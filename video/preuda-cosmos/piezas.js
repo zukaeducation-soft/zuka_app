@@ -139,3 +139,17 @@ function boxes(cx, y, vals, cols, o = {}) {
   vals.forEach((v, i) => { const x = x0 + i * gap, kk = o.k == null ? 1 : clamp(o.k * vals.length - i); stroke(cols[i] || C.cyan, 3, () => X.roundRect(x - w / 2, y - w / 2, w, w, 16), { g: 10 }); if (v != null && kk > 0) fade(kk, () => bigT(String(v), x, y + 22, cols[i] || C.cyan, o.s || 60)); if (o.labs) mono(o.labs[i], x, y + w / 2 + 36, C.mute, { s: 20 }); if (i) T(o.op || '×', x - gap / 2, y + 16, { k: 'r', s: 44, a: 'c', c: C.mute }); });
   return i => x0 + i * gap;
 }
+// Gráfica de barras: base en (x0, y0), ancho w y alto h para vmax; vals con sus rótulos; cols (color por barra o uno solo).
+// o.k (0–1) hace crecer las barras; o.ticks marcas del eje; o.vals escribe el valor encima; o.hl(i) resalta una barra.
+function barsC(x0, y0, w, h, labs, vals, vmax, cols, o = {}) {
+  const n = vals.length, bw = w / n, k = o.k ?? 1;
+  (o.ticks || []).forEach(v => { const y = y0 - v / vmax * h; stroke('rgba(160,180,240,.22)', 1, () => { X.moveTo(x0, y); X.lineTo(x0 + w, y); }, { g: 0 }); T(String(v), x0 - 12, y + 8, { k: 'mono', s: 20, a: 'r', c: C.mute }); });
+  stroke('rgba(225,232,255,.8)', 2.5, () => { X.moveTo(x0, y0 - h - 20); X.lineTo(x0, y0); X.lineTo(x0 + w, y0); }, { g: 4 });
+  vals.forEach((v, i) => { const c = Array.isArray(cols) ? cols[i] : cols, hl = o.hl && o.hl(i), hh = v / vmax * h * clamp(k * n - i * .6); bar(x0 + i * bw + bw * .18, y0 - hh, bw * .64, hh, hl ? C.lime : c, 1, { fill: hl ? .4 : .25 }); T(labs[i], x0 + (i + .5) * bw, y0 + 34, { k: 'mono', s: 22, a: 'c', c: C.mute }); if (o.vals && hh > 0) T(String(v), x0 + (i + .5) * bw, y0 - hh - 14, { k: 'r', s: 28, a: 'c', c: hl ? C.lime : C.ink }); });
+  return { x: i => x0 + (i + .5) * bw, y: v => y0 - v / vmax * h };
+}
+// Diagrama circular: centro O, radio R, partes [[ángulo°, color, rótulo]] desde arriba en el sentido del reloj; k dibuja.
+function pieC(O, R, parts, k = 1, o = {}) {
+  let a = -90;
+  parts.forEach(([deg, c, lab], i) => { const a1 = a + deg * clamp(k * parts.length - i), am = (a + a + deg) / 2; if (a1 > a) { X.save(); X.beginPath(); X.moveTo(...O); X.arc(O[0], O[1], R, a * DEG, a1 * DEG); X.closePath(); X.fillStyle = hexA(c, o.hl === i ? .55 : .3); X.fill(); X.restore(); stroke(c, 2.5, () => { X.moveTo(...O); X.arc(O[0], O[1], R, a * DEG, a1 * DEG); X.closePath(); }, { g: 8 }); if (lab && a1 >= a + deg - .01) { const p = [O[0] + Math.cos(am * DEG) * R * .62, O[1] + Math.sin(am * DEG) * R * .62]; T(lab, p[0], p[1] + 10, { k: 'r', s: o.s || 26, a: 'c', c: C.ink }); } } a += deg; });
+}

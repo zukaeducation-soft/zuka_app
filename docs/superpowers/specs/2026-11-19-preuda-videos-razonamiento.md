@@ -59,6 +59,9 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | | `pu-se-3` | `ciclos` | ABBCCCD en la posición 150 → B | 1 de marzo viernes → 1 de junio sábado |
 | 8 Codificación | `pu-cd-1` | `cifrados` | SOL, LUZ y SUR con símbolos en desorden → LOROS = ○ □ ● □ △ | OLEUR con clave +3 → LIBRO; 33 11 43 en la tabla → MAR |
 | | `pu-cd-2` | `reglas` | Dígito de control (residuo ÷ 7), 5 _ 2 8 4 → 3 | Máquinas A, B, C con el 5 → 49; ★□□△△△△○○ → 197 |
+| 9 Tablas y gráficas | `pu-gr-1` | `graficas` | Lluvia 40, 50, 90, 120, 80, 40 → mayor aumento porcentual: marzo (+80 %) | Café 30, 45, 36, 45, 60 → 2020; 180 estudiantes, baloncesto 90° → 45 |
+| | `pu-gr-2` | `promedios` | Notas 1 a 5 con 3, 3, 12, 9, 3 estudiantes → promedio 3.2 | Goles de 20 partidos → 33 y mediana 1.5; horas de celular → promedio 5, 2 días encima, mediana 4 |
+| | `pu-gr-3` | `concluir` | Librería por género y trimestre → la falsa: «40 % de los infantiles en T3 y T4» (es 33.3 %) | Planes de telefonía para 250 min → A; torneo con huecos → Búfalos 19, Cóndores 2 perdidos |
 
 Problemas propios (mundo 6): en los exámenes, los problemas espaciales dependen de figuras que el texto no conserva, así que algunos enunciados son originales en el formato del examen; su respuesta se comprueba por fuerza bruta en la prueba.
 

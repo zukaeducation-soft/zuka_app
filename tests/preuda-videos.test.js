@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -257,4 +257,28 @@ test('la matemática de los videos: Codificación', () => {
   assert.equal(125 + 2 * 25 + 4 * 5 + 2, 197);
   let n = 318, cnt = 0; for (const v of [125, 25, 5, 1]) { cnt += Math.floor(n / v); n %= v; } assert.equal(cnt, 10);
   assert.equal(2 * 9 + 0 * 3 + 1, 19); assert.equal(2 * 9 + 2 * 3 + 2, 26);
+});
+
+test('la matemática de los videos: Tablas y gráficas', () => {
+  const pct = (a, b) => (b - a) / a;
+  // Lluvia 40, 50, 90, 120, 80, 40: el mayor aumento porcentual es marzo; café 30, 45, 36, 45, 60: 2020; baloncesto 90° de 180.
+  const R = [40, 50, 90, 120, 80, 40], best = a => a.slice(1).map((v, i) => pct(a[i], v)).reduce((m, v, i, s) => (v > s[m] ? i : m), 0) + 1;
+  assert.equal(best(R), 2); assert.equal(pct(50, 90), .8); assert.equal(best([30, 45, 36, 45, 60]), 1); assert.equal(90 / 360 * 180, 45);
+  // Promedios: las notas (96 / 30 = 3.2), los goles (33 y mediana 1.5), el celular (promedio 5, dos días encima, mediana 4).
+  const exp = f => f.flatMap((n, v) => Array(n).fill(v)), mean = a => a.reduce((s, v) => s + v, 0) / a.length;
+  const med = a => { const s = [...a].sort((x, y) => x - y), m = s.length / 2; return s.length % 2 ? s[Math.floor(m)] : (s[m - 1] + s[m]) / 2; };
+  const notas = exp([0, 3, 3, 12, 9, 3]); assert.equal(notas.length, 30); assert.equal(mean(notas), 3.2);
+  const goles = exp([4, 6, 5, 3, 2]); assert.equal(goles.reduce((s, v) => s + v, 0), 33); assert.equal(med(goles), 1.5);
+  const cel = [3, 4, 2, 5, 4, 7, 10]; assert.equal(mean(cel), 5); assert.equal(cel.filter(v => v > 5).length, 2); assert.equal(med(cel), 4);
+  assert.equal(mean([6, 2, 9, 3]), 5); assert.equal(mean(exp([2, 5, 3])), 1.1); assert.equal(med([6, 2, 9, 4, 7]), 6); assert.equal(med([6, 2, 9, 4, 7, 11]), 6.5);
+  assert.deepEqual([mean([3, 4, 4, 5, 34]), med([3, 4, 4, 5, 34])], [10, 4]);
+  // Concluir: la librería (la falsa es la del 40 %), los planes (250 min → A; cruces en 300 y 500) y el torneo (19 puntos; 2 perdidos).
+  const L = { nov: [120, 90, 150, 140], poe: [30, 45, 25, 50], ens: [50, 65, 75, 60], inf: [100, 100, 50, 50] };
+  const sum = a => a.reduce((s, v) => s + v, 0), all = sum(Object.values(L).flat()), t3 = sum(Object.values(L).map(r => r[2]));
+  assert.equal(all, 1200); assert.equal(L.nov[2] / t3, .5); assert.equal(sum(L.poe) / all, .125); assert.ok(L.ens[3] > L.inf[3]);
+  assert.notEqual((L.inf[2] + L.inf[3]) / sum(L.inf), .4); assert.equal(sum(L.inf) / all, .25);
+  const A = m => 20000 + 100 * m, B = m => 35000 + 50 * m, Cc = () => 60000;
+  assert.deepEqual([A(250), B(250), Cc(250)], [45000, 47500, 60000]); assert.equal(A(300), B(300)); assert.equal(B(500), Cc(500));
+  assert.equal(5 * 3 + (10 - 5 - 1), 19); const G = (18 - 3) / 3; assert.equal(G, 5); assert.equal(10 - G - 3, 2);
+  assert.deepEqual([40 / 100, 40 / 50, 40 / 200], [.4, .8, .2]);
 });
