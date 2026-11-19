@@ -19,7 +19,7 @@ const S = {
     fade(A(t, 9.6, .6), () => {
       const P = streets(330, 1440, 3, 3, 140);
       ptL(P(0, 0), C.ink, 'P', -30, 40); ptL(P(3, 3), C.ink, 'Q', 30, -16);
-      fade(A(t, 10.4, .5), () => walk(P, 'DNDNDN'.split(''), PATH, seg(t, 10.6, 13)));
+      fade(A(t, 10.4, .5), () => walk(P, 'DDNNDN'.split(''), PATH, seg(t, 10.6, 13)));
       fade(A(t, 13, .5), () => { const r = P(1, 1); dot(r[0], r[1], 16, BAD, 20); check(r[0], r[1], 22, false, 1); mono('R', r[0] + 36, r[1] + 40, BAD, { s: 30 }); });
     });
   },

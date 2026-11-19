@@ -34,9 +34,9 @@ const D = (() => {
       narr: [[0.8, 9.4, 'Volvamos al reto. La obra completa son seis por doce, setenta y dos jornadas. En los primeros cuatro días se hacen veinticuatro.'], [10.0, 19.4, 'Faltan cuarenta y ocho jornadas, y ahora solo trabajan cuatro obreros.'], [20.0, 29.4, 'Cuarenta y ocho entre cuatro son doce días más. La obra dura cuatro más doce: dieciséis días.']] },
     { id: 'cierre', name: 'CIERRE', dur: 30,
       caps: [[0.8, 10.4, 'La obra duró 16 días', 'la opción A']],
-      narr: [[0.8, 10.4, 'La respuesta era la A: dieciséis días. Medir el trabajo en jornadas lo vuelve una resta y una división.'], [11.0, 20.4, 'Directa: el cociente se mantiene. Inversa: el producto se mantiene. Compuesta: pasar por la unidad.'], [21.0, 29.4, 'Directa, se divide; inversa, se multiplica.']] },
+      narr: [[0.8, 10.4, 'La respuesta era la A: dieciséis días. Medir el trabajo en jornadas lo vuelve una resta y una división.'], [11.0, 20.4, 'Directa: el cociente se mantiene. Inversa: el producto se mantiene. Compuesta: pasar por la unidad.'], [21.0, 29.4, 'Directa: el cociente no cambia; inversa: el producto no cambia.']] },
   ];
-  const WORLD = 'RAZONAMIENTO LÓGICO · MUNDO 4', TITLE = 'REGLA DE TRES', LINE = 'Directa, se divide; inversa, se multiplica.';
+  const WORLD = 'RAZONAMIENTO LÓGICO · MUNDO 4', TITLE = 'REGLA DE TRES', LINE = 'Directa: cociente fijo; inversa: producto fijo.';
   let t = 0; const SC = [], NARR = [];
   for (const s of SCENES) {
     SC.push({ id: s.id, name: s.name, t0: t, t1: t + s.dur });

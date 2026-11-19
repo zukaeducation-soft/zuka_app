@@ -42,7 +42,7 @@ const S = {
   // 3 · La bisagra: agudo, recto, obtuso.
   tipos(t) {
     stars(t, .3);
-    const u = 40, R = [280, 1080], th = t < 8.6 ? lerp(60, 120, eio(seg(t, 1, 8))) : t < 17.6 ? lerp(120, 90, eio(seg(t, 9, 11))) : lerp(90, 65, eio(seg(t, 18, 19.6))) + 50 * eio(seg(t, 21.4, 24.4));
+    const u = 40, R = [280, 1080], th = t < 8.6 ? lerp(75, 120, eio(seg(t, 1, 8))) : t < 17.6 ? lerp(120, 90, eio(seg(t, 9, 11))) : lerp(90, 75, eio(seg(t, 18, 19.6))) + 40 * eio(seg(t, 21.4, 24.4));
     const P = at(R, th, 5 * u), Q = at(R, 0, 12 * u), c2 = 25 + 144 - 120 * Math.cos(th * DEG);
     segL(R, Q, LB, 1, 5); segL(R, P, LA, 1, 5); segL(P, Q, HY, 1, 4);
     dot(...R, 9, NOW, 14);
@@ -50,7 +50,7 @@ const S = {
     mono('5', ...mid(R, P).map((v, i) => v + (i ? 0 : -30)), LA, { s: 28 }); mono('12', mid(R, Q)[0], R[1] + 44, LB, { s: 28 });
     const col = Math.abs(c2 - 169) < 1 ? RES : c2 < 169 ? LB : BAD, word = Math.abs(c2 - 169) < 1 ? 'recto' : c2 < 169 ? 'agudo' : 'obtuso';
     F([['c', 'i', HY], sq2(2), [' = ' + Math.round(c2), 'r', col]], CX, 560, 72);
-    bigT(word, CX, 660, col, 46);
+    bigT('ángulo ' + word, CX, 660, col, 46);
     fade(A(t, 18.4, .5), () => { F([['c', 'i'], sq2(2), [' < 169: agudo', 'r', LB]], CX, 1260, 40); F([['c', 'i'], sq2(2), [' = 169: recto', 'r', RES]], CX, 1330, 40); F([['c', 'i'], sq2(2), [' > 169: obtuso', 'r', BAD]], CX, 1400, 40); });
   },
   // 4 · Ternas y sus múltiplos; la trampa de sumar catetos.

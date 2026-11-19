@@ -20,7 +20,7 @@ const S = {
     fade(A(t, 9.6, .6), () => {
       const k = seg(t, 10, 13) * 4;
       work(180, 980, 6, 12, 60, (i, j) => (j < Math.floor(k) ? DONE : null), { rl: 'obreros', cl: 'días' });
-      fade(A(t, 14, .5), () => { [4, 5].forEach(i => stroke(BAD, 3, () => { X.moveTo(150, 980 + i * 60 + 30); X.lineTo(180 + 4 * 60, 980 + i * 60 + 30); }, { g: 10 })); mono('se van 2', 180 + 4 * 60 + 90, 980 + 5 * 60 + 8, BAD, { s: 22, a: 'l' }); });
+      fade(A(t, 14, .5), () => { [4, 5].forEach(i => stroke(BAD, 3, () => { X.moveTo(180 + 4 * 60, 980 + i * 60 + 30); X.lineTo(180 + 12 * 60, 980 + i * 60 + 30); }, { g: 10 })); mono('se van 2', 180 + 12 * 60 - 10, 980 + 6 * 60 + 40, BAD, { s: 22, a: 'r' }); });
     });
   },
   // 2 · Directa: la receta.

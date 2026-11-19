@@ -29,7 +29,7 @@ const S = {
       mono('bloque: se mueven juntos', CX, 980, NOW, { s: 26 });
     });
     fade(win(t, 10, 19.6), () => {
-      jT('«Diego está en una silla menor que la de Elsa»', CX, 480, C.ink, 36);
+      jT('«Diego está en una silla de número menor que Elsa»', CX, 480, C.ink, 36);
       const x = seats(780), e = 1 + Math.floor(clamp(seg(t, 12, 18.6)) * 3.999);
       who(x(0), 780, 'D'); who(x(e), 780, 'E');
       arrow(x(0) + 70, 700, x(e) - 70, 700, NOW, 1, 3, { h: 12 });
@@ -62,7 +62,7 @@ const S = {
     who(x(p), 760, 'C'); who(x(p + 1), 760, 'B');
     [0, 1, 2, 3].forEach(i => fade(A(t, 1.2 + i * 1.7, .3), () => { stroke(i === p ? NOW : C.dim, 3, () => { X.moveTo(x(i) - 50, 880 + i * 54); X.lineTo(x(i + 1) + 50, 880 + i * 54); }, { g: i === p ? 10 : 0 }); mono(`${i + 1}-${i + 2}`, x(i + 1) + 110, 888 + i * 54, i === p ? NOW : C.mute, { s: 22 }); }));
     fade(A(t, 9.2, .5), () => mono('pocos casos: se empieza por aquí', CX, 1150, NOW, { s: 28 }));
-    fade(A(t, 18.2, .5), () => { [0, 1, 2, 3].forEach(i => check(x(4) + 260, 880 + i * 54, 14, i % 3 === 0, A(t, 18.6 + i * .5, .5))); mono('cada caso contra las demás pistas', CX, 1250, C.mute, { s: 24 }); });
+    fade(A(t, 18.2, .5), () => { [0, 1, 2, 3].forEach(i => check(x(4) + 260, 880 + i * 54, 14, i % 2 === 0, A(t, 18.6 + i * .5, .5))); mono('cada caso contra las demás pistas', CX, 1250, C.mute, { s: 24 }); });
   },
   // 5 · Problema: la carrera de cinco.
   carrera(t) {
