@@ -54,6 +54,9 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | | `pu-es-2` | `cubos` | Cubo de 6 pintado y cortado → 48 con dos caras (el de 4 ya es un juego de la lección) | Vistas 3, 1, 2 y 2, 3, 1 sobre base de 3 × 3 → máximo 14 (mínimo 12) |
 | | `pu-es-3` | `desarrollos` | Torre de 3 dados con un 4 arriba → ocultas suman 17 | Fila 2-3-4-5, el 1 sobre el 2 y el 6 bajo el 4 → opuesta al 1: el 6 |
 | | `pu-es-4` | `giros` | Reloj que en el espejo marca 8:25 → 3:35 | Tira doblada por la mitad 4 veces y un agujero → 16 |
+| 7 Secuencias | `pu-se-1` | `sucesiones` | 5, 8, 13, 20, 29 → término 12: 148 | Aritmética con 3.º = 11 y 7.º = 27 → 20.º = 79; 3, 6, 5, 10, 9, 18, 17 → 10.º = 66 |
+| | `pu-se-2` | `letras` | A, C, F, J, O → U | 3C, 6F, 9I, 12L → 15O; 100 palitos → figura 33 |
+| | `pu-se-3` | `ciclos` | ABBCCCD en la posición 150 → B | 1 de marzo viernes → 1 de junio sábado |
 
 Problemas propios (mundo 6): en los exámenes, los problemas espaciales dependen de figuras que el texto no conserva, así que algunos enunciados son originales en el formato del examen; su respuesta se comprueba por fuerza bruta en la prueba.
 

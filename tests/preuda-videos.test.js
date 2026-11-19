@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -220,4 +220,21 @@ test('la matemática de los videos: Razonamiento espacial', () => {
   assert.equal(net.indexOf(opp[net[0]]) + 1, 6); assert.equal(net.indexOf(opp[net[1]]) + 1, 4); assert.equal(net.indexOf(opp[net[2]]) + 1, 5);
   // La torre de dados (3 + 7 + 7), el reloj en el espejo (12:00 − 8:25) y la tira doblada cuatro veces.
   assert.equal((7 - 4) + 7 + 7, 17); const mins = 12 * 60 - (8 * 60 + 25); assert.equal(`${Math.floor(mins / 60)}:${mins % 60}`, '3:35'); assert.equal(2 ** 4, 16);
+});
+
+test('la matemática de los videos: Secuencias y patrones', () => {
+  // Sucesiones: n² + 4 (término 12: 148), la aritmética (79), la alternada (66) y 2ⁿ − 1 (1 023).
+  assert.deepEqual([1, 2, 3, 4, 5].map(n => n * n + 4), [5, 8, 13, 20, 29]); assert.equal(12 * 12 + 4, 148);
+  const d = (27 - 11) / 4; assert.equal(11 + 17 * d, 79);
+  const alt = [3]; while (alt.length < 10) alt.push(alt.length % 2 ? alt.at(-1) * 2 : alt.at(-1) - 1); assert.deepEqual(alt.slice(0, 7), [3, 6, 5, 10, 9, 18, 17]); assert.equal(alt[9], 66);
+  assert.equal(2 ** 10 - 1, 1023);
+  // Letras: A, C, F, J, O → U (posiciones triangulares), 3C 6F 9I 12L → 15O, palitos (3n + 1 ≤ 100 → 33), marcos (4n + 4).
+  const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; assert.equal([1, 3, 6, 10, 15, 21].map(p => ABC[p - 1]).join(''), 'ACFJOU');
+  assert.equal(15 + ABC[14], '15O'); assert.equal(Math.floor((100 - 1) / 3), 33); assert.equal((15 + 2) ** 2 - 15 ** 2, 64);
+  // Ciclos: ABBCCCD en la 150 (B), los días, el horno y la última cifra de 2⁹⁹.
+  assert.equal('ABBCCCD'[(150 - 1) % 7], 'B'); assert.equal('ABBCCCD'[(147 - 1) % 7], 'D');
+  const dias = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
+  assert.equal(dias[(2 + 15) % 7], 'jueves'); assert.equal(dias[(4 + 31 + 30 + 31) % 7], 'sábado');
+  assert.equal(dias[Math.floor((8 + 100) / 24) % 7], 'viernes'); assert.equal((8 + 100) % 24, 12);
+  assert.equal(String(2n ** 99n).slice(-1), '8');
 });
