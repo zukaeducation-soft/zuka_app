@@ -19,7 +19,7 @@ todas las lecciones», usando como anexo los diez simulacros nuevos (`Documents/
 
 `piezas.js` (se carga después de `preu.js`): rótulos `mono`, `bigT`, `jT`, llave `brc`; geometría plana con ángulos en grados
 (`at`, `angOf`, `segL`, `polyL`, `arcA`, `arcV`, `wedge`, `ticks`, `rightA`, `ptL`); cuerpos (`prism`, `cyl`, `cone`); tablas
-(`gridT`), fichas (`pill`, `slotB`, `nodeC`), balanza (`scaleB`) y el cierre común `closeOpts`. `examCard` acepta `col1: true` para opciones largas en una sola columna. Sus nombres no chocan con los
+(`gridT`), fichas (`pill`, `slotB`, `nodeC`), balanza (`scaleB`), árbol de conteo (`treeD`), casillas de decisión (`boxes`) y el cierre común `closeOpts`. `examCard` acepta `col1: true` para opciones largas en una sola columna. Sus nombres no chocan con los
 que declaran las películas del mundo 1.
 
 `cola.sh`: cola de render (`out/cola.txt`, una película y su carpeta de entrega por renglón; registro en `out/cola.log`) que
@@ -45,6 +45,11 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | | `pu-pr-3` | `velocidad` | Dos llaves (6 h y 3 h) y desagüe (4 h) → 4 h | Trenes de M y N (360 km, 70 y 50) → 210 km; bus 60 / 40 → 48 km/h |
 | | `pu-pr-4` | `porcientos` | Elección: 60 % votó, 55 % = 6 600 → 20 000 | Tanque del 40 % al 65 % con 30 L → 120 L; grupo en bicicleta → 16 % |
 | | `pu-pr-5` | `aumentos` | Salario + 8 % = 1 620 000 → 1 500 000 | +20 % y −20 % → −4 %; comerciante 80 000, +25 %, −10 % → 12.5 % (el IVA y los descuentos 20 % + 10 % ya salen en los ejercicios) |
+| 5 Conteo | `pu-co-1` | `multiplicativo` | Bandera de 3 franjas, 4 colores, vecinas distintas → 36 | Código de 3 letras y 2 impares distintos → 540; clave con 1, 2, 3 sin vecinos iguales → 24 |
+| | `pu-co-2` | `permutaciones` | LIBRO con las vocales juntas → 48 | Presidente, secretario y tesorero de 6 → 120 |
+| | `pu-co-3` | `combinaciones` | Comité de 3 con exactamente 2 mujeres (5 H, 4 M) → 30 | 6 puntos en una circunferencia → 20 triángulos; 45 saludos → 10 personas |
+| | `pu-co-4` | `casos` | Múltiplos de 3 o de 5 del 1 al 100 → 47 | Ana y Beto no juntos → 12; pares de tres cifras con 1–5 → 24 |
+| | `pu-co-5` | `caminos` | Mensajero en 3 × 3 sin pasar por R → 8 | Cuadrados de una cuadrícula de 3 × 3 → 14 |
 
 Pruebas: `tests/preuda-videos.test.js` (formato, que ninguna lección de un mundo terminado se quede sin película, `KEYS`, y la
 matemática de cada problema, mundo por mundo).

@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -165,4 +165,34 @@ test('la matemática de los videos: Proporcionalidad y porcentajes', () => {
   // Aumentos: el salario (1 500 000 y la trampa 1 490 400), el IVA, ±20 %, +10 % +20 %, el comerciante y el interés compuesto.
   assert.ok(near(1620000 / 1.08, 1500000)); assert.ok(near(1620000 * 0.92, 1490400)); assert.ok(near(595000 / 1.19, 500000));
   assert.ok(near(1.2 * 0.8, 0.96) && near(1.1 * 1.2, 1.32)); assert.ok(near((80000 * 1.25 * 0.9 - 80000) / 80000, 0.125)); assert.ok(near(1.1 ** 3, 1.331));
+});
+
+test('la matemática de los videos: Conteo (se cuentan los casos uno por uno)', () => {
+  const range = n => [...Array(n).keys()];
+  const C = (n, r) => { let v = 1; for (let i = 0; i < r; i++) v = v * (n - i) / (i + 1); return Math.round(v); };
+  // Multiplicativo: la bandera, el código, la clave, sin 5, capicúas, caminos A–C.
+  let fl = 0; for (const a of range(4)) for (const b of range(4)) for (const c of range(4)) if (a !== b && b !== c) fl++; assert.equal(fl, 36);
+  assert.equal(3 ** 3 * 5 * 4, 540);
+  let cl = 0; for (let m = 0; m < 81; m++) { const d = [m % 3, Math.floor(m / 3) % 3, Math.floor(m / 9) % 3, Math.floor(m / 27)]; if (d.every((x, i) => !i || x !== d[i - 1])) cl++; } assert.equal(cl, 24);
+  assert.equal(range(900).map(i => String(i + 100)).filter(s => !s.includes('5')).length, 648);
+  assert.equal(range(9000).map(i => String(i + 1000)).filter(s => s === [...s].reverse().join('')).length, 90);
+  assert.equal(3 * 2 + 2, 8);
+  // Permutaciones: LIBRO con vocales juntas, cargos, podio, PAPA.
+  const perms = a => (a.length < 2 ? [a] : a.flatMap((x, i) => perms([...a.slice(0, i), ...a.slice(i + 1)]).map(p => [x, ...p])));
+  assert.equal(perms([...'LIBRO']).map(p => p.join('')).filter(s => Math.abs(s.indexOf('I') - s.indexOf('O')) === 1).length, 48);
+  assert.equal(6 * 5 * 4, 120); assert.equal(8 * 7 * 6, 336); assert.equal(new Set(perms([...'PAPA']).map(p => p.join(''))).size, 6);
+  assert.equal(perms([...'ABCD']).map(p => p.join('')).filter(s => Math.abs(s.indexOf('A') - s.indexOf('B')) === 1).length, 12);
+  // Combinaciones: el comité, los triángulos, los saludos, crecientes, diagonales, helados.
+  assert.equal(C(4, 2) * C(5, 1), 30); assert.equal(C(6, 3), 20); assert.equal(range(30).find(n => n * (n - 1) / 2 === 45), 10);
+  assert.equal(C(6, 4), 15); assert.equal(C(10, 2) - 10, 35); assert.equal(C(5, 3), 10); assert.equal(C(7, 2), 21);
+  // Casos y complemento: múltiplos de 3 o 5, cifras que suman 4, al menos un 7, pares con 1–5.
+  assert.equal(range(100).map(i => i + 1).filter(n => n % 3 === 0 || n % 5 === 0).length, 47);
+  assert.equal(range(900).map(i => i + 100).filter(n => [...String(n)].reduce((a, d) => a + +d, 0) === 4).length, 10);
+  assert.equal(range(90).map(i => String(i + 10)).filter(s => s.includes('7')).length, 18);
+  assert.equal(perms([1, 2, 3, 4, 5]).map(p => p.slice(0, 3).join('')).filter((s, i, a) => a.indexOf(s) === i && +s % 2 === 0).length, 24);
+  // Figuras y caminos: el mensajero, 3 × 2, cuadrados, rectángulos, triángulos, escalera.
+  const paths = (nx, ny, block) => { const v = []; for (let i = 0; i <= nx; i++) { v[i] = []; for (let j = 0; j <= ny; j++) v[i][j] = block && i === block[0] && j === block[1] ? 0 : !i && !j ? 1 : (i ? v[i - 1][j] : 0) + (j ? v[i][j - 1] : 0); } return v[nx][ny]; };
+  assert.equal(paths(3, 3, [1, 1]), 8); assert.equal(paths(3, 3), 20); assert.equal(paths(3, 2), 10);
+  assert.equal([1, 2, 3].reduce((a, s) => a + (4 - s) ** 2, 0), 14); assert.equal(C(3, 2) * C(4, 2), 18); assert.equal(C(5, 2), 10);
+  const st = [1, 2]; while (st.length < 5) st.push(st.at(-1) + st.at(-2)); assert.equal(st[4], 8);
 });

@@ -122,3 +122,20 @@ function arcV(p, q1, q2, r, col, k = 1, o = {}) {
 }
 // Cuña de ángulo rellena (vértice p, de d0 a d1 grados): para recortar y mover esquinas.
 function wedge(p, r, d0, d1, col, a = .45) { X.save(); X.beginPath(); X.moveTo(...p); X.arc(p[0], p[1], r, -d0 * DEG, -d1 * DEG, true); X.closePath(); X.fillStyle = hexA(col, a); X.shadowColor = col; X.shadowBlur = 12; X.fill(); X.restore(); stroke(col, 2.5, () => { X.moveTo(...p); X.arc(p[0], p[1], r, -d0 * DEG, -d1 * DEG, true); X.closePath(); }, { g: 8 }); }
+// Árbol de conteo que crece hacia la derecha: raíz en (x, cy), niveles con counts[i] ramas por nodo, alto total h, ancho por
+// nivel dx. k (0–1) cuánto se ha dibujado; lab(nivel, índice) da el rótulo de cada nodo; cols[nivel] su color.
+function treeD(x, cy, h, dx, counts, k, cols, lab) {
+  const levels = [[[x, cy]]]; let n = 1;
+  counts.forEach((c, l) => { n *= c; const gap = h / n, pts = []; for (let i = 0; i < n; i++) pts.push([x + (l + 1) * dx, cy - h / 2 + gap * (i + .5)]); levels.push(pts); });
+  const tot = counts.length;
+  for (let l = 1; l <= tot; l++) { const kk = clamp(k * tot - (l - 1)); if (kk <= 0) break;
+    levels[l].forEach((p, i) => { const par = levels[l - 1][Math.floor(i / counts[l - 1])]; segL(par, p, hexA(cols[l - 1], .7), kk, 2, { g: 4 }); if (kk > .95) { dot(p[0], p[1], 6, cols[l - 1], 10); if (lab) { const s = lab(l - 1, i); if (s) T(s, p[0] + 14, p[1] + 8, { k: 'r', s: Math.min(26, h / levels[l].length * .8), c: C.ink }); } } }); }
+  dot(x, cy, 8, C.ink, 12);
+  return levels;
+}
+// Fila de casillas de decisión (centradas en cx): vals[i] el número de opciones (o null), etiquetas debajo, signos × entre ellas.
+function boxes(cx, y, vals, cols, o = {}) {
+  const w = o.w || 120, gap = o.gap || 170, x0 = cx - (vals.length - 1) * gap / 2;
+  vals.forEach((v, i) => { const x = x0 + i * gap, kk = o.k == null ? 1 : clamp(o.k * vals.length - i); stroke(cols[i] || C.cyan, 3, () => X.roundRect(x - w / 2, y - w / 2, w, w, 16), { g: 10 }); if (v != null && kk > 0) fade(kk, () => bigT(String(v), x, y + 22, cols[i] || C.cyan, o.s || 60)); if (o.labs) mono(o.labs[i], x, y + w / 2 + 36, C.mute, { s: 20 }); if (i) T(o.op || '×', x - gap / 2, y + 16, { k: 'r', s: 44, a: 'c', c: C.mute }); });
+  return i => x0 + i * gap;
+}
