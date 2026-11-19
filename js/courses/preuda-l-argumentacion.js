@@ -33,7 +33,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     id: 'lec-biblioteca-cerro', title: 'Veinte años de la biblioteca del cerro',
     ficha: { autor: 'Crónica de aniversario', fuente: 'Periódico comunitario de un barrio de Bello', fecha: 'Agosto de 2025' },
     paras: [
-      'La biblioteca del barrio El Cerro abrió sus puertas el 12 de agosto de 2005, en una casa de dos pisos que antes había sido una bodega de cemento. Empezó con mil doscientos libros donados y una sola computadora; las primeras estanterías las hicieron los vecinos con tablas de la bodega. Hoy tiene once mil libros, veinte computadores y un promedio de trescientos visitantes al día.',
+      'La biblioteca del barrio El Cerro abrió sus puertas el 12 de agosto de 2005, en una casa de dos pisos que antes había sido una bodega de cemento. Empezó con mil doscientos libros donados y un solo computador; las primeras estanterías las hicieron los vecinos con tablas de la bodega. Hoy tiene once mil libros, veinte computadores y un promedio de trescientos visitantes al día.',
       'Es, sin exagerar, el lugar más importante del barrio. Ninguna otra obra pública ha cambiado tanto la vida de la gente: ni la cancha sintética, que se llena solo los fines de semana, ni el puesto de salud, que abre medio día y casi siempre tiene la fila hasta la esquina.',
       'Las cifras de la propia biblioteca muestran lo que hacen sus usuarios: el año pasado se prestaron diecinueve mil libros, se dictaron ciento cuarenta talleres y cerca de dos mil personas usaron los computadores para hacer trámites, buscar empleo o inscribirse en la universidad. Los sábados, la fila para entrar empieza antes de que abran.',
       'Su directora, Marleny Arias, lleva doce años en el cargo. Dice que el mayor logro no son los préstamos, sino que los niños que llegaban a hacer tareas hoy vuelven como profesores de los talleres; tres de ellos estudian una licenciatura en una universidad pública. A mi juicio, ese es el mejor indicador que puede tener una biblioteca, mejor que cualquier cifra.',
@@ -47,7 +47,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     play('mapa-del-texto', 'El esqueleto del argumento', { doc: FINANZAS, labels: ['presenta la tesis', 'argumenta con datos', 'argumenta con un ejemplo', 'argumenta con una analogía', 'responde una objeción', 'cierra reforzando la tesis', 'cuenta la historia de los bancos'], key: [0, 1, 2, 3, 4, 5] },
       'La tesis va en el párrafo 1 («Sostengo que…»). Los párrafos 2, 3 y 4 anuncian sus argumentos: datos, experiencia y comparación. «Se dirá que…» abre una objeción, y la última frase vuelve a la tesis.',
       { hint: 'Busca «Sostengo», «El primer argumento», «El segundo», «El tercero» y «Se dirá».' }),
-    play('quien-lo-dice', 'Cada argumento, de qué tipo', { doc: FINANZAS, ask: 'Lleva cada parte del texto al tipo de argumento que es.', voices: ['De datos', 'De ejemplo', 'Por analogía', 'Contraargumento'], cards: [
+    play('quien-lo-dice', 'Cada argumento, de qué tipo', { doc: FINANZAS, ask: 'Lleva cada parte del texto al tipo de argumento que es.', voices: ['De datos', 'De ejemplo', 'Por analogía', 'Objeción que el autor responde'], cards: [
       ['Más de la mitad de los adultos no sabe calcular cuánto pagará por un crédito.', 0],
       ['Un profesor de Pereira enseñó presupuestos con el recibo de la luz.', 1],
       ['Nadie entrega las llaves de un carro sin enseñar antes las señales de tránsito.', 2],
@@ -65,10 +65,10 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     play('lupa-evidencia', 'Lo que dice el autor', { doc: FINANZAS, cards: [
       ['El autor propone enseñar finanzas desde noveno grado.', 0],
       ['En Pereira se enseñó con ejemplos de la vida real.', 0],
-      ['El autor cree que muchos ejemplos de las clases de matemáticas no interesan.', 1],
+      ['Quienes prestan dinero se aprovechan de que muchos no saben hacer las cuentas.', 1],
       ['El autor propone crear una materia nueva de finanzas.', 2],
       ['Todos los adultos colombianos tienen deudas en tarjetas.', 2],
-    ] }, 'Las dos primeras están escritas. Lo de los ejemplos sale de «ejemplos que no le importan a nadie». El autor dice que no hace falta una materia nueva, y la encuesta habla de «más de la mitad», no de todos.',
+    ] }, 'Las dos primeras están escritas. Lo de los prestamistas se deduce de la última frase: los jóvenes quedan «a merced de quien sí sabe hacer las cuentas». El autor dice que no hace falta una materia nueva, y la encuesta habla de «más de la mitad», no de todos.',
       { hint: 'Revisa el párrafo 5: ¿qué dice el autor sobre una materia nueva?' }),
     play('conector-bisagra', 'Cómo se encadenan los argumentos', { doc: FINANZAS, rounds: [
       { a: 'Más de la mitad de los adultos no sabe calcular cuánto pagará por un crédito.', b: 'muchas familias acumulan deudas sin entender lo que firmaron.', options: ['Por eso,', 'Aunque', 'En cambio,', 'Es decir,'], answer: 0 },
@@ -109,10 +109,10 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     play('lupa-evidencia', 'Lo que dice y lo que no', { doc: MILLON, cards: [
       ['El curso cuesta novecientos noventa mil pesos.', 0],
       ['El autor cree que el método no puede funcionar para todos.', 1],
-      ['El autor no pagó el curso.', 1],
+      ['El autor duda de que el muchacho gane lo que dice.', 1],
       ['El autor desprecia a las personas que compran estos cursos.', 2],
       ['El muchacho del anuncio es dueño del carro rojo.', 2],
-    ] }, 'El precio está escrito. Si «se acaban las personas», el método no sirve para todos; y el autor solo vio «el video gratuito». Dice expresamente que no quiere burlarse de quienes caen, y sobre el carro dice lo contrario: «probablemente no es suyo».',
+    ] }, 'El precio está escrito. Si «se acaban las personas», el método no sirve para todos; y la duda sobre lo que gana el muchacho se nota en el carro que «probablemente no es suyo». Dice expresamente que no quiere burlarse de quienes caen, y sobre el carro dice lo contrario: «probablemente no es suyo».',
       { hint: 'Una ironía no se lee al pie de la letra. Y revisa lo que el autor dice de quienes caen.' }),
     play('balanza-argumento', '¿Engaño o negocio?', { doc: MILLON, thesis: 'Los cursos para hacerse rico rápido son un engaño que se aprovecha de la desesperación.', cards: [
       ['El método consiste en vender el mismo curso a otras personas.', 0],
@@ -162,14 +162,14 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     ] }, 'Las cifras se presentan sin adjetivos: el tono es informativo. «Lamentable» y «mendigar», en cambio, dejan ver la indignación del autor.',
       { hint: 'Busca adjetivos o verbos que valoren. Si no hay ninguno, el tono es informativo.' }),
     play('lupa-evidencia', 'Lo que dice la crónica', { doc: CERRO, cards: [
-      ['La biblioteca empezó con una sola computadora.', 0],
+      ['La biblioteca empezó con un solo computador.', 0],
       ['La directora lleva doce años en el cargo.', 0],
       ['El número de libros se multiplicó por más de nueve.', 1],
-      ['La alcaldía no ha cumplido una promesa de 2022.', 1],
+      ['La alcaldía no ha cumplido una promesa de 2022.', 0],
       ['La cancha sintética nunca se usa.', 2],
       ['La biblioteca recibe el mayor presupuesto del barrio.', 2],
-    ] }, 'Las dos primeras están escritas. De mil doscientos a once mil libros es más de nueve veces; y una ampliación prometida en 2022 sin presupuesto es una promesa incumplida. La cancha se llena los fines de semana, y el texto dice que la biblioteca tiene que «mendigar».',
-      { hint: 'Para la tercera tarjeta, haz la cuenta con los dos datos del párrafo 1.' }),
+    ] }, 'El computador, la directora y la promesa sin presupuesto están escritos. De mil doscientos a once mil libros es más de nueve veces. La cancha se llena los fines de semana, y el texto dice que la biblioteca tiene que «mendigar».',
+      { hint: 'Para la tarjeta del número de libros, haz la cuenta con los dos datos del párrafo 1.' }),
     play('balanza-argumento', '¿Ampliar ya?', { doc: CERRO, thesis: 'La alcaldía debería financiar ya la ampliación de la biblioteca.', cards: [
       ['En las tardes no hay sillas suficientes.', 0],
       ['Cerca de dos mil personas usaron los computadores el año pasado.', 0],
@@ -217,7 +217,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
         '«Lo verdaderamente escandaloso» muestra indignación por lo que pasaba antes de la medida.',
         'Busca la palabra que repite el autor en el párrafo 4.')],
     ['pu-ag-3', 'Una opinión valora y no se puede comprobar; un hecho sí.',
-      Q('Es una opinión, y no un hecho:', ['Desde enero se permite subir perros con bozal y correa', 'En los primeros tres meses viajaron más de cuatro mil perros', 'Es una de las mejores decisiones que ha tomado la empresa en años', 'La medida exige bozal y correa'], 2,
+      Q('Es una opinión, y no un hecho:', ['Desde enero se permite subir perros con bozal y correa', 'En los primeros tres meses viajaron más de cuatro mil perros', 'Es una de las mejores decisiones que ha tomado la empresa en años', 'Hay quienes temen las mordidas'], 2,
         '«Una de las mejores» es una valoración del autor. Lo demás se puede verificar.',
         'Busca la opción con una palabra que valore.')],
     ['pu-ag-3', 'Un hecho atribuido a una fuente («según la empresa») se puede comprobar en esa fuente.',

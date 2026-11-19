@@ -45,10 +45,10 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Los empaques de papas fritas llevan una capa metálica.', 0],
       ['Reciclar consume agua y energía.', 0],
       ['El precio del petróleo influye en cuánto plástico se recicla.', 1],
-      ['Según la autora, reutilizar debería ir antes que reciclar.', 1],
+      ['La autora considera más útil la botella de vidrio retornable que la de plástico desechable.', 1],
       ['La autora considera que reciclar es inútil.', 2],
       ['Una botella de plástico reciclada vuelve a ser botella muchas veces.', 2],
-    ] }, 'Las dos primeras están escritas. Si con petróleo barato las empresas prefieren plástico nuevo, el precio influye en el reciclaje; y el orden de las «tres tareas» pone reutilizar antes. La autora dice expresamente que reciclar no es inútil, y que una botella «rara vez» vuelve a ser botella.',
+    ] }, 'Las dos primeras están escritas. Si con petróleo barato las empresas prefieren plástico nuevo, el precio influye en el reciclaje; y la preferencia por el vidrio retornable sale de que se llena «decenas de veces» y no necesita planta de reciclaje. La autora dice expresamente que reciclar no es inútil, y que una botella «rara vez» vuelve a ser botella.',
       { hint: 'Un conector como «Esto no quiere decir que…» desmiente una lectura equivocada. No la tomes por la idea de la autora.' }),
     play('intruso-excepto', 'Pregunta EXCEPTO', { doc: RECICLA, ask: 'Según el texto, el reciclaje de plástico tiene estos problemas, EXCEPTO:', cards: [
       ['Algunos empaques mezclan materiales que no se separan', [2]],
@@ -87,7 +87,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 1, text: 'la |«|modernización» de la plaza de mercado', options: ['marca ironía: el autor duda de que sea una modernización', 'cita a un vendedor', 'marca un título oficial que el autor respeta', 'encierra una palabra extranjera'], answer: 0 },
       { p: 2, text: 'hierbas aromáticas |—|toronjil, limoncillo, ruda—', options: ['abre un inciso con ejemplos', 'marca el turno de un diálogo', 'anuncia una conclusión', 'cita a doña Rubiela'], answer: 0 },
       { p: 4, text: 'una convocatoria para los locales |(|siempre que tengan', options: ['abre una aclaración con las condiciones', 'abre una cita', 'marca un ejemplo extranjero', 'indica una pregunta'], answer: 0 },
-    ] }, 'Las comillas de «modernización» son irónicas: el autor demuestra que fue un desalojo. La raya abre ejemplos de hierbas. El paréntesis guarda las condiciones, que en el fondo son lo más importante.',
+    ] }, 'Las comillas de «modernización» son irónicas: el autor sostiene que fue un desalojo. La raya abre ejemplos de hierbas. El paréntesis guarda las condiciones, que en el fondo son lo más importante.',
       { hint: 'Lee el final de la columna para saber si el autor cree en la palabra entre comillas.' }),
     play('conector-bisagra', 'Bisagras del argumento', { doc: PLAZA, rounds: [
       { a: 'La plaza vieja tenía problemas serios.', b: 'arreglar un techo no obligaba a cambiar a quienes vivían debajo de él.', options: ['Pero', 'Por eso,', 'Además,', 'Por ejemplo,'], answer: 0 },
@@ -112,7 +112,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 5, text: 'Y |la plaza de mercado| la usaban, sobre todo, |los vendedores pequeños y sus clientes de siempre|. Si |ellos| ya no caben', from: 5, answer: 3 },
       { p: 2, text: '|Doña Rubiela| vendía hierbas aromáticas —toronjil, limoncillo, ruda— en |un puesto de un metro cuadrado| que pagaba a diario. |El nuevo local|, con vitrina y contador de luz, cuesta un arriendo mensual que equivale a lo que |ella|', from: 7, answer: 1 },
     ] }, '«Ellos» son los vendedores pequeños y sus clientes: los que ya no caben. Y «ella» es doña Rubiela, la única mujer nombrada: es quien ganaba en dos meses lo que hoy cuesta el arriendo.',
-      { hint: 'Busca hacia atrás un grupo de personas en plural y, en el segundo, una mujer.' }),
+      { hint: 'En el primero, busca hacia atrás un grupo de personas en plural; en el segundo, quién podía ganar dinero.' }),
     play('donde-buscar', 'Cada función en su lugar', { doc: PLAZA, cards: [
       ['¿Dónde se reconoce lo que estaba mal en la plaza vieja?', [3]], ['¿Dónde está el ejemplo de una vendedora?', [2]],
       ['¿Dónde está la conclusión del autor?', [5]], ['¿Qué requisitos pide la convocatoria?', [4]], ['¿Qué mostraban las fotos del proyecto?', [1]],

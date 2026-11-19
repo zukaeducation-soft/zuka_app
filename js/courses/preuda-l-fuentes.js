@@ -19,7 +19,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     id: 'lec-paramo-turismo', title: 'Caminar el páramo sin romperlo',
     ficha: { autor: 'Columna de opinión', fuente: 'Periódico regional de Boyacá', fecha: 'Enero de 2026' },
     paras: [
-      'Hace diez años, al páramo de Santa Inés subían unos cuantos campesinos y algún biólogo despistado. Hoy, los fines de semana, llegan hasta trescientos visitantes que quieren tomarse una foto junto a los frailejones, esas plantas peludas que crecen apenas un centímetro al año. La pregunta ya no es si el turismo llegará al páramo: ya llegó. La pregunta es qué hacer con él.',
+      'Hace diez años, al páramo de La Cumbrera subían unos cuantos campesinos y algún biólogo despistado. Hoy, los fines de semana, llegan hasta trescientos visitantes que quieren tomarse una foto junto a los frailejones, esas plantas peludas que crecen apenas un centímetro al año. La pregunta ya no es si el turismo llegará al páramo: ya llegó. La pregunta es qué hacer con él.',
       'Para Mauricio Lenis, guía e hijo de la vereda, el turismo es la mejor oportunidad que ha tenido la zona. «Antes, para ganarse la vida aquí había que tumbar monte para sembrar papa. Ahora hay familias que viven de cocinarles a los caminantes», dice. Lenis defiende que se siga abriendo el páramo, pero con guías locales obligatorios: nadie cuida mejor un lugar, dice, que quien vive de mostrarlo y piensa quedarse en él toda la vida.',
       'La bióloga Carolina Mesa no está de acuerdo. Según sus mediciones, en los senderos más visitados el suelo se ha compactado tanto que ya no absorbe el agua como antes, y el páramo es, ante todo, una esponja que surte de agua a los pueblos de abajo. «Cada pisada fuera del sendero es una pequeña herida que tarda años en cerrarse», advierte. Para ella, la mayor parte del páramo debería cerrarse a las visitas.',
       'El secretario de ambiente del departamento propone un camino intermedio: abrir solo dos senderos, con un cupo de cien personas al día, reservas previas y un cobro que se invierta en restaurar las zonas dañadas. Reconoce que el cupo será impopular, pero sostiene que sin límites no habrá páramo que mostrar dentro de veinte años. El dinero del cobro, explica, alcanzaría para pagar a los guías de la vereda.',
@@ -39,15 +39,15 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Una tarea que solo se hace con ayuda mide más la casa que al estudiante.', 3],
     ] }, 'Cada voz tiene su marca: «sostiene», «explica» y «reconoce» para la psicopedagoga; «según él» y «admite» para el profesor; «el problema es otro» y la pregunta para la madre; y «a mi modo de ver» para la autora.',
       { hint: 'Busca las marcas de cada voz: los verbos de decir, «según él», «para Liliana», «a mi modo de ver».' }),
-    play('signos-que-hablan', 'Comillas que citan y comillas que se distancian', { doc: TAREAS, rounds: [
+    play('signos-que-hablan', 'Citas largas y citas cortas', { doc: TAREAS, rounds: [
       { p: 2, text: '|«|En primaria, la tarea larga no mejora el aprendizaje', options: ['abre una cita directa', 'marca ironía', 'abre el título de un libro', 'marca una palabra extranjera'], answer: 0 },
-      { p: 3, text: 'muchas tareas se dejan |«|por cumplir»', options: ['marca una expresión dicha por otros, tomando distancia de ella', 'abre una cita larga de un libro', 'indica el título de una tarea', 'señala una pregunta'], answer: 0 },
-    ] }, 'Las primeras comillas abren las palabras exactas de la psicopedagoga. Las segundas encierran una expresión que el profesor usa con distancia: tareas que se dejan solo por cumplir un requisito.',
+      { p: 3, text: 'muchas tareas se dejan |«|por cumplir»', options: ['reproduce una expresión corta tal como la dijo el profesor', 'abre una cita larga de un libro', 'indica el título de una tarea', 'señala una pregunta'], answer: 0 },
+    ] }, 'Las primeras comillas abren las palabras exactas de la psicopedagoga. Las segundas encierran solo una expresión del profesor, con sus palabras exactas, dentro de una frase de la autora: tareas que se dejan solo por cumplir.',
       { hint: 'Mira cuánto encierran las comillas: ¿una declaración completa de alguien o una expresión corta?' }),
     play('lupa-evidencia', 'La trampa de la voz', { doc: TAREAS, cards: [
       ['Velásquez ha estudiado el tema durante una década.', 0],
       ['La vecina de Liliana paga para que le hagan las tareas al niño.', 0],
-      ['Liliana no tiene tiempo de ayudar a su hija con las tareas entre semana.', 1],
+      ['Liliana no tiene tiempo de ayudar a su hija con las tareas.', 1],
       ['La autora afirma que en primaria la tarea larga no mejora el aprendizaje.', 2],
       ['Benavides propone eliminar las tareas.', 2],
     ] }, 'Las dos primeras están dichas. Lo de Liliana se deduce de que llega a las ocho de la noche. La idea sobre primaria es de Velásquez, no de la autora; y Benavides defiende las tareas, no las quiere eliminar.',
@@ -61,9 +61,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['En bachillerato, las tareas bien diseñadas se relacionan con mejores resultados.', 0],
       ['Una tarea que solo se hace con ayuda mide más la casa que al estudiante.', 0],
       ['Un estudio muestra que cualquier tarea, larga o corta, da los mismos resultados.', 1],
-      ['Los estudiantes que no hacen ninguna tarea aprenden lo mismo que los demás.', 1],
+      ['Los estudiantes que hacen más horas de tarea, del tipo que sea, siempre aprenden más.', 1],
       ['Las tareas para la casa son tan viejas como la escuela.', null],
-    ] }, 'Si el diseño de la tarea cambia los resultados, el tipo importa: eso apoya la tesis. Si cualquier tarea diera lo mismo, o no hacer ninguna diera lo mismo, el tipo no importaría. La antigüedad de las tareas no dice nada.',
+    ] }, 'Si el diseño de la tarea cambia los resultados, el tipo importa: eso apoya la tesis. Si cualquier tarea diera lo mismo, o si solo importaran las horas, el tipo no importaría. La antigüedad de las tareas no dice nada.',
       { hint: 'La tesis dice que el tipo de tarea marca la diferencia. Busca lo que muestra que la marca y lo que muestra que no.' }),
     play('donde-buscar', '¿A qué párrafo vuelvo?', { doc: TAREAS, cards: [
       ['¿Qué escena se repite cada tarde?', [1]], ['¿Qué dice la psicopedagoga sobre primaria?', [2]], ['¿Qué admite el profesor?', [3]],

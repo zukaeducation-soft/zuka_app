@@ -28,7 +28,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   const REMOTO = {
     id: 'lec-trabajo-remoto', title: 'El trabajo remoto llegó para quedarse',
-    ficha: { autor: 'Columna de una consultora', fuente: 'Revista de negocios', fecha: 'Febrero de 2025' },
+    ficha: { autor: 'Columna de un consultor', fuente: 'Revista de negocios', fecha: 'Febrero de 2025' },
     paras: [
       'Hace cinco años, trabajar desde la casa era un privilegio de unos pocos. La pandemia lo convirtió, de un día para otro, en la norma para millones de personas, y muchas empresas descubrieron algo que antes se negaban a creer: que buena parte del trabajo de oficina se podía hacer igual de bien, o mejor, desde la mesa del comedor. Algunas lo descubrieron con alivio; otras, con un poco de vergüenza por haberlo negado tanto tiempo.',
       'Las ventajas son evidentes para quien las ha vivido. Se ahorran las dos o tres horas diarias de trancón, el dinero del transporte y del almuerzo. Muchas personas, sobre todo madres y padres, ganaron tiempo para sus hijos, y en las horas pico hubo menos carros en las calles. Y las empresas descubrieron que podían contratar talento en cualquier ciudad, no solo en la capital, y ahorrarse además buena parte del arriendo de sus sedes.',
@@ -70,13 +70,13 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['El texto Uno dice que ciertos juegos de acción mejoran la atención visual.', 0],
       ['Los dos textos aceptan que hace falta poner límites.', 0],
       ['El autor del texto Dos desconfía de las empresas de videojuegos.', 1],
-      ['El autor del texto Uno juega videojuegos con sus hijos.', 2],
+      ['La autora del texto Uno juega videojuegos con sus hijos.', 2],
       ['Los dos textos piden prohibir los cofres pagados.', 2],
     ] }, 'Las dos primeras están dichas (el texto Uno habla de «poner límites», el Dos de «límites claros»). La desconfianza del Dos sale de «No es casualidad: de que el jugador vuelva depende el negocio». El Uno recomienda jugar con los hijos, pero no dice que su autora lo haga; y solo el Dos habla de los cofres, para regularlos, no para prohibirlos.',
       { hint: 'Cuando una afirmación dice «los dos textos», búscala en cada uno. Y «regular» no es «prohibir».' }),
     play('conector-bisagra', 'Cómo se relacionan los dos textos', { ...A, rounds: [
       { a: 'El texto Uno destaca lo que los videojuegos dan.', b: 'el texto Dos insiste en lo que quitan.', options: ['En cambio,', 'Por eso,', 'Es decir,', 'Por ejemplo,'], answer: 0 },
-      { a: 'Los dos textos rechazan la prohibición.', b: 'los dos piden límites de tiempo.', options: ['Además,', 'Sin embargo,', 'Por lo tanto,', 'Aunque'], answer: 0 },
+      { a: 'Los dos textos rechazan la prohibición.', b: 'los dos piden límites de tiempo.', options: ['Además,', 'Es decir,', 'Por ejemplo,', 'En cambio,'], answer: 0 },
       { a: 'Según el texto Dos, de que el jugador vuelva depende el negocio.', b: 'pide que el Estado regule los cofres pagados.', options: ['Por eso,', 'Aunque', 'En cambio,', 'Es decir,'], answer: 0 },
     ] }, 'Los enfoques se oponen (contraste); las coincidencias se suman (adición); y el diseño del negocio es la razón de la regulación que pide el Dos (consecuencia).',
       { hint: 'Pregúntate si las dos ideas se oponen, se suman o una explica la otra.' }),
@@ -115,7 +115,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Los que empiezan aprenden mucho en la oficina.', 2],
       ['Conviene ir dos o tres días a la oficina.', 2],
     ] }, 'Los dos reconocen las ventajas y el problema del lugar para trabajar (el Uno en el párrafo 4, el Dos en el 3). El Uno defiende medir por resultados; el Dos, el aprendizaje en la oficina y un camino intermedio.',
-      { hint: 'Revisa el párrafo 4 del texto Uno antes de decidir si una idea es solo del Dos.' }),
+      { hint: 'Antes de dejar una idea en un solo lado, búscala en el otro texto.' }),
     play('balanza-argumento', 'Ideas de los dos frente a la tesis del Uno', { ...B, ask: 'Pon en cada platillo las ideas, de cualquiera de los dos textos, que apoyan o debilitan la tesis del texto Uno.', thesis: 'El trabajo remoto debería ser la norma, no la excepción.', cards: [
       ['Se ahorran horas de trancón y dinero.', 0],
       ['Las empresas pueden contratar talento en cualquier ciudad.', 0],
@@ -144,7 +144,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 5, text: 'Quien defiende |el regreso obligatorio a la oficina| defiende, en el fondo, |una costumbre|. |Las costumbres| cambian. |Esta| ya cambió.', from: 7, answer: 3 },
       { p: 2, text: 'Muchas personas, sobre todo |madres y padres|, ganaron tiempo para |sus| hijos, y en las horas pico hubo menos carros en |las calles|', from: 3, answer: 1 },
     ] }, '«Esta» es la costumbre de ir a la oficina, que ya cambió. Y los hijos son de las madres y los padres: las calles no tienen hijos.',
-      { hint: '«Esta» va en singular; «Las costumbres», en plural. ¿Cuál de las opciones en singular puede cambiar?' }),
+      { hint: '«Esta» es femenino singular: ¿cuál de las opciones concuerda con ella?' }),
   ]);
 
   // ---------------- Evaluación: formato real, dos textos nuevos ----------------

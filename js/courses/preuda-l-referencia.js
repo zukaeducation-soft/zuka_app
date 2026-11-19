@@ -60,9 +60,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     play('caso-nuevo', 'La lección de los faros', { doc: FAROS, principle: 'La tecnología ayuda, pero no reemplaza la atención de una persona.', cards: [
       ['Un piloto que, aunque vuela con piloto automático, sigue mirando los instrumentos.', true],
       ['Una enfermera que revisa al paciente aunque la máquina diga que todo está bien.', true],
-      ['Un estudiante que copia lo que dice la calculadora sin revisar si tiene sentido.', false],
-      ['Un conductor que sigue el GPS hasta meterse en un río.', false],
-    ] }, 'El piloto y la enfermera usan la máquina sin dejar de mirar. El estudiante y el conductor hacen lo que hizo Abel antes del apagón: confían solo en el aparato.',
+      ['Un señor que compra un celular nuevo porque el viejo se dañó.', false],
+      ['Una niña que aprende a montar en bicicleta.', false],
+    ] }, 'El piloto y la enfermera usan la máquina sin dejar de mirar. Comprar un celular o aprender a montar en bicicleta no tiene que ver con la idea.',
       { hint: 'Busca los casos en que alguien usa la tecnología y además sigue atento, como el capitán le pidió a Abel.' }),
     play('palabra-a-la-medida', 'Palabras del relato', { doc: FAROS, rounds: [
       { p: 3, before: 'un guardián que duerme no es guardián, sino ', word: 'inquilino', after: '.', options: ['alguien que solo vive en el lugar', 'un ladrón', 'un turista', 'un jefe'], answer: 0 },
@@ -96,10 +96,10 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     play('lupa-evidencia', 'Lo que se dice sin repetir', { doc: AGUACATE, cards: [
       ['Algunos productores de leche cambiaron de cultivo.', 0],
       ['El café salvó a doña Amparo cuando bajó el precio del aguacate.', 0],
-      ['Doña Amparo no tuvo que comprar comida cuando bajó el precio.', 1],
+      ['La huerta de doña Amparo ya le daba comida antes de que bajara el precio.', 1],
       ['Todos los productores de papa cambiaron de cultivo.', 2],
       ['La autora está en contra de sembrar aguacate.', 2],
-    ] }, 'Las dos primeras están dichas, aunque con elipsis («los de leche, unos pocos») y sustitución («el segundo la salvó»). Lo de la comida se deduce de que la huerta «le dio la comida». «Muchos de ellos» no es «todos», y la autora dice que el aguacate no es villano ni héroe.',
+    ] }, 'Las dos primeras están dichas, aunque con elipsis («los de leche, unos pocos») y sustitución («el segundo la salvó»). Lo de la huerta se deduce de «como siempre, le dio la comida». «Muchos de ellos» no es «todos», y la autora dice que el aguacate no es villano ni héroe.',
       { hint: 'Una idea dicha con elipsis o con otra palabra sigue estando dicha. Reconstruye la frase completa antes de decidir.' }),
     play('conector-bisagra', 'Bisagras del reportaje', { doc: AGUACATE, rounds: [
       { a: 'El fruto se vende en dólares y aguanta bien el viaje.', b: 'muchas familias dejaron sus potreros y sembraron árboles.', options: ['Por eso,', 'Aunque', 'Es decir,', 'En cambio,'], answer: 0 },
@@ -140,7 +140,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
         'Pregúntate qué hace más seguras las canoas con oleaje.')],
     ['pu-rf-1', 'Un pronombre concuerda en género y número con su referente.',
       Q('En «Don Pastor no los culpa», «los» se refiere a:', ['las lanchas', 'los troncos', 'los constructores', 'los jóvenes'], 3,
-        'Lo que Don Pastor podría reprochar es que los jóvenes prefieran las lanchas: no los culpa a ellos.',
+        'Lo que don Pastor podría reprochar es que los jóvenes prefieran las lanchas: no los culpa a ellos.',
         'Busca en la oración anterior un grupo, en masculino plural, al que se pueda culpar de algo.')],
     ['pu-rf-2', 'En la elipsis, la coma ocupa el lugar de una palabra que no se repite.',
       Q('En «Tallarlo toma dos meses; pintarlo, una semana», la coma después de «pintarlo» ocupa el lugar de:', ['tronco', 'semana', 'toma', 'dos meses'], 2,
@@ -150,7 +150,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       Q('La expresión «Cada embarcación» (párrafo 2) sustituye a:', ['las canoas', 'los troncos', 'las lanchas de fibra', 'los talleres'], 0,
         'El párrafo 2 sigue hablando de las canoas de don Pastor: cada una sale de un solo tronco.',
         'Las lanchas de fibra aparecen después. ¿De qué se hablaba al final del párrafo 1?')],
-    ['pu-rf-2', '«El otro» o «la otra» se refieren al segundo término de una pareja ya presentada.',
+    ['pu-rf-2', '«El otro» o «la otra» señalan el término de la pareja que no se acaba de mencionar.',
       Q('En «aprendan a hacer la otra», «la otra» se refiere a:', ['la lancha de fibra de vidrio', 'la canoa de un solo tronco', 'la proa', 'la azuela'], 1,
         'Frente a la lancha que van a comprar, «la otra» es la canoa tradicional que don Pastor les pide aprender a hacer.',
         'En el párrafo 3 hay dos tipos de embarcación. Si una es la que se compra, ¿cuál es la otra?')],

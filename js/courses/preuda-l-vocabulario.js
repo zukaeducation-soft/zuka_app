@@ -63,8 +63,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { hint: 'Reemplaza la palabra por cada opción y lee la frase entera. ¿Cuál conserva el sentido sin volverlo raro?' }),
     play('hilo-referente', 'Lo que no se repite', { doc: HUERTA, rounds: [
       { p: 2, text: 'y armaron |una compostera| al lado de |la cancha|. |Tardó| cuatro meses en dar abono', from: 5, answer: 1 },
-      { p: 3, text: 'Los estudiantes llevan |un registro de cada siembra|: |la fecha|, la semilla, cuánta agua recibió y qué plagas aparecieron. Con |esos datos|', from: 5, answer: 1 },
-    ] }, 'Lo que tardó cuatro meses en dar abono fue la compostera, no la cancha. Y «esos datos» son todo lo que se anota en el registro de cada siembra, no solo la fecha.',
+      { p: 3, text: 'Los estudiantes llevan |un registro de cada siembra|: |la fecha, la semilla, cuánta agua recibió y qué plagas aparecieron|. Con |esos datos| han aprendido más |estadística|', from: 5, answer: 3 },
+    ] }, 'Lo que tardó cuatro meses en dar abono fue la compostera, no la cancha. Y «esos datos» son lo que enumera la lista después de los dos puntos: fecha, semilla, agua y plagas.',
       { hint: 'Pregúntate qué puede dar abono y qué reúne varios datos a la vez.' }),
     play('termometro-tono', 'El tono de la nota', { doc: HUERTA, rounds: [
       { frag: 'La idea parecía un chiste: la tierra estaba tan dura que había que romperla con barra.', scale: ['incrédulo', 'solemne', 'furioso', 'triste'], answer: 0 },
@@ -93,11 +93,11 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     play('lupa-evidencia', 'Lo que dice la nota', { doc: HUERTA, cards: [
       ['La huerta tiene doce eras.', 0],
       ['El abono tardó cuatro meses en estar listo.', 0],
-      ['Antes de la huerta, algunos estudiantes se volaban de clase.', 1],
+      ['Algunos estudiantes ganaron confianza para hablar en público.', 1],
       ['La huerta produce para el restaurante todos los días.', 2],
       ['El profesor de matemáticas dirige la huerta.', 2],
       ['Las trampas de cerveza acabaron con las babosas.', 2],
-    ] }, 'Las eras y el abono están escritos. Que algunos se volaban se deduce de «se escapaban por la malla». La huerta alcanza dos veces por semana; quien propuso la huerta fue la profesora de biología, y el texto dice que probaron las trampas, no que funcionaran.',
+    ] }, 'Las eras y el abono están escritos. Que algunos ganaron confianza se deduce de que antes apenas hablaban en clase y ahora les explican a los visitantes. La huerta alcanza dos veces por semana; quien propuso la huerta fue la profesora de biología, y el texto dice que probaron las trampas, no que funcionaran.',
       { hint: '«Probaron» no es lo mismo que «funcionó». Compara cada verbo con el del texto.' }),
   ]);
 
@@ -167,10 +167,10 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['En el primer parcial de cálculo sacó 1.8.', 0],
       ['El profesor también había llegado del campo.', 0],
       ['El autor pensó en dejar la universidad.', 1],
-      ['Los del grupo de estudio tenían poco dinero.', 1],
+      ['El autor venía de un lugar pequeño.', 1],
       ['El autor perdió cálculo.', 2],
       ['El grupo de estudio lo organizó la universidad.', 2],
-    ] }, 'El 1.8 y el profesor del campo están escritos. Que pensó en irse sale de «me devolvía»; que tenían poco dinero, de que hacían vaca hasta para el almuerzo. Un parcial perdido no es la materia perdida, y el grupo lo armaron tres compañeros.',
+    ] }, 'El 1.8 y el profesor del campo están escritos. Que pensó en irse sale de «me devolvía»; que venía de un lugar pequeño, de su colegio de pueblo donde todos se conocían. Un parcial perdido no es la materia perdida, y el grupo lo armaron tres compañeros.',
       { hint: 'Perder un parcial no es perder la materia. Lee con cuidado quién armó el grupo.' }),
     play('hilo-referente', '¿Quién y qué?', { doc: SEMESTRE, rounds: [
       { p: 3, text: 'Lo que me salvó fue |un grupo de estudio|. |Lo| armaron |tres compañeros|', from: 3, answer: 1 },
@@ -200,7 +200,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 3, before: 'sonidos agudísimos, ', word: 'inaudibles', after: ' para nosotros', options: ['que no se pueden oír', 'muy fuertes', 'desagradables', 'que se oyen lejos'], answer: 0 },
       { p: 4, before: 'En sus aguas ', word: 'subterráneas', after: ' viven peces ciegos', options: ['que corren bajo tierra', 'muy frías', 'saladas', 'que caen en cascada'], answer: 0 },
       { p: 4, before: 'comunidades de ', word: 'microorganismos', after: ' que los científicos', options: ['seres vivos diminutos', 'minerales brillantes', 'plantas trepadoras', 'insectos grandes'], answer: 0 },
-    ] }, 'Fruti- (fruto) + -voro (que come); in- (no) + audible (que se oye); sub- (debajo) + terra (tierra); micro- (pequeño) + organismo (ser vivo). Las piezas dan el sentido, y la frase lo confirma.',
+    ] }, 'Frugi- (fruto, del latín frux) + -voro (que come); in- (no) + audible (que se oye); sub- (debajo) + terra (tierra); micro- (pequeño) + organismo (ser vivo). Las piezas dan el sentido, y la frase lo confirma.',
       { hint: 'Parte cada palabra en piezas: un comienzo (in-, sub-, micro-) y una raíz que ya conoces (fruto, audio, tierra, organismo).' }),
     play('intruso-excepto', 'Quiénes viven en la cueva', { doc: CUEVA, ask: 'Según el texto, en la cueva viven todos estos, EXCEPTO:', cards: [
       ['Aves que se orientan por el eco', [1, 3]],

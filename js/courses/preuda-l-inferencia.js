@@ -31,7 +31,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     id: 'lec-casas-candado', title: 'Las casas con candado',
     ficha: { autor: 'Reportaje de una periodista regional', fuente: 'Revista de un periódico del Eje Cafetero', fecha: 'Mayo de 2025' },
     paras: [
-      'En San José de la Montaña, de cada diez casas de la calle principal, tres tienen candado en la puerta y una mata de helecho que nadie riega. Sus dueños no murieron ni se perdieron: viven en Medellín, en Bogotá o en Madrid, y vuelven, si acaso, para las fiestas de diciembre.',
+      'En San José de las Nieblas, de cada diez casas de la calle principal, tres tienen candado en la puerta y una mata de helecho que nadie riega. Sus dueños no murieron ni se perdieron: viven en Medellín, en Bogotá o en Madrid, y vuelven, si acaso, para las fiestas de diciembre.',
       'La historia empezó a cambiar hace unos veinte años, cuando el precio de la leche cayó y varias familias vendieron sus vacas. Con menos ordeño hubo menos trabajo para los jóvenes, que antes se empleaban en las fincas desde los catorce. Muchos se fueron a estudiar o a buscar empleo a la ciudad. Al principio volvían cada mes; después, cada año. En diciembre todavía se nota: durante dos semanas las calles se llenan de carros con placas de otras ciudades, y en enero el pueblo se vacía de nuevo.',
       'La escuela de la vereda La Esperanza cerró en 2019 porque quedaban seis niños. Los que quedaron empezaron a viajar una hora en chiva hasta el colegio del pueblo, y algunas familias prefirieron mudarse más cerca o irse del todo. Así, la falta de niños cerró la escuela, y el cierre de la escuela se llevó a más niños.',
       'Hay quien culpa a la carretera pavimentada, que se terminó en 2010, justo cuando más gente se estaba yendo. Pero la carretera no expulsó a nadie: los que se iban ya tenían razones para irse, y lo único que cambió fue que el viaje se hizo más corto. De hecho, la misma carretera trajo el año pasado a los primeros turistas, y con ellos dos hostales y una tienda de quesos.',
@@ -41,7 +41,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   const MAQUINA = {
     id: 'lec-maquina-coser', title: 'La máquina del comedor',
-    ficha: { autor: 'Testimonio de una abogada de Bello', fuente: 'Concurso de relatos «Historias de mi casa»', fecha: '2024' },
+    ficha: { autor: 'Testimonio de una lectora de Bello', fuente: 'Concurso de relatos «Historias de mi casa»', fecha: '2024' },
     paras: [
       'La máquina de coser de mi mamá sigue en el rincón del comedor, con su forro de tela de flores. Nadie la usa desde hace seis años, pero todos los domingos alguien le quita el polvo. Mis hermanas dicen que soy yo; yo digo que son ellas. Ninguna lo ha visto, y ninguna lo pregunta.',
       'Mi mamá cosió en esa máquina durante treinta años. Hacía uniformes para dos colegios del barrio, y en diciembre se acostaba a la una de la mañana con los dedos llenos de curitas. Cuando alguien le decía que descansara, contestaba: «Descansar es para los ricos», y se reía, pero no paraba. Cosía con la radio prendida, tarareando boleros, y solo se callaba cuando tenía que contar los botones. Con esos uniformes pagó el estudio de las tres.',
@@ -100,10 +100,10 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['La ciclorruta mide once kilómetros.', 0],
       ['Antes del lunes, los ciclistas compartían el carril con los buses.', 1],
       ['El puente peatonal del colegio estuvo alguna vez en los presupuestos.', 1],
-      ['Otras obras de la ciudad también quedaron incompletas.', 1],
-      ['La segunda etapa del puente fue cancelada oficialmente.', 2],
+      ['Los niños del colegio llevan años cruzando la avenida entre los carros.', 1],
+      ['El puente peatonal fue cancelado oficialmente.', 2],
       ['La mayoría de quienes viven en la loma tienen bicicleta.', 2],
-    ] }, 'Los once kilómetros están escritos. Lo demás lo presuponen palabras como «ya no tienen que» (antes tenían que), «dejó de aparecer» (antes aparecía) y «vuelve a terminar donde terminan casi todas» (ya pasó con otras obras). El texto dice que nadie canceló el puente y no dice cuántos tienen bicicleta.',
+    ] }, 'Los once kilómetros están escritos. Lo demás lo presuponen palabras como «ya no tienen que» (antes tenían que), «dejó de aparecer» (antes aparecía) y «como lo hacían sus hermanos mayores» (llevan años cruzando así). El texto dice que nadie canceló el puente y no dice cuántos tienen bicicleta.',
       { hint: 'Busca palabras como «ya no», «dejó de», «vuelve a», «todavía». Cada una da por hecho algo que pasó antes.' }),
     play('palabra-a-la-medida', 'Palabras que cargan pasado', { doc: CICLO, rounds: [
       { p: 2, before: 'los que ', word: 'todavía', after: ' suben a pie', options: ['aún hoy', 'nunca', 'a veces', 'ya no'], answer: 0 },
@@ -202,11 +202,11 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     play('lupa-evidencia', 'Lo que se sabe y lo que se adivina', { doc: MAQUINA, cards: [
       ['La madre cosió durante treinta años.', 0],
       ['La autora estudió Derecho.', 1],
-      ['Las tres hermanas cuidan la máquina sin decirlo.', 1],
+      ['Alguna de las hermanas limpia la máquina sin admitirlo.', 1],
       ['La autora aprendió a usar la máquina mirando a su madre.', 1],
       ['La madre ganaba mucho dinero con los uniformes.', 2],
       ['Las hermanas de la autora saben coser.', 2],
-    ] }, 'Los treinta años están escritos. Que estudió Derecho se infiere de que quería ser abogada y se graduó con toga; que todas cuidan la máquina, de que alguien le quita el polvo y nadie lo admite; y que aprendió mirando, de «como la había visto hacerlo diez mil veces». «Descansar es para los ricos» sugiere lo contrario de mucho dinero, y del oficio de las hermanas no se dice nada.',
+    ] }, 'Los treinta años están escritos. Que estudió Derecho se infiere de que quería ser abogada y se graduó con toga; que alguna la cuida en secreto, de que alguien le quita el polvo y nadie lo admite; y que aprendió mirando, de «como la había visto hacerlo diez mil veces». «Descansar es para los ricos» sugiere lo contrario de mucho dinero, y del oficio de las hermanas no se dice nada.',
       { hint: 'Para inferir hace falta una pista. Si ninguna frase apunta en esa dirección, es una suposición.' }),
     play('caso-nuevo', 'Lo que se guarda', { doc: MAQUINA, principle: 'Los sentimientos se muestran más en lo que se hace o se guarda que en lo que se dice.', cards: [
       ['Un hombre que conserva en la billetera el último boleto de bus que compró con su padre.', true],
