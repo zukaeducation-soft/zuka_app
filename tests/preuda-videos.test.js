@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -195,4 +195,29 @@ test('la matemática de los videos: Conteo (se cuentan los casos uno por uno)', 
   assert.equal(paths(3, 3, [1, 1]), 8); assert.equal(paths(3, 3), 20); assert.equal(paths(3, 2), 10);
   assert.equal([1, 2, 3].reduce((a, s) => a + (4 - s) ** 2, 0), 14); assert.equal(C(3, 2) * C(4, 2), 18); assert.equal(C(5, 2), 10);
   const st = [1, 2]; while (st.length < 5) st.push(st.at(-1) + st.at(-2)); assert.equal(st[4], 8);
+});
+
+test('la matemática de los videos: Razonamiento espacial', () => {
+  // El robot: AADAIA → (1, 3) y solo ADADADA vuelve al inicio.
+  const robot = s => { let x = 0, y = 0, d = 0; for (const c of s) { if (c === 'A') { x += [0, 1, 0, -1][d]; y += [1, 0, -1, 0][d]; } else d = (d + (c === 'D' ? 1 : 3)) % 4; } return `${x},${y}`; };
+  assert.equal(robot('AADAIA'), '1,3'); assert.deepEqual(['ADADADA', 'ADAIADA', 'AIAIADA', 'ADADAIA'].filter(s => robot(s) === '0,0'), ['ADADADA']);
+  // Colorear 3 × 3 sin vecinas: máximo 5. Dominós en 2 × 4: 5.
+  let best = 0; for (let m = 0; m < 512; m++) { const on = i => m >> i & 1; let ok = true; for (let i = 0; i < 9; i++) if (on(i) && ((i % 3 < 2 && on(i + 1)) || (i < 6 && on(i + 3)))) ok = false; if (ok) best = Math.max(best, [...Array(9).keys()].filter(on).length); } assert.equal(best, 5);
+  const dom = n => (n < 2 ? 1 : dom(n - 1) + dom(n - 2)); assert.equal(dom(4), 5);
+  // Vistas: frente 3, 1, 2 y lado 2, 3, 1 sobre una base llena de 3 × 3: máximo 14 y mínimo 12 (por fuerza bruta).
+  const f = [3, 1, 2], sd = [2, 3, 1]; let mx = 0, mn = 99;
+  for (let m = 0; m < 3 ** 9; m++) { const h = [...Array(9).keys()].map(i => Math.floor(m / 3 ** i) % 3 + 1), H = (r, c) => h[r * 3 + c];
+    if ([0, 1, 2].every(c => Math.max(H(0, c), H(1, c), H(2, c)) === f[c]) && [0, 1, 2].every(r => Math.max(H(r, 0), H(r, 1), H(r, 2)) === sd[r])) { const s = h.reduce((a, b) => a + b, 0); mx = Math.max(mx, s); mn = Math.min(mn, s); } }
+  assert.deepEqual([mx, mn], [14, 12]);
+  // El cubo de 6 pintado (48 con dos caras), el ladrillo de 3 × 3 × 2 y la pirámide de 14.
+  const paint = (a, b, c) => { const k = [0, 0, 0, 0]; for (let x = 0; x < a; x++) for (let y = 0; y < b; y++) for (let z = 0; z < c; z++) k[(x === 0 || x === a - 1) + (y === 0 || y === b - 1) + (z === 0 || z === c - 1)]++; return k; };
+  assert.deepEqual(paint(6, 6, 6), [64, 96, 48, 8]); assert.deepEqual(paint(3, 3, 2), [0, 2, 8, 8]); assert.equal(9 + 4 + 1, 14);
+  // Desarrollos: rodando un cubo sobre la fila de cuatro con una cara arriba y otra abajo, el 1 queda frente al 6.
+  const fold = cells => { const key = c => c.join(','), set = new Set(cells.map(key)), res = { [key(cells[0])]: 'D' }, q = [[...cells[0], { down: 'D', up: 'U', n: 'N', s: 'S', e: 'E', w: 'W' }]];
+    const roll = (o, d) => { const r = { ...o }; if (d === 'e') Object.assign(r, { down: o.e, e: o.up, up: o.w, w: o.down }); if (d === 'w') Object.assign(r, { down: o.w, w: o.up, up: o.e, e: o.down }); if (d === 's') Object.assign(r, { down: o.s, s: o.up, up: o.n, n: o.down }); if (d === 'n') Object.assign(r, { down: o.n, n: o.up, up: o.s, s: o.down }); return r; };
+    while (q.length) { const [x, y, o] = q.shift(); for (const [d, dx, dy] of [['e', 1, 0], ['w', -1, 0], ['s', 0, 1], ['n', 0, -1]]) { const k = key([x + dx, y + dy]); if (set.has(k) && !(k in res)) { const r = roll(o, d); res[k] = r.down; q.push([x + dx, y + dy, r]); } } } return cells.map(c => res[key(c)]); };
+  const net = fold([[0, 0], [0, 1], [1, 1], [2, 1], [3, 1], [2, 2]]), opp = { D: 'U', U: 'D', N: 'S', S: 'N', E: 'W', W: 'E' };
+  assert.equal(net.indexOf(opp[net[0]]) + 1, 6); assert.equal(net.indexOf(opp[net[1]]) + 1, 4); assert.equal(net.indexOf(opp[net[2]]) + 1, 5);
+  // La torre de dados (3 + 7 + 7), el reloj en el espejo (12:00 − 8:25) y la tira doblada cuatro veces.
+  assert.equal((7 - 4) + 7 + 7, 17); const mins = 12 * 60 - (8 * 60 + 25); assert.equal(`${Math.floor(mins / 60)}:${mins % 60}`, '3:35'); assert.equal(2 ** 4, 16);
 });

@@ -50,6 +50,14 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | | `pu-co-3` | `combinaciones` | Comité de 3 con exactamente 2 mujeres (5 H, 4 M) → 30 | 6 puntos en una circunferencia → 20 triángulos; 45 saludos → 10 personas |
 | | `pu-co-4` | `casos` | Múltiplos de 3 o de 5 del 1 al 100 → 47 | Ana y Beto no juntos → 12; pares de tres cifras con 1–5 → 24 |
 | | `pu-co-5` | `caminos` | Mensajero en 3 × 3 sin pasar por R → 8 | Cuadrados de una cuadrícula de 3 × 3 → 14 |
+| 6 Espacial | `pu-es-1` | `rejillas` | Robot en (0, 0) mirando al norte, AADAIA → (1, 3) | Secuencia que vuelve al inicio → ADADADA; colorear 3 × 3 sin vecinas → 5 |
+| | `pu-es-2` | `cubos` | Cubo de 6 pintado y cortado → 48 con dos caras (el de 4 ya es un juego de la lección) | Vistas 3, 1, 2 y 2, 3, 1 sobre base de 3 × 3 → máximo 14 (mínimo 12) |
+| | `pu-es-3` | `desarrollos` | Torre de 3 dados con un 4 arriba → ocultas suman 17 | Fila 2-3-4-5, el 1 sobre el 2 y el 6 bajo el 4 → opuesta al 1: el 6 |
+| | `pu-es-4` | `giros` | Reloj que en el espejo marca 8:25 → 3:35 | Tira doblada por la mitad 4 veces y un agujero → 16 |
+
+Problemas propios (mundo 6): en los exámenes, los problemas espaciales dependen de figuras que el texto no conserva, así que algunos enunciados son originales en el formato del examen; su respuesta se comprueba por fuerza bruta en la prueba.
+
+Revisión fresca (mundos 2 a 5, 2026-11-19): ninguna respuesta errada; se corrigieron un rótulo «agudo» sobre un triángulo obtuso, una condicional mal leída («si va C, va D» no amarra a C y D), frases ambiguas al oído y narraciones con forma de pregunta.
 
 Pruebas: `tests/preuda-videos.test.js` (formato, que ninguna lección de un mundo terminado se quede sin película, `KEYS`, y la
 matemática de cada problema, mundo por mundo).
