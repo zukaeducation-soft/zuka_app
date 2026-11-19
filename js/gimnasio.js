@@ -357,6 +357,67 @@ const GYM_RETOS = [
     answer: 'Hay que sacar 4 bolas para tener dos del mismo color y 9 para tener dos rojas. En el reparto, uno puede recibir hasta 12 dulces, y lo menos que puede recibir el que más recibe es 6.',
     wrap: 'En los problemas de «estar seguro» o de «lo máximo / lo mínimo», imagina el caso extremo: la peor suerte posible, o que los demás reciben lo menos que pueden. Lo que se resuelve en ese extremo es la respuesta.',
   },
+
+  // ---- Azar y probabilidad (Preuniversitario mundo 16) ----
+  {
+    id: 'gym-dados', after: ['pu-pb-2'], level: 2,
+    title: 'Dos dados', strategy: 'Contar lo contrario y no contar dos veces',
+    problem: 'Se lanzan dos dados. ¿Qué probabilidad hay de que el producto de los dos sea mayor que 6? ¿Y de que la suma sea 7 o salga algún 6?',
+    steps: [
+      { title: 'Cuenta lo contrario', coach: 'Los 36 resultados de la tabla son igual de probables. El juego mide lo contrario de lo que se pregunta: marca los que NO cumplen (producto 6 o menos), que son menos y están juntos, y al final réstalos de todos.',
+        ex: play('tabla-dados', 'Lo contrario: producto 6 o menos', { rounds: [{ say: 'el producto es 6 o menos', f: (a, b) => a * b <= 6 }] },
+          'Con el 1 sirven los seis; con el 2, del 1 al 3; con el 3, el 1 y el 2; con 4, 5 o 6, solo el 1: $6 + 3 + 2 + 1 + 1 + 1 = 14$. Producto mayor que 6: $1 - \\tfrac{14}{36} = \\tfrac{22}{36} = \\tfrac{11}{18}$.', { hint: 'Recorre fila por fila: ¿hasta qué número del otro dado sirve?' }),
+        hints: ['Recorre fila por fila: si el primer dado es 1, sirven todos; si es más grande, sirven menos.', 'Fila 1: seis casillas; fila 2: tres; fila 3: dos; filas 4, 5 y 6: una cada una.'],
+        note: 'Producto ≤ 6: 14 de 36; producto > 6: 1 − 14/36 = 22/36 = 11/18' },
+      { title: '«O»: no cuentes dos veces', coach: 'Para «A o B» se cuentan las casillas que cumplen alguna de las dos. Si una casilla cumple las dos a la vez, al sumar los dos grupos queda contada dos veces: hay que descontarla.',
+        ex: play('tabla-dados', 'Suma 7 o algún 6', { rounds: [{ say: 'la suma es 7 o sale algún 6', f: (a, b) => a + b === 7 || a === 6 || b === 6 }] },
+          'Suma 7: 6 casillas. Algún 6: 11 (la fila y la columna del 6, que comparten el (6, 6)). Las dos a la vez: (1, 6) y (6, 1). Total: $6 + 11 - 2 = 15$, así que $\\tfrac{15}{36} = \\tfrac{5}{12}$.', { hint: 'La suma 7 es una diagonal; «algún 6» es una fila y una columna.' }),
+        hints: ['Marca la diagonal de la suma 7 y la fila y la columna del 6. ¿Qué casillas están en las dos?', 'Se cruzan en (1, 6) y (6, 1).'],
+        note: 'Suma 7 (6) + algún 6 (11) − las dos (2) = 15 de 36 = 5/12' },
+    ],
+    answer: 'El producto es mayor que 6 con probabilidad $\\tfrac{11}{18}$, y la suma es 7 o sale algún 6 con probabilidad $\\tfrac{5}{12}$.',
+    wrap: 'Con resultados igual de probables, P = casos favorables ÷ casos posibles. Si lo pedido abarca casi todo, cuenta lo contrario y réstalo de 1. En un «o», suma los casos y descuenta los que se cuentan dos veces.',
+  },
+  {
+    id: 'gym-urna', after: ['pu-pb-2'], level: 3,
+    title: 'La urna con devolución', strategy: 'El árbol multiplica por camino y suma caminos',
+    problem: 'En una urna hay 8 bolas azules. ¿Cuántas rojas hay que echar para que la probabilidad de sacar una roja sea $\\tfrac37$? Con esa urna se saca una bola, se mira, se devuelve y se saca otra. ¿Qué probabilidad hay de que las dos sean del mismo color? ¿Y de sacar al menos una roja?',
+    steps: [
+      { title: 'Arma la urna', coach: 'La probabilidad es rojas ÷ total, y el total también crece con cada roja que echas. Piensa en la urna por grupos de 7: de cada 7 bolas, cuántas deben ser rojas y cuántas azules.',
+        ex: play('urna-fraccion', 'Rojas para que $P = \\tfrac37$', { rounds: [{ color: 'coral', others: [['sky', 8]], target: [3, 7] }] },
+          'Con $k$ rojas: $\\tfrac{k}{k + 8} = \\tfrac37$, así que $7k = 3k + 24$ y $k = 6$: 6 rojas de 14.', { hint: 'Con k rojas, el total es k + 8: ¿qué parte es k?' }),
+        hints: ['Si las rojas son 3 de cada 7 bolas, las azules son las otras 4 de cada 7.', 'Por cada 4 azules van 3 rojas, y hay 8 azules: dos grupos.'],
+        note: 'k ÷ (k + 8) = 3/7 → 7k = 3k + 24 → 6 rojas' },
+      { title: 'Recorre el árbol', coach: 'Como la bola se devuelve, la segunda sacada no depende de la primera. Cada camino del árbol multiplica sus ramas; marca los caminos que sirven y suma sus probabilidades. Son dos pestañas.',
+        ex: play('arbol-caminos', 'Dos sacadas con devolución', { rounds: [
+          { steps: [[['R', 3, 7], ['A', 4, 7]], [['R', 3, 7], ['A', 4, 7]]], say: 'las dos son del mismo color', f: pa => pa[0] === pa[1] },
+          { steps: [[['R', 3, 7], ['A', 4, 7]], [['R', 3, 7], ['A', 4, 7]]], say: 'sale al menos una roja', f: pa => pa.includes(0) },
+        ] }, 'Mismo color: $\\tfrac37 \\cdot \\tfrac37 + \\tfrac47 \\cdot \\tfrac47 = \\tfrac{9}{49} + \\tfrac{16}{49} = \\tfrac{25}{49}$. Al menos una roja: todos menos azul-azul, $1 - \\tfrac{16}{49} = \\tfrac{33}{49}$.', { hint: 'Cada camino es una pareja de colores.' }),
+        hints: ['«Mismo color» son dos caminos. Para «al menos una roja», piensa qué camino no tiene ninguna.', 'El único camino sin rojas es azul-azul.'],
+        note: 'Mismo color: 9/49 + 16/49 = 25/49; al menos una roja: 1 − 16/49 = 33/49' },
+    ],
+    answer: 'Hay que echar 6 rojas. Mismo color: $\\tfrac{25}{49}$. Al menos una roja: $\\tfrac{33}{49}$.',
+    wrap: 'Para dos sacadas, dibuja el árbol: la probabilidad de un camino es el producto de sus ramas y la de un suceso es la suma de sus caminos. «Al menos uno» suele ser más corto como 1 menos el camino donde no pasa nada.',
+  },
+  {
+    id: 'gym-adivina', after: ['pu-pb-2'], level: 2,
+    title: 'Adivinar el examen', strategy: 'Al menos uno = 1 − ninguno',
+    problem: 'Un examen tiene 3 preguntas, cada una con 4 opciones y una sola correcta. Pedro no estudió y responde todas al azar. ¿Qué probabilidad tiene de acertar al menos una? ¿Y de acertar al menos dos?',
+    steps: [
+      { title: 'Cuenta todas y las de ningún acierto', coach: 'Primero cuenta las formas de responder: una casilla por pregunta. Luego cuenta las formas de fallar todas (en cada pregunta, solo valen las opciones malas). La resta son las que aciertan al menos una.',
+        ex: play('complemento-conteo', 'Respuestas con al menos un acierto', { rounds: [{ ask: 'Formas de responder con al menos un acierto', slots: ['preg. 1', 'preg. 2', 'preg. 3'], all: [4, 4, 4], none: [3, 3, 3], tray: [4, 3, 2, 1] }] },
+          'Todas: $4^3 = 64$. Sin ningún acierto: $3^3 = 27$. Con al menos uno: $64 - 27 = 37$.', { hint: 'Fallar una pregunta deja las opciones malas.' }),
+        hints: ['Arriba, cuántas opciones tiene cada pregunta. Abajo, cuántas de esas son malas.', 'Arriba 4, 4, 4; abajo 3, 3, 3.'],
+        note: 'Todas 4³ = 64; ninguna buena 3³ = 27; al menos una: 64 − 27 = 37 de 64' },
+      { title: 'Al menos dos, en el árbol', coach: 'B es acertar (1 de 4) y M fallar (3 de 4). «Al menos dos» ya no es todo menos un camino: marca los caminos con dos o tres B y suma lo que vale cada uno.',
+        ex: play('arbol-caminos', 'Tres preguntas al azar', { rounds: [{ steps: [[['B', 1, 4], ['M', 3, 4]], [['B', 1, 4], ['M', 3, 4]], [['B', 1, 4], ['M', 3, 4]]], say: 'acierta al menos dos', f: pa => pa.filter(i => i === 0).length >= 2 }] },
+          'Con dos aciertos hay tres caminos (B‑B‑M, B‑M‑B, M‑B‑B), cada uno $\\tfrac14 \\cdot \\tfrac14 \\cdot \\tfrac34 = \\tfrac{3}{64}$; con tres, B‑B‑B: $\\tfrac{1}{64}$. Total: $\\tfrac{9}{64} + \\tfrac{1}{64} = \\tfrac{10}{64} = \\tfrac{5}{32}$.', { hint: 'Cuenta las B de cada camino.' }),
+        hints: ['Recorre cada camino y cuenta cuántas B tiene: sirven los de dos o tres.', 'Son cuatro caminos: tres con dos B y el de tres B.'],
+        note: 'Dos aciertos: 3 · 3/64 = 9/64; tres: 1/64; al menos dos: 10/64 = 5/32' },
+    ],
+    answer: 'Acierta al menos una con probabilidad $\\tfrac{37}{64}$, un poco más de la mitad; al menos dos, solo $\\tfrac{5}{32}$.',
+    wrap: 'Cuando piden «al menos uno», calcula la probabilidad de «ninguno» (un solo caso: fallar todo) y réstala de 1. Cuando piden «al menos dos», ese atajo ya no basta: en el árbol, cada camino multiplica sus ramas y se suman los caminos que sirven.',
+  },
 ];
 
 // Mundos del curso con retos: [{ unit, ui, retos }] en el orden del curso. Un reto va en el primer mundo del curso que tiene

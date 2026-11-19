@@ -121,11 +121,16 @@ test('cada paso tiene entrenador, dos ayudas, nota y un juego gráfico con pista
 test('el entrenador orienta sin regalar el número del paso', () => {
   for (const r of RETOS) r.steps.forEach((s, i) => {
     // El resultado del paso: el último número tras el último «=» o «→» de la nota (los miles van con espacio).
-    const tail = s.note.split(/[=→]/).pop().replace(/\(.*\)/g, ''), ms = tail.match(/\d+(?: \d{3})*(?:\.\d+)?/g);
+    // Una fracción a/b cuenta entera; también se busca su numerador suelto (salvo 1).
+    const tail = s.note.split(/[=→]/).pop().replace(/\(.*\)/g, ''), ms = tail.match(/\d+(?: \d{3})*(?:\.\d+)?(?:\/\d+)?/g);
     if (!ms) return;
-    const last = ms[ms.length - 1].replace(/ /g, '');
-    const says = t => new RegExp(`(^|[^\\d.,/])${last.replace('.', '\\.')}(?![\\d/])`).test(t.replace(/(\d) (?=\d{3})/g, '$1'));
-    assert.ok(!says(s.coach) && !says(s.hints[0]), `${r.id} paso ${i + 1}: el entrenador dice ${last}`);
+    const last = ms[ms.length - 1].replace(/ /g, ''), [num] = last.split('/');
+    const esc = v => v.replace(/[./]/g, m => `\\${m}`);
+    const has = (t, v) => new RegExp(`(^|[^\\d.,/])${esc(v)}(?![\\d/])`).test(t.replace(/(\d) (?=\d{3})/g, '$1'));
+    const says = t => has(t, last) || (last.includes('/') && num !== '1' && has(t, num));
+    for (const [k, t] of [['entrenador', s.coach], ['ayuda 1', s.hints[0]], ['pista del juego', s.ex.hint]]) {
+      assert.ok(!says(t), `${r.id} paso ${i + 1}: la ${k} dice ${last}`);
+    }
   });
 });
 
@@ -186,4 +191,9 @@ test('Conteo y combinatoria tiene sus retos en el Preuniversitario', () => {
 test('Aritmética y promedios tiene sus retos en el Preuniversitario', () => {
   const ids = gymRetos(COURSES.find(c => c.id === 'preuda')).flatMap(g => g.retos.map(r => r.id));
   for (const id of ['gym-prima', 'gym-examen', 'gym-peor']) assert.ok(ids.includes(id), id);
+});
+
+test('Azar y probabilidad tiene sus retos en el Preuniversitario', () => {
+  const ids = gymRetos(COURSES.find(c => c.id === 'preuda')).flatMap(g => g.retos.map(r => r.id));
+  for (const id of ['gym-dados', 'gym-urna', 'gym-adivina']) assert.ok(ids.includes(id), id);
 });
