@@ -58,6 +58,27 @@ const SOLVE = {
     const sols = []; for (let x = -6; x <= 6; x++) for (let y = -6; y <= 6; y++) if ([r.e1, r.e2].every(e => e[0] * x + e[1] * y === e[2])) sols.push({ x, y });
     assert.equal(sols.length, 1); return sols[0];
   }) }),
+  // fichas de un solo uso: cada casilla toma una ficha distinta de la bandeja
+  'placas-codigo': p => ({ rounds: p.rounds.map(r => {
+    const used = new Set(), put = r.want.map(w => { const i = r.tray.findIndex((t, k) => t === w && !used.has(k)); used.add(i); return i; });
+    assert.ok(put.every(i => i >= 0), 'faltan fichas en la bandeja'); return { put };
+  }) }),
+  // sellos que se pueden repetir
+  'complemento-conteo': p => ({ rounds: p.rounds.map(r => {
+    const pick = want => want.map(w => r.tray.indexOf(w)); const a = pick(r.all), b = pick(r.none);
+    assert.ok([...a, ...b].every(i => i >= 0)); return { a, b };
+  }) }),
+  'factorial-cajas': p => ({ rounds: p.rounds.map(r => { let f = 1, n = 0; while (f < r.target && n < 7) f *= ++n; assert.equal(f, r.target); return { n }; }) }),
+  anagramas: p => ({ rounds: p.rounds.map(r => {
+    const cnt = {}; for (const c of r.word) cnt[c] = (cnt[c] || 0) + 1;
+    const den = Object.values(cnt).filter(k => k > 1).sort((a, b) => a - b);
+    const tray = [2, 2, 3, 3, 4]; assert.ok(den.every(k => den.filter(x => x === k).length <= tray.filter(x => x === k).length), 'fichas k! suficientes');
+    return { den };
+  }) }),
+  'elige-comite': p => ({ rounds: p.rounds.map(r => {
+    const C = (n, k) => { let c = 1; for (let i = 0; i < k; i++) c = c * (n - i) / (i + 1); return c; };
+    const k = [...Array(r.n + 1).keys()].find(k => C(r.n, k) === r.ways); assert.ok(k !== undefined); return { k };
+  }) }),
   'precio-original': p => ({ rounds: p.rounds.map(r => { const old = r.now / (1 + r.r / 100); assert.ok(old <= r.max && Number.isInteger(old / r.step)); return { old }; }) }),
 };
 
@@ -140,4 +161,10 @@ test('Ecuaciones con contexto tiene retos en el Preuniversitario y en Álgebra',
   const ids = c => gymRetos(c).flatMap(g => g.retos.map(r => r.id));
   for (const id of ['gym-hermanas', 'gym-madre', 'gym-cafe', 'gym-recibos']) assert.ok(ids(pu).includes(id), `${id} en el Preuniversitario`);
   for (const id of ['gym-hermanas', 'gym-madre', 'gym-recibos']) assert.ok(ids(alg).includes(id), `${id} en Álgebra`);
+});
+
+test('Conteo y combinatoria tiene sus retos en el Preuniversitario', () => {
+  const pu = COURSES.find(c => c.id === 'preuda');
+  const ids = gymRetos(pu).flatMap(g => g.retos.map(r => r.id));
+  for (const id of ['gym-claves', 'gym-papaya', 'gym-comite']) assert.ok(ids.includes(id), id);
 });

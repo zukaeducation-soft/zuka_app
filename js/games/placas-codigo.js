@@ -1,7 +1,7 @@
 // Contar códigos casilla por casilla (Preuniversitario, pu-co-1 y pu-co-2; spec 2026-11-18-preuda-razonamiento-completo): en
 // un código cada casilla tiene sus opciones; si no se puede repetir, cada casilla tiene una menos que la anterior. Se arrastra
 // a cada casilla la ficha con su número de opciones; el juego multiplica.
-// params = { rounds: [{ slots: [rótulo], rule, want: [n], tray: [n] }] }   state = { rounds: [{ put: [índice de ficha | null] }] }
+// params = { rounds: [{ slots: [rótulo], rule, want: [n], tray: [n], ask? }] }   (ask: la pregunta; por defecto «¿Cuántos códigos hay?»)   state = { rounds: [{ put: [índice de ficha | null] }] }
 GAMES['placas-codigo'] = (() => {
   const ok = (s, r) => r.want.every((w, i) => s.put[i] != null && r.tray[s.put[i]] === w);
   const answer = r => { const used = new Set(); return { put: r.want.map(w => { const i = r.tray.findIndex((t, k) => t === w && !used.has(k)); used.add(i); return i; }) }; };
@@ -12,7 +12,7 @@ GAMES['placas-codigo'] = (() => {
     ok,
     answered: s => s.put.some(v => v != null),
     solution: r => `${r.want.join(' · ')} = ${r.want.reduce((a, b) => a * b, 1)}`,
-    prompt: r => `¿Cuántos códigos hay? ${r.rule}`,
+    prompt: r => `${r.ask || '¿Cuántos códigos hay?'} ${r.rule}`,
     foot: () => 'Arrastra a cada casilla cuántas opciones tiene',
     layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
     enter(G) { G.drag = null; lay(G); },
