@@ -382,6 +382,19 @@ Videos hechos y entregados que esperan su ID de Bunny (`clip.bunny` + `duration`
   **En el video solo va el enunciado** (pedido del usuario, 2026-11-19): nada de «pregunta del examen de admisión», «UdeA
   2024-2», «taller del preuniversitario» ni «la opción B del examen», ni en narración, rótulos, nombre de escena ni tarjeta (la
   tarjeta dice «RETO» o «PROBLEMA»); tampoco en las escenas de respaldo. La prueba lo comprueba.
+- **Preuniversitario UdeA, razonamiento, mundos 2 a 16 en video (2026-11-19)**: una película por lección (53 más, todas las del
+  componente; spec `2026-11-19-preuda-videos-razonamiento`, con la tabla de retos y problemas por lección; pruebas
+  `tests/preuda-videos.test.js`, que exige película para cada lección de los mundos de `HECHOS`, el formato, que los ejemplos (`KEYS`)
+  no salgan en los ejercicios de la lección y la matemática de cada mundo). Mismo formato del mundo 1: reto con opción A al inicio,
+  teoría con intuición, otros problemas con tarjeta, resolución y cierre; problemas sacados de los simulacros (`docs/simulacros/src`,
+  la primera opción `@` es la correcta) y de los exámenes, sin decir de dónde salen. Piezas de dibujo comunes en
+  `video/preuda-cosmos/piezas.js` (geometría, sólidos, tablas `gridT`, árboles, barras `barsC`, torta `pieC`, `closeOpts`). Antes de
+  renderizar: `node video/preuda-cosmos/tools/chk.js <película…>` (rótulos ≤ 36/58 letras, narración ≤ 3.4 palabras/s, sin ¿?),
+  `node video/preuda-cosmos/tools/dry.js <película>` (la corre sin navegador y avisa de errores) y `sh tools_stills.sh <película>`
+  (hoja de contacto). Render en cola: `sh video/preuda-cosmos/cola.sh` en segundo plano lee `out/cola.txt` («película carpeta»),
+  reintenta 3 veces y copia mp4 + `.srt` a `Downloads/Zuka_Preuniversitario/<NN_Mundo>`; registro en `out/cola.log` (unos 15 min por
+  película; no correr hojas de contacto a la vez si se puede). Esperan su ID de Bunny: al recibirlo, poner `clip.bunny` + `duration` y
+  cambiar las `scenes` de respaldo de esa lección por el reto y los ejemplos del video.
 - Clips: `cur-origen-numeros` ya está en Bunny (versión zoom, 80 s). `cur-abejas` también (75.5 s). Un clip nuevo puede vivir como mp4 en `media/clips/`
   mientras llega su ID; al recibirlo, cambiar `clip.video` por `clip.bunny`, poner la `duration` de Bunny y borrar el mp4.
   Bunny solo responde con `Referer` de la app o de localhost. **`cur-arroz`** («El arroz del rey», estilo Data Physicalization, 72.5 s, `video/arroz-ajedrez`,
