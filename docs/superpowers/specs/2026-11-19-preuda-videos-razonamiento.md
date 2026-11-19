@@ -76,6 +76,13 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | 13 Ecuaciones | `pu-ec-1` | `traducir` | Abuelo = 2 · hijo, hijo = 3 · nieto, suman 120 → 72 | Libro de Valentina → 150 páginas; terreno de perímetro 36 → 72 m² |
 | | `pu-ec-2` | `edades` | Hace 4 años el triple, en 8 el doble → suman 56 | Soluciones al 10 % y 20 % → 16 %; agua al alcohol → 10 L |
 | | `pu-ec-3` | `sistemas` | Balanza de cubos, esferas y pirámides → 3 pirámides | Entradas de teatro → 20 adultos; 3x − 7 < 20 → 8 enteros |
+| 14 Conjuntos | `pu-cj-1` | `venn` | 200 empleados: 60 % inglés, 25 % francés, 30 % ninguno → 30 hablan los dos | 60 familias con perro y gato → 11 sin ninguno |
+| | `pu-cj-2` | `encuestas` | Instituto con tres idiomas → 10 no estudian ninguno | Series y novelas → 18 solo series; club con tabla incompleta → 24 hombres diestros |
+| 15 Teoría de números | `pu-nu-1` | `primos` | Divisores de 72 → 12 | Del 1 al 60 sin divisor común con 60 → 16; primos distintos de 2 310 → 5 |
+| | `pu-nu-2` | `mcm` | Luces cada 12, 18 y 30 s → 10 veces en 30 min | Buses cada 12 y 20 min (6:00 y 6:20) → 7:00; piso de 360 × 270 → 12 baldosas |
+| | `pu-nu-3` | `residuos` | Unidades de 3¹ + … + 3⁸ → 0 | Unidad de 7²⁰²⁵ → 7; tablero circular de 8 casillas → casilla 6 |
+| 16 Probabilidad | `pu-pb-1` | `laplace` | Números de dos cifras con 1 a 4, múltiplo de 3 → 5/16 | Primo del 1 al 30 → 1/3; mujer entre los zurdos del club → 2/5 |
+| | `pu-pb-2` | `complemento` | Tres hijos, al menos un niño y una niña → 3/4 | Al menos dos caras en tres lanzamientos → 1/2; dos balotas del mismo color → 5/18 |
 
 Problemas propios (mundo 6): en los exámenes, los problemas espaciales dependen de figuras que el texto no conserva, así que algunos enunciados son originales en el formato del examen; su respuesta se comprueba por fuerza bruta en la prueba.
 

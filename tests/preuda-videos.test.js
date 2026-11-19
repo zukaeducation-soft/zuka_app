@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas', 'pu-logica', 'pu-operadores', 'pu-aritmetica', 'pu-ecuaciones'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas', 'pu-logica', 'pu-operadores', 'pu-aritmetica', 'pu-ecuaciones', 'pu-conjuntos', 'pu-numeros', 'pu-probabilidad'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -378,4 +378,47 @@ test('la matemática de los videos: Ecuaciones', () => {
   assert.ok(sols(x => 4 - 2 * x > -6, -20, 20).every(x => x < 5)); assert.equal(sols(x => 3 * x - 7 < 20, 1, 50).length, 8);
   assert.deepEqual(sols(x => -1 < 2 * x + 3 && 2 * x + 3 <= 9, -20, 20), [-1, 0, 1, 2, 3]);
   const E = 2, Cb = 3 * E / 2, P = Cb - E; assert.equal(Cb / P, 3);
+});
+
+test('la matemática de los videos: Conjuntos', () => {
+  // Dos idiomas (30), perros y gatos (11), fútbol y tenis (30 %, 40 %, 20 %), el instituto (10, solo inglés 28), series (18) y el club (24).
+  assert.equal((60 + 25 - (100 - 30)) / 100 * 200, 30); assert.equal(60 - (32 + 25 - 8), 11);
+  const both = 70 + 50 - 90; assert.deepEqual([both, 70 - both, 50 - both], [30, 40, 20]);
+  assert.equal(100 - (50 + 40 + 30 - 15 - 10 - 8 + 3), 10); assert.equal(50 - (15 - 3) - (10 - 3) - 3, 28);
+  const z = { a: 28, b: 40 - 12 - 5 - 3, c: 30 - 7 - 5 - 3, ab: 12, ac: 7, bc: 5, abc: 3 }; assert.equal(Object.values(z).reduce((s, v) => s + v, 0), 90); assert.equal(12 + 7 + 5, 24);
+  const x = 28 + 21 - (45 - 6); assert.equal(x, 10); assert.equal(28 - x, 18); assert.equal(30 - 6, 24);
+});
+
+test('la matemática de los videos: Teoría de números', () => {
+  const divs = n => [...Array(n).keys()].map(i => i + 1).filter(d => n % d === 0), gcd = (a, b) => (b ? gcd(b, a % b) : a), lcm = (a, b) => a * b / gcd(a, b);
+  const isP = n => divs(n).length === 2;
+  // Primos: 72 tiene 12 divisores, 18 tiene 6, 90 = 2 · 3² · 5, 119 = 7 · 17, 16 coprimos con 60 y 2 310 con 5 primos distintos.
+  assert.equal(divs(72).length, 12); assert.equal(divs(18).length, 6); assert.equal(2 * 9 * 5, 90); assert.ok(!isP(119) && 119 === 7 * 17);
+  assert.equal([...Array(60).keys()].filter(i => gcd(i + 1, 60) === 1).length, 16); assert.equal(divs(2310).filter(isP).length, 5);
+  assert.equal(4851 % 9, 0); assert.equal(7316 % 4, 0);
+  // MCM y MCD: las luces (180 s → 10 veces), 4 y 6, 8 y 12, los buses (7:00), las cintas (12), el piso (12 baldosas) y 63.
+  assert.equal(lcm(lcm(12, 18), 30), 180); assert.equal(30 * 60 / 180, 10); assert.equal(lcm(4, 6), 12); assert.deepEqual([lcm(8, 12), gcd(8, 12)], [24, 4]);
+  const r1 = [...Array(30).keys()].map(k => 12 * k), r2 = [...Array(30).keys()].map(k => 20 + 20 * k); assert.equal(Math.min(...r1.filter(v => r2.includes(v))), 60);
+  assert.equal(gcd(24, 36), 12); const g = gcd(360, 270); assert.equal(g, 90); assert.equal((360 / g) * (270 / g), 12);
+  assert.equal([...Array(200).keys()].find(n => n > 3 && n % 4 === 3 && n % 5 === 3 && n % 6 === 3), 63);
+  // Residuos: 3¹ + … + 3⁸ termina en 0, 3¹⁰ en 9, 7²⁰²⁵ en 7, la casilla 6, 85 = 5 · 17 y 1 237 · 4 569 termina en 3.
+  assert.equal(String([1, 2, 3, 4, 5, 6, 7, 8].reduce((s, n) => s + 3 ** n, 0)).slice(-1), '0'); assert.equal(String(3 ** 10).slice(-1), '9');
+  assert.equal(String(7n ** 2025n).slice(-1), '7'); assert.equal((3 * 10) % 8, 6); assert.equal((47 + 38) % 5, 0); assert.equal((1237 * 4569) % 10, 3);
+});
+
+test('la matemática de los videos: Probabilidad', () => {
+  const fr = (a, b) => a / b;
+  // Laplace: 5/16, un dado (1/3), dos monedas (1/2), primos hasta 30 (1/3), los zurdos (2/5), la suma 7 (6/36) y las fichas (2/5).
+  const nums = []; for (const a of [1, 2, 3, 4]) for (const b of [1, 2, 3, 4]) nums.push(10 * a + b);
+  assert.equal(fr(nums.filter(n => n % 3 === 0).length, nums.length), 5 / 16);
+  assert.equal(['CC', 'CS', 'SC', 'SS'].filter(r => r[0] !== r[1]).length / 4, 1 / 2);
+  assert.equal([...Array(30).keys()].filter(i => { const n = i + 1; return n > 1 && [...Array(n - 2).keys()].every(d => n % (d + 2)); }).length, 10);
+  assert.equal(fr(10 - 6, 10), 2 / 5); let s7 = 0; for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) s7 += a + b === 7; assert.equal(s7, 6);
+  let par = 0, tot = 0; for (let a = 1; a <= 5; a++) for (let b = a + 1; b <= 5; b++) { tot++; par += (a + b) % 2 === 0; } assert.deepEqual([par, tot], [4, 10]);
+  // Complemento: los tres hijos (3/4), al menos dos caras (1/2), dos balotas del mismo color (5/18), con y sin devolver, la condición (1/4).
+  const paths = ['H', 'M'].flatMap(a => ['H', 'M'].flatMap(b => ['H', 'M'].map(c => a + b + c)));
+  assert.equal(paths.filter(p => p.includes('H') && p.includes('M')).length / 8, 3 / 4);
+  assert.equal(paths.filter(p => [...p].filter(c => c === 'H').length >= 2).length / 8, 1 / 2);
+  const C2 = n => n * (n - 1) / 2; assert.equal((C2(4) + C2(3) + C2(2)) / C2(9), 5 / 18);
+  assert.ok(Math.abs((4 / 9) * (4 / 9) - 16 / 81) < 1e-12); assert.ok(Math.abs((4 / 9) * (3 / 8) - 1 / 6) < 1e-12); assert.equal(8 / 32, 1 / 4);
 });
