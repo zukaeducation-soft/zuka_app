@@ -67,6 +67,8 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | | `pu-lo-3` | `condicional` | Tarjetas A, K, 4, 7 → voltear A y 7 | Camila → contrarrecíproco; festivo y banco abierto → no es festivo |
 | | `pu-lo-4` | `silogismos` | Músicos de la banda y estudiantes de once → algunos de once leen partituras | Gatos de Marta y Tom → no es de Marta; ningún reptil tiene pelo → algunos del zoológico no son reptiles |
 | | `pu-lo-5` | `mentiras` | Pedro miente lunes a miércoles: «ayer mentí» y «en tres días diré la verdad» → jueves | Isla de veraces y falaces → X veraz, Y falaz; vidrio con una sola verdad → Camilo |
+| 11 Operadores | `pu-op-1` | `operadores` | a # b = aᵇ − bᵃ → 3 # 2 + 4 # 2 = 1 | Tabla en {a, b, c} → (a∘b)∘(b∘b) = a; ⌊7/2⌋ + ⌊−7/2⌋ = −1 |
+| | `pu-op-2` | `anidados` | ⊗ por casos → (3⊗5)⊗(4⊗2) = 20 | (5 ∗ 3) ∗ 2 con (a + b)/(a − b) → 3; x ▽ 3 = 9 → 6 |
 
 Problemas propios (mundo 6): en los exámenes, los problemas espaciales dependen de figuras que el texto no conserva, así que algunos enunciados son originales en el formato del examen; su respuesta se comprueba por fuerza bruta en la prueba.
 

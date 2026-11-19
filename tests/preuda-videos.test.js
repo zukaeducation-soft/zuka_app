@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas', 'pu-logica'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas', 'pu-logica', 'pu-operadores'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -311,4 +311,25 @@ test('la matemática de los videos: Lógica', () => {
   assert.deepEqual([0, 1, 2, 3, 4, 5, 6].filter(d => fits(d, !!LIAR[(d + 6) % 7])), [0, 3]);
   assert.deepEqual([0, 1, 2, 3, 4, 5, 6].filter(d => fits(d, !!LIAR[(d + 6) % 7]) && fits(d, !LIAR[(d + 3) % 7])), [3]);
   assert.deepEqual([0, 1, 2, 3, 4, 5, 6].filter(d => fits(d, !!LIAR[(d + 1) % 7])), [2, 6]);
+});
+
+test('la matemática de los videos: Operadores definidos', () => {
+  // a # b = aᵇ − bᵃ; a ∗ b = ab + a; la tabla de {a, b, c}; el mayor menos el menor; el piso; el neutro de a + b + 5.
+  const H = (a, b) => a ** b - b ** a; assert.equal(H(2, 3), -1); assert.equal(H(3, 2) + H(4, 2), 1);
+  const ST = (a, b) => a * b + a; assert.deepEqual([ST(4, 3), ST(3, 4), ST(-2, 3)], [16, 15, -8]); assert.equal((-3) ** 2, 9);
+  const TB = { a: { a: 'b', b: 'c', c: 'a' }, b: { a: 'c', b: 'a', c: 'b' }, c: { a: 'a', b: 'b', c: 'c' } }, o = (x, y) => TB[x][y];
+  assert.equal(o(o('a', 'b'), o('b', 'b')), 'a');
+  assert.deepEqual([Math.max(7, 2) - Math.min(7, 2), Math.max(2, 7) - Math.min(2, 7)], [5, 5]);
+  assert.equal(Math.floor(7 / 2) + Math.floor(-7 / 2), -1); assert.equal(Math.floor(2.7), 2);
+  assert.equal(8 + -5 + 5, 8);
+  // Anidados: ⊗ por casos → 20; ⟨⟨3⟩⟩ = 30; (5 ∗ 3) ∗ 2 = 3; f(f(f(11))) = 10; la escalera llega a 17.
+  const OT = (a, b) => (a >= b ? a * a - a * b : b * b - a * b); assert.equal(OT(OT(3, 5), OT(4, 2)), 20); assert.deepEqual([OT(3, 5), OT(4, 2)], [10, 8]);
+  const ANG = n => n * n - n; assert.equal(ANG(ANG(3)), 30);
+  const Q = (a, b) => (a + b) / (a - b); assert.equal(Q(Q(5, 3), 2), 3);
+  const f = n => (n % 2 ? n + 3 : n / 2); assert.equal(f(f(f(11))), 10);
+  let g = 2; const G = [g]; for (let n = 1; n < 5; n++) G.push(g = 2 * g - 1); assert.deepEqual(G, [2, 3, 5, 9, 17]);
+  // Ecuaciones: x ▽ 3 = 9 → 6; x ⊕ 2 = −5 → 7; x ∘ 1 = 3 ∘ x con 2a + b → 5.
+  const range = [...Array(41).keys()].map(i => i - 20);
+  assert.deepEqual(range.filter(x => x * 3 - x - 3 === 9), [6]); assert.deepEqual(range.filter(x => x + 2 - 2 * x === -5), [7]);
+  assert.deepEqual(range.filter(x => 2 * x + 1 === 2 * 3 + x), [5]);
 });
