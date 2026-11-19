@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#07080f">
+  <title>Zuka · Administración</title>
+  <link rel="icon" href="../icons/favicon-48.png" type="image/png">
+  <script>
+    // /admin sin barra final rompería las rutas relativas (admin.js, admin.css): se corrige la dirección.
+    if (!/\/$|\.html$/.test(location.pathname)) location.replace(location.pathname + '/' + location.search + location.hash);
+    (function () {
+      var t = 'system';
+      try { t = (JSON.parse(localStorage.getItem('zuka-v1')) || {}).theme || 'system'; } catch (e) {}
+      if (t === 'system') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Jost:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="admin.css?v=5">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script defer src="../js/acceso.js"></script>
+  <script defer src="admin.js?v=4"></script>
+</head>
+<body class="admin">
+  <header class="pn-top">
+    <a class="pn-brand" href="../" aria-label="Volver a Zuka">
+      <img class="logo logo-light" src="../brand/logo-light.svg" alt="Zuka" width="76" height="28">
+      <img class="logo logo-dark" src="../brand/logo-dark.svg" alt="Zuka" width="76" height="28">
+      <span>Administración</span>
+    </a>
+    <div class="pn-user" hidden><span class="pn-mail"></span><button class="link-btn" type="button" data-salir>Salir</button></div>
+  </header>
+  <nav class="pn-nav" aria-label="Secciones" hidden>
+    <a href="#resumen">Resumen</a><a href="#usuarios">Usuarios</a><a href="#cursos">Cursos</a><a href="#codigos">Códigos</a><a href="#planes">Planes</a>
+  </nav>
+  <main id="pn-view" class="pn-view" aria-live="polite"><p class="pn-state">Cargando…</p></main>
+  <div id="pn-toast" class="pn-toast" role="status" hidden></div>
+</body>
+</html>

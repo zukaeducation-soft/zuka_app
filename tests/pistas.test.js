@@ -1,0 +1,52 @@
+// Pistas: cada ejercicio puede llevar `hint`, un empujón que el estudiante abre si se atasca.
+// La lección 1.1 (alg-11) tiene el video de conceptos, el de ejemplos y luego sus ejercicios, todos con pista.
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const { loadScripts, get } = require('./load');
+
+const ctx = loadScripts(['js/content.js', 'js/courses/algebra.js']);
+const [mc, num, ord, play, buildQueue] = ['mc', 'num', 'ord', 'play', 'buildQueue'].map(n => get(ctx, n));
+const l = get(ctx, 'COURSE_ALGEBRA').units.flatMap(u => u.lessons).find(l => l.id === 'alg-11');
+
+test('mc, num, ord y play aceptan { hint } al final', () => {
+  assert.equal(mc('q', ['a', 'b'], 0, 'e', { hint: 'h1' }).hint, 'h1');
+  assert.equal(num('q', 3, 'e', { hint: 'h2' }).hint, 'h2');
+  assert.equal(ord('q', ['a', 'b'], 'e', { hint: 'h3' }).hint, 'h3');
+  assert.equal(play('juego', 'q', {}, 'e', { hint: 'h4' }).hint, 'h4');
+  assert.equal(mc('q', ['a'], 0, 'e').hint, undefined);
+});
+
+// Spec 2026-11-11-sistemas-numericos-desde-cero: alg-11 es la parte 1 (naturales y enteros), con su video
+// nuevo (N1) y luego sus ejercicios; mientras llega su ID de Bunny usa escenas de respaldo.
+test('alg-11: un solo video y luego todos los ejercicios', () => {
+  assert.ok(!l.more || l.more.length === 0, 'sin videos adicionales');
+  const q = JSON.parse(JSON.stringify(buildQueue(l)));
+  assert.deepEqual(q[0], { k: 'clip', n: 0 });
+  assert.equal(q.length, l.ex.length + 1);
+});
+
+test('alg-11: todos sus ejercicios son juegos interactivos', () => {
+  l.ex.forEach((e, i) => assert.equal(e.type, 'play', `ejercicio ${i} es ${e.type}`));
+});
+
+test('unidad 1: cada ejercicio de cada lección trae una pista que no regala la respuesta', () => {
+  const ids = ['alg-11', 'alg-12b', 'alg-21a', 'alg-21b', 'alg-22a', 'alg-22b'];
+  const lessons = get(ctx, 'COURSE_ALGEBRA').units.flatMap(u => u.lessons).filter(l => ids.includes(l.id));
+  assert.equal(lessons.length, ids.length);
+  for (const lesson of lessons) lesson.ex.forEach((e, i) => {
+    const where = `${lesson.id} ejercicio ${i}`;
+    assert.ok(typeof e.hint === 'string' && e.hint.length > 20, `${where} sin pista`);
+    if (e.type === 'mc') assert.ok(!e.hint.includes(e.options[e.answer]), `la pista de ${where} dice la respuesta`);
+    if (e.type === 'input') assert.ok(!new RegExp(`(^|[^\\d.])${String(e.answer).replace('-', '−?-?')}([^\\d.]|$)`).test(e.hint), `la pista de ${where} dice la respuesta`);
+  });
+});
+
+test('hintBlock: sin pista no dibuja nada; con pista, botón «Ver pista» y el texto oculto', () => {
+  const ex = loadScripts(['js/exercises.js']);
+  ex.tex = s => `<tex>${s}</tex>`; ex.ICON = { bulb: '<svg/>' };
+  const hintBlock = get(ex, 'hintBlock');
+  assert.equal(hintBlock({ q: 'x' }), '');
+  const h = hintBlock({ hint: 'Cuenta los pisos' });
+  assert.ok(h.includes('Ver pista') && h.includes('class="hint-btn hint-open"'), h);
+  assert.ok(/<p class="hint-text" hidden>.*<tex>Cuenta los pisos<\/tex>/.test(h), h);
+});

@@ -1,0 +1,187 @@
+// Utilidades compartidas: escape HTML, render de TeX, íconos, toasts, sonido y confeti.
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// Texto con fórmulas entre $...$ (KaTeX) y **negritas**.
+function tex(s) {
+  return String(s ?? '').split(/(\$[^$]+\$)/g).map(part => {
+    if (part.length > 2 && part[0] === '$' && part[part.length - 1] === '$') {
+      const src = part.slice(1, -1);
+      if (window.katex) {
+        try { return katex.renderToString(src, { throwOnError: false, macros: { '\\sen': '\\operatorname{sen}' } }); } catch (e) { /* cae al texto plano */ }
+      }
+      return `<span class="tex-fallback">${esc(src)}</span>`;
+    }
+    return esc(part).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  }).join('');
+}
+
+const svg = (d, fill) => `<svg class="i${fill ? ' f' : ''}" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+const ICON = {
+  learn: svg('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'),
+  clips: svg('<rect x="5" y="2" width="14" height="20" rx="3"/><path d="M10 9l5 3-5 3z"/>'),
+  calendar: svg('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M8 14h3M8 17h6"/>'),
+  user: svg('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'),
+  flame: svg('<path d="M12 22c4 0 7-3 7-7 0-5-5-7-5-12-3 2-4 5-4 7-1-1-2-2-2-4-2 2-3 5-3 9 0 4 3 7 7 7z"/>', true),
+  bolt: svg('<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>', true),
+  heart: svg('<path d="M12 21s-8-5.5-8-11.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8 3.5C20 15.5 12 21 12 21z"/>', true),
+  heartLine: svg('<path d="M12 21s-8-5.5-8-11.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8 3.5C20 15.5 12 21 12 21z"/>'),
+  bookmark: svg('<path d="M6 3h12v18l-6-4-6 4z"/>'),
+  sound: svg('<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/>'),
+  mute: svg('<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l5 6M22 9l-5 6"/>'),
+  x: svg('<path d="M6 6l12 12M18 6L6 18"/>'),
+  play: svg('<path d="M8 5l11 7-11 7z"/>', true),
+  check: svg('<path d="M5 12l5 5 9-10"/>'),
+  lock: svg('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'),
+  star: svg('<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>', true),
+  down: svg('<path d="M6 9l6 6 6-6"/>'),
+  back: svg('<path d="M15 6l-6 6 6 6"/>'),
+  right: svg('<path d="M9 6l6 6-6 6"/>'),
+  target: svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>'),
+  clock: svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  crown: svg('<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/><path d="M5 19h14"/>'),
+  trophy: svg('<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v5M8 21h8M10 18h4v3h-4z"/>'),
+  doc: svg('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>'),
+  download: svg('<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'),
+  gear: svg('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'),
+  sun: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+  moon: svg('<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>'),
+  auto: svg('<circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M12 7a5 5 0 0 1 0 10z" fill="currentColor" stroke="none"/>'),
+  trash: svg('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>'),
+  voice: svg('<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>'),
+  bulb: svg('<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/>'),
+};
+
+// Calendario de actividad (hoja de racha). Puras: reciben la fecha de hoy.
+const dayKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+// Días ('AAAA-MM-DD') de la racha viva (la que termina hoy o ayer), del más reciente al más viejo.
+function streakDays(lastDay, streak, now = new Date()) {
+  const at = k => new Date(now.getFullYear(), now.getMonth(), now.getDate() + k);
+  const last = lastDay === dayKey(at(0)) ? 0 : lastDay === dayKey(at(-1)) ? -1 : null;
+  if (last == null || !(streak > 0)) return [];
+  return Array.from({ length: Math.min(streak, 400) }, (_, i) => dayKey(at(last - i)));
+}
+// Celdas de un mes en semanas completas de lunes a domingo. `active` es un Set de días con actividad;
+// los días de los meses vecinos van con `out` y nunca se encienden ni se marcan como hoy.
+function monthGrid(year, month, active, now = new Date()) {
+  const lead = (new Date(year, month, 1).getDay() + 6) % 7, daysIn = new Date(year, month + 1, 0).getDate();
+  const todayKey = dayKey(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
+  return Array.from({ length: Math.ceil((lead + daysIn) / 7) * 7 }, (_, i) => {
+    const dt = new Date(year, month, 1 - lead + i), key = dayKey(dt), out = dt.getMonth() !== month;
+    return { key, d: dt.getDate(), out, lit: !out && active.has(key), today: !out && key === todayKey };
+  });
+}
+
+function toast(msg) {
+  document.querySelectorAll('.toast').forEach(t => t.remove());   // uno a la vez: no se apilan
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.setAttribute('role', 'status');
+  t.innerHTML = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('out'), 2200);
+  setTimeout(() => t.remove(), 2600);
+}
+
+// Diálogo propio (en lugar de la ventana de confirmación del navegador): tarjeta centrada con la ficha del cerebro, con los
+// colores del tema. ask({ title, text, ok, cancel, danger }) → Promise<boolean>; con ok: null solo
+// queda el botón de cancelar. Tocar el fondo, Esc o el botón «atrás» del celular (js/back.js) cancelan.
+let dialogDone = null;
+const dialogOpen = () => !!dialogDone;
+function dismissDialog() { dialogDone?.(false); }
+function ask({ title, text = '', ok = 'Aceptar', cancel = 'Cancelar', danger = false } = {}) {
+  dismissDialog();
+  return new Promise(resolve => {
+    const d = document.createElement('div');
+    d.className = 'dialog';
+    d.innerHTML = `<div class="dialog-bg"></div>
+      <div class="dialog-card${danger ? ' danger' : ''}" aria-modal="true" aria-labelledby="dlg-title"${text ? ' aria-describedby="dlg-text"' : ''}>
+        ${brainTile('simple', 'dialog-art')}
+        <h3 id="dlg-title">${esc(title)}</h3>${text ? `<p id="dlg-text">${esc(text)}</p>` : ''}
+        <div class="dialog-actions">${ok ? `<button class="btn" type="button" data-ok>${esc(ok)}</button>` : ''}
+          <button class="btn${ok ? ' ghost' : ''}" type="button" data-cancel>${esc(cancel)}</button></div>
+      </div>`;
+    const card = d.querySelector('.dialog-card'), before = document.activeElement;
+    card.setAttribute('role', 'alertdialog');
+    // Los toques y clics se quedan en el diálogo: p5 escucha en window y el juego de abajo no debe moverse.
+    ['mousedown', 'mouseup', 'mousemove', 'touchstart', 'touchmove', 'touchend', 'pointerdown', 'pointerup']
+      .forEach(t => d.addEventListener(t, e => e.stopPropagation()));
+    // Ninguna tecla llega a la lección de atrás (Enter, flechas, números); Esc cancela y Tab da la vuelta.
+    const key = e => {
+      e.stopPropagation();
+      if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+      if (e.key === 'Tab') {
+        const bs = [...card.querySelectorAll('button')], i = bs.indexOf(document.activeElement);
+        e.preventDefault(); bs[(i + (e.shiftKey ? bs.length - 1 : 1)) % bs.length].focus();
+      }
+    };
+    // Mientras el diálogo está abierto, el resto de la página queda inerte (lectores de pantalla y foco).
+    const others = [...document.body.children].filter(el => !el.inert);
+    function finish(v) {
+      if (dialogDone !== finish) return;
+      dialogDone = null;
+      document.removeEventListener('keydown', key, true);
+      others.forEach(el => { el.inert = false; });
+      d.classList.add('out');
+      setTimeout(() => d.remove(), 200);
+      before?.focus?.({ preventScroll: true });
+      resolve(v);
+    }
+    d.querySelector('.dialog-bg').onclick = () => finish(false);
+    d.querySelector('[data-cancel]').onclick = () => finish(false);
+    if (ok) d.querySelector('[data-ok]').onclick = () => finish(true);
+    dialogDone = finish;
+    document.addEventListener('keydown', key, true);
+    others.forEach(el => { el.inert = true; });
+    document.body.appendChild(d);
+    requestAnimationFrame(() => d.classList.add('open'));
+    d.querySelector(danger || !ok ? '[data-cancel]' : '[data-ok]').focus({ preventScroll: true });
+  });
+}
+
+// Efectos de sonido sintetizados (sin archivos de audio).
+const Sfx = (() => {
+  let ac;
+  const tone = (f, d, type = 'sine', t0 = 0, g = 0.08) => {
+    if (!S.sfx) return;
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      const o = ac.createOscillator(), v = ac.createGain(), s = ac.currentTime + t0;
+      o.type = type; o.frequency.value = f;
+      v.gain.setValueAtTime(g, s);
+      v.gain.exponentialRampToValueAtTime(0.0001, s + d);
+      o.connect(v).connect(ac.destination);
+      o.start(s); o.stop(s + d);
+    } catch (e) { /* sin audio */ }
+  };
+  return {
+    tap: () => tone(660, 0.06, 'triangle', 0, 0.04),
+    ok: () => { tone(784, 0.12); tone(1046, 0.2, 'sine', 0.1); navigator.vibrate?.(15); },
+    bad: () => { tone(196, 0.25, 'square', 0, 0.035); navigator.vibrate?.([40, 40, 40]); },
+    win: () => [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.28, 'triangle', i * 0.1)),
+  };
+})();
+
+function confetti(cv) {
+  const ctx = cv.getContext('2d'), r = cv.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1);
+  cv.width = r.width * dpr; cv.height = r.height * dpr; ctx.scale(dpr, dpr);
+  const P = Array.from({ length: 140 }, () => ({
+    x: r.width / 2, y: r.height * 0.3, vx: (Math.random() - 0.5) * 10, vy: -Math.random() * 10 - 3,
+    s: 5 + Math.random() * 6, a: Math.random() * 6, va: (Math.random() - 0.5) * 0.3,
+    c: PAL[Math.floor(Math.random() * PAL.length)],
+  }));
+  let n = 0;
+  (function frame() {
+    if (!cv.isConnected) return;
+    ctx.clearRect(0, 0, r.width, r.height);
+    for (const p of P) {
+      p.vy += 0.25; p.vx *= 0.99; p.x += p.vx; p.y += p.vy; p.a += p.va;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
+      ctx.restore();
+    }
+    if (++n < 200) requestAnimationFrame(frame); else ctx.clearRect(0, 0, r.width, r.height);
+  })();
+}
