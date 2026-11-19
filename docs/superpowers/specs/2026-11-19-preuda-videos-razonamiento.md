@@ -40,6 +40,11 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | | `pu-or-2` | `circular` | Tres parejas en mesa redonda → Natalia (igual con la convención contraria) | Mesa cuadrada de los instrumentos → Tomás |
 | | `pu-or-3` | `tablas` | Laura, Mónica, Natalia → ingeniera en Medellín | Cajas de 3, 5, 8 y 12 kg → roja 12 y verde 5 |
 | | `pu-or-4` | `condiciones` | Seis libros en tres estantes, C en 1 y F en 2 → E en el 3 | Carrera de cuatro (si Carlos después de Pablo → tercero); equipo de cuatro → C y D |
+| 4 Proporcionalidad | `pu-pr-1` | `razones` | Salón 3 : 5, llegan 6 hombres → 3 : 4 → 40 mujeres | Herencia 2 : 3 : 5 (18 millones de diferencia) → 60; escala 1 : 50 000, 6 cm → 3 km |
+| | `pu-pr-2` | `reglatres` | 6 obreros en 12 días, a los 4 se van 2 → 16 días | 8 llaves en 15 h → 12 llaves en 10 h; 4 máquinas, 600 piezas, 5 h → 6 máquinas, 8 h: 1 440 |
+| | `pu-pr-3` | `velocidad` | Dos llaves (6 h y 3 h) y desagüe (4 h) → 4 h | Trenes de M y N (360 km, 70 y 50) → 210 km; bus 60 / 40 → 48 km/h |
+| | `pu-pr-4` | `porcientos` | Elección: 60 % votó, 55 % = 6 600 → 20 000 | Tanque del 40 % al 65 % con 30 L → 120 L; grupo en bicicleta → 16 % |
+| | `pu-pr-5` | `aumentos` | Salario + 8 % = 1 620 000 → 1 500 000 | +20 % y −20 % → −4 %; comerciante 80 000, +25 %, −10 % → 12.5 % (el IVA y los descuentos 20 % + 10 % ya salen en los ejercicios) |
 
 Pruebas: `tests/preuda-videos.test.js` (formato, que ninguna lección de un mundo terminado se quede sin película, `KEYS`, y la
 matemática de cada problema, mundo por mundo).

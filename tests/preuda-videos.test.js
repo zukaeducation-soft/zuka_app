@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -145,4 +145,24 @@ test('la matemática de los videos: Acertijos de orden (se prueban todos los aco
   assert.deepEqual(eq.sort(), ['ACDE', 'ACDF', 'BCDE', 'BCDF']);
   const ca = perms([...'PJCL']).map(p => p.join('')).filter(s => { const i = c => s.indexOf(c); return i('P') < i('J') && i('C') < i('J') && i('L') < i('P'); });
   assert.deepEqual(ca.sort(), ['CLPJ', 'LCPJ', 'LPCJ']); assert.ok(ca.filter(s => s.indexOf('C') > s.indexOf('P')).every(s => s.indexOf('C') === 2));
+});
+
+test('la matemática de los videos: Proporcionalidad y porcentajes', () => {
+  const near = (a, b) => Math.abs(a - b) < 1e-6;
+  // Razones: el salón 3k : 5k → (3k + 6) : 5k = 3 : 4; la herencia 2 : 3 : 5; la escala; el producto cruzado; a/c.
+  const k = [...Array(50).keys()].find(k => k && 4 * (3 * k + 6) === 3 * 5 * k); assert.equal(k, 8); assert.equal(5 * k, 40);
+  assert.equal(18 / (5 - 2) * 10, 60); assert.equal(6 * 50000 / 100 / 1000, 3); assert.equal(60 / 4, 15); assert.ok(near(2 / 3 * 4 / 5, 8 / 15));
+  assert.ok(840000 / 7 * 3 === 360000 && 840000 / 7 * 4 === 480000);
+  // Regla de tres: los obreros (16 días), las llaves (10 h), la compuesta (1 440), la receta y los pintores.
+  assert.equal(4 + (6 * 12 - 6 * 4) / 4, 16); assert.equal(8 * 15 / 12, 10); assert.equal(600 / 4 / 5 * 6 * 8, 1440);
+  assert.equal(200 * 30 / 12, 500); assert.equal(3 * 8 / 4, 6);
+  // Velocidad y trabajo: el tanque (1/6 + 1/3 − 1/4 = 1/4 → 4 h), los trenes, el alcance, el bus y las obreras.
+  assert.ok(near(1 / (1 / 6 + 1 / 3 - 1 / 4), 4)); assert.equal(70 * 360 / (70 + 50), 210); assert.equal(15 * 2 / (45 - 15), 1);
+  assert.equal(240 / (120 / 60 + 120 / 40), 48); assert.ok(near(1 / (1 / 10 + 1 / 15), 6)); assert.equal(80 * 3, 240);
+  // Porcentajes: la elección (20 000), el tanque (120 L), lo que queda (40 L), el grupo (16 %), 18 de 24.
+  assert.ok(near(6600 / 0.55 / 0.6, 20000)); assert.ok(near(30 / (0.65 - 0.40), 120)); assert.ok(near(26 / 0.65, 40));
+  assert.ok(near(0.4 * 25 + 0.6 * 10, 16)); assert.equal(18 / 24 * 100, 75); assert.ok(near(0.25 * 0.40, 0.10)); assert.equal(45 / 0.3, 150);
+  // Aumentos: el salario (1 500 000 y la trampa 1 490 400), el IVA, ±20 %, +10 % +20 %, el comerciante y el interés compuesto.
+  assert.ok(near(1620000 / 1.08, 1500000)); assert.ok(near(1620000 * 0.92, 1490400)); assert.ok(near(595000 / 1.19, 500000));
+  assert.ok(near(1.2 * 0.8, 0.96) && near(1.1 * 1.2, 1.32)); assert.ok(near((80000 * 1.25 * 0.9 - 80000) / 80000, 0.125)); assert.ok(near(1.1 ** 3, 1.331));
 });
