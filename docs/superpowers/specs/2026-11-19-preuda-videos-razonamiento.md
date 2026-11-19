@@ -73,6 +73,9 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | | `pu-ar-2` | `medias` | Grupo 3.9, hombres 3.5, mujeres 4.1 → mujeres el doble | Quinto amigo → 35; Sofía tacha dos sin cambiar el promedio → 2 maneras |
 | | `pu-ar-3` | `cifras` | Padre AB, hijo BA, 27 de diferencia y cifras que suman 9 → 63 | AB + BA = 165 → 4 números; producto 24 y suma 9 → 432 |
 | | `pu-ar-4` | `extremos` | Cajón con 10, 8 y 6 medias, tres iguales con certeza → 7 | Urna 12, 9, 7, una de cada color → 22; cinco distintos que suman 30 → 20 |
+| 13 Ecuaciones | `pu-ec-1` | `traducir` | Abuelo = 2 · hijo, hijo = 3 · nieto, suman 120 → 72 | Libro de Valentina → 150 páginas; terreno de perímetro 36 → 72 m² |
+| | `pu-ec-2` | `edades` | Hace 4 años el triple, en 8 el doble → suman 56 | Soluciones al 10 % y 20 % → 16 %; agua al alcohol → 10 L |
+| | `pu-ec-3` | `sistemas` | Balanza de cubos, esferas y pirámides → 3 pirámides | Entradas de teatro → 20 adultos; 3x − 7 < 20 → 8 enteros |
 
 Problemas propios (mundo 6): en los exámenes, los problemas espaciales dependen de figuras que el texto no conserva, así que algunos enunciados son originales en el formato del examen; su respuesta se comprueba por fuerza bruta en la prueba.
 

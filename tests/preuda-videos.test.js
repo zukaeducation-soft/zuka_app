@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas', 'pu-logica', 'pu-operadores', 'pu-aritmetica'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas', 'pu-logica', 'pu-operadores', 'pu-aritmetica', 'pu-ecuaciones'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -360,4 +360,22 @@ test('la matemática de los videos: Aritmética', () => {
   const tandas = Math.min(Math.floor(12 / 3), Math.floor(15 / 5)); assert.equal(tandas * 8, 24);
   let best = 0; for (let m = 0; m < 512; m++) { const on = i => (m >> i) & 1; let ok = true; for (let i = 0; i < 9; i++) if (on(i) && ((i % 3 < 2 && on(i + 1)) || (i < 6 && on(i + 3)))) ok = false; if (ok) best = Math.max(best, [...Array(9).keys()].filter(on).length); }
   assert.equal(best, 5);
+});
+
+test('la matemática de los videos: Ecuaciones', () => {
+  const sols = (f, lo = -50, hi = 200) => [...Array(hi - lo + 1).keys()].map(i => i + lo).filter(f);
+  // Traducir: el abuelo (72), 2x + 3 frente a 2(x + 3), el lápiz (2 000), Valentina (150), la balanza (4) y el terreno (72 m²).
+  assert.deepEqual(sols(n => n + 3 * n + 6 * n === 120), [12]); assert.deepEqual([2 * 5 + 3, 2 * (5 + 3)], [13, 16]);
+  assert.equal(8000 / 4, 2000); assert.deepEqual(sols(x => x % 15 === 0 && (x * 4 / 5 * 3 / 4 - 40) * 3 === x, 1, 400), [150]);
+  assert.deepEqual(sols(x => 4 * x + 5 === x + 17), [4]); const a = sols(x => 2 * (x + 2 * x) === 36)[0]; assert.equal(a * 2 * a, 72);
+  // Edades y mezclas: padre e hijo (40 y 16), Marta (1985), la sal (16 %), el alcohol (10 L), la evaporación (10 kg) y las monedas (10).
+  const [h] = sols(h => { const p = 3 * (h - 4) + 4; return p + 8 === 2 * (h + 8); }); assert.equal(h, 16); assert.equal(3 * (h - 4) + 4 + h, 56);
+  assert.equal(2000 - sols(x => x + 30 === 3 * x)[0], 1985); assert.equal((200 * .1 + 300 * .2) / 500, .16);
+  assert.equal(40 * .25 / .2 - 40, 10); assert.equal(50 - 50 * .04 / .05, 10); assert.deepEqual(sols(k => 500 * k + 200 * (20 - k) === 7000, 0, 20), [10]);
+  // Sistemas: (7, 5), (6, 12), las entradas (20), las desigualdades (x < 5, 8 enteros, 5 enteros) y la balanza (3 pirámides).
+  assert.deepEqual(sols(x => x + (12 - x) === 12 && x - (12 - x) === 2), [7]); assert.deepEqual(sols(x => x + 2 * x === 18), [6]);
+  assert.deepEqual(sols(a => 12000 * a + 7000 * (50 - a) === 450000, 0, 50), [20]);
+  assert.ok(sols(x => 4 - 2 * x > -6, -20, 20).every(x => x < 5)); assert.equal(sols(x => 3 * x - 7 < 20, 1, 50).length, 8);
+  assert.deepEqual(sols(x => -1 < 2 * x + 3 && 2 * x + 3 <= 9, -20, 20), [-1, 0, 1, 2, 3]);
+  const E = 2, Cb = 3 * E / 2, P = Cb - E; assert.equal(Cb / P, 3);
 });
