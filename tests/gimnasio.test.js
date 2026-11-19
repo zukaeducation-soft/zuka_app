@@ -30,11 +30,39 @@ const SOLVE = {
   persecucion: p => ({ rounds: p.rounds.map(r => { const t = r.head / (r.v2 - r.v1); assert.ok(t <= 8 && Number.isInteger(t * 2)); return { t }; }) }),
   'trabajo-conjunto': p => ({ rounds: p.rounds.map(r => { const t = r.a * r.b / (r.a + r.b); assert.ok(t <= Math.min(r.a, r.b) && Number.isInteger(t * 2)); return { t }; }) }),
   cascada: p => { const f = p.changes.reduce((x, c) => x * (1 + c / 100), 1), single = 100 * (1 - f); assert.ok(Math.abs(single - Math.round(single)) < 1e-9, 'descuento único entero'); return { applied: p.changes.map((_, i) => i), single: Math.round(single) }; },
+  'cinta-ecuacion': p => ({ rounds: p.rounds.map(r => {
+    const xs = []; for (let x = r.lo; x <= r.hi; x++) if (r.parts.reduce((s, [c, k]) => s + c * x + k, 0) === r.total) xs.push(x);
+    assert.equal(xs.length, 1, 'una sola x en el rango'); return { x: xs[0] };
+  }) }),
+  'despeja-x': p => ({ rounds: p.rounds.map(r => {
+    const iPlus = r.cards.findIndex(([op, v]) => op === '+' && v === -r.b), iMul = r.cards.findIndex(([op, v]) => op === '×' && Math.abs(v * r.a - 1) < 1e-9);
+    assert.ok(iPlus >= 0 && iMul >= 0, 'faltan tarjetas para despejar'); return { steps: [iPlus, iMul] };
+  }) }),
+  'edades-barras': p => ({ rounds: p.rounds.map(r => { const s = r.L * (r.k2 - 1) / (r.k1 - r.k2); assert.ok(Number.isInteger(s) && s >= 1 && s <= 20); return { s }; }) }),
+  'mezcla-precio': p => ({ rounds: p.rounds.map(r => {
+    const ks = []; for (let k = 0; k <= r.total; k += r.step) if (Math.abs((r.a[1] * k + r.b[1] * (r.total - k)) / r.total - r.target) < 1e-9) ks.push(k);
+    assert.equal(ks.length, 1); return { ka: ks[0] };
+  }) }),
+  'balanza-promedio': p => ({ rounds: p.rounds.map(r => {
+    const n = r.groups.reduce((a, g) => a + g.n, 0), f = r.groups.reduce((a, g) => a + g.n * g.mean, 0) / n;
+    assert.ok(Number.isInteger(f * 2) && f >= r.lo && f <= r.hi, 'apoyo en la rejilla de medios'); return { f };
+  }) }),
+  'elimina-variable': p => ({ rounds: p.rounds.map(r => {
+    const ks = [-4, -3, -2, -1, 0, 1, 2, 3, 4].filter(k => r.e1[1] + k * r.e2[1] === 0); assert.equal(ks.length, 1); return { k: ks[0] };
+  }) }),
+  'dos-compras': p => ({ rounds: p.rounds.map(r => {
+    const sols = []; for (let a = 1; a <= r.max; a++) for (let b = 1; b <= r.max; b++) if ([r.e1, r.e2].every(e => e[0] * a + e[1] * b === e[2])) sols.push([a, b]);
+    assert.equal(sols.length, 1); return { p: sols[0] };
+  }) }),
+  'dos-rectas': p => ({ rounds: p.rounds.map(r => {
+    const sols = []; for (let x = -6; x <= 6; x++) for (let y = -6; y <= 6; y++) if ([r.e1, r.e2].every(e => e[0] * x + e[1] * y === e[2])) sols.push({ x, y });
+    assert.equal(sols.length, 1); return sols[0];
+  }) }),
   'precio-original': p => ({ rounds: p.rounds.map(r => { const old = r.now / (1 + r.r / 100); assert.ok(old <= r.max && Number.isInteger(old / r.step)); return { old }; }) }),
 };
 
 test('hay retos y cada uno está completo', () => {
-  assert.ok(RETOS.length >= 6);
+  assert.ok(RETOS.length >= 10);
   const ids = new Set();
   for (const r of RETOS) {
     assert.match(r.id, /^gym-/); assert.ok(!ids.has(r.id), `id repetido ${r.id}`); ids.add(r.id);
@@ -59,11 +87,12 @@ test('cada paso tiene entrenador, dos ayudas, nota y un juego gráfico con pista
 
 test('el entrenador orienta sin regalar el número del paso', () => {
   for (const r of RETOS) r.steps.forEach((s, i) => {
-    const nums = (s.note.match(/\d[\d .]*\d|\d/g) || []).map(x => x.replace(/[ .]/g, '')).filter(x => x.length >= 2);
-    const last = nums[nums.length - 1];   // la nota termina en el resultado del paso
-    if (!last) return;
-    const plain = t => t.replace(/[ .]/g, '');
-    assert.ok(!plain(s.coach).includes(last) && !plain(s.hints[0]).includes(last), `${r.id} paso ${i + 1}: el entrenador dice ${last}`);
+    // El resultado del paso: el último número tras el último «=» o «→» de la nota (los miles van con espacio).
+    const tail = s.note.split(/[=→]/).pop().replace(/\(.*\)/g, ''), ms = tail.match(/\d+(?: \d{3})*(?:\.\d+)?/g);
+    if (!ms) return;
+    const last = ms[ms.length - 1].replace(/ /g, '');
+    const says = t => new RegExp(`(^|[^\\d.,/])${last.replace('.', '\\.')}(?![\\d/])`).test(t.replace(/(\d) (?=\d{3})/g, '$1'));
+    assert.ok(!says(s.coach) && !says(s.hints[0]), `${r.id} paso ${i + 1}: el entrenador dice ${last}`);
   });
 });
 
@@ -104,4 +133,11 @@ test('el menú inferior lleva Gimnasio en lugar de Clips', () => {
   assert.match(app, /gym: 'gym'/);
   assert.match(read('js/pwa.js'), /'gym'/);
   assert.match(read('manifest.json'), /tab=gym/);
+});
+
+test('Ecuaciones con contexto tiene retos en el Preuniversitario y en Álgebra', () => {
+  const pu = COURSES.find(c => c.id === 'preuda'), alg = COURSES.find(c => c.id === 'algebra');
+  const ids = c => gymRetos(c).flatMap(g => g.retos.map(r => r.id));
+  for (const id of ['gym-hermanas', 'gym-madre', 'gym-cafe', 'gym-recibos']) assert.ok(ids(pu).includes(id), `${id} en el Preuniversitario`);
+  for (const id of ['gym-hermanas', 'gym-madre', 'gym-recibos']) assert.ok(ids(alg).includes(id), `${id} en Álgebra`);
 });

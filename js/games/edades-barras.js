@@ -22,7 +22,7 @@ GAMES['edades-barras'] = (() => {
         p.fill(C.coral); p.rect(84, y + 24, b * u, 18, 3); TK.label(p, C, `madre ${b}`, Math.min(G.W - 34, 84 + b * u + 36), y + 33, C.ink, 10, 66);
       });
       const later = (m + r.L) === r.k2 * (h + r.L);
-      TK.label(p, C, `en ${r.L} años: ${m + r.L} ${later ? '=' : '≠'} ${r.k2} × ${h + r.L}`, G.W / 2, 272, later ? C.ok : C.mute, 11, G.W - 30);
+      TK.label(p, C, `en ${r.L} años: ${m + r.L} ${later ? '=' : '≠'} ${r.k2} × ${h + r.L}`, G.W / 2, Math.min(272, G.tY - 34), later ? C.ok : C.mute, 11, G.W - 30);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, 20, h - 1, i => (i % 3 === 2 ? String(i + 1) : null));
       RK.strip(p, C, G.fb, `$${r.k1}x + ${r.L} = ${r.k2}(x + ${r.L})$`, { kicker: `x = ${h}`, col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
     },
