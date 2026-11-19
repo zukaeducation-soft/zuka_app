@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas', 'pu-logica', 'pu-operadores'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas', 'pu-logica', 'pu-operadores', 'pu-aritmetica'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -332,4 +332,32 @@ test('la matemática de los videos: Operadores definidos', () => {
   const range = [...Array(41).keys()].map(i => i - 20);
   assert.deepEqual(range.filter(x => x * 3 - x - 3 === 9), [6]); assert.deepEqual(range.filter(x => x + 2 - 2 * x === -5), [7]);
   assert.deepEqual(range.filter(x => 2 * x + 1 === 2 * 3 + x), [5]);
+});
+
+test('la matemática de los videos: Aritmética', () => {
+  const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} ≠ ${b}`);
+  // Lo que queda: el testamento (36), la tela (60), Julián (60 000), la biblioteca (200) y el error de restar.
+  const T = 36; near(T / 2 + (T / 2) / 3 + 2 * 6, T); near(((T / 2) * (2 / 3)) / 2, 6);
+  near(60 * (3 / 5) * (2 / 3), 24); near(60000 * (2 / 3) * (3 / 4), 30000);
+  const total = 800; near(total * .75 * .7, 420); near(total * .25, 200);
+  near(1 - 1 / 3 - 1 / 4, 5 / 12); near((2 / 3) * (3 / 4), 1 / 2); near((2 / 3) * (1 / 2), 1 / 3);
+  // Promedios: Daniela (5.0), el quinto amigo (35), quitar dos (17), el carro (68), ida y vuelta (48), Sofía (2) y el grupo (m = 2h).
+  near(6 * 4 - 5 * 3.8, 5); assert.equal(5 * 27 - 4 * 25, 35); assert.equal((8 * 15 - 2 * 9) / 6, 17);
+  assert.equal((2 * 80 + 3 * 60) / 5, 68); assert.equal(240 / (120 / 60 + 120 / 40), 48);
+  const L = [3, 4, 7, 8, 10, 12, 13, 15], pairs = [];
+  for (let i = 0; i < 8; i++) for (let j = i + 1; j < 8; j++) { const r = L.filter((_, k) => k !== i && k !== j); if (r.reduce((a, b) => a + b) / 6 === 9) pairs.push([L[i], L[j]]); }
+  assert.deepEqual(pairs, [[3, 15], [8, 10]]); near((10 * 3.5 + 20 * 4.1) / 30, 3.9);
+  // Cifras: el padre (63), AB + BA = 165 (4), cuatro veces sus cifras (4), AB + B = BA (89), 432 y las cifras de 2¹⁰ · 5⁷ (8).
+  const two = [...Array(90).keys()].map(i => i + 10), d = n => [Math.floor(n / 10), n % 10], rev = n => d(n)[1] * 10 + d(n)[0];
+  assert.deepEqual(two.filter(n => n - rev(n) === 27 && d(n)[0] + d(n)[1] === 9), [63]);
+  assert.equal(two.filter(n => n % 10 && n + rev(n) === 165).length, 4); assert.deepEqual(two.filter(n => n === 4 * (d(n)[0] + d(n)[1])), [12, 24, 36, 48]);
+  assert.deepEqual(two.filter(n => d(n)[0] !== d(n)[1] && n + d(n)[1] === rev(n) && d(n)[1]), [89]);
+  const three = [...Array(900).keys()].map(i => i + 100).filter(n => { const c = String(n).split('').map(Number); return c[0] * c[1] * c[2] === 24 && c[0] + c[1] + c[2] === 9; });
+  assert.equal(Math.max(...three), 432); assert.equal(String(2 ** 10 * 5 ** 7).length, 8);
+  // Extremos: las medias (7), 13 y 25 personas, la urna (22), el reparto (20), el producto (110), la pintura (24) y la cuadrícula (5).
+  assert.equal(2 * 3 + 1, 7); assert.equal(12 + 1, 13); assert.equal(2 * 12 + 1, 25); assert.equal(12 + 9 + 1, 22);
+  assert.equal(30 - (1 + 2 + 3 + 4), 20); assert.equal(Math.max(...[...Array(20).keys()].map(a => (a + 1) * (21 - a - 1))), 110);
+  const tandas = Math.min(Math.floor(12 / 3), Math.floor(15 / 5)); assert.equal(tandas * 8, 24);
+  let best = 0; for (let m = 0; m < 512; m++) { const on = i => (m >> i) & 1; let ok = true; for (let i = 0; i < 9; i++) if (on(i) && ((i % 3 < 2 && on(i + 1)) || (i < 6 && on(i + 3)))) ok = false; if (ok) best = Math.max(best, [...Array(9).keys()].filter(on).length); }
+  assert.equal(best, 5);
 });

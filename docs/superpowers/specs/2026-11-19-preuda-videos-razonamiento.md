@@ -69,6 +69,10 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | | `pu-lo-5` | `mentiras` | Pedro miente lunes a miércoles: «ayer mentí» y «en tres días diré la verdad» → jueves | Isla de veraces y falaces → X veraz, Y falaz; vidrio con una sola verdad → Camilo |
 | 11 Operadores | `pu-op-1` | `operadores` | a # b = aᵇ − bᵃ → 3 # 2 + 4 # 2 = 1 | Tabla en {a, b, c} → (a∘b)∘(b∘b) = a; ⌊7/2⌋ + ⌊−7/2⌋ = −1 |
 | | `pu-op-2` | `anidados` | ⊗ por casos → (3⊗5)⊗(4⊗2) = 20 | (5 ∗ 3) ∗ 2 con (a + b)/(a − b) → 3; x ▽ 3 = 9 → 6 |
+| 12 Aritmética | `pu-ar-1` | `queda` | Testamento (1/2, 1/3 del resto, dos hijas de 6 M) → 36 millones | Tela (2/5 y 1/3 del resto, sobran 24 m) → 60; biblioteca → 200 en inglés |
+| | `pu-ar-2` | `medias` | Grupo 3.9, hombres 3.5, mujeres 4.1 → mujeres el doble | Quinto amigo → 35; Sofía tacha dos sin cambiar el promedio → 2 maneras |
+| | `pu-ar-3` | `cifras` | Padre AB, hijo BA, 27 de diferencia y cifras que suman 9 → 63 | AB + BA = 165 → 4 números; producto 24 y suma 9 → 432 |
+| | `pu-ar-4` | `extremos` | Cajón con 10, 8 y 6 medias, tres iguales con certeza → 7 | Urna 12, 9, 7, una de cada color → 22; cinco distintos que suman 30 → 20 |
 
 Problemas propios (mundo 6): en los exámenes, los problemas espaciales dependen de figuras que el texto no conserva, así que algunos enunciados son originales en el formato del examen; su respuesta se comprueba por fuerza bruta en la prueba.
 
