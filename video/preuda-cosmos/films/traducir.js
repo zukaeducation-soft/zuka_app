@@ -21,9 +21,9 @@ const S = {
   // 2 · Traducir con cuidado.
   traducir(t) {
     stars(t, .3);
-    jT('«el doble de un número, aumentado en 3»', CX, 560, WD, 36, { max: 960 });
+    jT('«el doble de un número, más 3»', CX, 560, WD, 36, { max: 960 });
     F([['2', 'r'], ['x', 'i', XX], [' + 3', 'r', KN]], CX, 660, 60);
-    fade(A(t, 9.2, .5), () => { jT('«el doble de un número aumentado en 3»', CX, 820, WD, 36, { max: 960 }); F([['2(', 'r'], ['x', 'i', XX], [' + 3', 'r', KN], [')', 'r']], CX, 920, 60); mono('con x = 5: 13 frente a 16', CX, 990, NOW, { s: 24 }); });
+    fade(A(t, 9.2, .5), () => { jT('«el doble de la suma de un número y 3»', CX, 820, WD, 36, { max: 960 }); F([['2(', 'r'], ['x', 'i', XX], [' + 3', 'r', KN], [')', 'r']], CX, 920, 60); mono('con x = 5: 13 frente a 16', CX, 990, NOW, { s: 24 }); });
     fade(A(t, 18.2, .5), () => { jT('«la mitad de un número»', 330, 1130, WD, 34); F([['x', 'i', XX], [' ÷ 2', 'r']], 780, 1140, 52); });
   },
   // 3 · Menos que, más que.

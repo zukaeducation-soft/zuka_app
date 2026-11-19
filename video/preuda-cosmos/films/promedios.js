@@ -87,7 +87,7 @@ const S = {
   // 8 · Problema: las horas de celular.
   celular(t) {
     stars(t, .3);
-    examCard(t, { y: 262, t0: .8, lines: ['La gráfica muestra las horas que Sebastián usó el celular', 'cada día de una semana: 3, 4, 2, 5, 4, 7 y 10 horas de lunes', 'a domingo. Los días en que usó el celular más horas que', 'su promedio diario son:'], opts: ['2', '3', '1', '4'], ok: 0, rv: 22.6 });
+    examCard(t, { y: 262, t0: .8, lines: ['La gráfica muestra las horas que Sebastián usó el celular', 'cada día de una semana: 3, 4, 2, 5, 4, 7 y 10 horas de lunes', 'a domingo. La cantidad de días en que usó el celular más horas', 'que su promedio diario es:'], opts: ['2', '3', '1', '4'], ok: 0, rv: 22.6 });
     fade(A(t, 9.8, .5), () => {
       const G = barsC(170, 1330, 820, 400, ['L', 'M', 'X', 'J', 'V', 'S', 'D'], CEL, 11, DAT, { vals: true, ticks: [2, 4, 6, 8, 10], hl: i => t > 12 && i >= 5 });
       fade(A(t, 11, .5), () => { stroke(UP, 3, () => { X.moveTo(170, G.y(5)); X.lineTo(990, G.y(5)); }, { dash: [12, 8], g: 10 }); mono('promedio 5', 990, G.y(5) - 16, UP, { s: 22, a: 'r' }); });

@@ -90,3 +90,19 @@ Revisión fresca (mundos 2 a 5, 2026-11-19): ninguna respuesta errada; se corrig
 
 Pruebas: `tests/preuda-videos.test.js` (formato, que ninguna lección de un mundo terminado se quede sin película, `KEYS`, y la
 matemática de cada problema, mundo por mundo).
+
+### Revisión fresca de los mundos 6 a 16 (2026-11-19)
+
+Un subagente (opus) revisó las 33 películas y rehízo cada cuenta: ningún error crítico (todas las respuestas, opciones y números
+dibujados están bien). Se corrigieron nueve puntos engañosos o confusos:
+
+- `letras` (`contar`): «si lo agregado crece» → «si lo agregado crece siempre igual» aparece un n² (1, 3, 7, 15 crece y es 2ⁿ − 1).
+- `cifrados` (`tabla`): la tabla de 5 × 5 deja por fuera la W; ahora se dice.
+- `promedios` (`celular`): la tarjeta pide «la cantidad de días», para que «2» no se lea como «el día 2».
+- `concluir` (`caer`): el rótulo habla de la cuarta parte, como la narración y el dibujo.
+- `negacion` (`pajaros`): la opción C «Todos los pájaros no vuelan» era ambigua; ahora es «Todos los pájaros vuelan».
+- `operadores` (`piso`): el piso baja hacia la izquierda salvo si el número ya es entero.
+- `queda` (`error`): el subtítulo explica qué se restó de más (1/4 del total frente a 1/4 de 2/3).
+- `traducir` (`traducir`): en vez de enseñar que la coma decide, frases sin ambigüedad («el doble de un número, más 3» y «el doble de
+  la suma de un número y 3»).
+- `venn` (`doble`): «si la suma pasa de la unión», no «del total».

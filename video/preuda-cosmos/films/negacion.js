@@ -48,7 +48,7 @@ const S = {
   // 5 · Problema: no todos los pájaros.
   pajaros(t) {
     stars(t, .3);
-    examCard(t, { y: 262, t0: .8, lines: ['La afirmación «no todos los pájaros vuelan» equivale a:'], opts: ['Algún pájaro no vuela', 'Ningún pájaro vuela', 'Todos los pájaros no vuelan', 'Algún pájaro vuela'], ok: 0, col1: true, os: 32, rv: 22.6 });
+    examCard(t, { y: 262, t0: .8, lines: ['La afirmación «no todos los pájaros vuelan» equivale a:'], opts: ['Algún pájaro no vuela', 'Ningún pájaro vuela', 'Todos los pájaros vuelan', 'Algún pájaro vuela'], ok: 0, col1: true, os: 32, rv: 22.6 });
     fade(A(t, 10, .5), () => [['colibrí', 1], ['loro', 1], ['águila', 1], ['pingüino', 0]].forEach(([n, v], i) => fade(A(t, 10.2 + i * .5, .4), () => { const x = 180 + i * 240; pill(x, 1000, 210, 90, v ? FR_ : (t > 11.8 ? BAD : FR_), n, { s: 32 }); mono(v ? 'vuela' : 'no vuela', x, 1090, v ? C.mute : BAD, { s: 22 }); })));
     fade(A(t, 12.6, .5), () => mono('con uno basta para tumbar el «todos»', CX, 1190, NOW, { s: 26 }));
   },
