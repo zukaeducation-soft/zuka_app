@@ -79,6 +79,18 @@ const SOLVE = {
     const C = (n, k) => { let c = 1; for (let i = 0; i < k; i++) c = c * (n - i) / (i + 1); return c; };
     const k = [...Array(r.n + 1).keys()].find(k => C(r.n, k) === r.ways); assert.ok(k !== undefined); return { k };
   }) }),
+  'dato-faltante': p => ({ rounds: p.rounds.map(r => {
+    const v = r.mean * r.data.length - r.data.reduce((a, b) => a + (b ?? 0), 0);
+    assert.ok(v > 0 && v <= r.hi && Math.abs(v / r.step - Math.round(v / r.step)) < 1e-9, 'el dato que falta está en la rejilla'); return { v };
+  }) }),
+  'nivela-datos': p => ({ rounds: p.rounds.map(r => {
+    const h = r.data.reduce((a, b) => a + b, 0) / r.data.length; assert.ok(Number.isInteger(h * 2) && h <= r.hi); return { h };
+  }) }),
+  'total-original': p => ({ rounds: p.rounds.map(r => {
+    const left = t => r.steps.reduce((v, [n, d]) => v * (1 - n / d), t);   // todos los pasos de estos retos se aplican sobre lo que queda
+    const ts = []; for (let t = r.step; t <= r.max; t += r.step) if (Math.abs(left(t) - r.left) < 1e-6) ts.push(t);
+    assert.equal(ts.length, 1); return { t: ts[0] };
+  }) }),
   'precio-original': p => ({ rounds: p.rounds.map(r => { const old = r.now / (1 + r.r / 100); assert.ok(old <= r.max && Number.isInteger(old / r.step)); return { old }; }) }),
 };
 
@@ -119,7 +131,9 @@ test('el entrenador orienta sin regalar el número del paso', () => {
 
 test('cada paso tiene solución alcanzable con los controles del juego', () => {
   for (const r of RETOS) r.steps.forEach((s, i) => {
-    const solve = SOLVE[s.ex.game];
+    // Juegos por rondas que exportan su respuesta: se usa esa (y los de deslizador revisan su rango en SOLVE).
+    const own = GAMES[s.ex.game].answer && s.ex.params.rounds ? p => ({ rounds: p.rounds.map(r => GAMES[s.ex.game].answer(r)) }) : null;
+    const solve = SOLVE[s.ex.game] || own;
     assert.ok(solve, `${r.id} paso ${i + 1}: falta el solucionador de ${s.ex.game} en la prueba`);
     const g = GAMES[s.ex.game].grade(solve(s.ex.params), s.ex.params);
     assert.ok(g.ok, `${r.id} paso ${i + 1}: ${s.ex.game} no se puede resolver`);
@@ -167,4 +181,9 @@ test('Conteo y combinatoria tiene sus retos en el Preuniversitario', () => {
   const pu = COURSES.find(c => c.id === 'preuda');
   const ids = gymRetos(pu).flatMap(g => g.retos.map(r => r.id));
   for (const id of ['gym-claves', 'gym-papaya', 'gym-comite']) assert.ok(ids.includes(id), id);
+});
+
+test('Aritmética y promedios tiene sus retos en el Preuniversitario', () => {
+  const ids = gymRetos(COURSES.find(c => c.id === 'preuda')).flatMap(g => g.retos.map(r => r.id));
+  for (const id of ['gym-prima', 'gym-examen', 'gym-peor']) assert.ok(ids.includes(id), id);
 });
