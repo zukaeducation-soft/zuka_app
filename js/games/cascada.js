@@ -13,7 +13,7 @@ GAMES['cascada'] = (() => {
     const all = params.changes.every((_, i) => state.applied.filter(j => j === i).length === 1) && state.applied.length === params.changes.length;
     const ok = all && state.single === answerOf(params);
     const prod = params.changes.map(c => dec(1 + c / 100)).join(' \\cdot ');
-    const sum = params.changes.reduce((s, c) => s + Math.abs(c), 0);
+    const sum = -params.changes.reduce((s, c) => s + c, 0);   // lo que daría sumar los cambios con su signo
     return { ok, solution: `$${prod} = ${dec(factor(params))} \\Rightarrow ${answerOf(params)}\\%$ (no ${sum} %)` };
   }
 
@@ -55,7 +55,7 @@ GAMES['cascada'] = (() => {
         const ans = answerOf(params), good = st.single === ans;
         const col = locked ? (good && st.applied.length === params.changes.length ? C.ok : C.bad) : C.brand;
         p.noStroke(); p.fill(C.N); p.textAlign(p.CENTER, p.TOP); p.textStyle(p.BOLD); p.textSize(14);
-        p.text('Pega los dos descuentos y halla el descuento único', 12, 8, W - 24, 40);
+        p.text(params.changes.every(c => c < 0) ? 'Pega los dos descuentos y halla el descuento único' : 'Pega los dos cambios y halla el descuento único', 12, 8, W - 24, 40);
         // Etiqueta.
         p.stroke(C.line); p.strokeWeight(2); p.fill(C.card); p.rect(tag.x, tag.y, tag.w, tag.h, 16);
         p.noStroke(); p.fill(C.line); p.circle(tag.x + tag.w / 2, tag.y + 14, 12);

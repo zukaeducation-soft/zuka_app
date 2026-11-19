@@ -1325,3 +1325,76 @@ button.set-row:active { opacity: .7; }
 .theme-seg button[aria-pressed="true"] { background: var(--bg); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
 .theme-seg .i { width: 20px; height: 20px; }
 @media (max-width: 339px) { .settings .seg { margin-left: 0; } .theme-seg button { width: 34px; height: 34px; } }
+
+/* ---- Gimnasio (spec 2026-11-19-gimnasio): retos guiados por un entrenador ---- */
+.gym-count { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--mute); }
+.gym-count b { color: var(--ink); font-weight: 600; }
+.gym-world h2 { font-family: var(--display); font-size: 19px; font-weight: 500; margin-bottom: 10px; display: grid; gap: 2px; }
+.gym-world h2 small { font-family: var(--font); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--c, var(--brand)) 75%, var(--ink)); font-weight: 600; }
+.gym-list { display: grid; gap: 10px; }
+.gym-card { display: grid; gap: 6px; text-align: left; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+.gym-card:hover { border-color: color-mix(in srgb, var(--c, var(--brand)) 60%, var(--line)); }
+.gym-card:focus-visible { outline: 2px solid var(--c, var(--brand)); outline-offset: 2px; }
+.gym-card b { font-size: 16px; font-weight: 600; }
+.gym-card small { font-size: 13px; color: var(--mute); display: flex; align-items: center; gap: 6px; }
+.gym-card small .i { width: 14px; height: 14px; flex: none; }
+.gym-card.locked { opacity: .55; }
+.gym-card.done { border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); }
+.gym-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.gym-lvl { display: inline-flex; gap: 4px; vertical-align: middle; }
+.gym-lvl i { width: 14px; height: 6px; border-radius: 3px; border: 1px solid color-mix(in srgb, var(--c, var(--brand)) 70%, var(--line)); }
+.gym-lvl i.on { background: var(--c, var(--brand)); }
+.gym-stars { display: inline-flex; gap: 2px; font-style: normal; }
+.gym-stars i { font-style: normal; color: var(--line); font-size: 15px; }
+.gym-stars i.on { color: var(--gold); }
+.gym-empty .course-list { margin-top: 6px; }
+
+/* el reto en curso */
+.gym-run .gym-badge { color: var(--c, var(--brand)); }
+.gym-intro { display: grid; gap: 12px; padding: 4px 0 12px; }
+.gym-eyebrow { display: flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--c, var(--brand)) 75%, var(--ink)); font-weight: 600; }
+.gym-intro h2 { font-family: var(--display); font-size: 24px; font-weight: 500; }
+.gym-intro h3, .gym-notes h3 { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--mute); font-weight: 600; }
+.gym-problem { padding: 14px 16px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--c, var(--brand)); font-size: 15.5px; line-height: 1.5; }
+.gym-strat { display: grid; gap: 2px; padding: 10px 14px; border-radius: 12px; background: color-mix(in srgb, var(--c, var(--brand)) 12%, transparent); border: 1px solid color-mix(in srgb, var(--c, var(--brand)) 40%, transparent); text-align: left; }
+.gym-strat small { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.gym-strat b { font-size: 15.5px; font-weight: 600; }
+.gym-plan { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; }
+.gym-plan li { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 5px 5px; border-radius: 999px; border: 1px solid var(--line); font-size: 12.5px; color: var(--mute); }
+.gym-plan li span { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; border: 1px solid var(--line); }
+.gym-plan li span .i { width: 12px; height: 12px; }
+.gym-plan li.now { color: var(--ink); border-color: var(--c, var(--brand)); background: color-mix(in srgb, var(--c, var(--brand)) var(--halo), transparent); }
+.gym-plan li.now span { border-color: var(--c, var(--brand)); color: var(--c, var(--brand)); }
+.gym-plan li.ok { color: var(--ink); }
+.gym-plan li.ok span { background: var(--ok); border-color: var(--ok); color: #0b0d1a; }
+.gym-intro .gym-plan { flex-direction: column; align-items: flex-start; }
+.gym-reto { margin: 2px 0 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.gym-reto summary { cursor: pointer; padding: 8px 12px; font-size: 13px; font-weight: 600; color: var(--mute); }
+.gym-reto summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.gym-dots { display: inline-flex; gap: 5px; }
+.gym-dots i { width: 18px; height: 6px; border-radius: 3px; background: var(--line); }
+.gym-dots i.ok { background: var(--ok); }
+.gym-dots i.now { background: var(--c, var(--brand)); box-shadow: 0 0 8px color-mix(in srgb, var(--c, var(--brand)) var(--halo), transparent); }
+.gym-reto > div { padding: 0 12px 12px; font-size: 14.5px; line-height: 1.5; }
+.coach { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 4px; padding: 12px 14px; border-radius: 14px; background: var(--card); border: 1px solid color-mix(in srgb, var(--c, var(--brand)) 50%, var(--line)); }
+.coach-av { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: var(--c, var(--brand)); border: 1px solid color-mix(in srgb, var(--c, var(--brand)) 60%, transparent); }
+.coach-av .i { width: 20px; height: 20px; }
+.coach small { display: block; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: color-mix(in srgb, var(--c, var(--brand)) 75%, var(--ink)); font-weight: 600; margin-bottom: 3px; }
+.coach p { font-size: 14.5px; line-height: 1.45; }
+.coach.nudge { animation: gym-nudge .5s ease; }
+@keyframes gym-nudge { 30% { transform: translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) { .coach.nudge { animation: none; } }
+.gym-notes { margin-top: 14px; padding: 12px 14px; border-radius: 14px; border: 1px dashed var(--line); display: grid; gap: 6px; text-align: left; }
+.gym-notes ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14px; line-height: 1.45; }
+.gym-noted { margin: 8px 0 14px; font-size: 14.5px; }
+.gym-noted small { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+.gym-done { position: relative; display: grid; gap: 12px; padding: 16px 0 8px; text-align: center; }
+.gym-done h2 { font-family: var(--display); font-size: 25px; font-weight: 500; }
+.gym-done-stats { display: flex; justify-content: center; align-items: center; gap: 16px; font-size: 17px; }
+.gym-done-stats .gym-stars i { font-size: 24px; }
+.gym-done-stats b { display: inline-flex; align-items: center; gap: 4px; color: var(--gold); }
+.gym-answer { padding: 12px 14px; border-radius: 14px; background: color-mix(in srgb, var(--ok) 12%, transparent); border: 1px solid color-mix(in srgb, var(--ok) 45%, transparent); text-align: left; }
+.gym-answer small { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.gym-answer p { font-size: 16px; font-weight: 600; }
+.gym-wrap { text-align: left; font-size: 14.5px; line-height: 1.5; color: var(--ink); }
+.gym-done .streak-up { justify-content: center; }

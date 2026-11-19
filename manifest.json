@@ -35,9 +35,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Clips de curiosidades",
-      "short_name": "Clips",
-      "url": "./index.html?tab=clips",
+      "name": "Entrenar en el gimnasio",
+      "short_name": "Gimnasio",
+      "url": "./index.html?tab=gym",
       "icons": [
         {
           "src": "icons/icon-192.png",

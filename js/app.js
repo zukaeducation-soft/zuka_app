@@ -150,7 +150,7 @@ function go(t) {
   document.body.dataset.tab = t;
   document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   renderTop();
-  ({ learn: renderLearn, clips: renderClips, tutorias: renderTutorias, profile: renderProfile })[t]();
+  ({ learn: renderLearn, gym: renderGym, clips: renderClips, tutorias: renderTutorias, profile: renderProfile })[t]();
 }
 
 // Números largos de la barra de arriba: 12450 → «12.4 k», para que quepa el nombre del curso.
@@ -761,7 +761,7 @@ function startLesson(c, l) {
     body.innerHTML = `<div class="done-screen">
       <div class="trophy sad">${ICON.heartLine}</div>
       <h2>Te quedaste sin vidas</h2>
-      <p class="muted">Recuperas una vida cada 20 minutos. Mientras tanto, mira clips de curiosidades.</p></div>`;
+      <p class="muted">Recuperas una vida cada 20 minutos. Mientras tanto, entrena en el Gimnasio: allí no se pierden vidas.</p></div>`;
     root.classList.remove('fb-open');
     btn.textContent = 'Salir'; btn.disabled = false; btn.onclick = close;
   }
@@ -906,7 +906,7 @@ function renderSettings() {
 
 // ---- arranque ----
 document.querySelectorAll('#tabbar button').forEach(b => {
-  b.insertAdjacentHTML('afterbegin', ICON[{ learn: 'learn', clips: 'clips', tutorias: 'calendar' }[b.dataset.tab] || 'user']);
+  b.insertAdjacentHTML('afterbegin', ICON[{ learn: 'learn', gym: 'gym', clips: 'clips', tutorias: 'calendar' }[b.dataset.tab] || 'user']);
   b.onclick = () => {
     if (lessonClose) return lessonClose(b.dataset.tab);
     if (tab === 'learn' && b.dataset.tab === 'learn') { if (openWorld) openWorld = null; else openBlock = null; }   // tocar Aprender otra vez: un paso arriba (mundo → mapa → componentes)

@@ -181,12 +181,12 @@ test('sin conexión una navegación abre index.html guardado', async () => {
   assert.equal(await fire(listeners, 'http://localhost/?tab=clips', 'navigate'), 'INDEX');
 });
 
-test('el manifest es instalable y trae atajos a Clips y Tutorías', () => {
+test('el manifest es instalable y trae atajos al Gimnasio y Tutorías', () => {
   for (const k of ['name', 'short_name', 'start_url', 'display', 'icons']) assert.ok(manifest[k], `falta ${k}`);
   assert.ok(manifest.icons.some(i => i.sizes === '192x192'));
   assert.ok(manifest.icons.some(i => i.sizes === '512x512' && i.purpose === 'maskable'));
   const urls = (manifest.shortcuts || []).map(s => s.url);
-  assert.ok(urls.includes('./index.html?tab=clips'));
+  assert.ok(urls.includes('./index.html?tab=gym'));
   assert.ok(urls.includes('./index.html?tab=tutorias'));
   for (const s of manifest.shortcuts) assert.ok(s.icons && s.icons.length, `atajo sin icono: ${s.name}`);
 });

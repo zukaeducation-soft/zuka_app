@@ -19,9 +19,9 @@ test('sale solo a quien abre la app por primera vez', () => {
   assert.equal(shouldStart({ xp: 0, done: { 'alg-0a': true } }), false);
 });
 
-test('cubre curso, mundos, niveles, video, ejercicios, progreso, Clips y Perfil, en ese orden', () => {
+test('cubre curso, mundos, niveles, video, ejercicios, progreso, Gimnasio y Perfil, en ese orden', () => {
   assert.equal(STEPS.map(s => s.id).join(),
-    'hola,curso,mundos,niveles,video,ejercicios,progreso,clips,tutorias,perfil,fin');
+    'hola,curso,mundos,niveles,video,ejercicios,progreso,gimnasio,tutorias,perfil,fin');
 });
 
 test('cada paso tiene título y un texto corto que cabe en el celular', () => {
@@ -41,7 +41,7 @@ test('los pasos que señalan algo dicen qué; los centrados llevan mascota o ilu
   assert.match(t('curso'), /\.tb-course/);
   assert.match(t('mundos'), /\.wnode/);
   assert.match(t('niveles'), /\.node/);
-  assert.match(t('clips'), /data-tab="clips"/);
+  assert.match(t('gimnasio'), /data-tab="gym"/);
   assert.match(t('perfil'), /data-tab="profile"/);
 });
 

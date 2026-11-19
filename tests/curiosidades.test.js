@@ -87,11 +87,11 @@ test('en pausa, el pie del clip sube por encima de la barra de adelantar', () =>
   assert.match(read('css/styles.css'), /\.feed-cap \{[^}]*opacity: 0/, 'mientras el clip corre, el pie no tapa el video');
 });
 
-test('el recorrido guiado presenta Clips como curiosidades, no como videos de lecciones', () => {
+test('Clips ya no tiene botón en el menú: el recorrido presenta el Gimnasio (spec 2026-11-19-gimnasio)', () => {
   const tour = loadScripts(['js/tour.js']);
-  const s = get(tour, 'TOUR_STEPS').find(x => x.id === 'clips');
-  assert.match(s.title + s.text, /curios/i);
-  assert.doesNotMatch(s.text, /todas las lecciones|Practicar/);
+  const steps = get(tour, 'TOUR_STEPS');
+  assert.ok(!steps.some(x => x.id === 'clips'));
+  assert.ok(steps.some(x => x.id === 'gimnasio'));
 });
 
 test('«La razón que no cambia» (Art Deco) está en Clips con su video y escenas de respaldo', () => {

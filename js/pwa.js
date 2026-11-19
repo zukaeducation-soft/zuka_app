@@ -3,7 +3,7 @@
 // - watchConnection: avisa cuando se va o vuelve la red, en vez de fallar en silencio.
 // - keepData: pide al navegador que no borre el progreso (localStorage) cuando falte espacio.
 
-const TABS = ['learn', 'clips', 'tutorias', 'profile'];
+const TABS = ['learn', 'gym', 'clips', 'tutorias', 'profile'];
 
 function tabFromURL(search) {
   const m = /[?&]tab=([^&#]*)/.exec(search || '');
