@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos', 'pu-graficas', 'pu-logica'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -281,4 +281,34 @@ test('la matemática de los videos: Tablas y gráficas', () => {
   assert.deepEqual([A(250), B(250), Cc(250)], [45000, 47500, 60000]); assert.equal(A(300), B(300)); assert.equal(B(500), Cc(500));
   assert.equal(5 * 3 + (10 - 5 - 1), 19); const G = (18 - 3) / 3; assert.equal(G, 5); assert.equal(10 - G - 3, 2);
   assert.deepEqual([40 / 100, 40 / 50, 40 / 200], [.4, .8, .2]);
+});
+
+test('la matemática de los videos: Lógica', () => {
+  const B = [0, 1];
+  // Circuito: s = O(Y(x, y), N(z)); si s = 0, en todos los casos z = 1, y x o y vale 0 sin saber cuál.
+  const zeros = B.flatMap(x => B.flatMap(y => B.map(z => [x, y, z]))).filter(([x, y, z]) => ((x && y) || !z) === false);
+  assert.ok(zeros.every(([, , z]) => z === 1)); assert.ok(zeros.some(([x]) => x === 1) && zeros.some(([, y]) => y === 1));
+  // El objeto: negro o rojo; rojo → lapicero → azul (no rojo); negro → marcador.
+  const objs = ['negro', 'rojo', 'azul'].flatMap(c => ['lapicero', 'marcador'].map(k => [c, k]));
+  const ok = ([c, k]) => (c === 'negro' || c === 'rojo') && (c !== 'negro' || k === 'marcador') && (k !== 'lapicero' || c === 'azul') && (c !== 'rojo' || k === 'lapicero');
+  assert.deepEqual(objs.filter(ok), [['negro', 'marcador']]);
+  assert.deepEqual([9, 6, 12, 14].filter(n => [n % 2 === 0, n % 3 === 0, n > 10].filter(Boolean).length === 1), [9]);
+  // De Morgan y el condicional en las cuatro filas; las tarjetas: solo la vocal y el impar pueden romper la regla.
+  for (const p of [true, false]) for (const q of [true, false]) {
+    assert.equal(!(p && q), !p || !q); assert.equal(!(p || q), !p && !q);
+    const imp = !p || q; assert.equal(imp, !q ? !p : true); assert.equal(p || q, !p ? q : true); assert.equal(!imp, p && !q);
+  }
+  const breaks = f => (/[AEIOU]/.test(f) ? [1, 2, 3, 7, 9].some(n => n % 2) : /\d/.test(f) && +f % 2 === 1);
+  assert.deepEqual(['A', 'K', '4', '7'].filter(breaks), ['A', '7']);
+  // Verdad y mentira: Lucía y Mateo, la isla, el vidrio y la semana de Pedro.
+  const consistent = (says, roles) => says.every((s, i) => s(roles) === roles[i]);
+  const solve = says => [[true, true], [true, false], [false, true], [false, false]].filter(r => consistent(says, r));
+  assert.deepEqual(solve([r => !r[1], r => r[0] && r[1]]), [[true, false]]);
+  assert.deepEqual([[true, true], [true, false], [false, true], [false, false]].filter(r => (!r[0] || !r[1]) === r[0]), [[true, false]]);
+  assert.deepEqual(solve([r => !r[0] && !r[1], r => r[1]]), [[false, true]]);
+  assert.deepEqual([0, 1, 2].filter(c => [c === 1, c !== 1, c !== 2].filter(Boolean).length === 1), [2]);
+  const LIAR = [1, 1, 1, 0, 0, 0, 0], fits = (d, claim) => (LIAR[d] ? !claim : claim);
+  assert.deepEqual([0, 1, 2, 3, 4, 5, 6].filter(d => fits(d, !!LIAR[(d + 6) % 7])), [0, 3]);
+  assert.deepEqual([0, 1, 2, 3, 4, 5, 6].filter(d => fits(d, !!LIAR[(d + 6) % 7]) && fits(d, !LIAR[(d + 3) % 7])), [3]);
+  assert.deepEqual([0, 1, 2, 3, 4, 5, 6].filter(d => fits(d, !!LIAR[(d + 1) % 7])), [2, 6]);
 });

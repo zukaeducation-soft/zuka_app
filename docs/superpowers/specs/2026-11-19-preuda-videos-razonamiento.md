@@ -62,6 +62,11 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | 9 Tablas y gráficas | `pu-gr-1` | `graficas` | Lluvia 40, 50, 90, 120, 80, 40 → mayor aumento porcentual: marzo (+80 %) | Café 30, 45, 36, 45, 60 → 2020; 180 estudiantes, baloncesto 90° → 45 |
 | | `pu-gr-2` | `promedios` | Notas 1 a 5 con 3, 3, 12, 9, 3 estudiantes → promedio 3.2 | Goles de 20 partidos → 33 y mediana 1.5; horas de celular → promedio 5, 2 días encima, mediana 4 |
 | | `pu-gr-3` | `concluir` | Librería por género y trimestre → la falsa: «40 % de los infantiles en T3 y T4» (es 33.3 %) | Planes de telefonía para 250 min → A; torneo con huecos → Búfalos 19, Cóndores 2 perdidos |
+| 10 Lógica | `pu-lo-1` | `conectivos` | Circuito de bits Y, O, N con salida 0 → lo seguro: z = 1 | El objeto (negro o rojo…) → marcador negro; solo una de tres es cierta → 9 |
+| | `pu-lo-2` | `negacion` | «En todos los salones hay algún estudiante con gafas» → en algún salón ninguno usa gafas | Juan alto y rubio → no alto o no rubio; no todos los pájaros vuelan → alguno no vuela |
+| | `pu-lo-3` | `condicional` | Tarjetas A, K, 4, 7 → voltear A y 7 | Camila → contrarrecíproco; festivo y banco abierto → no es festivo |
+| | `pu-lo-4` | `silogismos` | Músicos de la banda y estudiantes de once → algunos de once leen partituras | Gatos de Marta y Tom → no es de Marta; ningún reptil tiene pelo → algunos del zoológico no son reptiles |
+| | `pu-lo-5` | `mentiras` | Pedro miente lunes a miércoles: «ayer mentí» y «en tres días diré la verdad» → jueves | Isla de veraces y falaces → X veraz, Y falaz; vidrio con una sola verdad → Camilo |
 
 Problemas propios (mundo 6): en los exámenes, los problemas espaciales dependen de figuras que el texto no conserva, así que algunos enunciados son originales en el formato del examen; su respuesta se comprueba por fuerza bruta en la prueba.
 
