@@ -19,7 +19,7 @@ todas las lecciones», usando como anexo los diez simulacros nuevos (`Documents/
 
 `piezas.js` (se carga después de `preu.js`): rótulos `mono`, `bigT`, `jT`, llave `brc`; geometría plana con ángulos en grados
 (`at`, `angOf`, `segL`, `polyL`, `arcA`, `arcV`, `wedge`, `ticks`, `rightA`, `ptL`); cuerpos (`prism`, `cyl`, `cone`); tablas
-(`gridT`), fichas (`pill`, `slotB`, `nodeC`), balanza (`scaleB`) y el cierre común `closeOpts`. Sus nombres no chocan con los
+(`gridT`), fichas (`pill`, `slotB`, `nodeC`), balanza (`scaleB`) y el cierre común `closeOpts`. `examCard` acepta `col1: true` para opciones largas en una sola columna. Sus nombres no chocan con los
 que declaran las películas del mundo 1.
 
 `cola.sh`: cola de render (`out/cola.txt`, una película y su carpeta de entrega por renglón; registro en `out/cola.log`) que
@@ -36,6 +36,10 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | | `pu-ge-4` | `areas` | Pista 100 × 60 con semicírculos → 200 + 60π | Ventana 2 × 1 con medio círculo → 2 + π/2 |
 | | `pu-ge-5` | `sombreadas` | Cuadrado 8 con cuatro cuartos de radio 4 → 64 − 16π | Pentágono de la cuadrícula → 21 |
 | | `pu-ge-6` | `volumenes` | Vela cilíndrica r 3 h 8 en conos r 1 h 2 → 108 | Caja de cartón 20 × 14 con esquinas de 3 → 336 |
+| 3 Orden | `pu-or-1` | `fila` | Cinco sillas (Ana, Beto, Carla, Diego, Elsa) → Elsa en la 5 | Estaturas → Fabio; carrera de cinco → Esteban justo antes que Bruno |
+| | `pu-or-2` | `circular` | Tres parejas en mesa redonda → Natalia (igual con la convención contraria) | Mesa cuadrada de los instrumentos → Tomás |
+| | `pu-or-3` | `tablas` | Laura, Mónica, Natalia → ingeniera en Medellín | Cajas de 3, 5, 8 y 12 kg → roja 12 y verde 5 |
+| | `pu-or-4` | `condiciones` | Seis libros en tres estantes, C en 1 y F en 2 → E en el 3 | Carrera de cuatro (si Carlos después de Pablo → tercero); equipo de cuatro → C y D |
 
 Pruebas: `tests/preuda-videos.test.js` (formato, que ninguna lección de un mundo terminado se quede sin película, `KEYS`, y la
 matemática de cada problema, mundo por mundo).

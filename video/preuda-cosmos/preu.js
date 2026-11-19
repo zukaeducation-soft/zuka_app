@@ -120,7 +120,7 @@ function area(x0, y0, ux, a, b, k = 1) {
 // correcta), y (borde de arriba), lh (alto de renglón), s (tamaño del enunciado), out ({ índice: segundo en que se tacha }).
 function examCard(t, o) {
   const y0 = o.y ?? 290, t0 = o.t0 ?? .6, lh = o.lh || 54, s = o.s || 38, n = o.lines.length;
-  const hOpt = o.opts ? 2 * 104 + 20 : 0, h = 96 + n * lh + hOpt;
+  const hOpt = o.opts ? (o.col1 ? o.opts.length * 92 + 24 : 2 * 104 + 20) : 0, h = 96 + n * lh + hOpt;
   fade(A(t, t0, .6), () => {
     X.save(); X.fillStyle = 'rgba(14,20,46,.55)'; X.beginPath(); X.roundRect(70, y0, 940, h, 30); X.fill(); X.restore();
     stroke(hexA(C.lime, .75), 2.5, () => X.roundRect(70, y0, 940, h, 30), { g: 10 });
@@ -131,6 +131,10 @@ function examCard(t, o) {
       if (Array.isArray(ln)) F(ln, 120, y, s, { a: 'l', max: 840 }); else T(ln, 120, y, { k: 'j', s, c: '#dfe5fb', max: 840 });
     }));
     if (o.opts) o.opts.forEach((op, i) => {
+      if (o.col1) { const y = y0 + 96 + n * lh + 56 + i * 92, rv = A(t, o.rv ?? 1e9, .6), good = i === o.ok, gone = !!o.out && o.out[i] != null && t > o.out[i];
+        const col = rv > 0 && good ? C.green : gone || (rv > 0 && !good) ? C.dim : hexA(C.violet, .9);
+        fade(A(t, t0 + .8 + n * .3 + i * .15, .4), () => { stroke(col, good && rv > 0 ? 4 : 2.5, () => X.roundRect(110, y - 38, 860, 76, 18), { g: good && rv > 0 ? 22 : 6 }); T('ABCD'[i], 140, y + 10, { k: 'mono', s: 26, c: good && rv > 0 ? C.green : C.mute }); T(String(op), 190, y + 11, { k: 'j', s: o.os || 32, c: gone ? C.dim : C.ink, max: 720 }); if (good) check(930, y, 14, true, rv); });
+        return; }
       const x = 310 + (i % 2) * 460, y = y0 + 96 + n * lh + 60 + Math.floor(i / 2) * 104, rv = A(t, o.rv ?? 1e9, .6);
       const good = i === o.ok, gone = !!o.out && o.out[i] != null && t > o.out[i];
       const col = rv > 0 && good ? C.green : gone || (rv > 0 && !good) ? C.dim : hexA(C.violet, .9);

@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -97,4 +97,52 @@ test('la matemática de los videos: Geometría', () => {
   assert.equal(Math.cbrt((150 / 6) ** 1.5) ** 2, 25); assert.equal(Math.sqrt(150 / 6) ** 3, 125);
   assert.equal(10 ** 2 * 2, 200); assert.equal(4 / 3 * 216, 288); assert.equal(16 * 3, 48);
   assert.ok(Math.abs(Math.sin(17 * r)) > 0);
+});
+
+test('la matemática de los videos: Acertijos de orden (se prueban todos los acomodos)', () => {
+  const perms = a => (a.length < 2 ? [a] : a.flatMap((x, i) => perms([...a.slice(0, i), ...a.slice(i + 1)]).map(p => [x, ...p])));
+  // Cinco sillas: Ana no en extremo; Beto justo a la derecha de Carla; Diego antes que Elsa; Elsa no junto a Ana.
+  const sillas = perms([...'ABCDE']).map(p => p.join('')).filter(s => { const i = c => s.indexOf(c); return i('A') > 0 && i('A') < 4 && i('B') === i('C') + 1 && i('D') < i('E') && Math.abs(i('E') - i('A')) > 1; });
+  assert.deepEqual(sillas.sort(), ['CBADE', 'DACBE']);
+  // Estaturas: Diana < Carlos < Esteban y Carlos < Fabio < Esteban.
+  const alt = perms([...'CDEF']).map(p => p.join('')).filter(s => { const h = c => s.indexOf(c); return h('C') > h('D') && h('C') < h('E') && h('F') > h('C') && h('F') < h('E'); });
+  assert.deepEqual(alt, ['DCFE']);
+  // Carrera de cinco: Andrés dos antes que Bruno, Camilo justo después de Daniel, Esteban ni primero ni último.
+  const car = perms([...'ABCDE']).map(p => p.join('')).filter(s => { const i = c => s.indexOf(c); return i('B') === i('A') + 2 && i('C') === i('D') + 1 && i('E') > 0 && i('E') < 4; });
+  assert.deepEqual(car.sort(), ['AEBDC', 'DCAEB']); assert.ok(car.every(s => s.indexOf('B') === s.indexOf('E') + 1));
+  // Tres parejas en una mesa de 6 (puesto k + 1 a la derecha de k, mirando al centro); con la convención contraria, igual.
+  for (const dir of [1, -1]) {
+    const ok = perms(['K', 'S', 'T', 'R', 'N']).map(p => ['J', ...p]).filter(m => { const at = n => m.indexOf(n), opp = (a, b) => (at(a) + 3) % 6 === at(b), nb = (a, b) => [1, 5].includes((at(a) - at(b) + 6) % 6);
+      return opp('J', 'K') && opp('S', 'T') && opp('R', 'N') && nb('T', 'R') && at('N') === (at('J') + dir + 6) % 6; });
+    assert.equal(ok.length, 1); const m = ok[0]; assert.equal(m[(m.indexOf('S') - dir + 6) % 6], 'N');
+  }
+  // Mesa cuadrada: la guitarra es de Tomás en todos los acomodos.
+  const ins = perms(['guitarra', 'piano', 'violín', 'flauta']);
+  const gu = new Set();
+  for (const m of perms([...'STVN'])) for (const s of ins) {
+    const at = n => m.indexOf(n), opp = (a, b) => (at(a) + 2) % 4 === at(b), nb = (a, b) => (at(a) - at(b) + 4) % 2 === 1, who = x => m[s.indexOf(x)];
+    if (opp(who('piano'), 'T') && nb('S', 'N') && nb(who('guitarra'), 'V') && who('flauta') !== 'T') gu.add(who('guitarra'));
+  }
+  assert.deepEqual([...gu], ['T']);
+  // Tablas: Natalia ingeniera en Medellín; las cajas roja 12 y verde 5.
+  const sol = [];
+  for (const pr of perms(['med', 'abo', 'ing'])) for (const ci of perms(['Bog', 'Cal', 'Med'])) {
+    const P = { L: pr[0], M: pr[1], N: pr[2] }, Q = { L: ci[0], M: ci[1], N: ci[2] }, abo = Object.keys(P).find(k => P[k] === 'abo'), ing = Object.keys(P).find(k => P[k] === 'ing');
+    if (Q[abo] === 'Cal' && Q.M === 'Bog' && Q.N !== 'Cal' && Q[ing] !== 'Bog') sol.push(P.N + Q.N);
+  }
+  assert.deepEqual(sol, ['ingMed']);
+  const cajas = perms([3, 5, 8, 12]).filter(([r, a, v, n]) => r > a && v + a === n && v !== 3);
+  assert.deepEqual(cajas, [[12, 3, 5, 8]]);
+  // Condiciones: la bibliotecaria (30 acomodos; con C en 1 y F en 2 quedan 6, todos con E en el 3), el equipo y la carrera.
+  let base = 0; const con = [];
+  for (let m = 0; m < 729; m++) {
+    const e = [...'ABCDEF'].map((_, i) => Math.floor(m / 3 ** i) % 3 + 1), d = Object.fromEntries([...'ABCDEF'].map((l, i) => [l, e[i]])), cnt = [1, 2, 3].map(k => e.filter(x => x === k).length);
+    if (Math.min(...cnt) < 1 || Math.max(...cnt) > 3 || d.A === d.B || d.C !== d.D || !(d.E > d.F)) continue;
+    base++; if (d.C === 1 && d.F === 2) con.push(d);
+  }
+  assert.equal(base, 30); assert.equal(con.length, 6); assert.ok(con.every(d => d.E === 3)); assert.ok(con.some(d => d.A !== 1));
+  const eq = []; for (let m = 0; m < 64; m++) { const s = [...'ABCDEF'].filter((_, i) => m >> i & 1); if (s.length === 4 && !(s.includes('A') && s.includes('B')) && (!s.includes('C') || s.includes('D')) && (s.includes('E') !== s.includes('F'))) eq.push(s.join('')); }
+  assert.deepEqual(eq.sort(), ['ACDE', 'ACDF', 'BCDE', 'BCDF']);
+  const ca = perms([...'PJCL']).map(p => p.join('')).filter(s => { const i = c => s.indexOf(c); return i('P') < i('J') && i('C') < i('J') && i('L') < i('P'); });
+  assert.deepEqual(ca.sort(), ['CLPJ', 'LCPJ', 'LPCJ']); assert.ok(ca.filter(s => s.indexOf('C') > s.indexOf('P')).every(s => s.indexOf('C') === 2));
 });
