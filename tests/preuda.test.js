@@ -103,7 +103,7 @@ test('ordena-terminos y encuesta-venn: datos válidos', () => {
 
 test('subraya-texto: cada ronda con texto en trozos, consigna y trozos correctos que existen', () => {
   const sub = exercises.filter(x => x.e.game === 'subraya-texto');
-  assert.ok(sub.length >= 40, `${sub.length} ejercicios de subrayar`);
+  // Ya no se exige un mínimo: los mundos rehechos con textos de verdad (spec 2026-11-19-preuda-lectura-textos) los reemplazan.
   for (const { l, e, i } of sub) {
     for (const r of e.params.rounds) {
       const n = r.text.split('|').length;
