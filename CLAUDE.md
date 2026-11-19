@@ -37,7 +37,8 @@ UdeA (Zarrazola, 2024), `C:\Users\User Acer\Documents\LIBRO DE ALGEBRA Y TRIGONO
   pruebas `tests/preuda-lectura.test.js`, estrategia general en `2026-11-19-preuda-estrategia-examen`): cada lección = un texto original
   de 330–560 palabras en 4–7 párrafos y 7 juegos distintos de arrastrar del kit HTML `LEC` (`js/games/lectura-kit.js`: `LEC.doc`,
   `LEC.drop`); la evaluación del mundo, otro texto con `pregunta-examen` (formato real A–D, solo en evaluaciones). Un archivo por mundo
-  `js/courses/preuda-l-<mundo>.js` con `PU_LEC_JUEGOS.push(({ setLesson, setExam }) => …)`; hechos los mundos 1 y 2.
+  `js/courses/preuda-l-<mundo>.js` con `PU_LEC_JUEGOS.push(({ setLesson, setExam }) => …)`; **hechos los 12 mundos** (la lista de
+  textos está en la sección «Estado» de la spec; en Lectura de dos textos cada ejercicio lleva `docs: [Uno, Dos]` y `doc: Uno`).
 - **Las instrucciones van sobre el juego, no en una ventana** (pedido del 2026-11-18, spec `2026-11-18-demo-en-juego`, pruebas
   `tests/demo-en-juego.test.js`): una mano hace el gesto en el lugar real del lienzo (`def.demo(G)` en `roundsGame` / `questGame`,
   `drawDemo` en `kit.js`) hasta el primer toque, y «Cómo se juega» la repite. Juego nuevo = con `demo`; los viejos conservan su

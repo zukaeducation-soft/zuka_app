@@ -63,5 +63,17 @@ atención en textos de 600 a 800 palabras y volver al párrafo veinte veces.
 - Hecho: kit, 16 juegos, mundo 1 «Estrategias de lectura» (`preuda-l-estrategias.js`: ruido urbano, tienda de barrio,
   volcanes; evaluación con bibliotecas móviles) y mundo 2 «Tipos de texto y géneros» (`preuda-l-tipos.js`: crónica del río,
   entrevista a un lutier, testimonio de alfabetización; evaluación con una columna sobre las chivas).
-- Siguen los otros 10 mundos, uno por uno, con el mismo estándar (la prueba se lo exige a todo mundo de `PU_LEC_HECHOS`).
-  Cuando bajen los ejercicios de `subraya-texto`, ajustar el mínimo de `tests/preuda.test.js`.
+- Hechos también los mundos 3 a 12 (2026-11-19), un archivo por mundo: `preuda-l-explicita.js` (inventario de un bosque, sueño
+  adolescente, abejas sin aguijón, calle peatonal; evaluación: recicladoras), `preuda-l-inferencia.js` (panadería, ciclorruta,
+  pueblo que se vacía, máquina de coser; cartero rural), `preuda-l-vocabulario.js` (huerta escolar, planta de café, primer
+  semestre, cueva de guácharos; remendón), `preuda-l-aplicacion.js` (senderos de deseo, el cuerpo como ciudad; mecánico),
+  `preuda-l-fuentes.js` (tareas, turismo en el páramo; grafitis), `preuda-l-conectores.js` (reciclaje, «modernización» de una
+  plaza; cosecha de lluvia), `preuda-l-argumentacion.js` (educación financiera, cursos para hacerse rico, biblioteca del cerro;
+  perros en el metrocable), `preuda-l-dos-textos.js` (videojuegos y pantallas, trabajo remoto y oficina; turismo y arriendos),
+  `preuda-l-referencia.js` (guardianes de faro, aguacate; canoas de Tumaco) y `preuda-l-figurado.js` (la ciudad a las cinco,
+  elogio del trancón; abuelo pescador). **Todo el componente de lectura está rehecho.**
+- En **Lectura de dos textos** cada ejercicio lleva `docs: [Uno, Dos]` (los dos textos a la vista; el Dos, plegado) y `doc: Uno`
+  para los juegos que trabajan por párrafos; la evaluación usa `docs` de dos textos nuevos.
+- `quien-lo-dice` también sirve para clasificar con zonas que no son voces (tipos de argumento, figuras, hecho u opinión, qué autor
+  lo diría): basta con cambiar `ask` y `voices`.
+- `subraya-texto` ya no tiene mínimo en `tests/preuda.test.js`: los mundos rehechos lo reemplazaron.
