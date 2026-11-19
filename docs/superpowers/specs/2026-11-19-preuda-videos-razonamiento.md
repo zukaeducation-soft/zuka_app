@@ -57,6 +57,8 @@ construye una a una con `build.sh` y copia el resultado a `Downloads/Zuka_Preuni
 | 7 Secuencias | `pu-se-1` | `sucesiones` | 5, 8, 13, 20, 29 → término 12: 148 | Aritmética con 3.º = 11 y 7.º = 27 → 20.º = 79; 3, 6, 5, 10, 9, 18, 17 → 10.º = 66 |
 | | `pu-se-2` | `letras` | A, C, F, J, O → U | 3C, 6F, 9I, 12L → 15O; 100 palitos → figura 33 |
 | | `pu-se-3` | `ciclos` | ABBCCCD en la posición 150 → B | 1 de marzo viernes → 1 de junio sábado |
+| 8 Codificación | `pu-cd-1` | `cifrados` | SOL, LUZ y SUR con símbolos en desorden → LOROS = ○ □ ● □ △ | OLEUR con clave +3 → LIBRO; 33 11 43 en la tabla → MAR |
+| | `pu-cd-2` | `reglas` | Dígito de control (residuo ÷ 7), 5 _ 2 8 4 → 3 | Máquinas A, B, C con el 5 → 49; ★□□△△△△○○ → 197 |
 
 Problemas propios (mundo 6): en los exámenes, los problemas espaciales dependen de figuras que el texto no conserva, así que algunos enunciados son originales en el formato del examen; su respuesta se comprueba por fuerza bruta en la prueba.
 

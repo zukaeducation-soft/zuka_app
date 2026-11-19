@@ -20,7 +20,7 @@ const MUNDO1 = ['enteros', 'fracciones', 'porcentajes', 'potencias'];
 const films = fs.readdirSync(path.join(ROOT, dir, 'films')).filter(f => f.endsWith('.data.js')).map(f => f.replace('.data.js', '')).filter(f => !MUNDO1.includes(f));
 const data = Object.fromEntries(films.map(f => [f, require(`../${dir}/films/${f}.data.js`)]));
 // Mundos terminados: cada lección tiene su película (se amplía a medida que se hacen los mundos).
-const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias'];
+const HECHOS = ['pu-calculo', 'pu-geometria', 'pu-orden', 'pu-proporcion', 'pu-conteo', 'pu-espacial', 'pu-secuencias', 'pu-codigos'];
 
 test('cada lección de los mundos terminados tiene su película, y ninguna lección tiene dos', () => {
   const byLesson = {};
@@ -237,4 +237,24 @@ test('la matemática de los videos: Secuencias y patrones', () => {
   assert.equal(dias[(2 + 15) % 7], 'jueves'); assert.equal(dias[(4 + 31 + 30 + 31) % 7], 'sábado');
   assert.equal(dias[Math.floor((8 + 100) / 24) % 7], 'viernes'); assert.equal((8 + 100) % 24, 12);
   assert.equal(String(2n ** 99n).slice(-1), '8');
+});
+
+test('la matemática de los videos: Codificación', () => {
+  // SOL, LUZ y SUR: cada letra es el símbolo común de sus dos palabras; LOROS = ○ □ ● □ △.
+  const W = { SOL: '□○△', LUZ: '★○◇', SUR: '◇●△' }, key = {};
+  for (const L of 'LSU') { const ws = Object.keys(W).filter(w => w.includes(L)); key[L] = [...W[ws[0]]].find(s => W[ws[1]].includes(s)); }
+  for (const w of Object.keys(W)) { const free = [...W[w]].filter(s => !Object.values(key).includes(s)); const L = [...w].find(c => !key[c]); if (free.length === 1 && L) key[L] = free[0]; }
+  assert.equal([...'LOROS'].map(c => key[c]).join(''), '○□●□△');
+  // César +3, la tabla de fila y columna y el dígito de control.
+  const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', sh = (w, k) => [...w].map(c => ABC[(ABC.indexOf(c) + k + 26) % 26]).join('');
+  assert.equal(sh('ZUKA', 3), 'CXND'); assert.equal(sh('OLEUR', -3), 'LIBRO');
+  const tab = ['ABCDE', 'FGHIJ', 'KLMNO', 'PQRST', 'UVXYZ'], at = n => tab[Math.floor(n / 10) - 1][n % 10 - 1];
+  assert.equal(at(23), 'H'); assert.equal(at(32), 'L'); assert.equal([33, 11, 43].map(at).join(''), 'MAR');
+  assert.equal((2 + 5 + 1 + 3) % 7, 4); assert.equal((3 + 4 + 6 + 2) % 7, 1);
+  assert.deepEqual([...Array(10).keys()].filter(x => (5 + x + 2 + 8) % 7 === 4), [3]);
+  // Máquinas, la numeración antigua (197 y 318 con 10 símbolos) y las tres luces.
+  assert.equal(((5 * 2) - 3) ** 2, 49); assert.equal((5 ** 2) * 2 - 3, 47); assert.equal(Math.sqrt((47 + 3) / 2), 5);
+  assert.equal(125 + 2 * 25 + 4 * 5 + 2, 197);
+  let n = 318, cnt = 0; for (const v of [125, 25, 5, 1]) { cnt += Math.floor(n / v); n %= v; } assert.equal(cnt, 10);
+  assert.equal(2 * 9 + 0 * 3 + 1, 19); assert.equal(2 * 9 + 2 * 3 + 2, 26);
 });
