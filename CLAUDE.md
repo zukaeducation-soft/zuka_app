@@ -1,8 +1,11 @@
 # Zuka · guía para sesiones nuevas
 
 App web progresiva (PWA) de matemáticas en español, JavaScript sin frameworks. Lecciones = video corto
-+ ejercicios (muchos son minijuegos de p5.js). Repositorio `github.com/CarlosHurtado2024/zuka_app`,
-rama `main`; Vercel publica cada push. Contenido basado en el *Manual de Álgebra y Trigonometría* de la
++ ejercicios (muchos son minijuegos de p5.js). Repositorio `github.com/zukaeducation-soft/zuka_app`
+(`origin`, desde el 2026-11-19; el viejo `CarlosHurtado2024/zuka_app` quedó como remoto `repo-viejo` y ya no se usa),
+rama `main`; Vercel publica cada push. **Los archivos pesados no van a GitHub** (pedido del usuario): mp4, mp3, wav, pdf
+e imágenes dentro de `video/` se quedan solo en el computador (`.gitignore`); por eso en el Vercel nuevo faltan los
+PDF de `media/resumenes/` y `media/clips/distancias.mp4` hasta que se alojen en otro lado (Bunny o Supabase Storage). Contenido basado en el *Manual de Álgebra y Trigonometría* de la
 UdeA (Zarrazola, 2024), `C:\Users\User Acer\Documents\LIBRO DE ALGEBRA Y TRIGONOMETRIA.pdf`.
 
 ## Cómo trabaja el usuario (respetar siempre)
