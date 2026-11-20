@@ -181,14 +181,14 @@ const logoHTML = () => \`<span class="logo" role="img" aria-label="Zuka">\${brai
 }
 
 // ---- iconos PNG ----
-// El personaje sobre el fondo oscuro de la app (pedido del 2026-11-20). `pad`: margen alrededor, en fracción del lado. El
+// El personaje sobre el fondo oscuro de la app, casi hasta el borde (pedidos del 2026-11-20). `pad`: margen alrededor, en fracción del lado. El
 // enmascarable (Android lo recorta en círculo u otra forma) lo deja dentro de la zona segura: un círculo del 80 %.
 const ICONS = [
-  { file: 'icons/icon-512.png', size: 512, pad: 0.07 },
-  { file: 'icons/icon-192.png', size: 192, pad: 0.07 },
-  { file: 'icons/icon-maskable-512.png', size: 512, pad: 0.17 },
-  { file: 'icons/apple-touch-icon.png', size: 180, pad: 0.08 },
-  { file: 'icons/favicon-48.png', size: 48, pad: 0.03, round: 0.22 },
+  { file: 'icons/icon-512.png', size: 512, pad: 0.015 },
+  { file: 'icons/icon-192.png', size: 192, pad: 0.015 },
+  { file: 'icons/icon-maskable-512.png', size: 512, pad: 0.12 },
+  { file: 'icons/apple-touch-icon.png', size: 180, pad: 0.025 },
+  { file: 'icons/favicon-48.png', size: 48, pad: 0, round: 0.22 },
 ];
 function iconPage({ size, pad, round = 0 }) {
   const s = size * (1 - 2 * pad);

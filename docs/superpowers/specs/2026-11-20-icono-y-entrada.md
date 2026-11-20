@@ -4,7 +4,7 @@ Pedido del usuario: cambiar el icono de la app por el nuevo personaje (el cerebr
 cargar la app en la que el personaje dice «Zuka potencia tu mente».
 
 - **Icono**: `node tools/marca.js --png` dibuja `icons/*.png` con el personaje en la pose de la imagen (`think`) sobre el
-  fondo oscuro de la app (#07080f, con un brillo morado suave). El enmascarable de Android lo deja dentro de la zona
+  fondo oscuro de la app (#07080f, con un brillo morado suave), casi hasta el borde (margen de 1.5 %; 12 % en el enmascarable). El enmascarable de Android lo deja dentro de la zona
   segura (círculo del 80 %). El cerebro de malla sigue en `js/marca.js` y `brand/` (logo de cuenta y panel).
 - **Entrada**: `introBlock()` de `tools/marca.js` escribe en la portada `#boot` el personaje (`cheer`) y un globo:
   «Zuka» en coral y «potencia tu mente» palabra por palabra. El personaje aparece con un rebote (0.1 s), el globo
