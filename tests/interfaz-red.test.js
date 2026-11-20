@@ -108,33 +108,31 @@ test('brainSVG, brainTile y logoHTML: malla, caras encendidas y nombre accesible
   assert.match(logoHTML(), /role="img" aria-label="Zuka"/);
 });
 
-test('animación de entrada: vive en la portada, con el cerebro quieto desde el primer cuadro', () => {
+test('animación de entrada: vive en la portada; el personaje dice «Zuka potencia tu mente» (spec 2026-11-20-icono-y-entrada)', () => {
   // El bloque de index.html es el que genera tools/marca.js y va dentro de #boot: se ve sin esperar a ningún script.
   assert.equal(index, built.withIntro(index), 'correr: node tools/marca.js');
   const boot = index.slice(index.indexOf('<div id="boot"'), index.indexOf('<div id="app"'));
   assert.ok(boot.includes(built.intro), 'la animación va dentro de la portada');
-  const html = built.intro, g = built.geo.full;
-  assert.match(html, /<p class="intro-slogan">Potencia tu mente<\/p>/);
-  // El cerebro de malla (el mismo del icono) no lleva animación; las caras van en franjas y ZUKA en cuatro letras, cada una en su capa.
-  assert.equal((html.match(/<svg class="bi-wire"/g) || []).length, 1);
-  const bands = [...html.matchAll(/<svg class="bi-band" style="--k:(\d+)"[^>]*>([\s\S]*?)<\/svg>/g)];
-  assert.equal(bands.map(m => m[1]).join(), '0,1,2,3,4,5');
-  assert.equal(bands.reduce((n, m) => n + (m[2].match(/<polygon/g) || []).length, 0), g.tris.length, 'cada cara en una franja');
-  for (const m of bands) assert.ok(/<polygon/.test(m[2]), `franja ${m[1]} vacía`);
-  assert.equal((html.match(/<div class="intro-word">([\s\S]*?)<\/div>/)[1].match(/<svg style="--k:\d"/g) || []).length, 4, 'Z, U, K, A');
-  // Estable: en los estilos de la entrada solo se anima la opacidad; nada de mover, escalar ni dibujar trazos.
-  const intro = css.slice(css.indexOf('/* Animación de entrada'), css.indexOf('@keyframes intro-in'));
-  assert.doesNotMatch(intro, /(?<!text-)transform|translate|scale\(|stroke-dash|@keyframes/);
-  assert.match(css, /@keyframes intro-in \{ to \{ opacity: 1; \} \}/);
-  assert.doesNotMatch(block('.intro-brain .bi-wire'), /animation|opacity/, 'el cerebro de malla se ve desde el primer cuadro');
-  assert.match(css, /\.intro \.bi-band, \.intro-word svg, \.intro-slogan \{ opacity: 0; will-change: opacity; animation: intro-in/);
-  // Centrado en la pantalla, como el icono con que el celular abre la app.
-  assert.match(block('.intro-brain'), /left: calc\(50% - var\(--bw\) \/ 2\); top: calc\(50% - var\(--bw\) \/ 2\)/);
-  // El orden: caras, palabra, eslogan; y la app espera a que termine.
-  const delay = sel => Number((rules.find(r => r.sel === sel && /animation-delay/.test(r.body))?.body.match(/animation-delay: (?:calc\()?([\d.]+)s/) || [])[1]);
-  assert.ok(delay('.intro .bi-band') < delay('.intro-word svg') && delay('.intro-word svg') < delay('.intro-slogan'));
+  const html = built.intro;
+  assert.match(html, /<p class="intro-say"><b>Zuka<\/b><span><i style="--k:0">potencia<\/i> <i style="--k:1">tu<\/i> <i style="--k:2">mente<\/i><\/span><\/p>/);
+  assert.match(html, /<div class="intro-hero"><svg class="mascot cheer intro-mascot"/);
+  assert.match(html, /url\(#m-ol-intro\)/, 'su filtro no choca con el de los demás personajes');
+  assert.doesNotMatch(html, /url\(#m-ol\)/);
+  // El orden: aparece el personaje, luego el globo, luego las palabras; y la app espera a que termine.
+  const hero = Number(block('.intro-hero').match(/intro-pop [\d.]+s [^;]* ([\d.]+)s both/)[1]);
+  const say = Number(block('.intro-say').match(/intro-pop [\d.]+s [^;]* ([\d.]+)s both/)[1]);
+  const words = Number(block('.intro-say i').match(/animation-delay: calc\(([\d.]+)s/)[1]);
+  assert.ok(hero < say && say < words, `${hero} ${say} ${words}`);
   const ms = Number((app.match(/const INTRO_MS = (\d+)/) || [])[1]);
-  assert.ok(ms >= (delay('.intro-slogan') + .6) * 1000 && ms <= 3500, `la portada espera ${ms} ms`);
+  assert.ok(ms >= (words + 2 * .3 + .3) * 1000 && ms <= 3500, `la portada espera ${ms} ms`);
+  assert.match(css, /@keyframes intro-in \{ to \{ opacity: 1; \} \}/);
+});
+
+test('el icono de la app es el personaje sobre el fondo oscuro', () => {
+  const src = read('tools/marca.js');
+  assert.match(src, /mascotSVG\('think'\)\.replace\('<svg'/);
+  for (const f of ['icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-48.png'])
+    assert.ok(fs.statSync(path.join(ROOT, f)).size > 500, f);
 });
 
 test('la entrada no deja bordes claros: documento, portada y barra del celular oscuros mientras dura', () => {

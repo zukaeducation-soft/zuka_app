@@ -115,27 +115,25 @@ const WORD_D = 'M1 1H15L1 21H15M24 1V13.5a7 7 0 0 0 14 0V1M47 1V21M61 1L47 12.5M
 const wordmark = (ink = 'currentColor') => `<svg class="wordmark" viewBox="-1 -1 89 24" aria-hidden="true" focusable="false">`
   + `<path d="${WORD_D}" pathLength="1" fill="none" stroke="${ink}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-// Animación de entrada (va dentro de la portada #boot de index.html, entre las marcas <!-- intro -->): el cerebro en
-// malla está quieto desde el primer cuadro, igual al icono con que Android abre la app, y sus caras se encienden por
-// franjas desde el tallo; luego aparecen las letras de ZUKA y el eslogan. Nada se mueve ni cambia de tamaño: solo
-// cambia la opacidad de capas enteras (cada franja y cada letra es su propio <svg>), que el celular anima aunque esté
-// ocupado cargando la app. Los tiempos los pone css/styles.css (.intro), con el turno --k de cada capa.
+// El personaje (js/mascota.js), leído aquí para la animación de entrada y los iconos.
+const mascotSVG = (() => {
+  const vm = require('vm'), c = {};
+  vm.createContext(c);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'js/mascota.js'), 'utf8') + ';this.m = mascotSVG;', c);
+  return c.m;
+})();
+
+// Animación de entrada (va dentro de la portada #boot de index.html, entre las marcas <!-- intro -->; pedido del
+// 2026-11-20, spec 2026-11-20-icono-y-entrada): el personaje aparece en el centro con un pequeño rebote y dice en un
+// globo «Zuka potencia tu mente», palabra por palabra; luego salta dos veces. Los tiempos los pone css/styles.css (.intro).
+// El filtro del borde lleva otro id (m-ol-intro): la portada se esconde y un filtro dentro de algo oculto no se pinta.
 const SLOGAN = 'Potencia tu mente';
-const INTRO_BANDS = 6;
-const INTRO_LETTERS = [['M1 1H15L1 21H15', 1, 15], ['M24 1V13.5a7 7 0 0 0 14 0V1', 24, 38], ['M47 1V21M61 1L47 12.5M52.6 8L61.5 21', 47, 61.5], ['M70 21L78 1L86 21M73 14H83', 70, 86]];
+const INTRO_WORDS = SLOGAN.toLowerCase().split(' ');
 function introBlock() {
-  const g = mesh('full'), INK = '#e6ecff', dist = p => Math.hypot(p[0] - g.root[0], p[1] - g.root[1]);
-  const mid = t => [0, 1].map(k => (g.nodes[t[0]][k] + g.nodes[t[1]][k] + g.nodes[t[2]][k]) / 3);
-  const far = Math.max(...g.tris.map(t => dist(mid(t)))) + 1e-9;
-  const svg = (cls, k, body) => `<svg class="${cls}"${k === null ? '' : ` style="--k:${k}"`} viewBox="0 0 100 100" focusable="false">${body}</svg>`;
-  const bands = Array.from({ length: INTRO_BANDS }, (_, b) => svg('bi-band', b,
-    `<g stroke="#07080f" stroke-width=".5" stroke-linejoin="round">${g.tris.map((t, i) => (Math.floor((dist(mid(t)) / far) * INTRO_BANDS) === b
-      ? `<polygon points="${t.map(k => pt(g.nodes[k])).join(' ')}" fill="${FACES[(i * 5 + t[0]) % FACES.length]}"/>` : '')).join('')}</g>`)).join('');
-  const wire = svg('bi-wire', null, inner(brain('full', { ink: INK, stem: '#8fdcff', cls: false })));
-  const word = INTRO_LETTERS.map(([d, x0, x1], k) => `<svg style="--k:${k}" viewBox="${x0 - 1.5} -0.5 ${x1 - x0 + 3} 23" focusable="false">`
-    + `<path d="${d}" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`).join('');
-  return `<div class="intro"><div class="intro-brain">${bands}${wire}</div>`
-    + `<div class="intro-text"><div class="intro-word">${word}</div><p class="intro-slogan">${SLOGAN}</p></div></div>`;
+  const hero = mascotSVG('cheer', 'intro-mascot').replace(/m-ol/g, 'm-ol-intro');
+  const words = INTRO_WORDS.map((w, k) => `<i style="--k:${k}">${w}</i>`).join(' ');
+  return `<div class="intro"><p class="intro-say"><b>Zuka</b><span>${words}</span></p>`
+    + `<div class="intro-hero">${hero}</div></div>`;
 }
 const INTRO_MARKS = ['<!-- intro: generado por tools/marca.js, no editar -->', '<!-- /intro -->'];
 // Pone el bloque de la animación en index.html, entre sus marcas.
@@ -183,22 +181,22 @@ const logoHTML = () => \`<span class="logo" role="img" aria-label="Zuka">\${brai
 }
 
 // ---- iconos PNG ----
-// `pad`: margen alrededor del cerebro, en fracción del lado. El cerebro va casi hasta el borde; el enmascarable (el que
-// usa Android, que lo recorta en círculo u otra forma) lo lleva hasta el límite de la zona segura: un círculo del 80 %.
+// El personaje sobre el fondo oscuro de la app (pedido del 2026-11-20). `pad`: margen alrededor, en fracción del lado. El
+// enmascarable (Android lo recorta en círculo u otra forma) lo deja dentro de la zona segura: un círculo del 80 %.
 const ICONS = [
-  { file: 'icons/icon-512.png', size: 512, pad: 0.03, kind: 'full' },
-  { file: 'icons/icon-192.png', size: 192, pad: 0.03, kind: 'full' },
-  { file: 'icons/icon-maskable-512.png', size: 512, pad: 0.1, kind: 'full' },
-  { file: 'icons/apple-touch-icon.png', size: 180, pad: 0.03, kind: 'full' },
-  { file: 'icons/favicon-48.png', size: 48, pad: 0.02, kind: 'simple', round: 0.22 },
+  { file: 'icons/icon-512.png', size: 512, pad: 0.07 },
+  { file: 'icons/icon-192.png', size: 192, pad: 0.07 },
+  { file: 'icons/icon-maskable-512.png', size: 512, pad: 0.17 },
+  { file: 'icons/apple-touch-icon.png', size: 180, pad: 0.08 },
+  { file: 'icons/favicon-48.png', size: 48, pad: 0.03, round: 0.22 },
 ];
-function iconPage({ size, pad, kind, round = 0 }) {
-  const s = size * (1 - 2 * pad), glow = Math.max(1, size / 64);
-  const svg = brain(kind, { ink: '#e6ecff', stem: '#8fdcff', cls: false }).replace('<svg', `<svg ${XMLNS} width="${s}" height="${s}"`);
+function iconPage({ size, pad, round = 0 }) {
+  const s = size * (1 - 2 * pad);
+  const svg = mascotSVG('think').replace('<svg', `<svg ${XMLNS} width="${s}" height="${s * 118 / 125}"`);
   return `<!doctype html><meta charset="utf-8"><style>html,body{margin:0;background:transparent}
     #i{width:${size}px;height:${size}px;display:grid;place-items:center;border-radius:${round * size}px;
-      background:radial-gradient(circle at 50% 44%, #10142a 0, #07080f 62%)}
-    svg{filter:drop-shadow(0 0 ${glow}px rgba(150,205,255,.55)) drop-shadow(0 0 ${glow * 4}px rgba(111,211,255,.28))}</style>
+      background:radial-gradient(circle at 50% 46%, #241430 0, #10101e 48%, #07080f 72%)}
+    svg{filter:drop-shadow(0 ${size / 64}px ${size / 24}px rgba(250,122,108,.35))}</style>
     <div id="i">${svg}</div>`;
 }
 async function pngs() {
@@ -209,6 +207,7 @@ async function pngs() {
   for (const icon of ICONS) {
     const page = await browser.newPage({ viewport: { width: icon.size, height: icon.size }, deviceScaleFactor: 1 });
     await page.setContent(iconPage(icon));
+    await page.waitForTimeout(50);
     await page.locator('#i').screenshot({ path: path.join(ROOT, icon.file), omitBackground: true });
     await page.close();
     console.log('  ' + icon.file);
