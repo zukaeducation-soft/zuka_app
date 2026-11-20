@@ -72,7 +72,7 @@ function renderHome() {
   const mine = myCourses();
   const goalP = Math.min(1, todayXP() / S.goal), name = (S.name || '').trim().split(/\s+/)[0];
   view.innerHTML = `<div class="home">
-    <header class="home-head"><p>${name ? `Hola, ${esc(name)}` : 'Hola'}</p><h1>¿Qué aprendemos hoy?</h1></header>
+    <header class="home-head has-mascot"><div><p>${name ? `Hola, ${esc(name)}` : 'Hola'}</p><h1>¿Qué aprendemos hoy?</h1></div>${mascotSVG('think', 'm-hello')}</header>
     ${installEvt && !S.hideInstall ? `<section class="install-banner">
       <img src="icons/icon-192.png" alt="" width="44" height="44">
       <div><b>Instala Zuka</b><p>Ábrela como app, incluso sin conexión.</p></div>
@@ -104,6 +104,7 @@ function renderMyCourses() {
   const mine = myCourses();
   view.innerHTML = `<div class="mycourses">
     <header class="home-head"><h1>Mis cursos</h1><p>${mine.length ? 'Los cursos en que estás inscrito.' : 'Aún no te has inscrito en ningún curso.'}</p></header>
+    ${mine.length ? '' : `<div class="m-empty">${mascotSVG('think')}<p>Elige un curso en el Inicio y aquí lo tendrás a mano, con la lección donde vas.</p></div>`}
     ${mine.length ? `<div class="mc-list">${mine.map(c => {
       const ls = lessonsOf(c), d = ls.filter(isDone).length, nxt = currentLesson(c);
       return `<button class="mc-row" data-open="${c.id}" style="--c:${c.color}">

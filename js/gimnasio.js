@@ -553,7 +553,7 @@ function renderGym() {
     : (() => {
       const gs = groups.map(g => ({ ui: g.ui, retos: g.retos.filter(r => r.level === lvl) })).filter(g => g.retos.length);
       return gs.length ? gs.map(g => section(g.ui, g.retos)).join('')
-        : `<div class="gym-soon lv${lvl}">${gymPlates(lvl)}<p><b>Pronto llegan retos de este nivel</b> a ${esc(blockName || c.name)}. Mientras tanto, calienta con los juegos de tus lecciones.</p>
+        : `<div class="gym-soon lv${lvl}">${mascotSVG('think', 'm-soon')}<p><b>Pronto llegan retos de este nivel</b> a ${esc(blockName || c.name)}. Mientras tanto, calienta con los juegos de tus lecciones.</p>
           <button class="btn ghost" data-lv="1">Ir al calentamiento</button></div>`;
     })();
   const t = rec.item, tOpen = isOpen(t), L = GYM_LEVELS[rec.level - 1];
@@ -677,7 +677,7 @@ function startReto(c, r) {
     const dots = `<span class="gym-dots" aria-label="Paso ${pos + 1} de ${r.steps.length}">${r.steps.map((_, i) => `<i class="${i < pos ? 'ok' : i === pos ? 'now' : ''}"></i>`).join('')}</span>`;
     // Un solo contenedor: mountSketch (kit.js) mide el primer hijo de .lesson-body para achicar el juego si no cabe.
     body.innerHTML = `<div class="gym-step"><details class="gym-reto"><summary><span>El reto</span>${dots}</summary><div>${tex(r.problem)}</div></details>
-      <div class="coach" role="note"><span class="coach-av">${ICON.gym}</span><div><small>Paso ${pos + 1} · ${esc(s.title)}</small><p></p></div></div>
+      <div class="coach" role="note"><span class="coach-av">${mascotSVG('think')}</span><div><small>Paso ${pos + 1} · ${esc(s.title)}</small><p></p></div></div>
       <div class="gym-ex"></div>${notebook()}</div>`;
     coach(s.coach, `Paso ${pos + 1} · ${s.title}`);
     btn.textContent = 'Comprobar'; btn.disabled = true;
@@ -731,6 +731,7 @@ function startReto(c, r) {
     save();
     bar.style.width = '100%';
     body.innerHTML = `<div class="gym-done"><canvas class="confetti"></canvas>
+      ${mascotSVG('cheer', 'm-win')}
       <h2>${stars === 3 ? '¡Reto superado sin ayudas!' : '¡Reto superado!'}</h2>
       <p class="muted">${esc(r.title)}</p>
       <div class="gym-done-stats">${gymStarsHTML(stars)}${xp ? `<b>${ICON.bolt}+${xp} XP</b>` : ''}</div>

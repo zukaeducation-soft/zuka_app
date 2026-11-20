@@ -719,7 +719,7 @@ function startLesson(c, l) {
     bar.style.width = '100%';
     body.className = 'lesson-body';
     body.innerHTML = `<div class="done-screen"><canvas class="confetti"></canvas>
-      <span class="brain-tile done-brain">${brainSVG('lit')}</span>
+      ${mascotSVG('cheer', 'm-win')}
       <h2>${perfect ? '¡Lección perfecta!' : '¡Lección completada!'}</h2>
       <p class="muted">${esc(l.title)}</p>
       <div class="done-stats">
@@ -738,7 +738,7 @@ function startLesson(c, l) {
     finished = true;
     body.className = 'lesson-body';
     body.innerHTML = `<div class="done-screen">
-      <div class="trophy sad">${ICON.heartLine}</div>
+      ${mascotSVG('sad', 'm-win')}
       <h2>Te quedaste sin vidas</h2>
       <p class="muted">Recuperas una vida cada 20 minutos. Mientras tanto, entrena con el botón del gimnasio de tu curso: allí no se pierden vidas.</p></div>`;
     root.classList.remove('fb-open');

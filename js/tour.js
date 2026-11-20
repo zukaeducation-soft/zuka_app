@@ -67,7 +67,7 @@ function tourTipPos(hole, tipW, tipH, vw, vh, bounds, gap = 14, edge = 8) {
 }
 
 const TOUR_ART = {
-  mascot: () => brainTile('full', 'tour-mascot'),   // la ficha del cerebro (js/marca.js)
+  mascot: () => mascotSVG('cheer', 'tour-mascot'),   // el personaje (js/mascota.js)
   // Los videos siempre son oscuros: la ilustración usa colores fijos, como el reproductor.
   video: () => `<div class="tour-video" aria-hidden="true"><span class="tv-skip">Ejercicios →</span>
     <span class="tv-play">${ICON.play}</span><span class="tv-seek"><b></b></span></div>`,

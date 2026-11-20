@@ -163,6 +163,7 @@ test('la mascota y los logos viejos ya no se usan', () => {
   for (const f of files) assert.doesNotMatch(read(f), /mascota\.png|logo-(light|dark)\.png/, f);
   assert.doesNotMatch(read('js/tour.js'), /Soy Zuka/);
   assert.match(read('js/ui.js'), /brainTile\(/, 'el diálogo lleva la ficha del cerebro');
-  assert.match(app, /brainSVG\('lit'\)/, 'al terminar la lección el cerebro se enciende');
+  // desde el 2026-11-20 al terminar la lección celebra el personaje nuevo (js/mascota.js, spec 2026-11-20-personaje)
+  assert.match(app, /mascotSVG\('cheer', 'm-win'\)/, 'al terminar la lección celebra el personaje');
   assert.match(read('js/cuenta.js'), /logoHTML\(\)/);
 });
