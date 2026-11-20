@@ -1594,3 +1594,8 @@ button.set-row:active { opacity: .7; }
 .stat b { font-family: var(--display); font-weight: 600; font-size: 22px; }
 .hk-next { color: var(--mute); font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .home-continue .btn { width: 100%; }
+
+/* Racha y experiencia solo dentro de un curso (su portada, sus mundos y su gimnasio); en las demás pestañas la barra no
+   se ve y la página arranca bajo la barra del celular (pedido del 2026-11-19). */
+body:not([data-tab=learn]):not([data-tab=gym]) #topbar { display: none; }
+body:not([data-tab=learn]):not([data-tab=gym]) #view { padding-top: env(safe-area-inset-top); }

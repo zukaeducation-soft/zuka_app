@@ -495,7 +495,7 @@ function renderClips() {
       b.querySelector('small').textContent = likeCount(l); Sfx.tap();
     } else if (act === 'save') {
       S.saved[id] = !S.saved[id]; b.classList.toggle('on', S.saved[id]);
-      toast(S.saved[id] ? 'Guardado en tu perfil' : 'Eliminado de guardados');
+      toast(S.saved[id] ? 'Guardado en «Tú»' : 'Eliminado de guardados');
     }
     save();
   });
@@ -794,15 +794,6 @@ function renderProfile() {
       <p class="muted">${todayXP()} de ${S.goal} XP</p>
       <div class="bar"><i style="width:${Math.min(1, todayXP() / S.goal) * 100}%"></i></div>
     </section>
-    <section class="card">
-      <h3>Progreso por curso</h3>
-      ${cursosVisibles().map(c => {
-        const ls = lessonsOf(c), d = ls.filter(isDone).length;
-        return `<button class="prog-row" data-course="${c.id}" style="--c:${c.color}">${courseArt(c, 'md')}
-          <span class="pr-body"><b>${esc(c.name)}</b><span class="mini-bar"><i style="width:${(d / ls.length) * 100}%"></i></span></span>
-          <span class="cr-count">${d}/${ls.length}</span></button>`;
-      }).join('')}
-    </section>
     ${saved.length ? `<section class="card"><h3>Clips guardados</h3>${saved.map(({ c, l }) =>
       `<button class="saved-row" data-${l.fact ? 'curio' : 'lesson'}="${l.id}" style="--c:${c.color}">${ICON.bookmark}<span><b>${esc(l.title)}</b><small>${esc(c.name)}</small></span></button>`).join('')}</section>` : ''}
   </div>`;
@@ -810,7 +801,6 @@ function renderProfile() {
   nameInp.onchange = () => { S.name = nameInp.value = nameInp.value.trim(); save(); $('.avatar', view).textContent = (S.name || 'Z')[0].toUpperCase(); };
   cuentaBind(view);
   $('[data-settings]', view).onclick = () => { profileSub = 'settings'; renderProfile(); view.scrollTop = 0; $('[data-back]', view).focus({ preventScroll: true }); };
-  view.querySelectorAll('[data-course]').forEach(b => b.onclick = () => openCourse(b.dataset.course));
   view.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => {
     const { c, l } = findLesson(b.dataset.lesson);
     if (isUnlocked(c, l)) startLesson(c, l); else toast(`Primero completa las lecciones anteriores de ${esc(c.name)}.`);
@@ -826,7 +816,7 @@ function renderSettings() {
   const toggle = k => `<span class="toggle${S[k] ? ' on' : ''}"></span>`;
   const conCuenta = typeof Cuenta !== 'undefined' && !!Cuenta.user;   // con sesión, las lecciones hechas viven en la nube y vuelven
   view.innerHTML = `<div class="settings">
-    <header class="set-head"><button class="icon-btn" data-back aria-label="Volver al perfil">${ICON.back}</button><h2>Ajustes</h2></header>
+    <header class="set-head"><button class="icon-btn" data-back aria-label="Volver a Tú">${ICON.back}</button><h2>Ajustes</h2></header>
     <section class="set-group">
       <h3 class="eyebrow">Aprendizaje</h3>
       <div class="set-row">${row('target', 'Meta diaria', `${todayXP()} de ${S.goal} XP hoy`)}</div>

@@ -25,3 +25,11 @@ test('arriba solo la racha y la experiencia, más grandes', () => {
   assert.match(css, /#topbar \.tb-stat \{ gap: 6px; padding: 7px 14px 7px 10px; font-size: 17px; \}/);
   assert.match(css, /#topbar \.tb-stat \.i \{ width: 24px; height: 24px; \}/);
 });
+
+test('racha y experiencia solo dentro de un curso; la pestaña Perfil se llama «Tú» y no trae el progreso por curso', () => {
+  assert.match(css, /body:not\(\[data-tab=learn\]\):not\(\[data-tab=gym\]\) #topbar \{ display: none; \}/);
+  assert.match(css, /body:not\(\[data-tab=learn\]\):not\(\[data-tab=gym\]\) #view \{ padding-top: env\(safe-area-inset-top\); \}/);
+  assert.match(html, /<button data-tab="profile">Tú<\/button>/);
+  const prof = app.slice(app.indexOf('function renderProfile'), app.indexOf('function renderSettings'));
+  assert.doesNotMatch(prof, /Progreso por curso|prog-row/);
+});
