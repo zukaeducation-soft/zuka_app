@@ -14,9 +14,15 @@ const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), GUIDE_ARCADE = get
 const C = get(ctx, 'COURSES').find(c => c.id === 'preuda');
 const L = C.units.flatMap(u => u.lessons).find(l => l.id === 'pu-cm-1');
 const exOf = g => L.ex.filter(e => e.game === g);
-const items = g => exOf(g).flatMap(e => e.params.rounds.flatMap(r => r.items));
+const items = g => [...exOf(g).flatMap(e => e.params.rounds.flatMap(r => r.items)), ...(g === 'capas-operacion' ? EXPRS : [])];
 const NEW = ['globo-lastre', 'voltea-flecha', 'capas-operacion'];
-const rounds = g => exOf(g).flatMap(e => e.params.rounds);
+// La lección lleva una sola ronda por juego (spec 2026-11-20-preuda-razonamiento-diez): las variantes del juego se prueban con estas.
+const MORE = {
+  'globo-lastre': [{ g: 2, s: 5, act: 'addG', target: 1 }, { g: 3, s: 1, act: 'addS', target: -4 }, { g: 6, s: 2, act: 'remG', target: -1 }, { g: 1, s: 6, act: 'remS', target: -1 }],
+  'voltea-flecha': [{ a: 2, target: -12 }, { a: -4, target: -20 }, { a: -2, target: 10 }, { a: -5, target: 15 }, { a: 6, target: -18 }],
+};
+const rounds = g => [...exOf(g).flatMap(e => e.params.rounds), ...(MORE[g] || [])];
+const EXPRS = ['6 + 2 * ( 5 - 8 ) ^ 2', '( 4 - 9 ) * ( 3 + 1 )', '18 - ( 2 + 4 ) * 3', '20 / 4 * 5 - 3', '3 ^ 2 - 4 * ( 1 - 3 )'].map(expr => ({ expr }));
 
 test('los tres juegos nuevos existen, están registrados y con guía; se juegan arrastrando, no con botones', () => {
   for (const g of NEW) {
@@ -30,15 +36,14 @@ test('los tres juegos nuevos existen, están registrados y con guía; se juegan 
   }
 });
 
-test('la lección: ocho ejercicios distintos con los tres juegos propios; todos con pista y explicación', () => {
-  assert.equal(L.ex.map(e => e.game).join(), 'recta-espejo,globo-lastre,ascensor,tren-ordenado,voltea-flecha,pares-negativos,capas-operacion,salta-signos');
+test('la lección: once ejercicios distintos con los tres juegos propios y la zona de examen; todos con pista y explicación', () => {
+  assert.equal(L.ex.map(e => e.game).join(), 'recta-espejo,globo-lastre,ascensor,tren-ordenado,voltea-flecha,pares-negativos,capas-operacion,salta-signos,completa-solucion,caza-error,opcion-examen');
   assert.ok([...GUIDE_ARCADE].includes('capas-operacion'));
   for (const e of L.ex) {
     assert.ok(e.hint?.length > 20 && e.explain?.length > 20, e.game);
-    assert.ok(e.params.rounds.length >= 1);
+    if (e.params.rounds) assert.equal(e.params.rounds.length, 1, `${e.game}: una sola ronda`);
   }
-  assert.ok(exOf('capas-operacion')[0].params.rounds.every(r => r.title && r.items.length >= 2));
-  for (const g of ['globo-lastre', 'voltea-flecha']) assert.ok(rounds(g).length >= 4 && rounds(g).length <= 5, `${g}: de cuatro a cinco pestañas`);
+  assert.ok(exOf('capas-operacion')[0].params.rounds.every(r => r.title && r.items.length >= 1));
   assert.ok(L.clip.scenes.length >= 6, 'las escenas de respaldo cuentan el video');
 });
 

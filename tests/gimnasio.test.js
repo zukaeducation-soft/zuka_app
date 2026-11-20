@@ -16,6 +16,8 @@ const lessonIds = new Set(COURSES.flatMap(c => c.units.flatMap(u => u.lessons.ma
 
 // Estado correcto de cada juego que usa el Gimnasio, para ver que el paso tiene solución alcanzable con sus controles.
 const SOLVE = {
+  'cuadricula-cien': p => ({ counts: p.rounds.map(r => { assert.ok(Number.isInteger(r.count) && r.count > 0 && r.count < 100); return r.count; }) }),
+  'pinta-personas': p => ({ painted: p.rounds.map(r => { const n = r.total * r.pct / 100; assert.ok(Number.isInteger(n) && r.total <= 50); return n; }) }),
   reparto: p => { const s = p.parts.reduce((a, b) => a + b, 0); return { cuts: [p.parts[0] / s, (p.parts[0] + p.parts[1]) / s] }; },
   'estira-barra': p => { for (const r of p.rounds) assert.ok(Number.isInteger(r.pct) && r.pct <= (p.max ?? 200)); return { pcts: p.rounds.map(r => r.pct) }; },
   'barra-razon': p => ({ rounds: p.rounds.map(r => { const a = r.T * r.p / (r.p + r.q); assert.ok(Number.isInteger(a) && a > 0 && a < r.T); return { a }; }) }),
@@ -138,7 +140,8 @@ test('cada paso tiene solución alcanzable con los controles del juego', () => {
   for (const r of RETOS) r.steps.forEach((s, i) => {
     // Juegos por rondas que exportan su respuesta: se usa esa (y los de deslizador revisan su rango en SOLVE).
     const own = GAMES[s.ex.game].answer && s.ex.params.rounds ? p => ({ rounds: p.rounds.map(r => GAMES[s.ex.game].answer(r)) }) : null;
-    const solve = SOLVE[s.ex.game] || own;
+    // Los juegos que traen su propio solucionador (la zona de examen) lo usan.
+    const solve = SOLVE[s.ex.game] || own || GAMES[s.ex.game].solve;
     assert.ok(solve, `${r.id} paso ${i + 1}: falta el solucionador de ${s.ex.game} en la prueba`);
     const g = GAMES[s.ex.game].grade(solve(s.ex.params), s.ex.params);
     assert.ok(g.ok, `${r.id} paso ${i + 1}: ${s.ex.game} no se puede resolver`);

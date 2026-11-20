@@ -13,6 +13,8 @@ const html = read('index.html'), sw = read('sw.js');
 const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
 const ctx = loadScripts(all);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), DONE = get(ctx, 'PU_HECHOS');
+// Los mundos rehechos con diez ejercicios (PU_DIEZ) tienen su propia prueba: tests/preuda-diez.test.js.
+const DIEZ = get(ctx, 'PU_DIEZ');
 const units = get(ctx, 'COURSES').find(c => c.id === 'preuda').units.filter(u => u.block === 'razonamiento');
 const BORING = ['escala-solucion', 'arma-la-cuenta', 'une-parejas', 'clasifica-cartas', 'verdadero-falso', 'ordena-terminos'];
 // Juegos que se mueven solos o se lanzan (arcades y questGame): los que pueden cerrar una lección.
@@ -38,6 +40,7 @@ test('mundos terminados: 7 u 8 juegos distintos, gráficos, con pista, y uno en 
   assert.ok(DONE.length >= 1);
   for (const u of units.filter(u => DONE.includes(u.world))) for (const l of u.lessons) {
     const games = l.ex.map(e => e.game);
+    if (DIEZ.includes(u.world)) { assert.ok(l.ex.length >= 9, l.id); continue; }
     assert.ok(l.ex.length >= 7 && l.ex.length <= 8, `${l.id}: ${l.ex.length}`);
     assert.equal(new Set(games).size, games.length, `${l.id}: repetido (${games})`);
     for (const e of l.ex) {

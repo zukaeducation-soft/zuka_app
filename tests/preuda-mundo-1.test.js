@@ -15,14 +15,17 @@ const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES');
 const U = get(ctx, 'COURSES').find(c => c.id === 'preuda').units[0];
 // Juegos en movimiento (algo corre, vuela o se desliza solo): van de último.
 const MOVING = ['salta-signos', 'carrera-fracciones', 'vuela-precios', 'serpiente-orden', 'buzo-enteros', 'dispara-inverso', 'rompe-cambios', 'corta-proporciones'];
+// Desde el 2026-11-20 (spec preuda-razonamiento-diez) cada lección cierra con la zona de examen, después del juego en movimiento.
+const ZONA = ['completa-solucion', 'caza-error', 'opcion-examen'];
 // Mecánicas que el usuario no quiere: escoger entre opciones, tarjetas y armar con fichas de solo tocar.
 const BORING = ['escala-solucion', 'arma-la-cuenta', 'une-parejas', 'clasifica-cartas', 'verdadero-falso', 'ordena-terminos'];
 
 test('las cuatro lecciones: 7 u 8 ejercicios distintos, gráficos, con pista, y un juego en movimiento al final', () => {
   assert.equal(U.lessons.map(l => l.id).join(), 'pu-cm-1,pu-cm-2,pu-cm-3,pu-cm-4');
   for (const l of U.lessons) {
-    const games = l.ex.map(e => e.game);
-    assert.ok(l.ex.length >= 7 && l.ex.length <= 8, `${l.id}: ${l.ex.length} ejercicios`);
+    assert.equal(l.ex.slice(-3).map(e => e.game).join(), ZONA.join(), `${l.id}: zona de examen`);
+    const games = l.ex.slice(0, -3).map(e => e.game);
+    assert.ok(games.length >= 7 && games.length <= 8, `${l.id}: ${games.length} juegos`);
     assert.equal(new Set(games).size, games.length, `${l.id}: juego repetido (${games})`);
     for (const e of l.ex) {
       assert.equal(e.type, 'play', l.id);

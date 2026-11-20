@@ -624,7 +624,9 @@ function startReto(c, r) {
   document.body.classList.add('in-lesson');
   const root = $('.lesson', ov), body = $('.lesson-body', ov), btn = $('.btn.main', ov), fb = $('.feedback', ov), bar = $('.pbar i', ov);
 
-  const teardown = () => { handle?.destroy?.(); handle = null; };
+  let closeConcept = null;
+  const conceptOf = s => (s.concept && typeof CONCEPTOS !== 'undefined' && CONCEPTOS[s.concept]) || null;
+  const teardown = () => { closeConcept?.(); closeConcept = null; handle?.destroy?.(); handle = null; };
   function close(to) {
     if (!finished && pos >= 0) {
       return ask({ title: '¿Salir del reto?', text: 'Lo que llevas de este reto no se guarda.', ok: 'Salir', cancel: 'Seguir entrenando', danger: true })
@@ -677,8 +679,10 @@ function startReto(c, r) {
     const dots = `<span class="gym-dots" aria-label="Paso ${pos + 1} de ${r.steps.length}">${r.steps.map((_, i) => `<i class="${i < pos ? 'ok' : i === pos ? 'now' : ''}"></i>`).join('')}</span>`;
     // Un solo contenedor: mountSketch (kit.js) mide el primer hijo de .lesson-body para achicar el juego si no cabe.
     body.innerHTML = `<div class="gym-step"><details class="gym-reto"><summary><span>El reto</span>${dots}</summary><div>${tex(r.problem)}</div></details>
-      <div class="coach" role="note"><span class="coach-av">${mascotSVG('think')}</span><div><small>Paso ${pos + 1} · ${esc(s.title)}</small><p></p></div></div>
+      <div class="coach" role="note"><span class="coach-av">${mascotSVG('think')}</span><div><small>Paso ${pos + 1} · ${esc(s.title)}</small><p></p>${conceptOf(s) ? `<button type="button" class="con-btn" data-concept>${ICON.bulb}Recordar el concepto</button>` : ''}</div></div>
       <div class="gym-ex"></div>${notebook()}</div>`;
+    const cb = $('[data-concept]', body);
+    if (cb) cb.onclick = () => { cb.classList.remove('pulse'); closeConcept?.(); closeConcept = CON.open(root, s.concept); };
     coach(s.coach, `Paso ${pos + 1} · ${s.title}`);
     btn.textContent = 'Comprobar'; btn.disabled = true;
     handle = renderExercise($('.gym-ex', body), s.ex, ok => { btn.disabled = !ok; });
@@ -707,6 +711,7 @@ function startReto(c, r) {
     helps[pos]++;
     if (helps[pos] <= s.hints.length) {
       const h = s.hints[helps[pos] - 1];
+      $('[data-concept]', body)?.classList.add('pulse');   // atascado: el concepto está a un toque
       return showFb('bad', `<div class="fb-head"><span class="fb-icon">${ICON.bulb}</span><h4>Todavía no. Te ayudo</h4></div>
         <p class="fb-exp">${tex(h)}</p>`, 'Intentar de nuevo', () => { btn.disabled = true; coach(h,`Ayuda ${helps[pos]} de ${s.hints.length} · ${s.title}`); });
     }
