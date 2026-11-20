@@ -146,7 +146,7 @@ test('con componentes, el nivel sigue al componente que se estudia; la hoja nunc
   assert.equal(courseLevelUi(PU, null, { done: raz, last: 'pu-cm-1' }), lastRaz);
   assert.ok(gymWorld(PU, lastRaz, raz, false).review.length >= 1);
   const ini = read('js/inicio.js');
-  assert.match(ini, /Retos del curso/, 'si nada del componente tiene retos, la hoja muestra los del curso');
+  assert.match(read('js/gimnasio.js'), /Pronto llegan retos de este nivel/, 'un nivel sin retos lleva al calentamiento');
   assert.match(read('js/gimnasio.js'), /data-back-course/, 'la vista completa del gimnasio vuelve al curso');
 });
 

@@ -191,38 +191,7 @@ function bindGymFab(c) {
   const b = $('[data-gym-fab]', view);
   if (!b) return;
   b.closest('.learn')?.classList.add('has-fab');   // espacio abajo para el botón (sin depender de :has)
-  b.addEventListener('click', () => openGymSheet(c, +b.dataset.ui, openWorld?.course === c.id));
+  // Las pesas abren la página del gimnasio en el mundo del nivel del estudiante (spec 2026-11-19-gimnasio-niveles).
+  b.addEventListener('click', () => { gymFocus = { course: c.id, ui: +b.dataset.ui }; go('gym'); });
 }
 
-// inWorld: se abrió desde un mundo que se está mirando («este mundo»); si no, es el mundo del nivel del estudiante («tu mundo»).
-function openGymSheet(c, ui, inWorld) {
-  const g = gymWorld(c, ui, S.done, S.unlockAll, S.gym || {}), u = c.units[ui], w = WORLDS[u.world] || { name: u.title }, mine = S.gym || {};
-  const blockName = c.blocks?.find(b => b.id === u.block)?.name, mio = inWorld ? 'este mundo' : 'tu mundo';
-  // Si ni este mundo, ni los anteriores, ni los siguientes del componente tienen retos, se muestran los de todo el curso.
-  const rest = !g.here.length && !g.review.length && !g.ahead.length ? gymRetos(c).flatMap(x => x.retos) : [];
-  const row = (r, open) => {
-    const key = lessonsOf(c).find(l => r.after.includes(l.id)), best = mine[r.id]?.best;
-    return `<button class="gs-row${open ? '' : ' locked'}" data-reto="${r.id}"${open ? '' : ' aria-disabled="true"'}>
-      <span class="gs-top">${gymLevel(r.level)}${best ? gymStarsHTML(best) : ''}</span>
-      <b>${esc(r.title)}</b>
-      <small>${open ? `Estrategia: ${esc(r.strategy)}` : `${ICON.lock}Termina «${esc(key?.title || 'la lección')}» para abrirlo`}</small></button>`;
-  };
-  openSheet(`<div class="gym-sheet" style="--c:${c.color}">
-    <p class="gs-eyebrow">${ICON.gym}Gimnasio · ${blockName ? `${esc(blockName)} · ` : ''}Mundo ${worldNo(c, ui)}</p>
-    <h3 class="sheet-title">${esc(w.name)}</h3>
-    <p class="muted">Retos un poco más difíciles, con un entrenador que te guía paso a paso. Aquí no pierdes vidas.</p>
-    ${g.here.length ? `<h4 class="gs-h">De ${mio}</h4><div class="gs-list">${g.here.map(x => row(x.r, x.open)).join('')}</div>`
-      : `<p class="gs-empty">${gymRetos(c).length ? `${inWorld ? 'Este' : 'Tu'} mundo aún no tiene retos guiados.` : 'Este curso aún no tiene retos guiados. Pronto llegan.'}</p>`}
-    ${g.review.length ? `<h4 class="gs-h">Para repasar</h4><div class="gs-list">${g.review.map(r => row(r, true)).join('')}</div>` : ''}
-    ${g.ahead.length ? `<h4 class="gs-h">Más adelante</h4><div class="gs-list">${g.ahead.map(x => row(x.r, x.open)).join('')}</div>` : ''}
-    ${rest.length ? `<h4 class="gs-h">Retos del curso</h4><div class="gs-list">${rest.map(r => row(r, gymOpen(r, S.done, S.unlockAll))).join('')}</div>` : ''}
-    <button class="btn ghost" data-all>Ver todo el gimnasio</button>
-  </div>`, sh => {
-    sh.querySelectorAll('[data-reto]').forEach(b => b.onclick = () => {
-      const r = GYM_RETOS.find(x => x.id === b.dataset.reto);
-      if (!gymOpen(r, S.done, S.unlockAll)) return toast('Termina la lección de este tema para abrir el reto.');
-      closeSheet(false); startReto(c, r);
-    });
-    $('[data-all]', sh).onclick = () => { closeSheet(false); go('gym'); };
-  });
-}

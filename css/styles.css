@@ -1327,27 +1327,12 @@ button.set-row:active { opacity: .7; }
 @media (max-width: 339px) { .settings .seg { margin-left: 0; } .theme-seg button { width: 34px; height: 34px; } }
 
 /* ---- Gimnasio (spec 2026-11-19-gimnasio): retos guiados por un entrenador ---- */
-.gym-count { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--mute); }
-.gym-count b { color: var(--ink); font-weight: 600; }
 .gym-world h2 { font-family: var(--display); font-size: 19px; font-weight: 500; margin-bottom: 10px; display: grid; gap: 2px; }
 .gym-world h2 small { font-family: var(--font); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--c, var(--brand)) 75%, var(--ink)); font-weight: 600; }
 .gym-list { display: grid; gap: 10px; }
-.gym-card { display: grid; gap: 6px; text-align: left; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
-.gym-card:hover { border-color: color-mix(in srgb, var(--c, var(--brand)) 60%, var(--line)); }
-.gym-card:focus-visible { outline: 2px solid var(--c, var(--brand)); outline-offset: 2px; }
-.gym-card b { font-size: 16px; font-weight: 600; }
-.gym-card small { font-size: 13px; color: var(--mute); display: flex; align-items: center; gap: 6px; }
-.gym-card small .i { width: 14px; height: 14px; flex: none; }
-.gym-card.locked { opacity: .55; }
-.gym-card.done { border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); }
-.gym-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.gym-lvl { display: inline-flex; gap: 4px; vertical-align: middle; }
-.gym-lvl i { width: 14px; height: 6px; border-radius: 3px; border: 1px solid color-mix(in srgb, var(--c, var(--brand)) 70%, var(--line)); }
-.gym-lvl i.on { background: var(--c, var(--brand)); }
 .gym-stars { display: inline-flex; gap: 2px; font-style: normal; }
 .gym-stars i { font-style: normal; color: var(--line); font-size: 15px; }
 .gym-stars i.on { color: var(--gold); }
-.gym-empty .course-list { margin-top: 6px; }
 
 /* el reto en curso */
 .gym-run .gym-badge { color: var(--c, var(--brand)); }
@@ -1509,17 +1494,86 @@ button.set-row:active { opacity: .7; }
 @keyframes gym-fab-in { from { opacity: 0; transform: translateY(12px) scale(.9); } }
 @media (prefers-reduced-motion: reduce) { .gym-fab, .gym-fab .gf-db { animation: none; } }
 .learn.has-fab { padding-bottom: 110px; }
-.gym-sheet { display: grid; gap: 10px; }
-.gym-sheet .sheet-title { margin-bottom: 0; }
-.gs-eyebrow { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--c) 75%, var(--ink)); }
-.gs-eyebrow .i { width: 18px; height: 18px; }
-.gs-h { font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--mute); font-weight: 700; margin-top: 6px; }
-.gs-list { display: grid; gap: 8px; }
-.gs-row { display: grid; gap: 4px; text-align: left; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
-.gs-row b { font-size: 15.5px; font-weight: 600; }
-.gs-row small { font-size: 13px; color: var(--mute); display: flex; align-items: center; gap: 6px; }
-.gs-row small .i { width: 14px; height: 14px; flex: none; }
-.gs-row.locked { opacity: .55; }
-.gs-top { display: flex; align-items: center; justify-content: space-between; }
-.gs-empty { color: var(--mute); font-size: 14px; padding: 10px 0; }
 .hk-acts .btn { white-space: nowrap; padding-left: 10px; padding-right: 10px; }
+
+/* ---- Gimnasio cerebral por niveles (spec 2026-11-19-gimnasio-niveles) ---- */
+.gym { display: grid; gap: 14px; padding: 16px 16px 48px; }
+/* --ls: el color del nivel con algo de tinta, para barras, bordes y discos (los tonos claros se perdían en tema claro) */
+.gym .lv1, .gym-run .lv1 { --lc: var(--g1, var(--c)); }
+.gym .lv2, .gym-run .lv2 { --lc: var(--g2, var(--c)); }
+.gym .lv3, .gym-run .lv3 { --lc: var(--g3, var(--c)); }
+.gym-plates { width: 44px; height: 22px; flex: none; }
+.gym-plates .gp-bar { fill: color-mix(in srgb, var(--ink) 38%, transparent); }
+.gym :is(.lv1, .lv2, .lv3), .gym-run :is(.lv1, .lv2, .lv3) { --ls: color-mix(in srgb, var(--lc) 78%, var(--ink)); }
+.gym-plates .gp-plate { fill: var(--ls, var(--c)); }
+.gym-hero {
+  position: relative; overflow: hidden; display: grid; gap: 6px; padding: 20px 18px 16px; border-radius: 22px;
+  border: 1px solid color-mix(in srgb, var(--g2, var(--c)) 35%, var(--line));
+  background: radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--g2, var(--c)) 26%, transparent), transparent 60%),
+    linear-gradient(160deg, color-mix(in srgb, var(--g3, var(--c)) 10%, var(--card)), var(--card));
+  --gb1: color-mix(in srgb, var(--c) 14%, color-mix(in srgb, var(--ink) 26%, var(--bg)));
+  --gb2: color-mix(in srgb, var(--c) 8%, color-mix(in srgb, var(--ink) 9%, var(--bg)));
+  --gd1: color-mix(in srgb, var(--ink) 4%, var(--bg));
+  --gd2: color-mix(in srgb, var(--c) 10%, color-mix(in srgb, var(--ink) 18%, var(--bg)));
+  --grim: color-mix(in srgb, var(--c) 45%, transparent);
+}
+.gh-art { position: absolute; top: 4px; right: 4px; width: 104px; height: 104px; filter: drop-shadow(0 8px 16px color-mix(in srgb, var(--c) 30%, transparent)); }
+.gh-art .gf-art { width: 104px; height: 104px; overflow: visible; }
+.gh-art .gf-db { animation: gym-fab-bob 3.2s ease-in-out infinite; }
+.gh-eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--g2, var(--c)) 45%, var(--ink)); padding-right: 96px; }
+.gym-hero h1 { font-family: var(--display); font-size: 27px; font-weight: 500; line-height: 1.1; padding-right: 92px; }
+.gh-sub { font-size: 14px; line-height: 1.45; color: var(--mute); padding-right: 40px; }
+.gh-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+.gh-stats > span { display: grid; gap: 2px; justify-items: start; padding: 9px 10px; border-radius: 14px; background: color-mix(in srgb, var(--bg) 55%, transparent); border: 1px solid var(--line); font-size: 11.5px; color: var(--mute); }
+.gh-stats b { display: flex; align-items: center; gap: 4px; min-height: 24px; font-size: 19px; font-weight: 600; color: var(--ink); }
+.gh-stats b small { font-size: 12px; color: var(--mute); font-weight: 500; }
+.gh-stats .gym-plates { width: 40px; height: 20px; }
+.gh-star { font-style: normal; color: var(--gold); font-size: 17px; }
+.gym-today {
+  display: grid; gap: 12px; padding: 16px; border-radius: 20px; background: color-mix(in srgb, var(--lc) 10%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--ls) 60%, var(--line));
+  box-shadow: 0 0 22px color-mix(in srgb, var(--lc) var(--halo), transparent);
+}
+.gt-eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--lc) 42%, var(--ink)); }
+.gt-row { display: flex; gap: 12px; align-items: center; }
+.gt-ic { width: 56px; height: 56px; flex: none; display: grid; place-items: center; border-radius: 16px; background: color-mix(in srgb, var(--lc) 16%, var(--bg)); border: 1px solid color-mix(in srgb, var(--lc) 45%, transparent); }
+.gt-row h2 { font-family: var(--display); font-size: 19px; font-weight: 500; line-height: 1.2; }
+.gt-row p { font-size: 13.5px; line-height: 1.4; color: var(--mute); margin-top: 2px; }
+.gym-today .btn { justify-self: stretch; }
+.gym-h { font-family: var(--display); font-size: 19px; font-weight: 500; margin-top: 6px; }
+.gym-levels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px; }
+.gym-lv {
+  position: relative; display: grid; justify-items: center; gap: 3px; padding: 16px 6px 10px; border-radius: 16px;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink); text-align: center; cursor: pointer; min-width: 0;
+}
+@media (max-width: 340px) { .gym-lv { padding-left: 2px; padding-right: 2px; } .gym-lv b { font-size: 10.5px; letter-spacing: -.02em; } }
+.gym-lv .gym-plates { width: 48px; height: 24px; margin-bottom: 2px; }
+.gym-lv b { font-size: clamp(11px, 3.5vw, 14px); font-weight: 600; letter-spacing: -.01em; }
+.gym-lv small { font-size: 11px; color: var(--mute); }
+.gym-lv.on { border: 1.5px solid var(--ls); background: color-mix(in srgb, var(--lc) 14%, var(--card)); box-shadow: 0 0 18px color-mix(in srgb, var(--lc) var(--halo), transparent); }
+.gym-lv:focus-visible { outline: 2px solid var(--lc); outline-offset: 2px; }
+.glv-tag { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 2px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: var(--lc); color: #0b0d1a; }
+.glv-bar { width: 82%; height: 5px; border-radius: 3px; background: color-mix(in srgb, var(--ink) 12%, transparent); overflow: hidden; margin-top: 4px; }
+.glv-bar i { display: block; height: 100%; border-radius: 3px; background: var(--ls); }
+.gym-lv .glv-n { font-weight: 600; color: var(--ink); }
+.gym-lv-desc { font-size: 13.5px; line-height: 1.45; color: var(--mute); }
+.gym-world { display: grid; gap: 8px; margin-top: 4px; }
+.gym-world h2 small { display: flex; align-items: center; gap: 8px; }
+.gw-here { padding: 1px 8px; border-radius: 999px; font-size: 10.5px; letter-spacing: .04em; background: color-mix(in srgb, var(--c) 18%, transparent); color: var(--ink); border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); }
+.gym-item { display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px 14px 12px 12px; border-radius: 16px; border: 1px solid var(--line); border-left: 3px solid var(--ls); background: var(--card); color: var(--ink); cursor: pointer; }
+.gym-item:hover { border-color: color-mix(in srgb, var(--ls) 60%, var(--line)); border-left-color: var(--ls); }
+.gym-item:focus-visible { outline: 2px solid var(--lc); outline-offset: 2px; }
+.gi-ic { width: 48px; height: 48px; flex: none; display: grid; place-items: center; border-radius: 14px; background: color-mix(in srgb, var(--lc) 14%, var(--bg)); }
+.gi-body { display: grid; gap: 3px; flex: 1; min-width: 0; }
+.gi-body b { font-size: 15.5px; font-weight: 600; line-height: 1.25; }
+.gi-body small { font-size: 12.5px; color: var(--mute); line-height: 1.35; display: flex; gap: 5px; align-items: flex-start; }
+.gi-body small .i { width: 13px; height: 13px; flex: none; margin-top: 2px; }
+.gi-end { flex: none; color: var(--mute); display: flex; align-items: center; }
+.gi-end .i { width: 18px; height: 18px; }
+.gym-item.locked { opacity: .55; border-left-color: var(--line); }
+.gym-item.locked .gym-plates { filter: grayscale(1); }
+.gym-item.done .gi-ic { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ok) 60%, transparent); }
+.gym-soon { display: grid; gap: 10px; justify-items: center; text-align: center; padding: 20px 16px; border-radius: 18px; border: 1px dashed color-mix(in srgb, var(--lc, var(--c)) 50%, var(--line)); color: var(--mute); font-size: 14px; line-height: 1.45; }
+.gym-soon b { color: var(--ink); }
+.gym-run .gym-eyebrow .gym-plates { width: 36px; height: 18px; }
+@media (prefers-reduced-motion: reduce) { .gh-art .gf-db { animation: none; } }
