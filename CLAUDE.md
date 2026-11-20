@@ -39,6 +39,29 @@ UdeA (Zarrazola, 2024), `C:\Users\User Acer\Documents\LIBRO DE ALGEBRA Y TRIGONO
   `LEC.drop`); la evaluación del mundo, otro texto con `pregunta-examen` (formato real A–D, solo en evaluaciones). Un archivo por mundo
   `js/courses/preuda-l-<mundo>.js` con `PU_LEC_JUEGOS.push(({ setLesson, setExam }) => …)`; **hechos los 12 mundos** (la lista de
   textos está en la sección «Estado» de la spec; en Lectura de dos textos cada ejercicio lleva `docs: [Uno, Dos]` y `doc: Uno`).
+- **Razonamiento lógico con diez ejercicios por lección** (pedido del 2026-11-20, spec `2026-11-20-preuda-razonamiento-diez`,
+  pruebas `tests/preuda-diez.test.js` y `tests/conceptos.test.js`; **reemplaza** el estándar de 7 u 8 en ese componente): el usuario
+  encontró «tedioso y aburrido» que cada juego repitiera 3, 4 o 5 rondas. Ahora cada lección tiene **10 u 11 ejercicios, todos con un
+  juego distinto y de UNA sola ronda** (los arcades, una ronda con 3 preguntas como máximo), con enunciados de contexto (tiendas,
+  torneos, encuestas…): seis o siete juegos del concepto, el juego en movimiento y, al final, la **zona de examen** con tres formatos
+  HTML de `js/games/examen-kit.js` (estilo `css/examen.css`, rótulo «Como en el examen»): `completa-solucion` (la solución con huecos:
+  se arrastran fichas; un toque manda la ficha al primer hueco libre; sobran fichas con los errores típicos), `caza-error` (una solución
+  con un paso equivocado: se toca y se le arrastra la corrección) y `opcion-examen` (la pregunta A–D, de última). Se escriben con los
+  ayudantes `sol(q, lines, extra, explain, hint)` (huecos `[[valor]]`, fuera de las fórmulas), `err(q, steps, wrong, fixes, explain,
+  hint)` (la corrección buena va primero en `fixes`) y `opc(q, options, answer, explain, hint)`, que reciben los archivos
+  `preuda-r-<mundo>.js`. Cada archivo conserva arriba su `setLesson` viejo (con varias rondas) y al final un bloque
+  `diezLesson(id, [[juego, ronda, enunciado, explicación]], [sol, err, opc])`, que deja una ronda de cada juego (`ronda` = índice u
+  objeto), y `addExam(mundo, [[lección, repaso, opc(…)]])`, que añade a la evaluación una pregunta en formato real por lección. El
+  mundo 1 está escrito entero en `preuda-r-calculo.js`. `PU_DIEZ` lista los mundos hechos: **los 16**. Los problemas salen de los
+  simulacros y de los exámenes reales, con otros números; la prueba de los videos sigue vigilando que no se repitan los ejemplos de la
+  película de la lección (ojo con las claves cortas: «mes», «tira», «solución», «amigo» son subcadenas). **Gimnasio**: cada mundo tiene
+  al menos un reto (30 en razonamiento; los nuevos y los conceptos están en `js/gimnasio-razonamiento.js`, que va después de
+  `gimnasio.js`) y un paso puede llevar `concept: '<id>'`: sale el botón **«Recordar el concepto»** (late tras el primer fallo) que abre
+  una tarjeta con una **animación corta** hecha con anime.js (`js/conceptos.js`: `CONCEPTOS[id] = { title, scene, beats }`; escenas
+  SVG por datos: `barra`, `recta`, `venn`, `arbol`, `tabla`, `ciclo`, `figura`, `pasos`; cada pieza lleva `b`, el tiempo en que
+  aparece; con «reducir movimiento» muestra el cuadro final). `GYM_CONCEPT_DE` asigna conceptos a los pasos de los retos viejos. No se
+  añadió three.js. Con una sola ronda ya no se dibuja la pestaña «1» (`drawTabs`). Para ver todos los conceptos: `CON.svg(id)` en una
+  rejilla. Al escribir archivos con barras invertidas, usar la herramienta de escritura o un `.py` (los heredoc de Bash las comen).
 - **Las instrucciones van sobre el juego, no en una ventana** (pedido del 2026-11-18, spec `2026-11-18-demo-en-juego`, pruebas
   `tests/demo-en-juego.test.js`): una mano hace el gesto en el lugar real del lienzo (`def.demo(G)` en `roundsGame` / `questGame`,
   `drawDemo` en `kit.js`) hasta el primer toque, y «Cómo se juega» la repite. Juego nuevo = con `demo`; los viejos conservan su

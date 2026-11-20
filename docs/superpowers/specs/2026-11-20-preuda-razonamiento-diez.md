@@ -48,6 +48,21 @@ evaluación salvo `opcion-examen`.
   No se añade three.js al PWA.
 - `tests/conceptos.test.js`: todo `concept` de un reto existe, cada concepto tiene título, escena válida y un texto por tiempo.
 
-## Estado
+## Estado (2026-11-20)
 
-Se hace por mundos; `PU_DIEZ` (en `preuda-razonamiento-juegos.js`) lista los terminados.
+Hechos los 16 mundos (`PU_DIEZ`): 57 lecciones, 573 ejercicios de una ronda (antes 402 ejercicios y 1 039 rondas), 177 preguntas
+de evaluación (57 de ellas en formato real) y 30 retos de gimnasio en razonamiento (11 nuevos: `gym-transporte`, `gym-jardin`,
+`gym-podio`, `gym-cubo`, `gym-potencias`, `gym-mensaje`, `gym-ciclistas`, `gym-testigos`, `gym-operador`, `gym-noticias`,
+`gym-faros`), con 35 conceptos animados y 40 pasos que llevan concepto.
+
+Cómo quedó escrito:
+
+- Cada `preuda-r-<mundo>.js` conserva arriba su `setLesson` de antes y lleva al final un bloque con `diezLesson` (deja una ronda de
+  cada juego, con enunciado y explicación nuevos, y añade la zona de examen) y `addExam` (una `opcion-examen` por lección). El mundo 1
+  está escrito entero con `setLesson`. Los ayudantes están en `preuda-razonamiento-juegos.js`.
+- Retos y conceptos nuevos: `js/gimnasio-razonamiento.js`. `GYM_CONCEPT_DE` les pone concepto a los pasos de los retos que ya existían.
+- Probado en el navegador: los 750 ejercicios (lecciones y evaluaciones) se montan sin error; el arrastre de fichas, la corrección
+  del paso y la tarjeta del concepto, en celular y en los dos temas.
+- De paso se arregló `rejilla-razon`, que nunca cargaba (llamaba `G.lay`), y con una sola ronda ya no se dibuja la pestaña «1».
+
+Pendiente: las escenas de respaldo de las lecciones y los videos no cambian. Comprensión lectora no se tocó.
