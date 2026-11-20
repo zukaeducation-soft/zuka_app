@@ -29,6 +29,7 @@ function setupBack() {
   if (history.state?.zuka !== 'top') { history.replaceState({ zuka: 'base' }, ''); cover(); }
 
   addEventListener('popstate', () => {
+    if (typeof presentacionAtras === 'function' && presentacionAtras()) { cover(); return; }   // js/presentacion.js
     const step = backStep({
       exitAsk, tab, dialog: dialogOpen(), tour: tourOpen(), guide: typeof guideOpen !== 'undefined' && !!guideOpen, sheet: $('#sheet').classList.contains('open'),
       lesson: !!lessonClose, world: (tab === 'learn' && (!!openWorld || !!openBlock)) || (tab === 'profile' && !!profileSub),   // Ajustes vuelve al Perfil por su [data-back]

@@ -925,5 +925,6 @@ watchConnection(window, document.body, toast);
 if (isStandalone()) keepData(navigator);   // instalada: que el navegador no borre el progreso
 setupBack();   // botón «atrás» del celular (js/back.js)
 // Primera vez en la app: recorrido guiado (js/tour.js).
-// Sin sesión sale primero la pantalla de entrada; el recorrido empieza al cerrarla.
-if (!cuentaPideEntrar() && tourShouldStart(S)) startTour();
+// En la web sin instalar y sin sesión sale primero la presentación (js/presentacion.js); si no, sin sesión, la pantalla
+// de entrada. El recorrido empieza al cerrarlas.
+if (!presentacionPide() && !cuentaPideEntrar() && tourShouldStart(S)) startTour();

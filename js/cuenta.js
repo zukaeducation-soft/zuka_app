@@ -63,16 +63,18 @@ function cuentaPideEntrar() {
   return true;
 }
 function authCerrar() {
-  const el = $('#auth');
-  if (!el) return;
-  el.remove();
+  const el = $('#auth'), pz = $('#landing');   // también la presentación (js/presentacion.js), si seguía abierta
+  if (!el && !pz) return;
+  el?.remove(); if (pz) presentacionCerrar();
   if (typeof tourShouldStart === 'function' && tourShouldStart(S)) startTour();   // el recorrido de bienvenida esperaba
 }
 function authScreen(modo = 'login', aviso = '') {
   let el = $('#auth');
   if (!el) { el = document.createElement('div'); el.id = 'auth'; document.body.appendChild(el); }
   const reg = modo === 'registro';
+  const volver = typeof pzDesde !== 'undefined' && pzDesde;   // se llegó desde la presentación: se puede volver a ella
   el.innerHTML = `<div class="auth-in">
+    ${volver ? `<button class="link-btn auth-volver" type="button" data-pz-volver>${ICON.back} Conocer Zuka</button>` : ''}
     <div class="auth-brand">${logoHTML()}</div>
     <h1>${reg ? 'Crea tu cuenta' : 'Entra a tu cuenta'}</h1>
     <p class="muted">${reg ? 'Es gratis. Guarda tu avance y te deja activar tu plan con un código.' : 'Sigue donde ibas: tu avance y tu plan te esperan.'}</p>
@@ -91,6 +93,7 @@ function authScreen(modo = 'login', aviso = '') {
   const f = $('form', el), msg = $('.form-msg', el), b = $('button[type=submit]', el);
   el.querySelectorAll('[data-m]').forEach(x => x.onclick = () => { if (x.dataset.m !== modo) authScreen(x.dataset.m); });
   $('[data-olvide]', el)?.addEventListener('click', openOlvide);
+  $('[data-pz-volver]', el)?.addEventListener('click', () => { el.remove(); presentacionAbrir(); });
   $('[data-guest]', el).onclick = () => { S.guest = true; save(); authCerrar(); };
   const error = t => { msg.textContent = t; msg.className = 'form-msg bad'; msg.hidden = false; };
   f.onsubmit = async e => {
@@ -199,7 +202,7 @@ async function cuentaSesion(ev, session) {
   if (antes === session.user.id && ev === 'TOKEN_REFRESHED') return;
   await cuentaPerfil();
   cuentaRol();
-  if (ev !== 'PASSWORD_RECOVERY' || !$('#sheet.open')) authCerrar(); else $('#auth')?.remove();
+  if (ev !== 'PASSWORD_RECOVERY' || !$('#sheet.open')) authCerrar(); else { $('#auth')?.remove(); if (typeof presentacionCerrar === 'function') presentacionCerrar(); }
   // Supabase repite el aviso de sesión cada vez que se vuelve a la pestaña: solo se repinta si algo cambió.
   if (antes === session.user.id) { if (JSON.stringify(Cuenta.perfil) !== perfilPrevio) cuentaRepinta(); return; }
   Cuenta.bases.clear(); cuentaCola.clear();   // nada pendiente de otra cuenta sube a esta

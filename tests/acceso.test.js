@@ -129,7 +129,7 @@ test('solo el administrador ve todo abierto; a los demás se les abre de a una l
 
 test('sin sesión la app abre en la pantalla de entrada, que deja seguir sin cuenta', () => {
   const cuenta = read('js/cuenta.js'), app = read('js/app.js');
-  assert.match(app, /if \(!cuentaPideEntrar\(\) && tourShouldStart\(S\)\) startTour\(\);/, 'el recorrido espera a la pantalla de entrada');
+  assert.match(app, /if \(!presentacionPide\(\) && !cuentaPideEntrar\(\) && tourShouldStart\(S\)\) startTour\(\);/, 'el recorrido espera a la pantalla de entrada');
   assert.match(cuenta, /if \(!Cuenta\.sb \|\| Cuenta\.user \|\| S\.guest\) return false;/, 'sin conexión, con sesión o como invitado no estorba');
   for (const s of ['data-guest', 'data-olvide', 'signInWithPassword', 'signUp(']) assert.ok(cuenta.includes(s), s);
   assert.match(read('css/styles.css'), /#auth \{[^}]*z-index: 35/, 'encima de la app y debajo de las hojas');
