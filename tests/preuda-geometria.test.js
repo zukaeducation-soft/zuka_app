@@ -13,7 +13,14 @@ const ctx = loadScripts(all);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES');
 const U = get(ctx, 'COURSES').find(c => c.id === 'preuda').units.find(u => u.lessons.some(l => l.id === 'pu-ge-1'));
 const L = id => U.lessons.find(l => l.id === id);
-const ex = (id, game) => L(id).ex.find(e => e.game === game);
+// La lección lleva una ronda por juego (spec 2026-11-20-preuda-razonamiento-diez): las variantes se prueban con estas.
+const FULL = {
+  'tijera-angulos': [{ kind: 'opp', given: 65 }, { kind: 'sup', given: 50 }, { kind: 'comp', given: 35 }, { kind: 'ratio', k: 2 }, { kind: 'sup', given: 105 }],
+  'paralelas-gira': [{ t: 65, top: 0, pair: 'corr' }, { t: 70, top: 10, pair: 'alt' }, { t: 60, top: -15, pair: 'corr' }, { t: 75, top: 5, pair: 'conj' }],
+  'suma-poligono': [{ n: 4 }, { n: 5 }, { n: 7 }, { n: 8 }],
+};
+const ex = (id, game) => { const e = L(id).ex.find(e => e.game === game); return FULL[game] ? { ...e, params: { ...e.params, rounds: FULL[game] } } : e; };
+const ZONA = ['completa-solucion', 'caza-error', 'opcion-examen'];
 const NEW = ['tijera-angulos', 'paralelas-gira', 'apice-triangulo', 'suma-poligono', 'cuadrados-pitagoras', 'escalera-pared', 'billar-rebote'];
 const MOVING = ['billar-rebote', 'vuela-precios'];
 const BORING = ['escala-solucion', 'arma-la-cuenta', 'une-parejas', 'clasifica-cartas', 'verdadero-falso', 'ordena-terminos'];
@@ -22,8 +29,9 @@ const win = (game, params, state) => GAMES[game].grade({ rounds: state }, params
 
 test('pu-ge-1 y pu-ge-2: 7 u 8 juegos distintos, gráficos, con pista, y uno en movimiento al final', () => {
   for (const id of ['pu-ge-1', 'pu-ge-2']) {
-    const l = L(id), games = l.ex.map(e => e.game);
-    assert.ok(l.ex.length >= 7 && l.ex.length <= 8, `${id}: ${l.ex.length}`);
+    const l = L(id), games = l.ex.slice(0, -3).map(e => e.game);
+    assert.equal(l.ex.slice(-3).map(e => e.game).join(), ZONA.join(), `${id}: zona de examen`);
+    assert.ok(games.length >= 7 && games.length <= 8, `${id}: ${games.length}`);
     assert.equal(new Set(games).size, games.length, `${id}: repetido (${games})`);
     for (const e of l.ex) {
       assert.equal(e.type, 'play');

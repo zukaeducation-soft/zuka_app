@@ -22,5 +22,34 @@ const PU_DIEZ = [];
     u.exam.minutes = Math.max(12, Math.round(u.exam.items.length * 1.5));
     PU_HECHOS.push(world);
   };
-  PU_JUEGOS.forEach(f => f({ L, setLesson, setExam, sol, err, opc, diez }));
+  // Estándar de diez (spec 2026-11-20-preuda-razonamiento-diez) sobre una lección que ya tiene sus juegos: de cada juego
+  // elegido queda UNA ronda, con enunciado de contexto, y al final va la zona de examen. picks = [[juego, ronda, enunciado,
+  // explicación, pista]]: `ronda` es el índice de la ronda que se conserva, o un objeto (la ronda nueva; en los juegos sin
+  // rondas, los parámetros que cambian). En los arcades quedan las tres primeras preguntas de la ronda.
+  const QUIZ = it => it && (it.options || it.expr || it.sign);
+  const diezLesson = (id, picks, zona) => {
+    const l = L(id), by = Object.fromEntries(l.ex.map(e => [e.game, e]));
+    setLesson(id, [...picks.map(([game, round, q, explain, hint]) => {
+      const e = by[game];
+      if (!e) throw new Error(`${id}: la lección no tiene ${game}`);
+      let params = { ...e.params };
+      if (Array.isArray(params.rounds)) {
+        let r = typeof round === 'number' ? params.rounds[round] : round;
+        if (!r) throw new Error(`${id}: ${game} no tiene la ronda ${round}`);
+        if (QUIZ(r.items?.[0])) r = { ...r, items: r.items.slice(0, 3) };
+        params.rounds = [r];
+      } else if (round && typeof round === 'object') params = { ...params, ...round };
+      return { ...e, q: q || e.q, params, explain: explain || e.explain, hint: hint || e.hint };
+    }), ...zona]);
+  };
+  // Evaluación: se añaden preguntas (las de formato real) a la que ya tiene el mundo y se deja una ronda por juego.
+  const addExam = (world, items) => {
+    const u = PU_RAZONAMIENTO.find(u => u.world === world), order = u.lessons.map(l => l.id);
+    for (const [lesson, review, ex] of items) u.exam.items.push({ lesson, review, ex: { ...ex, canvasGuide: true, exam: true, params: { ...ex.params, autoDemo: false } } });
+    for (const it of u.exam.items) if (Array.isArray(it.ex.params.rounds) && it.ex.params.rounds.length > 1) it.ex.params = { ...it.ex.params, rounds: [it.ex.params.rounds[0]] };
+    u.exam.items.sort((a, b) => order.indexOf(a.lesson) - order.indexOf(b.lesson));
+    u.exam.minutes = Math.max(12, Math.round(u.exam.items.length * 1.5));
+    diez(world);
+  };
+  PU_JUEGOS.forEach(f => f({ L, setLesson, setExam, sol, err, opc, diez, diezLesson, addExam }));
 })();
