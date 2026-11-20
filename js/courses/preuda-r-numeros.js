@@ -102,3 +102,93 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
       play('ciclo-colores', 'Collar', { rounds: [{ cyc: ['coral', 'sky', 'mint', 'sun'], N: 50 }] }, '$50 = 4 \\cdot 12 + 2$: la segunda.', { hint: 'Residuo.' })],
   ]);
 });
+
+// Mundo 15 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
+  diezLesson('pu-nu-1', [
+    ['criba-primos', 0, 'La criba de Eratóstenes: tacha los múltiplos y quédate con los primos hasta 40'],
+    ['arbol-factores', 0, 'Descompón el 84 en factores primos con el árbol', '$84 = 2 \\cdot 42 = 2 \\cdot 2 \\cdot 21 = 2^2 \\cdot 3 \\cdot 7$. No importa por dónde se empiece: los primos del final son los mismos.'],
+    ['tabla-divisores', 0, 'Cuenta los divisores de $2^2 \\cdot 3^2$ con la tabla', 'Cada divisor elige cuántos 2 lleva (0, 1 o 2) y cuántos 3 (0, 1 o 2): $3 \\cdot 3 = 9$ divisores.'],
+    ['cifra-faltante', 0, 'El recibo número 4_72 es divisible por 9, pero se borró una cifra. Encuéntrala', 'Las cifras deben sumar un múltiplo de 9: $4 + 7 + 2 = 13$, y con un 5 llega a 18.'],
+    ['tablero-cifras', 0, 'Un número primo de dos cifras, mayor que 50, cuyas cifras suman 10. Encuéntralo', 'Los que suman 10 y pasan de 50 son 55, 64, 73, 82 y 91. Solo el 73 es primo ($91 = 7 \\cdot 13$).'],
+    ['contraejemplo', 0, 'Alguien afirma: «si un número es divisible por 2 y por 4, es divisible por 8». Busca el que lo tumba', 'El 12 es divisible por 2 y por 4, pero no por 8. Ser divisible por 4 ya incluye serlo por 2: no se gana nada.'],
+    ['vuela-precios', 0, 'Vuela al divisor', '$2^4$ tiene 5 divisores: 1, 2, 4, 8 y 16. En 2 346 las cifras suman 15: es divisible por 3. El único primo par es el 2.'],
+  ], [
+    sol('¿Cuántos divisores positivos tiene el número 200?',
+      ['$200 = 8 \\cdot 25 = 2^3 \\cdot 5^2$: el exponente del 2 es [[3]] y el del 5 es [[2]]', 'Un divisor puede llevar el 2 de [[4]] maneras (0, 1, 2 o 3 veces) y el 5 de 3 maneras', 'Divisores: $4 \\cdot 3 =$ [[12]]'],
+      ['5', '6', '10'],
+      'Los divisores se arman escogiendo cuántas veces va cada primo, desde ninguna hasta su exponente: por eso a cada exponente se le suma 1 y los resultados se multiplican.',
+      'Descompón el número en primos. Un divisor es una parte de esa descomposición.'),
+    err('El número de cuatro cifras $5\\,A\\,3\\,2$ es divisible por 3. ¿Cuántos valores distintos puede tomar la cifra A?',
+      ['Un número es divisible por 3 si la suma de sus cifras lo es', 'Las cifras conocidas suman $5 + 3 + 2 = 10$', 'Hace falta que $10 + A$ sea múltiplo de 3: solo sirve $A = 2$', 'La cifra A puede tomar 1 valor'], 2,
+      ['Hace falta que $10 + A$ sea múltiplo de 3: sirven $A = 2$, $A = 5$ y $A = 8$', 'Hace falta que $10 + A$ sea múltiplo de 3: sirven $A = 0$, $3$, $6$ y $9$', 'Hace falta que $10 + A$ sea múltiplo de 3: sirve cualquier A impar'],
+      'Hay varios múltiplos de 3 al alcance: 12, 15 y 18. Las cifras que sirven son 2, 5 y 8: tres valores.',
+      'Una cifra va de 0 a 9. ¿Hasta qué múltiplos de 3 puede llegar la suma?'),
+    opc('El menor número primo mayor que 50 es:',
+      ['51', '57', '53', '59'], 2,
+      '$51 = 3 \\cdot 17$ no es primo. El 52 es par. El 53 no tiene divisores: basta probar con 2, 3, 5 y 7.',
+      'Revisa los candidatos en orden y aplica las reglas de divisibilidad: las cifras de 51 suman 6.'),
+  ]);
+
+  diezLesson('pu-nu-2', [
+    ['ritmos-mcm', 1, 'El bus A pasa cada 10 minutos y el bus B cada 15. Salen juntos: ¿cuándo vuelven a coincidir?', 'Coinciden en los múltiplos comunes de 10 y 15; el primero es el MCM: 30 minutos.'],
+    ['corta-mcd', 0, 'Un piso de $12 \\times 18$ se quiere cubrir con baldosas cuadradas iguales, lo más grandes posible. Halla su lado', 'El lado debe dividir a 12 y a 18: el mayor divisor común es 6.'],
+    ['pares-primos', 0, 'Empareja los primos comunes de 60 y 84 para hallar su MCD', '$60 = 2^2 \\cdot 3 \\cdot 5$ y $84 = 2^2 \\cdot 3 \\cdot 7$: comparten $2^2 \\cdot 3 = 12$.'],
+    ['arbol-factores', 0, 'Para hallar un MCM primero se factoriza. Descompón el 96', '$96 = 2^5 \\cdot 3$.'],
+    ['tablero-cifras', 0, 'Un número de dos cifras, mayor que 70, que es múltiplo de 6 y de 15 a la vez. Encuéntralo', 'Los múltiplos de 6 y de 15 a la vez son los múltiplos de su MCM, 30: 30, 60, 90. El único mayor que 70 es 90.'],
+    ['bolsas-residuo', 0, 'Se reparten 84 dulces en bolsas de 12. Llena las bolsas', '$84 = 12 \\cdot 7$: salen 7 bolsas y no sobra nada. El 12 es divisor de 84.'],
+    ['rompe-cambios', 0, 'Manda la pelota al MCM o al MCD', 'MCM de 4 y 6: 12. MCD de 18 y 24: 6. Alarmas cada 9 y cada 12 minutos coinciden cada 36.'],
+  ], [
+    sol('Tres corredores dan vueltas a una pista y tardan 4, 6 y 9 minutos por vuelta. Si salen juntos de la meta, ¿a los cuántos minutos vuelven a coincidir los tres en la meta? ¿Cuántas vueltas habrá dado cada uno?',
+      ['$4 = 2^2$, $6 = 2 \\cdot 3$ y $9 = 3^2$. El MCM toma cada primo con su mayor exponente: $2^2 \\cdot 3^2 =$ [[36]]', 'Vuelven a coincidir a los [[36]] minutos', 'El más rápido habrá dado $36 \\div 4 =$ [[9]] vueltas; el más lento, [[4]]'],
+      ['216', '18', '6'],
+      'Los tres pasan por la meta en los múltiplos de su tiempo: coinciden en el primer múltiplo común, el MCM. Multiplicar $4 \\cdot 6 \\cdot 9$ da un múltiplo común, pero no el primero.',
+      'Coincidir es un problema de múltiplos comunes: busca el más pequeño.'),
+    err('Se quieren armar paquetes iguales con 48 lápices y 36 borradores, sin que sobre nada y con la mayor cantidad posible de paquetes. ¿Cuántos paquetes salen?',
+      ['Las dos cantidades se reparten en partes iguales: el número de paquetes debe dividir a 48 y a 36', 'Para tener la mayor cantidad de paquetes se usa el mínimo común múltiplo: 144', 'Salen 144 paquetes'], 1,
+      ['Para tener la mayor cantidad de paquetes se usa el máximo común divisor: 12', 'Para tener la mayor cantidad de paquetes se usa la suma: $48 + 36 = 84$', 'Para tener la mayor cantidad de paquetes se usa el menor divisor común: 2'],
+      'Repartir sin que sobre es un problema de divisores, no de múltiplos: el mayor divisor común de 48 y 36 es 12. Cada paquete lleva 4 lápices y 3 borradores.',
+      'Compara la respuesta con los datos: ¿se pueden armar más paquetes que lápices hay?'),
+    opc('Dos luces intermitentes se encienden al mismo tiempo. Una se enciende cada 12 segundos y la otra cada 18 segundos. Durante el minuto siguiente, sin contar el instante inicial, el número de veces que se encienden juntas es:',
+      ['1', '2', '3', '5'], 0,
+      'Coinciden cada MCM(12, 18) = 36 segundos: a los 36 segundos, y la siguiente sería a los 72, ya fuera del minuto.',
+      'Halla cada cuánto coinciden y cuenta cuántas de esas coincidencias caben en 60 segundos.'),
+  ]);
+
+  diezLesson('pu-nu-3', [
+    ['ultima-cifra', 0, '¿En qué cifra termina $2^{35}$?', 'Las últimas cifras del 2 se repiten: 2, 4, 8, 6. Como $35 = 4 \\cdot 8 + 3$, es la tercera del ciclo: 8.'],
+    ['bolsas-residuo', 1, 'Se sientan 53 personas en mesas de 4. Llena las mesas y mira cuántas quedan sin mesa completa', '$53 = 4 \\cdot 13 + 1$: se llenan 13 mesas y sobra una persona.'],
+    ['ciclo-colores', 0, 'Una guirnalda repite cinco colores. ¿De qué color es el bombillo 88?', '$88 = 5 \\cdot 17 + 3$: después de 17 vueltas completas, es el tercer color del ciclo.'],
+    ['ciclo-reloj', 0, 'Gira la rueda de la semana: ¿qué día será dentro de 250 días?', '$250 = 7 \\cdot 35 + 5$: pasan 35 semanas completas y se avanzan 5 días.'],
+    ['contraejemplo', 1, 'Alguien afirma: «si un producto es par, los dos factores son pares». Busca el que lo tumba', '$3 \\cdot 4 = 12$ es par y el 3 es impar: basta un factor par para que el producto sea par.'],
+    ['tablero-cifras', 0, 'Un número menor que 30 que deja residuo 3 al dividirlo entre 5 y residuo 1 al dividirlo entre 4', 'Con residuo 3 entre 5: 3, 8, 13, 18, 23, 28. De esos, el que deja residuo 1 entre 4 es el 13.'],
+    ['vuela-precios', 0, 'Vuela al residuo', 'Impar por impar es impar. $17 \\cdot 23$ se comporta como $2 \\cdot 3 = 6$: residuo 1 entre 5. Y $3^{20}$ termina en 1, porque 20 es múltiplo de 4.'],
+  ], [
+    sol('Un número entero deja residuo 3 cuando se divide entre 5. ¿Qué residuo deja su doble al dividirlo entre 5? ¿Y su cuadrado?',
+      ['Para los residuos basta trabajar con el residuo: el número se comporta como un [[3]]', 'Su doble se comporta como 6, que al dividir entre 5 deja residuo [[1]]', 'Su cuadrado se comporta como [[9]], que al dividir entre 5 deja residuo [[4]]'],
+      ['6', '0', '2'],
+      'Se puede comprobar con el 8 o con el 13: sus dobles (16 y 26) dejan residuo 1, y sus cuadrados (64 y 169) dejan residuo 4. Los residuos se operan entre sí y se vuelven a reducir.',
+      'Prueba con un número concreto que deje residuo 3, como el 8, y después con otro.'),
+    err('¿Es posible que la suma de 7 números impares sea igual a 100?',
+      ['La suma de dos impares es par', 'Seis de los impares forman tres parejas: su suma es par', 'Al sumar el séptimo impar, el total sigue siendo par', 'Como 100 es par, sí es posible'], 2,
+      ['Al sumar el séptimo impar, par más impar da impar', 'Al sumar el séptimo impar, el total es divisible por 7', 'Al sumar el séptimo impar, el total deja de ser un número entero'],
+      'Una cantidad impar de números impares suma impar. Como 100 es par, no es posible: la paridad lo decide sin hacer ninguna cuenta.',
+      'Prueba con números pequeños: ¿qué paridad tiene la suma de tres impares?'),
+    opc('Hoy es lunes. El día de la semana que será dentro de 500 días es:',
+      ['martes', 'miércoles', 'viernes', 'jueves'], 3,
+      '$500 = 7 \\cdot 71 + 3$: pasan 71 semanas completas y sobran 3 días. Lunes más 3 es jueves.',
+      'Las semanas completas no cambian el día: solo importa el residuo al dividir entre 7.'),
+  ]);
+
+  addExam('pu-numeros', [
+    ['pu-nu-1', 'Un número es primo si solo se deja dividir por 1 y por él mismo.',
+      opc('De los siguientes números, el único que es primo es:', ['91', '97', '87', '93'], 1,
+        '$91 = 7 \\cdot 13$, $87 = 3 \\cdot 29$ y $93 = 3 \\cdot 31$. El 97 no tiene divisores.', 'Prueba con 3 (suma de cifras) y con 7.')],
+    ['pu-nu-2', 'El MCM es el primer múltiplo que comparten los dos números.',
+      opc('El mínimo común múltiplo de 8 y 12 es:', ['4', '96', '48', '24'], 3,
+        'Múltiplos de 12: 12, 24… El 24 también es múltiplo de 8.', 'Recorre los múltiplos del mayor hasta encontrar uno del menor.')],
+    ['pu-nu-3', 'Dividendo = divisor · cociente + residuo.',
+      opc('El residuo de dividir 1 000 entre 7 es:', ['6', '1', '3', '0'], 0,
+        '$7 \\cdot 142 = 994$ y $1\\,000 - 994 = 6$.', 'Busca el múltiplo de 7 más cercano por debajo de 1 000.')],
+  ]);
+});

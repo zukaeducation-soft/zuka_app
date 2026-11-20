@@ -215,6 +215,28 @@ const CONCEPTOS_PU = {
     scene: { type: 'venn', a: 'prensa', b: 'televisión', regs: { out: { t: '20', b: 0, c: 'mute' }, ab: { t: '15', b: 1, c: 'ok' }, a: { t: '30', b: 2 }, b: { t: '15', b: 2 } } },
     beats: ['Los 20 que no hacen nada quedan fuera de los dos círculos: adentro hay 60.', 'Las listas suman $45 + 30 = 75$. Sobran 15: están en los dos círculos.', 'Lo que queda de cada lista va en su zona de «solo»: 30 y 15.'],
   },
+  'mcm-coincidir': {
+    title: 'Coincidir es buscar el MCM',
+    scene: { type: 'recta', min: 0, max: 24, ticks: [0, 8, 12, 16, 24],
+      hops: [{ from: 0, to: 8, c: 'a', b: 0 }, { from: 8, to: 16, c: 'a', b: 0 }, { from: 16, to: 24, c: 'a', b: 0 }, { from: 0, to: 12, c: 'g', b: 1, down: true }, { from: 12, to: 24, c: 'g', b: 1, down: true }],
+      dots: [{ v: 24, t: 'coinciden', c: 'ok', b: 2 }] },
+    beats: ['Un faro destella cada 8 segundos: 8, 16, 24…', 'El otro, cada 12 segundos: 12, 24…', 'El primer instante que está en las dos listas es el mínimo común múltiplo: 24.'],
+  },
+  'contar-contrario': {
+    title: 'Contar lo contrario',
+    scene: { type: 'pasos', lines: [{ t: 'todos los resultados, igual de probables', s: 13 }, { t: 'si lo contrario es más corto, cuéntalo', s: 13 }, 'P = 1 − P(lo contrario)'] },
+    beats: ['Primero el total de resultados, todos igual de probables.', 'A veces lo que NO sirve es una lista mucho más corta.', 'La probabilidad buscada es 1 menos la de lo contrario.'],
+  },
+  'no-contar-dos': {
+    title: 'Con «o», no cuentes dos veces',
+    scene: { type: 'venn', a: 'suma 7', b: 'algún 6', regs: { a: { t: '4', b: 0 }, b: { t: '9', b: 0 }, ab: { t: '2', b: 1, c: 'ok' }, out: { t: '21', b: 2, c: 'mute' } } },
+    beats: ['«Suma 7» tiene 6 resultados y «algún 6» tiene 11.', 'Dos resultados están en las dos listas: (1, 6) y (6, 1). Se cuentan una sola vez.', 'La unión tiene $6 + 11 - 2 = 15$ resultados: $P = \\tfrac{15}{36}$.'],
+  },
+  'arbol-multiplica': {
+    title: 'En el árbol: por y más',
+    scene: { type: 'arbol', levels: [{ n: 2, b: 0, labels: ['R', 'A'], name: '1.ª' }, { n: 2, b: 1, labels: ['R', 'A'], name: '2.ª' }], foot: { t: '× en el camino, + entre caminos', b: 2 } },
+    beats: ['Cada extracción abre ramas, cada una con su probabilidad.', 'A lo largo de un camino, las probabilidades se multiplican.', 'Si sirven varios caminos, sus resultados se suman.'],
+  },
 };
 if (typeof CONCEPTOS !== 'undefined') Object.assign(CONCEPTOS, CONCEPTOS_PU);
 
@@ -477,6 +499,31 @@ GYM_RETOS.push(
   },
 );
 
+GYM_RETOS.push(
+  {
+    id: 'gym-faros', after: ['pu-nu-2'], level: 2,
+    title: 'Los dos faros', strategy: 'Coincidir es un múltiplo común',
+    problem: 'Dos faros destellan juntos a medianoche. El faro norte destella cada 8 segundos y el faro sur cada 12 segundos. ¿Cada cuánto tiempo vuelven a destellar juntos? ¿Cuántas veces coinciden en los 2 minutos siguientes, sin contar el instante inicial?',
+    steps: [
+      { title: 'Busca el primer instante común', concept: 'mcm-coincidir',
+        coach: 'Cada faro destella en los múltiplos de su tiempo. Coinciden cuando un instante es múltiplo de los dos a la vez: busca el primero.',
+        ex: play('ritmos-mcm', 'Avanza hasta que los dos destellen juntos', { rounds: [{ a: 8, b: 12, max: 30, labels: ['faro norte', 'faro sur'] }] },
+          'Múltiplos de 8: 8, 16, 24. Múltiplos de 12: 12, 24. El primero que comparten es 24.', { hint: 'Avanza el tiempo hasta que los dos destellos caigan en el mismo instante.' }),
+        hints: ['Escribe los primeros múltiplos de cada número y busca el primero que aparece en las dos listas.', 'El faro sur destella a los 12 segundos y otra vez 12 después. ¿Ese instante es múltiplo de 8?'],
+        note: 'Coinciden cada MCM(8, 12) = 24 segundos' },
+      { title: 'Cuenta las coincidencias',
+        coach: 'Ya sabes cada cuánto coinciden. Pasa el tiempo total a segundos y cuenta cuántos de esos tramos caben.',
+        ex: play('completa-solucion', 'Completa la cuenta', { q: 'Los dos faros coinciden cada 24 segundos. ¿Cuántas veces coinciden en los 2 minutos siguientes, sin contar el instante inicial? ¿Cuántas veces destella el faro norte en ese tiempo?',
+          lines: ['Dos minutos son [[120]] segundos', 'Coinciden una vez cada 24 segundos: $120 \\div 24 =$ [[5]] veces', 'En ese tiempo, el faro norte destella $120 \\div 8 =$ [[15]] veces'], extra: ['6', '10', '96'] },
+          '$120 \\div 24 = 5$ coincidencias, la última justo al cumplirse los dos minutos.', { hint: 'Todo en la misma unidad: segundos.' }),
+        hints: ['Convierte los minutos a segundos antes de dividir.', 'Son 120 segundos. Divide entre el tiempo que pasa de una coincidencia a la siguiente.'],
+        note: 'En 2 minutos: 120 ÷ 24 = 5 coincidencias' },
+    ],
+    answer: 'Destellan juntos cada 24 segundos y coinciden 5 veces en los 2 minutos siguientes.',
+    wrap: 'Cuando dos cosas se repiten con ritmos distintos, coinciden en los múltiplos comunes, y la primera vez es el mínimo común múltiplo. Si el problema pide partir sin que sobre, lo que se busca es el máximo común divisor.',
+  },
+);
+
 // Concepto de cada paso de los retos que ya existían: { reto: [concepto del paso 1, del paso 2, …] } (null = sin concepto).
 const GYM_CONCEPT_DE = {
   'gym-concreto': ['razon-en-partes', 'aumento-como-factor', null],
@@ -495,6 +542,9 @@ const GYM_CONCEPT_DE = {
   'gym-madre': ['edades-tiempo', null],
   'gym-cafe': ['mezcla-valor', null],
   'gym-recibos': ['eliminar', null, null],
+  'gym-dados': ['contar-contrario', 'no-contar-dos'],
+  'gym-urna': [null, 'arbol-multiplica'],
+  'gym-adivina': ['contar-contrario', 'arbol-multiplica'],
   // (los mundos siguientes añaden aquí)
 };
 for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (c && r.steps[i]) r.steps[i].concept = c; });

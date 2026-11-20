@@ -71,3 +71,65 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
       play('area-probabilidad', 'Área', { rounds: [{ a: [2, 3], b: null, both: [1, 3], grid: 6 }] }, '$\\tfrac23 \\cdot P(B) = \\tfrac13$: $P(B) = \\tfrac12$.', { hint: 'Área.' })],
   ]);
 });
+
+// Mundo 16 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
+  diezLesson('pu-pb-1', [
+    ['tabla-dados', 0, 'En un juego de mesa se lanzan dos dados. Marca los resultados en que la suma es 8', 'Suma 8: (2, 6), (3, 5), (4, 4), (5, 3) y (6, 2). Son 5 de 36 resultados: $\\tfrac{5}{36}$.'],
+    ['urna-fraccion', 1, 'En la urna hay 3 bolas azules y 3 amarillas. Echa verdes hasta que la probabilidad de sacar verde sea $\\tfrac25$', 'Con 4 verdes hay 10 bolas: $\\tfrac{4}{10} = \\tfrac25$. Cada bola que se echa cuenta en los favorables y en los posibles.'],
+    ['ruleta-sectores', 0, 'Una ruleta de feria tiene 8 sectores iguales. Pinta los premiados para que ganar tenga probabilidad $\\tfrac38$', 'Con 8 sectores igual de probables, $\\tfrac38$ son 3 sectores.'],
+    ['arbol-opciones', 0, 'Se lanza una moneda y un dado. Completa el árbol del espacio muestral', 'Cada resultado de la moneda se combina con cada uno del dado: $2 \\cdot 6 = 12$ resultados igual de probables.'],
+    ['rueda-porcentaje', 0, 'En 9 de los 36 resultados de dos dados gana Ana. Gira hasta esa parte', '$\\tfrac{9}{36} = \\tfrac14$: gana con probabilidad del 25 %.'],
+    ['cubo-pintado', 0, 'Un cubo pintado se corta en 27 cubitos y se saca uno al azar. Clasifícalos para hallar las probabilidades', 'De 27 cubitos, 8 tienen tres caras pintadas ($\\tfrac{8}{27}$), 12 tienen dos, 6 tienen una y solo 1 no tiene ninguna.'],
+    ['vuela-precios', 0, 'Vuela a la probabilidad', 'Primos del dado: 2, 3 y 5, $\\tfrac36 = \\tfrac12$. Moneda y dado: 12 resultados. Tres rojas de 8 bolas: $\\tfrac38$.'],
+  ], [
+    sol('Se lanzan dos dados corrientes. ¿Cuál es la probabilidad de que la suma de los dos resultados sea mayor que 9?',
+      ['Con dos dados hay $6 \\cdot 6 =$ [[36]] resultados igual de probables', 'Suma 10: tres parejas. Suma 11: [[2]] parejas. Suma 12: una sola', 'Favorables: $3 + 2 + 1 =$ [[6]]', 'Probabilidad: $\\tfrac{6}{36}$, que simplificada es [[$\\tfrac16$]]'],
+      ['$\\tfrac14$', '11', '3'],
+      'Los 36 pares son igual de probables; las sumas no. Por eso se cuentan pares: (4, 6), (5, 5), (6, 4), (5, 6), (6, 5) y (6, 6).',
+      'Haz la lista de las parejas, no de las sumas: (4, 6) y (6, 4) son resultados distintos.'),
+    err('En una bolsa hay 4 bolas rojas, 6 azules y 5 verdes. Se saca una bola al azar. ¿Cuál es la probabilidad de que NO sea azul?',
+      ['En total hay $4 + 6 + 5 = 15$ bolas', 'No son azules las rojas y las verdes: $4 + 5 = 9$', 'Probabilidad: $\\tfrac{9}{6} = \\tfrac32$'], 2,
+      ['Probabilidad: $\\tfrac{9}{15} = \\tfrac35$', 'Probabilidad: $\\tfrac{6}{15} = \\tfrac25$', 'Probabilidad: $\\tfrac{9}{24} = \\tfrac38$'],
+      'Los casos posibles son todas las bolas (15), no las azules. Además, una probabilidad nunca pasa de 1: $\\tfrac32$ avisa del error.',
+      'Toda probabilidad está entre 0 y 1. ¿Lo cumple la respuesta?'),
+    opc('Se tienen diez tarjetas numeradas del 1 al 10 y se saca una al azar. La probabilidad de que el número de la tarjeta sea múltiplo de 3 o mayor que 7 es:',
+      ['$\\tfrac35$', '$\\tfrac12$', '$\\tfrac{3}{10}$', '$\\tfrac25$'], 1,
+      'Múltiplos de 3: 3, 6 y 9. Mayores que 7: 8, 9 y 10. El 9 está en las dos listas: sirven 5 tarjetas de 10.',
+      'Escribe los números que sirven en cada condición y no cuentes dos veces el que se repite.'),
+  ]);
+
+  diezLesson('pu-pb-2', [
+    ['arbol-caminos', 1, 'De una caja con 2 fichas rojas y 3 azules se saca una, se devuelve y se saca otra. Marca los caminos en que salen del mismo color', 'Roja y roja: $\\tfrac25 \\cdot \\tfrac25 = \\tfrac{4}{25}$. Azul y azul: $\\tfrac35 \\cdot \\tfrac35 = \\tfrac{9}{25}$. Los dos caminos se suman: $\\tfrac{13}{25}$.'],
+    ['area-probabilidad', 0, 'Dos sucesos independientes: $P(A) = \\tfrac12$ y $P(A \\text{ y } B) = \\tfrac16$. Halla $P(B)$ con el área', 'En independientes, $P(A \\text{ y } B) = P(A) \\cdot P(B)$: $\\tfrac12 \\cdot P(B) = \\tfrac16$ da $P(B) = \\tfrac13$.'],
+    ['tabla-dados', 0, 'Con dos dados, marca los resultados en que sale al menos un 6', 'Son 11 resultados, no 12: el (6, 6) está en la fila y en la columna a la vez. También se ve como $36 - 25$.'],
+    ['complemento-conteo', 0, 'Tres monedas: cuenta los resultados con al menos una cara', 'Todos: $2^3 = 8$. Sin ninguna cara: 1. Con al menos una: 7, y la probabilidad es $\\tfrac78$.'],
+    ['solapa-barras', 0, 'De 40 personas, 24 ven fútbol, 18 ven tenis y 6 no ven ninguno. Solapa las barras', 'Ven algo 34 personas. Como $24 + 18 = 42$, hay 8 que ven los dos: por eso no se pueden sumar las dos probabilidades sin restar.'],
+    ['ruleta-sectores', 0, 'En una ruleta de 10 sectores, NO ganar debe tener probabilidad $\\tfrac{3}{10}$. Pinta los que ganan', 'Si no ganar vale $\\tfrac{3}{10}$, ganar vale $1 - \\tfrac{3}{10} = \\tfrac{7}{10}$: 7 sectores.'],
+    ['rompe-cambios', 0, 'Manda la pelota a la probabilidad', '$1 - 0.3 = 0.7$. Dos caras seguidas: $\\tfrac12 \\cdot \\tfrac12 = \\tfrac14$. Al menos un 6 con dos dados: $1 - \\tfrac{25}{36} = \\tfrac{11}{36}$.'],
+  ], [
+    sol('Un arquero acierta el 80 % de sus tiros, y cada tiro es independiente de los demás. Si hace 2 tiros, ¿cuál es la probabilidad de que acierte al menos uno?',
+      ['Lo contrario de «al menos uno» es «[[ninguno]]»', 'La probabilidad de fallar un tiro es $1 - 0.8 =$ [[0.2]]', 'Fallar los dos tiros: $0.2 \\cdot 0.2 =$ [[0.04]]', 'Acertar al menos uno: $1 - 0.04 =$ [[0.96]]'],
+      ['todos', '0.64', '1.6'],
+      'Es más corto calcular lo contrario y restarlo de 1. Sumar $0.8 + 0.8$ daría 1.6, que no puede ser una probabilidad.',
+      '«Al menos uno» reúne varios casos. ¿Cuál es el único caso que queda por fuera?'),
+    err('Se lanza un dado dos veces. ¿Cuál es la probabilidad de sacar 6 en los dos lanzamientos?',
+      ['La probabilidad de sacar 6 en un lanzamiento es $\\tfrac16$', 'Los dos lanzamientos son independientes: uno no afecta al otro', 'La probabilidad de que pasen las dos cosas es la suma: $\\tfrac16 + \\tfrac16 = \\tfrac13$'], 2,
+      ['La probabilidad de que pasen las dos cosas es el producto: $\\tfrac16 \\cdot \\tfrac16 = \\tfrac{1}{36}$', 'La probabilidad de que pasen las dos cosas sigue siendo $\\tfrac16$', 'La probabilidad de que pasen las dos cosas es $\\tfrac{1}{12}$'],
+      'Con sucesos independientes, «y» se multiplica: de los 36 pares posibles, solo (6, 6) sirve. Pedir dos cosas a la vez no puede ser más probable que pedir una sola.',
+      'Sacar 6 dos veces es más difícil que sacarlo una. ¿La respuesta es menor que un sexto?'),
+    opc('En una caja hay 3 bombillos defectuosos y 7 buenos. Se sacan dos bombillos al azar, uno después del otro y sin devolver el primero. La probabilidad de que los dos sean buenos es:',
+      ['$\\tfrac{49}{100}$', '$\\tfrac{7}{10}$', '$\\tfrac{7}{15}$', '$\\tfrac{21}{50}$'], 2,
+      'El primero es bueno con probabilidad $\\tfrac{7}{10}$; para el segundo quedan 6 buenos de 9: $\\tfrac{7}{10} \\cdot \\tfrac{6}{9} = \\tfrac{42}{90} = \\tfrac{7}{15}$.',
+      'Al no devolver el primer bombillo, la caja cambia: cuenta cuántos buenos y cuántos en total quedan.'),
+  ]);
+
+  addExam('pu-probabilidad', [
+    ['pu-pb-1', 'Con resultados igual de probables, P = favorables / posibles.',
+      opc('Se lanza un dado corriente. La probabilidad de obtener un número mayor que 4 es:', ['$\\tfrac12$', '$\\tfrac23$', '$\\tfrac16$', '$\\tfrac13$'], 3,
+        'Sirven el 5 y el 6: $\\tfrac26 = \\tfrac13$.', 'Cuenta cuáles caras del dado sirven.')],
+    ['pu-pb-2', 'P(no A) = 1 − P(A).',
+      opc('La probabilidad de que llueva mañana es 0.35. La probabilidad de que no llueva es:', ['0.65', '0.35', '1.35', '0.5'], 0,
+        '$1 - 0.35 = 0.65$.', 'Llover y no llover completan el total, que es 1.')],
+  ]);
+});
