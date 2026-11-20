@@ -405,6 +405,19 @@ Videos hechos y entregados que esperan su ID de Bunny (`clip.bunny` + `duration`
   **En el video solo va el enunciado** (pedido del usuario, 2026-11-19): nada de «pregunta del examen de admisión», «UdeA
   2024-2», «taller del preuniversitario» ni «la opción B del examen», ni en narración, rótulos, nombre de escena ni tarjeta (la
   tarjeta dice «RETO» o «PROBLEMA»); tampoco en las escenas de respaldo. La prueba lo comprueba.
+- **Voz y Bunny de los videos del Preuniversitario (2026-11-20, mundos 2 a 16)**: `video/preuda-cosmos/tools/voz.py` (Python de
+  `video/.venv-audio`, con google-genai, faster-whisper, num2words y scipy) sigue el proceso del usuario: el `.srt` pasa a texto sin
+  «Un problema para empezar.», Gemini TTS lo lee entero (`gemini-3.8-flash-tts`, voz Cruz, temperatura 1.2; **el SDK debe ir con
+  `api_version: 'v1beta'`**, si no responde «Unknown name speechConfig»), se alinea palabra por palabra con whisper y difflib, cada
+  frase va en su línea con ≥ 0.3 s entre frases (programa lineal), se quitan los tramos quietos de la imagen entre frases con fundido
+  de 0.15 s, la música baja −9 dB con ducking y se verifica transcribiendo otra vez (informe en `out/voz/<película>/informe.txt`).
+  Deja `<nombre>_con_audio.mp4` y `.srt` junto al original en `Downloads/Zuka_Preuniversitario/<NN_Mundo>/`. `tools/bunny.py
+  --watch` los sube a Bunny Stream (biblioteca 811556, colección «Preuniversitario · Razonamiento»), espera la codificación, mide la
+  duración sumando los `#EXTINF` y corre `tools/app-videos.js`, que escribe **`js/courses/preuda-videos.js`** (generado, no editar a
+  mano: `clip.bunny`, `duration` y escenas de respaldo sacadas de los rótulos de la película), prueba, sube `VERSION` y hace commit y
+  push. IDs y duraciones en `video/preuda-cosmos/out/voz/bunny.json`. **Llaves fuera del repositorio**: `~/.zuka/gemini_key.txt` y
+  `~/.zuka/bunny_key.txt` (la «API Key» de la biblioteca). Se lanzan con `sh tools/voz.sh` y `sh tools/bunny.sh`; los dos siguen donde
+  iban. La fila de cada lección en la tabla `lecciones` de Supabase (proyecto `zuka`) se pone al día aparte, con `update … set videos`.
 - **Preuniversitario UdeA, razonamiento, mundos 2 a 16 en video (2026-11-19)**: una película por lección (53 más, todas las del
   componente; spec `2026-11-19-preuda-videos-razonamiento`, con la tabla de retos y problemas por lección; pruebas
   `tests/preuda-videos.test.js`, que exige película para cada lección de los mundos de `HECHOS`, el formato, que los ejemplos (`KEYS`)
