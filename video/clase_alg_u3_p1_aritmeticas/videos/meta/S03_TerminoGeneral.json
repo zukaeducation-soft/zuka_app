@@ -1,0 +1,54 @@
+{
+ "scene": "S03_TerminoGeneral",
+ "duration": 58.933,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Contar los saltos",
+   "hold": 36.333
+  },
+  {
+   "time": 36.933,
+   "title": "La gráfica",
+   "hold": 58.333
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 9.9,
+   "text": "Para hallar el término veinte de siete, once, quince, no hace falta escribir los veinte. Basta contar saltos.",
+   "fox": true
+  },
+  {
+   "start": 9.9,
+   "end": 19.933,
+   "text": "Para llegar al término dos se da un salto; al tres, dos saltos; al cinco, cuatro saltos. Siempre un salto menos que el puesto.",
+   "fox": false
+  },
+  {
+   "start": 19.933,
+   "end": 28.733,
+   "text": "En general, al término n se llega con n menos uno saltos de tamaño d. Esa es la fórmula del término general.",
+   "fox": false
+  },
+  {
+   "start": 28.733,
+   "end": 35.933,
+   "text": "El término veinte es siete más diecinueve saltos de cuatro: ochenta y tres.",
+   "fox": false
+  },
+  {
+   "start": 36.933,
+   "end": 45.5,
+   "text": "Si se dibuja cada puesto con su término, los puntos quedan sobre una recta: suben lo mismo en cada paso.",
+   "fox": false
+  },
+  {
+   "start": 45.5,
+   "end": 57.933,
+   "text": "Como el taxi de las proporciones, la recta no pasa por el origen. Y solo hay puntos sueltos: los puestos son naturales, no existe el término uno y medio.",
+   "fox": false
+  }
+ ]
+}

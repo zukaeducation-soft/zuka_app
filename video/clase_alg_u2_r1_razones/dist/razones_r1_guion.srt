@@ -1,0 +1,139 @@
+1
+00:00:08,900 --> 00:00:16,933
+Ana tiene doce cromos y Beto tiene cuatro. Esas dos cantidades se pueden comparar de dos formas.
+
+2
+00:00:16,933 --> 00:00:24,567
+Primera forma, restando: Ana tiene ocho cromos más que Beto. La resta dice cuánto más hay.
+
+3
+00:00:24,567 --> 00:00:33,167
+Segunda forma, dividiendo: los cuatro cromos de Beto caben tres veces en los de Ana. Ana tiene el triple.
+
+4
+00:00:33,167 --> 00:00:41,867
+Comparar dividiendo tiene un nombre: es una razón. Dice cuántas veces cabe una cantidad en la otra.
+
+5
+00:00:42,867 --> 00:00:51,967
+Dividir dice algo que la resta no dice. Mira estos dos árboles. Hace un año uno medía dos metros y el otro diez.
+
+6
+00:00:51,967 --> 00:00:57,933
+Este año los dos crecieron dos metros. Restando, crecieron igual.
+
+7
+00:00:57,933 --> 00:01:07,500
+Pero el pequeño duplicó su tamaño: cuatro entre dos da dos. El grande casi no cambió: doce entre diez es uno punto dos.
+
+8
+00:01:07,500 --> 00:01:15,800
+La resta dice cuánto creció. La razón dice cuántas veces creció: compara tamaños relativos.
+
+9
+00:01:17,800 --> 00:01:28,233
+En un salón hay dieciocho niñas y doce niños. La razón de niñas a niños se escribe dieciocho, dos puntos, doce, o como una fracción.
+
+10
+00:01:28,233 --> 00:01:34,133
+El primer número se llama antecedente y el segundo, consecuente.
+
+11
+00:01:34,133 --> 00:01:46,200
+Cuidado con dos cosas. La primera: el orden importa. Niños a niñas es doce a dieciocho, otra razón. Pasa lo mismo que con la división, que no es conmutativa.
+
+12
+00:01:46,200 --> 00:01:55,467
+La segunda: el consecuente nunca es cero, porque no se puede dividir entre cero. Lo vimos con los axiomas.
+
+13
+00:01:57,470 --> 00:02:08,437
+Dieciocho a doce se puede simplificar como una fracción. Si formamos grupos iguales, salen seis grupos, cada uno con tres niñas y dos niños.
+
+14
+00:02:08,437 --> 00:02:16,337
+Por eso dieciocho a doce es lo mismo que tres a dos: se dividieron los dos números entre seis.
+
+15
+00:02:16,337 --> 00:02:28,337
+Es la misma regla de las fracciones equivalentes: multiplicar o dividir los dos términos por el mismo número, distinto de cero, no cambia la razón.
+
+16
+00:02:29,337 --> 00:02:38,103
+Pero sumar lo mismo a los dos términos sí cambia la razón. Mira esta foto de tres de ancho por dos de alto.
+
+17
+00:02:38,103 --> 00:02:46,870
+Si multiplicamos los dos lados por dos, queda de seis por cuatro: la foto se ve igual, solo que más grande.
+
+18
+00:02:46,870 --> 00:02:56,437
+Si en cambio sumamos tres a los dos lados, queda de seis por cinco, y el zorrito se estira: la razón ya no es la misma.
+
+19
+00:02:56,437 --> 00:03:03,337
+Por eso una razón se agranda o se achica multiplicando, nunca sumando.
+
+20
+00:03:05,340 --> 00:03:15,773
+Volvamos al salón. Tres a dos compara una parte con la otra parte: niñas con niños. También se puede comparar una parte con el todo.
+
+21
+00:03:15,773 --> 00:03:23,807
+Por cada grupo de cinco estudiantes, tres son niñas. La razón de niñas al total es tres a cinco.
+
+22
+00:03:23,807 --> 00:03:32,607
+Tres quintos es una fracción del grupo y, como aprendiste con los racionales, en decimal es cero punto seis.
+
+23
+00:03:32,607 --> 00:03:43,940
+Así, en un salón de treinta estudiantes con esa razón hay tres quintos de treinta: dieciocho niñas, justo las del ejemplo.
+
+24
+00:03:45,940 --> 00:03:56,173
+Cuando las dos cantidades miden cosas distintas, la razón lleva unidades. Un bus recorre ciento ochenta kilómetros en tres horas.
+
+25
+00:03:56,173 --> 00:04:04,640
+Si dividimos los kilómetros entre las horas, sale la rapidez: sesenta kilómetros por cada hora.
+
+26
+00:04:05,640 --> 00:04:17,773
+Con la misma idea se descubre qué sale más barato. Un paquete de seis jugos cuesta siete mil doscientos pesos y uno de ocho jugos cuesta nueve mil doscientos.
+
+27
+00:04:17,773 --> 00:04:30,807
+No sirve comparar los precios así nomás, porque los paquetes traen distinto número de jugos. Hay que comparar el precio de un solo jugo: dividir el precio entre los jugos.
+
+28
+00:04:30,807 --> 00:04:40,573
+Mil ciento cincuenta pesos por jugo contra mil doscientos: el paquete de ocho sale más barato, aunque cueste más en total.
+
+29
+00:04:40,573 --> 00:04:51,807
+Estas razones con unidades se llaman tasas unitarias: dicen cuánto corresponde a una sola unidad, como el precio unitario o la rapidez.
+
+30
+00:04:53,810 --> 00:05:04,710
+Los mapas también usan razones. La escala uno a cien mil quiere decir que cada centímetro del mapa son cien mil centímetros de la realidad.
+
+31
+00:05:04,710 --> 00:05:13,010
+Con una regla medimos la distancia entre los dos pueblos en el mapa: cuatro punto cinco centímetros.
+
+32
+00:05:13,010 --> 00:05:22,610
+Cien mil centímetros son mil metros, es decir, un kilómetro. Así que cada centímetro del mapa es un kilómetro de verdad.
+
+33
+00:05:22,610 --> 00:05:29,143
+Entonces los pueblos están a cuatro punto cinco kilómetros en la realidad.
+
+34
+00:05:29,143 --> 00:05:40,777
+Fíjate en que la escala compara dos longitudes en la misma unidad, centímetros con centímetros. Por eso no lleva unidades: es solo un número.
+
+35
+00:05:42,780 --> 00:05:53,180
+Una razón compara dos cantidades dividiéndolas, y se agranda o se achica multiplicando los dos términos por el mismo número.

@@ -1,0 +1,37 @@
+{
+ "scene": "S04_ParteTodo",
+ "duration": 40.6,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Parte a parte y parte al todo",
+   "hold": 40.0
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.433,
+   "text": "Volvamos al salón. Tres a dos compara una parte con la otra parte: niñas con niños. También se puede comparar una parte con el todo.",
+   "fox": true
+  },
+  {
+   "start": 11.433,
+   "end": 19.467,
+   "text": "Por cada grupo de cinco estudiantes, tres son niñas. La razón de niñas al total es tres a cinco.",
+   "fox": false
+  },
+  {
+   "start": 19.467,
+   "end": 28.267,
+   "text": "Tres quintos es una fracción del grupo y, como aprendiste con los racionales, en decimal es cero punto seis.",
+   "fox": false
+  },
+  {
+   "start": 28.267,
+   "end": 39.6,
+   "text": "Así, en un salón de treinta estudiantes con esa razón hay tres quintos de treinta: dieciocho niñas, justo las del ejemplo.",
+   "fox": false
+  }
+ ]
+}

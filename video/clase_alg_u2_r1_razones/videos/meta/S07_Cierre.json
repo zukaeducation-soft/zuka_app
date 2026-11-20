@@ -1,0 +1,24 @@
+{
+ "scene": "S07_Cierre",
+ "duration": 20.0,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Repasemos",
+   "hold": 11.8
+  },
+  {
+   "time": 12.4,
+   "title": "Cierre",
+   "hold": 19.0
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.4,
+   "text": "Una razón compara dos cantidades dividiéndolas, y se agranda o se achica multiplicando los dos términos por el mismo número.",
+   "fox": false
+  }
+ ]
+}

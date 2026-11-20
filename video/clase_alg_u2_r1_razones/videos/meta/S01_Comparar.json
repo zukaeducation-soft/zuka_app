@@ -1,0 +1,66 @@
+{
+ "scene": "S01_Comparar",
+ "duration": 68.9,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Dos formas de comparar",
+   "hold": 34.367
+  },
+  {
+   "time": 34.967,
+   "title": "¿Por qué dividir?",
+   "hold": 68.3
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 9.033,
+   "text": "Ana tiene doce cromos y Beto tiene cuatro. Esas dos cantidades se pueden comparar de dos formas.",
+   "fox": true
+  },
+  {
+   "start": 9.033,
+   "end": 16.667,
+   "text": "Primera forma, restando: Ana tiene ocho cromos más que Beto. La resta dice cuánto más hay.",
+   "fox": false
+  },
+  {
+   "start": 16.667,
+   "end": 25.267,
+   "text": "Segunda forma, dividiendo: los cuatro cromos de Beto caben tres veces en los de Ana. Ana tiene el triple.",
+   "fox": false
+  },
+  {
+   "start": 25.267,
+   "end": 33.967,
+   "text": "Comparar dividiendo tiene un nombre: es una razón. Dice cuántas veces cabe una cantidad en la otra.",
+   "fox": false
+  },
+  {
+   "start": 34.967,
+   "end": 44.067,
+   "text": "Dividir dice algo que la resta no dice. Mira estos dos árboles. Hace un año uno medía dos metros y el otro diez.",
+   "fox": false
+  },
+  {
+   "start": 44.067,
+   "end": 50.033,
+   "text": "Este año los dos crecieron dos metros. Restando, crecieron igual.",
+   "fox": false
+  },
+  {
+   "start": 50.033,
+   "end": 59.6,
+   "text": "Pero el pequeño duplicó su tamaño: cuatro entre dos da dos. El grande casi no cambió: doce entre diez es uno punto dos.",
+   "fox": false
+  },
+  {
+   "start": 59.6,
+   "end": 67.9,
+   "text": "La resta dice cuánto creció. La razón dice cuántas veces creció: compara tamaños relativos.",
+   "fox": false
+  }
+ ]
+}

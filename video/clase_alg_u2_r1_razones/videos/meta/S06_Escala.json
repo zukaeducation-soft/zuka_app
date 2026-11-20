@@ -1,0 +1,43 @@
+{
+ "scene": "S06_Escala",
+ "duration": 48.967,
+ "marks": [
+  {
+   "time": 0,
+   "title": "La escala de un mapa",
+   "hold": 48.367
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.9,
+   "text": "Los mapas también usan razones. La escala uno a cien mil quiere decir que cada centímetro del mapa son cien mil centímetros de la realidad.",
+   "fox": true
+  },
+  {
+   "start": 11.9,
+   "end": 20.2,
+   "text": "Con una regla medimos la distancia entre los dos pueblos en el mapa: cuatro punto cinco centímetros.",
+   "fox": false
+  },
+  {
+   "start": 20.2,
+   "end": 29.8,
+   "text": "Cien mil centímetros son mil metros, es decir, un kilómetro. Así que cada centímetro del mapa es un kilómetro de verdad.",
+   "fox": false
+  },
+  {
+   "start": 29.8,
+   "end": 36.333,
+   "text": "Entonces los pueblos están a cuatro punto cinco kilómetros en la realidad.",
+   "fox": false
+  },
+  {
+   "start": 36.333,
+   "end": 47.967,
+   "text": "Fíjate en que la escala compara dos longitudes en la misma unidad, centímetros con centímetros. Por eso no lleva unidades: es solo un número.",
+   "fox": false
+  }
+ ]
+}

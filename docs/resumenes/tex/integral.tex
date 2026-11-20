@@ -1,0 +1,341 @@
+% Resumen del mundo «Campos del Área» (Cálculo Integral, mundo 1: la integral). Lecciones int-1, int-2.
+% Usa los ejemplos de los videos (área bajo y = x^2 entre 0 y 2 con rectángulos, regla de la potencia, teorema
+% fundamental); el taller trae ejercicios nuevos.
+\documentclass[11pt,a4paper]{article}
+\usepackage{zuka-resumen}
+\zukacurso{int}
+\zukamundo{1}{Campos del Área}{La integral}
+\newcommand{\dx}{\,dx}
+\pgfplotsset{riem/.style={zplot,width=5.6cm,height=4.6cm,xmin=-0.2,xmax=2.45,ymin=-0.3,ymax=4.6,
+  xtick={0.5,1,1.5,2},ytick={1,2,3,4},grid=none,clip=false}}
+\newcommand{\rects}[2]{% #1 = desplazamiento del punto de muestra, #2 = número de rectángulos en [0,2]
+  \addplot[fill=zaccent!22,draw=zaccent,line width=0.6pt,ybar interval,samples=#2+1,domain=0:2] {(x+#1)^2};}
+
+\begin{document}
+
+\portada{%
+¿Cuánto mide el área de una región con un borde curvo? En este mundo aprendiste a responderlo como lo hicieron
+Arquímedes, Newton y Leibniz: primero se aproxima el área con \clave{rectángulos}, luego se toman cada vez más
+rectángulos y el límite da el valor exacto, la \clave{integral definida}. Después descubriste el atajo que hace
+todo esto práctico: integrar es \emph{deshacer} una derivada. Este resumen reúne las definiciones, las gráficas y
+los ejemplos de los videos, y termina con un taller.}{%
+\item \textbf{Nivel 1-1.} Área bajo la curva: particiones, sumas de Riemann, integral definida, área con signo y propiedades.
+\item \textbf{Nivel 1-2.} Antiderivadas: integral indefinida, constante de integración, tabla básica y teorema fundamental del cálculo.}
+
+\begin{clavebox}[LAS TRES IDEAS QUE SOSTIENEN TODO EL MUNDO]
+\renewcommand{\arraystretch}{1.6}\begin{tabular}{@{}c@{\quad}c@{\quad}c@{}}
+$\displaystyle\int_a^b f(x)\dx=\lim_{n\to\infty}\sum_{i=1}^{n}f(x_i)\,\Delta x$ &
+$\displaystyle F'=f\iff\int f(x)\dx=F(x)+C$ &
+$\displaystyle\int_a^b f(x)\dx=F(b)-F(a)$\\
+\small área $=$ límite de rectángulos & \small integrar deshace derivar & \small teorema fundamental
+\end{tabular}
+\end{clavebox}
+
+%=====================================================================
+\nivel{1-1}{Área bajo la curva}
+
+\textbf{El problema.} ¿Cuál es el área de la región bajo $y=x^{2}$, sobre el eje $x$, entre $x=0$ y $x=2$? No es un
+triángulo ni un rectángulo, así que ninguna fórmula de geometría sirve. La idea es \emph{rebanar} la región en franjas
+delgadas y tratar cada franja como si fuera un rectángulo.
+
+\subsection{Partición y sumas de Riemann}
+\begin{definicion}[Suma de Riemann]
+Se divide $[a,b]$ en $n$ subintervalos de igual ancho
+\[ \Delta x=\frac{b-a}{n},\qquad x_i=a+i\,\Delta x\quad(i=0,1,\dots,n). \]
+En cada subintervalo se elige un punto de muestra $x_i^{*}$ y se levanta un rectángulo de altura $f(x_i^{*})$.
+La \clave{suma de Riemann} es la suma de sus áreas:
+\[ S_n=\sum_{i=1}^{n}f(x_i^{*})\,\Delta x. \]
+Si $x_i^{*}$ es el extremo izquierdo se obtiene $L_n$; si es el derecho, $R_n$; si es el punto medio, $M_n$.
+\end{definicion}
+
+\begin{figura}[Área bajo $y=x^2$ en $[0,2]$. Con $f$ creciente, los rectángulos izquierdos quedan por debajo y los
+derechos por encima; con más rectángulos el error se achica.]
+\begin{tikzpicture}
+\begin{axis}[riem]
+  \rects{0}{4}
+  \addplot[zink,domain=0:2.15,samples=60,line width=1.1pt] {x^2};
+  \node[font=\small,anchor=south] at (axis cs:1,4.65) {izquierda, $n=4$};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[riem]
+  \rects{0.5}{4}
+  \addplot[zink,domain=0:2.15,samples=60,line width=1.1pt] {x^2};
+  \node[font=\small,anchor=south] at (axis cs:1,4.65) {derecha, $n=4$};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[riem]
+  \rects{0.125}{16}
+  \addplot[zink,domain=0:2.15,samples=60,line width=1.1pt] {x^2};
+  \node[font=\small,anchor=south] at (axis cs:1,4.65) {derecha, $n=16$};
+\end{axis}
+\end{tikzpicture}
+\end{figura}
+
+\begin{ejemplo}[{Los rectángulos del video: $f(x)=x^2$ en $[0,2]$ con $n=4$}]
+$\Delta x=\frac{2-0}{4}=0.5$ y los puntos de la partición son $0,\ 0.5,\ 1,\ 1.5,\ 2$.
+\begin{align*}
+L_4&=0.5\left[f(0)+f(0.5)+f(1)+f(1.5)\right]=0.5\,(0+0.25+1+2.25)=1.75,\\
+R_4&=0.5\left[f(0.5)+f(1)+f(1.5)+f(2)\right]=0.5\,(0.25+1+2.25+4)=3.75,\\
+M_4&=0.5\left[f(0.25)+f(0.75)+f(1.25)+f(1.75)\right]=0.5\,(5.25)=2.625.
+\end{align*}
+El área verdadera está entre $1.75$ y $3.75$; el punto medio ya se acerca mucho al valor exacto, $\frac83\approx2.667$.
+\end{ejemplo}
+
+\subsection{La integral definida}
+\begin{definicion}[Integral definida]
+Si $f$ es continua en $[a,b]$, la \clave{integral definida} de $f$ desde $a$ hasta $b$ es el límite de las sumas de Riemann
+\[ \int_a^b f(x)\dx=\lim_{n\to\infty}\sum_{i=1}^{n}f(x_i^{*})\,\Delta x, \]
+y no depende de cómo se elijan los puntos de muestra. $a$ y $b$ son los \clave{límites de integración}, $f$ es el
+\clave{integrando} y $dx$ recuerda que se suman franjas de ancho $\Delta x\to0$.
+\end{definicion}
+\begin{ejemplo}[El límite del video: el área exacta es $\tfrac83$]
+Con $\Delta x=\frac2n$ y $x_i=\frac{2i}{n}$, la suma derecha es
+\[ R_n=\sum_{i=1}^{n}\left(\frac{2i}{n}\right)^{2}\frac{2}{n}=\frac{8}{n^{3}}\sum_{i=1}^{n}i^{2}
+      =\frac{8}{n^{3}}\cdot\frac{n(n+1)(2n+1)}{6}=\frac{4}{3}\left(1+\frac1n\right)\left(2+\frac1n\right). \]
+Cuando $n\to\infty$, $R_n\to\frac43\cdot1\cdot2=\frac83$. Por tanto $\displaystyle\int_0^2x^{2}\dx=\frac83\approx2.667$.
+\end{ejemplo}
+Las sumas que más se usan para estos límites son
+\[ \sum_{i=1}^{n}1=n,\qquad \sum_{i=1}^{n}i=\frac{n(n+1)}{2},\qquad \sum_{i=1}^{n}i^{2}=\frac{n(n+1)(2n+1)}{6}. \]
+
+\subsection{Área con signo}
+\begin{minipage}[c]{0.52\linewidth}
+Si $f$ toma valores negativos, sus rectángulos tienen «altura negativa». La integral cuenta \emph{con signo}: el área
+sobre el eje suma y el área bajo el eje resta.
+\begin{ejemplo}[{$f(x)=x-1$ en $[0,3]$}]
+Por geometría: un triángulo bajo el eje de área $\frac12$ y uno sobre el eje de área $2$.
+\[ \int_0^3(x-1)\dx=-\tfrac12+2=\tfrac32, \]
+mientras que el área total sombreada es $\tfrac12+2=\tfrac52$.
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.44\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[zplot,width=6.4cm,height=5.4cm,xmin=-0.4,xmax=3.6,ymin=-1.6,ymax=2.8,xtick={1,2,3},ytick={-1,1,2},clip=false,
+  xlabel={$x$},ylabel={$y$},xlabel style={at={(1,0.36)},anchor=west},ylabel style={at={(0.09,1)},anchor=south}]
+  \fill[zcoral!35] (axis cs:0,0) -- (axis cs:0,-1) -- (axis cs:1,0) -- cycle;
+  \fill[zmint!35] (axis cs:1,0) -- (axis cs:3,2) -- (axis cs:3,0) -- cycle;
+  \addplot[zink,domain=-0.3:3.3] {x-1};
+  \node[font=\small,text=zcoral] at (axis cs:0.35,-1.3) {$-\tfrac12$};
+  \node[font=\small,text=zmint!70!zink] at (axis cs:2.45,0.6) {$+2$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+
+\begin{propiedad}[Propiedades de la integral definida]
+Para $f$ y $g$ continuas y $k$ una constante:
+\begin{align*}
+&\int_a^b k\dx=k\,(b-a), &&\int_a^b\left[f(x)\pm g(x)\right]\dx=\int_a^b f(x)\dx\pm\int_a^b g(x)\dx,\\
+&\int_a^b k\,f(x)\dx=k\int_a^b f(x)\dx, &&\int_a^c f(x)\dx=\int_a^b f(x)\dx+\int_b^c f(x)\dx,\\
+&\int_a^a f(x)\dx=0, &&\int_b^a f(x)\dx=-\int_a^b f(x)\dx.
+\end{align*}
+\end{propiedad}
+\begin{ejemplo}[Cuando la región es una figura conocida]
+$\displaystyle\int_{-2}^{2}\sqrt{4-x^{2}}\dx$: la gráfica de $y=\sqrt{4-x^2}$ es la mitad superior de la circunferencia
+de radio $2$, así que la integral es el área de medio círculo: $\tfrac12\pi(2)^2=2\pi$.
+\end{ejemplo}
+\begin{ojo}[Integral no es lo mismo que área]
+\begin{itemize}
+\item La integral puede ser negativa o cero aunque la región tenga área: para el área total se integra $\abs{f(x)}$,
+      es decir, se separa por los cortes con el eje.
+\item $\Delta x=\frac{b-a}{n}$: con $n$ rectángulos hay $n+1$ puntos en la partición, y cada suma usa solo $n$ de ellos.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\clearpage
+\nivel{1-2}{Antiderivadas}
+
+\textbf{Intuición.} Derivar responde «¿qué tan rápido cambia?». Integrar va al revés: si se conoce la rapidez del
+cambio, ¿cuál era la función? Como $\frac{d}{dx}\left(\frac{x^3}{3}\right)=x^2$, la función $\frac{x^3}{3}$ es una
+\emph{antiderivada} de $x^2$.
+
+\begin{definicion}[Antiderivada e integral indefinida]
+$F$ es una \clave{antiderivada} de $f$ en un intervalo si $F'(x)=f(x)$ para todo $x$ del intervalo.
+Si $F$ es una, \emph{todas} son de la forma $F(x)+C$, y se escribe
+\[ \int f(x)\dx=F(x)+C,\qquad C\text{ constante (constante de integración).} \]
+\end{definicion}
+
+\begin{minipage}[c]{0.5\linewidth}
+\textbf{¿Por qué $+C$?} La derivada de una constante es cero, así que $\frac{x^3}{3}$, $\frac{x^3}{3}+1$ y
+$\frac{x^3}{3}-1$ tienen la misma derivada, $x^2$. Sus gráficas son la misma curva desplazada verticalmente: en cada
+$x$ tienen la misma pendiente.
+
+\smallskip
+Para elegir \emph{una} de la familia se necesita un dato extra, una \clave{condición inicial} como $F(0)=1$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.46\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[zplot,width=6.6cm,height=5.6cm,xmin=-2,xmax=2.6,ymin=-2.6,ymax=4,xtick={-1,1,2},ytick={-2,-1,1,2,3},clip=false,
+  every axis plot/.append style={line width=1pt,samples=60}]
+  \foreach \c/\col in {-1/zsky,0/zaccent,1/zmint,2/zcoral}{
+    \edef\temp{\noexpand\addplot[\col,domain=-1.75:1.7] {x^3/3+\c};}\temp
+    \edef\temp{\noexpand\addplot[\col,dashed,line width=0.6pt,domain=0.55:1.45] {x-1+1/3+\c};}\temp}
+  \node[font=\scriptsize,text=zcoral,anchor=west] at (axis cs:1.72,3.64) {$C=2$};
+  \node[font=\scriptsize,text=zmint,anchor=west] at (axis cs:1.72,2.64) {$C=1$};
+  \node[font=\scriptsize,text=zaccent,anchor=west] at (axis cs:1.72,1.64) {$C=0$};
+  \node[font=\scriptsize,text=zsky,anchor=west] at (axis cs:1.72,0.64) {$C=-1$};
+\end{axis}
+\end{tikzpicture}\\[-2pt]
+{\small\color{zmute}$y=\frac{x^3}{3}+C$: tangentes paralelas en $x=1$.}
+\end{minipage}
+
+\subsection{Reglas básicas}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{62mm} L@{}}
+\toprule
+Integral & Se comprueba derivando\\ \midrule
+$\displaystyle\int k\dx=kx+C$ & $(kx)'=k$\\
+$\displaystyle\int x^{n}\dx=\frac{x^{n+1}}{n+1}+C\quad(n\neq-1)$ & $\left(\frac{x^{n+1}}{n+1}\right)'=x^{n}$\\
+$\displaystyle\int \frac1x\dx=\ln\abs{x}+C$ & $(\ln\abs{x})'=\frac1x$ (el caso $n=-1$)\\
+$\displaystyle\int e^{x}\dx=e^{x}+C$ & $(e^x)'=e^x$\\
+$\displaystyle\int \cos x\dx=\sen x+C$ & $(\sen x)'=\cos x$\\
+$\displaystyle\int \sen x\dx=-\cos x+C$ & $(-\cos x)'=\sen x$\\
+$\displaystyle\int \sec^{2}x\dx=\tg x+C$ & $(\tg x)'=\sec^2x$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\begin{propiedad}[Linealidad]
+$\displaystyle\int\left[a\,f(x)+b\,g(x)\right]\dx=a\int f(x)\dx+b\int g(x)\dx$: se integra término a término y las
+constantes salen.
+\end{propiedad}
+\clearpage
+\begin{ejemplo}[Regla de la potencia, como en el video]
+\begin{align*}
+\int x^{4}\dx&=\frac{x^{5}}{5}+C,\\
+\int\left(3x^{2}-4x+5\right)\dx&=3\cdot\frac{x^{3}}{3}-4\cdot\frac{x^{2}}{2}+5x+C=x^{3}-2x^{2}+5x+C,\\
+\int\sqrt[3]{x}\dx&=\int x^{1/3}\dx=\frac{x^{4/3}}{4/3}+C=\tfrac34\,x^{4/3}+C.
+\end{align*}
+Siempre se puede comprobar derivando: $\left(x^3-2x^2+5x\right)'=3x^2-4x+5$.
+\end{ejemplo}
+\begin{ejemplo}[Con condición inicial]
+Si $f'(x)=6x-2$ y $f(1)=4$: $f(x)=3x^{2}-2x+C$, y $4=3-2+C$ da $C=3$. Así $f(x)=3x^{2}-2x+3$.
+\end{ejemplo}
+
+\subsection{El teorema fundamental del cálculo}
+\begin{propiedad}[Teorema fundamental del cálculo]
+Sea $f$ continua en $[a,b]$.
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=1.6em]
+\item La función de área $A(x)=\displaystyle\int_a^x f(t)\,dt$ es derivable y $A'(x)=f(x)$: el área acumulada crece
+      a la velocidad que marca la altura de la curva.
+\item Si $F$ es cualquier antiderivada de $f$, entonces
+      $\displaystyle\int_a^b f(x)\dx=\Big[F(x)\Big]_a^b=F(b)-F(a).$
+\end{enumerate}
+\end{propiedad}
+\begin{minipage}[c]{0.52\linewidth}
+\begin{ejemplo}[Se cierra el círculo]
+El área que en el nivel 1-1 costó un límite de sumas sale ahora en una línea:
+\[ \int_0^2x^{2}\dx=\left[\frac{x^{3}}{3}\right]_0^2=\frac83-0=\frac83. \]
+Y el área bajo un arco del seno:
+\[ \int_0^{\pi}\sen x\dx=\Big[-\cos x\Big]_0^{\pi}=-(-1)-(-1)=2. \]
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.44\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[zplot,width=6.6cm,height=4.4cm,xmin=-0.3,xmax=3.7,ymin=-0.3,ymax=1.45,
+  xtick={1.5708,3.1416},xticklabels={$\frac{\pi}{2}$,$\pi$},ytick={1},clip=false]
+  \addplot[draw=none,fill=zaccent!25,domain=0:3.1416,samples=60] {sin(deg(x))} \closedcycle;
+  \addplot[zink,domain=-0.2:3.5,samples=80] {sin(deg(x))};
+  \node[font=\small] at (axis cs:1.5708,0.42) {área $=2$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+
+\begin{ojo}[Errores frecuentes con antiderivadas]
+\begin{itemize}
+\item Olvidar $+C$ en la integral indefinida (en la definida se cancela y no hace falta).
+\item Usar la regla de la potencia con $n=-1$: $\int x^{-1}\dx$ es $\ln\abs{x}+C$, no $\frac{x^0}{0}$.
+\item Creer que $\int f\,g\dx=\int f\dx\cdot\int g\dx$. Es falso: por ejemplo, $\int x\cdot x\dx=\frac{x^3}{3}+C$, no $\frac{x^4}{4}+C$.
+\item Restar al revés: es $F(b)-F(a)$, el límite de arriba menos el de abajo.
+\item Equivocar el signo de $\int\sen x\dx=-\cos x+C$.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\clearpage
+\repaso
+\begin{center}\renewcommand{\arraystretch}{1.7}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{70mm} L@{}}
+\toprule
+Fórmula o símbolo & Qué dice\\ \midrule
+$\Delta x=\frac{b-a}{n}$,\quad $x_i=a+i\,\Delta x$ & ancho y puntos de la partición\\
+$\sum_{i=1}^{n}f(x_i^*)\,\Delta x$ & suma de Riemann ($L_n$, $R_n$, $M_n$)\\
+$\int_a^b f(x)\dx=\lim_{n\to\infty}\sum f(x_i^*)\Delta x$ & integral definida: área con signo\\
+$\int_b^a f=-\int_a^b f$,\quad $\int_a^c f=\int_a^b f+\int_b^c f$ & cambiar el orden y partir el intervalo\\
+$\int f(x)\dx=F(x)+C$ con $F'=f$ & integral indefinida: una familia de funciones\\
+$\int x^{n}\dx=\frac{x^{n+1}}{n+1}+C$ ($n\ne-1$),\quad $\int\frac{dx}{x}=\ln\abs{x}+C$ & regla de la potencia y su excepción\\
+$\frac{d}{dx}\int_a^x f(t)\,dt=f(x)$ & teorema fundamental, parte 1\\
+$\int_a^b f(x)\dx=F(b)-F(a)$ & teorema fundamental, parte 2\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{ojo}[Errores frecuentes]
+\begin{itemize}
+\item Confundir la integral (con signo) con el área total de la región.
+\item Calcular mal $\Delta x$ o usar $n+1$ rectángulos en lugar de $n$.
+\item Olvidar la constante $C$, o dividir entre $0$ con la regla de la potencia en $n=-1$.
+\item Integrar productos o cocientes «factor por factor».
+\item Evaluar $F(a)-F(b)$ en lugar de $F(b)-F(a)$.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\taller
+\begin{ejercicios}
+\item Sea $f(x)=x+1$ en $[0,4]$ con $n=4$. Calcula $L_4$ y $R_4$, y compáralas con el área exacta, que puedes hallar
+  con la fórmula del trapecio.
+\item El agua entra a un tanque con un caudal de $r(t)=4-t^{2}$ litros por minuto, para $0\le t\le2$. Estima con la
+  suma del punto medio y $n=4$ cuántos litros entraron, y compara con el valor exacto $\int_0^2 r(t)\,dt$.
+\item Para $f(x)=x$ en $[0,3]$, escribe la suma derecha $R_n$ con notación sigma, simplifícala con la fórmula de
+  $\sum i$ y calcula $\lim_{n\to\infty}R_n$.
+\item La gráfica de $f$ está formada por segmentos de recta. Usa áreas para calcular:
+
+  \begin{center}
+  \begin{tikzpicture}
+  \begin{axis}[zplot,width=8.4cm,height=4.6cm,xmin=-0.3,xmax=6.8,ymin=-2.8,ymax=2.8,xtick={1,...,6},ytick={-2,-1,1,2},clip=false,
+    xlabel={$x$},ylabel={$y$},xlabel style={at={(1,0.5)},anchor=west},ylabel style={at={(0.04,1)},anchor=south}]
+    \addplot[zaccent] coordinates {(0,2) (2,2) (4,-2) (6,-2)};
+  \end{axis}
+  \end{tikzpicture}
+  \end{center}
+  \begin{ejercicios}
+  \item $\int_0^3 f(x)\dx$ \quad (b) $\int_3^6 f(x)\dx$ \quad (c) $\int_0^6 f(x)\dx$ \quad (d) el área total entre la
+    gráfica y el eje $x$ en $[0,6]$.
+  \end{ejercicios}
+\item Calcula interpretando cada integral como áreas: (a) $\int_{-1}^{3}\abs{x-1}\dx$; (b) $\int_0^5(3-x)\dx$.
+\item Si $\int_0^5 f(x)\dx=7$ y $\int_0^2 f(x)\dx=3$, halla (a) $\int_2^5 f(x)\dx$; (b) $\int_5^2 f(x)\dx$;
+  (c) $\int_0^5\left[2f(x)+1\right]\dx$.
+\item Halla las integrales indefinidas y comprueba derivando:
+  \begin{ejercicios}
+  \item $\int\left(5x^{4}-6x+2\right)\dx$ \quad (b) $\int\sqrt{x}\dx$ \quad (c) $\int\frac{1}{x^{2}}\dx$
+  \item[(d)] $\int\left(2\cos x-e^{x}\right)\dx$ \quad (e) $\int\frac{x^{2}+1}{x}\dx$
+  \end{ejercicios}
+\item Halla la función $f$ que cumple $f'(x)=4x^{3}-3$ y $f(1)=5$.
+\item Calcula: (a) $\int_1^4(2x-1)\dx$; (b) $\int_1^9\frac{1}{\sqrt{x}}\dx$; (c) $\int_0^{\pi/2}\cos x\dx$;
+  (d) $\int_1^{e}\frac{1}{x}\dx$; (e) $\frac{d}{dx}\int_2^{x}\left(t^{2}+1\right)^{5}dt$.
+\item Una partícula se mueve en línea recta con velocidad $v(t)=3t^{2}-12t+9$ (en \si{m/s}), para $0\le t\le4$ segundos.
+  \begin{ejercicios}
+  \item Halla su desplazamiento $\int_0^4 v(t)\,dt$.
+  \item ¿En qué instantes se detiene? Halla la distancia total recorrida.
+  \end{ejercicios}
+\end{ejercicios}
+
+\respuestas
+\begin{respuestascortas}
+\begin{soluciones}
+\item $\Delta x=1$. $L_4=1+2+3+4=10$; $R_4=2+3+4+5=14$; exacta: trapecio $\frac{(1+5)}{2}\cdot4=12$.
+\item $M_4=0.5\,(3.9375+3.4375+2.4375+0.9375)=5.375$ L; exacto: $8-\frac83=\frac{16}{3}\approx5.333$ L.
+\item $R_n=\sum_{i=1}^{n}\frac{3i}{n}\cdot\frac3n=\frac{9}{n^{2}}\cdot\frac{n(n+1)}{2}=\frac92\left(1+\frac1n\right)\to\frac92$.
+\item (a) $4+1=5$ \ (b) $-1-4=-5$ \ (c) $0$ \ (d) $10$.
+\item (a) Dos triángulos de base $2$ y altura $2$: $4$. (b) $\frac92-2=\frac52$.
+\item (a) $4$ \ (b) $-4$ \ (c) $2(7)+5=19$.
+\item (a) $x^{5}-3x^{2}+2x+C$ (b) $\frac23x^{3/2}+C$ (c) $-\frac1x+C$ (d) $2\sen x-e^{x}+C$ (e) $\frac{x^{2}}{2}+\ln\abs{x}+C$.
+\item $f(x)=x^{4}-3x+C$; $1-3+C=5\Rightarrow C=7$: $f(x)=x^{4}-3x+7$.
+\item (a) $\left[x^{2}-x\right]_1^4=12$ (b) $\left[2\sqrt x\right]_1^9=4$ (c) $1$ (d) $\ln e-\ln1=1$ (e) $(x^{2}+1)^{5}$.
+\item (a) $\left[t^{3}-6t^{2}+9t\right]_0^4=\SI{4}{m}$. (b) $v=3(t-1)(t-3)=0$ en $t=1$ y $t=3$; por tramos
+  $4$, $-4$ y $4$: distancia $\SI{12}{m}$.
+\end{soluciones}
+\end{respuestascortas}
+
+\end{document}

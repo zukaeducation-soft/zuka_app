@@ -1,0 +1,25 @@
+{
+ "scene": "S04_Mas100",
+ "duration": 24.467,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Más de cien y menos de uno",
+   "hold": 23.867
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 12.033,
+   "text": "Un porcentaje puede pasar de cien. El cien por ciento de cuarenta es cuarenta, y el ciento cincuenta por ciento es eso más la mitad: sesenta.",
+   "fox": true
+  },
+  {
+   "start": 12.033,
+   "end": 23.467,
+   "text": "Y puede ser menor que uno. El uno por ciento de dos mil es veinte; el cero punto cinco por ciento es la mitad de eso: diez.",
+   "fox": false
+  }
+ ]
+}

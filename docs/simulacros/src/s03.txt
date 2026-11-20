@@ -1,0 +1,496 @@
+== LECTURA
+## Texto Uno
+p: Cada vez que alguien desbloquea el teléfono <<solo para mirar la hora>> y veinte minutos después sigue deslizando el dedo, no ha sido víctima de su falta de carácter. Ha perdido, más bien, una partida desigual: de un lado está una persona cansada; del otro, equipos de ingenieros y psicólogos cuyo trabajo consiste en que esa persona no suelte la pantalla.
+p: Las aplicaciones más populares no cobran por su uso, y esa gratuidad explica su diseño. Su ingreso proviene de la publicidad, y la publicidad se paga según el tiempo que los usuarios permanecen mirando. La mercancía, por tanto, no es la aplicación: es la atención de quien la usa. Mientras más minutos entregue cada usuario, más vale la empresa.
+p: Para conseguir esos minutos se recurre a mecanismos conocidos desde hace décadas por los fabricantes de máquinas tragamonedas. El más eficaz es la recompensa variable: al deslizar la pantalla hacia abajo, a veces aparece algo interesante y a veces no. Esa incertidumbre, y no el contenido, es la que engancha. <<Si cada vez saliera algo bueno, nos aburriríamos; si nunca saliera, nos iríamos>>, explica la psicóloga Diana Lopera. <<Lo adictivo es el quizá>>.
+p: A ello se suma la eliminación de las pausas. Antes, un capítulo de una serie terminaba y había que decidir si se veía otro; hoy el siguiente comienza solo. Antes, una página se acababa; hoy el contenido es infinito. Cada una de esas pausas era una oportunidad para preguntarse <<¿quiero seguir?>>, y suprimirlas equivale a suprimir la pregunta.
+p: Las empresas responden que solo ofrecen lo que la gente elige, y que nadie está obligado a usar sus productos. Lopera considera tramposo el argumento: <<Elegir supone poder detenerse a pensar, y el diseño está hecho justamente para que eso no ocurra>>. Añade que los más expuestos son los adolescentes, cuyo cerebro todavía está desarrollando la capacidad de frenar impulsos.
+p: Algunos países discuten leyes que obliguen a desactivar por defecto la reproducción automática para menores de edad o que limiten las notificaciones nocturnas. Sus críticos advierten que son medidas difíciles de vigilar. Sus defensores recuerdan que lo mismo se dijo, en su momento, del cinturón de seguridad.
+src: Texto elaborado para este simulacro.
+
+q: La idea central del texto Uno es que:
+@ Muchas aplicaciones se diseñan para retener la atención, porque de ella depende su negocio
+@ Los adolescentes son los únicos afectados por el uso excesivo del teléfono
+@ Las máquinas tragamonedas son menos adictivas que las redes sociales
+@ Las leyes sobre tecnología son imposibles de hacer cumplir
+q: Con la expresión <<una partida desigual>> (párrafo 1) se da a entender que:
+@ El usuario se enfrenta a especialistas que cuentan con muchos más recursos que él
+@ Los juegos del teléfono son más difíciles para las personas cansadas
+@ Los ingenieros y los psicólogos compiten entre sí por los usuarios
+@ El usuario siempre termina perdiendo dinero en las aplicaciones
+q: En el párrafo 1, frente a la persona que no logra soltar el teléfono, el autor:
+@ Evita atribuirle la responsabilidad principal de lo que ocurre
+@ La censura por su falta de carácter
+@ La compara con los ingenieros que diseñan las aplicaciones
+@ Le recomienda descansar antes de usar la pantalla
+q: Según el párrafo 2, muchas aplicaciones populares son gratuitas porque:
+@ Sus ganancias provienen de los anunciantes, que pagan por la atención de los usuarios
+@ Sus creadores buscan que la tecnología esté al alcance de todos
+@ Cobran únicamente a los usuarios que las usan muchos minutos
+@ Producirlas no representa ningún costo para las empresas
+q: En el párrafo 2, el conector <<\sub{por tanto}>> introduce:
+@ Una consecuencia de lo dicho antes
+@ Una objeción a lo dicho antes
+@ Un ejemplo de lo dicho antes
+@ Una causa de lo dicho antes
+q: La afirmación <<La mercancía [\dots] es la atención de quien la usa>> (párrafo 2) significa que:
+@ Lo que las empresas venden es el tiempo que los usuarios pasan mirando
+@ Los usuarios pagan con dinero cada minuto de uso
+@ Las aplicaciones han dejado de ser un producto útil
+@ La atención de los usuarios no tiene ningún valor económico
+q: De acuerdo con el párrafo 3, la <<recompensa variable>> consiste en:
+@ Entregar algo atractivo solo algunas veces y de manera impredecible
+@ Premiar con dinero a los usuarios más constantes
+@ Mostrar siempre el contenido que más le gusta a cada usuario
+@ Cambiar cada día el aspecto de la aplicación
+q: En el párrafo 3, la expresión <<\sub{Esa incertidumbre}>> se refiere a:
+@ No saber si al deslizar la pantalla aparecerá algo interesante
+@ La duda sobre quiénes fabrican las máquinas tragamonedas
+@ El desconocimiento de los usuarios sobre la publicidad
+@ La falta de claridad de los contenidos publicados
+q: La frase de Lopera <<Lo adictivo es el quizá>> (párrafo 3) quiere decir que lo que engancha es:
+@ La posibilidad incierta de encontrar algo valioso
+@ La calidad de los contenidos que se publican
+@ La duda sobre si conviene usar el teléfono
+@ El temor a quedarse sin conexión
+q: La referencia a las máquinas tragamonedas (párrafo 3) tiene como propósito:
+@ Señalar que las técnicas usadas provienen de la industria de las apuestas
+@ Demostrar que las aplicaciones hacen perder dinero a sus usuarios
+@ Proponer que se prohíban los juegos de azar
+@ Explicar cómo funcionan los casinos modernos
+q: Según el párrafo 4, el diseño actual de las aplicaciones, EXCEPTO:
+@ Cobra por cada capítulo adicional que se reproduce
+@ Hace que el capítulo siguiente comience sin intervención del usuario
+@ Ofrece contenido que no tiene final
+@ Reduce las ocasiones en que el usuario decide si continúa
+q: Con la afirmación <<suprimirlas equivale a suprimir la pregunta>> (párrafo 4) el autor sostiene que, sin pausas, el usuario:
+@ No llega a decidir de manera consciente si quiere continuar
+@ Pierde el interés por el contenido
+@ Deja de entender lo que está viendo
+@ Se ve obligado a pagar por seguir mirando
+q: En el párrafo 5, la palabra <<\sub{tramposo}>> puede reemplazarse por:
+@ Engañoso
+@ Ilegal
+@ Ingenioso
+@ Agresivo
+q: Lopera rechaza el argumento de las empresas (párrafo 5) porque:
+@ Una verdadera elección exige una reflexión que el diseño busca impedir
+@ Las personas están obligadas por ley a usar las aplicaciones
+@ Las empresas no ofrecen en realidad lo que la gente quiere
+@ Los adolescentes no saben usar la tecnología
+q: Según el párrafo 5, los adolescentes son los más expuestos porque:
+@ Aún no han terminado de desarrollar el control de sus impulsos
+@ Pasan más horas que los adultos sin supervisión
+@ Reciben más publicidad que el resto de los usuarios
+@ No comprenden los argumentos de las empresas
+q: En el párrafo 6, la expresión <<\sub{por defecto}>> significa:
+@ Como configuración inicial, sin que el usuario deba pedirlo
+@ A causa de una falla de la aplicación
+@ De manera definitiva e irreversible
+@ Únicamente cuando lo autoricen los padres
+q: La mención del cinturón de seguridad (párrafo 6) sirve a los defensores de las leyes para sugerir que:
+@ La dificultad de vigilar una norma no es razón suficiente para descartarla
+@ Las aplicaciones son tan peligrosas como los accidentes de tránsito
+@ Los menores no deberían viajar en automóvil sin un adulto
+@ Las leyes de tránsito tampoco han funcionado
+q: En el párrafo 6, el autor:
+@ Expone las críticas y las defensas, y cierra con el argumento de los defensores
+@ Demuestra que las leyes propuestas son inaplicables
+@ Se declara abiertamente en contra de cualquier regulación
+@ Omite la opinión de quienes critican las leyes
+q: La relación entre los párrafos 2 y 3 es que el tercero:
+@ Describe los medios para alcanzar el objetivo planteado en el segundo
+@ Contradice la explicación económica dada en el segundo
+@ Resume lo dicho en el segundo con otras palabras
+@ Presenta las consecuencias legales de lo dicho en el segundo
+q: Un ejemplo de <<recompensa variable>>, distinto de los del texto, es:
+@ Un pescador que lanza el anzuelo sin saber si esta vez picará un pez
+@ Un empleado que recibe el mismo salario cada quincena
+@ Un estudiante que obtiene un punto por cada tarea entregada
+@ Un cliente que paga una mensualidad fija por ver películas
+q: De lo expuesto en el párrafo 2 se puede inferir que una aplicación financiada con una suscripción fija, y no con publicidad:
+@ Tendría menos motivos para prolongar el tiempo de uso
+@ Sería más adictiva que las aplicaciones gratuitas
+@ No necesitaría ingenieros ni psicólogos
+@ Tendría más usuarios adolescentes
+
+## Texto Dos
+p: De niño, las tardes de domingo me parecían un castigo. No había nada que hacer, y ese <<nada>> tenía peso, como una cobija mojada. Miraba las manchas del techo hasta encontrarles forma de países; inventaba campeonatos de canicas con reglas que cambiaban a mi favor. No lo sabía entonces, pero en esas tardes larguísimas estaba aprendiendo algo que ningún colegio enseña: a estar conmigo.
+p: Hoy el aburrimiento está en vías de extinción. En la fila del banco, en el bus, en la sala de espera, cada minuto vacío se tapa de inmediato con una pantalla. Hemos logrado lo que parecía imposible: que nadie tenga que quedarse a solas con su cabeza ni siquiera el tiempo que tarda un semáforo.
+p: Se dirá que es un progreso, y en parte lo es. Nadie extraña las horas muertas de una oficina pública. Pero el aburrimiento no era solo una molestia: era también una señal. Como el hambre, avisaba que algo faltaba y empujaba a buscarlo. De ese empujón salieron juegos, dibujos, preguntas, amistades con el vecino. Quien calma el hambre con dulces deja de sentirla, pero no se alimenta; quien calma el aburrimiento con una pantalla deja de sentirlo, pero no encuentra nada.
+p: No propongo volver al pasado ni botar el teléfono al río. Me basta con algo más modesto: defender ciertos territorios. Una caminata sin audífonos. Una fila sin pantalla. Diez minutos mirando por la ventana, que es la forma más antigua de pensar.
+p: Sospecho que al principio será incómodo, como todo músculo que no se usa. Pero vale la pena insistir. Una mente que nunca se aburre es una mente que nunca tiene que inventar nada.
+src: Texto elaborado para este simulacro.
+
+## Preguntas del Texto Dos
+q: Con la comparación <<tenía peso, como una cobija mojada>> (párrafo 1), el autor expresa que el tedio de esas tardes era:
+@ Agobiante
+@ Pasajero
+@ Agradable
+@ Imaginario
+q: Según el párrafo 1, lo que el autor aprendió en las tardes de domingo fue a:
+@ Acompañarse a sí mismo sin necesidad de estímulos externos
+@ Ganar en los campeonatos de canicas
+@ Reconocer los países en los mapas
+@ Obedecer los castigos de sus padres
+q: La expresión <<en vías de extinción>> (párrafo 2) indica que el aburrimiento:
+@ Está desapareciendo
+@ Es cada vez más peligroso
+@ Afecta a muchas especies
+@ Se ha vuelto más frecuente
+q: En el párrafo 2, la oración <<Hemos logrado lo que parecía imposible>> tiene un tono:
+@ Irónico
+@ Entusiasta
+@ Agradecido
+@ Indiferente
+q: Con la frase <<Se dirá que es un progreso, y en parte lo es>> (párrafo 3), el autor:
+@ Concede parcialmente la razón a una posible objeción
+@ Cambia por completo la opinión que venía defendiendo
+@ Cita la opinión de un experto en tecnología
+@ Rechaza de plano que haya algún progreso
+q: La comparación del aburrimiento con el hambre (párrafo 3) busca mostrar que el aburrimiento:
+@ Señala una carencia y mueve a buscar cómo resolverla
+@ Es una necesidad que se satisface comiendo
+@ Produce un malestar físico que puede enfermar
+@ Solo aparece en quienes no se alimentan bien
+q: La última oración del párrafo 3 establece que la pantalla, frente al aburrimiento:
+@ Quita la sensación sin resolver lo que la originaba
+@ Es tan nutritiva como un buen alimento
+@ Aumenta las ganas de buscar algo nuevo
+@ Sirve para encontrar juegos y amistades
+q: Según el párrafo 3, del aburrimiento surgieron, EXCEPTO:
+@ Avances tecnológicos
+@ Juegos
+@ Dibujos
+@ Amistades
+q: En el párrafo 4, la palabra <<\sub{territorios}>> se refiere a:
+@ Momentos de la vida diaria que se mantienen libres de pantallas
+@ Lugares del campo donde no hay señal de teléfono
+@ Países en los que está prohibido el uso del celular
+@ Zonas de la casa reservadas para el descanso
+q: Con la oración <<No propongo volver al pasado ni botar el teléfono al río>> (párrafo 4), el autor:
+@ Descarta una interpretación extrema de su postura
+@ Reconoce que su propuesta es imposible de cumplir
+@ Se burla de quienes no tienen teléfono
+@ Invita a deshacerse de la tecnología
+q: En el párrafo 4, <<la forma más antigua de pensar>> es:
+@ Mirar por la ventana
+@ Caminar sin audífonos
+@ Hacer fila en el banco
+@ Defender un territorio
+q: La comparación <<como todo músculo que no se usa>> (párrafo 5) sugiere que la capacidad de estar sin estímulos:
+@ Se debilita cuando no se practica y puede recuperarse con ejercicio
+@ Depende de la fuerza física de cada persona
+@ Se pierde para siempre después de la infancia
+@ Solo la tienen quienes hacen deporte
+q: La tesis que defiende el texto Dos es que:
+@ El aburrimiento es valioso porque impulsa a inventar y a estar con uno mismo
+@ La infancia de antes era más feliz que la de ahora
+@ Las pantallas deberían prohibirse en los lugares públicos
+@ El progreso tecnológico ha eliminado las molestias de la vida diaria
+
+## Preguntas sobre los Textos Uno y Dos
+q: Los dos textos comparten la preocupación por:
+@ La desaparición de los momentos de pausa a causa del uso continuo de las pantallas
+@ El costo económico de las aplicaciones para los usuarios
+@ La falta de leyes que protejan a los menores de edad
+@ La mala calidad de los contenidos que circulan en las redes
+q: El texto Uno explica \bl, mientras que el texto Dos reflexiona sobre \bl.
+@ Por qué es difícil soltar la pantalla / lo que se pierde al no soltarla
+@ Cómo se inventaron las aplicaciones / cómo se usan en los colegios
+@ Las ventajas de la publicidad / las ventajas del aburrimiento
+@ La historia de las tragamonedas / la historia de las canicas
+q: Las <<pausas>> de las que habla el párrafo 4 del texto Uno guardan relación, en el texto Dos, con:
+@ Los minutos vacíos de la fila, el bus o el semáforo
+@ Los campeonatos de canicas
+@ Las horas muertas de la oficina pública
+@ El músculo que no se usa
+q: Una empresa de tecnología anuncia: <<Nuestra misión es que nadie vuelva a aburrirse jamás>>. Desde la perspectiva del texto Dos, este anuncio:
+@ Presenta como un logro lo que en realidad sería una pérdida
+@ Confirma que el aburrimiento es solamente una molestia
+@ Coincide con la propuesta de defender ciertos territorios
+@ Demuestra que las empresas no buscan retener a los usuarios
+q: La propuesta del párrafo 4 del texto Dos y las leyes mencionadas en el párrafo 6 del texto Uno se diferencian en que la primera:
+@ Apela a decisiones personales, mientras que las segundas buscan modificar el diseño de las aplicaciones
+@ Está dirigida a los menores de edad, mientras que las segundas están dirigidas a los adultos
+@ Es más difícil de vigilar que las segundas
+@ Rechaza la tecnología, mientras que las segundas la promueven
+q: El uso de la primera persona y de recuerdos del autor es un rasgo del texto:
+@ Dos, pero no del Uno
+@ Uno, pero no del Dos
+@ Uno más que del Dos
+@ Uno y del Dos por igual
+
+== RAZONAMIENTO
+ctx 2: Cuatro equipos, A, B, C y D, jugaron un torneo en el que cada equipo se enfrentó una sola vez con cada uno de los otros. Por cada partido, el ganador recibió 3 puntos y el perdedor 0; en caso de empate, cada equipo recibió 1 punto. Al final del torneo, A obtuvo 7 puntos, B obtuvo 5, C obtuvo 2 y D obtuvo 1.
+q: La cantidad de partidos que terminaron empatados en el torneo fue:
+@ 3
+@ 1
+@ 2
+@ 4
+! Se jugaron 6 partidos; sin empates se repartirían 18 puntos. Se repartieron 15, y cada empate reparte un punto menos.
+q: De las siguientes afirmaciones, la única verdadera es:
+@ A y B empataron
+@ A le ganó a B
+@ C le ganó a D
+@ B perdió un partido
+! A: dos triunfos y un empate; B: un triunfo y dos empates; C: dos empates; D: un empate. B no perdió, así que A no le ganó: A y B empataron, y los otros empates fueron B con C y C con D.
+q: La negación de la frase <<si llueve, entonces no voy al parque>> es:
+@ Llueve y voy al parque
+@ Si no llueve, entonces voy al parque
+@ No llueve y no voy al parque
+@ Si llueve, entonces voy al parque
+! La negación de <<si $p$, entonces $q$>> es <<$p$ y no $q$>>.
+q: Se sabe que <<todos los músicos de la banda leen partituras>> y que <<algunos estudiantes de once son músicos de la banda>>. De las siguientes afirmaciones, la única que necesariamente es verdadera es:
+@ Algunos estudiantes de once leen partituras
+@ Todos los estudiantes de once leen partituras
+@ Todos los que leen partituras son músicos de la banda
+@ Algunos estudiantes de once no leen partituras
+! Los estudiantes de once que están en la banda leen partituras.
+ctx 2: En un juego se escriben cuatro números en fila. Los dos primeros, llamados semillas, se escogen libremente entre los enteros positivos; el tercero es la suma de los dos primeros y el cuarto es la suma del segundo y el tercero. Por ejemplo, con las semillas 2 y 5 se obtiene la fila 2, 5, 7, 12.
+q: Si la primera semilla es 5 y el cuarto número de la fila es 19, entonces el tercer número de la fila es:
+@ 12
+@ 7
+@ 14
+@ 9
+! La fila es $a,\ b,\ a+b,\ a+2b$: $5+2b=19$ da $b=7$ y el tercero es 12.
+q: La cantidad de filas distintas que terminan en el número 11 es:
+@ 5
+@ 4
+@ 6
+@ 10
+! $a+2b=11$ con $a,b\ge1$: $b=1,2,3,4,5$.
+q: Cuatro cajas, una roja, una azul, una verde y una negra, pesan 3, 5, 8 y 12 kilogramos, no necesariamente en ese orden. Se sabe que la caja roja pesa más que la azul, que la verde y la azul pesan juntas lo mismo que la negra, y que la verde no es la más liviana. Los pesos, en kilogramos, de la caja roja y de la caja verde son, respectivamente:
+@ 12 y 5
+@ 12 y 3
+@ 8 y 5
+@ 5 y 3
+! La única suma posible es $3+5=8$: la negra pesa 8, la verde 5 (no es la más liviana), la azul 3 y la roja 12.
+ctx 2: Un parqueadero cobra \$4.000 por la primera hora y \$2.500 por cada hora o fracción de hora adicional. Además, ningún vehículo paga más de \$20.000 en un mismo día (tarifa tope).
+q: El valor que debe pagar un conductor que dejó su carro 3 horas y 20 minutos es:
+@ \$11.500
+@ \$9.000
+@ \$12.500
+@ \$10.000
+! Paga 4 horas: $4.000+3\cdot2.500$.
+q: La menor cantidad de horas completas de parqueo con la que un conductor paga la tarifa tope es:
+@ 8
+@ 7
+@ 6
+@ 9
+! Con 7 horas paga \$19.000; con 8 serían \$21.500, y se aplica el tope.
+q: Se mezclan 200 gramos de una solución que tiene 10\% de sal con 300 gramos de otra solución que tiene 20\% de sal. El porcentaje de sal de la mezcla es:
+@ 16\%
+@ 15\%
+@ 30\%
+@ 18\%
+! $(20+60)/500=16\%$.
+q: La población de un municipio aumenta cada año un 10\% con respecto al año anterior. Si hoy tiene 20.000 habitantes, dentro de dos años tendrá:
+@ 24.200
+@ 24.000
+@ 22.000
+@ 24.400
+! $20.000\cdot1{,}1^2$.
+q: El promedio de las cinco primeras notas de Daniela es 3,8. Después de presentar la sexta evaluación, su promedio subió a 4,0. La nota que obtuvo en la sexta evaluación fue:
+@ 5,0
+@ 4,2
+@ 4,8
+@ 4,5
+! $6\cdot4{,}0-5\cdot3{,}8=24-19$.
+q: Los primeros términos de una sucesión son 3, 6, 5, 10, 9, 18, 17, \dots{} Si se continúa con la misma regla de formación, el término que ocupa la posición 10 es:
+@ 66
+@ 65
+@ 34
+@ 33
+! Se alterna <<multiplicar por 2>> y <<restar 1>>: \dots, 17, 34, 33, 66.
+q: Para dos números reales distintos $a$ y $b$ se define $a * b=\dfrac{a+b}{a-b}$. El valor de $(5*3)*2$ es:
+@ 3
+@ 4
+@ 2
+@ 6
+! $5*3=4$ y $4*2=\frac62=3$.
+q: Un código se forma con tres letras seguidas de dos dígitos. Las letras se escogen entre A, B y C, y pueden repetirse; los dígitos deben ser impares y distintos entre sí. La cantidad de códigos distintos que se pueden formar es:
+@ 540
+@ 675
+@ 120
+@ 270
+! $3^3\cdot5\cdot4=540$.
+q: En una bolsa hay 4 balotas rojas, 3 azules y 2 verdes. Si se sacan al azar dos balotas al mismo tiempo, la probabilidad de que las dos sean del mismo color es:
+@ $\frac{5}{18}$
+@ $\frac{1}{3}$
+@ $\frac{2}{9}$
+@ $\frac{13}{36}$
+! $(6+3+1)/\binom92=10/36$.
+q: Una escalera de 13 metros de largo está apoyada en una pared vertical, con su base a 5 metros de la pared. Si la base se aleja 7 metros más de la pared, entonces el extremo superior de la escalera desciende:
+@ 7 metros
+@ 5 metros
+@ 6 metros
+@ 12 metros
+! Altura inicial 12 m ($5$-$12$-$13$); altura final 5 m ($12$-$5$-$13$).
+ctx 2: Una familia tiene un ingreso mensual de \$3.000.000 y lo distribuye como muestra el diagrama circular.\par\smallskip
+{\centering\begin{tikzpicture}[scale=.8]\draw (0,0) circle(1.5);\foreach \a in {0,126,216,270,306} \draw (0,0)--(\a:1.5);
+\node[font=\scriptsize,align=center] at (63:2.15) {Arriendo\\35\%};\node[font=\scriptsize,align=center] at (171:2.55) {Alimentación\\25\%};
+\node[font=\scriptsize,align=center] at (236:2.25) {Transporte\\15\%};\node[font=\scriptsize,align=center] at (290:2.2) {Educación\\10\%};
+\node[font=\scriptsize,align=center] at (336:2.35) {Ahorro\\15\%};\end{tikzpicture}\par}
+q: La diferencia entre lo que la familia destina al arriendo y lo que destina al transporte es:
+@ \$600.000
+@ \$450.000
+@ \$750.000
+@ \$200.000
+! El 20\% de \$3.000.000.
+q: Si el valor del arriendo aumenta un 10\%, el ingreso no cambia y la diferencia se toma del ahorro, entonces el ahorro pasa a ser, con respecto al ingreso, el:
+@ 11,5\%
+@ 5\%
+@ 13,5\%
+@ 10\%
+! El arriendo pasa de 35\% a 38,5\% del ingreso: el ahorro baja 3,5 puntos.
+q: La cantidad de números naturales del 1 al 100 que son múltiplos de 3 o de 5 es:
+@ 47
+@ 53
+@ 41
+@ 39
+! $33+20-6=47$.
+q: La suma de los dígitos del número $10^{15}-25$ es:
+@ 129
+@ 135
+@ 120
+@ 138
+! $10^{15}-25=999\dots975$, con 13 nueves: $13\cdot9+7+5$.
+q: Un programa de computador realiza las siguientes instrucciones:
+\st{1.}{Comience con $x=100$ y $n=0$}
+\st{2.}{Cambie el valor de $x$ por la mitad de $x$ más 10}
+\st{3.}{Aumente $n$ en 1}
+\st{4.}{Si $n=3$, pase a la instrucción 5; en otro caso, regrese a la instrucción 2}
+\st{5.}{Imprima el valor de $x$ y pare}
+El valor que imprime el programa es:
+@ 30
+@ 40
+@ 25
+@ 35
+! $100\to60\to40\to30$.
+q: Mariana decide ahorrar cada semana. La primera semana ahorra \$5.000 y cada semana ahorra \$2.000 más que la anterior. La cantidad de semanas que necesita para completar exactamente \$96.000 es:
+@ 8
+@ 7
+@ 9
+@ 10
+! $5+7+9+11+13+15+17+19=96$ (en miles).
+q: Un número de dos cifras $AB$ cumple que, al restarle el número $BA$ que resulta de invertir sus cifras, se obtiene 27. Si además $A+B=11$, entonces el número $AB$ es:
+@ 74
+@ 83
+@ 47
+@ 92
+! $9(A-B)=27$ da $A-B=3$; con $A+B=11$: $A=7$, $B=4$.
+ctx 2: A cada letra de las palabras SOL, LUZ y SUR se le asignó un símbolo distinto. Enseguida se muestran, frente a cada palabra, los tres símbolos de sus letras, pero no necesariamente en el orden de las letras.\par\smallskip
+{\centering\begin{tabular}{ll}SOL: & $\square\ \ \circ\ \ \triangle$\\ LUZ: & $\bigstar\ \ \circ\ \ \diamond$\\ SUR: & $\diamond\ \ \bullet\ \ \triangle$\end{tabular}\par}
+q: El código de la palabra LOROS, con los símbolos en el orden de las letras, es:
+@ $\circ\ \square\ \bullet\ \square\ \triangle$
+@ $\circ\ \square\ \diamond\ \square\ \triangle$
+@ $\triangle\ \square\ \bullet\ \square\ \circ$
+@ $\circ\ \bullet\ \square\ \bullet\ \triangle$
+! L está en SOL y LUZ: $\circ$. S está en SOL y SUR: $\triangle$. U: $\diamond$. Quedan O: $\square$, Z: $\bigstar$, R: $\bullet$.
+q: La secuencia de símbolos $\bullet\ \diamond\ \triangle\ \square$ corresponde a la palabra:
+@ RUSO
+@ LUSO
+@ RULO
+@ ZURO
+! R, U, S, O.
+q: Se quiere completar la cuadrícula de la figura con los números 1, 2, 3 y 4, de modo que en cada fila y en cada columna aparezcan los cuatro números.\par
+{\centering\begin{tikzpicture}[scale=.5]\draw (0,0) grid (4,4);
+\foreach \x/\y/\n in {.5/3.5/1,3.5/3.5/4,1.5/2.5/4,2.5/2.5/1,.5/1.5/2,2.5/1.5/$X$,3.5/.5/3} \node at (\x,\y) {\n};\end{tikzpicture}\par}
+El número que debe ir en la casilla marcada con $X$ es:
+@ 4
+@ 3
+@ 1
+@ 2
+! La única manera de completarla, por filas, es 1234, 3412, 2341 y 4123.
+q: Un cubo de madera de 4 cm de arista se pinta de rojo por todas sus caras y luego se corta en cubitos de 1 cm de arista. La cantidad de cubitos que quedan con exactamente dos caras pintadas es:
+@ 24
+@ 8
+@ 32
+@ 16
+! En cada una de las 12 aristas hay 2 cubitos que no son esquinas.
+q: En la figura todos los ángulos son rectos y las medidas están en centímetros. El perímetro de la figura, en centímetros, es:\par
+{\centering\begin{tikzpicture}[scale=.3]\draw[thick] (0,0)--(8,0)--(8,4)--(5,4)--(5,6)--(0,6)--cycle;
+\node[below,font=\scriptsize] at (4,0) {8};\node[left,font=\scriptsize] at (0,3) {6};\end{tikzpicture}\par}
+@ 28
+@ 24
+@ 30
+@ 34
+! Los tramos horizontales de arriba suman 8 y los verticales de la derecha suman 6: $2(8+6)$.
+q: En un mapa hecho a escala $1:50.000$, la distancia entre dos pueblos es de 6 cm. La distancia real entre los dos pueblos, en kilómetros, es:
+@ 3
+@ 30
+@ 0,3
+@ 12
+! $6\cdot50.000=300.000$ cm $=3$ km.
+q: Un reloj defectuoso se adelanta 4 minutos cada hora. Si se pone a la hora correcta a las 8:00 a.m., la hora que marcará cuando en realidad sean las 6:00 p.m. del mismo día es:
+@ 6:40 p.m.
+@ 6:36 p.m.
+@ 5:20 p.m.
+@ 6:44 p.m.
+! En 10 horas se adelanta 40 minutos.
+q: Hay tres cajas cerradas: una contiene dos bolas blancas, otra dos bolas negras y otra una bola blanca y una negra. Las cajas están marcadas con las etiquetas BB, NN y BN, pero se sabe que ninguna etiqueta corresponde al contenido de su caja. Para saber con certeza el contenido de las tres cajas, basta con sacar, sin mirar dentro:
+@ Una bola de la caja marcada BN
+@ Una bola de la caja marcada BB
+@ Una bola de la caja marcada NN
+@ Una bola de cada una de las tres cajas
+! La caja BN tiene dos bolas iguales; la bola que salga dice cuáles, y las otras dos etiquetas se deducen por ser falsas.
+q: La cantidad total de cuadrados, de cualquier tamaño, que se pueden contar en la figura es:\par
+{\centering\begin{tikzpicture}[scale=.5]\draw (0,0) grid (3,3);\end{tikzpicture}\par}
+@ 14
+@ 9
+@ 10
+@ 13
+! $9$ de lado 1, $4$ de lado 2 y $1$ de lado 3.
+q: Un ciclista sale de un pueblo a una velocidad constante de 15 km/h. Dos horas después, sale del mismo pueblo y por la misma carretera una moto a 45 km/h. La distancia del pueblo al punto donde la moto alcanza al ciclista, en kilómetros, es:
+@ 45
+@ 30
+@ 60
+@ 90
+! El ciclista lleva 30 km de ventaja y la moto descuenta 30 km cada hora: lo alcanza en 1 hora.
+ctx 2: En un colegio se preguntó a 200 estudiantes, de las jornadas de la mañana y de la tarde, cómo llegan al colegio. Los resultados se muestran en la tabla.\par\smallskip
+{\centering\small\begin{tabular}{|l|c|c|c|c|}\hline
+ & Bus & Bicicleta & A pie & Total\\\hline
+Mañana & 60 & 30 & 30 & 120\\\hline
+Tarde & 20 & 50 & 10 & 80\\\hline
+Total & 80 & 80 & 40 & 200\\\hline
+\end{tabular}\par}
+q: Si se escoge al azar uno de los 200 estudiantes, la probabilidad de que sea de la jornada de la tarde y llegue en bicicleta es:
+@ $\frac14$
+@ $\frac58$
+@ $\frac25$
+@ $\frac38$
+! $50/200$.
+q: De los estudiantes que llegan en bicicleta, el porcentaje que pertenece a la jornada de la mañana es:
+@ 37,5\%
+@ 25\%
+@ 15\%
+@ 30\%
+! $30/80$.
+q: La cantidad de números enteros positivos $x$ que cumplen la desigualdad $3x-7<20$ es:
+@ 8
+@ 9
+@ 7
+@ 10
+! $x<9$: del 1 al 8.
+q: La menor cantidad de personas que debe haber en un grupo para tener la certeza de que por lo menos tres de ellas cumplen años en el mismo mes es:
+@ 25
+@ 13
+@ 36
+@ 24
+! Con 24 personas podría haber 2 por mes; la número 25 obliga a que algún mes tenga 3.
+q: De un tanque lleno de agua se sacaron primero las dos quintas partes de su contenido y luego 10 litros más. Si después de esto el tanque quedó exactamente por la mitad, su capacidad, en litros, es:
+@ 100
+@ 50
+@ 80
+@ 120
+! $\frac35x-10=\frac12x$.
+q: Con cuadritos iguales se construye la secuencia de figuras en forma de cruz que se muestra, en la que cada brazo de la cruz tiene un cuadrito más que en la figura anterior.\par
+\newcommand\cruz[2]{\begin{scope}[shift={(#1,0)}]\draw (0,0) rectangle (1,1);\foreach \k in {1,...,#2} {\draw (\k,0) rectangle (\k+1,1);\draw (-\k,0) rectangle (-\k+1,1);\draw (0,\k) rectangle (1,\k+1);\draw (0,-\k) rectangle (1,-\k+1);}\node at (.5,-#2-1) {\scriptsize Figura #2};\end{scope}}
+{\centering\begin{tikzpicture}[scale=.22]\cruz{0}{1}\cruz{7}{2}\cruz{16}{3}\end{tikzpicture}\par}
+La cantidad de cuadritos que tiene la figura 20 de la secuencia es:
+@ 81
+@ 80
+@ 100
+@ 84
+! La figura $n$ tiene $4n+1$ cuadritos.

@@ -1,0 +1,420 @@
+% Resumen del mundo «Sendero de los Intervalos» (Cálculo Diferencial, mundo 1).
+% Lecciones alg-32, alg-26c, alg-51, calc-recta. Usa los ejemplos de los videos C1–C4; el taller trae ejercicios nuevos.
+\documentclass[11pt,a4paper]{article}
+\usepackage{zuka-resumen}
+\zukacurso{calc}
+\zukamundo{1}{Sendero de los Intervalos}{Desigualdades, valor absoluto y la recta}
+
+% Puntos de una recta numérica: lleno (entra) y vacío (no entra).
+\newcommand{\pll}[1]{\fill[zaccent] (#1,0) circle (2.3pt);}
+\newcommand{\pva}[1]{\filldraw[draw=zaccent,fill=white,line width=0.9pt] (#1,0) circle (2.3pt);}
+% Recta numérica mínima para la tabla de intervalos (de 0 a 3, extremos a = 0.7 y b = 2.3).
+\newcommand{\eje}{\draw[zmute,line width=0.6pt,-{Stealth[length=1.6mm]}] (0,0)--(3,0);}
+\newcommand{\miniab}[2]{\tikz[baseline=-0.7ex]{\eje\draw[zaccent,line width=2pt] (0.7,0)--(2.3,0); #1 #2
+  \node[font=\scriptsize,text=zmute,below=1pt] at (0.7,0) {$a$};\node[font=\scriptsize,text=zmute,below=1pt] at (2.3,0) {$b$};}}
+
+\begin{document}
+
+\portada{%
+Antes de hablar de límites y derivadas hay que saber moverse por la recta real y por el plano. En este mundo
+aprendiste a comparar números, a describir trozos de la recta con \clave{intervalos}, a resolver
+\clave{inecuaciones}, a medir \clave{distancias} con el valor absoluto y con Pitágoras, y a escribir la ecuación de una
+\clave{recta}. Este resumen reúne las definiciones, la notación y los ejemplos de los videos, y termina con un taller.}{%
+\item \textbf{Nivel 1-1.} Orden de los reales, intervalos, inecuaciones lineales y tablas de signos.
+\item \textbf{Nivel 1-2.} Valor absoluto como distancia; desigualdades $\abs{x-a}<r$ y $\abs{x-a}>r$; desigualdad triangular.
+\item \textbf{Nivel 1-3.} Plano cartesiano, distancia entre dos puntos, punto medio y división en una razón.
+\item \textbf{Nivel 1-4.} Pendiente, formas de la ecuación de la recta, paralelas y perpendiculares.}
+
+\begin{clavebox}[LAS IDEAS QUE SOSTIENEN TODO EL MUNDO]
+\renewcommand{\arraystretch}{1.5}\begin{tabular}{@{}>{\centering\arraybackslash}p{44mm}@{\quad}>{\centering\arraybackslash}p{60mm}@{\quad}>{\centering\arraybackslash}p{44mm}@{}}
+$a<b\ \Rightarrow\ -a>-b$ & $\abs{x-a}\le r \iff a-r\le x\le a+r$ & $m=\dfrac{y_2-y_1}{x_2-x_1}$\\[2pt]
+\small un negativo voltea la desigualdad & \small el valor absoluto es una distancia & \small la pendiente es subida sobre avance
+\end{tabular}
+\end{clavebox}
+
+%=====================================================================
+\nivel{1-1}{Orden, intervalos e inecuaciones}
+
+En la fila de la montaña rusa un letrero dice: \emph{para subir hay que medir al menos \SI{120}{\centi\metre}}.
+Esa regla es una desigualdad, $h\ge 120$, y quienes pasan forman todo un trozo de la recta: desde $120$ (incluido)
+hacia la derecha.
+
+\begin{propiedad}[Orden de los números reales]
+\begin{itemize}
+\item \textbf{Tricotomía.} Dados $a,b\in\R$ se cumple exactamente una de estas: $a<b$, $a=b$ o $a>b$.
+\item \textbf{Sumar conserva.} Si $a<b$, entonces $a+c<b+c$ para todo $c\in\R$.
+\item \textbf{Multiplicar por un positivo conserva.} Si $a<b$ y $c>0$, entonces $ac<bc$.
+\item \textbf{Multiplicar por un negativo voltea.} Si $a<b$ y $c<0$, entonces $ac>bc$.
+\end{itemize}
+\end{propiedad}
+
+Multiplicar por $-1$ refleja cada número al otro lado del cero, como un espejo: de $2<5$ se pasa a $-2>-5$.
+
+\begin{figura}[Multiplicar por $-1$ es reflejar en el cero: el orden se invierte.]
+\begin{tikzpicture}[x=0.85cm]
+  \draw[zmute,line width=0.6pt,-{Stealth[length=2mm]}] (-6.4,0)--(6.4,0);
+  \foreach \t in {-6,...,6} \draw[zmute] (\t,0.08)--(\t,-0.08);
+  \foreach \t in {-5,-2,0,2,5} \node[font=\footnotesize,text=zmute,below=3pt] at (\t,0) {$\t$};
+  \fill[zsky] (2,0) circle (2.6pt); \fill[zsky] (5,0) circle (2.6pt);
+  \fill[zcoral] (-2,0) circle (2.6pt); \fill[zcoral] (-5,0) circle (2.6pt);
+  \draw[->,zcoral,line width=0.8pt] (2,0.15) to[bend right=40] (-2,0.15);
+  \draw[->,zcoral,line width=0.8pt] (5,0.15) to[bend right=35] (-5,0.15);
+  \node[font=\small,text=zsky] at (3.5,-0.75) {$2<5$};
+  \node[font=\small,text=zcoral] at (-3.5,-0.75) {$-2>-5$};
+\end{tikzpicture}
+\end{figura}
+
+\subsection{Intervalos}
+Las soluciones de una desigualdad casi nunca son un solo número: son trozos de la recta. El \clave{corchete}
+incluye el extremo (punto lleno) y el \clave{paréntesis} lo deja afuera (punto vacío). El infinito no es un número:
+siempre va con paréntesis.
+
+\begin{center}
+\begin{tabular}{@{}l l c@{}}
+\toprule
+Intervalo & Conjunto & Gráfica\\ \midrule
+$(a,b)$ & $\{x\in\R\tq a<x<b\}$ & \miniab{\pva{0.7}}{\pva{2.3}}\\
+$[a,b]$ & $\{x\in\R\tq a\le x\le b\}$ & \miniab{\pll{0.7}}{\pll{2.3}}\\
+$(a,b]$ & $\{x\in\R\tq a<x\le b\}$ & \miniab{\pva{0.7}}{\pll{2.3}}\\
+$[a,\infty)$ & $\{x\in\R\tq x\ge a\}$ & \tikz[baseline=-0.7ex]{\eje\draw[zaccent,line width=2pt] (0.7,0)--(2.85,0);\pll{0.7}\node[font=\scriptsize,text=zmute,below=1pt] at (0.7,0) {$a$};}\\
+$(-\infty,b)$ & $\{x\in\R\tq x<b\}$ & \tikz[baseline=-0.7ex]{\eje\draw[zaccent,line width=2pt] (0.05,0)--(2.3,0);\pva{2.3}\node[font=\scriptsize,text=zmute,below=1pt] at (2.3,0) {$b$};}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Inecuaciones lineales}
+Una inecuación lineal se despeja como una ecuación, con un solo cuidado: si se multiplica o divide por un número
+negativo, el sentido de la desigualdad se voltea.
+
+\begin{ejemplo}[Del video]
+Resolver $3-2x\le x+9$.
+\begin{align*}
+3-2x &\le x+9 &&\text{restar $x$ y restar $3$ (el sentido no cambia)}\\
+-3x &\le 6 &&\text{dividir entre $-3$, que es negativo: se voltea}\\
+x &\ge -2 &&\text{solución: } [-2,\infty).
+\end{align*}
+Comprobación con $x=0$: $3\le 9$. Se cumple.
+\end{ejemplo}
+
+\begin{ojo}[Dividir entre una expresión con $x$]
+No se puede dividir ni multiplicar por una expresión como $x-1$ sin saber su signo: podría voltear la desigualdad
+en unos valores y no en otros. Para eso está la tabla de signos.
+\end{ojo}
+
+\subsection{Productos y cocientes: la tabla de signos}
+Cada factor cambia de signo solo en su cero. Los ceros parten la recta en \clave{tramos} y dentro de cada tramo
+el signo no cambia, así que basta probar un número de cada uno.
+
+\begin{ejemplo}[Del video: $(x-2)(x+1)\ge 0$]
+Los ceros son $-1$ y $2$. La ley de los signos da el signo del producto en cada tramo:
+\begin{figura}
+\begin{tikzpicture}[x=1cm,y=0.62cm,font=\small]
+  \node[anchor=east] at (-0.2,0) {$x+1$};
+  \node[anchor=east] at (-0.2,-1) {$x-2$};
+  \node[anchor=east] at (-0.2,-2) {$(x-2)(x+1)$};
+  \fill[zmint!25] (0,-2.45) rectangle (3,-1.55); \fill[zmint!25] (6,-2.45) rectangle (9,-1.55);
+  \draw[zline] (0,0.55)--(9,0.55); \draw[zline] (0,-1.5)--(9,-1.5);
+  \foreach \x/\lab in {3/{-1},6/{2}} {\draw[zmute,dashed] (\x,0.55)--(\x,-2.5); \node[text=zmute,font=\footnotesize] at (\x,0.95) {$\lab$};}
+  \foreach \x/\a/\b/\c in {1.5/-/-/+,4.5/+/-/-,7.5/+/+/+} {
+    \node at (\x,0) {$\a$}; \node at (\x,-1) {$\b$}; \node at (\x,-2) {$\c$};}
+  \foreach \x/\y in {3/0,6/-1,3/-2,6/-2} \node[fill=white,inner sep=1.5pt,font=\footnotesize] at (\x,\y) {$0$};
+\end{tikzpicture}
+\end{figura}
+Se piden los tramos positivos y también los ceros (ahí el producto vale $0$):
+\[ (x-2)(x+1)\ge 0 \iff x\in(-\infty,-1]\cup[2,\infty). \]
+\end{ejemplo}
+
+\begin{ejemplo}[Del video: un cociente]
+En $(x+3)/(x-1)<0$ los ceros son $-3$ y $1$; los signos son $+\,|\,-\,|\,+$. El cociente es negativo solo en el
+tramo del medio, y el $1$ nunca entra porque allí el denominador se anula: la solución es $(-3,1)$.
+\end{ejemplo}
+
+\begin{ojo}[El cero del denominador]
+En un cociente, el valor que anula el denominador \emph{nunca} entra en la solución, aunque la desigualdad sea $\le$ o $\ge$.
+\end{ojo}
+
+%=====================================================================
+\nivel{1-2}{Desigualdades con valor absoluto}
+
+\begin{definicion}[Valor absoluto]
+\[ \abs{x}=\begin{cases} x, & x\ge 0,\\ -x, & x<0.\end{cases} \]
+Geométricamente, $\abs{x}$ es la \clave{distancia} de $x$ al cero y $\abs{x-a}$ es la distancia entre $x$ y $a$.
+\end{definicion}
+
+Por eso un valor absoluto nunca es negativo: $\abs{-7}=7$ y $\abs{5-2}=\abs{2-5}=3$ (da lo mismo medir de $2$ a $5$
+que de $5$ a $2$).
+
+\begin{propiedad}[Propiedades básicas]
+Para $a,b\in\R$: \quad $\abs{a}\ge 0$; \quad $\abs{a}=0\iff a=0$; \quad $\abs{ab}=\abs{a}\,\abs{b}$; \quad $\abs{a}=\abs{-a}$; \quad $\sqrt{a^2}=\abs{a}$.
+\end{propiedad}
+
+\subsection{El perro y el gato}
+Un perro está amarrado a un poste en $a=2$ con una correa de largo $r=3$. Llega a los puntos que están a lo sumo a
+$3$ del poste; el gato está a salvo en los que están a más de $3$.
+
+\begin{figura}[El perro alcanza un intervalo centrado en el poste; el gato vive en dos semirrectas.]
+\begin{tikzpicture}[x=0.8cm]
+  \begin{scope}
+  \draw[zmute,line width=0.6pt,{Stealth[length=2mm]}-{Stealth[length=2mm]}] (-4.4,0)--(8.4,0);
+  \foreach \t in {-4,...,8} \draw[zmute] (\t,0.08)--(\t,-0.08);
+  \foreach \t in {-1,2,5} \node[font=\footnotesize,text=zmute,below=3pt] at (\t,0) {$\t$};
+  \draw[zaccent,line width=2.4pt] (-1,0)--(5,0); \pll{-1}\pll{5}
+  \draw[zink,line width=1pt] (2,0)--(2,0.55); \fill[zink] (2,0.55) circle (1.6pt);
+  \draw[decorate,decoration={brace,amplitude=4pt},zmute] (2.05,0.75)--(5,0.75) node[midway,above=4pt,font=\footnotesize,text=zmute] {$r=3$};
+  \node[font=\footnotesize,text=zmute,anchor=east] at (1.9,0.5) {poste};
+  \node[anchor=west,font=\small] at (8.7,0) {$\abs{x-2}\le 3\iff x\in[-1,5]$};
+  \end{scope}
+  \begin{scope}[yshift=-1.5cm]
+  \draw[zmute,line width=0.6pt,{Stealth[length=2mm]}-{Stealth[length=2mm]}] (-4.4,0)--(8.4,0);
+  \foreach \t in {-4,...,8} \draw[zmute] (\t,0.08)--(\t,-0.08);
+  \foreach \t in {-1,2,5} \node[font=\footnotesize,text=zmute,below=3pt] at (\t,0) {$\t$};
+  \draw[zcoral,line width=2.4pt] (-4.3,0)--(-1,0); \draw[zcoral,line width=2.4pt] (5,0)--(8.3,0);
+  \filldraw[draw=zcoral,fill=white,line width=0.9pt] (-1,0) circle (2.3pt);
+  \filldraw[draw=zcoral,fill=white,line width=0.9pt] (5,0) circle (2.3pt);
+  \node[anchor=west,font=\small] at (8.7,0) {$\abs{x-2}>3\iff x\in(-\infty,-1)\cup(5,\infty)$};
+  \end{scope}
+\end{tikzpicture}
+\end{figura}
+
+\begin{propiedad}[Desigualdades con valor absoluto, $r>0$]
+\[ \abs{x-a}\le r \iff a-r\le x\le a+r, \qquad\qquad \abs{x-a}\ge r \iff x\le a-r\ \text{ o }\ x\ge a+r. \]
+Lo mismo con desigualdades estrictas (puntos vacíos). Y $\abs{x-a}=r\iff x=a-r$ o $x=a+r$.
+\end{propiedad}
+
+\begin{ejemplo}[Del video: sacar el coeficiente]
+Resolver $\abs{2x-6}\le 4$. Como $\abs{2x-6}=\abs{2}\,\abs{x-3}=2\abs{x-3}$,
+\[ 2\abs{x-3}\le 4 \iff \abs{x-3}\le 2 \iff 1\le x\le 5. \]
+Poste en $3$, correa $2$: la solución es $[1,5]$. Directo también sale: $-4\le 2x-6\le 4$, $\ 2\le 2x\le 10$, $\ 1\le x\le 5$.
+\end{ejemplo}
+
+\begin{ejemplo}[Del video: tolerancia en una fábrica]
+Un tornillo debe medir $\SI{10}{\centi\metre}$ con tolerancia de $\SI{0.5}{\centi\metre}$: se acepta si $\abs{L-10}\le 0.5$,
+es decir, si $9.5\le L\le 10.5$. Uno de $\SI{10.3}{\centi\metre}$ pasa; uno de $\SI{10.6}{\centi\metre}$ se rechaza.
+\end{ejemplo}
+
+\begin{ojo}[El signo dentro de las barras]
+$\abs{x+4}=\abs{x-(-4)}$ es la distancia a $-4$, no a $4$. Y $\abs{x}<-2$ no tiene solución: una distancia no es negativa.
+\end{ojo}
+
+\begin{propiedad}[Desigualdad triangular]
+Para todo $a,b\in\R$: \quad $\abs{a+b}\le\abs{a}+\abs{b}$, con igualdad si y solo si $a$ y $b$ tienen el mismo signo (o alguno es $0$).
+\end{propiedad}
+Tres pasos adelante y cinco atrás dejan a dos pasos del inicio, aunque se caminaron ocho: $\abs{3+(-5)}=2\le 3+5=8$.
+
+%=====================================================================
+\nivel{1-3}{Plano cartesiano, distancia y punto medio}
+
+El \clave{plano cartesiano} es un mapa: dos ejes perpendiculares que se cortan en el origen $O(0,0)$. Cada punto es
+un par ordenado $(x,y)$: primero el avance horizontal y luego el vertical. Los ejes dividen el plano en cuatro
+cuadrantes: I $(+,+)$, II $(-,+)$, III $(-,-)$ y IV $(+,-)$.
+
+\begin{minipage}[c]{0.5\linewidth}\tcbset{zbase/.append style={unbreakable}}
+\begin{propiedad}[Distancia entre dos puntos]
+Con $P_1(x_1,y_1)$ y $P_2(x_2,y_2)$, el segmento es la hipotenusa de un triángulo rectángulo de catetos
+$\abs{\Delta x}$ y $\abs{\Delta y}$. Por Pitágoras:
+\[ d(P_1,P_2)=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}. \]
+\end{propiedad}
+\begin{propiedad}[Punto medio]
+\[ M=\left(\frac{x_1+x_2}{2},\ \frac{y_1+y_2}{2}\right). \]
+\end{propiedad}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.46\linewidth}\centering
+\begin{tikzpicture}[scale=0.42]
+  \draw[zline,line width=0.3pt] (-2,-1) grid (6,11);
+  \draw[zink,-{Stealth[length=2mm]}] (-2,0)--(6.6,0) node[right,font=\footnotesize] {$x$};
+  \draw[zink,-{Stealth[length=2mm]}] (0,-1)--(0,11.6) node[above,font=\footnotesize] {$y$};
+  \fill[zsun!25] (-1,2)--(5,2)--(5,10)--cycle;
+  \draw[zsky,line width=1pt] (-1,2)--(5,2) node[midway,below,font=\footnotesize,text=zink] {$\Delta x=6$};
+  \draw[zsky,line width=1pt] (5,2)--(5,10) node[midway,right,font=\footnotesize,text=zink] {$\Delta y=8$};
+  \draw[zaccent,line width=1.4pt] (-1,2)--(5,10);
+  \draw[zmute] (4.5,2)--(4.5,2.5)--(5,2.5);
+  \node[punto] at (-1,2) {}; \node[punto] at (5,10) {}; \node[circle,fill=zaccent,inner sep=1.6pt] at (2,6) {};
+  \node[font=\footnotesize,anchor=east] at (-1.1,2.5) {$A(-1,2)$};
+  \node[font=\footnotesize,anchor=east] at (4.8,10.4) {$B(5,10)$};
+  \node[font=\footnotesize,anchor=north west,text=zaccent,inner sep=1pt] at (2.3,5.9) {$M(2,6)$};
+\end{tikzpicture}
+\end{minipage}
+
+\begin{ejemplo}[Del video: la tirolesa]
+Las torres están en $A(-1,2)$ y $B(5,10)$. Los catetos miden $5-(-1)=6$ y $10-2=8$, así que el cable mide
+\[ d=\sqrt{6^2+8^2}=\sqrt{100}=10. \]
+La plataforma de descanso, a mitad del cable, va en $M=\left(\frac{-1+5}{2},\frac{2+10}{2}\right)=(2,6)$.
+\end{ejemplo}
+
+\subsection{Dividir un segmento en una razón}
+\begin{propiedad}[Promedio ponderado]
+Si en $A$ hay un peso $m_A$ y en $B$ un peso $m_B$, el punto de equilibrio es
+\[ G=\frac{m_A\,A+m_B\,B}{m_A+m_B}, \]
+que divide el segmento de modo que $\dfrac{AG}{GB}=\dfrac{m_B}{m_A}$: el apoyo queda más cerca del lado pesado.
+Con pesos iguales, $G$ es el punto medio.
+\end{propiedad}
+
+\begin{ejemplo}[Del video: el balancín]
+$A(1,1)$ pesa el doble que $B(7,4)$. Entonces
+$G=\dfrac{2(1,1)+(7,4)}{3}=\left(\dfrac{9}{3},\dfrac{6}{3}\right)=(3,2)$: un tercio del camino desde $A$.
+\end{ejemplo}
+
+\begin{ejemplo}[Del video: el anillo]
+Un anillo se desliza por el eje $y$ amarrado a $(-3,0)$ y a $(1,4)$. ¿Dónde miden lo mismo las dos cuerdas? Con
+$P(0,y)$ se igualan los cuadrados de las distancias:
+\[ 9+y^2=1+(y-4)^2 \iff 9+y^2=y^2-8y+17 \iff 8y=8 \iff y=1. \]
+El anillo queda en $(0,1)$. Al igualar cuadrados, $y^2$ se cancela y queda una ecuación lineal.
+\end{ejemplo}
+
+%=====================================================================
+\clearpage
+\nivel{1-4}{La recta: pendiente, paralelas y perpendiculares}
+
+\begin{definicion}[Pendiente]
+La \clave{pendiente} de la recta que pasa por $P_1(x_1,y_1)$ y $P_2(x_2,y_2)$, con $x_1\ne x_2$, es
+\[ m=\frac{\text{subida}}{\text{avance}}=\frac{y_2-y_1}{x_2-x_1}. \]
+Si $m>0$ la recta sube, si $m<0$ baja y si $m=0$ es horizontal. Una recta vertical no tiene pendiente.
+\end{definicion}
+
+\begin{ejemplo}[Del video]
+Por $(-1,3)$ y $(2,-3)$: la recta avanza $3$ y baja $6$, así que $m=\dfrac{-3-3}{2-(-1)}=\dfrac{-6}{3}=-2$.
+\end{ejemplo}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+Forma & Ecuación & Para el ejemplo ($m=-2$, punto $(-1,3)$)\\ \midrule
+Punto-pendiente & $y-y_1=m(x-x_1)$ & $y-3=-2(x+1)$\\
+Pendiente-intercepto & $y=mx+b$ ($b$: corte con el eje $y$) & $y=-2x+1$\\
+General & $Ax+By+C=0$ & $2x+y-1=0$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+Las tres formas describen la misma recta. De la general se lee la pendiente despejando $y$: si $B\ne0$, $m=-A/B$.
+
+\begin{propiedad}[Paralelas y perpendiculares]
+Sean $L_1$ y $L_2$ rectas no verticales de pendientes $m_1$ y $m_2$.
+\[ L_1\parallel L_2 \iff m_1=m_2, \qquad\qquad L_1\perp L_2 \iff m_1\,m_2=-1\ \ \left(m_2=-\tfrac{1}{m_1}\right). \]
+Una recta horizontal $y=c$ y una vertical $x=k$ siempre son perpendiculares.
+\end{propiedad}
+
+\begin{minipage}[c]{0.52\linewidth}\tcbset{zbase/.append style={unbreakable}}
+\begin{ejemplo}[Del video: rieles y un cuarto de vuelta]
+La paralela a $y=-2x+1$ por $(0,4)$ conserva el escalón (avanza $1$, baja $2$): $y=-2x+4$.
+
+Al girar la recta $90^\circ$ alrededor de $(0,4)$, el avance se vuelve subida: ahora avanza $2$ y sube $1$. La
+perpendicular es $y=\tfrac12x+4$, y en efecto $(-2)\cdot\tfrac12=-1$.
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.44\linewidth}\centering
+\begin{tikzpicture}[scale=0.55]
+  \draw[zline,line width=0.3pt] (-3.5,-2.5) grid (4.5,6.5);
+  \draw[zink,-{Stealth[length=2mm]}] (-3.5,0)--(4.8,0) node[right,font=\footnotesize] {$x$};
+  \draw[zink,-{Stealth[length=2mm]}] (0,-2.5)--(0,6.8) node[above,font=\footnotesize] {$y$};
+  \draw[zmute,line width=1.1pt] (-2.5,6)--(1.5,-2);
+  \draw[zaccent,line width=1.4pt] (-1,6)--(3,-2);
+  \draw[zcoral,line width=1.4pt] (-3.4,2.3)--(4,6);
+  \draw[zcoral,line width=0.6pt] (0.179,4.089)--(0.268,3.910)--(0.089,3.821);
+  \node[punto] at (0,4) {};
+  \node[font=\footnotesize,text=zmute,anchor=south] at (-2.5,6) {$y=-2x+1$};
+  \node[font=\footnotesize,text=zaccent,anchor=north] at (3,-2) {$y=-2x+4$};
+  \node[font=\footnotesize,text=zcoral,anchor=south east] at (4.4,6.1) {$y=\tfrac12x+4$};
+  \node[font=\scriptsize,text=zmute,anchor=north east] at (0,0) {$0$};
+\end{tikzpicture}
+\end{minipage}
+
+\begin{ojo}[Errores frecuentes con la pendiente]
+\begin{itemize}
+\item Poner las $x$ arriba: eso da el recíproco de la pendiente.
+\item Restar en distinto orden arriba y abajo: el signo sale cambiado. Siempre «segundo menos primero» en los dos.
+\item Creer que la perpendicular solo cambia el signo: también hay que tomar el recíproco.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\repaso
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}l L@{}}
+\toprule
+Idea & Fórmula o regla\\ \midrule
+Orden y negativos & $a<b,\ c<0\ \Rightarrow\ ac>bc$ (multiplicar o dividir por un negativo voltea)\\
+Intervalos & $[\ ]$ incluye el extremo, $(\ )$ lo excluye; $\pm\infty$ siempre con paréntesis\\
+Tabla de signos & ceros de cada factor $\to$ tramos $\to$ un valor de prueba por tramo\\
+Valor absoluto & $\abs{x-a}$ = distancia entre $x$ y $a$\\
+«Menor que» (perro) & $\abs{x-a}<r\iff a-r<x<a+r$: un intervalo\\
+«Mayor que» (gato) & $\abs{x-a}>r\iff x<a-r$ o $x>a+r$: dos semirrectas\\
+Desigualdad triangular & $\abs{a+b}\le\abs{a}+\abs{b}$\\
+Distancia & $d=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}$\\
+Punto medio y razón & $M=\frac{P_1+P_2}{2}$, \quad $G=\frac{m_AA+m_BB}{m_A+m_B}$\\
+Pendiente y rectas & $m=\frac{y_2-y_1}{x_2-x_1}$; \ $y-y_1=m(x-x_1)$; \ $\parallel$: $m_1=m_2$; \ $\perp$: $m_1m_2=-1$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{ojo}[Errores frecuentes]
+\begin{itemize}
+\item Olvidar voltear la desigualdad al dividir entre un negativo.
+\item Incluir en la solución el cero de un denominador.
+\item Leer $\abs{x+3}$ como «distancia a $3$» en vez de «distancia a $-3$».
+\item Escribir $\abs{x-a}>r$ como $a-r>x>a+r$: son \emph{dos} pedazos unidos con «o».
+\item Confundir el punto medio (promedio) con la mitad de la distancia.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\taller
+\begin{ejercicios}
+\item Escribe cada conjunto en notación de intervalo y dibújalo en la recta.
+  \begin{ejercicios}
+  \item $\{x\in\R\tq -3\le x<1\}$ \qquad (b) $\{x\in\R\tq x>4\}$ \qquad (c) $[-2,5]\cap(0,7)$
+  \end{ejercicios}
+\item Resuelve y expresa la solución como intervalo.
+  \begin{ejercicios}
+  \item $\dfrac{x+1}{2}-\dfrac{x-3}{3}<1$ \qquad (b) $-1\le\dfrac{2-3x}{4}<2$
+  \end{ejercicios}
+\item Resuelve con una tabla de signos.
+  \begin{ejercicios}
+  \item $x^2-x-6<0$ \qquad (b) $\dfrac{2x-1}{x+3}\ge 1$ \ (pasa todo a un lado antes de hacer la tabla)
+  \end{ejercicios}
+\item Resuelve.
+  \begin{ejercicios}
+  \item $\abs{3x+2}<7$ \qquad (b) $\abs{x-4}\ge 1.5$ \qquad (c) $\abs{1-2x}=5$
+  \end{ejercicios}
+\item Escribe cada conjunto como una desigualdad con valor absoluto de la forma $\abs{x-c}\ \square\ r$.
+  \begin{ejercicios}
+  \item $[-7,3]$ \qquad (b) $(-\infty,0)\cup(6,\infty)$
+  \end{ejercicios}
+\item Un termostato mantiene un laboratorio a una temperatura $T$ (en \si{\degreeCelsius}) que cumple $\abs{T-21}\le 1.5$.
+  ¿Entre qué valores se mueve la temperatura en grados Fahrenheit, si $F=\tfrac95T+32$?
+\item Sean $A(-2,4)$ y $B(3,-8)$.
+  \begin{ejercicios}
+  \item Halla la longitud de $\overline{AB}$ y su punto medio.
+  \item Demuestra que el triángulo de vértices $P(1,1)$, $Q(5,3)$ y $R(3,7)$ es isósceles y rectángulo. ¿En qué vértice está el ángulo recto?
+  \end{ejercicios}
+\item Halla el punto $P$ del segmento que va de $A(-1,7)$ a $B(8,-5)$ que está al doble de distancia de $B$ que de $A$.
+\item Rectas.
+  \begin{ejercicios}
+  \item Halla la ecuación de la recta que pasa por $(-2,5)$ y $(4,-1)$.
+  \item Halla la recta perpendicular a $2x-3y=6$ que pasa por $(2,-1)$; escríbela en forma general.
+  \item Halla la paralela a $2x-3y=6$ que pasa por el origen.
+  \end{ejercicios}
+\item Un plan de datos A cobra \$20\,000 fijos más \$800 por cada gigabyte; el plan B cobra \$35\,000 fijos más \$500 por gigabyte.
+  \begin{ejercicios}
+  \item Escribe el costo de cada plan como función lineal de los gigabytes $x$ y dibuja las dos rectas en un mismo plano.
+  \item ¿Qué significan la pendiente y el corte con el eje vertical en cada caso?
+  \item Plantea y resuelve una inecuación: ¿para cuántos gigabytes es más barato el plan B? Señálalo en la gráfica.
+  \end{ejercicios}
+\end{ejercicios}
+
+\respuestas
+\begin{respuestascortas}
+\begin{soluciones}
+\item (a) $[-3,1)$ \ (b) $(4,\infty)$ \ (c) $(0,5]$.
+\item (a) Por $6$: $3x+3-2x+6<6$, $x<-3$: $(-\infty,-3)$. (b) $-4\le 2-3x<8\Rightarrow -6\le -3x<6\Rightarrow -2<x\le 2$: $(-2,2]$.
+\item (a) $(x-3)(x+2)<0$: $(-2,3)$. (b) $\dfrac{x-4}{x+3}\ge 0$: $(-\infty,-3)\cup[4,\infty)$.
+\item (a) $-9<3x<5$: $\left(-3,\tfrac53\right)$. (b) $(-\infty,2.5]\cup[5.5,\infty)$. (c) $x=-2$ o $x=3$.
+\item (a) Centro $-2$, radio $5$: $\abs{x+2}\le 5$. (b) Centro $3$, radio $3$: $\abs{x-3}>3$.
+\item $19.5\le T\le 22.5$, así que $67.1\le F\le 72.5$ (en ${}^\circ$F).
+\item (a) $d=\sqrt{25+144}=13$; $M\left(\tfrac12,-2\right)$. (b) $PQ^2=QR^2=20$ y $PR^2=40=20+20$: isósceles y rectángulo en $Q$.
+\item $P=\dfrac{2A+B}{3}=(2,3)$.
+\item (a) $m=-1$: $y=-x+3$. (b) $m=-\tfrac32$: $y=-\tfrac32x+2$, o sea $3x+2y-4=0$. (c) $y=\tfrac23x$.
+\item (a) $C_A=20\,000+800x$, $C_B=35\,000+500x$. (b) Pendiente: precio por gigabyte; corte: cargo fijo. (c) $35\,000+500x<20\,000+800x\iff x>50$: más de $50$ gigabytes (las rectas se cortan en $(50,\,60\,000)$).
+\end{soluciones}
+\end{respuestascortas}
+
+\end{document}

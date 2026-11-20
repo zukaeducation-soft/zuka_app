@@ -1,0 +1,24 @@
+{
+ "scene": "S06_Cierre",
+ "duration": 20.533,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Repasemos",
+   "hold": 12.333
+  },
+  {
+   "time": 12.933,
+   "title": "Cierre",
+   "hold": 19.533
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.933,
+   "text": "La regla de tres arma una tabla, decide si es directa o inversa y resuelve la proporción. La compuesta cambia una magnitud a la vez.",
+   "fox": false
+  }
+ ]
+}

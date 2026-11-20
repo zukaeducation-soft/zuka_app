@@ -11,6 +11,39 @@
         ],
         "createdAt": "2026-11-12T16:19:49.523Z",
         "reason": "Claude: el estilo Tablet Sketch Explainer que pidió el usuario define el lienzo como papel crema (STYLE.md de lemo-opuscar); no es una página de interfaz"
+      },
+      {
+        "rule": "overused-font",
+        "value": "plus jakarta sans",
+        "createdAt": "2026-11-13T20:05:53.353Z",
+        "reason": "Claude: fuente establecida de toda la app Zuka (styles.css --font) antes de esta sesión; la portada la reutiliza a propósito"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "css/styles.css"
+        ],
+        "createdAt": "2026-11-14T02:25:43.788Z",
+        "reason": "Claude: barra del rótulo .ex-head, anterior a esta sesión (commit 23334e1) e intencional: copia el rótulo con barrita de los videos (spec 2026-11-13-juegos-estilo-video)"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-17T21:41:29.291Z",
+        "reason": "Claude: es el marco #app (borde lateral de 1 px en escritorio y fondo); la barra de arriba y el menu van pegados a proposito y traen su propio relleno. Anterior a esta sesion"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-17T21:41:29.471Z",
+        "reason": "Claude: el usuario pidio estilo neon en su encargo (spec 2026-11-27-interfaz-red); el brillo solo va en lo que toca ahora"
       }
     ]
   }

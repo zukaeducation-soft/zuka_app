@@ -1,0 +1,31 @@
+{
+ "scene": "S04_Cambio",
+ "duration": 40.467,
+ "marks": [
+  {
+   "time": 0,
+   "title": "El cambio porcentual",
+   "hold": 39.867
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 12.233,
+   "text": "El pasaje del bus subió de dos mil quinientos a tres mil pesos. Para saber en qué porcentaje subió, se compara la subida con el precio de antes.",
+   "fox": true
+  },
+  {
+   "start": 12.233,
+   "end": 23.8,
+   "text": "La subida fue de quinientos, y se divide entre el precio de antes: quinientos entre dos mil quinientos es cero punto dos. Subió el veinte por ciento.",
+   "fox": false
+  },
+  {
+   "start": 23.8,
+   "end": 39.467,
+   "text": "Pero si el pasaje volviera a bajar de tres mil a dos mil quinientos, la bajada sería de quinientos sobre tres mil: un dieciséis punto siete por ciento. No es simétrico, porque cambió el precio de antes.",
+   "fox": false
+  }
+ ]
+}

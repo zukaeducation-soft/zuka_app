@@ -1,0 +1,42 @@
+{
+ "scene": "S01_Proporcion",
+ "duration": 42.0,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Qué es una proporción",
+   "hold": 28.667
+  },
+  {
+   "time": 29.267,
+   "title": "Extremos y medios",
+   "hold": 41.4
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.233,
+   "text": "Una receta de pan lleva cuatro huevos por cada seis tazas de harina. Otra receta, más grande, lleva diez huevos por quince tazas.",
+   "fox": true
+  },
+  {
+   "start": 11.233,
+   "end": 21.4,
+   "text": "Las dos razones valen lo mismo: cuatro sextos y diez quinceavos se simplifican a dos tercios. Por eso los dos panes saben igual.",
+   "fox": false
+  },
+  {
+   "start": 21.4,
+   "end": 28.267,
+   "text": "Cuando escribimos que dos razones son iguales, tenemos una proporción.",
+   "fox": false
+  },
+  {
+   "start": 29.267,
+   "end": 41.0,
+   "text": "En general se escribe a es a b como c es a d. Los de afuera, a y d, se llaman extremos. Los de adentro, b y c, se llaman medios.",
+   "fox": false
+  }
+ ]
+}

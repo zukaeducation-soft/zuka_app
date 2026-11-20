@@ -1,0 +1,43 @@
+{
+ "scene": "S04_Receta",
+ "duration": 30.267,
+ "marks": [
+  {
+   "time": 0,
+   "title": "La receta en cuatro pasos",
+   "hold": 29.667
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 2.4,
+   "text": "Resumamos la receta de la regla de tres en cuatro pasos.",
+   "fox": true
+  },
+  {
+   "start": 2.4,
+   "end": 9.067,
+   "text": "Arma la tabla: una columna por magnitud, una fila por situación.",
+   "fox": false
+  },
+  {
+   "start": 9.067,
+   "end": 17.4,
+   "text": "Decide: si una se duplica, la otra se duplica (directa) o se reduce a la mitad (inversa).",
+   "fox": false
+  },
+  {
+   "start": 17.4,
+   "end": 23.733,
+   "text": "Directa: iguala las razones. Inversa: iguala los productos.",
+   "fox": false
+  },
+  {
+   "start": 23.733,
+   "end": 29.267,
+   "text": "Despeja x y revisa que el resultado tenga sentido.",
+   "fox": false
+  }
+ ]
+}

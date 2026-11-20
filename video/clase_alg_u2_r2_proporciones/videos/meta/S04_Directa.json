@@ -1,0 +1,37 @@
+{
+ "scene": "S04_Directa",
+ "duration": 43.567,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Directamente proporcionales",
+   "hold": 42.967
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.167,
+   "text": "Ahora miremos cantidades que cambian juntas. Cada cuaderno cuesta dos mil quinientos pesos. Si compras más cuadernos, pagas más.",
+   "fox": true
+  },
+  {
+   "start": 11.167,
+   "end": 22.0,
+   "text": "Si los cuadernos se duplican, el precio se duplica. Si se triplican, el precio se triplica. Por eso se llaman directamente proporcionales.",
+   "fox": false
+  },
+  {
+   "start": 22.0,
+   "end": 33.6,
+   "text": "Lo que no cambia es el cociente. El precio entre los cuadernos da siempre dos mil quinientos. Esa es la constante de proporcionalidad, que se llama k.",
+   "fox": false
+  },
+  {
+   "start": 33.6,
+   "end": 42.567,
+   "text": "En una gráfica, los puntos quedan sobre una recta que pasa por el origen: cero cuadernos, cero pesos.",
+   "fox": false
+  }
+ ]
+}

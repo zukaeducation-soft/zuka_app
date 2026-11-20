@@ -1,0 +1,75 @@
+1
+00:00:08,900 --> 00:00:10,700
+La expresión por ciento quiere decir de cada cien. Mira esta cuadrícula de cien casillas.
+
+2
+00:00:10,700 --> 00:00:17,733
+Si se pintan treinta y cinco de las cien, se pintó el treinta y cinco por ciento.
+
+3
+00:00:17,733 --> 00:00:29,967
+Un porcentaje es una fracción con denominador cien. Y como aprendiste con los racionales, también se escribe como decimal: cero punto treinta y cinco.
+
+4
+00:00:30,967 --> 00:00:38,633
+Algunos porcentajes conviene reconocerlos al instante, porque son fracciones muy conocidas.
+
+5
+00:00:38,633 --> 00:00:47,433
+Por ejemplo, la mitad de algo es su cincuenta por ciento, y el todo completo es el cien por ciento.
+
+6
+00:00:49,430 --> 00:00:59,530
+En un curso de veinticinco estudiantes, nueve usan gafas. Como en las razones, la parte es al todo como nueve es a veinticinco.
+
+7
+00:00:59,530 --> 00:01:10,563
+Para hablar en porcentaje, el todo tiene que ser cien. Cuatro cursos iguales suman cien estudiantes, y en ellos hay treinta y seis con gafas.
+
+8
+00:01:10,563 --> 00:01:19,430
+Es la misma razón, escalada: se multiplica arriba y abajo por cuatro, igual que con las razones equivalentes.
+
+9
+00:01:19,430 --> 00:01:30,263
+También se puede dividir: nueve entre veinticinco es cero punto treinta y seis, y en centésimas eso es treinta y seis por ciento.
+
+10
+00:01:32,260 --> 00:01:42,760
+Todo problema de porcentajes es una proporción: la parte es al todo como el porcentaje es a cien. Es la regla de tres que ya conoces.
+
+11
+00:01:42,760 --> 00:01:50,860
+Primera pregunta: cuánto es el quince por ciento de ochenta. El todo es ochenta y falta la parte.
+
+12
+00:01:50,860 --> 00:02:00,860
+De cabeza también sale: el diez por ciento de ochenta es ocho, el cinco por ciento es la mitad, cuatro. Juntos, doce.
+
+13
+00:02:01,860 --> 00:02:10,893
+Segunda pregunta: qué porcentaje es dieciocho de setenta y dos. Ahora se conocen la parte y el todo, y falta p.
+
+14
+00:02:10,893 --> 00:02:17,993
+Dieciocho es la cuarta parte de setenta y dos: el veinticinco por ciento.
+
+15
+00:02:18,993 --> 00:02:26,360
+Tercera pregunta: treinta es el cuarenta por ciento de un número. Ahora falta el todo.
+
+16
+00:02:26,360 --> 00:02:36,393
+Comprobación: el cuarenta por ciento de setenta y cinco es setenta y cinco por cero punto cuatro, treinta. Sí cuadra.
+
+17
+00:02:38,390 --> 00:02:49,423
+Un porcentaje puede pasar de cien. El cien por ciento de cuarenta es cuarenta, y el ciento cincuenta por ciento es eso más la mitad: sesenta.
+
+18
+00:02:49,423 --> 00:03:00,857
+Y puede ser menor que uno. El uno por ciento de dos mil es veinte; el cero punto cinco por ciento es la mitad de eso: diez.
+
+19
+00:03:02,860 --> 00:03:13,993
+Un porcentaje es una razón con el todo igual a cien, y la proporción parte entre todo igual a p entre cien resuelve cualquier pregunta.

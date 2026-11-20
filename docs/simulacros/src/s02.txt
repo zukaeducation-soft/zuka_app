@@ -1,0 +1,512 @@
+== LECTURA
+## Texto Uno
+p: A las seis y cuarto de la mañana, cuando suena el primer timbre en miles de colegios, buena parte de los estudiantes de bachillerato está presente solo de cuerpo. Los profesores lo saben: las dos primeras horas de la jornada se dictan ante una audiencia que bosteza, apoya la cabeza en el brazo y responde con monosílabos. Durante mucho tiempo se explicó esa escena con una palabra: pereza.
+p: La biología ofrece otra explicación. Al llegar la pubertad, el reloj interno que regula el sueño se retrasa. La melatonina, la hormona que anuncia al cuerpo que es hora de dormir, empieza a liberarse hasta dos horas más tarde que en la niñez. Un adolescente que se acuesta a las diez no se está portando bien: está mirando el techo. Su cuerpo no le pedirá sueño hasta cerca de la medianoche y, sin embargo, necesita entre ocho y diez horas de descanso, más que un adulto.
+p: La cuenta no cuadra. Si se duerme a las doce y el colegio empieza antes de las siete, el estudiante acumula cada noche una deuda de dos o tres horas. <<No es un problema de disciplina sino de horario>>, afirma el neurólogo Esteban Arcila, quien dirige una clínica del sueño. <<Les pedimos que aprendan álgebra a una hora en que su cerebro, biológicamente, sigue en la noche>>.
+p: Las consecuencias van más allá del bostezo. Durante el sueño profundo el cerebro repasa lo aprendido en el día y decide qué conserva; quien duerme poco estudia, en cierto modo, para olvidar. La falta de sueño se asocia además con irritabilidad, con mayor consumo de bebidas azucaradas y con más accidentes entre los jóvenes que ya conducen. Aquella, sin embargo, es la que más inquieta a los maestros, porque se confunde fácilmente con mala actitud.
+p: Algunos colegios han ensayado una medida simple: empezar más tarde. En una institución que corrió el inicio de clases de las seis y media a las ocho, las llegadas tarde se redujeron a la mitad en un semestre y las notas de las primeras horas subieron. El cambio no fue gratis: hubo que reorganizar las rutas de transporte y varios padres, que entran a trabajar temprano, protestaron porque ya no podían dejar a sus hijos de camino.
+p: Arcila reconoce que el horario no lo explica todo. La pantalla del celular, encendida en la cama, engaña al cerebro con una luz parecida a la del día y retrasa todavía más el sueño. Pero insiste en el orden de las responsabilidades: <<Podemos pedirles que apaguen el teléfono. Lo que no podemos es pedirles que cambien de biología>>.
+src: Texto elaborado para este simulacro.
+
+q: El tema central del texto Uno es:
+@ El desajuste entre el reloj biológico de los adolescentes y el horario escolar
+@ Los efectos del teléfono celular en el rendimiento académico
+@ La pereza como principal causa del bajo rendimiento en bachillerato
+@ Las protestas de los padres por los cambios en la jornada escolar
+q: La expresión <<presente solo de cuerpo>> (párrafo 1) indica que los estudiantes:
+@ Asisten a clase, pero no logran estar atentos
+@ Llegan tarde a la primera hora de clase
+@ Se quedan dormidos en sus casas
+@ Participan únicamente en las actividades físicas
+q: El párrafo 1 cumple la función de:
+@ Presentar una escena cotidiana y la explicación que tradicionalmente se le ha dado
+@ Exponer la tesis del neurólogo Esteban Arcila
+@ Criticar a los profesores que dictan las primeras horas
+@ Resumir las conclusiones a las que llega el texto
+q: Según el párrafo 2, la melatonina:
+@ Le indica al organismo que ha llegado el momento de dormir
+@ Deja de producirse cuando comienza la pubertad
+@ Provoca que los adolescentes necesiten menos descanso
+@ Mantiene despierto al adolescente hasta la medianoche
+q: Con la frase <<no se está portando bien: está mirando el techo>> (párrafo 2), el autor quiere decir que:
+@ Acostarse temprano no garantiza que el adolescente se duerma
+@ Los adolescentes obedientes suelen sufrir de insomnio
+@ Mirar el techo es una buena técnica para conciliar el sueño
+@ Los padres no deberían enviar a sus hijos a la cama
+q: La expresión <<La cuenta no cuadra>> (párrafo 3) se refiere a la diferencia entre:
+@ Las horas de sueño que el adolescente necesita y las que puede dormir
+@ La hora de entrada de los estudiantes y la de los profesores
+@ El sueño de los niños y el de los adultos
+@ Las notas de las primeras horas y las de las últimas
+q: En el párrafo 3, la palabra <<\sub{deuda}>> se usa con el sentido de:
+@ Faltante de sueño que se va acumulando
+@ Obligación económica con el colegio
+@ Castigo por llegar tarde a clase
+@ Tarea que queda pendiente para la noche
+q: La postura de Esteban Arcila en el párrafo 3 puede resumirse así:
+@ El horario escolar no se ajusta a la biología de los adolescentes
+@ Los adolescentes necesitan más disciplina a la hora de acostarse
+@ El álgebra debería enseñarse en los últimos grados
+@ Los colegios deberían ofrecer clases en la noche
+q: La afirmación <<quien duerme poco estudia, en cierto modo, para olvidar>> (párrafo 4) significa que:
+@ Sin suficiente sueño, el cerebro no fija bien lo aprendido
+@ Los estudiantes trasnochan para olvidar sus problemas
+@ Es mejor no estudiar cuando se tiene sueño
+@ Lo que se estudia de noche se recuerda menos que lo que se estudia de día
+q: En el párrafo 4, la palabra <<\sub{Aquella}>> alude a:
+@ La irritabilidad
+@ La falta de sueño
+@ La mala actitud
+@ El consumo de bebidas azucaradas
+q: Según el párrafo 4, son efectos asociados a la falta de sueño, EXCEPTO:
+@ La pérdida del apetito
+@ La dificultad para conservar lo aprendido
+@ El mayor riesgo de accidentes
+@ La irritabilidad
+q: Respecto a los párrafos anteriores, el párrafo 5:
+@ Presenta una posible solución junto con sus dificultades
+@ Refuta con cifras la explicación biológica
+@ Repite los argumentos del neurólogo
+@ Describe un problema distinto al del sueño
+q: La oración <<El cambio no fue gratis>> (párrafo 5) da a entender que la medida:
+@ Trajo consigo algunos inconvenientes
+@ Exigió que los padres pagaran más
+@ Fracasó a los pocos meses
+@ Fue financiada por el colegio
+q: De acuerdo con el párrafo 5, el cambio de horario tuvo las siguientes consecuencias, EXCEPTO:
+@ Aumentó la cantidad de horas de clase
+@ Disminuyeron las llegadas tarde
+@ Mejoraron las notas de las primeras horas
+@ Obligó a modificar las rutas de transporte
+q: Algunos padres protestaron por la medida (párrafo 5) porque:
+@ El nuevo horario chocaba con su jornada laboral
+@ Consideraban que sus hijos dormirían demasiado
+@ No estaban de acuerdo con la explicación biológica
+@ Las notas de sus hijos habían bajado
+q: En la frase <<\sub{engaña} al cerebro con una luz parecida a la del día>> (párrafo 6), la palabra subrayada significa:
+@ Confunde
+@ Traiciona
+@ Entretiene
+@ Daña
+q: Con la cita final (párrafo 6), Arcila da a entender que:
+@ Es más razonable ajustar el horario que exigir algo imposible a los jóvenes
+@ El celular no tiene ninguna influencia sobre el sueño
+@ Los adolescentes no tienen ninguna responsabilidad en el problema
+@ La biología de los adolescentes cambiará con el tiempo
+q: De la información del párrafo 2 se puede inferir que:
+@ Un niño de ocho años siente sueño más temprano que un joven de quince
+@ Un adulto necesita más horas de sueño que un adolescente
+@ Los adolescentes producen más melatonina que los niños
+@ El reloj interno se adelanta al llegar a la pubertad
+q: Frente a la explicación de la <<pereza>> (párrafo 1), el autor del texto:
+@ La considera insuficiente
+@ La defiende con argumentos biológicos
+@ La atribuye al neurólogo Arcila
+@ La ignora por completo
+q: Una situación semejante a la medida descrita en el párrafo 5 sería:
+@ Una empresa que organiza los turnos según las horas en que sus empleados rinden más
+@ Un colegio que sanciona con trabajo extra a quienes llegan tarde
+@ Una fábrica que alarga la jornada para aumentar la producción
+@ Un hospital que prohíbe el uso de celulares a sus pacientes
+q: De los siguientes hallazgos, el que más debilitaría la propuesta de empezar las clases más tarde es:
+@ En los colegios que retrasaron la entrada, los estudiantes terminaron acostándose todavía más tarde
+@ Los adolescentes que duermen nueve horas obtienen mejores notas
+@ La luz de las pantallas retrasa la liberación de melatonina
+@ Las rutas de transporte pueden reorganizarse sin mayores costos
+
+## Texto Dos
+p: Presumir de dormir poco se volvió una forma de elegancia. El empresario que se levanta a las cuatro, la estudiante que <<amanece>> terminando un trabajo, el político que asegura que con cinco horas le basta: todos cuentan su desvelo como quien enseña una medalla. Dormir, en cambio, tiene mala prensa. Al que duerme ocho horas se le mira con la misma sospecha que al que almuerza despacio.
+p: La idea es antigua, pero se endureció cuando la luz eléctrica volvió opcional la noche. Antes de ella, la oscuridad imponía el descanso a ricos y pobres por igual. Después, cada hora de sueño empezó a parecer una hora robada a la producción. No es casual que el refrán diga que <<al que madruga Dios le ayuda>> y que no exista ninguno en favor del que se acuesta temprano.
+p: El problema es que el cuerpo no leyó el refranero. Una persona que lleva diecinueve horas despierta comete errores parecidos a los de alguien que ha bebido. Aun así, nadie llegaría a una reunión jactándose de estar ebrio, mientras que llegar trasnochado se interpreta como prueba de compromiso. Hemos convertido un deterioro en virtud.
+p: Tampoco se trata de moralizar al revés y repartir culpas a los desvelados. Muchos no eligen sus noches: la enfermera de turno, el vigilante, la madre que termina a medianoche lo que el día no le dejó hacer. Para ellos el sueño no es un asunto de voluntad sino de condiciones. Defender el descanso es, por eso, menos un consejo de salud que una discusión sobre cómo repartimos el tiempo.
+p: Quizá el primer paso sea modesto: dejar de aplaudir. La próxima vez que alguien anuncie con orgullo que casi no durmió, podríamos responderle lo mismo que a quien confiesa que no ha comido: <<Qué pena, ojalá hoy puedas>>.
+src: Texto elaborado para este simulacro.
+
+## Preguntas del Texto Dos
+q: La comparación <<como quien enseña una medalla>> (párrafo 1) indica que las personas mencionadas hablan de su desvelo con:
+@ Orgullo
+@ Vergüenza
+@ Preocupación
+@ Indiferencia
+q: La expresión <<tiene mala prensa>> (párrafo 1) significa que dormir:
+@ Está mal visto
+@ Aparece poco en los periódicos
+@ Es perjudicial para la salud
+@ Resulta difícil para muchas personas
+q: La comparación con <<el que almuerza despacio>> (párrafo 1) sugiere que en nuestra sociedad:
+@ Se desconfía de quien no se muestra apurado
+@ Comer despacio y dormir bien son señales de riqueza
+@ Las personas saludables despiertan envidia
+@ Almorzar rápido ayuda a dormir mejor
+q: Según el párrafo 2, la llegada de la luz eléctrica:
+@ Permitió prolongar la actividad en la noche y con ello cambió la valoración del sueño
+@ Hizo que ricos y pobres durmieran por fin la misma cantidad de horas
+@ Dio origen al refrán <<al que madruga Dios le ayuda>>
+@ Aumentó el número de horas que las personas dedican a dormir
+q: La mención del refrán en el párrafo 2 sirve para:
+@ Mostrar que la cultura popular premia al que madruga y no al que descansa
+@ Demostrar que madrugar es más productivo que trasnochar
+@ Recomendar a los lectores que se acuesten temprano
+@ Explicar el origen religioso del trabajo nocturno
+q: Con la frase <<el cuerpo no leyó el refranero>> (párrafo 3) el autor afirma que:
+@ El organismo no se rige por las creencias de la sociedad
+@ Las personas que duermen poco no conocen los refranes
+@ Los refranes sobre el sueño carecen de valor literario
+@ El cuerpo humano se adapta con facilidad a cualquier horario
+q: La comparación entre el trasnochado y el ebrio (párrafo 3) busca:
+@ Evidenciar la incoherencia con que se juzgan dos deterioros parecidos
+@ Demostrar que quienes trasnochan suelen consumir alcohol
+@ Proponer que se sancione a quien llegue trasnochado al trabajo
+@ Defender a quienes asisten ebrios a las reuniones
+q: En el párrafo 3, la palabra <<\sub{jactándose}>> significa:
+@ Presumiendo
+@ Disculpándose
+@ Quejándose
+@ Dudando
+q: El párrafo 4 cumple la función de:
+@ Matizar la crítica para no culpar a quienes trasnochan por obligación
+@ Contradecir lo dicho en los tres primeros párrafos
+@ Presentar cifras sobre los trabajadores nocturnos
+@ Proponer una solución definitiva al problema del desvelo
+q: Son ejemplos de personas que <<no eligen sus noches>> (párrafo 4), EXCEPTO:
+@ El empresario que se levanta a las cuatro
+@ La enfermera de turno
+@ El vigilante
+@ La madre que termina sus labores a medianoche
+q: La afirmación de que defender el descanso es <<menos un consejo de salud que una discusión sobre cómo repartimos el tiempo>> (párrafo 4) implica que el sueño es un asunto:
+@ Social y no solamente individual
+@ Médico y no económico
+@ Privado, que cada cual debe resolver
+@ Menos importante de lo que se cree
+q: La respuesta que el autor propone en el párrafo 5 busca que el desvelo sea tratado como:
+@ Una carencia y no como un mérito
+@ Una falta de educación
+@ Un motivo de burla
+@ Una enfermedad que requiere tratamiento
+q: La intención principal del autor del texto Dos es:
+@ Cuestionar el prestigio social que tiene dormir poco
+@ Explicar los mecanismos biológicos del sueño
+@ Enseñar técnicas para descansar mejor
+@ Narrar la historia de la luz eléctrica
+
+## Preguntas sobre los Textos Uno y Dos
+q: Los dos textos coinciden en que:
+@ Dormir poco deteriora el desempeño de las personas
+@ Los colegios deberían empezar sus clases más tarde
+@ La luz eléctrica es la causa principal del desvelo
+@ Quienes trasnochan lo hacen por decisión propia
+q: El texto Uno se apoya principalmente en \bl, mientras que el texto Dos lo hace en \bl.
+@ Datos y la voz de un experto / reflexiones y comparaciones
+@ Refranes populares / estadísticas escolares
+@ Anécdotas personales / experimentos de laboratorio
+@ Opiniones de padres de familia / testimonios de estudiantes
+q: La idea del texto Dos de que para muchos el sueño <<no es un asunto de voluntad sino de condiciones>> se corresponde, en el texto Uno, con:
+@ La frase de Arcila: <<No es un problema de disciplina sino de horario>>
+@ La explicación tradicional de la pereza
+@ La protesta de los padres de familia
+@ La advertencia sobre la pantalla del celular
+q: Un rector afirma: <<Si los muchachos se acostaran temprano, no tendríamos este problema>>. Esta opinión:
+@ Pasa por alto lo expuesto en el párrafo 2 del texto Uno
+@ Coincide con la tesis central del texto Dos
+@ Resume la postura de Esteban Arcila en el texto Uno
+@ Se apoya en los resultados descritos en el párrafo 5 del texto Uno
+q: De acuerdo con el párrafo 4 del texto Uno, la estudiante que <<amanece>> terminando un trabajo (texto Dos) probablemente:
+@ Recordará menos de lo que estudió esa noche
+@ Obtendrá mejores notas por su compromiso
+@ Dormirá más horas la noche siguiente
+@ Producirá melatonina más temprano
+q: La explicación histórica de por qué dormir llegó a verse como una pérdida de tiempo es un interés del texto:
+@ Dos, pero no del Uno
+@ Uno, pero no del Dos
+@ Uno más que del Dos
+@ Uno y del Dos por igual
+
+== RAZONAMIENTO
+ctx 2: En un colegio van a programar cinco talleres, Matemáticas, Lengua, Ciencias, Arte e Historia, uno por día, de lunes a viernes. Se sabe que:
+\vi{El taller de Matemáticas es antes que el de Ciencias}
+\vi{El taller de Arte no es el lunes ni el viernes, y es antes que el de Historia}
+\vi{El taller de Lengua es justo el día siguiente al de Historia}
+\vi{El taller de Ciencias no es el jueves}
+q: De las siguientes afirmaciones, de la única que se tiene certeza es:
+@ El taller de Matemáticas es el lunes
+@ El taller de Lengua es el viernes
+@ El taller de Arte es el martes
+@ El taller de Ciencias es el viernes
+! Las programaciones posibles (lunes a viernes) son M-C-A-H-L, M-A-C-H-L y M-A-H-L-C: en todas Matemáticas es el lunes.
+q: Si el taller de Lengua es el viernes, entonces, de las siguientes afirmaciones, la única que no es posible es:
+@ El taller de Arte es el jueves
+@ El taller de Ciencias es el martes
+@ El taller de Arte es el martes
+@ El taller de Ciencias es el miércoles
+! Si Lengua es el viernes, Historia es el jueves; quedan M-C-A-H-L y M-A-C-H-L.
+q: Sobre cierta figura de cartulina se tiene certeza de que:
+\vi{Es roja o es azul}
+\vi{Si es roja, entonces es un círculo}
+\vi{Es un círculo o es un cuadrado}
+\vi{Si es un círculo, entonces es grande}
+\vi{No es grande}
+De la información anterior se puede concluir que la figura es un:
+@ Cuadrado azul
+@ Círculo azul
+@ Cuadrado rojo
+@ Círculo rojo
+! No es grande, luego no es círculo: es cuadrado. Como no es círculo, no es roja: es azul.
+q: Considere la afirmación: <<si un número natural es múltiplo de 4, entonces es múltiplo de 8>>. De los siguientes números, el único que muestra que la afirmación es falsa es:
+@ 12
+@ 16
+@ 24
+@ 10
+! Un contraejemplo debe ser múltiplo de 4 y no de 8.
+ctx 2: En una cafetería se preguntó a 80 clientes qué bebida caliente consumen. Se encontró que 50 toman café, 35 toman té y 15 no toman ninguna de las dos bebidas.
+q: La cantidad de clientes que toma café, pero no toma té, es:
+@ 30
+@ 20
+@ 35
+@ 15
+! $80-15=65$ toman alguna; $50+35-65=20$ toman las dos; $50-20=30$.
+q: Si se escoge al azar uno de los 80 clientes, la probabilidad de que tome exactamente una de las dos bebidas es:
+@ $\frac{9}{16}$
+@ $\frac{13}{16}$
+@ $\frac{1}{4}$
+@ $\frac{3}{8}$
+! Solo café 30, solo té 15: $45/80 = 9/16$.
+q: Sara, Tomás, Valeria y Nicolás están sentados alrededor de una mesa cuadrada, uno en cada lado. Cada uno toca un instrumento distinto: guitarra, piano, violín y flauta, no necesariamente en ese orden. Se sabe que:
+\vi{Quien toca el piano está sentado frente a Tomás}
+\vi{Sara y Nicolás están sentados uno junto al otro}
+\vi{Quien toca la guitarra está sentado junto a Valeria}
+\vi{Tomás no toca la flauta}
+Quien toca la guitarra es:
+@ Tomás
+@ Sara
+@ Nicolás
+@ Valeria
+! Tomás y Valeria quedan juntos, y el otro vecino de Valeria está frente a Tomás: es el pianista. El guitarrista es vecino de Valeria, así que solo puede ser Tomás.
+ctx 2: En una fábrica hay tres máquinas que transforman números. La máquina A duplica el número que recibe, la máquina B le resta 3 y la máquina C lo eleva al cuadrado. Un número puede pasar por varias máquinas, una después de otra.
+q: Si el número 5 pasa primero por la máquina A, luego por la B y finalmente por la C, el número que sale es:
+@ 49
+@ 44
+@ 47
+@ 94
+! $5\to10\to7\to49$.
+q: Un número positivo pasó primero por la máquina C, luego por la A y finalmente por la B, y al final salió el número 47. El número que entró fue:
+@ 5
+@ 7
+@ 25
+@ 4
+! $2x^2-3=47$ da $x^2=25$.
+q: El precio de un artículo aumentó un 20\% y, un mes después, el nuevo precio disminuyó un 20\%. Con respecto al precio inicial, el precio final:
+@ Disminuyó un 4\%
+@ Quedó igual
+@ Aumentó un 4\%
+@ Disminuyó un 2\%
+! $1{,}2\times0{,}8=0{,}96$.
+q: En una biblioteca, el 25\% de los libros está en inglés y el resto en español. De los libros en español, el 30\% son novelas. Si hay exactamente 420 libros en español que no son novelas, la cantidad de libros en inglés es:
+@ 200
+@ 150
+@ 180
+@ 240
+! $420$ es el 70\% de los libros en español: 600. Estos son el 75\% del total: 800. En inglés: 200.
+q: Tres hermanos se reparten una herencia en la razón $2:3:5$. Si el que más recibe obtiene 18 millones de pesos más que el que menos recibe, el valor total de la herencia, en millones de pesos, es:
+@ 60
+@ 54
+@ 90
+@ 36
+! La diferencia es de 3 partes: cada parte vale 6 y hay 10 partes.
+q: Los primeros términos de una sucesión son 2, 6, 12, 20, 30, \dots{} Si la sucesión continúa con la misma regla de formación, el término que ocupa la posición 20 es:
+@ 420
+@ 400
+@ 380
+@ 440
+! El término $n$ es $n(n+1)$.
+q: Para un número entero $n$ se define $\langle n\rangle = n^2-n$. El valor de $\langle\langle 3\rangle\rangle$ es:
+@ 30
+@ 36
+@ 6
+@ 12
+! $\langle3\rangle=6$ y $\langle6\rangle=30$.
+q: De un grupo de 5 hombres y 4 mujeres se va a escoger un comité de 3 personas en el que haya exactamente 2 mujeres. La cantidad de comités distintos que se pueden formar es:
+@ 30
+@ 24
+@ 20
+@ 60
+! $\binom42\cdot5=30$.
+q: Se lanzan dos dados corrientes al mismo tiempo. La probabilidad de que la suma de los puntos obtenidos sea 8 es:
+@ $\frac{5}{36}$
+@ $\frac{1}{6}$
+@ $\frac{1}{9}$
+@ $\frac{2}{9}$
+! Casos: (2,6), (3,5), (4,4), (5,3), (6,2).
+q: El perímetro de un terreno rectangular es 36 metros y su largo es el doble de su ancho. El área del terreno, en metros cuadrados, es:
+@ 72
+@ 81
+@ 64
+@ 144
+! Ancho 6 y largo 12.
+ctx 2: Una litografía tiene tres impresoras. La tabla muestra, para cada una, la cantidad de páginas que imprime en una hora, cuántas de esas páginas salen defectuosas y se desechan, y el costo de funcionamiento por hora.\par\smallskip
+{\centering\small\setlength\tabcolsep{4pt}\begin{tabular}{|l|c|c|c|}\hline
+ & Impresora 1 & Impresora 2 & Impresora 3\\\hline
+Páginas por hora & 600 & 900 & 1200\\\hline
+Defectuosas por hora & 30 & 90 & 60\\\hline
+Costo por hora & \$4.000 & \$5.000 & \$9.000\\\hline
+\end{tabular}\par}
+q: Si se deben entregar 4.050 páginas sin defecto y se va a usar únicamente la impresora 2, entonces el tiempo empleado y el costo de funcionamiento serán, respectivamente:
+@ 5 horas y \$25.000
+@ 4,5 horas y \$22.500
+@ 5 horas y \$20.000
+@ 4 horas y \$20.000
+! La impresora 2 deja 810 páginas buenas por hora: $4.050\div810=5$.
+q: De las siguientes afirmaciones, la única verdadera es:
+@ La impresora 2 es la que tiene el menor costo por página sin defecto
+@ La impresora 1 es la que tiene el mayor porcentaje de páginas defectuosas
+@ La impresora 3 es la que tiene el menor costo por página sin defecto
+@ En 2 horas, las impresoras 1 y 3 juntas producen menos páginas sin defecto que la impresora 2 en 4 horas
+! Costo por página buena: $4.000/570\approx7{,}0$; $5.000/810\approx6{,}2$; $9.000/1.140\approx7{,}9$.
+q: El menor número natural mayor que 3 que deja residuo 3 al dividirlo entre 4, entre 5 y entre 6 es:
+@ 63
+@ 123
+@ 33
+@ 60
+! Es $\text{mcm}(4,5,6)+3=63$.
+q: Pedro le dice a Ana: <<Tengo el doble de la edad que tú tenías cuando yo tenía la edad que tú tienes ahora>>. Si las edades de los dos suman 49 años, la edad de Pedro es:
+@ 28
+@ 21
+@ 35
+@ 30
+! $P=2(A-(P-A))$ da $3P=4A$; con $P+A=49$: $P=28$, $A=21$.
+q: En una balanza de platillos se observa que 3 manzanas y 1 pera pesan lo mismo que 10 ciruelas, y que 1 manzana y 6 ciruelas pesan lo mismo que 1 pera. Si las frutas de la misma clase pesan igual, la cantidad de ciruelas que pesan lo mismo que 1 pera es:
+@ 7
+@ 5
+@ 6
+@ 8
+! Reemplazando la pera: 4 manzanas y 6 ciruelas pesan 10 ciruelas, luego 1 manzana pesa 1 ciruela y la pera, 7.
+q: En el cuadrado de la figura se van a escribir los números del 1 al 9, sin repetir, de modo que la suma de los tres números de cada fila, de cada columna y de cada diagonal sea la misma.\par
+{\centering\begin{tikzpicture}[scale=.6]\draw (0,0) grid (3,3);\node at (.5,2.5) {8};\node at (1.5,2.5) {1};\node at (2.5,.5) {$X$};\end{tikzpicture}\par}
+El número que debe ir en la casilla marcada con $X$ es:
+@ 2
+@ 4
+@ 6
+@ 9
+! La suma común es 15 y el centro es 5; en la diagonal: $8+5+X=15$.
+q: Un número de dos cifras es igual a cuatro veces la suma de sus dígitos. La cantidad de números de dos cifras que cumplen esta condición es:
+@ 4
+@ 1
+@ 2
+@ 3
+! $10a+b=4a+4b$ da $b=2a$: 12, 24, 36 y 48.
+ctx 2: Un tablero tiene cinco bombillos en fila. De izquierda a derecha, los bombillos valen 16, 8, 4, 2 y 1. El número que muestra el tablero es la suma de los valores de los bombillos encendidos. Por ejemplo, $\circ\bullet\circ\circ\bullet$ (encendidos $\bullet$, apagados $\circ$) muestra el número 9.
+q: El número que muestra el tablero $\bullet\circ\bullet\bullet\circ$ es:
+@ 22
+@ 13
+@ 26
+@ 11
+! $16+4+2=22$.
+q: La cantidad de números distintos que se pueden mostrar con exactamente dos bombillos encendidos es:
+@ 10
+@ 8
+@ 20
+@ 16
+! $\binom52=10$ y todas las sumas son distintas.
+q: En una cuadrícula de $3\times3$ se quieren colorear algunas casillas de modo que no haya dos casillas coloreadas que compartan un lado. La mayor cantidad de casillas que se pueden colorear es:
+@ 5
+@ 4
+@ 6
+@ 3
+! Las cuatro esquinas y el centro; con 6 habría dos vecinas.
+q: Un acuario con forma de caja rectangular mide 50 cm de largo, 30 cm de ancho y 40 cm de alto. Si se llena con agua hasta las tres cuartas partes de su altura, la cantidad de agua que contiene, en litros, es:\par
+{\footnotesize Nota: 1 litro equivale a 1.000 cm$^3$.}
+@ 45
+@ 60
+@ 36
+@ 30
+! $50\cdot30\cdot30=45.000$ cm$^3$.
+q: En la figura, el círculo está inscrito en un cuadrado de lado 4 cm. El área de la región sombreada, en cm$^2$, es:\par
+{\centering\begin{tikzpicture}[scale=.5]\fill[gray!45] (0,0) rectangle (4,4);\fill[white] (2,2) circle (2);\draw (0,0) rectangle (4,4);\draw (2,2) circle (2);\end{tikzpicture}\par}
+@ $16-4\pi$
+@ $16-2\pi$
+@ $4\pi-8$
+@ $16-8\pi$
+! Cuadrado $16$ menos círculo de radio 2, $4\pi$.
+q: Un bus viaja de una ciudad a otra a una velocidad constante de 60 km/h y regresa por la misma vía a 40 km/h. La velocidad promedio del bus en todo el recorrido, en km/h, es:
+@ 48
+@ 50
+@ 52
+@ 45
+! Para 120 km de ida: $2+3=5$ horas para 240 km.
+q: El menor ángulo que forman las manecillas de un reloj cuando marca las 3:30 mide:
+@ $75^\circ$
+@ $90^\circ$
+@ $60^\circ$
+@ $105^\circ$
+! El minutero está en $180^\circ$ y el horario en $90^\circ+15^\circ=105^\circ$.
+q: Alguien rompió un vidrio y hay cuatro sospechosos, de los cuales solo uno es el culpable. Al interrogarlos dijeron:
+\st{}{Andrés: <<Fue Bruno>>.}
+\st{}{Bruno: <<Fue Daniel>>.}
+\st{}{Camilo: <<Yo no fui>>.}
+\st{}{Daniel: <<Bruno miente>>.}
+Si se sabe que exactamente uno de los cuatro dijo la verdad, entonces el culpable es:
+@ Camilo
+@ Andrés
+@ Bruno
+@ Daniel
+! Si fue Camilo, solo Daniel dice la verdad. En los otros casos hay dos o tres verdades.
+q: Al comenzar una reunión, cada asistente saludó de mano exactamente una vez a cada uno de los demás. Si en total hubo 45 saludos, la cantidad de asistentes fue:
+@ 10
+@ 9
+@ 15
+@ 12
+! $\frac{n(n-1)}{2}=45$ da $n=10$.
+q: Seis obreros, que trabajan todos al mismo ritmo, pueden terminar una obra en 12 días. Después de 4 días de trabajo se retiran 2 obreros y los demás continúan hasta terminar. La cantidad total de días que duró la obra fue:
+@ 16
+@ 14
+@ 18
+@ 20
+! Faltaban $6\cdot8=48$ jornadas; con 4 obreros son 12 días más.
+ctx 2: La gráfica muestra el precio, en miles de pesos, de una acción en la bolsa de valores, registrado cada hora entre las 8 y las 14 horas de un mismo día.\par\smallskip
+{\centering\begin{tikzpicture}[x=.75cm,y=.07cm]\draw[->] (0,0)--(0,54);\draw (0,0)--(7,0);
+\foreach \v in {10,20,...,50} {\draw[gray!50] (0,\v)--(7,\v);\node[left,font=\scriptsize] at (0,\v) {\v};}
+\foreach \i/\h in {.5/8,1.5/9,2.5/10,3.5/11,4.5/12,5.5/13,6.5/14} \node[below,font=\scriptsize] at (\i,0) {\h};
+\draw[thick] (.5,20)--(1.5,35)--(2.5,30)--(3.5,45)--(4.5,40)--(5.5,25)--(6.5,30);
+\foreach \p in {(.5,20),(1.5,35),(2.5,30),(3.5,45),(4.5,40),(5.5,25),(6.5,30)} \fill \p circle(2pt);
+\node[font=\scriptsize] at (3.5,-9) {Hora};\end{tikzpicture}\par}
+q: La cantidad de intervalos de una hora en los que el precio de la acción subió es:
+@ 3
+@ 2
+@ 4
+@ 5
+! Sube de 8 a 9, de 10 a 11 y de 13 a 14.
+q: Una persona compró acciones a las 10 horas y las vendió a las 11 horas. Su ganancia, como porcentaje del valor de compra, fue de:
+@ 50\%
+@ 15\%
+@ 33\%
+@ 45\%
+! Pasó de 30 a 45: ganó 15 sobre 30.
+q: La cantidad de números enteros $n$ que cumplen $n^2<50$ es:
+@ 15
+@ 7
+@ 14
+@ 8
+! Los enteros de $-7$ a $7$.
+q: La suma de cinco números enteros positivos, todos distintos, es 30. El mayor valor que puede tomar el más grande de esos cinco números es:
+@ 20
+@ 26
+@ 15
+@ 18
+! Los otros cuatro suman como mínimo $1+2+3+4=10$.
+q: En una conferencia, $\frac35$ de los asistentes son mujeres. Usan gafas $\frac23$ de las mujeres y $\frac12$ de los hombres. La fracción del total de asistentes que usa gafas es:
+@ $\frac{3}{5}$
+@ $\frac{7}{12}$
+@ $\frac{1}{2}$
+@ $\frac{7}{10}$
+! $\frac35\cdot\frac23+\frac25\cdot\frac12=\frac25+\frac15$.
+q: Con puntos se construye la secuencia de figuras triangulares que se muestra, en la que cada figura tiene una fila más que la anterior.\par
+{\centering\begin{tikzpicture}[scale=.3]
+\fill (0,0) circle(4pt);\node at (0,-1.2) {\scriptsize Figura 1};
+\foreach \p in {(4,0),(5,0),(4.5,.87)} \fill \p circle(4pt);\node at (4.5,-1.2) {\scriptsize Figura 2};
+\foreach \p in {(9,0),(10,0),(11,0),(9.5,.87),(10.5,.87),(10,1.74)} \fill \p circle(4pt);\node at (10,-1.2) {\scriptsize Figura 3};
+\end{tikzpicture}\par}
+El número de la figura que está formada por 78 puntos es:
+@ 12
+@ 13
+@ 11
+@ 39
+! La figura $n$ tiene $\frac{n(n+1)}{2}$ puntos: $\frac{12\cdot13}{2}=78$.

@@ -1,0 +1,37 @@
+{
+ "scene": "S03_Periodico",
+ "duration": 37.667,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Los decimales periódicos",
+   "hold": 37.067
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.5,
+   "text": "Esto explica algo que vimos con los racionales: un decimal periódico es una fracción. Cero punto tres periódico es una suma infinita.",
+   "fox": true
+  },
+  {
+   "start": 11.5,
+   "end": 20.733,
+   "text": "Cada término es el anterior dividido entre diez: es geométrica, con primer término tres décimos y razón un décimo.",
+   "fox": false
+  },
+  {
+   "start": 20.733,
+   "end": 28.0,
+   "text": "La suma infinita es tres décimos entre nueve décimos: tres novenos, que es un tercio.",
+   "fox": false
+  },
+  {
+   "start": 28.0,
+   "end": 36.667,
+   "text": "Y una sorpresa: cero punto nueve periódico es exactamente uno. Nueve décimos entre nueve décimos.",
+   "fox": false
+  }
+ ]
+}

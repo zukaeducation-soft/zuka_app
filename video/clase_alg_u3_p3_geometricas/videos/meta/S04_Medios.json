@@ -1,0 +1,31 @@
+{
+ "scene": "S04_Medios",
+ "duration": 42.067,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Medios geométricos",
+   "hold": 41.467
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 13.1,
+   "text": "Entre dos y ciento sesenta y dos se quieren meter tres medios geométricos. Con tres números en medio hay cuatro multiplicaciones por la razón.",
+   "fox": true
+  },
+  {
+   "start": 13.1,
+   "end": 26.867,
+   "text": "Hace falta un número que, multiplicado cuatro veces por sí mismo, dé ochenta y uno. Es la raíz cuarta de ochenta y uno: tres, porque tres por tres por tres por tres es ochenta y uno.",
+   "fox": false
+  },
+  {
+   "start": 26.867,
+   "end": 41.067,
+   "text": "Pero menos tres también sirve, porque un negativo elevado a una potencia par da positivo. Con r igual a menos tres, los medios son menos seis, dieciocho y menos cincuenta y cuatro.",
+   "fox": false
+  }
+ ]
+}

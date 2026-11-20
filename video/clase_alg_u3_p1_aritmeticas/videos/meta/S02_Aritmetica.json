@@ -1,0 +1,53 @@
+{
+ "scene": "S02_Aritmetica",
+ "duration": 59.533,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Sumar siempre lo mismo",
+   "hold": 21.467
+  },
+  {
+   "time": 22.067,
+   "title": "Diferencia negativa o cero",
+   "hold": 43.367
+  },
+  {
+   "time": 43.967,
+   "title": "Revisar todos los saltos",
+   "hold": 58.933
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 7.5,
+   "text": "Sara tiene veinte mil pesos ahorrados y cada semana guarda cinco mil más.",
+   "fox": true
+  },
+  {
+   "start": 7.5,
+   "end": 21.067,
+   "text": "Cuando se suma siempre el mismo número, la sucesión es una progresión aritmética. Ese número fijo se llama diferencia, porque es la resta de un término menos el anterior.",
+   "fox": false
+  },
+  {
+   "start": 22.067,
+   "end": 34.067,
+   "text": "La diferencia también puede ser negativa. Una vela de treinta centímetros se gasta dos centímetros cada hora: treinta, veintiocho, veintiséis, veinticuatro.",
+   "fox": false
+  },
+  {
+   "start": 34.067,
+   "end": 42.967,
+   "text": "Y si la diferencia es cero, la sucesión se queda quieta: siete, siete, siete. También es aritmética.",
+   "fox": false
+  },
+  {
+   "start": 43.967,
+   "end": 58.533,
+   "text": "Cuidado: para decidir hay que revisar todos los saltos, no solo el primero. En uno, dos, cuatro, ocho, el primer salto es uno, pero el siguiente es dos y luego cuatro. No es aritmética.",
+   "fox": false
+  }
+ ]
+}

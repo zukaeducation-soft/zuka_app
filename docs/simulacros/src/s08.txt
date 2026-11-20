@@ -1,0 +1,490 @@
+== LECTURA
+## Texto Uno
+p: A finales de los años ochenta, dos químicos anunciaron ante las cámaras que habían logrado producir fusión nuclear en un frasco, a temperatura ambiente. De ser cierto, el hallazgo prometía energía casi ilimitada y barata. Durante unas semanas fueron celebridades. Luego, decenas de laboratorios de todo el mundo intentaron repetir el experimento y ninguno obtuvo el mismo resultado. El anuncio se desinfló tan rápido como había crecido.
+p: El episodio suele contarse como un bochorno, pero puede leerse al revés: como una prueba de que el sistema funcionó. La ciencia no confió en la reputación de los autores ni en el entusiasmo de los periódicos; exigió que otros, sin ningún interés en que el resultado fuera cierto, pudieran obtenerlo también. A ese requisito se le llama reproducibilidad, y es lo que distingue un conocimiento científico de una simple afirmación.
+p: <<La gente cree que la ciencia es un depósito de verdades>>, dice la física Carolina Mesa. <<Es más bien un procedimiento para detectar errores, empezando por los propios>>. Un científico, explica, no publica solo sus conclusiones: publica el camino que siguió, precisamente para que otros puedan buscarle las fallas. En pocas actividades humanas se entrega al rival el mapa de las propias debilidades.
+p: Esa costumbre tiene un costo en la opinión pública. Cuando los expertos corrigen una recomendación ---sobre una dieta, un medicamento, el uso de una mascarilla---, muchos lo interpretan como señal de que <<no saben nada>>. En realidad ocurre lo contrario: quien cambia de posición ante nuevas pruebas está haciendo lo que debe. El charlatán, en cambio, nunca se corrige; su seguridad es constante porque no depende de los hechos.
+p: Mesa admite que el sistema tiene grietas. Los investigadores son evaluados por la cantidad de artículos que publican, y las revistas prefieren los resultados llamativos. Repetir el experimento de otro, que es la tarea más útil para detectar errores, casi no da prestigio ni financiación. El resultado es que algunos hallazgos famosos tardaron años en ser revisados, y varios no resistieron la revisión.
+p: Aun así, sostiene, ninguna otra forma de conocimiento ha incorporado la duda en sus propias reglas. <<No le pido a nadie que crea en la ciencia. Creer es justo lo que la ciencia no pide. Le pido que se fije en quién está dispuesto a mostrar cómo llegó a lo que afirma, y quién no>>.
+src: Texto elaborado para este simulacro.
+
+q: El párrafo 1 cumple la función de:
+@ Narrar un caso que servirá para explicar un rasgo de la ciencia
+@ Demostrar que la fusión nuclear es imposible
+@ Presentar la opinión de la física Carolina Mesa
+@ Criticar a los periodistas que cubren temas científicos
+q: En el párrafo 1, la expresión <<se \sub{desinfló}>> significa que el anuncio:
+@ Perdió credibilidad
+@ Fue prohibido
+@ Se repitió muchas veces
+@ Causó un accidente
+q: Según el párrafo 1, el anuncio de los dos químicos fracasó porque:
+@ Otros laboratorios no lograron obtener el mismo resultado
+@ La energía prometida resultó demasiado costosa
+@ Los autores no eran científicos reconocidos
+@ Los periódicos dejaron de interesarse en el tema
+q: Cuando el autor dice que el episodio <<puede leerse al revés>> (párrafo 2), propone entenderlo como:
+@ Una muestra de que los controles de la ciencia cumplieron su tarea
+@ Un engaño planeado por los dos químicos
+@ Un error de los laboratorios que repitieron el experimento
+@ Una vergüenza para toda la comunidad científica
+q: De acuerdo con el párrafo 2, la reproducibilidad exige que un resultado:
+@ Pueda ser obtenido también por investigadores independientes
+@ Sea anunciado primero en una rueda de prensa
+@ Provenga de científicos con buena reputación
+@ Tenga aplicaciones prácticas inmediatas
+q: La aclaración <<sin ningún interés en que el resultado fuera cierto>> (párrafo 2) resalta:
+@ La imparcialidad de quienes verifican un hallazgo
+@ La envidia entre los científicos
+@ La falta de recursos de los laboratorios
+@ El desinterés del público por la ciencia
+q: Con la expresión <<depósito de verdades>> (párrafo 3), Mesa describe la idea, que ella no comparte, de que la ciencia es:
+@ Un conjunto de certezas definitivas
+@ Un lugar donde se guardan los experimentos
+@ Una actividad reservada a los expertos
+@ Un método para corregir errores
+q: Para Carolina Mesa (párrafo 3), la ciencia es sobre todo:
+@ Un método para encontrar errores
+@ Una colección de datos comprobados
+@ Una competencia entre laboratorios
+@ Una fuente de energía barata
+q: Según el párrafo 3, un científico publica <<el camino que siguió>> con el fin de que:
+@ Otros puedan revisar su trabajo y encontrar posibles fallas
+@ Nadie más pueda atribuirse el descubrimiento
+@ El público entienda las conclusiones sin esfuerzo
+@ Las revistas acepten su artículo con mayor rapidez
+q: La oración <<En pocas actividades humanas se entrega al rival el mapa de las propias debilidades>> (párrafo 3) significa que en la ciencia:
+@ Se facilita a los demás la crítica del trabajo propio
+@ Los científicos suelen traicionar a sus colegas
+@ Los errores se mantienen en secreto
+@ La rivalidad impide el avance del conocimiento
+q: En el párrafo 4, la expresión <<\sub{Esa costumbre}>> alude a:
+@ La práctica de exponer el trabajo a la revisión y de corregirlo
+@ El hábito de anunciar los hallazgos en ruedas de prensa
+@ La tendencia del público a desconfiar de los expertos
+@ La seguridad con la que habla el charlatán
+q: Los elementos escritos entre rayas en el párrafo 4 (<<---sobre una dieta, un medicamento, el uso de una mascarilla--->>) son:
+@ Ejemplos de recomendaciones que los expertos han modificado
+@ Temas sobre los que los expertos no saben nada
+@ Productos que venden los charlatanes
+@ Casos en los que la ciencia nunca se ha equivocado
+q: Con la frase <<En realidad ocurre lo contrario>> (párrafo 4), el autor afirma que corregir una recomendación:
+@ Es una señal de rigor y no de ignorancia
+@ Demuestra que los expertos no saben nada
+@ Es propio de los charlatanes
+@ Debería evitarse para no confundir al público
+q: Según el párrafo 4, la seguridad del charlatán es constante porque:
+@ Sus afirmaciones no se basan en pruebas
+@ Ha estudiado más que los expertos
+@ Corrige sus errores en privado
+@ Sus afirmaciones siempre resultan ciertas
+q: En el párrafo 5, la palabra <<\sub{grietas}>> significa:
+@ Fallas
+@ Ventajas
+@ Secretos
+@ Reglas
+q: Son <<grietas>> del sistema mencionadas en el párrafo 5, EXCEPTO:
+@ Los científicos ocultan el camino que siguieron
+@ A los investigadores se les evalúa por la cantidad de artículos
+@ Las revistas prefieren los resultados llamativos
+@ Repetir experimentos ajenos da poco prestigio
+q: De acuerdo con el párrafo 5, una consecuencia de esas <<grietas>> es que:
+@ Algunos resultados equivocados permanecieron mucho tiempo sin ser revisados
+@ Los científicos dejaron de publicar sus conclusiones
+@ Las revistas se negaron a publicar hallazgos famosos
+@ Se dejó de exigir la reproducibilidad
+q: En el párrafo 6, la expresión <<\sub{Aun así}>> introduce una idea que:
+@ Se mantiene a pesar de lo admitido en el párrafo anterior
+@ Es consecuencia de lo dicho en el párrafo anterior
+@ Repite lo dicho en el párrafo anterior
+@ Sirve de ejemplo de lo dicho en el párrafo anterior
+q: La afirmación <<Creer es justo lo que la ciencia no pide>> (párrafo 6) quiere decir que la ciencia:
+@ Invita a examinar las pruebas en lugar de aceptar por fe
+@ No merece la confianza de las personas
+@ Es incompatible con cualquier creencia
+@ Solo puede ser entendida por los científicos
+q: El criterio que propone Mesa en el párrafo 6 para decidir en quién confiar es:
+@ La disposición a mostrar cómo se llegó a lo que se afirma
+@ La seguridad con que la persona habla
+@ La fama que tiene quien hace la afirmación
+@ La cantidad de artículos que ha publicado
+q: De las siguientes situaciones, la que mejor ilustra la actitud que el párrafo 4 considera correcta es:
+@ Una médica que cambia un tratamiento después de conocer un estudio nuevo
+@ Un vendedor que asegura que su producto nunca falla
+@ Un político que jamás reconoce una equivocación
+@ Un profesor que repite cada año la misma clase
+
+## Texto Dos
+p: Mi tía Olga reenvía cada semana un mensaje que empieza con <<Los médicos no quieren que usted sepa esto>>. La semana pasada era el limón congelado; antes, el agua tibia con bicarbonato. Olga no es ingenua: fue contadora durante treinta años y jamás firmó un balance sin revisarlo dos veces. Pero frente a esos mensajes baja la guardia, y me he preguntado por qué.
+p: La primera razón es que el mensaje llega de alguien querido. No lo envía un laboratorio ni un ministerio, sino la prima, la vecina, el grupo de la parroquia. Desconfiar del contenido se siente como desconfiar de la persona, y eso es de mala educación.
+p: La segunda es que la mentira tiene ventajas de fabricación. La verdad está obligada a parecerse a los hechos, que suelen ser complicados y aburridos; el bulo, libre de esa obligación, puede diseñarse a la medida de nuestros miedos y de nuestras esperanzas. Promete una cura sencilla, señala un culpable y nos concede el halago de pertenecer a los pocos que <<ya despertaron>>.
+p: La tercera es la más incómoda: creer es más descansado que dudar. Verificar exige tiempo, y aceptar que algo no se sabe produce una inquietud que casi nadie tolera. Entre una respuesta falsa pero completa y una respuesta cierta pero parcial, la mente suele preferir la primera.
+p: Por eso sirve de poco responderle a mi tía con un enlace a un estudio. No le falta información; le sobra confianza en quien se lo mandó. He tenido mejor suerte con una sola pregunta, hecha sin ironía: <<¿Y esto quién lo dijo primero?>>. Casi nunca hay respuesta. A veces, ese silencio hace más que cien desmentidos.
+src: Texto elaborado para este simulacro.
+
+## Preguntas del Texto Dos
+q: El autor menciona que su tía fue contadora durante treinta años (párrafo 1) para mostrar que:
+@ Creer en esos mensajes no es cuestión de falta de inteligencia o de cuidado
+@ Los contadores suelen ser personas ingenuas
+@ Su tía tiene conocimientos de medicina
+@ Las personas mayores no saben usar el teléfono
+q: La expresión <<baja la guardia>> (párrafo 1) significa que la tía:
+@ Deja de ser precavida
+@ Se enoja con facilidad
+@ Pierde la memoria
+@ Deja de responder los mensajes
+q: Según el párrafo 2, estos mensajes se creen porque:
+@ Provienen de personas cercanas y apreciadas
+@ Están respaldados por laboratorios y ministerios
+@ Están escritos con un lenguaje científico
+@ Circulan en muchos idiomas
+q: La afirmación <<eso es de mala educación>> (párrafo 2) da a entender que:
+@ Dudar del mensaje se percibe como una ofensa a quien lo envió
+@ Reenviar mensajes es una falta de cortesía
+@ Los grupos de la parroquia tienen reglas estrictas
+@ La tía no recibió una buena educación
+q: Con la expresión <<ventajas de fabricación>> (párrafo 3), el autor indica que la mentira:
+@ Puede moldearse para que resulte atractiva
+@ Es producida por las fábricas de medicamentos
+@ Cuesta más trabajo que la verdad
+@ Se parece mucho a los hechos
+q: En el párrafo 3, la palabra <<\sub{bulo}>> significa:
+@ Noticia falsa
+@ Consejo médico
+@ Mensaje de voz
+@ Chiste
+q: Según el párrafo 3, el bulo ofrece lo siguiente, EXCEPTO:
+@ Pruebas que cualquiera puede revisar
+@ Una solución sencilla
+@ Un responsable a quien culpar
+@ La sensación de formar parte de un grupo selecto
+q: Las comillas en <<ya despertaron>> (párrafo 3) indican que el autor:
+@ Reproduce, sin compartirla, una expresión propia de esos mensajes
+@ Cita las palabras exactas de su tía
+@ Resalta la idea más importante del párrafo
+@ Usa un término técnico de la medicina
+q: La tercera razón, expuesta en el párrafo 4, consiste en que:
+@ Dudar exige un esfuerzo y produce una incomodidad que se prefiere evitar
+@ Las personas no tienen acceso a información confiable
+@ Los mensajes falsos están mejor escritos que los verdaderos
+@ La mente humana es incapaz de reconocer la verdad
+q: En el párrafo 4, <<\sub{la primera}>> se refiere a:
+@ La respuesta falsa pero completa
+@ La respuesta cierta pero parcial
+@ La primera razón
+@ La inquietud de no saber
+q: Según el párrafo 5, responder con un enlace a un estudio sirve de poco porque:
+@ El problema no es la falta de datos, sino la confianza en quien envía el mensaje
+@ Los estudios científicos suelen estar equivocados
+@ La tía no sabe abrir enlaces en su teléfono
+@ Los estudios se publican en otros idiomas
+q: La pregunta <<¿Y esto quién lo dijo primero?>> (párrafo 5) busca que la persona:
+@ Advierta por sí misma que el mensaje carece de una fuente identificable
+@ Se sienta avergonzada por haber reenviado el mensaje
+@ Deje de usar las redes sociales
+@ Consulte a su médico antes de seguir el consejo
+q: La aclaración de que la pregunta se hace <<sin ironía>> (párrafo 5) indica que, para que funcione, debe plantearse:
+@ Con respeto hacia la otra persona
+@ En tono de burla
+@ Por escrito
+@ Delante de otras personas
+
+## Preguntas sobre los Textos Uno y Dos
+q: Los dos textos coinciden en que una afirmación merece más confianza cuando:
+@ Se puede rastrear quién la sostiene y cómo llegó a ella
+@ La repiten muchas personas
+@ Proviene de alguien cercano
+@ Se expresa con total seguridad
+q: El charlatán del texto Uno (párrafo 4) y el bulo del texto Dos (párrafo 3) tienen en común que:
+@ No dependen de los hechos
+@ Se corrigen ante nuevas pruebas
+@ Son difundidos por los laboratorios
+@ Resultan complicados y aburridos
+q: La idea del texto Dos de que <<aceptar que algo no se sabe produce una inquietud que casi nadie tolera>> ayuda a explicar, en el texto Uno:
+@ Por qué muchos interpretan mal que los expertos corrijan sus recomendaciones
+@ Por qué fracasó el anuncio de la fusión en un frasco
+@ Por qué las revistas prefieren los resultados llamativos
+@ Por qué los científicos publican el camino que siguieron
+q: La pregunta que el autor del texto Dos le hace a su tía es semejante a:
+@ El criterio que propone Mesa en el párrafo 6 del texto Uno
+@ El anuncio de los dos químicos del texto Uno
+@ La forma como se evalúa a los investigadores, según el texto Uno
+@ La opinión de quienes dicen que los expertos <<no saben nada>>
+q: Circula un mensaje que dice: <<Este remedio es cien por ciento seguro. Lo afirma un doctor que prefiere no dar su nombre>>. Según lo planteado en ambos textos, este mensaje:
+@ Debería despertar desconfianza, pues no muestra fuente ni procedimiento
+@ Es confiable, porque lo respalda un doctor
+@ Cumple con el requisito de la reproducibilidad
+@ Solo puede ser evaluado por los científicos
+q: El papel de los lazos afectivos en lo que una persona decide creer es un asunto tratado en el texto:
+@ Dos, pero no en el Uno
+@ Uno, pero no en el Dos
+@ Uno más que en el Dos
+@ Uno y en el Dos por igual
+
+== RAZONAMIENTO
+ctx 2: Sobre una mesa hay cinco cartas en fila, boca abajo, numeradas con 1, 2, 3, 4 y 5 (una carta con cada número). Se sabe que:
+\vi{Los números de las dos primeras cartas de la fila suman 7}
+\vi{La carta del centro tiene un número impar}
+\vi{El número de la última carta es mayor que el de la primera}
+\vi{Las cartas con los números 1 y 2 no están una junto a la otra}
+q: De las siguientes afirmaciones, de la única que se tiene certeza es:
+@ La segunda carta de la fila es el 5
+@ La carta del centro es el 1
+@ La última carta de la fila es el 4
+@ La cuarta carta de la fila es el 3
+! Las filas posibles son 2, 5, 1, 3, 4; 2, 5, 1, 4, 3 y 2, 5, 3, 1, 4.
+q: Si la carta del centro es el 3, entonces la última carta de la fila es el:
+@ 4
+@ 1
+@ 5
+@ 2
+! Queda la fila 2, 5, 3, 1, 4.
+q: La afirmación <<estudio o repruebo el examen>> es lógicamente equivalente a:
+@ Si no estudio, entonces repruebo el examen
+@ Si estudio, entonces repruebo el examen
+@ Si estudio, entonces no repruebo el examen
+@ Estudio y no repruebo el examen
+! <<$p$ o $q$>> equivale a <<si no $p$, entonces $q$>>.
+q: Se sabe que <<ningún reptil tiene pelo>> y que <<algunos animales del zoológico tienen pelo>>. De las siguientes afirmaciones, la única que necesariamente es verdadera es:
+@ Algunos animales del zoológico no son reptiles
+@ Ningún animal del zoológico es un reptil
+@ Algunos animales del zoológico son reptiles
+@ Todos los animales del zoológico tienen pelo
+! Los animales del zoológico que tienen pelo no pueden ser reptiles.
+ctx 2: En un grupo de 50 personas se preguntó por la lectura de tres revistas, A, B y C. Se encontró que 20 leen A, 18 leen B y 15 leen C; 6 leen A y B, 5 leen A y C, 4 leen B y C, y 2 leen las tres revistas.
+q: La cantidad de personas del grupo que lee exactamente una de las tres revistas es:
+@ 29
+@ 40
+@ 38
+@ 31
+! Solo A: $20-6-5+2=11$; solo B: $10$; solo C: $8$.
+q: La cantidad de personas del grupo que lee por lo menos dos de las revistas es:
+@ 11
+@ 15
+@ 13
+@ 9
+! Leen alguna $20+18+15-6-5-4+2=40$ personas, y $40-29=11$.
+q: Tres relojes marcan en este momento las 3:50, las 4:05 y las 3:55. Se sabe que uno de ellos está adelantado 10 minutos, otro está atrasado 5 minutos y el otro marca la hora exacta. La hora exacta es:
+@ 3:55
+@ 3:50
+@ 4:05
+@ 4:00
+! $3{:}50$ es 5 minutos menos y $4{:}05$ es 10 minutos más que $3{:}55$.
+ctx 2: En un juego de dardos, el tablero tiene tres zonas que otorgan 3, 5 y 8 puntos. Cada dardo que da en el tablero suma los puntos de la zona donde cae, y varios dardos pueden caer en la misma zona.
+q: La menor cantidad de dardos con la que se puede obtener un total de exactamente 31 puntos es:
+@ 5
+@ 4
+@ 6
+@ 7
+! $8+8+5+5+5=31$; con 4 dardos no es posible.
+q: De los siguientes puntajes totales, el único que no se puede obtener en este juego es:
+@ 7
+@ 11
+@ 13
+@ 14
+! $11=8+3$, $13=8+5$, $14=8+3+3$; 7 no es suma de números 3, 5 y 8.
+q: Se tienen 40 litros de una mezcla de agua y alcohol que contiene 25\% de alcohol. La cantidad de litros de agua que se le deben agregar para que la mezcla quede con 20\% de alcohol es:
+@ 10
+@ 5
+@ 8
+@ 2
+! Hay 10 litros de alcohol, que deben ser el 20\% de 50 litros.
+q: Un comerciante compra un artículo en \$80.000 y le fija un precio de venta con el que ganaría el 25\% sobre el costo. Si a un cliente le hace un descuento del 10\% sobre ese precio de venta, la ganancia del comerciante, como porcentaje del costo, es:
+@ 12,5\%
+@ 15\%
+@ 10\%
+@ 22,5\%
+! Precio fijado: \$100.000; con descuento: \$90.000; gana \$10.000 sobre \$80.000.
+q: Una empresa reparte una bonificación de \$900.000 entre tres empleados, de manera proporcional a los años que llevan en ella: 2, 3 y 4 años. La cantidad que recibe el empleado más antiguo es:
+@ \$400.000
+@ \$300.000
+@ \$450.000
+@ \$360.000
+! $\frac49$ de \$900.000.
+q: El resultado del producto $\dfrac12\cdot\dfrac23\cdot\dfrac34\cdot\,\cdots\,\cdot\dfrac{9}{10}$ es:
+@ $\frac{1}{10}$
+@ $\frac{9}{10}$
+@ $\frac{1}{2}$
+@ $\frac{1}{9}$
+! Cada numerador se cancela con el denominador anterior.
+q: Para un número real $x$ se define $\lfloor x\rfloor$ como el mayor número entero que es menor o igual que $x$. Por ejemplo, $\lfloor 2{,}7\rfloor=2$. El valor de $\left\lfloor\frac72\right\rfloor+\left\lfloor-\frac72\right\rfloor$ es:
+@ $-1$
+@ 0
+@ 1
+@ $-7$
+! $\lfloor3{,}5\rfloor=3$ y $\lfloor-3{,}5\rfloor=-4$.
+q: Con los dígitos del 1 al 6 se forman números de cuatro cifras en los que cada cifra es mayor que la que tiene a su izquierda, como 1356. La cantidad de números de este tipo es:
+@ 15
+@ 24
+@ 30
+@ 360
+! Basta escoger los 4 dígitos: $\binom64$.
+q: Una pareja tiene tres hijos. Si se supone que en cada nacimiento es igualmente probable que nazca niño o niña, la probabilidad de que entre los tres haya por lo menos un niño y por lo menos una niña es:
+@ $\frac34$
+@ $\frac12$
+@ $\frac78$
+@ $\frac38$
+! De los 8 casos solo se excluyen <<tres niños>> y <<tres niñas>>.
+q: A cierta hora del día, un poste vertical de 3 metros de altura proyecta una sombra de 4 metros. A la misma hora, un edificio cercano proyecta una sombra de 28 metros. La altura del edificio, en metros, es:
+@ 21
+@ 27
+@ 24
+@ 37
+! $\frac{h}{28}=\frac34$.
+ctx 2: Una empresa de mensajería cobra por cada envío así: \$8.000 por el primer kilogramo, \$3.000 por cada kilogramo o fracción de kilogramo adicional y, además, un seguro igual al 2\% del valor declarado del contenido.
+q: El costo de enviar un paquete que pesa 3,4 kilogramos y cuyo contenido tiene un valor declarado de \$150.000 es:
+@ \$20.000
+@ \$17.000
+@ \$18.200
+@ \$23.000
+! $8.000+3\cdot3.000+3.000$.
+q: Por enviar un paquete de exactamente 5 kilogramos se pagaron \$26.600. El valor declarado del contenido era:
+@ \$330.000
+@ \$532.000
+@ \$66.000
+@ \$130.000
+! El transporte cuesta \$20.000; el seguro, \$6.600, es el 2\% de \$330.000.
+q: El número $25!$ es el producto $1\cdot2\cdot3\cdots25$. La cantidad de ceros en que termina este número es:
+@ 6
+@ 5
+@ 2
+@ 10
+! Hay un factor 5 en 5, 10, 15 y 20, y dos en 25.
+q: La edad de un padre es un número de dos cifras; al invertir el orden de esas cifras se obtiene la edad de su hijo. Si el padre es 27 años mayor que el hijo y las dos cifras suman 9, la edad del padre es:
+@ 63
+@ 72
+@ 54
+@ 81
+! $9(a-b)=27$ y $a+b=9$ dan $a=6$, $b=3$.
+q: Un programa de computador realiza las siguientes instrucciones:
+\st{1.}{Comience con $a=84$ y $b=36$}
+\st{2.}{Calcule el residuo $r$ de dividir $a$ entre $b$}
+\st{3.}{Cambie el valor de $a$ por el de $b$ y luego el valor de $b$ por $r$}
+\st{4.}{Si $b=0$, pase a la instrucción 5; en otro caso, regrese a la instrucción 2}
+\st{5.}{Imprima el valor de $a$ y pare}
+El valor que imprime el programa es:
+@ 12
+@ 36
+@ 6
+@ 0
+! $(84,36)\to(36,12)\to(12,0)$.
+q: La suma de los primeros 15 múltiplos positivos de 4 es:
+@ 480
+@ 240
+@ 460
+@ 600
+! $4(1+2+\dots+15)=4\cdot120$.
+q: En la multiplicación $AB\times B=CAB$, letras iguales representan dígitos iguales y letras distintas representan dígitos distintos. El dígito que representa la letra $B$ es:
+@ 5
+@ 6
+@ 1
+@ 2
+! Las únicas soluciones son $25\times5=125$ y $75\times5=375$.
+ctx 2: Un tablero tiene tres luces en fila. Cada luz puede estar en rojo, amarillo o verde, y a cada color le corresponde un valor: rojo vale 0, amarillo vale 1 y verde vale 2. El número que muestra el tablero se calcula multiplicando por 9 el valor de la luz de la izquierda, por 3 el valor de la luz del centro y por 1 el valor de la luz de la derecha, y sumando los tres resultados.
+q: El número que muestra el tablero cuando las luces están, de izquierda a derecha, en verde, rojo y amarillo es:
+@ 19
+@ 7
+@ 21
+@ 11
+! $2\cdot9+0\cdot3+1$.
+q: El mayor número que puede mostrar el tablero es:
+@ 26
+@ 27
+@ 13
+@ 222
+! Tres luces verdes: $18+6+2$.
+q: En la cuadrícula de la figura se escriben números de modo que la suma de los tres números de cada fila y de cada columna sea 12.\par
+{\centering\begin{tikzpicture}[scale=.6]\draw (0,0) grid (3,3);\node at (.5,2.5) {5};\node at (2.5,2.5) {4};\node at (.5,.5) {1};\node at (2.5,.5) {7};\node at (1.5,1.5) {$X$};\end{tikzpicture}\par}
+El número que va en la casilla marcada con $X$ es:
+@ 5
+@ 3
+@ 4
+@ 6
+! La fila de arriba se completa con 3 y la de abajo con 4; en la columna del centro: $3+X+4=12$.
+q: Un tanque cilíndrico de 2 metros de radio y 5 metros de altura está lleno de agua. Toda el agua se va a pasar a tanques con forma de cubo de 2 metros de arista. La menor cantidad de tanques cúbicos que se necesitan es (use $\pi\approx3{,}14$):
+@ 8
+@ 7
+@ 16
+@ 10
+! $20\pi\approx62{,}8$ m$^3$ y cada cubo recibe 8 m$^3$.
+q: En la cuadrícula de la figura cada cuadrito tiene 1 unidad de lado. El área del triángulo sombreado, en unidades cuadradas, es:\par
+{\centering\begin{tikzpicture}[scale=.42]\fill[gray!45] (0,0)--(6,2)--(2,5)--cycle;\draw[gray] (0,0) grid (6,5);\draw[thick] (0,0)--(6,2)--(2,5)--cycle;\end{tikzpicture}\par}
+@ 13
+@ 15
+@ 12
+@ 14
+! Rectángulo de $30$ menos tres triángulos de áreas $6$, $6$ y $5$.
+q: Un carro consume 6 litros de gasolina por cada 100 kilómetros. La distancia que puede recorrer con 45 litros de gasolina, en kilómetros, es:
+@ 750
+@ 270
+@ 700
+@ 650
+! $45\div6\cdot100$.
+q: Un reloj digital muestra la hora en el formato de 24 horas, con dos dígitos para la hora y dos para los minutos (desde 00:00 hasta 23:59). La cantidad de veces que, en un día, el reloj muestra los cuatro dígitos iguales es:
+@ 3
+@ 2
+@ 4
+@ 6
+! 00:00, 11:11 y 22:22.
+q: Pedro miente todos los lunes, martes y miércoles, y dice la verdad los demás días de la semana. Hoy Pedro hizo dos afirmaciones: <<Ayer mentí>> y <<Dentro de tres días diré la verdad>>. Hoy es:
+@ Jueves
+@ Lunes
+@ Miércoles
+@ Domingo
+! <<Ayer mentí>> solo la puede decir un lunes (mintiendo) o un jueves (con verdad). Un lunes, la segunda afirmación sería verdadera, y ese día miente: es jueves.
+q: La cantidad de maneras distintas de repartir 5 dulces iguales entre 3 niños, de modo que cada niño reciba por lo menos un dulce, es:
+@ 6
+@ 3
+@ 10
+@ 5
+! Los repartos son las ordenaciones de $3+1+1$ (3) y de $2+2+1$ (3).
+q: Un carro viaja durante 2 horas a 80 km/h y luego durante 3 horas a 60 km/h. La velocidad promedio del carro en todo el viaje, en km/h, es:
+@ 68
+@ 70
+@ 72
+@ 65
+! $(160+180)\div5$.
+ctx 2: La gráfica muestra la cantidad de horas que Sebastián usó el celular cada día de una semana.\par\smallskip
+{\centering\begin{tikzpicture}[x=.75cm,y=.27cm]\draw[->] (0,0)--(0,11.5);\draw (0,0)--(7.3,0);
+\foreach \v in {2,4,6,8,10} {\draw[gray!50] (0,\v)--(7.3,\v);\node[left,font=\scriptsize] at (0,\v) {\v};}
+\foreach \i/\m/\v in {1/L/3,2/M/4,3/X/2,4/J/5,5/V/4,6/S/7,7/D/10} {\fill[gray!60,draw=black] (\i-.75,0) rectangle (\i-.25,\v);\node[below,font=\scriptsize] at (\i-.5,0) {\m};}
+\node[font=\scriptsize,rotate=90] at (-.8,5.5) {Horas};\end{tikzpicture}\par}
+q: La cantidad de días de la semana en los que Sebastián usó el celular más horas que su promedio diario es:
+@ 2
+@ 3
+@ 1
+@ 4
+! El promedio es $35\div7=5$ horas; lo supera el sábado y el domingo.
+q: La mediana de las horas diarias de uso del celular en esa semana es:
+@ 4
+@ 5
+@ 3
+@ 4,5
+! Ordenados: 2, 3, 4, 4, 5, 7, 10.
+q: La cantidad de números enteros del 1 al 60 que no tienen ningún divisor común con 60, aparte del 1, es:
+@ 16
+@ 20
+@ 15
+@ 24
+! Los que no son múltiplos de 2, de 3 ni de 5: $60\cdot\frac12\cdot\frac23\cdot\frac45$.
+q: Se reparten 50 fichas entre 7 niños. Sin importar cómo se haga el reparto, se puede asegurar que por lo menos un niño recibe una cantidad de fichas mayor o igual que:
+@ 8
+@ 7
+@ 9
+@ 10
+! Si todos recibieran 7 o menos, habría a lo sumo 49 fichas.
+q: En su testamento, un señor dejó la mitad de sus ahorros a su esposa, la tercera parte de lo restante a su hijo mayor y lo que quedaba, en partes iguales, a sus dos hijas. Si cada hija recibió 6 millones de pesos, el total de los ahorros, en millones de pesos, era:
+@ 36
+@ 72
+@ 24
+@ 48
+! Las hijas reciben $\frac12\cdot\frac23=\frac13$ del total, es decir 12 millones.
+q: Con cuadritos de 1 cm de lado se construye la secuencia de escaleras que se muestra, en la que cada figura tiene un escalón más que la anterior.\par
+\newcommand\esc[3]{\begin{scope}[shift={(#1,0)}]\foreach \i in {1,...,#2}{\foreach \j in {1,...,\i}{\draw (\i-1,\j-1) rectangle (\i,\j);}}\node at (#2/2,-.8) {\scriptsize Figura #3};\end{scope}}
+{\centering\begin{tikzpicture}[scale=.35]\esc{0}{1}{1}\esc{4}{2}{2}\esc{9}{3}{3}\end{tikzpicture}\par}
+El perímetro de la figura 25 de la secuencia, en centímetros, es:
+@ 100
+@ 325
+@ 50
+@ 104
+! El contorno de la escalera mide lo mismo que el de un cuadrado de lado $n$: $4n$.
