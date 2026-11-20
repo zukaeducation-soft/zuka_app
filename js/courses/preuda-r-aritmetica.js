@@ -149,3 +149,121 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
       play('reparto-extremo', 'Reparto', { rounds: [{ n: 3, total: 18, ask: 'max' }] }, '1 y 2 a los otros: 15.', { hint: 'Mínimo a los demás.' })],
   ]);
 });
+
+// Mundo 12 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
+  diezLesson('pu-ar-1', [
+    ['corta-lo-que-queda', 0, 'Lina recibe 90 000 pesos: gasta un tercio en transporte y dos tercios de lo que queda en libros. Corta la barra', 'Gasta 30 000 y quedan 60 000. Después gasta $\\tfrac23$ de 60 000, que son 40 000: le quedan 20 000.'],
+    ['area-queda', 0, 'De un terreno se vende $\\tfrac14$ y después se siembran $\\tfrac23$ de lo que queda. Halla lo que sobra', 'Después de la venta quedan $\\tfrac34$; de eso sobra un tercio: $\\tfrac34 \\cdot \\tfrac13 = \\tfrac14$ del terreno.'],
+    ['total-original', 1, 'Después de gastar $\\tfrac25$ de su sueldo y $\\tfrac13$ de lo que le quedaba, a Óscar le sobran 24 000. Halla el sueldo', 'Sobra $\\tfrac35 \\cdot \\tfrac23 = \\tfrac25$ del sueldo, que son 24 000: el sueldo era 60 000.'],
+    ['rueda-porcentaje', 1, 'De 90 invitados llegaron 54. Gira la aguja hasta esa parte del todo', '$54 \\div 90 = \\tfrac35$: el 60 %.'],
+    ['pinta-personas', 0, 'Tres cuartas partes de un grupo de 24 llegaron temprano. Píntalos', '$\\tfrac34$ de 24: un cuarto son 6, tres cuartos son 18.'],
+    ['cruz-porcentaje', { problems: [{ text: 'Gastó el 25 % de 80 000. ¿Cuánto gastó?', chips: [{ label: '25', cell: 'p' }, { label: '80 000', cell: 'C' }, { label: '?', cell: 'B' }] }] }, 'Una fracción también es un porcentaje. Arma la cruz', 'El 25 % es la cuarta parte: gastó 20 000.'],
+    ['vuela-precios', 0, 'Vuela a lo que queda', 'Mitad y mitad de lo que queda: sobra $\\tfrac14$. Un quinto y luego un cuarto del resto: $\\tfrac45 \\cdot \\tfrac34 = \\tfrac35$. Si $\\tfrac13$ son 50 000, había 150 000.'],
+  ], [
+    sol('Camilo leyó un libro así: el lunes leyó la cuarta parte del libro; el martes, la tercera parte de lo que le faltaba; el miércoles leyó 60 páginas y terminó el libro. ¿Cuántas páginas tiene el libro?',
+      ['Después del lunes le falta [[$\\tfrac34$]] del libro', 'El martes lee $\\tfrac13$ de $\\tfrac34$, que es [[$\\tfrac14$]] del libro', 'Le queda $\\tfrac34 - \\tfrac14 =$ [[$\\tfrac12$]] del libro, que son las 60 páginas', 'El libro tiene $60 \\cdot 2 =$ [[120]] páginas'],
+      ['$\\tfrac{5}{12}$', '144', '$\\tfrac13$'],
+      'La tercera parte del martes es de lo que faltaba ($\\tfrac34$), no del libro entero. Las 60 páginas del miércoles son la mitad del libro.',
+      'Lleva la cuenta de lo que falta por leer después de cada día, siempre como fracción del libro completo.'),
+    err('De un tanque lleno de agua se sacaron primero las dos quintas partes de su contenido y luego 10 litros más. Después de esto, el tanque quedó exactamente hasta la mitad. ¿Cuál es la capacidad del tanque?',
+      ['Después de sacar $\\tfrac25$ queda $\\tfrac35$ del tanque', 'Al final queda $\\tfrac12$: los 10 litros son la diferencia, $\\tfrac35 - \\tfrac12 = \\tfrac{1}{10}$ del tanque', 'Si $\\tfrac{1}{10}$ del tanque son 10 litros, la capacidad es $10 \\div 10 = 1$ litro'], 2,
+      ['Si $\\tfrac{1}{10}$ del tanque son 10 litros, la capacidad es $10 \\cdot 10 = 100$ litros', 'Si $\\tfrac{1}{10}$ del tanque son 10 litros, la capacidad es $10 + 10 = 20$ litros', 'Si $\\tfrac{1}{10}$ del tanque son 10 litros, la capacidad es $10 \\cdot 5 = 50$ litros'],
+      'Si una décima parte son 10 litros, el tanque completo son diez de esas partes: 100 litros. Un tanque de 1 litro no deja sacar 10.',
+      'Compara la respuesta con el enunciado: ¿se pueden sacar 10 litros de ese tanque?'),
+    opc('Tres amigos se comen una pizza así: el primero come la cuarta parte de la pizza; el segundo, la tercera parte de lo que quedó, y el tercero, la mitad de lo que quedaba. La fracción de la pizza que sobra es:',
+      ['$\\tfrac14$', '$\\tfrac{1}{12}$', '$\\tfrac{1}{24}$', '$\\tfrac13$'], 0,
+      'Quedan $\\tfrac34$; el segundo deja $\\tfrac23$ de eso, $\\tfrac12$; el tercero deja la mitad: $\\tfrac14$.',
+      'Sigue lo que queda después de cada uno: cada fracción se toma de lo que queda, no de la pizza entera.'),
+  ]);
+
+  diezLesson('pu-ar-2', [
+    ['nivela-datos', 1, 'Cinco cajas pesan 8, 3, 5, 10 y 4 kilos. Nivela las barras para hallar el promedio', 'Entre todas pesan 30 kilos: repartidos por igual, 6 kilos cada una.'],
+    ['dato-faltante', 0, 'Marta quiere promediar 80 en cuatro pruebas y lleva 70, 85 y 90. Halla la nota que falta', 'Para promediar 80 debe sumar 320. Lleva 245: le faltan 75.'],
+    ['balanza-promedio', 0, 'Tres mujeres promedian 8 y cinco hombres promedian 4. Ubica el promedio de todo el grupo', '$\\tfrac{3 \\cdot 8 + 5 \\cdot 4}{8} = \\tfrac{44}{8} = 5.5$: queda más cerca del promedio del grupo más grande.'],
+    ['nota-ponderada', 0, 'Dos parciales del 30 % con notas 3 y 4, y un final del 40 %. Halla la nota del final para una definitiva de 3.9', 'Los parciales aportan $0.9 + 1.2 = 2.1$. Faltan 1.8, y el final pesa 0.4: $1.8 \\div 0.4 = 4.5$.'],
+    ['tres-centros', 0, 'Los puntajes de siete jugadores: ubica la media, la mediana y la moda', 'Moda 2 (sale tres veces), mediana 3 (el del centro) y media $28 \\div 7 = 4$.'],
+    ['ordena-mediana', 0, 'Seis tiempos de carrera: ordénalos y halla la mediana', 'Ordenados: 9, 9, 11, 12, 15, 20. La mediana es el promedio de los dos del centro: 11.5.'],
+    ['rompe-cambios', 0, 'Manda la pelota al promedio', 'Promedio 6 con 5 datos: la suma es 30. Con pesos iguales, 3 y 4 dan 3.5. Tres datos que promedian 4 suman 12; con un 8 más, $20 \\div 4 = 5$.'],
+  ], [
+    sol('El promedio de las edades de los 6 jugadores de un equipo es 20 años. Si se retira un jugador de 25 años, ¿cuál es el promedio de las edades de los que quedan?',
+      ['Suma de las 6 edades: $6 \\cdot 20 =$ [[120]]', 'Sin el jugador que se retira: $120 - 25 =$ [[95]]', 'Quedan [[5]] jugadores', 'Nuevo promedio: $95 \\div 5 =$ [[19]] años'],
+      ['15', '22.5', '20'],
+      'El promedio no se resta ni se promedia otra vez: se convierte en suma, se ajusta la suma y se divide entre la nueva cantidad.',
+      'Todo promedio esconde una suma. ¿Cuánto suman las seis edades?'),
+    err('Un estudiante lleva un promedio de 3.5 en 4 exámenes. ¿Qué nota debe sacar en el quinto examen para que su promedio suba a 3.8?',
+      ['Suma de los 4 exámenes: $4 \\cdot 3.5 = 14$', 'Para promediar 3.8 en 5 exámenes necesita sumar $5 \\cdot 3.8 = 19$', 'En el quinto examen necesita $3.8 + 0.3 = 4.1$'], 2,
+      ['En el quinto examen necesita $19 - 14 = 5.0$', 'En el quinto examen necesita $19 \\div 5 = 3.8$', 'En el quinto examen necesita $(3.5 + 3.8) \\div 2 = 3.65$'],
+      'La nota nueva tiene que subir el promedio de los cinco exámenes, no solo superar el anterior: le toca cubrir la suma que falta, $19 - 14 = 5.0$.',
+      'Los dos primeros pasos ya dieron la suma que lleva y la suma que necesita. ¿Qué falta?'),
+    opc('El promedio de cinco números es 12. Cuatro de ellos son 8, 10, 13 y 15. El quinto número es:',
+      ['12', '11.5', '14', '46'], 2,
+      'Los cinco suman $5 \\cdot 12 = 60$ y los cuatro conocidos suman 46: el quinto es 14.',
+      'Convierte el promedio en la suma de los cinco números.'),
+  ]);
+
+  diezLesson('pu-ar-3', [
+    ['cripto-letras', 0, 'Cada letra es una cifra: $A + A + A = \\overline{BA}$. Descúbrelas', '$3A$ debe terminar en A: solo pasa con $A = 5$, porque $15$ termina en 5. Entonces $B = 1$.'],
+    ['tablero-cifras', 0, 'Un número de dos cifras: sus cifras suman 9 y al invertirlas baja 45. Encuéntralo en el tablero', 'Al invertir, el número cambia en 9 veces la diferencia de sus cifras: $45 \\div 9 = 5$. Cifras que suman 9 y difieren en 5: 7 y 2. Es el 72.'],
+    ['maquina-regla', 1, 'Una máquina cambia 23 por 32, 58 por 85 y 71 por 17. ¿Qué entrega con el 40?', 'La máquina invierte las cifras: con 40 entrega 04, que es el 4.'],
+    ['ultima-cifra', 1, '¿En qué cifra termina $8^{14}$?', 'Las últimas cifras del 8 se repiten: 8, 4, 2, 6. Como $14 = 4 \\cdot 3 + 2$, es la segunda: 4.'],
+    ['arma-negacion', 0, 'Escribe con fichas cuánto vale el número de dos cifras $\\overline{AB}$', 'La cifra de las decenas vale diez veces: $\\overline{AB} = 10A + B$.'],
+    ['binario-luces', 0, 'El valor de cada puesto en base 2: enciende los bombillos que forman el 19', '$19 = 16 + 2 + 1$: en binario, 10011.'],
+    ['vuela-precios', 0, 'Vuela a la cifra', '$\\overline{AB} + \\overline{BA} = 11(A + B)$: múltiplo de 11. $\\overline{AB} - \\overline{BA} = 9(A - B)$: múltiplo de 9. Y $7 + 7 = 14$: B es 4.'],
+  ], [
+    sol('La suma de las cifras de un número de dos cifras es 11. Si se invierte el orden de sus cifras, el número aumenta en 27. ¿Cuál es el número?',
+      ['Al invertir las cifras, el número cambia en 9 veces su diferencia: aquí $27 \\div 9 =$ [[3]]', 'Las cifras suman 11 y se diferencian en 3: son [[4]] y [[7]]', 'El número aumenta al invertirlo, así que la cifra menor va en las decenas: es el [[47]]'],
+      ['74', '38', '9'],
+      '$(10b + a) - (10a + b) = 9(b - a)$. Con suma 11 y diferencia 3, las cifras son 4 y 7. El 47 pasa a 74, que es 27 más.',
+      'Escribe el número como $10a + b$ y el invertido como $10b + a$, y resta.'),
+    err('En la suma $\\overline{AB} + \\overline{BA} = 132$, A y B son cifras distintas de cero. ¿Cuánto vale $A + B$?',
+      ['$\\overline{AB} = 10A + B$ y $\\overline{BA} = 10B + A$', 'La suma es $11A + 11B = 11(A + B)$', 'Entonces $A + B = 132 - 11 = 121$'], 2,
+      ['Entonces $A + B = 132 \\div 11 = 12$', 'Entonces $A + B = 132 \\div 2 = 66$', 'Entonces $A + B = 132 \\div 10 = 13.2$'],
+      'El 11 está multiplicando: para despejar se divide. $A + B = 12$, por ejemplo 75 + 57. La suma de dos cifras no puede pasar de 18.',
+      'Dos cifras son números del 0 al 9. ¿Cuánto pueden sumar como máximo?'),
+    opc('En la resta $\\overline{A7} - \\overline{4B} = 28$, las letras A y B representan cifras. El valor de $A + B$ es:',
+      ['14', '15', '13', '16'], 3,
+      '$10A + 7 - 40 - B = 28$ da $10A - B = 61$: solo sirve $A = 7$ y $B = 9$. En efecto, $77 - 49 = 28$, y $A + B = 16$.',
+      'Mira primero las unidades: ¿qué cifra B hace que $7 - B$ termine en 8 (prestando una decena)?'),
+  ]);
+
+  diezLesson('pu-ar-4', [
+    ['peor-caso-bolsa', 2, 'En una bolsa hay 3 bolas de cada uno de 4 colores. ¿Cuántas hay que sacar para tener, con seguridad, 3 del mismo color?', 'La peor suerte: 2 de cada color, 8 bolas, sin completar ningún trío. La novena completa uno con seguridad.'],
+    ['rectangulo-max', 0, 'Con 24 m de cerca se quiere el corral rectangular de mayor área. Ajusta sus lados', 'Con el mismo perímetro, el rectángulo de mayor área es el cuadrado: lado 6 y área 36.'],
+    ['reparto-extremo', 0, 'Se reparten 20 dulces entre 4 niños, todos con cantidades distintas y al menos uno. ¿Cuánto puede recibir, como máximo, uno de ellos?', 'Para que uno reciba lo máximo, los otros tres reciben lo mínimo posible y distinto: 1, 2 y 3. Le quedan $20 - 6 = 14$.'],
+    ['contraejemplo', 0, 'Alguien afirma que con 3 bolas sacadas ya es seguro que hay dos del mismo color. Busca la sacada que lo desmiente', 'Con mala suerte salen una roja, una azul y una verde: tres bolas y ningún color repetido.'],
+    ['dato-faltante', 0, 'Un estudiante sacó 5, 5 y 5. ¿Cuál es la nota más baja que puede sacar en la cuarta para promediar 4?', 'Para promediar 4 en cuatro notas necesita sumar 16. Ya tiene 15: le basta un 1.'],
+    ['mayor-subida', 1, 'La gráfica muestra las ventas de una semana. Señala la mayor caída', 'La única bajada es de 15 a 9: cae 6. Los demás tramos suben.'],
+    ['rompe-cambios', 0, 'Manda la pelota al extremo'],
+  ], [
+    sol('Se reparten 50 fichas entre 7 niños, sin importar cómo. ¿Cuál es la mayor cantidad de fichas que, con seguridad, recibe por lo menos uno de ellos?',
+      ['Si el reparto es lo más parejo posible, cada niño recibe [[7]] fichas y sobra [[1]]', 'La ficha que sobra le toca a alguno, que queda con [[8]]', 'En cualquier otro reparto alguien recibe todavía más: se puede asegurar que al menos uno recibe [[8]] fichas'],
+      ['50', '6', '43'],
+      'El reparto parejo es el peor caso para el que quiere asegurar algo: $50 = 7 \\cdot 7 + 1$. Si nadie tuviera 8 o más, habría como mucho 49 fichas.',
+      'Intenta repartir de modo que nadie reciba muchas: lo más parejo que puedas. ¿Qué pasa con lo que sobra?'),
+    err('En un cajón hay 10 medias negras, 8 azules y 6 grises, todas revueltas. ¿Cuántas medias hay que sacar sin mirar, como mínimo, para estar seguros de tener dos del mismo color?',
+      ['Hay tres colores de medias', 'En el peor caso, las tres primeras medias salen de colores distintos: una negra, una azul y una gris', 'Para asegurar el par hay que sacar todas las de un color y una más: $10 + 1 = 11$'], 2,
+      ['La media siguiente repite algún color: basta sacar $3 + 1 = 4$', 'Basta sacar 3: una de cada color', 'Hay que sacar todas las grises y una más: $6 + 1 = 7$'],
+      'Después de una media de cada color, la cuarta tiene que repetir alguno. Las cantidades de cada color no importan aquí: solo cuántos colores hay.',
+      'Imagina la peor suerte posible y pregúntate: ¿de qué color puede ser la media que sigue?'),
+    opc('Con 40 m de malla se quiere cercar un corral rectangular. La mayor área que puede tener el corral es:',
+      ['96 m²', '100 m²', '400 m²', '80 m²'], 1,
+      'Largo más ancho suman 20. El producto es máximo cuando los dos son iguales: $10 \\cdot 10 = 100$ m².',
+      'Prueba varios rectángulos con ese perímetro: 12 por 8, 11 por 9… ¿Cuál tiene más área?'),
+  ]);
+
+  addExam('pu-aritmetica', [
+    ['pu-ar-1', 'Una fracción «de lo que queda» se multiplica por lo que queda.',
+      opc('Ana gasta la mitad de su dinero en un regalo y la tercera parte de lo que le queda en transporte. La fracción de su dinero que le sobra es:', ['$\\tfrac16$', '$\\tfrac13$', '$\\tfrac12$', '$\\tfrac23$'], 1,
+        'Le queda $\\tfrac12$ y de eso conserva $\\tfrac23$: $\\tfrac12 \\cdot \\tfrac23 = \\tfrac13$.', 'El segundo gasto es una parte de lo que quedó, no del total.')],
+    ['pu-ar-2', 'Promedio por cantidad de datos es la suma.',
+      opc('El promedio de tres números es 10. Si dos de ellos son 7 y 9, el tercero es:', ['10', '8', '16', '14'], 3,
+        'Los tres suman 30 y los dos conocidos suman 16: el tercero es 14.', 'Convierte el promedio en una suma.')],
+    ['pu-ar-3', 'Un número de dos cifras vale 10 veces sus decenas más sus unidades.',
+      opc('Un número de dos cifras se suma con el número que resulta de invertir sus cifras. El resultado siempre es múltiplo de:', ['11', '9', '10', '2'], 0,
+        '$(10a + b) + (10b + a) = 11(a + b)$.', 'Escribe los dos números con las letras a y b y súmalos.')],
+    ['pu-ar-4', 'Para estar seguros hay que pensar en la peor suerte posible.',
+      opc('En una bolsa hay 5 bolas rojas, 5 verdes y 5 azules. La cantidad mínima de bolas que hay que sacar sin mirar para estar seguros de tener dos del mismo color es:', ['2', '3', '4', '6'], 2,
+        'Con la peor suerte salen tres de colores distintos; la cuarta repite color.', 'Imagina que cada bola sale de un color distinto mientras se pueda.')],
+  ]);
+});

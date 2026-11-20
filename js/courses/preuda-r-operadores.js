@@ -85,3 +85,65 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
       play('busca-x-operador', 'Ecuación', { rounds: [{ sym: '\\oplus', tex: '2a + 3b', f: (a, b) => 2 * a + 3 * b, k: 2, side: 'left', target: 14, lo: -5, hi: 10 }] }, '$2x + 6 = 14$: $x = 4$.', { hint: 'Reemplaza.' })],
   ]);
 });
+
+// Mundo 11 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
+  diezLesson('pu-op-1', [
+    ['maquina-operador', 0, 'La máquina aplica $a \\star b = 2a - b$. Ya entró el 6: elige la otra entrada para que salga 9', '$2 \\cdot 6 - b = 9$: la segunda entrada es 3.'],
+    ['cruce-tabla', 0, 'Esta operación no tiene fórmula: está en una tabla. Halla $3 \\ast 4$', 'El resultado está en el cruce de la fila del primer número con la columna del segundo: fila 3, columna 4, da 2.'],
+    ['neutro-buscador', 0, 'Con $a \\circ b = a + b - 3$, busca el número que no cambia a los demás', 'Para que $a \\circ e = a$ hace falta $a + e - 3 = a$: el neutro es 3.'],
+    ['adivina-operador', 0, 'Tres ejemplos de una operación secreta: $3 \\star 1 = 8$, $2 \\star 5 = 1$ y $4 \\star 4 = 8$. ¿Cuál es la regla?', 'La única regla que cumple los tres ejemplos es $3a - b$: $9 - 1 = 8$, $6 - 5 = 1$ y $12 - 4 = 8$.'],
+    ['contraejemplo', 0, 'Alguien afirma que en $a \\star b = 2a - b$ el orden no importa. Busca la pareja que lo desmiente', 'Con $(2, 6)$: $2 \\star 6 = -2$, pero $6 \\star 2 = 10$. Las parejas de números iguales no sirven para probar nada.'],
+    ['capas-operacion', 0, 'Después de reemplazar en el operador queda una cuenta corriente. Resuélvela por capas', 'Primero la potencia y los productos, después la resta: $16 - 15 = 1$ y $14 - 6 = 8$.'],
+    ['vuela-precios', 0, 'Vuela al resultado del operador', '$4 \\star 1 = 2 \\cdot 4 - 1 = 7$. El neutro de $a + b - 3$ es 3. Y $3 \\,\\#\\, 2 = 3 \\cdot 2 - 2 = 4$.'],
+  ], [
+    sol('En los números enteros se define la operación $a \\diamond b = 3a - 2b$. Calcula $5 \\diamond 4$ y $4 \\diamond 5$. ¿La operación es conmutativa?',
+      ['En $5 \\diamond 4$ el primero es 5 y el segundo es 4: $3 \\cdot 5 - 2 \\cdot 4 =$ [[7]]', 'En $4 \\diamond 5$ el primero es 4: $3 \\cdot 4 - 2 \\cdot 5 =$ [[2]]', 'Los resultados son [[distintos]]: la operación [[no es]] conmutativa'],
+      ['iguales', 'es', '−2'],
+      'Un operador definido es una receta con dos puestos: lo que se hace con el primer número no es lo mismo que con el segundo. Por eso el orden puede cambiar el resultado.',
+      'Marca cuál número ocupa el lugar de a y cuál el de b antes de reemplazar.'),
+    err('Se define la operación $a \\circ b = a^2 - b$. ¿Cuánto vale $(-3) \\circ 4$?',
+      ['El primer número es $-3$ y el segundo es 4', 'Se eleva el primero al cuadrado: $(-3)^2 = -9$', 'Se resta el segundo: $-9 - 4 = -13$'], 1,
+      ['Se eleva el primero al cuadrado: $(-3)^2 = 9$', 'Se eleva el primero al cuadrado: $(-3)^2 = -6$', 'Se eleva el primero al cuadrado: $(-3)^2 = 6$'],
+      'Al reemplazar un número negativo va con su paréntesis: $(-3)^2 = 9$. El resultado es $9 - 4 = 5$.',
+      'Reemplaza la letra por el número completo, con su signo y entre paréntesis.'),
+    opc('En los números reales se define la operación $a \\star b = a \\cdot b - a$. El valor de $3 \\star 5$ menos el valor de $5 \\star 3$ es:',
+      ['0', '2', '$-2$', '4'], 1,
+      '$3 \\star 5 = 15 - 3 = 12$ y $5 \\star 3 = 15 - 5 = 10$. La diferencia es 2.',
+      'Calcula cada uno por separado: en cada caso, el número que se resta es el primero.'),
+  ]);
+
+  diezLesson('pu-op-2', [
+    ['anida-operador', 0, 'Con $a \\star b = 2a - b$, calcula $(4 \\star 3) \\star 2$ de adentro hacia afuera', 'Primero el paréntesis: $4 \\star 3 = 8 - 3 = 5$. Después $5 \\star 2 = 10 - 2 = 8$.'],
+    ['busca-x-operador', 0, 'Con $a \\oplus b = 3a + b$, halla la $x$ que cumple $x \\oplus 5 = 26$', 'Al reemplazar queda $3x + 5 = 26$: $3x = 21$ y $x = 7$.'],
+    ['cruce-tabla', 0, 'Una cadena de operaciones en la tabla: $(2 \\ast 3) \\ast 3$', 'Se opera de a dos: $2 \\ast 3 = 1$ y luego $1 \\ast 3 = 0$. Esta tabla suma y se queda con el residuo al dividir entre 4.'],
+    ['maquina-operador', 0, 'La máquina aplica $a \\star b = a^2 - 2b$. Ya entró el 3: elige la otra entrada para que salga 3', '$3^2 - 2b = 3$ da $2b = 6$: la segunda entrada es 3.'],
+    ['capas-operacion', 0, 'El anidado $(4 \\star 2) \\star 3$, ya reemplazado. Resuélvelo por capas', 'El paréntesis vale $2 \\cdot 4 - 2 = 6$; después $2 \\cdot 6 - 3 = 9$.'],
+    ['arma-negacion', 0, 'Con $a \\star b = 2a - b$, escribe con fichas qué significa $5 \\star x$', 'El 5 ocupa el lugar de a y la x el de b: $2 \\cdot 5 - x$.'],
+    ['balanza-cajas', 0, 'Después de reemplazar queda una ecuación. Despeja lo que hay en la caja'],
+  ], [
+    sol('En los números enteros se define la operación $a \\ast b = a \\cdot b - (a + b)$. ¿Cuánto vale $(4 \\ast 3) \\ast 2$?',
+      ['Primero el paréntesis: $4 \\ast 3 = 12 - 7 =$ [[5]]', 'Ese resultado ocupa el lugar del paréntesis: queda $5 \\ast 2$, con producto [[10]] y suma [[7]]', '$5 \\ast 2 = 10 - 7 =$ [[3]]'],
+      ['8', '24', '−3'],
+      'Un anidado se resuelve de adentro hacia afuera: el resultado del paréntesis pasa a ser un número más de la operación siguiente.',
+      'Olvida por un momento el 2 de afuera y resuelve solo el paréntesis.'),
+    err('Se define la operación $a \\oplus b = a + b - ab$. ¿Para qué valor de $x$ se cumple $x \\oplus 2 = -5$?',
+      ['Se reemplaza: $x \\oplus 2 = x + 2 - 2x$', 'Se simplifica: $x + 2 - 2x = 2 - x$', 'Se plantea $2 - x = -5$, así que $-x = -3$', 'Entonces $x = 3$'], 2,
+      ['Se plantea $2 - x = -5$, así que $-x = -7$', 'Se plantea $2 - x = -5$, así que $-x = 7$', 'Se plantea $2 - x = -5$, así que $x = -5$'],
+      'Al pasar el 2 al otro lado se resta: $-5 - 2 = -7$. Entonces $x = 7$, y se comprueba: $7 + 2 - 14 = -5$.',
+      'Comprueba la respuesta final reemplazándola en la operación original.'),
+    opc('Para números reales se define $a \\,\\#\\, b = 2a + b$. El valor de $x$ que cumple $x \\,\\#\\, 3 = 3 \\,\\#\\, x$ es:',
+      ['0', '1', '6', '3'], 3,
+      '$x \\,\\#\\, 3 = 2x + 3$ y $3 \\,\\#\\, x = 6 + x$. Igualando: $2x + 3 = 6 + x$, así que $x = 3$.',
+      'Reemplaza en los dos lados con cuidado: la x ocupa un puesto distinto en cada uno.'),
+  ]);
+
+  addExam('pu-operadores', [
+    ['pu-op-1', 'Un operador definido es una receta: cada letra se reemplaza por el número que ocupa su lugar.',
+      opc('Se define la operación $a \\triangle b = a^2 + b$. El valor de $3 \\triangle 4$ es:', ['10', '19', '13', '7'], 2,
+        '$3^2 + 4 = 9 + 4 = 13$.', 'El cuadrado es solo para el primer número.')],
+    ['pu-op-2', 'Los operadores anidados se resuelven de adentro hacia afuera.',
+      opc('Se define la operación $a \\star b = 2a - b$. El valor de $(5 \\star 4) \\star 3$ es:', ['9', '3', '6', '15'], 0,
+        '$5 \\star 4 = 10 - 4 = 6$ y $6 \\star 3 = 12 - 3 = 9$.', 'Resuelve primero el paréntesis.')],
+  ]);
+});

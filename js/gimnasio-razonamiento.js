@@ -160,6 +160,30 @@ const CONCEPTOS_PU = {
     scene: { type: 'pasos', lines: [{ t: 'supón: N dice la verdad', s: 14 }, { t: '→  L y M dicen la verdad', s: 14 }, { t: '→  M afirma: «N miente»', s: 14 }, 'contradicción: N miente'] },
     beats: ['Escoge a alguien y supón que dice la verdad.', 'Saca todo lo que se sigue de esa suposición.', 'Si aparece algo que choca con lo supuesto, hay una contradicción.', 'Una suposición que lleva a contradicción se descarta: era falsa.'],
   },
+  'operador-receta': {
+    title: 'Un operador es una receta',
+    scene: { type: 'pasos', lines: [{ t: 'a ★ b = 3a − b', s: 15 }, { t: '2 ★ 1 = 3·2 − 1 = 5', s: 15 }, { t: '(2 ★ 1) ★ 4 = 5 ★ 4', s: 15 }, '5 ★ 4 = 3·5 − 4 = 11'] },
+    beats: ['El operador es una receta: el triple del primero menos el segundo.', 'Se reemplaza cada letra por el número que ocupa su lugar.', 'Con paréntesis, el resultado de adentro pasa a ser el primer número.', 'Se aplica la receta otra vez con los números nuevos.'],
+  },
+  'fraccion-del-resto': {
+    title: 'Una fracción de lo que queda',
+    scene: { type: 'barra', bars: [
+      { label: 'la prima completa', b: 0, segs: [{ w: 1, t: '1', c: 'a' }] },
+      { label: 'gasta 1/3 del total', b: 1, segs: [{ w: 1 / 3, t: '1/3', c: 'bad', dim: 1 }, { w: 2 / 3, t: 'queda 2/3', c: 'a' }] },
+      { label: 'gasta 3/4 de lo que queda', b: 2, segs: [{ w: 1 / 3, t: '', c: 'mute', dim: 1 }, { w: .5, t: '3/4 del resto', c: 'bad', dim: 1 }, { w: 1 / 6, t: '1/6', c: 'ok' }] },
+    ] },
+    beats: ['La barra completa es la prima.', 'El primer gasto se quita del total: quedan $\\tfrac23$.', 'El segundo gasto es una fracción de lo que queda, no del total: sobrevive $\\tfrac14$ de $\\tfrac23$, que es $\\tfrac16$.'],
+  },
+  'promedio-suma': {
+    title: 'Todo promedio esconde una suma',
+    scene: { type: 'pasos', lines: ['promedio · cantidad = suma', '3.7 · 5 = 18.5', 'falta: 18.5 − 14 = 4.5'] },
+    beats: ['Todo promedio esconde una suma: el promedio por la cantidad de datos.', 'Para el promedio que se quiere, calcula la suma que hace falta.', 'El dato que falta es esa suma menos lo que ya se lleva.'],
+  },
+  'peor-caso': {
+    title: 'Gánale a la peor suerte',
+    scene: { type: 'pasos', lines: [{ t: 'peor suerte: roja, azul, verde', s: 14 }, { t: 'la siguiente repite color', s: 14 }, '3 + 1 = 4'] },
+    beats: ['Imagina la peor suerte posible: cada bola sale de un color distinto.', 'Cuando ya salió una de cada color, la siguiente tiene que repetir.', 'Para estar seguros: el peor caso y una más.'],
+  },
 };
 if (typeof CONCEPTOS !== 'undefined') Object.assign(CONCEPTOS, CONCEPTOS_PU);
 
@@ -373,6 +397,30 @@ GYM_RETOS.push(
   },
 );
 
+GYM_RETOS.push(
+  {
+    id: 'gym-operador', after: ['pu-op-1', 'pu-op-2'], level: 2,
+    title: 'El operador estrella', strategy: 'Reemplazar con la receta, de adentro hacia afuera',
+    problem: 'En los números enteros se define la operación $a \\star b = 3a - b$. Calcula $(2 \\star 1) \\star 4$ y halla el valor de $x$ para el cual $x \\star 5 = 16$.',
+    steps: [
+      { title: 'Resuelve el anidado', concept: 'operador-receta',
+        coach: 'Un operador nuevo es una receta: dice qué hacer con el primer número y qué con el segundo. Cuando hay paréntesis, se resuelve primero lo de adentro y su resultado ocupa ese lugar.',
+        ex: play('anida-operador', 'Calcula de adentro hacia afuera', { rounds: [{ sym: '\\star', tex: '3a - b', f: (a, b) => 3 * a - b, expr: [[2, 1], 4] }] },
+          '$2 \\star 1 = 6 - 1 = 5$ y luego $5 \\star 4 = 15 - 4 = 11$.', { hint: 'Empieza por el paréntesis y usa su resultado como primer número.' }),
+        hints: ['Resuelve primero el paréntesis con la receta: el triple del primero menos el segundo.', 'El paréntesis vale 5. Ahora aplica la receta con 5 de primero y 4 de segundo.'],
+        note: 'Anidado: (2 ★ 1) ★ 4 = 5 ★ 4 = 11' },
+      { title: 'Despeja la x del operador',
+        coach: 'Ahora la incógnita está dentro del operador. Reemplaza con la receta, como si la x fuera un número, y te queda una ecuación corriente.',
+        ex: play('busca-x-operador', 'Halla la x', { rounds: [{ sym: '\\star', tex: '3a - b', f: (a, b) => 3 * a - b, k: 5, side: 'left', target: 16, lo: -5, hi: 10 }] },
+          'Al reemplazar queda $3x - 5 = 16$: $3x = 21$ y $x = 7$.', { hint: 'Escribe la receta con la x en el primer lugar y despeja.' }),
+        hints: ['La x ocupa el primer lugar: la receta le pide su triple. El 5 ocupa el segundo.', 'La ecuación es $3x - 5 = 16$. Suma 5 a los dos lados y divide entre 3.'],
+        note: 'Ecuación: 3x − 5 = 16, así que x = 7' },
+    ],
+    answer: 'El anidado vale 11, y la ecuación se cumple con x = 7.',
+    wrap: 'Con un operador definido no hay nada que memorizar: se reemplaza cada letra por lo que ocupa su lugar. Los paréntesis van primero, y una incógnita dentro del operador se convierte en una ecuación corriente.',
+  },
+);
+
 // Concepto de cada paso de los retos que ya existían: { reto: [concepto del paso 1, del paso 2, …] } (null = sin concepto).
 const GYM_CONCEPT_DE = {
   'gym-concreto': ['razon-en-partes', 'aumento-como-factor', null],
@@ -384,6 +432,9 @@ const GYM_CONCEPT_DE = {
   'gym-claves': ['casillas-multiplican', 'complemento'],
   'gym-papaya': [null, 'repetidas-dividen', null],
   'gym-comite': [null, 'orden-no-importa', null],
+  'gym-prima': ['fraccion-del-resto', null, null],
+  'gym-examen': [null, 'promedio-suma'],
+  'gym-peor': ['peor-caso', null],
   // (los mundos siguientes añaden aquí)
 };
 for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (c && r.steps[i]) r.steps[i].concept = c; });
