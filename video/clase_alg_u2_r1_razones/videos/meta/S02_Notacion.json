@@ -1,0 +1,37 @@
+{
+ "scene": "S02_Notacion",
+ "duration": 39.667,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Cómo se escribe una razón",
+   "hold": 39.067
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.433,
+   "text": "En un salón hay dieciocho niñas y doce niños. La razón de niñas a niños se escribe dieciocho, dos puntos, doce, o como una fracción.",
+   "fox": true
+  },
+  {
+   "start": 11.433,
+   "end": 17.333,
+   "text": "El primer número se llama antecedente y el segundo, consecuente.",
+   "fox": false
+  },
+  {
+   "start": 17.333,
+   "end": 29.4,
+   "text": "Cuidado con dos cosas. La primera: el orden importa. Niños a niñas es doce a dieciocho, otra razón. Pasa lo mismo que con la división, que no es conmutativa.",
+   "fox": false
+  },
+  {
+   "start": 29.4,
+   "end": 38.667,
+   "text": "La segunda: el consecuente nunca es cero, porque no se puede dividir entre cero. Lo vimos con los axiomas.",
+   "fox": false
+  }
+ ]
+}

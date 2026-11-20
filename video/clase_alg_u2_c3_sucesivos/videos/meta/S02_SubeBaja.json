@@ -1,0 +1,36 @@
+{
+ "scene": "S02_SubeBaja",
+ "duration": 38.933,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Subir y bajar lo mismo",
+   "hold": 20.4
+  },
+  {
+   "time": 21.0,
+   "title": "Para volver al precio",
+   "hold": 38.333
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.367,
+   "text": "Una acción vale cien. Sube el cincuenta por ciento y luego baja el cincuenta por ciento. Parece que debería volver a cien, pero no.",
+   "fox": true
+  },
+  {
+   "start": 11.367,
+   "end": 20.0,
+   "text": "La bajada es la mitad de ciento cincuenta, que es más grande que cien: queda en setenta y cinco.",
+   "fox": false
+  },
+  {
+   "start": 21.0,
+   "end": 37.933,
+   "text": "Por la misma razón, si algo baja el veinte por ciento, para volver al precio de antes no basta subir el veinte. De cien queda en ochenta, y para volver a cien hay que subir veinte sobre ochenta: el veinticinco por ciento.",
+   "fox": false
+  }
+ ]
+}

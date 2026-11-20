@@ -1,0 +1,83 @@
+1
+00:00:08,900 --> 00:00:17,867
+Una sucesión es una lista de números puesta en orden: hay un primero, un segundo, un tercero, y así sin parar.
+
+2
+00:00:17,867 --> 00:00:31,233
+Son los números cuadrados que vimos con las potencias. Cada número tiene su puesto, y los puestos son los naturales: uno, dos, tres. El término del puesto n se escribe a sub n.
+
+3
+00:00:31,233 --> 00:00:42,567
+Si hay un patrón, una fórmula da cualquier término sin escribir los anteriores: es el término general. Aquí cada término es su puesto al cuadrado.
+
+4
+00:00:42,567 --> 00:00:54,000
+Otra forma de describir una sucesión es con una regla que pasa de un término al siguiente. Los pares empiezan en dos y suman dos cada vez.
+
+5
+00:00:56,000 --> 00:01:02,500
+Sara tiene veinte mil pesos ahorrados y cada semana guarda cinco mil más.
+
+6
+00:01:02,500 --> 00:01:16,067
+Cuando se suma siempre el mismo número, la sucesión es una progresión aritmética. Ese número fijo se llama diferencia, porque es la resta de un término menos el anterior.
+
+7
+00:01:17,067 --> 00:01:29,067
+La diferencia también puede ser negativa. Una vela de treinta centímetros se gasta dos centímetros cada hora: treinta, veintiocho, veintiséis, veinticuatro.
+
+8
+00:01:29,067 --> 00:01:37,967
+Y si la diferencia es cero, la sucesión se queda quieta: siete, siete, siete. También es aritmética.
+
+9
+00:01:38,967 --> 00:01:53,533
+Cuidado: para decidir hay que revisar todos los saltos, no solo el primero. En uno, dos, cuatro, ocho, el primer salto es uno, pero el siguiente es dos y luego cuatro. No es aritmética.
+
+10
+00:01:55,530 --> 00:02:04,430
+Para hallar el término veinte de siete, once, quince, no hace falta escribir los veinte. Basta contar saltos.
+
+11
+00:02:04,430 --> 00:02:14,463
+Para llegar al término dos se da un salto; al tres, dos saltos; al cinco, cuatro saltos. Siempre un salto menos que el puesto.
+
+12
+00:02:14,463 --> 00:02:23,263
+En general, al término n se llega con n menos uno saltos de tamaño d. Esa es la fórmula del término general.
+
+13
+00:02:23,263 --> 00:02:30,463
+El término veinte es siete más diecinueve saltos de cuatro: ochenta y tres.
+
+14
+00:02:31,463 --> 00:02:40,030
+Si se dibuja cada puesto con su término, los puntos quedan sobre una recta: suben lo mismo en cada paso.
+
+15
+00:02:40,030 --> 00:02:52,463
+Como el taxi de las proporciones, la recta no pasa por el origen. Y solo hay puntos sueltos: los puestos son naturales, no existe el término uno y medio.
+
+16
+00:02:54,460 --> 00:03:04,627
+A veces solo se conocen dos términos. Si el tercero es diez y el octavo es veinticinco, se puede reconstruir toda la progresión.
+
+17
+00:03:04,627 --> 00:03:13,727
+Del puesto tres al ocho hay cinco saltos, y la distancia entre los dos términos es quince. Cada salto mide tres.
+
+18
+00:03:13,727 --> 00:03:21,927
+Para el primer término se retroceden dos saltos desde el tercero: diez menos seis, cuatro.
+
+19
+00:03:22,927 --> 00:03:34,860
+Meter números entre otros dos es la misma idea. Entre dos y dieciocho caben tres medios aritméticos. Con tres números adentro quedan cuatro saltos iguales.
+
+20
+00:03:34,860 --> 00:03:44,760
+La distancia es dieciséis y se reparte en cuatro saltos: cada salto es cuatro. Los medios son seis, diez y catorce.
+
+21
+00:03:46,760 --> 00:03:56,160
+Una progresión aritmética suma siempre la misma diferencia, y el término n se alcanza con n menos uno saltos.

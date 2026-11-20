@@ -1,0 +1,495 @@
+== LECTURA
+## Texto Uno
+p: Lea la etiqueta de un paquete de galletas rellenas. Encontrará harina y azúcar, pero también una lista de nombres que ninguna cocina doméstica guarda en la alacena: emulsionantes, jarabes, colorantes, saborizantes <<idénticos al natural>>. Los nutricionistas llaman a estos productos ultraprocesados y proponen una regla sencilla para reconocerlos: si su abuela no hubiera reconocido los ingredientes, probablemente lo sea.
+p: La clasificación no depende de cuánta azúcar o grasa tenga un alimento, sino de cuánto se ha alejado de su forma original. Un pan hecho con harina, agua, sal y levadura es un alimento procesado; un pan de molde que dura tres semanas sin endurecerse es otra cosa. La diferencia está en que el segundo no se elabora a partir de alimentos, sino de sustancias extraídas de ellos y vueltas a ensamblar.
+p: ¿Por qué importa? En un estudio muy citado, veinte voluntarios vivieron un mes en una clínica. Durante dos semanas recibieron comidas ultraprocesadas y, durante otras dos, comidas preparadas con ingredientes frescos. Ambos menús ofrecían las mismas calorías, azúcar, grasa y fibra, y cada persona podía comer cuanto quisiera. Con el menú ultraprocesado comieron, en promedio, quinientas calorías más por día y subieron de peso; con el otro, bajaron.
+p: Los investigadores no saben del todo por qué. Una hipótesis es la velocidad: estos productos son blandos, se mastican poco y se tragan rápido, de modo que el aviso de saciedad llega cuando ya se ha comido de más. Otra apunta a su diseño. <<No se formulan para alimentar sino para que no se pueda parar de comer>>, afirma el médico Ramiro Castaño. <<La combinación exacta de sal, azúcar y grasa que los hace irresistibles casi no existe en la naturaleza>>.
+p: Sería injusto, sin embargo, convertir el asunto en un reproche a quienes los consumen. Son baratos, no se dañan, no exigen cocinar y se consiguen en cualquier esquina. Para una madre que trabaja diez horas y gasta tres en transporte, el paquete no es un capricho: es la única cena posible. Por eso Castaño desconfía de las campañas que se limitan a recomendar <<comer sano>>. <<Decirle a alguien que elija mejor, cuando no tiene entre qué elegir, es una forma elegante de culparlo>>.
+p: Varios países han optado por intervenir el entorno y no al individuo: sellos de advertencia en los empaques, impuestos a las bebidas azucaradas, restricciones a la venta en colegios. Los primeros resultados sugieren que los sellos sí cambian lo que la gente compra. La industria, por su parte, ha respondido reformulando sus productos para quedar justo por debajo del límite que obliga a llevarlos.
+src: Texto elaborado para este simulacro.
+
+q: La <<regla sencilla>> que se menciona en el párrafo 1 permite reconocer un ultraprocesado porque:
+@ Contiene ingredientes que no se usan en una cocina doméstica
+@ Tiene más azúcar que los alimentos preparados en casa
+@ Es un producto que las abuelas no acostumbraban comprar
+@ Trae la etiqueta escrita en un lenguaje difícil
+q: En el párrafo 1, las comillas en <<idénticos al natural>> indican que el autor:
+@ Reproduce con distancia una expresión propia de las etiquetas
+@ Cita las palabras de un nutricionista
+@ Destaca la principal ventaja de los saborizantes
+@ Usa un término científico que explicará más adelante
+q: Según el párrafo 2, el criterio para clasificar un alimento como ultraprocesado es:
+@ El grado en que ha sido transformado respecto a su forma original
+@ La cantidad de azúcar y de grasa que contiene
+@ El tiempo que puede durar sin dañarse
+@ El lugar donde se fabrica y se vende
+q: El ejemplo de los dos panes (párrafo 2) sirve para:
+@ Diferenciar un alimento procesado de uno ultraprocesado
+@ Demostrar que el pan engorda más que otros alimentos
+@ Explicar cómo se prepara el pan en casa
+@ Recomendar el consumo de pan de molde
+q: En el párrafo 2, la expresión <<\sub{el segundo}>> se refiere a:
+@ El pan de molde que dura tres semanas
+@ El pan hecho con harina, agua, sal y levadura
+@ El alimento procesado
+@ El azúcar
+q: La expresión <<vueltas a ensamblar>> (párrafo 2) da a entender que las sustancias:
+@ Se recombinan en la industria para formar un producto nuevo
+@ Regresan a su estado natural
+@ Se empacan varias veces antes de venderse
+@ Se mezclan en la cocina de cada casa
+q: En el estudio del párrafo 3, los dos menús tenían las mismas calorías, azúcar, grasa y fibra con el fin de:
+@ Asegurar que las diferencias se debieran al grado de procesamiento
+@ Evitar que los voluntarios subieran de peso
+@ Reducir los costos de la alimentación en la clínica
+@ Lograr que los voluntarios no notaran el cambio de menú
+q: El resultado principal del estudio (párrafo 3) fue que, con el menú ultraprocesado, los voluntarios:
+@ Comieron más y aumentaron de peso
+@ Comieron lo mismo, pero aumentaron de peso
+@ Comieron menos porque se saciaban pronto
+@ Prefirieron las comidas preparadas con ingredientes frescos
+q: Del estudio del párrafo 3 se puede inferir que:
+@ Dos comidas con igual composición nutricional pueden llevar a comer cantidades distintas
+@ Las calorías de los ultraprocesados no aparecen en las etiquetas
+@ Los ingredientes frescos no aportan calorías
+@ Veinte voluntarios son suficientes para conocer los hábitos de un país
+q: La oración <<Los investigadores no saben del todo por qué>> (párrafo 4) indica que las explicaciones que siguen:
+@ Son hipótesis todavía no confirmadas
+@ Fueron rechazadas por los científicos
+@ Son hechos demostrados en el mismo estudio
+@ Provienen de la industria de alimentos
+q: Según la hipótesis de la velocidad (párrafo 4), se come de más porque:
+@ La sensación de llenura llega después de haber comido mucho
+@ Los productos tienen porciones demasiado grandes
+@ Las personas comen mientras hacen otras actividades
+@ Los productos blandos tienen más calorías
+q: En el párrafo 4, la palabra <<\sub{saciedad}>> significa:
+@ Sensación de estar satisfecho
+@ Ganas de comer
+@ Malestar estomacal
+@ Rapidez al masticar
+q: De acuerdo con Castaño (párrafo 4), los ultraprocesados están diseñados para:
+@ Estimular un consumo que cuesta detener
+@ Aportar todos los nutrientes necesarios
+@ Imitar los sabores de la comida casera
+@ Reducir el tiempo que se dedica a cocinar
+q: Según el párrafo 5, son razones que explican el consumo de ultraprocesados, EXCEPTO:
+@ Son más nutritivos que los alimentos frescos
+@ Cuestan poco
+@ Se conservan durante mucho tiempo
+@ Son fáciles de conseguir
+q: El ejemplo de la madre trabajadora (párrafo 5) busca mostrar que:
+@ El consumo de estos productos responde a las condiciones de vida y no al descuido
+@ Las madres que trabajan no saben cocinar
+@ El transporte público es demasiado lento
+@ Los ultraprocesados son la mejor cena para una familia
+q: En el párrafo 5, la palabra <<\sub{capricho}>> puede reemplazarse por:
+@ Antojo
+@ Error
+@ Ahorro
+@ Hábito
+q: Con la frase <<es una forma elegante de culparlo>> (párrafo 5), Castaño critica que:
+@ Se responsabilice a las personas sin ofrecerles alternativas reales
+@ Las campañas usen un lenguaje demasiado técnico
+@ Los médicos regañen a sus pacientes
+@ La gente elegante consuma ultraprocesados
+q: La expresión <<intervenir el entorno y no al individuo>> (párrafo 6) significa:
+@ Modificar las condiciones en que se ofrecen los productos, en lugar de pedirle a cada persona que cambie
+@ Prohibir a las personas que compren ciertos alimentos
+@ Educar a cada consumidor para que lea las etiquetas
+@ Dejar que la industria se regule por sí misma
+q: Son medidas mencionadas en el párrafo 6, EXCEPTO:
+@ Campañas que recomiendan comer sano
+@ Sellos de advertencia en los empaques
+@ Impuestos a las bebidas azucaradas
+@ Límites a la venta en los colegios
+q: La última oración del párrafo 6 sugiere que la industria:
+@ Ajusta sus productos lo necesario para evitar los sellos
+@ Ha dejado de fabricar productos ultraprocesados
+@ Se niega a cumplir las normas de etiquetado
+@ Apoya con entusiasmo las medidas de los gobiernos
+q: La relación entre los párrafos 5 y 6 es que el sexto:
+@ Presenta medidas coherentes con la crítica planteada en el quinto
+@ Contradice la opinión de Castaño expuesta en el quinto
+@ Repite los ejemplos dados en el quinto
+@ Cambia de tema y vuelve al estudio de la clínica
+
+## Texto Dos
+p: Cada vez que se habla de comida aparece la abuela. La invocan los nutricionistas, los chefs de televisión y los anuncios de caldo en cubo: <<como lo hacía la abuela>>. En esa cocina imaginaria siempre hay una olla humeante, una mujer sonriente y todo el tiempo del mundo.
+p: Yo conocí esa cocina, y la olla y el humo eran ciertos. Lo que no recuerdo es la sonrisa permanente. Mi abuela se levantaba a las cuatro para moler el maíz, cocinaba tres veces al día para once personas y fue la última en sentarse a la mesa durante cincuenta años. Nadie le preguntó nunca si quería hacer otra cosa. La sopa era deliciosa. También era una jornada de trabajo que no figuraba en ninguna nómina.
+p: Por eso desconfío cuando la solución a la mala alimentación se resume en <<volver a cocinar en casa>>. La frase omite el sujeto. ¿Quién vuelve? En la mayoría de los hogares, la respuesta sigue siendo la misma de hace un siglo, solo que ahora esa persona además tiene un empleo. El paquete de sopa instantánea no llegó a las cocinas por ignorancia: llegó porque le devolvía a alguien una hora de su vida.
+p: Nada de esto absuelve a la industria, que ha sabido vender como liberación productos que enferman. Pero la nostalgia tampoco es inocente. Añorar la comida de antes sin mencionar el trabajo de antes es querer el plato sin la cocinera.
+p: Si de verdad queremos comer mejor, la pregunta no es cómo regresar a la cocina de la abuela, sino cómo repartirla: entre hombres y mujeres, entre la casa y el comedor escolar, entre la familia y la ciudad. La sopa puede seguir siendo la misma. Lo que tiene que cambiar es quién sostiene la olla.
+src: Texto elaborado para este simulacro.
+
+## Preguntas del Texto Dos
+q: Con la oración <<Cada vez que se habla de comida aparece la abuela>> (párrafo 1), el autor señala que:
+@ La figura de la abuela se usa con frecuencia como símbolo de la buena comida
+@ Las abuelas participan en todos los programas de cocina
+@ Las abuelas opinan sobre lo que comen sus nietos
+@ La comida es el tema preferido de las personas mayores
+q: Al enumerar a <<los nutricionistas, los chefs de televisión y los anuncios de caldo en cubo>> (párrafo 1), el autor muestra que la figura de la abuela:
+@ Es aprovechada por actores muy distintos, incluida la publicidad
+@ Solo es respetada por los especialistas en nutrición
+@ Ha dejado de interesar a los medios de comunicación
+@ Es rechazada por la industria de alimentos
+q: La expresión <<cocina imaginaria>> (párrafo 1) alude a:
+@ Una imagen idealizada de la cocina del pasado
+@ Una cocina que el autor inventó para su relato
+@ Un programa de televisión sobre comida
+@ La cocina moderna con sus electrodomésticos
+q: Con la frase <<Lo que no recuerdo es la sonrisa permanente>> (párrafo 2), el autor:
+@ Pone en duda la imagen idealizada de la abuela que cocina feliz
+@ Reconoce que tiene mala memoria
+@ Afirma que su abuela era una mujer amargada
+@ Niega que su abuela cocinara bien
+q: Los datos sobre la rutina de la abuela (párrafo 2) sirven para:
+@ Mostrar la magnitud del trabajo que exigía esa cocina
+@ Explicar la receta de la sopa
+@ Criticar a las familias numerosas
+@ Demostrar que antes se comía mejor
+q: La expresión <<no figuraba en ninguna nómina>> (párrafo 2) significa que el trabajo de la abuela:
+@ No era pagado ni reconocido como trabajo
+@ Se hacía en horarios nocturnos
+@ Era pagado con comida
+@ Era ilegal
+q: Al decir que la frase <<volver a cocinar en casa>> <<omite el sujeto>> (párrafo 3), el autor critica que esa propuesta:
+@ No aclara quién asumirá la tarea de cocinar
+@ Está mal construida gramaticalmente
+@ No explica qué alimentos se deben preparar
+@ Olvida mencionar a las abuelas
+q: Según el párrafo 3, la sopa instantánea llegó a las cocinas porque:
+@ Le ahorraba tiempo a quien se encargaba de cocinar
+@ Las personas desconocían sus efectos en la salud
+@ Su sabor era mejor que el de la sopa casera
+@ Era recomendada por los nutricionistas
+q: En el párrafo 4, la palabra <<\sub{absuelve}>> significa:
+@ Libra de culpa
+@ Acusa
+@ Explica
+@ Beneficia
+q: La expresión <<querer el plato sin la cocinera>> (párrafo 4) se refiere a:
+@ Desear la comida de antes ignorando el esfuerzo que costaba
+@ Preferir los restaurantes a la comida de la casa
+@ Reemplazar a las cocineras por máquinas
+@ Comer solo, sin compañía
+q: De acuerdo con el párrafo 5, la cocina debería repartirse de las siguientes maneras, EXCEPTO:
+@ Entre la industria y los anunciantes
+@ Entre hombres y mujeres
+@ Entre la casa y el comedor escolar
+@ Entre la familia y la ciudad
+q: La oración final, <<Lo que tiene que cambiar es quién sostiene la olla>>, significa que debe cambiar:
+@ Quién asume la carga de cocinar
+@ La receta de la sopa tradicional
+@ El tipo de utensilios que se usan
+@ El lugar donde se compra la comida
+q: La tesis del texto Dos es que:
+@ Comer mejor exige redistribuir el trabajo de cocinar, y no simplemente volver al pasado
+@ La comida de las abuelas era menos saludable de lo que se cree
+@ La industria de alimentos liberó a las mujeres de la cocina
+@ Cocinar en casa es una costumbre que debe desaparecer
+
+## Preguntas sobre los Textos Uno y Dos
+q: Los dos textos coinciden en que, para mejorar la alimentación:
+@ No basta con pedirle a cada persona que cambie sus hábitos
+@ Es necesario prohibir los productos ultraprocesados
+@ Hay que volver a las recetas tradicionales
+@ Lo más importante es leer las etiquetas
+q: La <<regla sencilla>> del párrafo 1 del texto Uno es, desde la perspectiva del texto Dos:
+@ Un ejemplo de la costumbre de invocar a la abuela al hablar de comida
+@ Una prueba de que las abuelas sabían de nutrición
+@ Una crítica a la industria de los caldos en cubo
+@ Una propuesta para repartir el trabajo de la cocina
+q: La madre que trabaja diez horas (texto Uno, párrafo 5) corresponde, en el texto Dos, a:
+@ La persona que, además de encargarse de la cocina, tiene un empleo
+@ La abuela que cocinaba para once personas
+@ El chef de televisión
+@ La mujer sonriente de la cocina imaginaria
+q: Frente a la industria de alimentos, los dos textos:
+@ Le atribuyen parte de la responsabilidad del problema
+@ La defienden por haber facilitado la vida diaria
+@ Evitan mencionarla
+@ La consideran la única culpable de la mala alimentación
+q: Una campaña publicitaria dice: <<La solución está en sus manos: cocine en casa>>. Frente a esta campaña, Castaño (texto Uno) y el autor del texto Dos:
+@ La criticarían por razones parecidas
+@ La apoyarían sin reservas
+@ Discreparían: Castaño la apoyaría y el autor del texto Dos la criticaría
+@ No tendrían nada que decir, pues no hablan de campañas
+q: La distribución del trabajo de la cocina entre hombres y mujeres es un asunto tratado en el texto:
+@ Dos, pero no en el Uno
+@ Uno, pero no en el Dos
+@ Uno más que en el Dos
+@ Uno y en el Dos por igual
+
+== RAZONAMIENTO
+ctx 2: En un centro médico hay cuatro consultorios en fila, numerados de 1 a 4, y en cada uno atiende uno de los doctores Pérez, Quintero, Ruiz y Suárez. Se sabe que:
+\vi{Pérez no atiende en el consultorio 1}
+\vi{Quintero y Ruiz atienden en consultorios contiguos}
+\vi{Suárez atiende en un consultorio de número par}
+q: De las siguientes afirmaciones, de la única que se tiene certeza es:
+@ Pérez atiende en el consultorio 3
+@ Quintero atiende en el consultorio 1
+@ Ruiz atiende en el consultorio 2
+@ Suárez atiende en el consultorio 2
+! Solo son posibles (del 1 al 4) Quintero, Ruiz, Pérez, Suárez y Ruiz, Quintero, Pérez, Suárez.
+q: Si Quintero no atiende en el consultorio 1, entonces en el consultorio 1 atiende:
+@ Ruiz
+@ Pérez
+@ Suárez
+@ No es posible determinarlo
+! Queda Ruiz, Quintero, Pérez, Suárez.
+q: La negación de la frase <<algún estudiante llegó tarde>> es:
+@ Ningún estudiante llegó tarde
+@ Algún estudiante no llegó tarde
+@ Todos los estudiantes llegaron tarde
+@ No todos los estudiantes llegaron tarde
+! Negar que existe alguno es afirmar que no hay ninguno.
+q: Se sabe que <<si Luis estudia, entonces aprueba>> y que <<Luis aprobó>>. De estas dos afirmaciones:
+@ No se puede concluir si Luis estudió o no
+@ Se concluye que Luis estudió
+@ Se concluye que Luis no estudió
+@ Se concluye que Luis aprueba siempre
+! Aprobar no garantiza haber estudiado: el condicional no vale en sentido contrario.
+ctx 2: En una encuesta a 60 familias de un barrio se encontró que 32 tienen perro, 25 tienen gato y 8 tienen perro y gato.
+q: La cantidad de familias encuestadas que no tiene perro ni gato es:
+@ 11
+@ 3
+@ 19
+@ 5
+! $60-(32+25-8)$.
+q: Si se escoge al azar una de las familias que tienen perro, la probabilidad de que también tenga gato es:
+@ $\frac14$
+@ $\frac{2}{15}$
+@ $\frac{8}{25}$
+@ $\frac{8}{49}$
+! $8$ de las $32$ familias con perro.
+q: Carlos es más alto que Diana y más bajo que Esteban. Fabio es más alto que Carlos y más bajo que Esteban. De los cuatro, el segundo más alto es:
+@ Fabio
+@ Carlos
+@ Esteban
+@ Diana
+! Esteban, Fabio, Carlos, Diana.
+ctx 2: Una receta para preparar 12 galletas necesita 200 gramos de harina, 80 gramos de azúcar y 2 huevos. Para preparar otras cantidades, los ingredientes se usan en la misma proporción.
+q: La cantidad de harina, en gramos, que se necesita para preparar 30 galletas es:
+@ 500
+@ 600
+@ 450
+@ 360
+! $200\cdot\frac{30}{12}$.
+q: Si se dispone de 1 kilogramo de harina, 300 gramos de azúcar y 6 huevos, la mayor cantidad de galletas que se puede preparar es:
+@ 36
+@ 45
+@ 60
+@ 48
+! La harina alcanza para 60, el azúcar para 45 y los huevos para 36.
+q: El precio de un producto aumentó un 10\% en un año y un 20\% en el año siguiente. El aumento total del precio en los dos años fue del:
+@ 32\%
+@ 30\%
+@ 22\%
+@ 28\%
+! $1{,}1\cdot1{,}2=1{,}32$.
+q: Del tanque de combustible de un carro se ha gastado el 35\% y todavía quedan 26 litros. La capacidad del tanque, en litros, es:
+@ 40
+@ 35
+@ 61
+@ 74
+! $26$ es el 65\% del tanque.
+q: El promedio de ocho números es 15. Si se retiran dos de ellos, cuyo promedio es 9, el promedio de los seis números restantes es:
+@ 17
+@ 16
+@ 18
+@ 21
+! $(120-18)\div6$.
+q: En la secuencia 3C, 6F, 9I, 12L, \dots{} (con el alfabeto de 26 letras, sin la ñ), el término que sigue es:
+@ 15O
+@ 15N
+@ 14O
+@ 16P
+! El número aumenta de 3 en 3 y la letra es la que ocupa esa posición en el alfabeto.
+q: En los números reales se define la operación $a\oplus b=a+b-ab$. El valor de $x$ para el cual $x\oplus2=-5$ es:
+@ 7
+@ 3
+@ $-7$
+@ 5
+! $x+2-2x=-5$.
+q: De un grupo de 6 personas se va a escoger un presidente, un secretario y un tesorero, y ninguna persona puede ocupar dos cargos. La cantidad de maneras distintas de hacer la elección es:
+@ 120
+@ 20
+@ 216
+@ 18
+! $6\cdot5\cdot4$.
+q: Se lanzan dos dados corrientes. La probabilidad de que el producto de los dos números obtenidos sea impar es:
+@ $\frac14$
+@ $\frac12$
+@ $\frac13$
+@ $\frac34$
+! Ambos deben ser impares: $\frac12\cdot\frac12$.
+q: Las medidas de los tres ángulos de un triángulo están en la razón $2:3:4$. La medida del ángulo mayor es:
+@ $80^\circ$
+@ $90^\circ$
+@ $60^\circ$
+@ $100^\circ$
+! $180\div9=20$ y $4\cdot20=80$.
+ctx 2: La tabla muestra la información nutricional de tres productos, por cada 100 gramos de producto.\par\smallskip
+{\centering\small\begin{tabular}{|l|c|c|c|}\hline
+ & Producto A & Producto B & Producto C\\\hline
+Energía (kcal) & 250 & 400 & 150\\\hline
+Azúcar (g) & 10 & 30 & 5\\\hline
+\end{tabular}\par}
+q: La energía total, en kilocalorías, que aporta una porción formada por 40 gramos del producto A y 50 gramos del producto B es:
+@ 300
+@ 325
+@ 650
+@ 290
+! $100+200$.
+q: La cantidad de gramos del producto C que contiene la misma cantidad de azúcar que 30 gramos del producto B es:
+@ 180
+@ 150
+@ 90
+@ 60
+! $30$ g de B tienen $9$ g de azúcar; C tiene $5$ g por cada $100$ g.
+q: El piso rectangular de un salón mide 360 cm de largo y 270 cm de ancho. Se quiere cubrir por completo con baldosas cuadradas, todas iguales y del mayor tamaño posible, sin cortar ninguna. La cantidad de baldosas que se necesitan es:
+@ 12
+@ 9
+@ 16
+@ 108
+! El lado es $\text{mcd}(360,270)=90$ cm: $4\times3$ baldosas.
+q: En el año 2030, Marta tendrá el triple de la edad que tenía en el año 2000. El año en que nació Marta es:
+@ 1985
+@ 1990
+@ 1980
+@ 1975
+! $x+30=3x$: en 2000 tenía 15 años.
+q: Un programa de computador realiza las siguientes instrucciones:
+\st{1.}{Comience con $n=1$}
+\st{2.}{Cambie el valor de $n$ por $2n+1$}
+\st{3.}{Si $n$ es mayor o igual que 200, pase a la instrucción 4; en otro caso, regrese a la instrucción 2}
+\st{4.}{Imprima el valor de $n$ y pare}
+El valor que imprime el programa es:
+@ 255
+@ 201
+@ 127
+@ 511
+! $n$: 3, 7, 15, 31, 63, 127, 255.
+q: Una pelota se deja caer desde 16 metros de altura y, cada vez que rebota, sube hasta la mitad de la altura desde la que cayó. La distancia total que ha recorrido la pelota en el momento en que toca el suelo por cuarta vez, en metros, es:
+@ 44
+@ 30
+@ 28
+@ 46
+! $16+2\cdot8+2\cdot4+2\cdot2$.
+q: Un número de dos cifras $AB$ y el número $BA$, que resulta de invertir sus cifras, suman 165. La cantidad de números $AB$ que cumplen esta condición es:
+@ 4
+@ 2
+@ 3
+@ 6
+! $11(A+B)=165$ da $A+B=15$: 69, 78, 87 y 96.
+ctx 2: En una bodega, cada producto tiene un código de cinco dígitos. Los cuatro primeros identifican el producto y el quinto es un dígito de control: es igual al residuo que se obtiene al dividir entre 7 la suma de los cuatro primeros dígitos. Por ejemplo, el código 2 5 1 3 4 es correcto, porque $2+5+1+3=11$ y el residuo de dividir 11 entre 7 es 4.
+q: El dígito de control de un producto cuyos cuatro primeros dígitos son 3, 4, 6 y 2 es:
+@ 1
+@ 2
+@ 5
+@ 0
+! $15=2\cdot7+1$.
+q: En la etiqueta de un producto se borró el segundo dígito y solo se lee 5 \rule{.8em}{.4pt} 2 8 4. Si el código es correcto, el dígito borrado es:
+@ 3
+@ 4
+@ 0
+@ 6
+! $15+x$ debe dejar residuo 4: $x=3$ (pues $18=2\cdot7+4$).
+q: En las cuatro casillas de la cuadrícula se escriben los números 1, 2, 3 y 4, uno en cada casilla. Junto a cada fila y debajo de cada columna aparece el producto de sus dos números.\par
+{\centering\begin{tikzpicture}[scale=.65]\draw (0,0) grid (2,2);\node at (1.5,.5) {$X$};\node at (2.5,1.5) {3};\node at (2.5,.5) {8};\node at (.5,-.5) {4};\node at (1.5,-.5) {6};\end{tikzpicture}\par}
+El número que va en la casilla marcada con $X$ es:
+@ 2
+@ 1
+@ 4
+@ 3
+! Arriba van 1 y 3, abajo 2 y 4. La columna de producto 4 tiene 1 y 4; la otra, 3 y 2.
+q: El área total de la superficie de un cubo es 150 cm$^2$. El volumen del cubo, en cm$^3$, es:
+@ 125
+@ 150
+@ 216
+@ 625
+! Cada cara tiene $25$ cm$^2$: la arista mide 5.
+q: Una pista de atletismo está formada por un rectángulo de 100 m de largo y 60 m de ancho, y dos semicírculos cuyos diámetros son los lados de 60 m, como muestra la figura. La longitud del borde de la pista, en metros, es:\par
+{\centering\begin{tikzpicture}[scale=.022]\draw[thick] (0,0)--(100,0) arc (-90:90:30)--(0,60) arc (90:270:30);\draw[dashed] (0,0)--(0,60) (100,0)--(100,60);
+\node[below,font=\scriptsize] at (50,0) {100 m};\node[font=\scriptsize] at (82,30) {60 m};\end{tikzpicture}\par}
+@ $200+60\pi$
+@ $200+30\pi$
+@ $320+60\pi$
+@ $200+120\pi$
+! Dos tramos rectos de 100 m y una circunferencia completa de diámetro 60 m.
+q: Un grifo mal cerrado deja caer 3 gotas cada 2 segundos. Si 20 gotas equivalen a 1 mililitro, la cantidad de agua que se pierde en un día, en litros, es:
+@ 6,48
+@ 64,8
+@ 2,16
+@ 12,96
+! $1{,}5\cdot86.400=129.600$ gotas, es decir $6.480$ ml.
+q: El reloj de una iglesia da tantas campanadas como indica la hora: una a la 1, dos a las 2, y así hasta doce a las 12. La cantidad de campanadas que da desde la 1:00 p.m. hasta las 12:00 de la noche, incluidas ambas horas, es:
+@ 78
+@ 66
+@ 72
+@ 144
+! $1+2+\dots+12$.
+q: Sobre cierto número se hacen tres afirmaciones: <<es par>>, <<es múltiplo de 3>> y <<es mayor que 10>>. Si se sabe que exactamente una de las tres afirmaciones es verdadera, entonces, de los siguientes, el número puede ser:
+@ 9
+@ 6
+@ 12
+@ 14
+! Para 9 solo es cierta <<es múltiplo de 3>>. Para 6 y 14 son ciertas dos, y para 12 las tres.
+q: Camila sube una escalera de 5 peldaños. En cada paso puede subir 1 peldaño o 2 peldaños. La cantidad de maneras distintas en que puede subir la escalera es:
+@ 8
+@ 5
+@ 10
+@ 6
+! Para 1, 2, 3, 4 y 5 peldaños hay 1, 2, 3, 5 y 8 maneras.
+q: Dos atletas parten al mismo tiempo del mismo punto de una pista circular de 400 metros y corren en el mismo sentido, uno a 5 m/s y el otro a 3 m/s. El tiempo que tarda el más rápido en alcanzar por primera vez al otro es:
+@ 200 segundos
+@ 50 segundos
+@ 80 segundos
+@ 133 segundos
+! Debe sacarle una vuelta de ventaja: $400\div(5-3)$.
+ctx 2: La gráfica muestra la producción de café, en toneladas, de una cooperativa durante cinco años.\par\smallskip
+{\centering\begin{tikzpicture}[x=.85cm,y=.05cm]\draw[->] (0,0)--(0,68);\draw (0,0)--(5.4,0);
+\foreach \v in {15,30,45,60} {\draw[gray!50] (0,\v)--(5.4,\v);\node[left,font=\scriptsize] at (0,\v) {\v};}
+\foreach \i/\m/\v in {1/2019/30,2/2020/45,3/2021/36,4/2022/45,5/2023/60} {\fill[gray!60,draw=black] (\i-.75,0) rectangle (\i-.25,\v);\node[below,font=\scriptsize] at (\i-.5,0) {\m};\node[above,font=\scriptsize] at (\i-.5,\v) {\v};}
+\end{tikzpicture}\par}
+q: El año en el que la producción tuvo el mayor aumento porcentual con respecto al año anterior fue:
+@ 2020
+@ 2022
+@ 2023
+@ 2021
+! 2020: $+50\%$; 2022: $+25\%$; 2023: $+33\%$.
+q: La producción promedio anual de la cooperativa en los cinco años, en toneladas, fue:
+@ 43,2
+@ 45
+@ 42
+@ 44,5
+! $216\div5$.
+q: El mayor número entero $n$ que cumple $5n+3<2n+30$ es:
+@ 8
+@ 9
+@ 10
+@ 7
+! $3n<27$.
+q: En un examen de 20 preguntas se otorgan 5 puntos por cada respuesta correcta y se quitan 2 puntos por cada respuesta incorrecta. Sergio contestó todas las preguntas y obtuvo 58 puntos. La cantidad de preguntas que contestó correctamente es:
+@ 14
+@ 12
+@ 16
+@ 13
+! $5c-2(20-c)=58$.
+q: Un comerciante vendió las dos quintas partes de una pieza de tela y después la tercera parte de lo que le quedaba. Si al final le sobraron 24 metros, la longitud inicial de la pieza, en metros, era:
+@ 60
+@ 90
+@ 72
+@ 45
+! Le quedan $\frac35\cdot\frac23=\frac25$ de la pieza.
+q: Con palitos iguales se construye la secuencia de figuras que se muestra, en la que cada figura tiene un hexágono más que la anterior.\par
+\newcommand\hexa[1]{\draw[shift={(#1,0)}] (30:1)--(90:1)--(150:1)--(210:1)--(270:1)--(330:1)--cycle;}
+{\centering\begin{tikzpicture}[scale=.33]\hexa{0}\node at (0,-1.8) {\scriptsize Figura 1};
+\hexa{4}\hexa{5.732}\node at (4.87,-1.8) {\scriptsize Figura 2};\hexa{10}\hexa{11.732}\hexa{13.464}\node at (11.73,-1.8) {\scriptsize Figura 3};\end{tikzpicture}\par}
+La cantidad de palitos que se necesitan para construir la figura 12 es:
+@ 61
+@ 72
+@ 60
+@ 66
+! El primer hexágono usa 6 palitos y cada uno de los siguientes, 5: $5n+1$.

@@ -1,0 +1,24 @@
+{
+ "scene": "S05_Cierre",
+ "duration": 18.733,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Repasemos",
+   "hold": 10.533
+  },
+  {
+   "time": 11.133,
+   "title": "Cierre",
+   "hold": 17.733
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 10.133,
+   "text": "Para sumar una progresión aritmética se empareja el primero con el último: n veces esa pareja, entre dos.",
+   "fox": false
+  }
+ ]
+}

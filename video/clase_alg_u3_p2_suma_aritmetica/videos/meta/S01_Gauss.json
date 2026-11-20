@@ -1,0 +1,31 @@
+{
+ "scene": "S01_Gauss",
+ "duration": 39.967,
+ "marks": [
+  {
+   "time": 0,
+   "title": "El truco de Gauss",
+   "hold": 39.367
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 13.167,
+   "text": "Cuenta la historia que a un niño de nueve años, Carl Friedrich Gauss, el maestro le pidió sumar todos los números del uno al cien. Gauss terminó en un minuto.",
+   "fox": true
+  },
+  {
+   "start": 13.167,
+   "end": 26.1,
+   "text": "Su idea fue escribir la misma suma al revés, debajo. Ahora cada columna suma lo mismo: uno más cien, dos más noventa y nueve, tres más noventa y ocho. Siempre ciento uno.",
+   "fox": false
+  },
+  {
+   "start": 26.1,
+   "end": 38.967,
+   "text": "Hay cien columnas de ciento uno: diez mil cien. Pero así se sumó todo dos veces, una arriba y otra abajo. La suma que se pedía es la mitad: cinco mil cincuenta.",
+   "fox": false
+  }
+ ]
+}

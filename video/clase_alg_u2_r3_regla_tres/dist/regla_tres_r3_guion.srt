@@ -1,0 +1,87 @@
+1
+00:00:08,900 --> 00:00:18,533
+La regla de tres es una forma ordenada de resolver problemas de proporciones: conocemos tres datos y buscamos el cuarto.
+
+2
+00:00:18,533 --> 00:00:29,367
+Primer paso: una tabla. Cada columna es una magnitud, aquí kilos y pesos. Cada fila es una situación: la que conocemos y la que preguntan.
+
+3
+00:00:29,367 --> 00:00:39,233
+Las magnitudes son las cosas que se miden. Kilos con kilos, pesos con pesos: nunca se mezclan en una misma columna.
+
+4
+00:00:41,230 --> 00:00:52,597
+Segundo paso: decidir si es directa o inversa. Si compro el doble de kilos, pago el doble: las dos se multiplican por el mismo número. Es directa.
+
+5
+00:00:52,597 --> 00:01:03,497
+Una forma de resolverla es reducir a la unidad. Si cuatro kilos cuestan diez mil, un kilo cuesta diez mil entre cuatro: dos mil quinientos.
+
+6
+00:01:03,497 --> 00:01:09,830
+Y siete kilos cuestan siete veces eso: diecisiete mil quinientos pesos.
+
+7
+00:01:09,830 --> 00:01:24,630
+La otra forma es con una proporción. En una directa, la razón de los kilos es igual a la razón de los pesos: cuatro es a siete como diez mil es a equis. Multiplicando en cruz sale lo mismo.
+
+8
+00:01:26,630 --> 00:01:38,330
+Otro problema. Un grupo de ocho personas lleva comida para quince días. Si llegan cuatro personas más y son doce, ¿para cuántos días alcanza la comida?
+
+9
+00:01:38,330 --> 00:01:48,830
+Con el doble de personas, la comida dura la mitad de los días: una se multiplica y la otra se divide por el mismo número. Es inversa.
+
+10
+00:01:48,830 --> 00:02:01,763
+En una inversa lo que se conserva es el producto. Ocho personas durante quince días son ciento veinte raciones. Doce personas se comen esas mismas ciento veinte raciones.
+
+11
+00:02:01,763 --> 00:02:13,997
+Mira el error más común: hacerla como si fuera directa. Saldrían veintidós días y medio, como si con más gente la comida durara más. No tiene sentido.
+
+12
+00:02:16,000 --> 00:02:17,400
+Resumamos la receta de la regla de tres en cuatro pasos.
+
+13
+00:02:17,400 --> 00:02:24,067
+Arma la tabla: una columna por magnitud, una fila por situación.
+
+14
+00:02:24,067 --> 00:02:32,400
+Decide: si una se duplica, la otra se duplica (directa) o se reduce a la mitad (inversa).
+
+15
+00:02:32,400 --> 00:02:38,733
+Directa: iguala las razones. Inversa: iguala los productos.
+
+16
+00:02:38,733 --> 00:02:44,267
+Despeja x y revisa que el resultado tenga sentido.
+
+17
+00:02:46,270 --> 00:03:01,370
+A veces intervienen más de dos magnitudes: es una regla de tres compuesta. Tres impresoras imprimen novecientas hojas en cinco minutos. ¿Cuánto tardan cinco impresoras en imprimir mil ochocientas hojas?
+
+18
+00:03:01,370 --> 00:03:10,670
+El truco es cambiar una magnitud a la vez, dejando quietas las demás, y preguntar cada vez si es directa o inversa.
+
+19
+00:03:10,670 --> 00:03:28,003
+Primero cambiamos las impresoras, con las mismas novecientas hojas. El doble de impresoras termina en la mitad del tiempo: es inversa. Tres impresoras por cinco minutos dan quince; con cinco impresoras, quince entre cinco: tres minutos.
+
+20
+00:03:28,003 --> 00:03:39,103
+Ahora cambiamos las hojas, ya con cinco impresoras. El doble de hojas toma el doble de tiempo: es directa. Tres minutos por dos: seis minutos.
+
+21
+00:03:39,103 --> 00:03:50,537
+En una sola cuenta: cinco minutos, por tres quintos, por dos. Cada razón va al derecho si la magnitud es directa y volteada si es inversa.
+
+22
+00:03:52,540 --> 00:04:03,473
+La regla de tres arma una tabla, decide si es directa o inversa y resuelve la proporción. La compuesta cambia una magnitud a la vez.

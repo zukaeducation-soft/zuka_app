@@ -78,7 +78,7 @@ function authScreen(modo = 'login', aviso = '') {
     <div class="auth-brand">${zukaWord()}</div>
     <h1>${reg ? 'Crea tu cuenta' : 'Entra a tu cuenta'}</h1>
     <p class="muted">${reg ? 'Es gratis. Guarda tu avance y te deja activar tu plan con un código.' : 'Sigue donde ibas: tu avance y tu plan te esperan.'}</p>
-    <div class="seg seg-2" role="tablist"><button type="button" role="tab" data-m="login" aria-selected="${!reg}" class="${reg ? '' : 'on'}">Iniciar sesión</button><button type="button" role="tab" data-m="registro" aria-selected="${reg}" class="${reg ? 'on' : ''}">Crear cuenta</button></div>
+    <div class="seg seg-2" role="tablist" aria-label="Cuenta"><button type="button" role="tab" data-m="login" aria-selected="${!reg}" tabindex="${reg ? -1 : 0}" class="${reg ? '' : 'on'}">Iniciar sesión</button><button type="button" role="tab" data-m="registro" aria-selected="${reg}" tabindex="${reg ? 0 : -1}" class="${reg ? 'on' : ''}">Crear cuenta</button></div>
     <form class="acct-form" novalidate>
       ${reg ? campo('nombre', 'Nombre', 'text', 'autocomplete="name" maxlength="80" required') + campo('telefono', 'Celular (opcional)', 'tel', 'autocomplete="tel" inputmode="tel" maxlength="30"') : ''}
       ${campo('correo', 'Correo', 'email', 'autocomplete="email" inputmode="email" required')}
@@ -92,6 +92,15 @@ function authScreen(modo = 'login', aviso = '') {
   </div>`;
   const f = $('form', el), msg = $('.form-msg', el), b = $('button[type=submit]', el);
   el.querySelectorAll('[data-m]').forEach(x => x.onclick = () => { if (x.dataset.m !== modo) authScreen(x.dataset.m); });
+  // Pestañas con flechas (foco itinerante): cambian de modo y el foco queda en la pestaña nueva.
+  $('.seg', el).addEventListener('keydown', e => {
+    const tabs = [...el.querySelectorAll('[data-m]')], to = rovingIndex(e.key, tabs.indexOf(e.target), tabs.length);
+    if (to < 0 || !e.target.matches('[data-m]')) return;
+    e.preventDefault(); e.stopPropagation();   // la flecha no sigue a la lección de atrás (allá cambia de ejercicio)
+    const m = tabs[to].dataset.m;
+    if (m !== modo) authScreen(m);
+    $(`#auth [data-m="${m}"]`)?.focus();
+  });
   $('[data-olvide]', el)?.addEventListener('click', openOlvide);
   $('[data-pz-volver]', el)?.addEventListener('click', () => pzVolver());
   // En el computador es una ventana sobre la presentación: tocar afuera la cierra y vuelve a ella.
@@ -448,7 +457,7 @@ function openCanje() {
         <h3 class="sheet-title">Plan ${NIVEL_NOMBRE[data.nivel]} activado</h3>
         <p class="muted">Tienes acceso hasta el <b>${fechaCorta(data.acceso_hasta)}</b> (${diasTexto(estadoPlan(Cuenta.perfil).dias)}).</p>
         <button class="btn main" type="button" data-ok>Empezar a estudiar</button></div>`;
-      $('[data-ok]', sh).onclick = () => { closeSheet(); go('learn'); };
+      $('[data-ok]', sh).onclick = () => { closeSheet(false); go('learn'); };
       cuentaRepinta();
     },
   });

@@ -1,0 +1,43 @@
+{
+ "scene": "S02_TerminoGeneral",
+ "duration": 48.9,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Contar las multiplicaciones",
+   "hold": 48.3
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 10.433,
+   "text": "Para hallar un término lejano de tres, seis, doce no hace falta escribirlos todos: basta contar las multiplicaciones.",
+   "fox": true
+  },
+  {
+   "start": 10.433,
+   "end": 21.667,
+   "text": "Al término dos se llega con una multiplicación por dos; al cinco, con cuatro. Multiplicar cuatro veces por dos es dos a la cuarta: una potencia.",
+   "fox": false
+  },
+  {
+   "start": 21.667,
+   "end": 29.933,
+   "text": "Al término n se llega con n menos una multiplicaciones por r. Esa es la fórmula del término general.",
+   "fox": false
+  },
+  {
+   "start": 29.933,
+   "end": 37.733,
+   "text": "El término siete es tres por dos a la sexta: tres por sesenta y cuatro, ciento noventa y dos.",
+   "fox": false
+  },
+  {
+   "start": 37.733,
+   "end": 47.9,
+   "text": "Compara con la aritmética: allá los saltos se suman, n menos una veces d. Aquí se multiplican: r elevado a n menos uno.",
+   "fox": false
+  }
+ ]
+}

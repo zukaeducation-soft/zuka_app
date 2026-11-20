@@ -1,0 +1,65 @@
+{
+ "scene": "S03_TresPreguntas",
+ "duration": 66.133,
+ "marks": [
+  {
+   "time": 0,
+   "title": "La parte de un todo",
+   "hold": 30.0
+  },
+  {
+   "time": 30.6,
+   "title": "Qué porcentaje es",
+   "hold": 47.133
+  },
+  {
+   "time": 47.733,
+   "title": "El todo a partir de una parte",
+   "hold": 65.533
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.5,
+   "text": "Todo problema de porcentajes es una proporción: la parte es al todo como el porcentaje es a cien. Es la regla de tres que ya conoces.",
+   "fox": true
+  },
+  {
+   "start": 11.5,
+   "end": 19.6,
+   "text": "Primera pregunta: cuánto es el quince por ciento de ochenta. El todo es ochenta y falta la parte.",
+   "fox": false
+  },
+  {
+   "start": 19.6,
+   "end": 29.6,
+   "text": "De cabeza también sale: el diez por ciento de ochenta es ocho, el cinco por ciento es la mitad, cuatro. Juntos, doce.",
+   "fox": false
+  },
+  {
+   "start": 30.6,
+   "end": 39.633,
+   "text": "Segunda pregunta: qué porcentaje es dieciocho de setenta y dos. Ahora se conocen la parte y el todo, y falta p.",
+   "fox": false
+  },
+  {
+   "start": 39.633,
+   "end": 46.733,
+   "text": "Dieciocho es la cuarta parte de setenta y dos: el veinticinco por ciento.",
+   "fox": false
+  },
+  {
+   "start": 47.733,
+   "end": 55.1,
+   "text": "Tercera pregunta: treinta es el cuarenta por ciento de un número. Ahora falta el todo.",
+   "fox": false
+  },
+  {
+   "start": 55.1,
+   "end": 65.133,
+   "text": "Comprobación: el cuarenta por ciento de setenta y cinco es setenta y cinco por cero punto cuatro, treinta. Sí cuadra.",
+   "fox": false
+  }
+ ]
+}

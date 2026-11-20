@@ -1,0 +1,24 @@
+{
+ "scene": "S05_Cierre",
+ "duration": 20.0,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Repasemos",
+   "hold": 11.8
+  },
+  {
+   "time": 12.4,
+   "title": "Cierre",
+   "hold": 19.0
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.4,
+   "text": "Una progresión geométrica multiplica siempre por la misma razón, y el término n se alcanza con n menos una multiplicaciones.",
+   "fox": false
+  }
+ ]
+}

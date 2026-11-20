@@ -1,0 +1,37 @@
+{
+ "scene": "S02_Aumento",
+ "duration": 47.367,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Un aumento",
+   "hold": 46.767
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.1,
+   "text": "Con un aumento pasa lo contrario. Un producto vale cincuenta mil pesos sin impuesto, y el IVA le suma el diecinueve por ciento.",
+   "fox": true
+  },
+  {
+   "start": 11.1,
+   "end": 18.8,
+   "text": "Se paga el ciento diecinueve por ciento del precio: se multiplica por uno punto diecinueve.",
+   "fox": false
+  },
+  {
+   "start": 18.8,
+   "end": 31.2,
+   "text": "En general, aumentar un r por ciento es multiplicar por uno más r centésimos, y descontarlo es multiplicar por uno menos r centésimos. Ese número se llama factor.",
+   "fox": false
+  },
+  {
+   "start": 31.2,
+   "end": 46.367,
+   "text": "Por ejemplo: subir el ocho por ciento es multiplicar por uno punto cero ocho; bajar el ocho por ciento, por cero punto noventa y dos; y subir el cien por ciento es multiplicar por dos, el doble.",
+   "fox": false
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "scene": "S01_Truco",
+ "duration": 66.933,
+ "marks": [
+  {
+   "time": 0,
+   "title": "El truco de multiplicar y restar",
+   "hold": 66.333
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 10.433,
+   "text": "Para sumar una progresión geométrica hay un truco muy elegante. Sumemos uno, dos, cuatro, y así hasta dos a la nueve.",
+   "fox": true
+  },
+  {
+   "start": 10.433,
+   "end": 21.133,
+   "text": "Multipliquemos todo por la razón, dos. Cada término se convierte en el siguiente, así que la fila de abajo es la misma corrida un lugar.",
+   "fox": false
+  },
+  {
+   "start": 21.133,
+   "end": 32.067,
+   "text": "Ahora restemos: la fila de abajo menos la de arriba. Todos los del medio se cancelan. Solo quedan el último de abajo y el primero de arriba.",
+   "fox": false
+  },
+  {
+   "start": 32.067,
+   "end": 47.7,
+   "text": "Con cualquier razón pasa lo mismo. Al multiplicar por r y restar, de abajo queda el primer término por r a la n, y de arriba el primer término. Se saca factor común y se divide entre r menos uno.",
+   "fox": false
+  },
+  {
+   "start": 47.7,
+   "end": 65.933,
+   "text": "Es la famosa suma del ajedrez: un grano de arroz en la primera casilla y el doble en cada una de las siguientes. Las sesenta y cuatro casillas suman dos a la sesenta y cuatro menos uno: más arroz del que se ha cosechado en toda la historia.",
+   "fox": false
+  }
+ ]
+}

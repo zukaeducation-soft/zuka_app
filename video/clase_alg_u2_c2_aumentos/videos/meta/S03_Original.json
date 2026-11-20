@@ -1,0 +1,37 @@
+{
+ "scene": "S03_Original",
+ "duration": 40.9,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Volver al precio de antes",
+   "hold": 40.3
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.633,
+   "text": "Ahora al revés. Un televisor cuesta setenta y un mil cuatrocientos pesos con el IVA incluido, y se quiere saber cuánto costaba sin IVA.",
+   "fox": true
+  },
+  {
+   "start": 11.633,
+   "end": 28.667,
+   "text": "Un error muy común es quitarle el diecinueve por ciento a setenta y un mil cuatrocientos. Da cincuenta y siete mil ochocientos treinta y cuatro, y está mal: el diecinueve por ciento se calculó sobre el precio sin IVA, que es menor.",
+   "fox": false
+  },
+  {
+   "start": 28.667,
+   "end": 31.267,
+   "text": "Lo correcto: el precio sin IVA, multiplicado por uno punto diecinueve, da setenta y un mil cuatrocientos. Para deshacer esa multiplicación se divide entre el mismo factor, que es multiplicar por su recíproco.",
+   "fox": false
+  },
+  {
+   "start": 31.267,
+   "end": 39.9,
+   "text": "Comprobación: sesenta mil por uno punto diecinueve da setenta y un mil cuatrocientos. Sí cuadra.",
+   "fox": false
+  }
+ ]
+}

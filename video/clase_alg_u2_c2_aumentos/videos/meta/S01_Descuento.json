@@ -1,0 +1,37 @@
+{
+ "scene": "S01_Descuento",
+ "duration": 39.967,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Un descuento",
+   "hold": 39.367
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 8.233,
+   "text": "Una camisa cuesta sesenta mil pesos y tiene un descuento del veinticinco por ciento.",
+   "fox": true
+  },
+  {
+   "start": 8.233,
+   "end": 19.2,
+   "text": "Una forma: calcular el descuento y restarlo. El veinticinco por ciento de sesenta mil es quince mil, y queda por pagar cuarenta y cinco mil.",
+   "fox": false
+  },
+  {
+   "start": 19.2,
+   "end": 30.067,
+   "text": "Otra forma, más rápida: si te quitan el veinticinco por ciento, pagas el setenta y cinco. Basta multiplicar por cero punto setenta y cinco.",
+   "fox": false
+  },
+  {
+   "start": 30.067,
+   "end": 38.967,
+   "text": "Las dos formas dan lo mismo por la propiedad distributiva: sacamos el sesenta mil como factor común.",
+   "fox": false
+  }
+ ]
+}

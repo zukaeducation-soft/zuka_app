@@ -1,0 +1,31 @@
+{
+ "scene": "S03_Impares",
+ "duration": 32.467,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Los impares forman cuadrados",
+   "hold": 31.867
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.1,
+   "text": "Una suma famosa: la de los números impares. Uno, más tres, más cinco, más siete. Mira lo que pasa al dibujarlos como escuadras.",
+   "fox": true
+  },
+  {
+   "start": 11.1,
+   "end": 23.2,
+   "text": "Cada escuadra agrega el siguiente impar y el cuadrado crece un lado. La suma de los n primeros impares es n al cuadrado, como los cuadrados de las potencias.",
+   "fox": false
+  },
+  {
+   "start": 23.2,
+   "end": 31.467,
+   "text": "La fórmula de Gauss lo confirma: n términos, el primero es uno y el último dos n menos uno.",
+   "fox": false
+  }
+ ]
+}

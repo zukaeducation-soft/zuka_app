@@ -1,0 +1,24 @@
+{
+ "scene": "S05_Cierre",
+ "duration": 20.067,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Repasemos",
+   "hold": 11.867
+  },
+  {
+   "time": 12.467,
+   "title": "Cierre",
+   "hold": 19.067
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.467,
+   "text": "Aumentar o descontar un porcentaje es multiplicar por un factor, y para volver al precio de antes se divide entre ese factor.",
+   "fox": false
+  }
+ ]
+}

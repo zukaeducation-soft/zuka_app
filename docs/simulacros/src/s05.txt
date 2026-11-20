@@ -1,0 +1,490 @@
+== LECTURA
+## Texto Uno
+p: Cuando la alcaldía anunció que quitaría un carril de carros en la avenida principal para convertirlo en ciclorruta, los comerciantes del sector reunieron dos mil firmas en contra. Temían perder clientes: quién iba a comprar un televisor, decían, si no tenía dónde parquear. Tres años después, varios de los que firmaron piden que la ciclorruta se extienda hasta su cuadra.
+p: El cambio de opinión tiene una explicación menos romántica que el amor por el aire limpio. Un estudio de la cámara de comercio local encontró que quienes llegan en bicicleta o a pie gastan menos en cada visita que quienes llegan en carro, pero vuelven muchas más veces al mes. Sumadas las compras, el ciclista resultó ser mejor cliente que el conductor. Además, en el espacio donde parquea un automóvil caben diez bicicletas.
+p: La ingeniera de transporte Lucía Barrientos sostiene que el malentendido viene de confundir vehículos con personas. <<Durante décadas medimos el éxito de una calle por la cantidad de carros que pasaban por ella. Pero una calle no existe para mover carros, sino para mover gente>>. Un carril de automóviles, explica, transporta unas dos mil personas por hora; el mismo ancho dedicado a bicicletas puede mover más de siete mil.
+p: A esto se añade un fenómeno que los urbanistas conocen bien y los conductores se resisten a creer: ampliar las vías no reduce los trancones. Cada carril nuevo hace más atractivo el uso del carro, atrae viajes que antes no se hacían y, al cabo de pocos años, la congestión vuelve al punto de partida. Es como aflojarse el cinturón para combatir la obesidad.
+p: Nada de lo anterior significa que la bicicleta sirva para todos. No le sirve al que vive a veinte kilómetros de su trabajo, ni a la persona mayor que teme caerse, ni a quien debe cargar herramientas. Tampoco convence a muchas mujeres, que en las encuestas señalan la inseguridad de ciertos tramos, sobre todo de noche, como la razón principal para no pedalear. Una ciclorruta mal iluminada es, para la mitad de la población, una ciclorruta que no existe.
+p: Por eso Barrientos insiste en que la pregunta correcta no es <<¿carro o bicicleta?>>, sino <<¿cuántas maneras razonables de moverse tiene una persona?>>. Una ciudad donde la única opción sensata es el automóvil, concluye, no es una ciudad de conductores libres: es una ciudad de conductores obligados.
+src: Texto elaborado para este simulacro.
+
+q: El párrafo 1 cumple la función de:
+@ Presentar un cambio de opinión que el resto del texto se encarga de explicar
+@ Exponer la tesis de la ingeniera Lucía Barrientos
+@ Demostrar que los comerciantes siempre se oponen a las obras públicas
+@ Describir cómo se construye una ciclorruta
+q: Según el párrafo 1, los comerciantes se oponían a la ciclorruta porque:
+@ Creían que, sin lugar para parquear, sus clientes dejarían de ir
+@ Consideraban que las bicicletas son peligrosas para los peatones
+@ La obra iba a durar tres años
+@ La alcaldía no les había pedido su firma
+q: Al afirmar que el cambio de opinión tiene una explicación <<menos romántica>> (párrafo 2), el autor da a entender que los comerciantes:
+@ Cambiaron de parecer por conveniencia económica y no por ideales
+@ Dejaron de interesarse por el medio ambiente
+@ Se enamoraron de la nueva avenida
+@ Fueron obligados por la cámara de comercio
+q: De acuerdo con el estudio citado en el párrafo 2, quienes llegan en bicicleta o a pie:
+@ Gastan menos en cada visita, pero más en el total del mes
+@ Gastan más en cada visita que quienes llegan en carro
+@ Visitan los almacenes con menos frecuencia
+@ Compran artículos más costosos, como televisores
+q: El dato de que <<en el espacio donde parquea un automóvil caben diez bicicletas>> (párrafo 2) sirve para:
+@ Reforzar la idea de que la ciclorruta puede traer más clientes
+@ Demostrar que las bicicletas son más baratas que los carros
+@ Proponer que se eliminen todos los parqueaderos
+@ Explicar por qué los ciclistas gastan menos en cada visita
+q: Para Barrientos (párrafo 3), <<confundir vehículos con personas>> consiste en:
+@ Evaluar una calle por los carros que pasan y no por la gente que transporta
+@ Creer que todos los conductores son iguales
+@ Pensar que las bicicletas no son vehículos
+@ Diseñar las calles sin consultar a los vecinos
+q: De las cifras del párrafo 3 se puede concluir que un carril dedicado a bicicletas:
+@ Puede mover más del triple de personas que un carril de automóviles
+@ Mueve unas dos mil personas por hora
+@ Necesita el doble del ancho de un carril de automóviles
+@ Es usado por siete mil ciclistas cada día
+q: En el párrafo 4, la expresión <<\sub{A esto}>> se refiere a:
+@ Los argumentos presentados en los párrafos anteriores
+@ El uso del cinturón de seguridad
+@ La opinión de los conductores
+@ La construcción de nuevos carriles
+q: Con la expresión <<se resisten a creer>> (párrafo 4) se indica que los conductores:
+@ Ponen en duda un hecho que los especialistas dan por comprobado
+@ Protestan contra las decisiones de los urbanistas
+@ Desconocen por completo cómo funcionan los trancones
+@ Se niegan a usar las vías nuevas
+q: Según el párrafo 4, ampliar las vías no reduce los trancones porque:
+@ Estimula nuevos viajes en carro que terminan ocupando el espacio ganado
+@ Las obras de ampliación tardan muchos años
+@ Los conductores prefieren las vías angostas
+@ Los carriles nuevos se destinan a las bicicletas
+q: La comparación <<Es como aflojarse el cinturón para combatir la obesidad>> (párrafo 4) sugiere que ampliar las vías:
+@ Alivia la molestia por un tiempo y deja crecer el problema
+@ Es una medida saludable para la ciudad
+@ Resuelve de manera definitiva la congestión
+@ Obliga a los conductores a hacer ejercicio
+q: Respecto a los párrafos anteriores, el párrafo 5:
+@ Reconoce los límites de la solución que se venía defendiendo
+@ Contradice las cifras de la ingeniera Barrientos
+@ Repite los argumentos de los comerciantes
+@ Propone eliminar las ciclorrutas
+q: Según el párrafo 5, la bicicleta no es una opción adecuada para las siguientes personas, EXCEPTO:
+@ Quien vende electrodomésticos en la avenida
+@ Quien vive muy lejos de su lugar de trabajo
+@ Quien es mayor y teme sufrir una caída
+@ Quien debe transportar herramientas
+q: En el párrafo 5, la palabra <<\sub{tramos}>> significa:
+@ Partes del recorrido
+@ Horarios
+@ Barrios
+@ Semáforos
+q: La afirmación <<una ciclorruta que no existe>> (párrafo 5) significa que una ciclorruta mal iluminada:
+@ En la práctica no puede ser usada por muchas mujeres
+@ No aparece en los mapas de la ciudad
+@ Todavía no ha sido construida
+@ Solo es usada por las mujeres durante la noche
+q: Para Barrientos (párrafo 6), la <<pregunta correcta>> se centra en:
+@ La variedad de alternativas de transporte con que cuenta cada persona
+@ La elección del mejor vehículo para toda la ciudad
+@ El número de carros que circulan por cada calle
+@ El costo de construir nuevas ciclorrutas
+q: La expresión <<conductores obligados>> (párrafo 6) se refiere a personas que:
+@ Usan el carro porque no tienen otra alternativa razonable
+@ Deben pagar impuestos por conducir
+@ Son sancionadas por no usar la bicicleta
+@ Trabajan como conductores de servicio público
+q: En el párrafo 6, la palabra <<\sub{sensata}>> puede reemplazarse por:
+@ Razonable
+@ Sensible
+@ Económica
+@ Segura
+q: La postura del autor frente a la bicicleta como medio de transporte es:
+@ Favorable, aunque consciente de sus limitaciones
+@ De rechazo, por los riesgos que implica
+@ De indiferencia, pues solo presenta opiniones ajenas
+@ De entusiasmo sin reservas
+q: De los siguientes hallazgos, el que más debilitaría lo expuesto en el párrafo 2 es:
+@ Que las ventas totales del sector hubieran bajado desde que se abrió la ciclorruta
+@ Que los ciclistas compraran productos más pequeños que los conductores
+@ Que algunos comerciantes siguieran sin usar bicicleta
+@ Que la ciclorruta se llenara de ciclistas los domingos
+q: Una situación semejante al fenómeno descrito en el párrafo 4 es:
+@ Comprar un armario más grande y, al poco tiempo, tenerlo otra vez lleno
+@ Arreglar una gotera antes de que empiece el invierno
+@ Cambiar un bombillo dañado por uno de menor consumo
+@ Sembrar árboles para dar sombra a una calle
+
+## Texto Dos
+p: La idea suena irresistible: una ciudad en la que el trabajo, el colegio, el médico, el mercado y el parque queden a no más de quince minutos de la casa, a pie o en bicicleta. Los urbanistas la han bautizado <<la ciudad de los quince minutos>> y la presentan como el remedio contra los trancones, la contaminación y la soledad. Yo quisiera creer en ella. Vivo, de hecho, en algo parecido.
+p: Desde mi ventana veo una panadería, dos cafés, una librería y un gimnasio. Camino al trabajo. Conozco por su nombre al señor de la fruta. Mi barrio es exactamente lo que prometen los folletos, y por eso mismo sé cuánto cuesta: el arriendo se ha duplicado en seis años. La señora que me vendía las arepas se fue a vivir a hora y media de aquí, y cada madrugada toma dos buses para venir a atender a quienes sí podemos pagar la cercanía.
+p: Ese es el punto ciego del entusiasmo. Cuando un barrio lo tiene todo cerca, vivir en él se vuelve un lujo, y quienes lo hacen funcionar ---la cajera, el vigilante, la enfermera--- terminan expulsados hacia los bordes. La ciudad de los quince minutos existe, pero solo para algunos; para los demás es la ciudad de los noventa.
+p: No culpo a la idea, sino a su versión perezosa: la que se contenta con embellecer los barrios que ya eran privilegiados y llama a eso transformación. La versión seria es más difícil y menos fotogénica. Consiste en llevar el colegio, el centro de salud y el empleo a las periferias, y en reservar vivienda asequible en los barrios centrales antes de que el mercado los cierre.
+p: Mientras eso no ocurra, convendría medir estas ciudades con un cronómetro distinto: no el de quien vive en ellas, sino el de quien las sirve.
+src: Texto elaborado para este simulacro.
+
+## Preguntas del Texto Dos
+q: En el párrafo 1, la palabra <<\sub{irresistible}>> significa:
+@ Muy atractiva
+@ Imposible de realizar
+@ Difícil de entender
+@ Poco confiable
+q: La oración <<Yo quisiera creer en ella>> (párrafo 1) sugiere que el autor:
+@ Tiene reservas frente a la idea
+@ Desconoce en qué consiste la idea
+@ Está completamente convencido de la idea
+@ Considera que la idea es una mentira de los urbanistas
+q: El autor describe su propio barrio (párrafo 2) con el fin de:
+@ Mostrar, con un caso cercano, el costo oculto del modelo
+@ Presumir de las comodidades de las que disfruta
+@ Invitar a los lectores a mudarse a ese sector
+@ Demostrar que los folletos mienten sobre el barrio
+q: La frase <<por eso mismo sé cuánto cuesta>> (párrafo 2) quiere decir que:
+@ La cercanía de los servicios encarece la vivienda
+@ El autor trabaja en una oficina de arriendos
+@ Los cafés y las librerías del barrio son costosos
+@ El autor ha tenido que mudarse por el precio
+q: El caso de la señora de las arepas (párrafo 2) ilustra que:
+@ Quienes prestan servicios en el barrio no pueden pagar por vivir en él
+@ Las ventas callejeras han desaparecido del sector
+@ Los buses de la ciudad son lentos e incómodos
+@ Los vecinos antiguos prefieren los barrios tranquilos
+q: La expresión <<punto ciego>> (párrafo 3) se refiere a:
+@ Un aspecto del asunto que los entusiastas no alcanzan a ver
+@ Un lugar del barrio que no tiene iluminación
+@ Un error en los mapas de los urbanistas
+@ Una zona de la ciudad a la que no llegan los buses
+q: En el párrafo 3, el fragmento escrito entre rayas (<<---la cajera, el vigilante, la enfermera--->>) cumple la función de:
+@ Dar ejemplos de las personas que hacen funcionar el barrio
+@ Señalar a los responsables del aumento de los arriendos
+@ Corregir lo dicho en la oración anterior
+@ Citar las palabras de los vecinos
+q: Con la expresión <<la ciudad de los noventa>> (párrafo 3) el autor alude a:
+@ El tiempo de viaje, en minutos, de quienes fueron desplazados a los bordes
+@ La década en la que se construyó el barrio
+@ El porcentaje de habitantes que vive en la periferia
+@ La edad promedio de los vecinos del sector
+q: Según el párrafo 4, la <<versión perezosa>> de la idea consiste en:
+@ Mejorar únicamente los barrios que ya estaban favorecidos
+@ Construir colegios y centros de salud en las periferias
+@ Prohibir los carros en el centro de la ciudad
+@ Dejar los barrios tal como están
+q: De acuerdo con el párrafo 4, la <<versión seria>> incluye las siguientes acciones, EXCEPTO:
+@ Abrir más cafés y librerías en los barrios centrales
+@ Llevar servicios de educación y salud a los bordes de la ciudad
+@ Acercar las fuentes de empleo a las periferias
+@ Asegurar vivienda de bajo costo en las zonas centrales
+q: Al decir que la versión seria es <<menos fotogénica>> (párrafo 4), el autor indica que sus resultados:
+@ Son menos vistosos y lucen menos ante el público
+@ No pueden registrarse en fotografías
+@ Son de peor calidad que los de la versión perezosa
+@ Solo interesan a los fotógrafos
+q: La propuesta del párrafo 5 de usar <<un cronómetro distinto>> significa:
+@ Evaluar la ciudad según el tiempo de viaje de quienes trabajan en ella
+@ Reducir a menos de quince minutos todos los recorridos
+@ Medir con más precisión las distancias entre los barrios
+@ Dar más tiempo a los urbanistas para hacer los cambios
+q: La postura del autor frente a la <<ciudad de los quince minutos>> es:
+@ La apoya, siempre que no termine excluyendo a quienes tienen menos
+@ La rechaza por considerarla una moda pasajera
+@ La defiende sin reparos porque vive en un barrio así
+@ No toma partido y se limita a describirla
+
+## Preguntas sobre los Textos Uno y Dos
+q: Los dos textos tratan principalmente sobre:
+@ La manera como el diseño de la ciudad condiciona la forma de moverse de la gente
+@ Las ventajas económicas de la bicicleta para el comercio
+@ El aumento del valor de los arriendos en los barrios centrales
+@ Los problemas de inseguridad en las grandes ciudades
+q: El párrafo 5 del texto Uno y el texto Dos coinciden en advertir que:
+@ Una solución de movilidad puede dejar por fuera a una parte de la población
+@ La bicicleta es el medio de transporte más eficiente
+@ Los comerciantes se oponen a los cambios en las vías
+@ Las ciudades deben ampliar sus avenidas
+q: La señora de las arepas (texto Dos) sería, según el párrafo 5 del texto Uno, un ejemplo de alguien a quien la bicicleta no le sirve porque:
+@ Vive demasiado lejos de su lugar de trabajo
+@ Teme sufrir una caída
+@ Debe cargar herramientas pesadas
+@ Los tramos de su barrio son inseguros
+q: Un alcalde declara: <<El éxito de la nueva avenida se nota: ahora pasan por ella cinco mil carros más cada hora>>. Según lo expuesto en el texto Uno, Barrientos respondería que el alcalde:
+@ Confunde vehículos con personas
+@ Tiene razón, porque así se reducen los trancones
+@ Debería reunir firmas entre los comerciantes
+@ Está defendiendo la ciudad de los quince minutos
+q: El texto Uno se apoya principalmente en \bl, mientras que el texto Dos lo hace en \bl.
+@ Un estudio y la voz de una especialista / la vivencia de su autor
+@ Encuestas a comerciantes / entrevistas a urbanistas
+@ La vivencia de su autor / un estudio de la cámara de comercio
+@ Folletos de la alcaldía / cifras sobre arriendos
+q: El efecto que tienen las mejoras urbanas sobre el costo de la vivienda es un interés del texto:
+@ Dos, pero no del Uno
+@ Uno, pero no del Dos
+@ Uno más que del Dos
+@ Uno y del Dos por igual
+
+== RAZONAMIENTO
+ctx 2: Se tienen ocho fichas: dos marcadas con el número 1, dos con el 2, dos con el 3 y dos con el 4. Las ocho fichas se ponen en una fila de modo que:
+\vi{Entre las dos fichas marcadas con 1 hay exactamente una ficha; entre las dos marcadas con 2 hay exactamente dos fichas; entre las dos marcadas con 3 hay exactamente tres fichas, y entre las dos marcadas con 4 hay exactamente cuatro fichas}
+\vi{La primera ficha de la fila, de izquierda a derecha, está marcada con 4}
+q: El número de la ficha que queda en la quinta posición es:
+@ 2
+@ 1
+@ 3
+@ 4
+! La única fila posible es 4, 1, 3, 1, 2, 4, 3, 2.
+q: La suma de los números de las fichas que quedan en las posiciones 3 y 8 es:
+@ 5
+@ 4
+@ 6
+@ 7
+! $3+2=5$.
+q: El reglamento de un club dice: <<Para ser socio es necesario ser mayor de edad>>. De las siguientes afirmaciones, la única que se deduce del reglamento es:
+@ Si Juan es socio del club, entonces es mayor de edad
+@ Si Juan es mayor de edad, entonces es socio del club
+@ Si Juan no es socio del club, entonces no es mayor de edad
+@ Todos los mayores de edad son socios del club
+! Una condición necesaria la cumplen todos los socios, pero cumplirla no garantiza ser socio.
+q: Se sabe que <<si hoy es festivo, entonces el banco no abre>> y que <<hoy el banco abrió>>. De lo anterior se puede concluir que:
+@ Hoy no es festivo
+@ Hoy es festivo
+@ Mañana es festivo
+@ No se puede concluir nada sobre si hoy es festivo
+! Si fuera festivo, el banco no habría abierto.
+ctx 2: En una empresa trabajan 200 empleados. El 60\% habla inglés, el 25\% habla francés y el 30\% no habla ninguno de los dos idiomas.
+q: La cantidad de empleados que habla los dos idiomas es:
+@ 30
+@ 15
+@ 50
+@ 20
+! Habla alguno el 70\%; $60+25-70=15\%$ de 200.
+q: La cantidad de empleados que habla francés, pero no habla inglés, es:
+@ 20
+@ 10
+@ 50
+@ 35
+! $50-30=20$.
+q: Laura, Mónica y Natalia son, no necesariamente en ese orden, médica, abogada e ingeniera, y cada una vive en una ciudad distinta: Bogotá, Cali y Medellín. Se sabe que:
+\vi{La abogada vive en Cali}
+\vi{Mónica vive en Bogotá}
+\vi{Natalia no vive en Cali}
+\vi{La ingeniera no vive en Bogotá}
+Con certeza, Natalia es:
+@ Ingeniera y vive en Medellín
+@ Médica y vive en Medellín
+@ Abogada y vive en Medellín
+@ Ingeniera y vive en Cali
+! Natalia vive en Medellín y Laura en Cali, así que Laura es la abogada; Mónica (Bogotá) no es la ingeniera: es la médica.
+ctx 2: Al borde de una carretera recta hay cuatro postes. Un topógrafo midió las distancias entre cada dos de ellos y obtuvo seis medidas, que ordenadas de menor a mayor son 3, 4, 5, 7, 9 y 12 metros.
+q: La distancia, en metros, entre los dos postes que están en el medio es:
+@ 4
+@ 3
+@ 5
+@ 7
+! Las tres separaciones consecutivas suman 12 y son 3, 4 y 5; para que aparezcan 7 y 9 (y no 8), la del medio debe ser 4.
+q: La distancia, en metros, entre el primer poste y el tercero, contados desde uno de los extremos de la carretera:
+@ Puede ser 7 o 9
+@ Es únicamente 7
+@ Es únicamente 9
+@ Puede ser 7 u 8
+! Las separaciones son 3, 4, 5 en ese orden o en el contrario: $3+4=7$ o $5+4=9$.
+q: En una elección votó el 60\% de las personas habilitadas. El candidato ganador obtuvo el 55\% de los votos, que fueron 6.600. La cantidad de personas habilitadas para votar era:
+@ 20.000
+@ 12.000
+@ 18.150
+@ 11.000
+! Votaron $6.600\div0{,}55=12.000$, que son el 60\% de 20.000.
+q: Sandra presta \$2.000.000 con un interés simple del 1,5\% mensual. El interés total que recibe al cabo de 8 meses es:
+@ \$240.000
+@ \$30.000
+@ \$300.000
+@ \$120.000
+! $2.000.000\cdot0{,}015\cdot8$.
+q: Un pintor puede pintar solo una casa en 6 días y su ayudante puede pintarla solo en 12 días. Los dos trabajan juntos durante 2 días y luego el pintor se retira. La cantidad de días adicionales que necesita el ayudante para terminar el trabajo es:
+@ 6
+@ 4
+@ 3
+@ 8
+! En 2 días hacen $2\left(\frac16+\frac1{12}\right)=\frac12$; la otra mitad le toma 6 días al ayudante.
+q: Los primeros términos de una sucesión son 5, 8, 13, 20, 29, \dots{} Si se continúa con la misma regla de formación, el término que ocupa la posición 12 es:
+@ 148
+@ 144
+@ 125
+@ 173
+! El término $n$ es $n^2+4$.
+q: En los números reales se define la operación $a\,\triangledown\,b=ab-a-b$. El valor de $x$ para el cual $x\,\triangledown\,3=9$ es:
+@ 6
+@ 4
+@ 3
+@ 12
+! $3x-x-3=9$.
+q: Con los dígitos 1, 2, 3, 4 y 5, sin repetir ninguno, se forman números de tres cifras. La cantidad de esos números que son pares es:
+@ 24
+@ 12
+@ 30
+@ 60
+! La última cifra es 2 o 4, y las otras dos se escogen de $4\cdot3$ maneras.
+q: Se escoge al azar un número entero del 1 al 30. La probabilidad de que el número escogido sea primo es:
+@ $\frac13$
+@ $\frac{3}{10}$
+@ $\frac{11}{30}$
+@ $\frac25$
+! Hay 10 primos: 2, 3, 5, 7, 11, 13, 17, 19, 23 y 29.
+q: En un polígono regular, cada ángulo interior mide $150^\circ$. La cantidad de lados del polígono es:
+@ 12
+@ 10
+@ 15
+@ 8
+! Cada ángulo exterior mide $30^\circ$ y $360\div30=12$.
+ctx 2: Una empresa de telefonía ofrece tres planes mensuales:
+\vi{Plan A: cargo fijo de \$20.000 más \$100 por cada minuto de llamada}
+\vi{Plan B: cargo fijo de \$35.000 más \$50 por cada minuto de llamada}
+\vi{Plan C: \$60.000, con minutos ilimitados}
+q: Para una persona que habla 250 minutos al mes, el plan más económico es:
+@ El plan A
+@ El plan B
+@ El plan C
+@ El plan A o el plan B, pues cuestan lo mismo
+! A: \$45.000; B: \$47.500; C: \$60.000.
+q: De las siguientes afirmaciones, la única verdadera es:
+@ Para 400 minutos al mes, el plan B es el más económico
+@ Para 300 minutos al mes, el plan A es más económico que el plan B
+@ Para 500 minutos al mes, el plan C es más económico que el plan B
+@ Para 600 minutos al mes, los planes A y C cuestan lo mismo
+! Con 400 minutos: A \$60.000, B \$55.000, C \$60.000. Con 300, A y B cuestan igual; con 500, B y C cuestan igual.
+q: Un número capicúa es el que se lee igual de izquierda a derecha que de derecha a izquierda, como 3443. La cantidad de números capicúas de cuatro cifras es:
+@ 90
+@ 81
+@ 100
+@ 99
+! Tiene la forma $abba$: 9 opciones para $a$ y 10 para $b$.
+q: El promedio de las edades de cuatro amigos es 25 años. Cuando llega un quinto amigo, el promedio de las edades de los cinco es 27 años. La edad del quinto amigo es:
+@ 35
+@ 29
+@ 27
+@ 33
+! $5\cdot27-4\cdot25$.
+q: Un procedimiento comienza con el número 6 y repite el siguiente paso: si el número es par, se divide entre 2; si es impar, se multiplica por 3 y se le suma 1. La cantidad de pasos necesarios para llegar por primera vez al número 1 es:
+@ 8
+@ 6
+@ 7
+@ 9
+! $6\to3\to10\to5\to16\to8\to4\to2\to1$.
+q: En una progresión aritmética, el tercer término es 11 y el séptimo término es 27. El término que ocupa la posición 20 es:
+@ 79
+@ 83
+@ 75
+@ 80
+! La diferencia es 4 y el primer término es 3: $3+19\cdot4$.
+q: El mayor número de tres cifras tal que el producto de sus dígitos es 24 y la suma de sus dígitos es 9 es:
+@ 432
+@ 423
+@ 621
+@ 441
+! Los dígitos deben ser 2, 3 y 4.
+ctx 2: Un antiguo sistema de numeración escribe los números con puntos y barras: cada punto vale 1 y cada barra vale 5. Los símbolos se organizan en dos niveles: el valor de los símbolos del nivel inferior se cuenta tal cual, y el valor de los símbolos del nivel superior se multiplica por 20. Por ejemplo, con dos puntos en el nivel superior, y una barra y tres puntos en el nivel inferior, se escribe el número $2\cdot20+8=48$.
+q: El número que se escribe con una barra y un punto en el nivel superior, y dos barras y dos puntos en el nivel inferior, es:
+@ 132
+@ 112
+@ 18
+@ 72
+! $6\cdot20+12$.
+q: Para escribir el número 87 se necesitan:
+@ Cuatro puntos en el nivel superior; una barra y dos puntos en el inferior
+@ Una barra en el nivel superior; una barra y dos puntos en el inferior
+@ Cuatro puntos en el nivel superior; dos barras y tres puntos en el inferior
+@ Tres puntos en el nivel superior; cuatro barras y dos puntos en el inferior
+! $87=4\cdot20+7$.
+q: La cantidad total de rectángulos, de cualquier tamaño (incluidos los cuadrados), que se pueden contar en la figura es:\par
+{\centering\begin{tikzpicture}[scale=.55]\draw (0,0) grid (3,2);\end{tikzpicture}\par}
+@ 18
+@ 6
+@ 12
+@ 10
+! Se escogen dos de las 3 líneas horizontales y dos de las 4 verticales: $3\cdot6$.
+q: De una lámina rectangular de cartón de 20 cm por 14 cm se recorta, en cada esquina, un cuadrado de 3 cm de lado, y luego se doblan los bordes hacia arriba para formar una caja sin tapa. El volumen de la caja, en cm$^3$, es:
+@ 336
+@ 840
+@ 561
+@ 462
+! $(20-6)(14-6)\cdot3$.
+q: Una ventana tiene la forma de un rectángulo de 2 m de ancho y 1 m de alto, con un semicírculo encima cuyo diámetro es el ancho del rectángulo, como muestra la figura. El área de la ventana, en m$^2$, es:\par
+{\centering\begin{tikzpicture}[scale=.7]\draw[thick] (0,0)--(2,0)--(2,1) arc (0:180:1)--cycle;\draw[dashed] (0,1)--(2,1);\node[below,font=\scriptsize] at (1,0) {2 m};\node[right,font=\scriptsize] at (2,.5) {1 m};\end{tikzpicture}\par}
+@ $2+\frac{\pi}{2}$
+@ $2+\pi$
+@ $2+2\pi$
+@ $4+\frac{\pi}{2}$
+! Rectángulo $2$ más medio círculo de radio 1.
+q: Dos ruedas dentadas están engranadas. La pequeña tiene 12 dientes y la grande tiene 30. Cuando la rueda pequeña da 100 vueltas, la cantidad de vueltas que da la rueda grande es:
+@ 40
+@ 250
+@ 36
+@ 60
+! $12\cdot100=30\cdot x$.
+q: Un avión sale de una ciudad a las 10:40 p.m. (hora local) y vuela durante 9 horas y 45 minutos hasta otra ciudad, donde los relojes marcan 6 horas más que en la ciudad de salida. La hora local a la que llega el avión es:
+@ 2:25 p.m.
+@ 8:25 a.m.
+@ 2:25 a.m.
+@ 4:25 p.m.
+! Llega a las 8:25 a.m. de la ciudad de salida; 6 horas más son las 2:25 p.m.
+q: Ana dice: <<Beatriz miente>>. Beatriz dice: <<Carla miente>>. Carla dice: <<Ana y Beatriz mienten>>. Si cada una de ellas dice la verdad o miente, entonces quien dice la verdad es:
+@ Solamente Beatriz
+@ Solamente Ana
+@ Solamente Carla
+@ Ana y Carla
+! Si Beatriz mintiera, Ana diría la verdad y Carla también (pues sería falso que Carla miente); pero Carla afirma que Ana miente: contradicción. Luego Beatriz dice la verdad, y Ana y Carla mienten.
+q: La cantidad de diagonales que tiene un polígono de 10 lados es:
+@ 35
+@ 45
+@ 70
+@ 40
+! $\frac{10\cdot7}{2}$.
+q: Un caracol está en el fondo de un pozo de 10 metros de profundidad. Cada día sube 3 metros y cada noche, mientras duerme, resbala 2 metros. El caracol llega al borde del pozo durante el día número:
+@ 8
+@ 10
+@ 7
+@ 9
+! Al amanecer del día 8 está a 7 metros; ese día sube 3 y sale.
+ctx 2: La gráfica muestra la distancia recorrida por un ciclista, en kilómetros, durante las 4 horas que duró su paseo.\par\smallskip
+{\centering\begin{tikzpicture}[x=1.1cm,y=.05cm]\draw[->] (0,0)--(0,68);\draw[->] (0,0)--(4.5,0);
+\foreach \v in {10,20,...,60} {\draw[gray!50] (0,\v)--(4.3,\v);\node[left,font=\scriptsize] at (0,\v) {\v};}
+\foreach \i in {1,2,3,4} {\draw[gray!50] (\i,0)--(\i,64);\node[below,font=\scriptsize] at (\i,0) {\i};}
+\draw[thick] (0,0)--(1,20)--(2,20)--(3,50)--(4,60);\foreach \p in {(0,0),(1,20),(2,20),(3,50),(4,60)} \fill \p circle(2pt);
+\node[font=\scriptsize] at (2.2,-11) {Tiempo (horas)};\node[font=\scriptsize,rotate=90] at (-.8,32) {Distancia (km)};\end{tikzpicture}\par}
+q: La velocidad promedio del ciclista durante todo el paseo, en km/h, fue:
+@ 15
+@ 20
+@ 12
+@ 30
+! $60$ km en $4$ horas.
+q: El intervalo de una hora en el que el ciclista avanzó con mayor velocidad fue:
+@ Entre la hora 2 y la hora 3
+@ Entre la hora 0 y la hora 1
+@ Entre la hora 1 y la hora 2
+@ Entre la hora 3 y la hora 4
+! Avanzó 20, 0, 30 y 10 km en cada hora.
+q: La cantidad de parejas de números enteros positivos $(x,y)$ que cumplen $2x+3y=30$ es:
+@ 4
+@ 5
+@ 3
+@ 6
+! $y$ debe ser par: $(12,2)$, $(9,4)$, $(6,6)$ y $(3,8)$.
+q: Un granjero tiene 36 metros de malla para cercar un corral rectangular aprovechando un muro recto como uno de los lados, de modo que la malla solo se usa en los otros tres lados. La mayor área que puede tener el corral, en metros cuadrados, es:
+@ 162
+@ 144
+@ 81
+@ 180
+! Con lados $x$, $x$ y $36-2x$: el área $x(36-2x)$ es máxima para $x=9$.
+q: Tres amigos se comen una pizza así: el primero come la cuarta parte de la pizza; el segundo, la tercera parte de lo que quedó, y el tercero, la mitad de lo que quedó entonces. La fracción de la pizza que sobra es:
+@ $\frac14$
+@ $\frac16$
+@ $\frac13$
+@ $\frac18$
+! $\frac34\cdot\frac23\cdot\frac12$.
+q: Con cuadritos iguales se construye la secuencia de marcos cuadrados que se muestra, en la que el lado de cada marco tiene un cuadrito más que el del anterior.\par
+\newcommand\marco[3]{\begin{scope}[shift={(#1,0)}]\draw (0,0) grid (#2,#2);\fill[white] (1,1) rectangle (#2-1,#2-1);\draw (1,1) rectangle (#2-1,#2-1);\node at (#2/2,-.9) {\scriptsize Figura #3};\end{scope}}
+{\centering\begin{tikzpicture}[scale=.3]\marco{0}{3}{1}\marco{5}{4}{2}\marco{11}{5}{3}\end{tikzpicture}\par}
+La cantidad de cuadritos que tiene el marco de la figura 15 es:
+@ 64
+@ 60
+@ 68
+@ 225
+! La figura $n$ tiene lado $n+2$ y $(n+2)^2-n^2=4n+4$ cuadritos.

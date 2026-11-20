@@ -1,0 +1,517 @@
+== LECTURA
+## Texto Uno
+p: A más de tres mil metros de altura, donde los árboles se rinden y el viento parece no descansar, crece un paisaje que durante siglos fue visto como tierra inútil: el páramo. Los viajeros lo cruzaban de prisa, con miedo al frío y a la niebla, y los mapas coloniales lo marcaban como un vacío entre dos valles fértiles. Hoy sabemos que ese supuesto vacío sostiene la vida de millones de personas que jamás lo han pisado.
+p: El secreto está en el suelo y en las plantas. Los frailejones, con sus hojas cubiertas de una pelusa plateada, atrapan las gotas diminutas de la neblina y las dejan escurrir hasta la tierra. Allí las recibe un suelo negro y esponjoso, formado por materia vegetal que el frío descompone con extrema lentitud. Ese suelo puede retener varias veces su propio peso en agua y soltarla poco a poco, incluso en los meses en que no llueve. Por eso se dice que el páramo no produce agua: la administra.
+p: <<La imagen de la fábrica de agua es engañosa>>, advierte la hidróloga Marta Rendón, quien lleva veinte años midiendo caudales en la cordillera Central. <<Una fábrica se puede acelerar. El páramo no. Lo que hace es guardar lo que cae en invierno para entregarlo en verano; si le pedimos más, simplemente se agota>>. Según sus registros, las quebradas que nacen en zonas de páramo conservado mantienen en época seca cerca de dos tercios de su caudal, mientras que las que nacen en páramos convertidos en potreros pierden más de la mitad.
+p: La amenaza no llega de un solo lado. La papa y la ganadería suben cada año un poco más por la montaña; la minería busca oro y carbón bajo las turberas, y el aumento de la temperatura empuja hacia arriba a especies de tierras más bajas que compiten con las del páramo. Este último, a diferencia de las tres primeras amenazas, no se detiene con una cerca ni con un decreto. Un frailejón crece apenas un centímetro al año: una planta de la altura de una persona puede haber empezado a crecer cuando todavía no existían los automóviles.
+p: Quienes viven allí arriba reclaman, con razón, que no se les trate como invasores. Muchas familias llevan generaciones cultivando esas laderas y sienten que la ciudad, que nunca les preguntó nada, ahora les exige irse para proteger el agua que ella consume. En algunos municipios se ensaya otra salida: los acueductos pagan a los campesinos por cuidar las fuentes, cercar los nacimientos y reemplazar el ganado por actividades de menor impacto, como la apicultura o el turismo de observación.
+p: Los resultados todavía son modestos y los pagos, irregulares. Pero la idea encierra un cambio de mirada: aceptar que el vaso de agua que se sirve en un apartamento de la ciudad empieza en una hoja peluda, a cuatro horas de camino, y que alguien la está cuidando.
+src: Texto elaborado para este simulacro.
+
+q: El propósito principal del texto Uno es:
+@ Explicar por qué el páramo es valioso y qué dilemas plantea su protección
+@ Denunciar a los campesinos que cultivan en las zonas altas de la cordillera
+@ Describir las características botánicas del frailejón y de las turberas
+@ Proponer que los acueductos urbanos se trasladen a las zonas de páramo
+q: La expresión <<donde los árboles se rinden>> (párrafo 1) da a entender que:
+@ A esa altura las condiciones impiden que los árboles crezcan
+@ Los árboles del páramo han sido talados por los viajeros
+@ En el páramo los árboles se inclinan por la fuerza del viento
+@ Los árboles ceden su lugar a los cultivos de papa
+q: En el párrafo 1, la mención de los mapas coloniales sirve para:
+@ Ilustrar la poca importancia que antes se le daba al páramo
+@ Demostrar que el páramo no existía en la época colonial
+@ Explicar por qué los valles vecinos eran más fértiles
+@ Criticar la falta de precisión de los cartógrafos antiguos
+q: Según el párrafo 2, la función de los frailejones es:
+@ Captar el agua de la neblina y conducirla hacia el suelo
+@ Descomponer lentamente la materia vegetal del suelo
+@ Retener varias veces su propio peso en agua
+@ Proteger el suelo del frío durante los meses secos
+q: La afirmación <<el páramo no produce agua: la administra>> (párrafo 2) debe interpretarse como que el páramo:
+@ Regula en el tiempo la entrega del agua que recibe
+@ Decide a cuáles ciudades les entrega agua y a cuáles no
+@ Genera agua a partir de la descomposición de las plantas
+@ Consume la mayor parte del agua que recibe de la neblina
+q: Para Marta Rendón (párrafo 3), la imagen de la fábrica es engañosa porque:
+@ Hace pensar que la entrega de agua puede aumentarse a voluntad
+@ Las fábricas contaminan y el páramo es un ecosistema limpio
+@ El páramo entrega más agua en invierno que en verano
+@ En el páramo no trabajan obreros sino campesinos
+q: De los registros de Rendón (párrafo 3) se puede inferir que:
+@ El estado de conservación del páramo influye en el caudal de la época seca
+@ Las quebradas de páramo conservado no pierden caudal en verano
+@ Los potreros aumentan el caudal de las quebradas en invierno
+@ Las quebradas de la cordillera Central se secarán en veinte años
+q: En el párrafo 4, la expresión <<\sub{Este último}>> alude a:
+@ El aumento de la temperatura
+@ El cultivo de papa
+@ El frailejón
+@ La explotación de carbón
+q: En el mismo párrafo, <<\sub{las tres primeras amenazas}>> se refiere a:
+@ El cultivo de papa, la ganadería y la minería
+@ Las especies de tierras más bajas
+@ Las turberas y los frailejones
+@ Las cercas y los decretos
+q: La referencia a los automóviles en el párrafo 4 tiene como fin:
+@ Dar una idea de lo lento que es el crecimiento del frailejón
+@ Señalar a los automóviles como causa del calentamiento
+@ Mostrar que al páramo solo se puede llegar caminando
+@ Comparar la altura de un frailejón con la de un vehículo
+q: De acuerdo con el párrafo 4, son amenazas para el páramo, EXCEPTO:
+@ El turismo de observación
+@ La ganadería
+@ La minería
+@ El aumento de la temperatura
+q: En el párrafo 5, el inciso <<con razón>> indica que el autor:
+@ Considera legítimo el reclamo de las familias campesinas
+@ Duda de que los campesinos lleven generaciones en el páramo
+@ Piensa que la ciudad tiene derecho a exigirles que se vayan
+@ Reproduce una opinión de la hidróloga Marta Rendón
+q: En la frase <<En algunos municipios se \sub{ensaya} otra salida>> (párrafo 5), la palabra subrayada significa:
+@ Prueba
+@ Repite
+@ Escribe
+@ Impone
+q: El reclamo de las familias frente a la ciudad (párrafo 5) consiste en que esta:
+@ Les impone una carga sin haberlas tenido en cuenta
+@ Les compra sus productos a precios muy bajos
+@ Consume más agua de la que el páramo puede guardar
+@ Les prohíbe vender su tierra a los acueductos
+q: Son tareas por las que los acueductos pagan a los campesinos (párrafo 5), EXCEPTO:
+@ Sembrar papa en las partes más altas
+@ Cercar los nacimientos de agua
+@ Cuidar las fuentes
+@ Cambiar el ganado por otras actividades
+q: En el párrafo 6, la palabra <<\sub{modestos}>> puede reemplazarse, sin cambiar el sentido, por:
+@ Limitados
+@ Humildes
+@ Tímidos
+@ Honestos
+q: El <<cambio de mirada>> del que habla el párrafo 6 consiste en:
+@ Reconocer que el agua de la ciudad depende de un lugar lejano y de quienes lo cuidan
+@ Entender que el páramo debe quedar sin habitantes para proteger el agua
+@ Aceptar que los pagos a los campesinos nunca serán suficientes
+@ Admitir que el agua de los apartamentos es de menor calidad que la del páramo
+q: La relación entre los párrafos 1 y 2 es que el segundo:
+@ Explica por qué tiene valor lo que el primero presenta como un supuesto vacío
+@ Contradice la idea del primero de que el páramo sostiene a millones de personas
+@ Repite con otras palabras la descripción del paisaje hecha en el primero
+@ Presenta la opinión de una experta sobre lo dicho en el primero
+q: Respecto al párrafo 4, el párrafo 5:
+@ Agrega al problema ambiental una dimensión social
+@ Ofrece cifras que confirman las amenazas descritas
+@ Niega que la agricultura sea una amenaza para el páramo
+@ Resume las ideas expuestas hasta ese momento
+q: Un caso semejante al de los pagos descritos en el párrafo 5 sería:
+@ Una embotelladora que financia a los agricultores que reforestan la cuenca de la que ella toma el agua
+@ Una alcaldía que multa a quienes desperdician agua lavando automóviles
+@ Un acueducto que sube la tarifa a los barrios que más agua consumen
+@ Una empresa minera que compra las fincas vecinas para ampliar su explotación
+q: Las siguientes afirmaciones son compatibles con lo que dice el texto, EXCEPTO:
+@ Con la tecnología adecuada, el páramo podría entregar en verano más agua de la que guardó
+@ Una cerca puede frenar el ganado, pero no el aumento de la temperatura
+@ Hay personas que dependen del páramo sin haberlo visitado nunca
+@ El suelo del páramo se formó a lo largo de mucho tiempo
+
+## Texto Dos
+p: Abrir la llave es quizá el gesto menos pensado de la vida urbana. El agua aparece, limpia y a la temperatura que uno quiera, y desaparece por un sifón rumbo a un lugar que tampoco nos interesa. Esa comodidad es una conquista ---nadie querría volver a cargar baldes desde el río---, pero tiene un costo silencioso: nos ha vuelto analfabetas del agua.
+p: Un habitante de ciudad puede recitar el precio del dólar o la alineación de su equipo, y sin embargo ignorar de qué montaña baja lo que bebe. No es pereza individual. Las ciudades fueron diseñadas para esconder sus ríos: los canalizaron, los taparon con avenidas y los convirtieron en algo que solo se recuerda cuando se desborda. Lo que no se ve no se cuida, y lo que no se cuida termina por cobrarse.
+p: Las campañas de ahorro suelen apuntar al lugar equivocado. Nos piden cerrar la llave mientras nos cepillamos los dientes, como si el problema cupiera en un lavamanos. Mientras tanto, cerca de un tercio del agua tratada se pierde en tuberías rotas antes de llegar a una casa, y nadie ha visto un afiche que regañe a una tubería. Culpar al usuario es barato; reparar la red es caro y no da votos, porque las obras que quedan bajo tierra no se inauguran con cinta.
+p: No digo que los gestos pequeños sean inútiles. Digo que funcionan como coartada: quien cierra la llave siente que ya cumplió y deja de preguntar por lo demás. Una ciudadanía que supiera leer el agua haría preguntas más incómodas: cuánto se pierde en el camino, quién usa la mayor parte, qué pasa con el agua después del sifón, quién vive junto a la fuente y qué recibe a cambio.
+p: Tal vez habría que empezar por algo sencillo: que cada recibo del acueducto traiga, junto a la cifra por pagar, el nombre de la montaña de donde vino el agua. No resolvería nada, pero un nombre es el principio de una relación. Nadie defiende lo que no sabe nombrar.
+src: Texto elaborado para este simulacro.
+
+## Preguntas del Texto Dos
+q: Con la expresión <<analfabetas del agua>> (párrafo 1) el autor se refiere a personas que:
+@ Desconocen de dónde viene y a dónde va el agua que usan
+@ No saben leer el recibo del acueducto
+@ Desperdician agua por falta de educación escolar
+@ Nunca han tenido que cargar agua desde un río
+q: El inciso <<---nadie querría volver a cargar baldes desde el río--->> (párrafo 1) cumple la función de:
+@ Aclarar que la crítica no es un rechazo de la comodidad alcanzada
+@ Demostrar que antes el agua era más limpia que ahora
+@ Introducir el tema central del texto
+@ Burlarse de quienes viven lejos de la ciudad
+q: Según el párrafo 2, el desconocimiento del habitante urbano se debe principalmente a:
+@ La manera como las ciudades ocultaron sus ríos
+@ El desinterés de cada persona por la naturaleza
+@ La atención excesiva que se presta al fútbol
+@ El costo cada vez más alto del servicio de agua
+q: La frase <<lo que no se cuida termina por \sub{cobrarse}>> (párrafo 2) significa que el descuido:
+@ Trae consecuencias negativas
+@ Aumenta el valor del recibo
+@ Es castigado por las autoridades
+@ Se vuelve una costumbre
+q: El autor critica las campañas de ahorro (párrafo 3) porque:
+@ Cargan la responsabilidad en el usuario y desatienden pérdidas mayores
+@ Usan afiches en lugar de medios de comunicación modernos
+@ Recomiendan acciones que en realidad aumentan el consumo
+@ Son demasiado costosas para los resultados que logran
+q: El tono de la frase <<nadie ha visto un afiche que regañe a una tubería>> (párrafo 3) es:
+@ Irónico
+@ Nostálgico
+@ Solemne
+@ Neutral
+q: Según el párrafo 3, la reparación de la red de tuberías se aplaza por las siguientes razones, EXCEPTO:
+@ Los usuarios se oponen a las obras
+@ Es costosa
+@ No trae beneficios electorales
+@ Es una obra que no queda a la vista
+q: En el párrafo 4, la palabra <<\sub{coartada}>> significa:
+@ Excusa
+@ Trampa
+@ Costumbre
+@ Solución
+q: Son preguntas que haría una ciudadanía que supiera <<leer el agua>> (párrafo 4), EXCEPTO:
+@ ¿Cuánto cuesta el agua en otras ciudades?
+@ ¿Qué proporción del agua se pierde antes de llegar a las casas?
+@ ¿Qué sector consume más agua?
+@ ¿A dónde va el agua que sale por el desagüe?
+q: Con las oraciones <<No digo que los gestos pequeños sean inútiles. Digo que funcionan como coartada>> (párrafo 4), el autor:
+@ Previene una mala interpretación de lo que afirmó antes
+@ Reconoce que estaba equivocado en el párrafo anterior
+@ Invita a los lectores a dejar de ahorrar agua en casa
+@ Cita la opinión de quienes defienden las campañas
+q: La propuesta del párrafo 5 se presenta como:
+@ Un gesto simbólico que no pretende solucionar el problema
+@ La única manera eficaz de reducir las pérdidas de agua
+@ Una obligación legal de las empresas de acueducto
+@ Una estrategia para aumentar el valor del servicio
+q: La oración final, <<Nadie defiende lo que no sabe nombrar>>, da a entender que:
+@ Conocer algo es una condición para cuidarlo
+@ Las montañas deberían cambiar de nombre
+@ Los ciudadanos solo cuidan aquello por lo que pagan
+@ Quien conoce el origen del agua deja de desperdiciarla
+q: Del texto Dos se infiere que, para su autor, el problema del agua en las ciudades es sobre todo un asunto de:
+@ Conocimiento y responsabilidad colectiva
+@ Malos hábitos de aseo personal
+@ Escasez de fuentes en las montañas
+@ Tecnología de tratamiento insuficiente
+
+## Preguntas sobre los Textos Uno y Dos
+q: Los dos textos coinciden en señalar que:
+@ Los habitantes de la ciudad suelen ignorar el origen del agua que consumen
+@ Las campañas de ahorro de agua están mal orientadas
+@ El frailejón es la planta más importante del páramo
+@ Los campesinos deben salir de las zonas donde nace el agua
+q: En relación con el agua, el tono del texto Uno es \bl, mientras que el del texto Dos es \bl.
+@ Divulgativo / crítico
+@ Sarcástico / esperanzador
+@ Alarmista / indiferente
+@ Poético / técnico
+q: La pregunta <<quién vive junto a la fuente y qué recibe a cambio>> (texto Dos, párrafo 4) encuentra una respuesta parcial en el texto Uno, en el párrafo:
+@ 5
+@ 2
+@ 3
+@ 4
+q: Un informe técnico afirma que <<en la mayoría de las cuencas, el consumo de los hogares es una fracción pequeña frente al de la agricultura y la industria>>. Esta afirmación:
+@ Respalda la crítica del texto Dos a las campañas centradas en el hogar
+@ Contradice los registros de Marta Rendón en el texto Uno
+@ Demuestra que los gestos pequeños son inútiles, como dice el texto Dos
+@ Confirma que el páramo es una fábrica de agua, como afirma el texto Uno
+q: Si se aplicara la propuesta del párrafo 5 del texto Dos en una ciudad abastecida por un páramo, se favorecería directamente:
+@ El <<cambio de mirada>> del que habla el texto Uno
+@ El aumento del caudal en la época seca
+@ La salida de las familias campesinas del páramo
+@ La reparación de las tuberías rotas
+q: La situación de quienes habitan las zonas donde nace el agua es un interés del texto:
+@ Uno más que del Dos
+@ Dos más que del Uno
+@ Uno, pero no del Dos
+@ Dos, pero no del Uno
+
+== RAZONAMIENTO
+ctx 2: Ana, Beto, Carla, Diego y Elsa se sientan en una fila de cinco sillas numeradas de 1 a 5, de izquierda a derecha. Se sabe que:
+\vi{Ana no está en ninguno de los extremos}
+\vi{Beto está inmediatamente a la derecha de Carla}
+\vi{Diego está en una silla con número menor que la de Elsa}
+\vi{Elsa no está junto a Ana}
+q: De las siguientes afirmaciones, de la única que se tiene certeza es:
+@ Elsa ocupa la silla 5
+@ Ana ocupa la silla 3
+@ Carla ocupa la silla 1
+@ Diego ocupa la silla 4
+! Solo hay dos filas posibles: C, B, A, D, E y D, A, C, B, E. En ambas Elsa está en la silla 5.
+q: Si además se sabe que Carla no está en un extremo, entonces quien ocupa la silla 3 es:
+@ Carla
+@ Ana
+@ Beto
+@ Diego
+! Queda la fila D, A, C, B, E: en la silla 3 está Carla.
+q: La negación de la frase <<todos los estudiantes del grupo aprobaron por lo menos un examen>> es:
+@ Algún estudiante del grupo no aprobó ningún examen
+@ Ningún estudiante del grupo aprobó un examen
+@ Algún estudiante del grupo aprobó todos los exámenes
+@ Todos los estudiantes del grupo reprobaron por lo menos un examen
+! Negar <<todos\dots{} al menos uno>> es <<existe alguno que\dots{} ninguno>>.
+q: Un profesor anuncia: <<Si un estudiante llega tarde, entonces no presenta el quiz>>. De los siguientes casos:
+\st{I.}{Laura llegó tarde y presentó el quiz.}
+\st{II.}{Mateo llegó a tiempo y no presentó el quiz.}
+\st{III.}{Sara llegó a tiempo y presentó el quiz.}
+El (los) que muestra(n) que el anuncio no se cumplió es (son):
+@ Solamente I
+@ Solamente II
+@ Solamente I y II
+@ Solamente I y III
+! Un condicional solo falla cuando se cumple el antecedente (llegar tarde) y no el consecuente.
+ctx 2: En un colegio, 115 estudiantes practican por lo menos uno de tres deportes: fútbol, baloncesto y natación. De ellos, 30 practican fútbol y baloncesto, 25 practican fútbol y natación, 20 practican baloncesto y natación, y 10 practican los tres deportes. Además, la cantidad de estudiantes que practica solamente un deporte es la misma para cada uno de los tres deportes.
+q: La cantidad de estudiantes que practica fútbol es:
+@ 65
+@ 55
+@ 60
+@ 75
+! Exactamente dos deportes: $20+15+10=45$; con los 10 de tres, quedan $115-55=60$, es decir 20 por deporte. Fútbol: $20+20+15+10=65$.
+q: La cantidad de estudiantes que practica exactamente dos de los tres deportes es:
+@ 45
+@ 75
+@ 55
+@ 35
+! $(30-10)+(25-10)+(20-10)=45$.
+q: Pablo, Juan, Carlos y Luis corrieron una carrera en la que no hubo empates. Se sabe que Pablo llegó antes que Juan, Carlos llegó antes que Juan y Luis llegó antes que Pablo. De las siguientes afirmaciones, de la única que se tiene certeza es:
+@ Si Carlos llegó después de Pablo, entonces Carlos llegó de tercero
+@ Si Carlos no llegó de primero, entonces Carlos llegó de tercero
+@ Luis llegó de primero
+@ Carlos llegó antes que Pablo
+! Juan es el último y Luis va antes que Pablo; los órdenes posibles son C-L-P-J, L-C-P-J y L-P-C-J. Solo la primera afirmación vale en todos.
+ctx 2: Una bibliotecaria va a ubicar seis libros, A, B, C, D, E y F, en tres estantes numerados de 1 a 3, de acuerdo con las siguientes reglas:
+\vi{En cada estante debe quedar por lo menos un libro, pero no más de tres}
+\vi{A y B no pueden quedar en el mismo estante}
+\vi{C y D deben quedar en el mismo estante}
+\vi{E debe quedar en un estante con número mayor que el de F}
+q: Si C queda en el estante 1 y F queda en el estante 2, entonces, de las siguientes afirmaciones, de la única que se tiene certeza es:
+@ E queda en el estante 3
+@ A queda en el estante 1
+@ En el estante 2 quedan exactamente dos libros
+@ B y E quedan en el mismo estante
+! E debe ir en un estante mayor que el 2. Las otras fallan en algún acomodo, por ejemplo: 1: C, D; 2: A, F; 3: B, E.
+q: Si A y E quedan en el estante 2, entonces, de las siguientes opciones, la que no corresponde a una posible lista completa de los libros del estante 1 es:
+@ B, C y D
+@ B y F
+@ C, D y F
+@ F
+! F debe estar en el estante 1 (menor que el de E), así que toda lista del estante 1 incluye a F.
+q: Tres socios reúnen el capital para abrir una panadería. El primero aporta el 35\% del capital, el segundo el 45\% y el tercero los \$1.200.000 restantes. El capital total, en pesos, es:
+@ 6.000.000
+@ 4.800.000
+@ 5.400.000
+@ 7.200.000
+! El tercero aporta el 20\%: $1.200.000 \div 0{,}2 = 6.000.000$.
+q: Un tanque tiene dos llaves y un desagüe. La primera llave sola lo llena en 6 horas, la segunda sola lo llena en 3 horas y el desagüe, estando el tanque lleno, lo vacía en 4 horas. Si el tanque está vacío y se abren al mismo tiempo las dos llaves y el desagüe, el tiempo que tarda en llenarse es:
+@ 4 horas
+@ 2 horas
+@ 5 horas
+@ 3 horas
+! En una hora se llena $\frac16+\frac13-\frac14=\frac14$ del tanque.
+q: En un examen calificado de 0 a 5, el promedio de todo un grupo fue 3,9. El promedio de los hombres fue 3,5 y el de las mujeres fue 4,1. De las siguientes afirmaciones sobre el grupo, la única verdadera es:
+@ La cantidad de mujeres es el doble de la cantidad de hombres
+@ La cantidad de hombres es el doble de la cantidad de mujeres
+@ La cantidad de hombres es igual a la cantidad de mujeres
+@ La cantidad de mujeres es el triple de la cantidad de hombres
+! $0{,}4h = 0{,}2m$, luego $m = 2h$.
+q: El patrón ABBCCCDABBCCCDABBCCCD\dots{} se repite indefinidamente. La letra que aparece en la posición 150 es:
+@ B
+@ A
+@ C
+@ D
+! El bloque ABBCCCD tiene 7 letras y $150 = 7\cdot 21 + 3$: es la tercera letra del bloque.
+q: En los números reales se define la operación $\otimes$ así: $a\otimes b = a^2-ab$ si $a\ge b$, y $a\otimes b=b^2-ab$ si $a<b$. El valor de $(3\otimes 5)\otimes(4\otimes 2)$ es:
+@ 20
+@ 16
+@ 36
+@ 180
+! $3\otimes5=25-15=10$; $4\otimes2=16-8=8$; $10\otimes8=100-80=20$.
+q: Camilo quiere crear una clave de 4 cifras usando únicamente los dígitos 1, 2 y 3, de modo que nunca queden dos dígitos iguales uno junto al otro. La cantidad de claves distintas que puede crear es:
+@ 24
+@ 18
+@ 81
+@ 36
+! $3\cdot2\cdot2\cdot2=24$.
+q: Se escriben todos los números de dos cifras que se pueden formar con los dígitos 1, 2, 3 y 4 (se pueden repetir dígitos). Si se escoge al azar uno de esos números, la probabilidad de que sea múltiplo de 3 es:
+@ $\frac{5}{16}$
+@ $\frac{1}{4}$
+@ $\frac{3}{8}$
+@ $\frac{1}{3}$
+! Hay 16 números; son múltiplos de 3: 12, 21, 24, 42 y 33.
+q: Si el lado de un cuadrado aumenta en un 30\%, entonces su área aumenta en:
+@ 69\%
+@ 60\%
+@ 30\%
+@ 90\%
+! $1{,}3^2 = 1{,}69$.
+ctx 2: La tabla muestra la cantidad de libros que vendió una librería durante un año, por género y por trimestre.\par\smallskip
+{\centering\small\setlength\tabcolsep{5pt}\begin{tabular}{|l|c|c|c|c|c|}\hline
+Género & T1 & T2 & T3 & T4 & Total\\\hline
+Novela & 120 & 90 & 150 & 140 & 500\\\hline
+Poesía & 30 & 45 & 25 & 50 & 150\\\hline
+Ensayo & 50 & 65 & 75 & 60 & 250\\\hline
+Infantil & 100 & 100 & 50 & 50 & 300\\\hline
+Total & 300 & 300 & 300 & 300 & 1200\\\hline
+\end{tabular}\par}
+q: De las siguientes afirmaciones, la única falsa es:
+@ El 40\% de los libros infantiles se vendió en el segundo semestre (T3 y T4)
+@ El 50\% de las ventas del tercer trimestre correspondió a novela
+@ La poesía representó el 12,5\% de las ventas del año
+@ En el cuarto trimestre se vendió más ensayo que literatura infantil
+! En T3 y T4 se vendieron 100 de los 300 infantiles: 33,3\%.
+q: De las siguientes afirmaciones, la única verdadera es:
+@ Del total de novelas vendidas en el año, el 30\% se vendió en el tercer trimestre
+@ El ensayo fue el género menos vendido en todos los trimestres
+@ Las ventas de poesía aumentaron de un trimestre al siguiente durante todo el año
+@ Más de la cuarta parte de las ventas del año fue de literatura infantil
+! $150/500 = 30\%$. Infantil es exactamente la cuarta parte, no más.
+q: Sofía escribe la lista de números 3, 4, 7, 8, 10, 12, 13, 15 y calcula su promedio. Luego quiere tachar dos números de la lista de modo que el promedio de los seis restantes sea igual al de la lista original. La cantidad de maneras distintas en que puede escoger los dos números es:
+@ 2
+@ 1
+@ 3
+@ 4
+! El promedio es 9; los dos tachados deben sumar 18: (3, 15) u (8, 10).
+q: Hace 4 años la edad de un padre era el triple de la edad de su hijo, y dentro de 8 años será el doble. La suma de las edades actuales del padre y del hijo es:
+@ 56
+@ 48
+@ 52
+@ 64
+! $P-4=3(H-4)$ y $P+8=2(H+8)$ dan $H=16$, $P=40$.
+q: Un programa de computador realiza las siguientes instrucciones:
+\st{1.}{Comience con $x=1$ y $s=0$}
+\st{2.}{Cambie el valor de $x$ por $3x$}
+\st{3.}{Cambie el valor de $s$ por $s+x$}
+\st{4.}{Si $s$ es mayor o igual que 100, pase a la instrucción 5; en otro caso, regrese a la instrucción 2}
+\st{5.}{Imprima el valor de $x$ y pare}
+El valor que imprime el programa es:
+@ 81
+@ 120
+@ 27
+@ 243
+! $x$: 3, 9, 27, 81; $s$: 3, 12, 39, 120. Se detiene con $x=81$.
+q: En un teatro, la primera fila tiene 12 sillas y cada fila tiene 3 sillas más que la anterior. Si el teatro tiene en total 255 sillas, la cantidad de filas es:
+@ 10
+@ 9
+@ 11
+@ 12
+! $\frac{n}{2}\,(24+3(n-1))=255$ da $n=10$ (la última fila tiene 39 sillas).
+q: En la suma $ABC+ABC+ABC=BBB$, letras iguales representan dígitos iguales y letras distintas representan dígitos distintos. El dígito que representa la letra $C$ es:
+@ 8
+@ 4
+@ 1
+@ 7
+! $BBB=111B$, luego $ABC=37B$; el único caso con decenas $B$ y cifras distintas es $148$ ($3\cdot148=444$).
+ctx 2: Un antiguo sistema de numeración usa cuatro símbolos con los siguientes valores: $\circ = 1$, $\triangle = 5$, $\square = 25$ y $\bigstar = 125$. Un número se escribe juntando símbolos y su valor es la suma de los valores de todos ellos; ningún símbolo se repite más de cuatro veces en un mismo número. Por ejemplo, $\square\,\triangle\,\triangle\circ$ representa el número 36.
+q: El número representado por $\bigstar\,\square\,\square\,\triangle\,\triangle\,\triangle\,\triangle\circ\circ$ es:
+@ 197
+@ 192
+@ 177
+@ 222
+! $125+50+20+2=197$.
+q: La cantidad de símbolos que se necesitan para escribir el número 318 en este sistema es:
+@ 10
+@ 8
+@ 12
+@ 14
+! $318=2\cdot125+2\cdot25+3\cdot5+3$: $2+2+3+3=10$ símbolos.
+q: Una maestra pide pintar de negro algunas casillas de la cuadrícula de la figura. Junto a cada fila y debajo de cada columna escribió la cantidad de casillas que deben quedar pintadas en ella.\par
+{\centering\begin{tikzpicture}[scale=.55]\draw (0,0) grid (3,3);
+\foreach \y/\n in {2.5/2,1.5/1,.5/1} \node at (3.5,\y) {\n};
+\foreach \x/\n in {.5/1,1.5/2,2.5/1} \node at (\x,-.5) {\n};\end{tikzpicture}\par}
+La cantidad de maneras distintas de cumplir la tarea es:
+@ 5
+@ 3
+@ 4
+@ 6
+! Según la casilla que quede vacía en la primera fila hay $1+2+2=5$ maneras.
+q: Una vela de cera con forma de cilindro, de radio 3 cm y altura 8 cm, se derrite por completo para fabricar velas pequeñas con forma de cono, de radio 1 cm y altura 2 cm. Si no se pierde cera, la cantidad de velas pequeñas que se obtiene es:\par
+{\footnotesize Nota: el volumen de un cono de radio $r$ y altura $h$ es $\frac13\pi r^2h$.}
+@ 108
+@ 72
+@ 36
+@ 144
+! $72\pi \div \frac{2\pi}{3} = 108$.
+q: En la cuadrícula de la figura cada cuadrito tiene 1 unidad de lado. El área de la región sombreada, en unidades cuadradas, es:\par
+{\centering\begin{tikzpicture}[scale=.42]\fill[gray!45] (0,0)--(4,0)--(6,3)--(2,5)--(0,3)--cycle;
+\draw[gray] (0,0) grid (6,5);\draw[thick] (0,0)--(4,0)--(6,3)--(2,5)--(0,3)--cycle;\end{tikzpicture}\par}
+@ 21
+@ 19
+@ 23
+@ 24
+! Rectángulo de $6\times5=30$ menos tres triángulos de áreas 3, 4 y 2.
+q: Para preparar pintura verde se mezclan pintura azul y pintura amarilla en la razón 3 : 5. Si se dispone de 12 litros de azul y 15 litros de amarilla, la mayor cantidad de pintura verde que se puede preparar, en litros, es:
+@ 24
+@ 27
+@ 32
+@ 20
+! La amarilla limita: 15 litros de amarilla piden 9 de azul; $9+15=24$.
+q: El 1 de marzo de cierto año fue viernes. El 1 de junio de ese mismo año fue:
+@ Sábado
+@ Viernes
+@ Domingo
+@ Lunes
+! De una fecha a la otra pasan $31+30+31=92$ días, y $92=7\cdot13+1$.
+q: En una isla hay tres cofres cerrados y solo uno contiene un tesoro. Cada cofre tiene un letrero:
+\st{}{Cofre 1: <<El tesoro está aquí>>.}
+\st{}{Cofre 2: <<El tesoro no está aquí>>.}
+\st{}{Cofre 3: <<El tesoro no está en el cofre 1>>.}
+Si se sabe que exactamente uno de los tres letreros dice la verdad, entonces:
+@ El tesoro está en el cofre 2
+@ El tesoro está en el cofre 1
+@ El tesoro está en el cofre 3
+@ No es posible saber en cuál cofre está
+! Si estuviera en el 1 o en el 3 habría dos letreros verdaderos; en el 2 solo es verdadero el del cofre 3.
+q: En el plano de la figura, las líneas representan calles. Marta quiere ir del punto $P$ al punto $Q$ caminando por las calles, siempre hacia el este (derecha) o hacia el norte (arriba).\par
+{\centering\begin{tikzpicture}[scale=.6]\draw (0,0) grid (3,2);\fill (0,0) circle(3pt) node[below left]{$P$};\fill (3,2) circle(3pt) node[above right]{$Q$};\end{tikzpicture}\par}
+La cantidad de caminos distintos que puede seguir es:
+@ 10
+@ 6
+@ 8
+@ 12
+! Cada camino tiene 3 tramos al este y 2 al norte: $\binom{5}{2}=10$.
+q: Dos ciudades, M y N, están a 360 km de distancia por una misma vía férrea. A la misma hora sale un tren de M hacia N a 70 km/h y otro de N hacia M a 50 km/h. La distancia de la ciudad M al punto donde se cruzan los trenes, en kilómetros, es:
+@ 210
+@ 180
+@ 150
+@ 240
+! Se acercan a 120 km/h: se cruzan a las 3 horas, a $70\cdot3=210$ km de M.
+ctx 2: La gráfica muestra la cantidad de lluvia, en milímetros, que cayó en un municipio durante los seis primeros meses del año.\par\smallskip
+{\centering\begin{tikzpicture}[x=.8cm,y=.03cm]\draw[->] (0,0)--(0,135);\draw (0,0)--(6.4,0);
+\foreach \v in {20,40,...,120} {\draw[gray!50] (0,\v)--(6.4,\v);\node[left,font=\scriptsize] at (0,\v) {\v};}
+\foreach \i/\m/\v in {1/Ene/40,2/Feb/50,3/Mar/90,4/Abr/120,5/May/80,6/Jun/40} {\fill[gray!60,draw=black] (\i-.75,0) rectangle (\i-.25,\v);\node[below,font=\scriptsize] at (\i-.5,0) {\m};}
+\node[font=\scriptsize,rotate=90] at (-1,65) {Lluvia (mm)};\end{tikzpicture}\par}
+q: La cantidad de meses en los que llovió más que el promedio mensual del semestre es:
+@ 3
+@ 2
+@ 4
+@ 1
+! El total es 420 mm y el promedio 70 mm: lo superan marzo, abril y mayo.
+q: El mes en el que se presentó el mayor aumento porcentual de lluvia con respecto al mes anterior fue:
+@ Marzo
+@ Febrero
+@ Abril
+@ Mayo
+! Febrero: $+25\%$; marzo: $+80\%$; abril: $+33\%$.
+q: Dos lados de un triángulo miden 5 cm y 9 cm. Si la medida del tercer lado, en centímetros, es un número entero, la cantidad de valores posibles para esa medida es:
+@ 9
+@ 8
+@ 10
+@ 13
+! $4<x<14$: los enteros del 5 al 13.
+q: En un cajón oscuro hay 10 medias negras, 8 azules y 6 grises, todas sueltas. La menor cantidad de medias que se deben sacar, sin mirar, para tener la certeza de obtener por lo menos tres medias del mismo color es:
+@ 7
+@ 3
+@ 9
+@ 6
+! Con 6 medias puede haber 2 de cada color; la séptima obliga a que haya 3 de alguno.
+q: Julián gastó la tercera parte de su dinero en un libro y luego la cuarta parte de lo que le quedaba en un almuerzo. Si al final le quedaron \$30.000, la cantidad de dinero que tenía al comienzo, en pesos, era:
+@ 60.000
+@ 72.000
+@ 48.000
+@ 90.000
+! Le queda $\frac23\cdot\frac34=\frac12$ del dinero.
+q: Con palitos del mismo tamaño se construye la secuencia de figuras que se muestra, en la que cada figura tiene un cuadrado más que la anterior.\par
+{\centering\begin{tikzpicture}[scale=.5]\draw (0,0) grid (1,1);\node at (.5,-.6) {\scriptsize Figura 1};
+\draw[shift={(2.5,0)}] (0,0) grid (2,1);\node at (3.5,-.6) {\scriptsize Figura 2};
+\draw[shift={(6,0)}] (0,0) grid (3,1);\node at (7.5,-.6) {\scriptsize Figura 3};\end{tikzpicture}\par}
+Si se dispone de 100 palitos, el número de la figura más grande de la secuencia que se puede construir es:
+@ 33
+@ 25
+@ 32
+@ 34
+! La figura $n$ usa $3n+1$ palitos: $3n+1\le100$ da $n\le33$.

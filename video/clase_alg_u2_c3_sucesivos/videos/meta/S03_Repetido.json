@@ -1,0 +1,31 @@
+{
+ "scene": "S03_Repetido",
+ "duration": 46.067,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Crecer varias veces",
+   "hold": 45.467
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 10.367,
+   "text": "Un pueblo de mil habitantes crece el diez por ciento cada año. Al cabo de tres años no creció el treinta por ciento.",
+   "fox": true
+  },
+  {
+   "start": 10.367,
+   "end": 28.667,
+   "text": "Cada año se multiplica por uno punto uno, y el diez por ciento de cada año se calcula sobre una población más grande. Uno punto uno multiplicado tres veces por sí mismo se escribe uno punto uno al cubo: es una potencia, que verás en el próximo mundo.",
+   "fox": false
+  },
+  {
+   "start": 28.667,
+   "end": 45.067,
+   "text": "El pueblo creció el treinta y tres punto uno por ciento, un poco más que el treinta. Esta idea de multiplicar una y otra vez por el mismo factor volverá con las progresiones geométricas y con el interés compuesto.",
+   "fox": false
+  }
+ ]
+}

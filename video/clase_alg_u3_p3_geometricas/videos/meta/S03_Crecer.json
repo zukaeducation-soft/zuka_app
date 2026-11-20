@@ -1,0 +1,37 @@
+{
+ "scene": "S03_Crecer",
+ "duration": 44.033,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Sumar contra multiplicar",
+   "hold": 43.433
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.233,
+   "text": "Dos premios. El primero da cien pesos el primer día y cada día cien más. El segundo da un peso el primer día y cada día el doble.",
+   "fox": true
+  },
+  {
+   "start": 11.233,
+   "end": 19.533,
+   "text": "Al principio el premio A gana con mucha ventaja. Dibujemos los dos día por día, en cientos de pesos.",
+   "fox": false
+  },
+  {
+   "start": 19.533,
+   "end": 31.333,
+   "text": "El día diez, el premio A da mil pesos y el B quinientos doce. Pero el día doce el B ya da dos mil cuarenta y ocho, y desde ahí A no lo vuelve a alcanzar.",
+   "fox": false
+  },
+  {
+   "start": 31.333,
+   "end": 43.033,
+   "text": "Sumar siempre lo mismo crece en línea recta. Multiplicar por lo mismo crece cada vez más rápido. Esa curva volverá con la función exponencial.",
+   "fox": false
+  }
+ ]
+}

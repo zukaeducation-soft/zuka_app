@@ -54,7 +54,7 @@ function openExamSheet(c, u) {
     </ul>
     ${open ? `<button class="btn" data-go>${best != null ? 'Repetir evaluación' : 'Empezar evaluación'}</button>`
       : '<p class="muted">Completa todas las lecciones del mundo para abrir la evaluación.</p><button class="btn" disabled>Bloqueada</button>'}
-  </div>`, sh => sh.querySelector('[data-go]')?.addEventListener('click', () => { closeSheet(); startExam(c, u); }));
+  </div>`, sh => sh.querySelector('[data-go]')?.addEventListener('click', () => { closeSheet(false); startExam(c, u); }));
 }
 
 function startExam(c, u) {

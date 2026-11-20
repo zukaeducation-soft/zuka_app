@@ -1,0 +1,37 @@
+{
+ "scene": "S01_Sucesion",
+ "duration": 47.1,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Qué es una sucesión",
+   "hold": 46.5
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 9.967,
+   "text": "Una sucesión es una lista de números puesta en orden: hay un primero, un segundo, un tercero, y así sin parar.",
+   "fox": true
+  },
+  {
+   "start": 9.967,
+   "end": 23.333,
+   "text": "Son los números cuadrados que vimos con las potencias. Cada número tiene su puesto, y los puestos son los naturales: uno, dos, tres. El término del puesto n se escribe a sub n.",
+   "fox": false
+  },
+  {
+   "start": 23.333,
+   "end": 34.667,
+   "text": "Si hay un patrón, una fórmula da cualquier término sin escribir los anteriores: es el término general. Aquí cada término es su puesto al cuadrado.",
+   "fox": false
+  },
+  {
+   "start": 34.667,
+   "end": 46.1,
+   "text": "Otra forma de describir una sucesión es con una regla que pasa de un término al siguiente. Los pares empiezan en dos y suman dos cada vez.",
+   "fox": false
+  }
+ ]
+}
