@@ -164,7 +164,7 @@ test('estrellas: 3 sin ayudas, 2 con ayudas, 1 si se mostró una solución', () 
 });
 
 test('el menú inferior lleva Gimnasio en lugar de Clips', () => {
-  assert.match(html, /<button data-tab="learn">Aprender<\/button>\s*<button data-tab="gym">Gimnasio<\/button>\s*<button data-tab="tutorias">/);
+  assert.match(html, /<button data-tab="cursos">Mis cursos<\/button>\s*<button data-tab="gym">Gimnasio<\/button>\s*<button data-tab="tutorias">/);
   assert.doesNotMatch(html, /data-tab="clips"/);
   assert.match(html, /<script defer src="js\/gimnasio.js"><\/script>/);
   assert.match(sw, /'js\/gimnasio.js'/);

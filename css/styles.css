@@ -1398,3 +1398,119 @@ button.set-row:active { opacity: .7; }
 .gym-answer p { font-size: 16px; font-weight: 600; }
 .gym-wrap { text-align: left; font-size: 14.5px; line-height: 1.5; color: var(--ink); }
 .gym-done .streak-up { justify-content: center; }
+
+/* ---- Inicio, Mis cursos y portada del curso (spec 2026-11-19-inicio-mis-cursos) ----
+   Más aire y menos cajas: la barra de arriba no lleva línea, la portada del curso va centrada y sin marco, y el color
+   de cada curso aparece solo en su dibujo, su barra de avance y el brillo suave de su tarjeta. */
+#topbar { border-bottom-color: transparent; padding-left: 16px; padding-right: 16px; }
+#tabbar { border-top-color: color-mix(in srgb, var(--line) 60%, transparent); }
+#tabbar button .i { padding: 4px 12px; }
+#tabbar button { white-space: nowrap; }
+@media (max-width: 359px) { #tabbar button { font-size: 10.5px; } #tabbar button .i { padding: 4px 9px; } }
+.tb-brand { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 2px 4px 2px 0; border-radius: 10px; }
+.tb-brand b { font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: .04em; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 340px) { .tb-brand b { display: none; } }
+.tb-logo { display: grid; place-items: center; width: 30px; height: 30px; flex: none; }
+.tb-logo svg { width: 100%; height: 100%; }
+.tb-brand:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+.home, .mycourses { padding: 10px 16px 56px; display: grid; gap: 18px; }
+.home-head p { color: var(--mute); font-size: 15px; }
+.home-head h1 { font-family: var(--display); font-weight: 500; font-size: 28px; line-height: 1.15; margin-top: 2px; }
+.mycourses .home-head h1 { margin: 0 0 4px; }
+.home-h2 { font-family: var(--display); font-weight: 500; font-size: 21px; margin: 8px 2px -4px; }
+
+.home-continue {
+  padding: 18px; border-radius: 22px; display: grid; gap: 14px;
+  background: radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--c) 16%, var(--card)), var(--card) 65%);
+  border: 1px solid color-mix(in srgb, var(--c) 35%, var(--line));
+}
+.hk-top { display: flex; align-items: center; gap: 14px; }
+.hk-top > div { min-width: 0; display: grid; gap: 2px; }
+.hk-eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: color-mix(in srgb, var(--c) 70%, var(--ink)); }
+.hk-title { font-size: 19px; font-weight: 600; line-height: 1.2; }
+.hk-sub { color: var(--mute); font-size: 13.5px; }
+.hk-prog, .hc-prog, .ch-prog { display: flex; align-items: center; gap: 10px; }
+.hk-prog .mini-bar, .hc-prog .mini-bar, .ch-prog .mini-bar { flex: 1; margin: 0; }
+.hk-prog small, .hc-prog small, .ch-prog small { color: var(--mute); font-weight: 700; font-size: 12.5px; }
+.hk-acts { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+.hk-acts .btn { margin: 0; }
+
+.home-goal { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 16px; border: 1px solid var(--line); }
+.home-goal > .i { width: 26px; height: 26px; color: var(--gold); flex: none; }
+.home-goal > div { flex: 1; min-width: 0; }
+.home-goal p { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+.home-goal p span { color: var(--mute); font-weight: 700; }
+.home-goal .bar { height: 6px; border-radius: 6px; background: var(--track); overflow: hidden; }
+.home-goal .bar i { display: block; height: 100%; background: var(--gold); border-radius: inherit; }
+
+.home-courses { display: grid; gap: 14px; }
+.hc-card {
+  display: grid; justify-items: center; gap: 12px; text-align: center; padding: 24px 18px 20px; border-radius: 24px; color: var(--ink);
+  background: radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--c) 14%, var(--card)), var(--card) 70%);
+  border: 1px solid var(--line);
+}
+.hc-card:hover { border-color: color-mix(in srgb, var(--c) 55%, var(--line)); }
+.hc-card:focus-visible, .mc-row:focus-visible, .ch-back:focus-visible, .gym-fab:focus-visible { outline: 2px solid var(--c, var(--brand)); outline-offset: 3px; }
+.hc-art .cart.xl { width: 104px; height: 104px; }
+.hc-body { display: grid; gap: 6px; width: 100%; }
+.hc-body small { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--c) 70%, var(--ink)); }
+.hc-body b { font-family: var(--display); font-weight: 600; font-size: 23px; line-height: 1.15; }
+.hc-tag { color: var(--mute); font-size: 14.5px; line-height: 1.45; }
+.hc-stats { display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; color: var(--mute); font-size: 13.5px; font-weight: 600; margin-top: 2px; }
+.hc-stats .i { width: 16px; height: 16px; }
+.hc-prog { margin-top: 6px; }
+.hc-go { justify-self: center; display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; padding: 8px 16px; border-radius: 999px; font-weight: 700; font-size: 14px; color: var(--c-ink, var(--ink)); border: 1px solid color-mix(in srgb, var(--c) 60%, var(--line)); }
+.hc-go .i { width: 16px; height: 16px; }
+
+.mc-list { display: grid; gap: 12px; }
+.mc-row { display: flex; align-items: center; gap: 14px; text-align: left; padding: 16px; border-radius: 20px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+.mc-row .cart.xl { width: 64px; height: 64px; }
+.mc-row > .i { width: 18px; height: 18px; color: var(--mute); flex: none; }
+.mc-body { flex: 1; min-width: 0; display: grid; gap: 6px; }
+.mc-body b { font-size: 17px; font-weight: 600; }
+.mc-next { color: var(--mute); font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mc-more { margin-top: 4px; }
+
+/* Portada del curso: como una portada de libro, centrada y sin marco. */
+.ch-back { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px 6px 6px; margin-bottom: 4px; border-radius: 999px; color: var(--mute); font-weight: 700; font-size: 14px; }
+.ch-back .i { width: 20px; height: 20px; }
+.course-head { display: grid; justify-items: center; text-align: center; gap: 8px; padding: 8px 6px 18px; }
+.course-head .cart.xl { width: 112px; height: 112px; margin-bottom: 8px; }
+.ch-eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--c) 70%, var(--ink)); }
+.course-head h1 { font-family: var(--display); font-weight: 600; font-size: 30px; line-height: 1.12; }
+.ch-sub { color: var(--mute); font-size: 15px; line-height: 1.5; max-width: 30ch; }
+.ch-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; margin-top: 6px; font-weight: 600; font-size: 14.5px; }
+.ch-stats span { display: inline-flex; align-items: center; gap: 6px; }
+.ch-stats .i { width: 18px; height: 18px; color: var(--mute); }
+.ch-prog { width: min(260px, 100%); margin-top: 4px; }
+.learn .next-card { margin-top: 4px; border-color: color-mix(in srgb, var(--c) 45%, var(--line)); border-radius: 20px; }
+
+/* Gimnasio flotante: dentro de un mundo, abajo a la derecha, por encima del menú inferior. */
+.gym-fab {
+  position: fixed; z-index: 6; right: max(18px, calc((100vw - 480px) / 2 + 18px)); bottom: calc(var(--tabbar-h, 64px) + 18px);
+  width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; color: var(--c-on);
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c) 60%, #fff), var(--c) 70%);
+  box-shadow: 0 10px 26px -6px color-mix(in srgb, var(--c) 70%, transparent), 0 0 0 6px color-mix(in srgb, var(--c) 16%, transparent);
+  animation: gym-fab-in .35s ease both;
+}
+.gym-fab .i { width: 30px; height: 30px; stroke-width: 2.4; }
+.gym-fab:active { transform: scale(.96); }
+.gym-fab-n { position: absolute; top: -2px; right: -2px; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff; background: var(--bad); border: 2px solid var(--bg); }
+@keyframes gym-fab-in { from { opacity: 0; transform: translateY(12px) scale(.9); } }
+@media (prefers-reduced-motion: reduce) { .gym-fab { animation: none; } }
+.learn:has(.gym-fab) { padding-bottom: 110px; }
+.gym-sheet { display: grid; gap: 10px; }
+.gym-sheet .sheet-title { margin-bottom: 0; }
+.gs-eyebrow { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in srgb, var(--c) 75%, var(--ink)); }
+.gs-eyebrow .i { width: 18px; height: 18px; }
+.gs-h { font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--mute); font-weight: 700; margin-top: 6px; }
+.gs-list { display: grid; gap: 8px; }
+.gs-row { display: grid; gap: 4px; text-align: left; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+.gs-row b { font-size: 15.5px; font-weight: 600; }
+.gs-row small { font-size: 13px; color: var(--mute); display: flex; align-items: center; gap: 6px; }
+.gs-row small .i { width: 14px; height: 14px; flex: none; }
+.gs-row.locked { opacity: .55; }
+.gs-top { display: flex; align-items: center; justify-content: space-between; }
+.gs-empty { color: var(--mute); font-size: 14px; padding: 10px 0; }
+.hk-acts .btn { white-space: nowrap; padding-left: 10px; padding-right: 10px; }

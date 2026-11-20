@@ -150,7 +150,7 @@ test('al entrar al curso se elige primero el componente y luego se ven solo sus 
   assert.doesNotMatch(app, /Mundo \$\{ui \+ 1\}|Mundo \$\{ui \+ 2\}|Nivel \$\{ui \+ 1\}/, 'la numeración pasa por worldNo');
   assert.match(app, /c\.units\[ui \+ 1\]\.block === u\.block/, '«Siguiente mundo» no salta al otro componente');
   // Cambiar de curso, volver a tocar Aprender o el botón atrás del celular regresan a los componentes.
-  assert.ok((app.match(/openWorld = null; openBlock = null;/g) || []).length >= 3);
+  assert.ok(((app + read('js/inicio.js')).match(/openWorld = null; openBlock = null;/g) || []).length >= 3);
   // El mundo abierto marca la lección que toca en su propio componente, y el recorrido guiado abre un componente.
   assert.match(app, /cur = currentLesson\(c, u\.block\)/);
   assert.match(read('js/tour.js'), /if \(needBlock\) openBlock = \{ course: c\.id/);

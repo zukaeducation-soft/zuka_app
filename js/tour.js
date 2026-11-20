@@ -7,8 +7,8 @@
 const TOUR_STEPS = [
   { id: 'hola', view: 'map', art: 'mascot', title: 'Te damos la bienvenida',
     text: 'En un minuto verás cómo se usa Zuka: elegir tu curso, ver los videos y resolver los ejercicios.' },
-  { id: 'curso', view: 'map', target: ['.tb-course'], title: 'Elige tu curso',
-    text: 'Toca aquí para cambiar de curso: Álgebra, Trigonometría, Cálculo y más. Tu avance se guarda aparte en cada uno.' },
+  { id: 'curso', view: 'map', target: ['.course-head'], title: 'Tu curso',
+    text: 'Esta es la portada de tu curso. Para cambiar de curso o inscribirte en otro, ve a Inicio o a Mis cursos: tu avance se guarda aparte en cada uno.' },
   { id: 'mundos', view: 'map', target: ['.wnode.current', '.wnode'], title: 'El camino de mundos',
     text: 'Cada curso es un camino y cada mundo, un tema. Toca un mundo para entrar y ver sus niveles.' },
   { id: 'niveles', view: 'world', target: ['.path .node.current', '.path .node'], title: 'Cada nivel es una lección',

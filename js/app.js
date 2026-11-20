@@ -148,25 +148,25 @@ function go(t) {
   cleanup?.(); cleanup = null;
   tab = t;
   document.body.dataset.tab = t;
-  document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  // La vista de un curso ('learn') no tiene botón propio: se marca «Mis cursos» (spec 2026-11-19-inicio-mis-cursos).
+  document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === (t === 'learn' ? 'cursos' : t)));
   renderTop();
-  ({ learn: renderLearn, gym: renderGym, clips: renderClips, tutorias: renderTutorias, profile: renderProfile })[t]();
+  ({ home: renderHome, cursos: renderMyCourses, learn: renderLearn, gym: renderGym, clips: renderClips, tutorias: renderTutorias, profile: renderProfile })[t]();
 }
 
 // Números largos de la barra de arriba: 12450 → «12.4 k», para que quepa el nombre del curso.
 const shortNum = n => (n >= 10000 ? `${Math.floor(n / 100) / 10} k` : String(n));
 function renderTop() {
   syncHearts();
-  const c = courseById(S.course);
+  // A la izquierda la marca; el curso se elige en Inicio o en Mis cursos (spec 2026-11-19-inicio-mis-cursos).
   $('#topbar').innerHTML = `
-    <button class="tb-course" style="--c:${c.color}" aria-label="Cambiar de curso">
-      ${courseArt(c, 'sm')}<span class="tb-name">${esc(c.name)}</span>${ICON.down}</button>
+    <button class="tb-brand" data-home aria-label="Zuka: ir al inicio"><span class="tb-logo">${brainSVG('simple')}</span><b>Zuka</b></button>
     <div class="tb-stats">
       <button class="tb-stat streak${S.lastDay === today() ? ' lit' : ''}" data-streak aria-label="Racha: ${streakNow()} ${streakNow() === 1 ? 'día' : 'días'}. Ver tu actividad">${ICON.flame}<b>${streakNow()}</b></button>
       <span class="tb-stat xp" title="Experiencia: ${S.xp} XP">${ICON.bolt}<b>${shortNum(S.xp)}</b></span>
       <button class="tb-stat hearts" title="Vidas">${ICON.heart}<b>${S.hearts}</b></button>
     </div>`;
-  $('.tb-course').onclick = openCoursePicker;
+  $('#topbar [data-home]').onclick = () => { if (tab !== 'home') go('home'); };
   $('#topbar [data-streak]').onclick = openStreakSheet;
   $('#topbar .hearts').onclick = () => toast(S.hearts >= 5
     ? 'Tienes todas tus vidas. Cada error cuesta una.'
@@ -292,18 +292,10 @@ function currentLesson(c, block) {
 // Pantalla de entrada de un curso con componentes: la portada del curso y una tarjeta por componente, con sus mundos,
 // sus lecciones, el avance y la lección que sigue. Tocar una tarjeta abre los mundos de ese componente.
 function renderComponents(c) {
-  const ls = lessonsOf(c), doneN = ls.filter(isDone).length, goalP = Math.min(1, todayXP() / S.goal);
+  const ls = lessonsOf(c), doneN = ls.filter(isDone).length;
   const lastL = ls.find(l => l.id === S.lastLesson), last = lastL && blockOf(c, lastL);
   view.innerHTML = `<div class="learn" style="--c:${c.color}">
-    <section class="hero">
-      <div class="hero-body"><p class="eyebrow">${esc(c.level)}</p><h1>${esc(c.name)}</h1><p class="sub">${esc(c.tagline)}</p>
-        <div class="hero-prog"><span class="mini-bar"><i style="width:${(doneN / ls.length) * 100}%"></i></span><small>${doneN}/${ls.length}</small></div></div>
-      ${courseArt(c, 'xl')}
-    </section>
-    <section class="goal">
-      ${ICON.target}<div class="goal-body"><p><b>Meta diaria</b><span>${todayXP()} / ${S.goal} XP</span></p>
-      <div class="bar"><i style="width:${goalP * 100}%"></i></div></div>
-    </section>
+    ${courseHeadHTML(c)}
     <h2 class="comp-title">Elige un componente</h2>
     <div class="comp-list">${c.blocks.map((b, k) => {
       const bl = ls.filter(l => blockOf(c, l) === b.id), d = bl.filter(isDone).length, nw = c.units.filter(u => u.block === b.id).length;
@@ -322,10 +314,12 @@ function renderComponents(c) {
   view.querySelectorAll('[data-block]').forEach(b => b.onclick = () => {
     openBlock = { course: c.id, id: b.dataset.block }; renderLearn(); $('[data-back]', view)?.focus({ preventScroll: true });
   });
+  bindCourseHead();
   view.scrollTop = 0;
 }
 function renderLearn() {
   const c = courseById(S.course);
+  enroll(c.id);   // el curso que se ve queda en Mis cursos (recorrido, canje, ?tab=learn…)
   if (openWorld?.course === c.id && c.units[openWorld.i]) return renderWorld(c, openWorld.i);
   openWorld = null;
   if (c.blocks && openBlock?.course !== c.id) return renderComponents(c);
@@ -333,14 +327,10 @@ function renderLearn() {
   const block = c.blocks ? c.blocks.find(b => b.id === openBlock.id) || c.blocks[0] : null, bn = block ? c.blocks.indexOf(block) + 1 : 0;
   const ls = block ? lessonsOf(c).filter(l => blockOf(c, l) === block.id) : lessonsOf(c), doneN = ls.filter(isDone).length;
   const idx = c.units.map((u, i) => (!block || u.block === block.id ? i : -1)).filter(i => i >= 0);
-  const cur = block ? currentLesson(c, block.id) : currentLesson(c), goalP = Math.min(1, todayXP() / S.goal);
+  const cur = block ? currentLesson(c, block.id) : currentLesson(c);
   view.innerHTML = `<div class="learn" style="--c:${c.color}">
     ${block ? `<button class="world-back" data-back>${ICON.back}<span>Componentes</span></button>` : ''}
-    <section class="hero">
-      <div class="hero-body"><p class="eyebrow">${block ? `Componente ${bn} · ${esc(c.name)}` : esc(c.level)}</p><h1>${esc(block ? block.name : c.name)}</h1><p class="sub">${esc(block ? block.desc : c.tagline)}</p>
-        <div class="hero-prog"><span class="mini-bar"><i style="width:${(doneN / ls.length) * 100}%"></i></span><small>${doneN}/${ls.length}</small></div></div>
-      ${courseArt(c, 'xl')}
-    </section>
+    ${courseHeadHTML(c, block)}
     ${cur ? (() => {
       // «Sigue aquí»: la lección que toca y la que viene, con un botón que la abre de un toque.
       const ui = c.units.findIndex(u => u.lessons.includes(cur)), li = c.units[ui].lessons.indexOf(cur), n1 = ls[ls.indexOf(cur) + 1], nxt = n1 && blockOf(c, n1) === blockOf(c, cur) ? n1 : null;
@@ -351,10 +341,6 @@ function renderLearn() {
       <button class="btn" data-continue>${doneN ? 'Continuar' : 'Empezar'} · +10 XP</button>
     </section>`;
     })() : ''}
-    <section class="goal">
-      ${ICON.target}<div class="goal-body"><p><b>Meta diaria</b><span>${todayXP()} / ${S.goal} XP</span></p>
-      <div class="bar"><i style="width:${goalP * 100}%"></i></div></div>
-    </section>
     ${installEvt && !S.hideInstall ? `<section class="install-banner">
       <img src="icons/icon-192.png" alt="" width="44" height="44">
       <div><b>Instala Zuka</b><p>Ábrela como app, incluso sin conexión.</p></div>
@@ -389,6 +375,7 @@ function renderLearn() {
   });
   $('[data-install]', view)?.addEventListener('click', promptInstall);
   $('[data-hide-install]', view)?.addEventListener('click', () => { S.hideInstall = true; save(); renderLearn(); });
+  bindCourseHead();
   view.scrollTop = 0;   // arriba queda «Sigue aquí»; el mapa de mundos está debajo
 }
 
@@ -438,7 +425,9 @@ function renderWorld(c, ui) {
     : summaryOf(u) ? `<a class="world-summary" href="${summaryOf(u)}" download="Zuka - ${esc(w.name)} (resumen).pdf" target="_blank" rel="noopener">
       <span class="ws-icon">${ICON.doc}</span><span class="ws-text"><b>Resumen del mundo</b><small>PDF con la teoría, gráficas y un taller de 10 ejercicios · se descarga con conexión</small></span>${ICON.download}</a>` : ''}
     ${ui + 1 < c.units.length && c.units[ui + 1].block === u.block ? `<button class="world-next" data-next>Siguiente: Mundo ${worldNo(c, ui + 1)} · ${esc((WORLDS[c.units[ui + 1].world] || c.units[ui + 1]).name || c.units[ui + 1].title)} ${ICON.right}</button>` : ''}
+    ${gymFabHTML(c, ui)}
   </div>`;
+  bindGymFab(c, ui);
   view.querySelectorAll('.node[data-id]').forEach(b => b.onclick = () => openLessonSheet(c, findLesson(b.dataset.id).l));
   $('[data-exam]', view)?.addEventListener('click', () => (planMotivo(u.exam.id) ? openBloqueo(u.exam.id) : openExamSheet(c, u)));
   $('[data-summary-lock]', view)?.addEventListener('click', () => openBloqueo(`resumen-${u.world}`));
@@ -831,7 +820,7 @@ function renderProfile() {
   nameInp.onchange = () => { S.name = nameInp.value = nameInp.value.trim(); save(); $('.avatar', view).textContent = (S.name || 'Z')[0].toUpperCase(); };
   cuentaBind(view);
   $('[data-settings]', view).onclick = () => { profileSub = 'settings'; renderProfile(); view.scrollTop = 0; $('[data-back]', view).focus({ preventScroll: true }); };
-  view.querySelectorAll('[data-course]').forEach(b => b.onclick = () => { S.course = b.dataset.course; openWorld = null; openBlock = null; save(); go('learn'); });
+  view.querySelectorAll('[data-course]').forEach(b => b.onclick = () => openCourse(b.dataset.course));
   view.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => {
     const { c, l } = findLesson(b.dataset.lesson);
     if (isUnlocked(c, l)) startLesson(c, l); else toast(`Primero completa las lecciones anteriores de ${esc(c.name)}.`);
@@ -899,14 +888,14 @@ function renderSettings() {
         if (!yes) return;
         // Se conserva lo que no es progreso: cuenta, asesorías y preferencias (tema, nombre, meta, sonido, video, guías vistas).
         const keep = Object.fromEntries(RESET_KEEP.filter(k => k in S).map(k => [k, S[k]]));
-        S = Object.assign(DEFAULTS(), keep); openWorld = null; openBlock = null; profileSub = null; save(); applyTheme(); go('learn');
+        S = Object.assign(DEFAULTS(), keep); openWorld = null; openBlock = null; profileSub = null; save(); applyTheme(); go('home');
       });
   };
 }
 
 // ---- arranque ----
 document.querySelectorAll('#tabbar button').forEach(b => {
-  b.insertAdjacentHTML('afterbegin', ICON[{ learn: 'learn', gym: 'gym', clips: 'clips', tutorias: 'calendar' }[b.dataset.tab] || 'user']);
+  b.insertAdjacentHTML('afterbegin', ICON[{ home: 'learn', cursos: 'book', gym: 'gym', clips: 'clips', tutorias: 'calendar' }[b.dataset.tab] || 'user']);
   b.onclick = () => {
     if (lessonClose) return lessonClose(b.dataset.tab);
     if (tab === 'learn' && b.dataset.tab === 'learn') { if (openWorld) openWorld = null; else openBlock = null; }   // tocar Aprender otra vez: un paso arriba (mundo → mapa → componentes)

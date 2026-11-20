@@ -38,7 +38,7 @@ test('los pasos que señalan algo dicen qué; los centrados llevan mascota o ilu
     else assert.ok(s.art, `${s.id} es centrado y necesita arte`);
   }
   const t = id => STEPS.find(s => s.id === id).target.join();
-  assert.match(t('curso'), /\.tb-course/);
+  assert.match(t('curso'), /\.course-head/);
   assert.match(t('mundos'), /\.wnode/);
   assert.match(t('niveles'), /\.node/);
   assert.match(t('gimnasio'), /data-tab="gym"/);
@@ -123,7 +123,7 @@ test('sin hueco (paso centrado) la tarjeta queda centrada', () => {
 test('el botón atrás del celular cierra el recorrido antes que cualquier otra cosa de la app', () => {
   assert.equal(backStep({ tab: 'learn', tour: true, world: true }), 'tour');
   assert.equal(backStep({ tab: 'learn', tour: true, dialog: true }), 'dialog');
-  assert.equal(backStep({ tab: 'learn' }), 'ask-exit');
+  assert.equal(backStep({ tab: 'home' }), 'ask-exit');
 });
 
 test('tour.js se carga antes de app.js y está en el SHELL', () => {

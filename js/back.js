@@ -13,7 +13,7 @@ function backStep(s) {
   if (s.sheet) return 'sheet';         // hoja inferior: se cierra
   if (s.lesson) return 'lesson';       // lección o evaluación: se sale (pregunta si hay progreso)
   if (s.world) return 'world';         // dentro de un mundo: vuelve al mapa
-  if (s.tab !== 'learn') return 'tab'; // Clips, Tutorías o Perfil: vuelve a Aprender
+  if (s.tab !== 'home') return 'tab';  // un curso vuelve a Mis cursos; otra pestaña, a Inicio (spec 2026-11-19-inicio-mis-cursos)
   return 'ask-exit';
 }
 
@@ -55,6 +55,6 @@ function setupBack() {
     else if (step === 'sheet') closeSheet();
     else if (step === 'lesson') lessonClose();
     else if (step === 'world') { const b = $('[data-back]', view); if (b) b.click(); else if (tab === 'profile') { profileSub = null; renderProfile(); } else { openWorld = null; openBlock = null; renderLearn(); } }   // como «Mundos» o «Componentes»: un paso atrás
-    else go('learn');
+    else go(tab === 'learn' ? 'cursos' : 'home');
   });
 }

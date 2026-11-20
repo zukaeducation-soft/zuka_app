@@ -50,9 +50,9 @@ test('atrás: primero cierra lo abierto, en orden', () => {
   assert.equal(backStep({ tab: 'profile' }), 'tab');
 });
 
-test('atrás en la pantalla principal pregunta; el segundo atrás sale', () => {
-  assert.equal(backStep({ tab: 'learn' }), 'ask-exit');
-  assert.equal(backStep({ tab: 'learn', exitAsk: true, dialog: true }), 'exit');
+test('atrás en la pantalla principal (Inicio) pregunta; el segundo atrás sale', () => {
+  assert.equal(backStep({ tab: 'home' }), 'ask-exit');
+  assert.equal(backStep({ tab: 'home', exitAsk: true, dialog: true }), 'exit');
 });
 
 test('el diálogo no deja pasar toques ni teclas a la lección de atrás', () => {

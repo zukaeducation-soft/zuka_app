@@ -203,8 +203,8 @@ test('tabFromURL abre la pestaña del atajo y solo pestañas válidas', () => {
   assert.equal(tabFromURL('?tab=clips'), 'clips');
   assert.equal(tabFromURL('?tab=tutorias'), 'tutorias');
   assert.equal(tabFromURL('?tab=profile'), 'profile');
-  assert.equal(tabFromURL('?tab=hackeo'), 'learn');
-  assert.equal(tabFromURL(''), 'learn');
+  assert.equal(tabFromURL('?tab=hackeo'), 'home');
+  assert.equal(tabFromURL(''), 'home');
 });
 
 test('watchConnection avisa al perder y al recuperar la conexión', () => {
