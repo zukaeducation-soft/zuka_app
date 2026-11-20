@@ -1,0 +1,43 @@
+{
+ "scene": "S01_Encadenados",
+ "duration": 56.067,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Dos descuentos seguidos",
+   "hold": 55.467
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 14.367,
+   "text": "Una bicicleta de cien mil pesos tiene un veinte por ciento de descuento, y en caja te dan un diez por ciento más. Mucha gente piensa que eso es un treinta por ciento. No lo es.",
+   "fox": true
+  },
+  {
+   "start": 14.367,
+   "end": 20.733,
+   "text": "Primero el veinte por ciento: queda el ochenta por ciento, ochenta mil.",
+   "fox": false
+  },
+  {
+   "start": 20.733,
+   "end": 31.6,
+   "text": "Luego el diez por ciento, pero sobre los ochenta mil, no sobre los cien mil: queda el noventa por ciento de ochenta mil, setenta y dos mil.",
+   "fox": false
+  },
+  {
+   "start": 31.6,
+   "end": 45.5,
+   "text": "Los dos factores se multiplican: cero punto ocho por cero punto nueve es cero punto setenta y dos. Se paga el setenta y dos por ciento: el descuento total es del veintiocho por ciento.",
+   "fox": false
+  },
+  {
+   "start": 45.5,
+   "end": 55.067,
+   "text": "Y el orden no importa: primero el diez y luego el veinte da lo mismo, porque la multiplicación es conmutativa.",
+   "fox": false
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+[   0.6 s] Casi toda la matemática se escribe con una sola idea.
+[   6.6 s] Juntar objetos y tratarlos como una sola cosa. Aquí juntamos las vocales.
+[  15.0 s] Un conjunto es una colección bien definida de objetos. A este lo llamamos V: el conjunto de las vocales.
+[  22.6 s] Cada objeto del conjunto se llama elemento. V tiene cinco elementos.
+[  29.9 s] Por costumbre, los conjuntos se nombran con mayúscula y los elementos con minúscula.
+[  38.1 s] Bien definida quiere decir que de cada objeto se puede decidir si está o no está. La e es vocal: está. La t no.
+[  45.7 s] La respuesta no depende de quién opine. Por eso las vocales sí forman un conjunto.
+[  53.9 s] En cambio, «las letras bonitas» no: cada persona elige letras distintas y la frontera nunca se cierra. No es un conjunto.
+[  65.1 s] Este dibujo se llama diagrama de Venn: una curva cerrada, con los elementos adentro.
+[  72.8 s] Todo lo que no es elemento del conjunto queda afuera de la curva.
+[  81.5 s] Para decir que a es un elemento de V no se escribe la frase: se usa un símbolo.
+[  89.2 s] Este símbolo se lee «pertenece a» o «es elemento de». Entonces: a pertenece a V.
+[  97.3 s] El símbolo es una letra griega, épsilon. Lo empezó a usar el matemático Giuseppe Peano en 1889.
+[ 105.0 s] Y con una raya encima dice lo contrario: m no pertenece a V.
+[ 113.4 s] Hay dos formas de escribir un conjunto. La primera es por extensión: se nombran todos sus elementos.
+[ 122.0 s] Se escribe el nombre, el signo igual, y entre llaves los elementos separados por comas.
+[ 130.7 s] Tienen que ser llaves. Los paréntesis y los corchetes significan otra cosa en matemáticas.
+[ 139.4 s] La segunda forma es por comprensión: en vez de nombrar los elementos, se escribe la condición que cumplen.
+[ 147.1 s] Se lee así: V es el conjunto de las x tal que x es una vocal.
+[ 156.1 s] La letra x representa a un elemento cualquiera, todavía sin nombre.
+[ 163.3 s] Los dos puntos se leen «tal que». En algunos libros aparece una barra vertical: significa lo mismo.
+[ 171.2 s] Y lo que sigue es la condición. La a es una vocal, así que pertenece a V. La m no lo es: no pertenece.
+[ 180.9 s] Las dos escrituras nombran exactamente el mismo conjunto.
+[ 188.6 s] Cuál usar depende del caso. Para el conjunto de todas las letras, la condición es mucho más corta que la lista.
+[ 200.2 s] Dos conjuntos son iguales cuando tienen exactamente los mismos elementos, como V y W.
+[ 208.3 s] Por eso el orden no importa: W tiene las vocales al revés y sigue siendo igual a V.
+[ 218.6 s] Tampoco hay repetidos: cada elemento se escribe una sola vez. Un elemento está o no está, no puede estar dos veces.
+[ 227.2 s] La palabra salsa tiene cinco letras, pero el conjunto de sus letras tiene solo tres elementos: s, a y l.
+[ 237.9 s] El número de elementos de un conjunto se llama cardinal. V tiene uno, dos, tres, cuatro, cinco.
+[ 246.5 s] Se escribe n de V igual a cinco. Y el conjunto de las letras de salsa tiene cardinal tres.
+[ 256.2 s] Un detalle fino: la letra a es un elemento. Pero a entre llaves es un conjunto que tiene un solo elemento.
+[ 264.8 s] No son lo mismo. La a pertenece a V. El conjunto con la a adentro no es una vocal, así que no pertenece a V.
+[ 274.6 s] En resumen: un conjunto es una colección bien definida. Se escribe por extensión o por comprensión, y la pertenencia con este símbolo.
+[ 285.1 s] No tiene orden ni repetidos, y su cardinal cuenta los elementos.
+[ 290.9 s] Con esta idea se escribe todo lo que sigue.

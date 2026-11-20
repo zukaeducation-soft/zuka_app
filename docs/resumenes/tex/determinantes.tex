@@ -1,0 +1,318 @@
+% Resumen del mundo «Templo del Determinante» (Geometría Vectorial, mundo 2: inversa y determinantes).
+% Lecciones geo-5, geo-6, geo-7, geo-8. Usa los ejemplos de los videos; el taller trae ejercicios nuevos.
+\documentclass[11pt,a4paper]{article}
+\usepackage{zuka-resumen}
+\zukacurso{geo}
+\zukamundo{2}{Templo del Determinante}{Inversa y determinantes}
+
+\newcommand{\aug}[2]{\left(\begin{array}{#1}#2\end{array}\right)}
+\newcommand{\op}[1]{\xrightarrow{\;#1\;}}
+\newcommand{\sm}[1]{\left(\begin{smallmatrix}#1\end{smallmatrix}\right)}
+\DeclareMathOperator{\adj}{adj}
+\newcommand{\sv}[1]{\left|\begin{smallmatrix}#1\end{smallmatrix}\right|}
+% Que ningún título de nivel quede solo al pie de una página.
+\usepackage{needspace}
+\let\zukanivel\nivel
+\renewcommand{\nivel}[2]{\needspace{10\baselineskip}\zukanivel{#1}{#2}}
+\let\zukarepaso\repaso
+\renewcommand{\repaso}{\needspace{6\baselineskip}\zukarepaso}
+
+\begin{document}
+
+\portada{%
+La \clave{inversa} de una matriz deshace lo que la matriz hace, y el \clave{determinante} es un solo número que
+dice si eso es posible: mide cuánto estira o encoge las áreas la matriz. En este mundo aprendiste a calcular la inversa
+con Gauss-Jordan, a calcular determinantes por cofactores y con operaciones de fila, y a usar los dos para resolver sistemas.}{%
+\item \textbf{Nivel 2-1.} Gauss-Jordan para la inversa: $[\,A\mid I\,]\to[\,I\mid A^{-1}\,]$ y $\vec x=A^{-1}\vec b$.
+\item \textbf{Nivel 2-2.} La función determinante: área con signo, cofactores, matrices triangulares y propiedades.
+\item \textbf{Nivel 2-3.} El determinante con matrices elementales: triangular llevando la cuenta.
+\item \textbf{Nivel 2-4.} Determinante e inversa: $\det A\neq0$, la adjunta y la regla de Cramer.}
+
+\begin{clavebox}[LAS IDEAS QUE SOSTIENEN TODO EL MUNDO]
+\renewcommand{\arraystretch}{1.5}\begin{tabular}{@{}c@{\qquad}c@{\qquad}c@{}}
+$\displaystyle [\,A\mid I\,]\longrightarrow[\,I\mid A^{-1}\,]$ & $\displaystyle \det\begin{pmatrix} a & b\\ c & d\end{pmatrix}=ad-bc$ & $\displaystyle A^{-1}\text{ existe}\iff\det A\neq0$\\[2pt]
+\small las mismas operaciones & \small el área con signo & \small si el plano no se aplasta
+\end{tabular}
+\end{clavebox}
+
+%=====================================================================
+\nivel{2-1}{Gauss-Jordan para la inversa}
+
+La idea del video: si unas operaciones de fila llevan $A$ hasta $I$, esas operaciones equivalen a multiplicar por
+$E_k\cdots E_1=A^{-1}$. Aplicadas a $I$, dan $E_k\cdots E_1\,I=A^{-1}$.
+
+\begin{figura}[Se escribe la identidad al lado de $A$ y se hace Gauss-Jordan a la fila completa.]
+\begin{tikzpicture}[font=\small,blq/.style={draw=zaccent,line width=0.8pt,rounded corners=3pt,minimum width=34mm,minimum height=10mm}]
+  \node[blq,fill=zaccent!6] (a) at (0,0) {$\left[\begin{array}{c|c} A & I\end{array}\right]$};
+  \node[blq,fill=zok!12,draw=zok] (b) at (8,0) {$\left[\begin{array}{c|c} I & A^{-1}\end{array}\right]$};
+  \draw[->,line width=1pt,zink] (a) -- node[above,font=\footnotesize] {operaciones de fila} node[below,font=\footnotesize,text=zmute] {(las mismas en los dos lados)} (b);
+  \node[blq,fill=zbad!8,draw=zbad,minimum width=46mm] (c) at (4,-1.9) {fila de ceros a la izquierda};
+  \draw[->,zbad,line width=0.8pt] (a.south) |- (c.west);
+  \node[font=\footnotesize,text=zbad,anchor=west] at (c.east) {\ $\Rightarrow$ $A$ no tiene inversa};
+\end{tikzpicture}
+\end{figura}
+
+\begin{ejemplo}[El ejemplo del video: $A=\sm{1&2\\3&7}$]
+\[ \aug{cc|cc}{1 & 2 & 1 & 0\\ 3 & 7 & 0 & 1}\op{F_2-3F_1}\aug{cc|cc}{1 & 2 & 1 & 0\\ 0 & 1 & -3 & 1}
+\op{F_1-2F_2}\aug{cc|cc}{1 & 0 & 7 & -2\\ 0 & 1 & -3 & 1} \]
+Así $A^{-1}=\begin{pmatrix} 7 & -2\\ -3 & 1\end{pmatrix}$. \emph{Comprobación:}
+$\begin{pmatrix} 1 & 2\\ 3 & 7\end{pmatrix}\begin{pmatrix} 7 & -2\\ -3 & 1\end{pmatrix}=\begin{pmatrix} 7-6 & -2+2\\ 21-21 & -6+7\end{pmatrix}=I$. \checkmark
+\end{ejemplo}
+
+\begin{ejemplo}[Una inversa $3\times3$]
+Para $A=\sm{1&1&0\\1&2&1\\0&1&2}$ se hacen ceros debajo de los pivotes y luego encima:
+\begin{align*}
+&\aug{ccc|ccc}{1&1&0&1&0&0\\ 1&2&1&0&1&0\\ 0&1&2&0&0&1}
+\op{F_2-F_1}\aug{ccc|ccc}{1&1&0&1&0&0\\ 0&1&1&-1&1&0\\ 0&1&2&0&0&1}
+\op{F_3-F_2}\aug{ccc|ccc}{1&1&0&1&0&0\\ 0&1&1&-1&1&0\\ 0&0&1&1&-1&1}\\[4pt]
+&\op{F_2-F_3}\aug{ccc|ccc}{1&1&0&1&0&0\\ 0&1&0&-2&2&-1\\ 0&0&1&1&-1&1}
+\op{F_1-F_2}\aug{ccc|ccc}{1&0&0&3&-2&1\\ 0&1&0&-2&2&-1\\ 0&0&1&1&-1&1}
+\end{align*}
+Entonces $A^{-1}=\sm{3&-2&1\\-2&2&-1\\1&-1&1}$.
+\end{ejemplo}
+
+\begin{ejemplo}[Cuando no hay inversa]
+$\begin{pmatrix} 2 & 6\\ 1 & 3\end{pmatrix}\op{F_2-\frac12F_1}\begin{pmatrix} 2 & 6\\ 0 & 0\end{pmatrix}$:
+aparece una fila de ceros a la izquierda y ya no se puede llegar a $I$. La matriz no es invertible.
+\end{ejemplo}
+
+\begin{propiedad}[Resolver un sistema con la inversa]
+Si $A$ es invertible, el sistema $A\vec x=\vec b$ tiene la única solución $\vec x=A^{-1}\vec b$.
+Con $A^{-1}=\sm{7&-2\\-3&1}$, el sistema $x+2y=1$, $3x+7y=2$ da $\vec x=(7-4,\,-3+2)=(3,-1)$.
+\end{propiedad}
+
+\begin{ojo}[Solo operaciones de fila]
+En Gauss-Jordan no se mezclan operaciones de columna, y cada operación se hace a la fila \emph{completa}, a los dos lados de la barra.
+\end{ojo}
+
+%=====================================================================
+\needspace{18\baselineskip}
+\nivel{2-2}{La función determinante}
+
+\begin{definicion}[Determinante $2\times2$]
+\[ \det\begin{pmatrix} a & b\\ c & d\end{pmatrix}=\begin{vmatrix} a & b\\ c & d\end{vmatrix}=ad-bc. \]
+Su valor absoluto es el \clave{área del paralelogramo} formado por las columnas $(a,c)$ y $(b,d)$; es el factor por el
+que la matriz multiplica las áreas. El signo es positivo si la segunda columna queda girando a la izquierda de la primera
+(antihorario) y negativo si el plano se \emph{voltea}.
+\end{definicion}
+
+\begin{figura}[Izquierda: las columnas de $\sm{2&1\\0&1.5}$ forman un paralelogramo de área $3$. Derecha: con $\sm{1&2\\0.5&1}$ las columnas son paralelas y el área es $0$.]
+\begin{tikzpicture}[scale=1.05]
+  \draw[zline] (-0.3,-0.3) grid (3.4,2.2);
+  \draw[->,zmute] (-0.4,0) -- (3.6,0); \draw[->,zmute] (0,-0.4) -- (0,2.4);
+  \fill[zaccent!18] (0,0) -- (2,0) -- (3,1.5) -- (1,1.5) -- cycle;
+  \draw[zaccent,dashed] (2,0) -- (3,1.5) -- (1,1.5);
+  \draw[->,line width=1.4pt,zaccent] (0,0) -- (2,0) node[midway,below,font=\small] {$(2,0)$};
+  \draw[->,line width=1.4pt,zcoral] (0,0) -- (1,1.5) node[pos=0.6,left=2pt,font=\small,fill=white,inner sep=1pt] {$(1,1.5)$};
+  \node[font=\small] at (1.5,0.75) {área $=3$};
+  \node[font=\footnotesize,text=zmute] at (1.6,-0.85) {$\det=2\cdot1.5-1\cdot0=3$};
+\end{tikzpicture}\hspace{14mm}
+\begin{tikzpicture}[scale=1.05]
+  \draw[zline] (-0.3,-0.3) grid (3.4,2.2);
+  \draw[->,zmute] (-0.4,0) -- (3.6,0); \draw[->,zmute] (0,-0.4) -- (0,2.4);
+  \draw[->,line width=3pt,zcoral!60] (0,0) -- (2,1);
+  \draw[->,line width=1.4pt,zaccent] (0,0) -- (1,0.5);
+  \node[font=\small,anchor=west] at (2.05,1.05) {$(2,1)$};
+  \node[font=\small,anchor=north west] at (0.95,0.45) {$(1,0.5)$};
+  \node[font=\small,text=zbad] at (1.4,1.75) {el plano se aplasta};
+  \node[font=\footnotesize,text=zmute] at (1.6,-0.85) {$\det=1\cdot1-2\cdot0.5=0$};
+\end{tikzpicture}
+\end{figura}
+
+\subsection{Determinante $3\times3$ por cofactores}
+\begin{definicion}[Menor y cofactor]
+El \clave{menor} $M_{ij}$ es el determinante que queda al tapar la fila $i$ y la columna $j$. El \clave{cofactor} es
+$C_{ij}=(-1)^{i+j}M_{ij}$. El determinante se desarrolla por cualquier fila $i$ (o columna):
+\[ \det A=a_{i1}C_{i1}+a_{i2}C_{i2}+\dots+a_{in}C_{in}. \]
+\end{definicion}
+
+\begin{minipage}[c]{0.66\linewidth}
+\begin{ejemplo}[Del video: por la primera fila]
+\[ \begin{vmatrix} 1 & 2 & 0\\ 3 & 1 & 1\\ 0 & 2 & 1\end{vmatrix}
+=1\begin{vmatrix} 1 & 1\\ 2 & 1\end{vmatrix}-2\begin{vmatrix} 3 & 1\\ 0 & 1\end{vmatrix}+0\begin{vmatrix} 3 & 1\\ 0 & 2\end{vmatrix} \]
+\[ =1(1-2)-2(3-0)+0=-1-6=-7. \]
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.3\linewidth}\centering
+\begin{tikzpicture}[scale=0.62]
+  \foreach \i in {0,1,2} \foreach \j in {0,1,2} {
+    \pgfmathtruncatemacro{\s}{mod(\i+\j,2)}
+    \ifnum\s=0 \fill[zaccent!16] (\j,-\i) rectangle ++(1,1); \node[font=\large\bfseries,text=zaccent] at (\j+0.5,-\i+0.5) {$+$};
+    \else \fill[zcoral!14] (\j,-\i) rectangle ++(1,1); \node[font=\large\bfseries,text=zcoral] at (\j+0.5,-\i+0.5) {$-$}; \fi }
+  \draw[zink,line width=0.6pt] (0,-2) grid (3,1);
+  \node[font=\footnotesize,text=zmute] at (1.5,-2.6) {signos $(-1)^{i+j}$};
+\end{tikzpicture}
+\end{minipage}
+
+\needspace{11\baselineskip}
+\begin{propiedad}[Matriz triangular]
+Si $A$ es triangular (todo cero debajo, o encima, de la diagonal), su determinante es el producto de la diagonal:
+\[ \begin{vmatrix} 2 & 5 & 1\\ 0 & 3 & 4\\ 0 & 0 & -1\end{vmatrix}=2\cdot3\cdot(-1)=-6. \]
+\end{propiedad}
+
+\begin{propiedad}[Propiedades del determinante ($A$, $B$ de $n\times n$)]
+\[ \det A^T=\det A,\qquad \det(AB)=\det A\,\det B,\qquad \det(kA)=k^n\det A,\qquad \det I=1. \]
+Una fila (o columna) de ceros, o dos filas iguales o proporcionales, dan $\det A=0$.
+\end{propiedad}
+
+\begin{ojo}[$\det(kA)$ no es $k\det A$]
+Multiplicar \emph{una} fila por $k$ multiplica el determinante por $k$; multiplicar la matriz completa multiplica
+\emph{las $n$ filas}, así que el factor es $k^n$. Tampoco vale $\det(A+B)=\det A+\det B$.
+\end{ojo}
+
+%=====================================================================
+\nivel{2-3}{El determinante con matrices elementales}
+
+Cada operación de fila cambia el determinante de una forma conocida. Es lo mismo que decir
+$\det(EA)=\det E\cdot\det A$:
+\begin{center}
+\begin{tabular}{@{}l c c@{}}
+\toprule
+Operación de fila & $\det E$ & Efecto en el determinante\\ \midrule
+$F_i\leftrightarrow F_j$ & $-1$ & cambia el signo\\
+$F_i\leftarrow kF_i$ \ ($k\neq0$) & $k$ & lo multiplica por $k$\\
+$F_i\leftarrow F_i+kF_j$ & $1$ & no lo cambia\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{clavebox}[EL MÉTODO]
+Triangular con operaciones de fila llevando la cuenta, y al final multiplicar la diagonal:\quad
+$\displaystyle \det A=(\text{factor de la cuenta})\cdot\prod(\text{diagonal})$
+\end{clavebox}
+
+\begin{ejemplo}[Del video]
+\[ \begin{pmatrix} 0 & 1 & 2\\ 1 & 1 & 1\\ 2 & 2 & 6\end{pmatrix}
+\op{F_1\leftrightarrow F_2}\begin{pmatrix} 1 & 1 & 1\\ 0 & 1 & 2\\ 2 & 2 & 6\end{pmatrix}
+\op{F_3-2F_1}\begin{pmatrix} 1 & 1 & 1\\ 0 & 1 & 2\\ 0 & 0 & 4\end{pmatrix} \]
+El intercambio cambia el signo y la resta no cambia nada: $\det A=-(1\cdot1\cdot4)=-4$.
+\end{ejemplo}
+
+¿Por qué conviene? Por cofactores, una matriz $n\times n$ pide del orden de $n!$ productos: con $n=10$ son más de
+$3.6$ millones. Triangulando bastan unos $n^3/3$, es decir, unos cientos.
+
+\needspace{7\baselineskip}
+\begin{ojo}[Llevar bien la cuenta]
+Si para triangular se multiplica una fila por $k$, el determinante de la matriz nueva es $k$ veces el de la vieja:
+para recuperar $\det A$ hay que \emph{dividir} entre $k$. Con $F_i\leftarrow F_i+kF_j$ no hay nada que corregir.
+\end{ojo}
+
+%=====================================================================
+\nivel{2-4}{Determinante e inversa}
+
+\begin{propiedad}[El gran teorema]
+Una matriz cuadrada $A$ es invertible \textbf{si y solo si} $\det A\neq0$. En ese caso
+\[ \det\left(A^{-1}\right)=\frac{1}{\det A},\qquad\text{porque}\qquad \det A\,\det A^{-1}=\det\left(AA^{-1}\right)=\det I=1. \]
+Si $\det A=0$, la matriz aplasta el plano (o el espacio) y no hay forma de deshacerlo.
+\end{propiedad}
+
+\begin{definicion}[Adjunta]
+La \clave{adjunta} de $A$ es la transpuesta de la matriz de cofactores: $(\adj A)_{ij}=C_{ji}$. Si $\det A\neq0$,
+\[ A^{-1}=\frac{1}{\det A}\,\adj A. \]
+\end{definicion}
+
+\begin{ejemplo}[Del video]
+Para $A=\sm{4&1\\2&1}$: $\det A=4-2=2$ y los cofactores son $C_{11}=1$, $C_{12}=-2$, $C_{21}=-1$, $C_{22}=4$. Entonces
+\[ \adj A=\begin{pmatrix} 1 & -1\\ -2 & 4\end{pmatrix},\qquad A^{-1}=\frac12\begin{pmatrix} 1 & -1\\ -2 & 4\end{pmatrix}. \]
+\end{ejemplo}
+
+\begin{propiedad}[Regla de Cramer]
+Si $\det A\neq0$, el sistema $A\vec x=\vec b$ tiene solución única y
+\[ x_i=\frac{\det A_i}{\det A}, \]
+donde $A_i$ es la matriz $A$ con la columna $i$ cambiada por $\vec b$.
+\end{propiedad}
+
+\begin{ejemplo}[Del video: $x+y=5$, $x-y=1$]
+\[ \det A=\begin{vmatrix} 1 & 1\\ 1 & -1\end{vmatrix}=-2,\qquad
+x=\frac{\begin{vmatrix} 5 & 1\\ 1 & -1\end{vmatrix}}{-2}=\frac{-6}{-2}=3,\qquad
+y=\frac{\begin{vmatrix} 1 & 5\\ 1 & 1\end{vmatrix}}{-2}=\frac{-4}{-2}=2. \]
+\emph{Comprobación:} $3+2=5$ y $3-2=1$. \checkmark
+\end{ejemplo}
+
+\begin{ojo}[Cramer solo cuando $\det A\neq0$]
+Si $\det A=0$ la regla no se aplica: el sistema puede no tener solución o tener infinitas, y hay que escalonar para
+saberlo. Para matrices grandes, Gauss-Jordan es mucho más rápido que Cramer o que la adjunta.
+\end{ojo}
+
+%=====================================================================
+\repaso
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}l L@{}}
+\toprule
+Concepto & Fórmula o regla\\ \midrule
+Inversa por Gauss-Jordan & $[\,A\mid I\,]\to[\,I\mid A^{-1}\,]$; si sale una fila de ceros, no hay inversa\\
+Sistema con inversa & $\vec x=A^{-1}\vec b$\\
+Determinante $2\times2$ & $ad-bc$: área con signo del paralelogramo de las columnas\\
+Cofactores & $C_{ij}=(-1)^{i+j}M_{ij}$,\quad $\det A=\sum_j a_{ij}C_{ij}$\\
+Triangular & $\det A=$ producto de la diagonal\\
+Operaciones de fila & intercambio: $\times(-1)$;\quad $F_i\leftarrow kF_i$: $\times k$;\quad $F_i\leftarrow F_i+kF_j$: igual\\
+Propiedades & $\det A^T=\det A$,\quad $\det(AB)=\det A\det B$,\quad $\det(kA)=k^n\det A$\\
+Inversa y determinante & $A^{-1}$ existe $\iff\det A\neq0$;\quad $\det A^{-1}=1/\det A$\\
+Adjunta y Cramer & $A^{-1}=\dfrac{1}{\det A}\adj A$;\quad $x_i=\dfrac{\det A_i}{\det A}$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{ojo}[Errores frecuentes]
+\begin{itemize}
+\item Hacer la operación de fila solo en el lado izquierdo de $[\,A\mid I\,]$.
+\item Olvidar los signos $+\,-\,+$ de los cofactores.
+\item Escribir $\det(kA)=k\det A$ o $\det(A+B)=\det A+\det B$.
+\item Olvidar que un intercambio de filas cambia el signo del determinante.
+\item Usar la matriz de cofactores sin transponer al armar la adjunta.
+\item Aplicar Cramer a un sistema con $\det A=0$.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\taller
+\begin{ejercicios}[itemsep=6pt]
+\item Halla la inversa de $A=\begin{pmatrix} 2 & 3\\ 1 & 2\end{pmatrix}$ con Gauss-Jordan, escribiendo cada operación de fila.
+  Úsala para resolver $2x+3y=1$, $x+2y=-1$.
+\item Con Gauss-Jordan:
+  \begin{ejercicios}
+  \item halla la inversa de $\begin{pmatrix} 1 & 2 & 3\\ 0 & 1 & 4\\ 5 & 6 & 0\end{pmatrix}$ y compruébala;
+  \item muestra que $\begin{pmatrix} 1 & 2 & -1\\ 2 & 5 & 1\\ 1 & 3 & 2\end{pmatrix}$ no es invertible.
+  \end{ejercicios}
+\item Calcula los determinantes:
+  \begin{ejercicios}
+  \item $\begin{vmatrix} 5 & -2\\ 3 & 4\end{vmatrix}$ \qquad
+  (b) $\begin{vmatrix} 2 & -1 & 3\\ 0 & 4 & 1\\ 1 & 2 & -2\end{vmatrix}$ \qquad
+  (c) $\begin{vmatrix} 2 & 7 & -1 & 4\\ 0 & -1 & 5 & 2\\ 0 & 0 & 3 & 8\\ 0 & 0 & 0 & \tfrac12\end{vmatrix}$
+  \end{ejercicios}
+\item Un terreno triangular tiene vértices en $A(1,1)$, $B(5,2)$ y $C(2,6)$ (unidades en hectómetros).
+  Dibuja el terreno, el paralelogramo generado por $\overrightarrow{AB}$ y $\overrightarrow{AC}$, y calcula el área del
+  terreno con un determinante.
+\item Sea $A$ una matriz $3\times3$ con $\det A=-2$. Calcula: (a) $\det(3A)$; (b) $\det\left(A^{-1}\right)$;
+  (c) $\det\left(A^3\right)$; (d) $\det\left(2A^{-1}A^T\right)$.
+\item Calcula, triangulando con operaciones de fila y llevando la cuenta,
+  \[ \det\begin{pmatrix} 1 & 2 & 0 & 1\\ 2 & 5 & 1 & 3\\ 0 & 1 & 3 & 2\\ 1 & 2 & 1 & 4\end{pmatrix}. \]
+\item La matriz $B$ se obtuvo de $A$ ($3\times3$) con $F_1\leftrightarrow F_3$, luego $F_2\leftarrow5F_2$ y luego
+  $F_3\leftarrow F_3-2F_1$. Si $\det B=30$, ¿cuánto vale $\det A$?
+\item Halla los valores reales de $k$ para los que $\begin{pmatrix} 1 & k & 0\\ 0 & 1 & k\\ k & 0 & 1\end{pmatrix}$ no es invertible.
+\item Halla la inversa de $A=\begin{pmatrix} 1 & 0 & 1\\ 2 & 1 & 0\\ 0 & 1 & 1\end{pmatrix}$ con la fórmula de la adjunta.
+\item \begin{ejercicios}
+  \item Un hotel tiene $40$ habitaciones, unas dobles y otras triples, con $110$ camas en total. Plantea el sistema
+  y halla, con la regla de Cramer, cuántas hay de cada tipo.
+  \item Usa Cramer para hallar \emph{solo} $z$ en $x+y+z=6$, $2x-y+z=3$, $x+2y-z=2$.
+  \end{ejercicios}
+\end{ejercicios}
+
+\respuestas
+\begin{respuestascortas}
+\begin{soluciones}
+\item $F_1\leftrightarrow F_2$, $F_2-2F_1$, $-F_2$, $F_1-2F_2$: $A^{-1}=\sm{2&-3\\-1&2}$; $\vec x=A^{-1}(1,-1)=(5,-3)$.
+\item (a) $\sm{-24&18&5\\20&-15&-4\\-5&4&1}$. (b) $F_2-2F_1$, $F_3-F_1$, $F_3-F_2$ dejan la fila $0\ 0\ 0$ a la izquierda (su determinante es $0$).
+\item (a) $26$. (b) $2(-10)+1(-1)+3(-4)=-33$. (c) Triangular: $2(-1)(3)\left(\tfrac12\right)=-3$.
+\item $\sv{4&1\\1&5}=19$: el paralelogramo mide $19$ y el terreno $\tfrac{19}{2}=9.5$ hm$^2$.
+\item (a) $27(-2)=-54$; (b) $-\tfrac12$; (c) $-8$; (d) $2^3\cdot\left(-\tfrac12\right)(-2)=8$.
+\item $F_2-2F_1$, $F_4-F_1$, $F_3-F_2$ y $F_4-\tfrac12F_3$ dejan la diagonal $1,1,2,\tfrac52$: $\det=5$.
+\item $\det B=(-1)(5)(1)\det A=-5\det A$, así que $\det A=-6$.
+\item $\det=1+k^3=0$: solo $k=-1$.
+\item $\det A=3$; $A^{-1}=\tfrac13\sm{1&1&-1\\-2&1&2\\2&-1&1}$.
+\item (a) $d+t=40$, $2d+3t=110$; $\det A=1$, $d=\sv{40&1\\110&3}=10$, $t=\sv{1&40\\2&110}=30$.
+  (b) $\det A=7$, $\det A_z=21$: $z=3$.
+\end{soluciones}
+\end{respuestascortas}
+
+\end{document}

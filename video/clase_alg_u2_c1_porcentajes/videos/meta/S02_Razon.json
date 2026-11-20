@@ -1,0 +1,37 @@
+{
+ "scene": "S02_Razon",
+ "duration": 42.833,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Un porcentaje es una razón",
+   "hold": 42.233
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.1,
+   "text": "En un curso de veinticinco estudiantes, nueve usan gafas. Como en las razones, la parte es al todo como nueve es a veinticinco.",
+   "fox": true
+  },
+  {
+   "start": 11.1,
+   "end": 22.133,
+   "text": "Para hablar en porcentaje, el todo tiene que ser cien. Cuatro cursos iguales suman cien estudiantes, y en ellos hay treinta y seis con gafas.",
+   "fox": false
+  },
+  {
+   "start": 22.133,
+   "end": 31.0,
+   "text": "Es la misma razón, escalada: se multiplica arriba y abajo por cuatro, igual que con las razones equivalentes.",
+   "fox": false
+  },
+  {
+   "start": 31.0,
+   "end": 41.833,
+   "text": "También se puede dividir: nueve entre veinticinco es cero punto treinta y seis, y en centésimas eso es treinta y seis por ciento.",
+   "fox": false
+  }
+ ]
+}

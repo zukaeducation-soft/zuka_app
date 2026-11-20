@@ -1,0 +1,31 @@
+{
+ "scene": "S01_Tabla",
+ "duration": 32.333,
+ "marks": [
+  {
+   "time": 0,
+   "title": "La regla de tres",
+   "hold": 31.733
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 10.633,
+   "text": "La regla de tres es una forma ordenada de resolver problemas de proporciones: conocemos tres datos y buscamos el cuarto.",
+   "fox": true
+  },
+  {
+   "start": 10.633,
+   "end": 21.467,
+   "text": "Primer paso: una tabla. Cada columna es una magnitud, aquí kilos y pesos. Cada fila es una situación: la que conocemos y la que preguntan.",
+   "fox": false
+  },
+  {
+   "start": 21.467,
+   "end": 31.333,
+   "text": "Las magnitudes son las cosas que se miden. Kilos con kilos, pesos con pesos: nunca se mezclan en una misma columna.",
+   "fox": false
+  }
+ ]
+}

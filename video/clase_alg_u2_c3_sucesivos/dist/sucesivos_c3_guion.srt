@@ -1,0 +1,47 @@
+1
+00:00:08,900 --> 00:00:22,267
+Una bicicleta de cien mil pesos tiene un veinte por ciento de descuento, y en caja te dan un diez por ciento más. Mucha gente piensa que eso es un treinta por ciento. No lo es.
+
+2
+00:00:22,267 --> 00:00:28,633
+Primero el veinte por ciento: queda el ochenta por ciento, ochenta mil.
+
+3
+00:00:28,633 --> 00:00:39,500
+Luego el diez por ciento, pero sobre los ochenta mil, no sobre los cien mil: queda el noventa por ciento de ochenta mil, setenta y dos mil.
+
+4
+00:00:39,500 --> 00:00:53,400
+Los dos factores se multiplican: cero punto ocho por cero punto nueve es cero punto setenta y dos. Se paga el setenta y dos por ciento: el descuento total es del veintiocho por ciento.
+
+5
+00:00:53,400 --> 00:01:02,967
+Y el orden no importa: primero el diez y luego el veinte da lo mismo, porque la multiplicación es conmutativa.
+
+6
+00:01:04,970 --> 00:01:15,337
+Una acción vale cien. Sube el cincuenta por ciento y luego baja el cincuenta por ciento. Parece que debería volver a cien, pero no.
+
+7
+00:01:15,337 --> 00:01:23,970
+La bajada es la mitad de ciento cincuenta, que es más grande que cien: queda en setenta y cinco.
+
+8
+00:01:24,970 --> 00:01:41,903
+Por la misma razón, si algo baja el veinte por ciento, para volver al precio de antes no basta subir el veinte. De cien queda en ochenta, y para volver a cien hay que subir veinte sobre ochenta: el veinticinco por ciento.
+
+9
+00:01:43,900 --> 00:01:53,267
+Un pueblo de mil habitantes crece el diez por ciento cada año. Al cabo de tres años no creció el treinta por ciento.
+
+10
+00:01:53,267 --> 00:02:11,567
+Cada año se multiplica por uno punto uno, y el diez por ciento de cada año se calcula sobre una población más grande. Uno punto uno multiplicado tres veces por sí mismo se escribe uno punto uno al cubo: es una potencia, que verás en el próximo mundo.
+
+11
+00:02:11,567 --> 00:02:27,967
+El pueblo creció el treinta y tres punto uno por ciento, un poco más que el treinta. Esta idea de multiplicar una y otra vez por el mismo factor volverá con las progresiones geométricas y con el interés compuesto.
+
+12
+00:02:29,970 --> 00:02:40,303
+Los cambios porcentuales sucesivos no se suman: se multiplican sus factores, y cada uno se aplica sobre lo que va quedando.

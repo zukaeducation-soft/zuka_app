@@ -1,0 +1,37 @@
+{
+ "scene": "S03_Inversa",
+ "duration": 49.367,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Regla de tres inversa",
+   "hold": 48.767
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 12.7,
+   "text": "Otro problema. Un grupo de ocho personas lleva comida para quince días. Si llegan cuatro personas más y son doce, ¿para cuántos días alcanza la comida?",
+   "fox": true
+  },
+  {
+   "start": 12.7,
+   "end": 23.2,
+   "text": "Con el doble de personas, la comida dura la mitad de los días: una se multiplica y la otra se divide por el mismo número. Es inversa.",
+   "fox": false
+  },
+  {
+   "start": 23.2,
+   "end": 36.133,
+   "text": "En una inversa lo que se conserva es el producto. Ocho personas durante quince días son ciento veinte raciones. Doce personas se comen esas mismas ciento veinte raciones.",
+   "fox": false
+  },
+  {
+   "start": 36.133,
+   "end": 48.367,
+   "text": "Mira el error más común: hacerla como si fuera directa. Saldrían veintidós días y medio, como si con más gente la comida durara más. No tiene sentido.",
+   "fox": false
+  }
+ ]
+}

@@ -1,0 +1,498 @@
+== LECTURA
+## Texto Uno
+p: En la boda de su hermana, Camila tomó cuatrocientas fotografías con el teléfono. Dos años después no ha vuelto a mirar ninguna, y cuando intenta recordar el momento en que los novios entraron al salón, lo que le viene a la mente no es la escena sino la pantalla: ella, con el brazo en alto, buscando el encuadre.
+p: Los psicólogos han estudiado lo que le ocurrió. En un experimento ya clásico, se pidió a un grupo de visitantes de un museo que observara ciertos objetos y fotografiara otros. Al día siguiente recordaban peor, y con menos detalles, los objetos que habían fotografiado. La explicación propuesta es que, al confiar el recuerdo a la cámara, el cerebro se da permiso de no hacer el trabajo: para qué guardar lo que ya quedó guardado en otra parte.
+p: El hallazgo tiene un matiz importante. Cuando a los participantes se les pidió acercar la imagen a un detalle ---la mano de una estatua, el borde de una vasija---, el efecto desapareció: recordaron tan bien como quienes solo habían mirado. Lo que debilita la memoria, entonces, no es la cámara sino la manera de usarla. Quien fotografía para no tener que mirar olvida; quien fotografía porque ha mirado, recuerda.
+p: <<El problema no es nuevo, lo nuevo es la escala>>, comenta la investigadora Paula Ochoa. <<Mi abuela tenía un álbum con sesenta fotos de toda su vida y se sabía la historia de cada una. Hoy una persona toma esa cantidad en una tarde>>. La abundancia, sostiene, cambia la naturaleza del objeto: una foto entre sesenta es un tesoro; una entre veinte mil es un archivo que nadie abrirá.
+p: Ochoa no propone dejar de tomar fotos, sino devolverles un costo. Sugiere un ejercicio a sus estudiantes: durante un viaje, permitirse solo diez fotografías por día. La restricción obliga a decidir qué merece ser guardado, y esa decisión ---mirar, comparar, elegir--- es precisamente el trabajo que la memoria necesita. Los estudiantes suelen quejarse el primer día. Al final, casi todos pueden describir sus diez imágenes sin sacar el teléfono.
+p: Queda una pregunta que el experimento no responde: qué pasará con los recuerdos de una generación cuya infancia entera está fotografiada, pero por otros. Los niños de hoy no recordarán su quinto cumpleaños: recordarán el video.
+src: Texto elaborado para este simulacro.
+
+q: En el texto, el caso de Camila (párrafo 1) sirve para:
+@ Ilustrar con un ejemplo el fenómeno que se explicará después
+@ Criticar a quienes usan el teléfono en las celebraciones
+@ Demostrar que las fotografías de boda son innecesarias
+@ Presentar a la protagonista de una historia
+q: Cuando se dice que a Camila <<lo que le viene a la mente no es la escena sino la pantalla>> (párrafo 1), se da a entender que:
+@ Recuerda el acto de tomar la foto y no lo que estaba ocurriendo
+@ Prefiere mirar las fotos antes que recordar la boda
+@ No asistió realmente a la entrada de los novios
+@ Su teléfono se dañó durante la celebración
+q: El resultado del experimento descrito en el párrafo 2 fue que los participantes:
+@ Recordaron peor los objetos que habían fotografiado
+@ Recordaron mejor los objetos que habían fotografiado
+@ Olvidaron por igual todos los objetos del museo
+@ Tomaron más fotos de las que se les había pedido
+q: Según la explicación del párrafo 2, la memoria se debilita al tomar fotos porque:
+@ El cerebro delega el recuerdo en la cámara y reduce su esfuerzo
+@ La luz de la pantalla afecta la visión
+@ Las fotografías deforman los objetos reales
+@ Los visitantes no tienen tiempo de mirar los objetos
+q: En la frase <<el cerebro se da permiso de no hacer \sub{el trabajo}>> (párrafo 2), la expresión subrayada se refiere a:
+@ Fijar el recuerdo de lo que se observa
+@ Tomar una buena fotografía
+@ Recorrer todas las salas del museo
+@ Participar en el experimento
+q: En el párrafo 3, la palabra <<\sub{matiz}>> significa:
+@ Precisión que modifica en parte lo dicho antes
+@ Error que invalida lo dicho antes
+@ Color de una fotografía
+@ Repetición de la idea anterior
+q: De acuerdo con el párrafo 3, el efecto negativo de fotografiar desapareció cuando los participantes:
+@ Debieron concentrarse en un detalle del objeto
+@ Tomaron varias fotografías del mismo objeto
+@ Dejaron la cámara y solo miraron
+@ Volvieron al museo al día siguiente
+q: Los fragmentos escritos entre rayas en el párrafo 3 (<<---la mano de una estatua, el borde de una vasija--->>) cumplen la función de:
+@ Dar ejemplos
+@ Presentar una objeción
+@ Citar a un experto
+@ Resumir el párrafo
+q: En la oración <<Lo que debilita la memoria, \sub{entonces}, no es la cámara>> (párrafo 3), la palabra subrayada introduce:
+@ Una conclusión
+@ Una condición
+@ Un ejemplo
+@ Una oposición
+q: La última oración del párrafo 3 quiere decir que:
+@ Lo decisivo para recordar es la atención que se presta, no el aparato
+@ Las personas que no toman fotos tienen mejor memoria
+@ Fotografiar siempre perjudica el recuerdo
+@ Quienes miran con cuidado no necesitan tomar fotos
+q: Con la frase <<lo nuevo es la escala>> (párrafo 4), Ochoa se refiere a:
+@ La enorme cantidad de fotografías que hoy se toman
+@ El tamaño de las pantallas de los teléfonos
+@ La calidad de las cámaras actuales
+@ La edad a la que se empieza a tomar fotos
+q: La mención del álbum de la abuela (párrafo 4) sirve para:
+@ Contrastar unas pocas imágenes muy valoradas con la abundancia actual
+@ Demostrar que las fotos antiguas eran de mejor calidad
+@ Explicar cómo se hacía un álbum familiar
+@ Sugerir que las personas mayores tienen mejor memoria
+q: La afirmación <<una entre veinte mil es un archivo que nadie abrirá>> (párrafo 4) significa que:
+@ La abundancia le resta valor a cada imagen
+@ Los archivos digitales se dañan con el tiempo
+@ Nadie sabe usar los programas de fotografía
+@ Las fotos actuales no merecen ser vistas
+q: La propuesta de <<devolverles un costo>> a las fotos (párrafo 5) consiste en:
+@ Hacer que cada fotografía exija una decisión
+@ Cobrar dinero por cada imagen que se tome
+@ Imprimir todas las fotografías en papel
+@ Prohibir el uso del teléfono en los viajes
+q: Según el párrafo 5, el ejercicio de las diez fotografías funciona porque:
+@ Obliga a mirar con atención y a escoger
+@ Los estudiantes viajan con menos equipaje
+@ Diez es el número que la memoria puede retener
+@ Las fotos quedan mejor encuadradas
+q: De acuerdo con el párrafo 5, la decisión sobre qué fotografiar incluye las siguientes acciones, EXCEPTO:
+@ Publicar
+@ Mirar
+@ Comparar
+@ Elegir
+q: Las dos últimas oraciones del párrafo 5 muestran que los estudiantes:
+@ Se resisten al comienzo, pero obtienen un buen resultado
+@ Abandonan el ejercicio el primer día
+@ Terminan tomando más de diez fotos diarias
+@ Nunca llegan a entender el propósito del ejercicio
+q: La pregunta que plantea el párrafo 6 se refiere a:
+@ El efecto de que la infancia de alguien haya sido registrada por otras personas
+@ La cantidad de fotos que los niños toman en sus cumpleaños
+@ La posibilidad de que los videos se pierdan con el tiempo
+@ Los errores del experimento del museo
+q: La oración final, <<recordarán el video>>, sugiere que:
+@ El registro externo puede ocupar el lugar del recuerdo propio
+@ Los videos son más fieles que las fotografías
+@ Los niños de hoy tienen mejor memoria que los de antes
+@ Los cumpleaños infantiles ya no se celebran
+q: Una situación semejante al efecto descrito en el párrafo 2 es la de una persona que:
+@ No aprende las rutas de su ciudad porque siempre usa un navegador
+@ Repasa en voz alta una lección para aprenderla
+@ Escribe un diario para reflexionar sobre su día
+@ Aprende un idioma conversando con hablantes nativos
+q: De las siguientes afirmaciones, aquella con la que Ochoa estaría de acuerdo es:
+@ Tomar menos fotografías, pero más pensadas, favorece el recuerdo
+@ Lo mejor para la memoria es no volver a tomar fotografías
+@ Mientras más fotografías se guarden, más se recordará
+@ Las fotografías antiguas no tenían ningún valor para sus dueños
+
+## Texto Dos
+p: Un cuento famoso imagina a un hombre que no podía olvidar nada. Recordaba la forma de cada nube que había visto, cada palabra de cada conversación, el sabor exacto de un desayuno de hacía veinte años. Podría parecer un don. Era una condena: abrumado por los detalles, no lograba pensar. Para entender que dos perros distintos son, ambos, <<perro>>, hay que olvidar aquello en lo que se diferencian.
+p: Olvidar tiene mala fama. Lo asociamos con el descuido, la vejez, la ingratitud. Sin embargo, una memoria que lo conservara todo sería tan inútil como un mapa del tamaño del territorio: para orientarse hace falta que el mapa omita casi todo. La memoria no es una bodega; es un editor. Su trabajo no consiste en guardar, sino en escoger.
+p: Ese editor, además, tiene buen criterio. Suele borrar la contraseña vieja, el dolor exacto de una muela, el nombre del compañero que nos caía mal. Gracias a él los duelos se vuelven llevaderos y las peleas, reconciliables. Quien no puede olvidar una ofensa no tiene mejor memoria que los demás: tiene una herida que no cierra.
+p: Temo que la tecnología nos esté quitando ese alivio. Las redes nos devuelven cada año, con música alegre, la foto de un día que quizás habíamos logrado dejar atrás. El archivo no pregunta si queremos recordar. Lo conserva todo con la misma indiferencia ---el viaje feliz y la persona que ya no está--- y nos lo pone delante cuando a él le parece.
+p: No defiendo la amnesia. Hay cosas que una persona, y con mayor razón un país, tiene la obligación de recordar. Pero conviene distinguir entre la memoria que se elige y la que se impone. La primera construye; la segunda solo acumula. Tener derecho a recordar incluye, me parece, tener derecho a que algunas cosas se vayan borrando solas.
+src: Texto elaborado para este simulacro.
+
+## Preguntas del Texto Dos
+q: El hombre que no podía olvidar nada (párrafo 1) se presenta como ejemplo de que:
+@ Una memoria total puede impedir el pensamiento
+@ Algunas personas nacen con un don extraordinario
+@ Los cuentos exageran las capacidades humanas
+@ Recordar los detalles es señal de inteligencia
+q: La última oración del párrafo 1 (<<Para entender que dos perros distintos son, ambos, ``perro''\dots>>) afirma que:
+@ Para generalizar es necesario dejar de lado los detalles particulares
+@ Todos los perros son exactamente iguales
+@ Las personas olvidadizas confunden a los animales
+@ Quien recuerda mucho distingue mejor a los perros
+q: La expresión <<tiene mala fama>> (párrafo 2) significa que olvidar:
+@ Es mal valorado por la gente
+@ Es una enfermedad frecuente
+@ Es propio de las personas famosas
+@ Es cada vez más difícil
+q: La comparación con <<un mapa del tamaño del territorio>> (párrafo 2) busca mostrar que:
+@ Una memoria que lo guardara todo no serviría para orientarse
+@ Los mapas grandes son más exactos que los pequeños
+@ La memoria humana tiene una capacidad ilimitada
+@ Es imposible representar la realidad en un mapa
+q: Al afirmar que la memoria <<no es una bodega; es un editor>> (párrafo 2), el autor sostiene que la función principal de la memoria es:
+@ Seleccionar
+@ Almacenar
+@ Corregir errores
+@ Publicar recuerdos
+q: Según el párrafo 3, el <<editor>> suele borrar las siguientes cosas, EXCEPTO:
+@ El rostro de los seres queridos
+@ Una contraseña que ya no se usa
+@ La intensidad de un dolor físico
+@ El nombre de alguien que resultaba antipático
+q: En el párrafo 3, la palabra <<\sub{llevaderos}>> significa:
+@ Soportables
+@ Pasajeros
+@ Inolvidables
+@ Pesados
+q: Con la expresión <<una herida que no cierra>> (párrafo 3), el autor indica que no poder olvidar una ofensa:
+@ Es una forma de sufrimiento y no una cualidad
+@ Demuestra una memoria superior
+@ Es necesario para evitar nuevas ofensas
+@ Solo les ocurre a las personas rencorosas por naturaleza
+q: En el párrafo 4, el autor critica que la tecnología:
+@ Nos presenta recuerdos sin consultar si queremos revivirlos
+@ Borra las fotografías importantes al cabo de un año
+@ Impide guardar los recuerdos felices
+@ Cobra por conservar las imágenes
+q: El detalle de la <<música alegre>> (párrafo 4) sirve para:
+@ Resaltar el contraste entre la presentación festiva y lo doloroso que puede ser el recuerdo
+@ Elogiar la creatividad de las redes sociales
+@ Explicar cómo se hacen los videos de aniversario
+@ Mostrar que todos los recuerdos del archivo son felices
+q: En la frase <<cuando a \sub{él} le parece>> (párrafo 4), la palabra subrayada se refiere a:
+@ El archivo
+@ El viaje feliz
+@ El usuario
+@ El alivio
+q: Con la oración <<No defiendo la amnesia>> (párrafo 5), el autor busca:
+@ Evitar que se entienda que desprecia la memoria
+@ Reconocer que estaba equivocado
+@ Burlarse de quienes olvidan con facilidad
+@ Proponer que los países olviden su pasado
+q: En el párrafo 5, <<\sub{la segunda}>> alude a:
+@ La memoria que se impone
+@ La memoria que se elige
+@ La obligación de recordar
+@ La amnesia
+
+## Preguntas sobre los Textos Uno y Dos
+q: Los dos textos coinciden en que:
+@ Recordar bien no depende de acumular la mayor cantidad posible de registros
+@ La tecnología debería prohibirse en las celebraciones familiares
+@ Olvidar es siempre una señal de descuido
+@ Las fotografías antiguas eran mejores que las actuales
+q: La idea del texto Dos de que el trabajo de la memoria <<no consiste en guardar, sino en escoger>> se pone en práctica, en el texto Uno, en:
+@ El ejercicio de las diez fotografías diarias
+@ Las cuatrocientas fotografías de la boda
+@ El video del quinto cumpleaños
+@ La parte del experimento en la que no había que fijarse en detalles
+q: Sobre el archivo digital de imágenes, el texto Uno destaca que \bl, mientras que el texto Dos destaca que \bl.
+@ Casi nunca se consulta / reaparece sin que lo llamen
+@ Es muy costoso / es gratuito
+@ Mejora la memoria / la destruye
+@ Pertenece a las abuelas / pertenece a los niños
+q: Una empresa anuncia su servicio de almacenamiento así: <<Guárdelo todo: nunca más perderá un recuerdo>>. Frente a este anuncio, los autores de ambos textos:
+@ Lo cuestionarían, porque guardar no equivale a recordar
+@ Lo apoyarían, porque la memoria humana es frágil
+@ Lo ignorarían, porque no tratan sobre tecnología
+@ Discreparían entre sí sobre su conveniencia
+q: El texto Uno se fundamenta sobre todo en \bl, mientras que el texto Dos lo hace en \bl.
+@ Un experimento y una investigadora / reflexiones y comparaciones
+@ Un cuento famoso / un experimento en un museo
+@ Recuerdos de infancia / estadísticas
+@ Refranes populares / citas de psicólogos
+q: El deber que tienen los países de recordar ciertos hechos es un asunto mencionado en el texto:
+@ Dos, pero no en el Uno
+@ Uno, pero no en el Dos
+@ Uno más que en el Dos
+@ Uno y en el Dos por igual
+
+== RAZONAMIENTO
+ctx 2: Una alarma tiene tres sensores, A, B y C, cada uno de los cuales puede estar activo o inactivo. La alarma suena únicamente cuando se cumple por lo menos una de las siguientes condiciones:
+\vi{Los sensores A y B están activos al mismo tiempo}
+\vi{El sensor C está inactivo}
+q: De los siguientes casos:
+\st{I.}{A activo, B inactivo, C activo.}
+\st{II.}{A inactivo, B inactivo, C inactivo.}
+\st{III.}{A activo, B activo, C activo.}
+La alarma suena en:
+@ Solamente II y III
+@ Solamente III
+@ Solamente I y III
+@ Solamente II
+! En I no se cumple ninguna condición; en II, la segunda; en III, la primera.
+q: Si la alarma no está sonando, entonces, de las siguientes afirmaciones, de la única que se tiene certeza es:
+@ El sensor C está activo
+@ El sensor A está inactivo
+@ El sensor B está inactivo
+@ Los sensores A y B están inactivos
+! Si C estuviera inactivo, sonaría. De A y B solo se sabe que no están activos los dos a la vez.
+q: La negación de la frase <<Juan es alto y es rubio>> es:
+@ Juan no es alto o no es rubio
+@ Juan no es alto y no es rubio
+@ Juan es alto o es rubio
+@ Juan es alto y no es rubio
+! Negar <<$p$ y $q$>> es <<no $p$ o no $q$>>.
+q: Se sabe que <<todos los gatos de Marta son negros>> y que <<Tom no es negro>>. De lo anterior se puede concluir que:
+@ Tom no es un gato de Marta
+@ Tom es un gato de Marta
+@ Tom no es un gato
+@ Marta no tiene gatos
+! Si fuera un gato de Marta, sería negro.
+ctx 2: En un instituto de idiomas hay 100 estudiantes. De ellos, 50 estudian inglés, 40 estudian francés y 30 estudian alemán. Además, 15 estudian inglés y francés, 10 estudian inglés y alemán, 8 estudian francés y alemán, y 3 estudian los tres idiomas.
+q: La cantidad de estudiantes del instituto que no estudia ninguno de estos tres idiomas es:
+@ 10
+@ 13
+@ 7
+@ 0
+! $50+40+30-15-10-8+3=90$ estudian alguno.
+q: La cantidad de estudiantes que estudia solamente inglés es:
+@ 28
+@ 25
+@ 22
+@ 31
+! $50-15-10+3$.
+q: En una reunión familiar están presentes dos padres, dos hijos, un abuelo y un nieto. La menor cantidad de personas que puede haber en la reunión es:
+@ 3
+@ 4
+@ 5
+@ 6
+! Abuelo, su hijo y su nieto: el abuelo y el hijo son padres; el hijo y el nieto son hijos.
+ctx 2: Sobre una mesa hay cierta cantidad de fichas. Dos jugadores se turnan para retirar fichas: en cada turno, un jugador debe retirar 1, 2 o 3 fichas. Gana el jugador que retira la última ficha.
+q: Si el juego comienza con 21 fichas, entonces, para asegurar su victoria sin importar cómo juegue el otro, el jugador que tiene el primer turno debe retirar:
+@ 1 ficha
+@ 2 fichas
+@ 3 fichas
+@ Cualquier cantidad, pues siempre gana
+! Debe dejar un múltiplo de 4 (20) y, luego, completar 4 con lo que retire el rival en cada ronda.
+q: Si el juego comienza con 24 fichas y ambos jugadores juegan de la mejor manera posible, entonces:
+@ Gana el jugador que tiene el segundo turno
+@ Gana el jugador que tiene el primer turno
+@ El juego termina en empate
+@ No se puede saber quién gana
+! Con un múltiplo de 4, el segundo completa 4 en cada ronda y retira la última ficha.
+q: Después de un aumento del 8\%, el salario de Rosa quedó en \$1.620.000. El salario de Rosa antes del aumento era:
+@ \$1.500.000
+@ \$1.490.400
+@ \$1.540.000
+@ \$1.512.000
+! $1.620.000\div1{,}08$.
+q: En una tienda, un artículo tiene un descuento del 20\% y, sobre el precio ya rebajado, se aplica otro descuento del 10\%. Los dos descuentos equivalen a un único descuento del:
+@ 28\%
+@ 30\%
+@ 25\%
+@ 32\%
+! $0{,}8\cdot0{,}9=0{,}72$.
+q: Ocho llaves iguales llenan una piscina en 15 horas. El tiempo que tardan 12 de esas llaves en llenar la misma piscina es:
+@ 10 horas
+@ 22,5 horas
+@ 12 horas
+@ 9 horas
+! $8\cdot15=12\cdot t$.
+q: Los primeros términos de una sucesión son 1, 3, 7, 15, 31, \dots{} Si se continúa con la misma regla de formación, el término que ocupa la posición 10 es:
+@ 1.023
+@ 511
+@ 1.024
+@ 2.047
+! El término $n$ es $2^n-1$.
+q: Para un número entero positivo $n$ se define $f(n)=\dfrac{n}{2}$ si $n$ es par, y $f(n)=n+3$ si $n$ es impar. El valor de $f(f(f(11)))$ es:
+@ 10
+@ 7
+@ 14
+@ 5
+! $11\to14\to7\to10$.
+q: Se va a diseñar una bandera de tres franjas horizontales. Para pintarlas se dispone de cuatro colores y la única condición es que dos franjas vecinas no tengan el mismo color. La cantidad de banderas distintas que se pueden diseñar es:
+@ 36
+@ 24
+@ 64
+@ 48
+! $4\cdot3\cdot3$.
+q: En una bolsa hay cinco fichas numeradas del 1 al 5. Si se sacan al azar dos fichas al mismo tiempo, la probabilidad de que la suma de sus números sea par es:
+@ $\frac25$
+@ $\frac12$
+@ $\frac35$
+@ $\frac{3}{10}$
+! Dos impares (3 maneras) o dos pares (1 manera), de 10 parejas posibles.
+q: Las diagonales de un rombo miden 10 cm y 24 cm. El perímetro del rombo, en centímetros, es:
+@ 52
+@ 68
+@ 48
+@ 34
+! Cada lado es la hipotenusa de un triángulo de catetos 5 y 12: mide 13.
+ctx 2: De una terminal salen buses de dos rutas. Los buses de la ruta 1 salen cada 12 minutos y el primero sale a las 6:00 a.m. Los buses de la ruta 2 salen cada 20 minutos y el primero sale a las 6:20 a.m.
+q: La primera hora del día en la que sale un bus de cada ruta al mismo tiempo es:
+@ 7:00 a.m.
+@ 6:40 a.m.
+@ 7:20 a.m.
+@ 8:00 a.m.
+! Ruta 1: 6:00, 6:12, \dots, 7:00. Ruta 2: 6:20, 6:40, 7:00.
+q: La cantidad de veces que salen al mismo tiempo un bus de cada ruta, desde las 6:00 a.m. hasta las 10:00 a.m. (incluida esta hora), es:
+@ 4
+@ 3
+@ 5
+@ 12
+! Coinciden cada 60 minutos: 7:00, 8:00, 9:00 y 10:00.
+q: La cantidad de divisores positivos que tiene el número 72 es:
+@ 12
+@ 10
+@ 6
+@ 8
+! $72=2^3\cdot3^2$: $(3+1)(2+1)$.
+q: La suma de las edades de un padre y sus dos hijos gemelos es 50 años. Hace 5 años, la edad del padre era 5 veces la edad de cada uno de sus hijos. La edad actual del padre es:
+@ 30
+@ 35
+@ 40
+@ 32
+! $P+2H=50$ y $P-5=5(H-5)$ dan $H=10$, $P=30$.
+q: Un programa de computador realiza las siguientes instrucciones:
+\st{1.}{Comience con $s=0$ y $k=1$}
+\st{2.}{Si $k$ es impar, cambie $s$ por $s+k$; si $k$ es par, cambie $s$ por $s-1$}
+\st{3.}{Aumente $k$ en 1}
+\st{4.}{Si $k$ es mayor que 10, pase a la instrucción 5; en otro caso, regrese a la instrucción 2}
+\st{5.}{Imprima el valor de $s$ y pare}
+El valor que imprime el programa es:
+@ 20
+@ 25
+@ 30
+@ 15
+! Suma $1+3+5+7+9=25$ y resta 1 cinco veces.
+q: La suma $1+2+3+\dots+n$ es igual a 210. El valor de $n$ es:
+@ 20
+@ 21
+@ 19
+@ 15
+! $\frac{20\cdot21}{2}=210$.
+q: La cantidad de números de tres cifras cuyos dígitos suman 4 es:
+@ 10
+@ 6
+@ 12
+@ 15
+! Con centena 1: 4 números; con 2: 3; con 3: 2; con 4: 1.
+ctx 2: Para escribir mensajes en clave se usa la siguiente tabla. Cada letra se reemplaza por un número de dos cifras: la primera cifra es la fila y la segunda es la columna en la que se encuentra la letra. Por ejemplo, la letra H se escribe 23.\par\smallskip
+{\centering\begin{tabular}{c|ccccc} & 1 & 2 & 3 & 4 & 5\\\hline 1 & A & B & C & D & E\\ 2 & F & G & H & I & J\\ 3 & K & L & M & N & O\\ 4 & P & Q & R & S & T\\ 5 & U & V & X & Y & Z\end{tabular}\par}
+q: La palabra ZUKA se escribe en clave como:
+@ 55 51 31 11
+@ 55 15 13 11
+@ 55 51 13 11
+@ 54 51 31 11
+! Z: fila 5, columna 5; U: 51; K: 31; A: 11.
+q: El mensaje 33 11 43 corresponde a la palabra:
+@ MAR
+@ MAL
+@ PAR
+@ MAS
+! 33 es M, 11 es A y 43 es R.
+q: En el plano de la figura, las líneas representan calles. Un mensajero debe ir del punto $P$ al punto $Q$ caminando por las calles, siempre hacia la derecha o hacia arriba, pero no puede pasar por el cruce $R$, que está cerrado.\par
+{\centering\begin{tikzpicture}[scale=.6]\draw (0,0) grid (3,3);\fill (0,0) circle(3pt) node[below left]{$P$};\fill (3,3) circle(3pt) node[above right]{$Q$};
+\fill (1,1) circle(3.5pt);\node[font=\scriptsize] at (1.3,.72) {$R$};\end{tikzpicture}\par}
+La cantidad de caminos distintos que puede seguir es:
+@ 8
+@ 12
+@ 20
+@ 14
+! Hay $\binom63=20$ caminos en total y $\binom21\binom42=12$ pasan por $R$.
+q: Un vaso con forma de cono, con la punta hacia abajo, se llena de agua hasta la mitad de su altura. La fracción del volumen total del vaso que ocupa el agua es:
+@ $\frac18$
+@ $\frac12$
+@ $\frac14$
+@ $\frac13$
+! El cono de agua es semejante al vaso con razón $\frac12$; los volúmenes están en razón $\left(\frac12\right)^3$.
+q: En un cuadrado de 8 cm de lado se trazan cuatro cuartos de círculo de 4 cm de radio, con centro en cada uno de los vértices, como muestra la figura. El área de la región sombreada, en cm$^2$, es:\par
+{\centering\begin{tikzpicture}[scale=.3]\fill[gray!45] (0,0) rectangle (8,8);
+\fill[white] (0,0)--(4,0) arc (0:90:4)--cycle;\fill[white] (8,0)--(8,4) arc (90:180:4)--cycle;
+\fill[white] (8,8)--(4,8) arc (180:270:4)--cycle;\fill[white] (0,8)--(0,4) arc (270:360:4)--cycle;
+\draw (0,0) rectangle (8,8);\draw (4,0) arc (0:90:4);\draw (8,4) arc (90:180:4);\draw (4,8) arc (180:270:4);\draw (0,4) arc (270:360:4);\end{tikzpicture}\par}
+@ $64-16\pi$
+@ $64-4\pi$
+@ $16\pi-32$
+@ $64-8\pi$
+! Los cuatro cuartos forman un círculo completo de radio 4.
+q: Un tendero mezcla 3 kg de café de \$20.000 el kilogramo con 2 kg de café de \$30.000 el kilogramo. El costo de un kilogramo de la mezcla es:
+@ \$24.000
+@ \$25.000
+@ \$26.000
+@ \$22.000
+! $(60.000+60.000)\div5$.
+q: En cierto mes de 30 días, el día 15 fue miércoles. El último día de ese mes fue:
+@ Jueves
+@ Miércoles
+@ Viernes
+@ Martes
+! Del 15 al 30 pasan 15 días: dos semanas y un día.
+q: En una isla viven solamente dos clases de personas: los veraces, que siempre dicen la verdad, y los falaces, que siempre mienten. Un viajero se encuentra con dos habitantes, X e Y, y X le dice: <<Por lo menos uno de nosotros dos es falaz>>. De lo anterior se concluye que:
+@ X es veraz e Y es falaz
+@ X es falaz e Y es veraz
+@ Los dos son veraces
+@ Los dos son falaces
+! Si X mintiera, ninguno sería falaz, pero X lo sería. Luego X dice la verdad y el falaz es Y.
+q: Sobre una circunferencia se marcan 6 puntos. La cantidad de triángulos distintos que tienen sus tres vértices en esos puntos es:
+@ 20
+@ 18
+@ 15
+@ 120
+! $\binom63$.
+q: Un tren de 200 metros de largo viaja a 72 km/h y debe atravesar un túnel de 400 metros de largo. El tiempo que transcurre desde que la locomotora entra al túnel hasta que el último vagón sale de él es:
+@ 30 segundos
+@ 20 segundos
+@ 10 segundos
+@ 40 segundos
+! Debe avanzar $600$ m a $20$ m/s.
+ctx 2: La tabla muestra la cantidad de goles que anotó un equipo de fútbol en cada uno de los 20 partidos de un torneo.\par\smallskip
+{\centering\small\begin{tabular}{|l|c|c|c|c|c|}\hline
+Goles en el partido & 0 & 1 & 2 & 3 & 4\\\hline
+Cantidad de partidos & 4 & 6 & 5 & 3 & 2\\\hline
+\end{tabular}\par}
+q: La cantidad total de goles que anotó el equipo en el torneo fue:
+@ 33
+@ 30
+@ 20
+@ 36
+! $0\cdot4+1\cdot6+2\cdot5+3\cdot3+4\cdot2$.
+q: La mediana de la cantidad de goles anotados por partido es:
+@ 1,5
+@ 1
+@ 2
+@ 1,65
+! Ordenados los 20 datos, el décimo es 1 y el undécimo es 2.
+q: La cantidad de números enteros $n$ que cumplen $(n-2)(n-9)<0$ es:
+@ 6
+@ 7
+@ 8
+@ 5
+! $2<n<9$: del 3 al 8.
+q: En una urna hay 12 bolas rojas, 9 verdes y 7 azules. La menor cantidad de bolas que se deben sacar, sin mirar, para tener la certeza de obtener por lo menos una bola de cada color es:
+@ 22
+@ 3
+@ 20
+@ 17
+! En el peor caso salen primero las 12 rojas y las 9 verdes.
+q: Una llave llena las dos terceras partes de un tanque en 40 minutos. Si el agua sigue saliendo al mismo ritmo, el tiempo que tarda en llenarse la parte que falta es:
+@ 20 minutos
+@ 40 minutos
+@ 30 minutos
+@ 10 minutos
+! Cada tercio tarda 20 minutos.
+q: Con fósforos se construye la secuencia de cuadrículas que se muestra: la figura $n$ es una cuadrícula de $n\times n$ cuadritos, y cada lado de un cuadrito es un fósforo.\par
+{\centering\begin{tikzpicture}[scale=.45]\draw (0,0) grid (1,1);\node at (.5,-.6) {\scriptsize Figura 1};
+\draw[shift={(3,0)}] (0,0) grid (2,2);\node at (4,-.6) {\scriptsize Figura 2};
+\draw[shift={(7,0)}] (0,0) grid (3,3);\node at (8.5,-.6) {\scriptsize Figura 3};\end{tikzpicture}\par}
+La cantidad de fósforos que se necesitan para construir la figura 6 es:
+@ 84
+@ 72
+@ 49
+@ 60
+! Hay $n+1$ líneas horizontales y $n+1$ verticales de $n$ fósforos cada una: $2n(n+1)$.

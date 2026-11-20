@@ -1,0 +1,54 @@
+{
+ "scene": "S02_Infinita",
+ "duration": 59.8,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Sumar infinitos números",
+   "hold": 22.867
+  },
+  {
+   "time": 23.467,
+   "title": "Cuándo converge",
+   "hold": 59.2
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 2.6,
+   "text": "Sumar infinitos números puede dar un resultado finito. Mira esta barra de chocolate.",
+   "fox": true
+  },
+  {
+   "start": 2.6,
+   "end": 12.833,
+   "text": "Primero te comes la mitad. Luego la mitad de lo que queda: un cuarto. Luego la mitad de lo que sigue: un octavo. Y así sin parar.",
+   "fox": false
+  },
+  {
+   "start": 12.833,
+   "end": 22.467,
+   "text": "Lo que queda es cada vez más pequeño, pero nunca te pasas de la barra entera. La suma infinita se acerca a uno.",
+   "fox": false
+  },
+  {
+   "start": 23.467,
+   "end": 36.267,
+   "text": "Es una progresión geométrica de razón un medio. Como la razón está entre menos uno y uno, sus potencias se hacen tan pequeñas como se quiera: r a la n se acerca a cero.",
+   "fox": false
+  },
+  {
+   "start": 36.267,
+   "end": 51.7,
+   "text": "La fórmula de la suma se puede escribir con los signos cambiados arriba y abajo, que es la misma fracción. Así, cuando r a la n desaparece, queda la suma infinita: el primer término entre uno menos la razón.",
+   "fox": false
+  },
+  {
+   "start": 51.7,
+   "end": 58.8,
+   "text": "Comprobemos con el chocolate: un medio entre, uno menos un medio, da uno.",
+   "fox": false
+  }
+ ]
+}

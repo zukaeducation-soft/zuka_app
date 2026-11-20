@@ -1,0 +1,24 @@
+{
+ "scene": "S04_Cierre",
+ "duration": 19.933,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Repasemos",
+   "hold": 11.733
+  },
+  {
+   "time": 12.333,
+   "title": "Cierre",
+   "hold": 18.933
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.333,
+   "text": "Los cambios porcentuales sucesivos no se suman: se multiplican sus factores, y cada uno se aplica sobre lo que va quedando.",
+   "fox": false
+  }
+ ]
+}

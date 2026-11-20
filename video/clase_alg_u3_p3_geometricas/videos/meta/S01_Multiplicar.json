@@ -1,0 +1,48 @@
+{
+ "scene": "S01_Multiplicar",
+ "duration": 57.6,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Multiplicar siempre por lo mismo",
+   "hold": 33.067
+  },
+  {
+   "time": 33.667,
+   "title": "Razón fraccionaria o negativa",
+   "hold": 57.0
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 12.167,
+   "text": "El día cero, Ana sabe un secreto. El día uno se lo cuenta a tres amigos. El día dos, cada uno se lo cuenta a tres personas más, y así cada día.",
+   "fox": true
+  },
+  {
+   "start": 12.167,
+   "end": 23.533,
+   "text": "Cuando cada término sale de multiplicar el anterior por el mismo número, la sucesión es una progresión geométrica. Ese número fijo es la razón, r.",
+   "fox": false
+  },
+  {
+   "start": 23.533,
+   "end": 32.667,
+   "text": "Se llama razón porque es el cociente de dos términos seguidos, como las razones que comparan dividiendo.",
+   "fox": false
+  },
+  {
+   "start": 33.667,
+   "end": 45.3,
+   "text": "La razón puede ser una fracción. Un medicamento en la sangre baja a la mitad cada seis horas: ochocientos, cuatrocientos, doscientos, cien miligramos.",
+   "fox": false
+  },
+  {
+   "start": 45.3,
+   "end": 56.6,
+   "text": "Y puede ser negativa: uno, menos dos, cuatro, menos ocho. Por la ley de signos, al multiplicar por un negativo el signo cambia cada vez.",
+   "fox": false
+  }
+ ]
+}

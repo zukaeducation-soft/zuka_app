@@ -1,0 +1,43 @@
+{
+ "scene": "S06_Ninguna",
+ "duration": 55.1,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Ni directa ni inversa",
+   "hold": 54.5
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 13.967,
+   "text": "Cuidado: que dos cantidades crezcan juntas no basta para que sean directamente proporcionales. Un taxi cobra cuatro mil pesos por subirse, más dos mil por cada kilómetro.",
+   "fox": true
+  },
+  {
+   "start": 13.967,
+   "end": 25.167,
+   "text": "Un kilómetro cuesta seis mil y dos kilómetros cuestan ocho mil. La distancia se duplicó, pero el precio no: el doble de seis mil sería doce mil.",
+   "fox": false
+  },
+  {
+   "start": 25.167,
+   "end": 34.367,
+   "text": "El cociente tampoco se mantiene: seis mil entre uno no es lo mismo que ocho mil entre dos. No hay una constante k.",
+   "fox": false
+  },
+  {
+   "start": 34.367,
+   "end": 42.533,
+   "text": "Su gráfica es una recta, pero no pasa por el origen: arranca en cuatro mil, lo que cuesta subirse.",
+   "fox": false
+  },
+  {
+   "start": 42.533,
+   "end": 54.1,
+   "text": "La regla para decidir: si el cociente se mantiene, es directa; si el producto se mantiene, es inversa; si ninguno, no es ninguna de las dos.",
+   "fox": false
+  }
+ ]
+}

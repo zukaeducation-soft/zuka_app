@@ -1,0 +1,54 @@
+{
+ "scene": "S02_Cruzados",
+ "duration": 69.033,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Productos cruzados",
+   "hold": 25.6
+  },
+  {
+   "time": 26.2,
+   "title": "¿Por qué funciona?",
+   "hold": 68.433
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.167,
+   "text": "Las proporciones tienen una propiedad que las vuelve muy útiles: el producto de los extremos es igual al producto de los medios.",
+   "fox": true
+  },
+  {
+   "start": 11.167,
+   "end": 25.2,
+   "text": "Por eso, para saber si dos razones forman proporción, basta multiplicar en cruz. Dos tercios y cinco séptimos no la forman: dos por siete es catorce, y tres por cinco es quince.",
+   "fox": false
+  },
+  {
+   "start": 26.2,
+   "end": 39.733,
+   "text": "La razón está en una propiedad de la igualdad: si dos números son iguales y los multiplicamos por el mismo número, siguen siendo iguales. Multipliquemos los dos lados por b por d.",
+   "fox": false
+  },
+  {
+   "start": 39.733,
+   "end": 48.367,
+   "text": "Como vimos con los axiomas, dividir entre b es multiplicar por su recíproco, uno sobre b. Lo mismo con d.",
+   "fox": false
+  },
+  {
+   "start": 48.367,
+   "end": 57.533,
+   "text": "A la izquierda, uno sobre b por b da uno y queda a por d. A la derecha, uno sobre d por d da uno y queda c por b.",
+   "fox": false
+  },
+  {
+   "start": 57.533,
+   "end": 68.033,
+   "text": "Ese es el resultado: en una proporción, a por d es igual a b por c. Y al revés también vale, siempre que b y d no sean cero.",
+   "fox": false
+  }
+ ]
+}

@@ -82,7 +82,7 @@ function endTour() { tourEnd?.(); }
 
 // Deja detrás la vista que el paso necesita: el mapa de mundos o el mundo donde va el estudiante.
 function tourView(v) {
-  if ($('#sheet').classList.contains('open')) closeSheet();
+  if (sheetIsOpen) closeSheet();
   const c = courseById(S.course), cur = currentLesson(c);
   // Con componentes (c.blocks) el mapa vive dentro de un componente: se abre el de la lección que toca.
   const needBlock = !!c.blocks && openBlock?.course !== c.id;

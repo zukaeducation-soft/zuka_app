@@ -1,0 +1,366 @@
+% Resumen del mundo «Rampa de Newton» (Física Mecánica, mundo 2: dinámica). Lecciones fis-3, fis-4, fis-5.
+% Usa los ejemplos de los videos (empujar un bloque, plano de 30°, caída que convierte potencial en cinética);
+% el taller trae ejercicios nuevos.
+\documentclass[11pt,a4paper]{article}
+\usepackage{zuka-resumen}
+\zukacurso{fis}
+\zukamundo{2}{Rampa de Newton}{Dinámica}
+\sisetup{per-mode=symbol}
+\tikzset{fuerza/.style={->,line width=1.2pt},caja/.style={draw=zink,line width=0.9pt,fill=zsun!25}}
+
+\begin{document}
+
+\portada{%
+La \clave{dinámica} responde la pregunta que la cinemática dejó abierta: \emph{por qué} cambia el movimiento.
+La respuesta son las \clave{fuerzas}. En este mundo aprendiste las tres leyes de Newton, las usaste en la rampa
+más famosa de la física, el plano inclinado, y descubriste una forma más corta de resolver muchos problemas:
+la \clave{energía}. Este resumen reúne las definiciones, los diagramas y los ejemplos de los videos, y termina con
+un taller. En todo el resumen se usa $g=\SI{9.8}{\meter\per\second\squared}$.}{%
+\item \textbf{Nivel 2-1.} Leyes de Newton: fuerza neta, inercia, $\sum\vec F=m\,\vec a$, acción y reacción, peso, normal y fricción.
+\item \textbf{Nivel 2-2.} Plano inclinado: ejes inclinados, componentes del peso, normal, aceleración con y sin fricción.
+\item \textbf{Nivel 2-3.} Trabajo y energía: trabajo de una fuerza, energía cinética y potencial, teorema trabajo-energía y conservación.}
+
+\begin{clavebox}[LAS TRES IDEAS QUE SOSTIENEN TODO EL MUNDO]
+\renewcommand{\arraystretch}{1.5}\begin{tabular}{@{}c@{\qquad}c@{\qquad}c@{}}
+$\displaystyle\sum\vec F=m\,\vec a$ & $mg\sen\theta,\ \ mg\cos\theta$ & $\displaystyle W_{\text{neto}}=\Delta E_c$\\[2pt]
+\small la fuerza neta acelera & \small el peso se parte en la rampa & \small el trabajo cambia la energía
+\end{tabular}
+\end{clavebox}
+
+%=====================================================================
+\nivel{2-1}{Leyes de Newton}
+
+\begin{definicion}[Fuerza y fuerza neta]
+Una \clave{fuerza} es una interacción que puede cambiar el movimiento de un cuerpo. Es un \emph{vector}: tiene
+magnitud, dirección y sentido. Se mide en \clave{newtons}: $\SI{1}{\newton}=\SI{1}{\kilo\gram\meter\per\second\squared}$.
+La \clave{fuerza neta} $\sum\vec F$ es la suma vectorial de todas las fuerzas que actúan \emph{sobre el mismo cuerpo}.
+\end{definicion}
+
+\subsection{Las tres leyes}
+\begin{propiedad}[Leyes de Newton]
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=1.6em]
+\item \clave{Inercia.} Si $\sum\vec F=\vec 0$, el cuerpo conserva su velocidad: sigue en reposo o en MRU.
+\item \clave{Fuerza y aceleración.} $\displaystyle\sum\vec F=m\,\vec a$. La aceleración tiene la dirección de la fuerza neta,
+      y a más masa, menos aceleración con la misma fuerza.
+\item \clave{Acción y reacción.} Si $A$ empuja a $B$ con $\vec F_{AB}$, entonces $B$ empuja a $A$ con
+      $\vec F_{BA}=-\vec F_{AB}$: misma magnitud, sentido opuesto.
+\end{enumerate}
+\end{propiedad}
+\textbf{Intuición.} La primera ley dice que el movimiento no necesita una fuerza que lo «mantenga»; lo que necesita
+una fuerza es el \emph{cambio} de velocidad. Un disco de hockey sobre hielo sigue deslizando casi sin frenar
+porque casi nada lo empuja.
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{ojo}[Acción y reacción no se cancelan]
+Las dos fuerzas de la tercera ley actúan sobre cuerpos \emph{distintos}: una sobre $A$ y otra sobre $B$.
+Por eso nunca se suman en el mismo diagrama y no se anulan entre sí.
+\end{ojo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.44\linewidth}\centering
+\begin{tikzpicture}
+  \fill[zline] (-2.6,-0.12) rectangle (2.6,0);
+  \draw[caja] (-1.6,0) rectangle (0,1.1); \node at (-0.8,0.55) {$A$};
+  \draw[caja,fill=zsky!25] (0,0) rectangle (1.2,0.8); \node at (0.6,0.4) {$B$};
+  \draw[fuerza,zcoral] (0,1.0) -- (1.3,1.0) node[right,font=\small] {$\vec F_{AB}$};
+  \draw[fuerza,zsky] (0,0.25) -- (-1.3,0.25) node[left,font=\small] {$\vec F_{BA}$};
+  \node[font=\footnotesize,text=zmute,align=center] at (0,-0.55) {sobre $B$ (coral) y sobre $A$ (azul)};
+\end{tikzpicture}
+\end{minipage}
+
+\subsection{Fuerzas de todos los días}
+\begin{itemize}
+\item \clave{Peso}: la atracción de la Tierra, $W=m\,g$, vertical hacia abajo. La masa ($\si{\kilo\gram}$) no cambia de un
+      planeta a otro; el peso ($\si{\newton}$) sí.
+\item \clave{Normal} $N$: la fuerza que hace una superficie, perpendicular a ella. Impide que el cuerpo la atraviese.
+\item \clave{Tensión} $T$: la fuerza de una cuerda tensa, a lo largo de la cuerda.
+\item \clave{Fricción}: se opone al deslizamiento. Cinética: $f_k=\mu_k N$. Estática: $f_s\le\mu_s N$ (vale lo justo para
+      impedir que deslice, hasta un máximo).
+\end{itemize}
+
+\subsection{El diagrama de cuerpo libre}
+\begin{minipage}[c]{0.5\linewidth}
+Para aplicar la segunda ley se aísla el cuerpo y se dibujan \emph{solo} las fuerzas que actúan sobre él, cada una
+como una flecha que sale del cuerpo. Luego se eligen ejes y se escribe la segunda ley en cada uno:
+\[ \textstyle\sum F_x=m\,a_x,\qquad \sum F_y=m\,a_y. \]
+\end{minipage}\hfill
+\begin{minipage}[c]{0.46\linewidth}\centering
+\begin{tikzpicture}
+  \fill[zline] (-2.4,-0.12) rectangle (2.4,0);
+  \draw[caja] (-0.7,0) rectangle (0.7,1.1);
+  \coordinate (c) at (0,0.55);
+  \node[punto] at (c) {};
+  \draw[fuerza,zsky] (c) -- ++(0,1.5) node[above,font=\small] {$\vec N$};
+  \draw[fuerza,zcoral] (c) -- ++(0,-1.5) node[below,font=\small] {$\vec W=m\vec g$};
+  \draw[fuerza,zaccent] (c) -- ++(1.9,0) node[right,font=\small] {$\vec F$};
+  \draw[fuerza,zmint] (c) -- ++(-1.2,0) node[left,font=\small] {$\vec f_k$};
+  \draw[->,zmute,line width=0.6pt] (1.2,-0.6) -- (2.1,-0.6) node[right,font=\footnotesize] {$a$};
+\end{tikzpicture}
+\end{minipage}
+
+\begin{ejemplo}[El bloque del video]
+Una fuerza horizontal de $\SI{10}{\newton}$ empuja un bloque de $\SI{2}{\kilo\gram}$ sobre una mesa sin fricción.
+En $y$ no hay movimiento: $N-mg=0$, así que $N=2(9.8)=\SI{19.6}{\newton}$. En $x$:
+\[ a=\frac{\sum F_x}{m}=\frac{10}{2}=\SI{5}{\meter\per\second\squared}. \]
+\textbf{Con fricción.} Si la mesa tiene $\mu_k=0.2$, aparece $f_k=0.2\cdot19.6=\SI{3.92}{\newton}$ en contra del movimiento:
+\[ a=\frac{10-3.92}{2}=\SI{3.04}{\meter\per\second\squared}. \]
+\end{ejemplo}
+\begin{ojo}[Masa no es peso, y la normal no siempre es $mg$]
+Un objeto de $\SI{2}{\kilo\gram}$ \emph{pesa} $\SI{19.6}{\newton}$. Y la normal vale $mg$ solo en una superficie horizontal sin
+otras fuerzas verticales: en una rampa, en un ascensor que acelera o si se jala la cuerda hacia arriba, cambia.
+\end{ojo}
+
+%=====================================================================
+\nivel{2-2}{Plano inclinado}
+
+\textbf{Intuición.} En una rampa, el peso sigue apuntando hacia abajo, pero el bloque solo puede moverse a lo largo
+de la rampa. Por eso conviene girar los ejes: uno paralelo al plano y otro perpendicular. Así el peso se parte en
+una parte que \emph{lo hace deslizar} y otra que \emph{lo aprieta contra el plano}.
+
+\begin{minipage}[c]{0.47\linewidth}
+\begin{definicion}[Componentes del peso]
+En un plano inclinado un ángulo $\theta$:
+\[ W_{\parallel}=mg\sen\theta,\qquad W_{\perp}=mg\cos\theta. \]
+La parte paralela apunta plano abajo; la perpendicular, contra el plano. El ángulo entre $\vec W$ y la
+perpendicular al plano es el mismo $\theta$ de la rampa.
+\end{definicion}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.5\linewidth}\centering
+\begin{tikzpicture}[scale=0.9]
+  \fill[zline] (0,0) -- (7,0) -- (7,4.0415) -- cycle;
+  \draw[zink,line width=0.9pt] (0,0) -- (7,0) -- (7,4.0415) -- cycle;
+  \draw[zmute,line width=0.6pt] (1,0) arc (0:30:1); \node[font=\small,text=zmute] at (1.35,0.32) {$\theta$};
+  \coordinate (P) at (4.2,2.4249);
+  \draw[caja,rotate around={30:(P)}] ($(P)+(-0.6,0)$) rectangle ($(P)+(0.6,0.8)$);
+  \coordinate (C) at ($(P)+(120:0.4)$);
+  \draw[fuerza,zcoral] (C) -- ++(0,-1.6) node[below,font=\small] {$m\vec g$};
+  \draw[->,zcoral!70,dashed,line width=0.9pt] (C) -- ++(210:0.8) node[left,font=\small,fill=white,fill opacity=.8,text opacity=1,inner sep=1pt] {$mg\sen\theta$};
+  \draw[->,zcoral!70,dashed,line width=0.9pt] (C) -- ++(300:1.386) node[below right,font=\small,inner sep=1pt] {$mg\cos\theta$};
+  \draw[fuerza,zsky] (C) -- ++(120:1.386) node[above left,font=\small,inner sep=1pt] {$\vec N$};
+  \draw[zmute,line width=0.6pt] ($(C)+(270:0.7)$) arc (270:300:0.7);
+  \node[font=\scriptsize,text=zmute] at ($(C)+(285:0.95)$) {$\theta$};
+  \node[punto] at (C) {};
+\end{tikzpicture}
+\end{minipage}
+
+\begin{propiedad}[Ecuaciones del bloque en la rampa]
+En la dirección perpendicular no hay movimiento, así que $N=mg\cos\theta$. En la dirección del plano:
+\begin{align*}
+\text{sin fricción:}&\quad a=g\sen\theta,\\
+\text{con fricción cinética (bajando):}&\quad a=g\left(\sen\theta-\mu_k\cos\theta\right).
+\end{align*}
+El bloque queda en reposo mientras $mg\sen\theta\le\mu_s\,mg\cos\theta$, es decir, mientras $\tg\theta\le\mu_s$.
+\end{propiedad}
+
+\begin{ejemplo}[La rampa del video: \ang{30}]
+Un bloque de $\SI{4}{\kilo\gram}$ está en un plano de \ang{30}. Su peso es $W=4(9.8)=\SI{39.2}{\newton}$ y
+\[ W_{\parallel}=39.2\sen\ang{30}=\SI{19.6}{\newton}\ \ (\text{la mitad del peso}),\qquad
+   N=W_{\perp}=39.2\cos\ang{30}\approx\SI{33.9}{\newton}. \]
+Sin fricción, $a=9.8\sen\ang{30}=\SI{4.9}{\meter\per\second\squared}$, \emph{sin importar la masa}.
+Si el plano tiene $\mu_k=0.25$:
+\[ a=9.8\left(0.5-0.25\cdot0.866\right)\approx9.8\,(0.2835)\approx\SI{2.78}{\meter\per\second\squared}. \]
+\end{ejemplo}
+\begin{propiedad}[Qué pasa al inclinar más]
+Al subir $\theta$ crece $\sen\theta$ y baja $\cos\theta$: la parte que hace deslizar crece y la normal (y con ella la
+fricción) se achica. En $\theta=\ang{0}$ no hay nada que lo haga deslizar; en $\theta=\ang{90}$ el bloque cae libre, $a=g$.
+\end{propiedad}
+\begin{ojo}[Seno y coseno trocados]
+El error más común es poner $mg\cos\theta$ a lo largo del plano. Comprueba con un caso extremo: si $\theta=\ang{0}$ la
+componente paralela debe ser $0$, y $\sen\ang{0}=0$. Y otra vez: en la rampa $N\neq mg$.
+\end{ojo}
+
+%=====================================================================
+\nivel{2-3}{Trabajo y energía}
+
+\textbf{Intuición.} Una fuerza «hace trabajo» cuando empuja a lo largo del camino. Ese trabajo no se pierde: queda
+guardado como energía de movimiento (cinética) o de altura (potencial).
+
+\begin{minipage}[c]{0.54\linewidth}
+\begin{definicion}[Trabajo de una fuerza constante]
+Si una fuerza constante $\vec F$ actúa mientras el cuerpo se desplaza $d$ en línea recta, y $\varphi$ es el ángulo
+entre la fuerza y el desplazamiento,
+\[ W=F\,d\cos\varphi\qquad(\text{en julios: }\SI{1}{\joule}=\SI{1}{\newton\meter}). \]
+\end{definicion}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.42\linewidth}\centering
+\begin{tikzpicture}
+  \fill[zline] (-0.6,-0.12) rectangle (4.4,0);
+  \draw[caja] (0,0) rectangle (1.4,0.9);
+  \coordinate (c) at (1.4,0.6);
+  \draw[fuerza,zaccent] (c) -- ++(60:1.8) node[above,font=\small] {$\vec F$};
+  \draw[zmute,dashed,line width=0.7pt] (c) -- ++(0.9,0) -- ++(0,1.559);
+  \draw[zmute,line width=0.6pt] ($(c)+(0.5,0)$) arc (0:60:0.5);
+  \node[font=\small,text=zmute] at ($(c)+(30:0.75)$) {$\varphi$};
+  \node[font=\footnotesize,text=zmute,anchor=north] at (2.75,0.55) {$F\cos\varphi$};
+  \draw[->,zink,line width=0.8pt] (0,-0.45) -- (3.6,-0.45);
+  \node[font=\small,anchor=north] at (1.8,-0.5) {$d$};
+\end{tikzpicture}
+\end{minipage}
+
+\begin{itemize}
+\item Solo la parte de la fuerza a lo largo del camino, $F\cos\varphi$, hace trabajo.
+\item Si $\varphi=\ang{90}$ el trabajo es cero: la normal y el peso no hacen trabajo en un piso horizontal.
+\item Si la fuerza va en contra del movimiento ($\varphi=\ang{180}$, como la fricción), el trabajo es negativo.
+\item Si la fuerza cambia a lo largo del camino, el trabajo es el \emph{área} bajo la gráfica de $F$ contra $x$.
+\end{itemize}
+\begin{ejemplo}[Arrastrar una caja con una cuerda]
+Se jala una caja con $\SI{50}{\newton}$ por medio de una cuerda que forma \ang{60} con el piso, a lo largo de $\SI{10}{\meter}$:
+$W=50\cdot10\cos\ang{60}=\SI{250}{\joule}$. La mitad de la fuerza «se gasta» en levantar un poco la caja.
+\end{ejemplo}
+
+\subsection{Energía cinética y potencial}
+\begin{definicion}[Las dos energías mecánicas]
+\begin{itemize}
+\item \clave{Energía cinética} (de movimiento): $E_c=\tfrac12\,m\,v^{2}$.
+\item \clave{Energía potencial gravitatoria} (de altura): $E_p=m\,g\,h$, con $h$ medida desde un nivel que se elige.
+\item \clave{Energía mecánica}: $E_m=E_c+E_p$.
+\end{itemize}
+\end{definicion}
+\begin{propiedad}[Teorema trabajo-energía y conservación]
+\begin{itemize}
+\item El trabajo de la fuerza neta es el cambio de energía cinética: $W_{\text{neto}}=\Delta E_c=\tfrac12mv_f^2-\tfrac12mv_i^2$.
+\item Si solo el peso hace trabajo (sin fricción), la energía mecánica se conserva:
+      $\tfrac12mv_i^2+mgh_i=\tfrac12mv_f^2+mgh_f$.
+\item Con fricción, la energía mecánica disminuye en lo que vale el trabajo de la fricción: $E_{m,f}=E_{m,i}-f_k\,d$.
+\end{itemize}
+\end{propiedad}
+\begin{ejemplo}[La montaña rusa: la potencial se vuelve cinética]
+Un carro parte del reposo en la cima, a $\SI{20}{\meter}$ de altura, y baja por una vía sin fricción.
+La masa se cancela en la conservación:
+\begin{align*}
+\text{a } h=\SI{10}{\meter}:&\quad g(20)=\tfrac12v^2+g(10)\ \Rightarrow\ v=\sqrt{2(9.8)(10)}=\SI{14}{\meter\per\second},\\
+\text{abajo } (h=0):&\quad v=\sqrt{2(9.8)(20)}=\sqrt{392}\approx\SI{19.8}{\meter\per\second}.
+\end{align*}
+\end{ejemplo}
+\begin{figura}[La misma vía con las barras de energía por kilogramo: la potencial (azul) se vuelve cinética (coral)
+y la suma no cambia.]
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[zline,line width=0.4pt] (-0.5,0) -- (10,0);
+  \draw[zaccent,line width=1.4pt,domain=0:9.5,samples=80] plot (\x,{2+2*cos(deg(pi*\x/6))});
+  \foreach \x/\h/\n in {0/4/A,6/0/C,9/2/B} \node[punto] at (\x,\h) {};
+  \node[font=\small,anchor=south] at (0,4.1) {$A$: $h=\SI{20}{\meter}$, $v=0$};
+  \node[font=\small,anchor=north] at (6,-0.1) {$C$: $h=0$, $v\approx\SI{19.8}{\meter\per\second}$};
+  \node[font=\small,anchor=south east,align=right] at (8.85,2.1) {$B$: $h=\SI{10}{\meter}$\ $v=\SI{14}{\meter\per\second}$};
+  % barras (escala: 196 J/kg = 2.4 cm)
+  \begin{scope}[shift={(11.2,0)}]
+    \foreach \i/\n/\p/\k in {0/A/2.4/0,1/B/1.2/1.2,2/C/0/2.4}{
+      \fill[zsky!70] (\i*0.9,0) rectangle ++(0.55,\p);
+      \fill[zcoral!75] (\i*0.9,\p) rectangle ++(0.55,\k);
+      \draw[zink,line width=0.5pt] (\i*0.9,0) rectangle ++(0.55,2.4);
+      \node[font=\small,anchor=north] at (\i*0.9+0.275,-0.05) {$\n$};}
+    \fill[zsky!70] (0,3.0) rectangle ++(0.3,0.25); \node[font=\scriptsize,anchor=west] at (0.35,3.12) {$E_p$};
+    \fill[zcoral!75] (1.1,3.0) rectangle ++(0.3,0.25); \node[font=\scriptsize,anchor=west] at (1.45,3.12) {$E_c$};
+  \end{scope}
+\end{tikzpicture}
+\end{figura}
+\begin{ojo}[Trabajo y energía]
+\begin{itemize}
+\item El trabajo depende del \emph{ángulo}: $F\,d$ solo si la fuerza va en la dirección del desplazamiento.
+\item La rapidez abajo, $v=\sqrt{2gh}$, no depende de la masa ni de la forma de la vía (si no hay fricción); el
+      \emph{tiempo} que tarda sí depende de la forma.
+\item En $E_c=\tfrac12mv^2$ la velocidad va al cuadrado: el doble de rapidez es el cuádruple de energía.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\repaso
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}p{64mm} L@{}}
+\toprule
+Concepto & Fórmula & Unidad y nota\\ \midrule
+Segunda ley & $\sum\vec F=m\,\vec a$ & $\SI{1}{\newton}=\SI{1}{\kilo\gram\meter\per\second\squared}$\\
+Tercera ley & $\vec F_{BA}=-\vec F_{AB}$ & actúan sobre cuerpos distintos\\
+Peso & $W=m\,g$ & \si{\newton}; la masa va en \si{\kilo\gram}\\
+Fricción & $f_k=\mu_kN$,\quad $f_s\le\mu_sN$ & se opone al deslizamiento\\
+Plano inclinado & $W_\parallel=mg\sen\theta$,\quad $N=mg\cos\theta$ & sin fricción $a=g\sen\theta$\\
+Con fricción & $a=g(\sen\theta-\mu_k\cos\theta)$ & reposo si $\tg\theta\le\mu_s$\\
+Trabajo & $W=F\,d\cos\varphi$ & \si{\joule}; negativo si frena\\
+Energías & $E_c=\tfrac12mv^2$,\quad $E_p=mgh$ & \si{\joule}\\
+Trabajo-energía & $W_{\text{neto}}=\Delta E_c$ & vale siempre\\
+Conservación & $E_c+E_p=\text{constante}$ & solo sin fricción\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{ojo}[Errores frecuentes]
+\begin{itemize}
+\item Dibujar en el diagrama de cuerpo libre fuerzas que actúan sobre \emph{otros} cuerpos, o la «fuerza del movimiento».
+\item Cancelar la acción con la reacción: están en cuerpos distintos.
+\item Escribir $N=mg$ en una rampa o en un ascensor que acelera.
+\item Trocar seno y coseno al descomponer el peso en el plano inclinado.
+\item Usar la conservación de la energía cuando hay fricción, o confundir julios con newtons.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\taller
+\begin{ejercicios}
+\item Una astronauta tiene $\SI{65}{\kilo\gram}$ de masa. ¿Cuánto pesa en la Tierra? ¿Cuánto pesa en la Luna, donde
+  $g_L=\SI{1.62}{\meter\per\second\squared}$? ¿Cuál es su masa en la Luna?
+\item Sobre una caja de $\SI{3}{\kilo\gram}$, apoyada en un piso sin fricción, actúan dos fuerzas horizontales.
+  Halla la aceleración (magnitud y dirección) si:
+  \begin{ejercicios}
+  \item $\SI{12}{\newton}$ hacia el este y $\SI{3}{\newton}$ hacia el oeste;
+  \item $\SI{12}{\newton}$ hacia el este y $\SI{9}{\newton}$ hacia el norte.
+  \end{ejercicios}
+\item Dibuja el diagrama de cuerpo libre de: (a) un libro en reposo sobre una mesa; (b) una lámpara que cuelga de un
+  cable; (c) una caja que se empuja rampa arriba con una fuerza paralela al plano, con fricción.
+\item Un bloque de $\SI{5}{\kilo\gram}$ se jala sobre el piso con una fuerza horizontal de $\SI{25}{\newton}$. El
+  coeficiente de fricción cinética es $\mu_k=0.3$. Halla la normal, la fricción y la aceleración.
+\item Una persona de $\SI{60}{\kilo\gram}$ está sobre una báscula dentro de un ascensor. ¿Qué marca la báscula (en
+  newtons) si el ascensor (a) sube acelerando a $\SI{2}{\meter\per\second\squared}$; (b) se mueve con velocidad
+  constante; (c) baja acelerando a $\SI{2}{\meter\per\second\squared}$?
+\item Un bloque de $\SI{8}{\kilo\gram}$ está sobre una rampa de \ang{20}.
+  \begin{ejercicios}
+  \item Halla la componente del peso paralela al plano y la normal.
+  \item Si no hubiera fricción, ¿con qué aceleración bajaría?
+  \item Si $\mu_s=0.5$, ¿se queda quieto? Si es así, ¿cuánto vale la fricción estática?
+  \end{ejercicios}
+\item Un esquiador parte del reposo y baja $\SI{40}{\meter}$ por una pendiente de \ang{30} con $\mu_k=0.1$. Halla su
+  aceleración y su rapidez al final de la pendiente.
+\item Se arrastra una caja de $\SI{20}{\kilo\gram}$, que parte del reposo, a lo largo de $\SI{15}{\meter}$ con una
+  cuerda que hace $\SI{80}{\newton}$ a \ang{30} sobre la horizontal. La fricción vale $\SI{40}{\newton}$.
+  \begin{ejercicios}
+  \item Halla el trabajo de la cuerda, de la fricción, del peso y de la normal.
+  \item Halla el trabajo neto y la rapidez final de la caja.
+  \end{ejercicios}
+\item La gráfica muestra la fuerza (en la dirección del movimiento) que un motor ejerce sobre un carrito según su
+  posición. Halla el trabajo total que hace el motor entre $x=0$ y $x=\SI{14}{\meter}$.
+
+  \begin{center}
+  \begin{tikzpicture}
+  \begin{axis}[zplot,width=8.6cm,height=4.2cm,xmin=0,xmax=15.5,ymin=0,ymax=26,xtick={2,4,...,14},ytick={10,20},clip=false,
+    xlabel={$x$ (\si{\meter})},ylabel={$F$ (\si{\newton})},xlabel style={at={(1,0)},anchor=west},ylabel style={at={(0,1)},anchor=south}]
+    \addplot[zaccent] coordinates {(0,20) (10,20) (14,0)};
+  \end{axis}
+  \end{tikzpicture}
+  \end{center}
+\item Una patinadora de $\SI{50}{\kilo\gram}$ parte del reposo desde lo alto de una rampa de $\SI{7.2}{\meter}$.
+  \begin{ejercicios}
+  \item Sin fricción, ¿con qué rapidez pasa por el punto más bajo ($h=0$) y por una loma de $\SI{2.2}{\meter}$?
+  \item En realidad llega al punto más bajo a $\SI{11}{\meter\per\second}$. ¿Cuánta energía mecánica se perdió por fricción?
+  \end{ejercicios}
+\end{ejercicios}
+
+\respuestas
+\begin{respuestascortas}
+\begin{soluciones}
+\item $W=65(9.8)=\SI{637}{\newton}$; en la Luna $65(1.62)=\SI{105.3}{\newton}$; la masa sigue siendo $\SI{65}{\kilo\gram}$.
+\item (a) $\frac{12-3}{3}=\SI{3}{\meter\per\second\squared}$ al este. (b) $F=\sqrt{12^2+9^2}=\SI{15}{\newton}$,
+  $a=\SI{5}{\meter\per\second\squared}$, a $\approx\ang{36.9}$ al norte del este.
+\item (a) $\vec W$ abajo y $\vec N$ arriba, iguales. (b) $\vec W$ abajo y $\vec T$ arriba, iguales. (c) $\vec W$ vertical,
+  $\vec N$ perpendicular al plano, $\vec F$ plano arriba y $\vec f_k$ plano abajo.
+\item $N=\SI{49}{\newton}$; $f_k=0.3(49)=\SI{14.7}{\newton}$; $a=\frac{25-14.7}{5}=\SI{2.06}{\meter\per\second\squared}$.
+\item $N-mg=ma$: (a) $60(11.8)=\SI{708}{\newton}$; (b) $\SI{588}{\newton}$; (c) $60(7.8)=\SI{468}{\newton}$.
+\item (a) $W_\parallel=78.4\sen\ang{20}\approx\SI{26.8}{\newton}$, $N=78.4\cos\ang{20}\approx\SI{73.7}{\newton}$.
+  (b) $a=9.8\sen\ang{20}\approx\SI{3.35}{\meter\per\second\squared}$. (c) $\tg\ang{20}\approx0.36<0.5$: se queda quieto,
+  con $f_s=\SI{26.8}{\newton}$ (no $\mu_sN$).
+\item $a=9.8(0.5-0.1\cdot0.866)\approx\SI{4.05}{\meter\per\second\squared}$; $v=\sqrt{2(4.05)(40)}\approx\SI{18.0}{\meter\per\second}$.
+\item (a) $W_T=80\cdot15\cos\ang{30}\approx\SI{1039}{\joule}$; $W_f=-\SI{600}{\joule}$; peso y normal: $0$.
+  (b) $W_{\text{neto}}\approx\SI{439}{\joule}=\tfrac12(20)v^2\Rightarrow v\approx\SI{6.63}{\meter\per\second}$.
+\item Área bajo la gráfica: $20\cdot10+\tfrac12\cdot4\cdot20=\SI{240}{\joule}$.
+\item (a) $v=\sqrt{2(9.8)(7.2)}\approx\SI{11.9}{\meter\per\second}$; en la loma $v=\sqrt{2(9.8)(5)}\approx\SI{9.90}{\meter\per\second}$.
+  (b) $50(9.8)(7.2)-\tfrac12(50)(11^2)=3528-3025=\SI{503}{\joule}$.
+\end{soluciones}
+\end{respuestascortas}
+
+\end{document}

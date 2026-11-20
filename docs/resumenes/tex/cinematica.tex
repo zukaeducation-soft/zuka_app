@@ -1,0 +1,336 @@
+% Resumen del mundo «Pista de la Cinemática» (Física Mecánica, mundo 1: cinemática). Lecciones fis-1, fis-2.
+% Usa los ejemplos de los videos (x = 4t, x = t^2, proyectil a 20 m/s); el taller trae ejercicios nuevos.
+\documentclass[11pt,a4paper]{article}
+\usepackage{zuka-resumen}
+\zukacurso{fis}
+\zukamundo{1}{Pista de la Cinemática}{Cinemática}
+\sisetup{per-mode=symbol}
+
+\begin{document}
+
+\portada{%
+La \clave{cinemática} describe \emph{cómo} se mueve un cuerpo, sin preguntar todavía por qué: dónde está,
+qué tan rápido va y cómo cambia esa rapidez. En este mundo aprendiste los dos movimientos rectilíneos
+básicos y viste que un proyectil no es más que esos dos movimientos ocurriendo a la vez. Este resumen reúne
+las definiciones, las ecuaciones, las gráficas y los ejemplos de los videos, y termina con un taller.
+En todo el resumen se usa $g=\SI{9.8}{\meter\per\second\squared}$.}{%
+\item \textbf{Nivel 1-1.} MRU y MRUA: posición, velocidad, aceleración, ecuaciones y gráficas $x$--$t$ y $v$--$t$.
+\item \textbf{Nivel 1-2.} Tiro parabólico: caída libre, descomposición de la velocidad, tiempo de vuelo, altura máxima y alcance.}
+
+\begin{clavebox}[LAS TRES IDEAS QUE SOSTIENEN TODO EL MUNDO]
+\renewcommand{\arraystretch}{1.5}\begin{tabular}{@{}c@{\qquad}c@{\qquad}c@{}}
+$x=x_0+v\,t$ & $v=v_0+a\,t$ & $\begin{cases}x=v_{0x}\,t\\ y=v_{0y}\,t-\tfrac12 g t^2\end{cases}$\\[2pt]
+\small velocidad constante & \small la velocidad cambia parejo & \small dos movimientos independientes
+\end{tabular}
+\end{clavebox}
+
+%=====================================================================
+\nivel{1-1}{MRU y MRUA}
+
+\subsection{Posición, velocidad y aceleración}
+Para describir un movimiento en línea recta se elige un origen, un sentido positivo y un reloj.
+\begin{definicion}[Las tres magnitudes del movimiento]
+\begin{itemize}
+\item \clave{Posición} $x(t)$: dónde está el cuerpo en el instante $t$ (en \si{\meter}).
+      El \clave{desplazamiento} entre dos instantes es $\Delta x=x_f-x_i$.
+\item \clave{Velocidad media}: $\displaystyle \bar v=\frac{\Delta x}{\Delta t}$ (en \si{\meter\per\second}).
+      Tiene signo: indica hacia dónde se mueve el cuerpo.
+\item \clave{Aceleración media}: $\displaystyle \bar a=\frac{\Delta v}{\Delta t}$ (en \si{\meter\per\second\squared}):
+      cuánto cambia la velocidad en cada segundo.
+\end{itemize}
+\end{definicion}
+\begin{ojo}[Velocidad no es rapidez]
+La \emph{rapidez} es el tamaño de la velocidad y nunca es negativa. Un auto que va y vuelve al punto de partida
+tiene desplazamiento $0$ y velocidad media $0$, aunque haya recorrido muchos metros.
+Recuerda además que $\SI{1}{\kilo\meter\per\hour}=\tfrac{1000}{3600}\,\si{\meter\per\second}$: para pasar de
+\si{\kilo\meter\per\hour} a \si{\meter\per\second} se divide entre $3.6$.
+\end{ojo}
+
+\subsection{Movimiento rectilíneo uniforme (MRU)}
+\textbf{Intuición.} En el MRU el cuerpo avanza los mismos metros en cada segundo: la velocidad no cambia y,
+por eso, la aceleración es cero.
+\begin{definicion}[MRU]
+Un movimiento es \clave{rectilíneo uniforme} si su velocidad $v$ es constante. Entonces
+\[ x(t)=x_0+v\,t,\qquad v(t)=v,\qquad a=0. \]
+\end{definicion}
+\begin{figura}[Corredor del video: $x_0=0$ y $v=\SI{4}{\meter\per\second}$. En $x$--$t$ la pendiente es la velocidad;
+en $v$--$t$ el área bajo la recta es el desplazamiento.]
+\begin{tikzpicture}
+\begin{axis}[zplot,width=6.6cm,height=4.8cm,xmin=0,xmax=5.6,ymin=0,ymax=23,xtick={1,...,5},ytick={4,8,...,20},
+  xlabel={$t$ (\si{\second})},ylabel={$x$ (\si{\meter})},xlabel style={at={(1,0)},anchor=west},ylabel style={at={(0,1)},anchor=south},clip=false]
+  \addplot[zaccent,domain=0:5] {4*x};
+  \draw[zmute,dashed,line width=0.6pt] (axis cs:2,8) -- (axis cs:4,8) -- (axis cs:4,16);
+  \node[font=\footnotesize,text=zmute,anchor=north] at (axis cs:3,8) {$\Delta t=2$};
+  \node[font=\footnotesize,text=zmute,anchor=west] at (axis cs:4,12) {$\Delta x=8$};
+\end{axis}
+\end{tikzpicture}\qquad
+\begin{tikzpicture}
+\begin{axis}[zplot,width=6.6cm,height=4.8cm,xmin=0,xmax=5.6,ymin=0,ymax=6,xtick={1,...,5},ytick={2,4},
+  xlabel={$t$ (\si{\second})},ylabel={$v$ (\si{\meter\per\second})},xlabel style={at={(1,0)},anchor=west},ylabel style={at={(0,1)},anchor=south},clip=false]
+  \fill[zaccent!18] (axis cs:0,0) rectangle (axis cs:5,4);
+  \addplot[zaccent,domain=0:5] {4};
+  \node[font=\footnotesize] at (axis cs:2.5,2) {área $=4\cdot5=20$};
+\end{axis}
+\end{tikzpicture}
+\end{figura}
+\begin{ejemplo}[El corredor del video]
+Con $x(t)=4t$, a los $\SI{5}{\second}$ el corredor está en $x(5)=4\cdot5=\SI{20}{\meter}$. La pendiente de la recta
+$x$--$t$ es $\frac{\Delta x}{\Delta t}=\frac{8}{2}=\SI{4}{\meter\per\second}$, justo la velocidad, y el rectángulo bajo
+la gráfica $v$--$t$ mide $4\cdot5=20$: el mismo desplazamiento.
+\end{ejemplo}
+
+\subsection{Movimiento rectilíneo uniformemente acelerado (MRUA)}
+\textbf{Intuición.} En el MRUA la velocidad sube (o baja) la misma cantidad en cada segundo. Como el cuerpo va cada
+vez más rápido, recorre cada segundo más metros que el anterior y la gráfica $x$--$t$ se curva: es una parábola.
+\begin{definicion}[MRUA]
+Un movimiento es \clave{rectilíneo uniformemente acelerado} si su aceleración $a$ es constante. Entonces
+\begin{align*}
+v(t)&=v_0+a\,t, & x(t)&=x_0+v_0\,t+\tfrac12\,a\,t^{2}, & v^{2}&=v_0^{2}+2a\,(x-x_0).
+\end{align*}
+La tercera ecuación sale de eliminar $t$ entre las dos primeras y sirve cuando no se conoce el tiempo.
+\end{definicion}
+\begin{figura}[Móvil del video: parte del reposo con $a=\SI{2}{\meter\per\second\squared}$, así que $x=t^2$ y $v=2t$.
+El área del triángulo bajo $v$--$t$ es otra vez el desplazamiento.]
+\begin{tikzpicture}
+\begin{axis}[zplot,width=6.6cm,height=4.8cm,xmin=0,xmax=5.6,ymin=0,ymax=27,xtick={1,...,5},ytick={5,10,...,25},
+  xlabel={$t$ (\si{\second})},ylabel={$x$ (\si{\meter})},xlabel style={at={(1,0)},anchor=west},ylabel style={at={(0,1)},anchor=south},clip=false]
+  \addplot[zaccent,domain=0:5,samples=60] {x^2};
+  \addplot[zcoral,dashed,line width=0.8pt,domain=2.6:5.4] {8*x-16};
+  \node[font=\footnotesize,text=zcoral,anchor=west] at (axis cs:3.3,7) {pendiente $=v(4)=8$};
+  \node[punto] at (axis cs:4,16) {};
+\end{axis}
+\end{tikzpicture}\qquad
+\begin{tikzpicture}
+\begin{axis}[zplot,width=6.6cm,height=4.8cm,xmin=0,xmax=5.6,ymin=0,ymax=12,xtick={1,...,5},ytick={2,4,...,10},
+  xlabel={$t$ (\si{\second})},ylabel={$v$ (\si{\meter\per\second})},xlabel style={at={(1,0)},anchor=west},ylabel style={at={(0,1)},anchor=south},clip=false]
+  \fill[zaccent!18] (axis cs:0,0) -- (axis cs:4,8) -- (axis cs:4,0) -- cycle;
+  \addplot[zaccent,domain=0:5] {2*x};
+  \node[font=\footnotesize,anchor=west] at (axis cs:4.1,3) {$\tfrac12\cdot4\cdot8=16$};
+\end{axis}
+\end{tikzpicture}
+\end{figura}
+\begin{ejemplo}[El móvil del video a los 4 segundos]
+Datos: $x_0=0$, $v_0=0$, $a=\SI{2}{\meter\per\second\squared}$, $t=\SI{4}{\second}$.
+\begin{align*}
+v(4)&=0+2\cdot4=\SI{8}{\meter\per\second},\\
+x(4)&=0+0\cdot4+\tfrac12\cdot2\cdot4^{2}=\SI{16}{\meter}.
+\end{align*}
+Comprobación con la tercera ecuación: $v^2=0+2\cdot2\cdot16=64$, y $\sqrt{64}=8$. En la gráfica $x$--$t$, la recta
+tangente en $t=4$ tiene pendiente $8$: la pendiente de $x$--$t$ es la velocidad \emph{en ese instante}.
+\end{ejemplo}
+\begin{ejemplo}[Frenar también es acelerar]
+Un auto va a $\SI{72}{\kilo\meter\per\hour}$ y frena con aceleración constante $a=-\SI{5}{\meter\per\second\squared}$.
+Primero, $72\div3.6=\SI{20}{\meter\per\second}$. Se detiene cuando $v=0$:
+\[ 0=20-5t\ \Rightarrow\ t=\SI{4}{\second},\qquad 0^2=20^2+2(-5)\,\Delta x\ \Rightarrow\ \Delta x=\frac{400}{10}=\SI{40}{\meter}. \]
+\end{ejemplo}
+\begin{propiedad}[Cómo leer las gráficas]
+\begin{itemize}
+\item Pendiente de $x$--$t$ $=$ velocidad. \quad Pendiente de $v$--$t$ $=$ aceleración.
+\item Área bajo $v$--$t$ (con signo) $=$ desplazamiento. Si la gráfica está bajo el eje, el cuerpo retrocede.
+\end{itemize}
+\end{propiedad}
+\begin{ojo}[Signos y ecuaciones]
+La aceleración negativa no siempre significa «frenar»: frena cuando $v$ y $a$ tienen signos opuestos.
+Y las ecuaciones del MRUA solo valen si $a$ es \emph{constante} durante todo el tramo.
+\end{ojo}
+
+%=====================================================================
+\nivel{1-2}{Tiro parabólico}
+
+\subsection{Caída libre}
+Cerca de la superficie de la Tierra, y sin resistencia del aire, todo cuerpo cae con la misma aceleración,
+dirigida hacia abajo: $g=\SI{9.8}{\meter\per\second\squared}$. Con el eje $y$ hacia arriba es un MRUA con $a=-g$:
+\[ v_y(t)=v_{0y}-g\,t,\qquad y(t)=y_0+v_{0y}\,t-\tfrac12\,g\,t^{2}. \]
+\begin{ejemplo}[Una piedra que se suelta]
+Desde un balcón a $\SI{19.6}{\meter}$ se suelta una piedra ($v_{0y}=0$). Llega al suelo cuando $y=0$:
+\[ 0=19.6-4.9\,t^{2}\ \Rightarrow\ t^{2}=4\ \Rightarrow\ t=\SI{2}{\second},\qquad v_y=-9.8\cdot2=-\SI{19.6}{\meter\per\second}. \]
+\end{ejemplo}
+
+\subsection{Dos movimientos a la vez}
+\textbf{Intuición.} Un proyectil hace dos cosas al mismo tiempo y sin estorbarse: hacia los lados avanza con MRU
+(nada lo empuja ni lo frena en horizontal) y hacia arriba y abajo hace una caída libre. Lo único que comparten es el
+reloj $t$.
+\begin{definicion}[Ecuaciones del tiro parabólico]
+Si se lanza desde el origen con rapidez $v_0$ y ángulo $\theta$ sobre la horizontal, la velocidad inicial se descompone en
+\[ v_{0x}=v_0\cos\theta,\qquad v_{0y}=v_0\sen\theta, \]
+y en cada instante
+\begin{align*}
+x(t)&=v_0\cos\theta\;t, & v_x&=v_0\cos\theta \ \ (\text{constante}),\\
+y(t)&=v_0\sen\theta\;t-\tfrac12\,g\,t^{2}, & v_y&=v_0\sen\theta-g\,t.
+\end{align*}
+Al despejar $t=\frac{x}{v_0\cos\theta}$ y sustituir en $y(t)$ se obtiene la \clave{ecuación de la trayectoria}, una parábola:
+\[ y=x\tg\theta-\frac{g\,x^{2}}{2\,v_0^{2}\cos^{2}\theta}. \]
+\end{definicion}
+\begin{figura}[El proyectil del video: $v_0=\SI{20}{\meter\per\second}$ y $\theta=\ang{50}$. La flecha horizontal
+($v_x$) no cambia; la vertical ($v_y$) se achica, vale cero arriba y crece hacia abajo.]
+\begin{tikzpicture}[x=0.33cm,y=0.33cm]
+  \draw[zline,line width=0.4pt] (0,0) grid[step=5] (45,15);
+  \draw[->,zink,line width=0.8pt] (-1,0) -- (46,0) node[right,font=\small] {$x$ (\si{\meter})};
+  \draw[->,zink,line width=0.8pt] (0,-1) -- (0,16) node[above,font=\small] {$y$ (\si{\meter})};
+  \foreach \x in {10,20,30,40} \node[font=\footnotesize,text=zmute,below] at (\x,0) {\x};
+  \foreach \y in {5,10} \node[font=\footnotesize,text=zmute,left] at (0,\y) {\y};
+  \draw[zaccent,line width=1.3pt,domain=0:40.2,samples=80] plot (\x,{1.19175*\x-0.029644*\x*\x});
+  % velocidades (escala 0.45 m por m/s)
+  \draw[zmute,dashed,line width=0.6pt] (5.79,0) -- (5.79,6.89) -- (0,6.89);
+  \draw[->,zink,line width=1.1pt] (0,0) -- (5.79,6.89);
+  \node[font=\footnotesize,text=zink,anchor=south east] at (2.9,3.6) {$\vec v_0$};
+  \node[font=\footnotesize,text=zcoral,anchor=east] at (0,6.89) {$v_{0y}$};
+  \node[font=\footnotesize,text=zsky,anchor=north] at (5.79,-0.2) {$v_{0x}$};
+  \draw[zmute,line width=0.6pt] (2,0) arc (0:50:2);
+  \node[font=\footnotesize,text=zmute] at (2.7,1.15) {$\theta$};
+  \node[punto] at (20.1,11.98) {};
+  \draw[->,zsky,line width=1pt] (20.1,11.98) -- (25.89,11.98);
+  \node[font=\footnotesize,anchor=south] at (20.1,12.4) {$v_y=0$};
+  \node[font=\footnotesize,text=zsky,anchor=south] at (24.2,11.98) {$v_x$};
+  \draw[zmute,dashed,line width=0.6pt] (20.1,0) -- (20.1,11.98);
+  \node[font=\footnotesize,text=zmute,anchor=west] at (20.3,6) {$H\approx\SI{12.0}{\meter}$};
+  \node[punto] at (32,7.79) {};
+  \draw[->,zsky,line width=1pt] (32,7.79) -- (37.79,7.79);
+  \draw[->,zcoral,line width=1pt] (32,7.79) -- (32,3.71);
+  \node[font=\footnotesize,text=zsky,anchor=south] at (36,7.79) {$v_x$};
+  \node[font=\footnotesize,text=zcoral,anchor=east] at (32,4.6) {$v_y$};
+  \node[font=\footnotesize,text=zmute,anchor=north] at (40.2,-1.1) {$R\approx\SI{40.2}{\meter}$};
+\end{tikzpicture}
+\end{figura}
+
+\subsection{Tiempo de vuelo, altura máxima y alcance}
+Si el proyectil cae a la misma altura desde la que salió:
+\begin{itemize}
+\item \clave{Altura máxima}: arriba $v_y=0$, así que $t_{\text{sub}}=\dfrac{v_0\sen\theta}{g}$ y
+      $H=\dfrac{v_0^{2}\sen^{2}\theta}{2g}$.
+\item \clave{Tiempo de vuelo}: el doble de lo que tarda en subir, $T=\dfrac{2\,v_0\sen\theta}{g}$.
+\item \clave{Alcance}: $R=v_{0x}\,T=\dfrac{2\,v_0^{2}\sen\theta\cos\theta}{g}=\dfrac{v_0^{2}\sen 2\theta}{g}$.
+\end{itemize}
+\begin{ejemplo}[El proyectil del video]
+Con $v_0=\SI{20}{\meter\per\second}$ y $\theta=\ang{50}$:
+\begin{align*}
+v_{0x}&=20\cos\ang{50}\approx\SI{12.86}{\meter\per\second}, & v_{0y}&=20\sen\ang{50}\approx\SI{15.32}{\meter\per\second},\\
+T&=\frac{2(15.32)}{9.8}\approx\SI{3.13}{\second}, & H&=\frac{15.32^{2}}{2(9.8)}\approx\SI{11.98}{\meter},\\
+R&=12.86\cdot3.13\approx\SI{40.2}{\meter}. & &
+\end{align*}
+\end{ejemplo}
+\begin{propiedad}[Ángulo de máximo alcance]
+Como $\sen 2\theta\le 1$, el alcance es máximo cuando $2\theta=\ang{90}$, es decir, con $\theta=\ang{45}$:
+\[ R_{\max}=\frac{v_0^{2}}{g};\qquad\text{con } v_0=\SI{20}{\meter\per\second},\quad R_{\max}=\frac{400}{9.8}\approx\SI{40.8}{\meter}. \]
+Además, dos ángulos \clave{complementarios} ($\theta$ y $\ang{90}-\theta$) dan el mismo alcance, porque
+$\sen(\ang{180}-2\theta)=\sen 2\theta$: \ang{15} y \ang{75} llegan ambos a $\approx\SI{20.4}{\meter}$.
+\end{propiedad}
+\begin{figura}[Mismo $v_0=\SI{20}{\meter\per\second}$ y cinco ángulos: \ang{45} llega más lejos; \ang{30} y \ang{60}
+caen en el mismo sitio, igual que \ang{15} y \ang{75}.]
+\begin{tikzpicture}
+\begin{axis}[zplot,width=10cm,height=6cm,axis equal image,xmin=0,xmax=45,ymin=0,ymax=22,
+  xtick={10,20,30,40},ytick={5,10,15,20},grid=none,clip=false,
+  xlabel={$x$ (\si{\meter})},ylabel={$y$ (\si{\meter})},xlabel style={at={(1,0)},anchor=west},ylabel style={at={(0,1)},anchor=south},
+  every axis plot/.append style={line width=1pt,samples=60}]
+  \foreach \a/\c in {15/zsky,30/zmint,45/zaccent,60/zsun,75/zcoral}{
+    \edef\temp{\noexpand\addplot[\c,domain=0:{400*sin(2*\a)/9.8}] {x*tan(\a)-9.8*x^2/(2*400*cos(\a)^2)};}\temp}
+  \node[font=\scriptsize,text=zsky,anchor=south] at (axis cs:10.2,1.4) {\ang{15}};
+  \node[font=\scriptsize,text=zmint,anchor=south] at (axis cs:17.7,5.1) {\ang{30}};
+  \node[font=\scriptsize,text=zaccent,anchor=south] at (axis cs:20.4,10.2) {\ang{45}};
+  \node[font=\scriptsize,text=zsun,anchor=south] at (axis cs:17.7,15.3) {\ang{60}};
+  \node[font=\scriptsize,text=zcoral,anchor=south] at (axis cs:10.2,19.0) {\ang{75}};
+\end{axis}
+\end{tikzpicture}
+\end{figura}
+
+\begin{ojo}[Errores frecuentes en el tiro parabólico]
+\begin{itemize}
+\item En el punto más alto la velocidad \emph{no} es cero: solo $v_y=0$; sigue avanzando con $v_x$.
+\item La aceleración vale $g$ hacia abajo en \emph{todo} el vuelo, también al subir y en la cima.
+\item Las fórmulas de $T$, $H$ y $R$ suponen que sale y cae a la misma altura; si no, se plantea $y(t)$ y se resuelve.
+\item Calculadora en grados (no en radianes) cuando el ángulo está en grados.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\clearpage
+\repaso
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}p{62mm} L@{}}
+\toprule
+Movimiento & Ecuaciones & Gráficas\\ \midrule
+MRU & $x=x_0+v\,t$,\quad $a=0$ & $x$--$t$ recta; $v$--$t$ horizontal\\
+MRUA & $v=v_0+a\,t$,\quad $x=x_0+v_0t+\tfrac12at^2$ & $x$--$t$ parábola; $v$--$t$ recta de pendiente $a$\\
+MRUA sin $t$ & $v^2=v_0^2+2a\,\Delta x$ & \\
+Caída libre & $a=-g$,\quad $y=y_0+v_{0y}t-\tfrac12gt^2$ & $g=\SI{9.8}{\meter\per\second\squared}$\\
+Proyectil & $x=v_0\cos\theta\,t$,\quad $y=v_0\sen\theta\,t-\tfrac12gt^2$ & trayectoria parabólica\\
+Vuelo & $T=\dfrac{2v_0\sen\theta}{g}$,\quad $H=\dfrac{v_0^2\sen^2\theta}{2g}$ & misma altura de salida y llegada\\
+Alcance & $R=\dfrac{v_0^2\sen2\theta}{g}$ & máximo con $\theta=\ang{45}$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{ojo}[Errores frecuentes]
+\begin{itemize}
+\item Mezclar unidades: pasar todo a \si{\meter}, \si{\second} y \si{\meter\per\second} antes de calcular.
+\item Confundir desplazamiento con distancia recorrida, o velocidad con rapidez.
+\item Usar las ecuaciones del MRUA en un tramo donde la aceleración cambia.
+\item Creer que la velocidad es cero en la cima del tiro parabólico, o que $g$ «se apaga» al subir.
+\item Olvidar que $x$ y $y$ comparten el mismo $t$: el tiempo es el puente entre los dos movimientos.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\taller
+\begin{ejercicios}
+\item Convierte: (a) $\SI{90}{\kilo\meter\per\hour}$ a \si{\meter\per\second}; (b) $\SI{6}{\meter\per\second}$ a
+  \si{\kilo\meter\per\hour}.
+\item Dos autos se mueven por la misma vía recta con $x_A=10+15t$ y $x_B=100-5t$ ($x$ en metros, $t$ en segundos).
+  ¿En qué instante y en qué posición se encuentran?
+\item Una moto parte del reposo y alcanza $\SI{30}{\meter\per\second}$ en $\SI{12}{\second}$ con aceleración constante.
+  Halla su aceleración y la distancia que recorrió en ese tiempo.
+\item Un tren que va a $\SI{25}{\meter\per\second}$ frena de manera uniforme y se detiene en $\SI{125}{\meter}$.
+  ¿Cuál fue su aceleración? ¿Cuánto tardó en detenerse?
+\item La gráfica muestra la velocidad de un ciclista en función del tiempo.
+
+  \begin{center}
+  \begin{tikzpicture}
+  \begin{axis}[zplot,width=8.6cm,height=4.4cm,xmin=0,xmax=15.5,ymin=0,ymax=10,xtick={2,4,...,14},ytick={4,8},
+    xlabel={$t$ (\si{\second})},ylabel={$v$ (\si{\meter\per\second})},xlabel style={at={(1,0)},anchor=west},ylabel style={at={(0,1)},anchor=south},clip=false]
+    \addplot[zaccent] coordinates {(0,0) (4,8) (10,8) (14,0)};
+  \end{axis}
+  \end{tikzpicture}
+  \end{center}
+  \begin{ejercicios}
+  \item Halla la aceleración en cada uno de los tres tramos.
+  \item ¿Qué distancia recorrió en los $\SI{14}{\second}$? ¿Cuál fue su velocidad media?
+  \item Esboza la gráfica $x$--$t$ correspondiente, con $x(0)=0$.
+  \end{ejercicios}
+\item Una piedra soltada desde un puente tarda $\SI{2.5}{\second}$ en llegar al agua. ¿A qué altura está el puente y con
+  qué rapidez llega la piedra al agua?
+\item Se lanza una pelota verticalmente hacia arriba a $\SI{14.7}{\meter\per\second}$. Halla el tiempo que tarda en llegar
+  al punto más alto, la altura máxima y el tiempo total hasta volver a la mano.
+\item Una canica rueda por una mesa de $\SI{1.225}{\meter}$ de alto y sale del borde con velocidad horizontal de
+  $\SI{3}{\meter\per\second}$. ¿Cuánto tarda en caer, a qué distancia del borde toca el piso y con qué rapidez llega?
+\item Un balón se patea desde el suelo a $\SI{25}{\meter\per\second}$ con un ángulo de \ang{30}.
+  \begin{ejercicios}
+  \item Halla $v_{0x}$, $v_{0y}$, el tiempo de vuelo, la altura máxima y el alcance.
+  \item ¿Con qué otro ángulo se lograría el mismo alcance con la misma rapidez?
+  \end{ejercicios}
+\item Una jugadora lanza una pelota desde el suelo a $\SI{14}{\meter\per\second}$ con un ángulo de \ang{45}. A
+  $\SI{12}{\meter}$ hay un muro de $\SI{3}{\meter}$ de alto. ¿Pasa la pelota por encima del muro? ¿Por cuántos metros?
+  ¿Dónde caería si no hubiera muro?
+\end{ejercicios}
+
+\respuestas
+\begin{respuestascortas}
+\begin{soluciones}
+\item (a) $90\div3.6=\SI{25}{\meter\per\second}$. (b) $6\cdot3.6=\SI{21.6}{\kilo\meter\per\hour}$.
+\item $10+15t=100-5t\Rightarrow t=\SI{4.5}{\second}$, en $x=\SI{77.5}{\meter}$.
+\item $a=\frac{30}{12}=\SI{2.5}{\meter\per\second\squared}$; $x=\tfrac12(2.5)(12)^2=\SI{180}{\meter}$.
+\item $0=25^2+2a(125)\Rightarrow a=-\SI{2.5}{\meter\per\second\squared}$; $t=\frac{25}{2.5}=\SI{10}{\second}$.
+\item (a) $2$, $0$ y $-\SI{2}{\meter\per\second\squared}$. (b) Área: $16+48+16=\SI{80}{\meter}$;
+  $\bar v=\frac{80}{14}\approx\SI{5.71}{\meter\per\second}$. (c) Parábola que se abre hacia arriba hasta $(4,16)$,
+  recta de pendiente $8$ hasta $(10,64)$ y parábola que se aplana hasta $(14,80)$.
+\item $h=\tfrac12(9.8)(2.5)^2\approx\SI{30.6}{\meter}$; $v=9.8\cdot2.5=\SI{24.5}{\meter\per\second}$.
+\item $t=\frac{14.7}{9.8}=\SI{1.5}{\second}$; $H=\frac{14.7^2}{19.6}\approx\SI{11.0}{\meter}$; total $\SI{3}{\second}$.
+\item $1.225=4.9t^2\Rightarrow t=\SI{0.5}{\second}$; $x=3\cdot0.5=\SI{1.5}{\meter}$; $v_y=\SI{4.9}{\meter\per\second}$,
+  $\abs{\vv v}=\sqrt{3^2+4.9^2}\approx\SI{5.75}{\meter\per\second}$.
+\item (a) $v_{0x}\approx\SI{21.65}{\meter\per\second}$, $v_{0y}=\SI{12.5}{\meter\per\second}$; $T\approx\SI{2.55}{\second}$;
+  $H\approx\SI{7.97}{\meter}$; $R=\frac{625\sen\ang{60}}{9.8}\approx\SI{55.2}{\meter}$. (b) \ang{60}.
+\item Con $\tg\ang{45}=1$ y $2\cos^2\ang{45}=1$, la trayectoria da $y(12)=12-\frac{9.8\cdot144}{196}=12-7.2=\SI{4.8}{\meter}$:
+  pasa $\SI{1.8}{\meter}$ por encima. Sin muro, $R=\frac{14^2}{9.8}=\SI{20}{\meter}$.
+\end{soluciones}
+\end{respuestascortas}
+
+\end{document}

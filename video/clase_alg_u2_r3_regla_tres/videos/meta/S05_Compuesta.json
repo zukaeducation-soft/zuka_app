@@ -1,0 +1,43 @@
+{
+ "scene": "S05_Compuesta",
+ "duration": 66.267,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Regla de tres compuesta",
+   "hold": 65.667
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 16.1,
+   "text": "A veces intervienen más de dos magnitudes: es una regla de tres compuesta. Tres impresoras imprimen novecientas hojas en cinco minutos. ¿Cuánto tardan cinco impresoras en imprimir mil ochocientas hojas?",
+   "fox": true
+  },
+  {
+   "start": 16.1,
+   "end": 25.4,
+   "text": "El truco es cambiar una magnitud a la vez, dejando quietas las demás, y preguntar cada vez si es directa o inversa.",
+   "fox": false
+  },
+  {
+   "start": 25.4,
+   "end": 42.733,
+   "text": "Primero cambiamos las impresoras, con las mismas novecientas hojas. El doble de impresoras termina en la mitad del tiempo: es inversa. Tres impresoras por cinco minutos dan quince; con cinco impresoras, quince entre cinco: tres minutos.",
+   "fox": false
+  },
+  {
+   "start": 42.733,
+   "end": 53.833,
+   "text": "Ahora cambiamos las hojas, ya con cinco impresoras. El doble de hojas toma el doble de tiempo: es directa. Tres minutos por dos: seis minutos.",
+   "fox": false
+  },
+  {
+   "start": 53.833,
+   "end": 65.267,
+   "text": "En una sola cuenta: cinco minutos, por tres quintos, por dos. Cada razón va al derecho si la magnitud es directa y volteada si es inversa.",
+   "fox": false
+  }
+ ]
+}

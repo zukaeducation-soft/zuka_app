@@ -1,0 +1,24 @@
+{
+ "scene": "S08_Cierre",
+ "duration": 21.4,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Repasemos",
+   "hold": 13.2
+  },
+  {
+   "time": 13.8,
+   "title": "Cierre",
+   "hold": 20.4
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 12.8,
+   "text": "Una proporción iguala dos razones, y los productos cruzados la resuelven. Directa si el cociente se mantiene, inversa si se mantiene el producto.",
+   "fox": false
+  }
+ ]
+}

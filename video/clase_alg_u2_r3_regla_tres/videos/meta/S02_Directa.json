@@ -1,0 +1,37 @@
+{
+ "scene": "S02_Directa",
+ "duration": 45.4,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Regla de tres directa",
+   "hold": 44.8
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 12.367,
+   "text": "Segundo paso: decidir si es directa o inversa. Si compro el doble de kilos, pago el doble: las dos se multiplican por el mismo número. Es directa.",
+   "fox": true
+  },
+  {
+   "start": 12.367,
+   "end": 23.267,
+   "text": "Una forma de resolverla es reducir a la unidad. Si cuatro kilos cuestan diez mil, un kilo cuesta diez mil entre cuatro: dos mil quinientos.",
+   "fox": false
+  },
+  {
+   "start": 23.267,
+   "end": 29.6,
+   "text": "Y siete kilos cuestan siete veces eso: diecisiete mil quinientos pesos.",
+   "fox": false
+  },
+  {
+   "start": 29.6,
+   "end": 44.4,
+   "text": "La otra forma es con una proporción. En una directa, la razón de los kilos es igual a la razón de los pesos: cuatro es a siete como diez mil es a equis. Multiplicando en cruz sale lo mismo.",
+   "fox": false
+  }
+ ]
+}
