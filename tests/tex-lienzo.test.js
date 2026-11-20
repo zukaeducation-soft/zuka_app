@@ -36,6 +36,6 @@ test('arma-negacion acepta las respuestas conmutadas (¬q ∨ ¬p, 7 + 3x…) qu
   const course = get(ctx, 'COURSES').find(c => c.id === 'preuda');
   const rounds = course.units.flatMap(u => [...u.lessons.flatMap(l => l.ex || []), ...(u.exam?.items || []).map(i => i.ex)])
     .filter(e => e && e.game === 'arma-negacion').flatMap(e => e.params.rounds).filter(r => r.alt);
-  assert.ok(rounds.length >= 8);
+  assert.ok(rounds.length >= 1);   // una ronda por ejercicio desde el 2026-11-20 (spec preuda-razonamiento-diez)
   rounds.forEach(r => r.alt.forEach(a => assert.ok(g.grade({ rounds: [{ f: a }] }, { rounds: [r] }).ok, JSON.stringify(a))));
 });

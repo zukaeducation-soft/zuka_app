@@ -155,6 +155,11 @@ const CONCEPTOS_PU = {
     ] },
     beats: ['Antes, 100 de 400 estudiantes: la cuarta parte del colegio.', 'Ahora hay más ciclistas, pero el colegio creció más: 110 de 500.', 'La cantidad subió y la proporción bajó: son dos preguntas distintas.'],
   },
+  'suponer': {
+    title: 'Suponer y buscar el choque',
+    scene: { type: 'pasos', lines: [{ t: 'supón: N dice la verdad', s: 14 }, { t: '→  L y M dicen la verdad', s: 14 }, { t: '→  M afirma: «N miente»', s: 14 }, 'contradicción: N miente'] },
+    beats: ['Escoge a alguien y supón que dice la verdad.', 'Saca todo lo que se sigue de esa suposición.', 'Si aparece algo que choca con lo supuesto, hay una contradicción.', 'Una suposición que lleva a contradicción se descarta: era falsa.'],
+  },
 };
 if (typeof CONCEPTOS !== 'undefined') Object.assign(CONCEPTOS, CONCEPTOS_PU);
 
@@ -339,6 +344,32 @@ GYM_RETOS.push(
     ],
     answer: 'Los ciclistas aumentaron un 10 %, pero su proporción bajó del 25 % al 22 %.',
     wrap: 'Ante una afirmación sobre datos, separa dos preguntas: ¿cambió la cantidad? y ¿cambió la proporción? Cuando el total también cambia, las dos respuestas pueden ir en sentidos contrarios.',
+  },
+);
+
+GYM_RETOS.push(
+  {
+    id: 'gym-testigos', after: ['pu-lo-5'], level: 3,
+    title: 'Los tres testigos', strategy: 'Suponer y buscar la contradicción',
+    problem: 'Tres testigos declaran. Lucas dice: «Mateo miente». Mateo dice: «Nadia miente». Nadia dice: «Lucas y Mateo dicen la verdad». ¿Quién dice la verdad y quién miente?',
+    steps: [
+      { title: 'Supón y busca el choque', concept: 'suponer',
+        coach: 'No adivines. Escoge a la persona cuya frase dice más cosas, supón que dice la verdad y mira si todo encaja o si algo choca.',
+        ex: play('completa-solucion', 'Completa el razonamiento', { q: 'Lucas dice: «Mateo miente». Mateo dice: «Nadia miente». Nadia dice: «Lucas y Mateo dicen la verdad». Supón que Nadia dice la verdad. ¿Qué pasa?',
+          lines: ['Si Nadia dice la verdad, entonces Lucas y Mateo [[dicen la verdad]]', 'Pero Mateo afirma que Nadia [[miente]]: eso choca con lo que se supuso', 'Hay una [[contradicción]]: la suposición era falsa y Nadia miente'], extra: ['mienten', 'coincidencia'] },
+          'Suponer que Nadia dice la verdad obliga a creerle a Mateo, y Mateo dice que Nadia miente. Las dos cosas no pueden pasar a la vez.', { hint: 'Si Nadia dice la verdad, su frase es cierta: ¿qué dice su frase sobre los otros dos?' }),
+        hints: ['La frase de Nadia habla de Lucas y de Mateo. Si es cierta, ¿qué pasa con lo que dice Mateo?', 'Mateo estaría diciendo la verdad, y Mateo afirma que Nadia miente.'],
+        note: 'Suponer que Nadia dice la verdad lleva a una contradicción: Nadia miente' },
+      { title: 'Encadena lo que queda',
+        coach: 'Ya hay un dato firme. Úsalo para revisar la frase de quien habló de esa persona, y después la del que falta.',
+        ex: play('quien-miente', 'Marca quién miente y quién dice la verdad', { rounds: [{ people: [
+          { name: 'Lucas', say: 'Mateo miente', f: t => !t[1] }, { name: 'Mateo', say: 'Nadia miente', f: t => !t[2] }, { name: 'Nadia', say: 'Lucas y Mateo dicen la verdad', f: t => t[0] && t[1] }] }] },
+          'Nadia miente, así que Mateo (que lo afirma) dice la verdad. Y Lucas, que acusa a Mateo de mentir, miente.', { hint: 'Empieza por quien habló de la persona que ya sabes que miente.' }),
+        hints: ['Mateo afirma algo que ya comprobaste. ¿Dice la verdad?', 'Mateo dice la verdad. Lucas afirma lo contrario de eso.'],
+        note: 'Nadia miente, Mateo dice la verdad y Lucas miente' },
+    ],
+    answer: 'Solo Mateo dice la verdad; Lucas y Nadia mienten.',
+    wrap: 'En los problemas de verdad y mentira: supón que alguien dice la verdad, saca las consecuencias y busca un choque. Si lo hay, esa persona miente, y ese dato firme destraba a los demás.',
   },
 );
 
