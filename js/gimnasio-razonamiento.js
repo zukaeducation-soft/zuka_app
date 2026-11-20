@@ -184,6 +184,37 @@ const CONCEPTOS_PU = {
     scene: { type: 'pasos', lines: [{ t: 'peor suerte: roja, azul, verde', s: 14 }, { t: 'la siguiente repite color', s: 14 }, '3 + 1 = 4'] },
     beats: ['Imagina la peor suerte posible: cada bola sale de un color distinto.', 'Cuando ya salió una de cada color, la siguiente tiene que repetir.', 'Para estar seguros: el peor caso y una más.'],
   },
+  'todo-con-una-x': {
+    title: 'Todo con una sola x',
+    scene: { type: 'barra', bars: [
+      { label: 'Lina', b: 0, segs: [{ w: .3, t: 'x', c: 'a' }] },
+      { label: 'Sara: 4 más', b: 1, segs: [{ w: .3, t: 'x', c: 'a' }, { w: .12, t: '4', c: 'g' }] },
+      { label: 'Eva: el doble', b: 2, segs: [{ w: .3, t: 'x', c: 'a' }, { w: .3, t: 'x', c: 'a' }] },
+    ] },
+    beats: ['Elige como $x$ la cantidad de la que dependen las demás: la edad de Lina.', 'Sara tiene 4 más: su barra es $x + 4$.', 'Eva tiene el doble: $2x$. Las tres barras juntas suman 48.'],
+  },
+  'edades-tiempo': {
+    title: 'Edades: hoy y después',
+    scene: { type: 'tabla', hw: 52, cols: ['hoy', 'después'], rows: ['hijo', 'madre'],
+      cells: [[{ t: 'x', b: 0 }, { t: 'x + 12', b: 1 }], [{ t: '3x', b: 0 }, { t: '3x + 12', b: 1 }]],
+      hl: [{ r: 0, c: 1, rs: 2, col: 'ok', b: 2 }], foot: { t: '3x + 12 = 2(x + 12)', b: 2 } },
+    beats: ['Hoy: el hijo tiene $x$ años y la madre, el triple.', 'El tiempo pasa igual para los dos: a cada edad se le suman 12.', 'La condición del futuro se escribe con las edades del futuro.'],
+  },
+  'mezcla-valor': {
+    title: 'En una mezcla se suman valores',
+    scene: { type: 'pasos', lines: ['valor = kilos · precio', { t: '12x + 8(20 − x) = 9 · 20', s: 15 }, 'se suman valores, no precios'] },
+    beats: ['Cada café aporta su valor: sus kilos por su precio.', 'El valor de la mezcla es la suma de los dos valores.', 'Nunca se promedian los precios sin mirar los kilos de cada uno.'],
+  },
+  'eliminar': {
+    title: 'Restar para eliminar',
+    scene: { type: 'pasos', lines: ['3 panes + 2 jugos = 12', '1 pan + 2 jugos = 8', 'se restan: 2 panes = 4'] },
+    beats: ['Dos recibos con las mismas cosas, en cantidades distintas.', 'Los dos recibos tienen la misma cantidad de jugos.', 'Al restar los recibos, los jugos desaparecen y queda una sola incógnita.'],
+  },
+  'venn-dos': {
+    title: 'Una encuesta en dos círculos',
+    scene: { type: 'venn', a: 'prensa', b: 'televisión', regs: { out: { t: '20', b: 0, c: 'mute' }, ab: { t: '15', b: 1, c: 'ok' }, a: { t: '30', b: 2 }, b: { t: '15', b: 2 } } },
+    beats: ['Los 20 que no hacen nada quedan fuera de los dos círculos: adentro hay 60.', 'Las listas suman $45 + 30 = 75$. Sobran 15: están en los dos círculos.', 'Lo que queda de cada lista va en su zona de «solo»: 30 y 15.'],
+  },
 };
 if (typeof CONCEPTOS !== 'undefined') Object.assign(CONCEPTOS, CONCEPTOS_PU);
 
@@ -421,6 +452,31 @@ GYM_RETOS.push(
   },
 );
 
+GYM_RETOS.push(
+  {
+    id: 'gym-noticias', after: ['pu-cj-1', 'pu-cj-2'], level: 2,
+    title: 'La encuesta de las noticias', strategy: 'Quitar a los de afuera y buscar lo que sobra',
+    problem: 'En una encuesta a 80 personas, 45 leen prensa digital, 30 ven noticieros de televisión y 20 no hacen ninguna de las dos cosas. ¿Cuántas personas hacen las dos? ¿Cuántas solo leen prensa digital?',
+    steps: [
+      { title: 'Halla la intersección', concept: 'venn-dos',
+        coach: 'Empieza por quitar a los que no hacen nada: los demás están en al menos una de las dos listas. Si al sumar las dos listas sobra gente, los que sobran se contaron dos veces.',
+        ex: play('solapa-barras', 'Solapa las barras hasta que todo cuadre', { rounds: [{ labels: ['prensa digital', 'televisión'], total: 80, a: 45, b: 30, none: 20 }] },
+          'Hacen algo $80 - 20 = 60$ personas. Las listas suman 75: sobran 15, que están en las dos.', { hint: 'Compara la suma de las dos listas con los que hacen al menos una cosa.' }),
+        hints: ['Resta del total a los que no hacen ninguna: esa es la unión.', 'La unión tiene 60 personas y las dos listas juntas suman 75.'],
+        note: 'Los dos: 45 + 30 − 60 = 15' },
+      { title: 'Llena las zonas y comprueba',
+        coach: 'Con la intersección en la mano, llena el diagrama de adentro hacia afuera y comprueba que todas las zonas juntas dan el total de encuestados.',
+        ex: play('completa-solucion', 'Completa el diagrama', { q: 'De 80 encuestados, 45 leen prensa digital, 30 ven noticieros de televisión, 15 hacen las dos cosas y 20 no hacen ninguna. Llena las zonas del diagrama.',
+          lines: ['Solo prensa digital: $45 - 15 =$ [[30]]', 'Solo televisión: $30 - 15 =$ [[15]]', 'Las cuatro zonas suman $30 + 15 + 15 + 20 =$ [[80]]: cuadra con el total'], extra: ['45', '60', '75'] },
+          'A cada lista se le quitan los que están en las dos. Las zonas (30, 15, 15 y 20) completan los 80 encuestados.', { hint: 'Empieza por el centro del diagrama y resta.' }),
+        hints: ['A cada lista quítale los que están en las dos.', 'Solo prensa son 30. Haz lo mismo con la otra lista y suma las cuatro zonas.'],
+        note: 'Zonas: 30 solo prensa, 15 los dos, 15 solo televisión y 20 ninguna = 80' },
+    ],
+    answer: 'Hacen las dos cosas 15 personas, y 30 solo leen prensa digital.',
+    wrap: 'En una encuesta de dos listas: quita a los que no están en ninguna, compara la suma de las listas con lo que queda (el exceso es la intersección) y llena el diagrama del centro hacia afuera. Al final, las zonas deben sumar el total.',
+  },
+);
+
 // Concepto de cada paso de los retos que ya existían: { reto: [concepto del paso 1, del paso 2, …] } (null = sin concepto).
 const GYM_CONCEPT_DE = {
   'gym-concreto': ['razon-en-partes', 'aumento-como-factor', null],
@@ -435,6 +491,10 @@ const GYM_CONCEPT_DE = {
   'gym-prima': ['fraccion-del-resto', null, null],
   'gym-examen': [null, 'promedio-suma'],
   'gym-peor': ['peor-caso', null],
+  'gym-hermanas': ['todo-con-una-x', null],
+  'gym-madre': ['edades-tiempo', null],
+  'gym-cafe': ['mezcla-valor', null],
+  'gym-recibos': ['eliminar', null, null],
   // (los mundos siguientes añaden aquí)
 };
 for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (c && r.steps[i]) r.steps[i].concept = c; });
