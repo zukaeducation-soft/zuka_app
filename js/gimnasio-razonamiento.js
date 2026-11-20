@@ -100,6 +100,30 @@ const CONCEPTOS_PU = {
     scene: { type: 'pasos', lines: ['precio · 0.70 = 70', 'se deshace dividiendo', '70 ÷ 0.70 = 100'] },
     beats: ['Quitar el 30 % fue multiplicar el precio por 0.70.', 'Para volver atrás se hace la operación contraria: dividir entre el mismo factor.', 'Sumarle el 30 % al precio final no sirve: ese 30 % era de otro número.'],
   },
+  'casillas-multiplican': {
+    title: 'Las casillas se multiplican',
+    scene: { type: 'arbol', levels: [{ n: 2, b: 0, name: '1.ª casilla' }, { n: 3, b: 1, name: '2.ª casilla' }], foot: { t: '2 · 3 = 6', b: 2 } },
+    beats: ['Cada casilla abre tantas ramas como opciones tiene.', 'La casilla siguiente abre sus opciones desde cada rama.', 'Por eso las opciones de cada casilla se multiplican.'],
+  },
+  'complemento': {
+    title: 'Al menos uno, por resta',
+    scene: { type: 'barra', bars: [
+      { label: 'todos los casos', b: 0, segs: [{ w: 1, t: 'todos', c: 'a' }] },
+      { label: 'los que NO sirven', b: 1, segs: [{ w: .3, t: 'ninguno', c: 'bad' }, { w: .7, t: '', c: 'mute', dim: 1 }] },
+      { label: 'los que sirven', b: 2, segs: [{ w: .3, t: '', c: 'mute', dim: 1 }, { w: .7, t: 'todos − ninguno', c: 'ok' }] },
+    ] },
+    beats: ['Contar «al menos uno» caso por caso es largo: hay muchos casos.', 'Lo contrario es un solo caso fácil: «ninguno».', 'Al menos uno = todos menos ninguno.'],
+  },
+  'repetidas-dividen': {
+    title: 'Las letras repetidas dividen',
+    scene: { type: 'pasos', lines: ['A₁ A₂  =  A₂ A₁', 'cada palabra se contó 2! veces', 'n! ÷ repeticiones'] },
+    beats: ['Si las letras repetidas fueran distintas, cada palabra saldría varias veces.', 'Dos letras iguales se cambian entre sí de $2!$ maneras sin que la palabra cambie.', 'Por eso se divide $n!$ entre el factorial de cada repetición.'],
+  },
+  'orden-no-importa': {
+    title: 'Cuando el orden no importa',
+    scene: { type: 'pasos', lines: [{ t: 'A B C    A C B    B A C', s: 14 }, { t: 'B C A    C A B    C B A', s: 14 }, '6 filas  =  1 comité', 'se divide entre 3! = 6'] },
+    beats: ['Con orden, un mismo grupo aparece varias veces.', 'Tres personas se pueden ordenar de $3! = 6$ maneras.', 'Las seis filas son un solo comité.', 'Sin orden: los ordenamientos se dividen entre 6.'],
+  },
 };
 if (typeof CONCEPTOS !== 'undefined') Object.assign(CONCEPTOS, CONCEPTOS_PU);
 
@@ -193,6 +217,9 @@ const GYM_CONCEPT_DE = {
   'gym-muro': ['trabajo-por-hora', null, null],
   'gym-tele': ['aumento-como-factor', 'cambios-en-cadena', 'deshacer-porcentaje'],
   'gym-chaqueta': ['deshacer-porcentaje', 'deshacer-porcentaje'],
+  'gym-claves': ['casillas-multiplican', 'complemento'],
+  'gym-papaya': [null, 'repetidas-dividen', null],
+  'gym-comite': [null, 'orden-no-importa', null],
   // (los mundos siguientes añaden aquí)
 };
 for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (c && r.steps[i]) r.steps[i].concept = c; });
