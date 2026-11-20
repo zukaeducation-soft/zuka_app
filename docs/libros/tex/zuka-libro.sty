@@ -53,6 +53,7 @@
 \RequirePackage{eso-pic}
 \RequirePackage{lineno}
 \RequirePackage{pifont}
+\RequirePackage[normalem]{ulem}
 \RequirePackage[hidelinks]{hyperref}
 
 \usetikzlibrary{arrows.meta,calc,patterns,positioning,shapes.geometric,decorations.pathreplacing,angles,quotes,
@@ -471,6 +472,18 @@
   \end{tikzpicture}}
 
 \newcommand{\parte}[1]{\InputIfFileExists{#1}{}{}}
+
+% ---------- lectura: preguntas comentadas ----------
+\definecolor{zok}{HTML}{15803D}
+\newenvironment{comentada}[1]{%
+  \begin{tcolorbox}[zbase,colback=white,colframe=zline,boxrule=.5pt,left=4mm]
+  {\sffamily\small\bfseries\color{zolive}Pregunta comentada}\par\vspace{2pt}#1\par\vspace{4pt}
+  \begin{list}{}{\leftmargin=9mm\labelwidth=8mm\labelsep=1mm\itemsep=4pt\topsep=0pt\parsep=0pt}}
+  {\end{list}\end{tcolorbox}}
+\newcommand{\bien}[3]{\item[\op{#1}{\color{zok}\ding{51}}] #2\par{\footnotesize\color{zmute}#3}}
+\newcommand{\mal}[3]{\item[\op{#1}{\color{zcoral}\ding{55}}] #2\par{\footnotesize\color{zmute}#3}}
+\newcommand{\pf}[1]{(\S\,#1)}% referencia a un párrafo del texto
+\newcommand{\tecnica}[1]{\subsection{#1}}
 
 % ---------- utilidades de dibujo ----------
 \newcommand{\recta}[3]{% \recta{min}{max}{marcas extra} recta numérica sencilla
