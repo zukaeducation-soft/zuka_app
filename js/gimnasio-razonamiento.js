@@ -124,6 +124,13 @@ const CONCEPTOS_PU = {
     scene: { type: 'pasos', lines: [{ t: 'A B C    A C B    B A C', s: 14 }, { t: 'B C A    C A B    C B A', s: 14 }, '6 filas  =  1 comité', 'se divide entre 3! = 6'] },
     beats: ['Con orden, un mismo grupo aparece varias veces.', 'Tres personas se pueden ordenar de $3! = 6$ maneras.', 'Las seis filas son un solo comité.', 'Sin orden: los ordenamientos se dividen entre 6.'],
   },
+  'cubo-pintado': {
+    title: 'El cubo pintado, por posición',
+    scene: { type: 'tabla', hw: 52, cols: ['3 caras', '2 caras', '1 cara', 'ninguna'], rows: ['dónde', 'cuántos'],
+      cells: [[{ t: 'esquina', b: 0 }, { t: 'arista', b: 1 }, { t: 'centro', b: 2 }, { t: 'adentro', b: 3 }], [{ t: '8', b: 0 }, { t: '24', b: 1 }, { t: '24', b: 2 }, { t: '8', b: 3 }]],
+      hl: [{ r: 0, c: 0, rs: 2, col: 'a', b: 0 }, { r: 0, c: 1, rs: 2, col: 'g', b: 1 }, { r: 0, c: 2, rs: 2, col: 'f', b: 2 }, { r: 0, c: 3, rs: 2, col: 'ok', b: 3 }] },
+    beats: ['Las esquinas tocan tres caras del cubo: siempre son 8.', 'En cada arista, sin contar las esquinas, quedan cubitos con dos caras pintadas.', 'En el centro de cada cara están los de una sola cara pintada.', 'Adentro queda un cubo más pequeño, sin nada de pintura.'],
+  },
 };
 if (typeof CONCEPTOS !== 'undefined') Object.assign(CONCEPTOS, CONCEPTOS_PU);
 
@@ -206,6 +213,31 @@ GYM_RETOS.push(
     ],
     answer: 'Ganó Gloria y Dario llegó de último.',
     wrap: 'En un acertijo de orden: primero el dato que fija un puesto, después las parejas que van pegadas (ocupan dos casillas seguidas) y al final las pistas negativas, que descartan. Así casi nunca hay que probar todos los casos.',
+  },
+);
+
+GYM_RETOS.push(
+  {
+    id: 'gym-cubo', after: ['pu-es-2'], level: 2,
+    title: 'El cubo pintado de rojo', strategy: 'Clasificar por posición y comprobar con el total',
+    problem: 'Un cubo de madera de 4 cm de arista se pinta de rojo por fuera y luego se corta en cubitos de 1 cm de arista. ¿Cuántos cubitos tienen pintura en exactamente dos caras? ¿Cuántos no tienen pintura?',
+    steps: [
+      { title: 'Clasifica por posición', concept: 'cubo-pintado',
+        coach: 'No cuentes cubito por cubito. Cada cubito queda en una de cuatro posiciones: esquina, arista, centro de cara o interior. La posición dice cuántas caras pintadas tiene.',
+        ex: play('cubo-pintado', 'Clasifica los cubitos del cubo de 4', { rounds: [{ n: 4 }] },
+          'Las aristas (sin las esquinas) dan los de dos caras: $12 \\cdot 2 = 24$. Adentro queda un cubo de arista 2: $2^3 = 8$ sin pintura.', { hint: 'Fíjate en dónde está el cubito: de eso depende cuántas caras le quedaron pintadas.' }),
+        hints: ['Un cubito de esquina toca tres caras del cubo grande; uno de arista, dos; uno del centro de una cara, una sola.', 'Cada arista tiene 4 cubitos: quita los 2 de las esquinas. Adentro, la arista se acorta 2 cm.'],
+        note: 'Dos caras: los 24 de las aristas. Sin pintura: los del cubo de adentro, 8' },
+      { title: 'Comprueba con el total',
+        coach: 'Un buen cierre: sumar todas las clases y ver que dan el total de cubitos. Si no cuadra, alguna clase quedó mal contada.',
+        ex: play('completa-solucion', 'Completa la comprobación', { q: 'El cubo de 4 cm se cortó en cubitos de 1 cm. Cuenta cada clase de cubito y comprueba que entre todas completan el cubo.',
+          lines: ['Esquinas, con 3 caras pintadas: [[8]]', 'Aristas sin esquinas, con 2 caras: $12 \\cdot 2 =$ [[24]]', 'Centros de las caras, con 1 cara: $6 \\cdot 4 =$ [[24]]', 'Adentro, sin pintura: $2^3 =$ [[8]]. Entre todos suman [[64]], que es $4^3$'], extra: ['12', '16', '27'] },
+          '$8 + 24 + 24 + 8 = 64 = 4^3$: no sobra ni falta ningún cubito.', { hint: 'Usa los números del cubo: cuántas esquinas, cuántas aristas y cuántas caras tiene.' }),
+        hints: ['Un cubo tiene 8 esquinas, 12 aristas y 6 caras. En cada arista, quita los dos cubitos de las esquinas.', 'En cada cara, los de una sola cara pintada forman un cuadrado de $2 \\times 2$.'],
+        note: 'Comprobación: 8 + 24 + 24 + 8 = 64 cubitos' },
+    ],
+    answer: 'Hay 24 cubitos con dos caras pintadas y 8 sin pintura.',
+    wrap: 'En los problemas de cubos pintados no se cuenta de a uno: se clasifica por posición (esquinas, aristas, centros de cara e interior) y se comprueba que las clases sumen el total, $n^3$.',
   },
 );
 

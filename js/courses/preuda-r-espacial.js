@@ -123,3 +123,121 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
       play('reloj-espejo', 'Reloj', { rounds: [{ seen: 120 }] }, 'Espejo 2:00, real 10:00.', { hint: 'Resta de 12.' })],
   ]);
 });
+
+// Mundo 6 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
+  diezLesson('pu-es-1', [
+    ['ruta-cuadras', 0, 'Un domiciliario va de la esquina A a la B por las calles. Traza el camino más corto', 'Por las calles no hay atajos en diagonal: hay que avanzar 4 cuadras a lo ancho y 3 a lo alto, 7 en total, sin devolverse.'],
+    ['brujula-pasos', 0, 'Un explorador sigue las instrucciones de su mapa. Llévalo hasta donde termina', 'Norte y sur se compensan ($3 - 1 = 2$ al norte) y este y oeste también ($4 - 2 = 2$ al este): termina 2 cuadras al norte y 2 al este de la salida.'],
+    ['punto-distancia', 1, 'La casa de Lina queda a 5 cuadras del colegio y a 3 de la iglesia, caminando por las calles. Ubícala', 'Avanzando 4 cuadras por la calle del colegio y 1 hacia un lado quedan 5 al colegio y $2 + 1 = 3$ a la iglesia.'],
+    ['mapa-escala', 1, 'En el plano de un parque, 2 cm son 5 km. Ubica el mirador que está a 7.5 km', 'Cada centímetro vale 2.5 km: $7.5 \\div 2.5 = 3$ cm.'],
+    ['elige-comite', 1, 'Un camino de 4 cuadras tiene 2 hacia el norte. Cada manera de escogerlas es un camino', 'Escoger cuáles 2 de las 4 cuadras van al norte: $\\tfrac{4 \\cdot 3}{2} = 6$ caminos.'],
+    ['triangulo-pascal', 0, 'Los caminos que llegan a cada esquina son números de Pascal. Completa la fila 6', 'Fila 6: 1, 6, 15, 20, 15, 6, 1. A cada esquina se llega desde sus dos vecinas: los caminos se suman.'],
+    ['camino-pascal', 0, 'Traza todos los caminos más cortos hasta la estrella'],
+  ], [
+    sol('Un repartidor sale de la bodega y recorre 5 cuadras al norte, 3 al este, 2 al sur y 7 al oeste. Caminando por las calles, ¿a cuántas cuadras de la bodega termina? ¿Cuántas cuadras había recorrido?',
+      ['Norte y sur se compensan: $5 - 2 =$ [[3]] cuadras al norte', 'Este y oeste: $7 - 3 =$ [[4]] cuadras al oeste', 'Para volver por las calles camina $3 + 4 =$ [[7]] cuadras', 'Había recorrido $5 + 3 + 2 + 7 =$ [[17]] cuadras'],
+      ['5', '10', '12'],
+      'El recorrido suma todos los tramos (17), pero la posición final solo depende de lo que no se compensó: 3 al norte y 4 al oeste. En línea recta estaría a 5 cuadras; por las calles, a 7.',
+      'Separa los movimientos en dos ejes: norte contra sur y este contra oeste.'),
+    err('En una cuadrícula de calles, ¿cuántos caminos más cortos hay entre dos esquinas separadas 2 cuadras al este y 2 cuadras al norte?',
+      ['Todo camino más corto tiene 4 cuadras: 2 al este y 2 al norte', 'En cada cuadra se decide entre dos direcciones: $2 \\cdot 2 \\cdot 2 \\cdot 2$ caminos', 'Hay 16 caminos más cortos'], 1,
+      ['Solo hay que escoger cuáles 2 de las 4 cuadras van al norte: $\\tfrac{4 \\cdot 3}{2} = 6$ caminos', 'Se suman las cuadras de cada dirección: $2 + 2 = 4$ caminos', 'Se multiplican las cuadras de cada dirección: $2 \\cdot 2 = 4$ caminos'],
+      'No se puede decidir libremente en cada cuadra: un camino con cuatro pasos al este no llega. Deben ser exactamente 2 y 2: EENN, ENEN, ENNE, NEEN, NENE y NNEE. Son 6.',
+      'Escribe algunos caminos con letras E y N. ¿Sirve un camino que tenga tres E?'),
+    opc('Desde su casa, Julia camina 6 cuadras al este y luego 8 cuadras al norte hasta la biblioteca. La distancia en línea recta entre su casa y la biblioteca, medida en cuadras, es:',
+      ['14', '10', '2', '7'], 1,
+      'Los dos tramos forman un ángulo recto: $\\sqrt{6^2 + 8^2} = \\sqrt{100} = 10$.',
+      'En línea recta no se suman los tramos: forman los catetos de un triángulo rectángulo.'),
+  ]);
+
+  diezLesson('pu-es-2', [
+    ['torres-vistas', 1, 'Se conocen la vista de frente y la de lado de una construcción. Ármala con la mayor cantidad de cubos', 'Cada columna puede subir hasta la menor de las dos alturas que la tapan: aquí caben columnas de 1 y de 2 en cada fila, 6 cubos.'],
+    ['cubos-ocultos', 1, 'En una bodega apilaron cajas contra una esquina. Cuéntalas todas, también las escondidas', 'Se cuenta por columnas: $3 + 2 + 1$ en la primera fila, $2 + 1$ en la segunda y 1 en la tercera: 10.'],
+    ['cubo-pintado', 0, 'Un cubo de 4 de arista se pinta por fuera y se corta en cubitos. Clasifícalos', '8 esquinas con tres caras pintadas; 24 en las aristas, con dos; 24 en los centros de las caras, con una; y 8 adentro, sin pintura.'],
+    ['cubo-bloques', 0, 'Arma un cubo macizo con 27 bloquecitos', '$3^3 = 27$: tres bloques de arista.'],
+    ['lado-cubo', 0, 'Una caja cúbica contiene 64 cubitos. Halla su arista', '$4 \\cdot 4 \\cdot 4 = 64$: la arista mide 4.'],
+    ['factor-area', 0, 'Un cubito crece hasta estar formado por 125. ¿Por cuánto se multiplicó la arista?', 'El volumen crece con el cubo del factor: $125 = 5^3$, la arista se multiplicó por 5.'],
+    ['vuela-precios', 0, 'Vuela a la respuesta', 'Cubo de 5 pintado: adentro queda uno de 3, con 27 cubitos. Escalera de 4 escalones: $4 + 3 + 2 + 1 = 10$. Cubo de 3: un cubito con una cara en cada cara, 6.'],
+  ], [
+    sol('Un cubo de 6 cm de arista se pinta de azul por fuera y luego se corta en cubitos de 1 cm de arista. ¿Cuántos cubitos quedan con exactamente una cara pintada y cuántos quedan sin pintura?',
+      ['En cada cara, los de una sola cara pintada forman un cuadrado de $4 \\cdot 4 =$ [[16]] cubitos', 'Con las 6 caras: $6 \\cdot 16 =$ [[96]] cubitos con una cara pintada', 'Sin pintura queda el cubo de adentro, de arista $6 - 2 =$ [[4]] cm', 'Son $4^3 =$ [[64]] cubitos sin pintura'],
+      ['216', '36', '24'],
+      'La pintura solo llega a la capa de afuera. En cada cara se quita el borde (que tiene más caras pintadas) y adentro queda un cubo con 2 cm menos de arista.',
+      'Mira una cara del cubo: los cubitos del borde pertenecen también a otra cara. ¿Cuáles no?'),
+    err('Un cubo macizo de 2 cm de arista pesa 40 g. ¿Cuánto pesa un cubo del mismo material que tiene 6 cm de arista?',
+      ['La arista se multiplicó por $6 \\div 2 = 3$', 'El peso depende del volumen del cubo', 'El volumen también se multiplica por 3: pesa $40 \\cdot 3 = 120$ g'], 2,
+      ['El volumen se multiplica por $3^3 = 27$: pesa $40 \\cdot 27 = 1\\,080$ g', 'El volumen se multiplica por $3^2 = 9$: pesa $40 \\cdot 9 = 360$ g', 'El volumen se multiplica por $3 + 3 = 6$: pesa $40 \\cdot 6 = 240$ g'],
+      'El cubo crece en sus tres dimensiones: largo, ancho y alto se triplican, y el volumen se multiplica por $3 \\cdot 3 \\cdot 3 = 27$.',
+      'Imagina cuántos cubos pequeños caben dentro del grande: a lo largo, a lo ancho y a lo alto.'),
+    opc('Contra una pared se arma una escalera de cubos: la primera columna tiene 1 cubo, la segunda 2, la tercera 3 y la cuarta 4, y la escalera tiene 2 cubos de fondo. La cantidad total de cubos de la escalera es:',
+      ['10', '16', '20', '24'], 2,
+      'De frente se ven $1 + 2 + 3 + 4 = 10$ cubos, y detrás de cada uno hay otro: $10 \\cdot 2 = 20$.',
+      'Cuenta primero una sola capa y después piensa cuántas capas iguales hay hacia el fondo.'),
+  ]);
+
+  diezLesson('pu-es-3', [
+    ['arma-desarrollo', 0, 'A este molde de cartón le faltan caras para cerrar un cubo. Complétalo'],
+    ['caras-opuestas', 0, 'Este desarrollo se dobla para armar un cubo. Empareja las caras que quedan opuestas', 'En una fila de tres caras, la primera y la tercera quedan opuestas: B con D, A con E y C con F.'],
+    ['dado-siete', 0, 'En un dado se ven el 3 arriba, el 1 al frente y el 2 a la derecha. Halla las caras escondidas', 'Las opuestas suman 7: abajo está el 4, atrás el 6 y a la izquierda el 5.'],
+    ['desarrollo-caja', 0, 'Una caja de base $2 \\times 2$ se arma con 40 cm² de cartón. Halla su altura', '$2(2 \\cdot 2 + 2c + 2c) = 40$: $4 + 4c = 20$, así que $c = 4$.'],
+    ['lado-cubo', 1, 'Un cubo armado contiene 27 cubitos. Halla su arista', '$3 \\cdot 3 \\cdot 3 = 27$: la arista mide 3.'],
+    ['prisma-capas', 1, 'Una caja de base $2 \\times 5$ debe tener un volumen de 70. Apila las capas', 'La base mide 10 y cada capa suma 10: con 7 capas, $10 \\cdot 7 = 70$.'],
+    ['rompe-cambios', 0, 'Manda la pelota a la cara correcta', 'Frente al 2 está el 5. Si se ven 1, 2 y 3, las escondidas son 6, 5 y 4: suman 15. El cubo tiene 11 desarrollos distintos.'],
+  ], [
+    sol('Se apilan tres dados corrientes, uno encima de otro, sobre una mesa. En un dado corriente las caras opuestas suman 7. En la cara de arriba del dado superior se ve un 2. ¿Cuánto suman todas las caras horizontales que no se ven (las que quedan tapadas entre los dados y la que toca la mesa)?',
+      ['En cada dado, la cara de arriba y la de abajo suman [[7]]', 'En los tres dados, las caras horizontales suman $3 \\cdot 7 =$ [[21]]', 'De esas, la única que se ve es la de arriba, que vale [[2]]', 'Las que no se ven suman $21 - 2 =$ [[19]]'],
+      ['14', '5', '42'],
+      'No hace falta saber qué número tiene cada cara tapada: cada dado aporta 7 entre su cara de arriba y la de abajo. Al total se le quita lo único que se ve.',
+      'No intentes adivinar cada cara tapada. ¿Cuánto suman, en un solo dado, la cara de arriba y la de abajo?'),
+    err('Con una lámina de cartón de 16 cm por 10 cm se arma una caja sin tapa: en cada esquina se recorta un cuadrado de 2 cm de lado y se doblan los bordes hacia arriba. ¿Cuál es el volumen de la caja?',
+      ['La altura de la caja es el lado del cuadrado recortado: 2 cm', 'El largo de la base es $16 - 2 = 14$ cm', 'El ancho de la base es $10 - 4 = 6$ cm', 'Volumen: $14 \\cdot 6 \\cdot 2 = 168$ cm³'], 1,
+      ['El largo de la base es $16 - 2 \\cdot 2 = 12$ cm', 'El largo de la base es $16 + 2 = 18$ cm', 'El largo de la base sigue siendo 16 cm'],
+      'En cada lado se recortan dos esquinas, una en cada extremo: el largo pierde 4 cm y queda en 12. El volumen es $12 \\cdot 6 \\cdot 2 = 144$ cm³.',
+      'Mira un solo lado largo de la lámina: ¿cuántos cuadrados se le recortan?'),
+    opc('Para armar una caja con forma de cubo, con sus seis caras, se usan exactamente 150 cm² de cartón. La arista de la caja mide:',
+      ['25 cm', '6 cm', '12.5 cm', '5 cm'], 3,
+      'Cada cara mide $150 \\div 6 = 25$ cm², así que la arista es $\\sqrt{25} = 5$ cm.',
+      'El desarrollo del cubo son seis cuadrados iguales: reparte el cartón entre ellos.'),
+  ]);
+
+  diezLesson('pu-es-4', [
+    ['espejo-figura', 0, 'Un diseño se refleja en un espejo vertical. Dibuja el reflejo', 'El espejo deja cada casilla a la misma distancia del eje, pero del otro lado: lo que estaba a la izquierda queda a la derecha, sin cambiar de altura.'],
+    ['gira-figura', 1, 'Una ficha se gira media vuelta. Gírala hasta que coincida con la sombra', 'Media vuelta manda lo de arriba abajo y lo de la izquierda a la derecha, pero no voltea la figura como un espejo.'],
+    ['dobla-papel', 1, 'Una hoja se dobla tres veces y se perfora una vez. ¿Cuántos agujeros tiene al abrirla?', 'Cada doblez duplica las capas: tres dobleces son $2^3 = 8$ capas, y una perforación deja 8 agujeros.'],
+    ['reloj-espejo', 0, 'En el espejo de la peluquería, el reloj parece marcar las 3:00. Pon la hora real', 'El espejo cambia izquierda por derecha: la hora real y la reflejada suman 12 horas. Son las 9:00.'],
+    ['espejo-palabra', 1, 'Una ambulancia lleva su letrero escrito para leerse en el retrovisor. Escribe cómo se ve LUNA en el espejo', 'El espejo invierte el orden de las letras y voltea cada una: se ve ANUL con las letras al revés.'],
+    ['gira-mesa', 0, 'Una brújula girada es la misma brújula. Gira hasta que coincidan', 'Al girar, todos los rumbos se corren el mismo número de puestos y cada uno conserva sus vecinos.'],
+    ['billar-rebote', 0, 'El billar: el rebote es un espejo. Mete la bola con un rebote'],
+  ], [
+    sol('Un reloj de manecillas sin números se ve reflejado en un espejo y parece marcar las 4:20. ¿Qué hora es en realidad?',
+      ['En un espejo, la hora real y la hora reflejada suman [[12]] horas', 'De las 4:20 a las 12:00 faltan [[7]] horas y [[40]] minutos', 'La hora real es las [[7:40]]'],
+      ['8:40', '4:40', '20'],
+      'El espejo cambia la izquierda por la derecha, y en un reloj eso equivale a restar de 12:00. $12{:}00 - 4{:}20 = 7{:}40$.',
+      'Imagina el reloj: lo que está a la derecha del 12 pasa a la izquierda, a la misma distancia.'),
+    err('Una hoja de papel se dobla por la mitad cinco veces seguidas y luego se le hace una perforación que atraviesa todas las capas. ¿Cuántos agujeros tiene la hoja al desdoblarla?',
+      ['Cada doblez duplica el número de capas', 'Con 5 dobleces hay $5 \\cdot 2 = 10$ capas', 'La perforación atraviesa todas las capas: al desdoblar hay 10 agujeros'], 1,
+      ['Con 5 dobleces hay $2^5 = 32$ capas', 'Con 5 dobleces hay $5 + 2 = 7$ capas', 'Con 5 dobleces hay $5^2 = 25$ capas'],
+      'Duplicar cinco veces es multiplicar por 2 cinco veces: 2, 4, 8 y así hasta 32 capas. Al desdoblar hay 32 agujeros.',
+      'Hazlo doblez por doblez: una capa, dos, cuatro… ¿Se suma 2 cada vez o se multiplica por 2?'),
+    opc('La palabra AMO se escribe con letras mayúsculas en una hoja y se mira reflejada en un espejo colocado a la derecha de la hoja. En el espejo se lee:',
+      ['OMA', 'AMO', 'MOA', 'OAM'], 0,
+      'El espejo invierte el orden de las letras: la O queda primero. Como A, M y O son letras simétricas, se ven iguales: OMA.',
+      'En un espejo lateral, la letra que estaba más cerca del espejo sigue siendo la más cercana.'),
+  ]);
+
+  addExam('pu-espacial', [
+    ['pu-es-1', 'Los movimientos contrarios se compensan.',
+      opc('Un robot avanza 4 pasos al norte, 6 al este, 4 al sur y 2 al oeste. Para volver al punto de partida por el camino más corto debe avanzar:', ['4 pasos al este', '2 pasos al oeste', '4 pasos al oeste', '8 pasos al sur'], 2,
+        'Norte y sur se anulan. Al este queda $6 - 2 = 4$: para volver, 4 pasos al oeste.', 'Compensa norte con sur y este con oeste.')],
+    ['pu-es-2', 'En un cubo pintado, los cubitos de las aristas (sin las esquinas) tienen dos caras pintadas.',
+      opc('Un cubo de 3 cm de arista se pinta por fuera y se corta en 27 cubitos de 1 cm. La cantidad de cubitos que tienen exactamente dos caras pintadas es:', ['6', '8', '1', '12'], 3,
+        'En cada una de las 12 aristas hay un cubito que no es esquina: 12.', 'Los de dos caras están en las aristas, sin contar las esquinas.')],
+    ['pu-es-3', 'En un dado corriente las caras opuestas suman 7.',
+      opc('En un dado corriente, las caras opuestas suman 7. La cara opuesta a la del 3 es la del:', ['4', '6', '5', '2'], 0,
+        '$7 - 3 = 4$.', 'Busca el número que completa 7.')],
+    ['pu-es-4', 'Cada doblez duplica las capas del papel.',
+      opc('Una hoja cuadrada se dobla por la mitad dos veces y se le hace un corte pequeño en una esquina, que atraviesa todas las capas. Al desdoblar la hoja, la cantidad de cortes que aparece es:', ['2', '4', '8', '1'], 1,
+        'Dos dobleces dejan $2^2 = 4$ capas: el corte queda repetido 4 veces.', 'Cuenta las capas que atraviesa el corte.')],
+  ]);
+});
