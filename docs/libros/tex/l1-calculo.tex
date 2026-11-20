@@ -1,0 +1,537 @@
+% Libro 1 · Mundo 1 · Cálculo mental (app: pu-calculo)
+\mundo{Cálculo mental}{pu-calculo}{En el examen no hay calculadora, pero tampoco hacen falta cuentas largas: las preguntas
+están pensadas para quien ve la estructura de una operación antes de hacerla. Este mundo repasa los números con los que
+se trabaja todo el libro (enteros, fracciones, decimales, porcentajes y potencias) y, sobre todo, enseña a calcular
+\emph{poco} y \emph{bien}.}{%
+\item \textbf{1.1} Enteros, signos y jerarquía de operaciones
+\item \textbf{1.2} Fracciones: partir, comparar y operar
+\item \textbf{1.3} Decimales, periodos y porcentajes
+\item \textbf{1.4} Potencias, raíces y estimación}
+
+% ------------------------------------------------------------------
+\leccion{pu-cm-1}{Enteros, signos y jerarquía}{Video «Enteros» y los juegos del globo con lastre, la flecha que se voltea y
+las capas de una operación.}
+
+\begin{reto}
+Un congelador pasa de $-18\,^{\circ}\mathrm{C}$ a $4\,^{\circ}\mathrm{C}$ en 11 minutos, subiendo siempre al mismo
+ritmo. ¿Qué temperatura marcaba a los 3 minutos?\par
+\opciones{$-12\,^{\circ}\mathrm{C}$}{$-14\,^{\circ}\mathrm{C}$}{$-6\,^{\circ}\mathrm{C}$}{$-15\,^{\circ}\mathrm{C}$}
+\end{reto}
+
+\subsection{La idea: los enteros son lugares en una recta}
+Un entero no es solo una cantidad: es una \clave{posición}. El 0 es el punto de partida; a la derecha están los positivos
+y a la izquierda los negativos. Pensar en posiciones vuelve naturales las operaciones: sumar es \emph{caminar}, restar es
+\emph{medir la distancia con dirección}, y multiplicar por un negativo es \emph{dar media vuelta}.
+
+\begin{center}
+\recta{-6}{6}{\draw[zolive,line width=1pt,-{Latex[length=2mm]}] (-4,.35) to[bend left=30] node[above,font=\scriptsize]{$+6$} (2,.35);
+\fill[zcoral] (-4,0) circle (1.2pt); \fill[zolive] (2,0) circle (1.2pt);}
+\end{center}
+
+Así, $-4 + 6$ es salir del $-4$ y caminar seis pasos a la derecha: se llega al $2$. Y $3 - 7$ es caminar siete pasos a
+la izquierda desde el 3: se llega a $-4$.
+
+La \clave{distancia} entre dos números es el número de pasos que hay de uno a otro, sin importar la dirección. Se escribe
+con valor absoluto: la distancia entre $a$ y $b$ es $|a - b|$. Entre $-3$ y $5$ hay $|5 - (-3)| = 8$ pasos.
+
+\subsubsection{Restar un negativo}
+¿Por qué $2 - (-5) = 7$? Piensa en una cuenta de ahorros: restar es \emph{quitar}. Si a una persona le quitan una deuda
+de 5, queda 5 más rica. Quitar un negativo es lo mismo que sumar el positivo: $a - (-b) = a + b$.
+
+\subsubsection{Multiplicar es repetir y voltear}
+$4 \cdot (-3)$ son cuatro saltos de $-3$: se llega a $-12$. Multiplicar por $-1$ refleja un número al otro lado del
+cero, como en un espejo. Por eso $(-3)(-4)$ es «$3 \cdot 4$ y dos medias vueltas», que dejan mirando hacia el mismo lado:
+$+12$. Cada signo menos es una media vuelta; un número \emph{par} de medias vueltas te deja mirando hacia adelante.
+
+\begin{regla}
+\begin{itemize}
+  \item Restar es sumar el opuesto: $a - b = a + (-b)$; en particular $a - (-b) = a + b$.
+  \item Distancia entre $a$ y $b$: $|a - b|$. Hay dos números a distancia $d$ de $a$: $a - d$ y $a + d$.
+  \item En productos y cocientes: si hay una cantidad \textbf{par} de factores negativos, el resultado es positivo; si es
+  \textbf{impar}, es negativo.
+  \item Orden de las operaciones (de adentro hacia afuera): \textbf{paréntesis} $\to$ \textbf{potencias y raíces}
+  $\to$ \textbf{multiplicaciones y divisiones} (de izquierda a derecha) $\to$ \textbf{sumas y restas} (de izquierda a
+  derecha).
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Contar signos]
+Calcula $\dfrac{(-2)(-6)(-5)}{(-3)(-4)}$.
+\solucion Primero el signo: en total hay cinco signos menos (tres arriba y dos abajo), un número impar, así que el
+resultado es negativo. Luego el tamaño, simplificando antes de multiplicar: $\dfrac{2 \cdot 6 \cdot 5}{3 \cdot 4} =
+\dfrac{60}{12} = 5$. El resultado es $-5$.
+\end{ejemplo}
+
+\begin{ejemplo}[Capa por capa]
+Calcula $20 - 3\,(4 - 7)^2 \div 9 + (-2)^3$.
+\solucion
+\paso{Paréntesis.} $4 - 7 = -3$.
+\paso{Potencias.} $(-3)^2 = 9$ y $(-2)^3 = -8$. Queda $20 - 3 \cdot 9 \div 9 + (-8)$.
+\paso{× y ÷ de izquierda a derecha.} $3 \cdot 9 = 27$ y $27 \div 9 = 3$. Queda $20 - 3 - 8$.
+\paso{+ y −.} $20 - 3 - 8 = 9$.
+\end{ejemplo}
+
+\begin{ejemplo}[Los dos lugares a la misma distancia]
+Un número está a distancia 7 de $-2$ y es negativo. ¿Cuál es?
+\solucion A distancia 7 de $-2$ están $-2 - 7 = -9$ y $-2 + 7 = 5$. El negativo es $-9$.
+\end{ejemplo}
+
+\begin{ejemplo}[Pisos y sótanos]
+Un ascensor parte del sótano 3 (piso $-3$), sube 9 pisos, baja 4 y vuelve a subir 6. Si cada piso mide 3 metros, ¿a
+cuántos metros del punto de partida terminó?
+\solucion El recorrido neto es $+9 - 4 + 6 = +11$ pisos: termina en el piso $-3 + 11 = 8$. La distancia al punto de
+partida es $11 \cdot 3 = 33$ metros. Observa que no hizo falta saber en qué piso terminó: bastaba el desplazamiento neto.
+\end{ejemplo}
+
+\begin{trampa}
+$-3^2$ \textbf{no} es lo mismo que $(-3)^2$. La potencia se hace antes que el signo menos: $-3^2 = -(3^2) = -9$, mientras
+que $(-3)^2 = 9$. Las opciones del examen suelen traer las dos.
+\end{trampa}
+
+\begin{atajo}
+Separa siempre \emph{el signo} del \emph{tamaño}. Cuenta los menos para el signo y luego simplifica los números en valor
+absoluto. Así nunca multiplicas números grandes con signos mezclados.
+\end{atajo}
+
+\begin{profundiza}
+La jerarquía no es un capricho: es una convención para que una expresión escrita tenga un solo valor. Lo mismo pasa con
+«de izquierda a derecha»: $24 \div 4 \cdot 2$ vale $12$, no $3$, porque la división va primero por estar a la izquierda.
+\end{profundiza}
+
+\taller
+\piso{Calienta}{operaciones directas}
+\begin{ejercicios}[2]
+\item $-7 + 12 - 9$ \sol{$-4$.}
+\item $5 - (-8) - 3$ \sol{$10$.}
+\item $(-4)(-5)(-1)$ \sol{$-20$ (tres signos menos: impar).}
+\item $-2^4 + (-2)^4$ \sol{$-16 + 16 = 0$.}
+\item $|{-6} - 9|$ \sol{$15$.}
+\item $36 \div (-4) \cdot 3$ \sol{$-27$: de izquierda a derecha, $-9 \cdot 3$.}
+\end{ejercicios}
+\piso{Entrena}{problemas cortos}
+\begin{ejercicios}
+\item Calcula $\;8 - 2\,[\,3 - (5 - 9)\,] \div 7$. \sol{$8 - 2 \cdot 7 \div 7 = 8 - 2 = 6$.}
+\item Un buzo está a $-14$ m. Sube 9 m, baja 23 m y sube 11 m. ¿A qué profundidad quedó? \sol{$-14 + 9 - 23 + 11 = -17$: a 17 m de profundidad.}
+\item ¿Cuántos enteros hay estrictamente entre $-8$ y $5$? \sol{De $-7$ a $4$: $4 - (-7) + 1 = 12$ enteros.}
+\item Dos números enteros están a distancia 10 entre sí y su suma es 4. ¿Cuáles son? \sol{Su punto medio es $2$; están a 5 de él: $-3$ y $7$.}
+\item Ayer a las 6 a.\,m. hacía $-5\,^{\circ}\mathrm{C}$ y al mediodía $13\,^{\circ}\mathrm{C}$. ¿Cuántos grados subió por hora, si subió parejo? \sol{$18$ grados en 6 horas: 3 por hora.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item El valor de $\;-(-2)^2 - 2^2 \cdot (-1)^{5}\;$ es
+\opciones{$-8$}{$0$}{$8$}{$-4$}
+\sol{B. $-(4) - 4 \cdot (-1) = -4 + 4 = 0$.}
+\item Tres amigos anotan las ganancias de un juego: Pedro $-7$, Ana $+12$ y Lucía. Si la suma de los tres es $-3$,
+¿cuánto le falta a Lucía para llegar a 0?
+\opciones{$8$}{$5$}{$-8$}{$2$}
+\sol{A. Lucía tiene $-3 - (-7) - 12 = -8$; le faltan 8.}
+\item Si $a < 0 < b$, ¿cuál de las siguientes expresiones es \textbf{siempre} negativa?
+\opciones{$a + b$}{$b - a$}{$a \cdot b$}{$a^2 \cdot b$}
+\sol{C. Negativo por positivo es negativo. $a+b$ depende de los tamaños; $b - a > 0$; $a^2 b > 0$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+De $-18$ a $4$ hay $4 - (-18) = 22$ grados, que se suben en 11 minutos: $2$ grados por minuto. A los 3 minutos subió
+$6$ grados: $-18 + 6 = -12\,^{\circ}\mathrm{C}$. \textbf{Opción A.} La trampa es la C: quien calcula los
+$6$ grados que subió y olvida que partía de $-18$.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-cm-2}{Fracciones}{Video «Fracciones» y los juegos de cortar, comparar y repartir lo que queda.}
+
+\begin{reto}
+Una jarra está llena hasta los $\tfrac35$. Se le echan 2 vasos de agua y queda llena hasta los $\tfrac45$. ¿Cuántos vasos
+caben en la jarra completa?
+\opciones{8}{10}{12}{15}
+\end{reto}
+
+\subsection{La idea: abajo se corta, arriba se cuenta}
+En la fracción $\tfrac38$ el \clave{denominador} 8 dice en cuántas partes \textbf{iguales} se corta la unidad y el
+\clave{numerador} 3 cuántas de esas partes se toman. Si las partes no son iguales, no es una fracción.
+
+\begin{center}
+\begin{tikzpicture}[x=7mm,y=7mm]
+  \foreach \i in {0,...,7}{\draw[zink,line width=.4pt,fill=\ifnum\i<3 zlime!70\else white\fi] (\i,0) rectangle (\i+1,1);}
+  \node[right,font=\small] at (8.3,.5) {$\tfrac38$};
+  \foreach \i in {0,...,4}{\draw[zink,line width=.4pt,fill=\ifnum\i<3 zsky!35\else white\fi] (\i*1.6,-1.6) rectangle (\i*1.6+1.6,-.6);}
+  \node[right,font=\small] at (8.3,-1.1) {$\tfrac35$};
+\end{tikzpicture}
+\end{center}
+
+Una misma cantidad tiene muchos nombres: cortar cada pedazo en dos duplica las partes y las que se toman, así que
+$\tfrac35 = \tfrac{6}{10} = \tfrac{12}{20}$. \clave{Simplificar} es el camino de vuelta: dividir arriba y abajo por el
+mismo número.
+
+\subsubsection{Comparar}
+Para comparar $\tfrac47$ y $\tfrac59$ basta llevar las dos a pedazos del mismo tamaño. El atajo es el
+\clave{producto cruzado}: $4 \cdot 9 = 36$ y $5 \cdot 7 = 35$; como $36 > 35$, $\tfrac47 > \tfrac59$. Funciona porque es
+lo mismo que pasar ambas a sesenta y tresavos.
+
+\subsubsection{Sumar}
+Solo se suman pedazos del mismo tamaño: $\tfrac14 + \tfrac16$ no son «dos décimos». Se pasa a doceavos:
+$\tfrac{3}{12} + \tfrac{2}{12} = \tfrac{5}{12}$.
+
+\subsubsection{Multiplicar es «de»}
+$\tfrac23$ \emph{de} $\tfrac34$ es $\tfrac23 \cdot \tfrac34 = \tfrac{6}{12} = \tfrac12$: de tres cuartos, se toman dos
+de cada tres partes. Y $\tfrac27$ de 35 es dividir 35 en 7 grupos (de 5) y tomar 2: 10.
+
+\subsubsection{Dividir es «cuántas caben»}
+$3 \div \tfrac14$ pregunta cuántos cuartos caben en 3: doce. Por eso dividir por una fracción es multiplicar por su
+inversa: $3 \div \tfrac14 = 3 \cdot 4$.
+
+\begin{regla}
+\[\frac ab + \frac cd = \frac{ad + bc}{bd}\qquad \frac ab \cdot \frac cd = \frac{ac}{bd}\qquad
+\frac ab \div \frac cd = \frac ab \cdot \frac dc\]
+\[\frac ab < \frac cd \iff ad < bc\quad (b, d > 0)\]
+\textbf{Fracción de lo que queda:} si se usa $\tfrac{p}{q}$ de algo, queda $1 - \tfrac pq$. Si luego se usa
+$\tfrac rs$ \emph{del resto}, queda $\left(1 - \tfrac pq\right)\left(1 - \tfrac rs\right)$ del total.
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Simplificar antes de multiplicar]
+Calcula $\dfrac{14}{15} \cdot \dfrac{25}{21} \cdot \dfrac{9}{10}$.
+\solucion No se multiplica nada: se descompone en factores primos y se cancela.
+Numerador: $14 \cdot 25 \cdot 9 = 2\cdot7\cdot5\cdot5\cdot3\cdot3$. Denominador:
+$15 \cdot 21 \cdot 10 = 3\cdot5\cdot3\cdot7\cdot2\cdot5$. Son exactamente los mismos factores, así que el producto es $1$.
+\end{ejemplo}
+
+\begin{ejemplo}[La fracción del resto]
+Marta gasta $\tfrac14$ de su sueldo en arriendo y $\tfrac25$ \emph{de lo que le queda} en comida. Si le sobran
+\$540\,000, ¿cuál es su sueldo?
+\solucion Tras el arriendo queda $\tfrac34$. De eso gasta $\tfrac25$, así que conserva $\tfrac35$ de $\tfrac34$:
+$\tfrac35 \cdot \tfrac34 = \tfrac{9}{20}$ del sueldo. Si $\tfrac{9}{20}$ son 540\,000, $\tfrac{1}{20}$ es 60\,000 y el
+sueldo es $20 \cdot 60\,000 = 1\,200\,000$.
+\end{ejemplo}
+
+\begin{ejemplo}[Ordenar sin decimales]
+Ordena de menor a mayor $\tfrac58$, $\tfrac23$ y $\tfrac{7}{12}$.
+\solucion Denominador común 24: $\tfrac{15}{24}$, $\tfrac{16}{24}$, $\tfrac{14}{24}$. Orden:
+$\tfrac{7}{12} < \tfrac58 < \tfrac23$.
+\end{ejemplo}
+
+\begin{ejemplo}[Fracciones de fracciones en un problema]
+En un salón, $\tfrac23$ de los estudiantes son mujeres y $\tfrac38$ de las mujeres usan gafas. ¿Qué fracción del salón son
+mujeres sin gafas?
+\solucion Sin gafas son $\tfrac58$ de las mujeres: $\tfrac58 \cdot \tfrac23 = \tfrac{10}{24} = \tfrac{5}{12}$ del salón.
+\end{ejemplo}
+
+\begin{trampa}
+En la fracción del resto, el error típico es restar las fracciones del total: «$1 - \tfrac14 - \tfrac25$». La segunda
+fracción es de \emph{lo que quedaba}, no del total; por eso se multiplica.
+\end{trampa}
+
+\begin{atajo}
+Si en un problema «$\tfrac{9}{20}$ del total son 540\,000», no plantees ecuación: divide por el numerador para hallar una
+parte ($60\,000$) y multiplica por el denominador. Es la misma cuenta, más limpia.
+\end{atajo}
+
+\taller
+\piso{Calienta}{operaciones}
+\begin{ejercicios}[2]
+\item $\tfrac23 + \tfrac34$ \sol{$\tfrac{17}{12}$.}
+\item $\tfrac56 - \tfrac49$ \sol{$\tfrac{15 - 8}{18} = \tfrac{7}{18}$.}
+\item $\tfrac{12}{35} \cdot \tfrac{14}{9}$ \sol{$\tfrac{8}{15}$.}
+\item $\tfrac34 \div \tfrac{9}{16}$ \sol{$\tfrac34 \cdot \tfrac{16}{9} = \tfrac43$.}
+\item $\tfrac35$ de $45$ \sol{$27$.}
+\item Simplifica $\tfrac{84}{126}$ \sol{$\tfrac23$ (se divide por 42).}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item ¿Qué fracción es mayor, $\tfrac{11}{13}$ o $\tfrac{13}{15}$? \sol{$\tfrac{13}{15}$: $11 \cdot 15 = 165 < 169 = 13 \cdot 13$. A cada una le falta $\tfrac{2}{13}$ y $\tfrac{2}{15}$ para el 1, y le falta menos a la segunda.}
+\item Un tanque tiene $\tfrac38$ de agua. Se gastan 30 litros y queda en $\tfrac14$. ¿Cuál es su capacidad? \sol{$\tfrac38 - \tfrac14 = \tfrac18$ son 30 L: 240 L.}
+\item Juan leyó $\tfrac13$ de un libro el lunes y $\tfrac14$ del resto el martes. Le faltan 150 páginas. ¿Cuántas tiene el libro? \sol{Queda $\tfrac23 \cdot \tfrac34 = \tfrac12$: el libro tiene 300 páginas.}
+\item ¿Cuántos trozos de $\tfrac38$ m se cortan de una cinta de $6$ m? \sol{$6 \div \tfrac38 = 16$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item El valor de $\left(1 - \tfrac12\right)\left(1 - \tfrac13\right)\left(1 - \tfrac14\right)\cdots\left(1 - \tfrac{1}{20}\right)$ es
+\opciones{$\tfrac{1}{20}$}{$\tfrac{19}{20}$}{$\tfrac{1}{19}$}{$\tfrac{1}{2}$}
+\sol{A. $\tfrac12 \cdot \tfrac23 \cdot \tfrac34 \cdots \tfrac{19}{20}$: cada numerador se cancela con el denominador anterior.}
+\item De un grupo, $\tfrac25$ viajan en bus, $\tfrac13$ en metro y los 12 restantes a pie. ¿Cuántos son?
+\opciones{30}{45}{60}{36}
+\sol{B. A pie va $1 - \tfrac25 - \tfrac13 = \tfrac{4}{15}$: $\tfrac{4}{15}$ son 12, $\tfrac{1}{15}$ es 3 y el total 45.}
+\item ¿Cuál fracción está entre $\tfrac13$ y $\tfrac12$?
+\opciones{$\tfrac{3}{10}$}{$\tfrac{4}{7}$}{$\tfrac{5}{12}$}{$\tfrac{2}{9}$}
+\sol{C. $\tfrac13 = \tfrac{4}{12} < \tfrac{5}{12} < \tfrac{6}{12} = \tfrac12$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Los 2 vasos llenan la diferencia entre $\tfrac45$ y $\tfrac35$, que es $\tfrac15$ de la jarra. Si un quinto son 2 vasos,
+la jarra completa son $5 \cdot 2 = 10$ vasos. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-cm-3}{Decimales y porcentajes}{Video «Porcentajes» y los juegos de las cien casillas y las cifras que se repiten.}
+
+\begin{reto}
+Al escribir $\tfrac37$ como decimal, ¿qué cifra queda en el lugar 100 después del punto?
+\opciones{4}{2}{5}{7}
+\end{reto}
+
+\subsection{La idea: tres nombres para la misma cantidad}
+Una fracción, un decimal y un porcentaje pueden decir lo mismo: $\tfrac14 = 0.25 = 25\,\%$. «Por ciento» significa
+«de cada cien»: el $25\,\%$ son 25 casillas de una cuadrícula de 100.
+
+\begin{center}
+\begin{tikzpicture}[x=3.2mm,y=3.2mm]
+  \foreach \i in {0,...,9}{\foreach \j in {0,...,9}{%
+    \pgfmathtruncatemacro{\n}{\j*10+\i}
+    \ifnum\n<25 \fill[zlime!70] (\i,\j) rectangle ++(1,1);\fi
+    \draw[zline,line width=.3pt] (\i,\j) rectangle ++(1,1);}}
+  \node[right,font=\small,align=left] at (10.8,5) {$25$ de $100$\\$= 0.25 = \tfrac14$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{De fracción a decimal}
+Una fracción es una división: $\tfrac38 = 3 \div 8 = 0.375$. Si el denominador (ya simplificado) solo tiene factores 2 y
+5, el decimal \clave{termina}. Si tiene otro factor, el decimal es \clave{periódico}: una cifra o un bloque se repite
+para siempre, como $\tfrac{1}{3} = 0.\overline{3}$ o $\tfrac{1}{7} = 0.\overline{142857}$.
+
+\subsubsection{De decimal periódico a fracción}
+$0.\overline{36}$: si $x = 0.3636\ldots$, entonces $100x = 36.3636\ldots$ y al restar $99x = 36$, de donde
+$x = \tfrac{36}{99} = \tfrac{4}{11}$. La regla: el periodo sobre tantos nueves como cifras tenga.
+
+\subsubsection{Porcentajes a mano}
+El $10\,\%$ se obtiene corriendo el punto un lugar: el $10\,\%$ de $3\,450$ es $345$. Con él se arman los demás:
+$5\,\%$ es la mitad, $15\,\% = 10\,\% + 5\,\%$, $1\,\%$ es correr dos lugares. Y el $p\,\%$ de $N$ es igual al
+$N\,\%$ de $p$: el $16\,\%$ de 25 es el $25\,\%$ de 16, que es 4.
+
+\begin{regla}
+\begin{itemize}
+  \item $p\,\% = \tfrac{p}{100}$. El $p\,\%$ de $N$ es $\tfrac{p}{100}\cdot N$.
+  \item Fracciones que conviene saber: $\tfrac12 = 50\,\%$, $\tfrac14 = 25\,\%$, $\tfrac34 = 75\,\%$, $\tfrac15 = 20\,\%$,
+  $\tfrac18 = 12.5\,\%$, $\tfrac13 \approx 33.3\,\%$, $\tfrac{1}{20} = 5\,\%$.
+  \item Si un decimal se repite en bloques de $k$ cifras, la cifra del lugar $n$ es la misma que la del lugar
+  $r$, donde $r$ es el residuo de dividir $n$ entre $k$ (si el residuo es 0, es la última del bloque).
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Comparar formatos]
+Ordena de mayor a menor: $0.47$, $\tfrac{9}{20}$, $48\,\%$, $\tfrac{12}{25}$.
+\solucion Todo a centésimas: $0.47$, $\tfrac{45}{100} = 0.45$, $0.48$, $\tfrac{48}{100} = 0.48$. Orden: $48\,\% =
+\tfrac{12}{25} > 0.47 > \tfrac{9}{20}$. Dos de ellos son iguales, cosa que el examen aprovecha.
+\end{ejemplo}
+
+\begin{ejemplo}[El bloque que se repite]
+¿Cuánto suman las primeras 40 cifras decimales de $\tfrac{1}{7}$?
+\solucion $\tfrac17 = 0.\overline{142857}$, bloque de 6 cifras que suman $1+4+2+8+5+7 = 27$. Como $40 = 6 \cdot 6 + 4$,
+hay seis bloques completos y las cuatro primeras cifras de otro: $6 \cdot 27 + (1+4+2+8) = 162 + 15 = 177$.
+\end{ejemplo}
+
+\begin{ejemplo}[Porcentaje inverso]
+El $35\,\%$ de un número es 84. ¿Cuál es el número?
+\solucion $35\,\%$ son 84, así que el $5\,\%$ es $84 \div 7 = 12$ y el $100\,\%$ es $12 \cdot 20 = 240$.
+\end{ejemplo}
+
+\begin{ejemplo}[¿Qué porcentaje es?]
+En una encuesta, 27 de 180 personas prefieren el bus. ¿Qué porcentaje es?
+\solucion $\tfrac{27}{180} = \tfrac{3}{20} = \tfrac{15}{100} = 15\,\%$.
+\end{ejemplo}
+
+\begin{trampa}
+$0.3$ \textbf{no} es lo mismo que $0.\overline{3}$: el primero es $\tfrac{3}{10}$, el segundo $\tfrac13$. Y el
+$0.5\,\%$ es $0.005$, no $0.5$. Lee los símbolos con lupa.
+\end{trampa}
+
+\begin{atajo}
+Para porcentajes «feos», intercambia: el $18\,\%$ de 50 es el $50\,\%$ de 18, que es 9. Funciona siempre, porque
+$\tfrac{18}{100}\cdot 50 = \tfrac{50}{100}\cdot 18$.
+\end{atajo}
+
+\taller
+\piso{Calienta}{conversiones}
+\begin{ejercicios}[2]
+\item $\tfrac{7}{8}$ en decimal \sol{$0.875$.}
+\item $0.\overline{45}$ en fracción \sol{$\tfrac{45}{99} = \tfrac{5}{11}$.}
+\item $12\,\%$ de $250$ \sol{$30$.}
+\item $0.04$ en porcentaje \sol{$4\,\%$.}
+\item $\tfrac{3}{40}$ en porcentaje \sol{$7.5\,\%$.}
+\item $44\,\%$ de 25 \sol{$25\,\%$ de 44: $11$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item ¿Cuál de estas fracciones da un decimal finito: $\tfrac{7}{12}$, $\tfrac{9}{40}$, $\tfrac{5}{6}$? \sol{$\tfrac{9}{40}$: $40 = 2^3 \cdot 5$. Da $0.225$.}
+\item Un colegio tiene 640 estudiantes y el $15\,\%$ juega fútbol. ¿Cuántos no juegan fútbol? \sol{$85\,\%$ de 640: $544$.}
+\item ¿Qué cifra ocupa el lugar 50 de $0.\overline{285714}$? \sol{$50 = 8\cdot 6 + 2$: la segunda cifra del bloque, 8.}
+\item El 60\,\% de los asistentes a un concierto son 1\,500 personas. ¿Cuántos asistentes hay? \sol{$20\,\%$ son 500: total 2\,500.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item ¿Cuál es el mayor?
+\opciones{$\tfrac{5}{8}$}{$0.62$}{$63\,\%$}{$\tfrac{31}{50}$}
+\sol{C. $0.625$, $0.62$, $0.63$, $0.62$.}
+\item $0.\overline{9}$ es igual a
+\opciones{$0.9$}{$1$}{$\tfrac{9}{10}$}{un número menor que $0.99$}
+\sol{B. $\tfrac{9}{9} = 1$ (periodo sobre nueves).}
+\item Si el $20\,\%$ de $A$ es igual al $30\,\%$ de $B$, entonces $A$ es
+\opciones{el $150\,\%$ de $B$}{el $66\,\%$ de $B$}{el $110\,\%$ de $B$}{el $60\,\%$ de $B$}
+\sol{A. $0.2A = 0.3B$, así que $A = 1.5B$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+$\tfrac37 = 0.\overline{428571}$: bloque de 6 cifras. Como $100 = 16 \cdot 6 + 4$, el lugar 100 es el cuarto del
+bloque: \textbf{5}. \textbf{Opción C.} No hace falta escribir cien cifras; basta el residuo.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-cm-4}{Potencias, raíces y estimación}{Video «Potencias» y los juegos de la torre de potencias y el muro de raíces.}
+
+\begin{reto}
+¿Cuántas cifras tiene el número $2^{10} \cdot 5^{12}$?
+\opciones{10}{11}{12}{22}
+\end{reto}
+
+\subsection{La idea: multiplicar repetido es contar factores}
+$5^3 = 5 \cdot 5 \cdot 5 = 125$: tres factores iguales. Visto como cubitos, son cinco capas de $5 \times 5$. Las leyes
+de las potencias no hay que memorizarlas: salen de \emph{contar} cuántos factores hay.
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Ley} & \textbf{Por qué} & \textbf{Ejemplo}\\\midrule
+$a^m \cdot a^n = a^{m+n}$ & se juntan $m$ y $n$ factores & $2^3 \cdot 2^4 = 2^7$\\
+$\dfrac{a^m}{a^n} = a^{m-n}$ & se cancelan $n$ factores & $\dfrac{3^7}{3^5} = 3^2$\\
+$(a^m)^n = a^{mn}$ & $n$ grupos de $m$ factores & $(5^2)^3 = 5^6$\\
+$(ab)^n = a^n b^n$ & se reparten los factores & $(2 \cdot 5)^4 = 2^4 \cdot 5^4$\\
+$a^0 = 1,\ a^{-n} = \dfrac{1}{a^n}$ & seguir el patrón al dividir & $2^{-3} = \tfrac18$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{Potencias de 10}
+$10^n$ es un 1 seguido de $n$ ceros, y $10^n - 1$ son $n$ nueves. Esto resuelve muchas preguntas de cifras: como
+$2 \cdot 5 = 10$, cada pareja de un 2 y un 5 produce un cero.
+
+\subsubsection{Raíces}
+$\sqrt{a}$ es el número positivo que al cuadrado da $a$. Para simplificar se saca el mayor cuadrado:
+$\sqrt{72} = \sqrt{36 \cdot 2} = 6\sqrt2$. Para estimar, se encierra entre cuadrados: $64 < 72 < 81$, así que
+$8 < \sqrt{72} < 9$, y más cerca de 8.5 que de 9 ($8.5^2 = 72.25$).
+
+\subsubsection{Estimar}
+Muchas preguntas no piden la cuenta exacta sino el orden de magnitud. $49.7 \cdot 20.3 \approx 50 \cdot 20 = 1\,000$.
+Cuando las opciones están lejos unas de otras, estimar basta.
+
+\begin{regla}
+\begin{itemize}
+  \item Si el lado de un cuadrado se multiplica por $k$, su área se multiplica por $k^2$; en un cubo, el volumen por $k^3$.
+  \item $\sqrt{ab} = \sqrt a\,\sqrt b$, pero $\sqrt{a + b} \neq \sqrt a + \sqrt b$.
+  \item $(-a)^n$ es positivo si $n$ es par y negativo si $n$ es impar.
+  \item Cuadrados para tener a mano: $11^2 = 121,\ 12^2 = 144,\ 13^2 = 169,\ 14^2 = 196,\ 15^2 = 225,\ 16^2 = 256,
+  \ 25^2 = 625$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Juntar en una base]
+Simplifica $\dfrac{4^5 \cdot 8^2}{16^3}$.
+\solucion Todo en base 2: $4^5 = 2^{10}$, $8^2 = 2^6$, $16^3 = 2^{12}$. Queda $2^{10 + 6 - 12} = 2^4 = 16$.
+\end{ejemplo}
+
+\begin{ejemplo}[El área crece al cuadrado]
+El lado de un cuadrado aumenta un $30\,\%$. ¿En qué porcentaje aumenta su área?
+\solucion El lado se multiplica por $1.3$ y el área por $1.3^2 = 1.69$: aumenta $69\,\%$, no $30\,\%$ ni $60\,\%$.
+\end{ejemplo}
+
+\begin{ejemplo}[Suma de cifras de una resta]
+¿Cuánto suman las cifras de $10^{8} - 24$?
+\solucion $10^8 - 24 = 99\,999\,976$: seis nueves, un 7 y un 6. La suma es $54 + 7 + 6 = 67$. Para verlo sin escribir:
+$10^8 - 1$ son ocho nueves y luego se restan 23 a los dos últimos ($99 - 23 = 76$).
+\end{ejemplo}
+
+\begin{ejemplo}[Comparar potencias]
+¿Cuál es mayor, $2^{30}$ o $3^{20}$?
+\solucion Se lleva a un exponente común: $2^{30} = (2^3)^{10} = 8^{10}$ y $3^{20} = (3^2)^{10} = 9^{10}$. Como $9 > 8$,
+es mayor $3^{20}$.
+\end{ejemplo}
+
+\begin{trampa}
+$2^3$ no es $2 \cdot 3$, y $(a + b)^2$ no es $a^2 + b^2$: falta el término $2ab$. Por ejemplo, $(3 + 4)^2 = 49$, mientras
+que $3^2 + 4^2 = 25$.
+\end{trampa}
+
+\begin{atajo}
+Para contar cifras de $2^a \cdot 5^b$, empareja: el menor exponente da los ceros y lo que sobra se calcula aparte.
+$2^7 \cdot 5^4 = 2^3 \cdot 10^4 = 80\,000$: cinco cifras.
+\end{atajo}
+
+\taller
+\piso{Calienta}{potencias y raíces}
+\begin{ejercicios}[2]
+\item $3^4$ \sol{$81$.}
+\item $(-2)^5$ \sol{$-32$.}
+\item $5^{-2}$ \sol{$\tfrac{1}{25}$.}
+\item $\sqrt{98}$ simplificada \sol{$7\sqrt2$.}
+\item $\dfrac{9^3}{27^2}$ \sol{$3^6 / 3^6 = 1$.}
+\item $(2^3)^2 \cdot 2^{-4}$ \sol{$2^2 = 4$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item ¿Entre qué dos enteros consecutivos está $\sqrt{150}$? \sol{Entre 12 y 13 ($144 < 150 < 169$).}
+\item Si el radio de una pizza se duplica, ¿cuántas veces más área tiene? \sol{$2^2 = 4$ veces.}
+\item ¿Cuántos ceros tiene al final $4^5 \cdot 25^3$? \sol{$2^{10} \cdot 5^6 = 2^4 \cdot 10^6$: seis ceros (es $16\,000\,000$).}
+\item Estima $\dfrac{398 \cdot 51}{19.9}$. \sol{$\approx \tfrac{400 \cdot 50}{20} = 1\,000$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item $2^{20} + 2^{20}$ es igual a
+\opciones{$2^{40}$}{$4^{20}$}{$2^{21}$}{$4^{40}$}
+\sol{C. Dos veces $2^{20}$ es $2 \cdot 2^{20} = 2^{21}$.}
+\item Si $3^x = 5$, entonces $9^{x+1}$ vale
+\opciones{$45$}{$225$}{$75$}{$30$}
+\sol{B. $9^{x+1} = 9 \cdot (3^x)^2 = 9 \cdot 25 = 225$.}
+\item Un cubo de 3 cm de arista se agranda hasta 6 cm de arista. Su volumen se multiplica por
+\opciones{2}{4}{6}{8}
+\sol{D. $k = 2$ y el volumen se multiplica por $2^3 = 8$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Se emparejan diez 2 con diez 5: $2^{10} \cdot 5^{12} = (2 \cdot 5)^{10} \cdot 5^2 = 25 \cdot 10^{10}$. Es un 25 seguido
+de diez ceros: $2 + 10 = 12$ cifras. \textbf{Opción C.} La D sale de sumar los exponentes, que no tiene sentido aquí.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\evaluacion
+\begin{ejercicios}
+\item El valor de $\;6 - 4 \div 2 \cdot (-3) + (-1)^{4}\;$ es
+\opciones{$13$}{$-1$}{$7$}{$4$}
+\sol{A. $4 \div 2 \cdot (-3) = -6$; $6 + 6 + 1 = 13$. (Lección 1.1)}
+\item La temperatura en una ciudad varió así durante el día: $-3$, luego subió 8, bajó 11 y subió 4. ¿Qué temperatura marcaba al final?
+\opciones{$-2$}{$2$}{$-4$}{$0$}
+\sol{A. $-3 + 8 - 11 + 4 = -2$. (1.1)}
+\item Ana se gasta $\tfrac13$ de su dinero y luego $\tfrac12$ de lo que le queda. ¿Qué fracción conserva?
+\opciones{$\tfrac16$}{$\tfrac13$}{$\tfrac12$}{$\tfrac23$}
+\sol{B. $\tfrac23 \cdot \tfrac12 = \tfrac13$. (1.2)}
+\item ¿Cuál de las fracciones es la menor?
+\opciones{$\tfrac{7}{9}$}{$\tfrac{4}{5}$}{$\tfrac{10}{13}$}{$\tfrac{3}{4}$}
+\sol{D. A cada una le falta para 1: $\tfrac29, \tfrac15, \tfrac{3}{13}, \tfrac14$. A la menor le falta más: $\tfrac14$ es lo mayor. (1.2)}
+\item ¿Cuántos medios vasos se llenan con $4\tfrac12$ litros si un vaso tiene $\tfrac34$ de litro?
+\opciones{6}{9}{12}{18}
+\sol{C. Medio vaso son $\tfrac38$ L; $\tfrac92 \div \tfrac38 = 12$. (1.2)}
+\item El $15\,\%$ de 60 más el $60\,\%$ de 15 es
+\opciones{$9$}{$18$}{$15$}{$4.5$}
+\sol{B. Los dos valen 9. (1.3)}
+\item La cifra 2026 después del punto en $0.\overline{123}$ es
+\opciones{1}{2}{3}{0}
+\sol{A. $2026 = 675 \cdot 3 + 1$: la primera del bloque. (1.3)}
+\item En un curso de 45 estudiantes, 18 son hombres. ¿Qué porcentaje son mujeres?
+\opciones{$40\,\%$}{$55\,\%$}{$60\,\%$}{$27\,\%$}
+\sol{C. 27 de 45 es $\tfrac35 = 60\,\%$. (1.3)}
+\item $\dfrac{2^{12} \cdot 3^{6}}{6^{6}}$ es igual a
+\opciones{$2^6$}{$2^{18}$}{$6^{6}$}{$1$}
+\sol{A. $6^6 = 2^6 3^6$; queda $2^{12-6} = 2^6$. (1.4)}
+\item ¿Cuál número está más cerca de $\sqrt{90}$?
+\opciones{$9$}{$9.5$}{$10$}{$8.5$}
+\sol{B. $9.5^2 = 90.25$. (1.4)}
+\item Si el lado de un cuadrado disminuye un $10\,\%$, su área disminuye
+\opciones{$10\,\%$}{$20\,\%$}{$19\,\%$}{$81\,\%$}
+\sol{C. $0.9^2 = 0.81$: queda el $81\,\%$, se pierde el $19\,\%$. (1.4)}
+\item ¿Cuántas cifras tiene $8^{5} \cdot 5^{14}$?
+\opciones{14}{15}{16}{19}
+\sol{B. $2^{15} \cdot 5^{14} = 2 \cdot 10^{14}$: un 2 y catorce ceros, 15 cifras. (1.4)}
+\end{ejercicios}

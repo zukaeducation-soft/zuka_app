@@ -1,0 +1,470 @@
+% zuka-libro.sty — plantilla de los libros impresos de Zuka Preuniversitario UdeA (spec 2026-11-20-libros-preuda).
+% Texto y matemáticas en Palatino (newpx), títulos en Fira Sans. Página de 17 × 24 cm.
+% Uso: ver libro1.tex. Piezas: \portada, \creditos, \comousar, \mundo, \leccion, reto, regla, ejemplo, trampa, atajo,
+% \taller + \piso + ejercicios (con \sol{...} tras cada ejercicio), \opciones, \retoresuelto, \bitacora, \evaluacion,
+% \claves, \contraportada.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zuka-libro}[2026/11/20 Libros de Zuka Preuniversitario]
+
+\RequirePackage[spanish,es-noshorthands,es-tabla,es-nodecimaldot]{babel}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{newpxtext,newpxmath}
+\AtBeginDocument{\DeclareRobustCommand{\%}{\ifmmode\mathchar"7025\else\char37\relax\fi}}
+\DeclareUnicodeCharacter{2212}{\ensuremath{-}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\le}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\ge}}
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{2260}{\ensuremath{\neq}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\DeclareUnicodeCharacter{00B2}{\textsuperscript{2}}
+\DeclareUnicodeCharacter{00B3}{\textsuperscript{3}}
+\DeclareUnicodeCharacter{2713}{\ding{51}}
+\DeclareUnicodeCharacter{2717}{\ding{55}}
+\RequirePackage[scale=0.92]{FiraSans}
+\RequirePackage{amsmath,mathtools}
+\RequirePackage[paperwidth=170mm,paperheight=240mm,inner=19mm,outer=36mm,top=21mm,bottom=24mm,
+  marginparwidth=24mm,marginparsep=5mm,headheight=14pt,headsep=7mm,footskip=11mm]{geometry}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+\RequirePackage{pgfplots}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{enumitem}
+\RequirePackage{multicol}
+\RequirePackage{booktabs,array,tabularx,colortbl}
+\RequirePackage{fancyhdr}
+\RequirePackage{titlesec}
+\RequirePackage{titletoc}
+\RequirePackage{siunitx}
+\RequirePackage{xparse}
+\RequirePackage{microtype}
+\RequirePackage{eso-pic}
+\RequirePackage{lineno}
+\RequirePackage{pifont}
+\RequirePackage[hidelinks]{hyperref}
+
+\usetikzlibrary{arrows.meta,calc,patterns,positioning,shapes.geometric,decorations.pathreplacing,angles,quotes,
+  intersections,backgrounds,3d}
+\pgfplotsset{compat=1.18}
+\sisetup{output-decimal-marker={.},group-separator={\,},group-minimum-digits=4}
+
+% ---------- colores ----------
+\definecolor{zink}{HTML}{0B1020}     % tinta
+\definecolor{znight}{HTML}{07080F}   % fondo de la interfaz «red»
+\definecolor{zice}{HTML}{6FD3FF}     % acento hielo de la app
+\definecolor{zlime}{HTML}{A3E635}    % color del curso (rellenos)
+\definecolor{zolive}{HTML}{3F6212}   % el mismo color, legible sobre papel
+\definecolor{zmoss}{HTML}{65A30D}
+\definecolor{zmute}{HTML}{55607A}
+\definecolor{zline}{HTML}{D5DAE3}
+\definecolor{zsoft}{HTML}{F4F7EC}
+\definecolor{zpaper}{HTML}{FAFBF7}
+\definecolor{zcoral}{HTML}{D9472F}
+\definecolor{zsky}{HTML}{1F6FD1}
+\definecolor{zsun}{HTML}{C98A00}
+\definecolor{zviolet}{HTML}{6A4BE6}
+\colorlet{zaccent}{zolive}
+
+% ---------- datos del libro ----------
+\newcommand{\zuka@num}{1}\newcommand{\zuka@comp}{Razonamiento lógico}\newcommand{\zuka@tit}{Título}
+\newcommand{\zuka@sub}{}\newcommand{\zuka@mundos}{}
+% \libro{número}{componente}{título}{subtítulo}{lista de mundos separados por \\}
+\newcommand{\libro}[5]{\renewcommand{\zuka@num}{#1}\renewcommand{\zuka@comp}{#2}\renewcommand{\zuka@tit}{#3}%
+  \renewcommand{\zuka@sub}{#4}\renewcommand{\zuka@mundos}{#5}}
+
+% ---------- texto ----------
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4.5pt plus 1.5pt}
+\linespread{1.07}
+\AtBeginDocument{\color{zink}}
+\setlist{nosep,leftmargin=1.5em,topsep=3pt,itemsep=2.5pt}
+\setlist[itemize,1]{label={\color{zmoss}\scriptsize$\blacksquare$}}
+\setlist[enumerate,1]{label={\sffamily\bfseries\color{zolive}\arabic*.}}
+\newcommand{\clave}[1]{\textbf{\color{zolive}#1}}
+\newcommand{\kicker}[1]{{\sffamily\scriptsize\bfseries\color{zolive}\MakeUppercase{#1}}}
+\newcommand{\sen}{\operatorname{sen}}
+\newcommand{\nota}[1]{\marginpar{\raggedright\sffamily\footnotesize\color{zmute}#1}}
+\newcommand{\notaapp}[1]{\marginpar{\raggedright\sffamily\footnotesize
+  \tikz[baseline=-0.6ex]{\draw[zolive,line width=.7pt,rounded corners=1.2pt](0,-.13)rectangle(.17,.17);
+  \fill[zolive](.085,-.08)circle(.018);}\,{\color{zolive}\bfseries En la app}\\\color{zmute}#1}}
+\newcommand{\marca}{{\sffamily\bfseries ZUKA}}
+
+% ---------- encabezados ----------
+\newcommand{\zuka@mundoactual}{}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[LE]{\sffamily\footnotesize\color{zmute}\textbf{\color{zolive}\thepage}\hspace{4mm}Zuka Preuniversitario UdeA \,·\, Libro \zuka@num}
+\fancyhead[RO]{\sffamily\footnotesize\color{zmute}\zuka@mundoactual\hspace{4mm}\textbf{\color{zolive}\thepage}}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\sffamily\footnotesize\color{zmute}\thepage}}
+\fancypagestyle{vacia}{\fancyhf{}}
+
+% ---------- lecciones (secciones) ----------
+\newcounter{mundo}
+\newcommand{\zuka@lid}{}
+\titleformat{\section}[display]{\sffamily\color{zink}}
+  {\tikz[baseline=-0.7ex]{\node[draw=zolive,line width=.6pt,rounded corners=5pt,inner xsep=5pt,inner ysep=2.2pt,
+    font=\sffamily\scriptsize\bfseries\color{zolive}]{LECCIÓN \themundo.\arabic{section} \,·\, \zuka@lid};}}
+  {5pt}{\fontsize{19}{22}\selectfont\fontseries{sb}\selectfont}
+  [{\vspace{3pt}\color{zlime}\rule{18mm}{1.6pt}}]
+\titlespacing*{\section}{0pt}{6pt}{8pt}
+\titleformat{\subsection}[hang]{\sffamily\large\fontseries{sb}\selectfont\color{zink}}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+\titleformat{\subsubsection}[runin]{\sffamily\normalsize\bfseries\color{zolive}}{}{0pt}{}[.]
+\titlespacing*{\subsubsection}{0pt}{8pt}{.6em}
+\renewcommand{\thesection}{\themundo.\arabic{section}}
+\setcounter{secnumdepth}{1}
+\setcounter{tocdepth}{1}
+
+% \leccion{pu-cm-1}{Título}{lo que se hace en la app}
+\newcommand{\leccion}[3]{%
+  \clearpage
+  \renewcommand{\zuka@lid}{#1}\setcounter{ej}{0}\setcounter{ejemplo}{0}%
+  \section{#2}%
+  \immediate\write\zuka@sol{\noexpand\solcab{Lección \thesection\ · \unexpanded{#2}}}%
+  \notaapp{#3}%
+}
+
+% ---------- aperturas de mundo (capítulos) ----------
+% \mundo{Título}{id del mundo en la app}{texto de entrada}{lista de lecciones: \item ...}
+\newcommand{\mundo}[4]{%
+  \cleardoublepage
+  \stepcounter{mundo}\setcounter{section}{0}%
+  \renewcommand{\zuka@mundoactual}{Mundo \themundo\ · #1}%
+  \thispagestyle{vacia}%
+  \phantomsection\addcontentsline{toc}{chapter}{\protect\numberline{\themundo}#1}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[znight] (current page.north west) rectangle ([yshift=-92mm]current page.north east);
+    \begin{scope}[shift={([xshift=-8mm,yshift=-46mm]current page.north east)}]
+      \zuka@red{\themundo}
+    \end{scope}
+    \node[anchor=north west,font=\sffamily\small\bfseries,text=zlime] at ([xshift=19mm,yshift=-20mm]current page.north west)
+      {MUNDO \two@digits{\themundo}};
+    \node[anchor=north west,font=\sffamily\footnotesize,text=white!60] at ([xshift=19mm,yshift=-26mm]current page.north west)
+      {Zuka Preuniversitario UdeA · #2};
+    \node[anchor=south west,text width=110mm,align=left,font=\sffamily\fontsize{30}{32}\selectfont\firalight,text=white]
+      at ([xshift=18mm,yshift=-84mm]current page.north west) {#1};
+    \draw[zlime,line width=1.6pt] ([xshift=19mm,yshift=-88mm]current page.north west) -- ++(18mm,0);
+  \end{tikzpicture}%
+  \par\vspace*{76mm}%
+  {\large #3\par}\vspace{6mm}%
+  \begin{tcolorbox}[enhanced,colback=zsoft,colframe=zsoft,boxrule=0pt,arc=3pt,left=5mm,right=5mm,top=3mm,bottom=3mm]
+    \kicker{En este mundo}\par\vspace{2pt}
+    \begin{itemize}[leftmargin=1.2em,itemsep=3pt]#4\end{itemize}
+  \end{tcolorbox}
+  \vspace{3mm}
+  {\sffamily\small\color{zmute}En la app Zuka este mundo está en \textbf{Preuniversitario UdeA}
+   \,›\, \textbf{\zuka@comp}. Cada lección del libro tiene allá su video y sus diez juegos: lee aquí, juega allá y
+   vuelve al taller.\par}
+  \immediate\write\zuka@sol{\noexpand\solmun{Mundo \themundo\ · \unexpanded{#1}}}%
+}
+
+% red de nodos (el camino de la app) que sirve de motivo; #1 cambia la semilla
+\newcommand{\zuka@red}[1]{%
+  \pgfmathsetseed{#17}%
+  \foreach \i in {1,...,22}{%
+    \pgfmathsetmacro{\zx}{-rnd*120}\pgfmathsetmacro{\zy}{(rnd-0.5)*80}%
+    \expandafter\xdef\csname zrx\i\endcsname{\zx}\expandafter\xdef\csname zry\i\endcsname{\zy}%
+    \coordinate (r\i) at (\zx mm,\zy mm);}%
+  \foreach \i in {1,...,22}{\foreach \j in {1,...,22}{%
+    \ifnum\i<\j
+      \pgfmathsetmacro{\zd}{veclen(\csname zrx\i\endcsname-\csname zrx\j\endcsname,\csname zry\i\endcsname-\csname zry\j\endcsname)}%
+      \ifdim\zd pt<34pt \draw[white,opacity=.22,line width=.35pt] (r\i) -- (r\j);\fi
+    \fi}}%
+  \foreach \i in {1,...,22}{\fill[white,opacity=.55] (r\i) circle (.55mm);}%
+  \draw[zlime,line width=.9pt] (r3) -- (r7) -- (r12) -- (r18);
+  \foreach \i in {3,7,12}{\fill[zlime] (r\i) circle (.8mm);}
+  \draw[zlime,line width=.8pt] (r18) circle (1.6mm);
+  \fill[zlime] (r18) circle (.7mm);
+}
+
+% ---------- cajas ----------
+\tcbset{zbase/.style={enhanced,breakable,boxrule=0pt,arc=2.5pt,left=4mm,right=4mm,top=2.6mm,bottom=2.6mm,
+  before skip=7pt,after skip=7pt,fontupper=\normalsize}}
+
+\newenvironment{reto}{%
+  \begin{tcolorbox}[zbase,colback=znight,coltext=white,left=5mm,
+    overlay={\fill[zlime] (frame.north west) rectangle ([xshift=1.4mm]frame.south west);}]
+  {\sffamily\scriptsize\bfseries\color{zlime}EL RETO\quad}{\sffamily\scriptsize\color{white!60}se resuelve al final de la lección}\par\vspace{2pt}
+  \color{white}}
+  {\end{tcolorbox}}
+
+\newenvironment{regla}[1][La regla]{%
+  \begin{tcolorbox}[zbase,colback=white,colframe=zolive,boxrule=.7pt,
+    title={\sffamily\scriptsize\bfseries\MakeUppercase{#1}},coltitle=zolive,colbacktitle=zsoft,
+    attach title to upper={},toptitle=0pt,bottomtitle=0pt,
+    titlerule=0pt,detach title,before upper={{\sffamily\scriptsize\bfseries\color{zolive}\MakeUppercase{#1}}\par\vspace{2pt}}]}
+  {\end{tcolorbox}}
+
+\newcounter{ejemplo}
+\newenvironment{ejemplo}[1][]{%
+  \stepcounter{ejemplo}%
+  \begin{tcolorbox}[zbase,colback=white,colframe=white,left=4.5mm,
+    overlay={\draw[zline,line width=1.2pt] ([xshift=.6mm]frame.north west) -- ([xshift=.6mm]frame.south west);}]
+  {\sffamily\small\bfseries\color{zolive}Ejemplo \thesection.\arabic{ejemplo}}%
+  \if\relax\detokenize{#1}\relax\else{\sffamily\small\ \color{zmute}· #1}\fi\par\vspace{1pt}}
+  {\end{tcolorbox}}
+\newcommand{\solucion}{\par\vspace{2pt}{\sffamily\small\bfseries\color{zolive}Solución.}\ }
+\newcommand{\paso}[1]{\par{\sffamily\footnotesize\bfseries\color{zmute}#1\ }}
+
+\newenvironment{trampa}{%
+  \begin{tcolorbox}[zbase,colback=zcoral!6,left=4mm,
+    overlay={\fill[zcoral] (frame.north west) rectangle ([xshift=1mm]frame.south west);}]
+  {\sffamily\scriptsize\bfseries\color{zcoral}TRAMPA\quad}}
+  {\end{tcolorbox}}
+\newenvironment{atajo}{%
+  \begin{tcolorbox}[zbase,colback=zsky!6,left=4mm,
+    overlay={\fill[zsky] (frame.north west) rectangle ([xshift=1mm]frame.south west);}]
+  {\sffamily\scriptsize\bfseries\color{zsky}ATAJO DE EXAMEN\quad}}
+  {\end{tcolorbox}}
+\newenvironment{profundiza}{%
+  \begin{tcolorbox}[zbase,colback=zviolet!5,left=4mm,
+    overlay={\fill[zviolet] (frame.north west) rectangle ([xshift=1mm]frame.south west);}]
+  {\sffamily\scriptsize\bfseries\color{zviolet}PARA IR MÁS LEJOS\quad}}
+  {\end{tcolorbox}}
+
+\newenvironment{retoresuelto}{%
+  \begin{tcolorbox}[zbase,colback=zsoft,left=5mm,
+    overlay={\fill[zlime] (frame.north west) rectangle ([xshift=1.4mm]frame.south west);}]
+  {\sffamily\scriptsize\bfseries\color{zolive}EL RETO, RESUELTO\quad}}
+  {\end{tcolorbox}}
+
+% bitácora: casillas para marcar el avance con la app
+\newcommand{\casilla}[1]{\tikz[baseline=-0.7ex]\draw[zolive,line width=.6pt,rounded corners=1pt](0,-.14)rectangle(.28,.14);\,#1}
+\newcommand{\bitacora}{\par\vspace{6pt}\noindent
+  {\sffamily\footnotesize\color{zmute}\textbf{\color{zolive}Bitácora}\hfill
+   \casilla{Leí la lección}\hfill\casilla{Vi el video}\hfill\casilla{Jugué los diez}\hfill\casilla{Hice el taller}\hfill
+   Fecha \rule[-1pt]{14mm}{.4pt}}\par}
+
+% ---------- taller y ejercicios ----------
+\newcounter{ej}
+\newcommand{\taller}{\par\vspace{8pt}\noindent
+  \begin{tikzpicture}\node[fill=zlime,rounded corners=2pt,inner xsep=6pt,inner ysep=3pt,
+    font=\sffamily\small\bfseries,text=zink]{TALLER \thesection};\end{tikzpicture}\par\vspace{2pt}}
+\newcommand{\piso}[2]{\par\vspace{6pt}{\sffamily\small\bfseries\color{zolive}#1}\,{\sffamily\footnotesize\color{zmute}· #2}\par\vspace{1pt}}
+\newenvironment{ejercicios}[1][1]{%
+  \def\zuka@cols{#1}%
+  \ifnum\zuka@cols>1 \begin{multicols}{\zuka@cols}\fi
+  \begin{enumerate}[label={\sffamily\bfseries\color{zolive}\arabic*},start=\numexpr\value{ej}+1\relax,
+    leftmargin=1.6em,itemsep=5pt,align=left]}
+  {\global\setcounter{ej}{\value{enumi}}\end{enumerate}\ifnum\zuka@cols>1 \end{multicols}\fi}
+\newenvironment{ejercicios2}{\begin{multicols}{2}\begin{ejercicios}}{\end{ejercicios}\end{multicols}}
+
+% opciones A–D: \opciones (en fila), \opcionesd (2 × 2), \opcionesl (una por renglón)
+\newcommand{\op}[1]{{\sffamily\footnotesize\bfseries\color{zolive}#1}\ }
+\newcommand{\opciones}[4]{\par\vspace{1pt}\noindent
+  \begin{tabularx}{\linewidth}{@{}XXXX@{}}\op{A}#1&\op{B}#2&\op{C}#3&\op{D}#4\end{tabularx}\par}
+\newcommand{\opcionesd}[4]{\par\vspace{1pt}\noindent
+  \begin{tabularx}{\linewidth}{@{}XX@{}}\op{A}#1&\op{B}#2\\[2pt]\op{C}#3&\op{D}#4\end{tabularx}\par}
+\newcommand{\opcionesl}[4]{\par\vspace{1pt}%
+  \begin{list}{}{\leftmargin=1.4em\itemsep=1pt\topsep=1pt\labelwidth=1em\labelsep=.4em}
+  \item[\op{A}]#1\item[\op{B}]#2\item[\op{C}]#3\item[\op{D}]#4\end{list}}
+
+% ---------- claves (se escriben en un archivo y se imprimen al final) ----------
+\newwrite\zuka@sol
+\AtBeginDocument{\immediate\openout\zuka@sol=\jobname.sol}
+\newcommand{\sol}[1]{\immediate\write\zuka@sol{\noexpand\solitem{\the\value{enumi}}{\unexpanded{#1}}}}
+\newcommand{\solhead}[1]{\immediate\write\zuka@sol{\noexpand\solcab{\unexpanded{#1}}}}
+\newcommand{\solmundo}[1]{\immediate\write\zuka@sol{\noexpand\solmun{\unexpanded{#1}}}}
+\newcommand{\solitem}[2]{\par\noindent\hangindent=1.4em\hangafter=1{\sffamily\footnotesize\bfseries\color{zolive}#1}\ \,{\small#2}\par}
+\newcommand{\solcab}[1]{\par\vspace{5pt}{\sffamily\small\bfseries\color{zink}#1}\par\vspace{1pt}}
+\newcommand{\solmun}[1]{\par\vspace{10pt}{\sffamily\normalsize\bfseries\color{zolive}#1}\par\vspace{1pt}{\color{zlime}\rule{\linewidth}{.8pt}}\par}
+\newcommand{\claves}{%
+  \immediate\closeout\zuka@sol
+  \cleardoublepage\renewcommand{\zuka@mundoactual}{Claves y soluciones}%
+  \phantomsection\addcontentsline{toc}{chapter}{Claves y soluciones}%
+  {\sffamily\fontsize{26}{30}\selectfont\firalight Claves y soluciones\par}\vspace{2pt}
+  {\color{zlime}\rule{18mm}{1.6pt}}\par\vspace{4pt}
+  {\small\color{zmute}La respuesta de cada ejercicio con la idea que la sostiene. Mírala solo después de intentarlo: el
+   error que cometas es la mejor pista de qué repasar en la app.\par}
+  \vspace{4pt}\begin{multicols}{2}\raggedright\setlength{\parskip}{1.5pt}\InputIfFileExists{\jobname.sol}{}{}\end{multicols}}
+
+% ---------- evaluación del mundo ----------
+\newcommand{\evaluacion}{%
+  \clearpage\setcounter{ej}{0}%
+  \immediate\write\zuka@sol{\noexpand\solcab{Evaluación del mundo \themundo}}%
+  \noindent\begin{tikzpicture}
+    \fill[znight,rounded corners=3pt] (0,0) rectangle (\linewidth,15mm);
+    \node[anchor=west,font=\sffamily\scriptsize\bfseries,text=zlime] at (5mm,10mm) {EVALUACIÓN DEL MUNDO \themundo};
+    \node[anchor=west,font=\sffamily\large\firalight,text=white] at (5mm,4.6mm) {\zuka@mundoactual};
+    \node[anchor=east,font=\sffamily\scriptsize,text=white!60,align=right] at ([xshift=-5mm]\linewidth,7.5mm)
+      {Sin calculadora · 1.5 min por pregunta\\Como en el examen de admisión};
+  \end{tikzpicture}\par\vspace{4pt}
+  {\small\color{zmute}Responde todas antes de mirar las claves. Puntaje: \rule[-1pt]{8mm}{.4pt} de
+   \rule[-1pt]{8mm}{.4pt}. Si fallas una, la lección indicada en la clave te dice dónde volver, en el libro y en la app.\par}}
+
+% ---------- índice ----------
+\titlecontents{chapter}[8mm]{\vspace{5pt}\sffamily\bfseries\color{zink}}
+  {\contentslabel[\color{zolive}\two@digits{\thecontentslabel}]{8mm}}{\hspace*{-8mm}}{\hfill\color{zolive}\contentspage}
+\titlecontents{section}[17mm]{\vspace{.5pt}\small\color{zink}}
+  {\contentslabel[\color{zmute}\thecontentslabel]{9mm}}{}{\titlerule*[2.5mm]{\color{zline}.}\contentspage}
+\newcommand{\indice}{%
+  \cleardoublepage\thispagestyle{vacia}%
+  {\sffamily\fontsize{26}{30}\selectfont\firalight Contenido\par}\vspace{2pt}
+  {\color{zlime}\rule{18mm}{1.6pt}}\par\vspace{6pt}
+  \@starttoc{toc}}
+
+% ---------- texto con renglones numerados (lectura) ----------
+% \begin{texto}{Título}{tipo · autor ficticio} ... párrafos con \par ... \end{texto}
+\newcounter{parr}
+\newcommand{\pa}{\par\stepcounter{parr}\noindent\llap{\makebox[6mm][l]{\sffamily\scriptsize\bfseries\color{zolive}\arabic{parr}}}}
+\newenvironment{texto}[2]{%
+  \setcounter{parr}{0}%
+  \begin{tcolorbox}[enhanced,breakable,colback=zpaper,colframe=zline,boxrule=.5pt,arc=2pt,left=9mm,right=6mm,
+    top=4mm,bottom=4mm,before skip=8pt,after skip=8pt]
+  {\sffamily\large\fontseries{sb}\selectfont #1\par}{\sffamily\footnotesize\color{zmute}#2\par}\vspace{4pt}
+  \setlength{\parskip}{5pt}\linespread{1.12}\selectfont}
+  {\end{tcolorbox}}
+
+% ---------- portada y contraportada ----------
+\newcommand{\zuka@cerebro}{% marca: cerebro en malla, a línea fina
+  \begin{scope}[line width=.5pt,draw=zice]
+    \coordinate (a) at (0,0);\coordinate (b) at (.55,.35);\coordinate (c) at (1.1,.42);\coordinate (d) at (1.6,.22);
+    \coordinate (e) at (1.85,-.25);\coordinate (f) at (1.55,-.7);\coordinate (g) at (1.0,-.82);\coordinate (h) at (.45,-.7);
+    \coordinate (i) at (.05,-.42);\coordinate (m1) at (.6,-.2);\coordinate (m2) at (1.15,-.15);\coordinate (m3) at (.95,-.5);
+    \draw (a)--(b)--(c)--(d)--(e)--(f)--(g)--(h)--(i)--cycle;
+    \draw (a)--(m1)--(b) (m1)--(c)--(m2)--(d) (m2)--(e) (m2)--(f) (m2)--(m3)--(g) (m3)--(h)--(m1)--(i) (m1)--(m3) (m1)--(m2);
+    \draw (m3)--(f);
+    \foreach \p in {a,b,c,d,e,f,g,h,i,m1,m2,m3}{\fill[zice] (\p) circle (.035);}
+    \fill[zlime] (m2) circle (.06);
+  \end{scope}}
+
+% motivos de portada: 1 número y forma, 2 árbol lógico, 3 renglones, 4 dos textos
+\newcommand{\zuka@motivo}[1]{%
+  \ifcase#1\or
+    % 1: retícula de puntos con un triángulo rectángulo y una circunferencia encendidos
+    \foreach \x in {0,...,13}{\foreach \y in {0,...,11}{\fill[white,opacity=.22] (\x*9mm,\y*9mm) circle (.45mm);}}
+    \foreach \x in {0,...,13}{\draw[white,opacity=.07,line width=.3pt] (\x*9mm,0)--(\x*9mm,99mm);}
+    \foreach \y in {0,...,11}{\draw[white,opacity=.07,line width=.3pt] (0,\y*9mm)--(117mm,\y*9mm);}
+    \draw[zice,line width=.8pt] (18mm,18mm)--(72mm,18mm)--(72mm,90mm)--cycle;
+    \draw[zice,line width=.5pt] (72mm,18mm) rectangle ++(-4mm,4mm);
+    \draw[zlime,line width=1pt] (72mm,54mm) circle (36mm);
+    \foreach \p in {(18mm,18mm),(72mm,18mm),(72mm,90mm)}{\fill[zlime] \p circle (1.1mm);}
+    \node[font=\sffamily\scriptsize,text=zice] at (45mm,13mm) {$a$};
+    \node[font=\sffamily\scriptsize,text=zice] at (77mm,54mm) {$b$};
+    \node[font=\sffamily\scriptsize,text=zlime] at (40mm,58mm) {$c^2=a^2+b^2$};
+  \or
+    % 2: árbol de decisiones (lógica, conteo y azar)
+    \foreach \l in {0,...,3}{%
+      \pgfmathtruncatemacro{\cnt}{2^\l}%
+      \foreach \k in {1,...,\cnt}{%
+        \pgfmathsetmacro{\px}{12+(2*\k-1)*48/\cnt}\pgfmathsetmacro{\py}{100-\l*24}\pgfmathsetmacro{\off}{24/\cnt}%
+        \draw[white,opacity=.25,line width=.4pt] (\px mm,\py mm) -- ({(\px-\off)*1mm},{(\py-24)*1mm});
+        \draw[white,opacity=.25,line width=.4pt] (\px mm,\py mm) -- ({(\px+\off)*1mm},{(\py-24)*1mm});
+        \fill[white,opacity=.6] (\px mm,\py mm) circle (.6mm);}}
+    \foreach \k in {1,...,16}{\fill[white,opacity=.6] ({(12+(2*\k-1)*3)*1mm},4mm) circle (.6mm);}
+    \draw[zlime,line width=1.1pt] (60mm,100mm)--(36mm,76mm)--(48mm,52mm)--(42mm,28mm)--(45mm,4mm);
+    \foreach \p in {(60mm,100mm),(36mm,76mm),(48mm,52mm),(42mm,28mm)}{\fill[zlime] \p circle (1.1mm);}
+    \draw[zlime,line width=.9pt] (45mm,4mm) circle (2mm);\fill[zlime] (45mm,4mm) circle (.9mm);
+    \node[font=\scriptsize,text=zice] at (100mm,88mm) {$p\to q$};
+    \node[font=\scriptsize,text=zice] at (104mm,64mm) {$\neg q\to\neg p$};
+    \node[font=\scriptsize,text=zice] at (110mm,-6mm) {$P=\tfrac{1}{16}$};
+  \or
+    % 3: renglones de un texto, con trozos subrayados y unidos (lo que dice)
+    \foreach \y/\l in {0/112,1/104,2/116,3/96,4/110,5/72,6/114,7/108,8/100,9/116,10/84,11/112,12/106,13/60}{%
+      \draw[white,opacity=.18,line width=1.6pt,line cap=round] (0,100mm-\y*7.5mm) -- (\l mm,100mm-\y*7.5mm);}
+    \draw[zlime,line width=1.6pt,line cap=round] (22mm,92.5mm)--(58mm,92.5mm);
+    \draw[zlime,line width=1.6pt,line cap=round] (40mm,55mm)--(88mm,55mm);
+    \draw[zlime,line width=1.6pt,line cap=round] (8mm,17.5mm)--(46mm,17.5mm);
+    \draw[zice,line width=.5pt] (58mm,92.5mm) .. controls (118mm,85mm) and (110mm,62mm) .. (88mm,55mm);
+    \draw[zice,line width=.5pt] (40mm,55mm) .. controls (0mm,45mm) and (-6mm,25mm) .. (8mm,17.5mm);
+    \foreach \p in {(58mm,92.5mm),(88mm,55mm),(40mm,55mm),(8mm,17.5mm)}{\fill[zice] \p circle (1mm);}
+    \node[font=\sffamily\scriptsize\bfseries,text=zlime] at (8mm,106mm) {¶1};
+  \or
+    % 4: dos textos en columnas con hilos que se cruzan (lo que quiere decir)
+    \foreach \y/\l in {0/48,1/44,2/50,3/40,4/47,5/50,6/36,7/46,8/49,9/30,10/45,11/50,12/42}{%
+      \draw[white,opacity=.18,line width=1.5pt,line cap=round] (0,100mm-\y*7.6mm) -- (\l mm,100mm-\y*7.6mm);
+      \draw[white,opacity=.18,line width=1.5pt,line cap=round] (66mm,100mm-\y*7.6mm) -- (66mm+\l mm-2mm,100mm-\y*7.6mm);}
+    \draw[zlime,line width=1.5pt,line cap=round] (6mm,84.8mm)--(40mm,84.8mm);
+    \draw[zice,line width=1.5pt,line cap=round] (72mm,62mm)--(108mm,62mm);
+    \draw[zlime,line width=1.5pt,line cap=round] (10mm,31.6mm)--(44mm,31.6mm);
+    \draw[zice,line width=1.5pt,line cap=round] (70mm,16.4mm)--(100mm,16.4mm);
+    \draw[white,opacity=.7,line width=.5pt] (40mm,84.8mm) .. controls (56mm,80mm) and (56mm,66mm) .. (72mm,62mm);
+    \draw[white,opacity=.7,line width=.5pt] (44mm,31.6mm) .. controls (58mm,28mm) and (56mm,20mm) .. (70mm,16.4mm);
+    \draw[white,opacity=.7,line width=.5pt,dashed] (40mm,84.8mm) .. controls (60mm,60mm) and (52mm,30mm) .. (70mm,16.4mm);
+    \foreach \p in {(40mm,84.8mm),(72mm,62mm),(44mm,31.6mm),(70mm,16.4mm)}{\fill[white] \p circle (1mm);}
+    \node[font=\sffamily\scriptsize\bfseries,text=zlime] at (4mm,108mm) {TEXTO 1};
+    \node[font=\sffamily\scriptsize\bfseries,text=zice] at (72mm,108mm) {TEXTO 2};
+  \fi}
+
+\newcommand{\portada}{%
+  \thispagestyle{vacia}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[znight] (current page.south west) rectangle (current page.north east);
+    % brillo suave
+    \foreach \r/\o in {90/.025,70/.03,50/.035,30/.04}{\fill[zlime,opacity=\o] ([xshift=10mm,yshift=-130mm]current page.north east) circle (\r mm);}
+    % franja de la marca
+    \begin{scope}[shift={([xshift=16mm,yshift=-20mm]current page.north west)},scale=.62]\zuka@cerebro\end{scope}
+    \node[anchor=west,font=\sffamily\bfseries\fontsize{15}{15}\selectfont,text=white]
+      at ([xshift=30mm,yshift=-20.2mm]current page.north west) {Z\,U\,K\,A};
+    \node[anchor=east,font=\sffamily\scriptsize\bfseries,text=zlime]
+      at ([xshift=-16mm,yshift=-20mm]current page.north east) {LIBRO \zuka@num\ DE 4};
+    \draw[white,opacity=.15,line width=.4pt] ([xshift=16mm,yshift=-28mm]current page.north west) -- ([xshift=-16mm,yshift=-28mm]current page.north east);
+    \node[anchor=north west,font=\sffamily\small\bfseries,text=zlime]
+      at ([xshift=16mm,yshift=-36mm]current page.north west) {PREUNIVERSITARIO UdeA};
+    % título
+    \node[anchor=north west,text width=135mm,align=left,font=\sffamily\fontsize{34}{36}\selectfont\firalight,text=white]
+      at ([xshift=15mm,yshift=-43mm]current page.north west) {\zuka@comp};
+    \node[anchor=north west,text width=135mm,align=left,font=\sffamily\fontsize{20}{23}\selectfont\fontseries{sb}\selectfont,text=zlime]
+      at ([xshift=16mm,yshift=-60mm]current page.north west) {\zuka@tit};
+    \node[anchor=north west,text width=120mm,align=left,font=\sffamily\small,text=white!70]
+      at ([xshift=16mm,yshift=-71mm]current page.north west) {\zuka@sub};
+    % motivo
+    \begin{scope}[shift={([xshift=26mm,yshift=48mm]current page.south west)}]\zuka@motivo{\zuka@num}\end{scope}
+    % número de tomo grande, en contorno
+    \node[anchor=south east,font=\sffamily\bfseries\fontsize{120}{120}\selectfont,text opacity=0,draw opacity=0]
+      (big) at ([xshift=-10mm,yshift=148mm]current page.south east) {\zuka@num};
+    \node[anchor=south east,font=\sffamily\firathin\fontsize{120}{120}\selectfont,text=white,opacity=.9]
+      at ([xshift=-10mm,yshift=148mm]current page.south east) {\zuka@num};
+    % pie
+    \draw[white,opacity=.15,line width=.4pt] ([xshift=16mm,yshift=30mm]current page.south west) -- ([xshift=-16mm,yshift=30mm]current page.south east);
+    \node[anchor=north west,text width=100mm,align=left,font=\sffamily\scriptsize,text=white!65]
+      at ([xshift=16mm,yshift=26mm]current page.south west) {\zuka@mundos};
+    \node[anchor=north east,align=right,font=\sffamily\scriptsize,text=white!65]
+      at ([xshift=-16mm,yshift=26mm]current page.south east) {Teoría · ejemplos resueltos\\talleres · evaluaciones\\{\color{zlime}con la app Zuka}};
+  \end{tikzpicture}%
+  \null\clearpage}
+
+\newcommand{\creditos}{%
+  \thispagestyle{vacia}\null\vfill
+  {\small\sffamily
+  \textbf{Zuka Preuniversitario UdeA · Libro \zuka@num\ de 4}\\
+  \zuka@comp: \zuka@tit\par\vspace{6pt}
+  \color{zmute}Una publicación de Zuka Educación. Textos, problemas, lecturas e ilustraciones originales, escritos para
+  acompañar el curso Preuniversitario UdeA de la aplicación Zuka. Los problemas siguen el estilo y los temas de la prueba
+  de admisión de la Universidad de Antioquia; ninguno está copiado de un examen ni de otro libro.\par\vspace{6pt}
+  Primera edición, Medellín, noviembre de 2026.\par\vspace{6pt}
+  Prohibida la reproducción total o parcial sin permiso escrito de Zuka Educación.\par}
+  \clearpage}
+
+\newcommand{\contraportada}{%
+  \cleardoublepage\thispagestyle{vacia}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[znight] (current page.south west) rectangle (current page.north east);
+    \begin{scope}[shift={([xshift=-10mm,yshift=-60mm]current page.north east)}]\zuka@red{9}\end{scope}
+    \node[anchor=north west,text width=120mm,align=left,font=\sffamily\fontsize{17}{21}\selectfont\firalight,text=white]
+      at ([xshift=20mm,yshift=-110mm]current page.north west)
+      {Lee aquí. Juega allá.\\{\color{zlime}Vuelve al taller.}};
+    \node[anchor=north west,text width=115mm,align=left,font=\small,text=white!75]
+      at ([xshift=20mm,yshift=-132mm]current page.north west)
+      {Cuatro libros y una aplicación para preparar la prueba de admisión de la Universidad de Antioquia: dos de
+      Razonamiento lógico y dos de Comprensión lectora. Cada lección del libro tiene en Zuka su video y sus juegos;
+      el libro va más hondo, con ejemplos resueltos paso a paso, trampas, atajos y talleres en tres pisos, y cada mundo
+      cierra con una evaluación como la del examen.};
+    \foreach \n/\t in {1/Número y forma,2/{Orden, lógica y azar},3/Leer lo que dice,4/Leer lo que quiere decir}{%
+      \node[anchor=west,font=\sffamily\scriptsize,text=white!80] at ([xshift=20mm,yshift=40mm-\n*6mm]current page.south west)
+        {{\color{zlime}\bfseries Libro \n}\quad \t};}
+    \begin{scope}[shift={([xshift=-38mm,yshift=22mm]current page.south east)},scale=.62]\zuka@cerebro\end{scope}
+    \node[anchor=west,font=\sffamily\bfseries\small,text=white] at ([xshift=-24mm,yshift=22mm]current page.south east) {ZUKA};
+  \end{tikzpicture}}
+
+\newcommand{\parte}[1]{\InputIfFileExists{#1}{}{}}
+
+% ---------- utilidades de dibujo ----------
+\newcommand{\recta}[3]{% \recta{min}{max}{marcas extra} recta numérica sencilla
+  \begin{tikzpicture}[x=6mm]
+    \draw[-{Latex[length=2mm]},zmute] (#1-.6,0)--(#2+.6,0);
+    \foreach \t in {#1,...,#2}{\draw[zmute] (\t,.08)--(\t,-.08) node[below,font=\scriptsize,text=zink]{$\t$};}
+    #3
+  \end{tikzpicture}}

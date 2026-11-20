@@ -1,0 +1,373 @@
+% Libro 1 · Mundo 5 · Ecuaciones y planteamiento (app: pu-ecuaciones)
+\mundo{Ecuaciones y planteamiento}{pu-ecuaciones}{La parte difícil de un problema verbal casi nunca es despejar: es
+\emph{traducir}. Este mundo enseña a nombrar bien la incógnita, a convertir frases en igualdades y a reconocer los
+problemas clásicos (edades, mezclas, monedas) que el examen repite con otros nombres.}{%
+\item \textbf{5.1} Del texto a la ecuación
+\item \textbf{5.2} Edades, mezclas y monedas
+\item \textbf{5.3} Sistemas y desigualdades}
+
+\leccion{pu-ec-1}{Del texto a la ecuación}{Juego de la balanza con cajas.}
+
+\begin{reto}
+Si a un número se le suma su mitad y su tercera parte, se obtiene 55. ¿Cuál es el número?
+\opciones{30}{33}{36}{45}
+\end{reto}
+
+\subsection{La idea: una balanza que hay que mantener}
+Una ecuación es una \clave{balanza en equilibrio}: lo que se haga en un platillo debe hacerse en el otro. Despejar es
+quitar de los dos lados lo que estorba hasta dejar la incógnita sola.
+
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \draw[zink,line width=.8pt] (0,0) -- (0,18); \fill[zink] (-4,0) -- (4,0) -- (0,4) -- cycle;
+  \draw[zink,line width=.8pt] (-30,18) -- (30,18);
+  \draw[zmute] (-30,18) -- (-36,8) (-30,18) -- (-24,8) (30,18) -- (24,8) (30,18) -- (36,8);
+  \draw[zink,line width=.8pt] (-38,8) -- (-22,8); \draw[zink,line width=.8pt] (22,8) -- (38,8);
+  \foreach \x in {-36,-31}{\draw[zink,fill=zlime!70] (\x,8) rectangle ++(4,4) node[midway,font=\tiny]{$x$};}
+  \foreach \x in {-26}{\draw[zink,fill=zsky!30] (\x,8) rectangle ++(3,3) node[midway,font=\tiny]{1};}
+  \foreach \x in {23,26.5,30,33.5}{\draw[zink,fill=zsky!30] (\x,8) rectangle ++(3,3) node[midway,font=\tiny]{1};}
+  \foreach \x in {24.5,28,31.5}{\draw[zink,fill=zsky!30] (\x,11.2) rectangle ++(3,3) node[midway,font=\tiny]{1};}
+  \node[font=\small] at (0,-5) {$2x + 1 = 7 \;\Rightarrow\; 2x = 6 \;\Rightarrow\; x = 3$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Traducir}
+Antes de escribir, decide \emph{qué} es la incógnita y escríbelo en palabras: «$x$ = número de boletas vendidas el
+sábado». Luego traduce frase por frase:
+
+\begin{center}\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Frase} & \textbf{Expresión}\\\midrule
+el doble de un número aumentado en 5 & $2x + 5$\\
+el doble de un número aumentado en 5 (todo junto) & $2(x + 5)$\\
+tres números consecutivos & $n,\ n + 1,\ n + 2$\\
+dos números pares consecutivos & $2n,\ 2n + 2$\\
+$a$ excede a $b$ en 7 & $a - b = 7$\\
+un número es el triple de otro & $a = 3b$\\
+el número de dos cifras $\overline{ab}$ & $10a + b$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{regla}[Método en cuatro pasos]
+\begin{enumerate}
+  \item Nombra la incógnita con palabras.
+  \item Escribe las demás cantidades en términos de ella.
+  \item Busca la frase que dice «es igual»: esa es la ecuación.
+  \item Resuelve y \emph{verifica en el enunciado}, no en la ecuación (la ecuación pudo estar mal planteada).
+\end{enumerate}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Consecutivos]
+La suma de tres números impares consecutivos es 87. ¿Cuál es el mayor?
+\solucion Si el del medio es $m$, son $m - 2$, $m$, $m + 2$ y suman $3m = 87$: $m = 29$. El mayor es 31. (Elegir el del
+medio como incógnita hace desaparecer los números sueltos.)
+\end{ejemplo}
+
+\begin{ejemplo}[Repartir con condiciones]
+Entre Andrés, Bibiana y Camilo tienen \$145\,000. Bibiana tiene el doble que Andrés y Camilo \$25\,000 más que Bibiana.
+¿Cuánto tiene Camilo?
+\solucion Sea $a$ lo de Andrés. Bibiana $2a$, Camilo $2a + 25\,000$. Suma: $5a + 25\,000 = 145\,000$, $a = 24\,000$.
+Camilo tiene $73\,000$.
+\end{ejemplo}
+
+\begin{ejemplo}[Un problema de dos cifras]
+Un número de dos cifras es 4 veces la suma de sus cifras, y la cifra de las unidades excede en 2 a la de las decenas.
+¿Cuál es?
+\solucion Se escribe por posiciones: $\overline{ab} = 10a + b$. La primera condición da $10a + b = 4(a + b)$, o sea
+$6a = 3b$, es decir, $b = 2a$. La segunda da $b = a + 2$. Igualando, $2a = a + 2$: $a = 2$ y $b = 4$. El número es 24,
+y en efecto $24 = 4 \cdot (2 + 4)$.
+\end{ejemplo}
+
+\begin{ejemplo}[Ecuación con fracciones]
+De un tanque se saca $\tfrac14$ de su contenido, luego 30 litros y queda la mitad. ¿Cuántos litros tenía?
+\solucion $x - \tfrac{x}{4} - 30 = \tfrac{x}{2}$. Multiplicando por 4: $4x - x - 120 = 2x$, de donde $x = 120$.
+\end{ejemplo}
+
+\begin{trampa}
+«El doble de un número aumentado en 5» es ambiguo: puede ser $2x + 5$ o $2(x + 5)$. El examen suele resolver la
+ambigüedad con una coma o con el contexto: léelo dos veces.
+\end{trampa}
+
+\begin{atajo}
+Si las opciones son números, verifica cada una en el enunciado. Para el reto: $30 + 15 + 10 = 55$. Listo en diez
+segundos.
+\end{atajo}
+
+\taller
+\piso{Calienta}{traducir y despejar}
+\begin{ejercicios}
+\item El triple de un número disminuido en 4 es 23. Halla el número. \sol{$3x - 4 = 23$: $x = 9$.}
+\item Resuelve $\tfrac{x}{3} + \tfrac{x}{4} = 14$. \sol{$\tfrac{7x}{12} = 14$: $x = 24$.}
+\item Cuatro números consecutivos suman 98. ¿Cuál es el menor? \sol{$4n + 6 = 98$: $n = 23$.}
+\end{ejercicios}
+\piso{Entrena}{plantear}
+\begin{ejercicios}
+\item Un lápiz y un cuaderno cuestan \$7\,500. El cuaderno cuesta \$5\,500 más que el lápiz. ¿Cuánto cuesta el lápiz? \sol{$x + x + 5\,500 = 7\,500$: \$1\,000.}
+\item El perímetro de un rectángulo es 54 cm y el largo es el doble del ancho. Halla el área. \sol{$6a = 54$, $a = 9$, largo 18: área 162 cm$^2$.}
+\item Si al numerador y al denominador de $\tfrac{3}{5}$ se les suma el mismo número se obtiene $\tfrac{3}{4}$. ¿Qué número es? \sol{$4(3 + x) = 3(5 + x)$: $x = 3$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Un padre reparte \$120\,000 entre sus dos hijos de modo que el mayor recibe \$30\,000 más que el doble del menor. El menor recibe
+\opciones{\$30\,000}{\$45\,000}{\$40\,000}{\$90\,000}
+\sol{A. $x + 2x + 30\,000 = 120\,000$: $x = 30\,000$ (y el mayor 90\,000).}
+\item La edad de Pedro dentro de 5 años será el doble de la que tenía hace 4 años. ¿Cuántos años tiene?
+\opciones{9}{13}{14}{18}
+\sol{B. $x + 5 = 2(x - 4)$: $x = 13$.}
+\item Una cuerda de 60 m se corta en dos trozos de modo que uno es $\tfrac23$ del otro. El trozo largo mide
+\opciones{24 m}{36 m}{40 m}{30 m}
+\sol{B. $x + \tfrac23 x = 60$: $x = 36$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+$x + \tfrac{x}{2} + \tfrac{x}{3} = 55$. Con denominador 6: $\tfrac{6x + 3x + 2x}{6} = \tfrac{11x}{6} = 55$, de donde
+$x = 30$. Verificación: $30 + 15 + 10 = 55$. \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-ec-2}{Edades, mezclas y monedas}{Juegos de la línea del tiempo de edades y el tanque que mezcla.}
+
+\begin{reto}
+Hoy la edad de una madre es el triple de la de su hija. Dentro de 12 años será el doble. ¿Cuántos años tiene hoy la
+madre?
+\opciones{24}{30}{36}{48}
+\end{reto}
+
+\subsection{La idea: una tabla con el tiempo en columnas}
+En los problemas de edades, lo que nunca cambia es la \clave{diferencia de edades}: dos personas envejecen al mismo
+ritmo. Una tabla con «antes», «hoy» y «después» ordena todo:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+ & hace $k$ años & hoy & dentro de $m$ años\\\midrule
+Madre & $3h - k$ & $3h$ & $3h + m$\\
+Hija & $h - k$ & $h$ & $h + m$\\\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{Mezclas}
+En una mezcla se conserva la \clave{cantidad de sustancia}: si se juntan $a$ litros al $p\,\%$ con $b$ litros al
+$q\,\%$, la sustancia es $\tfrac{p}{100}a + \tfrac{q}{100}b$. Lo mismo con precios: kilos de café de distinto
+precio que se mezclan conservan el costo total.
+
+\subsubsection{Monedas y boletas}
+Con dos tipos de objetos de distinto valor (monedas de 200 y 500, boletas de adulto y niño), hay dos ecuaciones: una
+para la \emph{cantidad} y otra para el \emph{valor}. Un truco más rápido es suponer que todos son del tipo barato y ver
+cuánto sobra.
+
+\begin{regla}
+\begin{itemize}
+  \item Edades: la diferencia es constante. Usa una tabla antes / hoy / después.
+  \item Mezclas: sustancia total $=$ suma de sustancias; costo total $=$ suma de costos.
+  \item Dos tipos de objetos: suponer todos del mismo tipo y repartir la diferencia («método del falso supuesto»).
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Edades con el pasado]
+Hace 6 años, Luis tenía el cuádruple de la edad de su sobrino. Hoy tiene el doble. ¿Cuántos años tiene Luis?
+\solucion Sobrino hoy $s$, Luis $2s$. Hace 6 años: $2s - 6 = 4(s - 6)$, $2s - 6 = 4s - 24$, $s = 9$. Luis tiene 18.
+\end{ejemplo}
+
+\begin{ejemplo}[Mezcla de concentraciones]
+¿Cuántos litros de agua hay que agregar a 12 litros de alcohol al $60\,\%$ para bajarlo al $40\,\%$?
+\solucion Alcohol puro: $0.6 \cdot 12 = 7.2$ L, que no cambia. Para que sea el $40\,\%$, el total debe ser
+$7.2 \div 0.4 = 18$ L. Hay que agregar 6 L de agua.
+\end{ejemplo}
+
+\begin{ejemplo}[Falso supuesto]
+En una alcancía hay 30 monedas de \$200 y \$500 que suman \$10\,500. ¿Cuántas son de \$500?
+\solucion Si todas fueran de \$200 habría \$6\,000. Faltan \$4\,500, y cada moneda de \$500 en vez de una de \$200 aporta
+\$300 más: $4\,500 \div 300 = 15$ monedas de \$500.
+\end{ejemplo}
+
+\begin{ejemplo}[Café]
+Se mezclan 6 kg de café de \$20\,000 el kilo con 4 kg de \$30\,000. ¿A cuánto sale el kilo de la mezcla?
+\solucion Costo: $120\,000 + 120\,000 = 240\,000$ por 10 kg: \$24\,000 el kilo.
+\end{ejemplo}
+
+\begin{trampa}
+En los problemas de edades, sumar los años solo a una persona. Si «dentro de 12 años» la madre tiene $3h + 12$, la hija
+tiene $h + 12$, no $h$.
+\end{trampa}
+
+\begin{atajo}
+Diferencia constante: si la madre tiene 24 años más que la hija, cuando la madre tenga el doble, la hija tendrá
+exactamente 24 (y la madre 48). Sin ecuaciones.
+\end{atajo}
+
+\taller
+\piso{Calienta}{tablas}
+\begin{ejercicios}
+\item Ana tiene 14 años y su padre 41. ¿Dentro de cuántos años el padre tendrá el doble? \sol{Diferencia 27: cuando Ana tenga 27, dentro de 13 años.}
+\item En un corral hay gallinas y conejos: 20 cabezas y 56 patas. ¿Cuántos conejos? \sol{Todas gallinas: 40 patas; faltan 16, cada conejo aporta 2 más: 8 conejos.}
+\item ¿Cuánta sal hay en 5 L de salmuera al $8\,\%$? \sol{0.4 L.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item La suma de las edades de un padre y su hijo es 52, y hace 4 años el padre tenía el triple de la edad del hijo. ¿Edad del hijo? \sol{$h + p = 52$, $p - 4 = 3(h - 4)$: $p = 3h - 8$, $4h = 60$, $h = 15$.}
+\item Para una función se vendieron 120 boletas, de adulto a \$15\,000 y de niño a \$8\,000, por \$1\,450\,000. ¿Cuántas de niño? \sol{Todas de niño: 960\,000; faltan 490\,000 y cada boleta de adulto suma 7\,000: 70 de adulto y 50 de niño.}
+\item ¿Cuántos litros de jugo al $30\,\%$ hay que mezclar con 10 L al $10\,\%$ para obtener jugo al $20\,\%$? \sol{Las desviaciones se compensan: $10\cdot(-10) + x \cdot 10 = 0$: 10 L.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Carlos tiene 3 veces la edad de Jaime. Dentro de 10 años la suma de sus edades será 60. ¿Cuántos años tiene Carlos?
+\opciones{30}{40}{10}{20}
+\sol{A. $4j + 20 = 60$: $j = 10$, Carlos 30.}
+\item En un parqueadero hay carros y motos: 45 vehículos y 140 llantas. ¿Cuántas motos hay?
+\opciones{20}{25}{30}{15}
+\sol{A. Todos motos: 90 llantas; faltan 50, cada carro suma 2: 25 carros y 20 motos.}
+\item Se mezclan 20 L de leche al $3\,\%$ de grasa con 30 L al $4\,\%$. La mezcla tiene
+\opciones{$3.5\,\%$}{$3.6\,\%$}{$3.4\,\%$}{$7\,\%$}
+\sol{B. $\tfrac{0.6 + 1.2}{50} = 0.036$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Hija $h$, madre $3h$; dentro de 12 años: $3h + 12 = 2(h + 12)$, de donde $h = 12$ y la madre tiene 36.
+\textbf{Opción C.} Con el atajo: la diferencia es $2h$; cuando la madre tenga el doble, la hija tendrá $2h$, y eso ocurre
+12 años después: $2h = h + 12$.
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-ec-3}{Sistemas y desigualdades}{Juegos de las dos cajas y la recta con zona sombreada.}
+
+\begin{reto}
+En una tienda, 2 cuadernos y 3 lapiceros cuestan \$13\,000, y 3 cuadernos y 2 lapiceros cuestan \$17\,000. ¿Cuánto
+cuestan un cuaderno y un lapicero juntos?
+\opciones{\$5\,000}{\$6\,000}{\$4\,500}{\$7\,000}
+\end{reto}
+
+\subsection{La idea: combinar las ecuaciones}
+Un sistema son dos (o más) igualdades que deben cumplirse a la vez. Los métodos de colegio (sustitución, igualación,
+reducción) funcionan, pero en el examen gana quien \clave{mira qué se pide}. En el reto no piden cada precio: piden la
+\emph{suma}. Sumar las dos ecuaciones da $5c + 5\ell = 30\,000$, y de ahí $c + \ell = 6\,000$ sin despejar nada.
+
+\subsubsection{Reducción}
+Para hallar cada incógnita, se multiplica cada ecuación por un número para que una incógnita tenga el mismo coeficiente
+y se restan. Con $2c + 3\ell = 13\,000$ y $3c + 2\ell = 17\,000$: restando, $c - \ell = 4\,000$. Con la suma,
+$c = 5\,000$ y $\ell = 1\,000$.
+
+\subsubsection{Desigualdades}
+Una desigualdad se trabaja como una ecuación, con una diferencia: al \emph{multiplicar o dividir por un número
+negativo}, el sentido se invierte. De $-2x < 6$ sale $x > -3$. La solución suele ser un intervalo, que se dibuja en la
+recta.
+
+\begin{center}
+\begin{tikzpicture}[x=6mm]
+  \draw[-{Latex[length=2mm]},zmute] (-5.6,0)--(4.6,0);
+  \foreach \t in {-5,...,4}{\draw[zmute] (\t,.08)--(\t,-.08) node[below,font=\scriptsize,text=zink]{$\t$};}
+  \draw[zolive,line width=2pt] (-3,0) -- (4.5,0);
+  \draw[zolive,line width=.8pt,fill=white] (-3,0) circle (2.2pt);
+  \node[above,font=\scriptsize,text=zolive] at (1,.1) {$x > -3$};
+\end{tikzpicture}
+\end{center}
+
+\begin{regla}
+\begin{itemize}
+  \item Antes de resolver un sistema, mira si lo que piden sale de sumar o restar las ecuaciones.
+  \item Reducción: igualar coeficientes y restar.
+  \item En desigualdades, multiplicar o dividir por un negativo invierte el sentido.
+  \item «A lo sumo» es $\le$; «por lo menos» o «como mínimo» es $\ge$; «más de» es $>$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Sustitución]
+La suma de dos números es 50 y uno es 8 más que el otro. ¿Cuáles son?
+\solucion $x + (x + 8) = 50$: $x = 21$. Son 21 y 29. (Con la diferencia: el mayor es $\tfrac{50 + 8}{2}$.)
+\end{ejemplo}
+
+\begin{ejemplo}[Tres incógnitas sumando]
+$a + b = 11$, $b + c = 15$, $a + c = 14$. Halla $a + b + c$ y luego $c$.
+\solucion Sumando todo: $2(a + b + c) = 40$, $a + b + c = 20$. Entonces $c = 20 - 11 = 9$.
+\end{ejemplo}
+
+\begin{ejemplo}[Desigualdad en contexto]
+Un plan de celular cobra \$30\,000 fijos más \$200 por minuto. Otro cobra \$500 por minuto sin cargo fijo. ¿A partir de
+cuántos minutos conviene el primero?
+\solucion $30\,000 + 200m < 500m \iff 30\,000 < 300m \iff m > 100$. A partir de 101 minutos.
+\end{ejemplo}
+
+\begin{ejemplo}[Invertir el sentido]
+Resuelve $5 - 3x \ge -10$.
+\solucion $-3x \ge -15$. Dividiendo entre $-3$ (se invierte): $x \le 5$.
+\end{ejemplo}
+
+\begin{trampa}
+Dividir por un negativo sin invertir el sentido de la desigualdad, o responder $x = 100$ cuando la pregunta es «a partir
+de cuántos» y la desigualdad es estricta.
+\end{trampa}
+
+\begin{atajo}
+Suma de dos números $S$ y diferencia $D$: el mayor es $\tfrac{S + D}{2}$ y el menor $\tfrac{S - D}{2}$.
+\end{atajo}
+
+\taller
+\piso{Calienta}{sistemas cortos}
+\begin{ejercicios}
+\item $x + y = 20$, $x - y = 6$. \sol{$x = 13$, $y = 7$.}
+\item $2x + y = 11$, $x + 2y = 10$. Halla $x + y$. \sol{Sumando: $3(x + y) = 21$: $x + y = 7$.}
+\item Resuelve $4 - 2x < 10$. \sol{$x > -3$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item 3 kg de papa y 2 de tomate cuestan \$16\,000; 1 kg de papa y 2 de tomate cuestan \$8\,000. ¿Precio del kilo de papa? \sol{Restando: 2 kg de papa valen 8\,000: \$4\,000.}
+\item ¿Cuántos enteros cumplen $-3 \le 2x + 1 < 9$? \sol{$-2 \le x < 4$: $-2, -1, 0, 1, 2, 3$: seis.}
+\item Un estudiante tiene 3.2 y 3.8 en dos notas que valen $30\,\%$ cada una. ¿Qué nota mínima necesita en el $40\,\%$ restante para aprobar con 3.0? \sol{$0.96 + 1.14 + 0.4x \ge 3$: $x \ge 2.25$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si $x + 2y = 7$ y $2x + y = 8$, entonces $x - y$ vale
+\opciones{1}{$-1$}{3}{15}
+\sol{A. Restando la primera de la segunda: $x - y = 1$.}
+\item El conjunto solución de $-2x + 3 > 7$ es
+\opciones{$x > -2$}{$x < -2$}{$x > 2$}{$x < 5$}
+\sol{B. $-2x > 4 \Rightarrow x < -2$.}
+\item Un taxi cobra \$4\,000 de arranque y \$1\,200 por km. Con \$40\,000, ¿cuántos km completos se pueden recorrer como máximo?
+\opciones{30}{33}{36}{29}
+\sol{A. $4\,000 + 1\,200k \le 40\,000$: $k \le 30$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Sumando las dos compras: 5 cuadernos y 5 lapiceros cuestan $13\,000 + 17\,000 = 30\,000$. Un cuaderno y un lapicero:
+$6\,000$. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+\evaluacion
+\begin{ejercicios}
+\item La suma de tres números pares consecutivos es 78. El mayor es
+\opciones{24}{26}{28}{30}
+\sol{C. El del medio es 26. (5.1)}
+\item Si el doble de un número aumentado en 7 es igual al triple del número disminuido en 5, el número es
+\opciones{12}{2}{-12}{6}
+\sol{A. $2x + 7 = 3x - 5$. (5.1)}
+\item Un rectángulo tiene perímetro 46 y su largo excede al ancho en 7. Su área es
+\opciones{120}{90}{150}{60}
+\sol{A. Ancho 8, largo 15. (5.1)}
+\item Hace 5 años, la edad de Ana era el doble de la de Bruno. Hoy sus edades suman 55. ¿Cuántos años tiene Ana?
+\opciones{25}{30}{20}{35}
+\sol{D. $a - 5 = 2(b - 5)$ y $a + b = 55$: $a = 2b - 5$, $3b - 5 = 55$, $b = 20$ y $a = 35$. (5.2)}
+\item En una granja hay patos y cerdos: 35 cabezas y 100 patas. ¿Cuántos cerdos hay?
+\opciones{15}{20}{25}{10}
+\sol{A. Todos patos: 70 patas; faltan 30, de a 2: 15 cerdos. (5.2)}
+\item ¿Cuántos litros de agua se agregan a 30 L de jugo al $40\,\%$ para dejarlo al $25\,\%$?
+\opciones{12}{18}{20}{48}
+\sol{B. 12 L de fruta; total $12 / 0.25 = 48$; se agregan 18. (5.2)}
+\item Si $3a + 2b = 19$ y $a + 2b = 11$, entonces $a$ vale
+\opciones{4}{3}{8}{2}
+\sol{A. Restando: $2a = 8$. (5.3)}
+\item Si $p + q = 9$, $q + r = 12$ y $p + r = 13$, entonces $p + q + r$ es
+\opciones{17}{34}{15}{18}
+\sol{A. $34 / 2$. (5.3)}
+\item ¿Cuál es el mayor entero que cumple $7 - 3x > -8$?
+\opciones{4}{5}{$-5$}{6}
+\sol{A. $-3x > -15 \Rightarrow x < 5$. (5.3)}
+\item Una empresa de arriendos cobra \$80\,000 diarios más \$500 por km. Otra cobra \$1\,300 por km sin cargo diario. ¿Desde cuántos km recorridos en un día conviene la primera?
+\opciones{más de 100}{más de 160}{más de 62}{más de 200}
+\sol{A. $80\,000 + 500k < 1\,300k \iff k > 100$. (5.3)}
+\end{ejercicios}

@@ -1,0 +1,464 @@
+% Libro 1 · Mundo 2 · Aritmética y promedios (app: pu-aritmetica)
+\mundo{Aritmética y promedios}{pu-aritmetica}{Aquí los números ya no se operan sueltos: viven dentro de una historia.
+Alguien reparte, gasta, promedia o esconde cifras, y hay que reconstruir lo que pasó. El secreto de este mundo es
+\emph{trabajar hacia atrás} y \emph{representar} con barras y tablas antes de escribir una sola ecuación.}{%
+\item \textbf{2.1} Fracciones de lo que queda: trabajar hacia atrás
+\item \textbf{2.2} Promedios: el nivelador
+\item \textbf{2.3} Criptoaritmética: cuentas con letras
+\item \textbf{2.4} Máximos y mínimos: el peor y el mejor caso}
+
+% ------------------------------------------------------------------
+\leccion{pu-ar-1}{Fracciones de lo que queda}{Juegos de la barra que se parte y del camino de regreso.}
+
+\begin{reto}
+Un vendedor de mangos vende en la mañana la mitad de sus mangos más 2; en la tarde, la mitad de los que le quedan más 2,
+y se queda con 5 mangos. ¿Con cuántos empezó?
+\opciones{28}{32}{36}{40}
+\end{reto}
+
+\subsection{La idea: deshacer el camino}
+Cuando una historia termina con un dato conocido («le quedan 5») y cada paso es una operación sencilla, lo más rápido
+es caminar \clave{de atrás hacia adelante}, haciendo en cada paso la operación \emph{contraria}: lo que se restó se suma,
+lo que se partió a la mitad se duplica.
+
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm,font=\small]
+  \node[draw=zolive,rounded corners=2pt,minimum width=14mm,minimum height=7mm] (a) at (0,0) {$x$};
+  \node[draw=zolive,rounded corners=2pt,minimum width=14mm,minimum height=7mm] (b) at (32,0) {$\tfrac{x}{2} - 2$};
+  \node[draw=zolive,rounded corners=2pt,minimum width=14mm,minimum height=7mm,fill=zsoft] (c) at (70,0) {queda};
+  \draw[-{Latex[length=2mm]},zmute] (a) -- node[above,font=\scriptsize]{vende $\tfrac12$ + 2} (b);
+  \draw[-{Latex[length=2mm]},zmute] (b) -- node[above,font=\scriptsize]{…} (c);
+  \draw[-{Latex[length=2mm]},zolive] (c) to[bend left=25] node[below,font=\scriptsize]{al revés: $+2$ y luego $\times 2$} (a);
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{La barra que se parte}
+Cuando los datos son fracciones de lo que queda, una \clave{barra} ordena todo. Si alguien gasta $\tfrac13$ y luego
+$\tfrac14$ del resto, se dibuja la barra en tercios, se tacha uno, y lo que queda (dos tercios) se parte en cuartos.
+Como $\tfrac23$ partido en 4 da pedazos de $\tfrac16$, conviene partir toda la barra en sextos desde el comienzo.
+
+\begin{center}
+\begin{tikzpicture}[x=9mm,y=7mm,font=\scriptsize]
+  \foreach \i in {0,...,5}{\draw[zink,line width=.4pt,fill=\ifnum\i<2 zcoral!25\else\ifnum\i<3 zsky!30\else white\fi\fi] (\i,0) rectangle (\i+1,1);}
+  \draw[zink,line width=1.1pt] (0,0) rectangle (6,1); \draw[zink,line width=1.1pt] (2,0)--(2,1);
+  \draw[decorate,decoration={brace,amplitude=4pt}] (0,1.1) -- node[above=3pt]{$\tfrac13$ gastado} (2,1.1);
+  \draw[decorate,decoration={brace,amplitude=4pt}] (2,1.1) -- node[above=3pt]{$\tfrac14$ del resto} (3,1.1);
+  \draw[decorate,decoration={brace,amplitude=4pt,mirror}] (3,-.1) -- node[below=3pt]{queda: $\tfrac36 = \tfrac12$} (6,-.1);
+\end{tikzpicture}
+\end{center}
+
+\begin{regla}
+\begin{itemize}
+  \item Para deshacer un paso, invierte la operación y el orden: si el paso fue «dividir entre 2 y restar 2», al revés es
+  «sumar 2 y multiplicar por 2».
+  \item Si se quita $\tfrac ab$ de lo que hay, queda $\tfrac{b-a}{b}$; si después se quita $\tfrac cd$ del resto, queda
+  $\tfrac{b-a}{b}\cdot\tfrac{d-c}{d}$ del inicio.
+  \item Cuando se conoce una parte y su fracción, la unidad sale dividiendo: si $\tfrac{3}{8}$ del total son 45, el total
+  es $45 \div \tfrac38 = 120$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Tres paradas]
+Una persona gasta en tres tiendas, en cada una la mitad de lo que lleva más \$1\,000. Sale de la tercera sin dinero.
+¿Cuánto llevaba al empezar?
+\solucion De atrás hacia adelante. Antes de la tercera tienda: $(0 + 1\,000)\cdot 2 = 2\,000$. Antes de la segunda:
+$(2\,000 + 1\,000)\cdot 2 = 6\,000$. Antes de la primera: $(6\,000 + 1\,000)\cdot 2 = 14\,000$.
+\paso{Comprobación.} $14\,000 \to 14\,000 - 8\,000 = 6\,000 \to 6\,000 - 4\,000 = 2\,000 \to 2\,000 - 2\,000 = 0$.
+\end{ejemplo}
+
+\begin{ejemplo}[La herencia]
+Un padre deja $\tfrac25$ de su herencia al hijo mayor, $\tfrac13$ del resto al segundo y lo demás, \$24 millones, al
+menor. ¿De cuánto era la herencia?
+\solucion Tras el mayor queda $\tfrac35$; el segundo se lleva $\tfrac13$ de eso, así que el menor recibe
+$\tfrac23 \cdot \tfrac35 = \tfrac25$ de la herencia. Si $\tfrac25$ son 24 millones, $\tfrac15$ son 12 y la herencia
+es 60 millones. Curiosidad: el mayor y el menor reciben lo mismo.
+\end{ejemplo}
+
+\begin{ejemplo}[El rebote]
+Una pelota rebota hasta $\tfrac23$ de la altura desde la que cae. Después del tercer rebote sube 32 cm. ¿Desde qué
+altura se soltó?
+\solucion Cada rebote multiplica por $\tfrac23$; al revés, cada paso multiplica por $\tfrac32$:
+$32 \cdot \tfrac32 = 48$, $48 \cdot \tfrac32 = 72$, $72 \cdot \tfrac32 = 108$ cm.
+\end{ejemplo}
+
+\begin{trampa}
+Al deshacer, el orden importa. Si el paso fue «la mitad \emph{más} 2», lo que queda es «la mitad \emph{menos} 2» del
+número. Quien deshace multiplicando primero por 2 y luego sumando 2 obtiene otra respuesta (que suele ser una opción).
+\end{trampa}
+
+\begin{atajo}
+Si las opciones son números concretos, haz la historia hacia adelante con cada opción: en menos de un minuto sabes cuál
+termina en el dato final.
+\end{atajo}
+
+\taller
+\piso{Calienta}{hacia atrás}
+\begin{ejercicios}
+\item Pienso un número, lo multiplico por 3, le resto 7 y obtengo 32. ¿Qué número pensé? \sol{$(32 + 7) \div 3 = 13$.}
+\item Gasté $\tfrac34$ de mi dinero y me quedan \$6\,000. ¿Cuánto tenía? \sol{$\tfrac14$ son 6\,000: tenía 24\,000.}
+\item De un tanque se saca $\tfrac15$ y luego $\tfrac14$ del resto. ¿Qué fracción queda? \sol{$\tfrac45 \cdot \tfrac34 = \tfrac35$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item Un ciclista recorre el primer día $\tfrac13$ de una ruta, el segundo $\tfrac12$ de lo que falta y el tercero los 40 km restantes. ¿Cuánto mide la ruta? \sol{Queda $\tfrac23 \cdot \tfrac12 = \tfrac13$; la ruta mide 120 km.}
+\item Laura regala la mitad de sus láminas y 3 más; luego la mitad de las que le quedan y 3 más, y le quedan 6. ¿Cuántas tenía? \sol{Atrás: $(6+3)\cdot2 = 18$; $(18+3)\cdot 2 = 42$.}
+\item En una fiesta se comen $\tfrac38$ de una torta y luego $\tfrac35$ de lo que sobró. ¿Qué fracción de la torta quedó? \sol{$\tfrac58 \cdot \tfrac25 = \tfrac14$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Un estudiante gasta $\tfrac{2}{7}$ de su mesada en transporte y $\tfrac{3}{5}$ del resto en comida. Le quedan \$40\,000. ¿Cuál es su mesada?
+\opciones{\$100\,000}{\$140\,000}{\$120\,000}{\$175\,000}
+\sol{B. Queda $\tfrac57 \cdot \tfrac25 = \tfrac27$; $\tfrac27$ son 40\,000, así que $\tfrac17$ es 20\,000 y la mesada 140\,000.}
+\item Un número se duplica, al resultado se le suma 6, se divide entre 4 y se obtiene 9. El número es
+\opciones{12}{15}{18}{21}
+\sol{B. Atrás: $9 \cdot 4 = 36$, $36 - 6 = 30$, $30 \div 2 = 15$.}
+\item Una bacteria se divide en dos cada hora. A las 10 a.\,m. un frasco está lleno. ¿A qué hora estaba lleno hasta la cuarta parte?
+\opciones{4:00 a.\,m.}{8:00 a.\,m.}{7:30 a.\,m.}{9:00 a.\,m.}
+\sol{B. Hacia atrás, cada hora antes la mitad: a las 9 la mitad, a las 8 la cuarta parte.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Hacia atrás: antes de la tarde tenía $(5 + 2)\cdot 2 = 14$; antes de la mañana, $(14 + 2) \cdot 2 = 32$.
+Comprobación: vende $16 + 2 = 18$ y le quedan 14; vende $7 + 2 = 9$ y le quedan 5. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-ar-2}{Promedios}{Juegos de las torres que se nivelan y la balanza del promedio.}
+
+\begin{reto}
+El promedio de 5 números es 18. Si se quita uno de ellos, el promedio de los otros cuatro es 16. ¿Qué número se quitó?
+\opciones{2}{20}{26}{34}
+\end{reto}
+
+\subsection{La idea: el promedio nivela}
+Imagina torres de cubos de distintas alturas. Si se pasan cubos de las altas a las bajas hasta que todas queden iguales,
+esa altura común es el \clave{promedio}. Nada se pierde ni se crea: el total de cubos es el mismo.
+
+\begin{center}
+\begin{tikzpicture}[x=6mm,y=4mm]
+  \foreach \x/\h in {0/7,1/3,2/5,3/1,4/4}{\foreach \k in {1,...,\h}{\draw[zink,line width=.3pt,fill=zlime!60] (\x*1.2,\k-1) rectangle ++(1,1);}}
+  \draw[zcoral,dashed,line width=.8pt] (-.3,4) -- (6.1,4) node[right,font=\scriptsize,text=zcoral]{promedio $= 20 / 5 = 4$};
+\end{tikzpicture}
+\end{center}
+
+De ahí la regla más útil del tema: \textbf{total $=$ promedio $\times$ cantidad}. Casi todo problema de promedios se
+resuelve pasando a totales, operando con totales y volviendo a promediar.
+
+\subsubsection{Desviaciones que se cancelan}
+Otra forma de verlo: las distancias al promedio se compensan. En el dibujo, $7$ sobra 3, $5$ sobra 1, $3$ falta 1, $1$
+falta 3 y $4$ está justo: $+3 + 1 - 1 - 3 + 0 = 0$. Esto permite calcular promedios eligiendo una «base» cómoda:
+el promedio de 47, 52, 49 y 56 es $50 + \tfrac{-3 + 2 - 1 + 6}{4} = 50 + 1 = 51$.
+
+\subsubsection{Promedio ponderado}
+Si los grupos tienen tamaños distintos, no se promedian los promedios: se pesan. Un curso de 20 con promedio 3.5 y otro
+de 30 con promedio 4.0 tienen un promedio conjunto de $\tfrac{20 \cdot 3.5 + 30 \cdot 4.0}{50} = \tfrac{70 + 120}{50}
+= 3.8$, más cerca de 4.0 porque ese grupo pesa más.
+
+\begin{regla}
+\[\bar x = \frac{\text{suma}}{\text{cantidad}}\qquad\text{suma} = \bar x \cdot n\qquad
+\bar x_{\text{conjunto}} = \frac{n_1\bar x_1 + n_2 \bar x_2}{n_1 + n_2}\]
+\begin{itemize}
+  \item Si a cada dato se le suma $k$, el promedio aumenta $k$; si cada dato se multiplica por $k$, el promedio también.
+  \item El promedio de números consecutivos (o en progresión aritmética) es el del centro, o el punto medio entre el
+  primero y el último.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[La nota que falta]
+Las notas de Sofía en cuatro quices son 3.2, 4.0, 3.6 y 4.4. ¿Cuánto necesita en el quinto para que el promedio sea 4.0?
+\solucion Con promedio 4.0 en cinco quices, la suma debe ser $20$. Ya tiene $3.2 + 4.0 + 3.6 + 4.4 = 15.2$. Le faltan
+$20 - 15.2 = 4.8$.
+\end{ejemplo}
+
+\begin{ejemplo}[Grupos que se juntan]
+El peso promedio de 12 hombres es 70 kg y el de 8 mujeres es 60 kg. ¿Cuál es el promedio del grupo?
+\solucion Totales: $12 \cdot 70 = 840$ y $8 \cdot 60 = 480$. Promedio: $\tfrac{1\,320}{20} = 66$ kg. No es 65.
+\end{ejemplo}
+
+\begin{ejemplo}[Consecutivos]
+El promedio de siete números enteros consecutivos es 31. ¿Cuál es el mayor?
+\solucion Con siete consecutivos, el promedio es el del centro: 31 es el cuarto. Son 28, 29, 30, 31, 32, 33, 34. El
+mayor es 34.
+\end{ejemplo}
+
+\begin{ejemplo}[Un dato mal copiado]
+El promedio de 10 datos es 24, pero uno se copió como 42 cuando era 12. ¿Cuál es el promedio correcto?
+\solucion La suma bajó en $42 - 12 = 30$, así que el promedio baja $\tfrac{30}{10} = 3$: el correcto es 21.
+\end{ejemplo}
+
+\begin{trampa}
+Promediar promedios sin pesar. «El promedio de 3.5 y 4.0 es 3.75» solo es cierto si los dos grupos son del mismo tamaño.
+\end{trampa}
+
+\begin{atajo}
+Para promediar números grandes, elige una base cercana, promedia solo las diferencias y súmalas a la base.
+\end{atajo}
+
+\taller
+\piso{Calienta}{totales}
+\begin{ejercicios}
+\item Promedio de 12, 15, 18, 21 y 24. \sol{18 (el del centro).}
+\item Si el promedio de 6 números es 9, ¿cuánto suman? \sol{54.}
+\item Promedio de 98, 103, 101 y 106 (usa base 100). \sol{$100 + \tfrac{-2+3+1+6}{4} = 102$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item El promedio de edad de 4 hermanos es 15. Si se incluye la madre, el promedio sube a 20. ¿Cuántos años tiene la madre? \sol{$5 \cdot 20 - 4 \cdot 15 = 100 - 60 = 40$.}
+\item Un curso de 25 estudiantes sacó 3.2 de promedio y otro de 15 sacó 4.0. ¿Promedio de los 40? \sol{$\tfrac{80 + 60}{40} = 3.5$.}
+\item Un bus recorre 120 km a 60 km/h y vuelve a 40 km/h. ¿Cuál es su rapidez promedio en todo el viaje? \sol{Tiempo: $2 + 3 = 5$ h para 240 km: 48 km/h (no 50).}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item El promedio de $a$, $b$ y $c$ es 10 y el de $a$ y $b$ es 7. ¿Cuánto vale $c$?
+\opciones{3}{13}{16}{17}
+\sol{C. $3 \cdot 10 - 2 \cdot 7 = 30 - 14 = 16$.}
+\item Si a cada uno de 8 datos se le suma 5, el nuevo promedio
+\opcionesd{aumenta 5}{aumenta 40}{aumenta $\tfrac58$}{no cambia}
+\sol{A. Cada dato sube 5; la suma sube 40 y el promedio $\tfrac{40}{8} = 5$.}
+\item En un salón de 30 estudiantes el promedio fue 3.6. Los 12 hombres promediaron 3.0. ¿Cuál fue el promedio de las mujeres?
+\opciones{4.0}{4.2}{3.9}{4.4}
+\sol{A. Total 108, hombres 36, mujeres $72 / 18 = 4.0$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Total de los cinco: $5 \cdot 18 = 90$. Total de los cuatro: $4 \cdot 16 = 64$. El que se quitó es $90 - 64 = 26$.
+\textbf{Opción C.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-ar-3}{Criptoaritmética}{Juego de las cajas con cifras escondidas.}
+
+\begin{reto}
+En la suma
+\[\begin{array}{r}\mathrm{S\,E\,N\,D}\\+\;\mathrm{M\,O\,R\,E}\\\hline\mathrm{M\,O\,N\,E\,Y}\end{array}\]
+cada letra es una cifra distinta y ninguna palabra empieza por cero. ¿Cuánto vale $M$?
+\opciones{0}{1}{2}{9}
+\end{reto}
+
+\subsection{La idea: las columnas hablan}
+Una cuenta con letras o con huecos se resuelve \clave{columna por columna}, y casi siempre se empieza por los extremos:
+la cifra de la izquierda (que no puede ser 0) y las llevadas. Tres hechos sostienen todo:
+\begin{enumerate}
+  \item Al sumar dos números, lo que se lleva a la columna siguiente es 0 o 1 (nunca más, porque $9 + 9 + 1 = 19$).
+  \item Si el resultado tiene una cifra más que los sumandos, esa cifra nueva es 1.
+  \item En una multiplicación, la última cifra del producto depende solo de las últimas cifras de los factores.
+\end{enumerate}
+
+\begin{regla}[Estrategia]
+\begin{enumerate}
+  \item Busca la columna con menos incógnitas o con una llevada obligada.
+  \item Anota las llevadas encima, como en la escuela.
+  \item Cuando quedan pocas opciones, \emph{prueba} y descarta. Escribe lo que vas descartando.
+\end{enumerate}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Cifras escondidas]
+Completa: $\;\square\,4\,\square + 3\,\square\,8 = 1\,0\,0\,3$.
+\solucion \paso{Unidades.} $\square + 8$ termina en 3: el hueco es 5 y se lleva 1.
+\paso{Decenas.} $4 + \square + 1$ termina en 0: el hueco es 5 y se lleva 1.
+\paso{Centenas.} $\square + 3 + 1 = 10$: el hueco es 6.
+La cuenta es $645 + 358 = 1\,003$. Cada columna dejó una sola posibilidad porque se empezó por la derecha, donde no hay
+llevadas desconocidas.
+\end{ejemplo}
+
+\begin{ejemplo}[Una multiplicación]
+Halla el número $\overline{ABCD}$ de cifras distintas tal que $\overline{ABCD} \cdot 4 = \overline{DCBA}$.
+\solucion
+\paso{La primera cifra.} El producto sigue teniendo cuatro cifras, así que $A \le 2$. Además $A$ es la última cifra de
+$4D$, que es par: $A = 2$.
+\paso{La última.} $4D$ termina en 2: $D = 3$ u $8$. Como $D \ge 4A = 8$, $D = 8$. Las unidades dan $32$: se lleva 3.
+\paso{Los millares.} $4 \cdot 2 = 8 = D$, así que de las centenas no se lleva nada: $4B$ más lo que se lleve es menor
+que 10, y $B \le 2$.
+\paso{Las decenas.} $4C + 3$ es impar y termina en $B$: $B$ es impar, así que $B = 1$. Entonces $4C$ termina en 8:
+$C = 2$ o $C = 7$; $C = 2$ repetiría la cifra de $A$, así que $C = 7$. Comprobación en las centenas: $4 \cdot 1 + 3 = 7 = C$.
+El número es $2\,178$, y en efecto $2\,178 \cdot 4 = 8\,712$.
+\end{ejemplo}
+
+\begin{ejemplo}[Suma de dos cifras repetidas]
+Si $\overline{AA} + \overline{BB} = \overline{1C0}$ con $A$, $B$, $C$ cifras distintas y distintas de cero, ¿cuánto
+vale $A + B$?
+\solucion $\overline{AA} = 11A$ y $\overline{BB} = 11B$, así que la suma es $11(A + B)$, un múltiplo de 11 entre 100
+y 199 que termina en 0: solo $110$. Entonces $A + B = 10$ y $C = 1$.
+\end{ejemplo}
+
+\begin{trampa}
+Olvidar que la cifra inicial de un número no puede ser 0, o que las letras distintas son cifras distintas. Esas dos
+condiciones son las que dejan una sola solución.
+\end{trampa}
+
+\begin{atajo}
+Escribir el número por posiciones: $\overline{abc} = 100a + 10b + c$. Muchos acertijos de cifras se vuelven una ecuación
+corta.
+\end{atajo}
+
+\taller
+\piso{Calienta}{huecos}
+\begin{ejercicios}
+\item Completa $3\square 6 + 2 5\square = 6 0 3$. \sol{$346 + 257 = 603$: los huecos son 4 y 7.}
+\item Completa $5\square 3 - \square 7 5 = 2 6 8$. \sol{$543 - 275 = 268$: los huecos son 4 y 2.}
+\item Si $\overline{ab} + \overline{ba} = 121$, ¿cuánto vale $a + b$? \sol{$11(a + b) = 121$: $a + b = 11$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item Si $\overline{ab} - \overline{ba} = 45$, ¿cuánto vale $a - b$? \sol{$9(a - b) = 45$: $a - b = 5$.}
+\item En $\overline{A\,B} + \overline{A\,B} + \overline{A\,B} = \overline{C\,B\,B}$ con cifras distintas, halla $\overline{AB}$. \sol{$3B$ termina en $B$: $B = 0$ o $5$. Con $B=5$: $3 \cdot \overline{A5}$ debe terminar en 55: $\overline{A5} = 85$ da 255. $\overline{AB} = 85$, $C = 2$.}
+\item ¿Cuántos números de dos cifras aumentan en 27 al invertir sus cifras? \sol{$\overline{ba} - \overline{ab} = 9(b - a) = 27$: $b = a + 3$, con $a \ge 1$: 14, 25, 36, 47, 58, 69. Son 6.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si $A$ es una cifra par y $\overline{2A} \cdot A = \overline{1BA}$, ¿cuánto es $A + B$?
+\opciones{9}{11}{13}{6}
+\sol{B. $A \cdot A$ termina en $A$ y $A$ es par: $A = 6$. $26 \cdot 6 = 156$, así que $B = 5$ y $A + B = 11$.}
+\item Se borra una cifra de un número de 4 cifras: $8\,\square\,3\,6$. Si el número es múltiplo de 9, la cifra borrada es
+\opciones{1}{3}{0}{5}
+\sol{A. $8 + 3 + 6 = 17$; para llegar a 18 falta 1.}
+\item Al sumar $\overline{ABC} + \overline{CBA}$ con $A > C$ se obtiene 888. ¿Cuántos valores puede tomar $B$?
+\opciones{1}{2}{4}{5}
+\sol{A. Las unidades dan $A + C = 8$ (no puede ser 18, porque $A \ne C$). En las decenas, $2B$ termina en 8: $B = 4$ o $B = 9$; con $B = 9$ se llevaría 1 y las centenas darían $A + C = 7$, contradicción. Solo $B = 4$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+El resultado MONEY tiene una cifra más que los sumandos, así que $M$ es lo que se lleva de la última columna: $M = 1$.
+(Esta suma, famosa desde 1924, tiene solución única: $9567 + 1085 = 10652$.) \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-ar-4}{Máximos y mínimos}{Juegos del cajón de medias y del peor caso.}
+
+\begin{reto}
+En un cajón oscuro hay 6 medias rojas, 8 azules y 10 negras. ¿Cuántas hay que sacar, como mínimo, para estar
+\emph{seguros} de tener dos del mismo color?
+\opciones{2}{3}{4}{11}
+\end{reto}
+
+\subsection{La idea: pensar en el peor caso}
+La palabra «\emph{seguro}» cambia el problema: no importa qué puede pasar con suerte, sino qué pasa con la \clave{peor
+suerte posible}. Para asegurar algo, imagina a un adversario que saca las medias en el orden que más te perjudica y
+cuenta cuántas necesita para no poder evitar lo que pides.
+
+Este razonamiento se llama \clave{principio del palomar}: si hay más palomas que casillas, alguna casilla tiene al menos
+dos palomas. Con $n$ casillas, $n + 1$ objetos garantizan una casilla repetida; $kn + 1$ objetos garantizan una casilla
+con $k + 1$.
+
+\subsubsection{Máximos y mínimos con condiciones}
+La otra cara del tema: cuando se reparte un total con condiciones («todos distintos», «cada uno al menos 2»), para
+\emph{maximizar} a uno se \emph{minimiza} a los demás, y al revés.
+
+\begin{regla}
+\begin{itemize}
+  \item Para garantizar $k$ objetos de un mismo tipo entre $n$ tipos: en el peor caso se sacan $k - 1$ de cada tipo; uno
+  más asegura el resultado. Mínimo: $n(k - 1) + 1$ (si hay suficientes de cada tipo).
+  \item Para garantizar $k$ de un tipo \emph{específico}: en el peor caso salen primero \emph{todos} los de los otros tipos.
+  \item Para hacer grande una parte de un total fijo, haz lo más pequeñas posibles las otras.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Un color específico]
+Con el cajón del reto (6 rojas, 8 azules, 10 negras), ¿cuántas hay que sacar para asegurar dos rojas?
+\solucion Peor caso: salen las 8 azules, las 10 negras y una roja: 19 medias sin tener dos rojas. La siguiente es roja
+seguro: hacen falta $20$.
+\end{ejemplo}
+
+\begin{ejemplo}[Cumpleaños]
+¿Cuántas personas debe haber en un grupo para asegurar que al menos tres cumplen años el mismo mes?
+\solucion Casillas: 12 meses. Para que ningún mes tenga tres, a lo sumo 2 por mes: 24 personas. Con $25$ es seguro.
+\end{ejemplo}
+
+\begin{ejemplo}[Repartir para maximizar]
+Cinco amigos tienen en total 30 láminas, todos cantidades distintas y cada uno al menos una. ¿Cuántas puede tener, como
+máximo, el que más tiene?
+\solucion Los otros cuatro, lo menos posible y distintos: $1 + 2 + 3 + 4 = 10$. Al mayor le quedan $30 - 10 = 20$.
+\end{ejemplo}
+
+\begin{ejemplo}[Lo mínimo garantizado]
+En un curso de 40 estudiantes, 28 aprobaron matemáticas y 25 aprobaron lenguaje. ¿Cuántos aprobaron las dos, como mínimo?
+\solucion $28 + 25 = 53$, pero solo hay 40 personas: al menos $53 - 40 = 13$ se contaron dos veces. Mínimo 13 (y como
+máximo 25).
+\end{ejemplo}
+
+\begin{trampa}
+Responder con el caso de buena suerte (2 medias) cuando la pregunta dice «para estar seguros». Esa opción casi siempre
+está.
+\end{trampa}
+
+\begin{atajo}
+Escribe una línea con el peor caso («salen 1 roja, 1 azul, 1 negra…») y suma 1. Si la condición es sobre un tipo
+específico, el peor caso agota los demás tipos primero.
+\end{atajo}
+
+\taller
+\piso{Calienta}{peor caso}
+\begin{ejercicios}
+\item En una bolsa hay 5 bolas blancas y 7 negras. ¿Cuántas sacar para asegurar una negra? \sol{$5 + 1 = 6$.}
+\item ¿Cuántas cartas de una baraja de 4 palos hay que sacar para asegurar 3 del mismo palo? \sol{$4 \cdot 2 + 1 = 9$.}
+\item Tres números naturales distintos suman 20. ¿Cuál es el mayor valor posible del más grande? \sol{$20 - 1 - 2 = 17$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item En una caja hay 4 pares de guantes negros y 3 pares cafés, revueltos. ¿Cuántos guantes sacar para asegurar un par que sirva (una mano izquierda y una derecha del mismo color)? \sol{Peor caso: salen las 7 manos izquierdas (o las 7 derechas). El siguiente completa un par: 8.}
+\item En un salón de 35 estudiantes, ¿se puede asegurar que 3 nacieron el mismo día de la semana? \sol{Sí: $7 \cdot 2 = 14 < 35$. De hecho se aseguran 5: $7\cdot 4 = 28 < 35$.}
+\item Cuatro números enteros positivos tienen promedio 10. ¿Cuál es el mayor valor que puede tomar uno de ellos? \sol{Suma 40; los otros tres valen 1: el mayor puede ser 37.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Una urna tiene 10 bolas rojas, 10 verdes y 10 amarillas. ¿Cuántas sacar para asegurar 4 del mismo color?
+\opciones{4}{10}{12}{13}
+\sol{B. Peor caso: 3 de cada color (9 bolas). La décima asegura 4 de un color.}
+\item De 50 personas, 32 hablan inglés y 27 francés. El número mínimo de personas que hablan ambos idiomas es
+\opciones{5}{9}{18}{27}
+\sol{B. $32 + 27 - 50 = 9$.}
+\item Seis números enteros positivos distintos suman 40. El menor valor posible del mayor es
+\opciones{9}{10}{8}{35}
+\sol{B. Para que el mayor sea pequeño, los números deben estar cerca entre sí. Con mayor 9, el máximo posible es $4+5+6+7+8+9 = 39 < 40$. Con mayor 10: $4+5+6+7+8+10 = 40$. Respuesta 10.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Peor caso: una roja, una azul y una negra (tres medias sin repetir). La cuarta repite color sin remedio.
+\textbf{Opción C.} La A es la respuesta con suerte, y la D confunde con «asegurar una de cada color».
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\evaluacion
+\begin{ejercicios}
+\item María gasta $\tfrac{1}{4}$ de su sueldo en arriendo y $\tfrac{1}{3}$ del resto en mercado. Si le quedan \$900\,000, su sueldo es
+\opciones{\$1\,500\,000}{\$1\,800\,000}{\$2\,000\,000}{\$1\,600\,000}
+\sol{B. Queda $\tfrac34 \cdot \tfrac23 = \tfrac12$. (2.1)}
+\item Pienso un número, le sumo 5, lo multiplico por 3 y le resto 6. Obtengo 33. El número es
+\opciones{8}{6}{10}{13}
+\sol{A. $(33 + 6)\div 3 - 5 = 8$. (2.1)}
+\item Una pelota rebota hasta la mitad de la altura de la que cae. Si después del cuarto rebote sube 5 cm, se soltó desde
+\opciones{40 cm}{80 cm}{100 cm}{160 cm}
+\sol{B. $5 \cdot 2^4 = 80$. (2.1)}
+\item El promedio de 6 números es 12. Si se agrega el 26, el nuevo promedio es
+\opciones{14}{13}{19}{15}
+\sol{A. $(72 + 26)/7 = 14$. (2.2)}
+\item Diego tiene promedio 3.8 en 4 notas. ¿Qué nota necesita en la quinta para subir a 4.0?
+\opciones{4.2}{4.6}{4.8}{5.0}
+\sol{C. $20 - 15.2 = 4.8$. (2.2)}
+\item En un grupo, 10 personas promedian 1.70 m y otras 30 promedian 1.60 m. El promedio de todo el grupo es
+\opciones{1.65 m}{1.625 m}{1.675 m}{1.63 m}
+\sol{B. $(17 + 48)/40 = 1.625$. (2.2)}
+\item Si $\overline{ab} + \overline{ba} = 154$, entonces $a + b$ vale
+\opciones{11}{14}{13}{15}
+\sol{B. $11(a + b) = 154$. (2.3)}
+\item Si $\overline{3A5}$ es múltiplo de 9, $A$ vale
+\opciones{1}{4}{0}{9}
+\sol{A. $3 + A + 5$ debe ser 9 o 18: $A = 1$ o $A = 10$ (no es cifra). (2.3)}
+\item Un número de dos cifras disminuye en 36 al invertir sus cifras, y sus cifras suman 12. El número es
+\opciones{84}{48}{73}{95}
+\sol{A. $9(a - b) = 36$ y $a + b = 12$: $a = 8$, $b = 4$. (2.3)}
+\item Una caja tiene 7 lápices rojos, 5 azules y 3 verdes. ¿Cuántos sacar a ciegas para asegurar uno de cada color?
+\opciones{3}{8}{13}{15}
+\sol{C. Peor caso: salen los 7 rojos y los 5 azules (12); el 13.º es verde. (2.4)}
+\item En un club de 60 socios, 45 juegan tenis y 38 natación. Como mínimo, ¿cuántos practican los dos deportes?
+\opciones{15}{23}{38}{22}
+\sol{B. $45 + 38 - 60 = 23$. (2.4)}
+\end{ejercicios}

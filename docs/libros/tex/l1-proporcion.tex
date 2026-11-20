@@ -1,0 +1,592 @@
+% Libro 1 · Mundo 4 · Proporcionalidad y porcentajes (app: pu-proporcion)
+\mundo{Proporcionalidad y porcentajes}{pu-proporcion}{Una receta para cuatro que se convierte en una para diez, un
+mapa que encoge una ciudad, dos obreros que terminan antes que uno, un descuento sobre un descuento. Todo eso es
+proporcionalidad: comparar cantidades que cambian juntas. Es, con diferencia, el tema que más preguntas aporta al
+examen.}{%
+\item \textbf{4.1} Razones, repartos y escalas
+\item \textbf{4.2} Regla de tres simple y compuesta
+\item \textbf{4.3} Velocidad y trabajo conjunto
+\item \textbf{4.4} Porcentajes: las tres preguntas
+\item \textbf{4.5} Aumentos, descuentos e IVA}
+
+% ------------------------------------------------------------------
+\leccion{pu-pr-1}{Razones, repartos y escalas}{Juegos de la limonada y la balanza de proporciones.}
+
+\begin{reto}
+En un curso, la razón entre hombres y mujeres es $3 : 5$. Si hay 12 mujeres más que hombres, ¿cuántos estudiantes hay?
+\opciones{32}{40}{48}{56}
+\end{reto}
+
+\subsection{La idea: partes iguales}
+Decir que hombres y mujeres están en razón $3 : 5$ es decir que el curso se puede partir en \clave{grupos iguales}: por
+cada 3 hombres hay 5 mujeres. No dice cuántos hay; dice cómo se comparan. La herramienta para verlo es la
+\clave{barra de partes}:
+
+\begin{center}
+\begin{tikzpicture}[x=9mm,y=6mm,font=\scriptsize]
+  \node[left] at (-.2,.5) {Hombres}; \node[left] at (-.2,-.9) {Mujeres};
+  \foreach \i in {0,1,2}{\draw[zink,fill=zsky!30] (\i,0) rectangle ++(1,1);}
+  \foreach \i in {0,...,4}{\draw[zink,fill=zlime!60] (\i,-1.4) rectangle ++(1,1);}
+  \draw[decorate,decoration={brace,amplitude=4pt,mirror}] (3,-1.5) -- node[below=3pt]{2 partes $=$ 12} (5,-1.5);
+\end{tikzpicture}
+\end{center}
+
+Cuando se sabe cuánto vale \emph{una} parte, se sabe todo. Este es el corazón de los repartos y las escalas.
+
+\subsubsection{Proporción}
+Dos razones iguales forman una \clave{proporción}: $\tfrac ab = \tfrac cd$. Su propiedad clave es que los productos
+cruzados son iguales: $ad = bc$. Si falta un término, se despeja: en $\tfrac{3}{5} = \tfrac{x}{40}$, $x = \tfrac{3 \cdot
+40}{5} = 24$.
+
+\subsubsection{Reparto proporcional}
+Repartir $N$ en razón $a : b : c$ es partir $N$ en $a + b + c$ partes iguales y dar $a$, $b$ y $c$ de ellas. Si el
+reparto es \emph{inversamente} proporcional (por ejemplo, más ayuda a quien menos tiene), se reparte en razón
+$\tfrac1a : \tfrac1b : \tfrac1c$, que conviene convertir a enteros multiplicando por un múltiplo común.
+
+\subsubsection{Escalas}
+Una escala $1 : 50\,000$ dice que 1 unidad en el mapa son 50\,000 de esas mismas unidades en la realidad: 1 cm son
+50\,000 cm, es decir, 500 m. Para áreas, la escala se eleva al cuadrado: 1 cm$^2$ del mapa son $50\,000^2$ cm$^2$
+reales.
+
+\begin{regla}
+\begin{itemize}
+  \item Razón $a : b$ y total $N$: cada parte vale $\tfrac{N}{a + b}$.
+  \item Razón $a : b$ y diferencia $D$: cada parte vale $\tfrac{D}{b - a}$.
+  \item $\tfrac ab = \tfrac cd \iff ad = bc$.
+  \item Reparto inverso a $a, b, c$: en razón $\tfrac1a : \tfrac1b : \tfrac1c$.
+  \item Escala $1 : k$: longitudes por $k$, áreas por $k^2$, volúmenes por $k^3$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Reparto en tres]
+Tres socios invierten 4, 6 y 10 millones y reparten una ganancia de 15 millones en proporción a lo invertido. ¿Cuánto
+recibe cada uno?
+\solucion La razón $4 : 6 : 10$ se simplifica a $2 : 3 : 5$, con $10$ partes. Cada parte vale $1.5$ millones: reciben
+$3$, $4.5$ y $7.5$ millones.
+\end{ejemplo}
+
+\begin{ejemplo}[Reparto inverso]
+Se reparten 260 cuadernos entre tres escuelas en forma inversamente proporcional a su número de computadores: 2, 3 y 4.
+¿Cuántos recibe la que tiene 3?
+\solucion Razón $\tfrac12 : \tfrac13 : \tfrac14$. Multiplicando por 12: $6 : 4 : 3$, con 13 partes de $260 \div 13 =
+20$. La escuela de 3 computadores recibe $4 \cdot 20 = 80$.
+\end{ejemplo}
+
+\begin{ejemplo}[Mezclas]
+Una pintura verde se hace con azul y amarillo en razón $2 : 3$. Si hay 8 litros de azul, ¿cuánto amarillo falta para
+usarlos todos, y cuánta pintura verde resulta?
+\solucion 2 partes son 8 L, una parte 4 L. Amarillo: $3 \cdot 4 = 12$ L. Verde: $5 \cdot 4 = 20$ L.
+\end{ejemplo}
+
+\begin{ejemplo}[Escala y área]
+En un plano a escala $1 : 200$, un salón mide $4 \text{ cm} \times 3 \text{ cm}$. ¿Cuál es su área real?
+\solucion Las medidas reales son $8$ m y $6$ m: $48$ m$^2$. (Con la escala al cuadrado: $12 \text{ cm}^2 \cdot 40\,000
+= 480\,000$ cm$^2 = 48$ m$^2$.)
+\end{ejemplo}
+
+\begin{trampa}
+En una razón $3 : 5$, los hombres no son $\tfrac35$ del curso: son $\tfrac38$ (3 de cada 8 personas). La razón compara
+las partes entre sí; la fracción compara una parte con el total.
+\end{trampa}
+
+\begin{atajo}
+Antes de repartir, simplifica la razón: $4 : 6 : 10$ es $2 : 3 : 5$. Menos partes, cuentas más cortas.
+\end{atajo}
+
+\taller
+\piso{Calienta}{partes}
+\begin{ejercicios}
+\item Reparte 72 en razón $4 : 5$. \sol{Partes de 8: 32 y 40.}
+\item Halla $x$: $\tfrac{x}{12} = \tfrac{15}{20}$. \sol{$x = 9$.}
+\item En un mapa $1 : 25\,000$, ¿cuántos km son 6 cm? \sol{$150\,000$ cm $= 1.5$ km.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item Las edades de dos hermanos están en razón $2 : 7$ y suman 36. ¿Cuántos años se llevan? \sol{Partes de 4: 8 y 28. Se llevan 20.}
+\item Se reparten 330 000 pesos entre tres niños en forma inversamente proporcional a sus edades: 2, 5 y 10 años. ¿Cuánto recibe el menor? \sol{$\tfrac12 : \tfrac15 : \tfrac1{10} = 5 : 2 : 1$; 8 partes de 41\,250. El de 2 años recibe 206\,250.}
+\item Un cubo a escala $1 : 10$ tiene volumen de 2 cm$^3$. ¿Cuál es el volumen del cubo real? \sol{$2 \cdot 10^3 = 2\,000$ cm$^3$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item En una bolsa hay canicas rojas y azules en razón $4 : 7$. Si hay 21 azules más que rojas, el total de canicas es
+\opciones{33}{55}{77}{88}
+\sol{C. Tres partes son 21: la parte es 7 y el total $11 \cdot 7 = 77$.}
+\item La razón entre $a$ y $b$ es $2 : 3$ y la razón entre $b$ y $c$ es $4 : 5$. La razón entre $a$ y $c$ es
+\opciones{$8 : 15$}{$2 : 5$}{$6 : 5$}{$8 : 5$}
+\sol{A. Se iguala $b$: $a : b = 8 : 12$, $b : c = 12 : 15$.}
+\item En un plano a escala $1 : 500$, un terreno ocupa 20 cm$^2$. Su área real es
+\opciones{1\,000 m$^2$}{500 m$^2$}{100 m$^2$}{10\,000 m$^2$}
+\sol{B. $20 \cdot 500^2$ cm$^2 = 5\,000\,000$ cm$^2 = 500$ m$^2$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Las mujeres tienen 2 partes más que los hombres ($5 - 3$), y esas 2 partes son 12 personas: cada parte vale 6. El curso
+tiene $3 + 5 = 8$ partes: $8 \cdot 6 = 48$ estudiantes. \textbf{Opción C.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-pr-2}{Regla de tres simple y compuesta}{Juegos de las magnitudes que suben juntas y la balanza inversa.}
+
+\begin{reto}
+Seis grifos iguales llenan un tanque en 8 horas. ¿Cuántas horas tardan 4 de esos grifos en llenar dos tanques iguales
+al primero?
+\opciones{6}{12}{24}{32}
+\end{reto}
+
+\subsection{La idea: ¿suben juntas o una sube y la otra baja?}
+Dos magnitudes son \clave{directamente proporcionales} si al duplicar una se duplica la otra: kilos y precio, horas y
+salario. Lo que se conserva es el \emph{cociente} (el precio por kilo). Son \clave{inversamente proporcionales} si al
+duplicar una la otra se reduce a la mitad: obreros y días para una misma obra, velocidad y tiempo para un mismo camino.
+Lo que se conserva es el \emph{producto} (el trabajo total).
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=50mm,height=36mm,axis lines=left,xmin=0,xmax=6,ymin=0,ymax=6,ticks=none,
+  title={\scriptsize directa: $y = kx$},xlabel={\scriptsize $x$},ylabel={\scriptsize $y$}]
+  \addplot[zolive,line width=1pt,domain=0:5.5] {x};
+\end{axis}
+\end{tikzpicture}\hspace{8mm}
+\begin{tikzpicture}
+\begin{axis}[width=50mm,height=36mm,axis lines=left,xmin=0,xmax=6,ymin=0,ymax=6,ticks=none,
+  title={\scriptsize inversa: $xy = k$},xlabel={\scriptsize $x$},ylabel={\scriptsize $y$}]
+  \addplot[zsky,line width=1pt,domain=0.7:6,samples=60] {4/x};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{La regla de tres compuesta como «trabajo total»}
+Cuando intervienen varias magnitudes (obreros, horas por día, días, metros de obra), la forma más segura es calcular una
+cantidad que se conserva: el \clave{trabajo} medido en obrero-horas. Si 5 obreros trabajando 8 horas diarias hacen
+una obra en 12 días, la obra «cuesta» $5 \cdot 8 \cdot 12 = 480$ obrero-horas. Con esa cifra se responde cualquier otra
+pregunta sobre la misma obra.
+
+\begin{regla}
+\begin{itemize}
+  \item Directa: $\dfrac{y_1}{x_1} = \dfrac{y_2}{x_2}$. Inversa: $x_1 y_1 = x_2 y_2$.
+  \item Compuesta: $\dfrac{\text{trabajadores} \times \text{horas} \times \text{días}}{\text{obra}}$ es constante (si
+  la eficiencia es la misma).
+  \item Para decidir si es directa o inversa, pregúntate: \emph{si hubiera más de esto, ¿haría falta más o menos de lo
+  otro?}
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Directa]
+Si 3 kg de queso cuestan \$51\,000, ¿cuánto cuestan 5 kg?
+\solucion Un kilo vale $17\,000$; cinco kilos, $85\,000$.
+\end{ejemplo}
+
+\begin{ejemplo}[Inversa]
+Un viaje dura 6 horas a 80 km/h. ¿Cuánto dura a 120 km/h?
+\solucion La distancia (producto) es 480 km. A 120 km/h: $480 \div 120 = 4$ horas.
+\end{ejemplo}
+
+\begin{ejemplo}[Compuesta]
+Ocho máquinas, trabajando 6 horas diarias, fabrican 1\,200 piezas en 5 días. ¿Cuántos días necesitan 10 máquinas,
+trabajando 8 horas diarias, para fabricar 2\,400 piezas?
+\solucion Trabajo por pieza: $\tfrac{8 \cdot 6 \cdot 5}{1\,200} = \tfrac{240}{1\,200} = 0.2$ máquina-horas. Para 2\,400
+piezas hacen falta $480$ máquina-horas. Con $10 \cdot 8 = 80$ máquina-horas por día: $480 \div 80 = 6$ días.
+\end{ejemplo}
+
+\begin{ejemplo}[Provisiones]
+Un campamento de 30 personas tiene comida para 12 días. Al cabo de 4 días llegan 10 personas más. ¿Para cuántos días
+más alcanza la comida?
+\solucion Comida total: $30 \cdot 12 = 360$ raciones-día. En 4 días se gastan 120 y quedan 240. Para 40 personas:
+$240 \div 40 = 6$ días.
+\end{ejemplo}
+
+\begin{trampa}
+Aplicar regla de tres directa a magnitudes inversas: «si 4 obreros tardan 6 días, 8 obreros tardan 12 días». El sentido
+común lo descarta: más obreros, menos días.
+\end{trampa}
+
+\begin{atajo}
+En la compuesta, no armes tablas de flechas: calcula el «trabajo total» y divide. Es una sola idea que sirve para todos
+los casos.
+\end{atajo}
+
+\taller
+\piso{Calienta}{directa o inversa}
+\begin{ejercicios}
+\item 5 cuadernos cuestan \$17\,500. ¿Cuánto cuestan 8? \sol{\$28\,000.}
+\item 12 obreros hacen una casa en 30 días. ¿Cuántos días tardan 18? \sol{$360 / 18 = 20$ días.}
+\item Un grifo llena un tanque en 4 horas con un caudal de 15 L/min. ¿Cuánto tardaría con 20 L/min? \sol{3 horas.}
+\end{ejercicios}
+\piso{Entrena}{compuesta}
+\begin{ejercicios}
+\item 6 pintores pintan 4 casas en 10 días. ¿Cuántos pintores se necesitan para pintar 6 casas en 9 días? \sol{Por casa: $6 \cdot 10 / 4 = 15$ pintor-días. Seis casas: 90. En 9 días: 10 pintores.}
+\item Una familia de 4 gasta 120 kg de arroz en 60 días. ¿Cuánto gasta una de 6 en 30 días? \sol{Por persona-día: $\tfrac{120}{240} = 0.5$ kg. $6 \cdot 30 \cdot 0.5 = 90$ kg.}
+\item Un barco tiene víveres para 25 días con 40 tripulantes. ¿Para cuántos días alcanzan si se embarcan 10 más? \sol{$1\,000 / 50 = 20$ días.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si 3 gallinas ponen 3 huevos en 3 días, ¿cuántos huevos ponen 12 gallinas en 12 días?
+\opciones{12}{24}{36}{48}
+\sol{D. Una gallina pone 1 huevo cada 3 días: en 12 días, 4. Doce gallinas: 48.}
+\item 20 obreros terminan una obra en 15 días. Después de 5 días se retiran 5 obreros. ¿Cuántos días tardan en total?
+\opciones{$18\tfrac13$}{$20$}{$13\tfrac13$}{$18$}
+\sol{A. Obra: 300 obrero-días. En 5 días se hacen 100; faltan 200 con 15 obreros: $13\tfrac13$ días más. Total $18\tfrac13$.}
+\item Un automóvil gasta 8 galones en 320 km. ¿Cuántos galones gasta en 500 km?
+\opciones{10}{12.5}{12}{15}
+\sol{B. 40 km por galón: $500 / 40 = 12.5$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Un tanque cuesta $6 \cdot 8 = 48$ grifo-horas. Dos tanques: 96 grifo-horas. Con 4 grifos: $96 \div 4 = 24$ horas.
+\textbf{Opción C.} La A ($8 \cdot 6 / 8$) olvida el segundo tanque y la B olvida que hay menos grifos.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-pr-3}{Velocidad y trabajo conjunto}{Juegos de los dos móviles en la pista y los grifos que llenan juntos.}
+
+\begin{reto}
+Dos ciudades están a 360 km. A la misma hora sale un bus de cada una, hacia la otra: uno a 70 km/h y el otro a 50 km/h.
+¿En cuántas horas se encuentran?
+\opciones{2}{3}{3.6}{5}
+\end{reto}
+
+\subsection{La idea: velocidades que se suman o se restan}
+La relación de siempre es $d = v \cdot t$. Lo nuevo aparece con dos móviles: si se \clave{acercan} de frente, la distancia
+entre ellos se cierra con la \emph{suma} de sus velocidades; si uno \clave{persigue} al otro en la misma dirección, la
+distancia se cierra con la \emph{diferencia}.
+
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm,font=\scriptsize]
+  \draw[zline,line width=1.5pt] (0,0) -- (90,0);
+  \fill[zsky] (0,0) circle (1.6); \fill[zcoral] (90,0) circle (1.6);
+  \draw[-{Latex[length=2mm]},zsky,line width=.8pt] (3,4) -- (25,4) node[above,midway]{70 km/h};
+  \draw[-{Latex[length=2mm]},zcoral,line width=.8pt] (87,4) -- (65,4) node[above,midway]{50 km/h};
+  \node[below] at (45,-1) {se cierran $70 + 50 = 120$ km cada hora};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Trabajo conjunto: se suman las rapideces, no los tiempos}
+Si un grifo llena un tanque en 3 horas, llena $\tfrac13$ de tanque por hora. Si otro lo llena en 6, llena $\tfrac16$ por
+hora. Juntos llenan $\tfrac13 + \tfrac16 = \tfrac12$ por hora: tardan 2 horas. Lo que se suma es la \clave{rapidez}
+(fracción de trabajo por unidad de tiempo); el tiempo conjunto es el inverso de esa suma. Un desagüe que vacía resta su
+rapidez.
+
+\begin{regla}
+\begin{itemize}
+  \item $d = v t$. Encuentro de frente: $t = \dfrac{d}{v_1 + v_2}$. Persecución: $t = \dfrac{d}{v_1 - v_2}$.
+  \item Si $A$ hace un trabajo en $a$ horas y $B$ en $b$ horas, juntos tardan
+  $\dfrac{1}{\frac1a + \frac1b} = \dfrac{ab}{a + b}$.
+  \item Rapidez promedio $=$ distancia total $\div$ tiempo total (no el promedio de las rapideces).
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Persecución]
+Un ciclista sale a 15 km/h. Dos horas después sale tras él una moto a 45 km/h. ¿Cuánto tarda la moto en alcanzarlo?
+\solucion Cuando sale la moto, el ciclista lleva 30 km. La moto descuenta $45 - 15 = 30$ km cada hora: lo alcanza en
+1 hora.
+\end{ejemplo}
+
+\begin{ejemplo}[Tres que trabajan]
+Ana pinta un muro en 4 horas, Beto en 6 y Caro en 12. ¿Cuánto tardan los tres juntos?
+\solucion Rapideces: $\tfrac14 + \tfrac16 + \tfrac{1}{12} = \tfrac{3 + 2 + 1}{12} = \tfrac12$ de muro por hora: 2 horas.
+\end{ejemplo}
+
+\begin{ejemplo}[Grifo y desagüe]
+Un grifo llena una piscina en 6 horas y el desagüe la vacía en 10. Si se abren los dos con la piscina vacía, ¿cuánto
+tarda en llenarse?
+\solucion $\tfrac16 - \tfrac1{10} = \tfrac{5 - 3}{30} = \tfrac{1}{15}$ por hora: 15 horas.
+\end{ejemplo}
+
+\begin{ejemplo}[Ida y vuelta]
+Un atleta sube una montaña a 4 km/h y baja por el mismo camino a 12 km/h. ¿Cuál es su rapidez promedio?
+\solucion Supón 12 km de camino: sube en 3 h y baja en 1 h. Recorre 24 km en 4 h: 6 km/h (no 8).
+\end{ejemplo}
+
+\begin{trampa}
+Promediar tiempos en el trabajo conjunto: «4 horas y 6 horas, juntos 5 horas». Juntos siempre tardan \emph{menos} que el
+más rápido solo.
+\end{trampa}
+
+\begin{atajo}
+Para dos personas, $\dfrac{ab}{a + b}$ da el tiempo conjunto de inmediato: 4 y 12 horas $\to \tfrac{48}{16} = 3$ horas.
+\end{atajo}
+
+\taller
+\piso{Calienta}{cálculos directos}
+\begin{ejercicios}
+\item ¿Cuánto tarda en recorrer 210 km un carro a 70 km/h? \sol{3 h.}
+\item Juan hace una tarea en 3 horas y Pedro en 6. ¿Juntos? \sol{$\tfrac{18}{9} = 2$ h.}
+\item Dos personas a 600 m caminan una hacia la otra a 1.5 m/s y 2.5 m/s. ¿En cuánto se encuentran? \sol{$600 / 4 = 150$ s.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item Un tren de 200 m a 20 m/s cruza un puente de 400 m. ¿Cuánto tarda en cruzarlo por completo? \sol{Debe recorrer $400 + 200 = 600$ m: 30 s.}
+\item Dos grifos juntos llenan un tanque en 4 horas. Uno solo lo llena en 6. ¿Cuánto tarda el otro solo? \sol{$\tfrac14 - \tfrac16 = \tfrac1{12}$: 12 horas.}
+\item Un nadador avanza 3 km/h en aguas quietas y el río corre a 1 km/h. ¿Cuánto tarda en ir 4 km río arriba y volver? \sol{Sube a 2 km/h (2 h) y baja a 4 km/h (1 h): 3 horas.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Una llave llena un tanque en 2 horas y otra en 3 horas. Juntas lo llenan en
+\opciones{2.5 h}{1.2 h}{1.5 h}{5 h}
+\sol{B. $\tfrac{6}{5} = 1.2$ h.}
+\item Un carro va de A a B a 60 km/h y regresa a 40 km/h. Su rapidez promedio es
+\opciones{50 km/h}{48 km/h}{45 km/h}{52 km/h}
+\sol{B. Con 120 km de distancia: 2 h + 3 h para 240 km.}
+\item Dos corredores dan vueltas a una pista circular de 400 m en el mismo sentido, a 5 m/s y 3 m/s, saliendo juntos. ¿Cada cuánto el rápido le saca una vuelta al lento?
+\opciones{50 s}{80 s}{200 s}{133 s}
+\sol{C. Le gana 2 m por segundo; una vuelta son 400 m: 200 s.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Se acercan $70 + 50 = 120$ km cada hora; los 360 km se cierran en $360 \div 120 = 3$ horas. \textbf{Opción B.} La D
+sale de usar la diferencia de velocidades, que es para persecuciones.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-pr-4}{Porcentajes}{Juegos de pintar personas y de la barra del cien por ciento.}
+
+\begin{reto}
+En unas elecciones, el candidato A obtuvo el $40\,\%$ de los votos, el candidato B obtuvo $\tfrac38$ y los 9\,000 votos
+restantes fueron en blanco. ¿Cuántos votos hubo?
+\opciones{36\,000}{40\,000}{45\,000}{24\,000}
+\end{reto}
+
+\subsection{La idea: tres preguntas distintas}
+Con porcentajes se hacen tres preguntas, y la mitad de los errores vienen de confundirlas:
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Pregunta} & \textbf{Ejemplo} & \textbf{Cuenta}\\\midrule
+¿Cuánto es el $p\,\%$ de $N$? & el $30\,\%$ de 80 & $0.3 \cdot 80 = 24$\\
+¿Qué porcentaje es $A$ de $B$? & ¿qué \% es 18 de 72? & $\tfrac{18}{72} = 25\,\%$\\
+¿De qué número $A$ es el $p\,\%$? & 45 es el $15\,\%$ de… & $45 \div 0.15 = 300$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+La tercera es la más traicionera, y la que se resuelve mejor con la \clave{barra del cien por ciento}: si 45 es el
+$15\,\%$, el $5\,\%$ es 15 y el $100\,\%$ es $15 \cdot 20 = 300$.
+
+\subsubsection{Porcentaje de un porcentaje}
+El $20\,\%$ del $30\,\%$ de algo es $0.2 \cdot 0.3 = 0.06$, es decir, el $6\,\%$. Los porcentajes encadenados se
+multiplican.
+
+\subsubsection{Puntos porcentuales}
+Si el desempleo pasa del $10\,\%$ al $12\,\%$, subió 2 \emph{puntos porcentuales}, pero creció un $20\,\%$
+(porque 2 es el $20\,\%$ de 10). Son dos formas de medir el mismo cambio, y el examen las distingue.
+
+\begin{regla}
+\begin{itemize}
+  \item Parte $= \tfrac{p}{100}\cdot$ total. Porcentaje $= \tfrac{\text{parte}}{\text{total}}\cdot 100$.
+  Total $= \text{parte} \div \tfrac{p}{100}$.
+  \item El $a\,\%$ del $b\,\%$ es el $\tfrac{ab}{100}\,\%$.
+  \item La «base» del porcentaje es siempre la cantidad que sigue a la palabra «de».
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[¿Qué parte del total?]
+En un colegio hay 480 estudiantes; el $45\,\%$ son mujeres y el $25\,\%$ de las mujeres practica un deporte. ¿Cuántas
+mujeres deportistas hay?
+\solucion $0.25 \cdot 0.45 = 0.1125$; el $11.25\,\%$ de 480 es $54$. O por pasos: 216 mujeres, la cuarta parte 54.
+\end{ejemplo}
+
+\begin{ejemplo}[El total desde una parte]
+Pagué \$63\,000, que era el $70\,\%$ del precio original. ¿Cuál era?
+\solucion El $10\,\%$ es $9\,000$; el $100\,\%$, $90\,000$.
+\end{ejemplo}
+
+\begin{ejemplo}[Porcentaje de cambio]
+Una planta pasó de 40 cm a 52 cm. ¿En qué porcentaje creció?
+\solucion Creció 12 cm sobre 40 cm: $\tfrac{12}{40} = 30\,\%$. La base es el valor \emph{inicial}.
+\end{ejemplo}
+
+\begin{ejemplo}[Mezcla de porcentajes]
+Se mezclan 30 litros de jugo con $20\,\%$ de azúcar y 20 litros con $45\,\%$. ¿Qué porcentaje de azúcar tiene la
+mezcla?
+\solucion Azúcar: $6 + 9 = 15$ litros en 50 litros: $30\,\%$. (Es un promedio ponderado: más cerca de $20\,\%$ porque
+hay más de ese jugo.)
+\end{ejemplo}
+
+\begin{trampa}
+Calcular un porcentaje de cambio sobre el valor final. De 40 a 52 es un aumento del $30\,\%$; de 52 a 40 es una
+disminución de $\tfrac{12}{52} \approx 23\,\%$, no del $30\,\%$.
+\end{trampa}
+
+\taller
+\piso{Calienta}{las tres preguntas}
+\begin{ejercicios}
+\item ¿Cuánto es el $35\,\%$ de 260? \sol{91.}
+\item ¿Qué porcentaje es 21 de 60? \sol{$35\,\%$.}
+\item 56 es el $80\,\%$ de un número. ¿Cuál? \sol{70.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item En un examen de 80 preguntas, Luisa acertó 62. ¿Qué porcentaje falló? \sol{18 de 80: $22.5\,\%$.}
+\item El $30\,\%$ de los empleados de una empresa son técnicos y el $40\,\%$ de los técnicos son mujeres. Si hay 36 técnicas, ¿cuántos empleados hay? \sol{$12\,\%$ del total son 36: total 300.}
+\item La matrícula pasó de \$800\,000 a \$920\,000. ¿Qué porcentaje subió? \sol{$\tfrac{120}{800} = 15\,\%$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si el $25\,\%$ de un número es 30, el $60\,\%$ del mismo número es
+\opciones{72}{50}{18}{90}
+\sol{A. El número es 120 y su $60\,\%$, 72.}
+\item Un indicador pasó del $8\,\%$ al $10\,\%$. ¿Cuál afirmación es correcta?
+\opcionesl{Subió $2\,\%$ y también $2$ puntos.}{Subió 2 puntos porcentuales, es decir, un $25\,\%$.}{Subió un $20\,\%$.}{Subió $10\,\%$.}
+\sol{B. $2 \div 8 = 25\,\%$.}
+\item En un salón, el $60\,\%$ son hombres. Si se van 6 hombres, quedan iguales hombres y mujeres. ¿Cuántos estudiantes había?
+\opciones{30}{24}{36}{60}
+\sol{A. Hombres $0.6x$, mujeres $0.4x$; $0.6x - 6 = 0.4x$: $x = 30$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+$40\,\% = \tfrac25$. Entre A y B: $\tfrac25 + \tfrac38 = \tfrac{16 + 15}{40} = \tfrac{31}{40}$. En blanco: $\tfrac{9}{40}$,
+que son 9\,000 votos. Un cuarentavo son 1\,000 y el total 40\,000. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-pr-5}{Aumentos, descuentos e IVA}{Juego del factor escondido: subir y bajar es multiplicar.}
+
+\begin{reto}
+El precio de un artículo sube un $25\,\%$ y luego baja un $20\,\%$. Comparado con el precio original, el precio final
+\opcionesd{sube un $5\,\%$}{es el mismo}{baja un $5\,\%$}{baja un $4\,\%$}
+\end{reto}
+
+\subsection{La idea: cada cambio es un factor}
+Aumentar un $25\,\%$ es pasar de $100\,\%$ a $125\,\%$: multiplicar por $1.25$. Descontar un $20\,\%$ es quedar en el
+$80\,\%$: multiplicar por $0.80$. Pensar en \clave{factores} tiene dos ventajas enormes:
+\begin{enumerate}
+  \item Los cambios sucesivos se \emph{multiplican}: subir $25\,\%$ y bajar $20\,\%$ es $\times 1.25 \times 0.8 = \times 1$.
+  \item Deshacer un cambio es \emph{dividir} por el factor: si el precio con IVA del $19\,\%$ es 238\,000, el precio sin
+  IVA es $238\,000 \div 1.19 = 200\,000$, no $238\,000 \cdot 0.81$.
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm,font=\small]
+  \node[draw=zolive,rounded corners=2pt,minimum width=16mm,minimum height=7mm] (a) at (0,0) {\$200\,000};
+  \node[draw=zolive,rounded corners=2pt,minimum width=16mm,minimum height=7mm] (b) at (52,0) {\$238\,000};
+  \draw[-{Latex[length=2mm]},zolive] (a.north east) to[bend left=20] node[above,font=\scriptsize]{$\times 1.19$ (con IVA)} (b.north west);
+  \draw[-{Latex[length=2mm]},zcoral] (b.south west) to[bend left=20] node[below,font=\scriptsize]{$\div 1.19$ (sin IVA)} (a.south east);
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Interés simple y compuesto}
+Con interés \clave{simple} del $r\,\%$ anual, cada año se gana lo mismo: $I = C \cdot r \cdot t$. Con interés
+\clave{compuesto}, cada año se aplica el factor $(1 + r)$ al saldo: $C (1 + r)^t$. Al cabo de dos años al $10\,\%$,
+el simple da $20\,\%$ y el compuesto $21\,\%$.
+
+\begin{regla}
+\begin{itemize}
+  \item Aumento del $p\,\%$: $\times\left(1 + \tfrac{p}{100}\right)$. Descuento del $p\,\%$: $\times\left(1 - \tfrac{p}{100}\right)$.
+  \item Cambios sucesivos: se multiplican los factores. Factor final $f$: cambio total $(f - 1)\cdot 100\,\%$.
+  \item Precio original $=$ precio final $\div$ factor.
+  \item Descuentos sucesivos del $a\,\%$ y $b\,\%$ equivalen a uno de $\left(a + b - \tfrac{ab}{100}\right)\%$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Dos descuentos]
+Una tienda ofrece $30\,\%$ de descuento y, en caja, un $10\,\%$ adicional. ¿Cuál es el descuento total?
+\solucion $0.7 \cdot 0.9 = 0.63$: se paga el $63\,\%$, el descuento es del $37\,\%$ (no del $40\,\%$).
+\end{ejemplo}
+
+\begin{ejemplo}[Precio sin IVA]
+Un celular cuesta \$952\,000 con IVA del $19\,\%$. ¿Cuál es el valor del IVA?
+\solucion Sin IVA: $952\,000 \div 1.19 = 800\,000$. El IVA es $152\,000$.
+\end{ejemplo}
+
+\begin{ejemplo}[¿Cuánto hay que subir para recuperar?]
+Una acción cayó un $20\,\%$. ¿Cuánto debe subir para volver a su valor?
+\solucion Quedó en $0.8$; para volver a 1 hay que multiplicar por $\tfrac{1}{0.8} = 1.25$: subir un $25\,\%$.
+\end{ejemplo}
+
+\begin{ejemplo}[Interés compuesto]
+Se depositan \$1\,000\,000 al $10\,\%$ anual compuesto. ¿Cuánto hay al cabo de 3 años?
+\solucion $1\,000\,000 \cdot 1.1^3 = 1\,000\,000 \cdot 1.331 = 1\,331\,000$.
+\end{ejemplo}
+
+\begin{trampa}
+Sumar porcentajes sucesivos («$30\,\% + 10\,\% = 40\,\%$») o quitar el IVA restando el $19\,\%$ del precio final. En los
+dos casos la base cambió.
+\end{trampa}
+
+\begin{atajo}
+Un aumento seguido de un descuento del mismo porcentaje $p$ siempre deja una pérdida de $\tfrac{p^2}{100}\,\%$:
+subir y bajar $10\,\%$ pierde el $1\,\%$; $20\,\%$ pierde el $4\,\%$.
+\end{atajo}
+
+\taller
+\piso{Calienta}{factores}
+\begin{ejercicios}[2]
+\item Factor de un aumento del $8\,\%$. \sol{1.08.}
+\item Factor de un descuento del $35\,\%$. \sol{0.65.}
+\item $\$50\,000$ con $12\,\%$ de recargo. \sol{\$56\,000.}
+\item Precio sin IVA de \$119\,000. \sol{\$100\,000.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item Un salario sube $10\,\%$ un año y $10\,\%$ el siguiente. ¿Cuánto subió en total? \sol{$1.1^2 = 1.21$: $21\,\%$.}
+\item Tras un descuento del $15\,\%$, un pantalón cuesta \$68\,000. ¿Cuánto costaba? \sol{$68\,000 \div 0.85 = 80\,000$.}
+\item Un comerciante compra a \$40\,000 y quiere ganar el $25\,\%$ \emph{sobre el precio de venta}. ¿A cuánto debe vender? \sol{La ganancia es $\tfrac14$ de la venta: el costo es $\tfrac34$ de ella. Venta $= 40\,000 \div 0.75 \approx 53\,333$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Un precio baja $20\,\%$ y luego sube $20\,\%$. El precio final respecto al inicial
+\opcionesd{es igual}{baja $4\,\%$}{sube $4\,\%$}{baja $2\,\%$}
+\sol{B. $0.8 \cdot 1.2 = 0.96$.}
+\item Una población crece $10\,\%$ cada año. Si hoy hay 20\,000 habitantes, dentro de 2 años habrá
+\opciones{24\,000}{24\,200}{22\,000}{24\,400}
+\sol{B. $20\,000 \cdot 1.21$.}
+\item Con un descuento del $25\,\%$ pagué \$45\,000. Si el descuento hubiera sido del $40\,\%$, habría pagado
+\opciones{\$27\,000}{\$36\,000}{\$33\,750}{\$30\,000}
+\sol{B. Precio original $60\,000$; el $60\,\%$ es $36\,000$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Factores: $1.25 \cdot 0.80 = 1$. El precio final es exactamente el original. \textbf{Opción B.} Quien suma $+25 - 20$
+elige la A; quien usa el atajo de «subir y bajar el mismo porcentaje» con un porcentaje que no es el mismo elige la D.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\evaluacion
+\begin{ejercicios}
+\item Se reparten 450 dulces entre dos niños en razón $4 : 5$. ¿Cuántos más recibe el segundo?
+\opciones{50}{90}{45}{250}
+\sol{A. Partes de 50: 200 y 250. (4.1)}
+\item En un mapa a escala $1 : 40\,000$, dos puntos están a 7.5 cm. La distancia real es
+\opciones{3 km}{30 km}{300 m}{0.3 km}
+\sol{A. $7.5 \cdot 40\,000 = 300\,000$ cm. (4.1)}
+\item Si $a : b = 3 : 4$ y $b : c = 6 : 7$, entonces $a : c$ es
+\opciones{$9 : 14$}{$3 : 7$}{$18 : 21$}{$1 : 2$}
+\sol{A. $a : b : c = 9 : 12 : 14$. (4.1)}
+\item Si 15 obreros hacen una carretera en 24 días, ¿cuántos días tardan 20 obreros?
+\opciones{32}{18}{20}{16}
+\sol{B. $360 / 20$. (4.2)}
+\item 4 máquinas fabrican 600 tornillos en 5 horas. ¿Cuántos fabrican 6 máquinas en 8 horas?
+\opciones{1\,200}{1\,440}{960}{1\,800}
+\sol{B. 30 tornillos por máquina-hora; $48 \cdot 30$. (4.2)}
+\item Un grifo llena un tanque en 5 horas y otro en 20 horas. Juntos tardan
+\opciones{4 h}{12.5 h}{3 h}{2.5 h}
+\sol{A. $\tfrac{100}{25}$. (4.3)}
+\item Un tren sale a 60 km/h; una hora después sale otro, por la misma vía y en el mismo sentido, a 80 km/h. Lo alcanza al cabo de
+\opciones{1 h}{2 h}{3 h}{4 h}
+\sol{C. Ventaja 60 km, descuenta 20 km/h. (4.3)}
+\item ¿Qué porcentaje de 250 es 40?
+\opciones{$16\,\%$}{$40\,\%$}{$62.5\,\%$}{$6.25\,\%$}
+\sol{A. $40/250 = 0.16$. (4.4)}
+\item El $40\,\%$ del $25\,\%$ de 800 es
+\opciones{80}{200}{320}{100}
+\sol{A. $0.1 \cdot 800$. (4.4)}
+\item Un televisor cuesta \$1\,428\,000 con IVA del $19\,\%$. Su precio sin IVA es
+\opciones{\$1\,200\,000}{\$1\,156\,680}{\$1\,240\,000}{\$1\,409\,000}
+\sol{A. $1\,428\,000 \div 1.19$. (4.5)}
+\item Dos descuentos sucesivos del $20\,\%$ y del $25\,\%$ equivalen a uno de
+\opciones{$45\,\%$}{$40\,\%$}{$5\,\%$}{$60\,\%$}
+\sol{B. $0.8 \cdot 0.75 = 0.6$. (4.5)}
+\item Un artículo bajó de \$80\,000 a \$60\,000. Para volver al precio inicial debe subir
+\opciones{$25\,\%$}{$20\,\%$}{$33.\overline{3}\,\%$}{$30\,\%$}
+\sol{C. $\tfrac{20\,000}{60\,000}$. (4.5)}
+\end{ejercicios}

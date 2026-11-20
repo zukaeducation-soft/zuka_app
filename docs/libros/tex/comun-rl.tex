@@ -1,0 +1,94 @@
+% Páginas de entrada comunes a los libros de Razonamiento lógico (1 y 2)
+\cleardoublepage
+\thispagestyle{vacia}
+{\sffamily\fontsize{26}{30}\selectfont\firalight Cómo se usa este libro\par}\vspace{2pt}
+{\color{zlime}\rule{18mm}{1.6pt}}\par\vspace{8pt}
+
+Este libro y la aplicación \marca\ son dos mitades de un mismo curso. La app te enseña con un video corto y te hace
+jugar: arrastras, giras, llenas, comparas, y la cuenta aparece sola. El libro va más despacio y más hondo: explica
+\emph{por qué} funciona cada idea, resuelve ejemplos completos y te deja papel y lápiz para practicar como en el examen.
+Cada lección tiene el mismo número y el mismo código en los dos lugares (por ejemplo, \texttt{pu-cm-1}).
+
+\vspace{4pt}
+\begin{tabularx}{\linewidth}{@{}>{\sffamily\small\bfseries\color{zolive}}p{27mm}X@{}}
+El reto & Abre la lección con un problema tipo examen. No tienes que resolverlo todavía: léelo, piénsalo dos minutos
+y sigue. Al final de la lección vuelve resuelto.\\[4pt]
+La idea & La intuición, con un dibujo cuando ayuda. Primero se entiende; la fórmula viene después.\\[4pt]
+La regla & El recuadro con lo que hay que llevarse. Si solo tienes cinco minutos antes del examen, lee los recuadros.\\[4pt]
+Ejemplos & Problemas resueltos paso a paso. Tapa la solución, intenta y luego compara.\\[4pt]
+Trampa & El error que más se repite en esa clase de pregunta, y cómo lo ponen como opción falsa.\\[4pt]
+Atajo & La manera de ganar tiempo sin calculadora.\\[4pt]
+Para ir más lejos & Una idea extra para quien quiere el puntaje alto. Se puede saltar.\\[4pt]
+Taller & Tres pisos: \textbf{Calienta} (directo), \textbf{Entrena} (problemas) y \textbf{Como en el examen}
+(opción múltiple A–D). Las respuestas están al final del libro, en \emph{Claves y soluciones}.\\[4pt]
+Bitácora & Cuatro casillas para marcar: leí, vi el video, jugué los diez juegos de la app e hice el taller.\\[4pt]
+Evaluación & Cada mundo termina con una prueba de 10 a 12 preguntas como las del examen, con tiempo.\\
+\end{tabularx}
+
+\vspace{6pt}
+\begin{tcolorbox}[enhanced,colback=znight,coltext=white,boxrule=0pt,arc=3pt,left=5mm,right=5mm,top=3mm,bottom=3mm]
+{\sffamily\scriptsize\bfseries\color{zlime}EL CICLO DE CADA LECCIÓN}\par\vspace{3pt}
+\begin{tikzpicture}[x=1mm,y=1mm,every node/.style={font=\sffamily\footnotesize,text=white}]
+  \foreach \i/\t/\s in {0/Lee/la idea y la regla,1/Mira/el video en Zuka,2/Juega/los diez juegos,3/Resuelve/el taller,4/Repasa/con las claves}{%
+    \node[draw=zlime,circle,minimum size=7mm,line width=.6pt] (n\i) at (\i*22.5,0) {\bfseries\the\numexpr\i+1\relax};
+    \node[below=1mm of n\i,align=center,text width=20mm] {\textbf{\t}\\{\color{white!65}\scriptsize\s}};}
+  \foreach \i/\j in {0/1,1/2,2/3,3/4}{\draw[zice,line width=.5pt,-{Latex[length=1.6mm]}] (n\i) -- (n\j);}
+\end{tikzpicture}
+\end{tcolorbox}
+
+\clearpage
+\thispagestyle{vacia}
+{\sffamily\fontsize{26}{30}\selectfont\firalight La prueba de razonamiento\par}\vspace{2pt}
+{\color{zlime}\rule{18mm}{1.6pt}}\par\vspace{8pt}
+
+La prueba de admisión de la Universidad de Antioquia tiene dos componentes con el mismo peso: Razonamiento lógico y
+Competencia lectora. En razonamiento hay alrededor de \textbf{40 preguntas} de opción múltiple con cuatro opciones,
+\textbf{sin calculadora}. No pide fórmulas raras: pide \emph{ver} la estructura de un problema, organizar la información
+y descartar con criterio. Por eso este libro insiste en tres hábitos.
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=4pt]
+  \item \textbf{Dibujar antes de calcular.} Una recta, una tabla, un árbol o una barra partida convierten un enunciado
+  enredado en algo que se ve. Casi todos los ejemplos del libro empiezan con un dibujo.
+  \item \textbf{Calcular lo menos posible.} Simplificar antes de multiplicar, estimar antes de operar, probar las opciones
+  cuando el problema lo permite. Una cuenta corta y segura vale más que una larga y frágil.
+  \item \textbf{Leer la pregunta dos veces.} «¿Cuántos \emph{más}?», «\emph{a lo sumo}», «\emph{necesariamente}», «el
+  \emph{resto}»: una palabra cambia la respuesta. Las opciones falsas del examen suelen ser la respuesta a otra
+  pregunta muy parecida.
+\end{enumerate}
+
+\subsection*{Cómo repartir el tiempo}
+Con unos 90 segundos por pregunta, conviene una primera vuelta rápida: responder lo que sale en menos de un minuto,
+marcar con un círculo lo que parece largo y volver después. Ninguna pregunta vale más que otra; una pregunta difícil no
+merece cinco minutos si hay tres fáciles esperando.
+
+\subsection*{Cómo descartar}
+\begin{itemize}
+  \item \textbf{Por tamaño:} si el resultado debe estar entre 50 y 60, las opciones fuera de ese rango sobran.
+  \item \textbf{Por paridad o última cifra:} un producto de un número par es par; $37 \times 43$ termina en 1.
+  \item \textbf{Por unidades:} un área se mide en unidades cuadradas, un volumen en cúbicas.
+  \item \textbf{Probando:} cuando piden un número que cumple condiciones, reemplazar las opciones suele ser más rápido que
+  plantear la ecuación.
+\end{itemize}
+
+\subsection*{Símbolos que vas a encontrar}
+\begin{multicols}{2}\small
+\begin{tabular}{@{}>{$}l<{$}l@{}}
+a \cdot b,\ ab & producto\\
+\tfrac{a}{b} & cociente, fracción\\
+a^n & potencia\\
+\sqrt{a} & raíz cuadrada\\
+|a| & valor absoluto\\
+a \mid b & $a$ divide a $b$\\
+a \approx b & aproximadamente igual\\
+\end{tabular}
+
+\begin{tabular}{@{}>{$}l<{$}l@{}}
+a \neq b & distinto de\\
+<,\ \le & menor, menor o igual\\
+n! & factorial\\
+\pi \approx 3.14 & número pi\\
+\overline{ab} & número de cifras $a$, $b$\\
+\angle ABC & ángulo de vértice $B$\\
+\triangle ABC & triángulo\\
+\end{tabular}
+\end{multicols}

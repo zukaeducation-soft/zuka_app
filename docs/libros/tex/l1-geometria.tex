@@ -1,0 +1,667 @@
+% Libro 1 · Mundo 7 · Geometría (app: pu-geometria)
+\mundo{Geometría}{pu-geometria}{Ángulos que se esconden en un dibujo, triángulos que se parecen, áreas que se suman y se
+restan. En la prueba, la geometría pide \emph{ver}: trazar una línea auxiliar, reconocer un triángulo conocido, partir
+una figura rara en piezas sencillas. Las fórmulas son pocas; la mirada se entrena.}{%
+\item \textbf{7.1} Ángulos y paralelas
+\item \textbf{7.2} Triángulos y Pitágoras
+\item \textbf{7.3} Semejanza y escala
+\item \textbf{7.4} Perímetros, áreas y círculos
+\item \textbf{7.5} Áreas sombreadas y cuadrícula
+\item \textbf{7.6} Volúmenes y superficies}
+
+% ------------------------------------------------------------------
+\leccion{pu-ge-1}{Ángulos y paralelas}{Juegos de la tijera de ángulos y las paralelas que giran.}
+
+\begin{reto}
+Dos ángulos suplementarios están en razón $2 : 7$. ¿Cuánto mide el menor?
+\opciones{$20^\circ$}{$40^\circ$}{$70^\circ$}{$140^\circ$}
+\end{reto}
+
+\subsection{La idea: un ángulo es un giro}
+Un ángulo mide cuánto hay que girar una semirrecta para llevarla sobre otra. Una vuelta completa son $360^\circ$, media
+vuelta $180^\circ$ (un ángulo \clave{llano}) y un cuarto de vuelta $90^\circ$ (un ángulo \clave{recto}).
+
+\begin{itemize}
+  \item \clave{Complementarios}: suman $90^\circ$. \clave{Suplementarios}: suman $180^\circ$.
+  \item \clave{Opuestos por el vértice}: los que forman dos rectas que se cortan, enfrentados; son iguales.
+\end{itemize}
+
+\subsubsection{Dos paralelas y una transversal}
+Cuando una recta corta a dos paralelas aparecen ocho ángulos, pero solo \emph{dos medidas}: los agudos son todos iguales
+entre sí, los obtusos también, y un agudo más un obtuso suman $180^\circ$.
+
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm,font=\scriptsize]
+  \draw[zink,line width=.6pt] (-30,10) -- (40,10) node[right]{$r$};
+  \draw[zink,line width=.6pt] (-30,-10) -- (40,-10) node[right]{$s$};
+  \draw[zolive,line width=.8pt] (-10,-22) -- (22,22);
+  \coordinate (P) at (13.27,10); \coordinate (Q) at (-1.27,-10);
+  \coordinate (L1) at (-30,10); \coordinate (R2) at (40,-10); \coordinate (L2) at (-30,-10); \coordinate (D) at (-10,-22);
+  \pic[draw=zsky,fill=zsky!25,angle radius=5mm] {angle = L1--P--Q};
+  \pic[draw=zsky,fill=zsky!25,angle radius=5mm] {angle = R2--Q--P};
+  \pic[draw=zcoral,fill=zcoral!20,angle radius=4mm] {angle = L2--Q--D};
+  \node at (7.8,7.3) {$\alpha$}; \node at (4.6,-7.4) {$\alpha$}; \node at (-6.6,-12.6) {$\alpha$};
+  \node[right,align=left] at (45,0) {alternos internos: iguales\\correspondientes: iguales\\conjugados: suman $180^\circ$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{La suma de los ángulos de un triángulo}
+Si por un vértice se traza la paralela al lado opuesto, los tres ángulos del triángulo aparecen juntos formando un
+ángulo llano: suman $180^\circ$. Y el \clave{ángulo exterior} es igual a la suma de los dos interiores no adyacentes.
+
+\begin{regla}
+\begin{itemize}
+  \item Complementarios: $\alpha + \beta = 90^\circ$. Suplementarios: $\alpha + \beta = 180^\circ$.
+  \item Entre paralelas: alternos y correspondientes son iguales; conjugados suman $180^\circ$.
+  \item En un triángulo: $\alpha + \beta + \gamma = 180^\circ$; ángulo exterior $=$ suma de los dos interiores opuestos.
+  \item En un polígono de $n$ lados, los ángulos interiores suman $(n - 2)\cdot 180^\circ$; los exteriores, $360^\circ$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[El complemento del suplemento]
+El suplemento de un ángulo es el triple de su complemento. ¿Cuánto mide?
+\solucion $180 - x = 3(90 - x)$, $180 - x = 270 - 3x$, $2x = 90$, $x = 45^\circ$.
+\end{ejemplo}
+
+\begin{ejemplo}[La línea en zigzag]
+Dos paralelas $r$ y $s$; entre ellas una línea quebrada forma con $r$ un ángulo de $35^\circ$ y con $s$ uno de $50^\circ$
+(medidos hacia adentro). ¿Cuánto mide el ángulo del quiebre?
+\solucion Se traza por el quiebre una tercera paralela: parte el ángulo en dos, alternos con $35^\circ$ y $50^\circ$.
+El quiebre mide $85^\circ$. Es el truco más usado del tema: \emph{una paralela auxiliar}.
+\end{ejemplo}
+
+\begin{ejemplo}[Polígono regular]
+¿Cuánto mide cada ángulo interior de un hexágono regular? ¿Y cuántos lados tiene un polígono regular cuyo ángulo
+exterior mide $24^\circ$?
+\solucion Hexágono: $(6 - 2)\cdot 180 = 720$; cada uno $120^\circ$. Exteriores suman 360: $360 / 24 = 15$ lados.
+\end{ejemplo}
+
+\begin{trampa}
+Suponer que dos rectas son paralelas porque «se ven» paralelas. Solo se usan las propiedades si el enunciado lo dice
+(o lo marca con flechas).
+\end{trampa}
+
+\begin{atajo}
+En los problemas de razón entre ángulos, reparte: suplementarios en razón $2 : 7$ son 9 partes de $20^\circ$.
+\end{atajo}
+
+\taller
+\piso{Calienta}{medir}
+\begin{ejercicios}[2]
+\item Complemento de $27^\circ$. \sol{$63^\circ$.}
+\item Suplemento de $118^\circ$. \sol{$62^\circ$.}
+\item Suma de los ángulos de un octágono. \sol{$1\,080^\circ$.}
+\item Tercer ángulo si dos miden $47^\circ$ y $68^\circ$. \sol{$65^\circ$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item En un triángulo, un ángulo es el doble de otro y el tercero mide $60^\circ$. ¿Cuánto mide el mayor? \sol{$3x = 120$, $x = 40$: el mayor es $80^\circ$.}
+\item Un ángulo exterior de un triángulo mide $130^\circ$ y uno de los interiores no adyacentes $55^\circ$. ¿Cuánto mide el otro? \sol{$75^\circ$.}
+\item ¿Qué ángulo forman las manecillas de un reloj a las 3:30? \sol{El horario está a mitad entre 3 y 4 ($105^\circ$ desde las 12), el minutero en $180^\circ$: $75^\circ$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Dos ángulos complementarios se diferencian en $18^\circ$. El mayor mide
+\opciones{$54^\circ$}{$36^\circ$}{$99^\circ$}{$72^\circ$}
+\sol{A. $\tfrac{90 + 18}{2}$.}
+\item Los ángulos de un triángulo están en razón $1 : 2 : 3$. El triángulo es
+\opciones{acutángulo}{rectángulo}{obtusángulo}{equilátero}
+\sol{B. $30^\circ, 60^\circ, 90^\circ$.}
+\item Cada ángulo interior de un polígono regular mide $150^\circ$. ¿Cuántos lados tiene?
+\opciones{10}{12}{15}{8}
+\sol{B. Exterior $30^\circ$: $360/30$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+$180^\circ$ en $2 + 7 = 9$ partes de $20^\circ$: el menor mide $40^\circ$ (y el mayor $140^\circ$). \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-ge-2}{Triángulos y Pitágoras}{Juegos del ápice del triángulo, los cuadrados de Pitágoras y la escalera en la pared.}
+
+\begin{reto}
+Una antena vertical de 15 m se sostiene con un cable tenso que va desde su punta hasta un punto del suelo a 8 m de la
+base. ¿Cuánto mide el cable?
+\opciones{17 m}{23 m}{13 m}{19 m}
+\end{reto}
+
+\subsection{La idea: los cuadrados sobre los lados}
+En un triángulo rectángulo, el cuadrado construido sobre la \clave{hipotenusa} (el lado opuesto al ángulo recto) tiene
+exactamente la misma área que los cuadrados de los dos \clave{catetos} juntos.
+
+\begin{center}
+\begin{tikzpicture}[x=5mm,y=5mm]
+  \coordinate (A) at (0,0); \coordinate (B) at (4,0); \coordinate (C) at (0,3);
+  \fill[zlime!45] (A) rectangle (4,-4); \fill[zsky!30] (A) rectangle (-3,3);
+  \fill[zcoral!20] (B) -- (C) -- (3,7) -- (7,4) -- cycle;
+  \draw[zink,line width=.7pt] (A) -- (B) -- (C) -- cycle;
+  \draw[zink,line width=.4pt] (A) rectangle (4,-4) (A) rectangle (-3,3) (B) -- (7,4) -- (3,7) -- (C);
+  \node[font=\small] at (2,-2) {$4^2 = 16$}; \node[font=\small] at (-1.5,1.5) {$9$}; \node[font=\small] at (3.5,3.5) {$25$};
+  \draw[zink] (0,.4) -- (.4,.4) -- (.4,0);
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Ternas que conviene reconocer}
+$3$-$4$-$5$, $5$-$12$-$13$, $8$-$15$-$17$, $7$-$24$-$25$ y todos sus múltiplos ($6$-$8$-$10$, $9$-$12$-$15$, …). En el
+examen, la mayoría de los triángulos rectángulos son de estas familias.
+
+\subsubsection{Los dos triángulos especiales}
+\begin{itemize}
+  \item $45^\circ$-$45^\circ$-$90^\circ$ (medio cuadrado): lados $x$, $x$, $x\sqrt2$. La diagonal de un cuadrado de lado
+  $\ell$ mide $\ell\sqrt2$.
+  \item $30^\circ$-$60^\circ$-$90^\circ$ (medio triángulo equilátero): lados $x$, $x\sqrt3$, $2x$. La altura de un
+  equilátero de lado $\ell$ mide $\tfrac{\sqrt3}{2}\ell$.
+\end{itemize}
+
+\subsubsection{Desigualdad triangular}
+Tres segmentos forman un triángulo solo si cada uno es menor que la suma de los otros dos. Con 3, 4 y 8 no se puede:
+$3 + 4 < 8$.
+
+\begin{regla}
+\begin{itemize}
+  \item Pitágoras: $c^2 = a^2 + b^2$ ($c$ la hipotenusa). Si $c^2 > a^2 + b^2$, el ángulo opuesto a $c$ es obtuso; si
+  $c^2 < a^2 + b^2$, es agudo.
+  \item Área de un triángulo: $\tfrac{b\cdot h}{2}$; equilátero de lado $\ell$: $\tfrac{\sqrt3}{4}\ell^2$.
+  \item A mayor lado se opone mayor ángulo.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[La escalera que resbala]
+Una escalera de 10 m está apoyada en una pared con el pie a 6 m. Si el pie se aleja 2 m más, ¿cuánto baja la punta?
+\solucion Antes: altura $\sqrt{100 - 36} = 8$ m. Después, a 8 m de la pared: altura $\sqrt{100 - 64} = 6$ m. Baja 2 m.
+\end{ejemplo}
+
+\begin{ejemplo}[La diagonal de una caja]
+¿Cuánto mide la diagonal de una caja de $3 \times 4 \times 12$?
+\solucion Diagonal del piso: $\sqrt{9 + 16} = 5$. Con la altura: $\sqrt{25 + 144} = 13$.
+\end{ejemplo}
+
+\begin{ejemplo}[Altura de un isósceles]
+Un triángulo isósceles tiene lados iguales de 13 y base 10. Halla su área.
+\solucion La altura cae en la mitad de la base: $\sqrt{169 - 25} = 12$. Área $\tfrac{10 \cdot 12}{2} = 60$.
+\end{ejemplo}
+
+\begin{trampa}
+Aplicar Pitágoras como si la hipotenusa fuera un cateto: con lados 6 y 10, el tercero puede ser 8 (si 10 es hipotenusa)
+o $\sqrt{136}$ (si los dos son catetos). Lee cuál es el ángulo recto.
+\end{trampa}
+
+\taller
+\piso{Calienta}{Pitágoras}
+\begin{ejercicios}[2]
+\item Hipotenusa con catetos 9 y 40. \sol{41.}
+\item Cateto con hipotenusa 26 y cateto 24. \sol{10.}
+\item Diagonal de un cuadrado de lado 7. \sol{$7\sqrt2$.}
+\item Altura de un equilátero de lado 6. \sol{$3\sqrt3$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item Un barco navega 12 km al norte y luego 5 km al este. ¿A qué distancia está del punto de partida? \sol{13 km.}
+\item ¿Forman un triángulo rectángulo los lados 20, 21 y 29? \sol{$400 + 441 = 841 = 29^2$: sí.}
+\item Los lados de un triángulo miden 7 y 11. ¿Cuántos valores enteros puede tener el tercero? \sol{Por la desigualdad triangular, $11 - 7 < x < 11 + 7$: $x = 5, 6, \ldots, 17$, trece valores.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item El perímetro de un rombo cuyas diagonales miden 12 y 16 es
+\opciones{40}{48}{56}{20}
+\sol{A. Cada lado es la hipotenusa de catetos 6 y 8: 10.}
+\item Un triángulo tiene lados 5, 6 y 8. El triángulo es
+\opciones{rectángulo}{acutángulo}{obtusángulo}{equilátero}
+\sol{C. $64 > 25 + 36$.}
+\item El área de un triángulo equilátero de perímetro 12 es
+\opciones{$4\sqrt3$}{$8$}{$16\sqrt3$}{$2\sqrt3$}
+\sol{A. Lado 4: $\tfrac{\sqrt3}{4}\cdot 16$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Catetos 15 y 8: $\sqrt{225 + 64} = \sqrt{289} = 17$ m (la terna $8$-$15$-$17$). \textbf{Opción A.} La B suma los catetos.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-ge-3}{Semejanza y escala}{Juegos de estirar la foto y la sombra del árbol.}
+
+\begin{reto}
+Un poste de 6 m proyecta una sombra de 4 m. A la misma hora, ¿qué sombra proyecta un edificio de 27 m?
+\opciones{18 m}{40.5 m}{25 m}{16 m}
+\end{reto}
+
+\subsection{La idea: la misma forma, otro tamaño}
+Dos figuras son \clave{semejantes} si una es una ampliación (o reducción) de la otra: los ángulos son iguales y todas
+las longitudes se multiplican por el mismo número $k$, la \clave{razón de semejanza}. Una foto estirada solo a lo ancho
+no es semejante: se deforma.
+
+\subsubsection{Triángulos semejantes}
+Dos triángulos son semejantes si tienen dos ángulos iguales (el tercero lo será también). Pasa, por ejemplo:
+\begin{itemize}
+  \item con las sombras a la misma hora (los rayos de sol son paralelos);
+  \item cuando una recta paralela a un lado corta un triángulo (\clave{teorema de Tales});
+  \item con la altura sobre la hipotenusa de un triángulo rectángulo, que lo parte en dos triángulos semejantes al grande.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[x=5mm,y=5mm,font=\scriptsize]
+  \draw[zink,line width=.7pt] (0,0) -- (9,0) -- (0,6) -- cycle;
+  \draw[zolive,line width=.7pt] (3,0) -- (3,4);
+  \node[below] at (1.5,0) {$a$}; \node[below] at (6,0) {$b - a$};
+  \node[left] at (3,2) {$h$}; \node[left] at (0,3) {$H$};
+  \draw[decorate,decoration={brace,amplitude=4pt,mirror}] (0,-.8) -- node[below=3pt]{$b$} (9,-.8);
+  \node[right] at (10,3) {$\dfrac{h}{H} = \dfrac{b - a}{b}$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Áreas y volúmenes}
+Si las longitudes se multiplican por $k$, las áreas se multiplican por $k^2$ y los volúmenes por $k^3$. Un mapa a escala
+doble tiene cuatro veces el área en el papel.
+
+\begin{regla}
+\begin{itemize}
+  \item Semejantes: $\dfrac{a'}{a} = \dfrac{b'}{b} = \dfrac{c'}{c} = k$.
+  \item Áreas: $\dfrac{A'}{A} = k^2$. Volúmenes: $\dfrac{V'}{V} = k^3$.
+  \item Tales: una paralela a un lado de un triángulo determina un triángulo semejante al original.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Tales]
+En un triángulo $ABC$, una recta paralela a $BC$ corta $AB$ en $D$ y $AC$ en $E$. Si $AD = 4$, $DB = 6$ y $DE = 5$,
+¿cuánto mide $BC$?
+\solucion $\triangle ADE \sim \triangle ABC$ con $k = \tfrac{AB}{AD} = \tfrac{10}{4} = 2.5$. $BC = 5 \cdot 2.5 = 12.5$.
+\end{ejemplo}
+
+\begin{ejemplo}[Áreas semejantes]
+Dos cuadrados tienen áreas 9 y 25 cm$^2$. ¿Cuál es la razón de sus perímetros?
+\solucion $k^2 = \tfrac{25}{9}$, $k = \tfrac53$: perímetros en razón $3 : 5$.
+\end{ejemplo}
+
+\begin{ejemplo}[La maqueta]
+Una maqueta a escala $1 : 50$ de una piscina tiene capacidad de 0.4 litros. ¿Cuál es la capacidad real?
+\solucion Volumen por $50^3 = 125\,000$: $50\,000$ litros, es decir, $50$ m$^3$.
+\end{ejemplo}
+
+\begin{trampa}
+Al duplicar las medidas de una figura, el área se cuadruplica, no se duplica. Es la opción falsa favorita del examen.
+\end{trampa}
+
+\taller
+\piso{Calienta}{razón $k$}
+\begin{ejercicios}
+\item Un triángulo de lados 3, 4, 5 se amplía con $k = 2.5$. ¿Su perímetro? \sol{30.}
+\item Una persona de 1.60 m proyecta una sombra de 2 m. ¿Qué sombra da un árbol de 8 m? \sol{10 m.}
+\item Si el lado de un cubo se triplica, ¿por cuánto se multiplica su volumen? \sol{27.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item En un triángulo rectángulo de catetos 6 y 8 se traza la altura sobre la hipotenusa. ¿Cuánto mide? \sol{Área $24 = \tfrac{10 \cdot h}{2}$: $h = 4.8$.}
+\item Una foto de $10 \times 15$ se amplía de modo que el lado corto mida 40. ¿Cuánto mide el largo y cuántas veces más área tiene? \sol{60; $k = 4$, área 16 veces.}
+\item Una pirámide de 12 cm de altura se corta con un plano paralelo a la base a 4 cm de la cúspide. ¿Qué fracción del volumen queda en la pirámide pequeña? \sol{$k = \tfrac13$: $\tfrac{1}{27}$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Dos triángulos semejantes tienen perímetros 18 y 30. Si el área del pequeño es 27, la del grande es
+\opciones{45}{75}{54}{81}
+\sol{B. $k = \tfrac53$; $27 \cdot \tfrac{25}{9} = 75$.}
+\item En la figura de la lección, si $a = 3$, $b = 9$ y $H = 6$, entonces $h$ mide
+\opciones{2}{3}{4}{4.5}
+\sol{C. $h = 6 \cdot \tfrac{6}{9} = 4$.}
+\item Una piscina se llena en 4 horas. Otra, semejante y con el doble de cada medida, con el mismo caudal se llena en
+\opciones{8 h}{16 h}{32 h}{64 h}
+\sol{C. Volumen por 8.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Altura y sombra son proporcionales: $\tfrac{6}{4} = \tfrac{27}{x}$, $x = 18$ m. \textbf{Opción A.} La B pone la razón al
+revés.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-ge-4}{Perímetros, áreas y círculos}{Juegos de las fichas que miden áreas y la rueda que se desenrolla.}
+
+\begin{reto}
+Una pista de atletismo está formada por un rectángulo de $100 \times 60$ m con un semicírculo en cada lado corto (de
+diámetro 60 m). ¿Cuál es el perímetro de la pista?
+\opciones{$200 + 60\pi$ m}{$320 + 60\pi$ m}{$200 + 30\pi$ m}{$320$ m}
+\end{reto}
+
+\subsection{La idea: el área se cuenta en cuadritos}
+El área es cuántos cuadritos de $1 \times 1$ caben en una figura. Todas las fórmulas salen de recortar y reacomodar:
+
+\begin{center}\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Figura} & \textbf{Área} & \textbf{De dónde sale}\\\midrule
+Rectángulo & $b \cdot h$ & filas por columnas\\
+Paralelogramo & $b \cdot h$ & se corta un triángulo y se pasa al otro lado\\
+Triángulo & $\tfrac{b h}{2}$ & medio paralelogramo\\
+Trapecio & $\tfrac{(B + b) h}{2}$ & dos copias forman un paralelogramo\\
+Rombo & $\tfrac{D d}{2}$ & medio rectángulo de lados $D$ y $d$\\
+Círculo & $\pi r^2$ & se corta en tajadas y se arma un casi-rectángulo $\pi r \times r$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{Circunferencia}
+La longitud de la circunferencia es $2\pi r = \pi d$: si una rueda de diámetro 1 da una vuelta, avanza $\pi \approx
+3.14$. Un \clave{sector} de ángulo $\theta$ es la fracción $\tfrac{\theta}{360^\circ}$ del círculo: su arco mide
+$\tfrac{\theta}{360}\cdot 2\pi r$ y su área $\tfrac{\theta}{360}\cdot\pi r^2$.
+
+\begin{regla}
+\begin{itemize}
+  \item Perímetro: suma de los bordes. Área: superficie interior.
+  \item Círculo: $L = 2\pi r$, $A = \pi r^2$. Sector de $\theta$: fracción $\tfrac{\theta}{360}$.
+  \item Si el radio se multiplica por $k$, la longitud por $k$ y el área por $k^2$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Trapecio]
+Un trapecio isósceles tiene bases 16 y 6 y lados no paralelos de 13. ¿Cuál es su área?
+\solucion Lo que sobresale a cada lado: $\tfrac{16 - 6}{2} = 5$. Altura $\sqrt{169 - 25} = 12$. Área
+$\tfrac{(16 + 6)\cdot 12}{2} = 132$.
+\end{ejemplo}
+
+\begin{ejemplo}[Vueltas de una rueda]
+Una rueda de 70 cm de diámetro recorre 66 m. ¿Cuántas vueltas da? (Usa $\pi \approx \tfrac{22}{7}$.)
+\solucion Cada vuelta: $\pi \cdot 70 = 220$ cm. Vueltas: $6\,600 \div 220 = 30$.
+\end{ejemplo}
+
+\begin{ejemplo}[Mismo perímetro, distinta área]
+Con 40 m de malla se cerca un terreno rectangular. ¿Cuál es el área máxima?
+\solucion Largo $+$ ancho $= 20$. El área $x(20 - x)$ es máxima cuando el rectángulo es cuadrado: $10 \times 10 = 100$ m$^2$.
+\end{ejemplo}
+
+\begin{trampa}
+Usar el diámetro donde va el radio: el área de un círculo de diámetro 10 es $25\pi$, no $100\pi$.
+\end{trampa}
+
+\taller
+\piso{Calienta}{fórmulas}
+\begin{ejercicios}[2]
+\item Área de un rombo de diagonales 10 y 7. \sol{35.}
+\item Longitud de una circunferencia de radio 9. \sol{$18\pi$.}
+\item Área de un sector de $60^\circ$ y radio 6. \sol{$\tfrac16 \cdot 36\pi = 6\pi$.}
+\item Área de un trapecio de bases 9 y 5, altura 4. \sol{28.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item Un cuadrado y un rectángulo de $16 \times 4$ tienen la misma área. ¿Cuál tiene menor perímetro? \sol{El cuadrado de lado 8: perímetro 32 frente a 40.}
+\item El perímetro de un círculo es $10\pi$. ¿Su área? \sol{$r = 5$: $25\pi$.}
+\item Un jardín rectangular de $12 \times 8$ tiene alrededor un camino de 1 m de ancho. ¿Cuál es el área del camino? \sol{$14 \cdot 10 - 96 = 44$ m$^2$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si el radio de un círculo aumenta $50\,\%$, su área aumenta
+\opciones{$50\,\%$}{$100\,\%$}{$125\,\%$}{$225\,\%$}
+\sol{C. $1.5^2 = 2.25$.}
+\item El área de un cuadrado inscrito en un círculo de radio 5 es
+\opciones{25}{50}{100}{$25\pi$}
+\sol{B. La diagonal es 10: área $\tfrac{10^2}{2}$.}
+\item Un hexágono regular de lado 2 tiene área
+\opciones{$6\sqrt3$}{$12$}{$3\sqrt3$}{$24$}
+\sol{A. Seis equiláteros de lado 2, cada uno $\sqrt3$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+El perímetro de la pista solo incluye los bordes de afuera: los dos lados largos (200 m) y los dos semicírculos, que
+juntos forman una circunferencia de diámetro 60: $60\pi$. Total $200 + 60\pi \approx 388$ m. \textbf{Opción A.} La B
+suma también los lados cortos, que quedan por dentro.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-ge-5}{Áreas sombreadas y cuadrícula}{Juegos de la cuadrícula y el billar que rebota.}
+
+\begin{reto}
+En un cuadrado de lado 4 se dibujan, con centro en cada vértice, cuatro cuartos de círculo de radio 2. ¿Cuál es el área
+de la parte del cuadrado que queda fuera de los cuartos de círculo?
+\opciones{$16 - 4\pi$}{$16 - 2\pi$}{$4\pi$}{$8 - 2\pi$}
+\end{reto}
+
+\subsection{La idea: total menos lo que sobra}
+Casi ninguna región sombreada tiene fórmula propia. Se calcula como \clave{una figura grande menos las piezas que se le
+quitan}, o como \clave{suma de piezas conocidas}. A veces conviene \emph{mover} piezas: dos medias lunas que se
+reacomodan forman un cuadrado.
+
+\begin{center}
+\begin{tikzpicture}[x=6mm,y=6mm]
+  \fill[zlime!55] (0,0) rectangle (4,4);
+  \foreach \c/\a in {{(0,0)}/0,{(4,0)}/90,{(4,4)}/180,{(0,4)}/270}{%
+    \fill[white] \c -- ++(\a:2) arc[start angle=\a,end angle=\a+90,radius=2] -- cycle;
+    \draw[zink,line width=.5pt] \c ++(\a:2) arc[start angle=\a,end angle=\a+90,radius=2];}
+  \draw[zink,line width=.7pt] (0,0) rectangle (4,4);
+  \node[font=\scriptsize,right] at (4.5,2) {$16 - \pi \cdot 2^2$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{En la cuadrícula}
+Cuando la figura está sobre una cuadrícula, hay tres caminos: contar cuadros enteros y medios; usar la fórmula con base
+y altura leídas en la cuadrícula; o \clave{encerrar} la figura en un rectángulo y restar los triángulos rectángulos que
+sobran en las esquinas.
+
+\begin{center}
+\begin{tikzpicture}[x=5mm,y=5mm]
+  \draw[zline,line width=.3pt] (0,0) grid (6,5);
+  \fill[zsky!30] (1,1) -- (5,2) -- (3,4) -- cycle;
+  \draw[zink,line width=.7pt] (1,1) -- (5,2) -- (3,4) -- cycle;
+  \draw[zcoral,dashed,line width=.6pt] (1,1) rectangle (5,4);
+  \node[font=\scriptsize,right] at (6.4,2.5) {$12 - 2 - 3 - 2 = 5$};
+\end{tikzpicture}
+\end{center}
+
+En el dibujo, el rectángulo $4 \times 3$ tiene área 12; los triángulos de las esquinas tienen áreas
+$\tfrac{4 \cdot 1}{2} = 2$, $\tfrac{2 \cdot 3}{2} = 3$ y $\tfrac{2 \cdot 2}{2} = 2$. El triángulo sombreado mide 5.
+
+\begin{regla}
+\begin{itemize}
+  \item Sombreada $=$ total $-$ blanca, o suma de piezas.
+  \item Cuartos de círculo iguales en las cuatro esquinas suman un círculo completo.
+  \item Encerrar en un rectángulo y restar triángulos rectángulos.
+  \item Triángulos con la misma base y entre las mismas paralelas tienen la misma área.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Círculo inscrito]
+¿Qué área queda entre un cuadrado de lado 10 y el círculo inscrito?
+\solucion $100 - 25\pi \approx 100 - 78.5 = 21.5$.
+\end{ejemplo}
+
+\begin{ejemplo}[Triángulo en un rectángulo]
+En un rectángulo de $8 \times 5$ se elige un punto $P$ en el lado de arriba y se une con los dos vértices de abajo. ¿Qué
+fracción del rectángulo ocupa el triángulo?
+\solucion Su base es 8 y su altura 5, sin importar dónde esté $P$: área 20, la mitad del rectángulo.
+\end{ejemplo}
+
+\begin{ejemplo}[Corona]
+Dos círculos concéntricos tienen radios 5 y 3. ¿Cuál es el área del anillo entre ellos?
+\solucion $25\pi - 9\pi = 16\pi$.
+\end{ejemplo}
+
+\begin{trampa}
+Contar dos veces una región que pertenece a dos figuras a la vez, o restar una pieza que no estaba dentro de la figura
+grande.
+\end{trampa}
+
+\taller
+\piso{Calienta}{restar}
+\begin{ejercicios}
+\item Área entre un círculo de radio 4 y el cuadrado inscrito en él. \sol{$16\pi - 32$.}
+\item Área del triángulo de vértices $(0, 0)$, $(6, 0)$ y $(2, 5)$. \sol{15.}
+\item Un cuadrado de lado 6 tiene en su interior un semicírculo con diámetro en un lado. Área fuera del semicírculo. \sol{$36 - \tfrac92\pi$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item Triángulo de vértices $(1, 0)$, $(5, 3)$ y $(0, 4)$ en la cuadrícula. Área. \sol{Rectángulo $5 \times 4 = 20$; se restan $\tfrac{4\cdot3}{2} = 6$, $\tfrac{5\cdot1}{2} = 2.5$ y $\tfrac{1\cdot4}{2} = 2$: queda 9.5.}
+\item En un cuadrado de lado 2 se unen los puntos medios de los lados. ¿Qué área tiene el cuadrado interior? \sol{La mitad: 2.}
+\item Tres círculos de radio 1 están en fila, tangentes, dentro de un rectángulo que los encierra justo. Área sin cubrir. \sol{$6 \cdot 2 - 3\pi = 12 - 3\pi$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Un cuadrado de lado 8 tiene un círculo inscrito. El área de las cuatro esquinas fuera del círculo es
+\opciones{$64 - 16\pi$}{$64 - 8\pi$}{$16\pi$}{$64 - 64\pi$}
+\sol{A. Radio 4.}
+\item Uniendo los puntos medios de los lados de un rectángulo de $10 \times 6$ se forma un rombo de área
+\opciones{60}{30}{15}{20}
+\sol{B. Diagonales 10 y 6.}
+\item El área del cuadrilátero de vértices $(0, 0)$, $(4, 0)$, $(5, 3)$ y $(1, 3)$ es
+\opciones{12}{15}{10}{9}
+\sol{A. Paralelogramo de base 4 y altura 3.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Los cuatro cuartos de círculo de radio 2 forman un círculo completo de área $4\pi$. Lo que queda del cuadrado es
+$16 - 4\pi \approx 3.4$. \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-ge-6}{Volúmenes y superficies}{Juegos del tanque que se llena y el cubo que se desarma.}
+
+\begin{reto}
+Un vaso cilíndrico de radio 3 cm y altura 10 cm está lleno de agua. Se vierte en conos de papel del mismo radio y la misma
+altura. ¿Cuántos conos se llenan completos?
+\opciones{1}{2}{3}{4}
+\end{reto}
+
+\subsection{La idea: capas iguales}
+Un prisma o un cilindro son \clave{capas iguales} apiladas: el volumen es el área de una capa (la base) por cuántas capas
+hay (la altura). Las figuras en punta (pirámides y conos) se van adelgazando y llenan exactamente \clave{un tercio} del
+prisma o cilindro con la misma base y altura: con un cono lleno de agua hay que vaciarlo tres veces para llenar el
+cilindro.
+
+\begin{center}
+\begin{tikzpicture}[x=5mm,y=5mm]
+  \draw[zink,line width=.6pt] (-2,0) -- (-2,4); \draw[zink,line width=.6pt] (2,0) -- (2,4);
+  \draw[zink,line width=.6pt,fill=zlime!30] (0,4) ellipse (2 and .5);
+  \draw[zink,line width=.6pt] (-2,0) arc[start angle=180,end angle=360,x radius=2,y radius=.5];
+  \draw[zink,dashed,line width=.4pt] (2,0) arc[start angle=0,end angle=180,x radius=2,y radius=.5];
+  \node[font=\scriptsize] at (0,-1.3) {$V = \pi r^2 h$};
+  \begin{scope}[xshift=40mm]
+  \draw[zink,line width=.6pt] (-2,0) -- (0,4) -- (2,0);
+  \draw[zink,line width=.6pt,fill=zsky!25] (-2,0) arc[start angle=180,end angle=360,x radius=2,y radius=.5];
+  \draw[zink,dashed,line width=.4pt] (2,0) arc[start angle=0,end angle=180,x radius=2,y radius=.5];
+  \node[font=\scriptsize] at (0,-1.3) {$V = \tfrac13 \pi r^2 h$};
+  \end{scope}
+  \begin{scope}[xshift=80mm]
+  \draw[zink,line width=.6pt,fill=zcoral!15] (0,2) circle (2);
+  \draw[zink,dashed,line width=.4pt] (-2,2) arc[start angle=180,end angle=360,x radius=2,y radius=.5];
+  \node[font=\scriptsize] at (0,-1.3) {$V = \tfrac43 \pi r^3$};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Superficie}
+El área de la superficie es la suma de las caras: se ve mejor \emph{desarmando} la figura en su \clave{desarrollo} plano.
+Un cubo de arista $a$ tiene 6 caras: $6a^2$. Un cilindro se desarma en dos círculos y un rectángulo de base $2\pi r$
+(la circunferencia) y altura $h$: $2\pi r^2 + 2\pi r h$.
+
+\begin{regla}
+\begin{itemize}
+  \item Prisma y cilindro: $V = A_{\text{base}} \cdot h$. Pirámide y cono: $V = \tfrac13 A_{\text{base}} \cdot h$.
+  \item Esfera: $V = \tfrac43\pi r^3$, $A = 4\pi r^2$.
+  \item Cubo: $V = a^3$, $A = 6a^2$, diagonal $a\sqrt3$.
+  \item 1 litro $= 1$ dm$^3 = 1\,000$ cm$^3$; 1 m$^3 = 1\,000$ litros.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Tanque]
+Un tanque cilíndrico de radio 1 m y altura 2 m. ¿Cuántos litros caben? (Usa $\pi \approx 3.14$.)
+\solucion $V = \pi \cdot 1^2 \cdot 2 \approx 6.28$ m$^3 = 6\,280$ litros.
+\end{ejemplo}
+
+\begin{ejemplo}[Cubitos pintados]
+Un cubo de $3 \times 3 \times 3$ formado por 27 cubitos se pinta por fuera. ¿Cuántos cubitos tienen exactamente dos caras
+pintadas?
+\solucion Son los del medio de cada arista: 12 aristas con 1 cubito cada una: 12. (Con 3 caras: los 8 vértices; con 1:
+el centro de cada cara, 6; sin pintar: el del centro, 1. Total $8 + 12 + 6 + 1 = 27$.)
+\end{ejemplo}
+
+\begin{ejemplo}[Nivel del agua]
+En un acuario de $50 \times 30$ cm de base con agua, se sumerge una piedra y el nivel sube 2 cm. ¿Qué volumen tiene la
+piedra?
+\solucion El agua desplazada: $50 \cdot 30 \cdot 2 = 3\,000$ cm$^3 = 3$ litros.
+\end{ejemplo}
+
+\begin{trampa}
+Mezclar unidades: un tanque de $2 \text{ m} \times 50 \text{ cm} \times 40 \text{ cm}$ no tiene volumen $4\,000$ de nada.
+Pasa todo a la misma unidad antes de multiplicar ($200 \cdot 50 \cdot 40 = 400\,000$ cm$^3 = 400$ L).
+\end{trampa}
+
+\taller
+\piso{Calienta}{fórmulas}
+\begin{ejercicios}[2]
+\item Volumen de un cubo de arista 5. \sol{125.}
+\item Volumen de un cono de radio 3 y altura 4. \sol{$12\pi$.}
+\item Superficie de un cubo de arista 4. \sol{96.}
+\item Volumen de una esfera de radio 3. \sol{$36\pi$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item ¿Cuántos cubitos de 2 cm de arista caben en una caja de $10 \times 8 \times 6$ cm? \sol{$5 \cdot 4 \cdot 3 = 60$.}
+\item Una piscina de $10 \times 5$ m y 2 m de profundidad se llena a 50 L por segundo. ¿Cuánto tarda? \sol{$100$ m$^3 = 100\,000$ L: $2\,000$ s $\approx 33$ min.}
+\item Un cubo de $4 \times 4 \times 4$ formado por cubitos se pinta por fuera. ¿Cuántos cubitos quedan sin pintar? \sol{El interior $2 \times 2 \times 2 = 8$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si la arista de un cubo se duplica, su superficie se multiplica por
+\opciones{2}{4}{6}{8}
+\sol{B. Áreas por $k^2$.}
+\item Una caja sin tapa se arma con una lámina de $20 \times 14$ cm cortando un cuadrado de 2 cm en cada esquina. Su volumen es
+\opciones{400 cm$^3$}{560 cm$^3$}{320 cm$^3$}{480 cm$^3$}
+\sol{A. Base $16 \times 10$, altura 2.}
+\item Una esfera de radio 3 se funde y se rehace como un cilindro de radio 3. Su altura es
+\opciones{3}{4}{6}{2}
+\sol{B. $36\pi = 9\pi h$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Cada cono tiene la tercera parte del volumen del cilindro con la misma base y altura: el agua del vaso llena exactamente
+3 conos. \textbf{Opción C.} No hizo falta calcular $90\pi$ ni $30\pi$.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\evaluacion
+\begin{ejercicios}
+\item El suplemento del complemento de $35^\circ$ mide
+\opciones{$125^\circ$}{$55^\circ$}{$145^\circ$}{$35^\circ$}
+\sol{A. Complemento $55^\circ$; suplemento $125^\circ$. (7.1)}
+\item ¿Cuánto suman los ángulos interiores de un pentágono?
+\opciones{$360^\circ$}{$540^\circ$}{$720^\circ$}{$900^\circ$}
+\sol{B. $3 \cdot 180$. (7.1)}
+\item Una escalera de 13 m llega a 12 m de altura en una pared. ¿A qué distancia de la pared está su pie?
+\opciones{1 m}{5 m}{25 m}{$\sqrt{313}$ m}
+\sol{B. Terna 5-12-13. (7.2)}
+\item La diagonal de un rectángulo de $9 \times 12$ mide
+\opciones{15}{21}{$\sqrt{108}$}{13}
+\sol{A. Terna 9-12-15. (7.2)}
+\item En un triángulo, una paralela a la base corta los lados a $\tfrac13$ de la altura desde el vértice. El triangulito superior ocupa del área total
+\opciones{$\tfrac13$}{$\tfrac19$}{$\tfrac16$}{$\tfrac{1}{27}$}
+\sol{B. $k = \tfrac13$, áreas $k^2$. (7.3)}
+\item Un árbol da una sombra de 12 m cuando un bastón de 1.5 m da una de 2 m. La altura del árbol es
+\opciones{16 m}{9 m}{8 m}{10 m}
+\sol{B. $12 \cdot \tfrac{1.5}{2}$. (7.3)}
+\item El área de un círculo cuya circunferencia mide $12\pi$ es
+\opciones{$36\pi$}{$144\pi$}{$12\pi$}{$6\pi$}
+\sol{A. $r = 6$. (7.4)}
+\item Un sector circular de radio 6 tiene un arco de longitud $2\pi$. Su ángulo es
+\opciones{$30^\circ$}{$60^\circ$}{$90^\circ$}{$120^\circ$}
+\sol{B. El arco es $\tfrac16$ de $12\pi$. (7.4)}
+\item Dos semicírculos de diámetro 4 se dibujan dentro de un cuadrado de lado 4, sobre dos lados opuestos. El área del cuadrado no cubierta es
+\opciones{$16 - 4\pi$}{$16 - 2\pi$}{$16 - 8\pi$}{$8 - \pi$}
+\sol{A. Dos semicírculos de radio 2 suman un círculo de área $4\pi$. (7.5)}
+\item El triángulo de vértices $(0, 0)$, $(8, 0)$ y $(3, 6)$ tiene área
+\opciones{24}{48}{18}{30}
+\sol{A. Base 8, altura 6. (7.5)}
+\item ¿Cuántos litros caben en una caja de $40 \times 25 \times 20$ cm?
+\opciones{20}{200}{2}{2\,000}
+\sol{A. $20\,000$ cm$^3$. (7.6)}
+\item Un cono y un cilindro tienen la misma base y el mismo volumen. Si el cilindro mide 5 cm de alto, el cono mide
+\opciones{15 cm}{5 cm}{$\tfrac53$ cm}{10 cm}
+\sol{A. El cono necesita el triple de altura. (7.6)}
+\end{ejercicios}

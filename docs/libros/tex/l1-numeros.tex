@@ -1,0 +1,356 @@
+% Libro 1 · Mundo 6 · Teoría de números (app: pu-numeros)
+\mundo{Teoría de números}{pu-numeros}{Los números enteros esconden una estructura: cómo se descomponen en primos, cuándo
+uno cabe exacto en otro, qué residuo deja una división. El examen la usa para preguntas que parecen imposibles sin
+calculadora («la última cifra de $3^{2027}$») y que salen en tres renglones con la idea correcta.}{%
+\item \textbf{6.1} Primos y divisibilidad
+\item \textbf{6.2} Máximo común divisor y mínimo común múltiplo
+\item \textbf{6.3} Paridad, residuos y última cifra}
+
+\leccion{pu-nu-1}{Primos y divisibilidad}{Juegos del árbol de factores y la criba.}
+
+\begin{reto}
+¿Cuántos divisores positivos tiene el número 360?
+\opciones{12}{18}{24}{36}
+\end{reto}
+
+\subsection{La idea: los primos son los ladrillos}
+Un número \clave{primo} tiene exactamente dos divisores: 1 y él mismo (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, …). El 1 no
+es primo. Todo entero mayor que 1 se escribe de \emph{una sola manera} como producto de primos: es su «código genético».
+
+\begin{center}
+\begin{tikzpicture}[level distance=9mm,sibling distance=14mm,every node/.style={font=\small},
+  edge from parent/.style={draw,zmute}]
+\node {$360$}
+  child {node[text=zolive] {$2$}}
+  child {node {$180$}
+    child {node[text=zolive] {$2$}}
+    child {node {$90$}
+      child {node[text=zolive] {$2$}}
+      child {node {$45$}
+        child {node[text=zolive] {$3$}}
+        child {node {$15$} child {node[text=zolive] {$3$}} child {node[text=zolive] {$5$}}}}}};
+\node[right,font=\small] at (3.4,-2.4) {$360 = 2^3 \cdot 3^2 \cdot 5$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Contar divisores}
+Un divisor de $360 = 2^3 \cdot 3^2 \cdot 5$ se arma eligiendo cuántos 2 lleva (0, 1, 2 o 3: cuatro opciones), cuántos 3
+(0, 1 o 2: tres) y cuántos 5 (0 o 1: dos). Por el principio multiplicativo hay $4 \cdot 3 \cdot 2 = 24$ divisores.
+
+\subsubsection{Criterios de divisibilidad}
+\begin{center}\small
+\begin{tabular}{@{}cl@{}}
+\toprule
+\textbf{Entre} & \textbf{Se divide si…}\\\midrule
+2 & la última cifra es par\\
+3 & la suma de las cifras es múltiplo de 3\\
+4 & las dos últimas cifras forman un múltiplo de 4\\
+5 & termina en 0 o 5\\
+6 & es divisible entre 2 y entre 3\\
+8 & las tres últimas cifras forman un múltiplo de 8\\
+9 & la suma de las cifras es múltiplo de 9\\
+11 & la suma alternada de cifras ($+ - + \ldots$) es múltiplo de 11\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{¿Es primo?}
+Para saber si $n$ es primo basta probar los primos hasta $\sqrt n$: si $n$ tuviera un factor mayor que $\sqrt n$,
+tendría otro menor. ¿Es primo 221? $\sqrt{221} < 15$; se prueba 2, 3, 5, 7, 11, 13: $221 = 13 \cdot 17$. No.
+
+\begin{regla}
+\begin{itemize}
+  \item Si $n = p^a q^b r^c$, el número de divisores positivos es $(a + 1)(b + 1)(c + 1)$.
+  \item $n$ es un cuadrado perfecto si y solo si todos los exponentes son pares (y entonces tiene un número impar de
+  divisores).
+  \item Si $d$ divide a $a$ y a $b$, divide a $a + b$, a $a - b$ y a cualquier combinación $ma + nb$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Completar un criterio]
+¿Qué cifra $d$ hace que $5\,d\,4\,2$ sea divisible entre 6?
+\solucion Termina en 2, es par. Para el 3: $5 + d + 4 + 2 = 11 + d$ múltiplo de 3: $d = 1, 4, 7$. Hay tres cifras posibles.
+\end{ejemplo}
+
+\begin{ejemplo}[El menor múltiplo cuadrado]
+¿Por qué número mínimo hay que multiplicar 180 para obtener un cuadrado perfecto?
+\solucion $180 = 2^2 \cdot 3^2 \cdot 5$. Al 5 le falta otro 5: se multiplica por 5 y se obtiene $900 = 30^2$.
+\end{ejemplo}
+
+\begin{ejemplo}[Divisibilidad entre 11]
+¿Es 918\,082 divisible entre 11?
+\solucion Suma alternada desde la derecha: $2 - 8 + 0 - 8 + 1 - 9 = -22$, múltiplo de 11. Sí.
+\end{ejemplo}
+
+\begin{ejemplo}[Factores en un factorial]
+¿Cuántas veces aparece el factor 2 en $10! = 1 \cdot 2 \cdots 10$?
+\solucion Pares hasta 10: cinco (aportan un 2 cada uno). Múltiplos de 4: dos (aportan otro). De 8: uno (otro más).
+Total $5 + 2 + 1 = 8$.
+\end{ejemplo}
+
+\begin{trampa}
+Creer que 1 es primo, o que todos los impares son primos ($9$, $15$, $21$, $27$, $51 = 3 \cdot 17$, $91 = 7 \cdot 13$
+no lo son).
+\end{trampa}
+
+\taller
+\piso{Calienta}{descomponer}
+\begin{ejercicios}[2]
+\item Descompón 504. \sol{$2^3 \cdot 3^2 \cdot 7$.}
+\item ¿Cuántos divisores tiene 72? \sol{$2^3 3^2$: $4 \cdot 3 = 12$.}
+\item ¿Es primo 187? \sol{No: $11 \cdot 17$.}
+\item ¿Es 7\,416 divisible entre 8? \sol{Sí: $416 = 8 \cdot 52$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item ¿Cuántos números del 1 al 100 son divisibles entre 3 o entre 5? \sol{$33 + 20 - 6 = 47$.}
+\item ¿Cuál es el menor número con exactamente 6 divisores? \sol{$12 = 2^2 \cdot 3$ ($3 \cdot 2 = 6$).}
+\item ¿Cuántos divisores impares tiene 360? \sol{Sin el 2: $3^2 \cdot 5$ tiene $3 \cdot 2 = 6$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item ¿Cuál de estos números es primo?
+\opciones{91}{87}{97}{111}
+\sol{C. $91 = 7 \cdot 13$, $87 = 3 \cdot 29$, $111 = 3 \cdot 37$.}
+\item El número $\overline{4a7b}$ es divisible entre 5 y entre 9 y $b \ne 0$. Entonces $a$ es
+\opciones{0}{2}{1}{9}
+\sol{B. Termina en 0 o 5 y $b \ne 0$, así que $b = 5$. La suma $4 + a + 7 + 5 = 16 + a$ debe ser múltiplo de 9: $a = 2$.}
+\item ¿Cuántos divisores tiene $2^4 \cdot 3^3$?
+\opciones{7}{12}{20}{24}
+\sol{C. $5 \cdot 4 = 20$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+$360 = 2^3 \cdot 3^2 \cdot 5^1$. Divisores: $(3 + 1)(2 + 1)(1 + 1) = 24$. \textbf{Opción C.}
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-nu-2}{MCM y MCD}{Juegos de las luces que coinciden y la baldosa más grande.}
+
+\begin{reto}
+Tres luces parpadean cada 12, 18 y 30 segundos. Si parpadean juntas a las 8:00:00, ¿a qué hora vuelven a coincidir?
+\opciones{8:01:00}{8:03:00}{8:06:00}{8:09:00}
+\end{reto}
+
+\subsection{La idea: ¿cuándo coinciden? ¿en qué se parten?}
+Dos preguntas, dos herramientas:
+\begin{itemize}
+  \item «¿Cuándo vuelven a coincidir?», «¿cuál es el menor número que…?» $\to$ \clave{mínimo común múltiplo} (MCM): el
+  menor número que es múltiplo de todos.
+  \item «¿En cuántos trozos iguales, lo más grandes posible?», «¿cuál es la mayor baldosa?» $\to$ \clave{máximo común
+  divisor} (MCD): el mayor número que divide a todos.
+\end{itemize}
+
+Con factores primos: el MCD toma los primos \emph{comunes} con el \emph{menor} exponente; el MCM toma \emph{todos} los
+primos con el \emph{mayor} exponente.
+
+\begin{center}
+\begin{tabular}{rl}
+$12 =$ & $2^2 \cdot 3$\\
+$18 =$ & $2 \cdot 3^2$\\
+$30 =$ & $2 \cdot 3 \cdot 5$\\\midrule
+MCD $=$ & $2 \cdot 3 = 6$\\
+MCM $=$ & $2^2 \cdot 3^2 \cdot 5 = 180$\\
+\end{tabular}
+\end{center}
+
+\begin{regla}
+\begin{itemize}
+  \item Para dos números: $\text{MCD}(a, b) \cdot \text{MCM}(a, b) = a \cdot b$.
+  \item Si $a$ y $b$ no tienen factores comunes ($\text{MCD} = 1$), su MCM es $ab$.
+  \item Algoritmo de Euclides: $\text{MCD}(a, b) = \text{MCD}(b, a - b)$; restando (o dividiendo) se llega rápido.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Baldosas]
+Un piso mide 360 cm por 240 cm. ¿Cuál es la mayor baldosa cuadrada que lo cubre sin cortar, y cuántas se necesitan?
+\solucion $\text{MCD}(360, 240) = 120$. Baldosas de 120 cm: $3 \cdot 2 = 6$.
+\end{ejemplo}
+
+\begin{ejemplo}[Un residuo común]
+¿Cuál es el menor número mayor que 1 que al dividirlo entre 4, 6 y 9 deja residuo 1?
+\solucion El número menos 1 es múltiplo de 4, 6 y 9: de $\text{MCM} = 36$. El número es 37.
+\end{ejemplo}
+
+\begin{ejemplo}[Euclides]
+Calcula $\text{MCD}(391, 299)$.
+\solucion $391 - 299 = 92$; $\text{MCD}(299, 92)$: $299 = 3 \cdot 92 + 23$; $\text{MCD}(92, 23) = 23$ porque $92 = 4
+\cdot 23$. Es 23.
+\end{ejemplo}
+
+\begin{ejemplo}[Producto y MCD]
+Dos números tienen MCD 6 y MCM 180. Si uno es 36, ¿cuál es el otro?
+\solucion $6 \cdot 180 = 36 \cdot x$: $x = 30$.
+\end{ejemplo}
+
+\begin{trampa}
+Usar el MCD cuando se pregunta por coincidencias en el tiempo, o el MCM cuando se pregunta por partir en trozos. Pregunta
+de control: ¿el resultado debe ser \emph{mayor} que los datos (MCM) o \emph{menor} (MCD)?
+\end{trampa}
+
+\taller
+\piso{Calienta}{calcular}
+\begin{ejercicios}[2]
+\item MCD y MCM de 24 y 36. \sol{12 y 72.}
+\item MCM de 8, 12 y 15. \sol{120.}
+\item MCD de 84, 126 y 210. \sol{42.}
+\item MCM de 7 y 9. \sol{63.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item Dos buses salen de la terminal cada 15 y 20 minutos. Si salen juntos a las 6:00, ¿cuántas veces salen juntos hasta las 12:00 (incluidas)? \sol{Cada 60 min: 6:00, 7:00, …, 12:00: 7 veces.}
+\item Se tienen 48 rosas y 72 claveles para armar ramos iguales con todas las flores, el mayor número posible de ramos. ¿Cuántos ramos y de qué composición? \sol{MCD 24: 24 ramos de 2 rosas y 3 claveles.}
+\item ¿Cuál es el menor número de 3 cifras divisible entre 6, 8 y 10? \sol{MCM 120: el menor es 120.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Tres atletas dan una vuelta a la pista en 60, 72 y 90 segundos. Salen juntos. Vuelven a coincidir en la salida a los
+\opciones{6 min}{12 min}{18 min}{3 min}
+\sol{A. MCM $= 360$ s.}
+\item Se quiere cortar dos varillas de 180 cm y 252 cm en trozos iguales, lo más largos posible. ¿Cuántos trozos salen en total?
+\opciones{12}{7}{36}{24}
+\sol{A. MCD 36: $5 + 7 = 12$ trozos.}
+\item Si $\text{MCD}(a, 40) = 8$ y $\text{MCM}(a, 40) = 120$, entonces $a$ es
+\opciones{24}{48}{15}{12}
+\sol{A. $8 \cdot 120 / 40 = 24$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+$\text{MCM}(12, 18, 30) = 180$ segundos $= 3$ minutos. Vuelven a coincidir a las 8:03:00. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-nu-3}{Paridad, residuos y última cifra}{Juegos del reloj de residuos y la cifra que da vueltas.}
+
+\begin{reto}
+¿Cuál es la última cifra de $3^{2027}$?
+\opciones{1}{3}{7}{9}
+\end{reto}
+
+\subsection{La idea: los residuos dan vueltas como un reloj}
+Al dividir entre 4, los residuos solo pueden ser 0, 1, 2 o 3, y se repiten en ciclo: 0, 1, 2, 3, 0, 1, 2, 3, … Esto es
+como un reloj de 4 horas. Muchas preguntas sobre números enormes solo dependen de «en qué hora del reloj» están.
+
+\subsubsection{Últimas cifras de potencias}
+La última cifra de un producto depende solo de las últimas cifras de los factores. Por eso las potencias forman ciclos:
+
+\begin{center}\small
+\begin{tabular}{@{}cl@{\qquad}cl@{}}
+\toprule
+\textbf{Base} & \textbf{Ciclo de la última cifra} & \textbf{Base} & \textbf{Ciclo}\\\midrule
+2 & 2, 4, 8, 6 & 7 & 7, 9, 3, 1\\
+3 & 3, 9, 7, 1 & 8 & 8, 4, 2, 6\\
+4 & 4, 6 & 9 & 9, 1\\
+0, 1, 5, 6 & siempre la misma & & \\\bottomrule
+\end{tabular}
+\end{center}
+
+Para saber la última cifra de $3^{2027}$ basta saber en qué lugar del ciclo de 4 cae 2027: el residuo de $2027 \div 4$
+es 3, así que es el tercero del ciclo.
+
+\subsubsection{Paridad}
+Par $+$ par $=$ par, impar $+$ impar $=$ par, par $+$ impar $=$ impar; un producto es impar solo si todos los factores
+son impares. La paridad resuelve rápido preguntas de «¿es posible…?»: la suma de cinco números impares nunca es par.
+
+\begin{regla}
+\begin{itemize}
+  \item Para residuos de sumas y productos, se puede trabajar solo con los residuos: el residuo de $a \cdot b$ entre $n$
+  es el residuo de (residuo de $a$) $\cdot$ (residuo de $b$).
+  \item Ciclos: si un patrón se repite cada $k$ pasos, el paso $N$ es igual al paso $r$, donde $r$ es el residuo de
+  $N \div k$ (si $r = 0$, es el último del ciclo).
+  \item Días de la semana: avanzar $N$ días es avanzar $N \bmod 7$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Día de la semana]
+Si hoy es martes, ¿qué día será dentro de 100 días?
+\solucion $100 = 14 \cdot 7 + 2$: dos días después del martes, jueves.
+\end{ejemplo}
+
+\begin{ejemplo}[Residuo de una potencia]
+¿Qué residuo deja $2^{50}$ al dividirlo entre 7?
+\solucion Residuos de $2^1, 2^2, 2^3, \ldots$ entre 7: 2, 4, 1, 2, 4, 1, … ciclo de 3. $50 = 16 \cdot 3 + 2$: residuo 4.
+\end{ejemplo}
+
+\begin{ejemplo}[Última cifra de una suma]
+¿Cuál es la última cifra de $7^{2026} + 8^{2026}$?
+\solucion $2026 = 506 \cdot 4 + 2$. Para el 7, el segundo del ciclo: 9. Para el 8: 4. La suma termina en $9 + 4 = 13$: 3.
+\end{ejemplo}
+
+\begin{ejemplo}[Paridad]
+¿Se pueden repartir los números del 1 al 10 en dos grupos con la misma suma?
+\solucion La suma total es 55, impar: no se puede partir en dos mitades enteras iguales. No.
+\end{ejemplo}
+
+\begin{trampa}
+Cuando el residuo es 0, la cifra es la \emph{última} del ciclo, no la primera: $3^{2028}$ termina en 1, no en 3.
+\end{trampa}
+
+\taller
+\piso{Calienta}{ciclos}
+\begin{ejercicios}[2]
+\item Última cifra de $2^{100}$. \sol{$100 \bmod 4 = 0$: la cuarta, 6.}
+\item Última cifra de $9^{55}$. \sol{Exponente impar: 9.}
+\item Residuo de $1\,000$ entre 7. \sol{$1\,000 = 142 \cdot 7 + 6$: 6.}
+\item Si hoy es sábado, ¿qué día fue hace 30 días? \sol{$30 = 4 \cdot 7 + 2$: dos días antes, jueves.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item ¿Qué letra ocupa el lugar 2026 en ZUKAZUKAZUKA…? \sol{$2026 \bmod 4 = 2$: U.}
+\item ¿Cuál es el residuo de $13^{40}$ entre 12? \sol{$13$ deja residuo 1; $1^{40} = 1$.}
+\item La suma de 4 números naturales consecutivos, ¿puede ser 2026? \sol{$4n + 6 = 2026$ da $n = 505$: sí (505 a 508).}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item La última cifra de $2^{2026}$ es
+\opciones{2}{4}{6}{8}
+\sol{B. $2026 \bmod 4 = 2$.}
+\item El 1 de enero de cierto año fue lunes. Si el año no es bisiesto, el 31 de diciembre fue
+\opciones{lunes}{martes}{domingo}{sábado}
+\sol{A. Del 1 de enero al 31 de diciembre hay 364 días, múltiplo de 7.}
+\item Si $n$ es impar, ¿cuál expresión es siempre par?
+\opciones{$n^2$}{$n^2 + n$}{$3n$}{$n^2 + 2$}
+\sol{B. $n(n + 1)$: producto de consecutivos.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Ciclo de 4: 3, 9, 7, 1. $2027 = 506 \cdot 4 + 3$: el tercero del ciclo, 7. \textbf{Opción C.}
+\end{retoresuelto}
+\bitacora
+
+\evaluacion
+\begin{ejercicios}
+\item ¿Cuántos divisores positivos tiene 200?
+\opciones{8}{10}{12}{6}
+\sol{C. $2^3 5^2$: $4 \cdot 3$. (6.1)}
+\item ¿Qué cifra debe ir en $\overline{37\square 4}$ para que el número sea divisible entre 9?
+\opciones{4}{5}{3}{0}
+\sol{A. $3 + 7 + 4 = 14$; con 4 suma 18. (6.1)}
+\item El menor número por el que hay que multiplicar 75 para obtener un cuadrado perfecto es
+\opciones{3}{5}{15}{25}
+\sol{A. $75 = 3 \cdot 5^2$. (6.1)}
+\item El MCD de 150 y 225 es
+\opciones{25}{75}{15}{450}
+\sol{B. $2 \cdot 3 \cdot 5^2$ y $3^2 5^2$. (6.2)}
+\item Un número entre 50 y 100 deja residuo 2 al dividirlo entre 3, entre 4 y entre 5. El número es
+\opciones{60}{62}{64}{92}
+\sol{B. Es $60 + 2$. (6.2)}
+\item Dos engranajes de 24 y 36 dientes están encajados. ¿Cuántas vueltas da el pequeño hasta que vuelven a la posición inicial?
+\opciones{2}{3}{6}{12}
+\sol{B. MCM 72 dientes: el de 24 da 3 vueltas. (6.2)}
+\item La última cifra de $7^{2026}$ es
+\opciones{7}{9}{3}{1}
+\sol{B. $2026 \bmod 4 = 2$. (6.3)}
+\item ¿Qué residuo deja $5^{100}$ al dividirlo entre 4?
+\opciones{0}{1}{2}{3}
+\sol{B. 5 deja residuo 1. (6.3)}
+\item Si hoy es miércoles, dentro de 1\,000 días será
+\opciones{martes}{miércoles}{jueves}{domingo}
+\sol{A. $1\,000 \bmod 7 = 6$: seis días después del miércoles. (6.3)}
+\item La suma $1 + 2 + 3 + \cdots + 99$ es
+\opciones{par y múltiplo de 3}{impar}{par y no múltiplo de 3}{primo}
+\sol{A. $\tfrac{99 \cdot 100}{2} = 4\,950 = 2 \cdot 3^2 \cdot 5^2 \cdot 11$. (6.3)}
+\end{ejercicios}

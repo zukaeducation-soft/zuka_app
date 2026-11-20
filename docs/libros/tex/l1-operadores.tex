@@ -1,0 +1,232 @@
+% Libro 1 · Mundo 3 · Operadores definidos (app: pu-operadores)
+\mundo{Operadores definidos}{pu-operadores}{El examen inventa operaciones: un símbolo nuevo, como $\star$ o $\triangle$,
+con una regla escrita al lado. No hay nada que saber de antemano; hay que \emph{leer la regla con cuidado} y aplicarla
+como una máquina, sin agregarle propiedades que no tiene.}{%
+\item \textbf{3.1} Operaciones nuevas: la regla como máquina
+\item \textbf{3.2} Operadores anidados, tablas y ecuaciones}
+
+\leccion{pu-op-1}{Operaciones nuevas}{Juego de la máquina que transforma fichas.}
+
+\begin{reto}
+Se define $a \star b = a^2 - 2b$. ¿Cuánto vale $(3 \star 1) \star 4$?
+\opciones{$41$}{$9$}{$-1$}{$17$}
+\end{reto}
+
+\subsection{La idea: una máquina con ranuras}
+Una definición como $a \star b = a^2 - 2b$ es una máquina con dos ranuras: lo que entra por la izquierda ocupa el lugar
+de $a$ y lo que entra por la derecha el de $b$. La máquina no sabe nada más. Para calcular $5 \star 3$, se copia la regla
+y se reemplaza: $5^2 - 2 \cdot 3 = 19$.
+
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm,font=\small]
+  \node[draw=zolive,rounded corners=3pt,minimum width=30mm,minimum height=11mm,fill=zsoft] (m) at (0,0) {$a^2 - 2b$};
+  \node (a) at (-30,5) {$a = 5$}; \node (b) at (-30,-5) {$b = 3$}; \node (r) at (28,0) {$19$};
+  \draw[-{Latex[length=2mm]},zmute] (a) -- (m.west|-0,3); \draw[-{Latex[length=2mm]},zmute] (b) -- (m.west|-0,-3);
+  \draw[-{Latex[length=2mm]},zolive] (m) -- (r);
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Lo que no se puede suponer}
+Una operación inventada \emph{no tiene por qué} ser conmutativa: $5 \star 3 = 19$ pero $3 \star 5 = 9 - 10 = -1$.
+Tampoco tiene por qué ser asociativa: $(a \star b)\star c$ y $a \star (b \star c)$ pueden dar distinto. Por eso los
+paréntesis mandan: primero se calcula lo de adentro.
+
+\subsubsection{Operadores de un solo número}
+También se definen con figuras: «$\boxed{n} = n^2 + 1$» o «$\overline{n} = $ el número que resulta de invertir las
+cifras de $n$». Se leen igual: se reemplaza el número en la regla.
+
+\begin{regla}
+\begin{enumerate}
+  \item Identifica qué ocupa cada lugar de la regla.
+  \item Reemplaza con paréntesis: si $b = -2$, escribe $2(-2)$, no $2 - 2$.
+  \item Resuelve de adentro hacia afuera cuando hay operadores dentro de otros.
+  \item No supongas conmutatividad ni asociatividad: si la necesitas, compruébala con la regla.
+\end{enumerate}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Con negativos]
+Si $x \circ y = 3x - y^2$, calcula $(-2) \circ (-3)$.
+\solucion $3(-2) - (-3)^2 = -6 - 9 = -15$. El paréntesis en $(-3)^2$ es lo que evita el error.
+\end{ejemplo}
+
+\begin{ejemplo}[Una figura]
+Se define $\boxed{n} = \dfrac{n(n + 1)}{2}$. Calcula $\boxed{\boxed{3}}$.
+\solucion Por dentro: $\boxed{3} = \tfrac{3 \cdot 4}{2} = 6$. Por fuera: $\boxed{6} = \tfrac{6 \cdot 7}{2} = 21$.
+\end{ejemplo}
+
+\begin{ejemplo}[¿Conmuta?]
+Para $a \diamond b = ab + a + b$, ¿es cierto que $a \diamond b = b \diamond a$?
+\solucion $b \diamond a = ba + b + a$, que es lo mismo que $ab + a + b$: sí conmuta. En cambio $a \star b = a^2 - 2b$
+no conmuta (basta un ejemplo: $5 \star 3 \ne 3 \star 5$).
+\end{ejemplo}
+
+\begin{trampa}
+Reemplazar sin paréntesis: con $a \star b = a^2 - 2b$ y $b = -4$, escribir $a^2 - 2 - 4$ en vez de $a^2 - 2(-4)$.
+\end{trampa}
+
+\begin{atajo}
+Si piden comparar dos expresiones con el mismo operador, a veces basta restar las reglas en general en vez de hacer
+dos cuentas.
+\end{atajo}
+
+\taller
+\piso{Calienta}{aplicar la regla}
+\begin{ejercicios}
+\item Si $a \# b = 2a + 3b$, calcula $4 \# (-1)$. \sol{$8 - 3 = 5$.}
+\item Si $\triangle x = x^2 - x$, calcula $\triangle(-3)$. \sol{$9 + 3 = 12$.}
+\item Si $m \odot n = \dfrac{m + n}{m - n}$, calcula $5 \odot 3$ y $3 \odot 5$. \sol{$4$ y $-4$.}
+\end{ejercicios}
+\piso{Entrena}{dos pasos}
+\begin{ejercicios}
+\item Si $a \star b = ab - b$, calcula $(2 \star 3) \star 2$. \sol{$2 \star 3 = 3$; $3 \star 2 = 6 - 2 = 4$.}
+\item Si $\overline{n}$ invierte las cifras de $n$, calcula $\overline{\overline{52} + 17}$. \sol{$\overline{52} = 25$; $25 + 17 = 42$; $\overline{42} = 24$.}
+\item Con $p \ast q = p + q - pq$, ¿es $(1 \ast 2) \ast 3 = 1 \ast (2 \ast 3)$? \sol{$1 \ast 2 = 1$, $1 \ast 3 = 1$; $2 \ast 3 = -1$, $1 \ast (-1) = 1$. Sí, en este caso dan igual (esta operación es asociativa).}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si $a \triangle b = a^b - b^a$, el valor de $2 \triangle 3$ es
+\opciones{$1$}{$-1$}{$17$}{$0$}
+\sol{B. $8 - 9 = -1$.}
+\item Se define $\langle n \rangle = $ suma de las cifras de $n$. ¿Cuánto vale $\langle\langle 9\,999 \rangle\rangle$?
+\opciones{36}{9}{18}{4}
+\sol{B. $\langle 9\,999 \rangle = 36$ y $\langle 36 \rangle = 9$.}
+\item Si $x \bullet y = x^2 + y$, ¿para qué valor de $y$ se cumple $3 \bullet y = y \bullet 3$?
+\opciones{$-2$ o $3$}{solo $3$}{$0$}{$-3$ o $2$}
+\sol{A. $9 + y = y^2 + 3$: $y^2 - y - 6 = 0$, $(y - 3)(y + 2) = 0$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Por dentro: $3 \star 1 = 9 - 2 = 7$. Por fuera: $7 \star 4 = 49 - 8 = 41$. \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-op-2}{Anidados y ecuaciones}{Juego de las capas de operadores y la tabla que se completa.}
+
+\begin{reto}
+Si $a \star b = 2a - b$ y $x \star 3 = 5 \star x$, ¿cuánto vale $x$?
+\opciones{$\tfrac{13}{3}$}{$4$}{$\tfrac{7}{3}$}{$13$}
+\end{reto}
+
+\subsection{La idea: la regla también se usa al revés}
+Cuando el operador aparece con una incógnita, la regla se convierte en una ecuación. Se reemplaza en cada lado, se
+obtiene una igualdad común y corriente, y se despeja.
+
+\subsubsection{Operadores definidos por tabla}
+A veces la regla no es una fórmula sino una tabla de doble entrada: el resultado de $a \ast b$ se lee en la fila de $a$
+y la columna de $b$. Se usa igual que una fórmula, y permite preguntas como «¿qué elemento no cambia nada?»
+(el \clave{neutro}: $a \ast e = a$ para todo $a$) o «¿qué elemento deshace a otro?» (el \clave{inverso}).
+
+\begin{center}
+\begin{tabular}{c|cccc}
+$\ast$ & $a$ & $b$ & $c$ & $d$\\\hline
+$a$ & $c$ & $d$ & $a$ & $b$\\
+$b$ & $d$ & $a$ & $b$ & $c$\\
+$c$ & $a$ & $b$ & $c$ & $d$\\
+$d$ & $b$ & $c$ & $d$ & $a$\\
+\end{tabular}
+\end{center}
+
+En esta tabla, la fila y la columna de $c$ repiten los encabezados: $c$ es el neutro. El inverso de $b$ es el que
+con $b$ da $c$: $b \ast d = c$, así que es $d$.
+
+\subsubsection{Reglas recursivas}
+Algunas definiciones se apoyan en sí mismas: $f(1) = 2$ y $f(n + 1) = f(n) + 3$. Se calcula paso a paso: $f(2) = 5$,
+$f(3) = 8$, … y, si se ve el patrón, se generaliza: $f(n) = 3n - 1$.
+
+\begin{regla}
+\begin{itemize}
+  \item Ecuación con operador: reemplaza en ambos lados y despeja.
+  \item Neutro $e$: su fila y su columna copian los encabezados. Inverso de $a$: el $x$ con $a \ast x = e$.
+  \item Recursión: calcula los primeros términos, busca el patrón y compruébalo.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Ecuación]
+Si $m \nabla n = mn + m - n$, halla $x$ en $x \nabla 2 = 13$.
+\solucion $2x + x - 2 = 13$, así que $3x = 15$ y $x = 5$.
+\end{ejemplo}
+
+\begin{ejemplo}[Operador dentro de operador]
+Si $\boxed{x} = 2x - 1$ y $\boxed{\boxed{a}} = 17$, halla $a$.
+\solucion De afuera hacia adentro: si $\boxed{y} = 17$, entonces $2y - 1 = 17$ e $y = 9$. Ahora $\boxed{a} = 9$:
+$2a - 1 = 9$, $a = 5$.
+\end{ejemplo}
+
+\begin{ejemplo}[Una regla escondida]
+Se sabe que $2 \star 3 = 13$, $4 \star 1 = 17$ y $3 \star 2 = 13$. Si la regla es $a \star b = a^2 + b^2$, ¿cuánto es
+$5 \star 2$?
+\solucion Comprobamos: $4 + 9 = 13$, $16 + 1 = 17$, $9 + 4 = 13$. Funciona. $5 \star 2 = 25 + 4 = 29$.
+\end{ejemplo}
+
+\begin{trampa}
+Al resolver $\boxed{\boxed{a}} = 17$, empezar por dentro con $a$ desconocida. Con la incógnita adentro, se deshace
+de afuera hacia adentro.
+\end{trampa}
+
+\taller
+\piso{Calienta}{despejar}
+\begin{ejercicios}
+\item Si $a \star b = 3a + b$, halla $x$ en $x \star 4 = 19$. \sol{$3x + 4 = 19$: $x = 5$.}
+\item Si $\triangle n = n^2 - 1$ y $\triangle x = 24$ con $x > 0$, halla $x$. \sol{$x^2 = 25$: $x = 5$.}
+\item En la tabla de la lección, calcula $(a \ast b) \ast d$. \sol{$a \ast b = d$; $d \ast d = a$.}
+\end{ejercicios}
+\piso{Entrena}{problemas}
+\begin{ejercicios}
+\item Con $f(1) = 3$ y $f(n + 1) = 2f(n) - 1$, calcula $f(5)$. \sol{$3, 5, 9, 17, 33$: $f(5) = 33$.}
+\item Si $x \diamond y = \dfrac{x + y}{2}$, halla $a$ en $(a \diamond 6) \diamond 10 = 9$. \sol{$a \diamond 6 = 8$, así que $\tfrac{a + 6}{2} = 8$ y $a = 10$.}
+\item En la tabla de la lección, ¿cuál es el inverso de $a$? \sol{$a \ast a = c$: es $a$ mismo.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si $a \circledast b = a + b + 4$, el elemento neutro es
+\opciones{$0$}{$-4$}{$4$}{no tiene}
+\sol{B. $a + e + 4 = a$ exige $e = -4$.}
+\item Si $\boxed{n} = 3n + 2$, ¿cuánto vale $\boxed{\boxed{\boxed{0}}}$?
+\opciones{$26$}{$8$}{$80$}{$24$}
+\sol{A. $2 \to 8 \to 26$.}
+\item Si $x \star y = x^2 - y$ y $(2 \star a) \star 1 = 8$ con $a > 4$, entonces $a$ es
+\opciones{$5$}{$7$}{$6$}{$8$}
+\sol{B. $2 \star a = 4 - a$ y $(4 - a)^2 - 1 = 8$, así que $4 - a = \pm 3$: $a = 1$ o $a = 7$. Con $a > 4$, $a = 7$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+$x \star 3 = 2x - 3$ y $5 \star x = 10 - x$. Igualando: $2x - 3 = 10 - x$, de donde $3x = 13$ y $x = \tfrac{13}{3}$.
+\textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+\evaluacion
+\begin{ejercicios}
+\item Si $a \blacktriangle b = 2a^2 - b$, entonces $(-1) \blacktriangle (-3)$ es
+\opciones{$5$}{$-1$}{$1$}{$-5$}
+\sol{A. $2 + 3 = 5$. (3.1)}
+\item Si $m \# n = \dfrac{m^2}{n}$, entonces $(4 \# 2) \# 16$ es
+\opciones{$1$}{$4$}{$8$}{$\tfrac12$}
+\sol{B. $4 \# 2 = 8$; $8 \# 16 = 64 / 16 = 4$. (3.1)}
+\item ¿Cuál de las operaciones es conmutativa?
+\opcionesd{$a \ast b = a - b$}{$a \ast b = 2a + b$}{$a \ast b = a^2 b^2 + 1$}{$a \ast b = a^b$}
+\sol{C. Las demás cambian al intercambiar: $2 - 1 \ne 1 - 2$, $2\cdot2 + 1 \ne 2\cdot 1 + 2$, $2^3 \ne 3^2$. (3.1)}
+\item Si $\langle n \rangle$ es el producto de las cifras de $n$, $\langle\langle 77 \rangle\rangle$ vale
+\opciones{$49$}{$36$}{$13$}{$4$}
+\sol{B. $\langle 77 \rangle = 49$; $\langle 49 \rangle = 36$. (3.1)}
+\item Si $a \star b = ab + 2$, halla $x$ en $x \star (x \star 1) = 26$ con $x > 0$.
+\opciones{$3$}{$4$}{$2$}{$6$}
+\sol{B. $x \star 1 = x + 2$; $x(x + 2) + 2 = 26$, $x^2 + 2x - 24 = 0$, $x = 4$. (3.2)}
+\item Si $f(1) = 1$ y $f(n + 1) = f(n) + 2n + 1$, entonces $f(6)$ es
+\opciones{$36$}{$25$}{$21$}{$49$}
+\sol{A. $1, 4, 9, 16, 25, 36$: son los cuadrados. (3.2)}
+\item Con $x \circ y = x + y - 3$, el inverso de $5$ es
+\opciones{$-5$}{$1$}{$3$}{$-2$}
+\sol{B. Neutro: $x + e - 3 = x$, $e = 3$. Inverso de 5: $5 + y - 3 = 3$, $y = 1$. (3.2)}
+\item Si $\boxed{x} = x^2 - 4x$, ¿cuántos valores de $x$ cumplen $\boxed{x} = -4$?
+\opciones{$0$}{$1$}{$2$}{$4$}
+\sol{B. $x^2 - 4x + 4 = 0$, $(x - 2)^2 = 0$: solo $x = 2$. (3.2)}
+\item Si $a \oplus b = \dfrac{a + b}{ab}$, entonces $2 \oplus 3$ es igual a
+\opciones{$\tfrac12 + \tfrac13$}{$\tfrac56$}{$\tfrac65$}{las dos primeras}
+\sol{D. $\tfrac{5}{6} = \tfrac12 + \tfrac13$: la regla es la suma de los inversos. (3.1)}
+\item Si $a \star b = 2a - b$, ¿para qué valor de $k$ se cumple $k \star 4 = 4 \star k$?
+\opciones{$4$}{$0$}{$2$}{$-4$}
+\sol{A. $2k - 4 = 8 - k$, $k = 4$. (3.2)}
+\end{ejercicios}
