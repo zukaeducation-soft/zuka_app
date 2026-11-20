@@ -99,3 +99,93 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
       play('ciclo-colores', 'Collar', { rounds: [{ cyc: ['mint', 'coral', 'sky'], N: 60 }] }, '$60 = 3 \\cdot 20$: la última del grupo.', { hint: 'Residuo.' })],
   ]);
 });
+
+// Mundo 7 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
+  diezLesson('pu-se-1', [
+    ['arregla-termino', 0, 'Un cajero anotó los números de sus turnos y se equivocó en uno. Arregla el término que rompe la sucesión', 'La sucesión sube de 4 en 4: 5, 9, 13, 17, 21. El 14 debía ser 13.'],
+    ['razon-terminos', 0, 'Una colonia de bacterias se multiplica por lo mismo cada hora: de 3 pasó a 24 en tres horas. Halla la razón', '$3 \\cdot r^3 = 24$ da $r^3 = 8$: la razón es 2.'],
+    ['diferencias-escalera', 1, 'Las diferencias también forman una sucesión. Halla el término que sigue', 'Diferencias: 4, 6, 8, 10; la siguiente es 12. El término que sigue es $30 + 12 = 42$.'],
+    ['fibonacci-suma', 0, 'Cada término es la suma de los dos anteriores. Halla el que falta', '$5 + 7 = 12$, y se comprueba con el siguiente: $7 + 12 = 19$.'],
+    ['alterna-dos', 1, 'Aquí hay dos sucesiones mezcladas. Halla el número que falta', 'En los lugares impares: 2, 4, 8, 16 (se duplica). En los pares: 30, 25, 20, y sigue 15.'],
+    ['cuenta-saltos', 0, 'La fila 1 de un auditorio tiene 7 sillas y cada fila tiene 6 más. ¿Cuántas tiene la fila 15?', 'De la fila 1 a la 15 hay 14 saltos: $7 + 14 \\cdot 6 = 91$.'],
+    ['traza-progresion', 0, 'Traza la sucesión en orden'],
+  ], [
+    sol('En un teatro, la primera fila tiene 12 sillas y cada fila tiene 3 sillas más que la anterior. ¿Cuántas sillas tiene la fila 20? ¿Cuántas sillas hay en las primeras 20 filas?',
+      ['De la fila 1 a la 20 hay [[19]] saltos de 3 sillas', 'Fila 20: $12 + 19 \\cdot 3 =$ [[69]] sillas', 'La primera fila y la última suman $12 + 69 =$ [[81]], igual que cada pareja de extremos', 'Hay 10 parejas: $10 \\cdot 81 =$ [[810]] sillas'],
+      ['72', '20', '1 620'],
+      'Entre el término 1 y el término $n$ hay $n - 1$ saltos. Para sumar una progresión aritmética se emparejan los extremos: todas las parejas suman lo mismo.',
+      'Cuenta los saltos, no las filas. Para la suma, junta la primera fila con la última, la segunda con la penúltima…'),
+    err('Los primeros términos de una sucesión son 3, 5, 9, 15, 23. ¿Cuál es el término que sigue?',
+      ['Las diferencias entre términos seguidos son 2, 4, 6 y 8', 'Las diferencias aumentan de 2 en 2: la siguiente es 10', 'El término que sigue es $23 + 8 = 31$'], 2,
+      ['El término que sigue es $23 + 10 = 33$', 'El término que sigue es $23 \\cdot 2 = 46$', 'El término que sigue es $23 + 2 = 25$'],
+      'Se suma la diferencia nueva (10), no la última que ya se usó (8): $23 + 10 = 33$.',
+      'Compara lo que dice el paso 2 con lo que hace el paso 3. ¿Usó la diferencia correcta?'),
+    opc('En una sucesión, cada término se obtiene multiplicando el anterior por 3. Si el segundo término es 6, el quinto término es:',
+      ['162', '54', '486', '24'], 0,
+      'Del segundo al quinto hay tres saltos: $6 \\cdot 3 \\cdot 3 \\cdot 3 = 162$.',
+      'Cuenta cuántas veces hay que multiplicar para ir del segundo término al quinto.'),
+  ]);
+
+  diezLesson('pu-se-2', [
+    ['letras-salto', 2, 'Las letras son números disfrazados. Halla la letra que sigue en A, B, D, H', 'Los puestos son 1, 2, 4, 8: se duplican. Sigue el puesto 16, la P.'],
+    ['figura-patron', 2, 'Una pila de latas crece en cada figura: 1, 3, 6, 10. Arma la que sigue', 'Se agrega una fila más cada vez: $+2$, $+3$, $+4$, y ahora $+5$: 15 latas.'],
+    ['pisa-huellas', 0, 'Las huellas 2 y 5 de un camino llevan los números 11 y 20. Halla el primer número y el salto', 'De la huella 2 a la 5 hay 3 saltos y 9 de diferencia: el salto es 3. La primera huella lleva $11 - 3 = 8$.'],
+    ['zigzag-razon', 0, 'Un saldo cambia de signo cada mes y se duplica. Sigue el zigzag', 'Se multiplica por $-2$: 3, $-6$, 12, $-24$. El signo alterna y el tamaño se duplica.'],
+    ['rellena-medios', null, 'Entre el 5 y el 29 faltan tres postes a la misma distancia. Rellena los huecos', 'De 5 a 29 hay 24, repartidos en 4 saltos de 6: 11, 17 y 23.'],
+    ['rebota-pelota', 1, 'Una pelota cae desde 64 cm y en cada rebote sube la mitad. Marca las alturas', 'Cada altura es la mitad de la anterior: 32, 16 y 8 cm.'],
+    ['vuela-precios', 0, 'Vuela a lo que sigue', 'C, G, K, O avanza de 4 en 4: sigue S. En 2, 4, 7, 11, 16 las diferencias crecen de uno en uno: sigue 22. Y 2, 5, 8, 11 sube de 3 en 3: 14.'],
+  ], [
+    sol('Un patrón de baldosas crece así: la figura 1 tiene 5 baldosas, la figura 2 tiene 8 y la figura 3 tiene 11. ¿Cuántas baldosas tiene la figura 30? ¿Qué figura tiene 62 baldosas?',
+      ['Cada figura agrega [[3]] baldosas a la anterior', 'Figura 30: $5 + 29 \\cdot 3 =$ [[92]] baldosas', 'Para llegar a 62 desde 5 faltan [[57]] baldosas, que son $57 \\div 3 = 19$ saltos', 'Es la figura $1 + 19 =$ [[20]]'],
+      ['95', '90', '21'],
+      'La figura $n$ tiene $5 + 3(n - 1)$ baldosas. Para devolverse de la cantidad a la figura se cuentan los saltos y se suma 1, porque la figura 1 no necesita saltos.',
+      'De la figura 1 a la 30 no hay 30 saltos. Cuéntalos con cuidado.'),
+    err('En la secuencia B, E, H, K, … las letras siguen la misma regla (alfabeto de 26 letras, sin Ñ). ¿Cuál es la octava letra de la secuencia?',
+      ['Las letras ocupan los puestos 2, 5, 8 y 11 del alfabeto: avanzan de 3 en 3', 'Hasta la octava letra hay 8 saltos: $2 + 8 \\cdot 3 = 26$', 'La letra del puesto 26 es la Z'], 1,
+      ['Hasta la octava letra hay 7 saltos: $2 + 7 \\cdot 3 = 23$', 'Hasta la octava letra hay 9 saltos: $2 + 9 \\cdot 3 = 29$', 'Hasta la octava letra hay 8 saltos: $8 \\cdot 3 = 24$'],
+      'Del primer término al octavo hay 7 saltos, no 8. El puesto es $2 + 21 = 23$: la letra W.',
+      'Entre la primera letra y la segunda hay un solo salto. ¿Cuántos hay entre la primera y la octava?'),
+    opc('Observa la secuencia: A1, C4, E9, G16, … El término que sigue es:',
+      ['H25', 'I20', 'I25', 'J36'], 2,
+      'Las letras saltan de dos en dos (A, C, E, G, I) y los números son los cuadrados 1, 4, 9, 16, 25.',
+      'Separa el patrón en dos: mira solo las letras y después solo los números.'),
+  ]);
+
+  diezLesson('pu-se-3', [
+    ['ciclo-reloj', 0, 'Un contrato vence en 45 días. Gira la rueda de la semana hasta el día en que vence', '45 días son 6 semanas completas y sobran 3: basta avanzar 3 días desde el día de partida.'],
+    ['ciclo-colores', 1, 'Un collar repite siempre los mismos cinco colores. ¿De qué color es la cuenta 73?', '$73 = 5 \\cdot 14 + 3$: después de 14 vueltas completas, es el tercer color del ciclo.'],
+    ['ultima-cifra', 1, '¿En qué cifra termina $7^{42}$?', 'Las últimas cifras del 7 se repiten: 7, 9, 3, 1. Como $42 = 4 \\cdot 10 + 2$, es la segunda del ciclo: 9.'],
+    ['bolsas-residuo', 0, 'Se empacan 58 naranjas en bolsas de 7. Llena las bolsas y mira lo que sobra', '$58 = 7 \\cdot 8 + 2$: salen 8 bolsas y sobran 2 naranjas. Lo que sobra es el residuo.'],
+    ['gira-mesa', 1, 'Una ruleta de 7 números gira varios puestos. Gira hasta que coincida', 'Girar más de una vuelta completa es lo mismo que girar solo el residuo: lo que cuenta es lo que sobra al dividir entre 7.'],
+    ['ronda-saltos', 1, 'Ocho jugadores en ronda: sale uno de cada dos. ¿Quién queda de último?', 'En la primera vuelta salen los de lugar par; la ronda se cierra y la cuenta sigue con los que quedan.'],
+    ['rompe-cambios', 0, 'Manda la pelota al resultado del ciclo', '30 días son 4 semanas y 2 días: jueves más 2 es sábado. Las potencias de 9 terminan en 9 o en 1: con exponente impar, 9. En ABCABC…, $40 = 3 \\cdot 13 + 1$: la A.'],
+  ], [
+    sol('Un semáforo repite siempre el mismo ciclo: 40 segundos en verde, 5 en amarillo y 35 en rojo. Si acaba de ponerse en verde, ¿de qué color estará 5 minutos y 30 segundos después?',
+      ['El ciclo completo dura $40 + 5 + 35 =$ [[80]] segundos', 'Cinco minutos y medio son [[330]] segundos', '$330 = 4 \\cdot 80 +$ [[10]]: pasan 4 ciclos completos y sobran 10 segundos', 'A los 10 segundos de empezar el ciclo, el semáforo está en [[verde]]'],
+      ['rojo', 'amarillo', '50'],
+      'Los ciclos completos no cambian nada: solo importa el residuo. Con 10 segundos dentro del ciclo todavía no se acaban los 40 de verde.',
+      'Halla cuánto dura una vuelta completa del semáforo y cuántas vueltas enteras caben en el tiempo que pasa.'),
+    err('Hoy es martes. ¿Qué día de la semana será dentro de 100 días?',
+      ['Los días de la semana se repiten cada 7', '$100 = 14 \\cdot 7 + 2$: pasan 14 semanas completas y sobran 2 días', 'Como sobran 2, será el segundo día de la semana: martes'], 2,
+      ['Se avanzan 2 días desde el martes: será jueves', 'Se retroceden 2 días desde el martes: será domingo', 'Como el residuo no es 0, será miércoles'],
+      'El residuo no dice el día: dice cuántos días hay que avanzar desde el de hoy. Martes más 2 es jueves.',
+      'Después de las 14 semanas completas vuelve a ser martes. ¿Qué falta por hacer con los días que sobran?'),
+    opc('Las letras de la palabra CAMINO se escriben una y otra vez, sin espacios: CAMINOCAMINOCAMINO… La letra que ocupa el lugar 100 es:',
+      ['M', 'N', 'C', 'I'], 3,
+      'La palabra tiene 6 letras y $100 = 6 \\cdot 16 + 4$: es la cuarta letra de CAMINO, la I.',
+      'Divide entre el largo de la palabra: el residuo dice qué letra es.'),
+  ]);
+
+  addExam('pu-secuencias', [
+    ['pu-se-1', 'Del término 1 al término n hay n − 1 saltos.',
+      opc('En la sucesión 4, 9, 14, 19, …, el término que ocupa el lugar 12 es:', ['64', '59', '60', '54'], 1,
+        'Sube de 5 en 5 y hasta el lugar 12 hay 11 saltos: $4 + 11 \\cdot 5 = 59$.', 'Cuenta los saltos que hay del primer término al duodécimo.')],
+    ['pu-se-2', 'Las letras siguen patrones de números: cada una es su puesto en el alfabeto.',
+      opc('En la secuencia A, D, G, J, …, la letra que sigue es:', ['K', 'L', 'N', 'M'], 3,
+        'Los puestos son 1, 4, 7, 10: avanzan de 3 en 3. Sigue el 13, la M.', 'Cuenta cuántas letras se salta cada vez.')],
+    ['pu-se-3', 'En un ciclo, el residuo de la división dice el lugar.',
+      opc('La cifra de las unidades de $2^{30}$ es:', ['4', '2', '8', '6'], 0,
+        'Las últimas cifras del 2 se repiten: 2, 4, 8, 6. Como $30 = 4 \\cdot 7 + 2$, es la segunda: 4.', 'Escribe las últimas cifras de las primeras potencias de 2 y busca el ciclo.')],
+  ]);
+});

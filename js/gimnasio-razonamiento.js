@@ -131,6 +131,16 @@ const CONCEPTOS_PU = {
       hl: [{ r: 0, c: 0, rs: 2, col: 'a', b: 0 }, { r: 0, c: 1, rs: 2, col: 'g', b: 1 }, { r: 0, c: 2, rs: 2, col: 'f', b: 2 }, { r: 0, c: 3, rs: 2, col: 'ok', b: 3 }] },
     beats: ['Las esquinas tocan tres caras del cubo: siempre son 8.', 'En cada arista, sin contar las esquinas, quedan cubitos con dos caras pintadas.', 'En el centro de cada cara están los de una sola cara pintada.', 'Adentro queda un cubo más pequeño, sin nada de pintura.'],
   },
+  'ciclo-residuo': {
+    title: 'En un ciclo manda el residuo',
+    scene: { type: 'ciclo', items: ['3', '9', '7', '1'], marks: [{ i: 1, b: 2, c: 'ok' }], center: { t: 'ciclo de 4', b: 1 }, foot: { t: '50 = 4 · 12 + 2', b: 2 } },
+    beats: ['Las últimas cifras de $3^1, 3^2, 3^3, 3^4$ son 3, 9, 7 y 1, y se repiten.', 'El ciclo tiene 4 cifras: cada 4 potencias se vuelve al comienzo.', 'El residuo de dividir el exponente entre 4 dice el lugar: residuo 2, la segunda cifra.'],
+  },
+  'cesar': {
+    title: 'La clave es el salto',
+    scene: { type: 'pasos', lines: ['S  →  V', 'O  →  R', 'cada letra avanza 3', 'descifrar: retroceder 3'] },
+    beats: ['Compara una letra con su versión cifrada.', 'Todas las letras se mueven lo mismo.', 'Ese número de puestos es la clave.', 'Para leer el mensaje, cada letra se devuelve los mismos puestos.'],
+  },
 };
 if (typeof CONCEPTOS !== 'undefined') Object.assign(CONCEPTOS, CONCEPTOS_PU);
 
@@ -238,6 +248,59 @@ GYM_RETOS.push(
     ],
     answer: 'Hay 24 cubitos con dos caras pintadas y 8 sin pintura.',
     wrap: 'En los problemas de cubos pintados no se cuenta de a uno: se clasifica por posición (esquinas, aristas, centros de cara e interior) y se comprueba que las clases sumen el total, $n^3$.',
+  },
+);
+
+GYM_RETOS.push(
+  {
+    id: 'gym-potencias', after: ['pu-se-3'], level: 3,
+    title: 'La última cifra de una suma enorme', strategy: 'Buscar el ciclo y usar el residuo',
+    problem: '¿En qué cifra termina el número $3^{50} + 7^{50}$?',
+    steps: [
+      { title: 'El ciclo del 3', concept: 'ciclo-residuo',
+        coach: 'Nadie calcula ese número: es enorme. Pero sus últimas cifras se repiten en un ciclo corto. Encuentra el ciclo y mira en qué lugar cae el exponente.',
+        ex: play('ultima-cifra', 'Halla la última cifra de la primera potencia', { rounds: [{ a: 3, n: 50 }] },
+          'Las últimas cifras del 3 son 3, 9, 7, 1. Como $50 = 4 \\cdot 12 + 2$, es la segunda del ciclo: 9.', { hint: 'Divide el exponente entre el largo del ciclo: el residuo dice el lugar.' }),
+        hints: ['Escribe las últimas cifras de las primeras potencias hasta que alguna se repita.', 'El ciclo es 3, 9, 7, 1. Divide 50 entre 4 y mira el residuo.'],
+        note: 'Última cifra de 3⁵⁰ = 9' },
+      { title: 'El ciclo del 7',
+        coach: 'Repite la idea con la otra base: su ciclo tiene otras cifras, pero el mismo largo.',
+        ex: play('ultima-cifra', 'Halla la última cifra de la segunda potencia', { rounds: [{ a: 7, n: 50 }] },
+          'Las últimas cifras del 7 son 7, 9, 3, 1. Con residuo 2 es la segunda: 9.', { hint: 'Busca el ciclo de las últimas cifras del 7.' }),
+        hints: ['El ciclo del 7 también tiene cuatro cifras. Halla el residuo del exponente al dividirlo entre el largo del ciclo.', 'El ciclo es 7, 9, 3, 1 y el residuo es el mismo de antes.'],
+        note: 'Última cifra de 7⁵⁰ = 9' },
+      { title: 'Suma solo las unidades',
+        coach: 'La última cifra de una suma depende solo de las últimas cifras de los sumandos. Súmalas y quédate con las unidades.',
+        ex: play('completa-solucion', 'Completa el cierre', { q: 'El número $3^{50}$ termina en 9 y el número $7^{50}$ también termina en 9. ¿En qué cifra termina su suma?',
+          lines: ['Las unidades de los sumandos son [[9]] y [[9]]', 'Esas unidades suman [[18]]', 'La suma termina en [[8]]: la decena que sobra no cambia las unidades'], extra: ['6', '0', '81'] },
+          '$9 + 9 = 18$: la suma termina en 8.', { hint: 'Suma las dos últimas cifras y mira en qué termina el resultado.' }),
+        hints: ['Para saber en qué termina una suma basta sumar las unidades de cada número.', 'Las dos unidades son iguales. Súmalas y mira solo la cifra final.'],
+        note: 'Unidades: 9 + 9 = 18, la suma termina en 8' },
+    ],
+    answer: 'El número termina en 8.',
+    wrap: 'Las últimas cifras de las potencias se repiten en ciclos cortos. Con potencias enormes: halla el ciclo, divide el exponente entre su largo y usa el residuo. En sumas y productos solo cuentan las unidades.',
+  },
+  {
+    id: 'gym-mensaje', after: ['pu-cd-1', 'pu-cd-2'], level: 2,
+    title: 'El mensaje interceptado', strategy: 'Sacar la clave de un ejemplo y deshacerla',
+    problem: 'Se interceptó un mensaje cifrado que dice FDVD. Se sabe que, con la misma clave, la palabra SOL se escribe VRO. ¿Qué dice el mensaje?',
+    steps: [
+      { title: 'Descubre la clave con el ejemplo', concept: 'cesar',
+        coach: 'Un ejemplo resuelto es la llave: compara letra por letra la palabra y su versión cifrada y mira cuántos puestos se movió cada una.',
+        ex: play('completa-solucion', 'Completa el razonamiento', { q: 'Con cierta clave, la palabra SOL se escribe VRO. ¿Cuál es la clave y cómo se descifra un mensaje?',
+          lines: ['De la S a la V se avanza [[3]] letras; de la O a la R, lo mismo', 'Para descifrar se hace lo contrario: se [[retrocede]] esa cantidad', 'La F del mensaje viene de la [[C]]'], extra: ['avanza', '4', 'I'] },
+          'S, T, U, V: tres puestos. Todas las letras se movieron igual, así que descifrar es retroceder tres.', { hint: 'Compara la primera letra de la palabra con la primera de su cifrado.' }),
+        hints: ['Cuenta en el alfabeto los puestos que hay de la S a la V.', 'Son tres puestos hacia adelante. Para leer el mensaje hay que ir hacia atrás.'],
+        note: 'Clave: cada letra avanzó tres puestos; para leer, se retrocede' },
+      { title: 'Descifra el mensaje',
+        coach: 'Con la clave en la mano, pon la rueda en la posición que deshace el salto y lee letra por letra.',
+        ex: play('rueda-cesar', 'Gira la rueda y descifra', { rounds: [{ pair: ['SOL', 'VRO'], msg: 'FDVD' }] },
+          'Retrocediendo tres puestos: F → C, D → A, V → S, D → A. El mensaje dice CASA.', { hint: 'Usa el ejemplo para ubicar la rueda y después lee el mensaje.' }),
+        hints: ['Alinea la rueda para que la S quede frente a la V, como en el ejemplo.', 'Cada letra del mensaje se devuelve tres puestos: la F pasa a C.'],
+        note: 'FDVD se descifra como CASA' },
+    ],
+    answer: 'El mensaje dice CASA.',
+    wrap: 'En los problemas de códigos, la regla se saca de un ejemplo resuelto, se comprueba con todas sus letras y después se aplica al revés para descifrar.',
   },
 );
 
