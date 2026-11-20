@@ -1,0 +1,414 @@
+% Libro 2 · Mundo 4 · Conteo y combinatoria (app: pu-conteo)
+\mundo{Conteo y combinatoria}{pu-conteo}{Contar parece fácil hasta que las posibilidades son miles. La combinatoria es el
+arte de contar sin hacer la lista: multiplicar decisiones, decidir si el orden importa, separar por casos o contar lo
+contrario. Cinco ideas que resuelven casi todo.}{%
+\item \textbf{4.1} Principio multiplicativo y árboles
+\item \textbf{4.2} Permutaciones: cuando el orden importa
+\item \textbf{4.3} Combinaciones: cuando el orden no importa
+\item \textbf{4.4} Conteo por casos y por complemento
+\item \textbf{4.5} Contar figuras y caminos}
+
+% ------------------------------------------------------------------
+\leccion{pu-co-1}{Principio multiplicativo y árboles}{Juego del árbol que se ramifica.}
+
+\begin{reto}
+¿Cuántos números de tres cifras \emph{distintas} se pueden formar con los dígitos 0, 1, 2, 3 y 4?
+\opciones{48}{60}{100}{64}
+\end{reto}
+
+\subsection{La idea: decisiones en cadena}
+Si una tarea se hace en pasos, y el primer paso tiene $m$ opciones y el segundo $n$ (sin importar qué se eligió en el
+primero), la tarea completa tiene $m \cdot n$ maneras. Es el \clave{principio multiplicativo}, y un \clave{árbol} lo
+muestra:
+
+\begin{center}
+\begin{tikzpicture}[level distance=11mm,sibling distance=7mm,grow=right,font=\scriptsize,
+  level 1/.style={sibling distance=14mm},level 2/.style={sibling distance=6mm},edge from parent/.style={draw,zmute}]
+\node {inicio}
+  child {node {camisa 3} child {node {pantalón 2}} child {node {pantalón 1}}}
+  child {node {camisa 2} child {node {pantalón 2}} child {node {pantalón 1}}}
+  child {node {camisa 1} child {node {pantalón 2}} child {node {pantalón 1}}};
+\node[right,font=\small] at (3.6,0) {$3 \cdot 2 = 6$ pintas};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Sumar o multiplicar}
+Se \emph{multiplica} cuando hay que tomar una decisión \emph{y} luego otra. Se \emph{suma} cuando se elige entre caminos
+excluyentes: \emph{o} esto \emph{o} aquello. Para ir de Medellín a Bogotá hay 3 vuelos o 5 buses: $3 + 5 = 8$ maneras.
+
+\subsubsection{Empezar por la casilla con restricción}
+Cuando un paso tiene restricciones (la primera cifra no puede ser 0, el número debe ser par), se llena primero la casilla
+más restringida.
+
+\begin{regla}
+\begin{itemize}
+  \item «Y luego»: se multiplica. «O» excluyente: se suma.
+  \item Llena primero las casillas con restricciones.
+  \item Con repetición permitida, cada casilla conserva todas sus opciones: $n^k$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Placas]
+Una placa tiene 3 letras (de 26) y 3 dígitos. ¿Cuántas placas distintas hay?
+\solucion $26^3 \cdot 10^3 = 17\,576\,000$.
+\end{ejemplo}
+
+\begin{ejemplo}[Pares de tres cifras distintas]
+¿Cuántos números pares de tres cifras distintas hay?
+\solucion Restricciones: la última par, la primera no cero. Caso última $= 0$: primera 9 opciones, del medio 8: 72. Caso
+última $\in \{2, 4, 6, 8\}$: 4 opciones; primera: 8 (ni 0 ni la última); del medio: 8. $4 \cdot 8 \cdot 8 = 256$. Total
+$328$.
+\end{ejemplo}
+
+\begin{ejemplo}[Menú]
+Un restaurante ofrece 4 entradas, 5 platos fuertes y 3 postres. Un menú tiene un plato fuerte y, opcionalmente, una entrada
+y un postre. ¿Cuántos menús hay?
+\solucion Entrada: 4 o ninguna (5 opciones). Fuerte: 5. Postre: 3 o ninguno (4). $5 \cdot 5 \cdot 4 = 100$.
+\end{ejemplo}
+
+\begin{trampa}
+Olvidar el caso «ninguno» cuando algo es opcional, o empezar por una casilla sin restricción y luego no saber cuántas
+opciones quedan para la restringida.
+\end{trampa}
+
+\taller
+\piso{Entrena}{multiplicar}
+\begin{ejercicios}
+\item ¿Cuántas contraseñas de 4 dígitos hay (se pueden repetir)? \sol{$10^4 = 10\,000$.}
+\item ¿Cuántos números de 3 cifras (pueden repetirse) hay que usen solo dígitos impares? \sol{$5^3 = 125$.}
+\item Una moneda se lanza 5 veces. ¿Cuántas secuencias de caras y sellos hay? \sol{$2^5 = 32$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item ¿Cuántos números de 4 cifras distintas se forman con 1, 2, 3, 4, 5, 6 si deben empezar en 5?
+\opciones{60}{120}{20}{360}
+\sol{A. $1 \cdot 5 \cdot 4 \cdot 3$.}
+\item Entre las ciudades A y B hay 3 caminos y entre B y C hay 4. ¿De cuántas maneras se va de A a C y se regresa sin repetir ningún camino?
+\opciones{144}{72}{24}{12}
+\sol{B. Ida $3 \cdot 4 = 12$; vuelta $3 \cdot 2 = 6$: 72.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Primera cifra: 4 opciones (no el 0). Segunda: 4 (ya se usó una, pero ahora el 0 vale). Tercera: 3. $4 \cdot 4 \cdot 3 =
+48$. \textbf{Opción A.} La B ($5 \cdot 4 \cdot 3$) cuenta números que empiezan en 0.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-co-2}{Permutaciones}{Juego de los libros que se ordenan en el estante.}
+
+\begin{reto}
+¿De cuántas maneras se pueden sentar 5 personas en fila si Ana y Beto deben quedar juntos?
+\opciones{24}{48}{120}{96}
+\end{reto}
+
+\subsection{La idea: ordenar todos}
+Para ordenar $n$ objetos distintos hay $n$ opciones para el primer lugar, $n - 1$ para el segundo, y así hasta 1. Eso es
+el \clave{factorial}: $n! = n \cdot (n - 1) \cdots 2 \cdot 1$. Cinco libros se ordenan de $5! = 120$ maneras.
+
+\subsubsection{Ordenar solo algunos}
+Si de $n$ objetos se ordenan solo $k$ (un podio de 3 entre 8 corredores), hay $n(n-1)\cdots(n-k+1)$ maneras:
+$8 \cdot 7 \cdot 6 = 336$. Se escribe $P(n, k) = \tfrac{n!}{(n-k)!}$.
+
+\subsubsection{Bloques y repetidos}
+\begin{itemize}
+  \item Si dos deben ir juntos, se pegan en un \clave{bloque}: se ordenan los bloques y luego se ordena dentro del bloque.
+  \item Si hay objetos repetidos, se divide por las maneras de ordenar los repetidos: las letras de ANA se ordenan de
+  $\tfrac{3!}{2!} = 3$ maneras (ANA, AAN, NAA).
+  \item En una mesa redonda, $n$ personas se sientan de $(n - 1)!$ maneras (se fija a una).
+\end{itemize}
+
+\begin{regla}
+\begin{itemize}
+  \item $n!$ maneras de ordenar $n$ objetos distintos. $0! = 1$.
+  \item $P(n, k) = n(n - 1)\cdots(n - k + 1)$.
+  \item Con repetidos: $\dfrac{n!}{a!\, b!\, \cdots}$. Circular: $(n - 1)!$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Anagramas]
+¿Cuántas palabras (con o sin sentido) se forman con las letras de PAPAYA?
+\solucion 6 letras: P dos veces, A tres veces, Y una. $\tfrac{6!}{2!\,3!} = \tfrac{720}{12} = 60$.
+\end{ejemplo}
+
+\begin{ejemplo}[Separados]
+¿De cuántas maneras se sientan 5 personas en fila si Ana y Beto \emph{no} deben quedar juntos?
+\solucion Total $120$; juntos $48$ (el reto). Separados: $72$.
+\end{ejemplo}
+
+\begin{ejemplo}[Cargos]
+En un grupo de 10 se elige presidente, secretario y tesorero. ¿De cuántas maneras?
+\solucion Los cargos son distintos: importa el orden. $10 \cdot 9 \cdot 8 = 720$.
+\end{ejemplo}
+
+\begin{trampa}
+Olvidar ordenar dentro del bloque: Ana-Beto y Beto-Ana son distintos.
+\end{trampa}
+
+\taller
+\piso{Entrena}{ordenar}
+\begin{ejercicios}
+\item $\dfrac{8!}{6!}$ \sol{56.}
+\item ¿Cuántos anagramas tiene la palabra LIBRO? ¿Y ARROZ? \sol{120 y 60.}
+\item ¿De cuántas maneras se sientan 6 personas en una mesa redonda? \sol{$5! = 120$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item ¿De cuántas maneras pueden llegar a la meta 6 corredores si se premian el 1.º, el 2.º y el 3.º lugar?
+\opciones{20}{120}{720}{216}
+\sol{B. $6 \cdot 5 \cdot 4$.}
+\item Tres libros de matemáticas y dos de física se ordenan en un estante con los de cada materia juntos. ¿De cuántas maneras?
+\opciones{12}{24}{120}{72}
+\sol{B. Bloques: $2!$; dentro: $3! \cdot 2!$. $2 \cdot 6 \cdot 2 = 24$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+El bloque \fbox{Ana Beto} y las otras 3 personas son 4 objetos: $4! = 24$ órdenes. Dentro del bloque, 2 órdenes. Total
+$48$. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-co-3}{Combinaciones}{Juego de los grupos que se forman sin importar el orden.}
+
+\begin{reto}
+En un torneo de ajedrez con 10 jugadores, cada uno juega exactamente una partida contra cada uno de los demás. ¿Cuántas
+partidas se juegan?
+\opciones{90}{45}{100}{20}
+\end{reto}
+
+\subsection{La idea: el orden no importa}
+Para elegir un \emph{comité} de 3 personas entre 5, el orden no importa: \{Ana, Beto, Caro\} es el mismo comité que
+\{Caro, Ana, Beto\}. Si se cuentan los órdenes ($5 \cdot 4 \cdot 3 = 60$), cada comité aparece $3! = 6$ veces. Así que hay
+$\tfrac{60}{6} = 10$ comités. Eso es una \clave{combinación}:
+\[\binom{n}{k} = \frac{n(n - 1)\cdots(n - k + 1)}{k!} = \frac{n!}{k!\,(n - k)!}.\]
+
+\subsubsection{¿Permutación o combinación?}
+Pregúntate: si cambio el orden de los elegidos, ¿obtengo algo distinto? Cargos, podios, contraseñas: sí (permutación).
+Comités, grupos, manos de cartas, partidas entre dos: no (combinación).
+
+\subsubsection{Propiedades útiles}
+$\binom{n}{k} = \binom{n}{n - k}$ (elegir los que entran es elegir los que salen). $\binom{n}{2} = \tfrac{n(n-1)}{2}$:
+apretones de mano, partidas, diagonales.
+
+\begin{regla}
+\begin{itemize}
+  \item $\binom{n}{k} = \dfrac{P(n, k)}{k!}$. $\binom n0 = \binom nn = 1$, $\binom n1 = n$.
+  \item $\binom nk = \binom n{n-k}$.
+  \item Si hay dos grupos (hombres y mujeres), se elige de cada grupo y se multiplica.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Comité mixto]
+Hay 6 hombres y 4 mujeres. ¿Cuántos comités de 3 hombres y 2 mujeres se pueden formar?
+\solucion $\binom63 \cdot \binom42 = 20 \cdot 6 = 120$.
+\end{ejemplo}
+
+\begin{ejemplo}[Diagonales]
+¿Cuántas diagonales tiene un octágono?
+\solucion Segmentos entre 8 vértices: $\binom82 = 28$. Menos los 8 lados: 20.
+\end{ejemplo}
+
+\begin{ejemplo}[Al menos una mujer]
+Con los mismos 10, ¿cuántos comités de 3 tienen al menos una mujer?
+\solucion Total $\binom{10}{3} = 120$; sin mujeres $\binom63 = 20$. Con al menos una: 100.
+\end{ejemplo}
+
+\begin{trampa}
+Usar permutaciones donde el orden no importa (el reto daría 90). Cada partida entre A y B se contaría dos veces: «A contra
+B» y «B contra A».
+\end{trampa}
+
+\taller
+\piso{Entrena}{elegir}
+\begin{ejercicios}
+\item $\binom{7}{3}$ y $\binom{7}{4}$. \sol{35 y 35.}
+\item ¿Cuántos apretones de mano hay entre 12 personas si todos se saludan? \sol{66.}
+\item ¿De cuántas maneras se eligen 2 sabores de helado de 8? \sol{28.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item ¿Cuántos triángulos se forman con vértices en 7 puntos de una circunferencia?
+\opciones{35}{21}{210}{42}
+\sol{A. $\binom73$.}
+\item De 5 libros de cuentos y 4 de poesía se eligen 3 de cuentos y 2 de poesía. ¿De cuántas maneras?
+\opciones{60}{126}{20}{36}
+\sol{A. $10 \cdot 6$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Cada partida es una pareja de jugadores, sin orden: $\binom{10}{2} = \tfrac{10 \cdot 9}{2} = 45$. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-co-4}{Conteo por casos y complemento}{Juego de contar lo que sobra.}
+
+\begin{reto}
+¿Cuántos números del 1 al 100 no son divisibles ni entre 2 ni entre 3?
+\opciones{33}{34}{17}{50}
+\end{reto}
+
+\subsection{La idea: a veces es más fácil contar lo contrario}
+Cuando una condición dice «al menos uno», «no todos» o «ni… ni…», suele ser más rápido contar \clave{lo que no cumple} y
+restarlo del total. Y cuando una condición cambia según la situación, se separa en \clave{casos} que no se solapan y se
+suman.
+
+\subsubsection{Inclusión-exclusión}
+Para contar los que cumplen $A$ o $B$: se suman y se resta lo contado dos veces, como en los diagramas de Venn:
+$n(A \cup B) = n(A) + n(B) - n(A \cap B)$.
+
+\begin{regla}
+\begin{itemize}
+  \item Complemento: casos buenos $=$ total $-$ casos malos.
+  \item Casos: separa en situaciones excluyentes y suma.
+  \item Múltiplos de $k$ entre 1 y $N$: la parte entera de $\tfrac Nk$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Al menos un 7]
+¿Cuántos números de tres cifras tienen al menos un 7?
+\solucion Total: 900. Sin ningún 7: primera cifra 8 opciones (ni 0 ni 7), las otras 9 cada una: $8 \cdot 9 \cdot 9 =
+648$. Con al menos un 7: $900 - 648 = 252$.
+\end{ejemplo}
+
+\begin{ejemplo}[Por casos]
+¿Cuántos números de dos cifras tienen la suma de sus cifras igual a 10?
+\solucion Primera cifra $a$ de 1 a 9 y $b = 10 - a$ debe ser cifra (0 a 9): $a$ de 1 a 9 da $b$ de 9 a 1. Son 9 números
+(19, 28, …, 91).
+\end{ejemplo}
+
+\begin{trampa}
+Al contar por casos, que dos casos se solapen y un mismo objeto se cuente dos veces.
+\end{trampa}
+
+\taller
+\piso{Entrena}{complemento}
+\begin{ejercicios}
+\item ¿Cuántos números del 1 al 60 son múltiplos de 4 o de 6? \sol{$15 + 10 - 5 = 20$.}
+\item Se lanza un dado 3 veces. ¿En cuántas secuencias sale al menos un 6? \sol{$216 - 125 = 91$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item ¿Cuántas palabras de 4 letras con las letras A, B, C (pueden repetirse) usan al menos una A?
+\opciones{65}{81}{16}{64}
+\sol{A. $3^4 - 2^4 = 81 - 16$.}
+\item De 8 personas se eligen 3, pero Juan y Pedro no pueden estar juntos. ¿Cuántos grupos hay?
+\opciones{56}{50}{36}{6}
+\sol{B. Total 56; con los dos: 6 (el tercero entre los otros 6). $56 - 6$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Divisibles entre 2: 50. Entre 3: 33. Entre los dos (entre 6): 16. Entre 2 o 3: $50 + 33 - 16 = 67$. Ni uno ni otro:
+$100 - 67 = 33$. \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-co-5}{Contar figuras y caminos}{Juego de la cuadrícula de calles.}
+
+\begin{reto}
+En una cuadrícula de calles, para ir de la esquina A a la esquina B hay que avanzar 3 cuadras hacia la derecha y 2 hacia
+arriba, sin retroceder. ¿Cuántos caminos distintos hay?
+\opciones{5}{6}{10}{12}
+\end{reto}
+
+\subsection{La idea: un camino es una palabra}
+Cada camino corto es una secuencia de pasos: por ejemplo DDADA (derecha, derecha, arriba, derecha, arriba). Contar
+caminos es contar palabras con 3 letras D y 2 letras A: $\tfrac{5!}{3!\,2!} = \binom52 = 10$.
+
+\begin{center}
+\begin{tikzpicture}[x=8mm,y=8mm,font=\scriptsize]
+  \draw[zline,line width=.6pt] (0,0) grid (3,2);
+  \foreach \x/\y/\n in {0/0/1,1/0/1,2/0/1,3/0/1,0/1/1,1/1/2,2/1/3,3/1/4,0/2/1,1/2/3,2/2/6,3/2/10}{%
+    \node[fill=white,inner sep=1pt,text=zolive] at (\x,\y) {\n};}
+  \node[below left] at (0,0) {A}; \node[above right] at (3,2) {B};
+\end{tikzpicture}
+\end{center}
+
+El dibujo muestra otro método, útil cuando hay obstáculos: en cada esquina se escribe el número de caminos que llegan
+a ella, que es la suma de los de la esquina de la izquierda y la de abajo (\clave{método de sumar esquinas}).
+
+\subsubsection{Contar figuras}
+Para contar triángulos, cuadrados o rectángulos en un dibujo, hay que \emph{organizar}: por tamaño, o por cuántas piezas
+pequeñas forman cada figura. En una cuadrícula de $m \times n$, los rectángulos son $\binom{m+1}{2}\binom{n+1}{2}$ (se
+eligen dos rectas verticales y dos horizontales).
+
+\begin{regla}
+\begin{itemize}
+  \item Caminos en una cuadrícula de $a \times b$: $\binom{a + b}{a}$.
+  \item Con obstáculos: sumar esquinas.
+  \item Rectángulos en $m \times n$: $\binom{m + 1}{2}\binom{n + 1}{2}$. Cuadrados en $n \times n$: $1^2 + 2^2 + \cdots + n^2$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Cuadrados en un tablero]
+¿Cuántos cuadrados hay en una cuadrícula de $3 \times 3$?
+\solucion De $1 \times 1$: 9. De $2 \times 2$: 4. De $3 \times 3$: 1. Total 14.
+\end{ejemplo}
+
+\begin{ejemplo}[Pasando por un punto]
+En una cuadrícula de $4 \times 4$, ¿cuántos caminos cortos de la esquina inferior izquierda a la superior derecha pasan por
+el centro $(2, 2)$?
+\solucion Hasta el centro: $\binom42 = 6$. Del centro al final: 6. Total $36$.
+\end{ejemplo}
+
+\begin{trampa}
+Contar figuras sin orden y olvidar las grandes (las formadas por varias piezas).
+\end{trampa}
+
+\taller
+\piso{Entrena}{contar}
+\begin{ejercicios}
+\item Caminos cortos en una cuadrícula de $4 \times 2$. \sol{$\binom62 = 15$.}
+\item Rectángulos en una cuadrícula de $2 \times 3$. \sol{$\binom32 \binom42 = 3 \cdot 6 = 18$.}
+\item ¿Cuántos triángulos hay en un triángulo dividido por dos rectas que salen de un vértice al lado opuesto? \sol{En el lado opuesto quedan 4 puntos: cada par forma un triángulo con el vértice: $\binom42 = 6$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item ¿Cuántos cuadrados hay en un tablero de $4 \times 4$?
+\opciones{16}{25}{30}{20}
+\sol{C. $16 + 9 + 4 + 1$.}
+\item En la cuadrícula de la lección ($3 \times 2$), si la esquina $(1, 1)$ está cerrada, ¿cuántos caminos quedan?
+\opciones{10}{6}{4}{8}
+\sol{C. Caminos que pasan por $(1, 1)$: $\binom21 \cdot \binom31 = 2 \cdot 3 = 6$. Quedan $10 - 6 = 4$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Cada camino es una palabra con 3 D y 2 A: $\binom52 = 10$. La tabla de esquinas también termina en 10.
+\textbf{Opción C.}
+\end{retoresuelto}
+\bitacora
+
+\evaluacion
+\begin{ejercicios}
+\item ¿Cuántos números de tres cifras tienen todas sus cifras pares?
+\opciones{100}{125}{64}{80}
+\sol{A. Primera: 2, 4, 6, 8 (4); las otras 5 cada una: 100. (4.1)}
+\item Con 4 camisas, 3 pantalones y 2 pares de zapatos, ¿cuántas pintas distintas hay?
+\opciones{9}{24}{12}{18}
+\sol{B. (4.1)}
+\item ¿Cuántos anagramas tiene la palabra CASA?
+\opciones{24}{12}{6}{4}
+\sol{B. $\tfrac{4!}{2!}$. (4.2)}
+\item ¿De cuántas maneras se ordenan 4 personas en una mesa redonda?
+\opciones{24}{6}{12}{4}
+\sol{B. $3!$. (4.2)}
+\item ¿Cuántos grupos de 4 se forman con 9 personas?
+\opciones{126}{3\,024}{36}{84}
+\sol{A. $\binom94$. (4.3)}
+\item Cada par de 15 ciudades está unido por una carretera. ¿Cuántas carreteras hay?
+\opciones{105}{210}{225}{30}
+\sol{A. $\binom{15}{2}$. (4.3)}
+\item ¿Cuántos números de 2 cifras tienen al menos una cifra igual a 5?
+\opciones{18}{19}{17}{20}
+\sol{A. Total 90; sin 5: $8 \cdot 9 = 72$. (4.4)}
+\item Caminos cortos en una cuadrícula de $5 \times 1$.
+\opciones{5}{6}{10}{15}
+\sol{B. $\binom61$. (4.5)}
+\end{ejercicios}

@@ -1,0 +1,315 @@
+% Libro 2 · Mundo 8 · Razonamiento espacial (app: pu-espacial)
+% cubito isométrico: \cubito{x}{y}{z}
+\providecommand{\cubito}[3]{%
+  \begin{scope}[shift={(#1*0.866-#2*0.866,#1*0.5+#2*0.5+#3)}]
+    \filldraw[fill=zlime!55,draw=zink,line width=.4pt] (0,0) -- (0.866,0.5) -- (0,1) -- (-0.866,0.5) -- cycle;
+  \end{scope}}
+\providecommand{\cubo}[3]{%
+  \begin{scope}[shift={({(#1-#2)*0.866},{(#1+#2)*0.5+#3})}]
+    \filldraw[fill=zlime!60,draw=zink,line width=.4pt] (0,1) -- (0.866,1.5) -- (0,2) -- (-0.866,1.5) -- cycle;
+    \filldraw[fill=zlime!25,draw=zink,line width=.4pt] (0,0) -- (0,1) -- (-0.866,1.5)++(0,0) -- (-0.866,0.5) -- cycle;
+    \filldraw[fill=zolive!35,draw=zink,line width=.4pt] (0,0) -- (0.866,0.5) -- (0.866,1.5) -- (0,1) -- cycle;
+  \end{scope}}
+\mundo{Razonamiento espacial}{pu-espacial}{Ver con la mente: seguir un recorrido sin dibujarlo, contar cubos que no se ven,
+armar un cubo con un desarrollo plano, imaginar una figura en un espejo o una hoja desdoblada. Es una habilidad que mejora
+mucho con práctica, y la práctica empieza por dibujar.}{%
+\item \textbf{8.1} Rejillas y caminos
+\item \textbf{8.2} Vistas y cubos
+\item \textbf{8.3} Desarrollos del cubo
+\item \textbf{8.4} Giros, espejos y dobleces}
+
+\leccion{pu-es-1}{Rejillas y caminos}{Juego del robot que sigue instrucciones.}
+
+\begin{reto}
+Un robot mira hacia el norte. Gira $90^\circ$ a la derecha y avanza 3 casillas; gira a la izquierda y avanza 2; gira a la
+izquierda y avanza 5. ¿Dónde quedó respecto al punto de partida?
+\opcionesd{2 al oeste y 2 al norte}{2 al este y 2 al norte}{8 al oeste y 2 al norte}{2 al oeste y 2 al sur}
+\end{reto}
+
+\subsection{La idea: coordenadas y dirección}
+Para seguir un recorrido hay que llevar dos cosas: la \clave{posición} (como coordenadas: este positivo, norte positivo) y
+la \clave{dirección} a la que se mira. «Girar a la derecha» cambia solo la dirección:
+N $\to$ E $\to$ S $\to$ O $\to$ N. «Girar a la izquierda» va al revés.
+
+\begin{center}
+\begin{tikzpicture}[x=6mm,y=6mm,font=\scriptsize]
+  \draw[zline,line width=.3pt] (-3,-1) grid (4,3);
+  \draw[zolive,line width=1pt,-{Latex[length=2mm]}] (0,0) -- (3,0);
+  \draw[zolive,line width=1pt,-{Latex[length=2mm]}] (3,0) -- (3,2);
+  \draw[zolive,line width=1pt,-{Latex[length=2mm]}] (3,2) -- (-2,2);
+  \fill[zcoral] (0,0) circle (2pt) node[below]{inicio}; \fill[zolive] (-2,2) circle (2pt) node[above]{fin};
+  \node at (4.6,2.5) {N $\uparrow$};
+\end{tikzpicture}
+\end{center}
+
+\begin{regla}
+\begin{itemize}
+  \item Anota en una tabla, paso a paso: dirección actual y posición $(x, y)$.
+  \item Derecha: N $\to$ E $\to$ S $\to$ O. Izquierda: N $\to$ O $\to$ S $\to$ E.
+  \item La distancia «en cuadras» entre $(x_1, y_1)$ y $(x_2, y_2)$ es $|x_1 - x_2| + |y_1 - y_2|$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Ida y vuelta]
+Una persona camina 4 cuadras al este, 3 al norte, 6 al oeste y 1 al sur. ¿Cuántas cuadras debe caminar, como mínimo, para
+volver?
+\solucion Posición: $(4 - 6, 3 - 1) = (-2, 2)$. Para volver: $2 + 2 = 4$ cuadras.
+\end{ejemplo}
+
+\begin{ejemplo}[Giros acumulados]
+Alguien mira al este y hace: derecha, derecha, izquierda, derecha, derecha. ¿Hacia dónde mira?
+\solucion Cuatro derechas y una izquierda equivalen a tres derechas, que es una izquierda: del este pasa al norte.
+\end{ejemplo}
+
+\begin{trampa}
+Girar «a la derecha» desde el punto de vista del lector y no del robot. Si el robot mira al sur, su derecha es el oeste.
+\end{trampa}
+
+\taller
+\piso{Entrena}{recorridos}
+\begin{ejercicios}
+\item Mirando al norte: izquierda, avanza 2; izquierda, avanza 2; izquierda, avanza 2. ¿Dónde está? \sol{Al oeste 2 y luego al sur 2 y al este 2: $(0, -2)$, 2 al sur del inicio.}
+\item Mirando al oeste, ¿cuántos giros a la derecha llevan a mirar al norte? \sol{Uno.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Un taxi recorre 5 cuadras al norte, 3 al este, 2 al sur y 7 al oeste. ¿A cuántas cuadras (por calles) está del inicio?
+\opciones{7}{17}{5}{3}
+\sol{A. Queda en $(-4, 3)$: $4 + 3$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Norte $\to$ derecha: este; avanza 3: $(3, 0)$. Izquierda: norte; avanza 2: $(3, 2)$. Izquierda: oeste; avanza 5:
+$(-2, 2)$. Dos al oeste y dos al norte. \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-es-2}{Vistas y cubos}{Juego de la pila de cubos que se mira desde arriba.}
+
+\begin{reto}
+Desde arriba, una pila de cubos se ve como una cuadrícula de $2 \times 2$; el número de cada casilla dice cuántos cubos hay
+en esa columna. ¿Cuántos cubos tiene la pila?
+\begin{center}\begin{tikzpicture}[x=7mm,y=7mm]
+  \draw[white,line width=.6pt] (0,0) grid (2,2);
+  \node at (.5,1.5) {3}; \node at (1.5,1.5) {1}; \node at (.5,.5) {2}; \node at (1.5,.5) {2};
+\end{tikzpicture}\end{center}
+\opciones{4}{6}{8}{12}
+\end{reto}
+
+\subsection{La idea: contar por columnas o por capas}
+Una pila de cubos se cuenta organizadamente: por \clave{columnas} (cuántos hay en cada posición del piso) o por
+\clave{capas} (cuántos hay en cada nivel). En los dibujos en perspectiva, algunos cubos no se ven pero \emph{tienen} que
+estar: un cubo no flota, siempre tiene otro debajo.
+
+\begin{center}
+\begin{tikzpicture}[scale=.55]
+  \cubo{1}{1}{0}\cubo{1}{1}{1}\cubo{1}{1}{2}
+  \cubo{0}{1}{0}
+  \cubo{1}{0}{0}\cubo{1}{0}{1}
+  \cubo{0}{0}{0}\cubo{0}{0}{1}
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Las tres vistas}
+Una pila se describe con su vista de \emph{frente}, de \emph{lado} y de \emph{arriba}. La vista de frente muestra, en cada
+columna, la altura máxima de lo que hay detrás; la de arriba, qué posiciones del piso están ocupadas.
+
+\begin{regla}
+\begin{itemize}
+  \item Cuenta por columnas (vista de arriba con números) o por capas.
+  \item Los cubos ocultos cuentan si son necesarios para sostener los de arriba.
+  \item Para el mínimo de cubos compatibles con unas vistas, pon en cada columna lo justo para que todas las vistas se
+  cumplan; para el máximo, llena todo lo que las vistas permiten.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Completar un cubo]
+Una pila tiene 10 cubitos. ¿Cuántos faltan para formar un cubo de $3 \times 3 \times 3$?
+\solucion $27 - 10 = 17$.
+\end{ejemplo}
+
+\begin{ejemplo}[Caras visibles]
+Una torre de 4 cubos apilados se pone sobre una mesa. ¿Cuántas caras de cubitos se ven desde todos lados (sin mirar por
+debajo)?
+\solucion Cada lado de la torre muestra 4 caras: $4 \cdot 4 = 16$, más la de arriba: 17.
+\end{ejemplo}
+
+\begin{trampa}
+Contar solo los cubos que se ven en el dibujo y olvidar los que sostienen a los de arriba.
+\end{trampa}
+
+\taller
+\piso{Entrena}{contar cubos}
+\begin{ejercicios}
+\item Vista de arriba con números 1 2 1 / 2 3 2 / 1 2 1. ¿Cuántos cubos? \sol{15.}
+\item En la pila del reto, ¿qué altura muestra la vista de frente en la columna izquierda? \sol{La mayor de esa columna: 3.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Un cubo de $4 \times 4 \times 4$ se arma con cubitos y se le quitan los 8 de las esquinas. ¿Cuántos quedan?
+\opciones{56}{60}{48}{32}
+\sol{A. $64 - 8$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Por columnas: $3 + 1 + 2 + 2 = 8$ cubos. \textbf{Opción C.} (Es la pila del dibujo de la lección.)
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-es-3}{Desarrollos del cubo}{Juego de armar el cubo con la cruz de papel.}
+
+\begin{reto}
+El desarrollo plano de la figura se dobla para formar un cubo. ¿Qué número queda en la cara opuesta a la del 1?
+\begin{center}\begin{tikzpicture}[x=6mm,y=6mm,font=\small]
+  \foreach \x/\y/\n in {1/3/1,1/2/3,1/1/5,1/0/6,0/2/2,2/2/4}{\draw[white,line width=.6pt] (\x,\y) rectangle ++(1,1); \node at (\x+.5,\y+.5) {\n};}
+\end{tikzpicture}\end{center}
+\opciones{3}{5}{6}{2}
+\end{reto}
+
+\subsection{La idea: las caras opuestas nunca se tocan}
+Un cubo tiene 6 caras en 3 parejas de \clave{opuestas}. En un desarrollo plano, dos caras opuestas nunca comparten un
+borde. Dos reglas prácticas:
+\begin{itemize}
+  \item En una fila (o columna) recta de caras, las que están \emph{a una de distancia} (con otra en medio) son opuestas.
+  \item En un desarrollo en «zigzag», las caras separadas por una en diagonal también terminan opuestas.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[x=6mm,y=6mm,font=\scriptsize]
+  \foreach \x/\y/\n in {1/3/A,1/2/B,1/1/C,1/0/D,0/2/E,2/2/F}{\draw[zink,line width=.5pt,fill=white] (\x,\y) rectangle ++(1,1); \node at (\x+.5,\y+.5) {\n};}
+  \fill[zlime!50] (1,3) rectangle ++(1,1); \fill[zlime!50] (1,1) rectangle ++(1,1);
+  \foreach \x/\y/\n in {1/3/A,1/1/C}{\draw[zink,line width=.5pt] (\x,\y) rectangle ++(1,1); \node at (\x+.5,\y+.5) {\n};}
+  \node[right,align=left] at (3.5,2) {A y C opuestas (una en medio)\\B y D opuestas\\E y F opuestas};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{¿Es un desarrollo válido?}
+Un cubo tiene 11 desarrollos distintos. Uno no sirve si tiene cuatro caras en un cuadrado de $2 \times 2$, o más de
+cuatro caras en línea, o si dos caras quedarían una sobre otra al doblar.
+
+\begin{regla}
+\begin{itemize}
+  \item Opuestas: separadas por una cara en línea recta.
+  \item Caras que comparten un borde en el desarrollo son vecinas en el cubo.
+  \item En un dado, las caras opuestas suman 7.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Dado]
+En un dado las opuestas suman 7. Si se ven las caras 2, 3 y 6, ¿cuánto suman las tres caras ocultas?
+\solucion Ocultas: 5, 4 y 1. Suman 10. (O: $21 - 11 = 10$.)
+\end{ejemplo}
+
+\begin{trampa}
+Creer que dos caras que se tocan por una esquina en el desarrollo son opuestas: al doblar, suelen quedar vecinas.
+\end{trampa}
+
+\taller
+\piso{Entrena}{doblar}
+\begin{ejercicios}
+\item En el desarrollo del reto, ¿qué número es opuesto al 3? \sol{6.}
+\item En un dado normal, la cara de arriba es 6. ¿Cuánto suman las cuatro caras laterales? \sol{Las seis caras suman 21; arriba 6 y abajo 1: laterales $21 - 7 = 14$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item En un desarrollo en línea de 4 caras 1, 2, 3, 4 con la 5 arriba de la 2 y la 6 abajo de la 2, la cara opuesta a la 5 es
+\opciones{6}{1}{3}{4}
+\sol{A. La 5 y la 6 están en la columna de la 2, separadas por ella.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+En la columna 1, 3, 5, 6: el 1 y el 5 están separados por el 3, así que son opuestos (y el 3 con el 6). El 2 y el 4,
+a los lados del 3, son opuestos entre sí. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-es-4}{Giros, espejos y dobleces}{Juego de la hoja que se dobla y se perfora.}
+
+\begin{reto}
+Una hoja cuadrada se dobla por la mitad y luego otra vez por la mitad, de modo que queda un cuadrado con la cuarta parte
+del área. Se hace un agujero en el centro del cuadrado doblado. Al desdoblar la hoja, ¿cuántos agujeros tiene?
+\opciones{1}{2}{4}{8}
+\end{reto}
+
+\subsection{La idea: cada doblez es un espejo}
+Al desdoblar, todo lo que se hizo en la hoja doblada se \clave{refleja} en la línea del doblez. Por eso cada doblez duplica
+los agujeros (si el agujero no está justo sobre la línea). Lo práctico es desdoblar \emph{de a un doblez}, empezando por el
+último.
+
+\subsubsection{Espejos y giros}
+\begin{itemize}
+  \item En un \clave{espejo vertical}, izquierda y derecha se intercambian; arriba y abajo no.
+  \item Un \clave{giro} de $180^\circ$ equivale a dos espejos (uno vertical y otro horizontal).
+  \item Un reloj visto en un espejo marca la hora «simétrica»: las 3:00 se ven como las 9:00.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[x=5mm,y=5mm,font=\large]
+  \node at (0,0) {\sffamily F}; \draw[zcoral,dashed] (1,-1) -- (1,1); \node[xscale=-1] at (2,0) {\sffamily F};
+  \node[font=\scriptsize] at (1,-1.5) {espejo};
+  \node[rotate=180] at (6,0) {\sffamily F}; \node[font=\scriptsize] at (6,-1.5) {giro $180^\circ$};
+\end{tikzpicture}
+\end{center}
+
+\begin{regla}
+\begin{itemize}
+  \item Desdobla del último doblez al primero; en cada uno, refleja lo que hay.
+  \item $n$ dobleces por la mitad (sin agujeros sobre las líneas): $2^n$ agujeros.
+  \item Hora en el espejo: $12{:}00 - $ hora real.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Reloj en el espejo]
+Un reloj de agujas visto en un espejo parece marcar las 4:20. ¿Qué hora es?
+\solucion $12{:}00 - 4{:}20 = 7{:}40$.
+\end{ejemplo}
+
+\begin{ejemplo}[Tres dobleces]
+Una hoja se dobla tres veces por la mitad y se perfora una vez lejos de los bordes. ¿Cuántos agujeros hay al abrirla?
+\solucion $2^3 = 8$.
+\end{ejemplo}
+
+\begin{trampa}
+Desdoblar en el orden en que se dobló: los reflejos se hacen al revés (el último doblez se deshace primero).
+\end{trampa}
+
+\taller
+\piso{Entrena}{reflejar}
+\begin{ejercicios}
+\item ¿Qué letras mayúsculas se ven iguales en un espejo vertical: A, B, H, M, N, T? \sol{A, H, M, T.}
+\item Un reloj en el espejo marca las 2:45. ¿Qué hora es? \sol{9:15.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Una hoja doblada dos veces por la mitad se perfora con un agujero que queda justo sobre el centro de la hoja original (en la esquina del doblez). Al abrirla hay
+\opciones{1 agujero}{2 agujeros}{4 agujeros}{8 agujeros}
+\sol{A. El agujero está sobre las dos líneas de doblez: sus reflejos caen en el mismo sitio.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Dos dobleces por la mitad: el agujero se refleja en el segundo doblez (2) y luego en el primero (4). \textbf{Opción C.}
+\end{retoresuelto}
+\bitacora
+
+\evaluacion
+\begin{ejercicios}
+\item Mirando al sur, una persona gira a la izquierda dos veces. ¿Hacia dónde mira?
+\opciones{norte}{este}{oeste}{sur}
+\sol{A. (8.1)}
+\item Vista de arriba con alturas 2 3 / 1 4. ¿Cuántos cubos hay?
+\opciones{10}{8}{4}{24}
+\sol{A. (8.2)}
+\item En un dado se ven arriba el 5 y al frente el 3. ¿Cuánto suman la cara de abajo y la de atrás?
+\opciones{6}{8}{7}{9}
+\sol{A. Abajo 2, atrás 4. (8.3)}
+\item Un reloj visto en el espejo marca las 10:10. La hora real es
+\opciones{1:50}{2:10}{10:50}{1:10}
+\sol{A. (8.4)}
+\item Una hoja se dobla tres veces por la mitad y se le hacen dos agujeros alejados de los bordes. Al desdoblarla hay
+\opciones{8}{16}{6}{32}
+\sol{B. $2 \cdot 2^3$. (8.4)}
+\end{ejercicios}

@@ -1,0 +1,243 @@
+% Libro 2 · Mundo 9 · Tablas y gráficas (app: pu-graficas)
+\mundo{Tablas y gráficas}{pu-graficas}{Una gráfica es un texto hecho de formas: barras, líneas, porciones. El examen pide
+leerla con precisión (¿cuánto?, ¿cuándo?, ¿qué porcentaje?), calcular medidas que resumen datos (promedio, mediana,
+moda) y, sobre todo, distinguir lo que la gráfica \emph{muestra} de lo que solo parece insinuar.}{%
+\item \textbf{9.1} Leer gráficas
+\item \textbf{9.2} Promedio, mediana y moda
+\item \textbf{9.3} Qué se puede concluir}
+
+\leccion{pu-gr-1}{Leer gráficas}{Juego de las barras que se arrastran hasta el valor.}
+
+\begin{reto}
+La gráfica muestra las ventas de una tienda (en millones de pesos). ¿En qué porcentaje aumentaron las ventas de enero a
+abril?
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=62mm,height=36mm,ybar,bar width=7mm,ymin=0,ymax=45,symbolic x coords={Ene,Feb,Mar,Abr},xtick=data,
+  axis lines*=left,ytick={0,10,20,30,40},tick label style={font=\scriptsize,color=white},axis line style={white},
+  nodes near coords,every node near coord/.append style={font=\scriptsize,color=white}]
+  \addplot[fill=zlime,draw=none] coordinates {(Ene,20) (Feb,35) (Mar,25) (Abr,40)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\opciones{$20\,\%$}{$50\,\%$}{$100\,\%$}{$200\,\%$}
+\end{reto}
+
+\subsection{La idea: primero los ejes, después los datos}
+Antes de mirar las barras, lee el \clave{título}, los \clave{ejes} y las \clave{unidades}: ¿miles o millones? ¿porcentaje
+o cantidad? ¿el eje empieza en cero? Un eje que no empieza en cero exagera las diferencias: una barra que se ve el doble
+de alta puede representar solo un $10\,\%$ más.
+
+\subsubsection{Tipos de gráfica}
+\begin{itemize}
+  \item \clave{Barras}: comparan cantidades entre categorías.
+  \item \clave{Líneas}: muestran cambios en el tiempo; la pendiente indica qué tan rápido.
+  \item \clave{Circular} (torta): muestra partes de un todo; cada porción es un porcentaje y un ángulo
+  ($1\,\% = 3.6^\circ$).
+  \item \clave{Tablas}: dan los valores exactos; a veces conviene agregar una columna con totales.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=60mm,height=38mm,ymin=0,ymax=50,xmin=0.5,xmax=6.5,xtick={1,...,6},axis lines=left,
+  tick label style={font=\scriptsize},xlabel={\scriptsize mes},ylabel={\scriptsize temperatura},grid=major,grid style={zline}]
+  \addplot[zolive,line width=1pt,mark=*,mark size=1.4pt] coordinates {(1,18) (2,22) (3,30) (4,31) (5,26) (6,20)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+En la gráfica de líneas, el mayor aumento está entre los meses 2 y 3 (la pendiente más empinada), aunque el valor más alto
+se alcanza en el mes 4.
+
+\begin{regla}
+\begin{itemize}
+  \item Lee título, ejes y unidades antes que los datos.
+  \item Cambio porcentual $= \tfrac{\text{final} - \text{inicial}}{\text{inicial}} \cdot 100\,\%$.
+  \item En una torta: porcentaje $\times 3.6^\circ =$ ángulo; porcentaje $\times$ total $=$ cantidad.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[De torta a cantidad]
+En una torta, la porción de «transporte» mide $72^\circ$. Si el gasto total es \$2\,500\,000, ¿cuánto se gasta en
+transporte?
+\solucion $72^\circ$ es $\tfrac{72}{360} = \tfrac15 = 20\,\%$: \$500\,000.
+\end{ejemplo}
+
+\begin{ejemplo}[La mayor variación]
+En la gráfica de ventas del reto, ¿entre qué meses hubo la mayor caída?
+\solucion Solo hay una caída: de febrero (35) a marzo (25), 10 millones.
+\end{ejemplo}
+
+\begin{trampa}
+Comparar alturas de barras sin mirar dónde empieza el eje, o confundir «aumentó en 20 millones» con «aumentó un $20\,\%$».
+\end{trampa}
+
+\taller
+\piso{Entrena}{leer}
+\begin{ejercicios}
+\item Con la gráfica de ventas: ¿cuál fue el promedio mensual? \sol{$\tfrac{120}{4} = 30$ millones.}
+\item ¿Qué ángulo corresponde en una torta a una porción del $15\,\%$? \sol{$54^\circ$.}
+\item En la gráfica de temperaturas, ¿en cuántos meses bajó la temperatura respecto al mes anterior? \sol{Dos (meses 5 y 6).}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Con la gráfica de ventas, ¿qué fracción de las ventas de los cuatro meses corresponde a febrero?
+\opciones{$\tfrac{7}{24}$}{$\tfrac{35}{100}$}{$\tfrac14$}{$\tfrac13$}
+\sol{A. $\tfrac{35}{120}$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+De 20 a 40 millones: aumentó 20 sobre 20, es decir, $100\,\%$ (las ventas se duplicaron). \textbf{Opción C.}
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-gr-2}{Promedio, mediana y moda}{Juego de la balanza de datos.}
+
+\begin{reto}
+Los datos son: 3, 7, 7, 2, 9, 4, 7, 5. ¿Cuál afirmación es correcta?
+\opcionesd{media $<$ mediana $<$ moda}{moda $<$ media $<$ mediana}{mediana $<$ media $<$ moda}{las tres son iguales}
+\end{reto}
+
+\subsection{La idea: tres maneras de decir «lo típico»}
+\begin{itemize}
+  \item La \clave{media} (promedio) reparte todo por igual: suma $\div$ cantidad. Es sensible a los valores extremos.
+  \item La \clave{mediana} es el valor del medio cuando los datos se ordenan (con una cantidad par, el promedio de los dos
+  del medio). Los extremos no la mueven.
+  \item La \clave{moda} es el valor que más se repite. Puede haber varias o ninguna.
+\end{itemize}
+
+\subsubsection{Un caso que lo muestra todo}
+Salarios de una pequeña empresa (en millones): 1.5, 1.5, 1.5, 2, 2.5 y 12 (el del dueño). Media: $\tfrac{21}{6} = 3.5$;
+mediana: $\tfrac{1.5 + 2}{2} = 1.75$; moda: 1.5. Decir «el salario promedio es 3.5 millones» es cierto pero engañoso:
+cinco de seis ganan menos.
+
+\subsubsection{Rango}
+El \clave{rango} es la diferencia entre el mayor y el menor; mide qué tan dispersos están los datos.
+
+\begin{regla}
+\begin{itemize}
+  \item Media $= \tfrac{\sum x}{n}$. Mediana: ordenar primero. Moda: el más frecuente.
+  \item Con datos en tabla de frecuencias, la media es $\tfrac{\sum x \cdot f}{\sum f}$.
+  \item Un valor extremo mueve la media mucho más que la mediana.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Tabla de frecuencias]
+En una encuesta sobre hermanos: 0 hermanos, 4 personas; 1, 8; 2, 6; 3, 2. Halla media, mediana y moda.
+\solucion Media: $\tfrac{0 + 8 + 12 + 6}{20} = 1.3$. Mediana: con 20 datos, los lugares 10 y 11; los primeros 4 son 0 y
+los siguientes 8 son 1 (lugares 5 a 12): mediana 1. Moda: 1.
+\end{ejemplo}
+
+\begin{ejemplo}[Cambiar un dato]
+Si en 2, 4, 6, 8, 10 el 10 se cambia por 50, ¿qué pasa con la media y la mediana?
+\solucion La media pasa de 6 a 14; la mediana sigue en 6.
+\end{ejemplo}
+
+\begin{trampa}
+Calcular la mediana sin ordenar los datos.
+\end{trampa}
+
+\taller
+\piso{Entrena}{calcular}
+\begin{ejercicios}
+\item Media, mediana y moda de 5, 1, 4, 4, 6. \sol{4, 4 y 4.}
+\item Mediana de 12, 3, 8, 15, 9, 10. \sol{Ordenados: 3, 8, 9, 10, 12, 15: $\tfrac{9 + 10}{2} = 9.5$.}
+\item ¿Qué número hay que agregar a 4, 6, 9 para que la media sea 7? \sol{$28 - 19 = 9$.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Cinco números tienen media 10 y mediana 12. Si el mayor aumenta 5, entonces
+\opcionesd{la media sube 1 y la mediana no cambia}{las dos suben 1}{la media sube 5}{la mediana sube 5}
+\sol{A. La suma sube 5: la media sube $\tfrac55 = 1$; el del medio no cambia.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Media: $\tfrac{44}{8} = 5.5$. Ordenados: 2, 3, 4, 5, 7, 7, 7, 9: mediana $\tfrac{5 + 7}{2} = 6$. Moda: 7. Entonces
+$5.5 < 6 < 7$. \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-gr-3}{Qué se puede concluir}{Juego de las afirmaciones que la gráfica sostiene o no.}
+
+\begin{reto}
+Se preguntó a 200 estudiantes por su materia favorita: Matemáticas $30\,\%$, Lenguaje $25\,\%$, Ciencias $20\,\%$,
+Sociales $15\,\%$ y Arte $10\,\%$. ¿Cuál afirmación se puede concluir de los datos?
+\opcionesl{60 estudiantes prefieren Matemáticas.}{Matemáticas es la materia más fácil.}{Más de la mitad prefiere Ciencias o Lenguaje.}{A ningún estudiante le gusta Arte.}
+\end{reto}
+
+\subsection{La idea: lo que dicen los datos y lo que no}
+Las preguntas de «se puede concluir» tienen opciones de cuatro tipos:
+\begin{enumerate}
+  \item \clave{Correctas}: se calculan o se leen directamente de los datos.
+  \item \clave{Falsas}: contradicen los datos (un cálculo mal hecho, una lectura equivocada).
+  \item \clave{No se sabe}: pueden ser ciertas, pero los datos no lo dicen (causas, opiniones, datos de otras personas).
+  \item \clave{Exageradas}: generalizan («todos», «nunca») a partir de una muestra.
+\end{enumerate}
+Solo el tipo 1 es la respuesta. El error típico es elegir una opción del tipo 3 porque suena razonable.
+
+\subsubsection{Correlación no es causa}
+Si en una gráfica los barrios con más parques tienen menos estrés, no se puede concluir que los parques \emph{causen}
+menos estrés: puede haber otra explicación (más ingresos, por ejemplo). Los datos muestran que van juntos, no por qué.
+
+\begin{regla}
+\begin{itemize}
+  \item ¿Se puede calcular o leer de la gráfica? Entonces se puede concluir.
+  \item ¿Habla de causas, gustos, intenciones o de otras poblaciones? Probablemente no se puede.
+  \item Desconfía de «todos», «nadie», «siempre», «el mejor».
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Una afirmación que no se sabe]
+Con los datos del reto: «A los hombres les gustan más las Matemáticas que a las mujeres». ¿Se puede concluir?
+\solucion No: los datos no separan por sexo.
+\end{ejemplo}
+
+\begin{ejemplo}[Una afirmación calculable]
+«Los que prefieren Sociales o Arte son la mitad de los que prefieren Matemáticas o Lenguaje.» ¿Es cierta?
+\solucion Sociales o Arte: $25\,\%$; Matemáticas o Lenguaje: $55\,\%$. La mitad de 55 es 27.5, no 25: es falsa.
+\end{ejemplo}
+
+\begin{trampa}
+Escoger lo que uno cree cierto en la vida real en vez de lo que los datos permiten afirmar.
+\end{trampa}
+
+\taller
+\piso{Entrena}{concluir}
+\begin{ejercicios}
+\item Con los datos del reto, ¿cuántos estudiantes más prefieren Lenguaje que Sociales? \sol{$10\,\%$ de 200: 20.}
+\item ¿Se puede concluir que los 200 estudiantes son de un mismo colegio? \sol{No: los datos no lo dicen.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Una gráfica muestra que en una ciudad las ventas de helado y los ahogamientos aumentan en los mismos meses. Se puede concluir que
+\opcionesl{comer helado causa ahogamientos.}{las dos cosas tienden a aumentar juntas en esa ciudad.}{prohibir el helado reduciría los ahogamientos.}{en todas las ciudades pasa lo mismo.}
+\sol{B. Van juntas (probablemente por el calor), pero eso no muestra causa ni se generaliza a otras ciudades.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+El $30\,\%$ de 200 es 60: se calcula directamente. B es una opinión, C es falsa ($45\,\%$ no es más de la mitad) y D es
+falsa ($10\,\%$ prefiere Arte, y además «preferir» no es lo mismo que «gustar»). \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+\evaluacion
+\begin{ejercicios}
+\item En una torta, una porción de $90^\circ$ representa
+\opciones{$25\,\%$}{$90\,\%$}{$9\,\%$}{$30\,\%$}
+\sol{A. (9.1)}
+\item Una gráfica de líneas muestra que una población pasó de 800 a 1\,000 habitantes. El aumento porcentual fue
+\opciones{$20\,\%$}{$25\,\%$}{$200\,\%$}{$80\,\%$}
+\sol{B. $\tfrac{200}{800}$. (9.1)}
+\item La mediana de 7, 2, 9, 4, 6 es
+\opciones{4}{6}{5.6}{7}
+\sol{B. Ordenados: 2, 4, 6, 7, 9. (9.2)}
+\item Las notas de un curso son: 3.0 (5 estudiantes), 4.0 (10) y 5.0 (5). La media es
+\opciones{4.0}{3.5}{4.5}{12}
+\sol{A. $\tfrac{15 + 40 + 25}{20}$. (9.2)}
+\item Una encuesta en un barrio muestra que el $70\,\%$ de los encuestados usa bus. Se puede concluir que
+\opcionesl{el $70\,\%$ de los encuestados de ese barrio usa bus.}{el $70\,\%$ de la ciudad usa bus.}{el bus es el mejor transporte.}{nadie usa bicicleta.}
+\sol{A. (9.3)}
+\end{ejercicios}

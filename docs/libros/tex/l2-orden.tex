@@ -1,0 +1,349 @@
+% Libro 2 · Mundo 1 · Acertijos de orden y asignación (app: pu-orden)
+\mundo{Acertijos de orden y asignación}{pu-orden}{Cinco personas en una fila, seis alrededor de una mesa, tres amigas con
+tres carreras y tres barrios. Estos acertijos no piden cuentas sino \emph{orden}: un dibujo bien hecho y una lista de lo
+que se va descartando. Son de las preguntas más seguras del examen para quien tiene método.}{%
+\item \textbf{1.1} Orden en línea
+\item \textbf{1.2} Orden circular
+\item \textbf{1.3} Tablas de doble entrada
+\item \textbf{1.4} Condiciones: tiene que, podría, no puede}
+
+% ------------------------------------------------------------------
+\leccion{pu-or-1}{Orden en línea}{Juego de la fila que se arma con fichas.}
+
+\begin{reto}
+Seis corredores llegan a la meta, sin empates. Ana llegó antes que Beto pero después de Carla. Dani llegó justo después
+de Beto. Eva llegó justo antes que Carla. Fito no fue ni el primero ni el último. ¿Cuál afirmación es
+\emph{necesariamente} cierta?
+\opcionesd{Ana llegó tercera.}{Dani llegó de última.}{Fito llegó cuarto.}{Carla llegó primera.}
+\end{reto}
+
+\subsection{La idea: casillas y bloques}
+El primer paso es siempre el mismo: dibujar una fila de casillas numeradas y decidir qué significa «antes» (más cerca
+de la casilla 1). Luego las pistas se clasifican:
+\begin{itemize}
+  \item \clave{Fijas}: «Óscar es el último». Se ponen de inmediato.
+  \item \clave{Bloques}: «Dani justo después de Beto». Se dibujan como una ficha doble \fbox{B\,D} que se mueve junta.
+  \item \clave{Relativas}: «Ana antes que Beto». Forman cadenas: $C < A < B$.
+  \item \clave{Negativas}: «Fito no es el primero». Tachan casillas.
+\end{itemize}
+
+Se empieza por las fijas y los bloques, que dejan menos libertad, y se termina con las negativas, que descartan.
+
+\begin{center}
+\begin{tikzpicture}[x=10mm,y=8mm,font=\small]
+  \foreach \i in {1,...,6}{\draw[zline,line width=.6pt] (\i,0) rectangle ++(.9,.9); \node[font=\scriptsize,text=zmute] at (\i+.45,-.3) {\i};}
+  \foreach \i/\t in {1/E,2/C}{\fill[zlime!55] (\i,0) rectangle ++(.9,.9); \node at (\i+.45,.45) {\t};}
+  \foreach \i/\t in {5/B,6/D}{\fill[zsky!30] (\i,0) rectangle ++(.9,.9); \node at (\i+.45,.45) {\t};}
+  \node at (3.45,.45) {?}; \node at (4.45,.45) {?};
+  \node[right,font=\scriptsize,align=left] at (7.2,.45) {A y F ocupan 3 y 4,\\en cualquier orden};
+\end{tikzpicture}
+\end{center}
+
+\begin{regla}
+\begin{enumerate}
+  \item Dibuja la fila y fija el sentido.
+  \item Coloca fijas y bloques; une las relativas en cadenas.
+  \item Si hay dos posibilidades, \emph{escríbelas las dos} y sigue con ambas.
+  \item Para «necesariamente cierto», la afirmación debe cumplirse en \emph{todas} las posibilidades.
+\end{enumerate}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Edificio de cinco pisos]
+En un edificio de 5 pisos vive una familia por piso: Gómez, Ruiz, Toro, Vélez y Zea. Los Ruiz viven más arriba que los
+Toro y más abajo que los Zea. Los Gómez viven en el piso 1. Los Vélez viven justo encima de los Zea. ¿En qué piso viven
+los Ruiz?
+\solucion Gómez en 1. Cadena: Toro $<$ Ruiz $<$ Zea, y Vélez justo encima de Zea. Quedan los pisos 2 a 5 para Toro,
+Ruiz, Zea, Vélez, en ese orden obligado: Toro 2, Ruiz 3, Zea 4, Vélez 5. Los Ruiz, en el 3.
+\end{ejemplo}
+
+\begin{ejemplo}[Dos posibilidades]
+Cuatro libros en un estante: Álgebra, Biología, Cálculo y Derecho. Álgebra no está en los extremos. Biología está justo a
+la derecha de Cálculo. Derecho está a la izquierda de Álgebra. ¿Qué libro puede estar en el extremo derecho?
+\solucion Álgebra en 2 o 3. Si Álgebra está en 2, Derecho en 1 y el bloque C\,B en 3-4: \textsf{D A C B}. Si Álgebra
+está en 3, Derecho en 1 o 2 y el bloque C\,B necesita dos casillas juntas libres: con D en 1 quedan 2 y 4 (separadas); con
+D en 2 quedan 1 y 4 (separadas). No cabe. Única: \textsf{D A C B}. En el extremo derecho está Biología.
+\end{ejemplo}
+
+\begin{trampa}
+Confundir «antes» con «justo antes». «Ana llegó antes que Beto» permite que haya gente entre ellos; «justo antes» no.
+\end{trampa}
+
+\begin{atajo}
+En preguntas de «necesariamente», busca una posibilidad que contradiga cada opción: la que no se deja contradecir es
+la respuesta.
+\end{atajo}
+
+\taller
+\piso{Entrena}{filas}
+\begin{ejercicios}
+\item En una fila de 5, Juan está en el centro, Karen justo delante de Juan, Lina de última y Mario delante de Nelly. ¿Quién es el primero? \sol{Posiciones 1 a 5: Karen 2, Juan 3, Lina 5. Mario y Nelly ocupan 1 y 4, con Mario delante: Mario 1.}
+\item En una carrera de 4, Pía no ganó, Quino llegó justo después de Rita y Sara llegó antes que Pía pero después de Quino. ¿Quién ganó? \sol{Cadena R Q … S … P: el orden es R, Q, S, P. Ganó Rita.}
+\item Cinco casas en una calle, numeradas de izquierda a derecha. La azul está entre la roja y la verde (no necesariamente juntas). La blanca está en un extremo y la amarilla junto a la blanca. La roja está en la casa 3. ¿Dónde puede estar la verde? \sol{Blanca en 1 o 5 y amarilla a su lado. Si blanca 1, amarilla 2, roja 3: azul y verde en 4 y 5 con la azul entre roja y verde: azul 4, verde 5. Si blanca 5, amarilla 4: azul 2 y verde 1. Verde en 1 o en 5.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Con las pistas del ejercicio 3, ¿cuál es necesariamente cierta?
+\opcionesd{La azul está junto a la roja.}{La verde está en la casa 5.}{La blanca está en la casa 1.}{La amarilla está en la casa 2.}
+\sol{A. En los dos casos la azul (4 o 2) está junto a la roja (3).}
+\item Seis estudiantes presentan exposiciones, una por hora. Tomás expone antes que Ulises; Valeria expone justo después de Tomás; Walter expone de tercero. Si Ulises expone de quinto, ¿en qué hora puede exponer Tomás?
+\opciones{solo en la 1}{en la 1 o en la 4}{solo en la 2}{en la 1 o en la 2}
+\sol{A. Walter ocupa la hora 3 y Ulises la 5. El bloque T\,V necesita dos horas seguidas libres antes de la 5: solo 1-2 (con 4-5 Valeria chocaría con Ulises). Tomás expone en la 1.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Bloques \fbox{E\,C} y \fbox{B\,D}, y la cadena $C < A < B$: \textsf{E C … A … B D}. Fito no puede ir en los extremos, así
+que entra entre C y A o entre A y B: \textsf{E C F A B D} o \textsf{E C A F B D}. En ambos, Dani es el último.
+Ana puede ser 3.ª o 4.ª y Fito 3.º o 4.º; Carla es 2.ª. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-or-2}{Orden circular}{Juego de la mesa redonda.}
+
+\begin{reto}
+Seis amigos se sientan alrededor de una mesa redonda con seis puestos iguales. Ana está frente a Beto. Carlos se sienta
+junto a Ana. Elena está frente a Carlos. Diana se sienta junto a Beto. ¿Quién está frente a Diana?
+\opciones{Ana}{Elena}{Fabio}{Carlos}
+\end{reto}
+
+\subsection{La idea: fija a una persona}
+En una mesa redonda, girar a todos un puesto no cambia nada: las relaciones («frente a», «junto a», «a la derecha de»)
+siguen iguales. Por eso el primer paso es \clave{fijar} a una persona en un puesto y ubicar a las demás respecto a ella.
+
+\begin{center}
+\begin{tikzpicture}[font=\scriptsize]
+  \draw[zline,line width=.8pt] (0,0) circle (1.1);
+  \foreach \i/\t in {0/1,1/2,2/3,3/4,4/5,5/6}{\node[draw=zolive,circle,minimum size=6mm,fill=white] at (90-\i*60:1.55) {\t};}
+  \draw[zcoral,dashed] (90:1.25) -- (270:1.25);
+  \node[right,align=left] at (2.3,0) {Con 6 puestos, frente al\\puesto $k$ está el $k + 3$.\\Junto al 1 están el 2 y el 6.};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Derecha e izquierda}
+Si las personas miran hacia el centro de la mesa, la derecha de alguien es el puesto siguiente en el sentido de las
+manecillas del reloj… o en el contrario, según cómo esté dibujado. Para no equivocarse: \emph{ponte en su silla}. Mirando
+al centro, tu mano derecha queda hacia un lado fijo; en el dibujo de arriba (vista desde el techo), la derecha de quien
+está en el puesto 1 (arriba, mirando hacia abajo) es el puesto 6.
+
+\begin{regla}
+\begin{itemize}
+  \item Fija a la persona con más pistas en el puesto 1.
+  \item Con $n$ puestos (par), frente al puesto $k$ está el $k + \tfrac n2$.
+  \item Una pista de «junto a» deja dos opciones: si nada más las distingue, por simetría basta estudiar una.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Cuatro en una mesa cuadrada]
+Cuatro amigos, uno en cada lado de una mesa cuadrada: Pedro frente a Quique, Rosa a la derecha de Pedro. ¿Quién está a
+la izquierda de Pedro?
+\solucion Pedro y Quique enfrentados; Rosa ocupa uno de los otros dos lados (el de la derecha de Pedro). El que queda,
+Saúl, está a la izquierda de Pedro.
+\end{ejemplo}
+
+\begin{ejemplo}[Ocho puestos]
+Ocho personas en una mesa redonda. Entre Juan y Kelly hay exactamente dos personas (por el lado más corto). ¿Cuántas
+personas hay entre ellos por el otro lado?
+\solucion Además de Juan y Kelly son 6 personas; si 2 están por un lado, 4 están por el otro.
+\end{ejemplo}
+
+\begin{trampa}
+Fijar a dos personas a la vez en puestos arbitrarios. Solo la primera se puede fijar libremente; las demás se ubican
+según las pistas.
+\end{trampa}
+
+\taller
+\piso{Entrena}{mesas}
+\begin{ejercicios}
+\item Cinco amigos en una mesa redonda de 5 puestos: Lía junto a Mía y a Nía; Oto junto a Nía. ¿Quién está junto a Pía? \sol{Orden circular Mía, Lía, Nía, Oto, Pía (cerrando con Mía): Pía está junto a Oto y a Mía.}
+\item En una mesa de 6, ¿de cuántas maneras puede sentarse una pareja frente a frente si los demás puestos no importan? \sol{Hay 3 pares de puestos enfrentados y la pareja puede intercambiarse: 6 maneras (si los puestos están numerados).}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Seis personas en una mesa redonda: Q frente a R; S junto a Q y junto a T; U frente a S. ¿Quién está frente a T?
+\opciones{Q}{V}{U}{R}
+\sol{B. Q en 1, R en 4. S junto a Q: 2 (por simetría). T junto a S: 3. U frente a S: 5. Queda V en 6, frente a T (3).}
+\item Ocho caballeros en una mesa redonda; cada uno estrecha la mano solo a quienes \emph{no} tiene al lado. ¿Cuántos apretones hay?
+\opciones{20}{28}{16}{24}
+\sol{A. Cada uno saluda a 5: $\tfrac{8 \cdot 5}{2} = 20$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Ana en 1, Beto en 4. Carlos junto a Ana: en 2 (el 6 es simétrico). Elena frente a Carlos: 5. Diana junto a Beto: 3 o 5,
+y 5 está ocupado: 3. Fabio en 6. Frente a Diana (3) está el 6: Fabio. \textbf{Opción C.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-or-3}{Tablas de doble entrada}{Juego de la tabla con chulos y equis.}
+
+\begin{reto}
+Laura, Marta y Nubia estudian Medicina, Derecho e Ingeniería (una carrera cada una) y viven en Bello, Envigado e Itagüí
+(un municipio cada una). La de Medicina vive en Envigado. Laura no vive en Bello. Marta vive en Itagüí. La que vive en
+Bello no estudia Ingeniería. ¿Qué estudia Nubia?
+\opciones{Medicina}{Derecho}{Ingeniería}{No se puede saber}
+\end{reto}
+
+\subsection{La idea: una ✓ por fila y por columna}
+Cuando hay que emparejar elementos de dos o más grupos, la herramienta es una \clave{tabla de doble entrada}: personas en
+las filas, opciones en las columnas. Cada pista pone ✗ o ✓. Como cada persona tiene exactamente una opción y cada
+opción una persona, cuando se pone un ✓ se tacha el resto de su fila y de su columna; cuando en una fila queda una sola
+casilla libre, esa es el ✓.
+
+\begin{center}\small
+\begin{tabular}{l|ccc|ccc}
+ & Med & Der & Ing & Bello & Env & Itag\\\hline
+Laura & ✓ & ✗ & ✗ & ✗ & ✓ & ✗\\
+Marta & ✗ &  &  & ✗ & ✗ & ✓\\
+Nubia & ✗ &  &  & ✓ & ✗ & ✗\\
+\end{tabular}
+\end{center}
+
+Con tres categorías (persona, carrera, municipio), las pistas que mezclan dos categorías («la de Medicina vive en
+Envigado») se usan para \emph{transportar} información de una tabla a la otra.
+
+\begin{regla}
+\begin{itemize}
+  \item Una ✓ por fila y por columna en cada bloque.
+  \item Fila o columna con una sola casilla libre: ✓ obligado.
+  \item Las pistas negativas son las más útiles: tachan.
+  \item Las pistas cruzadas («la de X vive en Y») conectan los bloques.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Mascotas]
+Andrés, Bruno y César tienen un perro, un gato y un loro. Andrés es alérgico a los gatos. El dueño del loro es vecino de
+Bruno. César no tiene perro. Bruno no tiene perro. ¿Quién tiene el loro?
+\solucion Bruno no tiene el loro (es vecino de su dueño) ni el perro: tiene el gato. César no tiene perro ni gato: tiene
+el loro. Andrés, el perro (y no tiene gato, como exige su alergia).
+\paso{Comprobación de unicidad.} Sin la última pista habría dos soluciones (César con loro y Andrés con perro, o Andrés con
+loro y César con gato). Cuando llegues a dos soluciones, revisa si te faltó usar una pista.
+\end{ejemplo}
+
+\begin{trampa}
+Usar una pista positiva solo en un sentido. «La de Medicina vive en Envigado» también dice que quien vive en Envigado
+estudia Medicina, y que nadie de Bello o Itagüí estudia Medicina.
+\end{trampa}
+
+\taller
+\piso{Entrena}{tablas}
+\begin{ejercicios}
+\item Tres hermanos (Iván, José, Kevin) tienen 10, 12 y 15 años. Iván es mayor que José. Kevin no es el mayor. José no es el menor. ¿Cuántos años tiene Kevin? \sol{José no es el menor y es menor que Iván: José 12, Iván 15. Kevin 10.}
+\item Cuatro amigas visten de rojo, azul, verde y negro. Ana no viste de rojo ni de negro. Bea viste de verde. Cata no viste de rojo. ¿De qué color viste Dora? \sol{Bea verde. Ana: azul (ni rojo ni negro ni verde). Cata: negro. Dora: rojo.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Pablo, Raúl y Saúl son médico, ingeniero y abogado. El ingeniero es el menor de los tres. Pablo es el mayor. Saúl es mayor que Raúl. Saúl no es abogado. ¿Qué es Saúl?
+\opciones{médico}{ingeniero}{abogado}{no se puede saber}
+\sol{A. Por edades, Pablo $>$ Saúl $>$ Raúl: Raúl es el menor, luego el ingeniero. Saúl no es abogado: es médico (y Pablo abogado).}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Marta vive en Itagüí; Laura no vive en Bello, así que vive en Envigado; Nubia vive en Bello. Quien vive en Envigado
+estudia Medicina: Laura. Quien vive en Bello (Nubia) no estudia Ingeniería, así que estudia Derecho, y Marta Ingeniería.
+\textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-or-4}{Condiciones: tiene que, podría, no puede}{Juego de los casos que se tachan.}
+
+\begin{reto}
+De cinco personas (P, Q, R, S y T) se elige un comité de tres con estas condiciones: si P está, Q no está; R y S están
+los dos o ninguno de los dos; T tiene que estar. ¿Cuál comité es posible?
+\opciones{P, Q, T}{R, S, T}{P, R, T}{Q, S, T}
+\end{reto}
+
+\subsection{La idea: tres preguntas distintas}
+En los problemas con condiciones, el examen pregunta casi siempre una de estas cosas:
+\begin{itemize}
+  \item \clave{Tiene que} (necesariamente): ocurre en \emph{todas} las configuraciones válidas.
+  \item \clave{Podría} (es posible): ocurre en \emph{al menos una}.
+  \item \clave{No puede}: no ocurre en \emph{ninguna}.
+\end{itemize}
+Cuando hay pocas configuraciones, lo más seguro es \emph{listarlas todas} y revisar cada opción contra la lista.
+
+\subsubsection{Leer bien el «si…, entonces…»}
+«Si P está, Q no está» solo dice algo cuando P está. Si P no está, Q puede estar o no. Tampoco dice «si Q no está,
+entonces P está». Lo único equivalente es su \clave{contrarrecíproco}: «si Q está, P no está».
+
+\begin{regla}
+\begin{itemize}
+  \item «Si A, entonces B» equivale a «si no B, entonces no A». No equivale a «si B, entonces A».
+  \item «A o B, pero no ambos»: exactamente uno.
+  \item «A solo si B»: si A, entonces B.
+  \item Para «podría», basta un ejemplo; para «tiene que», hace falta que no haya contraejemplo.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Lista de casos]
+Con las condiciones del reto, ¿qué persona tiene que estar en el comité, además de T?
+\solucion Comités de 3 con T: faltan 2 de P, Q, R, S. Con R y S juntos: \{R, S, T\}. Sin R ni S: dos de P, Q, que no
+pueden ir juntos: imposible. Hay un solo comité válido, \{R, S, T\}: R y S tienen que estar.
+\end{ejemplo}
+
+\begin{ejemplo}[Horario]
+Cuatro materias (A, B, C, D) se dictan de lunes a jueves, una por día. B va antes que D. A no va el lunes. C va el
+miércoles o el jueves. ¿Cuál podría ir el martes?
+\solucion Listado. Si C es miércoles: lunes, martes y jueves para A, B, D con A no lunes y B antes que D: (B, A, C, D),
+(B, D, C, A). Si C es jueves: lunes a miércoles para A, B, D: (B, A, D, C), (B, D, A, C). El martes puede ser A o D; nunca
+B ni C.
+\end{ejemplo}
+
+\begin{trampa}
+Leer «si P, entonces no Q» como «P y Q nunca están juntos, \emph{y} siempre está uno». La condición permite que no esté
+ninguno.
+\end{trampa}
+
+\taller
+\piso{Entrena}{casos}
+\begin{ejercicios}
+\item Con el horario del ejemplo, ¿qué día va necesariamente B? \sol{El lunes, en los cuatro casos.}
+\item En una fiesta, si va Carlos va Diana; si va Diana no va Ernesto. Ernesto fue. ¿Qué se puede concluir? \sol{Diana no fue (contrarrecíproco de la segunda), y entonces Carlos no fue (contrarrecíproco de la primera).}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Se eligen dos de cuatro libros (W, X, Y, Z). Si se elige W, se elige X. No se eligen Y y Z juntos. ¿Cuál pareja \emph{no} es posible?
+\opciones{X, Y}{W, X}{W, Y}{X, Z}
+\sol{C. Con W debe ir X, y solo caben dos.}
+\item Con las condiciones del ejercicio anterior, ¿cuál afirmación es necesariamente cierta?
+\opcionesd{Siempre se elige X.}{W nunca se elige.}{Se elige Y o Z.}{Si no se elige X, se eligen Y y Z.}
+\sol{A. Las parejas válidas son \{W, X\}, \{X, Y\} y \{X, Z\}: X está en todas. Sin X, solo quedarían \{Y, Z\} (prohibida) o parejas con W (que exige X).}
+\end{ejercicios}
+
+\begin{retoresuelto}
+A tiene P y Q juntos; C tiene R sin S; D tiene S sin R. Solo \{R, S, T\} cumple todo. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\evaluacion
+\begin{ejercicios}
+\item En una fila de 5, Ema está justo detrás de Fer, Gus es el primero, Hilda está detrás de Ema e Iris no es la última. ¿Quién es la última?
+\opciones{Hilda}{Ema}{Iris}{Fer}
+\sol{A. Gus 1; el bloque F\,E y Hilda detrás de Ema; Iris no última: Gus, Iris, Fer, Ema, Hilda o Gus, Fer, Ema, Iris, Hilda. En los dos, Hilda es última. (1.1)}
+\item Cuatro carros en un parqueadero en línea (1 a 4). El rojo está junto al azul. El blanco está en el puesto 1. El negro no está junto al blanco. ¿Dónde está el negro?
+\opciones{2}{3}{4}{3 o 4}
+\sol{C. Puestos 2, 3, 4 para rojo, azul, negro; negro no en 2. Si negro en 3, rojo y azul en 2 y 4: no son vecinos. Negro en 4. (1.1)}
+\item Cinco amigos se sientan en una mesa redonda de 5 puestos. Sofía no está junto a Tomás. ¿Cuántos vecinos tiene Sofía que no sean Tomás?
+\opciones{1}{2}{3}{4}
+\sol{B. Todos tienen dos vecinos. (1.2)}
+\item Seis personas en una mesa redonda: M frente a N; O junto a M; P frente a O; Q junto a N. ¿Quién está frente a Q?
+\opciones{M}{R}{O}{P}
+\sol{B. M en 1, N en 4, O en 2 (el 6 es simétrico), P en 5. Q junto a N: 3 (el 5 está ocupado). R queda en 6, frente al 3. (1.2)}
+\item Tres amigos (X, Y, Z) toman café, té y jugo. X no toma café. Y toma té. ¿Qué toma Z?
+\opciones{café}{té}{jugo}{no se sabe}
+\sol{A. X toma jugo. (1.3)}
+\item Ana, Bea y Cami tienen 17, 18 y 19 años. La de 18 es prima de Ana. Bea es menor que Cami. ¿Cuántos años tiene Ana?
+\opciones{17}{18}{19}{no se sabe}
+\sol{D. Ana no tiene 18 y Bea es menor que Cami. Si Ana tiene 17: Bea 18 y Cami 19. Si Ana tiene 19: Bea 17 y Cami 18. Las dos cumplen. (1.3)}
+\item Si Luis va al paseo, Mario no va. Mario fue al paseo. Entonces
+\opcionesd{Luis fue.}{Luis no fue.}{Luis pudo ir o no.}{Nadie más fue.}
+\sol{B. Contrarrecíproco. (1.4)}
+\item Se escogen 2 de 4 colores (azul, blanco, café, dorado). Si se escoge azul, no se escoge blanco. Café se escoge siempre. ¿Cuántas parejas son posibles?
+\opciones{1}{2}{3}{4}
+\sol{C. Café con azul, blanco o dorado. (1.4)}
+\end{ejercicios}

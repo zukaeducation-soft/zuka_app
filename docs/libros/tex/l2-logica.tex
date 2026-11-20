@@ -1,0 +1,462 @@
+% Libro 2 · Mundo 2 · Lógica proposicional (app: pu-logica)
+\mundo{Lógica proposicional}{pu-logica}{La lógica es la gramática del razonamiento: dice cuándo una conclusión se
+sigue de unas premisas y cuándo solo lo parece. En el examen aparece de forma explícita (tablas de verdad, negaciones,
+silogismos) y de forma escondida en casi todas las demás preguntas, cada vez que hay un «si…, entonces…» o un
+«todos».}{%
+\item \textbf{2.1} Conectivos y tablas de verdad
+\item \textbf{2.2} Negación y leyes de De Morgan
+\item \textbf{2.3} El condicional
+\item \textbf{2.4} Cuantificadores y silogismos
+\item \textbf{2.5} Verdad y mentira}
+
+% ------------------------------------------------------------------
+\leccion{pu-lo-1}{Conectivos y tablas de verdad}{Juego de los interruptores que encienden una lámpara.}
+
+\begin{reto}
+Si $p$ es verdadera y $q$ es falsa, ¿cuál de las siguientes proposiciones es verdadera?
+\opciones{$p \wedge q$}{$\neg p \vee q$}{$p \to q$}{$q \to p$}
+\end{reto}
+
+\subsection{La idea: circuitos que encienden}
+Una \clave{proposición} es una frase que es verdadera (V) o falsa (F): «7 es primo» lo es; «¿qué hora es?» no. Los
+\clave{conectivos} combinan proposiciones, y funcionan como interruptores:
+
+\begin{itemize}
+  \item $p \wedge q$ («$p$ y $q$»): interruptores en serie. Solo enciende si los dos están cerrados.
+  \item $p \vee q$ («$p$ o $q$»): en paralelo. Enciende si al menos uno está cerrado.
+  \item $\neg p$ («no $p$»): invierte.
+  \item $p \to q$ («si $p$, entonces $q$»): una promesa. Solo se rompe si se cumple $p$ y no $q$.
+  \item $p \leftrightarrow q$ («$p$ si y solo si $q$»): verdadera cuando las dos tienen el mismo valor.
+\end{itemize}
+
+\begin{center}\small
+\begin{tabular}{cc|ccccc}
+$p$ & $q$ & $p \wedge q$ & $p \vee q$ & $p \to q$ & $p \leftrightarrow q$ & $p \veebar q$\\\hline
+V & V & V & V & V & V & F\\
+V & F & F & V & \textbf{F} & F & V\\
+F & V & F & V & V & F & V\\
+F & F & F & F & V & V & F\\
+\end{tabular}
+\end{center}
+
+\subsubsection{¿Por qué $F \to$ cualquier cosa es V?}
+Piensa en la promesa «si ganas el examen, te invito a cine». Si no ganas, la promesa no se rompe, haya cine o no. El
+condicional solo es falso cuando el antecedente se cumple y el consecuente no.
+
+\subsubsection{Tautologías y contradicciones}
+Una \clave{tautología} es verdadera en todas las filas ($p \vee \neg p$); una \clave{contradicción}, falsa en todas
+($p \wedge \neg p$). Con $n$ proposiciones simples, la tabla tiene $2^n$ filas.
+
+\begin{regla}
+\begin{itemize}
+  \item $\wedge$: V solo si ambas V. $\vee$: F solo si ambas F.
+  \item $\to$: F solo en el caso V $\to$ F.
+  \item $\leftrightarrow$: V si coinciden. $\veebar$ (o exclusivo): V si difieren.
+  \item Una tabla con $n$ variables tiene $2^n$ filas.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Evaluar paso a paso]
+Si $p$ es V, $q$ es F y $r$ es V, ¿cuál es el valor de $(p \vee q) \to (q \wedge r)$?
+\solucion $p \vee q = $ V. $q \wedge r = $ F. V $\to$ F $=$ F.
+\end{ejemplo}
+
+\begin{ejemplo}[Deducir valores]
+Se sabe que $(p \wedge q) \to r$ es falsa. ¿Qué valores tienen $p$, $q$ y $r$?
+\solucion Un condicional falso exige antecedente V y consecuente F: $p \wedge q$ es V (así que $p$ y $q$ son V) y $r$
+es F.
+\end{ejemplo}
+
+\begin{ejemplo}[¿Tautología?]
+¿Es $(p \to q) \vee (q \to p)$ una tautología?
+\solucion Para que sea falsa, ambos condicionales serían falsos: $p$ V y $q$ F en el primero, $q$ V y $p$ F en el
+segundo. Imposible a la vez: es una tautología.
+\end{ejemplo}
+
+\begin{trampa}
+Leer el «o» del español como exclusivo. En lógica, $p \vee q$ es verdadera también cuando las dos lo son. El «o» exclusivo
+se escribe $\veebar$ y el examen lo dice expresamente («o…, pero no ambos»).
+\end{trampa}
+
+\begin{atajo}
+Para saber cuándo una proposición es falsa, busca la única fila que la hace falsa (en $\to$ y $\vee$) en vez de hacer la
+tabla completa.
+\end{atajo}
+
+\taller
+\piso{Calienta}{evaluar}
+\begin{ejercicios}[2]
+\item $p$ V, $q$ V: $\neg p \to q$. \sol{F $\to$ V $=$ V.}
+\item $p$ F, $q$ V: $p \leftrightarrow q$. \sol{F.}
+\item $p$ V, $q$ F: $\neg(p \wedge \neg q)$. \sol{$p \wedge \neg q = $ V; negada: F.}
+\item Filas de la tabla con 4 variables. \sol{16.}
+\end{ejercicios}
+\piso{Entrena}{deducir}
+\begin{ejercicios}
+\item Si $p \vee q$ es F, ¿qué valor tiene $p \to q$? \sol{$p$ y $q$ son F; F $\to$ F $=$ V.}
+\item Si $\neg(p \to q)$ es V, ¿qué valor tiene $q \to p$? \sol{$p$ V, $q$ F: F $\to$ V $=$ V.}
+\item ¿Es $p \wedge \neg p$ tautología, contradicción o contingencia? \sol{Contradicción.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si $p \to q$ es falsa, entonces es verdadera
+\opciones{$p \wedge q$}{$\neg p$}{$p \vee q$}{$q$}
+\sol{C. $p$ es V y $q$ es F; $p \vee q$ es V.}
+\item ¿Cuál es una tautología?
+\opcionesd{$p \to (p \vee q)$}{$(p \vee q) \to p$}{$p \wedge \neg q$}{$p \leftrightarrow \neg p$}
+\sol{A. Si $p$ es V, $p \vee q$ también.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+$p \wedge q$: F. $\neg p \vee q$: F $\vee$ F $=$ F. $p \to q$: V $\to$ F $=$ F. $q \to p$: F $\to$ V $=$ V.
+\textbf{Opción D.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-lo-2}{Negación y De Morgan}{Juego del espejo que niega frases.}
+
+\begin{reto}
+La negación de «Todos los estudiantes aprobaron y nadie se quejó» es
+\opcionesl{Algún estudiante no aprobó o alguien se quejó.}{Ningún estudiante aprobó y todos se quejaron.}{Algún estudiante no aprobó y alguien se quejó.}{Todos los estudiantes reprobaron o alguien se quejó.}
+\end{reto}
+
+\subsection{La idea: negar es decir exactamente lo contrario}
+La negación de una frase es la que es verdadera justo cuando la original es falsa. No es «lo opuesto extremo»: la negación
+de «hace calor» es «no hace calor», no «hace frío».
+
+\subsubsection{Leyes de De Morgan}
+Para negar un «y», basta que falle una de las partes; para negar un «o», tienen que fallar las dos:
+\[\neg(p \wedge q) \equiv \neg p \vee \neg q \qquad\qquad \neg(p \vee q) \equiv \neg p \wedge \neg q\]
+«No es cierto que estudie y trabaje» equivale a «no estudia o no trabaja».
+
+\subsubsection{Negar cuantificadores}
+\begin{center}\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Frase} & \textbf{Negación}\\\midrule
+Todos son $P$ & Algunos no son $P$ (al menos uno no es $P$)\\
+Algunos son $P$ & Ninguno es $P$\\
+Ninguno es $P$ & Algunos son $P$\\
+Algunos no son $P$ & Todos son $P$\\\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{Negar un condicional}
+$\neg(p \to q) \equiv p \wedge \neg q$. La negación de «si llueve, llevo paraguas» es «llueve y no llevo paraguas»
+(no «si no llueve, no llevo paraguas»).
+
+\begin{regla}
+\begin{itemize}
+  \item $\neg(p \wedge q) \equiv \neg p \vee \neg q$; $\neg(p \vee q) \equiv \neg p \wedge \neg q$.
+  \item $\neg(\text{todos } P) \equiv$ algunos no $P$; $\neg(\text{algunos } P) \equiv$ ninguno $P$.
+  \item $\neg(p \to q) \equiv p \wedge \neg q$. $\neg\neg p \equiv p$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Una negación doble]
+Niega: «Algunos médicos no usan gafas».
+\solucion La negación de «algunos no son» es «todos son»: «Todos los médicos usan gafas».
+\end{ejemplo}
+
+\begin{ejemplo}[De Morgan en contexto]
+Niega: «Juan habla inglés o francés».
+\solucion «Juan no habla inglés y no habla francés» (no habla ninguno).
+\end{ejemplo}
+
+\begin{ejemplo}[Condicional]
+Niega: «Si un número es par, entonces es divisible entre 4».
+\solucion «Hay un número par que no es divisible entre 4» (por ejemplo, 6). En lógica proposicional: $p \wedge \neg q$.
+\end{ejemplo}
+
+\begin{trampa}
+Negar «todos aprobaron» con «ninguno aprobó». Basta que uno no haya aprobado para que «todos aprobaron» sea falsa.
+\end{trampa}
+
+\taller
+\piso{Entrena}{negar}
+\begin{ejercicios}
+\item Niega: «Ningún perro maúlla». \sol{«Algún perro maúlla».}
+\item Niega: «Estudio y no veo televisión». \sol{«No estudio o veo televisión».}
+\item Niega: «Si como, no duermo». \sol{«Como y duermo».}
+\item ¿Es «no todos vinieron» lo mismo que «algunos no vinieron»? \sol{Sí.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item La negación de «Algunos números primos son pares» es
+\opcionesl{Algunos números primos no son pares.}{Ningún número primo es par.}{Todos los números primos son pares.}{Todos los números pares son primos.}
+\sol{B. (Y como 2 es primo y par, la original es verdadera y la negación falsa.)}
+\item $\neg(\neg p \vee q)$ equivale a
+\opciones{$p \wedge \neg q$}{$\neg p \wedge q$}{$p \vee \neg q$}{$p \to q$}
+\sol{A. De Morgan: $p \wedge \neg q$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+La frase es «$A$ y $B$» con $A$ = «todos aprobaron» y $B$ = «nadie se quejó». Su negación es «$\neg A$ o $\neg B$»:
+«algún estudiante no aprobó o alguien se quejó». \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-lo-3}{El condicional}{Juego de las cartas que hay que voltear.}
+
+\begin{reto}
+«Si llueve, el partido se cancela». Se sabe que el partido no se canceló. ¿Qué se puede concluir?
+\opcionesd{Llovió.}{No llovió.}{No se sabe si llovió.}{Se jugó bajo la lluvia.}
+\end{reto}
+
+\subsection{La idea: cuatro frases que se parecen}
+A partir de «si $p$, entonces $q$» se forman tres frases parecidas. Solo una dice lo mismo:
+
+\begin{center}\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Nombre} & \textbf{Forma} & \textbf{¿Equivale a $p \to q$?}\\\midrule
+Condicional & si $p$, entonces $q$ & ---\\
+Recíproco & si $q$, entonces $p$ & no\\
+Inverso & si no $p$, entonces no $q$ & no\\
+Contrarrecíproco & si no $q$, entonces no $p$ & \textbf{sí}\\\bottomrule
+\end{tabular}
+\end{center}
+
+«Si es un perro, es un mamífero» es verdadera; su recíproco («si es mamífero, es perro») es falso. Su contrarrecíproco
+(«si no es mamífero, no es perro») es tan verdadero como la original.
+
+\subsubsection{Las dos inferencias válidas y las dos trampas}
+\begin{itemize}
+  \item \clave{Modus ponens}: $p \to q$ y $p$; luego $q$. ✓
+  \item \clave{Modus tollens}: $p \to q$ y $\neg q$; luego $\neg p$. ✓
+  \item Afirmar el consecuente: $p \to q$ y $q$; luego $p$. ✗ (el partido se pudo cancelar por otra razón)
+  \item Negar el antecedente: $p \to q$ y $\neg p$; luego $\neg q$. ✗
+\end{itemize}
+
+\subsubsection{Otras formas de decir «si…, entonces»}
+«$p$ solo si $q$» es $p \to q$. «$q$ si $p$» es $p \to q$. «$p$ es suficiente para $q$» es $p \to q$; «$q$ es necesario
+para $p$» también. Y $p \to q \equiv \neg p \vee q$: «si estudias, apruebas» equivale a «no estudias o apruebas».
+
+\begin{regla}
+\begin{itemize}
+  \item $p \to q \equiv \neg q \to \neg p \equiv \neg p \vee q$.
+  \item Válidas: modus ponens y modus tollens. Inválidas: afirmar el consecuente y negar el antecedente.
+  \item «$p$ solo si $q$»: $p \to q$. «Suficiente» va a la izquierda de la flecha; «necesario», a la derecha.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Las cuatro cartas]
+Cada carta tiene una letra de un lado y un número del otro. Regla: «si una carta tiene vocal, al otro lado tiene número
+par». Se ven: \fbox{E}\ \fbox{K}\ \fbox{4}\ \fbox{7}. ¿Qué cartas hay que voltear para comprobar la regla?
+\solucion La E (modus ponens: debe tener par) y el 7 (modus tollens: si tuviera vocal, rompería la regla). La K no
+importa y el 4 tampoco (afirmar el consecuente no prueba nada). Se voltean E y 7.
+\end{ejemplo}
+
+\begin{ejemplo}[Solo si]
+«Te dan la beca solo si tu promedio es mayor que 4.5». Carlos tiene promedio 4.7. ¿Le dan la beca?
+\solucion La frase es «beca $\to$ promedio $> 4.5$». Saber el consecuente no permite concluir el antecedente: no se puede
+asegurar. Lo que sí se sabe: con promedio 4.3 no habría beca.
+\end{ejemplo}
+
+\begin{trampa}
+Afirmar el consecuente es el error más común en las preguntas de lógica del examen. Si la conclusión «vuelve» por la
+flecha al revés, desconfía.
+\end{trampa}
+
+\taller
+\piso{Entrena}{condicionales}
+\begin{ejercicios}
+\item Escribe el contrarrecíproco de «si estudio, apruebo». \sol{«Si no apruebo, no estudié».}
+\item «Si es cuadrado, es rectángulo». Una figura es rectángulo. ¿Es cuadrado? \sol{No se sabe (afirmar el consecuente).}
+\item Traduce: «Aprobar es necesario para graduarse». \sol{«Si me gradúo, aprobé»: graduarse $\to$ aprobar.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item ¿Cuál equivale a «si un número es múltiplo de 6, es par»?
+\opcionesl{Si un número es par, es múltiplo de 6.}{Si un número no es par, no es múltiplo de 6.}{Si un número no es múltiplo de 6, no es par.}{Un número es par y múltiplo de 6.}
+\sol{B. Contrarrecíproco.}
+\item «Si hay huelga, no hay clase. Si no hay clase, voy a la biblioteca.» Hoy no fui a la biblioteca. Entonces
+\opcionesd{hubo huelga}{hubo clase y no hubo huelga}{no hubo clase}{hubo huelga y clase}
+\sol{B. Por tollens: hubo clase; y de nuevo por tollens: no hubo huelga.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Es modus tollens: lluvia $\to$ cancelación; no hubo cancelación; luego no llovió. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-lo-4}{Cuantificadores y silogismos}{Juego de los diagramas que encierran.}
+
+\begin{reto}
+«Todos los ingenieros saben cálculo. Algunos músicos son ingenieros.» De estas premisas se concluye que
+\opcionesl{Algunos músicos saben cálculo.}{Todos los músicos saben cálculo.}{Algunos que saben cálculo no son músicos.}{Ningún músico sabe cálculo.}
+\end{reto}
+
+\subsection{La idea: dibujar conjuntos}
+Las frases con «todos», «algunos» y «ningún» hablan de conjuntos. Dibujarlas con círculos (diagramas de Euler) vuelve
+evidente qué se sigue y qué no:
+\begin{itemize}
+  \item «Todos los $A$ son $B$»: el círculo $A$ dentro del círculo $B$.
+  \item «Ningún $A$ es $B$»: círculos separados.
+  \item «Algunos $A$ son $B$»: círculos que se cruzan, con una marca $\times$ en la parte común (hay al menos uno ahí).
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[font=\scriptsize]
+  \draw[zolive,line width=.7pt] (0,0) circle (1.1) node[above=7mm]{saben cálculo};
+  \draw[zsky,line width=.7pt,fill=zsky!15] (0,-.2) circle (.55) node{ingenieros};
+  \draw[zcoral,line width=.7pt] (1.1,-.4) circle (.8);
+  \node[text=zcoral] at (1.95,-1.1) {músicos};
+  \node at (.42,-.42) {$\times$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Cómo se prueba que una conclusión \emph{no} se sigue}
+Basta dibujar un caso que cumpla las premisas y donde la conclusión falle. Si no puedes dibujar un contraejemplo de
+ninguna manera, la conclusión es válida.
+
+\begin{regla}
+\begin{itemize}
+  \item Una conclusión es válida si es verdadera en \emph{todos} los dibujos que respetan las premisas.
+  \item «Todos los $A$ son $B$» no dice que existan $A$, ni que todos los $B$ sean $A$.
+  \item De dos premisas con «algunos» no se concluye nada seguro.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Un silogismo inválido]
+«Todos los gatos son mamíferos. Algunos mamíferos nadan. Luego algunos gatos nadan.» ¿Es válido?
+\solucion No: se puede dibujar el círculo de gatos dentro de mamíferos y los que nadan en otra zona de mamíferos, sin
+tocar a los gatos.
+\end{ejemplo}
+
+\begin{ejemplo}[Ninguno]
+«Ningún reptil tiene pelo. Todos los perros tienen pelo.» ¿Qué se concluye?
+\solucion El círculo de perros está dentro de «tienen pelo», que no toca a los reptiles: ningún perro es reptil.
+\end{ejemplo}
+
+\begin{trampa}
+Concluir lo que es cierto en la vida real pero no se sigue de las premisas. El examen evalúa la \emph{forma} del
+argumento, no si la conclusión es verdad en el mundo.
+\end{trampa}
+
+\taller
+\piso{Entrena}{dibujar}
+\begin{ejercicios}
+\item «Todos los $A$ son $B$. Todos los $B$ son $C$.» ¿Qué se concluye de $A$ y $C$? \sol{Todos los $A$ son $C$.}
+\item «Algunos $A$ son $B$. Algunos $B$ son $C$.» ¿Se concluye que algunos $A$ son $C$? \sol{No: los $B$ que son $A$ pueden ser otros que los que son $C$.}
+\item «Ningún $A$ es $B$. Algunos $C$ son $A$.» ¿Qué se concluye? \sol{Algunos $C$ no son $B$ (los que son $A$).}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item «Todos los deportistas del club madrugan. Lucía no madruga.» Entonces
+\opcionesd{Lucía es del club.}{Lucía no es deportista del club.}{Lucía es deportista.}{No se puede concluir nada.}
+\sol{B. Si fuera deportista del club, madrugaría.}
+\item «Ningún político es honesto» y «algunos abogados son políticos». Se concluye:
+\opcionesl{Algunos abogados no son honestos.}{Ningún abogado es honesto.}{Algunos honestos son abogados.}{Todos los abogados son políticos.}
+\sol{A. Los abogados que son políticos no son honestos.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+El círculo de ingenieros está dentro del de «saben cálculo», y hay al menos un músico en el círculo de ingenieros. Ese
+músico sabe cálculo. \textbf{Opción A.} La C puede ser cierta pero no se sigue: quizás todos los que saben cálculo son
+músicos.
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-lo-5}{Verdad y mentira}{Juego de los guardianes que dicen la verdad o mienten.}
+
+\begin{reto}
+Tres personas, A, B y C, son veraces (siempre dicen la verdad) o mentirosas (siempre mienten). A dice: «B miente». B dice:
+«C miente». C dice: «A y B mienten». ¿Quiénes dicen la verdad?
+\opciones{solo A}{solo B}{A y C}{ninguno}
+\end{reto}
+
+\subsection{La idea: suponer y buscar la contradicción}
+En estos acertijos se \clave{supone} algo («A dice la verdad») y se sigue la cadena de consecuencias. Si se llega a una
+contradicción, la suposición era falsa. Si no, se tiene una solución (que conviene verificar con todas las frases).
+
+\subsubsection{Afirmaciones que se contradicen}
+Si dos personas dicen cosas \emph{contradictorias} (una es la negación de la otra), exactamente una dice la verdad. Es el
+mejor punto de partida: ya se sabe algo sin suponer nada.
+
+\subsubsection{Contar mentirosos}
+Cuando el enunciado dice «solo uno miente», se prueba cada persona como la mentirosa y se ve cuál deja todo coherente.
+
+\begin{regla}
+\begin{enumerate}
+  \item Busca dos frases contradictorias: una es verdad y otra mentira.
+  \item Si no las hay, supón el valor de la persona con la frase más «fuerte» y encadena.
+  \item Verifica la solución con todas las frases.
+\end{enumerate}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Solo uno miente]
+Se rompió un vidrio. Ana: «Fue Beto». Beto: «Fue Ciro». Ciro: «Beto miente». Dani: «Yo no fui». Solo uno miente. ¿Quién
+rompió el vidrio?
+\solucion Beto y Ciro se contradicen: uno de ellos es el mentiroso, así que Ana y Dani dicen la verdad: fue Beto (y Dani
+no fue). Entonces Beto miente al decir «fue Ciro», y Ciro dice la verdad. Fue Beto.
+\end{ejemplo}
+
+\begin{ejemplo}[El guardián]
+Un guardián dice: «Yo soy mentiroso». ¿Qué es?
+\solucion Si fuera veraz, diría una mentira; si fuera mentiroso, diría una verdad. Ninguna opción funciona: la frase es una
+paradoja y nadie de ese mundo puede decirla. El examen usa esto para descartar opciones.
+\end{ejemplo}
+
+\begin{trampa}
+Olvidar verificar la solución con \emph{todas} las frases. A veces una suposición no lleva a contradicción en dos frases
+pero choca con la tercera.
+\end{trampa}
+
+\taller
+\piso{Entrena}{suponer}
+\begin{ejercicios}
+\item X dice: «Y y yo somos del mismo tipo». Y dice: «X es mentiroso». ¿Qué es cada uno? \sol{Si X veraz, Y veraz, pero Y diría una mentira: contradicción. X mentiroso: entonces son de distinto tipo, Y veraz, y Y dice la verdad ✓.}
+\item Cuatro sospechosos; solo uno dice la verdad. P: «Fue Q». Q: «Fue S». R: «Yo no fui». S: «Q miente». ¿Quién fue? \sol{Q y S se contradicen: uno dice la verdad. Entonces P y R mienten: no fue Q y R sí fue. Fue R (y Q miente, S dice la verdad).}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Tres hermanos, uno de los cuales se comió el pastel. Juan: «Fui yo». Kike: «No fue Juan». Leo: «No fui yo». Si exactamente uno dice la verdad, ¿quién se comió el pastel?
+\opciones{Juan}{Kike}{Leo}{no se puede saber}
+\sol{C. Juan y Kike se contradicen: uno dice la verdad. Así que Leo miente: fue Leo. Verificación: Juan miente y Kike dice la verdad.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Si A dice la verdad: B miente, entonces C dice la verdad, y C afirma que A miente: contradicción. Luego A miente: B dice la
+verdad, C miente, y la frase de C («A y B mienten») es falsa porque B es veraz ✓. Solo B dice la verdad.
+\textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\evaluacion
+\begin{ejercicios}
+\item Si $p$ es F y $q$ es V, el valor de $(p \to q) \wedge (q \to p)$ es
+\opciones{V}{F}{depende de $r$}{no se puede evaluar}
+\sol{B. V $\wedge$ F. (2.1)}
+\item Si $(p \vee q) \to r$ es falsa y $p$ es F, entonces
+\opciones{$q$ es V y $r$ es F}{$q$ es F y $r$ es V}{$q$ y $r$ son F}{$q$ y $r$ son V}
+\sol{A. Antecedente V (luego $q$ V) y consecuente F. (2.1)}
+\item La negación de «Todos los días hace frío o llueve» es
+\opcionesl{Algún día no hace frío y no llueve.}{Ningún día hace frío ni llueve.}{Algún día no hace frío o no llueve.}{Todos los días hace calor y no llueve.}
+\sol{A. (2.2)}
+\item $\neg(p \to \neg q)$ equivale a
+\opciones{$p \wedge q$}{$\neg p \wedge q$}{$p \vee q$}{$p \wedge \neg q$}
+\sol{A. $\neg(p \to r) = p \wedge \neg r$ con $r = \neg q$. (2.2)}
+\item «Si como dulces, me duele la muela.» ¿Cuál es equivalente?
+\opcionesl{Si me duele la muela, comí dulces.}{Si no como dulces, no me duele la muela.}{Si no me duele la muela, no comí dulces.}{Como dulces y me duele la muela.}
+\sol{C. (2.3)}
+\item «Solo los socios pueden entrar.» Marta entró. Entonces
+\opcionesd{Marta es socia.}{Marta no es socia.}{No se sabe.}{Todos los socios entraron.}
+\sol{A. Entrar $\to$ socio. (2.3)}
+\item «Algunos artistas son tímidos. Todos los tímidos son callados.» Se concluye que
+\opcionesl{Algunos artistas son callados.}{Todos los artistas son callados.}{Algunos callados no son artistas.}{Ningún artista es callado.}
+\sol{A. (2.4)}
+\item Dos guardianes: uno siempre dice la verdad y otro siempre miente. El primero dice: «Los dos decimos la verdad». ¿Quién es el veraz?
+\opciones{el primero}{el segundo}{ninguno}{no se sabe}
+\sol{B. Si el primero fuera veraz, la frase sería falsa. (2.5)}
+\end{ejercicios}

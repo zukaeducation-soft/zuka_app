@@ -1,0 +1,193 @@
+% Libro 2 · Mundo 3 · Conjuntos (app: pu-conjuntos)
+\mundo{Conjuntos}{pu-conjuntos}{Un conjunto es una colección bien definida: se sabe con certeza qué está adentro y qué
+no. Con dos o tres conjuntos que se cruzan se resuelven las preguntas de encuestas, uno de los clásicos del examen.
+La herramienta es una sola: el diagrama de Venn, llenado de adentro hacia afuera.}{%
+\item \textbf{3.1} Operaciones y diagramas de Venn
+\item \textbf{3.2} Encuestas con dos y tres conjuntos}
+
+\leccion{pu-cj-1}{Operaciones y Venn}{Juegos del lazo que encierra y las zonas que se pintan.}
+
+\begin{reto}
+Sean $A = \{1, 2, 3, 4, 5, 6\}$, $B = \{2, 4, 6, 8\}$ y $C = \{3, 6, 9\}$. ¿Cuántos elementos tiene $(A \cap B) \cup C$?
+\opciones{3}{4}{5}{6}
+\end{reto}
+
+\subsection{La idea: zonas de un dibujo}
+Dos conjuntos dibujados como círculos que se cruzan dentro de un rectángulo (el \clave{universo} $U$) dividen el plano
+en cuatro zonas. Cada operación es pintar algunas zonas:
+
+\begin{center}
+\begin{tikzpicture}[scale=.62,font=\scriptsize]
+  \foreach \k/\t/\op in {0/{$A \cup B$}/u,1/{$A \cap B$}/i,2/{$A - B$}/d,3/{$(A \cup B)'$}/c}{%
+  \begin{scope}[xshift=\k*4.4cm]
+    \draw[zline] (-1.9,-1.4) rectangle (1.9,1.4);
+    \ifnum\k=0 \fill[zlime!60] (-.45,0) circle (1) (.45,0) circle (1);\fi
+    \ifnum\k=1 \begin{scope}\clip (-.45,0) circle (1); \fill[zlime!60] (.45,0) circle (1);\end{scope}\fi
+    \ifnum\k=2 \begin{scope}[even odd rule]\clip (-.45,0) circle (1) (.45,0) circle (1); \fill[zlime!60] (-.45,0) circle (1);\end{scope}\fi
+    \ifnum\k=3 \fill[zlime!60,even odd rule] (-1.9,-1.4) rectangle (1.9,1.4) (-.45,0) circle (1); \fill[white] (.45,0) circle (1); \fill[white] (-.45,0) circle (1);\fi
+    \draw[zink,line width=.5pt] (-.45,0) circle (1) (.45,0) circle (1);
+    \node at (-.95,.95) {$A$}; \node at (.95,.95) {$B$};
+    \node at (0,-1.75) {\t};
+  \end{scope}}
+\end{tikzpicture}
+\end{center}
+
+\begin{itemize}
+  \item \clave{Unión} $A \cup B$: lo que está en $A$, en $B$ o en ambos.
+  \item \clave{Intersección} $A \cap B$: lo que está en los dos.
+  \item \clave{Diferencia} $A - B$: lo que está en $A$ pero no en $B$.
+  \item \clave{Complemento} $A'$: lo que está en $U$ pero no en $A$.
+  \item \clave{Diferencia simétrica} $A \,\triangle\, B$: lo que está en uno solo de los dos.
+\end{itemize}
+
+\subsubsection{Contar sin repetir}
+Al sumar $n(A) + n(B)$, los elementos de la intersección se cuentan dos veces. Por eso
+\[n(A \cup B) = n(A) + n(B) - n(A \cap B).\]
+
+\subsubsection{Subconjuntos}
+$A \subseteq B$ si todo elemento de $A$ está en $B$. Un conjunto de $n$ elementos tiene $2^n$ subconjuntos (cada
+elemento está o no está), contando el vacío y el conjunto mismo.
+
+\begin{regla}
+\begin{itemize}
+  \item $n(A \cup B) = n(A) + n(B) - n(A \cap B)$.
+  \item $(A \cup B)' = A' \cap B'$ y $(A \cap B)' = A' \cup B'$ (De Morgan, como en lógica).
+  \item $A - B = A \cap B'$. Número de subconjuntos: $2^n$.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Con números]
+$U = \{1, \ldots, 10\}$, $P$ = pares, $T$ = múltiplos de 3. Halla $(P \cup T)'$.
+\solucion $P \cup T = \{2, 3, 4, 6, 8, 9, 10\}$. Complemento: $\{1, 5, 7\}$.
+\end{ejemplo}
+
+\begin{ejemplo}[Contar subconjuntos]
+¿Cuántos subconjuntos de $\{a, b, c, d, e\}$ contienen a la $a$?
+\solucion La $a$ está fija; los otros cuatro elementos están o no: $2^4 = 16$.
+\end{ejemplo}
+
+\begin{trampa}
+Confundir $A - B$ con $B - A$, o creer que la diferencia es simétrica. $\{1, 2, 3\} - \{3, 4\} = \{1, 2\}$, pero
+$\{3, 4\} - \{1, 2, 3\} = \{4\}$.
+\end{trampa}
+
+\taller
+\piso{Entrena}{operar}
+\begin{ejercicios}
+\item $A = \{a, e, i\}$, $B = \{e, o, u\}$: halla $A \cup B$, $A \cap B$ y $A \,\triangle\, B$. \sol{$\{a, e, i, o, u\}$, $\{e\}$, $\{a, i, o, u\}$.}
+\item Si $n(A) = 12$, $n(B) = 9$ y $n(A \cup B) = 17$, ¿cuánto vale $n(A \cap B)$? \sol{4.}
+\item ¿Cuántos subconjuntos tiene un conjunto de 6 elementos? \sol{64.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si $A \subseteq B$, entonces $A \cap B$ es igual a
+\opciones{$A$}{$B$}{$\varnothing$}{$A \cup B$}
+\sol{A.}
+\item La zona de un Venn de dos conjuntos que está en $B$ pero no en $A$ se escribe
+\opciones{$A - B$}{$B \cap A'$}{$(A \cup B)'$}{$A \cap B$}
+\sol{B. Es $B - A$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+$A \cap B = \{2, 4, 6\}$. Unido con $C$: $\{2, 3, 4, 6, 9\}$ (el 6 no se repite). Tiene 5 elementos. \textbf{Opción C.}
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-cj-2}{Encuestas}{Juego de la encuesta que se reparte en zonas.}
+
+\begin{reto}
+En un grupo de 50 personas, 30 leen el periódico A, 25 leen el B y 8 no leen ninguno. ¿Cuántas leen solo uno de los dos?
+\opciones{29}{13}{42}{17}
+\end{reto}
+
+\subsection{La idea: llenar de adentro hacia afuera}
+En las encuestas, los datos suelen venir «gruesos» (los que leen A, incluidos los que leen A y B). El método seguro es
+\clave{empezar por la zona más interna} (la de todos) y avanzar hacia afuera, restando lo ya puesto.
+
+\begin{center}
+\begin{tikzpicture}[font=\scriptsize]
+  \draw[zline] (-2.6,-1.9) rectangle (2.9,1.8); \node[anchor=north west] at (-2.6,1.8) {$U = 50$};
+  \draw[zsky,line width=.7pt] (-.6,0) circle (1.25); \draw[zcoral,line width=.7pt] (.75,0) circle (1.25);
+  \node at (-1.3,0) {17}; \node at (.08,0) {\textbf{13}}; \node at (1.45,0) {12};
+  \node at (-1.3,1.45) {A (30)}; \node at (1.55,1.45) {B (25)}; \node at (2.35,-1.55) {8};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Tres conjuntos}
+Con tres conjuntos hay ocho zonas. Se llena primero el centro (los tres), luego las zonas de exactamente dos (restando
+el centro), luego las de uno solo, y al final lo de afuera. La fórmula general es
+\[n(A \cup B \cup C) = n(A) + n(B) + n(C) - n(A\cap B) - n(A \cap C) - n(B \cap C) + n(A \cap B \cap C),\]
+pero el diagrama es más seguro que la fórmula.
+
+\begin{regla}
+\begin{itemize}
+  \item Empieza por la intersección de todos; resta lo ya puesto al pasar a cada zona exterior.
+  \item «Solo $A$» $= n(A) -$ (todo lo de $A$ compartido).
+  \item Al final, la suma de todas las zonas (incluida la de afuera) debe dar el total.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Tres deportes]
+En un colegio, de 100 estudiantes: 45 juegan fútbol, 40 baloncesto y 30 voleibol; 15 fútbol y baloncesto, 10 fútbol y
+voleibol, 12 baloncesto y voleibol; y 5 los tres. ¿Cuántos no juegan ninguno? ¿Cuántos juegan exactamente uno?
+\solucion Centro: 5. Exactamente dos: F-B $15 - 5 = 10$; F-V $10 - 5 = 5$; B-V $12 - 5 = 7$. Solo F: $45 - 10 - 5 - 5 =
+25$; solo B: $40 - 10 - 7 - 5 = 18$; solo V: $30 - 5 - 7 - 5 = 13$. Juegan alguno: $5 + 22 + 56 = 83$. Ninguno: 17.
+Exactamente uno: 56.
+\end{ejemplo}
+
+\begin{ejemplo}[Datos de «solo»]
+De 40 turistas, 12 visitaron solo Guatapé, 10 solo Santa Fe, 6 ambos lugares. ¿Cuántos no visitaron ninguno?
+\solucion Visitaron alguno: $12 + 10 + 6 = 28$. Ninguno: 12. (Aquí los datos ya venían por zonas.)
+\end{ejemplo}
+
+\begin{trampa}
+Restar dos veces el centro, o usar «los que juegan fútbol y baloncesto» como si fuera «solo fútbol y baloncesto»
+(incluye a los de los tres).
+\end{trampa}
+
+\taller
+\piso{Entrena}{encuestas}
+\begin{ejercicios}
+\item De 60 personas, 35 toman café, 28 té y 10 ambos. ¿Cuántas no toman ninguno? \sol{$60 - (35 + 28 - 10) = 7$.}
+\item En un salón de 32, todos estudian inglés o francés; 20 inglés y 18 francés. ¿Cuántos estudian ambos? \sol{$20 + 18 - 32 = 6$.}
+\item De 80 encuestados, 50 usan Instagram, 40 TikTok y 15 ninguno. ¿Cuántos usan solo TikTok? \sol{Alguno: 65. Ambos: $90 - 65 = 25$. Solo TikTok: 15.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item En una encuesta sobre tres sabores (A, B, C), 4 personas prefieren los tres y 9 prefieren A y B. ¿Cuántas prefieren A y B pero no C?
+\opciones{4}{5}{9}{13}
+\sol{B. $9 - 4$.}
+\item De 120 estudiantes, 70 aprobaron Física, 60 Química y 25 ambas. ¿Cuántos reprobaron las dos?
+\opciones{15}{25}{10}{35}
+\sol{A. $120 - (70 + 60 - 25) = 15$.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Leen alguno: $50 - 8 = 42$. Leen ambos: $30 + 25 - 42 = 13$. Solo uno: $42 - 13 = 29$ (17 solo A y 12 solo B).
+\textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+\evaluacion
+\begin{ejercicios}
+\item Si $U = \{1, \ldots, 8\}$, $A = \{1, 2, 3, 4\}$ y $B = \{3, 4, 5, 6\}$, entonces $(A \cup B)'$ es
+\opciones{$\{7, 8\}$}{$\{3, 4\}$}{$\{1, 2, 5, 6\}$}{$\varnothing$}
+\sol{A. (3.1)}
+\item ¿Cuántos subconjuntos de $\{1, 2, 3, 4\}$ tienen exactamente 2 elementos?
+\opciones{4}{6}{8}{16}
+\sol{B. $\{12, 13, 14, 23, 24, 34\}$. (3.1)}
+\item Si $n(A) = 15$, $n(B) = 20$ y $n(A \cap B) = 7$, entonces $n(A \,\triangle\, B)$ es
+\opciones{28}{35}{21}{13}
+\sol{C. Unión 28, menos intersección 7. (3.1)}
+\item En un grupo de 45, 25 hablan inglés, 18 portugués y 9 ninguno. ¿Cuántos hablan los dos?
+\opciones{7}{9}{16}{36}
+\sol{A. Alguno 36; $43 - 36 = 7$. (3.2)}
+\item En el ejemplo de los tres deportes, ¿cuántos juegan exactamente dos?
+\opciones{22}{37}{27}{17}
+\sol{A. $10 + 5 + 7$. (3.2)}
+\item De 70 personas, 40 ven series, 35 ven deportes y 10 no ven ninguno. ¿Cuántos ven solo series?
+\opciones{25}{15}{30}{40}
+\sol{A. Alguno 60; ambos 15; solo series 25. (3.2)}
+\end{ejercicios}

@@ -1,0 +1,161 @@
+% Libro 2 · Mundo 7 · Codificación (app: pu-codigos)
+\mundo{Codificación}{pu-codigos}{Un código es una regla que transforma un mensaje en otro. El examen da algunos ejemplos
+ya codificados y pide aplicar la regla a una palabra nueva, o deducir el significado de un símbolo. Es lógica pura:
+comparar, aislar lo que cambia y comprobar.}{%
+\item \textbf{7.1} Claves de sustitución
+\item \textbf{7.2} Deducir la regla}
+
+\leccion{pu-cd-1}{Claves de sustitución}{Juego de las casillas con fichas que cambian de letra.}
+
+\begin{reto}
+En un código, la palabra MESA se escribe NFTB. ¿Cómo se escribe SILLA?
+\opciones{TJMMB}{RHKKZ}{TJMMA}{UJNNB}
+\end{reto}
+
+\subsection{La idea: buscar el desplazamiento}
+Los códigos más comunes son de \clave{sustitución}: cada letra se cambia por otra según una regla fija. El caso más
+famoso es el \clave{cifrado de César}: correr cada letra $k$ lugares en el alfabeto (con $k = 3$: A $\to$ D, B $\to$ E,
+…, X $\to$ A). Para descubrir $k$ basta comparar una letra con su código.
+
+\begin{center}\small
+\begin{tabular}{c|cccc}
+original & M & E & S & A\\
+posición & 13 & 5 & 19 & 1\\\hline
+código & N & F & T & B\\
+posición & 14 & 6 & 20 & 2\\
+\end{tabular}
+\end{center}
+
+Otras sustituciones: invertir el alfabeto (A $\leftrightarrow$ Z, B $\leftrightarrow$ Y: la posición $p$ pasa a
+$27 - p$), cambiar letras por números, o cambiar cada letra por un símbolo.
+
+\subsubsection{Códigos de posición}
+A veces la regla no cambia las letras sino su \emph{orden}: invertir la palabra, intercambiar la primera con la última,
+mover la primera al final. Se reconoce porque el código usa las mismas letras.
+
+\begin{regla}
+\begin{itemize}
+  \item Si el código usa las mismas letras, la regla es de posición. Si usa otras, es de sustitución.
+  \item En sustitución, compara las posiciones: ¿suma constante? ¿diferencia constante?
+  \item Comprueba la regla con \emph{todas} las letras del ejemplo antes de aplicarla.
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Alfabeto invertido]
+Si CASA se escribe XZHZ, ¿cómo se escribe LUNA?
+\solucion C (3) $\to$ X (24), A (1) $\to$ Z (26), S (19) $\to$ H (8): suman 27. L (12) $\to$ 15 = O; U (21) $\to$ 6 = F;
+N (14) $\to$ 13 = M; A $\to$ Z. LUNA $\to$ OFMZ.
+\end{ejemplo}
+
+\begin{ejemplo}[De posición]
+Si CAMINO se escribe ONIMAC, ¿cómo se escribe PERRO?
+\solucion La palabra se invierte: ORREP.
+\end{ejemplo}
+
+\begin{ejemplo}[Números]
+Si ROSA se codifica 18-15-19-1, ¿qué palabra es 13-1-18?
+\solucion Posiciones: M, A, R. MAR.
+\end{ejemplo}
+
+\begin{trampa}
+Suponer un desplazamiento con una sola letra cuando la regla podría ser otra: comprueba siempre con la segunda y la
+tercera letra.
+\end{trampa}
+
+\taller
+\piso{Entrena}{codificar}
+\begin{ejercicios}
+\item Con César $k = 2$, codifica GATO. \sol{ICVQ.}
+\item Si 2-5-19-15 significa BESO, ¿qué significa 1-13-15-18? \sol{AMOR.}
+\item Si LIBRO se escribe ORBIL, ¿cómo se escribe MESA? \sol{ASEM.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si en un código PATO se escribe QBUP, la palabra que se escribe DBTB es
+\opciones{CASA}{EBSA}{CAPA}{COSA}
+\sol{A. Cada letra se corre uno hacia atrás.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Cada letra avanza una posición: M $\to$ N, E $\to$ F, S $\to$ T, A $\to$ B. SILLA $\to$ TJMMB. \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+\leccion{pu-cd-2}{Deducir la regla}{Juego de las palabras en otro idioma.}
+
+\begin{reto}
+En un idioma, «lumo sapi» significa «perro grande», «tera sapi» significa «gato grande» y «tera nov» significa «gato
+negro». ¿Cómo se dice «perro negro»?
+\opciones{lumo nov}{nov lumo}{sapi nov}{lumo tera}
+\end{reto}
+
+\subsection{La idea: lo que se repite se corresponde}
+Cuando hay varias frases traducidas, se buscan las palabras \clave{comunes}: si dos frases comparten «grande» y
+comparten «sapi», entonces «sapi» = «grande». Es como resolver un sistema de ecuaciones: cada frase es una ecuación y
+cada coincidencia aísla una incógnita.
+
+\subsubsection{Códigos con símbolos y operaciones}
+La misma idea sirve cuando el código es numérico: si \texttt{3 \# 4 = 712} y \texttt{5 \# 2 = 710}, se busca qué
+operación da cada parte (aquí, la suma y luego el producto: $3 + 4 = 7$, $3 \cdot 4 = 12$).
+
+\begin{regla}
+\begin{itemize}
+  \item Compara frases de dos en dos: lo común en ambas lenguas se corresponde.
+  \item Descarta lo ya identificado y repite.
+  \item Fíjate si el orden de las palabras se conserva (sustantivo y luego adjetivo, o al revés).
+\end{itemize}
+\end{regla}
+
+\subsection{Ejemplos resueltos}
+\begin{ejemplo}[Tres frases]
+«ka mo ri» = «río frío grande»; «ri pe» = «grande lago»; «pe ka su» = «lago frío quieto». ¿Qué significa «mo»?
+\solucion Las frases 1 y 2 comparten «ri» y comparten «grande»: ri = grande. Entonces, en la 2, pe = lago. Las frases 1 y
+3 comparten «ka» y comparten «frío»: ka = frío. En la 1 solo queda mo = río (y en la 3, su = quieto). Fíjate en que el
+orden de las palabras no sirvió: la correspondencia salió de las repeticiones.
+\end{ejemplo}
+
+\begin{ejemplo}[Números con regla]
+Si $2 \to 5$, $3 \to 10$, $4 \to 17$, ¿a qué va el 6?
+\solucion $n^2 + 1$: $6 \to 37$.
+\end{ejemplo}
+
+\begin{trampa}
+Asumir que el orden de las palabras es el mismo que en español. Muchos de estos idiomas inventados ponen el adjetivo
+después (o antes); la correspondencia se halla por repeticiones, no por posición.
+\end{trampa}
+
+\taller
+\piso{Entrena}{deducir}
+\begin{ejercicios}
+\item «bi la» = «agua fría», «la to» = «fría noche». ¿Qué es «to»? \sol{noche.}
+\item Si $1 \to 3$, $2 \to 6$, $3 \to 11$, $4 \to 18$, ¿a qué va el 5? \sol{$n^2 + 2$: 27.}
+\end{ejercicios}
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Si $4 \star 2 = 62$, $5 \star 3 = 82$ y $7 \star 1 = 86$, ¿cuánto es $6 \star 4$?
+\opciones{102}{1\,024}{210}{224}
+\sol{A. Se escribe la suma seguida de la diferencia: $4 + 2 = 6$ y $4 - 2 = 2$ dan 62; $5 + 3$ y $5 - 3$ dan 82; $7 + 1$ y $7 - 1$ dan 86. Para $6 \star 4$: 10 y 2, es decir, 102.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+«sapi» aparece en las dos primeras, como «grande»: sapi = grande. Entonces lumo = perro y tera = gato. De la tercera,
+nov = negro. El orden es sustantivo y luego adjetivo: «lumo nov». \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+\evaluacion
+\begin{ejercicios}
+\item Con César de $k = 3$, la palabra HOLA se escribe
+\opciones{KROD}{JNKZ}{KRNA}{IPMB}
+\sol{A. (7.1)}
+\item Si 3-1-6-5 significa CAFE, ¿qué significa 4-1-4-15?
+\opciones{DADO}{DEDO}{CACO}{DIDO}
+\sol{A. (7.1)}
+\item «mi ta» = «casa blanca», «ta po» = «blanca nube», «po su» = «nube gris». ¿Qué es «su»?
+\opciones{gris}{nube}{casa}{blanca}
+\sol{A. (7.2)}
+\item Si $2 \to 8$, $3 \to 27$, $5 \to 125$, ¿a qué va el 4?
+\opciones{16}{64}{12}{48}
+\sol{B. Cubos. (7.2)}
+\end{ejercicios}
