@@ -66,11 +66,19 @@ test('arriba va el nombre «Zuka» en letra, sin el cerebro de puntos', () => {
 test('en el computador el juego se dibuja con ancho de celular y se agranda para llenar el espacio', () => {
   const k = loadScripts(['js/games/kit.js']);
   const zoom = get(k, 'zoomScale');
-  assert.equal(get(k, 'DESK_W'), 480);
+  assert.equal(get(k, 'DESK_W'), 380);
   assert.equal(zoom(480, 400, 800, 1000), 800 / 480);
   assert.equal(zoom(480, 400, 800, 500), 500 / 400);
   assert.equal(zoom(480, 400, 2000, 2000), 2);
   assert.equal(zoom(480, 400, 800, 100), 0.66);
   assert.match(read('css/escritorio.css'), /\.lesson:not\(\.clip-mode\) \.practice > \.ex-area \{ grid-column: 2; grid-row: 1 \/ span 3; \}/);
   assert.match(read('js/games/kit.js'), /k = deskGame\(\) \? zoomScale\(size\.w, size\.h, host\.clientWidth, room\) : fitScale\(size\.h, room\);/);
+});
+
+test('Preuniversitario en portátil: «Comprobar» bajo el enunciado y, en lectura, el texto a la izquierda y la actividad a la derecha', () => {
+  const css = read('css/escritorio.css');
+  assert.match(css, /\.lesson:has\(\.lesson-body > \.practice\):not\(:has\(\.lec\)\):not\(\.clip-mode\) \.lesson-foot \{\s*position: absolute;/);
+  assert.match(css, /\.practice:has\(\.lec\) > \.ex-area > \.play, \.lesson:not\(\.clip-mode\) \.practice \.lec \{ display: contents; \}/);
+  assert.match(css, /\.practice \.lec-play \{ position: absolute; top: 0; right: 0; bottom: 0;/);
+  assert.match(css, /\.ex-area:not\(:has\(canvas\)\):not\(:has\(\.lec\)\) \{ zoom: 1\.18; \}/);
 });

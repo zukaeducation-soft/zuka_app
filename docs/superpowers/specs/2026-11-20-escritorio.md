@@ -19,3 +19,17 @@ lados, estético y profesional.
 - **Hojas**: ventanas centradas.
 
 Pruebas: `tests/escritorio.test.js`.
+
+## Juegos en el portátil (revisión del Preuniversitario, 2026-11-20)
+
+El usuario vio los juegos diminutos en el portátil y pidió revisar todos los del Preuniversitario (razonamiento y lectura).
+Un robot abrió los ~990 ejercicios (lecciones y evaluaciones) a 1366×768 y midió lienzo, desbordes y letra:
+
+- **Lienzo** (`mountSketch`): se dibuja con 380 px de ancho (`DESK_W`, el celular de diseño) y se agranda con CSS
+  (`zoomScale`, hasta ×2, con más densidad de píxeles). A 1366×768 quedan entre ×1.05 y ×1.8 (mediana ×1.35).
+- **Juego**: enunciado y ayudas en una columna a la izquierda, con «Comprobar» debajo; el juego a la derecha con todo el
+  alto del panel.
+- **Juegos HTML de examen** (`completa-solucion`, `caza-error`, `opcion-examen`): letra un 18 % más grande.
+- **Lectura** (kit LEC): el texto en la columna izquierda con su propia barra de desplazamiento y la actividad a la
+  derecha con la suya; se leen y se arrastran a la vez. Antes casi todos se salían del panel (hasta 1 400 px); ahora
+  ninguno.

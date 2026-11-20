@@ -76,13 +76,37 @@
   /* Juego: el enunciado y las ayudas a la izquierda y el juego a la derecha, con todo el alto del panel para agrandarse
      (mountSketch lo agranda con zoomScale, js/games/kit.js). */
   .lesson:not(.clip-mode) .lesson-body > .practice {
-    max-width: 1180px; display: grid; grid-template-columns: minmax(230px, 320px) minmax(0, 1fr); grid-template-rows: auto auto 1fr;
+    max-width: 1180px; display: grid; grid-template-columns: min(320px, 30%) minmax(0, 1fr); grid-template-rows: auto auto 1fr;
     column-gap: 44px; align-items: start;
   }
   .lesson:not(.clip-mode) .practice > * { grid-column: 1; }
   .lesson:not(.clip-mode) .practice > .ex-head { margin-top: 18px; }
   .lesson:not(.clip-mode) .practice > .ex-area { grid-column: 2; grid-row: 1 / span 3; }
   .lesson:not(.clip-mode) .practice .ex-q { font-size: 25px; line-height: 1.25; }
+  /* «Comprobar» va en la columna del enunciado: el juego gana el alto de la barra de abajo. */
+  .lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) { --pw: min(1180px, calc(100vw - 120px)); }
+  .lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .lesson-body { margin-bottom: 18px; border-bottom: 1px solid var(--line); border-radius: 28px; }
+  .lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .lesson-foot {
+    position: absolute; left: calc(50% - var(--pw) / 2); bottom: 44px; width: min(320px, calc(var(--pw) * .3)); margin: 0; padding: 0;
+    border: 0; background: none; display: flex; gap: 10px;
+  }
+  .lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .lesson-foot .btn { max-width: none; }
+  /* Juegos hechos en HTML (examen, lectura): letra de computador. */
+  .lesson:not(.clip-mode) .ex-area:not(:has(canvas)):not(:has(.lec)) { zoom: 1.18; }
+  /* Lectura (kit LEC): el texto a la izquierda, bajo el enunciado, y la actividad a la derecha; cada uno con su barra
+     de desplazamiento, así el texto y lo que se arrastra se ven a la vez. Columna en flex (no grid: la actividad, larga,
+     estiraba las filas) y la actividad en posición absoluta a la derecha. */
+  .lesson:not(.clip-mode) .lesson-body > .practice:has(.lec) {
+    position: relative; display: flex; flex-direction: column; height: 100%; max-width: 1180px;
+  }
+  .lesson:not(.clip-mode) .practice:has(.lec) > * { width: 53%; }
+  .lesson:not(.clip-mode) .practice:has(.lec) > .ex-area, .lesson:not(.clip-mode) .practice:has(.lec) > .ex-area > .play, .lesson:not(.clip-mode) .practice .lec { display: contents; }
+  .lesson:not(.clip-mode) .practice:has(.lec) > .ex-head { margin-top: 4px; }
+  .lesson:not(.clip-mode) .practice .lec-doc { width: 53%; flex: none; max-height: calc(100% - 30px); overflow-y: auto; margin: 0 0 8px; overscroll-behavior: contain; }
+  .lesson:not(.clip-mode) .practice:has(.lec-doc + .lec-doc) .lec-doc[open] { max-height: calc(100% - 84px); }
+  .lesson:not(.clip-mode) .practice .lec-body { max-height: none; overflow: visible; }
+  .lesson:not(.clip-mode) .practice .lec-p { font-size: 17px; line-height: 1.7; }
+  .lesson:not(.clip-mode) .practice .lec-play { position: absolute; top: 0; right: 0; bottom: 0; width: calc(47% - 32px); overflow-y: auto; padding: 4px 6px 12px 0; overscroll-behavior: contain; }
   .lesson:not(.clip-mode) .lesson-foot {
     margin: 0 32px 18px; padding: 10px 32px 16px; border: 1px solid var(--line); border-top: 0; border-radius: 0 0 28px 28px;
     background: color-mix(in srgb, var(--card) 35%, var(--bg)); display: flex; justify-content: center;

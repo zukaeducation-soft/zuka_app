@@ -255,7 +255,7 @@ const fitScale = (h, room) => (room > 0 && h > 0 ? Math.max(FIT_MIN, Math.min(1,
 // En el computador (desde 1000 px, spec 2026-11-20-escritorio) el juego se dibuja con un ancho de celular (DESK_W) y
 // el lienzo se agranda con CSS hasta llenar el ancho y el alto libres (hasta ZOOM_MAX): con todo el ancho del portátil
 // las piezas y los textos, de medidas fijas, se veían diminutos. La densidad de píxeles sube con el zoom: no se ve borroso.
-const DESK_W = 480, ZOOM_MAX = 2;
+const DESK_W = 380, ZOOM_MAX = 2;   // 380: el celular para el que se diseñaron (las piezas tienen medidas fijas)
 const deskGame = () => typeof matchMedia === 'function' && matchMedia('(min-width: 1000px)').matches;
 const zoomScale = (w, h, roomW, roomH) => (w > 0 && h > 0 ? Math.max(FIT_MIN, Math.min(ZOOM_MAX, roomW / w, roomH > 0 ? roomH / h : ZOOM_MAX)) : 1);
 function mountSketch(host, sketch, aspect = 1.25, gesture) {
