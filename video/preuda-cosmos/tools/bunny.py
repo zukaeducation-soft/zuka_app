@@ -71,6 +71,15 @@ def upload_ready(c, db):
                     r = c.put(f'{API}/videos/{e["guid"]}', content=f, headers={'Content-Type': 'application/octet-stream'}, timeout=900)
                 if r.status_code < 300: ok = True; break
                 log(f'  Bunny respondió {r.status_code}; reintento')
+                if r.status_code == 400:
+                    # Una subida cortada deja el video en «falló la subida» (estado 6) y Bunny ya no acepta otra en ese ID:
+                    # se borra ese video vacío (lo creó este script) y se crea uno nuevo.
+                    j = c.get(f'{API}/videos/{e["guid"]}').json()
+                    if j.get('status') in (5, 6) and not j.get('storageSize'):
+                        c.delete(f'{API}/videos/{e["guid"]}')
+                        r2 = c.post(f'{API}/videos', json={'title': j.get('title') or name, 'collectionId': col}); r2.raise_for_status()
+                        log(f'  el ID {e["guid"]} quedó en «subida fallida»: lo cambio por {r2.json()["guid"]}')
+                        e['guid'] = r2.json()['guid']; save(db)
             except httpx.HTTPError as x: log(f'  fallo de red ({type(x).__name__}); reintento')
             time.sleep(30 * (intento + 1))
         if not ok: log(f'  no se pudo subir {p.name}; queda para la próxima vuelta'); continue
