@@ -90,10 +90,10 @@ const CONCEPTOS_PU = {
     title: 'Se suma lo que hacen por hora',
     scene: { type: 'barra', bars: [
       { label: 'el muro completo', b: 0, segs: [{ w: 1, t: '1 muro', c: 'mute', dim: 1 }] },
-      { label: 'en una hora', b: 1, segs: [{ w: 1 / 6, t: 'Ana', c: 'a' }, { w: 2 / 6, t: 'Beto', c: 'g' }, { w: .5, t: '', c: 'mute', dim: 1 }] },
-      { label: 'juntos', b: 2, segs: [{ w: .5, t: '1/2 por hora', c: 'ok' }] },
+      { label: 'en una hora', b: 1, segs: [{ w: 1 / 5, t: 'Ana', c: 'a' }, { w: 1 / 20, t: '', c: 'g' }, { w: 3 / 4, t: '', c: 'mute', dim: 1 }] },
+      { label: 'juntos', b: 2, segs: [{ w: 1 / 4, t: '1/4 por hora', c: 'ok' }] },
     ] },
-    beats: ['No se suman los tiempos: se suma lo que hace cada uno en una hora.', 'Ana pinta $\\tfrac16$ del muro por hora y Beto $\\tfrac13$.', 'Juntos pintan $\\tfrac16 + \\tfrac13 = \\tfrac12$ del muro cada hora.'],
+    beats: ['No se suman los tiempos: se suma lo que hace cada uno en una hora.', 'Si Ana tarda 5 horas y Beto 20, en una hora Ana pinta $\\tfrac15$ y Beto $\\tfrac{1}{20}$.', 'Juntos pintan $\\tfrac15 + \\tfrac{1}{20} = \\tfrac14$ del muro cada hora: 4 horas.'],
   },
   'deshacer-porcentaje': {
     title: 'Deshacer un porcentaje',
@@ -169,10 +169,10 @@ const CONCEPTOS_PU = {
     title: 'Una fracción de lo que queda',
     scene: { type: 'barra', bars: [
       { label: 'la prima completa', b: 0, segs: [{ w: 1, t: '1', c: 'a' }] },
-      { label: 'gasta 1/3 del total', b: 1, segs: [{ w: 1 / 3, t: '1/3', c: 'bad', dim: 1 }, { w: 2 / 3, t: 'queda 2/3', c: 'a' }] },
-      { label: 'gasta 3/4 de lo que queda', b: 2, segs: [{ w: 1 / 3, t: '', c: 'mute', dim: 1 }, { w: .5, t: '3/4 del resto', c: 'bad', dim: 1 }, { w: 1 / 6, t: '1/6', c: 'ok' }] },
+      { label: 'gasta 1/5 del total', b: 1, segs: [{ w: 1 / 5, t: '1/5', c: 'bad', dim: 1 }, { w: 4 / 5, t: 'queda 4/5', c: 'a' }] },
+      { label: 'gasta 1/2 de lo que queda', b: 2, segs: [{ w: 1 / 5, t: '', c: 'mute', dim: 1 }, { w: 2 / 5, t: '1/2 del resto', c: 'bad', dim: 1 }, { w: 2 / 5, t: '2/5', c: 'ok' }] },
     ] },
-    beats: ['La barra completa es la prima.', 'El primer gasto se quita del total: quedan $\\tfrac23$.', 'El segundo gasto es una fracción de lo que queda, no del total: sobrevive $\\tfrac14$ de $\\tfrac23$, que es $\\tfrac16$.'],
+    beats: ['La barra completa es la prima.', 'El primer gasto se quita del total: quedan $\\tfrac45$.', 'El segundo gasto es una fracción de lo que queda, no del total: sobrevive $\\tfrac12$ de $\\tfrac45$, que es $\\tfrac25$.'],
   },
   'promedio-suma': {
     title: 'Todo promedio esconde una suma',
@@ -229,8 +229,8 @@ const CONCEPTOS_PU = {
   },
   'no-contar-dos': {
     title: 'Con «o», no cuentes dos veces',
-    scene: { type: 'venn', a: 'suma 7', b: 'algún 6', regs: { a: { t: '4', b: 0 }, b: { t: '9', b: 0 }, ab: { t: '2', b: 1, c: 'ok' }, out: { t: '21', b: 2, c: 'mute' } } },
-    beats: ['«Suma 7» tiene 6 resultados y «algún 6» tiene 11.', 'Dos resultados están en las dos listas: (1, 6) y (6, 1). Se cuentan una sola vez.', 'La unión tiene $6 + 11 - 2 = 15$ resultados: $P = \\tfrac{15}{36}$.'],
+    scene: { type: 'venn', a: 'dobles', b: 'suma 6', regs: { a: { t: '5', b: 0 }, b: { t: '4', b: 0 }, ab: { t: '1', b: 1, c: 'ok' }, out: { t: '26', b: 2, c: 'mute' } } },
+    beats: ['Con dos dados, «dobles» tiene 6 resultados y «suma 6» tiene 5.', 'El (3, 3) está en las dos listas: se cuenta una sola vez.', 'La unión tiene $6 + 5 - 1 = 10$ resultados: $P = \\tfrac{10}{36}$.'],
   },
   'arbol-multiplica': {
     title: 'En el árbol: por y más',

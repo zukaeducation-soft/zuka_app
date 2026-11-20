@@ -47,3 +47,12 @@ test('retos: todo concepto citado existe, y en los mundos rehechos cada reto lle
     for (const r of mine) assert.ok(r.steps.some(s => s.concept), `${r.id}: ningún paso con concepto`);
   }
 });
+
+test('el concepto de un paso no trae la respuesta de ese mismo paso (se abre con un toque)', () => {
+  for (const r of RETOS) r.steps.forEach((s, i) => {
+    if (!s.concept || !s.note) return;
+    const c = CONCEPTOS[s.concept], text = c.beats.join(' ') + ' ' + JSON.stringify(c.scene);
+    for (const [, a, b] of s.note.matchAll(/(\d+)\s*\/\s*(\d+)/g)) for (const f of [`${a}/${b}`, `{${a}}{${b}}`])
+      assert.ok(!text.includes(f), `${r.id} paso ${i + 1}: el concepto ${s.concept} trae ${a}/${b}`);
+  });
+});
