@@ -53,23 +53,27 @@ function openCourse(id) {
 }
 
 // ---- Inicio ----
-function renderHome() {
-  // «Sigue aprendiendo»: el curso que se estudió por última vez; si ya lo terminó, otro inscrito con lecciones pendientes.
-  const mine = myCourses(), pend = mine.filter(c => currentLesson(c));
+// «Sigue aprendiendo» (va en Mis cursos, no en el Inicio, pedido del 2026-11-19): el curso que se estudió por última vez;
+// si ya lo terminó, otro inscrito con lecciones pendientes.
+function continueHTML(mine) {
+  const pend = mine.filter(c => currentLesson(c));
   const last = pend.find(c => c.id === S.course) || pend[0], cur = last && currentLesson(last);
-  const goalP = Math.min(1, todayXP() / S.goal), name = (S.name || '').trim().split(/\s+/)[0];
-  view.innerHTML = `<div class="home">
-    <header class="home-head"><p>${name ? `Hola, ${esc(name)}` : 'Hola'}</p><h1>¿Qué aprendemos hoy?</h1></header>
-    ${cur ? (() => {
-      const ui = last.units.findIndex(u => u.lessons.includes(cur)), w = WORLDS[last.units[ui].world] || { name: last.units[ui].title };
-      const ls = lessonsOf(last), d = ls.filter(isDone).length;
-      return `<section class="home-continue" style="--c:${last.color}" aria-label="Sigue aprendiendo">
+  if (!cur) return { html: '' };
+  const ui = last.units.findIndex(u => u.lessons.includes(cur)), w = WORLDS[last.units[ui].world] || { name: last.units[ui].title };
+  const ls = lessonsOf(last), d = ls.filter(isDone).length;
+  return { last, cur, html: `<section class="home-continue" style="--c:${last.color}" aria-label="Sigue aprendiendo">
         <div class="hk-top">${courseArt(last, 'lg')}<div><p class="hk-eyebrow">Sigue aprendiendo · ${esc(last.name)}</p>
           <b class="hk-title">${esc(cur.title)}</b><span class="hk-sub">Mundo ${worldNo(last, ui)} · ${esc(w.name)}</span></div></div>
         <div class="hk-prog"><span class="mini-bar"><i style="width:${(d / ls.length) * 100}%"></i></span><small>${d}/${ls.length}</small></div>
         <div class="hk-acts"><button class="btn" data-continue>Continuar</button><button class="btn ghost" data-open="${last.id}">Ver el curso</button></div>
-      </section>`;
-    })() : ''}
+      </section>` };
+}
+
+function renderHome() {
+  const mine = myCourses();
+  const goalP = Math.min(1, todayXP() / S.goal), name = (S.name || '').trim().split(/\s+/)[0];
+  view.innerHTML = `<div class="home">
+    <header class="home-head"><p>${name ? `Hola, ${esc(name)}` : 'Hola'}</p><h1>¿Qué aprendemos hoy?</h1></header>
     ${installEvt && !S.hideInstall ? `<section class="install-banner">
       <img src="icons/icon-192.png" alt="" width="44" height="44">
       <div><b>Instala Zuka</b><p>Ábrela como app, incluso sin conexión.</p></div>
@@ -91,7 +95,6 @@ function renderHome() {
     }).join('')}</div>
   </div>`;
   view.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openCourse(b.dataset.open));
-  $('[data-continue]', view)?.addEventListener('click', () => { S.course = last.id; save(); startLesson(last, cur); });
   $('[data-install]', view)?.addEventListener('click', promptInstall);
   $('[data-hide-install]', view)?.addEventListener('click', () => { S.hideInstall = true; save(); renderHome(); });
   view.scrollTop = 0;
@@ -99,9 +102,10 @@ function renderHome() {
 
 // ---- Mis cursos ----
 function renderMyCourses() {
-  const mine = myCourses();
+  const mine = myCourses(), k = continueHTML(mine);
   view.innerHTML = `<div class="mycourses">
     <header class="home-head"><h1>Mis cursos</h1><p>${mine.length ? 'Los cursos en que estás inscrito.' : 'Aún no te has inscrito en ningún curso.'}</p></header>
+    ${k.html}
     ${mine.length ? `<div class="mc-list">${mine.map(c => {
       const ls = lessonsOf(c), d = ls.filter(isDone).length, nxt = currentLesson(c);
       return `<button class="mc-row" data-open="${c.id}" style="--c:${c.color}">
@@ -115,6 +119,7 @@ function renderMyCourses() {
   </div>`;
   view.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openCourse(b.dataset.open));
   $('[data-home]', view).onclick = () => go('home');
+  $('[data-continue]', view)?.addEventListener('click', () => { S.course = k.last.id; save(); startLesson(k.last, k.cur); });
   view.scrollTop = 0;
 }
 
@@ -136,32 +141,33 @@ function courseHeadHTML(c, block) {
 function bindCourseHead() { $('[data-courses]', view)?.addEventListener('click', () => go('cursos')); }
 
 // ---- gimnasio flotante (dentro de un mundo) ----
-// Mancuerna en relieve sobre una base (pedido del 2026-11-19): discos con costado y cara, degradado lila → rosa → naranja.
+// Mancuerna en relieve sobre una base (pedido del 2026-11-19): discos con costado y cara, en los colores del curso
+// (--g1..--g4, de ART_PAL; ver gymFabColors); la base toma los tonos del tema (--gb*, --gd*, en css/styles.css).
 // Se dibuja con el eje horizontal y luego se inclina; la cara visible de los discos mira a la izquierda.
 const GYM_3D = (() => {
   const plate = (x0, x1, face) => `<rect x="${Math.min(x0, x1)}" y="-13" width="${Math.abs(x1 - x0)}" height="26" fill="url(#gf-g)"/>
     <rect x="${Math.min(x0, x1)}" y="-13" width="${Math.abs(x1 - x0)}" height="26" fill="url(#gf-s)"/>
     <ellipse cx="${x1}" cy="0" rx="4.6" ry="13" fill="url(#gf-g)"/><ellipse cx="${x1}" cy="0" rx="4.6" ry="13" fill="url(#gf-s)"/>
     <ellipse cx="${x0}" cy="0" rx="4.6" ry="13" fill="url(#gf-g)"/><ellipse cx="${x0}" cy="0" rx="4.6" ry="13" fill="#fff" opacity=".38"/>
-    ${face ? `<ellipse cx="${x0 - .3}" cy="0" rx="1.6" ry="3.8" fill="#8a6cf0" opacity=".55"/>` : ''}`;
+    ${face ? `<ellipse cx="${x0 - .3}" cy="0" rx="1.6" ry="3.8" style="fill:var(--g4)" opacity=".5"/>` : ''}`;
   return `<svg class="gf-art" viewBox="0 0 64 64" aria-hidden="true">
   <defs>
     <linearGradient id="gf-g" gradientUnits="userSpaceOnUse" x1="-20" y1="0" x2="20" y2="0">
-      <stop offset="0" stop-color="#b9a4ff"/><stop offset=".5" stop-color="#ff93c9"/><stop offset="1" stop-color="#ffb35a"/></linearGradient>
+      <stop offset="0" style="stop-color:var(--g1)"/><stop offset=".5" style="stop-color:var(--g2)"/><stop offset="1" style="stop-color:var(--g3)"/></linearGradient>
     <linearGradient id="gf-s" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#3a1a5a" stop-opacity=".28"/></linearGradient>
+      <stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" style="stop-color:var(--g4)" stop-opacity=".35"/></linearGradient>
     <radialGradient id="gf-b" cx=".5" cy=".35" r=".7">
-      <stop offset="0" stop-color="#7a7e88"/><stop offset="1" stop-color="#34363c"/></radialGradient>
+      <stop offset="0" style="stop-color:var(--gb1)"/><stop offset="1" style="stop-color:var(--gb2)"/></radialGradient>
     <radialGradient id="gf-d" cx=".5" cy=".3" r=".75">
-      <stop offset="0" stop-color="#2a2c31"/><stop offset="1" stop-color="#55585f"/></radialGradient>
+      <stop offset="0" style="stop-color:var(--gd1)"/><stop offset="1" style="stop-color:var(--gd2)"/></radialGradient>
     <radialGradient id="gf-h" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#c58bff" stop-opacity=".7"/><stop offset=".6" stop-color="#ff9a6a" stop-opacity=".25"/><stop offset="1" stop-color="#ff9a6a" stop-opacity="0"/></radialGradient>
+      <stop offset="0" style="stop-color:var(--g2)" stop-opacity=".55"/><stop offset=".6" style="stop-color:var(--g3)" stop-opacity=".2"/><stop offset="1" style="stop-color:var(--g3)" stop-opacity="0"/></radialGradient>
   </defs>
   <ellipse cx="32" cy="52" rx="30" ry="11" fill="url(#gf-h)"/>
   <ellipse cx="32" cy="48" rx="25" ry="10.5" fill="url(#gf-b)"/>
-  <ellipse cx="32" cy="47.2" rx="25" ry="10.5" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width=".8"/>
+  <ellipse cx="32" cy="47.2" rx="25" ry="10.5" fill="none" style="stroke:var(--grim)" stroke-width=".8"/>
   <ellipse cx="32" cy="47.5" rx="19" ry="7.4" fill="url(#gf-d)"/>
-  <ellipse cx="33" cy="47" rx="12" ry="3.6" fill="#000" opacity=".28"/>
+  <ellipse cx="33" cy="47" rx="12" ry="3.6" style="fill:var(--g4)" opacity=".3"/>
   <g class="gf-db"><g transform="translate(32 28) rotate(-36)">
     ${plate(10, 19, false)}
     <rect x="-10" y="-3.6" width="20" height="7.2" rx="1" fill="url(#gf-g)"/><rect x="-10" y="-3.6" width="20" height="7.2" rx="1" fill="url(#gf-s)"/>
@@ -170,10 +176,15 @@ const GYM_3D = (() => {
 </svg>`;
 })();
 
+// Degradado de la pesa: tono claro → color del curso → su acento; --g4 es la sombra.
+function gymFabColors(c) {
+  const p = (typeof ART_PAL !== 'undefined' && ART_PAL[c.id]) || {};
+  return `--c:${c.color};--g1:${p.soft || c.color};--g2:${p.blue || c.color};--g3:${p.sun || c.color};--g4:${p.deep || c.color}`;
+}
 function gymFabHTML(c, ui) {
   const g = gymWorld(c, ui, S.done, S.unlockAll, S.gym || {});
   if (!g.fab) return '';
-  return `<button class="gym-fab" data-gym-fab data-ui="${ui}" style="--c:${c.color}" aria-label="Gimnasio: retos guiados de tu nivel${g.pending ? `, ${g.pending} por hacer` : ''}">
+  return `<button class="gym-fab" data-gym-fab data-ui="${ui}" style="${gymFabColors(c)}" aria-label="Gimnasio: retos guiados de tu nivel${g.pending ? `, ${g.pending} por hacer` : ''}">
     ${GYM_3D}${g.pending ? `<span class="gym-fab-n" aria-hidden="true">${g.pending}</span>` : ''}</button>`;
 }
 function bindGymFab(c) {

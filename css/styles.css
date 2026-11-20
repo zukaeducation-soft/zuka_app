@@ -1490,13 +1490,18 @@ button.set-row:active { opacity: .7; }
 /* Gimnasio flotante: dentro de un mundo, abajo a la derecha, por encima del menú inferior. */
 .gym-fab {
   position: fixed; z-index: 6; right: max(18px, calc((100vw - 480px) / 2 + 18px)); bottom: calc(var(--tabbar-h, 64px) + 18px);
-  width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; color: var(--c-on);
-  padding: 0; border: 0; cursor: pointer;
-  background: radial-gradient(circle at 50% 58%, var(--bg) 52%, color-mix(in srgb, var(--bg) 0%, transparent) 71%);
-  filter: drop-shadow(0 8px 14px rgba(20, 10, 40, .35));
+  width: 74px; height: 74px; border-radius: 50%; display: grid; place-items: center; color: var(--c-on);
+  padding: 0; border: 0; cursor: pointer; background: none;
+  /* la base toma los tonos del tema y un poco del color del curso: se funde con el fondo en los dos temas */
+  --gb1: color-mix(in srgb, var(--c) 14%, color-mix(in srgb, var(--ink) 26%, var(--bg)));
+  --gb2: color-mix(in srgb, var(--c) 8%, color-mix(in srgb, var(--ink) 9%, var(--bg)));
+  --gd1: color-mix(in srgb, var(--ink) 4%, var(--bg));
+  --gd2: color-mix(in srgb, var(--c) 10%, color-mix(in srgb, var(--ink) 18%, var(--bg)));
+  --grim: color-mix(in srgb, var(--c) 45%, transparent);
+  filter: drop-shadow(0 6px 12px color-mix(in srgb, var(--c) 30%, transparent));
   animation: gym-fab-in .35s ease both;
 }
-.gym-fab .gf-art { width: 68px; height: 68px; overflow: visible; }
+.gym-fab .gf-art { width: 74px; height: 74px; overflow: visible; }
 .gym-fab .gf-db { animation: gym-fab-bob 3.2s ease-in-out infinite; }
 @keyframes gym-fab-bob { 50% { transform: translateY(-2.5px); } }
 .gym-fab:active { transform: scale(.94); }

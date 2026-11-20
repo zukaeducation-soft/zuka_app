@@ -157,3 +157,20 @@ test('el botón flotante es una mancuerna en relieve sobre una base (sin el icon
   assert.match(css, /\.gym-fab \.gf-art \{/);
   assert.match(css, /prefers-reduced-motion: reduce\) \{ \.gym-fab, \.gym-fab \.gf-db \{ animation: none; \} \}/);
 });
+
+test('la pesa toma los colores del curso y la base los del tema; «Sigue aprendiendo» va en Mis cursos, no en el Inicio', () => {
+  const ini = read('js/inicio.js');
+  assert.doesNotMatch(ini, /#b9a4ff|#ff93c9|#ffb35a/, 'sin el degradado fijo');
+  assert.match(ini, /stop-color:var\(--g1\)/);
+  const art = loadScripts(['js/art.js']);
+  const f = loadScripts(['js/inicio.js']); f.ART_PAL = get(art, 'ART_PAL');
+  const st = get(f, 'gymFabColors')({ id: 'trig', color: '#22d3ee' });
+  assert.match(st, new RegExp(`--g2:${get(art, 'ART_PAL').trig.blue}`));
+  assert.match(get(f, 'gymFabColors')({ id: 'nuevo', color: '#123456' }), /--g1:#123456/, 'curso sin paleta: su color');
+  assert.match(css, /\.gym-fab \{[^}]*--gb1: color-mix\([^}]*var\(--bg\)/);
+  const home = ini.slice(ini.indexOf('function renderHome'), ini.indexOf('function renderMyCourses'));
+  assert.doesNotMatch(home, /continueHTML|home-continue/);
+  const mis = ini.slice(ini.indexOf('function renderMyCourses'), ini.indexOf('function courseHeadHTML'));
+  assert.match(mis, /continueHTML\(mine\)/);
+  assert.match(mis, /\[data-continue\][^\n]*startLesson\(k\.last, k\.cur\)/);
+});
