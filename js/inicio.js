@@ -136,11 +136,45 @@ function courseHeadHTML(c, block) {
 function bindCourseHead() { $('[data-courses]', view)?.addEventListener('click', () => go('cursos')); }
 
 // ---- gimnasio flotante (dentro de un mundo) ----
+// Mancuerna en relieve sobre una base (pedido del 2026-11-19): discos con costado y cara, degradado lila → rosa → naranja.
+// Se dibuja con el eje horizontal y luego se inclina; la cara visible de los discos mira a la izquierda.
+const GYM_3D = (() => {
+  const plate = (x0, x1, face) => `<rect x="${Math.min(x0, x1)}" y="-13" width="${Math.abs(x1 - x0)}" height="26" fill="url(#gf-g)"/>
+    <rect x="${Math.min(x0, x1)}" y="-13" width="${Math.abs(x1 - x0)}" height="26" fill="url(#gf-s)"/>
+    <ellipse cx="${x1}" cy="0" rx="4.6" ry="13" fill="url(#gf-g)"/><ellipse cx="${x1}" cy="0" rx="4.6" ry="13" fill="url(#gf-s)"/>
+    <ellipse cx="${x0}" cy="0" rx="4.6" ry="13" fill="url(#gf-g)"/><ellipse cx="${x0}" cy="0" rx="4.6" ry="13" fill="#fff" opacity=".38"/>
+    ${face ? `<ellipse cx="${x0 - .3}" cy="0" rx="1.6" ry="3.8" fill="#8a6cf0" opacity=".55"/>` : ''}`;
+  return `<svg class="gf-art" viewBox="0 0 64 64" aria-hidden="true">
+  <defs>
+    <linearGradient id="gf-g" gradientUnits="userSpaceOnUse" x1="-20" y1="0" x2="20" y2="0">
+      <stop offset="0" stop-color="#b9a4ff"/><stop offset=".5" stop-color="#ff93c9"/><stop offset="1" stop-color="#ffb35a"/></linearGradient>
+    <linearGradient id="gf-s" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#3a1a5a" stop-opacity=".28"/></linearGradient>
+    <radialGradient id="gf-b" cx=".5" cy=".35" r=".7">
+      <stop offset="0" stop-color="#7a7e88"/><stop offset="1" stop-color="#34363c"/></radialGradient>
+    <radialGradient id="gf-d" cx=".5" cy=".3" r=".75">
+      <stop offset="0" stop-color="#2a2c31"/><stop offset="1" stop-color="#55585f"/></radialGradient>
+    <radialGradient id="gf-h" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#c58bff" stop-opacity=".7"/><stop offset=".6" stop-color="#ff9a6a" stop-opacity=".25"/><stop offset="1" stop-color="#ff9a6a" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="32" cy="52" rx="30" ry="11" fill="url(#gf-h)"/>
+  <ellipse cx="32" cy="48" rx="25" ry="10.5" fill="url(#gf-b)"/>
+  <ellipse cx="32" cy="47.2" rx="25" ry="10.5" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width=".8"/>
+  <ellipse cx="32" cy="47.5" rx="19" ry="7.4" fill="url(#gf-d)"/>
+  <ellipse cx="33" cy="47" rx="12" ry="3.6" fill="#000" opacity=".28"/>
+  <g class="gf-db"><g transform="translate(32 28) rotate(-36)">
+    ${plate(10, 19, false)}
+    <rect x="-10" y="-3.6" width="20" height="7.2" rx="1" fill="url(#gf-g)"/><rect x="-10" y="-3.6" width="20" height="7.2" rx="1" fill="url(#gf-s)"/>
+    ${plate(-19, -10, true)}
+  </g></g>
+</svg>`;
+})();
+
 function gymFabHTML(c, ui) {
   const g = gymWorld(c, ui, S.done, S.unlockAll, S.gym || {});
   if (!g.fab) return '';
   return `<button class="gym-fab" data-gym-fab data-ui="${ui}" style="--c:${c.color}" aria-label="Gimnasio: retos guiados de tu nivel${g.pending ? `, ${g.pending} por hacer` : ''}">
-    ${ICON.gym}${g.pending ? `<span class="gym-fab-n" aria-hidden="true">${g.pending}</span>` : ''}</button>`;
+    ${GYM_3D}${g.pending ? `<span class="gym-fab-n" aria-hidden="true">${g.pending}</span>` : ''}</button>`;
 }
 function bindGymFab(c) {
   const b = $('[data-gym-fab]', view);

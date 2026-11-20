@@ -149,3 +149,11 @@ test('con componentes, el nivel sigue al componente que se estudia; la hoja nunc
   assert.match(ini, /Retos del curso/, 'si nada del componente tiene retos, la hoja muestra los del curso');
   assert.match(read('js/gimnasio.js'), /data-back-course/, 'la vista completa del gimnasio vuelve al curso');
 });
+
+test('el botón flotante es una mancuerna en relieve sobre una base (sin el icono plano)', () => {
+  const ini = read('js/inicio.js');
+  assert.match(ini, /const GYM_3D = /);
+  assert.match(ini, /\$\{GYM_3D\}/);
+  assert.match(css, /\.gym-fab \.gf-art \{/);
+  assert.match(css, /prefers-reduced-motion: reduce\) \{ \.gym-fab, \.gym-fab \.gf-db \{ animation: none; \} \}/);
+});
