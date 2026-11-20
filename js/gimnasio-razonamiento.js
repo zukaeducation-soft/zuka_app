@@ -47,6 +47,59 @@ const CONCEPTOS_PU = {
       foot: { t: 'una sola opción sobrevive', b: 2 } },
     beats: ['Empieza por quien tiene puesto seguro: ese dato no se mueve.', 'Una pareja «justo después» ocupa dos casillas seguidas: mira dónde cabe.', 'Las pistas negativas tachan opciones hasta dejar una sola.'],
   },
+  'razon-en-partes': {
+    title: 'Una razón son partes iguales',
+    scene: { type: 'barra', bars: [
+      { label: 'razón 1 : 3 : 4', b: 0, segs: [{ w: 1 / 8, t: '1', c: 'a' }, { w: 3 / 8, t: '3', c: 'g' }, { w: 4 / 8, t: '4', c: 'f' }] },
+      { label: '8 partes iguales de 60', b: 1, segs: [1, 2, 3, 4, 5, 6, 7, 8].map(() => ({ w: 1 / 8, t: '60', c: 'mute', dim: 1 })) },
+      { label: 'cada cantidad', b: 2, segs: [{ w: 1 / 8, t: '60', c: 'a' }, { w: 3 / 8, t: '180', c: 'g' }, { w: 4 / 8, t: '240', c: 'f' }] },
+    ] },
+    beats: ['Una razón $1 : 3 : 4$ corta el total en $1 + 3 + 4 = 8$ partes iguales.', 'Cada parte vale el total entre 8: $480 \\div 8 = 60$.', 'Cada cantidad es su número de partes: 60, 180 y 240.'],
+  },
+  'aumento-como-factor': {
+    title: 'Un aumento es un factor',
+    scene: { type: 'barra', bars: [
+      { label: 'antes', b: 0, segs: [{ w: .64, t: '100 %', c: 'a' }] },
+      { label: 'se le suma su cuarta parte', b: 1, segs: [{ w: .64, t: '100 %', c: 'a' }, { w: .16, t: '+25 %', c: 'g' }] },
+      { label: 'después', b: 2, segs: [{ w: .8, t: '125 %  →  × 1.25', c: 'ok' }] },
+    ] },
+    beats: ['El valor de antes es siempre el 100 %.', 'Aumentar un 25 % es agregarle su cuarta parte.', 'Queda el 125 %: multiplicar por 1.25. Un descuento del 25 % sería por 0.75.'],
+  },
+  'cambios-en-cadena': {
+    title: 'Dos cambios seguidos',
+    scene: { type: 'barra', bars: [
+      { label: 'precio inicial', b: 0, segs: [{ w: .66, t: '100', c: 'a' }] },
+      { label: 'sube el 20 % de 100', b: 1, segs: [{ w: .792, t: '120', c: 'g' }] },
+      { label: 'baja el 20 % de 120', b: 2, segs: [{ w: .634, t: '96', c: 'ok' }, { w: .158, t: '−24', c: 'bad', dim: 1 }] },
+    ] },
+    beats: ['Empieza con 100: así los porcentajes se leen directo.', 'El aumento del 20 % se calcula sobre 100: sube a 120.', 'El descuento del 20 % se calcula sobre 120: baja 24, no 20. Queda en 96.'],
+  },
+  'inversa-constante': {
+    title: 'Obreros por días no cambia',
+    scene: { type: 'pasos', lines: ['6 obreros · 20 días = 120', 'menos días  →  más obreros', '120 ÷ 12 días = 10 obreros'] },
+    beats: ['El trabajo que falta se mide en obreros por días: ese producto no cambia.', 'Si el plazo se acorta, el mismo trabajo se reparte entre más obreros.', 'Divide el trabajo entre los días que quedan.'],
+  },
+  'alcance': {
+    title: 'Alcanzar es cerrar la ventaja',
+    scene: { type: 'recta', min: 0, max: 270, ticks: [0, 90, 180, 270],
+      dots: [{ v: 0, t: 'carro', c: 'a', b: 0 }, { v: 90, t: 'bus', c: 'g', b: 0 }, { v: 270, t: 'km 270', c: 'ok', b: 2 }],
+      hops: [{ from: 0, to: 90, t: 'carro +90', c: 'a', b: 1 }, { from: 90, to: 150, t: 'bus +60', c: 'g', b: 1 }] },
+    beats: ['Cuando el carro arranca, el bus ya lleva 90 km de ventaja.', 'Cada hora el carro avanza 90 y el bus 60: la ventaja se achica 30 km.', 'La ventaja de 90 se acaba en $90 \\div 30 = 3$ horas, en el kilómetro 270.'],
+  },
+  'trabajo-por-hora': {
+    title: 'Se suma lo que hacen por hora',
+    scene: { type: 'barra', bars: [
+      { label: 'el muro completo', b: 0, segs: [{ w: 1, t: '1 muro', c: 'mute', dim: 1 }] },
+      { label: 'en una hora', b: 1, segs: [{ w: 1 / 6, t: 'Ana', c: 'a' }, { w: 2 / 6, t: 'Beto', c: 'g' }, { w: .5, t: '', c: 'mute', dim: 1 }] },
+      { label: 'juntos', b: 2, segs: [{ w: .5, t: '1/2 por hora', c: 'ok' }] },
+    ] },
+    beats: ['No se suman los tiempos: se suma lo que hace cada uno en una hora.', 'Ana pinta $\\tfrac16$ del muro por hora y Beto $\\tfrac13$.', 'Juntos pintan $\\tfrac16 + \\tfrac13 = \\tfrac12$ del muro cada hora.'],
+  },
+  'deshacer-porcentaje': {
+    title: 'Deshacer un porcentaje',
+    scene: { type: 'pasos', lines: ['precio · 0.70 = 70', 'se deshace dividiendo', '70 ÷ 0.70 = 100'] },
+    beats: ['Quitar el 30 % fue multiplicar el precio por 0.70.', 'Para volver atrás se hace la operación contraria: dividir entre el mismo factor.', 'Sumarle el 30 % al precio final no sirve: ese 30 % era de otro número.'],
+  },
 };
 if (typeof CONCEPTOS !== 'undefined') Object.assign(CONCEPTOS, CONCEPTOS_PU);
 
@@ -133,5 +186,13 @@ GYM_RETOS.push(
 );
 
 // Concepto de cada paso de los retos que ya existían: { reto: [concepto del paso 1, del paso 2, …] } (null = sin concepto).
-const GYM_CONCEPT_DE = {};
+const GYM_CONCEPT_DE = {
+  'gym-concreto': ['razon-en-partes', 'aumento-como-factor', null],
+  'gym-obra': [null, 'inversa-constante'],
+  'gym-bus': [null, 'alcance', null],
+  'gym-muro': ['trabajo-por-hora', null, null],
+  'gym-tele': ['aumento-como-factor', 'cambios-en-cadena', 'deshacer-porcentaje'],
+  'gym-chaqueta': ['deshacer-porcentaje', 'deshacer-porcentaje'],
+  // (los mundos siguientes añaden aquí)
+};
 for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (c && r.steps[i]) r.steps[i].concept = c; });
