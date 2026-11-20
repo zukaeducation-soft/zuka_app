@@ -110,3 +110,93 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
       play('eje-engano', 'Eje', { rounds: [{ a: ['A', 63], b: ['B', 60], floor: 55 }] }, '$\\tfrac{3}{60} = 5\\%$.', { hint: 'Números.' })],
   ]);
 });
+
+// Mundo 9 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
+  diezLesson('pu-gr-1', [
+    ['lee-barras', 0, 'La gráfica muestra los almuerzos vendidos de lunes a jueves. ¿Cuántos más se vendieron el martes que el miércoles?', 'El eje sube de 10 en 10: martes 50 y miércoles 20. La diferencia es 30.'],
+    ['arma-barras', 0, 'Una encuesta de deportes llegó en una tabla. Pásala a la gráfica de barras', 'Cada barra sube hasta el número de su fila: 12, 7, 4 y 9. La escala va de 2 en 2, así que 7 y 9 quedan entre dos líneas.'],
+    ['mayor-subida', 1, 'Las visitas a una página crecen cada día. ¿En qué tramo fue mayor el aumento en porcentaje?', 'En visitas, el salto más grande es el último (14). En porcentaje gana el primero: pasar de 4 a 10 es crecer un 150 %.'],
+    ['variacion-barras', 1, 'Un precio pasó de 80 a 60. Halla la variación porcentual', 'Bajó 20 sobre los 80 de antes: $20 \\div 80 = 0.25$, una caída del 25 %.'],
+    ['rueda-porcentaje', 0, 'En una gráfica circular de 120 encuestados, 18 eligieron teatro. Gira hasta esa parte', '$18 \\div 120 = 0.15$: el 15 % del círculo.'],
+    ['cruz-porcentaje', { problems: [{ text: 'El 30 % de 120 encuestados prefiere rock. ¿Cuántos son?', chips: [{ label: '30', cell: 'p' }, { label: '120', cell: 'C' }, { label: '?', cell: 'B' }] }] }, 'De la gráfica a la cantidad: arma la cruz del porcentaje', 'La cruz es $\\tfrac{100}{120} = \\tfrac{30}{B}$: prefieren rock 36 personas.'],
+    ['vuela-precios', 0, 'Vuela a la lectura correcta', 'Un sector de 90° es la cuarta parte: 25 %. De 200 a 150 se pierden 50 sobre 200: $-25\\,\\%$. Entre barras de 30 y 45 hay 15 de diferencia.'],
+  ], [
+    sol('Una papelería vendió 120 cuadernos en la semana 1, 150 en la semana 2, 90 en la semana 3 y 180 en la semana 4. ¿En qué porcentaje aumentaron las ventas de la semana 3 a la 4? ¿Cuál fue el promedio de ventas por semana?',
+      ['De la semana 3 a la 4 las ventas subieron $180 - 90 =$ [[90]] cuadernos', 'El cambio se mide sobre el valor de antes: $90 \\div 90 = 1$, es decir, el [[100 %]]', 'En las cuatro semanas se vendieron $120 + 150 + 90 + 180 =$ [[540]] cuadernos', 'Promedio por semana: $540 \\div 4 =$ [[135]] cuadernos'],
+      ['50 %', '200 %', '180'],
+      'Duplicarse es aumentar un 100 %, no un 200 %: el aumento (90) es igual al valor de antes (90). El promedio reparte el total entre las cuatro semanas.',
+      'Para el porcentaje, compara lo que subió con lo que había antes, no con lo que hay ahora.'),
+    err('Una gráfica circular muestra cómo llegan al trabajo los 240 empleados de una empresa. El sector «moto» tiene un ángulo de $60^\\circ$. ¿Cuántos empleados llegan en moto?',
+      ['El círculo completo son $360^\\circ$ y representa a los 240 empleados', 'El sector de $60^\\circ$ es $\\tfrac{60}{360} = \\tfrac16$ del círculo', 'Llegan en moto el 60 % de los empleados: $0.60 \\cdot 240 = 144$'], 2,
+      ['Llega en moto $\\tfrac16$ de los empleados: $240 \\div 6 = 40$', 'Llegan en moto 60 empleados: uno por cada grado', 'Llegan en moto $240 - 60 = 180$ empleados'],
+      'Grados no son porcentajes: $60^\\circ$ es la sexta parte del círculo (cerca del 16.7 %), y la sexta parte de 240 es 40.',
+      'El 100 % del círculo son $360^\\circ$, no 100. ¿Qué fracción del círculo ocupa el sector?'),
+    opc('Una gráfica de líneas registra la temperatura de una ciudad cada tres horas: a las 6 h, 12 °C; a las 9 h, 16 °C; a las 12 h, 23 °C; a las 15 h, 25 °C; a las 18 h, 19 °C, y a las 21 h, 14 °C. El intervalo de tres horas en el que la temperatura tuvo el mayor cambio fue:',
+      ['de 6 a 9 horas', 'de 15 a 18 horas', 'de 9 a 12 horas', 'de 18 a 21 horas'], 2,
+      'Los cambios son $+4$, $+7$, $+2$, $-6$ y $-5$ grados. El mayor, sin importar el signo, es el de 9 a 12 horas.',
+      'Calcula la diferencia en cada tramo. Un cambio puede ser una subida o una bajada.'),
+  ]);
+
+  diezLesson('pu-gr-2', [
+    ['nivela-datos', 0, 'Cinco amigos llevan 4, 9, 6, 3 y 8 dulces. Nivela las barras para repartirlos por igual', 'Entre todos tienen 30 dulces: nivelados, cada uno queda con $30 \\div 5 = 6$. Ese es el promedio.'],
+    ['ordena-mediana', 1, 'Seis atletas marcaron estos tiempos. Ordénalos y halla la mediana', 'Ordenados: 7, 7, 9, 10, 12, 15. Con un número par de datos, la mediana es el promedio de los dos del centro: 9.5.'],
+    ['tres-centros', 0, 'Los salarios de una empresa pequeña: ubica la media, la mediana y la moda', 'Moda 3 (el que más se repite), mediana 3.5 (entre 3 y 4) y media 5: los dos datos grandes jalan la media hacia arriba.'],
+    ['dato-faltante', 1, 'Un vendedor necesita promediar 50 en cinco días y ya lleva 40, 55, 45 y 50. Halla el dato que falta', 'Para promediar 50 en cinco días debe sumar 250. Lleva 190: le faltan 60.'],
+    ['balanza-promedio', 0, 'Seis estudiantes promediaron 3 y otros dos promediaron 7. Ubica el promedio de todos', 'El grupo grande pesa más: $\\tfrac{6 \\cdot 3 + 2 \\cdot 7}{8} = \\tfrac{32}{8} = 4$, más cerca del 3 que del 7.'],
+    ['nivela-barras', 0, 'Los datos suben como una escalera. Nivélala', 'En una escalera pareja (2, 5, 8, 11, 14) el promedio es el dato del centro: 8.'],
+    ['rompe-cambios', 0, 'Manda la pelota al centro correcto', 'Promedio: $21 \\div 3 = 7$. Mediana de 2, 4, 7, 9, 10: el del centro, 7. Moda: el 5, que sale tres veces.'],
+  ], [
+    sol('En un curso, la nota definitiva se calcula así: el examen parcial vale el 40 % y el examen final vale el 60 %. Andrea obtuvo 3.0 en el parcial. ¿Qué nota necesita en el final para que su definitiva sea 3.6?',
+      ['El parcial aporta $0.40 \\cdot 3.0 =$ [[1.2]]', 'Para llegar a 3.6, el final debe aportar $3.6 - 1.2 =$ [[2.4]]', 'El final pesa 0.60: la nota debe ser $2.4 \\div 0.60 =$ [[4.0]]'],
+      ['4.2', '3.6', '1.8'],
+      'Un promedio ponderado suma los aportes de cada nota por su peso. No es el promedio simple: con 4.2 en el final, la definitiva sería 3.72.',
+      'Cada examen aporta su nota multiplicada por su peso. ¿Cuánto aporta ya el parcial?'),
+    err('En un curso hay 20 mujeres y 10 hombres. En un examen, el promedio de las mujeres fue 4.0 y el de los hombres, 3.1. ¿Cuál fue el promedio de todo el curso?',
+      ['Puntos de las mujeres: $20 \\cdot 4.0 = 80$', 'Puntos de los hombres: $10 \\cdot 3.1 = 31$', 'Promedio del curso: $(4.0 + 3.1) \\div 2 = 3.55$'], 2,
+      ['Promedio del curso: $(80 + 31) \\div 30 = 3.7$', 'Promedio del curso: $(80 + 31) \\div 2 = 55.5$', 'Promedio del curso: $(80 + 31) \\div 20 = 5.55$'],
+      'Los grupos no tienen el mismo tamaño: se suman los puntos de todos y se divide entre las 30 personas. Da 3.7, más cerca del promedio del grupo grande.',
+      'Los dos primeros pasos ya calcularon los puntos de cada grupo. ¿Los usó el último paso?'),
+    opc('Las edades de cinco primos son 8, 11, 11, 14 y 21 años. De las siguientes afirmaciones, la única verdadera es:',
+      ['El promedio es igual a la mediana', 'La mediana es mayor que el promedio', 'La moda es mayor que la mediana', 'El promedio es mayor que la mediana'], 3,
+      'El promedio es $65 \\div 5 = 13$; la mediana y la moda son 11. El dato grande (21) sube el promedio por encima de la mediana.',
+      'Calcula los tres: el promedio, el dato del centro y el que más se repite.'),
+  ]);
+
+  diezLesson('pu-gr-3', [
+    ['muestra-sesgo', 0, 'Un periodista quiere saber qué opina toda la ciudad. Ubica la muestra donde mejor la represente', 'Una buena muestra se parece al total: debe tener la misma mezcla de opiniones, no solo las del lado donde es más fácil preguntar.'],
+    ['eje-engano', 0, 'Un anuncio compara dos marcas con el eje cortado. Baja el eje hasta el 0 para ver la diferencia real', 'Con el eje desde 45, la barra de 55 parece el doble de la de 50. Desde 0 se ve la verdad: solo es un 10 % más alta.'],
+    ['tabla-doble', 0, 'En el colegio A usan bicicleta 18 de 30 estudiantes y en el B, 28 de 70. ¿Dónde es mayor la proporción?', 'En B hay más ciclistas, pero A gana en proporción: $18 \\div 30 = 60\\,\\%$ contra $28 \\div 70 = 40\\,\\%$.'],
+    ['lee-barras', 0, 'El eje de esta gráfica de puntajes no empieza en 0. ¿Cuánto más sacó Caro que Beto?', 'Se leen los valores, no los tamaños: $86 - 78 = 8$ puntos, aunque la barra de Caro parezca el doble.'],
+    ['variacion-barras', 0, 'Un titular dice que las ventas «se duplicaron» al pasar de 120 a 180. Mide la variación real', 'Subieron 60 sobre 120: un 50 %. Duplicarse sería un 100 %, llegar a 240.'],
+    ['pinta-personas', 0, 'En una muestra de 40 personas, el 35 % prefiere la radio. Píntalas', 'El 10 % de 40 es 4: el 35 % son $12 + 2 = 14$ personas.'],
+    ['tanque-porcentaje', 0, 'Llena cada tanque al porcentaje pedido'],
+  ], [
+    sol('Una encuesta preguntó en dos ciudades si las personas usan transporte público. En la ciudad A respondieron 80 personas y 60 dijeron que sí. En la ciudad B respondieron 120 personas y 72 dijeron que sí. ¿En cuál ciudad es mayor la proporción de usuarios?',
+      ['Ciudad A: $60 \\div 80 =$ [[75 %]]', 'Ciudad B: $72 \\div 120 =$ [[60 %]]', 'En B hay más usuarios (72 contra 60), pero la proporción es mayor en la ciudad [[A]]', 'La diferencia es de [[15]] puntos porcentuales'],
+      ['B', '12', '66 %'],
+      'Para comparar grupos de distinto tamaño no sirven las cantidades: se comparan las proporciones. Tener más usuarios no es tener mayor proporción.',
+      'Cada ciudad tiene su propio total. Divide los que dijeron que sí entre los que respondieron en esa ciudad.'),
+    err('Una tienda vendió 40 camisetas en enero, 60 en febrero y 90 en marzo. El dueño afirma: «las ventas crecieron en el mismo porcentaje en febrero y en marzo». ¿Tiene razón?',
+      ['De enero a febrero: $60 - 40 = 20$ camisetas más', 'De febrero a marzo: $90 - 60 = 30$ camisetas más', 'Como 30 es más que 20, el porcentaje de crecimiento fue mayor en marzo'], 2,
+      ['En porcentaje: $20 \\div 40 = 50\\,\\%$ y $30 \\div 60 = 50\\,\\%$. Creció lo mismo', 'En porcentaje: $20 \\div 60$ y $30 \\div 90$. Creció el 33 % cada mes', 'Como 20 es menos que 30, el porcentaje fue mayor en febrero'],
+      'Cada aumento se compara con las ventas del mes anterior: 20 sobre 40 y 30 sobre 60 son el 50 % las dos veces. El dueño tiene razón.',
+      'Un porcentaje de crecimiento no es la cantidad que se sumó: depende de cuánto había antes.'),
+    opc('En una gráfica de barras, el eje vertical empieza en 90 en lugar de 0. La barra del producto A llega a 100 y la del producto B llega a 110, de modo que la barra de B se ve el doble de alta que la de A. De las siguientes afirmaciones, la única correcta es:',
+      ['B vendió el doble que A', 'B vendió un 10 % más que A', 'B vendió un 100 % más que A', 'No se puede comparar a A con B'], 1,
+      'Los valores son 100 y 110: B vendió 10 más sobre 100, un 10 % más. El eje cortado exagera la diferencia.',
+      'Lee los números del eje, no el tamaño de las barras.'),
+  ]);
+
+  addExam('pu-graficas', [
+    ['pu-gr-1', 'En una gráfica circular, el sector es la misma fracción del total que su ángulo de 360°.',
+      opc('Una gráfica circular representa a 600 estudiantes. El sector de quienes prefieren ciencias mide $120^\\circ$. La cantidad de estudiantes que prefiere ciencias es:', ['200', '120', '72', '300'], 0,
+        '$120^\\circ$ es la tercera parte del círculo: $600 \\div 3 = 200$.', 'Halla qué fracción de la vuelta completa ocupa el sector.')],
+    ['pu-gr-2', 'El promedio por el número de datos da la suma.',
+      opc('El promedio de cuatro números es 15. Si se agrega un quinto número, el promedio pasa a ser 16. El quinto número es:', ['16', '20', '17', '31'], 1,
+        'Los cuatro suman 60 y los cinco deben sumar 80: el quinto es 20.', 'Convierte cada promedio en una suma.')],
+    ['pu-gr-3', 'Una muestra solo permite concluir sobre un grupo que se le parezca.',
+      opc('A la salida de un gimnasio se encuestó a 50 personas, y 45 dijeron que hacen ejercicio todas las semanas. De esa encuesta se puede concluir que:', ['El 90 % de la población hace ejercicio', 'La mayoría de la ciudad va al gimnasio', 'Hacer ejercicio está de moda', 'La muestra no representa a toda la población'], 3,
+        'Quienes salen de un gimnasio no se parecen al resto de la población: la muestra está sesgada.', 'Pregúntate a quiénes se les preguntó y si se parecen a todos los demás.')],
+  ]);
+});

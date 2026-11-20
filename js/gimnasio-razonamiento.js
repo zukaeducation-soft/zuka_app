@@ -141,6 +141,20 @@ const CONCEPTOS_PU = {
     scene: { type: 'pasos', lines: ['S  →  V', 'O  →  R', 'cada letra avanza 3', 'descifrar: retroceder 3'] },
     beats: ['Compara una letra con su versión cifrada.', 'Todas las letras se mueven lo mismo.', 'Ese número de puestos es la clave.', 'Para leer el mensaje, cada letra se devuelve los mismos puestos.'],
   },
+  'cambio-porcentual': {
+    title: 'El cambio, sobre el valor de antes',
+    scene: { type: 'pasos', lines: ['cambio = después − antes', 'se compara con el de antes', '10 ÷ 100 = 10 %'] },
+    beats: ['Primero se halla cuánto cambió la cantidad.', 'Ese cambio se compara siempre con el valor de antes, que es el 100 %.', 'Diez ciclistas más sobre cien que había: un aumento del 10 %.'],
+  },
+  'proporcion-no-cantidad': {
+    title: 'Más cantidad no es más proporción',
+    scene: { type: 'barra', bars: [
+      { label: 'antes: 100 de 400', b: 0, segs: [{ w: .2, t: '25 %', c: 'a' }, { w: .6, t: '', c: 'mute', dim: 1 }] },
+      { label: 'ahora: 110 de 500', b: 1, segs: [{ w: .22, t: '22 %', c: 'g' }, { w: .78, t: '', c: 'mute', dim: 1 }] },
+      { label: 'la parte creció menos que el todo', b: 2, segs: [{ w: .25, t: '25 %', c: 'a' }, { w: .22, t: '22 %', c: 'g' }] },
+    ] },
+    beats: ['Antes, 100 de 400 estudiantes: la cuarta parte del colegio.', 'Ahora hay más ciclistas, pero el colegio creció más: 110 de 500.', 'La cantidad subió y la proporción bajó: son dos preguntas distintas.'],
+  },
 };
 if (typeof CONCEPTOS !== 'undefined') Object.assign(CONCEPTOS, CONCEPTOS_PU);
 
@@ -301,6 +315,30 @@ GYM_RETOS.push(
     ],
     answer: 'El mensaje dice CASA.',
     wrap: 'En los problemas de códigos, la regla se saca de un ejemplo resuelto, se comprueba con todas sus letras y después se aplica al revés para descifrar.',
+  },
+);
+
+GYM_RETOS.push(
+  {
+    id: 'gym-ciclistas', after: ['pu-gr-1', 'pu-gr-3'], level: 2,
+    title: 'El anuncio del rector', strategy: 'Separar cantidad y proporción',
+    problem: 'Un colegio pasó de 400 a 500 estudiantes, y los que llegan en bicicleta pasaron de 100 a 110. El rector anuncia: «cada vez más estudiantes prefieren la bicicleta». ¿En qué porcentaje aumentó el número de ciclistas? ¿Aumentó también su proporción en el colegio?',
+    steps: [
+      { title: 'Mide el cambio de la cantidad', concept: 'cambio-porcentual',
+        coach: 'Primero mira la cantidad: cuántos ciclistas había y cuántos hay. El cambio se mide comparándolo con el valor de antes.',
+        ex: play('variacion-barras', 'Halla la variación de los ciclistas', { rounds: [{ from: 100, to: 110, what: 'Ciclistas' }] },
+          'Hay 10 ciclistas más sobre los 100 de antes: un aumento del 10 %.', { hint: 'Divide lo que cambió entre el valor de antes.' }),
+        hints: ['El aumento son los ciclistas nuevos. Compáralos con los que había al comienzo, no con los de ahora.', 'Los ciclistas nuevos son la décima parte de los que había.'],
+        note: 'Ciclistas: de 100 a 110, un aumento del 10 %' },
+      { title: 'Compara las proporciones', concept: 'proporcion-no-cantidad',
+        coach: 'Ahora mira la proporción: qué parte del colegio va en bicicleta antes y ahora. Si el total crece más rápido que la parte, la proporción baja.',
+        ex: play('tabla-doble', 'Compara la proporción de antes con la de ahora', { rounds: [{ rows: [['antes', 100, 400], ['ahora', 110, 500]], what: 'llega en bicicleta' }] },
+          'Antes: $100 \\div 400 = 25\\,\\%$. Ahora: $110 \\div 500 = 22\\,\\%$. La proporción bajó.', { hint: 'Compara las dos filas en porcentaje, no en cantidad.' }),
+        hints: ['En cada fila, divide los ciclistas entre el total de estudiantes de ese momento.', 'Antes eran la cuarta parte del colegio. Ahora, 110 de 500 es un poco menos.'],
+        note: 'Proporción de ciclistas: bajó (del 25 % al 22 %)' },
+    ],
+    answer: 'Los ciclistas aumentaron un 10 %, pero su proporción bajó del 25 % al 22 %.',
+    wrap: 'Ante una afirmación sobre datos, separa dos preguntas: ¿cambió la cantidad? y ¿cambió la proporción? Cuando el total también cambia, las dos respuestas pueden ir en sentidos contrarios.',
   },
 );
 
