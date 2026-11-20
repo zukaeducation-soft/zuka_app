@@ -124,10 +124,17 @@ function pzInerte(on) {
 }
 // Botón atrás del celular (js/back.js): desde la pantalla de entrada abierta aquí, vuelve a la presentación.
 function presentacionAtras() {
-  const a = document.getElementById('auth');
-  if (!a || !pzDesde) return false;
-  a.remove(); presentacionAbrir();
+  if (!document.getElementById('auth') || !pzDesde) return false;
+  pzVolver();
   return true;
+}
+// De la pantalla de entrada a la presentación: la ventana se cierra (escritorio) o la presentación vuelve (celular).
+function pzVolver() {
+  document.getElementById('auth')?.remove();
+  const lz = document.getElementById('landing');
+  if (!lz) return presentacionAbrir();
+  lz.inert = false; pzDesde = false;
+  lz.querySelector('h1')?.focus({ preventScroll: true });
 }
 function presentacionInstall() {
   if (isStandalone()) return '';
@@ -150,8 +157,16 @@ function presentacionAbrir() {
     if (m === 'install') return promptInstall().then(() => presentacionAbrir());
     // authCerrar quita también la presentación y abre el recorrido si toca
     if (m === 'guest' || !Cuenta.sb) { S.guest = m === 'guest' || S.guest; save(); pzDesde = false; return authCerrar(); }
-    presentacionCerrar(); pzDesde = true; authScreen(m);
-    document.querySelector('#auth h1')?.setAttribute('tabindex', '-1');
+    // En el computador la entrada es una ventana sobre la presentación (css/escritorio.css); en el celular la reemplaza.
+    const encima = esEscritorio();
+    if (!encima) presentacionCerrar();
+    pzDesde = true; authScreen(m);
+    const auth = document.getElementById('auth'), h1 = auth.querySelector('h1');
+    h1.tabIndex = -1;
+    if (encima) {
+      el.inert = true; h1.focus();   // la presentación de atrás no se alcanza con Tab; Escape cierra la ventana
+      if (!auth.dataset.pzEsc) { auth.dataset.pzEsc = '1'; auth.addEventListener('keydown', e => { if (e.key === 'Escape') pzVolver(); }); }
+    }
   });
   // Pestañas de cursos (con flechas, foco itinerante).
   const tabs = [...el.querySelectorAll('[data-pz-tab]')];

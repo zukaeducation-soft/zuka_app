@@ -153,5 +153,6 @@
   .pz-rev { opacity: 1; translate: 0 0; }
 }
 
-/* pantalla de entrada abierta desde aquí */
+/* pantalla de entrada abierta desde aquí (en el computador, una ventana encima de la presentación) */
+#auth { z-index: 37; }
 .auth-volver { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; }

@@ -160,12 +160,13 @@ function renderTop() {
   syncHearts();
   // Solo racha y experiencia, más grandes; sin la marca ni las vidas (las vidas se ven dentro de la lección).
   // Pedido del 2026-11-19: la app ocupa la pantalla de arriba abajo (spec 2026-11-19-pantalla-completa).
-  $('#topbar').innerHTML = `
+  $('#topbar').innerHTML = `<button class="tb-logo-d" type="button" data-home aria-label="Ir al inicio">${logoHTML()}</button>
     <div class="tb-stats">
       <button class="tb-stat streak${S.lastDay === today() ? ' lit' : ''}" data-streak aria-label="Racha: ${streakNow()} ${streakNow() === 1 ? 'día' : 'días'}. Ver tu actividad">${ICON.flame}<b>${streakNow()}</b></button>
       <span class="tb-stat xp" title="Experiencia: ${S.xp} XP">${ICON.bolt}<b>${shortNum(S.xp)}</b></span>
     </div>`;
   $('#topbar [data-streak]').onclick = openStreakSheet;
+  $('#topbar [data-home]').onclick = () => { profileSub = null; go('home'); };   // logo de la barra de escritorio (css/escritorio.css)
 }
 
 // ---- hojas inferiores ----
@@ -541,6 +542,7 @@ function startLesson(c, l) {
     <button class="icon-btn clip-close" data-close aria-label="Salir">${ICON.x}</button>
     <button class="clip-skip" type="button">Ejercicios ↓</button>
     <span class="clip-part"></span>
+    <div class="ls-sides"></div>
   </div>`;
   ov.classList.add('open');
   document.body.classList.add('in-lesson');   // sin menú inferior: la lección ocupa toda la pantalla
@@ -603,6 +605,7 @@ function startLesson(c, l) {
     const after = review >= 0 ? queue.find((t, i) => i > reviewPos && i < pos && t.k === 'clip') ?? clipAt(pos) : clipAt(pos + 1);
     $('.clip-skip', root).textContent = after ? `Parte ${after.n + 1} ↓` : review >= 0 && queue[pos]?.k === 'ex' ? 'Al ejercicio ↓' : 'Ejercicios ↓';
     $('.clip-part', root).textContent = clips.length > 1 ? `Parte ${n + 1} de ${clips.length}` : '';
+    leccionLados(root, c, l, queue, review >= 0 ? reviewPos : pos, n, clips[n]);   // paneles a los lados en escritorio (js/escritorio.js)
     player.play();
     btn.textContent = 'Continuar'; btn.disabled = false;
     btn.onclick = advance;

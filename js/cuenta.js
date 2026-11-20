@@ -93,7 +93,9 @@ function authScreen(modo = 'login', aviso = '') {
   const f = $('form', el), msg = $('.form-msg', el), b = $('button[type=submit]', el);
   el.querySelectorAll('[data-m]').forEach(x => x.onclick = () => { if (x.dataset.m !== modo) authScreen(x.dataset.m); });
   $('[data-olvide]', el)?.addEventListener('click', openOlvide);
-  $('[data-pz-volver]', el)?.addEventListener('click', () => { el.remove(); presentacionAbrir(); });
+  $('[data-pz-volver]', el)?.addEventListener('click', () => pzVolver());
+  // En el computador es una ventana sobre la presentación: tocar afuera la cierra y vuelve a ella.
+  el.onclick = e => { if (e.target === el && $('#landing')) pzVolver(); };
   $('[data-guest]', el).onclick = () => { S.guest = true; save(); authCerrar(); };
   const error = t => { msg.textContent = t; msg.className = 'form-msg bad'; msg.hidden = false; };
   f.onsubmit = async e => {
