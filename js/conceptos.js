@@ -55,7 +55,8 @@ const CON = (() => {
     },
     arbol(s) {
       const L = s.levels, x0 = 30, dx = (W - 76) / L.length;
-      let nodes = [[x0, 80]], out = `<circle cx="${x0}" cy="80" r="4" style="fill:var(--ink)"/>`, span = 132;
+      const yc = s.foot ? 94 : 82;
+      let nodes = [[x0, yc]], out = `<circle cx="${x0}" cy="${yc}" r="4" style="fill:var(--ink)"/>`, span = s.foot ? 112 : 132;
       L.forEach((lv, li) => {
         const next = [], each = span / nodes.length;
         nodes.forEach(([x, y]) => {
@@ -69,10 +70,10 @@ const CON = (() => {
         if (lv.name) out += txt(lv.name, x0 + dx * (li + 1), 162, { s: 10, c: 'mute', b: lv.b });
         nodes = next;
       });
-      return out + (s.foot ? txt(s.foot.t, W - 14, 20, { a: 'end', s: 13, w: 600, c: s.foot.c || 'ok', b: s.foot.b }) : '');
+      return out + (s.foot ? txt(s.foot.t, W - 14, 19, { a: 'end', s: 12.5, w: 600, c: s.foot.c || 'ok', b: s.foot.b }) : '');
     },
     tabla(s) {
-      const nc = s.cols.length, nr = s.rows.length, hw = s.hw ?? 46, cw = Math.min(46, (W - 28 - hw) / nc), ch = Math.min(26, (H - 44) / nr), x0 = (W - hw - cw * nc) / 2 + hw, y0 = 34;
+      const nc = s.cols.length, nr = s.rows.length, hw = s.hw ?? 46, cw = Math.min(46, (W - 28 - hw) / nc), ch = Math.min(26, (H - 44) / nr), x0 = (W - hw - cw * nc) / 2 + hw, y0 = Math.max(32, (H - (s.foot ? 20 : 0) - nr * ch) / 2 + 8);
       let out = s.cols.map((c, j) => txt(c, x0 + cw * (j + .5), y0 - 8, { s: 10.5, c: 'a', w: 600 })).join('') + s.rows.map((r, i) => txt(r, x0 - 8, y0 + ch * (i + .5) + 4, { s: 10.5, c: 'g', w: 600, a: 'end' })).join('');
       (s.hl || []).forEach(h => { out += `<rect x="${x0 + cw * h.c + 1.5}" y="${y0 + ch * h.r + 1.5}" width="${cw * (h.cs || 1) - 3}" height="${ch * (h.rs || 1) - 3}" rx="5" style="fill:${fill(h.col || 'ok', 34)};stroke:${col(h.col || 'ok')}" stroke-width="1.4"${at(h.b)}/>`; });
       for (let i = 0; i < nr; i++) for (let j = 0; j < nc; j++) {

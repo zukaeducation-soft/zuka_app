@@ -494,6 +494,7 @@ function roundTabs(n, w) {
 }
 // La pestaña actual conserva su posición al cambiar de ronda.
 function drawTabs(p, C, tabs, cur, colorOf) {
+  if (tabs.length < 2) return;   // una sola ronda: una pestaña «1» suelta no dice nada (spec 2026-11-20-preuda-razonamiento-diez)
   tabs.forEach((tb, i) => {
     const col = colorOf(i), on = i === cur, plain = col === C.line;
     drawPracticePanel(p, tb, plain ? C.card : col, on ? C.brand : C.line, 7, on ? 2 : 1);

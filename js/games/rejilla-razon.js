@@ -15,7 +15,7 @@ GAMES['rejilla-razon'] = (() => {
     prompt: r => `Pinta: pintadas a blancas como ${r.p} : ${r.q}`,
     foot: () => 'Pasa el dedo por las baldosas para pintarlas',
     layout(G) { const r = G.r; G.cs = Math.min((G.W - 40) / r.cols, (G.H * 0.5) / r.rows); G.gx = (G.W - G.cs * r.cols) / 2; G.gy = 100; G.fb = { x: 12, y: G.H - 84, w: G.W - 24, h: 52 }; },
-    enter(G) { G.mode = null; G.lay(G); },
+    enter(G) { G.mode = null; game.lay(G); },
     draw(G) {
       game.lay(G);
       const { p, C, r } = G, n = r.rows * r.cols, s = G.locked && !ok(G.s, r) ? { on: [...Array(need(r)).keys()] } : G.s;
