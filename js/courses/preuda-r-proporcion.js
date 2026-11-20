@@ -210,7 +210,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['persecucion', 2, 'Un ciclista lleva 45 km de ventaja y va a 30 km/h; una moto lo sigue a 60 km/h. ¿Cuándo lo alcanza?', 'La moto se acerca $60 - 30 = 30$ km cada hora: $45 \\div 30 = 1.5$ horas.'],
     ['duplica-magnitud', 0, 'A 60 km/h un viaje dura 4 horas. ¿Cuánto dura a 80 km/h?', 'La distancia es la misma: $60 \\cdot 4 = 240$ km. A 80 km/h, $240 \\div 80 = 3$ horas.'],
     ['encuentro-caminantes', 1, 'Un caminante lleva 150 m de ventaja y avanza 40 m por minuto; otro sale detrás a 70 m por minuto. Para el reloj cuando se encuentren', '$70t = 40t + 150$ da $30t = 150$: se encuentran a los 5 minutos.'],
-    ['grafica-relacion', null, 'Un atleta corre a ritmo constante: en 2 minutos avanza 5 cuadras. Ubica los demás puntos'],
+    ['grafica-relacion', null, 'Un atleta corre a ritmo constante: en 2 minutos avanza 5 cuadras. Ubica los demás puntos', 'A ritmo fijo la distancia es proporcional al tiempo: 2.5 cuadras por minuto. En 4 minutos, 10 cuadras; en 1 minuto, 2.5; en 5 minutos, 12.5.'],
     ['bote-corriente', 0, 'Río abajo la corriente ayuda; río arriba, frena. Halla la corriente y el bote'],
   ], [
     sol('Dos atletas parten al mismo tiempo del mismo punto de una pista circular de 400 m y corren en el mismo sentido, uno a 5 m/s y el otro a 3 m/s. ¿Cuánto tarda el más rápido en alcanzar al otro por primera vez, y cuántas vueltas ha dado en ese momento?',
@@ -256,7 +256,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
 
   diezLesson('pu-pr-5', [
     ['estira-barra', 1, 'Un pasaje de 500 baja un 30 % en temporada baja. Encoge la barra', 'Quitar el 30 % es quedarse con el 70 %: $500 \\cdot 0.70 = 350$.'],
-    ['etiqueta-rebaja', { items: [{ name: 'Chaqueta', price: 120000, change: -25 }, { name: 'Libro', price: 40000, change: 20 }], stickers: [90000, 48000, 30000, 8000, 96000] }, 'La chaqueta baja y el libro sube. Pega en cada etiqueta el precio final', 'Chaqueta: $120\\,000 \\cdot 0.75 = 90\\,000$. Libro: $40\\,000 \\cdot 1.20 = 48\\,000$. Los otros stickers son solo el cambio.'],
+    ['etiqueta-rebaja', { items: [{ name: 'Chaqueta', price: 120000, change: -25 }, { name: 'Libro', price: 40000, change: 20 }], stickers: [90000, 48000, 30000, 8000, 96000] }, 'La chaqueta baja y el libro sube. Pega en cada etiqueta el precio final', 'Chaqueta: $120\\,000 \\cdot 0.75 = 90\\,000$. Libro: $40\\,000 \\cdot 1.20 = 48\\,000$. Los otros stickers son el cambio solo o el porcentaje aplicado al revés.'],
     ['factor-cambio', 1, 'Un artículo pasa de 200 a 150. Encuentra el factor del cambio', '$150 \\div 200 = 0.75$: bajó un 25 %, medido sobre el precio de antes.'],
     ['precio-original', 1, 'Con un 30 % de descuento, unos audífonos quedan en 56. Encuentra el precio de antes', 'El 70 % del precio es 56: $56 \\div 0.70 = 80$.'],
     ['cascada', null, 'Una tienda aplica dos descuentos seguidos, del 25 % y del 20 %. Halla el descuento único', '$0.75 \\cdot 0.80 = 0.60$: se paga el 60 %, un descuento único del 40 %, no del 45 %.'],

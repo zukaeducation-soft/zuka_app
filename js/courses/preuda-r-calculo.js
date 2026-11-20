@@ -71,7 +71,7 @@ PU_JUEGOS.push(({ setLesson, setExam, sol, err, opc, diez }) => {
       '$\\tfrac{10}{15} = \\tfrac23$ (se divide entre 5), $\\tfrac25 = 0.4$ y $\\tfrac{9}{12} = \\tfrac34$ (se divide entre 3).',
       { hint: 'No hay prisa: mide cada puerta en la regla y compara su largo con el del número de arriba.' }),
     sol('En un torneo, $\\tfrac35$ de los inscritos vienen de colegios públicos. Llevan uniforme propio $\\tfrac23$ de los de colegios públicos y $\\tfrac12$ de los demás. ¿Qué fracción del total de inscritos lleva uniforme propio?',
-      ['Públicos con uniforme: $\\tfrac23$ de $\\tfrac35$ es [[$\\tfrac25$]] del total', 'Los demás son $1 - \\tfrac35 =$ [[$\\tfrac{2}{5}$]] del total, y la mitad de ellos es [[$\\tfrac15$]]', 'Con uniforme: $\\tfrac25 + \\tfrac15 =$ [[$\\tfrac35$]] del total'],
+      ['Públicos con uniforme: $\\tfrac23$ de $\\tfrac35$ es [[$\\tfrac25$]] del total', 'Los demás son $1 - \\tfrac35 =$ [[$\\tfrac25$]] del total, y la mitad de ellos es [[$\\tfrac15$]]', 'Con uniforme: $\\tfrac25 + \\tfrac15 =$ [[$\\tfrac35$]] del total'],
       ['$\\tfrac76$', '$\\tfrac13$', '$\\tfrac{4}{15}$'],
       '«De» es multiplicar: $\\tfrac23 \\cdot \\tfrac35 = \\tfrac25$ y $\\tfrac12 \\cdot \\tfrac25 = \\tfrac15$. Sumar $\\tfrac23 + \\tfrac12 = \\tfrac76$ no sirve: son fracciones de grupos distintos.',
       'Cada fracción habla de un grupo diferente. Pásalas todas a fracción del total antes de sumar.'),
@@ -107,7 +107,7 @@ PU_JUEGOS.push(({ setLesson, setExam, sol, err, opc, diez }) => {
       { hint: 'El valor de antes es el 100 %. Si se le quita una parte, la barra queda por debajo del 100 %.' }),
     play('etiqueta-rebaja', 'Una tienda rebaja el morral y sube el balón. Pega en cada etiqueta el sticker del precio final', {
       items: [{ name: 'Morral', price: 60000, change: -25 }, { name: 'Balón', price: 50000, change: 20 }], stickers: [45000, 15000, 60000, 40000, 10000] },
-      'Morral: $60\\,000 \\cdot 0.75 = 45\\,000$. Balón: $50\\,000 \\cdot 1.20 = 60\\,000$. Los otros stickers son solo el cambio, no el precio final.',
+      'Morral: $60\\,000 \\cdot 0.75 = 45\\,000$. Balón: $50\\,000 \\cdot 1.20 = 60\\,000$. Los otros stickers son el cambio solo o el porcentaje aplicado al revés.',
       { hint: 'Cuidado: algunos stickers son solo el descuento o el aumento. Y no todo baja: mira el signo del cambio.' }),
     play('vuela-precios', 'Alinea el planeador con el resultado y suelta para volar', { rounds: [
       { title: 'Porcentajes de cabeza', items: [{ ask: '25 % de 120', options: ['30', '25', '95'], answer: 0 }, { ask: '3/5 en porcentaje', options: ['60 %', '35 %', '53 %'], answer: 0 }, { ask: '10 % de 350', options: ['35', '3.5', '340'], answer: 0 }] }] },

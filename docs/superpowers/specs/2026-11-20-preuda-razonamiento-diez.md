@@ -66,3 +66,13 @@ Cómo quedó escrito:
 - De paso se arregló `rejilla-razon`, que nunca cargaba (llamaba `G.lay`), y con una sola ronda ya no se dibuja la pestaña «1».
 
 Pendiente: las escenas de respaldo de las lecciones y los videos no cambian. Comprensión lectora no se tocó.
+
+## Revisión fresca (2026-11-20)
+
+Un subagente recalculó los 16 mundos, las evaluaciones, los retos y los conceptos: ninguna respuesta equivocada y todos los
+acertijos con solución única. Se corrigieron 7 puntos importantes y 9 menores: dos huecos de `completa-solucion` que se podían
+llenar en otro orden válido (fichas iguales con texto distinto, y «son 4 y 7»), explicaciones y pistas heredadas que hablaban de
+rondas ya quitadas (`traza-progresion`, `grafica-relacion`, `cuenta-triangulos`, `arma-desarrollo`, `rompe-promesa`,
+`cripto-letras`, `ruta-cuadras`, `rompe-cambios`, dos preguntas de la evaluación de geometría y una de conjuntos), el enunciado
+ambiguo de `cinta-ecuacion` en `pu-ec-1` y dos conceptos que mostraban números de otro reto (`gym-tele`, `gym-chaqueta`).
+**Al usar `diezLesson`: si el pick no trae explicación o pista, hereda las de todas las rondas viejas; revisar que sirvan.**

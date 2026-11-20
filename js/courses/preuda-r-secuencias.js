@@ -109,7 +109,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['fibonacci-suma', 0, 'Cada término es la suma de los dos anteriores. Halla el que falta', '$5 + 7 = 12$, y se comprueba con el siguiente: $7 + 12 = 19$.'],
     ['alterna-dos', 1, 'Aquí hay dos sucesiones mezcladas. Halla el número que falta', 'En los lugares impares: 2, 4, 8, 16 (se duplica). En los pares: 30, 25, 20, y sigue 15.'],
     ['cuenta-saltos', 0, 'La fila 1 de un auditorio tiene 7 sillas y cada fila tiene 6 más. ¿Cuántas tiene la fila 15?', 'De la fila 1 a la 15 hay 14 saltos: $7 + 14 \\cdot 6 = 91$.'],
-    ['traza-progresion', 0, 'Traza la sucesión en orden'],
+    ['traza-progresion', 0, 'Traza la sucesión en orden', 'Los dos primeros puntos dan el salto ($+7$ y $+5$); de ahí, cada punto es el anterior más ese salto: $6, 13, 20, 27, 34$ y $-4, 1, 6, 11, 16$.'],
   ], [
     sol('En un teatro, la primera fila tiene 12 sillas y cada fila tiene 3 sillas más que la anterior. ¿Cuántas sillas tiene la fila 20? ¿Cuántas sillas hay en las primeras 20 filas?',
       ['De la fila 1 a la 20 hay [[19]] saltos de 3 sillas', 'Fila 20: $12 + 19 \\cdot 3 =$ [[69]] sillas', 'La primera fila y la última suman $12 + 69 =$ [[81]], igual que cada pareja de extremos', 'Hay 10 parejas: $10 \\cdot 81 =$ [[810]] sillas'],
@@ -157,7 +157,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['ciclo-colores', 1, 'Un collar repite siempre los mismos cinco colores. ¿De qué color es la cuenta 73?', '$73 = 5 \\cdot 14 + 3$: después de 14 vueltas completas, es el tercer color del ciclo.'],
     ['ultima-cifra', 1, '¿En qué cifra termina $7^{42}$?', 'Las últimas cifras del 7 se repiten: 7, 9, 3, 1. Como $42 = 4 \\cdot 10 + 2$, es la segunda del ciclo: 9.'],
     ['bolsas-residuo', 0, 'Se empacan 58 naranjas en bolsas de 7. Llena las bolsas y mira lo que sobra', '$58 = 7 \\cdot 8 + 2$: salen 8 bolsas y sobran 2 naranjas. Lo que sobra es el residuo.'],
-    ['gira-mesa', 1, 'Una ruleta de 7 números gira varios puestos. Gira hasta que coincida', 'Girar más de una vuelta completa es lo mismo que girar solo el residuo: lo que cuenta es lo que sobra al dividir entre 7.'],
+    ['gira-mesa', 1, 'Una ruleta de 7 números gira varios puestos. Gira hasta que coincida', 'Girar 5 puestos hacia un lado es lo mismo que girar 2 hacia el otro: en un ciclo de 7, lo que cuenta es el residuo.'],
     ['ronda-saltos', 1, 'Ocho jugadores en ronda: sale uno de cada dos. ¿Quién queda de último?', 'En la primera vuelta salen los de lugar par; la ronda se cierra y la cuenta sigue con los que quedan.'],
     ['rompe-cambios', 0, 'Manda la pelota al resultado del ciclo', '30 días son 4 semanas y 2 días: jueves más 2 es sábado. Las potencias de 9 terminan en 9 o en 1: con exponente impar, 9. En ABCABC…, $40 = 3 \\cdot 13 + 1$: la A.'],
   ], [

@@ -203,7 +203,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
   ]);
 
   diezLesson('pu-ar-3', [
-    ['cripto-letras', 0, 'Cada letra es una cifra: $A + A + A = \\overline{BA}$. Descúbrelas', '$3A$ debe terminar en A: solo pasa con $A = 5$, porque $15$ termina en 5. Entonces $B = 1$.'],
+    ['cripto-letras', 0, 'Cada letra es una cifra: $A + A + A = \\overline{BA}$. Descúbrelas', '$3A$ debe terminar en A: solo pasa con $A = 5$, porque $15$ termina en 5. Entonces $B = 1$.', 'Mira las unidades: tres veces A tiene que terminar en A. Lo que se lleva a las decenas es la cifra B.'],
     ['tablero-cifras', 0, 'Un número de dos cifras: sus cifras suman 9 y al invertirlas baja 45. Encuéntralo en el tablero', 'Al invertir, el número cambia en 9 veces la diferencia de sus cifras: $45 \\div 9 = 5$. Cifras que suman 9 y difieren en 5: 7 y 2. Es el 72.'],
     ['maquina-regla', 1, 'Una máquina cambia 23 por 32, 58 por 85 y 71 por 17. ¿Qué entrega con el 40?', 'La máquina invierte las cifras: con 40 entrega 04, que es el 4.'],
     ['ultima-cifra', 1, '¿En qué cifra termina $8^{14}$?', 'Las últimas cifras del 8 se repiten: 8, 4, 2, 6. Como $14 = 4 \\cdot 3 + 2$, es la segunda: 4.'],
@@ -212,7 +212,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['vuela-precios', 0, 'Vuela a la cifra', '$\\overline{AB} + \\overline{BA} = 11(A + B)$: múltiplo de 11. $\\overline{AB} - \\overline{BA} = 9(A - B)$: múltiplo de 9. Y $7 + 7 = 14$: B es 4.'],
   ], [
     sol('La suma de las cifras de un número de dos cifras es 11. Si se invierte el orden de sus cifras, el número aumenta en 27. ¿Cuál es el número?',
-      ['Al invertir las cifras, el número cambia en 9 veces su diferencia: aquí $27 \\div 9 =$ [[3]]', 'Las cifras suman 11 y se diferencian en 3: son [[4]] y [[7]]', 'El número aumenta al invertirlo, así que la cifra menor va en las decenas: es el [[47]]'],
+      ['Al invertir las cifras, el número cambia en 9 veces su diferencia: aquí $27 \\div 9 =$ [[3]]', 'Las cifras suman 11 y se diferencian en 3: la menor es [[4]] y la mayor es [[7]]', 'El número aumenta al invertirlo, así que la cifra menor va en las decenas: es el [[47]]'],
       ['74', '38', '9'],
       '$(10b + a) - (10a + b) = 9(b - a)$. Con suma 11 y diferencia 3, las cifras son 4 y 7. El 47 pasa a 74, que es 27 más.',
       'Escribe el número como $10a + b$ y el invertido como $10b + a$, y resta.'),

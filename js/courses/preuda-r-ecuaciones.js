@@ -11,7 +11,7 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
     ] }, 'Con coma, primero se triplica y luego se resta: $3x - 4$. «El triple de la diferencia» multiplica todo: $3(x - 4)$. «Excede en 3» dice que la mitad es la cuarta parte más 3.',
       { hint: 'Lee la frase despacio: ¿qué se hace primero? Lo que se hace al final es lo de afuera.' }),
     play('cinta-ecuacion', 'La cinta de la ecuación', { rounds: [
-      { say: 'Uno tiene 2 más que otro y un tercero el doble del primero: suman 34', parts: [[1, 0, 'primero'], [1, 2, 'segundo'], [2, 0, 'tercero']], total: 34, lo: 0, hi: 15 },
+      { say: 'El segundo tiene 2 más que el primero y el tercero el doble del primero: suman 34', parts: [[1, 0, 'primero'], [1, 2, 'segundo'], [2, 0, 'tercero']], total: 34, lo: 0, hi: 15 },
       { say: 'Un número excede a otro en 7 y suman 31', parts: [[1, 0, 'menor'], [1, 7, 'mayor']], total: 31, lo: 0, hi: 20 },
     ] }, '$x + (x + 2) + 2x = 4x + 2 = 34$ da $x = 8$. $x + (x + 7) = 31$ da $x = 12$: el mayor es 19.',
       { hint: 'Escribe cada cantidad con la misma x y junta todas las x.' }),
@@ -111,7 +111,7 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
   diezLesson('pu-ec-1', [
     ['arma-negacion', 1, 'Traduce a una expresión: «el triple de la diferencia entre un número y 4»', 'Primero se arma la diferencia y después se triplica: $3(x - 4)$. Sin paréntesis sería «el triple de un número, disminuido en 4».'],
-    ['cinta-ecuacion', 0, 'Tres hermanos ahorran: uno tiene 2 más que otro, y el tercero el doble del primero. Entre los tres suman 34', 'Con $x$ para el primero: $x + (x + 2) + 2x = 34$, es decir $4x + 2 = 34$ y $x = 8$.'],
+    ['cinta-ecuacion', 0, 'Tres hermanos ahorran: el segundo tiene 2 más que el primero y el tercero tiene el doble del primero. Entre los tres suman 34', 'Con $x$ para el primero: $x + (x + 2) + 2x = 34$, es decir $4x + 2 = 34$ y $x = 8$.'],
     ['consecutivos', 1, 'Cuatro números pares seguidos suman 100. Encuéntralos', 'Los pares seguidos van de 2 en 2: $x + (x + 2) + (x + 4) + (x + 6) = 100$ da $x = 22$. Son 22, 24, 26 y 28.'],
     ['perimetro-x', 1, 'Una cancha mide de largo 4 veces su ancho y su perímetro es 50. Halla sus lados', '$2(x + 4x) = 50$ da $10x = 50$: el ancho es 5 y el largo 20.'],
     ['despeja-x', 0, 'Despeja la $x$ de $5x - 3 = 22$ deshaciendo las operaciones', 'Se deshace en orden contrario: primero se suma 3 ($5x = 25$) y después se divide entre 5: $x = 5$.'],

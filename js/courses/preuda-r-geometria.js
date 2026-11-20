@@ -107,9 +107,9 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 
   setExam('pu-geometria', 'Geometría', [
     ['pu-ge-1', 'Los opuestos por el vértice son iguales y los vecinos suman 180°.',
-      play('tijera-angulos', 'Deduce el ángulo', { rounds: [{ kind: 'sup', given: 70 }, { kind: 'opp', given: 40 }] }, 'El vecino de 70° mide 110°; el opuesto de 40° mide 40°.', { hint: 'Vecinos: media vuelta.' })],
+      play('tijera-angulos', 'Deduce el ángulo', { rounds: [{ kind: 'sup', given: 70 }, { kind: 'opp', given: 40 }] }, 'El vecino de 70° mide 110°: juntos llenan media vuelta, 180°.', { hint: 'Vecinos: media vuelta.' })],
     ['pu-ge-1', 'Los ángulos de un polígono de n lados suman (n − 2)·180°.',
-      play('suma-poligono', 'Parte el polígono', { rounds: [{ n: 10 }, { n: 9 }] }, 'Decágono: 8 triángulos, 1440°. Eneágono: 7 triángulos, 1260°.', { hint: 'Cuenta triángulos.' })],
+      play('suma-poligono', 'Parte el polígono', { rounds: [{ n: 10 }, { n: 9 }] }, 'Decágono: $10 - 2 = 8$ triángulos, $8 \\cdot 180^\\circ = 1\\,440^\\circ$.', { hint: 'Cuenta triángulos.' })],
     ['pu-ge-2', 'En un triángulo los tres ángulos suman 180°.',
       play('apice-triangulo', 'El ángulo que falta', { rounds: [{ mode: 'falta', A: 45, C: 80 }] }, 'B = 180° − 125° = 55°.', { hint: 'Completa media vuelta.' })],
     ['pu-ge-2', 'Pitágoras: pie² + altura² = largo².',
@@ -217,7 +217,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['corta-pizza', 0, 'Corta el sector de la pizza cuyo borde mide $3\\pi$', 'La circunferencia completa mide $2\\pi \\cdot 6 = 12\\pi$: un arco de $3\\pi$ es la cuarta parte, un ángulo de $90^\\circ$.'],
     ['rectangulo-pa', 2, 'Con 24 m de cerca se encierra un corral de 32 m². Halla sus lados', 'Los lados suman 12 y multiplican 32: son 4 y 8.'],
     ['lado-del-cuadrado', 1, 'Una baldosa cuadrada tiene 6.25 dm² de área. Estira el cuadrado hasta esa área', '$2.5 \\cdot 2.5 = 6.25$: el lado mide 2.5 dm.'],
-    ['rompe-cambios', 0, 'Manda la pelota al resultado', 'Con diámetro 10 el radio es 5: la longitud es $10\\pi$ y el área $25\\pi$. Con radio 3, el área es $9\\pi$.'],
+    ['rompe-cambios', 0, 'Manda la pelota al resultado', 'Con diámetro 10 el radio es 5: la longitud es $10\\pi$ y el área $25\\pi$. Con radio 3, el área es $9\\pi$.', 'Antes de lanzar, saca el radio si te dan el diámetro: la longitud es $2\\pi r$ y el área $\\pi r^2$.'],
   ], [
     sol('Una pista de atletismo está formada por un rectángulo de 100 m por 60 m y dos semicírculos pegados a los lados de 60 m. Tomando $\\pi \\approx 3$, ¿cuánto mide una vuelta completa a la pista?',
       ['Los dos semicírculos forman un círculo de diámetro [[60]] m', 'Su longitud es $\\pi \\cdot d \\approx 3 \\cdot 60 =$ [[180]] m', 'Los dos tramos rectos suman $2 \\cdot 100 =$ [[200]] m', 'La vuelta mide $180 + 200 =$ [[380]] m'],

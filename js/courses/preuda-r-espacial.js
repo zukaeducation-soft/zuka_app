@@ -127,7 +127,7 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 // Mundo 6 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
 PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
   diezLesson('pu-es-1', [
-    ['ruta-cuadras', 0, 'Un domiciliario va de la esquina A a la B por las calles. Traza el camino más corto', 'Por las calles no hay atajos en diagonal: hay que avanzar 4 cuadras a lo ancho y 3 a lo alto, 7 en total, sin devolverse.'],
+    ['ruta-cuadras', 0, 'Un domiciliario va de la esquina A a la B por las calles. Traza el camino más corto', 'Por las calles no hay atajos en diagonal: hay que avanzar 4 cuadras a lo ancho y 3 a lo alto, 7 en total, sin devolverse.', 'No retrocedas nunca: cada cuadra que camines debe acercarte a B.'],
     ['brujula-pasos', 0, 'Un explorador sigue las instrucciones de su mapa. Llévalo hasta donde termina', 'Norte y sur se compensan ($3 - 1 = 2$ al norte) y este y oeste también ($4 - 2 = 2$ al este): termina 2 cuadras al norte y 2 al este de la salida.'],
     ['punto-distancia', 1, 'La casa de Lina queda a 5 cuadras del colegio y a 3 de la iglesia, caminando por las calles. Ubícala', 'Avanzando 4 cuadras por la calle del colegio y 1 hacia un lado quedan 5 al colegio y $2 + 1 = 3$ a la iglesia.'],
     ['mapa-escala', 1, 'En el plano de un parque, 2 cm son 5 km. Ubica el mirador que está a 7.5 km', 'Cada centímetro vale 2.5 km: $7.5 \\div 2.5 = 3$ cm.'],
@@ -177,7 +177,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
   ]);
 
   diezLesson('pu-es-3', [
-    ['arma-desarrollo', 0, 'A este molde de cartón le faltan caras para cerrar un cubo. Complétalo'],
+    ['arma-desarrollo', 0, 'A este molde de cartón le faltan caras para cerrar un cubo. Complétalo', 'Un desarrollo son seis cuadrados unidos que al doblarse no se montan: si dos caen sobre la misma cara, el molde no cierra.'],
     ['caras-opuestas', 0, 'Este desarrollo se dobla para armar un cubo. Empareja las caras que quedan opuestas', 'En una fila de tres caras, la primera y la tercera quedan opuestas: B con D, A con E y C con F.'],
     ['dado-siete', 0, 'En un dado se ven el 3 arriba, el 1 al frente y el 2 a la derecha. Halla las caras escondidas', 'Las opuestas suman 7: abajo está el 4, atrás el 6 y a la izquierda el 5.'],
     ['desarrollo-caja', 0, 'Una caja de base $2 \\times 2$ se arma con 40 cm² de cartón. Halla su altura', '$2(2 \\cdot 2 + 2c + 2c) = 40$: $4 + 4c = 20$, así que $c = 4$.'],

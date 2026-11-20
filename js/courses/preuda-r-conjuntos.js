@@ -65,7 +65,7 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
     ['pu-cj-1', 'Cada operación es un grupo de zonas del diagrama.',
       play('pinta-venn', 'Operación', { rounds: [{ text: '(A ∪ B) − C', n: 3, f: (a, b, c) => (a || b) && !c }] }, 'Lo de A o B que no toca C.', { hint: 'Zona por zona.' })],
     ['pu-cj-1', 'Con tres conjuntos se llena del centro hacia afuera.',
-      play('encuesta-tres', 'Tres', { rounds: [{ labels: ['A', 'B', 'C'], z: { abc: 1, ab: 2, ac: 3, bc: 2, a: 4, b: 5, c: 3, none: 2 } }] }, 'Del centro hacia afuera.', { hint: 'Centro.' })],
+      play('encuesta-tres', 'Tres', { rounds: [{ labels: ['A', 'B', 'C'], z: { abc: 1, ab: 2, ac: 3, bc: 2, a: 4, b: 5, c: 3, none: 2 } }] }, 'Primero el centro (1), luego cada pareja menos el centro y después cada conjunto solo.', { hint: 'Centro.' })],
     ['pu-cj-2', '$n(A \\cup B) = n(A) + n(B) - n(A \\cap B)$.',
       play('solapa-barras', 'Solapa', { rounds: [{ labels: ['A', 'B'], total: 40, a: 22, b: 15, none: 9 }] }, 'Unión 31; los dos: $37 - 31 = 6$.', { hint: 'Doble conteo.' })],
     ['pu-cj-2', 'Los de ninguno son el total menos la unión.',

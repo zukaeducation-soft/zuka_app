@@ -276,7 +276,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
   ]);
 
   diezLesson('pu-co-5', [
-    ['cuenta-triangulos', 0, 'Un vitral triangular está dividido en triángulos pequeños. Cuéntalos por tamaños'],
+    ['cuenta-triangulos', 0, 'Un vitral triangular está dividido en triángulos pequeños. Cuéntalos por tamaños', 'Cada triángulo sale de escoger dos de las rectas que llegan a la base: con 4 rectas, $C(4, 2) = 6$: 3 pequeños, 2 de dos piezas y 1 grande.'],
     ['diagonales', 2, 'Traza todas las diagonales de un polígono de 7 lados', 'De cada vértice salen $7 - 3 = 4$ diagonales y cada una se cuenta dos veces: $\\tfrac{7 \\cdot 4}{2} = 14$.'],
     ['cuenta-cuadrados', 1, 'Un tablero de $4 \\times 4$ esconde cuadrados de varios tamaños. Cuéntalos todos', '$16 + 9 + 4 + 1 = 30$: los de lado 1, 2, 3 y 4.'],
     ['triangulo-pascal', 0, 'Los caminos en una cuadrícula son números de Pascal. Completa la fila 5', 'Fila 5: 1, 5, 10, 10, 5, 1. Cada casilla suma los caminos que llegan desde sus dos vecinas de arriba.'],

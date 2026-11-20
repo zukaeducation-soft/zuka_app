@@ -247,7 +247,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
   diezLesson('pu-lo-3', [
     ['flecha-deduce', 2, '«Si el agua hierve, está muy caliente». El agua no está muy caliente. ¿Qué se concluye?', 'Si hirviera, estaría muy caliente. Como no lo está, no hierve: se niega el consecuente y cae el antecedente.'],
     ['arma-negacion', 0, 'Escribe el contrarrecíproco de $p \\to q$', 'Se voltea y se niegan las dos partes: $\\neg q \\to \\neg p$. Dice exactamente lo mismo que el original.'],
-    ['rompe-promesa', 1, '«Se cancela el partido si y solo si llueve». Marca un caso en que la frase es falsa', 'El bicondicional exige que las dos cosas pasen juntas o no pase ninguna: es falso cuando pasa una sola.'],
+    ['rompe-promesa', 1, '«Se cancela el partido si y solo si llueve». Marca un caso en que la frase es falsa', 'El bicondicional exige que las dos cosas pasen juntas o no pase ninguna: es falso cuando pasa una sola.', 'El «si y solo si» exige que las dos cosas pasen juntas o que no pase ninguna: busca un caso en que pase solo una.'],
     ['tabla-verdad', 0, 'Comprueba con la tabla que el contrarrecíproco es equivalente', 'Las dos columnas dan V, F, V, V: $p \\to q$ y $\\neg q \\to \\neg p$ siempre valen lo mismo.'],
     ['circuito-logico', 0, 'El condicional como circuito: deja el bombillo apagado', '$p \\to q$ es lo mismo que $\\neg p \\vee q$: solo se apaga con p encendida y q apagada.'],
     ['tiene-podria', 0, 'Se eligen dos de cuatro delegados con reglas de «solo si». Decide qué tiene que pasar', 'Las parejas posibles son A y B, B y C, y B y D. B está en todas: tiene que ir. A podría ir. A y C juntos no pueden: A iría sin B.'],
