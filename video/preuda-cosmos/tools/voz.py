@@ -92,7 +92,7 @@ def gemini_tts(text):
     cfg = types.GenerateContentConfig(temperature=TEMP, response_modalities=['audio'],
         speech_config=types.SpeechConfig(voice_config=types.VoiceConfig(prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=VOICE))))
     contents = [types.Content(role='user', parts=[types.Part.from_text(text='## Transcript:\n' + text)])]
-    for intento in range(4):
+    for intento in range(8):
         try:
             data, mime = bytearray(), ''
             for chunk in client.models.generate_content_stream(model=MODEL, contents=contents, config=cfg):
@@ -108,11 +108,12 @@ def gemini_tts(text):
             code, msg = getattr(e, 'code', 0), str(e)
             if code in (401, 403) or 'API_KEY_INVALID' in msg or 'API key not valid' in msg: raise LlaveMala(msg[:300])
             if code == 429 or 'RESOURCE_EXHAUSTED' in msg:
-                if re.search(r'PerDay|per day|daily', msg, re.I) or intento == 3: raise Agotada(msg[:400])
+                if re.search(r'PerDay|per day|daily|check your plan', msg, re.I) or intento >= 3: raise Agotada(msg[:400])
                 w = re.search(r'retry in ([\d.]+)s|retryDelay["\']?: ?["\']?(\d+)', msg)
                 s = float(next(g for g in w.groups() if g)) + 2 if w else 65
                 log(f'  límite por minuto: espero {s:.0f} s'); time.sleep(s); continue
-            if code and code >= 500 and intento < 3: log(f'  error {code} del servidor; reintento'); time.sleep(20); continue
+            if code and code >= 500 and intento < 7:
+                s = min(240, 30 * 2 ** min(intento, 3)); log(f'  error {code} del servidor; reintento en {s} s'); time.sleep(s); continue
             log(f'  error de Gemini: {msg[:300]}'); raise
 
 def resample(x, r):
@@ -400,7 +401,11 @@ def main():
     try:
         for p in mp4s:
             if not p.with_suffix('.srt').exists(): log(f'{p.name}: falta el .srt'); continue
-            if film(p) == 'hecho': hechos += 1
+            try:
+                if film(p) == 'hecho': hechos += 1
+            except (Agotada, LlaveMala): raise
+            except Exception as e:                      # servidor caído u otro fallo de una película: se salta y se sigue
+                log(f'  SALTADA {p.parent.name}/{p.name}: {str(e)[:300]}')
     except Agotada as e:
         log(f'LLAVE AGOTADA después de {hechos} películas en esta tanda. {e}'); sys.exit(3)
     except LlaveMala as e:
