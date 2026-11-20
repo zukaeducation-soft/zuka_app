@@ -168,7 +168,8 @@ test('cada componente se abre por su cuenta, gratis, y «Sigue aquí» no salta 
   // «Sigue aquí» se queda en el componente que se estudia y no salta al otro.
   assert.match(app, /function currentLesson\(c, block\) \{[\s\S]{0,300}S\.lastLesson/);
   assert.match(app, /S\.lastLesson = l\.id; save\(\);/);
-  assert.match(app, /nxt = n1 && blockOf\(c, n1\) === blockOf\(c, cur\) \? n1 : null/);
+  // «Después: …» en la tarjeta del curso (js/inicio.js, continueCardHTML) tampoco salta de componente.
+  assert.match(read('js/inicio.js'), /next = nx && c\.units\.find\(x => x\.lessons\.includes\(nx\)\)\?\.block === u\.block \? nx : null/);
   // La primera lección de cada componente es gratis.
   const rows = get(ctx, 'catalogo')([C]).filter(r => r.tipo === 'leccion' && r.nivel_minimo === 'gratis').map(r => r.id);
   assert.equal(rows.join(), 'pu-cm-1,pu-el-1');

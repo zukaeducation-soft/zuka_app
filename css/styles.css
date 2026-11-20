@@ -1579,3 +1579,18 @@ button.set-row:active { opacity: .7; }
 .gym-soon b { color: var(--ink); }
 .gym-run .gym-eyebrow .gym-plates { width: 36px; height: 18px; }
 @media (prefers-reduced-motion: reduce) { .gh-art .gf-db { animation: none; } }
+
+/* Misma letra en Inicio, Mis cursos, Tutorías y Perfil (pedido del 2026-11-19): título de página en Jost 500 de 28 px,
+   secciones en Jost 500, texto de apoyo en gris de 15 px, nombres de curso en Jakarta 600 de 17 px y el mismo margen. */
+.tutorias, .profile { padding: 10px 16px 56px; gap: 18px; }
+.settings { padding-top: 10px; }
+.tu-head h1, .set-head h2 { font-family: var(--display); font-weight: 500; font-size: 28px; line-height: 1.15; margin: 2px 0 4px; }
+.tu-head p { font-size: 15px; color: var(--mute); }
+.tu-pick h2 { font-family: var(--display); font-weight: 500; font-size: 21px; }
+.tu-mine-card h2, .profile .card h3 { font-family: var(--display); font-weight: 500; font-size: 19px; }
+.name-input { font-family: var(--display); font-weight: 500; font-size: 26px; }
+.tu-course b, .prog-row .pr-body b, .saved-row b { font-size: 17px; font-weight: 600; }
+.tu-course { padding: 16px; border-radius: 20px; }
+.stat b { font-family: var(--display); font-weight: 600; font-size: 22px; }
+.hk-next { color: var(--mute); font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.home-continue .btn { width: 100%; }

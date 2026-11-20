@@ -157,7 +157,7 @@ test('el botón flotante es una mancuerna en relieve sobre una base (sin el icon
   assert.match(css, /prefers-reduced-motion: reduce\) \{ \.gym-fab, \.gym-fab \.gf-db \{ animation: none; \} \}/);
 });
 
-test('la pesa toma los colores del curso y la base los del tema; «Sigue aprendiendo» va en Mis cursos, no en el Inicio', () => {
+test('la pesa toma los colores del curso y la base los del tema; «Sigue aprendiendo» no va en el Inicio ni en Mis cursos', () => {
   const ini = read('js/inicio.js');
   assert.doesNotMatch(ini, /#b9a4ff|#ff93c9|#ffb35a/, 'sin el degradado fijo');
   assert.match(ini, /stop-color:var\(--g1\)/);
@@ -170,6 +170,5 @@ test('la pesa toma los colores del curso y la base los del tema; «Sigue aprendi
   const home = ini.slice(ini.indexOf('function renderHome'), ini.indexOf('function renderMyCourses'));
   assert.doesNotMatch(home, /continueHTML|home-continue/);
   const mis = ini.slice(ini.indexOf('function renderMyCourses'), ini.indexOf('function courseHeadHTML'));
-  assert.match(mis, /continueHTML\(mine\)/);
-  assert.match(mis, /\[data-continue\][^\n]*startLesson\(k\.last, k\.cur\)/);
+  assert.doesNotMatch(mis, /continue|home-continue/, 'ni en Mis cursos: va dentro de cada curso');
 });

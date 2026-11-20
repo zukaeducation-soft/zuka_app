@@ -19,7 +19,7 @@ test('la racha de arriba es un botón que abre la hoja de racha', () => {
 
 test('el inicio trae la tarjeta «Sigue aquí» que abre la lección de un toque', () => {
   const learn = app.slice(app.indexOf('function renderLearn('), app.indexOf('function renderWorld('));
-  assert.match(learn, /class="next-card"/);
+  assert.match(learn, /continueCardHTML\(c, cur, ls\)/, '«Sigue aprendiendo» dentro del curso');
   assert.match(learn, /data-continue/);
   assert.match(learn, /\[data-continue\][^\n]*startLesson\(c, cur\)/);
   assert.match(learn, /cur \? /, 'con el curso completo no hay tarjeta');

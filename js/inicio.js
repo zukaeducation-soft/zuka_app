@@ -53,20 +53,19 @@ function openCourse(id) {
 }
 
 // ---- Inicio ----
-// «Sigue aprendiendo» (va en Mis cursos, no en el Inicio, pedido del 2026-11-19): el curso que se estudió por última vez;
-// si ya lo terminó, otro inscrito con lecciones pendientes.
-function continueHTML(mine) {
-  const pend = mine.filter(c => currentLesson(c));
-  const last = pend.find(c => c.id === S.course) || pend[0], cur = last && currentLesson(last);
-  if (!cur) return { html: '' };
-  const ui = last.units.findIndex(u => u.lessons.includes(cur)), w = WORLDS[last.units[ui].world] || { name: last.units[ui].title };
-  const ls = lessonsOf(last), d = ls.filter(isDone).length;
-  return { last, cur, html: `<section class="home-continue" style="--c:${last.color}" aria-label="Sigue aprendiendo">
-        <div class="hk-top">${courseArt(last, 'lg')}<div><p class="hk-eyebrow">Sigue aprendiendo · ${esc(last.name)}</p>
-          <b class="hk-title">${esc(cur.title)}</b><span class="hk-sub">Mundo ${worldNo(last, ui)} · ${esc(w.name)}</span></div></div>
-        <div class="hk-prog"><span class="mini-bar"><i style="width:${(d / ls.length) * 100}%"></i></span><small>${d}/${ls.length}</small></div>
-        <div class="hk-acts"><button class="btn" data-continue>Continuar</button><button class="btn ghost" data-open="${last.id}">Ver el curso</button></div>
-      </section>` };
+// «Sigue aprendiendo» va dentro de cada curso, no en el Inicio ni en Mis cursos (pedido del 2026-11-19): la lección que toca
+// en ese curso (o en su componente), el mundo, el avance y «Continuar». ls: las lecciones que cuenta el avance.
+function continueCardHTML(c, cur, ls) {
+  const ui = c.units.findIndex(u => u.lessons.includes(cur)), u = c.units[ui], w = WORLDS[u.world] || { name: u.title };
+  const blockName = c.blocks?.find(b => b.id === u.block)?.name, d = ls.filter(isDone).length;
+  const i = ls.indexOf(cur), nx = ls[i + 1], next = nx && c.units.find(x => x.lessons.includes(nx))?.block === u.block ? nx : null;
+  return `<section class="home-continue" aria-label="Sigue aprendiendo">
+    <div class="hk-top">${courseArt(c, 'lg')}<div><p class="hk-eyebrow">${d ? 'Sigue aprendiendo' : 'Empieza aquí'}${blockName ? ` · ${esc(blockName)}` : ''}</p>
+      <b class="hk-title">${esc(cur.title)}</b><span class="hk-sub">Mundo ${worldNo(c, ui)} · ${esc(w.name)}</span></div></div>
+    <div class="hk-prog"><span class="mini-bar"><i style="width:${(d / ls.length) * 100}%"></i></span><small>${d}/${ls.length}</small></div>
+    ${next ? `<p class="hk-next">Después: ${esc(next.title)}</p>` : ''}
+    <button class="btn" data-continue>${d ? 'Continuar' : 'Empezar'} · +10 XP</button>
+  </section>`;
 }
 
 function renderHome() {
@@ -102,10 +101,9 @@ function renderHome() {
 
 // ---- Mis cursos ----
 function renderMyCourses() {
-  const mine = myCourses(), k = continueHTML(mine);
+  const mine = myCourses();
   view.innerHTML = `<div class="mycourses">
     <header class="home-head"><h1>Mis cursos</h1><p>${mine.length ? 'Los cursos en que estás inscrito.' : 'Aún no te has inscrito en ningún curso.'}</p></header>
-    ${k.html}
     ${mine.length ? `<div class="mc-list">${mine.map(c => {
       const ls = lessonsOf(c), d = ls.filter(isDone).length, nxt = currentLesson(c);
       return `<button class="mc-row" data-open="${c.id}" style="--c:${c.color}">
@@ -119,7 +117,6 @@ function renderMyCourses() {
   </div>`;
   view.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openCourse(b.dataset.open));
   $('[data-home]', view).onclick = () => go('home');
-  $('[data-continue]', view)?.addEventListener('click', () => { S.course = k.last.id; save(); startLesson(k.last, k.cur); });
   view.scrollTop = 0;
 }
 

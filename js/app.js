@@ -288,9 +288,10 @@ function currentLesson(c, block) {
 // sus lecciones, el avance y la lección que sigue. Tocar una tarjeta abre los mundos de ese componente.
 function renderComponents(c) {
   const ls = lessonsOf(c), doneN = ls.filter(isDone).length;
-  const lastL = ls.find(l => l.id === S.lastLesson), last = lastL && blockOf(c, lastL);
+  const lastL = ls.find(l => l.id === S.lastLesson), last = lastL && blockOf(c, lastL), cur = currentLesson(c);
   view.innerHTML = `<div class="learn" style="--c:${c.color}">
     ${courseHeadHTML(c)}
+    ${cur ? continueCardHTML(c, cur, ls.filter(l => blockOf(c, l) === blockOf(c, cur))) : ''}
     <h2 class="comp-title">Elige un componente</h2>
     <div class="comp-list">${c.blocks.map((b, k) => {
       const bl = ls.filter(l => blockOf(c, l) === b.id), d = bl.filter(isDone).length, nw = c.units.filter(u => u.block === b.id).length;
@@ -310,6 +311,7 @@ function renderComponents(c) {
   view.querySelectorAll('[data-block]').forEach(b => b.onclick = () => {
     openBlock = { course: c.id, id: b.dataset.block }; renderLearn(); $('[data-back]', view)?.focus({ preventScroll: true });
   });
+  $('[data-continue]', view)?.addEventListener('click', () => startLesson(c, cur));
   bindCourseHead(); bindGymFab(c);
   view.scrollTop = 0;
 }
@@ -327,16 +329,7 @@ function renderLearn() {
   view.innerHTML = `<div class="learn" style="--c:${c.color}">
     ${block ? `<button class="world-back" data-back>${ICON.back}<span>Componentes</span></button>` : ''}
     ${courseHeadHTML(c, block)}
-    ${cur ? (() => {
-      // «Sigue aquí»: la lección que toca y la que viene, con un botón que la abre de un toque.
-      const ui = c.units.findIndex(u => u.lessons.includes(cur)), li = c.units[ui].lessons.indexOf(cur), n1 = ls[ls.indexOf(cur) + 1], nxt = n1 && blockOf(c, n1) === blockOf(c, cur) ? n1 : null;
-      return `<section class="next-card" aria-label="Sigue aquí">
-      <p class="eyebrow">Sigue aquí · ${esc((WORLDS[c.units[ui].world] || {}).name || c.units[ui].title)}</p>
-      <p class="nc-row cur"><span class="nc-dot">${ICON.play}</span><span><small>Nivel ${worldNo(c, ui)}-${li + 1}</small><b>${esc(cur.title)}</b></span></p>
-      ${nxt ? `<p class="nc-row"><span class="nc-dot"></span><span>${esc(nxt.title)}</span></p>` : ''}
-      <button class="btn" data-continue>${doneN ? 'Continuar' : 'Empezar'} · +10 XP</button>
-    </section>`;
-    })() : ''}
+    ${cur ? continueCardHTML(c, cur, ls) : ''}
     ${installEvt && !S.hideInstall ? `<section class="install-banner">
       <img src="icons/icon-192.png" alt="" width="44" height="44">
       <div><b>Instala Zuka</b><p>Ábrela como app, incluso sin conexión.</p></div>
