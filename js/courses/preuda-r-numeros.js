@@ -134,7 +134,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['ritmos-mcm', 1, 'El bus A pasa cada 10 minutos y el bus B cada 15. Salen juntos: ¿cuándo vuelven a coincidir?', 'Coinciden en los múltiplos comunes de 10 y 15; el primero es el MCM: 30 minutos.'],
     ['corta-mcd', 0, 'Un piso de $12 \\times 18$ se quiere cubrir con baldosas cuadradas iguales, lo más grandes posible. Halla su lado', 'El lado debe dividir a 12 y a 18: el mayor divisor común es 6.'],
     ['pares-primos', 0, 'Empareja los primos comunes de 60 y 84 para hallar su MCD', '$60 = 2^2 \\cdot 3 \\cdot 5$ y $84 = 2^2 \\cdot 3 \\cdot 7$: comparten $2^2 \\cdot 3 = 12$.'],
-    ['arbol-factores', 0, 'Para hallar un MCM primero se factoriza. Descompón el 96', '$96 = 2^5 \\cdot 3$.'],
+    ['arbol-factores', 0, 'Para hallar un MCM primero se factoriza. Descompón el 96', '$96 = 2 \\cdot 48 = 2 \\cdot 2 \\cdot 24$, y así hasta $2^5 \\cdot 3$: cinco veces el 2 y una vez el 3.'],
     ['tablero-cifras', 0, 'Un número de dos cifras, mayor que 70, que es múltiplo de 6 y de 15 a la vez. Encuéntralo', 'Los múltiplos de 6 y de 15 a la vez son los múltiplos de su MCM, 30: 30, 60, 90. El único mayor que 70 es 90.'],
     ['bolsas-residuo', 0, 'Se reparten 84 dulces en bolsas de 12. Llena las bolsas', '$84 = 12 \\cdot 7$: salen 7 bolsas y no sobra nada. El 12 es divisor de 84.'],
     ['rompe-cambios', 0, 'Manda la pelota al MCM o al MCD', 'MCM de 4 y 6: 12. MCD de 18 y 24: 6. Alarmas cada 9 y cada 12 minutos coinciden cada 36.'],
