@@ -1,0 +1,60 @@
+{
+ "scene": "S03_Equivalentes",
+ "duration": 67.867,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Simplificar una razón",
+   "hold": 32.267
+  },
+  {
+   "time": 32.867,
+   "title": "Sumar no sirve",
+   "hold": 67.267
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.967,
+   "text": "Dieciocho a doce se puede simplificar como una fracción. Si formamos grupos iguales, salen seis grupos, cada uno con tres niñas y dos niños.",
+   "fox": true
+  },
+  {
+   "start": 11.967,
+   "end": 19.867,
+   "text": "Por eso dieciocho a doce es lo mismo que tres a dos: se dividieron los dos números entre seis.",
+   "fox": false
+  },
+  {
+   "start": 19.867,
+   "end": 31.867,
+   "text": "Es la misma regla de las fracciones equivalentes: multiplicar o dividir los dos términos por el mismo número, distinto de cero, no cambia la razón.",
+   "fox": false
+  },
+  {
+   "start": 32.867,
+   "end": 41.633,
+   "text": "Pero sumar lo mismo a los dos términos sí cambia la razón. Mira esta foto de tres de ancho por dos de alto.",
+   "fox": false
+  },
+  {
+   "start": 41.633,
+   "end": 50.4,
+   "text": "Si multiplicamos los dos lados por dos, queda de seis por cuatro: la foto se ve igual, solo que más grande.",
+   "fox": false
+  },
+  {
+   "start": 50.4,
+   "end": 59.967,
+   "text": "Si en cambio sumamos tres a los dos lados, queda de seis por cinco, y el zorrito se estira: la razón ya no es la misma.",
+   "fox": false
+  },
+  {
+   "start": 59.967,
+   "end": 66.867,
+   "text": "Por eso una razón se agranda o se achica multiplicando, nunca sumando.",
+   "fox": false
+  }
+ ]
+}

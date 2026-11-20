@@ -1,0 +1,79 @@
+1
+00:00:08,900 --> 00:00:18,333
+Para sumar una progresión geométrica hay un truco muy elegante. Sumemos uno, dos, cuatro, y así hasta dos a la nueve.
+
+2
+00:00:18,333 --> 00:00:29,033
+Multipliquemos todo por la razón, dos. Cada término se convierte en el siguiente, así que la fila de abajo es la misma corrida un lugar.
+
+3
+00:00:29,033 --> 00:00:39,967
+Ahora restemos: la fila de abajo menos la de arriba. Todos los del medio se cancelan. Solo quedan el último de abajo y el primero de arriba.
+
+4
+00:00:39,967 --> 00:00:55,600
+Con cualquier razón pasa lo mismo. Al multiplicar por r y restar, de abajo queda el primer término por r a la n, y de arriba el primer término. Se saca factor común y se divide entre r menos uno.
+
+5
+00:00:55,600 --> 00:01:13,833
+Es la famosa suma del ajedrez: un grano de arroz en la primera casilla y el doble en cada una de las siguientes. Las sesenta y cuatro casillas suman dos a la sesenta y cuatro menos uno: más arroz del que se ha cosechado en toda la historia.
+
+6
+00:01:15,830 --> 00:01:17,430
+Sumar infinitos números puede dar un resultado finito. Mira esta barra de chocolate.
+
+7
+00:01:17,430 --> 00:01:27,663
+Primero te comes la mitad. Luego la mitad de lo que queda: un cuarto. Luego la mitad de lo que sigue: un octavo. Y así sin parar.
+
+8
+00:01:27,663 --> 00:01:37,297
+Lo que queda es cada vez más pequeño, pero nunca te pasas de la barra entera. La suma infinita se acerca a uno.
+
+9
+00:01:38,297 --> 00:01:51,097
+Es una progresión geométrica de razón un medio. Como la razón está entre menos uno y uno, sus potencias se hacen tan pequeñas como se quiera: r a la n se acerca a cero.
+
+10
+00:01:51,097 --> 00:02:06,530
+La fórmula de la suma se puede escribir con los signos cambiados arriba y abajo, que es la misma fracción. Así, cuando r a la n desaparece, queda la suma infinita: el primer término entre uno menos la razón.
+
+11
+00:02:06,530 --> 00:02:13,630
+Comprobemos con el chocolate: un medio entre, uno menos un medio, da uno.
+
+12
+00:02:15,630 --> 00:02:26,130
+Esto explica algo que vimos con los racionales: un decimal periódico es una fracción. Cero punto tres periódico es una suma infinita.
+
+13
+00:02:26,130 --> 00:02:35,363
+Cada término es el anterior dividido entre diez: es geométrica, con primer término tres décimos y razón un décimo.
+
+14
+00:02:35,363 --> 00:02:42,630
+La suma infinita es tres décimos entre nueve décimos: tres novenos, que es un tercio.
+
+15
+00:02:42,630 --> 00:02:51,297
+Y una sorpresa: cero punto nueve periódico es exactamente uno. Nueve décimos entre nueve décimos.
+
+16
+00:02:53,300 --> 00:02:53,900
+Si la razón no está entre menos uno y uno, la suma infinita no se acerca a ningún número: se dice que diverge.
+
+17
+00:02:53,900 --> 00:03:02,867
+Con uno más dos más cuatro, las sumas parciales son uno, tres, siete, quince, treinta y uno: crecen sin parar.
+
+18
+00:03:02,867 --> 00:03:11,900
+Con uno menos uno más uno menos uno, las sumas parciales saltan: uno, cero, uno, cero. Nunca se quedan quietas.
+
+19
+00:03:11,900 --> 00:03:19,033
+Y con razón uno, tres más tres más tres, la suma también crece sin límite.
+
+20
+00:03:21,030 --> 00:03:33,763
+La suma geométrica sale de multiplicar por la razón y restar. Si la razón está entre menos uno y uno, la suma infinita se acerca a a sub uno entre uno menos r.

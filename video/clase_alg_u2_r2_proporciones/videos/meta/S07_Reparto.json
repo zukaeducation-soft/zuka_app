@@ -1,0 +1,37 @@
+{
+ "scene": "S07_Reparto",
+ "duration": 41.167,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Reparto proporcional",
+   "hold": 40.567
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 14.833,
+   "text": "Las proporciones también sirven para repartir con justicia. Ana, Beto y Caro pusieron dos mil, tres mil y cuatro mil pesos para un boleto, y ganaron un premio de cuarenta y cinco mil.",
+   "fox": true
+  },
+  {
+   "start": 14.833,
+   "end": 22.167,
+   "text": "Lo justo es repartir en la razón dos a tres a cuatro. Juntas son nueve partes iguales.",
+   "fox": false
+  },
+  {
+   "start": 22.167,
+   "end": 28.167,
+   "text": "Cada parte vale cuarenta y cinco mil entre nueve: cinco mil pesos.",
+   "fox": false
+  },
+  {
+   "start": 28.167,
+   "end": 40.167,
+   "text": "Ana se lleva dos partes, diez mil. Beto, tres partes, quince mil. Y Caro, cuatro partes, veinte mil. Entre los tres suman los cuarenta y cinco mil.",
+   "fox": false
+  }
+ ]
+}

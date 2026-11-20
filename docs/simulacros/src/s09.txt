@@ -1,0 +1,491 @@
+== LECTURA
+## Texto Uno
+p: Durante más de un siglo, trabajar significó ir a un lugar. La fábrica primero y la oficina después organizaron la vida de las ciudades: definieron a qué hora se llenaban los buses, dónde se construían las viviendas y cuándo almorzaba un país entero. Bastaron unos meses de emergencia sanitaria para demostrar que, al menos para una parte de los empleados, ese lugar era prescindible.
+p: Quienes pudieron trabajar desde casa descubrieron ventajas inmediatas. Desapareció el trayecto, que en las grandes ciudades consume entre dos y tres horas diarias; hubo más tiempo para dormir, cocinar o acompañar a los hijos, y varias encuestas registraron que la mayoría no quería volver a la oficina todos los días. Las empresas, por su lado, comprobaron que la productividad no se derrumbaba y que podían ahorrar en arriendos.
+p: Con el tiempo aparecieron los costos. El primero fue la jornada sin bordes: cuando la oficina está en la mesa del comedor, nunca se sale de ella. <<Antes, cerrar la puerta de la oficina era una frontera>>, señala la socióloga del trabajo Inés Bedoya. <<Ahora el correo de las nueve de la noche llega al mismo lugar donde uno cena. No es que trabajemos desde casa; es que vivimos en el trabajo>>.
+p: El segundo costo es menos visible. En una oficina se aprende por contagio: escuchando cómo un colega resuelve una llamada difícil, preguntando algo en el pasillo, observando a quien lleva veinte años en el oficio. Los empleados jóvenes, que son quienes más necesitan ese aprendizaje informal, son también quienes más lo pierden a distancia. Aquellos, en cambio, que ya tienen experiencia y contactos, pueden prescindir de él sin mayor daño.
+p: Hay además una desigualdad de partida. El trabajo remoto solo es posible para quienes laboran frente a una pantalla. La enfermera, el conductor, la operaria y el vendedor ambulante nunca tuvieron la opción. Y entre los que sí la tuvieron, no es lo mismo trabajar desde un estudio silencioso que desde una habitación compartida con tres hermanos.
+p: Por eso Bedoya considera mal planteado el debate entre <<presencial>> y <<remoto>>. La pregunta útil, dice, es otra: quién decide. Un esquema flexible que el empleado elige según sus necesidades es una conquista; el mismo esquema, impuesto por la empresa para ahorrarse el arriendo y trasladarle al trabajador el costo de la luz, la silla y el internet, es un retroceso con buena publicidad.
+src: Texto elaborado para este simulacro.
+
+q: La idea principal del párrafo 1 es que:
+@ Durante mucho tiempo el trabajo estuvo atado a un lugar, y eso organizó la vida de las ciudades
+@ Las fábricas fueron reemplazadas por las oficinas hace más de un siglo
+@ La emergencia sanitaria acabó con el trabajo en las ciudades
+@ Los buses y las viviendas se construyeron lejos de las oficinas
+q: Según el párrafo 1, la fábrica y la oficina determinaron los siguientes aspectos de la vida urbana, EXCEPTO:
+@ El salario de los empleados
+@ Los horarios de mayor uso del transporte
+@ La ubicación de las viviendas
+@ La hora del almuerzo
+q: En el párrafo 1, la palabra <<\sub{prescindible}>> significa:
+@ Innecesario
+@ Peligroso
+@ Costoso
+@ Indispensable
+q: La expresión <<al menos para una parte de los empleados>> (párrafo 1) indica que:
+@ La afirmación no es válida para todos los trabajadores
+@ La mayoría de los empleados perdió su trabajo
+@ Solo una parte de los empleados cumplía su horario
+@ Todos los empleados podían trabajar desde su casa
+q: De acuerdo con el párrafo 2, son ventajas que encontraron los empleados al trabajar desde casa, EXCEPTO:
+@ El ahorro en el arriendo de las oficinas
+@ La eliminación del tiempo de viaje
+@ Más horas de sueño
+@ Más tiempo con la familia
+q: Según el párrafo 2, las empresas comprobaron que con el trabajo en casa:
+@ El rendimiento se mantenía y los gastos se reducían
+@ Los empleados trabajaban menos horas
+@ La productividad aumentaba al doble
+@ Era necesario arrendar oficinas más grandes
+q: La expresión <<la jornada sin bordes>> (párrafo 3) se refiere a:
+@ Un horario de trabajo que deja de tener límites claros
+@ Una jornada laboral más corta que la habitual
+@ Un trabajo que se realiza sin jefes
+@ Una oficina sin paredes ni divisiones
+q: Cuando Bedoya dice que <<cerrar la puerta de la oficina era una frontera>> (párrafo 3), quiere decir que ese gesto:
+@ Separaba el tiempo de trabajo del tiempo personal
+@ Impedía que los empleados salieran antes de tiempo
+@ Aislaba a los jefes de los empleados
+@ Protegía la información de la empresa
+q: La frase <<es que vivimos en el trabajo>> (párrafo 3) expresa que:
+@ El trabajo ha invadido el espacio y el tiempo de la vida privada
+@ Los empleados se han mudado a las oficinas
+@ Las casas actuales son demasiado pequeñas
+@ Trabajar desde casa es más agradable que hacerlo en la oficina
+q: En el párrafo 4, la expresión <<por contagio>> significa que en la oficina se aprende:
+@ De manera espontánea, por la cercanía con los demás
+@ Mediante cursos organizados por la empresa
+@ Con ayuda de manuales y de videos
+@ A través de los errores propios
+q: Son formas de aprendizaje informal mencionadas en el párrafo 4, EXCEPTO:
+@ Asistir a un curso virtual
+@ Oír cómo un compañero atiende una llamada
+@ Hacer una consulta rápida en el pasillo
+@ Observar a alguien con mucha experiencia
+q: En el párrafo 4, la palabra <<\sub{Aquellos}>> se refiere a:
+@ Los empleados que ya tienen experiencia y contactos
+@ Los empleados jóvenes
+@ Los colegas que resuelven llamadas difíciles
+@ Los costos del trabajo remoto
+q: Según el párrafo 4, los empleados jóvenes son los más afectados por el trabajo a distancia porque:
+@ Son quienes más necesitan aprender de sus compañeros
+@ Tienen menos habilidades con la tecnología
+@ Reciben salarios más bajos
+@ Prefieren trabajar en horarios nocturnos
+q: El autor califica el segundo costo de <<menos visible>> (párrafo 4) porque:
+@ Sus efectos no se notan de inmediato ni se miden con facilidad
+@ Las empresas lo ocultan a propósito
+@ Solo afecta a un número muy pequeño de personas
+@ Ocurre fuera del horario de trabajo
+q: La <<desigualdad de partida>> del párrafo 5 consiste en que:
+@ No todos los oficios ni todas las casas permiten trabajar a distancia en buenas condiciones
+@ Los jóvenes ganan menos que los empleados con experiencia
+@ Las empresas pagan menos a quienes trabajan desde casa
+@ Algunos empleados tienen mejores computadores que otros
+q: La enumeración <<la enfermera, el conductor, la operaria y el vendedor ambulante>> (párrafo 5) presenta ejemplos de:
+@ Oficios que no se pueden ejercer desde la casa
+@ Personas que rechazaron el trabajo remoto
+@ Trabajadores que perdieron su empleo
+@ Oficios que desaparecerán con la tecnología
+q: La comparación entre el <<estudio silencioso>> y la <<habitación compartida con tres hermanos>> (párrafo 5) muestra que:
+@ Las condiciones del hogar influyen en la experiencia de trabajar a distancia
+@ Las familias numerosas no deberían trabajar desde casa
+@ El silencio es indispensable para cualquier trabajo
+@ Los estudios son más costosos que las habitaciones
+q: Para Bedoya (párrafo 6), la <<pregunta útil>> es:
+@ Quién toma la decisión sobre la forma de trabajar
+@ Cuántos días se debe ir a la oficina
+@ Cuánto ahorran las empresas con el trabajo remoto
+@ Cuál de los dos esquemas es más productivo
+q: Según el párrafo 6, la empresa que impone el trabajo remoto para reducir sus gastos le traslada al trabajador los siguientes costos, EXCEPTO:
+@ El arriendo de la oficina
+@ La energía eléctrica
+@ El mobiliario
+@ La conexión a internet
+q: La expresión <<un retroceso con buena publicidad>> (párrafo 6) se refiere a:
+@ Una medida que perjudica al trabajador, pero se presenta como un beneficio
+@ Una campaña publicitaria que fracasó
+@ Un esquema flexible elegido por el empleado
+@ El regreso obligatorio a las oficinas
+q: En conjunto, el texto Uno se organiza así:
+@ Presenta las ventajas del trabajo remoto, luego sus costos y, al final, replantea el debate
+@ Narra una historia personal y saca una moraleja
+@ Defiende el trabajo presencial y refuta a quienes lo critican
+@ Enumera cifras de encuestas sin llegar a ninguna conclusión
+
+## Texto Dos
+p: Cuando le preguntan a mi vecino cómo está, responde siempre lo mismo: <<Ocupado, gracias a Dios>>. Lo dice con una sonrisa cansada y un punto de orgullo, como quien informa que goza de buena salud. Nadie contesta <<desocupado, gracias a Dios>>. La frase sonaría a confesión.
+p: Hemos llegado a medir el valor de una persona por lo llena que tiene la agenda. El descanso, para ser aceptable, debe disfrazarse de otra cosa: de <<recargar baterías>> para rendir más el lunes, de curso de fin de semana, de ejercicio con metas. Hasta las vacaciones se planean con cronograma. El ocio que no produce nada ---mirar llover, conversar sin tema, caminar sin rumbo--- nos deja una culpa parecida a la de quien se queda con el cambio.
+p: No siempre fue así. Para los antiguos griegos el ocio no era lo que sobraba después del trabajo, sino aquello para lo que se trabajaba: el tiempo de pensar, conversar y ocuparse de los asuntos de la ciudad. Es verdad que ese ocio lo sostenían los esclavos, y conviene no olvidarlo. Pero la idea de fondo resiste: una vida entera dedicada a ganarse la vida no deja espacio para vivirla.
+p: La tecnología prometió liberarnos y cumplió a medias. Las máquinas hacen en una hora lo que antes tomaba un día, pero no usamos ese tiempo para descansar, sino para producir más. El teléfono, que nos permite trabajar desde cualquier parte, nos permite sobre todo trabajar a cualquier hora.
+p: Propongo una prueba sencilla. El próximo domingo, intente pasar una hora sin hacer nada útil. Si a los diez minutos siente la urgencia de revisar el correo, no se preocupe: no es pereza lo que le falta. Es práctica.
+src: Texto elaborado para este simulacro.
+
+## Preguntas del Texto Dos
+q: La comparación <<como quien informa que goza de buena salud>> (párrafo 1) indica que, para el vecino, estar ocupado es:
+@ Un motivo de satisfacción
+@ Una enfermedad
+@ Una desgracia
+@ Un secreto
+q: Al afirmar que la frase <<desocupado, gracias a Dios>> <<sonaría a confesión>> (párrafo 1), el autor sugiere que:
+@ Reconocer que no se está ocupado se percibe como admitir una falta
+@ Las personas desocupadas suelen ser muy religiosas
+@ Nadie tiene en realidad tiempo libre
+@ El vecino miente cuando dice que está ocupado
+q: Según el párrafo 2, el descanso resulta aceptable cuando:
+@ Se justifica como algo útil
+@ Dura muy poco tiempo
+@ Se hace en compañía
+@ No cuesta dinero
+q: En el párrafo 2, la palabra <<\sub{disfrazarse}>> se usa con el sentido de:
+@ Presentarse como algo distinto de lo que es
+@ Vestirse para una fiesta
+@ Volverse más divertido
+@ Ocultarse de los demás
+q: Son ejemplos del <<ocio que no produce nada>> (párrafo 2), EXCEPTO:
+@ Hacer ejercicio con metas
+@ Mirar llover
+@ Conversar sin tema
+@ Caminar sin rumbo
+q: La comparación con <<quien se queda con el cambio>> (párrafo 2) sugiere que el ocio improductivo produce la sensación de:
+@ Haber tomado algo que no correspondía
+@ Haber ahorrado dinero
+@ Haber sido engañado
+@ Haber cumplido con un deber
+q: De acuerdo con el párrafo 3, para los antiguos griegos el ocio era:
+@ La finalidad del trabajo
+@ El tiempo que sobraba después de trabajar
+@ Una actividad propia de los esclavos
+@ Un vicio que debía evitarse
+q: Con la aclaración <<y conviene no olvidarlo>> (párrafo 3), el autor:
+@ Reconoce una injusticia en el ejemplo que él mismo está usando
+@ Recomienda estudiar la historia de Grecia
+@ Propone volver a la organización social de los griegos
+@ Corrige un error de los historiadores
+q: La afirmación <<una vida entera dedicada a ganarse la vida no deja espacio para vivirla>> (párrafo 3) significa que:
+@ El trabajo no debería ocupar toda la existencia
+@ Trabajar es innecesario para vivir bien
+@ Quien trabaja mucho gana más dinero
+@ La vida de los griegos era más corta que la actual
+q: Cuando el autor dice que la tecnología <<cumplió a medias>> (párrafo 4), quiere decir que:
+@ Ahorró tiempo, pero ese tiempo no se destinó al descanso
+@ Solo algunas máquinas funcionan correctamente
+@ Liberó a la mitad de los trabajadores
+@ Hizo el trabajo más lento que antes
+q: La última oración del párrafo 4 da a entender que el teléfono:
+@ Ha extendido el trabajo a todas las horas del día
+@ Ha reducido la cantidad de trabajo
+@ Solo sirve para trabajar fuera de la oficina
+@ Es la principal forma de descanso
+q: Con las oraciones finales (<<no es pereza lo que le falta. Es práctica>>), el autor sugiere, con humor, que:
+@ La capacidad de descansar se ha perdido por falta de uso
+@ Las personas perezosas descansan mejor
+@ Revisar el correo es una buena forma de ocio
+@ El domingo es un mal día para descansar
+q: El propósito principal del texto Dos es:
+@ Cuestionar el valor excesivo que se le da a estar siempre ocupado
+@ Explicar la historia del trabajo en la antigua Grecia
+@ Recomendar actividades para el fin de semana
+@ Defender el uso del teléfono en el tiempo libre
+
+## Preguntas sobre los Textos Uno y Dos
+q: Los dos textos advierten que la tecnología que permite trabajar desde cualquier lugar:
+@ También borra los límites del horario de trabajo
+@ Ha hecho desaparecer las oficinas
+@ Reduce la productividad de los empleados
+@ Solo beneficia a los empleados jóvenes
+q: La frase de Bedoya <<vivimos en el trabajo>> (texto Uno) coincide con la idea del texto Dos de que:
+@ El teléfono permite sobre todo trabajar a cualquier hora
+@ Los griegos trabajaban para tener ocio
+@ El descanso debe disfrazarse de otra cosa
+@ Nadie responde <<desocupado, gracias a Dios>>
+q: El texto Uno \bl, mientras que el texto Dos \bl.
+@ Examina ventajas y costos con apoyo de una especialista / reflexiona con humor a partir de escenas cotidianas
+@ Narra recuerdos de infancia / presenta los resultados de un experimento
+@ Defiende el trabajo presencial / defiende el trabajo remoto
+@ Reflexiona con humor sobre el descanso / analiza cifras de productividad
+q: Una empresa anuncia: <<Con nuestro plan de trabajo remoto, usted es dueño de su tiempo>>. Según lo expuesto en el texto Uno, Bedoya preguntaría ante todo:
+@ Quién eligió ese plan y quién asume sus costos
+@ Cuántos empleados tiene la empresa
+@ Si el plan incluye cursos de fin de semana
+@ Qué opinan los clientes de la empresa
+q: Desde la perspectiva del texto Dos, <<el correo de las nueve de la noche>> (texto Uno, párrafo 3) es un ejemplo de:
+@ La manera como la tecnología extiende el trabajo más allá del horario
+@ El ocio que no produce nada
+@ El aprendizaje por contagio
+@ El descanso que se disfraza de otra cosa
+q: La manera como los empleados jóvenes aprenden su oficio es un asunto tratado en el texto:
+@ Uno, pero no en el Dos
+@ Dos, pero no en el Uno
+@ Dos más que en el Uno
+@ Uno y en el Dos por igual
+
+== RAZONAMIENTO
+ctx 2: En una balanza de platillos se ponen cubos, esferas y pirámides; todos los objetos de una misma forma pesan lo mismo. Se observa que:
+\vi{2 cubos pesan lo mismo que 3 esferas}
+\vi{1 esfera y 1 pirámide, juntas, pesan lo mismo que 1 cubo}
+q: La cantidad de pirámides que pesan lo mismo que 1 cubo es:
+@ 3
+@ 2
+@ 4
+@ 6
+! Un cubo pesa 1,5 esferas, así que una pirámide pesa 0,5 esferas.
+q: La cantidad de pirámides que pesan lo mismo que 4 esferas es:
+@ 8
+@ 6
+@ 2
+@ 12
+! Cada esfera pesa lo mismo que 2 pirámides.
+q: La negación de la frase <<en todos los salones hay algún estudiante que usa gafas>> es:
+@ En algún salón ningún estudiante usa gafas
+@ En ningún salón hay estudiantes que usen gafas
+@ En algún salón todos los estudiantes usan gafas
+@ En todos los salones hay algún estudiante que no usa gafas
+! Se niega <<todos\dots{} algún>> con <<algún\dots{} ninguno>>.
+q: El entrenador dice: <<Basta con que llueva para que se cancele el partido>>. De las siguientes afirmaciones, la única que se deduce de lo dicho por el entrenador es:
+@ Si el partido no se canceló, entonces no llovió
+@ Si no llueve, entonces el partido no se cancela
+@ Si el partido se canceló, entonces llovió
+@ El partido solamente se cancela cuando llueve
+! <<Si llueve, se cancela>> equivale a su contrarrecíproca.
+ctx 2: En un curso, el 70\% de los estudiantes aprobó matemáticas, el 60\% aprobó física y el 10\% no aprobó ninguna de las dos materias. Se sabe además que exactamente 16 estudiantes aprobaron las dos materias.
+q: La cantidad de estudiantes del curso es:
+@ 40
+@ 32
+@ 50
+@ 160
+! Aprobó alguna el 90\%; las dos, $70+60-90=40\%$, que son 16 estudiantes.
+q: La cantidad de estudiantes que aprobó matemáticas, pero no aprobó física, es:
+@ 12
+@ 8
+@ 28
+@ 4
+! El 30\% de 40.
+q: Cinco cubos, uno rojo, uno azul, uno verde, uno amarillo y uno blanco, se apilan en una torre. Se sabe que:
+\vi{El cubo rojo está justo encima del azul}
+\vi{El cubo verde no está en la base ni en la parte más alta}
+\vi{El cubo amarillo está más abajo que el blanco}
+\vi{Los cubos verde y amarillo no se tocan}
+De las siguientes afirmaciones, de la única que se tiene certeza es:
+@ El cubo amarillo está en la base
+@ El cubo blanco está en la parte más alta
+@ El cubo verde está en el centro de la torre
+@ El cubo rojo está justo debajo del verde
+! De abajo hacia arriba solo son posibles amarillo, azul, rojo, verde, blanco y amarillo, blanco, verde, azul, rojo.
+ctx 2: Una máquina expendedora recibe únicamente monedas de \$100, \$200 y \$500, y no devuelve cambio.
+q: La cantidad de maneras distintas de completar exactamente \$1.000 (sin importar el orden en que se introduzcan las monedas) es:
+@ 10
+@ 8
+@ 6
+@ 12
+! Sin monedas de \$500 hay 6 maneras; con una, 3; con dos, 1.
+q: La menor cantidad de monedas con la que se pueden completar exactamente \$1.300 es:
+@ 4
+@ 3
+@ 5
+@ 6
+! $500+500+200+100$.
+q: Un tanque está lleno hasta el 40\% de su capacidad. Después de agregarle 30 litros, queda lleno hasta el 65\%. La capacidad del tanque, en litros, es:
+@ 120
+@ 75
+@ 100
+@ 150
+! $30$ litros son el 25\% de la capacidad.
+q: La cantidad de peces de un lago se triplica cada 5 años. Si hoy hay 200 peces, la cantidad que habrá dentro de 15 años es:
+@ 5.400
+@ 1.800
+@ 9.000
+@ 600
+! $200\cdot3^3$.
+q: Una obrera puede hacer cierto trabajo en 10 días y otra puede hacerlo en 15 días. Si trabajan juntas, cada una a su ritmo, el tiempo que tardan en hacer el trabajo es:
+@ 6 días
+@ 12,5 días
+@ 5 días
+@ 8 días
+! $\frac1{10}+\frac1{15}=\frac16$ del trabajo por día.
+q: Los primeros términos de una sucesión son 2, 3, 5, 8, 12, 17, \dots{} Si se continúa con la misma regla de formación, el término que ocupa la posición 10 es:
+@ 47
+@ 38
+@ 57
+@ 45
+! Se suma 1, 2, 3, \dots: el décimo término es $2+(1+2+\dots+9)$.
+q: Para números enteros positivos $a$ y $b$ se define $a\,\#\,b=a^b-b^a$. Por ejemplo, $2\,\#\,3=2^3-3^2=-1$. El valor de $3\,\#\,2$ más el valor de $4\,\#\,2$ es:
+@ 1
+@ 0
+@ 2
+@ $-1$
+! $3\,\#\,2=9-8=1$ y $4\,\#\,2=16-16=0$.
+q: Ana, Beto, Carla y Diego se van a sentar en una fila de cuatro sillas. La cantidad de maneras en que pueden hacerlo, de modo que Ana y Beto no queden uno junto al otro, es:
+@ 12
+@ 6
+@ 18
+@ 24
+! De las 24 maneras, en $3!\cdot2=12$ quedan juntos.
+q: En una bolsa hay 3 balotas rojas y 2 azules. Se saca una balota al azar, se anota su color y se devuelve a la bolsa; luego se saca otra. La probabilidad de que las dos balotas sacadas sean de distinto color es:
+@ $\frac{12}{25}$
+@ $\frac{6}{25}$
+@ $\frac{3}{5}$
+@ $\frac{13}{25}$
+! $2\cdot\frac35\cdot\frac25$.
+q: Un cuadrado está inscrito en un círculo de 5 cm de radio, es decir, sus cuatro vértices están sobre la circunferencia. El área del cuadrado, en cm$^2$, es:
+@ 50
+@ 100
+@ 25
+@ 75
+! La diagonal mide 10: el área es $\frac{10\cdot10}{2}$.
+ctx 2: En una empresa, cada hora de trabajo se paga a \$12.000. Las horas que un empleado trabaja por encima de 40 en una misma semana son horas extras y se pagan con un recargo del 50\%.
+q: El pago que recibe un empleado que trabajó 46 horas en una semana es:
+@ \$588.000
+@ \$552.000
+@ \$828.000
+@ \$516.000
+! $40\cdot12.000+6\cdot18.000$.
+q: Si un empleado recibió \$570.000 por una semana de trabajo, la cantidad de horas que trabajó esa semana fue:
+@ 45
+@ 47
+@ 44
+@ 48
+! \$480.000 por las 40 primeras; \$90.000 son 5 horas extras.
+q: La cantidad de cuadrados perfectos que hay entre 100 y 500, incluidos ambos números, es:
+@ 13
+@ 12
+@ 22
+@ 14
+! De $10^2=100$ a $22^2=484$.
+q: Hace 6 años, Juan tenía la mitad de la edad que tendrá dentro de 9 años. La edad actual de Juan es:
+@ 21
+@ 15
+@ 24
+@ 30
+! $J-6=\frac{J+9}{2}$.
+q: Un programa de computador realiza las siguientes instrucciones:
+\st{1.}{Comience con $n=45$ y $c=0$}
+\st{2.}{Calcule el residuo de dividir $n$ entre 2; si el residuo es 1, aumente $c$ en 1}
+\st{3.}{Cambie el valor de $n$ por el cociente entero de dividir $n$ entre 2}
+\st{4.}{Si $n=0$, pase a la instrucción 5; en otro caso, regrese a la instrucción 2}
+\st{5.}{Imprima el valor de $c$ y pare}
+El valor que imprime el programa es:
+@ 4
+@ 3
+@ 6
+@ 5
+! $n$: 45, 22, 11, 5, 2, 1; los residuos son 1, 0, 1, 1, 0, 1.
+q: El resultado de la suma $3+6+12+24+\dots+384$, en la que cada sumando es el doble del anterior, es:
+@ 765
+@ 768
+@ 381
+@ 1.533
+! Son 8 sumandos: $3(2^8-1)$.
+q: La cantidad de cifras que tiene el número $2^{10}\cdot5^{7}$ es:
+@ 8
+@ 7
+@ 10
+@ 17
+! $2^3\cdot10^7=80.000.000$.
+ctx 2: Un robot se mueve sobre un plano cuadriculado. Comienza en el punto $(0,0)$ mirando hacia el norte (hacia donde aumenta la segunda coordenada) y obedece tres órdenes: A, avanzar una unidad en la dirección en la que mira; D, girar $90^\circ$ a su derecha sin avanzar, e I, girar $90^\circ$ a su izquierda sin avanzar.
+q: Después de obedecer la secuencia de órdenes AADAIA, el robot queda en el punto:
+@ $(1,3)$
+@ $(3,1)$
+@ $(1,2)$
+@ $(-1,3)$
+! Avanza a $(0,2)$, gira al este y avanza a $(1,2)$, gira al norte y avanza a $(1,3)$.
+q: De las siguientes secuencias de órdenes, la única con la que el robot termina en el punto de partida es:
+@ ADADADA
+@ ADAIADA
+@ AIAIADA
+@ ADADAIA
+! Recorre los cuatro lados de un cuadrado de lado 1.
+q: Un tablero de 2 filas y 4 columnas se va a cubrir por completo con 4 fichas rectangulares de $1\times2$, sin que se monten unas sobre otras. Las fichas se pueden poner horizontales o verticales.\par
+{\centering\begin{tikzpicture}[scale=.5]\draw (0,0) grid (4,2);\draw[thick,fill=gray!45] (5.5,.5) rectangle (7.5,1.5);\draw (6.5,.5)--(6.5,1.5);\end{tikzpicture}\par}
+La cantidad de maneras distintas de cubrir el tablero es:
+@ 5
+@ 4
+@ 8
+@ 6
+! Para tableros de $2\times1$, $2\times2$, $2\times3$ y $2\times4$ hay 1, 2, 3 y 5 maneras.
+q: Una piscina mide 10 metros de largo y 4 metros de ancho. Su fondo es inclinado: la profundidad aumenta de manera uniforme a lo largo de la piscina, desde 1 metro en un extremo hasta 2 metros en el otro. El volumen de agua que cabe en la piscina, en m$^3$, es:
+@ 60
+@ 80
+@ 40
+@ 120
+! La profundidad promedio es 1,5 m: $10\cdot4\cdot1{,}5$.
+q: Una pintura rectangular de 30 cm por 40 cm se rodea con un marco de 5 cm de ancho por todos sus lados. El área del marco, en cm$^2$, es:
+@ 800
+@ 700
+@ 375
+@ 2.000
+! $40\cdot50-30\cdot40$.
+q: Si $\dfrac{a}{b}=\dfrac23$ y $\dfrac{b}{c}=\dfrac45$, entonces $\dfrac{a}{c}$ es igual a:
+@ $\frac{8}{15}$
+@ $\frac{5}{6}$
+@ $\frac{6}{8}$
+@ $\frac{10}{12}$
+! $\frac23\cdot\frac45$.
+q: Cierto año no bisiesto comenzó un lunes. El último día de ese año fue:
+@ Lunes
+@ Domingo
+@ Martes
+@ Sábado
+! $365=52\cdot7+1$: el día 365 cae igual que el día 1.
+q: Sobre una mesa hay cuatro tarjetas. Cada tarjeta tiene una letra por un lado y un número por el otro. Las caras que se ven muestran: A, K, 4 y 7. Alguien afirma: <<Si una tarjeta tiene una vocal por un lado, entonces tiene un número par por el otro>>. Para comprobar si la afirmación es verdadera, las únicas tarjetas que es necesario voltear son las que muestran:
+@ A y 7
+@ A y 4
+@ A, 4 y 7
+@ K y 7
+! La regla solo falla si hay una vocal con un impar: hay que ver el reverso de la vocal y el del impar.
+q: La cantidad de números de tres cifras en los que no aparece el dígito 5 es:
+@ 648
+@ 729
+@ 720
+@ 810
+! $8\cdot9\cdot9$.
+q: Juan sale de su casa caminando a 4 km/h. Media hora después, su hermano Pedro sale de la misma casa en bicicleta, por el mismo camino, a 12 km/h. El tiempo que tarda Pedro en alcanzar a Juan es:
+@ 15 minutos
+@ 10 minutos
+@ 20 minutos
+@ 30 minutos
+! Juan lleva 2 km de ventaja y Pedro descuenta 8 km cada hora.
+ctx 2: En una encuesta se preguntó a 180 estudiantes cuál es su deporte favorito. Los resultados se representaron en el diagrama circular, en el que se indica el ángulo central de cada sector.\par\smallskip
+{\centering\begin{tikzpicture}[scale=.8]\draw (0,0) circle(1.5);\foreach \a in {0,150,240,312} \draw (0,0)--(\a:1.5);
+\node[font=\scriptsize,align=center] at (75:2.2) {Fútbol\\$150^\circ$};\node[font=\scriptsize,align=center] at (195:2.5) {Baloncesto\\$90^\circ$};
+\node[font=\scriptsize,align=center] at (276:2.1) {Natación\\$72^\circ$};\node[font=\scriptsize,align=center] at (336:2.3) {Otros\\$48^\circ$};\end{tikzpicture}\par}
+q: La cantidad de estudiantes que prefiere el baloncesto es:
+@ 45
+@ 90
+@ 60
+@ 36
+! $\frac{90}{360}\cdot180$.
+q: El porcentaje de estudiantes que prefiere la natación es:
+@ 20\%
+@ 72\%
+@ 36\%
+@ 25\%
+! $72\div360$.
+q: Si $x$ es un número real tal que $x+\dfrac1x=3$, entonces el valor de $x^2+\dfrac{1}{x^2}$ es:
+@ 7
+@ 9
+@ 11
+@ 8
+! $\left(x+\frac1x\right)^2=x^2+2+\frac1{x^2}=9$.
+q: Se tienen 9 monedas de igual apariencia; 8 pesan lo mismo y una, que es falsa, pesa menos. Se dispone de una balanza de dos platillos, sin pesas. La menor cantidad de pesadas con la que siempre se puede identificar la moneda falsa es:
+@ 2
+@ 3
+@ 4
+@ 1
+! Se pesan 3 contra 3 y se sabe en cuál grupo de 3 está; luego, 1 contra 1 de ese grupo.
+q: La tercera parte de un número más la cuarta parte del mismo número es igual a 35. El número es:
+@ 60
+@ 84
+@ 48
+@ 245
+! $\frac{7}{12}x=35$.
+q: Con bloques iguales se construye la secuencia de pirámides que se muestra, en la que cada figura tiene una fila más que la anterior y cada fila tiene dos bloques más que la que está encima de ella.\par
+\newcommand\pir[3]{\begin{scope}[shift={(#1,0)}]\foreach \k in {1,...,#2}{\pgfmathtruncatemacro\m{2*\k-1}\foreach \j in {1,...,\m}{\draw (\j-\k-.5,#2-\k) rectangle (\j-\k+.5,#2-\k+1);}}\node at (0,-.8) {\scriptsize Figura #3};\end{scope}}
+{\centering\begin{tikzpicture}[scale=.33]\pir{0}{1}{1}\pir{5}{2}{2}\pir{12}{3}{3}\end{tikzpicture}\par}
+La cantidad de bloques que tiene la figura 15 es:
+@ 225
+@ 120
+@ 29
+@ 210
+! $1+3+5+\dots+(2n-1)=n^2$.

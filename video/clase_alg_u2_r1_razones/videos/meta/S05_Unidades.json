@@ -1,0 +1,54 @@
+{
+ "scene": "S05_Unidades",
+ "duration": 67.867,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Razones con unidades",
+   "hold": 20.1
+  },
+  {
+   "time": 20.7,
+   "title": "Precio por unidad",
+   "hold": 67.267
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.233,
+   "text": "Cuando las dos cantidades miden cosas distintas, la razón lleva unidades. Un bus recorre ciento ochenta kilómetros en tres horas.",
+   "fox": true
+  },
+  {
+   "start": 11.233,
+   "end": 19.7,
+   "text": "Si dividimos los kilómetros entre las horas, sale la rapidez: sesenta kilómetros por cada hora.",
+   "fox": false
+  },
+  {
+   "start": 20.7,
+   "end": 32.833,
+   "text": "Con la misma idea se descubre qué sale más barato. Un paquete de seis jugos cuesta siete mil doscientos pesos y uno de ocho jugos cuesta nueve mil doscientos.",
+   "fox": false
+  },
+  {
+   "start": 32.833,
+   "end": 45.867,
+   "text": "No sirve comparar los precios así nomás, porque los paquetes traen distinto número de jugos. Hay que comparar el precio de un solo jugo: dividir el precio entre los jugos.",
+   "fox": false
+  },
+  {
+   "start": 45.867,
+   "end": 55.633,
+   "text": "Mil ciento cincuenta pesos por jugo contra mil doscientos: el paquete de ocho sale más barato, aunque cueste más en total.",
+   "fox": false
+  },
+  {
+   "start": 55.633,
+   "end": 66.867,
+   "text": "Estas razones con unidades se llaman tasas unitarias: dicen cuánto corresponde a una sola unidad, como el precio unitario o la rapidez.",
+   "fox": false
+  }
+ ]
+}

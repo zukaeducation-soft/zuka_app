@@ -1,0 +1,63 @@
+1
+00:00:08,900 --> 00:00:16,133
+Una camisa cuesta sesenta mil pesos y tiene un descuento del veinticinco por ciento.
+
+2
+00:00:16,133 --> 00:00:27,100
+Una forma: calcular el descuento y restarlo. El veinticinco por ciento de sesenta mil es quince mil, y queda por pagar cuarenta y cinco mil.
+
+3
+00:00:27,100 --> 00:00:37,967
+Otra forma, más rápida: si te quitan el veinticinco por ciento, pagas el setenta y cinco. Basta multiplicar por cero punto setenta y cinco.
+
+4
+00:00:37,967 --> 00:00:46,867
+Las dos formas dan lo mismo por la propiedad distributiva: sacamos el sesenta mil como factor común.
+
+5
+00:00:48,870 --> 00:00:58,970
+Con un aumento pasa lo contrario. Un producto vale cincuenta mil pesos sin impuesto, y el IVA le suma el diecinueve por ciento.
+
+6
+00:00:58,970 --> 00:01:06,670
+Se paga el ciento diecinueve por ciento del precio: se multiplica por uno punto diecinueve.
+
+7
+00:01:06,670 --> 00:01:19,070
+En general, aumentar un r por ciento es multiplicar por uno más r centésimos, y descontarlo es multiplicar por uno menos r centésimos. Ese número se llama factor.
+
+8
+00:01:19,070 --> 00:01:34,237
+Por ejemplo: subir el ocho por ciento es multiplicar por uno punto cero ocho; bajar el ocho por ciento, por cero punto noventa y dos; y subir el cien por ciento es multiplicar por dos, el doble.
+
+9
+00:01:36,240 --> 00:01:46,873
+Ahora al revés. Un televisor cuesta setenta y un mil cuatrocientos pesos con el IVA incluido, y se quiere saber cuánto costaba sin IVA.
+
+10
+00:01:46,873 --> 00:02:03,907
+Un error muy común es quitarle el diecinueve por ciento a setenta y un mil cuatrocientos. Da cincuenta y siete mil ochocientos treinta y cuatro, y está mal: el diecinueve por ciento se calculó sobre el precio sin IVA, que es menor.
+
+11
+00:02:03,907 --> 00:02:06,507
+Lo correcto: el precio sin IVA, multiplicado por uno punto diecinueve, da setenta y un mil cuatrocientos. Para deshacer esa multiplicación se divide entre el mismo factor, que es multiplicar por su recíproco.
+
+12
+00:02:06,507 --> 00:02:15,140
+Comprobación: sesenta mil por uno punto diecinueve da setenta y un mil cuatrocientos. Sí cuadra.
+
+13
+00:02:17,140 --> 00:02:28,373
+El pasaje del bus subió de dos mil quinientos a tres mil pesos. Para saber en qué porcentaje subió, se compara la subida con el precio de antes.
+
+14
+00:02:28,373 --> 00:02:39,940
+La subida fue de quinientos, y se divide entre el precio de antes: quinientos entre dos mil quinientos es cero punto dos. Subió el veinte por ciento.
+
+15
+00:02:39,940 --> 00:02:55,607
+Pero si el pasaje volviera a bajar de tres mil a dos mil quinientos, la bajada sería de quinientos sobre tres mil: un dieciséis punto siete por ciento. No es simétrico, porque cambió el precio de antes.
+
+16
+00:02:57,610 --> 00:03:08,077
+Aumentar o descontar un porcentaje es multiplicar por un factor, y para volver al precio de antes se divide entre ese factor.

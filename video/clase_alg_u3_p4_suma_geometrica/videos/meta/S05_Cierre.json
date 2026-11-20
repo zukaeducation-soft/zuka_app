@@ -1,0 +1,24 @@
+{
+ "scene": "S05_Cierre",
+ "duration": 22.333,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Repasemos",
+   "hold": 14.133
+  },
+  {
+   "time": 14.733,
+   "title": "Cierre",
+   "hold": 21.333
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 13.733,
+   "text": "La suma geométrica sale de multiplicar por la razón y restar. Si la razón está entre menos uno y uno, la suma infinita se acerca a a sub uno entre uno menos r.",
+   "fox": false
+  }
+ ]
+}

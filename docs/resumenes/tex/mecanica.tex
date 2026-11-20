@@ -1,0 +1,348 @@
+% Resumen del mundo «Puerto de las Fuerzas» (Geometría Vectorial y Analítica, mundo 5: vectores en la mecánica).
+% Lecciones geo-19, geo-20, geo-21. Usa los ejemplos de los videos; el taller trae ejercicios nuevos.
+\documentclass[11pt,a4paper]{article}
+\usepackage{zuka-resumen}
+\usepackage{needspace}
+\let\nivelbase\nivel
+\renewcommand{\nivel}[2]{\Needspace{10\baselineskip}\nivelbase{#1}{#2}}
+\zukacurso{geo}
+\zukamundo{5}{Puerto de las Fuerzas}{Vectores en la mecánica}
+\sisetup{inter-unit-product=\ensuremath{{}\cdot{}}}
+
+\newcommand{\vF}{\vec{F}}\newcommand{\vr}{\vec{r}}\newcommand{\vd}{\vec{d}}\newcommand{\vR}{\vec{R}}
+\newcommand{\vM}{\vec{M}}
+
+\begin{document}
+
+\portada{%
+En la física casi todo lo que empuja, tira o se mueve tiene magnitud \emph{y} dirección: es un vector. En este
+mundo usaste lo que sabías de vectores para sumar \clave{fuerzas}, decidir si un cuerpo está en
+\clave{equilibrio}, describir un \clave{movimiento} con una recta paramétrica, sumar velocidades de un nadador y
+un río, y calcular el \clave{trabajo} (un producto escalar) y el \clave{momento} (un producto vectorial) de una
+fuerza. Este resumen reúne las definiciones y los ejemplos de los videos, y termina con un taller de práctica.}{%
+\item \textbf{Nivel 5-1.} Fuerzas coplanarias y concurrentes: componentes, resultante, equilibrio y equilibrante.
+\item \textbf{Nivel 5-2.} Cinemática: posición, desplazamiento, velocidad media, movimiento rectilíneo uniforme y velocidades relativas.
+\item \textbf{Nivel 5-3.} Trabajo de una fuerza constante y momento (torque) de una fuerza.}
+
+\begin{clavebox}[LAS IDEAS QUE SOSTIENEN TODO EL MUNDO]
+\renewcommand{\arraystretch}{1.5}\begin{tabular}{@{}c@{\quad}c@{\quad}c@{\quad}c@{}}
+$\displaystyle \vR=\sum\vF_i$ & $\displaystyle \vr(t)=\vr_0+t\,\vec v$ & $\displaystyle W=\vF\cdot\vd$ & $\displaystyle \vM=\vr\times\vF$\\[2pt]
+\footnotesize las fuerzas se suman & \footnotesize el tiempo es el parámetro & \footnotesize trabajo: producto escalar & \footnotesize giro: producto vectorial
+\end{tabular}
+\end{clavebox}
+
+%=====================================================================
+\nivel{5-1}{Fuerzas coplanarias y concurrentes}
+
+\textbf{Intuición.} Dos personas que tiran de una misma cuerda en direcciones distintas producen el mismo efecto que
+\emph{una sola} fuerza: su suma vectorial. Si todas las fuerzas se cancelan, el cuerpo no se acelera.
+
+\begin{definicion}[Fuerza, concurrentes y coplanarias]
+Una \clave{fuerza} es un vector: tiene magnitud (en newtons, \si{\newton}), dirección y sentido. Varias fuerzas son
+\clave{concurrentes} si actúan sobre un mismo punto, y \clave{coplanarias} si están en un mismo plano.
+Su \clave{resultante} es la suma vectorial
+\[ \vR=\vF_1+\vF_2+\cdots+\vF_n=\left(\sum F_{x},\ \sum F_{y}\right). \]
+\end{definicion}
+
+\subsection{Componentes de una fuerza}
+Si una fuerza de magnitud $F$ forma un ángulo $\theta$ con el eje $x$ positivo (medido en sentido antihorario),
+\[ \vF=F\left(\cos\theta,\ \sen\theta\right),\qquad F=\norma{\vF}=\sqrt{F_x^2+F_y^2},\qquad \tg\theta=\frac{F_y}{F_x}. \]
+
+\begin{figura}[Izquierda: componentes de $10$ N a $30^\circ$. Derecha: la resultante es la diagonal del paralelogramo.]
+\begin{tikzpicture}[scale=0.42]
+  \draw[zmute,->] (-0.5,0) -- (10.5,0) node[right,font=\footnotesize] {$x$};
+  \draw[zmute,->] (0,-0.5) -- (0,6.4) node[above,font=\footnotesize] {$y$};
+  \draw[zsky,dashed,line width=0.7pt] (8.66,0) -- (8.66,5);
+  \draw[->,zsky,line width=1.1pt] (0,0) -- (8.66,0);
+  \draw[->,zsky,line width=1.1pt] (0,0) -- (0,5);
+  \draw[zsky,dashed,line width=0.7pt] (0,5) -- (8.66,5);
+  \draw[->,zcoral,line width=1.4pt] (0,0) -- (8.66,5) node[above right,etq,text=zcoral] {$\SI{10}{\newton}$};
+  \draw[zmute] (2.2,0) arc (0:30:2.2); \node[font=\footnotesize] at (2.9,0.75) {$30^\circ$};
+  \node[font=\footnotesize,text=zsky,below] at (4.33,0) {$10\cos30^\circ\approx8.66$};
+  \node[font=\footnotesize,text=zsky,left] at (0,2.5) {$10\sen30^\circ=5$};
+  \begin{scope}[xshift=17cm]
+    \fill[zsun!15] (0,0) -- (4,1) -- (5,4) -- (1,3) -- cycle;
+    \draw[zmute,dashed] (4,1) -- (5,4) -- (1,3);
+    \draw[->,zsky,line width=1.2pt] (0,0) -- (4,1) node[below right,etq,text=zsky] {$\vF_1$};
+    \draw[->,zmint,line width=1.2pt] (0,0) -- (1,3) node[above left,etq,text=zmint] {$\vF_2$};
+    \draw[->,zcoral,line width=1.5pt] (0,0) -- (5,4) node[above right,etq,text=zcoral] {$\vR=\vF_1+\vF_2$};
+    \node[punto] at (0,0) {};
+  \end{scope}
+\end{tikzpicture}
+\end{figura}
+
+\begin{ejemplo}[Del video y uno más: dos fuerzas sobre un mismo punto]
+Del video: $10$ N a $30^\circ$ es $\vF_1=10\left(\cos30^\circ,\sen30^\circ\right)\approx(8.66,\ 5)$ N.
+Si además actúa $\vF_2=6$ N a $120^\circ$, es decir $\vF_2=6\left(\cos120^\circ,\sen120^\circ\right)\approx(-3,\ 5.20)$ N,
+\[ \vR\approx(8.66-3,\ 5+5.20)=(5.66,\ 10.20)\ \si{\newton},\qquad
+\norma{\vR}=\sqrt{5.66^2+10.20^2}\approx\SI{11.66}{\newton},\qquad \theta\approx61.0^\circ . \]
+Comprobación: las dos fuerzas son perpendiculares ($120^\circ-30^\circ=90^\circ$), así que
+$\norma{\vR}=\sqrt{10^2+6^2}=\sqrt{136}\approx11.66$ N.
+\end{ejemplo}
+\begin{ojo}[El ángulo y el cuadrante]
+$\tg\theta=F_y/F_x$ no basta: $(-3,4)$ y $(3,-4)$ tienen la misma tangente. Mira los signos de las componentes
+para saber en qué cuadrante está la fuerza. Y las magnitudes \emph{no} se suman: $10+6\neq11.66$.
+\end{ojo}
+
+\subsection{Equilibrio}
+\begin{propiedad}[Condición de equilibrio de fuerzas concurrentes]
+Un cuerpo sometido a fuerzas concurrentes está en \clave{equilibrio} cuando la resultante es el vector cero:
+\[ \sum F_x=0\qquad\text{y}\qquad\sum F_y=0 . \]
+La fuerza que equilibra a un sistema con resultante $\vR$ es la \clave{equilibrante} $-\vR$: misma magnitud, sentido contrario.
+\end{propiedad}
+
+\begin{minipage}[c]{0.56\linewidth}
+\begin{ejemplo}[Del video: la lámpara de 60 N]
+Una lámpara de $60$ N cuelga de dos cables que forman $45^\circ$ con la horizontal. En $x$:
+$T\cos45^\circ-T\cos45^\circ=0$, así que por simetría las tensiones son iguales. En $y$, sus partes verticales
+sostienen el peso:
+\[ 2T\sen45^\circ=60\ \Longrightarrow\ T=\frac{60}{2\cdot\frac{\sqrt2}{2}}=\frac{60}{\sqrt2}=30\sqrt2\approx\SI{42.4}{\newton}. \]
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.4\linewidth}\centering
+\begin{tikzpicture}[scale=0.85]
+  \fill[pattern=north east lines,pattern color=zmute] (-2.6,2.3) rectangle (2.6,2.55);
+  \draw[zink,line width=0.8pt] (-2.6,2.3) -- (2.6,2.3);
+  \draw[zmute,line width=0.8pt] (0,0) -- (-2.3,2.3); \draw[zmute,line width=0.8pt] (0,0) -- (2.3,2.3);
+  \draw[->,zsky,line width=1.3pt] (0,0) -- (-1.3,1.3) node[left,etq,text=zsky] {$\vec T_1$};
+  \draw[->,zsky,line width=1.3pt] (0,0) -- (1.3,1.3) node[right,etq,text=zsky] {$\vec T_2$};
+  \draw[->,zcoral,line width=1.3pt] (0,0) -- (0,-1.84) node[below,etq,text=zcoral] {$\vec W$: $60$ N};
+  \draw[zmute,dashed] (0,0) -- (1.9,0);
+  \draw[zmute] (0.8,0) arc (0:45:0.8); \node[font=\footnotesize] at (1.15,0.38) {$45^\circ$};
+  \node[circle,fill=zsun,draw=zink,inner sep=2.5pt] at (0,0) {};
+\end{tikzpicture}
+
+{\small\color{zmute}Diagrama de cuerpo libre del nudo.}
+\end{minipage}
+
+%=====================================================================
+\nivel{5-2}{Cinemática}
+
+\textbf{Intuición.} Un móvil que se desplaza en el plano deja una huella: su posición es un vector que cambia con
+el tiempo. Restando posiciones se obtiene el desplazamiento; dividiendo entre el tiempo, la velocidad.
+
+\begin{definicion}[Posición, desplazamiento y velocidad media]
+La \clave{posición} en el instante $t$ es el vector $\vr(t)$ que va del origen al móvil. Entre $t_1$ y $t_2$:
+\[ \Delta\vr=\vr(t_2)-\vr(t_1)\quad\text{(desplazamiento)},\qquad
+\vec v_m=\frac{\Delta\vr}{\Delta t}\quad\text{(velocidad media)}. \]
+La \clave{rapidez} es la norma de la velocidad: $\norma{\vec v}$, en \si{\metre\per\second} o \si{\kilo\metre\per\hour}.
+\end{definicion}
+
+\subsection{Movimiento con velocidad constante}
+\begin{minipage}[c]{0.52\linewidth}
+\begin{propiedad}[Movimiento rectilíneo uniforme]
+Si la velocidad $\vec v$ es constante, el móvil recorre una recta paramétrica en la que el tiempo hace de parámetro:
+\[ \vr(t)=\vr_0+t\,\vec v . \]
+\end{propiedad}
+\begin{ejemplo}[Del video]
+Con $\vr_0=(0,2)$ m y $\vec v=(3,1)$ m/s:
+$\vr(2)=(0,2)+2(3,1)=(6,4)$ m. El desplazamiento en esos $2$ s es $(6,2)$ m, de longitud
+$\sqrt{40}\approx\SI{6.32}{\metre}$, y $\vec v_m=(3,1)$ m/s, igual a $\vec v$.
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.44\linewidth}\centering
+\begin{tikzpicture}[scale=0.62]
+  \draw[zline,line width=0.4pt] (-0.5,-0.5) grid (7.5,5.5);
+  \draw[zmute,->] (-0.5,0) -- (7.8,0) node[right,font=\footnotesize] {$x$};
+  \draw[zmute,->] (0,-0.5) -- (0,5.8) node[above,font=\footnotesize] {$y$};
+  \draw[zaccent,line width=0.9pt] (-0.6,1.8) -- (7.5,4.5);
+  \foreach \t in {0,1,2} {
+    \node[punto] at (3*\t,2+\t) {};
+    \node[font=\footnotesize,anchor=south east] at (3*\t,2+\t) {$t=\t$};}
+  \draw[->,zcoral,line width=1.2pt] (6,4) -- (9-0.01,5-0.01);
+  \node[font=\footnotesize,text=zcoral,anchor=west] at (6.2,5.2) {$\vec v$};
+  \draw[->,zmint,line width=1.1pt] (0,2) to[bend right=12] (6,4);
+  \node[font=\footnotesize,text=zmint] at (3.6,2.25) {$\Delta\vr$};
+\end{tikzpicture}
+
+{\small\color{zmute}Cada segundo el móvil avanza el vector $\vec v=(3,1)$.}
+\end{minipage}
+
+\begin{ojo}[Desplazamiento no es distancia recorrida]
+El desplazamiento solo depende del punto de partida y del de llegada. Si un atleta da una vuelta completa a la pista,
+recorrió $400$ m pero su desplazamiento es $\vec 0$ y su velocidad media es cero.
+\end{ojo}
+
+\subsection{Velocidades relativas}
+\begin{propiedad}[Suma de velocidades]
+Lo que ve un observador en tierra es la suma de la velocidad propia del móvil (respecto al agua o al aire) y la
+velocidad del medio:
+\[ \vec v_{\text{tierra}}=\vec v_{\text{propia}}+\vec v_{\text{medio}} . \]
+\end{propiedad}
+\begin{minipage}[c]{0.56\linewidth}
+\begin{ejemplo}[Del video: el nadador y el río]
+Un nadador avanza a $(0,\ 1.5)$ m/s respecto al agua y el río corre a $(2,\ 0)$ m/s. Respecto a la orilla:
+\[ \vec v=(0,1.5)+(2,0)=(2,\ 1.5)\ \si{\metre\per\second},\qquad \norma{\vec v}=\sqrt{4+2.25}=\SI{2.5}{\metre\per\second}. \]
+Si el río tiene $30$ m de ancho, tarda $30/1.5=\SI{20}{\second}$ en cruzar (solo cuenta la parte de la velocidad que
+atraviesa el río) y llega $2\cdot20=\SI{40}{\metre}$ aguas abajo.
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.4\linewidth}\centering
+\begin{tikzpicture}[scale=1.15]
+  \fill[zsky!12] (-0.4,0) rectangle (3,2);
+  \draw[zink,line width=0.9pt] (-0.4,0) -- (3,0); \draw[zink,line width=0.9pt] (-0.4,2) -- (3,2);
+  \node[font=\footnotesize,text=zmute,anchor=south west] at (-0.4,2) {orilla};
+  \draw[->,zmint,line width=1.2pt] (0,0) -- (0,1.5) node[midway,left,etq,text=zmint] {$(0,1.5)$};
+  \draw[->,zsky,line width=1.2pt] (0,1.5) -- (2,1.5) node[midway,above,etq,text=zsky] {río $(2,0)$};
+  \draw[->,zcoral,line width=1.4pt] (0,0) -- (2,1.5);
+  \node[etq,text=zcoral,anchor=north west] at (1.05,0.7) {$(2,\,1.5)$};
+  \node[punto] at (0,0) {};
+\end{tikzpicture}
+
+{\small\color{zmute}La corriente desvía al nadador.}
+\end{minipage}
+
+%=====================================================================
+\nivel{5-3}{Trabajo y momento de una fuerza}
+
+\subsection{Trabajo de una fuerza constante}
+\textbf{Intuición.} Al arrastrar una caja con una cuerda inclinada, solo la parte de la fuerza que va \emph{a lo largo
+del camino} la hace avanzar; la parte vertical no aporta. Medir «la parte a lo largo de» es justo lo que hace el
+producto escalar.
+
+\begin{definicion}[Trabajo]
+El trabajo de una fuerza constante $\vF$ durante un desplazamiento rectilíneo $\vd$ es
+\[ W=\vF\cdot\vd=\norma{\vF}\,\norma{\vd}\cos\theta , \]
+donde $\theta$ es el ángulo entre la fuerza y el desplazamiento. Se mide en julios: $\SI{1}{\joule}=\SI{1}{\newton\metre}$.
+\end{definicion}
+
+\begin{minipage}[c]{0.5\linewidth}
+\begin{itemize}
+\item $0^\circ\le\theta<90^\circ$: $W>0$, la fuerza ayuda al movimiento.
+\item $\theta=90^\circ$: $W=0$, la fuerza no trabaja (por ejemplo, el peso en un camino horizontal).
+\item $90^\circ<\theta\le180^\circ$: $W<0$, la fuerza se opone (como la fricción).
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.46\linewidth}\centering
+\begin{tikzpicture}[scale=0.85]
+  \fill[pattern=north east lines,pattern color=zmute] (-0.5,-0.25) rectangle (5.2,0);
+  \draw[zink,line width=0.8pt] (-0.5,0) -- (5.2,0);
+  \draw[zink,fill=zsun!35,line width=0.8pt] (0,0) rectangle (1.2,1);
+  \draw[->,zcoral,line width=1.4pt] (1.2,0.5) -- (3.6,2.3) node[above,etq,text=zcoral] {$\vF=(3,4)$};
+  \draw[->,zcoral!60,line width=1.1pt,dashed] (1.2,0.5) -- (3.6,0.5);
+  \node[font=\footnotesize,text=zcoral,below] at (2.4,0.5) {$F_x=3$};
+  \draw[zmute] (1.9,0.5) arc (0:53.13:0.7); \node[font=\footnotesize] at (2.15,0.85) {$\theta$};
+  \draw[->,zaccent,line width=1.2pt] (0,-0.6) -- (5,-0.6) node[midway,below,etq,text=zaccent] {$\vd=(5,0)$};
+\end{tikzpicture}
+\end{minipage}
+
+\begin{ejemplo}[Del video: $\vF=(3,4)$ N y $\vd=(5,0)$ m]
+\[ W=\vF\cdot\vd=3\cdot5+4\cdot0=\SI{15}{\joule}. \]
+Con la otra fórmula: $\norma{\vF}=5$, $\norma{\vd}=5$ y $\cos\theta=\tfrac35$, así que $W=5\cdot5\cdot\tfrac35=\SI{15}{\joule}$.
+La componente vertical, $4$ N, no hace trabajo.
+\end{ejemplo}
+
+\subsection{Momento de una fuerza}
+\textbf{Intuición.} Para aflojar una tuerca no importa solo cuánta fuerza se hace, sino \emph{dónde} y \emph{cómo}: una
+llave larga ayuda, y empujar a lo largo del mango no sirve de nada. El momento mide esa tendencia a hacer girar.
+
+\begin{definicion}[Momento o torque]
+El momento de una fuerza $\vF$ aplicada en el punto de posición $\vr$ (medida desde el eje de giro $O$) es
+\[ \vM=\vr\times\vF,\qquad \norma{\vM}=\norma{\vr}\,\norma{\vF}\sen\theta , \]
+con $\theta$ el ángulo entre $\vr$ y $\vF$. Se mide en $\si{\newton\metre}$. En el plano,
+$\vr\times\vF=\left(0,\ 0,\ xF_y-yF_x\right)$: el número $M=xF_y-yF_x$ es positivo si la fuerza hace girar en
+sentido antihorario y negativo si lo hace en sentido horario.
+\end{definicion}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{ejemplo}[Del video: la llave]
+Con $\vr=(0.3,\ 0)$ m y $\vF=(0,\ 50)$ N,
+\[ M=xF_y-yF_x=0.3\cdot50-0\cdot0=\SI{15}{\newton\metre}, \]
+positivo: la llave gira en sentido antihorario. Si la misma fuerza formara $30^\circ$ con el mango, el momento
+bajaría a $0.3\cdot50\cdot\sen30^\circ=\SI{7.5}{\newton\metre}$, y empujando a lo largo del mango ($\theta=0^\circ$) sería $0$.
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.44\linewidth}\centering
+\begin{tikzpicture}[scale=1]
+  \draw[zink,fill=zsoft,line width=0.9pt,rounded corners=2pt] (-0.25,-0.18) rectangle (3.1,0.18);
+  \node[regular polygon,regular polygon sides=6,draw=zink,fill=zsun!40,minimum size=7mm,inner sep=0] at (0,0) {};
+  \node[font=\footnotesize] at (0,-0.6) {$O$};
+  \draw[->,zaccent,line width=1.2pt] (0,0.45) -- (3,0.45) node[midway,above,etq,text=zaccent] {$\vr$: $0.3$ m};
+  \draw[->,zcoral,line width=1.4pt] (3,0) -- (3,1.8) node[above,etq,text=zcoral] {$\vF$: $50$ N};
+  \draw[->,zmint,line width=1pt] (0.75,-0.55) arc (-40:60:0.95);
+  \node[font=\footnotesize,text=zmint] at (1.55,-0.35) {antihorario};
+\end{tikzpicture}
+\end{minipage}
+
+\begin{ojo}[Errores frecuentes con trabajo y momento]
+El trabajo es un número (puede ser negativo) y el momento es un vector. En el trabajo va el \emph{coseno}; en el
+momento, el \emph{seno}. Y el orden importa: $\vr\times\vF=-\vF\times\vr$.
+\end{ojo}
+
+%=====================================================================
+\repaso
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}p{72mm} L@{}}
+\toprule
+Concepto & Fórmula & Unidad o nota\\ \midrule
+Componentes & $\vF=F\left(\cos\theta,\ \sen\theta\right)$ & $\theta$ desde el eje $x$\\
+Resultante & $\vR=\left(\sum F_x,\ \sum F_y\right)$,\quad $\norma{\vR}=\sqrt{R_x^2+R_y^2}$ & \si{\newton}\\
+Equilibrio & $\sum F_x=0$,\quad $\sum F_y=0$;\quad equilibrante $-\vR$ & \\
+Desplazamiento & $\Delta\vr=\vr(t_2)-\vr(t_1)$ & \si{\metre}\\
+Velocidad media & $\vec v_m=\dfrac{\Delta\vr}{\Delta t}$;\quad rapidez $\norma{\vec v}$ & \si{\metre\per\second}\\
+Movimiento uniforme & $\vr(t)=\vr_0+t\,\vec v$ & recta paramétrica\\
+Velocidad relativa & $\vec v_{\text{tierra}}=\vec v_{\text{propia}}+\vec v_{\text{medio}}$ & agua, viento\\
+Trabajo & $W=\vF\cdot\vd=\norma{\vF}\norma{\vd}\cos\theta$ & $\si{\joule}=\si{\newton\metre}$\\
+Momento & $\vM=\vr\times\vF$,\quad $\norma{\vM}=rF\sen\theta$;\quad en el plano $M=xF_y-yF_x$ & \si{\newton\metre}; $+$ antihorario\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{ojo}[Errores frecuentes]
+\begin{itemize}
+\item Sumar magnitudes de fuerzas en vez de sumar sus componentes.
+\item Usar el coseno cuando el ángulo se midió desde el eje $y$ (o con la vertical): ahí la componente $x$ lleva seno.
+\item Confundir desplazamiento con distancia recorrida, o velocidad con rapidez.
+\item En el trabajo, olvidar que solo cuenta la parte de la fuerza a lo largo del desplazamiento.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\taller
+\begin{ejercicios}
+\item Halla las componentes de una fuerza de $25$ N que forma $150^\circ$ con el eje $x$ positivo.
+\item Sobre una argolla actúan $\vF_1=12$ N a $0^\circ$, $\vF_2=8$ N a $90^\circ$ y $\vF_3=5$ N a $225^\circ$.
+  Halla la resultante en componentes, su magnitud y su dirección.
+\item Sobre un punto actúan $\vF_1=(4,-1)$ N, $\vF_2=(-2,5)$ N y $\vF_3=(1,1)$ N. Halla la fuerza equilibrante y su magnitud.
+\item Un semáforo de $200$ N cuelga de dos cables: el izquierdo forma $30^\circ$ con la horizontal y el derecho $60^\circ$.
+  Plantea $\sum F_x=0$ y $\sum F_y=0$ y halla la tensión de cada cable. ¿Cuál cable está más tenso?
+\item Un dron se mueve con $\vr(t)=(1,-2)+t\,(2,3)$ (en metros y segundos).
+  \begin{ejercicios}
+  \item Dibuja su trayectoria para $0\le t\le3$ marcando las posiciones en $t=0,1,2,3$.
+  \item ¿Dónde está en $t=4$ s?
+  \item ¿En qué instante y en qué punto cruza el eje $x$?
+  \end{ejercicios}
+\item Un móvil está en $(1,0,2)$ m en $t=1$ s y en $(7,-4,14)$ m en $t=3$ s. Halla su velocidad media y su rapidez media.
+\item Una avioneta vuela a $260$ km/h respecto al aire y sopla un viento de $100$ km/h hacia el este. El piloto quiere
+  avanzar exactamente hacia el norte. ¿Hacia dónde debe apuntar la nariz (velocidad propia) y cuál será su rapidez
+  respecto a tierra?
+\item Una fuerza $\vF=(10,5,-2)$ N lleva un objeto en línea recta del punto $A(1,0,0)$ al punto $B(4,2,1)$ (en metros).
+  ¿Cuánto trabajo hace? ¿Y si la misma fuerza actúa mientras el objeto va de $B$ a $A$?
+\item Un viajero arrastra su maleta $15$ m por un pasillo horizontal tirando de la manija con $40$ N, a $35^\circ$ sobre
+  la horizontal. ¿Qué trabajo hace? ¿Qué parte de la fuerza no contribuye al trabajo?
+\item Momentos:
+  \begin{ejercicios}
+  \item Un mecánico aplica $60$ N en el extremo de una llave de $0.3$ m, formando $40^\circ$ con el mango. Halla la
+    magnitud del momento.
+  \item Halla $\vM=\vr\times\vF$ para $\vr=(0.4,\ 0,\ 0.3)$ m y $\vF=(0,\ 50,\ 0)$ N, y su magnitud.
+  \end{ejercicios}
+\end{ejercicios}
+
+\respuestas
+\begin{respuestascortas}\raggedright
+\begin{soluciones}
+\item $25(\cos150^\circ,\sen150^\circ)\approx(-21.65,\ 12.5)$ N.
+\item $\vF_3\approx(-3.54,-3.54)$; $\vR\approx(8.46,\ 4.46)$ N; $\norma{\vR}\approx9.57$ N; $\theta\approx27.8^\circ$.
+\item $\vR=(3,5)$, equilibrante $(-3,-5)$ N, de magnitud $\sqrt{34}\approx5.83$ N.
+\item $T_1\cos30^\circ=T_2\cos60^\circ$ y $T_1\sen30^\circ+T_2\sen60^\circ=200$: $T_1=100$ N, $T_2=100\sqrt3\approx173.2$ N.
+  El derecho (el más empinado) está más tenso.
+\item (a) Recta por $(1,-2)$, $(3,1)$, $(5,4)$, $(7,7)$. (b) $(9,10)$ m. (c) $-2+3t=0$: $t=\tfrac23$ s, en $\left(\tfrac73,\ 0\right)$.
+\item $\Delta\vr=(6,-4,12)$, $\vec v_m=(3,-2,6)$ m/s, rapidez $\sqrt{49}=7$ m/s.
+\item Propia $(-100,\ 240)$ km/h, unos $22.6^\circ$ al oeste del norte; respecto a tierra $(0,240)$: $240$ km/h.
+\item $\vd=(3,2,1)$: $W=30+10-2=\SI{38}{\joule}$; de $B$ a $A$, $W=\SI{-38}{\joule}$.
+\item $W=40\cdot15\cos35^\circ\approx\SI{491.5}{\joule}$; la componente vertical, $40\sen35^\circ\approx22.9$ N.
+\item (a) $0.3\cdot60\sen40^\circ\approx\SI{11.6}{\newton\metre}$. (b) $\vM=(-15,\ 0,\ 20)$ N$\cdot$m, $\norma{\vM}=\SI{25}{\newton\metre}$.
+\end{soluciones}
+\end{respuestascortas}
+
+\end{document}

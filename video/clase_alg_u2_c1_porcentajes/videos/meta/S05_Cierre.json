@@ -1,0 +1,24 @@
+{
+ "scene": "S05_Cierre",
+ "duration": 20.733,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Repasemos",
+   "hold": 12.533
+  },
+  {
+   "time": 13.133,
+   "title": "Cierre",
+   "hold": 19.733
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 12.133,
+   "text": "Un porcentaje es una razón con el todo igual a cien, y la proporción parte entre todo igual a p entre cien resuelve cualquier pregunta.",
+   "fox": false
+  }
+ ]
+}

@@ -1,0 +1,361 @@
+% Resumen del mundo «Plano Transformado» (Álgebra Lineal, mundo 1: vectores y matrices). Lecciones lin-1, lin-2.
+% Usa los ejemplos de los videos (a = (3,1), b = (1,2), el vector (3,4), estirar, girar 90°, la matriz de
+% determinante 2); el taller trae ejercicios nuevos.
+\documentclass[11pt,a4paper]{article}
+\usepackage{zuka-resumen}
+\zukacurso{lin}
+\zukamundo{1}{Plano Transformado}{Vectores y matrices}
+\newcommand{\ii}{\hat{\imath}}
+\newcommand{\jj}{\hat{\jmath}}
+% en fórmulas destacadas, matriz grande; dentro del texto, matriz pequeña
+\newcommand{\vecdos}[2]{\mathchoice{\begin{pmatrix}#1\\ #2\end{pmatrix}}{\left(\begin{smallmatrix}#1\\ #2\end{smallmatrix}\right)}{\left(\begin{smallmatrix}#1\\ #2\end{smallmatrix}\right)}{\left(\begin{smallmatrix}#1\\ #2\end{smallmatrix}\right)}}
+\newcommand{\matdos}[4]{\mathchoice{\begin{pmatrix}#1 & #2\\ #3 & #4\end{pmatrix}}{\left(\begin{smallmatrix}#1 & #2\\ #3 & #4\end{smallmatrix}\right)}{\left(\begin{smallmatrix}#1 & #2\\ #3 & #4\end{smallmatrix}\right)}{\left(\begin{smallmatrix}#1 & #2\\ #3 & #4\end{smallmatrix}\right)}}
+\tikzset{vec/.style={->,line width=1.3pt},rejilla/.style={zline,line width=0.4pt},
+  ejes/.style={->,zmute,line width=0.6pt}}
+% \plano{xmin}{xmax}{ymin}{ymax}: cuadrícula con ejes
+\newcommand{\plano}[4]{\draw[rejilla] (#1,#3) grid (#2,#4);
+  \draw[ejes] (#1-0.3,0) -- (#2+0.4,0) node[right,font=\footnotesize] {$x$};
+  \draw[ejes] (0,#3-0.3) -- (0,#4+0.4) node[above,font=\footnotesize] {$y$};}
+% \transformada{m11}{m12}{m21}{m22}{rango}: cuadrícula transformada por la matriz (cm usa a, b, c, d por columnas)
+\newcommand{\transformada}[5]{%
+  \begin{scope}
+    \clip (-#5,-#5) rectangle (#5,#5);
+    \begin{scope}[cm={#1,#3,#2,#4,(0,0)}]
+      \draw[zaccent!35,line width=0.5pt] (-6,-6) grid (6,6);
+      \fill[zsun!35,opacity=.8] (0,0) rectangle (1,1);
+    \end{scope}
+  \end{scope}
+  \draw[ejes] (-#5-0.2,0) -- (#5+0.3,0); \draw[ejes] (0,-#5-0.2) -- (0,#5+0.3);
+  \draw[vec,zcoral] (0,0) -- (#1,#3); \draw[vec,zsky] (0,0) -- (#2,#4);}
+
+\begin{document}
+
+\portada{%
+Un \clave{vector} es una flecha: dice cuánto y hacia dónde. Una \clave{matriz} es una máquina que toma cada flecha
+del plano y la convierte en otra, de manera que la cuadrícula entera se estira, gira, se refleja o se inclina, pero
+sus líneas siguen rectas, paralelas y parejas. En este mundo aprendiste a operar con vectores y a leer una matriz
+$2\times2$ como una transformación del plano. Este resumen reúne las definiciones, los dibujos y los ejemplos de los
+videos, y termina con un taller.}{%
+\item \textbf{Nivel 1-1.} Vectores: componentes, suma, producto por escalar, magnitud, dirección, combinación lineal y producto punto.
+\item \textbf{Nivel 1-2.} Matrices como transformaciones: producto matriz-vector, columnas como imágenes de $\ii$ y $\jj$,
+  rotaciones, escalamientos, reflexiones y cizallas, composición y determinante.}
+
+\begin{clavebox}[LAS TRES IDEAS QUE SOSTIENEN TODO EL MUNDO]
+\renewcommand{\arraystretch}{1.5}\begin{tabular}{@{}c@{\qquad}c@{\qquad}c@{}}
+$\vec u\cdot\vec v=\norma{\vec u}\,\norma{\vec v}\cos\theta$ & $A=\big(\,A\ii\ \big|\ A\jj\,\big)$ & $\det\matdos abcd=ad-bc$\\[2pt]
+\small el producto punto mide el ángulo & \small columnas: adónde van $\ii$ y $\jj$ & \small cuánto cambia el área
+\end{tabular}
+\end{clavebox}
+
+%=====================================================================
+\nivel{1-1}{Vectores}
+
+\begin{definicion}[Vector en el plano]
+Un \clave{vector} $\vec v$ es una magnitud con tamaño y dirección. En el plano se escribe con sus
+\clave{componentes}: $\vec v=(v_x,v_y)$, la flecha que va del origen al punto $(v_x,v_y)$. Dos vectores son iguales si
+tienen las mismas componentes, sin importar dónde se dibuje la flecha. El vector que va del punto $P$ al punto $Q$ es
+\[ \overrightarrow{PQ}=Q-P=(q_x-p_x,\ q_y-p_y). \]
+\end{definicion}
+
+\subsection{Suma y producto por un escalar}
+\begin{definicion}[Operaciones]
+Con $\vec u=(u_x,u_y)$, $\vec v=(v_x,v_y)$ y un número real $c$ (un \clave{escalar}):
+\[ \vec u+\vec v=(u_x+v_x,\ u_y+v_y),\qquad c\,\vec v=(c\,v_x,\ c\,v_y),\qquad \vec u-\vec v=\vec u+(-1)\vec v. \]
+\end{definicion}
+\textbf{Intuición.} Para sumar, se pone la cola de $\vec v$ en la punta de $\vec u$: la suma va de la cola del primero a
+la punta del segundo (\emph{regla del triángulo}). Si se hace en los dos órdenes se forma un paralelogramo cuya
+diagonal es $\vec u+\vec v$. Multiplicar por $c$ estira la flecha si $\abs{c}>1$, la encoge si $\abs{c}<1$ y le da la
+vuelta si $c<0$.
+
+\begin{figura}[Izquierda: la suma del video, $(3,1)+(1,2)=(4,3)$, con la regla del paralelogramo. Derecha: múltiplos de
+$\vec v=(2,1)$; todos quedan sobre la misma recta.]
+\begin{tikzpicture}[scale=0.85]
+  \plano{0}{5}{0}{4}
+  \draw[zmute,dashed,line width=0.7pt] (3,1) -- (4,3) (1,2) -- (4,3);
+  \draw[vec,zcoral] (0,0) -- (3,1) node[pos=0.6,below,font=\small] {$\vec a=(3,1)$};
+  \draw[vec,zsky] (0,0) -- (1,2) node[pos=0.55,left,font=\small] {$\vec b=(1,2)$};
+  \draw[vec,zaccent] (0,0) -- (4,3) node[above right,font=\small,inner sep=1pt] {$\vec a+\vec b=(4,3)$};
+\end{tikzpicture}\hspace{12mm}
+\begin{tikzpicture}[scale=0.85]
+  \plano{-3}{5}{-2}{3}
+  \draw[vec,zmint] (0,0) -- (4,2) node[above,font=\small] {$2\vec v$};
+  \draw[vec,zaccent] (0,0) -- (2,1) node[above left,font=\small,inner sep=1pt] {$\vec v$};
+  \draw[vec,zcoral] (0,0) -- (-2,-1) node[below,font=\small] {$-\vec v$};
+  \draw[vec,zsun] (0,0) -- (1,0.5);
+  \node[font=\small,text=zink] at (1.15,0.05) {$\tfrac12\vec v$};
+\end{tikzpicture}
+\end{figura}
+
+\begin{propiedad}[Reglas de las operaciones]
+Para vectores $\vec u,\vec v,\vec w$ y escalares $c,d$:
+$\vec u+\vec v=\vec v+\vec u$;\quad $(\vec u+\vec v)+\vec w=\vec u+(\vec v+\vec w)$;\quad $\vec v+\vec 0=\vec v$;\quad
+$c(\vec u+\vec v)=c\vec u+c\vec v$;\quad $(c+d)\vec v=c\vec v+d\vec v$.
+\end{propiedad}
+
+\subsection{Magnitud y dirección}
+\begin{minipage}[c]{0.6\linewidth}
+\begin{definicion}[Magnitud, vector unitario y dirección]
+La \clave{magnitud} (o norma) de $\vec v=(v_x,v_y)$ sale del teorema de Pitágoras:
+\[ \norma{\vec v}=\sqrt{v_x^{2}+v_y^{2}}. \]
+Un \clave{vector unitario} tiene magnitud $1$; el unitario en la dirección de $\vec v\neq\vec0$ es
+$\hat v=\dfrac{\vec v}{\norma{\vec v}}$. La \clave{dirección} es el ángulo $\theta$ con el eje $x$ positivo:
+$\tg\theta=\dfrac{v_y}{v_x}$, mirando en qué cuadrante está el vector.
+\end{definicion}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.36\linewidth}\centering
+\begin{tikzpicture}[scale=0.75]
+  \plano{0}{4}{0}{4}
+  \fill[zaccent!12] (0,0) -- (3,0) -- (3,4) -- cycle;
+  \draw[zmute,dashed,line width=0.7pt] (3,0) -- (3,4);
+  \draw[vec,zaccent] (0,0) -- (3,4) node[above,font=\small] {$(3,4)$};
+  \node[font=\small,below] at (1.5,0) {$3$};
+  \node[font=\small,right] at (3,2) {$4$};
+  \node[font=\small,text=zaccent,rotate=53.13] at (1.2,2.0) {$\norma{\vec v}=5$};
+  \draw[zmute,line width=0.6pt] (0.8,0) arc (0:53.13:0.8); \node[font=\scriptsize,text=zmute] at (1.05,0.4) {$\theta$};
+\end{tikzpicture}
+\end{minipage}
+\begin{ejemplo}[El vector del video: $\vec v=(3,4)$]
+$\norma{\vec v}=\sqrt{9+16}=5$, su unitario es $\hat v=\left(\tfrac35,\tfrac45\right)$ y su dirección es
+$\theta=\arctan\tfrac43\approx\ang{53.13}$.
+\end{ejemplo}
+
+\subsection{Los vectores canónicos y las combinaciones lineales}
+Los vectores $\ii=(1,0)$ y $\jj=(0,1)$ son los \clave{vectores canónicos}: cualquier vector se arma con ellos,
+$(v_x,v_y)=v_x\,\ii+v_y\,\jj$. En general, una \clave{combinación lineal} de $\vec u$ y $\vec v$ es cualquier vector
+de la forma $a\,\vec u+b\,\vec v$ con $a,b$ reales.
+\begin{ejemplo}[Escribir un vector con otros dos]
+¿Es $(1,7)$ combinación lineal de $\vec a=(3,1)$ y $\vec b=(1,2)$? Se buscan $s,t$ con $s(3,1)+t(1,2)=(1,7)$:
+\[ \begin{cases}3s+t=1\\ s+2t=7\end{cases}\ \Rightarrow\ s=-1,\ t=4. \qquad\text{Comprobación: } -(3,1)+4(1,2)=(1,7). \]
+\end{ejemplo}
+
+\subsection{Producto punto}
+\begin{definicion}[Producto punto]
+$\vec u\cdot\vec v=u_xv_x+u_yv_y$. El resultado es un \emph{número}, no un vector. Además
+\[ \vec u\cdot\vec v=\norma{\vec u}\,\norma{\vec v}\cos\theta,\qquad\text{donde $\theta\in[\ang{0},\ang{180}]$ es el ángulo entre ellos.} \]
+\end{definicion}
+\begin{propiedad}[Lo que dice el signo]
+$\vec u\cdot\vec v>0$: ángulo agudo. \quad $\vec u\cdot\vec v<0$: ángulo obtuso. \quad
+$\vec u\cdot\vec v=0$: son \clave{ortogonales} (perpendiculares). Y $\vec v\cdot\vec v=\norma{\vec v}^{2}$.
+\end{propiedad}
+\begin{ejemplo}[El ángulo entre los vectores del video]
+Con $\vec a=(3,1)$ y $\vec b=(1,2)$: $\vec a\cdot\vec b=3+2=5$, $\norma{\vec a}=\sqrt{10}$, $\norma{\vec b}=\sqrt5$.
+\[ \cos\theta=\frac{5}{\sqrt{10}\,\sqrt5}=\frac{5}{\sqrt{50}}=\frac{1}{\sqrt2}\ \Rightarrow\ \theta=\ang{45}. \]
+\end{ejemplo}
+\begin{ojo}[Errores frecuentes con vectores]
+\begin{itemize}
+\item $\norma{\vec u+\vec v}\neq\norma{\vec u}+\norma{\vec v}$ en general: con $(3,0)$ y $(0,4)$ se obtiene $5$, no $7$.
+\item $\overrightarrow{PQ}$ es $Q-P$ (punta menos cola), no $P-Q$.
+\item El producto punto da un número; no tiene sentido escribir $(\vec u\cdot\vec v)$ como una pareja.
+\item Para la dirección, $\arctan\frac{v_y}{v_x}$ solo acierta en los cuadrantes I y IV: revisa el dibujo.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\nivel{1-2}{Matrices como transformaciones}
+
+\textbf{Intuición.} Una matriz $2\times2$ es una instrucción para mover \emph{todo} el plano a la vez. Basta saber a
+dónde van los dos vectores canónicos: como cualquier vector es $x\,\ii+y\,\jj$, su imagen es $x$ veces la imagen de $\ii$
+más $y$ veces la imagen de $\jj$.
+
+\begin{definicion}[Matriz y producto matriz-vector]
+Una matriz $2\times2$ es un arreglo $A=\matdos abcd$. Su producto con el vector $(x,y)$ es
+\[ A\vecdos xy=\vecdos{ax+by}{cx+dy}=x\vecdos ac+y\vecdos bd. \]
+La primera columna, $(a,c)$, es $A\ii$; la segunda, $(b,d)$, es $A\jj$.
+\end{definicion}
+\begin{propiedad}[Transformación lineal]
+La función $T(\vec v)=A\vec v$ es una \clave{transformación lineal}: $T(\vec u+\vec v)=T(\vec u)+T(\vec v)$ y
+$T(c\,\vec v)=c\,T(\vec v)$. Por eso fija el origen, manda rectas en rectas y conserva el paralelismo: la cuadrícula
+se convierte en una cuadrícula de paralelogramos iguales.
+\end{propiedad}
+
+\begin{figura}[La matriz del video $A=\matdos1102$. Izquierda: el plano original. Derecha: el plano transformado; $\ii$
+(coral) va a $(1,0)$, $\jj$ (azul) va a $(1,2)$ y el cuadrado unitario (amarillo) se vuelve un paralelogramo de área $2$.]
+\begin{tikzpicture}[scale=0.62]
+  \transformada{1}{0}{0}{1}{3.4}
+  \node[font=\small,anchor=north] at (0.5,-0.05) {$\ii$};
+  \node[font=\small,anchor=east] at (-0.05,0.5) {$\jj$};
+  \node[font=\small\bfseries,text=zmute] at (0,-4.3) {antes};
+\end{tikzpicture}\hspace{8mm}
+\raisebox{22mm}{$\xrightarrow{\ \ A\ \ }$}\hspace{8mm}
+\begin{tikzpicture}[scale=0.62]
+  \transformada{1}{1}{0}{2}{3.4}
+  \node[font=\small,anchor=north] at (0.5,-0.05) {$A\ii$};
+  \node[font=\small,anchor=south east,inner sep=1pt] at (1,2.05) {$A\jj=(1,2)$};
+  \node[font=\small\bfseries,text=zmute] at (0,-4.3) {después};
+\end{tikzpicture}
+\end{figura}
+
+\begin{ejemplo}[Aplicar la matriz del video a un vector]
+\[ \matdos1102\vecdos31=3\vecdos10+1\vecdos12=\vecdos42. \]
+Se lee así: el vector $(3,1)$ es «$3$ pasos de $\ii$ y $1$ de $\jj$»; después de transformar, son $3$ pasos de $(1,0)$
+y $1$ de $(1,2)$.
+\end{ejemplo}
+
+\subsection{Un catálogo de transformaciones}
+\begin{figura}
+\begin{tabular}{@{}cccc@{}}
+\begin{tikzpicture}[scale=0.5]\transformada{2}{0}{0}{1}{3.2}\end{tikzpicture} &
+\begin{tikzpicture}[scale=0.5]\transformada{0}{-1}{1}{0}{3.2}\end{tikzpicture} &
+\begin{tikzpicture}[scale=0.5]\transformada{1}{0}{0}{-1}{3.2}\end{tikzpicture} &
+\begin{tikzpicture}[scale=0.5]\transformada{1}{1}{0}{1}{3.2}\end{tikzpicture}\\[2pt]
+$\displaystyle\matdos2001$ & $\displaystyle\matdos0{-1}10$ & $\displaystyle\matdos100{-1}$ & $\displaystyle\matdos1101$\\[8pt]
+\small estira $x$ al doble & \small gira \ang{90} & \small refleja en el eje $x$ & \small cizalla horizontal
+\end{tabular}
+\end{figura}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}l >{\centering\arraybackslash}p{38mm} L@{}}
+\toprule
+Transformación & Matriz & Qué hace\\ \midrule
+Escalamiento & $\displaystyle\matdos{k_1}00{k_2}$ & multiplica las $x$ por $k_1$ y las $y$ por $k_2$\\[6pt]
+Rotación en $\theta$ & $\displaystyle\matdos{\cos\theta}{-\sen\theta}{\sen\theta}{\cos\theta}$ & gira todo $\theta$ en sentido antihorario\\[6pt]
+Reflexión en el eje $x$ & $\displaystyle\matdos100{-1}$ & cambia el signo de $y$\\[6pt]
+Cizalla horizontal & $\displaystyle\matdos1k01$ & desliza cada punto $k\,y$ unidades en $x$\\[6pt]
+Identidad & $\displaystyle I=\matdos1001$ & deja todo quieto\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\begin{ejemplo}[La rotación del video]
+Con $\theta=\ang{90}$: $\cos\ang{90}=0$ y $\sen\ang{90}=1$, así que $R=\matdos0{-1}10$. Manda $\ii\mapsto(0,1)$ y
+$\jj\mapsto(-1,0)$, y por ejemplo $R\,(2,1)=(-1,2)$: el vector giró un cuarto de vuelta.
+\end{ejemplo}
+
+\subsection{Composición: el producto de matrices}
+\begin{definicion}[Producto de matrices]
+Hacer primero $B$ y luego $A$ equivale a una sola matriz, el producto $AB$: $(AB)\vec v=A(B\vec v)$. Se calcula fila por
+columna:
+\[ \matdos abcd\matdos efgh=\matdos{ae+bg}{af+bh}{ce+dg}{cf+dh}. \]
+\end{definicion}
+\begin{ejemplo}[Estirar y girar no es lo mismo que girar y estirar]
+Con $S=\matdos2001$ (estira $x$) y $R=\matdos0{-1}10$ (gira \ang{90}):
+\[ RS=\matdos0{-1}20\ \ (\text{primero estira, luego gira}),\qquad SR=\matdos0{-2}10\ \ (\text{primero gira, luego estira}). \]
+Como $RS\neq SR$, el orden importa. En $AB$ se lee de derecha a izquierda: actúa primero $B$.
+\end{ejemplo}
+
+\subsection{El determinante}
+\begin{definicion}[Determinante]
+$\det\matdos abcd=ad-bc$. Es el factor por el que la transformación multiplica las áreas: el cuadrado unitario
+(área $1$) se convierte en el paralelogramo de lados $(a,c)$ y $(b,d)$, de área $\abs{ad-bc}$.
+\end{definicion}
+\begin{propiedad}[Cómo leer el determinante]
+\begin{itemize}
+\item $\abs{\det A}$: cuánto se agrandan o achican las áreas. Las rotaciones tienen $\det=1$: no cambian áreas.
+\item $\det A<0$: la transformación \emph{voltea} el plano (cambia la orientación), como una reflexión.
+\item $\det A=0$: el plano se aplasta sobre una recta o un punto; se pierde información y no se puede deshacer.
+\item Si $\det A\neq0$, la transformación se deshace con la inversa
+      $A^{-1}=\dfrac{1}{ad-bc}\matdos d{-b}{-c}a$, y $\det(AB)=\det A\cdot\det B$.
+\end{itemize}
+\end{propiedad}
+\begin{ejemplo}[Los determinantes del video]
+$\det\matdos1102=1\cdot2-1\cdot0=2$: las áreas se duplican (el cuadrado amarillo pasó a medir $2$).
+$\det\matdos2001=2$ y $\det\matdos0{-1}10=0-(-1)=1$. En cambio, $\det\matdos2412=2\cdot2-4\cdot1=0$: sus dos
+columnas, $(2,1)$ y $(4,2)$, apuntan en la misma dirección y todo el plano cae sobre la recta $y=\tfrac{x}{2}$.
+\end{ejemplo}
+\begin{ojo}[Errores frecuentes con matrices]
+\begin{itemize}
+\item Las imágenes de $\ii$ y $\jj$ van en las \emph{columnas}, no en las filas.
+\item $AB\neq BA$ en general, y en $AB$ actúa primero $B$.
+\item El determinante es $ad-bc$ (diagonal principal menos la otra), no $ab-cd$.
+\item Un determinante negativo no es un «área negativa»: el área se multiplica por $\abs{\det}$ y el signo avisa del volteo.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\clearpage
+\repaso
+\begin{center}\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{74mm} L@{}}
+\toprule
+Fórmula & Qué dice\\ \midrule
+$\vec u+\vec v=(u_x+v_x,\,u_y+v_y)$,\quad $c\vec v=(cv_x,\,cv_y)$ & suma y producto por escalar, componente a componente\\
+$\overrightarrow{PQ}=Q-P$ & vector de un punto a otro (punta menos cola)\\
+$\norma{\vec v}=\sqrt{v_x^2+v_y^2}$,\quad $\hat v=\vec v/\norma{\vec v}$ & magnitud y vector unitario\\
+$\vec u\cdot\vec v=u_xv_x+u_yv_y=\norma{\vec u}\norma{\vec v}\cos\theta$ & producto punto; $0$ si son ortogonales\\
+$A\vecdos xy=x\vecdos ac+y\vecdos bd$ & la imagen es una combinación de las columnas\\
+$\matdos{\cos\theta}{-\sen\theta}{\sen\theta}{\cos\theta}$ & rotación en $\theta$ (antihoraria)\\
+$(AB)\vec v=A(B\vec v)$ & composición: primero $B$, luego $A$\\
+$\det\matdos abcd=ad-bc$ & factor de área; signo $=$ orientación; $0$ aplasta\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{ojo}[Errores frecuentes]
+\begin{itemize}
+\item Sumar magnitudes en lugar de componentes.
+\item Restar al revés al formar $\overrightarrow{PQ}$, o equivocar el cuadrante de la dirección.
+\item Poner las imágenes de $\ii$ y $\jj$ en las filas de la matriz.
+\item Suponer que $AB=BA$, o leer la composición de izquierda a derecha.
+\item Confundir $ad-bc$ con otra combinación de las entradas.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\taller
+\begin{ejercicios}
+\item Sean $\vec u=(2,-3)$ y $\vec v=(-1,4)$. Calcula (a) $\vec u+\vec v$; (b) $3\vec u-2\vec v$; (c) $\norma{\vec u-\vec v}$.
+\item Dados los puntos $P(1,2)$ y $Q(4,-2)$, halla $\overrightarrow{PQ}$, la distancia entre $P$ y $Q$ y el vector
+  unitario en la dirección de $\overrightarrow{PQ}$.
+\item Sean $\vec u=(2,1)$ y $\vec v=(-1,2)$.
+  \begin{ejercicios}
+  \item En una cuadrícula, dibuja $\vec u$, $\vec v$, $\vec u+\vec v$, $\vec u-\vec v$ y $2\vec u$.
+  \item ¿Qué ángulo forman $\vec u$ y $\vec v$? Compruébalo con el producto punto.
+  \end{ejercicios}
+\item (a) Halla el ángulo entre $(1,\sqrt3)$ y $(\sqrt3,1)$. (b) Halla $k$ para que $(k,3)$ sea ortogonal a $(2,-4)$.
+\item Escribe $\vec w=(7,1)$ como combinación lineal de $(1,1)$ y $(2,-1)$.
+\item Aplicaciones del producto punto y de la suma.
+  \begin{ejercicios}
+  \item Un dron vuela con velocidad propia $(12,0)$ \si{m/s} y el viento lo empuja con $(0,5)$ \si{m/s}. Halla su
+    velocidad resultante, su rapidez y el ángulo que se desvía de su rumbo.
+  \item Una fuerza $\vec F=(30,40)$ \si{N} arrastra una caja con desplazamiento $\vec d=(5,0)$ \si{m}. El trabajo es
+    $W=\vec F\cdot\vec d$. Hállalo, junto con el ángulo entre la fuerza y el desplazamiento.
+  \end{ejercicios}
+\item Sea $A=\matdos12{3}{-1}$. Calcula $A\vecdos21$ de dos maneras: fila por columna y como combinación de las columnas.
+\item Escribe la matriz de cada transformación del plano:
+  \begin{ejercicios}
+  \item la reflexión en el eje $y$; \quad (b) la rotación de \ang{180};
+  \item[(c)] la que manda $\ii\mapsto(0,2)$ y $\jj\mapsto(1,0)$ (halla también su determinante y explica qué hace con
+    las áreas y la orientación); \quad (d) la rotación de \ang{60}.
+  \end{ejercicios}
+\item La figura muestra la cuadrícula transformada por una matriz $M$: la flecha coral es $M\ii$ y la azul es $M\jj$.
+
+  \begin{center}
+  \begin{tikzpicture}[scale=0.55]
+    \transformada{2}{1}{1}{2}{3.6}
+    \foreach \v in {-3,...,3}{\node[font=\scriptsize,text=zmute,anchor=north] at (\v,-3.75) {\v};
+      \node[font=\scriptsize,text=zmute,anchor=east] at (-3.75,\v) {\v};}
+  \end{tikzpicture}
+  \end{center}
+  \begin{ejercicios}
+  \item Escribe $M$. \quad (b) Halla la imagen de $(1,-1)$ y la de $(1,1)$; ¿qué notas en cada caso?
+  \item[(c)] ¿Cuál es el área del paralelogramo amarillo? \quad (d) Un triángulo de área $4$ se transforma con $M$.
+    ¿Cuál es el área de su imagen?
+  \end{ejercicios}
+\item En un videojuego, una figura se inclina con la cizalla $H=\matdos1101$ y \emph{después} se gira \ang{90} con
+  $R=\matdos0{-1}10$.
+  \begin{ejercicios}
+  \item Halla la matriz única que hace las dos cosas, y la que resultaría si el programador las aplicara en el orden contrario.
+  \item ¿Adónde va el punto $(2,1)$ en cada caso? ¿Cambia el área de la figura?
+  \end{ejercicios}
+\end{ejercicios}
+
+\respuestas
+\begin{respuestascortas}
+\begin{soluciones}
+\item (a) $(1,1)$ (b) $(8,-17)$ (c) $\vec u-\vec v=(3,-7)$, $\norma{\cdot}=\sqrt{58}$.
+\item $\overrightarrow{PQ}=(3,-4)$; distancia $5$; unitario $\left(\frac35,-\frac45\right)$.
+\item (a) $\vec u+\vec v=(1,3)$, $\vec u-\vec v=(3,-1)$, $2\vec u=(4,2)$. (b) $\vec u\cdot\vec v=-2+2=0$: son
+  perpendiculares, \ang{90}.
+\item (a) $\cos\theta=\frac{2\sqrt3}{2\cdot2}=\frac{\sqrt3}{2}$, $\theta=\ang{30}$. (b) $2k-12=0$, $k=6$.
+\item $a(1,1)+b(2,-1)=(7,1)$: $a+2b=7$, $a-b=1$, así $a=3$, $b=2$.
+\item (a) $(12,5)$ \si{m/s}; rapidez $\SI{13}{m/s}$; $\arctan\frac{5}{12}\approx\ang{22.6}$.
+  (b) $W=\SI{150}{J}$; $\cos\theta=\frac{150}{50\cdot5}=0.6$, $\theta\approx\ang{53.1}$.
+\item $(1\cdot2+2\cdot1,\ 3\cdot2-1\cdot1)=(4,5)$, y $2(1,3)+1(2,-1)=(4,5)$.
+\item (a) $\matdos{-1}001$ (b) $\matdos{-1}00{-1}$ (c) $\matdos0120$, $\det=-2$: duplica las áreas y voltea el plano.
+  (d) $\matdos{1/2}{-\sqrt3/2}{\sqrt3/2}{1/2}$.
+\item (a) $M=\matdos2112$. (b) $M(1,-1)=(1,-1)$: no cambia; $M(1,1)=(3,3)$: misma dirección, triple de largo.
+  (c) $\det M=4-1=3$. (d) $4\cdot3=12$.
+\item (a) Primero $H$, luego $R$: $RH=\matdos0{-1}11$; al revés, $HR=\matdos1{-1}10$.
+  (b) $RH(2,1)=(-1,3)$ y $HR(2,1)=(1,2)$. El área no cambia: $\det=1$ en los dos casos.
+\end{soluciones}
+\end{respuestascortas}
+
+\end{document}

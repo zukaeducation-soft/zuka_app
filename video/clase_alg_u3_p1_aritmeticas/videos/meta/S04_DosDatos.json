@@ -1,0 +1,48 @@
+{
+ "scene": "S04_DosDatos",
+ "duration": 52.3,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Con dos términos",
+   "hold": 28.867
+  },
+  {
+   "time": 29.467,
+   "title": "Medios aritméticos",
+   "hold": 51.7
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.167,
+   "text": "A veces solo se conocen dos términos. Si el tercero es diez y el octavo es veinticinco, se puede reconstruir toda la progresión.",
+   "fox": true
+  },
+  {
+   "start": 11.167,
+   "end": 20.267,
+   "text": "Del puesto tres al ocho hay cinco saltos, y la distancia entre los dos términos es quince. Cada salto mide tres.",
+   "fox": false
+  },
+  {
+   "start": 20.267,
+   "end": 28.467,
+   "text": "Para el primer término se retroceden dos saltos desde el tercero: diez menos seis, cuatro.",
+   "fox": false
+  },
+  {
+   "start": 29.467,
+   "end": 41.4,
+   "text": "Meter números entre otros dos es la misma idea. Entre dos y dieciocho caben tres medios aritméticos. Con tres números adentro quedan cuatro saltos iguales.",
+   "fox": false
+  },
+  {
+   "start": 41.4,
+   "end": 51.3,
+   "text": "La distancia es dieciséis y se reparte en cuatro saltos: cada salto es cuatro. Los medios son seis, diez y catorce.",
+   "fox": false
+  }
+ ]
+}

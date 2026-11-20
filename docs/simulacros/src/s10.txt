@@ -1,0 +1,511 @@
+== LECTURA
+## Texto Uno
+p: El fichaje más caro de la historia del fútbol costó más que el presupuesto anual de salud de varias ciudades intermedias. La cifra escandaliza cada vez que se menciona, y sin embargo los estadios siguen llenos. La pregunta de por qué un futbolista gana cien veces más que una cirujana tiene una respuesta económica sencilla y una respuesta moral bastante más difícil.
+p: La económica es esta: el salario no mide la utilidad social de un oficio, sino cuánta gente está dispuesta a pagar por él y qué tan reemplazable es quien lo ejerce. Una cirujana excelente opera a unas cuantas personas por semana; un delantero excelente es visto, al mismo tiempo, por cientos de millones. La televisión permitió que el talento de uno solo se vendiera a todo el planeta, y los ingresos se concentraron en quienes están en la cima.
+p: Los economistas llaman a este fenómeno <<el ganador se lo lleva todo>>. En una liga, la diferencia de habilidad entre el mejor jugador y el número quinientos puede ser pequeña, pero la diferencia de ingresos es abismal, porque nadie paga por ver al segundo mejor si puede ver al primero por el mismo precio. Por cada estrella hay miles de jugadores profesionales que ganan poco más que un salario mínimo y cuya carrera termina, en promedio, antes de los treinta años.
+p: <<El niño que sueña con ser futbolista no ve la pirámide; ve la punta>>, advierte el exjugador y hoy formador Hernán Zuleta. En las escuelas que dirige, calcula que de cada mil niños uno llegará a vivir del fútbol. Por eso exige a todos el boletín de notas antes de cada entrenamiento. <<No les quito el sueño. Les pido que tengan otro por si acaso>>.
+p: La respuesta moral es menos clara. Hay quienes sostienen que nadie obliga al público a pagar y que, por tanto, la fortuna del futbolista es legítima: cada aficionado entregó voluntariamente una suma minúscula. Otros replican que el problema no es lo que gana la estrella, sino lo que ese contraste revela sobre nuestras prioridades colectivas: una sociedad que encuentra dinero para un traspaso récord y no para sus hospitales.
+p: Zuleta prefiere no entrar en esa discusión. <<Yo no decido cuánto vale un gol>>, dice. <<Lo que sí puedo decidir es que ningún muchacho salga de mi escuela creyendo que su única manera de valer algo es metiéndolos>>.
+src: Texto elaborado para este simulacro.
+
+q: El párrafo 1 cumple la función de:
+@ Plantear la pregunta que el texto va a desarrollar y anunciar que tiene dos respuestas
+@ Demostrar que los futbolistas ganan demasiado dinero
+@ Comparar el sistema de salud de varias ciudades
+@ Presentar la opinión del formador Hernán Zuleta
+q: La expresión <<y sin embargo los estadios siguen llenos>> (párrafo 1) da a entender que:
+@ El escándalo por las cifras no disminuye el interés del público
+@ Los aficionados desconocen cuánto ganan los futbolistas
+@ Las entradas a los estadios son cada vez más baratas
+@ El público asiste a los estadios para protestar
+q: Según el párrafo 2, el salario de un oficio depende de:
+@ Cuánta gente paga por él y qué tan difícil es reemplazar a quien lo ejerce
+@ Los años de estudio que exige
+@ El beneficio que le trae a la sociedad
+@ El esfuerzo físico que requiere
+q: La afirmación de que el salario <<no mide la utilidad social de un oficio>> (párrafo 2) significa que:
+@ Un salario alto no indica que un oficio sea más valioso para la sociedad
+@ Los oficios mejor pagados son inútiles
+@ La sociedad no necesita cirujanas
+@ Los salarios deberían ser iguales para todos
+q: La comparación entre la cirujana y el delantero (párrafo 2) sirve para mostrar la diferencia en:
+@ La cantidad de personas a las que cada uno puede llegar al mismo tiempo
+@ La dificultad de las dos profesiones
+@ Los años de preparación de cada uno
+@ La importancia de la salud frente al deporte
+q: De acuerdo con el párrafo 2, la televisión contribuyó a los altos ingresos de los futbolistas porque:
+@ Multiplicó el público que puede ver a un mismo jugador
+@ Les paga directamente un salario a los jugadores
+@ Redujo el precio de las entradas a los estadios
+@ Hizo más emocionantes los partidos
+q: El fenómeno llamado <<el ganador se lo lleva todo>> (párrafo 3) consiste en que:
+@ Pequeñas diferencias de habilidad producen enormes diferencias de ingresos
+@ El equipo campeón recibe todo el dinero del torneo
+@ Los mejores jugadores son también los más trabajadores
+@ Todos los jugadores de una liga ganan lo mismo
+q: En el párrafo 3, la palabra <<\sub{abismal}>> significa:
+@ Enorme
+@ Injusta
+@ Pequeña
+@ Reciente
+q: Según el párrafo 3, la gran diferencia de ingresos se explica porque:
+@ El público prefiere ver al mejor si le cuesta lo mismo
+@ Los mejores jugadores negocian mejor sus contratos
+@ Los jugadores menos hábiles se retiran pronto
+@ Las ligas premian la antigüedad de los jugadores
+q: El dato sobre los <<miles de jugadores profesionales>> (párrafo 3) sirve para:
+@ Mostrar que la riqueza de las estrellas no es la situación de la mayoría
+@ Demostrar que el fútbol es una profesión mal organizada
+@ Explicar por qué las carreras deportivas son cortas
+@ Sugerir que hay demasiados jugadores profesionales
+q: Con la frase <<no ve la pirámide; ve la punta>> (párrafo 4), Zuleta quiere decir que el niño:
+@ Solo se fija en los pocos que alcanzan el éxito
+@ No conoce las reglas del fútbol profesional
+@ Aspira a jugar en la posición más destacada
+@ Desconoce la historia de su deporte
+q: Zuleta exige el boletín de notas antes de entrenar (párrafo 4) porque:
+@ Quiere que los niños tengan una alternativa distinta al fútbol
+@ Los buenos estudiantes juegan mejor
+@ Las escuelas de fútbol están obligadas a hacerlo
+@ Busca reducir la cantidad de niños inscritos
+q: La actitud de Zuleta que expresa la frase <<No les quito el sueño. Les pido que tengan otro por si acaso>> (párrafo 4) es:
+@ Realista, sin llegar a desalentar
+@ Pesimista y resignada
+@ Indiferente
+@ Entusiasta sin reservas
+q: En el párrafo 5, el conector <<\sub{por tanto}>> introduce:
+@ Una consecuencia
+@ Una objeción
+@ Un ejemplo
+@ Una condición
+q: La primera postura moral presentada en el párrafo 5 sostiene que la fortuna del futbolista es legítima porque:
+@ Proviene de pagos que los aficionados hacen por su propia voluntad
+@ El futbolista trabaja más que otros profesionales
+@ Los clubes tienen derecho a gastar su dinero como quieran
+@ El fútbol produce alegría en la población
+q: En el párrafo 5, la palabra <<\sub{replican}>> significa:
+@ Responden con una objeción
+@ Repiten lo mismo
+@ Aceptan
+@ Preguntan
+q: La segunda postura del párrafo 5 afirma que el verdadero problema es:
+@ Lo que el contraste muestra sobre las prioridades de la sociedad
+@ La cantidad de dinero que gana la estrella
+@ La falta de talento de la mayoría de los jugadores
+@ El precio de las entradas a los estadios
+q: Frente a las dos posturas morales del párrafo 5, el autor del texto:
+@ Las expone sin inclinarse por ninguna
+@ Defiende abiertamente la primera
+@ Defiende abiertamente la segunda
+@ Las rechaza por igual
+q: Con la frase <<Yo no decido cuánto vale un gol>> (párrafo 6), Zuleta:
+@ Se declara ajeno al debate sobre los salarios
+@ Critica a los directivos del fútbol
+@ Reconoce que los goles valen demasiado
+@ Afirma que los goles no tienen ningún valor
+q: En la palabra <<metiéndo\sub{los}>> (párrafo 6), la parte subrayada se refiere a:
+@ Los goles
+@ Los muchachos
+@ Los salarios
+@ Los sueños
+q: Una situación semejante a la que describe el párrafo 3 es la de:
+@ Una cantante escuchada en todo el mundo, mientras miles de músicos casi tan buenos apenas viven de su oficio
+@ Un grupo de médicos que cobra la misma tarifa por cada consulta
+@ Una fábrica que paga a sus obreros según las horas trabajadas
+@ Un colegio en el que todos los profesores reciben el mismo salario
+
+## Texto Dos
+p: En el potrero de mi barrio no había árbitro ni uniformes. Los arcos eran dos piedras y la cancha terminaba donde empezaba la casa de doña Fabiola, que devolvía los balones según su estado de ánimo. Jugábamos hasta que oscurecía o hasta que el dueño del balón se enojaba, lo que ocurriera primero. Nadie llevaba la cuenta de los goles más allá del último: <<el que meta gana>>.
+p: Aquel desorden era, sin que lo supiéramos, una escuela. Había que armar equipos parejos, porque un partido desigual aburría a todos. Había que inventar reglas para el caso del perro que cruzaba la cancha y discutirlas sin adulto que arbitrara. El más pequeño jugaba con ventaja y el más hábil, por acuerdo tácito, no pateaba fuerte. Aprendimos a negociar antes que a multiplicar.
+p: Hoy los niños de mi barrio juegan en una escuela de fútbol, con petos numerados, entrenador con silbato y padres en la tribuna. Saben hacer ejercicios que nosotros jamás vimos. Pero cuando el entrenador falta, se quedan esperando: no saben empezar solos. Les hemos dado la técnica y les hemos quitado el juego.
+p: No tengo nada contra las escuelas deportivas; enseñan disciplina y alejan de la calle peligrosa. Lo que me inquieta es que hayamos convertido todo juego en una preparación para algo: para la beca, para el torneo, para el contrato improbable. El niño ya no juega; entrena. Y un niño que solo entrena aprende pronto que su valor depende del resultado.
+p: El potrero ya no existe; hay un edificio. No pido que vuelva. Pido que, de vez en cuando, alguien deje a los niños un balón, un rato largo y ninguna instrucción.
+src: Texto elaborado para este simulacro.
+
+## Preguntas del Texto Dos
+q: La descripción del potrero en el párrafo 1 resalta sobre todo:
+@ La informalidad del juego y la libertad de los niños
+@ La pobreza del barrio
+@ La falta de seguridad de la cancha
+@ El mal carácter de los vecinos
+q: El comentario de que doña Fabiola <<devolvía los balones según su estado de ánimo>> (párrafo 1) tiene un tono:
+@ Humorístico
+@ Acusador
+@ Triste
+@ Solemne
+q: La regla <<el que meta gana>> (párrafo 1) indica que en esos partidos:
+@ El marcador acumulado no tenía importancia
+@ Siempre ganaba el dueño del balón
+@ Solo se podía anotar un gol por partido
+@ Los goles se contaban con mucho cuidado
+q: Al afirmar que <<Aquel desorden era [\dots] una escuela>> (párrafo 2), el autor sostiene que en el juego libre los niños:
+@ Aprendían a organizarse y a convivir
+@ Perdían el tiempo que debían dedicar al estudio
+@ Se preparaban para ser futbolistas profesionales
+@ Recibían clases de un entrenador
+q: Según el párrafo 2, en el potrero los niños aprendían a hacer lo siguiente, EXCEPTO:
+@ Ejecutar ejercicios técnicos
+@ Formar equipos equilibrados
+@ Crear reglas para situaciones imprevistas
+@ Darle ventajas al más pequeño
+q: La expresión <<acuerdo tácito>> (párrafo 2) se refiere a un acuerdo:
+@ Que se respeta sin necesidad de decirlo
+@ Que se firma ante un adulto
+@ Que nadie cumple
+@ Que se impone por la fuerza
+q: La oración <<Aprendimos a negociar antes que a multiplicar>> (párrafo 2) significa que:
+@ El juego les enseñó a entenderse con otros incluso antes de lo que enseña el colegio
+@ Los niños del barrio eran malos para las matemáticas
+@ En el potrero se hacían negocios con los balones
+@ El colegio del barrio era de mala calidad
+q: El contraste que establece el párrafo 3 es que los niños de hoy:
+@ Tienen más técnica, pero menos iniciativa
+@ Juegan menos horas, pero con más alegría
+@ Tienen mejores canchas, pero peores entrenadores
+@ Son más disciplinados, pero menos hábiles
+q: La oración <<Les hemos dado la técnica y les hemos quitado el juego>> (párrafo 3) expresa que:
+@ Se privilegió el entrenamiento dirigido por encima de la iniciativa propia de los niños
+@ Las escuelas de fútbol han prohibido los partidos
+@ Los niños actuales no disfrutan del deporte
+@ Los entrenadores no saben jugar al fútbol
+q: La oración <<No tengo nada contra las escuelas deportivas>> (párrafo 4) cumple la función de:
+@ Precisar el alcance de la crítica, concediendo algo a la postura contraria
+@ Retirar la crítica hecha en el párrafo anterior
+@ Elogiar sin reservas a los entrenadores
+@ Cambiar de tema
+q: Al hablar del <<contrato improbable>> (párrafo 4), el autor da a entender que:
+@ Es muy poco probable que un niño llegue a ser futbolista profesional
+@ Los contratos de los futbolistas son injustos
+@ Los niños no deberían firmar contratos
+@ Las escuelas de fútbol engañan a los padres
+q: Según el párrafo 4, un niño que solo entrena aprende que:
+@ Vale según lo que logra
+@ La disciplina es lo más importante
+@ El juego es una pérdida de tiempo
+@ Debe obedecer siempre al entrenador
+q: La petición final del autor (párrafo 5) es que los niños tengan:
+@ Momentos de juego libre, sin la dirección de los adultos
+@ Un nuevo potrero en el barrio
+@ Mejores escuelas de fútbol
+@ Balones de mejor calidad
+
+## Preguntas sobre los Textos Uno y Dos
+q: Los dos textos coinciden en que:
+@ El valor de un niño no debería depender de su éxito en el deporte
+@ Los futbolistas profesionales ganan demasiado dinero
+@ Las escuelas de fútbol deberían desaparecer
+@ El fútbol de antes era mejor que el de ahora
+q: El <<contrato improbable>> del texto Dos corresponde, en el texto Uno, a:
+@ El cálculo de Zuleta de que uno de cada mil niños vivirá del fútbol
+@ El fichaje más caro de la historia
+@ El boletín de notas que se exige antes de entrenar
+@ La suma minúscula que paga cada aficionado
+q: Frente a la formación deportiva de los niños, Zuleta (texto Uno) \bl, mientras que el autor del texto Dos \bl.
+@ La acompaña con una exigencia académica / reclama espacios de juego sin adultos
+@ La rechaza por completo / la defiende sin reparos
+@ Reclama espacios de juego sin adultos / exige buenas notas
+@ Propone eliminar los entrenamientos / propone aumentarlos
+q: El texto Uno aborda su tema por medio de \bl, y el texto Dos por medio de \bl.
+@ Una explicación económica y un dilema moral / la evocación de una experiencia personal
+@ Un recuerdo de infancia / un estudio estadístico
+@ Una entrevista a un aficionado / un reglamento deportivo
+@ Una crónica de un partido / un informe médico
+q: Un padre afirma: <<Mi hijo entrena cinco horas diarias; el colegio puede esperar, porque él va a ser profesional>>. De acuerdo con el texto Uno, Zuleta:
+@ Cuestionaría esa decisión, pues el niño necesita otra opción <<por si acaso>>
+@ Felicitaría al padre por apoyar el sueño de su hijo
+@ Diría que no le corresponde opinar sobre el asunto
+@ Le recomendaría al niño dejar el fútbol
+q: La explicación económica de por qué algunos deportistas reciben ingresos tan altos es un asunto tratado en el texto:
+@ Uno, pero no en el Dos
+@ Dos, pero no en el Uno
+@ Dos más que en el Uno
+@ Uno y en el Dos por igual
+
+== RAZONAMIENTO
+ctx 2: Un entrenador debe escoger 4 jugadores entre seis candidatos, A, B, C, D, E y F, para un torneo. Al conformar el equipo debe cumplir las siguientes condiciones:
+\vi{A y B no pueden estar los dos en el equipo}
+\vi{Si C está en el equipo, entonces D también debe estar}
+\vi{De los jugadores E y F, exactamente uno debe estar en el equipo}
+q: La cantidad de equipos distintos que puede conformar el entrenador es:
+@ 4
+@ 2
+@ 3
+@ 6
+! A lo sumo entra uno entre A y B, y exactamente uno entre E y F; por eso deben estar C y D. Hay $2\cdot2$ equipos.
+q: De las siguientes afirmaciones, de la única que se tiene certeza es:
+@ C y D están en el equipo
+@ A está en el equipo
+@ E está en el equipo
+@ B y F están en el equipo
+! Los equipos posibles son ACDE, ACDF, BCDE y BCDF.
+q: La afirmación <<si no hay examen, entonces voy a cine>> es lógicamente equivalente a:
+@ Si no voy a cine, entonces hay examen
+@ Si hay examen, entonces no voy a cine
+@ Si voy a cine, entonces no hay examen
+@ No hay examen y voy a cine
+! Es su contrarrecíproca.
+q: Laura dice: <<Aprobaré el curso solo si entrego el trabajo final>>. De las siguientes afirmaciones, la única que se deduce de lo dicho por Laura es:
+@ Si Laura aprueba el curso, entonces entregó el trabajo final
+@ Si Laura entrega el trabajo final, entonces aprueba el curso
+@ Si Laura no aprueba el curso, entonces no entregó el trabajo final
+@ Laura aprueba el curso y entrega el trabajo final
+! <<$p$ solo si $q$>> significa <<si $p$, entonces $q$>>.
+ctx 2: En un club deportivo hay 50 socios. La tabla muestra parte de la información sobre cuántos son diestros y cuántos son zurdos.\par\smallskip
+{\centering\small\begin{tabular}{|l|c|c|c|}\hline
+ & Diestros & Zurdos & Total\\\hline
+Hombres & & 6 & 30\\\hline
+Mujeres & & & \\\hline
+Total & & 10 & 50\\\hline
+\end{tabular}\par}
+q: La cantidad de hombres diestros que hay en el club es:
+@ 24
+@ 20
+@ 16
+@ 40
+! $30-6$.
+q: Si se escoge al azar uno de los socios zurdos, la probabilidad de que sea mujer es:
+@ $\frac25$
+@ $\frac15$
+@ $\frac{2}{25}$
+@ $\frac35$
+! Hay $10-6=4$ mujeres zurdas entre 10 zurdos.
+q: Andrés, Bruno, Camilo, Daniel y Esteban corrieron una carrera en la que no hubo empates. Se sabe que:
+\vi{Andrés llegó exactamente dos puestos antes que Bruno}
+\vi{Camilo llegó inmediatamente después de Daniel}
+\vi{Esteban no llegó de primero ni de último}
+De las siguientes afirmaciones, de la única que se tiene certeza es:
+@ Esteban llegó justo antes que Bruno
+@ Andrés llegó de primero
+@ Camilo llegó de último
+@ Daniel llegó antes que Andrés
+! Los órdenes posibles son Andrés, Esteban, Bruno, Daniel, Camilo y Daniel, Camilo, Andrés, Esteban, Bruno.
+ctx 2: Un taller fabrica camisetas. Cada mes tiene costos fijos de \$300.000 (arriendo y servicios) y, además, fabricar cada camiseta le cuesta \$8.000. Cada camiseta se vende en \$14.000.
+q: La cantidad de camisetas que el taller debe vender en un mes para no tener ganancias ni pérdidas es:
+@ 50
+@ 38
+@ 22
+@ 60
+! Cada camiseta deja \$6.000: $300.000\div6.000$.
+q: La ganancia del taller en un mes en el que fabrica y vende 120 camisetas es:
+@ \$420.000
+@ \$720.000
+@ \$1.380.000
+@ \$660.000
+! $120\cdot6.000-300.000$.
+q: En un grupo, el 40\% de las personas son mujeres. El 25\% de las mujeres y el 10\% de los hombres llegan en bicicleta. El porcentaje del grupo que llega en bicicleta es:
+@ 16\%
+@ 35\%
+@ 17,5\%
+@ 14\%
+! $0{,}4\cdot25+0{,}6\cdot10$.
+q: Se invierte \$1.000.000 a una tasa de interés compuesto del 10\% anual, es decir, cada año el interés se suma al capital. El valor total que se tiene al cabo de 3 años es:
+@ \$1.331.000
+@ \$1.300.000
+@ \$1.210.000
+@ \$1.333.000
+! $1.000.000\cdot1{,}1^3$.
+q: Si 3 gatos cazan 3 ratones en 3 minutos, entonces la cantidad de gatos que se necesitan para cazar 100 ratones en 100 minutos, al mismo ritmo, es:
+@ 3
+@ 100
+@ 33
+@ 1
+! Cada gato caza 1 ratón cada 3 minutos; 3 gatos cazan 100 ratones en 100 minutos.
+q: Los primeros términos de una sucesión son 1, 8, 27, 64, \dots{} La diferencia entre el término que ocupa la posición 11 y el que ocupa la posición 10 es:
+@ 331
+@ 271
+@ 121
+@ 300
+! $11^3-10^3=1.331-1.000$.
+q: Se define $f(1)=2$ y, para cada entero positivo $n$, $f(n+1)=2f(n)-1$. El valor de $f(5)$ es:
+@ 17
+@ 9
+@ 33
+@ 16
+! $2,\ 3,\ 5,\ 9,\ 17$.
+q: Con las letras de la palabra ZUKA se forman <<palabras>> de tres letras distintas (tengan o no significado). La cantidad de esas palabras que empiezan por consonante es:
+@ 12
+@ 24
+@ 6
+@ 18
+! $2$ consonantes para la primera letra, luego $3\cdot2$.
+q: Se lanza un dado corriente dos veces. La probabilidad de que el número obtenido en el segundo lanzamiento sea mayor que el obtenido en el primero es:
+@ $\frac{5}{12}$
+@ $\frac12$
+@ $\frac13$
+@ $\frac{7}{12}$
+! De los 36 casos, en 6 hay empate y en la mitad de los 30 restantes gana el segundo.
+q: El área de un hexágono regular de 2 cm de lado, en cm$^2$, es:
+@ $6\sqrt3$
+@ $12$
+@ $4\sqrt3$
+@ $12\sqrt3$
+! Son 6 triángulos equiláteros de lado 2, cada uno de área $\sqrt3$.
+ctx 2: En un torneo de fútbol, cada equipo recibe 3 puntos por partido ganado, 1 punto por partido empatado y 0 puntos por partido perdido. La tabla muestra parte de los resultados de tres equipos después de 10 partidos jugados (PJ): ganados (G), empatados (E), perdidos (P) y puntos.\par\smallskip
+{\centering\small\begin{tabular}{|l|c|c|c|c|c|}\hline
+Equipo & PJ & G & E & P & Puntos\\\hline
+Águilas & 10 & 6 & 2 & 2 & 20\\\hline
+Búfalos & 10 & 5 & & 1 & \\\hline
+Cóndores & 10 & & 3 & & 18\\\hline
+\end{tabular}\par}
+q: La cantidad de puntos que tienen los Búfalos es:
+@ 19
+@ 16
+@ 15
+@ 20
+! Empataron 4: $5\cdot3+4$.
+q: La cantidad de partidos que han perdido los Cóndores es:
+@ 2
+@ 1
+@ 3
+@ 4
+! $3G+3=18$ da $G=5$; perdidos: $10-5-3$.
+q: La suma de todos los divisores positivos del número 28 es:
+@ 56
+@ 28
+@ 55
+@ 27
+! $1+2+4+7+14+28$.
+q: La edad de un abuelo es el doble de la edad de su hijo, y la edad de este es el triple de la edad de su propio hijo. Si las edades de los tres suman 120 años, la edad del abuelo es:
+@ 72
+@ 60
+@ 80
+@ 66
+! $x+3x+6x=120$ da $x=12$.
+q: Un programa de computador realiza las siguientes instrucciones:
+\st{1.}{Comience con $x=1000$}
+\st{2.}{Cambie el valor de $x$ por $x-7$}
+\st{3.}{Si $x$ es menor que 7, pase a la instrucción 4; en otro caso, regrese a la instrucción 2}
+\st{4.}{Imprima el valor de $x$ y pare}
+El valor que imprime el programa es:
+@ 6
+@ 0
+@ 1
+@ 5
+! Es el residuo de dividir 1000 entre 7: $1000=7\cdot142+6$.
+q: La suma de todos los números enteros del 1 al 100 que son múltiplos de 7 es:
+@ 735
+@ 700
+@ 686
+@ 742
+! $7(1+2+\dots+14)=7\cdot105$.
+q: La cifra de las unidades del resultado de $3^1+3^2+3^3+\dots+3^8$ es:
+@ 0
+@ 3
+@ 9
+@ 1
+! Las unidades de las potencias son 3, 9, 7, 1, que suman 20, y se repiten dos veces.
+ctx 2: Un antiguo sistema de numeración usa tres símbolos: $\mid$ vale 1, $\cap$ vale 10 y $\circledcirc$ vale 100. Un número se escribe juntando símbolos y su valor es la suma de los valores de todos ellos. Por ejemplo, $\circledcirc\cap\cap\mid\mid\mid$ representa el número 123.
+q: El número representado por $\circledcirc\circledcirc\cap\cap\cap\mid\mid\mid\mid$ es:
+@ 234
+@ 243
+@ 324
+@ 9
+! $200+30+4$.
+q: Un escriba suma dos números: el primero está escrito con un símbolo $\circledcirc$, ocho símbolos $\cap$ y cinco símbolos $\mid$; el segundo, con dos símbolos $\cap$ y seis símbolos $\mid$. La menor cantidad de símbolos con la que puede escribir el resultado es:
+@ 4
+@ 22
+@ 13
+@ 5
+! $185+26=211$: dos de 100, uno de 10 y uno de 1.
+q: En la cuadrícula de la figura se van a escribir las letras A, B y C de modo que en cada fila y en cada columna aparezcan las tres letras.\par
+{\centering\begin{tikzpicture}[scale=.6]\draw (0,0) grid (3,3);\node at (.5,2.5) {A};\node at (1.5,1.5) {B};\node at (2.5,.5) {$X$};\end{tikzpicture}\par}
+La letra que va en la casilla marcada con $X$:
+@ Es C
+@ Es A
+@ Es B
+@ Puede ser A o C
+! La primera fila debe ser A, C, B; la segunda, C, B, A; la tercera, B, A, C.
+q: Un cubo de hielo tiene 10 cm de arista. Al derretirse, el agua que se obtiene ocupa un volumen 10\% menor que el del hielo. El volumen del agua, en cm$^3$, es:
+@ 900
+@ 990
+@ 100
+@ 729
+! El 90\% de $1.000$.
+q: En un rectángulo de 12 cm por 4 cm se dibujan tres círculos iguales de 2 cm de radio, tangentes entre sí y a los lados del rectángulo, como muestra la figura. El área de la región sombreada, en cm$^2$, es:\par
+{\centering\begin{tikzpicture}[scale=.3]\fill[gray!45] (0,0) rectangle (12,4);\foreach \x in {2,6,10} {\fill[white] (\x,2) circle(2);\draw (\x,2) circle(2);}\draw (0,0) rectangle (12,4);\end{tikzpicture}\par}
+@ $48-12\pi$
+@ $48-6\pi$
+@ $48-4\pi$
+@ $12\pi-24$
+! Rectángulo $48$ menos tres círculos de área $4\pi$.
+q: En una casa de cambio, 1 dólar equivale a 4.000 pesos y 1 euro equivale a 1,1 dólares. La cantidad de pesos que se recibe al cambiar 50 euros es:
+@ 220.000
+@ 200.000
+@ 181.818
+@ 242.000
+! $50\cdot1{,}1=55$ dólares.
+q: Un horno industrial se enciende un lunes a las 8:00 a.m. y debe permanecer encendido durante 100 horas seguidas. El horno se apaga el:
+@ Viernes a las 12:00 del mediodía
+@ Viernes a las 4:00 a.m.
+@ Jueves a las 12:00 del mediodía
+@ Sábado a las 8:00 a.m.
+! $100$ horas son 4 días y 4 horas.
+q: Hay tres cajas cerradas, una roja, una verde y una azul, y solo una contiene una moneda. Cada caja tiene un letrero:
+\st{}{Caja roja: <<La moneda está en la caja verde>>.}
+\st{}{Caja verde: <<La moneda no está aquí>>.}
+\st{}{Caja azul: <<La moneda no está aquí>>.}
+Si se sabe que exactamente uno de los tres letreros es verdadero, entonces la moneda está en:
+@ La caja azul
+@ La caja roja
+@ La caja verde
+@ No es posible saberlo
+! Si estuviera en la roja o en la verde habría dos letreros verdaderos; en la azul, solo el de la caja verde.
+q: En la figura, desde el vértice superior de un triángulo se trazan tres segmentos hasta el lado opuesto. La cantidad total de triángulos que se pueden contar en la figura es:\par
+{\centering\begin{tikzpicture}[scale=.55]\draw (0,0)--(4,0)--(1.6,2.6)--cycle;\foreach \x in {1,2,3} \draw (1.6,2.6)--(\x,0);\end{tikzpicture}\par}
+@ 10
+@ 4
+@ 6
+@ 8
+! Cada triángulo queda determinado por dos de las 5 líneas que salen del vértice: $\binom52$.
+q: Un tren sale de una estación a las 8:00 a.m. y viaja a 60 km/h. A las 9:00 a.m. sale de la misma estación, por una vía paralela y en la misma dirección, otro tren que viaja a 90 km/h. La hora a la que el segundo tren alcanza al primero es:
+@ 11:00 a.m.
+@ 10:00 a.m.
+@ 10:30 a.m.
+@ 12:00 m.
+! El primero lleva 60 km de ventaja y el segundo descuenta 30 km cada hora.
+ctx 2: La gráfica muestra la temperatura, en grados Celsius, registrada en una ciudad cada tres horas, entre las 6 y las 21 horas de un día.\par\smallskip
+{\centering\begin{tikzpicture}[x=.85cm,y=.11cm]\draw[->] (0,0)--(0,31);\draw (0,0)--(6.3,0);
+\foreach \v in {5,10,...,25} {\draw[gray!50] (0,\v)--(6.3,\v);\node[left,font=\scriptsize] at (0,\v) {\v};}
+\foreach \i/\h in {.5/6,1.5/9,2.5/12,3.5/15,4.5/18,5.5/21} \node[below,font=\scriptsize] at (\i,0) {\h};
+\draw[thick] (.5,12)--(1.5,16)--(2.5,24)--(3.5,26)--(4.5,21)--(5.5,15);
+\foreach \x/\y in {.5/12,1.5/16,2.5/24,3.5/26,4.5/21,5.5/15} {\fill (\x,\y) circle(2pt);\node[above,font=\scriptsize] at (\x,\y+.6) {\y};}
+\node[font=\scriptsize] at (3.1,-5.5) {Hora};\end{tikzpicture}\par}
+q: El intervalo de tres horas en el que la temperatura tuvo el mayor cambio fue:
+@ Entre las 9 y las 12 horas
+@ Entre las 6 y las 9 horas
+@ Entre las 15 y las 18 horas
+@ Entre las 18 y las 21 horas
+! Los cambios son $+4$, $+8$, $+2$, $-5$ y $-6$ grados.
+q: El promedio de las seis temperaturas registradas, en grados Celsius, es:
+@ 19
+@ 20
+@ 18,5
+@ 21
+! $114\div6$.
+q: La cantidad de números enteros positivos $n$ que cumplen $2^n<1000$ es:
+@ 9
+@ 10
+@ 8
+@ 499
+! $2^9=512$ y $2^{10}=1024$.
+q: Se quiere dividir una pizza en 7 pedazos, que no tienen que ser del mismo tamaño ni de la misma forma, haciendo cortes rectos que la atraviesen de lado a lado. La menor cantidad de cortes necesarios es:
+@ 3
+@ 4
+@ 6
+@ 7
+! Con 2 cortes se obtienen máximo 4 pedazos; con 3 cortes que se crucen dos a dos en puntos distintos, 7.
+q: El tanque A está lleno hasta las tres cuartas partes y el tanque B, que tiene el doble de capacidad que A, está lleno hasta la mitad. Toda el agua de los dos tanques se vierte en un tanque vacío C, cuya capacidad es igual a la suma de las capacidades de A y B. La fracción del tanque C que queda llena es:
+@ $\frac{7}{12}$
+@ $\frac{5}{8}$
+@ $\frac{5}{12}$
+@ $\frac{2}{3}$
+! $\left(\frac34+1\right)\div3$.
+q: Con palitos iguales se construye la secuencia de triángulos que se muestra, en la que el lado de cada triángulo grande tiene un palito más que el del anterior.\par
+\newcommand\tri[3]{\begin{scope}[shift={(#1,0)}]\foreach \k in {0,...,\numexpr#2-1\relax}{\draw ({\k/2},{\k*.866})--({#2-\k/2},{\k*.866});\draw ({\k},0)--({(#2+\k)/2},{(#2-\k)*.866});\draw ({#2-\k},0)--({(#2-\k)/2},{(#2-\k)*.866});}\node at (#2/2,-.6) {\scriptsize Figura #3};\end{scope}}
+{\centering\begin{tikzpicture}[scale=.5]\tri{0}{1}{1}\tri{2.5}{2}{2}\tri{6}{3}{3}\end{tikzpicture}\par}
+La cantidad de palitos que se necesitan para construir la figura 8 es:
+@ 108
+@ 96
+@ 64
+@ 84
+! La figura $n$ tiene $1+2+\dots+n$ triángulos con la punta hacia arriba, de 3 palitos cada uno: $\frac{3n(n+1)}{2}$.

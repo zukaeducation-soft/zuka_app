@@ -1,0 +1,459 @@
+% Resumen del mundo «Forja del Producto» (Geometría Vectorial y Analítica, mundo 4).
+% Lecciones geo-14, geo-15, geo-16, geo-17, geo-18. Usa los ejemplos de los videos; el taller trae ejercicios nuevos.
+\documentclass[11pt,a4paper]{article}
+\usepackage{zuka-resumen}
+\usepackage{tikz-3dplot}
+\usepackage{needspace}
+\let\nivelbase\nivel
+\renewcommand{\nivel}[2]{\Needspace{8\baselineskip}\nivelbase{#1}{#2}}
+\zukacurso{geo}
+\zukamundo{4}{Forja del Producto}{Producto escalar y producto vectorial}
+
+\newcommand{\proy}{\operatorname{proy}}
+\newcommand{\comp}{\operatorname{comp}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\ii}{\hat{\imath}}\newcommand{\jj}{\hat{\jmath}}\newcommand{\kk}{\hat{k}}
+\newcommand{\vu}{\vec{u}}\def\vv{\vec{v}}\newcommand{\vw}{\vec{w}}\newcommand{\vn}{\vec{n}}
+
+\begin{document}
+
+\portada{%
+Con dos vectores se pueden hacer dos productos muy distintos. El \clave{producto escalar} devuelve un número
+que mide cuánto se acompañan: sirve para hallar ángulos, sombras (proyecciones), rectas, planos y distancias.
+El \clave{producto vectorial} devuelve un vector perpendicular a los dos, cuya longitud es un área: sirve para
+hallar normales, planos por tres puntos, áreas y volúmenes. Este resumen reúne las definiciones, las
+propiedades y los ejemplos de los videos, y termina con un taller de práctica.}{%
+\item \textbf{Nivel 4-1.} Producto escalar: definición geométrica y con componentes, signo y ángulo entre vectores.
+\item \textbf{Nivel 4-2.} Proyección ortogonal: componente escalar, vector proyección y descomposición.
+\item \textbf{Nivel 4-3.} Producto escalar y geometría analítica: vector normal, rectas, planos, distancias y ángulos.
+\item \textbf{Nivel 4-4.} Producto vectorial: determinante, mano derecha, propiedades y área del paralelogramo.
+\item \textbf{Nivel 4-5.} Producto vectorial y geometría analítica: plano por tres puntos, recta de corte, distancias y triple producto.}
+
+\begin{clavebox}[LAS IDEAS QUE SOSTIENEN TODO EL MUNDO]
+\renewcommand{\arraystretch}{1.5}\begin{tabular}{@{}c@{\quad}c@{\quad}c@{}}
+$\displaystyle \vu\cdot\vv=\norma{\vu}\,\norma{\vv}\cos\theta$ &
+$\displaystyle \vu\cdot\vv=0\iff\vu\perp\vv$ &
+$\displaystyle \norma{\vu\times\vv}=\norma{\vu}\,\norma{\vv}\sen\theta$\\[2pt]
+\footnotesize un número: cuánto se acompañan & \footnotesize perpendicular: producto cero & \footnotesize un vector: su largo es un área
+\end{tabular}
+\end{clavebox}
+
+%=====================================================================
+\nivel{4-1}{Producto escalar}
+
+\textbf{Intuición.} El producto escalar mide cuánto «empuja» un vector en la dirección del otro: es grande si
+apuntan hacia el mismo lado, cero si se cruzan en ángulo recto y negativo si se oponen.
+
+\begin{definicion}[Producto escalar o producto punto]
+Si $\theta\in[0^\circ,180^\circ]$ es el ángulo entre los vectores no nulos $\vu$ y $\vv$,
+\[ \vu\cdot\vv=\norma{\vu}\,\norma{\vv}\cos\theta . \]
+Con componentes, en $\R^3$ (en $\R^2$ se omite la tercera):
+\[ (u_1,u_2,u_3)\cdot(v_1,v_2,v_3)=u_1v_1+u_2v_2+u_3v_3 . \]
+El resultado es un \emph{número} (un escalar), no un vector.
+\end{definicion}
+
+\begin{figura}[El signo del producto escalar depende solo del ángulo.]
+\begin{tikzpicture}[scale=1]
+  \foreach \x/\a/\t/\s in {0/40/{agudo}/{$\vu\cdot\vv>0$},4.6/90/{recto}/{$\vu\cdot\vv=0$},9.2/140/{obtuso}/{$\vu\cdot\vv<0$}} {
+    \begin{scope}[xshift=\x cm]
+      \draw[zstyle,->,draw=zaccent,line width=1.1pt] (0,0) -- (2,0) node[right,etq] {$\vv$};
+      \draw[zstyle,->,draw=zcoral,line width=1.1pt] (0,0) -- (\a:1.7) node[above,etq] {$\vu$};
+      \draw[zmute] (0.55,0) arc (0:\a:0.55);
+      \node[font=\footnotesize,text=zmute] at ({\a/2}:0.85) {$\theta$};
+      \node[font=\small\bfseries] at (0.9,-0.55) {\t};
+      \node[font=\small] at (0.9,-1.05) {\s};
+    \end{scope}}
+  \draw[zmute] (4.6,0) rectangle (4.85,0.25);
+\end{tikzpicture}
+\end{figura}
+
+\begin{ejemplo}[Del video: dos vectores perpendiculares]
+\[ (1,2,2)\cdot(2,0,-1)=1\cdot2+2\cdot0+2\cdot(-1)=2+0-2=0 . \]
+El producto es cero: los dos vectores forman un ángulo recto aunque a simple vista no sea evidente.
+\end{ejemplo}
+
+\subsection{El ángulo entre dos vectores}
+Igualando las dos formas del producto se despeja el coseno del ángulo:
+\begin{clavebox}[ÁNGULO ENTRE VECTORES]
+$\displaystyle \cos\theta=\frac{\vu\cdot\vv}{\norma{\vu}\,\norma{\vv}},\qquad 0^\circ\le\theta\le180^\circ$
+\end{clavebox}
+\begin{ejemplo}[Del video: $(1,0)$ y $(1,1)$]
+Se tiene $\vu\cdot\vv=1\cdot1+0\cdot1=1$, $\norma{\vu}=1$ y $\norma{\vv}=\sqrt{1^2+1^2}=\sqrt2$, así que
+\[ \cos\theta=\frac{1}{1\cdot\sqrt2}=\frac{1}{\sqrt2}\quad\Longrightarrow\quad \theta=45^\circ . \]
+\end{ejemplo}
+
+\begin{propiedad}[Propiedades del producto escalar]
+Para vectores $\vu,\vv,\vw$ y un escalar $\lambda$:
+\begin{itemize}
+\item $\vu\cdot\vv=\vv\cdot\vu$ (conmutativa), \ $\vu\cdot(\vv+\vw)=\vu\cdot\vv+\vu\cdot\vw$ (distributiva) y
+      $(\lambda\vu)\cdot\vv=\lambda\,(\vu\cdot\vv)$.
+\item Norma: $\vu\cdot\vu=\norma{\vu}^2\ge0$, y vale $0$ solo si $\vu=\vec 0$.
+\item Cauchy--Schwarz: $\abs{\vu\cdot\vv}\le\norma{\vu}\,\norma{\vv}$ (porque $\abs{\cos\theta}\le1$).
+\end{itemize}
+\end{propiedad}
+\begin{ojo}[No existe el «cociente» ni se cancela]
+De $\vu\cdot\vv=\vu\cdot\vw$ \emph{no} se sigue que $\vv=\vw$: solo que $\vu\perp(\vv-\vw)$. Tampoco tiene
+sentido escribir $\vu\cdot\vv\cdot\vw$: el primer producto ya es un número.
+\end{ojo}
+
+%=====================================================================
+\nivel{4-2}{Proyección ortogonal}
+
+\textbf{Intuición.} Si el sol cae perpendicular a la recta de $\vv$, la \clave{sombra} de $\vu$ sobre esa recta es
+su proyección ortogonal. Su largo con signo es la componente escalar.
+
+\begin{definicion}[Componente escalar y proyección]
+Para $\vv\neq\vec 0$:
+\[ \comp_{\vv}\vu=\frac{\vu\cdot\vv}{\norma{\vv}}=\norma{\vu}\cos\theta,
+\qquad
+\proy_{\vv}\vu=\frac{\vu\cdot\vv}{\norma{\vv}^2}\,\vv . \]
+La componente es un número (positivo si la sombra cae en el sentido de $\vv$, negativo si cae en contra);
+la proyección es un vector paralelo a $\vv$.
+\end{definicion}
+
+\begin{minipage}[c]{0.5\linewidth}
+\begin{ejemplo}[Del video: $(2,4)$ sobre $(3,1)$]
+\begin{align*}
+\vu\cdot\vv&=2\cdot3+4\cdot1=10,\qquad \norma{\vv}^2=10,\\
+\proy_{\vv}\vu&=\tfrac{10}{10}(3,1)=(3,1).
+\end{align*}
+Lo que sobra es
+\[ \vu-\proy_{\vv}\vu=(2,4)-(3,1)=(-1,3), \]
+y en efecto $(-1,3)\cdot(3,1)=-3+3=0$.
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.46\linewidth}\centering
+\begin{tikzpicture}[scale=0.85]
+  \draw[zline,line width=0.4pt] (-1.5,-0.5) grid (4.5,4.5);
+  \draw[zmute,->] (-1.5,0) -- (4.7,0) node[right,font=\footnotesize] {$x$};
+  \draw[zmute,->] (0,-0.5) -- (0,4.7) node[above,font=\footnotesize] {$y$};
+  \draw[zmute,dashed] (-1.5,-0.5) -- (4.5,1.5);
+  \draw[->,zsky,line width=1.2pt] (0,0) -- (3,1);
+  \node[etq,text=zsky,below right] at (2.4,0.75) {$\proy_{\vv}\vu=\vv$};
+  \draw[->,zcoral,line width=1.2pt] (0,0) -- (2,4) node[above,etq,text=zcoral] {$\vu=(2,4)$};
+  \draw[->,zmint,line width=1.2pt] (3,1) -- (2,4);
+  \node[etq,text=zmint,right] at (2.55,2.7) {$(-1,3)$};
+  \begin{scope}[shift={(3,1)}]
+    \draw[zink,line width=0.5pt] (-0.285,-0.095) -- (-0.38,0.19) -- (-0.095,0.285);
+  \end{scope}
+\end{tikzpicture}
+
+{\small\color{zmute}La sombra de $\vu$ y la parte perpendicular.}
+\end{minipage}
+
+\begin{propiedad}[Descomposición ortogonal]
+Todo vector se parte en una parte paralela a $\vv$ y otra perpendicular a $\vv$:
+\[ \vu=\underbrace{\proy_{\vv}\vu}_{\parallel\,\vv}+\underbrace{\left(\vu-\proy_{\vv}\vu\right)}_{\perp\,\vv}. \]
+\end{propiedad}
+\begin{ojo}[El orden importa]
+$\proy_{\vv}\vu$ (la sombra de $\vu$ sobre $\vv$) no es lo mismo que $\proy_{\vu}\vv$. En el denominador va
+siempre la norma del vector \emph{sobre el que} se proyecta, y al cuadrado en la proyección vectorial.
+\end{ojo}
+
+%=====================================================================
+\nivel{4-3}{Producto escalar y geometría analítica}
+
+\textbf{Intuición.} Una recta del plano o un plano del espacio quedan determinados por un punto $P_0$ y un vector
+\clave{normal} $\vn$ que les forma ángulo recto. Un punto $P$ está en ellos exactamente cuando
+$\overrightarrow{P_0P}$ es perpendicular a $\vn$.
+
+\begin{definicion}[Ecuación punto-normal]
+\[ \vn\cdot\left(P-P_0\right)=0 . \]
+\begin{itemize}
+\item En el plano, con $\vn=(a,b)$: $a(x-x_0)+b(y-y_0)=0$, es decir, $ax+by=c$. Un vector director es $(-b,a)$.
+\item En el espacio, con $\vn=(a,b,c)$: $a(x-x_0)+b(y-y_0)+c(z-z_0)=0$, es decir, $ax+by+cz=d$.
+\end{itemize}
+El vector normal se \emph{lee en los coeficientes} de $x$, $y$ (y $z$).
+\end{definicion}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{ejemplo}[Del video: plano por un punto con una normal]
+Con $P_0(1,0,2)$ y $\vn=(3,-1,2)$:
+\begin{align*}
+3(x-1)-(y-0)+2(z-2)&=0\\
+3x-y+2z&=7 .
+\end{align*}
+Comprobación: $3(1)-0+2(2)=7$.
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.44\linewidth}\centering
+\tdplotsetmaincoords{68}{118}
+\begin{tikzpicture}[tdplot_main_coords,scale=1.05]
+  \fill[zaccent!12] (-1.6,-1.8,0) -- (1.8,-1.8,0) -- (1.8,1.9,0) -- (-1.6,1.9,0) -- cycle;
+  \draw[zaccent!60,line width=0.6pt] (-1.6,-1.8,0) -- (1.8,-1.8,0) -- (1.8,1.9,0) -- (-1.6,1.9,0) -- cycle;
+  \coordinate (P0) at (0,0,0); \coordinate (P) at (1.1,1.3,0);
+  \draw[->,zmint,line width=1.2pt] (P0) -- (P);
+  \draw[->,zcoral,line width=1.3pt] (P0) -- (0,0,2.1) node[above,etq,text=zcoral] {$\vn$};
+  \draw[zink,line width=0.5pt] (0,0,0.3) -- (0.25*1.1/1.7,0.25*1.3/1.7,0.3) -- (0.25*1.1/1.7,0.25*1.3/1.7,0);
+  \node[punto] at (P0) {}; \node[punto] at (P) {};
+  \node[etq,anchor=north east] at (P0) {$P_0$};
+  \node[etq,anchor=west] at (P) {$P$};
+  \node[font=\footnotesize,text=zmute] at (1.2,-1.3,0) {plano};
+\end{tikzpicture}
+
+{\small\color{zmute}$\overrightarrow{P_0P}$ vive en el plano y es perpendicular a $\vn$.}
+\end{minipage}
+
+\subsection{Distancia de un punto a una recta o a un plano}
+La distancia más corta va por la normal: es el valor absoluto de la componente de $\overrightarrow{P_0Q}$ sobre $\vn$.
+\begin{clavebox}[FÓRMULAS DE DISTANCIA]
+$\displaystyle \dist\big(Q,\ ax+by=c\big)=\frac{\abs{ax_0+by_0-c}}{\sqrt{a^2+b^2}}\qquad
+\dist\big(Q,\ ax+by+cz=d\big)=\frac{\abs{ax_0+by_0+cz_0-d}}{\sqrt{a^2+b^2+c^2}}$
+\end{clavebox}
+\begin{ejemplo}[Del video: de $(1,2,3)$ al plano $2x-y+2z=1$]
+\[ \dist=\frac{\abs{2(1)-2+2(3)-1}}{\sqrt{2^2+(-1)^2+2^2}}=\frac{\abs{5}}{\sqrt9}=\frac53 . \]
+\end{ejemplo}
+
+\subsection{Ángulo entre planos}
+\begin{propiedad}[Planos paralelos, perpendiculares y su ángulo]
+El ángulo entre dos planos es el ángulo agudo entre sus normales:
+$\cos\theta=\dfrac{\abs{\vn_1\cdot\vn_2}}{\norma{\vn_1}\,\norma{\vn_2}}$.
+Son \clave{paralelos} si $\vn_1=\lambda\vn_2$ y \clave{perpendiculares} si $\vn_1\cdot\vn_2=0$.
+\end{propiedad}
+\begin{ojo}[Normal y director no son lo mismo]
+En $ax+by=c$ el vector $(a,b)$ es \emph{perpendicular} a la recta, no paralelo. Antes de usar la fórmula de
+distancia, pasa la ecuación a la forma $ax+by+cz=d$ (todo lo que tiene variables a un lado).
+\end{ojo}
+
+%=====================================================================
+\nivel{4-4}{Producto vectorial}
+
+\textbf{Intuición.} Dados dos vectores del espacio, el producto vectorial fabrica un tercero que los atraviesa a los
+dos en ángulo recto. Su largo dice cuánto «se abren»: es el área del paralelogramo que forman.
+
+\begin{definicion}[Producto vectorial o producto cruz]
+Para $\vu,\vv\in\R^3$, $\vu\times\vv$ es el vector
+\begin{itemize}
+\item perpendicular a $\vu$ y a $\vv$;
+\item de norma $\norma{\vu\times\vv}=\norma{\vu}\,\norma{\vv}\sen\theta$, el \clave{área del paralelogramo};
+\item con el sentido que da la \clave{regla de la mano derecha}: los dedos van de $\vu$ hacia $\vv$ y el pulgar señala $\vu\times\vv$.
+\end{itemize}
+\end{definicion}
+
+\begin{minipage}[c]{0.48\linewidth}\centering
+\tdplotsetmaincoords{70}{115}
+\begin{tikzpicture}[tdplot_main_coords,scale=1.15]
+  \coordinate (O) at (0,0,0); \coordinate (U) at (2.2,0,0); \coordinate (V) at (0.7,1.9,0);
+  \fill[zsky!18] (O) -- (U) -- ($(U)+(V)$) -- (V) -- cycle;
+  \draw[zsky!70,dashed] (U) -- ($(U)+(V)$) -- (V);
+  \draw[->,zcoral,line width=1.3pt] (O) -- (U) node[anchor=north east,etq,text=zcoral] {$\vu$};
+  \draw[->,zsky,line width=1.3pt] (O) -- (V) node[anchor=west,etq,text=zsky] {$\vv$};
+  \draw[->,zaccent,line width=1.4pt] (O) -- (0,0,2.2) node[above,etq,text=zaccent] {$\vu\times\vv$};
+  \draw[zmute] plot[domain=0:69.8,samples=20] ({0.5*cos(\x)},{0.5*sin(\x)},0);
+  \node[font=\footnotesize,text=zmute] at (0.72,0.42,0) {$\theta$};
+  \node[font=\footnotesize,text=zink] at (1.5,1.15,0) {área};
+\end{tikzpicture}
+
+{\small\color{zmute}Perpendicular a los dos; su largo es el área.}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.48\linewidth}\centering
+\begin{tikzpicture}[scale=1]
+  \draw[zline,line width=0.8pt] (0,0) circle (1.15);
+  \foreach \a/\t in {90/{\ii},-30/{\jj},210/{\kk}}
+    \node[circle,fill=zaccent!15,draw=zaccent,minimum size=7mm,font=\small] at (\a:1.15) {$\t$};
+  \draw[->,zaccent,line width=0.9pt] (70:1.15) arc (70:-10:1.15);
+  \draw[->,zaccent,line width=0.9pt] (-50:1.15) arc (-50:-130:1.15);
+  \draw[->,zaccent,line width=0.9pt] (190:1.15) arc (190:110:1.15);
+\end{tikzpicture}
+
+{\small\color{zmute}A favor del giro: $\ii\times\jj=\kk$, $\jj\times\kk=\ii$, $\kk\times\ii=\jj$.
+En contra, el signo cambia: $\jj\times\ii=-\kk$.}
+\end{minipage}
+
+\subsection{Cómo se calcula}
+Se escribe un determinante «simbólico» y se tapa una columna por vez (la del medio lleva signo menos):
+\[
+\vu\times\vv=\begin{vmatrix}\ii&\jj&\kk\\ u_1&u_2&u_3\\ v_1&v_2&v_3\end{vmatrix}
+=\left(u_2v_3-u_3v_2\right)\ii-\left(u_1v_3-u_3v_1\right)\jj+\left(u_1v_2-u_2v_1\right)\kk .
+\]
+\begin{ejemplo}[Del video: $(1,0,2)\times(0,1,1)$]
+Tapando la columna de $x$, la de $y$ (con signo menos) y la de $z$:
+\[ \vu\times\vv=\big(0\cdot1-2\cdot1,\ -\left(1\cdot1-2\cdot0\right),\ 1\cdot1-0\cdot0\big)=(-2,-1,1). \]
+Comprobación: $(1,0,2)\cdot(-2,-1,1)=-2+0+2=0$ y $(0,1,1)\cdot(-2,-1,1)=0-1+1=0$.
+El área del paralelogramo es $\norma{(-2,-1,1)}=\sqrt{6}$.
+\end{ejemplo}
+
+\begin{propiedad}[Propiedades del producto vectorial]
+\begin{itemize}
+\item Anticonmutativa: $\vv\times\vu=-\left(\vu\times\vv\right)$.
+\item Distributiva: $\vu\times(\vv+\vw)=\vu\times\vv+\vu\times\vw$; y $(\lambda\vu)\times\vv=\lambda\left(\vu\times\vv\right)$.
+\item $\vu\times\vu=\vec0$; más en general, $\vu\times\vv=\vec 0\iff\vu$ y $\vv$ son paralelos.
+\item En el plano: $(u_1,u_2,0)\times(v_1,v_2,0)=\left(0,\,0,\,u_1v_2-u_2v_1\right)$. El número $u_1v_2-u_2v_1$ es
+      positivo si $\vv$ gira a la izquierda (antihorario) de $\vu$.
+\end{itemize}
+\end{propiedad}
+\begin{ojo}[Errores frecuentes con el producto cruz]
+Olvidar el signo menos de la componente $\jj$; cambiar el orden de los factores (cambia el sentido); y creer que
+es asociativo: $(\ii\times\ii)\times\jj=\vec0$, pero $\ii\times(\ii\times\jj)=\ii\times\kk=-\jj$.
+\end{ojo}
+
+%=====================================================================
+\nivel{4-5}{Producto vectorial y geometría analítica}
+
+\subsection{Plano por tres puntos}
+$\overrightarrow{AB}\times\overrightarrow{AC}$ es perpendicular a los dos lados del triángulo, así que es una
+normal del plano que pasa por $A$, $B$ y $C$ (si no están alineados).
+\begin{ejemplo}[Del video: $A(1,0,0)$, $B(0,1,0)$, $C(0,0,1)$]
+Con $\overrightarrow{AB}=(-1,1,0)$ y $\overrightarrow{AC}=(-1,0,1)$:
+\[ \vn=\overrightarrow{AB}\times\overrightarrow{AC}=\left(1\cdot1-0\cdot0,\ -\left((-1)\cdot1-0\cdot(-1)\right),\ (-1)\cdot0-1\cdot(-1)\right)=(1,1,1). \]
+Con el punto $A$: $1(x-1)+1(y-0)+1(z-0)=0$, o sea $x+y+z=1$. Los tres puntos lo cumplen.
+\end{ejemplo}
+
+\subsection{Recta de corte de dos planos}
+La recta común está en los dos planos, así que es perpendicular a las dos normales:
+$\vec d=\vn_1\times\vn_2$.
+\begin{ejemplo}[Los planos $x+y=2$ y $y+z=3$]
+Normales $\vn_1=(1,1,0)$ y $\vn_2=(0,1,1)$, y
+$\vec d=\vn_1\times\vn_2=\left(1\cdot1-0\cdot1,\ -\left(1\cdot1-0\cdot0\right),\ 1\cdot1-1\cdot0\right)=(1,-1,1)$.
+Un punto común: con $y=0$ salen $x=2$ y $z=3$. La recta es
+\[ (x,y,z)=(2,0,3)+t\,(1,-1,1),\qquad t\in\R . \]
+\end{ejemplo}
+
+\subsection{Distancia de un punto a una recta del espacio}
+\begin{minipage}[c]{0.55\linewidth}
+Con $A$ un punto de la recta y $\vec d$ su dirección, $\norma{\overrightarrow{AP}\times\vec d}$ es el área del
+paralelogramo; dividida entre la base $\norma{\vec d}$ queda la altura $h$, que es la distancia:
+\[ \dist(P,\ell)=\norma{\overrightarrow{AP}\times\vec d}\,\big/\,\norma{\vec d} . \]
+\end{minipage}\hfill
+\begin{minipage}[c]{0.41\linewidth}\centering
+\begin{tikzpicture}[scale=0.8]
+  \fill[zsun!20] (0,0) -- (2.4,0) -- (3.3,1.6) -- (0.9,1.6) -- cycle;
+  \draw[zmute,line width=0.6pt] (-0.7,0) -- (3.8,0) node[right,font=\footnotesize] {$\ell$};
+  \draw[->,zaccent,line width=1.2pt] (0,0) -- (2.4,0) node[below,pos=0.55,etq,text=zaccent] {$\vec d$};
+  \draw[->,zcoral,line width=1.2pt] (0,0) -- (0.9,1.6);
+  \node[etq,text=zcoral,left] at (0.42,0.9) {$\overrightarrow{AP}$};
+  \draw[zink,dashed] (0.9,1.6) -- (0.9,0);
+  \draw[zink,line width=0.5pt] (0.9,0.2) -- (1.1,0.2) -- (1.1,0);
+  \node[etq,right] at (0.95,0.75) {$h$};
+  \node[punto] at (0,0) {}; \node[etq,below left] at (0,0) {$A$};
+  \node[punto] at (0.9,1.6) {}; \node[etq,above] at (0.9,1.6) {$P$};
+\end{tikzpicture}
+
+\end{minipage}
+\Needspace{4\baselineskip}
+\begin{ejemplo}[De $P(2,1,3)$ a la recta $(1,0,0)+t\,(0,1,1)$]
+$\overrightarrow{AP}=(1,1,3)$ y $\overrightarrow{AP}\times\vec d=\left(1\cdot1-3\cdot1,\ -\left(1\cdot1-3\cdot0\right),\ 1\cdot1-1\cdot0\right)=(-2,-1,1)$.
+Por tanto $\dist=\sqrt{4+1+1}\,\big/\sqrt{0+1+1}=\sqrt6/\sqrt2=\sqrt3\approx1.73$.
+\end{ejemplo}
+
+\subsection{Triple producto y volumen}
+\begin{minipage}[c]{0.64\linewidth}
+\begin{definicion}[Triple producto escalar]
+\[ \vu\cdot\left(\vv\times\vw\right)=\det\begin{pmatrix}u_1&u_2&u_3\\ v_1&v_2&v_3\\ w_1&w_2&w_3\end{pmatrix} . \]
+Su valor absoluto es el \clave{volumen del paralelepípedo} de aristas $\vu,\vv,\vw$: área de la base
+$\norma{\vv\times\vw}$ por la altura. Si vale $0$, los tres vectores son \clave{coplanares}.
+
+\smallskip
+\textbf{Ejemplo del video.} Para la caja de aristas $(1,0,0)$, $(0,2,0)$ y $(0,0,3)$ la matriz es diagonal y
+su determinante es $1\cdot2\cdot3=6$: justo el volumen de la caja $1\times2\times3$.
+\end{definicion}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.33\linewidth}\centering
+\tdplotsetmaincoords{70}{115}
+\begin{tikzpicture}[tdplot_main_coords,scale=0.85]
+  \coordinate (O) at (0,0,0); \coordinate (A) at (2.2,0,0); \coordinate (B) at (0.6,1.8,0); \coordinate (C) at (0.4,0.5,1.6);
+  \fill[zmint!18] (O) -- (A) -- ($(A)+(B)$) -- (B) -- cycle;
+  \draw[zmute!80] (C) -- ($(C)+(A)$) -- ($(C)+(A)+(B)$) -- ($(C)+(B)$) -- cycle;
+  \draw[zmute!80] (A) -- ($(A)+(C)$) (B) -- ($(B)+(C)$) ($(A)+(B)$) -- ($(A)+(B)+(C)$) (A) -- ($(A)+(B)$) -- (B);
+  \draw[->,zcoral,line width=1.2pt] (O) -- (C) node[above,etq,text=zcoral] {$\vu$};
+  \draw[->,zsky,line width=1.2pt] (O) -- (A) node[anchor=north east,etq,text=zsky] {$\vv$};
+  \draw[->,zaccent,line width=1.2pt] (O) -- (B) node[anchor=west,etq,text=zaccent] {$\vw$};
+  \draw[zink,dashed] (C) -- (0.4,0.5,0);
+  \node[font=\footnotesize] at (0.62,0.62,0.55) {$h$};
+\end{tikzpicture}
+\end{minipage}
+
+%=====================================================================
+\repaso
+\begin{center}
+\small\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{@{}l l@{\hspace{8mm}}l l@{}}
+\toprule
+Concepto & Fórmula & Concepto & Fórmula\\ \midrule
+Producto escalar & $u_1v_1+u_2v_2+u_3v_3=\norma{\vu}\norma{\vv}\cos\theta$ &
+  Producto vectorial & $\norma{\vu\times\vv}=\norma{\vu}\norma{\vv}\sen\theta$\\
+Ángulo & $\cos\theta=\dfrac{\vu\cdot\vv}{\norma{\vu}\norma{\vv}}$ &
+  Área del triángulo & $\tfrac12\norma{\overrightarrow{AB}\times\overrightarrow{AC}}$\\
+Proyección & $\proy_{\vv}\vu=\dfrac{\vu\cdot\vv}{\norma{\vv}^2}\vv$ &
+  Recta de corte & $\vec d=\vn_1\times\vn_2$\\
+Recta o plano & $\vn\cdot(P-P_0)=0$ &
+  Distancia a una recta & $\dfrac{\norma{\overrightarrow{AP}\times\vec d}}{\norma{\vec d}}$\\
+Distancia a un plano & $\dfrac{\abs{ax_0+by_0+cz_0-d}}{\norma{\vn}}$ &
+  Volumen & $\abs{\vu\cdot(\vv\times\vw)}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\begin{ojo}[Errores frecuentes]
+\begin{itemize}
+\item Confundir los dos productos: $\vu\cdot\vv$ es un número y $\vu\times\vv$ es un vector.
+\item Usar $\norma{\vv}$ en vez de $\norma{\vv}^2$ en la proyección vectorial (o al revés en la componente).
+\item Tomar la normal de una recta por su director, u olvidar el signo menos de la componente $\jj$.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\taller
+\begin{ejercicios}
+\item Sean $\vu=(2,-1,2)$ y $\vv=(1,2,2)$.
+  \begin{ejercicios}
+  \item Calcula $\vu\cdot\vv$ y el ángulo entre $\vu$ y $\vv$ (en grados, con un decimal).
+  \item ¿Es $\vu$ perpendicular a $(1,4,1)$?
+  \item Halla $k$ para que $(1,-3,k)$ y $(k,1,2)$ sean perpendiculares.
+  \end{ejercicios}
+\item Si $\norma{\vu}=2$, $\norma{\vv}=5$ y el ángulo entre ellos es $60^\circ$, calcula $\vu\cdot\vv$ y $\norma{\vu-\vv}$.
+\item Una antena vertical se sostiene con un cable que va del punto $(0,0,4)$ de la antena al punto $(3,4,0)$ del suelo
+  (en metros). ¿Qué ángulo forma el cable con el suelo?
+\item En papel cuadriculado dibuja $\vu=(1,3)$ y, en cada caso, $\vv$, la proyección $\proy_{\vv}\vu$ y la parte de
+  $\vu$ perpendicular a $\vv$. Comprueba en el dibujo que las dos partes suman $\vu$.
+  \begin{ejercicios}
+  \item $\vv=(4,0)$ \qquad (b) $\vv=(2,2)$
+  \end{ejercicios}
+\item Para $\vu=(3,1,-2)$ y $\vv=(1,2,2)$ halla $\comp_{\vv}\vu$, $\proy_{\vv}\vu$ y escribe $\vu$ como suma de un
+  vector paralelo y otro perpendicular a $\vv$.
+\item En el plano:
+  \begin{ejercicios}
+  \item Escribe la recta que pasa por $(1,-2)$ y es perpendicular a $\vn=(2,5)$, y da un vector director.
+  \item Halla la distancia del punto $(-2,5)$ a la recta $3x-4y=2$.
+  \end{ejercicios}
+\item En el espacio:
+  \begin{ejercicios}
+  \item Halla el plano que pasa por $(2,-1,3)$ y es paralelo a $x-2y+2z=1$, y la distancia entre los dos planos.
+  \item ¿Qué ángulo forman los planos $2x-y+z=3$ y $x+y+2z=1$?
+  \end{ejercicios}
+\item Sean $\vu=(2,-1,3)$ y $\vv=(1,0,-2)$. Calcula $\vu\times\vv$, verifica que es perpendicular a los dos, escribe
+  $\vv\times\vu$ y halla el área del triángulo que tiene a $\vu$ y $\vv$ por lados.
+\item Una cara de un techo es el triángulo de vértices $A(0,0,3)$, $B(4,0,3)$ y $C(0,3,7)$ (en metros).
+  \begin{ejercicios}
+  \item ¿Cuántos metros cuadrados de teja se necesitan para cubrirla?
+  \item Halla un vector unitario perpendicular a esa cara y la ecuación del plano del techo.
+  \end{ejercicios}
+\item Sean $\vu=(1,2,k)$, $\vv=(0,1,1)$ y $\vw=(2,1,0)$.
+  \begin{ejercicios}
+  \item Halla $k$ para que los tres vectores sean coplanares.
+  \item Con $k=0$, halla el volumen del paralelepípedo que determinan.
+  \end{ejercicios}
+\end{ejercicios}
+
+\respuestas
+\begin{respuestascortas}\raggedright
+\begin{soluciones}
+\item (a) $\vu\cdot\vv=4$, $\norma{\vu}=\norma{\vv}=3$, $\cos\theta=\tfrac49$, $\theta\approx63.6^\circ$.
+  (b) Sí: $2-4+2=0$. (c) $k-3+2k=0\Rightarrow k=1$.
+\item $\vu\cdot\vv=2\cdot5\cdot\tfrac12=5$; $\norma{\vu-\vv}^2=4-2(5)+25=19$, $\norma{\vu-\vv}=\sqrt{19}\approx4.36$.
+\item Cable $(3,4,-4)$, su sombra en el suelo $(3,4,0)$: $\cos\theta=25/(5\sqrt{41})=5/\sqrt{41}$, $\theta\approx38.7^\circ$.
+\item (a) $\proy=(1,0)$, parte perpendicular $(0,3)$. (b) $\vu\cdot\vv=8$, $\norma{\vv}^2=8$: $\proy=(2,2)$, parte perpendicular $(-1,1)$.
+\item $\vu\cdot\vv=1$: $\comp=\tfrac13$, $\proy=\tfrac19(1,2,2)$;
+  $\vu=\tfrac19(1,2,2)+\tfrac19(26,7,-20)$, y $(26,7,-20)\cdot(1,2,2)=0$.
+\item (a) $2x+5y=-8$; director $(5,-2)$. (b) $\abs{-6-20-2}/5=28/5=5.6$.
+\item (a) $x-2y+2z=10$; distancia $\abs{10-1}/3=3$. (b) $\cos\theta=3/(\sqrt6\,\sqrt6)=\tfrac12$, $\theta=60^\circ$.
+\item $\vu\times\vv=(2,7,1)$; $(2,7,1)\cdot\vu=4-7+3=0$ y $(2,7,1)\cdot\vv=2+0-2=0$; $\vv\times\vu=(-2,-7,-1)$;
+  área $=\tfrac12\sqrt{54}=\tfrac{3\sqrt6}{2}\approx3.67$.
+\item $\overrightarrow{AB}=(4,0,0)$, $\overrightarrow{AC}=(0,3,4)$, producto $(0,-16,12)$ de norma $20$.
+  (a) $\SI{10}{\metre\squared}$. (b) $\tfrac15(0,-4,3)$; plano $-4y+3z=9$.
+\item (a) $\det=3-2k=0\Rightarrow k=\tfrac32$. (b) $\abs{\det}=3$.
+\end{soluciones}
+\end{respuestascortas}
+
+\end{document}

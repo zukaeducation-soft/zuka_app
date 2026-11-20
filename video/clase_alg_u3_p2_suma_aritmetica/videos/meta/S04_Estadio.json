@@ -1,0 +1,31 @@
+{
+ "scene": "S04_Estadio",
+ "duration": 35.333,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Ejemplo: un estadio",
+   "hold": 34.733
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.167,
+   "text": "Un ejemplo completo. Un estadio tiene quince filas. La primera tiene veinte sillas y cada fila tiene cuatro más que la anterior.",
+   "fox": true
+  },
+  {
+   "start": 11.167,
+   "end": 23.8,
+   "text": "Las sillas por fila forman una progresión aritmética: veinte, veinticuatro, veintiocho. Primero, la última fila: veinte más catorce saltos de cuatro, setenta y seis.",
+   "fox": false
+  },
+  {
+   "start": 23.8,
+   "end": 34.333,
+   "text": "Ahora la suma: quince filas por, veinte más setenta y seis, entre dos. Quince por cuarenta y ocho: setecientas veinte sillas.",
+   "fox": false
+  }
+ ]
+}

@@ -713,6 +713,8 @@ body.in-lesson .lesson-foot { padding-bottom: max(16px, calc(env(safe-area-inset
 .sb-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
 .sb-tab { min-width: 40px; height: 30px; border-radius: 8px; border: 1px solid var(--line); color: var(--mute); font-weight: 700; background: transparent; }
 .sb-tab.has { color: var(--ink); }
+.sb-tab:focus-visible { outline: 2px solid var(--c, var(--brand)); outline-offset: 2px; }
+.sheet-card:focus { outline: none; }   /* la tarjeta solo recibe el foco cuando no tiene botones; no se marca */
 .sb-tab.on { border-color: var(--c, var(--brand)); color: var(--c-ink); background: color-mix(in srgb, var(--c, var(--brand)) 14%, transparent); }
 .sb-ask { margin: 0 0 8px; font-weight: 700; font-size: 15px; line-height: 1.35; }
 .sb-title { margin: 0 0 8px; padding-left: 9px; border-left: 1px solid var(--c, var(--brand)); color: var(--mute); font-size: 14px; line-height: 1.45; }

@@ -1,0 +1,48 @@
+{
+ "scene": "S01_DeCada100",
+ "duration": 40.533,
+ "marks": [
+  {
+   "time": 0,
+   "title": "De cada cien",
+   "hold": 22.467
+  },
+  {
+   "time": 23.067,
+   "title": "Porcentajes que conviene reconocer",
+   "hold": 39.933
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 2.8,
+   "text": "La expresión por ciento quiere decir de cada cien. Mira esta cuadrícula de cien casillas.",
+   "fox": true
+  },
+  {
+   "start": 2.8,
+   "end": 9.833,
+   "text": "Si se pintan treinta y cinco de las cien, se pintó el treinta y cinco por ciento.",
+   "fox": false
+  },
+  {
+   "start": 9.833,
+   "end": 22.067,
+   "text": "Un porcentaje es una fracción con denominador cien. Y como aprendiste con los racionales, también se escribe como decimal: cero punto treinta y cinco.",
+   "fox": false
+  },
+  {
+   "start": 23.067,
+   "end": 30.733,
+   "text": "Algunos porcentajes conviene reconocerlos al instante, porque son fracciones muy conocidas.",
+   "fox": false
+  },
+  {
+   "start": 30.733,
+   "end": 39.533,
+   "text": "Por ejemplo, la mitad de algo es su cincuenta por ciento, y el todo completo es el cien por ciento.",
+   "fox": false
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "scene": "S02_Escaleras",
+ "duration": 60.533,
+ "marks": [
+  {
+   "time": 0,
+   "title": "Dos escaleras",
+   "hold": 59.933
+  }
+ ],
+ "captions": [
+  {
+   "start": 1.0,
+   "end": 11.7,
+   "text": "El truco sirve para cualquier progresión aritmética. Sumemos tres, cinco, siete, nueve y once, hechos de cuadritos: forman una escalera.",
+   "fox": true
+  },
+  {
+   "start": 11.7,
+   "end": 19.267,
+   "text": "Ahora una copia de la escalera, volteada, encima. Encajan perfecto: forman un rectángulo.",
+   "fox": false
+  },
+  {
+   "start": 19.267,
+   "end": 28.133,
+   "text": "El rectángulo mide cinco columnas por catorce: setenta cuadritos. Cada escalera es la mitad: treinta y cinco.",
+   "fox": false
+  },
+  {
+   "start": 28.133,
+   "end": 37.2,
+   "text": "En general: son n columnas, y cada columna mide el primero más el último. Esa es la fórmula de la suma.",
+   "fox": false
+  },
+  {
+   "start": 37.2,
+   "end": 48.567,
+   "text": "Si no se conoce el último término, se reemplaza: a sub n es a sub uno más n menos uno por d. Con la distributiva queda otra versión de la fórmula.",
+   "fox": false
+  },
+  {
+   "start": 48.567,
+   "end": 59.533,
+   "text": "Por ejemplo, los doce primeros términos de tres, cinco, siete suman doce por, seis más veintidós, entre dos: ciento sesenta y ocho.",
+   "fox": false
+  }
+ ]
+}

@@ -1,0 +1,403 @@
+% Resumen del mundo «Cruce de las Rectas» (Geometría Vectorial, mundo 1: sistemas de ecuaciones y matrices).
+% Lecciones geo-1, geo-2, geo-3, geo-4. Usa los ejemplos de los videos; el taller trae ejercicios nuevos.
+\documentclass[11pt,a4paper]{article}
+\usepackage{zuka-resumen}
+\zukacurso{geo}
+\zukamundo{1}{Cruce de las Rectas}{Sistemas de ecuaciones y matrices}
+
+% Matriz aumentada: \aug{cc|c}{filas}
+\newcommand{\aug}[2]{\left(\begin{array}{#1}#2\end{array}\right)}
+\newcommand{\op}[1]{\xrightarrow{\;#1\;}}
+\newcommand{\sm}[1]{\left(\begin{smallmatrix}#1\end{smallmatrix}\right)}
+% Que ningún título de nivel quede solo al pie de una página.
+\usepackage{needspace}
+\let\zukanivel\nivel
+\renewcommand{\nivel}[2]{\needspace{5\baselineskip}\zukanivel{#1}{#2}}
+\let\zukarepaso\repaso
+\renewcommand{\repaso}{\needspace{6\baselineskip}\zukarepaso}
+
+\begin{document}
+
+\portada{%
+Un \clave{sistema de ecuaciones lineales} pide los valores que cumplen varias ecuaciones a la vez. En el plano cada
+ecuación es una recta, y resolver el sistema es encontrar dónde se cruzan. En este mundo aprendiste a resolverlos
+por eliminación, a guardarlos en matrices, a operar con ellas y a decidir cuándo una matriz se puede invertir.}{%
+\item \textbf{Nivel 1-1.} Sistemas $2\times2$ y $3\times3$: eliminación, sustitución hacia atrás y su geometría.
+\item \textbf{Nivel 1-2.} El conjunto $\R^n$, suma y escalares, producto de matrices y la forma $A\vec x=\vec b$.
+\item \textbf{Nivel 1-3.} Transpuesta, matriz aumentada, formas escalonada y reducida, tipos de solución.
+\item \textbf{Nivel 1-4.} Matrices invertibles, fórmula $2\times2$, matrices elementales y $(AB)^{-1}=B^{-1}A^{-1}$.}
+
+\begin{clavebox}[LAS IDEAS QUE SOSTIENEN TODO EL MUNDO]
+\renewcommand{\arraystretch}{1.5}\begin{tabular}{@{}c@{\qquad}c@{\qquad}c@{}}
+$\displaystyle A\vec x=\vec b$ & $\displaystyle (m\times n)(n\times p)=m\times p$ & $\displaystyle AA^{-1}=A^{-1}A=I$\\[2pt]
+\small un sistema es una ecuación & \small fila por columna & \small la inversa deshace a $A$\\[4pt]
+\multicolumn{3}{c}{\small Las operaciones de fila no cambian las soluciones: se escalona y se lee el tipo de solución.}
+\end{tabular}
+\end{clavebox}
+
+%=====================================================================
+\nivel{1-1}{Sistemas $2\times2$ y $3\times3$ y su geometría}
+
+\begin{definicion}[Sistema lineal y solución]
+Un \clave{sistema lineal} $2\times2$ es un par de ecuaciones
+\[ \begin{cases} a_1x+b_1y=c_1\\ a_2x+b_2y=c_2 \end{cases} \]
+Una \clave{solución} es una pareja $(x,y)$ que cumple las dos ecuaciones a la vez. Como cada ecuación
+$ax+by=c$ dibuja una recta, las soluciones son los puntos que están \emph{en las dos rectas}.
+\end{definicion}
+
+\begin{figura}[Dos rectas del plano solo pueden cortarse, ser paralelas o ser la misma recta.]
+\pgfplotsset{trescasos/.style={zplot,width=5.3cm,height=4.6cm,xmin=-1,xmax=5,ymin=-2,ymax=5,
+  xtick={2,4},ytick={2,4},title style={align=center,font=\small}}}
+\begin{tikzpicture}
+\begin{axis}[trescasos,title={\textbf{una solución}\\ $x+y=3,\ x-y=1$}]
+  \addplot[zaccent,domain=-1:5] {3-x};
+  \addplot[zcoral,domain=-1:5] {x-1};
+  \addplot[only marks,mark=*,mark size=2pt,zink] coordinates {(2,1)};
+  \node[font=\footnotesize,anchor=west,fill=white,inner sep=1pt] at (axis cs:2.35,1) {$(2,1)$};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[trescasos,title={\textbf{ninguna}\\ $x+y=3,\ x+y=5$}]
+  \addplot[zaccent,domain=-1:5] {3-x};
+  \addplot[zcoral,domain=-1:5] {5-x};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[trescasos,title={\textbf{infinitas}\\ $x+y=3,\ 2x+2y=6$}]
+  \addplot[zaccent,domain=-1:5,line width=3pt,opacity=.35] {3-x};
+  \addplot[zcoral,domain=-1:5,dashed] {3-x};
+\end{axis}
+\end{tikzpicture}
+\end{figura}
+
+\begin{propiedad}[Los tres casos de un sistema $2\times2$]
+\begin{itemize}
+\item Las rectas se \clave{cortan}: solución única. Ocurre cuando $a_1b_2-a_2b_1\neq0$.
+\item Son \clave{paralelas}: no hay solución. Los coeficientes de $x$ y $y$ son proporcionales, pero el término independiente no.
+\item Son \clave{la misma recta}: infinitas soluciones. Una ecuación es un múltiplo de la otra.
+\end{itemize}
+\end{propiedad}
+
+\begin{ejemplo}[Eliminación: el ejemplo del video]
+Para resolver $x+y=3$, $x-y=1$ se suman las ecuaciones: la $y$ desaparece.
+\[ (x+y)+(x-y)=3+1\ \Longrightarrow\ 2x=4\ \Longrightarrow\ x=2,\qquad 2+y=3\ \Longrightarrow\ y=1. \]
+La solución es $(2,1)$, el punto donde se cruzan las rectas. \emph{Comprobación:} $2-1=1$. \checkmark
+\end{ejemplo}
+
+\subsection{Tres incógnitas: planos en el espacio}
+Con tres incógnitas cada ecuación $ax+by+cz=d$ es un \clave{plano}. Tres planos pueden tener en común
+un solo punto (solución única), una recta entera (infinitas soluciones) o nada (sin solución).
+El método es el mismo: eliminar hasta dejar una ecuación con una sola incógnita y \clave{sustituir hacia atrás}.
+
+\needspace{7\baselineskip}
+\begin{ejemplo}[Un sistema escalonado]
+\[ \begin{cases} x+y+z=6\\ \phantom{x+{}}y+z=5\\ \phantom{x+y+{}}z=3 \end{cases}
+\qquad z=3\ \Longrightarrow\ y=5-3=2\ \Longrightarrow\ x=6-2-3=1. \]
+La solución es $(x,y,z)=(1,2,3)$: los tres planos se encuentran en un solo punto.
+\end{ejemplo}
+
+\begin{ojo}[Comprobar en \emph{todas} las ecuaciones]
+Un punto que cumple una sola ecuación no es solución. Al terminar, reemplaza la solución en cada ecuación del sistema original.
+\end{ojo}
+
+%=====================================================================
+\nivel{1-2}{El conjunto $\R^n$ y el álgebra matricial}
+
+\begin{definicion}[El conjunto $\R^n$]
+$\R^n=\conjunto{(x_1,x_2,\dots,x_n)\tq x_i\in\R}$ es el conjunto de las listas ordenadas de $n$ números reales.
+En $\R^2$ son puntos o flechas del plano; en $\R^3$, del espacio. Se operan \clave{componente a componente}:
+\[ (x_1,\dots,x_n)+(y_1,\dots,y_n)=(x_1+y_1,\dots,x_n+y_n),\qquad r\,(x_1,\dots,x_n)=(rx_1,\dots,rx_n). \]
+\end{definicion}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{ejemplo}[Del video]
+\begin{gather*} (1,4,-2)+(3,0,5)=(4,4,3),\\ 3\,(2,-1,0)=(6,-3,0). \end{gather*}
+En el plano, la suma $(3,1)+(1,2)=(4,3)$ es la diagonal del paralelogramo que forman las dos flechas.
+\end{ejemplo}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.44\linewidth}\centering
+\begin{tikzpicture}[scale=0.85]
+  \draw[zline] (-0.3,-0.3) grid (4.4,3.4);
+  \draw[->,zmute] (-0.4,0) -- (4.6,0) node[right,font=\footnotesize] {$x$};
+  \draw[->,zmute] (0,-0.4) -- (0,3.6) node[above,font=\footnotesize] {$y$};
+  \draw[zmute,dashed] (3,1) -- (4,3); \draw[zmute,dashed] (1,2) -- (4,3);
+  \draw[->,line width=1.3pt,zaccent] (0,0) -- (3,1) node[midway,below,font=\small] {$\vec u$};
+  \draw[->,line width=1.3pt,zcoral] (0,0) -- (1,2) node[midway,left,font=\small] {$\vec v$};
+  \draw[->,line width=1.5pt,zink] (0,0) -- (4,3) node[pos=0.45,above=3pt,sloped,font=\small,fill=white,inner sep=1pt] {$\vec u+\vec v$};
+  \node[font=\footnotesize,anchor=west] at (4.05,3.05) {$(4,3)$};
+\end{tikzpicture}
+\end{minipage}
+
+\subsection{Matriz por vector: combinar columnas}
+Una matriz $m\times n$ es un arreglo de $m$ filas y $n$ columnas; $a_{ij}$ es la entrada de la fila $i$ y la columna $j$.
+Multiplicar una matriz por un vector \clave{combina sus columnas}: cada componente del vector dice cuánto tomar de cada columna.
+\[ \begin{pmatrix} 1 & 3\\ 2 & -1 \end{pmatrix}\begin{pmatrix} 2\\ 1 \end{pmatrix}
+=2\begin{pmatrix} 1\\ 2 \end{pmatrix}+1\begin{pmatrix} 3\\ -1 \end{pmatrix}=\begin{pmatrix} 5\\ 3 \end{pmatrix}. \]
+
+\begin{definicion}[Producto de matrices]
+Si $A$ es $m\times n$ y $B$ es $n\times p$, el producto $AB$ es la matriz $m\times p$ cuya entrada $(i,j)$ es
+la fila $i$ de $A$ por la columna $j$ de $B$:
+\[ (AB)_{ij}=a_{i1}b_{1j}+a_{i2}b_{2j}+\dots+a_{in}b_{nj}=\sum_{k=1}^{n}a_{ik}b_{kj}. \]
+Solo existe si las dimensiones \emph{de adentro} coinciden; las de afuera dan el tamaño del resultado.
+\end{definicion}
+
+\begin{figura}[Regla de las dimensiones: las de adentro se cancelan.]
+\begin{tikzpicture}[font=\Large,inner sep=1pt,x=1.35cm,y=1.2cm]
+  \node at (-0.24,0) {$($}; \node[text=zcoral] (m1) at (0,0) {$m$}; \node at (0.36,0) {$\times$};
+  \node[text=zaccent] (n1) at (0.7,0) {$n$}; \node at (0.92,0) {$)$};
+  \node at (1.28,0) {$($}; \node[text=zaccent] (n2) at (1.5,0) {$n$}; \node at (1.86,0) {$\times$};
+  \node[text=zcoral] (p1) at (2.2,0) {$p$}; \node at (2.42,0) {$)$};
+  \node at (3.0,0) {$=$};
+  \node at (3.56,0) {$($}; \node[text=zcoral] at (3.8,0) {$m$}; \node at (4.16,0) {$\times$};
+  \node[text=zcoral] at (4.5,0) {$p$}; \node at (4.72,0) {$)$};
+  \draw[zaccent,line width=0.9pt] (0.72,-0.3) -- (0.72,-0.5) -- (1.6,-0.5) -- (1.6,-0.3);
+  \node[font=\footnotesize,text=zaccent] at (1.1,-0.8) {deben ser iguales};
+  \draw[zcoral,line width=0.9pt] (0,0.32) -- (0,0.52) -- (2.2,0.52) -- (2.2,0.32);
+  \node[font=\footnotesize,text=zcoral] at (1.1,0.8) {quedan las de afuera};
+  \draw[->,zcoral,line width=0.8pt] (2.3,0.6) to[bend left=25] (4.15,0.38);
+\end{tikzpicture}
+\end{figura}
+
+\begin{ejemplo}[Fila por columna]
+\[ \begin{pmatrix} 1 & 2\\ 3 & 0 \end{pmatrix}\begin{pmatrix} 4\\ 5 \end{pmatrix}
+=\begin{pmatrix} 1\cdot4+2\cdot5\\ 3\cdot4+0\cdot5 \end{pmatrix}=\begin{pmatrix} 14\\ 12 \end{pmatrix}
+\qquad (2\times2)(2\times1)=2\times1. \]
+\end{ejemplo}
+
+\begin{clavebox}[UN SISTEMA ENTERO EN UNA ECUACIÓN]
+$\displaystyle \begin{cases} x+3y=5\\ 2x-y=3 \end{cases}\quad\Longleftrightarrow\quad
+\underbrace{\begin{pmatrix} 1 & 3\\ 2 & -1 \end{pmatrix}}_{A}\underbrace{\begin{pmatrix} x\\ y \end{pmatrix}}_{\vec x}
+=\underbrace{\begin{pmatrix} 5\\ 3 \end{pmatrix}}_{\vec b}$
+\end{clavebox}
+
+\begin{ojo}[El orden importa]
+En general $AB\neq BA$, y puede que uno de los dos productos ni siquiera exista. Tampoco vale cancelar:
+$AB=AC$ no implica $B=C$.
+\end{ojo}
+
+%=====================================================================
+\nivel{1-3}{Transpuesta, sistemas $m\times n$ y tipos de solución}
+
+\begin{definicion}[Transpuesta]
+La \clave{transpuesta} de $A$ ($m\times n$) es la matriz $A^T$ ($n\times m$) que cambia filas por columnas:
+$(A^T)_{ij}=a_{ji}$. Si $A^T=A$, la matriz es \clave{simétrica}.
+\[ \begin{pmatrix} 1 & 2 & 3\\ 4 & 5 & 6 \end{pmatrix}^{T}=\begin{pmatrix} 1 & 4\\ 2 & 5\\ 3 & 6 \end{pmatrix}. \]
+\end{definicion}
+
+\begin{propiedad}[Propiedades de la transpuesta]
+\[ (A^T)^T=A,\qquad (A+B)^T=A^T+B^T,\qquad (rA)^T=rA^T,\qquad (AB)^T=B^TA^T. \]
+\end{propiedad}
+
+\subsection{Matriz aumentada y operaciones de fila}
+Un sistema de $m$ ecuaciones y $n$ incógnitas se guarda en su \clave{matriz aumentada} $[A\mid\vec b]$.
+Tres \clave{operaciones elementales de fila} no cambian sus soluciones:
+\begin{center}
+\begin{tabular}{@{}l l@{}}
+\toprule
+Operación & Notación\\ \midrule
+intercambiar dos filas & $F_i\leftrightarrow F_j$\\
+multiplicar una fila por $k\neq0$ & $F_i\leftarrow kF_i$\\
+sumar a una fila un múltiplo de otra & $F_i\leftarrow F_i+kF_j$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{definicion}[Formas escalonada y reducida]
+Una matriz está en \clave{forma escalonada} si las filas de ceros van abajo y el primer número no nulo de cada fila
+(el \clave{pivote}) está a la derecha del pivote de la fila de arriba. Está en \clave{forma reducida} si además cada
+pivote vale $1$ y es lo único no nulo de su columna.
+\end{definicion}
+
+\begin{ejemplo}[Del video: escalonar y reducir]
+\[ \aug{cc|c}{1 & 1 & 3\\ 1 & -1 & 1}\op{F_2-F_1}\aug{cc|c}{1 & 1 & 3\\ 0 & -2 & -2}
+\op{-\frac12F_2}\aug{cc|c}{1 & 1 & 3\\ 0 & 1 & 1}\op{F_1-F_2}\aug{cc|c}{1 & 0 & 2\\ 0 & 1 & 1} \]
+En la forma reducida la solución se lee directo: $x=2$, $y=1$.
+\end{ejemplo}
+
+\begin{figura}[Cómo leer el tipo de solución en la forma escalonada.]
+\begin{tikzpicture}[font=\small,
+  caja/.style={draw=zaccent,line width=0.8pt,rounded corners=3pt,fill=zaccent!6,align=center,inner sep=5pt},
+  fin/.style={rounded corners=3pt,align=center,inner sep=5pt,text width=38mm}]
+  \node[caja] (e) at (0,0) {¿Hay una fila\\ $\begin{array}{ccc|c}0&\cdots&0&c\end{array}$ con $c\neq0$?};
+  \node[fin,fill=zbad!12] (n) at (5.4,0) {\textbf{sin solución}\\ ($0=c$ es imposible)};
+  \node[caja] (p) at (0,-2.1) {¿Toda columna de\\ incógnita tiene pivote?};
+  \node[fin,fill=zok!14] (u) at (5.4,-2.1) {\textbf{solución única}};
+  \node[fin,fill=zsun!22] (i) at (0,-4.0) {\textbf{infinitas soluciones}\\ (variables libres)};
+  \draw[->,zink] (e) -- node[above,font=\footnotesize] {sí} (n);
+  \draw[->,zink] (e) -- node[right,font=\footnotesize] {no} (p);
+  \draw[->,zink] (p) -- node[above,font=\footnotesize] {sí} (u);
+  \draw[->,zink] (p) -- node[right,font=\footnotesize] {no} (i);
+\end{tikzpicture}
+\end{figura}
+
+\begin{ejemplo}[Una variable libre]
+\[ \aug{ccc|c}{1 & -1 & 2 & 1\\ 2 & -2 & 5 & 4}\op{F_2-2F_1}\aug{ccc|c}{1 & -1 & 2 & 1\\ 0 & 0 & 1 & 2}
+\op{F_1-2F_2}\aug{ccc|c}{1 & -1 & 0 & -3\\ 0 & 0 & 1 & 2} \]
+La columna de $y$ no tiene pivote: $y=t$ es \clave{libre}. La solución general es $(x,y,z)=(-3+t,\ t,\ 2)$, $t\in\R$.
+\end{ejemplo}
+
+\needspace{5\baselineskip}
+\begin{ojo}[Una fila de ceros no es lo mismo que $0=c$]
+La fila $\begin{array}{ccc|c}0&0&0&0\end{array}$ dice $0=0$: no estorba. La fila $\begin{array}{ccc|c}0&0&0&5\end{array}$ dice $0=5$: el sistema
+no tiene solución.
+\end{ojo}
+
+%=====================================================================
+\nivel{1-4}{Matrices invertibles y matrices elementales}
+
+\begin{definicion}[Matriz invertible]
+Una matriz cuadrada $A$ ($n\times n$) es \clave{invertible} si existe una matriz $A^{-1}$ tal que
+\[ AA^{-1}=A^{-1}A=I_n. \]
+Es como dividir entre un número: $A^{-1}$ deshace lo que hace $A$. Si existe, es única, y $A\vec x=\vec b$ tiene la
+única solución $\vec x=A^{-1}\vec b$.
+\end{definicion}
+
+\begin{propiedad}[Inversa de una matriz $2\times2$]
+Si $ad-bc\neq0$:\qquad
+$\displaystyle \begin{pmatrix} a & b\\ c & d \end{pmatrix}^{-1}=\frac{1}{ad-bc}\begin{pmatrix} d & -b\\ -c & a \end{pmatrix}.$
+\quad Si $ad-bc=0$, no hay inversa.
+\end{propiedad}
+
+\begin{ejemplo}[Del video]
+Para $A=\begin{pmatrix} 3 & 1\\ 5 & 2 \end{pmatrix}$: $ad-bc=6-5=1$, así que
+$A^{-1}=\begin{pmatrix} 2 & -1\\ -5 & 3 \end{pmatrix}$. \emph{Comprobación:}
+\[ \begin{pmatrix} 3 & 1\\ 5 & 2 \end{pmatrix}\begin{pmatrix} 2 & -1\\ -5 & 3 \end{pmatrix}
+=\begin{pmatrix} 6-5 & -3+3\\ 10-10 & -5+6 \end{pmatrix}=\begin{pmatrix} 1 & 0\\ 0 & 1 \end{pmatrix}=I.\ \checkmark \]
+\end{ejemplo}
+
+\begin{definicion}[Matriz elemental]
+Una \clave{matriz elemental} $E$ es la identidad después de aplicarle \emph{una} operación de fila.
+Multiplicar $EA$ hace esa misma operación sobre $A$.
+\end{definicion}
+
+\begin{ejemplo}[Una elemental y su inversa]
+La elemental de $F_2\leftarrow F_2-2F_1$ se deshace con $F_2\leftarrow F_2+2F_1$:
+\[ E=\begin{pmatrix} 1 & 0\\ -2 & 1 \end{pmatrix},\qquad E^{-1}=\begin{pmatrix} 1 & 0\\ 2 & 1 \end{pmatrix},\qquad
+EE^{-1}=\begin{pmatrix} 1 & 0\\ -2+2 & 1 \end{pmatrix}=I. \]
+\end{ejemplo}
+
+\begin{figura}[Llevar $A$ a la identidad con elementales: el producto de todas ellas es $A^{-1}$.]
+\begin{tikzpicture}[font=\small,m/.style={draw=zaccent,fill=zaccent!8,rounded corners=3pt,minimum width=12mm,minimum height=8mm}]
+  \node[m] (a) at (0,0) {$A$};
+  \node[m] (b) at (3,0) {$E_1A$};
+  \node[m] (c) at (6,0) {$E_2E_1A$};
+  \node at (8.1,0) {$\cdots$};
+  \node[m,draw=zok,fill=zok!12] (d) at (10.3,0) {$E_k\cdots E_1A=I$};
+  \draw[->,zink] (a) -- node[above,font=\footnotesize] {$E_1$} (b);
+  \draw[->,zink] (b) -- node[above,font=\footnotesize] {$E_2$} (c);
+  \draw[->,zink] (c) -- (7.6,0); \draw[->,zink] (8.6,0) -- (d);
+  \draw[decorate,decoration={brace,mirror,amplitude=5pt},zmute] (-0.4,-0.7) -- (11.6,-0.7)
+     node[midway,below=6pt,font=\footnotesize,text=zink] {$A^{-1}=E_k\cdots E_2E_1$\qquad y\qquad $A=E_1^{-1}E_2^{-1}\cdots E_k^{-1}$};
+\end{tikzpicture}
+\end{figura}
+
+\begin{propiedad}[Teorema de la matriz invertible (primera versión)]
+Para una matriz $A$ de $n\times n$ son equivalentes:
+\begin{enumerate}[label=(\alph*)]
+\item $A$ es invertible;
+\item $A\vec x=\vec b$ tiene solución única para cada $\vec b$; en particular, $A\vec x=\vec 0$ solo tiene la solución $\vec x=\vec 0$;
+\item la forma reducida de $A$ es $I_n$;
+\item $A$ es un producto de matrices elementales.
+\end{enumerate}
+Además, si $A$ y $B$ son invertibles: \quad $(AB)^{-1}=B^{-1}A^{-1}$,\quad $(A^{-1})^{-1}=A$,\quad $(A^T)^{-1}=(A^{-1})^T$.
+\end{propiedad}
+
+\begin{ojo}[La inversa de un producto va al revés]
+$(AB)^{-1}=B^{-1}A^{-1}$, no $A^{-1}B^{-1}$: para deshacer «primero $B$, luego $A$» se deshace primero $A$.
+Como al vestirse: medias y luego zapatos; al desvestirse, zapatos y luego medias.
+\end{ojo}
+
+%=====================================================================
+\repaso
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}l L@{}}
+\toprule
+Concepto & Fórmula o regla\\ \midrule
+Tres casos $2\times2$ & se cortan ($a_1b_2-a_2b_1\neq0$), paralelas, la misma recta\\
+Suma en $\R^n$ & componente a componente; $r\vec x$ multiplica cada componente\\
+Producto $AB$ & $(AB)_{ij}=\sum_k a_{ik}b_{kj}$;\quad $(m\times n)(n\times p)=m\times p$\\
+Matriz por vector & $A\vec x=x_1\vec a_1+\dots+x_n\vec a_n$ (combinación de columnas)\\
+Transpuesta & $(A^T)_{ij}=a_{ji}$;\quad $(AB)^T=B^TA^T$\\
+Operaciones de fila & $F_i\leftrightarrow F_j$,\quad $F_i\leftarrow kF_i$ ($k\neq0$),\quad $F_i\leftarrow F_i+kF_j$\\
+Tipo de solución & fila $0\cdots0\mid c\neq0$: ninguna; columna sin pivote: infinitas; si no, única\\
+Inversa $2\times2$ & $\frac{1}{ad-bc}\begin{pmatrix} d & -b\\ -c & a\end{pmatrix}$ si $ad-bc\neq0$\\
+Inversas & $(AB)^{-1}=B^{-1}A^{-1}$;\quad $\vec x=A^{-1}\vec b$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{ojo}[Errores frecuentes]
+\begin{itemize}
+\item Dar como solución un punto que cumple solo una de las ecuaciones.
+\item Multiplicar matrices entrada por entrada, o creer que $AB=BA$.
+\item Hacer $F_i\leftarrow 0\cdot F_i$: multiplicar una fila por cero no es una operación válida.
+\item Confundir la fila $0=0$ (no estorba) con $0=c$, $c\neq0$ (sistema sin solución).
+\item Escribir $(AB)^{-1}=A^{-1}B^{-1}$ o $(AB)^T=A^TB^T$: en los dos casos el orden se invierte.
+\end{itemize}
+\end{ojo}
+
+%=====================================================================
+\taller
+\begin{ejercicios}[itemsep=6pt]
+\item Sin resolver, decide si cada sistema tiene una solución, ninguna o infinitas. Justifica. Después resuelve
+  por eliminación los que tengan solución única y comprueba en las dos ecuaciones.
+  \begin{ejercicios}
+  \item $2x-y=4,\ \ -6x+3y=-12$ \quad (b) $x+4y=2,\ \ 2x+8y=5$ \quad (c) $3x+y=1,\ \ x-y=3$ \quad (d) $2x-3y=7,\ \ x+2y=0$
+  \end{ejercicios}
+\item Dibuja en un mismo plano las rectas $x+2y=5$ y $2x-y=0$. Lee en la gráfica el punto de corte y verifícalo
+  algebraicamente.
+\item Resuelve el sistema $3\times3$: \quad $x-y+2z=5,\quad 2x+y-z=1,\quad x+3y+z=10$.
+\item Sean $\vec u=(2,-1,3)$ y $\vec v=(0,4,-2)$.
+  \begin{ejercicios}
+  \item Calcula $3\vec u-2\vec v$.
+  \item Calcula $\begin{pmatrix} 2 & -1 & 0\\ 1 & 3 & 4 \end{pmatrix}\begin{pmatrix} 1\\ 2\\ -1 \end{pmatrix}$ como combinación de las columnas de la matriz.
+  \end{ejercicios}
+\item Una papelería anota sus ventas de dos días en la matriz $V$ (filas: lunes y martes; columnas: cuadernos,
+  lápices y borradores). Los precios, en miles de pesos, están en $\vec p$:
+  \ $V=\begin{pmatrix} 3 & 10 & 4\\ 5 & 6 & 2 \end{pmatrix}$, \ $\vec p=(4,\ 1,\ 0.5)^T$.
+  Calcula $V\vec p$ e interpreta cada componente. ¿Qué día se vendió más?
+\item Sean $A=\begin{pmatrix} 1 & 2\\ 0 & 1 \end{pmatrix}$ y $B=\begin{pmatrix} 1 & 0\\ 3 & 1 \end{pmatrix}$.
+  \begin{ejercicios}
+  \item Calcula $AB$ y $BA$. ¿Son iguales?
+  \item Si $C$ es $3\times2$ y $D$ es $2\times4$, ¿cuál de los productos $CD$ y $DC$ existe y de qué tamaño es?
+  \end{ejercicios}
+\item Sea $A=\begin{pmatrix} 1 & -2\\ 3 & 0\\ 4 & 5 \end{pmatrix}$. Calcula $A^T$ y $A^TA$, y explica, usando las propiedades de la
+  transpuesta, por qué $A^TA$ siempre es simétrica.
+\item Escribe la matriz aumentada, llévala a forma reducida y da la solución general:
+  \begin{ejercicios}
+  \item $x+2y-z=3,\ \ 2x+4y+z=9$.
+  \item ¿Para qué valores de $k$ tiene solución el sistema $x+y=2$, $3x+3y=k$? ¿Cuántas tiene en ese caso?
+  \end{ejercicios}
+\item Sea $A=\begin{pmatrix} 4 & 3\\ 1 & 1 \end{pmatrix}$.
+  \begin{ejercicios}
+  \item Halla $A^{-1}$ con la fórmula $2\times2$ y compruébala.
+  \item Usa $A^{-1}$ para resolver $4x+3y=5$, $x+y=2$.
+  \item Escribe la matriz elemental $3\times3$ que hace $F_3\leftarrow F_3-4F_1$ y su inversa.
+  \end{ejercicios}
+\item En un cine hay entradas de niño (\$8\,000), de adulto (\$12\,000) y de adulto mayor (\$6\,000). En una función
+  se vendieron $100$ entradas por un total de \$880\,000, y hubo el doble de adultos que de niños. Plantea un sistema
+  $3\times3$ y halla cuántas entradas de cada tipo se vendieron.
+\end{ejercicios}
+
+\respuestas
+\begin{respuestascortas}
+\begin{soluciones}
+\item (a) Infinitas: la segunda es $-3$ veces la primera. (b) Ninguna: el doble de la primera es $2x+8y=4\neq5$.
+  (c) Única: sumando, $4x=4$; $(1,-2)$. (d) Única: $x=-2y$ da $-7y=7$; $(2,-1)$.
+\item Se cortan en $(1,2)$: $1+4=5$ y $2-2=0$.
+\item $(x,y,z)=(1,2,3)$.
+\item (a) $(6,-11,13)$. (b) $1\sm{2\\1}+2\sm{-1\\3}-1\sm{0\\4}=\sm{0\\3}$.
+\item $V\vec p=(24,\,27)$: el lunes se vendieron \$24\,000 y el martes \$27\,000; vendió más el martes.
+\item (a) $AB=\sm{7&2\\3&1}$, $BA=\sm{1&2\\3&7}$: no son iguales.
+  (b) Solo $CD$, de tamaño $3\times4$.
+\item $A^T=\sm{1&3&4\\-2&0&5}$, $A^TA=\sm{26&18\\18&29}$. Es simétrica porque
+  $(A^TA)^T=A^T(A^T)^T=A^TA$.
+\item (a) $F_2-2F_1$ da $3z=3$: $z=1$, $x=4-2t$, $y=t$, $t\in\R$.
+  (b) Solo si $k=6$; entonces hay infinitas soluciones.
+\item (a) $ad-bc=1$: $A^{-1}=\sm{1&-3\\-1&4}$. (b) $\vec x=A^{-1}(5,2)=(-1,3)$.
+  (c) $E=\sm{1&0&0\\0&1&0\\-4&0&1}$, $E^{-1}=\sm{1&0&0\\0&1&0\\4&0&1}$.
+\item $n+a+m=100$, $8n+12a+6m=880$, $a=2n$: $20$ de niño, $40$ de adulto y $40$ de adulto mayor.
+\end{soluciones}
+\end{respuestascortas}
+
+\end{document}

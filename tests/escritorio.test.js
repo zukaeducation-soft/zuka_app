@@ -66,7 +66,7 @@ test('arriba va el nombre «Zuka» en letra, sin el cerebro de puntos', () => {
 test('en el computador el juego se dibuja con ancho de celular y se agranda para llenar el espacio', () => {
   const k = loadScripts(['js/games/kit.js']);
   const zoom = get(k, 'zoomScale');
-  assert.equal(get(k, 'DESK_W'), 480);
+  assert.equal(get(k, 'DESK_W'), 380);
   assert.equal(zoom(480, 400, 800, 1000), 800 / 480);
   assert.equal(zoom(480, 400, 800, 500), 500 / 400);
   assert.equal(zoom(480, 400, 2000, 2000), 2);

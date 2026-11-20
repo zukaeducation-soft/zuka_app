@@ -1,0 +1,71 @@
+1
+00:00:08,900 --> 00:00:20,067
+El día cero, Ana sabe un secreto. El día uno se lo cuenta a tres amigos. El día dos, cada uno se lo cuenta a tres personas más, y así cada día.
+
+2
+00:00:20,067 --> 00:00:31,433
+Cuando cada término sale de multiplicar el anterior por el mismo número, la sucesión es una progresión geométrica. Ese número fijo es la razón, r.
+
+3
+00:00:31,433 --> 00:00:40,567
+Se llama razón porque es el cociente de dos términos seguidos, como las razones que comparan dividiendo.
+
+4
+00:00:41,567 --> 00:00:53,200
+La razón puede ser una fracción. Un medicamento en la sangre baja a la mitad cada seis horas: ochocientos, cuatrocientos, doscientos, cien miligramos.
+
+5
+00:00:53,200 --> 00:01:04,500
+Y puede ser negativa: uno, menos dos, cuatro, menos ocho. Por la ley de signos, al multiplicar por un negativo el signo cambia cada vez.
+
+6
+00:01:06,500 --> 00:01:15,933
+Para hallar un término lejano de tres, seis, doce no hace falta escribirlos todos: basta contar las multiplicaciones.
+
+7
+00:01:15,933 --> 00:01:27,167
+Al término dos se llega con una multiplicación por dos; al cinco, con cuatro. Multiplicar cuatro veces por dos es dos a la cuarta: una potencia.
+
+8
+00:01:27,167 --> 00:01:35,433
+Al término n se llega con n menos una multiplicaciones por r. Esa es la fórmula del término general.
+
+9
+00:01:35,433 --> 00:01:43,233
+El término siete es tres por dos a la sexta: tres por sesenta y cuatro, ciento noventa y dos.
+
+10
+00:01:43,233 --> 00:01:53,400
+Compara con la aritmética: allá los saltos se suman, n menos una veces d. Aquí se multiplican: r elevado a n menos uno.
+
+11
+00:01:55,400 --> 00:02:05,633
+Dos premios. El primero da cien pesos el primer día y cada día cien más. El segundo da un peso el primer día y cada día el doble.
+
+12
+00:02:05,633 --> 00:02:13,933
+Al principio el premio A gana con mucha ventaja. Dibujemos los dos día por día, en cientos de pesos.
+
+13
+00:02:13,933 --> 00:02:25,733
+El día diez, el premio A da mil pesos y el B quinientos doce. Pero el día doce el B ya da dos mil cuarenta y ocho, y desde ahí A no lo vuelve a alcanzar.
+
+14
+00:02:25,733 --> 00:02:37,433
+Sumar siempre lo mismo crece en línea recta. Multiplicar por lo mismo crece cada vez más rápido. Esa curva volverá con la función exponencial.
+
+15
+00:02:39,430 --> 00:02:51,530
+Entre dos y ciento sesenta y dos se quieren meter tres medios geométricos. Con tres números en medio hay cuatro multiplicaciones por la razón.
+
+16
+00:02:51,530 --> 00:03:05,297
+Hace falta un número que, multiplicado cuatro veces por sí mismo, dé ochenta y uno. Es la raíz cuarta de ochenta y uno: tres, porque tres por tres por tres por tres es ochenta y uno.
+
+17
+00:03:05,297 --> 00:03:19,497
+Pero menos tres también sirve, porque un negativo elevado a una potencia par da positivo. Con r igual a menos tres, los medios son menos seis, dieciocho y menos cincuenta y cuatro.
+
+18
+00:03:21,500 --> 00:03:31,900
+Una progresión geométrica multiplica siempre por la misma razón, y el término n se alcanza con n menos una multiplicaciones.

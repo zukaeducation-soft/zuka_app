@@ -77,7 +77,8 @@ def pcm_rate(mime):
 def gemini_tts(text):
     from google import genai
     from google.genai import types, errors
-    client = genai.Client(api_key=api_key())
+    # speechConfig solo existe en v1beta (este SDK usa v1 por defecto y la API responde «Unknown name speechConfig»).
+    client = genai.Client(api_key=api_key(), http_options={'api_version': 'v1beta'})
     cfg = types.GenerateContentConfig(temperature=TEMP, response_modalities=['audio'],
         speech_config=types.SpeechConfig(voice_config=types.VoiceConfig(prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=VOICE))))
     contents = [types.Content(role='user', parts=[types.Part.from_text(text='## Transcript:\n' + text)])]
@@ -102,6 +103,7 @@ def gemini_tts(text):
                 s = float(next(g for g in wait.groups() if g)) + 2 if wait else 65
                 log(f'  límite por minuto: espero {s:.0f} s'); time.sleep(s); continue
             if code and code >= 500 and intento < 3: log(f'  error {code} del servidor; reintento'); time.sleep(20); continue
+            log(f'  error de Gemini: {msg[:300]}')
             raise
 
 def fake_tts(text):

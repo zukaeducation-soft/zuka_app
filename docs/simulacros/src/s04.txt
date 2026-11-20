@@ -1,0 +1,503 @@
+== LECTURA
+## Texto Uno
+p: Cuando murió doña Rosalba, en una vereda a orillas de un río amazónico, sus nietos heredaron una casa, dos canoas y un silencio. Era la última persona de su comunidad que hablaba con fluidez la lengua de sus abuelos. Los jóvenes la entendían a medias y respondían en español. Con ella no desapareció solo una forma de saludar: se cerró una biblioteca que nunca había sido escrita.
+p: No es un caso aislado. Los lingüistas calculan que en el mundo se hablan cerca de siete mil lenguas y que casi la mitad podría dejar de usarse antes de que termine este siglo. La mayoría no muere por una catástrofe, sino por abandono: los padres, convencidos de que la lengua propia será un estorbo para sus hijos en la escuela y en el trabajo, dejan de transmitirla. Basta una generación que no la aprenda en casa para que la cadena se rompa.
+p: ¿Qué se pierde? Para empezar, conocimiento. Muchas lenguas indígenas tienen decenas de nombres para plantas que la ciencia apenas ha clasificado, y en esos nombres viajan sus usos: cuál cura la fiebre, cuál envenena, cuál anuncia la creciente del río. <<Cada lengua es un inventario de soluciones que un pueblo encontró para vivir en un lugar>>, explica la lingüista Yaneth Tumiñá. <<Cuando se apaga, ese inventario no se traduce: se borra>>.
+p: También se pierde una manera de ordenar el mundo. Hay lenguas que no dicen <<izquierda>> y <<derecha>>, sino que ubican todo según los puntos cardinales, de modo que sus hablantes saben siempre dónde queda el norte. Otras obligan a indicar, con una terminación del verbo, si lo que se cuenta fue visto por quien habla o si se lo contaron. En ellas, mentir sobre la fuente exige un esfuerzo gramatical.
+p: Los intentos de revertir la tendencia son tan variados como sus resultados. Hay escuelas donde las primeras letras se enseñan en la lengua de la comunidad, emisoras que la usan para transmitir partidos de fútbol y abuelos contratados como maestros. Tumiñá desconfía, en cambio, de los proyectos que se limitan a grabar diccionarios: <<Un diccionario es un museo. Sirve para recordar, no para vivir. Una lengua está viva cuando los niños la usan para pelear por un balón>>.
+p: La pregunta de fondo es incómoda. Nadie puede obligar a una familia a hablar una lengua que asocia con la pobreza y la burla. Lo que sí puede cambiar es esa asociación. Allí donde hablar la lengua propia dejó de ser motivo de vergüenza, los padres volvieron a usarla sin que nadie se lo pidiera.
+src: Texto elaborado para este simulacro.
+
+q: En el párrafo 1, al decir que los nietos heredaron <<un silencio>>, el autor da a entender que:
+@ Con la muerte de la abuela dejó de escucharse la lengua de la comunidad
+@ Los nietos decidieron no hablar más de su abuela
+@ En la vereda estaba prohibido hablar en español
+@ La abuela era una mujer callada y reservada
+q: La expresión <<se cerró una biblioteca que nunca había sido escrita>> (párrafo 1) significa que:
+@ Se perdió un saber que solo se conservaba de manera oral
+@ La comunidad se quedó sin un lugar donde guardar sus libros
+@ La abuela nunca aprendió a leer ni a escribir
+@ Los libros de la comunidad estaban escritos en español
+q: El párrafo 1 cumple la función de:
+@ Introducir el tema por medio de un caso particular
+@ Presentar la opinión de una especialista
+@ Dar cifras sobre las lenguas que desaparecen
+@ Proponer soluciones al problema
+q: Según el párrafo 2, la causa más frecuente de la desaparición de una lengua es:
+@ Que los padres dejan de enseñarla a sus hijos
+@ Que ocurre una catástrofe natural
+@ Que los lingüistas no alcanzan a estudiarla
+@ Que la escuela prohíbe su uso
+q: En el párrafo 2, la palabra <<\sub{estorbo}>> significa:
+@ Obstáculo
+@ Vergüenza
+@ Ventaja
+@ Recuerdo
+q: En la frase <<para que la \sub{cadena} se rompa>> (párrafo 2), la palabra subrayada alude a:
+@ La transmisión de la lengua de una generación a otra
+@ La relación entre la escuela y el trabajo
+@ El orden de las palabras en una oración
+@ La unión entre las siete mil lenguas del mundo
+q: De acuerdo con el párrafo 2, los padres dejan de transmitir su lengua porque:
+@ Creen que perjudicará a sus hijos en el estudio y en el empleo
+@ La han olvidado por falta de uso
+@ Consideran que el español es más fácil de aprender
+@ Los lingüistas les recomiendan no hacerlo
+q: La pregunta con la que comienza el párrafo 3 sirve para:
+@ Anunciar el asunto que se va a desarrollar a continuación
+@ Expresar una duda que el autor no logra resolver
+@ Cuestionar los cálculos de los lingüistas
+@ Dirigirse a los padres que abandonan su lengua
+q: El ejemplo de los nombres de las plantas (párrafo 3) ilustra que:
+@ El vocabulario de una lengua guarda saberes prácticos sobre el entorno
+@ Las lenguas indígenas tienen más palabras que el español
+@ La ciencia ha clasificado mal muchas plantas
+@ Los pueblos indígenas se dedican únicamente a la agricultura
+q: Con la afirmación <<ese inventario no se traduce: se borra>> (párrafo 3), Tumiñá sostiene que el conocimiento de una lengua que desaparece:
+@ No pasa a otra lengua, sino que se pierde
+@ Queda guardado en los diccionarios
+@ Puede recuperarse con ayuda de la ciencia
+@ Es imposible de entender para otros pueblos
+q: De los ejemplos del párrafo 4 se puede inferir que una lengua:
+@ Influye en aquello a lo que sus hablantes prestan atención
+@ Impide a sus hablantes aprender otros idiomas
+@ Determina el lugar donde viven sus hablantes
+@ Es más precisa mientras menos hablantes tiene
+q: La afirmación <<mentir sobre la fuente exige un esfuerzo gramatical>> (párrafo 4) se explica porque en esas lenguas:
+@ Al hablar siempre hay que indicar cómo se supo lo que se cuenta
+@ Las mentiras se castigan con severidad
+@ No existen palabras para referirse a los rumores
+@ Los verbos son más difíciles de conjugar que en español
+q: La relación entre los párrafos 3 y 4 es que:
+@ Cada uno presenta un tipo distinto de pérdida
+@ El cuarto contradice lo afirmado en el tercero
+@ El tercero plantea un problema y el cuarto su solución
+@ El cuarto repite los ejemplos del tercero
+q: Son iniciativas mencionadas en el párrafo 5 para mantener vivas las lenguas, EXCEPTO:
+@ Traducir al español los relatos de los abuelos
+@ Enseñar a leer y escribir en la lengua de la comunidad
+@ Usar la lengua en transmisiones de radio
+@ Vincular a los abuelos como maestros
+q: En el párrafo 5, la palabra <<\sub{revertir}>> significa:
+@ Cambiar el rumbo de
+@ Repetir
+@ Explicar
+@ Acelerar
+q: Cuando Tumiñá afirma que <<un diccionario es un museo>> (párrafo 5), quiere decir que un diccionario:
+@ Conserva la lengua, pero no logra que se use
+@ Es un objeto costoso y difícil de conseguir
+@ Solo interesa a los turistas y a los investigadores
+@ Es la mejor manera de salvar una lengua
+q: Con la expresión <<para pelear por un balón>> (párrafo 5), Tumiñá se refiere al uso de la lengua:
+@ De manera espontánea en la vida diaria de los niños
+@ En las competencias deportivas oficiales
+@ Para resolver conflictos entre comunidades
+@ En las clases de educación física
+q: Según el párrafo 6, la pregunta de fondo es <<incómoda>> porque:
+@ La conservación de la lengua depende de decisiones familiares que no se pueden imponer
+@ Las comunidades no quieren hablar del tema con extraños
+@ Los lingüistas no se ponen de acuerdo sobre las cifras
+@ Las lenguas indígenas son difíciles de enseñar en la escuela
+q: De acuerdo con el párrafo 6, lo que sí es posible cambiar es:
+@ La mala imagen asociada al uso de la lengua propia
+@ La obligación legal de hablar español
+@ El número de lenguas que existen en el mundo
+@ La manera como las familias educan a sus hijos
+q: Del párrafo 6 se puede concluir que, para que una lengua se siga transmitiendo, resulta más eficaz:
+@ Que hablarla sea motivo de orgullo y no de burla
+@ Que una ley obligue a usarla en casa
+@ Que se publiquen más diccionarios
+@ Que los padres dejen de enseñar español
+q: De las siguientes iniciativas, la más coherente con las ideas de Tumiñá es:
+@ Un campeonato de fútbol infantil que se juega y se narra en la lengua de la comunidad
+@ Una grabación de todas las palabras de la lengua, guardada en un archivo
+@ Una exposición de fotografías antiguas de la comunidad
+@ Un curso de español para los abuelos de la vereda
+
+## Texto Dos
+p: Mi abuela me hablaba en una lengua y yo le contestaba en otra. Durante años creí que así eran todas las abuelas: señoras que decían cosas redondas y antiguas, a las que uno respondía con las palabras planas de la escuela. Nos entendíamos lo suficiente para querernos y no lo bastante para discutir.
+p: En el colegio aprendí pronto que esa lengua era un defecto. No me lo dijo nadie; no hizo falta. Bastaba ver la sonrisa de los compañeros cuando mi madre llegaba a recogerme y se le escapaba una palabra. Aprendí a caminar unos pasos adelante de ella. A los diez años ya era experto en una disciplina triste: fingir que no entendía.
+p: Fingir tiene un problema: funciona. A fuerza de no usarla, la lengua se me fue encogiendo como un saco lavado con agua caliente. Hoy me queda para pedir comida y para los regaños, que son lo último que se olvida. Cuando mi abuela enfermó quise decirle algo que estuviera a su altura y descubrí que solo tenía palabras de niño.
+p: Desconfío de quienes celebran las lenguas indígenas en los discursos de las fechas patrias y el resto del año exigen <<hablar bien>>. Desconfío también de mi propia nostalgia, que es cómoda: lamentar la pérdida no cuesta nada cuando ya no hay que pagar el precio de la burla. Ese precio lo pagó mi madre, en la puerta de un colegio, mientras yo caminaba adelante.
+p: Ahora tomo clases, los sábados, con una profesora más joven que yo. Pronuncio mal. Los niños del grupo, que la hablan entre ellos en el recreo, se ríen, y me parece justo: alguna vez alguien tenía que reírse en la dirección correcta.
+src: Texto elaborado para este simulacro.
+
+## Preguntas del Texto Dos
+q: Al contrastar las <<cosas redondas y antiguas>> de la abuela con las <<palabras planas de la escuela>> (párrafo 1), el autor:
+@ Valora la riqueza de la lengua de su abuela frente al español que aprendió en clase
+@ Critica a su abuela por no haber aprendido español
+@ Afirma que la escuela enseña palabras más útiles
+@ Describe la forma de los objetos de su casa
+q: La oración <<Nos entendíamos lo suficiente para querernos y no lo bastante para discutir>> (párrafo 1) indica que la comunicación entre ellos era:
+@ Afectuosa, pero limitada
+@ Fría y distante
+@ Completa y profunda
+@ Conflictiva
+q: Según el párrafo 2, el autor aprendió que su lengua era <<un defecto>> por:
+@ La reacción de sus compañeros
+@ Las explicaciones de sus profesores
+@ Los consejos de su madre
+@ Las normas del colegio
+q: La frase <<Aprendí a caminar unos pasos adelante de ella>> (párrafo 2) expresa que el autor:
+@ Sentía vergüenza de que lo relacionaran con su madre
+@ Tenía prisa por llegar a su casa
+@ Quería proteger a su madre de las burlas
+@ Era más rápido que su madre al caminar
+q: La <<disciplina triste>> que menciona el párrafo 2 consiste en:
+@ Aparentar que no comprendía la lengua de su familia
+@ Estudiar español durante muchas horas
+@ Soportar las burlas sin responder
+@ Caminar solo hasta la casa
+q: Con la oración <<Fingir tiene un problema: funciona>> (párrafo 3), el autor quiere decir que:
+@ De tanto aparentar que no sabía la lengua, terminó por perderla
+@ Sus compañeros descubrieron que fingía
+@ Fingir le permitió ser aceptado en el colegio
+@ Nunca logró engañar a su abuela
+q: La comparación con <<un saco lavado con agua caliente>> (párrafo 3) expresa que la lengua:
+@ Se fue reduciendo por la falta de uso
+@ Se volvió más limpia y correcta
+@ Dejó de servirle de un día para otro
+@ Pasó de moda entre los jóvenes
+q: Cuando el autor afirma que <<solo tenía palabras de niño>> (párrafo 3), da a entender que:
+@ Su dominio de la lengua se quedó en el nivel de la infancia
+@ Su abuela lo seguía tratando como a un niño
+@ Prefería hablarle a su abuela con ternura
+@ Había olvidado por completo la lengua
+q: El autor desconfía de quienes celebran las lenguas indígenas en los discursos (párrafo 4) porque:
+@ Ese homenaje ocasional contradice el desprecio de todos los días
+@ Pronuncian mal las palabras indígenas
+@ Quieren obligar a todos a aprender esas lenguas
+@ No conocen la historia del país
+q: El autor califica su nostalgia de <<cómoda>> (párrafo 4) porque:
+@ Lamenta la pérdida sin haber asumido el costo de conservar la lengua
+@ Recordar el pasado le produce tranquilidad
+@ Ya no tiene que estudiar la lengua
+@ Su madre nunca le reprochó nada
+q: En el párrafo 4, la expresión <<\sub{Ese precio}>> alude a:
+@ La burla
+@ La nostalgia
+@ El costo de las clases
+@ La desconfianza
+q: Con la frase <<alguien tenía que reírse en la dirección correcta>> (párrafo 5), el autor da a entender que ahora:
+@ La risa recae sobre quien no sabe la lengua y no sobre quien la habla
+@ Los niños han dejado de burlarse de los adultos
+@ Él se ríe de la pronunciación de los niños
+@ La profesora permite las burlas en clase
+q: El tono que predomina en el texto Dos es:
+@ Autocrítico
+@ Triunfal
+@ Burlón
+@ Impersonal
+
+## Preguntas sobre los Textos Uno y Dos
+q: Los dos textos coinciden en señalar, como causa de que una lengua deje de hablarse:
+@ El desprestigio social que sufren sus hablantes
+@ La falta de diccionarios y grabaciones
+@ La dificultad de su gramática
+@ La muerte repentina de los ancianos
+q: El texto Uno aborda el tema desde \bl, mientras que el texto Dos lo hace desde \bl.
+@ Una mirada general apoyada en una especialista / una experiencia personal
+@ Un relato de ficción / un informe científico
+@ La opinión de los padres / la opinión de los maestros
+@ Una experiencia personal / una mirada general apoyada en cifras
+q: La actitud de los compañeros de colegio (texto Dos, párrafo 2) es un ejemplo de lo que el texto Uno, en su párrafo 6, describe como:
+@ La asociación de la lengua con la burla
+@ El intento de revertir la tendencia
+@ La transmisión de la lengua en la casa
+@ El inventario de soluciones de un pueblo
+q: Según el criterio de Tumiñá (texto Uno, párrafo 5), en la clase de los sábados del texto Dos hay una señal de que la lengua está viva, porque:
+@ Hay niños que la usan con naturalidad
+@ La profesora es más joven que el autor
+@ El autor pronuncia mal las palabras
+@ Las clases se dictan fuera del horario escolar
+q: Un funcionario declara: <<Con publicar un buen diccionario, la lengua quedará a salvo>>. Esta afirmación:
+@ Es contraria a la opinión de Tumiñá en el texto Uno
+@ Coincide con la conclusión del texto Dos
+@ Resume lo dicho en el párrafo 2 del texto Uno
+@ Explica por qué el autor del texto Dos perdió su lengua
+q: La crítica a los homenajes oficiales a las lenguas indígenas es un interés del texto:
+@ Dos, pero no del Uno
+@ Uno, pero no del Dos
+@ Uno más que del Dos
+@ Uno y del Dos por igual
+
+== RAZONAMIENTO
+ctx 2: Cinco familias, García, López, Mora, Ríos y Vélez, viven en un edificio de cinco pisos, una familia en cada piso. Se sabe que:
+\vi{Los García viven en un piso más alto que los López}
+\vi{Los Mora no viven en el primer piso ni en el quinto}
+\vi{Los Ríos viven en el piso que está justo encima del de los Vélez}
+\vi{Los López y los Mora no viven en pisos consecutivos}
+q: De las siguientes afirmaciones, de la única que se tiene certeza es:
+@ Los López viven en el primer piso
+@ Los Mora viven en el tercer piso
+@ Los García viven en el quinto piso
+@ Los Ríos viven en el quinto piso
+! Del piso 1 al 5 solo son posibles López, García, Mora, Vélez, Ríos y López, Vélez, Ríos, Mora, García.
+q: Si los García viven en el quinto piso, entonces los Mora viven en el piso:
+@ 4
+@ 2
+@ 3
+@ 1
+! Queda López, Vélez, Ríos, Mora, García.
+q: La afirmación <<si Camila estudia, entonces aprueba el examen>> es lógicamente equivalente a:
+@ Si Camila no aprueba el examen, entonces no estudió
+@ Si Camila aprueba el examen, entonces estudió
+@ Si Camila no estudia, entonces no aprueba el examen
+@ Camila estudia y aprueba el examen
+! Un condicional equivale a su contrarrecíproca.
+q: La afirmación <<no todos los pájaros vuelan>> equivale a:
+@ Algún pájaro no vuela
+@ Ningún pájaro vuela
+@ Todos los pájaros no vuelan
+@ Algún pájaro vuela
+! Negar <<todos>> es afirmar que existe al menos uno que no.
+ctx 2: Un grupo de 42 turistas visitó una ciudad. Cada turista visitó por lo menos uno de tres lugares: el museo, el parque y la catedral. Se sabe que:
+\vi{8 visitaron solamente el museo y 7 visitaron solamente la catedral}
+\vi{5 visitaron el museo y el parque, pero no la catedral}
+\vi{4 visitaron el museo y la catedral, pero no el parque}
+\vi{6 visitaron el parque y la catedral, pero no el museo}
+\vi{Los que visitaron solamente el parque son el doble de los que visitaron los tres lugares}
+q: La cantidad de turistas que visitó los tres lugares es:
+@ 4
+@ 3
+@ 6
+@ 8
+! $8+7+5+4+6+2t+t=42$ da $t=4$.
+q: La cantidad de turistas que visitó el parque es:
+@ 23
+@ 19
+@ 15
+@ 27
+! $8+5+6+4=23$.
+q: Marta dice: <<La madre de Daniel es la única hija de mi padre>>. Entonces Marta es, de Daniel:
+@ La madre
+@ La tía
+@ La hermana
+@ La abuela
+! La única hija del padre de Marta es la misma Marta.
+ctx 2: Un tablero circular tiene 8 casillas numeradas, en el sentido de las manecillas del reloj, del 0 al 7. En la casilla 0 se ponen una ficha roja y una ficha azul. En cada turno, la ficha roja avanza 3 casillas en el sentido de las manecillas del reloj y, al mismo tiempo, la ficha azul avanza 2 casillas en el sentido contrario.
+q: Después de 10 turnos, la ficha roja está en la casilla:
+@ 6
+@ 2
+@ 4
+@ 3
+! Avanza 30 casillas y $30=3\cdot8+6$.
+q: El primer turno después del cual las dos fichas vuelven a quedar en una misma casilla es el turno:
+@ 8
+@ 4
+@ 5
+@ 16
+! En cada turno se separan 5 casillas; coinciden cuando $5t$ es múltiplo de 8.
+q: Un televisor cuesta \$238.000 con el IVA del 19\% incluido. El precio del televisor sin el IVA es:
+@ \$200.000
+@ \$192.780
+@ \$219.000
+@ \$210.000
+! $238.000\div1{,}19$.
+q: En una fábrica, 4 máquinas iguales producen 600 piezas en 5 horas. La cantidad de piezas que producen 6 de esas máquinas en 8 horas es:
+@ 1.440
+@ 1.200
+@ 960
+@ 1.800
+! Cada máquina produce 30 piezas por hora: $6\cdot8\cdot30$.
+q: En un curso, la nota definitiva se calcula así: el examen parcial vale el 40\% y el examen final vale el 60\%. Si Andrea obtuvo 3,0 en el parcial, la nota que debe obtener en el final para que su definitiva sea 3,6 es:
+@ 4,0
+@ 4,2
+@ 3,9
+@ 4,5
+! $0{,}4\cdot3{,}0+0{,}6x=3{,}6$.
+q: En la secuencia de letras A, C, F, J, O, \dots{} (se usa el alfabeto de 26 letras, sin la ñ), la letra que sigue es:
+@ U
+@ T
+@ S
+@ V
+! Las posiciones son 1, 3, 6, 10, 15: los saltos aumentan de uno en uno; sigue la posición 21.
+q: En el conjunto $\{a,b,c\}$ se define la operación $\circ$ mediante la tabla, en la que el resultado de $x\circ y$ está en la fila de $x$ y la columna de $y$.\par
+{\centering\begin{tabular}{c|ccc}$\circ$ & $a$ & $b$ & $c$\\\hline $a$ & $b$ & $c$ & $a$\\ $b$ & $c$ & $a$ & $b$\\ $c$ & $a$ & $b$ & $c$\end{tabular}\par}
+El resultado de $(a\circ b)\circ(b\circ b)$ es:
+@ $a$
+@ $b$
+@ $c$
+@ No está definido
+! $a\circ b=c$, $b\circ b=a$ y $c\circ a=a$.
+q: La cantidad de maneras distintas de ordenar las cinco letras de la palabra LIBRO, de modo que las dos vocales queden juntas, es:
+@ 48
+@ 24
+@ 120
+@ 96
+! Las vocales forman un bloque: $4!\cdot2$.
+q: Se lanza una moneda corriente tres veces. La probabilidad de obtener cara por lo menos dos veces es:
+@ $\frac12$
+@ $\frac38$
+@ $\frac14$
+@ $\frac58$
+! Tres maneras de obtener dos caras y una de obtener tres: $4/8$.
+q: La rueda de una bicicleta tiene 35 cm de radio. La cantidad de vueltas completas que da la rueda para recorrer 220 metros es (use $\pi\approx\frac{22}{7}$):
+@ 100
+@ 50
+@ 200
+@ 110
+! La rueda avanza $2\cdot\frac{22}{7}\cdot35=220$ cm en cada vuelta.
+ctx 2: Una empresa de energía cobra el consumo mensual de cada casa por tramos: cada uno de los primeros 100 kWh cuesta \$500; cada kWh del 101 al 200 cuesta \$700, y cada kWh por encima de 200 cuesta \$1.000.
+q: El valor que paga una casa que consumió 260 kWh en el mes es:
+@ \$180.000
+@ \$260.000
+@ \$156.000
+@ \$170.000
+! $50.000+70.000+60.000$.
+q: Si una casa pagó \$141.000 por el consumo de un mes, la cantidad de kWh que consumió fue:
+@ 221
+@ 241
+@ 201
+@ 230
+! Los primeros 200 kWh cuestan \$120.000; los \$21.000 restantes son 21 kWh.
+q: Tres luces intermitentes se encienden cada 12, 18 y 30 segundos, respectivamente. Si las tres se encienden a la vez en este momento, la cantidad de veces que volverán a encenderse al mismo tiempo durante los próximos 30 minutos es:
+@ 10
+@ 5
+@ 6
+@ 12
+! $\text{mcm}(12,18,30)=180$ s $=3$ min.
+q: La edad de Ana es $\frac23$ de la edad de Luis. Dentro de 10 años, la edad de Ana será $\frac45$ de la edad de Luis. La edad actual de Luis es:
+@ 15
+@ 12
+@ 18
+@ 30
+! $\frac23L+10=\frac45(L+10)$ da $L=15$.
+q: Un programa de computador realiza las siguientes instrucciones:
+\st{1.}{Comience con $a=1$ y $b=1$}
+\st{2.}{Calcule $c=a+b$}
+\st{3.}{Cambie el valor de $a$ por el de $b$ y luego el valor de $b$ por el de $c$}
+\st{4.}{Si $c$ es mayor que 50, pase a la instrucción 5; en otro caso, regrese a la instrucción 2}
+\st{5.}{Imprima el valor de $c$ y pare}
+El valor que imprime el programa es:
+@ 55
+@ 89
+@ 51
+@ 34
+! $c$ toma los valores 2, 3, 5, 8, 13, 21, 34, 55.
+q: Cierta bacteria se divide en dos cada 20 minutos. Si se comienza con una sola bacteria, la cantidad de bacterias que habrá al cabo de 3 horas es:
+@ 512
+@ 256
+@ 1.024
+@ 18
+! En 3 horas hay 9 divisiones: $2^9$.
+q: La cifra de las unidades del número $7^{2025}$ es:
+@ 7
+@ 9
+@ 3
+@ 1
+! Las unidades de las potencias de 7 se repiten cada cuatro: 7, 9, 3, 1; y $2025=4\cdot506+1$.
+ctx 2: Para enviar mensajes secretos, dos amigos reemplazan cada letra por la que está tres lugares más adelante en el alfabeto de 26 letras (sin la ñ): A se cambia por D, B por E, C por F, y así sucesivamente; después de la Z se vuelve a empezar, de modo que X se cambia por A, Y por B y Z por C.
+q: La palabra ZUKA se envía como:
+@ CXND
+@ CXNE
+@ WRHX
+@ BXND
+! Z$\to$C, U$\to$X, K$\to$N, A$\to$D.
+q: Si se recibe el mensaje OLEUR, la palabra original es:
+@ LIBRO
+@ LIBRA
+@ ROHXU
+@ LIMBO
+! Se retroceden tres lugares: O$\to$L, L$\to$I, E$\to$B, U$\to$R, R$\to$O.
+q: En un tablero de $4\times4$ se van a poner 4 fichas de modo que en cada fila y en cada columna haya exactamente una ficha y que ninguna ficha quede sobre la diagonal sombreada.\par
+{\centering\begin{tikzpicture}[scale=.45]\foreach \k in {0,1,2,3} \fill[gray!45] (\k,3-\k) rectangle (\k+1,4-\k);\draw (0,0) grid (4,4);\end{tikzpicture}\par}
+La cantidad de maneras distintas de hacerlo es:
+@ 9
+@ 6
+@ 12
+@ 24
+! De las $4!=24$ maneras de poner una ficha por fila y columna, 9 no usan ninguna casilla de la diagonal.
+q: En un recipiente cilíndrico de 10 cm de radio que contiene agua se sumerge por completo una piedra, y el nivel del agua sube 2 cm sin derramarse. El volumen de la piedra, en cm$^3$, es:
+@ $200\pi$
+@ $40\pi$
+@ $20\pi$
+@ $400\pi$
+! El agua desplazada ocupa un cilindro de radio 10 y altura 2.
+q: A un cuadrado de 6 cm de lado se le recortan, en las cuatro esquinas, triángulos rectángulos iguales cuyos catetos miden 2 cm, como muestra la figura. El área del octágono que queda, en cm$^2$, es:\par
+{\centering\begin{tikzpicture}[scale=.4]\draw[dashed] (0,0) rectangle (6,6);\draw[thick,fill=gray!45] (2,0)--(4,0)--(6,2)--(6,4)--(4,6)--(2,6)--(0,4)--(0,2)--cycle;\end{tikzpicture}\par}
+@ 28
+@ 32
+@ 20
+@ 30
+! $36-4\cdot2=28$.
+q: En un salón de clase, la razón entre el número de hombres y el número de mujeres es $3:5$. Si llegan 6 hombres más, la razón pasa a ser $3:4$. La cantidad de mujeres que hay en el salón es:
+@ 40
+@ 24
+@ 30
+@ 20
+! $\frac{3k+6}{5k}=\frac34$ da $k=8$.
+q: Si ayer fue el día siguiente al lunes, entonces pasado mañana será:
+@ Viernes
+@ Jueves
+@ Sábado
+@ Miércoles
+! Ayer fue martes y hoy es miércoles.
+q: En una hoja están escritas las siguientes cuatro afirmaciones:
+\st{1.}{En esta hoja hay exactamente una afirmación falsa.}
+\st{2.}{En esta hoja hay exactamente dos afirmaciones falsas.}
+\st{3.}{En esta hoja hay exactamente tres afirmaciones falsas.}
+\st{4.}{En esta hoja hay exactamente cuatro afirmaciones falsas.}
+De las cuatro afirmaciones, la única verdadera es la:
+@ 3
+@ 1
+@ 2
+@ 4
+! Las afirmaciones se contradicen entre sí, así que a lo sumo una es verdadera; si lo es, hay tres falsas.
+q: En un torneo de tenis por eliminación directa participan 32 jugadores: en cada partido el perdedor queda eliminado y no hay empates. La cantidad de partidos que se deben jugar para que quede un único campeón es:
+@ 31
+@ 16
+@ 32
+@ 30
+! Cada partido elimina a un jugador y hay que eliminar a 31.
+q: Una lancha navega a 20 km/h en aguas tranquilas. En un río cuya corriente es de 4 km/h, la lancha recorre 48 km a favor de la corriente y luego regresa al punto de partida. El tiempo total del viaje es:
+@ 5 horas
+@ 4,8 horas
+@ 4 horas
+@ 6 horas
+! $48/24+48/16=2+3$.
+ctx 2: La gráfica muestra la cantidad de estudiantes de un grupo que obtuvo cada una de las notas posibles (1, 2, 3, 4 o 5) en una evaluación.\par\smallskip
+{\centering\begin{tikzpicture}[x=.8cm,y=.22cm]\draw[->] (0,0)--(0,14);\draw (0,0)--(5.4,0);
+\foreach \v in {3,6,9,12} {\draw[gray!50] (0,\v)--(5.4,\v);\node[left,font=\scriptsize] at (0,\v) {\v};}
+\foreach \i/\v in {1/3,2/3,3/12,4/9,5/3} {\fill[gray!60,draw=black] (\i-.75,0) rectangle (\i-.25,\v);\node[below,font=\scriptsize] at (\i-.5,0) {\i};}
+\node[font=\scriptsize] at (2.7,-3.3) {Nota};\node[font=\scriptsize,rotate=90] at (-.9,7) {Estudiantes};\end{tikzpicture}\par}
+q: El porcentaje de estudiantes del grupo que obtuvo una nota de 4 o más es:
+@ 40\%
+@ 30\%
+@ 12\%
+@ 36\%
+! $12$ de $30$.
+q: La nota promedio del grupo en la evaluación fue:
+@ 3,2
+@ 3,0
+@ 3,5
+@ 3,4
+! $(3+6+36+36+15)/30=96/30$.
+q: La cantidad de números enteros $x$ que cumplen $|x-3|\le5$ es:
+@ 11
+@ 10
+@ 9
+@ 6
+! De $-2$ a $8$.
+q: La suma de dos números enteros positivos es 21. El mayor valor que puede tomar su producto es:
+@ 110
+@ 108
+@ 100
+@ 441
+! $10\cdot11$.
+q: Valentina leyó un libro así: el lunes leyó la quinta parte del libro; el martes, la cuarta parte de lo que le faltaba; el miércoles leyó 40 páginas, y entonces le quedó por leer la tercera parte del libro. La cantidad de páginas del libro es:
+@ 150
+@ 200
+@ 120
+@ 180
+! Después del martes falta $\frac45\cdot\frac34=\frac35$: $\frac35x-40=\frac13x$.
+q: Con palitos iguales se construye la secuencia de figuras que se muestra, en la que cada figura tiene un triángulo más que la anterior.\par
+{\centering\begin{tikzpicture}[scale=.55]\draw (0,0)--(1,0)--(.5,.87)--cycle;\node at (.5,-.5) {\scriptsize Figura 1};
+\begin{scope}[shift={(2.6,0)}]\draw (0,0)--(1,0)--(.5,.87)--cycle;\draw (1,0)--(1.5,.87)--(.5,.87);\node at (.75,-.5) {\scriptsize Figura 2};\end{scope}
+\begin{scope}[shift={(5.7,0)}]\draw (0,0)--(1,0)--(.5,.87)--cycle;\draw (1,0)--(1.5,.87)--(.5,.87);\draw (1,0)--(2,0)--(1.5,.87);\node at (1,-.5) {\scriptsize Figura 3};\end{scope}\end{tikzpicture}\par}
+La cantidad de triángulos pequeños que tiene la figura que se construye con exactamente 75 palitos es:
+@ 37
+@ 25
+@ 38
+@ 36
+! La figura con $n$ triángulos usa $2n+1$ palitos.
