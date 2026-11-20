@@ -34,3 +34,17 @@ Pedido del usuario, con dos capturas de referencia (portada de un curso en una a
   mundo aún no tiene retos, lo dice y ofrece el repaso. `gymWorld(c, ui, done, unlockAll)` es la lógica pura.
 
 Pruebas: `tests/inicio-mis-cursos.test.js`.
+
+## Cambio del mismo día: gimnasio flotante en todo el curso
+
+Pedido del usuario: el gimnasio no va en el menú inferior ni solo dentro de los mundos, sino como **botón flotante en
+todo el curso** (portada, componentes, mapa de mundos y cada mundo) y **en todos los cursos**; además, **menú inferior
+más grande**.
+
+- Menú inferior de 4 pestañas: Inicio · Mis cursos · Tutorías · Perfil, con iconos de 26 px y letra de 12 px.
+- El gimnasio (`gym`) sigue existiendo como vista completa («Ver todo el gimnasio» de la hoja, `?tab=gym`); mientras se
+  ve, se marca «Mis cursos», y el atrás vuelve al curso.
+- `gymWorld(c, ui, …)` sirve para cualquier curso (ya no hay `GYM_FAB_BLOCKS`). El nivel que lleva el estudiante es
+  `courseLevelUi(c, block)`: el mundo abierto o, si no, el mundo de la lección que toca (en el componente abierto, si
+  hay); si ya terminó, el último mundo. La hoja muestra «De tu mundo» y «Para repasar»; en un curso sin retos lo dice.
+- El recorrido señala el botón flotante (`.gym-fab`).

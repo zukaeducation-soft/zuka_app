@@ -1,12 +1,22 @@
 // Inicio, Mis cursos y gimnasio flotante (spec 2026-11-19-inicio-mis-cursos, pruebas tests/inicio-mis-cursos.test.js).
 // Inicio muestra los cursos en grande y lo que se estudia ahora; Mis cursos, los cursos en que está inscrito el estudiante;
-// la vista de un curso (pestaña interna 'learn', en app.js) empieza con una portada limpia, y dentro de un mundo de
-// Razonamiento lógico flota el botón del gimnasio con los retos del nivel que lleva.
+// la vista de un curso (pestaña interna 'learn', en app.js) empieza con una portada limpia, y en todo el curso (portada,
+// mapa y mundos) flota el botón del gimnasio con los retos del nivel que lleva el estudiante.
 
 if (typeof ICON !== 'undefined') ICON.book = svg('<path d="M5 5a2 2 0 0 1 2-2h12v14H7a2 2 0 0 0-2 2z"/><path d="M5 19a2 2 0 0 0 2 2h12v-4"/><path d="M9 7.5h6"/>');
 
-// Componentes con gimnasio flotante (se ensaya primero en Razonamiento lógico).
-const GYM_FAB_BLOCKS = { preuda: ['razonamiento'] };
+// El mundo que corresponde al nivel que lleva el estudiante en el curso c (y en el componente block, si hay uno abierto):
+// el mundo abierto (s.open), o el de la primera lección sin hacer, o el último si ya terminó. Con componentes y ninguno
+// abierto, el componente que se estudió por última vez (s.last, id de lección), como «Sigue aquí». s = { done, open, last }.
+function courseLevelUi(c, block, s) {
+  if (s.open != null && c.units[s.open]) return s.open;
+  if (!block && c.blocks) {
+    const lastU = c.units.find(u => u.lessons.some(l => l.id === s.last));
+    block = c.blocks.find(b => b.id === lastU?.block) || c.blocks[0];
+  }
+  const idx = c.units.map((u, i) => (!block || u.block === block.id ? i : -1)).filter(i => i >= 0);
+  return idx.find(i => c.units[i].lessons.some(l => !(s.done || {})[l.id])) ?? idx[idx.length - 1] ?? 0;
+}
 
 // Inscrito: está en S.misCursos o ya tiene alguna lección hecha. En el orden del catálogo, sin cursos que no existen.
 function enrolledIds(s, courses) {
@@ -17,11 +27,14 @@ function enrolledIds(s, courses) {
 // Los retos del gimnasio para el mundo ui del curso c: los de este mundo (abiertos o no) y, para repasar, los abiertos de
 // mundos anteriores del mismo componente. pending = abiertos de este mundo que aún no se han superado.
 function gymWorld(c, ui, done, unlockAll, mine = {}) {
-  const u = c.units[ui], fab = !!u && (GYM_FAB_BLOCKS[c.id] || []).includes(u.block);
+  const u = c.units[ui], fab = !!u;   // en todos los cursos (spec 2026-11-19-inicio-mis-cursos)
   const groups = typeof gymRetos === 'function' ? gymRetos(c) : [];
   const here = (groups.find(g => g.ui === ui)?.retos || []).map(r => ({ r, open: gymOpen(r, done, unlockAll) }));
   const review = groups.filter(g => g.ui < ui && c.units[g.ui].block === u?.block).flatMap(g => g.retos).filter(r => gymOpen(r, done, unlockAll));
-  return { fab, here, review, pending: here.filter(x => x.open && !mine[x.r.id]).length };
+  // Más adelante: los primeros retos de los mundos que siguen (del mismo componente), para que la hoja nunca quede vacía.
+  const ahead = groups.filter(g => g.ui > ui && c.units[g.ui].block === u?.block).flatMap(g => g.retos).slice(0, 3)
+    .map(r => ({ r, open: gymOpen(r, done, unlockAll) }));
+  return { fab, here, review, ahead, pending: here.filter(x => x.open && !mine[x.r.id]).length };
 }
 
 const courseExercises = c => c.units.reduce((t, u) => t + u.lessons.reduce((s, l) => s + l.ex.length, 0), 0);
@@ -126,13 +139,22 @@ function bindCourseHead() { $('[data-courses]', view)?.addEventListener('click',
 function gymFabHTML(c, ui) {
   const g = gymWorld(c, ui, S.done, S.unlockAll, S.gym || {});
   if (!g.fab) return '';
-  return `<button class="gym-fab" data-gym-fab style="--c:${c.color}" aria-label="Gimnasio: retos guiados de este mundo${g.pending ? `, ${g.pending} por hacer` : ''}">
+  return `<button class="gym-fab" data-gym-fab data-ui="${ui}" style="--c:${c.color}" aria-label="Gimnasio: retos guiados de tu nivel${g.pending ? `, ${g.pending} por hacer` : ''}">
     ${ICON.gym}${g.pending ? `<span class="gym-fab-n" aria-hidden="true">${g.pending}</span>` : ''}</button>`;
 }
-function bindGymFab(c, ui) { $('[data-gym-fab]', view)?.addEventListener('click', () => openGymSheet(c, ui)); }
+function bindGymFab(c) {
+  const b = $('[data-gym-fab]', view);
+  if (!b) return;
+  b.closest('.learn')?.classList.add('has-fab');   // espacio abajo para el botón (sin depender de :has)
+  b.addEventListener('click', () => openGymSheet(c, +b.dataset.ui, openWorld?.course === c.id));
+}
 
-function openGymSheet(c, ui) {
+// inWorld: se abrió desde un mundo que se está mirando («este mundo»); si no, es el mundo del nivel del estudiante («tu mundo»).
+function openGymSheet(c, ui, inWorld) {
   const g = gymWorld(c, ui, S.done, S.unlockAll, S.gym || {}), u = c.units[ui], w = WORLDS[u.world] || { name: u.title }, mine = S.gym || {};
+  const blockName = c.blocks?.find(b => b.id === u.block)?.name, mio = inWorld ? 'este mundo' : 'tu mundo';
+  // Si ni este mundo, ni los anteriores, ni los siguientes del componente tienen retos, se muestran los de todo el curso.
+  const rest = !g.here.length && !g.review.length && !g.ahead.length ? gymRetos(c).flatMap(x => x.retos) : [];
   const row = (r, open) => {
     const key = lessonsOf(c).find(l => r.after.includes(l.id)), best = mine[r.id]?.best;
     return `<button class="gs-row${open ? '' : ' locked'}" data-reto="${r.id}"${open ? '' : ' aria-disabled="true"'}>
@@ -141,12 +163,14 @@ function openGymSheet(c, ui) {
       <small>${open ? `Estrategia: ${esc(r.strategy)}` : `${ICON.lock}Termina «${esc(key?.title || 'la lección')}» para abrirlo`}</small></button>`;
   };
   openSheet(`<div class="gym-sheet" style="--c:${c.color}">
-    <p class="gs-eyebrow">${ICON.gym}Gimnasio · Mundo ${worldNo(c, ui)}</p>
+    <p class="gs-eyebrow">${ICON.gym}Gimnasio · ${blockName ? `${esc(blockName)} · ` : ''}Mundo ${worldNo(c, ui)}</p>
     <h3 class="sheet-title">${esc(w.name)}</h3>
     <p class="muted">Retos un poco más difíciles, con un entrenador que te guía paso a paso. Aquí no pierdes vidas.</p>
-    ${g.here.length ? `<h4 class="gs-h">De este mundo</h4><div class="gs-list">${g.here.map(x => row(x.r, x.open)).join('')}</div>`
-      : '<p class="gs-empty">Este mundo aún no tiene retos guiados.</p>'}
+    ${g.here.length ? `<h4 class="gs-h">De ${mio}</h4><div class="gs-list">${g.here.map(x => row(x.r, x.open)).join('')}</div>`
+      : `<p class="gs-empty">${gymRetos(c).length ? `${inWorld ? 'Este' : 'Tu'} mundo aún no tiene retos guiados.` : 'Este curso aún no tiene retos guiados. Pronto llegan.'}</p>`}
     ${g.review.length ? `<h4 class="gs-h">Para repasar</h4><div class="gs-list">${g.review.map(r => row(r, true)).join('')}</div>` : ''}
+    ${g.ahead.length ? `<h4 class="gs-h">Más adelante</h4><div class="gs-list">${g.ahead.map(x => row(x.r, x.open)).join('')}</div>` : ''}
+    ${rest.length ? `<h4 class="gs-h">Retos del curso</h4><div class="gs-list">${rest.map(r => row(r, gymOpen(r, S.done, S.unlockAll))).join('')}</div>` : ''}
     <button class="btn ghost" data-all>Ver todo el gimnasio</button>
   </div>`, sh => {
     sh.querySelectorAll('[data-reto]').forEach(b => b.onclick = () => {

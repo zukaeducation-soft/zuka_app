@@ -441,17 +441,20 @@ const gymStarsHTML = n => `<span class="gym-stars" aria-label="${n} de 3 estrell
 // ---- pestaña Gimnasio ----
 function renderGym() {
   const c = courseById(S.course), groups = gymRetos(c), mine = S.gym || {};
-  const head = `<header class="tu-head"><h1>Gimnasio</h1>
+  // Sin pestaña propia: se llega desde el botón flotante del curso y se vuelve al curso (spec 2026-11-19-inicio-mis-cursos).
+  const head = `<button class="world-back" data-back-course>${ICON.back}<span>Volver al curso</span></button>
+    <header class="tu-head"><h1>Gimnasio</h1>
     <p class="muted">Retos un poco más difíciles que los de las lecciones. Un entrenador te sugiere el procedimiento paso a paso y te ayuda si te equivocas. Aquí no pierdes vidas.</p></header>`;
   if (!groups.length) {
     const others = cursosVisibles().filter(o => o.id !== c.id && gymRetos(o).length);
     view.innerHTML = `<div class="gym tutorias">${head}
       <section class="card gym-empty"><h3>${esc(c.name)} aún no tiene retos</h3>
-        <p class="muted">Por ahora el Gimnasio entrena proporciones y porcentajes. Pronto llegan retos para más mundos.</p>
+        <p class="muted">Por ahora hay retos en Álgebra y en el Preuniversitario. Pronto llegan a más cursos.</p>
         ${others.length ? `<div class="course-list">${others.map(o => `<button class="course-row" data-course="${o.id}" style="--c:${o.color}">${courseArt(o, 'lg')}
           <span class="cr-body"><b>${esc(o.name)}</b><small>${gymRetos(o).reduce((n, g) => n + g.retos.length, 0)} retos</small></span>${ICON.right}</button>`).join('')}</div>` : ''}
       </section></div>`;
-    view.querySelectorAll('[data-course]').forEach(b => b.onclick = () => { S.course = b.dataset.course; save(); go('gym'); });
+    view.querySelectorAll('[data-course]').forEach(b => b.onclick = () => openCourse(b.dataset.course));
+    $('[data-back-course]', view).onclick = () => go('learn');
     return;
   }
   const total = groups.reduce((n, g) => n + g.retos.length, 0), done = groups.reduce((n, g) => n + g.retos.filter(r => mine[r.id]).length, 0);
@@ -471,6 +474,7 @@ function renderGym() {
         }).join('')}</div></section>`;
     }).join('')}
   </div>`;
+  $('[data-back-course]', view).onclick = () => go('learn');
   view.querySelectorAll('[data-reto]').forEach(b => b.onclick = () => {
     const r = GYM_RETOS.find(x => x.id === b.dataset.reto);
     if (!gymOpen(r, S.done, S.unlockAll)) return toast('Termina la lección de este tema para abrir el reto.');

@@ -149,7 +149,7 @@ function go(t) {
   tab = t;
   document.body.dataset.tab = t;
   // La vista de un curso ('learn') no tiene botón propio: se marca «Mis cursos» (spec 2026-11-19-inicio-mis-cursos).
-  document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === (t === 'learn' ? 'cursos' : t)));
+  document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === (t === 'learn' || t === 'gym' ? 'cursos' : t)));
   renderTop();
   ({ home: renderHome, cursos: renderMyCourses, learn: renderLearn, gym: renderGym, clips: renderClips, tutorias: renderTutorias, profile: renderProfile })[t]();
 }
@@ -310,11 +310,12 @@ function renderComponents(c) {
         <span class="comp-go" aria-hidden="true">${ICON.right}</span></button>`;
     }).join('')}</div>
     ${doneN === ls.length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
+    ${gymFabHTML(c, courseLevelUi(c, null, { done: S.done, last: S.lastLesson }))}
   </div>`;
   view.querySelectorAll('[data-block]').forEach(b => b.onclick = () => {
     openBlock = { course: c.id, id: b.dataset.block }; renderLearn(); $('[data-back]', view)?.focus({ preventScroll: true });
   });
-  bindCourseHead();
+  bindCourseHead(); bindGymFab(c);
   view.scrollTop = 0;
 }
 function renderLearn() {
@@ -363,6 +364,7 @@ function renderLearn() {
     </div>
     ${cur ? '' : block ? `<div class="course-done">${ICON.star}<div><b>¡Componente completado!</b><p>Repasa cualquier lección o vuelve a los componentes.</p></div></div>`
       : `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>`}
+    ${gymFabHTML(c, courseLevelUi(c, block, { done: S.done, last: S.lastLesson }))}
   </div>`;
   view.querySelectorAll('.wnode').forEach(b => b.onclick = () => {
     openWorld = { course: c.id, i: +b.dataset.world }; renderLearn(); $('[data-back]', view).focus({ preventScroll: true });
@@ -375,7 +377,7 @@ function renderLearn() {
   });
   $('[data-install]', view)?.addEventListener('click', promptInstall);
   $('[data-hide-install]', view)?.addEventListener('click', () => { S.hideInstall = true; save(); renderLearn(); });
-  bindCourseHead();
+  bindCourseHead(); bindGymFab(c);
   view.scrollTop = 0;   // arriba queda «Sigue aquí»; el mapa de mundos está debajo
 }
 
@@ -427,7 +429,7 @@ function renderWorld(c, ui) {
     ${ui + 1 < c.units.length && c.units[ui + 1].block === u.block ? `<button class="world-next" data-next>Siguiente: Mundo ${worldNo(c, ui + 1)} · ${esc((WORLDS[c.units[ui + 1].world] || c.units[ui + 1]).name || c.units[ui + 1].title)} ${ICON.right}</button>` : ''}
     ${gymFabHTML(c, ui)}
   </div>`;
-  bindGymFab(c, ui);
+  bindGymFab(c);
   view.querySelectorAll('.node[data-id]').forEach(b => b.onclick = () => openLessonSheet(c, findLesson(b.dataset.id).l));
   $('[data-exam]', view)?.addEventListener('click', () => (planMotivo(u.exam.id) ? openBloqueo(u.exam.id) : openExamSheet(c, u)));
   $('[data-summary-lock]', view)?.addEventListener('click', () => openBloqueo(`resumen-${u.world}`));
@@ -750,7 +752,7 @@ function startLesson(c, l) {
     body.innerHTML = `<div class="done-screen">
       <div class="trophy sad">${ICON.heartLine}</div>
       <h2>Te quedaste sin vidas</h2>
-      <p class="muted">Recuperas una vida cada 20 minutos. Mientras tanto, entrena en el Gimnasio: allí no se pierden vidas.</p></div>`;
+      <p class="muted">Recuperas una vida cada 20 minutos. Mientras tanto, entrena con el botón del gimnasio de tu curso: allí no se pierden vidas.</p></div>`;
     root.classList.remove('fb-open');
     btn.textContent = 'Salir'; btn.disabled = false; btn.onclick = close;
   }

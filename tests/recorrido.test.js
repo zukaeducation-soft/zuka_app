@@ -41,7 +41,7 @@ test('los pasos que señalan algo dicen qué; los centrados llevan mascota o ilu
   assert.match(t('curso'), /\.course-head/);
   assert.match(t('mundos'), /\.wnode/);
   assert.match(t('niveles'), /\.node/);
-  assert.match(t('gimnasio'), /data-tab="gym"/);
+  assert.match(t('gimnasio'), /\.gym-fab/);
   assert.match(t('perfil'), /data-tab="profile"/);
 });
 

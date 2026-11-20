@@ -20,7 +20,7 @@ test('inscrito: los de S.misCursos y los que ya tienen alguna lección hecha, si
   assert.equal(enrolledIds({ misCursos: ['no-existe'] }, COURSES).length, 0, 'un id viejo o de un curso oculto no aparece');
 });
 
-test('el gimnasio flotante sale en los mundos de Razonamiento lógico', () => {
+test('el gimnasio flotante: retos del mundo, repaso de los anteriores y conteo de pendientes', () => {
   const w4 = ui('pu-pr-1');   // mundo 4, Proporcionalidad: tiene retos
   const g = gymWorld(PU, w4, {}, false);
   assert.equal(g.fab, true);
@@ -42,14 +42,39 @@ test('el gimnasio flotante sale en los mundos de Razonamiento lógico', () => {
   assert.equal(gymWorld(PU, w1, {}, false).here.length, 0);
 });
 
-test('fuera de Razonamiento lógico no hay gimnasio flotante (por ahora)', () => {
+test('el gimnasio flotante sale en todos los cursos y componentes', () => {
   const lec = PU.units.findIndex(u => u.block === 'lectura');
-  assert.equal(gymWorld(PU, lec, {}, true).fab, false);
-  assert.equal(gymWorld(ALG, 0, {}, true).fab, false);
+  assert.equal(gymWorld(PU, lec, {}, true).fab, true);
+  for (const c of COURSES) assert.equal(gymWorld(c, 0, {}, true).fab, true, c.id);
+  // Álgebra tiene retos (proporciones, ecuaciones): desde su último mundo, el repaso los trae en modo revisión
+  assert.ok(gymWorld(ALG, ALG.units.length - 1, {}, true).review.length >= 1);
 });
 
-test('menú inferior: Inicio, Mis cursos, Gimnasio, Tutorías y Perfil; la app abre en Inicio', () => {
-  assert.match(html, /<button data-tab="home">Inicio<\/button>\s*<button data-tab="cursos">Mis cursos<\/button>\s*<button data-tab="gym">Gimnasio<\/button>\s*<button data-tab="tutorias">Tutorías<\/button>\s*<button data-tab="profile">Perfil<\/button>/);
+test('el nivel que lleva el estudiante: el mundo abierto, o el de la lección que toca, o el último', () => {
+  const courseLevelUi = get(ctx, 'courseLevelUi');
+  const s = (done, openWorld = null) => ({ done, open: openWorld });
+  assert.equal(courseLevelUi(PU, null, s({})), 0);
+  assert.equal(courseLevelUi(PU, null, s({ 'pu-cm-1': true, 'pu-cm-2': true, 'pu-cm-3': true, 'pu-cm-4': true })), 1, 'mundo 1 terminado: el mundo 2');
+  assert.equal(courseLevelUi(PU, null, s({}, 5)), 5, 'dentro de un mundo, ese mundo');
+  const lec = PU.units.findIndex(u => u.block === 'lectura');
+  assert.equal(courseLevelUi(PU, PU.blocks.find(b => b.id === 'lectura'), s({})), lec, 'con un componente abierto, su primer mundo pendiente');
+  const all = Object.fromEntries(ALG.units.flatMap(u => u.lessons.map(l => [l.id, true])));
+  assert.equal(courseLevelUi(ALG, null, s(all)), ALG.units.length - 1, 'terminado: el último mundo');
+});
+
+test('el botón flotante va en la portada, el mapa y los mundos del curso', () => {
+  for (const f of ['renderComponents', 'renderLearn', 'renderWorld']) {
+    const at = app.indexOf(`function ${f}(`), body = app.slice(at, at + app.slice(at).search(/\r?\n\}\r?\n/));
+    assert.match(body, /gymFabHTML\(c, /, f);
+    assert.match(body, /bindGymFab\(c\)/, f);
+  }
+});
+
+test('menú inferior: Inicio, Mis cursos, Tutorías y Perfil (el gimnasio flota en el curso); la app abre en Inicio', () => {
+  assert.match(html, /<button data-tab="home">Inicio<\/button>\s*<button data-tab="cursos">Mis cursos<\/button>\s*<button data-tab="tutorias">Tutorías<\/button>\s*<button data-tab="profile">Perfil<\/button>/);
+  assert.doesNotMatch(html, /<button data-tab="gym">/);
+  assert.match(app, /t === 'learn' \|\| t === 'gym' \? 'cursos' : t/, 'en el gimnasio se marca Mis cursos');
+  assert.match(css, /#tabbar button \.i \{[^}]*width: 26px/, 'iconos más grandes');
   assert.match(html, /<body data-tab="home">/);
   assert.match(html, /<script defer src="js\/inicio.js"><\/script>/);
   assert.match(sw, /'js\/inicio.js'/);
@@ -73,7 +98,7 @@ test('atrás: en un curso vuelve a Mis cursos, en otra pestaña a Inicio y en In
   assert.equal(backStep({ tab: 'home' }), 'ask-exit');
   assert.equal(backStep({ tab: 'learn' }), 'tab');
   assert.equal(backStep({ tab: 'cursos' }), 'tab');
-  assert.match(read('js/back.js'), /go\(tab === 'learn' \? 'cursos' : 'home'\)/);
+  assert.match(read('js/back.js'), /go\(tab === 'learn' \? 'cursos' : tab === 'gym' \? 'learn' : 'home'\)/);
 });
 
 test('estilos: portada del curso, tarjetas del inicio y botón flotante en los dos temas', () => {
@@ -84,7 +109,7 @@ test('estilos: portada del curso, tarjetas del inicio y botón flotante en los d
 
 test('el curso que se ve queda inscrito, y la vista del curso marca «Mis cursos»', () => {
   assert.match(app, /function renderLearn\(\) \{\s*const c = courseById\(S\.course\);\s*enroll\(c\.id\);/);
-  assert.match(app, /b\.dataset\.tab === \(t === 'learn' \? 'cursos' : t\)/);
+  assert.match(app, /b\.dataset\.tab === \(t === 'learn' \|\| t === 'gym' \? 'cursos' : t\)/);
   const ini = loadScripts(['js/inicio.js']);
   ini.S = { misCursos: ['algebra'] }; ini.save = () => {};
   get(ini, 'enroll')('preuda'); get(ini, 'enroll')('preuda');
@@ -99,6 +124,28 @@ test('el botón flotante usa la tinta del curso, queda dentro de la columna en e
 });
 
 test('a 300 px: el menú no parte «Mis cursos» y la marca de arriba se recorta o se esconde', () => {
-  assert.match(css, /#tabbar button \{ white-space: nowrap; \}/);
+  assert.match(css, /#tabbar button \{ white-space: nowrap;/);
   assert.match(css, /@media \(max-width: 340px\) \{ \.tb-brand b \{ display: none; \} \}/);
+});
+
+test('si el mundo no tiene retos, la hoja ofrece los que vienen más adelante', () => {
+  const g = gymWorld(ALG, 0, {}, false);
+  assert.equal(g.here.length, 0);
+  assert.ok(g.ahead.length >= 1 && g.ahead.length <= 3);
+  assert.ok(g.ahead.every(x => x.open === false), 'sin lecciones hechas, cerrados');
+});
+
+test('con componentes, el nivel sigue al componente que se estudia; la hoja nunca queda vacía en un curso con retos', () => {
+  const courseLevelUi = get(ctx, 'courseLevelUi');
+  const lec = PU.units.findIndex(u => u.block === 'lectura');
+  assert.equal(courseLevelUi(PU, null, { done: {}, last: PU.units[lec].lessons[0].id }), lec, 'quien va por Lectura recibe un mundo de Lectura');
+  assert.equal(courseLevelUi(PU, null, { done: {}, last: null }), 0, 'sin historia: el primer componente');
+  // Razonamiento terminado y estudiando Razonamiento: su último mundo, con repaso de lo anterior
+  const raz = Object.fromEntries(PU.units.filter(u => u.block === 'razonamiento').flatMap(u => u.lessons.map(l => [l.id, true])));
+  const lastRaz = PU.units.map((u, i) => (u.block === 'razonamiento' ? i : -1)).filter(i => i >= 0).pop();
+  assert.equal(courseLevelUi(PU, null, { done: raz, last: 'pu-cm-1' }), lastRaz);
+  assert.ok(gymWorld(PU, lastRaz, raz, false).review.length >= 1);
+  const ini = read('js/inicio.js');
+  assert.match(ini, /Retos del curso/, 'si nada del componente tiene retos, la hoja muestra los del curso');
+  assert.match(read('js/gimnasio.js'), /data-back-course/, 'la vista completa del gimnasio vuelve al curso');
 });

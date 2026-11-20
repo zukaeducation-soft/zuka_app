@@ -55,6 +55,6 @@ function setupBack() {
     else if (step === 'sheet') closeSheet();
     else if (step === 'lesson') lessonClose();
     else if (step === 'world') { const b = $('[data-back]', view); if (b) b.click(); else if (tab === 'profile') { profileSub = null; renderProfile(); } else { openWorld = null; openBlock = null; renderLearn(); } }   // como «Mundos» o «Componentes»: un paso atrás
-    else go(tab === 'learn' ? 'cursos' : 'home');
+    else go(tab === 'learn' ? 'cursos' : tab === 'gym' ? 'learn' : 'home');
   });
 }
