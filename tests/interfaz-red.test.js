@@ -163,5 +163,6 @@ test('la mascota y los logos viejos ya no se usan', () => {
   assert.match(read('js/ui.js'), /brainTile\(/, 'el diálogo lleva la ficha del cerebro');
   // desde el 2026-11-20 al terminar la lección celebra el personaje nuevo (js/mascota.js, spec 2026-11-20-personaje)
   assert.match(app, /mascotSVG\('cheer', 'm-win'\)/, 'al terminar la lección celebra el personaje');
-  assert.match(read('js/cuenta.js'), /logoHTML\(\)/);
+  // desde el 2026-11-20 la entrada lleva el nombre en letra, sin el cerebro de puntos (spec 2026-11-20-escritorio)
+  assert.match(read('js/cuenta.js'), /zukaWord\(\)/);
 });

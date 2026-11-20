@@ -75,7 +75,7 @@ function authScreen(modo = 'login', aviso = '') {
   const volver = typeof pzDesde !== 'undefined' && pzDesde;   // se llegó desde la presentación: se puede volver a ella
   el.innerHTML = `<div class="auth-in">
     ${volver ? `<button class="link-btn auth-volver" type="button" data-pz-volver>${ICON.back} Conocer Zuka</button>` : ''}
-    <div class="auth-brand">${logoHTML()}</div>
+    <div class="auth-brand">${zukaWord()}</div>
     <h1>${reg ? 'Crea tu cuenta' : 'Entra a tu cuenta'}</h1>
     <p class="muted">${reg ? 'Es gratis. Guarda tu avance y te deja activar tu plan con un código.' : 'Sigue donde ibas: tu avance y tu plan te esperan.'}</p>
     <div class="seg seg-2" role="tablist"><button type="button" role="tab" data-m="login" aria-selected="${!reg}" class="${reg ? '' : 'on'}">Iniciar sesión</button><button type="button" role="tab" data-m="registro" aria-selected="${reg}" class="${reg ? 'on' : ''}">Crear cuenta</button></div>

@@ -10,6 +10,10 @@ function presentacionToca({ standalone, user, guest, query = '' }) {
   return !standalone && !user && !guest;
 }
 
+// El nombre en letra (pedido del 2026-11-20: sin el cerebro de puntos): barra de la presentación, entrada y barra de
+// escritorio. Estilo .zk-word en css/presentacion.css.
+const zukaWord = () => '<span class="zk-word">Zuka</span>';
+
 const pzEsc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 const pzLessons = c => (c.units || []).reduce((n, u) => n + ((u.lessons || []).length), 0);
 
@@ -32,7 +36,7 @@ const PZ_TUTOR = `<svg viewBox="0 0 160 120" aria-hidden="true"><rect x="2" y="2
   ${['8:00', '10:00', '4:00 p. m.'].map((h, i) => `<rect x="16" y="${56 + i * 18}" width="${i === 2 ? 128 : 92}" height="13" rx="6.5" class="${i === 2 ? 'pz-s-a' : 'pz-s-day'}"/>`).join('')}</svg>`;
 
 function presentacionHTML(cursos, { worlds = {}, install = '' } = {}) {
-  const logo = typeof logoHTML === 'function' ? logoHTML() : '<b class="pz-word">Zuka</b>';
+  const logo = zukaWord();
   const mascot = pose => (typeof mascotSVG === 'function' ? mascotSVG(pose) : '');
   const art = c => (typeof courseArt === 'function' ? courseArt(c, 'xl') : `<span class="pz-dot" style="background:${c.color}"></span>`);
   const empieza = (cls = '') => `<button class="btn main brand ${cls}" type="button" data-pz="registro">Empieza gratis</button>`;

@@ -53,3 +53,24 @@ test('va registrado', () => {
   assert.ok(idx.indexOf('js/escritorio.js') > idx.indexOf('js/presentacion.js') && idx.indexOf('js/escritorio.js') < idx.indexOf('js/app.js'));
   assert.ok(sw.includes("'js/escritorio.js'") && sw.includes("'css/escritorio.css'"));
 });
+
+test('arriba va el nombre «Zuka» en letra, sin el cerebro de puntos', () => {
+  const pz = read('js/presentacion.js');
+  assert.match(pz, /const zukaWord = \(\) => '<span class="zk-word">Zuka<\/span>';/);
+  assert.match(pz, /const logo = zukaWord\(\);/);
+  assert.match(read('js/cuenta.js'), /<div class="auth-brand">\$\{zukaWord\(\)\}<\/div>/);
+  assert.match(read('js/app.js'), /data-home aria-label="Ir al inicio">\$\{zukaWord\(\)\}<\/button>/);
+  assert.match(read('css/presentacion.css'), /\.zk-word \{ font-family: var\(--display\); font-weight: 600;/);
+});
+
+test('en el computador el juego se dibuja con ancho de celular y se agranda para llenar el espacio', () => {
+  const k = loadScripts(['js/games/kit.js']);
+  const zoom = get(k, 'zoomScale');
+  assert.equal(get(k, 'DESK_W'), 480);
+  assert.equal(zoom(480, 400, 800, 1000), 800 / 480);
+  assert.equal(zoom(480, 400, 800, 500), 500 / 400);
+  assert.equal(zoom(480, 400, 2000, 2000), 2);
+  assert.equal(zoom(480, 400, 800, 100), 0.66);
+  assert.match(read('css/escritorio.css'), /\.lesson:not\(\.clip-mode\) \.practice > \.ex-area \{ grid-column: 2; grid-row: 1 \/ span 3; \}/);
+  assert.match(read('js/games/kit.js'), /k = deskGame\(\) \? zoomScale\(size\.w, size\.h, host\.clientWidth, room\) : fitScale\(size\.h, room\);/);
+});

@@ -153,6 +153,13 @@
   .pz-rev { opacity: 1; translate: 0 0; }
 }
 
+/* el nombre en letra, sin el cerebro de puntos */
+.zk-word { font-family: var(--display); font-weight: 600; font-size: 28px; line-height: 1; letter-spacing: -.02em; color: var(--ink); }
+.pz-logo .zk-word { font-size: 27px; }
+.pz-foot .zk-word { font-size: 22px; color: var(--mute); }
+.auth-brand .zk-word { font-size: 32px; }
+.tb-logo-d .zk-word { font-size: 27px; }
+
 /* pantalla de entrada abierta desde aquí (en el computador, una ventana encima de la presentación) */
 #auth { z-index: 37; }
 .auth-volver { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; }

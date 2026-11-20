@@ -252,6 +252,12 @@ const heightFor = (w, aspect) => Math.round(Math.max(w, DESIGN_W) * aspect);
 // Cuánto se achica el lienzo (de alto h) para caber en `room` px: 1 si cabe; nunca menos de FIT_MIN (ahí ya se desliza).
 const FIT_MIN = 0.66;
 const fitScale = (h, room) => (room > 0 && h > 0 ? Math.max(FIT_MIN, Math.min(1, room / h)) : 1);
+// En el computador (desde 1000 px, spec 2026-11-20-escritorio) el juego se dibuja con un ancho de celular (DESK_W) y
+// el lienzo se agranda con CSS hasta llenar el ancho y el alto libres (hasta ZOOM_MAX): con todo el ancho del portátil
+// las piezas y los textos, de medidas fijas, se veían diminutos. La densidad de píxeles sube con el zoom: no se ve borroso.
+const DESK_W = 480, ZOOM_MAX = 2;
+const deskGame = () => typeof matchMedia === 'function' && matchMedia('(min-width: 1000px)').matches;
+const zoomScale = (w, h, roomW, roomH) => (w > 0 && h > 0 ? Math.max(FIT_MIN, Math.min(ZOOM_MAX, roomW / w, roomH > 0 ? roomH / h : ZOOM_MAX)) : 1);
 function mountSketch(host, sketch, aspect = 1.25, gesture) {
   let inst = null, removed = false, ro = null, grabbed = false;
   let seenGesture = false, gestureTime = 0, gestureUntil = 0;
@@ -263,12 +269,15 @@ function mountSketch(host, sketch, aspect = 1.25, gesture) {
     let k = 1;
     if (body && ex && typeof getComputedStyle === 'function') {
       const cs = getComputedStyle(body), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
-      k = fitScale(size.h, body.clientHeight - pad - (ex.offsetHeight - cv.offsetHeight) - 2);
+      const room = body.clientHeight - pad - (ex.offsetHeight - cv.offsetHeight) - 2;
+      k = deskGame() ? zoomScale(size.w, size.h, host.clientWidth, room) : fitScale(size.h, room);
     }
+    const pd = Math.min(4, Math.ceil((globalThis.devicePixelRatio || 1) * Math.max(1, k) * 2) / 2);
+    if (k > 1 && inst.pixelDensity?.() !== pd) inst.pixelDensity(pd);   // reinicia el tamaño de CSS: va antes
     cv.style.width = `${Math.round(size.w * k)}px`; cv.style.height = `${Math.round(size.h * k)}px`;
   };
   const ripples = [];
-  const widthOf = () => Math.max(240, Math.floor(host.clientWidth || 320));
+  const widthOf = () => Math.max(240, Math.floor(Math.min(host.clientWidth || 320, deskGame() ? DESK_W : Infinity)));
   const ready = loadP5().then(P5 => {
     if (removed) return;
     const size = { w: widthOf(), h: 0 };
