@@ -158,19 +158,14 @@ function go(t) {
 const shortNum = n => (n >= 10000 ? `${Math.floor(n / 100) / 10} k` : String(n));
 function renderTop() {
   syncHearts();
-  // A la izquierda la marca; el curso se elige en Inicio o en Mis cursos (spec 2026-11-19-inicio-mis-cursos).
+  // Solo racha y experiencia, más grandes; sin la marca ni las vidas (las vidas se ven dentro de la lección).
+  // Pedido del 2026-11-19: la app ocupa la pantalla de arriba abajo (spec 2026-11-19-pantalla-completa).
   $('#topbar').innerHTML = `
-    <button class="tb-brand" data-home aria-label="Zuka: ir al inicio"><span class="tb-logo">${brainSVG('simple')}</span><b>Zuka</b></button>
     <div class="tb-stats">
       <button class="tb-stat streak${S.lastDay === today() ? ' lit' : ''}" data-streak aria-label="Racha: ${streakNow()} ${streakNow() === 1 ? 'día' : 'días'}. Ver tu actividad">${ICON.flame}<b>${streakNow()}</b></button>
       <span class="tb-stat xp" title="Experiencia: ${S.xp} XP">${ICON.bolt}<b>${shortNum(S.xp)}</b></span>
-      <button class="tb-stat hearts" title="Vidas">${ICON.heart}<b>${S.hearts}</b></button>
     </div>`;
-  $('#topbar [data-home]').onclick = () => { if (tab !== 'home') go('home'); };
   $('#topbar [data-streak]').onclick = openStreakSheet;
-  $('#topbar .hearts').onclick = () => toast(S.hearts >= 5
-    ? 'Tienes todas tus vidas. Cada error cuesta una.'
-    : `Recuperas una vida en ${minsToHeart()} min.`);
 }
 
 // ---- hojas inferiores ----

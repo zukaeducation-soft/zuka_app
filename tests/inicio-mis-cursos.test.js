@@ -88,7 +88,7 @@ test('menú inferior: Inicio, Mis cursos, Tutorías y Perfil (el gimnasio flota 
 test('la barra de arriba ya no trae el selector de curso; el recorrido señala la portada del curso', () => {
   const top = app.slice(app.indexOf('function renderTop'), app.indexOf('// ---- hojas inferiores'));
   assert.doesNotMatch(top, /tb-course/);
-  assert.match(top, /tb-brand/);
+  assert.doesNotMatch(top, /tb-brand|hearts/, 'sin marca ni vidas arriba (spec 2026-11-19-pantalla-completa)');
   const tour = loadScripts(['js/tour.js']);
   assert.match(get(tour, 'TOUR_STEPS').find(s => s.id === 'curso').target.join(), /\.course-head/);
 });
@@ -102,7 +102,7 @@ test('atrás: en un curso vuelve a Mis cursos, en otra pestaña a Inicio y en In
 });
 
 test('estilos: portada del curso, tarjetas del inicio y botón flotante en los dos temas', () => {
-  for (const sel of ['.course-head', '.hc-card', '.mc-row', '.gym-fab', '.tb-brand']) assert.ok(css.includes(`${sel} {`) || css.includes(`${sel}{`), sel);
+  for (const sel of ['.course-head', '.hc-card', '.mc-row', '.gym-fab']) assert.ok(css.includes(`${sel} {`) || css.includes(`${sel}{`), sel);
   assert.match(css, /\.gym-fab \{[^}]*position: fixed/);
   assert.match(css, /\.gym-fab \{[^}]*var\(--tabbar-h/, 'flota por encima del menú inferior');
 });
@@ -125,7 +125,6 @@ test('el botón flotante usa la tinta del curso, queda dentro de la columna en e
 
 test('a 300 px: el menú no parte «Mis cursos» y la marca de arriba se recorta o se esconde', () => {
   assert.match(css, /#tabbar button \{ white-space: nowrap;/);
-  assert.match(css, /@media \(max-width: 340px\) \{ \.tb-brand b \{ display: none; \} \}/);
 });
 
 test('si el mundo no tiene retos, la hoja ofrece los que vienen más adelante', () => {
