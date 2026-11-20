@@ -64,9 +64,16 @@ def upload_ready(c, db):
             r = c.post(f'{API}/videos', json={'title': f'{lesson} · {title}' if lesson else title, 'collectionId': col}); r.raise_for_status()
             e = {'guid': r.json()['guid'], 'lesson': lesson, 'world': p.parent.name, 'file': p.name}; db[name] = e; save(db)
         log(f'subo {p.parent.name}/{p.name} ({p.stat().st_size / 1e6:.1f} MB) → {e["guid"]}')
-        with open(p, 'rb') as f:
-            r = c.put(f'{API}/videos/{e["guid"]}', content=f, headers={'Content-Type': 'application/octet-stream'}, timeout=900)
-        r.raise_for_status()
+        ok = False
+        for intento in range(5):                       # Bunny a veces responde 500 o corta: se reintenta con espera creciente
+            try:
+                with open(p, 'rb') as f:
+                    r = c.put(f'{API}/videos/{e["guid"]}', content=f, headers={'Content-Type': 'application/octet-stream'}, timeout=900)
+                if r.status_code < 300: ok = True; break
+                log(f'  Bunny respondió {r.status_code}; reintento')
+            except httpx.HTTPError as x: log(f'  fallo de red ({type(x).__name__}); reintento')
+            time.sleep(30 * (intento + 1))
+        if not ok: log(f'  no se pudo subir {p.name}; queda para la próxima vuelta'); continue
         e['uploaded'] = time.strftime('%Y-%m-%d %H:%M'); save(db); n += 1
     return n
 
@@ -127,8 +134,11 @@ def main():
         if r.status_code in (401, 403): sys.exit('La llave de Bunny no sirve (401/403): revisa que sea la «API Key» de la biblioteca 811556.')
         db = load()
         while True:
-            n = upload_ready(c, db)
-            if check_lengths(c, db): publish()
+            try:
+                n = upload_ready(c, db)
+                if check_lengths(c, db): publish()
+            except httpx.HTTPError as x:
+                log(f'  fallo hablando con Bunny ({str(x)[:150]}); sigo en un minuto')
             if not watch: break
             if voz_done() and not any(not db.get(p.stem.removesuffix('_con_audio'), {}).get('uploaded') for p in pending()):
                 for _ in range(30):                                   # espera a que Bunny termine de codificar los últimos
