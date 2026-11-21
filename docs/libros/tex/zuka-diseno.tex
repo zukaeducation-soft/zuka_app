@@ -1,0 +1,124 @@
+% zuka-diseno.tex — capa de diseño de los libros (la carga zuka-libro.sty al final). Redefine cabeceras, cajas e iconos.
+% Todo en claro. Cada caja lleva una ficha redonda de color con su icono a línea blanca.
+
+% ---------- figuras: trazo redondo y gráficas con la misma letra ----------
+\tikzset{every picture/.append style={line cap=round,line join=round}}
+\pgfplotsset{every axis/.append style={tick label style={font=\sffamily\scriptsize},label style={font=\sffamily\scriptsize},
+  title style={font=\sffamily\scriptsize},axis line style={zmute},tick style={zmute}}}
+
+% ---------- iconos ----------
+\newcommand{\zchip}[2]{\tikz[x=1mm,y=1mm,baseline=-1mm]{\fill[#1] (0,0) circle (2.7);
+  \begin{scope}[white,draw=white,line width=.5pt]\csname zico@#2\endcsname\end{scope}}}
+\@namedef{zico@reto}{\draw (0,0) circle (1.55); \draw (0,0) circle (.85); \fill (0,0) circle (.28);}
+\@namedef{zico@regla}{\fill (-.95,1.45)--(.95,1.45)--(.95,-1.55)--(0,-.75)--(-.95,-1.55)--cycle;}
+\@namedef{zico@ejemplo}{\draw (-1.35,-1.35)--(-.95,-.2)--(.65,1.4)--(1.4,.65)--(-.2,-.95)--cycle; \draw (-.95,-.2)--(-.2,-.95);}
+\@namedef{zico@trampa}{\draw (0,1.35)--(1.5,-1.1)--(-1.5,-1.1)--cycle; \draw (0,.55)--(0,-.25); \fill (0,-.68) circle (.15);}
+\@namedef{zico@atajo}{\fill (.3,1.6)--(-1.05,-.2)--(-.1,-.2)--(-.4,-1.6)--(1.05,.3)--(.1,.3)--cycle;}
+\@namedef{zico@lejos}{\draw (0,-1.35)--(0,1.25); \draw (-.95,.3)--(0,1.3)--(.95,.3);}
+\@namedef{zico@listo}{\draw[line width=.7pt] (-1.15,0)--(-.3,-.9)--(1.25,.95);}
+\@namedef{zico@taller}{\fill (-1.35,-1.2) rectangle (-.6,-.2); \fill (-.37,-1.2) rectangle (.37,.5); \fill (.6,-1.2) rectangle (1.35,1.25);}
+\@namedef{zico@examen}{\draw (-1,-1.45) rectangle (1,1.45); \draw (-.5,.75)--(.5,.75) (-.5,.15)--(.5,.15) (-.5,-.45)--(.15,-.45);}
+\@namedef{zico@idea}{\draw (0,.45) circle (.95); \draw (-.45,-.75)--(.45,-.75) (-.3,-1.25)--(.3,-1.25);}
+\@namedef{zico@lectura}{\draw (0,-1)--(0,.95) (0,.95) .. controls (-.7,1.3) and (-1,1.2) .. (-1.55,1) -- (-1.55,-.95) .. controls (-1,-.75) and (-.7,-.7) .. (0,-1)
+  (0,.95) .. controls (.7,1.3) and (1,1.2) .. (1.55,1) -- (1.55,-.95) .. controls (1,-.75) and (.7,-.7) .. (0,-1);}
+\@namedef{zico@pregunta}{\draw (-.6,.6) .. controls (-.6,1.5) and (.75,1.5) .. (.75,.6) .. controls (.75,0) and (0,.1) .. (0,-.5); \fill (0,-1.15) circle (.16);}
+\newcommand{\zuka@cab}[3]{\zchip{#1}{#2}\hspace{2mm}{\sffamily\scriptsize\bfseries\color{#1!80!black}\MakeUppercase{#3}}}
+
+% ---------- cabecera de lección ----------
+\newcommand{\zuka@cabezaleccion}[1]{%
+  \begin{tabularx}{\linewidth}{@{}l@{\hspace{4.5mm}}X@{}}
+  {\sffamily\firathin\fontsize{40}{40}\selectfont\color{zmoss}\thesection} &
+  {\sffamily\scriptsize\bfseries\color{zolive}LECCIÓN \,·\, EN LA APP: \zuka@lid}\par\vspace{1.5pt}
+  {\sffamily\fontsize{18}{21}\selectfont\fontseries{sb}\selectfont\color{zink}#1}\end{tabularx}\par\vspace{-1pt}%
+  \noindent\tikz{\draw[zline,line width=.5pt,line cap=butt] (0,0) -- (\dimexpr\linewidth-2pt\relax,0);
+    \draw[zlime,line width=1.8pt,line cap=butt] (0,0) -- (22mm,0);}}
+\titleformat{\section}[block]{\sffamily\color{zink}}{}{0pt}{\zuka@cabezaleccion}
+\titlespacing*{\section}{0pt}{2pt}{9pt}
+\titleformat{\subsection}[hang]{\sffamily\large\fontseries{sb}\selectfont\color{zink}}{}{0pt}
+  {\tikz[baseline=-.6ex]\fill[zlime] (0,0) rectangle (1.6mm,1.6mm);\hspace{2mm}}
+
+% ---------- encabezado de página y pestaña del mundo en el borde ----------
+\newcommand{\zuka@pestana}[1]{\ifnum\value{mundo}>0
+  \begin{tikzpicture}[remember picture,overlay]
+    \pgfmathsetmacro{\zty}{-26-mod(\value{mundo}-1,12)*15}
+    \ifnum#1=1
+      \fill[zlime!80,rounded corners=1.5mm] ([xshift=-7mm,yshift=\zty mm]current page.north east) rectangle ++(9mm,-13mm);
+      \node[font=\sffamily\scriptsize\bfseries,text=zolive] at ([xshift=-3.7mm,yshift=\zty mm-6.5mm]current page.north east) {\themundo};
+    \else
+      \fill[zlime!80,rounded corners=1.5mm] ([xshift=7mm,yshift=\zty mm]current page.north west) rectangle ++(-9mm,-13mm);
+      \node[font=\sffamily\scriptsize\bfseries,text=zolive] at ([xshift=3.7mm,yshift=\zty mm-6.5mm]current page.north west) {\themundo};
+    \fi
+  \end{tikzpicture}\fi}
+\fancyhf{}
+\fancyhead[LE]{\zuka@pestana{0}\sffamily\footnotesize\color{zmute}\textbf{\color{zolive}\thepage}\hspace{4mm}Zuka Preuniversitario UdeA \,·\, Libro \zuka@num}
+\fancyhead[RO]{\sffamily\footnotesize\color{zmute}\zuka@mundoactual\hspace{4mm}\textbf{\color{zolive}\thepage}\zuka@pestana{1}}
+
+% ---------- cajas ----------
+\tcbset{zbase/.style={enhanced,breakable,boxrule=0pt,arc=3pt,left=4.5mm,right=4.5mm,top=3mm,bottom=3mm,
+  before skip=8pt,after skip=8pt,fontupper=\normalsize},
+  zborde/.style={borderline west={1.6pt}{0pt}{#1}}}
+
+\renewenvironment{reto}{%
+  \begin{tcolorbox}[zbase,colback=zlime!14,zborde=zmoss]
+  \zuka@cab{zmoss}{reto}{El reto}{\sffamily\scriptsize\color{zmute}\quad se resuelve al final de la lección}\par\vspace{4pt}}
+  {\end{tcolorbox}\zuka@poneanalogia}
+\renewcommand{\zuka@cajaanalogia}[2]{%
+  \begin{tcolorbox}[zbase,colback=zsun!8,zborde=zsun]
+  \zuka@cab{zsun}{idea}{La analogía}{\sffamily\small\bfseries\color{zink}\quad #1}\par\vspace{4pt}
+  {\itshape #2}\end{tcolorbox}}
+\renewenvironment{regla}[1][La regla]{%
+  \begin{tcolorbox}[zbase,colback=white,colframe=zolive,boxrule=.7pt]
+  \zuka@cab{zolive}{regla}{#1}\par\vspace{4pt}}
+  {\end{tcolorbox}}
+\renewenvironment{ejemplo}[1][]{%
+  \stepcounter{ejemplo}%
+  \begin{tcolorbox}[zbase,colback=zpaper,zborde=zline]
+  \zuka@cab{zmute}{ejemplo}{Ejemplo \thesection.\arabic{ejemplo}}%
+  \if\relax\detokenize{#1}\relax\else{\sffamily\small\bfseries\color{zink}\quad #1}\fi\par\vspace{4pt}}
+  {\end{tcolorbox}}
+\renewenvironment{trampa}{%
+  \begin{tcolorbox}[zbase,colback=zcoral!6,zborde=zcoral]\zuka@cab{zcoral}{trampa}{Trampa}\quad}
+  {\end{tcolorbox}}
+\renewenvironment{atajo}{%
+  \begin{tcolorbox}[zbase,colback=zsky!6,zborde=zsky]\zuka@cab{zsky}{atajo}{Atajo de examen}\quad}
+  {\end{tcolorbox}}
+\renewenvironment{profundiza}{%
+  \begin{tcolorbox}[zbase,colback=zviolet!5,zborde=zviolet]\zuka@cab{zviolet}{lejos}{Para ir más lejos}\quad}
+  {\end{tcolorbox}}
+\renewenvironment{retoresuelto}{%
+  \begin{tcolorbox}[zbase,colback=zlime!14,zborde=zmoss]\zuka@cab{zmoss}{listo}{El reto, resuelto}\quad}
+  {\end{tcolorbox}}
+\renewcommand{\zuka@cajaexamen}[1]{\setcounter{forma}{0}%
+  \begin{tcolorbox}[zbase,colback=zsky!5,colframe=zsky!45,boxrule=.5pt]
+  \zuka@cab{zsky}{examen}{Así lo preguntan en el examen}{\sffamily\scriptsize\color{zmute}\quad las formas en que aparece este tema}\par
+  #1\end{tcolorbox}}
+\renewenvironment{comentada}[1]{%
+  \begin{tcolorbox}[zbase,colback=white,colframe=zline,boxrule=.5pt]
+  \zuka@cab{zolive}{pregunta}{Pregunta comentada}\par\vspace{4pt}#1\par\vspace{4pt}
+  \begin{list}{}{\leftmargin=9mm\labelwidth=8mm\labelsep=1mm\itemsep=4pt\topsep=0pt\parsep=0pt}}
+  {\end{list}\end{tcolorbox}}
+
+% ---------- texto de lectura ----------
+\renewenvironment{texto}[2]{%
+  \setcounter{parr}{0}%
+  \begin{tcolorbox}[enhanced,breakable,colback=zpaper,colframe=zline,boxrule=.5pt,arc=3pt,left=10mm,right=7mm,
+    top=4mm,bottom=5mm,before skip=9pt,after skip=9pt,borderline north={1.6pt}{0pt}{zmoss}]
+  \zuka@cab{zmoss}{lectura}{Lectura}{\sffamily\scriptsize\color{zmute}\quad #2}\par\vspace{5pt}
+  {\fontsize{15}{18}\selectfont\itshape\color{zink}#1\par}\vspace{5pt}
+  \setlength{\parskip}{5pt}\linespread{1.13}\selectfont}
+  {\end{tcolorbox}}
+
+% ---------- taller, pisos y bitácora ----------
+\renewcommand{\taller}{\zuka@poneexamen\par\vspace{10pt}\noindent
+  \zuka@cab{zolive}{taller}{Taller \thesection}\hspace{3mm}%
+  \tikz[baseline=-.6ex]{\draw[zlime,line width=1.4pt] (0,0) -- (\dimexpr\linewidth-38mm\relax,0);}\par\vspace{2pt}}
+\newcommand{\zuka@nivel}[1]{\tikz[x=1mm,y=1mm,baseline=-.9mm]{\foreach \k in {1,2,3}{%
+  \ifnum\k>#1 \draw[zolive,line width=.5pt] (\k*2.3,0) circle (.75);\else \fill[zolive] (\k*2.3,0) circle (.8);\fi}}}
+\renewcommand{\piso}[2]{\par\vspace{7pt}%
+  {\ifstrequal{#1}{Calienta}{\zuka@nivel{1}}{\ifstrequal{#1}{Entrena}{\zuka@nivel{2}}{\zuka@nivel{3}}}\hspace{2mm}%
+  \sffamily\small\bfseries\color{zolive}#1}\,{\sffamily\footnotesize\color{zmute}· #2}\par\vspace{1pt}}
+\renewcommand{\bitacora}{\par\vspace{8pt}\noindent
+  \begin{tcolorbox}[enhanced,colback=white,colframe=zline,boxrule=.5pt,arc=5pt,left=3mm,right=3mm,top=1.6mm,bottom=1.6mm]
+  {\sffamily\footnotesize\color{zmute}\textbf{\color{zolive}Bitácora}\hfill
+   \casilla{Leí}\hfill\casilla{Vi el video en Zuka}\hfill\casilla{Jugué}\hfill\casilla{Hice el taller}\hfill
+   Fecha \rule[-1pt]{13mm}{.4pt}}\end{tcolorbox}}
