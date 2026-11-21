@@ -392,6 +392,20 @@ material extra (promos, cortos, efectos, 3D, audio).
   dos dedos; `NARR` es la narración (`mix.py` escribe `abejas.srt`). `engine.js`/`engine2.js` son el motor de la demo en
   vertical. Renderiza con 2 trabajadores (cada página usa cerca de 1 GB). Datos y lo que quedó fuera: `FACTS.md`.
 
+## Libros impresos del Preuniversitario (2026-11-20)
+
+Cuatro libros en LaTeX en `docs/libros/` (spec `2026-11-20-libros-preuda`): 1 y 2 de Razonamiento lógico («Número y forma»,
+«Orden, lógica y azar»), 3 y 4 de Comprensión lectora («Leer lo que dice», «Leer lo que quiere decir»); contenido original, un
+capítulo por mundo de la app y una sección por lección (mismo id `pu-…`). `sh docs/libros/build.sh [1 2 3 4]` deja
+`docs/libros/pdf/Zuka_Preuniversitario_Libro_N.pdf` (no van al repositorio; entrega en `Downloads/Zuka_Libros_Preuniversitario`).
+Plantilla `tex/zuka-libro.sty` (17 × 24 cm, Palatino + Fira Sans): `\mundo`, `\leccion`, `reto`, `regla`, `ejemplo`, `trampa`,
+`atajo`, `\taller` + `ejercicios` con `\sol{…}` (las claves se imprimen solas al final), `texto` + `comentada` en lectura.
+**El usuario pidió: sin fondos negros**, muy visuales, analogías y lenguaje sencillo, muchos ejemplos y las formas en que cada
+concepto se pregunta en el examen. Por eso cada lección lleva su analogía (`analogias-*.tex`) y «Así lo preguntan en el examen»
+(`examen-*.tex`), que se insertan solas por id. Arte de portadas por código (`arte/portadas.py`: Julia, Clifford, libro con
+letras, árbol de letras). En este Windows, `sed -i` y los heredoc con barras fallan sobre los `.tex`: editar con la herramienta
+de edición. Pendiente: revisión independiente de las claves y más ejemplos resueltos por lección.
+
 ## Pendiente (a la fecha)
 
 Videos hechos y entregados que esperan su ID de Bunny (`clip.bunny` + `duration`):
