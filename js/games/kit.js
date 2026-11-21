@@ -115,6 +115,17 @@ const COURSE_PALETTES = {
       mint: '#65A30D', sky: '#0284C7', creamD: '#D3D8E0', night: '#161B24', star: '#E8EBF0', halo: '#EFF1F4',
     },
   },
+  // Preicfes Saber 11: como el Preuniversitario, fondo neutro y plano; el fucsia solo de acento y el ámbar de apoyo.
+  preicfes: {
+    dark: {
+      brand: '#E879F9', bg: '#13121A', card: '#1E1C27', line: '#3A3649', ink: '#F5F3F8', mute: '#ABA6BC',
+      mint: '#F0ABFC', sky: '#FBBF24', cream: '#F1EEF5', creamD: '#BDB8CA', night: '#13121A', star: '#2A2736', halo: '#1A1822',
+    },
+    light: {
+      brand: '#A21CAF', bg: '#F8F7FA', card: '#FFFFFF', line: '#DDD9E5', ink: '#1A1724', mute: '#5E5872',
+      mint: '#C026D3', sky: '#B45309', creamD: '#D6D1E0', night: '#1A1724', star: '#EAE7F0', halo: '#F0EEF4',
+    },
+  },
   lin: {
     dark: {
       brand: '#FB923C', bg: '#1E130C', card: '#2E1F15', line: '#5E4029', ink: '#FFF3EA', mute: '#C9AD98',
@@ -128,7 +139,7 @@ const COURSE_PALETTES = {
 };
 let gameTheme = 'dark', gameCourse = null;
 // Cursos con fondo plano (sin el brillo de su color detrás del juego).
-const FLAT_COURSES = new Set(['preuda']);
+const FLAT_COURSES = new Set(['preuda', 'preicfes']);
 function paintGamePalette() {
   Object.assign(PALETTE, PALETTES[gameTheme], COURSE_PALETTES[gameCourse]?.[gameTheme]);
   // El marco del juego (.play, la guía) usa el mismo fondo: css/styles.css trae el del tema y aquí se pone el del curso.

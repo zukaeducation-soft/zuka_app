@@ -9,9 +9,9 @@ const files = [...read('index.html').matchAll(/src="(js\/[^"]+)"/g)].map(m => m[
   .filter(f => /content|games\/|courses\/|data\.js|guia/.test(f));
 const ctx = loadScripts(files), games = get(ctx, 'GAMES');
 
-test('los ocho cursos tienen instrucciones para la práctica sobre la escena', () => {
+test('los nueve cursos tienen instrucciones para la práctica sobre la escena', () => {
   const lines = get(ctx, 'practiceGuideLines'), courses = get(ctx, 'COURSES');
-  assert.equal(courses.length, 8);
+  assert.equal(courses.length, 9);
   for (const c of courses) for (const u of c.units) for (const l of [...u.lessons, u.boss].filter(Boolean)) {
     for (const e of l.ex) {
       const text = lines(e);

@@ -11,7 +11,7 @@ PI_MUNDOS.push((() => {
     paras: [
       'Cada vez que llueve, los niños de la vereda La Esperanza dejan de ir a la escuela. Para llegar tienen que cruzar una quebrada que en invierno crece tanto que arrastra piedras y troncos. Los padres llevan años pidiendo un puente. Seguir su solicitud paso a paso es una buena manera de entender cómo funciona el Estado colombiano.',
       'La Constitución de 1991 dice en su primer artículo que Colombia es un Estado social de derecho. «De derecho» significa que todas las autoridades, desde el presidente hasta el alcalde, deben actuar según las leyes y no según su voluntad. «Social» significa que el Estado no solo pone reglas: también tiene el deber de garantizar condiciones de vida dignas, como la educación de esos niños.',
-      'Para que nadie concentre todo el poder, este se divide en tres ramas. La legislativa hace las normas: en el país, el Congreso expide las leyes; en el municipio, el concejo aprueba los acuerdos y el presupuesto. La ejecutiva gobierna y ejecuta: el presidente a nivel nacional, los gobernadores en los departamentos y los alcaldes en los municipios. La judicial resuelve los conflictos y protege los derechos por medio de los jueces y las altas cortes.',
+      'Para que nadie concentre todo el poder, este se divide en tres ramas. La legislativa hace las leyes: es el Congreso, formado por el Senado y la Cámara. La ejecutiva gobierna y ejecuta: el presidente a nivel nacional, los gobernadores en los departamentos y los alcaldes en los municipios. La judicial resuelve los conflictos y protege los derechos por medio de los jueces y las altas cortes. En el municipio, las normas locales y el presupuesto los aprueba el concejo, una corporación administrativa elegida por voto popular: no es parte del Congreso, pero cumple allí la tarea de decidir las normas.',
       'En el caso del puente, la junta de acción comunal llevó la petición a la alcaldía. El alcalde incluyó la obra en su proyecto de presupuesto, pero no podía gastar el dinero por su cuenta: primero el concejo municipal tuvo que aprobarlo. Solo entonces la alcaldía pudo contratar a la empresa que construiría el puente.',
       'Además de las tres ramas, existen órganos de control que vigilan a los demás. La Contraloría revisa que el dinero público se gaste bien; la Procuraduría investiga a los funcionarios que incumplen sus deberes; y la Defensoría del Pueblo y las personerías ayudan a los ciudadanos a defender sus derechos. Cuando la obra se retrasó, la Contraloría pidió explicaciones sobre los pagos que ya se habían hecho.',
       'El puente se terminó dos años después de la primera solicitud. Para los habitantes de La Esperanza, la espera fue larga; para el Estado, la división del poder hizo más lento el proceso, pero también más difícil que el dinero se perdiera. Esa es la tensión de siempre: los controles cuestan tiempo, y sin ellos el poder no le rinde cuentas a nadie.',
@@ -35,7 +35,7 @@ PI_MUNDOS.push((() => {
     sc(6, 'La prueba de Sociales pregunta casi siempre por **casos**: una comunidad, una autoridad y una decisión. Para resolverlos hay que saber quién hace qué en el Estado.', { title: 'Casos, no fechas' }),
     sc(7, 'Colombia es un **Estado social de derecho**: las autoridades obedecen las leyes, y además el Estado debe garantizar condiciones de vida dignas.', { title: 'De derecho y social' }),
     sc(7, 'El poder se divide en **tres ramas**: la legislativa hace las normas, la ejecutiva gobierna y ejecuta, y la judicial resuelve conflictos. Es como un equipo en el que nadie es a la vez jugador, árbitro y dueño del reglamento.', { title: 'Tres ramas' }),
-    sc(7, 'Ejemplo en un municipio: el concejo aprueba la norma que prohíbe parquear en el andén, la alcaldía pone las señales y multa, y un juez decide si una multa fue injusta.', { title: 'Concejo, alcaldía y juez' }),
+    sc(7, 'Ejemplo en un municipio: el concejo (una corporación administrativa, no parte del Congreso) aprueba la norma que prohíbe parquear en el andén, la alcaldía pone las señales y multa, y un juez decide si una multa fue injusta.', { title: 'Concejo, alcaldía y juez' }),
     sc(6, 'Los **órganos de control** vigilan: la Contraloría cuida el dinero público, la Procuraduría a los funcionarios y la Defensoría los derechos humanos.', { title: 'Quién vigila' }),
   ], [
     play('anticipa-texto', 'Antes de leer, anticipa con la ficha', { doc: PUENTE, slots: [
@@ -47,15 +47,15 @@ PI_MUNDOS.push((() => {
     play('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { doc: PUENTE, labels: ['presenta el caso', 'define el Estado social de derecho', 'explica las tres ramas del poder', 'sigue el caso por las ramas', 'presenta los órganos de control', 'concluye con una tensión', 'critica la Constitución'], key: [0, 1, 2, 3, 4, 5] },
       'Empieza con el problema de la vereda, define el Estado social de derecho, explica las tres ramas, sigue la petición por la alcaldía y el concejo, presenta los órganos de control y cierra con la tensión entre controles y rapidez. No critica la Constitución.',
       { hint: 'Pregúntate en cada párrafo si cuenta el caso, define, explica, aplica o concluye.' }),
-    play('quien-lo-dice', '¿A quién le toca cada tarea?', { doc: PUENTE, ask: 'Lleva cada tarea a la parte del Estado que la cumple, según el texto.', voices: ['Rama legislativa', 'Rama ejecutiva', 'Rama judicial', 'Órganos de control'], cards: [
+    play('quien-lo-dice', '¿A quién le toca cada tarea?', { doc: PUENTE, ask: 'Lleva cada tarea a la función del Estado que cumple, según el texto.', voices: ['Hace las normas', 'Ejecuta y gobierna', 'Juzga', 'Vigila'], cards: [
       ['El concejo aprueba el presupuesto de la obra.', 0],
       ['La alcaldía contrata a la empresa del puente.', 1],
       ['Los jueces resuelven conflictos y protegen derechos.', 2],
       ['La Contraloría pide explicaciones por los pagos.', 3],
       ['El Congreso expide las leyes.', 0],
       ['El gobernador gobierna el departamento.', 1],
-    ] }, 'El concejo y el Congreso hacen normas (legislativa); la alcaldía y el gobernador ejecutan (ejecutiva); los jueces deciden (judicial); la Contraloría vigila el dinero (control).',
-      { hint: 'Pregunta por el verbo de cada tarea: ¿hace normas, ejecuta, decide un conflicto o vigila a otros?' }),
+    ] }, 'El Congreso hace las leyes (rama legislativa) y el concejo las normas del municipio (es una corporación administrativa, no parte del Congreso); la alcaldía y el gobernador ejecutan (ejecutiva); los jueces deciden (judicial); la Contraloría vigila el dinero (control).',
+      { hint: 'Pregunta por el verbo de cada tarea: ¿hace normas, ejecuta, decide un conflicto o vigila a otros? Un mismo verbo puede estar en el país y en el municipio.' }),
     play('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { doc: PUENTE, cards: [
       ['El alcalde no podía gastar el dinero sin la aprobación del concejo.', 0],
       ['La Procuraduría investiga a los funcionarios que incumplen sus deberes.', 0],
@@ -88,7 +88,7 @@ PI_MUNDOS.push((() => {
       ['Quien aprueba el presupuesto del municipio es…', ['el concejo', 'el alcalde', 'un juez'], 0],
       ['Quien vigila que el dinero público se gaste bien…', ['la Contraloría', 'el Congreso', 'la alcaldía'], 0],
       ['La rama que resuelve conflictos es la…', ['judicial', 'ejecutiva', 'legislativa'], 0],
-    ], 'El concejo es la parte normativa del municipio; la Contraloría hace el control fiscal; y los jueces, de la rama judicial, resuelven los conflictos.',
+    ], 'El concejo, una corporación administrativa elegida por voto, aprueba las normas y el presupuesto del municipio; la Contraloría hace el control fiscal; y los jueces, de la rama judicial, resuelven los conflictos.',
       'Pregúntate por el verbo: aprobar normas, vigilar el dinero o resolver conflictos.'),
   ]);
 
@@ -139,7 +139,7 @@ PI_MUNDOS.push((() => {
       { p: 2, text: 'Cualquier persona puede presentar |una solicitud respetuosa| ante |una autoridad|, de forma verbal o escrita, y |esta| debe responder de fondo', from: 5, answer: 3 },
       { p: 1, text: 'La personera estudiantil le explicó que |la Constitución| no solo enumera |derechos|: también da herramientas concretas para |reclamarlos|.', from: 5, answer: 3 },
     ] }, '«Esta» es la autoridad, la que debe responder (no la solicitud). En «reclamarlos», «los» son los derechos que enumera la Constitución.',
-      { hint: 'Fíjate en el género y el número: «esta» es femenino singular y «los» es masculino plural. Luego prueba si la oración tiene sentido.' }),
+      { hint: 'Pregúntate quién puede responder una solicitud. Y «los» es masculino plural: busca qué cosa en plural se puede reclamar.' }),
     play('palabra-a-la-medida', 'La palabra en su oración', { doc: TUTELA, rounds: [
       { p: 3, before: 'cuando una autoridad o un particular los ', word: 'vulnera', after: ' o los amenaza', options: ['viola', 'consulta', 'protege', 'enumera'], answer: 0 },
       { p: 6, before: 'Quien sabe que puede reclamar deja de pedir favores y empieza a ', word: 'exigir', after: ' derechos', options: ['reclamar con firmeza', 'regalar', 'imaginar', 'olvidar'], answer: 0 },
@@ -154,7 +154,7 @@ PI_MUNDOS.push((() => {
   ]);
 
   const PARQUE = {
-    id: 'icf-parque', title: 'El parque que el concejo quería vender',
+    id: 'icf-parque', title: 'El parque que la alcaldía quería vender',
     paras: [
       'En un municipio de la sabana, la alcaldía presentó al concejo un proyecto para vender el lote del parque El Recreo a una constructora. Con ese dinero, explicó el alcalde, se terminaría el hospital, cuya obra está detenida hace dos años por falta de recursos. El concejo debía decidir en tres semanas.',
       'Los vecinos del parque reaccionaron de inmediato. Para ellos, El Recreo es el único espacio verde del barrio, el lugar donde juegan los niños y se reúnen los adultos mayores. «Nos están pidiendo escoger entre la salud y el aire», dijo la presidenta de la junta de acción comunal en una sesión abierta del concejo. Al día siguiente, más de dos mil vecinos firmaron una carta para pedir que el lote siguiera siendo un parque y que el hospital se financiara de otra manera.',
@@ -167,7 +167,7 @@ PI_MUNDOS.push((() => {
   return mundo('icf-sc-constitucion', 'Constitución y Estado', 'sociales', [l1, l2], [
     ['icf-sc-constitucion-1', 'El concejo hace las normas del municipio y aprueba lo que propone el alcalde.',
       Q('En el caso, la decisión de vender o no el parque le corresponde, en primer lugar, al concejo municipal porque:', ['Es la autoridad judicial del municipio', 'Es el órgano que aprueba las normas y decisiones que presenta la alcaldía', 'Es el órgano de control que vigila al alcalde', 'Representa a los comerciantes de la zona'], 1,
-        'El concejo es la corporación normativa del municipio, de la rama legislativa en lo local: aprueba o rechaza los proyectos del alcalde. No es un juez ni un órgano de control.',
+        'El concejo es la corporación administrativa del municipio, elegida por voto popular: aprueba o rechaza las normas y los proyectos del alcalde. No es un juez ni un órgano de control, y tampoco representa a un gremio.',
         'Recuerda qué hace cada parte del Estado: hacer normas, ejecutar, juzgar o vigilar.')],
     ['icf-sc-constitucion-1', 'Cada rama cumple su función: el juez decide sobre los conflictos y los derechos.',
       Q('Cuando el juez ordena suspender la venta, actúa como parte de:', ['La rama ejecutiva, porque gobierna el municipio', 'La rama legislativa, porque cambia una norma', 'Los órganos de control, porque vigila el dinero', 'La rama judicial, porque resuelve un conflicto sobre derechos'], 3,

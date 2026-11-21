@@ -142,7 +142,7 @@ PI_MUNDOS.push((() => {
       'Si cada día hay el doble, el día anterior había la mitad: si la laguna se llena el día 10, estaba medio llena el día 9. Si se llena el 8, estaba a la cuarta parte el día 6.',
       { hint: 'No busques a mitad del calendario: piensa cuántas veces hay que dividir entre 2 para llegar a lo que te piden.' }),
     sol('Una estudiante calienta agua y registra la temperatura cada minuto: 20, 26, 32, 38 y 44 °C en los minutos 0 a 4. Si la tendencia sigue igual, ¿qué temperatura tendrá a los 7 minutos y hasta cuándo vale la predicción?',
-      ['Cada minuto la temperatura sube [[6]] °C', 'A los 7 minutos: $20 + 7 \\cdot 6 =$ [[62]] °C', 'La temperatura cambia de forma [[constante]] mientras se calienta', 'La predicción vale solo hasta que el agua llegue a unos [[100]] °C, donde hierve'],
+      ['Cada minuto la temperatura sube [[6]] °C', 'A los 7 minutos: 20 °C más 7 veces lo que sube por minuto, [[62]] °C', 'La temperatura cambia de forma [[constante]] mientras se calienta', 'La predicción vale solo hasta que el agua llegue a unos [[100]] °C, donde hierve'],
       ['44', 'variable', '50'],
       'Los datos suben 6 °C por minuto, así que a los 7 minutos el agua estaría a 62 °C. La tendencia no sigue para siempre: al hervir, la temperatura deja de subir aunque se siga calentando.',
       'Halla cuánto sube por minuto restando dos datos seguidos, y piensa qué le pasa al agua cuando hierve.'),

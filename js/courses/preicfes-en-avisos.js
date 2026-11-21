@@ -56,11 +56,11 @@ PI_MUNDOS.push((() => {
     play('lupa-evidencia', '¿El aviso lo dice, se deduce o no lo dice?', { doc: AVISOS, cards: [
       ['Dogs must be on a lead in the park.', 0],
       ['Students can enter the museum free on Wednesdays.', 0],
-      ['The 8:15 bus is not running today.', 1],
-      ['If you want more time for a book, you should talk to the librarian.', 1],
+      ['You will not pay again if you take the 9:00 bus.', 1],
+      ['If you ask before the date, you may keep a book longer.', 1],
       ['The museum is closed on Mondays.', 2],
       ['The blue jacket belongs to a teacher.', 2],
-    ] }, 'Lo de los perros y el museo está escrito. Que el bus de las 8:15 no sale se deduce de *cancelled*, y lo del bibliotecario, de *ask the librarian*. Ningún aviso dice qué día cierra el museo ni de quién es la chaqueta.',
+    ] }, 'Lo de los perros y el museo está escrito. Que no se paga otra vez por el bus de las 9:00 se deduce de *with the same ticket*, y que se puede tener un libro más tiempo, de *ask the librarian before the date*. Ningún aviso dice qué día cierra el museo ni de quién es la chaqueta.',
       { hint: 'Si la frase está casi igual en el aviso, lo dice; si sale de entender una palabra (como *cancelled*), se deduce; si no hay de dónde sacarla, no lo dice.' }),
     play('palabra-a-la-medida', 'La palabra que dice lo mismo en el aviso', { doc: AVISOS, rounds: [
       { p: 1, before: 'Students who return books ', word: 'late', after: ' cannot borrow', options: ['after the date', 'early', 'quickly', 'together'], answer: 0 },
@@ -157,7 +157,7 @@ PI_MUNDOS.push((() => {
       Q('According to the notices, buses to the coast now leave from:', ['Platform 4', 'Window 2', 'Platform 6', 'The café'], 2,
         'El aviso del andén 4 dice que está cerrado por reparaciones y que los buses a la costa salen ahora del andén 6.', 'Lee el aviso PLATFORM 4 completo: dice dónde salen ahora los buses.')],
     ['icf-en-avisos-1', '*Please keep* pide algo y *will be removed* dice lo que pasa si no se cumple.',
-      Q('What does the WAITING ROOM notice ask you to do?', ['Give your bags to the driver', 'Leave your bags with security', 'Eat only in the café', 'Not leave your bags alone'], 3,
+      Q('What does the WAITING ROOM notice ask you to do?', ['Give your bags to the driver', 'Leave your bags with security', 'Eat only in the café', 'Keep your bags with you'], 3,
         'El aviso pide tener las maletas con uno todo el tiempo; las que se dejan solas se las lleva seguridad. No obliga a comer en la cafetería.', 'Mira qué pasa con las maletas que se dejan solas.')],
     ['icf-en-avisos-1', 'Las condiciones de un aviso deben cumplirse todas.',
       Q('The TICKETS notice says that students:', ['Always travel free', 'Pay half price on weekdays if they show their card', 'Can buy tickets from the driver', 'Pay half price only on Sundays'], 1,

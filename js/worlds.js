@@ -369,6 +369,29 @@ const WORLDS = (() => {
       ${T(62, 34, 'calles', INK, 6)}${T(62, 48, '=', INK, 7)}${T(62, 60, 'ríos', TEAL, 7)}
       ${L('M86 50q6-14 12 0t12 0', TEAL, 1.2)}${L('M86 56q6-14 12 0t12 0', INK, .7)}
       ${T(110, 28, 'como', INK, 5)}${T(30, 30, 'ironía', INK, 5)}${C(30, 44, 5, TEAL, .8, true)}${D(86, 50, 1.3, TEAL)}${D(110, 50, 1.3, TEAL)}${Ld('M50 40h24')}`) },
+    // ---------- Preicfes Saber 11 (spec 2026-11-20-curso-preicfes): el primer mundo de cada componente ----------
+    'icf-ma-datos': { name: 'Datos y Gráficas', art: plate('icf-ma-datos', TEAL, `
+      ${L('M50 62V18M50 62h66', INK, .9)}${[[56, 30], [70, 18], [84, 24], [98, 12]].map(([x, h], i) => (i === 1 ? F(`M${x} 62v-${h + 12}h10v${h + 12}z`, TEAL, .35) : '') + L(`M${x} 62v-${h + 12}h10v${h + 12}`, i === 1 ? TEAL : INK, i === 1 ? 1.3 : .9)).join('')}
+      ${Ld('M50 40h66', TEAL)}${T(126, 42, 'x̄', TEAL, 8)}
+      ${C(30, 34, 10, INK, .9)}${F('M30 34V24A10 10 0 0 1 39.5 37z', TEAL, .4)}${L('M30 34V24M30 34l9.5 3', TEAL, 1)}${T(30, 56, '25 %', INK, 5.5)}`) },
+    'icf-lc-literal': { name: 'Lo que Dice el Texto', art: plate('icf-lc-literal', TEAL, `
+      ${L('M50 18h44v46H50z', INK, .9)}${[26, 34, 42, 50].map((y, i) => L(`M56 ${y}h${i === 1 ? 24 : 32}`, i === 1 ? TEAL : INK, i === 1 ? 1.3 : .7)).join('')}
+      ${C(102, 44, 9, TEAL, 1.2)}${L('M108.5 50.5l9 9', TEAL, 1.6)}${T(102, 47, '¶', INK, 8)}
+      ${T(30, 30, 'dice', INK, 6)}${T(30, 46, '≠', TEAL, 8)}${T(30, 60, 'supone', INK, 5.5)}`) },
+    'icf-sc-constitucion': { name: 'Constitución y Estado', art: plate('icf-sc-constitucion', TEAL, `
+      ${L('M56 30l24-12 24 12z', INK, 1)}${L('M58 34h44M58 60h44', INK, .9)}
+      ${[64, 80, 96].map((x, i) => L(`M${x} 36v22`, i === 1 ? TEAL : INK, i === 1 ? 1.6 : 1)).join('')}
+      ${T(64, 70, 'L', INK, 5.5)}${T(80, 70, 'E', TEAL, 5.5)}${T(96, 70, 'J', INK, 5.5)}
+      ${T(28, 34, 'Art. 86', INK, 5.5)}${T(132, 34, 'tutela', TEAL, 6)}${A(118, 42, 104, 48, TEAL, .9)}`) },
+    'icf-cn-indaga': { name: 'Indagación Científica', art: plate('icf-cn-indaga', TEAL, `
+      ${L('M70 18h12M73 18v14l-12 24a4 4 0 0 0 4 6h22a4 4 0 0 0 4-6L79 32V18', INK, 1)}${F('M64 50h24l3 6a4 4 0 0 1-4 6H65a4 4 0 0 1-4-6z', TEAL, .35)}
+      ${D(72, 54, 1.4, TEAL)}${D(80, 50, 1.1, TEAL)}${H(76, 44, 1.6, TEAL)}
+      ${L('M104 62V30M104 62h30', INK, .8)}${L('M106 58l7-8 7-6 7-10', TEAL, 1.2)}${[[113, 50], [120, 44], [127, 34]].map(([x, y]) => D(x, y, 1.4, INK)).join('')}
+      ${T(30, 36, 'x → y', INK, 6.5)}${T(30, 52, 'control', TEAL, 5.5)}`) },
+    'icf-en-avisos': { name: 'Avisos y Vocabulario', art: plate('icf-en-avisos', TEAL, `
+      ${L('M52 20h56v24H52z', INK, 1)}${T(80, 35, 'NO ENTRY', TEAL, 7)}${L('M80 44v18M70 62h20', INK, .9)}
+      ${C(30, 34, 9, TEAL, 1.1)}${L('M24 40l12-12', TEAL, 1.3)}
+      ${T(130, 30, 'word', INK, 6)}${A(130, 36, 130, 46, TEAL, .9)}${T(130, 56, 'meaning', INK, 5)}`) },
   };
 })();
 
