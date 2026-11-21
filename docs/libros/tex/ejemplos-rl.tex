@@ -57,10 +57,10 @@
 \ejx{Billetes}{En una caja hay 40 billetes de \$2\,000 y \$5\,000 que suman \$125\,000. ¿Cuántos hay de \$5\,000?}{Si todos fueran de 2\,000: \$80\,000. Faltan \$45\,000, y cada billete de 5\,000 aporta 3\,000 más: 15 billetes.}}
 \masejemplosde{pu-ec-3}{
 \ejx{Dos compras}{Tres empanadas y dos jugos cuestan \$13\,000; una empanada y dos jugos, \$7\,000. ¿Cuánto cuesta un jugo?}{Restando: dos empanadas cuestan \$6\,000, cada una \$3\,000. Entonces dos jugos cuestan \$4\,000: un jugo, \$2\,000.}
-\ejx{Presupuesto}{Con \$50\,000 se quieren comprar cuadernos de \$4\,500 después de pagar \$8\,000 de transporte. ¿Cuántos cuadernos, como máximo?}{$8\,000 + 4\,500n \le 50\,000$: $n \le 9.3$. Máximo 9 cuadernos.}}
+\ejx{Presupuesto}{Con \$50\,000 se quieren comprar cuadernos de \$4\,500 después de pagar \$8\,000 de transporte. ¿Cuántos cuadernos, como máximo?}{$8\,000 + 4\,500n \le 50\,000$: $4\,500n \le 42\,000$, $n \le 9.33\ldots$ Máximo 9 cuadernos.}}
 % --- Teoría de números ---
 \masejemplosde{pu-nu-1}{
-\ejx{La cifra que falta}{¿Qué cifras puede ser $d$ para que $\overline{2d6}$ sea divisible entre 4?}{Las dos últimas, $\overline{d6}$, deben ser múltiplo de 4: 16, 36, 56, 76, 96. $d$ puede ser 1, 3, 5, 7 o 9.}
+\ejx{La cifra que falta}{¿Qué valores puede tomar la cifra $d$ para que $\overline{2d6}$ sea divisible entre 4?}{Las dos últimas cifras, $\overline{d6}$, deben formar un múltiplo de 4: 16, 36, 56, 76, 96. $d$ puede ser 1, 3, 5, 7 o 9.}
 \ejx{Divisores de un cuadrado}{¿Cuántos divisores tiene 144?}{$144 = 2^4 \cdot 3^2$: $(4 + 1)(2 + 1) = 15$. Es impar, como en todo cuadrado perfecto.}}
 \masejemplosde{pu-nu-2}{
 \ejx{Cajas iguales}{Se quieren empacar 84 manzanas y 126 naranjas en cajas iguales, sin mezclar frutas y con el mayor número posible de frutas por caja. ¿Cuántas cajas se necesitan?}{MCD$(84, 126) = 42$ frutas por caja: $2 + 3 = 5$ cajas.}
@@ -92,8 +92,8 @@
 \ejx{El podio}{En una carrera de cinco, Sara llegó antes que Tito y después de Vera. Uma llegó de última. Willy llegó justo antes que Sara. ¿En qué puesto llegó Tito?}{Cadena $V < S < T$, con $W$ pegado antes de $S$ y $U$ en el 5: $V, W, S, T, U$. Tito llegó cuarto.}
 \ejx{Estaturas}{Ana es más alta que Bea; Cata es más baja que Bea; Dora es más alta que Ana. ¿Quién es la segunda más alta?}{Orden de mayor a menor: Dora, Ana, Bea, Cata. La segunda es Ana.}}
 \masejemplosde{pu-or-2}{
-\ejx{Cuatro en la mesa}{Cuatro amigos en una mesa cuadrada, uno por lado: Inés frente a Joel; Karen no está a la derecha de Inés. ¿Quién está a la derecha de Inés?}{Los dos lados libres son para Karen y el cuarto, Luis. Como Karen no está a la derecha de Inés, es Luis.}
-\ejx{Ocho puestos}{En una mesa redonda de 8 puestos, Mario está frente a Nora y Olga está dos puestos a la derecha de Mario. ¿Cuántos puestos separan a Olga de Nora por el lado más corto?}{Mario en el 1, Nora en el 5, Olga en el 3 (o en el 7). Entre el 3 y el 5 hay un puesto en medio: están a 2 puestos de distancia.}}
+\ejx{Cuatro en la mesa}{Inés, Joel, Karen y Luis se sientan en una mesa cuadrada, uno por lado. Inés está frente a Joel y Karen no está a la derecha de Inés. ¿Quién está a la derecha de Inés?}{Los dos lados libres, a la izquierda y a la derecha de Inés, son para Karen y Luis. Como Karen no está a la derecha de Inés, ahí está Luis.}
+\ejx{Ocho puestos}{En una mesa redonda de 8 puestos, Mario está frente a Nora y Olga está dos puestos a la derecha de Mario. Contando por el lado más corto, ¿cuántos puestos hay entre Olga y Nora?}{Numerando: Mario en el 1, Nora en el 5 y Olga en el 3 (o en el 7, según el sentido; el caso es simétrico). Entre el 3 y el 5 queda solo el 4: hay un puesto entre ellas.}}
 \masejemplosde{pu-or-3}{
 \ejx{Tres oficios}{Paula, Quique y Rosa son chef, piloto y veterinaria. Paula no cocina. Quique le tiene miedo a volar. Rosa no trabaja con animales ni cocina. ¿Qué es cada uno?}{Rosa: piloto. Quique no es piloto, y Paula no es chef: Quique es chef y Paula veterinaria.}
 \ejx{Las mascotas}{Tres niños tienen un gato, un perro y un pez. Sami no tiene gato. Tina tiene el pez. ¿Qué tiene Ugo?}{Tina, el pez. Sami no tiene gato: tiene el perro. Ugo, el gato.}}
@@ -132,19 +132,19 @@
 \ejx{Una foto}{Cuatro hombres y tres mujeres posan en fila, con las mujeres en los tres puestos del centro. ¿De cuántas maneras?}{$3!$ para las mujeres y $4!$ para los hombres: $6 \cdot 24 = 144$.}}
 \masejemplosde{pu-co-3}{
 \ejx{El examen}{En un examen hay que responder 8 de 10 preguntas. ¿De cuántas maneras se pueden elegir?}{$\binom{10}{8} = \binom{10}{2} = 45$.}
-\ejx{Con una obligatoria}{Y si las tres primeras son obligatorias, ¿de cuántas maneras?}{Faltan 5 de las otras 7: $\binom75 = 21$.}}
+\ejx{Con tres obligatorias}{Y si las tres primeras son obligatorias, ¿de cuántas maneras?}{Faltan 5 de las otras 7: $\binom75 = 21$.}}
 \masejemplosde{pu-co-4}{
 \ejx{Al menos una mujer}{De 5 hombres y 4 mujeres se elige un comité de 3. ¿Cuántos comités tienen al menos una mujer?}{Total $\binom93 = 84$; solo hombres $\binom53 = 10$. Con al menos una mujer: 74.}
 \ejx{Cifras repetidas}{¿Cuántos números de tres cifras tienen al menos dos cifras iguales?}{Total 900; con las tres distintas $9 \cdot 9 \cdot 8 = 648$. Con alguna repetida: 252.}}
 \masejemplosde{pu-co-5}{
 \ejx{Pasando por la panadería}{En una cuadrícula, la casa está en $(0, 0)$, la panadería en $(2, 1)$ y el colegio en $(4, 3)$. ¿Cuántos caminos cortos pasan por la panadería?}{Hasta la panadería: $\binom31 = 3$. De ahí al colegio (2 a la derecha, 2 arriba): $\binom42 = 6$. Total 18.}
-\ejx{Rectángulos}{¿Cuántos rectángulos (de cualquier tamaño) hay en una cuadrícula de $3 \times 3$?}{$\binom42 \cdot \binom42 = 36$.}}
+\ejx{Rectángulos}{¿Cuántos rectángulos (de cualquier tamaño) hay en una cuadrícula de $3 \times 3$ cuadros?}{Hay 4 rayas horizontales y 4 verticales; un rectángulo se forma al elegir 2 de cada una: $\binom42 \cdot \binom42 = 36$.}}
 % --- Probabilidad ---
 \masejemplosde{pu-pb-1}{
 \ejx{Una carta}{De una baraja de 52 cartas se saca una. ¿Probabilidad de que sea un as o una carta de corazones?}{4 ases $+$ 13 corazones $-$ 1 as de corazones $= 16$. $P = \tfrac{16}{52} = \tfrac{4}{13}$.}
 \ejx{Dos dados distintos}{Se lanzan dos dados. ¿Probabilidad de que los dos números sean distintos?}{Iguales: 6 casos. Distintos: 30 de 36: $\tfrac56$.}}
 \masejemplosde{pu-pb-2}{
-\ejx{Tres semáforos}{La probabilidad de encontrar en verde cada uno de tres semáforos independientes es $\tfrac12$. ¿Probabilidad de encontrar al menos uno en rojo?}{Todos en verde: $\tfrac18$. Al menos uno en rojo: $\tfrac78$.}
+\ejx{Tres semáforos}{La probabilidad de encontrar en verde cada uno de tres semáforos independientes es $\tfrac12$. ¿Probabilidad de que al menos uno no esté en verde?}{Todos en verde: $\left(\tfrac12\right)^3 = \tfrac18$. Al menos uno que no esté en verde: $1 - \tfrac18 = \tfrac78$.}
 \ejx{Dos calcetines}{En un cajón hay 4 medias negras y 2 blancas. Se sacan dos al azar. ¿Probabilidad de que formen un par del mismo color?}{Negras: $\tfrac46 \cdot \tfrac35 = \tfrac{12}{30}$. Blancas: $\tfrac26 \cdot \tfrac15 = \tfrac{2}{30}$. Total $\tfrac{14}{30} = \tfrac{7}{15}$.}}
 % --- Secuencias ---
 \masejemplosde{pu-se-1}{
@@ -161,7 +161,7 @@
 \ejx{Dos lugares}{Si PERRO se escribe RGTTQ, ¿cómo se escribe GATO?}{Cada letra avanza 2 lugares: G$\to$I, A$\to$C, T$\to$V, O$\to$Q. ICVQ.}
 \ejx{Decodificar}{Con la misma clave, ¿qué palabra es ECUC?}{Se retroceden 2 lugares: C, A, S, A. CASA.}}
 \masejemplosde{pu-cd-2}{
-\ejx{Tres frases}{«zu ka» = «luz verde»; «ka mi» = «verde claro»; «ro zu» = «mucha luz». ¿Cómo se dice «mucho»?}{«ka» es común a las dos primeras, como «verde». Entonces zu = luz, y en la tercera, ro = mucha (mucho).}
+\ejx{Tres frases}{«zu ka» = «luz verde»; «ka mi» = «verde claro»; «ro zu» = «mucha luz». ¿Cómo se dice «mucha»?}{«ka» es la palabra común a las dos primeras frases, como «verde». Entonces, en la primera, zu = luz. En la tercera, zu = luz y ro = mucha.}
 \ejx{Parejas de números}{Si $(2, 3) \to 7$, $(4, 1) \to 17$ y $(5, 2) \to 27$, ¿a qué va $(3, 3)$?}{El resultado crece mucho con el primer número: se prueba su cuadrado. $2^2 + 3 = 7$, $4^2 + 1 = 17$, $5^2 + 2 = 27$: la regla es $a^2 + b$. Entonces $(3, 3) \to 12$.}}
 % --- Espacial ---
 \masejemplosde{pu-es-1}{

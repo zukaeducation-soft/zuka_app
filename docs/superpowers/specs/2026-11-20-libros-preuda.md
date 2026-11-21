@@ -70,3 +70,10 @@ Todas las ilustraciones salen de dos kits que carga la plantilla: `tex/zuka-figu
 `tex/zuka-figuras2.tex` (34 nuevas, sobre todo de lectura). En los capítulos se usan con `figura{nombre}{pie}` (con barra
 invertida delante); el pie se numera por mundo. Estilo: fichas con relieve y sombra suave, tarjetas blancas para fórmulas y
 rótulos, letra Fira. Los parches `arte/poner_figuras*.py` y `arte/patch_sty.py` ya se aplicaron: quedan como registro.
+
+## Revisión independiente y más ejemplos (mismo día)
+
+Tres subagentes (opus) revisaron todo: 571 ejercicios de razonamiento, 261 preguntas de lectura y los 180 ejemplos nuevos.
+Se aplicaron 59 correcciones (parches `arte/correcciones_revision.py` y `arte/correcciones_ejemplos.py`, ya aplicados).
+«Más ejemplos resueltos»: dos por lección en `tex/ejemplos-rl.tex` y `tex/ejemplos-cl.tex`; salen solos antes de «Así lo
+preguntan en el examen». Páginas: 169, 157, 121 y 101.
