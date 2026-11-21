@@ -1,0 +1,273 @@
+% zuka-figuras2.tex — segunda tanda de ilustraciones (lectura y lecciones que no tenían figura). Mismo kit que zuka-figuras.tex.
+\usetikzlibrary{shapes.symbols}
+\newcommand{\zrenglones}[4]{% x, y (esquina superior izquierda), ancho, número de renglones
+  \foreach \k in {1,...,#4}{\pgfmathsetmacro{\zw}{#3*(0.72+0.28*mod(\k*7,5)/4)}
+    \draw[zline,line width=1.3pt] (#1,#2-\k*2.6) -- ++(\zw,0);}}
+\newcommand{\zhoja}[3]{\filldraw[fill=white,draw=zline,line width=.5pt,rounded corners=.8mm,sombra] (#1,#2) rectangle ++(#3);}
+\tikzset{globo/.style={rounded corners=2mm,fill=#1!18,draw=#1!80!black,line width=.5pt,inner sep=2mm,align=center,sombra},globo/.default=zsky,
+  resalte/.style={fill=zlime!60,rounded corners=.5mm}}
+
+% ================= LIBRO 3 =================
+\@namedef{zfig@prelectura}{\begin{tikzpicture}[zf]
+  \zhoja{0}{0}{40,52}
+  \fill[resalte] (4,44.5) rectangle (30,48.5); \draw[zink,line width=1.6pt] (5,46.5) -- (28,46.5);
+  \foreach \y in {40,28,16}{\fill[resalte] (4,\y-1.4) rectangle (36,\y+1.2); \zrenglones{5}{\y+2.6}{30}{4}}
+  \fill[zsun!35,rounded corners=.5mm] (4,3.2) rectangle (36,13.2); \zrenglones{5}{15.6}{30}{4}
+  \foreach \n/\y/\t in {1/46.5/título,2/40/primera frase de cada párrafo,3/8/último párrafo}{%
+    \node[circle,fill=zmoss,text=white,inner sep=0,minimum size=4.6mm,font=\sffamily\scriptsize\bfseries] (c\n) at (48,\y) {\n};
+    \node[anchor=west] at (51.5,\y) {\t}; \draw[zmute,line width=.4pt] (c\n.west) -- (41,\y);}
+  \node[tarjeta,anchor=west] at (48,24) {30 segundos\\y dos preguntas propias};
+\end{tikzpicture}}
+
+\@namedef{zfig@excepto}{\begin{tikzpicture}[zf]
+  \foreach \i/\l/\t in {0/A/{sí, \S\,2},1/B/{sí, \S\,3},2/C/no aparece,3/D/{sí, \S\,4}}{%
+    \node[tarjeta,minimum width=22mm,minimum height=13mm] (o\i) at (\i*26,0) {{\normalsize\bfseries\color{zolive}\l}\\\t};}
+  \foreach \i in {0,1,3}{\draw[zcoral,line width=1.2pt] (o\i.south west) -- (o\i.north east);}
+  \draw[zmoss,line width=1.4pt,rounded corners=2.4mm] ([xshift=-1.5mm,yshift=-1.5mm]o2.south west) rectangle ([xshift=1.5mm,yshift=1.5mm]o2.north east);
+  \node[rot] at (52,-12) {LA QUE SOBRA ES LA RESPUESTA};
+\end{tikzpicture}}
+
+\@namedef{zfig@tipologias}{\begin{tikzpicture}[zf]
+  \foreach \i/\t/\s/\c in {0/NARRAR/¿qué pasó?/zsky,1/DESCRIBIR/¿cómo es?/zmoss,2/EXPLICAR/¿qué es y por qué?/zsun,3/CONVENCER/¿qué debo pensar?/zcoral,4/INSTRUIR/¿cómo se hace?/zviolet}{%
+    \node[tarjeta,minimum width=19.5mm,minimum height=24mm] at (\i*21.5,0) {};
+    \fill[\c!22] (\i*21.5,5) circle (5.2); \node[font=\sffamily\tiny\bfseries,text=\c!70!black] at (\i*21.5,-4) {\t}; \node[font=\sffamily\tiny,text=zmute] at (\i*21.5,-8) {\s};}
+  \begin{scope}[zsky!70!black,line width=.6pt]\draw (-3.5,5) -- (3.5,5); \foreach \x in {-3,0,3}{\fill (\x,5) circle (.7);}\end{scope}
+  \begin{scope}[shift={(21.5,5)},zmoss!70!black,line width=.6pt]\draw (-3.6,0) .. controls (-1.5,2.6) and (1.5,2.6) .. (3.6,0) .. controls (1.5,-2.6) and (-1.5,-2.6) .. (-3.6,0); \fill (0,0) circle (1.1);\end{scope}
+  \begin{scope}[shift={(43,5)},zsun!70!black,line width=.6pt]\draw (0,.8) circle (2.1); \draw (-1,-2) -- (1,-2) (-.7,-3) -- (.7,-3);\end{scope}
+  \begin{scope}[shift={(64.5,5)},zcoral!80!black,line width=.6pt]\draw (0,-3) -- (0,2.6) (-3.4,2.2) -- (3.4,2.2) (-3.4,2.2) -- (-4.2,-.4) -- (-2.6,-.4) -- cycle (3.4,2.2) -- (2.6,-.4) -- (4.2,-.4) -- cycle (-1.6,-3) -- (1.6,-3);\end{scope}
+  \begin{scope}[shift={(86,5)},zviolet!80!black,line width=.6pt]\foreach \y in {2,0,-2}{\fill (-2.6,\y) circle (.55); \draw (-1.2,\y) -- (3,\y);}\end{scope}
+\end{tikzpicture}}
+
+\@namedef{zfig@estructuras}{\begin{tikzpicture}[zf]
+  \node[rot,anchor=west] at (0,10) {CRONOLÓGICA}; \draw[zmute,line width=.7pt,-{Stealth[length=2mm]}] (0,4) -- (42,4); \foreach \x/\t in {4/antes,20/después,36/al final}{\fill[zmoss] (\x,4) circle (1.3); \node[below=1.5mm] at (\x,4) {\t};}
+  \node[rot,anchor=west] at (56,10) {PROBLEMA Y SOLUCIÓN}; \node[tarjeta,fill=zcoral!15] (p) at (66,3) {problema}; \node[tarjeta,fill=zlime!30] (s) at (92,3) {solución}; \draw[flecha] (p) -- (s);
+  \node[rot,anchor=west] at (0,-12) {CAUSA Y EFECTO}; \node[tarjeta] (c) at (8,-19) {causa}; \node[tarjeta] (e1) at (34,-15.5) {efecto}; \node[tarjeta] (e2) at (34,-23) {efecto}; \draw[flecha] (c) -- (e1.west); \draw[flecha] (c) -- (e2.west);
+  \node[rot,anchor=west] at (56,-12) {COMPARACIÓN}; \zhoja{60}{-27}{15,12} \zhoja{84}{-27}{15,12} \zrenglones{62}{-16}{11}{3} \zrenglones{86}{-16}{11}{3}
+  \draw[zsky,line width=.7pt,{Stealth[length=1.8mm]}-{Stealth[length=1.8mm]}] (76,-21) -- (83,-21);
+\end{tikzpicture}}
+
+\@namedef{zfig@ancla}{\begin{tikzpicture}[zf]
+  \node[tarjeta,anchor=west] (q) at (0,26) {¿Cuándo se declara la \textbf{alerta}?};
+  \zhoja{4}{-14}{62,32} \zrenglones{8}{16.6}{52}{3}
+  \fill[resalte] (26,4.3) rectangle (40,7.6); \node[font=\sffamily\scriptsize\bfseries] at (33,6) {alerta};
+  \draw[zline,line width=1.3pt] (8,6) -- (24.5,6) (41.5,6) -- (58,6); \zrenglones{8}{5}{52}{5}
+  \draw[zmoss,line width=1.2pt] (33,6) circle (9.5); \draw[zmoss,line width=2pt] (39.8,-.8) -- (46.5,-7.5);
+  \draw[flecha,zolive] (q.south) to[bend right=20] (30,16);
+  \node[tarjeta,anchor=west,align=left] at (72,4) {1. palabra ancla\\2. leer esa oración\\\phantom{2. }y sus vecinas\\3. comparar con lupa};
+\end{tikzpicture}}
+
+\@namedef{zfig@parafrasis}{\begin{tikzpicture}[zf]
+  \node[globo=zmoss,minimum width=30mm] (a) at (0,0) {«No todas las\\abejas pican»};
+  \node[globo=zmoss,minimum width=30mm] (b) at (44,9) {«Algunas abejas\\no pican»};
+  \node[globo=zcoral,minimum width=30mm] (c) at (44,-9) {«Ninguna\\abeja pica»};
+  \node[font=\Large,text=zmoss] at (22,5) {$=$}; \node[font=\Large,text=zcoral] at (22,-5) {$\neq$};
+  \node[anchor=west,text=zmoss] at (62,9) {mismo sentido, otras palabras}; \node[anchor=west,text=zcoral] at (62,-9) {cambió el cuantificador};
+\end{tikzpicture}}
+
+\@namedef{zfig@trescajas}{\begin{tikzpicture}[zf]
+  \foreach \i/\t/\s/\c/\m in {0/LO DICE/está en el texto/zmoss/\ding{51},1/LO NIEGA/el texto dice lo contrario/zcoral/\ding{55},2/NO LO DICE/el texto no habla de eso/zsun/?}{%
+    \filldraw[fill=\c!14,draw=\c!80!black,line width=.6pt,rounded corners=1.5mm,sombra] (\i*34,0) rectangle ++(30,17);
+    \filldraw[fill=\c!30,draw=\c!80!black,line width=.6pt] (\i*34-1.5,17) -- ++(33,0) -- ++(-3,4.5) -- ++(-27,0) -- cycle;
+    \node[font=\sffamily\scriptsize\bfseries,text=\c!70!black] at (\i*34+15,11.5) {\t}; \node[text=zmute,font=\sffamily\tiny] at (\i*34+15,5.5) {\s};
+    \node[font=\normalsize\bfseries,text=\c!70!black] at (\i*34+15,19.3) {\m};}
+\end{tikzpicture}}
+
+\@namedef{zfig@voces}{\begin{tikzpicture}[zf]
+  \node[globo=zsky,text width=27mm] (a) at (0,8) {«No le quita espacio a nadie»}; \node[rot,text=zsky!70!black] at (0,-1) {LA INGENIERA};
+  \node[globo=zcoral,text width=27mm] (b) at (36,8) {«Nuestros clientes vienen en carro»}; \node[rot,text=zcoral] at (36,-1) {EL COMERCIANTE};
+  \node[globo=zmoss,text width=27mm] (c) at (72,8) {El proyecto eliminará un carril.}; \node[rot] at (72,-1) {EL PERIODISTA};
+  \node[text=zmute] at (36,-8) {comillas y «según…»: voz ajena \quad·\quad sin marcas: voz del autor};
+\end{tikzpicture}}
+
+\@namedef{zfig@reemplazo}{\begin{tikzpicture}[zf]
+  \node[tarjeta,minimum width=88mm,minimum height=10mm] at (44,12) {};
+  \node[anchor=west] at (3,12) {La propuesta fue}; \draw[zmoss,line width=.8pt,dashed,rounded corners=1mm] (31,8.6) rectangle (51,15.4); \node[anchor=west] at (53,12) {por los vecinos.};
+  \node[ficha=zlime!80,inner sep=1.6mm,rounded corners=1mm] (ok) at (41,-4) {aceptada}; \node[ficha=zsoft,inner sep=1.6mm,rounded corners=1mm] (n1) at (14,-4) {hospedada}; \node[ficha=zsoft,inner sep=1.6mm,rounded corners=1mm] (n2) at (68,-4) {protegida};
+  \draw[flecha,zmoss] (ok.north) -- (41,8.4); \node[text=zcoral] at (14,2) {\ding{55}}; \node[text=zcoral] at (68,2) {\ding{55}}; \node[text=zmoss] at (45,2.5) {\ding{51}};
+\end{tikzpicture}}
+
+\@namedef{zfig@polisemia}{\begin{tikzpicture}[zf]
+  \node[circle,fill=zlime!60,draw=zolive,line width=.7pt,minimum size=17mm,sombra] (w) at (0,0) {\normalsize\bfseries banco};
+  \foreach \a/\t/\v in {150/asiento/{«se sentó en el…»},30/entidad/{«pidió un préstamo al…»},-90/conjunto de peces/{«un… de sardinas»}}{%
+    \node[tarjeta,text width=30mm] (n) at (\a:36) {\textbf{\t}\\{\color{zmute}\v}}; \draw[zmute,line width=.6pt] (w) -- (n);}
+\end{tikzpicture}}
+
+\@namedef{zfig@piezas}{\begin{tikzpicture}[zf]
+  \foreach \x/\a/\b/\ta/\tb in {0/tele/trabajo/lejos/trabajo,50/bio/logía/vida/estudio}{%
+    \filldraw[ficha=zsky!40] (\x,0) -- ++(17,0) -- ++(0,3) arc[start angle=-90,end angle=90,radius=2] -- ++(0,3) -- ++(-17,0) -- cycle;
+    \filldraw[ficha=zlime!75] (\x+18.5,0) -- ++(22,0) -- ++(0,10) -- ++(-22,0) -- ++(0,-3) arc[start angle=90,end angle=-90,radius=2] -- cycle;
+    \node[font=\sffamily\small\bfseries] at (\x+8,5) {\a}; \node[font=\sffamily\small\bfseries] at (\x+31,5) {\b};
+    \node[text=zmute] at (\x+8,-3.5) {\ta}; \node[text=zmute] at (\x+31,-3.5) {\tb};}
+\end{tikzpicture}}
+
+\@namedef{zfig@referente}{\begin{tikzpicture}[zf]
+  \node[tarjeta,minimum width=100mm,minimum height=11mm] at (50,0) {};
+  \node[anchor=west] at (2,0) {Los}; \node[resalte,anchor=west,inner sep=1mm] (r) at (8.5,0) {\textbf{micos}}; \node[anchor=west] at (21,0) {cruzaban por el suelo porque la vía partió los árboles que};
+  \node[fill=zsky!35,rounded corners=.5mm,inner sep=1mm,anchor=west] (p) at (2,-12) {\textbf{ellos}}; \node[anchor=west] at (13,-12) {usaban para moverse.};
+  \draw[flecha,zsky!70!black] (p.north) to[bend left=30] (r.south);
+  \node[tarjeta,anchor=west] at (56,-13) {mismo género y número\\+ prueba del reemplazo};
+\end{tikzpicture}}
+
+\@namedef{zfig@senales}{\begin{tikzpicture}[zf]
+  \draw[zline,line width=5pt] (0,0) -- (30,0) .. controls (42,0) and (40,-12) .. (52,-12) -- (100,-12);
+  \draw[white,line width=.6pt,dash pattern=on 2mm off 2mm] (0,0) -- (30,0) .. controls (42,0) and (40,-12) .. (52,-12) -- (100,-12);
+  \foreach \x/\y/\t/\s/\c in {12/0/además/sigue derecho/zmoss,40/-6/sin embargo/curva/zcoral,66/-12/por ejemplo/mirador/zsky,92/-12/por lo tanto/llegada/zsun}{%
+    \draw[zmute,line width=.8pt] (\x,\y+1) -- (\x,\y+9); \node[fill=\c!25,draw=\c!80!black,line width=.6pt,rounded corners=1mm,inner sep=1.3mm,font=\sffamily\scriptsize\bfseries,sombra] at (\x,\y+12) {\t};
+    \node[text=zmute,font=\sffamily\tiny] at (\x,\y+17.5) {\s};}
+\end{tikzpicture}}
+
+% ================= LIBRO 4 =================
+\@namedef{zfig@presupuesto}{\begin{tikzpicture}[zf]
+  \fill[zsky!14] (-40,-24) rectangle (40,0); \draw[zsky,line width=.8pt,decorate,decoration={snake,amplitude=.6mm,segment length=6mm}] (-40,0) -- (40,0);
+  \filldraw[fill=white,draw=zsky!70!black,line width=.6pt] (-9,0) -- (-3,11) -- (2,7) -- (6,13) -- (11,0) -- cycle;
+  \filldraw[fill=zsky!30,draw=zsky!70!black,line width=.6pt] (-9,0) -- (-20,-9) -- (-12,-20) -- (4,-23) -- (19,-16) -- (22,-6) -- (11,0) -- cycle;
+  \node[tarjeta,anchor=west] (a) at (46,9) {\textbf{lo que se dice}\\«Andrés dejó de fumar»}; \node[tarjeta,anchor=west,fill=zsky!12] (b) at (46,-13) {\textbf{lo que se presupone}\\Andrés fumaba antes};
+  \draw[flecha] (a.west) -- (8,8); \draw[flecha] (b.west) -- (20,-12);
+\end{tikzpicture}}
+
+\@namedef{zfig@intensidad}{\begin{tikzpicture}[zf]
+  \shade[left color=zsun!25,right color=zcoral,rounded corners=1.5mm] (0,0) rectangle (90,5);
+  \foreach \x/\t in {8/incomodidad,31/molestia,56/enojo,82/furia}{\draw[zink,line width=.6pt] (\x,-1) -- (\x,6); \node[below=1.5mm] at (\x,-1) {\t};}
+  \filldraw[fill=white,draw=zink,line width=.7pt] (31,6.5) -- (28.5,11) -- (33.5,11) -- cycle; \node[tarjeta] at (31,16) {lo que el texto sostiene};
+  \node[text=zcoral,anchor=east] at (90,12) {decir «furia» sería decir de más};
+\end{tikzpicture}}
+
+\@namedef{zfig@principio}{\begin{tikzpicture}[zf]
+  \node[tarjeta,text width=27mm] (a) at (0,0) {\textbf{ejemplo del texto}\\30 mermeladas: nadie elige};
+  \node[tarjeta,text width=30mm,fill=zlime!28] (p) at (44,15) {\textbf{principio}\\demasiadas opciones paralizan};
+  \node[tarjeta,text width=27mm] (b) at (88,0) {\textbf{caso nuevo}\\50 electivas: aplaza la inscripción};
+  \draw[flecha,zolive] (a.north) to[bend left=22] node[above left]{se extrae} (p.west); \draw[flecha,zolive] (p.east) to[bend left=22] node[above right]{se aplica} (b.north);
+  \draw[zcoral,dashed,line width=.6pt] (a) -- node[below,text=zcoral]{el tema cambió; el mecanismo no} (b);
+\end{tikzpicture}}
+
+\@namedef{zfig@analogia}{\begin{tikzpicture}[zf]
+  \node[tarjeta,minimum width=20mm] (a) at (0,8) {libro}; \node[tarjeta,minimum width=20mm] (b) at (40,8) {biblioteca};
+  \node[tarjeta,minimum width=20mm] (c) at (0,-8) {cuadro}; \node[tarjeta,minimum width=20mm,fill=zlime!28] (d) at (40,-8) {museo};
+  \draw[flecha,zmoss] (a) -- node[above,text=zolive]{se exhibe en} (b); \draw[flecha,zmoss] (c) -- node[above,text=zolive]{se exhibe en} (d);
+  \node[tarjeta,anchor=west] at (58,0) {la relación se nombra\\con una frase y se repite};
+\end{tikzpicture}}
+
+\@namedef{zfig@paraque}{\begin{tikzpicture}[zf]
+  \node[globo=zsky,minimum width=22mm] (q) at (0,0) {«…»\\una cita};
+  \foreach \y/\t/\s/\c in {12/APOYAR/un experto dice lo mismo/zmoss,0/OPONER/una idea que se va a refutar/zcoral,-12/ILUSTRAR/un testimonio la vuelve concreta/zsun}{%
+    \node[tarjeta,anchor=west,minimum width=58mm,align=left] (t) at (30,\y) {{\color{\c!75!black}\bfseries \t}\quad \s}; \draw[flecha] (q.east) -- (t.west);}
+\end{tikzpicture}}
+
+\@namedef{zfig@fuente}{\begin{tikzpicture}[zf]
+  \foreach \i/\t/\s in {0/¿Quién lo dice?/¿sabe del tema?,1/¿Qué interés tiene?/¿gana si le creo?,2/¿Cómo lo sabe?/{estudio, vivencia o rumor}}{%
+    \node[tarjeta,minimum width=31mm,minimum height=15mm] at (\i*35,0) {\textbf{\t}\\{\color{zmute}\s}};
+    \node[circle,fill=zmoss,text=white,inner sep=0,minimum size=5mm,font=\sffamily\scriptsize\bfseries] at (\i*35-13,7.5) {\the\numexpr\i+1\relax};}
+\end{tikzpicture}}
+
+\@namedef{zfig@tono}{\begin{tikzpicture}[zf]
+  \foreach \i/\t/\p/\c in {0/objetivo/datos y verbos neutros/zmute,1/crítico/adjetivos negativos/zcoral,2/irónico/elogio que no cuadra/zviolet,3/nostálgico/{«antes», «ya no»}/zsky,4/preocupado/riesgos y advertencias/zsun}{%
+    \node[tarjeta,minimum width=19.5mm,minimum height=17mm,text width=17mm] at (\i*21.5,0) {{\color{\c!75!black}\bfseries \t}\\[1pt]{\tiny\color{zmute}\p}};
+    \fill[\c] (\i*21.5-9.75,8.5) rectangle ++(19.5,-1.2);}
+\end{tikzpicture}}
+
+\@namedef{zfig@hechoopinion}{\begin{tikzpicture}[zf]
+  \draw[zmute,line width=.7pt,fill=white,rounded corners=1.6mm] (-1.6,0) rectangle (1.6,24); \fill[zcoral] (0,-2) circle (3.2); \fill[zcoral] (-.9,0) rectangle (.9,13);
+  \foreach \y in {4,8,...,22}{\draw[zmute,line width=.4pt] (1.6,\y) -- (3.2,\y);}
+  \node[tarjeta,anchor=west] (h) at (10,14) {\textbf{hecho}\\marca 18 °C\\{\color{zmute}se puede comprobar}};
+  \node[globo=zsky,anchor=west] (o1) at (52,19) {«Hace frío»}; \node[globo=zsun,anchor=west] (o2) at (52,6) {«Qué clima tan rico»};
+  \node[rot,text=zsky!70!black,anchor=west] at (82,12.5) {OPINIONES}; \node[text=zmute,anchor=west] at (82,8.5) {dependen de quién habla};
+\end{tikzpicture}}
+
+\@namedef{zfig@ironia}{\begin{tikzpicture}[zf]
+  \node[globo=zmoss] (d) at (0,0) {«¡Qué servicio\\tan puntual!»}; \node[rot] at (0,-10) {LO QUE SE DICE};
+  \node[tarjeta] (s) at (58,0) {dos horas esperando\\el bus bajo la lluvia}; \node[rot,text=zcoral] at (58,-10) {LO QUE PASA};
+  \node[starburst,starburst points=11,starburst point height=2.4mm,fill=zsun!45,draw=zsun!80!black,line width=.5pt,inner sep=.6mm,font=\sffamily\scriptsize\bfseries] at (29,0) {choque};
+\end{tikzpicture}}
+
+\@namedef{zfig@dostextos}{\begin{tikzpicture}[zf]
+  \filldraw[fill=zsky!25,draw=zsky!70!black,line width=.7pt,rounded corners=2mm] (0,0) rectangle (46,26);
+  \filldraw[fill=zcoral!22,draw=zcoral,line width=.7pt,rounded corners=2mm,fill opacity=.75] (30,-8) rectangle (76,18);
+  \node[rot,text=zsky!60!black] at (15,22) {TEXTO 1}; \node[rot,text=zcoral] at (61,-4) {TEXTO 2};
+  \node[text width=26mm,align=center] at (14,11) {reducir la tarea al mínimo}; \node[text width=26mm,align=center] at (62,7) {mantenerla, pero bien hecha};
+  \node[font=\sffamily\tiny\bfseries,text=zink,text width=14mm,align=center] at (38,9) {no debe depender de los padres};
+  \node[tarjeta,anchor=west] at (82,9) {el punto común\\está en el cruce};
+\end{tikzpicture}}
+
+% ================= RAZONAMIENTO: lecciones que no tenían figura =================
+\@namedef{zfig@potencias}{\begin{tikzpicture}[zf]
+  \foreach \n/\x/\c in {0/0/1,1/14/2,2/30/4,3/50/8}{\foreach \k in {1,...,\c}{\zt{(\x,\k*2.6-2.6) rectangle ++(10,2.1)}}
+    \node at (\x+5,-4) {$2^{\n} = \c$};}
+  \foreach \x in {11,27,47}{\node[text=zolive] at (\x+.7,3) {$\times 2$};}
+  \node[tarjeta,anchor=west] at (68,10) {cada doblez \textbf{duplica}:\\no suma, multiplica};
+\end{tikzpicture}}
+
+\@namedef{zfig@palomar}{\begin{tikzpicture}[zf]
+  \foreach \i/\t in {0/roja,1/azul,2/negra}{\filldraw[fill=zsoft,draw=zmute,line width=.6pt,rounded corners=1mm] (\i*20,0) rectangle ++(16,14); \node[text=zmute] at (\i*20+8,-3) {\t};}
+  \fill[zcoral] (8,6) circle (2.6); \fill[zsky] (28,6) circle (2.6); \fill[zink] (48,6) circle (2.6);
+  \fill[zmoss] (72,7) circle (2.6); \draw[flecha,zmoss] (69,7) to[bend right=25] (52,10);
+  \node[tarjeta,anchor=west] at (80,7) {3 casillas, 4 medias:\\alguna casilla repite};
+\end{tikzpicture}}
+
+\@namedef{zfig@barracien}{\begin{tikzpicture}[zf]
+  \filldraw[fill=zsoft,draw=zmute,line width=.5pt,rounded corners=1mm] (0,0) rectangle (100,7); \fill[zlime!85,rounded corners=1mm] (0,0) rectangle (15,7);
+  \foreach \x in {5,10,...,95}{\draw[white,line width=.5pt] (\x,0) -- (\x,7);} \draw[zmute,line width=.5pt,rounded corners=1mm] (0,0) rectangle (100,7);
+  \foreach \x/\p/\v in {0/0/0,5/5/15,15/15/45,50/50/150,100/100/300}{\draw[zmute,line width=.5pt] (\x,7) -- (\x,9) (\x,0) -- (\x,-2); \node[above] at (\x,9) {$\p\,\%$}; \node[below,text=zolive] at (\x,-2) {\v};}
+  \node[tarjeta] at (50,-13) {si el 15\,\% son 45, el 5\,\% son 15 y el 100\,\% son 300};
+\end{tikzpicture}}
+
+\@namedef{zfig@mcm}{\begin{tikzpicture}[zf]
+  \foreach \y/\p/\c/\t in {8/12/zsky/cada 12 min,0/18/zcoral/cada 18 min}{\draw[zline,line width=1.6pt] (0,\y) -- (92,\y); \node[anchor=east,text=\c!80!black] at (-2,\y) {\t};
+    \foreach \k in {0,...,6}{\pgfmathsetmacro{\px}{\k*\p*1.2}\ifdim\px pt<91pt \fill[\c] (\px,\y) circle (1.2);\fi}}
+  \foreach \m in {0,36,72}{\draw[zmoss,line width=.9pt,rounded corners=1.5mm] (\m*1.2-2.5,-2.5) rectangle (\m*1.2+2.5,10.5); \node[below,text=zolive] at (\m*1.2,-2.5) {\m};}
+  \node[tarjeta] at (46,-13) {coinciden cada 36 minutos: el MCM de 12 y 18};
+\end{tikzpicture}}
+
+\@namedef{zfig@relojciclo}{\begin{tikzpicture}[zf]
+  \draw[zline,line width=1.4pt] (0,0) circle (13);
+  \foreach \a/\d/\e in {90/3/{$3^1$},0/9/{$3^2$},-90/7/{$3^3$},180/1/{$3^4$}}{\node[circle,fill=zlime!80,draw=zolive,line width=.6pt,minimum size=8mm,sombra,font=\normalsize\bfseries] at (\a:13) {\d}; \node[text=zmute] at (\a:22) {\e};}
+  \foreach \a in {65,-25,-115,155}{\draw[flecha,zolive] (\a:13) arc[start angle=\a,end angle=\a-40,radius=13];}
+  \node[tarjeta,anchor=west,align=left] at (32,0) {la última cifra de $3^n$\\da vueltas de a 4:\\$2027 = 4 \cdot 506 + 3$\\$\to$ tercera casilla: \textbf{7}};
+\end{tikzpicture}}
+
+\@namedef{zfig@tablalogica}{\begin{tikzpicture}[zf]
+  \foreach \j/\t in {0/Med,1/Der,2/Ing}{\node[rot] at (\j*11+22.5,37) {\t};}
+  \foreach \i/\t in {0/Laura,1/Marta,2/Nubia}{\node[anchor=east] at (15,29.5-\i*11) {\t};}
+  \foreach \i/\j/\m in {0/0/1,0/1/0,0/2/0,1/0/0,1/1/0,1/2/1,2/0/0,2/1/1,2/2/0}{%
+    \ifnum\m=1 \zt{(\j*11+17.5,24.5-\i*11) rectangle ++(10,10)} \node[text=zolive] at (\j*11+22.5,29.5-\i*11) {\ding{51}};
+    \else \zt[zsoft]{(\j*11+17.5,24.5-\i*11) rectangle ++(10,10)} \node[text=zcoral!70] at (\j*11+22.5,29.5-\i*11) {\ding{55}};\fi}
+  \node[tarjeta,anchor=west,align=left] at (58,19) {una \ding{51} por fila\\y por columna:\\cada \ding{51} tacha su fila\\y su columna};
+\end{tikzpicture}}
+
+\@namedef{zfig@circuitos}{\begin{tikzpicture}[zf]
+  \node[rot,anchor=west] at (0,13) {«Y»: EN SERIE}; \draw[zink,line width=.8pt] (0,5) -- (9,5) (15,5) -- (23,5) (29,5) -- (36,5); \draw[zink,line width=.8pt] (9,5) -- (14.5,8) (23,5) -- (28.5,8);
+  \foreach \x in {9,15,23,29}{\fill[zink] (\x,5) circle (.7);} \node[below] at (12,4) {$p$}; \node[below] at (26,4) {$q$};
+  \draw[zmute,line width=.7pt,fill=zsoft] (40,5) circle (3.4); \node[text=zmute] at (40,-1.5) {apagado};
+  \node[rot,anchor=west] at (56,13) {«O»: EN PARALELO}; \draw[zink,line width=.8pt] (56,5) -- (60,5) (60,9) -- (60,1) (60,9) -- (67,9) (73,9) -- (80,9) (60,1) -- (67,1) (73,1) -- (80,1) (80,9) -- (80,1) (80,5) -- (86,5);
+  \draw[zink,line width=.8pt] (67,9) -- (73,9); \draw[zink,line width=.8pt] (67,1) -- (72.5,4);
+  \foreach \x/\y in {67/9,73/9,67/1,73/1}{\fill[zink] (\x,\y) circle (.7);} \node[above] at (70,9.5) {$p$}; \node[below] at (70,.3) {$q$};
+  \draw[zsun!80!black,line width=.7pt,fill=zsun!55] (90,5) circle (3.4); \foreach \a in {0,45,...,315}{\draw[zsun,line width=.6pt] (90,5) ++(\a:4.4) -- ++(\a:1.6);} \node[text=zmute] at (90,-3.5) {encendido};
+\end{tikzpicture}}
+
+\@namedef{zfig@cartas}{\begin{tikzpicture}[zf]
+  \foreach \i/\t/\c/\w in {0/E/zmoss/1.2pt,1/K/zline/.5pt,2/4/zline/.5pt,3/7/zmoss/1.2pt}{\filldraw[fill=white,draw=\c,line width=\w,rounded corners=1.5mm,sombra] (\i*18,0) rectangle ++(13,18);
+    \node[font=\LARGE\sffamily\bfseries] at (\i*18+6.5,9) {\t};}
+  \node[text=zolive] at (6.5,-3.5) {voltear}; \node[text=zmute] at (24.5,-3.5) {no importa}; \node[text=zmute] at (42.5,-3.5) {no prueba nada}; \node[text=zolive] at (60.5,-3.5) {voltear};
+  \node[tarjeta,anchor=west,align=left] at (74,9) {regla: si vocal, entonces par\\E: modus ponens\\7: modus tollens};
+\end{tikzpicture}}
+
+\@namedef{zfig@ordenimporta}{\begin{tikzpicture}[zf]
+  \node[rot] at (17,24) {EL ORDEN IMPORTA}; \foreach \x/\h/\t in {0/9/2.º,12/14/1.º,24/6/3.º}{\zt[zsun!45]{(\x,0) rectangle ++(10,\h)} \node at (\x+5,\h/2) {\t}; \fill[zmoss] (\x+5,\h+3.5) circle (2.6);}
+  \node[text=zmute] at (17,-4) {podio: $5 \cdot 4 \cdot 3 = 60$};
+  \node[rot] at (72,24) {EL ORDEN NO IMPORTA}; \draw[zolive,line width=.8pt,fill=zlime!20] (72,9) ellipse (15 and 9); \foreach \x/\y in {64/10,72/6,80/11}{\fill[zmoss] (\x,\y) circle (2.6);}
+  \node[text=zmute] at (72,-4) {comité: $\tfrac{60}{3!} = 10$}; \node[font=\Large,text=zmute] at (45,9) {$\div\,3!$};
+\end{tikzpicture}}
+
+\@namedef{zfig@mediana}{\begin{tikzpicture}[zf]
+  \draw[zline,line width=1.6pt] (0,0) -- (100,0); \foreach \x/\v in {6/1.5,9.5/1.5,13/1.5,17/2,21/2.5}{\fill[zmoss] (\x,2.4) circle (1.6);} \fill[zmoss] (9.5,5.8) circle (1.6); \fill[zmoss] (13,5.8) circle (1.6); \fill[zmoss] (6,5.8) circle (0);
+  \fill[zcoral] (96,2.4) circle (1.6); \node[above,text=zcoral] at (96,4.5) {12}; \node[below] at (6,-1) {1.5}; \node[below] at (21,-1) {2.5};
+  \draw[zsky,line width=.9pt] (14,-7) -- (14,9); \node[text=zsky!70!black,anchor=west] at (15,-9) {mediana 1.75};
+  \draw[zsun!80!black,line width=.9pt,dashed] (28,-7) -- (28,9); \node[text=zsun!70!black,anchor=west] at (29,8) {media 3.5};
+  \node[tarjeta] at (64,-9) {un dato extremo arrastra la media, no la mediana};
+\end{tikzpicture}}
+
+\@namedef{zfig@cesar}{\begin{tikzpicture}[zf]
+  \foreach \i/\a/\b in {0/L/M,1/M/N,2/N/O,3/O/P,4/P/Q,5/Q/R,6/R/S,7/S/T,8/T/U}{\zt[zsoft]{(\i*9.5,9) rectangle ++(8.5,7)} \node[font=\sffamily\small\bfseries] at (\i*9.5+4.25,12.5) {\a};
+    \zt{(\i*9.5,-2) rectangle ++(8.5,7)} \node[font=\sffamily\small\bfseries] at (\i*9.5+4.25,1.5) {\b}; \draw[flecha,zolive] (\i*9.5+4.25,8.6) -- (\i*9.5+4.25,5.4);}
+  \node[anchor=east,text=zmute] at (-2,12.5) {original}; \node[anchor=east,text=zolive] at (-2,1.5) {código};
+  \node[tarjeta] at (42,-9) {MESA $\to$ NFTB: cada letra avanza un lugar};
+\end{tikzpicture}}

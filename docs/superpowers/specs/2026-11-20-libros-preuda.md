@@ -63,3 +63,10 @@ razonamiento y motivos de lectura en comprensión. No hace falta seguir la estru
   sale sola antes del taller: 3 o 4 formas de pregunta por lección, con mini ejemplo.
 - Páginas: 153, 135, 105 y 89. Pendiente: revisión independiente de todas las claves (el subagente falló por red) y
   ampliar los ejemplos resueltos de cada lección.
+
+## Figuras (mismo día)
+
+Todas las ilustraciones salen de dos kits que carga la plantilla: `tex/zuka-figuras.tex` (39 figuras redibujadas) y
+`tex/zuka-figuras2.tex` (34 nuevas, sobre todo de lectura). En los capítulos se usan con `figura{nombre}{pie}` (con barra
+invertida delante); el pie se numera por mundo. Estilo: fichas con relieve y sombra suave, tarjetas blancas para fórmulas y
+rótulos, letra Fira. Los parches `arte/poner_figuras*.py` y `arte/patch_sty.py` ya se aplicaron: quedan como registro.

@@ -160,7 +160,7 @@
       at ([xshift=17mm,yshift=-16mm]current page.north west) {\two@digits{\themundo}};
     \node[anchor=north west,font=\sffamily\scriptsize\bfseries,text=zolive]
       at ([xshift=19mm,yshift=-44mm]current page.north west) {MUNDO \themundo\ \,·\, EN LA APP: #2};
-    \node[anchor=north west,text width=72mm,align=left,font=\sffamily\fontsize{25}{28}\selectfont\firalight,text=zink]
+    \node[anchor=north west,text width=72mm,align=left,font=\hyphenpenalty=10000 \sffamily\fontsize{25}{28}\selectfont\firalight,text=zink]
       at ([xshift=18mm,yshift=-50mm]current page.north west) {#1};
     \draw[zlime,line width=2pt] ([xshift=19mm,yshift=-90mm]current page.north west) -- ++(18mm,0);
   \end{tikzpicture}%
@@ -468,3 +468,4 @@
 % capa de diseno (cabeceras, cajas e iconos)
 \input{zuka-diseno}
 \input{zuka-figuras}
+\input{zuka-figuras2}
