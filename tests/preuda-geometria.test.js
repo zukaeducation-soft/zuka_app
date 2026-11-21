@@ -22,7 +22,8 @@ const FULL = {
 const ex = (id, game) => { const e = L(id).ex.find(e => e.game === game); return FULL[game] ? { ...e, params: { ...e.params, rounds: FULL[game] } } : e; };
 const ZONA = ['completa-solucion', 'caza-error', 'opcion-examen'];
 const NEW = ['tijera-angulos', 'paralelas-gira', 'apice-triangulo', 'suma-poligono', 'cuadrados-pitagoras', 'escalera-pared', 'billar-rebote'];
-const MOVING = ['billar-rebote', 'vuela-precios'];
+// pu-ge-2 terminaba en vuela-precios; desde la spec 2026-11-20-preuda-movimiento, en aro-lanza (mismas preguntas).
+const MOVING = ['billar-rebote', 'vuela-precios', 'aro-lanza'];
 const BORING = ['escala-solucion', 'arma-la-cuenta', 'une-parejas', 'clasifica-cartas', 'verdadero-falso', 'ordena-terminos'];
 // El estado con que se gana cada ronda de un juego por rondas.
 const win = (game, params, state) => GAMES[game].grade({ rounds: state }, params).ok;
@@ -134,7 +135,7 @@ test('los juegos de la biblioteca reciben datos con solución, y los ejemplos de
   const cr = ex('pu-ge-2', 'compas-raiz').params;
   assert.ok(cr.rounds.every(r => [1, 2, 3, 4].some(a => [1, 2, 3, 4].some(b => a * a + b * b === r.n))));
   for (const r of ex('pu-ge-1', 'rueda-angulo').params.rounds) assert.equal(r.target % 15, 0);
-  for (const r of ex('pu-ge-2', 'vuela-precios').params.rounds) for (const it of r.items) {
+  for (const r of ex('pu-ge-2', 'aro-lanza').params.rounds) for (const it of r.items) {
     assert.equal(new Set(it.options).size, it.options.length);
     const [a, b] = it.ask.match(/\d+/g).map(Number), v = Number(it.options[it.answer]);
     assert.ok(/catetos/.test(it.ask) ? a * a + b * b === v * v : a * a - b * b === v * v, it.ask);

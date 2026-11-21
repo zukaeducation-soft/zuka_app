@@ -24,6 +24,7 @@ const MOVING = ['billar-rebote', 'vuela-precios', 'salta-signos', 'carrera-fracc
   'llaves-tanque', 'lazo-conjunto', 'anillos-subconjunto', 'piedras-selva', 'cruza-o-rebota', 'apunta-chorro', 'donde-cae', 'lirios-laguna',
   'sondea-niebla', 'cruce-curvas', 'llena-estanque', 'dos-bancos', 'regla-de-calculo', 'maquina-sigma', 'luciernagas-venn', 'revienta-globos',
   'lluvia-elementos', 'sirve-la-razon', 'vagon-inverso', 'rebote-signos', 'torre-pisos', 'escala-leyes', 'siembra-raices', 'muro-radicales',
+  'barco-muelle', 'aro-lanza', 'canica-tablero', 'tren-aguja', 'grua-carga', 'rueda-cabinas',
 ];
 
 test('el archivo de juegos del componente está registrado después de las lecciones', () => {

@@ -353,6 +353,7 @@ const GUIDE_ARCADE = new Set(['rampa-precio', 'tanque-porcentaje', 'llaves-tanqu
   'dispara-inverso', 'salta-signos', 'serpiente-orden', 'sirve-la-razon', 'corta-proporciones', 'resortera-tres', 'caja-veloz', 'vuela-precios',
   'rompe-cambios', 'traza-progresion', 'encesta-suma', 'dobla-fichas', 'rana-zenon', 'maquina-sigma', 'torre-pisos', 'escala-leyes',
   'siembra-raices', 'muro-radicales', 'jefe-venn', 'jefe-ruta', 'jefe-rueda',
+  'barco-muelle', 'aro-lanza', 'canica-tablero', 'tren-aguja', 'grua-carga', 'rueda-cabinas',
   'torre-grados', 'arma-la-mesa', 'camino-pascal', 'reparte-barras', 'gira-complejos', 'balanza-cajas', 'apunta-chorro', 'donde-cae', 'empaca-filas', 'sondea-niebla',
   'cruza-o-rebota', 'rio-o-hueco', 'llena-estanque', 'bote-corriente', 'cruce-curvas', 'lirios-laguna', 'dos-bancos', 'regla-de-calculo', 'piedras-selva',
   'quita-vueltas', 'rueda-rodante', 'toca-lados', 'figuras-notables', 'multiplica-razon', 'proyecta-punto', 'espejo-cuadrantes', 'ola-entre-lineas', 'crestas-faroles', 'ventana-inversa',
@@ -905,6 +906,13 @@ const GUIDES = {
   'verdadero-falso': [['swipe', 'Desliza la tarjeta: a la derecha si es verdadera, a la izquierda si es falsa.', { left: 'falso', right: 'verdadero' }]],
   'voltea-desigualdad': [['tap', 'Después de cada operación elige «<» o «>» para el nuevo orden de los puntos.', { items: ['<', '>'], pick: [1] }]],
   'vuela-precios': [['slide', 'Arrastra el planeador hasta la altura del resultado y suelta para volar.', { vert: true }]],
+  // Juegos en movimiento por preguntas (spec 2026-11-20-preuda-movimiento, kit js/games/mueve-kit.js).
+  'barco-muelle': [['drag', 'Arrastra el barco entre las boyas hasta el muelle de la respuesta.', { tile: 'barco', slot: 'muelle' }]],
+  'aro-lanza': [['fling', 'Desliza desde el aro hacia la estaca: el punteado muestra dónde cae. Suelta para lanzar.', {}]],
+  'canica-tablero': [['slide', 'Sube o baja un lado del tablero: la canica rueda. Suelta sobre el hueco de la respuesta.', { label: 'inclinación' }]],
+  'tren-aguja': [['turn', 'Gira la aguja del cambio hacia el ramal de la respuesta.', {}], ['drag', 'Luego empuja el tren con el dedo por la vía hasta la estación.', { tile: 'tren', slot: 'estación' }]],
+  'grua-carga': [['slide', 'Arrastra el carro de la grúa sobre el camión de la respuesta y suelta: la caja baja sola.', { label: 'carro' }]],
+  'rueda-cabinas': [['turn', 'Gira la rueda con el dedo hasta dejar en el andén la cabina de la respuesta y suelta.', {}]],
 };
 
 // Los ejercicios que no son juegos también tienen su ejemplo.
