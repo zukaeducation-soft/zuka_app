@@ -148,12 +148,28 @@ def publish():
     """Pone los videos codificados en sus lecciones (js/courses/preuda-videos.js), prueba, sube VERSION y hace commit y push."""
     r = subprocess.run(['node', str(HERE / 'tools' / 'app-videos.js')], cwd=REPO, capture_output=True, text=True, encoding='utf8')
     if r.returncode: log('  app-videos falló:', r.stderr[-400:]); return
-    t = subprocess.run(['node', '--test', 'tests/preuda.test.js', 'tests/preuda-videos.test.js', 'tests/registro.test.js', 'tests/acceso.test.js'],
-                       cwd=REPO, capture_output=True, text=True, encoding='utf8', errors='replace')
+    # Otras sesiones pueden tener cambios sin commit en el mismo repositorio: se prueba en una copia limpia de HEAD con solo
+    # preuda-videos.js nuevo, y el commit lleva solo ese archivo y el VERSION subido sobre el sw.js de HEAD.
+    if git('diff', '--cached', '--quiet').returncode: log('  hay cambios ajenos preparados en el índice; espero'); return
+    import shutil, tempfile
+    tmp = Path(tempfile.mkdtemp(prefix='zuka-pub-')) / 'wt'
+    if git('worktree', 'add', '-q', '--detach', str(tmp), 'HEAD').returncode: log('  no pude crear la copia de prueba'); return
+    try:
+        shutil.copy(REPO / 'js' / 'courses' / 'preuda-videos.js', tmp / 'js' / 'courses' / 'preuda-videos.js')
+        t = subprocess.run(['node', '--test', 'tests/preuda.test.js', 'tests/preuda-videos.test.js', 'tests/registro.test.js', 'tests/acceso.test.js'],
+                           cwd=tmp, capture_output=True, text=True, encoding='utf8', errors='replace')
+    finally:
+        git('worktree', 'remove', '--force', str(tmp))
     if t.returncode: log('  las pruebas fallan; no subo a la app:', t.stdout[-600:]); return
+    bump = lambda s: re.sub(r"zuka-v(\d+)", lambda m: f'zuka-v{int(m.group(1)) + 1}', s, count=1)
+    raw = subprocess.run(['git', 'show', 'HEAD:sw.js'], cwd=REPO, capture_output=True).stdout          # bytes: sin tocar los fines de línea
+    head_sw = raw.decode('utf8')
+    blob = subprocess.run(['git', 'hash-object', '-w', '--stdin'], cwd=REPO, input=bump(head_sw).encode('utf8'), capture_output=True).stdout.decode().strip()
+    git('update-index', '--cacheinfo', f'100644,{blob},sw.js')
     sw = REPO / 'sw.js'; s = sw.read_text(encoding='utf8')
-    s = re.sub(r"zuka-v(\d+)", lambda m: f'zuka-v{int(m.group(1)) + 1}', s, count=1); sw.write_text(s, encoding='utf8')
-    git('add', 'js/courses/preuda-videos.js', 'sw.js')
+    new_v = re.search(r"zuka-v\d+", bump(head_sw)).group(0)
+    sw.write_text(re.sub(r"zuka-v\d+", new_v, s, count=1), encoding='utf8')     # la copia de trabajo queda con el mismo VERSION
+    git('add', 'js/courses/preuda-videos.js')
     msg = f'Preuniversitario: videos con voz en las lecciones ({r.stdout.strip()})\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>'
     if git('commit', '-q', '-m', msg).returncode == 0:
         for _ in range(3):
