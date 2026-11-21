@@ -1,0 +1,333 @@
+% Libro 4 · Mundo 1 · Inferencia (app: pu-inferencia)
+\mundo{Inferencia}{pu-inferencia}{Inferir es leer entre líneas: sacar de lo que el texto dice algo que no dice pero que
+se sigue con seguridad. No es adivinar ni opinar. La diferencia entre una buena inferencia y una especulación es que la
+primera tiene \emph{pruebas} en el texto. Este es el nivel que más pesa en la prueba.}{%
+\item \textbf{1.1} Ideas implícitas
+\item \textbf{1.2} Presupuestos: lo que se da por sentado
+\item \textbf{1.3} Causa y efecto
+\item \textbf{1.4} Actitudes y motivos de los personajes}
+
+% ------------------------------------------------------------------
+\leccion{pu-in-1}{Ideas implícitas}{Juego de encontrar la pista que sostiene una conclusión.}
+
+\begin{reto}
+«Cuando Laura llegó a la estación, el andén estaba vacío y el reloj marcaba las 7:10. Se sentó en una banca y sacó un libro
+largo.» ¿Qué se puede inferir?
+\opcionesl{Laura perdió el tren y esperará el siguiente.}{Laura trabaja en la estación.}{El tren llegó temprano.}{Laura odia leer.}
+\end{reto}
+
+\tecnica{La técnica: conclusión con pruebas}
+Una \clave{inferencia válida} cumple dos condiciones: (1) no está dicha literalmente, y (2) se sigue de lo dicho sin
+necesidad de inventar. Para comprobarla, pregúntate: \emph{¿qué frase del texto me obliga a pensar esto?} Si no encuentras
+ninguna, es especulación.
+
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm,font=\scriptsize,every node/.style={rounded corners=2pt,minimum height=6mm}]
+  \node[draw=zolive,fill=zsoft,text width=30mm,align=center] (a) at (0,0) {andén vacío};
+  \node[draw=zolive,fill=zsoft,text width=30mm,align=center] (b) at (0,-9) {7:10};
+  \node[draw=zolive,fill=zsoft,text width=30mm,align=center] (c) at (0,-18) {saca un libro largo};
+  \node[draw=zcoral,fill=zcoral!10,text width=38mm,align=center] (d) at (55,-9) {el tren ya pasó y la espera será larga};
+  \foreach \n in {a,b,c}{\draw[zmute,-{Latex[length=1.5mm]}] (\n.east) -- (d.west);}
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Grados de inferencia}
+Entre «el texto lo dice» y «el texto no dice nada de eso» hay una zona: lo que el texto \emph{sugiere con fuerza}. El
+examen premia la opción que está más cerca de lo seguro. Una opción con «probablemente», «sugiere», «puede» suele ser más
+defendible que una con «siempre» o «es seguro que».
+
+\begin{regla}
+\begin{itemize}
+  \item Señala la frase que prueba la inferencia. Sin prueba, no hay inferencia.
+  \item Prefiere la conclusión mínima: la que exige suponer menos.
+  \item Cuidado con lo que «suena lógico» por conocimiento propio, pero no tiene apoyo en el texto.
+\end{itemize}
+\end{regla}
+
+\begin{texto}{La vecina del cuarto piso}{Relato · texto original escrito para este libro}
+\pa Doña Inés vive sola en el cuarto piso desde que yo tengo memoria. Todos los días, a las cinco de la tarde, baja a la
+portería con una bolsa de pan y se queda conversando con el celador hasta que oscurece. Él dice que es la única hora en que
+ella habla con alguien.
+
+\pa El mes pasado no bajó durante una semana. El celador subió dos veces a tocarle la puerta; la segunda vez ella abrió en
+bata, con la voz ronca, y le dijo que no se preocupara, que era solo una gripa. Desde entonces, él le sube el pan.
+
+\pa Ayer la vi de nuevo en la portería. Llevaba la bolsa de pan, pero esta vez traía dos, y una se la entregó al celador
+sin decir nada. Él la recibió también en silencio, y los dos se quedaron mirando la calle hasta que encendieron los
+faroles.
+\end{texto}
+
+\subsection{Preguntas comentadas}
+\begin{comentada}{¿Qué se puede inferir del gesto de doña Inés en el \S\,3?}
+\mal{A}{Que compró pan de más por error.}{No hay ninguna prueba; contradice la intención del gesto.}
+\bien{B}{Que agradece al celador lo que hizo por ella cuando estuvo enferma.}{El \S\,2 cuenta que él le subía el pan; ahora
+ella le trae una bolsa: el gesto devuelve el favor.}
+\mal{C}{Que el celador no tiene dinero para comer.}{\emph{No lo dice} ni se sigue.}
+\mal{D}{Que ella y el celador están peleados.}{\emph{Dice lo contrario}: comparten la tarde.}
+\end{comentada}
+
+\begin{trampa}
+Elegir una inferencia emocionante pero sin pruebas («están enamorados»). Puede que sí, pero el texto no lo sostiene; la
+gratitud sí.
+\end{trampa}
+
+\taller
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Del \S\,1 se puede inferir que doña Inés
+\opcionesl{tiene muchos amigos en el edificio.}{probablemente se siente sola.}{trabaja de noche.}{no le gusta el pan.}
+\sol{B. «la única hora en que ella habla con alguien».}
+\item El silencio con que se intercambian el pan en el \S\,3 sugiere que
+\opcionesl{están enojados.}{entre ellos hay una confianza que no necesita palabras.}{no se conocen.}{el celador no quería el pan.}
+\sol{B.}
+\item ¿Cuál inferencia NO tiene apoyo en el texto?
+\opcionesl{Doña Inés estuvo enferma.}{El celador se preocupó por ella.}{Doña Inés tiene hijos que la visitan.}{Doña Inés recuperó su rutina.}
+\sol{C.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Andén vacío (el tren ya pasó o no ha llegado), y Laura se prepara para una espera larga (un libro largo): lo más defendible
+es que perdió el tren y esperará el siguiente. Las demás no tienen apoyo. \textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-in-2}{Presupuestos}{Juego de descubrir lo que una frase da por sentado.}
+
+\begin{reto}
+«Andrés dejó de fumar hace un año.» Esta frase presupone que
+\opcionesd{Andrés fumaba antes.}{Andrés está enfermo.}{fumar es bueno.}{Andrés nunca fumó.}
+\end{reto}
+
+\tecnica{La técnica: lo que se da por hecho}
+Un \clave{presupuesto} es una información que la frase no afirma, pero que da por sentada para tener sentido. «Dejó de
+fumar» presupone que fumaba; «otra vez llegó tarde» presupone que ya había llegado tarde; «lamento que no vinieras»
+presupone que no viniste. Una prueba sencilla: si se niega la frase («no dejó de fumar»), el presupuesto sigue en pie
+(fumaba antes, sigue fumando).
+
+\subsubsection{Marcas de presupuestos}
+Verbos de cambio (\emph{dejar de, empezar a, seguir}), adverbios como \emph{otra vez, todavía, ya, también}, verbos de
+sentimiento o conocimiento (\emph{lamentar, saber, reconocer que}), y descripciones como \emph{el nuevo director}
+(presupone que hubo otro).
+
+\begin{regla}
+\begin{itemize}
+  \item Busca verbos de cambio, «otra vez», «todavía», «también», «el nuevo…».
+  \item Prueba de la negación: el presupuesto sobrevive cuando se niega la frase.
+  \item En argumentos, los presupuestos son ideas que el autor no defiende porque cree que todos las aceptan.
+\end{itemize}
+\end{regla}
+
+\begin{texto}{La nueva biblioteca del colegio}{Carta de un estudiante · texto original escrito para este libro}
+\pa Señora rectora: le escribo en nombre del consejo estudiantil porque, \emph{otra vez}, la biblioteca permanecerá cerrada
+durante las vacaciones de mitad de año. Sabemos que la nueva bibliotecaria todavía se está adaptando, pero muchos
+estudiantes necesitamos ese espacio precisamente en vacaciones, cuando preparamos el examen de admisión.
+
+\pa Lamentamos que la decisión se haya tomado sin consultarnos. Proponemos que la biblioteca abra al menos tres mañanas
+por semana, con estudiantes voluntarios del último grado que ayuden a cuidarla.
+
+\pa También le pedimos que considere ampliar la sección de libros de preparación, que sigue siendo la más pequeña de la
+biblioteca. Quedamos atentos a su respuesta.
+\end{texto}
+
+\subsection{Preguntas comentadas}
+\begin{comentada}{La expresión «otra vez» \pf{1} presupone que}
+\mal{A}{la rectora está enojada.}{\emph{No lo dice}.}
+\bien{B}{la biblioteca ya había estado cerrada en vacaciones antes.}{«Otra vez» indica repetición.}
+\mal{C}{la biblioteca nunca abre.}{\emph{Dice de más}.}
+\mal{D}{los estudiantes no estudian en vacaciones.}{\emph{Dice lo contrario}.}
+\end{comentada}
+
+\taller
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item «La nueva bibliotecaria» presupone que
+\opcionesl{antes hubo otra bibliotecaria.}{la bibliotecaria es joven.}{la biblioteca es nueva.}{la bibliotecaria no sabe su oficio.}
+\sol{A.}
+\item «Lamentamos que la decisión se haya tomado sin consultarnos» presupone que
+\opcionesl{los estudiantes fueron consultados.}{la decisión se tomó sin consultar a los estudiantes.}{la rectora consultará en el futuro.}{la decisión es ilegal.}
+\sol{B.}
+\item «que sigue siendo la más pequeña» \pf{3} presupone que
+\opcionesl{la sección ya era la más pequeña antes.}{la sección creció.}{no hay libros de preparación.}{la biblioteca es pequeña.}
+\sol{A.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+«Dejar de» presupone que antes se hacía. Aunque se niegue («no dejó de fumar»), sigue presupuesto que fumaba.
+\textbf{Opción A.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-in-3}{Causa y efecto}{Juego de las fichas que se encadenan.}
+
+\begin{reto}
+«Las lluvias de marzo dañaron las vías, por lo que los camiones tardaron el doble en llegar al mercado y los precios de
+la papa subieron.» Según el fragmento, ¿cuál fue la causa directa del alza de precios?
+\opcionesd{las lluvias}{la demora de los camiones}{el mercado}{la papa}
+\end{reto}
+
+\tecnica{La técnica: dibujar la cadena}
+Los textos encadenan hechos: A produce B, que produce C. Las preguntas piden a veces la causa \emph{directa} (la
+inmediatamente anterior) y a veces la causa \emph{original}. Dibujar la cadena evita confundirlas:
+
+\begin{center}
+\begin{tikzpicture}[x=1mm,font=\scriptsize,every node/.style={draw=zolive,rounded corners=2pt,fill=zsoft,minimum height=6mm}]
+  \node (a) at (0,0) {lluvias}; \node (b) at (25,0) {vías dañadas}; \node (c) at (52,0) {camiones tardan}; \node (d) at (80,0) {precios suben};
+  \draw[zmute,-{Latex[length=1.5mm]}] (a) -- (b); \draw[zmute,-{Latex[length=1.5mm]}] (b) -- (c); \draw[zmute,-{Latex[length=1.5mm]}] (c) -- (d);
+\end{tikzpicture}
+\end{center}
+
+Además, hay que distinguir la causa de la simple \emph{coincidencia} (lo que ocurrió al mismo tiempo) y de la
+\emph{condición} (lo que hizo posible, pero no provocó).
+
+\begin{regla}
+\begin{itemize}
+  \item Marcas de causa: porque, ya que, debido a, gracias a, a causa de. De efecto: por eso, así que, de modo que,
+  provocó, generó.
+  \item Dibuja la cadena y fíjate si piden la causa directa o la original.
+  \item Ocurrir antes no es causar.
+\end{itemize}
+\end{regla}
+
+\begin{texto}{El año sin luciérnagas}{Divulgación · texto original escrito para este libro}
+\pa En las veredas de algunos municipios, los mayores recuerdan noches llenas de luciérnagas. Hoy, muchos niños de esas
+mismas veredas nunca han visto una.
+
+\pa Las luciérnagas usan su luz para encontrar pareja: los machos vuelan encendiéndose y apagándose, y las hembras
+responden desde el suelo. Cuando la noche está iluminada por bombillos y faroles, esas señales se pierden, y menos parejas
+logran encontrarse. Con menos encuentros, nacen menos larvas.
+
+\pa Las larvas, además, viven en el suelo húmedo y se alimentan de caracoles y babosas. Por eso, cuando se secan los
+humedales o se usan venenos contra caracoles en los cultivos, también se quedan sin hogar y sin alimento.
+
+\pa La buena noticia es que las causas son conocidas. Apagar las luces innecesarias, dirigir los faroles hacia el suelo y
+conservar zonas húmedas son medidas sencillas que, en algunos lugares, ya han devuelto las luces de las noches.
+\end{texto}
+
+\subsection{Preguntas comentadas}
+\begin{comentada}{Según el \S\,2, ¿por qué nacen menos larvas cuando la noche está iluminada?}
+\mal{A}{Porque la luz mata a las larvas.}{\emph{No lo dice}.}
+\bien{B}{Porque las señales de luz se pierden y menos parejas se encuentran.}{Cadena: luz artificial $\to$ señales
+perdidas $\to$ menos encuentros $\to$ menos larvas.}
+\mal{C}{Porque las hembras vuelan encendiéndose.}{\emph{Dice otra cosa}: son los machos los que vuelan.}
+\mal{D}{Porque no hay caracoles.}{Es otra causa, del \S\,3, no la de la luz.}
+\end{comentada}
+
+\taller
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item Según el \S\,3, el uso de venenos contra caracoles afecta a las luciérnagas porque
+\opcionesl{envenena a los adultos.}{deja a las larvas sin alimento.}{ilumina los cultivos.}{seca los humedales.}
+\sol{B.}
+\item ¿Cuál de las siguientes NO aparece como causa de la disminución de luciérnagas?
+\opcionesd{la luz artificial}{la desecación de humedales}{el cambio de temperatura}{los venenos para caracoles}
+\sol{C.}
+\item El \S\,4 presenta las medidas como
+\opcionesl{costosas e imposibles.}{sencillas y, en algunos lugares, ya efectivas.}{obligatorias por ley.}{inútiles.}
+\sol{B.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Cadena: lluvias $\to$ vías dañadas $\to$ camiones tardan el doble $\to$ precios suben. La causa \emph{directa} del alza es
+la demora; las lluvias son la causa original. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\leccion{pu-in-4}{Actitudes y motivos}{Juego de leer las emociones de un personaje por lo que hace.}
+
+\begin{reto}
+«Camilo leyó la carta dos veces, la dobló con cuidado y la guardó en el bolsillo de la camisa, del lado del corazón.» La
+actitud de Camilo hacia la carta es de
+\opcionesd{indiferencia}{aprecio}{enojo}{burla}
+\end{reto}
+
+\tecnica{La técnica: los hechos delatan}
+Los buenos textos rara vez dicen «estaba triste»: lo muestran. Para inferir una \clave{actitud} o un \clave{motivo}, se
+miran las acciones, los gestos, las palabras elegidas y los silencios. Luego se busca la opción que nombre esa emoción
+con la intensidad justa: ni más (furia, si solo hay molestia) ni menos.
+
+\begin{regla}
+\begin{itemize}
+  \item Haz una lista de las acciones y palabras del personaje.
+  \item Pregunta: ¿qué sentimiento explica \emph{todas} esas acciones a la vez?
+  \item Ajusta la intensidad: preocupación no es pánico; molestia no es odio.
+\end{itemize}
+\end{regla}
+
+\begin{texto}{El primer día}{Relato · texto original escrito para este libro}
+\pa Mi papá me acompañó hasta la puerta de la universidad aunque le dije tres veces que no hacía falta. En el bus no habló
+mucho; miraba por la ventana y se arreglaba el cuello de la camisa, que no estaba torcido.
+
+\pa Cuando llegamos, se quedó en la acera. Me dio la mano como a un adulto, pero no me la soltó enseguida. «Usted es la
+primera de la familia que llega aquí», dijo, y después tosió como si se le hubiera metido algo en la garganta.
+
+\pa Caminé hacia el edificio sin voltear. Al llegar a la escalera miré hacia atrás: seguía en la acera, con las manos en
+los bolsillos, sin moverse. Esa tarde, cuando volví a la casa, mi mamá me contó que él había llegado al trabajo dos horas
+tarde.
+\end{texto}
+
+\subsection{Preguntas comentadas}
+\begin{comentada}{¿Qué actitud muestra el padre en el texto?}
+\mal{A}{Fastidio por tener que acompañarla.}{\emph{Dice lo contrario}: él insistió en ir.}
+\bien{B}{Orgullo y emoción contenida.}{Se arregla la camisa (nervios), no suelta la mano, dice la frase sobre «la
+primera de la familia», tose para disimular, se queda inmóvil y llega tarde al trabajo.}
+\mal{C}{Indiferencia.}{Todas sus acciones la contradicen.}
+\mal{D}{Miedo a que le pase algo malo.}{\emph{No lo dice}: nada sugiere peligro.}
+\end{comentada}
+
+\taller
+\piso{Como en el examen}{opción múltiple}
+\begin{ejercicios}
+\item La tos del padre \pf{2} sugiere que
+\opcionesl{está enfermo.}{intenta disimular la emoción.}{tiene frío.}{está molesto.}
+\sol{B.}
+\item El dato final, que llegó dos horas tarde al trabajo, permite inferir que
+\opcionesl{se perdió en el camino.}{se quedó un buen rato frente a la universidad.}{no tenía trabajo ese día.}{el bus se dañó.}
+\sol{B. Coherente con «seguía en la acera, sin moverse».}
+\item ¿Por qué la narradora caminó «sin voltear» \pf{3}?
+\opcionesl{Porque estaba enojada con su padre.}{Probablemente para mostrarse fuerte o no emocionarse.}{Porque no lo vio.}{Porque llegaba tarde.}
+\sol{B. Luego, en la escalera, sí miró atrás.}
+\end{ejercicios}
+
+\begin{retoresuelto}
+Leerla dos veces, doblarla con cuidado y guardarla «del lado del corazón» muestra que la valora. \textbf{Opción B.}
+\end{retoresuelto}
+\bitacora
+
+% ------------------------------------------------------------------
+\evaluacion
+\begin{texto}{La última función}{Crónica · texto original escrito para este libro (el teatro es imaginario)}
+\pa El teatro Colón de San Pedro cerró sus puertas un domingo de lluvia. No hubo discursos: el dueño, don Alirio, apagó
+las luces de la marquesina a las diez de la noche, como siempre, y se quedó un rato mirando la fachada desde la otra
+acera.
+
+\pa Durante cincuenta años, el Colón fue el único cine del pueblo. Allí se dieron los primeros besos de varias
+generaciones, allí se lloró con las películas mexicanas y se gritó con las de vaqueros. En los años noventa todavía se
+llenaba los sábados; en los últimos tiempos, a veces la función empezaba con tres espectadores.
+
+\pa Don Alirio nunca subió el precio de la boleta, aunque sus hijos se lo pedían. Decía que el cine era «para que la gente
+saliera de la casa», no para hacerse rico. Cuando las plataformas de películas llegaron a los celulares, la gente dejó de
+salir.
+
+\pa La última película fue una comedia. Los pocos asistentes se rieron en los mismos momentos, y al final, cuando se
+encendieron las luces, nadie se levantó enseguida.
+\end{texto}
+\begin{ejercicios}
+\item Del \S\,1 se puede inferir que don Alirio
+\opcionesl{estaba feliz de cerrar.}{se despidió del teatro con tristeza contenida.}{no quería volver nunca.}{olvidó apagar las luces.}
+\sol{B. (1.4)}
+\item Según el texto, la causa principal de que la gente dejara de ir al cine fue
+\opcionesl{el precio de la boleta.}{la llegada de las películas a los celulares.}{la lluvia.}{las películas mexicanas.}
+\sol{B. \S\,3; el precio nunca subió. (1.3)}
+\item La frase «el cine era para que la gente saliera de la casa» presupone que
+\opcionesl{la gente salía poco de la casa.}{el cine tenía una función más social que comercial para don Alirio.}{don Alirio era rico.}{las películas eran malas.}
+\sol{B. (1.2)}
+\item Que nadie se levantara enseguida al final \pf{4} sugiere que
+\opcionesl{la película fue aburrida.}{los asistentes querían prolongar la despedida del teatro.}{estaban dormidos.}{esperaban otra película.}
+\sol{B. (1.1)}
+\item ¿Cuál inferencia NO se puede sostener?
+\opcionesl{El teatro fue importante en la vida del pueblo.}{Don Alirio priorizaba su idea del cine sobre la ganancia.}{Los hijos de don Alirio querían subir el precio.}{El teatro será demolido.}
+\sol{D. (1.1)}
+\end{ejercicios}
