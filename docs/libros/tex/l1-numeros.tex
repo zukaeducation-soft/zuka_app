@@ -17,21 +17,7 @@ calculadora («la última cifra de $3^{2027}$») y que salen en tres renglones c
 Un número \clave{primo} tiene exactamente dos divisores: 1 y él mismo (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, …). El 1 no
 es primo. Todo entero mayor que 1 se escribe de \emph{una sola manera} como producto de primos: es su «código genético».
 
-\begin{center}
-\begin{tikzpicture}[level distance=9mm,sibling distance=14mm,every node/.style={font=\small},
-  edge from parent/.style={draw,zmute}]
-\node {$360$}
-  child {node[text=zolive] {$2$}}
-  child {node {$180$}
-    child {node[text=zolive] {$2$}}
-    child {node {$90$}
-      child {node[text=zolive] {$2$}}
-      child {node {$45$}
-        child {node[text=zolive] {$3$}}
-        child {node {$15$} child {node[text=zolive] {$3$}} child {node[text=zolive] {$5$}}}}}};
-\node[right,font=\small] at (3.4,-2.4) {$360 = 2^3 \cdot 3^2 \cdot 5$};
-\end{tikzpicture}
-\end{center}
+\figura{factores}{El árbol de factores de 360: en verde, los primos.}
 
 \subsubsection{Contar divisores}
 Un divisor de $360 = 2^3 \cdot 3^2 \cdot 5$ se arma eligiendo cuántos 2 lleva (0, 1, 2 o 3: cuatro opciones), cuántos 3

@@ -101,18 +101,7 @@ probabilidades de sus ramas. Si las etapas no se afectan (lanzar una moneda y lu
 \clave{independientes} y se multiplica directamente. Si una etapa cambia la siguiente (sacar sin devolver), la segunda
 rama se calcula con lo que quedó.
 
-\begin{center}
-\begin{tikzpicture}[grow=right,level distance=20mm,font=\scriptsize,
-  level 1/.style={sibling distance=16mm},level 2/.style={sibling distance=8mm},edge from parent/.style={draw,zmute}]
-\node {}
-  child {node {A} child {node {A $\;\tfrac{2}{5}\cdot\tfrac14$} edge from parent node[below]{$\tfrac14$}}
-                  child {node {R $\;\tfrac25 \cdot \tfrac34$} edge from parent node[above]{$\tfrac34$}}
-         edge from parent node[below]{$\tfrac25$}}
-  child {node {R} child {node {A $\;\tfrac35\cdot\tfrac24$} edge from parent node[below]{$\tfrac24$}}
-                  child {node[text=zolive] {R $\;\tfrac35 \cdot \tfrac24 = \tfrac{3}{10}$} edge from parent node[above]{$\tfrac24$}}
-         edge from parent node[above]{$\tfrac35$}};
-\end{tikzpicture}
-\end{center}
+\figura{arbolprob}{Sin reposición: la segunda rama se calcula con lo que quedó en la urna.}
 
 \subsubsection{Complemento}
 $P(\text{no } E) = 1 - P(E)$. Es la herramienta para «al menos uno»: la probabilidad de al menos un 6 en tres lanzamientos

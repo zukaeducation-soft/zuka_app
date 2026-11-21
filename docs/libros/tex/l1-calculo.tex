@@ -151,14 +151,7 @@ caben en la jarra completa?
 En la fracción $\tfrac38$ el \clave{denominador} 8 dice en cuántas partes \textbf{iguales} se corta la unidad y el
 \clave{numerador} 3 cuántas de esas partes se toman. Si las partes no son iguales, no es una fracción.
 
-\begin{center}
-\begin{tikzpicture}[x=7mm,y=7mm]
-  \foreach \i in {0,...,7}{\draw[zink,line width=.4pt,fill=\ifnum\i<3 zlime!70\else white\fi] (\i,0) rectangle (\i+1,1);}
-  \node[right,font=\small] at (8.3,.5) {$\tfrac38$};
-  \foreach \i in {0,...,4}{\draw[zink,line width=.4pt,fill=\ifnum\i<3 zsky!35\else white\fi] (\i*1.6,-1.6) rectangle (\i*1.6+1.6,-.6);}
-  \node[right,font=\small] at (8.3,-1.1) {$\tfrac35$};
-\end{tikzpicture}
-\end{center}
+\figura{fracciones}{El denominador corta, el numerador cuenta.}
 
 Una misma cantidad tiene muchos nombres: cortar cada pedazo en dos duplica las partes y las que se toman, así que
 $\tfrac35 = \tfrac{6}{10} = \tfrac{12}{20}$. \clave{Simplificar} es el camino de vuelta: dividir arriba y abajo por el
@@ -275,15 +268,7 @@ Al escribir $\tfrac37$ como decimal, ¿qué cifra queda en el lugar 100 después
 Una fracción, un decimal y un porcentaje pueden decir lo mismo: $\tfrac14 = 0.25 = 25\,\%$. «Por ciento» significa
 «de cada cien»: el $25\,\%$ son 25 casillas de una cuadrícula de 100.
 
-\begin{center}
-\begin{tikzpicture}[x=3.2mm,y=3.2mm]
-  \foreach \i in {0,...,9}{\foreach \j in {0,...,9}{%
-    \pgfmathtruncatemacro{\n}{\j*10+\i}
-    \ifnum\n<25 \fill[zlime!70] (\i,\j) rectangle ++(1,1);\fi
-    \draw[zline,line width=.3pt] (\i,\j) rectangle ++(1,1);}}
-  \node[right,font=\small,align=left] at (10.8,5) {$25$ de $100$\\$= 0.25 = \tfrac14$};
-\end{tikzpicture}
-\end{center}
+\figura{cien}{Veinticinco casillas de cien: la misma cantidad con tres nombres.}
 
 \subsubsection{De fracción a decimal}
 Una fracción es una división: $\tfrac38 = 3 \div 8 = 0.375$. Si el denominador (ya simplificado) solo tiene factores 2 y

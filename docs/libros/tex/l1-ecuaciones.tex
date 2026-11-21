@@ -17,19 +17,7 @@ Si a un número se le suma su mitad y su tercera parte, se obtiene 55. ¿Cuál e
 Una ecuación es una \clave{balanza en equilibrio}: lo que se haga en un platillo debe hacerse en el otro. Despejar es
 quitar de los dos lados lo que estorba hasta dejar la incógnita sola.
 
-\begin{center}
-\begin{tikzpicture}[x=1mm,y=1mm]
-  \draw[zink,line width=.8pt] (0,0) -- (0,18); \fill[zink] (-4,0) -- (4,0) -- (0,4) -- cycle;
-  \draw[zink,line width=.8pt] (-30,18) -- (30,18);
-  \draw[zmute] (-30,18) -- (-36,8) (-30,18) -- (-24,8) (30,18) -- (24,8) (30,18) -- (36,8);
-  \draw[zink,line width=.8pt] (-38,8) -- (-22,8); \draw[zink,line width=.8pt] (22,8) -- (38,8);
-  \foreach \x in {-36,-31}{\draw[zink,fill=zlime!70] (\x,8) rectangle ++(4,4) node[midway,font=\tiny]{$x$};}
-  \foreach \x in {-26}{\draw[zink,fill=zsky!30] (\x,8) rectangle ++(3,3) node[midway,font=\tiny]{1};}
-  \foreach \x in {23,26.5,30,33.5}{\draw[zink,fill=zsky!30] (\x,8) rectangle ++(3,3) node[midway,font=\tiny]{1};}
-  \foreach \x in {24.5,28,31.5}{\draw[zink,fill=zsky!30] (\x,11.2) rectangle ++(3,3) node[midway,font=\tiny]{1};}
-  \node[font=\small] at (0,-5) {$2x + 1 = 7 \;\Rightarrow\; 2x = 6 \;\Rightarrow\; x = 3$};
-\end{tikzpicture}
-\end{center}
+\figura{balanza}{Lo que se hace en un platillo se hace en el otro.}
 
 \subsubsection{Traducir}
 Antes de escribir, decide \emph{qué} es la incógnita y escríbelo en palabras: «$x$ = número de boletas vendidas el
@@ -256,15 +244,7 @@ Una desigualdad se trabaja como una ecuación, con una diferencia: al \emph{mult
 negativo}, el sentido se invierte. De $-2x < 6$ sale $x > -3$. La solución suele ser un intervalo, que se dibuja en la
 recta.
 
-\begin{center}
-\begin{tikzpicture}[x=6mm]
-  \draw[-{Latex[length=2mm]},zmute] (-5.6,0)--(4.6,0);
-  \foreach \t in {-5,...,4}{\draw[zmute] (\t,.08)--(\t,-.08) node[below,font=\scriptsize,text=zink]{$\t$};}
-  \draw[zolive,line width=2pt] (-3,0) -- (4.5,0);
-  \draw[zolive,line width=.8pt,fill=white] (-3,0) circle (2.2pt);
-  \node[above,font=\scriptsize,text=zolive] at (1,.1) {$x > -3$};
-\end{tikzpicture}
-\end{center}
+\figura{desigualdad}{La solución de una desigualdad es un tramo de la recta.}
 
 \begin{regla}
 \begin{itemize}

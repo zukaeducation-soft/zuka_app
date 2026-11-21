@@ -302,15 +302,7 @@ evidente qué se sigue y qué no:
   \item «Algunos $A$ son $B$»: círculos que se cruzan, con una marca $\times$ en la parte común (hay al menos uno ahí).
 \end{itemize}
 
-\begin{center}
-\begin{tikzpicture}[font=\scriptsize]
-  \draw[zolive,line width=.7pt] (0,0) circle (1.1) node[above=7mm]{saben cálculo};
-  \draw[zsky,line width=.7pt,fill=zsky!15] (0,-.2) circle (.55) node{ingenieros};
-  \draw[zcoral,line width=.7pt] (1.1,-.4) circle (.8);
-  \node[text=zcoral] at (1.95,-1.1) {músicos};
-  \node at (.42,-.42) {$\times$};
-\end{tikzpicture}
-\end{center}
+\figura{euler}{Las premisas dibujadas: basta un músico dentro del círculo de ingenieros.}
 
 \subsubsection{Cómo se prueba que una conclusión \emph{no} se sigue}
 Basta dibujar un caso que cumpla las premisas y donde la conclusión falle. Si no puedes dibujar un contraejemplo de

@@ -136,14 +136,7 @@ Un texto bien escrito es un edificio: cada párrafo cumple una \clave{función} 
 contrastar, objetar, concluir) y todos sostienen una \clave{idea central}. El \clave{mapa del texto} es la lista de esas
 funciones, una palabra por párrafo, escrita al margen mientras se lee.
 
-\begin{center}\small
-\begin{tikzpicture}[x=1mm,y=1mm,font=\scriptsize,every node/.style={draw=zolive,rounded corners=2pt,minimum width=17mm,minimum height=6mm,fill=white}]
-  \node (a) at (0,0) {\S1 creencia}; \node (b) at (22,0) {\S2 datos};
-  \node (c) at (44,0) {\S3 por qué}; \node (d) at (66,0) {\S4 propuesta};
-  \node[draw=zcoral,fill=zcoral!10,minimum width=60mm] (t) at (33,-12) {idea central: la creencia es falsa y hay que…};
-  \foreach \n in {a,b,c,d}{\draw[zmute,-{Latex[length=1.5mm]}] (\n.south) -- (t.north -| \n.south);}
-\end{tikzpicture}
-\end{center}
+\figura{mapatexto}{El mapa del texto: una función por párrafo y una idea que las reúne.}
 
 \subsubsection{Idea central, tema y título}
 El \clave{tema} es de qué se habla («el olvido»); la \clave{idea central} es qué se dice de eso («olvidar es necesario para

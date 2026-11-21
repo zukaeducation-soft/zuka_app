@@ -29,15 +29,7 @@ de la casilla 1). Luego las pistas se clasifican:
 
 Se empieza por las fijas y los bloques, que dejan menos libertad, y se termina con las negativas, que descartan.
 
-\begin{center}
-\begin{tikzpicture}[x=10mm,y=8mm,font=\small]
-  \foreach \i in {1,...,6}{\draw[zline,line width=.6pt] (\i,0) rectangle ++(.9,.9); \node[font=\scriptsize,text=zmute] at (\i+.45,-.3) {\i};}
-  \foreach \i/\t in {1/E,2/C}{\fill[zlime!55] (\i,0) rectangle ++(.9,.9); \node at (\i+.45,.45) {\t};}
-  \foreach \i/\t in {5/B,6/D}{\fill[zsky!30] (\i,0) rectangle ++(.9,.9); \node at (\i+.45,.45) {\t};}
-  \node at (3.45,.45) {?}; \node at (4.45,.45) {?};
-  \node[right,font=\scriptsize,align=left] at (7.2,.45) {A y F ocupan 3 y 4,\\en cualquier orden};
-\end{tikzpicture}
-\end{center}
+\figura{fila}{Bloques fijos y dos casillas libres: quedan dos filas posibles.}
 
 \begin{regla}
 \begin{enumerate}
@@ -111,14 +103,7 @@ junto a Ana. Elena está frente a Carlos. Diana se sienta junto a Beto. ¿Quién
 En una mesa redonda, girar a todos un puesto no cambia nada: las relaciones («frente a», «junto a», «a la derecha de»)
 siguen iguales. Por eso el primer paso es \clave{fijar} a una persona en un puesto y ubicar a las demás respecto a ella.
 
-\begin{center}
-\begin{tikzpicture}[font=\scriptsize]
-  \draw[zline,line width=.8pt] (0,0) circle (1.1);
-  \foreach \i/\t in {0/1,1/2,2/3,3/4,4/5,5/6}{\node[draw=zolive,circle,minimum size=6mm,fill=white] at (90-\i*60:1.55) {\t};}
-  \draw[zcoral,dashed] (90:1.25) -- (270:1.25);
-  \node[right,align=left] at (2.3,0) {Con 6 puestos, frente al\\puesto $k$ está el $k + 3$.\\Junto al 1 están el 2 y el 6.};
-\end{tikzpicture}
-\end{center}
+\figura{mesa}{Una mesa de seis puestos con una persona fija.}
 
 \subsubsection{Derecha e izquierda}
 Si las personas miran hacia el centro de la mesa, la derecha de alguien es el puesto siguiente en el sentido de las

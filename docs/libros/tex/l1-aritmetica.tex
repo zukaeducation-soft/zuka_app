@@ -21,31 +21,14 @@ Cuando una historia termina con un dato conocido («le quedan 5») y cada paso e
 es caminar \clave{de atrás hacia adelante}, haciendo en cada paso la operación \emph{contraria}: lo que se restó se suma,
 lo que se partió a la mitad se duplica.
 
-\begin{center}
-\begin{tikzpicture}[x=1mm,y=1mm,font=\small]
-  \node[draw=zolive,rounded corners=2pt,minimum width=14mm,minimum height=7mm] (a) at (0,0) {$x$};
-  \node[draw=zolive,rounded corners=2pt,minimum width=14mm,minimum height=7mm] (b) at (32,0) {$\tfrac{x}{2} - 2$};
-  \node[draw=zolive,rounded corners=2pt,minimum width=14mm,minimum height=7mm,fill=zsoft] (c) at (70,0) {queda};
-  \draw[-{Latex[length=2mm]},zmute] (a) -- node[above,font=\scriptsize]{vende $\tfrac12$ + 2} (b);
-  \draw[-{Latex[length=2mm]},zmute] (b) -- node[above,font=\scriptsize]{…} (c);
-  \draw[-{Latex[length=2mm]},zolive] (c) to[bend left=25] node[below,font=\scriptsize]{al revés: $+2$ y luego $\times 2$} (a);
-\end{tikzpicture}
-\end{center}
+\figura{atras}{El camino de ida (gris) y el de regreso (verde), con las operaciones contrarias.}
 
 \subsubsection{La barra que se parte}
 Cuando los datos son fracciones de lo que queda, una \clave{barra} ordena todo. Si alguien gasta $\tfrac13$ y luego
 $\tfrac14$ del resto, se dibuja la barra en tercios, se tacha uno, y lo que queda (dos tercios) se parte en cuartos.
 Como $\tfrac23$ partido en 4 da pedazos de $\tfrac16$, conviene partir toda la barra en sextos desde el comienzo.
 
-\begin{center}
-\begin{tikzpicture}[x=9mm,y=7mm,font=\scriptsize]
-  \foreach \i in {0,...,5}{\draw[zink,line width=.4pt,fill=\ifnum\i<2 zcoral!25\else\ifnum\i<3 zsky!30\else white\fi\fi] (\i,0) rectangle (\i+1,1);}
-  \draw[zink,line width=1.1pt] (0,0) rectangle (6,1); \draw[zink,line width=1.1pt] (2,0)--(2,1);
-  \draw[decorate,decoration={brace,amplitude=4pt}] (0,1.1) -- node[above=3pt]{$\tfrac13$ gastado} (2,1.1);
-  \draw[decorate,decoration={brace,amplitude=4pt}] (2,1.1) -- node[above=3pt]{$\tfrac14$ del resto} (3,1.1);
-  \draw[decorate,decoration={brace,amplitude=4pt,mirror}] (3,-.1) -- node[below=3pt]{queda: $\tfrac36 = \tfrac12$} (6,-.1);
-\end{tikzpicture}
-\end{center}
+\figura{barraresto}{La barra en sextos: un tercio gastado, un cuarto del resto y lo que queda.}
 
 \begin{regla}
 \begin{itemize}
@@ -136,12 +119,7 @@ El promedio de 5 números es 18. Si se quita uno de ellos, el promedio de los ot
 Imagina torres de cubos de distintas alturas. Si se pasan cubos de las altas a las bajas hasta que todas queden iguales,
 esa altura común es el \clave{promedio}. Nada se pierde ni se crea: el total de cubos es el mismo.
 
-\begin{center}
-\begin{tikzpicture}[x=6mm,y=4mm]
-  \foreach \x/\h in {0/7,1/3,2/5,3/1,4/4}{\foreach \k in {1,...,\h}{\draw[zink,line width=.3pt,fill=zlime!60] (\x*1.2,\k-1) rectangle ++(1,1);}}
-  \draw[zcoral,dashed,line width=.8pt] (-.3,4) -- (6.1,4) node[right,font=\scriptsize,text=zcoral]{promedio $= 20 / 5 = 4$};
-\end{tikzpicture}
-\end{center}
+\figura{promedio}{Nivelar las torres: lo que sobra en unas llena lo que falta en otras.}
 
 De ahí la regla más útil del tema: \textbf{total $=$ promedio $\times$ cantidad}. Casi todo problema de promedios se
 resuelve pasando a totales, operando con totales y volviendo a promediar.

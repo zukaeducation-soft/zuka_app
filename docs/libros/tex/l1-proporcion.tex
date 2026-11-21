@@ -22,14 +22,7 @@ Decir que hombres y mujeres están en razón $3 : 5$ es decir que el curso se pu
 cada 3 hombres hay 5 mujeres. No dice cuántos hay; dice cómo se comparan. La herramienta para verlo es la
 \clave{barra de partes}:
 
-\begin{center}
-\begin{tikzpicture}[x=9mm,y=6mm,font=\scriptsize]
-  \node[left] at (-.2,.5) {Hombres}; \node[left] at (-.2,-.9) {Mujeres};
-  \foreach \i in {0,1,2}{\draw[zink,fill=zsky!30] (\i,0) rectangle ++(1,1);}
-  \foreach \i in {0,...,4}{\draw[zink,fill=zlime!60] (\i,-1.4) rectangle ++(1,1);}
-  \draw[decorate,decoration={brace,amplitude=4pt,mirror}] (3,-1.5) -- node[below=3pt]{2 partes $=$ 12} (5,-1.5);
-\end{tikzpicture}
-\end{center}
+\figura{razon}{Razón 3 : 5 en barras: conocer una parte es conocerlo todo.}
 
 Cuando se sabe cuánto vale \emph{una} parte, se sabe todo. Este es el corazón de los repartos y las escalas.
 
@@ -141,20 +134,7 @@ salario. Lo que se conserva es el \emph{cociente} (el precio por kilo). Son \cla
 duplicar una la otra se reduce a la mitad: obreros y días para una misma obra, velocidad y tiempo para un mismo camino.
 Lo que se conserva es el \emph{producto} (el trabajo total).
 
-\begin{center}
-\begin{tikzpicture}
-\begin{axis}[width=50mm,height=36mm,axis lines=left,xmin=0,xmax=6,ymin=0,ymax=6,ticks=none,
-  title={\scriptsize directa: $y = kx$},xlabel={\scriptsize $x$},ylabel={\scriptsize $y$}]
-  \addplot[zolive,line width=1pt,domain=0:5.5] {x};
-\end{axis}
-\end{tikzpicture}\hspace{8mm}
-\begin{tikzpicture}
-\begin{axis}[width=50mm,height=36mm,axis lines=left,xmin=0,xmax=6,ymin=0,ymax=6,ticks=none,
-  title={\scriptsize inversa: $xy = k$},xlabel={\scriptsize $x$},ylabel={\scriptsize $y$}]
-  \addplot[zsky,line width=1pt,domain=0.7:6,samples=60] {4/x};
-\end{axis}
-\end{tikzpicture}
-\end{center}
+\figura{dirinv}{Directa: una recta que pasa por el origen. Inversa: una curva que baja.}
 
 \subsubsection{La regla de tres compuesta como «trabajo total»}
 Cuando intervienen varias magnitudes (obreros, horas por día, días, metros de obra), la forma más segura es calcular una
@@ -253,15 +233,7 @@ La relación de siempre es $d = v \cdot t$. Lo nuevo aparece con dos móviles: s
 entre ellos se cierra con la \emph{suma} de sus velocidades; si uno \clave{persigue} al otro en la misma dirección, la
 distancia se cierra con la \emph{diferencia}.
 
-\begin{center}
-\begin{tikzpicture}[x=1mm,y=1mm,font=\scriptsize]
-  \draw[zline,line width=1.5pt] (0,0) -- (90,0);
-  \fill[zsky] (0,0) circle (1.6); \fill[zcoral] (90,0) circle (1.6);
-  \draw[-{Latex[length=2mm]},zsky,line width=.8pt] (3,4) -- (25,4) node[above,midway]{70 km/h};
-  \draw[-{Latex[length=2mm]},zcoral,line width=.8pt] (87,4) -- (65,4) node[above,midway]{50 km/h};
-  \node[below] at (45,-1) {se cierran $70 + 50 = 120$ km cada hora};
-\end{tikzpicture}
-\end{center}
+\figura{encuentro}{Al acercarse de frente, las velocidades se suman.}
 
 \subsubsection{Trabajo conjunto: se suman las rapideces, no los tiempos}
 Si un grifo llena un tanque en 3 horas, llena $\tfrac13$ de tanque por hora. Si otro lo llena en 6, llena $\tfrac16$ por
@@ -463,14 +435,7 @@ $80\,\%$: multiplicar por $0.80$. Pensar en \clave{factores} tiene dos ventajas 
   IVA es $238\,000 \div 1.19 = 200\,000$, no $238\,000 \cdot 0.81$.
 \end{enumerate}
 
-\begin{center}
-\begin{tikzpicture}[x=1mm,y=1mm,font=\small]
-  \node[draw=zolive,rounded corners=2pt,minimum width=16mm,minimum height=7mm] (a) at (0,0) {\$200\,000};
-  \node[draw=zolive,rounded corners=2pt,minimum width=16mm,minimum height=7mm] (b) at (52,0) {\$238\,000};
-  \draw[-{Latex[length=2mm]},zolive] (a.north east) to[bend left=20] node[above,font=\scriptsize]{$\times 1.19$ (con IVA)} (b.north west);
-  \draw[-{Latex[length=2mm]},zcoral] (b.south west) to[bend left=20] node[below,font=\scriptsize]{$\div 1.19$ (sin IVA)} (a.south east);
-\end{tikzpicture}
-\end{center}
+\figura{factor}{Poner el IVA es multiplicar; quitarlo es dividir por el mismo factor.}
 
 \subsubsection{Interés simple y compuesto}
 Con interés \clave{simple} del $r\,\%$ anual, cada año se gana lo mismo: $I = C \cdot r \cdot t$. Con interés

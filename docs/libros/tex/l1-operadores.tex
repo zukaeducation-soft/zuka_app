@@ -17,14 +17,7 @@ Una definición como $a \star b = a^2 - 2b$ es una máquina con dos ranuras: lo 
 de $a$ y lo que entra por la derecha el de $b$. La máquina no sabe nada más. Para calcular $5 \star 3$, se copia la regla
 y se reemplaza: $5^2 - 2 \cdot 3 = 19$.
 
-\begin{center}
-\begin{tikzpicture}[x=1mm,y=1mm,font=\small]
-  \node[draw=zolive,rounded corners=3pt,minimum width=30mm,minimum height=11mm,fill=zsoft] (m) at (0,0) {$a^2 - 2b$};
-  \node (a) at (-30,5) {$a = 5$}; \node (b) at (-30,-5) {$b = 3$}; \node (r) at (28,0) {$19$};
-  \draw[-{Latex[length=2mm]},zmute] (a) -- (m.west|-0,3); \draw[-{Latex[length=2mm]},zmute] (b) -- (m.west|-0,-3);
-  \draw[-{Latex[length=2mm]},zolive] (m) -- (r);
-\end{tikzpicture}
-\end{center}
+\figura{maquina}{Un operador es una máquina: cada entrada ocupa su lugar en la regla.}
 
 \subsubsection{Lo que no se puede suponer}
 Una operación inventada \emph{no tiene por qué} ser conmutativa: $5 \star 3 = 19$ pero $3 \star 5 = 9 - 10 = -1$.

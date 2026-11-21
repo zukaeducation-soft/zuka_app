@@ -21,15 +21,7 @@ Una \clave{inferencia válida} cumple dos condiciones: (1) no está dicha litera
 necesidad de inventar. Para comprobarla, pregúntate: \emph{¿qué frase del texto me obliga a pensar esto?} Si no encuentras
 ninguna, es especulación.
 
-\begin{center}
-\begin{tikzpicture}[x=1mm,y=1mm,font=\scriptsize,every node/.style={rounded corners=2pt,minimum height=6mm}]
-  \node[draw=zolive,fill=zsoft,text width=30mm,align=center] (a) at (0,0) {andén vacío};
-  \node[draw=zolive,fill=zsoft,text width=30mm,align=center] (b) at (0,-9) {7:10};
-  \node[draw=zolive,fill=zsoft,text width=30mm,align=center] (c) at (0,-18) {saca un libro largo};
-  \node[draw=zcoral,fill=zcoral!10,text width=38mm,align=center] (d) at (55,-9) {el tren ya pasó y la espera será larga};
-  \foreach \n in {a,b,c}{\draw[zmute,-{Latex[length=1.5mm]}] (\n.east) -- (d.west);}
-\end{tikzpicture}
-\end{center}
+\figura{pistas}{Una inferencia se apoya en pistas que sí están en el texto.}
 
 \subsubsection{Grados de inferencia}
 Entre «el texto lo dice» y «el texto no dice nada de eso» hay una zona: lo que el texto \emph{sugiere con fuerza}. El
@@ -171,12 +163,7 @@ la papa subieron.» Según el fragmento, ¿cuál fue la causa directa del alza d
 Los textos encadenan hechos: A produce B, que produce C. Las preguntas piden a veces la causa \emph{directa} (la
 inmediatamente anterior) y a veces la causa \emph{original}. Dibujar la cadena evita confundirlas:
 
-\begin{center}
-\begin{tikzpicture}[x=1mm,font=\scriptsize,every node/.style={draw=zolive,rounded corners=2pt,fill=zsoft,minimum height=6mm}]
-  \node (a) at (0,0) {lluvias}; \node (b) at (25,0) {vías dañadas}; \node (c) at (52,0) {camiones tardan}; \node (d) at (80,0) {precios suben};
-  \draw[zmute,-{Latex[length=1.5mm]}] (a) -- (b); \draw[zmute,-{Latex[length=1.5mm]}] (b) -- (c); \draw[zmute,-{Latex[length=1.5mm]}] (c) -- (d);
-\end{tikzpicture}
-\end{center}
+\figura{cadena}{Una cadena causal: cada hecho empuja al siguiente.}
 
 Además, hay que distinguir la causa de la simple \emph{coincidencia} (lo que ocurrió al mismo tiempo) y de la
 \emph{condición} (lo que hizo posible, pero no provocó).

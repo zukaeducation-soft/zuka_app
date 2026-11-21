@@ -31,16 +31,7 @@ Para seguir un recorrido hay que llevar dos cosas: la \clave{posición} (como co
 la \clave{dirección} a la que se mira. «Girar a la derecha» cambia solo la dirección:
 N $\to$ E $\to$ S $\to$ O $\to$ N. «Girar a la izquierda» va al revés.
 
-\begin{center}
-\begin{tikzpicture}[x=6mm,y=6mm,font=\scriptsize]
-  \draw[zline,line width=.3pt] (-3,-1) grid (4,3);
-  \draw[zolive,line width=1pt,-{Latex[length=2mm]}] (0,0) -- (3,0);
-  \draw[zolive,line width=1pt,-{Latex[length=2mm]}] (3,0) -- (3,2);
-  \draw[zolive,line width=1pt,-{Latex[length=2mm]}] (3,2) -- (-2,2);
-  \fill[zcoral] (0,0) circle (2pt) node[below]{inicio}; \fill[zolive] (-2,2) circle (2pt) node[above]{fin};
-  \node at (4.6,2.5) {N $\uparrow$};
-\end{tikzpicture}
-\end{center}
+\figura{recorrido}{El recorrido del robot, paso a paso.}
 
 \begin{regla}
 \begin{itemize}
@@ -102,14 +93,7 @@ Una pila de cubos se cuenta organizadamente: por \clave{columnas} (cuántos hay 
 \clave{capas} (cuántos hay en cada nivel). En los dibujos en perspectiva, algunos cubos no se ven pero \emph{tienen} que
 estar: un cubo no flota, siempre tiene otro debajo.
 
-\begin{center}
-\begin{tikzpicture}[scale=.55]
-  \cubo{1}{1}{0}\cubo{1}{1}{1}\cubo{1}{1}{2}
-  \cubo{0}{1}{0}
-  \cubo{1}{0}{0}\cubo{1}{0}{1}
-  \cubo{0}{0}{0}\cubo{0}{0}{1}
-\end{tikzpicture}
-\end{center}
+\figura{cubos}{La misma pila en perspectiva y vista desde arriba.}
 
 \subsubsection{Las tres vistas}
 Una pila se describe con su vista de \emph{frente}, de \emph{lado} y de \emph{arriba}. La vista de frente muestra, en cada
@@ -176,14 +160,7 @@ borde. Dos reglas prácticas:
   \item En un desarrollo en «zigzag», las caras separadas por una en diagonal también terminan opuestas.
 \end{itemize}
 
-\begin{center}
-\begin{tikzpicture}[x=6mm,y=6mm,font=\scriptsize]
-  \foreach \x/\y/\n in {1/3/A,1/2/B,1/1/C,1/0/D,0/2/E,2/2/F}{\draw[zink,line width=.5pt,fill=white] (\x,\y) rectangle ++(1,1); \node at (\x+.5,\y+.5) {\n};}
-  \fill[zlime!50] (1,3) rectangle ++(1,1); \fill[zlime!50] (1,1) rectangle ++(1,1);
-  \foreach \x/\y/\n in {1/3/A,1/1/C}{\draw[zink,line width=.5pt] (\x,\y) rectangle ++(1,1); \node at (\x+.5,\y+.5) {\n};}
-  \node[right,align=left] at (3.5,2) {A y C opuestas (una en medio)\\B y D opuestas\\E y F opuestas};
-\end{tikzpicture}
-\end{center}
+\figura{desarrollo}{En un desarrollo, las caras opuestas tienen otra en medio.}
 
 \subsubsection{¿Es un desarrollo válido?}
 Un cubo tiene 11 desarrollos distintos. Uno no sirve si tiene cuatro caras en un cuadrado de $2 \times 2$, o más de
@@ -246,13 +223,7 @@ los agujeros (si el agujero no está justo sobre la línea). Lo práctico es des
   \item Un reloj visto en un espejo marca la hora «simétrica»: las 3:00 se ven como las 9:00.
 \end{itemize}
 
-\begin{center}
-\begin{tikzpicture}[x=5mm,y=5mm,font=\large]
-  \node at (0,0) {\sffamily F}; \draw[zcoral,dashed] (1,-1) -- (1,1); \node[xscale=-1] at (2,0) {\sffamily F};
-  \node[font=\scriptsize] at (1,-1.5) {espejo};
-  \node[rotate=180] at (6,0) {\sffamily F}; \node[font=\scriptsize] at (6,-1.5) {giro $180^\circ$};
-\end{tikzpicture}
-\end{center}
+\figura{espejo}{El espejo voltea izquierda y derecha; el giro, todo.}
 
 \begin{regla}
 \begin{itemize}

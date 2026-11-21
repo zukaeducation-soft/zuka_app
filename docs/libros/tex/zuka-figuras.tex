@@ -1,0 +1,382 @@
+% zuka-figuras.tex — ilustraciones de los libros. Uso en los capítulos: \figura{nombre}{pie de figura}.
+% Cada dibujo es \zfig@<nombre>. Unidades en mm. Estilo: fichas con relieve, sombra suave, letra Fira.
+\usetikzlibrary{shadows,shadings,decorations.pathmorphing}
+\newcounter{zfig}\@addtoreset{zfig}{mundo}
+\newcommand{\figura}[2]{\par\vspace{7pt}\begin{center}\stepcounter{zfig}\csname zfig@#1\endcsname\par\vspace{3pt}
+  {\sffamily\footnotesize\color{zmute}\textbf{\color{zolive}Figura \themundo.\arabic{zfig}}\quad #2}\end{center}\vspace{2pt}}
+\tikzset{
+  zf/.style={x=1mm,y=1mm,font=\sffamily\scriptsize,text=zink},
+  sombra/.style={drop shadow={opacity=.14,shadow xshift=.35mm,shadow yshift=-.45mm}},
+  tarjeta/.style={rounded corners=1.4mm,fill=white,draw=zline,line width=.5pt,sombra,inner sep=2mm,align=center},
+  ficha/.style={rounded corners=.9mm,line width=.4pt,draw=zmute!55,fill=#1,sombra},
+  ficha/.default=zlime,
+  flecha/.style={-{Stealth[length=2.2mm,width=1.8mm]},line width=.7pt,zmute},
+  rot/.style={font=\sffamily\scriptsize\bfseries,text=zolive}}
+\newcommand{\zt}[2][zlime!80]{\filldraw[ficha=#1] #2;}
+
+% ---------- recta numérica (macro \recta de los capítulos) ----------
+\renewcommand{\recta}[3]{\begin{tikzpicture}[x=7mm,font=\sffamily\scriptsize]
+  \draw[zline,line width=2.2pt] (#1-.7,0)--(#2+.7,0);
+  \draw[flecha] (#2+.5,0)--(#2+.95,0); \draw[flecha] (#1-.5,0)--(#1-.95,0);
+  \foreach \t in {#1,...,#2}{\fill[white,draw=zmute,line width=.5pt] (\t,0) circle (1.1pt); \node[below=1.5mm,text=zink] at (\t,0) {$\t$};}
+  \fill[zolive] (0,0) circle (1.6pt);
+  #3
+\end{tikzpicture}}
+
+% ---------- LIBRO 1 ----------
+\@namedef{zfig@fracciones}{\begin{tikzpicture}[zf]
+  \foreach \i in {0,1,2}{\zt{(\i*10+.5,.5) rectangle ++(9,8)}}
+  \foreach \i in {3,...,7}{\zt[zsoft]{(\i*10+.5,.5) rectangle ++(9,8)}}
+  \foreach \i in {0,1,2}{\zt[zsky!45]{(\i*16+.5,-14.5) rectangle ++(15,8)}}
+  \foreach \i in {3,4}{\zt[zsoft]{(\i*16+.5,-14.5) rectangle ++(15,8)}}
+  \node[tarjeta] at (-9,4.5) {$\tfrac38$}; \node[tarjeta] at (-9,-10.5) {$\tfrac35$};
+  \node[right,text=zmute] at (82,4.5) {8 cortes, 3 tomados}; \node[right,text=zmute] at (82,-10.5) {5 cortes, 3 tomados};
+\end{tikzpicture}}
+
+\@namedef{zfig@cien}{\begin{tikzpicture}[zf]
+  \foreach \i in {0,...,9}{\foreach \j in {0,...,9}{\pgfmathtruncatemacro{\n}{\j*10+\i}
+    \ifnum\n<25 \fill[zlime!85,rounded corners=.5mm] (\i*4+.3,\j*4+.3) rectangle ++(3.4,3.4);
+    \else \fill[zsoft,rounded corners=.5mm] (\i*4+.3,\j*4+.3) rectangle ++(3.4,3.4);\fi}}
+  \draw[zolive,line width=.6pt,rounded corners=1mm] (-.6,-.6) rectangle (40.6,40.6);
+  \node[tarjeta,anchor=west] (a) at (50,28) {$\tfrac14$}; \node[tarjeta,anchor=west] (b) at (50,18) {$0.25$}; \node[tarjeta,anchor=west] (c) at (50,8) {$25\,\%$};
+  \node[rot,anchor=west] at (49,36) {TRES NOMBRES};
+  \draw[flecha] (41.5,10) -- (c.west);
+  \node[text=zmute,anchor=west] at (64,28) {fracción}; \node[text=zmute,anchor=west] at (67,18) {decimal}; \node[text=zmute,anchor=west] at (68,8) {porcentaje};
+\end{tikzpicture}}
+
+\@namedef{zfig@atras}{\begin{tikzpicture}[zf]
+  \node[tarjeta,minimum width=17mm,minimum height=9mm] (a) at (0,0) {inicio\\$x$};
+  \node[tarjeta,minimum width=17mm,minimum height=9mm] (b) at (36,0) {mañana\\$\tfrac x2 - 2$};
+  \node[tarjeta,minimum width=17mm,minimum height=9mm,fill=zlime!25] (c) at (72,0) {final\\5};
+  \draw[flecha] (a) -- node[above]{mitad, $-2$} (b); \draw[flecha] (b) -- node[above]{mitad, $-2$} (c);
+  \draw[flecha,zolive] (c.south) to[bend left=28] node[below,text=zolive]{$+2$, luego $\times 2$} (b.south);
+  \draw[flecha,zolive] (b.south) to[bend left=28] node[below,text=zolive]{$+2$, luego $\times 2$} (a.south);
+\end{tikzpicture}}
+
+\@namedef{zfig@barraresto}{\begin{tikzpicture}[zf]
+  \foreach \i in {0,1}{\zt[zcoral!40]{(\i*14+.5,.5) rectangle ++(13,9)}}
+  \zt[zsky!45]{(28.5,.5) rectangle ++(13,9)}
+  \foreach \i in {3,4,5}{\zt[zlime!80]{(\i*14+.5,.5) rectangle ++(13,9)}}
+  \draw[decorate,decoration={brace,amplitude=1.4mm},zmute] (0,11.5) -- node[above=1.6mm]{$\tfrac13$ gastado} (28,11.5);
+  \draw[decorate,decoration={brace,amplitude=1.4mm},zmute] (28.5,11.5) -- node[above=1.6mm]{$\tfrac14$ del resto} (42,11.5);
+  \draw[decorate,decoration={brace,amplitude=1.4mm,mirror},zolive] (42.5,-1.5) -- node[below=1.6mm,text=zolive]{queda $\tfrac36 = \tfrac12$} (84,-1.5);
+\end{tikzpicture}}
+
+\@namedef{zfig@promedio}{\begin{tikzpicture}[zf]
+  \foreach \x/\h in {0/7,1/3,2/5,3/1,4/4}{\foreach \k in {1,...,\h}{\zt{(\x*11+.4,\k*4.6-4.2) rectangle ++(8.2,3.8)}}
+    \node[below] at (\x*11+4.5,-.6) {\h};}
+  \draw[zcoral,dashed,line width=.8pt] (-3,18.4) -- (55,18.4);
+  \node[tarjeta,anchor=west,text=zcoral] at (58,18.4) {promedio $= \tfrac{20}{5} = 4$};
+  \draw[flecha,zcoral] (4.5,30) to[bend left=35] node[above,text=zcoral]{sobran 3} (37.5,10);
+\end{tikzpicture}}
+
+\@namedef{zfig@balanza}{\begin{tikzpicture}[zf]
+  \fill[zmute] (-6,0) -- (6,0) -- (1.2,5) -- (-1.2,5) -- cycle; \fill[zmute] (-.9,5) rectangle (.9,24);
+  \draw[zink,line width=1.4pt] (-34,24) -- (34,24); \fill[zolive] (0,24) circle (1.6);
+  \foreach \s in {-1,1}{\draw[zmute,line width=.5pt] (\s*34,24) -- (\s*42,11) (\s*34,24) -- (\s*26,11);
+    \fill[zline] (\s*44,11) arc[start angle=0,end angle=-180,x radius=10,y radius=2.4] -- cycle; \draw[zmute,line width=.6pt] (\s*24,11) -- (\s*44,11);}
+  \zt{(-41,11.4) rectangle ++(6.4,6.4)} \zt{(-33.8,11.4) rectangle ++(6.4,6.4)} \node at (-37.8,14.6) {$x$}; \node at (-30.6,14.6) {$x$};
+  \zt[zsky!45]{(-41,18.6) rectangle ++(4.4,4.4)} \node at (-38.8,20.8) {1};
+  \foreach \i in {0,...,3}{\zt[zsky!45]{(25.2+\i*4.7,11.4) rectangle ++(4.3,4.3)}}
+  \foreach \i in {0,1,2}{\zt[zsky!45]{(27.5+\i*4.7,16.1) rectangle ++(4.3,4.3)}}
+  \node[tarjeta] at (0,-8) {$2x + 1 = 7 \;\Rightarrow\; 2x = 6 \;\Rightarrow\; x = 3$};
+\end{tikzpicture}}
+
+\@namedef{zfig@desigualdad}{\begin{tikzpicture}[x=7mm,font=\sffamily\scriptsize]
+  \draw[zline,line width=2.2pt] (-5.7,0)--(4.7,0);
+  \draw[zmoss,line width=2.6pt,-{Stealth[length=3mm]}] (-3,0) -- (4.9,0);
+  \foreach \t in {-5,...,4}{\fill[white,draw=zmute,line width=.5pt] (\t,0) circle (1.1pt); \node[below=1.5mm,text=zink] at (\t,0) {$\t$};}
+  \draw[zmoss,line width=1pt,fill=white] (-3,0) circle (2.6pt);
+  \node[tarjeta,text=zolive] at (1,.9) {$x > -3$}; \node[text=zmute,align=center] at (-3,.9) {abierto:\\no se incluye};
+\end{tikzpicture}}
+
+\@namedef{zfig@paralelas}{\begin{tikzpicture}[zf]
+  \draw[zink,line width=.9pt] (-30,10) -- (42,10) node[right]{$r$}; \draw[zink,line width=.9pt] (-30,-10) -- (42,-10) node[right]{$s$};
+  \coordinate (P) at (13.27,10); \coordinate (Q) at (-1.27,-10); \coordinate (L1) at (-30,10); \coordinate (R1) at (42,10);
+  \coordinate (R2) at (42,-10); \coordinate (L2) at (-30,-10); \coordinate (D) at (-10,-22); \coordinate (U) at (22,22);
+  \pic[draw=zsky,fill=zsky!30,angle radius=5.5mm,line width=.5pt] {angle = L1--P--Q};
+  \pic[draw=zsky,fill=zsky!30,angle radius=5.5mm,line width=.5pt] {angle = R2--Q--P};
+  \pic[draw=zcoral,fill=zcoral!25,angle radius=5.5mm,line width=.5pt] {angle = Q--P--R1};
+  \pic[draw=zsky,fill=zsky!30,angle radius=4.5mm,line width=.5pt] {angle = L2--Q--D};
+  \draw[zolive,line width=1.1pt] (D) -- (U);
+  \node at (7.2,7.2) {$\alpha$}; \node at (5.2,-7.2) {$\alpha$}; \node at (-7,-13) {$\alpha$}; \node[text=zcoral] at (19,6.5) {$\beta$};
+  \node[text=zmute] at (-22,12.5) {$\triangleright\!\triangleright$}; \node[text=zmute] at (-22,-7.5) {$\triangleright\!\triangleright$};
+  \node[tarjeta,anchor=west,align=left] at (50,0) {{\color{zsky}$\alpha = \alpha$} alternos internos\\{\color{zsky}$\alpha = \alpha$} opuestos por el vértice\\$\alpha + {\color{zcoral}\beta} = 180^\circ$ conjugados};
+\end{tikzpicture}}
+
+\@namedef{zfig@pitagoras}{\begin{tikzpicture}[zf]
+  \foreach \i in {0,...,3}{\foreach \j in {0,...,3}{\fill[zlime!75,rounded corners=.4mm] (\i*5+.3,-\j*5-4.7) rectangle ++(4.4,4.4);}}
+  \foreach \i in {0,1,2}{\foreach \j in {0,1,2}{\fill[zsky!45,rounded corners=.4mm] (-\i*5-4.7,\j*5+.3) rectangle ++(4.4,4.4);}}
+  \begin{scope}[shift={(20,0)},x={(-4mm,3mm)},y={(3mm,4mm)}]
+    \foreach \i in {0,...,4}{\foreach \j in {0,...,4}{\fill[zcoral!35] (\i+.06,\j+.06) -- (\i+.94,\j+.06) -- (\i+.94,\j+.94) -- (\i+.06,\j+.94) -- cycle;}}
+  \end{scope}
+  \filldraw[fill=white,draw=zink,line width=1pt] (0,0) -- (20,0) -- (0,15) -- cycle; \draw[zink,line width=.5pt] (0,2.2) -- (2.2,2.2) -- (2.2,0);
+  \node at (10,-10) {\normalsize\bfseries 16}; \node at (-7.5,7.5) {\normalsize\bfseries 9}; \node at (23.5,20) {\normalsize\bfseries 25};
+  \node at (10,2) {4}; \node at (2,7.5) {3}; \node at (8.2,6.2) {5};
+  \node[tarjeta,anchor=west] at (48,-12) {$9 + 16 = 25$\\$a^2 + b^2 = c^2$};
+\end{tikzpicture}}
+
+\@namedef{zfig@tales}{\begin{tikzpicture}[zf]
+  \fill[zlime!22] (0,0) -- (72,0) -- (0,42) -- cycle; \fill[zsky!25] (24,0) -- (72,0) -- (24,28) -- cycle;
+  \draw[zink,line width=1pt] (0,0) -- (72,0) -- (0,42) -- cycle; \draw[zsky!70!black,line width=1pt] (24,0) -- (24,28);
+  \draw[zink,line width=.5pt] (0,2.5) -- (2.5,2.5) -- (2.5,0) (24,2.5) -- (26.5,2.5) -- (26.5,0);
+  \node[left] at (0,21) {$H$}; \node[left] at (24,14) {$h$};
+  \draw[decorate,decoration={brace,amplitude=1.4mm,mirror},zmute] (0,-2) -- node[below=1.6mm]{$a$} (24,-2);
+  \draw[decorate,decoration={brace,amplitude=1.4mm,mirror},zmute] (24,-2) -- node[below=1.6mm]{$b - a$} (72,-2);
+  \node[tarjeta,anchor=west] at (50,30) {$\dfrac{h}{H} = \dfrac{b - a}{b}$};
+\end{tikzpicture}}
+
+\@namedef{zfig@cuartos}{\begin{tikzpicture}[zf]
+  \fill[zlime!70] (0,0) rectangle (32,32);
+  \foreach \cx/\cy/\a in {0/0/0,32/0/90,32/32/180,0/32/270}{\fill[white] (\cx,\cy) -- ++(\a:16) arc[start angle=\a,end angle=\a+90,radius=16] -- cycle;
+    \draw[zolive,line width=.6pt] (\cx,\cy) ++(\a:16) arc[start angle=\a,end angle=\a+90,radius=16];}
+  \draw[zink,line width=1pt] (0,0) rectangle (32,32); \node[below] at (16,0) {4}; \node[below] at (4,-.3) {2};
+  \node at (41,16) {\Large $=$};
+  \fill[zlime!70] (50,0) rectangle (82,32); \fill[white] (66,16) circle (16); \draw[zolive,line width=.6pt] (66,16) circle (16); \draw[zink,line width=1pt] (50,0) rectangle (82,32);
+  \node[tarjeta,anchor=west] at (88,16) {$16 - 4\pi$};
+\end{tikzpicture}}
+
+\@namedef{zfig@cuadricula}{\begin{tikzpicture}[zf,x=7mm,y=7mm]
+  \draw[zline,line width=.4pt] (0,0) grid (6,5);
+  \fill[zcoral!18] (1,1) -- (5,2) -- (5,1) -- cycle; \fill[zcoral!18] (5,2) -- (5,4) -- (3,4) -- cycle; \fill[zcoral!18] (1,1) -- (3,4) -- (1,4) -- cycle;
+  \fill[zsky!40] (1,1) -- (5,2) -- (3,4) -- cycle; \draw[zink,line width=1pt] (1,1) -- (5,2) -- (3,4) -- cycle;
+  \draw[zcoral,dashed,line width=.7pt] (1,1) rectangle (5,4);
+  \node[text=zcoral] at (4,1.3) {2}; \node[text=zcoral] at (4.4,3.4) {2}; \node[text=zcoral] at (1.6,3.2) {3}; \node at (3,2.4) {\bfseries 5};
+  \node[tarjeta,anchor=west] at (6.8,2.5) {$12 - 2 - 2 - 3 = 5$};
+\end{tikzpicture}}
+
+\@namedef{zfig@solidos}{\begin{tikzpicture}[zf]
+  \shade[left color=zlime!70,right color=zlime!25] (-10,0) -- (-10,20) arc[start angle=180,end angle=360,x radius=10,y radius=2.6] -- (10,0) arc[start angle=0,end angle=-180,x radius=10,y radius=2.6];
+  \filldraw[fill=zlime!40,draw=zolive,line width=.6pt] (0,20) ellipse (10 and 2.6);
+  \draw[zolive,line width=.6pt] (-10,20) -- (-10,0) arc[start angle=180,end angle=360,x radius=10,y radius=2.6] -- (10,20);
+  \node[tarjeta] at (0,-10) {$\pi r^2 h$};
+  \begin{scope}[xshift=36mm]
+  \shade[left color=zsky!60,right color=zsky!20] (-10,0) -- (0,20) -- (10,0) arc[start angle=0,end angle=-180,x radius=10,y radius=2.6];
+  \draw[zsky!60!black,line width=.6pt] (-10,0) -- (0,20) -- (10,0) arc[start angle=0,end angle=-180,x radius=10,y radius=2.6];
+  \draw[zsky!60!black,dashed,line width=.4pt] (10,0) arc[start angle=0,end angle=180,x radius=10,y radius=2.6];
+  \node[tarjeta] at (0,-10) {$\tfrac13 \pi r^2 h$};
+  \end{scope}
+  \begin{scope}[xshift=72mm]
+  \shade[ball color=zcoral!45] (0,10) circle (10); \draw[zcoral!70!black,line width=.6pt] (0,10) circle (10);
+  \draw[zcoral!70!black,dashed,line width=.4pt] (-10,10) arc[start angle=180,end angle=360,x radius=10,y radius=2.6];
+  \node[tarjeta] at (0,-10) {$\tfrac43 \pi r^3$};
+  \end{scope}
+  \node[text=zmute] at (18,10) {$=3\times$};
+\end{tikzpicture}}
+
+\@namedef{zfig@factores}{\begin{tikzpicture}[zf,level distance=10mm,sibling distance=17mm,
+  every node/.style={circle,draw=zline,fill=white,line width=.5pt,minimum size=7.5mm,inner sep=0,font=\sffamily\scriptsize,sombra},
+  p/.style={fill=zlime!80,draw=zolive},edge from parent/.style={draw=zmute,line width=.6pt}]
+  \node {360} child {node[p] {2}} child {node {180} child {node[p] {2}} child {node {90} child {node[p] {2}} child {node {45}
+    child {node[p] {3}} child {node {15} child {node[p] {3}} child {node[p] {5}}}}}};
+  \node[tarjeta,rectangle,minimum size=0pt,inner sep=2mm] at (-34,-28) {$360 = 2^3 \cdot 3^2 \cdot 5$};
+\end{tikzpicture}}
+
+\@namedef{zfig@maquina}{\begin{tikzpicture}[zf]
+  \node[tarjeta,minimum width=13mm] (a) at (-34,6) {$a = 5$}; \node[tarjeta,minimum width=13mm] (b) at (-34,-6) {$b = 3$};
+  \node[rounded corners=2.5mm,fill=zlime!30,draw=zolive,line width=.8pt,sombra,minimum width=34mm,minimum height=20mm] (m) at (0,0) {};
+  \node[rot] at (0,6) {MÁQUINA $\star$}; \node at (0,-1.5) {\normalsize $a^2 - 2b$};
+  \foreach \x in {-11,-7,...,11}{\fill[zolive] (\x,-7.5) circle (.5);}
+  \node[tarjeta,fill=zlime!25,minimum width=13mm] (r) at (34,0) {\normalsize 19};
+  \draw[flecha] (a.east) -- (m.west |- a); \draw[flecha] (b.east) -- (m.west |- b); \draw[flecha,zolive] (m.east) -- (r.west);
+\end{tikzpicture}}
+
+\@namedef{zfig@razon}{\begin{tikzpicture}[zf]
+  \node[anchor=east] at (-2,13) {Hombres}; \node[anchor=east] at (-2,2) {Mujeres};
+  \foreach \i in {0,1,2}{\zt[zsky!45]{(\i*13+.5,9) rectangle ++(12,8)}}
+  \foreach \i in {0,...,4}{\zt{(\i*13+.5,-2) rectangle ++(12,8)}}
+  \draw[decorate,decoration={brace,amplitude=1.4mm,mirror},zolive] (39.5,-4) -- node[below=1.6mm,text=zolive]{2 partes $=$ 12 personas} (65,-4);
+  \node[tarjeta,anchor=west] at (72,7) {1 parte $= 6$\\total: $8 \cdot 6 = 48$};
+\end{tikzpicture}}
+
+\@namedef{zfig@dirinv}{\begin{tikzpicture}
+\begin{axis}[width=52mm,height=40mm,axis lines=left,xmin=0,xmax=6,ymin=0,ymax=6,ticks=none,title={directa: $y = kx$},xlabel={$x$},ylabel={$y$},
+  axis line style={zmute,line width=.6pt}]
+  \addplot[zmoss,line width=1.3pt,domain=0:5.5] {x}; \addplot[only marks,mark=*,mark size=1.6pt,zmoss] coordinates {(1,1) (2,2) (4,4)};
+\end{axis}\end{tikzpicture}\hspace{6mm}\begin{tikzpicture}
+\begin{axis}[width=52mm,height=40mm,axis lines=left,xmin=0,xmax=6,ymin=0,ymax=6,ticks=none,title={inversa: $xy = k$},xlabel={$x$},ylabel={$y$},
+  axis line style={zmute,line width=.6pt}]
+  \addplot[zsky,line width=1.3pt,domain=0.7:6,samples=60] {4/x}; \addplot[only marks,mark=*,mark size=1.6pt,zsky] coordinates {(1,4) (2,2) (4,1)};
+\end{axis}\end{tikzpicture}}
+
+\@namedef{zfig@encuentro}{\begin{tikzpicture}[zf]
+  \draw[zline,line width=3pt] (0,0) -- (96,0); \foreach \x in {4,10,...,94}{\draw[white,line width=.6pt] (\x,0) -- ++(3,0);}
+  \foreach \x/\c/\s in {6/zsky/1,90/zcoral/-1}{\begin{scope}[shift={(\x,2.2)},xscale=\s]
+    \filldraw[fill=\c!50,draw=\c!70!black,line width=.5pt,rounded corners=.8mm] (-6,0) rectangle (6,5.5);
+    \fill[white] (-4.5,2.6) rectangle (-1.5,4.5) (-.5,2.6) rectangle (2.5,4.5); \fill[zink] (-3.5,0) circle (1.1) (3.5,0) circle (1.1);\end{scope}}
+  \draw[flecha,zsky] (14,5) -- node[above,text=zsky]{70 km/h} (34,5); \draw[flecha,zcoral] (82,5) -- node[above,text=zcoral]{50 km/h} (62,5);
+  \draw[decorate,decoration={brace,amplitude=1.4mm,mirror},zmute] (0,-3.5) -- node[below=1.6mm]{360 km: se cierran $70 + 50 = 120$ km cada hora} (96,-3.5);
+\end{tikzpicture}}
+
+\@namedef{zfig@factor}{\begin{tikzpicture}[zf]
+  \node[tarjeta,minimum width=24mm] (a) at (0,0) {sin IVA\\{\normalsize\$200\,000}}; \node[tarjeta,minimum width=24mm,fill=zlime!25] (b) at (62,0) {con IVA\\{\normalsize\$238\,000}};
+  \draw[flecha,zolive] (a.north east) to[bend left=22] node[above,text=zolive]{$\times\,1.19$} (b.north west);
+  \draw[flecha,zcoral] (b.south west) to[bend left=22] node[below,text=zcoral]{$\div\,1.19$} (a.south east);
+\end{tikzpicture}}
+
+% ---------- LIBRO 2 ----------
+\@namedef{zfig@fila}{\begin{tikzpicture}[zf]
+  \foreach \i/\t/\c in {1/E/zlime!80,2/C/zlime!80,3/?/zsoft,4/?/zsoft,5/B/zsky!45,6/D/zsky!45}{\zt[\c]{(\i*13,0) rectangle ++(11,11)}
+    \node at (\i*13+5.5,5.5) {\normalsize\bfseries \t}; \node[text=zmute] at (\i*13+5.5,-3) {\i};}
+  \draw[zolive,line width=.8pt,rounded corners=1.5mm] (12,-1) rectangle (37,12); \draw[zsky!70!black,line width=.8pt,rounded corners=1.5mm] (64,-1) rectangle (89,12);
+  \node[rot] at (24.5,15) {BLOQUE}; \node[rot,text=zsky!70!black] at (76.5,15) {BLOQUE};
+  \node[tarjeta] at (50.5,20) {A y F, en cualquier orden};
+  \draw[flecha] (50.5,16.8) -- (45,12.2); \draw[flecha] (50.5,16.8) -- (57,12.2);
+\end{tikzpicture}}
+
+\@namedef{zfig@mesa}{\begin{tikzpicture}[zf]
+  \shade[inner color=zsun!25,outer color=zsun!50] (0,0) circle (13); \draw[zsun!70!black,line width=.7pt] (0,0) circle (13);
+  \foreach \i/\c in {1/zlime!80,2/white,3/white,4/zlime!80,5/white,6/white}{\node[circle,draw=zolive,fill=\c,line width=.6pt,minimum size=8mm,sombra] (s\i) at (150-\i*60:20.5) {\normalsize\bfseries \i};}
+  \draw[zcoral,dashed,line width=.7pt,{Stealth[length=2mm]}-{Stealth[length=2mm]}] (s1) -- (s4);
+  \node[tarjeta,anchor=west,align=left] at (32,0) {Frente al puesto $k$ está el $k + 3$.\\Junto al 1 están el 2 y el 6.\\Girar a todos no cambia nada:\\\textbf{fija a uno}.};
+\end{tikzpicture}}
+
+\@namedef{zfig@euler}{\begin{tikzpicture}[zf]
+  \filldraw[fill=zlime!18,draw=zolive,line width=.8pt] (0,0) ellipse (26 and 19); \filldraw[fill=zsky!30,draw=zsky!70!black,line width=.8pt] (-5,-3) ellipse (12 and 8.5);
+  \draw[zcoral,line width=.9pt,fill=zcoral!18,fill opacity=.55] (20,-7) ellipse (17 and 11);
+  \node[rot] at (0,14) {SABEN CÁLCULO}; \node[rot,text=zsky!60!black] at (-7,-3) {INGENIEROS}; \node[rot,text=zcoral] at (27,-9) {MÚSICOS};
+  \node[circle,fill=zink,inner sep=1pt] (x) at (5.5,-6) {}; \node[tarjeta,anchor=west] (t) at (46,10) {un músico que es\\ingeniero: sabe cálculo};
+  \draw[flecha] (t.west) to[bend right=15] (x);
+\end{tikzpicture}}
+
+\newcommand{\zvenn}[2]{\begin{scope}[xshift=#1]
+  \draw[zline,fill=white,line width=.5pt,rounded corners=1mm,sombra] (-13,-10) rectangle (13,10);
+  #2
+  \draw[zink,line width=.6pt] (-3.6,0) circle (6.5) (3.6,0) circle (6.5); \node at (-9,7.3) {$A$}; \node at (9,7.3) {$B$};\end{scope}}
+\@namedef{zfig@vennops}{\begin{tikzpicture}[zf]
+  \zvenn{0mm}{\fill[zlime!80] (-3.6,0) circle (6.5) (3.6,0) circle (6.5);} \node at (0,-13.5) {$A \cup B$};
+  \zvenn{29mm}{\begin{scope}\clip (-3.6,0) circle (6.5); \fill[zlime!80] (3.6,0) circle (6.5);\end{scope}} \node at (29,-13.5) {$A \cap B$};
+  \zvenn{58mm}{\begin{scope}\clip (-3.6,0) circle (6.5); \fill[zlime!80] (-13,-10) rectangle (13,10); \fill[white] (3.6,0) circle (6.5);\end{scope}} \node at (58,-13.5) {$A - B$};
+  \zvenn{87mm}{\fill[zlime!80,rounded corners=1mm] (-13,-10) rectangle (13,10); \fill[white] (-3.6,0) circle (6.5) (3.6,0) circle (6.5);} \node at (87,-13.5) {$(A \cup B)'$};
+\end{tikzpicture}}
+
+\@namedef{zfig@vennencuesta}{\begin{tikzpicture}[zf]
+  \draw[zline,fill=white,line width=.5pt,rounded corners=1.5mm,sombra] (-34,-21) rectangle (36,21); \node[anchor=north west,text=zmute] at (-33,20) {grupo: 50};
+  \fill[zsky!30] (-7,0) circle (14); \fill[zcoral!25] (9,0) circle (14);
+  \begin{scope}\clip (-7,0) circle (14); \fill[zlime!80] (9,0) circle (14);\end{scope}
+  \draw[zsky!70!black,line width=.8pt] (-7,0) circle (14); \draw[zcoral,line width=.8pt] (9,0) circle (14);
+  \node at (-13,0) {\normalsize 17}; \node at (1,0) {\normalsize\bfseries 13}; \node at (15.5,0) {\normalsize 12}; \node at (30,-17) {\normalsize 8};
+  \node[rot,text=zsky!60!black] at (-17,17) {A: 30}; \node[rot,text=zcoral] at (20,17) {B: 25};
+  \node[tarjeta,anchor=west,align=left] at (42,0) {1.º el centro: 13\\2.º solo A: $30 - 13$\\3.º solo B: $25 - 13$\\4.º ninguno: 8};
+\end{tikzpicture}}
+
+\@namedef{zfig@arbolconteo}{\begin{tikzpicture}[zf,grow=right,level distance=24mm,
+  level 1/.style={sibling distance=15mm},level 2/.style={sibling distance=6.5mm},
+  n/.style={tarjeta,inner sep=1.2mm},edge from parent/.style={draw=zmute,line width=.6pt}]
+  \node[n,fill=zlime!30] {inicio}
+    child {node[n] {camisa 3} child {node[n] {pantalón 2}} child {node[n] {pantalón 1}}}
+    child {node[n] {camisa 2} child {node[n] {pantalón 2}} child {node[n] {pantalón 1}}}
+    child {node[n] {camisa 1} child {node[n] {pantalón 2}} child {node[n] {pantalón 1}}};
+  \node[rot] at (24,23) {3 opciones}; \node[rot] at (48,23) {$\times$ 2 opciones};
+  \node[n,fill=zlime!30] at (72,0) {$3 \cdot 2 = 6$\\pintas};
+\end{tikzpicture}}
+\@namedef{zfig@caminos}{\begin{tikzpicture}[zf,x=13mm,y=11mm]
+  \draw[zline,line width=2.4pt] (0,0) grid (3,2);
+  \draw[zmoss,line width=1.6pt,-{Stealth[length=2.5mm]}] (0,0) -- (2,0) -- (2,1) -- (3,1) -- (3,1.85);
+  \foreach \x/\y/\n in {0/0/1,1/0/1,2/0/1,3/0/1,0/1/1,1/1/2,2/1/3,3/1/4,0/2/1,1/2/3,2/2/6,3/2/10}{%
+    \node[circle,fill=white,draw=zolive,line width=.5pt,minimum size=5mm,inner sep=0,sombra] at (\x,\y) {\n};}
+  \node[rot] at (-.45,-.3) {A}; \node[rot] at (3.4,2.3) {B};
+  \node[tarjeta,anchor=west,align=left] at (3.9,1) {cada esquina $=$\\izquierda $+$ abajo\\[2pt]camino verde: DDADA};
+\end{tikzpicture}}
+
+\@namedef{zfig@arbolprob}{\begin{tikzpicture}[zf,grow=right,level distance=27mm,
+  level 1/.style={sibling distance=19mm},level 2/.style={sibling distance=9mm},
+  r/.style={circle,fill=zcoral!55,draw=zcoral!70!black,line width=.5pt,minimum size=6mm,inner sep=0,sombra},
+  a/.style={circle,fill=zsky!50,draw=zsky!70!black,line width=.5pt,minimum size=6mm,inner sep=0,sombra},
+  edge from parent/.style={draw=zmute,line width=.6pt}]
+  \node[circle,fill=zink,inner sep=1.2pt] {}
+    child {node[a] {A} child {node[a] {A} edge from parent node[below]{$\tfrac14$}} child {node[r] {R} edge from parent node[above]{$\tfrac34$}} edge from parent node[below]{$\tfrac25$}}
+    child {node[r] {R} child {node[a] {A} edge from parent node[below]{$\tfrac24$}} child {node[r] {R} edge from parent node[above]{$\tfrac24$}} edge from parent node[above]{$\tfrac35$}};
+  \node[tarjeta,anchor=west,fill=zlime!25] at (60,14) {$\tfrac35 \cdot \tfrac24 = \tfrac{3}{10}$};
+  \node[anchor=west,text=zmute] at (60,5) {$\tfrac35 \cdot \tfrac24 = \tfrac{3}{10}$}; \node[anchor=west,text=zmute] at (60,-5) {$\tfrac25 \cdot \tfrac34 = \tfrac{3}{10}$}; \node[anchor=west,text=zmute] at (60,-14) {$\tfrac25 \cdot \tfrac14 = \tfrac{1}{10}$};
+\end{tikzpicture}}
+
+\@namedef{zfig@diferencias}{\begin{tikzpicture}[zf]
+  \foreach \i/\v in {0/1,1/4,2/9,3/16,4/25}{\node[tarjeta,minimum width=9mm] (n\i) at (\i*17,0) {\normalsize \v};}
+  \foreach \i/\v in {0/3,1/5,2/7,3/9}{\node[circle,fill=zlime!70,inner sep=1pt,minimum size=6mm] (d\i) at (\i*17+8.5,-11) {$+\v$};}
+  \foreach \i in {0,1,2}{\node[circle,fill=zcoral!30,inner sep=1pt,minimum size=6mm] at (\i*17+17,-21) {$+2$};}
+  \node[anchor=west,text=zmute] at (76,-11) {diferencias}; \node[anchor=west,text=zmute] at (76,-21) {segundas diferencias};
+\end{tikzpicture}}
+
+\@namedef{zfig@giro}{\begin{tikzpicture}[zf]
+  \foreach \i/\a in {0/0,1/90,2/180,3/270}{\node[circle,draw=zolive,fill=white,line width=.7pt,minimum size=11mm,sombra] at (\i*17,0) {};
+    \fill[zmoss] (\i*17,0) ++(\a:3.4) circle (1.5); \node[text=zmute] at (\i*17,-9) {\the\numexpr\i+1\relax.º};}
+  \node[circle,draw=zolive,dashed,fill=zlime!20,line width=.7pt,minimum size=11mm] at (68,0) {\normalsize ?}; \node[text=zmute] at (68,-9) {5.º};
+  \node[tarjeta,anchor=west] at (80,0) {gira $90^\circ$ cada vez:\\vuelve a la derecha};
+\end{tikzpicture}}
+
+\@namedef{zfig@ciclo}{\begin{tikzpicture}[zf]
+  \draw[zmoss,line width=6pt,line cap=butt] (90:14) arc[start angle=90,end angle=-90,radius=14];
+  \draw[zsun,line width=6pt,line cap=butt] (-90:14) arc[start angle=-90,end angle=-112.5,radius=14];
+  \draw[zcoral,line width=6pt,line cap=butt] (-112.5:14) arc[start angle=-112.5,end angle=-270,radius=14];
+  \node {\normalsize\bfseries 80 s}; \draw[flecha] (60:18.5) arc[start angle=60,end angle=20,radius=18.5];
+  \node[tarjeta,anchor=west,align=left] at (26,0) {{\color{zmoss}\rule{3mm}{2mm}} verde: 0 a 40 s\\{\color{zsun}\rule{3mm}{2mm}} amarillo: 40 a 45 s\\{\color{zcoral}\rule{3mm}{2mm}} rojo: 45 a 80 s};
+\end{tikzpicture}}
+
+\@namedef{zfig@recorrido}{\begin{tikzpicture}[zf,x=8mm,y=8mm]
+  \draw[zline,line width=.4pt] (-3,-1) grid (4,3);
+  \draw[zmoss,line width=1.5pt,-{Stealth[length=2.6mm]}] (0,0) -- (3,0); \draw[zmoss,line width=1.5pt,-{Stealth[length=2.6mm]}] (3,0) -- (3,2);
+  \draw[zmoss,line width=1.5pt,-{Stealth[length=2.6mm]}] (3,2) -- (-2,2);
+  \node[circle,fill=zcoral,inner sep=1.6pt] at (0,0) {}; \node[below=1mm,text=zcoral] at (0,0) {inicio}; \node[circle,fill=zolive,inner sep=1.6pt] at (-2,2) {}; \node[above=1mm,text=zolive] at (-2,2) {fin};
+  \node[text=zmute] at (1.5,-.35) {3}; \node[text=zmute] at (3.3,1) {2}; \node[text=zmute] at (.5,2.3) {5};
+  \begin{scope}[shift={(5.3,1)}]\draw[flecha,zink] (0,-.8) -- (0,.9) node[above]{N}; \draw[zink,line width=.5pt] (-.7,0) -- (.7,0) node[right]{E}; \node[left] at (-.7,0) {O}; \node[below] at (0,-.8) {S};\end{scope}
+\end{tikzpicture}}
+
+\newcommand{\cubo}[3]{\begin{scope}[shift={({(#1-#2)*0.866},{(#1+#2)*0.5+#3})}]
+  \filldraw[fill=zlime!85,draw=zolive,line width=.4pt] (0,1) -- (0.866,1.5) -- (0,2) -- (-0.866,1.5) -- cycle;
+  \filldraw[fill=zlime!45,draw=zolive,line width=.4pt] (0,0) -- (0,1) -- (-0.866,1.5) -- (-0.866,0.5) -- cycle;
+  \filldraw[fill=zmoss!75,draw=zolive,line width=.4pt] (0,0) -- (0.866,0.5) -- (0.866,1.5) -- (0,1) -- cycle;\end{scope}}
+\@namedef{zfig@cubos}{\begin{tikzpicture}[font=\sffamily\scriptsize,text=zink]
+  \begin{scope}[scale=.72]\cubo{1}{1}{0}\cubo{1}{1}{1}\cubo{1}{1}{2}\cubo{0}{1}{0}\cubo{1}{0}{0}\cubo{1}{0}{1}\cubo{0}{0}{0}\cubo{0}{0}{1}\end{scope}
+  \begin{scope}[shift={(4.2,.5)},x=9mm,y=9mm]
+    \foreach \x/\y/\n in {0/1/3,1/1/1,0/0/2,1/0/2}{\filldraw[ficha=zsoft] (\x+.05,\y+.05) rectangle ++(.9,.9); \node at (\x+.5,\y+.5) {\normalsize\bfseries \n};}
+    \node[font=\sffamily\scriptsize\bfseries,text=zolive] at (1,2.3) {VISTA DESDE ARRIBA}; \node[text=zmute] at (1,-.35) {$3 + 1 + 2 + 2 = 8$ cubos};
+  \end{scope}
+\end{tikzpicture}}
+
+\@namedef{zfig@desarrollo}{\begin{tikzpicture}[zf]
+  \foreach \x/\y/\n/\c in {1/3/A/zlime!80,1/2/B/zsky!45,1/1/C/zlime!80,1/0/D/zsky!45,0/2/E/zcoral!35,2/2/F/zcoral!35}{\zt[\c]{(\x*10+.4,\y*10+.4) rectangle ++(9.2,9.2)} \node at (\x*10+5,\y*10+5) {\normalsize\bfseries \n};}
+  \draw[flecha,zolive,{Stealth[length=2mm]}-{Stealth[length=2mm]}] (21,35) to[bend left=40] (21,15);
+  \node[tarjeta,anchor=west,align=left] at (40,20) {{\color{zmoss}\rule{3mm}{2mm}} A y C: opuestas (una en medio)\\{\color{zsky}\rule{3mm}{2mm}} B y D: opuestas\\{\color{zcoral!60}\rule{3mm}{2mm}} E y F: opuestas};
+\end{tikzpicture}}
+
+\@namedef{zfig@espejo}{\begin{tikzpicture}[zf]
+  \node[tarjeta,minimum size=13mm] at (0,0) {\Huge\sffamily\bfseries F}; \node[tarjeta,minimum size=13mm] at (26,0) {\scalebox{-1}[1]{\Huge\sffamily\bfseries F}};
+  \draw[zsky,line width=1.4pt] (13,-10) -- (13,10); \node[text=zsky!70!black] at (13,-13) {espejo};
+  \node[tarjeta,minimum size=13mm] at (62,0) {\rotatebox{180}{\Huge\sffamily\bfseries F}}; \node[text=zmute] at (62,-13) {giro de $180^\circ$};
+  \node[text=zmute] at (0,-13) {original};
+\end{tikzpicture}}
+
+\@namedef{zfig@lineas}{\begin{tikzpicture}
+\begin{axis}[width=74mm,height=44mm,ymin=0,ymax=40,xmin=0.5,xmax=6.5,xtick={1,...,6},ytick={0,10,20,30,40},axis lines=left,
+  xlabel={mes},ylabel={temperatura (°C)},ymajorgrids,grid style={zline},axis line style={zmute,line width=.6pt}]
+  \addplot[zmoss,line width=1.3pt,mark=*,mark size=1.8pt,mark options={fill=white,draw=zmoss,line width=.9pt}] coordinates {(1,18) (2,22) (3,30) (4,31) (5,26) (6,20)};
+  \node[font=\sffamily\scriptsize,text=zcoral,anchor=east] at (axis cs:2.45,28.5) {mayor subida};
+  \draw[zcoral,line width=.6pt,-{Stealth[length=2mm]}] (axis cs:2.45,28) -- (axis cs:2.5,26.5);
+\end{axis}\end{tikzpicture}}
+
+% ---------- LECTURA ----------
+\@namedef{zfig@mapatexto}{\begin{tikzpicture}[zf]
+  \foreach \i/\t in {0/creencia,1/datos,2/por qué,3/propuesta}{\node[tarjeta,minimum width=20mm] (p\i) at (\i*25,0) {{\color{zolive}\bfseries \S\,\the\numexpr\i+1\relax}\\\t};}
+  \node[tarjeta,fill=zlime!25,minimum width=95mm] (t) at (37.5,-17) {\textbf{idea central:} la creencia es falsa y conviene hacer otra cosa};
+  \foreach \i in {0,...,3}{\draw[flecha] (p\i.south) -- (p\i.south |- t.north);}
+\end{tikzpicture}}
+
+\@namedef{zfig@pistas}{\begin{tikzpicture}[zf]
+  \foreach \y/\t in {9/andén vacío,0/{son las 7:10},-9/saca un libro largo}{\node[tarjeta,minimum width=34mm] (a\y) at (0,\y) {\t};}
+  \node[tarjeta,fill=zlime!25,text width=38mm] (d) at (62,0) {\textbf{inferencia:} el tren ya pasó y la espera será larga};
+  \draw[flecha] (a9.east) -- (d.west); \draw[flecha] (a0.east) -- (d.west); \draw[flecha] (a-9.east) -- (d.west);
+  \node[rot] at (0,16) {PISTAS DEL TEXTO};
+\end{tikzpicture}}
+
+\@namedef{zfig@cadena}{\begin{tikzpicture}[zf]
+  \foreach \i/\t in {0/lluvias,1/vías dañadas,2/camiones tardan,3/precios suben}{\node[tarjeta,minimum width=21mm,minimum height=8mm] (c\i) at (\i*27,0) {\t};}
+  \foreach \i/\j in {0/1,1/2,2/3}{\draw[flecha] (c\i) -- (c\j);}
+  \node[rot] at (0,-8) {causa original}; \node[rot,text=zcoral] at (54,-8) {causa directa}; \node[rot,text=zmute] at (81,-8) {efecto};
+\end{tikzpicture}}
+
+\@namedef{zfig@arbolarg}{\begin{tikzpicture}[zf]
+  \node[tarjeta,fill=zlime!25,minimum width=44mm] (t) at (0,0) {\textbf{tesis}\\las ciudades deben sembrar más árboles};
+  \foreach \x/\s in {-34/refrescan las calles,0/reducen el ruido,34/mejoran el ánimo}{\node[tarjeta,minimum width=28mm] (a\x) at (\x,-19) {\s}; \draw[flecha] (a\x.north) -- (t.south -| {\x*0.45,0});}
+  \node[rot] at (-52,-19) {ARGUMENTOS};
+\end{tikzpicture}}

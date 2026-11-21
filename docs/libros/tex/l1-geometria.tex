@@ -30,20 +30,7 @@ vuelta $180^\circ$ (un ángulo \clave{llano}) y un cuarto de vuelta $90^\circ$ (
 Cuando una recta corta a dos paralelas aparecen ocho ángulos, pero solo \emph{dos medidas}: los agudos son todos iguales
 entre sí, los obtusos también, y un agudo más un obtuso suman $180^\circ$.
 
-\begin{center}
-\begin{tikzpicture}[x=1mm,y=1mm,font=\scriptsize]
-  \draw[zink,line width=.6pt] (-30,10) -- (40,10) node[right]{$r$};
-  \draw[zink,line width=.6pt] (-30,-10) -- (40,-10) node[right]{$s$};
-  \draw[zolive,line width=.8pt] (-10,-22) -- (22,22);
-  \coordinate (P) at (13.27,10); \coordinate (Q) at (-1.27,-10);
-  \coordinate (L1) at (-30,10); \coordinate (R2) at (40,-10); \coordinate (L2) at (-30,-10); \coordinate (D) at (-10,-22);
-  \pic[draw=zsky,fill=zsky!25,angle radius=5mm] {angle = L1--P--Q};
-  \pic[draw=zsky,fill=zsky!25,angle radius=5mm] {angle = R2--Q--P};
-  \pic[draw=zcoral,fill=zcoral!20,angle radius=4mm] {angle = L2--Q--D};
-  \node at (7.8,7.3) {$\alpha$}; \node at (4.6,-7.4) {$\alpha$}; \node at (-6.6,-12.6) {$\alpha$};
-  \node[right,align=left] at (45,0) {alternos internos: iguales\\correspondientes: iguales\\conjugados: suman $180^\circ$};
-\end{tikzpicture}
-\end{center}
+\figura{paralelas}{Dos paralelas y una transversal: ocho ángulos, solo dos medidas.}
 
 \subsubsection{La suma de los ángulos de un triángulo}
 Si por un vértice se traza la paralela al lado opuesto, los tres ángulos del triángulo aparecen juntos formando un
@@ -131,17 +118,7 @@ base. ¿Cuánto mide el cable?
 En un triángulo rectángulo, el cuadrado construido sobre la \clave{hipotenusa} (el lado opuesto al ángulo recto) tiene
 exactamente la misma área que los cuadrados de los dos \clave{catetos} juntos.
 
-\begin{center}
-\begin{tikzpicture}[x=5mm,y=5mm]
-  \coordinate (A) at (0,0); \coordinate (B) at (4,0); \coordinate (C) at (0,3);
-  \fill[zlime!45] (A) rectangle (4,-4); \fill[zsky!30] (A) rectangle (-3,3);
-  \fill[zcoral!20] (B) -- (C) -- (3,7) -- (7,4) -- cycle;
-  \draw[zink,line width=.7pt] (A) -- (B) -- (C) -- cycle;
-  \draw[zink,line width=.4pt] (A) rectangle (4,-4) (A) rectangle (-3,3) (B) -- (7,4) -- (3,7) -- (C);
-  \node[font=\small] at (2,-2) {$4^2 = 16$}; \node[font=\small] at (-1.5,1.5) {$9$}; \node[font=\small] at (3.5,3.5) {$25$};
-  \draw[zink] (0,.4) -- (.4,.4) -- (.4,0);
-\end{tikzpicture}
-\end{center}
+\figura{pitagoras}{Las baldosas de los dos cuadrados pequeños llenan justo el grande.}
 
 \subsubsection{Ternas que conviene reconocer}
 $3$-$4$-$5$, $5$-$12$-$13$, $8$-$15$-$17$, $7$-$24$-$25$ y todos sus múltiplos ($6$-$8$-$10$, $9$-$12$-$15$, …). En el
@@ -242,16 +219,7 @@ Dos triángulos son semejantes si tienen dos ángulos iguales (el tercero lo ser
   \item con la altura sobre la hipotenusa de un triángulo rectángulo, que lo parte en dos triángulos semejantes al grande.
 \end{itemize}
 
-\begin{center}
-\begin{tikzpicture}[x=5mm,y=5mm,font=\scriptsize]
-  \draw[zink,line width=.7pt] (0,0) -- (9,0) -- (0,6) -- cycle;
-  \draw[zolive,line width=.7pt] (3,0) -- (3,4);
-  \node[below] at (1.5,0) {$a$}; \node[below] at (6,0) {$b - a$};
-  \node[left] at (3,2) {$h$}; \node[left] at (0,3) {$H$};
-  \draw[decorate,decoration={brace,amplitude=4pt,mirror}] (0,-.8) -- node[below=3pt]{$b$} (9,-.8);
-  \node[right] at (10,3) {$\dfrac{h}{H} = \dfrac{b - a}{b}$};
-\end{tikzpicture}
-\end{center}
+\figura{tales}{Una paralela a un lado forma un triángulo semejante al original.}
 
 \subsubsection{Áreas y volúmenes}
 Si las longitudes se multiplican por $k$, las áreas se multiplican por $k^2$ y los volúmenes por $k^3$. Un mapa a escala
@@ -426,31 +394,14 @@ Casi ninguna región sombreada tiene fórmula propia. Se calcula como \clave{una
 quitan}, o como \clave{suma de piezas conocidas}. A veces conviene \emph{mover} piezas: dos medias lunas que se
 reacomodan forman un cuadrado.
 
-\begin{center}
-\begin{tikzpicture}[x=6mm,y=6mm]
-  \fill[zlime!55] (0,0) rectangle (4,4);
-  \foreach \c/\a in {{(0,0)}/0,{(4,0)}/90,{(4,4)}/180,{(0,4)}/270}{%
-    \fill[white] \c -- ++(\a:2) arc[start angle=\a,end angle=\a+90,radius=2] -- cycle;
-    \draw[zink,line width=.5pt] \c ++(\a:2) arc[start angle=\a,end angle=\a+90,radius=2];}
-  \draw[zink,line width=.7pt] (0,0) rectangle (4,4);
-  \node[font=\scriptsize,right] at (4.5,2) {$16 - \pi \cdot 2^2$};
-\end{tikzpicture}
-\end{center}
+\figura{cuartos}{Cuatro cuartos de círculo equivalen a un círculo completo.}
 
 \subsubsection{En la cuadrícula}
 Cuando la figura está sobre una cuadrícula, hay tres caminos: contar cuadros enteros y medios; usar la fórmula con base
 y altura leídas en la cuadrícula; o \clave{encerrar} la figura en un rectángulo y restar los triángulos rectángulos que
 sobran en las esquinas.
 
-\begin{center}
-\begin{tikzpicture}[x=5mm,y=5mm]
-  \draw[zline,line width=.3pt] (0,0) grid (6,5);
-  \fill[zsky!30] (1,1) -- (5,2) -- (3,4) -- cycle;
-  \draw[zink,line width=.7pt] (1,1) -- (5,2) -- (3,4) -- cycle;
-  \draw[zcoral,dashed,line width=.6pt] (1,1) rectangle (5,4);
-  \node[font=\scriptsize,right] at (6.4,2.5) {$12 - 2 - 3 - 2 = 5$};
-\end{tikzpicture}
-\end{center}
+\figura{cuadricula}{Encerrar en un rectángulo y restar los triángulos de las esquinas.}
 
 En el dibujo, el rectángulo $4 \times 3$ tiene área 12; los triángulos de las esquinas tienen áreas
 $\tfrac{4 \cdot 1}{2} = 2$, $\tfrac{2 \cdot 3}{2} = 3$ y $\tfrac{2 \cdot 2}{2} = 2$. El triángulo sombreado mide 5.
@@ -533,26 +484,7 @@ hay (la altura). Las figuras en punta (pirámides y conos) se van adelgazando y 
 prisma o cilindro con la misma base y altura: con un cono lleno de agua hay que vaciarlo tres veces para llenar el
 cilindro.
 
-\begin{center}
-\begin{tikzpicture}[x=5mm,y=5mm]
-  \draw[zink,line width=.6pt] (-2,0) -- (-2,4); \draw[zink,line width=.6pt] (2,0) -- (2,4);
-  \draw[zink,line width=.6pt,fill=zlime!30] (0,4) ellipse (2 and .5);
-  \draw[zink,line width=.6pt] (-2,0) arc[start angle=180,end angle=360,x radius=2,y radius=.5];
-  \draw[zink,dashed,line width=.4pt] (2,0) arc[start angle=0,end angle=180,x radius=2,y radius=.5];
-  \node[font=\scriptsize] at (0,-1.3) {$V = \pi r^2 h$};
-  \begin{scope}[xshift=40mm]
-  \draw[zink,line width=.6pt] (-2,0) -- (0,4) -- (2,0);
-  \draw[zink,line width=.6pt,fill=zsky!25] (-2,0) arc[start angle=180,end angle=360,x radius=2,y radius=.5];
-  \draw[zink,dashed,line width=.4pt] (2,0) arc[start angle=0,end angle=180,x radius=2,y radius=.5];
-  \node[font=\scriptsize] at (0,-1.3) {$V = \tfrac13 \pi r^2 h$};
-  \end{scope}
-  \begin{scope}[xshift=80mm]
-  \draw[zink,line width=.6pt,fill=zcoral!15] (0,2) circle (2);
-  \draw[zink,dashed,line width=.4pt] (-2,2) arc[start angle=180,end angle=360,x radius=2,y radius=.5];
-  \node[font=\scriptsize] at (0,-1.3) {$V = \tfrac43 \pi r^3$};
-  \end{scope}
-\end{tikzpicture}
-\end{center}
+\figura{solidos}{Cilindro, cono y esfera: el cono es la tercera parte del cilindro.}
 
 \subsubsection{Superficie}
 El área de la superficie es la suma de las caras: se ve mejor \emph{desarmando} la figura en su \clave{desarrollo} plano.
