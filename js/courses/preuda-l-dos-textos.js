@@ -21,7 +21,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     paras: [
       'Los defensores de los videojuegos suelen hablar de lo que los juegos dan: atención, estrategia, amigos. Rara vez hablan de lo que quitan. Y lo que quitan, sobre todo, es tiempo.',
       'En mi consultorio lo veo cada semana. Llegan adolescentes que juegan cuatro horas diarias, con sueño, sin moverse y sin ganas de conversar con nadie. Cuando les pregunto a qué hora se duermen, la respuesta casi siempre tiene que ver con una partida que no podían dejar a medias. Esas horas se las quitan a dormir, a moverse, a conversar cara a cara y hasta a aburrirse, que también es necesario para imaginar.',
-      'Además, muchos juegos están diseñados para que sea difícil dejarlos: recompensas cada pocos minutos, cofres sorpresa que se pagan con dinero real, misiones que se pierden si uno no entra cada día. No es casualidad: de que el jugador vuelva depende el negocio.',
+      'Además, muchos juegos están diseñados para que sea difícil dejarlos: recompensas cada pocos minutos, cofres sorpresa que se pagan con dinero real, misiones que se pierden si uno no entra cada día. No es casualidad: de que el jugador vuelva depende el negocio. Esas recompensas tan seguidas hacen, además, que perder no duela: se pierde una partida y en segundos empieza otra.',
       'No se trata de prohibir los videojuegos, sino de reconocer que no son una actividad neutra. Hace falta que las familias pongan límites claros de tiempo y que el Estado regule los cofres pagados, que se parecen demasiado a las apuestas.',
     ],
   };
@@ -64,9 +64,14 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['El autor cuenta lo que ve en su consultorio.', 2],
     ] }, 'Los dos rechazan prohibir y piden límites de tiempo. El texto Uno se concentra en lo que los juegos dan (estrategia, amigos) y se apoya en estudios; el Dos, en lo que quitan y en cómo están diseñados para enganchar, y se apoya en lo que el médico ve en su consultorio.',
       { hint: 'Una coincidencia tiene que estar en los dos textos. Antes de ponerla en el medio, búscala en cada uno.' }),
-    play('mapa-del-texto', 'El recorrido del texto Uno', { ...A, labels: ['presenta beneficios para la atención', 'presenta beneficios sociales', 'muestra juegos para aprender', 'reconoce los límites del argumento', 'propone acompañar en vez de prohibir', 'propone prohibir los videojuegos'], key: [0, 1, 2, 3, 4] },
-      'El texto Uno suma beneficios (párrafos 1 a 3), reconoce un límite (4) y propone qué hacer (5). Tampoco propone prohibir: dice «más que prohibir, conviene acompañar».',
-      { hint: 'Fíjate en los conectores: «Sin embargo», «Además», «Hay también», «Nada de esto quiere decir», «Por eso».' }),
+    play('caso-nuevo', 'Un texto que explica al otro', { ...A, principle: 'Una idea de un texto «encuentra explicación» en el otro cuando el otro da la causa o el mecanismo de lo que el primero solo afirma. Repetir la idea o coincidir con ella no es explicarla.', ask: '¿En cuáles parejas el segundo fragmento explica por qué pasa lo que afirma el primero?', cards: [
+      ['Uno: a los estudiantes no les da miedo equivocarse en el juego. → Dos: las recompensas seguidas hacen que perder no duela, porque en segundos empieza otra partida.', true],
+      ['Uno: un adolescente que deja de dormir por jugar tiene un problema. → Dos: muchos juegos están diseñados para que sea difícil dejarlos.', true],
+      ['Uno: ciertos juegos de acción mejoran la atención visual. → Dos: los defensores de los videojuegos hablan de atención y estrategia.', false],
+      ['Uno: más que prohibir, conviene acompañar. → Dos: no se trata de prohibir los videojuegos.', false],
+      ['Dos: los cofres sorpresa se pagan con dinero real. → Uno: hay juegos diseñados para aprender.', false],
+    ] }, 'En las dos primeras parejas, el texto Dos da el mecanismo que el Uno solo afirma: si perder no duele, no da miedo equivocarse; y si el juego está hecho para que no se pueda dejar, se entiende al que deja de dormir. Las otras no explican: una solo repite la palabra «atención» (el Dos cuenta lo que dicen los defensores), otra es una coincidencia (los dos rechazan prohibir) y la última une ideas que no tienen que ver. Un texto puede explicar al otro aunque sus autores no estén de acuerdo: la psicóloga ve en el error sin miedo una ventaja; el médico, parte del enganche.',
+      { hint: 'No te guíes por la palabra que se repite. Pregúntate si el segundo fragmento responde «¿por qué pasa eso?» sobre el primero.' }),
     play('lupa-evidencia', 'Lo que dicen los textos', { ...A, cards: [
       ['El texto Uno dice que ciertos juegos de acción mejoran la atención visual.', 0],
       ['Los dos textos aceptan que hace falta poner límites.', 0],
@@ -164,7 +169,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     paras: [
       'El turismo dejó el año pasado más de un billón de pesos en la ciudad, según la cámara de comercio, y creó cerca de doce mil empleos directos en restaurantes, hoteles y transporte. Barrios que antes nadie visitaba hoy reciben extranjeros que pagan por conocer su historia, y muchos de esos recorridos los guían jóvenes del mismo barrio.',
       'Las cifras, desde luego, no cuentan toda la historia. Una parte de ese dinero se queda en cadenas hoteleras y en plataformas que no tributan en la ciudad, y los empleos del sector suelen ser temporales. Aun así, los estudios disponibles indican que, por cada peso que gasta un visitante, la economía local mueve casi dos, porque el restaurante compra en la plaza y el guía paga arriendo en su barrio.',
-      'Es cierto que hay problemas. En algunos sectores los arriendos han subido y hay vecinos que se quejan del ruido. Pero esos problemas tienen nombre y se pueden resolver con regulación: límites al alquiler por noches, cobros a las plataformas y horarios para los bares. Cerrar la puerta, en cambio, no resuelve nada; solo cambia el problema por otro.',
+      'Es cierto que hay problemas. En algunos sectores los arriendos han subido, porque a un propietario le rinde más alquilar por noches a visitantes que por meses a una familia, y hay vecinos que se quejan del ruido. Pero esos problemas tienen nombre y se pueden resolver con regulación: límites al alquiler por noches, cobros a las plataformas y horarios para los bares. Cerrar la puerta, en cambio, no resuelve nada; solo cambia el problema por otro.',
       'Una ciudad que se cierra al visitante se cierra también a sus ingresos. La pregunta útil no es si queremos turismo, sino qué reglas necesitamos para que deje más de lo que se lleva.',
     ],
   };
@@ -180,6 +185,10 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
   };
   const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { docs: [TURISMO, DECORADO], q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
   setExam('pu-dos-textos', 'Evaluación · Lectura de dos textos', [
+    ['pu-dt-1', 'Una idea de un texto «encuentra explicación» en el otro cuando el otro da su causa o su mecanismo; repetir las mismas palabras no es explicar.',
+      Q('Que siete de las doce casas de la cuadra se alquilen por noches (texto Dos) encuentra explicación en el texto Uno, cuando este dice que:', ['hay que poner límites al alquiler por noches', 'a un propietario le rinde más alquilar por noches que por meses', 'barrios que antes nadie visitaba reciben hoy a extranjeros que pagan por su historia', 'por cada peso de un visitante, la economía local mueve casi dos'], 1,
+        'El Dos solo cuenta lo que ve: siete casas alquiladas por noches. El Uno da la causa: alquilar por noches le rinde más al propietario que alquilar por meses. La opción A repite las palabras «alquiler por noches», pero es una solución, no una explicación; C y D hablan de los beneficios del turismo.',
+        'No elijas la opción que repite las palabras del Dos. Busca en el Uno la que responde «¿por qué pasa eso?».')],
     ['pu-dt-1', 'Una coincidencia debe estar en los dos textos.',
       Q('Los dos textos coinciden en que:', ['el turismo debería prohibirse en los barrios residenciales', 'el turismo trae problemas que necesitan reglas', 'el arriendo se duplicó en todos los barrios de la ciudad', 'el turismo dejó más de un billón de pesos el año pasado'], 1,
         'El Uno dice que los problemas se resuelven «con regulación»; el Dos critica que «nadie ponga reglas». Las cifras solo están en el Uno, y el arriendo duplicado es de un local del Dos.',

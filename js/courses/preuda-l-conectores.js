@@ -11,9 +11,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       'Durante años nos han enseñado que reciclar es la mejor manera de cuidar el planeta. Separamos las botellas, lavamos los envases y los llevamos al punto ecológico con la conciencia tranquila. Sin embargo, los datos cuentan una historia menos cómoda: en muchos países, solo una pequeña parte del plástico que se separa termina convertida en un objeto nuevo.',
       'Las razones son varias. En primer lugar, muchos plásticos no se pueden reciclar porque mezclan materiales que no se separan, como los empaques de papas fritas, que llevan una capa metálica por dentro. Además, cada vez que un plástico se recicla pierde calidad, de modo que una botella rara vez vuelve a ser botella: suele convertirse en fibra para ropa o en relleno, y ahí termina su vida.',
       'Por otra parte, reciclar tiene costos que casi nunca vemos. Hay que transportar el material, lavarlo, triturarlo y fundirlo, y todo eso consume agua y energía. Por eso, cuando el petróleo está barato, a muchas empresas les sale más económico fabricar plástico nuevo que comprar el reciclado. Y si el material llega sucio o mezclado, buena parte termina de todos modos en el relleno sanitario.',
-      'Esto no quiere decir que reciclar sea inútil. Al contrario: cada kilo que se recupera es un kilo que no llega al río ni al relleno sanitario. Lo que quiere decir es que el reciclaje es la última de tres tareas, no la primera. Antes vienen reducir lo que compramos y reutilizar lo que ya tenemos.',
+      'Esto no quiere decir que reciclar sea inútil. Al contrario: cada kilo que se recupera es un kilo que no llega al río ni al relleno sanitario. El problema no está en reciclar; está, más bien, en creer que con eso basta. El reciclaje es la última de tres tareas, no la primera. Antes vienen reducir lo que compramos y reutilizar lo que ya tenemos.',
       'Por ejemplo, una botella de vidrio retornable puede volver a llenarse decenas de veces antes de romperse, mientras que una de plástico desechable se usa una vez. Del mismo modo, una bolsa de tela que se lleva al mercado durante un año reemplaza cientos de bolsas plásticas, y un frasco que se lleva a la tienda para comprar a granel ahorra un empaque cada semana. Ninguna de estas soluciones necesita una planta de reciclaje.',
-      'En conclusión, separar la basura está bien, pero no nos exime de lo más difícil: comprar menos y desechar menos. El mejor residuo, como dicen los ambientalistas, es el que nunca se produce.',
+      'En conclusión, separar la basura está bien, pero no nos exime de lo más difícil: comprar menos y desechar menos. Reciclar no es el comienzo del camino; antes bien, es lo que queda cuando ya no se pudo reducir ni reutilizar. El mejor residuo, como dicen los ambientalistas, es el que nunca se produce.',
     ],
   };
 
@@ -24,7 +24,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       'En marzo, la alcaldía anunció con bombos y platillos la «modernización» de la plaza de mercado: pisos de baldosa blanca, locales con vitrina y un parqueadero de dos pisos. Hubo banda, discursos y una cinta tricolor que cortó el alcalde. Las fotos del proyecto mostraban gente sonriente, frutas brillantes y ningún perro. Seis meses después de la inauguración, la mitad de los vendedores ya no está.',
       'Pongamos un ejemplo. Doña Rubiela vendía hierbas aromáticas —toronjil, limoncillo, ruda— en un puesto de un metro cuadrado que pagaba a diario. El nuevo local, con vitrina y contador de luz, cuesta un arriendo mensual que equivale a lo que ella ganaba en dos meses. Hoy vende en la acera de enfrente, sin techo, y la policía la saca cada tanto por «ocupar el espacio público». Sus clientes de siempre la siguen buscando; los nuevos, los del parqueadero, ni la ven.',
       'Se dirá, con razón, que la plaza vieja tenía problemas serios: el techo goteaba, los baños eran una vergüenza y las ratas se paseaban a plena luz del día. Nadie pide volver a eso, ni defender la suciedad en nombre de la tradición. Pero arreglar un techo no obligaba a cambiar a quienes vivían debajo de él.',
-      'Los funcionarios repiten que los vendedores pueden presentarse a una convocatoria para los locales (siempre que tengan cámara de comercio, cuenta bancaria y un fiador). Es decir, pueden presentarse todos, menos los que más lo necesitan. Ninguno de los requisitos tiene que ver con saber vender, ni con los años que cada uno lleva en la plaza, ni con la calidad de lo que ofrece a sus clientes.',
+      'Los funcionarios repiten que los vendedores pueden presentarse a una convocatoria para los locales (siempre que tengan cámara de comercio, cuenta bancaria y un fiador). Es decir, pueden presentarse todos, menos los que más lo necesitan. Ninguno de los requisitos tiene que ver con saber vender, ni con los años que cada uno lleva en la plaza, ni con la calidad de lo que ofrece a sus clientes. La alcaldía presume de que hoy llegan más compradores a la plaza; puede ser, pero de poco sirve que lleguen más si ya no encuentran a quién comprarle.',
       'En suma, una plaza no se moderniza cuando cambia de baldosa, sino cuando sirve mejor a quienes la usan. Y la plaza de mercado la usaban, sobre todo, los vendedores pequeños y sus clientes de siempre. Si ellos ya no caben, lo que se hizo no fue una modernización: fue un desalojo con buena iluminación. Una modernización de verdad habría empezado por preguntarles a ellos qué necesitaban.',
     ],
   };
@@ -36,8 +36,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { a: 'Cada vez que un plástico se recicla pierde calidad,', b: 'una botella rara vez vuelve a ser botella.', options: ['de modo que', 'aunque', 'por ejemplo,', 'sin embargo,'], answer: 0 },
       { a: 'Muchos plásticos mezclan materiales que no se separan.', b: 'cada reciclaje les hace perder calidad.', options: ['Además,', 'En cambio,', 'Por lo tanto,', 'Es decir,'], answer: 0 },
       { a: 'Antes de reciclar vienen reducir y reutilizar.', b: 'una botella retornable se llena decenas de veces.', options: ['Por ejemplo,', 'Sin embargo,', 'Aunque', 'Por lo tanto,'], answer: 0 },
-    ] }, 'Lo que nos enseñaron choca con los datos (contraste). Perder calidad tiene una consecuencia. La mezcla de materiales y la pérdida de calidad son dos razones que se suman. Y la botella retornable ilustra la idea de reutilizar (ejemplo).',
-      { hint: 'Para cada pareja, pregúntate: ¿se oponen, una resulta de la otra, se suman o la segunda ilustra la primera?' }),
+      { a: 'Esto no quiere decir que reciclar sea inútil.', b: 'cada kilo que se recupera es un kilo que no llega al río.', options: ['Al contrario:', 'Sin embargo,', 'Por ejemplo,', 'Es decir,'], answer: 0 },
+    ] }, 'Lo que nos enseñaron choca con los datos (contraste). Perder calidad tiene una consecuencia. La mezcla de materiales y la pérdida de calidad son dos razones que se suman. La botella retornable ilustra la idea de reutilizar (ejemplo). Y después de una idea que la autora rechaza («no quiere decir que sea inútil») va un conector que rectifica: pone en su lugar lo que ella sí sostiene, que reciclar sirve. «Sin embargo» no cabe ahí: no hay nada a qué oponerse.',
+      { hint: 'Para cada pareja, pregúntate: ¿se oponen, una resulta de la otra, se suman o la segunda ilustra la primera? Si la primera frase niega algo, busca el conector que pone en su lugar lo que el autor sí piensa.' }),
     play('mapa-del-texto', 'Lo que hace cada párrafo', { doc: RECICLA, labels: ['plantea una creencia y la objeta', 'da razones técnicas', 'agrega los costos', 'aclara para no ser malinterpretado', 'ejemplifica', 'concluye', 'propone dejar de reciclar'], key: [0, 1, 2, 3, 4, 5] },
       'Los conectores del comienzo de cada párrafo anuncian su función: «Sin embargo» objeta, «En primer lugar» y «Además» dan razones, «Por otra parte» agrega, «Esto no quiere decir» aclara, «Por ejemplo» ilustra y «En conclusión» cierra. Nadie propone dejar de reciclar: «Esto no quiere decir que reciclar sea inútil».',
       { hint: 'Lee el conector con que empieza o en que gira cada párrafo: casi siempre anuncia lo que hace.' }),
@@ -57,11 +58,16 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Libera gases que enferman a quienes trabajan en las plantas', null],
     ] }, 'Los empaques y la pérdida de calidad están en el párrafo 2; el consumo de agua y energía, en el 3. Los gases no aparecen.',
       { hint: 'Lleva cada problema al párrafo que lo menciona. El que no encuentre lugar es la respuesta.' }),
-    play('signos-que-hablan', 'Lo que anuncian los dos puntos', { doc: RECICLA, rounds: [
-      { p: 2, text: 'una botella rara vez vuelve a ser botella|:| suele convertirse en fibra', options: ['anuncia lo que pasa en su lugar', 'abre una cita', 'abre una lista de países', 'marca una pregunta'], answer: 0 },
-      { p: 4, text: 'Al contrario|:| cada kilo que se recupera', options: ['anuncia la razón que sostiene lo dicho', 'abre un ejemplo extranjero', 'introduce una pregunta', 'cita a los ambientalistas'], answer: 0 },
-    ] }, 'Los primeros dos puntos anuncian en qué termina la botella. Los segundos, la razón por la que reciclar no es inútil.',
-      { hint: 'Los dos puntos anuncian algo: una explicación, una lista o una cita. Mira qué viene después.' }),
+    play('quien-lo-dice', 'Qué hace cada conector', { doc: RECICLA, ask: 'Lleva cada fragmento de la columna a la relación que marca su conector.', voices: ['Contraste: opone dos ideas que siguen en pie', 'Rectificación: niega una idea y pone otra en su lugar', 'Consecuencia: lo que resulta de lo anterior', 'Adición: suma otra razón', 'Ejemplo: muestra la idea en un caso'], cards: [
+      ['Nos enseñaron que reciclar es lo mejor. Sin embargo, los datos cuentan una historia menos cómoda.', 0],
+      ['Esto no quiere decir que reciclar sea inútil. Al contrario: cada kilo que se recupera no llega al río.', 1],
+      ['El problema no está en reciclar; está, más bien, en creer que con eso basta.', 1],
+      ['Reciclar no es el comienzo del camino; antes bien, es lo que queda cuando ya no se pudo reducir.', 1],
+      ['Cada vez que un plástico se recicla pierde calidad, de modo que una botella rara vez vuelve a ser botella.', 2],
+      ['Además, cada vez que un plástico se recicla pierde calidad.', 3],
+      ['Por ejemplo, una botella de vidrio retornable puede volver a llenarse decenas de veces.', 4],
+    ] }, 'Con «sin embargo» quedan en pie las dos ideas: lo que nos enseñaron y lo que dicen los datos. «Al contrario», «más bien» y «antes bien» hacen otra cosa: llegan después de una idea que la autora niega («no quiere decir», «no está en», «no es») y ponen en su lugar la que ella sí sostiene. «De modo que» anuncia un resultado, «Además» suma y «Por ejemplo» ilustra.',
+      { hint: 'Mira si antes del conector hay una negación. Si la autora rechaza una idea y el conector trae la que la reemplaza, no es un simple contraste.' }),
     play('resume-parrafo', 'La idea de cada párrafo', { doc: RECICLA, paras: [2, 3, 4, 5], options: [
       'Muchos plásticos no se pueden reciclar o pierden calidad al hacerlo.',
       'Reciclar cuesta agua, energía y dinero.',
@@ -113,15 +119,16 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 2, text: '|Doña Rubiela| vendía hierbas aromáticas —toronjil, limoncillo, ruda— en |un puesto de un metro cuadrado| que pagaba a diario. |El nuevo local|, con vitrina y contador de luz, cuesta un arriendo mensual que equivale a lo que |ella|', from: 7, answer: 1 },
     ] }, '«Ellos» son los vendedores pequeños y sus clientes: los que ya no caben. Y «ella» es doña Rubiela, la única mujer nombrada: es quien ganaba en dos meses lo que hoy cuesta el arriendo.',
       { hint: 'En el primero, busca hacia atrás un grupo de personas en plural; en el segundo, quién podía ganar dinero.' }),
-    play('quien-lo-dice', 'Verbos de función', { doc: PLAZA, ask: 'Las opciones del examen usan estos verbos. Lleva cada frase de la columna a lo que hace en el argumento.', voices: ['Ejemplifica o ilustra: muestra la idea en un caso', 'Concede: acepta algo de la postura contraria', 'Matiza o relativiza: limita el alcance de lo dicho', 'Refuta: muestra que una idea no se sostiene', 'Concluye: recoge lo dicho'], cards: [
+    play('quien-lo-dice', 'Verbos de función', { doc: PLAZA, ask: 'Las opciones del examen usan estos verbos. Lleva cada frase de la columna a lo que hace en el argumento.', voices: ['Ejemplifica o ilustra: muestra la idea en un caso', 'Concede: acepta algo de la postura contraria', 'Matiza: precisa hasta dónde llega lo que el propio autor sostiene', 'Relativiza: acepta un dato del otro, pero le quita peso', 'Refuta: muestra que una idea no se sostiene', 'Concluye: recoge lo dicho'], cards: [
       ['Pongamos un ejemplo. Doña Rubiela vendía hierbas aromáticas.', 0],
       ['Se dirá, con razón, que la plaza vieja tenía problemas serios.', 1],
       ['Nadie pide volver a eso, ni defender la suciedad en nombre de la tradición.', 2],
-      ['Pero arreglar un techo no obligaba a cambiar a quienes vivían debajo de él.', 3],
-      ['Es decir, pueden presentarse todos, menos los que más lo necesitan.', 3],
-      ['En suma, una plaza no se moderniza cuando cambia de baldosa.', 4],
-    ] }, 'Doña Rubiela ilustra la idea. «Se dirá, con razón» concede que la plaza vieja estaba mal, y «Nadie pide volver a eso» matiza: aclara hasta dónde llega la crítica del autor. El «Pero» refuta la objeción, y «Es decir» desmonta lo que dicen los funcionarios: la convocatoria no está abierta a todos. «En suma» concluye.',
-      { hint: 'Conceder es darle la razón al otro en algo; refutar, quitársela. Matizar no cambia de lado: solo precisa hasta dónde llega lo que se dijo.' }),
+      ['Puede ser que lleguen más compradores, pero de poco sirve si ya no encuentran a quién comprarle.', 3],
+      ['Pero arreglar un techo no obligaba a cambiar a quienes vivían debajo de él.', 4],
+      ['Es decir, pueden presentarse todos, menos los que más lo necesitan.', 4],
+      ['En suma, una plaza no se moderniza cuando cambia de baldosa.', 5],
+    ] }, 'Doña Rubiela ilustra la idea. «Se dirá, con razón» concede que la plaza vieja estaba mal. «Nadie pide volver a eso» no concede nada nuevo (la concesión ya se hizo en la frase anterior): matiza la crítica del propio autor, aclara que no defiende la suciedad. Lo de los compradores relativiza: el autor no niega el dato de la alcaldía («puede ser»), pero muestra que pesa menos de lo que parece. El «Pero» refuta la objeción, y «Es decir» desmonta lo que dicen los funcionarios: la convocatoria no está abierta a todos. «En suma» concluye.',
+      { hint: 'Pregúntate de quién es la idea que se limita. Si el autor precisa hasta dónde llega lo suyo, matiza; si acepta un dato del otro lado y le quita importancia, relativiza; si se lo quita del todo, refuta.' }),
   ]);
 
   // ---------------- Evaluación: formato real, texto nuevo ----------------
@@ -129,13 +136,17 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     id: 'lec-cosechar-lluvia', title: 'Cosechar la lluvia',
     paras: [
       'En La Guajira llueve poco, pero cuando llueve, llueve fuerte. Por eso, desde hace mucho tiempo, las comunidades wayuu construyen jagüeyes: depresiones en la tierra que recogen el agua de los aguaceros y la guardan para los meses secos. Sin embargo, el agua de un jagüey se evapora rápido y se ensucia con facilidad.',
-      'Algunas escuelas rurales han probado otra solución: canaletas en los techos que llevan el agua a tanques cerrados. Un techo de cien metros cuadrados, por ejemplo, puede recoger miles de litros en una sola temporada de lluvias. Además, como el tanque está tapado, el agua llega más limpia y no se pierde por evaporación.',
+      'Algunas escuelas rurales han probado otra solución: canaletas en los techos que llevan el agua a tanques cerrados. Un techo de cien metros cuadrados, por ejemplo, puede recoger miles de litros en una sola temporada de lluvias. Además, como el tanque está tapado, el agua llega más limpia y no se pierde por evaporación. Esto no significa que haya que tapar los jagüeyes. Al contrario: donde hay tanque, el jagüey queda libre para los animales y los cultivos.',
       'Es cierto que un tanque cuesta más que un jagüey y que no todas las casas tienen un techo grande. No obstante, varias familias pueden compartir el tanque de la escuela, y el costo se reparte.',
       'En suma, cosechar la lluvia no reemplaza un acueducto, pero puede ser la diferencia entre tener agua o no tenerla durante la sequía.',
     ],
   };
   const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: LLUVIA, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
   setExam('pu-conectores', 'Evaluación · Conectores y función de partes', [
+    ['pu-cn-1', 'Después de una idea que el autor rechaza («Esto no significa que…»), «al contrario» rectifica: pone en su lugar lo que el autor sí sostiene.',
+      Q('En el párrafo 2, «Al contrario» introduce:', ['un problema de los tanques que el autor no había mencionado', 'lo que el autor sí sostiene sobre los jagüeyes, en lugar de lo que acaba de rechazar', 'una consecuencia de que el agua del jagüey se evapore tan rápido', 'un ejemplo de las escuelas rurales que construyen canaletas'], 1,
+        'Antes, el autor rechaza una idea: que haya que tapar los jagüeyes. «Al contrario» trae la idea que la reemplaza: los jagüeyes siguen sirviendo, ahora para los animales y los cultivos. No opone dos datos: corrige una lectura equivocada.',
+        'Lee la oración anterior al conector: ¿qué idea niega el autor? Lo que sigue a «Al contrario» es lo que pone en su lugar.')],
     ['pu-cn-1', 'Un conector de contraste anuncia una idea que se opone o le pone un límite a la anterior.',
       Q('En el párrafo 1, «Sin embargo» introduce:', ['un ejemplo de cómo se construye un jagüey', 'una limitación de los jagüeyes', 'una consecuencia de que llueva tan fuerte', 'la conclusión de todo el texto sobre el agua'], 1,
         'Después de explicar para qué sirven los jagüeyes, «Sin embargo» presenta sus problemas: el agua se evapora y se ensucia.',

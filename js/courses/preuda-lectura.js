@@ -35,6 +35,7 @@ const PU_LECTURA = [
     PU_L('pu-el-3', 'Tiempo y preguntas EXCEPTO', [
       sc(6, 'La parte de lectura del examen trae dos textos largos y unas 30 preguntas (de la 31 a la 60): unos **15 minutos de lectura por texto** y el resto para responder. Las preguntas se pueden leer antes, para saber qué buscar.', { title: 'Manejar el tiempo' }),
       sc(7, 'En una pregunta «EXCEPTO», tres opciones sí están en el texto y una no. Se verifica cada opción contra el texto y se marca la que no aparece.', { title: 'Preguntas EXCEPTO' }),
+      sc(7, 'Cuidado cuando la pregunta nombra un párrafo («según el párrafo 4…»): la intrusa puede estar **en el texto, pero en otro párrafo**, o con el papel contrario (una ventaja puesta entre los problemas). Lo que cuenta no es si «suena» al texto, sino si está **donde la pregunta indica**.', { title: 'La intrusa que sí está en el texto' }),
       sc(6, 'Las respuestas malas no restan: ninguna pregunta se deja en blanco.', { title: 'Nada en blanco' }),
     ], [
       PU_SUB('Pregunta EXCEPTO: «La biblioteca ofrece todo lo siguiente, EXCEPTO: a) préstamo de computadores, b) talleres para jóvenes, c) una sala infantil, d) cursos de inglés»', [
@@ -82,6 +83,7 @@ const PU_LECTURA = [
     PU_L('pu-tt-3', 'Estructura y testimonio', [
       sc(6, 'Casi todo texto tiene introducción, desarrollo y cierre. En uno argumentativo: **tesis**, **argumentos** y, a veces, un **contraargumento** respondido.', { title: 'Tesis y argumentos' }),
       sc(7, 'El testimonio tiene rasgos propios: primera persona, marcas de oralidad («pues», «uno», «sí me entiende») y un contexto histórico que explica lo vivido.', { title: 'Rasgos del testimonio' }),
+      sc(7, 'La palabra **testimonio** tiene dos usos. Como **género**, es un texto entero en que alguien cuenta su propia vida. Como **cita testimonial**, es un fragmento dentro de otro texto (una crónica, una columna) donde el autor deja hablar en primera persona a alguien que vive lo que se discute. Una columna con una cita testimonial sigue siendo una columna.', { title: 'Género o cita' }),
       sc(6, 'En un testimonio las preguntas del examen suelen ir a los sentimientos y a las causas de lo que se cuenta.', { title: 'Qué preguntan' }),
       sc(6, 'Quien da un testimonio a veces lanza una pregunta que no espera respuesta: es una **pregunta retórica**. No pide un dato; señala algo que para quien habla es obvio, como quien pregunta quién lo va a ayudar sabiendo que nadie lo hará.', { title: 'La pregunta retórica' }),
     ], [
@@ -272,6 +274,7 @@ const PU_LECTURA = [
       sc(6, 'Muchas palabras se entienden por sus piezas griegas y latinas: **anti-** contra, **sub-** debajo, **poli-** muchos, **bio-** vida.', { title: 'Prefijos' }),
       sc(6, 'Y por sus finales: **-logía** estudio, **-cida** que mata, **-fobia** miedo. Un insecticida mata insectos.', { title: 'Sufijos y raíces' }),
       sc(6, 'Con esas piezas se deduce una palabra que nunca se ha visto: un «hidrófobo» teme al agua (hidro-, agua).', { title: 'Deducir' }),
+      sc(7, 'Pero las piezas **a veces engañan**. Re- no siempre es «de nuevo»: recorrer un camino no es correrlo otra vez, y restaurar un mueble es repararlo. Por eso la lectura por piezas se pone a prueba en la frase: si no encaja con lo que dice el resto del párrafo, **manda el contexto**.', { title: 'Cuando el contexto corrige' }),
     ], [
       PU_SUB('Raíces que significan «vida»', [
         { text: 'biodiversidad|biografía|bisabuelo|antibiótico', ask: 'Toca las palabras que tienen la raíz «bio», vida', answer: [0, 1, 3] },
@@ -350,7 +353,8 @@ const PU_LECTURA = [
   // ---------------- 24 · Conectores ----------------
   { world: 'pu-conectores', title: 'Conectores y función de partes', block: 'lectura', lessons: [
     PU_L('pu-cn-1', 'Conectores', [
-      sc(6, 'Los conectores dicen cómo se relacionan las ideas: **adición** (además), **contraste** (sin embargo), **causa** (porque), **consecuencia** (por lo tanto).', { title: 'Tipos de conectores' }),
+      sc(6, 'Los conectores dicen cómo se relacionan las ideas: **adición** (además), **contraste** (sin embargo, en cambio, no obstante), **causa** (porque), **consecuencia** (por lo tanto).', { title: 'Tipos de conectores' }),
+      sc(7, 'Después de una idea que el autor **rechaza** («No digo que…», «Esto no quiere decir que…»), **al contrario**, **más bien**, **antes bien** y **sino** no oponen dos ideas que siguen en pie: **rectifican**. Niegan lo anterior y ponen en su lugar lo que el autor sí sostiene. «No pido cerrar el parque. Al contrario: quiero que abra más horas.»', { title: 'Conectores que rectifican' }),
       sc(6, 'También hay de **ejemplificación** (por ejemplo, como) y de **conclusión** (en suma, en conclusión).', { title: 'Más conectores' }),
       sc(6, 'Un conector de contraste anuncia que viene lo importante: lo que sigue a «sin embargo» suele pesar más.', { title: 'El peso del contraste' }),
     ], [
@@ -370,6 +374,7 @@ const PU_LECTURA = [
       sc(8, 'Las opciones del examen usan verbos más finos. **Ejemplificar** o **ilustrar**: mostrar la idea en un caso. **Conceder**: aceptar una parte de la postura contraria. **Refutar**: mostrar que una idea no se sostiene (también se dice desmontarla o rebatirla). **Matizar**: precisar hasta dónde llega lo que se dijo. **Relativizar**: mostrar que algo no es tan absoluto o tan grave como parece.', { title: 'Verbos de función' }),
       sc(7, 'Los signos también: las **comillas** citan o marcan ironía; los **paréntesis** aclaran; las **rayas** abren un inciso; los **dos puntos** anuncian una explicación o una lista.', { title: 'Funciones de los signos' }),
       sc(6, 'Ejemplo: «Llegó el "gran" cambio: un semáforo nuevo.» Las comillas de «gran» son irónicas.', { title: 'Comillas irónicas' }),
+      sc(7, '**Matizar** y **relativizar** no son lo mismo. Se matiza lo propio: «No digo que todo sea malo» precisa hasta dónde llega la crítica del autor. Se relativiza lo del otro: «Puede ser que haya más visitantes, pero eso dice poco» acepta un dato contrario y le quita peso. Pregúntate de quién es la idea que se limita.', { title: 'Matizar o relativizar' }),
     ], [
       PU_SUB('Signos con función', [
         { text: 'El gobierno anunció un «generoso» aumento:|apenas 2 % (menos que la inflación).|Los maestros —que esperaban un 8 %— protestaron.', ask: 'Toca el trozo con comillas irónicas', answer: [0] },
@@ -405,6 +410,7 @@ const PU_LECTURA = [
       sc(6, 'La **intención** es para qué escribe el autor: informar, persuadir, criticar o reflexionar.', { title: 'Intención' }),
       sc(6, 'El **tono** es la actitud: crítico, irónico, nostálgico, preocupado, optimista. Se nota en los adjetivos y en lo que se elige contar.', { title: 'Tono' }),
       sc(6, 'Un texto puede informar con datos y, aun así, tener un tono preocupado si elige los datos más alarmantes.', { title: 'Datos y tono' }),
+      sc(7, 'El tono no vive solo en los adjetivos. Los **adverbios y expresiones de actitud** («curiosamente», «por fortuna», «lamentablemente», «por supuesto», «como era de esperarse») no añaden ningún dato: muestran qué piensa el autor de lo que cuenta. Si se quitan, el dato queda y la actitud desaparece. «Curiosamente», junto a algo sospechoso, no es sorpresa: es ironía.', { title: 'Adverbios con actitud' }),
     ], [
       PU_ES('«Qué maravilla: otro puente nuevo que se inunda con la primera lluvia.» ¿Cuál es el tono?', [['dice lo contrario de lo que piensa', 'elogia el puente'], ['irónico', 'optimista']],
         '«Qué maravilla» choca con un puente que se inunda: el autor critica diciendo lo contrario, con ironía.',
@@ -417,7 +423,9 @@ const PU_LECTURA = [
     ]),
     PU_L('pu-ag-3', 'Hechos y opiniones', [
       sc(6, 'Un **hecho** se puede comprobar: una fecha, una cifra, un suceso. Una **opinión** es una valoración.', { title: 'Comprobar o valorar' }),
-      sc(6, 'Palabras que delatan opinión: «mejor», «peor», «debería», «lamentable», «excelente», «a mi juicio».', { title: 'Palabras de opinión' }),
+      sc(6, 'Algunas palabras suelen delatar opinión: «mejor», «peor», «debería», «lamentable», «excelente», «a mi juicio». Ayudan, pero no deciden: la prueba es **si se puede verificar**', { title: 'Palabras de opinión' }),
+      sc(7, 'Hay opiniones **sin ninguna palabra de la lista**: «el plan es acertado», «tiene toda la razón», «ninguna obra ha cambiado tanto la vida del barrio». Y hay exigencias sin «debería»: «es hora de», «hace falta que», «no se puede seguir esperando». Si no hay registro, cuenta ni medida que lo compruebe, es opinión.', { title: 'Opiniones sin palabra pista' }),
+      sc(7, 'Al revés, una palabra que valora en una frase **describe** en otra. «El alimento más rico» valora; «un suelo rico en hierro» es un dato que se mide. Igual pasa con «buena parte», «grande», «fuerte» o «el más cercano»: no mires la palabra sola, mira si lo que dice la frase se puede comprobar.', { title: 'La misma palabra, dos usos' }),
       sc(6, 'Un texto mezcla los dos: los hechos sirven de apoyo a las opiniones.', { title: 'Hechos al servicio de opiniones' }),
     ], [
       PU_SUB('Sobre el metro de Medellín', [
@@ -437,6 +445,7 @@ const PU_LECTURA = [
       sc(6, 'Las últimas preguntas del examen comparan los dos textos. Conviene una tabla: tema, postura y argumentos de cada uno.', { title: 'Una tabla de comparación' }),
       sc(6, 'Dos textos pueden tratar el mismo tema con **enfoques** distintos: económico, ambiental, ético, personal.', { title: 'Mismo tema, otro enfoque' }),
       sc(6, 'Una coincidencia debe estar en los dos textos; si solo está en uno, no es coincidencia.', { title: 'En los dos' }),
+      sc(7, 'Otra pregunta: «esta idea del Texto Dos **encuentra explicación** en el Texto Uno». Se busca en el otro texto la **causa** o el **mecanismo** de lo que el primero solo afirma: uno cuenta que algo pasa; el otro dice por qué. No basta con que repita la misma palabra, y los autores no tienen que estar de acuerdo.', { title: 'Un texto explica al otro' }),
       sc(7, 'También se compara **cómo respalda** cada texto lo que dice: uno puede exponer con estudios y cautela («varios estudios», «ciertos juegos», «puede»); otro, opinar desde la **experiencia personal** del autor («en mi consultorio veo…»). Las marcas son la primera persona, las cifras y las palabras que suavizan.', { title: 'Cómo se sostiene cada uno' }),
     ], [
       PU_SUB('Texto A: «La inteligencia artificial puede ayudar a los profesores a corregir más rápido.» Texto B: «Si una máquina corrige, el estudiante pierde la conversación con su profesor.»', [

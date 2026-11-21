@@ -228,7 +228,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
   ]);
 
   diezLesson('pu-ar-4', [
-    ['peor-caso-bolsa', 2, 'En una bolsa hay 3 bolas de cada uno de 4 colores. ¿Cuántas hay que sacar para tener, con seguridad, 3 del mismo color?', 'La peor suerte: 2 de cada color, 8 bolas, sin completar ningún trío. La novena completa uno con seguridad.'],
+    ['peor-caso-bolsa', 2, 'En una bolsa hay 3 bolas de cada uno de 4 colores. ¿Cuántas hay que sacar para tener, con seguridad, 3 del mismo color?', 'La peor suerte: 2 de cada color, 8 bolas, sin completar ningún trío. La novena completa uno con seguridad. Si se pidieran 3 de un color dado (por ejemplo, 3 verdes), las cantidades sí importarían: en el peor caso salen antes todas las de los otros tres colores, 9, y después las 3 verdes: 12.'],
     ['rectangulo-max', 0, 'Con 24 m de cerca se quiere el corral rectangular de mayor área. Ajusta sus lados', 'Con el mismo perímetro, el rectángulo de mayor área es el cuadrado: lado 6 y área 36.'],
     ['reparto-extremo', 0, 'Se reparten 20 dulces entre 4 niños, todos con cantidades distintas y al menos uno. ¿Cuánto puede recibir, como máximo, uno de ellos?', 'Para que uno reciba lo máximo, los otros tres reciben lo mínimo posible y distinto: 1, 2 y 3. Le quedan $20 - 6 = 14$.'],
     ['contraejemplo', 0, 'Alguien afirma que con 3 bolas sacadas ya es seguro que hay dos del mismo color. Busca la sacada que lo desmiente', 'Con mala suerte salen una roja, una azul y una verde: tres bolas y ningún color repetido.'],
@@ -241,11 +241,11 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       ['50', '6', '43'],
       'El reparto parejo es el peor caso para el que quiere asegurar algo: $50 = 7 \\cdot 7 + 1$. Si nadie tuviera 8 o más, habría como mucho 49 fichas.',
       'Intenta repartir de modo que nadie reciba muchas: lo más parejo que puedas. ¿Qué pasa con lo que sobra?'),
-    err('En un cajón hay 10 medias negras, 8 azules y 6 grises, todas revueltas. ¿Cuántas medias hay que sacar sin mirar, como mínimo, para estar seguros de tener dos del mismo color?',
-      ['Hay tres colores de medias', 'En el peor caso, las tres primeras medias salen de colores distintos: una negra, una azul y una gris', 'Para asegurar el par hay que sacar todas las de un color y una más: $10 + 1 = 11$'], 2,
-      ['La media siguiente repite algún color: basta sacar $3 + 1 = 4$', 'Basta sacar 3: una de cada color', 'Hay que sacar todas las grises y una más: $6 + 1 = 7$'],
-      'Después de una media de cada color, la cuarta tiene que repetir alguno. Las cantidades de cada color no importan aquí: solo cuántos colores hay.',
-      'Imagina la peor suerte posible y pregúntate: ¿de qué color puede ser la media que sigue?'),
+    err('En un cajón hay 7 medias negras, 9 azules y 5 grises, todas revueltas. ¿Cuántas medias hay que sacar sin mirar, como mínimo, para estar seguros de tener dos medias grises?',
+      ['Se piden dos medias de un color dado, el gris, y no dos de un color cualquiera', 'La peor suerte es que salgan primero las medias que no sirven', 'Las que no sirven son una negra y una azul: salen $1 + 1 = 2$', 'Después salen las dos grises: con $2 + 2 = 4$ medias es seguro'], 2,
+      ['Las que no sirven son todas las negras y todas las azules: pueden salir $7 + 9 = 16$', 'Las que no sirven son las grises: salen 5', 'Las que no sirven son solo las negras: salen 7'],
+      'Mientras queden negras o azules en el cajón, puede salir otra: en el peor caso salen las 16 y después 2 grises, $16 + 2 = 18$ medias. La cuenta «una de cada color y una más» solo sirve cuando se piden dos del mismo color, cualquiera: ahí las cantidades no importan, solo cuántos colores hay. Con un color dado sí importan las cantidades de los otros colores.',
+      'Antes de que salgan las grises, ¿cuántas medias de otros colores pueden salir con la peor suerte?'),
     opc('Con 40 m de malla se quiere cercar un corral rectangular. La mayor área que puede tener el corral es:',
       ['96 m²', '100 m²', '400 m²', '80 m²'], 1,
       'Largo más ancho suman 20. El producto es máximo cuando los dos son iguales: $10 \\cdot 10 = 100$ m².',

@@ -1,0 +1,37 @@
+{
+ "forma": "B",
+ "ronda": "2",
+ "totales": {
+  "rl": {
+   "aciertos": 29,
+   "preguntas": 30,
+   "cobertura": {
+    "completa": 26,
+    "parcial": 4,
+    "ninguna": 0
+   }
+  },
+  "cl": {
+   "aciertos": 30,
+   "preguntas": 30,
+   "cobertura": {
+    "completa": 24,
+    "parcial": 6,
+    "ninguna": 0
+   }
+  }
+ },
+ "fallos": [
+  {
+   "n": 13,
+   "comp": "rl",
+   "tema": "razonamiento espacial",
+   "habilidad": "doblar y recortar papel",
+   "respondio": "A",
+   "correcta": "C",
+   "cobertura": "parcial",
+   "leccion": "pu-es-4",
+   "falto": "El curso solo enseña «un agujero por capa» y en la evaluación del mundo dice que un corte en una esquina tras dos dobleces da 4 cortes. Nunca muestra que la esquina donde se juntan los dobleces es el centro de la hoja (sale un solo agujero) ni que la posición del corte importa. Mateo responde A y probablemente se equivoca."
+  }
+ ]
+}

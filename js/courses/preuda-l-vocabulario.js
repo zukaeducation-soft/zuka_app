@@ -45,7 +45,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     id: 'lec-cueva-guacharos', title: 'Los habitantes de la oscuridad',
     ficha: { autor: 'Artículo de divulgación', fuente: 'Revista de ciencia para jóvenes', fecha: 'Abril de 2025' },
     paras: [
-      'A la entrada de la cueva, el guía apaga la linterna y pide silencio. Al principio no se oye nada. Luego, desde el fondo, llega un chillido largo, después otro, y en pocos segundos la oscuridad se llena de un ruido que parece de mil puertas oxidadas. Son guácharos, unas aves nocturnas que pasan el día dentro de las cuevas y salen de noche a buscar frutos.',
+      'A la entrada de la cueva, el guía apaga la linterna y pide silencio. Lleva quince años recorriendo esta cueva con grupos reducidos de visitantes. Al principio no se oye nada. Luego, desde el fondo, llega un chillido largo, después otro, y en pocos segundos la oscuridad se llena de un ruido que parece de mil puertas oxidadas. Son guácharos, unas aves nocturnas que pasan el día dentro de las cuevas y salen de noche a buscar frutos.',
       'Los guácharos son frugívoros: se alimentan casi solo de frutos, sobre todo de palmas y de laureles silvestres, que tragan enteros. Las semillas que no digieren caen al suelo de la cueva, y algunas alcanzan a germinar en la penumbra. Por eso el piso de muchas cuevas donde viven está cubierto de plántulas pálidas y delgadas, que crecen unos días buscando una luz que nunca llega y luego mueren.',
       'Para moverse en la oscuridad total, los guácharos usan un sistema parecido al de los murciélagos: emiten chasquidos y se orientan por el eco que rebota en las paredes. A diferencia de los murciélagos, que usan sonidos agudísimos, inaudibles para nosotros, los chasquidos del guácharo se oyen perfectamente. Fuera de la cueva, en cambio, se guían sobre todo por la vista y el olfato, que les permite encontrar de noche los frutos maduros desde lejos.',
       'La cueva no solo alberga aves. En sus aguas subterráneas viven peces ciegos, sin pigmento, y en sus paredes, comunidades de microorganismos que los científicos estudian con atención: algunos producen sustancias capaces de frenar a otras bacterias, y podrían servir algún día para fabricar antibióticos nuevos. Cada cueva es, en ese sentido, un laboratorio que todavía nadie ha terminado de explorar.',
@@ -196,12 +196,14 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
   // ---------------- Lección 4 · Prefijos y raíces ----------------
   setLesson('pu-vo-4', [
     play('palabra-a-la-medida', 'Palabras que se arman por piezas', { doc: CUEVA, rounds: [
+      { p: 1, before: 'Lleva quince años ', word: 'recorriendo', after: ' esta cueva', options: ['andando por', 'corriendo otra vez por', 'vigilando de lejos', 'cerrando el paso a'], answer: 0 },
+      { p: 1, before: 'con grupos ', word: 'reducidos', after: ' de visitantes', options: ['pequeños', 'conducidos de nuevo', 'callados', 'de estudiantes'], answer: 0 },
       { p: 2, before: 'Los guácharos son ', word: 'frugívoros', after: ':', options: ['que comen frutos', 'que vuelan de noche', 'que viven en grupo', 'que cantan fuerte'], answer: 0 },
       { p: 3, before: 'sonidos agudísimos, ', word: 'inaudibles', after: ' para nosotros', options: ['que no se pueden oír', 'muy fuertes', 'desagradables al oído', 'que se oyen lejos'], answer: 0 },
       { p: 4, before: 'En sus aguas ', word: 'subterráneas', after: ' viven peces ciegos', options: ['que corren bajo tierra', 'muy frías', 'saladas', 'que caen en cascada desde lo alto'], answer: 0 },
       { p: 4, before: 'comunidades de ', word: 'microorganismos', after: ' que los científicos', options: ['seres vivos diminutos', 'minerales brillantes', 'plantas trepadoras', 'insectos grandes y nocturnos'], answer: 0 },
-    ] }, 'Frugi- (fruto, del latín frux) + -voro (que come); in- (no) + audible (que se oye); sub- (debajo) + terra (tierra); micro- (pequeño) + organismo (ser vivo). Las piezas dan el sentido, y la frase lo confirma.',
-      { hint: 'Parte cada palabra en piezas: un comienzo (in-, sub-, micro-) y una raíz que ya conoces (fruto, audio, tierra, organismo).' }),
+    ] }, 'Frugi- (fruto, del latín frux) + -voro (que come); in- (no) + audible (que se oye); sub- (debajo) + terra (tierra); micro- (pequeño) + organismo (ser vivo): ahí las piezas dan el sentido y la frase lo confirma. Pero las piezas también engañan: en «recorriendo» y «reducidos», re- no quiere decir «de nuevo». El guía no corre otra vez: anda la cueva de un lado a otro; y un grupo reducido es pequeño, no uno que se conduce dos veces. Cuando la lectura por piezas no encaja en la frase, manda el contexto.',
+      { hint: 'Parte cada palabra en piezas: un comienzo (re-, in-, sub-, micro-) y una raíz que ya conoces. Luego pon tu lectura en la frase: si no tiene sentido ahí, las piezas te engañaron y decide el contexto.' }),
     play('intruso-excepto', 'Quiénes viven en la cueva', { doc: CUEVA, ask: 'Según el texto, en la cueva viven todos estos, EXCEPTO:', cards: [
       ['Aves que se orientan por el eco', [1, 3]],
       ['Peces ciegos, sin pigmento', [4]],
@@ -287,6 +289,10 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       Q('En «ropa reutilizada», el prefijo re- significa:', ['antes', 'contra', 'por debajo', 'de nuevo'], 3,
         'Reutilizar es utilizar de nuevo: la tienda vende ropa que ya tuvo otro dueño.',
         'Piensa en otras palabras con re-: releer, rehacer, reconstruir.')],
+    ['pu-vo-4', 'Las piezas orientan, pero el contexto manda: re- no siempre es «de nuevo» (restaurar, recorrer, reducir).',
+      Q('En «una caja de botas para restaurar» (párrafo 3), «restaurar» significa:', ['volver a guardar en la tienda', 'reparar hasta dejar en buen estado', 'servir como en un restaurante', 'volver a vender sin arreglarlas'], 1,
+        'Por las piezas, re- invita a leer «otra vez», pero no hay ningún «staurar» que se repita: lo que decide es el contexto. Don Isaías es remendón y la tienda le manda botas gastadas: restaurarlas es repararlas. Con la prueba del reemplazo, solo «reparar» deja la frase con sentido.',
+        'No te quedes con lo que sugiere el re-. Pon cada opción en la frase y piensa en el oficio de don Isaías.')],
     ['pu-vo-4', 'Inter- significa «entre»: internacional, intercambio.',
       Q('Un bus «intermunicipal» es uno que:', ['circula dentro de un solo municipio', 'viaja de un municipio a otro', 'pertenece a la alcaldía', 'pasa por debajo de la ciudad'], 1,
         'Inter- es «entre»: el bus intermunicipal va entre municipios.',
