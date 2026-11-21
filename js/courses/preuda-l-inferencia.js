@@ -67,11 +67,11 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { frag: 'Siguió contando, pero se le perdió la cuenta y tuvo que empezar otra vez.', scale: ['conmovido', 'indiferente', 'furioso', 'aburrido'], answer: 0 },
     ] }, 'Don Aurelio espera a que la masa esté lista: es paciente. Y quien pierde la cuenta justo después de oír a su hijo está conmovido, aunque no conteste.',
       { hint: 'El relato no nombra lo que sienten: lo muestra. ¿Qué le pasa a alguien que pierde la cuenta en ese momento?' }),
-    play('hilo-referente', '¿Quién y qué?', { doc: PAN, rounds: [
-      { p: 3, text: 'A |la señora Inés| le guarda |el pan más tostado| sin que |ella| tenga que pedirlo', from: 5, answer: 1 },
-      { p: 5, text: 'Camilo se quedó mirando a |su papá| mientras contaba |los billetes|. Después recogió |el folleto de la máquina|, |lo| dobló en cuatro', from: 7, answer: 5 },
-    ] }, '«Ella» es la señora Inés: es quien no tiene que pedir su pan. Y lo que Camilo dobla en cuatro es el folleto de la máquina, que luego bota.',
-      { hint: 'Fíjate en el género y el número: «ella» es una mujer; «lo», algo masculino y singular que se puede doblar.' }),
+    play('subraya-prueba', 'Lo que prueba el gesto', { doc: PAN, rounds: [
+      { claim: 'Don Aurelio está preocupado por las ventas, aunque no lo diga.', p: 4, answer: 2 },
+      { claim: 'Camilo renunció a la idea de comprar la máquina.', p: 5, answer: 1 },
+    ] }, 'Nadie dice «preocupado»: lo muestra la libreta de las ventas, que ya no queda abierta sino guardada en el delantal. Y la renuncia a la máquina está en el folleto que Camilo dobla y bota a la basura.',
+      { hint: 'En un relato, los sentimientos se prueban con gestos. Busca el gesto que encaja con la conclusión.' }),
     play('caso-nuevo', 'Gestos que hablan', { doc: PAN, principle: 'Las personas muestran lo que sienten más por lo que hacen que por lo que dicen.', cards: [
       ['Una vecina que, sin decir nada, le lleva sopa todos los días a un enfermo.', true],
       ['Un estudiante que guarda en un cajón el boletín de notas para que nadie lo vea.', true],
@@ -84,14 +84,20 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 3, before: 'la vio devolver uno porque estaba ', word: 'pálido', after: '.', options: ['poco tostado', 'enfermo', 'frío', 'duro como una piedra'], answer: 0 },
     ] }, 'Amasar «escuchando» es estar atento a cómo responde la masa. Y un pan pálido está poco tostado: por eso don Aurelio le guarda el más tostado. «Enfermo» es el sentido más común de la palabra, pero no el de esta frase.',
       { hint: 'Pregúntate de qué se habla en cada frase. Un pan no puede estar enfermo.' }),
-    play('donde-buscar', 'Vuelve a la escena', { doc: PAN, cards: [
-      ['¿A qué hora llega don Aurelio?', [1]], ['¿Qué ha visto Camilo en internet?', [2]], ['¿Qué pan le guardan a la señora Inés?', [3]],
-      ['¿Qué cambió con el supermercado?', [4]], ['¿Qué hizo Camilo con el folleto?', [5]],
-    ] }, 'El relato sigue una mañana: la llegada (1), el amasado (2), los clientes (3), la amenaza del supermercado (4) y la decisión de Camilo (5).',
-      { hint: 'Piensa en qué momento de la mañana ocurre cada cosa.' }),
-    play('mapa-del-texto', 'Cómo avanza el relato', { doc: PAN, labels: ['presenta a padre e hijo y su rutina', 'contrasta dos maneras de trabajar', 'muestra la relación con los clientes', 'cuenta la amenaza del supermercado', 'narra la decisión de Camilo', 'narra cómo don Aurelio compra la máquina de amasar'], key: [0, 1, 2, 3, 4] },
-      'El relato prepara el final: dos maneras de trabajar (párrafo 2) y una amenaza (párrafo 4) hacen que el gesto de Camilo en el párrafo 5 tenga peso. Camilo no compra la máquina: tira el folleto a la basura.',
-      { hint: 'El párrafo 2 tiene un «en cambio». ¿Qué se opone allí?' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: PAN, q: '¿Por qué Camilo bota el folleto de la máquina al final?', options: [
+      ['Porque la máquina era demasiado cara para la panadería.', 3],
+      ['Porque al ver a su papá contar los billetes entendió que la panadería pasa por un mal momento.', 0],
+      ['Porque decidió que nunca más en su vida va a usar una máquina.', 1],
+      ['Porque ya no le interesa trabajar en la panadería.', 2],
+    ] }, 'B se apoya en lo que pasa: Camilo mira a su papá contar los billetes, bota el folleto y promete llegar a las tres. A no está en el texto (nadie habla del precio); C dice de más, porque habla de toda su vida; y D dice lo contrario de «Mañana llego a las tres». Sobra el sello «Mezcla datos».',
+      { hint: 'Para cada opción pregúntate: ¿el texto lo dice, dice algo más pequeño, dice lo opuesto o no habla de eso?' }),
+    play('cadena-causas', 'Lo que trajo el supermercado', { doc: PAN, chain: [
+      'Abre un supermercado con pan más barato a tres cuadras.',
+      'Don Aurelio hornea dos bandejas menos cada mañana.',
+      'La libreta de las ventas pasa del mostrador al bolsillo del delantal.',
+    ], extra: ['Camilo deja el folleto de la máquina sobre el mostrador.', 'Don Aurelio le guarda el pan más tostado a la señora Inés.'] },
+      'El párrafo 4 encadena el supermercado, las bandejas de menos y la libreta que ya no se deja a la vista. El folleto lo dejaba Camilo desde antes, y el pan de la señora Inés es una costumbre que no tiene que ver con el supermercado.',
+      { hint: 'Empieza por «Hace dos meses» y sigue lo que cambió «desde entonces».' }),
   ]);
 
   // ---------------- Lección 2 · Presupuestos ----------------
@@ -105,11 +111,13 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['La mayoría de quienes viven en la loma tienen bicicleta.', 2],
     ] }, 'Los once kilómetros están escritos. Lo demás el texto lo da por sentado: lo presuponen palabras como «ya no tienen que» (antes tenían que), «dejó de aparecer» (antes aparecía) y «como lo hacían sus hermanos mayores» (llevan años cruzando así). El texto dice que nadie canceló el puente y no dice cuántos tienen bicicleta.',
       { hint: 'Busca palabras como «ya no», «dejó de», «vuelve a», «todavía». Cada una da por hecho algo que pasó antes.' }),
-    play('palabra-a-la-medida', 'Palabras que cargan pasado', { doc: CICLO, rounds: [
-      { p: 2, before: 'los que ', word: 'todavía', after: ' suben a pie', options: ['aún hoy', 'nunca', 'a veces', 'ya no'], answer: 0 },
-      { p: 3, before: 'el parque de la quebrada ', word: 'sigue', after: ' esperando la suya desde 2015', options: ['continúa', 'empieza', 'deja de', 'vuelve a'], answer: 0 },
-    ] }, '«Todavía» dice que siguen subiendo a pie, como antes. «Sigue esperando» presupone que la espera empezó hace tiempo, en 2015, y no ha terminado.',
-      { hint: 'Las dos palabras hablan de algo que empezó antes y no ha terminado. ¿Cuál opción conserva esa idea?' }),
+    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: CICLO, ask: 'Según el texto, todas estas obras quedaron a medias o sin hacer, EXCEPTO:', cards: [
+      ['El tramo de la ciclorruta en la loma de San Antonio', [2, 3]],
+      ['El parque de la quebrada', [3]],
+      ['El puente peatonal del colegio', [3]],
+      ['La ampliación de la avenida para los buses', null],
+    ] }, 'El tramo de la loma está en los párrafos 2 y 3; el parque de la quebrada y el puente del colegio, en el 3. Ninguna ampliación de la avenida aparece en el texto.',
+      { hint: 'Lleva cada obra al párrafo que la nombra. La que no tenga dónde ir es la respuesta.' }),
     play('quien-lo-dice', 'Presupuestos sin palabra pista', { doc: CICLO, ask: 'El autor da por sentadas todas estas ideas. Lleva cada una a lo que la delata en el texto.', voices: ['Una palabra de la lista: «ya no», «dejó de», «todavía», «otra vez»', 'Otra cosa: una comparación, un «sí» que insiste o un verbo como «saber»'], cards: [
       ['Antes, los ciclistas tenían que disputarles el carril a los buses.', 0],
       ['El puente del colegio aparecía antes en los presupuestos.', 0],
@@ -126,17 +134,18 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['El tramo plano está bien iluminado.', null],
     ] }, 'Las tres primeras son razones del autor para no esperar. Si casi nadie fuera a usar la vía, la urgencia se cae. La iluminación del tramo plano no dice nada sobre la loma.',
       { hint: 'Si cada oración fuera cierta, ¿le daría más razón o menos razón a quien pide la obra ya?' }),
-    play('termometro-tono', 'El tono de la columna', { doc: CICLO, rounds: [
-      { frag: 'Es una buena noticia, y vale la pena decirlo antes de cualquier queja.', scale: ['equilibrado', 'furioso', 'burlón', 'triste'], answer: 0 },
-      { frag: 'Ojalá esta vez la segunda etapa no tenga que esperar a otra alcaldía.', scale: ['desconfiado', 'eufórico', 'indiferente', 'burlón'], answer: 0 },
-    ] }, 'El autor reconoce lo bueno antes de criticar: es equilibrado. Y «ojalá esta vez» deja ver que desconfía, porque antes no se cumplió.',
-      { hint: 'Fíjate en «esta vez»: ¿qué da por hecho sobre las veces anteriores?' }),
-    play('conector-bisagra', 'Bisagras de la columna', { doc: CICLO, rounds: [
-      { a: 'La ciclorruta es una buena noticia.', b: 'las quejas también hay que decirlas.', options: ['Pero', 'Por eso,', 'Es decir,', 'Además,'], answer: 0 },
-      { a: 'La gente de las lomas usa menos la bicicleta', b: 'nadie le ha construido por dónde subir con ella.', options: ['porque', 'aunque', 'en cambio,', 'por ejemplo,'], answer: 0 },
-      { a: 'La ciudad sí puede hacer bien una obra cuando decide hacerla.', b: 'falta que decida hacerla completa.', options: ['Sin embargo,', 'Por ejemplo,', 'Porque', 'O sea,'], answer: 0 },
-    ] }, 'Lo bueno se opone a las quejas (contraste); la falta de vía explica el poco uso (causa); y el logro tiene un límite (contraste).',
-      { hint: 'Pregúntate si la segunda idea se opone a la primera o la explica.' }),
+    play('subraya-prueba', 'La prueba en la columna', { doc: CICLO, rounds: [
+      { claim: 'El autor duda de que la segunda etapa se haga pronto.', p: 3, answer: 1 },
+      { claim: 'Una vía nueva puede crear ciclistas donde antes no los había.', p: 4, answer: 3 },
+    ] }, 'La duda está en «esta ciudad ya sabe lo que significa una segunda etapa», seguida del parque y del puente que nunca llegaron. Y que la vía crea ciclistas lo prueba el caso de los barrios planos: no había ciclistas hasta que tuvieron por dónde andar.',
+      { hint: 'Busca la oración que trae un antecedente o un caso que ya pasó: eso es lo que sostiene la conclusión.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: CICLO, q: 'Según el autor, ¿por qué la gente de las lomas usa poco la bicicleta?', options: [
+      ['Porque nadie le ha construido una vía por donde subir con ella.', 0],
+      ['Porque las bicicletas le cuestan medio día de jornal.', 4],
+      ['Porque en toda la ciudad no se ha construido ninguna ciclorruta.', 1],
+      ['Porque a la gente de las lomas no le interesa la bicicleta.', 2],
+    ] }, 'A es lo que dice el párrafo 4. B mezcla datos: el medio día de jornal es lo que cuesta el bus, no la bicicleta. C dice de más, porque la ciudad sí tiene once kilómetros nuevos. Y D es justo lo que el autor niega con «Tampoco es cierto». Sobra el sello «El texto no lo dice».',
+      { hint: 'Revisa cada opción contra el párrafo 4 y fíjate de quién es cada dato: del bus, de la bicicleta o de los funcionarios.' }),
     play('resume-parrafo', 'La idea de cada párrafo', { doc: CICLO, paras: [2, 3, 4], options: [
       'La ciclorruta se detiene justo donde más falta hace.',
       'Las segundas etapas de la ciudad suelen quedarse esperando.',
@@ -149,9 +158,13 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 3 · Causa y efecto ----------------
   setLesson('pu-in-3', [
-    play('mapa-del-texto', 'De las causas a los efectos', { doc: PUEBLO, labels: ['muestra el efecto: casas vacías', 'cuenta la primera causa', 'explica una cadena que se alimenta sola', 'descarta una causa equivocada', 'presenta una posible solución y sus límites', 'da cifras del turismo'], key: [0, 1, 2, 3, 4] },
-      'El reportaje empieza por el efecto (las casas con candado), va a la causa (la leche), muestra el círculo de la escuela, descarta la carretera y termina con el subsidio. Del turismo solo se dice que llegó; no hay cifras.',
-      { hint: 'El texto no sigue el orden del tiempo: empieza por lo que se ve hoy y luego busca por qué.' }),
+    play('cadena-causas', 'Por qué se fueron', { doc: PUEBLO, chain: [
+      'El precio de la leche cae y varias familias venden sus vacas.',
+      'Los jóvenes, que trabajaban en las fincas, se quedan sin empleo.',
+      'Muchos jóvenes se van a la ciudad a estudiar o a trabajar.',
+    ], extra: ['Se termina la carretera pavimentada.', 'Llegan los primeros turistas.'] },
+      'Según el párrafo 2, la caída de la leche dejó sin trabajo a los jóvenes y por eso se fueron. El autor discute, en el párrafo 4, que la carretera los haya expulsado: solo hizo más corto el viaje. Y los turistas llegaron mucho después, gracias a la carretera.',
+      { hint: 'El texto separa la causa de fondo de lo que solo coincidió en el tiempo. Sigue el párrafo que empieza «La historia empezó a cambiar».' }),
     play('lupa-evidencia', 'Causas dichas y causas deducidas', { doc: PUEBLO, cards: [
       ['La escuela cerró porque quedaban pocos niños.', 0],
       ['La caída del precio de la leche dejó a los jóvenes con menos trabajo.', 0],
@@ -175,10 +188,16 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { a: 'La escuela cerró en 2019', b: 'quedaban seis niños.', options: ['porque', 'así que', 'aunque', 'sin embargo,'], answer: 0 },
     ] }, 'La venta de las vacas produce la falta de trabajo (consecuencia). La creencia sobre la carretera se desmiente (contraste). Y los pocos niños explican el cierre (causa).',
       { hint: 'Mira en qué orden van la causa y el efecto: a veces la causa va primero y a veces después.' }),
-    play('hilo-referente', '¿Con quiénes llegaron los hostales?', { doc: PUEBLO, rounds: [
-      { p: 4, text: 'Pero |la carretera| no expulsó a nadie: |los que se iban| ya tenían razones para irse, y lo único que cambió fue que |el viaje| se hizo más corto. De hecho, |la misma carretera| trajo el año pasado a |los primeros turistas|, y con |ellos|', from: 11, answer: 9 },
-    ] }, 'Con los turistas llegaron los hostales y la tienda de quesos. «Los que se iban» también es plural, pero ellos se fueron: no trajeron nada.',
-      { hint: 'Busca un grupo de personas, en plural, que pueda traer negocios a un pueblo.' }),
+    play('resumen-esencial', 'El resumen en cuatro renglones', { doc: PUEBLO, ideas: [
+      ['El pueblo se ha ido quedando sin gente.', true],
+      ['La caída de la leche dejó sin trabajo a los jóvenes, que se fueron.', true],
+      ['La falta de niños y el cierre de la escuela se alimentan entre sí.', true],
+      ['Para que la gente vuelva no basta con un subsidio.', true],
+      ['Tres de cada diez casas de la calle principal tienen candado.', false],
+      ['La carretera se terminó de pavimentar en 2010.', false],
+      ['Dos jóvenes han preguntado por el subsidio de la alcaldía.', false],
+    ] }, 'Las cuatro ideas siguen el texto: el pueblo vacío, la causa de fondo, el círculo de la escuela y lo que haría falta para volver. Las casas con candado, el año de la carretera y los dos jóvenes son datos que ilustran esas ideas.',
+      { hint: 'Si una frase trae una cifra o un año de un solo párrafo, probablemente es un detalle.' }),
     play('balanza-argumento', '¿Culpa de la carretera?', { doc: PUEBLO, thesis: 'La carretera no fue la causa de que el pueblo se vaciara.', cards: [
       ['Los que se iban ya tenían razones para irse.', 0],
       ['La gente empezó a irse antes de que se terminara la carretera.', 0],
@@ -187,15 +206,20 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['La escuela de La Esperanza cerró en 2019.', null],
     ] }, 'Que ya hubiera razones y que la salida empezara antes apoyan la tesis. Si nadie se hubiera ido antes de 2010, o si sin carretera nadie se fuera, la carretera sí parecería la causa. El cierre de la escuela no dice nada sobre la carretera.',
       { hint: 'Para debilitar «no fue la causa», hace falta algo que relacione la salida de la gente con la carretera.' }),
-    play('donde-buscar', 'Cada causa en su párrafo', { doc: PUEBLO, cards: [
-      ['¿Cuántas casas tienen candado?', [1]], ['¿Qué pasó con el precio de la leche?', [2]], ['¿Por qué cerró la escuela?', [3]],
-      ['¿Cuándo se terminó la carretera?', [4]], ['¿Qué ofrece la alcaldía?', [5]],
-    ] }, 'Las casas (1), la leche (2), la escuela (3), la carretera (4) y el subsidio (5): cada párrafo trata una pieza de la explicación.',
-      { hint: 'Ubica la palabra clave de cada pregunta: candado, leche, escuela, carretera, alcaldía.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: PUEBLO, q: 'Según el texto, ¿qué papel tuvo la carretera pavimentada en la salida de la gente?', options: [
+      ['Fue la causa principal de que el pueblo se vaciara.', 2],
+      ['Atrajo a los turistas que compraron las casas con candado.', 4],
+      ['Ninguno de fondo: los que se iban ya tenían razones y solo se acortó el viaje.', 0],
+      ['Cambió por completo la economía del pueblo.', 1],
+    ] }, 'C es lo que dice el párrafo 4. A dice lo contrario: el autor niega que la carretera expulsara a alguien. B mezcla dos datos ciertos (los turistas y las casas con candado) que el texto nunca une. D dice de más: la carretera trajo dos hostales y una tienda de quesos, no un cambio total. Sobra el sello «El texto no lo dice».',
+      { hint: 'Fíjate en la oración que empieza «Pero la carretera no expulsó a nadie» y compara cada opción con ella.' }),
   ]);
 
   // ---------------- Lección 4 · Actitudes y motivos ----------------
   setLesson('pu-in-4', [
+    play('ordena-parrafos', 'Arma el relato otra vez', { doc: MAQUINA },
+      'El relato abre en el presente con la máquina; el 2 cuenta los treinta años de costura de la mamá; «Yo nunca quise aprender» responde a esa costura, así que va después; «El año pasado» trae el grado y el 5 cierra con la foto de ese grado.',
+      { hint: 'La foto del grado no puede ir antes del grado. Y «nunca quise aprender» responde a algo que ya se contó.' }),
     play('termometro-tono', 'Lo que siente quien escribe', { doc: MAQUINA, rounds: [
       { frag: 'Nadie la usa desde hace seis años, pero todos los domingos alguien le quita el polvo.', scale: ['nostálgico', 'alegre', 'burlón', 'furioso'], answer: 0 },
       { frag: 'Le decía que yo iba a ser abogada y que las abogadas no hacían ojales.', scale: ['desdeñoso', 'agradecido', 'temeroso', 'triste'], answer: 0 },
@@ -222,19 +246,17 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 5, text: 'En |la foto del grado| salgo sonriendo, con |la toga| torcida a la altura del hombro. |La| tengo en la mesa de noche.', from: 5, answer: 1 },
     ] }, 'Lo que está en la mesa de noche es la foto del grado. «La toga» también es femenina, pero lo que se manda arreglar «con un fotógrafo» es una foto.',
       { hint: 'Lee la oración siguiente: habla de arreglar algo con un fotógrafo.' }),
-    play('mapa-del-texto', 'El orden del testimonio', { doc: MAQUINA, labels: ['presenta la máquina y un secreto de familia', 'cuenta el esfuerzo de la madre', 'confiesa su rechazo al oficio', 'narra el día en que usó la máquina', 'cierra con el recuerdo que conserva', 'cuenta cómo la autora aprendió a coser de niña'], key: [0, 1, 2, 3, 4] },
-      'El testimonio va de hoy al pasado y vuelve: la máquina, la madre, el rechazo de la autora, el grado y la foto. La autora no aprendió a coser de niña: «Yo nunca quise aprender».',
-      { hint: 'Busca el giro: el párrafo 3 dice «nunca quise aprender» y el 4 cuenta lo que pasó después.' }),
     play('palabra-a-la-medida', 'Palabras de la casa', { doc: MAQUINA, rounds: [
       { p: 1, before: 'con su ', word: 'forro', after: ' de tela de flores.', options: ['funda', 'cajón', 'pedal', 'dibujo'], answer: 0 },
       { p: 2, before: 'y se reía, pero no ', word: 'paraba', after: '.', options: ['dejaba de coser', 'se enojaba', 'dormía', 'pagaba sus deudas'], answer: 0 },
-    ] }, 'El forro es la funda de tela que cubre la máquina. Y la madre se reía, pero no dejaba de coser: seguía trabajando hasta la madrugada.',
+      { p: 4, before: 'La costura quedó ', word: 'torcida', after: '.', options: ['chueca', 'perfecta', 'rota en dos partes', 'escondida'], answer: 0 },
+    ] }, 'El forro es la funda de tela que cubre la máquina. Y la madre se reía, pero no dejaba de coser: seguía trabajando hasta la madrugada. Y una costura torcida queda chueca, no recta: a la narradora no le importó.',
       { hint: 'En el párrafo 4 la autora «abre» el forro. Y en el 2, lee qué le pedían a la madre que hiciera.' }),
-    play('donde-buscar', 'Vuelve al párrafo', { doc: MAQUINA, cards: [
-      ['¿Dónde está la máquina?', [1]], ['¿Para quién hacía uniformes la madre?', [2]], ['¿Qué quería ser la autora?', [3]],
-      ['¿Qué se le dañó el día del grado?', [4]], ['¿Dónde guarda la foto?', [5]],
-    ] }, 'La máquina hoy (1), la madre (2), la autora joven (3), el grado (4) y la foto (5).',
-      { hint: 'El testimonio sigue a la máquina en el tiempo. Ubica en qué momento cae cada pregunta.' }),
+    play('subraya-prueba', 'Lo que prueba el gesto', { doc: MAQUINA, rounds: [
+      { claim: 'De joven, la narradora despreciaba lo que su mamá hacía por ella.', p: 3, answer: 5 },
+      { claim: 'Al coser la toga, la narradora sintió la presencia de su mamá.', p: 4, answer: 3 },
+    ] }, 'El desprecio se ve en la carpeta bordada que la mamá le hizo y que ella usó un mes y cambió por una de plástico. La presencia de la mamá, en las manos que temblaban «como si ella estuviera mirándome por encima de las gafas».',
+      { hint: 'El relato no nombra los sentimientos: los muestra con un objeto o con un gesto. Busca cuál.' }),
   ]);
 
   // ---------------- Evaluación: formato real, texto nuevo ----------------

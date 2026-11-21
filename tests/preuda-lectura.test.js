@@ -1,7 +1,7 @@
 // Preuniversitario · Comprensión lectora con textos de verdad (spec 2026-11-19-preuda-lectura-textos): en los mundos terminados
 // (PU_LEC_HECHOS) cada lección trabaja un solo texto original de 330 a 560 palabras en 7 juegos distintos de arrastrar, con
 // pista y explicación; las referencias a párrafos existen y las citas están en el texto; la evaluación del mundo va en formato
-// real (pregunta-examen), con dos o más preguntas por lección. Los 16 juegos del kit LEC califican bien.
+// real (pregunta-examen), con dos o más preguntas por lección. Los 21 juegos del kit LEC califican bien.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
@@ -16,7 +16,9 @@ const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), DONE = get(ctx, 'P
 const units = get(ctx, 'COURSES').find(c => c.id === 'preuda').units.filter(u => u.block === 'lectura');
 const NEW = ['anticipa-texto', 'mapa-del-texto', 'resume-parrafo', 'donde-buscar', 'lupa-evidencia', 'intruso-excepto',
   'palabra-a-la-medida', 'hilo-referente', 'conector-bisagra', 'signos-que-hablan', 'quien-lo-dice', 'balanza-argumento',
-  'termometro-tono', 'caso-nuevo', 'puente-dos-textos', 'pregunta-examen'];
+  'termometro-tono', 'caso-nuevo', 'puente-dos-textos', 'pregunta-examen',
+  // Juegos de la variedad (tests/preuda-lectura-variedad.test.js).
+  'ordena-parrafos', 'subraya-prueba', 'resumen-esencial', 'trampa-opcion', 'cadena-causas'];
 const LESSON_GAMES = NEW.filter(g => g !== 'pregunta-examen');
 const words = d => d.paras.join(' ').split(/\s+/).filter(Boolean).length;
 const docsOf = p => p.docs || (p.doc ? [p.doc] : []);
@@ -64,7 +66,7 @@ test('los juegos de fichas: aciertan con la clave, fallan vacíos o con una fich
     assert.equal(g.grade(s, e.params).ok, false, `${l.id} ${e.game} sin una ficha`);
     assert.ok(g.grade(solved(e.game, e.params), e.params).solution.length > 5, `${e.game} sin solución`);
     for (const rr of LEC.rounds(e.game, e.params)) {
-      assert.ok(rr.chips.length >= 2 && rr.zones.length >= 1, `${l.id} ${e.game}`);
+      assert.ok(rr.chips.length >= (e.game === 'subraya-prueba' ? 1 : 2) && rr.zones.length >= 1, `${l.id} ${e.game}`); // el subrayador es una sola ficha
       for (const k of rr.key) for (const z of [].concat(k ?? [])) assert.ok(z >= 0 && z < rr.zones.length, `${l.id} ${e.game}: zona ${z}`);
       assert.ok(rr.key.some(k => k != null), `${l.id} ${e.game}: ninguna ficha va a una zona`);
     }

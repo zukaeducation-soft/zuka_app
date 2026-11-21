@@ -31,6 +31,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 1 · Aplicar a un caso nuevo ----------------
   setLesson('pu-ap-1', [
+    play('ordena-parrafos', 'Arma la columna otra vez', { doc: SENDEROS },
+      'Primero se presenta el sendero de deseo; «Durante décadas» cuenta la respuesta de prohibir; «hacer lo contrario» solo se entiende después de esa respuesta; «La idea va mucho más allá» saca la lección; «Eso no significa» le pone un límite y el 6 cierra con un consejo al lector.',
+      { hint: '«Hacer lo contrario» y «eso no significa» se refieren a algo que ya se contó. Busca qué.' }),
     play('caso-nuevo', 'La idea de los senderos, en otros lugares', { doc: SENDEROS, principle: 'Antes de diseñar o de prohibir, conviene observar lo que la gente ya hace y facilitarlo.', cards: [
       ['Una biblioteca que pone enchufes donde los estudiantes ya se sentaban en el piso a cargar el celular.', true],
       ['Un colegio que, al ver que todos se reúnen en la escalera, pone allí bancas y una mesa.', true],
@@ -50,15 +53,6 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Los urbanistas los llaman «senderos de deseo».', null],
     ] }, 'El fracaso de las prohibiciones y el éxito de pavimentar apoyan la tesis. Las zonas frágiles le ponen un límite, y si pavimentar multiplicara los atajos, la idea perdería fuerza. El nombre de los senderos no pesa en ningún lado.',
       { hint: 'Imagina cada oración como cierta: ¿le da la razón a quien quiere pavimentar, a quien quiere prohibir o a ninguno?' }),
-    play('lupa-evidencia', 'Lo que dice la columna', { doc: SENDEROS, cards: [
-      ['Las prohibiciones casi nunca lograron borrar los atajos.', 0],
-      ['En algunos campus se esperó un año antes de pavimentar.', 0],
-      ['Un letrero no cambia la ruta que la gente considera más útil.', 1],
-      ['El autor desaprueba prohibir sin observar antes.', 1],
-      ['Todos los atajos deben convertirse en caminos.', 2],
-      ['Los senderos de deseo dañan el pasto para siempre.', 2],
-    ] }, 'Las dos primeras están escritas. Que un letrero no cambia la ruta se deduce de que la gente lo ignoraba y el caminito volvía a aparecer; y la postura del autor, de que llama a lo segundo «más barato» y más duradero. El párrafo 5 dice lo contrario de la quinta, y el texto no habla de daños permanentes.',
-      { hint: 'Ojo con «todos»: el párrafo 5 pone un límite a la idea.' }),
     play('resume-parrafo', 'Cada párrafo en una frase', { doc: SENDEROS, paras: [2, 3, 4, 5], options: [
       'Prohibir los atajos casi nunca funcionó.',
       'Observar primero y pavimentar después dio senderos que sí se usan.',
@@ -68,12 +62,13 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       'Los letreros de «No pise el césped» deben quitarse.',
     ], key: [0, 1, 2, 3] }, 'Los cuatro resúmenes recogen la idea de su párrafo. El autor no ataca a los arquitectos ni pide quitar los letreros: dice que prohibir sin observar no funciona.',
       { hint: 'Descarta los resúmenes que dicen más de lo que dice el autor.' }),
-    play('conector-bisagra', 'Las bisagras de la columna', { doc: SENDEROS, rounds: [
-      { a: 'Muchas administraciones pusieron cercas, arbustos y letreros.', b: 'casi nunca funcionaron.', options: ['Sin embargo,', 'Por eso,', 'Es decir,', 'Además,'], answer: 0 },
-      { a: 'Algunos diseñadores decidieron hacer lo contrario.', b: 'dejaban el terreno sembrado de pasto durante el primer año.', options: ['Por ejemplo,', 'Sin embargo,', 'Por lo tanto,', 'Aunque'], answer: 0 },
-      { a: 'Hay senderos que cruzan zonas frágiles.', b: 'ahí sí hace falta proteger el terreno.', options: ['Por eso,', 'Aunque', 'Es decir,', 'En cambio,'], answer: 0 },
-    ] }, 'El esfuerzo de prohibir choca con su fracaso (contraste). Lo del campus es un caso de «hacer lo contrario» (ejemplo). Y la fragilidad del terreno es la razón para protegerlo (consecuencia).',
-      { hint: 'Pregúntate si la segunda idea se opone a la primera, la ilustra con un caso o resulta de ella.' }),
+    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: SENDEROS, ask: 'Según el texto, las administraciones intentaron frenar los senderos de deseo con todo lo siguiente, EXCEPTO:', cards: [
+      ['Poner una cerca', [2]],
+      ['Sembrar arbustos espinosos', [2]],
+      ['Clavar un letrero de «No pise el césped»', [2]],
+      ['Multar a quien pisara el pasto', null],
+    ] }, 'La cerca, los arbustos y el letrero están en el párrafo 2. Nadie habla de multas: suenan a algo que una administración haría, pero el texto no lo dice.',
+      { hint: 'Revisa cada opción en el párrafo de las respuestas que fracasaron. La que no está es la respuesta.' }),
     play('signos-que-hablan', 'Lo que hacen los signos', { doc: SENDEROS, rounds: [
       { p: 1, text: 'Los urbanistas los llaman |«|senderos de deseo».', options: ['marca el nombre técnico que se presenta', 'cita a una persona con nombre propio', 'marca ironía', 'abre una pregunta'], answer: 0 },
       { p: 6, text: 'Mírelo como un mensaje|:| alguien, muchas veces,', options: ['anuncia en qué consiste el mensaje', 'abre una lista', 'cierra una cita', 'marca un cambio de tema'], answer: 0 },
@@ -83,13 +78,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 2 · Analogías ----------------
   setLesson('pu-ap-2', [
-    play('quien-lo-dice', 'Cada parte en su papel', { doc: DEFENSA, ask: 'Lleva cada parte del cuerpo al papel que cumple en la ciudad de la comparación.', voices: ['La muralla', 'Los guardias', 'Las llaves', 'El archivo de retratos'], cards: [
-      ['La piel y las mucosas', 0],
-      ['Glóbulos blancos que patrullan', 1],
-      ['Los anticuerpos', 2],
-      ['Las células de memoria', 3],
-    ] }, 'La piel cierra el paso como una muralla; los glóbulos blancos patrullan como guardias; los anticuerpos encajan en el invasor como llaves; y las células de memoria guardan a los enemigos como un archivo de retratos.',
-      { hint: 'Busca en el texto el «como» de cada comparación.' }),
+    play('ordena-parrafos', 'Arma el artículo otra vez', { doc: DEFENSA },
+      'La comparación se presenta en el 1 y las defensas van de afuera hacia adentro y de la más rápida a la más lenta: «La primera defensa», «Detrás de la muralla», «Si la invasión continúa», «Lo más asombroso viene después». El 6 marca los límites de la comparación.',
+      { hint: 'Fíjate en las palabras de orden: «primera», «detrás», «si continúa», «después».' }),
     play('caso-nuevo', '¿Es la misma relación?', { doc: DEFENSA, principle: 'Una analogía funciona cuando la relación entre A y B es la misma que entre C y D.', ask: '¿Cuáles analogías son correctas según el texto?', cards: [
       ['Piel es a cuerpo como muralla es a ciudad.', true],
       ['Anticuerpo es a invasor como llave es a cerradura.', true],
@@ -98,29 +89,34 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Glóbulo blanco es a microbio como muralla es a ladrón.', false],
     ] }, 'Las tres primeras conservan la relación del texto (barrera, encaje, memoria). La herida es una brecha en la muralla, no un guardia; y el glóbulo blanco ataca al microbio, mientras que la muralla no ataca al ladrón: solo le cierra el paso. Las parejas se parecen, pero la relación es otra.',
       { hint: 'Di en voz alta la relación de la primera pareja y prueba si la misma frase sirve para la segunda.' }),
-    play('palabra-a-la-medida', 'Palabras del artículo', { doc: DEFENSA, rounds: [
-      { p: 1, before: 'Por eso muchos profesores ', word: 'recurren', after: ' a una comparación', options: ['acuden', 'renuncian', 'se oponen', 'vuelven a correr'], answer: 0 },
-      { p: 2, before: 'y por ahí pueden ', word: 'colarse', after: ' los invasores', options: ['entrar sin permiso', 'filtrarse como el café', 'salir', 'esconderse'], answer: 0 },
-    ] }, 'Recurrir es acudir a algo para resolver un problema. Y los invasores se cuelan: entran sin permiso por la brecha; «colar» el café es otro sentido de la palabra.',
-      { hint: 'Lee la frase completa: ¿qué hacen los invasores cuando encuentran una brecha en la muralla?' }),
-    play('lupa-evidencia', 'Lo que dice el artículo', { doc: DEFENSA, cards: [
-      ['La piel no distingue entre unos microbios y otros.', 0],
-      ['Los anticuerpos tardan días en organizarse.', 0],
-      ['El cuerpo se defiende mejor de un microbio que ya enfrentó.', 1],
-      ['La hinchazón de una herida puede ser una señal de defensa.', 0],
-      ['Una persona vacunada se defiende más rápido que una que nunca ha visto el microbio.', 1],
-      ['Los glóbulos blancos atacan solo a los microbios que ya conocen.', 2],
-      ['Todas las infecciones entran por heridas.', 2],
-    ] }, 'Las tres primeras están escritas: la hinchazón es «la huella de esa pelea». La respuesta más rápida ante el mismo microbio permite inferir que el cuerpo se defiende mejor, y que una persona vacunada responde más rápido. Los glóbulos blancos atacan lo que no reconocen como propio, no lo que ya conocen, y las mucosas también son una puerta.',
-      { hint: 'Compara cada afirmación con las palabras del texto. ¿Atacan lo conocido o lo que no reconocen?' }),
+    play('cadena-causas', 'Lo que pasa en una herida', { doc: DEFENSA, chain: [
+      'Una herida abre una brecha en la piel.',
+      'Los microbios se cuelan por la brecha.',
+      'Los glóbulos blancos atacan y la zona se enrojece y se hincha.',
+    ], extra: ['El cuerpo fabrica los anticuerpos en pocos minutos.', 'La vacuna le muestra al cuerpo el retrato de un enemigo.'] },
+      'Los párrafos 2 y 3 forman la cadena: la herida abre la muralla, los invasores entran y la pelea de los guardias deja la hinchazón. Los anticuerpos tardan días, no minutos, y la vacuna es otra historia: prepara la memoria antes de la infección.',
+      { hint: 'Empieza en la brecha de la muralla y sigue lo que hacen los invasores y los guardias.' }),
+    play('resumen-esencial', 'El resumen en tres renglones', { doc: DEFENSA, ideas: [
+      ['El cuerpo se defiende como una ciudad con murallas, guardias y un archivo.', true],
+      ['Unas defensas cierran el paso, otras atacan rápido y otras son lentas pero precisas.', true],
+      ['El cuerpo recuerda a los enemigos vencidos, y en eso se apoyan las vacunas.', true],
+      ['La hinchazón alrededor de una herida es la huella de la pelea.', false],
+      ['Un anticuerpo encaja en el invasor como una llave en su cerradura.', false],
+      ['La piel no distingue entre un ladrón y un comerciante.', false],
+    ] }, 'El texto plantea la comparación, recorre los tres tipos de defensa y termina en la memoria y las vacunas. La hinchazón, la llave y el ladrón son imágenes que explican cada defensa, pero no resumen el texto.',
+      { hint: 'Fíjate en la última oración del texto: nombra las tres clases de defensa.' }),
     play('termometro-tono', 'El tono del artículo', { doc: DEFENSA, rounds: [
       { frag: 'Lo más asombroso viene después.', scale: ['admirado', 'aburrido', 'temeroso', 'irónico'], answer: 0 },
       { frag: 'Toda comparación tiene límites, y esta también.', scale: ['prudente', 'eufórico', 'burlón', 'enojado'], answer: 0 },
     ] }, '«Asombroso» deja ver la admiración del autor por la memoria del cuerpo. Y al final, reconoce que su propia comparación no es perfecta: es prudente.',
       { hint: 'Busca la palabra que delata la actitud en cada fragmento.' }),
-    play('mapa-del-texto', 'Cómo se arma la comparación', { doc: DEFENSA, labels: ['presenta la comparación', 'explica la primera barrera', 'explica la defensa rápida', 'explica la defensa precisa', 'explica la memoria y las vacunas', 'señala los límites de la comparación', 'explica cómo se fabrican las vacunas'], key: [0, 1, 2, 3, 4, 5] },
-      'Cada párrafo desarrolla una parte de la ciudad: la comparación, la muralla, los guardias, las llaves, el archivo y, al final, dónde la comparación deja de servir. Las vacunas aparecen en el párrafo 5 solo para explicar la memoria; el texto no dice cómo se fabrican.',
-      { hint: 'Fíjate en la imagen de la ciudad que aparece en cada párrafo: muralla, guardias, llaves, archivo.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: DEFENSA, q: 'Según el texto, ¿en qué falla la comparación entre el cuerpo y una ciudad?', options: [
+      ['En que una ciudad antigua no tenía murallas que cerraran el paso.', 2],
+      ['En que las ciudades antiguas no guardaban retratos de sus enemigos.', 3],
+      ['En que la comparación no sirve para explicar nada del cuerpo.', 1],
+      ['En que una ciudad no fabrica sus guardias según el enemigo que llega, y el cuerpo sí.', 0],
+    ] }, 'D es el límite que señala el párrafo 6. A dice lo contrario de la comparación, que se apoya justo en las murallas; B habla de algo que el texto no dice sobre las ciudades reales; y C dice de más, porque el autor afirma que la imagen ayuda a recordar lo esencial. Sobra el sello «Mezcla datos».',
+      { hint: 'Busca el párrafo que empieza «Toda comparación tiene límites» y compara cada opción con él.' }),
     play('conector-bisagra', 'Las bisagras de la explicación', { doc: DEFENSA, rounds: [
       { a: 'Cada anticuerpo sirve para un solo tipo de enemigo.', b: 'esta defensa tarda días en organizarse.', options: ['Por eso,', 'Aunque', 'En cambio,', 'Por ejemplo,'], answer: 0 },
       { a: 'Si el mismo microbio vuelve, la llave ya existe.', b: 'la respuesta es mucho más rápida.', options: ['Por lo tanto,', 'Sin embargo,', 'Aunque', 'En cambio,'], answer: 0 },

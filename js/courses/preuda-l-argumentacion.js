@@ -45,6 +45,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 1 · Tesis y argumentos ----------------
   setLesson('pu-ag-1', [
+    play('ordena-parrafos', 'Arma el argumento otra vez', { doc: FINANZAS },
+      'La tesis va primero. Los argumentos se anuncian en orden («El primer argumento», «El segundo», «El tercero»); después vienen las objeciones («Se dirá que…» y «Hay quien piensa…»), y la frase final vuelve a la tesis.',
+      { hint: 'Hay párrafos que se numeran solos. Lo que responde a una objeción va después de los argumentos.' }),
     play('mapa-del-texto', 'El esqueleto del argumento', { doc: FINANZAS, labels: ['presenta la tesis', 'argumenta con datos', 'argumenta con un ejemplo', 'argumenta con una analogía', 'responde una objeción anunciada', 'concede un punto y lo relativiza', 'cierra reforzando la tesis', 'cita a una autoridad en economía'], key: [0, 1, 2, 3, 4, 5, 6] },
       'La tesis va en el párrafo 1 («Sostengo que…»). Los párrafos 2, 3 y 4 anuncian sus argumentos: datos, experiencia y comparación. «Se dirá que…» abre una objeción; el párrafo 6 trae otra sin anunciarla («Hay quien piensa»), la concede en parte («sin duda») y le quita peso sin decir «pero». La última frase vuelve a la tesis. La encuesta es un dato, no la voz de un experto.',
       { hint: 'Busca «Sostengo», «El primer argumento», «El segundo», «El tercero» y «Se dirá». En el párrafo 6 no hay «pero»: pregúntate qué acepta el autor y qué no.' }),
@@ -67,14 +70,6 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['El área del trapecio se enseña en el colegio.', null],
     ] }, 'La encuesta muestra la necesidad y Pereira muestra que enseñar funciona. Si los cursos no cambiaran nada, la propuesta perdería su razón. El trapecio solo aparece como contraste en la introducción.',
       { hint: 'Para debilitar la tesis, hace falta mostrar que enseñar finanzas no sirve o no es necesario.' }),
-    play('lupa-evidencia', 'Lo que dice el autor', { doc: FINANZAS, cards: [
-      ['El autor propone enseñar finanzas desde noveno grado.', 0],
-      ['En Pereira se enseñó con ejemplos de la vida real.', 0],
-      ['Quienes prestan dinero se aprovechan de que muchos no saben hacer las cuentas.', 1],
-      ['El autor propone crear una materia nueva de finanzas.', 2],
-      ['Todos los adultos colombianos tienen deudas en tarjetas.', 2],
-    ] }, 'Las dos primeras están escritas. Lo de los prestamistas se deduce de la última frase: los jóvenes quedan «a merced de quien sí sabe hacer las cuentas». El autor dice que no hace falta una materia nueva, y la encuesta habla de «más de la mitad», no de todos.',
-      { hint: 'Revisa el párrafo 5: ¿qué dice el autor sobre una materia nueva?' }),
     play('conector-bisagra', 'Cómo se encadenan los argumentos', { doc: FINANZAS, rounds: [
       { a: 'Más de la mitad de los adultos no sabe calcular cuánto pagará por un crédito.', b: 'muchas familias acumulan deudas sin entender lo que firmaron.', options: ['Por eso,', 'Aunque', 'En cambio,', 'Es decir,'], answer: 0 },
       { a: 'Nadie entrega las llaves de un carro sin enseñar las señales de tránsito.', b: 'a los dieciocho años entregamos una cédula para firmar créditos sin explicar nada.', options: ['Sin embargo,', 'Por lo tanto,', 'Además,', 'Por ejemplo,'], answer: 0 },
@@ -82,12 +77,13 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { a: 'Algunas familias, sin duda, enseñan bien a manejar el dinero.', b: 'las filas de diciembre en los almacenes que venden a crédito muestran cómo les va a las demás.', options: ['Sin embargo,', 'Por eso,', 'Por ejemplo,', 'Es decir,'], answer: 0 },
     ] }, 'No saber calcular lleva a endeudarse sin entender (consecuencia). La analogía funciona por contraste: con el carro sí enseñamos, con la cédula no. La objeción del currículo se acepta para luego responderla (contraste). Y en el párrafo 6 el texto no escribe ningún conector, pero la relación es la misma: concede y luego gira.',
       { hint: 'En una objeción respondida, el autor reconoce algo y luego gira. A veces el giro no está escrito: pon el conector que se sobreentiende.' }),
-    play('termometro-tono', 'Responder sin decir «pero»', { doc: FINANZAS, rounds: [
-      { frag: 'Las filas que se forman cada diciembre en los almacenes que venden a crédito cuentan cómo les va a las demás.', scale: ['irónico', 'admirado', 'neutral', 'alegre'], answer: 0 },
-      { frag: 'Algunas familias, sin duda, lo enseñan bien, y sus hijos llegan a adultos sabiendo ahorrar y desconfiando de las cuotas fáciles.', scale: ['concesivo', 'burlón', 'alarmado', 'indignado'], answer: 0 },
-      { frag: 'Un país que enseña a sumar, pero no a endeudarse con cuidado, deja a sus jóvenes a merced de quien sí sabe hacer las cuentas.', scale: ['crítico', 'festivo', 'indiferente', 'nostálgico'], answer: 0 },
-    ] }, 'El autor no dice que la mayoría de las familias fracasa: deja que la imagen de las filas lo diga. Esa frase, en apariencia neutral, es una respuesta irónica. Antes, «sin duda» es concesivo: le da la razón a la objeción en una parte. Y el cierre critica a un país que no enseña lo que necesitan sus jóvenes.',
-      { hint: 'Pregúntate si la frase de las filas solo informa o si responde algo. Concesivo es el tono de quien le da la razón al otro en una parte.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: FINANZAS, q: 'En el párrafo 6, ¿qué hace el autor con la idea de que de plata se aprende en la casa?', options: [
+      ['La concede en parte y luego muestra, con un hecho, que no alcanza para la mayoría.', 0],
+      ['La acepta del todo: las familias enseñan bien a manejar la plata.', 2],
+      ['La refuta con una encuesta nacional sobre los créditos.', 4],
+      ['Dice que ninguna familia sabe enseñar a ahorrar.', 1],
+    ] }, 'A describe el párrafo 6: «sin duda» concede que algunas familias enseñan bien, y las filas de diciembre muestran que a las demás no les va así. B dice lo contrario de esa respuesta; C mezcla datos, porque la encuesta está en el párrafo 2 y sirve para otra cosa; D dice de más, porque el autor reconoce que algunas sí enseñan. Sobra el sello «El texto no lo dice».',
+      { hint: 'Una concesión acepta una parte y responde a la otra. Mira qué acepta el autor con «sin duda» y qué responde después.' }),
     play('resume-parrafo', 'Cada argumento en una frase', { doc: FINANZAS, paras: [2, 3, 4, 5], options: [
       'Los datos muestran que muchos adultos no entienden sus créditos.',
       'Una experiencia en un colegio muestra que enseñar finanzas funciona.',
@@ -115,14 +111,11 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { frag: 'Por eso mismo me indigna que alguien haga negocio con esa desesperación.', scale: ['indignado', 'burlón', 'indiferente', 'eufórico'], answer: 0 },
     ] }, '«Curiosamente» no expresa una sorpresa de verdad: señala, con sospecha, que los testigos felices también ganan vendiendo el curso. «Por supuesto» se burla de lo previsible: todos esos videos tienen música y reloj. Llamar «brillante» a un método que se agota es ironía. Con quienes caen, el autor es comprensivo; con quien vende el curso, indignado. Un texto puede cambiar de tono según de quién hable.',
       { hint: 'Los adverbios también tienen tono: quita «curiosamente» o «por supuesto» de la frase y mira qué se pierde. El dato sigue; lo que desaparece es la actitud del autor.' }),
-    play('lupa-evidencia', 'Lo que dice y lo que no', { doc: MILLON, cards: [
-      ['El curso cuesta novecientos noventa mil pesos.', 0],
-      ['El autor cree que el método no puede funcionar para todos.', 1],
-      ['El autor duda de que el muchacho gane lo que dice.', 1],
-      ['El autor desprecia a las personas que compran estos cursos.', 2],
-      ['El muchacho del anuncio es dueño del carro rojo.', 2],
-    ] }, 'El precio está escrito. Si «se acaban las personas», el método no sirve para todos; y la duda sobre lo que gana el muchacho se nota en el carro que «probablemente no es suyo». Dice expresamente que no quiere burlarse de quienes caen, y sobre el carro dice lo contrario: «probablemente no es suyo».',
-      { hint: 'Una ironía no se lee al pie de la letra. Y revisa lo que el autor dice de quienes caen.' }),
+    play('subraya-prueba', 'La prueba de la ironía', { doc: MILLON, rounds: [
+      { claim: 'El autor no cree que el muchacho del video sea rico de verdad.', p: 1, answer: 0 },
+      { claim: 'El método del curso no puede funcionar para todos los que lo compran.', p: 2, answer: 3 },
+    ] }, 'La duda sobre la riqueza está en el carro rojo «que probablemente no es suyo». Y que el método no puede funcionar para todos lo dice la ironía del párrafo 2: una idea «brillante» con un solo inconveniente, que en algún momento se acaban las personas.',
+      { hint: 'La ironía esconde la crítica en un detalle o en un elogio. Busca la oración donde el elogio se vuelve problema.' }),
     play('balanza-argumento', '¿Engaño o negocio?', { doc: MILLON, thesis: 'Los cursos para hacerse rico rápido son un engaño que se aprovecha de la desesperación.', cards: [
       ['El método consiste en vender el mismo curso a otras personas.', 0],
       ['No hay cifras que se puedan revisar, solo capturas y testimonios.', 0],
@@ -131,13 +124,13 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['El autor buscaba una receta de arepas.', null],
     ] }, 'Un método que vive de venderse a sí mismo, sin cifras revisables y con testigos interesados, apoya la tesis. Una auditoría que confirmara las ganancias la debilitaría. La receta de arepas solo sitúa la escena.',
       { hint: 'Pregúntate si cada oración muestra una señal de engaño, una prueba de que no lo es o nada.' }),
-    play('caso-nuevo', 'La prueba del autor, en otros casos', { doc: MILLON, principle: 'Antes de creer una promesa de dinero fácil, hay que averiguar cómo gana dinero quien la hace.', cards: [
-      ['Antes de entrar a una natillera que promete pagar el triple, una señora pregunta de dónde sale ese dinero.', true],
-      ['Un joven revisa quién financia la página que le recomienda un préstamo.', true],
-      ['Un estudiante compara dos computadores por sus características técnicas.', false],
-      ['Una familia ahorra cada mes en una alcancía.', false],
-    ] }, 'La señora y el joven aplican la prueba: averiguan cómo gana quien les promete. Comparar computadores o ahorrar no tiene que ver con creer promesas de dinero fácil.',
-      { hint: 'Busca los casos en que alguien desconfía de una promesa y averigua quién gana con ella.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: MILLON, q: '¿Cuál es la intención principal del autor?', options: [
+      ['Burlarse de las personas que pagan esos cursos.', 2],
+      ['Advertir, con ironía, sobre los cursos que prometen dinero fácil y enseñar a reconocerlos.', 0],
+      ['Contar la historia de una mujer que se hizo rica con el curso.', 4],
+      ['Demostrar que ningún negocio por internet es honesto.', 1],
+    ] }, 'B recoge la ironía y la prueba final del párrafo 5. A dice lo contrario de «No quiero burlarme de quienes caen». C mezcla datos: la mujer existe, pero todavía no ha vendido el primer curso. D dice de más: el autor habla de un tipo de anuncio, no de todos los negocios por internet. Sobra el sello «El texto no lo dice».',
+      { hint: 'La intención está en lo que el autor le pide al lector al final. Revisa cada opción contra el párrafo 4 y el 5.' }),
     play('mapa-del-texto', 'Cómo avanza la ironía', { doc: MILLON, labels: ['presenta el anuncio', 'explica el método con ironía', 'muestra las señales de engaño', 'aclara a quién no critica', 'da un consejo al lector', 'confiesa que él también compró el curso'], key: [0, 1, 2, 3, 4] },
       'Del anuncio al consejo: el autor presenta la promesa, se burla del método, muestra las señales del engaño, aclara que no ataca a las víctimas y termina con una prueba para el lector. El autor no compró el curso: solo vio el video gratuito.',
       { hint: 'El párrafo 4 cambia de tono: empieza con «No quiero burlarme». ¿Qué aclara ahí?' }),
@@ -150,6 +143,12 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 3 · Hechos y opiniones ----------------
   setLesson('pu-ag-3', [
+    play('anticipa-texto', 'Antes de leer', { doc: CERRO, slots: [
+      ['Tema', ['la historia y el presente de una biblioteca de barrio', 'cómo se construye una bodega de cemento', 'los libros más vendidos del año'], 0],
+      ['Propósito', ['celebrar un aniversario contando lo que se ha logrado', 'vender libros usados', 'explicar cómo se presta un libro'], 0],
+      ['Tipo de texto', ['crónica, que cuenta y también comenta', 'receta, con pasos', 'poema, en versos'], 0],
+    ] }, 'El título habla de «veinte años» de una biblioteca y la ficha dice que es una crónica de aniversario en un periódico comunitario: se espera un texto que cuente su historia y celebre lo que ha hecho por el barrio.',
+      { hint: 'El título trae una cifra y la ficha dice qué clase de texto es. Con eso se adivina el tema y el propósito.' }),
     play('quien-lo-dice', '¿Se puede comprobar?', { doc: CERRO, ask: 'Lleva cada afirmación a «Hecho» si se puede verificar con un registro, una cuenta o una medida, o a «Opinión» si nadie podría comprobarla.', voices: ['Hecho comprobable', 'Opinión'], cards: [
       ['La biblioteca abrió el 12 de agosto de 2005.', 0],
       ['Su colección es rica en historia local: más de ochocientos títulos sobre Bello.', 0],
@@ -167,12 +166,6 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 5, before: 'tenga que ', word: 'mendigar', after: ' lo que a otras se les da', options: ['rogar como un favor', 'robar', 'comprar con su presupuesto', 'prestar'], answer: 0 },
     ] }, '«Rica en» es «que tiene mucho de algo»: ochocientos títulos se pueden contar, así que ahí «rica» describe, no valora (en «el alimento más rico» sí valoraría). «No dar abasto» es no alcanzar para lo que se necesita: faltan sillas y espacio. Y «mendigar» carga una opinión: la biblioteca tiene que pedir como favor lo que debería recibir.',
       { hint: 'Lee lo que sigue a cada expresión: una cifra de títulos; faltan sillas; a otras obras se les da «sin pedirlo». Una misma palabra puede medir en una frase y valorar en otra.' }),
-    play('termometro-tono', 'Datos con tono y datos sin tono', { doc: CERRO, rounds: [
-      { frag: 'el año pasado se prestaron diecinueve mil libros, se dictaron ciento cuarenta talleres', scale: ['informativo', 'apasionado', 'irónico', 'triste'], answer: 0 },
-      { frag: 'Es lamentable que una obra que funciona tan bien tenga que mendigar lo que a otras se les da sin pedirlo.', scale: ['indignado', 'neutral', 'burlón', 'eufórico'], answer: 0 },
-      { frag: 'Ya es hora de que la alcaldía cumpla su palabra.', scale: ['exigente', 'neutral', 'resignado', 'burlón'], answer: 0 },
-    ] }, 'Las cifras se presentan sin adjetivos: el tono es informativo. «Lamentable» y «mendigar», en cambio, dejan ver la indignación del autor. Y «ya es hora de» exige algo sin decir «debería»: es una opinión con tono exigente.',
-      { hint: 'Busca adjetivos o verbos que valoren. Si no hay ninguno, el tono es informativo.' }),
     play('lupa-evidencia', 'Lo que dice la crónica', { doc: CERRO, cards: [
       ['La biblioteca empezó con un solo computador.', 0],
       ['La directora lleva doce años en el cargo.', 0],
@@ -182,22 +175,27 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['La biblioteca recibe el mayor presupuesto del barrio.', 2],
     ] }, 'El computador, la directora y la promesa sin presupuesto están escritos. De mil doscientos a once mil libros es más de nueve veces. La cancha se llena los fines de semana, y el texto dice que la biblioteca tiene que «mendigar».',
       { hint: 'Para la tarjeta del número de libros, haz la cuenta con los dos datos del párrafo 1.' }),
-    play('balanza-argumento', '¿Ampliar ya?', { doc: CERRO, thesis: 'La alcaldía debería financiar ya la ampliación de la biblioteca.', cards: [
-      ['En las tardes no hay sillas suficientes.', 0],
-      ['Cerca de dos mil personas usaron los computadores el año pasado.', 0],
-      ['El techo del segundo piso se filtra.', 0],
-      ['Un estudio muestra que las visitas a la biblioteca vienen bajando desde hace tres años.', 1],
-      ['La casa antes fue una bodega de cemento.', null],
-    ] }, 'La falta de sillas, el uso intenso y la gotera muestran la necesidad. Si las visitas estuvieran bajando, ampliar sería menos urgente. El pasado de la casa no pesa en la decisión.',
-      { hint: 'Los hechos también sirven para argumentar. ¿Cuáles muestran que hace falta más espacio y cuál que no?' }),
-    play('mapa-del-texto', 'Hechos y opiniones en orden', { doc: CERRO, labels: ['da los datos del origen y de hoy', 'valora la biblioteca frente a otras obras', 'presenta cifras de uso', 'recoge la voz de la directora y la opinión del autor', 'señala los problemas actuales', 'cierra con un deseo', 'narra la vida de la directora'], key: [0, 1, 2, 3, 4, 5] },
-      'La crónica alterna hechos (párrafos 1 y 3) y valoraciones (2 y 4), señala los problemas (5) y cierra con un deseo (6). De la directora solo se dice cuánto lleva y qué piensa.',
-      { hint: 'Fíjate en qué párrafos hay cifras y en cuáles hay palabras como «más importante» o «a mi juicio».' }),
-    play('donde-buscar', 'Vuelve al párrafo', { doc: CERRO, cards: [
-      ['¿Cuándo abrió la biblioteca?', [1]], ['¿Con qué otras obras se compara?', [2]], ['¿Cuántos talleres se dictaron?', [3]],
-      ['¿Cuál es, según la directora, el mayor logro?', [4]], ['¿Qué problemas tiene el edificio?', [5]],
-    ] }, 'Origen (1), comparación (2), cifras de uso (3), la directora (4) y los problemas (5).',
-      { hint: 'Ubica la palabra clave de cada pregunta: abrió, otra obra, talleres, directora, edificio.' }),
+    play('resumen-esencial', 'El resumen en tres renglones', { doc: CERRO, ideas: [
+      ['La biblioteca del barrio creció mucho en veinte años.', true],
+      ['Niños y adultos la usan a diario, y ha cambiado vidas en el barrio.', true],
+      ['El edificio ya no da abasto y la alcaldía no ha cumplido la ampliación.', true],
+      ['Empezó con mil doscientos libros donados.', false],
+      ['Guarda más de ochocientos títulos sobre Bello y sus veredas.', false],
+      ['La directora lleva doce años en el cargo.', false],
+    ] }, 'La crónica cuenta cuánto creció la biblioteca, cuánto se usa y qué ha logrado, y el problema del edificio. Los libros donados, los títulos sobre Bello y los años de la directora son datos que apoyan esas ideas.',
+      { hint: 'Un resumen no copia cifras: dice qué muestran. Las ideas esenciales son las que siguen siendo ciertas sin el número.' }),
+    play('subraya-prueba', 'La prueba en la crónica', { doc: CERRO, rounds: [
+      { claim: 'La biblioteca no solo sirve para leer.', p: 3, answer: 0 },
+      { claim: 'La biblioteca formó a personas que hoy enseñan en ella.', p: 4, answer: 1 },
+    ] }, 'Que no solo sirve para leer lo prueban los talleres y los computadores que se usan para trámites, empleo y la universidad. Y lo de formar a quienes hoy enseñan, los niños que llegaban a hacer tareas y vuelven como profesores de los talleres.',
+      { hint: 'Busca la oración que trae el hecho concreto. Una opinión de la autora no prueba nada por sí sola.' }),
+    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: CERRO, ask: 'Según el texto, en la biblioteca se ha hecho todo lo siguiente, EXCEPTO:', cards: [
+      ['Prestar diecinueve mil libros en un año', [3]],
+      ['Dictar ciento cuarenta talleres', [3]],
+      ['Usar los computadores para buscar empleo', [3]],
+      ['Dictar clases de inglés para adultos', null],
+    ] }, 'Los préstamos, los talleres y los computadores están en el párrafo 3. Las clases de inglés no aparecen: que la mitad de los usuarios sean adultos no quiere decir que haya clases para ellos.',
+      { hint: 'Lleva cada opción a su párrafo. Cuidado con la que junta dos cosas que el texto dice por separado.' }),
   ]);
 
   // ---------------- Evaluación: formato real, texto nuevo ----------------

@@ -72,16 +72,22 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Una persona que aprende a nadar y no lo olvida.', false],
     ] }, 'El parque, la biblioteca y el acueducto mantienen su beneficio solo mientras se sostiene un gasto o un esfuerzo. El puente de piedra y saber nadar no dependen de algo que haya que pagar cada año.',
       { hint: 'Pregúntate si el beneficio se pierde cuando deja de pagarse o de hacerse algo periódicamente.' }),
-    play('palabra-a-la-medida', 'Las palabras del párrafo 5', { doc: RIO, rounds: [
-      { p: 5, before: 'Sin embargo, la recuperación es ', word: 'frágil', after: '.', options: ['delicada', 'rápida', 'completa', 'costosa'], answer: 0 },
-      { p: 5, before: 'y no un gasto que se puede ', word: 'aplazar', after: '.', options: ['dejar para después', 'eliminar', 'duplicar', 'discutir en una reunión'], answer: 0 },
-    ] }, 'La recuperación es delicada: bastaría una temporada sin mantenimiento para perderla. Y aplazar es dejar para después, no eliminar.',
-      { hint: 'El resto del párrafo 5 explica el sentido: lee qué pasaría si se descuida la planta.' }),
-    play('donde-buscar', '¿En qué párrafo está?', { doc: RIO, cards: [
-      ['¿Qué pasó en 1998?', [1]], ['¿Cómo se ve hoy el río?', [2]], ['¿Cómo limpia la planta el agua?', [3]],
-      ['¿Qué sintió Ofelia con la sabaleta?', [4]], ['¿Por qué la recuperación está en riesgo?', [5]],
-    ] }, 'Cada pregunta corresponde a una tipología del texto: el hecho de 1998 (narración), el río de hoy (descripción), la planta (explicación), Ofelia (testimonio) y el riesgo (argumentación).',
-      { hint: 'Ubica la palabra clave de cada pregunta: 1998, hoy, planta, sabaleta, presupuesto.' }),
+    play('cadena-causas', 'Por qué volvió la vida al río', { doc: RIO, chain: [
+      'Las aguas de las fincas y del pueblo pasan por una planta de tratamiento.',
+      'El agua recupera el oxígeno que necesitan los peces.',
+      'Los peces vuelven al río, como la sabaleta que vio Ofelia.',
+    ], extra: ['El agua del río queda potable.', 'El presupuesto de la planta se recorta dos veces.'] },
+      'La planta limpia el agua y le devuelve el oxígeno (párrafo 3), y por eso vuelven los peces, como la sabaleta del párrafo 4. El texto aclara que el agua no queda potable, y el recorte del presupuesto es una amenaza para el río, no una parte del cambio.',
+      { hint: 'Lee el párrafo 3 con cuidado: dice lo que logra el proceso y también lo que no logra.' }),
+    play('resumen-esencial', 'El resumen en tres renglones', { doc: RIO, ideas: [
+      ['El río estuvo contaminado durante años.', true],
+      ['Hoy el río está limpio gracias a una planta de tratamiento.', true],
+      ['La recuperación es frágil y depende de que la planta no se descuide.', true],
+      ['Los niños se lanzan desde una roca que llaman «el trampolín».', false],
+      ['Ofelia Zapata lavó ropa en esa orilla durante cuarenta años.', false],
+      ['En la planta, unas bacterias se alimentan de la materia orgánica.', false],
+    ] }, 'El texto pasa por tres momentos: el río muerto de 1998, el río recuperado con su explicación y la advertencia final. El trampolín, los años de Ofelia y las bacterias son ciertos, pero solo dan vida o precisión a esos momentos.',
+      { hint: 'Piensa el texto como un antes, un ahora y un «sin embargo». Un detalle se puede quitar sin que cambie lo que el texto dice.' }),
   ]);
 
   // ---------------- Lección 2 · Géneros del examen ----------------
@@ -106,14 +112,11 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 5, text: '—¿Qué le pediría al público|?| —Que vengan', options: ['cierra la pregunta del entrevistador', 'marca una exclamación de sorpresa', 'cierra una cita', 'anuncia un ejemplo'], answer: 0 },
     ] }, 'La raya de diálogo marca quién toma la palabra. Los dos puntos anuncian en qué consiste esa «otra parte». El signo de interrogación cierra la pregunta del periodista; enseguida empieza la respuesta.',
       { hint: 'Mira qué viene después de cada signo: ¿alguien que habla, una explicación, una respuesta?' }),
-    play('lupa-evidencia', 'Lo que dice el lutier', { doc: LUTIER, cards: [
-      ['El padre de Gil le enseñó el oficio.', 0],
-      ['Gil reconoce que su oficio no es muy rentable.', 0],
-      ['Gil sabe distinguir a los jóvenes que tienen vocación.', 1],
-      ['Gil cree que el sonido depende solo de la madera.', 2],
-      ['Las guitarras de fábrica suenan mal.', 2],
-    ] }, 'El padre y la poca rentabilidad están dichos. Que distingue la vocación se deduce de «yo ya sé que va a volver». Gil dice que también cuenta la relación del músico con el instrumento, y no dice que las de fábrica suenen mal: dice que «la diferencia se oye» y que una guitarra barata «no es un pecado».',
-      { hint: 'Compara cada afirmación con las palabras exactas de Gil. Una afirmación que exagera lo que él dijo no está en el texto.' }),
+    play('subraya-prueba', 'La prueba en la entrevista', { doc: LUTIER, rounds: [
+      { claim: 'Para Humberto, el valor de una guitarra hecha a mano no se puede medir del todo con aparatos.', p: 3, answer: 3 },
+      { claim: 'Según Humberto, el oficio exige mucho tiempo y deja poca plata.', p: 4, answer: 2 },
+    ] }, 'La parte que no se mide está en la oración del músico que toca distinto, y cuida distinto, un instrumento que hizo una persona. El tiempo y la plata del oficio salen de «no da para hacerse rico, y aprender bien toma diez años».',
+      { hint: 'Varias oraciones hablan del mismo tema. Quédate con la que dice justo lo que la conclusión necesita, ni más ni menos.' }),
     play('termometro-tono', 'Cómo habla el lutier', { doc: LUTIER, rounds: [
       { frag: 'A ese no hay que convencerlo: hay que enseñarle.', scale: ['apasionado', 'burlón', 'indiferente', 'amargado'], answer: 0 },
       { frag: 'Una guitarra barata no es un pecado, pero una guitarra sin historia es una oportunidad perdida.', scale: ['reflexivo', 'agresivo', 'burlón', 'técnico'], answer: 0 },
@@ -137,36 +140,42 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 3 · Estructura y testimonio ----------------
   setLesson('pu-tt-3', [
+    play('ordena-parrafos', 'Arma el testimonio otra vez', { doc: ROSALBA },
+      'Es un testimonio en orden de tiempo: la infancia en la finca, los años de esconder que no sabía leer, «Un día» el cuento del nieto, «Esa misma semana» las clases y «Ahora leo». «Esa misma semana» solo puede ir después del día del cuento.',
+      { hint: 'Sigue las marcas de tiempo del comienzo de cada párrafo: «Un día», «Esa misma semana», «Ahora».' }),
     play('mapa-del-texto', 'La estructura del testimonio', { doc: ROSALBA, labels: ['cuenta por qué no estudió', 'describe cómo lo ocultaba', 'narra el hecho que la hizo cambiar', 'cuenta cómo aprendió', 'muestra el resultado', 'presenta datos sobre analfabetismo'], key: [0, 1, 2, 3, 4] },
       'El testimonio avanza en el tiempo: la infancia sin escuela, los años de disimular, la escena con el nieto, las clases y lo que hoy puede hacer. No trae cifras: habla una sola persona de su vida.',
       { hint: 'Un testimonio suele contar un antes, un momento de cambio y un después. Ubica cada parte.' }),
-    play('lupa-evidencia', 'Lo que cuenta Rosalba', { doc: ROSALBA, cards: [
-      ['Rosalba trabajaba desde niña.', 0],
-      ['En la clase había once personas.', 0],
-      ['Rosalba ponía excusas para que no la descubrieran.', 1],
-      ['La profesora era muy estricta.', 2],
-      ['Rosalba aprendió a leer en menos de un mes.', 2],
-    ] }, 'Que trabajaba de niña y que eran once está escrito. Las gafas olvidadas y la «letra pequeña» eran excusas: se deduce. Del carácter de la profesora solo se sabe que no las trató como niñas, y el texto no dice cuánto tardó en aprender.',
-      { hint: 'Una afirmación sobre cuánto tiempo pasó o sobre cómo era alguien necesita respaldo en el texto. Búscalo.' }),
-    play('termometro-tono', 'Lo que siente quien habla', { doc: ROSALBA, rounds: [
-      { frag: '«Abuela, eso no dice ahí». No me dio rabia con él; me dio vergüenza conmigo. Esa noche no pude dormir pensando en todos los cuentos que me había inventado.', scale: ['autocrítico', 'furioso', 'burlón', 'indiferente'], answer: 0 },
-      { frag: 'Ahora leo despacio, pero leo.', scale: ['orgulloso', 'resignado', 'irónico', 'temeroso'], answer: 0 },
-    ] }, 'Rosalba no se enoja con el niño: se juzga a sí misma; por eso es autocrítica (la crítica va hacia uno mismo). Y «despacio, pero leo» dice con orgullo lo que logró.',
-      { hint: 'En un testimonio el tono lo da cómo se siente quien habla frente a lo que cuenta.' }),
-    play('hilo-referente', '¿Quién conocía el cuento?', { doc: ROSALBA, rounds: [
-      { p: 3, text: 'Un día |mi nieto| me pidió que le leyera |un cuento|. Tenía cinco años y me trajo |el libro| con mucha ceremonia. Yo le inventé la historia mirando los dibujos, y |él|, que ya conocía el cuento', from: 7, answer: 1 },
-    ] }, '«Él» es el nieto: es quien ya conocía el cuento y corrige a la abuela.',
-      { hint: 'Pregúntate quién, en esa escena, podía saber lo que de verdad decía el libro.' }),
-    play('donde-buscar', 'Vuelve al párrafo', { doc: ROSALBA, cards: [
-      ['¿Dónde estaba la escuela?', [1]], ['¿Qué excusas usaba en el banco?', [2]], ['¿Qué la decidió a estudiar?', [3]],
-      ['¿Qué fue lo más difícil de aprender?', [4]], ['¿Qué lee ahora?', [5]],
-    ] }, 'El testimonio va en orden: la finca y la escuela lejana (1), las excusas (2), la escena con el nieto (3), las clases (4) y lo que lee hoy (5).',
-      { hint: 'Como el relato sigue el tiempo, piensa en qué momento de la vida de Rosalba ocurre cada cosa.' }),
-    play('palabra-a-la-medida', 'Palabras del testimonio', { doc: ROSALBA, rounds: [
-      { p: 2, before: 'Uno se vuelve experto en ', word: 'disimular', after: '.', options: ['ocultar', 'imitar', 'mentir sobre la salud', 'olvidar'], answer: 0 },
-      { p: 3, before: 'me trajo el libro con mucha ', word: 'ceremonia', after: '.', options: ['solemnidad', 'prisa', 'tristeza profunda', 'rabia'], answer: 0 },
-    ] }, 'Disimular es ocultar lo que no se quiere mostrar, como hacía Rosalba con las excusas. Y el niño trae el libro con solemnidad, como si fuera algo importante.',
-      { hint: 'Lee lo que rodea cada palabra: qué hacía Rosalba en el banco y cómo un niño de cinco años entrega un libro que le importa.' }),
+    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: ROSALBA, ask: 'Según el texto, para ocultar que no sabía leer la narradora hizo todo lo siguiente, EXCEPTO:', cards: [
+      ['Decir en el banco que se le habían quedado las gafas', [2]],
+      ['Pasarle los papeles del puesto de salud a su hija', [2]],
+      ['Reconocer los buses por el color', [2]],
+      ['Firmar con una cruz los papeles del banco', null],
+    ] }, 'Las gafas, la hija y los colores de los buses están en el párrafo 2. Firmar no lo hizo: el texto dice que vivía con el miedo de que alguien se lo pidiera.',
+      { hint: 'Lleva cada opción a su párrafo. Cuidado con la que usa una palabra del texto, pero cuenta algo que no pasó.' }),
+    play('cadena-causas', 'Lo que la llevó a las clases', { doc: ROSALBA, chain: [
+      'Le inventa el cuento a su nieto mirando los dibujos.',
+      'El nieto le avisa que eso no es lo que dice el libro.',
+      'Siente vergüenza y esa noche no puede dormir.',
+      'Se inscribe en las clases de la biblioteca.',
+    ], extra: ['Su papá le dice que para coger café no hay que saber leer.', 'La profesora la trata como a una niña.'] },
+      'El párrafo 3 y el comienzo del 4 forman la cadena: el cuento inventado, la corrección del nieto, la vergüenza de esa noche y la inscripción «esa misma semana». Lo del papá explica por qué no estudió de niña, no por qué volvió; y la profesora nunca las trató como niñas.',
+      { hint: '«Esa misma semana» une el último eslabón con lo que pasó la noche del cuento.' }),
+    play('resumen-esencial', 'El testimonio en cuatro renglones', { doc: ROSALBA, ideas: [
+      ['De niña no pudo estudiar porque trabajaba en la finca.', true],
+      ['Durante años escondió que no sabía leer.', true],
+      ['La corrección de su nieto la llevó a inscribirse en clases.', true],
+      ['Ahora lee, despacio, y le lee cuentos a su nieto.', true],
+      ['La escuela quedaba a dos horas de camino.', false],
+      ['Repasaba en un cuaderno escondido detrás de la licuadora.', false],
+      ['En las clases eran once, casi todas mujeres.', false],
+    ] }, 'Las cuatro ideas siguen la vida de la narradora: por qué no estudió, cómo lo escondía, qué la hizo cambiar y dónde está hoy. La distancia de la escuela, la licuadora y los once compañeros son detalles que hacen vívida la historia.',
+      { hint: 'Un testimonio se resume siguiendo sus etapas. Un detalle se puede quitar sin que la historia cambie.' }),
+    play('subraya-prueba', 'La prueba en el testimonio', { doc: ROSALBA, rounds: [
+      { claim: 'Lo que más le costó al aprender no fue lo académico.', p: 4, answer: 4 },
+      { claim: 'Para la narradora, aprender a leer fue algo que hizo acompañada.', p: 5, answer: 3 },
+    ] }, 'Lo que más costó está en la última oración del párrafo 4: no fueron las letras, sino el miedo a equivocarse delante de otros. Y la compañía, en «así fue como aprendimos los dos», cuando el nieto la corrige.',
+      { hint: 'Busca la oración que compara dos dificultades, o la que nombra a otra persona en el aprendizaje.' }),
     play('caso-nuevo', 'El miedo de aprender de grande', { doc: ROSALBA, principle: 'Lo más difícil de aprender siendo adulto no es el contenido, sino perder el miedo a equivocarse delante de otros.', cards: [
       ['Un señor de sesenta años que no se atreve a hablar inglés en clase por temor a la burla.', true],
       ['Una mujer que deja la clase de natación por vergüenza de que la vean chapotear.', true],

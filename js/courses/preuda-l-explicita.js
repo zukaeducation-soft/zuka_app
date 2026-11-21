@@ -64,8 +64,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     ] }, 'El título habla de contar árboles uno por uno y la fuente es el boletín de una universidad, en la sección de ciencia: se espera un texto que informa con cifras y explica un método.',
       { hint: 'Lee el título, la sección y la fuente. ¿Quién publica algo así y para qué?' }),
     play('donde-buscar', 'Cada dato tiene su párrafo', { doc: BOSQUE, cards: [
-      ['¿Cuándo subió el grupo al bosque?', [1]], ['¿A qué altura se mide el tronco?', [2]], ['¿Cuántas parcelas se marcaron?', [3]],
-      ['¿Quién reconocía especies por el olor?', [4]], ['¿Cuántas hectáreas se pidió proteger?', [5]],
+      ['¿Cuántas parcelas se marcaron?', [3]], ['¿Cuántas hectáreas se pidió proteger?', [5]], ['¿Cuándo subió el grupo al bosque?', [1]],
+      ['¿Quién reconocía especies por el olor?', [4]], ['¿A qué altura se mide el tronco?', [2]],
     ] }, 'Fecha y grupo (1), método (2), resultados en cifras (3), el saber de los guías (4) y lo que se hizo con el mapa (5). Saber qué hace cada párrafo permite ir directo al dato.',
       { hint: 'Toma la palabra clave de cada pregunta (cuándo, altura, parcelas, olor, hectáreas) y búscala en el texto.' }),
     play('lupa-evidencia', 'Datos que están y datos que no', { doc: BOSQUE, cards: [
@@ -87,16 +87,23 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     play('palabra-a-la-medida', 'Palabras del método', { doc: BOSQUE, rounds: [
       { p: 2, before: 'Esa altura no es ', word: 'caprichosa', after: ': es la que usan', options: ['arbitraria', 'peligrosa para todos', 'exacta', 'elegante'], answer: 0 },
       { p: 4, before: 'Los guías ', word: 'aportaron', after: ' algo que ningún instrumento mide.', options: ['contribuyeron con', 'cobraron', 'escondieron', 'compraron para el viaje'], answer: 0 },
-    ] }, 'Una altura «no caprichosa» no es arbitraria: la eligen todos para poder comparar. Y los guías contribuyeron con su saber al trabajo.',
+      { p: 3, before: 'Pero el dato que más ', word: 'sorprendió', after: ' al equipo fue otro', options: ['llamó la atención de', 'asustó a', 'aburrió a', 'confundió del todo a'], answer: 0 },
+    ] }, 'Una altura «no caprichosa» no es arbitraria: la eligen todos para poder comparar. Y los guías contribuyeron con su saber al trabajo. El dato que «sorprendió» al equipo es el que le llamó la atención porque no lo esperaba: nadie se asustó ni se confundió.',
       { hint: 'Lee lo que sigue a cada palabra: los dos puntos del párrafo 2 explican por qué esa altura y no otra.' }),
     play('hilo-referente', '¿A qué se refiere?', { doc: BOSQUE, rounds: [
       { p: 3, text: 'La más abundante fue |el roble andino|, con 212 ejemplares, seguido del |encenillo|, con 158. Pero el dato que más sorprendió al equipo fue otro: |19 de las especies| aparecieron una sola vez, en una sola parcela. «Si hubiéramos marcado diez parcelas en vez de catorce, |varias de ellas|', from: 7, answer: 5 },
       { p: 5, text: 'pidió a |la alcaldía| declarar protegidas |las 140 hectáreas| de |la parte alta|, |la| que surte de agua a dos acueductos', from: 7, answer: 5 },
     ] }, '«Varias de ellas» son algunas de las 19 especies que aparecieron una sola vez: con menos parcelas no se habrían encontrado. Y «la que surte de agua» es la parte alta: «la» va en singular, y las hectáreas son plurales.',
       { hint: 'Fíjate en el número y el género: «ellas» pide algo en plural femenino; «la», algo en singular femenino que pueda surtir de agua a un acueducto.' }),
-    play('mapa-del-texto', 'El recorrido del texto', { doc: BOSQUE, labels: ['presenta quiénes, cuándo y qué hicieron', 'explica el método', 'da los resultados en cifras', 'suma el saber de los guías', 'cuenta para qué sirvió el trabajo', 'cierra con la idea central', 'critica a la alcaldía'], key: [0, 1, 2, 3, 4, 5] },
-      'El texto avanza como un informe: quién y cuándo, cómo se hizo, qué se encontró, qué aportaron los guías, para qué sirvió y una frase final con la idea. No critica a nadie.',
-      { hint: 'Nombra con dos o tres palabras lo que hace cada párrafo y busca la etiqueta que más se le parece.' }),
+    play('resumen-esencial', 'El resumen en tres renglones', { doc: BOSQUE, ideas: [
+      ['Un equipo midió árbol por árbol un bosque de niebla, por parcelas.', true],
+      ['Encontró mucha diversidad, con especies tan raras que aparecieron una sola vez.', true],
+      ['Con el inventario, la comunidad pidió proteger la parte alta del bosque.', true],
+      ['El roble andino fue la especie más abundante, con 212 ejemplares.', false],
+      ['Don Efraín reconocía especies por la corteza y el olor de las hojas.', false],
+      ['Los troncos se miden a un metro con treinta centímetros del suelo.', false],
+    ] }, 'El texto cuenta qué se hizo (medir el bosque por parcelas), qué se encontró (mucha diversidad y especies raras) y para qué sirvió (pedir que se proteja). El roble andino, don Efraín y la altura de medida son datos precisos dentro de esas ideas.',
+      { hint: 'Pregúntate qué se hizo, qué se encontró y para qué sirvió. Lo demás son datos de apoyo.' }),
   ]);
 
   // ---------------- Lección 2 · Paráfrasis ----------------
@@ -119,11 +126,13 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Los adolescentes duermen menos que los adultos.', 2],
     ] }, 'Las dos primeras están escritas. La tercera se deduce de que a los quince años no da sueño a las nueve «aunque se acuesten a esa hora». «Elimina» y «todos» cambian el alcance de lo dicho («reduce», «en algunos casos»), y el texto no compara con los adultos.',
       { hint: 'Compara verbo por verbo: «reduce» no es «elimina», y «en varios» no es «en todos».' }),
-    play('palabra-a-la-medida', 'El verbo justo', { doc: SUENO, rounds: [
-      { p: 3, before: 'Las pantallas pueden ', word: 'empeorar', after: ' el problema.', options: ['agravar', 'provocar', 'resolver', 'explicar'], answer: 0 },
-      { p: 4, before: 'La falta de sueño ', word: 'acumulada', after: ' se ha relacionado', options: ['que se va sumando', 'repentina', 'que se recupera', 'de una sola noche'], answer: 0 },
-    ] }, 'Empeorar es agravar algo que ya existe; «provocar» diría que las pantallas lo causan, y el texto dice que el problema viene del reloj del cuerpo. La falta de sueño acumulada es la que se suma noche tras noche: «meses así».',
-      { hint: 'Ten en cuenta lo que dice el resto del texto: ¿el problema ya existía antes de las pantallas? ¿Se habla de una noche o de meses?' }),
+    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: SUENO, ask: 'Según el texto, a muchos adolescentes les cuesta dormirse temprano por todo lo siguiente, EXCEPTO:', cards: [
+      ['La melatonina aparece más tarde en la noche', [2]],
+      ['La luz del celular retrasa la llegada del sueño', [3]],
+      ['Lo que ven en la pantalla mantiene la mente despierta', [3]],
+      ['El colegio les deja demasiadas tareas para la noche', null],
+    ] }, 'La melatonina tardía está en el párrafo 2; la luz y lo que se ve en la pantalla, en el 3. Las tareas no aparecen en el texto como causa, aunque suenen razonables.',
+      { hint: 'Busca cada causa en el texto. Una de las cuatro suena lógica, pero el texto nunca la nombra.' }),
     play('conector-bisagra', 'Cómo se unen las ideas', { doc: SUENO, rounds: [
       { a: 'A los quince años la melatonina aparece más tarde en la noche.', b: 'a muchos jóvenes no les da sueño a las nueve.', options: ['Por eso,', 'Aunque', 'En cambio,', 'Por ejemplo,'], answer: 0 },
       { a: 'Las pantallas pueden empeorar el problema.', b: 'apagar el celular no adelanta el reloj por completo.', options: ['Sin embargo,', 'Por lo tanto,', 'Es decir,', 'Además,'], answer: 0 },
@@ -139,9 +148,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     ] }, 'La melatonina tardía y el efecto de entrar más tarde respaldan la tesis. Si sin celular se durmieran temprano, o si a las nueve se durmieran enseguida, el problema no sería biológico. El transporte es un costo de la medida, no una razón a favor ni en contra de la tesis.',
       { hint: 'Imagina que cada oración es verdad: ¿haría más creíble o menos creíble que el sueño tardío sea biológico?' }),
     play('donde-buscar', 'Vuelve al párrafo', { doc: SUENO, cards: [
-      ['¿Qué sustancia anuncia la hora de dormir?', [2]], ['¿Por qué la luz del celular afecta el sueño?', [3]],
-      ['¿Cuántas horas se recomienda dormir a esa edad?', [4]], ['¿Qué pasó en los colegios que empezaron más tarde?', [5]],
-      ['¿Qué puede hacer cada familia?', [6]],
+      ['¿Cuántas horas se recomienda dormir a esa edad?', [4]], ['¿Qué puede hacer cada familia?', [6]], ['¿Qué sustancia anuncia la hora de dormir?', [2]],
+      ['¿Qué pasó en los colegios que empezaron más tarde?', [5]], ['¿Por qué la luz del celular afecta el sueño?', [3]],
     ] }, 'Biología (2), pantallas (3), horas de sueño (4), colegios (5) y medidas en casa (6): el texto va de la causa a las soluciones.',
       { hint: 'El texto avanza de la causa al problema y de ahí a las soluciones. Ubica en qué parte de ese recorrido cae cada pregunta.' }),
     play('signos-que-hablan', 'Lo que hacen los signos', { doc: SUENO, rounds: [
@@ -171,32 +179,42 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     ] }, 'Las tres primeras están en el párrafo 2. El olor que espanta suena posible, pero el texto no lo menciona.',
       { hint: 'No elijas la opción que te suene rara: busca cada una en el texto y quédate con la que no aparece.' }),
     play('donde-buscar', 'Cada dato en su lugar', { doc: ABEJAS, cards: [
-      ['¿Qué tamaño tiene la caja?', [1]], ['¿Cómo vende Marina la miel?', [3]], ['¿Qué le pidieron los vecinos?', [4]],
-      ['¿Cuántas cajas tiene hoy?', [5]], ['¿Cuántas personas han hecho su curso?', [6]],
+      ['¿Qué le pidieron los vecinos?', [4]], ['¿Cuántas personas han hecho su curso?', [6]], ['¿Qué tamaño tiene la caja?', [1]],
+      ['¿Cuántas cajas tiene hoy?', [5]], ['¿Cómo vende Marina la miel?', [3]],
     ] }, 'Presentación con la caja (1), la miel (3), los vecinos y los cultivos (4), la cría y sus reglas (5) y el curso (6).',
       { hint: 'Ubica la palabra clave de cada pregunta: caja, miel, vecinos, cajas de hoy, curso.' }),
     play('palabra-a-la-medida', 'Palabras de Marina', { doc: ABEJAS, rounds: [
       { p: 5, before: 'si se hace con ', word: 'afán', after: ', se pierden las dos partes.', options: ['prisa', 'cuidado', 'tristeza', 'dinero'], answer: 0 },
       { p: 3, before: 'Ella misma ', word: 'advierte', after: ' que esos usos vienen de la tradición', options: ['avisa', 'niega', 'olvida', 'descubre'], answer: 0 },
-    ] }, 'En Colombia, hacer algo «con afán» es hacerlo de prisa: lo contrario de la paciencia con que Marina divide las colmenas. Y advertir es avisar de algo para prevenir un error.',
+      { p: 1, before: 'la respuesta ', word: 'suele', after: ' ser un paso atrás', options: ['acostumbra', 'nunca llega a', 'debe', 'parece'], answer: 0 },
+    ] }, 'En Colombia, hacer algo «con afán» es hacerlo de prisa: lo contrario de la paciencia con que Marina divide las colmenas. Y advertir es avisar de algo para prevenir un error. «Suele» dice que pasa casi siempre: la gente acostumbra retroceder cuando oye hablar de abejas.',
       { hint: 'En el párrafo 5, Marina divide la colmena «con paciencia». ¿Qué sería lo contrario?' }),
     play('hilo-referente', '¿De qué se habla?', { doc: ABEJAS, rounds: [
       { p: 2, text: 'La entrada de la caja es |un tubito de cera| por donde apenas cabe |una abeja|, y de día siempre hay |varias guardianas| paradas en |él|', from: 7, answer: 1 },
       { p: 4, text: 'Dos de |sus vecinos| le pidieron |cajas| para ponerlas cerca de sus árboles. |Ninguno| ha medido', from: 5, answer: 1 },
     ] }, 'Las guardianas están paradas en el tubito de cera, la entrada. Y «ninguno» es ninguno de los dos vecinos que pidieron cajas.',
       { hint: 'Pregúntate dónde se puede estar parado y quién podría medir una cosecha.' }),
-    play('termometro-tono', 'El tono de Marina', { doc: ABEJAS, rounds: [
-      { frag: 'Ella misma advierte que esos usos vienen de la tradición y que no reemplazan la consulta médica.', scale: ['prudente', 'entusiasta', 'burlón', 'alarmado'], answer: 0 },
-      { frag: '«Una abeja que no pica no necesita que uno le tenga miedo. Necesita que uno le tenga respeto».', scale: ['respetuoso', 'temeroso', 'irónico', 'indiferente'], answer: 0 },
-    ] }, 'Marina no exagera las virtudes de su miel: es prudente. Y su frase final pide respeto por las abejas.',
-      { hint: 'Fíjate si quien habla exagera, se burla, se asusta o cuida lo que afirma.' }),
-    play('mapa-del-texto', 'El orden de la crónica', { doc: ABEJAS, labels: ['presenta a Marina y sus abejas', 'explica cómo se defienden', 'describe la miel y sus usos', 'cuenta su visita a los cultivos vecinos', 'explica las reglas de la cría', 'cierra con su enseñanza', 'mide cuánto mejoraron las cosechas vecinas'], key: [0, 1, 2, 3, 4, 5] },
-      'Cada párrafo trata un aspecto: quién es Marina, la defensa, la miel, los cultivos, las reglas y la frase con que cierra sus clases. Y nadie ha medido todavía si las cosechas vecinas mejoraron.',
-      { hint: 'Busca de qué habla cada párrafo en su primera oración.' }),
+    play('subraya-prueba', 'La prueba en el texto', { doc: ABEJAS, rounds: [
+      { claim: 'Marina no promete que su miel cure enfermedades.', p: 3, answer: 3 },
+      { claim: 'Todavía no se sabe si las abejas mejoran las cosechas de los vecinos.', p: 4, answer: 3 },
+    ] }, 'La primera conclusión sale de la advertencia de Marina: esos usos vienen de la tradición y no reemplazan la consulta médica. La segunda, de que ninguno de los vecinos ha medido todavía si la cosecha mejoró.',
+      { hint: 'Busca la oración que pone un límite o una duda. Las demás cuentan lo que sí pasa.' }),
+    play('resumen-esencial', 'El resumen en tres renglones', { doc: ABEJAS, ideas: [
+      ['Marina cría en su casa abejas sin aguijón que no pican.', true],
+      ['Dan poca miel, pero a Marina le importa más que visitan las flores de los cultivos.', true],
+      ['Criarlas exige reglas y paciencia, y ella ya enseña a otros a hacerlo.', true],
+      ['Las guardianas se paran en la entrada «como porteras».', false],
+      ['Una colmena de angelitas da cerca de un litro de miel al año.', false],
+      ['Hoy Marina tiene veintiséis cajas.', false],
+    ] }, 'Las tres ideas cubren quién es Marina y qué cría, qué es lo que más valora de sus abejas y cómo se crían y se enseñan. Las porteras, el litro de miel y las veintiséis cajas son ciertos, pero son detalles de esas ideas.',
+      { hint: 'Si una frase da una cifra o una imagen de un solo párrafo, probablemente es un detalle.' }),
   ]);
 
   // ---------------- Lección 4 · Quién dice qué ----------------
   setLesson('pu-ie-4', [
+    play('ordena-parrafos', 'Arma la columna otra vez', { doc: CALLE },
+      'La historia de la calle va primero; luego Gerardo, que «se opuso desde el principio». La urbanista reconoce que faltó un lugar de cargue «para negocios como el de Gerardo», así que va después de él; la alcaldesa habilita esa zona y el autor opina al final.',
+      { hint: 'Si alguien menciona a otra persona («como el de Gerardo»), esa persona ya tuvo que aparecer antes.' }),
     play('quien-lo-dice', 'Cuatro voces en una columna', { doc: CALLE, voices: ['Gerardo Montoya', 'Natalia Restrepo', 'La alcaldía', 'El autor'], cards: [
       ['Si los clientes no pueden parquear, se van a otro lado.', 0],
       ['Las ventas de herramientas pequeñas subieron.', 0],
@@ -223,24 +241,18 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Los comerciantes bloquearon la calle en protesta', null],
     ] }, 'La aprobación y la suspensión están en el párrafo 1; el anuncio, en el 4. Gerardo se opuso en la audiencia pública, pero nadie bloqueó la calle.',
       { hint: 'Ubica cada hecho con su fecha o su protagonista. Oponerse en una audiencia no es lo mismo que bloquear una calle.' }),
-    play('balanza-argumento', '¿Fue buena idea?', { doc: CALLE, thesis: 'Cerrar la calle Bolívar a los carros fue una buena decisión para el pueblo.', cards: [
-      ['No ha habido atropellos desde el cierre.', 0],
-      ['Las ventas de herramientas pequeñas subieron.', 0],
-      ['Las ventas de cemento bajaron.', 1],
-      ['Faltó un lugar de cargue para los negocios.', 1],
-      ['Las obras se suspendieron por las lluvias.', null],
-    ] }, 'Menos atropellos y más ventas pequeñas favorecen el cierre; menos cemento y la falta de cargue son sus costos. La lluvia retrasó la obra, pero no dice si la decisión fue buena o mala.',
-      { hint: 'Pregúntate si cada hecho es un beneficio del cierre, un costo, o algo que no tiene que ver con el resultado.' }),
     play('signos-que-hablan', 'Signos y voces', { doc: CALLE, rounds: [
       { p: 3, text: '|«|Una calle no es un parqueadero alargado», afirma.', options: ['abre las palabras exactas de la urbanista', 'marca ironía', 'abre el título de una obra', 'encierra una palabra extranjera'], answer: 0 },
       { p: 1, text: 'la calle Bolívar de Santa Rosa fue un embudo|:| buses, motos y carretas', options: ['anuncia en qué consistía el embudo', 'abre una cita', 'marca una pregunta', 'indica un cambio de tema'], answer: 0 },
     ] }, 'Las comillas, con «afirma», marcan una cita directa: las palabras exactas de Natalia. Los dos puntos anuncian la explicación de por qué la calle era un embudo.',
       { hint: 'Fíjate en el verbo que acompaña las comillas y en lo que viene después de los dos puntos.' }),
-    play('palabra-a-la-medida', 'Palabras de la columna', { doc: CALLE, rounds: [
-      { p: 1, before: 'la calle Bolívar de Santa Rosa fue un ', word: 'embudo', after: ':', options: ['lugar donde todo se atascaba', 'calle muy ancha', 'sitio peligroso de noche para la gente', 'mercado al aire libre'], answer: 0 },
-      { p: 3, before: 'la urbanista que diseñó el proyecto, ', word: 'sostiene', after: ' que el cambio', options: ['afirma', 'duda', 'niega del todo', 'teme'], answer: 0 },
-    ] }, 'Un embudo es ancho arriba y estrecho abajo: todo se atasca al pasar, como buses, motos y gente en seis metros. Y sostener una idea es afirmarla y defenderla.',
-      { hint: 'Lee lo que viene después de «embudo»: ¿cuántas cosas pasaban por seis metros de ancho?' }),
+    play('cadena-causas', 'Lo que cambió en la ferretería', { doc: CALLE, chain: [
+      'La calle se cierra a los carros.',
+      'Por la calle pasa más gente a pie y mira las vitrinas.',
+      'Suben las ventas de herramientas pequeñas en la ferretería.',
+    ], extra: ['Suben las ventas de cemento y varillas.', 'Las obras se suspenden por las lluvias.'] },
+      'Gerardo cuenta en el párrafo 2 que, con la calle cerrada, pasa más gente a pie frente a su vitrina y por eso vende más herramientas pequeñas. Las ventas de cemento bajaron, no subieron, y las lluvias solo demoraron la obra.',
+      { hint: 'Lee la oración de Gerardo que empieza «Un año después»: trae un «porque».' }),
     play('hilo-referente', '¿Quiénes son «los dos»?', { doc: CALLE, rounds: [
       { p: 5, text: 'A mi modo de ver, |la discusión| se planteó mal desde el comienzo, como si hubiera que escoger entre |comerciantes y peatones|. Lo que |la calle Bolívar| muestra es que |los dos| pueden ganar', from: 7, answer: 3 },
     ] }, '«Los dos» que pueden ganar son los comerciantes y los peatones, entre quienes la discusión parecía obligar a escoger.',

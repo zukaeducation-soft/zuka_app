@@ -61,16 +61,21 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 4, before: 'una plaga de babosas ', word: 'arrasó', after: ' con las lechugas', options: ['acabó por completo', 'se paseó', 'creció', 'jugó entre las hojas'], answer: 0 },
     ] }, 'Un terreno árido es seco: «aburrido» es otro sentido de la palabra, el de un libro árido. Una cosecha sólida es abundante y segura, no dura. Y la plaga arrasó: acabó con todo «en una sola semana».',
       { hint: 'Reemplaza la palabra por cada opción y lee la frase entera. ¿Cuál conserva el sentido sin volverlo raro?' }),
-    play('hilo-referente', 'Lo que no se repite', { doc: HUERTA, rounds: [
-      { p: 2, text: 'y armaron |una compostera| al lado de |la cancha|. |Tardó| cuatro meses en dar abono', from: 5, answer: 1 },
-      { p: 3, text: 'Los estudiantes llevan |un registro de cada siembra|: |la fecha, la semilla, cuánta agua recibió y qué plagas aparecieron|. Con |esos datos| han aprendido más |estadística|', from: 5, answer: 3 },
-    ] }, 'Lo que tardó cuatro meses en dar abono fue la compostera, no la cancha. Y «esos datos» son lo que enumera la lista después de los dos puntos: fecha, semilla, agua y plagas.',
-      { hint: 'Pregúntate qué puede dar abono y qué reúne varios datos a la vez.' }),
-    play('termometro-tono', 'El tono de la nota', { doc: HUERTA, rounds: [
-      { frag: 'La idea parecía un chiste: la tierra estaba tan dura que había que romperla con barra.', scale: ['incrédulo', 'solemne', 'furioso', 'triste'], answer: 0 },
-      { frag: '«La huerta no les enseñó a sembrar», dice la profesora de biología; «les enseñó a esperar».', scale: ['reflexivo', 'burlón', 'alarmado', 'técnico'], answer: 0 },
-    ] }, 'Al comienzo nadie creía en la huerta: el tono es incrédulo, casi de broma. La frase de la profesora, en cambio, invita a pensar en lo que de verdad se aprendió.',
-      { hint: 'Fíjate en «parecía un chiste» y en la oposición entre sembrar y esperar.' }),
+    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: HUERTA, ask: 'Según el texto, los estudiantes hicieron todo lo siguiente, EXCEPTO:', cards: [
+      ['Armar una compostera al lado de la cancha', [2]],
+      ['Llevar un registro de cada siembra', [3, 4]],
+      ['Probar trampas de cerveza para las babosas', [4]],
+      ['Construir un invernadero de plástico', null],
+    ] }, 'La compostera está en el párrafo 2; el registro, en el 3 y en el 4; las trampas de cerveza, en el 4. Ningún invernadero aparece en el texto.',
+      { hint: 'Lleva cada acción a su párrafo. La que no encuentre lugar es la respuesta.' }),
+    play('cadena-causas', 'Del patio a la cosecha', { doc: HUERTA, chain: [
+      'Recogen cascarones, borra de café y hojas secas.',
+      'La compostera da abono después de cuatro meses.',
+      'El suelo del patio se vuelve oscuro, suelto y húmedo.',
+      'La huerta da una cosecha que alcanza para el restaurante escolar.',
+    ], extra: ['Una plaga de babosas arrasa con las lechugas.', 'Los estudiantes aprenden estadística con los datos.'] },
+      'Los párrafos 2 y 3 cuentan el camino: lo que recogen se vuelve abono, el abono cambia el suelo y el suelo da la cosecha. Las babosas fueron un tropiezo, no un paso, y la estadística es otro efecto de la huerta, no de la cosecha.',
+      { hint: 'Empieza por lo que llevaron de sus casas y sigue qué se volvió cada cosa.' }),
     play('resume-parrafo', 'La idea de cada párrafo', { doc: HUERTA, paras: [2, 3, 4, 5], options: [
       'Preparar el suelo tomó tiempo y paciencia, pero lo transformó.',
       'La huerta ya produce y además sirve para aprender.',
@@ -80,29 +85,30 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       'Las babosas son la peor plaga de las lechugas.',
     ], key: [0, 1, 2, 3] }, 'Los resúmenes buenos dicen la idea central de cada párrafo. La huerta alcanza para el restaurante dos veces por semana, no todos los días, y lo de las babosas es un detalle.',
       { hint: 'Compara las cantidades: ¿cuántas veces por semana alcanza la cosecha?' }),
-    play('donde-buscar', '¿Dónde está la respuesta?', { doc: HUERTA, cards: [
-      ['¿Cómo era el patio antes?', [1]], ['¿Con qué se hizo el abono?', [2]], ['¿Qué se anota en el registro?', [3]],
-      ['¿Cómo enfrentaron la sequía?', [4]], ['¿Qué quiere hacer el colegio el próximo año?', [6]],
-    ] }, 'El antes (1), el abono (2), el registro (3), los fracasos (4), el cambio en los estudiantes (5) y el plan (6).',
-      { hint: 'La nota sigue el tiempo: antes, preparación, hoy, problemas, lo que cambió y lo que viene.' }),
+    play('subraya-prueba', 'La prueba en el texto', { doc: HUERTA, rounds: [
+      { claim: 'Los estudiantes aprendieron de sus errores.', p: 4, answer: 3 },
+      { claim: 'La huerta logró que algunos estudiantes quisieran estar en el colegio.', p: 5, answer: 2 },
+    ] }, 'Aprender de los errores lo prueba la anotación que quedó de cada fracaso y que sirvió al año siguiente. Y las ganas de estar en el colegio, los que antes se escapaban por la malla y ahora llegan temprano para regar.',
+      { hint: 'Hay oraciones del mismo párrafo que hablan de cambios distintos. Busca la que muestra justo el de la conclusión.' }),
     play('conector-bisagra', 'Cómo se unen las ideas', { doc: HUERTA, rounds: [
       { a: 'La compostera olía a cebolla podrida.', b: 'cuando la mezclaron con la tierra, el suelo cambió de color.', options: ['Pero', 'Por eso,', 'Es decir,', 'Además,'], answer: 0 },
       { a: 'Aprendieron a regar al amanecer', b: 'a esa hora el sol todavía no evapora el agua.', options: ['porque', 'aunque', 'sin embargo,', 'por ejemplo,'], answer: 0 },
     ] }, 'El mal olor se opone al buen resultado (contraste). Y el sol que aún no evapora el agua explica por qué regar a esa hora (causa).',
       { hint: 'Pregúntate si la segunda idea se opone a la primera o dice por qué ocurre.' }),
-    play('lupa-evidencia', 'Lo que dice la nota', { doc: HUERTA, cards: [
-      ['La huerta tiene doce eras.', 0],
-      ['El abono tardó cuatro meses en estar listo.', 0],
-      ['Algunos estudiantes ganaron confianza para hablar en público.', 1],
-      ['La huerta produce para el restaurante todos los días.', 2],
-      ['El profesor de matemáticas dirige la huerta.', 2],
-      ['Las trampas de cerveza acabaron con las babosas.', 2],
-    ] }, 'Las eras y el abono están escritos. Que algunos ganaron confianza se deduce de que antes apenas hablaban en clase y ahora les explican a los visitantes. La huerta alcanza dos veces por semana; quien propuso la huerta fue la profesora de biología, y el texto dice que probaron las trampas, no que funcionaran.',
-      { hint: '«Probaron» no es lo mismo que «funcionó». Compara cada verbo con el del texto.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: HUERTA, q: '¿Qué quiere decir la profesora con «les enseñó a esperar»?', options: [
+      ['Que aprendieron a esperar su turno en el restaurante escolar.', 4],
+      ['Que ahora son pacientes en todo lo que hacen.', 1],
+      ['Que la huerta les mostró que los frutos toman tiempo, como el abono que tardó meses.', 0],
+      ['Que la huerta les enseñó sobre todo a sembrar.', 2],
+    ] }, 'C recoge lo que cuenta el texto: el abono tardó cuatro meses y el suelo cambió despacio. A mezcla la frase con un dato del texto que no tiene que ver (el restaurante); B dice de más («en todo»), y D dice lo contrario de «no les enseñó a sembrar». Sobra el sello «El texto no lo dice».',
+      { hint: 'Lee la frase completa de la profesora: tiene dos partes, una que niega y otra que afirma.' }),
   ]);
 
   // ---------------- Lección 2 · Palabras con varios sentidos ----------------
   setLesson('pu-vo-2', [
+    play('ordena-parrafos', 'Arma el reportaje otra vez', { doc: CAFE },
+      '«La planta costó más de lo que la asociación tenía» explica cómo se pagó la planta recién inaugurada; «Al cabo de seis meses» trae los resultados; «Con ese puntaje» usa la nota del catador, y «Mientras tanto» cierra con la cosecha salvada.',
+      { hint: '«Ese puntaje» y «al cabo de seis meses» necesitan algo antes. Busca qué retoman.' }),
     play('palabra-a-la-medida', 'El sentido de esta frase', { doc: CAFE, rounds: [
       { p: 1, before: 'inauguró su ', word: 'planta', after: ' de secado', options: ['instalación', 'mata', 'suela', 'piso de abajo'], answer: 0 },
       { p: 3, before: 'y le dio una ', word: 'nota', after: ' de 86 sobre 100', options: ['calificación', 'apunte', 'sonido musical', 'cuenta por pagar'], answer: 0 },
@@ -110,33 +116,38 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 5, before: 'la planta ya ', word: 'salvó', after: ' una cosecha', options: ['rescató', 'aprobó', 'saltó', 'ahorró dinero'], answer: 0 },
     ] }, 'La misma palabra cambia con la frase: «planta» de secado es una instalación; una «nota» de 86 es una calificación, pero las «notas» de panela son sabores; y salvar una cosecha es rescatarla, no aprobarla como una materia.',
       { hint: 'Mira las palabras que acompañan a cada una: «de secado», «sobre 100», «de panela», «una cosecha».' }),
-    play('donde-buscar', 'Cada sentido en su párrafo', { doc: CAFE, ask: 'Lleva cada sentido de una palabra al párrafo donde se usa con ese sentido.', cards: [
-      ['«banco» como entidad que presta dinero', [2]], ['«banco» como asiento', [5]], ['«nota» como calificación', [3]],
-      ['«red» como grupo de productores', [4]], ['«tiempo» como el clima', [4]],
-    ] }, 'El banco agrario presta (2) y el banco de la entrada es un asiento (5). La nota de 86 está en el 3. En el 4, la red es un grupo de productores y el gusto que «cambia como el tiempo» habla del clima, que cambia de un día a otro.',
-      { hint: 'Busca cada palabra en el texto y lee la frase completa: ¿presta dinero o sirve para sentarse? ¿Pasa el tiempo o cambia el clima?' }),
-    play('lupa-evidencia', 'Lo que cuenta la crónica', { doc: CAFE, cards: [
-      ['El banco agrario prestó parte del dinero.', 0],
-      ['Antes de la planta, la lluvia podía dañar el café.', 0],
-      ['No todas las familias aportaron lo mismo para la planta.', 1],
-      ['Antes, el café de la vereda había recibido notas más bajas.', 1],
-      ['El precio por kilo se triplicó.', 2],
-      ['Todos los socios confían en la red de productores.', 2],
-    ] }, 'El préstamo y el riesgo de la lluvia están escritos. Que no aportaron igual sale de «cada una puso según lo que había cosechado»; y que antes hubo notas más bajas, de que esta es «la más alta que ha recibido». El precio «casi se duplicó», y algunos socios desconfían.',
-      { hint: '«Duplicar» es multiplicar por dos. Y «algunos desconfían» no permite decir «todos confían».' }),
-    play('termometro-tono', 'El tono de la crónica', { doc: CAFE, rounds: [
-      { frag: 'palabras que hicieron reír a más de uno, porque en Tablazo el café siempre había sabido simplemente a café.', scale: ['humorístico', 'solemne', 'amargo', 'alarmado'], answer: 0 },
-      { frag: 'y dijo que por primera vez no había rezado para que dejara de llover.', scale: ['aliviado', 'temeroso', 'furioso', 'burlón'], answer: 0 },
-    ] }, 'El cronista se ríe con cariño de las palabras del catador. Y doña Fabiola, por primera vez, no teme la lluvia: está aliviada.',
-      { hint: 'Pregúntate qué siente doña Fabiola al no tener que rezar esta vez.' }),
-    play('mapa-del-texto', 'El año de la planta', { doc: CAFE, labels: ['cuenta cómo se secaba antes el café', 'explica cómo se pagó la planta', 'muestra la mejora en la calidad', 'cuenta un mercado nuevo y una duda', 'narra cómo la planta salvó una cosecha', 'cuenta cómo se deshizo la red de compradores'], key: [0, 1, 2, 3, 4] },
-      'La crónica sigue el primer año: el problema de antes, el costo, la nota del catador, la red y la duda de algunos socios, y la lluvia de mayo. La red de compradores no se deshace: algunos socios solo desconfían de ella.',
-      { hint: 'Cada párrafo abre con su tema: hasta entonces, el costo, los resultados, el puntaje, mientras tanto.' }),
-    play('conector-bisagra', 'Bisagras', { doc: CAFE, rounds: [
-      { a: 'La asociación entró a una red que vende a Europa y Asia.', b: 'el precio por kilo casi se duplicó.', options: ['Por eso,', 'Aunque', 'Es decir,', 'Por ejemplo,'], answer: 0 },
-      { a: 'El precio por kilo casi se duplicó.', b: 'algunos socios desconfían.', options: ['Sin embargo,', 'Por lo tanto,', 'Además,', 'O sea,'], answer: 0 },
-    ] }, 'Vender directamente subió el precio (consecuencia). Y aun con un buen precio, hay quien desconfía (contraste).',
-      { hint: 'La primera pareja va de una causa a su resultado. En la segunda, ¿lo esperable sería confiar o desconfiar?' }),
+    play('signos-que-hablan', 'Lo que hacen los signos', { doc: CAFE, rounds: [
+      { p: 2, text: 'el resto salió de una vaca que hicieron las cuarenta familias socias|:| cada una puso según lo que había cosechado', options: ['anuncia cómo se hizo la vaca', 'abre una cita de don Hernán', 'separa una lista de nombres', 'marca una pregunta'], answer: 0 },
+      { p: 4, text: 'Algunos socios|,| sin embargo, desconfían', options: ['abre un inciso con un conector que contrasta', 'separa dos cifras', 'reemplaza un verbo que no se repite', 'cierra una enumeración'], answer: 0 },
+      { p: 4, text: 'una red de productores que vende directamente|,| sin intermediarios, a tostadores', options: ['abre un inciso que aclara cómo se vende', 'separa dos verbos', 'anuncia una cita', 'marca el final de la oración'], answer: 0 },
+    ] }, 'Los dos puntos anuncian la explicación de cómo funcionó la vaca. En el párrafo 4, las comas abren incisos: uno con «sin embargo», que contrasta con la buena noticia del precio, y otro que aclara que se vende sin intermediarios.',
+      { hint: 'Lee la oración sin lo que queda entre los signos. Si sigue teniendo sentido, el signo abrió un inciso; si anuncia algo, mira qué viene después.' }),
+    play('resume-parrafo', 'Cada párrafo en una frase', { doc: CAFE, paras: [2, 3, 4, 5], options: [
+      'La planta se pagó con un préstamo y con aportes de las familias.',
+      'El café de la asociación recibió la mejor nota de su historia.',
+      'La buena nota abrió un mercado que paga casi el doble, aunque algunos desconfían.',
+      'La planta ya salvó una cosecha en un mes de lluvias.',
+      'Don Hernán guarda en el bolsillo la libreta de los aportes.',
+      'El café de Tablazo siempre ha sabido a panela y mandarina.',
+    ], key: [0, 1, 2, 3] },
+      'Cada resumen dice de qué trata el párrafo entero: cómo se pagó, qué nota sacó, qué mercado abrió (con la duda de algunos socios) y la cosecha salvada. La libreta de don Hernán es un detalle, y el texto dice que el café de Tablazo siempre había sabido «simplemente a café».',
+      { hint: 'Un buen resumen cubre todo el párrafo. Si una frase solo habla de una persona o de un objeto, es un detalle.' }),
+    play('cadena-causas', 'Del puntaje al precio', { doc: CAFE, chain: [
+      'El café de la asociación recibe una nota de 86 sobre 100.',
+      'La asociación entra a una red que vende sin intermediarios.',
+      'El precio por kilo casi se duplica.',
+    ], extra: ['Algunos socios desconfían de los compradores extranjeros.', 'Llueve tres semanas seguidas en mayo.'] },
+      'El párrafo 4 empieza «Con ese puntaje»: la nota del catador abre la puerta de la red, y vender sin intermediarios casi duplica el precio. La desconfianza de algunos socios es una reacción, no un paso de la cadena, y la lluvia de mayo pertenece a otra historia, la de la cosecha salvada.',
+      { hint: 'Busca la expresión que une la nota del catador con lo que vino después.' }),
+    play('resumen-esencial', 'El resumen en tres renglones', { doc: CAFE, ideas: [
+      ['Cuarenta familias construyeron juntas una planta para secar el café.', true],
+      ['Con la planta, su café ganó calidad y se vende casi al doble.', true],
+      ['La planta ya protegió una cosecha de la lluvia.', true],
+      ['El catador describió notas de panela y de mandarina.', false],
+      ['Don Hernán anotó cada aporte en una libreta.', false],
+      ['Doña Fabiola lleva cuarenta años en el café.', false],
+    ] }, 'El reportaje cuenta cómo se hizo la planta, qué ganó el café y la cosecha que ya salvó. La panela, la libreta de don Hernán y los años de doña Fabiola son ciertos, pero son detalles que dan color a esas ideas.',
+      { hint: 'Pregúntate qué cambió para las familias. Lo que solo describe a una persona es un detalle.' }),
     play('hilo-referente', '¿En quiénes no conviene pensar solo?', { doc: CAFE, rounds: [
       { p: 4, text: 'Algunos |socios|, sin embargo, desconfían: dicen que el gusto de |los compradores extranjeros| cambia como |el tiempo| y que no conviene sembrar pensando solo en |ellos|.', from: 7, answer: 3 },
     ] }, '«Ellos» son los compradores extranjeros: no conviene sembrar pensando solo en su gusto. Los socios son quienes lo dicen.',
@@ -145,6 +156,12 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 3 · Expresiones y frases hechas ----------------
   setLesson('pu-vo-3', [
+    play('anticipa-texto', 'Antes de leer', { doc: SEMESTRE, slots: [
+      ['Tema', ['el primer semestre de un estudiante en la universidad', 'cómo se calcula el promedio de notas', 'la historia de una universidad pública'], 0],
+      ['Propósito', ['animar a los que entran, a partir de la propia experiencia', 'explicar el reglamento de la universidad', 'criticar a los profesores de cálculo'], 0],
+      ['Tipo de texto', ['testimonio, contado en primera persona', 'noticia, con datos oficiales', 'instructivo, con pasos numerados'], 0],
+    ] }, 'El título habla como un consejo («Aguanten»), lo firma un estudiante y sale en un blog de bienvenida: se espera un testimonio que cuente el primer semestre para animar a los que llegan.',
+      { hint: 'Mira a quién le habla el título y dónde se publica. La ficha dice también quién escribe.' }),
     play('palabra-a-la-medida', 'Lo que quieren decir', { doc: SEMESTRE, rounds: [
       { p: 1, before: 'en la ciudad uno no puede ', word: 'dar papaya', after: '.', options: ['facilitar que lo roben', 'regalar fruta en la calle', 'ser amable', 'llegar tarde'], answer: 0 },
       { p: 2, before: 'Las primeras semanas no ', word: 'di pie con bola', after: '.', options: ['acerté en nada', 'jugué fútbol', 'caminé mucho', 'dormí bien por las noches'], answer: 0 },
@@ -163,15 +180,6 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { frag: 'No es para echar voladores, pero tampoco es para llorar.', scale: ['conforme', 'eufórico', 'desesperado', 'burlón'], answer: 0 },
     ] }, 'La cara roja delata la vergüenza. Y quien dice que su nota no es para celebrar con pólvora ni para llorar está conforme.',
       { hint: '«Echar voladores» es celebrar con pólvora. ¿Qué siente quien dice que su nota no da para eso ni para llorar?' }),
-    play('lupa-evidencia', 'Lo que cuenta y lo que no', { doc: SEMESTRE, cards: [
-      ['En el primer parcial de cálculo sacó 1.8.', 0],
-      ['El profesor también había llegado del campo.', 0],
-      ['El autor pensó en dejar la universidad.', 1],
-      ['El autor venía de un lugar pequeño.', 1],
-      ['El autor perdió cálculo.', 2],
-      ['El grupo de estudio lo organizó la universidad.', 2],
-    ] }, 'El 1.8 y el profesor del campo están escritos. Que pensó en irse sale de «me devolvía»; que venía de un lugar pequeño, de su colegio de pueblo donde todos se conocían. Un parcial perdido no es la materia perdida, y el grupo lo armaron tres compañeros.',
-      { hint: 'Perder un parcial no es perder la materia. Lee con cuidado quién armó el grupo.' }),
     play('hilo-referente', '¿Quién y qué?', { doc: SEMESTRE, rounds: [
       { p: 3, text: 'Lo que me salvó fue |un grupo de estudio|. |Lo| armaron |tres compañeros|', from: 3, answer: 1 },
       { p: 2, text: 'en |el primer parcial de cálculo| saqué 1.8. Esa noche llamé a |mi papá| para decirle que me devolvía. |Él| me escuchó', from: 5, answer: 3 },
@@ -220,29 +228,34 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Los guácharos son ciegos.', 2],
     ] }, 'Las dos primeras están escritas. Si las semillas que no digieren caen dentro, son ellos quienes las llevan; y las plántulas buscan una luz «que nunca llega» y mueren. Los antibióticos «podrían» fabricarse algún día; y los ciegos son los peces: fuera de la cueva, los guácharos se guían por la vista.',
       { hint: '«Podrían servir algún día» no es «ya se hizo». Y fíjate bien de quién se dice que es ciego.' }),
-    play('termometro-tono', 'El tono del artículo', { doc: CUEVA, rounds: [
-      { frag: 'en pocos segundos la oscuridad se llena de un ruido que parece de mil puertas oxidadas.', scale: ['inquietante', 'alegre', 'técnico', 'burlón'], answer: 0 },
-      { frag: 'Quien entra a una cueva, dicen, entra a la casa de otros.', scale: ['respetuoso', 'indiferente', 'irónico', 'eufórico'], answer: 0 },
-    ] }, 'El comienzo crea una atmósfera inquietante, con un ruido de puertas oxidadas en la oscuridad. El cierre pide respeto por los habitantes de la cueva.',
-      { hint: 'Imagina la escena del primer fragmento con la linterna apagada. Y piensa en cómo se entra a la casa de otros.' }),
+    play('signos-que-hablan', 'Lo que hacen los signos', { doc: CUEVA, rounds: [
+      { p: 2, text: 'Los guácharos son frugívoros|:| se alimentan casi solo de frutos', options: ['explica qué quiere decir la palabra anterior', 'abre una lista de cuevas', 'marca una cita del guía', 'separa dos preguntas'], answer: 0 },
+      { p: 5, text: 'los biólogos insisten en que las visitas se hagan con reglas|:| grupos pequeños, sin linternas potentes y sin tocar las paredes.', options: ['anuncia las reglas una por una', 'da la causa de las visitas', 'abre una cita de los biólogos', 'marca una ironía'], answer: 0 },
+      { p: 1, text: 'Son guácharos|,| unas aves nocturnas que pasan el día dentro de las cuevas', options: ['abre una aclaración de qué son los guácharos', 'separa los elementos de una lista', 'reemplaza un verbo que no se repite', 'anuncia una pregunta'], answer: 0 },
+    ] }, 'En el párrafo 2, los dos puntos traducen «frugívoros» a palabras de todos los días. En el 5, anuncian la lista de reglas. Y la coma del párrafo 1 abre una aclaración: dice qué clase de animal es un guácharo.',
+      { hint: 'Mira lo que viene después del signo: ¿aclara una palabra, enumera cosas o explica quién es alguien?' }),
     play('conector-bisagra', 'Contrastes y consecuencias', { doc: CUEVA, rounds: [
       { a: 'Los murciélagos usan sonidos agudísimos, inaudibles para nosotros.', b: 'los chasquidos del guácharo se oyen perfectamente.', options: ['En cambio,', 'Por eso,', 'Además,', 'Es decir,'], answer: 0 },
       { a: 'Un exceso de luz puede hacer que las aves abandonen la cueva.', b: 'las visitas se hacen sin linternas potentes.', options: ['Por eso,', 'Aunque', 'Sin embargo,', 'Por ejemplo,'], answer: 0 },
     ] }, 'Los dos animales se comparan por lo que se oye (contraste). Y el riesgo de la luz es la razón de la regla (consecuencia).',
       { hint: 'Pregúntate si las dos ideas se oponen o si la segunda es lo que se hace por causa de la primera.' }),
-    play('donde-buscar', 'Vuelve al párrafo', { doc: CUEVA, cards: [
-      ['¿Qué se oye cuando el guía apaga la linterna?', [1]], ['¿Qué comen los guácharos?', [2]], ['¿Cómo se orientan en la oscuridad?', [3]],
-      ['¿Qué vive en las aguas de la cueva?', [4]], ['¿Qué reglas tienen las visitas?', [5]],
-    ] }, 'La escena de entrada (1), la comida (2), la orientación (3), los otros habitantes (4) y las reglas (5).',
-      { hint: 'Ubica la palabra clave de cada pregunta en el texto: linterna, frutos, eco, aguas, reglas.' }),
-    play('balanza-argumento', '¿Visitas con reglas?', { doc: CUEVA, thesis: 'Las visitas a las cuevas deben hacerse con reglas estrictas.', cards: [
-      ['El exceso de luz puede hacer que las aves se vayan.', 0],
-      ['Una mano con bloqueador puede alterar comunidades de microorganismos.', 0],
-      ['Un estudio muestra que el ruido de los visitantes no afecta a los guácharos.', 1],
-      ['Las cuevas con visitas libres conservan tantas aves como las protegidas.', 1],
-      ['Los guácharos son frugívoros.', null],
-    ] }, 'Los daños de la luz y del bloqueador justifican las reglas. Si el ruido no afectara a las aves o las cuevas sin reglas estuvieran igual de bien, las reglas perderían sentido. Lo que comen los guácharos no dice nada sobre las visitas.',
-      { hint: 'Pregúntate si cada oración muestra un daño de las visitas, una prueba de que no hay daño, o nada sobre las visitas.' }),
+    play('resumen-esencial', 'El resumen en tres renglones', { doc: CUEVA, ideas: [
+      ['Los guácharos viven en la oscuridad de las cuevas y se orientan por el eco.', true],
+      ['Las cuevas guardan otras formas de vida valiosas para la ciencia.', true],
+      ['Por eso las visitas deben hacerse con reglas que protejan la cueva.', true],
+      ['El guía lleva quince años recorriendo la cueva.', false],
+      ['Los murciélagos usan sonidos tan agudos que no los oímos.', false],
+      ['En el piso crecen plántulas pálidas que mueren en pocos días.', false],
+    ] }, 'El texto presenta a los guácharos y cómo se orientan, muestra que la cueva guarda otra vida valiosa y concluye que hay que visitarla con reglas. El guía, los murciélagos y las plántulas son detalles que ilustran esas ideas.',
+      { hint: 'La última oración del texto resume a dónde quería llegar. Las ideas esenciales llevan hasta ella.' }),
+    play('cadena-causas', 'Las plántulas de la cueva', { doc: CUEVA, chain: [
+      'Los guácharos tragan los frutos enteros.',
+      'Las semillas que no digieren caen al suelo de la cueva.',
+      'Algunas germinan en la penumbra.',
+      'Las plántulas crecen unos días sin luz y luego mueren.',
+    ], extra: ['Los guácharos emiten chasquidos para orientarse.', 'Una mano con bloqueador altera a los microorganismos.'] },
+      'El párrafo 2 encadena los cuatro hechos: los frutos se tragan enteros, las semillas caen sin digerir, algunas germinan y las plántulas mueren porque la luz nunca llega. Los chasquidos y el bloqueador son ciertos, pero pertenecen a otras partes del texto.',
+      { hint: 'Todo ocurre en un solo párrafo. Sigue lo que le pasa a una semilla desde que el guácharo se traga el fruto.' }),
   ]);
 
   // ---------------- Evaluación: formato real, texto nuevo ----------------

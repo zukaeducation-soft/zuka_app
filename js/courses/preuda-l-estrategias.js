@@ -49,23 +49,26 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Tipo de texto', ['divulgativo, que expone', 'cuento, que narra', 'poema, que expresa'], 0],
     ] }, 'El título pregunta por el ruido que aguanta una ciudad; lo firma un equipo universitario y sale en una revista de divulgación científica: se espera un texto que explique un problema con datos.',
       { hint: 'Mira qué anuncia el título y qué clase de publicación es la fuente. Quien escribe también da una pista.' }),
-    play('mapa-del-texto', 'El esqueleto del texto', { doc: RUIDO, labels: ['presenta el problema con un dato', 'explica cómo nos afecta', 'trae la voz de una experta', 'clasifica las soluciones', 'señala una desigualdad', 'cierra con una propuesta', 'cuenta una anécdota del autor'], key: [0, 1, 2, 3, 4, 5] },
-      'El texto abre con un dato (75 decibeles), explica qué le hace el ruido al cuerpo, cita a la ingeniera Restrepo, divide las soluciones en dos tipos, muestra quiénes sufren más y termina con la propuesta de los mapas. Nadie cuenta una anécdota propia.',
-      { hint: 'Para cada párrafo pregúntate qué hace: ¿da un dato, explica, cita a alguien, clasifica, compara o propone?' }),
+    play('subraya-prueba', 'La prueba en el texto', { doc: RUIDO, rounds: [
+      { claim: 'El ruido puede hacerle daño a alguien aunque esa persona no llegue a despertarse.', p: 2, answer: 2 },
+      { claim: 'Proteger las casas no resuelve el ruido que sufren los que están en la calle.', p: 4, answer: 3 },
+    ] }, 'La primera conclusión sale de la oración que dice que la persona no se despierta del todo, pero su corazón se acelera varias veces en la noche. La segunda, de la última oración del párrafo 4: las protecciones son más baratas, pero dejan intacto el problema en la calle.',
+      { hint: 'Varias oraciones hablan del mismo tema. Busca la que, si la borraras, dejaría la conclusión sin apoyo.' }),
     play('donde-buscar', '¿A qué párrafo vuelvo?', { doc: RUIDO, cards: [
-      ['¿Qué ruido produce una aspiradora?', [1]], ['¿Por qué el ruido afecta aunque no despierte?', [2]], ['¿Qué opina Restrepo de acostumbrarse?', [3]],
-      ['¿Qué soluciones protegen al que escucha?', [4]], ['¿Quiénes duermen con más ruido?', [5]], ['¿Qué propone la ingeniera?', [6]],
+      ['¿Qué soluciones protegen al que escucha?', [4]], ['¿Qué ruido produce una aspiradora?', [1]], ['¿Qué propone la ingeniera?', [6]],
+      ['¿Qué opina Restrepo de acostumbrarse?', [3]], ['¿Quiénes duermen con más ruido?', [5]], ['¿Por qué el ruido afecta aunque no despierte?', [2]],
     ] }, 'Cada pregunta tiene su párrafo: el dato de la aspiradora en el 1, el sueño en el 2, la cita sobre acostumbrarse en el 3, los dos tipos de soluciones en el 4, la desigualdad en el 5 y los mapas en el 6.',
       { hint: 'Usa el esqueleto: cada párrafo trata un asunto. Busca la palabra clave de la pregunta en el texto.' }),
-    play('lupa-evidencia', '¿Lo dice o lo pones tú?', { doc: RUIDO, cards: [
-      ['En Medellín, quien vive junto a una avenida principal oye de día unos 75 decibeles.', 0],
-      ['Mientras dormimos, el cerebro sigue registrando los sonidos.', 0],
-      ['Alguien puede estar sufriendo por el ruido aunque no se queje.', 1],
-      ['En los barrios pobres el ruido pesa más sobre la salud.', 1],
-      ['Los buses eléctricos son más caros que los de diésel.', 2],
-      ['Medellín es la ciudad más ruidosa de Colombia.', 2],
-    ] }, 'Los dos primeros están en los párrafos 1 y 2. Que el cuerpo sufra sin quejarse se deduce de la cita de Restrepo; que en los barrios pobres pese más se deduce del párrafo 5. Los precios de los buses y la comparación entre ciudades no aparecen.',
-      { hint: 'Busca cada afirmación en el texto. Si está, «lo dice»; si sale de juntar lo que dice, «se deduce»; si no hay de dónde sacarla, «no lo dice».' }),
+    play('resumen-esencial', 'El resumen en cuatro renglones', { doc: RUIDO, ideas: [
+      ['El ruido constante es un problema de salud, no una simple molestia.', true],
+      ['El cuerpo reacciona al ruido aun dormido, sobre todo cuando se repite cada noche.', true],
+      ['Los barrios con menos recursos son los que más ruido soportan.', true],
+      ['Medir el ruido barrio por barrio convertiría la queja en un dato que obliga a actuar.', true],
+      ['Una avenida produce 75 decibeles, como una aspiradora a un metro.', false],
+      ['Los buses eléctricos y ciertos pavimentos bajan el ruido en la fuente.', false],
+      ['La ingeniera Natalia Restrepo mide el ruido de la ciudad desde hace una década.', false],
+    ] }, 'El resumen recoge la tesis (el ruido es un problema de salud), por qué lo es (el cuerpo reacciona aun dormido), a quiénes golpea más y la propuesta de los mapas. Los 75 decibeles, los buses eléctricos y los años de la ingeniera son ciertos, pero son detalles que apoyan esas ideas.',
+      { hint: 'Una idea esencial resume un párrafo entero o el texto completo. Un dato, un ejemplo o un nombre es un detalle dentro de un párrafo.' }),
     play('palabra-a-la-medida', 'La palabra en su oración', { doc: RUIDO, rounds: [
       { p: 3, before: 'el compresor de una fábrica que funciona todas las noches ', word: 'desgasta', after: '.', options: ['agota', 'limpia', 'adelgaza', 'enfría'], answer: 0 },
       { p: 4, before: 'pero dejan ', word: 'intacto', after: ' el problema en la calle', options: ['sin cambios', 'resuelto', 'pequeño', 'oculto a la vista'], answer: 0 },
@@ -86,6 +89,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 2 · Idea central y mapa del texto ----------------
   setLesson('pu-el-2', [
+    play('ordena-parrafos', 'Arma el texto otra vez', { doc: TIENDA },
+      'El texto abre con la tesis. «La razón es económica» presenta el primer argumento y «Además» suma el segundo, el crédito del cuaderno. Después responde a «quienes celebran» las grandes cadenas, «Por eso» saca la propuesta y las dos frases cortas cierran.',
+      { hint: 'Mira cómo empieza cada párrafo: un «Además», un «Por eso» o una respuesta a otros solo pueden ir después de lo que suman, concluyen o responden.' }),
     play('resume-parrafo', 'Una idea por párrafo', { doc: TIENDA, paras: [1, 2, 3, 4], options: [
       'La tienda debe defenderse por razones prácticas, no sentimentales.',
       'Comprar poco y cerca le sale más barato a quien vive del día a día.',
@@ -112,30 +118,24 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { a: 'Los precios bajos no los aprovechan todos.', b: 'las políticas deberían preguntar a quién sirve cada forma de vender.', options: ['Por eso,', 'Aunque', 'Es decir,', 'Pero'], answer: 0 },
     ] }, 'Lo bonito y lo equivocado se oponen: contraste. El fiado es una razón más que se suma a la anterior. Y preguntar a quién sirve cada forma de vender es la consecuencia de que no todos aprovechen los precios bajos.',
       { hint: 'Mira qué relación hay entre las dos ideas: ¿se oponen, la segunda se suma, la segunda es resultado de la primera o la aclara?' }),
-    play('quien-lo-dice', 'Las voces de la columna', { doc: TIENDA, voices: ['La autora', 'Los defensores de las cadenas', 'Las despedidas nostálgicas'], cards: [
-      ['La tienda es la manera más racional de hacer mercado para muchas familias.', 0],
-      ['Los precios bajos benefician a todos.', 1],
-      ['Lo que se pierde es el tendero que fiaba y la radio encendida.', 2],
-      ['Un descuento por cantidad solo ayuda a quien puede comprar la cantidad.', 0],
-      ['Hay que facilitar que las tiendas acepten pagos digitales.', 0],
-    ] }, 'La autora sostiene la tesis, la respuesta sobre los descuentos y la propuesta. Que los precios bajos benefician a todos es lo que dicen quienes celebran las cadenas. El tendero y la radio son el tema de las despedidas que la autora critica.',
-      { hint: 'En una columna aparecen ideas que la autora cita para discutirlas. Fíjate en «Quienes celebran… responden que».' }),
     play('hilo-referente', '¿De qué textos habla?', { doc: TIENDA, rounds: [
       { p: 1, text: 'Cada vez que cierra |una tienda de barrio|, alguien escribe |una despedida llena de nostalgia|: el tendero que fiaba, el olor a panela, la radio encendida. |Esos textos| son bonitos', from: 5, answer: 3 },
     ] }, '«Esos textos» son las despedidas llenas de nostalgia que alguien escribe cuando cierra una tienda.',
       { hint: 'Una expresión con «esos» apunta hacia atrás, a algo ya nombrado en la misma oración. Prueba cuál de los trozos encaja con «textos».' }),
-    play('lupa-evidencia', 'Lo que la autora dice y lo que no', { doc: TIENDA, cards: [
-      ['La tienda vende por unidades pequeñas.', 0],
-      ['Sin el fiado, muchos hogares quedan expuestos a prestamistas informales.', 0],
-      ['Para algunas familias, el supermercado sale más caro de lo que parece.', 1],
-      ['La autora considera inútiles las despedidas nostálgicas.', 2],
-      ['Las tiendas venden más barato que los supermercados.', 2],
-    ] }, 'Las dos primeras están en los párrafos 2 y 3. Que el supermercado salga más caro para algunos se deduce del párrafo 2. La autora dice que las despedidas «equivocan el diagnóstico», no que sean inútiles; y nunca dice que la tienda venda más barato, solo que comprar en ella resulta más barato contando el bus y el tiempo.',
-      { hint: 'Cuidado con las afirmaciones que exageran lo que dice el texto: compara palabra por palabra con el párrafo.' }),
+    play('cadena-causas', 'Lo que se pierde con la tienda', { doc: TIENDA, ask: 'Según el texto, ¿qué pasa cuando cierra la tienda del barrio? Arma la cadena.', chain: [
+      'La tienda del barrio cierra.',
+      'Desaparece el crédito del cuaderno del tendero.',
+      'Muchas familias quedan en manos de prestamistas informales.',
+    ], extra: ['El supermercado baja los precios.', 'Las familias compran el arroz por arrobas.'] },
+      'El párrafo 3 encadena tres hechos: la tienda cierra, el préstamo del cuaderno desaparece y los hogares quedan expuestos a prestamistas que cobran intereses abusivos. Que el supermercado baje precios es cierto, pero no sale del cierre; y comprar por arrobas es justo lo que esas familias no pueden hacer.',
+      { hint: 'Busca la oración que empieza «Cuando la tienda cierra…» y sigue lo que pasa después, paso por paso.' }),
   ]);
 
   // ---------------- Lección 3 · Tiempo y preguntas EXCEPTO ----------------
   setLesson('pu-el-3', [
+    play('ordena-parrafos', 'Arma el texto otra vez', { doc: VOLCAN },
+      '«Para escuchar esos avisos» retoma los avisos del final del párrafo 1. El 3 advierte que ningún instrumento basta solo; «Con esa información», en el 4, usa lo que se mide; «Sin embargo», en el 5, pone el límite de la vigilancia, y el 6 cierra con la confianza.',
+      { hint: 'Las palabras que retoman algo, como «esos avisos» o «esa información», necesitan que ese algo ya se haya dicho.' }),
     play('intruso-excepto', 'Pregunta EXCEPTO', { doc: VOLCAN, ask: 'Los observatorios hacen todo lo siguiente, EXCEPTO:', cards: [
       ['Medir los gases que salen del cráter', [2, 3]],
       ['Detectar si la montaña se infla', [2, 3]],
@@ -144,8 +144,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     ] }, 'Medir gases y detectar si la montaña se infla está en el párrafo 2; los niveles de alerta, en el 4. Decidir quién evacúa no aparece: los observatorios comunican y hacen simulacros. Esa es la respuesta.',
       { hint: 'No elijas por intuición: busca cada opción en el texto. La que no encuentre párrafo es la que no está.' }),
     play('donde-buscar', 'Ubica sin releer todo', { doc: VOLCAN, cards: [
-      ['¿Qué causó la tragedia de Armero?', [1]], ['¿Dónde están los observatorios?', [2]], ['¿Por qué un solo síntoma no basta?', [3]],
-      ['¿Qué significa la alerta naranja?', [4]], ['¿Qué falló en 1985 además del volcán?', [5]],
+      ['¿Por qué un solo síntoma no basta?', [3]], ['¿Qué falló en 1985 además del volcán?', [5]], ['¿Qué causó la tragedia de Armero?', [1]],
+      ['¿Qué significa la alerta naranja?', [4]], ['¿Dónde están los observatorios?', [2]],
     ] }, 'Armero está en el párrafo 1; los observatorios y sus instrumentos, en el 2; la comparación con el paciente, en el 3; los colores, en el 4; los avisos que no llegaron, en el 5.',
       { hint: 'Busca la palabra clave de cada pregunta (Armero, observatorios, síntoma, naranja, avisos) y mira en qué párrafo aparece.' }),
     play('lupa-evidencia', 'Lo dice, se deduce o no lo dice', { doc: VOLCAN, cards: [
@@ -157,11 +157,6 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['El Galeras es el volcán más peligroso del país.', 2],
     ] }, 'Los inclinómetros y los avisos de 1985 están escritos tal cual. Que no fue la lava se deduce de cómo se describe el agua con ceniza; que el rojo es más grave, del orden de los colores. Lo de los temblores contradice el párrafo 3 y el Galeras no se menciona.',
       { hint: 'Busca cada afirmación en su párrafo. Si para aceptarla tienes que añadir algo que el texto no dice, no la pongas en «lo dice».' }),
-    play('palabra-a-la-medida', 'Vocabulario en contexto', { doc: VOLCAN, rounds: [
-      { p: 3, before: 'un síntoma ', word: 'aislado', after: ' no dice mucho', options: ['solo', 'lejano', 'encerrado', 'frío'], answer: 0 },
-      { p: 4, before: 'una erupción en curso o ', word: 'inminente', after: '.', options: ['a punto de ocurrir', 'muy grande', 'imposible de ver a simple vista', 'ya terminada'], answer: 0 },
-    ] }, 'Un síntoma aislado es uno solo, sin otros que lo acompañen: la cita lo opone a «varios al mismo tiempo». Inminente es lo que está a punto de pasar, por eso va junto a «en curso».',
-      { hint: 'Busca en la misma oración la palabra que se opone o se suma a la subrayada: te dice qué significa ahí.' }),
     play('quien-lo-dice', 'EXCEPTO con trampa: el párrafo que pide la pregunta', { doc: VOLCAN, ask: 'La pregunta dice: «Según el párrafo 4, sobre los niveles de alerta se afirma todo lo siguiente, EXCEPTO:». Lleva cada opción a donde la encuentras.', voices: ['Está en el párrafo 4: queda descartada', 'Está en el texto, pero en otro párrafo: no está donde pide la pregunta', 'No está en ninguna parte del texto'], cards: [
       ['Los colores van del verde al rojo.', 0],
       ['El naranja anuncia una erupción probable en días o semanas.', 0],
@@ -179,9 +174,13 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Un conductor frena en cuanto ve una luz roja.', false],
     ] }, 'El médico, el meteorólogo y el banco esperan a que coincidan varias señales, como los vulcanólogos. El profesor decide por un solo hecho, y el conductor reacciona a una sola señal, que en su caso basta.',
       { hint: 'Pregúntate en cada caso si la decisión se toma por una sola señal o porque varias coinciden.' }),
-    play('mapa-del-texto', 'El mapa del artículo', { doc: VOLCAN, labels: ['narra un caso que deja una lección', 'describe los instrumentos de vigilancia', 'explica cómo se interpretan las señales', 'explica los niveles de alerta', 'señala un límite de la vigilancia', 'cierra con una conclusión', 'refuta a una experta'], key: [0, 1, 2, 3, 4, 5] },
-      'El texto parte de Armero, describe los instrumentos, explica que las señales se leen juntas, presenta los colores de alerta, admite que vigilar no basta si nadie escucha («Sin embargo») y cierra con una frase sobre la confianza. La experta se cita, no se refuta.',
-      { hint: 'El párrafo que empieza con «Sin embargo» marca un giro: ¿qué hace frente a lo anterior?' }),
+    play('cadena-causas', 'Lo que pasó en Armero', { doc: VOLCAN, chain: [
+      'Una erupción pequeña derrite parte del glaciar.',
+      'El agua baja por los ríos mezclada con ceniza, rocas y troncos.',
+      'El lodo sepulta el pueblo de Armero.',
+    ], extra: ['La lava corre por las laderas hasta el pueblo.', 'Los inclinómetros detectan que la montaña se infla.'] },
+      'Según el párrafo 1 no fue la lava: el glaciar derretido se mezcló con ceniza, rocas y troncos, y esa avalancha sepultó Armero. Los inclinómetros son parte de la vigilancia de hoy, no de la tragedia.',
+      { hint: 'El texto avisa que el peligro de un volcán «no siempre es la lava». Sigue lo que hizo el agua del glaciar.' }),
   ]);
 
   // ---------------- Evaluación: formato real, texto nuevo ----------------

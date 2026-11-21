@@ -29,41 +29,33 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 1 · Figuras literarias ----------------
   setLesson('pu-lf-1', [
-    play('quien-lo-dice', 'Cada figura en su lugar', { doc: MADRUGADA, ask: 'Lleva cada expresión de la crónica a la figura que usa.', voices: ['Metáfora', 'Comparación', 'Personificación', 'Hipérbole'], cards: [
-      ['De noche, el río era una cinta negra.', 0],
-      ['El metro, ese gusano de acero.', 0],
-      ['Panaderos blancos de harina, como estatuas que se movieran.', 1],
-      ['Las luces parecen un pesebre olvidado.', 1],
-      ['Los buses bostezan en los paraderos.', 2],
-      ['La ciudad todavía no se ha puesto los zapatos.', 2],
-      ['Vigilantes que llevan cien años sin dormir.', 3],
-    ] }, 'La metáfora dice que A es B (el río era una cinta negra); la comparación usa «como» o «parecen»; la personificación da gestos humanos a cosas (bostezar, ponerse zapatos); y la hipérbole exagera (cien años sin dormir).',
-      { hint: 'Busca las pistas: «como» o «parece» (comparación), un gesto humano en una cosa (personificación), una exageración imposible (hipérbole).' }),
+    play('ordena-parrafos', 'Arma la crónica otra vez', { doc: MADRUGADA },
+      'La crónica sigue el reloj: las cinco, los que madrugan a esa misma hora, «A las seis», «A las siete» y el cierre con «Pero quien vio la ciudad a las cinco», que vuelve al comienzo.',
+      { hint: 'Busca las horas al comienzo de los párrafos. El último no trae hora: vuelve a una que ya pasó.' }),
     play('palabra-a-la-medida', 'Lo que quieren decir las figuras', { doc: MADRUGADA, rounds: [
       { p: 1, before: 'Medellín todavía no ', word: 'se ha puesto los zapatos', after: '.', options: ['ha empezado su día', 'ha comprado ropa', 'ha salido a caminar', 'se ha acostado'], answer: 0 },
       { p: 2, before: 'empujan sus carritos cuesta arriba con una ', word: 'paciencia de piedra', after: '.', options: ['paciencia firme e incansable', 'paciencia dura y fría como una roca', 'paciencia de escultor', 'poca paciencia'], answer: 0 },
       { p: 3, before: 'el metro, ese gusano de acero, empieza a ', word: 'tragarse', after: ' a la gente por montones', options: ['recibir en sus vagones', 'expulsar', 'asustar', 'olvidar en las estaciones'], answer: 0 },
     ] }, 'En el examen importa lo que significa la figura: la ciudad que no se ha puesto los zapatos todavía no empieza el día; la paciencia de piedra es firme e incansable; y el metro «se traga» a la gente porque la recibe a montones en sus vagones.',
       { hint: 'No leas la figura al pie de la letra: pregúntate qué idea real quiere transmitir.' }),
-    play('lupa-evidencia', 'Figurado o literal', { doc: MADRUGADA, cards: [
-      ['A las cinco de la mañana ya hay buses en los paraderos.', 0],
-      ['A las siete hay mucho ruido en la ciudad.', 0],
-      ['A las seis, el metro va lleno de gente.', 1],
-      ['El autor prefiere la ciudad de la madrugada.', 1],
-      ['Los vigilantes llevan exactamente cien años sin dormir.', 2],
-      ['Las palomas trabajan para la alcaldía.', 2],
-    ] }, 'Los buses y el ruido están dichos (con figuras, pero dichos). Que el metro va lleno se entiende de «tragarse a la gente por montones» y de los que dormitan de pie; y la preferencia del autor, del «secreto» que guarda la madrugada. Los cien años son una exageración, y las palomas son «como» funcionarias: no lo son.',
-      { hint: 'Una hipérbole o una comparación no se toman al pie de la letra.' }),
+    play('signos-que-hablan', 'Lo que hacen los signos', { doc: MADRUGADA, rounds: [
+      { p: 2, text: 'Nadie habla mucho a esa hora|:| las palabras también están dormidas', options: ['anuncia por qué nadie habla', 'abre una lista de oficios', 'marca una cita', 'separa dos preguntas'], answer: 0 },
+      { p: 2, text: 'como estatuas que se movieran|;| vigilantes que llevan cien años sin dormir', options: ['separa partes de una lista que ya tienen comas', 'cierra el párrafo', 'anuncia una explicación', 'marca una pregunta'], answer: 0 },
+      { p: 3, text: 'y el metro|,| ese gusano de acero, empieza a tragarse a la gente', options: ['abre un inciso que nombra al metro con una metáfora', 'separa dos verbos', 'reemplaza un verbo que no se repite', 'anuncia una cita'], answer: 0 },
+    ] }, 'Los dos puntos anuncian la razón poética del silencio. El punto y coma separa las partes de una lista larga cuyas partes ya llevan comas. Y las comas del párrafo 3 encierran un inciso: «ese gusano de acero» es otro nombre del metro.',
+      { hint: 'Fíjate qué viene después del signo: una razón, otra parte de una lista o un nombre nuevo para lo que se acaba de decir.' }),
     play('termometro-tono', 'El tono de la crónica', { doc: MADRUGADA, rounds: [
       { frag: 'Nadie habla mucho a esa hora: las palabras también están dormidas, y los saludos se hacen con la cabeza.', scale: ['poético', 'técnico', 'agresivo', 'irónico'], answer: 0 },
       { frag: 'Pero quien vio la ciudad a las cinco sabe que ella también tiene un rato de silencio, y que lo guarda solo para los que madrugan.', scale: ['afectuoso', 'burlón', 'técnico', 'alarmado'], answer: 0 },
     ] }, 'Las palabras «dormidas» son una imagen poética. Y el cierre habla de la ciudad con cariño, como de alguien que guarda un secreto.',
       { hint: 'Fíjate en cómo trata el autor a la ciudad: ¿como un objeto o como alguien a quien quiere?' }),
-    play('hilo-referente', '¿Qué guarda la ciudad?', { doc: MADRUGADA, rounds: [
-      { p: 5, text: 'Pero quien vio |la ciudad| a las cinco sabe que |ella| también tiene |un rato de silencio|, y que |lo| guarda solo para |los que madrugan|', from: 7, answer: 5 },
-      { p: 3, text: '|El río|, que de noche era |una cinta negra|, se vuelve de plata por unos minutos. |Las palomas del parque Berrío| ocupan |sus| puestos', from: 7, answer: 5 },
-    ] }, 'Lo que la ciudad guarda es su rato de silencio. Y los puestos son de las palomas, que la crónica trata como a funcionarias puntuales.',
-      { hint: '«Lo» va en masculino singular. Y «sus» pide un dueño: busca hacia atrás quién ocupa puestos.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: MADRUGADA, q: '¿Qué quiere decir el autor con «Medellín todavía no se ha puesto los zapatos»?', options: [
+      ['Que a esa hora la gente de Medellín sale descalza a la calle.', 3],
+      ['Que a esa hora la ciudad todavía no ha empezado su día.', 0],
+      ['Que nadie en la ciudad trabaja antes de las siete.', 1],
+      ['Que la ciudad nunca termina de despertar.', 2],
+    ] }, 'B lee la personificación: la ciudad es como alguien que aún no se ha arreglado para salir. A toma la frase al pie de la letra, y eso el texto no lo dice. C dice de más: a las cinco ya trabajan panaderos, vigilantes y vendedoras. D dice lo contrario de las siete, cuando todo es ruido. Sobra el sello «Mezcla datos».',
+      { hint: 'Una figura no se lee al pie de la letra. Pregúntate qué hace alguien antes de ponerse los zapatos.' }),
     play('caso-nuevo', '¿Hay personificación?', { doc: MADRUGADA, principle: 'Una personificación les da acciones o rasgos humanos a cosas, lugares o animales.', ask: '¿En cuáles frases hay personificación?', cards: [
       ['El viento golpeaba la puerta con rabia.', true],
       ['La nevera ronca toda la noche.', true],
@@ -71,27 +63,31 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Corrió como un rayo.', false],
     ] }, 'Sentir rabia y roncar son cosas de personas: el viento y la nevera están personificados. «Grande y vieja» describe sin figura, y «como un rayo» es una comparación.',
       { hint: 'Pregúntate si la cosa hace algo que solo haría una persona.' }),
-    play('mapa-del-texto', 'La crónica hora por hora', { doc: MADRUGADA, labels: ['la ciudad a las cinco', 'los que madrugan', 'la ciudad a las seis', 'la ciudad a las siete', 'el secreto de la madrugada', 'la ciudad a medianoche'], key: [0, 1, 2, 3, 4] },
-      'La crónica sigue el reloj: cinco, la gente de la madrugada, seis y siete, y cierra con el secreto que solo ven los que madrugan. Empieza a las cinco: no hay escena de medianoche.',
-      { hint: 'Busca las horas al comienzo de los párrafos.' }),
+    play('resumen-esencial', 'El resumen en tres renglones', { doc: MADRUGADA, ideas: [
+      ['A las cinco la ciudad está en silencio y solo la recorren los que madrugan.', true],
+      ['Con el sol la ciudad despierta poco a poco, y a las siete ya es puro ruido.', true],
+      ['Ese rato de silencio es un secreto que solo conocen los madrugadores.', true],
+      ['Un perro callejero cruza la avenida vacía.', false],
+      ['Las palomas del parque Berrío ocupan sus puestos.', false],
+      ['El río se vuelve de plata por unos minutos.', false],
+    ] }, 'La crónica va de la ciudad callada de las cinco a la ciudad ruidosa de las siete, y cierra con el secreto de los que madrugan. El perro, las palomas y el río son imágenes que pintan cada hora, no lo que el texto quiere decir.',
+      { hint: 'En un texto lleno de imágenes, las ideas esenciales son las que quedan cuando se quitan las imágenes.' }),
   ]);
 
   // ---------------- Lección 2 · Ironía ----------------
   setLesson('pu-lf-2', [
+    play('anticipa-texto', 'Antes de leer', { doc: TRANCON, slots: [
+      ['Tema', ['el trancón de la ciudad', 'la historia de los carros', 'cómo se construye una autopista'], 0],
+      ['Tono', ['humorístico, con ironía', 'solemne, como un informe técnico', 'triste, como una despedida'], 0],
+      ['Tipo de texto', ['columna de opinión', 'noticia de tránsito', 'manual de conducción'], 0],
+    ] }, 'Un «elogio» del trancón en una columna de humor de la página de opinión: lo que se espera es una crítica dicha al revés, con ironía.',
+      { hint: 'Piensa si alguien elogiaría de verdad un trancón. La ficha dice en qué sección se publica.' }),
     play('termometro-tono', 'Lo que dice y lo que piensa', { doc: TRANCON, rounds: [
       { frag: 'Las autoridades, sabias como siempre, han decidido proteger esta tradición.', scale: ['irónico', 'respetuoso', 'técnico', 'temeroso'], answer: 0 },
       { frag: '¿Qué más se le puede pedir a una vía?', scale: ['sarcástico', 'curioso', 'preocupado', 'neutral'], answer: 0 },
       { frag: 'está rodeado de miles de personas que, como usted, están aprovechando al máximo su vida.', scale: ['irónico', 'sincero', 'solemne', 'asustado'], answer: 0 },
     ] }, 'Llamar «sabias» a autoridades que llevan quince años sin hacer la obra es ironía. La pregunta finge admiración por una vía que no funciona. Y nadie aprovecha su vida detenido en un trancón: el autor dice lo contrario de lo que piensa.',
       { hint: 'Compara lo que dice cada frase con los hechos del texto: quince años de estudio, cuarenta minutos quietos, humo.' }),
-    play('caso-nuevo', 'Ironía sutil en un texto serio', { doc: TRANCON, principle: 'En un texto serio la ironía no siempre contradice un hecho: se asoma en un tono solemne para algo pequeño, en una comparación con la fe o la suerte, o en unas comillas que toman distancia.', ask: 'Estas frases son de un informe serio sobre la misma autopista. ¿En cuáles se asoma la ironía?', cards: [
-      ['El concejo anunció, con aire de gran conquista, que la vía tendrá una cuarta mesa de estudio.', true],
-      ['Los funcionarios confían en la nueva aplicación de semáforos con la fe que otros les tienen a los amuletos.', true],
-      ['La alcaldía presentó el «plan definitivo» de movilidad, el tercero de este año.', true],
-      ['El concejo anunció que en marzo se instalará una cuarta mesa de estudio sobre la vía.', false],
-      ['La nueva aplicación de semáforos se instaló en tres cruces del centro.', false],
-    ] }, 'Ninguna frase dice lo contrario de un hecho, pero tres toman distancia: celebrar «con aire de gran conquista» una reunión más, comparar la confianza en una aplicación con la fe en un amuleto y poner entre comillas un «plan definitivo» que ya es el tercero. Las otras dos dan el mismo dato sin ningún juicio.',
-      { hint: 'Compara las frases que dan el mismo dato: ¿qué palabras sobran si solo se quisiera informar?' }),
     play('balanza-argumento', 'La tesis escondida', { doc: TRANCON, ask: 'La tesis real del autor está detrás de la ironía. Pesa estas oraciones frente a ella.', thesis: 'El trancón de la autopista es un problema que las autoridades no han querido resolver.', cards: [
       ['Llevan quince años estudiando la ampliación de la vía.', 0],
       ['Hay quienes pasan más tiempo en el carro que con sus hijos.', 0],
@@ -100,22 +96,23 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['En la autopista hay vallas de colchones.', null],
     ] }, 'Los quince años de estudio, el tiempo perdido y los carros que aumentan muestran el problema y la inacción. Si la vía ya se hubiera ampliado y el trancón desaparecido, la tesis sería falsa. La valla del colchón es un detalle cómico.',
       { hint: 'Primero saca la tesis real: lo contrario de lo que dice el «elogio». Luego pesa cada oración.' }),
-    play('lupa-evidencia', 'Leer la ironía', { doc: TRANCON, cards: [
-      ['La ampliación de la vía lleva quince años en estudio.', 0],
-      ['El trancón ocurre a las seis de la tarde.', 0],
-      ['El autor critica a las autoridades.', 1],
-      ['El autor quiere de verdad que el trancón continúe.', 2],
-      ['El autor piensa de verdad que quienes se quejan no tienen razón.', 2],
-    ] }, 'Los quince años y la hora están escritos. La crítica a las autoridades se deduce de la ironía. Al pie de la letra, el autor elogia el trancón y se burla de los que se quejan; leído con la ironía, piensa justo lo contrario: está del lado de ellos.',
-      { hint: 'En un texto irónico, lo que se dice al pie de la letra no es lo que el autor piensa.' }),
+    play('subraya-prueba', 'La prueba de la ironía', { doc: TRANCON, rounds: [
+      { claim: 'El autor se burla de lo mucho que tardan las autoridades en decidir.', p: 4, answer: 1 },
+      { claim: 'El autor sabe que el trancón le quita a la gente tiempo con su familia.', p: 3, answer: 1 },
+    ] }, 'La burla está en los quince años de estudio que, «es de esperar», durarán quince más. Y el tiempo con la familia aparece en lo que dicen los que se quejan: pasan más tiempo en el carro que con sus hijos.',
+      { hint: 'En una columna irónica, la verdad suele estar en lo que el autor pone en boca de otros o en lo que exagera.' }),
     play('palabra-a-la-medida', 'Palabras con doble filo', { doc: TRANCON, rounds: [
       { p: 1, before: 'que nos regala, cada día, hora y media de reflexión ', word: 'obligatoria', after: '.', options: ['que no se puede evitar', 'voluntaria', 'agradable', 'pagada por las empresas de buses'], answer: 0 },
       { p: 4, before: 'Construirla de afán sería, como todo el mundo sabe, un error ', word: 'imperdonable', after: '.', options: ['muy grave', 'pequeño', 'útil', 'frecuente'], answer: 0 },
     ] }, '«Regala» y «obligatoria» chocan: nadie regala algo obligatorio; la ironía está en ese choque. Y llamar «imperdonable» a construir rápido una vía que lleva quince años en estudio es decir lo contrario de lo que se piensa.',
       { hint: 'Busca el choque entre la palabra y lo que la rodea: un regalo obligatorio, un error que sería hacer la obra.' }),
-    play('mapa-del-texto', 'Cómo avanza el elogio', { doc: TRANCON, labels: ['elogia el trancón en broma', 'enumera falsos beneficios', 'finge burlarse de quienes se quejan', 'critica con ironía a las autoridades', 'cierra con un falso consejo', 'propone una solución técnica'], key: [0, 1, 2, 3, 4] },
-      'Todo el texto finge un elogio: lo presenta, enumera beneficios absurdos, se «burla» de quienes se quejan, «elogia» a las autoridades y aconseja disfrutar el humo. No propone ninguna solución técnica.',
-      { hint: 'En cada párrafo, pregúntate qué critica el autor en realidad.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: TRANCON, q: '¿Qué busca el autor al llamar al trancón «una institución que no recibe el reconocimiento que merece»?', options: [
+      ['Criticar el trancón con ironía, diciendo lo contrario de lo que piensa.', 0],
+      ['Elogiar de verdad el trancón como una tradición de la ciudad.', 2],
+      ['Pedir que se construyan trenes rápidos en todas las ciudades del país.', 1],
+      ['Contar que los monjes buscan la paciencia en las montañas.', 4],
+    ] }, 'A es la ironía: el elogio es una crítica al revés. B dice lo contrario de lo que el autor piensa; C dice de más, porque los trenes rápidos solo se mencionan de otras ciudades; y D toma un detalle de una comparación como si fuera el propósito. Sobra el sello «El texto no lo dice».',
+      { hint: 'Antes de sellar, decide si el autor piensa de verdad lo que dice. Lo que exagera es la pista.' }),
     play('signos-que-hablan', 'Signos de la ironía', { doc: TRANCON, rounds: [
       { p: 2, text: '|¿|Qué más se le puede pedir a una vía?', options: ['abre una pregunta retórica que no espera respuesta', 'abre una duda real del autor', 'cita a un conductor', 'marca una exclamación'], answer: 0 },
       { p: 4, text: 'Las autoridades|,| sabias como siempre, han decidido', options: ['abre un inciso irónico sobre las autoridades', 'separa los elementos de una lista', 'anuncia un ejemplo', 'marca el final de una cita'], answer: 0 },

@@ -8,6 +8,8 @@
 //                                     { ask, chips: [texto], zones: [{ label, cap }], key: [zona | [zonas] | null por ficha] }
 //                                     y def.render(r, ui) arma la escena con ui.zone(i), ui.chip(c), ui.pool(), ui.placed(i).
 //   LEC.rounds(name, params)        → las rondas normalizadas (para las pruebas).
+//   LEC.sentences(párrafo)          → las oraciones de un párrafo (corta tras . ! ? … cuando sigue mayúscula).
+//   LEC.css(id, reglas)             → pone una sola vez en la página los estilos propios de un juego.
 const LEC = (() => {
   const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
   // Texto con __subrayado__ (la palabra por la que pregunta el examen) y **negrita**.
@@ -19,7 +21,7 @@ const LEC = (() => {
     if (!d) return '';
     const ficha = d.ficha ? `<p class="lec-ficha">${[d.ficha.autor, d.ficha.fuente, d.ficha.fecha].filter(Boolean).map(esc).join(' · ')}</p>` : '';
     const body = o.hideBody
-      ? '<p class="lec-hidden">El texto se abre cuando termines de anticipar.</p>'
+      ? `<p class="lec-hidden">${esc(o.hideMsg || 'El texto se abre cuando termines de anticipar.')}</p>`
       : d.paras.map((p, i) => `<p class="lec-p"><span class="lec-pn" aria-label="párrafo ${i + 1}">${i + 1}</span>${fmt(p)}</p>`).join('');
     return `<details class="lec-doc"${o.closed ? '' : ' open'}><summary><span class="lec-dk">${esc(o.label || 'Texto')}</span><span class="lec-dt">${esc(d.title)}</span></summary>${ficha}<div class="lec-body">${body}</div></details>`;
   }
@@ -32,6 +34,16 @@ const LEC = (() => {
   const first = (s, n = 7) => { const w = s.replace(/__|\*\*/g, '').split(/\s+/); return w.slice(0, n).join(' ') + (w.length > n ? '…' : ''); };
 
   function rounds(name, params) { return DEFS[name].norm(params); }
+  // Sin «lookbehind» (Safari viejo no lo entiende): se marca el corte y luego se parte.
+  const sentences = t => String(t).replace(/([.!?…][»”")]?)\s+(?=[¿¡«"(—]?[A-ZÁÉÍÓÚÑ0-9])/g, '$1\u0001').split('\u0001').map(x => x.trim()).filter(Boolean);
+  const styled = new Set();
+  function css(id, rules) {
+    if (styled.has(id) || typeof document === 'undefined' || !document.head?.appendChild) return;
+    styled.add(id);
+    const el = document.createElement('style');
+    el.id = `lec-css-${id}`; el.textContent = rules;
+    document.head.appendChild(el);
+  }
   // Enter y las flechas sobre el texto, una ficha o una zona no siguen hasta la lección: allá Enter comprueba la respuesta y
   // ← / → cambian de ejercicio. El <summary> conserva su Enter para plegar el texto.
   function guardKeys(box) {
@@ -61,7 +73,7 @@ const LEC = (() => {
       let at = 0, sel = -1, locked = false, okAll = null, drag = null;
       const box = document.createElement('div');
       box.className = `lec lec-${name}`;
-      box.innerHTML = `${docs(params, { hideBody: def.hideBody })}<div class="lec-play"></div>`;
+      box.innerHTML = `${docs(params, { hideBody: def.hideBody, hideMsg: def.hideMsg })}<div class="lec-play"></div>`;
       host.appendChild(box);
       const play = box.querySelector('.lec-play');
       const needAll = r => r.key.every(k => k != null);
@@ -195,7 +207,8 @@ const LEC = (() => {
         lock(ok) { locked = true; okAll = ok; sel = -1; render(); },
         destroy() { drag?.ghost?.remove(); box.remove(); },
         // Para el robot del navegador: la ronda, el estado y la jugada de la clave.
-        peek: () => ({ at, state: st, solve: rs.map(r => r.key.map(k => keyOf(k)[0] ?? -1)) }),
+        // Una zona de cupo 1 recibe una sola ficha: si la clave admite varias zonas (los renglones de un resumen), cada ficha toma una libre.
+        peek: () => ({ at, state: st, solve: rs.map(r => { const used = new Set(); return r.key.map(k => { const z = keyOf(k).find(z => r.zones[z].cap !== 1 || !used.has(z)) ?? -1; used.add(z); return z; }); }) }),
       };
     }
     return { grade, create };
@@ -214,5 +227,5 @@ const LEC = (() => {
   ];
   const rel = w => { const m = REL.find(([re]) => re.test(String(w).trim())); return m ? { sym: m[1], name: m[2] } : { sym: '·', name: 'otra relación' }; };
 
-  return { esc, fmt, doc, docs, drop, rounds, first, rel, keyOf, guardKeys, mix };
+  return { esc, fmt, doc, docs, drop, rounds, first, rel, keyOf, guardKeys, mix, sentences, css };
 })();

@@ -31,6 +31,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 1 · Conectores ----------------
   setLesson('pu-cn-1', [
+    play('ordena-parrafos', 'Arma el texto otra vez', { doc: RECICLA },
+      'Las costuras son conectores: «Las razones son varias» explica el problema anunciado; «Por otra parte» suma otra razón; «Esto no quiere decir» matiza; «Por ejemplo» ilustra lo de reducir y reutilizar, y «En conclusión» cierra.',
+      { hint: 'Lee la primera palabra de cada párrafo. «Por otra parte» suma, «Por ejemplo» ilustra y «En conclusión» cierra: cada uno necesita algo antes.' }),
     play('conector-bisagra', 'Las bisagras de la columna', { doc: RECICLA, rounds: [
       { a: 'Nos han enseñado que reciclar es la mejor manera de cuidar el planeta.', b: 'solo una pequeña parte del plástico separado se convierte en un objeto nuevo.', options: ['Sin embargo,', 'Por lo tanto,', 'Además,', 'Por ejemplo,'], answer: 0 },
       { a: 'Cada vez que un plástico se recicla pierde calidad,', b: 'una botella rara vez vuelve a ser botella.', options: ['de modo que', 'aunque', 'por ejemplo,', 'sin embargo,'], answer: 0 },
@@ -39,18 +42,13 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { a: 'Esto no quiere decir que reciclar sea inútil.', b: 'cada kilo que se recupera es un kilo que no llega al río.', options: ['Al contrario:', 'Sin embargo,', 'Por ejemplo,', 'Es decir,'], answer: 0 },
     ] }, 'Lo que nos enseñaron choca con los datos (contraste). Perder calidad tiene una consecuencia. La mezcla de materiales y la pérdida de calidad son dos razones que se suman. La botella retornable ilustra la idea de reutilizar (ejemplo). Y después de una idea que la autora rechaza («no quiere decir que sea inútil») va un conector que rectifica: pone en su lugar lo que ella sí sostiene, que reciclar sirve. «Sin embargo» no cabe ahí: no hay nada a qué oponerse.',
       { hint: 'Para cada pareja, pregúntate: ¿se oponen, una resulta de la otra, se suman o la segunda ilustra la primera? Si la primera frase niega algo, busca el conector que pone en su lugar lo que el autor sí piensa.' }),
-    play('mapa-del-texto', 'Lo que hace cada párrafo', { doc: RECICLA, labels: ['plantea una creencia y la objeta', 'da razones técnicas', 'agrega los costos', 'aclara para no ser malinterpretado', 'ejemplifica', 'concluye', 'propone dejar de reciclar'], key: [0, 1, 2, 3, 4, 5] },
-      'Los conectores del comienzo de cada párrafo anuncian su función: «Sin embargo» objeta, «En primer lugar» y «Además» dan razones, «Por otra parte» agrega, «Esto no quiere decir» aclara, «Por ejemplo» ilustra y «En conclusión» cierra. Nadie propone dejar de reciclar: «Esto no quiere decir que reciclar sea inútil».',
-      { hint: 'Lee el conector con que empieza o en que gira cada párrafo: casi siempre anuncia lo que hace.' }),
-    play('lupa-evidencia', 'Lo que dice la columna', { doc: RECICLA, cards: [
-      ['Los empaques de papas fritas llevan una capa metálica.', 0],
-      ['Reciclar consume agua y energía.', 0],
-      ['El precio del petróleo influye en cuánto plástico se recicla.', 1],
-      ['La autora considera más útil la botella de vidrio retornable que la de plástico desechable.', 1],
-      ['La autora considera que reciclar es inútil.', 2],
-      ['Una botella de plástico reciclada vuelve a ser botella muchas veces.', 2],
-    ] }, 'Las dos primeras están escritas. Si con petróleo barato las empresas prefieren plástico nuevo, el precio influye en el reciclaje; y la preferencia por el vidrio retornable sale de que se llena «decenas de veces» y no necesita planta de reciclaje. La autora dice expresamente que reciclar no es inútil, y que una botella «rara vez» vuelve a ser botella.',
-      { hint: 'Un conector como «Esto no quiere decir que…» desmiente una lectura equivocada. No la tomes por la idea de la autora.' }),
+    play('cadena-causas', 'La vida de una botella', { doc: RECICLA, chain: [
+      'Una botella de plástico se recicla.',
+      'El plástico pierde calidad.',
+      'La botella termina convertida en fibra para ropa o en relleno.',
+    ], extra: ['El petróleo sube de precio.', 'Una botella de vidrio se llena decenas de veces.'] },
+      'El párrafo 2 lo encadena con «de modo que»: cada reciclaje baja la calidad, y por eso una botella rara vez vuelve a ser botella. El texto habla del petróleo barato, no caro, y la botella de vidrio es el ejemplo de reutilizar, no de reciclar.',
+      { hint: 'Busca el «de modo que» del párrafo 2: une una causa con su consecuencia.' }),
     play('intruso-excepto', 'Pregunta EXCEPTO', { doc: RECICLA, ask: 'Según el texto, el reciclaje de plástico tiene estos problemas, EXCEPTO:', cards: [
       ['Algunos empaques mezclan materiales que no se separan', [2]],
       ['El plástico pierde calidad cada vez que se recicla', [2]],
@@ -77,11 +75,11 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       'Las bolsas de tela son mejores que cualquier otra solución.',
     ], key: [0, 1, 2, 3] }, 'Cada resumen recoge la idea central de su párrafo. El petróleo barato explica por qué se recicla menos, no causa toda la contaminación; y la bolsa de tela es solo un ejemplo.',
       { hint: 'Cuidado con los resúmenes que convierten un detalle o un ejemplo en la idea principal.' }),
-    play('palabra-a-la-medida', 'Palabras de la columna', { doc: RECICLA, rounds: [
-      { p: 6, before: 'pero no nos ', word: 'exime', after: ' de lo más difícil', options: ['libra', 'acusa', 'obliga', 'acerca'], answer: 0 },
-      { p: 2, before: 'de modo que una botella ', word: 'rara vez', after: ' vuelve a ser botella', options: ['pocas veces', 'nunca', 'siempre', 'de forma extraña'], answer: 0 },
-    ] }, 'Eximir es librar de una obligación: separar no nos libra de comprar menos. Y «rara vez» es pocas veces, no nunca.',
-      { hint: 'Cuidado con el alcance: «rara vez» no es lo mismo que «nunca».' }),
+    play('subraya-prueba', 'La prueba en el texto', { doc: RECICLA, rounds: [
+      { claim: 'Que la gente separe la basura no garantiza que el plástico se recicle.', p: 1, answer: 2 },
+      { claim: 'Reciclar plástico conviene más o menos según el precio del petróleo.', p: 3, answer: 2 },
+    ] }, 'La primera conclusión sale del «Sin embargo» del párrafo 1: solo una pequeña parte de lo que se separa se convierte en algo nuevo. La segunda, de la oración del petróleo barato, que hace más económico fabricar plástico nuevo.',
+      { hint: 'Busca la oración que trae el dato o la condición que hace verdadera la conclusión.' }),
   ]);
 
   // ---------------- Lección 2 · Función de párrafos y signos ----------------
@@ -114,11 +112,13 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['El techo de la plaza vieja goteaba.', null],
     ] }, 'El arriendo, los requisitos y la salida de la mitad apoyan la tesis. Si los que se fueron hubieran mejorado por su cuenta, no habría desalojo. El techo explica por qué había que arreglar la plaza, pero no dice quién se quedó.',
       { hint: 'Fíjate en que la tesis habla de quiénes salieron y por qué. ¿Qué dice cada oración sobre eso?' }),
-    play('hilo-referente', '¿A quién se refiere?', { doc: PLAZA, rounds: [
-      { p: 5, text: 'Y |la plaza de mercado| la usaban, sobre todo, |los vendedores pequeños y sus clientes de siempre|. Si |ellos| ya no caben', from: 5, answer: 3 },
-      { p: 2, text: '|Doña Rubiela| vendía hierbas aromáticas —toronjil, limoncillo, ruda— en |un puesto de un metro cuadrado| que pagaba a diario. |El nuevo local|, con vitrina y contador de luz, cuesta un arriendo mensual que equivale a lo que |ella|', from: 7, answer: 1 },
-    ] }, '«Ellos» son los vendedores pequeños y sus clientes: los que ya no caben. Y «ella» es doña Rubiela, la única mujer nombrada: es quien ganaba en dos meses lo que hoy cuesta el arriendo.',
-      { hint: 'En el primero, busca hacia atrás un grupo de personas en plural; en el segundo, quién podía ganar dinero.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: PLAZA, q: 'Según el autor, ¿por qué la mitad de los vendedores ya no está en la plaza?', options: [
+      ['Porque ya no llegan compradores a la plaza modernizada.', 2],
+      ['Porque prefirieron la plaza vieja, aunque tuviera goteras y ratas.', 4],
+      ['Porque la policía los sacó a todos de la plaza.', 1],
+      ['Porque los arriendos y los requisitos de los locales quedaron fuera de su alcance.', 0],
+    ] }, 'D es lo que muestran el caso de doña Rubiela y los requisitos del párrafo 4. A dice lo contrario: la alcaldía presume de que llegan más compradores. B mezcla datos ciertos (las goteras y las ratas) con una preferencia que nadie menciona. C dice de más: la policía saca «cada tanto» a doña Rubiela de la acera, no a todos de la plaza. Sobra el sello «El texto no lo dice».',
+      { hint: 'Compara cada opción con el ejemplo del párrafo 2 y con los requisitos del 4. Fíjate si dice «todos» donde el texto dice «una».' }),
     play('quien-lo-dice', 'Verbos de función', { doc: PLAZA, ask: 'Las opciones del examen usan estos verbos. Lleva cada frase de la columna a lo que hace en el argumento.', voices: ['Ejemplifica o ilustra: muestra la idea en un caso', 'Concede: acepta algo de la postura contraria', 'Matiza: precisa hasta dónde llega lo que el propio autor sostiene', 'Relativiza: acepta un dato del otro, pero le quita peso', 'Refuta: muestra que una idea no se sostiene', 'Concluye: recoge lo dicho'], cards: [
       ['Pongamos un ejemplo. Doña Rubiela vendía hierbas aromáticas.', 0],
       ['Se dirá, con razón, que la plaza vieja tenía problemas serios.', 1],
