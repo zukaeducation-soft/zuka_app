@@ -1,0 +1,48 @@
+{
+ "forma": "A",
+ "ronda": "1",
+ "totales": {
+  "rl": {
+   "aciertos": 29,
+   "preguntas": 30,
+   "cobertura": {
+    "completa": 27,
+    "parcial": 3,
+    "ninguna": 0
+   }
+  },
+  "cl": {
+   "aciertos": 29,
+   "preguntas": 30,
+   "cobertura": {
+    "completa": 23,
+    "parcial": 7,
+    "ninguna": 0
+   }
+  }
+ },
+ "fallos": [
+  {
+   "n": 10,
+   "comp": "rl",
+   "tema": "conteo",
+   "habilidad": "conteo por casos (cifra 0)",
+   "respondio": "C",
+   "correcta": "A",
+   "cobertura": "parcial",
+   "leccion": "pu-co-4",
+   "falto": "El curso cuenta pares sin el 0 (1 a 5) y números con 0 sin la condición de par, pero nunca el caso en que el 0 puede ir al final y a la vez está prohibido adelante: falta partir en casos «termina en 0» y «termina en 2 o 4». Mateo hace 3 · 4 · 4 = 48."
+  },
+  {
+   "n": 55,
+   "comp": "cl",
+   "tema": "función de párrafos",
+   "habilidad": "concesión y cierre",
+   "respondio": "C",
+   "correcta": "A",
+   "cobertura": "parcial",
+   "leccion": "pu-ag-1",
+   "falto": "El curso enseña la objeción respondida con marcas claras («Se dirá… Es cierto. Pero», «Es cierto que… No obstante»). No enseña la concesión sin «pero» («No niego que…» seguido de una frase irónica), ni las palabras «conceder» y «relativizar». Valentina no ve que «Basta contar cuántos teléfonos quedaron en la caja» es irónico y elige C, que repite «contar», «teléfonos» y «caja»."
+  }
+ ]
+}

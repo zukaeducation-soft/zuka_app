@@ -38,8 +38,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { a: 'Antes de reciclar vienen reducir y reutilizar.', b: 'una botella retornable se llena decenas de veces.', options: ['Por ejemplo,', 'Sin embargo,', 'Aunque', 'Por lo tanto,'], answer: 0 },
     ] }, 'Lo que nos enseñaron choca con los datos (contraste). Perder calidad tiene una consecuencia. La mezcla de materiales y la pérdida de calidad son dos razones que se suman. Y la botella retornable ilustra la idea de reutilizar (ejemplo).',
       { hint: 'Para cada pareja, pregúntate: ¿se oponen, una resulta de la otra, se suman o la segunda ilustra la primera?' }),
-    play('mapa-del-texto', 'Lo que hace cada párrafo', { doc: RECICLA, labels: ['plantea una creencia y la objeta', 'da razones técnicas', 'agrega los costos', 'aclara para no ser malinterpretado', 'ejemplifica', 'concluye', 'cuenta la historia del plástico'], key: [0, 1, 2, 3, 4, 5] },
-      'Los conectores del comienzo de cada párrafo anuncian su función: «Sin embargo» objeta, «En primer lugar» y «Además» dan razones, «Por otra parte» agrega, «Esto no quiere decir» aclara, «Por ejemplo» ilustra y «En conclusión» cierra.',
+    play('mapa-del-texto', 'Lo que hace cada párrafo', { doc: RECICLA, labels: ['plantea una creencia y la objeta', 'da razones técnicas', 'agrega los costos', 'aclara para no ser malinterpretado', 'ejemplifica', 'concluye', 'propone dejar de reciclar'], key: [0, 1, 2, 3, 4, 5] },
+      'Los conectores del comienzo de cada párrafo anuncian su función: «Sin embargo» objeta, «En primer lugar» y «Además» dan razones, «Por otra parte» agrega, «Esto no quiere decir» aclara, «Por ejemplo» ilustra y «En conclusión» cierra. Nadie propone dejar de reciclar: «Esto no quiere decir que reciclar sea inútil».',
       { hint: 'Lee el conector con que empieza o en que gira cada párrafo: casi siempre anuncia lo que hace.' }),
     play('lupa-evidencia', 'Lo que dice la columna', { doc: RECICLA, cards: [
       ['Los empaques de papas fritas llevan una capa metálica.', 0],
@@ -80,9 +80,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 2 · Función de párrafos y signos ----------------
   setLesson('pu-cn-2', [
-    play('mapa-del-texto', 'La función de cada párrafo', { doc: PLAZA, labels: ['presenta el hecho con ironía', 'da un ejemplo concreto', 'reconoce una objeción y la responde', 'muestra una contradicción', 'concluye con la tesis', 'describe el parqueadero'], key: [0, 1, 2, 3, 4] },
-      '«Pongamos un ejemplo» abre el párrafo 2; «Se dirá, con razón» anuncia una objeción que el «Pero» responde; «Es decir» deja ver una contradicción; «En suma» concluye.',
-      { hint: 'Las primeras palabras de cada párrafo anuncian su función: «Pongamos un ejemplo», «Se dirá», «En suma».' }),
+    play('mapa-del-texto', 'La función de cada párrafo', { doc: PLAZA, labels: ['presenta el hecho con ironía', 'ejemplifica con un caso concreto', 'concede una objeción y la refuta', 'desmonta lo que dicen los funcionarios', 'concluye con la tesis', 'propone volver a la plaza vieja'], key: [0, 1, 2, 3, 4] },
+      '«Pongamos un ejemplo» abre el párrafo 2; «Se dirá, con razón» concede una objeción que el «Pero» refuta; «Es decir» desmonta el argumento de los funcionarios; «En suma» concluye. Nadie propone volver a la plaza vieja: el párrafo 3 lo descarta («Nadie pide volver a eso»).',
+      { hint: 'Las primeras palabras de cada párrafo anuncian su función: «Pongamos un ejemplo», «Se dirá», «En suma». Revisa también qué dice el párrafo 3 de la plaza vieja.' }),
     play('signos-que-hablan', 'Comillas, rayas y paréntesis', { doc: PLAZA, rounds: [
       { p: 1, text: 'la |«|modernización» de la plaza de mercado', options: ['marca ironía: el autor duda de que sea una modernización', 'cita a un vendedor', 'marca un título oficial que el autor respeta', 'encierra una palabra extranjera'], answer: 0 },
       { p: 2, text: 'hierbas aromáticas |—|toronjil, limoncillo, ruda—', options: ['abre un inciso con ejemplos', 'marca el turno de un diálogo', 'anuncia una conclusión', 'cita a doña Rubiela'], answer: 0 },
@@ -113,11 +113,15 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { p: 2, text: '|Doña Rubiela| vendía hierbas aromáticas —toronjil, limoncillo, ruda— en |un puesto de un metro cuadrado| que pagaba a diario. |El nuevo local|, con vitrina y contador de luz, cuesta un arriendo mensual que equivale a lo que |ella|', from: 7, answer: 1 },
     ] }, '«Ellos» son los vendedores pequeños y sus clientes: los que ya no caben. Y «ella» es doña Rubiela, la única mujer nombrada: es quien ganaba en dos meses lo que hoy cuesta el arriendo.',
       { hint: 'En el primero, busca hacia atrás un grupo de personas en plural; en el segundo, quién podía ganar dinero.' }),
-    play('donde-buscar', 'Cada función en su lugar', { doc: PLAZA, cards: [
-      ['¿Dónde se reconoce lo que estaba mal en la plaza vieja?', [3]], ['¿Dónde está el ejemplo de una vendedora?', [2]],
-      ['¿Dónde está la conclusión del autor?', [5]], ['¿Qué requisitos pide la convocatoria?', [4]], ['¿Qué mostraban las fotos del proyecto?', [1]],
-    ] }, 'El hecho (1), el ejemplo (2), la objeción (3), la contradicción de los requisitos (4) y la conclusión (5).',
-      { hint: 'Si ya sabes la función de cada párrafo, sabes dónde buscar.' }),
+    play('quien-lo-dice', 'Verbos de función', { doc: PLAZA, ask: 'Las opciones del examen usan estos verbos. Lleva cada frase de la columna a lo que hace en el argumento.', voices: ['Ejemplifica o ilustra: muestra la idea en un caso', 'Concede: acepta algo de la postura contraria', 'Matiza o relativiza: limita el alcance de lo dicho', 'Refuta: muestra que una idea no se sostiene', 'Concluye: recoge lo dicho'], cards: [
+      ['Pongamos un ejemplo. Doña Rubiela vendía hierbas aromáticas.', 0],
+      ['Se dirá, con razón, que la plaza vieja tenía problemas serios.', 1],
+      ['Nadie pide volver a eso, ni defender la suciedad en nombre de la tradición.', 2],
+      ['Pero arreglar un techo no obligaba a cambiar a quienes vivían debajo de él.', 3],
+      ['Es decir, pueden presentarse todos, menos los que más lo necesitan.', 3],
+      ['En suma, una plaza no se moderniza cuando cambia de baldosa.', 4],
+    ] }, 'Doña Rubiela ilustra la idea. «Se dirá, con razón» concede que la plaza vieja estaba mal, y «Nadie pide volver a eso» matiza: aclara hasta dónde llega la crítica del autor. El «Pero» refuta la objeción, y «Es decir» desmonta lo que dicen los funcionarios: la convocatoria no está abierta a todos. «En suma» concluye.',
+      { hint: 'Conceder es darle la razón al otro en algo; refutar, quitársela. Matizar no cambia de lado: solo precisa hasta dónde llega lo que se dijo.' }),
   ]);
 
   // ---------------- Evaluación: formato real, texto nuevo ----------------
@@ -133,7 +137,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
   const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: LLUVIA, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
   setExam('pu-conectores', 'Evaluación · Conectores y función de partes', [
     ['pu-cn-1', 'Un conector de contraste anuncia una idea que se opone o le pone un límite a la anterior.',
-      Q('En el párrafo 1, «Sin embargo» introduce:', ['un ejemplo de jagüey', 'una limitación de los jagüeyes', 'una consecuencia de la lluvia', 'la conclusión del texto'], 1,
+      Q('En el párrafo 1, «Sin embargo» introduce:', ['un ejemplo de cómo se construye un jagüey', 'una limitación de los jagüeyes', 'una consecuencia de que llueva tan fuerte', 'la conclusión de todo el texto sobre el agua'], 1,
         'Después de explicar para qué sirven los jagüeyes, «Sin embargo» presenta sus problemas: el agua se evapora y se ensucia.',
         'Mira qué dice el texto de los jagüeyes antes y después del conector.')],
     ['pu-cn-1', 'Dos conectores son intercambiables si establecen la misma relación.',
@@ -145,15 +149,23 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
         'Introduce una respuesta que se opone a la desventaja dicha antes: es contraste, igual que «sin embargo».',
         'Lee lo que hay antes (una desventaja) y lo que viene después (una salida).')],
     ['pu-cn-2', 'Un párrafo que empieza con «Es cierto que…» suele reconocer una objeción para luego responderla.',
-      Q('La función del párrafo 3 es:', ['presentar una objeción y responderla', 'dar un ejemplo', 'introducir el tema', 'concluir'], 0,
+      Q('La función del párrafo 3 es:', ['presentar una objeción y responderla', 'dar un ejemplo de una escuela que usa tanques', 'introducir el tema de la sequía en La Guajira', 'concluir que el jagüey es la mejor solución'], 0,
         'Reconoce dos desventajas del tanque («Es cierto que…») y las responde con «No obstante»: compartir el tanque reparte el costo.',
         'Fíjate en cómo empieza el párrafo y en el conector que viene después.')],
     ['pu-cn-2', 'Los conectores «en suma», «en conclusión» y «en fin» anuncian un cierre.',
       Q('El párrafo 4 cumple la función de:', ['contraargumentar', 'ejemplificar', 'concluir', 'introducir'], 2,
         '«En suma» anuncia la conclusión: la cosecha de lluvia no reemplaza un acueducto, pero ayuda en la sequía.',
         'Mira la primera expresión del párrafo.')],
+    ['pu-cn-2', 'Conceder es aceptar una parte de la postura contraria; relativizar, mostrar que pesa menos de lo que parece.',
+      Q('En el párrafo 3, el autor:', ['refuta con datos la idea de que un tanque cueste más que un jagüey', 'concede dos desventajas del tanque y luego les quita peso', 'ejemplifica cómo se construye un jagüey', 'concluye que el jagüey es mejor que el tanque'], 1,
+        '«Es cierto que…» acepta que el tanque es más caro y que no todas las casas tienen techo grande; «No obstante» les quita peso: el tanque se comparte y el costo se reparte. No niega que cueste más.',
+        'Fíjate en si el autor niega la desventaja o la acepta y luego dice por qué no es tan grave.')],
+    ['pu-cn-2', 'Matizar es precisar hasta dónde llega lo que se afirma, sin cambiar de postura.',
+      Q('Con «cosechar la lluvia no reemplaza un acueducto», el autor:', ['refuta a quienes piden construir acueductos en La Guajira', 'concede que cosechar la lluvia no sirve', 'matiza el alcance de la solución que defiende', 'ilustra cómo funciona un acueducto'], 2,
+        'Sigue defendiendo la cosecha de lluvia («puede ser la diferencia»), pero precisa hasta dónde llega: no es un acueducto. Eso es matizar.',
+        'Lee la frase completa del párrafo 4: después del «pero», ¿el autor abandona su propuesta o la mantiene?')],
     ['pu-cn-2', 'Los dos puntos pueden anunciar una definición, una lista o una explicación.',
-      Q('Los dos puntos en «jagüeyes: depresiones en la tierra que recogen el agua…» sirven para:', ['introducir una definición de jagüey', 'citar a los wayuu', 'enumerar escuelas', 'marcar ironía'], 0,
+      Q('Los dos puntos en «jagüeyes: depresiones en la tierra que recogen el agua…» sirven para:', ['introducir una definición de jagüey', 'citar las palabras de las comunidades wayuu', 'enumerar las escuelas que recogen la lluvia', 'marcar ironía frente a la palabra jagüey'], 0,
         'Lo que sigue a los dos puntos explica qué es un jagüey.',
         'Lee lo que viene después de los dos puntos: ¿qué te dice de la palabra anterior?')],
   ]);

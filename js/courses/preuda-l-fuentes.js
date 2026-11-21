@@ -55,7 +55,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     play('termometro-tono', 'El tono de cada voz', { doc: TAREAS, rounds: [
       { frag: '«Yo llego a las ocho de la noche. ¿A qué hora le explico fracciones a mi hija?»', scale: ['exasperado', 'indiferente', 'burlón', 'eufórico'], answer: 0 },
       { frag: 'A mi modo de ver, los tres tienen parte de razón, y por eso la pregunta está mal planteada.', scale: ['conciliador', 'agresivo', 'irónico', 'temeroso'], answer: 0 },
-    ] }, 'La pregunta de Liliana muestra cansancio y frustración. La autora, en cambio, busca un punto donde todos tengan algo de razón.',
+    ] }, 'La pregunta de Liliana muestra cansancio y frustración. La autora, en cambio, busca un punto donde todos tengan algo de razón: es conciliadora, quiere acercar las posturas.',
       { hint: 'Fíjate en la pregunta de Liliana: ¿espera una respuesta o se queja? Y en la autora: ¿ataca o reúne?' }),
     play('balanza-argumento', 'La tesis de la autora', { doc: TAREAS, thesis: 'Lo que importa no es si hay tareas, sino qué tipo de tareas se dejan.', cards: [
       ['En bachillerato, las tareas bien diseñadas se relacionan con mejores resultados.', 0],
@@ -111,11 +111,11 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { hint: 'Fíjate en el verbo «advierte» y en el tono del cierre: ¿duda o afirma?' }),
     play('palabra-a-la-medida', 'Palabras del debate', { doc: PARAMO, rounds: [
       { p: 3, before: 'el suelo se ha ', word: 'compactado', after: ' tanto que ya no absorbe', options: ['apretado', 'ablandado', 'secado al sol', 'llenado de flores'], answer: 0 },
-      { p: 4, before: 'Reconoce que el cupo será ', word: 'impopular', after: ',', options: ['mal recibido por muchos', 'barato', 'famoso', 'obligatorio'], answer: 0 },
+      { p: 4, before: 'Reconoce que el cupo será ', word: 'impopular', after: ',', options: ['mal recibido por muchos', 'barato', 'conocido en todo el país', 'obligatorio'], answer: 0 },
     ] }, 'Un suelo compactado está tan apretado que el agua ya no le entra. Y algo impopular disgusta a mucha gente (im- niega a «popular»).',
       { hint: 'Lee las consecuencias: un suelo que ya no absorbe el agua; un cupo que el secretario defiende «pero» sabe que traerá quejas.' }),
-    play('mapa-del-texto', 'El orden del debate', { doc: PARAMO, labels: ['plantea el problema', 'presenta una postura a favor', 'presenta una postura en contra', 'presenta una postura intermedia', 'da la opinión del autor', 'cuenta la historia de los frailejones'], key: [0, 1, 2, 3, 4] },
-      'La columna plantea el problema, da la palabra a tres posturas y termina con la del autor. Los frailejones se mencionan, pero ningún párrafo cuenta su historia.',
+    play('mapa-del-texto', 'El orden del debate', { doc: PARAMO, labels: ['plantea el problema', 'presenta una postura a favor', 'presenta una postura en contra', 'presenta una postura intermedia', 'da la opinión del autor', 'presenta la postura de los turistas'], key: [0, 1, 2, 3, 4] },
+      'La columna plantea el problema, da la palabra a tres posturas y termina con la del autor. Las tres voces son un guía, una bióloga y un secretario: ningún párrafo da la postura de los turistas.',
       { hint: 'Ubica las posturas de a favor a en contra y fíjate dónde aparece el «Creo».' }),
     play('conector-bisagra', 'Cómo matiza el autor', { doc: PARAMO, rounds: [
       { a: 'El secretario se acerca más a la respuesta,', b: 'se queda corto.', options: ['aunque', 'porque', 'así que', 'por ejemplo,'], answer: 0 },

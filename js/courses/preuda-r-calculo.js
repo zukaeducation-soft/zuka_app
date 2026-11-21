@@ -12,7 +12,7 @@ PU_JUEGOS.push(({ setLesson, setExam, sol, err, opc, diez }) => {
     play('ascensor', 'Dejaste el carro en el parqueadero del edificio. Lleva el ascensor al piso donde termina el viaje', { min: -6, max: 7, rounds: [{ start: -5, move: 8, text: 'Estás en el sótano 5 y subes 8 pisos' }] },
       '$-5 + 8 = 3$: cinco pisos para llegar a la planta baja y tres más hacia arriba.',
       { hint: 'Cuenta los pisos pasando por la planta baja, que es el piso 0. Los sótanos se numeran hacia abajo.' }),
-    play('tren-ordenado', 'Estas son las temperaturas de cinco ciudades. Ordena el tren de la más fría a la más caliente', { rounds: [
+    play('tren-ordenado', 'Cada vagón lleva un número escrito con signos y barras de valor absoluto. Ordena el tren de menor a mayor', { rounds: [
       { items: [{ label: '−1', v: -1 }, { label: '|−6|', v: 6 }, { label: '−|−4|', v: -4 }, { label: '2', v: 2 }, { label: '−9', v: -9 }] }] },
       '$-9 < -|{-4}| < -1 < 2 < |{-6}|$. El valor absoluto quita el signo: $|-6| = 6$; pero el menos de afuera se queda: $-|-4| = -4$.',
       { hint: 'Resuelve primero las barras de valor absoluto. Entre dos negativos, el que está más lejos del 0 es el menor.' }),

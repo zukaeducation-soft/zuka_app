@@ -57,8 +57,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
   setLesson('pu-vo-1', [
     play('palabra-a-la-medida', 'La palabra que encaja', { doc: HUERTA, rounds: [
       { p: 1, before: 'era un terreno ', word: 'árido', after: ' donde solo crecían piedras', options: ['seco', 'aburrido', 'lejano', 'plano'], answer: 0 },
-      { p: 3, before: 'y una cosecha ', word: 'sólida', after: ' que alcanza para el restaurante', options: ['abundante y segura', 'dura', 'pesada', 'congelada'], answer: 0 },
-      { p: 4, before: 'una plaga de babosas ', word: 'arrasó', after: ' con las lechugas', options: ['acabó por completo', 'se paseó', 'creció', 'jugó'], answer: 0 },
+      { p: 3, before: 'y una cosecha ', word: 'sólida', after: ' que alcanza para el restaurante', options: ['abundante y segura', 'dura', 'pesada', 'congelada en bloques'], answer: 0 },
+      { p: 4, before: 'una plaga de babosas ', word: 'arrasó', after: ' con las lechugas', options: ['acabó por completo', 'se paseó', 'creció', 'jugó entre las hojas'], answer: 0 },
     ] }, 'Un terreno árido es seco: «aburrido» es otro sentido de la palabra, el de un libro árido. Una cosecha sólida es abundante y segura, no dura. Y la plaga arrasó: acabó con todo «en una sola semana».',
       { hint: 'Reemplaza la palabra por cada opción y lee la frase entera. ¿Cuál conserva el sentido sin volverlo raro?' }),
     play('hilo-referente', 'Lo que no se repite', { doc: HUERTA, rounds: [
@@ -104,10 +104,10 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
   // ---------------- Lección 2 · Palabras con varios sentidos ----------------
   setLesson('pu-vo-2', [
     play('palabra-a-la-medida', 'El sentido de esta frase', { doc: CAFE, rounds: [
-      { p: 1, before: 'inauguró su ', word: 'planta', after: ' de secado', options: ['instalación', 'mata', 'suela', 'piso'], answer: 0 },
+      { p: 1, before: 'inauguró su ', word: 'planta', after: ' de secado', options: ['instalación', 'mata', 'suela', 'piso de abajo'], answer: 0 },
       { p: 3, before: 'y le dio una ', word: 'nota', after: ' de 86 sobre 100', options: ['calificación', 'apunte', 'sonido musical', 'cuenta por pagar'], answer: 0 },
-      { p: 3, before: 'Describió ', word: 'notas', after: ' de panela y de mandarina', options: ['sabores que se perciben', 'calificaciones', 'mensajes escritos', 'sonidos'], answer: 0 },
-      { p: 5, before: 'la planta ya ', word: 'salvó', after: ' una cosecha', options: ['rescató', 'aprobó', 'saltó', 'ahorró'], answer: 0 },
+      { p: 3, before: 'Describió ', word: 'notas', after: ' de panela y de mandarina', options: ['sabores que se perciben', 'calificaciones', 'mensajes escritos en papel', 'sonidos'], answer: 0 },
+      { p: 5, before: 'la planta ya ', word: 'salvó', after: ' una cosecha', options: ['rescató', 'aprobó', 'saltó', 'ahorró dinero'], answer: 0 },
     ] }, 'La misma palabra cambia con la frase: «planta» de secado es una instalación; una «nota» de 86 es una calificación, pero las «notas» de panela son sabores; y salvar una cosecha es rescatarla, no aprobarla como una materia.',
       { hint: 'Mira las palabras que acompañan a cada una: «de secado», «sobre 100», «de panela», «una cosecha».' }),
     play('donde-buscar', 'Cada sentido en su párrafo', { doc: CAFE, ask: 'Lleva cada sentido de una palabra al párrafo donde se usa con ese sentido.', cards: [
@@ -129,8 +129,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { frag: 'y dijo que por primera vez no había rezado para que dejara de llover.', scale: ['aliviado', 'temeroso', 'furioso', 'burlón'], answer: 0 },
     ] }, 'El cronista se ríe con cariño de las palabras del catador. Y doña Fabiola, por primera vez, no teme la lluvia: está aliviada.',
       { hint: 'Pregúntate qué siente doña Fabiola al no tener que rezar esta vez.' }),
-    play('mapa-del-texto', 'El año de la planta', { doc: CAFE, labels: ['cuenta cómo se secaba antes el café', 'explica cómo se pagó la planta', 'muestra la mejora en la calidad', 'cuenta un mercado nuevo y una duda', 'narra cómo la planta salvó una cosecha', 'enseña a catar café'], key: [0, 1, 2, 3, 4] },
-      'La crónica sigue el primer año: el problema de antes, el costo, la nota del catador, la red y la duda de algunos socios, y la lluvia de mayo. No enseña a catar.',
+    play('mapa-del-texto', 'El año de la planta', { doc: CAFE, labels: ['cuenta cómo se secaba antes el café', 'explica cómo se pagó la planta', 'muestra la mejora en la calidad', 'cuenta un mercado nuevo y una duda', 'narra cómo la planta salvó una cosecha', 'cuenta cómo se deshizo la red de compradores'], key: [0, 1, 2, 3, 4] },
+      'La crónica sigue el primer año: el problema de antes, el costo, la nota del catador, la red y la duda de algunos socios, y la lluvia de mayo. La red de compradores no se deshace: algunos socios solo desconfían de ella.',
       { hint: 'Cada párrafo abre con su tema: hasta entonces, el costo, los resultados, el puntaje, mientras tanto.' }),
     play('conector-bisagra', 'Bisagras', { doc: CAFE, rounds: [
       { a: 'La asociación entró a una red que vende a Europa y Asia.', b: 'el precio por kilo casi se duplicó.', options: ['Por eso,', 'Aunque', 'Es decir,', 'Por ejemplo,'], answer: 0 },
@@ -146,9 +146,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
   // ---------------- Lección 3 · Expresiones y frases hechas ----------------
   setLesson('pu-vo-3', [
     play('palabra-a-la-medida', 'Lo que quieren decir', { doc: SEMESTRE, rounds: [
-      { p: 1, before: 'en la ciudad uno no puede ', word: 'dar papaya', after: '.', options: ['dar la oportunidad de que lo roben', 'regalar fruta', 'ser amable', 'llegar tarde'], answer: 0 },
-      { p: 2, before: 'Las primeras semanas no ', word: 'di pie con bola', after: '.', options: ['acerté en nada', 'jugué fútbol', 'caminé mucho', 'dormí bien'], answer: 0 },
-      { p: 3, before: 'y que también estaban en ', word: 'la olla', after: '.', options: ['una situación difícil', 'la cocina', 'una fiesta', 'la biblioteca'], answer: 0 },
+      { p: 1, before: 'en la ciudad uno no puede ', word: 'dar papaya', after: '.', options: ['facilitar que lo roben', 'regalar fruta en la calle', 'ser amable', 'llegar tarde'], answer: 0 },
+      { p: 2, before: 'Las primeras semanas no ', word: 'di pie con bola', after: '.', options: ['acerté en nada', 'jugué fútbol', 'caminé mucho', 'dormí bien por las noches'], answer: 0 },
+      { p: 3, before: 'y que también estaban en ', word: 'la olla', after: '.', options: ['una situación difícil', 'la cocina', 'una fiesta', 'la biblioteca de la universidad'], answer: 0 },
     ] }, 'En una frase hecha, el sentido no sale de sumar las palabras: dar papaya es descuidarse y dar la oportunidad de un robo; no dar pie con bola, no acertar en nada; y estar en la olla, pasar por un mal momento.',
       { hint: 'Lee lo que pasa alrededor: el bolso abrazado, las clases equivocadas y el 1.8, los compañeros que también necesitaban ayuda.' }),
     play('caso-nuevo', 'Nadie se salva solo', { doc: SEMESTRE, principle: 'Pedir ayuda y trabajar en grupo no es de débiles: es como se sale adelante.', cards: [
@@ -197,9 +197,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
   setLesson('pu-vo-4', [
     play('palabra-a-la-medida', 'Palabras que se arman por piezas', { doc: CUEVA, rounds: [
       { p: 2, before: 'Los guácharos son ', word: 'frugívoros', after: ':', options: ['que comen frutos', 'que vuelan de noche', 'que viven en grupo', 'que cantan fuerte'], answer: 0 },
-      { p: 3, before: 'sonidos agudísimos, ', word: 'inaudibles', after: ' para nosotros', options: ['que no se pueden oír', 'muy fuertes', 'desagradables', 'que se oyen lejos'], answer: 0 },
-      { p: 4, before: 'En sus aguas ', word: 'subterráneas', after: ' viven peces ciegos', options: ['que corren bajo tierra', 'muy frías', 'saladas', 'que caen en cascada'], answer: 0 },
-      { p: 4, before: 'comunidades de ', word: 'microorganismos', after: ' que los científicos', options: ['seres vivos diminutos', 'minerales brillantes', 'plantas trepadoras', 'insectos grandes'], answer: 0 },
+      { p: 3, before: 'sonidos agudísimos, ', word: 'inaudibles', after: ' para nosotros', options: ['que no se pueden oír', 'muy fuertes', 'desagradables al oído', 'que se oyen lejos'], answer: 0 },
+      { p: 4, before: 'En sus aguas ', word: 'subterráneas', after: ' viven peces ciegos', options: ['que corren bajo tierra', 'muy frías', 'saladas', 'que caen en cascada desde lo alto'], answer: 0 },
+      { p: 4, before: 'comunidades de ', word: 'microorganismos', after: ' que los científicos', options: ['seres vivos diminutos', 'minerales brillantes', 'plantas trepadoras', 'insectos grandes y nocturnos'], answer: 0 },
     ] }, 'Frugi- (fruto, del latín frux) + -voro (que come); in- (no) + audible (que se oye); sub- (debajo) + terra (tierra); micro- (pequeño) + organismo (ser vivo). Las piezas dan el sentido, y la frase lo confirma.',
       { hint: 'Parte cada palabra en piezas: un comienzo (in-, sub-, micro-) y una raíz que ya conoces (fruto, audio, tierra, organismo).' }),
     play('intruso-excepto', 'Quiénes viven en la cueva', { doc: CUEVA, ask: 'Según el texto, en la cueva viven todos estos, EXCEPTO:', cards: [
@@ -249,7 +249,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     paras: [
       'En la esquina de la plaza de mercado, debajo de un parasol desteñido, don Isaías Mejía remienda zapatos desde 1979. Tiene una lezna, un martillo, tres hormas y una paciencia que no se compra. Por su banco han pasado botas de policía, zapatillas de bailarina y unos tacones que, según él, «tenían más kilómetros que un bus intermunicipal».',
       'Hace veinte años, en la misma cuadra trabajaban seis remendones. Hoy queda él solo. Los zapatos baratos, que se botan cuando se dañan, acabaron con el oficio más rápido que cualquier impuesto. «Ahora la gente prefiere comprar otro par que arreglar el que tiene», dice sin rabia, como quien describe el clima.',
-      'Sin embargo, en los últimos años algo ha empezado a cambiar. Estudiantes de diseño vienen a preguntarle cómo se cose una suela, y una tienda de ropa reutilizada le manda cada semana una caja de botas para restaurar. Él cobra lo mismo que antes y trabaja más que nunca. «Me tocó vivir para ver que lo viejo se volviera moda», dice, y se ríe.',
+      'Sin embargo, en los últimos años algo ha empezado a cambiar. Estudiantes de diseño vienen a preguntarle cómo se cose una suela, y una tienda de ropa reutilizada le manda cada semana una caja de botas para restaurar. Sin proponérselo, van desarmando la idea de que lo remendado es cosa de pobres. Él cobra lo mismo que antes y trabaja más que nunca. «Me tocó vivir para ver que lo viejo se volviera moda», dice, y se ríe.',
       'Don Isaías no cree que el oficio vaya a desaparecer, pero tampoco que vuelva a ser lo que fue. Lo que sí le preocupa es que nadie aprenda. Ha ofrecido enseñar gratis los sábados, y hasta ahora solo han ido dos muchachos. Uno se cansó al tercer día; el otro ya cose suelas mejor que él, asegura, aunque nadie le crea.',
     ],
   };
@@ -260,15 +260,19 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
         'Remendar es arreglar algo roto o gastado; don Isaías trabaja con hormas y lezna para reparar zapatos.',
         'Reemplaza la palabra por cada opción y relee la frase con las herramientas que tiene don Isaías.')],
     ['pu-vo-1', 'Una expresión se entiende con el sentido de toda la frase, no palabra por palabra.',
-      Q('En «una paciencia que no se compra», se quiere decir que la paciencia de don Isaías:', ['es muy cara', 'no se consigue con dinero', 'está prohibida', 'se vende en la plaza'], 1,
+      Q('En «una paciencia que no se compra», se quiere decir que la paciencia de don Isaías:', ['es tan cara que pocos la pueden pagar', 'no se consigue con dinero', 'está prohibida', 'se vende en la plaza'], 1,
         'Algo que «no se compra» no se obtiene pagando: se forma con los años, como la paciencia del oficio.',
         'Piensa en qué cosas no se pueden comprar aunque uno tenga dinero.')],
+    ['pu-vo-1', 'Un verbo concreto puede tener un sentido abstracto: desarmar una idea es refutarla.',
+      Q('En el párrafo 3, «van desarmando la idea de que lo remendado es cosa de pobres» quiere decir que los estudiantes y la tienda:', ['van mostrando que esa idea no se sostiene', 'van reforzando la idea con sus compras', 'van desbaratando los zapatos viejos', 'van repitiendo esa idea entre sus clientes'], 0,
+        'Una idea no se desarma con las manos: se desarma mostrando que no se sostiene, es decir, refutándola. Que los jóvenes de diseño y una tienda de moda busquen lo remendado contradice que sea «cosa de pobres».',
+        'Reemplaza «desarmando» por cada opción y lee la frase entera. Recuerda que lo que se desarma aquí es una idea, no un objeto.')],
     ['pu-vo-2', 'Una palabra con varios sentidos se interpreta por las demás palabras de la frase.',
-      Q('En el párrafo 1, la palabra «banco» se refiere a:', ['una entidad que presta dinero', 'el asiento y la mesa donde trabaja', 'un grupo de peces', 'un lugar donde se guarda sangre'], 1,
+      Q('En el párrafo 1, la palabra «banco» se refiere a:', ['una entidad que presta dinero a los vecinos', 'el asiento y la mesa donde trabaja', 'un grupo de peces', 'un lugar donde se guarda sangre'], 1,
         'Por el banco «han pasado» botas y zapatillas: es el lugar de trabajo del remendón, no una entidad financiera.',
         'Lee qué ha pasado «por su banco».')],
     ['pu-vo-2', 'El sentido más común de una palabra suele ser la trampa.',
-      Q('En «Los zapatos baratos, que se botan cuando se dañan», la palabra «botan» significa:', ['rebotan', 'fabrican', 'calzan', 'tiran a la basura'], 3,
+      Q('En «Los zapatos baratos, que se botan cuando se dañan», la palabra «botan» significa:', ['rebotan contra el piso', 'fabrican', 'calzan', 'tiran a la basura'], 3,
         'Botar, en Colombia, es tirar a la basura: los zapatos baratos se desechan en vez de arreglarse.',
         'Lee la oración siguiente: la gente prefiere comprar otro par.')],
     ['pu-vo-3', 'La exageración es una manera de decir algo con fuerza.',
@@ -276,11 +280,11 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
         'Comparar los tacones con un bus que viaja todo el día exagera para decir que habían caminado muchísimo: estaban muy gastados.',
         'Piensa en cuánto anda un bus que va de un municipio a otro y en cómo quedan unos zapatos que caminan tanto.')],
     ['pu-vo-3', 'Una frase hecha expresa una actitud; el contexto dice cuál.',
-      Q('Con la expresión «me tocó vivir para ver que lo viejo se volviera moda», don Isaías expresa:', ['tristeza por el pasado', 'obligación de trabajar más', 'sorpresa ante algo que no esperaba', 'miedo al futuro'], 2,
+      Q('Con la expresión «me tocó vivir para ver que lo viejo se volviera moda», don Isaías expresa:', ['tristeza por el pasado', 'obligación de trabajar más que antes por la moda', 'sorpresa ante algo que no esperaba', 'miedo al futuro'], 2,
         '«Me tocó vivir para ver» se dice ante algo inesperado; y él se ríe: le sorprende que su oficio vuelva a interesar.',
         'Fíjate en lo que hace don Isaías justo después de decirlo.')],
     ['pu-vo-4', 'Los prefijos dan pistas del sentido: re- (de nuevo), sub- (debajo), inter- (entre).',
-      Q('En «ropa reutilizada», el prefijo re- significa:', ['antes', 'contra', 'debajo', 'de nuevo'], 3,
+      Q('En «ropa reutilizada», el prefijo re- significa:', ['antes', 'contra', 'por debajo', 'de nuevo'], 3,
         'Reutilizar es utilizar de nuevo: la tienda vende ropa que ya tuvo otro dueño.',
         'Piensa en otras palabras con re-: releer, rehacer, reconstruir.')],
     ['pu-vo-4', 'Inter- significa «entre»: internacional, intercambio.',

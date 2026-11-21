@@ -149,10 +149,10 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       ['Para tener la mayor cantidad de paquetes se usa el máximo común divisor: 12', 'Para tener la mayor cantidad de paquetes se usa la suma: $48 + 36 = 84$', 'Para tener la mayor cantidad de paquetes se usa el menor divisor común: 2'],
       'Repartir sin que sobre es un problema de divisores, no de múltiplos: el mayor divisor común de 48 y 36 es 12. Cada paquete lleva 4 lápices y 3 borradores.',
       'Compara la respuesta con los datos: ¿se pueden armar más paquetes que lápices hay?'),
-    opc('Dos luces intermitentes se encienden al mismo tiempo. Una se enciende cada 12 segundos y la otra cada 18 segundos. Durante el minuto siguiente, sin contar el instante inicial, el número de veces que se encienden juntas es:',
-      ['1', '2', '3', '5'], 0,
-      'Coinciden cada MCM(12, 18) = 36 segundos: a los 36 segundos, y la siguiente sería a los 72, ya fuera del minuto.',
-      'Halla cada cuánto coinciden y cuenta cuántas de esas coincidencias caben en 60 segundos.'),
+    opc('Dos alarmas suenan juntas en este instante. Una suena cada 8 segundos y la otra cada 20 segundos. Contando también este instante, el número de veces que suenan juntas en el minuto y medio que empieza ahora es:',
+      ['3', '2', '4', '7'], 0,
+      'Coinciden cada MCM(8, 20) = 40 segundos: en el segundo 0, en el 40 y en el 80; la siguiente, en el 120, ya se pasa de los 90. Contando el instante inicial son 3; si el enunciado dijera «sin contar el instante inicial», serían 2. Lee siempre si el comienzo cuenta.',
+      'Halla cada cuánto coinciden y haz la lista de esos momentos desde el segundo 0. ¿El 0 entra en la cuenta?'),
   ]);
 
   diezLesson('pu-nu-3', [

@@ -33,7 +33,7 @@ const PU_LECTURA = [
         'Para cada párrafo, pregúntate qué hace: si explica por qué importa algo, si plantea un problema, si da un caso o si propone.'),
     ]),
     PU_L('pu-el-3', 'Tiempo y preguntas EXCEPTO', [
-      sc(6, 'El examen trae dos textos largos y 40 preguntas: unos **15 minutos de lectura por texto**. Las preguntas se pueden leer antes, para saber qué buscar.', { title: 'Manejar el tiempo' }),
+      sc(6, 'La parte de lectura del examen trae dos textos largos y unas 30 preguntas (de la 31 a la 60): unos **15 minutos de lectura por texto** y el resto para responder. Las preguntas se pueden leer antes, para saber qué buscar.', { title: 'Manejar el tiempo' }),
       sc(7, 'En una pregunta «EXCEPTO», tres opciones sí están en el texto y una no. Se verifica cada opción contra el texto y se marca la que no aparece.', { title: 'Preguntas EXCEPTO' }),
       sc(6, 'Las respuestas malas no restan: ninguna pregunta se deja en blanco.', { title: 'Nada en blanco' }),
     ], [
@@ -41,7 +41,7 @@ const PU_LECTURA = [
         { text: 'La biblioteca del barrio abrió en 2019.|Presta libros, computadores y juegos de mesa.|Los sábados ofrece talleres de escritura para jóvenes.|Su sala infantil fue pintada por los vecinos.', ask: 'Toca los trozos que respaldan las opciones a, b y c', answer: [1, 2, 3] },
       ], 'Las opciones a, b y c tienen respaldo en el texto; los cursos de inglés no aparecen: la respuesta es d.',
         'Toma cada opción y busca en qué frase del texto aparece. La que no encuentres es la respuesta.'),
-      PU_ES('Tienes dos textos y 40 preguntas de lectura. ¿Cuál es el mejor plan?', [['unos 15 minutos de lectura por texto', 'leer cada texto tres veces con calma'], ['marcar la difícil y volver a ella', 'quedarse hasta resolverla'], ['no dejar nada en blanco', 'dejar en blanco si hay duda']],
+      PU_ES('Tienes dos textos y unas 30 preguntas de lectura. ¿Cuál es el mejor plan?', [['unos 15 minutos de lectura por texto', 'leer cada texto tres veces con calma'], ['marcar la difícil y volver a ella', 'quedarse hasta resolverla'], ['no dejar nada en blanco', 'dejar en blanco si hay duda']],
         'Leer con un tiempo fijo, saltar lo difícil para volver después y responder todo, porque las malas no restan.',
         'Recuerda que en este examen las respuestas malas no anulan las buenas.'),
     ]),
@@ -83,6 +83,7 @@ const PU_LECTURA = [
       sc(6, 'Casi todo texto tiene introducción, desarrollo y cierre. En uno argumentativo: **tesis**, **argumentos** y, a veces, un **contraargumento** respondido.', { title: 'Tesis y argumentos' }),
       sc(7, 'El testimonio tiene rasgos propios: primera persona, marcas de oralidad («pues», «uno», «sí me entiende») y un contexto histórico que explica lo vivido.', { title: 'Rasgos del testimonio' }),
       sc(6, 'En un testimonio las preguntas del examen suelen ir a los sentimientos y a las causas de lo que se cuenta.', { title: 'Qué preguntan' }),
+      sc(6, 'Quien da un testimonio a veces lanza una pregunta que no espera respuesta: es una **pregunta retórica**. No pide un dato; señala algo que para quien habla es obvio, como quien pregunta quién lo va a ayudar sabiendo que nadie lo hará.', { title: 'La pregunta retórica' }),
     ], [
       PU_SUB('Un fragmento de testimonio', [
         { text: 'Mire, o sea, uno no sabía nada de leyes.|Yo llegué a Bogotá en 2002 con dos bolsas y una dirección escrita en un papel.|Allá en el pueblo la guerra ya no dejaba sembrar.', ask: 'Toca la marca de oralidad', answer: [0] },
@@ -178,6 +179,8 @@ const PU_LECTURA = [
       sc(6, 'Un **presupuesto** es lo que el autor da por hecho sin decirlo. «Dejó de fumar» presupone que fumaba.', { title: 'Lo que se da por hecho' }),
       sc(6, '«Ya es hora de que el gobierno cumpla» presupone que no ha cumplido.', { title: 'Un presupuesto en opinión' }),
       sc(6, 'Palabras que suelen cargar presupuestos: «otra vez», «todavía», «ya no», «por fin», «dejar de».', { title: 'Palabras delatoras' }),
+      sc(7, 'Pero muchas veces no hay ninguna palabra de la lista. «La paciencia de los vecinos es más corta de lo que creen en la alcaldía» da por sentado que en la alcaldía la creen larga: el presupuesto sale de una **comparación**. «El barrio ya sabe lo que vale una promesa» da por sentado que las promesas se han incumplido.', { title: 'Sin palabra pista' }),
+      sc(6, 'El examen lo pregunta de varias formas: «el autor **da por sentado** que…», «da por hecho», «supone», «presupone». Es la misma pregunta: qué tiene que ser cierto para que la frase tenga sentido.', { title: 'Cómo lo pregunta el examen' }),
     ], [
       PU_SUB('Frase de una noticia', [
         { text: 'Otra vez|el metro|se detuvo|en hora pico.', ask: 'Toca las palabras que dan por hecho que ya había pasado antes', answer: [0] },
@@ -225,6 +228,7 @@ const PU_LECTURA = [
       sc(6, 'El sinónimo correcto es el que **encaja en la frase**, no el primero del diccionario.', { title: 'El contexto manda' }),
       sc(6, 'En «una propuesta sólida», sólida significa bien fundamentada, no dura ni pesada.', { title: '«Sólida»' }),
       sc(6, 'La prueba: reemplazar la palabra por la opción y leer la frase completa. Si cambia el sentido, no sirve.', { title: 'La prueba del reemplazo' }),
+      sc(7, 'Los textos de opinión usan verbos concretos con sentido abstracto: **desarmar** una idea es refutarla, mostrar que no se sostiene; **tejer** acuerdos es construirlos poco a poco; **sembrar** dudas es provocarlas. Se aplica la misma prueba del reemplazo.', { title: 'Verbos concretos, ideas abstractas' }),
     ], [
       PU_SUB('Un informe sobre el río', [
         { text: 'El informe fue|contundente:|el río está contaminado|y los datos no dejan lugar a otra lectura.', ask: 'Toca la palabra que significa «terminante, que no deja dudas»', answer: [1] },
@@ -253,6 +257,7 @@ const PU_LECTURA = [
       sc(6, 'En una frase hecha el sentido no es la suma de las palabras: «meter la pata» no tiene que ver con patas.', { title: 'Frases hechas' }),
       sc(6, 'El examen usa coloquialismos colombianos: «dar papaya», «echar los perros», «estar en la olla», «hacer vaca».', { title: 'Colombianismos' }),
       sc(6, '«Hacer vaca» es juntar dinero entre varios para algo común.', { title: '«Hacer vaca»' }),
+      sc(6, 'Muchas expresiones populares exageran: «más viejo que el agua», «tener más vidas que un gato». No se leen al pie de la letra: la exageración (**hipérbole**) dice algo con fuerza. Se estudia a fondo en Lenguaje figurado.', { title: 'Exagerar para decir' }),
     ], [
       PU_SUB('Una final', [
         { text: 'Después de perder tres partidos seguidos,|el equipo no tiró la toalla:|entrenó el doble|y llegó a la final.', ask: 'Toca lo que muestra qué significa «no tiró la toalla»', answer: [2] },
@@ -362,6 +367,7 @@ const PU_LECTURA = [
     ]),
     PU_L('pu-cn-2', 'Función de párrafos y signos', [
       sc(6, 'Cada párrafo cumple una función: **introducir**, **ejemplificar**, **contraargumentar** o **concluir**.', { title: 'Funciones de un párrafo' }),
+      sc(8, 'Las opciones del examen usan verbos más finos. **Ejemplificar** o **ilustrar**: mostrar la idea en un caso. **Conceder**: aceptar una parte de la postura contraria. **Refutar**: mostrar que una idea no se sostiene (también se dice desmontarla o rebatirla). **Matizar**: precisar hasta dónde llega lo que se dijo. **Relativizar**: mostrar que algo no es tan absoluto o tan grave como parece.', { title: 'Verbos de función' }),
       sc(7, 'Los signos también: las **comillas** citan o marcan ironía; los **paréntesis** aclaran; las **rayas** abren un inciso; los **dos puntos** anuncian una explicación o una lista.', { title: 'Funciones de los signos' }),
       sc(6, 'Ejemplo: «Llegó el "gran" cambio: un semáforo nuevo.» Las comillas de «gran» son irónicas.', { title: 'Comillas irónicas' }),
     ], [
@@ -382,6 +388,7 @@ const PU_LECTURA = [
       sc(6, 'La **tesis** es lo que el autor defiende. Los **argumentos** la sostienen; el **contraargumento** es la objeción que el autor responde.', { title: 'Tesis, argumentos, objeción' }),
       sc(6, 'Tipos de argumento: de **autoridad** (un experto), de **ejemplo** (un caso), de **datos** (cifras), de **causa** y por **analogía**.', { title: 'Tipos de argumento' }),
       sc(6, 'La tesis responde a «qué defiende»; un argumento, a «por qué».', { title: 'Qué y por qué' }),
+      sc(7, 'La objeción no siempre se anuncia con «Se dirá…» ni se responde con un «pero». «Hay quien piensa que…» la presenta; «sin duda», «admito que», «no niego que» **conceden** una parte; y la respuesta puede llegar sin «pero», con un dato o una frase irónica que **refuta** o **relativiza** lo concedido.', { title: 'Conceder sin «pero»' }),
     ], [
       PU_SUB('Un texto sobre el parqueo en la calle', [
         { text: 'Las ciudades deberían cobrar por parquear en la calle.|Un cupo en la calle ocupa un espacio que vale millones.|Además, el cobro reduce las vueltas buscando dónde parquear.|Algunos dicen que es un impuesto más, pero el dinero puede ir al transporte público.', ask: 'Toca la tesis', answer: [0] },
@@ -430,6 +437,7 @@ const PU_LECTURA = [
       sc(6, 'Las últimas preguntas del examen comparan los dos textos. Conviene una tabla: tema, postura y argumentos de cada uno.', { title: 'Una tabla de comparación' }),
       sc(6, 'Dos textos pueden tratar el mismo tema con **enfoques** distintos: económico, ambiental, ético, personal.', { title: 'Mismo tema, otro enfoque' }),
       sc(6, 'Una coincidencia debe estar en los dos textos; si solo está en uno, no es coincidencia.', { title: 'En los dos' }),
+      sc(7, 'También se compara **cómo respalda** cada texto lo que dice: uno puede exponer con estudios y cautela («varios estudios», «ciertos juegos», «puede»); otro, opinar desde la **experiencia personal** del autor («en mi consultorio veo…»). Las marcas son la primera persona, las cifras y las palabras que suavizan.', { title: 'Cómo se sostiene cada uno' }),
     ], [
       PU_SUB('Texto A: «La inteligencia artificial puede ayudar a los profesores a corregir más rápido.» Texto B: «Si una máquina corrige, el estudiante pierde la conversación con su profesor.»', [
         { title: 'Un estudiante comparó los dos textos así:', text: 'Los dos hablan de la IA en la educación;|los dos la rechazan;|A destaca una ventaja y B, un riesgo;|y B propone prohibirla.', ask: 'Toca lo que es cierto de la comparación', answer: [0, 2] },
@@ -443,6 +451,7 @@ const PU_LECTURA = [
       sc(6, 'Otra pregunta común: qué opinaría el autor de un texto sobre lo que dice el otro.', { title: 'Ponerse en sus zapatos' }),
       sc(6, 'Se responde usando la **tesis** de ese autor como lente para juzgar la idea del otro.', { title: 'Su tesis como lente' }),
       sc(6, 'La respuesta no puede contradecir lo que ese autor ya dijo en su propio texto.', { title: 'Coherencia' }),
+      sc(7, 'Otra variante: «Un **defensor** de X tomaría del texto Uno, como argumento contra el Dos…». Sirve una idea que el autor del Uno **sostiene** (o que concede) y que choca con la tesis del Dos. Cuidado con lo que el Uno solo menciona para rechazarlo: «los críticos dicen…» no es una idea del autor.', { title: 'Un tercero en la discusión' }),
     ], [
       PU_SUB('Autor A: «Leer en papel ayuda a concentrarse.» Autor B: «Lo importante no es el soporte sino el hábito.»', [
         { title: 'Una estudiante imaginó la respuesta de B:', text: 'B le diría a A que el papel no basta si no hay hábito,|que hay que prohibir las pantallas|y que leer, en el fondo, no importa.', ask: 'Toca lo que B sí diría según su tesis', answer: [0] },
@@ -509,6 +518,7 @@ const PU_LECTURA = [
       sc(6, 'La **ironía** dice lo contrario de lo que se piensa. El contexto la delata: lo que se dice choca con lo que pasa.', { title: 'Decir lo contrario' }),
       sc(6, '«Qué puntual», dicho a quien llega una hora tarde, es ironía.', { title: 'Un ejemplo' }),
       sc(6, 'Para reconocerla se compara el tono de la frase con los hechos que la rodean.', { title: 'Tono contra hechos' }),
+      sc(7, 'En un texto serio la ironía suele ser **sutil**: ninguna palabra dice lo contrario de un hecho. Se nota en el registro: un tono solemne para algo pequeño («anunció, con aire de gran noticia, una reunión más»), una comparación con la fe o con un amuleto, unas comillas. La clave es ver si el autor toma distancia de lo que cuenta.', { title: 'Ironía sutil' }),
     ], [
       PU_SUB('Un mal comienzo', [
         { text: 'Llegué empapado, sin paraguas y con el bus perdido.|«Qué día tan perfecto», le dije al portero.', ask: 'Toca la frase irónica', answer: [1] },

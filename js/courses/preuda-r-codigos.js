@@ -83,7 +83,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['clave-simbolos', 1, 'Un candado usa símbolos en lugar de letras. Descifra la palabra con la tabla', 'Cada símbolo vale siempre la misma letra: se cambia uno por uno, mirando la tabla.'],
     ['altura-letras', 0, 'Si A vale 1, B vale 2 y así hasta la Z, ¿cuánto vale la palabra PAN?', 'P es la letra 16, A la 1 y N la 14: $16 + 1 + 14 = 31$.'],
     ['binario-luces', 1, 'Un tablero de 5 bombillos muestra números. Enciende los que forman el 22', 'Los bombillos valen 16, 8, 4, 2 y 1: $22 = 16 + 4 + 2$. En binario, 10110.'],
-    ['cuadro-polibio', 0, 'En esta clave, cada letra es su fila y su columna en el cuadro. Cifra la palabra FLOR', 'Cada letra se cambia por dos números: primero la fila y después la columna en que está.'],
+    ['cuadro-polibio', 0, 'En esta clave, cada letra es su fila y su columna en el cuadro. Cifra la palabra FLOR', 'Cada letra se cambia por dos números: primero la fila y después la columna en que está. Este cuadro tiene 6 filas para que quepan las 26 letras del alfabeto sin la Ñ. Un cuadro de 5 × 5 solo tiene 25 casillas y debe dejar una letra por fuera: el problema siempre dice cuál. Si no dice nada sobre el alfabeto, se usan las 26 letras sin la Ñ.'],
     ['espejo-palabra', 1, 'Un mensaje se escribe al revés para esconderlo. Escribe RISA en código espejo', 'Se invierte el orden de las letras: RISA queda ASIR.'],
     ['vuela-precios', 0, 'Vuela al código correcto', 'César +3: A pasa a D y S a V, ASA es DVD. OSO vale $15 + 19 + 15 = 49$. Y 10010 es $16 + 2 = 18$.'],
   ], [

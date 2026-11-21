@@ -95,8 +95,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['Anticuerpo es a invasor como llave es a cerradura.', true],
       ['Célula de memoria es a microbio vencido como retrato archivado es a enemigo.', true],
       ['Herida es a piel como guardia es a ciudad.', false],
-      ['Vacuna es a enfermedad como ladrón es a comerciante.', false],
-    ] }, 'Las tres primeras conservan la relación del texto (barrera, encaje, memoria). La herida es una brecha en la muralla, no un guardia; y la vacuna no es a la enfermedad lo que un ladrón a un comerciante.',
+      ['Glóbulo blanco es a microbio como muralla es a ladrón.', false],
+    ] }, 'Las tres primeras conservan la relación del texto (barrera, encaje, memoria). La herida es una brecha en la muralla, no un guardia; y el glóbulo blanco ataca al microbio, mientras que la muralla no ataca al ladrón: solo le cierra el paso. Las parejas se parecen, pero la relación es otra.',
       { hint: 'Di en voz alta la relación de la primera pareja y prueba si la misma frase sirve para la segunda.' }),
     play('palabra-a-la-medida', 'Palabras del artículo', { doc: DEFENSA, rounds: [
       { p: 1, before: 'Por eso muchos profesores ', word: 'recurren', after: ' a una comparación', options: ['acuden', 'renuncian', 'se oponen', 'vuelven a correr'], answer: 0 },
@@ -118,8 +118,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { frag: 'Toda comparación tiene límites, y esta también.', scale: ['prudente', 'eufórico', 'burlón', 'enojado'], answer: 0 },
     ] }, '«Asombroso» deja ver la admiración del autor por la memoria del cuerpo. Y al final, reconoce que su propia comparación no es perfecta: es prudente.',
       { hint: 'Busca la palabra que delata la actitud en cada fragmento.' }),
-    play('mapa-del-texto', 'Cómo se arma la comparación', { doc: DEFENSA, labels: ['presenta la comparación', 'explica la primera barrera', 'explica la defensa rápida', 'explica la defensa precisa', 'explica la memoria y las vacunas', 'señala los límites de la comparación', 'da consejos para no enfermarse'], key: [0, 1, 2, 3, 4, 5] },
-      'Cada párrafo desarrolla una parte de la ciudad: la comparación, la muralla, los guardias, las llaves, el archivo y, al final, dónde la comparación deja de servir. No hay consejos de salud.',
+    play('mapa-del-texto', 'Cómo se arma la comparación', { doc: DEFENSA, labels: ['presenta la comparación', 'explica la primera barrera', 'explica la defensa rápida', 'explica la defensa precisa', 'explica la memoria y las vacunas', 'señala los límites de la comparación', 'explica cómo se fabrican las vacunas'], key: [0, 1, 2, 3, 4, 5] },
+      'Cada párrafo desarrolla una parte de la ciudad: la comparación, la muralla, los guardias, las llaves, el archivo y, al final, dónde la comparación deja de servir. Las vacunas aparecen en el párrafo 5 solo para explicar la memoria; el texto no dice cómo se fabrican.',
       { hint: 'Fíjate en la imagen de la ciudad que aparece en cada párrafo: muralla, guardias, llaves, archivo.' }),
     play('conector-bisagra', 'Las bisagras de la explicación', { doc: DEFENSA, rounds: [
       { a: 'Cada anticuerpo sirve para un solo tipo de enemigo.', b: 'esta defensa tarda días en organizarse.', options: ['Por eso,', 'Aunque', 'En cambio,', 'Por ejemplo,'], answer: 0 },

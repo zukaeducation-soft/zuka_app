@@ -49,8 +49,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { frag: 'Abel no respondió nada, pero esa noche subió con su tío los ochenta escalones.', scale: ['humilde', 'orgulloso', 'furioso', 'indiferente'], answer: 0 },
     ] }, 'El tío se burla del sobrino con una comparación. Y Abel, sin decir nada, sube con él: reconoce su error con humildad.',
       { hint: 'En el segundo fragmento, Abel no habla. ¿Qué dice su gesto?' }),
-    play('mapa-del-texto', 'El orden del relato', { doc: FAROS, labels: ['presenta a los dos guardianes', 'describe el método del tío', 'describe el método del sobrino', 'narra la noche del apagón', 'muestra el cambio en los dos', 'explica cómo funciona un faro'], key: [0, 1, 2, 3, 4] },
-      'Presentación, dos maneras de trabajar, el conflicto de la noche del apagón y el cambio final. El relato no explica cómo funciona un faro.',
+    play('mapa-del-texto', 'El orden del relato', { doc: FAROS, labels: ['presenta a los dos guardianes', 'describe el método del tío', 'describe el método del sobrino', 'narra la noche del apagón', 'muestra el cambio en los dos', 'narra cómo Abel salva solo el barco'], key: [0, 1, 2, 3, 4] },
+      'Presentación, dos maneras de trabajar, el conflicto de la noche del apagón y el cambio final. Abel no salva solo el barco: dormía, y fue su tío quien vio el peligro y lo despertó.',
       { hint: 'Los párrafos 2 y 3 se oponen con «en cambio». ¿Qué se opone allí?' }),
     play('donde-buscar', 'Vuelve al párrafo', { doc: FAROS, cards: [
       ['¿Qué cuidaba cada guardián?', [1]], ['¿Cuántos escalones tiene el faro?', [2, 5]], ['¿Qué hacía la aplicación de Abel?', [3]],
@@ -65,7 +65,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     ] }, 'El piloto y la enfermera usan la máquina sin dejar de mirar. Comprar un celular o aprender a montar en bicicleta no tiene que ver con la idea.',
       { hint: 'Busca los casos en que alguien usa la tecnología y además sigue atento, como el capitán le pidió a Abel.' }),
     play('palabra-a-la-medida', 'Palabras del relato', { doc: FAROS, rounds: [
-      { p: 3, before: 'un guardián que duerme no es guardián, sino ', word: 'inquilino', after: '.', options: ['alguien que solo vive en el lugar', 'un ladrón', 'un turista', 'un jefe'], answer: 0 },
+      { p: 3, before: 'un guardián que duerme no es guardián, sino ', word: 'inquilino', after: '.', options: ['un simple habitante', 'un ladrón que entra de noche', 'un turista', 'un jefe'], answer: 0 },
       { p: 2, before: 'Lo hacía por ', word: 'costumbre', after: ', decía', options: ['hábito', 'obligación', 'dinero', 'miedo'], answer: 0 },
     ] }, 'Un inquilino vive en un lugar sin cuidarlo como suyo: eso es, para el tío, un guardián que duerme. Y hacer algo por costumbre es hacerlo por hábito.',
       { hint: 'Piensa en la diferencia entre cuidar una casa y solo vivir en ella.' }),
@@ -114,8 +114,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       ['El aguacate hass tiene la piel rugosa.', null],
     ] }, 'El riesgo de la caída del precio y el caso de doña Amparo apoyan la tesis. Si las fincas de un solo cultivo resistieran mejor, la tesis se caería. La piel rugosa no tiene que ver.',
       { hint: 'Imagina cada oración como cierta: ¿muestra el riesgo de depender de un cultivo o lo contrario?' }),
-    play('mapa-del-texto', 'El recorrido del reportaje', { doc: AGUACATE, labels: ['presenta el auge del aguacate', 'explica sus ventajas', 'señala sus costos', 'da un ejemplo de alternativa', 'cierra con una postura equilibrada', 'compara precios de varios países'], key: [0, 1, 2, 3, 4] },
-      'Auge, ventajas, costos, una alternativa y un cierre que no condena ni celebra. No hay comparación de precios entre países.',
+    play('mapa-del-texto', 'El recorrido del reportaje', { doc: AGUACATE, labels: ['presenta el auge del aguacate', 'explica sus ventajas', 'señala sus costos', 'da un ejemplo de alternativa', 'cierra con una postura equilibrada', 'condena el aguacate como el villano de la región'], key: [0, 1, 2, 3, 4] },
+      'Auge, ventajas, costos, una alternativa y un cierre que no condena ni celebra. El cierre dice que el aguacate «no es el villano», así que no lo condena.',
       { hint: 'El párrafo 3 empieza con «Pero» y el 5 dice «ni el villano ni el héroe». ¿Qué hace cada uno?' }),
   ]);
 

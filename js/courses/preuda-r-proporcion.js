@@ -161,7 +161,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['mapa-escala', 2, 'En un mapa, 1 cm son 8 km. Ubica el pueblo que queda a 20 km', '$20 \\div 8 = 2.5$ cm en el mapa.'],
     ['receta-escala', 0, 'Una receta para 4 personas lleva 200 g de harina y 300 mL de leche. Agrándala hasta usar 500 g de harina', 'De 200 a 500 el factor es 2.5: alcanza para 10 personas y la leche sube a 750 mL.'],
     ['limonada', null, 'Prepara una jarra más grande que sepa igual que el modelo'],
-    ['bici-cambios', 0, 'Elige el piñón para llegar a la bandera'],
+    ['bici-cambios', 0, 'En una bicicleta, la cadena une el plato de los pedales con el piñón de la rueda: cada diente del plato que pasa mueve un diente del piñón. Elige el piñón para llegar a la bandera', 'En una vuelta del pedal pasan por la cadena tantos dientes como tiene el plato, y el piñón da una vuelta por cada grupo de sus dientes: la rueda gira plato ÷ piñón. Con 42 y 14 da 3 vueltas por pedalazo, y en 2 pedalazos, 6. Con 36 y 12, 3 por pedalazo: 9 en 3 pedalazos. Con 50 y 10, 5 por pedalazo: 10 en 2. Un piñón más pequeño da más vueltas: dientes y vueltas son inversamente proporcionales.', 'Divide los dientes del plato entre los del piñón: eso gira la rueda por cada pedalazo.'],
   ], [
     sol('Tres socios aportaron capital en la razón $3 : 4 : 5$ y se reparten la ganancia del año en esa misma razón. El que más recibe obtiene 600 000 pesos más que el que menos recibe. ¿De cuánto fue la ganancia?',
       ['La ganancia se parte en $3 + 4 + 5 =$ [[12]] partes iguales', 'Entre el que más recibe y el que menos hay $5 - 3 =$ [[2]] partes, que valen 600 000', 'Cada parte vale [[300 000]] pesos', 'Ganancia: $12 \\cdot 300\\,000 =$ [[3 600 000]] pesos'],
@@ -185,7 +185,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['engranajes', 0, 'Un piñón de 20 dientes da 6 vueltas y mueve otro de 40 dientes. Completa el engranaje', 'Pasan los mismos dientes por los dos: $20 \\cdot 6 = 40 \\cdot x$ da 3 vueltas. Más dientes, menos vueltas.'],
     ['tasa-unitaria', 0, 'Dos paquetes de jabones: 5 por 6 000 o 8 por 8 800. Reduce a la unidad y compara', 'En el A cada jabón vale 1 200 y en el B, 1 100: sale mejor el paquete B.'],
     ['grafica-relacion', null, 'Un terreno de área fija: a más ancho, menos largo. Mueve los puntos para que la relación sea inversa'],
-    ['tabla-compuesta', 0, 'Tres máquinas hacen 600 piezas en 4 horas. ¿Cuántas hacen 5 máquinas en 2 horas?', 'Cada máquina hace $600 \\div (3 \\cdot 4) = 50$ piezas por hora. Cinco máquinas en 2 horas: $5 \\cdot 2 \\cdot 50 = 500$.'],
+    ['tabla-compuesta', 0, 'Tres máquinas hacen 600 piezas en 4 horas. ¿Cuántas hacen 5 máquinas en 2 horas?', 'Cada máquina hace $600 \\div (3 \\cdot 4) = 50$ piezas por hora. Cinco máquinas en 2 horas: $5 \\cdot 2 \\cdot 50 = 500$. Con más magnitudes se hace lo mismo: se juntan todas las que aportan trabajo en una sola unidad. Si 4 pintores, 6 horas diarias durante 5 días, pintan 60 m², una hora de pintor pinta $60 \\div (4 \\cdot 6 \\cdot 5) = 0.5$ m²; 3 pintores, 8 horas diarias durante 10 días, pintan $3 \\cdot 8 \\cdot 10 \\cdot 0.5 = 120$ m².'],
     ['llaves-tanque', 0, 'Más llaves, menos tiempo: abre las llaves justas'],
   ], [
     sol('Seis impresoras iguales imprimen 1 800 folletos en 5 horas. ¿Cuántos folletos imprimen 4 de esas impresoras en 3 horas?',
@@ -211,7 +211,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['duplica-magnitud', 0, 'A 60 km/h un viaje dura 4 horas. ¿Cuánto dura a 80 km/h?', 'La distancia es la misma: $60 \\cdot 4 = 240$ km. A 80 km/h, $240 \\div 80 = 3$ horas.'],
     ['encuentro-caminantes', 1, 'Un caminante lleva 150 m de ventaja y avanza 40 m por minuto; otro sale detrás a 70 m por minuto. Para el reloj cuando se encuentren', '$70t = 40t + 150$ da $30t = 150$: se encuentran a los 5 minutos.'],
     ['grafica-relacion', null, 'Un atleta corre a ritmo constante: en 2 minutos avanza 5 cuadras. Ubica los demás puntos', 'A ritmo fijo la distancia es proporcional al tiempo: 2.5 cuadras por minuto. En 4 minutos, 10 cuadras; en 1 minuto, 2.5; en 5 minutos, 12.5.'],
-    ['bote-corriente', 0, 'Río abajo la corriente ayuda; río arriba, frena. Halla la corriente y el bote'],
+    ['bote-corriente', 0, 'Un bote navega por un río. Río abajo la corriente lo empuja; río arriba, lo frena. Con las dos velocidades medidas, halla la del bote en agua quieta y la de la corriente', 'Si el bote va a b en agua quieta y la corriente a c, río abajo las velocidades se suman ($b + c$) y río arriba se restan ($b - c$). Por eso el bote es el promedio de las dos velocidades medidas y la corriente es la mitad de su diferencia. Con 16 y 10: bote 13 y corriente 3. Con 12 y 4: bote 8 y corriente 4. Con 21 y 9: bote 15 y corriente 6.', 'La corriente suma de bajada y resta de subida: la diferencia entre las dos velocidades es dos veces la corriente.'],
   ], [
     sol('Dos atletas parten al mismo tiempo del mismo punto de una pista circular de 400 m y corren en el mismo sentido, uno a 5 m/s y el otro a 3 m/s. ¿Cuánto tarda el más rápido en alcanzar al otro por primera vez, y cuántas vueltas ha dado en ese momento?',
       ['Cada segundo el rápido le saca $5 - 3 =$ [[2]] m de ventaja', 'Lo alcanza cuando la ventaja es una vuelta entera: [[400]] m', 'Tiempo: $400 \\div 2 =$ [[200]] s', 'En ese tiempo recorre $5 \\cdot 200 = 1\\,000$ m, que son [[2.5]] vueltas'],
@@ -236,7 +236,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['estira-todo', 1, 'Doce estudiantes son el 15 % de un curso. Estira la barra hasta el total', 'Si 12 es el 15 %, el total es $12 \\div 0.15 = 80$.'],
     ['mezcla', null, 'Hay 30 mL de jugo concentrado. Añade agua hasta que el jugo sea el 20 % de la mezcla', 'Si 30 mL son el 20 %, la mezcla completa tiene 150 mL: hay que añadir 120 mL de agua.'],
     ['cruz-porcentaje', { problems: [{ text: '¿De qué número es 36 el 12 %?', chips: [{ label: '12', cell: 'p' }, { label: '36', cell: 'B' }, { label: '?', cell: 'C' }] }] }, 'En una tienda, 36 clientes pagaron con tarjeta: el 12 % del total. Arma la cruz', 'La cruz es la regla de tres $\\tfrac{100}{C} = \\tfrac{12}{36}$: el total es 300.'],
-    ['tanque-porcentaje', 0, 'Llena cada tanque al porcentaje pedido'],
+    ['tanque-porcentaje', 0, 'Una finca tiene tres tanques de distinto tamaño. Llena cada uno al porcentaje pedido', 'Un porcentaje es una parte de cada 100, y conviene pasar por el 10 %, que es la décima parte. El 10 % de 60 L son 6 L, así que el 45 % son $4.5 \\cdot 6 = 27$ L. El 16 % de 250 L son 40 L y el 30 % de 90 L, 27 L: el mismo volumen que en el primero, aunque el porcentaje sea otro.', 'Calcula primero el 10 % del tanque y arma con él el porcentaje pedido.'],
   ], [
     sol('En un grupo, el 60 % de las personas son mujeres. Usan gafas el 20 % de las mujeres y el 15 % de los hombres. ¿Qué porcentaje del grupo usa gafas?',
       ['Imagina un grupo de 100 personas: [[60]] mujeres y 40 hombres', 'Mujeres con gafas: 20 % de 60 = [[12]]', 'Hombres con gafas: 15 % de 40 = [[6]]', 'Usan gafas 18 de cada 100: el [[18 %]]'],
@@ -261,7 +261,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
     ['precio-original', 1, 'Con un 30 % de descuento, unos audífonos quedan en 56. Encuentra el precio de antes', 'El 70 % del precio es 56: $56 \\div 0.70 = 80$.'],
     ['cascada', null, 'Una tienda aplica dos descuentos seguidos, del 25 % y del 20 %. Halla el descuento único', '$0.75 \\cdot 0.80 = 0.60$: se paga el 60 %, un descuento único del 40 %, no del 45 %.'],
     ['crece-planta', 1, 'Una cuenta paga interés compuesto: de 400 pasó a 440 en un mes. Haz crecer las plantas', 'El interés es del 10 % y cada mes se calcula sobre lo que ya hay: 440, 484 y unos 532. El interés también gana interés.'],
-    ['rampa-precio', 0, 'Elige el sello para que la etiqueta llegue con su precio'],
+    ['rampa-precio', 0, 'Una tienda cambia sus precios. Elige el sello de porcentaje para que cada etiqueta llegue con su precio nuevo', 'El cambio porcentual se mide sobre el precio de antes: precio nuevo ÷ precio viejo da el factor. $120 \\div 160 = 0.75$: bajó el 25 %. $81 \\div 90 = 0.9$: bajó el 10 %. $300 \\div 250 = 1.2$: subió el 20 %.', 'Divide el precio final entre el inicial: si da menos de 1 fue un descuento; si da más, un aumento.'],
   ], [
     sol('Un comerciante compra un artículo en 60 000 pesos y le fija un precio de venta con el que ganaría el 40 % sobre el costo. A un cliente le hace un descuento del 25 % sobre ese precio. ¿Cuánto gana el comerciante en esa venta?',
       ['Precio fijado: $60\\,000 \\cdot 1.40 =$ [[84 000]] pesos', 'Con el descuento se paga el 75 %: $84\\,000 \\cdot 0.75 =$ [[63 000]] pesos', 'Ganancia: $63\\,000 - 60\\,000 =$ [[3 000]] pesos', 'Sobre el costo, eso es apenas el [[5 %]]'],

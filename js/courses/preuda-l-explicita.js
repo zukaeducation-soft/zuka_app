@@ -85,8 +85,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     ] }, 'Los cuadrados y la medida de los troncos están en el párrafo 2; el herbario, en el 4. Nadie cortó madera: se medía cada tronco, no se cortaba.',
       { hint: 'Lleva cada opción al párrafo donde aparece. La que no encuentre lugar es la respuesta.' }),
     play('palabra-a-la-medida', 'Palabras del método', { doc: BOSQUE, rounds: [
-      { p: 2, before: 'Esa altura no es ', word: 'caprichosa', after: ': es la que usan', options: ['arbitraria', 'peligrosa', 'exacta', 'elegante'], answer: 0 },
-      { p: 4, before: 'Los guías ', word: 'aportaron', after: ' algo que ningún instrumento mide.', options: ['contribuyeron con', 'cobraron', 'escondieron', 'compraron'], answer: 0 },
+      { p: 2, before: 'Esa altura no es ', word: 'caprichosa', after: ': es la que usan', options: ['arbitraria', 'peligrosa para todos', 'exacta', 'elegante'], answer: 0 },
+      { p: 4, before: 'Los guías ', word: 'aportaron', after: ' algo que ningún instrumento mide.', options: ['contribuyeron con', 'cobraron', 'escondieron', 'compraron para el viaje'], answer: 0 },
     ] }, 'Una altura «no caprichosa» no es arbitraria: la eligen todos para poder comparar. Y los guías contribuyeron con su saber al trabajo.',
       { hint: 'Lee lo que sigue a cada palabra: los dos puntos del párrafo 2 explican por qué esa altura y no otra.' }),
     play('hilo-referente', '¿A qué se refiere?', { doc: BOSQUE, rounds: [
@@ -190,8 +190,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       { frag: '«Una abeja que no pica no necesita que uno le tenga miedo. Necesita que uno le tenga respeto».', scale: ['respetuoso', 'temeroso', 'irónico', 'indiferente'], answer: 0 },
     ] }, 'Marina no exagera las virtudes de su miel: es prudente. Y su frase final pide respeto por las abejas.',
       { hint: 'Fíjate si quien habla exagera, se burla, se asusta o cuida lo que afirma.' }),
-    play('mapa-del-texto', 'El orden de la crónica', { doc: ABEJAS, labels: ['presenta a Marina y sus abejas', 'explica cómo se defienden', 'describe la miel y sus usos', 'cuenta su visita a los cultivos vecinos', 'explica las reglas de la cría', 'cierra con su enseñanza', 'compara precios de la miel'], key: [0, 1, 2, 3, 4, 5] },
-      'Cada párrafo trata un aspecto: quién es Marina, la defensa, la miel, los cultivos, las reglas y la frase con que cierra sus clases. No hay precios.',
+    play('mapa-del-texto', 'El orden de la crónica', { doc: ABEJAS, labels: ['presenta a Marina y sus abejas', 'explica cómo se defienden', 'describe la miel y sus usos', 'cuenta su visita a los cultivos vecinos', 'explica las reglas de la cría', 'cierra con su enseñanza', 'mide cuánto mejoraron las cosechas vecinas'], key: [0, 1, 2, 3, 4, 5] },
+      'Cada párrafo trata un aspecto: quién es Marina, la defensa, la miel, los cultivos, las reglas y la frase con que cierra sus clases. Y nadie ha medido todavía si las cosechas vecinas mejoraron.',
       { hint: 'Busca de qué habla cada párrafo en su primera oración.' }),
   ]);
 
@@ -237,8 +237,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     ] }, 'Las comillas, con «afirma», marcan una cita directa: las palabras exactas de Natalia. Los dos puntos anuncian la explicación de por qué la calle era un embudo.',
       { hint: 'Fíjate en el verbo que acompaña las comillas y en lo que viene después de los dos puntos.' }),
     play('palabra-a-la-medida', 'Palabras de la columna', { doc: CALLE, rounds: [
-      { p: 1, before: 'la calle Bolívar de Santa Rosa fue un ', word: 'embudo', after: ':', options: ['lugar donde todo se atascaba', 'calle muy ancha', 'sitio peligroso de noche', 'mercado al aire libre'], answer: 0 },
-      { p: 3, before: 'la urbanista que diseñó el proyecto, ', word: 'sostiene', after: ' que el cambio', options: ['afirma', 'duda', 'niega', 'teme'], answer: 0 },
+      { p: 1, before: 'la calle Bolívar de Santa Rosa fue un ', word: 'embudo', after: ':', options: ['lugar donde todo se atascaba', 'calle muy ancha', 'sitio peligroso de noche para la gente', 'mercado al aire libre'], answer: 0 },
+      { p: 3, before: 'la urbanista que diseñó el proyecto, ', word: 'sostiene', after: ' que el cambio', options: ['afirma', 'duda', 'niega del todo', 'teme'], answer: 0 },
     ] }, 'Un embudo es ancho arriba y estrecho abajo: todo se atasca al pasar, como buses, motos y gente en seis metros. Y sostener una idea es afirmarla y defenderla.',
       { hint: 'Lee lo que viene después de «embudo»: ¿cuántas cosas pasaban por seis metros de ancho?' }),
     play('hilo-referente', '¿Quiénes son «los dos»?', { doc: CALLE, rounds: [

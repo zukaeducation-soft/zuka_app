@@ -100,7 +100,7 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
   ]);
 
   diezLesson('pu-pb-2', [
-    ['arbol-caminos', 1, 'De una caja con 2 fichas rojas y 3 azules se saca una, se devuelve y se saca otra. Marca los caminos en que salen del mismo color', 'Roja y roja: $\\tfrac25 \\cdot \\tfrac25 = \\tfrac{4}{25}$. Azul y azul: $\\tfrac35 \\cdot \\tfrac35 = \\tfrac{9}{25}$. Los dos caminos se suman: $\\tfrac{13}{25}$.'],
+    ['arbol-caminos', 1, 'De una caja con 2 fichas rojas y 3 azules se saca una, se devuelve y se saca otra. Marca los caminos en que salen del mismo color', 'Roja y roja: $\\tfrac25 \\cdot \\tfrac25 = \\tfrac{4}{25}$. Azul y azul: $\\tfrac35 \\cdot \\tfrac35 = \\tfrac{9}{25}$. Los dos caminos se suman: $\\tfrac{13}{25}$. Aquí la ficha se devuelve, por eso la segunda rama vuelve a valer $\\tfrac25$. Si NO se devolviera, la caja cambiaría: después de una roja quedarían 1 roja y 3 azules, y la segunda rama valdría $\\tfrac14$.'],
     ['area-probabilidad', 0, 'Dos sucesos independientes: $P(A) = \\tfrac12$ y $P(A \\text{ y } B) = \\tfrac16$. Halla $P(B)$ con el área', 'En independientes, $P(A \\text{ y } B) = P(A) \\cdot P(B)$: $\\tfrac12 \\cdot P(B) = \\tfrac16$ da $P(B) = \\tfrac13$.'],
     ['tabla-dados', 0, 'Con dos dados, marca los resultados en que sale al menos un 6', 'Son 11 resultados, no 12: el (6, 6) está en la fila y en la columna a la vez. También se ve como $36 - 25$.'],
     ['complemento-conteo', 0, 'Tres monedas: cuenta los resultados con al menos una cara', 'Todos: $2^3 = 8$. Sin ninguna cara: 1. Con al menos una: 7, y la probabilidad es $\\tfrac78$.'],
@@ -113,11 +113,11 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       ['todos', '0.64', '1.6'],
       'Es más corto calcular lo contrario y restarlo de 1. Sumar $0.8 + 0.8$ daría 1.6, que no puede ser una probabilidad.',
       '«Al menos uno» reúne varios casos. ¿Cuál es el único caso que queda por fuera?'),
-    err('Se lanza un dado dos veces. ¿Cuál es la probabilidad de sacar 6 en los dos lanzamientos?',
-      ['La probabilidad de sacar 6 en un lanzamiento es $\\tfrac16$', 'Los dos lanzamientos son independientes: uno no afecta al otro', 'La probabilidad de que pasen las dos cosas es la suma: $\\tfrac16 + \\tfrac16 = \\tfrac13$'], 2,
-      ['La probabilidad de que pasen las dos cosas es el producto: $\\tfrac16 \\cdot \\tfrac16 = \\tfrac{1}{36}$', 'La probabilidad de que pasen las dos cosas sigue siendo $\\tfrac16$', 'La probabilidad de que pasen las dos cosas es $\\tfrac{1}{12}$'],
-      'Con sucesos independientes, «y» se multiplica: de los 36 pares posibles, solo (6, 6) sirve. Pedir dos cosas a la vez no puede ser más probable que pedir una sola.',
-      'Sacar 6 dos veces es más difícil que sacarlo una. ¿La respuesta es menor que un sexto?'),
+    err('En una bolsa hay 4 bolas rojas y 6 azules. Se sacan dos bolas, una después de la otra y sin devolver la primera. ¿Cuál es la probabilidad de que las dos sean rojas?',
+      ['La primera es roja con probabilidad $\\tfrac{4}{10}$', 'La segunda es roja con probabilidad $\\tfrac{4}{10}$, porque la bolsa es la misma', 'Las dos cosas pasan a la vez: $\\tfrac{4}{10} \\cdot \\tfrac{4}{10} = \\tfrac{16}{100}$'], 1,
+      ['Si la primera fue roja, quedan 3 rojas entre 9 bolas: la segunda es roja con probabilidad $\\tfrac{3}{9}$', 'Si la primera fue roja, quedan 3 rojas entre 10 bolas: $\\tfrac{3}{10}$', 'Si la primera fue roja, quedan 4 rojas entre 9 bolas: $\\tfrac{4}{9}$'],
+      'Sacar sin devolver cambia la bolsa: hay una bola menos en total y una roja menos. La segunda probabilidad se calcula con lo que quedó: $\\tfrac{4}{10} \\cdot \\tfrac{3}{9} = \\tfrac{12}{90} = \\tfrac{2}{15}$. Solo si la bola se devuelve se repite $\\tfrac{4}{10}$ (y entonces el producto de dos sucesos independientes sí sería $\\tfrac{4}{10} \\cdot \\tfrac{4}{10}$).',
+      'Imagina que ya sacaste una roja y la dejaste afuera. ¿Cuántas bolas hay ahora en la bolsa y cuántas son rojas?'),
     opc('En una caja hay 3 bombillos defectuosos y 7 buenos. Se sacan dos bombillos al azar, uno después del otro y sin devolver el primero. La probabilidad de que los dos sean buenos es:',
       ['$\\tfrac{49}{100}$', '$\\tfrac{7}{10}$', '$\\tfrac{7}{15}$', '$\\tfrac{21}{50}$'], 2,
       'El primero es bueno con probabilidad $\\tfrac{7}{10}$; para el segundo quedan 6 buenos de 9: $\\tfrac{7}{10} \\cdot \\tfrac{6}{9} = \\tfrac{42}{90} = \\tfrac{7}{15}$.',
