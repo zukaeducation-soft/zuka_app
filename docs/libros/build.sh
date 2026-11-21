@@ -4,6 +4,8 @@
 # Deja docs/libros/pdf/Zuka_Preuniversitario_Libro_N.pdf (los PDF no van al repositorio).
 cd "$(dirname "$0")/tex" || exit 1
 mkdir -p salida ../pdf
+# el arte de las portadas se genera (no va al repositorio)
+[ -f arte/portada4.jpg ] || python -X utf8 ../arte/portadas.py
 nums="$*"; [ -z "$nums" ] && nums="1 2 3 4"
 for n in $nums; do
   [ -f "libro$n.tex" ] || { echo "no existe libro$n.tex"; continue; }

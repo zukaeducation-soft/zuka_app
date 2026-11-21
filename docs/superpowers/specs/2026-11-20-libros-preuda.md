@@ -46,3 +46,20 @@ texto en la mano, ejemplos de pregunta comentados (por qué la buena es buena y 
   ZUKA, «Preuniversitario UdeA» y el número de tomo.
 - `sh docs/libros/build.sh [1 2 3 4]` deja `docs/libros/pdf/Zuka_Preuniversitario_Libro_N.pdf`. Los PDF no van al
   repositorio (archivos pesados); se entregan en `Downloads/Zuka_Libros_Preuniversitario`.
+
+## Rediseño del mismo día (segundo pedido del usuario)
+
+El usuario pidió libros **más profesionales y atractivos, sin fondos negros**, con analogías, lenguaje sencillo, muchos
+ejemplos y **las formas en que cada concepto se evalúa en el examen**; carátulas con objetos matemáticos hermosos en
+razonamiento y motivos de lectura en comprensión. No hace falta seguir la estructura de la app.
+
+- **Todo en claro**: papel `#FAFAF4`, tinta azul, verde oliva y lima; nada de `znight` como relleno.
+- **Arte de portada generado por código** (`docs/libros/arte/portadas.py`, numpy + PIL, 300 ppp; deja
+  `tex/arte/portadaN.jpg`, que no va al repositorio): 1 conjunto de Julia (c = −0.7269 + 0.1889i), 2 atractor de
+  Clifford, 3 libro abierto del que suben letras, 4 árbol de letras con raíces bajo un renglón. Las aperturas de mundo
+  muestran un recorte distinto del arte de su libro.
+- **La analogía** de cada lección (`analogias-rl.tex`, `analogias-cl.tex`: `nalogiade{id}{título}{texto}`) sale sola
+  después del reto. **Así lo preguntan en el examen** (`examen-rl.tex`, `examen-cl.tex`: `\examende{id}{orma{…}{…}}`)
+  sale sola antes del taller: 3 o 4 formas de pregunta por lección, con mini ejemplo.
+- Páginas: 153, 135, 105 y 89. Pendiente: revisión independiente de todas las claves (el subagente falló por red) y
+  ampliar los ejemplos resueltos de cada lección.

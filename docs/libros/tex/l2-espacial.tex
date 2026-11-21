@@ -91,7 +91,7 @@ $(-2, 2)$. Dos al oeste y dos al norte. \textbf{Opción A.}
 Desde arriba, una pila de cubos se ve como una cuadrícula de $2 \times 2$; el número de cada casilla dice cuántos cubos hay
 en esa columna. ¿Cuántos cubos tiene la pila?
 \begin{center}\begin{tikzpicture}[x=7mm,y=7mm]
-  \draw[white,line width=.6pt] (0,0) grid (2,2);
+  \draw[zink,line width=.6pt] (0,0) grid (2,2);
   \node at (.5,1.5) {3}; \node at (1.5,1.5) {1}; \node at (.5,.5) {2}; \node at (1.5,.5) {2};
 \end{tikzpicture}\end{center}
 \opciones{4}{6}{8}{12}
@@ -163,7 +163,7 @@ Por columnas: $3 + 1 + 2 + 2 = 8$ cubos. \textbf{Opción C.} (Es la pila del dib
 \begin{reto}
 El desarrollo plano de la figura se dobla para formar un cubo. ¿Qué número queda en la cara opuesta a la del 1?
 \begin{center}\begin{tikzpicture}[x=6mm,y=6mm,font=\small]
-  \foreach \x/\y/\n in {1/3/1,1/2/3,1/1/5,1/0/6,0/2/2,2/2/4}{\draw[white,line width=.6pt] (\x,\y) rectangle ++(1,1); \node at (\x+.5,\y+.5) {\n};}
+  \foreach \x/\y/\n in {1/3/1,1/2/3,1/1/5,1/0/6,0/2/2,2/2/4}{\draw[zink,line width=.6pt] (\x,\y) rectangle ++(1,1); \node at (\x+.5,\y+.5) {\n};}
 \end{tikzpicture}\end{center}
 \opciones{3}{5}{6}{2}
 \end{reto}
