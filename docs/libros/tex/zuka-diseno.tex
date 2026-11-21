@@ -120,3 +120,19 @@
   {\sffamily\footnotesize\color{zmute}\textbf{\color{zolive}Bitácora}\hfill
    \casilla{Leí}\hfill\casilla{Vi el video en Zuka}\hfill\casilla{Jugué}\hfill\casilla{Hice el taller}\hfill
    Fecha \rule[-1pt]{13mm}{.4pt}}\end{tcolorbox}}
+
+% ---------- «Más ejemplos resueltos»: \masejemplosde{id}{\ejx{título}{enunciado}{solución}...}; sale antes de «Así lo preguntan» ----------
+\newcounter{ejx}
+\newcommand{\masejemplosde}[2]{\expandafter\gdef\csname zmas@#1\endcsname{\zuka@cajamas{#2}}}
+\newcommand{\zuka@ponemas}{\ifcsname zmas@\zuka@lid\endcsname\csname zmas@\zuka@lid\endcsname
+  \expandafter\global\expandafter\let\csname zmas@\zuka@lid\endcsname\relax\fi}
+\newcommand{\ejx}[3]{\stepcounter{ejx}\par\vspace{6pt}%
+  {\sffamily\small\bfseries\color{zolive}\Alph{ejx}\quad}{\sffamily\small\bfseries\color{zink}#1}\par\vspace{1pt}
+  #2\par\vspace{1pt}{\sffamily\small\bfseries\color{zolive}Solución.}\ #3\par}
+\newcommand{\zuka@cajamas}[1]{\setcounter{ejx}{0}%
+  \begin{tcolorbox}[zbase,colback=zpaper,zborde=zmoss]
+  \zuka@cab{zmoss}{ejemplo}{Más ejemplos resueltos}{\sffamily\scriptsize\color{zmute}\quad tapa la solución e inténtalo primero}\par
+  #1\end{tcolorbox}}
+\renewcommand{\taller}{\zuka@ponemas\zuka@poneexamen\par\vspace{10pt}\noindent
+  \zuka@cab{zolive}{taller}{Taller \thesection}\hspace{3mm}%
+  \tikz[baseline=-.6ex]{\draw[zlime,line width=1.4pt] (0,0) -- (\dimexpr\linewidth-38mm\relax,0);}\par\vspace{2pt}}

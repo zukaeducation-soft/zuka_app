@@ -228,7 +228,7 @@
   \shade[inner color=zsun!25,outer color=zsun!50] (0,0) circle (13); \draw[zsun!70!black,line width=.7pt] (0,0) circle (13);
   \foreach \i/\c in {1/zlime!80,2/white,3/white,4/zlime!80,5/white,6/white}{\node[circle,draw=zolive,fill=\c,line width=.6pt,minimum size=8mm,sombra] (s\i) at (150-\i*60:20.5) {\normalsize\bfseries \i};}
   \draw[zcoral,dashed,line width=.7pt,{Stealth[length=2mm]}-{Stealth[length=2mm]}] (s1) -- (s4);
-  \node[tarjeta,anchor=west,align=left] at (32,0) {Frente al puesto $k$ está el $k + 3$.\\Junto al 1 están el 2 y el 6.\\Girar a todos no cambia nada:\\\textbf{fija a uno}.};
+  \node[tarjeta,anchor=west,align=left] at (32,0) {Frente al puesto $k$ está el $k \pm 3$.\\Junto al 1 están el 2 y el 6.\\Girar a todos no cambia nada:\\\textbf{fija a uno}.};
 \end{tikzpicture}}
 
 \@namedef{zfig@euler}{\begin{tikzpicture}[zf]
@@ -364,7 +364,7 @@
 
 \@namedef{zfig@pistas}{\begin{tikzpicture}[zf]
   \foreach \y/\t in {9/andén vacío,0/{son las 7:10},-9/saca un libro largo}{\node[tarjeta,minimum width=34mm] (a\y) at (0,\y) {\t};}
-  \node[tarjeta,fill=zlime!25,text width=38mm] (d) at (62,0) {\textbf{inferencia:} el tren ya pasó y la espera será larga};
+  \node[tarjeta,fill=zlime!25,text width=38mm] (d) at (62,0) {\textbf{inferencia:} Laura se prepara para una espera larga};
   \draw[flecha] (a9.east) -- (d.west); \draw[flecha] (a0.east) -- (d.west); \draw[flecha] (a-9.east) -- (d.west);
   \node[rot] at (0,16) {PISTAS DEL TEXTO};
 \end{tikzpicture}}
