@@ -1,0 +1,383 @@
+{
+ "courses": [
+  {
+   "name": "Álgebra",
+   "w": 358,
+   "h": 326.484375
+  },
+  {
+   "name": "Trigonometría",
+   "w": 358,
+   "h": 305.46875
+  },
+  {
+   "name": "Cálculo Diferencial",
+   "w": 358,
+   "h": 305.46875
+  },
+  {
+   "name": "Geometría Vectorial y Analítica",
+   "w": 358,
+   "h": 331.90625
+  },
+  {
+   "name": "Preuniversitario UdeA",
+   "w": 358,
+   "h": 305.46875
+  },
+  {
+   "name": "Física Mecánica",
+   "w": 358,
+   "h": 305.46875
+  },
+  {
+   "name": "Cálculo Integral",
+   "w": 358,
+   "h": 305.46875
+  },
+  {
+   "name": "Álgebra Lineal",
+   "w": 358,
+   "h": 305.46875
+  }
+ ],
+ "games": [
+  {
+   "name": "game-0",
+   "course": "preuda",
+   "lesson": "pu-cm-1",
+   "game": "tren-ordenado"
+  },
+  {
+   "name": "game-1",
+   "course": "preuda",
+   "lesson": "pu-cm-3",
+   "game": "candado-fraccion"
+  },
+  {
+   "name": "game-2",
+   "course": "preuda",
+   "lesson": "pu-cm-4",
+   "game": "cuenta-factores"
+  },
+  {
+   "name": "game-3",
+   "course": "preuda",
+   "lesson": "pu-ge-1",
+   "game": "apice-triangulo"
+  },
+  {
+   "name": "game-4",
+   "course": "preuda",
+   "lesson": "pu-ge-2",
+   "game": "acorrala-raiz"
+  },
+  {
+   "name": "game-5",
+   "course": "preuda",
+   "lesson": "pu-ge-4",
+   "game": "mide-circulo"
+  },
+  {
+   "name": "game-6",
+   "course": "preuda",
+   "lesson": "pu-ge-5",
+   "game": "sombreado-resta"
+  },
+  {
+   "name": "game-7",
+   "course": "preuda",
+   "lesson": "pu-ge-6",
+   "game": "lado-cubo"
+  },
+  {
+   "name": "game-8",
+   "course": "preuda",
+   "lesson": "pu-or-1",
+   "game": "descarta-casos"
+  },
+  {
+   "name": "game-9",
+   "course": "preuda",
+   "lesson": "pu-or-3",
+   "game": "casilleros"
+  },
+  {
+   "name": "game-10",
+   "course": "preuda",
+   "lesson": "pu-or-4",
+   "game": "fila-pistas"
+  },
+  {
+   "name": "game-11",
+   "course": "preuda",
+   "lesson": "pu-pr-2",
+   "game": "la-obra"
+  },
+  {
+   "name": "game-12",
+   "course": "preuda",
+   "lesson": "pu-pr-3",
+   "game": "persecucion"
+  },
+  {
+   "name": "game-13",
+   "course": "preuda",
+   "lesson": "pu-pr-4",
+   "game": "estira-todo"
+  },
+  {
+   "name": "game-14",
+   "course": "preuda",
+   "lesson": "pu-pr-5",
+   "game": "cascada"
+  },
+  {
+   "name": "game-15",
+   "course": "preuda",
+   "lesson": "pu-co-2",
+   "game": "factorial-cajas"
+  },
+  {
+   "name": "game-16",
+   "course": "preuda",
+   "lesson": "pu-co-3",
+   "game": "saludos"
+  },
+  {
+   "name": "game-17",
+   "course": "preuda",
+   "lesson": "pu-co-4",
+   "game": "encuesta-venn"
+  },
+  {
+   "name": "game-18",
+   "course": "preuda",
+   "lesson": "pu-co-5",
+   "game": "elige-comite"
+  },
+  {
+   "name": "game-19",
+   "course": "preuda",
+   "lesson": "pu-es-2",
+   "game": "cubo-pintado"
+  },
+  {
+   "name": "game-20",
+   "course": "preuda",
+   "lesson": "pu-es-3",
+   "game": "prisma-capas"
+  },
+  {
+   "name": "game-21",
+   "course": "preuda",
+   "lesson": "pu-se-1",
+   "game": "razon-terminos"
+  },
+  {
+   "name": "game-22",
+   "course": "preuda",
+   "lesson": "pu-se-2",
+   "game": "pisa-huellas"
+  },
+  {
+   "name": "game-23",
+   "course": "preuda",
+   "lesson": "pu-se-3",
+   "game": "bolsas-residuo"
+  }
+ ],
+ "balanza": {
+  "params": {
+   "a": 3,
+   "b": 5,
+   "d": 20,
+   "min": 0,
+   "max": 30
+  },
+  "sol": 12,
+  "frames": [
+   {
+    "name": "bal-0",
+    "cx": 195,
+    "cy": 473.69124999999997,
+    "down": false
+   },
+   {
+    "name": "bal-1",
+    "cx": 195,
+    "cy": 473.69124999999997,
+    "down": false
+   },
+   {
+    "name": "bal-2",
+    "cx": 195,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-3",
+    "cx": 195.8,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-4",
+    "cx": 196.6,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-5",
+    "cx": 197.39999999999998,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-6",
+    "cx": 198.20000000000002,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-7",
+    "cx": 199,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-8",
+    "cx": 199.8,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-9",
+    "cx": 200.60000000000002,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-10",
+    "cx": 201.4,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-11",
+    "cx": 202.20000000000002,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-12",
+    "cx": 203,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-13",
+    "cx": 203.8,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-14",
+    "cx": 204.6,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-15",
+    "cx": 198.20000000000002,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-16",
+    "cx": 191.79999999999998,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-17",
+    "cx": 185.4,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-18",
+    "cx": 179,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-19",
+    "cx": 172.6,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-20",
+    "cx": 166.2,
+    "cy": 473.69124999999997,
+    "down": true
+   },
+   {
+    "name": "bal-21",
+    "cx": 166.2,
+    "cy": 473.69124999999997,
+    "down": false
+   },
+   {
+    "name": "bal-22",
+    "cx": 166.2,
+    "cy": 473.69124999999997,
+    "down": false
+   },
+   {
+    "name": "bal-23",
+    "cx": 166.2,
+    "cy": 473.69124999999997,
+    "down": false
+   },
+   {
+    "name": "bal-24",
+    "cx": 166.2,
+    "cy": 473.69124999999997,
+    "down": false
+   },
+   {
+    "name": "bal-25",
+    "cx": 166.2,
+    "cy": 473.69124999999997,
+    "down": false
+   },
+   {
+    "name": "bal-26",
+    "cx": 166.2,
+    "cy": 473.69124999999997,
+    "down": false
+   },
+   {
+    "name": "bal-27",
+    "cx": 166.2,
+    "cy": 473.69124999999997,
+    "down": false
+   },
+   {
+    "name": "bal-28",
+    "cx": 166.2,
+    "cy": 473.69124999999997,
+    "down": false
+   }
+  ],
+  "canvas": {
+   "x": 21,
+   "y": 189.03125,
+   "w": 348,
+   "h": 331
+  },
+  "check": null
+ }
+}

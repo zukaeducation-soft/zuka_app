@@ -1,0 +1,9 @@
+node_modules
+node_modules/
+out/
+public/tex/*.png
+public/tex/*.jpg
+public/media/
+*.mp3
+*.mp4
+*.wav
