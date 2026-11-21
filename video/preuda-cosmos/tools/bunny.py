@@ -63,28 +63,57 @@ def upload_ready(c, db):
         if not e.get('guid'):
             r = c.post(f'{API}/videos', json={'title': f'{lesson} · {title}' if lesson else title, 'collectionId': col}); r.raise_for_status()
             e = {'guid': r.json()['guid'], 'lesson': lesson, 'world': p.parent.name, 'file': p.name}; db[name] = e; save(db)
+        j = c.get(f'{API}/videos/{e["guid"]}').json()
+        if j.get('status') in (5, 6) and not j.get('storageSize'):
+            # Una subida cortada deja el video en «subida fallida» y Bunny ya no acepta otra en ese ID: se borra ese video
+            # vacío (lo creó este script) y se crea uno nuevo.
+            c.delete(f'{API}/videos/{e["guid"]}')
+            r2 = c.post(f'{API}/videos', json={'title': j.get('title') or name, 'collectionId': col}); r2.raise_for_status()
+            log(f'  el ID {e["guid"]} quedó en «subida fallida»: lo cambio por {r2.json()["guid"]}')
+            e['guid'] = r2.json()['guid']; e.pop('tus', None); save(db)
         log(f'subo {p.parent.name}/{p.name} ({p.stat().st_size / 1e6:.1f} MB) → {e["guid"]}')
-        ok = False
-        for intento in range(5):                       # Bunny a veces responde 500 o corta: se reintenta con espera creciente
-            try:
-                with open(p, 'rb') as f:
-                    r = c.put(f'{API}/videos/{e["guid"]}', content=f, headers={'Content-Type': 'application/octet-stream'}, timeout=900)
-                if r.status_code < 300: ok = True; break
-                log(f'  Bunny respondió {r.status_code}; reintento')
-                if r.status_code == 400:
-                    # Una subida cortada deja el video en «falló la subida» (estado 6) y Bunny ya no acepta otra en ese ID:
-                    # se borra ese video vacío (lo creó este script) y se crea uno nuevo.
-                    j = c.get(f'{API}/videos/{e["guid"]}').json()
-                    if j.get('status') in (5, 6) and not j.get('storageSize'):
-                        c.delete(f'{API}/videos/{e["guid"]}')
-                        r2 = c.post(f'{API}/videos', json={'title': j.get('title') or name, 'collectionId': col}); r2.raise_for_status()
-                        log(f'  el ID {e["guid"]} quedó en «subida fallida»: lo cambio por {r2.json()["guid"]}')
-                        e['guid'] = r2.json()['guid']; save(db)
-            except httpx.HTTPError as x: log(f'  fallo de red ({type(x).__name__}); reintento')
-            time.sleep(30 * (intento + 1))
-        if not ok: log(f'  no se pudo subir {p.name}; queda para la próxima vuelta'); continue
-        e['uploaded'] = time.strftime('%Y-%m-%d %H:%M'); save(db); n += 1
+        if tus_upload(p, e, db): e['uploaded'] = time.strftime('%Y-%m-%d %H:%M'); e.pop('tus', None); save(db); n += 1
+        else: log(f'  no se pudo subir {p.name}; queda para la próxima vuelta')
     return n
+
+TUS = 'https://video.bunnycdn.com/tusupload'
+CHUNK = 1 << 20                     # 1 MB: con una conexión lenta e inestable, lo que se pierde al cortarse es poco
+
+def tus_upload(p, e, db):
+    """Subida reanudable (TUS) por pedazos: si la conexión se cae, sigue desde el último pedazo que Bunny recibió."""
+    import hashlib
+    size, k = p.stat().st_size, key()
+    exp = int(time.time()) + 20 * 3600
+    sig = hashlib.sha256(f'{LIB}{k}{exp}{e["guid"]}'.encode()).hexdigest()
+    auth = {'AuthorizationSignature': sig, 'AuthorizationExpire': str(exp), 'VideoId': e['guid'], 'LibraryId': str(LIB), 'Tus-Resumable': '1.0.0'}
+    fails = 0
+    with httpx.Client(timeout=httpx.Timeout(120, connect=30)) as h:
+        while fails < 40:
+            try:
+                url = e.get('tus')
+                if not url:
+                    import base64
+                    meta = f'filetype {base64.b64encode(b"video/mp4").decode()},title {base64.b64encode(p.name.encode()).decode()}'
+                    r = h.post(TUS, headers={**auth, 'Upload-Length': str(size), 'Upload-Metadata': meta})
+                    if r.status_code != 201: log(f'  TUS no abrió la subida ({r.status_code}): {r.text[:150]}'); fails += 1; time.sleep(30); continue
+                    url = r.headers['Location']
+                    if url.startswith('/'): url = 'https://video.bunnycdn.com' + url
+                    e['tus'] = url; save(db)
+                r = h.head(url, headers=auth)
+                if r.status_code == 404: e.pop('tus', None); save(db); continue      # la subida venció: se abre otra
+                off = int(r.headers.get('Upload-Offset', '0'))
+                if off >= size: return True
+                with open(p, 'rb') as f:
+                    f.seek(off); chunk = f.read(CHUNK)
+                r = h.patch(url, content=chunk, headers={**auth, 'Upload-Offset': str(off), 'Content-Type': 'application/offset+octet-stream'})
+                if r.status_code not in (200, 204): log(f'  pedazo rechazado ({r.status_code}); reintento'); fails += 1; time.sleep(15); continue
+                new = int(r.headers.get('Upload-Offset', off + len(chunk)))
+                if new // (4 * CHUNK) != off // (4 * CHUNK) or new >= size: log(f'  {p.stem}: {new / size:.0%}')
+                if new >= size: return True
+                fails = 0
+            except httpx.HTTPError as x:
+                fails += 1; log(f'  corte de red ({type(x).__name__}); sigo desde el último pedazo'); time.sleep(min(120, 10 * fails))
+    return False
 
 CDN = 'https://vz-1a76d229-c83.b-cdn.net'
 def hls_length(guid):
