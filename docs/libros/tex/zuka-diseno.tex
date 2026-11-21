@@ -26,12 +26,10 @@
 
 % ---------- cabecera de lección ----------
 \newcommand{\zuka@cabezaleccion}[1]{%
-  \begin{tabularx}{\linewidth}{@{}l@{\hspace{4.5mm}}X@{}}
-  {\sffamily\firathin\fontsize{40}{40}\selectfont\color{zmoss}\thesection} &
-  {\sffamily\scriptsize\bfseries\color{zolive}LECCIÓN \,·\, EN LA APP: \zuka@lid}\par\vspace{1.5pt}
-  {\sffamily\fontsize{18}{21}\selectfont\fontseries{sb}\selectfont\color{zink}#1}\end{tabularx}\par\vspace{-1pt}%
+  {\sffamily\scriptsize\bfseries\color{zolive}L\,E\,C\,C\,I\,Ó\,N\quad{\color{zmoss}\thesection}}\par\vspace{3pt}
+  {\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000\sffamily\fontsize{21}{25}\selectfont\fontseries{sb}\selectfont\color{zink}#1\par}\vspace{3pt}%
   \noindent\tikz{\draw[zline,line width=.5pt,line cap=butt] (0,0) -- (\dimexpr\linewidth-2pt\relax,0);
-    \draw[zlime,line width=1.8pt,line cap=butt] (0,0) -- (22mm,0);}}
+    \draw[zlime,line width=2.2pt,line cap=butt] (0,0) -- (22mm,0);}}
 \titleformat{\section}[block]{\sffamily\color{zink}}{}{0pt}{\zuka@cabezaleccion}
 \titlespacing*{\section}{0pt}{2pt}{9pt}
 \titleformat{\subsection}[hang]{\sffamily\large\fontseries{sb}\selectfont\color{zink}}{}{0pt}

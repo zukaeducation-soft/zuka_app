@@ -150,19 +150,19 @@
     \fill[zsoft] (current page.north west) rectangle ([yshift=-96mm]current page.north east);
     % ventana con un trozo del arte de la portada, distinto en cada mundo
     \begin{scope}
-      \clip ([xshift=-78mm,yshift=-14mm]current page.north east) [rounded corners=4mm] rectangle ++(64mm,-68mm);
+      \clip ([xshift=-78mm,yshift=-14mm]current page.north east) [rounded corners=4mm] rectangle ++(64mm,-42mm);
       \pgfmathsetmacro{\zdx}{-70-mod(\themundo*37,110)}\pgfmathsetmacro{\zdy}{170+mod(\themundo*53,120)}
       \node[anchor=north west,inner sep=0] at ([xshift=-78mm+\zdx mm,yshift=-14mm+\zdy mm]current page.north east)
         {\includegraphics[width=300mm]{arte/portada\zuka@num.jpg}};
     \end{scope}
-    \draw[zolive,line width=.6pt,rounded corners=4mm] ([xshift=-78mm,yshift=-14mm]current page.north east) rectangle ++(64mm,-68mm);
-    \node[anchor=north west,font=\sffamily\firathin\fontsize{64}{64}\selectfont,text=zmoss]
-      at ([xshift=17mm,yshift=-16mm]current page.north west) {\two@digits{\themundo}};
-    \node[anchor=north west,font=\sffamily\scriptsize\bfseries,text=zolive]
-      at ([xshift=19mm,yshift=-44mm]current page.north west) {MUNDO \themundo\ \,·\, EN LA APP: #2};
-    \node[anchor=north west,text width=72mm,align=flush left,font=\sffamily\fontsize{25}{28}\selectfont\firalight,text=zink]
-      at ([xshift=18mm,yshift=-50mm]current page.north west) {#1};
-    \draw[zlime,line width=2pt] ([xshift=19mm,yshift=-90mm]current page.north west) -- ++(18mm,0);
+    \draw[zolive,line width=.6pt,rounded corners=4mm] ([xshift=-78mm,yshift=-14mm]current page.north east) rectangle ++(64mm,-42mm);
+    \node[anchor=north west,font=\sffamily\small\bfseries,text=zolive]
+      at ([xshift=19mm,yshift=-17mm]current page.north west) {M\,U\,N\,D\,O};
+    \node[anchor=north west,font=\sffamily\firalight\fontsize{58}{58}\selectfont,text=zmoss]
+      at ([xshift=17mm,yshift=-23mm]current page.north west) {\themundo};
+    \node[anchor=south west,text width=132mm,align=flush left,font=\sffamily\fontsize{27}{31}\selectfont\fontseries{sb}\selectfont,text=zink]
+      at ([xshift=18mm,yshift=-87mm]current page.north west) {#1};
+    \draw[zlime,line width=2.2pt] ([xshift=19mm,yshift=-91mm]current page.north west) -- ++(22mm,0);
   \end{tikzpicture}%
   \par\vspace*{82mm}%
   {\large #3\par}\vspace{6mm}%
