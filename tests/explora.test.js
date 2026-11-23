@@ -81,7 +81,7 @@ test('la escena responde con una frase a cada movimiento', () => {
   assert.match(XP.signos.dice({ neg: [true, true, false] }), /lado positivo/);
   for (const p of L.pasos) {
     const t = XP[p.tipo];
-    if (!t.dice) continue;
+    if (!t.dice || p.tipo === 'muestra') continue;   // las explicaciones tienen su propio límite
     for (const s of [t.ini(p), t.sol(p)]) assert.ok(t.dice(s, p).length <= 90, p.tipo + ': frase larga');
   }
 });
@@ -174,11 +174,11 @@ test('primero se explica y después se pide: cada capítulo abre con una explica
 test('explicaciones: momentos cortos, escena conocida y cuentas correctas', () => {
   const M = XP.muestra;
   for (const p of L.pasos.filter(p => p.tipo === 'muestra')) {
-    assert.ok(XP[p.escena] && p.momentos.length >= 3 && p.momentos.length <= 4);
+    assert.ok(XP[p.escena] && p.momentos.length >= 4 && p.momentos.length <= 7);
     assert.equal(M.ok({ n: p.momentos.length, fin: false }, p), false, 'no se cumple hasta ver el último momento');
     assert.equal(M.dice(M.ini(), p), p.momentos[0].dice, 'la primera frase sale desde el principio');
     for (const m of p.momentos) {
-      assert.ok(m.dice.length <= 90, 'momento largo: ' + m.dice);
+      assert.ok(m.dice.length <= 115, 'momento largo: ' + m.dice);
       if (p.escena === 'recta') assert.ok(m.de >= p.en.min && m.a <= p.en.max && m.a >= p.en.min);
       const c = m.cuenta && m.cuenta.match(/^\$(-?\d+) ([+-]) \(?(-?\d+)\)? = (-?\d+)\$$/);
       if (c) assert.equal(c[2] === '+' ? +c[1] + +c[3] : c[1] - c[3], +c[4], m.cuenta);
@@ -191,7 +191,7 @@ test('explicaciones: momentos cortos, escena conocida y cuentas correctas', () =
   assert.equal(XP.capas.sol(capas.en).toks[0], 53);
 });
 
-test('la explicación corre sola: cada momento deja entre 1.5 y 5 segundos para leer', () => {
+test('la explicación corre sola: cada momento deja entre 1.5 y 5.6 segundos para leer', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js/explora.js'), 'utf8');
   const bloque = src.slice(src.indexOf('XPD.muestra ='), src.indexOf('XPD.signos ='));
   assert.ok(!/stage\.onclick/.test(bloque), 'la escena de una explicación no se toca');
@@ -199,7 +199,44 @@ test('la explicación corre sola: cada momento deja entre 1.5 y 5 segundos para 
   for (const p of L.pasos.filter(p => p.tipo === 'muestra')) {
     for (const m of p.momentos) {
       const t = XP.muestra.pausa(m);
-      assert.ok(t >= 1500 && t <= 5000, m.dice + ': ' + t + ' ms');
+      assert.ok(t >= 1500 && t <= 5600, m.dice + ': ' + t + ' ms');
     }
   }
+});
+
+test('sonidos: existen, y sin audio (Node) no rompen nada', () => {
+  const XS = get(ctx, 'XS');
+  for (const k of ['tick', 'hop', 'flip', 'merge', 'pop', 'nope', 'page', 'whoosh', 'idea']) {
+    assert.equal(typeof XS[k], 'function', k);
+    assert.doesNotThrow(() => XS[k](3), k);
+  }
+  const src = fs.readFileSync(path.join(ROOT, 'js/explora.js'), 'utf8');
+  assert.match(src, /S\.sfx !== false/, 'respeta el interruptor de sonido de la app');
+});
+
+test('el texto entra palabra a palabra sin partir fórmulas ni negritas', () => {
+  ctx.tex = s => s;
+  const html = get(ctx, 'xpPalabras')('Sumar **es caminar**: $-4 + 5 = 1$ ya.');
+  const w = [...html.matchAll(/<span class="xp-w"[^>]*>(.*?)<\/span>/g)].map(m => m[1]);
+  assert.deepEqual(w, ['Sumar', '**es caminar**:', '$-4 + 5 = 1$', 'ya.']);
+});
+
+test('las explicaciones son detalladas: cuatro o más momentos y al menos tres con adornos en la recta', () => {
+  const M = L.pasos.filter(p => p.tipo === 'muestra');
+  assert.ok(M.every(p => p.momentos.length >= 4));
+  const adornos = M.flatMap(p => p.momentos).filter(m => m.zona || m.marcas);
+  assert.ok(adornos.length >= 3);
+  for (const m of adornos) {
+    if (m.zona) assert.ok(['pos', 'neg', 'ambas'].includes(m.zona));
+    for (const v of m.marcas || []) assert.ok(v >= -8 && v <= 8);
+  }
+});
+
+test('revisión: las zonas solo en «La recta», sonido que no se apila y botón de sonido con estado', () => {
+  const sumar = L.pasos.find(p => p.tipo === 'muestra' && p.cap === 1);
+  assert.ok(sumar.momentos.every(m => !m.zona), 'en sumar, la zona confundía sentido con signo');
+  assert.ok(!L.pasos.some(p => /Escucha/.test(JSON.stringify(p))), 'nada depende de oír');
+  const src = fs.readFileSync(path.join(ROOT, 'js/explora.js'), 'utf8');
+  assert.match(src, /ac\.state !== 'running'/);
+  assert.match(src, /aria-pressed/);
 });

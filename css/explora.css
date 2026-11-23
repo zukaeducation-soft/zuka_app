@@ -146,3 +146,58 @@
 }
 .xp-op.now { background: var(--c); border-color: var(--c); color: var(--c-on); transform: scale(1.12); transition: transform .25s cubic-bezier(.2,.8,.2,1), background .2s; }
 @media (prefers-reduced-motion: reduce) { .xp-op.now { transition: none; } }
+
+/* ---- más vida (2026-11-23): sonido, estela, adornos por momento, texto palabra a palabra ---- */
+.xp-meta { gap: 6px; }
+.xp-meta .xp-cap { margin-right: auto; }
+.xp-snd { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 999px; color: var(--mute); }
+.xp-snd svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.xp-snd .off, .xp-snd.mute .on { display: none; }
+.xp-snd.mute .off { display: inline; }
+
+/* Un brillo del color del curso detrás de la escena */
+.xp-stage { position: relative; isolation: isolate; }
+.xp-stage::before { content: ''; position: absolute; z-index: -1; inset: -6% 4%; pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--c) calc(var(--halo) / 3), transparent), transparent); }
+
+/* Palabras que entran una a una, sin saltos */
+.xp-w { display: inline-block; animation: xp-word .42s cubic-bezier(.2,.8,.2,1) backwards; animation-delay: calc(var(--w) * var(--dw, 45ms)); }
+@keyframes xp-word { from { opacity: 0; transform: translateY(7px); filter: blur(3px); } }
+.xp-read.swap { animation: xp-swap .4s cubic-bezier(.2,.8,.2,1); }
+@keyframes xp-swap { from { opacity: 0; transform: scale(.94); } }
+
+/* Recta: estela, número bajo la ficha, zonas que se dibujan y marcas que laten */
+.xp-trail { stroke: var(--c-ink); stroke-width: 5; stroke-linecap: round; opacity: .55; filter: drop-shadow(0 0 4px color-mix(in srgb, var(--c) var(--halo), transparent)); }
+.xp-trail.ghost { stroke-dasharray: 3 6; opacity: .45; filter: none; }
+.xp-lb-bg { fill: var(--bg); }
+.xp-lb-on { font-size: 15px; font-weight: 600; fill: var(--c-ink); }
+.xp-zone { stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .8; animation: xp-draw .9s cubic-bezier(.4,0,.2,1) forwards; }
+.xp-zone.pos { stroke: var(--c-ink); }
+.xp-zone.neg { stroke: var(--fire); }
+@keyframes xp-draw { to { stroke-dashoffset: 0; } }
+.xp-zlab { font-size: 12.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; animation: xp-fade .6s .4s backwards; }
+.xp-zlab.pos { fill: var(--c-ink); }
+.xp-zlab.neg { fill: color-mix(in srgb, var(--fire) 60%, var(--ink)); }
+@keyframes xp-fade { from { opacity: 0; transform: translateY(6px); } }
+.xp-zlab, .xp-mark { transform-box: fill-box; transform-origin: center; }
+.xp-mark { fill: none; stroke: var(--gold); stroke-width: 2; animation: xp-beat 1.4s ease-in-out infinite; }
+@keyframes xp-beat { 50% { transform: scale(1.18); opacity: .55; } }
+.xp-land { fill: var(--c-ink); }
+.xp-land.flip { fill: var(--fire); }
+
+/* Avance de la explicación: un punto por momento */
+.xp-dots { display: flex; gap: 6px; justify-content: center; }
+.xp-dots i { width: 6px; height: 6px; border-radius: 3px; background: var(--track); transition: width .35s cubic-bezier(.2,.8,.2,1), background .35s; }
+.xp-dots i.now { width: 20px; background: var(--c-ink); }
+.xp-dots i.done { background: color-mix(in srgb, var(--c-ink) 55%, transparent); }
+.xp-dots:has(+ .xp-sigue:not([hidden])) { display: none; }
+
+/* La idea ganada entra con un brillo corto */
+.xp-idea.gana { animation: xp-glint .9s cubic-bezier(.2,.8,.2,1); }
+@keyframes xp-glint { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 45%, transparent); } 100% { box-shadow: 0 0 0 14px transparent; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-w, .xp-read.swap, .xp-zone, .xp-zlab, .xp-mark, .xp-idea.gana { animation: none; }
+  .xp-zone { stroke-dashoffset: 0; }
+  .xp-dots i { transition: none; }
+}
