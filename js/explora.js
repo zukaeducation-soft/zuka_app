@@ -1,0 +1,442 @@
+// Explora: la explicación interactiva que ocupa el lugar del video (spec 2026-11-23-explora-leccion-interactiva).
+// El estudiante construye la idea paso a paso: una frase, una escena que se arrastra y una meta. Al cumplirla se revela
+// la idea, que entra al «andamio» (lo que lleva construido). Sin vidas, sin reloj y sin «Comprobar».
+//
+//   EXPLORA['<id de lección>'] = { caps: ['Capítulo', …], pasos: [{ cap, tipo, texto, idea, …parámetros }] }
+//   XP[tipo]  = { ini(p) → estado, ok(estado, p), sol(p) → estado cumplido, lee(estado, p) → renglón en TeX }   (puro)
+//   XPD[tipo] = (escena, p, estado, api) → dibuja y escucha el dedo; api.set(estado), api.nota(texto), api.memo
+// Va después de ui.js y antes de player.js (makePlayer llama a exploraPlayer).
+
+const EXPLORA = {};
+const XP = {};
+
+const xpPar = n => (n < 0 ? `(${n})` : `${n}`);            // en TeX: un negativo va entre paréntesis
+const xpMenos = n => String(n).replace('-', '−');           // en pantalla: menos tipográfico
+const xpSigno = n => (n > 0 ? '+' : '') + xpMenos(n);
+
+XP.apuesta = {
+  ini: () => ({ pick: null }),
+  ok: s => s.pick != null,
+  sol: p => ({ pick: p.opciones[0] }),
+  lee: () => '',
+};
+
+// Ficha en la recta. modo: 'llegar' (a meta), 'espejo' (el reflejo cae en meta), 'distancia' (desde `ancla`),
+// 'salto' (sale de `desde`; con `resta` la cuenta es desde − resta) y 'dos' (tocar los lugares a `dist` de `ancla`).
+XP.recta = {
+  ini: p => (p.modo === 'dos' ? { sel: [] } : { v: p.desde }),
+  ok(s, p) {
+    if (p.modo === 'dos') return s.sel.length === p.metas.length && p.metas.every(m => s.sel.includes(m));
+    return (p.modo === 'espejo' ? -s.v : s.v) === p.meta;
+  },
+  sol: p => (p.modo === 'dos' ? { sel: [...p.metas] } : { v: p.modo === 'espejo' ? -p.meta : p.meta }),
+  lee(s, p) {
+    if (p.modo === 'dos') return s.sel.length ? s.sel.map(m => `$|{${m}} - ${xpPar(p.ancla)}| = ${Math.abs(m - p.ancla)}$`).join(' · ') : '';
+    if (p.modo === 'espejo') return `$-(${s.v}) = ${-s.v}$`;
+    if (p.modo === 'distancia') return `$|{${s.v}} - ${xpPar(p.ancla)}| = ${Math.abs(s.v - p.ancla)}$`;
+    if (p.modo === 'salto') {
+      if (p.resta != null) return `$${p.desde} - ${xpPar(p.resta)} = ${s.v === p.meta ? s.v : '\\,?'}$`;
+      const d = s.v - p.desde;
+      return d ? `$${p.desde} + ${xpPar(d)} = ${s.v}$` : `$${p.desde}$`;
+    }
+    return `$${s.v}$`;
+  },
+};
+
+// Cadena de b saltos iguales de tamaño a que sale del 0; se arrastra la punta. Con b negativo la cadena se voltea.
+XP.saltos = {
+  ini: p => ({ b: p.desde ?? 1 }),
+  ok: (s, p) => p.a * s.b === p.meta,
+  sol: p => ({ b: p.meta / p.a }),
+  lee: (s, p) => `$${xpPar(p.a)} \\cdot ${xpPar(s.b)} = ${p.a * s.b}$`,
+  // Veces que corresponden a la posición x de la punta, sin salirse de la recta.
+  veces(x, p) {
+    let b = Math.round(x / p.a);
+    while (p.a * b > p.max || p.a * b < p.min) b -= Math.sign(b);
+    return b || 0;
+  },
+};
+
+// Factores que se tocan para cambiarles el signo; hay que usar `menos` signos menos.
+XP.signos = {
+  ini: p => ({ neg: p.factores.map(() => false) }),
+  valor: (s, p) => p.factores.reduce((t, f, i) => t * (s.neg[i] ? -f : f), 1),
+  ok: (s, p) => s.neg.filter(Boolean).length === p.menos,
+  sol: p => ({ neg: p.factores.map((_, i) => i < p.menos) }),
+  lee: (s, p) => `$${p.factores.map((f, i) => `(${s.neg[i] ? -f : f})`).join('')} = ${XP.signos.valor(s, p)}$`,
+};
+
+// Jerarquía: la expresión son fichas (números y operadores separados por espacios) y se toca la operación que sigue.
+const XP_CAPA = { paren: 'Antes va lo que está dentro del paréntesis.', pot: 'Antes va la potencia.',
+  mul: 'Antes van × y ÷, de izquierda a derecha.', sum: 'Sumas y restas van de izquierda a derecha.' };
+XP.capas = {
+  ini: p => ({ toks: p.expr.split(' ').map(t => (/^-?\d+$/.test(t) ? +t : t)), fallos: 0 }),
+  ok: s => s.toks.length === 1,
+  // Índice del operador que toca: dentro del paréntesis más interno, ^ primero, luego × ÷, luego + −.
+  sigue(toks) {
+    const hi = toks.indexOf(')'), lo = hi < 0 ? -1 : toks.lastIndexOf('(', hi);
+    const a = lo + 1, b = hi < 0 ? toks.length : hi;
+    for (const ops of ['^', '*/', '+-']) {
+      for (let i = a; i < b; i++) if (typeof toks[i] === 'string' && ops.includes(toks[i])) return i;
+    }
+    return -1;
+  },
+  capa(toks, i) { return toks.includes(')') ? 'paren' : toks[i] === '^' ? 'pot' : '*/'.includes(toks[i]) ? 'mul' : 'sum'; },
+  aplica(s, i) {
+    const t = [...s.toks], a = t[i - 1], b = t[i + 1];
+    const r = { '+': a + b, '-': a - b, '*': a * b, '/': a / b, '^': a ** b }[t[i]];
+    t.splice(i - 1, 3, r);
+    if (t[i - 2] === '(' && t[i] === ')') t.splice(i - 2, 3, r);   // un paréntesis con un solo número ya no hace falta
+    return { toks: t, fallos: s.fallos };
+  },
+  toca(s, i) {
+    const n = XP.capas.sigue(s.toks);
+    return i === n ? XP.capas.aplica(s, i) : { ...s, fallos: s.fallos + 1, fallo: XP.capas.capa(s.toks, n) };
+  },
+  sol(p) { let s = XP.capas.ini(p); while (!XP.capas.ok(s)) s = XP.capas.aplica(s, XP.capas.sigue(s.toks)); return s; },
+  lee: () => '',
+};
+
+// Fichas a casillas: cada fila { tex, r } recibe la ficha r.
+XP.casillas = {
+  ini: p => ({ puesto: p.filas.map(() => null) }),
+  ok: (s, p) => p.filas.every((f, i) => s.puesto[i] === f.r),
+  sol: p => ({ puesto: p.filas.map(f => f.r) }),
+  lee: () => '',
+};
+
+XP.cierre = { ini: () => ({}), ok: () => true, sol: () => ({}), lee: () => '' };
+
+// ------------------------------------------------------------------------------------------------------------------
+// Dibujo. Nada de lo que sigue corre al cargar el archivo (las pruebas lo cargan sin navegador).
+
+const xpStill = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const xpTick = () => { try { if (navigator.userActivation?.hasBeenActive) navigator.vibrate?.(6); } catch (e) { /* sin vibración */ } };
+
+// Resorte: lleva un valor de `from` a `to` llamando a `on` en cada cuadro. Devuelve cómo detenerlo.
+function xpSpring(from, to, on) {
+  if (xpStill() || from === to) { on(to); return () => {}; }
+  let x = from, v = 0, last = performance.now(), id = 0;
+  const f = t => {
+    const dt = Math.min(0.032, (t - last) / 1000); last = t;
+    v += (-260 * (x - to) - 22 * v) * dt; x += v * dt;
+    if (Math.abs(x - to) < 0.004 && Math.abs(v) < 0.04) return on(to);
+    on(x); id = requestAnimationFrame(f);
+  };
+  id = requestAnimationFrame(f);
+  return () => cancelAnimationFrame(id);
+}
+
+const XP_W = 340, XP_H = 156, XP_PAD = 24, XP_Y = 108;
+function xpAxis(stage, p, cada = 1) {
+  const n = p.max - p.min, X = v => XP_PAD + (v - p.min) / n * (XP_W - 2 * XP_PAD);
+  let h = `<line class="xp-ax" x1="8" y1="${XP_Y}" x2="${XP_W - 8}" y2="${XP_Y}"/>`;
+  for (let v = p.min; v <= p.max; v++) {
+    const big = v % cada === 0;
+    h += `<line class="xp-tk${v === 0 ? ' z' : ''}" x1="${X(v)}" y1="${XP_Y - (big ? 6 : 3)}" x2="${X(v)}" y2="${XP_Y + (big ? 6 : 3)}"/>`;
+    if (big) h += `<text class="xp-lb${v === 0 ? ' z' : ''}" x="${X(v)}" y="${XP_Y + 24}">${xpMenos(v)}</text>`;
+  }
+  stage.innerHTML = `<svg class="xp-svg" viewBox="0 0 ${XP_W} ${XP_H}" role="img">${h}<g class="xp-dyn"></g></svg>`;
+  const svg = stage.firstChild;
+  // Posición del dedo en unidades de la recta.
+  const at = e => { const r = svg.getBoundingClientRect(); return p.min + ((e.clientX - r.left) * XP_W / r.width - XP_PAD) / (XP_W - 2 * XP_PAD) * n; };
+  return { svg, dyn: svg.querySelector('.xp-dyn'), X, at };
+}
+const xpArc = (x1, x2, h, cls) => `<path class="${cls}" d="M${x1} ${XP_Y} Q${(x1 + x2) / 2} ${XP_Y - h * 2} ${x2} ${XP_Y}"/>`;
+const xpClamp = (x, a, b) => Math.max(a, Math.min(b, x));
+
+const XPD = {};
+const XP_MEM = {};   // por lección: { memo, estados, hechos, i } (ver exploraPlayer)
+
+XPD.recta = (stage, p, s, api) => {
+  const { svg, dyn, X, at } = xpAxis(stage, p);
+  let c = s.v ?? 0, touched = false, stop = null;
+  const tok = (x, t, cls = '') => `<g class="xp-tok ${cls}"><circle cx="${x}" cy="${XP_Y}" r="15"/><text x="${x}" y="${XP_Y + 5}">${xpMenos(t)}</text></g>`;
+  function draw() {
+    const v = Math.round(c), x = X(c);
+    let h = '';
+    if (p.modo === 'dos') {
+      h += `<circle class="xp-anc" cx="${X(p.ancla)}" cy="${XP_Y}" r="6"/>`;
+      for (const m of s.sel) {
+        h += xpArc(X(p.ancla), X(m), 17, `xp-arc${Math.abs(m - p.ancla) === p.dist ? ' good' : ''}`)
+          + `<text class="xp-tag" x="${(X(p.ancla) + X(m)) / 2}" y="${XP_Y - 42}">${Math.abs(m - p.ancla)}</text>`
+          + `<circle class="xp-ring${Math.abs(m - p.ancla) === p.dist ? ' good' : ''}" cx="${X(m)}" cy="${XP_Y}" r="11"/>`;
+      }
+      dyn.innerHTML = h; return;
+    }
+    if (p.modo === 'espejo') {
+      h += `<line class="xp-mir" x1="${X(0)}" y1="${XP_Y - 70}" x2="${X(0)}" y2="${XP_Y + 10}"/>`
+        + `<line class="xp-link" x1="${x}" y1="${XP_Y}" x2="${X(-c)}" y2="${XP_Y}"/>` + tok(X(-c), -v, 'ghost');
+    }
+    if (p.modo === 'distancia') {
+      h += `<circle class="xp-anc" cx="${X(p.ancla)}" cy="${XP_Y}" r="6"/>` + xpArc(X(p.ancla), x, 20, 'xp-arc');
+      const a = Math.min(p.ancla, v), b = Math.max(p.ancla, v);
+      for (let k = a + 1; k <= b; k++) h += `<circle class="xp-step-dot" cx="${X(k - 0.5)}" cy="${XP_Y - 12}" r="2.4"/>`;
+      if (v !== p.ancla) h += `<text class="xp-tag" x="${(X(p.ancla) + x) / 2}" y="${XP_Y - 48}">${Math.abs(v - p.ancla)} ${Math.abs(v - p.ancla) === 1 ? 'paso' : 'pasos'}</text>`;
+    }
+    if (p.modo === 'salto') {
+      const x0 = X(p.desde), y = XP_Y - 40, d = v - p.desde, dir = Math.sign(c - p.desde);
+      h += `<circle class="xp-anc hollow" cx="${x0}" cy="${XP_Y}" r="7"/>`;
+      if (Math.abs(c - p.desde) > 0.15) {
+        h += `<line class="xp-arrow" x1="${x0}" y1="${y}" x2="${x - dir * 7}" y2="${y}"/>`
+          + `<path class="xp-head" d="M${x} ${y} l${-dir * 10} -6 v12 z"/>`
+          + `<text class="xp-tag" x="${(x0 + x) / 2}" y="${y - 11}">${xpSigno(d)}</text>`;
+      }
+    }
+    if (!touched) h += `<circle class="xp-halo" cx="${x}" cy="${XP_Y}" r="15"/>`;
+    dyn.innerHTML = h + tok(x, v);
+  }
+  if (p.modo === 'dos') {
+    svg.onpointerdown = e => {
+      const m = xpClamp(Math.round(at(e)), p.min, p.max);
+      if (m === p.ancla) return;
+      s = { sel: s.sel.includes(m) ? s.sel.filter(k => k !== m) : [...s.sel, m].slice(-p.metas.length) };
+      xpTick(); api.set(s); draw();
+    };
+  } else {
+    const move = e => {
+      c = xpClamp(at(e), p.min, p.max);
+      if (Math.round(c) !== s.v) { s = { v: Math.round(c) }; xpTick(); api.set(s, true); }
+      draw();
+    };
+    svg.onpointerdown = e => { touched = true; stop?.(); svg.setPointerCapture(e.pointerId); svg.classList.add('drag'); move(e); svg.onpointermove = move; };
+    svg.onpointerup = svg.onpointercancel = () => {
+      svg.onpointermove = null; svg.classList.remove('drag');
+      api.set(s);   // la meta cuenta donde se suelta la ficha, no por donde pasa
+      stop = xpSpring(c, s.v, x => { c = x; draw(); });
+    };
+  }
+  draw();
+  return () => stop?.();
+};
+
+XPD.saltos = (stage, p, s, api) => {
+  const { svg, dyn, X, at } = xpAxis(stage, p, Math.abs(p.a));
+  let c = p.a * s.b, touched = false, stop = null;
+  function draw() {
+    const b = s.b, n = Math.abs(b), paso = p.a * Math.sign(b), x = X(c);
+    let h = `<circle class="xp-goal" cx="${X(p.meta)}" cy="${XP_Y}" r="15"/>`;
+    for (let k = 0; k < n; k++) h += xpArc(X(paso * k), X(paso * (k + 1)), 13, `xp-hop${b < 0 ? ' flip' : ''}`);
+    h += `<text class="xp-tag" x="${xpClamp(x, 70, XP_W - 70)}" y="${XP_Y - 44}">${xpMenos(b)} ${n === 1 ? 'vez' : 'veces'}${b < 0 ? ' · se voltea' : ''}</text>`;
+    if (!touched) h += `<circle class="xp-halo" cx="${x}" cy="${XP_Y}" r="13"/>`;
+    dyn.innerHTML = h + `<g class="xp-tok${b < 0 ? ' flip' : ''}"><circle cx="${x}" cy="${XP_Y}" r="13"/></g>`;
+  }
+  const move = e => {
+    c = xpClamp(at(e), p.min, p.max);
+    const b = XP.saltos.veces(c, p);
+    if (b !== s.b) { s = { b }; xpTick(); api.set(s, true); }
+    draw();
+  };
+  svg.onpointerdown = e => { touched = true; stop?.(); svg.setPointerCapture(e.pointerId); svg.classList.add('drag'); move(e); svg.onpointermove = move; };
+  svg.onpointerup = svg.onpointercancel = () => {
+    svg.onpointermove = null; svg.classList.remove('drag');
+    api.set(s);
+    stop = xpSpring(c, p.a * s.b, x => { c = x; draw(); });
+  };
+  draw();
+  return () => stop?.();
+};
+
+XPD.signos = (stage, p, s, api) => {
+  stage.innerHTML = `<div class="xp-fact">${p.factores.map((f, i) => `<button type="button" class="xp-f" data-i="${i}"><span></span></button>`).join('<i>·</i>')}</div>
+    <div class="xp-coin"><b></b><small></small></div>`;
+  const coin = stage.querySelector('.xp-coin');
+  function draw(flip) {
+    stage.querySelectorAll('.xp-f').forEach((b, i) => {
+      b.classList.toggle('neg', s.neg[i]); b.firstChild.textContent = xpMenos(s.neg[i] ? -p.factores[i] : p.factores[i]);
+      if (flip === i && !xpStill()) b.animate([{ transform: 'rotateY(90deg)' }, { transform: 'none' }], { duration: 260, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    });
+    const n = s.neg.filter(Boolean).length, v = XP.signos.valor(s, p);
+    coin.classList.toggle('neg', v < 0);
+    coin.querySelector('b').textContent = xpSigno(v);
+    coin.querySelector('small').textContent = `${n} ${n === 1 ? 'signo menos' : 'signos menos'} · ${n % 2 ? 'impar' : 'par'}`;
+    if (flip != null && !xpStill()) coin.animate([{ transform: 'rotateX(90deg) scale(.9)' }, { transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  }
+  stage.onclick = e => {
+    const b = e.target.closest('.xp-f'); if (!b) return;
+    const i = +b.dataset.i;
+    s = { neg: s.neg.map((x, k) => (k === i ? !x : x)) };
+    xpTick(); api.set(s); draw(i);
+  };
+  draw();
+};
+
+XPD.capas = (stage, p, s, api) => {
+  const OP = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+  function draw(nuevo) {
+    const t = s.toks, h = [];
+    for (let i = 0; i < t.length; i++) {
+      if (typeof t[i] === 'number') {
+        const par = t[i] < 0 && (i > 0 || t[i + 1] === '^');
+        h.push(`<span class="xp-n${i === nuevo ? ' new' : ''}">${par ? '(' : ''}${xpMenos(t[i])}${par ? ')' : ''}</span>`);
+      } else if (t[i] === '^') {   // el exponente va pegado a su base: no se separan al partir el renglón
+        h.push(`<span class="xp-grp">${h.pop()}<button type="button" class="xp-op pow" data-i="${i}">${t[i + 1]}</button></span>`); i++;
+      } else if (t[i] === '(' || t[i] === ')') h.push(`<span class="xp-par">${t[i]}</span>`);
+      else h.push(`<button type="button" class="xp-op" data-i="${i}">${OP[t[i]]}</button>`);
+    }
+    stage.innerHTML = `<div class="xp-expr${XP.capas.ok(s) ? ' done' : ''}">${h.join('')}</div>`;
+  }
+  stage.onclick = e => {
+    const b = e.target.closest('.xp-op'); if (!b || XP.capas.ok(s)) return;
+    const i = +b.dataset.i, r = XP.capas.toca(s, i);
+    if (r.fallo) {
+      s = { toks: r.toks, fallos: r.fallos }; api.nota(XP_CAPA[r.fallo]);
+      if (!xpStill()) b.animate([{ transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'none' }], { duration: 240 });
+      return;
+    }
+    // La ficha nueva queda donde estaba el primer número de la operación (uno antes si se quitó un paréntesis).
+    const nuevo = r.toks.length === s.toks.length - 4 ? i - 2 : i - 1;
+    s = r; xpTick(); api.nota(''); api.set(s); draw(nuevo);
+  };
+  draw();
+};
+
+XPD.casillas = (stage, p, s, api) => {
+  let malas = [], timer = 0;
+  function draw() {
+    const usadas = s.puesto.filter(x => x != null);
+    stage.innerHTML = `<div class="xp-rows">${p.filas.map((f, i) => `<div class="xp-row"><span class="xp-q">${tex(f.tex)} =</span>
+      <button type="button" class="xp-slot${s.puesto[i] != null ? ' full' : ''}${malas.includes(i) ? ' bad' : ''}" data-slot="${i}">${s.puesto[i] ?? ''}</button></div>`).join('')}</div>
+      <div class="xp-tray">${p.fichas.map(f => `<button type="button" class="xp-chip" data-f="${f}"${usadas.includes(f) ? ' disabled' : ''}>${f}</button>`).join('')}</div>`;
+  }
+  stage.onclick = e => {
+    const chip = e.target.closest('.xp-chip'), slot = e.target.closest('.xp-slot');
+    if (malas.length) return;
+    if (chip) { const i = s.puesto.indexOf(null); if (i < 0) return; s = { puesto: s.puesto.map((x, k) => (k === i ? chip.dataset.f : x)) }; }
+    else if (slot && s.puesto[+slot.dataset.slot] != null) s = { puesto: s.puesto.map((x, k) => (k === +slot.dataset.slot ? null : x)) };
+    else return;
+    xpTick(); api.nota(''); api.set(s);
+    if (!s.puesto.includes(null) && !XP.casillas.ok(s, p)) {
+      malas = p.filas.map((f, i) => (s.puesto[i] === f.r ? -1 : i)).filter(i => i >= 0);
+      api.nota(p.pista || 'Casi. Mira otra vez las que tiemblan.');
+      timer = setTimeout(() => { s = { puesto: s.puesto.map((x, k) => (malas.includes(k) ? null : x)) }; malas = []; api.set(s); draw(); }, 900);
+    }
+    draw();
+  };
+  draw();
+  return () => clearTimeout(timer);
+};
+
+XPD.apuesta = (stage, p, s, api) => {
+  function draw() {
+    stage.innerHTML = `<div class="xp-tray big">${p.opciones.map(o => `<button type="button" class="xp-chip${s.pick === o ? ' on' : ''}" data-f="${o}">${o}</button>`).join('')}</div>`;
+  }
+  stage.onclick = e => {
+    const chip = e.target.closest('.xp-chip'); if (!chip) return;
+    s = { pick: chip.dataset.f }; api.memo[p.clave] = s.pick; xpTick(); api.set(s); draw();
+  };
+  draw();
+};
+
+XPD.cierre = (stage, p, s, api) => {
+  const pick = api.memo[p.clave], bien = pick === p.real;
+  stage.innerHTML = `${pick == null ? '' : `<div class="xp-bet ${bien ? 'ok' : 'off'}"><span>Apostaste <b>${esc(pick)}</b></span><span>Era <b>${esc(p.real)}</b></span>
+      <small>${bien ? 'Tu intuición ya iba bien. Ahora sabes por qué.' : 'Ahora lo puedes medir, y no hace falta apostar.'}</small></div>`}
+    <ol class="xp-built">${api.ideas().map((t, i) => `<li style="--i:${i}">${tex(t)}</li>`).join('')}</ol>`;
+};
+
+// ------------------------------------------------------------------------------------------------------------------
+// La explicación como «reproductor»: mismo contrato que los videos (play, destroy, opts.onEnd). Devuelve null si la
+// lección no tiene explicación (o se pide otra parte, o es el feed de Clips): makePlayer sigue con el video.
+
+function exploraPlayer(host, lesson, course, opts) {
+  const def = EXPLORA[lesson.id];
+  if (!def || opts.feed || (opts.clip && opts.clip !== lesson.clip)) return null;
+  const hayVideo = !!(lesson.clip.bunny || lesson.clip.video || lesson.clip.youtube);
+  // Lo construido se recuerda mientras la app esté abierta: al volver a la explicación desde un ejercicio (repaso)
+  // se retoma donde iba, con «A practicar» a la mano, y no hay que rehacer los pasos.
+  const mem = XP_MEM[lesson.id] ||= { memo: {}, estados: [], hechos: [], i: 0 };
+  const { memo, estados, hechos } = mem;
+  let i = Math.min(mem.i, def.pasos.length - 1), clean = null, video = null;
+  const lesEl = host.closest('.lesson');
+  lesEl?.classList.add('has-explora');
+  // Las teclas de la lección (Enter, flechas) saltarían la explicación: aquí no pasan de este punto.
+  const keys = e => { if (['Enter', ' ', 'ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(e.key)) e.stopPropagation(); };
+  document.addEventListener('keydown', keys, true);
+  const suelta = () => { document.removeEventListener('keydown', keys, true); lesEl?.classList.remove('has-explora'); };
+
+  host.innerHTML = `<div class="explora">
+    <header class="xp-top">
+      <div class="xp-segs">${def.caps.map(() => '<i><b></b></i>').join('')}</div>
+      <div class="xp-meta"><span class="xp-cap"></span><button type="button" class="xp-ideas" aria-label="Ideas que llevas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18h16M6 13h12M8 8h8"/></svg><b>0</b></button></div>
+    </header>
+    <div class="xp-step"><p class="xp-text"></p><div class="xp-stage"></div><div class="xp-read"></div><p class="xp-nota" role="status"></p>
+      <div class="xp-idea" aria-live="polite"><span>Idea</span><p></p></div></div>
+    <footer class="xp-foot"><button type="button" class="xp-back" aria-label="Paso anterior">‹</button><button type="button" class="btn xp-next" disabled>Seguir</button></footer>
+    ${hayVideo ? '<button type="button" class="xp-video">Prefiero ver el video</button>' : ''}
+    <div class="xp-sheet" hidden><div class="xp-sheet-in"><h4>Lo que llevas construido</h4><ol></ol><button type="button" class="btn ghost xp-sheet-x">Volver</button></div></div>
+  </div>`;
+  const $x = q => host.querySelector(q);
+  const root = $x(".explora"), step = $x('.xp-step'), stage = $x('.xp-stage'), read = $x('.xp-read'), nota = $x('.xp-nota');
+  const idea = $x('.xp-idea'), next = $x('.xp-next'), back = $x('.xp-back'), sheet = $x('.xp-sheet');
+  // La lección pasa de video a ejercicios deslizando: aquí el dedo es para la escena, así que el gesto no sale.
+  root.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+
+  const ideas = () => def.pasos.filter((p, k) => hechos[k] && p.tipo !== 'apuesta' && p.tipo !== 'cierre').map(p => p.idea);
+  function chrome() {
+    const p = def.pasos[i];
+    host.querySelectorAll('.xp-segs i').forEach((seg, c) => {
+      const mine = def.pasos.map((q, k) => (q.cap === c ? k : -1)).filter(k => k >= 0);
+      seg.firstChild.style.width = mine.filter(k => hechos[k]).length / mine.length * 100 + '%';
+      seg.classList.toggle('now', c === p.cap);
+    });
+    $x('.xp-cap').textContent = def.caps[p.cap];
+    $x('.xp-ideas b').textContent = ideas().length;
+    back.disabled = i === 0;
+    next.disabled = !hechos[i];
+    next.textContent = i === def.pasos.length - 1 ? 'A practicar' : 'Seguir';
+    idea.classList.toggle('show', !!hechos[i]);
+    if (hayVideo) $x('.xp-video').hidden = i > 0;
+  }
+  function cumple(first) {
+    hechos[i] = true;
+    if (first) {
+      if (typeof Sfx !== 'undefined') Sfx.ok();
+      const n = $x('.xp-ideas');
+      if (!xpStill()) n.animate([{ transform: 'scale(1.25)' }, { transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    }
+    chrome();
+  }
+  function show(dir = 1) {
+    clean?.(); clean = null;
+    mem.i = i;
+    const k = i, p = def.pasos[i], t = XP[p.tipo];   // k: este paso; una escena vieja no escribe en el paso que se ve ahora
+    let s = estados[i] ?? t.ini(p);
+    $x('.xp-text').innerHTML = tex(p.texto);
+    idea.lastElementChild.innerHTML = tex(p.idea);
+    nota.textContent = '';
+    stage.onclick = null; stage.className = `xp-stage t-${p.tipo}`;
+    const leer = () => { read.innerHTML = tex(t.lee(s, p)); };
+    const api = {
+      memo, ideas,
+      nota: m => { nota.textContent = m; },
+      // vivo: el dedo sigue arrastrando; se actualiza el renglón pero la meta se mira al soltar.
+      set(ns, vivo) { if (k !== i) return; s = estados[k] = ns; leer(); if (!vivo && !hechos[k] && t.ok(s, p)) cumple(true); },
+    };
+    clean = XPD[p.tipo](stage, p, s, api) || null;
+    leer();
+    if (p.tipo === 'cierre') hechos[i] = true;
+    chrome();
+    if (!xpStill()) step.animate([{ opacity: 0, transform: `translateX(${dir * 28}px)` }, { opacity: 1, transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    step.scrollTop = 0;
+  }
+  next.onclick = () => { if (i === def.pasos.length - 1) return opts.onEnd?.(); i++; show(1); };
+  back.onclick = () => { if (i > 0) { i--; show(-1); } };
+  $x('.xp-ideas').onclick = () => {
+    const l = ideas();
+    sheet.querySelector('ol').innerHTML = l.length ? l.map(t => `<li>${tex(t)}</li>`).join('') : '<li class="none">Aún nada: cada paso que resuelvas deja aquí su idea.</li>';
+    sheet.hidden = false;
+  };
+  sheet.onclick = e => { if (e.target === sheet || e.target.closest('.xp-sheet-x')) sheet.hidden = true; };
+  if (hayVideo) {
+    $x('.xp-video').onclick = () => {
+      clean?.(); clean = null; suelta(); host.innerHTML = '';
+      video = makeClipPlayer(host, lesson, course, opts); video.play();
+    };
+  }
+
+  return {
+    play() { show(1); },
+    destroy() { clean?.(); clean = null; suelta(); if (video) video.destroy(); else host.innerHTML = ''; },
+  };
+}

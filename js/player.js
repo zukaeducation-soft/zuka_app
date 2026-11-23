@@ -579,7 +579,10 @@ class YouTubeClip {
   }
 }
 
+// Si la lección tiene explicación interactiva (js/explora.js), va en lugar del video; desde ella se puede pedir el video.
 const makePlayer = (host, lesson, course, opts) =>
+  (typeof exploraPlayer === 'function' && exploraPlayer(host, lesson, course, opts)) || makeClipPlayer(host, lesson, course, opts);
+const makeClipPlayer = (host, lesson, course, opts) =>
   // opts.clip elige uno de los videos de la lección (ver clipsOf); por defecto, el primero.
   (opts.clip || lesson.clip).youtube ? new YouTubeClip(host, lesson, course, opts)
     : (opts.clip || lesson.clip).video || (opts.clip || lesson.clip).bunny ? new VideoClip(host, lesson, course, opts)

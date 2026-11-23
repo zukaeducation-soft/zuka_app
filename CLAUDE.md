@@ -66,6 +66,16 @@ UdeA (Zarrazola, 2024), `C:\Users\User Acer\Documents\LIBRO DE ALGEBRA Y TRIGONO
   `tests/demo-en-juego.test.js`): una mano hace el gesto en el lugar real del lienzo (`def.demo(G)` en `roundsGame` / `questGame`,
   `drawDemo` en `kit.js`) hasta el primer toque, y «Cómo se juega» la repite. Juego nuevo = con `demo`; los viejos conservan su
   tarjeta emergente hasta que se les escriba.
+- **Explicación interactiva en lugar del video, «Explora»** (ensayo pedido el 2026-11-23, spec `2026-11-23-explora-leccion-interactiva`,
+  pruebas `tests/explora.test.js`; referencias Mimo y Brilliant): el estudiante construye la idea paso a paso en vez de mirar. Motor
+  `js/explora.js` (va antes de `player.js`: `makePlayer` entrega `exploraPlayer` si `EXPLORA[idLección]` existe; el video queda en
+  «Prefiero ver el video») y estilos `css/explora.css` (raíz `.explora`, piezas `.xp-*`; **`.xp` a secas ya es la píldora de XP**).
+  Contenido en `js/explora-<lección>.js` (fuera de `js/courses/`: muchas pruebas cargan esa carpeta entera): `{ caps, pasos }`, cada paso
+  `{ cap, tipo, texto ≤ 170 letras, idea, … }` con una frase, una escena y una meta; al cumplirla se revela la idea y entra al «andamio».
+  Sin vidas, reloj ni «Comprobar». Tipos: `apuesta`, `recta` (modos `llegar`, `espejo`, `distancia`, `salto`, `dos`), `saltos`, `signos`,
+  `capas`, `casillas`, `cierre`; lógica pura en `XP[tipo]` (`ini`, `ok`, `sol`, `lee`), dibujo en `XPD[tipo]`. Hecha solo `pu-cm-1`.
+  No se añadió Rive (necesita archivos `.riv` de su editor): el movimiento es código (resortes, SVG). En este equipo no hay dispositivo
+  virtual de Android creado: se prueba en el navegador a ancho de celular.
 - **Cada ejercicio con pista** (`hint`) que oriente sin dar la respuesta.
 - **Entender, no mecanizar:** los juegos no deben exigir cálculos rápidos ni reflejos. Nada de responder antes de que
   algo llegue o se acabe; si algo avanza solo, se detiene y espera. El juego dibuja la idea del video (barras, áreas,
