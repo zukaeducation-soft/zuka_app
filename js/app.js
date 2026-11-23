@@ -170,14 +170,60 @@ function renderTop() {
 }
 
 // ---- hojas inferiores ----
+// La hoja es un diálogo modal (spec 2026-11-18-foco-y-teclado): lleva el foco adentro, Tab da la vuelta sin salirse,
+// Escape la cierra, lo de atrás queda inerte (ni Tab ni el lector de pantalla lo alcanzan) y al cerrar el foco vuelve
+// a quien la abrió. sheetOpener se recuerda solo al abrir: una hoja que reemplaza a otra no lo pisa. sheetIsOpen se pone
+// en el acto (la clase 'open' llega un cuadro después, para la animación). Cerrada, la hoja misma queda inerte.
+let sheetOpener = null, sheetIsOpen = false, sheetInerted = [];
+const SHEET_BEHIND = ['#topbar', '#view', '#tabbar', '#overlay', '#auth'];
+const sheetFocusables = card => [...card.querySelectorAll(FOCUSABLE)].filter(x => x.offsetParent !== null || x === document.activeElement);
+function sheetKey(e) {
+  const card = $('#sheet .sheet-card');
+  // Un diálogo, la guía o el recorrido encima de la hoja manejan sus propias teclas.
+  if (!sheetIsOpen || !card || dialogOpen() || $('.guide-card, .tour-tip')) return;
+  // Ninguna tecla sigue a la lección de atrás (allá Enter comprueba y las flechas cambian de ejercicio).
+  e.stopPropagation();
+  if (e.key === 'Escape') { e.preventDefault(); closeSheet(); return; }
+  if (e.key !== 'Tab') return;
+  const fs = sheetFocusables(card);
+  const to = trapIndex(e.shiftKey, fs.indexOf(document.activeElement), fs.length);
+  if (to === -2) { e.preventDefault(); card.focus({ preventScroll: true }); }
+  else if (to >= 0) { e.preventDefault(); fs[to].focus({ preventScroll: true }); }
+}
 function openSheet(html, bind) {
   const sh = $('#sheet');
-  sh.innerHTML = `<div class="sheet-bg"></div><div class="sheet-card" role="dialog"><div class="grabber"></div>${html}</div>`;
-  requestAnimationFrame(() => sh.classList.add('open'));
-  sh.querySelector('.sheet-bg').onclick = closeSheet;
+  if (!sheetIsOpen) {
+    sheetOpener = document.activeElement;
+    // Solo se vuelve inerte lo que no lo estaba, y al cerrar solo eso se devuelve.
+    sheetInerted = SHEET_BEHIND.map(s => $(s)).filter(el => el && !el.inert);
+    sheetInerted.forEach(el => { el.inert = true; });
+  }
+  sheetIsOpen = true;
+  sh.inert = false;
+  sh.innerHTML = `<div class="sheet-bg"></div><div class="sheet-card" role="dialog" aria-modal="true" tabindex="-1"><div class="grabber"></div>${html}</div>`;
+  const card = $('.sheet-card', sh), title = card.querySelector('h1, h2, h3');
+  if (title) { title.id ||= 'sheet-title'; card.setAttribute('aria-labelledby', title.id); } else card.setAttribute('aria-label', 'Hoja');
+  requestAnimationFrame(() => { if (sheetIsOpen) sh.classList.add('open'); });
+  sh.querySelector('.sheet-bg').onclick = () => closeSheet();
+  document.removeEventListener('keydown', sheetKey, true);
+  document.addEventListener('keydown', sheetKey, true);
   bind?.(sh);
+  // El foco entra a la hoja: a su primer botón o enlace visible, o a la tarjeta si no tiene ninguno.
+  (sheetFocusables(card)[0] || card).focus({ preventScroll: true });
 }
-function closeSheet() { $('#sheet').classList.remove('open'); }
+// restore = false cuando la hoja da paso a otra vista (una lección, un examen): el foco no vuelve al mapa de atrás.
+function closeSheet(restore = true) {
+  const sh = $('#sheet');
+  if (!sheetIsOpen) return;
+  sheetIsOpen = false;
+  sh.classList.remove('open');
+  sh.inert = true;   // cerrada no se alcanza con Tab aunque siga en la página
+  sheetInerted.forEach(el => { el.inert = false; });
+  sheetInerted = [];
+  document.removeEventListener('keydown', sheetKey, true);
+  const back = sheetOpener; sheetOpener = null;
+  if (restore && back && back.isConnected && !sh.contains(back)) back.focus({ preventScroll: true });
+}
 
 function openCoursePicker() {
   openSheet(`<h3 class="sheet-title">Elige un curso</h3><div class="course-list">${cursosVisibles().map(c => {
@@ -188,7 +234,7 @@ function openCoursePicker() {
       <span class="mini-bar"><i style="width:${(d / ls.length) * 100}%"></i></span></span>
       ${d === ls.length ? `<span class="cr-done">${ICON.check}</span>` : ''}</button>`;
   }).join('')}</div>`, sh => sh.querySelectorAll('.course-row').forEach(b => b.onclick = () => {
-    S.course = b.dataset.id; openWorld = null; openBlock = null; save(); closeSheet(); go('learn'); view.scrollTop = 0;
+    S.course = b.dataset.id; openWorld = null; openBlock = null; save(); closeSheet(false); go('learn'); view.scrollTop = 0;
   }));
 }
 
@@ -239,7 +285,7 @@ function openLessonSheet(c, l) {
     ${locked
       ? '<p class="muted">Completa la lección anterior para desbloquear esta.</p><button class="btn" disabled>Bloqueada</button>'
       : `<button class="btn" data-go>${isDone(l) ? 'Repasar · +5 XP' : 'Empezar · +10 XP'}</button>`}
-  </div>`, sh => sh.querySelector('[data-go]')?.addEventListener('click', () => { closeSheet(); startLesson(c, l); }));
+  </div>`, sh => sh.querySelector('[data-go]')?.addEventListener('click', () => { closeSheet(false); startLesson(c, l); }));
 }
 
 // Jefe final de un mundo (unit.boss): una batalla que usa todo lo del mundo. Se abre al terminar sus lecciones.
@@ -253,7 +299,7 @@ function openBossSheet(c, u) {
     ${open
       ? `<button class="btn" data-go>${isDone(b) ? 'Volver a pelear · +5 XP' : 'Pelear · +10 XP'}</button>`
       : '<p class="muted">Completa las lecciones de este mundo para enfrentar al jefe.</p><button class="btn" disabled>Bloqueado</button>'}
-  </div>`, sh => sh.querySelector('[data-go]')?.addEventListener('click', () => { closeSheet(); startLesson(c, b); }));
+  </div>`, sh => sh.querySelector('[data-go]')?.addEventListener('click', () => { closeSheet(false); startLesson(c, b); }));
 }
 
 // ---- pestaña Aprender ----
@@ -515,7 +561,10 @@ const PRAISE = ['¡Correcto!', '¡Excelente!', '¡Muy bien!', '¡Así se hace!',
 
 function startLesson(c, l) {
   if (planMotivo(l.id)) return openBloqueo(l.id);   // candado por plan: también si se llega por otro camino
-  setGameCourse(c.id);   // los juegos toman la paleta del curso (COURSE_PALETTES, js/games/kit.js)
+  // Los juegos toman la paleta del curso (COURSE_PALETTES, js/games/kit.js); si la lección tiene explicación interactiva
+  // (js/explora.js), sus ejercicios se ven, suenan y se leen como ella (clase xp-lesson, css/explora.css).
+  const conExplora = typeof EXPLORA !== 'undefined' && !!EXPLORA[l.id];
+  setGameCourse(c.id, { explora: conExplora });
   S.lastLesson = l.id; save();   // el componente que se estudia (currentLesson)
   syncHearts();
   if (S.hearts <= 0 && !S.unlockAll) return toast(`Sin vidas. Recuperas una en ${minsToHeart()} min.`);
@@ -528,7 +577,7 @@ function startLesson(c, l) {
   let pos = 0, solved = 0, mistakes = 0, handle = null, player = null, finished = false, clipTimer = null;
 
   const ov = $('#overlay');
-  ov.innerHTML = `<div class="lesson" style="--c:${c.color}">
+  ov.innerHTML = `<div class="lesson${conExplora ? ' xp-lesson' : ''}" style="--c:${c.color}">
     <div class="lesson-top">
       <button class="icon-btn" data-close aria-label="Salir">${ICON.x}</button>
       <div class="pbar"><i></i></div>
@@ -682,6 +731,8 @@ function startLesson(c, l) {
       const ex = l.ex[item.i];
       btn.textContent = 'Comprobar'; btn.disabled = true;
       handle = renderExercise(body, ex, ok => { btn.disabled = !ok; });
+      const q = conExplora && typeof xpPalabras === 'function' ? body.querySelector('.ex-q') : null;
+      if (q) q.innerHTML = xpPalabras(ex.q, 22);   // el enunciado entra como el de la explicación
       btn.onclick = () => check(ex, item);
     }
   }
@@ -690,14 +741,14 @@ function startLesson(c, l) {
     const r = handle.check();
     handle.lock(r.ok);
     S.answered++;
-    if (r.ok) { S.correct++; solved++; Sfx.ok(); }
-    else { mistakes++; loseHeart(); queue.push(item); Sfx.bad(); }
+    if (r.ok) { S.correct++; solved++; conExplora ? XS.idea() : Sfx.ok(); }
+    else { mistakes++; loseHeart(); queue.push(item); conExplora ? XS.nope() : Sfx.bad(); }
     save(); updateBar();
     fb.className = `feedback show ${r.ok ? 'ok' : 'bad'}`;
     fb.innerHTML = `<div class="fb-in">
       <div class="fb-head"><span class="fb-icon">${r.ok ? ICON.check : ICON.x}</span><h4>${r.ok ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : 'Incorrecto'}</h4></div>
       ${r.ok ? '' : `<p class="fb-label">La respuesta correcta es:</p><div class="fb-sol">${tex(window.katex && typeof texify === 'function' ? texify(r.solution) : r.solution)}</div>`}
-      ${ex.explain ? `<p class="fb-exp">${tex(ex.explain)}</p>` : ''}
+      ${ex.explain ? `<p class="fb-exp">${conExplora ? xpPalabras(ex.explain, 14) : tex(ex.explain)}</p>` : ''}
       <button class="btn">${r.ok ? 'Continuar' : 'Entendido'}</button></div>`;
     root.classList.add('fb-open');
     // La retroalimentación tapa la parte de abajo: se deja ese espacio para poder desplazar el

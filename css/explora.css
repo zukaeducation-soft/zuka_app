@@ -235,3 +235,47 @@
 .xa .xa-r { stroke: var(--gold); stroke-width: 4; stroke-linecap: round; }
 .xa .xa-rl { font: italic 600 15px Cambria, 'Times New Roman', serif; fill: var(--gold); }
 .xa .xa-lab { font-size: 15px; font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+
+/* ---- ejercicios de una lección con explicación Explora: el mismo lenguaje que la explicación ----
+   (js/app.js pone .xp-lesson; js/games/kit.js pinta el lienzo con los mismos colores y suena con los mismos efectos) */
+.lesson.xp-lesson { --play-bg: var(--bg); }
+.lesson.xp-lesson .lesson-top { gap: 10px; }
+.lesson.xp-lesson .pbar { height: 5px; border-radius: 3px; background: var(--track); }
+.lesson.xp-lesson .pbar i { background: var(--c-ink); border-radius: 3px; transition: width .45s cubic-bezier(.2,.8,.2,1); }
+.lesson.xp-lesson .lesson-foot { border-top: 0; padding: 10px 20px calc(env(safe-area-inset-bottom) + 8px); }
+/* Enunciado: la letra, el tamaño y el color de la frase de la explicación (entra palabra a palabra) */
+.lesson.xp-lesson .ex-head, .lesson.xp-lesson .practice .ex-head { padding-left: 0; margin-bottom: 12px; }
+.lesson.xp-lesson .ex-head::before { display: none; }
+.lesson.xp-lesson .ex-q, .lesson.xp-lesson .practice .ex-q { margin: 2px 0 0; font: 400 17px/1.45 var(--font); letter-spacing: 0; text-wrap: pretty; }
+.lesson.xp-lesson .ex-q b { color: var(--c-ink); font-weight: 700; }
+/* Pista y «Cómo se juega»: píldoras como las de la explicación; la pista abierta es una tarjeta como la de la idea */
+.lesson.xp-lesson .ex-hint { margin: 0 0 14px; }
+.lesson.xp-lesson .ex-tools { gap: 6px; }
+.lesson.xp-lesson .hint-btn { min-height: 32px; padding: 0 12px 0 9px; background: transparent; font-size: 13px; font-weight: 700; }
+.lesson.xp-lesson .hint-btn svg { width: 16px; height: 16px; }
+.lesson.xp-lesson .hint-text { border-radius: 12px; font-size: 15px; background: color-mix(in srgb, var(--gold) 9%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line)); }
+.lesson.xp-lesson .hint-text svg { color: var(--gold); }
+/* El juego: sin tarjeta, sobre el mismo fondo; al acertar o fallar se enciende un borde con brillo */
+.lesson.xp-lesson .play { border: 1px solid transparent; background: var(--bg); }
+/* «Cómo se juega» dentro del juego: una nota tenue como la frase de la escena, no una franja de otra superficie */
+.lesson.xp-lesson .practice-guide { background: transparent; border-bottom: 0; padding: 4px 2px 10px; color: var(--mute); font-size: 14px; text-align: center; text-wrap: balance; }
+.lesson.xp-lesson .play.right { border-color: var(--ok); box-shadow: 0 0 22px -8px color-mix(in srgb, var(--ok) var(--halo), transparent); }
+.lesson.xp-lesson .play.wrong { border-color: var(--bad); box-shadow: 0 0 22px -8px color-mix(in srgb, var(--bad) var(--halo), transparent); }
+/* Acierto o error: sube como la tarjeta de idea, con su explicación palabra a palabra */
+.lesson.xp-lesson .feedback { border-radius: 18px 18px 0 0; background: var(--bg2); border: 1px solid var(--line); border-bottom: 0;
+  padding: 16px 20px max(16px, env(safe-area-inset-bottom)); }
+.lesson.xp-lesson .feedback.ok { border-color: color-mix(in srgb, var(--ok) 45%, var(--line));
+  box-shadow: 0 -16px 40px -26px color-mix(in srgb, var(--ok) var(--halo), transparent); }
+.lesson.xp-lesson .feedback.bad { border-color: color-mix(in srgb, var(--bad) 45%, var(--line));
+  box-shadow: 0 -16px 40px -26px color-mix(in srgb, var(--bad) var(--halo), transparent); }
+.lesson.xp-lesson .feedback h4 { font: 600 19px var(--display); }
+.lesson.xp-lesson .feedback.ok h4 { color: color-mix(in srgb, var(--ok) 72%, var(--ink)); }
+.lesson.xp-lesson .feedback.bad h4 { color: color-mix(in srgb, var(--bad) 80%, var(--ink)); }
+.lesson.xp-lesson .fb-icon { width: 26px; height: 26px; }
+.lesson.xp-lesson .fb-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); opacity: 1; }
+.lesson.xp-lesson .fb-exp { font-size: 15px; line-height: 1.45; opacity: 1; }
+.lesson.xp-lesson .feedback.show .fb-in { animation: xp-rise .42s cubic-bezier(.2,.8,.2,1); }
+@media (prefers-reduced-motion: reduce) {
+  .lesson.xp-lesson .feedback.show .fb-in, .lesson.xp-lesson .pbar i { animation: none; transition: none; }
+}

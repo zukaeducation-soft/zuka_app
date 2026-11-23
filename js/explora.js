@@ -14,6 +14,8 @@ const XP = {};
 const xpPar = n => (n < 0 ? `(${n})` : `${n}`);            // en TeX: un negativo va entre paréntesis
 const xpMenos = n => String(n).replace('-', '−');           // en pantalla: menos tipográfico
 const xpSigno = n => (n > 0 ? '+' : '') + xpMenos(n);
+// Los sonidos de los ejercicios de una lección con explicación (los juegos los reciben como api.sfx): los mismos de la escena.
+const XP_SFX = { tap: () => XS.pop(), ok: () => XS.idea(), bad: () => XS.nope(), win: () => XS.idea() };
 const xpPasos = n => `${n} ${n === 1 ? 'paso' : 'pasos'}`;
 
 XP.apuesta = {
@@ -212,7 +214,7 @@ const xpTick = () => { try { if (navigator.userActivation?.hasBeenActive) naviga
 
 // Sonidos de la explicación: todos sintetizados (sin archivos) y suaves; se apagan con el sonido de la app (S.sfx).
 const XS = (() => {
-  let ac = null, bus = null, last = 0;
+  let ac = null, bus = null, last = 0, lastPop = 0;
   const cache = new Map();
   const on = () => typeof S === 'undefined' || S.sfx !== false;
   const ctx = () => {
@@ -251,7 +253,7 @@ const XS = (() => {
     hop(k) { tone(500 + 45 * k, 0.11, { type: 'triangle', g: 0.035, to: 760 + 45 * k }); },
     flip() { tone(300, 0.14, { type: 'square', g: 0.018, to: 150 }); tone(560, 0.18, { t0: 0.07, g: 0.04, to: 880 }); },
     merge() { tone(392, 0.09, { g: 0.04 }); tone(523, 0.1, { t0: 0.05, g: 0.04 }); tone(784, 0.18, { t0: 0.1, g: 0.035 }); },
-    pop() { tone(660, 0.07, { type: 'triangle', g: 0.04, to: 990 }); },
+    pop() { const t = Date.now(); if (t - lastPop < 45) return; lastPop = t; tone(660, 0.07, { type: 'triangle', g: 0.04, to: 990 }); },
     nope() { tone(220, 0.16, { type: 'triangle', g: 0.04, to: 165 }); },
     page() { tone(523, 0.12, { g: 0.025 }); tone(784, 0.16, { t0: 0.06, g: 0.02 }); },
     whoosh(dir = 1) { soplo(0.32, dir > 0 ? 500 : 1800, dir > 0 ? 1800 : 500); },
@@ -282,7 +284,7 @@ const XS = (() => {
 
 // Texto que entra palabra a palabra (las fórmulas $…$ y las **negritas** entran enteras).
 function xpPalabras(txt, paso = 45) {
-  const w = String(txt).match(/\$[^$]+\$\S*|\*\*[^*]+\*\*\S*|\S+/g) || [];
+  const w = String(txt).match(/[^\s$*]*\$[^$]+\$[^\s$]*|[^\s$*]*\*\*[^*]+\*\*[^\s*$]*|\S+/g) || [];
   return w.map((t, k) => `<span class="xp-w" style="--w:${k}; --dw:${paso}ms">${tex(t)}</span>`).join(' ');
 }
 

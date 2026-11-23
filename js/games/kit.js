@@ -137,16 +137,25 @@ const COURSE_PALETTES = {
     },
   },
 };
-let gameTheme = 'dark', gameCourse = null;
+// Lecciones con explicación Explora (js/explora.js): sus juegos usan el fondo, las superficies, las líneas y la tinta de la
+// interfaz (los mismos valores de css/styles.css :root) para verse como la explicación; el acento sigue siendo el del curso.
+const EXPLORA_TOKENS = {
+  dark: { bg: '#07080f', card: '#10131f', line: '#262b44', ink: '#edf1ff', mute: '#8b93b8', ok: '#3ddc97', bad: '#ff6178',
+    night: '#07080f', halo: '#10131f', star: '#262b44' },
+  light: { bg: '#f4f6fb', card: '#ffffff', line: '#d9deec', ink: '#0a1230', mute: '#58618a', ok: '#12a865', bad: '#e23d5b',
+    night: '#0a1230', halo: '#e9edf6', star: '#d9deec' },
+};
+let gameTheme = 'dark', gameCourse = null, gameExplora = false;
 // Cursos con fondo plano (sin el brillo de su color detrás del juego).
 const FLAT_COURSES = new Set(['preuda', 'preicfes']);
 function paintGamePalette() {
-  Object.assign(PALETTE, PALETTES[gameTheme], COURSE_PALETTES[gameCourse]?.[gameTheme]);
+  Object.assign(PALETTE, PALETTES[gameTheme], COURSE_PALETTES[gameCourse]?.[gameTheme], gameExplora ? EXPLORA_TOKENS[gameTheme] : null);
   // El marco del juego (.play, la guía) usa el mismo fondo: css/styles.css trae el del tema y aquí se pone el del curso.
   if (typeof document !== 'undefined') document.documentElement?.style?.setProperty?.('--play-bg', PALETTE.bg);
 }
 function setGameTheme(theme) { gameTheme = PALETTES[theme] ? theme : 'dark'; paintGamePalette(); }
-function setGameCourse(id) { gameCourse = id || null; paintGamePalette(); }
+// opts.explora: la lección tiene explicación interactiva (sus ejercicios se ven como ella).
+function setGameCourse(id, opts = {}) { gameCourse = id || null; gameExplora = !!opts.explora; paintGamePalette(); }
 setGameTheme(typeof document !== 'undefined' ? document.documentElement?.dataset?.theme : 'dark');
 
 // ---------- Estilo «video» (spec 2026-11-13-juegos-estilo-video) ----------
@@ -178,7 +187,16 @@ function fxTween(target, props, opts = {}) {
 // más de fondo abajo. Sin cuadrícula (el usuario la quitó el 2026-11-27) y sin nada que se mueva.
 function drawBackdrop(p) {
   const ctx = p.drawingContext, W = p.width, H = p.height, C = PALETTE;
-  if (FLAT_COURSES.has(gameCourse) || !ctx?.save || !ctx.createRadialGradient) return;
+  if (!ctx?.save || !ctx.createRadialGradient) return;
+  if (gameExplora && !FLAT_COURSES.has(gameCourse)) {   // como detrás de la escena de la explicación: un brillo suave del color del curso
+    const d = typeof p.pixelDensity === 'function' ? p.pixelDensity() : 1;
+    ctx.save(); ctx.setTransform(d, 0, 0, d, 0, 0);
+    const g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.55);
+    g.addColorStop(0, C.brand); g.addColorStop(1, C.bg);
+    ctx.globalAlpha = gameTheme === 'light' ? 0.07 : 0.11; ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.restore(); return;
+  }
+  if (FLAT_COURSES.has(gameCourse)) return;
   const d = typeof p.pixelDensity === 'function' ? p.pixelDensity() : 1;
   ctx.save(); ctx.setTransform(d, 0, 0, d, 0, 0);
   const g = ctx.createRadialGradient(W / 2, -H * 0.1, 10, W / 2, -H * 0.1, H * 0.9);
@@ -316,6 +334,7 @@ function mountSketch(host, sketch, aspect = 1.25, gesture) {
         const r = press0(...a);
         if (r === false && guided) { seenGesture = true; gestureUntil = 0; }
         if (r === false && p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height && !reducedMotion() && typeof anime === 'function') {
+          if (gameExplora && typeof XS !== 'undefined') { XS.pop(); if (typeof xpTick === 'function') xpTick(); }   // suena como tocar la escena
           const rp = { x: p.mouseX, y: p.mouseY, r: 6, a: 0.8 };
           ripples.push(rp);
           fxTween(rp, { r: 30, a: 0 }, { duration: 460, complete: () => ripples.splice(ripples.indexOf(rp), 1) });

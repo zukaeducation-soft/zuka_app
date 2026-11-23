@@ -144,7 +144,9 @@ EX.play = (area, ex, ready) => {
     ready(false);
     const guideAuto = !ex.exam && (typeof S === 'undefined' || S.guideAuto !== false);
     stage.dataset.guideAuto = String(guideAuto);
-    const next = inst = game.create(stage, ex.params, { ready, sfx: Sfx, palette: PALETTE, tex, guideAuto });
+    // En una lección con explicación Explora, los juegos suenan como ella.
+    const sfx = typeof XP_SFX !== 'undefined' && box.closest('.xp-lesson') ? XP_SFX : Sfx;
+    const next = inst = game.create(stage, ex.params, { ready, sfx, palette: PALETTE, tex, guideAuto });
     Promise.resolve(next.loaded).then(() => {
       if (!disposed && inst === next) stage.removeAttribute('aria-busy');
     }, () => {

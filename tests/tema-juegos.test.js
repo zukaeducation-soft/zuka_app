@@ -84,7 +84,8 @@ test('Álgebra es morado: marca, fondo y línea en tonos morados, sin menta ni v
 
 test('la lección y la evaluación avisan el curso a los juegos, y el marco toma el fondo de la paleta', () => {
   const fs = require('fs'), path = require('path'), read = f => fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
-  assert.match(read('js/app.js'), /function startLesson\(c, l\) \{[\s\S]{0,200}setGameCourse\(c\.id\)/);
+  // En una lección con explicación Explora se avisa además que sus ejercicios se ven como ella (tests/explora-ejercicios.test.js).
+  assert.match(read('js/app.js'), /function startLesson\(c, l\) \{[\s\S]{0,600}setGameCourse\(c\.id(, \{ explora: conExplora \})?\)/);
   assert.match(read('js/exam.js'), /function startExam\(c, u\) \{[\s\S]{0,200}setGameCourse\(c\.id\)/);
   assert.match(read('js/games/kit.js'), /setProperty\?\.\('--play-bg', PALETTE\.bg\)/);
 });

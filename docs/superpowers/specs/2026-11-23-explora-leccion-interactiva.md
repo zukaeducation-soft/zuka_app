@@ -108,3 +108,7 @@ La práctica dice su enunciado. El botón de sonido calla también la voz. Los a
 decidir dónde alojarlos para la app publicada y cambiar `EXPLORA_VOZ`.
 
 La narración (m4a y voz.json) sí va a GitHub desde el 2026-11-23, por pedido del usuario: así suena también en la app publicada.
+
+## Ejercicios con el mismo lenguaje (2026-11-23, pedido: estandarizar calidad, estética e interacción)
+
+En una lección con explicación (EXPLORA[id]) sus ejercicios se ven, suenan y se leen como ella; las demás lecciones no cambian. `startLesson` pone `.xp-lesson` y `setGameCourse(c.id, { explora: true })`: el lienzo usa `EXPLORA_TOKENS` (fondo, superficies, líneas y tinta de css/styles.css :root; el acento sigue siendo el del curso) con el brillo suave del centro (plano en el Preuniversitario); tocar el juego suena y vibra como tocar la escena (`XS.pop`, una vez aunque el juego también lo pida) y los juegos reciben `XP_SFX` como `api.sfx`; al comprobar suenan `XS.idea` / `XS.nope`. El enunciado y la explicación del aviso entran palabra a palabra (`xpPalabras`, que no parte fórmulas ni negritas pegadas a un signo). css/explora.css viste el marco: enunciado con la letra de la frase de la escena, píldoras de pista y «Cómo se juega», pista abierta como tarjeta de idea, juego sin tarjeta con borde que se enciende al acertar o fallar, aviso que sube como la tarjeta de idea y barra de avance fina del color del curso. La mecánica de cada juego no cambia. Pruebas: tests/explora-ejercicios.test.js.
