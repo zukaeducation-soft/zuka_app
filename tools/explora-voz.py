@@ -65,6 +65,30 @@ def recorta(x, r):
     if len(idx) == 0: return x
     m = int(0.08 * r); return x[max(0, idx[0] - m): min(len(x), idx[-1] + m)]
 
+def parte(x, r, n, palabras):
+    # Corta una tanda leída de corrido en sus n frases: los n − 1 silencios más largos (entre frases la voz respira más
+    # que en una coma). Devuelve None si algún pedazo no se parece a su frase (segundos por palabra fuera de lo normal):
+    # entonces esas frases se piden una por una.
+    if n == 1: return [x]
+    v = int(0.02 * r); e = np.array([np.sqrt(np.mean(x[k:k + v] ** 2)) for k in range(0, len(x) - v, v)])
+    calla = e < max(1e-4, e.max() * 0.03)
+    huecos, k = [], 0
+    while k < len(calla):
+        if calla[k]:
+            j = k
+            while j < len(calla) and calla[j]: j += 1
+            if k > 0 and j < len(calla): huecos.append((j - k, (k + j) // 2))
+            k = j
+        else: k += 1
+    if len(huecos) < n - 1: return None
+    cortes = sorted(c for _, c in sorted(huecos, reverse=True)[:n - 1])
+    lim = [0] + [c * v for c in cortes] + [len(x)]
+    trozos = [x[a:b] for a, b in zip(lim, lim[1:])]
+    for t, w in zip(trozos, palabras):
+        sp = len(recorta(t, r)) / r / max(1, w)
+        if not 0.2 <= sp <= 0.9: return None
+    return trozos
+
 def main(lid):
     out = ROOT / 'media' / 'voz' / lid
     out.mkdir(parents=True, exist_ok=True)
@@ -74,26 +98,48 @@ def main(lid):
     from google import genai
     from google.genai import types, errors
     client = genai.Client(api_key=api_key(), http_options={'api_version': 'v1beta'})
-    hechas = set()
-    for n, fr in enumerate(frases, 1):
-        clave = hashlib.sha1(f'{MODEL}|{VOICE}|{TEMP}|{fr["h"]}'.encode()).hexdigest()[:12]
-        f = out / f'{clave}.m4a'
+    hechas, faltan = set(), []
+    for fr in frases:
+        fr['clave'] = hashlib.sha1(f'{MODEL}|{VOICE}|{TEMP}|{fr["h"]}'.encode()).hexdigest()[:12]
+        f = out / f'{fr["clave"]}.m4a'
         hechas.add(f.name)
-        if f.exists() and man.get(fr['t'], {}).get('f') == f.name: continue
-        print(f'[{n}/{len(frases)}] {fr["h"][:70]}', flush=True)
+        if not (f.exists() and man.get(fr['t'], {}).get('f') == f.name): faltan.append(fr)
+
+    def pide(texto):
+        nonlocal client
         while True:
-            try: x, r = tts(client, types, errors, fr['h']); break
+            try: return tts(client, types, errors, texto)
             except Agotada as e:
                 print('  ' + str(e)[:160], flush=True)
                 if not otra_llave(): sys.exit('Todas las llaves de la lista están agotadas: vuelve a correrlo mañana (sigue donde iba).')
                 client = genai.Client(api_key=api_key(), http_options={'api_version': 'v1beta'})
+
+    def guarda(fr, x, r):
         x = recorta(x, r); x = x * (0.9 / (np.abs(x).max() or 1))
-        wav = out / f'{clave}.wav'
+        f, wav = out / f'{fr["clave"]}.m4a', out / f'{fr["clave"]}.wav'
         sf.write(wav, x, r, subtype='PCM_16')
         subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(wav), '-ac', '1', '-c:a', 'aac', '-b:a', '48k', '-movflags', '+faststart', str(f)], check=True)
         wav.unlink()
         man[fr['t']] = {'f': f.name, 'd': round(len(x) / r, 2)}
         man_p.write_text(json.dumps(man, ensure_ascii=False, indent=1), encoding='utf8')   # se guarda a cada paso: se puede seguir donde iba
+
+    # Las cuentas gratuitas permiten pocas llamadas al día: se piden tandas de hasta 10 frases (unas 1000 letras) leídas de
+    # corrido, una por párrafo, y se cortan en los silencios. Si el corte no cuadra, esa tanda se pide frase por frase.
+    tandas, t = [], []
+    for fr in faltan:
+        if t and (len(t) == 10 or sum(len(x['h']) for x in t) + len(fr['h']) > 1000): tandas.append(t); t = []
+        t.append(fr)
+    if t: tandas.append(t)
+    for k, tanda in enumerate(tandas, 1):
+        print(f'[tanda {k}/{len(tandas)}] {len(tanda)} frases: {tanda[0]["h"][:50]}…', flush=True)
+        x, r = pide('\n\n'.join(fr['h'] for fr in tanda))
+        trozos = parte(x, r, len(tanda), [len(fr['h'].split()) for fr in tanda])
+        if trozos is None:
+            print('  el corte no cuadra: frase por frase', flush=True)
+            trozos = None
+            for fr in tanda: guarda(fr, *pide(fr['h']))
+            continue
+        for fr, tz in zip(tanda, trozos): guarda(fr, tz, r)
     vivos = {fr['t'] for fr in frases}
     man = {t: v for t, v in man.items() if t in vivos}
     man_p.write_text(json.dumps(man, ensure_ascii=False, indent=1), encoding='utf8')
