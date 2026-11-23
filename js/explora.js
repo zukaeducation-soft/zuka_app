@@ -124,8 +124,11 @@ XP.predice = {
 };
 
 // Explicación: la escena (`escena` con parámetros `en`) muestra la idea sola, por momentos { dice, de, a, cuenta };
-// el estudiante toca para pasar al siguiente. No pide nada: se cumple al ver el último momento.
+// corre sola, sin toques: el estudiante solo mira y lee (interviene después, en la práctica y en el problema).
+// Se cumple al terminar el último momento.
 XP.muestra = {
+  // Tiempo de lectura tras la animación de un momento: medio segundo más un cuarto de segundo por palabra.
+  pausa: m => 900 + 230 * m.dice.split(/\s+/).length,
   ini: () => ({ n: 0, fin: false }),
   ok: (s, p) => s.fin && s.n >= p.momentos.length,
   sol: p => ({ n: p.momentos.length, fin: true }),
@@ -355,7 +358,8 @@ XPD.predice = (stage, p, s, api) => {
   return () => { stop?.(); escena(); };
 };
 
-// Explicación por momentos: arranca sola; al terminar cada momento, un toque en la escena trae el siguiente.
+// Explicación por momentos: arranca sola y pasa sola de un momento al siguiente, dejando tiempo para leer.
+// La escena no se toca; al final queda «Ver otra vez».
 XPD.muestra = (stage, p, s, api) => {
   stage.innerHTML = '<div class="xp-watch"></div><button type="button" class="xp-sigue" hidden></button>';
   const box = stage.firstChild, btn = stage.lastChild, total = p.momentos.length, mudo = { set() {}, nota() {}, memo: {} };
@@ -366,20 +370,18 @@ XPD.muestra = (stage, p, s, api) => {
     const m = p.momentos[n];
     busy = true; btn.hidden = true;
     s = { n: n + 1, fin: false }; api.set(s, true);
+    // Al terminar la animación se deja leer la frase; luego viene el siguiente momento (o se cumple el paso).
     const done = () => {
-      busy = false;
-      if (n + 1 < total) return espera('Toca para seguir');
-      s = { n: total, fin: true }; api.set(s); espera('Ver otra vez');
+      timer = setTimeout(() => {
+        if (n + 1 < total) return play(n + 1);
+        busy = false; s = { n: total, fin: true }; api.set(s); espera('Ver otra vez');
+      }, XP.muestra.pausa(m));
     };
     if (escena.anima) stop = escena.anima(m, done);
-    else if (m.a == null || m.a === m.de) { escena.mover(m.a ?? m.de); timer = setTimeout(done, 1200); stop = () => clearTimeout(timer); }
+    else if (m.a == null || m.a === m.de) { escena.mover(m.a ?? m.de); done(); }
     else stop = xpTween(m.de, m.a, m.ms || 1500, x => escena.mover(x), done);
   }
-  stage.onclick = () => {
-    if (busy) return;
-    xpTick();
-    if (s.fin || s.n >= total) { monta(); play(0); } else play(s.n);
-  };
+  btn.onclick = () => { if (busy) return; xpTick(); monta(); play(0); };
   monta();
   if (s.fin) {   // ya vista: queda en su último cuadro y se puede repetir
     const u = p.momentos[total - 1];

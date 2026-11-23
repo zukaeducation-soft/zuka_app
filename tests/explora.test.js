@@ -190,3 +190,16 @@ test('explicaciones: momentos cortos, escena conocida y cuentas correctas', () =
   const capas = L.pasos.find(p => p.tipo === 'muestra' && p.escena === 'capas');
   assert.equal(XP.capas.sol(capas.en).toks[0], 53);
 });
+
+test('la explicación corre sola: cada momento deja entre 1.5 y 5 segundos para leer', () => {
+  const src = fs.readFileSync(path.join(ROOT, 'js/explora.js'), 'utf8');
+  const bloque = src.slice(src.indexOf('XPD.muestra ='), src.indexOf('XPD.signos ='));
+  assert.ok(!/stage\.onclick/.test(bloque), 'la escena de una explicación no se toca');
+  assert.ok(!/Toca para seguir/.test(src), 'no se pide un toque para seguir');
+  for (const p of L.pasos.filter(p => p.tipo === 'muestra')) {
+    for (const m of p.momentos) {
+      const t = XP.muestra.pausa(m);
+      assert.ok(t >= 1500 && t <= 5000, m.dice + ': ' + t + ' ms');
+    }
+  }
+});

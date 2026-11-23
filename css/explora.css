@@ -141,10 +141,8 @@
 .xp-chispa { position: absolute; z-index: 7; width: 9px; height: 9px; border-radius: 50%; background: var(--c); pointer-events: none; }
 
 /* ---- explicación por momentos ---- */
-.t-muestra { cursor: pointer; }
 .t-muestra ~ .xp-nota { min-height: 70px; font-size: 17px; line-height: 1.4; color: var(--ink); }
 .xp-sigue { justify-self: center; min-height: 40px; padding: 0 16px; border: 1px solid var(--c-ink); border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--c-ink);
-  animation: xp-late 1.6s ease-in-out infinite; }
-@keyframes xp-late { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--c-ink) 16%, transparent); } }
+}
 .xp-op.now { background: var(--c); border-color: var(--c); color: var(--c-on); transform: scale(1.12); transition: transform .25s cubic-bezier(.2,.8,.2,1), background .2s; }
-@media (prefers-reduced-motion: reduce) { .xp-sigue { animation: none; } .xp-op.now { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .xp-op.now { transition: none; } }
