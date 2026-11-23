@@ -25,9 +25,9 @@ test('el reproductor entrega la explicación interactiva en lugar del video', ()
   assert.match(read('js/player.js'), /exploraPlayer\(/);
 });
 
-test('la lección piloto tiene capítulos y entre 12 y 20 pasos cortos, cada uno con su idea', () => {
+test('la lección piloto tiene capítulos y entre 12 y 26 pasos cortos, cada uno con su idea', () => {
   assert.ok(L && L.caps.length >= 4);
-  assert.ok(L.pasos.length >= 12 && L.pasos.length <= 20, `${L.pasos.length} pasos`);
+  assert.ok(L.pasos.length >= 12 && L.pasos.length <= 26, `${L.pasos.length} pasos`);
   L.pasos.forEach((p, i) => {
     assert.ok(XP[p.tipo], `paso ${i}: tipo desconocido ${p.tipo}`);
     assert.ok(p.cap >= 0 && p.cap < L.caps.length, `paso ${i}: capítulo`);
@@ -37,7 +37,6 @@ test('la lección piloto tiene capítulos y entre 12 y 20 pasos cortos, cada uno
   const caps = L.pasos.map(p => p.cap);
   assert.equal(caps.join(), [...caps].sort((a, b) => a - b).join(), 'los capítulos van en orden');
   assert.equal(new Set(caps).size, L.caps.length, 'ningún capítulo vacío');
-  assert.equal(L.pasos[0].tipo, 'apuesta', 'abre con un reto para apostar');
   assert.equal(L.pasos.at(-1).tipo, 'cierre');
 });
 
@@ -88,8 +87,10 @@ test('la escena responde con una frase a cada movimiento', () => {
 });
 
 test('predice y mira: se elige, la escena se anima sola y el paso se cumple al verla', () => {
-  const P = XP.predice, pasos = L.pasos.filter(p => p.tipo === 'predice');
-  assert.ok(pasos.length >= 2);
+  const P = XP.predice, pasos = [
+    { escena: 'recta', en: { modo: 'salto', min: -8, max: 8, desde: 1 }, de: 1, a: 6, opciones: ['A la izquierda', 'A la derecha'], bien: 1, cuenta: '$1 - (-5) = 6$', porque: 'Restar es ir al revés.' },
+    { escena: 'saltos', en: { a: -3, min: -15, max: 15, meta: 12, desde: 4 }, de: -12, a: 12, opciones: ['−12', '12'], bien: 1, cuenta: '$(-3) \\cdot (-4) = 12$', porque: 'El menos voltea la cadena.' },
+  ];
   for (const p of pasos) {
     assert.equal(P.ok({ pick: p.bien, visto: false }, p), false, 'no basta elegir');
     assert.equal(P.ok({ pick: 0, visto: true }, p), true, 'no se califica la apuesta');
@@ -159,4 +160,33 @@ test('los ejemplos de la explicación no son los de los ejercicios de la lecció
   const capas = L.pasos.find(p => p.tipo === 'capas');
   assert.ok(!ex.includes(capas.expr));
   assert.ok(!/-3\^2|\(-3\)\^2/.test(ex), 'la pareja −3² y (−3)² no sale en los ejercicios');
+});
+
+test('primero se explica y después se pide: cada capítulo abre con una explicación y el problema va al final', () => {
+  assert.equal(L.pasos[0].tipo, 'muestra', 'la lección abre explicando, no preguntando');
+  assert.ok(!L.pasos.some(p => p.tipo === 'apuesta'), 'sin reto de entrada');
+  L.caps.slice(0, -1).forEach((c, k) => assert.equal(L.pasos.find(p => p.cap === k).tipo, 'muestra', 'el capítulo «' + c + '» abre con su explicación'));
+  const ultimo = L.pasos.filter(p => p.cap === L.caps.length - 1);
+  assert.ok(/equipo|torneo/.test(ultimo[0].texto), 'el problema de contexto va en el último capítulo');
+  assert.ok(L.pasos.filter(p => p.tipo === 'muestra').length >= 6);
+});
+
+test('explicaciones: momentos cortos, escena conocida y cuentas correctas', () => {
+  const M = XP.muestra;
+  for (const p of L.pasos.filter(p => p.tipo === 'muestra')) {
+    assert.ok(XP[p.escena] && p.momentos.length >= 3 && p.momentos.length <= 4);
+    assert.equal(M.ok({ n: p.momentos.length, fin: false }, p), false, 'no se cumple hasta ver el último momento');
+    assert.equal(M.dice(M.ini(), p), p.momentos[0].dice, 'la primera frase sale desde el principio');
+    for (const m of p.momentos) {
+      assert.ok(m.dice.length <= 90, 'momento largo: ' + m.dice);
+      if (p.escena === 'recta') assert.ok(m.de >= p.en.min && m.a <= p.en.max && m.a >= p.en.min);
+      const c = m.cuenta && m.cuenta.match(/^\$(-?\d+) ([+-]) \(?(-?\d+)\)? = (-?\d+)\$$/);
+      if (c) assert.equal(c[2] === '+' ? +c[1] + +c[3] : c[1] - c[3], +c[4], m.cuenta);
+      if (c && p.escena === 'recta' && p.en.modo === 'salto') assert.equal(m.a, +c[4], 'la ficha termina en el resultado de ' + m.cuenta);
+    }
+    if (p.escena === 'capas') assert.equal(p.momentos.length, XP.capas.ini(p.en).toks.filter(t => typeof t === 'string' && '+-*/^'.includes(t)).length, 'un momento por operación');
+    if (p.escena === 'saltos') for (const m of p.momentos) assert.equal(Math.abs(m.a % p.en.a), 0, 'la punta cae en un múltiplo');
+  }
+  const capas = L.pasos.find(p => p.tipo === 'muestra' && p.escena === 'capas');
+  assert.equal(XP.capas.sol(capas.en).toks[0], 53);
 });

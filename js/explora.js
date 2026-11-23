@@ -123,6 +123,16 @@ XP.predice = {
   },
 };
 
+// Explicación: la escena (`escena` con parámetros `en`) muestra la idea sola, por momentos { dice, de, a, cuenta };
+// el estudiante toca para pasar al siguiente. No pide nada: se cumple al ver el último momento.
+XP.muestra = {
+  ini: () => ({ n: 0, fin: false }),
+  ok: (s, p) => s.fin && s.n >= p.momentos.length,
+  sol: p => ({ n: p.momentos.length, fin: true }),
+  lee: (s, p) => p.momentos[Math.max(0, s.n - 1)].cuenta || '',
+  dice: (s, p) => p.momentos[Math.max(0, s.n - 1)].dice,
+};
+
 // Jerarquía: la expresión son fichas (números y operadores separados por espacios) y se toca la operación que sigue.
 const XP_CAPA = { paren: 'Antes va lo que está dentro del paréntesis.', pot: 'Antes va la potencia.',
   mul: 'Antes van × y ÷, de izquierda a derecha.', sum: 'Sumas y restas van de izquierda a derecha.' };
@@ -345,6 +355,40 @@ XPD.predice = (stage, p, s, api) => {
   return () => { stop?.(); escena(); };
 };
 
+// Explicación por momentos: arranca sola; al terminar cada momento, un toque en la escena trae el siguiente.
+XPD.muestra = (stage, p, s, api) => {
+  stage.innerHTML = '<div class="xp-watch"></div><button type="button" class="xp-sigue" hidden></button>';
+  const box = stage.firstChild, btn = stage.lastChild, total = p.momentos.length, mudo = { set() {}, nota() {}, memo: {} };
+  let escena = null, stop = null, busy = false, timer = 0;
+  const monta = () => { escena?.(); escena = XPD[p.escena](box, p.en, XP[p.escena].ini(p.en), mudo); };
+  const espera = t => { btn.textContent = t; btn.hidden = false; };
+  function play(n) {
+    const m = p.momentos[n];
+    busy = true; btn.hidden = true;
+    s = { n: n + 1, fin: false }; api.set(s, true);
+    const done = () => {
+      busy = false;
+      if (n + 1 < total) return espera('Toca para seguir');
+      s = { n: total, fin: true }; api.set(s); espera('Ver otra vez');
+    };
+    if (escena.anima) stop = escena.anima(m, done);
+    else if (m.a == null || m.a === m.de) { escena.mover(m.a ?? m.de); timer = setTimeout(done, 1200); stop = () => clearTimeout(timer); }
+    else stop = xpTween(m.de, m.a, m.ms || 1500, x => escena.mover(x), done);
+  }
+  stage.onclick = () => {
+    if (busy) return;
+    xpTick();
+    if (s.fin || s.n >= total) { monta(); play(0); } else play(s.n);
+  };
+  monta();
+  if (s.fin) {   // ya vista: queda en su último cuadro y se puede repetir
+    const u = p.momentos[total - 1];
+    if (!escena.anima) escena.mover(u.a ?? u.de);
+    espera('Ver otra vez');
+  } else timer = setTimeout(() => play(0), 500);
+  return () => { clearTimeout(timer); stop?.(); escena(); };
+};
+
 XPD.signos =(stage, p, s, api) => {
   stage.innerHTML = `<div class="xp-fact">${p.factores.map((f, i) => `<button type="button" class="xp-f" data-i="${i}"><span></span></button>`).join('<i>·</i>')}</div>
     <div class="xp-coin"><b></b><small></small></div>`;
@@ -367,6 +411,12 @@ XPD.signos =(stage, p, s, api) => {
     xpTick(); api.set(s); draw(i);
   };
   draw();
+  // anima(m): en una explicación, voltea el signo del factor m.i (o solo espera si el momento no voltea nada).
+  return Object.assign(() => {}, { anima(m, done) {
+    if (m.i != null) { s = { neg: s.neg.map((x, k) => (k === m.i ? !x : x)) }; draw(m.i); }
+    const t = setTimeout(done, 1000);
+    return () => clearTimeout(t);
+  } });
 };
 
 XPD.capas = (stage, p, s, api) => {
@@ -397,6 +447,17 @@ XPD.capas = (stage, p, s, api) => {
     s = r; xpTick(); api.nota(''); api.set(s); draw(nuevo);
   };
   draw();
+  // anima(): en una explicación, señala la operación que sigue y la funde sola.
+  return Object.assign(() => {}, { anima(m, done) {
+    const i = XP.capas.sigue(s.toks);
+    let t2 = 0;
+    stage.querySelector(`.xp-op[data-i="${i}"]`)?.classList.add('now');
+    const t1 = setTimeout(() => {
+      const r = XP.capas.aplica(s, i), nuevo = r.toks.length === s.toks.length - 4 ? i - 2 : i - 1;
+      s = r; draw(nuevo); t2 = setTimeout(done, 700);
+    }, 900);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  } });
 };
 
 XPD.casillas = (stage, p, s, api) => {
@@ -480,7 +541,9 @@ function exploraPlayer(host, lesson, course, opts) {
   // La lección pasa de video a ejercicios deslizando: aquí el dedo es para la escena, así que el gesto no sale.
   root.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
 
-  const ideas = () => def.pasos.filter((p, k) => hechos[k] && p.tipo !== 'apuesta' && p.tipo !== 'cierre').map(p => p.idea);
+  // El andamio: si la lección tiene explicaciones (`muestra`), guarda sus ideas (los conceptos); si no, las de cada paso.
+  const conMuestra = def.pasos.some(p => p.tipo === 'muestra');
+  const ideas = () => def.pasos.filter((p, k) => hechos[k] && (conMuestra ? p.tipo === 'muestra' : p.tipo !== 'apuesta' && p.tipo !== 'cierre')).map(p => p.idea);
   function chrome() {
     const p = def.pasos[i];
     host.querySelectorAll('.xp-segs i').forEach((seg, c) => {

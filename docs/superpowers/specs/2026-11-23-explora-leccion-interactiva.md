@@ -60,3 +60,7 @@ Pruebas: `tests/explora.test.js`.
 - **La escena responde**: cada tipo tiene `dice(estado, p)` (pura), una frase que cambia con cada movimiento («Llevas 3 de 7 pasos», «Así estarías sumando 7. Restar va al otro lado», «Cruzaste el 0 y la cadena se volteó»). Un aviso de error la tapa hasta el siguiente movimiento.
 - **Predice y mira** (tipo `predice`): se elige qué va a pasar y la escena (`recta` o `saltos`) se anima sola de `de` a `a` (`xpTween`, `mover`); no se califica, y al que no acertó se le dice el porqué. Después viene un paso «ahora tú» con otros números. La lección queda en 18 pasos.
 - **Destello** de chispas al ganar cada idea (`xpChispas`).
+
+## Primero se explica, después se pide (2026-11-23, tercer pedido)
+
+El usuario no quiere «atacar» al estudiante con problemas de entrada. Regla para toda lección Explora: **cada capítulo abre con una explicación** (tipo `muestra`: la escena `recta`, `saltos`, `signos` o `capas` se anima sola por momentos `{ dice, de, a, cuenta }`; arranca sola y un toque trae el siguiente momento; no pide nada y se puede repetir), sigue «Tu turno» con la misma escena y otros números, y **el problema de contexto va en el último capítulo**. Ya no hay apuesta de entrada. Con explicaciones, el andamio guarda solo sus ideas (los conceptos). `predice` queda disponible pero la lección piloto no lo usa. La lección tiene 24 pasos; la prueba exige que cada capítulo abra con `muestra`.
