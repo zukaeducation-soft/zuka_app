@@ -284,3 +284,7 @@ video/**/*.gif
 media/voz/*/frases.json
 media/voz/*/log.txt
 !media/voz/**/*.m4a
+
+# Llaves de API: nunca al repositorio
+gemini api keys.txt
+*api*key*.txt
