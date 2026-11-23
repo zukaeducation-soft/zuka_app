@@ -106,3 +106,5 @@ En la app (`XS.carga`/`XS.voz`, Web Audio por el mismo bus que los efectos): la 
 cada momento empieza junto con su frase y sigue cuando terminan la animación y la voz (+0.45 s); sin voz, el tiempo de lectura.
 La práctica dice su enunciado. El botón de sonido calla también la voz. Los audios están en `media/voz/` (ignorado por git): falta
 decidir dónde alojarlos para la app publicada y cambiar `EXPLORA_VOZ`.
+
+La narración (m4a y voz.json) sí va a GitHub desde el 2026-11-23, por pedido del usuario: así suena también en la app publicada.

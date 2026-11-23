@@ -46,8 +46,11 @@ test('el reproductor dice cada frase si hay audio y, si no, sigue con el tiempo 
   assert.match(src, /lista\.then\(va\); setTimeout\(va, 800\)/, 'espera la lista de voces para decir el primer enunciado');
 });
 
-test('los audios no van a GitHub y el generador usa la voz pedida', () => {
-  assert.match(read('.gitignore'), /^media\/voz\/$/m);
+test('la narración va a GitHub (sin los archivos de trabajo) y el generador usa la voz pedida', () => {
+  const gi = read('.gitignore');
+  assert.match(gi, /^!media\/voz\/\*\*\/\*\.m4a$/m);
+  assert.match(gi, /^media\/voz\/\*\/frases\.json$/m);
+  assert.ok(fs.existsSync(path.join(ROOT, 'media/voz/pu-cm-1/voz.json')), 'la lista de voces de pu-cm-1 está en el repositorio');
   const py = read('tools/explora-voz.py');
   assert.match(py, /MODEL, VOICE, TEMP = 'gemini-3\.8-flash-tts', 'Nika', 1\.0/);
   assert.match(py, /'api_version': 'v1beta'/);

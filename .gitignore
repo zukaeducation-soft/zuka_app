@@ -279,5 +279,8 @@ video/**/*.jpeg
 video/**/*.webp
 video/**/*.gif
 
-# Voz de las explicaciones Explora (tools/explora-voz.py): audios y lista, fuera de GitHub
-media/voz/
+# Voz de las explicaciones Explora (tools/explora-voz.py). Por pedido del usuario (2026-11-23) la narración sí va a GitHub
+# (audios m4a y voz.json, unos 40 KB por frase); los archivos de trabajo no.
+media/voz/*/frases.json
+media/voz/*/log.txt
+!media/voz/**/*.m4a

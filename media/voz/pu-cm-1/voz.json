@@ -1,0 +1,82 @@
+{
+ "Empecemos por la idea: **dónde viven los enteros**. Piensa en un termómetro acostado.": {
+  "f": "1e75b49e25fb.m4a",
+  "d": 5.35
+ },
+ "El 0 es como el punto donde el agua se congela: la frontera entre dos lados.": {
+  "f": "296985dde265.m4a",
+  "d": 5.1
+ },
+ "Si la temperatura sube, avanzamos a la derecha: 1, 2, 3… Son los **positivos**.": {
+  "f": "347befff61ff.m4a",
+  "d": 7.46
+ },
+ "Si baja del 0, seguimos a la izquierda: −1, −2, −3… Son los **negativos**.": {
+  "f": "4ca2f7c465d6.m4a",
+  "d": 7.34
+ },
+ "¿Qué es más frío, −5 o −2? −5: está más lejos del 0, hacia la izquierda.": {
+  "f": "1e2f22593957.m4a",
+  "d": 6.63
+ },
+ "Regla de oro: en la recta, el **menor** es siempre el que está más a la izquierda.": {
+  "f": "ee563f9afd98.m4a",
+  "d": 4.93
+ },
+ "**Tu turno.** Arrastra la ficha hasta $-2$.": {
+  "f": "7467348cb53a.m4a",
+  "d": 3.21
+ },
+ "Segunda idea: **el opuesto**. Imagina que en el 0 hay un espejo.": {
+  "f": "959cfa81b017.m4a",
+  "d": 5.61
+ },
+ "Cada número tiene un reflejo al otro lado del espejo. El reflejo del 4 es −4.": {
+  "f": "461eae0c456b.m4a",
+  "d": 5.45
+ },
+ "4 y −4 están a 4 pasos del 0, uno a cada lado. Se llaman **opuestos**.": {
+  "f": "14344f65e859.m4a",
+  "d": 6.72
+ },
+ "El reflejo de −6 es 6. Por eso −(−6) = 6: el reflejo de un reflejo vuelve al original.": {
+  "f": "5070d2cd55bf.m4a",
+  "d": 9.47
+ },
+ "¿Y el 0? Está justo sobre el espejo: es su propio opuesto.": {
+  "f": "602d3338cfac.m4a",
+  "d": 4.84
+ },
+ "Un número más su opuesto siempre da 0: ir 3 pasos y volver 3 deja en el mismo sitio.": {
+  "f": "0f02abf335b0.m4a",
+  "d": 6.5
+ },
+ "**Tu turno.** Mueve la ficha y déjala donde su reflejo caiga en $5$.": {
+  "f": "1a00f1a30612.m4a",
+  "d": 4.53
+ },
+ "Tercera idea: **la distancia**. Cuántos pasos hay que caminar de un número a otro.": {
+  "f": "4971859bb6a8.m4a",
+  "d": 6.05
+ },
+ "Caminemos de −2 a 3 y contemos cada paso que da la ficha.": {
+  "f": "941ebaad8487.m4a",
+  "d": 4.94
+ },
+ "Son 2 pasos hasta el 0 y 3 más del otro lado: 5 en total. Cruzar el 0 no cuesta nada extra.": {
+  "f": "a80eb97bf831.m4a",
+  "d": 6.37
+ },
+ "Se escribe con barras, |3 − (−2)|. Las barras dicen: «cuenta los pasos, sin importar el sentido».": {
+  "f": "2f9062e11b55.m4a",
+  "d": 9.09
+ },
+ "Hacia la izquierda también se cuentan pasos: de −2 a −6 hay 4.": {
+  "f": "00ea5ef3c3a6.m4a",
+  "d": 5.34
+ },
+ "Por eso una distancia **nunca es negativa**: los pasos se cuentan, no se deben.": {
+  "f": "f62e7664b544.m4a",
+  "d": 5.31
+ }
+}
