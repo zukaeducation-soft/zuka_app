@@ -278,3 +278,6 @@ video/**/*.jpg
 video/**/*.jpeg
 video/**/*.webp
 video/**/*.gif
+
+# Voz de las explicaciones Explora (tools/explora-voz.py): audios y lista, fuera de GitHub
+media/voz/

@@ -95,3 +95,14 @@ girar hacia atrás (−720° a 720°); una espiral muestra el giro (positivo en 
 explicaciones: `radio`, `arco`, `radios` (radios de un radián numerados) y `etiqueta` (solo cuando la rueda llega).
 Capítulos: un ángulo es un giro, grados, radianes (arco = radio; π radios en media vuelta), convertir, coterminales y el problema
 del minutero (20 minutos = −120° = −2π/3). No se dice cuántos grados mide un radián: lo calcula un ejercicio de la lección.
+
+## Voz (2026-11-23, octavo pedido: primero una lección)
+
+Gemini 3.8 Flash TTS, voz Nika (la del código que pasó el usuario), generada de antemano en el computador: la llave nunca va a la
+app. `tools/explora-frases.js` lista lo que se dice (enunciados y momentos) y lo pasa a texto hablado (`tools/explora-habla.js`:
+fórmulas y símbolos con palabras; `DICHO` para las frases que la regla dice mal, p. ej. −3² frente a (−3)²). `tools/explora-voz.py`
+pide cada frase, recorta el silencio, la guarda en AAC (m4a, 48 kbps) y escribe `voz.json` { texto en pantalla: { f, d } }.
+En la app (`XS.carga`/`XS.voz`, Web Audio por el mismo bus que los efectos): la explicación espera la lista de voces (hasta 0.8 s),
+cada momento empieza junto con su frase y sigue cuando terminan la animación y la voz (+0.45 s); sin voz, el tiempo de lectura.
+La práctica dice su enunciado. El botón de sonido calla también la voz. Los audios están en `media/voz/` (ignorado por git): falta
+decidir dónde alojarlos para la app publicada y cambiar `EXPLORA_VOZ`.

@@ -8,6 +8,7 @@
 // Va después de ui.js y antes de player.js (makePlayer llama a exploraPlayer).
 
 const EXPLORA = {};
+const EXPLORA_VOZ = 'media/voz/';   // carpeta (o dirección) de los audios de voz: <base><lección>/voz.json
 const XP = {};
 
 const xpPar = n => (n < 0 ? `(${n})` : `${n}`);            // en TeX: un negativo va entre paréntesis
@@ -212,6 +213,7 @@ const xpTick = () => { try { if (navigator.userActivation?.hasBeenActive) naviga
 // Sonidos de la explicación: todos sintetizados (sin archivos) y suaves; se apagan con el sonido de la app (S.sfx).
 const XS = (() => {
   let ac = null, bus = null, last = 0;
+  const cache = new Map();
   const on = () => typeof S === 'undefined' || S.sfx !== false;
   const ctx = () => {
     if (!on() || typeof window === 'undefined') return null;
@@ -254,6 +256,27 @@ const XS = (() => {
     page() { tone(523, 0.12, { g: 0.025 }); tone(784, 0.16, { t0: 0.06, g: 0.02 }); },
     whoosh(dir = 1) { soplo(0.32, dir > 0 ? 500 : 1800, dir > 0 ? 1800 : 500); },
     idea() { [523, 659, 784, 1046].forEach((f, k) => tone(f, 0.32, { t0: k * 0.07, g: 0.04 })); },
+    // Voz: baja y decodifica (una vez) el audio de una frase. Devuelve una promesa del búfer o null si no hay audio.
+    carga(url) {
+      const a = ctx(); if (!a) return null;
+      if (!cache.has(url)) cache.set(url, fetch(url).then(r => (r.ok ? r.arrayBuffer() : Promise.reject(r.status))).then(b => a.decodeAudioData(b)).catch(() => null));
+      return cache.get(url);
+    },
+    // Dice una frase y llama a fin() al terminar (o enseguida si no se pudo). Devuelve cómo callarla, o null sin audio.
+    voz(url, fin) {
+      const p = XS.carga(url); if (!p) return null;
+      let parar = false, src = null;
+      p.then(buf => {
+        if (parar) return;
+        if (!buf || !ac || ac.state !== 'running') return fin();
+        src = ac.createBufferSource(); src.buffer = buf;
+        const g = ac.createGain(); g.gain.value = 1.35;
+        src.connect(g).connect(bus);
+        src.onended = () => { if (!parar) fin(); };
+        src.start();
+      });
+      return () => { parar = true; try { src?.stop(); } catch (e) { /* ya paró */ } };
+    },
   };
 })();
 
@@ -469,13 +492,19 @@ XPD.muestra = (stage, p, s, api) => {
     busy = true; btn.hidden = true;
     s = { n: n + 1, fin: false }; api.set(s, true); puntos(n + 1);
     if (n) XS.page();
-    // Al terminar la animación se deja leer la frase; luego viene el siguiente momento (o se cumple el paso).
-    const done = () => {
+    // El momento sigue cuando terminan la animación y la frase. Con voz, la frase es la voz (y un respiro corto);
+    // sin voz, el tiempo de lectura de siempre.
+    let anim = false, oido = false;
+    const sigue = () => {
+      if (!anim || !oido) return;
       timer = setTimeout(() => {
         if (n + 1 < total) return play(n + 1);
         busy = false; s = { n: total, fin: true }; api.set(s); puntos(total + 1); espera('Ver otra vez');
-      }, XP.muestra.pausa(m));
+      }, habla ? 450 : XP.muestra.pausa(m));
     };
+    const habla = api.decir(m.dice, () => { oido = true; sigue(); });
+    if (!habla) oido = true;
+    const done = () => { anim = true; sigue(); };
     if (escena.anima) stop = escena.anima(m, done);
     else if (m.a == null || m.a === m.de) { escena.mover(m.a ?? m.de, m); done(); }
     else { escena.mover(m.de, m); stop = xpTween(m.de, m.a, m.ms || 1500, x => escena.mover(x, m), done); }
@@ -486,7 +515,7 @@ XPD.muestra = (stage, p, s, api) => {
     const u = p.momentos[total - 1];
     if (!escena.anima) escena.mover(u.a ?? u.de, u); else escena.salta?.(p.momentos);
     puntos(total + 1); espera('Ver otra vez');
-  } else timer = setTimeout(() => play(0), 500);
+  } else if (!api.decir(p.texto, () => { timer = setTimeout(() => play(0), 250); })) timer = setTimeout(() => play(0), 500);
   return () => { clearTimeout(timer); stop?.(); escena(); };
 };
 
@@ -732,6 +761,21 @@ function exploraPlayer(host, lesson, course, opts) {
   // Lo construido se recuerda mientras la app esté abierta: al volver a la explicación desde un ejercicio (repaso)
   // se retoma donde iba, con «A practicar» a la mano, y no hay que rehacer los pasos.
   const mem = XP_MEM[lesson.id] ||= { memo: {}, estados: [], hechos: [], i: 0 };
+  // Voz: si la lección tiene sus audios (tools/explora-voz.py), cada frase se dice; si no, todo sigue igual que sin voz.
+  const vozBase = `${EXPLORA_VOZ}${lesson.id}/`;
+  let voces = null, callar = null, muerto = false;
+  const lista = fetch(vozBase + 'voz.json').then(r => (r.ok ? r.json() : null)).then(j => {
+    voces = j;
+    if (j) Object.values(j).slice(0, 8).forEach(v => XS.carga(vozBase + v.f));   // las primeras frases, listas de una vez
+  }).catch(() => {});
+  const silencio = () => { callar?.(); callar = null; };
+  const decir = (txt, fin) => {
+    silencio();
+    const v = voces?.[txt];
+    if (!v || (typeof S !== 'undefined' && S.sfx === false)) return false;
+    callar = XS.voz(vozBase + v.f, fin);
+    return !!callar;
+  };
   const { memo, estados, hechos } = mem;
   let i = Math.min(mem.i, def.pasos.length - 1), clean = null, video = null;
   const lesEl = host.closest('.lesson');
@@ -792,7 +836,7 @@ function exploraPlayer(host, lesson, course, opts) {
     chrome();
   }
   function show(dir = 1) {
-    clean?.(); clean = null;
+    clean?.(); clean = null; silencio();
     mem.i = i;
     const k = i, p = def.pasos[i], t = XP[p.tipo];   // k: este paso; una escena vieja no escribe en el paso que se ve ahora
     let s = estados[i] ?? t.ini(p);
@@ -814,11 +858,15 @@ function exploraPlayer(host, lesson, course, opts) {
     };
     const api = {
       memo, ideas,
+      decir: (txt, fin) => (k === i ? decir(txt, () => { if (k === i) fin(); }) : false),
       nota: m => { if (k !== i) return; if (!m) return leer(); nota.classList.add('aviso'); nota.textContent = m; },
       // vivo: el dedo sigue arrastrando; se actualiza el renglón pero la meta se mira al soltar.
       set(ns, vivo) { if (k !== i) return; s = estados[k] = ns; leer(); if (!vivo && !hechos[k] && t.ok(s, p)) cumple(true); },
     };
     clean = XPD[p.tipo](stage, p, s, api) || null;
+    if (p.tipo !== 'muestra') decir(p.texto, () => {});   // en la práctica se dice el enunciado; la explicación dice lo suyo
+    // La frase siguiente, lista antes de llegar.
+    if (voces) for (const q of [def.pasos[i + 1]].filter(Boolean)) [q.texto, ...(q.momentos || []).map(m => m.dice)].forEach(x => voces[x] && XS.carga(vozBase + voces[x].f));
     leer();
     if (p.tipo === 'cierre') hechos[i] = true;
     chrome();
@@ -838,18 +886,19 @@ function exploraPlayer(host, lesson, course, opts) {
     snd.classList.toggle('mute', !on); snd.setAttribute('aria-pressed', String(on));
     snd.setAttribute('aria-label', on ? 'Sonido encendido' : 'Sonido apagado');
   };
-  snd.onclick = () => { if (typeof S === 'undefined') return; S.sfx = S.sfx === false; if (typeof save === 'function') save(); pinta(); XS.pop(); };
+  snd.onclick = () => { if (typeof S === 'undefined') return; S.sfx = S.sfx === false; if (typeof save === 'function') save(); if (S.sfx === false) silencio(); pinta(); XS.pop(); };
   pinta();
   sheet.onclick = e => { if (e.target === sheet || e.target.closest('.xp-sheet-x')) sheet.hidden = true; };
   if (hayVideo) {
     $x('.xp-video').onclick = () => {
-      clean?.(); clean = null; suelta(); host.innerHTML = '';
+      clean?.(); clean = null; silencio(); suelta(); host.innerHTML = '';
       video = makeClipPlayer(host, lesson, course, opts); video.play();
     };
   }
 
   return {
-    play() { show(1); },
-    destroy() { clean?.(); clean = null; suelta(); if (video) video.destroy(); else host.innerHTML = ''; },
+    // Se empieza cuando llega la lista de voces (o a los 0.8 s, sin voz): así el primer enunciado también se dice.
+    play() { let ya = false; const va = () => { if (!ya && !muerto) { ya = true; show(1); } }; lista.then(va); setTimeout(va, 800); },
+    destroy() { muerto = true; clean?.(); clean = null; silencio(); suelta(); if (video) video.destroy(); else host.innerHTML = ''; },
   };
 }
