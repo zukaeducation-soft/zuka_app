@@ -201,3 +201,22 @@
   .xp-zone { stroke-dashoffset: 0; }
   .xp-dots i { transition: none; }
 }
+
+/* ---- escena «conjunto» (alg-0a): membrana y fichas que se arrastran ---- */
+.xc { position: relative; width: 100%; max-width: 440px; height: 196px; touch-action: pan-y; user-select: none; -webkit-user-select: none;
+  transition: height .35s cubic-bezier(.2,.8,.2,1); }
+.xc-mem { position: absolute; transition: height .35s cubic-bezier(.2,.8,.2,1); border-radius: 50%; border: 1.5px solid color-mix(in srgb, var(--c-ink) 70%, transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--c) 16%, transparent), color-mix(in srgb, var(--c) 4%, transparent));
+  box-shadow: 0 0 24px -8px color-mix(in srgb, var(--c) var(--halo), transparent), inset 0 0 20px -10px color-mix(in srgb, var(--c) var(--halo), transparent); }
+.xc-name { position: absolute; left: 8%; top: 9%; font: italic 600 24px/1 Cambria, 'Times New Roman', serif; color: var(--c-ink); }
+.xc-chip { position: absolute; left: 0; top: 0; height: 34px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--card); color: var(--ink); font: 600 15px/1 var(--display); white-space: nowrap; touch-action: none; cursor: grab;
+  transition: transform .5s cubic-bezier(.2,.8,.2,1), background .25s, border-color .25s, color .25s, opacity .35s; }
+.xc-chip.in { background: var(--c); border-color: var(--c); color: var(--c-on); box-shadow: 0 0 14px -5px color-mix(in srgb, var(--c) var(--halo), transparent); }
+.xc-chip.bad { background: color-mix(in srgb, var(--bad) 16%, var(--card)); border-color: var(--bad); color: var(--bad); box-shadow: none; }
+.xc-chip.gone { opacity: 0; pointer-events: none; }
+.xc-chip.drag { transition: background .25s, border-color .25s; z-index: 3; cursor: grabbing; box-shadow: 0 12px 26px -12px rgba(0, 0, 0, .6); }
+.xc-chip.mark { outline: 2px solid var(--gold); outline-offset: 3px; animation: xc-beat 1.3s ease-in-out infinite; }
+@keyframes xc-beat { 50% { outline-offset: 8px; outline-color: transparent; } }
+.xc.quieto, .xc.quieto .xc-chip { transition: none; }
+@media (prefers-reduced-motion: reduce) { .xc, .xc-chip { transition: none; } .xc-chip.mark { animation: none; } }

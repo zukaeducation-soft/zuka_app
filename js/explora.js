@@ -181,6 +181,28 @@ XP.casillas = {
 
 XP.cierre = { ini: () => ({}), ok: () => true, sol: () => ({}), lee: () => '' };
 
+// Conjunto: fichas (`items`, pueden repetirse) que se arrastran dentro o fuera de una membrana llamada `nombre`. Fichas con
+// la misma etiqueta son el mismo elemento: si ya hay una adentro, la otra se funde con ella. Se cumple cuando adentro
+// están exactamente los elementos de `meta`. Con `cardinal`, el renglón muestra también n(·).
+const xpEl = x => (/^[A-Za-z0-9]$/.test(x) ? x : `\\text{${x}}`);
+XP.conjunto = {
+  ini: () => ({ en: [], ult: null }),
+  elems: (s, p) => [...new Set(s.en.map(k => p.items[k]))],
+  ok(s, p) { const c = XP.conjunto.elems(s, p); return c.length === p.meta.length && p.meta.every(x => c.includes(x)); },
+  sol: p => ({ en: p.items.map((x, k) => (p.meta.includes(x) ? k : -1)).filter(k => k >= 0), ult: null }),
+  lee(s, p) {
+    const c = XP.conjunto.elems(s, p);
+    return `$${p.nombre} = \\{${c.length ? c.map(xpEl).join(', ') : '\\,'}\\}$` + (p.cardinal ? ` $\\quad n(${p.nombre}) = ${c.length}$` : '');
+  },
+  dice(s, p) {
+    const u = s.ult, N = p.nombre;
+    if (!u) return 'Arrastra adentro lo que cumple la regla. Toca un elemento para sacarlo.';
+    if (u.que === 'dup') return `${u.lab} ya estaba adentro: en un conjunto nada se repite.`;
+    if (u.que === 'out') return `${u.lab} salió del conjunto: ahora ${u.lab} ∉ ${N}.`;
+    return p.meta.includes(u.lab) ? `${u.lab} cumple la regla: ${u.lab} ∈ ${N}.` : `${u.lab} no cumple la regla: no va en ${N}.`;
+  },
+};
+
 // ------------------------------------------------------------------------------------------------------------------
 // Dibujo. Nada de lo que sigue corre al cargar el archivo (las pruebas lo cargan sin navegador).
 
@@ -434,7 +456,7 @@ XPD.predice = (stage, p, s, api) => {
 // Explicación por momentos: arranca sola y pasa sola de un momento al siguiente, dejando tiempo para leer.
 // La escena no se toca; al final queda «Ver otra vez».
 XPD.muestra = (stage, p, s, api) => {
-  stage.innerHTML = `<div class="xp-watch"></div><div class="xp-dots" aria-hidden="true">${p.momentos.map(() => '<i></i>').join('')}</div>
+  stage.innerHTML = `<div class="xp-watch" inert></div><div class="xp-dots" aria-hidden="true">${p.momentos.map(() => '<i></i>').join('')}</div>
     <button type="button" class="xp-sigue" hidden></button>`;
   const box = stage.firstChild, btn = stage.lastElementChild, total = p.momentos.length, mudo = { set() {}, nota() {}, memo: {} };
   const dots = [...stage.querySelectorAll('.xp-dots i')];
@@ -462,7 +484,7 @@ XPD.muestra = (stage, p, s, api) => {
   monta();
   if (s.fin) {   // ya vista: queda en su último cuadro y se puede repetir
     const u = p.momentos[total - 1];
-    if (!escena.anima) escena.mover(u.a ?? u.de, u);
+    if (!escena.anima) escena.mover(u.a ?? u.de, u); else escena.salta?.(p.momentos);
     puntos(total + 1); espera('Ver otra vez');
   } else timer = setTimeout(() => play(0), 500);
   return () => { clearTimeout(timer); stop?.(); escena(); };
@@ -565,6 +587,120 @@ XPD.casillas = (stage, p, s, api) => {
   };
   draw();
   return () => clearTimeout(timer);
+};
+
+XPD.conjunto = (stage, p, s, api) => {
+  stage.innerHTML = `<div class="xc"><div class="xc-mem"><i class="xc-name">${esc(p.nombre)}</i></div>${p.items.map((x, k) =>
+    `<button type="button" class="xc-chip" data-k="${k}">${esc(x)}</button>`).join('')}</div>`;
+  const box = stage.firstChild, mem = box.firstChild, chips = [...box.querySelectorAll('.xc-chip')];
+  const dentro = k => s.en.includes(k);
+  const primero = lab => s.en.find(k => p.items[k] === lab);   // la ficha que representa a ese elemento
+  let orden = s.en.filter(k => primero(p.items[k]) === k);       // orden de los elementos adentro (la mezcla lo cambia)
+  let marcado = -1, arr = null, anchoYa = 0;
+  const filas = (ks, w, ancho) => {
+    const out = [[]]; let x = 0;
+    for (const k of ks) { if (x + w[k] > ancho && out.at(-1).length) { out.push([]); x = 0; } out.at(-1).push(k); x += w[k] + 8; }
+    return out;
+  };
+  function layout() {
+    const W = box.clientWidth || 300, w = chips.map(c => c.offsetWidth || 40);
+    const mw = W * 0.94, mx = (W - mw) / 2, my = 2, pos = {};
+    const fi = filas(orden, w, mw * 0.68), mh = Math.max(132, fi.length * 40 + 60);
+    mem.style.cssText = `left:${mx}px;top:${my}px;width:${mw}px;height:${mh}px`;
+    fi.forEach((f, r) => {
+      let x = (W - f.reduce((a, k) => a + w[k] + 8, -8)) / 2;
+      const y = my + mh / 2 - (fi.length * 40 - 6) / 2 + r * 40;
+      for (const k of f) { pos[k] = [x, y]; x += w[k] + 8; }
+    });
+    for (const k of s.en) if (!pos[k]) pos[k] = [...(pos[primero(p.items[k])] || [W / 2, my + mh / 2])];   // fundidas
+    const ft = filas(p.items.map((_, k) => k).filter(k => !dentro(k)), w, W - 12);
+    ft.forEach((f, r) => {
+      let x = (W - f.reduce((a, k) => a + w[k] + 8, -8)) / 2;
+      for (const k of f) { pos[k] = [x, my + mh + 16 + r * 44]; x += w[k] + 8; }
+    });
+    box.style.height = `${my + mh + 16 + Math.max(1, ft.filter(f => f.length).length) * 44}px`;
+    chips.forEach((c, k) => {
+      const fund = dentro(k) && primero(p.items[k]) !== k;
+      c.classList.toggle('in', dentro(k) && !fund);
+      c.classList.toggle('gone', fund);
+      c.classList.toggle('bad', !!p.meta && dentro(k) && !fund && !p.meta.includes(p.items[k]));
+      c.classList.toggle('mark', k === marcado);
+      c.setAttribute('aria-pressed', String(dentro(k)));
+      if (arr?.el !== c) c.style.transform = `translate(${pos[k][0]}px, ${pos[k][1]}px)${fund ? ' scale(.4)' : ''}`;
+    });
+  }
+  function poner(k, quieto) {
+    if (dentro(k)) return;
+    const dup = primero(p.items[k]) != null;
+    s = { en: [...s.en, k], ult: { lab: p.items[k], que: dup ? 'dup' : 'in' } };
+    if (!dup) orden.push(k);
+    if (!quieto) dup ? XS.merge() : p.meta && !p.meta.includes(p.items[k]) ? XS.nope() : XS.pop();
+  }
+  function sacar(k, quieto) {
+    if (!dentro(k)) return;
+    const lab = p.items[k], quita = primero(lab) === k ? s.en.filter(j => p.items[j] === lab) : [k];   // salen también sus copias
+    s = { en: s.en.filter(j => !quita.includes(j)), ult: { lab, que: 'out' } };
+    orden = orden.filter(j => !quita.includes(j));
+    if (!quieto) XS.tick(-12);
+  }
+  box.onclick = e => {
+    const c = e.target.closest('.xc-chip');
+    if (!c || e.detail !== 0 || c.classList.contains('gone')) return;
+    const k = +c.dataset.k; if (dentro(k)) sacar(k); else poner(k);
+    xpTick(); api.set(s); layout();
+  };
+  box.onpointerdown = e => {
+    if (arr) return;   // un segundo dedo no roba la ficha que ya se arrastra
+    const c = e.target.closest('.xc-chip'); if (!c || c.classList.contains('gone')) return;
+    e.preventDefault();
+    const m = /translate\(([-\d.]+)px, ([-\d.]+)px\)/.exec(c.style.transform) || [0, 0, 0];
+    arr = { el: c, k: +c.dataset.k, x0: e.clientX, y0: e.clientY, bx: +m[1], by: +m[2], mov: false };
+    try { c.setPointerCapture(e.pointerId); } catch (er) { /* sin captura */ }
+    c.classList.add('drag');
+  };
+  box.onpointermove = e => {
+    if (!arr) return;
+    const dx = e.clientX - arr.x0, dy = e.clientY - arr.y0;
+    if (Math.hypot(dx, dy) > 6) arr.mov = true;
+    if (arr.mov) arr.el.style.transform = `translate(${arr.bx + dx}px, ${arr.by + dy}px) scale(1.08)`;
+  };
+  box.onpointercancel = () => { if (!arr) return; arr.el.classList.remove('drag'); arr = null; layout(); };
+  box.onpointerup = () => {
+    if (!arr) return;
+    const { el, k, mov } = arr; arr = null; el.classList.remove('drag');
+    if (!mov) { if (dentro(k)) sacar(k); else poner(k); }   // un toque también sirve
+    else {
+      const mr = mem.getBoundingClientRect(), cr = el.getBoundingClientRect();
+      const ex = ((cr.left + cr.right) / 2 - mr.left - mr.width / 2) / (mr.width / 2);
+      const ey = ((cr.top + cr.bottom) / 2 - mr.top - mr.height / 2) / (mr.height / 2);
+      if (ex * ex + ey * ey <= 1) poner(k); else sacar(k);
+    }
+    xpTick(); api.set(s); layout();
+  };
+  // Un momento de explicación: meter (pon), sacar (saca), reordenar (mezcla) y señalar (marca), uno tras otro.
+  const pasos = (m, quieto) => [
+    ...(m.pon || []).map(lab => () => { const k = p.items.findIndex((x, j) => x === lab && !dentro(j)); if (k >= 0) poner(k, quieto); }),
+    ...(m.saca || []).map(lab => () => { const k = primero(lab); if (k != null) sacar(k, quieto); }),
+    ...(m.mezcla ? [() => { orden.sort((a, b) => p.items[a].localeCompare(p.items[b])); if (!quieto) XS.flip(); }] : []),
+    ...(m.marca != null ? [() => { marcado = primero(m.marca) ?? p.items.indexOf(m.marca); if (!quieto) XS.pop(); }] : []),
+  ];
+  const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(() => { if (box.clientWidth !== anchoYa) { anchoYa = box.clientWidth; layout(); } }) : null;
+  ro?.observe(box);
+  box.classList.add('quieto'); layout();
+  requestAnimationFrame(() => requestAnimationFrame(() => box.classList.remove('quieto')));
+  document.fonts?.ready?.then(() => { if (box.isConnected) layout(); });
+  return Object.assign(() => ro?.disconnect(), {
+    anima(m, done) {
+      marcado = -1; layout();
+      const ps = pasos(m);
+      let i = 0, t = 0;
+      const sig = () => { if (i < ps.length) { ps[i++](); layout(); t = setTimeout(sig, 430); } else t = setTimeout(done, 450); };
+      sig();
+      return () => clearTimeout(t);
+    },
+    // Explicación ya vista: queda en su último cuadro, sin animar.
+    salta(ms) { box.classList.add('quieto'); for (const m of ms) pasos(m, true).forEach(f => f()); marcado = -1; layout(); void box.offsetWidth; requestAnimationFrame(() => requestAnimationFrame(() => box.classList.remove('quieto'))); },
+  });
 };
 
 XPD.apuesta = (stage, p, s, api) => {

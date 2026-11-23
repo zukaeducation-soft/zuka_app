@@ -73,7 +73,7 @@ UdeA (Zarrazola, 2024), `C:\Users\User Acer\Documents\LIBRO DE ALGEBRA Y TRIGONO
   Contenido en `js/explora-<lección>.js` (fuera de `js/courses/`: muchas pruebas cargan esa carpeta entera): `{ caps, pasos }`, cada paso
   `{ cap, tipo, texto ≤ 170 letras, idea, … }` con una frase, una escena y una meta; al cumplirla se revela la idea y entra al «andamio».
   Sin vidas, reloj ni «Comprobar». Tipos: `apuesta`, `recta` (modos `llegar`, `espejo`, `distancia`, `salto`, `dos`), `saltos`, `signos`,
-  `capas`, `casillas`, `cierre`; lógica pura en `XP[tipo]` (`ini`, `ok`, `sol`, `lee`), dibujo en `XPD[tipo]`. Hecha solo `pu-cm-1`.
+  `capas`, `casillas`, `conjunto` (membrana con fichas que se arrastran; las repetidas se funden), `muestra` (explicación que corre sola, sin toques), `cierre`; lógica pura en `XP[tipo]` (`ini`, `ok`, `sol`, `lee`, `dice`), dibujo en `XPD[tipo]`, sonidos sintetizados `XS`. Formato: cada capítulo abre con una explicación `muestra`, sigue «Tu turno» y el problema de contexto va al final. Hechas `pu-cm-1` (Preuniversitario) y `alg-0a` (Álgebra, `js/explora-alg-0a.js`, pruebas `tests/explora-alg-0a.test.js`).
   No se añadió Rive (necesita archivos `.riv` de su editor): el movimiento es código (resortes, SVG). En este equipo no hay dispositivo
   virtual de Android creado: se prueba en el navegador a ancho de celular.
 - **Cada ejercicio con pista** (`hint`) que oriente sin dar la respuesta.

@@ -73,3 +73,16 @@ El usuario no quiere «atacar» al estudiante con problemas de entrada. Regla pa
 - **Más vistosa**: brillo del color del curso detrás de la escena, estela de la ficha, número resaltado bajo la ficha, zonas de positivos y negativos que se dibujan (`zona: pos|neg|ambas`, solo en «La recta»: en sumar confundían sentido con signo), marcas que laten (`marcas`), un punto por salto, puntos de avance por momento y destello al ganar una idea.
 - **Fluida**: el texto entra palabra a palabra (`xpPalabras`; fórmulas y negritas enteras), la cuenta se funde al cambiar (solo en explicaciones; al arrastrar parpadearía).
 - **Más detalle**: cada explicación tiene 4 a 6 momentos con analogías (termómetro, espejo, contar pasos, dinero y deudas, una rana que salta, pelar una cebolla) y la regla dicha al final. Lectura: 0.8 s + 0.215 s por palabra.
+
+## Primera lección de Álgebra, alg-0a (2026-11-23, sexto pedido)
+
+El mismo formato en «¿Qué es un conjunto? Notación y pertenencia» (`js/explora-alg-0a.js`, pruebas `tests/explora-alg-0a.test.js`).
+Escena nueva `conjunto`: una membrana (el conjunto, con su nombre en cursiva) y fichas que se arrastran adentro o afuera (un toque o
+Enter también sirven); fichas con la misma etiqueta son un solo elemento y la segunda se funde con la primera; la notación por
+extensión (y n(·) con `cardinal`) se escribe sola. En las explicaciones, cada momento puede meter (`pon`), sacar (`saca`),
+reordenar (`mezcla`) o señalar (`marca`). Capítulos: qué es un conjunto (bandera de Colombia; tu turno: semáforo), pertenecer
+(vocales; tu turno: dado > 4), extensión y comprensión (pares menores que 10; tu turno: múltiplos de 3), sin repetidos ni orden y
+cardinal (COLOMBIA, conjunto K con letras minúsculas: el conjunto nunca se llama como uno de sus elementos; tu turno: TOMATE y
+cardinales), y el problema de la heladería. Toda práctica tiene algo que dejar afuera. «Interpretamos «el curso de álgebra y
+trigonometría» como el curso de Álgebra (el libro es Álgebra y Trigonometría); la primera lección de Trigonometría, `trig-41a`, sigue
+con su video.»
