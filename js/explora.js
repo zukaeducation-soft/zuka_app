@@ -737,7 +737,11 @@ function exploraPlayer(host, lesson, course, opts) {
   const lesEl = host.closest('.lesson');
   lesEl?.classList.add('has-explora');
   // Las teclas de la lección (Enter, flechas) saltarían la explicación: aquí no pasan de este punto.
-  const keys = e => { if (['Enter', ' ', 'ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(e.key)) e.stopPropagation(); };
+  const keys = e => {
+    if (!['Enter', ' ', 'ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(e.key)) return;
+    e.stopPropagation();   // la lección no avanza con estas teclas
+    if (e.target.closest?.('.xp-stage') && e.target.onkeydown) e.target.onkeydown(e);   // pero la escena sí las recibe
+  };
   document.addEventListener('keydown', keys, true);
   const suelta = () => { document.removeEventListener('keydown', keys, true); lesEl?.classList.remove('has-explora'); };
 

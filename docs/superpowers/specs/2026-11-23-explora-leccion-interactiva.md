@@ -86,3 +86,12 @@ cardinal (COLOMBIA, conjunto K con letras minúsculas: el conjunto nunca se llam
 cardinales), y el problema de la heladería. Toda práctica tiene algo que dejar afuera. «Interpretamos «el curso de álgebra y
 trigonometría» como el curso de Álgebra (el libro es Álgebra y Trigonometría); la primera lección de Trigonometría, `trig-41a`, sigue
 con su video.»
+
+## Primera lección de Trigonometría, trig-41a (2026-11-23, séptimo pedido)
+
+Escena `angulo` (`js/explora-angulo.js`): rueda SVG con el lado terminal que se arrastra (un dedo a la vez; el centro no gira
+nada) o se gira con el teclado (flechas ±15°, Re Pág/Av Pág ±90°, Inicio = 0; `role="slider"`). Se puede pasar de una vuelta y
+girar hacia atrás (−720° a 720°); una espiral muestra el giro (positivo en el color del curso, negativo en naranja). En las
+explicaciones: `radio`, `arco`, `radios` (radios de un radián numerados) y `etiqueta` (solo cuando la rueda llega).
+Capítulos: un ángulo es un giro, grados, radianes (arco = radio; π radios en media vuelta), convertir, coterminales y el problema
+del minutero (20 minutos = −120° = −2π/3). No se dice cuántos grados mide un radián: lo calcula un ejercicio de la lección.
