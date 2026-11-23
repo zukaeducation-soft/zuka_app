@@ -89,6 +89,20 @@ def parte(x, r, n, palabras):
         if not 0.2 <= sp <= 0.9: return None
     return trozos
 
+def parte_whisper(x, r, tanda):
+    # Segundo intento de corte: transcribe la tanda con Whisper (las funciones de video/preuda-cosmos/tools/voz.py) y corta
+    # entre la última palabra de una frase y la primera de la siguiente. Devuelve (trozos, frecuencia) o None.
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('vozpu', ROOT / 'video' / 'preuda-cosmos' / 'tools' / 'voz.py')
+    vz = importlib.util.module_from_spec(spec); spec.loader.exec_module(vz)
+    x24 = vz.resample(x, r)
+    iv, _, _ = vz.split_phrases(x24, [{'text': fr['h']} for fr in tanda], vz.transcribe(x24))
+    trozos = [x24[int(a * vz.SR):int(b * vz.SR)] for a, b in iv]
+    for t, fr in zip(trozos, tanda):
+        sp = len(recorta(t, vz.SR)) / vz.SR / max(1, len(fr['h'].split()))
+        if not 0.2 <= sp <= 0.9: return None
+    return trozos, vz.SR
+
 def main(lid):
     out = ROOT / 'media' / 'voz' / lid
     out.mkdir(parents=True, exist_ok=True)
@@ -136,11 +150,19 @@ def main(lid):
     if t: tandas.append(t)
     for k, tanda in enumerate(tandas, 1):
         print(f'[tanda {k}/{len(tandas)}] {len(tanda)} frases: {tanda[0]["h"][:50]}…', flush=True)
-        x, r = pide('\n\n'.join(fr['h'] for fr in tanda))
+        # El audio de la tanda se guarda: si el corte falla o se acaba la cuota, no hay que volver a pedirlo.
+        texto = '\n\n'.join(fr['h'] for fr in tanda)
+        tw = out / 'tandas' / (hashlib.sha1(f'{MODEL}|{VOICE}|{TEMP}|{texto}'.encode()).hexdigest()[:12] + '.wav')
+        if tw.exists(): x, r = sf.read(tw, dtype='float32'); print('  tanda guardada: no se pide otra vez', flush=True)
+        else:
+            x, r = pide(texto); tw.parent.mkdir(exist_ok=True); sf.write(tw, x, r, subtype='PCM_16')
         trozos = parte(x, r, len(tanda), [len(fr['h'].split()) for fr in tanda])
         if trozos is None:
+            print('  los silencios no alcanzan: corto con Whisper', flush=True)
+            w = parte_whisper(x, r, tanda)
+            if w: trozos, r = w
+        if trozos is None:
             print('  el corte no cuadra: frase por frase', flush=True)
-            trozos = None
             for fr in tanda: guarda(fr, *pide(fr['h']))
             continue
         for fr, tz in zip(tanda, trozos): guarda(fr, tz, r)
