@@ -9,7 +9,7 @@ import hashlib, io, json, os, re, subprocess, sys, time
 from pathlib import Path
 import numpy as np, soundfile as sf
 
-MODEL, VOICE, TEMP = 'gemini-3.8-flash-tts', 'Nika', 1.0
+MODEL, VOICE, TEMP = 'gemini-3.8-flash-tts', 'Cruz', 1.45
 ROOT = Path(__file__).resolve().parent.parent
 KEYFILE = Path.home() / '.zuka' / 'gemini_key.txt'
 LISTA, USADAS = Path.home() / '.zuka' / 'gemini_keys.txt', Path.home() / '.zuka' / 'gemini_keys_usadas.txt'
@@ -95,6 +95,10 @@ def main(lid):
     frases = json.loads((out / 'frases.json').read_text(encoding='utf8'))
     man_p = out / 'voz.json'
     man = json.loads(man_p.read_text(encoding='utf8')) if man_p.exists() else {}
+    # Si cambió la voz (o el texto), lo viejo sale de la lista de una vez: nunca suenan dos voces en la misma lección.
+    claves = {fr['t']: hashlib.sha1(f'{MODEL}|{VOICE}|{TEMP}|{fr["h"]}'.encode()).hexdigest()[:12] + '.m4a' for fr in frases}
+    man = {t: v for t, v in man.items() if claves.get(t) == v.get('f')}
+    man_p.write_text(json.dumps(man, ensure_ascii=False, indent=1), encoding='utf8')
     from google import genai
     from google.genai import types, errors
     client = genai.Client(api_key=api_key(), http_options={'api_version': 'v1beta'})

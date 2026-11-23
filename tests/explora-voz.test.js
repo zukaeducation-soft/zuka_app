@@ -52,7 +52,7 @@ test('la narración va a GitHub (sin los archivos de trabajo) y el generador usa
   assert.match(gi, /^media\/voz\/\*\/frases\.json$/m);
   assert.ok(fs.existsSync(path.join(ROOT, 'media/voz/pu-cm-1/voz.json')), 'la lista de voces de pu-cm-1 está en el repositorio');
   const py = read('tools/explora-voz.py');
-  assert.match(py, /MODEL, VOICE, TEMP = 'gemini-3\.8-flash-tts', 'Nika', 1\.0/);
+  assert.match(py, /MODEL, VOICE, TEMP = 'gemini-3\.8-flash-tts', 'Cruz', 1\.45/);
   assert.match(py, /'api_version': 'v1beta'/);
   assert.ok(!/AIza[0-9A-Za-z_-]{20,}/.test(py), 'ninguna llave en el repositorio');
 });
