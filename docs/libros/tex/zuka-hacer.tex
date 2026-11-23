@@ -1,0 +1,152 @@
+% zuka-hacer.tex — capa final de la plantilla (2026-11-23, pedido del usuario):
+%  1. Diseño de los resúmenes de Zuka (docs/resumenes): página A4 con márgenes de 2 cm, sin columna lateral, franja de color
+%     al abrir cada mundo, rótulo «Lección» en píldora y encabezado/pie de los resúmenes.
+%  2. Aprender haciendo: el reto se intenta primero, cada ejemplo pide intentarlo antes de leer la solución, «Ahora tú» con
+%     espacio para resolver (soluciones en las claves), mapa del texto para llenar después de cada lectura y preguntas
+%     comentadas que se responden antes de leer el comentario.
+\RequirePackage{environ}
+
+% ---------- encabezado y pie como en los resúmenes ----------
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\zuka@pestana{\ifodd\value{page}1\else0\fi}\small\color{zmute}\textsc{Preuniversitario UdeA}\enspace·\enspace\zuka@mundoactual}
+\fancyhead[R]{\small\color{zmute}Libro \zuka@num\enspace·\enspace\zuka@comp}
+\fancyfoot[L]{\sffamily\footnotesize\textbf{\color{zolive}Zuka}\enspace{\color{zmute}Preuniversitario UdeA}}
+\fancyfoot[R]{\sffamily\footnotesize\color{zmute}\thepage}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[R]{\sffamily\footnotesize\color{zmute}\thepage}}
+
+% ---------- «En la app»: ya no va al margen, va bajo el título de la lección ----------
+\renewcommand{\notaapp}[1]{\par\vspace{1pt}\noindent{\sffamily\footnotesize\color{zmute}%
+  \tikz[baseline=-0.6ex]{\draw[zolive,line width=.7pt,rounded corners=1.2pt](0,-.13)rectangle(.17,.17);
+  \fill[zolive](.085,-.08)circle(.018);}\,\textbf{\color{zolive}En la app:} #1}\par\vspace{4pt}}
+
+% ---------- cabecera de lección: píldora «Lección k.n» + título, como «Nivel 1-1» de los resúmenes ----------
+\renewcommand{\zuka@cabezaleccion}[1]{%
+  \noindent\tikz[baseline=(p.base)]{\node[fill=zmoss,rounded corners=2.2mm,inner xsep=7pt,inner ysep=3.5pt,
+    font=\sffamily\small\bfseries,text=white] (p) {Lección \thesection};}\hspace{3mm}%
+  {\sffamily\fontsize{19}{23}\selectfont\fontseries{sb}\selectfont\color{zink}#1}\par\vspace{2pt}}
+\titlespacing*{\section}{0pt}{0pt}{2pt}
+
+% ---------- apertura de mundo: franja de color como la portada de un resumen ----------
+\newif\ifzuka@eval
+\renewcommand{\mundo}[4]{%
+  \cleardoublepage
+  \stepcounter{mundo}\setcounter{section}{0}\global\zuka@evalfalse
+  \renewcommand{\zuka@mundoactual}{Mundo \themundo\ · #1}%
+  \thispagestyle{plain}%
+  \phantomsection\addcontentsline{toc}{chapter}{\protect\numberline{\themundo}#1}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[zolive] (current page.north west) rectangle ([yshift=-64mm]current page.north east);
+    \begin{scope}
+      \clip ([xshift=-92mm]current page.north east) rectangle ([yshift=-64mm]current page.north east);
+      \pgfmathsetmacro{\zdy}{30+mod(\themundo*41,120)}
+      \node[anchor=north east,inner sep=0,opacity=.42] at ([yshift=\zdy mm]current page.north east)
+        {\includegraphics[width=150mm]{arte/portada\zuka@num.jpg}};
+    \end{scope}
+    \shade[left color=zolive,right color=zolive,middle color=zolive,opacity=.0] (current page.north west) rectangle ([yshift=-64mm]current page.north east);
+    \node[anchor=north west,font=\sffamily\small\bfseries,text=zlime]
+      at ([xshift=20mm,yshift=-16mm]current page.north west) {\MakeUppercase{\zuka@comp}\enspace·\enspace MUNDO \themundo};
+    \node[anchor=north west,text width=118mm,align=flush left,font=\sffamily\fontsize{30}{34}\selectfont\fontseries{sb}\selectfont,text=white]
+      at ([xshift=20mm,yshift=-24mm]current page.north west) {#1};
+    \node[anchor=south west,font=\sffamily\small,text=white!80]
+      at ([xshift=20mm,yshift=-58mm]current page.north west) {Preuniversitario UdeA\enspace·\enspace Libro \zuka@num: \zuka@tit};
+    \begin{scope}[shift={([xshift=-40mm,yshift=-13mm]current page.north east)},scale=.62]
+      \begin{scope}[draw=white]\zuka@cerebro\end{scope}\end{scope}
+    \node[anchor=west,font=\sffamily\bfseries\small,text=white] at ([xshift=-26mm,yshift=-13.3mm]current page.north east) {zuka};
+  \end{tikzpicture}%
+  \par\vspace*{48mm}%
+  {\large #3\par}\vspace{5mm}%
+  \begin{tcolorbox}[enhanced,colback=zsoft,colframe=zsoft,boxrule=0pt,arc=3mm,left=5mm,right=5mm,top=3mm,bottom=3mm]
+    {\sffamily\small\bfseries\color{zolive}En este mundo}\par\vspace{2pt}
+    \begin{itemize}[leftmargin=1.2em,itemsep=3pt]#4\end{itemize}
+  \end{tcolorbox}
+  \vspace{2mm}
+  \begin{tcolorbox}[enhanced,colback=white,colframe=zline,boxrule=.5pt,arc=3mm,left=5mm,right=5mm,top=3mm,bottom=3mm]
+    {\sffamily\small\bfseries\color{zolive}Cómo vas a trabajar}\par\vspace{2pt}
+    {\small En cada lección \textbf{haces primero y lees después}: intentas el reto, tapas cada solución antes de mirarla,
+    resuelves «Ahora tú» en el espacio del libro, practicas en la app con el video y los juegos de esa lección, y cierras con el
+    taller. Las respuestas están en las claves del final.\par}
+  \end{tcolorbox}
+  \immediate\write\zuka@sol{\noexpand\solmun{Mundo \themundo\ · \unexpanded{#1}}}%
+}
+\let\zuka@evaluacionvieja\evaluacion
+\renewcommand{\evaluacion}{\global\zuka@evaltrue\zuka@evaluacionvieja}
+\let\zuka@cabeceravieja\cabecera
+\renewcommand{\cabecera}[3]{\global\zuka@evaltrue\zuka@cabeceravieja{#1}{#2}{#3}}
+\let\zuka@leccionvieja\leccion
+\renewcommand{\leccion}[3]{\global\zuka@evalfalse\zuka@leccionvieja{#1}{#2}{#3}}
+
+% ---------- piezas para responder a mano ----------
+\newcommand{\zuka@renglones}[1]{\par\vspace{2pt}\foreach \k in {1,...,#1}{\noindent\textcolor{zline}{\rule{\linewidth}{.4pt}}\par\vspace{5.5mm}}}
+\newcommand{\zuka@cuadricula}[1]{\par\vspace{3pt}\noindent\begin{tikzpicture}
+  \draw[zline!70,line width=.25pt,step=5mm] (0,0) grid (\linewidth-.1pt,#1);
+  \draw[zline,line width=.4pt,rounded corners=1mm] (0,0) rectangle (\linewidth-.1pt,#1);
+  \end{tikzpicture}\par}
+\newcommand{\zuka@tapa}[1]{\par\vspace{4pt}\noindent{\sffamily\scriptsize\color{zmute}\ding{34}\enspace #1}\enspace
+  \leavevmode\xleaders\hbox to 2.2mm{\hss\textcolor{zline}{\rule[.55ex]{1.2mm}{.5pt}}\hss}\hfill\kern0pt\par\vspace{3pt}}
+\newcommand{\zuka@miresp}{\par\vspace{5pt}\noindent{\sffamily\small\color{zolive}\textbf{Mi respuesta:}}\enspace
+  \rule[-2pt]{28mm}{.4pt}\hfill{\sffamily\footnotesize\color{zmute}Qué tan seguro estoy:\enspace
+  \casilla{poco}\enspace\casilla{algo}\enspace\casilla{mucho}}\par}
+
+% ---------- 1. el reto se intenta antes de leer ----------
+\renewenvironment{reto}{%
+  \begin{tcolorbox}[zbase,colback=zlime!14,zborde=zmoss]
+  \zuka@cab{zmoss}{reto}{Inténtalo primero}{\sffamily\scriptsize\color{zmute}\quad sin mirar nada: el reto se resuelve al final de la lección}\par\vspace{4pt}}
+  {\zuka@miresp\end{tcolorbox}\zuka@poneanalogia}
+
+% ---------- 2. cada ejemplo: intentar antes de leer la solución ----------
+\renewcommand{\solucion}{\zuka@tapa{Tapa desde aquí e intenta resolverlo antes de seguir leyendo}%
+  {\sffamily\small\bfseries\color{zolive}Solución.}\ }
+
+% ---------- 3. «Ahora tú»: los ejemplos extra se resuelven en el libro; la solución va a las claves ----------
+\renewcommand{\ejx}[3]{\stepcounter{ejx}\par\vspace{6pt}%
+  {\sffamily\small\bfseries\color{zolive}\Alph{ejx}\quad}{\sffamily\small\bfseries\color{zink}#1}\par\vspace{1pt}
+  #2\par
+  \ifnum\zuka@num<3 \zuka@cuadricula{22mm}\else\zuka@renglones{2}\fi
+  \immediate\write\zuka@sol{\noexpand\solitem{Ahora tú \Alph{ejx}}{\unexpanded{#3}}}}
+\renewcommand{\zuka@cajamas}[1]{\setcounter{ejx}{0}%
+  \begin{tcolorbox}[zbase,colback=zpaper,zborde=zmoss]
+  \zuka@cab{zmoss}{ejemplo}{Ahora tú}{\sffamily\scriptsize\color{zmute}\quad resuélvelo aquí y compara con las claves del final}\par
+  #1\end{tcolorbox}}
+
+% ---------- 4. después de cada lectura, el mapa del texto para llenar ----------
+\let\zuka@endtextoviejo\endtexto
+\newcount\zuka@np
+\renewenvironment{texto}[2]{%
+  \setcounter{parr}{0}%
+  \begin{tcolorbox}[enhanced,breakable,colback=zpaper,colframe=zline,boxrule=.5pt,arc=3pt,left=10mm,right=7mm,
+    top=4mm,bottom=5mm,before skip=9pt,after skip=9pt,borderline north={1.6pt}{0pt}{zmoss}]
+  \zuka@cab{zmoss}{lectura}{Lectura}{\sffamily\scriptsize\color{zmute}\quad #2}\par\vspace{5pt}
+  {\fontsize{15}{18}\selectfont\itshape\color{zink}#1\par}\vspace{5pt}
+  \ifzuka@eval\else{\sffamily\scriptsize\color{zolive}Lee con lápiz: subraya la idea de cada párrafo y anota al lado una palabra que diga qué hace.}\par\vspace{4pt}\fi
+  \setlength{\parskip}{5pt}\linespread{1.13}\selectfont}
+  {\end{tcolorbox}%
+   \ifzuka@eval\else
+   \zuka@np=\value{parr}%
+   \begin{tcolorbox}[zbase,colback=white,colframe=zline,boxrule=.5pt]
+   \zuka@cab{zolive}{taller}{Tu mapa del texto}{\sffamily\scriptsize\color{zmute}\quad una palabra por párrafo: presenta, explica, ejemplifica, objeta, concluye…}\par\vspace{3pt}
+   \small\setlength{\tabcolsep}{3pt}%
+   \foreach \k in {1,...,\the\zuka@np}{\noindent\makebox[8mm][l]{\sffamily\scriptsize\bfseries\color{zolive}\S\,\k}%
+     \textcolor{zline}{\rule[-1pt]{\dimexpr\linewidth-8mm\relax}{.4pt}}\par\vspace{2.5mm}}
+   \noindent{\sffamily\scriptsize\color{zolive}\textbf{Idea central, en una oración:}}\par\vspace{5mm}
+   \noindent\textcolor{zline}{\rule{\linewidth}{.4pt}}\par
+   \end{tcolorbox}\fi}
+
+% ---------- 5. pregunta comentada: primero respondes, después lees el comentario ----------
+\RenewEnviron{comentada}[1]{%
+  \begin{tcolorbox}[zbase,colback=white,colframe=zline,boxrule=.5pt]
+  \zuka@cab{zolive}{pregunta}{Pregunta comentada}\par\vspace{4pt}#1\par\vspace{4pt}
+  \begingroup
+    \renewcommand{\bien}[3]{\item[\op{##1}] ##2}\renewcommand{\mal}[3]{\item[\op{##1}] ##2}%
+    \begin{list}{}{\leftmargin=7mm\labelwidth=6mm\labelsep=1mm\itemsep=2pt\topsep=0pt\parsep=0pt}\BODY\end{list}
+  \endgroup
+  \zuka@miresp
+  \zuka@tapa{Responde antes de leer por qué cada opción es buena o mala}%
+  \begin{list}{}{\leftmargin=9mm\labelwidth=8mm\labelsep=1mm\itemsep=4pt\topsep=0pt\parsep=0pt}\BODY\end{list}
+  \end{tcolorbox}}
+
+% ---------- 6. el taller lleva su marcador de aciertos ----------
+\let\zuka@tallerviejo\taller
+\renewcommand{\taller}{\zuka@tallerviejo
+  {\sffamily\footnotesize\color{zmute}Resuélvelo todo antes de mirar las claves.\hfill
+   \textbf{\color{zolive}Mis aciertos:} \rule[-1pt]{8mm}{.4pt} de \rule[-1pt]{8mm}{.4pt}}\par\vspace{2pt}}

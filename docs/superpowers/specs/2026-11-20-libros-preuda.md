@@ -77,3 +77,16 @@ Tres subagentes (opus) revisaron todo: 571 ejercicios de razonamiento, 261 pregu
 Se aplicaron 59 correcciones (parches `arte/correcciones_revision.py` y `arte/correcciones_ejemplos.py`, ya aplicados).
 «Más ejemplos resueltos»: dos por lección en `tex/ejemplos-rl.tex` y `tex/ejemplos-cl.tex`; salen solos antes de «Así lo
 preguntan en el examen». Páginas: 169, 157, 121 y 101.
+
+## Formato de los resúmenes y aprender haciendo (2026-11-23)
+
+Pedido del usuario: que los libros tengan el diseño de los resúmenes de `docs/resumenes` (menos margen) y que el enfoque
+sea aprender haciendo. Capa final `tex/zuka-hacer.tex` (se carga al final de `zuka-libro.sty`):
+- A4, 11 pt, márgenes de 2 cm, sin columna lateral («En la app» pasa bajo el título de la lección); encabezado y pie como
+  los resúmenes; píldora «Lección k.n» como «Nivel 1-1»; apertura de mundo con franja verde y el arte del libro.
+- «Inténtalo primero» (el reto, con renglón para la respuesta y casillas de seguridad); línea de tijera antes de cada
+  solución; «Ahora tú» (los ejemplos extra se resuelven en el libro, con cuadrícula en razonamiento y renglones en lectura;
+  las soluciones van a las claves); «Tu mapa del texto» después de cada lectura de lección (no en evaluaciones ni
+  simulacros); preguntas comentadas con las opciones primero, la respuesta del estudiante y el análisis bajo la tijera;
+  marcador de aciertos en cada taller.
+- Páginas: 139, 133, 113 y 91. Parche `arte/patch_formato.py` ya aplicado; `arte/ver_paginas.py` hace hojas de contacto.
