@@ -7,11 +7,6 @@ La herramienta es una sola: el diagrama de Venn, llenado de adentro hacia afuera
 
 \leccion{pu-cj-1}{Operaciones y Venn}{Juegos del lazo que encierra y las zonas que se pintan.}
 
-\begin{reto}
-Sean $A = \{1, 2, 3, 4, 5, 6\}$, $B = \{2, 4, 6, 8\}$ y $C = \{3, 6, 9\}$. ¿Cuántos elementos tiene $(A \cap B) \cup C$?
-\opciones{3}{4}{5}{6}
-\end{reto}
-
 \subsection{La idea: zonas de un dibujo}
 Dos conjuntos dibujados como círculos que se cruzan dentro de un rectángulo (el \clave{universo} $U$) dividen el plano
 en cuatro zonas. Cada operación es pintar algunas zonas:
@@ -58,6 +53,15 @@ Confundir $A - B$ con $B - A$, o creer que la diferencia es simétrica. $\{1, 2,
 $\{3, 4\} - \{1, 2, 3\} = \{4\}$.
 \end{trampa}
 
+\begin{reto}
+Sean $A = \{1, 2, 3, 4, 5, 6\}$, $B = \{2, 4, 6, 8\}$ y $C = \{3, 6, 9\}$. ¿Cuántos elementos tiene $(A \cap B) \cup C$?
+\opciones{3}{4}{5}{6}
+\end{reto}
+
+\begin{retoresuelto}
+$A \cap B = \{2, 4, 6\}$. Unido con $C$: $\{2, 3, 4, 6, 9\}$ (el 6 no se repite). Tiene 5 elementos. \textbf{Opción C.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{operar}
 \begin{ejercicios}
@@ -75,17 +79,9 @@ $\{3, 4\} - \{1, 2, 3\} = \{4\}$.
 \sol{B. Es $B - A$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-$A \cap B = \{2, 4, 6\}$. Unido con $C$: $\{2, 3, 4, 6, 9\}$ (el 6 no se repite). Tiene 5 elementos. \textbf{Opción C.}
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-cj-2}{Encuestas}{Juego de la encuesta que se reparte en zonas.}
-
-\begin{reto}
-En un grupo de 50 personas, 30 leen el periódico A, 25 leen el B y 8 no leen ninguno. ¿Cuántas leen solo uno de los dos?
-\opciones{29}{13}{42}{17}
-\end{reto}
 
 \subsection{La idea: llenar de adentro hacia afuera}
 En las encuestas, los datos suelen venir «gruesos» (los que leen A, incluidos los que leen A y B). El método seguro es
@@ -126,6 +122,16 @@ Restar dos veces el centro, o usar «los que juegan fútbol y baloncesto» como 
 (incluye a los de los tres).
 \end{trampa}
 
+\begin{reto}
+En un grupo de 50 personas, 30 leen el periódico A, 25 leen el B y 8 no leen ninguno. ¿Cuántas leen solo uno de los dos?
+\opciones{29}{13}{42}{17}
+\end{reto}
+
+\begin{retoresuelto}
+Leen alguno: $50 - 8 = 42$. Leen ambos: $30 + 25 - 42 = 13$. Solo uno: $42 - 13 = 29$ (17 solo A y 12 solo B).
+\textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{encuestas}
 \begin{ejercicios}
@@ -143,10 +149,6 @@ Restar dos veces el centro, o usar «los que juegan fútbol y baloncesto» como 
 \sol{A. $120 - (70 + 60 - 25) = 15$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Leen alguno: $50 - 8 = 42$. Leen ambos: $30 + 25 - 42 = 13$. Solo uno: $42 - 13 = 29$ (17 solo A y 12 solo B).
-\textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 \evaluacion

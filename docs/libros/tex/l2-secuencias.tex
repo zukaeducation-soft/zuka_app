@@ -8,11 +8,6 @@ ciclos, en ese orden.}{%
 
 \leccion{pu-se-1}{Sucesiones numéricas}{Juego del término que sigue.}
 
-\begin{reto}
-¿Qué número sigue en la sucesión $2,\ 5,\ 11,\ 23,\ 47,\ \ldots$?
-\opciones{94}{95}{96}{71}
-\end{reto}
-
 \subsection{La idea: preguntarle a la sucesión cómo cambia}
 El método es una lista de preguntas, en orden:
 \begin{enumerate}
@@ -58,6 +53,16 @@ $1,\ 20,\ 3,\ 17,\ 9,\ 14,\ 27,\ \ldots$
 Quedarse con la primera regla que parece funcionar sin comprobarla con \emph{todos} los términos dados.
 \end{trampa}
 
+\begin{reto}
+¿Qué número sigue en la sucesión $2,\ 5,\ 11,\ 23,\ 47,\ \ldots$?
+\opciones{94}{95}{96}{71}
+\end{reto}
+
+\begin{retoresuelto}
+Cada término es el doble del anterior más 1: $2 \to 5 \to 11 \to 23 \to 47 \to 95$. (También: las diferencias 3, 6, 12,
+24 se duplican; sigue $+48$.) \textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{reglas}
 \begin{ejercicios}[2]
@@ -78,18 +83,9 @@ Quedarse con la primera regla que parece funcionar sin comprobarla con \emph{tod
 \sol{B. $\times 2 + 1$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Cada término es el doble del anterior más 1: $2 \to 5 \to 11 \to 23 \to 47 \to 95$. (También: las diferencias 3, 6, 12,
-24 se duplican; sigue $+48$.) \textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-se-2}{Letras y figuras}{Juego del alfabeto numerado y las figuras que giran.}
-
-\begin{reto}
-¿Qué letra sigue en la sucesión A, C, F, J, O, …? (Usa el alfabeto sin Ñ.)
-\opciones{T}{U}{V}{S}
-\end{reto}
 
 \subsection{La idea: convertir letras en números}
 Las letras se vuelven números con su posición en el alfabeto. El examen suele usar el alfabeto de 26 letras (sin Ñ, CH ni
@@ -134,6 +130,15 @@ B, E, J, Q, …
 Usar un alfabeto con Ñ cuando el examen usa el de 26 letras (o al revés): todo se corre una posición después de la N.
 \end{trampa}
 
+\begin{reto}
+¿Qué letra sigue en la sucesión A, C, F, J, O, …? (Usa el alfabeto sin Ñ.)
+\opciones{T}{U}{V}{S}
+\end{reto}
+
+\begin{retoresuelto}
+Posiciones: 1, 3, 6, 10, 15 (diferencias 2, 3, 4, 5). Sigue $15 + 6 = 21$: U. \textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{letras}
 \begin{ejercicios}[2]
@@ -149,18 +154,9 @@ Usar un alfabeto con Ñ cuando el examen usa el de 26 letras (o al revés): todo
 \sol{A. Saltos de 2 dentro del par y de 4 entre pares.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Posiciones: 1, 3, 6, 10, 15 (diferencias 2, 3, 4, 5). Sigue $15 + 6 = 21$: U. \textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-se-3}{Patrones cíclicos}{Juego de la rueda que da vueltas.}
-
-\begin{reto}
-Un semáforo está en verde 40 segundos, en amarillo 5 y en rojo 35, y repite. Si se pone en verde a las 8:00:00, ¿qué
-color tiene a las 8:20:00?
-\opciones{verde}{amarillo}{rojo}{no se puede saber}
-\end{reto}
 
 \subsection{La idea: el residuo dice dónde estás}
 Todo lo que se repite con un período fijo (días de la semana, colores, letras de una palabra, cifras de un decimal
@@ -195,6 +191,17 @@ Contar desde 0 cuando el problema cuenta desde 1 (o al revés). Haz la prueba co
 residuo.
 \end{trampa}
 
+\begin{reto}
+Un semáforo está en verde 40 segundos, en amarillo 5 y en rojo 35, y repite. Si se pone en verde a las 8:00:00, ¿qué
+color tiene a las 8:20:00?
+\opciones{verde}{amarillo}{rojo}{no se puede saber}
+\end{reto}
+
+\begin{retoresuelto}
+De las 8:00:00 a las 8:20:00 hay 1\,200 s. El ciclo mide $40 + 5 + 35 = 80$ s, y $1\,200 = 15 \cdot 80$: se completan
+exactamente 15 ciclos y el semáforo acaba de ponerse en verde. \textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{ciclos}
 \begin{ejercicios}
@@ -209,10 +216,6 @@ residuo.
 \sol{D. Ciclo 1, 2, 3, 4, 3, 2 de longitud 6. $100 = 16 \cdot 6 + 4$: el cuarto, 4.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-De las 8:00:00 a las 8:20:00 hay 1\,200 s. El ciclo mide $40 + 5 + 35 = 80$ s, y $1\,200 = 15 \cdot 80$: se completan
-exactamente 15 ciclos y el semáforo acaba de ponerse en verde. \textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 \evaluacion

@@ -10,13 +10,6 @@ que se va descartando. Son de las preguntas más seguras del examen para quien t
 % ------------------------------------------------------------------
 \leccion{pu-or-1}{Orden en línea}{Juego de la fila que se arma con fichas.}
 
-\begin{reto}
-Seis corredores llegan a la meta, sin empates. Ana llegó antes que Beto pero después de Carla. Dani llegó justo después
-de Beto. Eva llegó justo antes que Carla. Fito no fue ni el primero ni el último. ¿Cuál afirmación es
-\emph{necesariamente} cierta?
-\opcionesd{Ana llegó tercera.}{Dani llegó de última.}{Fito llegó cuarto.}{Carla llegó primera.}
-\end{reto}
-
 \subsection{La idea: casillas y bloques}
 El primer paso es siempre el mismo: dibujar una fila de casillas numeradas y decidir qué significa «antes» (más cerca
 de la casilla 1). Luego las pistas se clasifican:
@@ -66,6 +59,19 @@ En preguntas de «necesariamente», busca una posibilidad que contradiga cada op
 la respuesta.
 \end{atajo}
 
+\begin{reto}
+Seis corredores llegan a la meta, sin empates. Ana llegó antes que Beto pero después de Carla. Dani llegó justo después
+de Beto. Eva llegó justo antes que Carla. Fito no fue ni el primero ni el último. ¿Cuál afirmación es
+\emph{necesariamente} cierta?
+\opcionesd{Ana llegó tercera.}{Dani llegó de última.}{Fito llegó cuarto.}{Carla llegó primera.}
+\end{reto}
+
+\begin{retoresuelto}
+Bloques \fbox{E\,C} y \fbox{B\,D}, y la cadena $C < A < B$: \textsf{E C … A … B D}. Fito no puede ir en los extremos, así
+que entra entre C y A o entre A y B: \textsf{E C F A B D} o \textsf{E C A F B D}. En ambos, Dani es el último.
+Ana puede ser 3.ª o 4.ª y Fito 3.º o 4.º; Carla es 2.ª. \textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{filas}
 \begin{ejercicios}
@@ -83,21 +89,10 @@ la respuesta.
 \sol{A. Walter ocupa la hora 3 y Ulises la 5. El bloque T\,V necesita dos horas seguidas libres antes de la 5: solo 1-2 (con 4-5 Valeria chocaría con Ulises). Tomás expone en la 1.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Bloques \fbox{E\,C} y \fbox{B\,D}, y la cadena $C < A < B$: \textsf{E C … A … B D}. Fito no puede ir en los extremos, así
-que entra entre C y A o entre A y B: \textsf{E C F A B D} o \textsf{E C A F B D}. En ambos, Dani es el último.
-Ana puede ser 3.ª o 4.ª y Fito 3.º o 4.º; Carla es 2.ª. \textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-or-2}{Orden circular}{Juego de la mesa redonda.}
-
-\begin{reto}
-Seis amigos se sientan alrededor de una mesa redonda con seis puestos iguales. Ana está frente a Beto. Carlos se sienta
-junto a Ana. Elena está frente a Carlos. Diana se sienta junto a Beto. ¿Quién está frente a Diana?
-\opciones{Ana}{Elena}{Fabio}{Carlos}
-\end{reto}
 
 \subsection{La idea: fija a una persona}
 En una mesa redonda, girar a todos un puesto no cambia nada: las relaciones («frente a», «junto a», «a la derecha de»)
@@ -138,6 +133,17 @@ Fijar a dos personas a la vez en puestos arbitrarios. Solo la primera se puede f
 según las pistas.
 \end{trampa}
 
+\begin{reto}
+Seis amigos se sientan alrededor de una mesa redonda con seis puestos iguales. Ana está frente a Beto. Carlos se sienta
+junto a Ana. Elena está frente a Carlos. Diana se sienta junto a Beto. ¿Quién está frente a Diana?
+\opciones{Ana}{Elena}{Fabio}{Carlos}
+\end{reto}
+
+\begin{retoresuelto}
+Ana en 1, Beto en 4. Carlos junto a Ana: en 2 (el 6 es simétrico). Elena frente a Carlos: 5. Diana junto a Beto: 3 o 5,
+y 5 está ocupado: 3. Fabio en 6. Frente a Diana (3) está el 6: Fabio. \textbf{Opción C.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{mesas}
 \begin{ejercicios}
@@ -154,21 +160,10 @@ según las pistas.
 \sol{A. Cada uno saluda a 5: $\tfrac{8 \cdot 5}{2} = 20$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Ana en 1, Beto en 4. Carlos junto a Ana: en 2 (el 6 es simétrico). Elena frente a Carlos: 5. Diana junto a Beto: 3 o 5,
-y 5 está ocupado: 3. Fabio en 6. Frente a Diana (3) está el 6: Fabio. \textbf{Opción C.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-or-3}{Tablas de doble entrada}{Juego de la tabla con chulos y equis.}
-
-\begin{reto}
-Laura, Marta y Nubia estudian Medicina, Derecho e Ingeniería (una carrera cada una) y viven en Bello, Envigado e Itagüí
-(un municipio cada una). La de Medicina vive en Envigado. Laura no vive en Bello. Marta vive en Itagüí. La que vive en
-Bello no estudia Ingeniería. ¿Qué estudia Nubia?
-\opciones{Medicina}{Derecho}{Ingeniería}{No se puede saber}
-\end{reto}
 
 \subsection{La idea: una ✓ por fila y por columna}
 Cuando hay que emparejar elementos de dos o más grupos, la herramienta es una \clave{tabla de doble entrada}: personas en
@@ -214,6 +209,19 @@ Usar una pista positiva solo en un sentido. «La de Medicina vive en Envigado» 
 estudia Medicina, y que nadie de Bello o Itagüí estudia Medicina.
 \end{trampa}
 
+\begin{reto}
+Laura, Marta y Nubia estudian Medicina, Derecho e Ingeniería (una carrera cada una) y viven en Bello, Envigado e Itagüí
+(un municipio cada una). La de Medicina vive en Envigado. Laura no vive en Bello. Marta vive en Itagüí. La que vive en
+Bello no estudia Ingeniería. ¿Qué estudia Nubia?
+\opciones{Medicina}{Derecho}{Ingeniería}{No se puede saber}
+\end{reto}
+
+\begin{retoresuelto}
+Marta vive en Itagüí; Laura no vive en Bello, así que vive en Envigado; Nubia vive en Bello. Quien vive en Envigado
+estudia Medicina: Laura. Quien vive en Bello (Nubia) no estudia Ingeniería, así que estudia Derecho, y Marta Ingeniería.
+\textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{tablas}
 \begin{ejercicios}
@@ -227,21 +235,10 @@ estudia Medicina, y que nadie de Bello o Itagüí estudia Medicina.
 \sol{A. Por edades, Pablo $>$ Saúl $>$ Raúl: Raúl es el menor, luego el ingeniero. Saúl no es abogado: es médico (y Pablo abogado).}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Marta vive en Itagüí; Laura no vive en Bello, así que vive en Envigado; Nubia vive en Bello. Quien vive en Envigado
-estudia Medicina: Laura. Quien vive en Bello (Nubia) no estudia Ingeniería, así que estudia Derecho, y Marta Ingeniería.
-\textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-or-4}{Condiciones: tiene que, podría, no puede}{Juego de los casos que se tachan.}
-
-\begin{reto}
-De cinco personas (P, Q, R, S y T) se elige un comité de tres con estas condiciones: si P está, Q no está; R y S están
-los dos o ninguno de los dos; T tiene que estar. ¿Cuál comité es posible?
-\opciones{P, Q, T}{R, S, T}{P, R, T}{Q, S, T}
-\end{reto}
 
 \subsection{La idea: tres preguntas distintas}
 En los problemas con condiciones, el examen pregunta casi siempre una de estas cosas:
@@ -285,6 +282,16 @@ Leer «si P, entonces no Q» como «P y Q nunca están juntos, \emph{y} siempre 
 ninguno.
 \end{trampa}
 
+\begin{reto}
+De cinco personas (P, Q, R, S y T) se elige un comité de tres con estas condiciones: si P está, Q no está; R y S están
+los dos o ninguno de los dos; T tiene que estar. ¿Cuál comité es posible?
+\opciones{P, Q, T}{R, S, T}{P, R, T}{Q, S, T}
+\end{reto}
+
+\begin{retoresuelto}
+A tiene P y Q juntos; C tiene R sin S; D tiene S sin R. Solo \{R, S, T\} cumple todo. \textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{casos}
 \begin{ejercicios}
@@ -301,9 +308,6 @@ ninguno.
 \sol{A. Las parejas válidas son \{W, X\}, \{X, Y\} y \{X, Z\}: X está en todas. Sin X, solo quedarían \{Y, Z\} (prohibida) o parejas con W (que exige X).}
 \end{ejercicios}
 
-\begin{retoresuelto}
-A tiene P y Q juntos; C tiene R sin S; D tiene S sin R. Solo \{R, S, T\} cumple todo. \textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------

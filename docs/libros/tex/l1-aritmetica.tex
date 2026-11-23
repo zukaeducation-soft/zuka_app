@@ -10,12 +10,6 @@ Alguien reparte, gasta, promedia o esconde cifras, y hay que reconstruir lo que 
 % ------------------------------------------------------------------
 \leccion{pu-ar-1}{Fracciones de lo que queda}{Juegos de la barra que se parte y del camino de regreso.}
 
-\begin{reto}
-Un vendedor de mangos vende en la mañana la mitad de sus mangos más 2; en la tarde, la mitad de los que le quedan más 2,
-y se queda con 5 mangos. ¿Con cuántos empezó?
-\opciones{28}{32}{36}{40}
-\end{reto}
-
 \subsection{La idea: deshacer el camino}
 Cuando una historia termina con un dato conocido («le quedan 5») y cada paso es una operación sencilla, lo más rápido
 es caminar \clave{de atrás hacia adelante}, haciendo en cada paso la operación \emph{contraria}: lo que se restó se suma,
@@ -75,6 +69,17 @@ Si las opciones son números concretos, haz la historia hacia adelante con cada 
 termina en el dato final.
 \end{atajo}
 
+\begin{reto}
+Un vendedor de mangos vende en la mañana la mitad de sus mangos más 2; en la tarde, la mitad de los que le quedan más 2,
+y se queda con 5 mangos. ¿Con cuántos empezó?
+\opciones{28}{32}{36}{40}
+\end{reto}
+
+\begin{retoresuelto}
+Hacia atrás: antes de la tarde tenía $(5 + 2)\cdot 2 = 14$; antes de la mañana, $(14 + 2) \cdot 2 = 32$.
+Comprobación: vende $16 + 2 = 18$ y le quedan 14; vende $7 + 2 = 9$ y le quedan 5. \textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Calienta}{hacia atrás}
 \begin{ejercicios}
@@ -101,19 +106,10 @@ termina en el dato final.
 \sol{B. Hacia atrás, cada hora antes la mitad: a las 9 la mitad, a las 8 la cuarta parte.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Hacia atrás: antes de la tarde tenía $(5 + 2)\cdot 2 = 14$; antes de la mañana, $(14 + 2) \cdot 2 = 32$.
-Comprobación: vende $16 + 2 = 18$ y le quedan 14; vende $7 + 2 = 9$ y le quedan 5. \textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-ar-2}{Promedios}{Juegos de las torres que se nivelan y la balanza del promedio.}
-
-\begin{reto}
-El promedio de 5 números es 18. Si se quita uno de ellos, el promedio de los otros cuatro es 16. ¿Qué número se quitó?
-\opciones{2}{20}{26}{34}
-\end{reto}
 
 \subsection{La idea: el promedio nivela}
 Imagina torres de cubos de distintas alturas. Si se pasan cubos de las altas a las bajas hasta que todas queden iguales,
@@ -175,6 +171,16 @@ Promediar promedios sin pesar. «El promedio de 3.5 y 4.0 es 3.75» solo es cier
 Para promediar números grandes, elige una base cercana, promedia solo las diferencias y súmalas a la base.
 \end{atajo}
 
+\begin{reto}
+El promedio de 5 números es 18. Si se quita uno de ellos, el promedio de los otros cuatro es 16. ¿Qué número se quitó?
+\opciones{2}{20}{26}{34}
+\end{reto}
+
+\begin{retoresuelto}
+Total de los cinco: $5 \cdot 18 = 90$. Total de los cuatro: $4 \cdot 16 = 64$. El que se quitó es $90 - 64 = 26$.
+\textbf{Opción C.}
+\end{retoresuelto}
+
 \taller
 \piso{Calienta}{totales}
 \begin{ejercicios}
@@ -201,21 +207,10 @@ Para promediar números grandes, elige una base cercana, promedia solo las difer
 \sol{A. Total 108, hombres 36, mujeres $72 / 18 = 4.0$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Total de los cinco: $5 \cdot 18 = 90$. Total de los cuatro: $4 \cdot 16 = 64$. El que se quitó es $90 - 64 = 26$.
-\textbf{Opción C.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-ar-3}{Criptoaritmética}{Juego de las cajas con cifras escondidas.}
-
-\begin{reto}
-En la suma
-\[\begin{array}{r}\mathrm{S\,E\,N\,D}\\+\;\mathrm{M\,O\,R\,E}\\\hline\mathrm{M\,O\,N\,E\,Y}\end{array}\]
-cada letra es una cifra distinta y ninguna palabra empieza por cero. ¿Cuánto vale $M$?
-\opciones{0}{1}{2}{9}
-\end{reto}
 
 \subsection{La idea: las columnas hablan}
 Una cuenta con letras o con huecos se resuelve \clave{columna por columna}, y casi siempre se empieza por los extremos:
@@ -274,6 +269,18 @@ Escribir el número por posiciones: $\overline{abc} = 100a + 10b + c$. Muchos ac
 corta.
 \end{atajo}
 
+\begin{reto}
+En la suma
+\[\begin{array}{r}\mathrm{S\,E\,N\,D}\\+\;\mathrm{M\,O\,R\,E}\\\hline\mathrm{M\,O\,N\,E\,Y}\end{array}\]
+cada letra es una cifra distinta y ninguna palabra empieza por cero. ¿Cuánto vale $M$?
+\opciones{0}{1}{2}{9}
+\end{reto}
+
+\begin{retoresuelto}
+El resultado MONEY tiene una cifra más que los sumandos, así que $M$ es lo que se lleva de la última columna: $M = 1$.
+(Esta suma, famosa desde 1924, tiene solución única: $9567 + 1085 = 10652$.) \textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Calienta}{huecos}
 \begin{ejercicios}
@@ -300,20 +307,10 @@ corta.
 \sol{A. Las unidades dan $A + C = 8$ (no puede ser 18, porque $A \ne C$). En las decenas, $2B$ termina en 8: $B = 4$ o $B = 9$; con $B = 9$ se llevaría 1 y las centenas darían $A + C = 7$, contradicción. Solo $B = 4$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-El resultado MONEY tiene una cifra más que los sumandos, así que $M$ es lo que se lleva de la última columna: $M = 1$.
-(Esta suma, famosa desde 1924, tiene solución única: $9567 + 1085 = 10652$.) \textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-ar-4}{Máximos y mínimos}{Juegos del cajón de medias y del peor caso.}
-
-\begin{reto}
-En un cajón oscuro hay 6 medias rojas, 8 azules y 10 negras. ¿Cuántas hay que sacar, como mínimo, para estar
-\emph{seguros} de tener dos del mismo color?
-\opciones{2}{3}{4}{11}
-\end{reto}
 
 \subsection{La idea: pensar en el peor caso}
 La palabra «\emph{seguro}» cambia el problema: no importa qué puede pasar con suerte, sino qué pasa con la \clave{peor
@@ -373,6 +370,17 @@ Escribe una línea con el peor caso («salen 1 roja, 1 azul, 1 negra…») y sum
 específico, el peor caso agota los demás tipos primero.
 \end{atajo}
 
+\begin{reto}
+En un cajón oscuro hay 6 medias rojas, 8 azules y 10 negras. ¿Cuántas hay que sacar, como mínimo, para estar
+\emph{seguros} de tener dos del mismo color?
+\opciones{2}{3}{4}{11}
+\end{reto}
+
+\begin{retoresuelto}
+Peor caso: una roja, una azul y una negra (tres medias sin repetir). La cuarta repite color sin remedio.
+\textbf{Opción C.} La A es la respuesta con suerte, y la D ($10 + 1$) responde otra pregunta: asegurar una media que no sea negra.
+\end{retoresuelto}
+
 \taller
 \piso{Calienta}{peor caso}
 \begin{ejercicios}
@@ -399,10 +407,6 @@ específico, el peor caso agota los demás tipos primero.
 \sol{B. Para que el mayor sea pequeño, los números deben estar cerca entre sí. Con mayor 9, el máximo posible es $4+5+6+7+8+9 = 39 < 40$. Con mayor 10: $4+5+6+7+8+10 = 40$. Respuesta 10.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Peor caso: una roja, una azul y una negra (tres medias sin repetir). La cuarta repite color sin remedio.
-\textbf{Opción C.} La A es la respuesta con suerte, y la D ($10 + 1$) responde otra pregunta: asegurar una media que no sea negra.
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------

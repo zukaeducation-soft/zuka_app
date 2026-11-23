@@ -20,12 +20,6 @@ mucho con práctica, y la práctica empieza por dibujar.}{%
 
 \leccion{pu-es-1}{Rejillas y caminos}{Juego del robot que sigue instrucciones.}
 
-\begin{reto}
-Un robot mira hacia el norte. Gira $90^\circ$ a la derecha y avanza 3 casillas; gira a la izquierda y avanza 2; gira a la
-izquierda y avanza 5. ¿Dónde quedó respecto al punto de partida?
-\opcionesd{2 al oeste y 2 al norte}{2 al este y 2 al norte}{8 al oeste y 2 al norte}{2 al oeste y 2 al sur}
-\end{reto}
-
 \subsection{La idea: coordenadas y dirección}
 Para seguir un recorrido hay que llevar dos cosas: la \clave{posición} (como coordenadas: este positivo, norte positivo) y
 la \clave{dirección} a la que se mira. «Girar a la derecha» cambia solo la dirección:
@@ -57,6 +51,17 @@ Alguien mira al este y hace: derecha, derecha, izquierda, derecha, derecha. ¿Ha
 Girar «a la derecha» desde el punto de vista del lector y no del robot. Si el robot mira al sur, su derecha es el oeste.
 \end{trampa}
 
+\begin{reto}
+Un robot mira hacia el norte. Gira $90^\circ$ a la derecha y avanza 3 casillas; gira a la izquierda y avanza 2; gira a la
+izquierda y avanza 5. ¿Dónde quedó respecto al punto de partida?
+\opcionesd{2 al oeste y 2 al norte}{2 al este y 2 al norte}{8 al oeste y 2 al norte}{2 al oeste y 2 al sur}
+\end{reto}
+
+\begin{retoresuelto}
+Norte $\to$ derecha: este; avanza 3: $(3, 0)$. Izquierda: norte; avanza 2: $(3, 2)$. Izquierda: oeste; avanza 5:
+$(-2, 2)$. Dos al oeste y dos al norte. \textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{recorridos}
 \begin{ejercicios}
@@ -70,23 +75,9 @@ Girar «a la derecha» desde el punto de vista del lector y no del robot. Si el 
 \sol{A. Queda en $(-4, 3)$: $4 + 3$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Norte $\to$ derecha: este; avanza 3: $(3, 0)$. Izquierda: norte; avanza 2: $(3, 2)$. Izquierda: oeste; avanza 5:
-$(-2, 2)$. Dos al oeste y dos al norte. \textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-es-2}{Vistas y cubos}{Juego de la pila de cubos que se mira desde arriba.}
-
-\begin{reto}
-Desde arriba, una pila de cubos se ve como una cuadrícula de $2 \times 2$; el número de cada casilla dice cuántos cubos hay
-en esa columna. ¿Cuántos cubos tiene la pila?
-\begin{center}\begin{tikzpicture}[x=7mm,y=7mm]
-  \draw[zink,line width=.6pt] (0,0) grid (2,2);
-  \node at (.5,1.5) {3}; \node at (1.5,1.5) {1}; \node at (.5,.5) {2}; \node at (1.5,.5) {2};
-\end{tikzpicture}\end{center}
-\opciones{4}{6}{8}{12}
-\end{reto}
 
 \subsection{La idea: contar por columnas o por capas}
 Una pila de cubos se cuenta organizadamente: por \clave{columnas} (cuántos hay en cada posición del piso) o por
@@ -124,6 +115,20 @@ debajo)?
 Contar solo los cubos que se ven en el dibujo y olvidar los que sostienen a los de arriba.
 \end{trampa}
 
+\begin{reto}
+Desde arriba, una pila de cubos se ve como una cuadrícula de $2 \times 2$; el número de cada casilla dice cuántos cubos hay
+en esa columna. ¿Cuántos cubos tiene la pila?
+\begin{center}\begin{tikzpicture}[x=7mm,y=7mm]
+  \draw[zink,line width=.6pt] (0,0) grid (2,2);
+  \node at (.5,1.5) {3}; \node at (1.5,1.5) {1}; \node at (.5,.5) {2}; \node at (1.5,.5) {2};
+\end{tikzpicture}\end{center}
+\opciones{4}{6}{8}{12}
+\end{reto}
+
+\begin{retoresuelto}
+Por columnas: $3 + 1 + 2 + 2 = 8$ cubos. \textbf{Opción C.} (Es la pila del dibujo de la lección.)
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{contar cubos}
 \begin{ejercicios}
@@ -137,20 +142,9 @@ Contar solo los cubos que se ven en el dibujo y olvidar los que sostienen a los 
 \sol{A. $64 - 8$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Por columnas: $3 + 1 + 2 + 2 = 8$ cubos. \textbf{Opción C.} (Es la pila del dibujo de la lección.)
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-es-3}{Desarrollos del cubo}{Juego de armar el cubo con la cruz de papel.}
-
-\begin{reto}
-El desarrollo plano de la figura se dobla para formar un cubo. ¿Qué número queda en la cara opuesta a la del 1?
-\begin{center}\begin{tikzpicture}[x=6mm,y=6mm,font=\small]
-  \foreach \x/\y/\n in {1/3/1,1/2/3,1/1/5,1/0/6,0/2/2,2/2/4}{\draw[zink,line width=.6pt] (\x,\y) rectangle ++(1,1); \node at (\x+.5,\y+.5) {\n};}
-\end{tikzpicture}\end{center}
-\opciones{3}{5}{6}{2}
-\end{reto}
 
 \subsection{La idea: las caras opuestas nunca se tocan}
 Un cubo tiene 6 caras en 3 parejas de \clave{opuestas}. En un desarrollo plano, dos caras opuestas nunca comparten un
@@ -184,6 +178,19 @@ En un dado las opuestas suman 7. Si se ven las caras 2, 3 y 6, ¿cuánto suman l
 Creer que dos caras que se tocan por una esquina en el desarrollo son opuestas: al doblar, suelen quedar vecinas.
 \end{trampa}
 
+\begin{reto}
+El desarrollo plano de la figura se dobla para formar un cubo. ¿Qué número queda en la cara opuesta a la del 1?
+\begin{center}\begin{tikzpicture}[x=6mm,y=6mm,font=\small]
+  \foreach \x/\y/\n in {1/3/1,1/2/3,1/1/5,1/0/6,0/2/2,2/2/4}{\draw[zink,line width=.6pt] (\x,\y) rectangle ++(1,1); \node at (\x+.5,\y+.5) {\n};}
+\end{tikzpicture}\end{center}
+\opciones{3}{5}{6}{2}
+\end{reto}
+
+\begin{retoresuelto}
+En la columna 1, 3, 5, 6: el 1 y el 5 están separados por el 3, así que son opuestos (y el 3 con el 6). El 2 y el 4,
+a los lados del 3, son opuestos entre sí. \textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{doblar}
 \begin{ejercicios}
@@ -197,19 +204,9 @@ Creer que dos caras que se tocan por una esquina en el desarrollo son opuestas: 
 \sol{A. La 5 y la 6 están en la columna de la 2, separadas por ella.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-En la columna 1, 3, 5, 6: el 1 y el 5 están separados por el 3, así que son opuestos (y el 3 con el 6). El 2 y el 4,
-a los lados del 3, son opuestos entre sí. \textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-es-4}{Giros, espejos y dobleces}{Juego de la hoja que se dobla y se perfora.}
-
-\begin{reto}
-Una hoja cuadrada se dobla por la mitad y luego otra vez por la mitad, de modo que queda un cuadrado con la cuarta parte
-del área. Se hace un agujero en el centro del cuadrado doblado. Al desdoblar la hoja, ¿cuántos agujeros tiene?
-\opciones{1}{2}{4}{8}
-\end{reto}
 
 \subsection{La idea: cada doblez es un espejo}
 Al desdoblar, todo lo que se hizo en la hoja doblada se \clave{refleja} en la línea del doblez. Por eso cada doblez duplica
@@ -248,6 +245,16 @@ Una hoja se dobla tres veces por la mitad y se perfora una vez lejos de los bord
 Desdoblar en el orden en que se dobló: los reflejos se hacen al revés (el último doblez se deshace primero).
 \end{trampa}
 
+\begin{reto}
+Una hoja cuadrada se dobla por la mitad y luego otra vez por la mitad, de modo que queda un cuadrado con la cuarta parte
+del área. Se hace un agujero en el centro del cuadrado doblado. Al desdoblar la hoja, ¿cuántos agujeros tiene?
+\opciones{1}{2}{4}{8}
+\end{reto}
+
+\begin{retoresuelto}
+Dos dobleces por la mitad: el agujero se refleja en el segundo doblez (2) y luego en el primero (4). \textbf{Opción C.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{reflejar}
 \begin{ejercicios}
@@ -261,9 +268,6 @@ Desdoblar en el orden en que se dobló: los reflejos se hacen al revés (el últ
 \sol{A. El agujero está sobre las dos líneas de doblez: sus reflejos caen en el mismo sitio.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Dos dobleces por la mitad: el agujero se refleja en el segundo doblez (2) y luego en el primero (4). \textbf{Opción C.}
-\end{retoresuelto}
 \bitacora
 
 \evaluacion

@@ -8,21 +8,6 @@ moda) y, sobre todo, distinguir lo que la gráfica \emph{muestra} de lo que solo
 
 \leccion{pu-gr-1}{Leer gráficas}{Juego de las barras que se arrastran hasta el valor.}
 
-\begin{reto}
-La gráfica muestra las ventas de una tienda (en millones de pesos). ¿En qué porcentaje aumentaron las ventas de enero a
-abril?
-\begin{center}
-\begin{tikzpicture}
-\begin{axis}[width=62mm,height=36mm,ybar,bar width=7mm,ymin=0,ymax=45,symbolic x coords={Ene,Feb,Mar,Abr},xtick=data,
-  axis lines*=left,ytick={0,10,20,30,40},tick label style={font=\scriptsize,color=zink},axis line style={zink},
-  nodes near coords,every node near coord/.append style={font=\scriptsize,color=zink}]
-  \addplot[fill=zmoss,draw=none] coordinates {(Ene,20) (Feb,35) (Mar,25) (Abr,40)};
-\end{axis}
-\end{tikzpicture}
-\end{center}
-\opciones{$20\,\%$}{$50\,\%$}{$100\,\%$}{$200\,\%$}
-\end{reto}
-
 \subsection{La idea: primero los ejes, después los datos}
 Antes de mirar las barras, lee el \clave{título}, los \clave{ejes} y las \clave{unidades}: ¿miles o millones? ¿porcentaje
 o cantidad? ¿el eje empieza en cero? Un eje que no empieza en cero exagera las diferencias: una barra que se ve el doble
@@ -66,6 +51,25 @@ En la gráfica de ventas del reto, ¿entre qué meses hubo la mayor caída?
 Comparar alturas de barras sin mirar dónde empieza el eje, o confundir «aumentó en 20 millones» con «aumentó un $20\,\%$».
 \end{trampa}
 
+\begin{reto}
+La gráfica muestra las ventas de una tienda (en millones de pesos). ¿En qué porcentaje aumentaron las ventas de enero a
+abril?
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=62mm,height=36mm,ybar,bar width=7mm,ymin=0,ymax=45,symbolic x coords={Ene,Feb,Mar,Abr},xtick=data,
+  axis lines*=left,ytick={0,10,20,30,40},tick label style={font=\scriptsize,color=zink},axis line style={zink},
+  nodes near coords,every node near coord/.append style={font=\scriptsize,color=zink}]
+  \addplot[fill=zmoss,draw=none] coordinates {(Ene,20) (Feb,35) (Mar,25) (Abr,40)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\opciones{$20\,\%$}{$50\,\%$}{$100\,\%$}{$200\,\%$}
+\end{reto}
+
+\begin{retoresuelto}
+De 20 a 40 millones: aumentó 20 sobre 20, es decir, $100\,\%$ (las ventas se duplicaron). \textbf{Opción C.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{leer}
 \begin{ejercicios}
@@ -80,17 +84,9 @@ Comparar alturas de barras sin mirar dónde empieza el eje, o confundir «aument
 \sol{A. $\tfrac{35}{120}$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-De 20 a 40 millones: aumentó 20 sobre 20, es decir, $100\,\%$ (las ventas se duplicaron). \textbf{Opción C.}
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-gr-2}{Promedio, mediana y moda}{Juego de la balanza de datos.}
-
-\begin{reto}
-Los datos son: 3, 7, 7, 2, 9, 4, 7, 5. ¿Cuál afirmación es correcta?
-\opcionesd{media $<$ mediana $<$ moda}{moda $<$ media $<$ mediana}{mediana $<$ media $<$ moda}{las tres son iguales}
-\end{reto}
 
 \subsection{La idea: tres maneras de decir «lo típico»}
 \begin{itemize}
@@ -134,6 +130,16 @@ Si en 2, 4, 6, 8, 10 el 10 se cambia por 50, ¿qué pasa con la media y la media
 Calcular la mediana sin ordenar los datos.
 \end{trampa}
 
+\begin{reto}
+Los datos son: 3, 7, 7, 2, 9, 4, 7, 5. ¿Cuál afirmación es correcta?
+\opcionesd{media $<$ mediana $<$ moda}{moda $<$ media $<$ mediana}{mediana $<$ media $<$ moda}{las tres son iguales}
+\end{reto}
+
+\begin{retoresuelto}
+Media: $\tfrac{44}{8} = 5.5$. Ordenados: 2, 3, 4, 5, 7, 7, 7, 9: mediana $\tfrac{5 + 7}{2} = 6$. Moda: 7. Entonces
+$5.5 < 6 < 7$. \textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{calcular}
 \begin{ejercicios}
@@ -148,19 +154,9 @@ Calcular la mediana sin ordenar los datos.
 \sol{A. La suma sube 5: la media sube $\tfrac55 = 1$; el del medio no cambia.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Media: $\tfrac{44}{8} = 5.5$. Ordenados: 2, 3, 4, 5, 7, 7, 7, 9: mediana $\tfrac{5 + 7}{2} = 6$. Moda: 7. Entonces
-$5.5 < 6 < 7$. \textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-gr-3}{Qué se puede concluir}{Juego de las afirmaciones que la gráfica sostiene o no.}
-
-\begin{reto}
-Se preguntó a 200 estudiantes por su materia favorita: Matemáticas $30\,\%$, Lenguaje $25\,\%$, Ciencias $20\,\%$,
-Sociales $15\,\%$ y Arte $10\,\%$. ¿Cuál afirmación se puede concluir de los datos?
-\opcionesl{60 estudiantes prefieren Matemáticas.}{Matemáticas es la materia más fácil.}{Más de la mitad prefiere Ciencias o Lenguaje.}{A ningún estudiante le gusta Arte.}
-\end{reto}
 
 \subsection{La idea: lo que dicen los datos y lo que no}
 Las preguntas de «se puede concluir» tienen opciones de cuatro tipos:
@@ -199,6 +195,17 @@ Con los datos del reto: «A los hombres les gustan más las Matemáticas que a l
 Escoger lo que uno cree cierto en la vida real en vez de lo que los datos permiten afirmar.
 \end{trampa}
 
+\begin{reto}
+Se preguntó a 200 estudiantes por su materia favorita: Matemáticas $30\,\%$, Lenguaje $25\,\%$, Ciencias $20\,\%$,
+Sociales $15\,\%$ y Arte $10\,\%$. ¿Cuál afirmación se puede concluir de los datos?
+\opcionesl{60 estudiantes prefieren Matemáticas.}{Matemáticas es la materia más fácil.}{Más de la mitad prefiere Ciencias o Lenguaje.}{A ningún estudiante le gusta Arte.}
+\end{reto}
+
+\begin{retoresuelto}
+El $30\,\%$ de 200 es 60: se calcula directamente. B es una opinión, C es falsa ($45\,\%$ no es más de la mitad) y D es
+falsa ($10\,\%$ prefiere Arte, y además «preferir» no es lo mismo que «gustar»). \textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{concluir}
 \begin{ejercicios}
@@ -212,10 +219,6 @@ Escoger lo que uno cree cierto en la vida real en vez de lo que los datos permit
 \sol{B. Van juntas (probablemente por el calor), pero eso no muestra causa ni se generaliza a otras ciudades.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-El $30\,\%$ de 200 es 60: se calcula directamente. B es una opinión, C es falsa ($45\,\%$ no es más de la mitad) y D es
-falsa ($10\,\%$ prefiere Arte, y además «preferir» no es lo mismo que «gustar»). \textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 \evaluacion

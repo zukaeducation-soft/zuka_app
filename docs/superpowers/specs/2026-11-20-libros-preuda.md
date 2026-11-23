@@ -90,3 +90,12 @@ sea aprender haciendo. Capa final `tex/zuka-hacer.tex` (se carga al final de `zu
   simulacros); preguntas comentadas con las opciones primero, la respuesta del estudiante y el análisis bajo la tijera;
   marcador de aciertos en cada taller.
 - Páginas: 139, 133, 113 y 91. Parche `arte/patch_formato.py` ya aplicado; `arte/ver_paginas.py` hace hojas de contacto.
+
+## Primero el concepto, después el reto (2026-11-23)
+
+Pedido del usuario: explicar primero los conceptos y después hacer los retos, mostrando cómo se usó el concepto. Orden de
+cada lección: analogía (sale sola al abrir la lección) → idea → regla → ejemplos → trampa y atajo → «Ponlo en práctica» (el
+reto, con renglón para la respuesta) → «Así se usó el concepto» (la solución, bajo una línea de tijera) → «Ahora tú» → «Así
+lo preguntan en el examen» → taller. El parche `arte/reto_despues.py` (ya aplicado) movió el reto y su solución en las 90
+lecciones; el reto de `pu-el-1` se cambió por la prelectura de un texto nuevo, porque el de antes era un fragmento de la
+misma crónica de la lección. Páginas: 143, 137, 115 y 91.

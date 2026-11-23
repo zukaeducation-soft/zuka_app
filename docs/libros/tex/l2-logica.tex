@@ -12,11 +12,6 @@ silogismos) y de forma escondida en casi todas las demás preguntas, cada vez qu
 % ------------------------------------------------------------------
 \leccion{pu-lo-1}{Conectivos y tablas de verdad}{Juego de los interruptores que encienden una lámpara.}
 
-\begin{reto}
-Si $p$ es verdadera y $q$ es falsa, ¿cuál de las siguientes proposiciones es verdadera?
-\opciones{$p \wedge q$}{$\neg p \vee q$}{$p \to q$}{$q \to p$}
-\end{reto}
-
 \subsection{La idea: circuitos que encienden}
 Una \clave{proposición} es una frase que es verdadera (V) o falsa (F): «7 es primo» lo es; «¿qué hora es?» no. Los
 \clave{conectivos} combinan proposiciones, y funcionan como interruptores:
@@ -86,6 +81,16 @@ Para saber cuándo una proposición es falsa, busca la única fila que la hace f
 tabla completa.
 \end{atajo}
 
+\begin{reto}
+Si $p$ es verdadera y $q$ es falsa, ¿cuál de las siguientes proposiciones es verdadera?
+\opciones{$p \wedge q$}{$\neg p \vee q$}{$p \to q$}{$q \to p$}
+\end{reto}
+
+\begin{retoresuelto}
+$p \wedge q$: F. $\neg p \vee q$: F $\vee$ F $=$ F. $p \to q$: V $\to$ F $=$ F. $q \to p$: F $\to$ V $=$ V.
+\textbf{Opción D.}
+\end{retoresuelto}
+
 \taller
 \piso{Calienta}{evaluar}
 \begin{ejercicios}[2]
@@ -110,19 +115,10 @@ tabla completa.
 \sol{A. Si $p$ es V, $p \vee q$ también.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-$p \wedge q$: F. $\neg p \vee q$: F $\vee$ F $=$ F. $p \to q$: V $\to$ F $=$ F. $q \to p$: F $\to$ V $=$ V.
-\textbf{Opción D.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-lo-2}{Negación y De Morgan}{Juego del espejo que niega frases.}
-
-\begin{reto}
-La negación de «Todos los estudiantes aprobaron y nadie se quejó» es
-\opcionesl{Algún estudiante no aprobó o alguien se quejó.}{Ningún estudiante aprobó y todos se quejaron.}{Algún estudiante no aprobó y alguien se quejó.}{Todos los estudiantes reprobaron o alguien se quejó.}
-\end{reto}
 
 \subsection{La idea: negar es decir exactamente lo contrario}
 La negación de una frase es la que es verdadera justo cuando la original es falsa. No es «lo opuesto extremo»: la negación
@@ -177,6 +173,16 @@ Niega: «Si un número es par, entonces es divisible entre 4».
 Negar «todos aprobaron» con «ninguno aprobó». Basta que uno no haya aprobado para que «todos aprobaron» sea falsa.
 \end{trampa}
 
+\begin{reto}
+La negación de «Todos los estudiantes aprobaron y nadie se quejó» es
+\opcionesl{Algún estudiante no aprobó o alguien se quejó.}{Ningún estudiante aprobó y todos se quejaron.}{Algún estudiante no aprobó y alguien se quejó.}{Todos los estudiantes reprobaron o alguien se quejó.}
+\end{reto}
+
+\begin{retoresuelto}
+La frase es «$A$ y $B$» con $A$ = «todos aprobaron» y $B$ = «nadie se quejó». Su negación es «$\neg A$ o $\neg B$»:
+«algún estudiante no aprobó o alguien se quejó». \textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{negar}
 \begin{ejercicios}
@@ -195,19 +201,10 @@ Negar «todos aprobaron» con «ninguno aprobó». Basta que uno no haya aprobad
 \sol{A. De Morgan: $p \wedge \neg q$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-La frase es «$A$ y $B$» con $A$ = «todos aprobaron» y $B$ = «nadie se quejó». Su negación es «$\neg A$ o $\neg B$»:
-«algún estudiante no aprobó o alguien se quejó». \textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-lo-3}{El condicional}{Juego de las cartas que hay que voltear.}
-
-\begin{reto}
-«Si llueve, el partido se cancela». Se sabe que el partido no se canceló. ¿Qué se puede concluir?
-\opcionesd{Llovió.}{No llovió.}{No se sabe si llovió.}{Se jugó bajo la lluvia.}
-\end{reto}
 
 \subsection{La idea: cuatro frases que se parecen}
 A partir de «si $p$, entonces $q$» se forman tres frases parecidas. Solo una dice lo mismo:
@@ -267,6 +264,15 @@ Afirmar el consecuente es el error más común en las preguntas de lógica del e
 flecha al revés, desconfía.
 \end{trampa}
 
+\begin{reto}
+«Si llueve, el partido se cancela». Se sabe que el partido no se canceló. ¿Qué se puede concluir?
+\opcionesd{Llovió.}{No llovió.}{No se sabe si llovió.}{Se jugó bajo la lluvia.}
+\end{reto}
+
+\begin{retoresuelto}
+Es modus tollens: lluvia $\to$ cancelación; no hubo cancelación; luego no llovió. \textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{condicionales}
 \begin{ejercicios}
@@ -284,18 +290,10 @@ flecha al revés, desconfía.
 \sol{B. Por tollens: hubo clase; y de nuevo por tollens: no hubo huelga.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Es modus tollens: lluvia $\to$ cancelación; no hubo cancelación; luego no llovió. \textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-lo-4}{Cuantificadores y silogismos}{Juego de los diagramas que encierran.}
-
-\begin{reto}
-«Todos los ingenieros saben cálculo. Algunos músicos son ingenieros.» De estas premisas se concluye que
-\opcionesl{Algunos músicos saben cálculo.}{Todos los músicos saben cálculo.}{Algunos que saben cálculo no son músicos.}{Ningún músico sabe cálculo.}
-\end{reto}
 
 \subsection{La idea: dibujar conjuntos}
 Las frases con «todos», «algunos» y «ningún» hablan de conjuntos. Dibujarlas con círculos (diagramas de Euler) vuelve
@@ -337,6 +335,17 @@ Concluir lo que es cierto en la vida real pero no se sigue de las premisas. El e
 argumento, no si la conclusión es verdad en el mundo.
 \end{trampa}
 
+\begin{reto}
+«Todos los ingenieros saben cálculo. Algunos músicos son ingenieros.» De estas premisas se concluye que
+\opcionesl{Algunos músicos saben cálculo.}{Todos los músicos saben cálculo.}{Algunos que saben cálculo no son músicos.}{Ningún músico sabe cálculo.}
+\end{reto}
+
+\begin{retoresuelto}
+El círculo de ingenieros está dentro del de «saben cálculo», y hay al menos un músico en el círculo de ingenieros. Ese
+músico sabe cálculo. \textbf{Opción A.} La C puede ser cierta pero no se sigue: quizás todos los que saben cálculo son
+músicos.
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{dibujar}
 \begin{ejercicios}
@@ -354,21 +363,10 @@ argumento, no si la conclusión es verdad en el mundo.
 \sol{A. Los abogados que son políticos no son honestos.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-El círculo de ingenieros está dentro del de «saben cálculo», y hay al menos un músico en el círculo de ingenieros. Ese
-músico sabe cálculo. \textbf{Opción A.} La C puede ser cierta pero no se sigue: quizás todos los que saben cálculo son
-músicos.
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-lo-5}{Verdad y mentira}{Juego de los guardianes que dicen la verdad o mienten.}
-
-\begin{reto}
-Tres personas, A, B y C, son veraces (siempre dicen la verdad) o mentirosas (siempre mienten). A dice: «B miente». B dice:
-«C miente». C dice: «A y B mienten». ¿Quiénes dicen la verdad?
-\opciones{solo A}{solo B}{A y C}{ninguno}
-\end{reto}
 
 \subsection{La idea: suponer y buscar la contradicción}
 En estos acertijos se \clave{supone} algo («A dice la verdad») y se sigue la cadena de consecuencias. Si se llega a una
@@ -408,6 +406,18 @@ Olvidar verificar la solución con \emph{todas} las frases. A veces una suposici
 pero choca con la tercera.
 \end{trampa}
 
+\begin{reto}
+Tres personas, A, B y C, son veraces (siempre dicen la verdad) o mentirosas (siempre mienten). A dice: «B miente». B dice:
+«C miente». C dice: «A y B mienten». ¿Quiénes dicen la verdad?
+\opciones{solo A}{solo B}{A y C}{ninguno}
+\end{reto}
+
+\begin{retoresuelto}
+Si A dice la verdad: B miente, entonces C dice la verdad, y C afirma que A miente: contradicción. Luego A miente: B dice la
+verdad, C miente, y la frase de C («A y B mienten») es falsa porque B es veraz ✓. Solo B dice la verdad.
+\textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{suponer}
 \begin{ejercicios}
@@ -421,11 +431,6 @@ pero choca con la tercera.
 \sol{C. Juan y Kike se contradicen: uno dice la verdad. Así que Leo miente: fue Leo. Verificación: Juan miente y Kike dice la verdad.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Si A dice la verdad: B miente, entonces C dice la verdad, y C afirma que A miente: contradicción. Luego A miente: B dice la
-verdad, C miente, y la frase de C («A y B mienten») es falsa porque B es veraz ✓. Solo B dice la verdad.
-\textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------

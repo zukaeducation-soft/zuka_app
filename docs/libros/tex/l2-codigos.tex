@@ -7,11 +7,6 @@ comparar, aislar lo que cambia y comprobar.}{%
 
 \leccion{pu-cd-1}{Claves de sustitución}{Juego de las casillas con fichas que cambian de letra.}
 
-\begin{reto}
-En un código, la palabra MESA se escribe NFTB. ¿Cómo se escribe SILLA?
-\opciones{TJMMB}{RHKKZ}{TJMMA}{UJNNB}
-\end{reto}
-
 \subsection{La idea: buscar el desplazamiento}
 Los códigos más comunes son de \clave{sustitución}: cada letra se cambia por otra según una regla fija. El caso más
 famoso es el \clave{cifrado de César}: correr cada letra $k$ lugares en el alfabeto (con $k = 3$: A $\to$ D, B $\to$ E,
@@ -65,6 +60,15 @@ Suponer un desplazamiento con una sola letra cuando la regla podría ser otra: c
 tercera letra.
 \end{trampa}
 
+\begin{reto}
+En un código, la palabra MESA se escribe NFTB. ¿Cómo se escribe SILLA?
+\opciones{TJMMB}{RHKKZ}{TJMMA}{UJNNB}
+\end{reto}
+
+\begin{retoresuelto}
+Cada letra avanza una posición: M $\to$ N, E $\to$ F, S $\to$ T, A $\to$ B. SILLA $\to$ TJMMB. \textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{codificar}
 \begin{ejercicios}
@@ -79,18 +83,9 @@ tercera letra.
 \sol{A. Cada letra se corre uno hacia atrás.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Cada letra avanza una posición: M $\to$ N, E $\to$ F, S $\to$ T, A $\to$ B. SILLA $\to$ TJMMB. \textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-cd-2}{Deducir la regla}{Juego de las palabras en otro idioma.}
-
-\begin{reto}
-En un idioma, «lumo sapi» significa «perro grande», «tera sapi» significa «gato grande» y «tera nov» significa «gato
-negro». ¿Cómo se dice «perro negro»?
-\opciones{lumo nov}{nov lumo}{sapi nov}{lumo tera}
-\end{reto}
 
 \subsection{La idea: lo que se repite se corresponde}
 Cuando hay varias frases traducidas, se buscan las palabras \clave{comunes}: si dos frases comparten «grande» y
@@ -127,6 +122,17 @@ Asumir que el orden de las palabras es el mismo que en español. Muchos de estos
 después (o antes); la correspondencia se halla por repeticiones, no por posición.
 \end{trampa}
 
+\begin{reto}
+En un idioma, «lumo sapi» significa «perro grande», «tera sapi» significa «gato grande» y «tera nov» significa «gato
+negro». ¿Cómo se dice «perro negro»?
+\opciones{lumo nov}{nov lumo}{sapi nov}{lumo tera}
+\end{reto}
+
+\begin{retoresuelto}
+«sapi» aparece en las dos primeras, como «grande»: sapi = grande. Entonces lumo = perro y tera = gato. De la tercera,
+nov = negro. El orden es sustantivo y luego adjetivo: «lumo nov». \textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{deducir}
 \begin{ejercicios}
@@ -140,10 +146,6 @@ después (o antes); la correspondencia se halla por repeticiones, no por posici�
 \sol{A. Se escribe la suma seguida de la diferencia: $4 + 2 = 6$ y $4 - 2 = 2$ dan 62; $5 + 3$ y $5 - 3$ dan 82; $7 + 1$ y $7 - 1$ dan 86. Para $6 \star 4$: 10 y 2, es decir, 102.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-«sapi» aparece en las dos primeras, como «grande»: sapi = grande. Entonces lumo = perro y tera = gato. De la tercera,
-nov = negro. El orden es sustantivo y luego adjetivo: «lumo nov». \textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 \evaluacion

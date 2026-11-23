@@ -7,11 +7,6 @@ como una máquina, sin agregarle propiedades que no tiene.}{%
 
 \leccion{pu-op-1}{Operaciones nuevas}{Juego de la máquina que transforma fichas.}
 
-\begin{reto}
-Se define $a \star b = a^2 - 2b$. ¿Cuánto vale $(3 \star 1) \star 4$?
-\opciones{$41$}{$9$}{$-1$}{$17$}
-\end{reto}
-
 \subsection{La idea: una máquina con ranuras}
 Una definición como $a \star b = a^2 - 2b$ es una máquina con dos ranuras: lo que entra por la izquierda ocupa el lugar
 de $a$ y lo que entra por la derecha el de $b$. La máquina no sabe nada más. Para calcular $5 \star 3$, se copia la regla
@@ -63,6 +58,15 @@ Si piden comparar dos expresiones con el mismo operador, a veces basta restar la
 dos cuentas.
 \end{atajo}
 
+\begin{reto}
+Se define $a \star b = a^2 - 2b$. ¿Cuánto vale $(3 \star 1) \star 4$?
+\opciones{$41$}{$9$}{$-1$}{$17$}
+\end{reto}
+
+\begin{retoresuelto}
+Por dentro: $3 \star 1 = 9 - 2 = 7$. Por fuera: $7 \star 4 = 49 - 8 = 41$. \textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Calienta}{aplicar la regla}
 \begin{ejercicios}
@@ -89,17 +93,9 @@ dos cuentas.
 \sol{A. $9 + y = y^2 + 3$: $y^2 - y - 6 = 0$, $(y - 3)(y + 2) = 0$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Por dentro: $3 \star 1 = 9 - 2 = 7$. Por fuera: $7 \star 4 = 49 - 8 = 41$. \textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-op-2}{Anidados y ecuaciones}{Juego de las capas de operadores y la tabla que se completa.}
-
-\begin{reto}
-Si $a \star b = 2a - b$ y $x \star 3 = 5 \star x$, ¿cuánto vale $x$?
-\opciones{$\tfrac{13}{3}$}{$4$}{$\tfrac{7}{3}$}{$13$}
-\end{reto}
 
 \subsection{La idea: la regla también se usa al revés}
 Cuando el operador aparece con una incógnita, la regla se convierte en una ecuación. Se reemplaza en cada lado, se
@@ -158,6 +154,16 @@ Al resolver $\boxed{\boxed{a}} = 17$, empezar por dentro con $a$ desconocida. Co
 de afuera hacia adentro.
 \end{trampa}
 
+\begin{reto}
+Si $a \star b = 2a - b$ y $x \star 3 = 5 \star x$, ¿cuánto vale $x$?
+\opciones{$\tfrac{13}{3}$}{$4$}{$\tfrac{7}{3}$}{$13$}
+\end{reto}
+
+\begin{retoresuelto}
+$x \star 3 = 2x - 3$ y $5 \star x = 10 - x$. Igualando: $2x - 3 = 10 - x$, de donde $3x = 13$ y $x = \tfrac{13}{3}$.
+\textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Calienta}{despejar}
 \begin{ejercicios}
@@ -184,10 +190,6 @@ de afuera hacia adentro.
 \sol{B. $2 \star a = 4 - a$ y $(4 - a)^2 - 1 = 8$, así que $4 - a = \pm 3$: $a = 1$ o $a = 7$. Con $a > 4$, $a = 7$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-$x \star 3 = 2x - 3$ y $5 \star x = 10 - x$. Igualando: $2x - 3 = 10 - x$, de donde $3x = 13$ y $x = \tfrac{13}{3}$.
-\textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 \evaluacion

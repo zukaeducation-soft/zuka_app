@@ -63,9 +63,10 @@
   \vspace{2mm}
   \begin{tcolorbox}[enhanced,colback=white,colframe=zline,boxrule=.5pt,arc=3mm,left=5mm,right=5mm,top=3mm,bottom=3mm]
     {\sffamily\small\bfseries\color{zolive}Cómo vas a trabajar}\par\vspace{2pt}
-    {\small En cada lección \textbf{haces primero y lees después}: intentas el reto, tapas cada solución antes de mirarla,
-    resuelves «Ahora tú» en el espacio del libro, practicas en la app con el video y los juegos de esa lección, y cierras con el
-    taller. Las respuestas están en las claves del final.\par}
+    {\small En cada lección \textbf{primero entiendes el concepto} (analogía, idea, regla y ejemplos, tapando cada solución
+    antes de mirarla) y \textbf{después lo usas}: resuelves el reto tipo examen y ves cómo se aplicó el concepto, haces «Ahora
+    tú» en el espacio del libro, practicas en la app con el video y los juegos de esa lección y cierras con el taller. Las
+    respuestas están en las claves del final.\par}
   \end{tcolorbox}
   \immediate\write\zuka@sol{\noexpand\solmun{Mundo \themundo\ · \unexpanded{#1}}}%
 }
@@ -74,7 +75,7 @@
 \let\zuka@cabeceravieja\cabecera
 \renewcommand{\cabecera}[3]{\global\zuka@evaltrue\zuka@cabeceravieja{#1}{#2}{#3}}
 \let\zuka@leccionvieja\leccion
-\renewcommand{\leccion}[3]{\global\zuka@evalfalse\zuka@leccionvieja{#1}{#2}{#3}}
+\renewcommand{\leccion}[3]{\global\zuka@evalfalse\zuka@leccionvieja{#1}{#2}{#3}\zuka@poneanalogia}
 
 % ---------- piezas para responder a mano ----------
 \newcommand{\zuka@renglones}[1]{\par\vspace{2pt}\foreach \k in {1,...,#1}{\noindent\textcolor{zline}{\rule{\linewidth}{.4pt}}\par\vspace{5.5mm}}}
@@ -88,11 +89,19 @@
   \rule[-2pt]{28mm}{.4pt}\hfill{\sffamily\footnotesize\color{zmute}Qué tan seguro estoy:\enspace
   \casilla{poco}\enspace\casilla{algo}\enspace\casilla{mucho}}\par}
 
-% ---------- 1. el reto se intenta antes de leer ----------
+% ---------- 1. primero el concepto; después el reto, para usarlo (pedido del 2026-11-23) ----------
 \renewenvironment{reto}{%
+  \par\vspace{6pt}\noindent{\sffamily\large\fontseries{sb}\selectfont\color{zink}%
+    \tikz[baseline=-.6ex]\fill[zlime] (0,0) rectangle (1.6mm,1.6mm);\hspace{2mm}Ponlo en práctica}\par\vspace{2pt}
+  {\small\color{zmute}Ya tienes la idea, la regla y los ejemplos. Ahora resuelve este reto tipo examen tú solo y escribe tu
+   respuesta; debajo está cómo se usa el concepto para resolverlo.\par}
   \begin{tcolorbox}[zbase,colback=zlime!14,zborde=zmoss]
-  \zuka@cab{zmoss}{reto}{Inténtalo primero}{\sffamily\scriptsize\color{zmute}\quad sin mirar nada: el reto se resuelve al final de la lección}\par\vspace{4pt}}
-  {\zuka@miresp\end{tcolorbox}\zuka@poneanalogia}
+  \zuka@cab{zmoss}{reto}{El reto}{\sffamily\scriptsize\color{zmute}\quad usa lo que acabas de aprender}\par\vspace{4pt}}
+  {\zuka@miresp\end{tcolorbox}}
+\renewenvironment{retoresuelto}{%
+  \zuka@tapa{Tapa desde aquí: resuelve el reto antes de leer la solución}%
+  \begin{tcolorbox}[zbase,colback=zlime!14,zborde=zmoss]\zuka@cab{zmoss}{listo}{Así se usó el concepto}\par\vspace{3pt}}
+  {\end{tcolorbox}}
 
 % ---------- 2. cada ejemplo: intentar antes de leer la solución ----------
 \renewcommand{\solucion}{\zuka@tapa{Tapa desde aquí e intenta resolverlo antes de seguir leyendo}%

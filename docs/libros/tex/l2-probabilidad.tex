@@ -7,11 +7,6 @@ contar bien los posibles y en no confundir «y» con «o».}{%
 
 \leccion{pu-pb-1}{Espacio muestral y Laplace}{Juego de la tabla de los dos dados.}
 
-\begin{reto}
-Se lanzan dos dados. ¿Cuál es la probabilidad de que la suma sea 8?
-\opciones{$\tfrac{5}{36}$}{$\tfrac16$}{$\tfrac{8}{36}$}{$\tfrac19$}
-\end{reto}
-
 \subsection{La idea: todos los casos con el mismo peso}
 El \clave{espacio muestral} es la lista de todos los resultados posibles de un experimento. Si todos son
 \emph{igualmente probables}, la probabilidad de un evento es la fracción de resultados que lo cumplen:
@@ -65,6 +60,15 @@ Usar las 11 sumas posibles de dos dados como si fueran igualmente probables: «$
 falso.
 \end{trampa}
 
+\begin{reto}
+Se lanzan dos dados. ¿Cuál es la probabilidad de que la suma sea 8?
+\opciones{$\tfrac{5}{36}$}{$\tfrac16$}{$\tfrac{8}{36}$}{$\tfrac19$}
+\end{reto}
+
+\begin{retoresuelto}
+Suma 8: (2,6), (3,5), (4,4), (5,3), (6,2): 5 casos de 36. $P = \tfrac{5}{36}$. \textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{contar casos}
 \begin{ejercicios}
@@ -82,18 +86,9 @@ falso.
 \sol{A. 2, 3, 5, 7, 11, 13, 17, 19: 8 de 20.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Suma 8: (2,6), (3,5), (4,4), (5,3), (6,2): 5 casos de 36. $P = \tfrac{5}{36}$. \textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 \leccion{pu-pb-2}{Complemento e independencia}{Juego del árbol de probabilidades.}
-
-\begin{reto}
-Una urna tiene 3 bolas rojas y 2 azules. Se sacan dos, una tras otra, sin devolver la primera. ¿Probabilidad de que las
-dos sean rojas?
-\opciones{$\tfrac{9}{25}$}{$\tfrac{3}{10}$}{$\tfrac35$}{$\tfrac12$}
-\end{reto}
 
 \subsection{La idea: el árbol multiplica}
 Cuando un experimento ocurre en etapas, la probabilidad de un camino del árbol es el \clave{producto} de las
@@ -132,6 +127,17 @@ Sumar cuando hay que multiplicar: «$P(\text{dos rojas}) = \tfrac35 + \tfrac24$�
 probabilidad nunca supera 1.
 \end{trampa}
 
+\begin{reto}
+Una urna tiene 3 bolas rojas y 2 azules. Se sacan dos, una tras otra, sin devolver la primera. ¿Probabilidad de que las
+dos sean rojas?
+\opciones{$\tfrac{9}{25}$}{$\tfrac{3}{10}$}{$\tfrac35$}{$\tfrac12$}
+\end{reto}
+
+\begin{retoresuelto}
+Primera roja: $\tfrac35$. Queda una urna con 2 rojas y 2 azules: segunda roja $\tfrac24$. Producto: $\tfrac{6}{20} =
+\tfrac{3}{10}$. \textbf{Opción B.} La A sería con reposición.
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{árboles}
 \begin{ejercicios}
@@ -149,10 +155,6 @@ probabilidad nunca supera 1.
 \sol{A. $\tfrac25 \cdot \tfrac14$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Primera roja: $\tfrac35$. Queda una urna con 2 rojas y 2 azules: segunda roja $\tfrac24$. Producto: $\tfrac{6}{20} =
-\tfrac{3}{10}$. \textbf{Opción B.} La A sería con reposición.
-\end{retoresuelto}
 \bitacora
 
 \evaluacion

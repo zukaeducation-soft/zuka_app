@@ -11,11 +11,6 @@ contrario. Cinco ideas que resuelven casi todo.}{%
 % ------------------------------------------------------------------
 \leccion{pu-co-1}{Principio multiplicativo y árboles}{Juego del árbol que se ramifica.}
 
-\begin{reto}
-¿Cuántos números de tres cifras \emph{distintas} se pueden formar con los dígitos 0, 1, 2, 3 y 4?
-\opciones{48}{60}{100}{64}
-\end{reto}
-
 \subsection{La idea: decisiones en cadena}
 Si una tarea se hace en pasos, y el primer paso tiene $m$ opciones y el segundo $n$ (sin importar qué se eligió en el
 primero), la tarea completa tiene $m \cdot n$ maneras. Es el \clave{principio multiplicativo}, y un \clave{árbol} lo
@@ -63,6 +58,16 @@ Olvidar el caso «ninguno» cuando algo es opcional, o empezar por una casilla s
 opciones quedan para la restringida.
 \end{trampa}
 
+\begin{reto}
+¿Cuántos números de tres cifras \emph{distintas} se pueden formar con los dígitos 0, 1, 2, 3 y 4?
+\opciones{48}{60}{100}{64}
+\end{reto}
+
+\begin{retoresuelto}
+Primera cifra: 4 opciones (no el 0). Segunda: 4 (ya se usó una, pero ahora el 0 vale). Tercera: 3. $4 \cdot 4 \cdot 3 =
+48$. \textbf{Opción A.} La B ($5 \cdot 4 \cdot 3$) cuenta números que empiezan en 0.
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{multiplicar}
 \begin{ejercicios}
@@ -80,19 +85,10 @@ opciones quedan para la restringida.
 \sol{B. Ida $3 \cdot 4 = 12$; vuelta $3 \cdot 2 = 6$: 72.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Primera cifra: 4 opciones (no el 0). Segunda: 4 (ya se usó una, pero ahora el 0 vale). Tercera: 3. $4 \cdot 4 \cdot 3 =
-48$. \textbf{Opción A.} La B ($5 \cdot 4 \cdot 3$) cuenta números que empiezan en 0.
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-co-2}{Permutaciones}{Juego de los libros que se ordenan en el estante.}
-
-\begin{reto}
-¿De cuántas maneras se pueden sentar 5 personas en fila si Ana y Beto deben quedar juntos?
-\opciones{24}{48}{120}{96}
-\end{reto}
 
 \subsection{La idea: ordenar todos}
 Para ordenar $n$ objetos distintos hay $n$ opciones para el primer lugar, $n - 1$ para el segundo, y así hasta 1. Eso es
@@ -138,6 +134,16 @@ En un grupo de 10 se elige presidente, secretario y tesorero. ¿De cuántas mane
 Olvidar ordenar dentro del bloque: Ana-Beto y Beto-Ana son distintos.
 \end{trampa}
 
+\begin{reto}
+¿De cuántas maneras se pueden sentar 5 personas en fila si Ana y Beto deben quedar juntos?
+\opciones{24}{48}{120}{96}
+\end{reto}
+
+\begin{retoresuelto}
+El bloque \fbox{Ana Beto} y las otras 3 personas son 4 objetos: $4! = 24$ órdenes. Dentro del bloque, 2 órdenes. Total
+$48$. \textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{ordenar}
 \begin{ejercicios}
@@ -155,20 +161,10 @@ Olvidar ordenar dentro del bloque: Ana-Beto y Beto-Ana son distintos.
 \sol{B. Bloques: $2!$; dentro: $3! \cdot 2!$. $2 \cdot 6 \cdot 2 = 24$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-El bloque \fbox{Ana Beto} y las otras 3 personas son 4 objetos: $4! = 24$ órdenes. Dentro del bloque, 2 órdenes. Total
-$48$. \textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-co-3}{Combinaciones}{Juego de los grupos que se forman sin importar el orden.}
-
-\begin{reto}
-En un torneo de ajedrez con 10 jugadores, cada uno juega exactamente una partida contra cada uno de los demás. ¿Cuántas
-partidas se juegan?
-\opciones{90}{45}{100}{20}
-\end{reto}
 
 \subsection{La idea: el orden no importa}
 Para elegir un \emph{comité} de 3 personas entre 5, el orden no importa: \{Ana, Beto, Caro\} es el mismo comité que
@@ -215,6 +211,16 @@ Usar permutaciones donde el orden no importa (el reto daría 90). Cada partida e
 B» y «B contra A».
 \end{trampa}
 
+\begin{reto}
+En un torneo de ajedrez con 10 jugadores, cada uno juega exactamente una partida contra cada uno de los demás. ¿Cuántas
+partidas se juegan?
+\opciones{90}{45}{100}{20}
+\end{reto}
+
+\begin{retoresuelto}
+Cada partida es una pareja de jugadores, sin orden: $\binom{10}{2} = \tfrac{10 \cdot 9}{2} = 45$. \textbf{Opción B.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{elegir}
 \begin{ejercicios}
@@ -232,18 +238,10 @@ B» y «B contra A».
 \sol{A. $10 \cdot 6$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Cada partida es una pareja de jugadores, sin orden: $\binom{10}{2} = \tfrac{10 \cdot 9}{2} = 45$. \textbf{Opción B.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-co-4}{Conteo por casos y complemento}{Juego de contar lo que sobra.}
-
-\begin{reto}
-¿Cuántos números del 1 al 100 no son divisibles ni entre 2 ni entre 3?
-\opciones{33}{34}{17}{50}
-\end{reto}
 
 \subsection{La idea: a veces es más fácil contar lo contrario}
 Cuando una condición dice «al menos uno», «no todos» o «ni… ni…», suele ser más rápido contar \clave{lo que no cumple} y
@@ -279,6 +277,16 @@ $n(A \cup B) = n(A) + n(B) - n(A \cap B)$.
 Al contar por casos, que dos casos se solapen y un mismo objeto se cuente dos veces.
 \end{trampa}
 
+\begin{reto}
+¿Cuántos números del 1 al 100 no son divisibles ni entre 2 ni entre 3?
+\opciones{33}{34}{17}{50}
+\end{reto}
+
+\begin{retoresuelto}
+Divisibles entre 2: 50. Entre 3: 33. Entre los dos (entre 6): 16. Entre 2 o 3: $50 + 33 - 16 = 67$. Ni uno ni otro:
+$100 - 67 = 33$. \textbf{Opción A.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{complemento}
 \begin{ejercicios}
@@ -295,20 +303,10 @@ Al contar por casos, que dos casos se solapen y un mismo objeto se cuente dos ve
 \sol{B. Total 56; con los dos: 6 (el tercero entre los otros 6). $56 - 6$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Divisibles entre 2: 50. Entre 3: 33. Entre los dos (entre 6): 16. Entre 2 o 3: $50 + 33 - 16 = 67$. Ni uno ni otro:
-$100 - 67 = 33$. \textbf{Opción A.}
-\end{retoresuelto}
 \bitacora
 
 % ------------------------------------------------------------------
 \leccion{pu-co-5}{Contar figuras y caminos}{Juego de la cuadrícula de calles.}
-
-\begin{reto}
-En una cuadrícula de calles, para ir de la esquina A a la esquina B hay que avanzar 3 cuadras hacia la derecha y 2 hacia
-arriba, sin retroceder. ¿Cuántos caminos distintos hay?
-\opciones{5}{6}{10}{12}
-\end{reto}
 
 \subsection{La idea: un camino es una palabra}
 Cada camino corto es una secuencia de pasos: por ejemplo DDADA (derecha, derecha, arriba, derecha, arriba). Contar
@@ -348,6 +346,17 @@ el centro $(2, 2)$?
 Contar figuras sin orden y olvidar las grandes (las formadas por varias piezas).
 \end{trampa}
 
+\begin{reto}
+En una cuadrícula de calles, para ir de la esquina A a la esquina B hay que avanzar 3 cuadras hacia la derecha y 2 hacia
+arriba, sin retroceder. ¿Cuántos caminos distintos hay?
+\opciones{5}{6}{10}{12}
+\end{reto}
+
+\begin{retoresuelto}
+Cada camino es una palabra con 3 D y 2 A: $\binom52 = 10$. La tabla de esquinas también termina en 10.
+\textbf{Opción C.}
+\end{retoresuelto}
+
 \taller
 \piso{Entrena}{contar}
 \begin{ejercicios}
@@ -365,10 +374,6 @@ Contar figuras sin orden y olvidar las grandes (las formadas por varias piezas).
 \sol{C. Caminos que pasan por $(1, 1)$: $\binom21 \cdot \binom31 = 2 \cdot 3 = 6$. Quedan $10 - 6 = 4$.}
 \end{ejercicios}
 
-\begin{retoresuelto}
-Cada camino es una palabra con 3 D y 2 A: $\binom52 = 10$. La tabla de esquinas también termina en 10.
-\textbf{Opción C.}
-\end{retoresuelto}
 \bitacora
 
 \evaluacion
