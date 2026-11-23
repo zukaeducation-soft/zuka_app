@@ -13,6 +13,7 @@ const XP = {};
 const xpPar = n => (n < 0 ? `(${n})` : `${n}`);            // en TeX: un negativo va entre paréntesis
 const xpMenos = n => String(n).replace('-', '−');           // en pantalla: menos tipográfico
 const xpSigno = n => (n > 0 ? '+' : '') + xpMenos(n);
+const xpPasos = n => `${n} ${n === 1 ? 'paso' : 'pasos'}`;
 
 XP.apuesta = {
   ini: () => ({ pick: null }),
@@ -41,6 +42,38 @@ XP.recta = {
     }
     return `$${s.v}$`;
   },
+  // La frase con que la escena responde a cada movimiento (todas las `dice` son puras).
+  dice(s, p) {
+    if (p.modo === 'dos') {
+      const m = s.sel.at(-1);
+      if (m == null) return `Cuenta ${xpPasos(p.dist)} desde el ${xpMenos(p.ancla)}, hacia un lado.`;
+      const d = Math.abs(m - p.ancla);
+      if (d !== p.dist) return `El ${xpMenos(m)} está a ${xpPasos(d)} del ${xpMenos(p.ancla)}, no a ${p.dist}.`;
+      return `El ${xpMenos(m)} está a ${xpPasos(d)}: sirve.${XP.recta.ok(s, p) ? '' : ' Falta el del otro lado.'}`;
+    }
+    const v = s.v;
+    if (p.modo === 'espejo') {
+      return v === 0 ? 'En el 0 la ficha y su reflejo se juntan: el opuesto de 0 es 0.'
+        : `Tu ficha está a ${xpPasos(Math.abs(v))} del 0. Su reflejo también, al otro lado.`;
+    }
+    if (p.modo === 'distancia') {
+      const d = Math.abs(v - p.ancla), lo = Math.min(v, p.ancla), hi = Math.max(v, p.ancla);
+      if (!d) return 'Sin moverse, la distancia es 0.';
+      return `De ${xpMenos(p.ancla)} a ${xpMenos(v)} hay ${xpPasos(d)}.${lo < 0 && hi > 0 ? ` Son ${-lo} hasta el 0 y ${hi} más.` : ''}`;
+    }
+    if (p.modo === 'salto') {
+      const d = v - p.desde, n = p.resta != null ? -p.resta : p.suma;
+      if (!d) return 'La ficha aún no se mueve.';
+      if (n == null) return `Te moviste ${xpPasos(Math.abs(d))} a la ${d > 0 ? 'derecha' : 'izquierda'}.`;
+      if (Math.sign(d) !== Math.sign(n)) {
+        return p.resta != null ? `Así estarías sumando ${xpMenos(p.resta)}. Restar va al otro lado.` : `Sumar ${xpMenos(n)} va hacia la ${n > 0 ? 'derecha' : 'izquierda'}.`;
+      }
+      if (Math.abs(d) < Math.abs(n)) return `Llevas ${Math.abs(d)} de ${xpPasos(Math.abs(n))}.`;
+      return Math.abs(d) > Math.abs(n) ? `Te pasaste: eran ${xpPasos(Math.abs(n))}.` : 'Justo ahí.';
+    }
+    return v === 0 ? 'El 0 no es positivo ni negativo: es la frontera.'
+      : `Estás en ${xpMenos(v)}: a la ${v > 0 ? 'derecha del 0, es positivo' : 'izquierda del 0, es negativo'}.`;
+  },
 };
 
 // Cadena de b saltos iguales de tamaño a que sale del 0; se arrastra la punta. Con b negativo la cadena se voltea.
@@ -49,6 +82,11 @@ XP.saltos = {
   ok: (s, p) => p.a * s.b === p.meta,
   sol: p => ({ b: p.meta / p.a }),
   lee: (s, p) => `$${xpPar(p.a)} \\cdot ${xpPar(s.b)} = ${p.a * s.b}$`,
+  dice(s, p) {
+    const n = Math.abs(s.b), t = `${n} ${n === 1 ? 'salto' : 'saltos'}`;
+    if (!s.b) return 'Cero saltos: te quedas en el 0.';
+    return s.b > 0 ? `${t} de ${xpMenos(p.a)}: vas por ${xpMenos(p.a * s.b)}.` : `Cruzaste el 0 y la cadena se volteó: ${t} al revés, ${xpMenos(p.a * s.b)}.`;
+  },
   // Veces que corresponden a la posición x de la punta, sin salirse de la recta.
   veces(x, p) {
     let b = Math.round(x / p.a);
@@ -64,6 +102,25 @@ XP.signos = {
   ok: (s, p) => s.neg.filter(Boolean).length === p.menos,
   sol: p => ({ neg: p.factores.map((_, i) => i < p.menos) }),
   lee: (s, p) => `$${p.factores.map((f, i) => `(${s.neg[i] ? -f : f})`).join('')} = ${XP.signos.valor(s, p)}$`,
+  dice(s) {
+    const n = s.neg.filter(Boolean).length;
+    if (!n) return 'Sin signos menos nadie da la vuelta: positivo.';
+    return n % 2 ? `${n === 1 ? 'Una vuelta' : `${n} vueltas`}: quedas mirando al lado negativo.` : `${n} vueltas: vuelves a mirar al lado positivo.`;
+  },
+};
+
+// Predice y mira: se elige qué va a pasar y la escena (`escena`: 'recta' o 'saltos', con parámetros `en`) se anima sola
+// de `de` a `a`. No se califica: acertar o no cambia la frase (`porque` explica al que no acertó).
+XP.predice = {
+  ini: () => ({ pick: null, visto: false }),
+  ok: s => s.visto,
+  sol: p => ({ pick: p.bien, visto: true }),
+  lee: (s, p) => (s.visto ? p.cuenta : ''),
+  dice(s, p) {
+    if (s.pick == null) return 'Elige, y la escena te muestra qué pasa.';
+    if (!s.visto) return 'Mira…';
+    return s.pick === p.bien ? 'Lo viste venir.' : p.porque;
+  },
 };
 
 // Jerarquía: la expresión son fichas (números y operadores separados por espacios) y se toca la operación que sigue.
@@ -95,6 +152,10 @@ XP.capas = {
   },
   sol(p) { let s = XP.capas.ini(p); while (!XP.capas.ok(s)) s = XP.capas.aplica(s, XP.capas.sigue(s.toks)); return s; },
   lee: () => '',
+  dice(s) {
+    const n = s.toks.filter(t => typeof t === 'string' && '+-*/^'.includes(t)).length;
+    return n ? `${n === 1 ? 'Queda una operación' : `Quedan ${n} operaciones`}.` : 'Quedó un solo número: ese es el resultado.';
+  },
 };
 
 // Fichas a casillas: cada fila { tex, r } recibe la ficha r.
@@ -125,6 +186,35 @@ function xpSpring(from, to, on) {
   };
   id = requestAnimationFrame(f);
   return () => cancelAnimationFrame(id);
+}
+
+// Recorrido con tiempo fijo y arranque y frenada suaves (para lo que la escena muestra sola).
+function xpTween(from, to, ms, on, done) {
+  if (xpStill()) { on(to); done(); return () => {}; }
+  let t0 = 0, id = requestAnimationFrame(function f(t) {
+    t0 ||= t;
+    const k = Math.min(1, (t - t0) / ms), e = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+    on(from + (to - from) * e);
+    if (k < 1) id = requestAnimationFrame(f); else done();
+  });
+  return () => cancelAnimationFrame(id);
+}
+
+// Destello al ganar una idea: chispas que salen del centro de la escena.
+function xpChispas(stage) {
+  if (xpStill()) return;
+  const r = stage.getBoundingClientRect(), host = stage.closest('.explora');
+  if (!host) return;
+  const h = host.getBoundingClientRect();
+  for (let k = 0; k < 10; k++) {
+    const d = document.createElement('i'), ang = (k / 10) * 2 * Math.PI + 0.3, far = 46 + 26 * (k % 3);
+    d.className = 'xp-chispa';
+    d.style.left = r.left - h.left + r.width / 2 + 'px'; d.style.top = r.top - h.top + r.height / 2 + 'px';
+    host.appendChild(d);
+    d.animate([{ transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+      { transform: `translate(calc(-50% + ${Math.cos(ang) * far}px), calc(-50% + ${Math.sin(ang) * far}px)) scale(.2)`, opacity: 0 }],
+    { duration: 620, easing: 'cubic-bezier(.2,.8,.2,1)' }).onfinish = () => d.remove();
+  }
 }
 
 const XP_W = 340, XP_H = 156, XP_PAD = 24, XP_Y = 108;
@@ -207,10 +297,11 @@ XPD.recta = (stage, p, s, api) => {
     };
   }
   draw();
-  return () => stop?.();
+  // mover(x): lleva la ficha sin dedo (la usa «predice y mira»).
+  return Object.assign(() => stop?.(), { mover(x) { touched = true; c = x; s = { v: Math.round(x) }; draw(); } });
 };
 
-XPD.saltos = (stage, p, s, api) => {
+XPD.saltos =(stage, p, s, api) => {
   const { svg, dyn, X, at } = xpAxis(stage, p, Math.abs(p.a));
   let c = p.a * s.b, touched = false, stop = null;
   function draw() {
@@ -234,10 +325,27 @@ XPD.saltos = (stage, p, s, api) => {
     stop = xpSpring(c, p.a * s.b, x => { c = x; draw(); });
   };
   draw();
-  return () => stop?.();
+  return Object.assign(() => stop?.(), { mover(x) { touched = true; c = x; s = { b: XP.saltos.veces(x, p) }; draw(); } });
 };
 
-XPD.signos = (stage, p, s, api) => {
+// Predice y mira: la escena de adentro no se toca; al elegir, se anima sola de p.de a p.a.
+XPD.predice = (stage, p, s, api) => {
+  stage.innerHTML = `<div class="xp-watch"></div><div class="xp-tray">${p.opciones.map((o, k) => `<button type="button" class="xp-chip" data-k="${k}">${o}</button>`).join('')}</div>`;
+  const box = stage.firstChild, chips = [...stage.querySelectorAll('.xp-chip')];
+  const escena = XPD[p.escena](box, p.en, XP[p.escena].ini(p.en), { set() {}, nota() {}, memo: {} });
+  let stop = null;
+  if (!s.visto) s = XP.predice.ini();   // si se salió a media animación, se vuelve a elegir
+  const marca =() => chips.forEach((c, k) => { c.disabled = s.pick != null; c.classList.toggle('on', s.pick === k); });
+  escena.mover(s.visto ? p.a : p.de); marca();
+  stage.onclick = e => {
+    const chip = e.target.closest('.xp-chip'); if (!chip || s.pick != null) return;
+    s = { pick: +chip.dataset.k, visto: false }; xpTick(); api.set(s, true); marca();
+    stop = xpTween(p.de, p.a, 1500, x => escena.mover(x), () => { s = { ...s, visto: true }; api.set(s); });
+  };
+  return () => { stop?.(); escena(); };
+};
+
+XPD.signos =(stage, p, s, api) => {
   stage.innerHTML = `<div class="xp-fact">${p.factores.map((f, i) => `<button type="button" class="xp-f" data-i="${i}"><span></span></button>`).join('<i>·</i>')}</div>
     <div class="xp-coin"><b></b><small></small></div>`;
   const coin = stage.querySelector('.xp-coin');
@@ -392,6 +500,7 @@ function exploraPlayer(host, lesson, course, opts) {
     hechos[i] = true;
     if (first) {
       if (typeof Sfx !== 'undefined') Sfx.ok();
+      xpChispas(stage);
       const n = $x('.xp-ideas');
       if (!xpStill()) n.animate([{ transform: 'scale(1.25)' }, { transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.2,.8,.2,1)' });
     }
@@ -406,10 +515,11 @@ function exploraPlayer(host, lesson, course, opts) {
     idea.lastElementChild.innerHTML = tex(p.idea);
     nota.textContent = '';
     stage.onclick = null; stage.className = `xp-stage t-${p.tipo}`;
-    const leer = () => { read.innerHTML = tex(t.lee(s, p)); };
+    // Renglón de la cuenta y frase con que la escena responde (un aviso de error la tapa hasta el siguiente movimiento).
+    const leer = () => { read.innerHTML = tex(t.lee(s, p)); nota.classList.remove('aviso'); nota.innerHTML = tex(t.dice?.(s, p) || ''); };
     const api = {
       memo, ideas,
-      nota: m => { nota.textContent = m; },
+      nota: m => { if (k !== i) return; if (!m) return leer(); nota.classList.add('aviso'); nota.textContent = m; },
       // vivo: el dedo sigue arrastrando; se actualiza el renglón pero la meta se mira al soltar.
       set(ns, vivo) { if (k !== i) return; s = estados[k] = ns; leer(); if (!vivo && !hechos[k] && t.ok(s, p)) cumple(true); },
     };

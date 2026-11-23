@@ -69,6 +69,39 @@ test('recta: cada modo mide lo que dice', () => {
   assert.equal(R.ok({ sel: [5, -3, 4] }, dos), false);
 });
 
+test('la escena responde con una frase a cada movimiento', () => {
+  const R = XP.recta, resta = { modo: 'salto', resta: 7, desde: 3, min: -8, max: 8, meta: -4 };
+  assert.match(R.dice({ v: 5 }, resta), /sumando 7/, 'ir al lado equivocado se dice');
+  assert.match(R.dice({ v: 0 }, resta), /Llevas 3 de 7 pasos/);
+  assert.match(R.dice({ v: -6 }, resta), /Te pasaste/);
+  assert.match(R.dice({ v: -4 }, resta), /Justo/);
+  assert.match(R.dice({ v: 6 }, { modo: 'distancia', ancla: -2, min: -8, max: 8 }), /8 pasos\. Son 2 hasta el 0 y 6 más/);
+  assert.match(R.dice({ sel: [4] }, { modo: 'dos', ancla: 1, dist: 4, metas: [-3, 5] }), /a 3 pasos del 1, no a 4/);
+  assert.match(R.dice({ sel: [5] }, { modo: 'dos', ancla: 1, dist: 4, metas: [-3, 5] }), /Falta el del otro lado/);
+  assert.match(XP.saltos.dice({ b: -4 }, { a: -3 }), /se volteó.*12/);
+  assert.match(XP.signos.dice({ neg: [true, true, false] }), /lado positivo/);
+  for (const p of L.pasos) {
+    const t = XP[p.tipo];
+    if (!t.dice) continue;
+    for (const s of [t.ini(p), t.sol(p)]) assert.ok(t.dice(s, p).length <= 90, p.tipo + ': frase larga');
+  }
+});
+
+test('predice y mira: se elige, la escena se anima sola y el paso se cumple al verla', () => {
+  const P = XP.predice, pasos = L.pasos.filter(p => p.tipo === 'predice');
+  assert.ok(pasos.length >= 2);
+  for (const p of pasos) {
+    assert.equal(P.ok({ pick: p.bien, visto: false }, p), false, 'no basta elegir');
+    assert.equal(P.ok({ pick: 0, visto: true }, p), true, 'no se califica la apuesta');
+    assert.ok(p.opciones[p.bien] && p.porque && p.cuenta && XP[p.escena]);
+    assert.equal(P.dice({ pick: 1 - p.bien, visto: true }, p), p.porque);
+    assert.notEqual(p.de, p.a);
+  }
+  const s = pasos.find(p => p.escena === 'saltos');
+  assert.equal(s.en.a * XP.saltos.veces(s.a, s.en), 12);
+  assert.equal(s.en.a * XP.saltos.veces(s.de, s.en), -12);
+});
+
 test('recta: las metas de la lección salen de sus propias cuentas', () => {
   for (const p of L.pasos.filter(p => p.tipo === 'recta')) {
     if (p.modo === 'dos') for (const m of p.metas) assert.equal(Math.abs(m - p.ancla), p.dist);

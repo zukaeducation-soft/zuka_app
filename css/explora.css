@@ -18,14 +18,14 @@
   font-size: 13px; font-weight: 700; color: var(--c-ink); }
 .xp-ideas svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
 
-.xp-step { flex: 1; min-height: 0; overflow: auto; padding: 14px 20px 8px; display: flex; flex-direction: column; gap: 12px; touch-action: pan-y; }
+.xp-step { flex: 1; min-height: 0; overflow: hidden auto; padding: 14px 20px 8px; display: flex; flex-direction: column; gap: 12px; touch-action: pan-y; }
 .xp-step > * { flex-shrink: 0; }
 .xp-text { font-size: 17px; line-height: 1.45; text-wrap: pretty; }
 .xp-text b { color: var(--c-ink); font-weight: 700; }
-.xp-stage { margin: auto 0; min-height: 150px; display: grid; align-content: center; justify-items: center; gap: 16px; }
+.xp-stage { margin: auto 0; min-height: 150px; display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; justify-items: center; gap: 16px; }
 .xp-read { min-height: 34px; text-align: center; font-size: 19px; }
-.xp-nota { min-height: 20px; text-align: center; font-size: 14px; color: var(--gold); }
-.xp-nota:empty { display: none; }
+.xp-nota { min-height: 40px; text-align: center; font-size: 14px; line-height: 1.4; color: var(--mute); text-wrap: balance; }
+.xp-nota.aviso { color: var(--gold); }
 
 .xp-idea { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--ok) 45%, var(--line));
   border-radius: 12px; background: color-mix(in srgb, var(--ok) 9%, var(--card)); opacity: 0; transform: translateY(10px); visibility: hidden;
@@ -128,6 +128,14 @@
 
 @media (max-height: 640px) { .xp-text { font-size: 16px; } .xp-stage { min-height: 120px; } .xp-step { gap: 8px; } }
 @media (prefers-reduced-motion: reduce) {
+  .xp-chispa { display: none; }
   .xp-halo, .xp-built li, .xp-sheet-in, .xp-expr .xp-n.new, .xp-slot.bad { animation: none; }
   .xp-idea, .xp-segs b, .xp-chip { transition: none; }
 }
+
+/* ---- predice y mira, chispas ---- */
+.xp-watch { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; pointer-events: none; }
+.t-predice .xp-chip { min-width: 96px; font-size: 16px; }
+.t-predice .xp-chip:disabled:not(.on) { opacity: .3; }
+.t-predice .xp-chip.on:disabled { opacity: 1; }
+.xp-chispa { position: absolute; z-index: 7; width: 9px; height: 9px; border-radius: 50%; background: var(--c); pointer-events: none; }

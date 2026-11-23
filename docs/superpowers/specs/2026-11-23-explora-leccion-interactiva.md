@@ -54,3 +54,9 @@ fuera de la potencia) · Cierre. Los ejemplos no repiten los de los ejercicios d
 - Solo la lección piloto. Si gusta, las demás se escriben con los mismos tipos de paso.
 
 Pruebas: `tests/explora.test.js`.
+
+## Más dinámica (2026-11-23, segundo pedido)
+
+- **La escena responde**: cada tipo tiene `dice(estado, p)` (pura), una frase que cambia con cada movimiento («Llevas 3 de 7 pasos», «Así estarías sumando 7. Restar va al otro lado», «Cruzaste el 0 y la cadena se volteó»). Un aviso de error la tapa hasta el siguiente movimiento.
+- **Predice y mira** (tipo `predice`): se elige qué va a pasar y la escena (`recta` o `saltos`) se anima sola de `de` a `a` (`xpTween`, `mover`); no se califica, y al que no acertó se le dice el porqué. Después viene un paso «ahora tú» con otros números. La lección queda en 18 pasos.
+- **Destello** de chispas al ganar cada idea (`xpChispas`).
