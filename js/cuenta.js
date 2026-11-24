@@ -438,7 +438,7 @@ async function cuentaTienda() {
   if (aj.data) Cuenta.ajustes = Object.fromEntries(aj.data.map(x => [x.clave, x.valor]));
   try { localStorage.setItem('zuka-tienda', JSON.stringify({ productos: Cuenta.productos, ajustes: Cuenta.ajustes })); } catch (e) { /* sin espacio */ }
 }
-async function openComprar(id) {
+async function openComprar(id, elegido) {
   if (!Cuenta.user) return openEntrar();
   const a = accesoCurso(Cuenta.accesos, id), renueva = a.estado === 'pago' || a.estado === 'vencido', curso = cursoNombre(id);
   openSheet(`<div class="acct-form compra"><h3 class="sheet-title">${renueva ? 'Renovar' : 'Comprar'} ${esc(curso)}</h3>
@@ -450,7 +450,7 @@ async function openComprar(id) {
   if (!box) return;
   const ps = productosDe(id);
   if (!ps.length) { lista.outerHTML = `<p class="muted">Escríbenos y te contamos cómo comprarlo.</p>${waBoton(WA.ayuda(Cuenta.codigo), 'Escribir por WhatsApp', 'main brand')}`; return; }
-  let sel = ps[ps.length - 1];
+  let sel = ps.find(p => p.id === elegido) || ps[ps.length - 1];
   const mes = ps[0].meses === 1 ? ps[0].precio : null;
   lista.innerHTML = ps.map(p => `<button type="button" role="radio" class="compra-op" data-p="${esc(p.id)}" aria-checked="${p === sel}" tabindex="${p === sel ? 0 : -1}">
     <span><b>${mesesTexto(p.meses)}</b><small>${mes && p.precio && p.meses > 1 ? `${cop(p.precio / p.meses)} al mes` : diasTexto(p.dias)}</small></span>

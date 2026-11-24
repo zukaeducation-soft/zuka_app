@@ -69,3 +69,13 @@ test('la tienda es una pestaña con cursos, paquetes, libros, asesorías y pedid
   for (const v of ['todo', 'cursos', 'libros', 'asesorias', 'pedidos']) assert.ok(s.includes(`['${v}', `), v);
   assert.match(s, /function tiendaCapa\(paso\)/);
 });
+test('el ahorro de un paquete es de verdad: suma lo que se vende suelto y, si algo no se vende, no promete nada', () => {
+  const t = f('tiendaSuelto');
+  const A = [{ id: 'f1', tipo: 'fisico', precio: 60, da: { fisicos: [1] } }, { id: 'f2', tipo: 'fisico', precio: 50, da: { fisicos: [2] } }, { id: 'd1', tipo: 'digital', precio: 20, da: { libros: [1] } }, { id: 'h', tipo: 'asesoria', precio: 45, da: { horas: 1, horas_tipo: 'general' } }];
+  const P = [{ curso: 'preuda', dias: 180, activo: true, precio: 140 }];
+  assert.equal(t({ id: 'x', da: { cursos: ['preuda'], dias: 180, libros: [1] } }, A, P), 160);
+  assert.equal(t({ id: 'x', da: { fisicos: [1, 2], libros: [1, 2] } }, A, P), 110, 'el digital de regalo no infla el ahorro');
+  assert.equal(t({ id: 'x', da: { horas: 4, horas_tipo: 'general' } }, A, P), 180);
+  assert.equal(t({ id: 'x', da: { cursos: ['preuda'], dias: 90, libros: [1] } }, A, P), 0);
+  assert.equal(t({ id: 'x', da: { fisicos: [1] } }, A, P), 0);
+});
