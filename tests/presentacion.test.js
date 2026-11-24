@@ -57,3 +57,28 @@ test('los estilos usan las variables del tema y respetan «reducir movimiento»'
   assert.match(css, /prefers-reduced-motion/);
   assert.doesNotMatch(css, /color: ?#fff\b/);
 });
+
+// ---- portada viva (spec 2026-11-24-portada-viva) ----
+test('la rueda: ángulo del punto, onda que sale de su altura y reto de sen θ = ½', () => {
+  const [ang, onda, reto] = ['pzAngulo', 'pzOnda', 'pzReto'].map(n => get(ctx, n));
+  assert.equal(Math.round(ang(1, 0)), 0); assert.equal(Math.round(ang(0, -1)), 90); assert.equal(Math.round(ang(0, 1)), 270);
+  for (const d of [0, 30, 90, 200]) {
+    const [x, y] = onda(d, { x0: 100, x1: 300, cy: 50, r: 40 }).slice(1).split('L')[0].split(' ').map(Number);
+    assert.equal(x, 100); assert.ok(Math.abs(y - (50 - 40 * Math.sin(d * Math.PI / 180))) < .1);
+  }
+  assert.equal(reto(31.9), 30); assert.equal(reto(148), 150); assert.equal(reto(48), null); assert.equal(reto(210), null);
+});
+
+test('el cuadrado suma siempre 100 y la palanca solo se equilibra a 2 pasos', () => {
+  const [area, pal] = ['pzArea', 'pzPalanca'].map(n => get(ctx, n));
+  for (let a = 1; a < 10; a++) { const m = area(a); assert.equal(m.aa + 2 * m.ab + m.bb, 100); }
+  assert.equal([1, 2, 3, 4].filter(d => pal(d).ok).join(), '2');
+  assert.ok(pal(1).giro < 0 && pal(2).giro === 0 && pal(4).giro > 0);
+});
+
+test('lo que se arrastra también se mueve con el teclado y las pestañas están enlazadas con su panel', () => {
+  assert.equal((html.match(/role="slider" tabindex="0" aria-label=/g) || []).length, 3);
+  assert.ok(html.includes('aria-controls="pz-panel-1"') && html.includes('id="pz-panel-1"'));
+  assert.match(html, /aria-live="polite"/);
+  for (const id of html.match(/href="#[^"]+/g)) assert.ok(html.includes(`id="${id.slice(7)}"`), id);
+});

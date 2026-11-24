@@ -1,4 +1,18 @@
 /* Tienda y lector de libros (js/tienda.js, js/lector.js; spec 2026-11-24-tienda-libros). */
+.tienda { display: flex; flex-direction: column; min-height: 100%; }
+.td-head { width: min(100%, 1080px); margin: 0 auto; padding: 20px 16px 12px; display: grid; gap: 4px; }
+.td-head h1 { font-family: var(--display); font-weight: 600; font-size: 28px; line-height: 1.1; outline: none; }
+.td-head p { font-size: 14.5px; line-height: 1.4; }
+.tienda > .td-tabs { position: sticky; top: 0; z-index: 4; background: var(--bg); padding-top: 8px; }
+.tienda > .td-in { flex: 1; align-content: start; }
+.tienda > .td-carro { position: sticky; bottom: 0; z-index: 4; padding-bottom: 12px; }
+.tienda .btn.main.brand { --c: var(--brand); color: var(--on-brand); }
+.td-in .acct-head h2 { margin: 0; }
+.td-in .acct-head { margin-bottom: 12px; }
+.td-curso-top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: start; }
+.td-curso small { color: var(--mute); font-size: 13px; line-height: 1.35; }
+.td-curso-top .cart.lg { width: 56px; height: 56px; }
+.td-otra { width: auto; justify-self: center; }
 #tienda { position: fixed; inset: 0; z-index: 32; display: flex; flex-direction: column; background: var(--bg); color: var(--ink); }
 .td-bar { display: flex; align-items: center; gap: 8px; padding: max(8px, env(safe-area-inset-top)) 12px 8px; }
 .td-bar h1 { font-family: var(--display); font-weight: 500; font-size: 24px; }
@@ -106,3 +120,19 @@
 .lx-indice small { color: #9aa3c4; }
 @media (prefers-reduced-motion: reduce) { .lx-indice { transition: none; } }
 @media print { body.leyendo { display: none !important; } }
+
+@media (min-width: 1000px) {
+  .td-head, .tienda > .td-in { width: 100%; padding-inline: var(--gut); }
+  .td-head { padding-top: 40px; }
+  .td-head h1 { font-size: 34px; }
+  .td-head p { font-size: 17px; }
+  .tienda > .td-tabs { padding-inline: var(--gut); }
+  .tienda > .td-carro { padding-inline: var(--gut); }
+  .tienda .td-in { gap: 40px; padding-bottom: 72px; }
+  .tienda .td-in h2 { font-size: 24px; }
+  .tienda .td-grid { gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .tienda .td-card { padding: 22px; }
+}
+/* cinco secciones en el menú de abajo */
+@media (max-width: 420px) { #tabbar button { font-size: 11px; } #tabbar button .i { padding: 5px 12px; } }
+@media (max-width: 340px) { #tabbar button { font-size: 10.5px; } #tabbar button .i { padding: 5px 9px; } }

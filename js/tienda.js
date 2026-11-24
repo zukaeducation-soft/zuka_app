@@ -1,4 +1,5 @@
-// Tienda: paquetes, libros, asesorías y mis pedidos (spec 2026-11-24-tienda-libros). Capa propia (#tienda) sobre la app.
+// Tienda: pestaña con el catálogo (cursos, paquetes, libros, asesorías) y mis pedidos (spec 2026-11-24-tienda-libros). El
+// pedido (dirección, total y pago) se hace en una capa propia (#tienda) sobre la app.
 // El precio lo pone la base al crear el pedido (crear_pedido); aquí solo se muestra. Se paga por fuera y el administrador
 // confirma en el panel.
 
@@ -18,7 +19,7 @@ const direccionError = d => [['nombre', 'Escribe quién recibe.'], ['telefono', 
 
 // ---------- datos ----------
 // Tienda.* se llena al entrar (artículos, envíos y libros son públicos; lo demás es de la cuenta).
-const Tienda = { arts: [], envios: [], libros: [], mios: [], saldo: { general: 0, universidad: 0, grupo: 0 }, pedidos: [], carro: {}, vista: 'paquetes' };
+const Tienda = { arts: [], envios: [], libros: [], mios: [], saldo: { general: 0, universidad: 0, grupo: 0 }, pedidos: [], carro: {}, vista: 'todo', cargada: false };
 async function tiendaCarga() {
   if (!Cuenta.sb) return false;
   const [a, e, l] = await Promise.all([Cuenta.sb.from('articulos').select('*'), Cuenta.sb.from('envios').select('*'), Cuenta.sb.from('libros').select('*')]);
@@ -29,6 +30,7 @@ async function tiendaCarga() {
   const listo = x => (x.da.libros || []).every(id => Tienda.libros.some(b => b.id === id && libroListo(b)));
   Tienda.arts = a.data.filter(x => x.activo && x.precio != null && listo(x)).sort(orden);
   Tienda.envios = e.data.filter(x => x.activo).sort(orden);
+  Tienda.cargada = true;
   return tiendaMios();
 }
 async function tiendaMios() {
@@ -46,35 +48,33 @@ const libroListo = l => l.publicado && l.version > 0 && l.paginas > 0;
 const conPlan = () => tienePago(Cuenta.accesos);
 const carroItems = () => Object.entries(Tienda.carro).filter(([id]) => Tienda.arts.some(a => a.id === id)).map(([id, cantidad]) => ({ id, cantidad }));
 
-// ---------- capa ----------
-function tiendaAtras() {   // botón atrás (js/back.js): del pedido a la tienda y de la tienda a la app
+// ---------- pestaña ----------
+function tiendaAtras() {   // botón atrás (js/back.js): cierra el libro o el pedido
   if (sheetIsOpen || dialogOpen()) return false;
   if (lectorAtras()) return true;
   const el = $('#tienda');
   if (!el) return false;
-  if (el.dataset.paso === 'enviando') return true;   // se está creando el pedido
-  if (el.dataset.paso) tiendaPinta(); else tiendaCerrar();
+  if (el.dataset.paso !== 'enviando') { tiendaCerrar(); if (tab === 'tienda') tiendaPinta(); }   // enviando: se está creando el pedido
   return true;
 }
 function tiendaCerrar() { const el = $('#tienda'); if (!el) return; el.remove(); tiendaInerte(false); }
 function tiendaInerte(on) { ['#topbar', '#view', '#tabbar'].forEach(s => { const x = $(s); if (x) x.inert = on; }); }
-async function openTienda(vista = 'paquetes') {
-  if (!Cuenta.user) return openEntrar();
-  closeSheet(false);
-  let el = $('#tienda');
-  if (!el) { el = document.createElement('div'); el.id = 'tienda'; document.body.appendChild(el); }
-  el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Tienda');
+function openTienda(vista = 'todo') {
+  closeSheet(false); tiendaCerrar();
   Tienda.vista = vista;
-  tiendaInerte(true);
-  if (Tienda.arts.length) tiendaPinta(); else el.innerHTML = '<div class="td-in"><p class="td-vacio">Cargando…</p></div>';
-  const ok = await tiendaCarga().catch(() => false);
-  if (!el.isConnected || el.dataset.paso) return;
-  if (!ok && !Tienda.arts.length) {
-    el.innerHTML = `<div class="td-in"><p class="td-vacio">No se pudo cargar la tienda. Revisa tu conexión.</p><button class="btn ghost" type="button" data-td="cerrar">Volver</button></div>`;
-    $('[data-td]', el).onclick = tiendaCerrar;
-    return;
-  }
-  tiendaPinta();
+  go('tienda'); view.scrollTop = 0;
+}
+// La pinta go('tienda'); los datos se ponen al día cada vez que se entra.
+function renderTienda() {
+  tiendaPinta('', false);
+  tiendaCarga().catch(() => false).then(ok => {
+    if (tab !== 'tienda' || lector || $('#tienda')) return;
+    if (ok || Tienda.cargada) tiendaPinta('', false);
+    else {
+      $('.td-in', view).innerHTML = '<p class="td-vacio">No se pudo cargar la tienda. Revisa tu conexión.</p><button class="btn ghost td-otra" type="button">Reintentar</button>';
+      $('.td-otra', view).onclick = renderTienda;
+    }
+  });
 }
 const tiendaPortada = (id, cls = '') => `<img class="td-portada ${cls}" src="brand/libros/${id}.webp" alt="" width="180" height="255" loading="lazy">`;
 function tiendaBoton(a) {
@@ -92,16 +92,35 @@ const tiendaCard = (a, extra = '') => `<article class="td-card${a.destacado ? ' 
   ${extra}<h3>${esc(a.nombre)}</h3><p>${esc(a.detalle)}</p><div class="td-pie"><span>${tiendaPrecioHTML(a)}</span>${tiendaBoton(a)}</div></article>`;
 const tiendaDe = tipo => Tienda.arts.filter(a => a.tipo === tipo);
 
+const tiendaPaqHTML = a => tiendaCard(a, (a.da.libros || []).length ? `<span class="td-mini">${a.da.libros.map(i => tiendaPortada(i, 'mini')).join('')}</span>` : '');
+// Un curso del catálogo: qué trae, desde cuánto y cómo lo tiene esta cuenta.
+function tiendaCursoHTML(c) {
+  const a = accesoCurso(Cuenta.accesos, c.id), ps = productosDe(c.id), pr = ps.map(p => p.precio).filter(p => p != null);
+  const ex = c.units.reduce((t, u) => t + u.lessons.reduce((n, l) => n + l.ex.length, 0), 0);
+  return `<article class="td-card td-curso" style="--c:${c.color}"><div class="td-curso-top">${courseArt(c, 'lg')}<div><h3>${esc(c.name)}</h3><small>${c.units.length} ${c.units.length === 1 ? 'mundo' : 'mundos'} · ${lessonsOf(c).length} lecciones · ${ex} ejercicios</small></div>${accesoPill(a)}</div>
+    <p>${esc(c.tagline || '')}</p><div class="td-pie"><span><strong class="td-precio">${pr.length ? cop(Math.min(...pr)) : 'Por WhatsApp'}</strong><small class="td-plan">${ps.length ? `${pr.length > 1 ? 'desde, ' : ''}${ps.map(p => mesesTexto(p.meses)).join(', ').replace(/, ([^,]*)$/, ' o $1')}` : ''}</small></span>
+      <button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-compra="${esc(c.id)}">${a.estado === 'pago' || a.estado === 'vencido' ? 'Renovar' : 'Comprar'}</button></div></article>`;
+}
+const tiendaJuegos = tipo => tiendaDe(tipo).filter(a => ((tipo === 'fisico' ? a.da.fisicos : a.da.libros) || []).length > 1);
+const tiendaJuegoHTML = a => tiendaCard(a, `<span class="td-mini">${Tienda.libros.map(l => tiendaPortada(l.id, 'mini')).join('')}</span>`);
+const tiendaSec = (t, html, v = '') => (html ? `<section><div class="acct-head"><h2>${t}</h2>${v ? `<button class="link-btn" type="button" data-v="${v}">Ver todo</button>` : ''}</div>${html}</section>` : '');
+const tiendaGrid = html => (html ? `<div class="td-grid">${html}</div>` : '');
+
 function tiendaVistaHTML() {
-  if (Tienda.vista === 'paquetes') {
-    return `<section><h2>Paquetes</h2><div class="td-grid">${tiendaDe('paquete').map(a => tiendaCard(a, (a.da.libros || []).length ? `<span class="td-mini">${a.da.libros.map(i => tiendaPortada(i, 'mini')).join('')}</span>` : '')).join('') || '<p class="td-vacio">Pronto habrá paquetes.</p>'}</div></section>
-      <section><h2>Solo el curso</h2><div class="td-lista">${cursosVisibles().map(c => { const ps = productosDe(c.id).filter(p => p.precio != null); return `<button class="td-fila" type="button" data-compra="${esc(c.id)}"><span><b>${esc(c.name)}</b><small>${ps.length ? `${ps.map(p => mesesTexto(p.meses)).join(', ').replace(/, ([^,]*)$/, ' o $1')} · desde ${cop(Math.min(...ps.map(p => p.precio)))}` : 'Precio por WhatsApp'}</small></span>${ICON.right}</button>`; }).join('')}</div></section>`;
+  if (Tienda.vista === 'todo') {
+    const h = tiendaSec('Paquetes', tiendaGrid(tiendaDe('paquete').map(tiendaPaqHTML).join('')))
+      + tiendaSec('Cursos', tiendaGrid(cursosVisibles().map(tiendaCursoHTML).join('')), 'cursos')
+      + tiendaSec('Libros', tiendaGrid([...tiendaJuegos('fisico'), ...tiendaJuegos('digital')].map(tiendaJuegoHTML).join('')) || (Tienda.libros.length ? '<p class="td-nota">Mira los cuatro libros del Preuniversitario, uno por uno.</p>' : ''), 'libros')
+      + tiendaSec('Asesorías', tiendaGrid(tiendaDe('asesoria').slice(0, 3).map(a => tiendaCard(a)).join('')), 'asesorias');
+    return Tienda.cargada ? h : `${tiendaSec('Cursos', tiendaGrid(cursosVisibles().map(tiendaCursoHTML).join('')), 'cursos')}<p class="td-vacio">Cargando…</p>`;
+  }
+  if (Tienda.vista === 'cursos') {
+    return tiendaSec('Cursos', tiendaGrid(cursosVisibles().map(tiendaCursoHTML).join(''))) + tiendaSec('Paquetes', tiendaGrid(tiendaDe('paquete').map(tiendaPaqHTML).join('')));
   }
   if (Tienda.vista === 'libros') {
     const suelto = (tipo, id) => tiendaDe(tipo).find(a => (a.da.libros || a.da.fisicos || []).length === 1 && (tipo === 'fisico' ? a.da.fisicos : a.da.libros)[0] === id);
-    const juego = tipo => tiendaDe(tipo).filter(a => ((tipo === 'fisico' ? a.da.fisicos : a.da.libros) || []).length > 1);
     const fila = (a, rot) => (a ? `<div class="td-op${Tienda.carro[a.id] ? ' on' : ''}"><span><small>${rot}</small>${tiendaPrecioHTML(a)}</span>${tiendaBoton(a)}</div>` : '');
-    return `<section><h2>Los cuatro libros</h2><div class="td-grid">${[...juego('fisico'), ...juego('digital')].map(a => tiendaCard(a, `<span class="td-mini">${Tienda.libros.map(l => tiendaPortada(l.id, 'mini')).join('')}</span>`)).join('')}</div></section>
+    return `${tiendaSec('Los cuatro libros', tiendaGrid([...tiendaJuegos('fisico'), ...tiendaJuegos('digital')].map(tiendaJuegoHTML).join('')))}
       <section><h2>Uno por uno</h2><div class="td-libros">${Tienda.libros.map(l => `<article class="td-libro">${tiendaPortada(l.id)}<div><h3>${esc(l.titulo)}</h3><p>${esc(l.subtitulo)}${l.paginas ? ` · ${l.paginas} páginas` : ''}</p>
         ${libroListo(l) || cuentaEsAdmin() ? `<button class="btn sm ${libroMio(l.id) ? 'main brand' : 'ghost'}" type="button" data-leer="${l.id}"${l.version ? '' : ' disabled'}>${libroMio(l.id) ? 'Leer' : 'Ver muestra'}</button>` : ''}
         ${fila(suelto('fisico', l.id), 'Impreso')}${fila(suelto('digital', l.id), 'Digital, 12 meses')}</div></article>`).join('')}</div>
@@ -119,20 +138,20 @@ function tiendaVistaHTML() {
     ${p.guia ? `<p class="td-guia">${esc(p.transportadora)} · guía <b>${esc(p.guia)}</b></p>` : ''}
     ${p.estado === 'pendiente' ? `<div class="acct-actions"><button class="btn main brand" type="button" data-pago="${p.id}">Pagar</button><button class="btn ghost" type="button" data-cancela="${p.id}">Cancelar pedido</button></div>` : ''}</article>`).join('')}</div>` : '<p class="td-vacio">Aún no tienes pedidos.</p>'}</section>`;
 }
-function tiendaPinta(foco = '') {
-  const el = $('#tienda'); if (!el) return;
-  const y = el.dataset.paso ? 0 : $('.td-cuerpo', el)?.scrollTop || 0;
-  delete el.dataset.paso;
-  const items = carroItems(), k = tiendaCuenta(items, Tienda.arts, conPlan()), n = items.reduce((t, x) => t + x.cantidad, 0);
-  const V = [['paquetes', 'Paquetes'], ['libros', 'Libros'], ['asesorias', 'Asesorías'], ['pedidos', 'Mis pedidos']];
-  el.innerHTML = `<header class="td-bar"><button class="icon-btn" type="button" data-td="cerrar" aria-label="Cerrar la tienda">${ICON.x}</button><h1 tabindex="-1">Tienda</h1></header>
+function tiendaPinta(foco = '', mueve = true) {
+  if (tab !== 'tienda') return;
+  const el = view, y = $('.tienda', el) ? el.scrollTop : 0;
+  const items = carroItems(), k = tiendaCuenta(items, Tienda.arts, conPlan()), n = items.reduce((t, x) => t + x.cantidad, 0), porPagar = Tienda.pedidos.filter(p => p.estado === 'pendiente').length;
+  const V = [['todo', 'Todo'], ['cursos', 'Cursos'], ['libros', 'Libros'], ['asesorias', 'Asesorías'], ['pedidos', `Mis pedidos${porPagar ? ` (${porPagar})` : ''}`]];
+  const tabs = $('.td-tabs', el)?.scrollLeft || 0;
+  el.innerHTML = `<div class="tienda"><header class="td-head"><h1 tabindex="-1">Tienda</h1><p class="muted">Cursos, libros y asesorías. Pagas con QR y se activa en tu mismo código.</p></header>
     <nav class="td-tabs" aria-label="Secciones de la tienda">${V.map(([id, t]) => `<button type="button" data-v="${id}"${id === Tienda.vista ? ' aria-current="page"' : ''}>${t}</button>`).join('')}</nav>
-    <div class="td-cuerpo"><div class="td-in">${tiendaVistaHTML()}</div></div>
-    ${n && Tienda.vista !== 'pedidos' ? `<footer class="td-carro"><span><small>${n} ${n === 1 ? 'artículo' : 'artículos'}${k.fisicos ? ' · envío aparte' : ''}</small><b>${cop(k.subtotal)}</b></span><button class="btn main brand" type="button" data-td="pedir">Continuar</button></footer>` : ''}`;
-  $('.td-cuerpo', el).scrollTop = y;
-  const A = { cerrar: tiendaCerrar, pedir: tiendaPedir, separar: () => { tiendaCerrar(); go('tutorias'); } };
+    <div class="td-in">${tiendaVistaHTML()}</div>
+    ${n && Tienda.vista !== 'pedidos' ? `<footer class="td-carro"><span><small>${n} ${n === 1 ? 'artículo' : 'artículos'}${k.fisicos ? ' · envío aparte' : ''}</small><b>${cop(k.subtotal)}</b></span><button class="btn main brand" type="button" data-td="pedir">Continuar</button></footer>` : ''}</div>`;
+  el.scrollTop = y; $('.td-tabs', el).scrollLeft = tabs;
+  const A = { pedir: tiendaPedir, separar: () => go('tutorias') };
   el.querySelectorAll('[data-td]').forEach(b => { b.onclick = () => A[b.dataset.td](); });
-  el.querySelectorAll('[data-v]').forEach(b => { b.onclick = () => { Tienda.vista = b.dataset.v; tiendaPinta(`[data-v="${b.dataset.v}"]`); $('.td-cuerpo', el).scrollTop = 0; }; });
+  el.querySelectorAll('[data-v]').forEach(b => { b.onclick = () => { Tienda.vista = b.dataset.v; tiendaPinta(`.td-tabs [data-v="${b.dataset.v}"]`); el.scrollTop = 0; $('.td-tabs [aria-current]', el)?.scrollIntoView({ inline: 'nearest', block: 'nearest' }); }; });
   el.querySelectorAll('[data-mas]').forEach(b => { b.onclick = () => { const id = b.dataset.mas; Tienda.carro[id] = Math.min(10, (Tienda.carro[id] || 0) + 1); tiendaPinta(`[data-mas="${id}"], [data-menos="${id}"]`); }; });
   el.querySelectorAll('[data-menos]').forEach(b => { b.onclick = () => { const id = b.dataset.menos; if (--Tienda.carro[id] <= 0) delete Tienda.carro[id]; tiendaPinta(`[data-menos="${id}"], [data-mas="${id}"]`); }; });
   el.querySelectorAll('[data-compra]').forEach(b => { b.onclick = () => openComprar(b.dataset.compra); });
@@ -143,16 +162,28 @@ function tiendaPinta(foco = '') {
     const r = await Cuenta.sb.rpc('cancelar_pedido', { p_id: +b.dataset.cancela });
     toast(r.error ? 'No se pudo cancelar. Inténtalo de nuevo.' : 'Pedido cancelado.'); await tiendaMios(); tiendaPinta();
   }); });
-  (foco && el.querySelector(foco) || $('h1', el)).focus({ preventScroll: true });
+  if (mueve) (foco && el.querySelector(foco) || $('h1', el)).focus({ preventScroll: true });
 }
 
 // ---------- pedido: dirección (si hay impresos) → confirmar ----------
 const DIR = [['nombre', 'Quién recibe', 'autocomplete="name" maxlength="80"'], ['telefono', 'Celular', 'type="tel" inputmode="tel" autocomplete="tel" maxlength="30"'], ['documento', 'Cédula o documento (opcional)', 'inputmode="numeric" maxlength="20"'],
   ['departamento', 'Departamento', 'autocomplete="address-level1" maxlength="60"'], ['ciudad', 'Ciudad o municipio', 'autocomplete="address-level2" maxlength="80"'], ['direccion', 'Dirección', 'autocomplete="street-address" maxlength="120"'], ['detalle', 'Barrio, apartamento o indicaciones (opcional)', 'maxlength="120"']];
+function tiendaCapa(paso) {
+  let el = $('#tienda');
+  if (!el) {
+    el = document.createElement('div'); el.id = 'tienda';
+    el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Tu pedido');
+    document.body.appendChild(el);
+  }
+  el.dataset.paso = paso;
+  tiendaInerte(true);
+  return el;
+}
 function tiendaPedir() {
-  const el = $('#tienda'), items = carroItems();
-  if (!el || !items.length) return;
-  el.dataset.paso = 'pedir';
+  const items = carroItems();
+  if (!items.length) return;
+  if (!Cuenta.user) return openEntrar();
+  const el = tiendaCapa('pedir');
   const p = Cuenta.perfil || {}, d = { nombre: p.nombre || '', telefono: p.telefono || '', ciudad: p.ciudad || '', ...(S.envio || {}) };
   const fis = tiendaFisicos(items, Tienda.arts);
   const clave = [...crypto.getRandomValues(new Uint8Array(12))].map(x => x.toString(16).padStart(2, '0')).join('');   // si se reintenta, es el mismo pedido
@@ -167,7 +198,7 @@ function tiendaPedir() {
   const f = $('form', el), msg = $('.form-msg', el), b = $('[type=submit]', el);
   const cuenta = () => { const k = tiendaCuenta(items, Tienda.arts, conPlan(), zona); $('.td-total', el).innerHTML = `<ul class="td-res">${fis ? `<li><span>Envío</span><b>${zona ? cop(k.envio) : 'Elige la zona'}</b></li>` : ''}<li class="t"><span>Total</span><b>${cop(k.total)}</b></li></ul>`; };
   const guarda = () => { if (!fis) return; DIR.forEach(([k]) => { d[k] = f[k].value; }); S.envio = { ...d, zona: zona ? zona.id : '' }; save(); };
-  $('[data-td]', el).onclick = () => { if (b.disabled) return; guarda(); tiendaPinta(); };
+  $('[data-td]', el).onclick = () => { if (b.disabled) return; guarda(); tiendaCerrar(); tiendaPinta(); };
   const zs = [...el.querySelectorAll('[data-z]')];
   const elige = i => { zona = Tienda.envios[i]; zs.forEach((x, k) => x.setAttribute('aria-checked', k === i)); cuenta(); };
   zs.forEach((x, i) => { x.onclick = () => elige(i); });
@@ -192,16 +223,15 @@ function tiendaPedir() {
   cuenta(); $('h1', el).focus({ preventScroll: true });
 }
 function tiendaListo(p) {
-  const el = $('#tienda'); if (!el) return;
-  el.dataset.paso = 'listo';
+  const el = tiendaCapa('listo');
   el.innerHTML = `<header class="td-bar"><button class="icon-btn" type="button" data-td="cerrar" aria-label="Cerrar">${ICON.x}</button><h1 tabindex="-1">Pedido ${p.id}</h1></header>
-    <div class="td-cuerpo"><div class="td-in td-listo"><span class="canje-check">${ICON.check}</span><h2>Pedido recibido</h2><p class="td-precio">${cop(p.total)}</p>
+    <div class="td-cuerpo"><div class="td-in td-listo"><span class="canje-check">${ICON.check}</span><h2>Pedido recibido</h2>
       <p class="muted">Paga y envíanos el comprobante por WhatsApp. Al confirmarlo, lo digital se abre aquí mismo${p.envio ? ' y te avisamos el envío' : ''}.</p>
       ${Cuenta.ajustes.pago_info ? `<p class="td-info">${esc(Cuenta.ajustes.pago_info)}</p>` : ''}
       ${pagoHTML(p.total)}
       ${waBoton(pedidoTexto(p), 'Enviar comprobante', 'main brand')}<button class="btn ghost" type="button" data-td="pedidos">Ver mis pedidos</button></div></div>`;
-  $('[data-td=cerrar]', el).onclick = tiendaCerrar;
-  $('[data-td=pedidos]', el).onclick = () => { Tienda.vista = 'pedidos'; tiendaPinta(); };
+  $('[data-td=cerrar]', el).onclick = () => { tiendaCerrar(); tiendaPinta(); };
+  $('[data-td=pedidos]', el).onclick = () => openTienda('pedidos');
   $('h1', el).focus({ preventScroll: true });
 }
 

@@ -61,3 +61,11 @@ test('el QR de pago es el de Zuka y sale al comprar, al pedir y en los pedidos p
   assert.match(read('js/tienda.js'), /data-pago=/);
   assert.match(read('sw.js'), /'brand\/pago-breb\.png'/);
 });
+test('la tienda es una pestaña con cursos, paquetes, libros, asesorías y pedidos; el pedido va en su capa', () => {
+  const s = read('js/tienda.js');
+  assert.match(read('index.html'), /<button data-tab="tienda">Tienda<\/button>/);
+  assert.match(read('js/app.js'), /tienda: renderTienda,/);
+  assert.match(read('js/pwa.js'), /'tienda'/);
+  for (const v of ['todo', 'cursos', 'libros', 'asesorias', 'pedidos']) assert.ok(s.includes(`['${v}', `), v);
+  assert.match(s, /function tiendaCapa\(paso\)/);
+});
