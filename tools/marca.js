@@ -62,6 +62,7 @@ const logoHTML = () => \`<span class="logo" role="img" aria-label="Zuka">\${BRAI
       'brand/logo-light.svg': horizontal(NAVY),     // para fondo claro
       'brand/logo-vertical-dark.svg': vertical(WHITE, NAVY),
       'brand/logo-vertical-light.svg': vertical(NAVY, WHITE),
+      'icons/zuka-favicon.svg': file('0 0 100 100', WHITE, `<rect width="100" height="100" rx="22" fill="${NAVY}"/><g transform="translate(7 7) scale(.86)">${MARK}</g>`),
       'brand/cerebro.svg': file('0 0 100 100', NAVY, MARK),
     },
   };
@@ -69,13 +70,14 @@ const logoHTML = () => \`<span class="logo" role="img" aria-label="Zuka">\${BRAI
 
 // ---- iconos PNG ----
 // El cerebro blanco sobre azul noche, sin la palabra (el celular ya escribe el nombre debajo). `k`: lado del cerebro como
-// fracción del icono. Android recorta el enmascarable: el cerebro queda dentro de la zona segura (círculo del 80 %).
+// fracción del icono. Si cambia el dibujo, cambiar también el nombre del archivo: los dispositivos guardan el icono por su dirección.
+// Android recorta el enmascarable: el cerebro queda dentro de la zona segura (círculo del 80 %).
 const ICONS = [
-  { file: 'icons/icon-512.png', size: 512, k: 0.8 },
-  { file: 'icons/icon-192.png', size: 192, k: 0.8 },
-  { file: 'icons/icon-maskable-512.png', size: 512, k: 0.62 },
-  { file: 'icons/apple-touch-icon.png', size: 180, k: 0.78 },
-  { file: 'icons/favicon-48.png', size: 48, k: 0.9, round: 0.22 },
+  { file: 'icons/zuka-512.png', size: 512, k: 0.8, round: 0.22 },
+  { file: 'icons/zuka-192.png', size: 192, k: 0.8, round: 0.22 },
+  { file: 'icons/zuka-maskable-512.png', size: 512, k: 0.62 },
+  { file: 'icons/zuka-apple-180.png', size: 180, k: 0.78 },
+  { file: 'icons/zuka-favicon-48.png', size: 48, k: 0.9, round: 0.22 },
 ];
 function iconPage({ size, k, round = 0 }) {
   const s = size * k;

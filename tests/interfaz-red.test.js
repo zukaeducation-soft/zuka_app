@@ -118,7 +118,7 @@ test('animación de entrada: vive en la portada; cerebro, nombre y eslogan (spec
 
 test('el icono de la app es el cerebro blanco sobre azul noche', () => {
   assert.match(read('tools/marca.js'), /brain\(\{ ink: WHITE \}\)/);
-  for (const f of ['icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-48.png'])
+  for (const f of ['icons/zuka-192.png', 'icons/zuka-512.png', 'icons/zuka-maskable-512.png', 'icons/zuka-apple-180.png', 'icons/zuka-favicon-48.png'])
     assert.ok(fs.statSync(path.join(ROOT, f)).size > 500, f);
 });
 
@@ -152,4 +152,16 @@ test('la mascota y los logos viejos ya no se usan', () => {
   assert.match(app, /mascotSVG\('cheer', 'm-win'\)/, 'al terminar la lección celebra el personaje');
   // desde el 2026-11-20 la entrada lleva el nombre en letra, sin el cerebro de puntos (spec 2026-11-20-escritorio)
   assert.match(read('js/cuenta.js'), /zukaWord\(\)/);
+});
+
+test('la app se llama solo Zuka y sus iconos tienen nombre propio (los viejos quedaron guardados en los dispositivos)', () => {
+  const m = JSON.parse(read('manifest.json'));
+  assert.equal(m.name, 'Zuka');
+  assert.equal(m.short_name, 'Zuka');
+  assert.match(index, /<title>Zuka<\/title>/);
+  assert.doesNotMatch(index + read('manifest.json'), /en clips/i);
+  for (const i of [...m.icons, ...m.shortcuts.flatMap(s => s.icons || [])]) {
+    assert.match(i.src, /^icons\/zuka-/);
+    assert.ok(fs.existsSync(path.join(ROOT, i.src)), i.src);
+  }
 });

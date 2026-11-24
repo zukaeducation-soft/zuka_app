@@ -1,4 +1,4 @@
-# Zuka · Matemáticas en clips
+# Zuka
 
 App web móvil para aprender materias de fundamentación de ingeniería con **clips verticales 9:16** y **ejercicios interactivos**.
 
