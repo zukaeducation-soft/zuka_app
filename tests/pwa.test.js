@@ -65,7 +65,7 @@ test('el shell guarda los iconos que usa la app instalada', () => {
   const { ctx } = loadSW();
   const shell = vm.runInContext('SHELL', ctx);
   for (const icon of manifest.icons) assert.ok(shell.includes(icon.src), `falta ${icon.src}`);
-  assert.ok(shell.includes('icons/zuka-apple-180.png'));
+  assert.ok(shell.includes('icons/zuka-claro-apple-180.png'));
   assert.ok(shell.includes('js/pwa.js'));
 });
 

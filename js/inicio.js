@@ -74,7 +74,7 @@ function renderHome() {
   view.innerHTML = `<div class="home">
     <header class="home-head has-mascot"><div><p>${name ? `Hola, ${esc(name)}` : 'Hola'}</p><h1>¿Qué aprendemos hoy?</h1></div>${mascotSVG('think', 'm-hello')}</header>
     ${installEvt && !S.hideInstall ? `<section class="install-banner">
-      <img src="icons/zuka-192.png" alt="" width="44" height="44">
+      <img src="icons/zuka-claro-192.png" alt="" width="44" height="44">
       <div><b>Instala Zuka</b><p>Ábrela como app, incluso sin conexión.</p></div>
       <button class="btn brand sm" data-install>Instalar</button>
       <button class="icon-btn" data-hide-install aria-label="Ocultar">${ICON.x}</button>

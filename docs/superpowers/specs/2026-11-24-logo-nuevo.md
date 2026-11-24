@@ -7,7 +7,7 @@ cerebro de un solo trazo con dos destellos y la palabra ZUKA, monocromo (blanco 
   genera `js/marca.js`, `brand/*.svg`, la entrada de `index.html` y, con `--png`, `icons/*.png` y `brand/logo-vertical-*.png`.
 - **App**: `brainSVG()` (sin variantes), `brainTile(cls)`, `logoHTML()`; toman el color del texto, así sirven en los dos temas.
   `zukaWord()` (barra de escritorio, cuenta, clave, presentación) es ahora `logoHTML()`.
-- **Iconos**: cerebro blanco sobre `#060d1a`, sin la palabra (el celular escribe el nombre debajo); el enmascarable, en la zona segura.
+- **Iconos** (`icons/zuka-claro-*`): cerebro `#060d1a` sobre blanco (pedido posterior, el mismo día), sin la palabra (el celular escribe el nombre debajo); el enmascarable, en la zona segura.
 - **Entrada**: cerebro, destellos, ZUKA y «potencia tu mente» (2.7 s). El personaje (`js/mascota.js`) sigue dentro de la app, pero ya
   no es ni el icono ni la entrada.
 - Pruebas: `tests/interfaz-red.test.js`, `tests/escritorio.test.js`.
