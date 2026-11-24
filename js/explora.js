@@ -8,7 +8,19 @@
 // Va después de ui.js y antes de player.js (makePlayer llama a exploraPlayer).
 
 const EXPLORA = {};
-const EXPLORA_VOZ = 'media/voz/';   // carpeta (o dirección) de los audios de voz: <base><lección>/voz.json
+const EXPLORA_VOZ = 'https://zukavoz.b-cdn.net/';   // Bunny Storage (tools/subir-voz.js): <base><lección>/<lista de js/explora-voces.js>
+const XP_VOZ_PLAZO = 6000;   // si una frase no empieza a sonar en este tiempo, la explicación sigue con el tiempo de lectura
+
+// De dónde sale la voz de una lección, en orden: lo publicado en Bunny y, si no responde, la copia propia. Sin narración
+// publicada no se pide nada. En localhost manda la carpeta local: así se oye lo nuevo antes de subirlo.
+function xpVozFuentes(id, host) {
+  const f = typeof EXPLORA_VOCES !== 'undefined' && EXPLORA_VOCES[id];
+  const propia = ['media/voz/' + id + '/', 'voz.json'];
+  const bunny = f ? [[EXPLORA_VOZ + id + '/', f]] : [];
+  return /^(localhost|127\.0\.0\.1)$/.test(host) ? [propia, ...bunny] : f ? [...bunny, propia] : [];
+}
+// Pide algo con un plazo (los navegadores viejos, sin plazo).
+const xpPide = (url, ms) => fetch(url, AbortSignal.timeout ? { signal: AbortSignal.timeout(ms) } : {});
 const XP = {};
 
 const xpPar = n => (n < 0 ? `(${n})` : `${n}`);            // en TeX: un negativo va entre paréntesis
@@ -214,7 +226,7 @@ const xpTick = () => { try { if (navigator.userActivation?.hasBeenActive) naviga
 
 // Sonidos de la explicación: todos sintetizados (sin archivos) y suaves; se apagan con el sonido de la app (S.sfx).
 const XS = (() => {
-  let ac = null, bus = null, last = 0, lastPop = 0;
+  let ac = null, bus = null, last = 0, lastPop = 0, lenta = false;
   const cache = new Map();
   const on = () => typeof S === 'undefined' || S.sfx !== false;
   const ctx = () => {
@@ -261,23 +273,29 @@ const XS = (() => {
     // Voz: baja y decodifica (una vez) el audio de una frase. Devuelve una promesa del búfer o null si no hay audio.
     carga(url) {
       const a = ctx(); if (!a) return null;
-      if (!cache.has(url)) cache.set(url, fetch(url).then(r => (r.ok ? r.arrayBuffer() : Promise.reject(r.status))).then(b => a.decodeAudioData(b)).catch(() => null));
+      if (!cache.has(url)) cache.set(url, xpPide(url, 20000).then(r => (r.ok ? r.arrayBuffer() : Promise.reject(r.status))).then(b => a.decodeAudioData(b)).catch(() => { cache.delete(url); return null; }));
       return cache.get(url);
     },
-    // Dice una frase y llama a fin() al terminar (o enseguida si no se pudo). Devuelve cómo callarla, o null sin audio.
-    voz(url, fin) {
-      const p = XS.carga(url); if (!p) return null;
+    // Dice una frase (la promesa de su audio) y llama a fin(true) al terminar, o a fin(false) si no se pudo o no empezó a tiempo. Devuelve cómo callarla, o null sin audio.
+    voz(p, fin) {
+      if (!p) return null;
       let parar = false, src = null;
+      // Con mala red no se espera lo mismo en cada frase: tras un fallo el plazo se acorta hasta que una vuelva a sonar.
+      let plazo = setTimeout(() => { parar = true; lenta = true; fin(false); }, lenta ? 1500 : XP_VOZ_PLAZO);
       p.then(buf => {
         if (parar) return;
-        if (!buf || !ac || ac.state !== 'running') return fin();
+        clearTimeout(plazo);
+        if (!buf || !ac || ac.state !== 'running') return fin(false);
         src = ac.createBufferSource(); src.buffer = buf;
         const g = ac.createGain(); g.gain.value = 1.35;
         src.connect(g).connect(bus);
-        src.onended = () => { if (!parar) fin(); };
+        lenta = false;
+        src.onended = () => { if (!parar) { parar = true; clearTimeout(plazo); fin(true); } };
         src.start();
+        // Si el sistema detiene el sonido (una llamada), la explicación no se queda esperando el final.
+        plazo = setTimeout(() => { if (parar) return; parar = true; try { src.stop(); } catch (e) { /* ya paró */ } fin(false); }, buf.duration * 1000 + 2500);
       });
-      return () => { parar = true; try { src?.stop(); } catch (e) { /* ya paró */ } };
+      return () => { parar = true; clearTimeout(plazo); try { src?.stop(); } catch (e) { /* ya paró */ } };
     },
   };
 })();
@@ -505,7 +523,7 @@ XPD.muestra = (stage, p, s, api) => {
         busy = false; s = { n: total, fin: true }; api.set(s); puntos(total + 1); espera('Ver otra vez');
       }, habla ? 450 : XP.muestra.pausa(m));
     };
-    const habla = api.decir(m.dice, () => { oido = true; sigue(); });
+    let habla = api.decir(m.dice, ok => { if (ok === false) habla = null; oido = true; sigue(); });
     if (!habla) oido = true;
     const done = () => { anim = true; sigue(); };
     if (escena.anima) stop = escena.anima(m, done);
@@ -764,19 +782,29 @@ function exploraPlayer(host, lesson, course, opts) {
   // Lo construido se recuerda mientras la app esté abierta: al volver a la explicación desde un ejercicio (repaso)
   // se retoma donde iba, con «A practicar» a la mano, y no hay que rehacer los pasos.
   const mem = XP_MEM[lesson.id] ||= { memo: {}, estados: [], hechos: [], i: 0 };
-  // Voz: si la lección tiene sus audios (tools/explora-voz.py), cada frase se dice; si no, todo sigue igual que sin voz.
-  const vozBase = `${EXPLORA_VOZ}${lesson.id}/`;
-  let voces = null, callar = null, muerto = false;
-  const lista = fetch(vozBase + 'voz.json').then(r => (r.ok ? r.json() : null)).then(j => {
+  // Voz: si la lección tiene sus audios (js/explora-voces.js), cada frase se dice; si no, todo sigue igual que sin voz.
+  let vozBase = '';
+  let voces = null, callar = null, pendiente = null, muerto = false, copia = null;
+  const fuentes = xpVozFuentes(lesson.id, location.hostname);
+  const lista = fuentes.reduce((antes, [base, f]) => antes.then(j => j
+    || xpPide(base + f, 5000).then(r => (r.ok ? r.json() : null)).then(x => { if (x) vozBase = base; return x; }).catch(() => null)), Promise.resolve(null)).then(j => {
     voces = j;
-    if (j) Object.values(j).slice(0, 8).forEach(v => XS.carga(vozBase + v.f));   // las primeras frases, listas de una vez
+    if (j && !muerto) Object.keys(j).slice(0, 8).forEach(t => XS.carga(vozBase + j[t].f));   // las primeras frases, listas de una vez
   }).catch(() => {});
-  const silencio = () => { callar?.(); callar = null; };
+  // El audio de una frase; si su fuente falla, se busca la misma frase (por su texto) en la copia propia.
+  const audio = txt => XS.carga(vozBase + voces[txt].f)?.then(b => {
+    const otra = b ? null : fuentes.find(x => x[0] !== vozBase);
+    if (!otra) return b;
+    copia ||= xpPide(otra[0] + otra[1], 5000).then(r => (r.ok ? r.json() : null)).catch(() => null);
+    return copia.then(j => (j?.[txt] ? XS.carga(otra[0] + j[txt].f) : null));
+  });
+  const silencio = () => { callar?.(); callar = pendiente = null; };
   const decir = (txt, fin) => {
     silencio();
     const v = voces?.[txt];
     if (!v || (typeof S !== 'undefined' && S.sfx === false)) return false;
-    callar = XS.voz(vozBase + v.f, fin);
+    pendiente = fin;
+    callar = XS.voz(audio(txt), ok => { pendiente = null; fin(ok); });
     return !!callar;
   };
   const { memo, estados, hechos } = mem;
@@ -861,7 +889,7 @@ function exploraPlayer(host, lesson, course, opts) {
     };
     const api = {
       memo, ideas,
-      decir: (txt, fin) => (k === i ? decir(txt, () => { if (k === i) fin(); }) : false),
+      decir: (txt, fin) => (k === i ? decir(txt, ok => { if (k === i) fin(ok); }) : false),
       nota: m => { if (k !== i) return; if (!m) return leer(); nota.classList.add('aviso'); nota.textContent = m; },
       // vivo: el dedo sigue arrastrando; se actualiza el renglón pero la meta se mira al soltar.
       set(ns, vivo) { if (k !== i) return; s = estados[k] = ns; leer(); if (!vivo && !hechos[k] && t.ok(s, p)) cumple(true); },
@@ -889,7 +917,12 @@ function exploraPlayer(host, lesson, course, opts) {
     snd.classList.toggle('mute', !on); snd.setAttribute('aria-pressed', String(on));
     snd.setAttribute('aria-label', on ? 'Sonido encendido' : 'Sonido apagado');
   };
-  snd.onclick = () => { if (typeof S === 'undefined') return; S.sfx = S.sfx === false; if (typeof save === 'function') save(); if (S.sfx === false) silencio(); pinta(); XS.pop(); };
+  snd.onclick = () => {
+    if (typeof S === 'undefined') return;
+    S.sfx = S.sfx === false; if (typeof save === 'function') save(); 
+    if (S.sfx === false) { const f = pendiente; silencio(); f?.(false); }   // al callar a mitad de frase se sigue con el tiempo de lectura
+    pinta(); XS.pop();
+  };
   pinta();
   sheet.onclick = e => { if (e.target === sheet || e.target.closest('.xp-sheet-x')) sheet.hidden = true; };
   if (hayVideo) {

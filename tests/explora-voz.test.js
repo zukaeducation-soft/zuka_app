@@ -36,8 +36,7 @@ test('pu-cm-1: ninguna frase hablada lleva símbolos que la voz leería mal', ()
 
 test('el reproductor dice cada frase si hay audio y, si no, sigue con el tiempo de lectura', () => {
   const src = read('js/explora.js');
-  assert.match(src, /const EXPLORA_VOZ = 'media\/voz\/'/);
-  assert.match(src, /fetch\(vozBase \+ 'voz\.json'\)/);
+  assert.match(src, /xpVozFuentes\(lesson\.id, location\.hostname\)/);   // de dónde sale la voz: tests/voz-bunny.test.js
   const m = src.slice(src.indexOf('XPD.muestra ='), src.indexOf('XPD.signos ='));
   assert.match(m, /api\.decir\(m\.dice/, 'cada momento dice su frase');
   assert.match(m, /habla \? 450 : XP\.muestra\.pausa\(m\)/, 'con voz manda la voz; sin voz, el tiempo de lectura');
@@ -46,9 +45,8 @@ test('el reproductor dice cada frase si hay audio y, si no, sigue con el tiempo 
   assert.match(src, /lista\.then\(va\); setTimeout\(va, 800\)/, 'espera la lista de voces para decir el primer enunciado');
 });
 
-test('la narración va a GitHub (sin los archivos de trabajo) y el generador usa la voz pedida', () => {
+test('los archivos de trabajo no van a GitHub, la lección 1 queda de respaldo y el generador usa la voz pedida', () => {
   const gi = read('.gitignore');
-  assert.match(gi, /^!media\/voz\/\*\*\/\*\.m4a$/m);
   assert.match(gi, /^media\/voz\/\*\/frases\.json$/m);
   assert.ok(fs.existsSync(path.join(ROOT, 'media/voz/pu-cm-1/voz.json')), 'la lista de voces de pu-cm-1 está en el repositorio');
   const py = read('tools/explora-voz.py');

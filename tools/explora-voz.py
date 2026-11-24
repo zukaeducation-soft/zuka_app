@@ -3,7 +3,7 @@
 #   node tools/explora-frases.js pu-cm-1 > media/voz/pu-cm-1/frases.json
 #   video/.venv-audio/Scripts/python.exe -X utf8 tools/explora-voz.py pu-cm-1
 # Deja media/voz/<lección>/<clave>.m4a (AAC mono) y voz.json { "<texto en pantalla>": { "f": archivo, "d": segundos } }.
-# Los audios no van a GitHub (.gitignore): hay que alojarlos aparte. Lo ya generado no se vuelve a pedir (la clave sale del
+# Los audios no van a GitHub (.gitignore): se suben a Bunny con node tools/subir-voz.js <lección>. Lo ya generado no se vuelve a pedir (la clave sale del
 # modelo, la voz y el texto hablado). Llave: GEMINI_API_KEY o ~/.zuka/gemini_key.txt (nunca en el repositorio).
 import hashlib, io, json, os, re, subprocess, sys, time
 from pathlib import Path

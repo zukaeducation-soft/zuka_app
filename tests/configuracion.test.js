@@ -90,7 +90,7 @@ test('los videos propios, el panel y Supabase siguen sin pasar por la caché', (
 test('la narración se guarda en su propia caché: el audio sale de la copia y la lista se refresca por detrás', async () => {
   let red = 0;
   const voz = { '/media/voz/pu-cm-1/abc.m4a': 'AUDIO', '/media/voz/pu-cm-1/voz.json': 'LISTA' };
-  const sw = loadSW({ fetch: async () => { red++; return { ok: true, status: 200, clone: () => ({}), tag: 'RED' }; }, guardado: { 'zuka-voz-v1': voz } });
+  const sw = loadSW({ fetch: async () => { red++; return { ok: true, status: 200, clone: () => ({}), tag: 'RED' }; }, guardado: { 'zuka-voz-v2': voz } });
   assert.equal(await fire(sw, 'https://zuka.example/media/voz/pu-cm-1/abc.m4a').res, 'AUDIO');
   assert.equal(red, 0, 'un audio guardado no vuelve a la red');
   const lista = fire(sw, 'https://zuka.example/media/voz/pu-cm-1/voz.json');
@@ -99,13 +99,13 @@ test('la narración se guarda en su propia caché: el audio sale de la copia y l
   assert.equal(red, 1, 'la lista se refresca por detrás');
   const nuevo = await fire(sw, 'https://zuka.example/media/voz/pu-cm-2/def.m4a').res;
   assert.equal(nuevo.tag, 'RED');
-  assert.ok(sw.puestos.some(([c, p]) => c === 'zuka-voz-v1' && p === '/media/voz/pu-cm-2/def.m4a'));
+  assert.ok(sw.puestos.some(([c, p]) => c === 'zuka-voz-v2' && p === '/media/voz/pu-cm-2/def.m4a'));
 });
 
 test('al activar una versión se borran las cachés viejas, pero no la de la narración', async () => {
-  const sw = loadSW({ guardado: { 'zuka-v1': {}, 'zuka-voz-v1': {} } });
+  const sw = loadSW({ guardado: { 'zuka-v1': {}, 'zuka-voz-v1': {}, 'zuka-voz-v2': {} } });
   let p; sw.listeners.activate({ waitUntil: x => { p = x; } }); await p;
-  assert.deepEqual(sw.borradas, ['zuka-v1']);
+  assert.deepEqual(sw.borradas, ['zuka-v1', 'zuka-voz-v1']);
 });
 
 // ---------- Librerías externas con huella ----------

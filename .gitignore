@@ -279,11 +279,13 @@ video/**/*.jpeg
 video/**/*.webp
 video/**/*.gif
 
-# Voz de las explicaciones Explora (tools/explora-voz.py). Por pedido del usuario (2026-11-23) la narración sí va a GitHub
-# (audios m4a y voz.json, unos 40 KB por frase); los archivos de trabajo no.
+# Voz de las explicaciones Explora: desde el 2026-11-24 se aloja en Bunny Storage (tools/subir-voz.js) y no va a GitHub.
+# Solo la lección 1 (pu-cm-1) queda además en el repositorio, de respaldo por si Bunny no responde.
 media/voz/*/frases.json
 media/voz/*/log.txt
-!media/voz/**/*.m4a
+media/voz/*/voz.json
+!media/voz/pu-cm-1/voz.json
+!media/voz/pu-cm-1/*.m4a
 
 # Llaves de API: nunca al repositorio
 gemini api keys.txt
