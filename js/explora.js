@@ -854,6 +854,8 @@ function exploraPlayer(host, lesson, course, opts) {
     next.textContent = i === def.pasos.length - 1 ? 'A practicar' : 'Seguir';
     idea.classList.toggle('show', !!hechos[i]);
     if (hayVideo) $x('.xp-video').hidden = i > 0;
+    // En computador (js/escritorio.js): riel con los capítulos y las ideas, y la escena del tamaño del panel.
+    if (typeof exploraRiel === 'function') exploraRiel(root, { lesson, course, pasos: def.pasos, caps: def.caps, cap: p.cap, hechos, ideas: ideas(), ir: k => { if (k !== i) { const d = k > i ? 1 : -1; i = k; show(d); } } });
   }
   function cumple(first) {
     hechos[i] = true;

@@ -82,3 +82,26 @@ test('Preuniversitario en portátil: «Comprobar» bajo el enunciado y, en lectu
   assert.match(css, /\.practice \.lec-play \{ position: absolute; top: 0; right: 0; bottom: 0;/);
   assert.match(css, /\.ex-area:not\(:has\(canvas\)\):not\(:has\(\.lec\)\) \{ zoom: 1\.18; \}/);
 });
+
+// ---- explicación interactiva en computador (spec 2026-11-24-explora-escritorio) ----
+test('riel de capítulos: avance de cada uno y a cuáles se puede volver', () => {
+  const f = get(ctx, 'exploraCapitulos'), pasos = [{ cap: 0 }, { cap: 0 }, { cap: 1 }, { cap: 2 }];
+  assert.equal(JSON.stringify(f(['A', 'B', 'C'], pasos, [true, true])), JSON.stringify([{ t: 'A', hecho: 1, ir: 0 }, { t: 'B', hecho: 0, ir: 2 }, { t: 'C', hecho: 0, ir: null }]));
+  assert.equal(f(['A', 'B', 'C'], pasos, [true])[1].ir, null, 'no se salta a un capítulo sin terminar el anterior');
+});
+
+test('la escena cabe: su alto nunca pasa de 2/5 de la ventana y no se deforma', () => {
+  const w = get(ctx, 'exploraAncho');
+  for (const alto of [760, 820, 1000, 1200]) for (const r of [340 / 156, 340 / 224, 340 / 100, 1.2]) {
+    const x = w(r, alto);
+    assert.ok(x <= 760 && x >= 300, `${r} ${alto}`);
+    if (x > 300) assert.ok(x / r <= alto * 0.4 + 1, `${r} ${alto}: ${x / r}`);
+  }
+});
+
+test('la explicación avisa al riel y el aviso del ejercicio no tapa la escena en computador', () => {
+  assert.match(read('js/explora.js'), /exploraRiel\(root, \{/);
+  const css = read('css/escritorio.css').replace(/\r\n/g, '\n');
+  assert.match(css, /\.explora \{\n\s*max-width: 1240px; display: grid;/);
+  assert.match(css, /\.feedback \{\n\s*left: calc\(50% - var\(--pw\) \/ 2 - 12px\); right: auto;/);
+});

@@ -52,3 +52,41 @@ function leccionLados(root, c, l, queue, at, n, clip) {
   host.querySelector('[data-ls-skip]').textContent = skip ? skip.textContent : 'Seguir ↓';
   host.querySelector('[data-ls-skip]').onclick = () => skip?.click();
 }
+
+// ---- explicación interactiva en computador (spec 2026-11-24-explora-escritorio) ----
+// Estado de cada capítulo: fracción hecha y el paso al que se vuelve al tocarlo (null si aún no se ha llegado).
+function exploraCapitulos(caps, pasos, hechos) {
+  return caps.map((t, c) => {
+    const mios = pasos.map((p, k) => (p.cap === c ? k : -1)).filter(k => k >= 0), n = mios.filter(k => hechos[k]).length;
+    const llega = mios[0] === 0 || !!hechos[mios[0] - 1];
+    return { t, hecho: n / mios.length, ir: llega ? mios[0] : null };
+  });
+}
+// Ancho de la escena: lo que deja el alto de la ventana según la proporción de su dibujo (el dibujo no se deforma).
+const exploraAncho = (ratio, alto) => Math.round(Math.max(300, Math.min(760, ratio * alto * 0.33)));
+
+function exploraRiel(root, d) {
+  if (!esEscritorio()) return;
+  let el = root.querySelector('.xp-riel');
+  if (!el) {
+    el = document.createElement('aside');
+    el.className = 'xp-riel';
+    el.setAttribute('aria-label', 'Capítulos de la lección');
+    el.innerHTML = `<div class="xr-top"><span class="xr-curso">${esEsc(d.course?.name || '')}</span><h2>${esEsc(d.lesson.title || '')}</h2></div><ol class="xr-caps"></ol><div class="xr-ideas"><h3>Lo que llevas construido</h3><ul></ul></div>`;
+    root.prepend(el);
+  }
+  const caps = exploraCapitulos(d.caps, d.pasos, d.hechos), ol = el.querySelector('.xr-caps'), ul = el.querySelector('.xr-ideas ul');
+  ol.innerHTML = caps.map((c, k) => `<li class="${k === d.cap ? 'now' : ''}${c.hecho >= 1 ? ' done' : ''}"><button type="button" data-ir="${c.ir ?? ''}"${c.ir == null ? ' disabled' : ''}${k === d.cap ? ' aria-current="step"' : ''}>
+    <i style="--p:${c.hecho}">${c.hecho >= 1 ? '✓' : k + 1}</i><span>${esEsc(c.t)}</span></button></li>`).join('');
+  ol.onclick = e => { const b = e.target.closest('button[data-ir]'); if (b && b.dataset.ir !== '') d.ir(+b.dataset.ir); };
+  const antes = ul.children.length;
+  ul.innerHTML = d.ideas.map((t, k) => `<li${k >= antes ? ' class="nueva"' : ''}>${tex(t)}</li>`).join('') || '<li class="none">Cada idea que ganes queda aquí.</li>';
+  if (d.ideas.length > antes) ul.parentElement.scrollTop = ul.parentElement.scrollHeight;
+  const stage = root.querySelector('.xp-stage');
+  const ajusta = () => {
+    const vb = stage.querySelector('.xp-svg')?.viewBox?.baseVal;
+    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight)}px`);
+  };
+  ajusta();
+  if (!root.dataset.ajusta) { root.dataset.ajusta = '1'; new ResizeObserver(ajusta).observe(root); }
+}

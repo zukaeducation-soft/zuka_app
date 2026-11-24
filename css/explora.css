@@ -468,7 +468,7 @@
 .lesson.xp-lesson .exq-step.on, .lesson.xp-lesson .exq-opt.on { border-color: var(--c-ink); background: color-mix(in srgb, var(--c) 12%, var(--card)); }
 .lesson.xp-lesson .exq-step.good, .lesson.xp-lesson .exq-opt.good { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, var(--card)); }
 .lesson.xp-lesson .exq-step.bad, .lesson.xp-lesson .exq-opt.bad { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--card)); }
-.lesson.xp-lesson .exq-blank { border: 1.5px dashed var(--line); border-radius: 12px; background: none; font-family: var(--display); }
+.lesson.xp-lesson .exq-blank { border: 1.5px dashed var(--mute); border-radius: 12px; background: none; font-family: var(--display); }
 .lesson.xp-lesson .exq-blank.full { border-style: solid; border-color: var(--c-ink); background: color-mix(in srgb, var(--c) 12%, var(--card)); }
 .lesson.xp-lesson .exq-blank.over { border-color: var(--c-ink); }
 .lesson.xp-lesson .exq-blank.good { border-style: solid; border-color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, var(--card)); }

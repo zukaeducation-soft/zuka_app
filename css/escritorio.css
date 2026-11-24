@@ -158,3 +158,110 @@
 @media (min-width: 1000px) and (max-height: 700px) {
   .ls-note, .ls-keys { display: none; }
 }
+
+/* ---- explicación interactiva y sus ejercicios en computador (spec 2026-11-24-explora-escritorio) ----
+   Riel a la izquierda (lección, capítulos, ideas ganadas) y un panel con la escena grande. */
+@media (min-width: 1000px) {
+  .lesson.clip-mode.has-explora { background: var(--bg); }
+  .lesson.clip-mode.has-explora .lesson-top .pbar, .lesson.clip-mode.has-explora .rev-nav { visibility: hidden; }
+  .lesson.clip-mode.has-explora .lesson-body.is-clip { padding: 0 32px 24px; }
+  .explora {
+    max-width: 1240px; display: grid; grid-template: "riel top" auto "riel step" minmax(0, 1fr) "riel foot" auto / minmax(240px, 290px) minmax(0, 1fr);
+    column-gap: 36px;
+  }
+  .explora::before { content: ''; grid-row: 1 / 4; grid-column: 2; border: 1px solid var(--line); border-radius: 28px; background: color-mix(in srgb, var(--card) 35%, var(--bg)); }
+  .explora > .xp-top { grid-area: top; padding: 20px 32px 0; min-height: 0; position: relative; }
+  .explora .xp-segs, .explora .xp-ideas { display: none; }
+  .explora .xp-snd { width: 40px; height: 40px; transition: color .2s, border-color .2s; }
+  .explora .xp-snd:hover { color: var(--ink); border-color: var(--c-ink); }
+  .explora > .xp-step { grid-area: step; padding: 8px 56px 12px; gap: 14px; position: relative; scrollbar-width: thin; }
+  .explora .xp-text { width: 100%; max-width: 780px; margin-inline: auto; font-size: 22px; line-height: 1.4; text-align: center; text-wrap: balance; }
+  .explora .xp-stage { width: 100%; max-width: 820px; align-self: center; gap: 18px; }
+  .explora .xp-stage .xp-svg { max-width: var(--xp-w, 680px); margin-inline: auto; }
+  .explora .xp-watch { justify-items: center; }
+  .explora .xc { max-width: 600px; }
+  .explora .xp-fact, .explora .xp-coin, .explora .xp-rows, .explora .xp-expr { zoom: 1.2; }
+  .explora .xp-read { font-size: 24px; min-height: 40px; }
+  .explora .xp-nota, .explora .t-muestra ~ .xp-nota { width: 100%; max-width: 720px; margin-inline: auto; min-height: 30px; font-size: 18px; }
+  .explora .t-muestra ~ .xp-nota { font-size: 20px; min-height: 56px; }
+  .explora .xp-stage { min-height: 0; }
+  .lesson.xp-lesson .exq-completa .exq-tray { position: static; background: none; box-shadow: none; }
+  .explora .xp-idea { width: 100%; max-width: 780px; margin-inline: auto; padding: 14px 18px; }
+  .explora .xp-idea p { font-size: 17px; }
+  .explora > .xp-foot { grid-area: foot; position: relative; justify-content: space-between; padding: 12px 32px 22px; }
+  .explora .xp-next { flex: none; width: 220px; }
+  .explora .xp-back { width: 52px; transition: border-color .2s; }
+  .explora .xp-back:not(:disabled):hover { border-color: var(--c-ink); }
+  .explora .xp-chip:not(:disabled):hover, .explora .xp-op:hover, .explora .xp-f:hover { border-color: var(--c-ink); }
+  .explora .xp-built { width: 100%; max-width: 780px; margin-inline: auto; grid-template-columns: 1fr 1fr; }
+  .explora .xp-built li { font-size: 15.5px; }
+  .explora > .xp-video { grid-area: riel; align-self: end; justify-self: start; margin: 0; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; font-size: 14px; }
+  .explora > .xp-video:hover { color: var(--ink); border-color: var(--c-ink); }
+  .explora:has(.xp-video:not([hidden])) .xp-foot { padding-bottom: 22px; }
+  .explora:has(.xp-video:not([hidden])) .xp-riel { padding-bottom: 60px; }
+  .xp-riel { grid-area: riel; min-height: 0; display: flex; flex-direction: column; gap: 24px; padding-top: 18px; }
+  .xr-curso { font: 600 12px/1 var(--font); letter-spacing: .1em; text-transform: uppercase; color: var(--c-ink); }
+  .xp-riel h2 { margin-top: 10px; font: 500 27px/1.15 var(--display); text-wrap: balance; }
+  .xr-caps { list-style: none; display: grid; gap: 2px; margin: 0; padding: 0; }
+  .xr-caps li { position: relative; }
+  .xr-caps li + li::before { content: ''; position: absolute; left: 27px; top: -9px; height: 18px; width: 1.5px; background: var(--line); }
+  .xr-caps button { display: flex; align-items: center; gap: 14px; width: 100%; padding: 9px 12px; border-radius: 14px; font-size: 16px; text-align: left; color: var(--mute); transition: background .2s, color .2s; }
+  .xr-caps button:not(:disabled):hover { background: color-mix(in srgb, var(--card) 70%, transparent); color: var(--ink); }
+  .xr-caps i { position: relative; flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; font: 600 13px var(--display); background:
+    radial-gradient(closest-side, var(--bg) 88%, transparent 90%), conic-gradient(var(--c-ink) calc(var(--p) * 360deg), var(--line) 0); }
+  .xr-caps .now button { color: var(--ink); font-weight: 600; }
+  .xr-caps .done button { color: var(--ink); }
+  .xr-caps .done i { background: color-mix(in srgb, var(--c) 22%, var(--bg)); border: 1.5px solid var(--c-ink); color: var(--c-ink); }
+  .xr-ideas { flex: 0 1 auto; min-height: 0; overflow: auto; padding-top: 18px; border-top: 1px solid var(--line); scrollbar-width: thin; }
+  .xr-ideas h3 { font: 600 12px/1 var(--font); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-bottom: 12px; }
+  .xr-ideas ul { list-style: none; display: grid; gap: 10px; margin: 0; padding: 0; }
+  .xr-ideas li { padding-left: 14px; border-left: 2px solid var(--c-ink); font-size: 14.5px; line-height: 1.4; }
+  .xr-ideas li.none { border-color: var(--line); color: var(--mute); }
+  .xr-ideas li.nueva { animation: xp-rise .5s cubic-bezier(.2,.8,.2,1); }
+
+  /* ejercicios de una lección con explicación: escena grande; el aviso va en la columna del enunciado y no tapa la escena */
+  .lesson.xp-lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) { --lado: min(360px, calc(var(--pw) * .32)); }
+  .lesson.xp-lesson:not(.clip-mode) .lesson-body > .practice:not(:has(.lec)) { grid-template-columns: var(--lado) minmax(0, 1fr); min-height: 100%; }
+  .lesson.xp-lesson:not(.clip-mode) .practice .ex-q { font-size: 22px; line-height: 1.4; }
+  .lesson.xp-lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .lesson-foot { width: var(--lado); padding: 0; }
+  .lesson.xp-lesson:not(.clip-mode) .practice:not(:has(.lec)) > .ex-area { align-self: stretch; display: grid; }
+  .lesson.xp-lesson:not(.clip-mode) .ex-area:has(.xg), .lesson.xp-lesson:not(.clip-mode) .ex-area:has(.exq) { zoom: 1; }
+  .lesson.xp-lesson:not(.clip-mode) .play:has(.xg), .lesson.xp-lesson:not(.clip-mode) .play:has(.exq) { display: grid; align-content: center; background: none; border-radius: 20px; }
+  .lesson.xp-lesson:not(.clip-mode) .xg { width: 100%; max-width: 700px; padding: 20px 24px; }
+  .xg .xp-stage { gap: 20px; }
+  .xg .xg-lona, .xg .xg-perillas, .xg .xg-muda, .xg .xp-svg { max-width: 640px; }
+  .xg .xp-read { font-size: 25px; }
+  .xg .xp-nota { font-size: 18px; min-height: 52px; }
+  .xg .xp-chip { min-width: 78px; height: 54px; font-size: 21px; }
+  .xg .xp-slot { height: 58px; }
+  .xg .xp-chip:not(:disabled):hover, .xg .xp-f:hover, .xg .xg-sw:hover, .xg .xg-num:hover { border-color: var(--c-ink); }
+  .xg-muda .xg-col { height: 46px; font-size: 20px; }
+  .xg-frase { font-size: 27px; gap: 12px; }
+  .xg-frase .xp-slot { width: 118px; font-size: 22px; }
+  .xg .xp-f { width: 72px; height: 72px; font-size: 27px; }
+  .xg-dos { max-width: 440px; }
+  .xg-pot { font-size: 60px; }
+  .xg-pot sup { font-size: 33px; }
+  .xg-sw { width: 62px; height: 68px; }
+  .xg-sel { font-size: 38px; }
+  .xg-sel .xg-num { min-width: 64px; height: 70px; }
+  .xg-op-grande { font-size: 36px; }
+  .lesson.xp-lesson .exq { width: 100%; max-width: 680px; padding: 20px 24px; }
+  .lesson.xp-lesson .exq-q { font-size: 20px; }
+  .lesson.xp-lesson .exq-sol li, .lesson.xp-lesson .exq-step, .lesson.xp-lesson .exq-opt { font-size: 18px; transition: border-color .2s, background .2s; }
+  .lesson.xp-lesson .exq-opt:hover, .lesson.xp-lesson .exq-step:hover, .lesson.xp-lesson .exq-chip:hover { border-color: var(--c-ink); }
+  .lesson.xp-lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .feedback {
+    left: calc(50% - var(--pw) / 2 - 12px); right: auto; width: calc(var(--lado) + 24px); bottom: 34px; max-height: calc(100dvh - 250px); overflow: auto;
+    padding: 20px; border: 1px solid var(--line); border-radius: 22px;
+  }
+  .lesson.xp-lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .feedback.ok { border-color: color-mix(in srgb, var(--ok) 55%, var(--line)); }
+  .lesson.xp-lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .feedback.bad { border-color: color-mix(in srgb, var(--bad) 55%, var(--line)); }
+  .lesson.xp-lesson.fb-open:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .lesson-body { padding-bottom: 16px !important; }
+}
+@media (min-width: 1000px) and (max-height: 740px) {
+  .explora .xp-text { font-size: 19px; }
+  .explora .xp-step { gap: 8px; padding-bottom: 4px; }
+  .explora .xp-nota, .explora .t-muestra ~ .xp-nota { min-height: 44px; font-size: 17px; }
+  .xr-ideas { display: none; }
+}
+@media (min-width: 1000px) and (prefers-reduced-motion: reduce) { .xr-ideas li.nueva { animation: none; } }
