@@ -7,7 +7,7 @@ const path = require('path');
 const vm = require('vm');
 const { ROOT } = require('./load');
 
-const P5_URL = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js';
+const P5_URL = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js?sri';
 
 function installSW() {
   const listeners = {};

@@ -250,7 +250,8 @@ function playFx(box, ok) {
   });
 }
 
-const P5_URL ='https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js';
+const P5_URL = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js?sri';
+const P5_SRI = 'sha384-6Twx1hAeKnwfOYJAHtYeJETRiGD5pRPkjjh0pVbG1QoesncjOpw5e75Y1kOkXeRI';   // huella del archivo: si el CDN entrega otra cosa, el navegador no lo ejecuta
 let p5Promise = null;
 
 // Carga p5.js una sola vez; si falla (sin conexión), la próxima llamada lo reintenta.
@@ -259,6 +260,8 @@ function loadP5() {
   p5Promise ??= new Promise((resolve, reject) => {
     const s = document.createElement('script');
     s.src = P5_URL;
+    s.integrity = P5_SRI;
+    s.crossOrigin = 'anonymous';
     s.onload = () => resolve(window.p5);
     s.onerror = () => { p5Promise = null; reject(new Error('p5.js no cargó')); };
     document.head.appendChild(s);

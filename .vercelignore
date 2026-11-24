@@ -1,0 +1,9 @@
+# Lo que Vercel no publica: no es parte de la app (videos fuente, diseños, pruebas, herramientas, base de datos).
+# Así el despliegue es más corto y nada de esto queda a la vista en la web. Prueba: tests/configuracion.test.js
+/video
+/docs
+/tests
+/tools
+/supabase
+/.impeccable
+/*.md

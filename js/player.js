@@ -243,7 +243,9 @@ function loadHls() {
   hlsLib ??= new Promise((resolve, reject) => {
     if (window.Hls) return resolve(window.Hls);
     const s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js';
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js?sri';
+    s.integrity = 'sha384-w6Gb3fXHb5e1LUYa/hYA5Q41bEDglN5ZPCG7Jvnoo8/X90oGnlPqBlBJCe38mEMm';   // la misma copia verificada que carga index.html
+    s.crossOrigin = 'anonymous';
     s.onload = () => resolve(window.Hls);
     s.onerror = reject;
     document.head.appendChild(s);

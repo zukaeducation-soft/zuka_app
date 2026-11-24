@@ -1,8 +1,12 @@
 // Service worker de Zuka: permite instalar la app y usarla sin conexión.
-// Archivos propios: red primero (para recibir actualizaciones) y caché si no hay conexión.
-// Recursos externos (KaTeX, fuentes): caché primero.
+// Archivos propios: caché primero. Cada versión guarda todo su shell al instalarse, así la app abre al instante y
+// siempre con archivos de una misma versión; lo nuevo llega con la versión siguiente (aviso «Actualizar» de
+// js/update.js, o al volver a abrir la app). En localhost: red primero, para ver los cambios al programar
+// (registrar «sw.js?cache» prueba ahí el modo de producción). Recursos externos (KaTeX, fuentes): caché primero.
+// La narración (media/voz) va en su propia caché, que no se borra al cambiar de versión.
+// Spec: docs/superpowers/specs/2026-11-24-configuracion-rapida-segura.md
 
-const VERSION = 'zuka-v302';
+const VERSION = 'zuka-v303';
 const SHELL = [
   './', 'index.html', 'manifest.json', 'css/styles.css', 'css/examen.css', 'css/explora.css', 'js/explora.js', 'js/explora-pu-cm-1.js', 'js/explora-alg-0a.js', 'js/explora-angulo.js', 'js/explora-numeros.js', 'js/explora-escenas.js', 'js/explora-pu-cm-2.js', 'js/explora-pu-cm-3.js', 'js/explora-pu-cm-4.js', 'js/explora-pu-ge-1.js', 'js/explora-pu-ge-2.js', 'js/explora-pu-ge-3.js', 'js/explora-pu-ge-4.js', 'js/explora-pu-ge-5.js', 'js/explora-pu-ge-6.js', 'js/explora-pu-or-1.js', 'js/explora-pu-or-2.js', 'js/explora-pu-or-3.js', 'js/explora-pu-or-4.js', 'js/explora-pu-pr-1.js', 'js/explora-pu-pr-2.js', 'js/explora-pu-pr-3.js', 'js/explora-pu-pr-4.js', 'js/explora-pu-pr-5.js', 'js/explora-pu-co-1.js', 'js/explora-pu-co-2.js', 'js/explora-pu-co-3.js', 'js/explora-pu-co-4.js', 'js/explora-pu-co-5.js', 'js/explora-pu-es-1.js', 'js/explora-pu-es-2.js', 'js/explora-pu-es-3.js', 'js/explora-pu-es-4.js', 'js/explora-pu-cd-1.js', 'js/explora-pu-cd-2.js', 'js/explora-pu-gr-1.js', 'js/explora-pu-gr-2.js', 'js/explora-pu-gr-3.js', 'js/explora-pu-se-1.js', 'js/explora-pu-se-2.js', 'js/explora-pu-se-3.js', 'js/explora-pu-lo-1.js', 'js/explora-pu-lo-2.js', 'js/explora-pu-lo-3.js', 'js/explora-pu-lo-4.js', 'js/explora-pu-lo-5.js', 'js/explora-pu-op-1.js', 'js/explora-pu-op-2.js', 'js/explora-pu-ar-1.js', 'js/explora-pu-ar-2.js', 'js/explora-pu-ar-3.js', 'js/explora-pu-ar-4.js', 'js/explora-pu-ec-1.js', 'js/explora-pu-ec-2.js', 'js/explora-pu-ec-3.js', 'js/explora-pu-cj-1.js', 'js/explora-pu-cj-2.js', 'js/explora-pu-nu-1.js', 'js/explora-pu-nu-2.js', 'js/explora-pu-nu-3.js', 'js/explora-pu-pb-1.js', 'js/explora-pu-pb-2.js', 'js/explora-trig-41a.js', 'css/presentacion.css', 'css/escritorio.css', 'js/marca.js', 'js/mascota.js',
   'js/games/algebra-taller.js', 'js/games/algebra-escenas.js', 'js/courses/algebra-taller.js', 'js/courses/algebra-revision.js',
@@ -13,13 +17,17 @@ const SHELL = [
 
 // Librerías de CDN (minijuegos, fórmulas, reproductor) se precachean aparte: si el CDN falla no
 // bloquean la instalación. Sin esto la primera visita no las guarda (el SW aún no controla la página).
-const P5_URL = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js';
+const VOZ = 'zuka-voz-v1';
+const DEV = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|$)/.test(self.location.origin) && !/[?&]cache\b/.test(self.location.search || '');
+// «?sri»: dirección distinta de la que guardaron las versiones viejas, que pudieron guardar una copia opaca (sin CORS)
+// que el navegador rechazaría al comprobar la huella «integrity» de index.html.
+const P5_URL = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js?sri';
 const CDN = [
   P5_URL,
-  'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css',
-  'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js',
-  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css?sri',
+  'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js?sri',
+  'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js?sri',
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js?sri',
   // Fuentes que katex.min.css pide para casi toda fórmula.
   ...['Main-Regular', 'Main-Bold', 'Main-Italic', 'Math-Italic', 'AMS-Regular', 'Size1-Regular', 'Size2-Regular']
     .map(f => `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/fonts/KaTeX_${f}.woff2`),
@@ -48,7 +56,7 @@ self.addEventListener('message', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys()
-    .then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k))))
+    .then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== VOZ).map(k => caches.delete(k))))
     .then(() => self.clients.claim()));
 });
 
@@ -57,6 +65,19 @@ self.addEventListener('fetch', e => {
   // Los videos se piden por rangos (respuestas 206), que la caché no admite.
   if (req.method !== 'GET' || !req.url.startsWith('http') || req.headers.has('range')) return;
   const sameOrigin = new URL(req.url).origin === self.location.origin;
+  // Narración de las explicaciones: se guarda al oírla y luego suena sin conexión. Los audios llevan su huella en el
+  // nombre (nunca cambian); la lista voz.json sale de la copia y se refresca por detrás.
+  if (sameOrigin && !DEV && /\/media\/voz\//.test(new URL(req.url).pathname)) {
+    const lista = /\.json$/.test(new URL(req.url).pathname);
+    const res = caches.open(VOZ).then(c => c.match(req).then(hit => {
+      if (hit && !lista) return { hit };
+      const net = fetch(req).then(r => { if (r.status === 200) c.put(req, r.clone()); return r; });
+      return { hit, net };
+    }));
+    e.respondWith(res.then(r => r.hit || r.net));
+    e.waitUntil(res.then(r => r.net).catch(() => {}));   // la descarga sigue viva aunque ya se haya respondido con la copia
+    return;
+  }
   // Los videos propios pesan varios MB: se sirven de la red y nunca se guardan.
   if (sameOrigin && /\/media\//.test(new URL(req.url).pathname)) return;
   // El panel /admin es solo con conexión: no pasa por la caché.
@@ -64,6 +85,16 @@ self.addEventListener('fetch', e => {
   // YouTube maneja su propia caché; guardar su API dejaría una versión vieja. Supabase (cuenta, plan,
   // progreso) siempre va a la red: una respuesta guardada mostraría un plan viejo.
   if (/youtube|ytimg|googlevideo|b-cdn\.net|mediadelivery\.net|supabase\.co/.test(new URL(req.url).hostname)) return;
+
+  // Producción: la copia de esta versión, sin tocar la red. Solo lo que no esté guardado se pide (y se guarda).
+  if (sameOrigin && !DEV) {
+    const navigate = req.mode === 'navigate';
+    e.respondWith(caches.open(VERSION).then(c => c.match(req, { ignoreSearch: true })
+      .then(hit => hit || (navigate ? c.match('index.html') : null))
+      .then(hit => hit || fetch(req).then(res => { if (res.ok) c.put(req, res.clone()); return res; }))
+      .catch(() => Response.error())));
+    return;
+  }
 
   if (sameOrigin) {
     const navigate = req.mode === 'navigate';

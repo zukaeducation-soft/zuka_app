@@ -49,7 +49,7 @@ test('install guarda KaTeX y hls.js para que las fórmulas y el reproductor ande
   listeners.install({ waitUntil: p => { pending = p; } });
   await pending;
   for (const lib of ['katex.min.js', 'katex.min.css', 'hls.min.js']) {
-    assert.ok(cached.some(u => u.endsWith(lib)), `falta ${lib}`);
+    assert.ok(cached.some(u => u.includes(lib)), `falta ${lib}`);
   }
 });
 
