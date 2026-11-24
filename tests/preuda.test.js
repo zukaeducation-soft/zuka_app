@@ -170,9 +170,9 @@ test('cada componente se abre por su cuenta, gratis, y «Sigue aquí» no salta 
   assert.match(app, /S\.lastLesson = l\.id; save\(\);/);
   // «Después: …» en la tarjeta del curso (js/inicio.js, continueCardHTML) tampoco salta de componente.
   assert.match(read('js/inicio.js'), /next = nx && c\.units\.find\(x => x\.lessons\.includes\(nx\)\)\?\.block === u\.block \? nx : null/);
-  // La primera lección de cada componente es gratis.
-  const rows = get(ctx, 'catalogo')([C]).filter(r => r.tipo === 'leccion' && r.nivel_minimo === 'gratis').map(r => r.id);
-  assert.equal(rows.join(), 'pu-cm-1,pu-el-1');
+  // Un código de prueba abre el primer mundo de cada componente.
+  const rows = get(ctx, 'catalogo')([C]).filter(r => r.tipo === 'leccion' && r.prueba).map(r => r.id);
+  assert.ok(rows.includes('pu-cm-1') && rows.includes('pu-el-1') && rows.every(id => /^pu-(cm|el)-/.test(id)));
   const css = read('css/styles.css');
 });
 

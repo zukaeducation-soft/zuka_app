@@ -1,13 +1,16 @@
-// Cuenta del estudiante: registro e inicio de sesión (Supabase Auth), «Mi plan», canje de códigos,
-// progreso en la nube, candados por plan y enlaces de video. La lógica pura está en js/acceso.js.
+// Cuenta del estudiante: entrada con código de acceso, «Mi plan», compra, progreso en la nube, candados por curso y
+// enlaces de video (spec 2026-11-24-acceso-por-codigo). La lógica pura está en js/acceso.js.
 // Sin conexión (o si no carga la librería de Supabase) la app sigue con lo guardado en el celular.
 
 const Cuenta = {
   sb: null,        // cliente de Supabase (null sin conexión)
   user: null,      // usuario con sesión
   perfil: null,    // fila de `perfiles` (se guarda en S.cuenta para abrir sin conexión)
-  planes: null,    // filas de `planes`
-  niveles: {},     // id de lección o recurso → nivel_minimo
+  accesos: [],     // filas de `accesos`: los cursos de esta cuenta
+  codigo: '',      // el código con el que se entra
+  productos: null, // planes a la venta (tabla `productos`)
+  ajustes: {},     // tabla `ajustes`: whatsapp, pago_info…
+  recursos: {},    // id de lección o recurso → { curso, prueba, tipo }
   cursos: null,    // id de curso → publicado (tabla `cursos`); null si aún no se sabe
   bases: new Map() // id de video → { base, hasta }
 };
@@ -17,16 +20,15 @@ const Cuenta = {
 const SIN_CANDADOS = typeof location !== 'undefined' && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
   && !/[?&]candados\b/.test(location.search);
 
-const nivelDe = id => Cuenta.niveles[id] || 'basico';
 // Motivo por el que algo está cerrado para quien usa la app ahora (null = abierto).
 function planMotivo(id) {
   if (SIN_CANDADOS) return null;
-  return motivoBloqueo(Cuenta.user ? Cuenta.perfil : null, nivelDe(id));
+  return motivoBloqueo({ perfil: Cuenta.user ? Cuenta.perfil : null, accesos: Cuenta.accesos }, Cuenta.recursos[id] || { tipo: 'leccion' });
 }
 
 function cuentaCache() {
   // uid = cuenta cuyo avance está en este celular; solo cambia cuando la sincronización termina bien.
-  S.cuenta = { uid: (S.cuenta || {}).uid || null, perfil: Cuenta.perfil, sesion: !!Cuenta.user };
+  S.cuenta = { uid: (S.cuenta || {}).uid || null, perfil: Cuenta.perfil, accesos: Cuenta.accesos, codigo: Cuenta.codigo, sesion: !!Cuenta.user };
   save();
 }
 // Repinta la pestaña abierta (no durante una lección ni sobre el feed de clips, que se reiniciaría).
@@ -35,12 +37,11 @@ function cuentaRepinta() {
   if (tab !== 'clips') go(tab);
 }
 
-// Niveles por defecto (los de js/acceso.js) y la última copia de la tabla `lecciones`. Va al cargar
-// el archivo, antes de que app.js pinte la primera pantalla.
+// Qué es cada cosa (curso, si la abre un código de prueba). Va al cargar el archivo, antes de que app.js pinte.
 if (typeof COURSES !== 'undefined') {
   catalogo(COURSES, typeof CURIOS === 'undefined' ? [] : CURIOS, typeof summaryOf === 'function' ? summaryOf : undefined)
-    .forEach(r => { Cuenta.niveles[r.id] = r.nivel_minimo; });
-  try { Object.assign(Cuenta.niveles, JSON.parse(localStorage.getItem('zuka-niveles')) || {}); } catch (e) { /* sin copia */ }
+    .forEach(r => { Cuenta.recursos[r.id] = { curso: r.curso, prueba: r.prueba, tipo: r.tipo }; });
+  try { const t = JSON.parse(localStorage.getItem('zuka-tienda')) || {}; Cuenta.productos = t.productos || null; Cuenta.ajustes = t.ajustes || {}; } catch (e) { /* sin copia */ }
 }
 
 // ---------- quién ve todo abierto ----------
@@ -56,79 +57,106 @@ function cuentaRol() {
 }
 
 // ---------- pantalla de entrada ----------
-// Sale al abrir la app sin sesión (y al cerrar sesión). Se puede seguir sin cuenta: queda lo gratis.
+// Sale al abrir la app sin sesión (y al cerrar sesión): se entra con el código de acceso. El correo queda para la
+// administración y para cuentas creadas antes de los códigos.
 function cuentaPideEntrar() {
-  if (!Cuenta.sb || Cuenta.user || S.guest) return false;
-  authScreen('login');
+  if (!Cuenta.sb || Cuenta.user || SIN_CANDADOS) return false;
+  authScreen();
   return true;
 }
 function authCerrar() {
   const el = $('#auth'), pz = $('#landing');   // también la presentación (js/presentacion.js), si seguía abierta
   if (!el && !pz) return;
   el?.remove(); if (pz) presentacionCerrar();
-  if (typeof tourShouldStart === 'function' && tourShouldStart(S)) startTour();   // el recorrido de bienvenida esperaba
+  if (!datosFaltan(Cuenta.perfil, Cuenta.accesos) && typeof tourShouldStart === 'function' && tourShouldStart(S)) startTour();   // el recorrido de bienvenida esperaba (los datos van antes)
 }
-function authScreen(modo = 'login', aviso = '') {
+const waBoton = (texto, rotulo, cls = 'ghost') => {
+  const u = waLink(Cuenta.ajustes.whatsapp, texto);
+  return u ? `<a class="btn ${cls} wa" href="${esc(u)}" target="_blank" rel="noopener">${rotulo}</a>` : '';
+};
+function authScreen(modo = 'codigo', aviso = '') {
   let el = $('#auth');
   if (!el) { el = document.createElement('div'); el.id = 'auth'; document.body.appendChild(el); }
-  const reg = modo === 'registro';
+  const cod = modo !== 'correo';
   const volver = typeof pzDesde !== 'undefined' && pzDesde;   // se llegó desde la presentación: se puede volver a ella
+  const pedir = waBoton(WA.prueba(), 'Pedir un código de prueba');
   el.innerHTML = `<div class="auth-in">
     ${volver ? `<button class="link-btn auth-volver" type="button" data-pz-volver>${ICON.back} Conocer Zuka</button>` : ''}
     <div class="auth-brand">${zukaWord()}</div>
-    <h1>${reg ? 'Crea tu cuenta' : 'Entra a tu cuenta'}</h1>
-    <p class="muted">${reg ? 'Es gratis. Guarda tu avance y te deja activar tu plan con un código.' : 'Sigue donde ibas: tu avance y tu plan te esperan.'}</p>
-    <div class="seg seg-2" role="tablist"><button type="button" role="tab" data-m="login" aria-selected="${!reg}" class="${reg ? '' : 'on'}">Iniciar sesión</button><button type="button" role="tab" data-m="registro" aria-selected="${reg}" class="${reg ? 'on' : ''}">Crear cuenta</button></div>
+    <h1>${cod ? 'Entra con tu código' : 'Entra con tu correo'}</h1>
+    <p class="muted">${cod ? 'Es el que recibiste por WhatsApp. Con el mismo código entras siempre y sigues donde ibas.' : 'Para administración y cuentas creadas con correo.'}</p>
     <form class="acct-form" novalidate>
-      ${reg ? campo('nombre', 'Nombre', 'text', 'autocomplete="name" maxlength="80" required') + campo('telefono', 'Celular (opcional)', 'tel', 'autocomplete="tel" inputmode="tel" maxlength="30"') : ''}
-      ${campo('correo', 'Correo', 'email', 'autocomplete="email" inputmode="email" required')}
-      ${campo('clave', reg ? 'Contraseña (8 caracteres o más)' : 'Contraseña', 'password', `autocomplete="${reg ? 'new' : 'current'}-password" minlength="8" required`)}
-      <p class="form-msg${aviso ? ' ok' : ''}" role="alert"${aviso ? '' : ' hidden'}>${aviso}</p>
-      <button class="btn main" type="submit">${reg ? 'Crear mi cuenta' : 'Entrar'}</button>
+      ${cod ? CAMPO_CODIGO : campo('correo', 'Correo', 'email', 'autocomplete="email" inputmode="email" required')
+    + campo('clave', 'Contraseña', 'password', 'autocomplete="current-password" required')}
+      <p class="form-msg${aviso ? ' bad' : ''}" role="alert"${aviso ? '' : ' hidden'}>${aviso}</p>
+      <button class="btn main" type="submit">Entrar</button>
     </form>
-    ${reg ? '' : '<button class="link-btn" type="button" data-olvide>Olvidé mi contraseña</button>'}
-    <div class="auth-guest"><button class="btn ghost" type="button" data-guest>Explorar sin cuenta</button>
-      <p class="muted">Sin cuenta se abren la primera lección de cada curso y los clips.</p></div>
+    ${cod ? '' : '<button class="link-btn" type="button" data-olvide>Olvidé mi contraseña</button>'}
+    <div class="auth-guest">${cod ? `${pedir || '<p class="muted">Si aún no tienes código, pídelo por el WhatsApp de Zuka.</p>'}
+      <button class="link-btn auth-otro" type="button" data-modo="correo">Entrar con correo</button>`
+    : '<button class="btn ghost" type="button" data-modo="codigo">Entrar con código</button>'}</div>
   </div>`;
   const f = $('form', el), msg = $('.form-msg', el), b = $('button[type=submit]', el);
-  el.querySelectorAll('[data-m]').forEach(x => x.onclick = () => { if (x.dataset.m !== modo) authScreen(x.dataset.m); });
+  $('[data-modo]', el).onclick = e => authScreen(e.currentTarget.dataset.modo);
   $('[data-olvide]', el)?.addEventListener('click', openOlvide);
   $('[data-pz-volver]', el)?.addEventListener('click', () => pzVolver());
   // En el computador es una ventana sobre la presentación: tocar afuera la cierra y vuelve a ella.
   el.onclick = e => { if (e.target === el && $('#landing')) pzVolver(); };
-  $('[data-guest]', el).onclick = () => { S.guest = true; save(); authCerrar(); };
   const error = t => { msg.textContent = t; msg.className = 'form-msg bad'; msg.hidden = false; };
   f.onsubmit = async e => {
     e.preventDefault();
     if (b.disabled) return;
-    const d = Object.fromEntries(new FormData(f)), correo = d.correo.trim();
-    if (reg && !d.nombre.trim()) return error('Escribe tu nombre.');
-    if (!/^\S+@\S+\.\S+$/.test(correo)) return error('Ese correo no parece válido.');
-    if (reg ? d.clave.length < 8 : !d.clave) return error(reg ? 'La contraseña debe tener 8 caracteres o más.' : 'Escribe tu contraseña.');
-    msg.hidden = true; b.disabled = true; const txt = b.textContent; b.textContent = 'Un momento…';
-    let r;
+    const d = Object.fromEntries(new FormData(f));
+    if (sinRed()) return error(sinRed());
+    if (cod && !codigoValido(limpiaCodigo(d.codigo))) return error(canjeError('formato'));
+    if (!cod && (!/^\S+@\S+\.\S+$/.test(d.correo.trim()) || !d.clave)) return error('Escribe tu correo y tu contraseña.');
+    msg.hidden = true; b.disabled = true; b.textContent = 'Un momento…';
+    let mal = null;
     try {
-      r = reg
-        ? await Cuenta.sb.auth.signUp({ email: correo, password: d.clave,
-          options: { data: { nombre: d.nombre.trim(), telefono: d.telefono.trim() }, emailRedirectTo: correoVuelve() } })
-        : await Cuenta.sb.auth.signInWithPassword({ email: correo, password: d.clave });
-    } catch (x) { r = { error: x }; }
-    b.disabled = false; b.textContent = txt;
-    if (r.error) return error(authError(r.error));
-    if (reg && !S.name) { S.name = d.nombre.trim().slice(0, 24); save(); }
-    // Con sesión, la pantalla la cierra cuentaSesion. Al registrarse puede faltar confirmar el correo.
-    if (!r.data.session) authScreen('login', `Te enviamos un enlace a ${esc(correo)}. Ábrelo para confirmar tu cuenta y luego inicia sesión aquí.`);
+      if (cod) mal = await entrarConCodigo(limpiaCodigo(d.codigo));
+      else {
+        const r = await Cuenta.sb.auth.signInWithPassword({ email: d.correo.trim(), password: d.clave });
+        mal = r.error ? authError(r.error) : null;
+      }
+    } catch (x) { mal = authError(x); }
+    if (!f.isConnected) return;
+    b.disabled = false; b.textContent = 'Entrar';
+    if (mal) error(mal);   // con sesión, la pantalla la cierra cuentaSesion
   };
+}
+// Este navegador, para el límite de dispositivos por código.
+function dispositivoId() {
+  let id = null;
+  try { id = localStorage.getItem('zuka-dispositivo'); } catch (e) { /* sin almacenamiento */ }
+  if (!id) {
+    id = [...crypto.getRandomValues(new Uint8Array(16))].map(x => x.toString(16).padStart(2, '0')).join('');
+    try { localStorage.setItem('zuka-dispositivo', id); } catch (e) { /* idem */ }
+  }
+  return id;
+}
+function dispositivoNombre() {
+  const u = navigator.userAgent;
+  const so = /android/i.test(u) ? 'Android' : /iphone|ipad/i.test(u) ? 'iPhone o iPad' : /windows/i.test(u) ? 'Windows' : /mac/i.test(u) ? 'Mac' : 'Otro';
+  const nav = /edg\//i.test(u) ? 'Edge' : /firefox/i.test(u) ? 'Firefox' : /chrome|crios/i.test(u) ? 'Chrome' : /safari/i.test(u) ? 'Safari' : 'Navegador';
+  return `${so} · ${nav}${isStandalone() ? ' (app)' : ''}`;
+}
+// Devuelve un texto de error o null si quedó la sesión abierta.
+async function entrarConCodigo(codigo) {
+  const { data, error } = await Cuenta.sb.functions.invoke('entrar-codigo', { body: { codigo, dispositivo: dispositivoId(), nombre: dispositivoNombre() } });
+  if (error) return /fetch|network|failed to send/i.test(`${error.name} ${error.message}`) && !navigator.onLine ? canjeError('red') : canjeError('');
+  if (!data || !data.ok) return canjeError(data && data.error);
+  const v = await Cuenta.sb.auth.verifyOtp({ token_hash: data.token_hash, type: 'magiclink' });
+  return v.error ? authError(v.error) : null;
 }
 
 // ---------- cursos habilitados ----------
-// El administrador decide en el panel (/admin → Cursos) qué cursos ven los estudiantes (tabla `cursos`).
-// Él los ve todos, con la marca «Borrador» en los que aún no habilita. Sin datos del servidor valen los
+// El estudiante ve los cursos de su cuenta y, para comprarlos, los que el administrador publicó (tabla `cursos`).
+// El administrador los ve todos, con la marca «Borrador» en los que aún no habilita. Sin datos del servidor valen los
 // de CURSOS_LISTOS.
 const CURSOS_LISTOS = ['algebra', 'trig'];
 try { Cuenta.cursos = JSON.parse(localStorage.getItem('zuka-cursos')) || null; } catch (e) { /* sin copia */ }
 const cursoBorrador = c => (Cuenta.cursos ? Cuenta.cursos[c.id] !== true : !CURSOS_LISTOS.includes(c.id));
-const cursoVisible = c => SIN_CANDADOS || cuentaEsAdmin() || !cursoBorrador(c);
+const cursoVisible = c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || !cursoBorrador(c);
 function cursosVisibles() {
   const v = COURSES.filter(cursoVisible);
   return v.length ? v : COURSES.slice(0, 1);
@@ -166,19 +194,15 @@ function cuentaInit() {
   // Lo último que se supo de la cuenta: sirve para abrir sin conexión.
   if (S.cuenta && S.cuenta.sesion && S.cuenta.perfil) {
     Cuenta.user = { id: S.cuenta.perfil.id, offline: true }; Cuenta.perfil = S.cuenta.perfil;
+    Cuenta.accesos = S.cuenta.accesos || []; Cuenta.codigo = S.cuenta.codigo || '';
   }
   cuentaRol();
   if (!window.supabase || !window.supabase.createClient) return;
   Cuenta.sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
   // Dentro del aviso de Supabase no se le puede volver a llamar: se sale primero con setTimeout.
   Cuenta.sb.auth.onAuthStateChange((ev, session) => setTimeout(() => cuentaSesion(ev, session), 0));
-  Cuenta.sb.from('lecciones').select('id,nivel_minimo').then(({ data }) => {
-    if (!data) return;
-    const m = {}; data.forEach(r => { m[r.id] = r.nivel_minimo; });
-    Object.assign(Cuenta.niveles, m);
-    try { localStorage.setItem('zuka-niveles', JSON.stringify(m)); } catch (e) { /* sin espacio */ }
-    cuentaRepinta();
-  });
+  // Al llegar el WhatsApp por primera vez, la entrada lo muestra (sin borrar lo que ya se estaba escribiendo).
+  cuentaTienda().then(() => { const i = $('#auth input[name="codigo"]'); if (i && !i.value && !$('#auth .wa')) authScreen(); }, () => {});
   Cuenta.sb.from('cursos').select('id,publicado').then(({ data }) => {
     if (!data || !data.length) return;
     const m = {}; data.forEach(r => { m[r.id] = r.publicado; });
@@ -193,32 +217,53 @@ async function cuentaSesion(ev, session) {
   const antes = Cuenta.user && !Cuenta.user.offline ? Cuenta.user.id : null;
   if (!session) {
     if (ev === 'INITIAL_SESSION' && !navigator.onLine) return;   // sin red: vale lo guardado
-    Cuenta.user = null; Cuenta.perfil = null; Cuenta.bases.clear(); cuentaCola.clear();
+    Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; Cuenta.bases.clear(); cuentaCola.clear();
     cuentaCache(); cuentaRol(); cuentaRepinta();
-    if (ev === 'SIGNED_OUT') authScreen('login');
+    if (!SIN_CANDADOS && !Clave.vista) { datosAbierta = false; if (!$('#auth') && !$('#landing') && !lessonClose) authScreen(); }
     return;
   }
-  const uidPrevio = (S.cuenta || {}).uid || null, perfilPrevio = JSON.stringify(Cuenta.perfil);
+  const uidPrevio = (S.cuenta || {}).uid || null, perfilPrevio = cuentaHuella();
   Cuenta.user = session.user;
   if (ev === 'PASSWORD_RECOVERY') claveRecupera();   // js/clave.js
   if (antes === session.user.id && ev === 'TOKEN_REFRESHED') return;
   await cuentaPerfil();
   cuentaRol();
-  if (!Clave.vista) authCerrar(); else if (typeof presentacionCerrar === 'function') presentacionCerrar();   // la contraseña nueva se queda a la vista
+  if (datosAbierta) { /* los datos personales se quedan a la vista */ } else if (!Clave.vista) authCerrar(); else if (typeof presentacionCerrar === 'function') presentacionCerrar();   // la contraseña nueva se queda a la vista
   // Supabase repite el aviso de sesión cada vez que se vuelve a la pestaña: solo se repinta si algo cambió.
-  if (antes === session.user.id) { if (JSON.stringify(Cuenta.perfil) !== perfilPrevio) cuentaRepinta(); return; }
+  if (antes === session.user.id) { if (cuentaHuella() !== perfilPrevio) cuentaRepinta(); datosPide(); return; }
   Cuenta.bases.clear(); cuentaCola.clear();   // nada pendiente de otra cuenta sube a esta
   uso.seg = 0; uso.lec = 0; uso.ans = S.answered; uso.ok = S.correct; uso.t = Date.now();
-  await cuentaSyncProgreso(uidPrevio);
+  if (await cuentaSyncProgreso(uidPrevio)) await estadoSync();
   cuentaRepinta();
+  datosPide();
 }
+const cuentaHuella = () => JSON.stringify([Cuenta.perfil, Cuenta.accesos]);
+// Al volver a la app se pregunta si cambió el acceso (el administrador acaba de confirmar un pago…).
+let cuentaVista = 0;
+async function cuentaRevisa() {
+  if (!Cuenta.sb || !Cuenta.user || Cuenta.user.offline || Date.now() - cuentaVista < 30000) return;
+  cuentaVista = Date.now();
+  const antes = cuentaHuella(), pagos = new Set(Cuenta.accesos.filter(a => a.tipo === 'pago' && vigente(a.hasta, Date.now())).map(a => a.curso));
+  await cuentaPerfil();
+  if (cuentaHuella() === antes) return;
+  const nuevo = Cuenta.accesos.find(a => a.tipo === 'pago' && vigente(a.hasta, Date.now()) && !pagos.has(a.curso));
+  if (nuevo) toast(`¡Listo! Tu acceso a ${cursoNombre(nuevo.curso)} está activo.`);
+  Cuenta.bases.clear(); cuentaRepinta(); datosPide();
+}
+if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { if (!document.hidden) cuentaRevisa(); });
 
+const primerNombre = p => ((p && p.nombre) || '').trim().split(/\s+/)[0].slice(0, 24);
 async function cuentaPerfil() {
   if (!Cuenta.sb || !Cuenta.user) return null;
-  const { data } = await Cuenta.sb.from('perfiles').select('*').eq('id', Cuenta.user.id).maybeSingle();
+  const uid = Cuenta.user.id;
+  const [{ data }, acc, cod] = await Promise.all([Cuenta.sb.from('perfiles').select('*').eq('id', uid).maybeSingle(),
+    Cuenta.sb.from('accesos').select('curso,tipo,desde,hasta').eq('usuario', uid), Cuenta.sb.rpc('mi_codigo')]);
+  if (!Cuenta.user || Cuenta.user.id !== uid) return null;   // mientras tanto cambió de cuenta
+  if (acc.data) Cuenta.accesos = acc.data.sort((a, b) => a.curso.localeCompare(b.curso));
+  if (!cod.error) Cuenta.codigo = cod.data || '';
   if (data) {
     Cuenta.perfil = data;
-    if (data.nombre && !S.name) S.name = data.nombre.slice(0, 24);
+    if (!S.name) S.name = primerNombre(data);
     cuentaCache();
   }
   return data;
@@ -227,11 +272,11 @@ async function cuentaPerfil() {
 // Junta el avance del celular con el de la nube. Si en este celular estudiaba otra cuenta, su avance
 // local no se le pasa a la nueva: se reemplaza por el de la nube.
 async function cuentaSyncProgreso(uidPrevio) {
-  if (!Cuenta.sb || !Cuenta.user) return;
+  if (!Cuenta.sb || !Cuenta.user) return false;
   const { data, error } = await Cuenta.sb.from('progreso').select('leccion,completada,segundos_vistos').eq('usuario', Cuenta.user.id);
-  if (error || !data) return;
+  if (error || !data) return false;
   const otro = uidPrevio && uidPrevio !== Cuenta.user.id;
-  if (otro) { S.done = {}; S.secs = {}; S.days = {}; }   // tampoco el calendario de actividad de la cuenta anterior
+  if (otro) { S.done = {}; S.secs = {}; estadoLimpia(); S.tourDone = true; S.name = primerNombre(Cuenta.perfil); }   // tampoco XP, racha, evaluaciones… de la cuenta anterior
   S.secs = S.secs || {};
   const nube = new Map(data.map(r => [r.leccion, r]));
   data.forEach(r => {
@@ -244,6 +289,7 @@ async function cuentaSyncProgreso(uidPrevio) {
   S.cuenta = Object.assign(S.cuenta || {}, { uid: Cuenta.user.id });   // desde aquí el avance del celular es de esta cuenta
   save();
   for (let i = 0; i < faltan.length; i += 400) await Cuenta.sb.rpc('guardar_progreso', { p_filas: faltan.slice(i, i + 400) });
+  return true;
 }
 
 // Guarda el avance de una lección (al completarla y mientras se ve su video). Lo que no alcanza a
@@ -258,7 +304,7 @@ function cuentaProgreso(id, { completada = false, segundos = 0 } = {}) {
   q.completada = q.completada || completada; q.segundos = Math.max(q.segundos, Math.round(S.secs[id] || 0));
   cuentaCola.set(id, q);
   clearTimeout(cuentaTimer);
-  if (completada) cuentaEnvia(); else cuentaTimer = setTimeout(cuentaEnvia, 15000);
+  if (completada) { cuentaEnvia(); estadoPronto(); } else cuentaTimer = setTimeout(cuentaEnvia, 15000);
 }
 function cuentaEnvia() {
   clearTimeout(cuentaTimer);
@@ -306,6 +352,7 @@ function cuentaVideoBase(id, reintento = false) {
 // ---------- formularios (hojas inferiores) ----------
 const campo = (name, label, type = 'text', extra = '') =>
   `<label class="fld"><span>${label}</span><input name="${name}" type="${type}" ${extra}></label>`;
+const CAMPO_CODIGO = campo('codigo', 'Código de acceso', 'text', 'autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="14" placeholder="ABCDE-FGH23" required');
 
 // Hoja con un formulario: `enviar(datos)` devuelve un texto de error o nada si salió bien.
 function hojaForm({ title, intro = '', campos, ok, pie = '', enviar }) {
@@ -323,175 +370,156 @@ function hojaForm({ title, intro = '', campos, ok, pie = '', enviar }) {
       b.disabled = false; b.textContent = b.dataset.txt || txt;
       if (err) { msg.textContent = err; msg.hidden = false; msg.className = 'form-msg bad'; }
     };
-    sh.querySelectorAll('[data-open]').forEach(x => x.onclick = () => ({ login: openLogin, registro: openRegistro, clave: openOlvide, canje: openCanje, planes: openPlanes })[x.dataset.open]());
     setTimeout(() => $('input', f)?.focus({ preventScroll: true }), 250);
   });
 }
 const sinRed = () => (!Cuenta.sb ? 'No hay conexión. Revisa tu internet e inténtalo de nuevo.' : null);
+const cursoNombre = id => (COURSES.find(c => c.id === id) || {}).name || id;
+function openEntrar() { closeSheet(false); authScreen(); }
 
-function openLogin() {
-  hojaForm({
-    title: 'Iniciar sesión',
-    campos: campo('correo', 'Correo', 'email', 'autocomplete="email" inputmode="email" required')
-      + campo('clave', 'Contraseña', 'password', 'autocomplete="current-password" required'),
-    ok: 'Entrar',
-    pie: '<p class="form-links"><button type="button" data-open="clave">Olvidé mi contraseña</button><button type="button" data-open="registro">Crear cuenta</button></p>',
-    enviar: async d => {
-      if (sinRed()) return sinRed();
-      if (!d.correo.trim() || !d.clave) return 'Escribe tu correo y tu contraseña.';
-      const { error } = await Cuenta.sb.auth.signInWithPassword({ email: d.correo.trim(), password: d.clave });
-      if (error) return authError(error);
-      closeSheet(); toast('¡Hola de nuevo!');
-    },
-  });
-}
-
-function openRegistro() {
-  hojaForm({
-    title: 'Crear cuenta',
-    intro: 'Gratis. Guarda tu avance y te deja activar tu plan con un código.',
-    campos: campo('nombre', 'Nombre', 'text', 'autocomplete="name" maxlength="80" required')
-      + campo('telefono', 'Celular (opcional)', 'tel', 'autocomplete="tel" inputmode="tel" maxlength="30"')
-      + campo('correo', 'Correo', 'email', 'autocomplete="email" inputmode="email" required')
-      + campo('clave', 'Contraseña (8 caracteres o más)', 'password', 'autocomplete="new-password" minlength="8" required'),
-    ok: 'Crear mi cuenta',
-    pie: '<p class="form-links"><button type="button" data-open="login">Ya tengo cuenta</button></p>',
-    enviar: async (d, sh) => {
-      if (sinRed()) return sinRed();
-      if (!d.nombre.trim()) return 'Escribe tu nombre.';
-      if (!/^\S+@\S+\.\S+$/.test(d.correo.trim())) return 'Ese correo no parece válido.';
-      if (d.clave.length < 8) return 'La contraseña debe tener 8 caracteres o más.';
-      const { data, error } = await Cuenta.sb.auth.signUp({ email: d.correo.trim(), password: d.clave,
-        options: { data: { nombre: d.nombre.trim(), telefono: d.telefono.trim() }, emailRedirectTo: correoVuelve() } });
-      if (error) return authError(error);
-      if (!S.name) { S.name = d.nombre.trim().slice(0, 24); save(); }
-      if (data.session) { closeSheet(); toast('¡Cuenta creada!'); return; }
-      $('.sheet-card', sh).innerHTML = `<div class="grabber"></div><div class="acct-form"><h3 class="sheet-title">Revisa tu correo</h3>
-        <p class="muted">Te enviamos un enlace a <b>${esc(d.correo.trim())}</b>. Ábrelo para confirmar tu cuenta y luego inicia sesión.</p>
-        <button class="btn main" type="button" data-ok>Entendido</button></div>`;
-      $('[data-ok]', sh).onclick = closeSheet;
-    },
-  });
-}
-
-function openDatos() {
-  const p = Cuenta.perfil || {};
-  hojaForm({
-    title: 'Mis datos',
-    campos: campo('nombre', 'Nombre', 'text', `autocomplete="name" maxlength="80" value="${esc(p.nombre || '')}" required`)
-      + campo('telefono', 'Celular', 'tel', `autocomplete="tel" inputmode="tel" maxlength="30" value="${esc(p.telefono || '')}"`),
-    ok: 'Guardar',
-    enviar: async d => {
-      if (sinRed()) return sinRed();
-      if (!d.nombre.trim()) return 'Escribe tu nombre.';
-      const { error } = await Cuenta.sb.from('perfiles').update({ nombre: d.nombre.trim(), telefono: d.telefono.trim() }).eq('id', Cuenta.user.id);
-      if (error) return 'No se pudo guardar. Inténtalo de nuevo.';
-      S.name = d.nombre.trim().slice(0, 24); save();
-      await cuentaPerfil(); closeSheet(); toast('Datos guardados.'); cuentaRepinta();
-    },
-  });
-}
-
+// Otro código para esta misma cuenta: añade lo que trae (debe estar sin estrenar); el avance no cambia.
 function openCanje() {
-  if (!Cuenta.user) return openLogin();
-  let confirmado = null;   // código que el estudiante ya aceptó canjear aunque reemplace su plan
+  if (!Cuenta.user) return openEntrar();
   hojaForm({
-    title: 'Canjear código',
-    intro: 'Escribe el código de 10 letras y números que recibiste al pagar. Sirve una sola vez.',
-    campos: campo('codigo', 'Código de acceso', 'text', 'autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="14" placeholder="ABCDE-FGH23" required'),
-    ok: 'Activar mi plan',
+    title: 'Añadir un código',
+    intro: 'Si te dieron otro código, lo que trae se suma a tu cuenta. Sigues entrando con el de siempre y tu avance no cambia.',
+    campos: CAMPO_CODIGO, ok: 'Añadir',
     enviar: async (d, sh) => {
       const c = limpiaCodigo(d.codigo);
       if (!codigoValido(c)) return canjeError('formato');
       if (sinRed()) return canjeError('red');
-      const { data, error } = await Cuenta.sb.rpc('canjear_codigo', { p_codigo: c, p_confirmar: confirmado === c });
+      const { data, error } = await Cuenta.sb.rpc('canjear_codigo', { p_codigo: c });
       if (error) return canjeError(/fetch|network/i.test(error.message || '') ? 'red' : '');
-      // Código de otro nivel con plan vigente: el servidor aún no lo gasta; se pide confirmar.
-      if (data && data.error === 'reemplaza') {
-        confirmado = c;
-        $('button[type=submit]', sh).dataset.txt = 'Sí, cambiar mi plan';
-        return `Tu plan ${NIVEL_NOMBRE[data.nivel_actual]} sigue vigente (${diasTexto(estadoPlan({ nivel: data.nivel_actual, acceso_hasta: data.acceso_hasta }).dias)}). Este código es del plan ${NIVEL_NOMBRE[data.nivel]} por ${data.dias} días: si lo canjeas, reemplaza tu plan actual desde hoy y los días que te quedan se pierden. Toca «Sí, cambiar mi plan» para confirmar.`;
-      }
       if (!data || !data.ok) return canjeError(data && data.error);
       await cuentaPerfil(); Cuenta.bases.clear();
       $('.sheet-card', sh).innerHTML = `<div class="grabber"></div><div class="acct-form canje-ok"><span class="canje-check">${ICON.check}</span>
-        <h3 class="sheet-title">Plan ${NIVEL_NOMBRE[data.nivel]} activado</h3>
-        <p class="muted">Tienes acceso hasta el <b>${fechaCorta(data.acceso_hasta)}</b> (${diasTexto(estadoPlan(Cuenta.perfil).dias)}).</p>
-        <button class="btn main" type="button" data-ok>Empezar a estudiar</button></div>`;
-      $('[data-ok]', sh).onclick = () => { closeSheet(); go('learn'); };
-      cuentaRepinta();
+        <h3 class="sheet-title">Código añadido</h3>
+        <p class="muted">${(data.concede || []).map(x => `${esc(cursoNombre(x.curso))} (${x.tipo === 'pago' ? 'completo' : 'prueba'})`).join(', ')}.</p>
+        <button class="btn main" type="button" data-ok>Entendido</button></div>`;
+      $('[data-ok]', sh).onclick = () => { closeSheet(); cuentaRepinta(); if (!datosPide()) go('home'); };
     },
   });
 }
 
-// Planes y precios (tabla `planes`): no se compra aquí; se paga por Nequi y llega un código.
-async function openPlanes() {
-  openSheet(`<div class="acct-form"><h3 class="sheet-title">Planes</h3><div class="planes" aria-live="polite"><p class="muted">Cargando planes…</p></div></div>`);
-  if (!Cuenta.planes && Cuenta.sb) {
-    const { data } = await Cuenta.sb.from('planes').select('*');
-    if (data && data.length) Cuenta.planes = data;
-  }
-  const box = $('#sheet .planes');
+// ---------- comprar ----------
+// Se elige cuánto tiempo; queda la solicitud en el panel y se abre WhatsApp con el mensaje escrito. El acceso se activa
+// en el mismo código cuando el administrador confirma el pago.
+const productosDe = id => (Cuenta.productos || []).filter(p => p.curso === id && p.activo).sort((a, b) => a.meses - b.meses);
+async function cuentaTienda() {
+  if (!Cuenta.sb) return;
+  const [pr, aj] = await Promise.all([Cuenta.sb.from('productos').select('*'), Cuenta.sb.from('ajustes').select('*')]);
+  if (pr.data) Cuenta.productos = pr.data;
+  if (aj.data) Cuenta.ajustes = Object.fromEntries(aj.data.map(x => [x.clave, x.valor]));
+  try { localStorage.setItem('zuka-tienda', JSON.stringify({ productos: Cuenta.productos, ajustes: Cuenta.ajustes })); } catch (e) { /* sin espacio */ }
+}
+async function openComprar(id) {
+  if (!Cuenta.user) return openEntrar();
+  const a = accesoCurso(Cuenta.accesos, id), renueva = a.estado === 'pago' || a.estado === 'vencido', curso = cursoNombre(id);
+  openSheet(`<div class="acct-form compra"><h3 class="sheet-title">${renueva ? 'Renovar' : 'Comprar'} ${esc(curso)}</h3>
+    <p class="muted">${a.estado === 'pago' ? `Te quedan ${diasTexto(a.dias)}: los que compres se suman.` : 'Se activa en tu mismo código y sigues donde vas: no pierdes nada de tu avance.'}</p>
+    <div class="compra-lista" role="radiogroup" aria-label="Duración"><p class="muted">Cargando…</p></div>
+    <p class="form-msg" role="alert" hidden></p></div>`);
+  if (!Cuenta.productos) await cuentaTienda().catch(() => {});
+  const box = $('#sheet .compra'), lista = $('#sheet .compra-lista');
   if (!box) return;
-  if (!Cuenta.planes) { box.innerHTML = '<p class="form-msg bad">No se pudieron cargar los planes. Revisa tu conexión.</p>'; return; }
-  const precio = (n, d) => (Cuenta.planes.find(p => p.nivel === n && p.duracion === d) || {}).precio;
-  const mio = estadoPlan(Cuenta.perfil).estado === 'activo' ? Cuenta.perfil.nivel : null;
-  box.innerHTML = `${NIVELES.slice(1).map(n => `<section class="plan${mio === n ? ' mio' : ''}">
-      <header><b>${NIVEL_NOMBRE[n]}</b>${mio === n ? '<span class="pill ok">Tu plan</span>' : ''}</header>
-      <p class="muted">${NIVEL_INCLUYE[n]}</p>
-      <dl>${DURACIONES.map(d => `<div><dt>${DURACION_NOMBRE[d]}</dt><dd>${precio(n, d) != null ? cop(precio(n, d)) : '—'}</dd></div>`).join('')}</dl>
-    </section>`).join('')}
-    <p class="muted plan-how">Pagas por Nequi, recibes un código de acceso y lo canjeas aquí. Precios en pesos colombianos.</p>
-    <button class="btn main" type="button" data-canje>Ya tengo un código</button>`;
-  $('[data-canje]', box).onclick = openCanje;
+  const ps = productosDe(id);
+  if (!ps.length) { lista.outerHTML = `<p class="muted">Escríbenos y te contamos cómo comprarlo.</p>${waBoton(WA.ayuda(Cuenta.codigo), 'Escribir por WhatsApp', 'main brand')}`; return; }
+  let sel = ps[ps.length - 1];
+  const mes = ps[0].meses === 1 ? ps[0].precio : null;
+  lista.innerHTML = ps.map(p => `<button type="button" role="radio" class="compra-op" data-p="${esc(p.id)}" aria-checked="${p === sel}" tabindex="${p === sel ? 0 : -1}">
+    <span><b>${mesesTexto(p.meses)}</b><small>${mes && p.precio && p.meses > 1 ? `${cop(p.precio / p.meses)} al mes` : diasTexto(p.dias)}</small></span>
+    <strong>${p.precio != null ? cop(p.precio) : 'Precio por WhatsApp'}</strong></button>`).join('');
+  const ops = [...lista.querySelectorAll('.compra-op')];
+  const elige = i => { sel = ps[i]; ops.forEach((o, k) => { o.setAttribute('aria-checked', k === i); o.tabIndex = k === i ? 0 : -1; }); pinta(); };
+  ops.forEach((o, i) => {
+    o.onclick = () => elige(i);
+    o.onkeydown = e => { const d = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); const j = (i + d + ops.length) % ops.length; elige(j); ops[j].focus(); } };
+  });
+  box.insertAdjacentHTML('beforeend', `${Cuenta.ajustes.pago_info ? `<p class="muted compra-info">${esc(Cuenta.ajustes.pago_info)}</p>` : ''}<div class="compra-pie"></div>`);
+  // Enlace de verdad (no window.open tras una espera): así ningún navegador lo bloquea.
+  const pinta = () => {
+    const u = waLink(Cuenta.ajustes.whatsapp, WA.compra({ curso, meses: sel.meses, precio: sel.precio, codigo: Cuenta.codigo, nombre: (Cuenta.perfil || {}).nombre }));
+    $('.compra-pie', box).innerHTML = u ? `<a class="btn main brand" href="${esc(u)}" target="_blank" rel="noopener" data-pide>Pedir por WhatsApp</a>` : '<button class="btn main brand" type="button" data-pide>Solicitar</button>';
+    $('[data-pide]', box).onclick = async () => {
+      const msg = $('.form-msg', box);
+      const r = await Cuenta.sb?.rpc('pedir_compra', { p_producto: sel.id }).then(x => x, x => ({ error: x }));
+      if (!box.isConnected) return;
+      msg.hidden = false;
+      if (!r || r.error) { msg.className = 'form-msg bad'; msg.textContent = u ? 'No quedó registrada aquí, pero puedes enviar el mensaje de WhatsApp.' : 'No se pudo enviar. Inténtalo de nuevo.'; return; }
+      msg.className = 'form-msg ok'; msg.textContent = 'Solicitud enviada. Cuando confirmemos tu pago, el curso se abre aquí mismo.';
+    };
+  };
+  pinta();
+}
+// Qué cursos tiene y cuáles puede comprar.
+function openPlanes() {
+  openSheet(`<div class="acct-form"><h3 class="sheet-title">Cursos y planes</h3><div class="planes">${cursosVisibles().map(c => {
+    const a = accesoCurso(Cuenta.accesos, c.id), ps = productosDe(c.id), desde = ps.map(p => p.precio).filter(p => p != null).sort((x, y) => x - y)[0];
+    return `<section class="plan${a.estado === 'pago' ? ' mio' : ''}"><header><b>${esc(c.name)}</b>${accesoPill(a)}</header>
+      <p class="muted">${ps.length ? `${ps.map(p => mesesTexto(p.meses)).join(', ').replace(/, ([^,]*)$/, ' o $1')}${desde != null ? ` · desde ${cop(desde)}` : ''}` : 'Escríbenos para conocer el precio.'}</p>
+      <button class="btn ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-compra="${esc(c.id)}">${a.estado === 'pago' || a.estado === 'vencido' ? 'Renovar' : 'Comprar'}</button></section>`;
+  }).join('')}</div></div>`, sh => sh.querySelectorAll('[data-compra]').forEach(b => { b.onclick = () => openComprar(b.dataset.compra); }));
 }
 
 // Hoja que sale al tocar algo con candado: dice por qué y qué hacer.
 function openBloqueo(id) {
-  const motivo = planMotivo(id), t = textoBloqueo(motivo, nivelDe(id));
+  const motivo = planMotivo(id), rec = Cuenta.recursos[id] || {}, t = textoBloqueo(motivo, cursoNombre(rec.curso));
   if (!t) return;
+  const compra = rec.curso && ['ninguno', 'prueba', 'prueba_vencida', 'vencido'].includes(motivo);
   openSheet(`<div class="acct-form lock-sheet"><span class="lock-ico">${ICON.lock}</span>
-    <h3 class="sheet-title">${t.title}</h3><p class="muted">${t.text}</p>
-    ${motivo === 'sesion'
-      ? '<button class="btn main" type="button" data-a="login">Iniciar sesión</button><button class="btn ghost" type="button" data-a="registro">Crear cuenta gratis</button>'
-      : '<button class="btn main" type="button" data-a="canje">Canjear código</button>'}
-    <button class="btn ghost" type="button" data-a="planes">Ver planes y precios</button></div>`,
-  sh => sh.querySelectorAll('[data-a]').forEach(b => b.onclick = () => ({ login: openLogin, registro: openRegistro, canje: openCanje, planes: openPlanes })[b.dataset.a]()));
+    <h3 class="sheet-title">${esc(t.title)}</h3><p class="muted">${esc(t.text)}</p>
+    ${motivo === 'sesion' ? '<button class="btn main" type="button" data-a="entrar">Entrar con mi código</button>'
+    : motivo === 'bloqueado' ? waBoton(WA.ayuda(Cuenta.codigo), 'Escribir por WhatsApp', 'main')
+    : `<button class="btn main" type="button" data-a="compra">${motivo === 'vencido' ? 'Renovar' : compra ? 'Comprar acceso' : 'Ver planes'}</button>
+      <button class="btn ghost" type="button" data-a="canje">Ya tengo otro código</button>`}</div>`,
+  sh => sh.querySelectorAll('[data-a]').forEach(b => { b.onclick = () => ({ entrar: openEntrar, canje: openCanje, compra: () => (compra ? openComprar(rec.curso) : openPlanes()) })[b.dataset.a](); }));
 }
+// Aviso dentro del curso (portada): prueba, plan por vencer o vencido, con su botón.
+function accesoAvisoHTML(c) {
+  if (SIN_CANDADOS || cuentaEsAdmin() || !Cuenta.user) return '';
+  const a = accesoCurso(Cuenta.accesos, c.id);
+  const t = {
+    prueba: `Estás en la <b>prueba</b>: se abre el primer mundo${c.blocks ? ' de cada componente' : ''}${a.dias != null ? ` (${a.dias === 1 ? 'queda' : 'quedan'} ${diasTexto(a.dias)})` : ''}.`,
+    prueba_vencida: 'Tu prueba terminó. Tu avance sigue guardado.', vencido: 'Tu plan venció. Conservas el primer mundo y tu avance.',
+    ninguno: 'Este curso no está en tu plan.', pago: a.dias != null && a.dias <= 7 ? `Tu plan vence en <b>${diasTexto(a.dias)}</b>. Si renuevas ya, los días se suman.` : '',
+  }[a.estado];
+  return t ? `<section class="acc-aviso"><p>${t}</p><button class="btn sm main brand" type="button" data-comprar="${esc(c.id)}">${a.estado === 'pago' || a.estado === 'vencido' ? 'Renovar' : 'Comprar'}</button></section>` : '';
+}
+const bindAccesoAviso = () => $('[data-comprar]', view)?.addEventListener('click', e => openComprar(e.currentTarget.dataset.comprar));
 
-// ---------- tarjeta «Mi plan» del perfil ----------
+// ---------- tarjeta «Mi plan» de la pestaña Tú ----------
+const accesoPill = a => ({ pago: '<span class="pill ok">Activo</span>', prueba: '<span class="pill warn">Prueba</span>', vencido: '<span class="pill bad">Vencido</span>', prueba_vencida: '<span class="pill bad">Prueba terminada</span>' })[a.estado] || '';
 function cuentaCard() {
   if (!Cuenta.user) {
-    return `<section class="card acct-card"><h3>Tu cuenta</h3>
-      <p class="muted">Crea tu cuenta para guardar tu avance en la nube y activar tu plan con un código.</p>
-      <div class="acct-actions"><button class="btn brand" data-acct="login">Iniciar sesión</button><button class="btn ghost" data-acct="registro">Crear cuenta</button></div>
-      <button class="link-btn" data-acct="planes">Ver planes y precios</button></section>`;
+    return `<section class="card acct-card"><h3>Mi plan</h3><p class="muted">Entra con tu código de acceso para ver tus cursos y guardar tu avance.</p>
+      <button class="btn brand" data-acct="entrar">Entrar con mi código</button></section>`;
   }
-  const p = Cuenta.perfil || {}, e = estadoPlan(p);
-  const pill = { activo: ['ok', 'Activo'], vencido: ['bad', 'Vencido'], sin_plan: ['', 'Sin plan'] }[e.estado];
-  const admin = p.rol === 'admin';
-  return `<section class="card acct-card"><div class="acct-head"><h3>Mi plan</h3><span class="pill ${pill[0]}">${pill[1]}</span></div>
-    ${e.estado === 'sin_plan'
-      ? `<p class="muted">${admin ? 'Cuenta administradora: todo el contenido abierto.' : 'Aún no tienes un plan. Con un código de acceso se activa al instante.'}</p>`
-      : `<dl class="plan-facts">
-        <div><dt>Nivel</dt><dd>${NIVEL_NOMBRE[p.nivel] || '—'}${p.duracion ? ` · ${DURACION_NOMBRE[p.duracion]}` : ''}</dd></div>
-        <div><dt>Inicio</dt><dd>${fechaCorta(p.acceso_desde)}</dd></div>
-        <div><dt>Vence</dt><dd>${fechaCorta(p.acceso_hasta)}</dd></div>
-        <div><dt>Te quedan</dt><dd class="${e.estado === 'activo' && e.dias <= 7 ? 'warn' : ''}">${e.estado === 'activo' ? diasTexto(e.dias) : '0 días'}</dd></div></dl>
-        ${e.estado === 'vencido' ? '<p class="muted">Tu plan venció. Renueva con un código nuevo; tu avance sigue guardado.</p>' : e.dias <= 7 ? '<p class="muted">Tu plan está por vencer. Si canjeas un código del mismo nivel, los días se suman.</p>' : ''}`}
-    <div class="acct-actions"><button class="btn brand" data-acct="canje">${e.estado === 'sin_plan' ? 'Canjear código' : e.estado === 'vencido' ? 'Renovar con código' : 'Canjear otro código'}</button><button class="btn ghost" data-acct="planes">Ver planes</button></div>
-    ${admin ? '<a class="btn ghost" href="admin/">Panel de administración</a>' : ''}
-    <div class="acct-foot"><button class="link-btn" data-acct="datos">Mis datos</button><button class="link-btn" data-acct="salir">Cerrar sesión</button></div></section>`;
+  const p = Cuenta.perfil || {}, admin = p.rol === 'admin', mios = Cuenta.accesos || [];
+  return `<section class="card acct-card"><div class="acct-head"><h3>Mi plan</h3></div>
+    ${admin ? '<p class="muted">Cuenta administradora: todo el contenido abierto.</p>'
+    : mios.length ? `<ul class="plan-cursos">${mios.map(x => {
+      const a = accesoCurso(mios, x.curso);
+      return `<li><div class="acct-head"><b>${esc(cursoNombre(x.curso))}</b>${accesoPill(a)}</div>
+        <p class="muted">${a.estado === 'pago' ? `Del ${fechaCorta(a.desde)} al ${fechaCorta(a.hasta)} · <b class="${a.dias <= 7 ? 'warn' : ''}">${a.dias === 1 ? 'queda' : 'quedan'} ${diasTexto(a.dias)}</b>`
+        : a.estado === 'prueba' ? `Primer mundo abierto${a.hasta ? ` hasta el ${fechaCorta(a.hasta)}` : ''}.` : `Terminó el ${fechaCorta(a.hasta)}. Tu avance sigue guardado.`}</p>
+        <button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-acct="comprar" data-curso="${esc(x.curso)}">${x.tipo === 'pago' ? 'Renovar' : 'Comprar acceso'}</button></li>`;
+    }).join('')}</ul>` : '<p class="muted">Aún no tienes cursos en tu cuenta.</p>'}
+    ${Cuenta.codigo ? `<button class="mi-codigo" type="button" data-acct="copia" aria-label="Copiar mi código ${muestraCodigo(Cuenta.codigo)}"><span><small>Mi código de acceso</small><b>${muestraCodigo(Cuenta.codigo)}</b></span><span class="mi-copia">Copiar</span></button>` : ''}
+    ${admin ? '<a class="btn ghost" href="admin/">Panel de administración</a>' : `<div class="acct-actions"><button class="btn ghost" data-acct="planes">Más cursos</button><button class="btn ghost" data-acct="canje">Añadir código</button></div>`}
+    <div class="acct-foot">${admin ? '<span></span>' : '<button class="link-btn" data-acct="datos">Mis datos</button>'}<button class="link-btn" data-acct="salir">Cerrar sesión</button></div></section>`;
 }
-
+async function cuentaSalir() {
+  cuentaEnvia(); usoEnvia();
+  await estadoEnvia().catch(() => {});   // nada de lo ganado se queda sin subir
+  if (Cuenta.sb) await Cuenta.sb.auth.signOut({ scope: 'local' }).catch(() => {});
+  Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
+  if (!SIN_CANDADOS) authScreen();
+}
 function cuentaBind(root) {
-  const acts = { login: openLogin, registro: openRegistro, planes: openPlanes, canje: openCanje, datos: openDatos,
-    salir: async () => {
-      cuentaEnvia(); usoEnvia();
-      if (Cuenta.sb) await Cuenta.sb.auth.signOut().catch(() => {});
-      Cuenta.user = null; Cuenta.perfil = null; cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
-      authScreen('login');
-    } };
-  root.querySelectorAll('[data-acct]').forEach(b => b.onclick = () => acts[b.dataset.acct]());
+  const acts = { entrar: openEntrar, planes: openPlanes, canje: openCanje, datos: () => datosScreen(false),
+    comprar: b => openComprar(b.dataset.curso),
+    copia: () => navigator.clipboard?.writeText(muestraCodigo(Cuenta.codigo)).then(() => toast('Código copiado.'), () => toast(muestraCodigo(Cuenta.codigo))),
+    salir: () => ask({ title: '¿Cerrar sesión?', text: Cuenta.codigo ? `Para volver necesitarás tu código: ${muestraCodigo(Cuenta.codigo)}. Guárdalo antes.` : 'Tu avance queda guardado en tu cuenta.', ok: 'Cerrar sesión', cancel: 'Quedarme' })
+      .then(si => { if (si) cuentaSalir(); }) };
+  root.querySelectorAll('[data-acct]').forEach(b => { b.onclick = () => acts[b.dataset.acct](b); });
 }
-

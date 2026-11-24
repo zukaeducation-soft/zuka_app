@@ -1,0 +1,43 @@
+/* Entrada con código, compra, «Mi plan» y datos personales (js/cuenta.js, js/datos.js; spec 2026-11-24-acceso-por-codigo). */
+.auth-in a.btn, .acct-form a.btn { text-align: center; text-decoration: none; }
+.auth-otro { justify-self: center; align-self: center; }
+.auth-in .fld input[name="codigo"] { padding: 16px; font-size: 20px; text-align: center; }
+.fld select { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; font-size: 16px; font-weight: 600; }
+.fld select:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+.check { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.4; color: var(--ink); cursor: pointer; }
+.check input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--brand); }
+
+/* datos personales */
+.datos { gap: 12px; }
+.datos-paso { font-size: 13px; font-weight: 700; color: var(--mute); }
+.datos > .mini-bar { --c: var(--brand); display: block; margin: 0 0 4px; }
+.datos .form-links { justify-content: space-between; }
+
+/* comprar */
+.compra-lista { display: grid; gap: 10px; }
+.compra-op { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; min-height: 64px; padding: 12px 16px; text-align: left; color: var(--ink); border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+.compra-op b { display: block; font-size: 17px; }
+.compra-op small { color: var(--mute); font-size: 13.5px; }
+.compra-op strong { font-size: 16px; font-weight: 700; text-align: right; }
+.compra-op[aria-checked="true"] { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 10%, var(--card)); box-shadow: inset 0 0 0 1px var(--brand); }
+.compra-op:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.compra-info { white-space: pre-line; }
+.compra-pie .btn { width: 100%; }
+.plan .btn { padding: 11px 14px; font-size: 14.5px; }
+
+/* «Mi plan» en Tú */
+.plan-cursos { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.plan-cursos li { display: grid; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.plan-cursos .btn { justify-self: start; width: auto; }
+.plan-cursos .warn { color: var(--fire); }
+.mi-codigo { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; text-align: left; border-radius: 14px; border: 1px dashed var(--line); background: var(--bg2); color: var(--ink); }
+.mi-codigo small { display: block; font-size: 12px; font-weight: 700; color: var(--mute); }
+.mi-codigo b { font-family: ui-monospace, 'SF Mono', Consolas, monospace; font-size: 18px; letter-spacing: .08em; }
+.mi-copia { color: var(--brand); font-size: 14px; font-weight: 700; }
+.mi-codigo:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+/* aviso dentro del curso */
+.acc-aviso { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; margin-top: 14px; padding: 14px 16px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--gold) 55%, var(--line)); background: color-mix(in srgb, var(--gold) 9%, var(--card)); }
+.acc-aviso p { font-size: 14px; line-height: 1.4; }
+.acc-aviso .btn { flex: none; width: auto; --c: var(--brand); color: var(--on-brand); }
+@media (min-width: 1000px) { .cv-side .acc-aviso { margin: 0; } }

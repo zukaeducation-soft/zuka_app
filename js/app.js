@@ -13,7 +13,6 @@ const DEFAULTS = () => ({
   tourDone: false,   // recorrido guiado de bienvenida (js/tour.js): ya visto o saltado
   guides: {}, guideAuto: true,   // guías «Cómo se juega» ya vistas, por juego o tipo de ejercicio (js/guia.js)
   tutorias: [],      // asesorías separadas en la pestaña Tutorías (js/tutorias.js)
-  guest: false,      // eligió «Explorar sin cuenta» en la pantalla de entrada (js/cuenta.js)
   cuenta: null,      // última copia de la cuenta y su plan (js/cuenta.js), para abrir sin conexión
   secs: {},          // segundos vistos del video de cada lección
 });
@@ -316,7 +315,7 @@ const worldNo = (c, ui) => (c.blocks ? c.units.slice(0, ui + 1).filter(u => u.bl
 function worldInfo(c, u) {
   const wDone = u.lessons.filter(isDone).length;
   return { w: WORLDS[u.world] || { name: u.title, art: '' }, wDone, all: wDone === u.lessons.length,
-    closed: u.lessons.every(l => !isUnlocked(c, l)) };
+    closed: u.lessons.every(l => !isUnlocked(c, l) || !!planMotivo(l.id)) };
 }
 // Lección que toca: la primera sin terminar. En un curso con componentes, la del componente que se estudió por
 // última vez (S.lastLesson), para que quien va por Lectura no vea «Sigue aquí» en Razonamiento.
@@ -338,7 +337,7 @@ function renderComponents(c) {
   const lastL = ls.find(l => l.id === S.lastLesson), last = lastL && blockOf(c, lastL), cur = currentLesson(c);
   view.innerHTML = `<div class="learn cv" style="--c:${c.color}">
     <div class="cv-side">${courseHeadHTML(c)}
-    ${cur ? continueCardHTML(c, cur, ls.filter(l => blockOf(c, l) === blockOf(c, cur))) : ''}</div>
+    ${cur ? continueCardHTML(c, cur, ls.filter(l => blockOf(c, l) === blockOf(c, cur))) : ''}${accesoAvisoHTML(c)}</div>
     <div class="cv-main"><h2 class="comp-title">Elige un componente</h2>
     <div class="comp-list">${c.blocks.map((b, k) => {
       const bl = ls.filter(l => blockOf(c, l) === b.id), d = bl.filter(isDone).length, nw = c.units.filter(u => u.block === b.id).length;
@@ -360,7 +359,7 @@ function renderComponents(c) {
     openBlock = { course: c.id, id: b.dataset.block }; renderLearn(); $('[data-back]', view)?.focus({ preventScroll: true });
   });
   $('[data-continue]', view)?.addEventListener('click', () => startLesson(c, cur));
-  bindCourseHead(); bindGymFab(c);
+  bindCourseHead(); bindAccesoAviso(); bindGymFab(c);
   view.scrollTop = 0;
 }
 function renderLearn() {
@@ -377,7 +376,7 @@ function renderLearn() {
   view.innerHTML = `<div class="learn cv" style="--c:${c.color}">
     <div class="cv-side">${block ? `<button class="world-back" data-back>${ICON.back}<span>Componentes</span></button>` : ''}
     ${courseHeadHTML(c, block)}
-    ${cur ? continueCardHTML(c, cur, ls) : ''}</div>
+    ${cur ? continueCardHTML(c, cur, ls) : ''}${accesoAvisoHTML(c)}</div>
     <div class="cv-main">
     ${installEvt && !S.hideInstall ? `<section class="install-banner">
       <img src="icons/icon-192.png" alt="" width="44" height="44">
@@ -416,7 +415,7 @@ function renderLearn() {
   });
   $('[data-install]', view)?.addEventListener('click', promptInstall);
   $('[data-hide-install]', view)?.addEventListener('click', () => { S.hideInstall = true; save(); renderLearn(); });
-  bindCourseHead(); bindGymFab(c);
+  bindCourseHead(); bindAccesoAviso(); bindGymFab(c);
   view.scrollTop = 0;   // arriba queda «Sigue aquí»; el mapa de mundos está debajo
 }
 
@@ -462,7 +461,7 @@ function renderWorld(c, ui) {
           <span class="node-label"><small>Evaluación · ${u.exam.minutes} min</small>${best != null ? `Mejor resultado: ${best}%` : 'Pon a prueba el mundo'}</span></div>`;
         })() : ''}</div></section>
     ${summaryOf(u) && planMotivo(`resumen-${u.world}`) ? `<button class="world-summary locked" data-summary-lock type="button">
-      <span class="ws-icon">${ICON.lock}</span><span class="ws-text"><b>Resumen del mundo</b><small>PDF con la teoría, gráficas y un taller de 10 ejercicios · plan ${NIVEL_NOMBRE[nivelDe(`resumen-${u.world}`)]}</small></span></button>`
+      <span class="ws-icon">${ICON.lock}</span><span class="ws-text"><b>Resumen del mundo</b><small>PDF con la teoría, gráficas y un taller de 10 ejercicios · con el curso completo</small></span></button>`
     : summaryOf(u) ? `<a class="world-summary" href="${summaryOf(u)}" download="Zuka - ${esc(w.name)} (resumen).pdf" target="_blank" rel="noopener">
       <span class="ws-icon">${ICON.doc}</span><span class="ws-text"><b>Resumen del mundo</b><small>PDF con la teoría, gráficas y un taller de 10 ejercicios · se descarga con conexión</small></span>${ICON.download}</a>` : ''}
     ${ui + 1 < c.units.length && c.units[ui + 1].block === u.block ? `<button class="world-next" data-next>Siguiente: Mundo ${worldNo(c, ui + 1)} · ${esc((WORLDS[c.units[ui + 1].world] || c.units[ui + 1]).name || c.units[ui + 1].title)} ${ICON.right}</button>` : ''}
@@ -824,7 +823,7 @@ function startLesson(c, l) {
 
 // ---- pestaña Perfil ----
 // Lo que «Reiniciar progreso» no toca.
-const RESET_KEEP = ['tourDone', 'tutorias', 'cuenta', 'guest', 'unlockAll', 'theme', 'name', 'goal', 'voice', 'sfx', 'videoQuality', 'videoMuted', 'videoSpeed', 'hideInstall', 'guides'];
+const RESET_KEEP = ['tourDone', 'tutorias', 'cuenta', 'unlockAll', 'theme', 'name', 'goal', 'voice', 'sfx', 'videoQuality', 'videoMuted', 'videoSpeed', 'hideInstall', 'guides'];
 let profileSub = null;   // 'settings': pantalla de Ajustes dentro de la pestaña Perfil (null = el perfil)
 function renderProfile() {
   if (profileSub === 'settings') return renderSettings();
@@ -922,12 +921,12 @@ function renderSettings() {
   $('[data-install]', view)?.addEventListener('click', promptInstall);
   $('[data-tour]', view).onclick = () => { profileSub = null; startTour(); };
   $('[data-reset]', view).onclick = () => {
-    ask({ title: '¿Borrar todo tu progreso?', text: `${conCuenta ? 'Se borran tu XP, tu racha y tu actividad en este celular; las lecciones guardadas en tu cuenta se conservan.' : 'Se borran tu XP, tu racha y las lecciones completadas.'} Tus ajustes y tus asesorías separadas se conservan. No se puede deshacer.`, ok: 'Borrar todo', cancel: 'Cancelar', danger: true })
+    ask({ title: '¿Borrar todo tu progreso?', text: `${conCuenta ? 'Se borran tu XP, tu racha, tus evaluaciones y tu gimnasio; las lecciones guardadas en tu cuenta se conservan.' : 'Se borran tu XP, tu racha y las lecciones completadas.'} Tus ajustes y tus asesorías separadas se conservan. No se puede deshacer.`, ok: 'Borrar todo', cancel: 'Cancelar', danger: true })
       .then(yes => {
         if (!yes) return;
         // Se conserva lo que no es progreso: cuenta, asesorías y preferencias (tema, nombre, meta, sonido, video, guías vistas).
         const keep = Object.fromEntries(RESET_KEEP.filter(k => k in S).map(k => [k, S[k]]));
-        S = Object.assign(DEFAULTS(), keep); openWorld = null; openBlock = null; profileSub = null; save(); applyTheme(); go('home');
+        S = Object.assign(DEFAULTS(), keep); S.estadoNuevo = true; estadoPronto(); openWorld = null; openBlock = null; profileSub = null; save(); applyTheme(); go('home');
       });
   };
 }

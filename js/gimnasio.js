@@ -603,6 +603,7 @@ function renderGym() {
 
 // ---- un reto guiado ----
 function startReto(c, r) {
+  if (typeof planMotivo === 'function' && r.after.length && r.after.every(id => planMotivo(id))) return openBloqueo(r.after[0]);   // su lección no está en el plan
   setGameCourse(c.id);
   const back = tab;
   cleanup?.(); cleanup = null;

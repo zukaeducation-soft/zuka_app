@@ -188,7 +188,7 @@ test('no se publica lo que no es la app, y nada de lo que la app carga queda fue
   for (const d of ['/video', '/docs', '/tests', '/tools', '/supabase']) assert.ok(fuera.includes(d), `falta ${d}`);
   const shell = vm.runInContext('SHELL', loadSW().ctx);
   const tapa = f => fuera.some(p => (p.startsWith('/') ? ('/' + f).startsWith(p + '/') || '/' + f === p || (p.includes('*') && new RegExp('^' + p.replace(/\./g, '\\.').replace(/\*/g, '[^/]*') + '$').test('/' + f)) : false));
-  for (const f of [...shell.filter(f => f !== './'), 'sw.js', 'vercel.json', 'admin/index.html', 'admin/admin.js', 'admin/admin.css', 'media/voz/pu-cm-1/voz.json']) {
+  for (const f of [...shell.filter(f => f !== './'), 'sw.js', 'vercel.json', 'admin/index.html', 'admin/panel.js', 'admin/panel.css', 'admin/admin.css', 'media/voz/pu-cm-1/voz.json']) {
     assert.ok(!tapa(f), `${f} quedaría sin publicar`);
   }
 });

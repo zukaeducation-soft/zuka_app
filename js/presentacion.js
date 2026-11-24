@@ -3,11 +3,11 @@
 // arriba. Va como capa propia (#landing) sobre la app; los botones de cuenta abren la pantalla de entrada (js/cuenta.js).
 
 // ¿Sale? Pura: se prueba en Node.
-function presentacionToca({ standalone, user, guest, query = '' }) {
+function presentacionToca({ standalone, user, query = '' }) {
   const q = k => new RegExp(`[?&]${k}(=|&|$)`).test(query);
   if (q('presentacion')) return true;
   if (q('app')) return false;
-  return !standalone && !user && !guest;
+  return !standalone && !user;
 }
 
 // El nombre en letra (pedido del 2026-11-20: sin el cerebro de puntos): barra de la presentación, entrada y barra de
@@ -39,7 +39,7 @@ function presentacionHTML(cursos, { worlds = {}, install = '' } = {}) {
   const logo = zukaWord();
   const mascot = pose => (typeof mascotSVG === 'function' ? mascotSVG(pose) : '');
   const art = c => (typeof courseArt === 'function' ? courseArt(c, 'xl') : `<span class="pz-dot" style="background:${c.color}"></span>`);
-  const empieza = (cls = '') => `<button class="btn main brand ${cls}" type="button" data-pz="registro">Empieza gratis</button>`;
+  const empieza = (cls = '') => `<button class="btn main brand ${cls}" type="button" data-pz="prueba">Pide tu código de prueba</button>`;
   const world = u => pzEsc((worlds[u.world] || {}).name || u.title);
   const gymC = cursos[0];
   const gymArt = typeof GYM_3D === 'string' && gymC
@@ -49,16 +49,16 @@ function presentacionHTML(cursos, { worlds = {}, install = '' } = {}) {
       <div class="pz-feat-txt"><p class="pz-eyebrow">${eyebrow}</p><h3>${h}</h3><p>${p}</p>${extra}</div>
       <div class="pz-feat-fig">${fig}</div></section>`;
   return `<header class="pz-bar"><span class="pz-logo">${logo}</span>
-      <span class="pz-bar-acts"><button class="btn brand sm pz-bar-go" type="button" data-pz="registro" tabindex="-1">Empieza gratis</button>
-      <button class="btn ghost sm" type="button" data-pz="login">Iniciar sesión</button></span></header>
+      <span class="pz-bar-acts"><button class="btn brand sm pz-bar-go" type="button" data-pz="prueba" tabindex="-1">Código de prueba</button>
+      <button class="btn ghost sm" type="button" data-pz="login">Entrar</button></span></header>
     <main class="pz-main">
     <section class="pz-hero">
       <div class="pz-hero-art">${mascot('cheer')}</div>
       <h1>Matemáticas que se <em>entienden</em>, ejercicios que se <em>juegan</em></h1>
       <p class="pz-lead">Videos cortos que explican con intuición, juegos para arrastrar y un gimnasio cerebral. Del álgebra y la
         trigonometría a la preparación para entrar a la universidad.</p>
-      <div class="pz-ctas">${empieza()}<button class="btn ghost" type="button" data-pz="login">Ya tengo cuenta</button></div>
-      <ul class="pz-seals"><li>Gratis para empezar</li><li>100 % en español</li><li>En tu celular o computador</li></ul>
+      <div class="pz-ctas">${empieza()}<button class="btn ghost" type="button" data-pz="login">Ya tengo código</button></div>
+      <ul class="pz-seals"><li>Prueba gratis el primer mundo</li><li>100 % en español</li><li>En tu celular o computador</li></ul>
     </section>
     <section class="pz-fan" aria-label="Cursos">
       ${cursos.map((c, i) => `<article class="pz-card pz-rev" style="--c:${c.color};--i:${i}">${art(c)}<b>${pzEsc(c.name)}</b>
@@ -101,11 +101,10 @@ function presentacionHTML(cursos, { worlds = {}, install = '' } = {}) {
     </section>
     <section class="pz-final pz-rev">
       <h2>Tu mente, más fuerte cada día</h2>
-      <p>Empieza hoy con la primera lección de cada curso, gratis.</p>${empieza()}
+      <p>Pide tu código por WhatsApp y juega gratis el primer mundo.</p>${empieza()}
     </section>
     </main>
     <footer class="pz-foot"><span class="pz-logo">${logo}</span>
-      <button class="link-btn" type="button" data-pz="guest">Explorar sin cuenta</button>
       <small>© 2026 Zuka · Potencia tu mente</small></footer>`;
 }
 
@@ -113,7 +112,7 @@ function presentacionHTML(cursos, { worlds = {}, install = '' } = {}) {
 let pzDesde = false;   // la pantalla de entrada se abrió desde aquí: muestra «Volver» (js/cuenta.js)
 function presentacionPide() {
   if (claveAlAbrir()) return true;   // se vuelve del correo de la contraseña (js/clave.js)
-  const ok = presentacionToca({ standalone: isStandalone(), user: Cuenta.user, guest: S.guest, query: location.search });
+  const ok = presentacionToca({ standalone: isStandalone(), user: Cuenta.user, query: location.search });
   if (ok) presentacionAbrir();
   return ok;
 }
@@ -160,12 +159,12 @@ function presentacionAbrir() {
   el.querySelectorAll('[data-pz]').forEach(b => b.onclick = () => {
     const m = b.dataset.pz;
     if (m === 'install') return promptInstall().then(() => presentacionAbrir());
-    // authCerrar quita también la presentación y abre el recorrido si toca
-    if (m === 'guest' || !Cuenta.sb) { S.guest = m === 'guest' || S.guest; save(); pzDesde = false; return authCerrar(); }
+    const wa = m === 'prueba' && waLink(Cuenta.ajustes.whatsapp, WA.prueba());
+    if (wa) { window.open(wa, '_blank', 'noopener'); return; }
     // En el computador la entrada es una ventana sobre la presentación (css/escritorio.css); en el celular la reemplaza.
     const encima = esEscritorio();
     if (!encima) presentacionCerrar();
-    pzDesde = true; authScreen(m);
+    pzDesde = true; authScreen();
     const auth = document.getElementById('auth'), h1 = auth.querySelector('h1');
     h1.tabIndex = -1;
     if (encima) {

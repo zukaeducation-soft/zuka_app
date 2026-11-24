@@ -1,48 +1,51 @@
-// Planes y acceso: lógica pura (sin red ni DOM), compartida por la app y el panel /admin.
-// La validación que cuenta está en Supabase (funciones canjear_codigo, tiene_acceso, acceso_video);
-// esto solo decide qué se pinta. Spec: docs/superpowers/specs/2026-11-17-usuarios-planes-admin.md
+// Acceso por código y por curso: lógica pura (sin red ni DOM), compartida por la app y el panel /admin.
+// La validación que cuenta está en Supabase (privado.puede, acceso_video, entrar-codigo); esto solo decide qué se pinta.
+// Spec: docs/superpowers/specs/2026-11-24-acceso-por-codigo.md
 
 const SUPA_URL = 'https://bzzzufyjhzjqawwrduom.supabase.co';
 const SUPA_KEY = 'sb_publishable_g9nE6w3Da54IrmHbeKkXQg_iWR8eiAC';   // llave pública: va en el navegador
 
-const NIVELES = ['gratis', 'basico', 'medio', 'pro'];
-const NIVEL_NOMBRE = { gratis: 'Gratis', basico: 'Básico', medio: 'Medio', pro: 'Pro' };
-const DURACIONES = ['mensual', 'semestral', 'anual'];
-const DURACION_NOMBRE = { mensual: 'Mensual', semestral: 'Semestral', anual: 'Anual' };
-const NIVEL_INCLUYE = {
-  basico: 'Videos de todos los cursos y seguimiento de tu avance.',
-  medio: 'Lo del Básico, más guías, ejercicios resueltos y simulacros con retroalimentación.',
-  pro: 'Lo del Medio, más resolución de dudas y plan de estudio personalizado.',
-};
 const DIA_MS = 86400000;
+const vigente = (hasta, now) => !hasta || new Date(hasta).getTime() > now;
 
-const nivelRango = n => Math.max(0, NIVELES.indexOf(n));
-
-// Estado del plan de un perfil: 'activo', 'vencido' o 'sin_plan', con los días que le quedan.
-function estadoPlan(perfil, now = Date.now()) {
-  const hasta = perfil && perfil.acceso_hasta ? new Date(perfil.acceso_hasta).getTime() : NaN;
-  if (!perfil || !perfil.nivel || Number.isNaN(hasta)) return { estado: 'sin_plan', dias: 0 };
-  if (hasta <= now) return { estado: 'vencido', dias: 0 };
-  return { estado: 'activo', dias: Math.ceil((hasta - now) / DIA_MS) };
+// Cómo está el acceso a un curso: 'pago', 'prueba' (primer mundo), 'vencido' (pagó y venció: conserva el primer mundo),
+// 'prueba_vencida' o 'ninguno'. `accesos`: filas { curso, tipo, desde, hasta }.
+function accesoCurso(accesos, curso, now = Date.now()) {
+  const a = (accesos || []).find(x => x.curso === curso);
+  if (!a) return { estado: 'ninguno', dias: null };
+  const ok = vigente(a.hasta, now), dias = a.hasta ? Math.max(0, Math.ceil((new Date(a.hasta).getTime() - now) / DIA_MS)) : null;
+  return { estado: a.tipo === 'pago' ? (ok ? 'pago' : 'vencido') : ok ? 'prueba' : 'prueba_vencida', dias, desde: a.desde, hasta: a.hasta };
 }
+const tienePago = (accesos, now = Date.now()) => (accesos || []).some(a => a.tipo === 'pago' && vigente(a.hasta, now));
 
-// Por qué no se puede abrir algo que pide `nivelMin`: null (sí se puede), 'sesion', 'sin_plan',
-// 'vencido' o 'nivel' (el plan vigente es menor).
-function motivoBloqueo(perfil, nivelMin, now = Date.now()) {
-  if (nivelRango(nivelMin) === 0) return null;
+// Por qué no se puede abrir un recurso { curso, prueba, tipo }: null (sí se puede), 'sesion', 'bloqueado', 'ninguno',
+// 'prueba' (hay que comprar), 'vencido', 'prueba_vencida' o 'tutorias' (piden un curso pagado). Los clips, para todos.
+function motivoBloqueo({ perfil, accesos }, rec, now = Date.now()) {
+  if (!rec || rec.tipo === 'clip') return null;
   if (!perfil) return 'sesion';
   if (perfil.rol === 'admin') return null;
-  const { estado } = estadoPlan(perfil, now);
-  if (estado !== 'activo') return estado;
-  return nivelRango(perfil.nivel) >= nivelRango(nivelMin) ? null : 'nivel';
+  if (perfil.bloqueado) return 'bloqueado';
+  if (rec.tipo === 'tutorias') return tienePago(accesos, now) ? null : 'tutorias';
+  const { estado } = accesoCurso(accesos, rec.curso, now);
+  if (estado === 'pago' || (rec.prueba && (estado === 'prueba' || estado === 'vencido'))) return null;
+  return estado;
 }
 
-// Nivel mínimo de cada cosa mientras nadie lo cambie en la tabla `lecciones`: la primera lección de
-// cada curso y los clips de curiosidades son gratis; videos y jefes, Básico; resúmenes en PDF y
-// evaluaciones (guías y simulacros), Medio; tutorías (resolución de dudas), Pro.
-const NIVEL_TIPO = { leccion: 'basico', jefe: 'basico', evaluacion: 'medio', resumen: 'medio', clip: 'gratis', tutorias: 'pro' };
+// Textos de la hoja que sale al tocar algo con candado.
+function textoBloqueo(motivo, curso = 'este curso') {
+  return ({
+    sesion: { title: 'Entra con tu código', text: 'Este contenido se abre con tu código de acceso. Si aún no tienes uno, pídelo por WhatsApp.' },
+    bloqueado: { title: 'Tu acceso está en pausa', text: 'Escríbenos por WhatsApp para revisarlo. Tu avance sigue guardado.' },
+    ninguno: { title: `${curso} no está en tu plan`, text: 'Puedes comprarlo y se activa en tu mismo código, junto a lo que ya tienes.' },
+    prueba: { title: 'Aquí termina tu prueba', text: `Tu código de prueba abre el primer mundo de ${curso}. Compra el acceso y sigue donde vas: tu avance no se pierde.` },
+    prueba_vencida: { title: 'Tu prueba terminó', text: `Compra el acceso a ${curso} para continuar. Tu avance sigue guardado.` },
+    vencido: { title: 'Tu plan venció', text: `Renueva ${curso} para seguir. Conservas el primer mundo y todo tu avance.` },
+    tutorias: { title: 'Las asesorías vienen con tu plan', text: 'Se separan con cualquier curso pagado y vigente.' },
+  })[motivo] || null;
+}
 
-// Todo lo que la app puede abrir, como filas de la tabla `lecciones` (tools/sync-lecciones.js).
+// Todo lo que la app puede abrir, como filas de la tabla `lecciones` (tools/sync-lecciones.js). `prueba`: lo abre un código
+// de prueba (el primer mundo del curso; con componentes, el primer mundo de cada uno).
 function catalogo(courses, curios = [], summaryOf = () => null) {
   const rows = [], seen = new Set();
   const add = r => { if (r.id && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } };
@@ -50,17 +53,16 @@ function catalogo(courses, curios = [], summaryOf = () => null) {
   courses.forEach(c => {
     let n = 0;
     c.units.forEach((u, ui) => {
-      // Con componentes (c.blocks) cada uno se abre por su cuenta: su primera lección también es gratis.
-      const blockFirst = !!c.blocks && !!u.block && (ui === 0 || c.units[ui - 1].block !== u.block);
-      u.lessons.forEach((l, li) => add({ id: l.id, tipo: 'leccion', curso: c.id, titulo: l.title, orden: n,
-        nivel_minimo: n++ === 0 || (blockFirst && li === 0) ? 'gratis' : NIVEL_TIPO.leccion, videos: videos(l) }));
-      if (u.boss) add({ id: u.boss.id, tipo: 'jefe', curso: c.id, titulo: u.boss.title, orden: n, nivel_minimo: NIVEL_TIPO.jefe, videos: videos(u.boss) });
-      if (u.exam) add({ id: u.exam.id, tipo: 'evaluacion', curso: c.id, titulo: u.exam.title, orden: n, nivel_minimo: NIVEL_TIPO.evaluacion, videos: [] });
-      if (summaryOf(u)) add({ id: `resumen-${u.world}`, tipo: 'resumen', curso: c.id, titulo: `Resumen: ${u.title}`, orden: n, nivel_minimo: NIVEL_TIPO.resumen, videos: [] });
+      const prueba = ui === 0 || (!!c.blocks && !!u.block && c.units[ui - 1].block !== u.block);
+      const base = { curso: c.id, prueba };
+      u.lessons.forEach(l => add({ ...base, id: l.id, tipo: 'leccion', titulo: l.title, orden: n++, videos: videos(l) }));
+      if (u.boss) add({ ...base, id: u.boss.id, tipo: 'jefe', titulo: u.boss.title, orden: n, videos: videos(u.boss) });
+      if (u.exam) add({ ...base, id: u.exam.id, tipo: 'evaluacion', titulo: u.exam.title, orden: n, videos: [] });
+      if (summaryOf(u)) add({ ...base, id: `resumen-${u.world}`, tipo: 'resumen', titulo: `Resumen: ${u.title}`, orden: n, videos: [] });
     });
   });
-  curios.forEach((q, i) => add({ id: q.id, tipo: 'clip', curso: 'clips', titulo: q.title, orden: i, nivel_minimo: NIVEL_TIPO.clip, videos: videos(q) }));
-  add({ id: 'tutorias', tipo: 'tutorias', curso: '', titulo: 'Tutorías', orden: 0, nivel_minimo: NIVEL_TIPO.tutorias, videos: [] });
+  curios.forEach((q, i) => add({ id: q.id, tipo: 'clip', curso: 'clips', prueba: true, titulo: q.title, orden: i, videos: videos(q) }));
+  add({ id: 'tutorias', tipo: 'tutorias', curso: '', prueba: false, titulo: 'Tutorías', orden: 0, videos: [] });
   return rows;
 }
 
@@ -72,14 +74,62 @@ const muestraCodigo = c => `${c.slice(0, 5)}-${c.slice(5)}`;
 const CANJE_ERRORES = {
   formato: 'El código tiene 10 letras y números. Revísalo: no lleva la letra I, la O, el 0 ni el 1.',
   no_existe: 'Ese código no existe. Revisa que esté escrito igual que te lo enviaron.',
-  ya_usado: 'Ese código ya fue canjeado. Cada código sirve una sola vez.',
+  ya_usado: 'Ese código ya pertenece a otra cuenta.',
+  es_tuyo: 'Ese código ya es el de tu cuenta.',
+  bloqueado: 'Ese código está en pausa. Escríbenos por WhatsApp para revisarlo.',
+  es_admin: 'Esa cuenta es administradora: entra con correo y contraseña.',
+  dispositivos: 'Ese código ya está abierto en el máximo de dispositivos. Escríbenos por WhatsApp para liberar uno.',
   demasiados_intentos: 'Demasiados intentos fallidos. Espera 15 minutos y vuelve a intentarlo.',
-  sin_sesion: 'Inicia sesión para canjear tu código.',
-  reemplaza: 'Ese código es de otro nivel y reemplazaría tu plan vigente. Confírmalo para canjearlo.',
+  sin_sesion: 'Entra con tu código para continuar.',
   sin_perfil: 'Tu cuenta aún no está lista. Cierra sesión, vuelve a entrar e inténtalo de nuevo.',
   red: 'No hay conexión. Revisa tu internet e inténtalo de nuevo.',
 };
-const canjeError = e => CANJE_ERRORES[e] || 'No se pudo canjear el código. Inténtalo de nuevo.';
+const canjeError = e => CANJE_ERRORES[e] || 'No se pudo usar el código. Inténtalo de nuevo.';
+
+// ---------- WhatsApp ----------
+const waNumero = s => { const d = String(s || '').replace(/\D/g, ''); return d.length === 10 ? `57${d}` : d; };   // celular de Colombia sin indicativo
+function waLink(numero, texto) {
+  const n = waNumero(numero);
+  return n ? `https://wa.me/${n}?text=${encodeURIComponent(texto)}` : '';
+}
+const mesesTexto = n => (n === 1 ? '1 mes' : `${n} meses`);
+const WA = {
+  prueba: () => 'Hola, quiero un código de prueba de Zuka.',
+  compra: ({ curso, meses, precio, codigo, nombre }) => `Hola, quiero comprar ${curso} por ${mesesTexto(meses)}${precio != null ? ` (${cop(precio)})` : ''}.${nombre ? ` Soy ${nombre}.` : ''}${codigo ? ` Mi código de Zuka es ${muestraCodigo(codigo)}.` : ''}`,
+  ayuda: codigo => `Hola, necesito ayuda con mi acceso a Zuka.${codigo ? ` Mi código es ${muestraCodigo(codigo)}.` : ''}`,
+  envio: ({ nombre, codigo, cursos, prueba, dias, url }) => `Hola${nombre ? ` ${nombre}` : ''}, este es tu código de acceso a Zuka: *${muestraCodigo(codigo)}*\n\nEntra en ${url} y escríbelo. ${prueba
+    ? `Es de prueba: abre el primer mundo de ${cursos}${dias ? ` durante ${diasTexto(dias)}` : ''}.` : `Abre ${cursos} completo${dias ? ` por ${diasTexto(dias)}, desde que lo uses por primera vez` : ''}.`}\n\nGuárdalo: con el mismo código entras siempre y conservas tu avance.`,
+  activado: ({ nombre, codigo, cursos, hasta, url }) => `Hola${nombre ? ` ${nombre}` : ''}, tu acceso a ${cursos} ya está activo${hasta ? ` hasta el ${fechaCorta(hasta)}` : ''}. Entra en ${url} con tu código de siempre${codigo ? `: *${muestraCodigo(codigo)}*` : ''}. Tu avance sigue igual.`,
+  vence: ({ nombre, curso, hasta }) => `Hola${nombre ? ` ${nombre}` : ''}, tu acceso a ${curso} en Zuka vence el ${fechaCorta(hasta)}. Si renuevas antes, los días se suman y no pierdes tu avance.`,
+};
+
+// ---------- datos personales (obligatorios con un curso pagado) ----------
+const DATOS = {
+  genero: [['mujer', 'Mujer'], ['hombre', 'Hombre'], ['no_binario', 'No binario'], ['otro', 'Otro'], ['no_dice', 'Prefiero no decirlo']],
+  edad: [['menos_14', 'Menos de 14'], ['14_15', '14 a 15'], ['16_17', '16 a 17'], ['18_20', '18 a 20'], ['21_25', '21 a 25'], ['26_35', '26 a 35'], ['mas_35', 'Más de 35']],
+  ocupacion: [['colegio', 'Colegio, antes de 10.º'], ['decimo', 'Estoy en 10.º'], ['once', 'Estoy en 11.º'], ['egresado', 'Ya me gradué del colegio'], ['universidad', 'Estoy en la universidad'], ['trabajo', 'Trabajo'], ['otro', 'Otro']],
+  presentacion: [['1_mes', 'En menos de un mes'], ['3_meses', 'En 1 a 3 meses'], ['6_meses', 'En 4 a 6 meses'], ['mas', 'En más de 6 meses'], ['no', 'No voy a presentar examen']],
+  horas: [['1_2', '1 a 2 horas'], ['3_5', '3 a 5 horas'], ['6_10', '6 a 10 horas'], ['mas_10', 'Más de 10 horas']],
+  medio: [['amigo', 'Me la recomendaron'], ['instagram', 'Instagram'], ['tiktok', 'TikTok'], ['facebook', 'Facebook'], ['whatsapp', 'WhatsApp'], ['colegio', 'Colegio o profesor'], ['google', 'Google'], ['otro', 'Otro']],
+};
+const datoTexto = (k, v) => ((DATOS[k] || []).find(x => x[0] === v) || [])[1] || v || '—';
+const esMenor = edad => ['menos_14', '14_15', '16_17'].includes(edad);
+const datosFaltan = (perfil, accesos, now = Date.now()) => !!perfil && perfil.rol !== 'admin' && !perfil.datos_en && tienePago(accesos, now);
+// El primer dato que falta o no es válido: { campo, texto }, o null.
+function datosError(d) {
+  const falta = k => !String(d[k] || '').trim();
+  const pide = { nombre: 'Escribe tu nombre completo.', correo: 'Escribe tu correo.', telefono: 'Escribe tu celular.', ciudad: 'Escribe tu ciudad.',
+    genero: 'Elige tu género o «Prefiero no decirlo».', edad: 'Elige tu rango de edad.', ocupacion: 'Cuéntanos qué haces ahora.' };
+  const orden = ['nombre', 'correo', 'telefono', 'ciudad', 'genero', 'edad', 'ocupacion'];
+  for (const campo of orden) {
+    if (falta(campo)) return { campo, texto: pide[campo] };
+    if (campo === 'correo' && !/^\S+@\S+\.\S+$/.test(d.correo.trim())) return { campo, texto: 'Ese correo no parece válido.' };
+    const n = campo === 'telefono' ? d.telefono.replace(/\D/g, '').length : 10;
+    if (n < 7 || n > 15) return { campo, texto: 'Revisa tu celular: debe tener al menos 7 números.' };
+  }
+  if (!d.acepta) return { campo: 'acepta', texto: esMenor(d.edad) ? 'Falta la autorización de tu acudiente.' : 'Falta tu autorización para guardar los datos.' };
+  return null;
+}
 
 // Mensajes de Supabase Auth en español.
 function authError(err) {
@@ -101,14 +151,3 @@ function fechaCorta(iso) {
 }
 const cop = n => `$ ${String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
 const diasTexto = n => (n === 1 ? '1 día' : `${n} días`);
-
-// Textos de la hoja que sale al tocar algo con candado.
-function textoBloqueo(motivo, nivelMin) {
-  const plan = `plan ${NIVEL_NOMBRE[nivelMin] || 'Básico'}`;
-  return ({
-    sesion: { title: 'Inicia sesión para abrirlo', text: `Este contenido es del ${plan}. Entra con tu cuenta o crea una; es gratis y guarda tu avance.` },
-    sin_plan: { title: `Disponible con el ${plan}`, text: 'Activa tu plan con un código de acceso y se abre al instante.' },
-    vencido: { title: 'Tu plan venció', text: `Renueva con un código nuevo para volver a abrir el contenido del ${plan}. Tu avance sigue guardado.` },
-    nivel: { title: `Disponible con el ${plan}`, text: 'Tu plan actual no lo incluye. Puedes mejorarlo con un código del nivel que necesitas.' },
-  })[motivo] || null;
-}
