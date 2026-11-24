@@ -48,15 +48,10 @@ test('pu-ar-4: dos de un color dado se cuentan agotando los otros colores', () =
 });
 
 test('pu-cm-4: potencias y raíces de decimales, contando las cifras decimales', () => {
-  const l = L('pu-cm-4'), r = zona(l, 'serpiente-orden').params.rounds[0];
-  const val = { '$\\sqrt{0.49}$': Math.sqrt(0.49), '$0.5^3$': 0.5 ** 3, '$0.4^2$': 0.4 ** 2, '$\\sqrt{0.25}$': Math.sqrt(0.25), '$0.1^2$': 0.1 ** 2 };
-  for (const it of r.items) assert.ok(close(it.value, val[it.label]), it.label);
-  assert.match(zona(l, 'serpiente-orden').explain, /0\.125/);
-  const c = zona(l, 'lado-del-cuadrado');
-  assert.ok(close(Math.sqrt(c.params.rounds[0].area), 0.6));
-  assert.ok(c.params.max >= 0.6 && c.params.tol < 0.05);
-  assert.equal(GAMES['lado-del-cuadrado'].grade({ sides: [0.6] }, c.params).ok, true);
-  assert.equal(GAMES['lado-del-cuadrado'].grade({ sides: [0.06] }, c.params).ok, false);
+  const l = L('pu-cm-4'), e = zona(l, 'cuelga-decimales');
+  const val = { '0.5^2': 0.5 ** 2, '\\sqrt{0.49}': Math.sqrt(0.49), '\\sqrt{0.16}': Math.sqrt(0.16), '\\sqrt{0.81}': Math.sqrt(0.81) };
+  for (const f of e.params.fichas) assert.ok(close(f.v / e.params.den, val[f.t]), f.t);
+  assert.match(e.explain, /0\.25/);
 });
 
 test('pu-pb-2: «al menos una» con tres intentos', () => {

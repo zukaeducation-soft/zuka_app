@@ -485,6 +485,23 @@
 .xg .xg-siembra.good { stroke: var(--ok); fill: color-mix(in srgb, var(--ok) 40%, transparent); }
 .xg-frase .xg-ch { width: 68px; height: 58px; }
 .xg-piezas-exactas .xp-chip { height: 56px; }
+.xg .xg-cen { text-anchor: middle; }
+.xb .xg-et { text-anchor: start; font-size: 13px; fill: var(--mute); }
+.xb .xg-et.xg-cen { text-anchor: middle; }
+.xg-rejilla-otra .xg-lona .xp-svg { touch-action: none; }
+.xg .xg-lote.on { fill: var(--c); stroke: var(--c); }
+.xg .xg-lote.on.de { stroke: var(--ok); stroke-width: 2.4; fill: var(--c); }
+.xg .xg-lote.on2 { fill: color-mix(in srgb, var(--c) 26%, var(--card)); stroke: var(--c-ink); }
+.xg .xg-gr2 { font-size: 38px; }
+.xg-exp { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 22px 7px; padding-top: 24px; font: 500 34px/1 var(--display); }
+.xg-exp i { font-style: normal; color: var(--mute); }
+.xg-exp b { font-weight: 500; }
+.xg-exp .xg-gr { display: inline-flex; align-items: center; }
+.xg .xg-exp .xp-slot { width: 44px; height: 44px; margin: -30px 2px 0; font-size: 20px; }
+.xg-exp sup { font-size: 22px; align-self: flex-start; margin: -6px 0 0 2px; }
+.xg-exp .xg-meta { color: var(--ok); }
+.xg-fac.xg-mini { min-width: 26px; height: 30px; font-size: 14px; border-radius: 8px; }
+.xg-sep { width: 8px; }
 /* zona de examen con la letra y las superficies de la explicación */
 .lesson.xp-lesson .exq { max-width: 480px; }
 .lesson.xp-lesson .play:has(.exq), .lesson.xp-lesson .play:has(.exq) .game-stage { overflow: visible; }

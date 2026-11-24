@@ -48,7 +48,19 @@
     async 'total-escondido'(p, s) { await perillas([[s.parte, 1, 12], [s.n, 1, 10]]); },
     'lanza-fraccion': (p, s) => M['lanza-ficha'](p, s),
   });
+  const campos = async (p, s, g) => perillas(GAMES[g].campos(p).map(c => [s[c.k], c.min, c.max]));
+  for (const g of ['que-porcentaje', 'etiqueta-vieja', 'vuelta-al-precio', 'factor-final', 'crece-factor', 'cuadrado-justo', 'misma-potencia', 'raiz-bandera', 'estima-diez']) M[g] = (p, s) => campos(p, s, g);
+  const tira = (lo, hi) => async (p, s) => { for (const k of s.tiros) { const g = $$('.xg-per svg'); ev(g, 'pointerdown', ...enRiel(g, 0, lo(p), hi(p))); ev(g, 'pointermove', ...enRiel(g, k, lo(p), hi(p))); ev(g, 'pointerup', ...enRiel(g, k, lo(p), hi(p))); await esp(5800); } };
+  Object.assign(M, {
+    async 'rejilla-otra'(p, s) { const svg = $$('.xg-lona svg'), x0 = (340 - p.cols * 32) / 2, f = Math.ceil(s.k / p.cols) - 1; await dedoSvg(svg, enSvg(svg, x0 + 10, 20), enSvg(svg, x0 + (s.k - f * p.cols) * 32 - 10, 6 + f * 32 + 16)); },
+    'cuelga-porcientos': M['recta-muda'], 'cuelga-decimales': M['recta-muda'],
+    'pedazos-porciento': M['piezas-exactas'],
+    async 'exponentes-justos'(p, s) { for (let k = 0; k < 3; k++) await arrastra($$(`.xp-chip[data-i="${s.en[k]}"]`), ...cen($$(`.xp-slot[data-k="${k}"]`))); },
+    'lanza-porciento': tira(p => p.piso, p => p.tope), 'lanza-potencia': tira(p => p.piso ?? -p.tope, p => p.tope),
+  });
   const MAL = {
+    'rejilla-otra': { k: 35 }, 'cuelga-porcientos': { en: [7, 12, 15, 10] }, 'que-porcentaje': { v: 6 }, 'pedazos-porciento': { en: [0, 1, 4] }, 'etiqueta-vieja': { v: 17 }, 'vuelta-al-precio': { v: 5 }, 'factor-final': { v: 80 }, 'lanza-porciento': { tiros: [4, 5] },
+    'crece-factor': { e: 7 }, 'cuadrado-justo': { v: 16 }, 'exponentes-justos': { en: [0, 2, 4] }, 'misma-potencia': { a: 3, b: 3 }, 'raiz-bandera': { v: 125 }, 'cuelga-decimales': { en: [10, 14, 8, 18] }, 'estima-diez': { a: 3, e: 3 }, 'lanza-potencia': { tiros: [8, 8] },
     'corta-iguales': { c: [3, 5, 11, 16], t: [true, true, true, false, false] }, 'fraccion-gemela': { n: 9, d: 12 }, 'entre-fracciones': { n: 3, d: 4 }, 'piezas-exactas': { en: [0, 1, 2] },
     'resta-falta': { n: 6, d: 6 }, 'parte-de-parte': { w: 4, h: 2 }, 'total-escondido': { parte: 7, n: 3 }, 'lanza-fraccion': { tiros: [-3, -2] },
     'recta-muda': { en: [7, 5, -4, -3] }, 'dos-radares': { v: -7 }, 'arma-viaje': { en: [0, 4] }, 'taller-saltos': { a: 3, b: -5 },

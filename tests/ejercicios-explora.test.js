@@ -200,3 +200,74 @@ test('pu-cm-2: no repite los ejemplos de la explicación', () => {
   for (const x of [P2('resta-falta').de, P2('fraccion-gemela').a]) assert.ok(!t.includes(`meta: [${x.join(', ')}]`));
   assert.ok(!/21|35 boletas/.test((t.match(/total: \d+/g) || []).join()));
 });
+
+// ---- pu-cm-3 «Decimales y porcentajes» y pu-cm-4 «Potencias, raíces y estimación» ----
+const lec = id => get(ctx, 'COURSES').find(c => c.id === 'preuda').units.flatMap(u => u.lessons).find(l => l.id === id);
+const PC = ['rejilla-otra', 'cuelga-porcientos', 'que-porcentaje', 'pedazos-porciento', 'etiqueta-vieja', 'vuelta-al-precio', 'factor-final', 'lanza-porciento'];
+const PO = ['crece-factor', 'cuadrado-justo', 'exponentes-justos', 'misma-potencia', 'raiz-bandera', 'cuelga-decimales', 'estima-diez', 'lanza-potencia'];
+const pr = (id, g) => lec(id).ex.find(e => e.game === g).params;
+
+for (const [id, list] of [['pu-cm-3', PC], ['pu-cm-4', PO]]) test(`${id}: ocho juegos de la escena; la solución gana, el inicio no y no nace listo`, () => {
+  assert.equal(lec(id).ex.slice(0, 8).map(e => e.game).join(), list.join());
+  for (const g of list) {
+    const p = pr(id, g);
+    assert.equal(G(g).xp, true, g);
+    assert.equal(G(g).grade(G(g).solve(p), p).ok, true, `${g}: solve`);
+    assert.equal(G(g).grade(G(g).ini(p), p).ok, false, `${g}: ini`);
+    assert.equal(G(g).grade(undefined, p).ok, false, g);
+    assert.equal(G(g).listo(G(g).ini(p), p), false, `${g}: nace listo`);
+    assert.equal(G(g).listo(G(g).solve(p), p), true, g);
+    assert.equal((G(g).texto(p).match(/\$/g) || []).length % 2, 0, g);
+  }
+});
+
+test('juegos de perillas: se aceptan exactamente las respuestas que deben, la escena se dibuja en todo el recorrido y avisa algo', () => {
+  const acepta = (id, g) => {
+    const p = pr(id, g), cs = G(g).campos(p), out = [];
+    const rec = (i, s) => {
+      if (i === cs.length) {
+        if (G(g).grade(s, p).ok) out.push(Object.values(s).join('/'));
+        if (G(g).listo(s, p)) for (const f of [0, 0.5, 1]) assert.ok(!/NaN|undefined|Infinity|width="-|height="-/.test(G(g).cuadro(s, p, f)), `${g} ${JSON.stringify(s)} ${f}`);
+        if (G(g).listo(s, p) && !G(g).grade(s, p).ok) assert.ok(G(g).aviso(s, p).length > 5, g);
+        return;
+      }
+      for (let v = cs[i].min; v <= cs[i].max; v++) rec(i + 1, { ...s, [cs[i].k]: v });
+    };
+    rec(0, {});
+    assert.ok(!/NaN|undefined/.test(G(g).quieta(p)), g);
+    return out.join();
+  };
+  assert.equal(acepta('pu-cm-3', 'que-porcentaje'), '8');
+  assert.equal(acepta('pu-cm-3', 'etiqueta-vieja'), '18');
+  assert.equal(acepta('pu-cm-3', 'vuelta-al-precio'), '4');
+  assert.equal(acepta('pu-cm-3', 'factor-final'), '77');
+  assert.equal(acepta('pu-cm-4', 'crece-factor'), '5');
+  assert.equal(acepta('pu-cm-4', 'cuadrado-justo'), '4');
+  assert.equal(acepta('pu-cm-4', 'misma-potencia'), '3/6');
+  assert.equal(acepta('pu-cm-4', 'raiz-bandera'), '112,113,114,115,116');
+  assert.equal(acepta('pu-cm-4', 'estima-diez'), '3/4');
+});
+
+test('tres cartas: solo una terna de porcentajes; los exponentes aceptan toda igualdad cierta', () => {
+  const p = pr('pu-cm-3', 'pedazos-porciento'), n = p.cartas.length, ok = [];
+  for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++) for (let c = b + 1; c < n; c++) if (G('pedazos-porciento').grade({ en: [a, b, c] }, p).ok) ok.push([a, b, c].map(i => p.cartas[i]).sort((x, y) => x - y).join('+'));
+  assert.equal(ok.join(), '2+20+50');
+  assert.ok(p.cartas.some((x, a) => p.cartas.some((y, b) => p.cartas.some((z, c) => a < b && b < c && x + y + z === p.pct))), 'se puede caer en confundir la cantidad con el porcentaje');
+  const q = pr('pu-cm-4', 'exponentes-justos'), m = q.cartas.length;
+  let hay = 0;
+  for (let a = 0; a < m; a++) for (let b = 0; b < m; b++) for (let c = 0; c < m; c++) {
+    if (a === b || b === c || a === c) continue;
+    const [x, y, z] = [a, b, c].map(i => q.cartas[i]), r = G('exponentes-justos').grade({ en: [a, b, c] }, q).ok;
+    assert.equal(r, (q.base ** x) ** y * q.base ** z === q.base ** q.meta); hay += r;
+  }
+  assert.ok(hay >= 2);
+});
+
+test('rectas y tiros: cada ficha y cada tiro valen lo que dicen', () => {
+  const v = t => Function(`return ${t.replace(/\\tfrac\{?(\d+?)\}?\{(\d+)\}/g, '($1/$2)').replace(/\\tfrac(\d)(\d)/g, '($1/$2)').replace(/\\sqrt\{([\d.]+)\}/g, 'Math.sqrt($1)').replace(/([\d.]+)\^(\d)/g, '($1**$2)')}`)();
+  for (const [id, g] of [['pu-cm-3', 'cuelga-porcientos'], ['pu-cm-4', 'cuelga-decimales']]) for (const f of pr(id, g).fichas) assert.ok(Math.abs(v(f.t) - f.v / pr(id, g).den) < 1e-9, f.t);
+  const p = pr('pu-cm-3', 'lanza-porciento'), q = pr('pu-cm-4', 'lanza-potencia');
+  for (const t of p.tiros) { assert.ok(Math.abs(v(t.t) - t.d / 20) < 1e-9, t.t); assert.equal(t.res, `${t.d * 5}\\,\\%`); assert.ok(t.d <= p.tope); }
+  for (const t of q.tiros) { assert.equal(v(t.t), t.desde + t.d, t.t); assert.ok(Math.abs(t.d) <= q.tope); }
+  assert.equal(612 * 48, 29376);
+});

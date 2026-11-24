@@ -14,7 +14,7 @@ const ctx = loadScripts(all);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES');
 const U = get(ctx, 'COURSES').find(c => c.id === 'preuda').units[0];
 // Juegos en movimiento (algo corre, vuela o se desliza solo): van de último.
-const MOVING = ['lanza-ficha', 'lanza-fraccion', 'salta-signos', 'carrera-fracciones', 'vuela-precios', 'serpiente-orden', 'buzo-enteros', 'dispara-inverso', 'rompe-cambios', 'corta-proporciones'];
+const MOVING = ['lanza-ficha', 'lanza-fraccion', 'lanza-porciento', 'lanza-potencia', 'salta-signos', 'carrera-fracciones', 'vuela-precios', 'serpiente-orden', 'buzo-enteros', 'dispara-inverso', 'rompe-cambios', 'corta-proporciones'];
 // Desde el 2026-11-20 (spec preuda-razonamiento-diez) cada lección cierra con la zona de examen, después del juego en movimiento.
 const ZONA = ['completa-solucion', 'caza-error', 'opcion-examen'];
 // Mecánicas que el usuario no quiere: escoger entre opciones, tarjetas y armar con fichas de solo tocar.

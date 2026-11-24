@@ -6,7 +6,7 @@
   const MAXF = 2;
   const mcd = (a, b) => (b ? mcd(b, a % b) : Math.abs(a));
   const val = (x, p) => { if (!p.den) return `${x}`; const g = mcd(x, p.den) || 1, n = x / g, d = p.den / g; return d === 1 ? `${n}` : `\\tfrac{${n}}{${d}}`; };
-  for (const name of ['lanza-ficha', 'lanza-fraccion']) XG.juego(name, {
+  for (const name of ['lanza-ficha', 'lanza-fraccion', 'lanza-porciento', 'lanza-potencia']) XG.juego(name, {
     ini: () => ({ n: 0, fallos: 0 }),
     listo: (s, p) => s.n >= p.tiros.length || s.fallos >= MAXF,
     ok: (s, p) => s.n >= p.tiros.length && s.fallos < MAXF,
@@ -15,12 +15,12 @@
       if (s.n >= p.tiros.length || s.fallos >= MAXF) return s;
       return k === p.tiros[s.n].d ? { ...s, n: s.n + 1 } : { ...s, fallos: s.fallos + 1 };
     },
-    texto: p => p.tiros.map(t => `$${t.t} = ${val(t.desde + t.d, p)}$`).join(', '),
+    texto: p => p.tiros.map(t => `$${t.t} = ${t.res || val(t.desde + t.d, p)}$`).join(', '),
     monta(stage, p, ui) {
       const G = GAMES[name], cara = x => (p.den ? '' : x);
       stage.innerHTML = '<div class="xg-op-grande"></div><div class="xp-dots" aria-hidden="true"></div><div class="xg-lona"></div><div class="xg-perillas"></div>';
       const [op, dots, lona, per] = stage.children;
-      const R = XG.recta(lona, { min: p.min, max: p.max, alto: 150, ...(p.den ? { rotulos: [0, p.den / 2, p.den, p.den * 1.5], et: v => ({ 0: '0', [p.den / 2]: '1/2', [p.den]: '1', [p.den * 1.5]: '3/2' })[v] } : {}) });
+      const R = XG.recta(lona, { min: p.min, max: p.max, alto: 150, ...(p.marcas ? { rotulos: Object.keys(p.marcas).map(Number), et: v => p.marcas[v] } : p.cada ? { cada: p.cada } : p.den ? { rotulos: [0, p.den / 2, p.den, p.den * 1.5], et: v => ({ 0: '0', [p.den / 2]: '1/2', [p.den]: '1', [p.den * 1.5]: '3/2' })[v] } : {}) });
       let vuela = false;
       const tiro = () => p.tiros[Math.min(ui.s.n, p.tiros.length - 1)];
       const quieta = (x, cls) => { R.din.innerHTML = XG.ficha(R.X(x), R.y, cara(x), cls); };
@@ -29,7 +29,7 @@
         op.innerHTML = tex(`$${tiro().t}$`); quieta(tiro().desde); pe?.set(0);
       };
       let pe = null;
-      pe = XG.perilla(ui, per, { et: 'Impulso', min: -p.tope, max: p.tope, v: 0, quieta: () => vuela || G.listo(ui.s, p),
+      pe = XG.perilla(ui, per, { et: 'Impulso', min: p.piso ?? -p.tope, max: p.tope, v: 0, quieta: () => vuela || G.listo(ui.s, p),
         lee: v => (v ? `${Math.abs(v)} ${p.den ? (Math.abs(v) === 1 ? p.unidad[0] : p.unidad[1]) : Math.abs(v) === 1 ? 'paso' : 'pasos'} a la ${v > 0 ? 'derecha' : 'izquierda'}` : 'estira y suelta'), on() {}, suelta: lanza });
       function lanza(k) {
         if (!k || vuela || G.listo(ui.s, p)) return;
@@ -51,21 +51,21 @@
           ui.set(s);
           R.din.innerHTML = estela + `<circle class="xp-ring${bien ? ' good' : ' bad'}" cx="${R.X(x)}" cy="${R.y}" r="20"/>` + XG.ficha(R.X(x), R.y, cara(x));
           bien ? XS.merge() : XS.nope();
-          ui.lee(bien ? `$${t.t} = ${val(x, p)}$` : '');
+          ui.lee(bien ? `$${t.t} = ${t.res || val(x, p)}$` : '');
           const sentido = Math.sign(t.d) !== dir;
           ui.nota(bien ? (s.n >= p.tiros.length ? 'Ya están todos. Comprueba.' : 'Ahí es.')
-            : fuera ? 'Se salió de la recta.' : sentido ? 'La operación va hacia el otro lado.' : n < Math.abs(t.d) ? 'Faltaron pasos.' : 'Sobraron pasos.', !bien);
+            : fuera ? 'Se salió de la recta.' : sentido ? 'Era hacia el otro lado.' : n < Math.abs(t.d) ? `Faltaron ${p.unidad?.[1] || 'pasos'}.` : `Sobraron ${p.unidad?.[1] || 'pasos'}.`, !bien);
           if (!bien && s.fallos >= MAXF) ui.espera(1500, () => !ui.locked && ui.nota('Se acabaron los intentos. Comprueba para ver cómo era.', true));
           if (G.listo(s, p)) { vuela = false; dots.innerHTML = p.tiros.map((_, j) => `<i class="${j < s.n ? 'done' : ''}"></i>`).join(''); return; }
           ui.espera(1700, () => { vuela = false; ui.lee(''); ui.nota(bien ? 'Siguiente tiro.' : 'Otra vez: ya no puedes fallar más.'); pone(); });
         }
       }
-      pone(); ui.nota('Estira el impulso hacia donde va la operación y suelta.');
+      pone(); ui.nota(p.pie || 'Estira el impulso hacia donde va la operación y suelta.');
       return ok => {
         ui.nota(ok ? 'Todos en su lugar.' : 'Mira cómo era.');
         if (ok) return;
         const t = tiro();
-        ui.espera(400, () => { ui.lee(`$${t.t} = ${val(t.desde + t.d, p)}$`); XG.camina(ui, R, t.desde, [t], { cara }); });
+        ui.espera(400, () => { ui.lee(`$${t.t} = ${t.res || val(t.desde + t.d, p)}$`); XG.camina(ui, R, t.desde, [t], { cara }); });
       };
     },
   });

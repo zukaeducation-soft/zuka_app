@@ -91,8 +91,8 @@ const XG = (() => {
       for (let k = o.min; k <= o.max; k++) h += `<line class="xb-tk${k === 0 ? ' z' : ''}" x1="${X(k)}" y1="${Y - (k === 0 ? 8 : 4)}" x2="${X(k)}" y2="${Y + (k === 0 ? 8 : 4)}"/>`;
       if (v !== 0 && o.min < 0) h += `<line class="xp-trail${v < 0 ? ' neg' : ''}" x1="${X(0)}" y1="${Y}" x2="${X(v)}" y2="${Y}"/>`;
       if (!tocado && !ui.locked) h += `<circle class="xp-halo" cx="${X(v)}" cy="${Y}" r="15"/>`;
-      svg.innerHTML = h + ficha(X(v), Y, v, v < 0 ? 'flip' : '');
-      svg.setAttribute('aria-valuenow', v); svg.setAttribute('aria-valuetext', menos(v));
+      svg.innerHTML = h + ficha(X(v), Y, o.cara ? o.cara(v) : v, v < 0 ? 'flip' : '');
+      svg.setAttribute('aria-valuenow', v); svg.setAttribute('aria-valuetext', o.lee(v) || (o.cara ? `${o.cara(v)}` : menos(v)));
     };
     const pon = n => { n = clamp(n, o.min, o.max); tocado = true; if (n !== v) { v = n; XS.tick(v); xpTick(); o.on(v); } draw(); };
     const at = e => { const r = svg.getBoundingClientRect(); return Math.round(o.min + ((e.clientX - r.left) * W / r.width - X0) / (X1 - X0) * (o.max - o.min)); };
@@ -109,6 +109,36 @@ const XG = (() => {
     };
     draw();
     return { svg, el, get v() { return v; }, set(n) { v = n; draw(); } };
+  }
+
+  // Juego de perillas: se fijan uno o dos números y al comprobar la escena los ejecuta.
+  //   { campos(p) → [{ k, et, min, max, ini, cara, lee }], listo, ok, sol, texto, alto, quieta(p) → svg, cuadro(s, p, f) → svg, ms,
+  //     lee(s, p) → renglón, aviso(s, p), bien(s, p) }     state = { [k]: valor }
+  function conPerillas(name, d) {
+    juego(name, {
+      ini: p => Object.fromEntries(d.campos(p).map(c => [c.k, c.ini])),
+      listo: (s, p) => d.listo(s, p), ok: (s, p) => d.ok(s, p), sol: p => d.sol(p), texto: d.texto,
+      campos: d.campos, aviso: d.aviso, cuadro: (s, p, f) => d.cuadro(s, p, f), quieta: p => d.quieta(p),
+      monta(stage, p, ui) {
+        stage.innerHTML = '<div class="xg-lona"></div><div class="xg-perillas"></div>';
+        const [lona, per] = stage.children, campos = d.campos(p);
+        lona.innerHTML = `<svg class="xp-svg xb" viewBox="0 0 340 ${d.alto}" role="img" aria-label="Escena del ejercicio"></svg>`;
+        const svg = lona.firstChild;
+        svg.innerHTML = d.quieta(p);
+        const ps = campos.map(c => perilla(ui, per, { ...c, v: c.ini, on: v => ui.set({ ...ui.s, [c.k]: v }) }));
+        ui.nota(campos.length > 1 ? 'Mueve las perillas. La escena responde al comprobar.' : 'Mueve la perilla. La escena responde al comprobar.');
+        const corre = (s, fin) => { ui.lee(''); ui.tween(0, 1, d.ms || 1200, f => { svg.innerHTML = d.cuadro(s, p, f); }, () => { svg.innerHTML = d.cuadro(s, p, 1); ui.lee(d.lee?.(s, p) || ''); fin(); }); };
+        return ok => {
+          const s = ui.s;
+          ui.nota('');
+          corre(s, () => {
+            if (ok) return ui.nota(d.bien(s, p));
+            ui.nota(d.aviso(s, p));
+            ui.espera(2300, () => { const b = d.sol(p); campos.forEach((c, k) => ps[k].set(b[c.k])); corre(b, () => ui.nota(d.bien(b, p))); });
+          });
+        };
+      },
+    });
   }
 
   // Camina por la recta R de `desde` por los tramos [{ d, t }]: pinta cada tramo como flecha y va escribiendo la cuenta.
@@ -135,5 +165,5 @@ const XG = (() => {
   // Fichas que se arrastran (o se tocan): el mismo gesto de la zona de examen.
   const arrastra = (ui, root, sel, o) => ui.limpia(EXQ.drag(root, sel, { live: () => !ui.locked, ...o }));
 
-  return { juego, recta, perilla, camina, arrastra, ficha, arco, menos, par, clamp };
+  return { juego, conPerillas, recta, perilla, camina, arrastra, ficha, arco, menos, par, clamp };
 })();

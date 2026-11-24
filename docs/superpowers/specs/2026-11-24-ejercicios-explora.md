@@ -17,6 +17,14 @@ Kit: `js/games/explora-kit.js` (`XG.juego`, `XG.recta`, `XG.perilla`, `XG.camina
 texto, monta }`, todo puro menos `monta`, que devuelve `fin(ok)`. Estilos al final de `css/explora.css` (`.xg`). Teclado: lo que se
 arrastra se mueve con las flechas.
 
+## pu-cm-2, pu-cm-3 y pu-cm-4
+
+Barras (`fracciones-escena.js`), porcentajes (`porcentajes-escena.js`) y potencias (`potencias-escena.js`); los de perillas usan `XG.conPerillas`.
+pu-cm-3: `rejilla-otra` (de cada 100), `cuelga-porcientos` (tres formas), `que-porcentaje`, `pedazos-porciento` (porcentaje de una cantidad),
+`etiqueta-vieja`, `vuelta-al-precio`, `factor-final` (subir y bajar) y `lanza-porciento`. pu-cm-4: `crece-factor`, `cuadrado-justo`,
+`exponentes-justos`, `misma-potencia`, `raiz-bandera`, `cuelga-decimales`, `estima-diez` y `lanza-potencia`. Lo que la explicación no enseñaba
+(la parte entre el todo, deshacer un cambio, decimales al cuadrado y estimar productos) se añadió a sus momentos.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |
