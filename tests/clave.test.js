@@ -42,3 +42,13 @@ test('el correo lleva el enlace de Supabase y ningún archivo externo', () => {
   assert.equal(c.match(/\{\{ \.ConfirmationURL \}\}/g).length, 2);
   assert.doesNotMatch(c, /<img|<script|<link/);
 });
+test('que Supabase limpie la dirección no se toma como «atrás»', () => {
+  let pop; const vueltas = [];
+  const c = loadScripts(['js/back.js']);
+  Object.assign(c, { location: { pathname: '/', search: '' }, addEventListener: (_, f) => { pop = f; }, ask: () => assert.fail('preguntó si salir'),
+    history: { state: null, pushState() {}, replaceState: (...a) => vueltas.push(a) } });
+  get(c, 'setupBack')();
+  pop({ state: null });
+  assert.equal(vueltas.at(-1)[0].zuka, 'top');
+  assert.equal(vueltas.at(-1)[2], '/');
+});

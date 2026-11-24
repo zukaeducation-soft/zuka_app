@@ -28,7 +28,10 @@ function setupBack() {
   // Al recargar (o al actualizar la versión) la tapa ya existe: no se apilan bases nuevas.
   if (history.state?.zuka !== 'top') { history.replaceState({ zuka: 'base' }, ''); cover(); }
 
-  addEventListener('popstate', () => {
+  addEventListener('popstate', e => {
+    // Al entrar por un enlace del correo, Supabase limpia el «#…» y eso también avisa aquí, con una entrada sin
+    // marca: no es un «atrás». Se vuelve la tapa y no se pregunta nada.
+    if (!e.state) { history.replaceState({ zuka: 'top' }, '', location.pathname + location.search); return; }
     if (typeof presentacionAtras === 'function' && presentacionAtras()) { cover(); return; }   // js/presentacion.js
     const step = backStep({
       exitAsk, tab, dialog: dialogOpen(), tour: tourOpen(), guide: typeof guideOpen !== 'undefined' && !!guideOpen, sheet: $('#sheet').classList.contains('open'),
