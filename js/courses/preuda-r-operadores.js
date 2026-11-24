@@ -1,77 +1,6 @@
 // Preuniversitario · mundo 11 «Operadores definidos»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setLesson, setExam }) => {
-  const STAR = (a, b) => 2 * a - b;
+PU_JUEGOS.push(({ setExam }) => {
   const TAB4 = [[1, 2, 3, 4], [2, 4, 1, 3], [3, 1, 4, 2], [4, 3, 2, 1]];
-  const ABC = [['a', 'c', 'b'], ['a', 'b', 'c'], ['c', 'a', 'b']];
-  setLesson('pu-op-1', [
-    play('maquina-operador', 'La máquina de dos entradas', { rounds: [
-      { sym: '\\star', tex: '2a - b', f: STAR, target: 9, lo: -5, hi: 10, fix: { a: 6 } },
-      { sym: '\\triangle', tex: 'a^2 - 3b', f: (a, b) => a * a - 3 * b, target: 4, lo: 0, hi: 10, fix: { b: 4 } },
-      { sym: '\\diamond', tex: 'a + 2b', f: (a, b) => a + 2 * b, target: 11, lo: 0, hi: 10 },
-    ] }, 'Se reemplaza $a$ por el primer número y $b$ por el segundo: $2 \\cdot 6 - 3 = 9$; $4^2 - 3 \\cdot 4 = 4$; y $a + 2b = 11$ tiene varias parejas, como $(1, 5)$ o $(5, 3)$.',
-      { hint: 'Escribe la regla con los números puestos y mira cuánto falta para el resultado.' }),
-    play('cruce-tabla', 'La operación por tabla', { rounds: [{ set: [1, 2, 3, 4], tab: TAB4, chain: [3, 4] }, { set: ['a', 'b', 'c'], tab: ABC, chain: ['b', 'a'] }] },
-      'Fila del primero, columna del segundo: $3 \\circ 4 = 2$. En la segunda tabla $b \\circ a = a$, pero $a \\circ b = c$: el orden importa.',
-      { hint: 'El primer elemento manda la fila; el segundo, la columna.' }),
-    play('neutro-buscador', 'El que no cambia nada', { rounds: [
-      { sym: '\\circ', tex: 'a + b - 3', f: (a, b) => a + b - 3, lo: -5, hi: 8, as: [1, 2, 4, 6] },
-      { sym: '\\odot', tex: 'a + b + a \\cdot b', f: (a, b) => a + b + a * b, lo: -5, hi: 8, as: [1, 2, 3, 5] },
-      { sym: '\\#', tex: 'a \\cdot b \\div 2', f: (a, b) => a * b / 2, lo: -5, hi: 8, as: [2, 4, 6, 8] },
-    ] }, '$a + 3 - 3 = a$: $e = 3$. $a + 0 + a \\cdot 0 = a$: $e = 0$. $a \\cdot 2 \\div 2 = a$: $e = 2$.',
-      { hint: 'Escribe $a \\circ e = a$ con la regla y despeja $e$; tiene que servir para todos los $a$.' }),
-    play('adivina-operador', '¿Cuál es la regla?', { rounds: [
-      { sym: '\\star', ex: [[3, 1, 8], [2, 5, 1], [4, 4, 8]], rules: [{ tex: 'a + b + 4', f: (a, b) => a + b + 4 }, { tex: '2a + b', f: (a, b) => 2 * a + b }, { tex: '3a - b', f: (a, b) => 3 * a - b }, { tex: 'a \\cdot b + 5', f: (a, b) => a * b + 5 }], ok: 2 },
-      { sym: '\\diamond', ex: [[2, 3, 10], [1, 4, 9], [5, 0, 25]], rules: [{ tex: 'a + b + 5', f: (a, b) => a + b + 5 }, { tex: 'a^2 + 2b', f: (a, b) => a * a + 2 * b }, { tex: '2ab - 2', f: (a, b) => 2 * a * b - 2 }, { tex: '2(a + b)', f: (a, b) => 2 * (a + b) }], ok: 1 },
-    ] }, 'La regla tiene que dar todos los ejemplos: $3a - b$ da 8, 1 y 8. En la segunda, el primer ejemplo lo cumplen las cuatro reglas; solo $a^2 + 2b$ cumple también los otros dos.',
-      { hint: 'Que una regla sirva para un ejemplo no basta: pruébala con todos.' }),
-    play('contraejemplo', '¿Importa el orden?', { rounds: [{ claim: 'Con a ★ b = 2a − b, cambiar el orden da lo mismo en cada pareja (a, b)', items: ['(3, 3)', '(5, 5)', '(2, 6)', '(0, 0)'], bad: x => { const [a, b] = x.slice(1, -1).split(', ').map(Number); return 2 * a - b !== 2 * b - a; } }] },
-      'Con $(2, 6)$: $2 \\star 6 = -2$ pero $6 \\star 2 = 10$. Con números iguales no se nota; basta una pareja distinta para ver que no es conmutativa.',
-      { hint: 'Calcula $a \\star b$ y $b \\star a$ con cada pareja.' }),
-    play('capas-operacion', 'Reemplaza y calcula por capas', { rounds: [{ title: 'Después de reemplazar', items: [{ expr: '4 ^ 2 - 3 * 5' }, { expr: '2 * 7 - 3 * 2' }] }] },
-      'Con $a \\triangle b = a^2 - 3b$: $4 \\triangle 5 = 4^2 - 3 \\cdot 5 = 16 - 15 = 1$. Con $a \\otimes b = 2a - 3b$: $7 \\otimes 2 = 14 - 6 = 8$. Primero potencias, luego productos, luego restas.',
-      { hint: 'Al reemplazar aparecen potencias y productos: resuélvelos antes de restar.' }),
-    play('vuela-precios', 'Vuela al resultado del operador', { rounds: [{ title: 'Operadores', items: [
-      { ask: 'a ★ b = 2a − b: 4 ★ 1', options: ['7', '2', '9'], answer: 0 },
-      { ask: 'a ∘ b = a + b − 3: el neutro', options: ['3', '0', '−3'], answer: 0 },
-      { ask: 'a # b = a·b − b: 3 # 2', options: ['4', '5', '6'], answer: 0 },
-    ] }] }, '$2 \\cdot 4 - 1 = 7$. El neutro deja $a + e - 3 = a$: $e = 3$. $3 \\cdot 2 - 2 = 4$.',
-      { hint: 'Reemplaza con cuidado: el primer número va en $a$.' }),
-  ]);
-
-  setLesson('pu-op-2', [
-    play('anida-operador', 'De adentro hacia afuera', { rounds: [
-      { sym: '\\star', tex: '2a - b', f: STAR, expr: [[4, 3], 2] },
-      { sym: '\\#', tex: 'a + 2b', f: (a, b) => a + 2 * b, expr: [2, [1, 3]] },
-      { sym: '\\circ', tex: 'a \\cdot b - 1', f: (a, b) => a * b - 1, expr: [[2, 3], [1, 4]] },
-    ] }, '$4 \\star 3 = 5$ y $5 \\star 2 = 8$. $1 \\# 3 = 7$ y $2 \\# 7 = 16$. $2 \\circ 3 = 5$, $1 \\circ 4 = 3$ y $5 \\circ 3 = 14$.',
-      { hint: 'Solo se puede calcular una caja que ya no tenga cajas adentro.' }),
-    play('busca-x-operador', 'La x dentro del operador', { rounds: [
-      { sym: '\\oplus', tex: '3a + b', f: (a, b) => 3 * a + b, k: 5, side: 'left', target: 26, lo: -5, hi: 10 },
-      { sym: '\\star', tex: '2a - b', f: STAR, k: 3, side: 'right', target: -4, lo: -5, hi: 15 },
-      { sym: '\\triangle', tex: 'a^2 - b', f: (a, b) => a * a - b, k: 4, side: 'left', target: 21, lo: 0, hi: 10 },
-    ] }, '$3x + 5 = 26$ da $x = 7$. $3 \\star x = 6 - x = -4$ da $x = 10$ (aquí $x$ es el segundo). $x^2 - 4 = 21$ da $x = 5$.',
-      { hint: 'Fíjate si la x está en el lugar de $a$ o en el de $b$ antes de reemplazar.' }),
-    play('cruce-tabla', 'Cadenas en la tabla', { rounds: [
-      { set: [0, 1, 2, 3], tab: [[0, 1, 2, 3], [1, 2, 3, 0], [2, 3, 0, 1], [3, 0, 1, 2]], chain: [2, 3, 3] },
-      { set: ['a', 'b', 'c'], tab: ABC, chain: ['c', 'b', 'a'] },
-    ] }, 'Primero el paréntesis: $2 \\circ 3 = 1$ y luego $1 \\circ 3 = 0$. En la otra, $c \\circ b = a$ y $a \\circ a = a$.',
-      { hint: 'Lo que sale del primer cruce es la fila del segundo.' }),
-    play('maquina-operador', 'Encuentra la entrada', { rounds: [{ sym: '\\star', tex: 'a^2 - 2b', f: (a, b) => a * a - 2 * b, target: 3, lo: 0, hi: 8, fix: { a: 3 } }] },
-      '$9 - 2b = 3$: $2b = 6$ y $b = 3$.',
-      { hint: 'Con $a$ fija, la regla se vuelve una ecuación en $b$.' }),
-    play('capas-operacion', 'El anidado, reemplazado', { rounds: [{ title: '(4 ★ 2) ★ 3', items: [{ expr: '2 * ( 2 * 4 - 2 ) - 3' }] }] },
-      'Con $a \\star b = 2a - b$, $(4 \\star 2) \\star 3 = 2(2 \\cdot 4 - 2) - 3 = 2 \\cdot 6 - 3 = 9$: el paréntesis es la operación de adentro.',
-      { hint: 'Lo de adentro del paréntesis es la primera operación.' }),
-    play('arma-negacion', 'Escribe el reemplazo', { rounds: [
-      { ask: 'Con a ★ b = 2a − b, escribe la regla', show: '$5 \\star x$', tray: ['$2 \\cdot 5$', '$2x$', '$-$', '$+$', '$x$', '$5$'], need: [0, 2, 4] },
-      { ask: 'Con a ⊕ b = 3a + b, escribe la regla', show: '$x \\oplus 7$', tray: ['$3x$', '$3 \\cdot 7$', '$+$', '$-$', '$7$', '$x$'], need: [0, 2, 4], alt: [[4, 2, 0]] },
-    ] }, '$5 \\star x = 2 \\cdot 5 - x$: el 5 va en $a$ y la $x$ en $b$. $x \\oplus 7 = 3x + 7$.',
-      { hint: 'Copia la regla y cambia $a$ por lo de la izquierda y $b$ por lo de la derecha.' }),
-    play('balanza-cajas', 'Despeja lo que queda', { rounds: [{ title: 'Ecuaciones del operador', items: [{ a: 3, b: 2, c: 0, d: 17 }, { a: 4, b: 3, c: 1, d: 12 }] }] },
-      'Con $x \\oplus 2 = 17$ y $\\oplus$ como $3a + b$: $3x + 2 = 17$, $x = 5$. Y $4x + 3 = x + 12$ da $3x = 9$, $x = 3$.',
-      { hint: 'Quita lo mismo de los dos platillos hasta dejar cajas solas contra baldosas.' }),
-  ]);
-
   setExam('pu-operadores', 'Operadores definidos', [
     ['pu-op-1', 'En un operador, el primer número reemplaza a $a$ y el segundo a $b$.',
       play('maquina-operador', 'Máquina', { rounds: [{ sym: '\\star', tex: '3a - b', f: (a, b) => 3 * a - b, target: 10, lo: 0, hi: 10, fix: { a: 4 } }] }, '$12 - b = 10$: $b = 2$.', { hint: 'Reemplaza.' })],
@@ -87,16 +16,42 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 });
 
 // Mundo 11 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
-  diezLesson('pu-op-1', [
-    ['maquina-operador', 0, 'La máquina aplica $a \\star b = 2a - b$. Ya entró el 6: elige la otra entrada para que salga 9', '$2 \\cdot 6 - b = 9$: la segunda entrada es 3.'],
-    ['cruce-tabla', 0, 'Esta operación no tiene fórmula: está en una tabla. Halla $3 \\ast 4$', 'El resultado está en el cruce de la fila del primer número con la columna del segundo: fila 3, columna 4, da 2.'],
-    ['neutro-buscador', 0, 'Con $a \\circ b = a + b - 3$, busca el número que no cambia a los demás', 'Para que $a \\circ e = a$ hace falta $a + e - 3 = a$: el neutro es 3.'],
-    ['adivina-operador', 0, 'Tres ejemplos de una operación secreta: $3 \\star 1 = 8$, $2 \\star 5 = 1$ y $4 \\star 4 = 8$. ¿Cuál es la regla?', 'La única regla que cumple los tres ejemplos es $3a - b$: $9 - 1 = 8$, $6 - 5 = 1$ y $12 - 4 = 8$.'],
-    ['contraejemplo', 0, 'Alguien afirma que en $a \\star b = 2a - b$ el orden no importa. Busca la pareja que lo desmiente', 'Con $(2, 6)$: $2 \\star 6 = -2$, pero $6 \\star 2 = 10$. Las parejas de números iguales no sirven para probar nada.'],
-    ['capas-operacion', 0, 'Después de reemplazar en el operador queda una cuenta corriente. Resuélvela por capas', 'Primero la potencia y los productos, después la resta: $16 - 15 = 1$ y $14 - 6 = 8$.'],
-    ['vuela-precios', 0, 'Vuela al resultado del operador', '$4 \\star 1 = 2 \\cdot 4 - 1 = 7$. El neutro de $a + b - 3$ es 3. Y $3 \\,\\#\\, 2 = 3 \\cdot 2 - 2 = 4$.'],
-  ], [
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/operadores-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-op-1', [
+    play('arma-receta', 'Con $a \\star b = 4a - b^2$, pon cada número en su lugar y calcula $3 \\star 2$ y $2 \\star 3$.', { et: ['3 ★ 2', '2 ★ 3'], metas: ['3', '2', '8', '2', '3', '−1'], fichas: ['3', '3', '2', '2', '8', '−1', '17', '10'],
+      mira: ['Donde la receta dice a entra el primero: el 3.', 'Donde dice b entra el segundo: el 2.', 'Doce menos el cuadrado de 2.', 'Ahora el primero es el 2.', 'Ahora el segundo es el 3.', 'Ocho menos el cuadrado de 3.'],
+      trampas: { '0:2': 'El 2 es el segundo: no va en el lugar de a.', '3:3': 'Al voltear, el primero es el 2.', '2:10': '12 − 2 olvida el cuadrado.', '5:17': 'Sumaste el 9: la receta lo resta.' }, ok: 'Voltear los números cambió el resultado.' },
+      'Con 3 ★ 2 queda $4 \\cdot 3 - 2^2 = 8$. Con 2 ★ 3 queda $4 \\cdot 2 - 3^2 = -1$.',
+      { hint: 'Primero marca cuál es a y cuál es b en cada renglón; después haz la cuenta.' }),
+    play('maquina-ida-vuelta', 'La máquina hace $a \\star b = 2b - a$. Abajo entran los mismos números **volteados**. Mueve las entradas para que **arriba salga 7** y **abajo salga 1**.', { f: (a, b) => 2 * b - a, m: [7, 1], texto: 'a = 3 y b = 5' },
+      'Arriba, $2 \\cdot 5 - 3 = 7$. Abajo, volteados, $2 \\cdot 3 - 5 = 1$.',
+      { hint: 'Arriba el que se dobla es b; abajo, el que se dobla es a. ¿Cuál de los dos conviene que sea mayor?' }),
+    play('cuales-conmutan', '¿En cuáles recetas **no importa el orden** de los números, sean los que sean? Toca todas.', { casos: [{ t: 'a · b + 5', si: true }, { t: 'a + 5b', no: 'En a + 5b solo se multiplica por 5 el segundo: con 1 y 2 da 11; con 2 y 1 da 7.' }, { t: '(a − b)²', si: true }, { t: 'a · b − b', no: 'En a · b − b se resta el segundo: con 1 y 2 da 0; con 2 y 1 da 1.' }, { t: 'a² + b²', si: true }], falta: 'Falta otra que da lo mismo al voltear: pruébalas con 1 y 2, y luego con 2 y 1.', ok: 'Esas recetas tratan igual a las dos letras.' },
+      'El producto, la suma de cuadrados y el cuadrado de la diferencia no distinguen a de b. En a + 5b solo b se multiplica por 5, y en a · b − b solo se resta b.',
+      { hint: 'Cambia a por b y b por a en la receta y mira si queda la misma.' }),
+    play('entran-negativos', 'La máquina hace $a \\star b = a \\cdot b - b^2$. Entran $-2$ y $-3$. Llena cada parte.', { a: '−2', b: '−3', et: ['a · b', 'b²', 'sale'], ops: ['−', '='], metas: ['6', '9', '−3'], fichas: ['6', '−6', '9', '−9', '−3', '15', '3', '4'],
+      mira: ['Multiplica (−2) por (−3), con sus signos.', 'El cuadrado es de todo el −3.', 'Al producto se le resta el cuadrado.'],
+      trampas: { '0:−6': 'Menos por menos da más.', '1:−9': '(−3)² es (−3) · (−3).', '1:4': 'Ese es el cuadrado del primero; la receta pide el del segundo.', '2:15': 'La receta resta el 9.', '2:3': 'Restaste al revés: es 6 − 9.' }, ok: 'Con paréntesis, los signos no se pierden.' },
+      '$(-2) \\cdot (-3) = 6$ y $(-3)^2 = 9$: sale $6 - 9 = -3$.',
+      { hint: 'Reemplaza cada letra por su número entre paréntesis antes de calcular.' }),
+    play('lee-operacion', 'La operación está en la tabla: las **filas** son del primero y las **columnas** del segundo. Completa y halla la **x**.', { letras: ['p', 'q', 'r', 's'], tab: [['r', 's', 'p', 'q'], ['p', 'r', 'q', 's'], ['q', 'p', 's', 'r'], ['s', 'q', 'r', 'p']], et: ['q ✱ s =', 's ✱ q =', 'r ✱ x = p, x ='], metas: ['s', 'q', 'q'], fichas: ['p', 'q', 'q', 'q', 'r', 's', 's'],
+      mira: ['El primero, q, manda la fila.', 'Ahora el primero es s: cambia la fila.', 'Recorre la fila de r hasta encontrar p; la respuesta es el nombre de su columna.'], trampas: { '0:q': 'Eso es s ✱ q: leíste la fila de s.', '1:s': 'Eso es q ✱ s: leíste la fila de q.', '2:p': 'p es el resultado; se pide la columna.' }, ok: 'Al cambiar el orden, la casilla es otra.' },
+      'Fila de q, columna de s: s. Fila de s, columna de q: q. En la fila de r, la p está en la columna de q.',
+      { hint: 'Pon un dedo en la fila del primero y otro en la columna del segundo.' }),
+    play('tabla-desigual', 'Toca **todas** las casillas en las que **cambiar el orden** de las dos letras cambia el resultado.', { letras: ['p', 'q', 'r', 's'], tab: [['q', 'r', 'p', 's'], ['r', 'p', 'q', 'r'], ['p', 'q', 's', 'p'], ['p', 's', 'p', 'q']], texto: 'p ✱ s con s ✱ p, y q ✱ s con s ✱ q', ok: 'Esas casillas no son iguales a su reflejo en la diagonal.' },
+      'p ✱ s = s, pero s ✱ p = p. Y q ✱ s = r, pero s ✱ q = s. Las demás son iguales a su reflejo.',
+      { hint: 'Cada casilla tiene su pareja al otro lado de la diagonal: compara las dos.' }),
+    play('neutro-de-cada', 'El neutro $e$ no cambia a nadie: $a$ operado con $e$ da $a$, sea cual sea $a$. Pon el de cada receta.', { et: ['a + b − 4', 'a + b + 9', 'a · b', 'a · b ÷ 3'], metas: ['4', '−9', '1', '3'], fichas: ['4', '−4', '9', '−9', '1', '1', '0', '3'],
+      mira: ['Pon e en el lugar de b: lo que se suma debe deshacer el −4.', 'Pon e en el lugar de b: lo que se suma debe deshacer el +9.', '¿Por qué número se multiplica para no cambiar nada?', 'Se divide entre 3: ¿por cuánto hay que multiplicar antes?'], trampas: { '0:−4': 'Con −4 se restaría 4 dos veces.', '1:9': 'Con 9 se sumaría 9 dos veces.', '2:0': 'Con 0 todo se vuelve 0.', '3:1': 'Con 1 el número queda dividido entre 3.' }, ok: 'Cada neutro deshace lo que la receta añade.' },
+      '$a + 4 - 4 = a$; $a + (-9) + 9 = a$; $a \\cdot 1 = a$; $a \\cdot 3 \\div 3 = a$.',
+      { hint: 'Prueba con un número, por ejemplo 5: ¿qué tiene que entrar por b para que salga 5 otra vez?' }),
+    play('sube-operador', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Con $a \\diamond b = a^2 + 2b$, ¿cuánto vale $4 \\diamond 5$?', r: 26, c: '4^2 + 2 \\cdot 5', e: { 33: 'Eso es 5 ◆ 4: los volteaste.', 18: 'El cuadrado de 4 es 4 · 4.' } },
+      { q: 'Con $a \\circ b = 3b - a$, ¿cuánto vale $(-6) \\circ 5$?', r: 21, c: '3 \\cdot 5 - (-6)', e: { 9: 'Restar −6 es sumar 6.' } },
+      { q: 'Con $a \\odot b = a \\cdot b \\div 12$, ¿cuál es el neutro, el que no cambia a nadie?', r: 12, c: 'a \\cdot 12 \\div 12 = a \\Rightarrow e', e: { 1: 'Con 1 cada número queda dividido entre 12.' } }] },
+      '$16 + 10 = 26$; $15 + 6 = 21$; y con 12 queda $a \\cdot 12 \\div 12 = a$.',
+      { hint: 'En cada tiro, escribe quién es a y quién es b, y pon los negativos entre paréntesis.' }),
     sol('En los números enteros se define la operación $a \\diamond b = 3a - 2b$. Calcula $5 \\diamond 4$ y $4 \\diamond 5$. ¿La operación es conmutativa?',
       ['En $5 \\diamond 4$ el primero es 5 y el segundo es 4: $3 \\cdot 5 - 2 \\cdot 4 =$ [[7]]', 'En $4 \\diamond 5$ el primero es 4: $3 \\cdot 4 - 2 \\cdot 5 =$ [[2]]', 'Los resultados son [[distintos]]: la operación [[no es]] conmutativa'],
       ['iguales', 'es', '−2'],
@@ -113,15 +68,40 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Calcula cada uno por separado: en cada caso, el número que se resta es el primero.'),
   ]);
 
-  diezLesson('pu-op-2', [
-    ['anida-operador', 0, 'Con $a \\star b = 2a - b$, calcula $(4 \\star 3) \\star 2$ de adentro hacia afuera', 'Primero el paréntesis: $4 \\star 3 = 8 - 3 = 5$. Después $5 \\star 2 = 10 - 2 = 8$.'],
-    ['busca-x-operador', 0, 'Con $a \\oplus b = 3a + b$, halla la $x$ que cumple $x \\oplus 5 = 26$', 'Al reemplazar queda $3x + 5 = 26$: $3x = 21$ y $x = 7$.'],
-    ['cruce-tabla', 0, 'Una cadena de operaciones en la tabla: $(2 \\ast 3) \\ast 3$', 'Se opera de a dos: $2 \\ast 3 = 1$ y luego $1 \\ast 3 = 0$. Esta tabla suma y se queda con el residuo al dividir entre 4.'],
-    ['maquina-operador', 0, 'La máquina aplica $a \\star b = a^2 - 2b$. Ya entró el 3: elige la otra entrada para que salga 3', '$3^2 - 2b = 3$ da $2b = 6$: la segunda entrada es 3.'],
-    ['capas-operacion', 0, 'El anidado $(4 \\star 2) \\star 3$, ya reemplazado. Resuélvelo por capas', 'El paréntesis vale $2 \\cdot 4 - 2 = 6$; después $2 \\cdot 6 - 3 = 9$.'],
-    ['arma-negacion', 0, 'Con $a \\star b = 2a - b$, escribe con fichas qué significa $5 \\star x$', 'El 5 ocupa el lugar de a y la x el de b: $2 \\cdot 5 - x$.'],
-    ['balanza-cajas', 0, 'Después de reemplazar queda una ecuación. Despeja lo que hay en la caja'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/operadores-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-op-2', [
+    play('dos-parentesis', 'Con $a \\star b = a \\cdot b + 1$, llena cada renglón. ¿Importa dónde van los paréntesis?', { et: ['2 ★ 3', '(2 ★ 3) ★ 4', '3 ★ 4', '2 ★ (3 ★ 4)'], metas: ['7', '29', '13', '27'], fichas: ['7', '29', '13', '27', '25', '24', '28'],
+      mira: ['Dos por tres, más 1.', 'El paréntesis ya vale un número: opéralo con 4.', 'Tres por cuatro, más 1.', 'Dos operado con lo que dio el paréntesis.'], trampas: { '1:25': 'El +1 se hace en cada operación, no solo al final.', '3:25': 'El +1 se hace en cada operación, no solo al final.', '1:28': 'Falta el +1 de la operación de afuera.' }, ok: 'Mover los paréntesis cambió el resultado.' },
+      '$2 \\star 3 = 7$ y $7 \\star 4 = 29$. $3 \\star 4 = 13$ y $2 \\star 13 = 27$.',
+      { hint: 'Resuelve primero el paréntesis y cámbialo por un solo número.' }),
+    play('arbol-operador', 'Con $a \\ast b = a + 4b$ y $a \\diamond b = a^2 - b$, sube por el árbol de $(4 \\ast 1) \\diamond (2 \\diamond 3)$.', { h: ['4', '1', '2', '3'], s: ['✱', '◆', '◆'], metas: ['8', '1', '63'], fichas: ['8', '1', '63', '17', '7', '15', '−7'],
+      mira: ['4 más el cuádruple de 1.', 'El cuadrado de 2, menos 3.', 'Arriba está ◆: el cuadrado de lo de la izquierda menos lo de la derecha.'], trampas: { '0:17': 'Volteaste: el que se multiplica por 4 es el segundo.', '1:7': 'Volteaste: el cuadrado es del primero.', '2:15': '8 al cuadrado no es 16.', '2:−7': 'Volteaste: el primero es el de la izquierda.' }, ok: 'Cada nudo usó la receta de su símbolo.' },
+      '$4 + 4 \\cdot 1 = 8$; $2^2 - 3 = 1$; y $8^2 - 1 = 63$.',
+      { hint: 'Cada nudo se llena con los dos de abajo y la receta del símbolo que los une.' }),
+    play('lugar-x', 'Con $a \\oplus b = 2a - 3b$, une cada ecuación con la que queda al reemplazar.', { et: ['x ⊕ 4 = 10', '4 ⊕ x = 10', 'x ⊕ x = 10'], metas: ['2x − 12 = 10', '8 − 3x = 10', '2x − 3x = 10'], fichas: ['2x − 12 = 10', '8 − 3x = 10', '2x − 3x = 10', '2x − 4 = 10', '12 − 2x = 10'],
+      mira: ['La x entra por a y el 4 por b.', 'El 4 entra por a y la x por b.', 'La x entra por las dos partes.'], trampas: { '0:8 − 3x = 10': 'Ahí el primero es el 4.', '0:2x − 4 = 10': 'Falta triplicar el 4.', '1:12 − 2x = 10': 'El primero se dobla y el segundo se triplica.' }, ok: 'Lo primero es ver en qué lugar está la x.' },
+      'El doble del primero menos el triple del segundo: $2x - 12$, $8 - 3x$ y $2x - 3x$.',
+      { hint: 'Di en voz alta: «el doble del primero menos el triple del segundo».' }),
+    play('iguala-lados', 'Con $a \\circ b = 4a + b$, mueve la $x$ hasta que $x \\circ 2$ y $5 \\circ x$ valgan **lo mismo**.', { l: x => 4 * x + 2, r: x => 20 + x, et: ['x ∘ 2', '5 ∘ x'], max: 12, texto: 'x = 6' },
+      '$4x + 2 = 20 + x$: $3x = 18$ y $x = 6$. Los dos lados valen 26.',
+      { hint: 'Reemplaza en cada lado: en uno la x se cuadruplica y en el otro solo se suma.' }),
+    play('cadena-en-tabla', 'Las filas son del **primero** y las columnas del **segundo**. Halla cada resultado y la **x** de la última.', { letras: ['t', 'u', 'v'], tab: [['u', 'v', 't'], ['t', 't', 'v'], ['v', 'u', 'u']], et: ['(t ✱ u) ✱ v =', 't ✱ (u ✱ v) =', 'x ✱ u = u, x ='], metas: ['u', 't', 'v'], fichas: ['t', 't', 'u', 'u', 'v', 'v'],
+      mira: ['Primero t ✱ u; lo que sale es la fila del siguiente cruce.', 'Primero u ✱ v; lo que sale es la columna del siguiente cruce.', 'La x es una fila: busca en la columna de u dónde sale u.'], trampas: { '0:v': 'v es solo t ✱ u: falta operarlo con v.', '1:v': 'v es solo u ✱ v: falta operarlo con t.', '2:t': 'En t ✱ u sale v.', '2:u': 'En u ✱ u sale t.' }, ok: 'Con los paréntesis en otro lugar, el resultado es otro.' },
+      't ✱ u = v y v ✱ v = u. En cambio u ✱ v = v y t ✱ v = t. Y en la columna de u, la u está en la fila de v.',
+      { hint: 'Un cruce a la vez: resuelve el paréntesis y reemplázalo por la letra que salió.' }),
+    play('x-consigo', 'Con $a \\diamond b = a \\cdot b - 2b$, toca **todos** los números que operados **consigo mismos** dan 8.', { nums: [-4, -2, 2, 4, 6, 8], f: (a, b) => a * b - 2 * b, t: 8, ok: '4 · 4 − 2 · 4 = 8 y (−2) · (−2) − 2 · (−2) = 8.' },
+      '$4 \\diamond 4 = 16 - 8 = 8$ y $(-2) \\diamond (-2) = 4 + 4 = 8$. Los demás dan 24, 0, 24 y 48.',
+      { hint: 'Reemplaza el mismo número en a y en b. Con los negativos, cuida los paréntesis.' }),
+    play('deshace-operador', 'Con $a \\star b = a \\cdot b + 3$, en dos máquinas seguidas $(x \\star 2) \\star 4 = 55$. Ve **hacia atrás** y llena las casillas.', { s: ['★ 2', '★ 4'], sale: '55', metas: ['5', '13'], fichas: ['5', '13', '8', '10', '52', '58', '6'],
+      mira: ['Lo de la mitad salió de x por 2, más 3: deshazlo.', 'El 55 salió de lo de la mitad por 4, más 3: deshazlo.'], trampas: { '0:8': 'Sumaste el 3: para deshacer se resta.', '0:10': 'Falta dividir entre 2.', '1:52': 'Falta dividir entre 4.', '1:58': 'Para deshacer el +3 se resta, y después se divide entre 4.' }, ok: '5 ★ 2 = 13 y 13 ★ 4 = 55.' },
+      'Antes del 55: $(55 - 3) \\div 4 = 13$. Antes del 13: $(13 - 3) \\div 2 = 5$.',
+      { hint: 'La última cuenta que se hizo es la primera que se deshace.' }),
+    play('sube-anidado', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Con $a \\oplus b = 3a + b$, ¿cuánto vale $(2 \\oplus 1) \\oplus 4$?', r: 25, c: '3 \\cdot 7 + 4', e: { 13: 'Eso es 2 ⊕ (1 ⊕ 4): el paréntesis está al otro lado.', 7: 'Ese es solo el paréntesis.' } },
+      { q: 'Con $a \\circ b = 5b - a$, ¿qué $x$ cumple $7 \\circ x = 33$?', r: 8, c: '(33 + 7) \\div 5', e: { 2: 'La x es el segundo: es la que se multiplica por 5.', 40: 'Falta dividir entre 5.' } },
+      { q: 'Con $a \\star b = a \\cdot b - a$, ¿qué $x$ cumple $(x \\star 3) \\star 2 = 28$?', r: 14, c: '28 \\div 2', e: { 28: 'Eso es lo que da el paréntesis: falta la x.', 7: 'La segunda operación no duplica: 2 veces lo del paréntesis menos una vez.' } }] },
+      '$2 \\oplus 1 = 7$ y $7 \\oplus 4 = 25$. $5x - 7 = 33$ da $x = 8$. $x \\star 3 = 2x$ y $2x \\star 2 = 2x$: $x = 14$.',
+      { hint: 'Primero lo de adentro, y fíjate si la x es el primero o el segundo.' }),
     sol('En los números enteros se define la operación $a \\ast b = a \\cdot b - (a + b)$. ¿Cuánto vale $(4 \\ast 3) \\ast 2$?',
       ['Primero el paréntesis: $4 \\ast 3 = 12 - 7 =$ [[5]]', 'Ese resultado ocupa el lugar del paréntesis: queda $5 \\ast 2$, con producto [[10]] y suma [[7]]', '$5 \\ast 2 = 10 - 7 =$ [[3]]'],
       ['8', '24', '−3'],

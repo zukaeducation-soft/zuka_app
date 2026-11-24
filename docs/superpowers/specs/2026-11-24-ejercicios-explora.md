@@ -80,6 +80,11 @@ comprobar, para que no se responda a ojo. Pruebas `tests/ejercicios-graficas.tes
 mueven, y gente que miente (`mienten`, `culpable`: las frases van como funciones y las pruebas hallan por fuerza bruta que la solución es única).
 Pruebas `tests/ejercicios-logica.test.js`.
 
+## Mundo 11, Operadores definidos (pu-op-1 y pu-op-2)
+
+`js/games/operadores-escena.js`: máquina de dos entradas, tabla de la operación, árbol de paréntesis y balanza. `XG.renglones` y `XG.frases`
+(de `proposiciones-escena.js`) quedan disponibles para los demás mundos. Pruebas `tests/ejercicios-operadores.test.js`.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |

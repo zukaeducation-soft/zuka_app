@@ -122,4 +122,5 @@
   });
   renglones('supone-choca', { w: 148, x: 256, y0: 68, fondo: (K, p) => K.t(170, 26, p.da, 'ta') });
   XG.ascensor('sube-mentira', 15, 1, neutro);
+  Object.assign(XG, { renglones, frases });   // los usan otros mundos
 })();
