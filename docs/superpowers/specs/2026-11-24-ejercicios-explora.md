@@ -51,6 +51,11 @@ precio), con los armazones ya hechos; pruebas `tests/ejercicios-proporcion.test.
 `celdas` (tocar), perillas y `ascensor` (tiros). Pruebas `tests/ejercicios-conteo.test.js`: las metas se comprueban contando de verdad, y cada trampa
 tiene que poder armarse con las fichas que hay.
 
+## Mundo 6, Razonamiento espacial (pu-es-1 a pu-es-4)
+
+`js/games/espacial-escena.js`: calles, torres de cubos con sus vistas, moldes que se doblan de verdad (`XG.espacial.dobla`, con orientación), dados,
+espejos y dobleces. `XG.cuenta` y `XG.ascensor` (de `conteo-escena.js`) quedan para los demás mundos. Pruebas `tests/ejercicios-espacial.test.js`.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |

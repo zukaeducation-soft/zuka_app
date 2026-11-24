@@ -48,7 +48,7 @@
     });
   }
   // En movimiento: el ascensor sube el número de pisos que se le dé y debe parar en el de la respuesta.
-  function ascensor(name, max, paso = 1) {
+  function ascensor(name, max, paso = 1, avisos = ['Subió de más: se contó algo repetido o de sobra.', 'Le faltó subir: quedaron casos sin contar.']) {
     XG.tiros(name, {
       perilla: () => ({ et: 'Cantidad', min: 0, max: max / paso, cara: v => v * paso, lee: v => `${v * paso}` }), meta: t => t.r / paso, alto: 150, ms: 1600,
       dib(t, v, K, p, f) {
@@ -56,9 +56,10 @@
         for (let i = 0; i < 7; i++) h += K.l(136, 128 - i * 20, 130, 128 - i * 20, 'lm') + K.l(204, 128 - i * 20, 210, 128 - i * 20, 'lm');
         return h + K.l(210, y(1), 262, y(1), f >= 1 && v === m ? 'lo gr' : 'lg d gr') + K.t(270, y(1) + 5, 'aquí', 's tm', 'start') + K.l(170, 4, 170, y(k) - 16, 'lm') + K.r(142, y(k) - 16, 56, 32, f >= 1 && v !== m ? 'ff' : f >= 1 ? 'fo' : 'fa', 5) + K.t(170, y(k) + 6, v == null ? '' : v * paso, 'b');
       },
-      falla: (t, v) => t.e?.[v * paso] || (v * paso > t.r ? 'Subió de más: se contó algo repetido o de sobra.' : 'Le faltó subir: quedaron casos sin contar.'), cuenta: t => `$${t.c} = ${t.r}$`, pie: 'Estira hasta tu cuenta y suelta: el ascensor sube.',
+      falla: (t, v) => t.e?.[v * paso] || avisos[v * paso > t.r ? 0 : 1], cuenta: t => `$${t.c} = ${t.r}$`, pie: 'Estira hasta tu cuenta y suelta: el ascensor sube.',
     });
   }
+  Object.assign(XG, { cuenta, ascensor });   // los usan otros mundos
   ascensor('sube-arbol', 40); ascensor('sube-orden', 150, 5); ascensor('sube-grupo', 48); ascensor('sube-casos', 40); ascensor('sube-figuras', 44);
 
   // -------------------------------------------------------------------------------------- pu-co-1 · multiplicar o sumar

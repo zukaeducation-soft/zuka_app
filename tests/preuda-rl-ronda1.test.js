@@ -35,7 +35,7 @@ test('pu-es-3: qué caras se mueven al volcar un dado', () => {
   [up, front] = [opp(front), up];
   up = opp(right);
   assert.equal(up, 4); assert.equal(GAMES['completa-solucion'].solve(s.params).fill.at(-1), '4');
-  assert.match(zona(l, 'dado-siete').explain, /se vuelca/);
+  assert.match(zona(l, 'vuelca-dado').q, /[Ss]e vuelca/);
 });
 
 test('pu-se-3: dos ciclos a la vez se repiten juntos cada MCM', () => {

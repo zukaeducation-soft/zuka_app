@@ -56,6 +56,7 @@
         ['Dos dobleces: cuatro capas y cuatro huecos.', { d: 2 }, '$2 \\cdot 2 = 4$'],
         ['Tres dobleces: ocho. Cada doblez multiplica por 2.', { d: 3 }, '$2^3 = 8$'],
         ['Los huecos quedan en espejo a cada lado de cada doblez.', {}],
+        ['Y si se perfora sobre un doblez, las dos capas unidas dejan un solo hueco: sale la mitad.', {}],
       ], 'Con d dobleces hay $2^d$ capas: cada perforación deja $2^d$ huecos.'),
       xpHaz('dibujo', 'Se hacen **dos** perforaciones en la hoja doblada y al abrirla hay 16 huecos. ¿Cuántos dobleces tenía?', { dib: papel, v: { d: 0, np: 2, ab: 1 }, metas: { d: 3 }, alto: 245, manijas: [{ k: 'd', min: 0, max: 5, paso: 1, et: 'dobleces' }],
         lee: v => `$2 \\cdot 2^{${v.d}} = ${2 * 2 ** v.d}$`, dice: v => `${2 ** v.d} ${v.d ? 'capas' : 'capa'} por 2 perforaciones: ${2 * 2 ** v.d} huecos.` }, '$16 = 2 \\cdot 8$: ocho capas, tres dobleces.')],

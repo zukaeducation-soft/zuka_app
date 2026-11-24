@@ -27,7 +27,7 @@ test('pu-es-4: lo que sale de un corte depende de cuántos dobleces toca', () =>
   assert.match(s.params.q, /esquina donde se juntan los dos dobleces/);
   assert.equal(fill(s).join(), ['4', '2', 'centro', '1', String(cortes(0.5, 0.5) + cortes(0, 0.5) + cortes(0, 0))].join());
   assert.match(s.explain, /muescas/);
-  assert.match(zona(L('pu-es-4'), 'dobla-papel').explain, /un solo agujero/);
+  assert.match(zona(L('pu-es-4'), 'dobla-y-cuenta').explain, /un solo agujero/);
   // La evaluación nombra la esquina: un doblez y un borde suelto → 2 muescas en la mitad de dos lados opuestos.
   const ev = units.find(u => u.world === 'pu-espacial').exam.items.find(it => it.lesson === 'pu-es-4' && it.ex.game === 'opcion-examen').ex;
   assert.match(ev.params.q, /un doblez y un borde suelto/);
