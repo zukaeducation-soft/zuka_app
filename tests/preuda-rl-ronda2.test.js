@@ -74,7 +74,7 @@ test('pu-se-1: los dos sentidos de «alternada»', () => {
   const next = seq.length % 2 === 0 ? seq.at(-2) * 3 : seq.at(-2) - 3;
   assert.match(e.params.fixes[0], new RegExp(`= ${next}\\$$`));
   assert.match(e.explain, /operaciones que se turnan/); assert.match(e.explain, /intercaladas/);
-  assert.match(zona(L('pu-se-1'), 'alterna-dos').explain, /intercaladas/);
+  assert.match(zona(L('pu-se-1'), 'mezcladas-siguen').explain, /intercaladas/);
 });
 
 test('pu-es-2: contar los cuadrados que se ven en la vista de frente', () => {

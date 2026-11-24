@@ -59,15 +59,6 @@ test('fórmulas que se usan quedan enseñadas: rombo, sector, pendientes y reloj
   assert.match(zona(L('pu-ge-1'), 'caza-error').explain, /medio grado por minuto/);
 });
 
-test('la ronda dice quién queda, con la cuenta del juego', () => {
-  for (const id of ['pu-se-3']) {
-    const e = zona(L(id), 'ronda-saltos'), r = e.params.rounds[0];
-    const ring = Array.from({ length: r.n }, (_, i) => i + 1); let i = 0;
-    while (ring.length > 1) { i = (i + r.k - 1) % ring.length; ring.splice(i, 1); }
-    assert.match(e.explain, new RegExp(`[Qq]ueda el ${ring[0]}\\.`), id);
-  }
-});
-
 test('juegos que llegaban sin enunciado de contexto ni explicación propia', () => {
   for (const [id, g, re] of [['pu-lo-4', 'lazo-conjunto', /Todo múltiplo/], ['pu-lo-4', 'descifra-zona', /algunos/]]) assert.match(zona(L(id), g).q, re, `${id} ${g}`);
   assert.match(zona(L('pu-nu-2'), 'opcion-examen').explain, /instante inicial/);

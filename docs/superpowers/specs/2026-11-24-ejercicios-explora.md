@@ -56,6 +56,12 @@ tiene que poder armarse con las fichas que hay.
 `js/games/espacial-escena.js`: calles, torres de cubos con sus vistas, moldes que se doblan de verdad (`XG.espacial.dobla`, con orientación), dados,
 espejos y dobleces. `XG.cuenta` y `XG.ascensor` (de `conteo-escena.js`) quedan para los demás mundos. Pruebas `tests/ejercicios-espacial.test.js`.
 
+## Mundo 7, Secuencias y patrones (pu-se-1 a pu-se-3)
+
+`js/games/secuencias-escena.js`: filas de fichas con huecos y saltos (`huecos`), alfabeto con señalador, figuras que crecen y ruedas (`rueda`, que avanza
+o retrocede `pasos` desde `de`). Pruebas `tests/ejercicios-secuencias.test.js`. El lugar en un ciclo se cuenta desde antes de la primera pieza (`de: -1`),
+para que la cuenta que se muestra sea la de la explicación; ninguna sucesión tiene los saltos ni la razón de los ejemplos explicados.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |

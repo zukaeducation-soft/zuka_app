@@ -111,7 +111,7 @@ Object.assign(XG, (() => {
           s, { set: n => { ui.set(n); ui.nota(''); }, nota() {} });
         };
         monta(ui.s); ui.limpia(() => esc?.());
-        ui.nota('Arrastra cada medida a su lugar, o tócala.');
+        ui.nota('Arrastra cada ficha a su lugar, o tócala.');
         box.addEventListener('keydown', e => { if (!ui.locked && e.target.closest('.xfi-ch') && /^(Enter| |Arrow.*)$/.test(e.key)) e.stopPropagation(); });
         return ok => {
           box.inert = true;
