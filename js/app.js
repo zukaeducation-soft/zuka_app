@@ -345,7 +345,7 @@ function renderComponents(c) {
       const nxt = currentLesson(c, b.id), here = b.id === last;
       return `<button class="comp-card${here ? ' here' : ''}" data-block="${b.id}" type="button"
         aria-label="Componente ${k + 1}: ${esc(b.name)}. ${nw} ${nw === 1 ? 'mundo' : 'mundos'}, ${d} de ${bl.length} lecciones${here ? ', aquí ibas' : ''}">
-        <span class="comp-n" aria-hidden="true">${k + 1}</span>
+        ${blockArt(c, b) || `<span class="comp-n" aria-hidden="true">${k + 1}</span>`}
         <span class="comp-body"><small>Componente ${k + 1}${here ? ' · aquí ibas' : ''}</small><b>${esc(b.name)}</b><span class="comp-desc">${esc(b.desc)}</span>
           <span class="comp-stats">${nw} ${nw === 1 ? 'mundo' : 'mundos'} · ${bl.length} lecciones</span>
           <span class="comp-prog"><span class="mini-bar"><i style="width:${(d / bl.length) * 100}%"></i></span><small>${d}/${bl.length}</small></span>

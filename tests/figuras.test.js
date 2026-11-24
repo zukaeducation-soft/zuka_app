@@ -29,3 +29,13 @@ test('cada figura usa solo la paleta de su curso: tonos de su color y un acento'
   }
   assert.equal(new Set(Object.values(PAL).map(p => p.blue)).size, Object.keys(PAL).length, 'cada curso con su color');
 });
+
+test('los componentes del Preuniversitario tienen figura con la paleta del curso y la tarjeta la muestra', () => {
+  const c = get(ctx, 'COURSES').find(x => x.id === 'preuda'), B = get(ctx, 'BLOCK_ART'), pal = Object.values(get(ctx, 'ART_PAL').preuda);
+  for (const b of c.blocks) {
+    const svg = B[`preuda/${b.id}`] || '';
+    assert.match(svg, /^<svg viewBox="0 0 64 64"/, b.id);
+    for (const col of svg.match(/#[0-9a-fA-F]{6}/g)) assert.ok(pal.includes(col), `${b.id}: ${col}`);
+  }
+  assert.match(require('node:fs').readFileSync('js/app.js', 'utf8'), /\$\{blockArt\(c, b\) \|\|/);
+});

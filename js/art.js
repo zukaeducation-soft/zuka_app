@@ -87,14 +87,20 @@ const COURSE_ART_BASE = {
     <rect x="44" y="13" width="8" height="42" fill="${ART_C.blue}"/>
     <path d="M11 46C25 42 38 30 58 8" fill="none" stroke="${ART_C.sun}" stroke-width="4" stroke-linecap="round"/>`),
 
-  // Álgebra lineal: plano deformado por una matriz y dos vectores.
-  // Preuniversitario UdeA: un libro abierto (lectura) y, encima, una pieza de rompecabezas (razonamiento).
+  // Preuniversitario UdeA: el birrete sobre un libro abierto.
   preuda: artSvg(`
-    <path d="M32 52C24 47 15 46 7 48V20c8-2 17-1 25 4z" fill="${ART_C.deep}"/>
-    <path d="M32 52c8-5 17-6 25-4V20c-8-2-17-1-25 4z" fill="${ART_C.blue}"/>
-    <path d="M12 28c5-1 10-.5 15 1.5M12 35c5-1 10-.5 15 1.5M37 30c5-2 10-2.5 15-1.5M37 37c5-2 10-2.5 15-1.5" stroke="${ART_C.pale}" stroke-width="2" stroke-linecap="round" opacity=".8"/>
-    <path d="M32 24v28" stroke="${ART_C.soft}" stroke-width="2"/>
-    <path d="M24 6h7a3.5 3.5 0 1 1 7 0h7v7a3.5 3.5 0 1 1 0 7v0H24z" fill="${ART_C.sun}" stroke="${ART_C.sunDeep}" stroke-width="2" stroke-linejoin="round"/>`),
+    <path d="M32 61C24 56 14 55 5 57V43c9-2 19-1 27 4z" fill="${ART_C.deep}"/>
+    <path d="M32 61c8-5 18-6 27-4V43c-9-2-19-1-27 4z" fill="${ART_C.blue}"/>
+    <path d="M10 49.5c5-.6 10 0 15 2M54 49.5c-5-.6-10 0-15 2" fill="none" stroke="${ART_C.pale}" stroke-width="2" stroke-linecap="round"/>
+    <path d="M15 22v13c0 5 7.6 8.5 17 8.5S49 40 49 35V22z" fill="${ART_C.deep}"/>
+    <path d="M32 43.5c9.4 0 17-3.5 17-8.5V22H32z" fill="${ART_C.blue}"/>
+    <path d="M32 6L61 18.5 32 31 3 18.5z" fill="${ART_C.deep}" stroke="${ART_C.deep}" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M32 3L61 15.5 32 28 3 15.5z" fill="${ART_C.soft}" stroke="${ART_C.soft}" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M32 3L61 15.5 32 28z" fill="${ART_C.blue}" opacity=".35"/>
+    <path d="M32 15.5L56 19v17" fill="none" stroke="${ART_C.sunDeep}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M56 34l4 11h-8z" fill="${ART_C.sun}" stroke="${ART_C.sun}" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="32" cy="15.5" r="3" fill="${ART_C.sun}"/>`),
+  // Álgebra lineal: plano deformado por una matriz y dos vectores.
   lin: artSvg(`
     <path d="M10 50h28l16-28H26z" fill="${ART_C.pale}" fill-opacity=".3" stroke="${ART_C.pale}" stroke-width="2" stroke-linejoin="round"/>
     <path d="M19.3 50l16-28M28.7 50l16-28M18 36h28" stroke="${ART_C.pale}" stroke-width="1.5" opacity=".8"/>
@@ -117,3 +123,27 @@ const COURSE_ART_BASE = {
 const COURSE_ART = Object.fromEntries(Object.entries(COURSE_ART_BASE).map(([id, svg]) => [id, artTint(svg, ART_PAL[id])]));
 
 const courseArt = (c, size = '') => `<span class="cart ${size}" aria-hidden="true">${COURSE_ART[c.id] || ''}</span>`;
+
+// Figuras de los componentes de un curso (c.blocks), con la paleta del curso. Clave: curso/componente. El que no
+// tiene figura muestra su número (renderComponents en js/app.js).
+const ART_CUBE = (x, y, up = ART_C.soft, left = ART_C.blue, right = ART_C.deep) => `<path d="M${x} ${y}l13 6.5-13 6.5-13-6.5z" fill="${up}"/>
+    <path d="M${x - 13} ${y + 6.5}l13 6.5v14l-13-6.5z" fill="${left}"/><path d="M${x + 13} ${y + 6.5}l-13 6.5v14l13-6.5z" fill="${right}"/>
+    <path d="M${x} ${y}l13 6.5v14L${x} ${y + 27}l-13-6.5v-14zM${x - 13} ${y + 6.5}l13 6.5 13-6.5M${x} ${y + 13}v14" fill="none" stroke="${ART_C.deep}" stroke-width="1" stroke-linejoin="round"/>`;
+const BLOCK_ART_BASE = {
+  // Razonamiento lógico: un cubo de bloques al que le llega la pieza que falta.
+  'preuda/razonamiento': artSvg(`
+    ${[[32, 22], [19, 28.5], [45, 28.5], [32, 35], [32, 8], [19, 14.5], [45, 14.5]].map(([x, y]) => ART_CUBE(x, y)).join('')}
+    ${ART_CUBE(32, 17, ART_C.pale, ART_C.sun, ART_C.sunDeep)}`),
+  // Comprensión lectora: un texto con una frase subrayada bajo la lupa.
+  'preuda/lectura': artSvg(`
+    <path d="M32 57C24 52 14 51 5 53V13c9-2 19-1 27 4z" fill="${ART_C.deep}"/>
+    <path d="M32 57c8-5 18-6 27-4V13c-9-2-19-1-27 4z" fill="${ART_C.blue}"/>
+    <path d="M32 17v40" stroke="${ART_C.soft}" stroke-width="2"/>
+    <path d="M10 21.5c6-.8 11 0 16 2M10 37.5c6-.8 11 0 16 2M10 45.5c5-.6 8-.2 11 .8M38 23.5c5-2 10-2.8 16-2" fill="none" stroke="${ART_C.pale}" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M10 29.5c6-.8 11 0 16 2" fill="none" stroke="${ART_C.sun}" stroke-width="4" stroke-linecap="round"/>
+    <path d="M49.5 46.5l9 10" stroke="${ART_C.sunDeep}" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="43" cy="38" r="11" fill="${ART_C.deep}" stroke="${ART_C.sun}" stroke-width="4"/>
+    <path d="M38 35.5h10M38 41h6" stroke="${ART_C.pale}" stroke-width="2.5" stroke-linecap="round"/>`),
+};
+const BLOCK_ART = Object.fromEntries(Object.entries(BLOCK_ART_BASE).map(([k, svg]) => [k, artTint(svg, ART_PAL[k.split('/')[0]])]));
+const blockArt = (c, b) => (BLOCK_ART[`${c.id}/${b.id}`] ? `<span class="cart lg" aria-hidden="true">${BLOCK_ART[`${c.id}/${b.id}`]}</span>` : '');
