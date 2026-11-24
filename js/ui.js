@@ -185,3 +185,26 @@ function confetti(cv) {
     if (++n < 200) requestAnimationFrame(frame); else ctx.clearRect(0, 0, r.width, r.height);
   })();
 }
+
+// ---- foco y teclado (spec 2026-11-18-foco-y-teclado) ----
+// Pestañas con foco itinerante: solo la activa entra en el orden de Tab; las flechas (y Inicio/Fin) llevan a otra y
+// dan la vuelta en los extremos. Devuelve el índice al que lleva la tecla, o −1 si la tecla no mueve.
+function rovingIndex(key, i, n) {
+  if (key === 'ArrowRight' || key === 'ArrowDown') return (i + 1) % n;
+  if (key === 'ArrowLeft' || key === 'ArrowUp') return (i - 1 + n) % n;
+  if (key === 'Home') return 0;
+  if (key === 'End') return n - 1;
+  return -1;
+}
+// Diálogo modal: con Tab en el último elemento se vuelve al primero, y con Mayús+Tab en el primero se va al último.
+// i es la posición del foco entre los n enfocables (−1 si quedó afuera). Devuelve a cuál saltar, −1 para dejar que el
+// navegador avance solo, o −2 si no hay nada enfocable (el foco se queda en la tarjeta).
+function trapIndex(shift, i, n) {
+  if (!n) return -2;
+  if (i < 0) return shift ? n - 1 : 0;
+  if (!shift && i === n - 1) return 0;
+  if (shift && i === 0) return n - 1;
+  return -1;
+}
+const FOCUSABLE = ['a[href]', 'button:not([disabled])', 'input:not([disabled]):not([type=hidden])', 'select:not([disabled])', 'textarea:not([disabled])', '[tabindex]']
+  .map(s => `${s}:not([tabindex="-1"])`).join(', ');
