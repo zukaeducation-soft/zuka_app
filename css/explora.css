@@ -563,3 +563,6 @@
 .xg .xg-casillas .xp-slot.full { color: var(--ink); }
 .xg .xg-frases { gap: 8px; }
 .xg .xg-frases .xp-chip { height: auto; min-height: 40px; padding: 6px 12px; font-size: 15px; line-height: 1.25; }
+.xg .xg-casillas .xp-slot { min-height: 38px; }
+.xg .xg-frases .xp-chip { min-height: 36px; padding: 4px 11px; font-size: 14px; }
+@media (min-width: 1000px) and (max-height: 760px) { .xg .xg-lona:has(+ .xg-pistas) { max-width: 330px; } }

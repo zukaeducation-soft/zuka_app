@@ -142,9 +142,9 @@ PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
       { t: 'Rita lee poema.', r: ['es', 0, 2] }, { t: 'Saúl no lee novela.', r: ['no', 1, 1] }, { t: 'Tere no lee cómic.', r: ['no', 2, 3] }, { t: 'Uri lee poema o cómic.', r: ['o', 3, 2, 3] }] },
       'Tere no podía tener el cómic, y Uri debía tener poema o cómic, no novela. Rita y Saúl cumplen.',
       { hint: 'Toma cada pista y busca la fila de esa persona: ¿su ✓ la cumple?' }),
-    play('pista-falta', 'Lis, Moy y Nía tienen cada uno una prenda distinta, y la gorra no es de Lis. ¿Qué pista **basta** para saberlo todo?', { gente: ['Lis', 'Moy', 'Nía'], names: ['gorra', 'bufanda', 'guantes'], k: 1, dadas: [{ t: 'La gorra no es de Lis', r: ['noen', 'gorra', 0] }], cartas: [
-      { t: 'La gorra es de Nía', r: ['en', 'gorra', 2] }, { t: 'La bufanda es de Moy', r: ['en', 'bufanda', 1] }, { t: 'Los guantes no son de Nía', r: ['noen', 'guantes', 2] }, { t: 'La bufanda no es de Moy', r: ['noen', 'bufanda', 1] }] },
-      'Si la bufanda es de Moy, la gorra, que no es de Lis, es de Nía, y a Lis le quedan los guantes. Con las otras pistas quedan dos o más repartos.',
+    play('pista-falta', 'Lis, Moy y Nía tienen cada uno una prenda distinta, y la gorra no es de Lis. ¿Qué pista **basta** para saberlo todo?', { gente: ['Lis', 'Moy', 'Nía'], names: ['gorra', 'saco', 'reloj'], k: 1, dadas: [{ t: 'La gorra no es de Lis', r: ['noen', 'gorra', 0] }], cartas: [
+      { t: 'La gorra es de Nía', r: ['en', 'gorra', 2] }, { t: 'El saco es de Moy', r: ['en', 'saco', 1] }, { t: 'El reloj no es de Nía', r: ['noen', 'reloj', 2] }, { t: 'El saco no es de Moy', r: ['noen', 'saco', 1] }] },
+      'Si el saco es de Moy, la gorra, que no es de Lis, es de Nía, y a Lis le queda el reloj. Con las otras pistas quedan dos o más repartos.',
       { hint: 'Prueba cada pista: ¿cuántos de los repartos que siguen encendidos la cumplen?' }),
     play('tabla-dos-datos', 'Tres amigos, cada uno en un lugar distinto y con una mascota distinta. Marca los ✓ de las dos tablas.', { filas: ['Cira', 'Elio', 'Toni'], cols: ['norte', 'sur', 'río', 'gato', 'pez', 'loro'], pistas: [
       { t: 'Cira no vive en el norte.', r: ['no', 0, 0] }, { t: 'Cira no vive junto al río.', r: ['no', 0, 2] }, { t: 'Elio tiene el loro.', r: ['es', 1, 5] }, { t: 'Quien vive en el norte tiene el pez.', r: ['liga', 0, 4] }] },
