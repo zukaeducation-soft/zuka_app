@@ -33,6 +33,13 @@ mientras se responde y 1 cuando la figura ya ejecutó la respuesta), `XG.rotula`
 las zonas de examen no cambian. Pruebas `tests/ejercicios-geometria.test.js`: recorren todos los estados alcanzables y fijan qué se acepta.
 El error típico tiene que caber en la manija o en la perilla, y con su aviso. A la explicación de pu-ge-4 se le añadieron el rombo y el borde.
 
+## Mundo 3, Acertijos de orden (pu-or-1 a pu-or-4)
+
+Armazones de `js/games/logica-kit.js`, con las reglas como datos (`XG.regla`, `XG.reglaEq`, `XG.reglaTb`): `XG.puestos` (fichas a sus puestos; al comprobar
+se encienden las pistas una por una, cumplida o rota), `XG.marca` (tocar todos los que cumplen, o un grupo que cumpla), `XG.cartas` (escoger las
+pistas que dejan un solo orden) y `XG.tabla` (✓ y ✗). Escenas en `js/games/orden-escena.js`; pruebas `tests/ejercicios-orden.test.js` (solución única
+por fuerza bruta y ninguna pista de sobra; los tiros fallados no enseñan la respuesta).
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |

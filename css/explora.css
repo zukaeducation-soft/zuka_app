@@ -532,3 +532,34 @@
 .xg .xd .xf.bien { fill: color-mix(in srgb, var(--ok) 16%, transparent); stroke: var(--ok); stroke-width: 2; }
 .xg .xd .xf.mal { fill: color-mix(in srgb, var(--bad) 16%, transparent); stroke: var(--bad); stroke-width: 2; }
 .xg-pide { min-height: 26px; text-align: center; font-size: 16px; line-height: 1.45; }
+
+/* ---- acertijos (js/games/logica-kit.js) ---- */
+.xg-pistas { display: grid; gap: 5px; width: 100%; max-width: 440px; margin-top: 4px; }
+.xg-pistas:empty, .xg .xp-stage > div:empty { display: none; }
+.xg-pista { display: flex; align-items: center; gap: 9px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); font-size: 14px; line-height: 1.25; }
+.xg-pista i { flex: none; width: 18px; height: 18px; display: grid; place-items: center; border-radius: 50%; border: 1.4px solid var(--mute); font: 700 12px/1 var(--display); font-style: normal; }
+.xg-pista.bien { border-color: var(--ok); }
+.xg-pista.bien i { border-color: var(--ok); background: var(--ok); color: var(--bg); }
+.xg-pista.bien i::before { content: '✓'; }
+.xg-pista.mal { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 9%, var(--card)); }
+.xg-pista.mal i { border-color: var(--bad); background: var(--bad); color: var(--bg); }
+.xg-pista.mal i::before { content: '✗'; }
+.xg-sit { cursor: pointer; }
+.xg.fin .xg-sit { cursor: default; }
+.xg-sit .caja { fill: var(--card); stroke: var(--line); stroke-width: 1.4; }
+.xg-sit.on .caja { fill: color-mix(in srgb, var(--c) 24%, var(--card)); stroke: var(--c-ink); stroke-width: 2; }
+.xg-sit.bien .caja { fill: color-mix(in srgb, var(--ok) 20%, var(--card)); stroke: var(--ok); }
+.xg-sit.mal .caja { fill: color-mix(in srgb, var(--bad) 18%, var(--card)); stroke: var(--bad); }
+.xg-sit.falta .caja { stroke: var(--ok); stroke-width: 2; stroke-dasharray: 5 4; }
+.xg-sit:focus-visible { outline: none; }
+.xg-sit:focus-visible .caja { stroke: var(--ink); stroke-width: 2.6; }
+.xg-mundos { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; width: 100%; max-width: 440px; }
+.xg-cab { margin: 0; font-size: 14px; font-weight: 600; color: var(--c-ink); }
+.xg-mundos span { padding: 5px 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); font-size: 13px; }
+.xg-mundos .fuera, .xg-mundos .tacha { opacity: .42; text-decoration: line-through; }
+.xg-mundos .queda { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 16%, var(--card)); }
+.xg-casillas { display: grid; gap: 8px; width: 100%; max-width: 360px; }
+.xg .xg-casillas .xp-slot { width: 100%; min-height: 42px; height: auto; padding: 6px 10px; font-size: 15px; line-height: 1.25; color: var(--mute); }
+.xg .xg-casillas .xp-slot.full { color: var(--ink); }
+.xg .xg-frases { gap: 8px; }
+.xg .xg-frases .xp-chip { height: auto; min-height: 40px; padding: 6px 12px; font-size: 15px; line-height: 1.25; }

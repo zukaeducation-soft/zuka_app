@@ -330,7 +330,7 @@ XP.rejilla = {
 XPD.rejilla = (stage, p, s, api) => {
   const W = 340, izq = p.filas ? (p.izq || 78) : 0, est = p.estados || 2, y0 = p.cols ? 26 : 4;
   const cw = Math.min(p.cw || 44, (W - izq - 6) / p.c), ch = p.ch || Math.min(cw, 40), x0 = (W - izq - cw * p.c) / 2 + izq, H = y0 + ch * p.f + 6 + (p.pie ? 22 : 0);
-  let luz = [], txt = {}, stop = null, dedo = null, pinta = 0, ult = -1, v = { ...p.v }, cur = -1;
+  let luz = [], txt = {}, stop = null, dedo = null, pinta = 0, ult = -1, v = { ...p.v }, cur = -1, previa = null;
   stage.innerHTML = `<svg class="xp-svg xd xre" viewBox="0 0 ${W} ${H}" role="${p.momentos ? 'img' : 'application'}" aria-label="Tabla: flechas para moverse y Enter para marcar" ${p.momentos ? '' : 'tabindex="0"'}></svg>`;
   const svg = stage.firstChild, hueco = i => p.hueco?.(i, Math.floor(i / p.c), i % p.c);
   function draw() {
@@ -365,14 +365,18 @@ XPD.rejilla = (stage, p, s, api) => {
       if (dedo != null) return;
       clearTimeout(aviso);
       const i = celda(e); if (!puede(i)) return;
-      dedo = e.pointerId; ult = i; pinta = (s.c[i] + 1) % est;
+      dedo = e.pointerId; ult = i; previa = s; pinta = (s.c[i] + 1) % est;
       try { svg.setPointerCapture(e.pointerId); } catch (er) { /* sin captura */ }
       pon(i, pinta);
     };
     svg.onpointermove = e => { if (e.pointerId !== dedo || p.unoAUno || est > 2) return; const i = celda(e); if (i === ult || !puede(i)) return; ult = i; pon(i, pinta); };
-    svg.onpointerup = svg.onpointercancel = e => {
+    svg.onpointerup = e => {
       if (e.pointerId !== dedo) return;
       dedo = null; suelta();
+    };
+    svg.onpointercancel = e => {   // el gesto era desplazar la página: la casilla vuelve a como estaba
+      if (e.pointerId !== dedo) return;
+      dedo = null; s = previa; draw(); api.set(s);
     };
     svg.onkeydown = e => {
       const d = { ArrowRight: 1, ArrowLeft: -1, ArrowUp: -p.c, ArrowDown: p.c }[e.key];

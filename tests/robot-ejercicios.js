@@ -89,11 +89,43 @@
     if (G.rotula) { const m = [...G.metas(p)], f = [...G.fichas(p)]; m.forEach(x => f.splice(f.indexOf(x), 1)); m[0] = f[0]; return { q: m.map(x => [x]) }; }
     return { tiros: [1, 2] };
   };
+  // Armazones de logica-kit.
+  const acertijo = async (G, p, s, e) => {
+    const toca = (svg, el, a, b) => { ev(el, 'pointerdown', ...a); for (let k = 1; k <= 6; k++) ev(svg, 'pointermove', a[0] + (b[0] - a[0]) * k / 6, a[1] + (b[1] - a[1]) * k / 6); ev(svg, 'pointerup', ...b); };
+    if (G.puestos) {
+      const svg = () => $$('.xfi'), sl = G.slots(p);
+      for (let i = 0; i < s.q.length; i++) {
+        if (p.fijas?.[i] != null) continue;
+        const g = [...svg().querySelectorAll('.xfi-ch:not(.fija)')].find(x => x.textContent === s.q[i][0]);
+        if (+g.dataset.slot === i) continue;
+        toca(svg(), g, cen(g), enSvg(svg(), sl[i].x, sl[i].y)); await esp(40);
+      }
+    } else if (G.marca) { for (let i = 0; i < s.on.length; i++) if (s.on[i]) { $$(`[data-i="${i}"]`).dispatchEvent(new MouseEvent('click', { bubbles: true })); await esp(20); } }
+    else if (G.cartas) { for (let k = 0; k < p.k; k++) await arrastra($$(`.xp-chip[data-i="${s.en[k]}"]`), ...cen($$(`.xp-slot[data-k="${k}"]`))); }
+    else if (G.tabla) {
+      const svg = $$('.xre'), n = p.filas.length, m = p.cols.length, cw = Math.min(62, (340 - 62 - 6) / m), ch = Math.min(cw, 42), x0 = (340 - 62 - cw * m) / 2 + 62;
+      for (let i = 0; i < n * m; i++) if (s.c[i] === 1) { const q = enSvg(svg, x0 + (i % m + 0.5) * cw, 26 + (Math.floor(i / m) + 0.5) * ch); ev(svg, 'pointerdown', ...q); ev(svg, 'pointerup', ...q); await esp(20); }
+    } else for (let z = 0; z < 3; z++) for (const t of s.q[z]) {   // zonas
+      const svg = $$('.xfi'), g = [...svg.querySelectorAll('[data-casa]')].find(x => x.textContent === t);
+      toca(svg, g, cen(g), enSvg(svg, 60 + z * 110, 104)); await esp(40);
+    }
+  };
+  const acertijoMal = (G, p) => {
+    const s = JSON.parse(JSON.stringify(GAMES_SOL(G, p)));
+    if (G.puestos) { const l = s.q.map((_, i) => i).filter(i => p.fijas?.[i] == null), a = l[0], b = l.at(-1); [s.q[a], s.q[b]] = [s.q[b], s.q[a]]; }
+    else if (G.marca) { const i = s.on.indexOf(true), j = s.on.lastIndexOf(false); s.on[i] = false; s.on[j] = true; }
+    else if (G.cartas) { const bien = G.combos(p).map(c => c.en.join()); for (let a = 0; a < p.cartas.length; a++) { const en = p.k === 1 ? [a] : [a, (a + 1) % p.cartas.length].sort(); if (!bien.includes(en.join())) return { en }; } }
+    else if (G.tabla) { const m = p.cols.length, i = s.c.indexOf(1), j = s.c.indexOf(1, m); s.c[i] = s.c[j] = 0; s.c[j % m] = 1; s.c[i + Math.floor(j / m) * m] = 1; }
+    else { s.q = [s.q[1], s.q[0], s.q[2]]; }
+    return s;
+  };
+  const GAMES_SOL = (G, p) => G.solve(p);
   const api = {
     leccion(id) { L = busca(id); },
     async abre(i) { startLesson(C, { ...L, ex: [L.ex[i]], more: [] }); document.querySelector('.clip-skip')?.click(); await esp(900); },
     async juega(i, bien = true) {
       const e = L.ex[i], p = e.params, G = GAMES[e.game];
+      if (G.puestos || G.marca || G.cartas || G.tabla || G.zonas) { await acertijo(G, p, bien ? G.solve(p) : acertijoMal(G, p)); await esp(150); return !document.querySelector('.lesson-foot .btn').disabled; }
       if (G.figura || G.rotula || G.tiros) { await jugada(G, p, !bien ? errada(G, p) : G.tiros ? { tiros: p.tiros.map(t => G.meta(t, p)) } : G.solve(p)); await esp(150); return !document.querySelector('.lesson-foot .btn').disabled; }
       await M[e.game](p, !bien ? MAL[e.game] : e.game.startsWith('lanza-') ? { tiros: p.tiros.map(t => t.d) } : GAMES[e.game].solve(p));
       await esp(150);

@@ -63,7 +63,7 @@ test('fórmulas que se usan quedan enseñadas: rombo, sector, pendientes y reloj
 });
 
 test('la ronda dice quién queda, con la cuenta del juego', () => {
-  for (const id of ['pu-or-2', 'pu-se-3']) {
+  for (const id of ['pu-se-3']) {
     const e = zona(L(id), 'ronda-saltos'), r = e.params.rounds[0];
     const ring = Array.from({ length: r.n }, (_, i) => i + 1); let i = 0;
     while (ring.length > 1) { i = (i + r.k - 1) % ring.length; ring.splice(i, 1); }

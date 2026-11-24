@@ -4,152 +4,6 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
   const K = (t, a, b, say, x = {}) => ({ t, a, b, say, ...x });
   const at = (a, i, say) => ({ t: 'at', a, i, say }), notAt = (a, i, say) => ({ t: 'notAt', a, i, say });
 
-  setLesson('pu-or-1', [
-    play('fila-pistas', 'Acomoda la fila con las pistas', { rounds: [
-      { names: ['Pablo', 'Quino', 'Rosa', 'Sara'], clues: [at('Rosa', 2, 'Rosa es la tercera'), K('justBefore', 'Pablo', 'Quino', 'Quino va justo después de Pablo'), notAt('Sara', 0, 'Sara no es la primera')] },
-      { names: ['Tito', 'Uma', 'Vera', 'Walter', 'Xime'], clues: [at('Uma', 2, 'Uma está en el centro'), K('before', 'Vera', 'Tito', 'Tito está a la derecha de Vera'), K('justBefore', 'Walter', 'Xime', 'Xime va justo después de Walter'), notAt('Vera', 0, 'Vera no es la primera')] },
-    ] }, 'Se empieza por la pista más firme: un puesto fijo. En la primera, Rosa es la 3.ª; Pablo y Quino necesitan dos puestos seguidos, y como Sara no es la primera, solo caben en 1.º y 2.º. En la segunda, Uma en el centro deja dos puestos a cada lado; si Walter y Xime fueran 4.º y 5.º, Vera quedaría de primera.',
-      { hint: 'Ubica primero a quien tiene un puesto fijo; luego busca dónde caben las parejas que van juntas.' }),
-    play('edificio-pisos', '¿Quién vive en cada piso?', { rounds: [
-      { names: ['Ana', 'Beto', 'Ceci', 'Dani'], clues: [at('Ceci', 3, 'Ceci vive en el último piso'), K('justBefore', 'Dani', 'Ana', 'Ana vive justo encima de Dani'), K('before', 'Beto', 'Dani', 'Beto vive más abajo que Dani')] },
-      { names: ['Elsa', 'Fede', 'Gabi', 'Hugo', 'Inés'], clues: [at('Hugo', 1, 'Hugo vive en el piso 2'), at('Gabi', 4, 'Gabi vive en el último piso'), K('justBefore', 'Inés', 'Fede', 'Fede vive justo encima de Inés')] },
-    ] }, 'Un edificio es una fila de pie: «más arriba» es «después». Ceci arriba del todo; Beto debajo de Dani y Ana justo encima de Dani: Beto 1, Dani 2, Ana 3. En el otro, con Hugo en el 2 y Gabi en el 5, la pareja Inés-Fede solo cabe en 3 y 4, y Elsa queda en el 1.',
-      { hint: 'Pon primero los pisos fijos; las parejas «justo encima» necesitan dos pisos seguidos libres.' }),
-    play('carrera-llegada', 'El orden de llegada', { rounds: [
-      { names: ['Juan', 'Kiara', 'Leo', 'Mila'], clues: [at('Leo', 3, 'Leo llegó de último'), K('before', 'Kiara', 'Juan', 'Kiara llegó antes que Juan'), notAt('Mila', 0, 'Mila no ganó'), K('notAdj', 'Juan', 'Kiara', 'Juan y Kiara no llegaron seguidos')] },
-      { names: ['Nico', 'Olga', 'Pía', 'Raúl', 'Sol'], clues: [at('Pía', 2, 'Pía llegó tercera'), K('justBefore', 'Raúl', 'Sol', 'Sol llegó justo después de Raúl'), K('before', 'Olga', 'Nico', 'Olga llegó antes que Nico'), notAt('Sol', 4, 'Sol no fue la última')] },
-    ] }, 'Con Leo último quedan tres puestos. Mila no ganó; si Mila fuera 3.ª, Kiara y Juan llegarían seguidos. Así: Kiara, Mila, Juan, Leo. En la otra, Raúl y Sol no caben al final (Sol no fue última): van 1.º y 2.º, y Olga y Nico ocupan 4.º y 5.º.',
-      { hint: 'Prueba las dos opciones que deja una pista y descarta la que choca con otra.' }),
-    play('dias-semana', 'La agenda de la semana', { rounds: [
-      { names: ['Teatro', 'Música', 'Pintura', 'Baile', 'Cocina'], clues: [at('Música', 1, 'Música es el martes'), K('end', 'Cocina', null, 'Cocina es el primer o el último día'), notAt('Cocina', 0, 'Cocina no es el lunes'), K('justBefore', 'Baile', 'Pintura', 'Pintura es el día siguiente a Baile'), K('before', 'Teatro', 'Baile', 'Teatro es antes que Baile')] },
-    ] }, 'Música el martes y Cocina el viernes (es un extremo y no es el lunes). Quedan lunes, miércoles y jueves: Baile y Pintura necesitan dos días seguidos (miércoles y jueves) y Teatro, antes que Baile, va el lunes.',
-      { hint: 'Fija los días seguros y mira qué días seguidos quedan para la pareja.' }),
-    play('descarta-casos', 'Tacha los acomodos imposibles', { rounds: [
-      { cands: [['Lía', 'Max', 'Oto', 'Noa'], ['Max', 'Oto', 'Noa', 'Lía'], ['Oto', 'Max', 'Noa', 'Lía'], ['Lía', 'Noa', 'Oto', 'Max']], clues: [K('before', 'Max', 'Noa', 'Max va antes que Noa'), K('notEnd', 'Oto', null, 'Oto no está en un extremo'), K('end', 'Lía', null, 'Lía está en un extremo'), notAt('Noa', 3, 'Noa no es la última')] },
-    ] }, 'Cada acomodo cae con una pista: el primero pone a Noa de última, el tercero a Oto en un extremo y el cuarto a Noa antes que Max. Solo queda Max, Oto, Noa, Lía.',
-      { hint: 'Revisa cada tarjeta contra cada pista: basta una que no se cumpla para tacharla.' }),
-    play('tren-ordenado', 'Ordena de menor a mayor estatura', { rounds: [
-      { items: [{ label: 'Ana 1.62', v: 1.62 }, { label: 'Beto 1.75', v: 1.75 }, { label: 'Ciro 1.58', v: 1.58 }, { label: 'Dora 1.70', v: 1.70 }, { label: 'Eli 1.66', v: 1.66 }] },
-    ] }, 'Ordenar es comparar de a dos: 1.58 < 1.62 < 1.66 < 1.70 < 1.75. Ciro, Ana, Eli, Dora y Beto.',
-      { hint: 'Compara primero los decimales; todos empiezan en 1.' }),
-    play('rompe-cambios', 'Manda la pelota a la respuesta', { miss: 'revisa las pistas una por una', rounds: [
-      { title: 'Filas', items: [
-        { ask: 'A antes que B y B antes que C: ¿quién va primero?', options: ['A', 'B', 'C'], answer: 0 },
-        { ask: '5 en fila; X es la del centro: ¿qué puesto?', options: ['3.º', '2.º', '4.º'], answer: 0 },
-        { ask: 'P justo antes de Q y Q es la 4.ª: ¿P?', options: ['3.ª', '5.ª', '2.ª'], answer: 0 },
-      ] },
-    ] }, '«Antes que» encadena: si A va antes que B y B antes que C, A va primero. En una fila de 5 el centro es el 3.º, y si Q es la 4.ª, P va justo antes: 3.ª.',
-      { hint: 'Dibuja la fila en tu cabeza y pon a cada uno donde dice la pista.' }),
-  ]);
-
-  setLesson('pu-or-2', [
-    play('mesa-redonda', 'Sienta a todos alrededor de la mesa', { rounds: [
-      { names: ['Gil', 'Hana', 'Iván', 'Jade', 'Kai', 'Luz'], clues: [K('opp', 'Gil', 'Hana', 'Hana está frente a Gil'), K('right', 'Gil', 'Iván', 'Iván está justo a la derecha de Gil'), K('opp', 'Iván', 'Luz', 'Luz está frente a Iván'), K('adj', 'Jade', 'Hana', 'Jade está junto a Hana'), K('notAdj', 'Kai', 'Iván', 'Kai no está junto a Iván')] },
-      { names: ['Mar', 'Ned', 'Oli', 'Pau'], clues: [K('opp', 'Mar', 'Oli', 'Oli está frente a Mar'), K('right', 'Oli', 'Pau', 'Pau está justo a la derecha de Oli')] },
-    ] }, 'Con Gil fijo arriba, «frente a» es la silla opuesta: Hana abajo. Iván a su derecha y Luz frente a Iván. Jade junto a Hana en la silla libre de ese lado, y Kai, que no puede tocar a Iván, en la última.',
-      { hint: 'Con la primera persona fija, «frente a» y «justo a la derecha» dan sillas exactas: empieza por ellas.' }),
-    play('collar-cuentas', 'Ensarta el collar', { rounds: [
-      { names: ['roja', 'azul', 'verde', 'negra', 'blanca'], clues: [K('right', 'roja', 'azul', 'la azul va justo después de la roja'), K('adj', 'negra', 'roja', 'la negra toca a la roja'), K('notAdj', 'verde', 'azul', 'la verde no toca a la azul')] },
-      { names: ['gris', 'café', 'rosa', 'lila', 'oro', 'plata'], clues: [K('opp', 'gris', 'oro', 'el oro está frente al gris'), K('right', 'oro', 'rosa', 'la rosa va justo después del oro'), K('adj', 'café', 'gris', 'el café toca al gris'), K('notAdj', 'lila', 'rosa', 'la lila no toca a la rosa'), K('right', 'lila', 'plata', 'la plata va justo después de la lila')] },
-    ] }, 'La primera cuenta queda fija y las demás se ponen respecto a ella. La azul va después de la roja; la negra, que toca a la roja, solo cabe al otro lado; la verde no toca a la azul, así que la blanca queda entre ellas.',
-      { hint: 'Ubica primero las pistas de «justo después»; las de «no toca» sirven al final para descartar.' }),
-    play('brujula-casas', 'Las casas alrededor de la plaza', { rounds: [
-      { names: ['Rita', 'Saúl', 'Tere', 'Ugo'], clues: [at('Rita', 0, 'Rita vive al norte'), K('opp', 'Rita', 'Saúl', 'Saúl vive frente a Rita'), K('right', 'Rita', 'Tere', 'Tere vive justo después de Rita, en el sentido del reloj')] },
-      { names: ['Vale', 'Wil', 'Yeni', 'Zoe'], clues: [at('Wil', 3, 'Wil vive al oeste'), K('opp', 'Wil', 'Zoe', 'Zoe vive frente a Wil'), notAt('Vale', 2, 'Vale no vive al sur')] },
-    ] }, 'Aquí sí importa dónde está cada casa: el norte es el norte. Frente al norte está el sur; en el sentido del reloj, después del norte viene el este. Frente al oeste está el este, y si Vale no vive al sur, vive al norte.',
-      { hint: 'Ubica primero la casa con punto cardinal fijo; «frente a» es el punto opuesto.' }),
-    play('ronda-saltos', '¿Quién queda en la ronda?', { rounds: [{ n: 6, k: 2 }, { n: 7, k: 3 }, { n: 5, k: 2 }] },
-      'Se cuenta en el sentido del reloj y se saca a cada k-ésimo, siguiendo desde el siguiente. Con 6 y de 2 en 2 salen 2, 4, 6, 3, 1 y queda el 5. Con 7 y de 3 en 3 queda el 4; con 5 y de 2 en 2, el 3.',
-      { hint: 'Haz la cuenta despacio: tacha a cada uno que sale y no lo vuelvas a contar.' }),
-    play('gira-mesa', 'Girar la mesa no cambia el acomodo', { rounds: [{ left: ['Sol', 'Mar', 'Río', 'Luz', 'Cielo'], shift: 2 }, { left: ['Ana', 'Beto', 'Ciro', 'Dora', 'Eva', 'Fede'], shift: 4 }] },
-      'En una mesa redonda lo que cuenta es quién tiene a quién al lado. Si todos se corren las mismas sillas, el acomodo es el mismo: por eso se fija a una persona y se ubica a las demás respecto a ella.',
-      { hint: 'Busca a una persona en las dos mesas y gira hasta que quede en la misma silla.' }),
-    play('descarta-casos', 'Tacha las mesas imposibles', { rounds: [
-      { circ: true, cands: [['Pilar', 'Quique', 'Rafa', 'Susi'], ['Pilar', 'Rafa', 'Quique', 'Susi'], ['Pilar', 'Susi', 'Rafa', 'Quique'], ['Pilar', 'Quique', 'Susi', 'Rafa']], clues: [K('opp', 'Pilar', 'Rafa', 'Rafa está frente a Pilar'), K('right', 'Pilar', 'Quique', 'Quique está justo a la derecha de Pilar')] },
-    ] }, 'Leídas en el sentido del reloj desde Pilar, solo la primera mesa tiene a Quique justo después de ella y a Rafa en la silla opuesta.',
-      { hint: 'En una mesa de cuatro, «frente a» es dos sillas más allá.' }),
-    play('vuela-precios', 'Vuela a la respuesta', { rounds: [
-      { title: 'Mesas redondas', items: [
-        { ask: 'mesa de 8: silla frente a la 3', options: ['7', '5', '4'], answer: 0 },
-        { ask: 'mesa de 6: vecinos de la silla 1', options: ['2 y 6', '2 y 3', '6 y 5'], answer: 0 },
-        { ask: 'mesa de 10: silla frente a la 9', options: ['4', '1', '5'], answer: 0 },
-      ] },
-    ] }, 'En una mesa de $n$ sillas, la de enfrente está $n/2$ sillas más allá: frente a la 3 de 8 está la 7, y frente a la 9 de 10, la 4 (se da la vuelta). La silla 1 tiene de vecinas a la 2 y a la última.',
-      { hint: 'Suma la mitad de las sillas y, si te pasas del total, da la vuelta.' }),
-  ]);
-
-  setLesson('pu-or-3', [
-    play('tabla-cruces', 'Un ✓ por fila y por columna', { rounds: [
-      { rows: ['Tomás', 'Vilma', 'Yago'], cols: ['Medicina', 'Derecho', 'Arte'], clues: [{ t: 'not', a: 0, v: 0 }, { t: 'not', a: 0, v: 1 }, { t: 'not', a: 1, v: 0 }] },
-      { rows: ['Ema', 'Fran', 'Gus', 'Ivo'], cols: ['perro', 'gato', 'loro', 'pez'], clues: [{ t: 'not', a: 0, v: 0 }, { t: 'not', a: 0, v: 1 }, { t: 'not', a: 0, v: 2 }, { t: 'not', a: 2, v: 2 }, { t: 'not', a: 2, v: 3 }, { t: 'is', a: 1, v: 0, say: 'Fran tiene el perro' }] },
-    ] }, 'Cada ✗ es una pista negativa. Una fila con un solo hueco libre tiene ahí su ✓, y esa columna se tacha para los demás. Tomás solo puede Arte; Vilma, Derecho; Yago, Medicina. En la otra: Fran el perro, Ema el pez, Gus el gato e Ivo el loro.',
-      { hint: 'Busca la fila (o la columna) que tiene un solo hueco sin ✗: ese es su ✓.' }),
-    play('casilleros', '¿Qué guarda cada uno?', { rounds: [
-      { people: ['Bea', 'Coco', 'Dino'], names: ['mochila', 'balón', 'casco'], clues: [at('balón', 2, 'el balón es de Dino'), notAt('mochila', 0, 'la mochila no es de Bea')] },
-      { people: ['Edu', 'Fer', 'Gala', 'Hilda'], names: ['libro', 'gorra', 'raqueta', 'termo'], clues: [at('raqueta', 1, 'la raqueta es de Fer'), notAt('libro', 0, 'el libro no es de Edu'), notAt('libro', 3, 'el libro no es de Hilda'), notAt('gorra', 0, 'la gorra no es de Edu')] },
-    ] }, 'Con lo seguro primero: el balón es de Dino; la mochila no es de Bea, así que es de Coco, y a Bea le queda el casco. En la otra, Edu no tiene libro ni gorra ni raqueta: tiene el termo; el libro solo puede ser de Gala y la gorra, de Hilda.',
-      { hint: 'Mira qué persona tiene tachadas casi todas las cosas: la que le queda es la suya.' }),
-    play('tres-listas', 'Color y mascota de cada uno', { rounds: [
-      { people: ['Iris', 'Joel', 'Kim'], A: ['rojo', 'azul', 'verde'], B: ['perro', 'gato', 'pez'], clues: [{ t: 'link', a: 'rojo', b: 'perro', say: 'quien viste de rojo tiene el perro' }, { t: 'isB', p: 1, v: 'gato', say: 'Joel tiene el gato' }, { t: 'notA', p: 0, v: 'rojo', say: 'Iris no viste de rojo' }, { t: 'notA', p: 0, v: 'verde', say: 'Iris no viste de verde' }] },
-    ] }, 'Joel tiene el gato, así que no viste de rojo (el rojo va con el perro); Iris tampoco: el rojo y el perro son de Kim. Iris, sin verde, viste de azul y Joel de verde; a Iris le queda el pez.',
-      { hint: 'Las pistas que unen dos listas («quien viste de rojo tiene el perro») sirven para tachar en las dos.' }),
-    play('descarta-casos', 'Tacha los repartos imposibles', { rounds: [
-      { cands: [['té', 'café', 'jugo'], ['café', 'jugo', 'té'], ['jugo', 'té', 'café'], ['café', 'té', 'jugo']], clues: [notAt('café', 0, 'Ana no toma café'), at('jugo', 2, 'Ciro toma jugo')] },
-    ] }, 'Cada tarjeta dice qué toma Ana, Beto y Ciro en ese orden. Las que le dan café a Ana o no le dan el jugo a Ciro se tachan: queda té, café, jugo.',
-      { hint: 'Lee cada tarjeta como Ana · Beto · Ciro y compárala con las dos pistas.' }),
-    play('dias-semana', '¿Qué día atiende cada médico?', { rounds: [
-      { names: ['Gómez', 'Ríos', 'Pardo', 'Vélez'], clues: [notAt('Gómez', 0, 'Gómez no atiende el lunes'), K('before', 'Ríos', 'Gómez', 'Ríos atiende antes que Gómez'), at('Vélez', 3, 'Vélez atiende el jueves'), notAt('Pardo', 1, 'Pardo no atiende el martes'), notAt('Pardo', 0, 'Pardo no atiende el lunes')] },
-    ] }, 'Vélez el jueves. Gómez no el lunes y después de Ríos; Pardo no el martes. Si Gómez fuera el martes, Ríos sería el lunes y Pardo el miércoles: cumple todo. Si Gómez fuera el miércoles, a Pardo solo le quedarían lunes o martes, y no puede ninguno.',
-      { hint: 'Prueba los días posibles de Gómez y mira si los demás todavía caben.' }),
-    play('edificio-pisos', 'Cada uno en su piso', { rounds: [
-      { names: ['Raúl', 'Sonia', 'Tobi', 'Uriel'], clues: [notAt('Raúl', 0, 'Raúl no vive en el piso 1'), notAt('Raúl', 3, 'Raúl no vive en el último piso'), K('before', 'Raúl', 'Sonia', 'Sonia vive más arriba que Raúl'), at('Tobi', 1, 'Tobi vive en el piso 2')] },
-    ] }, 'Tobi en el 2. Raúl no está ni abajo ni arriba del todo, y el 2 está ocupado: vive en el 3. Sonia, más arriba, en el 4, y Uriel en el 1.',
-      { hint: 'Tacha para Raúl los pisos que no puede tener: le queda uno solo.' }),
-    play('rompe-cambios', 'Manda la pelota al reparto correcto', { miss: 'tacha con las pistas negativas', rounds: [
-      { title: 'Tablas', items: [
-        { ask: '3 personas y 3 deportes: X no juega fútbol ni tenis', options: ['X juega el tercero', 'no se sabe', 'X juega fútbol'], answer: 0 },
-        { ask: 'Y tiene el gato y Z no tiene pez (gato, pez, perro)', options: ['Z tiene el perro', 'Z tiene el pez', 'no se sabe'], answer: 0 },
-      ] },
-    ] }, 'Con tres opciones, tachar dos deja la tercera. Si Y tiene el gato y Z no el pez, a Z solo le queda el perro.',
-      { hint: 'Cuenta cuántas opciones le quedan a cada persona después de tachar.' }),
-  ]);
-
-  setLesson('pu-or-4', [
-    play('comite-reglas', 'Arma un comité que cumpla las reglas', { rounds: [
-      { names: ['F', 'G', 'H', 'J', 'K'], k: 3, need: ['H'], rules: [K('ifNot', 'F', 'G', 'si F va, G no'), K('onlyIf', 'H', 'J', 'H va solo si J va'), K('out', 'K', null, 'K no va')] },
-      { names: ['P', 'Q', 'R', 'S', 'T'], k: 3, need: ['R'], rules: [K('either', 'P', 'Q', 'va P o va Q'), K('ifNot', 'P', 'R', 'si P va, R no'), K('out', 'T', null, 'T no va')] },
-    ] }, 'Un «si A, entonces no B» solo prohíbe tenerlos juntos. «H va solo si J va»: con H, J tiene que ir. Así, con H van J y uno de F o G. En la otra, con R no puede ir P, así que va Q; el tercero es S.',
-      { hint: 'Empieza por quien tiene que ir y mira qué te obliga a meter o a dejar por fuera.' }),
-    play('tiene-podria', 'Tiene que, podría o no puede', { rounds: [
-      { names: ['L', 'M', 'N', 'O'], k: 2, rules: [K('ifNot', 'L', 'M', 'si L va, M no'), K('onlyIf', 'N', 'O', 'N va solo si O va')], claims: [{ t: 'in', a: 'O', say: 'O va' }, { t: 'in', a: 'L', say: 'L va' }, { t: 'both', a: 'L', b: 'M', say: 'L y M van' }, { t: 'in', a: 'M', say: 'M va' }] },
-    ] }, 'Los comités posibles son LO, MO y NO. O está en todos: tiene que ir. L y M aparecen en alguno: podrían. L y M juntos no aparecen nunca.',
-      { hint: 'Arriba arma los comités que cumplen y anótalos; una afirmación es «tiene que» si está en todos.' }),
-    play('descarta-casos', 'Tacha los horarios imposibles', { rounds: [
-      { cands: [['Arte', 'Cine', 'Danza', 'Baile'], ['Cine', 'Arte', 'Danza', 'Baile'], ['Arte', 'Baile', 'Danza', 'Cine'], ['Baile', 'Arte', 'Cine', 'Danza']], clues: [K('before', 'Arte', 'Cine', 'si hay Arte y Cine, Arte va antes'), at('Danza', 2, 'Danza es el miércoles'), K('notAdj', 'Arte', 'Cine', 'Arte y Cine no van seguidos')] },
-    ] }, 'Cada tarjeta es lunes, martes, miércoles y jueves. Se tacha la que pone Cine antes de Arte, la que no tiene Danza el miércoles y la que pone Arte y Cine seguidos: queda Arte, Baile, Danza, Cine.',
-      { hint: 'Revisa primero Danza el miércoles; luego el orden de Arte y Cine.' }),
-    play('dias-semana', 'Organiza las charlas', { rounds: [
-      { names: ['Agua', 'Bosques', 'Clima', 'Desiertos', 'Energía'], clues: [at('Clima', 2, 'Clima es el miércoles'), K('end', 'Energía', null, 'Energía es el lunes o el viernes'), K('before', 'Agua', 'Bosques', 'Agua va antes que Bosques'), K('justBefore', 'Clima', 'Desiertos', 'Desiertos es justo después de Clima'), K('notAt', 'Energía', null, 'Energía no es el viernes', { i: 4 })] },
-    ] }, 'Clima el miércoles y Desiertos el jueves. Energía va en un extremo pero no el viernes: el lunes. Quedan martes y viernes para Agua y Bosques, en ese orden.',
-      { hint: 'Encadena: una pista fija a Clima y otra pega a Desiertos justo después.' }),
-    play('fila-pistas', 'La fila del banco', { rounds: [
-      { names: ['Abi', 'Bruno', 'Cata', 'Dilan'], clues: [K('notAdj', 'Abi', 'Bruno', 'Abi y Bruno no están juntos'), at('Cata', 0, 'Cata es la primera'), K('before', 'Bruno', 'Abi', 'Bruno va antes que Abi')] },
-    ] }, 'Con Cata primera quedan 2.º, 3.º y 4.º. Bruno antes que Abi y sin estar juntos: Bruno 2.º y Abi 4.º; Dilan 3.º.',
-      { hint: 'Si dos no pueden estar juntos y quedan tres puestos seguidos, van a los extremos.' }),
-    play('casilleros', '¿De quién es cada maleta?', { rounds: [
-      { people: ['Iñaki', 'Jaz', 'Kevin'], names: ['roja', 'azul', 'negra'], clues: [notAt('roja', 0, 'la roja no es de Iñaki'), notAt('roja', 1, 'la roja no es de Jaz'), notAt('azul', 0, 'la azul no es de Iñaki')] },
-    ] }, 'La roja solo puede ser de Kevin. La azul no es de Iñaki ni de Kevin (ya tiene la roja): es de Jaz, e Iñaki tiene la negra.',
-      { hint: 'Empieza por la maleta que tiene más personas tachadas.' }),
-    play('vuela-precios', 'Vuela a lo que se puede afirmar', { rounds: [
-      { title: 'Condiciones', items: [
-        { ask: '«si llueve, no hay partido» y no llueve', options: ['puede haber partido o no', 'hay partido', 'no hay partido'], answer: 0 },
-        { ask: '«X va solo si Y va» y X va', options: ['Y va', 'Y no va', 'no se sabe'], answer: 0 },
-        { ask: 'algo pasa en todas las soluciones', options: ['tiene que ser', 'podría ser', 'no puede ser'], answer: 0 },
-      ] },
-    ] }, 'Un «si… no…» no dice nada cuando no se cumple la condición: si no llueve, puede haber partido o no. «X solo si Y» obliga a Y cuando X está. Y lo que pasa en todas las soluciones es necesario.',
-      { hint: 'Fíjate qué dice la regla y en qué caso aplica: fuera de ese caso no obliga nada.' }),
-  ]);
-
   setExam('pu-orden', 'Acertijos de orden y asignación', [
     ['pu-or-1', 'En una fila se ubican primero las pistas firmes y luego las parejas.',
       play('fila-pistas', 'Acomoda la fila', { rounds: [{ names: ['Elio', 'Fina', 'Gabo', 'Hilda'], clues: [at('Gabo', 1, 'Gabo es el segundo'), K('justBefore', 'Hilda', 'Elio', 'Elio va justo después de Hilda'), notAt('Fina', 3, 'Fina no es la última')] }] }, 'Gabo 2.º; Hilda y Elio solo caben en 3.º y 4.º; Fina 1.ª.', { hint: 'Primero el puesto fijo.' })],
@@ -171,16 +25,43 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 });
 
 // Mundo 3 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
-  diezLesson('pu-or-1', [
-    ['fila-pistas', 1, 'Cinco personas hacen fila en una taquilla. Acomódalas con las pistas', 'Uma va en el centro. Walter y Xime van seguidos: si fueran 4.º y 5.º, Vera quedaría de primera, y no puede. Entonces: Walter, Xime, Uma, Vera, Tito.'],
-    ['edificio-pisos', 0, 'Cuatro vecinos viven en un edificio de cuatro pisos. ¿Quién vive en cada piso?', 'Ceci arriba. Ana va justo encima de Dani y Beto debajo de Dani: Beto, Dani, Ana y Ceci, de abajo hacia arriba.'],
-    ['carrera-llegada', 1, 'Cinco atletas corrieron sin empates. Arma el orden de llegada', 'Pía es tercera. Raúl y Sol van seguidos y Sol no es la última: son 1.º y 2.º. Olga llegó antes que Nico: 4.ª y 5.º.'],
-    ['dias-semana', 0, 'Un centro cultural programa un taller por día, de lunes a viernes. Arma la agenda', 'Cocina va en un extremo y no es lunes: viernes. Música el martes. Baile y Pintura van seguidos y Teatro antes: lunes Teatro, miércoles Baile, jueves Pintura.'],
-    ['descarta-casos', 0, 'Cuatro amigos se acomodan para una foto. Tacha los acomodos imposibles', 'Cada pista tacha un acomodo: Noa no es la última, Oto no va en un extremo y Max va antes que Noa. Queda Max, Oto, Noa, Lía.'],
-    ['tren-ordenado', 0, 'Cinco jugadores de un equipo se miden. Ordena el tren del más bajo al más alto', 'Ciro 1.58, Ana 1.62, Eli 1.66, Dora 1.70 y Beto 1.75: se comparan primero las décimas y después las centésimas.'],
-    ['rompe-cambios', 0, 'Manda la pelota a la respuesta', 'Si A va antes que B y B antes que C, A va primero. En una fila de 5 el centro es el puesto 3. Justo antes de la 4.ª va la 3.ª.'],
-  ], [
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/orden-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-or-1', [
+    play('fila-cine', 'Cinco amigos hacen fila para entrar a cine. Pon a cada uno en su puesto.', { fichas: ['Abel', 'Cleo', 'Dina', 'Igor', 'Nuria'], pistas: [
+      { t: 'Dina es la cuarta.', r: ['en', 'Dina', 3] }, { t: 'Igor está justo detrás de Abel.', r: ['sig', 'Abel', 'Igor'] }, { t: 'Cleo está antes que Abel.', r: ['antes', 'Cleo', 'Abel'] }] },
+      'Con Dina en el 4, el bloque Abel-Igor solo cabe en 1-2 o en 2-3. Como Cleo va antes que Abel, es 2-3: Cleo, Abel, Igor, Dina y Nuria.',
+      { hint: 'Empieza por la pista que dice un puesto exacto y busca dónde cabe entera la pareja que va pegada.' }),
+    play('pisos-edificio', 'Cinco familias viven en un edificio, una por piso. Ubícalas.', { fichas: ['Cano', 'Díaz', 'Ossa', 'Pinto', 'Ruiz'], pistas: [
+      { t: 'Los Ossa viven en el piso 2.', r: ['en', 'Ossa', 1] }, { t: 'Los Pinto viven justo encima de los Díaz.', r: ['sig', 'Díaz', 'Pinto'] }, { t: 'Los Ruiz viven más abajo que los Ossa.', r: ['antes', 'Ruiz', 'Ossa'] }, { t: 'Los Cano no viven en el piso 5.', r: ['noen', 'Cano', 4] }] },
+      'Ossa en el 2 y Ruiz debajo, en el 1. El bloque Díaz-Pinto cabe en 3-4 o en 4-5; como Cano no está en el 5, es 4-5 y Cano queda en el 3.',
+      { hint: 'El piso 1 está abajo: «encima» es un número mayor. Fija primero el piso 2.' }),
+    play('puestos-posibles', 'Seis personas hacen fila: Kim, Nilo, Rosa y tres más. ¿En qué puestos **podría** estar Kim? Tócalos todos.', { names: ['Kim', 'Nilo', 'Rosa', 'X', 'Y', 'Z'], quien: 'Kim', pistas: [
+      { t: 'Rosa es la tercera.', r: ['en', 'Rosa', 2] }, { t: 'Kim está justo detrás de Nilo.', r: ['sig', 'Nilo', 'Kim'] }, { t: 'Kim no es la última.', r: ['noen', 'Kim', 5] }] },
+      'El bloque Nilo-Kim cabe en 1-2, en 4-5 y en 5-6; el último se borra porque Kim no es la última. Kim puede estar en el 2 o en el 5.',
+      { hint: 'La pareja viaja junta. Prueba cada lugar donde quepa sin pisar a Rosa.' }),
+    play('tacha-filas', 'Uri, Vito, Wanda y Zoe se forman para una foto. Tacha **todas** las filas imposibles.', { filas: [['Uri', 'Zoe', 'Vito', 'Wanda'], ['Wanda', 'Vito', 'Zoe', 'Uri'], ['Vito', 'Zoe', 'Uri', 'Wanda'], ['Uri', 'Vito', 'Wanda', 'Zoe'], ['Uri', 'Zoe', 'Wanda', 'Vito'], ['Uri', 'Wanda', 'Zoe', 'Vito']], pistas: [
+      { t: 'Zoe no está en una punta.', r: ['noext', 'Zoe'] }, { t: 'Uri está antes que Wanda.', r: ['antes', 'Uri', 'Wanda'] }, { t: 'Vito y Zoe están uno al lado del otro.', r: ['junto', 'Vito', 'Zoe'] }] },
+      'La segunda tiene a Wanda antes que Uri, la cuarta deja a Zoe en una punta y la quinta separa a Vito de Zoe. Las otras tres cumplen todo.',
+      { hint: 'Toma una pista y recorre las seis filas; luego la siguiente. Basta romper una para tacharla.' }),
+    play('un-cambio', 'Estos árboles quedaron mal plantados. Cámbialos de puesto hasta cumplir todas las pistas, leídas de izquierda a derecha.', { fichas: ['pino', 'olmo', 'roble', 'cedro', 'sauce'], ini: ['pino', 'olmo', 'roble', 'cedro', 'sauce'], izq: 'izquierda', der: 'derecha', pistas: [
+      { t: 'El roble está en el centro.', r: ['en', 'roble', 2] }, { t: 'El olmo está justo antes del roble.', r: ['sig', 'olmo', 'roble'] }, { t: 'El cedro está antes que el olmo.', r: ['antes', 'cedro', 'olmo'] }, { t: 'El sauce está justo después del pino.', r: ['sig', 'pino', 'sauce'] }] },
+      'El roble y el olmo ya estaban bien. El cedro debe ir antes que el olmo, en el 1, y el pino pasa al 4, pegado al sauce: basta intercambiar el pino y el cedro.',
+      { hint: 'Mira primero qué pistas ya se cumplen y no las dañes. Busca quién está en el lugar de otro.' }),
+    play('pistas-justas', 'Rita, Saúl y Tere hacen fila. Escoge **dos** pistas que dejen **una sola** fila posible.', { names: ['Rita', 'Saúl', 'Tere'], k: 2, cartas: [
+      { t: 'Rita está antes que Saúl', r: ['antes', 'Rita', 'Saúl'] }, { t: 'Tere no es la última', r: ['noen', 'Tere', 2] }, { t: 'Saúl está justo detrás de Rita', r: ['sig', 'Rita', 'Saúl'] }, { t: 'Saúl no es el primero', r: ['noen', 'Saúl', 0] }, { t: 'Rita no está en el centro', r: ['noen', 'Rita', 1] }] },
+      'Dos pistas bastan si juntas tachan cinco de las seis filas. Por ejemplo, «Saúl está justo detrás de Rita» deja dos filas, y «Tere no es la última» tacha una: queda Tere, Rita, Saúl.',
+      { hint: 'Empieza por la pista que más filas tacha y busca otra que borre lo que quedó.' }),
+    play('llegada-carrera', 'Una lista tiene cinco canciones. Ordénalas como suenan.', { fichas: ['Faro', 'Gris', 'Isla', 'Luna', 'Mar'], pistas: [
+      { t: '«Gris» suena de tercera.', r: ['en', 'Gris', 2] }, { t: '«Luna» suena dos puestos antes que «Isla».', r: ['dist', 'Luna', 'Isla', 2] }, { t: '«Faro» suena justo después de «Isla».', r: ['sig', 'Isla', 'Faro'] }] },
+      'Con Gris en el 3, Luna e Isla, a dos puestos, solo pueden ser 2 y 4 (en 1 y 3, o en 3 y 5, pisarían a Gris). Faro sigue a Isla, en el 5, y Mar queda primera.',
+      { hint: 'Fija la tercera y prueba dónde caben Luna e Isla con un puesto entre las dos.' }),
+    play('corre-puesto', 'Manda la ficha al puesto que se pide. Puedes fallar **una** vez.', { n: 8, tiros: [
+      { q: 'Alba es la 3.ª y Cata está justo detrás. Dani está **dos puestos** detrás de Cata. ¿Puesto de Dani?', fijo: { 3: 'A' }, r: 6, c: 'Cata es la 4.ª y Dani, la 6.ª', e: { 5: 'Contaste desde Alba: los dos puestos salen de Cata.' } },
+      { q: 'Beto es el último de 8. Ema está justo delante, y Leo, justo delante de Ema. ¿Puesto de Leo?', fijo: { 8: 'B' }, r: 6, c: 'Ema es la 7.ª y Leo, el 6.º', e: { 7: 'Ese es el puesto de Ema.' } },
+      { q: 'Iris es la 2.ª y Teo, el 5.º. Sara está entre los dos, pero no al lado de Iris. ¿Puesto de Sara?', fijo: { 2: 'I', 5: 'T' }, r: 4, c: 'Entre 2 y 5 están el 3 y el 4; el 3 toca a Iris', e: { 3: 'Ese puesto está al lado de Iris.' } }] },
+      'Dani: 3, 4 y dos más, 6. Leo: 8, 7, 6. Sara: entre el 2 y el 5 están el 3 y el 4, y el 3 toca a Iris.',
+      { hint: 'Dibuja la fila y cuenta siempre desde la persona que nombra la pista.' }),
     sol('En una carrera de cinco atletas no hubo empates. Paula llegó de segunda. Lucía llegó justo después de Marta. Nora llegó dos puestos antes que Olga. ¿Quién ganó la carrera?',
       ['Paula ocupa el puesto [[2]]: quedan libres 1, 3, 4 y 5', 'Marta y Lucía van seguidas: solo caben en 3 y 4, o en 4 y 5', 'Nora y Olga quedan a dos puestos: tienen que ser 1 y [[3]]; entonces Marta y Lucía son [[4]] y [[5]]', 'La ganadora es [[Nora]]'],
       ['Olga', 'Marta', '1'],
@@ -197,15 +78,38 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Escribe todas las filas posibles. «Certeza» es lo que se cumple en todas, no en una sola.'),
   ]);
 
-  diezLesson('pu-or-2', [
-    ['mesa-redonda', 0, 'Seis compañeros se sientan a almorzar en una mesa redonda. Siéntalos con las pistas', 'Gil y Hana quedan frente a frente; Iván a la derecha de Gil y Luz frente a Iván. Jade va junto a Hana y Kai en la silla que queda, lejos de Iván. Convención: si el problema no dice otra cosa, «a la derecha de Gil» es del lado de su mano derecha cuando él mira hacia el centro de la mesa. Vista desde arriba, la derecha de cada persona queda en sentido contrario a las agujas del reloj. Lo importante es usar la misma convención en todo el problema.'],
-    ['collar-cuentas', 0, 'Una artesana ensarta cinco cuentas en un collar cerrado. Ordénalas', 'Negra, roja y azul van seguidas. La verde no toca a la azul: después de la azul va la blanca, y la verde cierra el collar junto a la negra.'],
-    ['brujula-casas', 1, 'Cuatro casas rodean una plaza, una en cada punto cardinal. Ubícalas', 'Wil al oeste y Zoe frente a él, al este. Vale no vive al sur: va al norte, y Yeni al sur.'],
-    ['ronda-saltos', 1, 'Siete niños juegan en ronda y sale uno cada tres cuentas. ¿Quién queda de último?', 'Se cuenta de 3 en 3 y sale quien recibe el 3; la ronda se cierra y se sigue contando desde el siguiente. Hay que repetirlo hasta que quede uno solo. Con 7 niños salen, en orden, el 3, el 6, el 2, el 7, el 5 y el 1: queda el 4.'],
-    ['gira-mesa', 0, 'Dos fotos muestran la misma mesa girada. Gira hasta que coincidan', 'Si todos se corren el mismo número de sillas, cada uno conserva sus vecinos: en una mesa redonda es el mismo acomodo.'],
-    ['descarta-casos', 0, 'Cuatro amigos juegan cartas en una mesa redonda. Tacha las mesas imposibles', 'Solo en una mesa Rafa queda frente a Pilar y Quique a su derecha. En una mesa de 4, frente a cada puesto está el que queda dos sillas más allá.'],
-    ['vuela-precios', 0, 'Vuela a la respuesta', 'En una mesa de 8 la silla de enfrente está 4 puestos más allá: frente a la 3 está la 7. En una de 10, 5 puestos: frente a la 9 está la 4. Los vecinos de la 1 son la 2 y la última.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/orden-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-or-2', [
+    play('mesa-amigos', 'Olga ya está sentada. Sienta a los demás; «sigue» es en el sentido del reloj.', { fijas: { 0: 'Olga' }, fichas: ['Ciro', 'Elsa', 'Fito', 'Gina', 'Hilda'], pistas: [
+      { t: 'Ciro sigue a Olga.', r: ['sigc', 'Olga', 'Ciro'] }, { t: 'Elsa está frente a Ciro.', r: ['frente', 'Elsa', 'Ciro'] }, { t: 'Fito está entre Elsa y Gina.', r: ['entre', 'Fito', 'Elsa', 'Gina'] }] },
+      'Ciro va después de Olga y Elsa, a tres sillas de Ciro. Fito no puede ir al otro lado de Elsa, porque entonces Gina caería en la silla de Olga: va entre Elsa y Gina, y Hilda en la que queda.',
+      { hint: 'Frente a alguien, en seis sillas, es avanzar tres. Para Fito prueba los dos lados de Elsa.' }),
+    play('misma-mesa', 'Cinco personas se leen en el sentido del reloj. Toca **todas** las mesas que son la del modelo, girada.', { modelo: ['A', 'B', 'C', 'D', 'E'], mesas: [['C', 'D', 'E', 'A', 'B'], ['E', 'D', 'C', 'B', 'A'], ['A', 'C', 'B', 'D', 'E'], ['B', 'C', 'D', 'E', 'A']] },
+      'Al girar, cada uno conserva a quién sigue. La segunda va al revés y la tercera cambia de lugar a B y C: no son la misma.',
+      { hint: 'Busca a la A en cada mesa y lee desde ahí en el sentido del reloj.' }),
+    play('frente-silla', 'En una mesa de 12 sillas, numeradas en el sentido del reloj, ¿qué silla queda frente a cada una?', { n: 12, de: [4, 8, 11], fichas: ['10', '2', '5', '8', '14', '1'] },
+      'Media mesa son 6 sillas: $4 + 6 = 10$; $8 + 6 = 14$, que se pasa y es la 2; $11 + 6 = 17$, la 5.',
+      { hint: 'Avanza la mitad de las sillas. Si te pasas de la última, resta las 12.' }),
+    play('vuelta-silla', 'Hay 9 sillas en ronda. Desde la **4** se avanzan **25** pasos en el sentido del reloj. Lleva el señalador a la silla donde termina.', { n: 9, de: 4, pasos: 25 },
+      '$4 + 25 = 29$. Se restan vueltas de 9: $29 - 27 = 2$. Termina en la silla 2.',
+      { hint: 'Cada 9 pasos se vuelve al mismo lugar. Quita las vueltas completas y avanza solo lo que sobra.' }),
+    play('dos-lados', 'Nico está a **3** sillas de Ana, que ocupa la 7. La mesa tiene 8 sillas. Toca **todas** las sillas donde podría estar.', { n: 8, de: 7, d: 3, quien: 'Ana' },
+      'Hacia adelante: $7 + 3 = 10$, la 2. Hacia atrás: $7 - 3 = 4$. Son dos lugares posibles, la 2 y la 4.',
+      { hint: 'La pista no dice hacia qué lado. Cuenta tres pasos en cada sentido.' }),
+    play('collar-cerrado', 'El ámbar ya está en el collar, que se cierra. Ensarta las demás cuentas.', { fijas: { 0: 'ámbar' }, fichas: ['perla', 'jade', 'coral', 'ónix'], pistas: [
+      { t: 'El jade sigue al ámbar, en el sentido del reloj.', r: ['sigc', 'ámbar', 'jade'] }, { t: 'El coral es vecino del ámbar.', r: ['juntoc', 'coral', 'ámbar'] }, { t: 'La perla no es vecina del jade.', r: ['nojuntoc', 'perla', 'jade'] }] },
+      'El ámbar tiene dos vecinos: el jade y, del otro lado, el coral, porque el collar se cierra. La perla no toca al jade, así que va junto al coral, y el ónix junto al jade.',
+      { hint: 'El collar no tiene puntas: el ámbar tiene un vecino a cada lado.' }),
+    play('cambia-mesa', 'Ada no se mueve. Cambia de silla a las demás hasta que se cumplan las pistas.', { fijas: { 0: 'Ada' }, fichas: ['Bea', 'Cleo', 'Dora', 'Ema', 'Flor'], ini: ['Ada', 'Bea', 'Cleo', 'Dora', 'Ema', 'Flor'], pistas: [
+      { t: 'Dora está frente a Ada.', r: ['frente', 'Dora', 'Ada'] }, { t: 'Bea sigue a Ada en el sentido del reloj.', r: ['sigc', 'Ada', 'Bea'] }, { t: 'Ema está entre Bea y Dora.', r: ['entre', 'Ema', 'Bea', 'Dora'] }, { t: 'Flor sigue a Cleo en el sentido del reloj.', r: ['sigc', 'Cleo', 'Flor'] }] },
+      'Dora y Bea ya estaban bien. Entre ellas va Ema, no Cleo: se intercambian, y Flor queda justo después de Cleo.',
+      { hint: 'Revisa qué pistas ya se cumplen. ¿Quién ocupa la silla que está entre Bea y Dora?' }),
+    play('gira-ruleta', 'Da los pasos justos, en el sentido del reloj y sin vueltas de más. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Son 10 sillas. De la 8 a la que está **enfrente**', n: 10, de: 8, r: 5, c: 'La mitad de 10: 5 pasos, hasta la 3' },
+      { q: 'Son 11 sillas. De la 9 a la 2', n: 11, de: 9, r: 4, c: '$9 + 4 = 13$, y $13 - 11 = 2$', e: { 7: 'Esos son los pasos hacia atrás.' } },
+      { q: 'Son 8 sillas. De la 5 a la 3', n: 8, de: 5, r: 6, c: '$5 + 6 = 11$, y $11 - 8 = 3$', e: { 2: 'Esos son los pasos hacia atrás.' } }] },
+      'Enfrente: la mitad, 5 pasos. De 9 a 2 en una ronda de 11: 10, 11, 1, 2, cuatro pasos. De 5 a 3 en una de 8: seis.',
+      { hint: 'La ruleta no se devuelve: cuenta desde la silla siguiente y pasa por la última para volver a la 1.' }),
     sol('Seis amigos se sientan en una mesa redonda con sillas numeradas del 1 al 6 en el sentido del reloj. Andrés está en la silla 1. Beatriz está frente a Andrés. Carlos ocupa la silla siguiente a la de Beatriz. Daniela está frente a Carlos. Emilio no está junto a Andrés. ¿En qué silla está Felipe?',
       ['En una mesa de 6, la silla de enfrente está 3 puestos más allá: Beatriz está en la [[4]]', 'Carlos va en la siguiente, la [[5]], y Daniela frente a él, en la [[2]]', 'Quedan las sillas 3 y 6. Junto a Andrés están la 2 y la 6: Emilio va en la [[3]] y Felipe en la [[6]]'],
       ['1', '7', '8'],
@@ -222,15 +126,40 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Hazlo paso a paso tachando nombres: después de cada salida la cuenta empieza en el siguiente.'),
   ]);
 
-  diezLesson('pu-or-3', [
-    ['tabla-cruces', 0, 'Tres amigos se presentan a tres carreras distintas. Marca un ✓ por fila y por columna', 'Tomás no va a Medicina ni a Derecho: Arte. Vilma no va a Medicina: Derecho. A Yago le queda Medicina.'],
-    ['casilleros', 1, 'Cuatro deportistas dejaron sus cosas en el vestier. ¿Qué guardó cada uno?', 'La raqueta es de Fer. El libro no es de Edu ni de Hilda: es de Gala. La gorra no es de Edu: es de Hilda. A Edu le queda el termo.'],
-    ['tres-listas', 0, 'Tres vecinos: cada uno viste un color y tiene una mascota. Arma la tabla', 'Iris no viste de rojo ni de verde: azul. Joel tiene el gato, así que el de rojo con perro es Kim. Joel viste de verde e Iris tiene el pez.'],
-    ['descarta-casos', 0, 'Tres amigos piden bebidas distintas. Tacha los repartos imposibles', 'El jugo va en el tercer puesto y el café no va en el primero: queda té, café, jugo.'],
-    ['dias-semana', 0, 'Cuatro médicos atienden un día cada uno, de lunes a jueves. ¿Qué día atiende cada uno?', 'Vélez el jueves. Pardo no atiende lunes ni martes: miércoles. Ríos va antes que Gómez: lunes y martes.'],
-    ['edificio-pisos', 0, 'Cuatro inquilinos, uno por piso. Ubícalos con las pistas', 'Tobi en el piso 2. Raúl no vive en el 1 ni en el 4: vive en el 3. Sonia más arriba: en el 4. Uriel, en el 1.'],
-    ['rompe-cambios', 0, 'Manda la pelota al reparto correcto', 'Si X no juega dos de tres deportes, juega el tercero. Si Y tiene el gato y Z no tiene el pez, a Z le queda el perro.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/orden-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-or-3', [
+    play('tacha-cruz', 'Cuatro amigos y cuatro planes, uno para cada uno. Ya se sabe que Gala va al cine. Toca **todas** las casillas que ese ✓ tacha.', { filas: ['Fede', 'Gala', 'Hana', 'Isa'], cols: ['mar', 'lago', 'cine', 'feria'], si: [1, 2] },
+      'Gala ya no tiene otro plan: se tacha el resto de su fila. Y nadie más va al cine: se tacha el resto de la columna. Son 6 casillas.',
+      { hint: 'Piensa en dos cosas: qué ya no puede hacer Gala y quién ya no puede ir al cine.' }),
+    play('hueco-unico', 'Cuatro amigos y cuatro colores, uno distinto para cada uno. Con las ✗ que ya están, sin poner ninguna más, toca **todos** los ✓ que ya son seguros.', { filas: ['Ciro', 'Dana', 'Elio', 'Fina'], cols: ['rojo', 'azul', 'gris', 'lila'], x: [0, 1, 3, 7, 8, 11] },
+      'En la fila de Ciro queda un solo hueco: gris. En la columna lila queda un solo hueco: Fina. En las demás todavía hay dos o más.',
+      { hint: 'Busca filas con un solo hueco y también columnas con un solo hueco.' }),
+    play('tabla-oficios', 'Cada uno practica un deporte distinto. Marca los ✓.', { filas: ['Abril', 'Darío', 'Fabia', 'Omar'], cols: ['yudo', 'remo', 'golf', 'polo'], pistas: [
+      { t: 'Fabia practica remo.', r: ['es', 2, 1] }, { t: 'Abril no practica yudo.', r: ['no', 0, 0] }, { t: 'Abril tampoco practica polo.', r: ['no', 0, 3] }, { t: 'Omar no practica yudo.', r: ['no', 3, 0] }] },
+      'El remo es de Fabia. A Abril, sin yudo ni polo, le queda golf. Omar no practica yudo: polo. Y Darío, yudo.',
+      { hint: 'Empieza por la pista que afirma y tacha su fila y su columna. Después mira a Abril.' }),
+    play('tabla-ajena', 'Alguien llenó esta tabla sin mirar las pistas. Toca **todos** los ✓ que rompen alguna.', { filas: ['Rita', 'Saúl', 'Tere', 'Uri'], cols: ['cuento', 'novela', 'poema', 'cómic'], si: [2, 0, 3, 1], pistas: [
+      { t: 'Rita lee poema.', r: ['es', 0, 2] }, { t: 'Saúl no lee novela.', r: ['no', 1, 1] }, { t: 'Tere no lee cómic.', r: ['no', 2, 3] }, { t: 'Uri lee poema o cómic.', r: ['o', 3, 2, 3] }] },
+      'Tere no podía tener el cómic, y Uri debía tener poema o cómic, no novela. Rita y Saúl cumplen.',
+      { hint: 'Toma cada pista y busca la fila de esa persona: ¿su ✓ la cumple?' }),
+    play('pista-falta', 'Lis, Moy y Nía tienen cada uno una prenda distinta, y la gorra no es de Lis. ¿Qué pista **basta** para saberlo todo?', { gente: ['Lis', 'Moy', 'Nía'], names: ['gorra', 'bufanda', 'guantes'], k: 1, dadas: [{ t: 'La gorra no es de Lis', r: ['noen', 'gorra', 0] }], cartas: [
+      { t: 'La gorra es de Nía', r: ['en', 'gorra', 2] }, { t: 'La bufanda es de Moy', r: ['en', 'bufanda', 1] }, { t: 'Los guantes no son de Nía', r: ['noen', 'guantes', 2] }, { t: 'La bufanda no es de Moy', r: ['noen', 'bufanda', 1] }] },
+      'Si la bufanda es de Moy, la gorra, que no es de Lis, es de Nía, y a Lis le quedan los guantes. Con las otras pistas quedan dos o más repartos.',
+      { hint: 'Prueba cada pista: ¿cuántos de los repartos que siguen encendidos la cumplen?' }),
+    play('tabla-dos-datos', 'Tres amigos, cada uno en un lugar distinto y con una mascota distinta. Marca los ✓ de las dos tablas.', { filas: ['Cira', 'Elio', 'Toni'], cols: ['norte', 'sur', 'río', 'gato', 'pez', 'loro'], pistas: [
+      { t: 'Cira no vive en el norte.', r: ['no', 0, 0] }, { t: 'Cira no vive junto al río.', r: ['no', 0, 2] }, { t: 'Elio tiene el loro.', r: ['es', 1, 5] }, { t: 'Quien vive en el norte tiene el pez.', r: ['liga', 0, 4] }] },
+      'Cira vive en el sur. Elio tiene el loro, no el pez, así que no vive en el norte: vive junto al río. Toni, en el norte, con el pez; y Cira tiene el gato.',
+      { hint: 'La última pista une las dos tablas: si alguien no tiene el pez, tampoco vive en el norte.' }),
+    play('casas-datos', 'Tres casas en fila, de izquierda a derecha. Pon arriba la pared de cada una (azul, roja o gris) y abajo lo que toman.', { ocultas: [['grupo', 'azul', 0, 2], ['grupo', 'roja', 0, 2], ['grupo', 'gris', 0, 2]], avisoOculto: 'Las paredes van arriba y las bebidas abajo.', fichas: ['azul', 'roja', 'gris', 'té', 'jugo', 'agua'], pistas: [
+      { t: 'La casa azul es la del centro.', r: ['en', 'azul', 1] }, { t: 'En la casa roja toman té.', r: ['mismo', 'roja', 'té'] }, { t: 'Justo a la derecha de la azul toman agua.', r: ['rel', 'azul', 'agua', 1] }] },
+      'Con la azul en el centro, el agua está en la 3. En la roja toman té, así que la roja no es la 3: es la 1, y la gris la 3. El jugo queda en el centro.',
+      { hint: 'Une los datos que van en la misma casa: si en la 3 toman agua, ¿puede ser la roja?' }),
+    play('cae-caja', 'Suelta la bola en la caja que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Cuatro músicos, un instrumento distinto cada uno. Noa no toca tuba ni bajo. Pía toca piano. ¿Qué toca **Noa**?', cajas: ['tuba', 'piano', 'flauta', 'bajo'], r: 3, c: 'Sin tuba, ni bajo, ni el piano de Pía: flauta', e: { 1: 'Noa no toca tuba.', 2: 'El piano ya es de Pía.', 4: 'Noa no toca bajo.' } },
+      { q: 'Quien va en bus es médico. Raúl es juez. **Raúl** va en bus o en tren. ¿En cuál?', cajas: ['bus', 'tren', 'no se sabe'], r: 2, c: 'Raúl no es el médico: no va en bus', e: { 1: 'Quien va en bus es médico, y Raúl es juez.', 3: 'Sí se sabe: la pista une los dos datos.' } },
+      { q: 'Ari, Bo y Cam se reparten rojo, azul y gris, uno cada uno. Ari no tiene el rojo. Bo no tiene el rojo. ¿Cuál tiene **Cam**?', cajas: ['rojo', 'azul', 'gris', 'no se sabe'], r: 1, c: 'En la columna del rojo solo queda Cam', e: { 4: 'Mira la columna del rojo: solo queda una persona.' } }] },
+      'Noa: descartados tuba y bajo, y con el piano de Pía, flauta. Raúl no es médico, así que no va en bus. En la columna del rojo solo queda Cam.',
+      { hint: 'Tacha lo que no puede ser. A veces el único hueco está en la columna y no en la fila.' }),
     sol('Laura, Mónica y Paola estudian Biología, Química y Música, una carrera cada una, y viven en Bello, Envigado e Itagüí, cada una en un municipio. Mónica vive en Itagüí. Laura no vive en Bello. La que vive en Envigado estudia Música. Mónica no estudia Química. ¿Qué estudia Paola?',
       ['Mónica vive en Itagüí y Laura no vive en Bello: Laura vive en [[Envigado]]', 'La de Envigado estudia Música: Laura estudia [[Música]]', 'A Paola le queda vivir en [[Bello]]', 'Mónica no estudia Química: estudia [[Biología]], y Paola estudia [[Química]]'],
       ['Itagüí', 'Derecho'],
@@ -247,15 +176,39 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Empieza por la persona que tiene más casillas tachadas.'),
   ]);
 
-  diezLesson('pu-or-4', [
-    ['comite-reglas', 0, 'Un grupo debe enviar tres delegados y H tiene que ir. Arma un comité que cumpla las reglas', 'H obliga a J. K no va, y F y G no pueden ir juntos: el tercero es F o es G, pero no los dos.'],
-    ['tiene-podria', 0, 'Se escogen dos de cuatro candidatos. Decide qué tiene que pasar, qué podría y qué no puede', 'Las parejas posibles son L y O, M y O, y N y O. O está en todas: tiene que ir. L o M podrían ir. L y M juntos no pueden.'],
-    ['descarta-casos', 0, 'Una academia arma su horario de lunes a jueves. Tacha los horarios imposibles', 'Danza es el miércoles, Arte va antes que Cine y no van seguidos: queda Arte, Baile, Danza, Cine.'],
-    ['dias-semana', 0, 'Un colegio organiza cinco charlas, una por día. Ubícalas', 'Clima el miércoles y Desiertos el jueves. Energía va en un extremo y no es viernes: lunes. Agua antes que Bosques: martes y viernes.'],
-    ['fila-pistas', 0, 'Cuatro clientes esperan en la fila del banco. Acomódalos', 'Cata es la primera. Bruno va antes que Abi y no están juntos: Bruno es el segundo y Abi la cuarta, con Dilan en medio.'],
-    ['casilleros', 0, 'Tres viajeros recogen sus maletas. ¿De quién es cada una?', 'La roja no es de Iñaki ni de Jaz: es de Kevin. La azul no es de Iñaki: es de Jaz. A Iñaki le queda la negra.'],
-    ['vuela-precios', 0, 'Vuela a lo que se puede afirmar con cada regla', 'Con la regla «si llueve, no hay partido», si no llueve la regla no dice nada: puede haber partido o no. «X solo si Y» con X adentro obliga a Y. Lo que pasa en todas las soluciones tiene que ser.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/orden-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-or-4', [
+    play('casos-si', 'La regla dice: «si **no** va Quino, entonces va Rosa». Toca **todos** los casos que se pueden.', { a: 'Quino', b: 'Rosa', r: ['o', 'Quino', 'Rosa'] },
+      'La regla solo pide algo cuando Quino no va: ahí debe ir Rosa. Choca que no vaya ninguno; si Quino va, Rosa puede ir o no.',
+      { hint: 'Revisa los casos uno por uno y pregunta: ¿aquí falta Quino? Si no falta, la regla no pide nada.' }),
+    play('misma-regla', '«Vera viaja **solo si** lleva pasaporte.» Toca **todas** las frases que dicen lo mismo.', { frases: [{ t: 'Si Vera viaja, lleva pasaporte', ok: true }, { t: 'Si Vera lleva pasaporte, viaja', ok: false }, { t: 'Si Vera no lleva pasaporte, no viaja', ok: true }, { t: 'Si Vera no viaja, no lleva pasaporte', ok: false }] },
+      '«Solo si» señala el permiso: si viaja, lo lleva; y sin él no viaja. Llevarlo no la obliga a viajar.',
+      { hint: 'El pasaporte es el permiso. Pregúntate si tener un permiso obliga a usarlo.' }),
+    play('equipo-justo', 'Arma un equipo de **tres** que cumpla todas las reglas.', { gente: ['Ada', 'Bil', 'Cam', 'Dan', 'Eli', 'Fia'], cuantos: 3, pistas: [
+      { t: 'Va Cam.', r: ['va', 'Cam'] }, { t: 'Cam va solo si va Eli.', r: ['si', 'Cam', 'Eli'] }, { t: 'Si va Ada, va Dan.', r: ['si', 'Ada', 'Dan'] }, { t: 'Va Ada o va Bil.', r: ['o', 'Ada', 'Bil'] }] },
+      'Cam trae a Eli: queda un cupo. Con Ada harían falta dos, porque ella trae a Dan. El tercero es Bil.',
+      { hint: 'Sigue la cadena: quien va obliga a otros. Cuenta los cupos antes de escoger al último.' }),
+    play('quien-seguro', 'Se escogen **tres** de cinco. Toca a quien **tiene que** ir, sea cual sea el equipo.', { gente: ['Vito', 'Wil', 'Xime', 'Yan', 'Zoe'], son: 3, pistas: [
+      { t: 'Si va Vito, va Wil.', r: ['si', 'Vito', 'Wil'] }, { t: 'Si va Xime, va Wil.', r: ['si', 'Xime', 'Wil'] }, { t: 'Zoe va solo si va Xime.', r: ['si', 'Zoe', 'Xime'] }] },
+      'Sin Wil no van Vito ni Xime, y sin Xime no va Zoe: solo quedaría Yan. Por eso Wil está en todos los equipos; los demás faltan en alguno.',
+      { hint: 'Prueba a dejar por fuera a cada persona: si sin ella no se completan tres, tiene que ir.' }),
+    play('tres-zonas', 'Estos son **todos** los equipos posibles. Lleva cada afirmación a su zona.', { equipos: [['A', 'C', 'D'], ['A', 'B', 'D'], ['A', 'D', 'E']], dichos: [{ t: 'va B', van: ['B'] }, { t: 'van A y D', van: ['A', 'D'] }, { t: 'van B y C', van: ['B', 'C'] }, { t: 'van C y D', van: ['C', 'D'] }, { t: 'va E', van: ['E'] }] },
+      'A y D están en los tres: tiene que. B, E y la pareja C-D aparecen en alguno: podría. B con C no aparece en ninguno: no puede.',
+      { hint: 'Cuenta en cuántos equipos se cumple cada afirmación: en los tres, en alguno o en ninguno.' }),
+    play('rompe-regla', 'Arma un grupo de **tres** que **rompa** la primera regla y cumpla las otras dos.', { gente: ['Iva', 'Jon', 'Kai', 'Lea', 'Moe'], cuantos: 3, pistas: [
+      { t: 'Que se rompa: si va Iva, va Jon.', r: ['rompe', ['si', 'Iva', 'Jon']] }, { t: 'Kai va solo si va Lea.', r: ['si', 'Kai', 'Lea'] }, { t: 'Jon y Moe no van juntos.', r: ['nojuntos', 'Jon', 'Moe'] }] },
+      'Un «si va Iva, va Jon» solo se rompe con Iva adentro y Jon afuera. Kai necesita a Lea: sirven Iva, Kai y Lea, o Iva, Lea y Moe.',
+      { hint: 'Un «si…» prohíbe un solo caso. ¿Cuál es? Ese es el que hay que armar.' }),
+    play('maximo-grupo', 'Cumpliendo todas las reglas, arma el grupo **más grande** que se pueda.', { gente: ['Alan', 'Bea', 'Cruz', 'Dora', 'Efra', 'Flor'], pistas: [
+      { t: 'Alan y Bea no van juntos.', r: ['nojuntos', 'Alan', 'Bea'] }, { t: 'Cruz va solo si va Dora.', r: ['si', 'Cruz', 'Dora'] }, { t: 'Dora y Efra no van juntos.', r: ['nojuntos', 'Dora', 'Efra'] }, { t: 'Si va Flor, no va Alan.', r: ['nojuntos', 'Flor', 'Alan'] }] },
+      'Alan impide a Bea y a Flor: conviene dejarlo. Efra impide a Dora, y sin Dora no va Cruz: también sale. Quedan Bea, Cruz, Dora y Flor.',
+      { hint: 'Mira a quién deja por fuera cada uno. Conviene sacar al que impide a más personas.' }),
+    play('cae-zona', 'Suelta la bola en lo que se puede afirmar. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Si llueve, se cancela. **Se canceló.** ¿Llovió?', cajas: ['tiene que', 'podría', 'no puede'], r: 2, c: 'Pudo cancelarse por otra cosa: podría', e: { 1: 'La regla no dice que solo se cancele por lluvia.', 3: 'Si llovió, también se cancela: es posible.' } },
+      { q: 'Nía va solo si va Omar. **Omar no va.** ¿Va Nía?', cajas: ['tiene que', 'podría', 'no puede'], r: 3, c: 'Sin Omar no va Nía: no puede', e: { 1: 'Omar es el permiso de Nía, y no va.', 2: '«Solo si»: sin Omar no hay Nía.' } },
+      { q: 'Van dos de tres: P, Q y R. P y Q no van juntos. ¿Va **R**?', cajas: ['tiene que', 'podría', 'no puede'], r: 1, c: 'P-R o Q-R: R tiene que ir', e: { 2: 'Haz la lista de parejas: ¿en cuál falta R?' } }] },
+      'Un «si» no se puede leer al revés: podría. Sin el permiso no hay nada: no puede. Y en las dos parejas posibles está R: tiene que.',
+      { hint: 'Haz la lista de casos que cumplen: en todos, en alguno o en ninguno.' }),
     sol('Para un torneo se deben escoger exactamente 3 jugadoras entre Ana, Bea, Clara, Dora y Eva. Eva tiene que ir. Si va Ana, no va Bea. Clara va solo si va Dora. ¿Cuántos equipos distintos se pueden armar y quién, además de Eva, está en todos?',
       ['Eva va siempre: faltan [[2]] jugadoras entre las otras cuatro', 'Ana y Bea no pueden ir juntas, y Clara necesita que vaya [[Dora]]', 'Las parejas que sirven son Ana y Dora, Bea y Dora, y Clara y Dora: [[3]] equipos', 'En todos los equipos está [[Dora]]: ella también tiene que ir'],
       ['Clara', '6', '4'],
