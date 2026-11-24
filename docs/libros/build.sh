@@ -4,6 +4,8 @@
 # Deja docs/libros/pdf/Zuka_Preuniversitario_Libro_N.pdf (los PDF no van al repositorio).
 cd "$(dirname "$0")/tex" || exit 1
 mkdir -p salida ../pdf
+# la marca y las rutas de las lecciones salen de la app
+node ../arte/desde_app.js || exit 1
 # el arte de las portadas se genera (no va al repositorio)
 [ -f arte/portada4.jpg ] || python -X utf8 ../arte/portadas.py
 nums="$*"; [ -z "$nums" ] && nums="1 2 3 4"

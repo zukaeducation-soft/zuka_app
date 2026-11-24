@@ -98,7 +98,7 @@ function ask({ title, text = '', ok = 'Aceptar', cancel = 'Cancelar', danger = f
     d.className = 'dialog';
     d.innerHTML = `<div class="dialog-bg"></div>
       <div class="dialog-card${danger ? ' danger' : ''}" aria-modal="true" aria-labelledby="dlg-title"${text ? ' aria-describedby="dlg-text"' : ''}>
-        ${brainTile('simple', 'dialog-art')}
+        ${brainTile('dialog-art')}
         <h3 id="dlg-title">${esc(title)}</h3>${text ? `<p id="dlg-text">${esc(text)}</p>` : ''}
         <div class="dialog-actions">${ok ? `<button class="btn" type="button" data-ok>${esc(ok)}</button>` : ''}
           <button class="btn${ok ? ' ghost' : ''}" type="button" data-cancel>${esc(cancel)}</button></div>

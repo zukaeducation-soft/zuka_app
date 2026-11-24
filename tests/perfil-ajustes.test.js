@@ -120,7 +120,7 @@ test('reiniciar el progreso conserva las preferencias y con cuenta no promete bo
 });
 
 test('otra cuenta en el mismo celular no hereda el calendario de la anterior', () => {
-  assert.match(cuenta, /if \(otro\) \{.*S\.days = \{\};/);
+  assert.match(cuenta, /if \(otro\) \{.*estadoLimpia\(\);/);
 });
 
 test('en Ajustes el foco vuelve al control que se tocó y el día se escribe igual en toda la app', () => {

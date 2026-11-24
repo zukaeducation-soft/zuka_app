@@ -36,7 +36,7 @@ function claveRecupera() {
 }
 function claveSal() {   // a la pantalla de entrada
   Clave.vista = null;
-  if (Cuenta.user) authCerrar(); else authScreen('login');
+  if (Cuenta.user) authCerrar(); else authScreen('correo');
 }
 
 const claveCampo = (name, label) => `<div class="fld"><label for="cl-${name}">${label}</label>

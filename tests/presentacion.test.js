@@ -6,15 +6,14 @@ const path = require('path');
 const { ROOT, loadScripts, get } = require('./load');
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 
-const ctx = loadScripts(['js/presentacion.js']);
+const ctx = loadScripts(['js/marca.js', 'js/presentacion.js']);
 const toca = get(ctx, 'presentacionToca');
 
-test('sale en la web sin instalar y sin sesión; no en la app instalada, con sesión ni tras explorar sin cuenta', () => {
-  const base = { standalone: false, user: null, guest: false, query: '' };
+test('sale en la web sin instalar y sin sesión; no en la app instalada ni con sesión', () => {
+  const base = { standalone: false, user: null, query: '' };
   assert.equal(toca(base), true);
   assert.equal(toca({ ...base, standalone: true }), false);
   assert.equal(toca({ ...base, user: { id: 'x' } }), false);
-  assert.equal(toca({ ...base, guest: true }), false);
   assert.equal(toca({ ...base, query: '?app' }), false);
   assert.equal(toca({ ...base, standalone: true, user: { id: 'x' }, query: '?presentacion' }), true);
   assert.equal(toca({ ...base, query: '?tab=clips' }), true);
@@ -26,16 +25,16 @@ const cursos = [
 ];
 const html = get(ctx, 'presentacionHTML')(cursos, { worlds: { w1: { name: 'Teoría de Conjuntos' } }, install: '' });
 
-test('la barra de arriba trae «Iniciar sesión» antes que todo lo demás', () => {
+test('la barra de arriba trae «Entrar» antes que todo lo demás', () => {
   const top = html.indexOf('class="pz-bar'), login = html.indexOf('data-pz="login"'), hero = html.indexOf('class="pz-hero');
   assert.ok(top >= 0 && login > top && login < hero);
 });
 
 test('cuenta quiénes somos, cómo se aprende, los cursos con sus mundos y cierra con un llamado', () => {
-  for (const t of ['Quiénes somos', 'Empieza gratis', 'Ya tengo cuenta', 'Gimnasio cerebral', 'Tutorías', 'Explorar sin cuenta',
+  for (const t of ['Quiénes somos', 'Pide tu código de prueba', 'Ya tengo código', 'Gimnasio cerebral', 'Tutorías',
     'Álgebra', 'Trigonometría', 'Teoría de Conjuntos', 'Recta', 'Ondas', '3 lecciones']) assert.ok(html.includes(t), t);
   assert.doesNotMatch(html, /Brilliant|Koji/);
-  assert.equal((html.match(/data-pz="registro"/g) || []).length >= 2, true);
+  assert.equal((html.match(/data-pz="prueba"/g) || []).length >= 2, true);
 });
 
 test('va registrada, con su hoja de estilos, y el arranque la pide antes que la pantalla de entrada', () => {

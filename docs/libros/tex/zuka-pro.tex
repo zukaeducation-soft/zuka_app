@@ -1,0 +1,263 @@
+% zuka-pro.tex — última capa de la plantilla (2026-11-24, spec 2026-11-24-libros-profesional).
+% Estilo editorial sobrio: tinta azul noche de la marca, un solo acento (lima) y líneas finas en lugar de cajas de colores.
+% En Razonamiento lógico cada lección abre con la ruta de la explicación de la app (explora-rl.tex, generado) y cierra con
+% «Lo que construiste»; piezas \capitulo, \turno, \armar.
+\input{zuka-logo}
+
+% ---------- color ----------
+\definecolor{zink}{HTML}{0B1424}
+\definecolor{zolive}{HTML}{173F73}   % azul tinta: títulos y rótulos
+\definecolor{zmoss}{HTML}{4D7C0F}
+\definecolor{zmute}{HTML}{56637A}
+\definecolor{zline}{HTML}{CBD3DF}
+\definecolor{zsoft}{HTML}{F1F5FA}
+\definecolor{zpaper}{HTML}{F8FAFD}
+\definecolor{zsun}{HTML}{B7791F}
+\definecolor{zfire}{HTML}{D9541E}    % lo negativo o volteado, como en la app
+
+% ---------- rótulo: barra de color, sin icono ----------
+\renewcommand{\zuka@cab}[3]{{\color{#1}\rule[-.25ex]{1.1mm}{1.75ex}}\hspace{2mm}{\sffamily\footnotesize\bfseries\color{#1!85!black}#3}}
+\tcbset{zbase/.style={enhanced,breakable,frame hidden,boxrule=0pt,arc=1.2mm,left=4.5mm,right=4.5mm,top=2.6mm,bottom=2.8mm,
+  before skip=8pt,after skip=8pt,fontupper=\normalsize},
+  zborde/.style={},
+  zlisa/.style={enhanced,breakable,frame hidden,boxrule=0pt,sharp corners,colback=white,left=0mm,right=0mm,top=2.4mm,bottom=1mm,
+    before skip=8pt,after skip=8pt,borderline north={.5pt}{0pt}{zline}},
+  zmarco/.style={enhanced,breakable,colback=white,colframe=zolive,boxrule=.8pt,arc=1.2mm,left=4.5mm,right=4.5mm,top=2.8mm,bottom=3mm,
+    before skip=9pt,after skip=9pt}}
+\renewcommand{\zuka@cajaanalogia}[2]{%
+  \begin{tcolorbox}[zbase,colback=zsoft]\zuka@cab{zolive}{idea}{La analogía}{\sffamily\footnotesize\color{zmute}\quad #1}\par\vspace{3pt}#2\end{tcolorbox}}
+\renewenvironment{regla}[1][La regla]{\begin{tcolorbox}[zmarco]\zuka@cab{zolive}{regla}{#1}\par\vspace{4pt}}{\end{tcolorbox}}
+\renewenvironment{ejemplo}[1][]{\stepcounter{ejemplo}%
+  \begin{tcolorbox}[zlisa]\zuka@cab{zolive}{ejemplo}{Ejemplo \thesection.\arabic{ejemplo}}%
+  \if\relax\detokenize{#1}\relax\else{\sffamily\footnotesize\color{zmute}\quad #1}\fi\par\vspace{3pt}}{\end{tcolorbox}}
+\renewenvironment{trampa}{\begin{tcolorbox}[zbase,colback=zfire!6]\zuka@cab{zfire}{trampa}{Trampa}\par\vspace{2pt}}{\end{tcolorbox}}
+\renewenvironment{atajo}{\begin{tcolorbox}[zbase,colback=zsoft]\zuka@cab{zolive}{atajo}{Atajo de examen}\par\vspace{2pt}}{\end{tcolorbox}}
+\renewenvironment{profundiza}{\begin{tcolorbox}[zlisa]\zuka@cab{zmute}{lejos}{Para ir más lejos}\par\vspace{2pt}}{\end{tcolorbox}}
+\newcommand{\zuka@titulo}[1]{\par\vspace{9pt}\noindent{\color{zlime}\rule[-.2ex]{7mm}{.9mm}}\hspace{2.5mm}%
+  {\sffamily\fontsize{14}{17}\selectfont\fontseries{sb}\selectfont\color{zink}#1}\par\nopagebreak\vspace{3pt}}
+\renewenvironment{reto}{\zuka@titulo{Ahora sí, un problema}%
+  {\small\color{zmute}Ya tienes las ideas. Resuélvelo solo, escribe tu respuesta y después mira cómo se usó el concepto.\par}
+  \begin{tcolorbox}[zmarco,breakable=false]}{\zuka@miresp\end{tcolorbox}}
+\renewenvironment{retoresuelto}{\zuka@tapa{Tapa desde aquí hasta tener tu respuesta}%
+  \begin{tcolorbox}[zbase,colback=zsoft]\zuka@cab{zmoss}{listo}{Así se usó el concepto}\par\vspace{3pt}}{\end{tcolorbox}}
+\renewcommand{\zuka@cajamas}[1]{\setcounter{ejx}{0}\zuka@titulo{Ahora tú}%
+  {\small\color{zmute}Resuélvelo aquí y compara con las claves del final.\par}#1\par\vspace{4pt}}
+\renewcommand{\zuka@cajaexamen}[1]{\setcounter{forma}{0}\zuka@titulo{Así lo preguntan en el examen}#1\par\vspace{4pt}}
+\renewcommand{\forma}[2]{\stepcounter{forma}\par\vspace{3pt}\noindent
+  \begin{tabularx}{\linewidth}{@{}>{\leavevmode\sffamily\small\bfseries\color{zolive}}p{6mm}X@{}}
+  \arabic{forma} & \leavevmode{\sffamily\small\bfseries\color{zink}#1}\par{\small #2}\end{tabularx}}
+\renewcommand{\taller}{\zuka@ponemas\zuka@poneexamen\zuka@poneandamio\zuka@titulo{Taller \thesection}%
+  {\sffamily\footnotesize\color{zmute}Resuélvelo todo antes de mirar las claves.\hfill
+   \textbf{\color{zolive}Mis aciertos:} \rule[-1pt]{8mm}{.4pt} de \rule[-1pt]{8mm}{.4pt}}\par\vspace{2pt}}
+\titleformat{\subsection}[hang]{\sffamily\fontsize{14}{17}\selectfont\fontseries{sb}\selectfont\color{zink}}{}{0pt}
+  {{\color{zlime}\rule[-.2ex]{7mm}{.9mm}}\hspace{2.5mm}}
+\titlespacing*{\subsection}{0pt}{11pt}{4pt}
+% la bitácora solo queda en lectura: en razonamiento la reemplaza «Lo que construiste»
+\let\zuka@bitacoravieja\bitacora
+\renewcommand{\bitacora}{\ifnum\zuka@num<3\else\zuka@bitacoravieja\fi}
+
+\raggedbottom
+% el enunciado y su cuadrícula no se separan
+\renewcommand{\ejx}[3]{\stepcounter{ejx}\par\vspace{4pt}\noindent\begin{minipage}{\linewidth}\setlength{\parskip}{4pt}%
+  {\sffamily\small\bfseries\color{zolive}\Alph{ejx}\quad}{\sffamily\small\bfseries\color{zink}#1}\par
+  #2\par\ifnum\zuka@num<3 \zuka@cuadricula{22mm}\else\zuka@renglones{2}\fi\end{minipage}\par
+  \immediate\write\zuka@sol{\noexpand\solitem{Ahora tú \Alph{ejx}}{\unexpanded{#3}}}}
+\titlecontents{chapter}[8mm]{\vspace{2pt}\sffamily\bfseries\color{zink}}
+  {\contentslabel[\color{zolive}\two@digits{\thecontentslabel}]{8mm}}{\hspace*{-8mm}}{\hfill\color{zolive}\contentspage}
+\titlecontents{section}[17mm]{\vspace{-1.6pt}\small\color{zink}}
+  {\contentslabel[\color{zmute}\thecontentslabel]{9mm}}{}{\titlerule*[2.5mm]{\color{zline}.}\contentspage}
+
+% ---------- cabecera de lección: número grande, título y ruta de la app ----------
+\renewcommand{\zuka@cabezaleccion}[1]{%
+  \noindent\begin{minipage}[b]{20mm}{\sffamily\fontsize{34}{34}\selectfont\firalight\color{zolive}\thesection}\end{minipage}%
+  \begin{minipage}[b]{\dimexpr\linewidth-20mm}\raggedright\hyphenpenalty=10000{\sffamily\fontsize{22}{25}\selectfont\fontseries{sb}\selectfont\color{zink}#1}\end{minipage}%
+  \par\vspace{4pt}\noindent{\color{zlime}\rule{20mm}{1mm}}{\color{zline}\rule[.35mm]{\dimexpr\linewidth-20mm}{.4pt}}}
+\titleformat{\section}[block]{\sffamily\color{zink}}{}{0pt}{\zuka@cabezaleccion}
+\titlespacing*{\section}{0pt}{0pt}{5pt}
+
+\newcommand{\rutade}[2]{\expandafter\gdef\csname zrut@#1\endcsname{\zuka@ruta{#2}}}
+\newcommand{\zuka@ruta}[1]{\zuka@np=0 \foreach \t in {#1}{\global\advance\zuka@np by 1 }%
+  \par\vspace{4pt}\noindent\begin{tikzpicture}[x=1mm,y=1mm]
+    \pgfmathsetmacro{\zw}{170/\the\zuka@np}
+    \draw[zline,line width=1pt] (\zw/2,0) -- (170-\zw/2,0);
+    \foreach \t [count=\k] in {#1}{%
+      \ifnum\k=\zuka@np \filldraw[fill=zlime,draw=zlime,line width=1pt] (\k*\zw-\zw/2,0) circle (3);
+      \else \filldraw[fill=white,draw=zolive,line width=1pt] (\k*\zw-\zw/2,0) circle (3);\fi
+      \node[font=\sffamily\footnotesize\bfseries,text=zink] at (\k*\zw-\zw/2,0) {\k};
+      \pgfmathsetmacro{\zl}{\zw-4}
+      \node[anchor=north,text width=\zl mm,align=center,font=\sffamily\footnotesize,text=zmute] at (\k*\zw-\zw/2,-3.8) {\t};}
+  \end{tikzpicture}\par\vspace{3pt}}
+\newcommand{\zuka@poneruta}{\ifcsname zrut@\zuka@lid\endcsname\csname zrut@\zuka@lid\endcsname\fi}
+\newcommand{\andamiode}[2]{\expandafter\gdef\csname zand@#1\endcsname{\zuka@andamio{#2}}}
+\newcommand{\zuka@andamio}[1]{%
+  \begin{tcolorbox}[zbase,colback=zlime!13]\zuka@cab{zmoss}{listo}{Lo que construiste}{\sffamily\footnotesize\color{zmute}\quad
+  marca lo que podrías explicarle a otra persona; si algo queda sin marcar, vuelve a ese paso aquí o en la app}\par\vspace{3pt}
+  \begin{itemize}[leftmargin=6mm,itemsep=2pt,label={\casilla{}}]\small #1\end{itemize}\end{tcolorbox}}
+\newcommand{\zuka@poneandamio}{\ifcsname zand@\zuka@lid\endcsname\csname zand@\zuka@lid\endcsname
+  \expandafter\global\expandafter\let\csname zand@\zuka@lid\endcsname\relax\fi}
+\let\zuka@notaappvieja\notaapp
+\renewcommand{\notaapp}[1]{\ifnum\zuka@num<3 \zuka@poneruta
+    {\sffamily\footnotesize\color{zmute}\textbf{\color{zolive}En la app:} la misma ruta, para construirla con el dedo, y después los ejercicios.\par}%
+  \else\zuka@notaappvieja{#1}\fi}
+\InputIfFileExists{explora-rl}{}{}
+
+% ---------- piezas de la lección por pasos ----------
+\newcounter{zcap}\newcounter{zturno}
+\renewcommand{\leccion}[3]{\global\zuka@evalfalse\setcounter{zcap}{0}\setcounter{zturno}{0}\zuka@leccionvieja{#1}{#2}{#3}\zuka@poneanalogia}
+\newcommand{\capitulo}[1]{\stepcounter{zcap}\par\vspace{12pt}\noindent
+  \tikz[baseline=(n.base)]{\node[circle,draw=zolive,line width=1pt,inner sep=0,minimum size=6.4mm,font=\sffamily\small\bfseries,text=zink](n){\arabic{zcap}};}%
+  \hspace{2.5mm}{\sffamily\fontsize{15}{18}\selectfont\fontseries{sb}\selectfont\color{zink}#1}\par\nopagebreak\vspace{3pt}}
+% \turno{enunciado (con su dibujo)}{respuesta para las claves}
+\newcommand{\turno}[2]{\stepcounter{zturno}%
+  \begin{tcolorbox}[zbase,breakable=false,colback=zlime!13]\zuka@cab{zmoss}{reto}{Tu turno}\quad #1\end{tcolorbox}%
+  \immediate\write\zuka@sol{\noexpand\solitem{Tu turno \arabic{zturno}}{\unexpanded{#2}}}}
+% \armar{\arma{título}{enunciado}{respuesta y el error que detecta}...}: evalúa la idea construyendo algo que cumpla una condición
+\newcounter{zarma}
+\newcommand{\armar}[1]{\setcounter{zarma}{0}\zuka@titulo{Arma la respuesta}%
+  {\small\color{zmute}Como en los ejercicios de la app: no se pide un resultado, se pide construir algo que cumpla la condición.
+   Escribe primero qué crees que pasa y después compruébalo con la cuenta o el dibujo.\par}#1\par}
+\newcommand{\arma}[3]{\stepcounter{zarma}%
+  \begin{tcolorbox}[zlisa,breakable=false]\zuka@cab{zolive}{taller}{\Alph{zarma}}{\sffamily\small\bfseries\color{zink}\quad #1}\par\vspace{2pt}#2\par\vspace{3pt}
+  \zuka@cuadricula{20mm}\end{tcolorbox}%
+  \immediate\write\zuka@sol{\noexpand\solitem{Arma la respuesta \Alph{zarma}}{\unexpanded{#3}}}}
+\newcommand{\renglones}[1]{\zuka@renglones{#1}}
+\newcommand{\cuenta}[1]{\par\vspace{1pt}\begin{center}\tikz\node[fill=zsoft,rounded corners=1.2mm,inner xsep=4mm,inner ysep=1.8mm]{$\displaystyle #1$};\end{center}\vspace{-2pt}}
+\newcommand{\pie}[1]{{\par\centering\sffamily\footnotesize\color{zmute}#1\par}}
+
+% ---------- dibujos: recta, barras, cien casillas, cuadrados de puntos ----------
+\newcommand{\xficha}[2][zolive]{\filldraw[fill=#1,draw=white,line width=1pt] (#2,0) circle (2mm);}
+\newcommand{\xsalto}[4][zolive]{\draw[#1,line width=1.1pt,-{Stealth[length=2.3mm]},shorten <=1.6mm,shorten >=1.6mm] (#2,.12) to[bend left=\ifdim#2pt<#3pt 45\else-45\fi] node[above,font=\sffamily\footnotesize\bfseries,text=#1]{#4} (#3,.12);}
+\renewcommand{\recta}[3]{\begin{tikzpicture}[x=7.4mm,font=\sffamily\footnotesize]
+  \draw[zline,line width=1.6pt,{Stealth[length=2mm]}-{Stealth[length=2mm]}] (#1-.9,0)--(#2+.9,0);
+  \foreach \t in {#1,...,#2}{\draw[zmute,line width=.8pt] (\t,-.09)--(\t,.09); \node[below=1.4mm,text=zink] at (\t,0) {$\t$};}
+  \draw[zink,line width=1.6pt] (0,-.14)--(0,.14);
+  #3
+\end{tikzpicture}}
+\newcommand{\xrecta}[3]{\begin{center}\recta{#1}{#2}{#3}\end{center}}
+% \xbarra[color]{y}{partes}{tomadas}{rótulo}: barra de 96 mm
+\newcommand{\xbarra}[5][zlime]{\pgfmathsetmacro{\zp}{96/#3}
+  \foreach \i in {1,...,#3}{\ifnum\i>#4 \filldraw[fill=white,draw=zmute,line width=.5pt] ({(\i-1)*\zp},#2) rectangle ++(\zp,8);
+    \else \filldraw[fill=#1!75,draw=zmute,line width=.5pt] ({(\i-1)*\zp},#2) rectangle ++(\zp,8);\fi}
+  \node[anchor=west,font=\small,text=zink] at (99,#2+4) {#5};}
+\newenvironment{barras}{\begin{center}\begin{tikzpicture}[x=1mm,y=1mm]}{\end{tikzpicture}\end{center}}
+% \xcien{x}{pintadas}{segunda cantidad pintada en naranja}{pie}
+\newcommand{\xcien}[4]{\foreach \j in {0,...,9}{\foreach \i in {0,...,9}{\pgfmathtruncatemacro{\n}{\j*10+\i}
+    \ifnum\n<#2 \def\zc{zlime!80}\else\pgfmathtruncatemacro{\m}{#2+#3}\ifnum\n<\m \def\zc{zfire!55}\else\def\zc{white}\fi\fi
+    \filldraw[fill=\zc,draw=zline,line width=.4pt] (#1+\i*3.2,-\j*3.2) rectangle ++(3.2,-3.2);}}
+  \draw[zolive,line width=.8pt] (#1,0) rectangle ++(32,-32);
+  \node[anchor=north,align=center,font=\sffamily\footnotesize,text=zmute] at (#1+16,-33.5) {#4};}
+\newenvironment{casillas}{\begin{center}\begin{tikzpicture}[x=1mm,y=1mm]}{\end{tikzpicture}\end{center}}
+% \xcuad{x}{lado}{tamaño de casilla}{pie}
+\newcommand{\xcuad}[4]{\foreach \i in {1,...,#2}{\foreach \j in {1,...,#2}{%
+    \filldraw[fill=zlime!70,draw=white,line width=.8pt] ({#1+(\i-1)*#3},{(\j-1)*#3}) rectangle ++(#3,#3);}}
+  \node[anchor=north,align=center,font=\sffamily\footnotesize,text=zmute] at ({#1+#2*#3/2},-1.5) {#4};}
+
+% ---------- encabezado, pie y pestaña ----------
+\renewcommand{\zuka@pestana}[1]{\ifnum\value{mundo}>0
+  \begin{tikzpicture}[remember picture,overlay]
+    \pgfmathsetmacro{\zty}{-26-mod(\value{mundo}-1,12)*15}
+    \ifnum#1=1
+      \fill[zlime] ([xshift=-5mm,yshift=\zty mm]current page.north east) rectangle ++(6mm,-11mm);
+      \node[font=\sffamily\scriptsize\bfseries,text=zink] at ([xshift=-2.5mm,yshift=\zty mm-5.5mm]current page.north east) {\themundo};
+    \else
+      \fill[zlime] ([xshift=5mm,yshift=\zty mm]current page.north west) rectangle ++(-6mm,-11mm);
+      \node[font=\sffamily\scriptsize\bfseries,text=zink] at ([xshift=2.5mm,yshift=\zty mm-5.5mm]current page.north west) {\themundo};
+    \fi
+  \end{tikzpicture}\fi}
+\fancyhf{}
+\fancyhead[L]{\zuka@pestana{\ifodd\value{page}1\else0\fi}\sffamily\footnotesize\color{zmute}\zuka@mundoactual}
+\fancyhead[R]{\sffamily\footnotesize\color{zmute}\zuka@comp\enspace·\enspace Libro \zuka@num}
+\fancyfoot[L]{\raisebox{-.6mm}{\zukahor[zolive]{4.6mm}}\sffamily\footnotesize\color{zmute}\enspace Preuniversitario UdeA}
+\fancyfoot[R]{\sffamily\small\bfseries\color{zolive}\thepage}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[R]{\sffamily\small\bfseries\color{zolive}\thepage}}
+
+% ---------- apertura de mundo: clara, con el arte a la derecha ----------
+\renewcommand{\mundo}[4]{%
+  \cleardoublepage
+  \stepcounter{mundo}\setcounter{section}{0}\global\zuka@evalfalse
+  \renewcommand{\zuka@mundoactual}{Mundo \themundo\ · #1}%
+  \thispagestyle{plain}%
+  \phantomsection\addcontentsline{toc}{chapter}{\protect\numberline{\themundo}#1}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[zsoft] (current page.north west) rectangle ([yshift=-92mm]current page.north east);
+    \begin{scope}
+      \clip ([xshift=-72mm]current page.north east) rectangle ([yshift=-92mm]current page.north east);
+      \pgfmathsetmacro{\zdy}{46+mod(\themundo*41,90)}
+      \node[anchor=north east,inner sep=0] at ([xshift=26mm,yshift=\zdy mm]current page.north east)
+        {\includegraphics[width=150mm]{arte/portada\zuka@num.jpg}};
+    \end{scope}
+    \fill[zlime] ([yshift=-92mm]current page.north west) rectangle ++(20mm,-1.6mm);
+    \fill[zlime] ([xshift=20mm,yshift=-92mm]current page.north west) rectangle ++(22mm,-1.6mm);
+    \node[anchor=north west,inner sep=0] at ([xshift=20mm,yshift=-16mm]current page.north west) {\zukahor[zink]{9mm}};
+    \node[anchor=north west,inner sep=0,font=\sffamily\small,text=zmute]
+      at ([xshift=20mm,yshift=-38mm]current page.north west) {\zuka@comp\enspace·\enspace\textbf{\color{zolive}Mundo \themundo}};
+    \node[anchor=north west,inner sep=0,text width=112mm,align=flush left,font=\sffamily\fontsize{31}{35}\selectfont\fontseries{sb}\selectfont,text=zink]
+      at ([xshift=20mm,yshift=-46mm]current page.north west) {#1};
+  \end{tikzpicture}%
+  \par\vspace*{80mm}%
+  {\large #3\par}\vspace{7mm}%
+  \noindent{\sffamily\fontsize{14}{17}\selectfont\fontseries{sb}\selectfont\color{zink}Las lecciones}\par\vspace{2pt}
+  {\color{zline}\rule{\linewidth}{.5pt}}\par
+  {\begin{itemize}[leftmargin=0mm,itemsep=5pt,label={}]#4\end{itemize}}
+  \vspace{7mm}
+  \noindent{\sffamily\fontsize{14}{17}\selectfont\fontseries{sb}\selectfont\color{zink}Cómo vas a trabajar}\par\vspace{2pt}
+  {\color{zline}\rule{\linewidth}{.5pt}}\par\vspace{2pt}
+  {\small\ifnum\zuka@num<3
+    Cada lección es una \textbf{ruta}: los mismos pasos que construyes en la app. En cada paso \textbf{primero entiendes la
+    idea} y \textbf{después la usas}; al final viene el problema y ves cómo se usó el concepto. Cierra con «Lo que
+    construiste», el taller y las claves.
+  \else
+    En cada lección \textbf{primero entiendes la técnica} (analogía, idea y ejemplos comentados) y \textbf{después la usas}:
+    resuelves el reto, ves cómo se aplicó, practicas en la app y cierras con el taller y las claves.
+  \fi\par}
+  \immediate\write\zuka@sol{\noexpand\solmun{Mundo \themundo\ · \unexpanded{#1}}}%
+}
+
+% ---------- evaluación, portada y contraportada ----------
+\renewcommand{\zuka@cabeceravieja}[3]{%
+  \noindent{\sffamily\footnotesize\bfseries\color{zolive}#1}\hfill{\sffamily\footnotesize\color{zmute}\begin{tabular}[t]{@{}r@{}}#3\end{tabular}}\par\vspace{1pt}
+  {\sffamily\fontsize{22}{25}\selectfont\fontseries{sb}\selectfont\color{zink}#2\par}\vspace{4pt}
+  \noindent{\color{zlime}\rule{20mm}{1mm}}{\color{zline}\rule[.35mm]{\dimexpr\linewidth-20mm}{.4pt}}\par}
+\renewcommand{\portada}{%
+  \thispagestyle{vacia}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[white] (current page.south west) rectangle (current page.north east);
+    \begin{scope}
+      \clip ([yshift=34mm]current page.south west) rectangle ([yshift=-138mm]current page.north east);
+      \node[inner sep=0] at ([yshift=-22mm]current page.center) {\includegraphics[width=\paperwidth]{arte/portada\zuka@num.jpg}};
+    \end{scope}
+    \node[anchor=north west,inner sep=0] at ([xshift=20mm,yshift=-18mm]current page.north west) {\zukahor[zink]{15mm}};
+    \node[anchor=north east,inner sep=0,align=right,font=\sffamily\small,text=zmute] at ([xshift=-20mm,yshift=-21mm]current page.north east)
+      {Preuniversitario UdeA\\\textbf{\color{zolive}Libro \zuka@num\ de 4}};
+    \fill[zlime] ([xshift=20mm,yshift=-50mm]current page.north west) rectangle ++(26mm,-2mm);
+    \node[anchor=north west,inner sep=0,text width=170mm,align=flush left]
+      at ([xshift=20mm,yshift=-60mm]current page.north west)
+      {{\sffamily\fontsize{20}{24}\selectfont\firalight\color{zolive}\zuka@comp\par}\vspace{4mm}%
+       {\sffamily\fontsize{40}{44}\selectfont\fontseries{sb}\selectfont\color{zink}\zuka@tit\par}\vspace{6mm}%
+       \parbox{122mm}{\raggedright\sffamily\small\color{zmute}\zuka@sub}};
+    \node[anchor=north west,inner sep=0,text width=170mm,align=flush left,font=\sffamily\footnotesize,text=zmute]
+      at ([xshift=20mm,yshift=27mm]current page.south west) {\zuka@mundos};
+  \end{tikzpicture}%
+  \null\clearpage}
+\renewcommand{\contraportada}{%
+  \cleardoublepage\thispagestyle{vacia}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[white] (current page.south west) rectangle (current page.north east);
+    \begin{scope}
+      \clip (current page.north west) rectangle ([yshift=-96mm]current page.north east);
+      \node[anchor=north,inner sep=0] at ([yshift=62mm]current page.north) {\includegraphics[width=\paperwidth]{arte/portada\zuka@num.jpg}};
+    \end{scope}
+    \fill[zlime] ([xshift=20mm,yshift=-114mm]current page.north west) rectangle ++(26mm,-2mm);
+    \node[anchor=north west,inner sep=0,text width=150mm,align=flush left,font=\sffamily\fontsize{24}{29}\selectfont\fontseries{sb}\selectfont,text=zink]
+      at ([xshift=20mm,yshift=-122mm]current page.north west) {Primero la idea.\\Después, úsala.};
+    \node[anchor=north west,inner sep=0,text width=140mm,align=flush left,text=zink]
+      at ([xshift=20mm,yshift=-152mm]current page.north west)
+      {Cuatro libros y una aplicación para preparar la prueba de admisión de la Universidad de Antioquia: dos de
+      Razonamiento lógico y dos de Comprensión lectora. Cada lección del libro sigue el mismo camino que su lección en Zuka
+      y va más hondo: analogías, ejemplos resueltos paso a paso, trampas, atajos, talleres y, al cerrar cada mundo, una
+      evaluación como la del examen.};
+    \foreach \n/\t in {1/Número y forma,2/{Orden, lógica y azar},3/Leer lo que dice,4/Leer lo que quiere decir}{%
+      \node[anchor=west,inner sep=0,font=\sffamily\small,text=zink] at ([xshift=20mm,yshift=54mm-\n*7mm]current page.south west)
+        {{\color{zolive}\bfseries Libro \n}\quad \t};}
+    \node[anchor=south east,inner sep=0] at ([xshift=-20mm,yshift=24mm]current page.south east) {\zukaver[zink]{34mm}};
+  \end{tikzpicture}}

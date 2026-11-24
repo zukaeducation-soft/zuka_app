@@ -4,41 +4,26 @@
 {\sffamily\fontsize{26}{30}\selectfont\firalight Cómo se usa este libro\par}\vspace{2pt}
 {\color{zolive}\rule{18mm}{1.6pt}}\par\vspace{8pt}
 
-Este libro y la aplicación \marca\ son dos mitades de un mismo curso. La app te enseña con un video corto y te hace
-jugar: arrastras, giras, llenas, comparas, y la cuenta aparece sola. El libro va más despacio y más hondo: explica
-\emph{por qué} funciona cada idea, resuelve ejemplos completos y te deja papel y lápiz para practicar como en el examen.
-Cada lección tiene el mismo número y el mismo código en los dos lugares (por ejemplo, \texttt{pu-cm-1}).
+Este libro y la aplicación \marca\ son dos mitades de un mismo curso. En la app cada lección es una explicación que se
+construye con el dedo, paso a paso; el libro sigue \textbf{la misma ruta} y va más despacio y más hondo: explica \emph{por qué}
+funciona cada idea, resuelve ejemplos completos y te deja papel y lápiz para practicar como en el examen.
 
 \vspace{4pt}
-\begin{tabularx}{\linewidth}{@{}>{\leavevmode\sffamily\small\bfseries\color{zolive}}p{27mm}X@{}}
-La analogía & Abre la lección: una comparación con algo cotidiano para entender la idea antes de cualquier fórmula.\\[4pt]
-La idea & La intuición, con un dibujo cuando ayuda. Primero se entiende; la fórmula viene después.\\[4pt]
+\begin{tabularx}{\linewidth}{@{}>{\leavevmode\sffamily\small\bfseries\color{zolive}}p{32mm}X@{}}
+La ruta & Abre la lección: los pasos que vas a recorrer, los mismos de la app. El último es siempre un problema.\\[4pt]
+La analogía & Una comparación con algo cotidiano para entender la idea antes de cualquier fórmula.\\[4pt]
+La idea & La intuición, con un dibujo que la hace ver. Primero se entiende; la fórmula viene después.\\[4pt]
+Tu turno & Enseguida de una idea, un ejercicio corto con el mismo dibujo. Si sale, sigue; si no, relee el paso. Las respuestas están en las claves.\\[4pt]
 La regla & El recuadro con lo que hay que llevarse. Si solo tienes cinco minutos antes del examen, lee los recuadros.\\[4pt]
-Ejemplos & Problemas resueltos paso a paso. En cada uno hay una línea de tijera: tapa desde ahí, resuélvelo tú y
-luego compara.\\[4pt]
-Ponlo en práctica & Con el concepto ya entendido, un reto tipo examen para resolver tú solo. Escribe tu respuesta y marca
-qué tan seguro estás; debajo de la línea de tijera, «Así se usó el concepto» muestra paso a paso cómo se aplica.\\[4pt]
-Ahora tú & Dos problemas nuevos para resolver solo, con cuadrícula para tus cuentas. Las respuestas están en las
-claves.\\[4pt]
-Trampa & El error que más se repite en esa clase de pregunta, y cómo lo ponen como opción falsa.\\[4pt]
-Atajo & La manera de ganar tiempo sin calculadora.\\[4pt]
-Para ir más lejos & Una idea extra para quien quiere el puntaje alto. Se puede saltar.\\[4pt]
-Taller & Tres pisos: \textbf{Calienta} (directo), \textbf{Entrena} (problemas) y \textbf{Como en el examen}
-(opción múltiple A–D). Las respuestas están al final del libro, en \emph{Claves y soluciones}.\\[4pt]
-Bitácora & Cuatro casillas para marcar: leí, vi el video, jugué los diez juegos de la app e hice el taller.\\[4pt]
-Evaluación & Cada mundo termina con una prueba de 10 a 12 preguntas como las del examen, con tiempo.\\
+Ejemplos & Problemas resueltos. En cada uno hay una línea de tijera: tapa desde ahí, resuélvelo tú y luego compara.\\[4pt]
+Ahora sí, un problema & Un reto tipo examen. Escribe tu respuesta y qué tan seguro estás; debajo, «Así se usó el concepto» muestra cómo se aplica.\\[4pt]
+Arma la respuesta & No se pide un resultado: se pide construir algo que cumpla una condición. Las claves dicen el error que descubre.\\[4pt]
+Lo que construiste & Las ideas de la lección, para marcar las que podrías explicar.\\[4pt]
+Taller & Tres pisos: \textbf{Calienta}, \textbf{Entrena} y \textbf{Como en el examen} (opción múltiple A–D).\\[4pt]
+Evaluación & Cada mundo termina con una prueba como la del examen, con tiempo.\\[4pt]
 \end{tabularx}
-
-\vspace{6pt}
-\begin{tcolorbox}[enhanced,colback=zsoft,coltext=zink,boxrule=0pt,arc=3pt,left=5mm,right=5mm,top=3mm,bottom=3mm]
-{\sffamily\scriptsize\bfseries\color{zolive}EL CICLO DE CADA LECCIÓN}\par\vspace{3pt}
-\begin{tikzpicture}[x=1mm,y=1mm,every node/.style={font=\sffamily\footnotesize,text=zink}]
-  \foreach \i/\t/\s in {0/Lee/la idea y la regla,1/Mira/el video en Zuka,2/Juega/los diez juegos,3/Resuelve/el taller,4/Repasa/con las claves}{%
-    \node[draw=zolive,circle,minimum size=7mm,line width=.6pt] (n\i) at (\i*22.5,0) {\bfseries\the\numexpr\i+1\relax};
-    \node[below=1mm of n\i,align=center,text width=20mm] {\textbf{\t}\\{\color{zmute}\scriptsize\s}};}
-  \foreach \i/\j in {0/1,1/2,2/3,3/4}{\draw[zolive,line width=.5pt,-{Latex[length=1.6mm]}] (n\i) -- (n\j);}
-\end{tikzpicture}
-\end{tcolorbox}
+{\small\color{zmute}Según la lección encontrarás también trampas (el error que más se repite), atajos y «Para ir más lejos». Las piezas «Tu
+turno» y «Arma la respuesta» empiezan en el mundo 1, Cálculo mental.\par}
 
 \clearpage
 \thispagestyle{vacia}

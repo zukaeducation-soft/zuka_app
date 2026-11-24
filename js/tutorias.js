@@ -6,7 +6,7 @@
 // confirmación ofrece avisar a coordinación con el mensaje ya escrito.
 const TUTORIAS = {
   whatsapp: '',    // WhatsApp de coordinación, solo dígitos con indicativo (p. ej. '573001234567'); vacío = sin aviso
-  mins: 45,        // duración de una asesoría
+  mins: 60,        // duración de una asesoría
   leadMin: 60,     // anticipación mínima para separar, en minutos
   days: 7,         // cuántos días hacia adelante se ofrecen
   max: 3,          // asesorías pendientes a la vez
@@ -31,7 +31,9 @@ function tuDate(date, time = '00:00') {
   const [y, m, d] = date.split('-').map(Number), [h, mi] = time.split(':').map(Number);
   return new Date(y, m - 1, d, h, mi);
 }
-const tuStart = b => tuDate(b.date, b.time).getTime();
+// Los cupos son en hora de Colombia (UTC−5, sin horario de verano), esté donde esté el estudiante.
+const tuStart = b => { const [y, m, d] = b.date.split('-').map(Number), [h, mi] = b.time.split(':').map(Number); return Date.UTC(y, m - 1, d, h + 5, mi); };
+const tuHoy = now => { const d = new Date(now - 5 * 3600000); return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); };   // el día de hoy en Colombia
 const tuEnd = b => tuStart(b) + (b.mins || TUTORIAS.mins) * 60000;
 // Lo que venga dañado del almacenamiento (o del formato viejo, sin temas) se descarta en vez de romper la pestaña.
 const tuValid = b => !!b && typeof b === 'object' && /^\d{4}-\d\d-\d\d$/.test(b.date) && /^\d\d:\d\d$/.test(b.time)
@@ -47,7 +49,7 @@ function activeTutorias(mine, now) {
 // Los próximos días: [{ date, slots: [{ time, free }] }]. Solo cupos que aún se pueden separar; `free` es
 // false si choca con otra asesoría del estudiante.
 function tutoriaDays(now, mine, hours = TUTORIAS.hours) {
-  const busy = activeTutorias(mine, now), first = new Date(now), out = [];
+  const busy = activeTutorias(mine, now), first = tuHoy(now), out = [];
   for (let i = 0; i < TUTORIAS.days; i++) {
     const d = new Date(first.getFullYear(), first.getMonth(), first.getDate() + i), date = tuKey(d);
     const slots = (hours[d.getDay()] || []).map(time => {
@@ -100,8 +102,7 @@ const cancelTutoria = (mine, id) => (Array.isArray(mine) ? mine : []).filter(b =
 
 // «Hoy», «Mañana» o «lun 16 nov».
 function dayLabel(date, now) {
-  const d = tuDate(date), t = new Date(now);
-  const diff = Math.round((d - new Date(t.getFullYear(), t.getMonth(), t.getDate())) / 86400000);
+  const d = tuDate(date), diff = Math.round((d - tuHoy(now)) / 86400000);
   return diff === 0 ? 'Hoy' : diff === 1 ? 'Mañana' : `${TU_DOW[d.getDay()]} ${d.getDate()} ${TU_MON[d.getMonth()]}`;
 }
 // '16:00' → «4:00 p. m.»
@@ -129,7 +130,26 @@ const TU_ERRORS = {
   busy: 'Ya tienes una asesoría a esa hora.',
   max: `Puedes tener hasta ${TUTORIAS.max} asesorías pendientes. Cancela una para separar otra.`,
   topics: 'Elige al menos un tema para reforzar.',
+  saldo: 'No te quedan horas para esta materia.',
 };
+
+// Con cuenta, las asesorías están en la base y gastan horas (spec 2026-11-24-tienda-libros); sin candados (desarrollo) y en la
+// cuenta administradora siguen guardadas en el dispositivo, para probar.
+const tuServidor = () => typeof Cuenta !== 'undefined' && !!Cuenta.sb && !!Cuenta.user && !Cuenta.user.offline && !SIN_CANDADOS && !cuentaEsAdmin();
+const tuTipo = id => (['calc', 'fis', 'int', 'lin'].includes(id) ? 'universidad' : 'general');   // igual que privado.tipo_asesoria
+const tuSaldo = id => (typeof Tienda === 'undefined' ? 0 : Tienda.saldo[tuTipo(id)] || 0);
+// Fila de la base → asesoría de la app (hora de Colombia).
+function tuDeFila(r) {
+  const d = new Date(new Date(r.inicio).getTime() - 5 * 3600000).toISOString();
+  return { id: `srv-${r.id}`, course: r.curso, topics: r.temas, date: d.slice(0, 10), time: d.slice(11, 16), mins: r.minutos, note: r.nota, enlace: r.enlace, ok: r.estado === 'confirmada' };
+}
+async function asesoriasCarga() {
+  if (!tuServidor()) return false;
+  const uid = Cuenta.user.id, { data, error } = await Cuenta.sb.from('asesorias').select('*').eq('usuario', uid);
+  if (error || !Cuenta.user || Cuenta.user.id !== uid) return false;
+  S.tutorias = data.filter(r => ['pendiente', 'confirmada'].includes(r.estado)).map(tuDeFila); save();
+  return true;
+}
 
 function renderTutorias() {
   const now = Date.now(), mine = activeTutorias(S.tutorias, now);
@@ -140,11 +160,12 @@ function renderTutorias() {
   view.innerHTML = `<div class="tutorias">
     <header class="tu-head"><h1>Tutorías</h1>
       <p class="muted">Separa una asesoría virtual para reforzar lo que más te cuesta. Eliges la materia, los temas, el día y la hora.</p></header>
+    ${tuServidor() ? `<section class="tu-horas"><p><b>${Tienda.saldo.general}</b> ${Tienda.saldo.general === 1 ? 'hora general' : 'horas generales'}${Tienda.saldo.universidad ? ` · <b>${Tienda.saldo.universidad}</b> de universidad` : ''}</p><button class="btn sm main brand" type="button" data-horas>Comprar horas</button></section>` : ''}
     <aside class="tu-side" aria-label="Tus asesorías y cupos">${mine.length ? `<section class="card tu-mine-card"><h2>Tus asesorías</h2>${mine.map(b => {
       const c = tuCourse(b.course), titles = tuTitles(b);
       return `<div class="tu-mine" style="--c:${c?.color || 'var(--brand)'}">
         <span class="tu-when"><b>${esc(dayLabel(b.date, now))}</b><small>${hourLabel(b.time)}</small></span>
-        <span class="tu-what"><b>${esc(c?.name || 'Asesoría')}</b><small>${esc(titles.join(' · '))}${b.note ? `${titles.length ? ' · ' : ''}«${esc(b.note)}»` : ''}</small></span>
+        <span class="tu-what"><b>${esc(c?.name || 'Asesoría')}</b><small>${esc(titles.join(' · '))}${b.note ? `${titles.length ? ' · ' : ''}«${esc(b.note)}»` : ''}</small>${b.ok ? `<small class="tu-ok">Confirmada</small>` : ''}${/^https:/.test(b.enlace || '') ? `<a class="tu-enlace" href="${esc(b.enlace)}" target="_blank" rel="noopener">Entrar a la reunión</a>` : ''}</span>
         <span class="tu-acts"><button class="tu-cancel" data-cancel="${esc(b.id)}" aria-label="Cancelar la asesoría de ${esc(c?.name || 'la materia')}">Cancelar</button></span>
       </div>`;
     }).join('')}</section>` : ''}${dkTutoriasHTML(mine)}</aside>
@@ -157,26 +178,37 @@ function renderTutorias() {
         <span class="cr-body"><b>${esc(c.name)}</b><small>${c.units.length} ${c.units.length === 1 ? 'unidad' : 'unidades'} · ${lessonsOf(c).length} temas</small></span>
         ${ICON.right}</button>`).join('')}</div>
     </section>
-    ${tutoriaLink('x') ? '' : '<p class="tu-note">Por ahora la asesoría se guarda solo en este dispositivo.</p>'}
+    ${tuServidor() || tutoriaLink('x') ? '' : '<p class="tu-note">Por ahora la asesoría se guarda solo en este dispositivo.</p>'}
   </div>`;
+  $('[data-horas]', view)?.addEventListener('click', () => openTienda('asesorias'));
   view.querySelectorAll('[data-book]').forEach(b => b.onclick = () => openBooking(tuCourse(b.dataset.book)));
   view.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => {
     const bk = S.tutorias.find(x => x.id === b.dataset.cancel);
     if (!bk) return renderTutorias();
-    ask({ title: '¿Cancelar esta asesoría?', text: `${tuCourse(bk.course)?.name || 'Asesoría'}: ${dayLabel(bk.date, Date.now())}, ${hourLabel(bk.time)} Puedes separar otra cuando quieras.`, ok: 'Sí, cancelar', cancel: 'Conservarla', danger: true })
-      .then(yes => { if (yes) { S.tutorias = cancelTutoria(S.tutorias, bk.id); save(); if (tab === 'tutorias') renderTutorias(); toast('Asesoría cancelada.'); } });
+    if (bk.id.startsWith('srv-') && !tuServidor()) return toast('Necesitas conexión para cancelarla.');
+    ask({ title: '¿Cancelar esta asesoría?', text: `${tuCourse(bk.course)?.name || 'Asesoría'}: ${dayLabel(bk.date, Date.now())}, ${hourLabel(bk.time)} ${!tuServidor() ? 'Puedes separar otra cuando quieras.' : tuStart(bk) - Date.now() >= 12 * 3600000 ? 'La hora vuelve a tu saldo.' : 'Faltan menos de 12 horas: la hora no vuelve a tu saldo.'}`, ok: 'Sí, cancelar', cancel: 'Conservarla', danger: true })
+      .then(async yes => {
+        if (yes && tuServidor()) {
+          const r = await Cuenta.sb.rpc('cancelar_asesoria', { p_id: Number(bk.id.slice(4)) }).then(x => x, x => ({ error: x }));
+          if (r.error) return toast('No se pudo cancelar. Revisa tu conexión.');
+          await Promise.all([asesoriasCarga(), tiendaMios()]); if (tab === 'tutorias') renderTutorias();
+          return toast(r.data && r.data.vuelve ? 'Cancelada: la hora volvió a tu saldo.' : 'Asesoría cancelada.');
+        }
+        if (yes) { S.tutorias = cancelTutoria(S.tutorias, bk.id); save(); if (tab === 'tutorias') renderTutorias(); toast('Asesoría cancelada.'); }
+      });
   });
 }
 
 // Hoja para separar: temas → día → hora → nota → confirmar. Al confirmar, la misma hoja dice qué quedó.
 function openBooking(c) {
-  if (typeof planMotivo === 'function' && planMotivo('tutorias')) return openBloqueo('tutorias');   // tutorías: plan Pro
+  if (typeof planMotivo === 'function' && planMotivo('tutorias')) return openBloqueo('tutorias');   // tutorías: con horas en el saldo
+  if (tuServidor() && tuSaldo(c.id) < 1) { toast(TU_ERRORS.saldo); return openTienda('asesorias'); }
   const now = Date.now(), days = tutoriaDays(now, S.tutorias);
   let date = days.find(d => d.slots.some(s => s.free))?.date || null, time = null, topics = [];
   // Arranca en la unidad donde va el estudiante (la de su primera lección sin terminar).
   let unit = Math.max(0, c.units.findIndex(u => u.lessons.some(l => !S.done[l.id])));
   openSheet(`<div class="ag" style="--c:${c.color}">
-    <div class="ag-head">${courseArt(c, 'lg')}<div><h3>${esc(c.name)}</h3><p class="muted">Asesoría virtual · ${TUTORIAS.mins} min</p></div></div>
+    <div class="ag-head">${courseArt(c, 'lg')}<div><h3>${esc(c.name)}</h3><p class="muted">Asesoría virtual · ${TUTORIAS.mins} min${new Date().getTimezoneOffset() === 300 ? '' : ' · hora de Colombia'}</p></div></div>
     <h4 id="ag-l1"><i>1</i>¿Qué temas quieres reforzar? <span class="ag-count"></span></h4>
     ${c.units.length > 1 ? `<div class="ag-units" role="group" aria-label="Unidad">${c.units.map((u, i) =>
       `<button class="tu-chip" data-unit="${i}">${esc(u.title)}</button>`).join('')}</div>` : ''}
@@ -220,17 +252,25 @@ function openBooking(c) {
     };
     qa('[data-unit]').forEach(b => b.onclick = () => { unit = +b.dataset.unit; paint(); });
     qa('.ag-day').forEach(b => b.onclick = () => { date = b.dataset.day; time = null; paint(); });
-    q('[data-ok]').onclick = () => {
+    q('[data-ok]').onclick = async () => {
       const n = Date.now(), r = bookTutoria(S.tutorias, { course: c.id, topics, date, time, note: q('#ag-note').value }, n, tutoriaCatalog(COURSES));
       if (!r.ok) { toast(TU_ERRORS[r.error] || TU_ERRORS.slot); if (r.error === 'slot' || r.error === 'busy') { closeSheet(); renderTutorias(); } return; }
-      S.tutorias = r.list; save();
-      const b = r.booking, titles = tuTitles(b), wa = tutoriaLink(tutoriaText(b, S.name, c.name, titles, n));
+      const srv = tuServidor(), ok = q('[data-ok]');
+      if (srv) {
+        if (ok.disabled) return;
+        ok.disabled = true; ok.textContent = 'Un momento…';
+        const x = await Cuenta.sb.rpc('separar_asesoria', { p: { curso: c.id, temas: topics, fecha: date, hora: time, nota: q('#ag-note').value } }).then(y => y, y => ({ error: y }));
+        await Promise.all([asesoriasCarga().catch(() => {}), tiendaMios().catch(() => {})]);
+        if (!q('.ag')) return;
+        if (x.error) { ok.disabled = false; ok.textContent = 'Separar asesoría'; return toast(TU_ERRORS[x.error.message] || 'No se pudo separar. Revisa tu conexión.'); }
+      } else { S.tutorias = r.list; save(); }
+      const b = r.booking, titles = tuTitles(b), wa = tutoriaLink(tutoriaText(b, S.name, c.name, titles, n), (typeof Cuenta !== 'undefined' && Cuenta.ajustes.whatsapp) || TUTORIAS.whatsapp);
       q('.ag').innerHTML = `<div class="ag-done">${ICON.check}</div>
         <h3 class="ag-done-title" tabindex="-1">¡Asesoría separada!</h3>
         <div class="ag-done-when"><b>${esc(dayLabel(b.date, n))}, ${hourLabel(b.time)}</b><span>${esc(c.name)} · ${b.mins} min</span>
           <ul>${titles.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
         <p class="muted ag-done-next">${wa ? 'Avísale a coordinación por WhatsApp para confirmar tu cupo y recibir el enlace.'
-          : 'Quedó guardada en este dispositivo, en «Tus asesorías». Todavía no le avisa a ningún tutor.'}</p>
+          : srv ? 'Te confirmamos y te enviamos el enlace. Lo verás en «Tus asesorías».' : 'Quedó guardada en este dispositivo, en «Tus asesorías». Todavía no le avisa a ningún tutor.'}</p>
         ${wa ? `<a class="btn brand" href="${esc(wa)}" target="_blank" rel="noopener">Avisar por WhatsApp</a>` : ''}
         <button class="btn ${wa ? 'ghost' : 'brand'}" data-close>Listo</button>`;
       q('[data-close]').onclick = closeSheet;
