@@ -413,6 +413,17 @@ function openCanje() {
   });
 }
 
+// ---------- pagar con el QR de Bre-B ----------
+// brand/pago-breb.png: el QR de Zuka Education redibujado con el mismo contenido (tests/tienda.test.js lo vigila). No trae el
+// valor: el estudiante lo escribe. Desde el mismo celular se guarda la imagen y se sube en la app del banco.
+const PAGO_QR = 'brand/pago-breb.png';
+const pagoHTML = total => `<section class="pago"><h3>Paga con Bre-B</h3>${total != null ? `<p class="pago-valor">${cop(total)}</p>` : ''}
+  <img src="${PAGO_QR}" width="260" height="260" alt="Código QR de Bre-B para pagar a Zuka Education"><b>Zuka Education</b>
+  <ol><li>Escanéalo desde Nequi o la app de tu banco. Si estás en este celular, guarda la imagen y súbela en la opción de leer QR.</li>
+    <li>Revisa que diga <b>Zuka Education</b>${total != null ? ` y escribe <b>${cop(total)}</b>` : ' y escribe el valor'}.</li><li>Envíanos el comprobante por WhatsApp.</li></ol>
+  <a class="btn ghost" href="${PAGO_QR}" download="Zuka-pago-BreB.png">Guardar QR</a></section>`;
+const openPago = (total, texto) => openSheet(`<div class="acct-form">${pagoHTML(total)}${waBoton(texto, 'Enviar comprobante', 'main brand')}</div>`);
+
 // ---------- comprar ----------
 // Se elige cuánto tiempo; queda la solicitud en el panel y se abre WhatsApp con el mensaje escrito. El acceso se activa
 // en el mismo código cuando el administrador confirma el pago.
@@ -447,10 +458,12 @@ async function openComprar(id) {
     o.onclick = () => elige(i);
     o.onkeydown = e => { const d = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); const j = (i + d + ops.length) % ops.length; elige(j); ops[j].focus(); } };
   });
-  box.insertAdjacentHTML('beforeend', `${Cuenta.ajustes.pago_info ? `<p class="muted compra-info">${esc(Cuenta.ajustes.pago_info)}</p>` : ''}<div class="compra-pie"></div>`);
+  box.insertAdjacentHTML('beforeend', `${Cuenta.ajustes.pago_info ? `<p class="muted compra-info">${esc(Cuenta.ajustes.pago_info)}</p>` : ''}<div class="compra-pie"></div><details class="pago-mas"><summary>Ver QR para pagar</summary><div></div></details>`);
   // Enlace de verdad (no window.open tras una espera): así ningún navegador lo bloquea.
   const pinta = () => {
     const u = waLink(Cuenta.ajustes.whatsapp, WA.compra({ curso, meses: sel.meses, precio: sel.precio, codigo: Cuenta.codigo, nombre: (Cuenta.perfil || {}).nombre }));
+    const mas = $('.pago-mas', box);
+    mas.hidden = sel.precio == null; $('div', mas).innerHTML = sel.precio == null ? '' : pagoHTML(sel.precio);
     $('.compra-pie', box).innerHTML = u ? `<a class="btn main brand" href="${esc(u)}" target="_blank" rel="noopener" data-pide>Pedir por WhatsApp</a>` : '<button class="btn main brand" type="button" data-pide>Solicitar</button>';
     $('[data-pide]', box).onclick = async () => {
       const msg = $('.form-msg', box);

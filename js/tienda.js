@@ -117,7 +117,7 @@ function tiendaVistaHTML() {
   return `<section><h2>Mis pedidos</h2>${Tienda.pedidos.length ? `<div class="td-lista">${Tienda.pedidos.map(p => `<article class="td-pedido"><div class="acct-head"><b>Pedido ${p.id}</b><span class="pill ${PEDIDO_ESTADO[p.estado][0]}">${PEDIDO_ESTADO[p.estado][1]}</span></div>
     <p>${p.items.map(x => `${x.cantidad > 1 ? `${x.cantidad} × ` : ''}${esc(x.nombre)}`).join(', ')}</p><p class="muted">${fechaCorta(p.creado_en)} · ${cop(p.total)}${p.envio ? ` (envío ${cop(p.envio)})` : ''}</p>
     ${p.guia ? `<p class="td-guia">${esc(p.transportadora)} · guía <b>${esc(p.guia)}</b></p>` : ''}
-    ${p.estado === 'pendiente' ? `<div class="acct-actions">${waBoton(pedidoTexto(p), 'Enviar comprobante', 'main brand')}<button class="btn ghost" type="button" data-cancela="${p.id}">Cancelar pedido</button></div>` : ''}</article>`).join('')}</div>` : '<p class="td-vacio">Aún no tienes pedidos.</p>'}</section>`;
+    ${p.estado === 'pendiente' ? `<div class="acct-actions"><button class="btn main brand" type="button" data-pago="${p.id}">Pagar</button><button class="btn ghost" type="button" data-cancela="${p.id}">Cancelar pedido</button></div>` : ''}</article>`).join('')}</div>` : '<p class="td-vacio">Aún no tienes pedidos.</p>'}</section>`;
 }
 function tiendaPinta(foco = '') {
   const el = $('#tienda'); if (!el) return;
@@ -136,6 +136,7 @@ function tiendaPinta(foco = '') {
   el.querySelectorAll('[data-mas]').forEach(b => { b.onclick = () => { const id = b.dataset.mas; Tienda.carro[id] = Math.min(10, (Tienda.carro[id] || 0) + 1); tiendaPinta(`[data-mas="${id}"], [data-menos="${id}"]`); }; });
   el.querySelectorAll('[data-menos]').forEach(b => { b.onclick = () => { const id = b.dataset.menos; if (--Tienda.carro[id] <= 0) delete Tienda.carro[id]; tiendaPinta(`[data-menos="${id}"], [data-mas="${id}"]`); }; });
   el.querySelectorAll('[data-compra]').forEach(b => { b.onclick = () => openComprar(b.dataset.compra); });
+  el.querySelectorAll('[data-pago]').forEach(b => { b.onclick = () => { const p = Tienda.pedidos.find(x => x.id === +b.dataset.pago); if (p) openPago(p.total, pedidoTexto(p)); }; });
   el.querySelectorAll('[data-leer]').forEach(b => { b.onclick = () => openLector(+b.dataset.leer); });
   el.querySelectorAll('[data-cancela]').forEach(b => { b.onclick = () => ask({ title: '¿Cancelar este pedido?', text: 'Si ya pagaste, no lo canceles: envíanos el comprobante.', ok: 'Sí, cancelar', cancel: 'Conservarlo', danger: true }).then(async si => {
     if (!si) return;
@@ -197,7 +198,8 @@ function tiendaListo(p) {
     <div class="td-cuerpo"><div class="td-in td-listo"><span class="canje-check">${ICON.check}</span><h2>Pedido recibido</h2><p class="td-precio">${cop(p.total)}</p>
       <p class="muted">Paga y envíanos el comprobante por WhatsApp. Al confirmarlo, lo digital se abre aquí mismo${p.envio ? ' y te avisamos el envío' : ''}.</p>
       ${Cuenta.ajustes.pago_info ? `<p class="td-info">${esc(Cuenta.ajustes.pago_info)}</p>` : ''}
-      ${waBoton(pedidoTexto(p), 'Enviar por WhatsApp', 'main brand')}<button class="btn ghost" type="button" data-td="pedidos">Ver mis pedidos</button></div></div>`;
+      ${pagoHTML(p.total)}
+      ${waBoton(pedidoTexto(p), 'Enviar comprobante', 'main brand')}<button class="btn ghost" type="button" data-td="pedidos">Ver mis pedidos</button></div></div>`;
   $('[data-td=cerrar]', el).onclick = tiendaCerrar;
   $('[data-td=pedidos]', el).onclick = () => { Tienda.vista = 'pedidos'; tiendaPinta(); };
   $('h1', el).focus({ preventScroll: true });

@@ -53,3 +53,11 @@ test('va registrada en la página, el service worker, el botón atrás y el pane
   const ad = read('admin/index.html'); assert.ok(ad.indexOf('tienda.js') < ad.indexOf('panel.js'));
   assert.match(read('admin/tienda.js'), /isEvalSupported: false/);
 });
+test('el QR de pago es el de Zuka y sale al comprar, al pedir y en los pedidos por pagar', () => {
+  // Si alguien cambia la imagen (a dónde va el dinero), esta huella lo avisa.
+  const h = require('crypto').createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'brand/pago-breb.png'))).digest('hex');
+  assert.equal(h, '74fbf1fc117b08c2a3015a2fa61f2f487239088346ff5d346b77f0a91d0c376b');
+  assert.equal((read('js/cuenta.js') + read('js/tienda.js')).match(/pagoHTML\((sel\.precio|total|p\.total)\)/g).length, 3);
+  assert.match(read('js/tienda.js'), /data-pago=/);
+  assert.match(read('sw.js'), /'brand\/pago-breb\.png'/);
+});
