@@ -9,7 +9,7 @@ const ROOT = path.join(__dirname, '..');
 function frases(id) {
   const ctx = vm.createContext({ console, Math, setTimeout, clearTimeout });
   ctx.window = ctx;
-  for (const f of ['js/explora.js', 'js/explora-angulo.js', `js/explora-${id}.js`]) {
+  for (const f of ['js/explora.js', 'js/explora-angulo.js', 'js/explora-numeros.js', 'js/explora-escenas.js', `js/explora-${id}.js`]) {
     const p = path.join(ROOT, f);
     if (fs.existsSync(p)) vm.runInContext(fs.readFileSync(p, 'utf8'), ctx, { filename: f });
   }

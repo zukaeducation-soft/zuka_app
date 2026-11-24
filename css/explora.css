@@ -301,3 +301,64 @@
 .xpw .xpw-sub, .xpw .xpw-big { font-size: 16px; font-weight: 600; fill: var(--ink); }
 .xpw .xpw-big { font-size: 22px; fill: var(--c-ink); }
 @media (prefers-reduced-motion: reduce) { .xc100 .xc-cell { transition: none; } }
+
+/* ---- escenas por datos (js/explora-escenas.js): dibujo, fichas y rejilla ---- */
+.xd:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 4px; border-radius: 12px; }
+.xd .xt { font-size: 14px; font-weight: 600; fill: var(--ink); }
+.xd .xt.s { font-size: 12px; font-weight: 500; }
+.xd .xt.b { font-size: 18px; }
+.xd .xt.B { font-size: 26px; }
+.xd .xt.ta { fill: var(--c-ink); }
+.xd .xt.tf { fill: var(--fire); }
+.xd .xt.tg { fill: var(--gold); }
+.xd .xt.to { fill: var(--ok); }
+.xd .xt.tm { fill: var(--mute); }
+.xd .xt.tc { fill: var(--c-on); }
+.xd .xl { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.xd .xl.la { stroke: var(--c-ink); }
+.xd .xl.lf { stroke: var(--fire); }
+.xd .xl.lg { stroke: var(--gold); }
+.xd .xl.lo { stroke: var(--ok); }
+.xd .xl.lm { stroke: var(--mute); stroke-width: 1.3; }
+.xd .xl.ls { stroke: var(--line); stroke-width: 1.2; }
+.xd .xl.lr { stroke: color-mix(in srgb, var(--c-ink) 45%, transparent); stroke-width: 1; }
+.xd .xl.gr { stroke-width: 3.4; }
+.xd .xl.d { stroke-dasharray: 4 5; }
+.xd .xf { fill: var(--card); stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; }
+.xd .xf.fa { fill: color-mix(in srgb, var(--c-ink) 26%, transparent); stroke: var(--c-ink); }
+.xd .xf.ff { fill: color-mix(in srgb, var(--fire) 24%, transparent); stroke: var(--fire); }
+.xd .xf.fg { fill: color-mix(in srgb, var(--gold) 26%, transparent); stroke: var(--gold); }
+.xd .xf.fo { fill: color-mix(in srgb, var(--ok) 24%, transparent); stroke: var(--ok); }
+.xd .xf.fA { fill: var(--c); stroke: var(--c); }
+.xd .xf.fc { fill: var(--card); stroke: var(--line); }
+.xd .xf.fn { fill: none; }
+.xd .xf.fk { fill: var(--ink); stroke: none; }
+.xd .xf.fF { fill: var(--fire); stroke: var(--fire); }
+.xd .xf.fG { fill: var(--gold); stroke: var(--gold); }
+.xd .xf.fM { fill: var(--mute); stroke: none; }
+.xd .xf.sn { stroke: none; }
+.xd .xf.d { stroke-dasharray: 4 5; }
+.xfi-sl { fill: color-mix(in srgb, var(--card) 70%, transparent); stroke: var(--mute); stroke-width: 1.3; stroke-dasharray: 4 4; }
+.xfi-sl.on { stroke: var(--c-ink); stroke-width: 2; }
+.xfi-ch { cursor: grab; }
+.xfi-ch rect { fill: var(--card); stroke: var(--line); stroke-width: 1.3; }
+.xfi-ch text { font-size: 15px; font-weight: 600; fill: var(--ink); }
+.xfi-ch.in rect { stroke: var(--c-ink); }
+.xfi-ch.mk rect { fill: var(--c); stroke: var(--c); }
+.xfi-ch.mk text { fill: var(--c-on); }
+.xfi-ch.fija rect { stroke: var(--mute); fill: var(--card2); }
+.xfi-ch.drag rect { stroke: var(--c-ink); stroke-width: 2; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--c) var(--halo), transparent)); }
+.xfi-ch:focus-visible { outline: none; }
+.xfi-ch:focus-visible rect { stroke: var(--c-ink); stroke-width: 2.6; }
+.xre-c { fill: var(--card); stroke: var(--line); stroke-width: 1.1; transition: fill .16s; }
+.xre-c.e3 { fill: var(--c); stroke: var(--c); }
+.xd .xf.cu { fill: color-mix(in srgb, var(--c-ink) 22%, var(--card)); stroke: var(--c-ink); stroke-width: 1.2; }
+.xd .xf.cu.b { fill: color-mix(in srgb, var(--c-ink) 34%, var(--card)); }
+.xre-c.e1 { fill: var(--c); stroke: var(--c); }
+.xre-c.e2 { fill: color-mix(in srgb, var(--fire) 20%, var(--card)); stroke: var(--fire); }
+.xre-c.dado { stroke-dasharray: 3 2; stroke: var(--mute); }
+.xre-c.luz, .xre-c.cur { stroke: var(--gold); stroke-width: 2.4; }
+.xre-t { font-size: 14px; font-weight: 600; fill: var(--ink); }
+.xre-t.e1, .xre-t.e3 { fill: var(--c-on); }
+.xre-t.e2 { fill: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .xre-c { transition: none; } }
