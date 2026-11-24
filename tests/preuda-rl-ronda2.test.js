@@ -65,7 +65,6 @@ test('pu-gr-1: de la cantidad al ángulo del sector', () => {
   const e = zona(L('pu-gr-1'), 'caza-error');
   assert.match(e.params.q, /Qué ángulo/);
   assert.match(e.params.fixes[0], new RegExp(`${30 / 180 * 360}\\^\\\\circ`));
-  assert.match(zona(L('pu-gr-1'), 'rueda-porcentaje').explain, new RegExp(`${18 / 120 * 360}\\^\\\\circ`));
 });
 
 test('pu-se-1: los dos sentidos de «alternada»', () => {

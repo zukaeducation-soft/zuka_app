@@ -1,98 +1,5 @@
 // Preuniversitario · mundo 9 «Tablas y gráficas»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setLesson, setExam }) => {
-  setLesson('pu-gr-1', [
-    play('lee-barras', 'Lee la gráfica con su escala', { rounds: [
-      { bars: [['lun', 35], ['mar', 50], ['mié', 20], ['jue', 45]], hi: 60, step: 10, q: 'diff', a: 1, b: 2, max: 60, tstep: 5 },
-      { bars: [['A', 120], ['B', 90], ['C', 150]], hi: 160, step: 40, q: 'sum', max: 400, tstep: 20 },
-    ] }, 'Martes llega a 50 y miércoles a 20: 30 más. Con rayas de 40 en 40, B queda a un cuarto del camino entre 80 y 120 (90) y C a tres cuartos entre 120 y 160 (150): $120 + 90 + 150 = 360$.',
-      { hint: 'Mira cuánto vale cada raya de la escala antes de leer una barra.' }),
-    play('arma-barras', 'Pasa la tabla a la gráfica', { rounds: [
-      { rows: [['fútbol', 12], ['baloncesto', 7], ['voleibol', 4], ['tenis', 9]], hi: 14, step: 2, snap: 1 },
-      { rows: [['2022', 150], ['2023', 225], ['2024', 300]], hi: 350, step: 50, snap: 25 },
-    ] }, 'Cada barra llega a su dato: con rayas de 2 en 2, el 7 y el 9 quedan entre dos rayas; con rayas de 50, el 225 queda en la mitad entre 200 y 250.',
-      { hint: 'Cuenta cuánto vale cada raya y cuántas necesitas para llegar al dato.' }),
-    play('mayor-subida', 'El tramo que más cambia', { rounds: [
-      { pts: [['ene', 20], ['feb', 26], ['mar', 24], ['abr', 33], ['may', 35]], hi: 40, step: 10, q: 'up' },
-      { pts: [['L', 4], ['M', 10], ['X', 20], ['J', 34]], hi: 40, step: 10, q: 'pct' },
-      { pts: [['1', 50], ['2', 44], ['3', 30], ['4', 28], ['5', 20]], hi: 60, step: 10, q: 'down' },
-    ] }, 'De marzo a abril sube 9, lo que más. En porcentaje gana el primer tramo: de 4 a 10 es +150 %, aunque de 20 a 34 suba más unidades (+70 %). La mayor bajada es de 44 a 30: −14.',
-      { hint: 'Para el porcentaje, compara lo que cambió con el valor de partida de ese tramo.' }),
-    play('variacion-barras', 'La variación porcentual', { rounds: [{ from: 40, to: 50, what: 'Visitas' }, { from: 80, to: 60, what: 'Precio' }, { from: 30, to: 75, what: 'Seguidores' }] },
-      'El cambio se mide sobre lo de antes: $\\tfrac{10}{40} = 25\\%$ de aumento; $\\tfrac{-20}{80} = -25\\%$; $\\tfrac{45}{30} = 150\\%$ de aumento.',
-      { hint: 'La barra de antes es el 100 %: ¿cuántas rayas de 10 % hay que agregar o quitar?' }),
-    play('rueda-porcentaje', 'La gráfica circular', { rounds: [{ part: 18, whole: 120 }, { part: 63, whole: 90 }], tol: 1 },
-      'Cada sector es su parte del total: $\\tfrac{18}{120} = 15\\%$ y $\\tfrac{63}{90} = 70\\%$.',
-      { hint: 'Divide la parte entre el total y multiplica por 100.' }),
-    play('cruz-porcentaje', 'De la gráfica a la cantidad', { problems: [
-      { text: 'El 30 % de 120 encuestados prefiere rock. ¿Cuántos son?', chips: [{ label: '30', cell: 'p' }, { label: '120', cell: 'C' }, { label: '?', cell: 'B' }, { label: '90', cell: null }] },
-      { text: '18 de los 60 estudiantes llegan a pie. ¿Qué porcentaje es?', chips: [{ label: '?', cell: 'p' }, { label: '60', cell: 'C' }, { label: '18', cell: 'B' }, { label: '42', cell: null }] },
-    ] }, 'El total va con el 100 % y la parte con su porcentaje: $120 \\cdot 0.30 = 36$ y $\\tfrac{18}{60} = 30\\%$.',
-      { hint: 'El total de encuestados es el 100 %; la parte que se pregunta va enfrente de su porcentaje.' }),
-    play('vuela-precios', 'Vuela a la lectura correcta', { rounds: [{ title: 'Gráficas', items: [
-      { ask: 'En una torta, un sector de 90° es…', options: ['25 %', '90 %', '9 %'], answer: 0 },
-      { ask: 'De 200 a 150, el cambio es…', options: ['−25 %', '−50 %', '+25 %'], answer: 0 },
-      { ask: 'Barras de 30 y 45: la segunda tiene…', options: ['15 más', '45 más', '75 más'], answer: 0 },
-    ] }] }, '$\\tfrac{90}{360} = 25\\%$. $\\tfrac{-50}{200} = -25\\%$. $45 - 30 = 15$.',
-      { hint: 'Torta: compara con 360°. Cambio: divide entre lo de antes.' }),
-  ]);
-
-  setLesson('pu-gr-2', [
-    play('nivela-datos', 'El promedio es nivelar', { rounds: [{ data: [4, 9, 6, 3, 8], hi: 10, step: 2 }, { data: [12, 5, 9, 10], hi: 14, step: 2 }, { data: [7, 2, 5, 4], hi: 8, step: 2 }] },
-      'El promedio deja todo parejo: $\\tfrac{30}{5} = 6$, $\\tfrac{36}{4} = 9$ y $\\tfrac{18}{4} = 4.5$. Ahí lo que sobra arriba llena justo lo que falta abajo.',
-      { hint: 'Si sobra más de lo que falta, la línea está muy baja.' }),
-    play('ordena-mediana', 'La mediana pide orden', { rounds: [{ data: [8, 3, 5, 8, 1, 6, 4] }, { data: [12, 7, 9, 15, 7, 10] }] },
-      'Ordenados: 1, 3, 4, **5**, 6, 8, 8 (mediana 5). Con seis datos, 7, 7, **9, 10**, 12, 15: se promedian los dos del medio, 9.5.',
-      { hint: 'Escribe cada dato tantas veces como aparece, de menor a mayor.' }),
-    play('tres-centros', 'Media, mediana y moda', { rounds: [{ data: [2, 3, 3, 3, 4, 5, 8, 12], lo: 0, hi: 12 }, { data: [1, 5, 6, 6, 7], lo: 0, hi: 8 }] },
-      'En la primera: media $\\tfrac{40}{8} = 5$, mediana $\\tfrac{3 + 4}{2} = 3.5$ y moda 3: el 12 jala la media hacia la derecha. En la segunda: media 5, mediana 6, moda 6: el 1 la jala a la izquierda.',
-      { hint: 'La moda es la pila más alta; la mediana, el dato del medio; la media, la suma entre la cantidad.' }),
-    play('dato-faltante', 'El dato que falta', { rounds: [{ data: [6, 8, null, 7], mean: 8, hi: 12, step: 1 }, { data: [40, null, 55, 45, 50], mean: 50, hi: 80, step: 5 }] },
-      'La suma tiene que ser promedio por cantidad: $8 \\cdot 4 = 32$ y faltan $32 - 21 = 11$; $50 \\cdot 5 = 250$ y faltan $250 - 190 = 60$.',
-      { hint: 'Multiplica el promedio por la cantidad de datos y resta lo que ya tienes.' }),
-    play('balanza-promedio', 'El promedio de todos juntos', { rounds: [
-      { groups: [{ lab: 'A', n: 6, mean: 3 }, { lab: 'B', n: 2, mean: 7 }], lo: 0, hi: 10 },
-      { groups: [{ lab: 'mañana', n: 2, mean: 9 }, { lab: 'tarde', n: 5, mean: 3 }, { lab: 'noche', n: 1, mean: 7 }], lo: 0, hi: 10 },
-    ] }, 'Cada grupo pesa según cuántos son: $\\tfrac{6 \\cdot 3 + 2 \\cdot 7}{8} = 4$, no 5 (el promedio de los promedios). Y $\\tfrac{18 + 15 + 7}{8} = 5$.',
-      { hint: 'El grupo con más personas jala más el apoyo hacia su lado.' }),
-    play('nivela-barras', 'Nivela una escalera de datos', { rounds: [{ a1: 2, d: 3, n: 5 }] },
-      'Datos que suben parejo tienen el promedio en el medio: $\\tfrac{2 + 14}{2} = 8$, y suman $5 \\cdot 8 = 40$.',
-      { hint: 'Lo que sobra en la barra más alta llena lo que falta en la más baja.' }),
-    play('rompe-cambios', 'Manda la pelota al centro correcto', { miss: 'ordena los datos antes de buscar la mediana', rounds: [{ title: 'Centros', items: [
-      { ask: 'Promedio de 4, 6 y 11', options: ['7', '6', '21'], answer: 0 },
-      { ask: 'Mediana de 9, 2, 7, 4, 10', options: ['7', '4', '6.4'], answer: 0 },
-      { ask: 'Moda de 3, 5, 5, 2, 3, 5', options: ['5', '3', '4'], answer: 0 },
-    ] }] }, '$\\tfrac{21}{3} = 7$. Ordenados 2, 4, 7, 9, 10: mediana 7. El 5 aparece tres veces: moda 5.',
-      { hint: 'Promedio: suma y divide. Mediana: ordena. Moda: el que más se repite.' }),
-  ]);
-
-  const G1 = ['1111110000', '1111100000', '1111110000', '1111000000', '1111100000', '1111110000', '1111100000', '1111000000', '1111100000', '1111110000'];
-  const G2 = ['1111111111', '1111111111', '1111111111', '1111111111', '1111100000', '0000000000', '0010000100', '0000000000', '0000010000', '0000000000'];
-  setLesson('pu-gr-3', [
-    play('muestra-sesgo', 'La muestra que representa', { rounds: [{ grid: G1, w: 4, h: 5, tol: 5 }, { grid: G2, w: 5, h: 4, tol: 5 }] },
-      'Una muestra tomada en un solo rincón engaña: en la primera cuadrícula el «sí» está a la izquierda y en la segunda arriba. La muestra se parece al pueblo cuando toma de las dos zonas.',
-      { hint: 'Pon el marco donde quede gente de los dos lados de la frontera.' }),
-    play('eje-engano', 'El eje que engaña', { rounds: [{ a: ['marca A', 55], b: ['marca B', 50], floor: 45 }, { a: ['2024', 84], b: ['2023', 70], floor: 60 }] },
-      'Con el eje cortado, A parece el doble de B, pero $\\tfrac{55 - 50}{50} = 10\\%$ más. Y 84 frente a 70 es $\\tfrac{14}{70} = 20\\%$ más.',
-      { hint: 'Baja el piso a 0 para ver las barras de verdad; el porcentaje se calcula con los números, no con el dibujo.' }),
-    play('tabla-doble', 'Más gente no es más proporción', { rounds: [
-      { rows: [['colegio A', 18, 30], ['colegio B', 28, 70]], what: 'usa bicicleta' },
-      { rows: [['barrio norte', 45, 60], ['barrio sur', 33, 55]], what: 'recicla' },
-    ] }, 'En B son más (28 frente a 18), pero en proporción gana A: 60 % frente a 40 %. Y en el norte, 75 % frente a 60 % en el sur.',
-      { hint: 'Divide cada «sí» entre el total de su grupo, no entre el total de todos.' }),
-    play('lee-barras', 'Lee con el eje cortado', { rounds: [{ bars: [['Ana', 82], ['Beto', 78], ['Caro', 86]], lo: 70, hi: 90, step: 5, q: 'diff', a: 2, b: 1, max: 20, tstep: 1 }] },
-      'La barra de Caro parece el doble de la de Beto, pero el eje empieza en 70: la diferencia real es $86 - 78 = 8$.',
-      { hint: 'Lee los números del eje, no la altura del dibujo.' }),
-    play('variacion-barras', '¿Se duplicó o no?', { rounds: [{ from: 120, to: 180, what: 'Ventas' }, { from: 200, to: 50, what: 'Llamadas' }] },
-      'De 120 a 180 es +50 %, no el doble (eso sería +100 %). De 200 a 50 es −75 %: quedó la cuarta parte.',
-      { hint: 'Duplicar es +100 %; quedar en la mitad es −50 %.' }),
-    play('pinta-personas', 'La muestra en porcentaje', { rounds: [{ total: 40, pct: 35, what: 'prefieren la radio' }, { total: 25, pct: 44, what: 'llegan en bus' }] },
-      'El porcentaje es de cada 100: $40 \\cdot 0.35 = 14$ y $25 \\cdot 0.44 = 11$.',
-      { hint: 'Halla cuánto por ciento vale cada persona del grupo.' }),
-    play('tanque-porcentaje', 'Llena el tanque al porcentaje', { rounds: [{ title: 'Litros', items: [{ cap: 120, pct: 25, step: 5 }, { cap: 60, pct: 40, step: 3 }] }] },
-      'El 25 % de 120 es 30 litros y el 40 % de 60 es 24.',
-      { hint: 'El tanque lleno es el 100 %: parte la capacidad en cien y toma las que pide.' }),
-  ]);
-
+PU_JUEGOS.push(({ setExam }) => {
   setExam('pu-graficas', 'Tablas y gráficas', [
     ['pu-gr-1', 'Antes de leer una barra, mira cuánto vale cada raya de la escala.',
       play('lee-barras', 'Escala', { rounds: [{ bars: [['X', 60], ['Y', 25], ['Z', 40]], hi: 80, step: 20, q: 'diff', a: 0, b: 1, max: 60, tstep: 5 }] }, '$60 - 25 = 35$.', { hint: 'Rayas.' })],
@@ -112,16 +19,39 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 });
 
 // Mundo 9 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
-  diezLesson('pu-gr-1', [
-    ['lee-barras', 0, 'La gráfica muestra los almuerzos vendidos de lunes a jueves. ¿Cuántos más se vendieron el martes que el miércoles?', 'El eje sube de 10 en 10: martes 50 y miércoles 20. La diferencia es 30.'],
-    ['arma-barras', 0, 'Una encuesta de deportes llegó en una tabla. Pásala a la gráfica de barras', 'Cada barra sube hasta el número de su fila: 12, 7, 4 y 9. La escala va de 2 en 2, así que 7 y 9 quedan entre dos líneas.'],
-    ['mayor-subida', 1, 'Las visitas a una página crecen cada día. ¿En qué tramo fue mayor el aumento en porcentaje?', 'En visitas, el salto más grande es el último (14). En porcentaje gana el primero: pasar de 4 a 10 es crecer un 150 %.'],
-    ['variacion-barras', 1, 'Un precio pasó de 80 a 60. Halla la variación porcentual', 'Bajó 20 sobre los 80 de antes: $20 \\div 80 = 0.25$, una caída del 25 %. Para comparar dos variaciones muy parecidas sin calculadora, compara las fracciones con una que conozcas: bajar 18 sobre 75 es un poco menos que $\\tfrac14$, porque $18 \\cdot 4 = 72$ y 72 no llega a 75. Así que bajar de 75 a 57 es caer menos que el 25 %.'],
-    ['rueda-porcentaje', 0, 'En una gráfica circular de 120 encuestados, 18 eligieron teatro. Gira hasta esa parte', '$18 \\div 120 = 0.15$: el 15 % del círculo. Para dibujar el sector se pasa a grados con la misma fracción: $0.15 \\cdot 360^\\circ = 54^\\circ$.'],
-    ['cruz-porcentaje', { problems: [{ text: 'El 30 % de 120 encuestados prefiere rock. ¿Cuántos son?', chips: [{ label: '30', cell: 'p' }, { label: '120', cell: 'C' }, { label: '?', cell: 'B' }] }] }, 'De la gráfica a la cantidad: arma la cruz del porcentaje', 'La cruz es $\\tfrac{100}{120} = \\tfrac{30}{B}$: prefieren rock 36 personas.'],
-    ['vuela-precios', 0, 'Vuela a la lectura correcta', 'Un sector de 90° es la cuarta parte: 25 %. De 200 a 150 se pierden 50 sobre 200: $-25\\,\\%$. Entre barras de 30 y 45 hay 15 de diferencia.'],
-  ], [
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/graficas-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-gr-1', [
+    play('lee-escala', 'Estas son las entradas vendidas en tres funciones. Pon cuánto vale **cada barra** y el **total**.', { vals: [90, 50, 70], rot: ['viernes', 'sábado', 'domingo'], hi: 100, st: 20, et: ['viernes', 'sábado', 'domingo', 'total'], ops: ['+', '+', '='], metas: ['90', '50', '70', '210'], fichas: ['90', '50', '70', '210', '85', '45', '65'],
+      mira: ['Está a mitad de camino entre 80 y 100.', 'Está a mitad de camino entre 40 y 60.', 'Está a mitad de camino entre 60 y 80.', 'Suma las tres barras.'], trampas: { '0:85': 'Cada línea vale 20: la mitad son 10, no 5.', '1:45': 'Cada línea vale 20: la mitad son 10, no 5.', '2:65': 'Cada línea vale 20: la mitad son 10, no 5.' }, ok: 'Primero la escala, luego la punta.' },
+      'Las líneas van de 20 en 20, así que la mitad vale 10: $90 + 50 + 70 = 210$.',
+      { hint: 'Antes de leer, mira cuánto vale cada línea del eje. ¿Y la mitad de una línea?' }),
+    play('pasa-tabla', 'Pasa la tabla a la gráfica: Norte **150**, Centro **225**, Sur **75**. Arrastra la punta de cada barra.', { vals: [150, 225, 75], rot: ['Norte', 'Centro', 'Sur'], hi: 250, st: 50, paso: 25 },
+      'Las líneas van de 50 en 50: el 150 cae en una línea; el 225 y el 75 van a mitad de camino.',
+      { hint: 'Cada línea vale 50. ¿Qué número queda a mitad entre dos líneas?' }),
+    play('mayor-tramo', 'La gráfica muestra las ventas de cuatro meses. Toca el tramo que más creció **en porcentaje**.', { v: [15, 18, 27, 38] },
+      'De 15 a 18 sube $\\tfrac{3}{15} = 20\\,\\%$; de 18 a 27, $\\tfrac{9}{18} = 50\\,\\%$; de 27 a 38, cerca del 41 %. El último sube más unidades, pero no más porcentaje.',
+      { hint: 'Divide lo que subió cada tramo entre el valor con que empezó ese tramo.' }),
+    play('barra-baja', 'Una tienda vendía **70** y las ventas bajaron el **40 %**. Arrastra la barra de ahora hasta donde debe quedar.', { a: 70, pc: 40, max: 96 },
+      'El 40 % de 70 es 28: quedan $70 - 28 = 42$.',
+      { hint: 'El porcentaje es de lo que había antes. Halla cuánto se pierde y réstalo.' }),
+    play('ida-vuelta-porciento', 'Un precio pasa de 20 a 50 y después vuelve a 20. Pon el **cambio en porcentaje** de cada paso.', { a: 20, b: 50, et: ['20 → 50', '50 → 20'], metas: ['+150 %', '−60 %'], fichas: ['+150 %', '−60 %', '+60 %', '−150 %', '+30 %', '−30 %'],
+      mira: ['Sube 30: compáralo con los 20 de antes.', 'Baja 30: compáralo con los 50 de antes.'], trampas: { '0:+60 %': 'Dividiste entre 50; lo de antes es 20.', '0:+30 %': '30 son las unidades que subió, no el porcentaje.', '1:−150 %': 'Dividiste entre 20; ahora lo de antes es 50.', '1:−30 %': '30 son las unidades que bajó, no el porcentaje.', '0:−60 %': 'Primero sube.', '0:−30 %': 'Primero sube.', '0:−150 %': 'Primero sube.' }, ok: 'La misma diferencia, distinto porcentaje.' },
+      '$\\tfrac{30}{20} = 150\\,\\%$ de aumento; de vuelta, $\\tfrac{30}{50} = 60\\,\\%$ de bajada.',
+      { hint: 'La diferencia es la misma en los dos pasos. ¿Entre qué número se divide en cada uno?' }),
+    play('abre-sector', 'De **120** personas, **54** eligieron cine. Abre el sector del cine hasta el tamaño que le toca.', { parte: 54, total: 120 },
+      '$\\tfrac{54}{120} = 45\\,\\%$, y $45 \\cdot 3.6^\\circ = 162^\\circ$.',
+      { hint: 'Halla qué porcentaje del total son. La vuelta completa es el 100 %.' }),
+    play('sector-cantidad', 'En esta torta de **250** personas, el sector de la danza mide **72°**. Pon su porcentaje y cuántas personas son.', { g: 72, total: 250, et: ['porcentaje', 'personas'], metas: ['20 %', '50'], fichas: ['20 %', '50', '72 %', '180', '72', '36 %'],
+      mira: ['Compara 72° con la vuelta completa de 360°.', 'Saca ese porcentaje de las 250 personas.'], trampas: { '0:72 %': 'Los grados no son porcentaje: la vuelta tiene 360°.', '1:180': 'Ese es el 72 % de 250: el sector no es el 72 %.', '1:72': 'No es una persona por grado.' }, ok: 'El sector es una fracción de la vuelta.' },
+      '$\\tfrac{72}{360} = 20\\,\\%$, y el 20 % de 250 son 50 personas.',
+      { hint: '¿Cuántas veces cabe el sector en la vuelta completa?' }),
+    play('sube-grafica', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Las líneas del eje van de **20 en 20**. Una barra queda a **mitad** entre 40 y 60. ¿Cuánto vale?', r: 50, c: '40 + 10', e: { 45: 'La mitad de 20 no es 5.' } },
+      { q: 'Las ventas pasan de **60** a **75**. ¿En qué **porcentaje** aumentaron?', r: 25, c: '15 \\div 60 \\cdot 100', e: { 15: 'Esas son las unidades.', 20: 'Dividiste entre 75: se divide entre lo de antes.', 80: 'Comparaste los dos valores: halla primero cuánto subió.' } },
+      { q: 'Un sector mide **126°**. ¿Qué **porcentaje** de la torta es?', r: 35, c: '126 \\div 3.6', e: {} }] },
+      'La mitad entre 40 y 60 es 50; $\\tfrac{15}{60} = 25\\,\\%$; y $126 \\div 3.6 = 35$.',
+      { hint: 'Escala del eje, cambio entre lo de antes, y 3.6° por cada 1 %.' }),
     sol('Una papelería vendió 120 cuadernos en la semana 1, 150 en la semana 2, 90 en la semana 3 y 180 en la semana 4. ¿En qué porcentaje aumentaron las ventas de la semana 3 a la 4? ¿Cuál fue el promedio de ventas por semana?',
       ['De la semana 3 a la 4 las ventas subieron $180 - 90 =$ [[90]] cuadernos', 'El cambio se mide sobre el valor de antes: $90 \\div 90 = 1$, es decir, el [[100 %]]', 'En las cuatro semanas se vendieron $120 + 150 + 90 + 180 =$ [[540]] cuadernos', 'Promedio por semana: $540 \\div 4 =$ [[135]] cuadernos'],
       ['50 %', '200 %', '180'],
@@ -138,15 +68,38 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Calcula la diferencia en cada tramo. Un cambio puede ser una subida o una bajada.'),
   ]);
 
-  diezLesson('pu-gr-2', [
-    ['nivela-datos', 0, 'Cinco amigos llevan 4, 9, 6, 3 y 8 dulces. Nivela las barras para repartirlos por igual', 'Entre todos tienen 30 dulces: nivelados, cada uno queda con $30 \\div 5 = 6$. Ese es el promedio.'],
-    ['ordena-mediana', 1, 'Seis atletas marcaron estos tiempos. Ordénalos y halla la mediana', 'Ordenados: 7, 7, 9, 10, 12, 15. Con un número par de datos, la mediana es el promedio de los dos del centro: 9.5.'],
-    ['tres-centros', 0, 'Los salarios de una empresa pequeña: ubica la media, la mediana y la moda', 'Moda 3 (el que más se repite), mediana 3.5 (entre 3 y 4) y media 5: los dos datos grandes jalan la media hacia arriba.'],
-    ['dato-faltante', 1, 'Un vendedor necesita promediar 50 en cinco días y ya lleva 40, 55, 45 y 50. Halla el dato que falta', 'Para promediar 50 en cinco días debe sumar 250. Lleva 190: le faltan 60.'],
-    ['balanza-promedio', 0, 'Seis estudiantes promediaron 3 y otros dos promediaron 7. Ubica el promedio de todos', 'El grupo grande pesa más: $\\tfrac{6 \\cdot 3 + 2 \\cdot 7}{8} = \\tfrac{32}{8} = 4$, más cerca del 3 que del 7.'],
-    ['nivela-barras', 0, 'Los datos suben como una escalera. Nivélala', 'En una escalera pareja (2, 5, 8, 11, 14) el promedio es el dato del centro: 8.'],
-    ['rompe-cambios', 0, 'Manda la pelota al centro correcto', 'Promedio: $21 \\div 3 = 7$. Mediana de 2, 4, 7, 9, 10: el del centro, 7. Moda: el 5, que sale tres veces.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/graficas-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-gr-2', [
+    play('nivela-linea', 'Cinco personas tienen **3, 11, 4, 8 y 9** fichas y las reparten por igual. Lleva la línea al **promedio**.', { d: [3, 11, 4, 8, 9] },
+      'En total son 35 y entre cinco, $35 \\div 5 = 7$.',
+      { hint: 'Junta todas las fichas y repártelas por igual.' }),
+    play('dato-para-promedio', 'Los datos son 3, 8, 2, 5 y **uno más**. Muévelo hasta que el **promedio** sea 6.', { d: [3, 8, 2, 5], m: 6 },
+      'Cinco datos con promedio 6 suman 30. Ya hay 18: faltan 12.',
+      { hint: '¿Cuánto deben sumar los cinco datos? ¿Cuánto suman los cuatro que ya están?' }),
+    play('ordena-centro', 'Pon los datos **en orden**, de menor a mayor, y después la **mediana**.', { d: [12, 5, 9, 20, 7, 5, 14], metas: ['5', '5', '7', '9', '12', '14', '20', '9'], fichas: ['5', '5', '7', '9', '12', '14', '20', '9', '20', '5'],
+      mira: ['Va el menor.', 'El 5 está dos veces: se escribe dos veces.', 'Después de los dos 5 sigue el 7.', 'Sigue el 9.', 'Sigue el 12.', 'Sigue el 14.', 'Va el mayor.', 'La mediana deja tres datos a cada lado.'], trampas: { '7:20': 'El 20 está en el medio sin ordenar: primero se ordena.', '7:5': 'Ese es el que se repite: la moda.' }, ok: 'Tres datos a cada lado.' },
+      'En orden: 5, 5, 7, **9**, 12, 14, 20. Quedan tres a cada lado del 9.',
+      { hint: 'Los datos repetidos se escriben todas las veces. La mediana es el del medio, ya ordenados.' }),
+    play('centros-par', 'Pon el **promedio**, la **mediana** y la **moda** de estos seis datos.', { d: [10, 2, 12, 2, 7, 15], et: ['promedio', 'mediana', 'moda'], metas: ['8', '8.5', '2'], fichas: ['8', '8.5', '2', '7', '8.5', '10', '48', '15'],
+      mira: ['Suma los seis y divide entre seis.', 'Ordena: con seis datos hay dos en el medio.', 'La moda es el que más se repite.'], trampas: { '0:48': 'Esa es la suma: falta dividir.', '0:8.5': 'Esa es la mediana.', '1:7': 'Ordena primero: con seis datos hay dos en el medio, 7 y 10.', '1:10': 'Ordena primero: con seis datos hay dos en el medio, 7 y 10.', '2:15': 'Ese es el mayor, no el más repetido.' }, ok: 'Con cantidad par, la mediana es el promedio de los dos del medio.' },
+      'La suma es 48 y $48 \\div 6 = 8$. En orden, 2, 2, 7, 10, 12, 15: en el medio están 7 y 10, mediana 8.5. Se repite el 2.',
+      { hint: 'Ordena primero. Con seis datos, la mediana queda entre dos.' }),
+    play('dato-exagerado', 'El mayor de estos datos se escribió mal: **93** en lugar de 13. Toca **todo** lo que **cambia**.', { d: [4, 5, 5, 8, 13], e: [4, 5, 5, 8, 93], cols: 2, fichas: ['promedio', 'mediana', 'moda', 'suma'] },
+      'La suma pasa de 35 a 115 y el promedio, de 7 a 23. El del medio sigue siendo 5 y el más repetido también.',
+      { hint: '¿Cambió el dato del medio? ¿Cambió el que más se repite? ¿Y el total?' }),
+    play('apoyo-grupos', 'Tres personas sacaron **1** y dos sacaron **6**. Lleva el apoyo al **promedio** de las cinco.', { g: [[3, 1], [2, 6]] },
+      '$\\tfrac{3 \\cdot 1 + 2 \\cdot 6}{5} = \\tfrac{15}{5} = 3$, más cerca del grupo grande.',
+      { hint: 'No es el centro entre 1 y 6: cuenta cada valor tantas veces como personas lo tienen.' }),
+    play('meses-mas', 'En **6** meses Lina promedió **3** libros por mes. Con **2** meses más, el promedio de los 8 subió a **4**. Pon los libros de los 6 meses, los de los 8 y los de los **dos últimos**.', { n: 6, mas: 2, et: ['en 6', 'en 8', 'en los 2'], metas: ['18', '32', '14'], fichas: ['18', '32', '14', '8', '24', '1', '2'],
+      mira: ['Libros = promedio por meses.', 'Ahora son 8 meses con promedio 4.', 'Resta los libros de antes a los de ahora.'], trampas: { '1:8': 'Esos son los meses: falta multiplicar por el promedio.', '1:24': 'Son 8 meses con promedio 4, no 8 con 3 ni 6 con 4.', '2:8': 'Multiplicaste 2 · 4, pero los dos últimos subieron el promedio de todos.', '2:1': 'Eso subió el promedio, no los libros leídos.', '2:2': 'Esos son los meses, no los libros.' }, ok: 'Promedio por cantidad da la suma.' },
+      '$6 \\cdot 3 = 18$ y $8 \\cdot 4 = 32$: en los dos últimos leyó $32 - 18 = 14$.',
+      { hint: 'Cambia cada promedio por una suma: promedio por cuántos son.' }),
+    play('sube-centro', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'El **promedio** de 5, 9, 13 y 17 es…', r: 11, c: '44 \\div 4', e: { 13: 'Ese es uno de los datos: suma y divide entre cuatro.' } },
+      { q: 'La **mediana** de 3, 14, 21, 6 y 8 es…', r: 8, c: '3, 6, [8], 14, 21 \\Rightarrow \\text{mediana}', e: { 21: 'Está en el medio sin ordenar: primero se ordena.' } },
+      { q: 'Una persona sacó **2** y cuatro sacaron **12**. El **promedio** de las cinco es…', r: 10, c: '(2 + 4 \\cdot 12) \\div 5', e: { 7: 'Ese es el centro entre 2 y 12: los grupos no son iguales.' } }] },
+      '$44 \\div 4 = 11$; en orden 3, 6, 8, 14, 21, la mediana es 8; y $50 \\div 5 = 10$.',
+      { hint: 'Promedio: suma y reparte. Mediana: ordena. Grupos: cada valor cuenta tantas veces como personas.' }),
     sol('En un curso, la nota definitiva se calcula así: el examen parcial vale el 40 % y el examen final vale el 60 %. Andrea obtuvo 3.0 en el parcial. ¿Qué nota necesita en el final para que su definitiva sea 3.6?',
       ['El parcial aporta $0.40 \\cdot 3.0 =$ [[1.2]]', 'Para llegar a 3.6, el final debe aportar $3.6 - 1.2 =$ [[2.4]]', 'El final pesa 0.60: la nota debe ser $2.4 \\div 0.60 =$ [[4.0]]'],
       ['4.2', '3.6', '1.8'],
@@ -163,15 +116,37 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Calcula los tres: el promedio, el dato del centro y el que más se repite.'),
   ]);
 
-  diezLesson('pu-gr-3', [
-    ['muestra-sesgo', 0, 'Un periodista quiere saber qué opina toda la ciudad. Ubica la muestra donde mejor la represente', 'Una buena muestra se parece al total: debe tener la misma mezcla de opiniones, no solo las del lado donde es más fácil preguntar.'],
-    ['eje-engano', 0, 'Un anuncio compara dos marcas con el eje cortado. Baja el eje hasta el 0 para ver la diferencia real', 'Con el eje desde 45, la barra de 55 parece el doble de la de 50. Desde 0 se ve la verdad: solo es un 10 % más alta.'],
-    ['tabla-doble', 0, 'En el colegio A usan bicicleta 18 de 30 estudiantes y en el B, 28 de 70. ¿Dónde es mayor la proporción?', 'En B hay más ciclistas, pero A gana en proporción: $18 \\div 30 = 60\\,\\%$ contra $28 \\div 70 = 40\\,\\%$.'],
-    ['lee-barras', 0, 'El eje de esta gráfica de puntajes no empieza en 0. ¿Cuánto más sacó Caro que Beto?', 'Se leen los valores, no los tamaños: $86 - 78 = 8$ puntos, aunque la barra de Caro parezca el doble.'],
-    ['variacion-barras', 0, 'Un titular dice que las ventas «se duplicaron» al pasar de 120 a 180. Mide la variación real', 'Subieron 60 sobre 120: un 50 %. Duplicarse sería un 100 %, llegar a 240.'],
-    ['pinta-personas', 0, 'En una muestra de 40 personas, el 35 % prefiere la radio. Píntalas', 'El 10 % de 40 es 4: el 35 % son $12 + 2 = 14$ personas.'],
-    ['tanque-porcentaje', 0, 'Llena cada tanque al porcentaje pedido'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/graficas-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-gr-3', [
+    play('sube-piso', 'A vendió 40 y B vendió 50. ¿En qué número debe **empezar el eje** para que B **parezca el triple** de alta que A?', { a: 40, b: 50, veces: 3 },
+      'Con el eje desde 35, las barras miden 5 y 15: parece el triple, pero 50 es solo un 25 % más que 40.',
+      { hint: 'Si el eje empieza más arriba, a las dos barras se les quita lo mismo. ¿Cuánto debe quedar de cada una?' }),
+    play('diferencia-real', 'Mira dónde empieza el eje. Pon cuánto **más** vendió B y qué **porcentaje** más vendió.', { vals: [90, 108], rot: ['A: 90', 'B: 108'], hi: 110, st: 10, lo: 80, et: ['unidades', 'porcentaje'], metas: ['18', '20 %'], fichas: ['18', '20 %', '28', '180 %', '18 %', '17 %'],
+      mira: ['Resta los dos valores, no las alturas.', 'Compara las 18 unidades con las 90 de A.'], trampas: { '0:28': 'Esa es la altura de B desde 80: resta los valores.', '1:180 %': 'Comparaste el dibujo, que empieza en 80: compara los números.', '1:17 %': 'Dividiste entre 108; se compara con los 90 de A.', '1:18 %': '18 son las unidades: falta compararlas con las 90 de A.' }, ok: 'Se comparan los números, no el dibujo.' },
+      '$108 - 90 = 18$ y $\\tfrac{18}{90} = 20\\,\\%$, aunque B se vea casi tres veces más alta.',
+      { hint: 'Lee los números. El porcentaje se compara con lo que vendió A.' }),
+    play('pasan-porciento', 'En cada grupo se cuenta cuántos hablan inglés. Toca **todos** los grupos donde son el **40 % o más**.', { min: 40, cols: 3, fichas: ['12 de 30', '18 de 60', '11 de 25', '25 de 80', '14 de 35', '30 de 90'] },
+      '$\\tfrac{12}{30} = 40\\,\\%$, $\\tfrac{11}{25} = 44\\,\\%$ y $\\tfrac{14}{35} = 40\\,\\%$. Los otros tienen más personas, pero menos proporción.',
+      { hint: 'El 40 % son 4 de cada 10. Compara cada cantidad con su propio total.' }),
+    play('misma-proporcion', 'En el grupo A, **15 de 25** tocan un instrumento. ¿Cuántos deben tocar en el B, que tiene **40**, para que la **proporción** sea la misma?', { ka: 15, ta: 25, tb: 40 },
+      '$\\tfrac{15}{25} = 60\\,\\%$, y el 60 % de 40 son 24.',
+      { hint: '¿Qué porcentaje es 15 de 25? Saca ese mismo porcentaje de 40.' }),
+    play('muestra-parecida', 'Un colegio tiene 50 estudiantes en la mañana, 30 en la tarde y 20 en la noche. Arma una muestra de **20** que tenga **la misma mezcla** que el colegio.', { tot: [50, 30, 20], et: ['mañana', 'tarde', 'noche'], metas: ['10', '6', '4'], fichas: ['10', '6', '4', '7', '7', '6', '20', '5'],
+      mira: ['La mañana es la mitad del colegio.', 'La tarde es el 30 % del colegio.', 'La noche es el 20 % del colegio.'], trampas: { '0:7': '7 sería la parte si las jornadas fueran iguales; la mañana es la mitad.', '0:20': '20 es toda la muestra: no queda nadie para las otras jornadas.', '1:7': '7 sería la parte si las jornadas fueran iguales; la tarde es el 30 %.' }, ok: 'La muestra se parece al total.' },
+      'La mañana es el 50 %, la tarde el 30 % y la noche el 20 %: de 20 son 10, 6 y 4.',
+      { hint: '¿Qué parte del colegio es cada jornada? Esa misma parte va en la muestra.' }),
+    play('muestras-sirven', 'Se quiere saber a qué hora se acuestan **todos** los vecinos de un edificio. Toca **todas** las muestras que sirven.', { casos: [{ t: 'sortear 20 vecinos entre todos', si: true }, { t: 'los que llegan de una fiesta', no: 'Los que salen de fiesta se acuestan más tarde que los demás.' }, { t: 'solo los del primer piso', no: 'Los vecinos de los otros pisos nunca pueden salir.' }, { t: 'sortear 3 vecinos en cada piso', si: true }, { t: 'solo el chat de los jóvenes', no: 'Los demás vecinos quedan por fuera.' }], falta: 'Falta otra donde todos los vecinos pueden salir.', ok: 'Al azar y de todas partes.' },
+      'Sirven los dos sorteos: cualquiera puede salir. Las otras dejan por fuera a muchos vecinos.',
+      { hint: 'Pregúntate si cualquier vecino puede salir escogido.' }),
+    play('se-concluye', 'De **50** personas escogidas al azar en un barrio, **35** tienen mascota y **10** tienen gato. Toca **todo** lo que se concluye de esos datos.', { casos: [{ t: 'el 70 % de la muestra tiene mascota', si: true }, { t: 'todo el país prefiere las mascotas', no: 'Solo se preguntó en un barrio: no dice nada de todo el país.' }, { t: '15 encuestados no tienen mascota', si: true }, { t: 'las tienen porque viven solos', no: 'Los datos dicen cuántos, no por qué.' }, { t: '1 de cada 5 encuestados tiene gato', si: true }], falta: 'Falta algo que también sale de los números.', ok: 'Los datos dicen cuántos, no por qué.' },
+      '$\\tfrac{35}{50} = 70\\,\\%$, $50 - 35 = 15$ y $\\tfrac{10}{50}$ es 1 de cada 5. El motivo y «todo el país» no salen de esos datos.',
+      { hint: 'Quédate con lo que se puede calcular con esos números y habla solo de los encuestados.' }),
+    play('sube-dato-real', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'El eje empieza en **40**. A llega a 50 y B llega a 60. ¿Qué **porcentaje** más vendió B?', r: 20, c: '10 \\div 50 \\cdot 100', e: { 10: 'Esas son las unidades.', 100: 'Comparaste el dibujo, que empieza en 40: compara los números.' } },
+      { q: '**18 de 40** van en bicicleta. ¿Qué **porcentaje** es?', r: 45, c: '18 \\div 40 \\cdot 100', e: {} },
+      { q: 'El 30 % de una muestra de **200** dice que sí. ¿Cuántos **son**?', r: 60, c: '200 \\cdot 0.30', e: { 30: 'Ese es el porcentaje: son de cada 100, y hay 200.' } }] },
+      '$\\tfrac{10}{50} = 20\\,\\%$; $\\tfrac{18}{40} = 45\\,\\%$; y el 30 % de 200 son 60.',
+      { hint: 'Compara los números y no el dibujo; divide cada cantidad entre su total.' }),
     sol('Una encuesta preguntó en dos ciudades si las personas usan transporte público. En la ciudad A respondieron 80 personas y 60 dijeron que sí. En la ciudad B respondieron 120 personas y 72 dijeron que sí. ¿En cuál ciudad es mayor la proporción de usuarios?',
       ['Ciudad A: $60 \\div 80 =$ [[75 %]]', 'Ciudad B: $72 \\div 120 =$ [[60 %]]', 'En B hay más usuarios (72 contra 60), pero la proporción es mayor en la ciudad [[A]]', 'La diferencia es de [[15]] puntos porcentuales'],
       ['B', '12', '66 %'],

@@ -56,7 +56,7 @@
   });
   puestos('puestos-cambian'); puestos('devuelve-puestos');
   XG.rotula('avances-crecen', {
-    slots: p => p.metas.map((_, i) => ({ x: X(3, i % 3, 74), y: i < 3 ? 98 : 148, w: 60, h: 42 })), fichas: p => p.fichas, metas: p => p.metas, texto: p => p.metas.join(' '), alto: () => 222, fondo: (K, p) => flecha(K, 28, p.de, p.a) + [...p.ask].map((l, i) => K.t(X(3, i, 74), 68, l, 'B')).join('') + K.t(8, 103, 'avance', 's tm', 'start') + K.t(8, 153, 'letra', 's tm', 'start') + alfabeto(K, 190), aviso: avisa, bien: p => p.ok,
+    slots: p => p.metas.map((_, i) => ({ x: X(3, i % 3, 74), y: i < 3 ? 98 : 148, w: 60, h: 42 })), fichas: p => p.fichas, metas: p => p.metas, texto: p => p.metas.join(' '), alto: () => 213, fondo: (K, p) => flecha(K, 28, p.de, p.a) + [...p.ask].map((l, i) => K.t(X(3, i, 74), 68, l, 'B')).join('') + K.t(8, 103, 'avance', 's tm', 'start') + K.t(8, 153, 'letra', 's tm', 'start') + alfabeto(K, 186), aviso: avisa, bien: p => p.ok,
   });
   XG.rotula('clave-comparada', {
     slots: p => p.metas.map((_, i) => ({ x: X(p.metas.length, i, 64), y: 136, w: 54, h: 42 })), fichas: p => p.fichas, metas: p => p.metas, texto: p => p.metas.join(''), alto: () => 168, fondo: (K, p) => p.filas.map((s, r) => [...s].map((t, i) => K.r(86 + r * 168 + (i - 1) * 46 - 20, 10, 40, 44, 'fc', 9) + K.t(86 + r * 168 + (i - 1) * 46, 38, t, 'b ta')).join('')).join('') + [...p.ask].map((l, i) => K.t(X(p.ask.length, i, 64), 96, l, 'B')).join(''), aviso: avisa, bien: p => p.ok,

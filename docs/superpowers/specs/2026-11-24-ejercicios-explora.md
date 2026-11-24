@@ -69,6 +69,11 @@ espejo se quitaron porque la explicación no los enseña. Pruebas `tests/ejercic
 
 `XG.rotula` revuelve la bandeja (siempre igual) para que tocar las fichas de izquierda a derecha no dé la respuesta, en todos los mundos.
 
+## Mundo 9, Tablas y gráficas (pu-gr-1 a pu-gr-3)
+
+`js/games/graficas-escena.js`: barras con eje, tortas, barras que se nivelan, balanza de grupos y personas. El eje cortado y la balanza solo se mueven al
+comprobar, para que no se responda a ojo. Pruebas `tests/ejercicios-graficas.test.js`.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |
