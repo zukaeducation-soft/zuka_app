@@ -14,6 +14,14 @@
     const x = 60, y = 185, b = 8 * 26, h = v.h * 26, ap = x + 130;
     return K.r(x, y - h, b, h, 'fc d') + K.p([[x, y], [x + b, y], [ap, y - h]], 'fa') + K.l(ap, y, ap, y - h, 'lf d') + K.cota(x, y + 8, x + b, y + 8, '8') + K.t(ap + 9, y - h / 2 + 5, N(v.h), 'tf', 'start');
   };
+  const rombo = (v, K) => {
+    const [x, y] = [170, 105], a = 120, b = v.D * 10, L = [x - a, y], R = [x + a, y], T = [x, y - b], B = [x, y + b];
+    return K.f(v.caja, K.r(x - a, y - b, 2 * a, 2 * b, 'fn d', 0)) + K.p([L, T, R, B], 'fa') + K.f(v.dob, [[L, T, -1, -1], [T, R, 1, -1], [R, B, 1, 1], [B, L, -1, 1]].map(([P, Q, i, j]) => K.p([P, Q, [x + i * a, y + j * b]], 'fg')).join('')) + K.l(...L, ...R, 'lg') + K.l(...T, ...B, 'lf') + K.t(x + 60, y - 6, '12', 'tg') + K.t(x + 10, y + 50, N(v.D), 'tf', 'start');
+  };
+  const contorno = (v, K) => {
+    const r = v.w * 10, x = 170 - r, y = 180, h = 80, yo = y - h;
+    return K.r(x, yo, 2 * r, h, 'fa', 0) + K.sec(170, yo, r, 0, 180, 'fg') + K.f(v.r, K.pl([[x, yo], [x, y], [x + 2 * r, y], [x + 2 * r, yo]], 'la gr')) + K.f(v.t, K.l(x, yo, x + 2 * r, yo, 'lf d')) + K.f(v.c, K.arc(170, yo, r, 0, 180, 'lg gr')) + K.t(170, y + 18, N(v.w), 'ta') + K.t(x - 8, y - h / 2 + 5, '5', 'ta', 'end');
+  };
   const trap = (v, K) => {
     const u = 15, y = 170, x = 22, B = v.B * u, b = v.b * u, h = v.h * u, o = 20, g = v.g ?? 0;
     const P = [[x, y], [x + B, y], [x + o + b, y - h], [x + o, y - h]], d = (1 - g) * 70;
@@ -52,6 +60,15 @@
       xpHaz('dibujo', 'La base del triángulo mide 8. Sube el vértice hasta que el área sea 20.', { dib: triang, v: { h: 2 }, metas: { h: 5 }, alto: 220,
         manijas: [{ k: 'h', min: 1, max: 6.5, paso: 0.5, en: v => [190, 185 - v.h * 26], de: (x, y) => (185 - y) / 26 }],
         lee: v => `$\\tfrac{8 \\cdot ${N(v.h)}}{2} = ${N(4 * v.h)}$`, dice: v => `El rectángulo punteado vale ${N(8 * v.h)} y el triángulo es la mitad.` }, '$\\tfrac{8 \\cdot 5}{2} = 20$: el rectángulo entero vale 40.')],
+    ['El rombo: media caja',
+      xpMira('dibujo', 'Otra mitad: un **rombo** es la mitad de la caja de sus diagonales.', { dib: rombo, v: { D: 9, caja: 0, dob: 0 }, alto: 215 }, [
+        ['Un rombo tiene cuatro lados iguales. Sus diagonales, aquí 12 y 9, se cruzan en ángulo recto.', {}],
+        ['Lo metemos en una caja: sus lados miden lo mismo que las diagonales, 12 y 9.', { caja: 1 }, '$12 \\cdot 9 = 108$'],
+        ['Las diagonales parten el rombo en cuatro triángulos, y en las esquinas sobran otros cuatro iguales.', { dob: 1 }],
+        ['Por eso el rombo es la mitad de la caja: 54.', {}, '$\\tfrac{12 \\cdot 9}{2} = 54$'],
+      ], 'Rombo: la mitad del producto de las diagonales, $\\tfrac{D \\cdot d}{2}$.'),
+      xpHaz('dibujo', 'Una diagonal mide 12. Estira la otra hasta que el área del rombo sea 42.', { dib: rombo, v: { D: 4, caja: 1, dob: 0 }, metas: { D: 7 }, alto: 215, manijas: [{ k: 'D', min: 2, max: 10, paso: 1, en: v => [170, 105 - v.D * 10], de: (x, y) => (105 - y) / 10 }],
+        lee: v => `$\\tfrac{12 \\cdot ${v.D}}{2} = ${6 * v.D}$`, dice: v => `La caja vale ${12 * v.D} y el rombo es la mitad.` }, 'La caja debe valer 84: $\\tfrac{12 \\cdot 7}{2} = 42$.')],
     ['El trapecio: dos juntos',
       xpMira('dibujo', 'Segunda idea: un **trapecio** se entiende pegándole una copia.', { dib: trap, v: { B: 9, b: 5, h: 6, dos: 0, g: 0 }, alto: 200 }, [
         ['Un trapecio tiene dos bases paralelas: aquí 9 y 5. La altura es 6.', {}],
@@ -84,6 +101,16 @@
       xpHaz('dibujo', 'El radio mide 4. Abre el sector hasta que su área sea 6π.', { dib: sec, v: { g: 30, r: 4 }, metas: { g: 135 }, alto: 205,
         manijas: [{ k: 'g', min: 15, max: 345, paso: 15, en: v => XPK.at(170, 105, 82, v.g), de: (x, y, v) => { const g = (Math.atan2(105 - y, x - 170) * 180 / Math.PI + 360) % 360; return Math.abs(g - v.g) > 180 ? (v.g > 180 ? 345 : 15) : g; }, r: 10 }],
         lee: v => `$\\tfrac{${v.g}}{360} \\cdot 16\\pi = ${N(v.g / 360 * 16)}\\pi$`, dice: v => `${v.g}° de 360°: ${N(v.g / 3.6)} de cada 100 partes del círculo.` }, '6 de 16 son tres octavos: $\\tfrac38 \\cdot 360^\\circ = 135^\\circ$.')],
+    ['Por el borde',
+      xpMira('dibujo', 'Quinta idea: el **perímetro** es lo que se recorre por fuera.', { dib: contorno, v: { w: 8, r: 0, c: 0, t: 0 }, alto: 205 }, [
+        ['Un rectángulo de 8 por 5 con medio círculo encima. ¿Cuánto mide su borde?', {}],
+        ['Los tramos rectos de afuera son tres: 5, 8 y 5. Suman 18.', { r: 1 }, '$5 + 8 + 5 = 18$'],
+        ['El lado de arriba quedó adentro: lo tapa el medio círculo, y por ahí no se camina.', { t: 1 }],
+        ['La curva es media circunferencia de diámetro 8: la mitad de 8π.', { c: 1 }, '$\\tfrac12 \\cdot 8\\pi = 4\\pi$'],
+        ['El borde mide 18 más 4π.', {}, '$18 + 4\\pi$'],
+      ], 'Para el borde de una figura armada, recórrela por fuera: los lados que comparten las piezas no cuentan.'),
+      xpHaz('dibujo', 'Ensancha la figura hasta que los tramos **rectos** del borde sumen 20. Los costados miden 5.', { dib: contorno, v: { w: 4, r: 1, c: 0, t: 0 }, metas: { w: 10 }, alto: 205, manijas: [{ k: 'w', min: 3, max: 12, paso: 1, en: v => [170 + v.w * 10, 140], de: x => (x - 170) / 10 }],
+        lee: v => `$5 + ${v.w} + 5 = ${v.w + 10}$`, dice: () => 'Cuenta los dos costados y el piso; el lado de arriba quedó adentro.' }, 'Dos costados de 5 y un piso de 10: $5 + 10 + 5 = 20$.')],
     ['Ahora sí, un problema',
       xpHaz('fichas', 'Una ventana es un rectángulo de 4 por 3 con medio círculo encima. Pon el área de cada parte y la total.', {
         fondo: (K, v) => K.r(60, 78, 104, 78, 'fa') + K.sec(112, 78, 52, 0, 180, 'fg') + K.t(112, 174, '4', 'tm') + K.t(52, 122, '3', 'tm', 'end') + K.t(205, 62, 'medio círculo', 's tg', 'start') + K.t(205, 112, 'rectángulo', 's ta', 'start') + K.t(205, 162, 'en total', 's', 'start'),

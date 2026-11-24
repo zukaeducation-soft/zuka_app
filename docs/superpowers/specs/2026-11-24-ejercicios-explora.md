@@ -25,6 +25,14 @@ pu-cm-3: `rejilla-otra` (de cada 100), `cuelga-porcientos` (tres formas), `que-p
 `exponentes-justos`, `misma-potencia`, `raiz-bandera`, `cuelga-decimales`, `estima-diez` y `lanza-potencia`. Lo que la explicación no enseñaba
 (la parte entre el todo, deshacer un cambio, decimales al cuadrado y estimar productos) se añadió a sus momentos.
 
+## Mundo 2, Geometría (pu-ge-1 a pu-ge-6)
+
+Se responde **moviendo la figura misma**. Armazones en `js/games/figura-kit.js`: `XG.figura` (manijas sobre el dibujo; `dib(v, K, p, f)` con f = 0
+mientras se responde y 1 cuando la figura ya ejecutó la respuesta), `XG.rotula` (medidas que se arrastran a su lugar; reutiliza
+`XPD.fichas`) y `XG.tiros` (en movimiento: tres tiros, un fallo perdonado). Un archivo por lección, `js/games/geo-escena-N.js`, con ocho juegos;
+las zonas de examen no cambian. Pruebas `tests/ejercicios-geometria.test.js`: recorren todos los estados alcanzables y fijan qué se acepta.
+El error típico tiene que caber en la manija o en la perilla, y con su aviso. A la explicación de pu-ge-4 se le añadieron el rombo y el borde.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |

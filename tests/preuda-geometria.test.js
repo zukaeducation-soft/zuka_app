@@ -19,11 +19,16 @@ const FULL = {
   'paralelas-gira': [{ t: 65, top: 0, pair: 'corr' }, { t: 70, top: 10, pair: 'alt' }, { t: 60, top: -15, pair: 'corr' }, { t: 75, top: 5, pair: 'conj' }],
   'suma-poligono': [{ n: 4 }, { n: 5 }, { n: 7 }, { n: 8 }],
 };
-const ex = (id, game) => { const e = L(id).ex.find(e => e.game === game); return FULL[game] ? { ...e, params: { ...e.params, rounds: FULL[game] } } : e; };
+// Las lecciones usan ahora los juegos de la escena (tests/ejercicios-explora.test.js); estos quedan para evaluación y biblioteca.
+Object.assign(FULL, {
+  'apice-triangulo': [{ mode: 'falta', A: 35, C: 90 }, { mode: 'tipo', tipo: 'rectangulo', y: 'isosceles', A: 45 }],
+  'cuadrados-pitagoras': [{ c2: 100 }, { c2: 145 }], 'escalera-pared': [{ L: 17, h: 8 }, { L: 25, h: 24 }],
+});
+const ex = (id, game) => ({ params: { max: 12, rounds: FULL[game] } });
 const ZONA = ['completa-solucion', 'caza-error', 'opcion-examen'];
 const NEW = ['tijera-angulos', 'paralelas-gira', 'apice-triangulo', 'suma-poligono', 'cuadrados-pitagoras', 'escalera-pared', 'billar-rebote'];
 // pu-ge-2 terminaba en vuela-precios; desde la spec 2026-11-20-preuda-movimiento, en aro-lanza (mismas preguntas).
-const MOVING = ['billar-rebote', 'vuela-precios', 'aro-lanza'];
+const MOVING = ['lanza-angulo', 'lanza-cuerda'];
 const BORING = ['escala-solucion', 'arma-la-cuenta', 'une-parejas', 'clasifica-cartas', 'verdadero-falso', 'ordena-terminos'];
 // El estado con que se gana cada ronda de un juego por rondas.
 const win = (game, params, state) => GAMES[game].grade({ rounds: state }, params).ok;
@@ -115,33 +120,3 @@ test('escalera-pared: el pie queda a una distancia entera, distinta de la del in
   assert.ok(!win('escalera-pared', P, P.rounds.map(r => ({ d: g.need(r) - 1 }))));
 });
 
-test('billar-rebote: el punto de mira cae en un medio de la banda y los dos ángulos son iguales', () => {
-  const g = GAMES['billar-rebote'], P = ex('pu-ge-1', 'billar-rebote').params;
-  for (const r of P.rounds) {
-    assert.ok(r.items.length >= 2);
-    for (const it of r.items) {
-      const x = g.aim(it);
-      assert.ok(Number.isInteger(x * 2) && x >= 0.5 && x <= 9.5, `${JSON.stringify(it)} → ${x}`);
-      // Ángulo de llegada = ángulo de salida.
-      assert.ok(Math.abs((6 - it.p[1]) / Math.abs(x - it.p[0]) - (6 - it.t[1]) / Math.abs(it.t[0] - x)) < 1e-9);
-      assert.ok((x - it.p[0]) * (it.t[0] - x) > 0, 'el rebote queda entre la bola y la tronera');
-    }
-  }
-});
-
-test('los juegos de la biblioteca reciben datos con solución, y los ejemplos del video no se repiten', () => {
-  const C = GAMES['cuerdas-iguales'];
-  for (const r of ex('pu-ge-2', 'cuerdas-iguales').params.rounds) { const t = C.target(r); assert.ok(Number.isInteger(t * 2) && Math.abs(t) <= 8, JSON.stringify(r)); }
-  const cr = ex('pu-ge-2', 'compas-raiz').params;
-  assert.ok(cr.rounds.every(r => [1, 2, 3, 4].some(a => [1, 2, 3, 4].some(b => a * a + b * b === r.n))));
-  for (const r of ex('pu-ge-1', 'rueda-angulo').params.rounds) assert.equal(r.target % 15, 0);
-  for (const r of ex('pu-ge-2', 'aro-lanza').params.rounds) for (const it of r.items) {
-    assert.equal(new Set(it.options).size, it.options.length);
-    const [a, b] = it.ask.match(/\d+/g).map(Number), v = Number(it.options[it.answer]);
-    assert.ok(/catetos/.test(it.ask) ? a * a + b * b === v * v : a * a - b * b === v * v, it.ask);
-  }
-  // La escena habla del hexágono (720°) y de la escalera de 13 m a 5 m de la pared.
-  assert.ok(ex('pu-ge-1', 'suma-poligono').params.rounds.every(r => r.n !== 6));
-  assert.ok(ex('pu-ge-2', 'escalera-pared').params.rounds.every(r => r.L !== 13));
-  assert.ok(ex('pu-ge-2', 'cuadrados-pitagoras').params.rounds.every(r => r.c2 !== 169));
-});

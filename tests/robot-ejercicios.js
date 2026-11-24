@@ -66,11 +66,35 @@
     'recta-muda': { en: [7, 5, -4, -3] }, 'dos-radares': { v: -7 }, 'arma-viaje': { en: [0, 4] }, 'taller-saltos': { a: 3, b: -5 },
     'signos-condiciones': { neg: [false, true, true, false] }, 'potencia-signo': { fuera: false, e: 4 }, 'parentesis-justo': { a: 0, b: 1 }, 'lanza-ficha': { tiros: [-9, -9] },
   };
+  // Armazones de figura-kit: la manija se arrastra hasta el sitio de la respuesta; las fichas, a su lugar; los tiros, al soltar.
+  const jugada = async (G, p, s) => {
+    if (G.figura) {
+      const svg = $$('.xg-lona svg'), ms = xpManijas({ alto: G.alto(p), manijas: G.manijas(p) });
+      let v = { ...G.ini(p) };
+      for (const m of ms) { const b = { ...v }; m.ks.forEach(k => { b[k] = s[k]; }); await dedoSvg(svg, enSvg(svg, ...m.en(v, p)), enSvg(svg, ...m.en(b, p))); v = b; }
+    } else if (G.rotula) {
+      for (let i = 0; i < s.q.length; i++) {
+        const sl = G.slots(p)[i], svg = $$('.xfi'), c = [...svg.querySelectorAll('[data-casa]')].find(g => g.textContent === s.q[i][0]), r = cen(c), z = enSvg(svg, sl.x, sl.y);
+        ev(c, 'pointerdown', ...r);
+        for (let k = 1; k <= 5; k++) ev(svg, 'pointermove', r[0] + (z[0] - r[0]) * k / 5, r[1] + (z[1] - r[1]) * k / 5);
+        ev(svg, 'pointerup', ...z); await esp(40);
+      }
+    } else for (const k of s.tiros) {
+      const g = $$('.xg-per svg'), o = G.perilla(p.tiros[0], p);
+      ev(g, 'pointerdown', ...enRiel(g, o.min, o.min, o.max)); ev(g, 'pointermove', ...enRiel(g, k, o.min, o.max)); ev(g, 'pointerup', ...enRiel(g, k, o.min, o.max)); await esp(4600);
+    }
+  };
+  const errada = (G, p) => {
+    if (G.figura) { const s = { ...G.ini(p) }, uno = (x, i) => (Array.isArray(x) ? x[i] : x); for (const m of G.manijas(p)) [].concat(m.k).forEach((k, i) => { s[k] = uno(m.max, i) - uno(m.paso, i); }); return s; }
+    if (G.rotula) { const m = [...G.metas(p)], f = [...G.fichas(p)]; m.forEach(x => f.splice(f.indexOf(x), 1)); m[0] = f[0]; return { q: m.map(x => [x]) }; }
+    return { tiros: [1, 2] };
+  };
   const api = {
     leccion(id) { L = busca(id); },
     async abre(i) { startLesson(C, { ...L, ex: [L.ex[i]], more: [] }); document.querySelector('.clip-skip')?.click(); await esp(900); },
     async juega(i, bien = true) {
-      const e = L.ex[i], p = e.params;
+      const e = L.ex[i], p = e.params, G = GAMES[e.game];
+      if (G.figura || G.rotula || G.tiros) { await jugada(G, p, !bien ? errada(G, p) : G.tiros ? { tiros: p.tiros.map(t => G.meta(t, p)) } : G.solve(p)); await esp(150); return !document.querySelector('.lesson-foot .btn').disabled; }
       await M[e.game](p, !bien ? MAL[e.game] : e.game.startsWith('lanza-') ? { tiros: p.tiros.map(t => t.d) } : GAMES[e.game].solve(p));
       await esp(150);
       return !document.querySelector('.lesson-foot .btn').disabled;

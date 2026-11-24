@@ -523,3 +523,12 @@
 .lesson.xp-lesson .exq-tray { border-color: transparent; background: none; padding: 6px; gap: 6px; }
 .lesson.xp-lesson .exq-completa .exq-tray { background: var(--bg); }
 @media (prefers-reduced-motion: reduce) { .xg-fac { animation: none; } .xg-sel .xg-op { transition: none; } }
+
+/* ---- juegos que se manipulan sobre la figura (js/games/figura-kit.js) ---- */
+.xg-lona .xd { cursor: grab; }
+.xg-lona .xd.drag { cursor: grabbing; }
+.xg.fin .xg-lona .xd { cursor: default; }
+.xg-rot .xfi { touch-action: none; }
+.xg .xd .xf.bien { fill: color-mix(in srgb, var(--ok) 16%, transparent); stroke: var(--ok); stroke-width: 2; }
+.xg .xd .xf.mal { fill: color-mix(in srgb, var(--bad) 16%, transparent); stroke: var(--bad); stroke-width: 2; }
+.xg-pide { min-height: 26px; text-align: center; font-size: 16px; line-height: 1.45; }

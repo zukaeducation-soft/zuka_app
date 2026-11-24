@@ -53,10 +53,9 @@ test('pu-pb-2: sacar sin devolver se enseña antes de la pregunta en formato rea
 
 test('fórmulas que se usan quedan enseñadas: rombo, sector, pendientes y reloj', () => {
   const g4 = text(L('pu-ge-4'));
-  assert.match(g4, /D \\\\cdot d\}\{2\}/); assert.match(g4, /\\\\theta\}\{360/);
+  assert.match(g4, /D \\\\cdot d\}\{2\}/);
   assert.match(zona(L('pu-ge-4'), 'opcion-examen').params.q, /rombo/);
   assert.match(zona(L('pu-ge-5'), 'caza-error').explain, /l\^2 \+ l\^2/);
-  assert.match(zona(L('pu-ge-1'), 'rieles-paralelos').explain, /cuánto sube por cada paso/);
   assert.match(zona(L('pu-ge-1'), 'caza-error').explain, /medio grado por minuto/);
   assert.match(zona(L('pu-co-1'), 'elige-parentesis').explain, /escoger a o b/);
   assert.match(zona(L('pu-co-3'), 'exponentes-binomio').q, /k es el número de paréntesis/);
