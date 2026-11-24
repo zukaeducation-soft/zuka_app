@@ -18,7 +18,7 @@ const DIEZ = get(ctx, 'PU_DIEZ');
 const units = get(ctx, 'COURSES').find(c => c.id === 'preuda').units.filter(u => u.block === 'razonamiento');
 const BORING = ['escala-solucion', 'arma-la-cuenta', 'une-parejas', 'clasifica-cartas', 'verdadero-falso', 'ordena-terminos'];
 // Juegos que se mueven solos o se lanzan (arcades y questGame): los que pueden cerrar una lección.
-const MOVING = ['corre-puesto', 'gira-ruleta', 'cae-caja', 'cae-zona', 'lanza-angulo', 'lanza-cuerda', 'lanza-escala', 'rueda-lanza', 'llena-lanza', 'llena-tanque', 'lanza-ficha', 'lanza-fraccion', 'lanza-porciento', 'lanza-potencia', 'billar-rebote', 'vuela-precios', 'salta-signos', 'carrera-fracciones', 'serpiente-orden', 'rompe-cambios', 'encesta-suma',
+const MOVING = ['sirve-partes', 'lanza-regla', 'lanza-viaje', 'tiro-porciento', 'tiro-precio', 'corre-puesto', 'gira-ruleta', 'cae-caja', 'cae-zona', 'lanza-angulo', 'lanza-cuerda', 'lanza-escala', 'rueda-lanza', 'llena-lanza', 'llena-tanque', 'lanza-ficha', 'lanza-fraccion', 'lanza-porciento', 'lanza-potencia', 'billar-rebote', 'vuela-precios', 'salta-signos', 'carrera-fracciones', 'serpiente-orden', 'rompe-cambios', 'encesta-suma',
   'resortera-tres', 'traza-progresion', 'camino-pascal', 'descifra-zona', 'orbita-conjuntos', 'balanza-cajas', 'bote-corriente',
   'dobla-fichas', 'rana-zenon', 'corta-proporciones', 'dispara-inverso', 'buzo-enteros', 'tanque-porcentaje', 'rampa-precio', 'bici-cambios',
   'llaves-tanque', 'lazo-conjunto', 'anillos-subconjunto', 'piedras-selva', 'cruza-o-rebota', 'apunta-chorro', 'donde-cae', 'lirios-laguna',

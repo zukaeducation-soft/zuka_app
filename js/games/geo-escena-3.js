@@ -141,7 +141,7 @@
       const X = n => 24 + n * 292 / 30, y = 100, n = v == null ? 0 : v * f;
       let h = K.l(14, y, 326, y);
       for (let i = 0; i <= 30; i++) h += K.l(X(i), y - (i % 5 ? 3 : 6), X(i), y + (i % 5 ? 3 : 6), 'lm') + (i % 5 ? '' : K.t(X(i), y + 22, i, 's tm'));
-      return h + (v == null ? '' : K.l(X(0), y - 10, X(n), y - 10, 'la gr') + K.f(f * 4 - 3, K.l(X(t.r), y - 34, X(t.r), y, v === t.r ? 'lo gr' : 'lf gr') + K.t(X(t.r), y - 42, t.r, v === t.r ? 'to' : 'tf')))
+      return h + (v == null ? '' : K.l(X(0), y - 10, X(n), y - 10, 'la gr') + K.f(f * 4 - 3, K.t(X(v), y - 42, v, v === t.r ? 'to' : 'tf')))
         + (yy => K.c(X(n), yy, 8, 'fA') + K.l(X(n) - 15, yy - 8, X(n) + 15, yy - 8, 'gr'))(y - 18 - 44 * Math.sin(Math.PI * f));
     },
     falla: (t, v) => (t.e?.[v] || (v > t.r ? 'Se pasó de largo.' : 'Se quedó corto.')),

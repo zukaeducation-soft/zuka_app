@@ -37,6 +37,7 @@
         ['Si van menos obreros, 4, tienen que trabajar más días: 15. El trabajo es el mismo.', { a: 4, b: 15 }, '$4 \\cdot 15 = 60$'],
         ['Con 12 obreros bastan 5 días. El rectángulo se aplasta, pero ocupa lo mismo.', { a: 12, b: 5 }, '$12 \\cdot 5 = 60$'],
         ['Doble de obreros, mitad de días. Por eso se multiplica, no se divide.', {}, '$a \\cdot b = 60$'],
+        ['Si la gente cambia a mitad de camino, reparte lo que falta: 24 jornadas entre 4 obreros son 6 días.', { a: 4, b: 6 }, '$24 \\div 4 = 6$'],
         ['Pregúntate siempre: si una crece, ¿la otra crece o baja? Eso decide qué cuenta hacer.', {}],
       ], 'Inversa: el producto no cambia. Si una se duplica, la otra queda a la mitad.'),
       xpHaz('dibujo', 'El pasto alcanza para 6 vacas durante 14 días. Son 7 vacas: baja los días hasta gastar lo mismo.', { dib: inv, v: { a: 7, b: 16, ux: 18, uy: 8.5, ea: 'vacas', eb: 'días' }, metas: { b: 12 }, alto: 215, manijas: [{ k: 'b', min: 2, max: 18, paso: 1, en: v => [123, 190 - v.b * 8.5], de: (x, y) => (190 - y) / 8.5, r: 11 }],

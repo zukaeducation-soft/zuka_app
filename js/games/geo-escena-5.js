@@ -133,7 +133,7 @@
       else h += K.t(x + W / 2, y + 16, F.w, 's ta');
       h += F.tri ? K.l(x + W + 8, y, x + W + 8, y - H, 'lm') + K.t(x + W + 14, y - H / 2 + 5, F.h, 's ta', 'start') : K.t(x + W + 6, y - H / 2 + 5, F.h, 's ta', 'start');
       const c = 15, X = 180, n = v == null ? 0 : Math.floor(v * f + 1e-9);
-      for (let i = 0; i < 40; i++) h += K.r(X + (i % 10) * c, 106 - Math.floor(i / 10) * c, c - 2, c - 2, i < n ? (f >= 1 && i >= t.r ? 'ff' : 'fA') : f >= 1 && i < t.r ? 'fo' : 'fc', 3);
+      for (let i = 0; i < 40; i++) h += K.r(X + (i % 10) * c, 106 - Math.floor(i / 10) * c, c - 2, c - 2, i < n ? (f >= 1 && v !== t.r ? 'ff' : 'fA') : 'fc', 3);
       return h;
     },
     falla: (t, v) => (t.e?.[v] || (v > t.r ? 'Sobró pintura.' : 'Faltó pintura.')),

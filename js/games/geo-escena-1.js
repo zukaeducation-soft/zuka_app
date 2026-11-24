@@ -143,7 +143,7 @@
       h += K.l(24, 156, 316, 156);
       if (v != null) {
         const a = v * 5 * Math.min(1, f * 1.5), u = Math.max(0, f * 3 - 2);
-        h += K.sec(...C, 34, 0, a, 'fa') + K.l(...C, ...K.at(...C, 40 + 88 * u, a), 'la gr') + K.f(f * 3 - 2, K.c(...K.at(...C, 138, t.r), 6, v * 5 === t.r ? 'fo' : 'ff') + K.t(...K.at(170, 161, 60, Math.max(16, Math.min(164, v * 2.5))), `${v * 5}°`, 'ta'));
+        h += K.sec(...C, 34, 0, a, 'fa') + K.l(...C, ...K.at(...C, 40 + 88 * u, a), 'la gr') + K.f(f * 3 - 2, (v * 5 === t.r ? K.c(...K.at(...C, 138, t.r), 6, 'fo') : '') + K.t(...K.at(170, 161, 60, Math.max(16, Math.min(164, v * 2.5))), `${v * 5}°`, 'ta'));
       }
       return h + K.c(...C, 6, 'fk');
     },

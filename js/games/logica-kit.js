@@ -153,7 +153,7 @@ Object.assign(XG, (() => {
         draw(); ui.nota(d.pie || 'Toca todos los que cumplen. Otro toque los quita.');
         return ok => {
           ui.nota('');
-          const muestra = fin => { if (L && d.cumple) L.revisa(d.cumple(ui.s.on, p), fin); else { juicio = arr(d.sol(p), p); draw(); ui.espera(700, fin); } };
+          const muestra = fin => { if (L && d.cumple) L.revisa(d.cumple(ui.s.on, p), fin); else { juicio = ok ? ui.s.on : arr(d.sol(p), p); draw(); ui.espera(700, fin); } };
           muestra(() => {
             if (ok) { XS.merge(); if (!juicio) { juicio = ui.s.on; } draw(); return ui.nota(d.bien(p)); }
             XS.nope(); ui.nota(d.aviso(ui.s.on, p));

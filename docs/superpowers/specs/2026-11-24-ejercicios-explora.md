@@ -40,6 +40,11 @@ se encienden las pistas una por una, cumplida o rota), `XG.marca` (tocar todos l
 pistas que dejan un solo orden) y `XG.tabla` (✓ y ✗). Escenas en `js/games/orden-escena.js`; pruebas `tests/ejercicios-orden.test.js` (solución única
 por fuerza bruta y ninguna pista de sobra; los tiros fallados no enseñan la respuesta).
 
+## Mundo 4, Proporcionalidad y porcentajes (pu-pr-1 a pu-pr-5)
+
+Un solo archivo, `js/games/proporcion-escena.js` (40 juegos: vasos, cortes, escalas, rectángulos de trabajo, vías, tanques, dobles reglas y barras de
+precio), con los armazones ya hechos; pruebas `tests/ejercicios-proporcion.test.js`. En los tiros, un fallo dice si faltó o sobró, sin dejar medir cuánto.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |
