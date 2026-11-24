@@ -79,8 +79,9 @@ function renderHome() {
       <button class="btn brand sm" data-install>Instalar</button>
       <button class="icon-btn" data-hide-install aria-label="Ocultar">${ICON.x}</button>
     </section>` : ''}
-    <section class="home-goal">${ICON.target}<div><p><b>Meta de hoy</b><span>${todayXP()} / ${S.goal} XP</span></p>
+    <aside class="home-side" aria-label="Tu avance"><section class="home-goal">${ICON.target}<div><p><b>Meta de hoy</b><span>${todayXP()} / ${S.goal} XP</span></p>
       <div class="bar"><i style="width:${goalP * 100}%"></i></div></div></section>
+      ${dkSemanaHTML()}${dkAsesoriaHTML()}</aside>
     <h2 class="home-h2">Cursos</h2>
     <div class="home-courses">${cursosVisibles().map(c => {
       const ls = lessonsOf(c), d = ls.filter(isDone).length, inscrito = mine.includes(c);
@@ -94,6 +95,7 @@ function renderHome() {
     }).join('')}</div>
   </div>`;
   view.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openCourse(b.dataset.open));
+  dkBind(view);
   $('[data-install]', view)?.addEventListener('click', promptInstall);
   $('[data-hide-install]', view)?.addEventListener('click', () => { S.hideInstall = true; save(); renderHome(); });
   view.scrollTop = 0;
@@ -111,7 +113,7 @@ function renderMyCourses() {
         ${courseArt(c, 'xl')}
         <span class="mc-body"><b>${esc(c.name)}</b>
           <span class="hc-prog"><span class="mini-bar"><i style="width:${(d / ls.length) * 100}%"></i></span><small>${d}/${ls.length}</small></span>
-          <span class="mc-next">${nxt ? `${d ? 'Sigue' : 'Empieza'}: ${esc(nxt.title)}` : '¡Curso completado!'}</span></span>
+          <span class="mc-next">${nxt ? `${d ? 'Sigue' : 'Empieza'}: ${esc(nxt.title)}` : '¡Curso completado!'}</span>${dkCursoHTML(c)}</span>
         ${ICON.right}</button>`;
     }).join('')}</div>` : ''}
     <button class="btn ${mine.length ? 'ghost' : ''} mc-more" data-home>${mine.length ? 'Explorar más cursos' : 'Ver los cursos'}</button>

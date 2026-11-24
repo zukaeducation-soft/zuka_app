@@ -140,14 +140,14 @@ function renderTutorias() {
   view.innerHTML = `<div class="tutorias">
     <header class="tu-head"><h1>Tutorías</h1>
       <p class="muted">Separa una asesoría virtual para reforzar lo que más te cuesta. Eliges la materia, los temas, el día y la hora.</p></header>
-    ${mine.length ? `<section class="card tu-mine-card"><h2>Tus asesorías</h2>${mine.map(b => {
+    <aside class="tu-side" aria-label="Tus asesorías y cupos">${mine.length ? `<section class="card tu-mine-card"><h2>Tus asesorías</h2>${mine.map(b => {
       const c = tuCourse(b.course), titles = tuTitles(b);
       return `<div class="tu-mine" style="--c:${c?.color || 'var(--brand)'}">
         <span class="tu-when"><b>${esc(dayLabel(b.date, now))}</b><small>${hourLabel(b.time)}</small></span>
         <span class="tu-what"><b>${esc(c?.name || 'Asesoría')}</b><small>${esc(titles.join(' · '))}${b.note ? `${titles.length ? ' · ' : ''}«${esc(b.note)}»` : ''}</small></span>
         <span class="tu-acts"><button class="tu-cancel" data-cancel="${esc(b.id)}" aria-label="Cancelar la asesoría de ${esc(c?.name || 'la materia')}">Cancelar</button></span>
       </div>`;
-    }).join('')}</section>` : ''}
+    }).join('')}</section>` : ''}${dkTutoriasHTML(mine)}</aside>
     <section class="tu-pick">
       <h2>¿En qué materia quieres reforzar?</h2>
       <p class="tu-nextfree">${ICON.calendar}<span>${full ? `Ya tienes ${TUTORIAS.max} asesorías pendientes. Cancela una para separar otra.`
@@ -157,7 +157,7 @@ function renderTutorias() {
         <span class="cr-body"><b>${esc(c.name)}</b><small>${c.units.length} ${c.units.length === 1 ? 'unidad' : 'unidades'} · ${lessonsOf(c).length} temas</small></span>
         ${ICON.right}</button>`).join('')}</div>
     </section>
-    ${tutoriaLink('x') ? '' : '<p class="tu-note">Por ahora la asesoría se guarda solo en este celular.</p>'}
+    ${tutoriaLink('x') ? '' : '<p class="tu-note">Por ahora la asesoría se guarda solo en este dispositivo.</p>'}
   </div>`;
   view.querySelectorAll('[data-book]').forEach(b => b.onclick = () => openBooking(tuCourse(b.dataset.book)));
   view.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => {
@@ -230,7 +230,7 @@ function openBooking(c) {
         <div class="ag-done-when"><b>${esc(dayLabel(b.date, n))}, ${hourLabel(b.time)}</b><span>${esc(c.name)} · ${b.mins} min</span>
           <ul>${titles.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
         <p class="muted ag-done-next">${wa ? 'Avísale a coordinación por WhatsApp para confirmar tu cupo y recibir el enlace.'
-          : 'Quedó guardada en este celular, en «Tus asesorías». Todavía no le avisa a ningún tutor.'}</p>
+          : 'Quedó guardada en este dispositivo, en «Tus asesorías». Todavía no le avisa a ningún tutor.'}</p>
         ${wa ? `<a class="btn brand" href="${esc(wa)}" target="_blank" rel="noopener">Avisar por WhatsApp</a>` : ''}
         <button class="btn ${wa ? 'ghost' : 'brand'}" data-close>Listo</button>`;
       q('[data-close]').onclick = closeSheet;

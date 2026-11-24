@@ -27,8 +27,8 @@ test('los paneles dicen qué lección es, la parte del video y el recorrido', ()
 test('solo cambia desde 1000 px: el celular queda igual', () => {
   const css = read('css/escritorio.css');
   const fuera = css.replace(/@media \(min-width: 1000px\)[^]*$/, '');
-  assert.match(fuera, /^[^{]*\.tb-logo-d, \.ls-sides, \.xp-riel \{ display: none; \}/m);
-  assert.doesNotMatch(fuera.replace(/\.tb-logo-d, \.ls-sides, \.xp-riel \{ display: none; \}/, ''), /\{/, 'fuera del bloque de escritorio no hay más reglas');
+  assert.match(fuera, /^[^{]*\.tb-logo-d, \.ls-sides, \.xp-riel, \.dk \{ display: none; \}/m);
+  assert.doesNotMatch(fuera.replace(/\.tb-logo-d, \.ls-sides, \.xp-riel, \.dk \{ display: none; \}/, '').replace('.home-side, .tu-side, .pf-side, .pf-main { display: contents; }', ''), /\{/, 'fuera del bloque de escritorio no hay más reglas');
   assert.match(read('js/escritorio.js'), /const ESCRITORIO_MIN = 1000;/);
 });
 
@@ -104,4 +104,25 @@ test('la explicación avisa al riel y el aviso del ejercicio no tapa la escena e
   const css = read('css/escritorio.css').replace(/\r\n/g, '\n');
   assert.match(css, /\.explora \{\n\s*max-width: 1240px; display: grid;/);
   assert.match(css, /\.feedback \{\n\s*left: calc\(50% - var\(--pw\) \/ 2 - 12px\); right: auto;/);
+});
+
+test('la semana va de lunes a domingo y enciende los días con actividad', () => {
+  const c2 = loadScripts(['js/ui.js', 'js/escritorio.js']), semana = get(c2, 'dkSemana'), dayKey = get(c2, 'dayKey');
+  const lunes = dayKey(new Date(2026, 10, 16)), s = semana({ has: k => k === lunes }, new Date(2026, 10, 22));
+  assert.equal(s.map(x => x.l).join(''), 'LMXJVSD');
+  assert.equal(s.map(x => +x.lit).join(''), '1000000');
+  assert.equal(s.findIndex(x => x.today), 6);
+});
+
+test('el avance va por componente o, sin componentes, por mundos completos', () => {
+  const tr = get(ctx, 'dkTramos'), u = (b, ...ids) => ({ block: b, lessons: ids.map(id => ({ id })) }), hecha = l => l.id < 3;
+  assert.equal(JSON.stringify(tr({ units: [u(0, 1, 2), u(0, 3)] }, hecha).map(t => [t.d, t.n])), '[[1,2]]');
+  assert.equal(JSON.stringify(tr({ blocks: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }], units: [u('a', 1), u('b', 2, 3)] }, hecha).map(t => [t.name, t.d, t.n])), '[["A",1,1],["B",1,2]]');
+});
+
+test('Inicio, Mis cursos, Tutorías y Tú llevan sus paneles de computador', () => {
+  assert.match(read('js/inicio.js'), /dkSemanaHTML\(\)\}\$\{dkAsesoriaHTML\(\)/);
+  assert.match(read('js/inicio.js'), /\$\{dkCursoHTML\(c\)\}/);
+  assert.match(read('js/tutorias.js'), /\$\{dkTutoriasHTML\(mine\)\}<\/aside>/);
+  assert.match(read('js/app.js'), /\$\{dkMesHTML\(\)\}\$\{dkCursosHTML\(\)\}/);
 });

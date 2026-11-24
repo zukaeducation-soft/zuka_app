@@ -827,7 +827,7 @@ function renderProfile() {
   const all = cursosVisibles().flatMap(lessonsOf), doneN = all.filter(isDone).length;
   const acc = S.answered ? Math.round((100 * S.correct) / S.answered) : 0;
   const saved = Object.keys(S.saved).filter(id => S.saved[id]).map(id => findCurio(id) || findLesson(id)).filter(x => x && (x.l.fact || cursoVisible(x.c)));   // nada guardado de un curso oculto
-  view.innerHTML = `<div class="profile">
+  view.innerHTML = `<div class="profile"><div class="pf-side">
     <section class="me">
       <div class="avatar">${esc((S.name || 'Z')[0].toUpperCase())}</div>
       <div class="me-body">
@@ -836,24 +836,25 @@ function renderProfile() {
       </div>
       <button class="icon-btn prof-gear" data-settings aria-label="Ajustes">${ICON.gear}</button>
     </section>
-    ${cuentaCard()}
+    ${cuentaCard()}</div><div class="pf-main">
     <section class="stats">
       <div class="stat fire">${ICON.flame}<b>${streakNow()}</b><small>Días de racha</small></div>
       <div class="stat gold">${ICON.bolt}<b>${S.xp}</b><small>XP total</small></div>
       <div class="stat brand">${ICON.check}<b>${doneN}/${all.length}</b><small>Lecciones</small></div>
       <div class="stat ok">${ICON.target}<b>${acc}%</b><small>Precisión</small></div>
     </section>
-    <section class="card">
+    <section class="card pf-goal">
       <h3>Meta de hoy</h3>
       <p class="muted">${todayXP()} de ${S.goal} XP</p>
       <div class="bar"><i style="width:${Math.min(1, todayXP() / S.goal) * 100}%"></i></div>
     </section>
-    ${saved.length ? `<section class="card"><h3>Clips guardados</h3>${saved.map(({ c, l }) =>
+    ${dkMesHTML()}${dkCursosHTML()}
+    ${saved.length ? `<section class="card pf-saved"><h3>Clips guardados</h3>${saved.map(({ c, l }) =>
       `<button class="saved-row" data-${l.fact ? 'curio' : 'lesson'}="${l.id}" style="--c:${c.color}">${ICON.bookmark}<span><b>${esc(l.title)}</b><small>${esc(c.name)}</small></span></button>`).join('')}</section>` : ''}
-  </div>`;
+  </div></div>`;
   const nameInp = $('.name-input', view);
   nameInp.onchange = () => { S.name = nameInp.value = nameInp.value.trim(); save(); $('.avatar', view).textContent = (S.name || 'Z')[0].toUpperCase(); };
-  cuentaBind(view);
+  cuentaBind(view); dkBind(view);
   $('[data-settings]', view).onclick = () => { profileSub = 'settings'; renderProfile(); view.scrollTop = 0; $('[data-back]', view).focus({ preventScroll: true }); };
   view.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => {
     const { c, l } = findLesson(b.dataset.lesson);
