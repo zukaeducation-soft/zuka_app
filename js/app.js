@@ -150,7 +150,7 @@ function go(t) {
   // La vista de un curso ('learn') no tiene botón propio: se marca «Mis cursos» (spec 2026-11-19-inicio-mis-cursos).
   document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === (t === 'learn' || t === 'gym' ? 'cursos' : t)));
   renderTop();
-  ({ home: renderHome, cursos: renderMyCourses, learn: renderLearn, gym: renderGym, clips: renderClips, tutorias: renderTutorias, profile: renderProfile })[t]();
+  ({ home: renderHome, cursos: renderMyCourses, learn: renderLearn, gym: renderGym, clips: renderClips, tienda: renderTienda, tutorias: renderTutorias, profile: renderProfile })[t]();
 }
 
 // Números largos de la barra de arriba: 12450 → «12.4 k», para que quepa el nombre del curso.
@@ -934,7 +934,7 @@ function renderSettings() {
 
 // ---- arranque ----
 document.querySelectorAll('#tabbar button').forEach(b => {
-  b.insertAdjacentHTML('afterbegin', ICON[{ home: 'learn', cursos: 'book', gym: 'gym', clips: 'clips', tutorias: 'calendar' }[b.dataset.tab] || 'user']);
+  b.insertAdjacentHTML('afterbegin', ICON[{ home: 'learn', cursos: 'book', gym: 'gym', clips: 'clips', tienda: 'bag', tutorias: 'calendar' }[b.dataset.tab] || 'user']);
   b.onclick = () => {
     if (lessonClose) return lessonClose(b.dataset.tab);
     if (tab === 'learn' && b.dataset.tab === 'learn') { if (openWorld) openWorld = null; else openBlock = null; }   // tocar Aprender otra vez: un paso arriba (mundo → mapa → componentes)

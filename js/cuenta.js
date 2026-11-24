@@ -253,7 +253,7 @@ async function cuentaRevisa() {
   await cuentaReintenta();
   const antes = cuentaHuella(), pagos = new Set(Cuenta.accesos.filter(a => a.tipo === 'pago' && vigente(a.hasta, Date.now())).map(a => a.curso));
   await Promise.all([cuentaPerfil(), tiendaMios().catch(() => {}), asesoriasCarga().catch(() => {})]);
-  if ($('#tienda') && !$('#tienda').dataset.paso) tiendaPinta();
+  if (tab === 'tienda' && !$('#tienda')) tiendaPinta('', false);
   if (cuentaHuella() === antes) return;
   const nuevo = Cuenta.accesos.find(a => a.tipo === 'pago' && vigente(a.hasta, Date.now()) && !pagos.has(a.curso));
   if (nuevo) toast(`¡Listo! Tu acceso a ${cursoNombre(nuevo.curso)} está activo.`);

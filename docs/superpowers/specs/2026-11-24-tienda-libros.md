@@ -12,3 +12,5 @@
 - **Asesorías de 1 hora**: saldo en `horas` (general, universidad para calc/fis/int/lin, grupo). `separar_asesoria` gasta una;
   cancelar con 12 h o más la devuelve; si cancela Zuka, siempre. `S.tutorias` es copia de la base.
 - Portadas: `brand/libros/N.webp` (primera página del PDF). Pruebas: `tests/tienda.test.js`.
+- **Pestaña Tienda** (pedido del 2026-11-24): el catálogo vive en `#view` (`renderTienda`); solo el pedido y el pago van en la capa `#tienda`.
+- **Pago**: QR de Bre-B (`brand/pago-breb.png`), sin valor; el administrador confirma a mano.
