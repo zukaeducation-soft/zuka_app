@@ -1,0 +1,251 @@
+@@ pu-cm-1 ideas
+\capitulo{La recta}
+Un entero no es solo una cantidad: es un \clave{lugar}. Piensa en un termómetro acostado. El 0 es la frontera; a la derecha
+viven los positivos y a la izquierda los negativos.
+
+\xrecta{-8}{8}{\xficha[zfire]{-6}\xficha[zfire]{-1}\xficha{4}}
+\pie{$-6 < -1 < 4$: es menor el que está más a la izquierda.}
+
+¿Qué es menor, $-6$ o $-1$? El número 6 es más grande que el 1, pero aquí no se comparan tamaños sino lugares: $-6$ está más a
+la izquierda, así que $-6 < -1$. Si $-6$ y $-1$ son temperaturas, $-6$ es más frío.
+
+\turno{Ubica en la recta los números $-7$, $2$, $-3$ y $6$, y escríbelos de menor a mayor.
+\xrecta{-8}{8}{}}{$-7 < -3 < 2 < 6$.}
+
+\textbf{El opuesto es un reflejo.} Imagina un espejo en el 0. El reflejo de $5$ es $-5$ y el reflejo de $-5$ es $5$. El signo
+menos delante de un número \emph{pide} su reflejo: por eso $-(-5) = 5$, y por eso un número más su opuesto da 0.
+
+\xrecta{-8}{8}{\draw[zlime,line width=1.6pt] (0,-.5)--(0,.95);\xficha{5}\xficha[zfire]{-5}\xsalto[zmute]{5}{-5}{reflejo}}
+
+\textbf{La distancia cuenta pasos.} De $-3$ a $5$ se camina 3 pasos hasta el 0 y 5 más: son 8. Se escribe con barras,
+$|5 - (-3)| = 8$, y nunca es negativa, porque los pasos se cuentan, no se deben. Como se puede caminar hacia los dos
+lados, a una misma distancia de un número hay \clave{dos} lugares.
+
+\turno{¿Qué lugares están a 6 pasos de $-1$? Márcalos. \xrecta{-8}{8}{\xficha{-1}}}{$-7$ y $5$: $-1 - 6$ y $-1 + 6$.}
+
+\capitulo{Sumar y restar}
+\textbf{Sumar es caminar.} El signo dice hacia dónde y el número, cuántos pasos: sumar un positivo lleva a la derecha y sumar
+un negativo, a la izquierda.
+
+\xrecta{-8}{8}{\xficha{-5}\xficha{3}\xsalto{-5}{3}{$+8$}}
+\cuenta{-5 + 8 = 3}
+
+\textbf{Restar es caminar al revés.} Sumar $-5$ llevaría 5 pasos a la izquierda; restar $-5$ es hacer lo contrario: 5 pasos a
+la derecha. Piénsalo como dinero: si te perdonan una deuda de 5, tu saldo \emph{sube} 5.
+
+\xrecta{-8}{8}{\xficha{2}\xficha{7}\xsalto{2}{7}{$-\,(-5)$}}
+\cuenta{2 - (-5) = 2 + 5 = 7}
+
+\turno{Dibuja el salto y escribe dónde caes: $\;-1 - 6\;$ y luego $\;-3 - (-9)$.
+\xrecta{-8}{8}{}}{$-1 - 6 = -7$ (seis pasos a la izquierda) y $-3 - (-9) = 6$ (nueve a la derecha).}
+
+\capitulo{El menos da la vuelta}
+\textbf{Multiplicar es repetir saltos iguales}, como una rana que siempre salta lo mismo. $4 \cdot (-2)$ son cuatro saltos de
+$-2$: llegan a $-8$. Es como deber 2 a cuatro amigos.
+
+\xrecta{-9}{9}{\foreach \a/\b in {0/-2,-2/-4,-4/-6,-6/-8}{\draw[zfire,line width=1.1pt,-{Stealth[length=2mm]}] (\a,.12) to[bend right=55] (\b,.12);}
+\foreach \a/\b in {0/2,2/4,4/6,6/8}{\draw[zolive,line width=1.1pt,dashed,-{Stealth[length=2mm]}] (\a,.12) to[bend left=55] (\b,.12);}}
+\pie{Naranja: $4 \cdot (-2) = -8$. Al cambiar el 4 por $-4$, toda la cadena da la vuelta en el 0: $(-4)(-2) = 8$.}
+
+Un factor negativo \clave{da la vuelta} a la cadena. Dos vueltas te dejan como estabas: por eso menos por menos da más. Con
+muchos factores no importa \emph{cuál} es negativo, sino \emph{cuántos}: par, positivo; impar, negativo.
+
+\turno{Sin multiplicar, di el signo de $(-3)(-1)(2)(-5)$ y el de $(-4)(6)(-2)(1)$.}{El primero, negativo (tres
+vueltas); el segundo, positivo (dos vueltas).}
+
+\capitulo{Las capas}
+En una cuenta larga el orden importa. Se resuelve por capas, de adentro hacia afuera, como pelar una cebolla.
+
+\begin{center}\begin{tikzpicture}[x=1mm,y=1mm,font=\sffamily\small]
+\foreach \y/\e/\r in {0/{$7 - 2 \cdot (\,1 - 5\,)^2$}/{paréntesis: $1 - 5 = -4$},-10/{$7 - 2 \cdot (-4)^2$}/{potencia: $(-4)^2 = 16$},
+  -20/{$7 - 2 \cdot 16$}/{producto: $2 \cdot 16 = 32$},-30/{$7 - 32 = -25$}/{resta}}{%
+  \node[fill=zsoft,rounded corners=1.2mm,minimum width=58mm,minimum height=8mm] at (0,\y) {\e};
+  \node[anchor=west,text=zmute] at (34,\y) {\r};}
+\end{tikzpicture}\end{center}
+
+\turno{Escribe una capa por renglón: $\;10 + 3 \cdot (2 - 6) \div 2$.\renglones{3}}{$10 + 3 \cdot (-4) \div 2 = 10 - 12 \div 2 = 10 - 6 = 4$.}
+@@ pu-cm-1 armar
+\armar{
+\arma{El viaje}{Vas de $-9$ a $4$ con \emph{dos} movimientos: uno debe ser restar un negativo. Escríbelos y dibuja los saltos.}{Hay muchas:
+por ejemplo $-9 - (-15) - 2 = 4$. Los dos movimientos deben subir 13 en total. Error frecuente: creer que $-\,(-15)$ baja.}
+\arma{Los signos}{Encuentra dos enteros cuyo producto sea positivo y cuya suma sea negativa. ¿Cómo son siempre?}{Los dos negativos,
+como $-2$ y $-7$. Error frecuente: usar para la suma la regla de signos del producto.}
+\arma{El paréntesis justo}{Pon un solo paréntesis en $\;6 - 2 \cdot 5 - 8\;$ para que el resultado sea $12$.}{$6 - 2 \cdot (5 - 8) =
+6 - 2 \cdot (-3) = 6 + 6 = 12$. Error frecuente: dejar $6 - 6$ al multiplicar los signos.}
+}
+@@ pu-cm-2 ideas
+\capitulo{Partes iguales}
+Una fracción aparece cuando una barra se corta en pedazos \clave{iguales}. El número de abajo, el \clave{denominador}, dice en
+cuántos se cortó; el de arriba, el \clave{numerador}, cuántos se toman.
+
+\begin{barras}\xbarra{0}{9}{5}{$\tfrac59$}\xbarra{-12}{9}{9}{$\tfrac99 = 1$}\end{barras}
+
+Si un pedazo fuera más grande que otro, «cinco de nueve» no diría cuánto es. Y si se toman todos, vuelve la barra entera.
+
+\turno{Corta la barra y sombrea $\tfrac58$. ¿Qué fracción queda en blanco?
+\begin{barras}\xbarra{0}{1}{0}{}\end{barras}}{Queda $\tfrac38$: $\tfrac58 + \tfrac38 = 1$.}
+
+\capitulo{Fracciones equivalentes}
+Cortar cada pedazo en dos duplica los pedazos \emph{y} los que se toman: cambia el nombre, no la cantidad. Simplificar es el
+camino de vuelta: dividir arriba y abajo entre el mismo número.
+
+\begin{barras}\xbarra{0}{3}{2}{$\tfrac23$}\xbarra{-9}{6}{4}{$\tfrac46$}\xbarra{-18}{12}{8}{$\tfrac{8}{12}$}\end{barras}
+
+\turno{Completa: $\;\dfrac{3}{5} = \dfrac{\rule{7mm}{.4pt}}{20}\;$ y simplifica $\;\dfrac{18}{24}$.}{$\tfrac{12}{20}$ y $\tfrac34$.}
+
+\capitulo{Comparar y sumar}
+Pedazos de distinto tamaño no se pueden contar juntos. El truco es volver a cortar hasta que \clave{midan lo mismo}.
+
+\begin{barras}\xbarra{0}{4}{1}{$\tfrac14$}\xbarra[zfire]{-10}{6}{1}{$\tfrac16$}
+\xbarra{-24}{12}{3}{$\tfrac{3}{12} + \tfrac{2}{12} = \tfrac{5}{12}$}
+\foreach \i in {3,4}{\filldraw[fill=zfire!75,draw=zmute,line width=.5pt] (\i*8,-24) rectangle ++(8,8);}\end{barras}
+
+Con pedazos iguales se cuenta y ya: 3 más 2 son 5 doceavos. Sumar arriba y abajo daría $\tfrac{2}{10}$, que es \emph{menos} que
+$\tfrac14$: absurdo. Para comparar, el atajo es el \clave{producto cruzado}: $\tfrac47 > \tfrac59$ porque $4 \cdot 9 = 36$ gana a
+$5 \cdot 7 = 35$. Es lo mismo que pasar las dos a pedazos de $\tfrac{1}{63}$.
+
+\turno{¿Cuál es mayor, $\tfrac{5}{8}$ o $\tfrac{7}{11}$? ¿Y cuánto es $\tfrac13 + \tfrac25$?}{$5 \cdot 11 = 55 < 7 \cdot 8 = 56$: es mayor
+$\tfrac{7}{11}$. La suma es $\tfrac{5}{15} + \tfrac{6}{15} = \tfrac{11}{15}$.}
+
+\capitulo{La fracción de una cantidad}
+Ahora la barra \emph{vale} algo. Para $\tfrac27$ de 35 se reparten 35 en 7 grupos (de 5) y se toman 2: son 10.
+
+\begin{barras}\xbarra{0}{7}{2}{$\tfrac27$ de $35 = 10$}\foreach \i in {1,...,7}{\node[font=\sffamily\footnotesize] at ({(\i-.5)*96/7},4) {5};}\end{barras}
+
+La palabra «de» multiplica, y también vale con otra fracción: $\tfrac23$ \emph{de} $\tfrac34$ es
+$\tfrac23 \cdot \tfrac34 = \tfrac12$. Dividir pregunta lo contrario, \emph{cuántas caben}: en 3 caben doce cuartos, así que
+$3 \div \tfrac14 = 3 \cdot 4 = 12$.
+
+\turno{En un bus de 40 puestos van ocupados tres octavos. Dibuja la barra y di cuántos puestos quedan libres.
+\begin{barras}\xbarra{0}{8}{0}{}\end{barras}}{Cada octavo son 5 puestos: van 15 y quedan 25.}
+@@ pu-cm-2 armar
+\armar{
+\arma{Entre dos}{Escribe una fracción que esté entre $\tfrac25$ y $\tfrac12$. Muestra con dos barras por qué sirve.}{Por ejemplo
+$\tfrac{9}{20}$: $\tfrac25 = \tfrac{8}{20}$ y $\tfrac12 = \tfrac{10}{20}$. Error frecuente: creer que no hay nada entre ellas.}
+\arma{La suma justa}{Encuentra dos fracciones con denominadores distintos que sumen $\tfrac{7}{12}$.}{Por ejemplo
+$\tfrac13 + \tfrac14$. Error frecuente: sumar arriba y abajo.}
+\arma{El total escondido}{Inventa una cantidad de la que $\tfrac35$ sea 27 y explica con una barra cómo la hallaste.}{Tres quintos
+son 27, cada quinto es 9 y el total es 45. Error frecuente: calcular $\tfrac35$ de 27.}
+}
+@@ pu-cm-3 ideas
+\capitulo{De cada 100}
+«Por ciento» quiere decir \clave{de cada 100}. Una cuadrícula de 100 casillas es el total: pintar 35 es pintar el $35\,\%$.
+
+\begin{casillas}\xcien{0}{35}{0}{$35\,\%$}\xcien{50}{100}{0}{$100\,\%$: el total}\xcien{100}{0}{0}{Tu turno: pinta el $65\,\%$}\end{casillas}
+
+\turno{En la tercera cuadrícula pinta el $65\,\%$. ¿Qué porcentaje queda en blanco?}{El $35\,\%$: entre los dos completan el $100\,\%$.}
+
+\capitulo{Tres formas de decir lo mismo}
+Una fracción, un decimal y un porcentaje pueden nombrar la misma cantidad. Para pasar de una a otra se lleva a centésimas, o
+se divide arriba entre abajo y se corre el punto dos lugares.
+
+\figura{cien}{Veinticinco casillas de cien: la misma cantidad con tres nombres.}
+
+\turno{Completa la tabla.\par\vspace{2pt}
+{\renewcommand{\arraystretch}{1.5}\begin{tabularx}{\linewidth}{|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|}\hline
+\sffamily\small fracción & \sffamily\small decimal & \sffamily\small porcentaje\\\hline $\tfrac{7}{20}$ & & \\\hline & $0.08$ & \\\hline & & $62.5\,\%$\\\hline\end{tabularx}}}{$\tfrac{7}{20} = 0.35 = 35\,\%$;
+$\tfrac{2}{25} = 0.08 = 8\,\%$; $\tfrac58 = 0.625 = 62.5\,\%$.}
+
+\subsubsection{Decimales que no terminan}
+Una fracción es una división: $\tfrac38 = 0.375$. Si el denominador, ya simplificado, solo tiene factores 2 y 5, el decimal
+\clave{termina}; si tiene otro, es \clave{periódico}, como $\tfrac13 = 0.\overline{3}$ o $\tfrac17 = 0.\overline{142857}$. De vuelta:
+si $x = 0.\overline{36}$, entonces $100x = 36.\overline{36}$; al restar, $99x = 36$ y $x = \tfrac{36}{99} = \tfrac{4}{11}$. El periodo va
+sobre tantos nueves como cifras tenga.
+
+\capitulo{El porcentaje de una cantidad}
+Si la cuadrícula entera vale \$80\,000, cada casilla vale \$800. El $10\,\%$ son 10 casillas, \$8\,000: se corre el punto un
+lugar. Con él se arman los demás: el $5\,\%$ es la mitad y $15\,\% = 10\,\% + 5\,\%$, es decir, \$12\,000.
+
+\begin{casillas}\xcien{0}{10}{5}{$10\,\% + 5\,\%$}
+\node[anchor=west,text width=92mm,align=left,font=\small,text=zink] at (44,-16) {De una vez: el porcentaje en decimal por la cantidad,
+$0.15 \cdot 80\,000 = 12\,000$.\\[3pt] Al revés, ¿qué porcentaje es 18 de 72? La parte entre el todo: $18 \div 72 = 0.25$, el $25\,\%$.};\end{casillas}
+
+Un truco más: el $p\,\%$ de $N$ es igual al $N\,\%$ de $p$. El $16\,\%$ de 25 es el $25\,\%$ de 16, que es 4.
+
+\turno{La cuadrícula vale 360. ¿Cuánto es el $35\,\%$? ¿Y qué porcentaje es 54 de 360?}{Cada casilla vale 3.6:
+$0.35 \cdot 360 = 126$. Y $54 \div 360 = 0.15$: el $15\,\%$.}
+
+\capitulo{Subir y bajar}
+Bajar un $30\,\%$ es quedarse con el $70\,\%$: multiplicar por $0.7$. Subir un $20\,\%$ es multiplicar por $1.2$. Los cambios
+seguidos se \clave{multiplican}, porque el segundo se calcula sobre lo nuevo.
+
+\begin{casillas}\xcien{0}{100}{0}{antes: $100\,\%$}\xcien{50}{70}{0}{baja $30\,\%$: queda $70\,\%$}\xcien{100}{70}{14}{sube $20\,\%$ de 70: $84\,\%$}\end{casillas}
+
+Bajar 30 y subir 20 no es bajar 10: queda el $84\,\%$, es decir, bajó $16\,\%$. Para deshacer un cambio se divide: si \$56\,000 es
+lo que quedó tras bajar un $30\,\%$, antes valía $56\,000 \div 0.7 = 80\,000$.
+
+\turno{Un celular de \$900\,000 sube un $10\,\%$ y luego baja un $10\,\%$. ¿Vuelve a su precio?}{No: $900\,000 \cdot 1.1 \cdot 0.9 = 891\,000$;
+bajó $1\,\%$.}
+@@ pu-cm-3 armar
+\armar{
+\arma{Los pedazos}{Arma el $37\,\%$ de 2\,000 usando solo el $50\,\%$, el $10\,\%$ y el $1\,\%$, sumando o restando.}{$50\,\% - 10\,\% - 3 \cdot 1\,\%
+= 1\,000 - 200 - 60 = 740$. Error frecuente: sumar los porcentajes sin volverlos cantidades.}
+\arma{La etiqueta vieja}{Inventa un precio de antes y un descuento para que la etiqueta nueva diga \$45\,000. Comprueba con la
+multiplicación.}{Por ejemplo, \$60\,000 con $25\,\%$: $60\,000 \cdot 0.75 = 45\,000$. Error frecuente: sumarle el porcentaje al precio nuevo.}
+\arma{La vuelta}{Un precio sube un $25\,\%$. ¿Qué descuento lo devuelve exactamente al inicio?}{$20\,\%$: hay que multiplicar por
+$1 \div 1.25 = 0.8$. Error frecuente: responder $25\,\%$.}
+}
+@@ pu-cm-4 ideas
+\capitulo{Multiplicar repetido}
+Una potencia cuenta \clave{factores iguales}: $5^3 = 5 \cdot 5 \cdot 5 = 125$. No es $5 \cdot 3$. Cada factor más multiplica
+todo otra vez, y con cero factores la potencia vale 1, el punto de partida de toda multiplicación.
+
+\figura{potencias}{Una potencia no suma: duplica en cada paso.}
+
+\turno{¿Cuántos factores 4 hacen falta para llegar a 256? Escribe el camino: $4,\ 16,\ \rule{9mm}{.4pt},\ \rule{9mm}{.4pt}$.}{Cuatro:
+$4, 16, 64, 256$; $4^4 = 256$.}
+
+\capitulo{El cuadrado como área}
+Elevar \clave{al cuadrado} es armar un cuadrado: $4^2$ son 4 filas de 4 casillas. Si el lado se duplica, el área no se duplica:
+se \emph{cuadruplica}.
+
+\begin{casillas}\xcuad{0}{4}{4}{lado 4\\$4^2 = 16$}\xcuad{36}{8}{4}{lado 8\\$8^2 = 64$}
+\node[anchor=west,text width=66mm,align=left,font=\small,text=zink] at (78,17) {En el de lado 8 caben cuatro cuadrados de lado 4.\\[3pt]
+Con decimales es igual: si 100 casillas son 1, un lado de $0.4$ cubre 16 de 100: $0.4^2 = 0.16$.};\end{casillas}
+
+\turno{Si el lado de un cuadrado se multiplica por 5, ¿por cuánto se multiplica su área? ¿Cuánto es $0.7^2$?}{Por 25. Y $0.7^2 = 0.49$.}
+
+\capitulo{Contar factores}
+Las leyes de las potencias no se memorizan: salen de contar. En $2^3 \cdot 2^4$ hay tres doses y cuatro doses: siete. En $(5^2)^3$
+hay tres grupos de dos cincos: seis.
+
+\begin{center}\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Ley} & \textbf{Por qué} & \textbf{Ejemplo}\\\midrule
+$a^m \cdot a^n = a^{m+n}$ & se juntan $m$ y $n$ factores & $2^3 \cdot 2^4 = 2^7$\\
+$\dfrac{a^m}{a^n} = a^{m-n}$ & se cancelan $n$ factores & $\dfrac{3^7}{3^5} = 3^2$\\
+$(a^m)^n = a^{mn}$ & $n$ grupos de $m$ factores & $(5^2)^3 = 5^6$\\
+$(ab)^n = a^n b^n$ & se reparten los factores & $(2 \cdot 5)^4 = 2^4 \cdot 5^4$\\
+$a^0 = 1,\ a^{-n} = \dfrac{1}{a^n}$ & seguir el patrón al dividir & $2^{-3} = \tfrac18$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+En las potencias de 10 se ve la cuenta: $10^n$ es un 1 con $n$ ceros y $10^n - 1$ son $n$ nueves. Como $2 \cdot 5 = 10$, cada
+pareja de un 2 y un 5 produce un cero.
+
+\turno{Escribe como una sola potencia: $\;6^4 \cdot 6^3$, $\;(3^5)^2\;$ y $\;\dfrac{7^9}{7^2}$.}{$6^7$, $3^{10}$ y $7^7$.}
+
+\capitulo{La raíz, la pregunta al revés}
+La \clave{raíz cuadrada} no pregunta cuánto da el área, sino qué lado tiene. $\sqrt{49} = 7$ porque un cuadrado de 49 casillas
+tiene lado 7. Si no es exacta, se acorrala entre dos cuadrados: $64 < 72 < 81$, así que $8 < \sqrt{72} < 9$.
+
+\begin{casillas}\xcuad{0}{8}{3}{$8^2 = 64$\\no alcanza}\xcuad{40}{9}{3}{$9^2 = 81$\\se pasa}
+\node[anchor=west,text width=70mm,align=left,font=\small,text=zink] at (80,13) {Como $8.5^2 = 72.25$, $\sqrt{72}$ está apenas por debajo de 8.5.\\[3pt]
+Para simplificar se saca el mayor cuadrado: $\sqrt{72} = \sqrt{36 \cdot 2} = 6\sqrt2$.};\end{casillas}
+
+\textbf{Estimar.} Muchas preguntas no piden la cuenta exacta: $49.7 \cdot 20.3 \approx 50 \cdot 20 = 1\,000$. Si las opciones
+están lejos unas de otras, estimar basta.
+
+\turno{¿Entre qué enteros está $\sqrt{130}$ y de cuál está más cerca? Estima $\;6\,120 \cdot 0.49$.}{Entre 11 y 12
+($121$ y $144$), más cerca de 11. El producto es casi la mitad de 6\,000: unos 3\,000.}
+@@ pu-cm-4 armar
+\armar{
+\arma{Dos nombres}{Escribe $64$ como potencia de tres formas distintas.}{$2^6 = 4^3 = 8^2$ (también $64^1$). Error frecuente: $2 \cdot 32$, que
+no es una potencia.}
+\arma{Los exponentes justos}{Completa con enteros positivos: $\;3^{\square} \cdot 3^{\square} = 3^{8}\;$ y $\;(3^{\square})^{\square} = 3^{8}$, sin usar el 1.}{Sumas
+de 8, como 3 y 5; y productos de 8: 2 y 4. Error frecuente: multiplicar los exponentes en el primer caso.}
+\arma{El lado escondido}{Da un número que no sea cuadrado y cuya raíz esté entre 6 y 6.5. Explica cómo lo sabes.}{Cualquiera entre
+36 y 42.25, como 40. Error frecuente: tomar la mitad en vez del lado.}
+}
