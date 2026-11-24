@@ -1,65 +1,5 @@
 // Preuniversitario · mundo 8 «Codificación»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setLesson, setExam }) => {
-  const KEY = [['R', '#'], ['A', '*'], ['M', '%'], ['O', '@'], ['T', '&'], ['S', '=']];
-  setLesson('pu-cd-1', [
-    play('rueda-cesar', 'La rueda de César', { rounds: [{ pair: ['A', 'E'], msg: 'QIWE' }, { pair: ['B', 'D'], msg: 'RGTTQ' }] },
-      'Si A se cifra E, cada letra avanza 4: para descifrar se retrocede 4 y QIWE dice MESA. Si B se cifra D, la clave es +2 y RGTTQ dice PERRO.',
-      { hint: 'Alinea la letra original con su cifrada: el mismo giro sirve para todas las letras.' }),
-    play('clave-simbolos', 'Clave de símbolos', { rounds: [{ key: KEY, word: 'RAMO', mode: 'code' }, { key: KEY, word: 'ROSA', mode: 'decode' }] },
-      'Con la tabla, cada letra tiene siempre su símbolo: RAMO es # * % @, y # @ = * se lee ROSA.',
-      { hint: 'Busca cada letra (o cada símbolo) en la tabla, uno por uno, sin saltarte ninguno.' }),
-    play('altura-letras', 'Lo que vale una palabra', { rounds: [{ word: 'PAN' }, { word: 'DEDO' }] },
-      'Cada letra vale su lugar: $P + A + N = 16 + 1 + 14 = 31$ y $D + E + D + O = 4 + 5 + 4 + 15 = 28$.',
-      { hint: 'Sin la Ñ, la K es la 11: cuenta desde la regla de la izquierda.' }),
-    play('binario-luces', 'El código de los bombillos', { rounds: [{ n: 13, bits: 5 }, { n: 22, bits: 5 }, { n: 7, bits: 4 }] },
-      'Cada bombillo vale el doble del de su derecha: $13 = 8 + 4 + 1$ (01101), $22 = 16 + 4 + 2$ (10110) y $7 = 4 + 2 + 1$ (0111).',
-      { hint: 'Empieza por el bombillo más grande que quepa en el número y sigue con lo que falta.' }),
-    play('cuadro-polibio', 'Letras con coordenadas', { rounds: [{ word: 'FLOR', mode: 'code' }, { word: 'VELA', mode: 'code' }] },
-      'Cada letra es su fila y su columna: F = 21, L = 32, O = 35, R = 43; V = 52, E = 15, L = 32, A = 11.',
-      { hint: 'Primero la fila (número de la izquierda) y después la columna (número de arriba).' }),
-    play('espejo-palabra', 'El código espejo', { rounds: [{ word: 'PAZ' }, { word: 'RISA' }] },
-      'En el espejo la palabra se lee al revés: PAZ se ve ZAP y RISA se ve ASIR, cada letra volteada.',
-      { hint: 'La última letra de la palabra es la primera que se ve en el espejo.' }),
-    play('vuela-precios', 'Vuela al código correcto', { rounds: [{ title: 'Códigos', items: [
-      { ask: 'César +3: ¿cómo se cifra ASA?', options: ['DVD', 'BTB', 'CUC'], answer: 0 },
-      { ask: 'A = 1, …, Z = 26: ¿cuánto vale OSO?', options: ['49', '47', '51'], answer: 0 },
-      { ask: 'En binario, 10010 es…', options: ['18', '20', '9'], answer: 0 },
-    ] }] }, 'A + 3 = D y S + 3 = V: DVD. $15 + 19 + 15 = 49$. $10010 = 16 + 2 = 18$.',
-      { hint: 'Haz cada cuenta con la regla del código antes de volar.' }),
-  ]);
-
-  setLesson('pu-cd-2', [
-    play('maquina-regla', 'La máquina de la regla', { rounds: [
-      { ex: [[34, 7], [52, 7], [18, 9]], ask: 46, op: 'dsum' },
-      { ex: [[3, 11], [5, 13], [10, 18]], ask: 21, op: 'add', k: 8 },
-      { ex: [[23, 6], [45, 20], [17, 7]], ask: 38, op: 'dmul' },
-    ] }, 'La regla tiene que servir con todos los ejemplos: $3 + 4 = 7$, $5 + 2 = 7$, $1 + 8 = 9$ (suma de cifras, $46 \\to 10$); sumar 8 ($21 \\to 29$); y multiplicar las cifras ($38 \\to 24$).',
-      { hint: 'Prueba una regla y mira si la máquina marca todos los ejemplos; si falla uno, no es la regla.' }),
-    play('permuta-codigo', 'El código que reordena', { rounds: [
-      { ex: [['PERA', 'REPA'], ['LIMO', 'MILO']], word: 'NUBE' },
-      { ex: [['FRESA', 'RFSEA'], ['PLUMA', 'LPMUA']], word: 'CIELO' },
-    ] }, 'En la primera, la primera y la tercera letra cambian de lugar: NUBE → BUNE. En la segunda se cambian las letras de dos en dos y la última se queda: CIELO → ICLEO.',
-      { hint: 'Fíjate a qué lugar fue a parar la primera letra de cada ejemplo, luego la segunda…' }),
-    play('rueda-cesar', 'Descubre la clave con una palabra', { rounds: [{ pair: ['NUBE', 'QXEH'], msg: 'IUXWD' }] },
-      'N → Q, U → X, B → E, E → H: todas avanzan 3. Retrocediendo 3, IUXWD dice FRUTA.',
-      { hint: 'Mira cuánto avanzó la primera letra y comprueba con las demás.' }),
-    play('clave-simbolos', 'La clave escondida en los ejemplos', { rounds: [{ key: [['C', '#'], ['A', '*'], ['S', '%'], ['O', '@'], ['L', '&']], ex: [['CASO', '# * % @'], ['SOL', '% @ &']], word: 'LOCA', mode: 'decode' }] },
-      'Comparando posición por posición: C = #, A = *, S = %, O = @ y, con SOL, L = &. Entonces & @ # * dice LOCA.',
-      { hint: 'Pon cada letra encima de su símbolo en los ejemplos.' }),
-    play('letras-salto', 'La regla de las letras', { rounds: [{ seq: ['D', 'H', 'L', 'P'], need: 'T' }, { seq: ['Y', 'V', 'S', 'P'], need: 'M' }] },
-      'D, H, L, P son 4, 8, 12, 16: sigue 20, T. Y, V, S, P son 25, 22, 19, 16: sigue 13, M.',
-      { hint: 'Pasa las letras a números y busca el salto.' }),
-    play('cuadro-polibio', 'Descifra las coordenadas', { rounds: [{ word: 'NIDO', mode: 'decode' }] },
-      'Fila y columna: 34 es N, 24 es I, 14 es D y 35 es O: NIDO.',
-      { hint: 'La primera cifra es la fila; la segunda, la columna.' }),
-    play('rompe-cambios', 'Manda la pelota a lo que sigue la regla', { miss: 'comprueba la regla con todos los ejemplos', rounds: [{ title: 'Reglas', items: [
-      { ask: 'Si PISO se escribe OSIP, ¿cómo se escribe RAMO?', options: ['OMAR', 'AMOR', 'MORA'], answer: 0 },
-      { ask: '12 → 3, 41 → 5, 70 → 7. ¿27 → ?', options: ['9', '14', '5'], answer: 0 },
-      { ask: 'Si CAMA se cifra DBNB, ¿qué dice TPM?', options: ['SOL', 'UQN', 'TOM'], answer: 0 },
-    ] }] }, 'PISO al revés es OSIP: RAMO al revés, OMAR. Se suman las cifras: $2 + 7 = 9$. Cada letra avanzó 1: retrocediendo, TPM dice SOL.',
-      { hint: 'Descubre la regla con el ejemplo y aplícala tal cual.' }),
-  ]);
-
+PU_JUEGOS.push(({ setExam }) => {
   setExam('pu-codigos', 'Codificación', [
     ['pu-cd-1', 'En la clave César todas las letras se corren lo mismo.',
       play('rueda-cesar', 'César', { rounds: [{ pair: ['C', 'F'], msg: 'GLD' }] }, 'Clave +3: GLD dice DIA.', { hint: 'Retrocede.' })],
@@ -77,16 +17,40 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 });
 
 // Mundo 8 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
-  diezLesson('pu-cd-1', [
-    ['rueda-cesar', 0, 'Un mensaje secreto dice QIWE y se sabe que la A se escribe E. Gira la rueda y descífralo', 'De la A a la E la rueda avanza 4 letras. Para descifrar se retroceden 4: QIWE es MESA.'],
-    ['clave-simbolos', 1, 'Un candado usa símbolos en lugar de letras. Descifra la palabra con la tabla', 'Cada símbolo vale siempre la misma letra: se cambia uno por uno, mirando la tabla.'],
-    ['altura-letras', 0, 'Si A vale 1, B vale 2 y así hasta la Z, ¿cuánto vale la palabra PAN?', 'P es la letra 16, A la 1 y N la 14: $16 + 1 + 14 = 31$.'],
-    ['binario-luces', 1, 'Un tablero de 5 bombillos muestra números. Enciende los que forman el 22', 'Los bombillos valen 16, 8, 4, 2 y 1: $22 = 16 + 4 + 2$. En binario, 10110.'],
-    ['cuadro-polibio', 0, 'En esta clave, cada letra es su fila y su columna en el cuadro. Cifra la palabra FLOR', 'Cada letra se cambia por dos números: primero la fila y después la columna en que está. Este cuadro tiene 6 filas para que quepan las 26 letras del alfabeto sin la Ñ. Un cuadro de 5 × 5 solo tiene 25 casillas y debe dejar una letra por fuera: el problema siempre dice cuál. Si no dice nada sobre el alfabeto, se usan las 26 letras sin la Ñ.'],
-    ['espejo-palabra', 1, 'Un mensaje se escribe al revés para esconderlo. Escribe RISA en código espejo', 'Se invierte el orden de las letras: RISA queda ASIR.'],
-    ['vuela-precios', 0, 'Vuela al código correcto', 'César +3: A pasa a D y S a V, ASA es DVD. OSO vale $15 + 19 + 15 = 49$. Y 10010 es $16 + 2 = 18$.'],
-  ], [
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/codigos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-cd-1', [
+    play('avanza-clave', 'En una clave todas las letras avanzan lo mismo y, después de la Z, sigue la A (sin Ñ). La **W** se cifra con **D**. ¿Cuántos lugares **avanza** la clave?', { de: 'W', a: 'D' },
+      'X, Y, Z son 3 lugares; A, B, C, D son 4 más: la clave avanza 7.',
+      { hint: 'Cuenta desde la letra que sigue a la W y, al llegar a la Z, continúa con la A.' }),
+    play('cifra-palabra', 'La clave **avanza 4** lugares y después de la Z sigue la A (sin Ñ). Cifra la palabra **ZUMO**.', { w: 'ZUMO', metas: ['D', 'Y', 'Q', 'S'], fichas: ['D', 'Y', 'Q', 'S', 'V', 'K', 'E'],
+      mira: ['Después de la Z vienen A, B, C…', 'Avanza cuatro lugares desde la U.', 'Avanza cuatro lugares desde la M.', 'Avanza cuatro lugares desde la O.'], trampas: { '0:V': 'La V está cuatro lugares antes: para cifrar se avanza.', '0:E': 'Contaste un lugar de más: la A es el primero.', '3:K': 'La K está cuatro lugares antes: para cifrar se avanza.' }, ok: 'Cada letra avanza lo mismo.' },
+      'Z → D, dando la vuelta; U → Y; M → Q y O → S: DYQS.',
+      { hint: 'Piensa en el alfabeto como una rueda: al llegar al final se vuelve a empezar.' }),
+    play('descifra-mensaje', 'Para cifrar, cada letra **avanzó 6** lugares (sin Ñ). Llegó el mensaje **IGLK**. ¿Qué palabra era? (sin tildes)', { w: 'IGLK', metas: ['C', 'A', 'F', 'E'], fichas: ['C', 'A', 'F', 'E', 'O', 'M', 'R', 'Q'],
+      mira: ['Devuélvete seis lugares desde la I.', 'Devuélvete seis lugares desde la G.', 'Devuélvete seis lugares desde la L.', 'Devuélvete seis lugares desde la K.'], trampas: { '0:O': 'Avanzaste otra vez: descifrar es devolverse.', '1:M': 'Avanzaste otra vez: descifrar es devolverse.', '2:R': 'Avanzaste otra vez: descifrar es devolverse.', '3:Q': 'Avanzaste otra vez: descifrar es devolverse.' }, ok: 'Descifrar es hacer el camino contrario.' },
+      'Devolviendo 6: I → C, G → A, L → F y K → E. Decía CAFE.',
+      { hint: 'Si al cifrar se avanzó, ¿qué hay que hacer para volver a la palabra?' }),
+    play('suma-letras', 'A = 1, B = 2… Z = 26 (sin Ñ). Pon el valor de cada letra de **TREN** y el total.', { w: 'TREN', metas: ['20', '18', '5', '14', '57'], fichas: ['20', '18', '5', '14', '57', '21', '15', '58', '4'],
+      mira: ['La T es una de las letras de apoyo, de cinco en cinco.', 'La R está dos lugares antes de la T.', 'La E es una de las letras de apoyo.', 'La N está justo antes de la O.', 'Suma los cuatro valores.'], trampas: { '0:21': 'Contaste la Ñ: sin ella la T es la 20.', '2:4': 'Esa es la D.', '3:15': 'Esa es la O: la N va justo antes.', '4:58': 'Revisa la suma: hay uno de más.' }, ok: 'Cada letra vale su lugar.' },
+      '$20 + 18 + 5 + 14 = 57$.',
+      { hint: 'Recuerda las letras de apoyo, de cinco en cinco, y cuenta desde la más cercana.' }),
+    play('letra-falta', 'Con A = 1… Z = 26 (sin Ñ), esta palabra de tres letras vale **34**. Lleva el señalador a la letra que falta.', { w: 'M_L', total: 34, meta: 'I' },
+      'M vale 13 y L vale 12: suman 25. Falta $34 - 25 = 9$, que es la I: MIL.',
+      { hint: 'Suma las letras que se ven y mira cuánto falta para el total.' }),
+    play('prende-focos', 'Los bombillos valen 16, 8, 4, 2 y 1. Prende los que forman el **27**.', { n: 27 },
+      '$16 + 8 + 2 + 1 = 27$: se escribe 1 1 0 1 1.',
+      { hint: 'Empieza por el más grande que quepa y sigue con lo que falta.' }),
+    play('lee-tablero', 'Este tablero muestra un número. Pon **qué número** es y cómo queda el tablero con el número que **sigue**.', { b: '11100', et: ['número', 'el que sigue'], metas: ['28', '11101'], fichas: ['28', '11101', '7', '3', '11200', '11110'],
+      mira: ['Suma lo que valen los bombillos prendidos.', 'Al que sigue le falta 1: ¿qué bombillo vale 1?'], trampas: { '0:7': 'Leíste de derecha a izquierda: el 16 está a la izquierda.', '0:3': 'No se cuentan los prendidos: se suma lo que valen.', '1:11200': 'Un bombillo solo puede estar apagado (0) o prendido (1).', '1:11110': 'Prendiste el de 2: sumaste 2, no 1.' }, ok: 'Prendido vale; apagado no.' },
+      '$16 + 8 + 4 = 28$. Para el 29 se prende el de 1: 1 1 1 0 1.',
+      { hint: 'Suma lo que valen los prendidos. Para el que sigue hay que sumar uno.' }),
+    play('sube-codigo', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'En una clave la **D** se cifra con **M** (sin Ñ). ¿Cuántos lugares **avanza**?', r: 9, c: '13 - 4', e: { 10: 'La D no se cuenta: es el punto de partida.', 17: 'Ese es el camino contrario: la clave avanza.' } },
+      { q: 'Con A = 1… Z = 26 (sin Ñ), ¿cuánto vale **RIO**?', r: 42, c: '18 + 9 + 15', e: { 44: 'Contaste la Ñ: sin ella la R y la O valen uno menos.' } },
+      { q: 'Los bombillos valen 16, 8, 4, 2 y 1. ¿Qué número es **1 0 0 0 1** (1 prendido, 0 apagado)?', r: 17, c: '16 + 1', e: { 2: 'No se cuentan los prendidos: se suma lo que valen.' } }] },
+      'De D a M hay $13 - 4 = 9$ lugares; RIO vale $18 + 9 + 15 = 42$; y 1 0 0 0 1 es $16 + 1 = 17$.',
+      { hint: 'Cuenta lugares, suma valores de letras o suma bombillos prendidos.' }),
     sol('En una clave, cada letra se reemplaza por la que está 3 puestos después en el alfabeto (de 26 letras, sin Ñ); después de la Z se vuelve a empezar por la A. ¿Cómo se cifra la palabra ZONA?',
       ['La Z está al final: al avanzar 3 se da la vuelta y queda [[C]]', 'La O avanza 3 puestos: [[R]]', 'La N pasa a [[Q]] y la A pasa a [[D]]', 'ZONA se cifra como [[CRQD]]'],
       ['W', 'CRQC', 'X'],
@@ -103,15 +67,41 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Cuenta con cuidado el puesto de la S: es la letra que más pesa.'),
   ]);
 
-  diezLesson('pu-cd-2', [
-    ['maquina-regla', 0, 'Una máquina transforma números: 34 → 7, 52 → 7 y 18 → 9. ¿Qué entrega con el 46?', 'La máquina suma las cifras: $3 + 4 = 7$, $5 + 2 = 7$, $1 + 8 = 9$. Con 46 entrega $4 + 6 = 10$.'],
-    ['permuta-codigo', 0, 'Este código no cambia las letras: las cambia de puesto. Cifra NUBE', 'PERA pasa a REPA y LIMO a MILO: la primera letra y la tercera cambian de lugar. NUBE queda BUNE.'],
-    ['rueda-cesar', 0, 'Se sabe que NUBE se cifra QXEH. Descubre la clave y descifra el mensaje', 'De N a Q hay 3 puestos, y lo mismo en las demás letras. Retrocediendo 3, IUXWD es FRUTA.'],
-    ['clave-simbolos', 0, 'La clave está escondida en los ejemplos. Descifra la palabra', 'De CASO y SOL salen los símbolos de C, A, S, O y L. Con ellos se lee LOCA.'],
-    ['letras-salto', 1, 'La regla de las letras: halla la que sigue en Y, V, S, P', 'Los puestos bajan de 3 en 3: 25, 22, 19, 16. Sigue el 13, la M.'],
-    ['cuadro-polibio', 0, 'Un mensaje llega en coordenadas. Descífralo con el cuadro', 'Cada pareja de números señala una fila y una columna del cuadro: ahí está la letra.'],
-    ['rompe-cambios', 0, 'Manda la pelota a lo que sigue la regla', 'PISO al revés es OSIP: RAMO es OMAR. $12 \\to 3$ suma las cifras: $27 \\to 9$. Y CAMA → DBNB avanza una letra: TPM, retrocediendo, es SOL.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/codigos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-cd-2', [
+    play('regla-todos', 'Una máquina hizo estas tres cosas. Toca **todas** las reglas que sirven con los tres ejemplos.', { e: [[2, 8], [5, 20], [7, 28]], casos: [{ t: 'sumar 6', f: n => n + 6 }, { t: 'multiplicar por 4', f: n => 4 * n }, { t: 'por 3 y sumar 2', f: n => 3 * n + 2 }, { t: 'duplicar y volver a duplicar', f: n => 2 * (2 * n) }] },
+      'Multiplicar por 4 funciona siempre, y duplicar dos veces es lo mismo. Sumar 6 y «por 3 y sumar 2» solo sirven con el 2.',
+      { hint: 'Prueba cada regla con el 5 y con el 7, no solo con el 2.' }),
+    play('maquina-cifras', 'La máquina hace una cuenta con las dos **cifras** de cada número. Pon qué hace y qué entrega con el **84**.', { e: [['72', '5'], ['58', '3'], ['90', '9']], ask: 84, metas: ['restar', '4'], fichas: ['restar', '4', 'sumar', 'multiplicar', '12', '32'],
+      mira: ['Prueba con 72 y después con 58: la cuenta debe servir con todos.', 'Haz esa cuenta con el 8 y el 4.'], trampas: { '0:sumar': 'Sumar sirve con 90, pero 7 + 2 no es 5.', '0:multiplicar': '7 por 2 no es 5.', '1:12': 'Esa es la suma de 8 y 4.', '1:32': 'Esa es 8 por 4.' }, ok: 'A la cifra mayor se le resta la menor.' },
+      '$7 - 2 = 5$, $8 - 5 = 3$ y $9 - 0 = 9$: se resta la menor de la mayor. Con 84, $8 - 4 = 4$.',
+      { hint: 'Con el 90 sirven varias cuentas; con el 72 solo una.' }),
+    play('maquina-dos-pasos', 'La máquina multiplica por un número y después **suma** otro, siempre los mismos. Pon los dos números y lo que entrega con el **10**.', { e: [['2', '9'], ['4', '17'], ['7', '29']], et: ['por', 'más', 'con 10'], metas: ['4', '1', '41'], fichas: ['4', '1', '41', '3', '3', '7', '17', '40'],
+      mira: ['De 2 a 4 la entrada sube 2 y la salida sube 8. ¿Cuánto sube por cada 1?', 'Multiplica 2 por ese número: ¿cuánto falta para 9?', 'Usa los dos números con el 10.'], trampas: { '0:3': 'Por 3, de 2 a 4 la salida subiría 6, y sube 8.', '1:3': 'Con 4 · 2 ya son 8: hasta 9 falta menos.', '2:17': 'Sumar 7 solo sirve con el 2.', '2:40': 'Falta sumar.' }, ok: 'Sirve con los tres ejemplos.' },
+      '$4 \\cdot 2 + 1 = 9$, $4 \\cdot 4 + 1 = 17$ y $4 \\cdot 7 + 1 = 29$. Con 10: $4 \\cdot 10 + 1 = 41$.',
+      { hint: 'Propón una regla con el primer ejemplo y pruébala con los otros dos.' }),
+    play('puestos-cambian', 'El código solo cambia las letras de **puesto**. Escribe **TIGRE** en ese código.', { de: 'CAMPO', a: 'OCAMP', ask: 'TIGRE', rot: 'con la misma regla', metas: ['E', 'T', 'I', 'G', 'R'], fichas: ['T', 'I', 'G', 'R', 'E'],
+      mira: ['Mira a qué puesto fue la O de CAMPO.', 'La primera letra pasó al segundo puesto.', 'La segunda letra pasó al tercer puesto.', 'La tercera letra pasó al cuarto puesto.', 'La cuarta letra pasó al último puesto.'], ok: 'La última pasa al principio y las demás se corren.' },
+      'La última letra pasa al principio y las demás se corren un puesto: TIGRE queda ETIGR.',
+      { hint: 'Numera los puestos de CAMPO y mira dónde quedó cada uno.' }),
+    play('devuelve-puestos', 'Con este código llegó el mensaje **OLARC**. Devuelve cada letra a su puesto y escribe la palabra.', { de: 'RUBIA', a: 'UBIAR', ask: 'OLARC', rot: 'mensaje cifrado', metas: ['C', 'O', 'L', 'A', 'R'], fichas: ['O', 'L', 'A', 'R', 'C'],
+      mira: ['Al cifrar, la primera letra pasó al último puesto: devuélvela.', 'La que llegó primera estaba de segunda.', 'La que llegó segunda estaba de tercera.', 'La que llegó tercera estaba de cuarta.', 'La que llegó cuarta estaba de última.'], ok: 'Descifrar es devolver cada letra a su puesto.' },
+      'Al cifrar, la primera letra pasa al final. Para descifrar, la última vuelve al principio: COLAR.',
+      { hint: 'Mira a dónde fue la R de RUBIA. El mensaje se lee haciendo el cambio contrario.' }),
+    play('avances-crecen', 'En este código las letras no avanzan lo mismo (sin Ñ). Pon **cuánto avanza** cada puesto y cifra **MAL**.', { de: 'RED', a: 'TIJ', ask: 'MAL', metas: ['+2', '+4', '+6', 'O', 'E', 'R'], fichas: ['+2', '+4', '+6', 'O', 'E', 'R', '+3', 'C', 'N'],
+      mira: ['De R a T, ¿cuántos lugares hay?', 'De E a I, ¿cuántos lugares hay?', 'De D a J, ¿cuántos lugares hay?', 'La M avanza lo del primer puesto.', 'La A avanza lo del segundo puesto.', 'La L avanza lo del tercer puesto.'], trampas: { '1:+3': 'De E a I: F, G, H, I son cuatro.', '4:C': 'Con 2 llega a C: el segundo puesto avanza 4.', '5:N': 'Con 2 llega a N: el tercer puesto avanza 6.' }, ok: 'Los avances también siguen una regla: 2, 4, 6.' },
+      'R → T avanza 2, E → I avanza 4 y D → J avanza 6. Entonces M → O, A → E y L → R: OER.',
+      { hint: 'Cuenta los lugares de cada letra del ejemplo, una por una.' }),
+    play('clave-comparada', 'Estas dos palabras cifradas son **OSO** y **SOL**, pero no se sabe cuál es cuál. Cada símbolo es siempre la misma letra. Escribe **LOS**.', { filas: ['●◆▲', '◆●◆'], ask: 'LOS', metas: ['▲', '◆', '●'], fichas: ['●', '■', '▲', '◆', '★'],
+      mira: ['La L es la única letra que sale en una sola palabra.', 'La O es la que se repite en OSO.', 'La S está en las dos palabras y no se repite en ninguna.'], ok: 'La palabra con un símbolo repetido solo puede ser OSO.' },
+      'Solo OSO repite letra: es ◆●◆. Entonces O es ◆ y S es ●; en ●◆▲, la L es ▲. LOS se escribe ▲◆●.',
+      { hint: 'Una de las dos palabras repite una letra. ¿Cuál de las cifradas repite un símbolo?' }),
+    play('sube-regla', 'Sube al número que entrega la máquina o la clave. Puedes fallar **una** vez.', { tiros: [
+      { q: '4 → 13, 6 → 17, 9 → 23: se **duplica** y se suma siempre lo mismo. ¿Qué entrega con **12**?', r: 29, c: '2 \\cdot 12 + 5', e: { 21: 'Sumar 9 solo sirve con el 4.', 24: 'Falta sumar.' } },
+      { q: '12 → 6, 31 → 8, 40 → 8: se suman las **cifras** y con esa suma se hace **otra cuenta**, siempre la misma. ¿Qué entrega con **57**?', r: 24, c: '2 \\cdot (5 + 7)', e: { 12: 'Falta un paso: 1 + 2 son 3, no 6.', 15: 'Sumar 3 a la suma sirve con el 12, pero el 31 daría 7.' } },
+      { q: 'En una clave las letras avanzan **1, 3, 5, 7…** ¿Cuánto avanza la **sexta**?', r: 11, c: '1 + 5 \\cdot 2', e: { 9: 'Esa es la quinta.', 13: 'Esa es la séptima.' } }] },
+      '$2 \\cdot 12 + 5 = 29$; el doble de $5 + 7$ es 24; y los avances son 1, 3, 5, 7, 9 y 11.',
+      { hint: 'Propón una regla con el primer ejemplo y compruébala con los demás.' }),
     sol('En cierto código, la palabra GATO se escribe HBUP y la palabra LUNA se escribe MVOB. ¿Cómo se escribe PERA en ese código? ¿Qué palabra se cifró como DJOF?',
       ['G pasa a H y A pasa a B: cada letra avanza [[1]] puesto', 'PERA se escribe [[QFSB]]', 'Para leer un mensaje cifrado se hace lo contrario: se [[retrocede]] un puesto', 'DJOF es la palabra [[CINE]]'],
       ['avanza', 'EKPG', 'OFSB'],

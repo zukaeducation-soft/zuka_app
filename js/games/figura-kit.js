@@ -92,7 +92,21 @@ Object.assign(XG, (() => {
     });
   }
 
+  // La bandeja se revuelve (siempre igual): las fichas buenas no salen en el orden de sus lugares, porque un toque llena el primero libre.
+  function revuelve(fichas, metas) {
+    const coin = a => metas.filter((m, i) => a[i] === m).length;
+    let mejor = null;
+    for (let s = 1; s <= 60; s++) {
+      let h = s * 2654435761 >>> 0;
+      const a = [...fichas];
+      for (let i = a.length - 1; i > 0; i--) { h = (Math.imul(h ^ (h >>> 15), 2246822519) + s) >>> 0; const j = h % (i + 1); [a[i], a[j]] = [a[j], a[i]]; }
+      if (!mejor || coin(a) < coin(mejor)) mejor = a;
+      if (!coin(mejor)) break;
+    }
+    return mejor;
+  }
   function rotula(name, d) {
+    const fichas = p => revuelve(d.fichas(p), d.metas(p));
     const bien = (s, p) => d.metas(p).map((m, i) => s.q[i]?.[0] === m);
     XG.juego(name, {
       ini: p => ({ q: d.slots(p).map(() => []) }),
@@ -100,13 +114,13 @@ Object.assign(XG, (() => {
       ok: (s, p) => bien(s, p).every(Boolean),
       sol: p => ({ q: d.metas(p).map(m => [m]) }),
       texto: p => d.texto(p),
-      rotula: true, slots: p => d.slots(p), fichas: p => d.fichas(p), metas: p => d.metas(p), aviso: (s, p) => d.aviso(s.q, p), fondo: (K, p, f) => d.fondo(K, p, f), alto: p => d.alto(p),
+      rotula: true, slots: p => d.slots(p), fichas, metas: p => d.metas(p), aviso: (s, p) => d.aviso(s.q, p), fondo: (K, p, f) => d.fondo(K, p, f), alto: p => d.alto(p),
       monta(stage, p, ui) {
         stage.innerHTML = '<div class="xg-lona xg-rot"></div>';
         const box = stage.firstChild, slots = d.slots(p);
         let marca = null, esc = null, f = 0;
         const monta = s => {
-          esc?.(); esc = XPD.fichas(box, { slots, fichas: d.fichas(p), alto: d.alto(p), cumple: () => true,
+          esc?.(); esc = XPD.fichas(box, { slots, fichas: fichas(p), alto: d.alto(p), cumple: () => true,
             fondo: K => d.fondo(K, p, f) + (marca ? slots.map((sl, i) => K.r(sl.x - (sl.w || 56) / 2 - 4, sl.y - (sl.h || 42) / 2 - 4, (sl.w || 56) + 8, (sl.h || 42) + 8, marca[i] ? 'bien' : 'mal', 13)).join('') : '') },
           s, { set: n => { ui.set(n); ui.nota(''); }, nota() {} });
         };

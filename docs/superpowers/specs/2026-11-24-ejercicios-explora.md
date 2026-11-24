@@ -62,6 +62,13 @@ espejos y dobleces. `XG.cuenta` y `XG.ascensor` (de `conteo-escena.js`) quedan p
 o retrocede `pasos` desde `de`). Pruebas `tests/ejercicios-secuencias.test.js`. El lugar en un ciclo se cuenta desde antes de la primera pieza (`de: -1`),
 para que la cuenta que se muestra sea la de la explicación; ninguna sucesión tiene los saltos ni la razón de los ejemplos explicados.
 
+## Mundo 8, Codificación (pu-cd-1 y pu-cd-2)
+
+`js/games/codigos-escena.js`: rueda de letras, letras con valor, bombillos, máquinas y letras que cambian de puesto. El cuadro de coordenadas y el código
+espejo se quitaron porque la explicación no los enseña. Pruebas `tests/ejercicios-codigos.test.js`.
+
+`XG.rotula` revuelve la bandeja (siempre igual) para que tocar las fichas de izquierda a derecha no dé la respuesta, en todos los mundos.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |

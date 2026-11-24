@@ -86,7 +86,7 @@
   };
   const errada = (G, p) => {
     if (G.figura) { const s = { ...G.ini(p) }, uno = (x, i) => (Array.isArray(x) ? x[i] : x); for (const m of G.manijas(p)) [].concat(m.k).forEach((k, i) => { s[k] = uno(m.max, i) - uno(m.paso, i); }); return s; }
-    if (G.rotula) { const m = [...G.metas(p)], f = [...G.fichas(p)]; m.forEach(x => f.splice(f.indexOf(x), 1)); m[0] = f.find(x => x !== m[0]); return { q: m.map(x => [x]) }; }
+    if (G.rotula) { const m = [...G.metas(p)], f = [...G.fichas(p)]; m.forEach(x => f.splice(f.indexOf(x), 1)); const otra = f.find(x => x !== m[0]); if (otra) m[0] = otra; else [m[0], m[1]] = [m[1], m[0]]; return { q: m.map(x => [x]) }; }
     return { tiros: [1, 2] };
   };
   // Armazones de logica-kit.
