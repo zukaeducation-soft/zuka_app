@@ -70,7 +70,7 @@ function dkCursosHTML() {
   return `<section class="dk dk-card"><h2>Tus cursos</h2>${mine.length ? `<div class="dk-cursos">${mine.map(c => {
     const ls = lessonsOf(c), d = ls.filter(isDone).length;
     return `<button class="dk-curso" type="button" data-dk-open="${c.id}" style="--c:${c.color}">${courseArt(c, 'md')}<span><span class="dk-tr"><b>${esc(c.name)}</b><small>${d}/${ls.length}</small></span><span class="mini-bar"><i style="width:${(d / ls.length) * 100}%"></i></span></span></button>`;
-  }).join('')}</div>` : '<p class="dk-sub">Aún no te has inscrito en ningún curso.</p><button class="btn ghost" type="button" data-dk="home">Ver los cursos</button>'}</section>`;
+  }).join('')}</div>` : '<p class="dk-sub">Aún no has comprado ningún curso.</p><button class="btn ghost" type="button" data-dk="tienda">Ver la tienda</button>'}</section>`;
 }
 function dkBind(root) {
   root.querySelectorAll('[data-dk]').forEach(b => b.onclick = () => (b.dataset.dk === 'streak' ? openStreakSheet() : (go(b.dataset.dk), view.scrollTop = 0)));

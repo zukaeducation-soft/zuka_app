@@ -83,6 +83,8 @@
 .td-lomo small { color: var(--mute); font-size: 13px; }
 .td-lomo:focus-visible, .td-fila:focus-visible, .td-tabs button:focus-visible, .td-cant button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
+.td-solo { text-align: right; font-weight: 700; }
+
 /* QR de pago */
 .pago { display: grid; justify-items: center; gap: 10px; width: 100%; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); text-align: center; }
 .pago h3 { font-size: 18px; font-weight: 600; }

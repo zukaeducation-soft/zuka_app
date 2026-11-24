@@ -236,3 +236,14 @@ test('acceso por código: RLS en las tablas nuevas y las funciones que escriben,
   assert.ok(!/codigo_(entrar|vincular)|privado\.conceder/.test(sql.match(/grant execute[^;]*to (anon, )?authenticated;/g).join()), 'solo el servidor estrena códigos');
   assert.match(sql, /delete from public\.codigos where usado_por = v_uid;/, 'al borrar una cuenta su código no queda libre');
 });
+
+test('Mis cursos, el perfil y las asesorías muestran solo lo comprado; la prueba no cuenta', () => {
+  const c = f('comprado');
+  assert.strictEqual(c([acc('prueba', null)], 'preuda', false, NOW), false);
+  assert.strictEqual(c([acc('pago', dias(5))], 'preuda', true, NOW), true);
+  assert.strictEqual(c([acc('pago', dias(-1))], 'preuda', false, NOW), true, 'vencido: sigue en Mis cursos para renovar');
+  assert.strictEqual(c([acc('pago', dias(-1))], 'preuda', true, NOW), false, 'vencido: sin asesorías');
+  assert.match(read('js/inicio.js'), /cursosVisibles\(\)\.filter\(c => cursoComprado\(c\)\)/);
+  assert.match(read('js/tutorias.js'), /cursosVisibles\(\)\.filter\(c => cursoComprado\(c, true\)\)/);
+  assert.match(read('supabase/migrations/20261124000005_asesoria_curso.sql'), /tipo = ''pago'' and hasta > now\(\)/);
+});

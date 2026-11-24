@@ -38,7 +38,9 @@ function gymWorld(c, ui, done, unlockAll, mine = {}) {
 }
 
 const courseExercises = c => c.units.reduce((t, u) => t + u.lessons.reduce((s, l) => s + l.ex.length, 0), 0);
-const myCourses = () => { const ids = enrolledIds(S, cursosVisibles()); return cursosVisibles().filter(c => ids.includes(c.id)); };
+const cursosInscritos = () => { const ids = enrolledIds(S, cursosVisibles()); return cursosVisibles().filter(c => ids.includes(c.id)); };
+// Mis cursos: los comprados. En desarrollo y para el administrador (todo abierto), los inscritos.
+const myCourses = () => (SIN_CANDADOS || cuentaEsAdmin() ? cursosInscritos() : cursosVisibles().filter(c => cursoComprado(c)));
 
 // Inscribe un curso (sin repetir). renderLearn lo llama: el curso que se ve queda siempre en Mis cursos.
 function enroll(id) {
@@ -69,7 +71,7 @@ function continueCardHTML(c, cur, ls) {
 }
 
 function renderHome() {
-  const mine = myCourses();
+  const mine = cursosInscritos();
   const goalP = Math.min(1, todayXP() / S.goal), name = (S.name || '').trim().split(/\s+/)[0];
   view.innerHTML = `<div class="home">
     <header class="home-head has-mascot"><div><p>${name ? `Hola, ${esc(name)}` : 'Hola'}</p><h1>¿Qué aprendemos hoy?</h1></div>${mascotSVG('think', 'm-hello')}</header>
@@ -105,8 +107,8 @@ function renderHome() {
 function renderMyCourses() {
   const mine = myCourses();
   view.innerHTML = `<div class="mycourses">
-    <header class="home-head"><h1>Mis cursos</h1><p>${mine.length ? 'Los cursos en que estás inscrito.' : 'Aún no te has inscrito en ningún curso.'}</p></header>
-    ${mine.length ? '' : `<div class="m-empty">${mascotSVG('think')}<p>Elige un curso en el Inicio y aquí lo tendrás a mano, con la lección donde vas.</p></div>`}
+    <header class="home-head"><h1>Mis cursos</h1><p>${mine.length ? 'Los cursos que tienes.' : 'Aún no has comprado ningún curso.'}</p></header>
+    ${mine.length ? '' : `<div class="m-empty">${mascotSVG('think')}<p>${cursosConAcceso().length ? 'Tu prueba está en el Inicio. Cuando compres un curso, aparecerá aquí con la lección donde vas.' : 'Cuando compres un curso, aparecerá aquí con la lección donde vas.'}</p></div>`}
     ${mine.length ? `<div class="mc-list">${mine.map(c => {
       const ls = lessonsOf(c), d = ls.filter(isDone).length, nxt = currentLesson(c);
       return `<button class="mc-row" data-open="${c.id}" style="--c:${c.color}">
@@ -116,10 +118,10 @@ function renderMyCourses() {
           <span class="mc-next">${nxt ? `${d ? 'Sigue' : 'Empieza'}: ${esc(nxt.title)}` : '¡Curso completado!'}</span>${dkCursoHTML(c)}</span>
         ${ICON.right}</button>`;
     }).join('')}</div>` : ''}
-    <button class="btn ${mine.length ? 'ghost' : ''} mc-more" data-home>${mine.length ? 'Explorar más cursos' : 'Ver los cursos'}</button>
+    <button class="btn ${mine.length ? 'ghost' : ''} mc-more" data-home>${mine.length ? 'Comprar más cursos' : 'Ver la tienda'}</button>
   </div>`;
   view.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openCourse(b.dataset.open));
-  $('[data-home]', view).onclick = () => go('home');
+  $('[data-home]', view).onclick = () => openTienda('cursos');
   view.scrollTop = 0;
 }
 

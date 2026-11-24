@@ -131,6 +131,7 @@ const TU_ERRORS = {
   max: `Puedes tener hasta ${TUTORIAS.max} asesorías pendientes. Cancela una para separar otra.`,
   topics: 'Elige al menos un tema para reforzar.',
   saldo: 'No te quedan horas para esta materia.',
+  curso: 'Las asesorías son de los cursos que tienes comprados y vigentes.',
 };
 
 // Con cuenta, las asesorías están en la base y gastan horas (spec 2026-11-24-tienda-libros); sin candados (desarrollo) y en la
@@ -156,11 +157,12 @@ function renderTutorias() {
   if (!Array.isArray(S.tutorias) || mine.length !== S.tutorias.length) { S.tutorias = mine; save(); }   // las que ya pasaron se van
   const full = mine.length >= TUTORIAS.max, nx = nextFree(now, mine);
   // Primero la materia que se está estudiando.
-  const courses = [...(typeof cursosVisibles === 'function' ? cursosVisibles() : COURSES)].sort((a, b) => (b.id === S.course) - (a.id === S.course));
+  // Solo los cursos comprados y vigentes.
+  const courses = cursosVisibles().filter(c => cursoComprado(c, true)).sort((a, b) => (b.id === S.course) - (a.id === S.course));
   view.innerHTML = `<div class="tutorias">
     <header class="tu-head"><h1>Tutorías</h1>
       <p class="muted">Separa una asesoría virtual para reforzar lo que más te cuesta. Eliges la materia, los temas, el día y la hora.</p></header>
-    ${tuServidor() ? `<section class="tu-horas"><p><b>${Tienda.saldo.general}</b> ${Tienda.saldo.general === 1 ? 'hora general' : 'horas generales'}${Tienda.saldo.universidad ? ` · <b>${Tienda.saldo.universidad}</b> de universidad` : ''}</p><button class="btn sm main brand" type="button" data-horas>Comprar horas</button></section>` : ''}
+    ${tuServidor() && (courses.length || Tienda.saldo.general + Tienda.saldo.universidad) ? `<section class="tu-horas"><p><b>${Tienda.saldo.general}</b> ${Tienda.saldo.general === 1 ? 'hora general' : 'horas generales'}${Tienda.saldo.universidad ? ` · <b>${Tienda.saldo.universidad}</b> de universidad` : ''}</p><button class="btn sm main brand" type="button" data-horas>Comprar horas</button></section>` : ''}
     <aside class="tu-side" aria-label="Tus asesorías y cupos">${mine.length ? `<section class="card tu-mine-card"><h2>Tus asesorías</h2>${mine.map(b => {
       const c = tuCourse(b.course), titles = tuTitles(b);
       return `<div class="tu-mine" style="--c:${c?.color || 'var(--brand)'}">
@@ -170,9 +172,10 @@ function renderTutorias() {
       </div>`;
     }).join('')}</section>` : ''}${dkTutoriasHTML(mine)}</aside>
     <section class="tu-pick">
-      <h2>¿En qué materia quieres reforzar?</h2>
-      <p class="tu-nextfree">${ICON.calendar}<span>${full ? `Ya tienes ${TUTORIAS.max} asesorías pendientes. Cancela una para separar otra.`
+      ${courses.length ? '<h2>¿En qué materia quieres reforzar?</h2>' : ''}
+      <p class="tu-nextfree"${courses.length ? '' : ' hidden'}>${ICON.calendar}<span>${full ? `Ya tienes ${TUTORIAS.max} asesorías pendientes. Cancela una para separar otra.`
         : nx ? `Próximo cupo: <b>${esc(dayLabel(nx.date, now))} · ${hourLabel(nx.time)}</b>` : 'No quedan cupos esta semana.'}</span></p>
+      ${courses.length ? '' : `<div class="m-empty tu-vacio">${mascotSVG('think')}<p>Las asesorías son de los cursos que tienes comprados. Compra uno y sepáralas aquí.</p><button class="btn brand" type="button" data-cursos>Ver los cursos</button></div>`}
       <div class="course-list">${courses.map(c => `<button class="course-row tu-course" data-book="${c.id}" style="--c:${c.color}"${full || !nx ? ' disabled' : ''}>
         ${courseArt(c, 'lg')}
         <span class="cr-body"><b>${esc(c.name)}</b><small>${c.units.length} ${c.units.length === 1 ? 'unidad' : 'unidades'} · ${lessonsOf(c).length} temas</small></span>
@@ -180,6 +183,7 @@ function renderTutorias() {
     </section>
     ${tuServidor() || tutoriaLink('x') ? '' : '<p class="tu-note">Por ahora la asesoría se guarda solo en este dispositivo.</p>'}
   </div>`;
+  $('[data-cursos]', view)?.addEventListener('click', () => openTienda('cursos'));
   $('[data-horas]', view)?.addEventListener('click', () => openTienda('asesorias'));
   view.querySelectorAll('[data-book]').forEach(b => b.onclick = () => openBooking(tuCourse(b.dataset.book)));
   view.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => {
@@ -201,6 +205,7 @@ function renderTutorias() {
 
 // Hoja para separar: temas → día → hora → nota → confirmar. Al confirmar, la misma hoja dice qué quedó.
 function openBooking(c) {
+  if (!cursoComprado(c, true)) return toast(TU_ERRORS.curso);
   if (typeof planMotivo === 'function' && planMotivo('tutorias')) return openBloqueo('tutorias');   // tutorías: con horas en el saldo
   if (tuServidor() && tuSaldo(c.id) < 1) { toast(TU_ERRORS.saldo); return openTienda('asesorias'); }
   const now = Date.now(), days = tutoriaDays(now, S.tutorias);

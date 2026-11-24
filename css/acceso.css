@@ -48,3 +48,6 @@
 .acc-aviso p { font-size: 14px; line-height: 1.4; }
 .acc-aviso .btn { flex: none; width: auto; --c: var(--brand); color: var(--on-brand); }
 @media (min-width: 1000px) { .cv-side .acc-aviso { margin: 0; } }
+
+.tu-vacio .btn { width: auto; justify-self: center; --c: var(--brand); color: var(--on-brand); }
+.tu-nextfree[hidden] { display: none; }
