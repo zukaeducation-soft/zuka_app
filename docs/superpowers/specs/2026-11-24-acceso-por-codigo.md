@@ -27,4 +27,4 @@ Reemplaza los planes Básico / Medio / Pro de `2026-11-17-usuarios-planes-admin`
 - `js/acceso.js` (reglas puras), `js/cuenta.js` (sesión, entrada, Mi plan, compra), `js/datos.js` (datos personales),
   `js/estado.js` (avance completo), `admin/`.
 - `lecciones.prueba` dice qué abre un código de prueba: al añadir lecciones, `node tools/sync-lecciones.js`.
-- Pruebas: `tests/acceso.test.js`, `tests/estado.test.js`, `tests/panel.test.js`.
+- Pruebas: `tests/acceso.test.js`, `tests/estado.test.js`.

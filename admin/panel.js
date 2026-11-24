@@ -123,35 +123,36 @@ function confirma({ titulo, texto, ok, palabra = '', peligro = false }) {
   });
 }
 const checksCursos = (sel = []) => `<fieldset class="pn-checks"><legend>Cursos</legend>${CURSOS.map(c => `<label class="check"><input type="checkbox" name="cursos" value="${c.id}"${sel.includes(c.id) ? ' checked' : ''}><span>${esc(c.nombre)}</span></label>`).join('')}</fieldset>`;
-const camposAcceso = (tipo, sel, pago = true) => `
+const camposAcceso = (tipo, sel, rotulo = 'Valor por persona (COP)') => `
   <div class="pn-seg" role="radiogroup" aria-label="Tipo de acceso"><label><input type="radio" name="tipo" value="prueba"${tipo === 'prueba' ? ' checked' : ''}><span>Prueba<small>primer mundo</small></span></label>
     <label><input type="radio" name="tipo" value="pago"${tipo === 'pago' ? ' checked' : ''}><span>Pagado<small>curso completo</small></span></label></div>
   ${checksCursos(sel)}
   <div class="pn-planes"></div>
   <div class="pn-dos"><label class="fld"><span data-dias>Días</span><input name="dias" type="number" min="1" max="3650" inputmode="numeric"></label>
-    ${pago ? `<label class="fld solo-pago"><span>Valor pagado (COP)</span><input name="valor" type="number" min="0" step="1000" inputmode="numeric"></label>
-    <label class="fld solo-pago"><span>Medio de pago</span><select name="metodo">${METODOS.map(m => `<option>${m}</option>`).join('')}</select></label>` : ''}</div>`;
+    <label class="fld solo-pago"><span>${rotulo}</span><input name="valor" type="number" min="0" step="1000" inputmode="numeric"></label>
+    <label class="fld solo-pago"><span>Medio de pago</span><select name="metodo">${METODOS.map(m => `<option>${m}</option>`).join('')}</select></label></div>`;
 // Botones de 1, 3, 6 meses según los cursos marcados: llenan los días y el valor.
-function bindAcceso(f, { meses = null } = {}) {
+function bindAcceso(f, { meses = null, precio = null, llena = true } = {}) {
   const marca = () => $$('[name=cursos]:checked', f).map(x => x.value);
   let elegido = meses;
   const pinta = () => {
     const pago = $('[name=tipo]:checked', f).value === 'pago', ids = marca();
     $$('.solo-pago', f).forEach(x => { x.hidden = !pago; });
     $('[data-dias]', f).textContent = pago ? 'Días de acceso' : 'Días de prueba (vacío: sin límite)';
-    const com = pago && ids.length ? [...new Set(PRODUCTOS.filter(p => p.activo && ids.includes(p.curso)).map(p => p.meses))].filter(m => ids.every(i => PRODUCTOS.some(p => p.curso === i && p.activo && p.meses === m))).sort((a, b) => a - b) : [];
+    const com = pago && ids.length ? [...new Set(PRODUCTOS.filter(p => (p.activo || p.meses === meses) && ids.includes(p.curso)).map(p => p.meses))].filter(m => ids.every(i => PRODUCTOS.some(p => p.curso === i && (p.activo || m === meses) && p.meses === m))).sort((a, b) => a - b) : [];
     const box = $('.pn-planes', f);
     box.innerHTML = com.map(m => `<button type="button" class="chip${m === elegido ? ' on' : ''}" data-m="${m}" aria-pressed="${m === elegido}">${mesesTexto(m)}</button>`).join('');
     const pone = m => {
       elegido = m;
       const ps = ids.map(i => PRODUCTOS.find(p => p.curso === i && p.meses === m));
       f.dias.value = Math.max(...ps.map(p => p.dias));
-      if (f.valor) f.valor.value = ps.every(p => p.precio != null) ? ps.reduce((t, p) => t + p.precio, 0) : '';
+      if (llena) f.valor.value = m === meses && precio != null && ids.length === 1 ? precio : ps.every(p => p.precio != null) ? ps.reduce((t, p) => t + p.precio, 0) : '';
     };
     $$('[data-m]', box).forEach(b => { b.onclick = () => { pone(+b.dataset.m); pinta(); }; });
     if (pago && com.length && (!com.includes(elegido))) { pone(com[com.length - 1]); return pinta(); }
     if (pago && com.includes(elegido) && !f.dias.value) pone(elegido);
-    if (!pago) { elegido = null; }
+    if (!pago || !com.length) elegido = null;
+    if (pago && !com.length && llena) f.valor.value = '';
   };
   f.addEventListener('change', e => { if (e.target.name === 'tipo') { f.dias.value = ''; elegido = null; } if (['tipo', 'cursos'].includes(e.target.name)) { if (e.target.name === 'cursos') { const m = elegido; f.dias.value = ''; elegido = m; } pinta(); } });
   pinta();
@@ -159,12 +160,12 @@ function bindAcceso(f, { meses = null } = {}) {
 const leeAcceso = f => ({ tipo: $('[name=tipo]:checked', f).value, cursos: $$('[name=cursos]:checked', f).map(x => x.value), dias: f.dias.value ? Number(f.dias.value) : null,
   valor: f.valor && f.valor.value ? Math.round(Number(f.valor.value)) : 0, metodo: f.metodo ? f.metodo.value : '' });
 // Activa cursos en un código o en estudiantes, y al terminar deja lista la confirmación por WhatsApp.
-function dlgActivar({ codigo = '', usuarios = [], nombre = '', celular = '', sel = [], meses = null, titulo = 'Activar cursos', tipo = 'pago' }, hecho) {
+function dlgActivar({ codigo = '', usuarios = [], nombre = '', celular = '', sel = [], meses = null, precio = null, titulo = 'Activar cursos', tipo = 'pago' }, hecho) {
   ventana(`<form class="pn-form1" novalidate><h2>${titulo}</h2><p class="pn-count">${usuarios.length > 1 ? `${usuarios.length} estudiantes` : esc(nombre || (codigo ? muestraCodigo(codigo) : ''))}. El avance no cambia; si el curso sigue vigente, los días se suman.</p>
     ${camposAcceso(tipo, sel)}<label class="fld"><span>Nota (opcional)</span><input name="nota" maxlength="200"></label>
     <div class="pn-pie"><button class="btn ghost" type="button" data-cerrar>Cancelar</button><button class="btn main" type="submit">Activar</button></div></form>`, d => {
     const f = $('form', d);
-    bindAcceso(f, { meses });
+    bindAcceso(f, { meses, precio });
     f.onsubmit = e => {
       e.preventDefault();
       const v = leeAcceso(f);
@@ -174,7 +175,8 @@ function dlgActivar({ codigo = '', usuarios = [], nombre = '', celular = '', sel
         d.close(); hecho?.();
         if (usuarios.length > 1) return toast('Cursos activados');
         const uid = usuarios[0];
-        const acc = uid ? (await admin('usuario', { usuario: uid })).accesos : [];
+        let acc = [];
+        try { if (uid) acc = (await admin('usuario', { usuario: uid })).accesos; } catch (e2) { /* ya quedó activo: solo falta la fecha en el mensaje */ }
         const hasta = acc.filter(a => v.cursos.includes(a.curso)).map(a => a.hasta).sort()[0];
         ventana(`<div class="pn-form1"><h2>Listo</h2><p>${esc(nombres(v.cursos))} ${v.tipo === 'pago' ? 'quedó activo' : 'quedó en prueba'}${hasta ? ` hasta el ${fechaCorta(hasta)}` : ''}.</p>
           <div class="pn-pie"><button class="btn ghost" type="button" data-cerrar>Cerrar</button>${waA(celular, WA.activado({ nombre, codigo, cursos: nombres(v.cursos), hasta, url: APP }), 'Avisar por WhatsApp', 'main')}</div></div>`);
@@ -319,7 +321,7 @@ function vEstudiante(id) {
       ${pend.map(s => `<div class="pn-aviso">Pidió comprar <b>${esc(curso(s.curso).nombre)}</b> por ${mesesTexto(s.meses)}. <button class="btn small main" type="button" data-sol="${s.id}">Confirmar pago</button></div>`).join('')}
       <div class="pn-cols"><section class="pn-card"><div class="pn-head"><h2>Cursos</h2>${esA ? '' : '<button class="btn small ghost" type="button" data-a="asignar">Asignar curso</button>'}</div>
         ${tabla([{ t: 'Curso' }, { t: 'Acceso' }, { t: 'Hasta' }, { t: '' }], d.accesos.map(a => `<tr><td class="pn-main">${esc(curso(a.curso).nombre)}<span class="pn-sub">${a.tipo === 'pago' ? `Desde el ${fechaCorta(a.desde)}` : 'Primer mundo'}</span></td>${td('Acceso', pillAcceso(a, true))}
-          ${td('Hasta', `<input class="pn-fecha" type="date" data-fecha="${a.curso}" value="${fechaInput(a.hasta)}" aria-label="Fecha de vencimiento de ${esc(curso(a.curso).nombre)}">`)}${td('', `<button class="btn small ghost" type="button" data-quita="${a.curso}">Quitar</button>`, 'pn-num')}</tr>`), esA ? 'Ve todos los cursos.' : 'No tiene cursos asignados.')}</section>
+          ${td('Hasta', `<input class="pn-fecha" type="date" min="2024-01-01" max="2100-01-01" data-fecha="${a.curso}" value="${fechaInput(a.hasta)}" aria-label="Fecha de vencimiento de ${esc(curso(a.curso).nombre)}">`)}${td('', `<button class="btn small main" type="button" data-guarda="${a.curso}" hidden>Guardar fecha</button> <button class="btn small ghost" type="button" data-quita="${a.curso}">Quitar</button>`, 'pn-num')}</tr>`), esA ? 'Ve todos los cursos.' : 'No tiene cursos asignados.')}</section>
         <section class="pn-card"><div class="pn-head"><h2>Código y dispositivos</h2></div>
           ${d.codigos.map(k => `<div class="pn-cod"><span class="pn-code">${muestraCodigo(k.codigo)}</span>${k.bloqueado ? '<span class="pill bad">En pausa</span>' : ''}<span class="pn-acc"><button class="btn small ghost" type="button" data-copy="${k.codigo}">Copiar</button>${waA(p.telefono || k.celular, WA.envio({ nombre: p.nombre, codigo: k.codigo, cursos: nombres(d.accesos.map(a => a.curso)) || 'tus cursos', prueba: !tienePago(d.accesos), url: APP }), 'Enviar')}<button class="btn small ghost" type="button" data-renueva="${k.codigo}">Cambiar código</button></span></div>`).join('') || `<p class="pn-state">Entra con correo${correo ? `: ${esc(correo)}` : ''}.</p>`}
           ${d.dispositivos.length ? `<ul class="pn-disp">${d.dispositivos.map(x => `<li><span>${esc(x.nombre || 'Dispositivo')}<small>${hace(x.visto_en)}</small></span><button class="btn small ghost" type="button" data-disp="${esc(x.id)}">Liberar</button></li>`).join('')}</ul>` : ''}</section></div>
@@ -347,12 +349,17 @@ function vEstudiante(id) {
       unir: () => dlgUnir(id, p),
     };
     $$('[data-a]', view).forEach(b => { b.onclick = () => acts[b.dataset.a](b); });
-    $$('[data-sol]', view).forEach(b => { b.onclick = () => { const s = pend.find(x => String(x.id) === b.dataset.sol); dlgActivar({ ...dat, sel: [s.curso], meses: s.meses, titulo: 'Confirmar pago' }, otra); }; });
-    $$('[data-fecha]', view).forEach(i => { i.onchange = async () => { if (!i.value) return; try { await admin('acceso_fecha', { usuario: id, curso: i.dataset.fecha, hasta: i.value }); toast('Fecha guardada'); } catch (e) { toast(errTexto(e), true); } otra(); }; });
+    $$('[data-sol]', view).forEach(b => { b.onclick = () => { const s = pend.find(x => String(x.id) === b.dataset.sol); dlgActivar({ ...dat, sel: [s.curso], meses: s.meses, precio: s.precio, titulo: 'Confirmar pago' }, otra); }; });
+    // Se guarda con su botón: al teclear el año, el campo pasa por fechas a medias.
+    $$('[data-fecha]', view).forEach(i => {
+      const b = $(`[data-guarda="${i.dataset.fecha}"]`, view), ini = i.value;
+      i.oninput = () => { b.hidden = !i.value || i.value === ini; };
+      b.onclick = () => { if (!i.checkValidity()) return toast('Elige una fecha válida', true); hace1(b, () => admin('acceso_fecha', { usuario: id, curso: i.dataset.fecha, hasta: i.value }), 'Fecha guardada'); };
+    });
     $$('[data-quita]', view).forEach(b => { b.onclick = async () => { if (await confirma({ titulo: `¿Quitar ${esc(curso(b.dataset.quita).nombre)}?`, texto: 'Deja de tener ese curso y se pierden los días que le quedan. Su avance se conserva.', ok: 'Quitar', peligro: true })) hace1(b, () => admin('acceso_quitar', { usuario: id, curso: b.dataset.quita }), 'Curso quitado'); }; });
     $$('[data-copy]', view).forEach(b => { b.onclick = () => copiar(muestraCodigo(b.dataset.copy)); });
     $$('[data-renueva]', view).forEach(b => { b.onclick = () => renovar(b, b.dataset.renueva, p, otra); });
-    $$('[data-disp]', view).forEach(b => { b.onclick = () => hace1(b, () => admin('dispositivos_borrar', { usuario: id, id: b.dataset.disp }), 'Dispositivo liberado'); });
+    $$('[data-disp]', view).forEach(b => { b.onclick = () => hace1(b, () => admin('dispositivos_borrar', { usuario: id, id: b.dataset.disp }), 'Dispositivo liberado: los demás volverán a pedir el código'); });
   });
 }
 async function renovar(b, codigo, p, hecho) {
@@ -382,12 +389,12 @@ async function dlgUnir(id, p) {
 // ---------- 4. códigos ----------
 function dlgCodigo(pre = {}, hecho) {
   ventana(`<form class="pn-form1" novalidate><h2>Crear código</h2>
-    ${camposAcceso('prueba', CURSOS.some(c => c.id === 'preuda') ? ['preuda'] : [])}
+    ${camposAcceso('prueba', CURSOS.some(c => c.id === 'preuda') ? ['preuda'] : [], 'Valor ya pagado por código (vacío: aún no se vende)')}
     <div class="pn-dos"><label class="fld"><span>Nombre</span><input name="nombre" maxlength="80" value="${esc(pre.nombre || '')}" placeholder="A quién se envía"></label><label class="fld"><span>Celular (WhatsApp)</span><input name="celular" type="tel" inputmode="tel" maxlength="30" value="${esc(pre.celular || '')}" placeholder="300 123 4567"></label>
       <label class="fld"><span>Cantidad</span><input name="cantidad" type="number" min="1" max="200" value="1" inputmode="numeric"></label><label class="fld"><span>Nota (opcional)</span><input name="nota" maxlength="200"></label></div>
     <div class="pn-pie"><button class="btn ghost" type="button" data-cerrar>Cancelar</button><button class="btn main" type="submit">Crear</button></div></form>`, d => {
     const f = $('form', d);
-    bindAcceso(f);
+    bindAcceso(f, { llena: false });
     f.onsubmit = e => {
       e.preventDefault();
       const v = leeAcceso(f);
@@ -449,7 +456,7 @@ function vSolicitudes() {
       ${tabla([{ t: 'Estudiante' }, { t: 'Quiere' }, { t: 'Precio', n: 1 }, { t: 'Cuándo' }, { t: 'Estado' }, { t: '' }], ss.map(s => `<tr data-id="${s.usuario}"><td class="pn-main">${esc(s.nombre || 'Sin nombre')}<span class="pn-sub">${esc(s.telefono || '')} ${s.codigo ? muestraCodigo(s.codigo) : ''}</span></td>${td('Quiere', `${esc(curso(s.curso).nombre)} · ${mesesTexto(s.meses)}`)}${td('Precio', s.precio != null ? cop(s.precio) : '—', 'pn-num')}${td('Cuándo', hace(s.creado_en))}${td('Estado', `<span class="pill ${E[s.estado][0]}">${E[s.estado][1]}</span>`)}
         ${td('', s.estado === 'pendiente' ? `<span class="pn-acc"><button class="btn small main" type="button" data-ok="${s.id}">Confirmar pago</button>${waA(s.telefono, `Hola${s.nombre ? ` ${s.nombre}` : ''}, vimos que quieres ${curso(s.curso).nombre} por ${mesesTexto(s.meses)}.`)}<button class="btn small ghost" type="button" data-no="${s.id}">Descartar</button></span>` : '', 'pn-num')}</tr>`), 'No hay solicitudes.')}`;
     filas();
-    $$('[data-ok]', view).forEach(b => { b.onclick = () => { const s = ss.find(x => String(x.id) === b.dataset.ok); dlgActivar({ usuarios: [s.usuario], nombre: s.nombre, celular: s.telefono, sel: [s.curso], meses: s.meses, titulo: 'Confirmar pago' }, vSolicitudes); }; });
+    $$('[data-ok]', view).forEach(b => { b.onclick = () => { const s = ss.find(x => String(x.id) === b.dataset.ok); dlgActivar({ usuarios: [s.usuario], nombre: s.nombre, celular: s.telefono, sel: [s.curso], meses: s.meses, precio: s.precio, titulo: 'Confirmar pago' }, vSolicitudes); }; });
     $$('[data-no]', view).forEach(b => { b.onclick = () => ocupado(b, async () => { await admin('solicitud_estado', { id: b.dataset.no, estado: 'descartada' }); toast('Solicitud descartada'); vSolicitudes(); }); });
   });
 }

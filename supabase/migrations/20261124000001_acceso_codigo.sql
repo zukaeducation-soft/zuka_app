@@ -118,11 +118,17 @@ insert into public.productos (id, curso, meses, dias, activo) values
 insert into public.productos (id, curso, meses, dias)
 select c.id || '-6', c.id, 6, 180 from public.cursos c where c.id <> 'preuda';
 
--- Lo vendido antes se conserva: un plan vigente abre todos los cursos hasta su fecha, y un código sin usar, sus días.
+-- Lo vendido antes se conserva en los cursos que ya estaban abiertos: un plan (vigente o vencido) con su fecha, y un código
+-- sin usar, con sus días. Quien tenía cuenta sin plan queda con la prueba. Un código viejo ya canjeado era desechable: no
+-- sirve para entrar (esas cuentas siguen entrando con su correo).
 insert into public.accesos (usuario, curso, tipo, desde, hasta, dias)
 select p.id, c.id, 'pago', coalesce(p.acceso_desde, now()), p.acceso_hasta, 30
-from public.perfiles p cross join public.cursos c where p.rol = 'estudiante' and p.acceso_hasta > now();
-update public.codigos k set concede = (select jsonb_agg(jsonb_build_object('curso', c.id, 'tipo', 'pago', 'dias', k.dias) order by c.orden) from public.cursos c);
+from public.perfiles p cross join public.cursos c where p.rol = 'estudiante' and p.acceso_hasta is not null and (c.publicado or c.id in ('algebra', 'trig'));
+insert into public.accesos (usuario, curso, tipo)
+select p.id, c.id, 'prueba' from public.perfiles p cross join public.cursos c
+where p.rol = 'estudiante' and p.acceso_hasta is null and (c.publicado or c.id in ('algebra', 'trig'));
+update public.codigos k set concede = (select jsonb_agg(jsonb_build_object('curso', c.id, 'tipo', 'pago', 'dias', k.dias) order by c.orden)
+  from public.cursos c where c.publicado or c.id in ('algebra', 'trig')), bloqueado = k.usado_por is not null;
 
 -- ---------- permisos ----------
 create or replace function privado.puede(p_curso text, p_prueba boolean) returns boolean
@@ -150,7 +156,8 @@ declare v public.accesos;
 begin
   select * into v from public.accesos where usuario = p_uid and curso = p_curso for update;
   if p_tipo = 'prueba' then
-    if found and v.tipo = 'pago' then return; end if;
+    -- Ni baja un pago ni acorta una prueba.
+    if found and (v.tipo = 'pago' or v.hasta is null or (p_dias is not null and v.hasta >= now() + make_interval(days => p_dias))) then return; end if;
     insert into public.accesos (usuario, curso, tipo, desde, hasta, dias)
     values (p_uid, p_curso, 'prueba', now(), now() + make_interval(days => p_dias), p_dias)
     on conflict (usuario, curso) do update set hasta = excluded.hasta, dias = excluded.dias, actualizado_en = now();
@@ -177,8 +184,25 @@ begin
   end loop;
   update public.perfiles set nombre = case when nombre = '' then v.nombre else nombre end,
     telefono = case when telefono = '' then v.celular else telefono end where id = p_uid;
+  update public.pagos g set usuario = p_uid, nombre = case when g.nombre = '' then v.nombre else g.nombre end
+  where g.codigo = p_codigo and g.usuario is null;   -- lo que se pagó antes de estrenarlo
   return true;
 end $$;
+
+-- Las cuentas de código no tienen contraseña ni cambian de correo: si no, quien entró una vez podría seguir entrando
+-- aunque el código se cambie o se pause.
+create function privado.cuenta_de_codigo() returns trigger
+language plpgsql security definer set search_path = ''
+as $$
+begin
+  if old.email like '%@codigo.invalid' then
+    new.encrypted_password := old.encrypted_password;
+    new.email := old.email;
+  end if;
+  return new;
+end $$;
+create trigger zuka_cuenta_de_codigo before update of encrypted_password, email on auth.users
+  for each row execute function privado.cuenta_de_codigo();
 
 -- Primer paso de la entrada con código (solo la función entrar-codigo, con la llave de servicio).
 create function privado.codigo_entrar(p_codigo text, p_ip text, p_disp text, p_disp_nombre text) returns jsonb
@@ -454,9 +478,13 @@ begin
       if not found then raise exception 'No existe ese código' using errcode = '22023'; end if;
       v_ids := case when v_cod.usado_por is null then '{}' else array[v_cod.usado_por] end;
       if v_cod.usado_por is null then
+        -- Igual que en una cuenta: pago + pago suma los días y una prueba no baja un pago.
         update public.codigos set concede = (
           select coalesce(jsonb_agg(e), '[]') from jsonb_array_elements(v_cod.concede) e where not (e ->> 'curso' = any (v_cursos)))
-          || (select jsonb_agg(jsonb_build_object('curso', c, 'tipo', v_tipo, 'dias', v_dias)) from unnest(v_cursos) c)
+          || (select jsonb_agg(case when ya.tipo = 'pago' and v_tipo = 'prueba' then jsonb_build_object('curso', c, 'tipo', 'pago', 'dias', ya.dias)
+              else jsonb_build_object('curso', c, 'tipo', v_tipo, 'dias', v_dias + case when ya.tipo = 'pago' then ya.dias else 0 end) end)
+            from unnest(v_cursos) c left join lateral (select e ->> 'tipo' tipo, (e ->> 'dias')::integer dias
+              from jsonb_array_elements(v_cod.concede) e where e ->> 'curso' = c limit 1) ya on true)
         where codigo = v_cod.codigo;
       end if;
     else
@@ -481,7 +509,9 @@ begin
     return jsonb_build_object('ok', true);
 
   elsif p_accion = 'acceso_fecha' then
-    if nullif(p ->> 'hasta', '') is null then raise exception 'Elige la fecha' using errcode = '22023'; end if;
+    if nullif(p ->> 'hasta', '') is null or (p ->> 'hasta')::date not between date '2024-01-01' and date '2100-01-01' then
+      raise exception 'Elige una fecha válida' using errcode = '22023';
+    end if;
     update public.accesos set hasta = ((p ->> 'hasta')::date + 1)::timestamp at time zone 'America/Bogota' - interval '1 second', actualizado_en = now()
     where usuario = v_uid and curso = p ->> 'curso';
 
@@ -519,9 +549,25 @@ begin
       segundos_vistos = greatest(g.segundos_vistos, excluded.segundos_vistos), completada_en = coalesce(g.completada_en, excluded.completada_en);
     insert into public.accesos as a (usuario, curso, tipo, desde, hasta, dias)
     select (p ->> 'hacia')::uuid, curso, tipo, desde, hasta, dias from public.accesos where usuario = v_uid
-    on conflict (usuario, curso) do update set tipo = excluded.tipo, desde = excluded.desde, hasta = excluded.hasta, dias = excluded.dias
-      where excluded.tipo = 'pago' and (a.tipo = 'prueba' or excluded.hasta > a.hasta);
-    insert into public.estado_app (usuario, datos) select (p ->> 'hacia')::uuid, datos from public.estado_app where usuario = v_uid on conflict do nothing;
+    on conflict (usuario, curso) do update set tipo = excluded.tipo, dias = excluded.dias,
+      desde = case when a.tipo = 'pago' and a.hasta > now() then a.desde else excluded.desde end,
+      -- Dos pagos vigentes del mismo curso: se suman los días que quedaban en cada uno.
+      hasta = case when a.tipo = 'pago' and excluded.tipo = 'pago' and a.hasta > now() and excluded.hasta > now() then a.hasta + (excluded.hasta - now())
+        when a.tipo = 'pago' then greatest(a.hasta, excluded.hasta) else excluded.hasta end
+      where excluded.tipo = 'pago';
+    -- El resto del avance lo junta la app (js/estado.js) la próxima vez que abra: aquí solo se le deja a mano.
+    insert into public.estado_app as s (usuario, datos) select (p ->> 'hacia')::uuid, datos from public.estado_app where usuario = v_uid
+    on conflict (usuario) do update set datos = s.datos || jsonb_build_object('_unir', coalesce(s.datos -> '_unir', '[]') || jsonb_build_array(excluded.datos - '_unir') || coalesce(excluded.datos -> '_unir', '[]'));
+    update public.perfiles h set nombre = coalesce(nullif(h.nombre, ''), o.nombre), telefono = coalesce(nullif(h.telefono, ''), o.telefono), correo = coalesce(nullif(h.correo, ''), o.correo),
+      genero = coalesce(nullif(h.genero, ''), o.genero), edad = coalesce(nullif(h.edad, ''), o.edad), ciudad = coalesce(nullif(h.ciudad, ''), o.ciudad),
+      ocupacion = coalesce(nullif(h.ocupacion, ''), o.ocupacion), institucion = coalesce(nullif(h.institucion, ''), o.institucion), meta = coalesce(nullif(h.meta, ''), o.meta),
+      presentacion = coalesce(nullif(h.presentacion, ''), o.presentacion), horas = coalesce(nullif(h.horas, ''), o.horas), dificultad = coalesce(nullif(h.dificultad, ''), o.dificultad),
+      medio = coalesce(nullif(h.medio, ''), o.medio), acepta_mensajes = case when h.datos_en is null then o.acepta_mensajes else h.acepta_mensajes end, datos_en = coalesce(h.datos_en, o.datos_en)
+    from public.perfiles o where h.id = (p ->> 'hacia')::uuid and o.id = v_uid;
+    insert into public.perfil_notas as n (usuario, nota) select (p ->> 'hacia')::uuid, nota from public.perfil_notas where usuario = v_uid
+    on conflict (usuario) do update set nota = left(concat_ws(' · ', nullif(n.nota, ''), nullif(excluded.nota, '')), 400);
+    update public.solicitudes s set usuario = (p ->> 'hacia')::uuid where s.usuario = v_uid and not (s.estado = 'pendiente' and exists (
+      select 1 from public.solicitudes t where t.usuario = (p ->> 'hacia')::uuid and t.curso = s.curso and t.estado = 'pendiente'));
     insert into public.uso_diario as d (usuario, dia, segundos, lecciones, ejercicios, aciertos)
     select (p ->> 'hacia')::uuid, dia, segundos, lecciones, ejercicios, aciertos from public.uso_diario where usuario = v_uid
     on conflict (usuario, dia) do update set segundos = least(d.segundos + excluded.segundos, 86400), lecciones = d.lecciones + excluded.lecciones,
@@ -532,6 +578,7 @@ begin
 
   elsif p_accion = 'dispositivos_borrar' then
     delete from public.dispositivos where usuario = v_uid and (coalesce(p ->> 'id', '') = '' or id = p ->> 'id');
+    delete from auth.sessions where user_id = v_uid and not privado.es_admin_id(v_uid);   -- no se sabe cuál es la suya: los demás vuelven a entrar con el código
 
   elsif p_accion = 'codigo_editar' then
     update public.codigos set nombre = left(coalesce(p ->> 'nombre', nombre), 80), celular = left(coalesce(p ->> 'celular', celular), 30),
@@ -605,7 +652,7 @@ create policy productos_ver on public.productos for select to anon, authenticate
 create policy ajustes_ver on public.ajustes for select to anon, authenticated using (true);
 create policy accesos_ver on public.accesos for select to authenticated using (usuario = (select auth.uid()) or (select public.es_admin()));
 create policy solicitudes_ver on public.solicitudes for select to authenticated using (usuario = (select auth.uid()) or (select public.es_admin()));
-create policy pagos_ver on public.pagos for select to authenticated using (usuario = (select auth.uid()) or (select public.es_admin()));
+create policy pagos_ver on public.pagos for select to authenticated using ((select public.es_admin()));
 create policy dispositivos_ver on public.dispositivos for select to authenticated using (usuario = (select auth.uid()) or (select public.es_admin()));
 create policy intentos_codigo_ver on public.intentos_codigo for select to authenticated using ((select public.es_admin()));
 create policy auditoria_ver on public.auditoria for select to authenticated using ((select public.es_admin()));
@@ -617,7 +664,7 @@ create policy estado_editar on public.estado_app for update to authenticated usi
 revoke execute on function privado.puede(text, boolean), privado.conceder(uuid, text, text, integer), privado.codigo_vincular(text, uuid),
   privado.codigo_entrar(text, text, text, text), public.codigo_entrar(text, text, text, text), public.codigo_vincular(text, uuid),
   privado.guardar_datos(jsonb), public.guardar_datos(jsonb), privado.pedir_compra(text), public.pedir_compra(text), privado.mi_codigo(), public.mi_codigo(),
-  privado.codigo_nuevo(), privado.cursos_validos(jsonb), privado.dias_validos(text, integer), privado.admin(text, jsonb), public.admin(text, jsonb), privado.es_admin_id(uuid)
+  privado.cuenta_de_codigo(), privado.codigo_nuevo(), privado.cursos_validos(jsonb), privado.dias_validos(text, integer), privado.admin(text, jsonb), public.admin(text, jsonb), privado.es_admin_id(uuid)
   from public, anon, authenticated;
 grant execute on function privado.puede(text, boolean) to anon, authenticated;
 grant execute on function privado.guardar_datos(jsonb), public.guardar_datos(jsonb), privado.pedir_compra(text), public.pedir_compra(text),

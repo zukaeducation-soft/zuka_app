@@ -926,7 +926,7 @@ function renderSettings() {
         if (!yes) return;
         // Se conserva lo que no es progreso: cuenta, asesorías y preferencias (tema, nombre, meta, sonido, video, guías vistas).
         const keep = Object.fromEntries(RESET_KEEP.filter(k => k in S).map(k => [k, S[k]]));
-        S = Object.assign(DEFAULTS(), keep); S.estadoNuevo = true; estadoPronto(); openWorld = null; openBlock = null; profileSub = null; save(); applyTheme(); go('home');
+        S = Object.assign(DEFAULTS(), keep); S.reinicio = Date.now(); estadoPronto(); openWorld = null; openBlock = null; profileSub = null; save(); applyTheme(); go('home');
       });
   };
 }

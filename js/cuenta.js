@@ -219,7 +219,7 @@ async function cuentaSesion(ev, session) {
     if (ev === 'INITIAL_SESSION' && !navigator.onLine) return;   // sin red: vale lo guardado
     Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; Cuenta.bases.clear(); cuentaCola.clear();
     cuentaCache(); cuentaRol(); cuentaRepinta();
-    if (!SIN_CANDADOS && !Clave.vista) { datosAbierta = false; if (!$('#auth') && !$('#landing') && !lessonClose) authScreen(); }
+    if (!SIN_CANDADOS && !Clave.vista) { const tapa = datosAbierta; datosAbierta = false; if (tapa || (!$('#auth') && !$('#landing') && !lessonClose)) authScreen(); }
     return;
   }
   const uidPrevio = (S.cuenta || {}).uid || null, perfilPrevio = cuentaHuella();
@@ -237,12 +237,19 @@ async function cuentaSesion(ev, session) {
   cuentaRepinta();
   datosPide();
 }
+// Si la primera sincronización falló (sin red), se vuelve a intentar.
+async function cuentaReintenta() {
+  if (!Cuenta.sb || !Cuenta.user || Cuenta.user.offline || lessonClose || (S.cuenta || {}).uid === Cuenta.user.id) return;
+  if (await cuentaSyncProgreso((S.cuenta || {}).uid || null)) { await estadoSync(); cuentaRepinta(); }
+}
+if (typeof document !== 'undefined') setInterval(() => { if (!document.hidden) cuentaReintenta().catch(() => {}); }, 60000);
 const cuentaHuella = () => JSON.stringify([Cuenta.perfil, Cuenta.accesos]);
 // Al volver a la app se pregunta si cambió el acceso (el administrador acaba de confirmar un pago…).
 let cuentaVista = 0;
 async function cuentaRevisa() {
   if (!Cuenta.sb || !Cuenta.user || Cuenta.user.offline || Date.now() - cuentaVista < 30000) return;
   cuentaVista = Date.now();
+  await cuentaReintenta();
   const antes = cuentaHuella(), pagos = new Set(Cuenta.accesos.filter(a => a.tipo === 'pago' && vigente(a.hasta, Date.now())).map(a => a.curso));
   await cuentaPerfil();
   if (cuentaHuella() === antes) return;
@@ -273,11 +280,14 @@ async function cuentaPerfil() {
 // local no se le pasa a la nueva: se reemplaza por el de la nube.
 async function cuentaSyncProgreso(uidPrevio) {
   if (!Cuenta.sb || !Cuenta.user) return false;
-  const { data, error } = await Cuenta.sb.from('progreso').select('leccion,completada,segundos_vistos').eq('usuario', Cuenta.user.id);
-  if (error || !data) return false;
-  const otro = uidPrevio && uidPrevio !== Cuenta.user.id;
-  if (otro) { S.done = {}; S.secs = {}; estadoLimpia(); S.tourDone = true; S.name = primerNombre(Cuenta.perfil); }   // tampoco XP, racha, evaluaciones… de la cuenta anterior
+  const uid = Cuenta.user.id, otro = uidPrevio && uidPrevio !== uid;
+  // Se aparta lo de la otra cuenta antes de nada: aunque falle la red, esta no estudia encima de lo ajeno.
+  if (otro) { estadoAparta(uidPrevio); S.done = {}; S.secs = {}; estadoLimpia(); S.tourDone = true; S.name = primerNombre(Cuenta.perfil); }   // tampoco XP, racha, evaluaciones… de la cuenta anterior
   S.secs = S.secs || {};
+  if (otro) { S.cuenta = Object.assign(S.cuenta || {}, { uid: null }); save(); }
+  estadoRecupera(uid);
+  const { data, error } = await Cuenta.sb.from('progreso').select('leccion,completada,segundos_vistos').eq('usuario', uid);
+  if (error || !data || !Cuenta.user || Cuenta.user.id !== uid) return false;
   const nube = new Map(data.map(r => [r.leccion, r]));
   data.forEach(r => {
     if (r.completada) S.done[r.leccion] = true;
