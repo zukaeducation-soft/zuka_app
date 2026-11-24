@@ -77,8 +77,11 @@ function renderTienda() {
   });
 }
 const tiendaPortada = (id, cls = '') => `<img class="td-portada ${cls}" src="brand/libros/${id}.webp" alt="" width="180" height="255" loading="lazy">`;
+// Las horas son para cursos comprados: se venden a quien tiene uno o lo lleva en el mismo pedido.
+const tiendaHorasOk = () => conPlan() || cuentaEsAdmin() || carroItems().some(x => (Tienda.arts.find(a => a.id === x.id).da.cursos || []).length);
 function tiendaBoton(a) {
   const n = Tienda.carro[a.id] || 0;
+  if (a.tipo === 'asesoria' && !n && !tiendaHorasOk()) return '<small class="td-plan td-solo">Con un curso comprado</small>';
   if (!n) return `<button class="btn sm main brand" type="button" data-mas="${a.id}">Añadir</button>`;
   return a.tipo === 'fisico' || a.tipo === 'asesoria'
     ? `<span class="td-cant" role="group" aria-label="Cantidad de ${esc(a.nombre)}"><button type="button" data-menos="${a.id}" aria-label="Quitar uno">−</button><b>${n}</b><button type="button" data-mas="${a.id}" aria-label="Añadir uno"${n >= 10 ? ' disabled' : ''}>+</button></span>`
@@ -129,9 +132,9 @@ function tiendaVistaHTML() {
   if (Tienda.vista === 'asesorias') {
     const s = Tienda.saldo;
     return `<section><h2>Tus horas</h2><div class="td-saldo"><span><b>${s.general}</b>Generales</span><span><b>${s.universidad}</b>De universidad</span>${s.grupo ? `<span><b>${s.grupo}</b>En grupo</span>` : ''}</div>
-      ${s.general || s.universidad ? '<button class="btn main brand td-ir" type="button" data-td="separar">Separar una asesoría</button>' : ''}</section>
+      ${(s.general || s.universidad) && conPlan() ? '<button class="btn main brand td-ir" type="button" data-td="separar">Separar una asesoría</button>' : ''}</section>
       <section><h2>Comprar horas</h2><div class="td-grid">${tiendaDe('asesoria').map(a => tiendaCard(a)).join('')}</div>
-      <p class="td-nota">Cada asesoría es virtual y dura 1 hora. Si cancelas con 12 horas o más de anticipación, la hora vuelve a tu saldo.</p></section>`;
+      <p class="td-nota">Las asesorías son de los cursos que tienes comprados. Cada una es virtual y dura 1 hora. Si cancelas con 12 horas o más de anticipación, la hora vuelve a tu saldo.</p></section>`;
   }
   return `<section><h2>Mis pedidos</h2>${Tienda.pedidos.length ? `<div class="td-lista">${Tienda.pedidos.map(p => `<article class="td-pedido"><div class="acct-head"><b>Pedido ${p.id}</b><span class="pill ${PEDIDO_ESTADO[p.estado][0]}">${PEDIDO_ESTADO[p.estado][1]}</span></div>
     <p>${p.items.map(x => `${x.cantidad > 1 ? `${x.cantidad} × ` : ''}${esc(x.nombre)}`).join(', ')}</p><p class="muted">${fechaCorta(p.creado_en)} · ${cop(p.total)}${p.envio ? ` (envío ${cop(p.envio)})` : ''}</p>
@@ -183,6 +186,7 @@ function tiendaPedir() {
   const items = carroItems();
   if (!items.length) return;
   if (!Cuenta.user) return openEntrar();
+  if (!tiendaHorasOk() && items.some(x => Tienda.arts.find(a => a.id === x.id).tipo === 'asesoria')) return toast('Las asesorías son para cursos comprados. Añade un curso o quita las horas.');
   const el = tiendaCapa('pedir');
   const p = Cuenta.perfil || {}, d = { nombre: p.nombre || '', telefono: p.telefono || '', ciudad: p.ciudad || '', ...(S.envio || {}) };
   const fis = tiendaFisicos(items, Tienda.arts);

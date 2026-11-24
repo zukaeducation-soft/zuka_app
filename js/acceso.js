@@ -16,6 +16,8 @@ function accesoCurso(accesos, curso, now = Date.now()) {
   const ok = vigente(a.hasta, now), dias = a.hasta ? Math.max(0, Math.ceil((new Date(a.hasta).getTime() - now) / DIA_MS)) : null;
   return { estado: a.tipo === 'pago' ? (ok ? 'pago' : 'vencido') : ok ? 'prueba' : 'prueba_vencida', dias, desde: a.desde, hasta: a.hasta };
 }
+// Comprado: lo pagó, esté vigente o vencido (la prueba no cuenta). Con `alDia`, solo vigente.
+const comprado = (accesos, curso, alDia = false, now = Date.now()) => { const e = accesoCurso(accesos, curso, now).estado; return e === 'pago' || (!alDia && e === 'vencido'); };
 const tienePago = (accesos, now = Date.now()) => (accesos || []).some(a => a.tipo === 'pago' && vigente(a.hasta, now));
 
 // Por qué no se puede abrir un recurso { curso, prueba, tipo }: null (sí se puede), 'sesion', 'bloqueado', 'ninguno',

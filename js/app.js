@@ -828,7 +828,7 @@ const RESET_KEEP = ['tourDone', 'tutorias', 'cuenta', 'unlockAll', 'theme', 'nam
 let profileSub = null;   // 'settings': pantalla de Ajustes dentro de la pestaña Perfil (null = el perfil)
 function renderProfile() {
   if (profileSub === 'settings') return renderSettings();
-  const all = cursosVisibles().flatMap(lessonsOf), doneN = all.filter(isDone).length;
+  const all = cursosConAcceso().flatMap(lessonsOf), doneN = all.filter(isDone).length;
   const acc = S.answered ? Math.round((100 * S.correct) / S.answered) : 0;
   const saved = Object.keys(S.saved).filter(id => S.saved[id]).map(id => findCurio(id) || findLesson(id)).filter(x => x && (x.l.fact || cursoVisible(x.c)));   // nada guardado de un curso oculto
   view.innerHTML = `<div class="profile"><div class="pf-side">
