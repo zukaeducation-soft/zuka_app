@@ -45,6 +45,12 @@ por fuerza bruta y ninguna pista de sobra; los tiros fallados no enseñan la res
 Un solo archivo, `js/games/proporcion-escena.js` (40 juegos: vasos, cortes, escalas, rectángulos de trabajo, vías, tanques, dobles reglas y barras de
 precio), con los armazones ya hechos; pruebas `tests/ejercicios-proporcion.test.js`. En los tiros, un fallo dice si faltó o sobró, sin dejar medir cuánto.
 
+## Mundo 5, Conteo y combinatoria (pu-co-1 a pu-co-5)
+
+`js/games/conteo-escena.js`: `cuenta` (casillas con fichas; `mira` es el aviso de cada casilla y `trampas` el de un error típico en ella), `frases`, `fichas` y
+`celdas` (tocar), perillas y `ascensor` (tiros). Pruebas `tests/ejercicios-conteo.test.js`: las metas se comprueban contando de verdad, y cada trampa
+tiene que poder armarse con las fichas que hay.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |
