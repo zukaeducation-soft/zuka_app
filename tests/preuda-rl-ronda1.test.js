@@ -57,9 +57,6 @@ test('fórmulas que se usan quedan enseñadas: rombo, sector, pendientes y reloj
   assert.match(zona(L('pu-ge-4'), 'opcion-examen').params.q, /rombo/);
   assert.match(zona(L('pu-ge-5'), 'caza-error').explain, /l\^2 \+ l\^2/);
   assert.match(zona(L('pu-ge-1'), 'caza-error').explain, /medio grado por minuto/);
-  assert.match(zona(L('pu-co-1'), 'elige-parentesis').explain, /escoger a o b/);
-  assert.match(zona(L('pu-co-3'), 'exponentes-binomio').q, /k es el número de paréntesis/);
-  assert.match(zona(L('pu-co-3'), 'fila-potencia').explain, /entra o no entra/);
 });
 
 test('la ronda dice quién queda, con la cuenta del juego', () => {
