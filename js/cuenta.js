@@ -110,7 +110,7 @@ function authScreen(modo = 'login', aviso = '') {
     try {
       r = reg
         ? await Cuenta.sb.auth.signUp({ email: correo, password: d.clave,
-          options: { data: { nombre: d.nombre.trim(), telefono: d.telefono.trim() }, emailRedirectTo: location.origin + location.pathname } })
+          options: { data: { nombre: d.nombre.trim(), telefono: d.telefono.trim() }, emailRedirectTo: correoVuelve() } })
         : await Cuenta.sb.auth.signInWithPassword({ email: correo, password: d.clave });
     } catch (x) { r = { error: x }; }
     b.disabled = false; b.textContent = txt;
@@ -200,11 +200,11 @@ async function cuentaSesion(ev, session) {
   }
   const uidPrevio = (S.cuenta || {}).uid || null, perfilPrevio = JSON.stringify(Cuenta.perfil);
   Cuenta.user = session.user;
-  if (ev === 'PASSWORD_RECOVERY') openNuevaClave();
+  if (ev === 'PASSWORD_RECOVERY') claveRecupera();   // js/clave.js
   if (antes === session.user.id && ev === 'TOKEN_REFRESHED') return;
   await cuentaPerfil();
   cuentaRol();
-  if (ev !== 'PASSWORD_RECOVERY' || !$('#sheet.open')) authCerrar(); else { $('#auth')?.remove(); if (typeof presentacionCerrar === 'function') presentacionCerrar(); }
+  if (!Clave.vista) authCerrar(); else if (typeof presentacionCerrar === 'function') presentacionCerrar();   // la contraseña nueva se queda a la vista
   // Supabase repite el aviso de sesión cada vez que se vuelve a la pestaña: solo se repinta si algo cambió.
   if (antes === session.user.id) { if (JSON.stringify(Cuenta.perfil) !== perfilPrevio) cuentaRepinta(); return; }
   Cuenta.bases.clear(); cuentaCola.clear();   // nada pendiente de otra cuenta sube a esta
@@ -362,7 +362,7 @@ function openRegistro() {
       if (!/^\S+@\S+\.\S+$/.test(d.correo.trim())) return 'Ese correo no parece válido.';
       if (d.clave.length < 8) return 'La contraseña debe tener 8 caracteres o más.';
       const { data, error } = await Cuenta.sb.auth.signUp({ email: d.correo.trim(), password: d.clave,
-        options: { data: { nombre: d.nombre.trim(), telefono: d.telefono.trim() }, emailRedirectTo: location.origin + location.pathname } });
+        options: { data: { nombre: d.nombre.trim(), telefono: d.telefono.trim() }, emailRedirectTo: correoVuelve() } });
       if (error) return authError(error);
       if (!S.name) { S.name = d.nombre.trim().slice(0, 24); save(); }
       if (data.session) { closeSheet(); toast('¡Cuenta creada!'); return; }
@@ -370,36 +370,6 @@ function openRegistro() {
         <p class="muted">Te enviamos un enlace a <b>${esc(d.correo.trim())}</b>. Ábrelo para confirmar tu cuenta y luego inicia sesión.</p>
         <button class="btn main" type="button" data-ok>Entendido</button></div>`;
       $('[data-ok]', sh).onclick = closeSheet;
-    },
-  });
-}
-
-function openOlvide() {
-  hojaForm({
-    title: 'Recuperar contraseña',
-    intro: 'Te enviamos un enlace para poner una contraseña nueva.',
-    campos: campo('correo', 'Correo', 'email', 'autocomplete="email" inputmode="email" required'),
-    ok: 'Enviar enlace',
-    pie: '<p class="form-links"><button type="button" data-open="login">Volver</button></p>',
-    enviar: async d => {
-      if (sinRed()) return sinRed();
-      const { error } = await Cuenta.sb.auth.resetPasswordForEmail(d.correo.trim(), { redirectTo: location.origin + location.pathname });
-      if (error) return authError(error);
-      closeSheet(); toast('Enlace enviado. Revisa tu correo.');
-    },
-  });
-}
-
-function openNuevaClave() {
-  hojaForm({
-    title: 'Contraseña nueva',
-    campos: campo('clave', 'Contraseña nueva (8 caracteres o más)', 'password', 'autocomplete="new-password" minlength="8" required'),
-    ok: 'Guardar',
-    enviar: async d => {
-      if (d.clave.length < 8) return 'La contraseña debe tener 8 caracteres o más.';
-      const { error } = await Cuenta.sb.auth.updateUser({ password: d.clave });
-      if (error) return authError(error);
-      closeSheet(); toast('Contraseña cambiada.');
     },
   });
 }

@@ -1,0 +1,17 @@
+/* Restablecer la contraseña (js/clave.js), dentro de la pantalla de entrada #auth. */
+.clave-ico { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; border: 1px solid var(--line); background: var(--card); color: var(--brand); }
+.clave-ico .i { width: 26px; height: 26px; }
+.clave-lista .clave-ico { border-color: var(--ok); color: var(--ok); }
+.clave-vencido .clave-ico { color: var(--mute); }
+.clave h1:focus { outline: none; }
+.clave > .muted { margin-bottom: 6px; }
+.clave > .muted b { color: var(--ink); overflow-wrap: anywhere; }
+.clave > .btn.main { --c: var(--brand); color: var(--on-brand); }
+.clave-in { position: relative; display: block; }
+.clave-in input { padding-right: 92px; }
+.clave-in button { position: absolute; top: 0; bottom: 0; right: 2px; min-height: 44px; padding: 0 12px; border-radius: 10px; color: var(--brand); font-size: 14px; font-weight: 700; }
+.clave-reglas { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 14px; color: var(--mute); }
+.clave-reglas li { display: flex; align-items: center; gap: 8px; }
+.clave-reglas .i { width: 18px; height: 18px; padding: 2px; border: 1px solid var(--line); border-radius: 50%; color: transparent; }
+.clave-reglas .on { color: var(--ink); }
+.clave-reglas .on .i { border-color: var(--ok); color: var(--ok); }

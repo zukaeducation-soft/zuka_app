@@ -112,6 +112,7 @@ function presentacionHTML(cursos, { worlds = {}, install = '' } = {}) {
 // ---- en la página ----
 let pzDesde = false;   // la pantalla de entrada se abrió desde aquí: muestra «Volver» (js/cuenta.js)
 function presentacionPide() {
+  if (claveAlAbrir()) return true;   // se vuelve del correo de la contraseña (js/clave.js)
   const ok = presentacionToca({ standalone: isStandalone(), user: Cuenta.user, guest: S.guest, query: location.search });
   if (ok) presentacionAbrir();
   return ok;
