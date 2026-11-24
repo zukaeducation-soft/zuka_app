@@ -3,15 +3,15 @@
 // Se junta con lo que haya en la nube: ningún dispositivo borra lo que hizo otro.
 
 const ESTADO_MAPAS = ['saved', 'likes', 'watched', 'guides'];
-const ESTADO_CAMPOS = ['reinicio', 'name', 'xp', 'correct', 'answered', 'streak', 'maxStreak', 'lastDay', 'goal', 'course', 'lastLesson', 'misCursos',
-  'tutorias', 'today', 'tourDone', 'days', 'exams', 'gym', ...ESTADO_MAPAS];
+const ESTADO_CAMPOS = ['reinicio', 'name', 'xp', 'correct', 'answered', 'streak', 'maxStreak', 'lastDay', 'goal', 'course', 'lastLesson', 'misCursos', 'libros',
+  'today', 'tourDone', 'days', 'exams', 'gym', ...ESTADO_MAPAS];
 
 const estadoToma = s => Object.fromEntries(ESTADO_CAMPOS.filter(k => s[k] !== undefined && s[k] !== null).map(k => [k, s[k]]));
 
 const estadoDia = d => Math.round(Date.parse(`${d}T00:00:00Z`) / 86400000);
 // `local` manda en las preferencias; en lo ganado, lo mejor de los dos. Si uno reinició su progreso después, manda ese.
-// `primera`: este dispositivo aún no se había juntado con esta cuenta. Pura.
-function estadoMezcla(local, nube, primera = false) {
+// Pura.
+function estadoMezcla(local, nube) {
   const a = local || {}, b = { ...nube };
   delete b._unir;
   if ((a.reinicio || 0) !== (b.reinicio || 0) && nube && local) return (a.reinicio || 0) > (b.reinicio || 0) ? { ...a } : b;
@@ -48,7 +48,6 @@ function estadoMezcla(local, nube, primera = false) {
     });
   });
   if (a.misCursos || b.misCursos) r.misCursos = [...new Set([...(a.misCursos || []), ...(b.misCursos || [])])];
-  if (primera && (b.tutorias || []).length && !(a.tutorias || []).length) r.tutorias = b.tutorias;
   if (!a.name && b.name) r.name = b.name;
   if (!a.answered && b.answered && b.goal) r.goal = b.goal;
   if (!a.lastLesson && b.lastLesson) { r.lastLesson = b.lastLesson; if (b.course) r.course = b.course; }
@@ -70,11 +69,11 @@ async function estadoSync() {
     try {
       const { data, error } = await Cuenta.sb.from('estado_app').select('datos').eq('usuario', uid).maybeSingle();
       if (error || !estadoListo() || Cuenta.user.id !== uid) return false;
-      const nube = data && data.datos, primera = S.estadoVisto !== uid;
-      let datos = nube ? estadoMezcla(estadoToma(S), nube, primera) : estadoToma(S);
+      const nube = data && data.datos;
+      let datos = nube ? estadoMezcla(estadoToma(S), nube) : estadoToma(S);
       ((nube && nube._unir) || []).forEach(x => { datos = estadoMezcla(datos, { ...x, reinicio: datos.reinicio }); });
       const ans = S.answered || 0, cor = S.correct || 0;
-      Object.assign(S, datos); S.estadoVisto = uid; save();
+      Object.assign(S, datos); save();
       if (uso.ans != null) { uso.ans += (S.answered || 0) - ans; uso.ok += (S.correct || 0) - cor; }   // lo hecho en otro dispositivo no cuenta como de hoy
       const texto = estadoTexto();
       const up = await Cuenta.sb.from('estado_app').upsert({ usuario: uid, datos, actualizado_en: new Date().toISOString() });
@@ -104,7 +103,7 @@ function estadoRecupera(uid) {
     if (!x) return;
     Object.assign(S.done, x.done);
     Object.entries(x.secs || {}).forEach(([k, n]) => { S.secs[k] = Math.max(S.secs[k] || 0, n); });
-    Object.assign(S, estadoMezcla(estadoToma(S), x.estado, true));
+    Object.assign(S, estadoMezcla(estadoToma(S), x.estado));
     localStorage.removeItem(`zuka-pend-${uid}`); save();
   } catch (e) { /* sin copia */ }
 }
@@ -112,7 +111,7 @@ function estadoRecupera(uid) {
 function estadoLimpia() {
   const d = DEFAULTS();
   ESTADO_CAMPOS.forEach(k => { if (k in d) S[k] = d[k]; else delete S[k]; });
-  delete S.estadoVisto;
+  S.tutorias = []; delete S.libros;
   estadoSubido = '';
 }
 if (typeof document !== 'undefined' && document.addEventListener) {

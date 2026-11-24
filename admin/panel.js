@@ -12,7 +12,7 @@ const APP = location.origin + location.pathname.replace(/admin\/?(index\.html)?$
 const METODOS = ['Nequi', 'Bancolombia', 'Daviplata', 'Efectivo', 'Otro'];
 const ACCIONES = { generar: 'Generó códigos', activar: 'Activó cursos', acceso_fecha: 'Cambió una fecha', acceso_quitar: 'Quitó un curso', usuario_editar: 'Editó un estudiante',
   usuario_bloquear: 'Pausó o reanudó una cuenta', usuario_borrar: 'Eliminó una cuenta', usuario_unir: 'Unió dos cuentas', dispositivos_borrar: 'Liberó dispositivos', codigo_editar: 'Editó un código',
-  codigo_borrar: 'Eliminó un código', codigo_renovar: 'Cambió un código', solicitud_estado: 'Atendió una solicitud', pago_borrar: 'Borró un pago', producto_guardar: 'Cambió un plan', producto_borrar: 'Borró un plan', ajustes_guardar: 'Cambió ajustes' };
+  codigo_borrar: 'Eliminó un código', codigo_renovar: 'Cambió un código', solicitud_estado: 'Atendió una solicitud', pago_borrar: 'Borró un pago', producto_guardar: 'Cambió un plan', producto_borrar: 'Borró un plan', pedido_pagar: 'Confirmó un pedido', pedido_estado: 'Cambió un pedido', articulo_guardar: 'Cambió un artículo', envio_guardar: 'Cambió un envío', libro_guardar: 'Cambió un libro', libros_dar: 'Dio libros', libro_quitar: 'Quitó un libro', horas_ajustar: 'Ajustó horas', asesoria_estado: 'Cambió una asesoría', ajustes_guardar: 'Cambió ajustes' };
 let CURSOS = [], PRODUCTOS = [], AJUSTES = {}, lecciones = null, token = 0;
 
 // ---------- ayudas ----------
@@ -200,7 +200,7 @@ async function entrar() {
   document.body.classList.add('dentro');
   $('.pn-nav').hidden = false;
   addEventListener('hashchange', ruta);
-  ruta();
+  ruta(); tiendaConteo();
 }
 function login() {
   document.body.classList.remove('dentro');
@@ -225,10 +225,10 @@ $('[data-salir]').onclick = async () => { await sb.auth.signOut({ scope: 'local'
 function ruta() {
   const [name, arg] = (location.hash.slice(1) || 'inicio').split('/');
   $$('.pn-nav a').forEach(a => { const on = a.getAttribute('href') === `#${name === 'estudiante' ? 'estudiantes' : name}`; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-  ({ inicio: vInicio, estudiantes: vEstudiantes, estudiante: () => vEstudiante(arg), codigos: vCodigos, solicitudes: vSolicitudes, ventas: vVentas, cursos: vCursos, ajustes: vAjustes }[name] || vInicio)();
+  ({ inicio: vInicio, estudiantes: vEstudiantes, estudiante: () => vEstudiante(arg), codigos: vCodigos, solicitudes: vSolicitudes, pedidos: vPedidos, asesorias: vAsesorias, tienda: vTienda, ventas: vVentas, cursos: vCursos, ajustes: vAjustes }[name] || vInicio)();
   scrollTo(0, 0);
 }
-function pendientes(n) { const x = $('.pn-nav [data-pend]'); x.textContent = n || ''; x.hidden = !n; }
+function pendientes(n) { const x = $('.pn-nav [data-n="solicitudes"]'); x.textContent = n || ''; x.hidden = !n; }
 
 // ---------- 1. inicio ----------
 function vInicio() {
@@ -332,8 +332,10 @@ function vEstudiante(id) {
       <div class="pn-cols"><section class="pn-card"><h2>Uso</h2><div class="pn-tiles chico">${tile(hace(p.ultima_vez), 'Último ingreso')}${tile(hechas.size, 'Lecciones')}${tile(pct(T.aciertos, T.ejercicios), 'Aciertos')}${tile(`${mins(T.segundos)} min`, 'En total')}${tile(p.xp, 'XP')}${tile(diasTexto(p.racha), 'Racha')}</div>
           ${T.dias ? `<h3>Minutos por día</h3>${barras(serie, 'min')}` : '<p class="pn-state">Aún no tiene tiempo de uso.</p>'}</section>
         <section class="pn-card"><h2>Avance</h2>${avance.length ? `<div class="pn-prog">${avance.map(x => `<div><span>${esc(x.c.nombre)}</span><span>${x.n}/${x.total}</span><span class="mini-bar"><i style="width:${(100 * x.n) / x.total}%"></i></span></div>`).join('')}</div>` : '<p class="pn-state">Aún no ha empezado.</p>'}
-          <h2>Pagos</h2>${tabla([{ t: 'Fecha' }, { t: 'Curso' }, { t: 'Valor', n: 1 }], d.pagos.map(g => `<tr>${td('Fecha', fechaCorta(g.creado_en))}${td('Curso', `${esc(curso(g.curso).nombre)} · ${diasTexto(g.dias)}`)}${td('Valor', `${cop(g.valor)}${g.metodo ? ` <span class="pn-sub">${esc(g.metodo)}</span>` : ''}`, 'pn-num')}</tr>`), 'Sin pagos registrados.')}</section></div>
+          <h2>Pagos</h2>${tabla([{ t: 'Fecha' }, { t: 'Curso' }, { t: 'Valor', n: 1 }], d.pagos.map(g => `<tr>${td('Fecha', fechaCorta(g.creado_en))}${td('Curso', `${esc(curso(g.curso).nombre)}${g.dias ? ` · ${diasTexto(g.dias)}` : ''}`)}${td('Valor', `${cop(g.valor)}${g.metodo ? ` <span class="pn-sub">${esc(g.metodo)}</span>` : ''}`, 'pn-num')}</tr>`), 'Sin pagos registrados.')}</section></div>
+      ${esA ? '' : '<section class="pn-card" data-tienda><p class="pn-state">Cargando…</p></section>'}
       ${esA ? '' : `<section class="pn-card pn-zona"><h2>Cuenta</h2><div class="pn-acc"><button class="btn ghost" type="button" data-a="unir">Unir con otra cuenta</button><button class="btn ghost" type="button" data-a="pausa">${p.bloqueado ? 'Reanudar acceso' : 'Pausar acceso'}</button><button class="btn ghost danger" type="button" data-a="borrar">Eliminar cuenta</button></div></section>`}`;
+    if (!esA) fichaTienda(id, $('[data-tienda]', view));
     const hace1 = (b, fn, msg) => ocupado(b, async () => { await fn(); toast(msg); otra(); });
     const dat = { usuarios: [id], nombre: p.nombre, celular: p.telefono };
     const acts = {
@@ -468,7 +470,7 @@ function vVentas() {
     view.innerHTML = `<div class="pn-head"><h1>Ventas</h1><button class="btn ghost" type="button" data-csv>Descargar Excel</button></div>
       <div class="pn-tiles">${tile(cop(tot ? tot.valor : 0), 'Este mes', 'ok')}${tile(cop(r.ventas_30), 'Últimos 30 días')}${tile(cop(g.reduce((t, x) => t + x.valor, 0)), 'En total')}${tile(g.filter(x => x.valor > 0).length, 'Pagos')}</div>
       ${r.ventas_mes.length > 1 ? `<section class="pn-card"><h2>Por mes</h2>${barras(r.ventas_mes.map(x => ({ t: `${MESES[Number(x.mes.slice(5)) - 1]} ${x.mes.slice(0, 4)}`, c: MESES[Number(x.mes.slice(5)) - 1], v: x.valor })), 'COP')}</section>` : ''}
-      ${tabla([{ t: 'Fecha' }, { t: 'Estudiante' }, { t: 'Curso' }, { t: 'Medio' }, { t: 'Valor', n: 1 }, { t: '' }], g.map(x => `<tr${x.usuario ? ` data-id="${x.usuario}"` : ''}>${td('Fecha', fechaCorta(x.creado_en))}<td class="pn-main">${esc(x.nombre || 'Sin nombre')}<span class="pn-sub">${x.codigo ? muestraCodigo(x.codigo) : ''}${x.nota ? ` · ${esc(x.nota)}` : ''}</span></td>${td('Curso', `${esc(curso(x.curso).nombre)} · ${diasTexto(x.dias)}`)}${td('Medio', esc(x.metodo || '—'))}${td('Valor', cop(x.valor), 'pn-num')}${td('', `<button class="btn small ghost" type="button" data-b="${x.id}">Borrar</button>`, 'pn-num')}</tr>`), 'Aún no hay pagos. Se anotan al activar un curso como pagado.')}`;
+      ${tabla([{ t: 'Fecha' }, { t: 'Estudiante' }, { t: 'Curso' }, { t: 'Medio' }, { t: 'Valor', n: 1 }, { t: '' }], g.map(x => `<tr${x.usuario ? ` data-id="${x.usuario}"` : ''}>${td('Fecha', fechaCorta(x.creado_en))}<td class="pn-main">${esc(x.nombre || 'Sin nombre')}<span class="pn-sub">${x.codigo ? muestraCodigo(x.codigo) : ''}${x.nota ? ` · ${esc(x.nota)}` : ''}</span></td>${td('Curso', `${esc(curso(x.curso).nombre)}${x.dias ? ` · ${diasTexto(x.dias)}` : ''}`)}${td('Medio', esc(x.metodo || '—'))}${td('Valor', cop(x.valor), 'pn-num')}${td('', `<button class="btn small ghost" type="button" data-b="${x.id}">Borrar</button>`, 'pn-num')}</tr>`), 'Aún no hay pagos. Se anotan al activar un curso como pagado.')}`;
     filas();
     $('[data-csv]', view).onclick = () => csv('zuka-ventas', ['Fecha', 'Estudiante', 'Código', 'Curso', 'Días', 'Valor', 'Medio', 'Nota'], g.map(x => [fechaCorta(x.creado_en), x.nombre, x.codigo, curso(x.curso).nombre, x.dias, x.valor, x.metodo, x.nota]));
     $$('[data-b]', view).forEach(b => { b.onclick = async () => { if (await confirma({ titulo: '¿Borrar este pago?', texto: 'Solo se quita del registro de ventas; el acceso del estudiante no cambia.', ok: 'Borrar', peligro: true })) ocupado(b, async () => { await admin('pago_borrar', { id: b.dataset.b }); vVentas(); }); }; });

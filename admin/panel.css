@@ -91,3 +91,15 @@ a.pn-tile:hover { border-color: var(--brand); }
   .pn-table td[data-l=""]::before { content: none; }
   .pn-table td[data-l=""] { justify-content: flex-end; }
 }
+
+/* tienda */
+.pn-art { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr) 120px 120px auto auto auto; gap: 10px; align-items: end; padding-top: 12px; border-top: 1px solid var(--line); }
+.pn-art.envio { grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr) 130px auto auto; }
+.pn-art.libro { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 110px auto auto auto auto; }
+.pn-art .pn-sw, .pn-art .pn-count { padding-bottom: 11px; white-space: nowrap; }
+.pn-art .btn { margin-bottom: 4px; cursor: pointer; }
+@media (max-width: 1180px) {
+  .pn-art, .pn-art.envio, .pn-art.libro { grid-template-columns: 1fr 1fr; }
+  .pn-art .det, .pn-art > .fld:first-child { grid-column: 1 / -1; }
+  .pn-art .pn-sw, .pn-art .pn-count { padding-bottom: 0; }
+}

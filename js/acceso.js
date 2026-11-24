@@ -19,13 +19,13 @@ function accesoCurso(accesos, curso, now = Date.now()) {
 const tienePago = (accesos, now = Date.now()) => (accesos || []).some(a => a.tipo === 'pago' && vigente(a.hasta, now));
 
 // Por qué no se puede abrir un recurso { curso, prueba, tipo }: null (sí se puede), 'sesion', 'bloqueado', 'ninguno',
-// 'prueba' (hay que comprar), 'vencido', 'prueba_vencida' o 'tutorias' (piden un curso pagado). Los clips, para todos.
-function motivoBloqueo({ perfil, accesos }, rec, now = Date.now()) {
+// 'prueba' (hay que comprar), 'vencido', 'prueba_vencida' o 'tutorias' (sin horas en el saldo). Los clips, para todos.
+function motivoBloqueo({ perfil, accesos, horas = 0 }, rec, now = Date.now()) {
   if (!rec || rec.tipo === 'clip') return null;
   if (!perfil) return 'sesion';
   if (perfil.rol === 'admin') return null;
   if (perfil.bloqueado) return 'bloqueado';
-  if (rec.tipo === 'tutorias') return tienePago(accesos, now) ? null : 'tutorias';
+  if (rec.tipo === 'tutorias') return horas > 0 ? null : 'tutorias';
   const { estado } = accesoCurso(accesos, rec.curso, now);
   if (estado === 'pago' || (rec.prueba && (estado === 'prueba' || estado === 'vencido'))) return null;
   return estado;
@@ -40,7 +40,7 @@ function textoBloqueo(motivo, curso = 'este curso') {
     prueba: { title: 'Aquí termina tu prueba', text: `Tu código de prueba abre el primer mundo de ${curso}. Compra el acceso y sigue donde vas: tu avance no se pierde.` },
     prueba_vencida: { title: 'Tu prueba terminó', text: `Compra el acceso a ${curso} para continuar. Tu avance sigue guardado.` },
     vencido: { title: 'Tu plan venció', text: `Renueva ${curso} para seguir. Conservas el primer mundo y todo tu avance.` },
-    tutorias: { title: 'Las asesorías vienen con tu plan', text: 'Se separan con cualquier curso pagado y vigente.' },
+    tutorias: { title: 'Necesitas horas de asesoría', text: 'Compra una hora o un paquete y separa tu asesoría virtual cuando quieras.' },
   })[motivo] || null;
 }
 

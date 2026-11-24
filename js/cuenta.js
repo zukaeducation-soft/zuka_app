@@ -23,7 +23,7 @@ const SIN_CANDADOS = typeof location !== 'undefined' && /^(localhost|127\.0\.0\.
 // Motivo por el que algo está cerrado para quien usa la app ahora (null = abierto).
 function planMotivo(id) {
   if (SIN_CANDADOS) return null;
-  return motivoBloqueo({ perfil: Cuenta.user ? Cuenta.perfil : null, accesos: Cuenta.accesos }, Cuenta.recursos[id] || { tipo: 'leccion' });
+  return motivoBloqueo({ perfil: Cuenta.user ? Cuenta.perfil : null, accesos: Cuenta.accesos, horas: typeof Tienda === 'undefined' ? 0 : Tienda.saldo.general + Tienda.saldo.universidad }, Cuenta.recursos[id] || { tipo: 'leccion' });
 }
 
 function cuentaCache() {
@@ -217,7 +217,7 @@ async function cuentaSesion(ev, session) {
   const antes = Cuenta.user && !Cuenta.user.offline ? Cuenta.user.id : null;
   if (!session) {
     if (ev === 'INITIAL_SESSION' && !navigator.onLine) return;   // sin red: vale lo guardado
-    Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; Cuenta.bases.clear(); cuentaCola.clear();
+    Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; tiendaFuera(); Cuenta.bases.clear(); cuentaCola.clear();
     cuentaCache(); cuentaRol(); cuentaRepinta();
     if (!SIN_CANDADOS && !Clave.vista) { const tapa = datosAbierta; datosAbierta = false; if (tapa || (!$('#auth') && !$('#landing') && !lessonClose)) authScreen(); }
     return;
@@ -234,6 +234,7 @@ async function cuentaSesion(ev, session) {
   Cuenta.bases.clear(); cuentaCola.clear();   // nada pendiente de otra cuenta sube a esta
   uso.seg = 0; uso.lec = 0; uso.ans = S.answered; uso.ok = S.correct; uso.t = Date.now();
   if (await cuentaSyncProgreso(uidPrevio)) await estadoSync();
+  await Promise.all([tiendaCarga().catch(() => {}), asesoriasCarga().catch(() => {})]);
   cuentaRepinta();
   datosPide();
 }
@@ -243,7 +244,7 @@ async function cuentaReintenta() {
   if (await cuentaSyncProgreso((S.cuenta || {}).uid || null)) { await estadoSync(); cuentaRepinta(); }
 }
 if (typeof document !== 'undefined') setInterval(() => { if (!document.hidden) cuentaReintenta().catch(() => {}); }, 60000);
-const cuentaHuella = () => JSON.stringify([Cuenta.perfil, Cuenta.accesos]);
+const cuentaHuella = () => JSON.stringify([Cuenta.perfil, Cuenta.accesos, Tienda.mios, Tienda.saldo]);
 // Al volver a la app se pregunta si cambió el acceso (el administrador acaba de confirmar un pago…).
 let cuentaVista = 0;
 async function cuentaRevisa() {
@@ -251,7 +252,8 @@ async function cuentaRevisa() {
   cuentaVista = Date.now();
   await cuentaReintenta();
   const antes = cuentaHuella(), pagos = new Set(Cuenta.accesos.filter(a => a.tipo === 'pago' && vigente(a.hasta, Date.now())).map(a => a.curso));
-  await cuentaPerfil();
+  await Promise.all([cuentaPerfil(), tiendaMios().catch(() => {}), asesoriasCarga().catch(() => {})]);
+  if ($('#tienda') && !$('#tienda').dataset.paso) tiendaPinta();
   if (cuentaHuella() === antes) return;
   const nuevo = Cuenta.accesos.find(a => a.tipo === 'pago' && vigente(a.hasta, Date.now()) && !pagos.has(a.curso));
   if (nuevo) toast(`¡Listo! Tu acceso a ${cursoNombre(nuevo.curso)} está activo.`);
@@ -461,16 +463,6 @@ async function openComprar(id) {
   };
   pinta();
 }
-// Qué cursos tiene y cuáles puede comprar.
-function openPlanes() {
-  openSheet(`<div class="acct-form"><h3 class="sheet-title">Cursos y planes</h3><div class="planes">${cursosVisibles().map(c => {
-    const a = accesoCurso(Cuenta.accesos, c.id), ps = productosDe(c.id), desde = ps.map(p => p.precio).filter(p => p != null).sort((x, y) => x - y)[0];
-    return `<section class="plan${a.estado === 'pago' ? ' mio' : ''}"><header><b>${esc(c.name)}</b>${accesoPill(a)}</header>
-      <p class="muted">${ps.length ? `${ps.map(p => mesesTexto(p.meses)).join(', ').replace(/, ([^,]*)$/, ' o $1')}${desde != null ? ` · desde ${cop(desde)}` : ''}` : 'Escríbenos para conocer el precio.'}</p>
-      <button class="btn ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-compra="${esc(c.id)}">${a.estado === 'pago' || a.estado === 'vencido' ? 'Renovar' : 'Comprar'}</button></section>`;
-  }).join('')}</div></div>`, sh => sh.querySelectorAll('[data-compra]').forEach(b => { b.onclick = () => openComprar(b.dataset.compra); }));
-}
-
 // Hoja que sale al tocar algo con candado: dice por qué y qué hacer.
 function openBloqueo(id) {
   const motivo = planMotivo(id), rec = Cuenta.recursos[id] || {}, t = textoBloqueo(motivo, cursoNombre(rec.curso));
@@ -480,9 +472,9 @@ function openBloqueo(id) {
     <h3 class="sheet-title">${esc(t.title)}</h3><p class="muted">${esc(t.text)}</p>
     ${motivo === 'sesion' ? '<button class="btn main" type="button" data-a="entrar">Entrar con mi código</button>'
     : motivo === 'bloqueado' ? waBoton(WA.ayuda(Cuenta.codigo), 'Escribir por WhatsApp', 'main')
-    : `<button class="btn main" type="button" data-a="compra">${motivo === 'vencido' ? 'Renovar' : compra ? 'Comprar acceso' : 'Ver planes'}</button>
-      <button class="btn ghost" type="button" data-a="canje">Ya tengo otro código</button>`}</div>`,
-  sh => sh.querySelectorAll('[data-a]').forEach(b => { b.onclick = () => ({ entrar: openEntrar, canje: openCanje, compra: () => (compra ? openComprar(rec.curso) : openPlanes()) })[b.dataset.a](); }));
+    : `<button class="btn main" type="button" data-a="compra">${motivo === 'vencido' ? 'Renovar' : compra ? 'Comprar acceso' : 'Comprar horas'}</button>
+      ${motivo === 'tutorias' ? '' : '<button class="btn ghost" type="button" data-a="paquetes">Ver paquetes y libros</button><button class="link-btn" type="button" data-a="canje">Ya tengo otro código</button>'}`}</div>`,
+  sh => sh.querySelectorAll('[data-a]').forEach(b => { b.onclick = () => ({ entrar: openEntrar, canje: openCanje, paquetes: () => openTienda(), compra: () => (compra ? openComprar(rec.curso) : openTienda('asesorias')) })[b.dataset.a](); }));
 }
 // Aviso dentro del curso (portada): prueba, plan por vencer o vencido, con su botón.
 function accesoAvisoHTML(c) {
@@ -515,18 +507,18 @@ function cuentaCard() {
         <button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-acct="comprar" data-curso="${esc(x.curso)}">${x.tipo === 'pago' ? 'Renovar' : 'Comprar acceso'}</button></li>`;
     }).join('')}</ul>` : '<p class="muted">Aún no tienes cursos en tu cuenta.</p>'}
     ${Cuenta.codigo ? `<button class="mi-codigo" type="button" data-acct="copia" aria-label="Copiar mi código ${muestraCodigo(Cuenta.codigo)}"><span><small>Mi código de acceso</small><b>${muestraCodigo(Cuenta.codigo)}</b></span><span class="mi-copia">Copiar</span></button>` : ''}
-    ${admin ? '<a class="btn ghost" href="admin/">Panel de administración</a>' : `<div class="acct-actions"><button class="btn ghost" data-acct="planes">Más cursos</button><button class="btn ghost" data-acct="canje">Añadir código</button></div>`}
+    ${admin ? '<a class="btn ghost" href="admin/">Panel de administración</a>' : `<div class="acct-actions"><button class="btn brand" data-acct="tienda">Tienda</button><button class="btn ghost" data-acct="canje">Añadir código</button></div>`}
     <div class="acct-foot">${admin ? '<span></span>' : '<button class="link-btn" data-acct="datos">Mis datos</button>'}<button class="link-btn" data-acct="salir">Cerrar sesión</button></div></section>`;
 }
 async function cuentaSalir() {
   cuentaEnvia(); usoEnvia();
   await estadoEnvia().catch(() => {});   // nada de lo ganado se queda sin subir
   if (Cuenta.sb) await Cuenta.sb.auth.signOut({ scope: 'local' }).catch(() => {});
-  Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
+  Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; tiendaFuera(); cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
   if (!SIN_CANDADOS) authScreen();
 }
 function cuentaBind(root) {
-  const acts = { entrar: openEntrar, planes: openPlanes, canje: openCanje, datos: () => datosScreen(false),
+  const acts = { entrar: openEntrar, tienda: () => openTienda(), canje: openCanje, datos: () => datosScreen(false),
     comprar: b => openComprar(b.dataset.curso),
     copia: () => navigator.clipboard?.writeText(muestraCodigo(Cuenta.codigo)).then(() => toast('Código copiado.'), () => toast(muestraCodigo(Cuenta.codigo))),
     salir: () => ask({ title: '¿Cerrar sesión?', text: Cuenta.codigo ? `Para volver necesitarás tu código: ${muestraCodigo(Cuenta.codigo)}. Guárdalo antes.` : 'Tu avance queda guardado en tu cuenta.', ok: 'Cerrar sesión', cancel: 'Quedarme' })

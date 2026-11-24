@@ -36,6 +36,13 @@
 .mi-copia { color: var(--brand); font-size: 14px; font-weight: 700; }
 .mi-codigo:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
+/* horas de asesoría */
+.tu-horas { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+.tu-horas .btn { --c: var(--brand); color: var(--on-brand); }
+.tu-ok { color: var(--ok) !important; font-weight: 700; }
+.tu-enlace { color: var(--brand); font-weight: 700; font-size: 14px; }
+@media (min-width: 1000px) { .tutorias > .tu-horas { grid-column: 1 / -1; } }
+
 /* aviso dentro del curso */
 .acc-aviso { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; margin-top: 14px; padding: 14px 16px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--gold) 55%, var(--line)); background: color-mix(in srgb, var(--gold) 9%, var(--card)); }
 .acc-aviso p { font-size: 14px; line-height: 1.4; }

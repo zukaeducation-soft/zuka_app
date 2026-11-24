@@ -40,7 +40,8 @@ test('motivoBloqueo: la prueba abre solo el primer mundo; vencido lo conserva; b
   assert.strictEqual(m(con(acc('pago', dias(-1))), uno, NOW), null);
   assert.strictEqual(m(con(), uno, NOW), 'ninguno');
   assert.strictEqual(m(con(acc('prueba', null)), { tipo: 'tutorias' }, NOW), 'tutorias');
-  assert.strictEqual(m(con(acc('pago', dias(5))), { tipo: 'tutorias' }, NOW), null);
+  assert.strictEqual(m({ ...con(acc('pago', dias(5))), horas: 0 }, { tipo: 'tutorias' }, NOW), 'tutorias');
+  assert.strictEqual(m({ ...con(), horas: 1 }, { tipo: 'tutorias' }, NOW), null);
   assert.strictEqual(m({ perfil: { rol: 'estudiante', bloqueado: true }, accesos: [acc('pago', dias(5))] }, uno, NOW), 'bloqueado');
   assert.strictEqual(m({ perfil: { rol: 'admin' }, accesos: [] }, dos, NOW), null);
   for (const k of ['sesion', 'bloqueado', 'ninguno', 'prueba', 'prueba_vencida', 'vencido', 'tutorias']) assert.ok(f('textoBloqueo')(k, 'X').title, k);
@@ -151,7 +152,7 @@ test('sin sesión la app pide el código; no hay registro ni exploración sin cu
 });
 
 test('el panel no usa clases «ad-…»: los bloqueadores de anuncios las esconden', () => {
-  for (const f of ['admin/panel.js', 'admin/panel.css', 'admin/admin.css', 'admin/index.html']) {
+  for (const f of ['admin/panel.js', 'admin/tienda.js', 'admin/panel.css', 'admin/admin.css', 'admin/index.html']) {
     assert.ok(!/(^|[^A-Za-z0-9])ad-[a-z]/.test(read(f)), f);
   }
 });

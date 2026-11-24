@@ -35,10 +35,6 @@ test('la racha de dos dispositivos es una sola si los días se tocan', () => {
   assert.equal(mezcla({ streak: 3, lastDay: '2026-11-24' }, { streak: 10, lastDay: '2026-11-23' }).streak, 11);
   assert.equal(mezcla({ streak: 1, lastDay: '2026-11-24' }, { streak: 10, lastDay: '2026-11-20' }).streak, 1);
 });
-test('una asesoría cancelada no vuelve; en un dispositivo nuevo sí llega', () => {
-  assert.equal(mezcla({ tutorias: [] }, { tutorias: [1] }).tutorias.length, 0);
-  assert.equal(mezcla({ tutorias: [] }, { tutorias: [1] }, true).tutorias.length, 1);
-});
 test('reiniciar el progreso vale en todos los dispositivos', () => {
   assert.equal(mezcla({ xp: 0, reinicio: 9 }, { xp: 80 }).xp, 0);
   assert.equal(mezcla({ xp: 80 }, { xp: 0, reinicio: 9 }).xp, 0);

@@ -352,14 +352,15 @@ function renderComponents(c) {
         ${dkMundosHTML(c, b)}
         <span class="comp-go" aria-hidden="true">${ICON.right}</span></button>`;
     }).join('')}</div>
-    ${doneN === ls.length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}</div>
+    ${doneN === ls.length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
+    ${c.id === 'preuda' ? librosHTML() : ''}</div>
     ${gymFabHTML(c, courseLevelUi(c, null, { done: S.done, last: S.lastLesson }))}
   </div>`;
   view.querySelectorAll('[data-block]').forEach(b => b.onclick = () => {
     openBlock = { course: c.id, id: b.dataset.block }; renderLearn(); $('[data-back]', view)?.focus({ preventScroll: true });
   });
   $('[data-continue]', view)?.addEventListener('click', () => startLesson(c, cur));
-  bindCourseHead(); bindAccesoAviso(); bindGymFab(c);
+  bindCourseHead(); bindAccesoAviso(); bindGymFab(c); bindLibros(view);
   view.scrollTop = 0;
 }
 function renderLearn() {
@@ -851,13 +852,13 @@ function renderProfile() {
       <p class="muted">${todayXP()} de ${S.goal} XP</p>
       <div class="bar"><i style="width:${Math.min(1, todayXP() / S.goal) * 100}%"></i></div>
     </section>
-    ${dkMesHTML()}${dkCursosHTML()}
+    ${librosHTML(true)}${dkMesHTML()}${dkCursosHTML()}
     ${saved.length ? `<section class="card pf-saved"><h3>Clips guardados</h3>${saved.map(({ c, l }) =>
       `<button class="saved-row" data-${l.fact ? 'curio' : 'lesson'}="${l.id}" style="--c:${c.color}">${ICON.bookmark}<span><b>${esc(l.title)}</b><small>${esc(c.name)}</small></span></button>`).join('')}</section>` : ''}
   </div></div>`;
   const nameInp = $('.name-input', view);
   nameInp.onchange = () => { S.name = nameInp.value = nameInp.value.trim(); save(); $('.avatar', view).textContent = (S.name || 'Z')[0].toUpperCase(); };
-  cuentaBind(view); dkBind(view);
+  cuentaBind(view); dkBind(view); bindLibros(view);
   $('[data-settings]', view).onclick = () => { profileSub = 'settings'; renderProfile(); view.scrollTop = 0; $('[data-back]', view).focus({ preventScroll: true }); };
   view.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => {
     const { c, l } = findLesson(b.dataset.lesson);
