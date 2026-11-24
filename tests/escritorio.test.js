@@ -54,13 +54,13 @@ test('va registrado', () => {
   assert.ok(sw.includes("'js/escritorio.js'") && sw.includes("'css/escritorio.css'"));
 });
 
-test('arriba va el nombre «Zuka» en letra, sin el cerebro de puntos', () => {
+test('arriba va el logo: el cerebro de un trazo y ZUKA (spec 2026-11-24-logo-nuevo)', () => {
   const pz = read('js/presentacion.js');
-  assert.match(pz, /const zukaWord = \(\) => '<span class="zk-word">Zuka<\/span>';/);
+  assert.match(pz, /const zukaWord = \(\) => logoHTML\(\);/);
   assert.match(pz, /const logo = zukaWord\(\);/);
   assert.match(read('js/cuenta.js'), /<div class="auth-brand">\$\{zukaWord\(\)\}<\/div>/);
   assert.match(read('js/app.js'), /data-home aria-label="Ir al inicio">\$\{zukaWord\(\)\}<\/button>/);
-  assert.match(read('css/presentacion.css'), /\.zk-word \{ font-family: var\(--display\); font-weight: 600;/);
+  assert.doesNotMatch(read('css/presentacion.css'), /zk-word/);
 });
 
 test('en el computador el juego se dibuja con ancho de celular y se agranda para llenar el espacio', () => {

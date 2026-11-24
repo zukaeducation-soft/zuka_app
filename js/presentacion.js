@@ -11,8 +11,8 @@ function presentacionToca({ standalone, user, query = '' }) {
 }
 
 // El nombre en letra (pedido del 2026-11-20: sin el cerebro de puntos): barra de la presentación, entrada y barra de
-// escritorio. Estilo .zk-word en css/presentacion.css.
-const zukaWord = () => '<span class="zk-word">Zuka</span>';
+// escritorio. El logo es logoHTML (js/marca.js).
+const zukaWord = () => logoHTML();
 
 const pzEsc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 const pzLessons = c => (c.units || []).reduce((n, u) => n + ((u.lessons || []).length), 0);

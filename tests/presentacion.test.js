@@ -6,7 +6,7 @@ const path = require('path');
 const { ROOT, loadScripts, get } = require('./load');
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 
-const ctx = loadScripts(['js/presentacion.js']);
+const ctx = loadScripts(['js/marca.js', 'js/presentacion.js']);
 const toca = get(ctx, 'presentacionToca');
 
 test('sale en la web sin instalar y sin sesión; no en la app instalada ni con sesión', () => {

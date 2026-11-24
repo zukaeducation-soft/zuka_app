@@ -963,7 +963,7 @@ function hideBoot() {
 // desde el primer cuadro, mientras la app carga, sin esperar a este archivo. El script del <head> pone data-intro la
 // primera vez de cada sesión (y no con «reducir movimiento»). Aquí solo se espera a que termine antes de quitar la
 // portada: INTRO_MS desde que empezó a verse (zukaIntroT0); un toque la salta. Sin data-intro no se espera nada.
-const INTRO_MS = 3100;
+const INTRO_MS = 2700;
 function introWait() {
   const b = $('#boot');
   if (!document.documentElement.dataset.intro || !b) return Promise.resolve();

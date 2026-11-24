@@ -13,7 +13,7 @@
   transition: background .25s, border-color .25s; border-bottom: 1px solid transparent;
 }
 .pz-bar.lit { background: color-mix(in srgb, var(--bg) 95%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom-color: var(--line); }
-.pz-logo .logo { height: 30px; display: block; }
+.pz-logo .logo { height: 34px; }
 .pz-word { font-family: var(--display); font-size: 22px; }
 .pz-bar-acts { display: flex; gap: 8px; align-items: center; }
 .pz-bar .btn.sm { padding: 9px 14px; font-size: 14px; border-radius: 999px; white-space: nowrap; }
@@ -154,11 +154,7 @@
 }
 
 /* el nombre en letra, sin el cerebro de puntos */
-.zk-word { font-family: var(--display); font-weight: 600; font-size: 28px; line-height: 1; letter-spacing: -.02em; color: var(--ink); }
-.pz-logo .zk-word { font-size: 27px; }
-.pz-foot .zk-word { font-size: 22px; color: var(--mute); }
-.auth-brand .zk-word { font-size: 32px; }
-.tb-logo-d .zk-word { font-size: 27px; }
+.pz-foot .logo { height: 28px; color: var(--mute); }
 
 /* pantalla de entrada abierta desde aquí (en el computador, una ventana encima de la presentación) */
 #auth { z-index: 37; }

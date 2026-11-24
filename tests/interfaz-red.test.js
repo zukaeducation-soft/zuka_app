@@ -80,47 +80,35 @@ test('js/marca.js sale de tools/marca.js y está registrado', () => {
   assert.ok(sw.includes("'js/marca.js'"));
 });
 
-test('la malla: cada arista une dos nodos, todo cabe en el cuadro y hay una versión sencilla para tamaños chicos', () => {
-  for (const kind of ['full', 'simple']) {
-    const g = built.geo[kind];
-    for (const [x, y] of g.nodes) assert.ok(x >= 2 && x <= 98 && y >= 2 && y <= 98, `${kind}: nodo (${x}, ${y}) fuera`);
-    for (const [a, b] of g.edges) assert.ok(a !== b && g.nodes[a] && g.nodes[b], `${kind}: arista ${a}-${b}`);
-    for (const t of g.tris) assert.equal(new Set(t).size, 3);
-    const used = new Set(g.edges.flat());
-    assert.equal(used.size, g.nodes.length, `${kind}: ningún nodo suelto`);
-    assert.ok(g.stem.length >= 4, 'el tallo');
-  }
-  assert.ok(built.geo.full.nodes.length >= 30);
-  assert.ok(built.geo.simple.nodes.length <= 18);
-});
-
-test('brainSVG, brainTile y logoHTML: malla, caras encendidas y nombre accesible', () => {
+test('la marca: un solo color, dentro del cuadro y con nombre accesible (spec 2026-11-24-logo-nuevo)', () => {
   const ctx = loadScripts(['js/marca.js']);
   const brainSVG = get(ctx, 'brainSVG'), brainTile = get(ctx, 'brainTile'), logoHTML = get(ctx, 'logoHTML');
-  for (const k of ['full', 'simple', 'lit']) {
-    const s = brainSVG(k);
-    assert.match(s, /^<svg class="brain[^"]*" viewBox="0 0 100 100"/);
-    assert.match(s, /aria-hidden="true"/);
-    assert.match(s, /stroke="currentColor"/, 'las aristas toman el color del texto');
+  assert.match(brainSVG(), /^<svg class="brain" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true"/);
+  assert.match(brainSVG(), /class="rays"/, 'los destellos van aparte: la entrada los enciende');
+  const [, tx, ty, k] = brainSVG().match(/translate\(([-\d.]+) ([-\d.]+)\) scale\(([\d.]+)\)/).map(Number);
+  for (const d of brainSVG().match(/ d="[^"]+"/g)) {
+    const n = d.match(/-?\d+\.?\d*/g).map(Number);
+    n.forEach((v, i) => { const q = v * k + (i % 2 ? ty : tx); assert.ok(q >= 0 && q <= 100, `${q} fuera`); });
   }
-  assert.ok((brainSVG('lit').match(/<polygon/g) || []).length > (brainSVG('full').match(/<polygon/g) || []).length, 'lit llena las caras');
-  assert.match(brainTile('simple'), /class="brain-tile"/);
+  assert.match(brainTile(), /class="brain-tile"/);
+  assert.match(brainTile('dialog-art'), /class="brain-tile dialog-art"/);
   assert.match(logoHTML(), /role="img" aria-label="Zuka"/);
+  assert.match(logoHTML(), /class="wordmark"/);
+  assert.match(read('js/presentacion.js'), /zukaWord = \(\) => logoHTML\(\)/, 'la barra, la cuenta y la presentación llevan el logo');
 });
 
-test('animación de entrada: vive en la portada; el personaje dice «Zuka potencia tu mente» (spec 2026-11-20-icono-y-entrada)', () => {
+test('animación de entrada: vive en la portada; cerebro, nombre y eslogan (spec 2026-11-24-logo-nuevo)', () => {
   // El bloque de index.html es el que genera tools/marca.js y va dentro de #boot: se ve sin esperar a ningún script.
   assert.equal(index, built.withIntro(index), 'correr: node tools/marca.js');
   const boot = index.slice(index.indexOf('<div id="boot"'), index.indexOf('<div id="app"'));
   assert.ok(boot.includes(built.intro), 'la animación va dentro de la portada');
   const html = built.intro;
-  assert.match(html, /<p class="intro-say"><b>Zuka<\/b><span><i style="--k:0">potencia<\/i> <i style="--k:1">tu<\/i> <i style="--k:2">mente<\/i><\/span><\/p>/);
-  assert.match(html, /<div class="intro-hero"><svg class="mascot cheer intro-mascot"/);
-  assert.match(html, /url\(#m-ol-intro\)/, 'su filtro no choca con el de los demás personajes');
-  assert.doesNotMatch(html, /url\(#m-ol\)/);
-  // El orden: aparece el personaje, luego el globo, luego las palabras; y la app espera a que termine.
+  assert.match(html, /<div class="intro-hero"><svg class="brain"/);
+  assert.match(html, /<div class="intro-name"><svg class="wordmark"/);
+  assert.match(html, /<p class="intro-say"><i style="--k:0">potencia<\/i> <i style="--k:1">tu<\/i> <i style="--k:2">mente<\/i><\/p>/);
+  // El orden: aparece el cerebro, luego el nombre, luego las palabras; y la app espera a que termine.
   const hero = Number(block('.intro-hero').match(/intro-pop [\d.]+s [^;]* ([\d.]+)s both/)[1]);
-  const say = Number(block('.intro-say').match(/intro-pop [\d.]+s [^;]* ([\d.]+)s both/)[1]);
+  const say = Number(block('.intro-name').match(/intro-pop [\d.]+s [^;]* ([\d.]+)s both/)[1]);
   const words = Number(block('.intro-say i').match(/animation-delay: calc\(([\d.]+)s/)[1]);
   assert.ok(hero < say && say < words, `${hero} ${say} ${words}`);
   const ms = Number((app.match(/const INTRO_MS = (\d+)/) || [])[1]);
@@ -128,9 +116,8 @@ test('animación de entrada: vive en la portada; el personaje dice «Zuka potenc
   assert.match(css, /@keyframes intro-in \{ to \{ opacity: 1; \} \}/);
 });
 
-test('el icono de la app es el personaje sobre el fondo oscuro', () => {
-  const src = read('tools/marca.js');
-  assert.match(src, /mascotSVG\('think'\)\.replace\('<svg'/);
+test('el icono de la app es el cerebro blanco sobre azul noche', () => {
+  assert.match(read('tools/marca.js'), /brain\(\{ ink: WHITE \}\)/);
   for (const f of ['icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-48.png'])
     assert.ok(fs.statSync(path.join(ROOT, f)).size > 500, f);
 });

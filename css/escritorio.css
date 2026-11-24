@@ -19,7 +19,7 @@
   }
   body[data-tab=clips] #topbar .tb-stats { visibility: hidden; }
   .tb-logo-d { display: flex; align-items: center; padding: 6px 4px; border-radius: 10px; }
-  .tb-logo-d .logo { height: 32px; display: block; }
+  .tb-logo-d .logo { height: 34px; }
   #topbar .tb-stats { gap: 10px; margin-left: auto; width: auto; flex: none; justify-content: flex-end; }
   #topbar .tb-stat { padding: 7px 14px 7px 11px; font-size: 17px; }
   #tabbar, body[data-tab=clips] #tabbar {
