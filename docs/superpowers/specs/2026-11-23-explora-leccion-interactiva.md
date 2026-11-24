@@ -120,4 +120,16 @@ y se llena arrastrando; al cortar, lo tomado conserva su tamaño desde que empie
 (escena `cien`: cuadrícula de 100 que se pinta; `quita` para descuentos) y pu-cm-4 Potencias, raíces y estimación (escena
 `potencia`: fichas y puntos que se multiplican al arrastrar el exponente; modo `lado` para el cuadrado y la raíz). Mismo molde:
 explicación que corre sola por capítulo, «tu turno», problema final y cierre; prácticas distintas de los ejercicios de la lección.
-Pendientes: los mundos 2 a 16 de Razonamiento lógico.
+
+## Razonamiento lógico, mundos 2 a 16 (2026-11-23)
+
+Las 53 lecciones restantes ya tienen explicación (`pu-ge`, `pu-or`, `pu-pr`, `pu-co`, `pu-es`, `pu-se`, `pu-cd`, `pu-gr`, `pu-lo`, `pu-op`,
+`pu-ar`, `pu-ec`, `pu-cj`, `pu-nu`, `pu-pb`), un archivo `js/explora-<id>.js` por lección. Se escriben con tres escenas **por datos**
+de `js/explora-escenas.js`: `dibujo` (SVG que depende de unos valores `v`; `dib(v, K)` con las piezas `XPK`; manijas o deslizadores
+en la práctica), `fichas` (fichas a casilleros o zonas, con `fondo`) y `rejilla` (tabla de celdas). Ayudantes: `xpLec(id, caps, cierre)`
+(pone capítulo, «Tu turno» y cierre), `xpMira(escena, texto, en, momentos, idea)` con momentos `[dice, cambio, cuenta]` (los cambios se
+acumulan) y `xpHaz(tipo, texto, parámetros, idea)`. Cada archivo va dentro de un bloque `{ … }` para no chocar nombres.
+Pruebas: `tests/explora-escenas.test.js` (cada cuadro y la mitad de cada animación sin NaN ni decimales sueltos, rótulos dentro del
+lienzo, manijas que llegan a la meta, fichas que alcanzan) además del molde. Para mirar una lección de un vistazo en la página:
+`tests/robot-explora-galeria.js` (`__gal(['pu-ge-1'], 'light')`); el recorrido con el dedo, `tests/robot-explora.js`. Revisados por
+un agente independiente todos los mundos. Aún sin voz.

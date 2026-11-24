@@ -35,7 +35,7 @@
     ['Rodar el dado',
       xpMira('dibujo', 'Tercera idea: al **volcar** el dado, cada cara pasa al sitio siguiente.', { dib: (v, K) => (v.m < 0.5 ? dado(K, 100, 96, 52, 1, 2, 4) : dado(K, 240, 96, 52, 3, 2, 1)) + K.f(v.fl, K.ar(150, 178, 200, 178, 'la gr')) + K.t(v.m < 0.5 ? 100 : 240, 28, v.p || '', 'ta'), v: { m: 0, fl: 0, p: '' }, alto: 195 }, [
         ['Arriba el 1, al frente el 2 y a la derecha el 4. Lo volcamos hacia la derecha.', {}],
-        ['La cara de la derecha, el 4, queda contra la mesa.', { fl: 1 }],
+        ['La cara de la derecha, el 4, es la que va a quedar contra la mesa.', { fl: 1 }],
         ['La de arriba, el 1, pasa a la derecha. Y la de la izquierda, 7 menos 4, sube: el 3.', { m: 1 }, '$7 - 4 = 3$'],
         ['El frente no cambia: el dado giró alrededor de él. Sigue el 2.', {}],
         ['Cuatro vuelcos hacia el mismo lado lo dejan como al principio.', { m: 0, fl: 0 }],

@@ -172,6 +172,7 @@ XPD.dibujo = (stage, p, s, api) => {
 
 // -------------------------------------------------------------------------------------------------------------- fichas
 // Estado: q[slot] = fichas puestas (etiquetas). `fichas`: las que hay abajo; con `repite` no se gastan. `fijas` {slot: ficha}.
+// `donde(x, y)` → casillero (o −1) decide la zona donde se suelta cuando no son rectángulos (los círculos de un Venn).
 const xpLista = x => (x == null ? [] : xpArr(x));
 const xpIgual = (a, b) => [...a].sort().join('|') === [...b].sort().join('|');
 XP.fichas = {
@@ -271,7 +272,8 @@ XPD.fichas = (stage, p, s, api) => {
       const a = arr; arr = null;
       if (!a.mov) return toca(a.d);
       // El casillero donde se suelta (con un margen); si hay varios, el más cercano.
-      const c = p.slots.map((sl, i) => ({ i, dx: Math.abs(a.x - sl.x) - SW(i) / 2, dy: Math.abs(a.y - sl.y) - SH(i) / 2, d: Math.hypot(a.x - sl.x, a.y - sl.y) }))
+      const z = p.donde ? p.donde(a.x, a.y) : null;
+      const c = p.donde ? (z >= 0 ? { i: z } : undefined) : p.slots.map((sl, i) => ({ i, dx: Math.abs(a.x - sl.x) - SW(i) / 2, dy: Math.abs(a.y - sl.y) - SH(i) / 2, d: Math.hypot(a.x - sl.x, a.y - sl.y) }))
         .filter(q => q.dx < 14 && q.dy < 14 && libre(q.i)).sort((q, r) => q.d - r.d)[0];
       if (a.slot >= 0) {
         if (c && c.i === a.slot) return draw();

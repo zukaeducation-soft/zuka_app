@@ -43,10 +43,12 @@ for (const [id, L] of Object.entries(EXPLORA)) {
           let v = { ...e.v };
           p.momentos.forEach((m, k) => {
             const a = { ...v }; v = { ...v, ...m.v };
-            for (const k2 in m.v) assert.ok(k2 in e.v || typeof m.v[k2] === 'string', `${donde}: v.${k2} sin valor inicial`);
-            const mid = { ...v }; for (const q in mid) if (typeof mid[q] === 'number' && typeof a[q] === 'number') mid[q] = (a[q] + mid[q]) / 2;
+            for (const k2 in m.v) assert.ok(k2 in e.v || m.v[k2] === null || typeof m.v[k2] === 'string', `${donde}: v.${k2} sin valor inicial`);
+            const mid = { ...v }; for (const q in mid) if (typeof mid[q] === 'number' && typeof a[q] === 'number') mid[q] = a[q] + (mid[q] - a[q]) * 0.5137;
             bien(e.dib(v, K), H, `${donde} momento ${k}`);
-            assert.ok(!/NaN|undefined/.test(e.dib(mid, K)), `${donde} a mitad de ${k}`);
+            const md = e.dib(mid, K);
+            assert.ok(!/NaN|undefined/.test(md), `${donde} a mitad de ${k}`);
+            assert.ok(!/>[^<]*\d\.\d{3,}[^<]*<\/text>/.test(md), `${donde} a mitad de ${k}: decimales sueltos ${md.match(/>[^<]*\d\.\d{3,}[^<]*</)?.[0]}`);
           });
         } else {
           const s0 = XP.dibujo.ini(p).v, s1 = XP.dibujo.sol(p).v;

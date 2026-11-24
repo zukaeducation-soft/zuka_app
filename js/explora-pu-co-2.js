@@ -36,7 +36,7 @@
         ['Cada palabra se contó 2 veces: una por cada orden de las dos A.', { saca: [0, 2], pon: { 0: 'A', 2: 'A' }, v: { p: '6 ÷ 2' } }],
         ['Entonces se divide entre 2!: quedan 3 palabras. ALA, AAL y LAA.', { v: { p: '3! ÷ 2! = 3' } }, '$\\tfrac{3!}{2!} = 3$'],
       ], 'Con repetidas: el factorial del total entre el factorial de cada grupo de iguales.'),
-      xpHaz('fichas', '¿Cuántos órdenes distintos tienen las letras de COCO? Completa la cuenta.', { slots: [{ x: 66, y: 60, w: 80, et: '4!' }, { x: 170, y: 60, w: 80, et: '2! · 2!' }, { x: 276, y: 60, w: 80, et: 'órdenes' }], fichas: ['24', '4', '6', '12', '2', '8'], meta: ['24', '4', '6'], alto: 108, fondo: K => K.t(118, 65, '÷', 'b') + K.t(223, 65, '=', 'b'), pista: 'Hay dos C iguales y dos O iguales: 2! por 2!.' }, '$\\tfrac{4!}{2! \\cdot 2!} = \\tfrac{24}{4} = 6$.')],
+      xpHaz('fichas', '¿Cuántos órdenes distintos tienen las letras de TACTO? Completa la cuenta.', { slots: [{ x: 66, y: 60, w: 80, et: '5!' }, { x: 170, y: 60, w: 80, et: '2!' }, { x: 276, y: 60, w: 80, et: 'órdenes' }], fichas: ['120', '2', '60', '24', '4', '30'], meta: ['120', '2', '60'], alto: 108, fondo: K => K.t(118, 65, '÷', 'b') + K.t(223, 65, '=', 'b'), pista: 'Son cinco letras y solo la T se repite, dos veces.' }, '$\\tfrac{5!}{2!} = \\tfrac{120}{2} = 60$.')],
     ['Los que van juntos',
       xpMira('fichas', 'Cuarta idea: los que van **juntos** se atan y cuentan como uno.', { slots: fila(4, 90), fichas: ['M', 'N', 'P', 'Q'], alto: 130, fondo: (K, v) => K.t(170, 32, v.p || '', 'b ta') + K.f(v.b || 0, K.r(42 + (v.bx || 0) * 64, 62, 128, 56, 'fg', 12)) }, [
         ['Cuatro fichas en fila, con una condición: M y N van pegadas.', {}],

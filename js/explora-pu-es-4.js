@@ -3,8 +3,8 @@
   // Espejo: figura F en cuadritos y su reflejo a distancia de un eje vertical.
   const F = [[0, 0], [1, 0], [2, 0], [0, 1], [0, 2], [1, 2], [0, 3], [0, 4]];
   const espejo = (v, K) => {
-    const u = 22, ax = 170, y = 40, x = (c, s) => ax + s * (1.4 + c) * u;
-    return K.l(ax, 22, ax, 170, 'lg d') + F.map(([c, r]) => K.r(x(c, -1) - u * 1, y + r * u, u - 2, u - 2, 'fa')).join('') + K.f(v.r, F.map(([c, r]) => K.r(x(c, 1), y + r * u, u - 2, u - 2, 'fg')).join(''))
+    const u = 22, ax = 170, y = 40, x = (c, s) => ax + s * (1.4 + 2 - c) * u;
+    return K.l(ax, 22, ax, 170, 'lg d') + F.map(([c, r]) => K.r(x(c, -1) - u, y + r * u, u - 2, u - 2, 'fa')).join('') + K.f(v.r, F.map(([c, r]) => K.r(x(c, 1), y + r * u, u - 2, u - 2, 'fg')).join(''))
       + K.f(v.d, K.l(x(1, -1) - u / 2, y + 2 * u + 10, x(1, 1) + u / 2, y + 2 * u + 10, 'lf d') + K.t(ax, 188, 'la misma distancia', 's tf'));
   };
   // Giro de una F alrededor de su centro; g en grados, sentido del reloj.

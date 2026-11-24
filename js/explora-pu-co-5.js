@@ -35,7 +35,7 @@
       xpHaz('dibujo', 'Arrastra el número de lados hasta que haya exactamente 20 diagonales.', { dib: diag, v: { n: 4, una: 1, todas: 1 }, metas: { n: 8 }, alto: 250, manijas: [{ k: 'n', min: 3, max: 11, paso: 1, et: 'lados' }],
         lee: v => `$\\tfrac{${v.n} \\cdot ${v.n - 3}}{2} = ${v.n * (v.n - 3) / 2}$`, dice: v => `De cada vértice salen ${v.n - 3}.` }, '$\\tfrac{8 \\cdot 5}{2} = 20$: un octágono.')],
     ['Caminos que se suman',
-      xpMira('fichas', 'Tercera idea: a cada esquina se llega **desde la izquierda o desde abajo**.', { slots: esq(2, 2), fichas: ['1', '1', '1', '1', '1', '1', '2', '3', '3', '6'].slice(1), alto: 206, fondo: calles(2, 2), fijas: { 0: 'A' } }, [
+      xpMira('fichas', 'Tercera idea: a cada esquina se llega **desde la izquierda o desde abajo**.', { slots: esq(2, 2), fichas: ['1', '1', '1', '1', '2', '3', '3', '6'], alto: 206, fondo: calles(2, 2), fijas: { 0: 'A' } }, [
         ['Desde A solo se camina al este o al norte. ¿De cuántas maneras se llega a cada esquina?', {}],
         ['Por el borde de abajo y por el de la izquierda hay un solo camino: derecho.', { pon: { 1: '1', 2: '1', 3: '1', 6: '1' } }],
         ['A la esquina del centro se llega desde la izquierda o desde abajo: 1 más 1, dos.', { pon: { 4: '2' }, marca: [1, 3] }, '$1 + 1 = 2$'],

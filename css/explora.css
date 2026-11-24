@@ -332,6 +332,7 @@
 .xd .xf.fA { fill: var(--c); stroke: var(--c); }
 .xd .xf.fc { fill: var(--card); stroke: var(--line); }
 .xd .xf.fn { fill: none; }
+.xd .xf.fop { fill: var(--bg); stroke: none; }
 .xd .xf.fk { fill: var(--ink); stroke: none; }
 .xd .xf.fF { fill: var(--fire); stroke: var(--fire); }
 .xd .xf.fG { fill: var(--gold); stroke: var(--gold); }

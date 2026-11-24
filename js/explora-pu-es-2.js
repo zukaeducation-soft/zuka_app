@@ -10,7 +10,7 @@
     }
     return s;
   };
-  const H = [[1, 2, 1], [2, 3, 1]];
+  const H = [[1, 1, 2], [1, 3, 3]];
   // Vista plana: columnas de cuadros.
   const vista = (K, x, y, a, et) => a.map((n, i) => Array.from({ length: n }, (_, z) => K.r(x + i * 24, y - (z + 1) * 24, 22, 22, 'fg')).join('')).join('') + K.t(x + a.length * 12, y + 17, et, 's tm');
   const max = a => Math.max(...a);
@@ -31,17 +31,17 @@
       xpMira('dibujo', 'Empecemos por la idea: para no perder cubos escondidos, cuenta **por torres**.', { dib: (v, K) => pila(K, [140, 190], 34, H, v.s, v.n), v: { s: 1, n: 0 }, alto: 205 }, [
         ['Esta construcción tiene cubos que no se ven, debajo y detrás de otros.', {}],
         ['Mírala como torres. Cada torre tiene una altura: se escribe arriba.', { n: 1 }],
-        ['La fila de adelante tiene torres de 1, 2 y 1: cuatro cubos.', {}, '$1 + 2 + 1 = 4$'],
-        ['La de atrás, de 2, 3 y 1: seis cubos.', {}, '$2 + 3 + 1 = 6$'],
-        ['En total, diez. Ningún cubo flota: debajo de cada uno hay otro o el piso.', {}, '$4 + 6 = 10$'],
+        ['La fila de adelante tiene torres de 1, 1 y 2: cuatro cubos.', {}, '$1 + 1 + 2 = 4$'],
+        ['La de atrás, de 1, 3 y 3: siete cubos.', {}, '$1 + 3 + 3 = 7$'],
+        ['En total, once. Ningún cubo flota: debajo de cada uno hay otro o el piso.', {}, '$4 + 7 = 11$'],
       ], 'Escribe la altura de cada torre y suma: así cuentas también los cubos escondidos.'),
-      xpHaz('fichas', 'Cuenta los cubos de cada fila y el total. Los números dicen la altura de cada torre.', { slots: [{ x: 66, y: 196, w: 84, et: 'adelante' }, { x: 170, y: 196, w: 84, et: 'atrás' }, { x: 274, y: 196, w: 84, et: 'en total' }], fichas: ['5', '7', '12', '6', '10', '11'], meta: ['5', '7', '12'], alto: 242, fondo: K => pila(K, [150, 160], 28, [[2, 1, 2], [3, 1, 3]], 1, 1), pista: 'Adelante hay torres de 2, 1 y 2.' }, 'Adelante $2 + 1 + 2 = 5$, atrás $3 + 1 + 3 = 7$: 12 cubos.')],
+      xpHaz('fichas', 'Cuenta los cubos de cada fila y el total. Los números dicen la altura de cada torre.', { slots: [{ x: 66, y: 196, w: 84, et: 'adelante' }, { x: 170, y: 196, w: 84, et: 'atrás' }, { x: 274, y: 196, w: 84, et: 'en total' }], fichas: ['5', '8', '13', '6', '10', '11'], meta: ['5', '8', '13'], alto: 242, fondo: K => pila(K, [150, 160], 28, [[1, 2, 2], [2, 2, 4]], 1, 1), pista: 'Adelante hay torres de 1, 2 y 2.' }, 'Adelante $1 + 2 + 2 = 5$, atrás $2 + 2 + 4 = 8$: 13 cubos.')],
     ['Las vistas',
-      xpMira('dibujo', 'Segunda idea: una **vista** aplasta la construcción y deja ver solo lo más alto.', { dib: (v, K) => pila(K, [110, 170], 26, H, 1, 1) + K.f(v.f, vista(K, 222, 110, [0, 1, 2].map(c => max(H.map(r => r[c]))), 'de frente')) + K.f(v.l, vista(K, 232, 186, H.map(r => max(r)).map(n => n), 'de lado')), v: { f: 0, l: 0 }, alto: 210 }, [
+      xpMira('dibujo', 'Segunda idea: una **vista** aplasta la construcción y deja ver solo lo más alto.', { dib: (v, K) => pila(K, [110, 170], 26, H, 1, 1) + K.f(v.f, vista(K, 210, 84, [0, 1, 2].map(c => max(H.map(r => r[c]))), 'de frente')) + K.f(v.l, vista(K, 222, 190, H.map(r => max(r)).reverse(), 'desde la izquierda')), v: { f: 0, l: 0 }, alto: 210 }, [
         ['La misma construcción, con la altura de cada torre.', {}],
-        ['De frente, cada columna muestra su torre más alta: de izquierda a derecha, 2, 3 y 1.', { f: 1 }, '$2, \\; 3, \\; 1$'],
+        ['De frente, cada columna muestra su torre más alta: de izquierda a derecha, 1, 3 y 3.', { f: 1 }, '$1, \\; 3, \\; 3$'],
         ['Las torres bajitas de adelante no tapan a las altas, y las de atrás no se ven si son más bajas.', {}],
-        ['De lado se mira cada fila: la más alta de adelante es 2 y la de atrás es 3.', { l: 1 }, '$2, \\; 3$'],
+        ['Desde la izquierda se mira cada fila: la de atrás llega a 3 y la de adelante, a 2.', { l: 1 }, '$3, \\; 2$'],
         ['Construcciones distintas pueden tener las mismas vistas.', {}],
       ], 'En una vista, cada columna muestra la altura **máxima** de las torres que están en esa dirección.'),
       xpHaz('rejilla', 'Vista desde arriba: toca cada casilla para darle altura (0 a 3). De frente, por columnas, se debe ver 1, 3 y 2; por filas, 2 y 3.', { f: 2, c: 3, estados: 4, unoAUno: true, rot: ['0', '1', '2', '3'], filas: ['fila: 2', 'fila: 3'], cols: ['1', '3', '2'], izq: 70, cw: 64, ch: 52, cumple: c => [1, 3, 2].every((m, k) => Math.max(c[k], c[k + 3]) === m) && [2, 3].every((m, r) => Math.max(c[3 * r], c[3 * r + 1], c[3 * r + 2]) === m), sol: { 0: 1, 1: 0, 2: 2, 3: 1, 4: 3, 5: 0 },
