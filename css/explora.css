@@ -363,3 +363,119 @@
 .xre-t.e1, .xre-t.e3 { fill: var(--c-on); }
 .xre-t.e2 { fill: var(--ink); }
 @media (prefers-reduced-motion: reduce) { .xre-c { transition: none; } }
+
+/* ---- juegos con las escenas de la explicación (js/games/explora-kit.js, spec 2026-11-24-ejercicios-explora) ---- */
+.xg { position: relative; max-width: 480px; margin: 0 auto; padding: 14px 4px 10px; color: var(--ink); }
+.xg [hidden] { display: none !important; }
+.xg .xp-stage { min-height: 0; margin: 0; gap: 14px; }
+.xg .xp-read { margin-top: 10px; }
+.xg .xp-read:empty { min-height: 0; margin: 0; }
+.xg .xp-nota { margin-top: 8px; }
+.xg .xg-lona, .xg .xg-perillas, .xg .xg-muda { width: 100%; max-width: 440px; }
+.xg .xp-svg { display: block; margin: 0 auto; border-radius: 12px; }
+.xg .xp-svg:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 3px; }
+.xg button:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 2px; }
+.xg .xp-chip, .xg .xp-slot { touch-action: none; }
+.xg .xp-chip.lift, .xg .xp-slot.lift { opacity: .3; }
+.xg .xp-slot.over, .xg .xp-tray.over { border-color: var(--c-ink); background: color-mix(in srgb, var(--c) 18%, transparent); }
+.xg .xp-tray { width: 100%; min-height: 58px; padding: 5px; border: 1px solid transparent; border-radius: 14px; }
+.xp-chip.exq-ghost { box-shadow: 0 12px 26px -12px rgba(0, 0, 0, .6); border-color: var(--c-ink, var(--line)); }
+.xg .xp-arrow.flip, .xg .xp-trail.neg { stroke: var(--fire); }
+.xg .xp-head.flip { fill: var(--fire); }
+.xg .xp-ring.bad { fill: color-mix(in srgb, var(--bad) 18%, transparent); stroke: var(--bad); }
+.xg .xp-trail.neg { filter: none; }
+/* perilla sobre un riel */
+.xg-lona .xp-svg { touch-action: pan-y; cursor: default; }
+.xg-dos-radares .xg-lona .xp-svg { touch-action: none; cursor: grab; }
+.xg .xp-nota.aviso { color: color-mix(in srgb, var(--gold) 60%, var(--ink)); }
+.xg-perillas { display: grid; gap: 10px; }
+.xg-per .xb-rule { stroke: var(--mute); stroke-width: 1.5; stroke-linecap: round; }
+.xg-per .xb-tk { stroke: var(--mute); stroke-width: 1.2; }
+.xg-per .xb-tk.z { stroke: var(--ink); stroke-width: 2; }
+.xg-per .xg-et { text-anchor: start; font-size: 13px; fill: var(--mute); }
+.xg-per .xg-val { text-anchor: end; font-size: 14px; font-weight: 600; fill: var(--c-ink); }
+/* recta muda */
+.xg-muda { position: relative; }
+.xg-muda .xg-col { position: absolute; transform: translate(-50%, -50%); min-width: 60px; height: 38px; padding: 0 8px; font-size: 17px; z-index: 1; }
+.xg .xg-col { cursor: grab; }
+.xg-col.bien { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, var(--card)); }
+.xg-col.mal { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 14%, var(--card)); }
+.xg-hilo { stroke: var(--c-ink); stroke-width: 1.5; stroke-dasharray: 3 4; }
+.xg-hilo.good { stroke: var(--ok); }
+.xg-hilo.bad { stroke: var(--bad); }
+.xg-pin { fill: var(--c-ink); }
+.xg-pin.good { fill: var(--ok); }
+.xg-pin.bad { fill: var(--bad); }
+.xg-muda.over .xp-ax { stroke: var(--c-ink); stroke-width: 2.4; }
+/* radares */
+.xg-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.xg-tag { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font-size: 14px; }
+.xg-tag b { font: 600 16px var(--display); }
+.xg-tag i { width: 9px; height: 9px; border-radius: 50%; background: var(--fire); }
+.xg-tag.r1 i { background: var(--gold); }
+.xg-radar { fill: color-mix(in srgb, var(--fire) 30%, var(--bg)); stroke: var(--fire); stroke-width: 1.6; stroke-linejoin: round; }
+.xg-radar.r1 { fill: color-mix(in srgb, var(--gold) 30%, var(--bg)); stroke: var(--gold); }
+.xg .xg-ar { fill: none; stroke: var(--fire); }
+.xg .xg-ar.r1 { stroke: var(--gold); }
+.xg-vela { fill: var(--c-on); }
+/* viaje */
+.xg-frase { display: flex; align-items: center; justify-content: center; gap: 8px; font: 500 22px/1 var(--display); }
+.xg-frase .xp-slot { width: 84px; }
+.xg-frase > span { color: var(--mute); }
+.xg-frase .xg-meta { color: var(--ok); }
+.xg .xp-slot.full { cursor: grab; }
+.xg-arma-viaje .xp-tray { gap: 8px; }
+.xg-arma-viaje .xp-chip { min-width: 54px; padding: 0 9px; font-size: 17px; }
+.xg-arma-viaje .xp-stage { gap: 10px; }
+/* signos */
+.xg-dos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 340px; }
+.xg-dos .xp-coin { padding: 14px 8px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+.xg-dos .xp-coin b { font-size: 34px; color: var(--ink); }
+.xg-dos .xp-coin em { font-style: normal; font-size: 13px; font-weight: 600; color: var(--c-ink); }
+.xg-dos .xp-coin.good { border-color: var(--ok); }
+.xg-dos .xp-coin.good b { color: var(--ok); }
+.xg-dos .xp-coin.bad { border-color: var(--bad); }
+.xg-dos .xp-coin.bad b { color: var(--bad); }
+/* potencia */
+.xg-pot { display: flex; align-items: center; justify-content: center; gap: 4px; font: 500 44px/1 var(--display); }
+.xg-pot .xp-par { color: var(--mute); }
+.xg-pot sup { align-self: flex-start; font-size: 25px; line-height: 1; color: var(--c-ink); }
+.xg-sw { width: 46px; height: 52px; border: 1.5px dashed var(--line); border-radius: 12px; font: inherit; line-height: 1; color: var(--mute); }
+.xg-sw.on { border-style: solid; border-color: var(--fire); background: color-mix(in srgb, var(--fire) 16%, var(--card)); color: var(--fire); }
+.xg-cadena { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; min-height: 40px; }
+.xg-fac { display: grid; place-items: center; min-width: 42px; height: 38px; border-radius: 10px; border: 1.5px solid var(--c-ink); background: var(--card); font: 600 17px var(--display); animation: xp-pop .3s cubic-bezier(.2,.8,.2,1); }
+.xg-fac.par1 { border-color: var(--gold); }
+.xg-fac.solo { border-color: var(--fire); border-style: dashed; }
+/* paréntesis */
+.xg-sel { padding: 18px 6px; touch-action: none; user-select: none; -webkit-user-select: none; cursor: text; min-height: 92px; }
+.xg-sel .xg-num { min-width: 44px; height: 52px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); font: inherit; color: var(--ink); }
+.xg-sel .xg-num.in { border-color: var(--c-ink); background: color-mix(in srgb, var(--c) 16%, var(--card)); }
+.xg-sel .xg-op { min-width: 24px; text-align: center; color: var(--mute); border-radius: 10px; transition: background .2s, color .2s; }
+.xg-sel .xg-op.in { color: var(--c-ink); }
+.xg-sel .xg-op.now { background: var(--c); color: var(--c-on); padding: 8px 0; }
+.xg-sel .xp-par.on { color: var(--c-ink); font-weight: 600; font-size: 1.25em; }
+.xg-igual { font-size: 16px; color: var(--mute); text-align: center; }
+.xg-igual b { font: 600 26px var(--display); color: var(--ok); margin-left: 6px; }
+/* lanza la ficha */
+.xg-op-grande { font-size: 27px; text-align: center; min-height: 36px; }
+/* zona de examen con la letra y las superficies de la explicación */
+.lesson.xp-lesson .exq { max-width: 480px; }
+.lesson.xp-lesson .play:has(.exq), .lesson.xp-lesson .play:has(.exq) .game-stage { overflow: visible; }
+.lesson.xp-lesson .exq-tag { padding: 0; border: 0; color: var(--mute); font-size: 12px; letter-spacing: .1em; }
+.lesson.xp-lesson .exq-q { padding: 0; border: 0; background: none; font-size: 17px; line-height: 1.45; text-wrap: pretty; }
+.lesson.xp-lesson .exq-sub { font-size: 14px; }
+.lesson.xp-lesson .exq-sol li, .lesson.xp-lesson .exq-step, .lesson.xp-lesson .exq-opt { background: var(--card); border: 1px solid var(--line); border-radius: 12px; font-size: 16px; }
+.lesson.xp-lesson .exq-step.on, .lesson.xp-lesson .exq-opt.on { border-color: var(--c-ink); background: color-mix(in srgb, var(--c) 12%, var(--card)); }
+.lesson.xp-lesson .exq-step.good, .lesson.xp-lesson .exq-opt.good { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, var(--card)); }
+.lesson.xp-lesson .exq-step.bad, .lesson.xp-lesson .exq-opt.bad { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--card)); }
+.lesson.xp-lesson .exq-blank { border: 1.5px dashed var(--line); border-radius: 12px; background: none; font-family: var(--display); }
+.lesson.xp-lesson .exq-blank.full { border-style: solid; border-color: var(--c-ink); background: color-mix(in srgb, var(--c) 12%, var(--card)); }
+.lesson.xp-lesson .exq-blank.over { border-color: var(--c-ink); }
+.lesson.xp-lesson .exq-blank.good { border-style: solid; border-color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, var(--card)); }
+.lesson.xp-lesson .exq-blank.bad { border-style: solid; border-color: var(--bad); background: color-mix(in srgb, var(--bad) 14%, var(--card)); }
+.lesson.xp-lesson .exq-chip { border: 1px solid var(--line); border-radius: 12px; background: var(--card); min-height: 42px; min-width: 50px; padding: 4px 10px; font: 600 17px var(--display); }
+.lesson.xp-lesson .exq-chip.wide { font: 500 16px/1.35 var(--font); }
+.lesson.xp-lesson .exq-chip.on { background: color-mix(in srgb, var(--c) 18%, var(--card)); border-color: var(--c-ink); }
+.lesson.xp-lesson .exq-tray { border-color: transparent; background: none; padding: 6px; gap: 6px; }
+.lesson.xp-lesson .exq-completa .exq-tray { background: var(--bg); }
+@media (prefers-reduced-motion: reduce) { .xg-fac { animation: none; } .xg-sel .xg-op { transition: none; } }

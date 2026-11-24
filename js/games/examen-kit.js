@@ -26,7 +26,7 @@ const EXQ = (() => {
     let d = null;
     root.addEventListener('pointerdown', e => {
       const el = e.target.closest(sel);
-      if (!el || !live()) return;
+      if (!el || !live() || d) return;
       d = { el, id: e.pointerId, x: e.clientX, y: e.clientY, ghost: null };
     });
     const move = e => {
@@ -55,6 +55,7 @@ const EXQ = (() => {
       root.querySelectorAll('.over').forEach(o => o.classList.remove('over'));
       if (!ghost) return;     // sin arrastre: el click normal hace de toque
       ghost.remove();
+      if (!live()) return;
       const over = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-drop]');
       root.dataset.dragged = '1'; setTimeout(() => { delete root.dataset.dragged; }, 60);
       if (over && root.contains(over)) onDrop(el, over);
@@ -67,7 +68,7 @@ const EXQ = (() => {
       const el = e.target.closest(sel);
       if (el) onTap(el);
     });
-    return () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
+    return () => { d?.ghost?.remove(); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
   }
 
   // ── completa-solucion ──────────────────────────────────────────────────────────────────────────────────────────────
@@ -198,5 +199,5 @@ const EXQ = (() => {
     },
   };
 
-  return { completa, caza, opcion, blanksOf };
+  return { completa, caza, opcion, blanksOf, drag };
 })();

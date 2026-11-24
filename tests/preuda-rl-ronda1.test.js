@@ -75,6 +75,5 @@ test('la ronda dice quién queda, con la cuenta del juego', () => {
 test('juegos que llegaban sin enunciado de contexto ni explicación propia', () => {
   for (const [id, g, re] of [['pu-pr-1', 'bici-cambios', /cadena/], ['pu-pr-3', 'bote-corriente', /agua quieta/], ['pu-pr-4', 'tanque-porcentaje', /tanques/],
     ['pu-pr-5', 'rampa-precio', /tienda/], ['pu-lo-4', 'lazo-conjunto', /Todo múltiplo/], ['pu-lo-4', 'descifra-zona', /algunos/]]) assert.match(zona(L(id), g).q, re, `${id} ${g}`);
-  assert.doesNotMatch(zona(L('pu-cm-1'), 'tren-ordenado').q, /temperatura/);
   assert.match(zona(L('pu-nu-2'), 'opcion-examen').explain, /instante inicial/);
 });

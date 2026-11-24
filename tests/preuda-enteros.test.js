@@ -36,14 +36,13 @@ test('los tres juegos nuevos existen, están registrados y con guía; se juegan 
   }
 });
 
-test('la lección: once ejercicios distintos con los tres juegos propios y la zona de examen; todos con pista y explicación', () => {
-  assert.equal(L.ex.map(e => e.game).join(), 'recta-espejo,globo-lastre,ascensor,tren-ordenado,voltea-flecha,pares-negativos,capas-operacion,salta-signos,completa-solucion,caza-error,opcion-examen');
+test('la lección: todos los ejercicios con pista y explicación', () => {
+  // La lista de juegos de la lección la cuida tests/ejercicios-explora.test.js (spec 2026-11-24).
   assert.ok([...GUIDE_ARCADE].includes('capas-operacion'));
   for (const e of L.ex) {
     assert.ok(e.hint?.length > 20 && e.explain?.length > 20, e.game);
     if (e.params.rounds) assert.equal(e.params.rounds.length, 1, `${e.game}: una sola ronda`);
   }
-  assert.ok(exOf('capas-operacion')[0].params.rounds.every(r => r.title && r.items.length >= 1));
   assert.ok(L.clip.scenes.length >= 6, 'las escenas de respaldo cuentan el video');
 });
 
