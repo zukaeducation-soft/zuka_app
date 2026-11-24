@@ -82,3 +82,22 @@ test('lo que se arrastra también se mueve con el teclado y las pestañas están
   assert.match(html, /aria-live="polite"/);
   for (const id of html.match(/href="#[^"]+/g)) assert.ok(html.includes(`id="${id.slice(7)}"`), id);
 });
+
+// ---- portada aliada (spec 2026-11-24-portada-aliado) ----
+test('promete ser aliado para entrar y terminar la universidad y dice qué ofrece; lo no publicado va como «Muy pronto»', () => {
+  for (const t of ['aliado', 'universidad', 'Admisión', '¿Te ha pasado?', 'Asesorías', 'libros']) assert.ok(html.includes(t), t);
+  const con = get(ctx, 'presentacionHTML')(cursos, { todos: [...cursos, { id: 'calc', name: 'Cálculo Diferencial', color: '#f0f', units: [] }] });
+  assert.match(con, /class="pronto">Cálculo Diferencial<small>Muy pronto/);
+  assert.doesNotMatch(con, /class="pronto">Álgebra/);
+  assert.doesNotMatch(html, /garantiz|\d+ estudiantes|testimoni/i);
+});
+test('el camino sube del colegio al grado y cada tramo elige la etapa más cercana', () => {
+  const [y, en, ps] = ['pzCaminoY', 'pzEtapaEn', 'PZ_PARADAS'].map(n => get(ctx, n));
+  assert.equal(ps.map(p => en(p)).join(), '0,1,2,3'); assert.equal(en(0) + ',' + en(1), '0,3');
+  for (let i = 1; i < 4; i++) assert.ok(y(ps[i]) < y(ps[i - 1]), `parada ${i}`);
+  for (let x = 0; x <= 1; x += .02) assert.ok(y(x) > .03 && y(x) < .97);
+});
+test('el resorte llega a su meta sin dispararse, aun con cuadros largos', () => {
+  const r = get(ctx, 'pzResorte');
+  for (const dt of [.008, .016, .2]) { let [x, v] = [0, 0], max = 0; for (let i = 0; i < 400; i++) { [x, v] = r(x, v, 100, dt, 220, 18); max = Math.max(max, x); } assert.ok(Math.abs(x - 100) < .5 && max < 140, `${dt}: ${x} ${max}`); }
+});

@@ -67,10 +67,41 @@ const PZ_PALANCA = `<svg class="pz-pal" viewBox="0 0 360 250">
         <rect class="pz-hit" x="-32" y="-64" width="64" height="76"/><rect x="-23" y="-48" width="46" height="46" rx="10"/><text y="-18">3</text></g></g>
     <circle class="pz-pivote" cx="180" cy="145" r="6"/></svg>`;
 const PZ_TUTOR = `<div class="pz-agenda" aria-hidden="true"><div class="pz-dias">${['L', 'M', 'M', 'J', 'V'].map((d, i) => `<span${i === 2 ? ' class="on"' : ''}><small>${d}</small>${11 + i}</span>`).join('')}</div>
-    <div class="pz-horas">${['8:00 a. m.', '10:00 a. m.', '4:00 p. m.'].map((h, i) => `<span${i === 2 ? ' class="on"' : ''}>${h}</span>`).join('')}</div></div>`;
+    <div class="pz-horas">${['2:00 p. m.', '3:00 p. m.', '4:00 p. m.'].map((h, i) => `<span${i === 2 ? ' class="on"' : ''}>${h}</span>`).join('')}</div></div>`;
 const PZ_MUNDOS = 12;   // mundos a la vista por curso; los demás se cuentan
 
-function presentacionHTML(cursos, { worlds = {}, install = '' } = {}) {
+// ---- tu camino: del colegio al grado (spec 2026-11-24-portada-aliado) ----
+// Cada etapa nombra los cursos que la sirven; el que aún no está publicado sale como «Muy pronto».
+const PZ_ETAPAS = [
+  { id: 'colegio', name: 'Colegio', h: 'Llega con bases', p: 'Cierra los vacíos desde cero, con la idea antes que la fórmula.', cursos: ['algebra', 'trig', 'preicfes'] },
+  { id: 'admision', name: 'Admisión', h: 'Presenta el examen sabiendo qué esperar', p: 'Razonamiento lógico y comprensión lectora, explicados paso a paso y con la forma en que se preguntan.', cursos: ['preuda'], mas: [{ t: 'Libros impresos' }, { t: 'Asesorías', si: ['preuda'] }] },
+  { id: 'semestres', name: 'Semestres', h: 'Que las matemáticas no te frenen la carrera', p: 'Temas que siguen el programa de la Universidad de Antioquia y ejercicios para llegar preparado al parcial.', cursos: ['algebra', 'trig', 'calc', 'geo'], mas: [{ t: 'Asesorías' }] },
+  { id: 'grado', name: 'Grado', h: 'Alguien a quien preguntarle', p: 'Cálculo, Física y Álgebra Lineal, con asesorías virtuales de una hora para cuando una materia se ponga difícil.', cursos: ['int', 'lin', 'fis'], mas: [{ t: 'Asesorías de universidad', si: ['calc', 'fis', 'int', 'lin'] }] },
+];
+const PZ_PARADAS = [.1, .37, .64, .9];
+const pzCaminoY = x => .8 - .62 * x - .09 * Math.sin(x * Math.PI * 3);   // altura del camino, 0 arriba y 1 abajo
+const pzEtapaEn = x => PZ_PARADAS.reduce((m, p, i) => (Math.abs(p - x) < Math.abs(PZ_PARADAS[m] - x) ? i : m), 0);
+const pzCursosDe = (e, visibles, todos) => e.cursos.map(id => ({ c: visibles.find(c => c.id === id) || todos.find(c => c.id === id), listo: visibles.some(c => c.id === id) })).filter(x => x.c);
+// Resorte amortiguado (un paso): devuelve [posición, velocidad].
+function pzResorte(x, v, meta, dt, k = 170, c = 24) {
+  const h = Math.min(dt, .032), a = k * (meta - x) - c * v;
+  return [x + (v + a * h) * h, v + a * h];
+}
+const pzCaminoD = () => Array.from({ length: 61 }, (_, i) => `${i ? 'L' : 'M'}${(i / 60 * 1000).toFixed(1)} ${(pzCaminoY(i / 60) * 300).toFixed(1)}`).join('');
+const PZ_DUDAS = [
+  ['En clase lo entiendo, pero en el parcial me bloqueo', 'Mirar no es hacer. Aquí mueves cada idea hasta que puedes reconstruirla sin ayuda, y después la usas en problemas distintos.'],
+  ['Me aprendo la fórmula y al mes se me olvida', 'Primero ves de dónde sale. Cuando la idea es tuya, la fórmula se puede volver a armar.'],
+  ['No sé por dónde empezar a estudiar', 'Cada curso es un camino desde cero: un mundo después de otro. Abres Zuka y la lección que sigue ya está lista.'],
+  ['Me da pena preguntar', 'Te equivocas sin público y pides pistas cuando quieras. Si hace falta, separas una asesoría y lo resuelves con una persona.'],
+];
+const pzCamino = (cursos, todos) => `<div class="pz-ruta" data-en="1">
+      <div class="pz-ruta-map"><svg viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true"><path class="pz-ruta-b" d="${pzCaminoD()}"/><path class="pz-ruta-l" d="${pzCaminoD()}"/></svg>
+        <span class="pz-ruta-yo" aria-hidden="true"></span>
+        <div role="tablist" aria-label="Etapas">${PZ_ETAPAS.map((e, i) => `<button type="button" role="tab" id="pz-et-${i}" aria-controls="pz-ep-${i}" aria-selected="${i === 1}" tabindex="${i === 1 ? 0 : -1}" style="left:${PZ_PARADAS[i] * 100}%;top:${(pzCaminoY(PZ_PARADAS[i]) * 100).toFixed(1)}%"><i></i><span>${e.name}</span></button>`).join('')}</div></div>
+      <div class="pz-ruta-txt">${PZ_ETAPAS.map((e, i) => `<div role="tabpanel" id="pz-ep-${i}" aria-labelledby="pz-et-${i}" class="pz-ep${i === 1 ? ' on' : ''}"${i === 1 ? '' : ' inert'}><h3>${e.h}</h3><p>${e.p}</p>
+        <ul>${pzCursosDe(e, cursos, todos).map(({ c, listo }) => `<li style="--c:${c.color}"${listo ? '' : ' class="pronto"'}>${pzEsc(c.name)}${listo ? '' : '<small>Muy pronto</small>'}</li>`).join('')}${(e.mas || []).map(m => (!m.si || cursos.some(c => m.si.includes(c.id)) ? `<li>${m.t}</li>` : `<li class="pronto">${m.t}<small>Muy pronto</small></li>`)).join('')}</ul></div>`).join('')}</div></div>`;
+
+function presentacionHTML(cursos, { worlds = {}, install = '', todos = cursos } = {}) {
   const logo = zukaWord();
   const mascot = pose => (typeof mascotSVG === 'function' ? mascotSVG(pose) : '');
   const art = c => (typeof courseArt === 'function' ? courseArt(c, 'lg') : `<span class="pz-dot" style="background:${c.color}"></span>`);
@@ -82,24 +113,32 @@ function presentacionHTML(cursos, { worlds = {}, install = '' } = {}) {
   };
   const gymC = cursos[0];
   const gymArt = typeof GYM_3D === 'string' && gymC
-    ? `<span class="pz-gymart" style="${typeof gymFabColors === 'function' ? gymFabColors(gymC) : `--c:${gymC.color}`}">${GYM_3D}</span>` : '';
+    ? `<span class="pz-gymart" data-inclina="14" style="${typeof gymFabColors === 'function' ? gymFabColors(gymC) : `--c:${gymC.color}`}">${GYM_3D}</span>` : '';
   const plates = n => (typeof gymPlates === 'function' ? gymPlates(n) : '');
   const demo = (cls, h, p, fig, pie = '') => `<article class="pz-demo ${cls} pz-rev"><div class="pz-demo-txt"><h3>${h}</h3><p>${p}</p></div>
       <div class="pz-demo-fig">${fig}</div>${pie}</article>`;
   return `<header class="pz-bar"><div class="pz-in"><span class="pz-logo">${logo}</span>
-      <nav class="pz-nav" aria-label="Secciones"><a href="#pz-como">Cómo se aprende</a><a href="#pz-cursos">Cursos</a><a href="#pz-dudas">Preguntas</a></nav>
+      <nav class="pz-nav" aria-label="Secciones"><a href="#pz-ruta">Tu camino</a><a href="#pz-como">Cómo se aprende</a><a href="#pz-cursos">Cursos</a><a href="#pz-dudas">Preguntas</a></nav>
       <span class="pz-bar-acts"><button class="btn ghost sm" type="button" data-pz="login">Entrar</button>
       <button class="btn brand sm pz-bar-go" type="button" data-pz="prueba">Código de prueba</button></span></div></header>
     <main class="pz-main">
-    <section class="pz-hero">
+    <section class="pz-hero"><canvas class="pz-campo" aria-hidden="true"></canvas>
       <div class="pz-hero-in pz-in">
-        <h1>Matemáticas que se <em>entienden</em>, <br class="pz-br">ejercicios que se <em class="b">juegan</em></h1>
+        <h1>Tu aliado para <em>entrar</em> a la <br class="pz-br">universidad y <em class="b">terminarla</em></h1>
         <div class="pz-hero-side">
-          <p class="pz-lead">Aprende moviendo las ideas con tus manos: álgebra, trigonometría y la preparación para entrar a la universidad.</p>
+          <p class="pz-lead">Cursos que se juegan, libros y asesorías para preparar la admisión y sacar adelante las matemáticas de la carrera.</p>
           <div class="pz-ctas">${empieza()}<button class="btn ghost" type="button" data-pz="login">Ya tengo código</button></div>
         </div>
       </div>
       ${pzRueda()}
+    </section>
+    <section class="pz-sec pz-in" id="pz-ruta">
+      <header class="pz-head pz-rev"><h2>Contigo del colegio al grado</h2><p>Recorre el camino y mira qué tienes en cada etapa.</p></header>
+      <div class="pz-rev">${pzCamino(cursos, todos)}</div>
+    </section>
+    <section class="pz-sec pz-in pz-pasa">
+      <h2 class="pz-rev">¿Te ha pasado?</h2>
+      <ul class="pz-quejas pz-rev">${PZ_DUDAS.map(([q, r], i) => `<li${i ? '' : ' class="on"'}><button type="button" aria-expanded="${!i}" aria-controls="pz-q-${i}">«${q}»</button><div class="pz-resp" id="pz-q-${i}"><p>${r}</p></div></li>`).join('')}</ul>
     </section>
     <section class="pz-sec pz-in" id="pz-como">
       <header class="pz-head pz-rev"><h2>Cómo se aprende en Zuka</h2>
@@ -123,6 +162,11 @@ function presentacionHTML(cursos, { worlds = {}, install = '' } = {}) {
           ${(c.units || []).length > PZ_MUNDOS ? `<p class="pz-mas">y ${plural(c.units.length - PZ_MUNDOS, 'mundo más', 'mundos más')}</p>` : ''}</div>`).join('')}
       </div>
     </section>
+    <section class="pz-sec pz-in pz-libros">
+      <div class="pz-libros-txt pz-rev"><h2>También en papel</h2>
+        <p>Cuatro libros para el examen de admisión: dos de razonamiento lógico y dos de comprensión lectora. Ejemplos resueltos, talleres con clave y la forma en que se pregunta cada tema. Impresos a color, con envío.</p></div>
+      <div class="pz-estante pz-rev" data-inclina="9">${[['Número y forma', 1], ['Orden, lógica y azar', 2], ['Leer lo que dice', 3], ['Leer lo que quiere decir', 4]].map(([t, n]) => `<span style="--i:${n - 2.5}"><img src="brand/libros/${n}.webp" alt="Libro ${n}: ${t}" loading="lazy" width="340" height="480"></span>`).join('')}</div>
+    </section>
     <section class="pz-sec pz-in pz-about">
       <p class="pz-kicker pz-rev">Quiénes somos</p>
       <h2 class="pz-rev">Nadie es «malo para las matemáticas». Casi siempre <em class="b">faltó ver la idea</em>.</h2>
@@ -145,8 +189,9 @@ function presentacionHTML(cursos, { worlds = {}, install = '' } = {}) {
         <details><summary>¿Cómo entro y qué pasa con mi avance?</summary><p>Escribes tu código y listo. Con ese mismo código entras siempre y conservas tu avance.</p></details>
       </div>
     </section>
-    <section class="pz-final pz-rev"><div class="pz-final-art">${mascot('cheer')}</div>
-      <h2>Tu mente, más fuerte cada día</h2>${empieza()}</section>
+    <section class="pz-final pz-rev"><div class="pz-final-art" data-inclina="16">${mascot('cheer')}</div>
+      <h2>La universidad empieza hoy</h2>
+      <ol class="pz-pasos"><li><b>Pide tu código</b><span>Por WhatsApp, gratis.</span></li><li><b>Juega el primer mundo</b><span>Y decide con calma.</span></li><li><b>Sigue donde vas</b><span>Tu curso se activa en el mismo código.</span></li></ol>${empieza()}</section>
     </main>
     <footer class="pz-foot"><div class="pz-in"><span class="pz-logo">${logo}</span><small>© 2026 Zuka · Potencia tu mente</small></div></footer>`;
 }
@@ -232,6 +277,143 @@ function pzRuedaViva(el, quieto) {
   tocado = -1e9; raf = requestAnimationFrame(paso);
   new IntersectionObserver(es => { visible = es[es.length - 1].isIntersecting; if (visible && !raf) raf = requestAnimationFrame(paso); }, { root: el }).observe(st);
 }
+// ---- lo que responde al puntero (solo ratón; con «reducir movimiento», nada) ----
+function pzPuntero(el) {
+  const cosas = [];   // { paso(dt) → ¿sigue en marcha? }
+  let raf = 0, antes = 0;
+  const bucle = t => {
+    raf = 0;
+    if (!el.isConnected) return;
+    const dt = antes ? (t - antes) / 1000 : .016; antes = t;
+    if (cosas.map(c => c.paso(dt)).some(Boolean)) raf = requestAnimationFrame(bucle); else antes = 0;
+  };
+  const anda = () => { if (!raf) raf = requestAnimationFrame(bucle); };
+  // Dos números que persiguen su meta con un resorte y se pintan.
+  const sigue = (pinta, k, c) => {
+    const s = { x: 0, y: 0, vx: 0, vy: 0, mx: 0, my: 0, paso(dt) {
+      [s.x, s.vx] = pzResorte(s.x, s.vx, s.mx, dt, k, c); [s.y, s.vy] = pzResorte(s.y, s.vy, s.my, dt, k, c);
+      const vivo = Math.abs(s.mx - s.x) + Math.abs(s.my - s.y) + (Math.abs(s.vx) + Math.abs(s.vy)) * .1 > .02;
+      if (!vivo) { s.x = s.mx; s.y = s.my; s.vx = s.vy = 0; }
+      pinta(s.x, s.y); return vivo;
+    } };
+    cosas.push(s); return s;
+  };
+  const rel = (e, caja) => { const r = caja.getBoundingClientRect(); return [(e.clientX - r.left) / r.width - .5, (e.clientY - r.top) / r.height - .5, r]; };
+  // Botones principales: se dejan atraer un poco.
+  el.querySelectorAll('.pz-main .btn.brand').forEach(b => {
+    const s = sigue((x, y) => { b.style.translate = x || y ? `${x.toFixed(2)}px ${y.toFixed(2)}px` : ''; }, 220, 18);
+    b.addEventListener('pointermove', e => { const [x, y] = rel(e, b); s.mx = x * 14; s.my = y * 10; anda(); });
+    b.addEventListener('pointerleave', () => { s.mx = s.my = 0; anda(); });
+  });
+  // Piezas que se inclinan hacia el puntero en 3D (libros, mancuerna, personaje).
+  el.querySelectorAll('[data-inclina]').forEach(d => {
+    const g = +d.dataset.inclina, zona = d.closest('.pz-demo, .pz-final, .pz-libros') || d;
+    const s = sigue((x, y) => { d.style.setProperty('--rx', `${y.toFixed(2)}deg`); d.style.setProperty('--ry', `${x.toFixed(2)}deg`); }, 120, 16);
+    zona.addEventListener('pointermove', e => { const [x, y] = rel(e, zona); s.mx = x * 2 * g; s.my = -y * 2 * g; anda(); });
+    zona.addEventListener('pointerleave', () => { s.mx = s.my = 0; anda(); });
+  });
+  // Luz que sigue al puntero en las tarjetas.
+  el.querySelectorAll('.pz-demo, .pz-panel, .pz-ruta').forEach(d => {
+    d.classList.add('pz-luz');
+    d.addEventListener('pointermove', e => { const [x, y] = rel(e, d); d.style.setProperty('--mx', `${((x + .5) * 100).toFixed(1)}%`); d.style.setProperty('--my', `${((y + .5) * 100).toFixed(1)}%`); });
+  });
+}
+// Campo de flechas de la portada: cada una apunta al puntero (o al punto de la rueda si no hay ratón cerca).
+function pzCampoVivo(el, quieto) {
+  const hero = el.querySelector('.pz-hero'), cv = hero.querySelector('.pz-campo'), cx = cv.getContext('2d'), fin = el.querySelector('.pz-fin');
+  if (!cx) return;
+  let W = 0, H = 0, dpr = 1, raf = 0, t0 = 0, raton = null, fuerza = 0, col = ['#fff', '#fff'];
+  const p = { x: 0, y: 0, vx: 0, vy: 0 };
+  const bola = () => { const a = fin.getBoundingClientRect(), b = cv.getBoundingClientRect(); return [a.left + a.width / 2 - b.left, a.top + a.height / 2 - b.top]; };
+  const mide = () => {
+    W = cv.clientWidth; H = cv.clientHeight; dpr = Math.min(2, devicePixelRatio || 1);
+    cv.width = W * dpr; cv.height = H * dpr; const cs = getComputedStyle(el); col = [cs.getPropertyValue('--brand').trim(), cs.getPropertyValue('--mute').trim()];
+    pinta();
+  };
+  const pinta = () => {
+    const paso = W < 700 ? 34 : 44, R = W < 700 ? 150 : 300;
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H); cx.lineCap = 'round'; cx.lineWidth = 1.6;
+    for (let y = paso / 2; y < H; y += paso) for (let x = paso / 2 + (W % paso) / 2; x < W; x += paso) {
+      const dx = p.x - x, dy = p.y - y, d = Math.hypot(dx, dy) || 1, cerca = Math.max(0, 1 - d / R) * fuerza;
+      const l = 2 + 9 * cerca, ux = dx / d * l, uy = dy / d * l;
+      cx.globalAlpha = .12 + .5 * cerca * cerca; cx.strokeStyle = cerca > .04 ? col[0] : col[1];
+      cx.beginPath(); cx.moveTo(x - ux, y - uy); cx.lineTo(x + ux, y + uy); cx.stroke();
+    }
+  };
+  const bucle = t => {
+    raf = 0;
+    if (!el.isConnected) return;
+    const dt = t0 ? (t - t0) / 1000 : .016; t0 = t;
+    const [mx, my] = raton || [p.x, p.y], meta = raton ? 1 : 0;
+    [p.x, p.vx] = pzResorte(p.x, p.vx, mx, dt, 130, 20); [p.y, p.vy] = pzResorte(p.y, p.vy, my, dt, 130, 20);
+    fuerza += (meta - fuerza) * Math.min(1, dt * 7);
+    pinta();
+    if (Math.abs(mx - p.x) + Math.abs(my - p.y) > .3 || Math.abs(meta - fuerza) > .01) raf = requestAnimationFrame(bucle); else t0 = 0;
+  };
+  const ro = new ResizeObserver(() => (cv.isConnected ? mide() : ro.disconnect())); ro.observe(hero);
+  const mo = new MutationObserver(() => (cv.isConnected ? mide() : mo.disconnect())); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  [p.x, p.y] = bola(); mide();
+  if (quieto) return;
+  hero.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse') return;
+    const r = cv.getBoundingClientRect();
+    raton = [e.clientX - r.left, e.clientY - r.top];
+    if (fuerza < .02) { [p.x, p.y] = raton; p.vx = p.vy = 0; }
+    if (!raf) raf = requestAnimationFrame(bucle);
+  });
+  hero.addEventListener('pointerleave', () => { raton = null; if (!raf) raf = requestAnimationFrame(bucle); });
+}
+// El camino: el punto sigue al puntero (o al dedo) y se queda en la etapa elegida.
+function pzCaminoVivo(el, quieto) {
+  const ruta = el.querySelector('.pz-ruta'), map = ruta.querySelector('.pz-ruta-map'), yo = ruta.querySelector('.pz-ruta-yo'), luz = ruta.querySelector('.pz-ruta-l');
+  const tabs = [...ruta.querySelectorAll('[role="tab"]')], eps = [...ruta.querySelectorAll('.pz-ep')];
+  let x = PZ_PARADAS[1], v = 0, meta = x, sel = 1, raf = 0, t0 = 0;
+  const pinta = () => {
+    yo.style.left = `${x * 100}%`; yo.style.top = `${pzCaminoY(x) * 100}%`;
+    luz.style.clipPath = `inset(0 ${(1 - x) * 100}% 0 0)`;
+  };
+  const bucle = t => {
+    raf = 0;
+    if (!el.isConnected) return;
+    const dt = t0 ? (t - t0) / 1000 : .016; t0 = t;
+    [x, v] = pzResorte(x, v, meta, dt, 150, 21);
+    if (Math.abs(meta - x) < .0005 && Math.abs(v) < .002) { x = meta; v = t0 = 0; } else raf = requestAnimationFrame(bucle);
+    pinta();
+  };
+  const va = m => { meta = Math.max(.02, Math.min(.98, m)); if (quieto) { x = meta; pinta(); } else if (!raf) raf = requestAnimationFrame(bucle); };
+  const elige = (i, foco) => {
+    if (i !== sel) {
+      sel = i;
+      tabs.forEach((b, k) => { b.setAttribute('aria-selected', k === i); b.tabIndex = k === i ? 0 : -1; });
+      eps.forEach((d, k) => { d.classList.toggle('on', k === i); d.inert = k !== i; });
+    }
+    if (foco) tabs[i].focus();
+  };
+  const mueve = e => { const r = map.getBoundingClientRect(), m = (e.clientX - r.left) / r.width; va(m); elige(pzEtapaEn(m)); };
+  // con el dedo, solo tras un arrastre de lado: empezar a bajar la página no cambia la etapa
+  let x0 = 0, lado = false;
+  map.addEventListener('pointerdown', e => { x0 = e.clientX; lado = e.pointerType === 'mouse'; });
+  map.addEventListener('pointermove', e => { if (e.pointerType === 'mouse' || (lado = lado || Math.abs(e.clientX - x0) > 10)) mueve(e); });
+  ['pointerleave', 'pointercancel', 'pointerup'].forEach(n => map.addEventListener(n, () => va(PZ_PARADAS[sel])));
+  tabs.forEach((b, i) => {
+    b.onclick = () => { elige(i); va(PZ_PARADAS[i]); };
+    b.onkeydown = e => {
+      const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      if (!d) return;
+      e.preventDefault(); const j = (i + d + tabs.length) % tabs.length; elige(j, true); va(PZ_PARADAS[j]);
+    };
+  });
+  pinta();
+}
+// «¿Te ha pasado?»: la frase que se toca (o se señala) muestra cómo ayuda Zuka.
+function pzQuejasVivas(el, raton) {
+  const lis = [...el.querySelectorAll('.pz-quejas li')];
+  const abre = i => lis.forEach((li, k) => { li.classList.toggle('on', k === i); li.firstElementChild.setAttribute('aria-expanded', k === i); });
+  lis.forEach((li, i) => {
+    li.firstElementChild.onclick = () => abre(!esEscritorio() && li.classList.contains('on') ? -1 : i);   // en el celular, otro toque la cierra
+    if (raton) li.firstElementChild.addEventListener('pointerenter', () => { if (esEscritorio()) abre(i); });
+  });
+}
 function pzAreaViva(el) {
   const svg = el.querySelector('.pz-area'), knob = svg.querySelector('.pz-knob'), out = el.querySelector('.pz-cuenta-area');
   const L = 232, X = 52, Y = 44;
@@ -302,6 +484,12 @@ function pzVolver() {
   lz.inert = false; pzDesde = false;
   lz.querySelector('h1')?.focus({ preventScroll: true });
 }
+// Llegó la lista de cursos publicados (js/cuenta.js): se redibuja sin perder el sitio.
+function presentacionRefresca() {
+  const el = document.getElementById('landing');
+  if (!el || el.inert) return;
+  const y = el.scrollTop; presentacionAbrir(); el.scrollTop = y;
+}
 function presentacionInstall() {
   if (isStandalone()) return '';
   if (installEvt) return '<button class="btn main brand" type="button" data-pz="install">Instalar Zuka</button>';
@@ -314,7 +502,7 @@ function presentacionAbrir() {
     el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Conoce Zuka');
     document.body.appendChild(el);
   }
-  el.innerHTML = presentacionHTML(cursosVisibles(), { worlds: typeof WORLDS === 'undefined' ? {} : WORLDS, install: presentacionInstall() });
+  el.innerHTML = presentacionHTML(cursosVisibles(), { worlds: typeof WORLDS === 'undefined' ? {} : WORLDS, install: presentacionInstall(), todos: COURSES });
   el.scrollTop = 0;
   pzInerte(true);
   el.querySelector('h1').tabIndex = -1; el.querySelector('h1').focus({ preventScroll: true });
@@ -358,7 +546,10 @@ function presentacionAbrir() {
     sec.scrollIntoView({ behavior: quieto ? 'auto' : 'smooth' });
     const h = sec.querySelector('h2'); h.tabIndex = -1; h.focus({ preventScroll: true });
   });
-  pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el);
+  pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el); pzCaminoVivo(el, quieto); pzCampoVivo(el, quieto);
+  const raton = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  pzQuejasVivas(el, raton);
+  if (raton && !quieto) pzPuntero(el);
   // Cada bloque aparece suave al entrar en pantalla.
   const rev = el.querySelectorAll('.pz-rev');
   if (!('IntersectionObserver' in window) || quieto) rev.forEach(r => r.classList.add('in'));

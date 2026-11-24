@@ -209,7 +209,7 @@ function cuentaInit() {
     const cambio = JSON.stringify(m) !== JSON.stringify(Cuenta.cursos);
     Cuenta.cursos = m;
     try { localStorage.setItem('zuka-cursos', JSON.stringify(m)); } catch (e) { /* sin espacio */ }
-    if (cambio) cuentaRepinta();
+    if (cambio) { cuentaRepinta(); if (typeof presentacionRefresca === 'function') presentacionRefresca(); }
   });
 }
 
