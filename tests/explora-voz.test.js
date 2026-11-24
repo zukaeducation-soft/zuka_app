@@ -26,11 +26,13 @@ test('los rótulos repetidos se leen pero no se dicen', () => {
   assert.equal(hablar('**Tu turno.** Haz 3 − 7 con la ficha.'), 'Haz 3 menos 7 con la ficha.');
   assert.equal(hablar('Segunda idea: **el opuesto**.'), 'El opuesto.');
   assert.equal(hablar('Empecemos por la idea: ¿qué es?'), '¿Qué es?');
-  for (const { h } of frases('pu-cm-2')) assert.ok(!/tu turno|(primera|segunda|tercera|cuarta|última) idea/i.test(h), h);
+  for (const id of ['pu-cm-2', 'pu-cm-3']) for (const { h } of frases(id)) assert.ok(!/tu turno|(primera|segunda|tercera|cuarta|última) idea/i.test(h), h);
   // Sin muletillas: ningún arranque se repite más de dos veces en la lección.
-  const n = {};
-  for (const { h } of frases('pu-cm-2')) { const k = h.split(/\s+/)[0].toLowerCase(); n[k] = (n[k] || 0) + 1; }
-  for (const [k, v] of Object.entries(n)) assert.ok(v <= 2, `${v} frases empiezan con «${k}»`);
+  for (const id of ['pu-cm-2', 'pu-cm-3']) {
+    const n = {};
+    for (const { h } of frases(id)) { const k = h.split(/\s+/)[0].toLowerCase(); n[k] = (n[k] || 0) + 1; }
+    for (const [k, v] of Object.entries(n)) assert.ok(v <= 2, `${v} frases empiezan con «${k}»`);
+  }
 });
 
 test('las fracciones, las unidades, los porcentajes y los miles se dicen con palabras', () => {
@@ -38,9 +40,11 @@ test('las fracciones, las unidades, los porcentajes y los miles se dicen con pal
   assert.equal(hablar('1/2 y 36/100'), 'un medio y 36 centésimos');
   assert.equal(hablar('Un viaje de 42 km y una cinta de 24 m.'), 'Un viaje de 42 kilómetros y una cinta de 24 metros.');
   assert.equal(hablar('1 cm a 60 km/h, 48 m² y 1 h'), 'un centímetro a 60 kilómetros por hora, 48 metros cuadrados y una hora');
-  assert.equal(hablar('35 % de 50 000'), '35 por ciento de 50000');
+  assert.equal(hablar('35 % de 50 000'), '35 por ciento de 50 mil');
   assert.equal(hablar('3 más 5 son 8, y es par'), '3 más 5 son 8, y es par');
   assert.equal(hablar('7 goles'), '7 goles');
+  assert.equal(hablar('0.20, 0.25 y 0.05 de 7 500'), 'cero punto veinte, cero punto veinticinco y cero punto cero cinco de 7 mil 500');
+  assert.equal(hablar('por 0.8. Y 1.1'), 'por cero punto ocho. Y uno punto uno');
 });
 
 test('pu-cm-1: ninguna frase hablada lleva símbolos que la voz leería mal', () => {

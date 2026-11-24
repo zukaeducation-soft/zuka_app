@@ -36,7 +36,15 @@ const PARTE = { 2: 'medio', 3: 'tercio', 4: 'cuarto', 5: 'quinto', 6: 'sexto', 7
 const UNIDAD = { 'km/h': ['kilómetro por hora', 'kilómetros por hora'], 'm²': ['metro cuadrado', 'metros cuadrados'], 'm³': ['metro cúbico', 'metros cúbicos'],
   'cm²': ['centímetro cuadrado', 'centímetros cuadrados'], km: ['kilómetro', 'kilómetros'], cm: ['centímetro', 'centímetros'], m: ['metro', 'metros'],
   kg: ['kilogramo', 'kilogramos'], g: ['gramo', 'gramos'], h: ['hora', 'horas'], s: ['segundo', 'segundos'] };
+const DEC = ['', 'diez', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+const ESP = { 1: 'uno', 13: 'trece', 14: 'catorce', 15: 'quince', 16: 'dieciséis', 17: 'diecisiete', 18: 'dieciocho', 19: 'diecinueve',
+  21: 'veintiuno', 22: 'veintidós', 23: 'veintitrés', 24: 'veinticuatro', 25: 'veinticinco', 26: 'veintiséis', 27: 'veintisiete', 28: 'veintiocho', 29: 'veintinueve' };
+const letras = n => ESP[n] ?? NUM[n] ?? (n % 10 ? `${DEC[n / 10 | 0]} y ${letras(n % 10)}` : DEC[n / 10]);
+// 0.25 → cero punto veinticinco; 0.05 → cero punto cero cinco; 0.20 → cero punto veinte.
+const decimal = (a, b) => `${a.length < 3 ? letras(+a) : a} punto ${b[0] === '0' || b.length > 2 ? [...b].map(x => letras(+x)).join(' ') : letras(+b)}`;
 function cantidades(s) {
+  s = s.replace(/(?<!\d )\b(\d{1,3}) (\d{3})\b(?! \d{3}\b)/g, (m, n, r) => `${n === '1' ? '' : n + ' '}mil${+r ? ' ' + +r : ''}`);
+  s = s.replace(/(?<![\d.])(\d+)\.(\d+)(?![\d.]\d)/g, (m, a, b) => decimal(a, b));
   s = s.replace(/\b\d{1,3}(?: \d{3})+\b/g, n => n.replace(/ /g, ''));
   s = s.replace(/(\d+) ?(km\/h|cm²|m²|m³|km|cm|kg|m|g|h|s)(?![\wáéíóúñ²³\/])/g,
     (m, n, u) => `${n === '1' ? (u === 'h' ? 'una' : 'un') : n} ${UNIDAD[u][n === '1' ? 0 : 1]}`);
