@@ -116,9 +116,9 @@ test('animación de entrada: vive en la portada; cerebro, nombre y eslogan (spec
   assert.match(css, /@keyframes intro-in \{ to \{ opacity: 1; \} \}/);
 });
 
-test('el icono de la app es el cerebro blanco sobre azul noche', () => {
-  assert.match(read('tools/marca.js'), /brain\(\{ ink: WHITE \}\)/);
-  for (const f of ['icons/zuka-192.png', 'icons/zuka-512.png', 'icons/zuka-maskable-512.png', 'icons/zuka-apple-180.png', 'icons/zuka-favicon-48.png'])
+test('el icono de la app es el cerebro azul noche sobre blanco', () => {
+  assert.match(read('tools/marca.js'), /brain\(\{ ink: NAVY \}\)/);
+  for (const f of ['icons/zuka-claro-192.png', 'icons/zuka-claro-512.png', 'icons/zuka-claro-maskable-512.png', 'icons/zuka-claro-apple-180.png', 'icons/zuka-claro-favicon-48.png'])
     assert.ok(fs.statSync(path.join(ROOT, f)).size > 500, f);
 });
 

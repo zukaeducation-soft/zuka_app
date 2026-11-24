@@ -62,28 +62,28 @@ const logoHTML = () => \`<span class="logo" role="img" aria-label="Zuka">\${BRAI
       'brand/logo-light.svg': horizontal(NAVY),     // para fondo claro
       'brand/logo-vertical-dark.svg': vertical(WHITE, NAVY),
       'brand/logo-vertical-light.svg': vertical(NAVY, WHITE),
-      'icons/zuka-favicon.svg': file('0 0 100 100', WHITE, `<rect width="100" height="100" rx="22" fill="${NAVY}"/><g transform="translate(7 7) scale(.86)">${MARK}</g>`),
+      'icons/zuka-claro-favicon.svg': file('0 0 100 100', NAVY, `<rect width="100" height="100" rx="22" fill="${WHITE}"/><g transform="translate(7 7) scale(.86)">${MARK}</g>`),
       'brand/cerebro.svg': file('0 0 100 100', NAVY, MARK),
     },
   };
 }
 
 // ---- iconos PNG ----
-// El cerebro blanco sobre azul noche, sin la palabra (el celular ya escribe el nombre debajo). `k`: lado del cerebro como
+// El cerebro azul noche sobre blanco (pedido del 2026-11-24), sin la palabra (el celular ya escribe el nombre debajo). `k`: lado del cerebro como
 // fracción del icono. Si cambia el dibujo, cambiar también el nombre del archivo: los dispositivos guardan el icono por su dirección.
 // Android recorta el enmascarable: el cerebro queda dentro de la zona segura (círculo del 80 %).
 const ICONS = [
-  { file: 'icons/zuka-512.png', size: 512, k: 0.8, round: 0.22 },
-  { file: 'icons/zuka-192.png', size: 192, k: 0.8, round: 0.22 },
-  { file: 'icons/zuka-maskable-512.png', size: 512, k: 0.62 },
-  { file: 'icons/zuka-apple-180.png', size: 180, k: 0.78 },
-  { file: 'icons/zuka-favicon-48.png', size: 48, k: 0.9, round: 0.22 },
+  { file: 'icons/zuka-claro-512.png', size: 512, k: 0.8, round: 0.22 },
+  { file: 'icons/zuka-claro-192.png', size: 192, k: 0.8, round: 0.22 },
+  { file: 'icons/zuka-claro-maskable-512.png', size: 512, k: 0.62 },
+  { file: 'icons/zuka-claro-apple-180.png', size: 180, k: 0.78 },
+  { file: 'icons/zuka-claro-favicon-48.png', size: 48, k: 0.9, round: 0.22 },
 ];
 function iconPage({ size, k, round = 0 }) {
   const s = size * k;
   return `<!doctype html><meta charset="utf-8"><style>html,body{margin:0;background:transparent}
-    #i{width:${size}px;height:${size}px;display:grid;place-items:center;border-radius:${round * size}px;background:${NAVY}}</style>
-    <div id="i">${brain({ ink: WHITE }).replace('<svg', `<svg ${XMLNS} width="${s}" height="${s}"`)}</div>`;
+    #i{width:${size}px;height:${size}px;display:grid;place-items:center;border-radius:${round * size}px;background:${WHITE}}</style>
+    <div id="i">${brain({ ink: NAVY }).replace('<svg', `<svg ${XMLNS} width="${s}" height="${s}"`)}</div>`;
 }
 async function pngs() {
   const lemo = path.join(os.homedir(), 'lemo-opuscar');
