@@ -1,173 +1,6 @@
 // Preuniversitario · mundo 10 «Lógica proposicional»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setLesson, setExam }) => {
-  const K = (t, a, b, say, x = {}) => ({ t, a, b, say, ...x });
-  const at = (a, i, say) => ({ t: 'at', a, i, say }), notAt = (a, i, say) => ({ t: 'notAt', a, i, say });
-  const AND = (p, q) => p && q, OR = (p, q) => p || q, IMP = (p, q) => !p || q, IFF = (p, q) => p === q;
-
-  setLesson('pu-lo-1', [
-    play('circuito-logico', 'El circuito lógico', { rounds: [{ op: 'and', want: true }, { op: 'or', want: false }, { op: 'and', neg: [false, true], want: true }] },
-      'En serie ($\\wedge$) el bombillo pide los dos cerrados; en paralelo ($\\vee$) se apaga solo si los dos están abiertos. Con $\\neg q$, ese interruptor se cierra cuando $q$ es falsa: $p$ V y $q$ F.',
-      { hint: 'Serie es «y»: todo tiene que estar cerrado. Paralelo es «o»: basta uno.' }),
-    play('tabla-verdad', 'Llena la tabla de verdad', { rounds: [{ tex: 'p \\vee q', f: OR, n: 2 }, { tex: 'p \\to q', f: IMP, n: 2 }] },
-      '$p \\vee q$ solo es falsa en la fila F F. $p \\to q$ solo es falsa en la fila V F: si $p$ es falsa, la promesa no se rompe.',
-      { hint: 'Busca primero la única fila donde cambia el resultado.' }),
-    play('rompe-promesa', '¿Cuándo es falsa?', { rounds: [
-      { say: 'Si gano el partido, te invito a cine', p: 'gano', q: 'te invito', f: IMP, want: false },
-      { say: 'Voy en bus o en metro', p: 'voy en bus', q: 'voy en metro', f: OR, want: false },
-      { say: 'Estudio y apruebo', p: 'estudio', q: 'apruebo', f: AND, want: true },
-    ] }, 'La promesa solo se rompe si gano y no invito. El «o» solo falla si no voy en ninguno. El «y» solo es verdad si pasan las dos.',
-      { hint: 'Imagina cada caso como una escena: ¿alguien podría reclamar que mentiste?' }),
-    play('pinta-venn', 'Los conectivos en el diagrama (p es A, q es B)', { rounds: [{ text: 'p ∧ q', n: 2, f: (a, b) => a && b }, { text: 'p ∨ ¬q', n: 2, f: (a, b) => a || !b }] },
-      '«y» es la parte común de los dos círculos; «o» junta zonas. $p \\vee \\neg q$ es todo A más lo que queda fuera de B.',
-      { hint: 'Revisa zona por zona si cumple la fórmula.' }),
-    play('adivina-conectivo', '¿Qué conectivo es?', { rounds: [{ out: [true, false, true, true] }, { out: [true, false, false, true] }, { out: [true, true, true, false] }] },
-      'V F V V es el condicional: solo falla en V F. V F F V es el bicondicional: verdad cuando coinciden. V V V F es el «o».',
-      { hint: 'Mira en qué filas sale F: cada conectivo falla en sus propias filas.' }),
-    play('arbol-opciones', 'Las filas de una tabla de verdad', { rounds: [{ levels: [{ name: 'valores de p', n: 2 }, { name: 'valores de q', n: 2 }, { name: 'valores de r', n: 2 }], miss: 2, total: 8 }] },
-      'Cada letra tiene 2 valores: con tres letras la tabla tiene $2 \\cdot 2 \\cdot 2 = 8$ filas.',
-      { hint: 'Cada letra nueva duplica las filas.' }),
-    play('vuela-precios', 'Vuela al valor de verdad', { rounds: [{ title: 'Conectivos', items: [
-      { ask: 'p V y q F: p ∧ q es…', options: ['F', 'V', 'no se sabe'], answer: 0 },
-      { ask: 'p F y q F: p → q es…', options: ['V', 'F', 'no se sabe'], answer: 0 },
-      { ask: 'Filas de la tabla con 3 letras', options: ['8', '6', '3'], answer: 0 },
-    ] }] }, 'El «y» pide las dos verdaderas. Un condicional con $p$ falsa es verdadero. $2^3 = 8$.',
-      { hint: 'Recuerda en qué único caso falla cada conectivo.' }),
-  ]);
-
-  setLesson('pu-lo-2', [
-    play('arma-negacion', 'Escribe la negación', { rounds: [
-      { ask: 'Escribe la negación con De Morgan', show: '$\\neg(p \\wedge q)$', tray: ['$\\neg p$', '$\\neg q$', '$\\wedge$', '$\\vee$', '$p$', '$q$'], need: [0, 3, 1], alt: [[1, 3, 0]] },
-      { ask: 'Escribe la negación con De Morgan', show: '$\\neg(p \\vee \\neg q)$', tray: ['$\\neg p$', '$q$', '$\\wedge$', '$\\vee$', '$p$', '$\\neg q$'], need: [0, 2, 1], alt: [[1, 2, 0]] },
-      { ask: 'Escribe la negación de la frase', show: 'Todos los trenes salieron a tiempo', tray: ['algún', 'ningún', 'tren', 'todos', 'no salió', 'salió'], need: [0, 2, 4] },
-    ] }, 'Negar un «y» da un «o» de negaciones: $\\neg p \\vee \\neg q$. Negar un «o» da un «y»: $\\neg p \\wedge q$ (la doble negación se cancela). «Todos salieron» se niega con «algún tren no salió».',
-      { hint: 'Niega cada parte y cambia el conectivo: «y» por «o», «o» por «y».' }),
-    play('contraejemplo', 'Basta un contraejemplo', { rounds: [
-      { claim: 'Todos los números de la caja son pares', items: [4, 10, 8, 15, 22, 6], bad: x => x % 2 !== 0 },
-      { claim: 'Ningún número de la caja es primo', items: [9, 15, 21, 13, 25, 27], bad: x => [2, 3, 5, 7, 11, 13].includes(x) },
-      { claim: 'Todo número que termina en 3 es primo', items: [13, 23, 33, 43, 53], bad: x => x === 33 },
-    ] }, 'Para tumbar un «todos» basta uno que no cumpla (15); para tumbar un «ninguno», uno que sí (13). Y $33 = 3 \\cdot 11$ no es primo.',
-      { hint: 'No hay que revisarlos todos para tumbar la frase: busca uno solo que falle.' }),
-    play('niega-todos', 'Tumba la frase con lo mínimo', { rounds: [
-      { kind: 'todas', on: [true, true, true, true, true] },
-      { kind: 'alguna', on: [false, true, false, true, false, false] },
-      { kind: 'ninguna', on: [false, false, false, false, false] },
-    ] }, '«Todas prendidas» cae apagando una sola: su negación es «alguna está apagada». «Alguna prendida» solo cae si se apagan todas: su negación es «ninguna». «Ninguna» cae prendiendo una.',
-      { hint: 'Piensa qué frase es la negación y cumple exactamente esa.' }),
-    play('circuito-logico', 'El inversor y De Morgan', { rounds: [{ op: 'and', out: true, want: false }, { op: 'or', neg: [true, true], want: false }] },
-      '$\\neg(p \\wedge q)$ y $\\neg p \\vee \\neg q$ se apagan en el mismo único caso: $p$ y $q$ verdaderas. Son la misma fórmula.',
-      { hint: 'El inversor apaga cuando lo de adentro está prendido.' }),
-    play('tabla-verdad', 'Comprueba De Morgan con la tabla', { rounds: [{ tex: '\\neg p \\vee \\neg q', given: { tex: '\\neg(p \\wedge q)', f: (p, q) => !(p && q) }, f: (p, q) => !p || !q, n: 2 }] },
-      'Las dos columnas son iguales fila por fila: F V V V. Por eso son equivalentes.',
-      { hint: 'Llena tu columna y compárala con la de al lado.' }),
-    play('pinta-venn', 'De Morgan en el diagrama', { rounds: [{ text: '(A ∪ B)ᶜ', n: 2, f: (a, b) => !(a || b) }, { text: 'Aᶜ ∪ Bᶜ', n: 2, f: (a, b) => !a || !b }] },
-      'Lo que no está en ninguno de los dos es $A^c \\cap B^c$. Y $A^c \\cup B^c$ es todo menos la parte común: $(A \\cap B)^c$.',
-      { hint: 'Pinta zona por zona preguntando si cumple.' }),
-    play('rompe-cambios', 'Manda la pelota a la negación', { miss: '«todos» se niega con «alguno no»', rounds: [{ title: 'Negaciones', items: [
-      { ask: 'Negación de «todos aprobaron»', options: ['alguno no aprobó', 'ninguno aprobó', 'todos reprobaron'], answer: 0 },
-      { ask: 'Negación de «ninguno vino»', options: ['alguno vino', 'todos vinieron', 'nadie faltó'], answer: 0 },
-      { ask: '¬(p ∨ q) equivale a…', options: ['¬p ∧ ¬q', '¬p ∨ ¬q', 'p ∧ q'], answer: 0 },
-    ] }] }, 'Basta uno que no aprobó; basta uno que vino. Negar un «o» da un «y» de negaciones.',
-      { hint: 'La negación tiene que ser verdad exactamente cuando la frase es falsa.' }),
-  ]);
-
-  setLesson('pu-lo-3', [
-    play('flecha-deduce', '¿Qué se puede concluir?', { rounds: [
-      { p: 'es domingo', q: 'la biblioteca cierra', fact: ['p', true] },
-      { p: 'la figura es un cuadrado', q: 'tiene cuatro lados', fact: ['q', true] },
-      { p: 'el agua hierve', q: 'está muy caliente', fact: ['q', false] },
-      { p: 'Ana estudia', q: 'Ana aprueba', fact: ['p', false] },
-    ] }, 'Ponens: pasa $p$, entonces pasa $q$. Tener cuatro lados no prueba que sea cuadrado (puede ser un rectángulo). Tollens: si no está caliente, no hierve. Y si Ana no estudia, la regla no dice nada.',
-      { hint: 'La flecha solo empuja hacia adelante desde $p$, o hacia atrás desde «no $q$».' }),
-    play('arma-negacion', 'Recíproco, contrario y contrarrecíproco', { rounds: [
-      { ask: 'Escribe el contrarrecíproco', show: '$p \\to q$', tray: ['$p$', '$q$', '$\\neg p$', '$\\neg q$', '$\\to$'], need: [3, 4, 2] },
-      { ask: 'Escribe el recíproco', show: '$p \\to q$', tray: ['$p$', '$q$', '$\\neg p$', '$\\neg q$', '$\\to$'], need: [1, 4, 0] },
-      { ask: 'Escribe el contrario', show: '$p \\to q$', tray: ['$p$', '$q$', '$\\neg p$', '$\\neg q$', '$\\to$'], need: [2, 4, 3] },
-    ] }, 'Contrarrecíproco $\\neg q \\to \\neg p$ (el único equivalente); recíproco $q \\to p$; contrario $\\neg p \\to \\neg q$.',
-      { hint: 'Recíproco: se voltea. Contrario: se niega. Contrarrecíproco: se voltea y se niega.' }),
-    play('rompe-promesa', 'Condicional y bicondicional', { rounds: [
-      { say: 'Si es mayor de edad, puede votar', p: 'es mayor de edad', q: 'puede votar', f: IMP, want: true },
-      { say: 'Se cancela el partido si y solo si llueve', p: 'se cancela', q: 'llueve', f: IFF, want: false },
-    ] }, 'El condicional es verdad en tres de los cuatro casos: solo falla «mayor y no puede votar». El bicondicional falla cuando las dos partes no coinciden.',
-      { hint: 'El condicional no dice nada de los menores de edad.' }),
-    play('tabla-verdad', 'El contrarrecíproco es equivalente', { rounds: [{ tex: '\\neg q \\to \\neg p', given: { tex: 'p \\to q', f: IMP }, f: (p, q) => q || !p, n: 2 }] },
-      'Las dos columnas dan V F V V: el contrarrecíproco dice lo mismo que el condicional.',
-      { hint: 'Calcula $\\neg q$ y $\\neg p$ en cada fila y aplica el condicional.' }),
-    play('circuito-logico', 'El condicional como circuito', { rounds: [{ op: 'or', neg: [true, false], want: false }, { op: 'or', neg: [true, false], want: true, fix: { p: true } }] },
-      '$p \\to q$ es lo mismo que $\\neg p \\vee q$: solo se apaga con $p$ V y $q$ F. Si $p$ es V, para prender hace falta $q$ V (modus ponens).',
-      { hint: 'Con $\\neg p$, el interruptor de arriba se abre cuando $p$ es verdadera.' }),
-    play('tiene-podria', 'Reglas con «solo si»', { rounds: [
-      { names: ['A', 'B', 'C', 'D'], k: 2, rules: [K('onlyIf', 'A', 'B', 'A va solo si B va'), K('ifNot', 'C', 'D', 'si C va, D no')], claims: [{ t: 'in', a: 'B', say: 'B va' }, { t: 'in', a: 'A', say: 'A va' }, { t: 'both', a: 'A', b: 'C', say: 'A y C van' }] },
-    ] }, 'Las parejas posibles son AB, BC y BD. B está en todas: tiene que ir. A podría ir. A y C juntos no caben.',
-      { hint: '«A solo si B» quiere decir: si A va, B tiene que ir.' }),
-    play('vuela-precios', 'Vuela a la conclusión', { rounds: [{ title: 'Condicional', items: [
-      { ask: 'Si p → q y pasa p…', options: ['pasa q', 'no pasa q', 'no se sabe'], answer: 0 },
-      { ask: 'Si p → q y no pasa q…', options: ['no pasó p', 'pasó p', 'no se sabe'], answer: 0 },
-      { ask: 'Si p → q y pasa q…', options: ['no se sabe si p', 'pasó p', 'no pasó p'], answer: 0 },
-    ] }] }, 'Ponens y tollens concluyen; afirmar el consecuente no.',
-      { hint: 'La flecha va de $p$ a $q$, no de vuelta.' }),
-  ]);
-
-  setLesson('pu-lo-4', [
-    play('arma-silogismo', 'Dibuja las premisas', { rounds: [
-      { sets: [{ k: 'A', name: 'perros', r: 0.9 }, { k: 'B', name: 'mamíferos', r: 1.7 }, { k: 'C', name: 'animales', r: 2.6 }], rels: [['A', 'B', 'sub'], ['B', 'C', 'sub']], sol: { A: [5, 3], B: [5, 3], C: [5, 3] } },
-      { sets: [{ k: 'A', name: 'peces', r: 1 }, { k: 'B', name: 'aves', r: 1.2 }, { k: 'C', name: 'con plumas', r: 2 }], rels: [['B', 'C', 'sub'], ['A', 'C', 'disj']], sol: { A: [7.5, 3], B: [3, 3], C: [3, 3] } },
-      { sets: [{ k: 'A', name: 'estudiantes', r: 1.5 }, { k: 'B', name: 'deportistas', r: 1.5 }, { k: 'C', name: 'nadadores', r: 0.8 }], rels: [['C', 'B', 'sub'], ['A', 'B', 'cross']], sol: { A: [3.5, 3], B: [5.5, 3], C: [6.2, 3] } },
-    ] }, 'Los perros quedan dentro de los animales: se concluye. Las aves quedan dentro de «con plumas» y los peces afuera: ningún pez es ave. Con «algunos estudiantes son deportistas», los nadadores pueden quedar fuera de los estudiantes: no se concluye nada sobre ellos.',
-      { hint: '«Todos» mete un círculo dentro de otro; «ningún» los separa; «algunos» los cruza.' }),
-    play('mueve-circulos', 'Todos, ninguno y algunos', { rounds: [
-      { A: '{múltiplos de 2}', B: '{múltiplos de 4}', rB: 0.5, rel: 'sub' },
-      { A: '{números pares}', B: '{números impares}', rB: 0.8, rel: 'disjoint' },
-      { A: '{múltiplos de 2}', B: '{múltiplos de 3}', rB: 0.8, rel: 'overlap' },
-    ] }, 'Todo múltiplo de 4 es par: B dentro de A. Ningún par es impar: separados. Algunos múltiplos de 2 lo son de 3 (el 6) y otros no: cruzados.',
-      { hint: 'Busca un elemento que esté en los dos y otro que esté en uno solo.' }),
-    play('pinta-venn', 'Pinta lo que dice la frase', { rounds: [{ text: 'los A que no son B', n: 2, f: (a, b) => a && !b }, { text: 'los A que también son C', n: 3, f: (a, b, c) => a && c }] },
-      '«Los A que no son B» es la luna de A fuera de B. «Los A que también son C» es la parte común de A y C, esté o no en B.',
-      { hint: 'Pinta zona por zona preguntando si cumple las dos condiciones.' }),
-    play('reparte-venn', 'Algunos mamíferos viven en el agua', { rounds: [{ U: ['delfín', 'tiburón', 'ballena', 'salmón', 'perro', 'gato'], A: ['delfín', 'tiburón', 'ballena', 'salmón'], B: ['delfín', 'ballena', 'perro', 'gato'] }] },
-      'A son los que viven en el agua y B los mamíferos. Delfín y ballena están en los dos: por eso «algunos mamíferos viven en el agua», pero no todos.',
-      { hint: 'Pregunta por cada animal: ¿vive en el agua? ¿es mamífero?' }),
-    play('contraejemplo', '¿Todos? Busca el que falla', { rounds: [{ claim: 'Todo múltiplo de 3 es impar', items: [9, 15, 21, 12, 27], bad: x => x % 2 === 0 }] },
-      'El 12 es múltiplo de 3 y es par: la frase cae.',
-      { hint: 'Busca uno que cumpla la primera parte y no la segunda.' }),
-    play('descifra-zona', 'Describe la zona', { rounds: [{ title: 'Zonas', items: [{ zones: [1] }, { zones: [3] }] }] },
-      'La zona solo de A es $A - B$ («los A que no son B»); la del medio es $A \\cap B$ («los A que son B»).',
-      { hint: 'Mira si la zona rayada está dentro o fuera de cada círculo.' }),
-    play('lazo-conjunto', 'Encierra a los que cumplen', { rounds: [{ title: 'Todos los que cumplen', items: [{ name: 'P', rule: 'x es múltiplo de 5', members: ['10', '25', '40'], others: ['12', '33', '8', '21'] }] }] },
-      'Solo 10, 25 y 40 terminan en 0 o en 5: son los múltiplos de 5.',
-      { hint: 'Un múltiplo de 5 termina en 0 o en 5.' }),
-  ]);
-
-  setLesson('pu-lo-5', [
-    play('quien-miente', '¿Quién miente?', { rounds: [
-      { people: [{ name: 'Ana', say: 'Beto miente', f: t => !t[1] }, { name: 'Beto', say: 'Carla miente', f: t => !t[2] }, { name: 'Carla', say: 'Ana y Beto mienten', f: t => !t[0] && !t[1] }] },
-      { people: [{ name: 'Rosa', say: 'Exactamente uno de los dos miente', f: t => t.filter(x => !x).length === 1 }, { name: 'Saúl', say: 'Rosa miente', f: t => !t[0] }] },
-      { people: [{ name: 'Teo', say: 'Ulises miente', f: t => !t[1] }, { name: 'Ulises', say: 'Vale miente', f: t => !t[2] }, { name: 'Vale', say: 'Teo y Ulises mienten', f: t => !t[0] && !t[1] }] },
-    ] }, 'Si Carla dijera la verdad, Ana y Beto mentirían, pero entonces Ana diría la verdad: choca. Carla miente, Beto dice la verdad y Ana miente. Rosa dice la verdad y Saúl miente. Ulises dice la verdad y Teo y Vale mienten.',
-      { hint: 'Supón que alguien dice la verdad y sigue la cadena; si algo choca, cambia la suposición.' }),
-    play('descarta-casos', 'Tacha los podios imposibles', { rounds: [
-      { cands: [['Iván', 'Julia', 'Kevin'], ['Julia', 'Iván', 'Kevin'], ['Kevin', 'Julia', 'Iván'], ['Julia', 'Kevin', 'Iván']], clues: [notAt('Julia', 0, 'Julia no ganó'), K('before', 'Iván', 'Kevin', 'Iván llegó antes que Kevin')] },
-    ] }, 'Tres podios ponen a Julia de primera o a Kevin antes que Iván: queda Iván, Julia, Kevin.',
-      { hint: 'Revisa cada podio contra las dos pistas.' }),
-    play('tabla-cruces', 'Un ✓ por fila y por columna', { rounds: [{ rows: ['Lina', 'Mario', 'Nora'], cols: ['rojo', 'azul', 'verde'], clues: [{ t: 'not', a: 0, v: 0 }, { t: 'not', a: 1, v: 0 }, { t: 'not', a: 1, v: 1 }] }] },
-      'Mario solo puede verde; entonces Lina, que no es roja, queda azul, y Nora roja.',
-      { hint: 'Empieza por la fila con un solo hueco libre.' }),
-    play('casilleros', '¿De quién es cada cosa?', { rounds: [{ people: ['Ola', 'Pau', 'Quim'], names: ['lápiz', 'borrador', 'regla'], clues: [at('regla', 2, 'la regla es de Quim'), notAt('lápiz', 0, 'el lápiz no es de Ola')] }] },
-      'La regla es de Quim; el lápiz no es de Ola, así que es de Pau, y a Ola le queda el borrador.',
-      { hint: 'Lo seguro primero, luego lo que queda.' }),
-    play('dias-semana', 'El horario de exámenes', { rounds: [{ names: ['Química', 'Física', 'Biología', 'Historia'], clues: [at('Física', 0, 'Física es el lunes'), K('before', 'Historia', 'Química', 'Historia va antes que Química'), notAt('Biología', 3, 'Biología no es el jueves'), notAt('Biología', 1, 'Biología no es el martes')] }] },
-      'Física el lunes y Biología el miércoles (no martes ni jueves). Quedan martes y jueves: Historia antes que Química.',
-      { hint: 'Ubica primero lo que tiene menos lugares posibles.' }),
-    play('flecha-deduce', 'Verdad y consecuencia', { rounds: [{ p: 'Raúl dice la verdad', q: 'el tesoro está en la cueva', fact: ['q', false] }] },
-      'Raúl dijo que el tesoro está en la cueva. Si no está, Raúl no dijo la verdad: es modus tollens.',
-      { hint: 'Si lo que dijo resultó falso, ¿qué pasa con quien lo dijo?' }),
-    play('rompe-cambios', 'Manda la pelota a quien miente', { miss: 'supón y busca la contradicción', rounds: [{ title: 'Mentiras', items: [
-      { ask: 'A: «B miente». B: «A miente». ¿Cuántos mienten?', options: ['exactamente uno', 'los dos', 'ninguno'], answer: 0 },
-      { ask: 'F: «G y yo mentimos». ¿F miente?', options: ['sí', 'no', 'no se sabe'], answer: 0 },
-      { ask: 'Si una suposición lleva a una contradicción…', options: ['se descarta', 'se acepta', 'no importa'], answer: 0 },
-    ] }] }, 'Si A dice la verdad, B miente, y viceversa: siempre uno. Si F dijera la verdad, mentiría: choca, así que F miente (y G dice la verdad). Lo que choca se descarta.',
-      { hint: 'Prueba las dos suposiciones y quédate con la que no choca.' }),
-  ]);
-
+PU_JUEGOS.push(({ setExam }) => {
+  const IMP = (p, q) => !p || q;
   setExam('pu-logica', 'Lógica proposicional', [
     ['pu-lo-1', 'Una tabla de verdad prueba todas las combinaciones.',
       play('tabla-verdad', 'Tabla', { rounds: [{ tex: 'p \\wedge \\neg q', f: (p, q) => p && !q, n: 2 }] }, 'Solo es V en la fila V F.', { hint: 'Fila por fila.' })],
@@ -193,16 +26,40 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 });
 
 // Mundo 10 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
-  diezLesson('pu-lo-1', [
-    ['circuito-logico', 2, 'Una alarma suena solo si la puerta está abierta y el seguro NO está puesto. Enciende el bombillo', 'La compuerta Y solo se enciende con sus dos entradas encendidas. La segunda pasa por un inversor: hay que encender p y apagar q.'],
-    ['tabla-verdad', 1, 'Llena la tabla de verdad del condicional $p \\to q$', 'El condicional solo es falso en una fila: cuando p es verdadera y q es falsa. Si p es falsa, no hay promesa que incumplir.'],
-    ['rompe-promesa', 0, '«Si gano el partido, te invito a cine». Marca el caso en que la promesa se rompe', 'La promesa solo se rompe si gano y no te invito. Si no gano, haga lo que haga, no la incumplí.'],
-    ['pinta-venn', 1, 'Los conectivos en el diagrama (p es A, q es B): pinta $p \\vee \\neg q$', 'Se pinta todo A y todo lo que está fuera de B. Solo queda en blanco lo que es B y no es A.'],
-    ['adivina-conectivo', 1, 'Una tabla da V, F, F, V. ¿Qué conectivo es?', 'Es verdadera cuando p y q valen lo mismo y falsa cuando difieren: el bicondicional, $p \\leftrightarrow q$.'],
-    ['arbol-opciones', 0, 'Una proposición tiene tres letras: p, q y r. Completa el árbol de sus filas', 'Cada letra puede ser V o F: $2 \\cdot 2 \\cdot 2 = 8$ filas en la tabla de verdad.'],
-    ['vuela-precios', 0, 'Vuela al valor de verdad', 'Una conjunción con una parte falsa es falsa. Un condicional con antecedente falso es verdadero. Con 3 letras hay $2^3 = 8$ filas.'],
-  ], [
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-lo-1', [
+    play('prende-circuito', 'El bombillo prende con «(p **o** q) **y** r». Cierra **solo** las llaves necesarias para prenderlo dejando **q abierta**.', { abierta: 1, sol: [0, 2] },
+      'Con q abierta, la corriente pasa por p. Después está r en serie: también hay que cerrarla.',
+      { hint: 'Sigue el cable desde la izquierda: ¿por qué camino puede pasar y qué encuentra después?' }),
+    play('valor-frases', 'p es **falsa** y q es **verdadera**. Pon V o F en cada frase.', { da: 'p: F · q: V', et: ['p ∨ q', 'p ∧ q', '¬p', 'p → q', 'q → p'], metas: ['V', 'F', 'V', 'V', 'F'], fichas: ['V', 'V', 'V', 'V', 'F', 'F', 'F', 'F'],
+      mira: ['A la «o» le basta una verdadera.', 'La «y» pide las dos verdaderas.', 'Negar p es decir lo contrario de p.', 'p es falsa: la promesa no obligaba a nada.', 'q promete p: q pasa y p no.'], ok: 'El condicional solo falla de V a F.' },
+      'p ∨ q: basta q, V. p ∧ q: falta p, F. ¬p: V. p → q: p es F, no se rompe, V. q → p: de V a F, se rompe, F.',
+      { hint: '«o» se conforma con una, «y» pide las dos, y el condicional solo falla si promete y no cumple.' }),
+    play('tabla-disyuncion', 'Llena la columna de **¬p ∨ ¬q**: toca las filas donde vale V.', { frase: '¬p ∨ ¬q', f: (p, q) => !p || !q, regla: 'le basta con que una de las dos sea falsa.', ok: 'Solo falla con las dos verdaderas.' },
+      'En la primera fila ¬p y ¬q son F. En las demás, alguna de las dos es V, y a la «o» le basta.',
+      { hint: 'Antes de mirar la «o», piensa cuánto valen ¬p y ¬q en cada fila.' }),
+    play('promesa-sigue', 'Promesa: «**si llego temprano, cocino**». Toca **todos** los casos en que la promesa **no** se rompe.', { casos: [{ t: 'llega temprano y cocina', si: true }, { t: 'llega temprano y no cocina', no: 'Llegó temprano y no cocinó: ahí sí rompió la promesa.' }, { t: 'llega tarde y cocina', si: true }, { t: 'llega tarde y no cocina', si: true }], falta: 'Si no llega temprano, la promesa no obligaba a nada.', ok: 'Solo se rompe si llega temprano y no cocina.' },
+      'La promesa solo habla de cuando llega temprano. Si llega tarde, cocine o no, nadie mintió.',
+      { hint: '¿A qué obliga la promesa cuando no llega temprano?' }),
+    play('cuenta-filas', 'Cuenta las filas de la tabla de esta frase y en cuántas es **verdadera**.', { frase: 'p ∧ (q ∨ r)', et: ['filas', 'verdaderas', 'falsas'], metas: ['8', '3', '5'], fichas: ['8', '3', '5', '6', '4', '1', '2'],
+      mira: ['Son tres letras y cada una duplica los casos.', 'p debe ser V y además q, r o las dos.', 'Son las filas que sobran.'], trampas: { '0:6': 'Cada letra duplica: no se suma 2 por letra.', '1:4': 'Con p verdadera hay 4 filas, pero en una q y r son falsas.', '1:1': 'También sirven las filas con solo q o solo r.', '1:2': 'También cuenta la fila con q y r verdaderas.' }, ok: 'Verdaderas y falsas suman todas las filas.' },
+      'Hay $2^3 = 8$ filas. Con p verdadera hay 4, y solo falla la de q y r falsas: 3 verdaderas y 5 falsas.',
+      { hint: 'Fija p verdadera y mira qué combinaciones de q y r sirven.' }),
+    play('nombra-columna', 'Se borraron los títulos de estas tres columnas. Ponlos.', { cols: ['VFFF', 'VVVF', 'VFVV'], metas: ['p ∧ q', 'p ∨ q', 'p → q'], fichas: ['p ∧ q', 'p ∨ q', 'p → q', 'q → p', '¬p'],
+      mira: ['Solo es V cuando las dos lo son.', 'Solo es F cuando las dos lo son.', 'Solo es F cuando p es V y q es F.'], trampas: { '2:q → p': 'Esa falla en la fila de p falsa y q verdadera.' }, ok: 'Cada conectivo se reconoce por sus F o por sus V.' },
+      'Una sola V, con las dos verdaderas: ∧. Una sola F, con las dos falsas: ∨. Una sola F, de V a F: el condicional.',
+      { hint: 'Busca en cada columna lo que sale una sola vez y mira cuánto valen p y q ahí.' }),
+    play('frase-larga', 'p es V, q es V y r es F. Pon el valor de cada pedazo y el de la frase completa.', { et: ['p → r', 'q ∧ ¬r', '(p → r) ∨ (q ∧ ¬r)'], metas: ['F', 'V', 'V'], fichas: ['F', 'V', 'V', 'F', 'F', 'V'],
+      mira: ['p es V y r es F: mira si la promesa se rompe.', 'q es V y ¬r también es V.', 'A la «o» le basta un pedazo verdadero.'], ok: 'Primero los pedazos, después la frase.' },
+      'p → r va de V a F: es F. q ∧ ¬r es V y V: V. Con la «o» basta un pedazo: V.',
+      { hint: 'Resuelve cada paréntesis por aparte y deja la «o» para el final.' }),
+    play('sube-filas', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '¿Cuántas **filas** tiene una tabla con **5** letras?', r: 32, c: '2^5', e: { 10: 'Cada letra duplica: no se suma 2.', 25: 'Cada letra duplica: es 2 multiplicado cinco veces.' } },
+      { q: '¿En cuántas filas es **verdadera** p ∨ q ∨ r?', r: 7, c: '8 - 1', e: { 1: 'Esa es la única falsa.', 8: 'Hay una fila con las tres falsas.' } },
+      { q: '¿En cuántas filas es **falsa** p ∧ q ∧ r ∧ s?', r: 15, c: '16 - 1', e: { 1: 'Esa es la única verdadera.', 16: 'Hay una fila con las cuatro verdaderas.' } }] },
+      'Cinco letras: $2^5 = 32$. La «o» solo falla en una de 8: 7. La «y» solo acierta en una de 16: 15 falsas.',
+      { hint: 'Cada letra duplica las filas. ¿En qué fila falla una «o»? ¿En cuál acierta una «y»?' }),
     sol('Se sabe que la proposición «Llueve y no hace frío» es verdadera. ¿Cuál es el valor de verdad de «Si llueve, entonces hace frío»? ¿Y el de «Llueve o hace frío»?',
       ['Una conjunción es verdadera solo si sus dos partes lo son: «llueve» es [[verdadera]]', '«No hace frío» es verdadera, así que «hace frío» es [[falsa]]', '«Si llueve, entonces hace frío» va de verdadero a falso: es [[falsa]]', '«Llueve o hace frío» tiene una parte verdadera: es [[verdadera]]'],
       ['no se sabe', 'contradictoria'],
@@ -219,15 +76,39 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Para que una «o» sea verdadera, ¿cuántas de sus partes deben serlo, como mínimo?'),
   ]);
 
-  diezLesson('pu-lo-2', [
-    ['arma-negacion', 0, 'Escribe la negación de $p \\wedge q$ con De Morgan', 'Negar una «y» da una «o» con las partes negadas: $\\neg(p \\wedge q) = \\neg p \\vee \\neg q$.'],
-    ['contraejemplo', 1, 'Alguien afirma: «ningún número de la caja es primo». Busca el que lo tumba', 'Basta un solo caso: el 13 es primo. Los demás (9, 15, 21, 25, 27) tienen divisores.'],
-    ['niega-todos', 1, 'La frase dice «alguna luz está encendida». Tumba la frase con lo mínimo', 'Para que «alguna está encendida» sea falsa hay que apagarlas todas: su negación es «ninguna está encendida».'],
-    ['circuito-logico', 1, 'El inversor y De Morgan: deja el bombillo apagado', '$\\neg p \\vee \\neg q$ solo se apaga cuando las dos negaciones son falsas: p y q encendidas. Es lo mismo que $\\neg(p \\wedge q)$.'],
-    ['tabla-verdad', 0, 'Comprueba De Morgan con la tabla: las dos columnas deben coincidir', 'Las dos columnas dan F, V, V, V: $\\neg(p \\wedge q)$ y $\\neg p \\vee \\neg q$ son equivalentes.'],
-    ['pinta-venn', 0, 'De Morgan en el diagrama: pinta $(A \\cup B)^c$', 'Lo que no está en A ni en B: la zona de afuera. Es lo mismo que $A^c \\cap B^c$.'],
-    ['rompe-cambios', 0, 'Manda la pelota a la negación', '«Todos» se niega con «alguno no»; «ninguno», con «alguno». Y $\\neg(p \\vee q)$ es $\\neg p \\wedge \\neg q$.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-lo-2', [
+    play('niega-y', 'Arma la negación, **en el mismo orden** de la frase.', { frase: '«lavé la ropa y barrí»', metas: ['no lavé la ropa', 'o', 'no barrí'], fichas: ['no lavé la ropa', 'o', 'no barrí', 'y', 'lavé la ropa', 'barrí'],
+      mira: ['Niega la primera parte.', 'Al negar, el conectivo cambia.', 'Niega la segunda parte.'], trampas: { '1:y': 'Para que la frase sea falsa basta que falle una parte: es «o».' }, ok: 'Basta que falle una parte.' },
+      'La frase pide las dos cosas, así que es falsa si falla una: no lavé la ropa **o** no barrí.',
+      { hint: '¿Cuándo deja de ser verdad la frase? ¿Tienen que fallar las dos partes?' }),
+    play('niega-mezclada', 'Arma la negación, **en el mismo orden** de la frase.', { frase: '«no salí o me mojé»', metas: ['salí', 'y', 'no me mojé'], fichas: ['salí', 'y', 'no me mojé', 'no salí', 'o', 'me mojé'],
+      mira: ['Negar «no salí» es decir que sí.', 'Al negar, el conectivo cambia.', 'Niega la segunda parte.'], trampas: { '1:o': 'Para que una «o» sea falsa tienen que fallar las dos partes: es «y».' }, ok: 'Una «o» solo es falsa si fallan las dos.' },
+      'Es falsa solo si fallan las dos partes: salí **y** no me mojé.',
+      { hint: 'Lo contrario de algo que ya tiene «no» es decirlo sin el «no».' }),
+    play('tabla-negada', 'Llena la columna de **¬(¬p ∨ ¬q)**: toca las filas donde vale V.', { frase: '¬(¬p ∨ ¬q)', f: (p, q) => p && q, regla: 'solo es V si las dos son verdaderas.', ok: 'Es lo mismo que p ∧ q.' },
+      '¬p ∨ ¬q solo es falsa con las dos verdaderas: su negación solo es V ahí, igual que p ∧ q.',
+      { hint: 'Primero busca dónde es falsa ¬p ∨ ¬q; la negación es verdadera justo ahí.' }),
+    play('casos-tumban', 'Un cartel dice «**todos los perros de este parque llevan collar**». Toca **todos** los casos que lo vuelven **falso**.', { casos: [{ t: 'un perro del parque con collar', no: 'Ese perro cumple lo que dice el cartel.' }, { t: 'un perro del parque sin collar', si: true }, { t: 'un gato del parque sin collar', no: 'El cartel habla de perros, no de gatos.' }, { t: 'dos perros del parque sin collar', si: true }, { t: 'un perro de otro parque sin collar', no: 'El cartel solo habla de este parque.' }], falta: 'Falta otro caso con un perro de este parque sin collar.', ok: 'Basta un perro de este parque sin collar.' },
+      'Para tumbar un «todos» basta uno que no cumpla, y tiene que ser un perro de ese parque.',
+      { hint: '¿De quién habla el cartel? Busca a alguno de esos que no cumpla.' }),
+    play('parejas-negacion', 'Pon la **negación** de cada frase.', { et: ['todos ríen', 'alguno canta', 'ninguno llora'], metas: ['alguno no ríe', 'ninguno canta', 'alguno llora'], fichas: ['alguno no ríe', 'ninguno canta', 'alguno llora', 'ninguno ríe', 'alguno no canta', 'todos lloran'],
+      mira: ['Para tumbar «todos» basta uno.', 'Para tumbar «alguno» no puede quedar ni uno.', 'Para tumbar «ninguno» basta uno.'], trampas: { '0:ninguno ríe': 'No hace falta que ninguno ría: basta uno que no ría.', '1:alguno no canta': 'Puede haber uno que no canta y otro que sí: no la tumba.', '2:todos lloran': 'No hace falta que lloren todos: basta uno.' }, ok: 'Todos contra alguno no; alguno contra ninguno.' },
+      '«Todos ríen» ↔ «alguno no ríe»; «alguno canta» ↔ «ninguno canta»; «ninguno llora» ↔ «alguno llora».',
+      { hint: 'Busca lo mínimo que tendría que pasar para que cada frase sea mentira.' }),
+    play('pinta-negacion', 'p: «juega fútbol». q: «juega tenis». Toca **todas** las zonas donde es verdad **¬(p ∧ q)**.', { a: 'fútbol', b: 'tenis', zonas: [0, 2, 3], mira: ['Juega fútbol y no tenis: no juega los dos.', 'Ahí juega los dos: p ∧ q es verdad, y su negación, falsa.', 'Juega tenis y no fútbol: no juega los dos.', 'No juega ninguno: tampoco juega los dos.'], ok: 'Todo menos el centro: ¬p ∨ ¬q.' },
+      'Solo en el centro juega los dos. La negación es todo lo demás: los que no juegan uno **o** no juegan el otro.',
+      { hint: 'Ubica primero dónde es verdad «juega los dos». ¿Qué queda?' }),
+    play('niega-cartel', 'Arma la negación, **en el mismo orden** de la frase.', { frase: '«todos votaron y alguno habló»', metas: ['alguno no votó', 'o', 'ninguno habló'], fichas: ['alguno no votó', 'o', 'ninguno habló', 'ninguno votó', 'y', 'alguno no habló'],
+      mira: ['Para tumbar «todos votaron» basta uno que no.', 'Al negar, el conectivo cambia.', 'Para tumbar «alguno habló» no pudo hablar nadie.'], trampas: { '0:ninguno votó': 'No hace falta que ninguno vote: basta uno que no.', '1:y': 'Basta que falle una de las dos partes: es «o».', '2:alguno no habló': 'Aunque uno no hable, otro pudo hablar.' }, ok: 'Cada parte con su negación, y «y» pasa a «o».' },
+      'Alguno no votó **o** ninguno habló.',
+      { hint: 'Niega cada parte por aparte y después mira qué pasa con la «y».' }),
+    play('sube-niega', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De **12** ventanas, «alguna está abierta» es **falsa**. ¿Cuántas están **cerradas**?', r: 12, c: '12 - 0', e: { 1: 'Con una cerrada puede haber otras abiertas.', 11: 'Piensa qué pasa con la que falta.' } },
+      { q: 'De **8** socios, «todos tienen carné» es **falsa**. ¿Cuántos, **como mínimo**, no tienen?', r: 1, c: '\\text{basta } 1', e: { 8: 'Esos serían todos; para tumbarla basta menos.' } },
+      { q: '¿En cuántas filas de la tabla es **verdadera** ¬(p ∧ q)?', r: 3, c: '4 - 1', e: { 1: 'Esa es la fila donde es falsa.' } }] },
+      'Para tumbar «alguna» hay que cerrarlas todas: 12. Para tumbar «todos» basta 1. Y ¬(p ∧ q) solo falla en una de 4: 3.',
+      { hint: 'Piensa en lo mínimo que hace falta para que cada frase sea mentira.' }),
     sol('Un letrero dice: «Todos los buses de esta ruta tienen aire acondicionado y ninguno cobra más de 3 000 pesos». ¿Qué tiene que pasar para que el letrero sea falso?',
       ['El letrero une dos afirmaciones con «y»: es falso si falla [[al menos una]] de ellas', 'La negación de «todos tienen aire» es «[[alguno]] no tiene aire»', 'La negación de «ninguno cobra más» es «[[alguno]] cobra más»', 'Las dos negaciones se unen con [[o]]: es De Morgan'],
       ['ninguno', 'todos', 'y', 'las dos'],
@@ -244,15 +125,39 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'La negación debe ser verdadera exactamente cuando la frase original es falsa.'),
   ]);
 
-  diezLesson('pu-lo-3', [
-    ['flecha-deduce', 2, '«Si el agua hierve, está muy caliente». El agua no está muy caliente. ¿Qué se concluye?', 'Si hirviera, estaría muy caliente. Como no lo está, no hierve: se niega el consecuente y cae el antecedente. Si el consecuente es un «o», negarlo exige que fallen las dos partes, porque $\\neg(q \\vee r)$ es $\\neg q \\wedge \\neg r$. Con «si estudia, aprueba o recupera»: quien no aprobó y no recuperó, no estudió; pero de alguien que solo no aprobó no se concluye nada.'],
-    ['arma-negacion', 0, 'Escribe el contrarrecíproco de $p \\to q$', 'Se voltea y se niegan las dos partes: $\\neg q \\to \\neg p$. Dice exactamente lo mismo que el original. Hay otras dos que se parecen y NO equivalen: el recíproco $q \\to p$ (solo se voltea) y el contrario $\\neg p \\to \\neg q$ (solo se niega). Con «si llueve, la calle se moja»: el contrarrecíproco «si la calle no está mojada, no llovió» es cierto; el recíproco «si la calle está mojada, llovió» puede fallar (alguien la regó).'],
-    ['rompe-promesa', 1, '«Se cancela el partido si y solo si llueve». Marca un caso en que la frase es falsa', 'El bicondicional exige que las dos cosas pasen juntas o no pase ninguna: es falso cuando pasa una sola.', 'El «si y solo si» exige que las dos cosas pasen juntas o que no pase ninguna: busca un caso en que pase solo una.'],
-    ['tabla-verdad', 0, 'Comprueba con la tabla que el contrarrecíproco es equivalente', 'Las dos columnas dan V, F, V, V: $p \\to q$ y $\\neg q \\to \\neg p$ siempre valen lo mismo.'],
-    ['circuito-logico', 0, 'El condicional como circuito: deja el bombillo apagado', '$p \\to q$ es lo mismo que $\\neg p \\vee q$: solo se apaga con p encendida y q apagada.'],
-    ['tiene-podria', 0, 'Se eligen dos de cuatro delegados con reglas de «solo si». Decide qué tiene que pasar', 'Las parejas posibles son A y B, B y C, y B y D. B está en todas: tiene que ir. A podría ir. A y C juntos no pueden: A iría sin B.'],
-    ['vuela-precios', 0, 'Vuela a la conclusión', 'Con $p \\to q$: si pasa p, pasa q; si no pasa q, no pasó p. Pero si pasa q, no se sabe nada de p.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-lo-3', [
+    play('zonas-posibles', '«**Si es colibrí, vuela**». De un animal solo se sabe que **vuela**. Toca **todas** las zonas donde puede estar.', { p: 'colibríes', q: 'vuelan', zonas: [0, 1], mira: ['Puede ser un colibrí: los colibríes vuelan.', 'Puede volar sin ser colibrí.', 'Ahí están los que no vuelan, y este vuela.'], ok: 'Con solo saber que vuela, no se sabe si es colibrí.', texto: 'colibríes, o los que vuelan sin serlo' },
+      'Todos los colibríes vuelan, pero también vuelan otros. Que vuele no dice si es colibrí.',
+      { hint: '¿Puede haber animales que vuelen y no sean colibríes?' }),
+    play('voltea-niega', 'Arma el **contrarrecíproco** de esta frase.', { frase: '«si no llueve, hay partido»', metas: ['no hay partido', 'llueve'], fichas: ['no hay partido', 'llueve', 'no llueve', 'hay partido'],
+      mira: ['El contrarrecíproco empieza con la negación de la segunda parte.', 'Termina con la negación de la primera parte.'], trampas: { '0:llueve': 'Falta cambiarlas de lugar: empieza por el partido.', '0:hay partido': 'Cambiaste de lugar, pero falta negar.', '1:no llueve': 'Falta negar: lo contrario de «no llueve» es «llueve».' }, ok: 'Negar las dos y voltear.' },
+      'Se niegan las dos partes y se cambian de lugar: si **no hay partido**, entonces **llueve**.',
+      { hint: 'Niega cada parte (una ya trae «no») y cámbialas de lugar.' }),
+    play('mismo-condicional', '«**Si es lunes, hay mercado**». Toca **todas** las frases que dicen **lo mismo**.', { casos: [{ t: 'si no hay mercado, no es lunes', si: true }, { t: 'si hay mercado, es lunes', no: 'Esa está volteada: podría haber mercado otro día.' }, { t: 'si no es lunes, no hay mercado', no: 'Esa solo niega: podría haber mercado otro día.' }, { t: 'basta que sea lunes para que haya mercado', si: true }, { t: 'todos los lunes hay mercado', si: true }], falta: 'Falta otra que dice lo mismo con otras palabras.', ok: 'El contrarrecíproco y las formas de decir que el lunes basta.' },
+      'Dicen lo mismo el contrarrecíproco, «basta que sea lunes» y «todos los lunes». Voltearla sin negar, o negarla sin voltear, cambia la idea.',
+      { hint: 'Imagina que también hay mercado los jueves. ¿Qué frases siguen siendo verdad?' }),
+    play('basta-falta', 'Ser lo **primero**, ¿**basta** o solo **hace falta** para lo segundo?', { et: ['cuadrado … para 4 lados', '4 lados … para cuadrado', 'animal … para gato'], metas: ['basta', 'hace falta', 'hace falta'], fichas: ['basta', 'hace falta', 'hace falta', 'basta', 'basta'],
+      mira: ['Todo cuadrado tiene 4 lados: con eso alcanza.', 'Hay figuras de 4 lados que no son cuadrados.', 'Hay animales que no son gatos.'], ok: 'El de adentro basta; el de afuera hace falta.' },
+      'Ser cuadrado basta para tener 4 lados; tener 4 lados hace falta, pero no alcanza. Lo mismo con ser animal y ser gato.',
+      { hint: '¿Cuál está dentro de cuál? El de adentro alcanza; el de afuera solo es requisito.' }),
+    play('revisa-regla', 'Regla de una piscina: «**si nada en lo hondo, lleva gorro**». De cada persona se sabe **una** cosa. Toca **solo** a las que hay que revisar.', { cartas: [{ t: 'nada en lo hondo', si: true }, { t: 'nada en lo bajito', no: 'La regla no dice nada de los que nadan en lo bajito.' }, { t: 'lleva gorro', no: 'Con gorro no rompe la regla, nade donde nade.' }, { t: 'no lleva gorro', si: true }], falta: 'Falta otra que podría estar rompiendo la regla.', ok: 'Solo esas dos podrían romper la regla.' },
+      'Al de lo hondo hay que mirarle el gorro; al que no lleva gorro, dónde nada. Los otros dos no pueden romper la regla.',
+      { hint: '¿Quién podría estar rompiendo la regla? ¿A quién no le importa lo que falta por saber?' }),
+    play('deduce-seguro', '«**Si suena la alarma, hay humo**». ¿Qué se concluye de cada dato?', { et: ['sonó', 'no hay humo', 'hay humo', 'no sonó'], metas: ['hay humo', 'no sonó', 'no se sabe', 'no se sabe'], fichas: ['hay humo', 'no sonó', 'no se sabe', 'no se sabe', 'sonó', 'no hay humo'],
+      mira: ['Si pasa lo primero, pasa lo segundo.', 'Si no hay humo, no pudo sonar.', 'Con humo, la alarma pudo sonar o no.', 'Si no suena, puede haber humo o no.'], trampas: { '1:no se sabe': 'Sí se sabe: si hubiera sonado, habría humo.', '2:sonó': 'La frase no va al revés: puede haber humo sin alarma.', '3:no hay humo': 'Que no suene no dice nada del humo.' }, ok: 'Solo sirven p y «no q».' },
+      'Sonó → hay humo. No hay humo → no sonó. Con «hay humo» o «no sonó» no se sabe.',
+      { hint: 'Solo hay dos datos que permiten concluir algo seguro.' }),
+    play('cadena-si', 'Con estas tres cosas, ¿qué se concluye?', { da: ['Si madruga, corre.', 'Si corre, desayuna bien.', 'Hoy no desayunó bien.'], et: ['¿corrió?', '¿madrugó?'], metas: ['no corrió', 'no madrugó'], fichas: ['no corrió', 'no madrugó', 'corrió', 'madrugó', 'no se sabe', 'no se sabe'],
+      mira: ['Si hubiera corrido, habría desayunado bien.', 'Si hubiera madrugado, habría corrido.'], trampas: { '0:no se sabe': 'Sí se sabe: si hubiera corrido, habría desayunado bien.', '1:no se sabe': 'Sí se sabe: si hubiera madrugado, habría corrido.' }, ok: 'El contrarrecíproco se aplica dos veces.' },
+      'No desayunó bien → no corrió → no madrugó: el contrarrecíproco, una vez por cada frase.',
+      { hint: 'Empieza por el último dato y devuélvete una frase cada vez.' }),
+    play('sube-regla-si', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Todo socio tiene carné. Hay **18** socios y **30** personas con carné. ¿Cuántas tienen carné **sin** ser socias?', r: 12, c: '30 - 18', e: { 18: 'Esos son los socios.' } },
+      { q: '¿En cuántas filas de la tabla es **verdadero** p → q?', r: 3, c: '4 - 1', e: { 1: 'Esa es la única fila falsa.', 2: 'Con p falsa, las dos filas son verdaderas.' } },
+      { q: 'Regla: si la caja es roja, atrás dice «frágil». De unas cajas solo se ve un lado: **6** rojas, **5** azules, **4** que dicen «frágil» y **3** que no. ¿Cuántas hay que **voltear**?', r: 9, c: '6 + 3', e: { 10: 'Las que dicen «frágil» no rompen la regla, sean rojas o no.', 6: 'Hay otras que también podrían romper la regla.', 18: 'No hace falta voltearlas todas.' } }] },
+      '$30 - 18 = 12$; el condicional solo falla en una de 4: 3; y se voltean las rojas y las que no dicen «frágil»: $6 + 3 = 9$.',
+      { hint: '¿Los socios ya están contados entre los que tienen carné? ¿Qué caja podría romper la regla?' }),
     sol('Una empresa tiene esta norma: «Si un empleado trabaja el domingo, entonces recibe un día libre». Se revisan cuatro casos: (1) trabajó el domingo y recibió día libre; (2) trabajó el domingo y no lo recibió; (3) no trabajó el domingo y recibió día libre; (4) no trabajó el domingo y no lo recibió. ¿En cuál caso se incumple la norma?',
       ['La norma solo obliga a algo cuando el empleado [[trabajó]] el domingo', 'En los casos 3 y 4 no trabajó: ahí la norma [[no se incumple]]', 'En el caso 1 trabajó y recibió el día libre: la norma [[se cumple]]', 'El único caso que incumple la norma es el [[2]]'],
       ['3', 'no trabajó', 'se incumple'],
@@ -269,15 +174,37 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Si aprobar obliga a viajar, ¿qué se sabe de alguien que no viajó?'),
   ]);
 
-  diezLesson('pu-lo-4', [
-    ['arma-silogismo', 0, 'Dibuja las premisas: todos los perros son mamíferos y todos los mamíferos son animales', 'Un círculo dentro de otro: perros dentro de mamíferos y mamíferos dentro de animales. El dibujo muestra la conclusión: todos los perros son animales.'],
-    ['mueve-circulos', 2, 'Múltiplos de 2 y múltiplos de 3: acomoda los círculos', 'Hay números en los dos (6, 12…), solo en uno (2, 4… o 3, 9…) y en ninguno: los círculos se cruzan. «Algunos» A son B.'],
-    ['pinta-venn', 0, 'Pinta lo que dice la frase: «los A que no son B»', 'Es la parte de A que queda por fuera de B: $A - B$.'],
-    ['reparte-venn', 0, '«Algunos mamíferos viven en el agua». Reparte los animales en el diagrama', 'A son los que viven en el agua y B los mamíferos. Delfín y ballena están en los dos: por eso «algunos mamíferos viven en el agua» es cierta, y como perro y gato son mamíferos que no viven en el agua, «todos los mamíferos viven en el agua» es falsa. «Algunos A son B» solo pide que la zona del centro no esté vacía.', 'Pregunta por cada animal: ¿vive en el agua? ¿es mamífero? Los que cumplen las dos cosas van en el centro.'],
-    ['contraejemplo', 0, 'Alguien afirma: «todo múltiplo de 3 es impar». Busca el que falla', 'El 12 es múltiplo de 3 y es par: un solo caso basta para tumbar un «todos».'],
-    ['descifra-zona', 0, 'Cada frase con «algunos» o «ningún» habla de una zona del diagrama. Describe la zona rayada con una operación', 'La zona solo de A es $A - B$: «los A que no son B»; la del medio es $A \\cap B$: «los A que son B». Por eso «algunos A no son B» dice que la zona $A - B$ tiene algo, «algunos A son B» que el centro tiene algo, y «ningún A es B» que el centro está vacío.', 'Mira si la zona rayada está dentro o fuera de cada círculo y dila con palabras: «los A que…».'],
-    ['lazo-conjunto', 0, '«Todo múltiplo de 5 termina en 0 o en 5». Encierra a todos los múltiplos de 5', 'Una frase con «todo» habla de un conjunto entero: aquí, los múltiplos de 5 (10, 25 y 40). Para que «todo múltiplo de 5 termina en 0 o en 5» sea verdad, cada elemento encerrado debe cumplirlo; para negarla bastaría uno que no lo cumpla, como en el contraejemplo.', 'Un múltiplo de 5 se obtiene multiplicando 5 por un entero: prueba dividir cada número entre 5.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-lo-4', [
+    play('dibujo-contra', '«Todos los **taxis** son **carros**. Algunos carros son **eléctricos**». Mueve el círculo de los eléctricos para mostrar que tal vez **ningún taxi** lo es.', { a: 'taxis', b: 'carros', c: 'eléctricos', b1: 'carro', c1: 'eléctrico' },
+      'Los eléctricos pueden tocar a los carros sin tocar a los taxis: «algún taxi es eléctrico» no es seguro.',
+      { hint: 'Las dos frases deben cumplirse. ¿Dónde quedan los carros que no son taxis?' }),
+    play('frase-dibujo', 'Pon a cada dibujo la frase que le corresponde. Usa frases distintas.', { metas: ['todo A es B', 'algún A es B', 'ningún A es B'], fichas: ['todo A es B', 'algún A es B', 'ningún A es B', 'todo B es A', 'todo A es B'],
+      mira: ['A está completo dentro de B.', 'Los círculos se cruzan y hay un punto en el medio.', 'Los círculos no se tocan.'], trampas: { '0:todo B es A': 'B es el grande: sobra espacio fuera de A.', '1:todo B es A': 'Hay parte de B por fuera de A.', '1:todo A es B': 'Hay parte de A por fuera de B.' }, ok: 'Dentro, cruzados y separados.' },
+      'Dentro es «todo A es B», cruzados es «algún A es B» y separados es «ningún A es B».',
+      { hint: 'Mira si un círculo está dentro del otro, si se cruzan o si no se tocan.' }),
+    play('se-voltea', 'Toca **todas** las frases que siguen siendo **seguras** al voltearlas (cambiar A por B).', { casos: [{ t: 'ningún A es B', si: true }, { t: 'todo A es B', no: 'B puede ser más grande: no todo B es A.' }, { t: 'algún A es B', si: true }, { t: 'algún A no es B', no: 'B podría estar completo dentro de A: no siempre se voltea.' }], falta: 'Falta otra que también se puede voltear.', ok: '«Ningún» y «algún» se voltean.' },
+      'Separados se ven igual desde los dos lados, y el que está en la parte común está en los dos. «Todo» y «algún… no» no se voltean.',
+      { hint: 'Dibuja los círculos de cada frase y léelos empezando por B.' }),
+    play('donde-alguien', '«Algunos **cantantes** son **actores**. Algunos actores **no** son cantantes». Toca **todas** las zonas donde **seguro** hay alguien.', { a: 'cantantes', b: 'actores', zonas: [1, 2], mira: ['Nadie dijo que haya cantantes que no actúen.', 'La primera frase pone a alguien en el medio.', 'La segunda frase pone a un actor que no canta.', 'De los de afuera no se dijo nada.'], ok: 'Solo hay alguien seguro donde una frase lo dice.' },
+      'La primera frase asegura a alguien en el medio y la segunda, a un actor que no canta. De las demás zonas no se sabe.',
+      { hint: 'Cada «algunos» pone un punto en una zona. ¿En cuál?' }),
+    play('seguro-tres', 'Toca **todo** lo que es **seguro** con estas tres frases.', { da: ['Ningún pez es mamífero.', 'Todo delfín es mamífero.', 'Hay un delfín en el acuario.'], casos: [{ t: 'ningún delfín es pez', si: true }, { t: 'todo mamífero es delfín', no: 'Los delfines están dentro de los mamíferos, no al revés.' }, { t: 'hay un mamífero en el acuario', si: true }, { t: 'no hay peces en el acuario', no: 'Nadie dijo qué más hay en el acuario.' }], falta: 'Falta otra que también es segura.', ok: 'Vale si se cumple en todos los dibujos.' },
+      'Los delfines están dentro de los mamíferos, lejos de los peces; y el del acuario es mamífero. De lo demás no se sabe.',
+      { hint: 'Dibuja los círculos y pon un punto por el delfín del acuario.' }),
+    play('cadena-todos', '«Todo **sauce** es árbol. Todo **árbol** es planta. Ninguna **planta** es hongo». Pon cada palabra en su círculo.', { metas: ['sauces', 'árboles', 'plantas', 'hongos'], fichas: ['sauces', 'árboles', 'plantas', 'hongos'],
+      mira: ['El círculo más chico es el que está dentro de todos.', 'El del medio contiene al chico y está dentro del grande.', 'El grande contiene a los otros dos.', 'El que está aparte no toca a las plantas.'], ok: 'Todo sauce es planta, y ningún sauce es hongo.' },
+      'Sauces dentro de árboles, árboles dentro de plantas, y los hongos aparte: por eso ningún sauce es hongo.',
+      { hint: '«Todo A es B» pone a A dentro de B. ¿Quién queda aparte?' }),
+    play('tumba-todos', '«**Todos los múltiplos de 4 son múltiplos de 8**». Toca **todos** los números que la tumban.', { a: 4, b: 8, nums: [8, 12, 16, 18, 20, 24] },
+      '12 y 20 son múltiplos de 4 y no de 8. El 18 no cuenta: no es múltiplo de 4.',
+      { hint: 'El que la tumba tiene que ser de los que habla la frase y no cumplir.' }),
+    play('sube-circulos', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Ningún A es B. Hay **7** A y **12** B. ¿Cuántos hay **en total**, contando los A y los B?', r: 19, c: '7 + 12', e: { 12: 'Esos son solo los B: los A están aparte.', 5: 'No se restan: los círculos no se tocan.' } },
+      { q: 'Todo pintor es artista. Hay **9** pintores y **20** artistas. ¿Cuántos artistas **no** son pintores?', r: 11, c: '20 - 9', e: { 29: 'Los pintores ya están contados entre los artistas.' } },
+      { q: 'De **25** vecinos, «algún vecino es médico». ¿Cuántos médicos hay **como mínimo**?', r: 1, c: '\\text{al menos } 1', e: { 25: 'Esos serían todos los vecinos.' } }] },
+      'Separados se suman: 19. Dentro se restan: 11. Y «algún» asegura al menos 1.',
+      { hint: '¿Los círculos están separados, uno dentro del otro, o solo se sabe que comparten a alguien?' }),
     sol('Se sabe que: todos los ingenieros de una empresa saben programar, y algunos ingenieros de la empresa hablan alemán. ¿Qué se puede concluir con certeza?',
       ['Los ingenieros están [[dentro]] del conjunto de los que saben programar', 'Hay [[al menos uno]] que es ingeniero y habla alemán', 'Ese ingeniero también sabe programar: [[algunos]] de los que programan hablan alemán', 'No se puede concluir que [[todos]] los que hablan alemán sepan programar'],
       ['ninguno', 'fuera'],
@@ -294,15 +221,36 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Dibuja los médicos dentro de los que usan bata y los visitantes fuera de ese círculo.'),
   ]);
 
-  diezLesson('pu-lo-5', [
-    ['quien-miente', 0, 'Tres testigos se acusan entre sí. ¿Quién miente?', 'Si Carla dijera la verdad, Ana y Beto mentirían; pero entonces lo que dice Ana («Beto miente») sería cierto. Contradicción: Carla miente, Beto dice la verdad y Ana miente.'],
-    ['descarta-casos', 0, 'Tres atletas dan pistas sobre el podio. Tacha los podios imposibles', 'Julia no ganó e Iván llegó antes que Kevin: el único podio posible es Iván, Julia, Kevin.'],
-    ['tabla-cruces', 0, 'Tres amigas, tres colores. Marca un ✓ por fila y por columna', 'Mario no usa rojo ni azul: verde. Lina no usa rojo: azul. A Nora le queda el rojo.'],
-    ['casilleros', 0, 'Tres compañeros dejaron sus útiles en la mesa. ¿De quién es cada cosa?', 'La regla es de Quim. El lápiz no es de Ola: es de Pau. A Ola le queda el borrador.'],
-    ['dias-semana', 0, 'Cuatro exámenes, de lunes a jueves. Arma el horario', 'Física el lunes. Biología no es martes ni jueves: miércoles. Historia va antes que Química: martes y jueves.'],
-    ['flecha-deduce', 0, '«Si Raúl dice la verdad, el tesoro está en la cueva». El tesoro no está en la cueva. ¿Qué se concluye?', 'Si Raúl dijera la verdad, el tesoro estaría en la cueva. Como no está, Raúl no dice la verdad.'],
-    ['rompe-cambios', 0, 'Manda la pelota a quien miente', 'Si A y B se acusan mutuamente, miente exactamente uno. «G y yo mentimos» no puede ser verdad: quien lo dice miente. Una suposición que lleva a contradicción se descarta.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-lo-5', [
+    play('quien-miente-tres', 'Cada uno dice siempre la verdad o siempre miente. Toca a **todos los que mienten**.', { gente: [{ n: 'Pía', d: 'Rita dice la verdad', f: v => v[2] }, { n: 'Quique', d: 'Pía y Rita mienten', f: v => !v[0] && !v[2] }, { n: 'Rita', d: 'solo uno de Quique y yo miente', f: v => v[1] !== v[2] }], ok: 'Pía y Rita se apoyan; Quique queda solo.' },
+      'Pía y Rita valen lo mismo. Si mintieran las dos, Quique diría la verdad, y lo que dice Rita sería cierto: choca. Entonces miente Quique.',
+      { hint: 'Pía y Rita van juntas: supón que las dos mienten y mira qué pasa.' }),
+    play('tabla-sospechosos', 'Uno de los tres rompió la taza y **solo una** frase es **falsa**. Llena la tabla con las V y marca quién fue.', { v: 2, gente: [{ n: 'Sara', d: 'fue Uma', f: c => c === 2 }, { n: 'Tino', d: 'yo no fui', f: c => c !== 1 }, { n: 'Uma', d: 'fue Tino', f: c => c === 1 }], ok: 'Solo con Uma hay una sola frase falsa.' },
+      'Si fue Sara, fallan la frase de Sara y la de Uma. Si fue Tino, fallan la de Sara y la de Tino. Si fue Uma, solo falla la de Uma.',
+      { hint: 'Revisa una fila a la vez: supón que fue esa persona y mira cada frase.' }),
+    play('cadena-acusan', 'Cada uno dice siempre la verdad o siempre miente. Toca a **todos los que mienten**.', { gente: [{ n: 'Abril', d: 'Bruno miente', f: v => !v[1] }, { n: 'Bruno', d: 'Dora dice la verdad', f: v => v[3] }, { n: 'Ciro', d: 'Abril miente', f: v => !v[0] }, { n: 'Dora', d: 'solo uno de Ciro y yo miente', f: v => v[2] !== v[3] }], ok: 'Solo Abril dice la verdad.' },
+      'Si Dora dijera la verdad, Ciro mentiría y Bruno no; entonces Abril mentiría, y Ciro habría dicho la verdad: choca. Dora miente, Bruno también, Abril dice la verdad y Ciro miente.',
+      { hint: 'Supón que Dora dice la verdad y sigue la cadena hasta que algo choque.' }),
+    play('frases-opuestas', 'Uno solo tomó el último pan. Toca las **dos** frases que se contradicen: siempre una es verdad y la otra, mentira.', { par: [0, 1], gente: [{ n: 'Memo', d: 'yo no fui', f: c => c !== 0 }, { n: 'Nora', d: 'fue Memo', f: c => c === 0 }, { n: 'Oto', d: 'fue Nora', f: c => c === 1 }, { n: 'Paz', d: 'yo no fui', f: c => c !== 3 }], ok: 'Una de las dos es verdad, sin saber cuál.' },
+      'Memo dice que no fue y Nora dice que fue Memo: una es verdad y la otra no, pase lo que pase.',
+      { hint: 'Busca una frase que afirme justo lo que otra niega.' }),
+    play('supone-choca', 'En la isla, **cada uno** dice siempre la verdad o siempre miente. Completa el razonamiento.', { da: 'Iván: «todos los de la isla mentimos»', et: ['si dice la verdad', 'así que Iván', 'y en la isla'], metas: ['choca', 'miente', 'alguno no miente'], fichas: ['choca', 'miente', 'alguno no miente', 'cuadra', 'dice la verdad', 'nadie miente'],
+      mira: ['Si todos mienten, él también: ¿puede decir la verdad?', 'La suposición chocó: vale la contraria.', 'Su frase es falsa: no todos mienten.'], trampas: { '0:cuadra': 'Si todos mienten, él también: no puede decir la verdad.', '1:dice la verdad': 'Esa suposición acaba de chocar.', '2:nadie miente': 'Iván miente: solo se sabe que no todos lo hacen.' }, ok: 'Lo que choca se descarta.' },
+      'Si dijera la verdad, él también mentiría: choca. Entonces miente, y como su frase es falsa, alguien en la isla dice la verdad.',
+      { hint: 'Supón que dice la verdad y mira qué diría eso de él mismo.' }),
+    play('tres-cofres', 'El tesoro está en un cofre y **solo un** letrero dice la verdad. Toca el cofre del tesoro.', { v: 1, que: 'un solo cofre', gente: [{ n: 'Rojo', d: 'está aquí', f: c => c === 0 }, { n: 'Azul', d: 'no está aquí', f: c => c !== 1 }, { n: 'Verde', d: 'no está en el rojo', f: c => c !== 0 }], ok: 'Con el azul, solo acierta el verde.' },
+      'En el rojo acertarían el rojo y el azul; en el verde, el azul y el verde. En el azul solo acierta el verde.',
+      { hint: 'Prueba cada cofre y cuenta cuántos letreros dirían la verdad.' }),
+    play('culpable-una-verdad', 'Uno de los cuatro escondió las llaves y **solo una** frase es **verdad**. Toca a quien fue.', { v: 1, que: 'una sola persona', gente: [{ n: 'Alma', d: 'fue Beto o fue Dani', f: c => c === 1 || c === 3 }, { n: 'Beto', d: 'fue Alma', f: c => c === 0 }, { n: 'Cira', d: 'Beto miente', f: c => c !== 0 }, { n: 'Dani', d: 'fue Beto o fue Cira', f: c => c === 1 || c === 2 }], ok: 'Con Alma, solo Beto dice la verdad.' },
+      'Beto y Cira se contradicen: la única verdad está ahí. Entonces Alma y Dani mienten: no fue Beto, ni Dani, ni Cira. Fue Alma.',
+      { hint: 'Dos frases se contradicen: la única verdad está entre ellas. ¿Qué pasa con las otras dos?' }),
+    play('sube-mentira', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Cada uno dice siempre la verdad o siempre miente. Hay **6** parejas y en cada una los dos se acusan: «el otro miente». ¿Cuántos **mienten** en total?', r: 6, c: '6 \\cdot 1', e: { 12: 'Si los dos mintieran, las frases serían ciertas.' } },
+      { q: 'Cinco personas dicen, en orden: «miente 1 de nosotros», «mienten 2», «mienten 3», «mienten 4», «mienten 5» (justo esa cantidad). ¿Cuántas **mienten**?', r: 4, c: '5 - 1', e: { 5: 'Si mintieran las cinco, la última diría la verdad.', 1: 'Si mintiera una sola, las otras cuatro frases serían ciertas a la vez.' } },
+      { q: 'Cada uno dice siempre la verdad o siempre miente. En una fila de **9**, el primero dice la verdad y cada uno de los demás dice «el de adelante miente». ¿Cuántos **dicen la verdad**?', r: 5, c: '1, 3, 5, 7, 9 \\to 5', e: { 4: 'Esos son los que mienten.', 1: 'El tercero acusa al segundo, que sí miente.' } }] },
+      'Uno por pareja: 6. Las cinco frases se contradicen, así que solo una es cierta: mienten 4. Y en la fila se alternan: 5 verdades.',
+      { hint: 'Si dos frases se contradicen, no pueden ser ciertas a la vez.' }),
     sol('Alguien rompió un jarrón. Diego dice: «Yo lo rompí». Elena dice: «Diego miente». Fabio dice: «Yo no lo rompí». Se sabe que solo uno de los tres dice la verdad. ¿Quién rompió el jarrón?',
       ['Si Diego dijera la verdad, Fabio también: habría [[dos]] verdades. Se descarta', 'Entonces Diego miente, y por eso lo que dice [[Elena]] es verdad', 'Como solo hay una verdad, Fabio [[miente]]', 'Quien rompió el jarrón fue [[Fabio]]'],
       ['Diego', 'tres', 'dice la verdad'],

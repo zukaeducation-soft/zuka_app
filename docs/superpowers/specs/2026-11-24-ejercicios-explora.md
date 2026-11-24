@@ -74,6 +74,12 @@ espejo se quitaron porque la explicación no los enseña. Pruebas `tests/ejercic
 `js/games/graficas-escena.js`: barras con eje, tortas, barras que se nivelan, balanza de grupos y personas. El eje cortado y la balanza solo se mueven al
 comprobar, para que no se responda a ojo. Pruebas `tests/ejercicios-graficas.test.js`.
 
+## Mundo 10, Lógica proposicional (pu-lo-1 a pu-lo-5)
+
+`js/games/proposiciones-escena.js`: circuito, tablas de V y F (`tablaV`), negación en tres pedazos (`negacion`), zonas de un Venn (`zonas`), círculos que se
+mueven, y gente que miente (`mienten`, `culpable`: las frases van como funciones y las pruebas hallan por fuerza bruta que la solución es única).
+Pruebas `tests/ejercicios-logica.test.js`.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |

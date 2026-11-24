@@ -60,6 +60,5 @@ test('fórmulas que se usan quedan enseñadas: rombo, sector, pendientes y reloj
 });
 
 test('juegos que llegaban sin enunciado de contexto ni explicación propia', () => {
-  for (const [id, g, re] of [['pu-lo-4', 'lazo-conjunto', /Todo múltiplo/], ['pu-lo-4', 'descifra-zona', /algunos/]]) assert.match(zona(L(id), g).q, re, `${id} ${g}`);
   assert.match(zona(L('pu-nu-2'), 'opcion-examen').explain, /instante inicial/);
 });
