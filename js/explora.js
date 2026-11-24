@@ -487,7 +487,8 @@ XPD.muestra = (stage, p, s, api) => {
   const dots = [...stage.querySelectorAll('.xp-dots i')];
   const puntos = n => dots.forEach((d, k) => { d.className = k < n - 1 ? 'done' : k === n - 1 ? 'now' : ''; });
   let escena = null, stop = null, busy = false, timer = 0;
-  const monta = () => { escena?.(); escena = XPD[p.escena](box, p.en, XP[p.escena].ini(p.en), mudo); };
+  const en = { ...p.en, momentos: p.momentos };
+  const monta = () => { escena?.(); escena = XPD[p.escena](box, en, XP[p.escena].ini(en), mudo); };
   const espera = t => { btn.textContent = t; btn.hidden = false; };
   function play(n) {
     const m = p.momentos[n];

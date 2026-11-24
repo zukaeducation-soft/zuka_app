@@ -279,3 +279,25 @@
 @media (prefers-reduced-motion: reduce) {
   .lesson.xp-lesson .feedback.show .fb-in, .lesson.xp-lesson .pbar i { animation: none; transition: none; }
 }
+
+/* ---- escenas de números (js/explora-numeros.js): barras, cuadrícula de 100 y potencias ---- */
+.xpw { touch-action: pan-y; }
+.xb .xb-out { fill: var(--card); stroke: var(--line); stroke-width: 1.2; }
+.xb .xb-fill { fill: var(--c); opacity: .9; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--c) var(--halo), transparent)); }
+.xb .xb-cut { stroke: var(--bg); stroke-width: 2.2; }
+.xb .xb-lab, .xb .xb-val, .xb .xb-rl { font-size: 13px; font-weight: 600; fill: var(--mute); }
+.xb .xb-lab { text-anchor: end; font-size: 15px; fill: var(--ink); }
+.xb .xb-val.on { fill: var(--c-ink); }
+.xb .xb-rule, .xpw .xb-rule { stroke: var(--mute); stroke-width: 1.5; stroke-linecap: round; }
+.xb .xb-tk, .xpw .xb-tk { stroke: var(--mute); stroke-width: 1.2; }
+.xc100 .xc-cell { fill: var(--card); stroke: var(--line); stroke-width: 1; transition: fill .18s; }
+.xc100 .xc-cell.on { fill: var(--c); stroke: var(--c); }
+.xc100 .xc-cell.quita { fill: color-mix(in srgb, var(--fire) 30%, var(--card)); stroke: var(--fire); stroke-dasharray: 3 2; }
+.xpw .xpw-dot { fill: var(--c-ink); }
+.xpw .xpw-chip rect { fill: var(--card); stroke: var(--c-ink); stroke-width: 1.4; }
+.xpw .xpw-chip.g1 rect { stroke: var(--fire); }
+.xpw .xpw-chip.g2 rect { stroke: var(--gold); }
+.xpw .xpw-chip text { font-size: 16px; font-weight: 600; fill: var(--ink); }
+.xpw .xpw-sub, .xpw .xpw-big { font-size: 16px; font-weight: 600; fill: var(--ink); }
+.xpw .xpw-big { font-size: 22px; fill: var(--c-ink); }
+@media (prefers-reduced-motion: reduce) { .xc100 .xc-cell { transition: none; } }

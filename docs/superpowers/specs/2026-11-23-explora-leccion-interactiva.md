@@ -112,3 +112,12 @@ La narración (m4a y voz.json) sí va a GitHub desde el 2026-11-23, por pedido d
 ## Ejercicios con el mismo lenguaje (2026-11-23, pedido: estandarizar calidad, estética e interacción)
 
 En una lección con explicación (EXPLORA[id]) sus ejercicios se ven, suenan y se leen como ella; las demás lecciones no cambian. `startLesson` pone `.xp-lesson` y `setGameCourse(c.id, { explora: true })`: el lienzo usa `EXPLORA_TOKENS` (fondo, superficies, líneas y tinta de css/styles.css :root; el acento sigue siendo el del curso) con el brillo suave del centro (plano en el Preuniversitario); tocar el juego suena y vibra como tocar la escena (`XS.pop`, una vez aunque el juego también lo pida) y los juegos reciben `XP_SFX` como `api.sfx`; al comprobar suenan `XS.idea` / `XS.nope`. El enunciado y la explicación del aviso entran palabra a palabra (`xpPalabras`, que no parte fórmulas ni negritas pegadas a un signo). css/explora.css viste el marco: enunciado con la letra de la frase de la escena, píldoras de pista y «Cómo se juega», pista abierta como tarjeta de idea, juego sin tarjeta con borde que se enciende al acertar o fallar, aviso que sube como la tarjeta de idea y barra de avance fina del color del curso. La mecánica de cada juego no cambia. Pruebas: tests/explora-ejercicios.test.js.
+
+## Razonamiento lógico, mundo 1 completo (2026-11-23, pedido: «crear las demás lecciones del curso de razonamiento lógico»)
+
+Se hace mundo por mundo. Mundo 1 (Cálculo mental): pu-cm-2 Fracciones (escena `barras`: se corta con una regla de 1 a 12 partes
+y se llena arrastrando; al cortar, lo tomado conserva su tamaño desde que empieza el arrastre), pu-cm-3 Decimales y porcentajes
+(escena `cien`: cuadrícula de 100 que se pinta; `quita` para descuentos) y pu-cm-4 Potencias, raíces y estimación (escena
+`potencia`: fichas y puntos que se multiplican al arrastrar el exponente; modo `lado` para el cuadrado y la raíz). Mismo molde:
+explicación que corre sola por capítulo, «tu turno», problema final y cierre; prácticas distintas de los ejercicios de la lección.
+Pendientes: los mundos 2 a 16 de Razonamiento lógico.
