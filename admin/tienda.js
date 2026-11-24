@@ -56,11 +56,13 @@ function dlgPedido(p) {
   const fis = p.items.some(x => (x.da.fisicos || []).length), dir = pedDir(p.direccion), sig = { pagado: 'preparando', preparando: 'enviado', enviado: 'entregado' }[p.estado];
   ventana(`<form class="pn-form1"><h2>Pedido ${p.id}</h2><p><span class="pill ${PED[p.estado][0]}">${PED[p.estado][1]}</span></p><p>${pedItems(p)}</p>
     <dl class="pn-facts"><div><dt>Total</dt><dd>${cop(p.total)}</dd></div><div><dt>Pedido</dt><dd>${fechaCorta(p.creado_en)}</dd></div><div><dt>Pagado</dt><dd>${fechaCorta(p.pagado_en)}</dd></div>${fis ? `<div><dt>Enviado</dt><dd>${fechaCorta(p.enviado_en)}</dd></div>` : ''}</dl>
+    ${p.estado === 'cancelado' ? '<button class="btn small ghost" type="button" data-abre>Reabrir pedido</button>' : ''}
     ${dir.length ? `<p><b>Enviar a</b><br>${dir.map(esc).join('<br>')}<br>${esc(p.zona)}</p><button class="btn small ghost" type="button" data-cp>Copiar dirección</button>` : ''}
     ${fis && sig ? `<div class="pn-dos"><label class="fld"><span>Transportadora</span><input name="transportadora" maxlength="40" value="${esc(p.transportadora)}"></label><label class="fld"><span>Guía</span><input name="guia" maxlength="60" value="${esc(p.guia)}"></label></div>` : ''}
     <div class="pn-pie"><button class="btn ghost" type="button" data-cerrar>Cerrar</button>${p.estado === 'pendiente' ? '<button class="btn ghost danger" type="button" data-no>Cancelar pedido</button>' : ''}${fis && sig ? `<button class="btn main" type="submit">${{ preparando: 'Pasar a preparación', enviado: 'Marcar enviado', entregado: 'Marcar entregado' }[sig]}</button>` : ''}</div></form>`, d => {
     const f = $('form', d);
     $('[data-cp]', d)?.addEventListener('click', () => copiar(dir.join('\n')));
+    $('[data-abre]', d)?.addEventListener('click', e => ocupado(e.currentTarget, async () => { await tiendaAdm('pedido_estado', { id: p.id, estado: 'pendiente' }); d.close(); toast('Pedido reabierto: queda por pagar'); vPedidos(); }));
     $('[data-no]', d)?.addEventListener('click', async e => { const b = e.currentTarget; if (await confirma({ titulo: '¿Cancelar este pedido?', texto: 'Solo se cancela si no se ha pagado.', ok: 'Cancelar pedido', peligro: true })) ocupado(b, async () => { await tiendaAdm('pedido_estado', { id: p.id, estado: 'cancelado' }); d.close(); toast('Pedido cancelado'); vPedidos(); }); });
     f.onsubmit = e => {
       e.preventDefault();
@@ -117,8 +119,8 @@ function vTienda() {
 const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
 const PDFJS_SRI = { 'pdf.min.js': 'sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e', 'pdf.worker.min.js': 'sha384-SnzOobpRMLXZ52iJvZm/C0fYw0OQemTXzTjIsdsfMcrCtCEe9qgzxTd3RSklO5x2' };
 async function cargaPdf() {
-  if (!window.pdfjsLib) {
-    await new Promise((ok, mal) => { const s = document.createElement('script'); s.src = `${PDFJS}pdf.min.js`; s.integrity = PDFJS_SRI['pdf.min.js']; s.crossOrigin = 'anonymous'; s.onload = ok; s.onerror = () => mal(new Error('No se pudo cargar el lector de PDF')); document.head.appendChild(s); });
+  if (!window.pdfjsLib || !window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
+    if (!window.pdfjsLib) await new Promise((ok, mal) => { const s = document.createElement('script'); s.src = `${PDFJS}pdf.min.js`; s.integrity = PDFJS_SRI['pdf.min.js']; s.crossOrigin = 'anonymous'; s.onload = ok; s.onerror = () => mal(new Error('No se pudo cargar el lector de PDF')); document.head.appendChild(s); });
     const w = await fetch(`${PDFJS}pdf.worker.min.js`, { integrity: PDFJS_SRI['pdf.worker.min.js'] }).then(r => r.blob());
     window.pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(new Blob([w], { type: 'text/javascript' }));
   }
@@ -139,15 +141,25 @@ async function pdfIndice(pdf) {
   await anda(await pdf.getOutline(), 0);
   return out.slice(0, 200);
 }
+// Borra carpetas de subidas viejas o a medias; se conserva la anterior, por si alguien la tiene abierta.
+async function limpiaLibro(id, quedan) {
+  const st = sb.storage.from('libros'), { data } = await st.list(String(id), { limit: 100 });
+  for (const c of data || []) {
+    if (quedan.some(v => c.name === `v${v}`) || !/^v\d+$/.test(c.name)) continue;
+    const { data: fs } = await st.list(`${id}/${c.name}`, { limit: 1000 });
+    if (fs && fs.length) await st.remove(fs.map(x => `${id}/${c.name}/${x.name}`));
+  }
+}
 const LADO = 1500;   // ancho de cada página en píxeles
 function subeLibro(l, archivo) {
   let para = false;
-  const d = ventana(`<div class="pn-form1"><h2>Subiendo «${esc(l.titulo)}»</h2><p data-t>Abriendo el PDF…</p><span class="mini-bar"><i style="width:0%"></i></span><p class="pn-count">No cierres esta ventana hasta que termine.</p><div class="pn-pie"><button class="btn ghost" type="button" data-cerrar>Cancelar</button></div></div>`);
+  const d = ventana(`<div class="pn-form1"><h2>Subiendo «${esc(l.titulo)}»</h2><p data-t>Abriendo el PDF…</p><span class="mini-bar"><i style="width:0%"></i></span><p class="pn-count">No cierres esta ventana hasta que termine.</p><div class="pn-pie"><button class="btn ghost" type="button" data-cerrar>Cancelar</button></div></div>`, null, true);
   d.addEventListener('close', () => { para = true; });
   const t = $('[data-t]', d), barra = $('.mini-bar i', d);
   (async () => {
     const lib = await cargaPdf(), pdf = await lib.getDocument({ data: await archivo.arrayBuffer(), isEvalSupported: false }).promise;
-    const version = l.version + 1, N = pdf.numPages, indice = await pdfIndice(pdf);
+    // Carpeta nueva en cada subida (la hora en segundos): nunca se escribe sobre páginas que alguien esté leyendo.
+    const version = Math.floor(Date.now() / 1000), N = pdf.numPages, indice = await pdfIndice(pdf);
     const cv = document.createElement('canvas'), g = cv.getContext('2d');
     for (let n = 1; n <= N; n++) {
       if (para) return;
@@ -169,7 +181,7 @@ function subeLibro(l, archivo) {
     if (para) return;
     // Solo al terminar se cambia la versión: mientras tanto se sigue leyendo la anterior.
     await tiendaAdm('libro_guardar', { id: l.id, paginas: N, version, indice });
-    if (l.version) { const viejas = Array.from({ length: l.paginas }, (_, i) => `${l.id}/v${l.version}/${String(i + 1).padStart(4, '0')}.webp`); await sb.storage.from('libros').remove(viejas).catch(() => {}); }
+    await limpiaLibro(l.id, [version, l.version]).catch(() => {});
     d.close(); toast(`«${l.titulo}» quedó listo: ${N} páginas`); vTienda();
   })().catch(e => { if (para) return; t.textContent = `No se pudo terminar: ${errTexto(e)}`; t.classList.add('bad'); });
 }

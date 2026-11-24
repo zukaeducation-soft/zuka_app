@@ -24,7 +24,7 @@ test('la dirección dice el primer dato que falta', () => {
 test('el lector dibuja solo las páginas visibles y una a cada lado, y pide rutas que la base reconoce', () => {
   assert.equal(f('lectorCerca')([1, 2], 10).join(), '1,2,3');
   assert.equal(f('lectorCerca')([10], 10).join(), '9,10');
-  assert.match(f('lectorRuta')({ id: 2, version: 3 }, 7), /^(\d{1,2})\/v(\d{1,6})\/(\d{4})\.webp$/);
+  assert.match(f('lectorRuta')({ id: 2, version: 3 }, 7), /^(\d{1,2})\/v(\d{1,10})\/(\d{4})\.webp$/);
 });
 test('el lector no descarga, no imprime y marca cada página', () => {
   const s = read('js/lector.js');

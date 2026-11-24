@@ -31,7 +31,9 @@ function tuDate(date, time = '00:00') {
   const [y, m, d] = date.split('-').map(Number), [h, mi] = time.split(':').map(Number);
   return new Date(y, m - 1, d, h, mi);
 }
-const tuStart = b => tuDate(b.date, b.time).getTime();
+// Los cupos son en hora de Colombia (UTC−5, sin horario de verano), esté donde esté el estudiante.
+const tuStart = b => { const [y, m, d] = b.date.split('-').map(Number), [h, mi] = b.time.split(':').map(Number); return Date.UTC(y, m - 1, d, h + 5, mi); };
+const tuHoy = now => { const d = new Date(now - 5 * 3600000); return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); };   // el día de hoy en Colombia
 const tuEnd = b => tuStart(b) + (b.mins || TUTORIAS.mins) * 60000;
 // Lo que venga dañado del almacenamiento (o del formato viejo, sin temas) se descarta en vez de romper la pestaña.
 const tuValid = b => !!b && typeof b === 'object' && /^\d{4}-\d\d-\d\d$/.test(b.date) && /^\d\d:\d\d$/.test(b.time)
@@ -47,7 +49,7 @@ function activeTutorias(mine, now) {
 // Los próximos días: [{ date, slots: [{ time, free }] }]. Solo cupos que aún se pueden separar; `free` es
 // false si choca con otra asesoría del estudiante.
 function tutoriaDays(now, mine, hours = TUTORIAS.hours) {
-  const busy = activeTutorias(mine, now), first = new Date(now), out = [];
+  const busy = activeTutorias(mine, now), first = tuHoy(now), out = [];
   for (let i = 0; i < TUTORIAS.days; i++) {
     const d = new Date(first.getFullYear(), first.getMonth(), first.getDate() + i), date = tuKey(d);
     const slots = (hours[d.getDay()] || []).map(time => {
@@ -100,8 +102,7 @@ const cancelTutoria = (mine, id) => (Array.isArray(mine) ? mine : []).filter(b =
 
 // «Hoy», «Mañana» o «lun 16 nov».
 function dayLabel(date, now) {
-  const d = tuDate(date), t = new Date(now);
-  const diff = Math.round((d - new Date(t.getFullYear(), t.getMonth(), t.getDate())) / 86400000);
+  const d = tuDate(date), diff = Math.round((d - tuHoy(now)) / 86400000);
   return diff === 0 ? 'Hoy' : diff === 1 ? 'Mañana' : `${TU_DOW[d.getDay()]} ${d.getDate()} ${TU_MON[d.getMonth()]}`;
 }
 // '16:00' → «4:00 p. m.»
@@ -184,6 +185,7 @@ function renderTutorias() {
   view.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => {
     const bk = S.tutorias.find(x => x.id === b.dataset.cancel);
     if (!bk) return renderTutorias();
+    if (bk.id.startsWith('srv-') && !tuServidor()) return toast('Necesitas conexión para cancelarla.');
     ask({ title: '¿Cancelar esta asesoría?', text: `${tuCourse(bk.course)?.name || 'Asesoría'}: ${dayLabel(bk.date, Date.now())}, ${hourLabel(bk.time)} ${!tuServidor() ? 'Puedes separar otra cuando quieras.' : tuStart(bk) - Date.now() >= 12 * 3600000 ? 'La hora vuelve a tu saldo.' : 'Faltan menos de 12 horas: la hora no vuelve a tu saldo.'}`, ok: 'Sí, cancelar', cancel: 'Conservarla', danger: true })
       .then(async yes => {
         if (yes && tuServidor()) {
@@ -206,7 +208,7 @@ function openBooking(c) {
   // Arranca en la unidad donde va el estudiante (la de su primera lección sin terminar).
   let unit = Math.max(0, c.units.findIndex(u => u.lessons.some(l => !S.done[l.id])));
   openSheet(`<div class="ag" style="--c:${c.color}">
-    <div class="ag-head">${courseArt(c, 'lg')}<div><h3>${esc(c.name)}</h3><p class="muted">Asesoría virtual · ${TUTORIAS.mins} min</p></div></div>
+    <div class="ag-head">${courseArt(c, 'lg')}<div><h3>${esc(c.name)}</h3><p class="muted">Asesoría virtual · ${TUTORIAS.mins} min${new Date().getTimezoneOffset() === 300 ? '' : ' · hora de Colombia'}</p></div></div>
     <h4 id="ag-l1"><i>1</i>¿Qué temas quieres reforzar? <span class="ag-count"></span></h4>
     ${c.units.length > 1 ? `<div class="ag-units" role="group" aria-label="Unidad">${c.units.map((u, i) =>
       `<button class="tu-chip" data-unit="${i}">${esc(u.title)}</button>`).join('')}</div>` : ''}

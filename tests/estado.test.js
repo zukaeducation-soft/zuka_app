@@ -24,7 +24,7 @@ test('un dispositivo nuevo recibe todo y uno con datos no pierde nada contra una
 test('mezclar es estable: repetirlo no cambia nada', () => {
   const a = { xp: 5, days: { a: 1 }, exams: { e: { best: 3, at: 2 } } }, b = { xp: 9, days: { b: 2 } };
   const r = mezcla(a, b);
-  assert.equal(JSON.stringify(mezcla(r, r)), JSON.stringify(r));
+  assert.deepEqual(JSON.parse(JSON.stringify(mezcla(r, r))), JSON.parse(JSON.stringify(r)));
 });
 test('no suben el tema, el sonido ni la cuenta', () => {
   const t = toma({ xp: 1, theme: 'dark', cuenta: {}, sfx: true, unlockAll: true });
@@ -40,4 +40,6 @@ test('reiniciar el progreso vale en todos los dispositivos', () => {
   assert.equal(mezcla({ xp: 80 }, { xp: 0, reinicio: 9 }).xp, 0);
   assert.equal(mezcla({ xp: 5, reinicio: 9 }, { xp: 7, reinicio: 9 }).xp, 7);
   assert.equal(mezcla({ xp: 1 }, { xp: 2, _unir: [{}] })._unir, undefined);
+  assert.equal(mezcla({ xp: 1 }, { xp: 2, tutorias: [1] }).tutorias, undefined);
+  assert.equal(mezcla({ xp: 1 }, { xp: 2, tutorias: [1], reinicio: 9 }).tutorias, undefined);
 });

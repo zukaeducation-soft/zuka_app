@@ -174,7 +174,7 @@ function renderTop() {
 // a quien la abrió. sheetOpener se recuerda solo al abrir: una hoja que reemplaza a otra no lo pisa. sheetIsOpen se pone
 // en el acto (la clase 'open' llega un cuadro después, para la animación). Cerrada, la hoja misma queda inerte.
 let sheetOpener = null, sheetIsOpen = false, sheetInerted = [];
-const SHEET_BEHIND = ['#topbar', '#view', '#tabbar', '#overlay', '#auth'];
+const SHEET_BEHIND = ['#topbar', '#view', '#tabbar', '#overlay', '#auth', '#tienda', '#lector'];
 const sheetFocusables = card => [...card.querySelectorAll(FOCUSABLE)].filter(x => x.offsetParent !== null || x === document.activeElement);
 function sheetKey(e) {
   const card = $('#sheet .sheet-card');

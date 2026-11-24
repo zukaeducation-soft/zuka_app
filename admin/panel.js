@@ -97,12 +97,13 @@ async function base() {
 }
 
 // ---------- ventanas ----------
-function ventana(html, bind) {
+function ventana(html, bind, fija = false) {
   const d = document.createElement('dialog');
   d.className = 'pn-dialog'; d.innerHTML = html;
   document.body.appendChild(d);
   d.addEventListener('close', () => d.remove());
-  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+  if (fija) d.addEventListener('cancel', e => e.preventDefault());   // no se cierra con Escape ni tocando afuera
+  else d.addEventListener('click', e => { if (e.target === d) d.close(); });
   $$('[data-cerrar]', d).forEach(b => { b.onclick = () => d.close(); });
   bind?.(d);
   d.showModal();

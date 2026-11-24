@@ -12,8 +12,9 @@ const estadoDia = d => Math.round(Date.parse(`${d}T00:00:00Z`) / 86400000);
 // `local` manda en las preferencias; en lo ganado, lo mejor de los dos. Si uno reinició su progreso después, manda ese.
 // Pura.
 function estadoMezcla(local, nube) {
-  const a = local || {}, b = { ...nube };
-  delete b._unir;
+  // Solo los campos de hoy: lo que guardó una versión vieja (p. ej. `tutorias`, que ya vive en la base) no vuelve.
+  const solo = x => Object.fromEntries(ESTADO_CAMPOS.filter(k => x && x[k] !== undefined).map(k => [k, x[k]]));
+  const a = solo(local), b = solo(nube);
   if ((a.reinicio || 0) !== (b.reinicio || 0) && nube && local) return (a.reinicio || 0) > (b.reinicio || 0) ? { ...a } : b;
   const r = { ...b, ...a };
   const max = k => { const v = Math.max(Number(a[k]) || 0, Number(b[k]) || 0); if (a[k] !== undefined || b[k] !== undefined) r[k] = v; };

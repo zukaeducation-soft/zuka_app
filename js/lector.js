@@ -23,8 +23,12 @@ function lectorCerrar() {
   const t = $('#tienda'); if (t) t.inert = false; else tiendaInerte(false);
 }
 async function openLector(id) {
+  if (!Cuenta.sb || !Cuenta.user) return toast('Necesitas conexión para leer.');
+  // La fila al día: si se cambió el PDF, las páginas están en otra carpeta.
+  const fila = await Cuenta.sb.from('libros').select('*').eq('id', id).maybeSingle().then(x => x, () => ({}));
+  if (fila.data) Tienda.libros = Tienda.libros.map(x => (x.id === id ? fila.data : x));
   const l = Tienda.libros.find(x => x.id === id);
-  if (!l || !Cuenta.sb || !Cuenta.user) return toast('Necesitas conexión para leer.');
+  if (!l || !Cuenta.user) return toast('Necesitas conexión para leer.');
   if (!l.version || !l.paginas) return toast('Este libro aún no está disponible.');
   const mio = libroMio(id), total = mio ? l.paginas : Math.min(l.muestra, l.paginas);
   if (!total) return;

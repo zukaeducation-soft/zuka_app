@@ -77,7 +77,9 @@ create table public.pedidos (
   estado text not null default 'pendiente' check (estado in ('pendiente', 'pagado', 'preparando', 'enviado', 'entregado', 'cancelado')),
   transportadora text not null default '' check (char_length(transportadora) <= 40),
   guia text not null default '' check (char_length(guia) <= 60),
-  creado_en timestamptz not null default now(), pagado_en timestamptz, enviado_en timestamptz, entregado_en timestamptz
+  creado_en timestamptz not null default now(), pagado_en timestamptz, enviado_en timestamptz, entregado_en timestamptz,
+  clave text check (char_length(clave) <= 60),   -- la pone la app: si el envío se repite, es el mismo pedido
+  unique (usuario, clave)
 );
 create index pedidos_usuario_idx on public.pedidos (usuario);
 create index pedidos_estado_idx on public.pedidos (estado, creado_en);
@@ -156,6 +158,10 @@ begin
   if v_uid is null then raise exception 'Entra con tu código' using errcode = '42501'; end if;
   select * into u from public.perfiles where id = v_uid for update;
   if not found or u.bloqueado then raise exception 'Tu acceso está en pausa' using errcode = '42501'; end if;
+  if coalesce(p ->> 'clave', '') <> '' then
+    select * into v from public.pedidos where usuario = v_uid and clave = p ->> 'clave';
+    if found then return to_jsonb(v); end if;
+  end if;
   if jsonb_typeof(p -> 'items') is distinct from 'array' or jsonb_array_length(p -> 'items') not between 1 and 20 then
     raise exception 'Elige al menos un artículo' using errcode = '22023';
   end if;
@@ -166,6 +172,11 @@ begin
   for x in select * from jsonb_array_elements(p -> 'items') loop
     select * into a from public.articulos where id = x ->> 'id' and activo;
     if not found or a.precio is null then raise exception 'Un artículo ya no está disponible' using errcode = '22023'; end if;
+    -- Lo digital no se vende hasta que sus libros estén subidos y publicados.
+    if exists (select 1 from jsonb_array_elements_text(coalesce(a.da -> 'libros', '[]')) t where not exists (
+      select 1 from public.libros b where b.id = t::integer and b.publicado and b.version > 0 and b.paginas > 0)) then
+      raise exception 'Un artículo ya no está disponible' using errcode = '22023';
+    end if;
     v_n := least(greatest(coalesce((x ->> 'cantidad')::integer, 1), 1), case when a.tipo in ('fisico', 'asesoria') then 10 else 1 end);
     v_precio := case when v_plan then coalesce(a.precio_plan, a.precio) else a.precio end;
     v_sub := v_sub + v_precio * v_n;
@@ -182,8 +193,8 @@ begin
       v_dir := v_dir || jsonb_build_object(k, left(btrim(coalesce(p -> 'direccion' ->> k, '')), 120));
     end loop;
   end if;
-  insert into public.pedidos (usuario, nombre, telefono, codigo, items, subtotal, envio, total, zona, direccion)
-  values (v_uid, coalesce(nullif(u.nombre, ''), v_dir ->> 'nombre', ''), coalesce(nullif(u.telefono, ''), v_dir ->> 'telefono', ''), coalesce(privado.mi_codigo(), ''), v_items, v_sub,
+  insert into public.pedidos (usuario, clave, nombre, telefono, codigo, items, subtotal, envio, total, zona, direccion)
+  values (v_uid, nullif(left(coalesce(p ->> 'clave', ''), 60), ''), coalesce(nullif(u.nombre, ''), v_dir ->> 'nombre', ''), coalesce(nullif(u.telefono, ''), v_dir ->> 'telefono', ''), coalesce(privado.mi_codigo(), ''), v_items, v_sub,
     case when v_fis > 0 then z.precio * ceil(v_fis / 8.0)::integer else 0 end, v_sub + case when v_fis > 0 then z.precio * ceil(v_fis / 8.0)::integer else 0 end,
     case when v_fis > 0 then z.nombre else '' end, v_dir)
   returning * into v;
@@ -218,6 +229,9 @@ begin
   if not found or u.bloqueado then raise exception 'Tu acceso está en pausa' using errcode = '42501'; end if;
   v_ini := ((p ->> 'fecha') || ' ' || (p ->> 'hora'))::timestamp at time zone 'America/Bogota';
   if v_ini < now() + interval '55 minutes' or v_ini > now() + interval '9 days' or extract(minute from v_ini) <> 0 then raise exception 'slot' using errcode = '22023'; end if;
+  -- El mismo horario de TUTORIAS.hours (js/tutorias.js).
+  if not (case extract(dow from v_ini at time zone 'America/Bogota')::integer when 0 then false when 6 then extract(hour from v_ini at time zone 'America/Bogota') between 9 and 11
+    when 5 then extract(hour from v_ini at time zone 'America/Bogota') between 14 and 18 else extract(hour from v_ini at time zone 'America/Bogota') between 14 and 19 end) then raise exception 'slot' using errcode = '22023'; end if;
   if not exists (select 1 from public.cursos where id = p ->> 'curso') or jsonb_typeof(p -> 'temas') is distinct from 'array'
     or jsonb_array_length(p -> 'temas') not between 1 and 4 then raise exception 'topics' using errcode = '22023'; end if;
   if (select count(*) from public.asesorias where usuario = v_uid and estado in ('pendiente', 'confirmada') and inicio > now()) >= 3 then raise exception 'max' using errcode = '22023'; end if;
@@ -304,11 +318,12 @@ begin
       left((select string_agg(case when (e ->> 'cantidad')::integer > 1 then (e ->> 'cantidad') || ' × ' else '' end || (e ->> 'nombre'), ', ') from jsonb_array_elements(v.items) e), 200));
 
   elsif p_accion = 'pedido_estado' then
-    if p ->> 'estado' not in ('preparando', 'enviado', 'entregado', 'cancelado') then raise exception 'Estado no válido' using errcode = '22023'; end if;
+    if p ->> 'estado' not in ('preparando', 'enviado', 'entregado', 'cancelado', 'pendiente') then raise exception 'Estado no válido' using errcode = '22023'; end if;
     update public.pedidos set estado = p ->> 'estado', transportadora = left(coalesce(p ->> 'transportadora', transportadora), 40), guia = left(coalesce(p ->> 'guia', guia), 60),
       enviado_en = case when p ->> 'estado' = 'enviado' then coalesce(enviado_en, now()) else enviado_en end,
       entregado_en = case when p ->> 'estado' = 'entregado' then coalesce(entregado_en, now()) else entregado_en end
-    where id = (p ->> 'id')::bigint and (case when p ->> 'estado' = 'cancelado' then estado = 'pendiente' else estado <> 'pendiente' and estado <> 'cancelado' end);
+    where id = (p ->> 'id')::bigint and estado = case p ->> 'estado' when 'cancelado' then 'pendiente' when 'pendiente' then 'cancelado'   -- reabrir uno cancelado por error
+      when 'preparando' then 'pagado' when 'enviado' then 'preparando' else 'enviado' end;
     if not found then raise exception 'Ese pedido no puede pasar a ese estado' using errcode = '22023'; end if;
 
   elsif p_accion = 'articulo_guardar' then
@@ -326,6 +341,7 @@ begin
   elsif p_accion = 'libro_quitar' then
     delete from public.libros_acceso where usuario = v_uid and libro = (p ->> 'libro')::integer;
   elsif p_accion = 'horas_ajustar' then
+    perform 1 from public.perfiles where id = v_uid for update;
     if privado.saldo_horas(v_uid, p ->> 'tipo') + (p ->> 'cambio')::integer < 0 then raise exception 'El saldo no puede quedar negativo' using errcode = '22023'; end if;
     insert into public.horas (usuario, tipo, cambio, motivo) values (v_uid, p ->> 'tipo', (p ->> 'cambio')::integer, left(coalesce(nullif(p ->> 'motivo', ''), 'Ajuste'), 120));
   elsif p_accion = 'asesoria_estado' then
@@ -369,7 +385,7 @@ values ('libros', 'libros', false, 2097152, array['image/webp']) on conflict (id
 create function privado.puede_leer(p_ruta text) returns boolean
 language plpgsql stable security definer set search_path = ''
 as $$
-declare m text[] := regexp_match(p_ruta, '^(\d{1,2})/v(\d{1,6})/(\d{4})\.webp$');
+declare m text[] := regexp_match(p_ruta, '^(\d{1,2})/v(\d{1,10})/(\d{4})\.webp$');
 begin
   if m is null then return false; end if;
   return exists (select 1 from public.perfiles q where q.id = auth.uid() and not q.bloqueado and (q.rol = 'admin'

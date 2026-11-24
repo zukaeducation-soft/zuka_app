@@ -26,7 +26,7 @@ async function tiendaCarga() {
   const orden = (x, y) => x.orden - y.orden;
   Tienda.libros = l.data.sort((x, y) => x.id - y.id);
   // Lo digital no se vende hasta que sus libros estén subidos y publicados.
-  const listo = x => !['digital', 'paquete'].includes(x.tipo) || (x.da.libros || []).every(id => Tienda.libros.some(b => b.id === id && libroListo(b)));
+  const listo = x => (x.da.libros || []).every(id => Tienda.libros.some(b => b.id === id && libroListo(b)));
   Tienda.arts = a.data.filter(x => x.activo && x.precio != null && listo(x)).sort(orden);
   Tienda.envios = e.data.filter(x => x.activo).sort(orden);
   return tiendaMios();
@@ -48,13 +48,15 @@ const carroItems = () => Object.entries(Tienda.carro).filter(([id]) => Tienda.ar
 
 // ---------- capa ----------
 function tiendaAtras() {   // botón atrás (js/back.js): del pedido a la tienda y de la tienda a la app
+  if (sheetIsOpen || dialogOpen()) return false;
   if (lectorAtras()) return true;
   const el = $('#tienda');
-  if (!el || sheetIsOpen) return false;
+  if (!el) return false;
+  if (el.dataset.paso === 'enviando') return true;   // se está creando el pedido
   if (el.dataset.paso) tiendaPinta(); else tiendaCerrar();
   return true;
 }
-function tiendaCerrar() { $('#tienda')?.remove(); tiendaInerte(false); }
+function tiendaCerrar() { const el = $('#tienda'); if (!el) return; el.remove(); tiendaInerte(false); }
 function tiendaInerte(on) { ['#topbar', '#view', '#tabbar'].forEach(s => { const x = $(s); if (x) x.inert = on; }); }
 async function openTienda(vista = 'paquetes') {
   if (!Cuenta.user) return openEntrar();
@@ -152,6 +154,7 @@ function tiendaPedir() {
   el.dataset.paso = 'pedir';
   const p = Cuenta.perfil || {}, d = { nombre: p.nombre || '', telefono: p.telefono || '', ciudad: p.ciudad || '', ...(S.envio || {}) };
   const fis = tiendaFisicos(items, Tienda.arts);
+  const clave = [...crypto.getRandomValues(new Uint8Array(12))].map(x => x.toString(16).padStart(2, '0')).join('');   // si se reintenta, es el mismo pedido
   let zona = Tienda.envios.find(z => z.id === (S.envio || {}).zona) || null;
   el.innerHTML = `<header class="td-bar"><button class="icon-btn" type="button" data-td="volver" aria-label="Volver a la tienda">${ICON.back}</button><h1 tabindex="-1">Tu pedido</h1></header>
     <div class="td-cuerpo"><form class="td-in td-form acct-form" novalidate>
@@ -163,7 +166,7 @@ function tiendaPedir() {
   const f = $('form', el), msg = $('.form-msg', el), b = $('[type=submit]', el);
   const cuenta = () => { const k = tiendaCuenta(items, Tienda.arts, conPlan(), zona); $('.td-total', el).innerHTML = `<ul class="td-res">${fis ? `<li><span>Envío</span><b>${zona ? cop(k.envio) : 'Elige la zona'}</b></li>` : ''}<li class="t"><span>Total</span><b>${cop(k.total)}</b></li></ul>`; };
   const guarda = () => { if (!fis) return; DIR.forEach(([k]) => { d[k] = f[k].value; }); S.envio = { ...d, zona: zona ? zona.id : '' }; save(); };
-  $('[data-td]', el).onclick = () => { guarda(); tiendaPinta(); };
+  $('[data-td]', el).onclick = () => { if (b.disabled) return; guarda(); tiendaPinta(); };
   const zs = [...el.querySelectorAll('[data-z]')];
   const elige = i => { zona = Tienda.envios[i]; zs.forEach((x, k) => x.setAttribute('aria-checked', k === i)); cuenta(); };
   zs.forEach((x, i) => { x.onclick = () => elige(i); });
@@ -176,13 +179,13 @@ function tiendaPedir() {
     const mal = fis && direccionError(d);
     if (mal) return error(mal.texto, mal.campo);
     if (sinRed()) return error(sinRed());
-    b.disabled = true; b.textContent = 'Un momento…';
+    b.disabled = true; b.textContent = 'Un momento…'; el.dataset.paso = 'enviando';
     let r;
-    try { r = await Cuenta.sb.rpc('crear_pedido', { p: { items, zona: zona ? zona.id : '', direccion: fis ? d : {} } }); } catch (x) { r = { error: x }; }
+    try { r = await Cuenta.sb.rpc('crear_pedido', { p: { clave, items, zona: zona ? zona.id : '', direccion: fis ? d : {} } }); } catch (x) { r = { error: x }; }
+    if (!r.error) { Tienda.carro = {}; tiendaMios().catch(() => {}); }
     if (!f.isConnected) return;
-    b.disabled = false; b.textContent = 'Hacer pedido';
+    el.dataset.paso = 'pedir'; b.disabled = false; b.textContent = 'Hacer pedido';
     if (r.error) return error(/fetch|network/i.test(r.error.message || '') ? canjeError('red') : r.error.message || 'No se pudo hacer el pedido.');
-    Tienda.carro = {}; tiendaMios().catch(() => {});
     tiendaListo(r.data);
   };
   cuenta(); $('h1', el).focus({ preventScroll: true });
