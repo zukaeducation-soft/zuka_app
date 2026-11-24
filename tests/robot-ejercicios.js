@@ -1,8 +1,9 @@
 // Robot de los ejercicios con escenas (spec 2026-11-24-ejercicios-explora). Se carga en la página (fetch + eval) y resuelve con
-// el dedo el ejercicio `i` de pu-cm-1:  await __ej.abre(i); await __ej.juega(i, bien = true); await __ej.comprueba()
+// el dedo el ejercicio `i` de pu-cm-1 (o de otra lección: __ej.leccion('pu-cm-2')):  await __ej.abre(i); await __ej.juega(i, bien = true); await __ej.comprueba()
 // `await __ej.todos()` los recorre (mal y bien) y devuelve qué calificó la app.
 (() => {
-  const C = COURSES.find(c => c.id === 'preuda'), L = C.units.flatMap(u => u.lessons).find(l => l.id === 'pu-cm-1');
+  const C = COURSES.find(c => c.id === 'preuda'), busca = id => C.units.flatMap(u => u.lessons).find(l => l.id === id);
+  let L = busca('pu-cm-1');
   const esp = ms => new Promise(r => setTimeout(r, ms));
   const $$ = q => document.querySelector('.xg ' + q);
   const ev = (el, t, x, y) => el.dispatchEvent(new PointerEvent(t, { bubbles: true, cancelable: true, pointerId: 7, clientX: x, clientY: y, isPrimary: true }));
@@ -31,15 +32,34 @@
       for (const k of s.tiros) { const g = $$('.xg-per svg'); await arrastra(g, ...enRiel(g, k, -p.tope, p.tope)); await esp(5200); }
     },
   };
+  const perillas = async (xs) => { const g = [...document.querySelectorAll('.xg-per svg')]; for (let k = 0; k < xs.length; k++) await arrastra(g[k], ...enRiel(g[k], ...xs[k])); };
+  const enSvg = (svg, x, y) => { const r = svg.getBoundingClientRect(), v = svg.viewBox.baseVal; return [r.left + x * r.width / v.width, r.top + y * r.height / v.height]; };
+  const dedoSvg = async (svg, a, b) => { ev(svg, 'pointerdown', ...a); for (let k = 1; k <= 6; k++) { ev(svg, 'pointermove', a[0] + (b[0] - a[0]) * k / 6, a[1] + (b[1] - a[1]) * k / 6); await esp(8); } ev(svg, 'pointerup', ...b); await esp(40); };
+  const ND = async (p, s) => perillas([[s.n, 0, p.max], [s.d, 1, p.max]]);
+  Object.assign(M, {
+    async 'corta-iguales'(p, s) {
+      const svg = $$('.xg-lona svg'), X = v => 20 + v / p.ticks * 300;
+      for (let vuelta = 0; vuelta < 2; vuelta++) for (let i = s.c.length - 1; i >= 0; i--) { const v = +svg.querySelector(`[data-c="${i}"]`).getAttribute('aria-valuenow'); await dedoSvg(svg, enSvg(svg, X(v), 26), enSvg(svg, X(s.c[i]), 26)); }
+      for (let i = 0; i < p.n; i++) if (s.t[i]) { const e = svg.querySelector(`[data-p="${i}"]`); ev(e, 'pointerdown', ...cen(e)); ev(e, 'pointerup', ...cen(e)); }
+    },
+    'fraccion-gemela': ND, 'entre-fracciones': ND, 'resta-falta': ND,
+    async 'piezas-exactas'(p, s) { for (let k = 0; k < p.k; k++) await arrastra($$(`.xp-chip[data-i="${s.en[k]}"]`), ...cen($$(`.xp-slot[data-k="${k}"]`))); },
+    async 'parte-de-parte'(p, s) { const svg = $$('.xg-lona svg'), x0 = (340 - p.cols * 40) / 2; await dedoSvg(svg, enSvg(svg, x0 + 30, 30), enSvg(svg, x0 + s.w * 40, 6 + s.h * 40)); },
+    async 'total-escondido'(p, s) { await perillas([[s.parte, 1, 12], [s.n, 1, 10]]); },
+    'lanza-fraccion': (p, s) => M['lanza-ficha'](p, s),
+  });
   const MAL = {
+    'corta-iguales': { c: [3, 5, 11, 16], t: [true, true, true, false, false] }, 'fraccion-gemela': { n: 9, d: 12 }, 'entre-fracciones': { n: 3, d: 4 }, 'piezas-exactas': { en: [0, 1, 2] },
+    'resta-falta': { n: 6, d: 6 }, 'parte-de-parte': { w: 4, h: 2 }, 'total-escondido': { parte: 7, n: 3 }, 'lanza-fraccion': { tiros: [-3, -2] },
     'recta-muda': { en: [7, 5, -4, -3] }, 'dos-radares': { v: -7 }, 'arma-viaje': { en: [0, 4] }, 'taller-saltos': { a: 3, b: -5 },
     'signos-condiciones': { neg: [false, true, true, false] }, 'potencia-signo': { fuera: false, e: 4 }, 'parentesis-justo': { a: 0, b: 1 }, 'lanza-ficha': { tiros: [-9, -9] },
   };
   const api = {
+    leccion(id) { L = busca(id); },
     async abre(i) { startLesson(C, { ...L, ex: [L.ex[i]], more: [] }); document.querySelector('.clip-skip')?.click(); await esp(900); },
     async juega(i, bien = true) {
       const e = L.ex[i], p = e.params;
-      await M[e.game](p, !bien ? MAL[e.game] : e.game === 'lanza-ficha' ? { tiros: p.tiros.map(t => t.d) } : GAMES[e.game].solve(p));
+      await M[e.game](p, !bien ? MAL[e.game] : e.game.startsWith('lanza-') ? { tiros: p.tiros.map(t => t.d) } : GAMES[e.game].solve(p));
       await esp(150);
       return !document.querySelector('.lesson-foot .btn').disabled;
     },

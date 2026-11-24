@@ -14,7 +14,7 @@ const ctx = loadScripts(all);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES');
 const U = get(ctx, 'COURSES').find(c => c.id === 'preuda').units[0];
 // Juegos en movimiento (algo corre, vuela o se desliza solo): van de último.
-const MOVING = ['lanza-ficha', 'salta-signos', 'carrera-fracciones', 'vuela-precios', 'serpiente-orden', 'buzo-enteros', 'dispara-inverso', 'rompe-cambios', 'corta-proporciones'];
+const MOVING = ['lanza-ficha', 'lanza-fraccion', 'salta-signos', 'carrera-fracciones', 'vuela-precios', 'serpiente-orden', 'buzo-enteros', 'dispara-inverso', 'rompe-cambios', 'corta-proporciones'];
 // Desde el 2026-11-20 (spec preuda-razonamiento-diez) cada lección cierra con la zona de examen, después del juego en movimiento.
 const ZONA = ['completa-solucion', 'caza-error', 'opcion-examen'];
 // Mecánicas que el usuario no quiere: escoger entre opciones, tarjetas y armar con fichas de solo tocar.
@@ -60,7 +60,7 @@ test('cada ejercicio trae datos con solución (los juegos de la biblioteca calif
 });
 
 test('tableta-fraccion: se corta en partes iguales y se toman las del numerador; vale un corte equivalente', () => {
-  const g = GAMES['tableta-fraccion'], R = U.lessons[1].ex.find(e => e.game === 'tableta-fraccion').params.rounds;
+  const g = GAMES['tableta-fraccion'], R = [{ total: 40, cols: 10, num: 7, den: 10 }, { total: 24, cols: 6, num: 3, den: 4 }];
   for (const r of R) {
     assert.ok(r.total % r.den === 0 && r.total % r.cols === 0 && r.den <= 12, JSON.stringify(r));
     assert.ok(g.okOf({ parts: r.den, take: r.num }, r));
@@ -76,7 +76,7 @@ test('tableta-fraccion: se corta en partes iguales y se toman las del numerador;
 });
 
 test('corta-igual: solo encaja un denominador común, y el juego escribe la cuenta', () => {
-  const g = GAMES['corta-igual'], R = U.lessons[1].ex.find(e => e.game === 'corta-igual').params.rounds;
+  const g = GAMES['corta-igual'], R = [{ a: [2, 3], b: [1, 4], op: '-' }, { a: [1, 2], b: [1, 3] }];
   assert.ok(g.fits({ a: [1, 2], b: [1, 3] }, 6) && g.fits({ a: [1, 2], b: [1, 3] }, 12) && !g.fits({ a: [1, 2], b: [1, 3] }, 4));
   assert.equal(g.lcm(4, 6), 12);
   assert.equal(g.text({ a: [1, 2], b: [1, 3] }, 6), '1/2 + 1/3 = 3/6 + 2/6 = 5/6');

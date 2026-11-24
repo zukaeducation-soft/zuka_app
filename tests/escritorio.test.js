@@ -27,8 +27,8 @@ test('los paneles dicen qué lección es, la parte del video y el recorrido', ()
 test('solo cambia desde 1000 px: el celular queda igual', () => {
   const css = read('css/escritorio.css');
   const fuera = css.replace(/@media \(min-width: 1000px\)[^]*$/, '');
-  assert.match(fuera, /^[^{]*\.tb-logo-d, \.ls-sides \{ display: none; \}/m);
-  assert.doesNotMatch(fuera.replace(/\.tb-logo-d, \.ls-sides \{ display: none; \}/, ''), /\{/, 'fuera del bloque de escritorio no hay más reglas');
+  assert.match(fuera, /^[^{]*\.tb-logo-d, \.ls-sides, \.xp-riel \{ display: none; \}/m);
+  assert.doesNotMatch(fuera.replace(/\.tb-logo-d, \.ls-sides, \.xp-riel \{ display: none; \}/, ''), /\{/, 'fuera del bloque de escritorio no hay más reglas');
   assert.match(read('js/escritorio.js'), /const ESCRITORIO_MIN = 1000;/);
 });
 

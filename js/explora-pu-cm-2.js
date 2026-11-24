@@ -1,6 +1,6 @@
 // Preuniversitario · pu-cm-2 «Fracciones»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva; escena «barras»
 // en js/explora-numeros.js). Cada capítulo abre explicando, sigue «tu turno» y el problema va al final. Los ejemplos no son los
-// de los ejercicios de la lección (pizza 6/9, 7/10 de 40, 5/4, 7/3, 11/4, 2/3 − 1/4, 3/4 y 7/9, 1/4 + 1/6…).
+// de los ejercicios de la lección (tabla de quintos, 6/9, entre 1/2 y 3/5, 11/12, 7/8 − 1/2, 1/3 de 3/4, 3/5 = 21, 1/4 + 2/3…).
 EXPLORA['pu-cm-2'] = {
   caps: ['Partes iguales', 'Fracciones equivalentes', 'Comparar y sumar', 'La fracción de una cantidad', 'Ahora sí, un problema'],
   pasos: [

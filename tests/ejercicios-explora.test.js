@@ -147,3 +147,56 @@ test('revisión: lo calificado no cambia después, las teclas no se escapan, y u
   assert.match(ex('signos-condiciones'), /al menos uno/);
   assert.match(ex('lanza-ficha'), /fallar \*\*una\*\*/);
 });
+
+// ---- pu-cm-2 «Fracciones» ----
+const L2 = get(ctx, 'COURSES').find(c => c.id === 'preuda').units.flatMap(u => u.lessons).find(l => l.id === 'pu-cm-2');
+const P2 = g => L2.ex.find(e => e.game === g).params;
+const FR = ['corta-iguales', 'fraccion-gemela', 'entre-fracciones', 'piezas-exactas', 'resta-falta', 'parte-de-parte', 'total-escondido', 'lanza-fraccion'];
+
+test('pu-cm-2: ocho juegos de la escena; la solución gana, el inicio no y no nace listo', () => {
+  assert.equal(L2.ex.slice(0, 8).map(e => e.game).join(), FR.join());
+  for (const g of FR) {
+    const p = P2(g);
+    assert.equal(G(g).xp, true, g);
+    assert.equal(G(g).grade(G(g).solve(p), p).ok, true, `${g}: solve`);
+    assert.equal(G(g).grade(G(g).ini(p), p).ok, false, `${g}: ini`);
+    assert.equal(G(g).grade(undefined, p).ok, false, g);
+    assert.equal(G(g).listo(G(g).ini(p), p), false, `${g}: nace listo`);
+    assert.equal(G(g).listo(G(g).solve(p), p), true, g);
+    assert.equal((G(g).texto(p).match(/\$/g) || []).length % 2, 0, g);
+  }
+});
+
+test('pu-cm-2: las respuestas aceptadas son exactamente las que deben', () => {
+  const todas = (g, max) => span(1, max).flatMap(d => span(1, max).map(n => [n, d])).filter(([n, d]) => G(g).grade({ n, d }, P2(g)).ok).map(x => x.join('/')).join();
+  assert.equal(todas('fraccion-gemela', 15), '8/12,10/15');
+  assert.equal(todas('entre-fracciones', 12), '4/7,5/9,6/11,7/12');
+  assert.equal(todas('resta-falta', 12), '3/8');
+  const p = P2('piezas-exactas'), n = p.piezas.length, ok = [];
+  for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++) for (let c = b + 1; c < n; c++) if (G('piezas-exactas').grade({ en: [a, b, c] }, p).ok) ok.push([a, b, c].map(i => p.piezas[i].join('/')).sort().join());
+  assert.equal(ok.join(' · '), '1/2,1/4,1/6');
+  assert.ok(p.piezas.every(x => p.den % x[1] === 0));
+  const tot = P2('total-escondido');
+  assert.equal(span(1, 12).flatMap(parte => span(1, 10).map(k => [parte, k])).filter(([parte, k]) => G('total-escondido').grade({ parte, n: k }, tot).ok).join(), '7,5');
+  const pp = P2('parte-de-parte');
+  for (const [w, h, b] of [[6, 1, true], [3, 2, true], [2, 3, true], [8, 1, false], [4, 2, false]]) assert.equal(G('parte-de-parte').grade({ w, h }, pp).ok, b, `${w}x${h}`);
+  const c = P2('corta-iguales');
+  assert.equal(G('corta-iguales').grade({ c: [4, 8, 12, 16], t: [true, false, true, true, false] }, c).ok, true, 'valen tres partes cualesquiera');
+  assert.equal(G('corta-iguales').grade({ c: [4, 8, 12, 15], t: [true, true, true, false, false] }, c).ok, false);
+});
+
+test('pu-cm-2: los tiros en doceavos son la cuenta que dicen y caben en la recta', () => {
+  const p = P2('lanza-fraccion');
+  for (const t of p.tiros) {
+    const s = t.t.replace(/\\tfrac(\d)(\d)/g, '($1/$2)');
+    assert.ok(Math.abs(Function(`return ${s}`)() - (t.desde + t.d) / p.den) < 1e-9, t.t);
+    assert.ok(t.desde + t.d >= p.min && t.desde + t.d <= p.max && Math.abs(t.d) <= p.tope);
+  }
+  assert.match(G('lanza-fraccion').texto(p), /\\tfrac\{11\}\{12\}.*\\tfrac\{5\}\{12\}.*\\tfrac\{4\}\{3\}/);
+});
+
+test('pu-cm-2: no repite los ejemplos de la explicación', () => {
+  const t = read('js/explora-pu-cm-2.js');
+  for (const x of [P2('resta-falta').de, P2('fraccion-gemela').a]) assert.ok(!t.includes(`meta: [${x.join(', ')}]`));
+  assert.ok(!/21|35 boletas/.test((t.match(/total: \d+/g) || []).join()));
+});

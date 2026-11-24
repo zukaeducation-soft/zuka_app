@@ -43,7 +43,9 @@ const XG = (() => {
         const aLaVista = () => {
           const body = root.closest('.lesson-body'), fb = body?.parentElement.querySelector('.feedback.show');
           if (!body || !fb) return;
-          const r = root.getBoundingClientRect(), sobra = r.bottom - fb.getBoundingClientRect().top, arriba = r.top - body.getBoundingClientRect().top;
+          const r = root.getBoundingClientRect(), f = fb.getBoundingClientRect();
+          if (f.left >= r.right || f.right <= r.left) return;   // en computador el aviso va en otra columna
+          const sobra = r.bottom - f.top, arriba = r.top - body.getBoundingClientRect().top;
           if (sobra > 0) body.scrollBy({ top: Math.min(sobra, Math.max(0, arriba)), behavior: still() ? 'auto' : 'smooth' });
         };
         const fin = monta(stage, p, ui);
@@ -59,13 +61,13 @@ const XG = (() => {
   }
 
   // Recta como la de la explicación. Sin `rotulos` escribe todos los números (cada `cada`); con `rotulos`, solo esos.
-  function recta(box, { min, max, cada = 1, rotulos = null, alto = 156, y = 108 }) {
+  function recta(box, { min, max, cada = 1, rotulos = null, et = menos, alto = 156, y = 108 }) {
     const W = 340, PAD = 24, n = max - min, X = v => PAD + (v - min) / n * (W - 2 * PAD);
     let h = `<line class="xp-ax" x1="8" y1="${y}" x2="${W - 8}" y2="${y}"/>`;
     for (let v = min; v <= max; v++) {
       const big = rotulos ? rotulos.includes(v) : v % cada === 0;
       h += `<line class="xp-tk${v === 0 ? ' z' : ''}" x1="${X(v)}" y1="${y - (big ? 6 : 3)}" x2="${X(v)}" y2="${y + (big ? 6 : 3)}"/>`;
-      if (big) h += `<text class="xp-lb${v === 0 ? ' z' : ''}" x="${X(v)}" y="${y + 24}">${menos(v)}</text>`;
+      if (big) h += `<text class="xp-lb${v === 0 ? ' z' : ''}" x="${X(v)}" y="${y + 24}">${et(v)}</text>`;
     }
     box.innerHTML = `<svg class="xp-svg" viewBox="0 0 ${W} ${alto}" role="img" aria-label="Recta de ${menos(min)} a ${menos(max)}"><g class="xg-bajo"></g>${h}<g class="xg-din"></g></svg>`;
     const svg = box.firstChild;
@@ -110,9 +112,9 @@ const XG = (() => {
   }
 
   // Camina por la recta R de `desde` por los tramos [{ d, t }]: pinta cada tramo como flecha y va escribiendo la cuenta.
-  function camina(ui, R, desde, tramos, { cada, fin }) {
+  function camina(ui, R, desde, tramos, { cada, fin, cara = x => x }) {
     let k = 0, x = desde, fijo = '';
-    const tok = (c, cls = '') => ficha(R.X(c), R.y, Math.round(c), cls);
+    const tok = (c, cls = '') => ficha(R.X(c), R.y, cara(Math.round(c)), cls);
     const flecha = (a, b, y, d) => {
       const dir = Math.sign(b - a) || 1, f = d < 0 ? ' flip' : '';
       return `<line class="xp-arrow${f}" x1="${R.X(a)}" y1="${y}" x2="${R.X(b) - dir * 7}" y2="${y}"/><path class="xp-head${f}" d="M${R.X(b)} ${y} l${-dir * 10} -6 v12 z"/>`

@@ -458,6 +458,33 @@
 .xg-igual b { font: 600 26px var(--display); color: var(--ok); margin-left: 6px; }
 /* lanza la ficha */
 .xg-op-grande { font-size: 27px; text-align: center; min-height: 36px; }
+/* fracciones */
+.xg-corta-iguales .xg-lona .xp-svg, .xg-parte-de-parte .xg-lona .xp-svg { touch-action: none; }
+.xg [data-p]:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 2px; }
+.xg .xg-corte { cursor: ew-resize; }
+.xg .xg-corte line { stroke: var(--bg); stroke-width: 5; }
+.xg .xg-corte circle { fill: var(--c); stroke: var(--bg); stroke-width: 2; }
+.xg .xg-corte path { stroke: var(--c-on); stroke-width: 2; stroke-linecap: round; }
+.xg .xg-corte.on circle { filter: drop-shadow(0 0 7px color-mix(in srgb, var(--c) var(--halo), transparent)); }
+.xg .xg-corte:focus-visible { outline: none; }
+.xg .xg-corte:focus-visible circle { stroke: var(--ink); }
+.xg .xg-hueco { fill: var(--card); cursor: pointer; }
+.xg .xb-fill[data-p] { cursor: pointer; }
+.xg .xg-hueco.bad, .xg .xb-fill.bad { stroke: var(--bad); stroke-width: 2; }
+.xg .xb-fill.b { fill: var(--gold); filter: none; }
+.xg .xb-fill.c { fill: var(--fire); filter: none; }
+.xg .xg-sobre { fill: var(--c-on); }
+.xg .xg-tapada { fill: none; stroke: var(--mute); stroke-width: 1.4; stroke-dasharray: 5 5; }
+.xg .xg-franja { fill: color-mix(in srgb, var(--ok) 20%, transparent); }
+.xg .xg-marca { stroke: var(--ok); stroke-width: 2.4; stroke-dasharray: 5 4; }
+.xg .xg-ok { fill: color-mix(in srgb, var(--ok) 60%, var(--ink)); }
+.xg .xg-quita { fill: color-mix(in srgb, var(--fire) 26%, transparent); stroke: var(--fire); stroke-dasharray: 4 3; }
+.xg .xg-lote { fill: var(--card); stroke: var(--line); }
+.xg .xg-lote.de { fill: color-mix(in srgb, var(--gold) 22%, var(--card)); stroke: var(--gold); }
+.xg .xg-siembra { fill: color-mix(in srgb, var(--c) 45%, transparent); stroke: var(--c-ink); stroke-width: 2; }
+.xg .xg-siembra.good { stroke: var(--ok); fill: color-mix(in srgb, var(--ok) 40%, transparent); }
+.xg-frase .xg-ch { width: 68px; height: 58px; }
+.xg-piezas-exactas .xp-chip { height: 56px; }
 /* zona de examen con la letra y las superficies de la explicación */
 .lesson.xp-lesson .exq { max-width: 480px; }
 .lesson.xp-lesson .play:has(.exq), .lesson.xp-lesson .play:has(.exq) .game-stage { overflow: visible; }

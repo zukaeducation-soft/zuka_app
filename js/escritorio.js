@@ -59,14 +59,14 @@ function exploraCapitulos(caps, pasos, hechos) {
   return caps.map((t, c) => {
     const mios = pasos.map((p, k) => (p.cap === c ? k : -1)).filter(k => k >= 0), n = mios.filter(k => hechos[k]).length;
     const llega = mios[0] === 0 || !!hechos[mios[0] - 1];
-    return { t, hecho: n / mios.length, ir: llega ? mios[0] : null };
+    const falta = mios.find(k => !hechos[k]);   // a medias, se retoma donde iba
+    return { t, hecho: n / mios.length, ir: llega ? falta ?? mios[0] : null };
   });
 }
 // Ancho de la escena: lo que deja el alto de la ventana según la proporción de su dibujo (el dibujo no se deforma).
 const exploraAncho = (ratio, alto) => Math.round(Math.max(300, Math.min(760, ratio * alto * 0.33)));
 
 function exploraRiel(root, d) {
-  if (!esEscritorio()) return;
   let el = root.querySelector('.xp-riel');
   if (!el) {
     el = document.createElement('aside');
@@ -76,10 +76,13 @@ function exploraRiel(root, d) {
     root.prepend(el);
   }
   const caps = exploraCapitulos(d.caps, d.pasos, d.hechos), ol = el.querySelector('.xr-caps'), ul = el.querySelector('.xr-ideas ul');
+  const foco = [...ol.querySelectorAll('button')].indexOf(document.activeElement);
   ol.innerHTML = caps.map((c, k) => `<li class="${k === d.cap ? 'now' : ''}${c.hecho >= 1 ? ' done' : ''}"><button type="button" data-ir="${c.ir ?? ''}"${c.ir == null ? ' disabled' : ''}${k === d.cap ? ' aria-current="step"' : ''}>
     <i style="--p:${c.hecho}">${c.hecho >= 1 ? '✓' : k + 1}</i><span>${esEsc(c.t)}</span></button></li>`).join('');
-  ol.onclick = e => { const b = e.target.closest('button[data-ir]'); if (b && b.dataset.ir !== '') d.ir(+b.dataset.ir); };
-  const antes = ul.children.length;
+  if (foco >= 0) ol.querySelectorAll('button')[foco]?.focus({ preventScroll: true });
+  ol.onclick = e => { const b = e.target.closest('button[data-ir]'); if (b && b.dataset.ir !== '' && !b.hasAttribute('aria-current')) d.ir(+b.dataset.ir); };
+  const antes = el.dataset.n == null ? d.ideas.length : +el.dataset.n;   // al retomar no se animan las viejas
+  el.dataset.n = d.ideas.length;
   ul.innerHTML = d.ideas.map((t, k) => `<li${k >= antes ? ' class="nueva"' : ''}>${tex(t)}</li>`).join('') || '<li class="none">Cada idea que ganes queda aquí.</li>';
   if (d.ideas.length > antes) ul.parentElement.scrollTop = ul.parentElement.scrollHeight;
   const stage = root.querySelector('.xp-stage');
