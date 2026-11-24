@@ -336,10 +336,10 @@ function currentLesson(c, block) {
 function renderComponents(c) {
   const ls = lessonsOf(c), doneN = ls.filter(isDone).length;
   const lastL = ls.find(l => l.id === S.lastLesson), last = lastL && blockOf(c, lastL), cur = currentLesson(c);
-  view.innerHTML = `<div class="learn" style="--c:${c.color}">
-    ${courseHeadHTML(c)}
-    ${cur ? continueCardHTML(c, cur, ls.filter(l => blockOf(c, l) === blockOf(c, cur))) : ''}
-    <h2 class="comp-title">Elige un componente</h2>
+  view.innerHTML = `<div class="learn cv" style="--c:${c.color}">
+    <div class="cv-side">${courseHeadHTML(c)}
+    ${cur ? continueCardHTML(c, cur, ls.filter(l => blockOf(c, l) === blockOf(c, cur))) : ''}</div>
+    <div class="cv-main"><h2 class="comp-title">Elige un componente</h2>
     <div class="comp-list">${c.blocks.map((b, k) => {
       const bl = ls.filter(l => blockOf(c, l) === b.id), d = bl.filter(isDone).length, nw = c.units.filter(u => u.block === b.id).length;
       const nxt = currentLesson(c, b.id), here = b.id === last;
@@ -350,9 +350,10 @@ function renderComponents(c) {
           <span class="comp-stats">${nw} ${nw === 1 ? 'mundo' : 'mundos'} · ${bl.length} lecciones</span>
           <span class="comp-prog"><span class="mini-bar"><i style="width:${(d / bl.length) * 100}%"></i></span><small>${d}/${bl.length}</small></span>
           <span class="comp-next">${nxt ? `${d ? 'Sigue' : 'Empieza'}: ${esc(nxt.title)}` : 'Componente completado'}</span></span>
+        ${dkMundosHTML(c, b)}
         <span class="comp-go" aria-hidden="true">${ICON.right}</span></button>`;
     }).join('')}</div>
-    ${doneN === ls.length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
+    ${doneN === ls.length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}</div>
     ${gymFabHTML(c, courseLevelUi(c, null, { done: S.done, last: S.lastLesson }))}
   </div>`;
   view.querySelectorAll('[data-block]').forEach(b => b.onclick = () => {
@@ -373,16 +374,18 @@ function renderLearn() {
   const ls = block ? lessonsOf(c).filter(l => blockOf(c, l) === block.id) : lessonsOf(c), doneN = ls.filter(isDone).length;
   const idx = c.units.map((u, i) => (!block || u.block === block.id ? i : -1)).filter(i => i >= 0);
   const cur = block ? currentLesson(c, block.id) : currentLesson(c);
-  view.innerHTML = `<div class="learn" style="--c:${c.color}">
-    ${block ? `<button class="world-back" data-back>${ICON.back}<span>Componentes</span></button>` : ''}
+  view.innerHTML = `<div class="learn cv" style="--c:${c.color}">
+    <div class="cv-side">${block ? `<button class="world-back" data-back>${ICON.back}<span>Componentes</span></button>` : ''}
     ${courseHeadHTML(c, block)}
-    ${cur ? continueCardHTML(c, cur, ls) : ''}
+    ${cur ? continueCardHTML(c, cur, ls) : ''}</div>
+    <div class="cv-main">
     ${installEvt && !S.hideInstall ? `<section class="install-banner">
       <img src="icons/icon-192.png" alt="" width="44" height="44">
       <div><b>Instala Zuka</b><p>Ábrela como app, incluso sin conexión.</p></div>
       <button class="btn brand sm" data-install>Instalar</button>
       <button class="icon-btn" data-hide-install aria-label="Ocultar">${ICON.x}</button>
     </section>` : ''}
+    <h2 class="dk cv-title">${block ? 'Mundos del componente' : 'Mundos del curso'}</h2>
     <div class="world-map" role="list">
       <svg class="trail" width="1" height="1" overflow="visible" aria-hidden="true"><path d="${worldTrail(idx.map((_, k) => W_OFFSETS[k % W_OFFSETS.length]), WORLD_STEP, 64)}"/></svg>
       ${idx.map((ui, k) => {
@@ -394,11 +397,12 @@ function renderLearn() {
             <span class="wnode-art">${w.art}</span>
             ${all ? `<span class="wnode-badge">${ICON.star}</span>` : closed ? `<span class="wnode-badge">${ICON.lock}</span>` : ''}
           </button>
-          <span class="wnode-label" aria-hidden="true"><small>Mundo ${worldNo(c, ui)} · ${wDone}/${u.lessons.length}</small>${esc(w.name)}</span></div>`;
+          <span class="wnode-label" aria-hidden="true"><small>Mundo ${worldNo(c, ui)} · ${wDone}/${u.lessons.length}</small>${esc(w.name)}</span>
+          <span class="dk mini-bar" aria-hidden="true"><i style="width:${(wDone / u.lessons.length) * 100}%"></i></span></div>`;
       }).join('')}
     </div>
     ${cur ? '' : block ? `<div class="course-done">${ICON.star}<div><b>¡Componente completado!</b><p>Repasa cualquier lección o vuelve a los componentes.</p></div></div>`
-      : `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>`}
+      : `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>`}</div>
     ${gymFabHTML(c, courseLevelUi(c, block, { done: S.done, last: S.lastLesson }))}
   </div>`;
   view.querySelectorAll('.wnode').forEach(b => b.onclick = () => {
@@ -422,7 +426,7 @@ function renderWorld(c, ui) {
   const { w, wDone, all, closed } = worldInfo(c, u);
   // El jefe final y la evaluación del mundo (si tiene) son nodos más al final del camino; no cuentan como lecciones.
   const xs = [...u.lessons, ...(u.boss ? [u.boss] : []), ...(u.exam ? [u.exam] : [])].map((_, i) => OFFSETS[i % OFFSETS.length]);
-  view.innerHTML = `<div class="learn" style="--c:${c.color}">
+  view.innerHTML = `<div class="learn cv-world" style="--c:${c.color}">
     <button class="world-back" data-back>${ICON.back}<span>Mundos</span></button>
     <section class="world${closed ? ' closed' : ''}${all ? ' complete' : ''}">
       <header class="world-card">
@@ -441,7 +445,7 @@ function renderWorld(c, ui) {
         return `<div class="node-wrap" style="--x:${xs[li]}px">
           ${st === 'current' ? '<span class="start-bubble">EMPIEZA</span>' : ''}
           <button class="node ${st}" data-id="${l.id}" aria-label="Nivel ${worldNo(c, ui)}-${li + 1}: ${esc(l.title)}">${icon}</button>
-          <span class="node-label"><small>Nivel ${worldNo(c, ui)}-${li + 1}</small>${esc(l.title)}</span></div>`;
+          <span class="node-label"><small>Nivel ${worldNo(c, ui)}-${li + 1}</small>${esc(l.title)}${dkLeccionHTML(l)}</span></div>`;
       }).join('')}
         ${u.boss ? (() => {
           const st = planMotivo(u.boss.id) ? 'locked' : isDone(u.boss) ? 'done' : bossUnlocked(u) ? 'open' : 'locked';

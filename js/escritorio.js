@@ -48,6 +48,15 @@ function dkCursoHTML(c) {
   return `<span class="dk dk-tramos">${dkTramos(c, isDone).map(t => `<span class="dk-tramo">${t.b ? blockArt(c, t.b) : ''}<span><span class="dk-tr"><span>${esc(t.name)}</span><small>${t.d}/${t.n}</small></span>
     <span class="mini-bar"><i style="width:${(t.d / t.n) * 100}%"></i></span></span></span>`).join('')}</span><span class="dk dk-enter">Entrar al curso ${ICON.right}</span>`;
 }
+// Dentro de un curso: los mundos de un componente, en su tarjeta, y de qué consta cada lección, en su fila.
+function dkMundosHTML(c, b) {
+  return `<span class="dk cv-mundos" aria-hidden="true">${c.units.filter(u => u.block === b.id).map(u =>
+    `<span${u.lessons.every(isDone) ? ' class="ok"' : ''}>${esc((WORLDS[u.world] || {}).name || u.title)}</span>`).join('')}</span>`;
+}
+function dkLeccionHTML(l) {
+  const xp = typeof EXPLORA !== 'undefined' && EXPLORA[l.id];
+  return `<span class="dk cv-meta">${xp ? 'Explicación interactiva' : `Video de ${esMin(clipSecs(l))}`} · ${l.ex.length} ejercicios</span>`;
+}
 // Tú: el mes en calendario y el avance de los cursos en que está inscrito.
 function dkMesHTML() {
   const now = new Date();
