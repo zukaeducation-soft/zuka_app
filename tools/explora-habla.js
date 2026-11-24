@@ -29,11 +29,31 @@ function tex(src) {
   return s;
 }
 
+// Fracciones (5/6 → cinco sextos), unidades (42 km → 42 kilómetros), porcentajes y miles (50 000 → 50000).
+const NUM = ['cero', 'un', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez', 'once', 'doce'];
+const PARTE = { 2: 'medio', 3: 'tercio', 4: 'cuarto', 5: 'quinto', 6: 'sexto', 7: 'séptimo', 8: 'octavo', 9: 'noveno', 10: 'décimo',
+  12: 'doceavo', 15: 'quinceavo', 20: 'veinteavo', 24: 'veinticuatroavo', 25: 'veinticincoavo', 30: 'treintavo', 100: 'centésimo' };
+const UNIDAD = { 'km/h': ['kilómetro por hora', 'kilómetros por hora'], 'm²': ['metro cuadrado', 'metros cuadrados'], 'm³': ['metro cúbico', 'metros cúbicos'],
+  'cm²': ['centímetro cuadrado', 'centímetros cuadrados'], km: ['kilómetro', 'kilómetros'], cm: ['centímetro', 'centímetros'], m: ['metro', 'metros'],
+  kg: ['kilogramo', 'kilogramos'], g: ['gramo', 'gramos'], h: ['hora', 'horas'], s: ['segundo', 'segundos'] };
+function cantidades(s) {
+  s = s.replace(/\b\d{1,3}(?: \d{3})+\b/g, n => n.replace(/ /g, ''));
+  s = s.replace(/(\d+) ?(km\/h|cm²|m²|m³|km|cm|kg|m|g|h|s)(?![\wáéíóúñ²³\/])/g,
+    (m, n, u) => `${n === '1' ? (u === 'h' ? 'una' : 'un') : n} ${UNIDAD[u][n === '1' ? 0 : 1]}`);
+  s = s.replace(/(\d) ?%/g, '$1 por ciento');
+  return s.replace(/(?<![\d.\/])(\d+)\/(\d+)(?![\d.\/])/g, (m, a, b) => (PARTE[b] ? `${NUM[a] ?? a} ${PARTE[b]}${a === '1' ? '' : 's'}` : `${a} sobre ${b}`));
+}
+
 // Lo que se dice. Las fórmulas pasan por `tex` y luego todo por los símbolos comunes.
 function hablar(txt) {
   if (DICHO[txt]) return DICHO[txt];
   let s = String(txt).replace(/\*\*/g, '');
+  // Rótulos que se leen pero no se dicen: repetidos en cada paso suenan a máquina (pedido del usuario, 2026-11-24).
+  s = s.replace(/^(?:Tu turno\.|(?:Primera|Segunda|Tercera|Cuarta|Quinta|Sexta|Última) idea:|Empecemos por la idea:)\s*(\S)/, (m, c) => c.toUpperCase())
+    .replace(/^([¿¡])(\S)/, (m, a, c) => a + c.toUpperCase())
+    .replace(/^Eso es todo lo que construiste\. Con estas ideas ya puedes con los ejercicios\.$/, 'Muy bien, ya tienes lo que necesitas. Vamos a practicar.');
   s = s.replace(/\$([^$]+)\$/g, (m, f) => tex(f));
+  s = cantidades(s);
   s = s.replace(/\)\s*\(/g, ') por (');                                    // (−3)(−4): se multiplica
   s = s.replace(/π\/2\b/g, 'pi medios').replace(/(\d*)π\/(\d+)/g, (m, a, b) => `${a ? a + ' ' : ''}pi sobre ${b}`).replace(/π/g, 'pi');
   s = s.replace(/[−-](?=\s*[\d(a-zA-Zπ])/g, ' menos ');

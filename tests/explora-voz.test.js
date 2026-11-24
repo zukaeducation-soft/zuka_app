@@ -22,6 +22,27 @@ test('las fórmulas y los símbolos se dicen con palabras', () => {
   assert.match(hablar('$-3^2$'), /menos 3 al cuadrado/);
 });
 
+test('los rótulos repetidos se leen pero no se dicen', () => {
+  assert.equal(hablar('**Tu turno.** Haz 3 − 7 con la ficha.'), 'Haz 3 menos 7 con la ficha.');
+  assert.equal(hablar('Segunda idea: **el opuesto**.'), 'El opuesto.');
+  assert.equal(hablar('Empecemos por la idea: ¿qué es?'), '¿Qué es?');
+  for (const { h } of frases('pu-cm-2')) assert.ok(!/tu turno|(primera|segunda|tercera|cuarta|última) idea/i.test(h), h);
+  // Sin muletillas: ningún arranque se repite más de dos veces en la lección.
+  const n = {};
+  for (const { h } of frases('pu-cm-2')) { const k = h.split(/\s+/)[0].toLowerCase(); n[k] = (n[k] || 0) + 1; }
+  for (const [k, v] of Object.entries(n)) assert.ok(v <= 2, `${v} frases empiezan con «${k}»`);
+});
+
+test('las fracciones, las unidades, los porcentajes y los miles se dicen con palabras', () => {
+  assert.equal(hablar('¿Cuál es mayor, 5/6 o 4/5?'), '¿Cuál es mayor, cinco sextos o cuatro quintos?');
+  assert.equal(hablar('1/2 y 36/100'), 'un medio y 36 centésimos');
+  assert.equal(hablar('Un viaje de 42 km y una cinta de 24 m.'), 'Un viaje de 42 kilómetros y una cinta de 24 metros.');
+  assert.equal(hablar('1 cm a 60 km/h, 48 m² y 1 h'), 'un centímetro a 60 kilómetros por hora, 48 metros cuadrados y una hora');
+  assert.equal(hablar('35 % de 50 000'), '35 por ciento de 50000');
+  assert.equal(hablar('3 más 5 son 8, y es par'), '3 más 5 son 8, y es par');
+  assert.equal(hablar('7 goles'), '7 goles');
+});
+
 test('pu-cm-1: ninguna frase hablada lleva símbolos que la voz leería mal', () => {
   const f = frases('pu-cm-1');
   assert.ok(f.length >= 40);
