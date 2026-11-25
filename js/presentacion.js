@@ -142,6 +142,14 @@ const PZ_SUENOS = [
 ];
 const PZ_COMO = ['Primero la idea, después la fórmula', 'Juegas en vez de memorizar', 'Pistas cuando te trabas', 'Sin cronómetro ni afán'];
 
+// Clips de la app de verdad (webp animados, sin sonido); `-quieto` es el cuadro fijo, para la pausa y «reducir movimiento».
+const PZ_CLIPS = [
+  ['explora', 'Ves la idea', 'La lección te la construye paso a paso.', 'Lección: los cuadrados de los lados de un triángulo muestran el teorema de Pitágoras'],
+  ['figura', 'La mueves tú', 'Arrastras la figura y la cuenta cambia contigo.', 'Ejercicio: se arrastra la esquina de una foto hasta ampliarla sin deformarla'],
+  ['rotula', 'Armas la respuesta', 'Llevas cada ficha a su lugar y compruebas.', 'Ejercicio: se arrastran medidas al lado que le falta a cada triángulo'],
+  ['lanza', 'Y hasta juegas', 'Mandas el dron al número que responde.', 'Juego: un dron vuela por una recta hasta el número de la respuesta'],
+];
+
 function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = {}) {
   const cursos = pzOrdena(lista);
   const logo = zukaWord();
@@ -242,7 +250,10 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
     </section>
     <section class="pz-sec pz-in" id="pz-como">
       <header class="pz-head pz-rev"><h2>Cómo se aprende en Zuka</h2>
-        <p>Primero ves la idea, después la fórmula. Estos dibujos funcionan: pruébalos.</p></header>
+        <p>Así se ve una lección por dentro: primero la idea, después la fórmula, y siempre con las manos.</p></header>
+      <div class="pz-clips-caja pz-rev"><ul class="pz-clips">${PZ_CLIPS.map(([id, h, p, alt]) => `<li><span class="pz-clip"><picture><source media="(prefers-reduced-motion: reduce)" srcset="brand/clips/${id}-quieto.webp"><img src="brand/clips/${id}.webp" data-clip="${id}" alt="${alt}" width="320" height="622" loading="lazy"></picture></span><h3>${h}</h3><p>${p}</p></li>`).join('')}</ul>
+        <button class="pz-clips-p" type="button" aria-pressed="false">Pausar los videos</button></div>
+      <p class="pz-prueba pz-rev">Ahora prueba tú: estos dibujos funcionan.</p>
       <div class="pz-demos">
         ${demo('pz-d-rueda', 'La rueda que dibuja la onda', 'La altura del punto es el seno del ángulo. Muévelo y mira cómo se dibuja.', pzRueda())}
         ${demo('pz-d-area', 'La fórmula deja de ser un truco', 'Mueve el corte: el cuadrado siempre se arma con las mismas cuatro piezas.', PZ_AREA,
@@ -498,6 +509,16 @@ function pzCarrusel(el, quieto) {
     if (!enc && !document.hidden && !el.inert && el.scrollTop < 200 && !(hero.contains(document.activeElement) && document.activeElement.matches(':focus-visible'))) va(i + 1);
   }, PZ_PASA);
 }
+// Los clips se pueden detener: cada uno queda en su cuadro fijo.
+function pzClips(el, quieto) {
+  const b = el.querySelector('.pz-clips-p');
+  b.hidden = quieto;
+  b.onclick = () => {
+    const on = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', on); b.textContent = on ? 'Reproducir los videos' : 'Pausar los videos';
+    el.querySelectorAll('[data-clip]').forEach(i => { i.src = `brand/clips/${i.dataset.clip}${on ? '-quieto' : ''}.webp`; });
+  };
+}
 // Cuánto se abre cada carta según su distancia (en cartas) al puntero: 1 encima, 0 desde carta y media.
 const pzAbre = d => { const f = Math.max(0, 1 - Math.abs(d) / 1.6); return f * f * (3 - 2 * f); };
 // El mazo de cursos: las cartas se abren bajo el puntero o el dedo y la de encima dice su nombre completo.
@@ -676,7 +697,7 @@ function presentacionAbrir() {
   // Precios: primero los guardados; después, los de la base.
   pzPrecios(el, Cuenta.productos, Tienda.arts);
   if (Cuenta.sb) Promise.all([cuentaTienda(), tiendaCarga()]).then(() => { if (el.isConnected) pzPrecios(el, Cuenta.productos, Tienda.arts); }, () => {});
-  pzCarrusel(el, quieto); pzMazoVivo(el); pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el); pzCaminoVivo(el, quieto);
+  pzCarrusel(el, quieto); pzMazoVivo(el); pzClips(el, quieto); pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el); pzCaminoVivo(el, quieto);
   const raton = matchMedia('(hover: hover) and (pointer: fine)').matches;
   pzQuejasVivas(el, raton);
   if (raton && !quieto) pzPuntero(el);

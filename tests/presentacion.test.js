@@ -130,3 +130,12 @@ test('el mazo de cursos: una carta por curso de fundamentación y se abre solo c
   const f = get(ctx, 'pzAbre');
   assert.equal(f(0), 1); assert.equal(f(2), 0); assert.ok(f(.5) > f(1) && f(-1) === f(1));
 });
+
+test('los clips de la app existen, con su cuadro fijo, y se pueden pausar', () => {
+  for (const [id, , , alt] of get(ctx, 'PZ_CLIPS')) {
+    for (const f of [id, `${id}-quieto`]) assert.ok(fs.existsSync(path.join(ROOT, 'brand/clips', `${f}.webp`)), f);
+    assert.ok(alt.length > 20 && html.includes(`brand/clips/${id}.webp`));
+    assert.ok(fs.statSync(path.join(ROOT, 'brand/clips', `${id}.webp`)).size < 700000, id);
+  }
+  assert.match(html, /class="pz-clips-p" type="button" aria-pressed="false"/);
+});
