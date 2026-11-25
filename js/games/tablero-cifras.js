@@ -4,7 +4,8 @@
 // params = { rounds: [{ conds: [{ say, f(n) → bool }] }] }   state = { rounds: [{ n }] }
 GAMES['tablero-cifras'] = (() => {
   const all = r => Array.from({ length: 90 }, (_, k) => k + 10).filter(n => r.conds.every(c => c.f(n)));
-  const ok = (s, r) => s.n !== null && r.conds.every(c => c.f(s.n));
+  let ok = (s, r) => s.n !== null && r.conds.every(c => c.f(s.n));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.6,
     init: () => ({ n: null }),
@@ -17,7 +18,7 @@ GAMES['tablero-cifras'] = (() => {
     enter(G) {},
     draw(G) {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { n: all(r)[0] } : G.s, good = ok(s, r), cs = Math.min(28, (G.W - 40) / 10), x0 = (G.W - 10 * cs) / 2 + 6, y0 = 96 + r.conds.length * 18;
-      r.conds.forEach((c, i) => { const hit = s.n !== null && c.f(s.n); TK.label(p, C, `${s.n === null ? '·' : hit ? '✓' : '✗'} ${c.say}`, G.W / 2, 92 + i * 18, s.n === null ? C.ink : hit ? C.ok : C.bad, 11, G.W - 24); });
+      r.conds.forEach((c, i) => { const hit = s.n !== null && c.f(s.n); TK.label(p, C, `${s.n === null ? '·' : VELO.on ? '·' : hit ? '✓' : '✗'} ${c.say}`, G.W / 2, 92 + i * 18, s.n === null ? C.ink : hit && !VELO.on ? C.ok : C.bad, 11, G.W - 24); });
       for (let u = 0; u < 10; u++) TK.label(p, C, String(u), x0 + (u + 0.5) * cs, y0 + 6, C.coral, 9, cs);
       G.cells = [];
       for (let t = 1; t <= 9; t++) {

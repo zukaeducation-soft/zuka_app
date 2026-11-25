@@ -5,9 +5,10 @@
 // params = { rounds: [{ cands: [[nombres]], clues, circ? }] }   state = { rounds: [{ out: [índices de tarjetas tachadas] }] }
 GAMES['descarta-casos'] = (() => {
   const good = r => r.cands.findIndex(a => r.clues.every(c => ORD.sat(a, c, !!r.circ)));
-  const ok = (s, r) => s.out.length === r.cands.length - 1 && !s.out.includes(good(r));
+  let ok = (s, r) => s.out.length === r.cands.length - 1 && !s.out.includes(good(r));
   const answer = r => ({ out: r.cands.map((_, i) => i).filter(i => i !== good(r)) });
   const lay = G => { const n = G.r.cands.length, w = G.W - 40, h = Math.min(34, (G.H * 0.42) / n - 6); G.cards = G.r.cands.map((_, i) => ({ i, x: 20, y: 100 + i * (h + 6), w, h })); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: () => ({ out: [] }),

@@ -3,8 +3,9 @@
 // (x/x = 1). Lo que queda dice el exponente: arriba si a > b, abajo (exponente negativo) si b > a, y 1 si son iguales.
 // params = { rounds: [{ a, b, v }] }   (v: la letra)   state = { rounds: [{ k }] }   (parejas canceladas)
 GAMES['cancela-pisos'] = (() => {
-  const ok = (s, r) => s.k === Math.min(r.a, r.b);
+  let ok = (s, r) => s.k === Math.min(r.a, r.b);
   const res = r => r.a - r.b;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ k: 0 }),

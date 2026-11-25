@@ -7,7 +7,8 @@ GAMES['solapa-barras'] = (() => {
   const both = (r, s) => Math.max(0, Math.min(r.a, s + r.b) - s);
   const none = (r, s) => r.total - (r.a + r.b - both(r, s));
   const need = r => { for (let s = 0; s <= r.total - r.b; s++) if (none(r, s) === r.none) return s; return null; };
-  const ok = (s, r) => none(r, s.s) === r.none;
+  let ok = (s, r) => none(r, s.s) === r.none;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ s: need(r) === r.total - r.b ? 0 : r.total - r.b }),

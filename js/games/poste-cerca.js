@@ -5,7 +5,8 @@
 GAMES['poste-cerca'] = (() => {
   const MAX = 13;
   const need = r => r.L / r.d + 1;
-  const ok = (s, r) => s.n === need(r);
+  let ok = (s, r) => s.n === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 0.95,
     init: () => ({ n: 2 }),
@@ -20,7 +21,7 @@ GAMES['poste-cerca'] = (() => {
       p.stroke(C.line); p.strokeWeight(2); p.drawingContext.setLineDash([4, 4]); p.line(x0, G.y + 30, x1, G.y + 30); p.drawingContext.setLineDash([]);
       TK.label(p, C, `${r.L} m`, G.W / 2, G.y + 46, C.mute, 11, 60);
       for (let k = 0; k < n; k++) { const x = X(Math.min(k * r.d, r.L * 1.08)); if (k) { p.stroke(C.sun); p.strokeWeight(3); p.line(X((k - 1) * r.d), G.y - 10, x, G.y - 10); p.line(X((k - 1) * r.d), G.y + 6, x, G.y + 6); } p.stroke(C.ink); p.strokeWeight(5); p.line(x, G.y - 26, x, G.y + 22); }
-      TK.label(p, C, `${n - 1} tramos · ${len} m`, G.W / 2, G.y - 44, len === r.L ? C.ok : C.ink, 13, 160);
+      TK.label(p, C, `${n - 1} tramos · ${len} m`, G.W / 2, G.y - 44, len === r.L && !VELO.on ? C.ok : C.ink, 13, 160);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, MAX - 1, n - 2, i => ((i + 2) % 2 === 0 ? String(i + 2) : null));
       RK.strip(p, C, G.fb, `$${n}\\text{ postes} \\to ${n - 1}\\text{ tramos} \\cdot ${r.d} = ${len}\\text{ m}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
     },

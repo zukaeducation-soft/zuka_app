@@ -5,7 +5,8 @@
 GAMES['rompe-promesa'] = (() => {
   const CASES = [[true, true], [true, false], [false, true], [false, false]];
   const need = r => CASES.map(([a, b]) => !!r.f(a, b) === r.want);
-  const ok = (s, r) => need(r).every((v, i) => s.m[i] === v);
+  let ok = (s, r) => need(r).every((v, i) => s.m[i] === v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ m: [false, false, false, false] }),

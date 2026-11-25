@@ -5,8 +5,9 @@
 GAMES['escalera-potencias'] = (() => {
   const val = (b, e) => b ** e;
   const need = r => { for (let e = -4; e <= 4; e++) if (Math.abs(val(r.base, e) - r.num / r.den) < 1e-12) return e; return null; };
-  const ok = (s, r) => s.e === need(r);
+  let ok = (s, r) => s.e === need(r);
   const frac = (b, e) => (e >= 0 ? `${b ** e}` : `\\tfrac{1}{${b ** -e}}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ e: 1 }),

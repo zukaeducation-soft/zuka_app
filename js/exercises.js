@@ -144,6 +144,7 @@ EX.play = (area, ex, ready) => {
     ready(false);
     const guideAuto = !ex.exam && (typeof S === 'undefined' || S.guideAuto !== false);
     stage.dataset.guideAuto = String(guideAuto);
+    if (ex.exam || box.closest('.exam')) stage.dataset.examen = '1'; else delete stage.dataset.examen;
     // En una lección con explicación Explora, los juegos suenan como ella.
     const sfx = typeof XP_SFX !== 'undefined' && box.closest('.xp-lesson') ? XP_SFX : Sfx;
     const next = inst = game.create(stage, ex.params, { ready, sfx, palette: PALETTE, tex, guideAuto });

@@ -4,7 +4,8 @@
 // params = { rounds: [{ a: [rótulo, valor], b: [rótulo, valor], floor }] }   state = { rounds: [{ p, fl }] }   (p de 0 a 100, de 5 en 5)
 GAMES['eje-engano'] = (() => {
   const need = r => (r.a[1] - r.b[1]) / r.b[1] * 100;
-  const ok = (s, r) => s.p === need(r);
+  let ok = (s, r) => s.p === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ p: need(r) === 50 ? 45 : 50, fl: r.floor }),

@@ -59,7 +59,7 @@ GAMES['balanza-exponencial'] = (() => {
       p.draw = () => {
         p.background(C.bg);
         const r = params.rounds[cur], x = xs[cur], { min, max } = range(r);
-        const l = r.L(x), rr = r.R(x), t = tilt(l, rr), good = t === 0;
+        const l = r.L(x), rr = r.R(x), t = tilt(l, rr), good = t === 0 && !VELO.on;
         tabs.forEach((tb, i) => {
           const ok = Math.abs(xs[i] - params.rounds[i].x) < 1e-9;
           const col = locked ? (ok ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Z : C.line;

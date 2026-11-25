@@ -54,7 +54,7 @@ GAMES['mide-altura'] = (() => {
         p.background(C.bg);
         const r = params.rounds[cur], dep = r.mode === 'dep', d = st.ds[cur];
         s = scaleFor(r);
-        const topY = groundY - r.h * s, good = d !== null && Math.abs(angleAt(r.h, d) - r.angle) <= 1;
+        const topY = groundY - r.h * s, good = !VELO.on && d !== null && Math.abs(angleAt(r.h, d) - r.angle) <= 1;
         tabs.forEach((t, i) => {
           const di = st.ds[i], ok = di !== null && Math.abs(angleAt(params.rounds[i].h, di) - params.rounds[i].angle) <= 1;
           const col = locked ? (ok ? C.ok : C.bad) : i === cur ? C.brand : di !== null ? C.Z : C.line;

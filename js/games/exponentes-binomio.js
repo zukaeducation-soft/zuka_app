@@ -4,8 +4,9 @@
 // params = { rounds: [{ n, c, p }] }   state = { rounds: [{ k }] }
 GAMES['exponentes-binomio'] = (() => {
   const C_ = (n, k) => (k === 0 || k === n ? 1 : C_(n - 1, k - 1) + C_(n - 1, k));
-  const ok = (s, r) => r.n - s.k === r.p;
+  let ok = (s, r) => r.n - s.k === r.p;
   const coef = (r, k) => C_(r.n, k) * r.c ** k;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ k: 0 }),

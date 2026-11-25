@@ -4,7 +4,7 @@
 // params = { rounds: [{ tpl: '4_72', by: 3 | 4 | 9 | 11 | 6 }] }   state = { rounds: [{ d }] }   (cualquier cifra que cumpla vale)
 GAMES['cifra-faltante'] = (() => {
   const num = (r, d) => +r.tpl.replace('_', d);
-  const ok = (s, r) => s.d !== null && num(r, s.d) % r.by === 0;
+  let ok = (s, r) => s.d !== null && num(r, s.d) % r.by === 0;
   const first = r => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].find(d => num(r, d) % r.by === 0);
   const test = (r, d) => {
     const ds = String(num(r, d)).split('').map(Number), sum = ds.reduce((a, b) => a + b, 0);
@@ -13,6 +13,7 @@ GAMES['cifra-faltante'] = (() => {
     if (r.by === 11) { const alt = ds.reduce((a, b, i) => a + (i % 2 ? -b : b), 0); return `suma alternada: ${ds.map((b, i) => (i ? (i % 2 ? '− ' : '+ ') : '') + b).join(' ')} = ${alt}`; }
     return `par: ${ds.at(-1) % 2 === 0 ? 'sí' : 'no'} · suma de cifras ${sum}`;
   };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ d: num(r, 0) % r.by === 0 ? 1 : 0 }),

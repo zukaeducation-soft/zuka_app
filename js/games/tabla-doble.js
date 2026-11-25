@@ -4,7 +4,8 @@
 // params = { rounds: [{ rows: [[grupo, sí, total]], what }] }   state = { rounds: [{ p: [porcentaje por grupo] }] }
 GAMES['tabla-doble'] = (() => {
   const need = r => r.rows.map(([, y, t]) => y / t * 100);
-  const ok = (s, r) => need(r).every((v, i) => s.p[i] === v);
+  let ok = (s, r) => need(r).every((v, i) => s.p[i] === v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ p: r.rows.map(() => 0) }),

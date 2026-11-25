@@ -4,7 +4,8 @@
 // división y su signo: (−12) ÷ 3 = −4 y 15 ÷ (−5) = −3.
 // params = { min, max, rounds: [{ a, b }] }   state = { rounds: [{ n, flip }] }
 GAMES['parte-flecha'] = (() => {
-  const ok = (s, r) => s.n === Math.abs(r.b) && s.flip === r.b < 0;
+  let ok = (s, r) => s.n === Math.abs(r.b) && s.flip === r.b < 0;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ n: 1, flip: false }),

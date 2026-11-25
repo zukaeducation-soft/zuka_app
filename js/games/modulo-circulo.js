@@ -4,8 +4,9 @@
 // params = { rounds: [{ a, b }] }   (a² + b² es un cuadrado)   state = { rounds: [{ R }] }   (de 1 a 15)
 GAMES['modulo-circulo'] = (() => {
   const need = r => Math.round(Math.hypot(r.a, r.b));
-  const ok = (s, r) => s.R === need(r);
+  let ok = (s, r) => s.R === need(r);
   const z = (a, b) => GAMES['plano-complejo'].z(a, b);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ R: 1 }),

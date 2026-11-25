@@ -4,7 +4,8 @@
 // params = { rounds: [{ folds, holes }] }   state = { rounds: [{ n }] }   (de 1 a 32)
 GAMES['dobla-papel'] = (() => {
   const total = r => 2 ** r.folds * r.holes;
-  const ok = (s, r) => s.n === total(r);
+  let ok = (s, r) => s.n === total(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ n: 1 }),

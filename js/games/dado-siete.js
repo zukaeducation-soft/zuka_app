@@ -4,9 +4,10 @@
 // params = { rounds: [{ top, front, right }] }   state = { rounds: [{ bottom, back, left }] }
 GAMES['dado-siete'] = (() => {
   const want = r => ({ bottom: 7 - r.top, back: 7 - r.front, left: 7 - r.right });
-  const ok = (s, r) => ['bottom', 'back', 'left'].every(k => s[k] === want(r)[k]);
+  let ok = (s, r) => ['bottom', 'back', 'left'].every(k => s[k] === want(r)[k]);
   const NAMES = { bottom: 'abajo', back: 'atrás', left: 'izquierda' };
   const lay = G => { const u = 46, cx = G.W / 2; G.u = u; G.cells = { top: [cx - u / 2, 120], back: [cx - u / 2, 120 - u + u], left: [cx - 3 * u / 2, 120 + u], front: [cx - u / 2, 120 + u], right: [cx + u / 2, 120 + u], bottom: [cx - u / 2, 120 + 2 * u] }; G.cells.back = [cx - u / 2, 120 - 0]; G.cells.top = [cx - u / 2, 120 + u]; G.cells.front = [cx - u / 2, 120 + 2 * u]; G.cells.bottom = [cx - u / 2, 120 + 3 * u]; G.cells.left = [cx - 3 * u / 2, 120 + u]; G.cells.right = [cx + u / 2, 120 + u]; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: () => ({ bottom: null, back: null, left: null }),

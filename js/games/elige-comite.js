@@ -4,10 +4,11 @@
 // params = { rounds: [{ n, ways }] }   state = { rounds: [{ k }] }   (k de 0 a n)
 GAMES['elige-comite'] = (() => {
   const C_ = (n, k) => { let v = 1; for (let i = 1; i <= k; i++) v = v * (n - k + i) / i; return Math.round(v); };
-  const ok = (s, r) => C_(r.n, s.k) === r.ways;
+  let ok = (s, r) => C_(r.n, s.k) === r.ways;
   const answer = r => ({ k: [...Array(r.n + 1).keys()].find(k => C_(r.n, k) === r.ways) });
   const groups = (n, k) => { const out = []; for (let m = 0; m < 2 ** n && out.length < 40; m++) { let c = 0; for (let i = 0; i < n; i++) if (m & (1 << i)) c++; if (c === k) out.push(m); } return out; };
   const L = 'ABCDEFGH';
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ k: C_(r.n, 0) === r.ways ? 1 : 0 }),

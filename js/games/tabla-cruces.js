@@ -8,9 +8,10 @@ GAMES['tabla-cruces'] = (() => {
   const crossed = (r, a, v) => r.clues.some(c => c.t === 'not' && c.a === a && c.v === v);
   const valid = (r, pick) => pick.every(x => x != null) && new Set(pick).size === pick.length && r.clues.every(c => (c.t === 'not' ? pick[c.a] !== c.v : pick[c.a] === c.v));
   const solutions = r => ORD.perms(r.cols.map((_, i) => i)).filter(p => valid(r, p));
-  const ok = (s, r) => valid(r, s.pick);
+  let ok = (s, r) => valid(r, s.pick);
   const answer = r => ({ pick: solutions(r)[0] });
   const lay = G => { const r = G.r, cw = Math.min(64, (G.W - 90) / r.cols.length), ch = 34; G.cell = (a, v) => ({ x: 84 + v * cw, y: 128 + a * ch, w: cw - 4, h: ch - 4 }); G.cw = cw; G.ch = ch; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ pick: r.rows.map(() => null) }),

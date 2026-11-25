@@ -3,7 +3,8 @@
 // después − antes. Si va a la izquierda el cambio es negativo, aunque los dos números sean positivos.
 // params = { min, max, rounds: [{ text, from, to }] }   state = { rounds: [{ t, h }] }   (cola y punta, enteros)
 GAMES['flecha-resta'] = (() => {
-  const ok = (s, r) => s.t === r.from && s.h === r.to;
+  let ok = (s, r) => s.t === r.from && s.h === r.to;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 0.95,
     init: () => ({ t: 0, h: 1 }),

@@ -3,8 +3,9 @@
 // la altura y el lado inclinado; se arrastra la base hasta el área pedida. El triángulo recortado se ve pasar al otro lado.
 // params = { rounds: [{ h, slant, target }] }   (slant: lado inclinado, solo de distractor)   state = { rounds: [{ b }] }   (base de 1 a 12)
 GAMES['corta-paralelogramo'] = (() => {
-  const ok = (s, r) => s.b * r.h === r.target;
+  let ok = (s, r) => s.b * r.h === r.target;
   const answer = r => ({ b: r.target / r.h });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ b: 1 }),

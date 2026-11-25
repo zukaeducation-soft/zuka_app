@@ -6,7 +6,8 @@ GAMES['goteo-tanque'] = (() => {
   const MAX = 12;
   const term = (r, n) => r.a1 + (n - 1) * r.d;
   const need = r => (r.target - r.a1) / r.d + 1;
-  const ok = (s, r) => term(r, s.n) === r.target;
+  let ok = (s, r) => term(r, s.n) === r.target;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ n: 1 }),
@@ -18,7 +19,7 @@ GAMES['goteo-tanque'] = (() => {
     enter(G) { G.grab = false; },
     draw(G) {
       const { p, C, r } = G, n = G.locked && !ok(G.s, r) ? need(r) : G.s.n, w = (G.W - 40) / MAX, Y = v => G.base - (G.base - 110) * v / r.a1;
-      for (let k = 1; k <= n; k++) { const v = term(r, k); p.noStroke(); p.fill(v === r.target && k === n ? C.ok : C.sky); p.rect(20 + (k - 1) * w + 2, Y(Math.max(0, v)), w - 4, G.base - Y(Math.max(0, v)), 3); if (w > 18) TK.label(p, C, String(v), 20 + (k - 0.5) * w, Y(Math.max(0, v)) - 9, C.mute, 9, w); }
+      for (let k = 1; k <= n; k++) { const v = term(r, k); p.noStroke(); p.fill(v === r.target && k === n && !VELO.on ? C.ok : C.sky); p.rect(20 + (k - 1) * w + 2, Y(Math.max(0, v)), w - 4, G.base - Y(Math.max(0, v)), 3); if (w > 18) TK.label(p, C, String(v), 20 + (k - 0.5) * w, Y(Math.max(0, v)) - 9, C.mute, 9, w); }
       p.stroke(C.ok); p.strokeWeight(2); p.drawingContext.setLineDash([5, 4]); p.line(16, Y(r.target), G.W - 16, Y(r.target)); p.drawingContext.setLineDash([]);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, MAX, n - 1, i => String(i + 1));
       RK.strip(p, C, G.fb, `$a_{${n}} = ${r.a1} + ${n - 1}\\cdot(${r.d}) = ${term(r, n)}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 17 });

@@ -4,7 +4,8 @@
 // params = { rounds: [{ a, b, max, labels? }] }   state = { rounds: [{ t }] }
 GAMES['ritmos-mcm'] = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a), lcm = (a, b) => a / gcd(a, b) * b;
-  const ok = (s, r) => s.t === lcm(r.a, r.b);
+  let ok = (s, r) => s.t === lcm(r.a, r.b);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ t: r.a }),

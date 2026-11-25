@@ -5,9 +5,10 @@
 GAMES['cono-tercio'] = (() => {
   const A = r => (r.base === 'rect' ? r.dims[0] * r.dims[1] : r.dims[0] ** 2);
   const V = (r, h) => A(r) * h / 3;
-  const ok = (s, r) => Math.abs(V(r, s.h) - r.target) < 1e-9;
+  let ok = (s, r) => Math.abs(V(r, s.h) - r.target) < 1e-9;
   const answer = r => ({ h: 3 * r.target / A(r) });
   const pi = r => (r.base === 'circ' ? '\\pi' : '');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ h: 1 }),

@@ -6,9 +6,10 @@
 GAMES['elimina-variable'] = (() => {
   const K = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
   const sum = (r, k) => r.e1.map((v, i) => v + k * r.e2[i]);
-  const ok = (s, r) => sum(r, s.k)[1] === 0;
+  let ok = (s, r) => sum(r, s.k)[1] === 0;
   const answer = r => ({ k: K.find(k => ok({ k }, r)) });
   const eq = ([a, b, c]) => `${a === 1 ? '' : a === -1 ? '-' : a}x ${b < 0 ? '-' : '+'} ${Math.abs(b) === 1 ? '' : Math.abs(b)}y = ${c}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ k: 0 }),
@@ -22,7 +23,7 @@ GAMES['elimina-variable'] = (() => {
       const { p, C, r } = G, k = G.locked && !ok(G.s, r) ? answer(r).k : G.s.k, f = sum(r, k), cx = G.W / 2;
       TK.label(p, C, `fila 1: $${eq(r.e1)}$`, cx, 104, C.ink, 14, G.W - 30);
       TK.label(p, C, `fila 2: $${eq(r.e2)}$   × ${k}`, cx, 132, C.ink, 14, G.W - 30);
-      [['x', f[0], C.sky], ['y', f[1], f[1] === 0 ? C.ok : C.coral]].forEach(([n, v, col], i) => {
+      [['x', f[0], C.sky], ['y', f[1], f[1] === 0 && !VELO.on ? C.ok : C.coral]].forEach(([n, v, col], i) => {
         const y = 176 + i * 44; TK.label(p, C, n, 26, y + 11, C.mute, 14, 24);
         p.stroke(C.line); p.strokeWeight(1); p.line(cx, y - 4, cx, y + 26);
         p.noStroke(); p.fill(col); p.rect(cx, y, Math.max(-cx + 50, Math.min(cx - 50, v * 12)), 22, 3);

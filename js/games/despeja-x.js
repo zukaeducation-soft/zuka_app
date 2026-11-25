@@ -8,11 +8,12 @@ GAMES['despeja-x'] = (() => {
   const start = r => ({ k: r.div ? 1 / r.a : r.a, m: r.b, n: r.c });
   const apply = (e, [op, v]) => (op === '+' ? { k: e.k, m: e.m + v, n: e.n + v } : { k: e.k * v, m: e.m * v, n: e.n * v });
   const state = (s, r) => s.steps.reduce((e, i) => apply(e, r.cards[i]), start(r));
-  const ok = (s, r) => { const e = state(s, r); return Math.abs(e.k - 1) < 1e-9 && Math.abs(e.m) < 1e-9; };
+  let ok = (s, r) => { const e = state(s, r); return Math.abs(e.k - 1) < 1e-9 && Math.abs(e.m) < 1e-9; };
   const fmt = v => RK.num(Math.round(v * 1e6) / 1e6);
   const lhs = e => { const k = Math.abs(e.k - 1) < 1e-9 ? 'x' : Math.abs(e.k + 1) < 1e-9 ? '-x' : `${fmt(e.k)}x`; return Math.abs(e.m) < 1e-9 ? k : `${k} ${e.m < 0 ? '-' : '+'} ${fmt(Math.abs(e.m))}`; };
   const answer = r => { const steps = [], e0 = start(r); const iPlus = r.cards.findIndex(([op, v]) => op === '+' && Math.abs(v + e0.m) < 1e-9); if (e0.m && iPlus >= 0) steps.push(iPlus); const iMul = r.cards.findIndex(([op, v]) => op === '×' && Math.abs(v * e0.k - 1) < 1e-9); if (Math.abs(e0.k - 1) > 1e-9 && iMul >= 0) steps.push(iMul); return { steps }; };
   const lab = ([op, v]) => (op === '+' ? `${v < 0 ? '-' : '+'}\\,${fmt(Math.abs(v))}` : `\\times\\,${fmt(v)}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ steps: [] }),

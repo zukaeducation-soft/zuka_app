@@ -17,7 +17,7 @@ GAMES['arbol-partes'] = (() => {
     layout(G) { const W = G.W, H = G.H; G.top = 104; G.bot = H * 0.56; G.trayY = H - 124; G.fb = { x: 12, y: H - 84, w: W - 24, h: 52 }; },
     enter(G) { G.drag = null; },
     draw(G) {
-      const { p, C, r } = G, good = 2 ** G.s.n === r.target, n = G.locked && !good ? need(r) : G.s.n, A = SK.sets(C)[0];
+      const { p, C, r } = G, good = !VELO.on && 2 ** G.s.n === r.target, n = G.locked && !good ? need(r) : G.s.n, A = SK.sets(C)[0];
       const levels = Math.max(n, 1), dy = (G.bot - G.top) / levels, xAt = (lev, k) => 16 + (k + 0.5) * (G.W - 32) / 2 ** lev;
       // Las ramas: a la izquierda «sin», a la derecha «con».
       for (let lev = 0; lev < n; lev++) for (let k = 0; k < 2 ** lev; k++) {

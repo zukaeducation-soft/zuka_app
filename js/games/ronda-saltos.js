@@ -5,7 +5,8 @@
 // params = { rounds: [{ n, k }] }   state = { rounds: [{ pick }] }   (pick: número de la persona, de 1 a n)
 GAMES['ronda-saltos'] = (() => {
   const order = r => { const ring = Array.from({ length: r.n }, (_, i) => i + 1), out = []; let i = 0; while (ring.length > 1) { i = (i + r.k - 1) % ring.length; out.push(ring.splice(i, 1)[0]); } return { out, last: ring[0] }; };
-  const ok = (s, r) => s.pick === order(r).last;
+  let ok = (s, r) => s.pick === order(r).last;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.4,
     init: () => ({ pick: null }),

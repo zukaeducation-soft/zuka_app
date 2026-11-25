@@ -6,7 +6,8 @@ GAMES['alcancia-semanas'] = (() => {
   const MAX = 12;
   const sum = (r, n) => (n * (2 * r.a1 + (n - 1) * r.d)) / 2;
   const need = r => { for (let n = 1; n <= MAX; n++) if (sum(r, n) === r.goal) return n; return -1; };
-  const ok = (s, r) => sum(r, s.n) === r.goal;
+  let ok = (s, r) => sum(r, s.n) === r.goal;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ n: 1 }),
@@ -22,7 +23,7 @@ GAMES['alcancia-semanas'] = (() => {
       // La alcancía con el total.
       const tot = sum(r, n), hb = 90, f = Math.min(1, tot / (r.goal * 1.3));
       p.stroke(C.ink); p.strokeWeight(2); p.fill(C.card); p.rect(G.W - 74, G.base - hb, 54, hb, 10);
-      p.noStroke(); p.fill(tot === r.goal ? C.ok : C.sun); p.rect(G.W - 72, G.base - hb * f, 50, hb * f - 2, 8);
+      p.noStroke(); p.fill(tot === r.goal && !VELO.on ? C.ok : C.sun); p.rect(G.W - 72, G.base - hb * f, 50, hb * f - 2, 8);
       p.stroke(C.ok); p.strokeWeight(2); p.line(G.W - 80, G.base - hb / 1.3, G.W - 14, G.base - hb / 1.3);
       TK.label(p, C, `${tot}`, G.W - 47, G.base - hb - 14, C.ink, 13, 60);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, MAX, n - 1, i => ((i + 1) % 2 === 0 ? String(i + 1) : null));

@@ -4,8 +4,9 @@
 // params = { rounds: [{ total, steps: [[num, den, 'total' | 'resto']] }] }   state = { rounds: [{ j: [partes cortadas por fila] }] }
 GAMES['corta-lo-que-queda'] = (() => {
   const run = (r, j) => { let rem = r.total; return r.steps.map(([, den, of], k) => { const base = of === 'total' ? r.total : rem, spent = base * j[k] / den; rem -= spent; return { base, spent, rem }; }); };
-  const ok = (s, r) => r.steps.every(([num], k) => s.j[k] === num);
+  let ok = (s, r) => r.steps.every(([num], k) => s.j[k] === num);
   const money = v => (Math.round(v) === v ? v.toLocaleString('es-CO') : v.toFixed(1));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ j: r.steps.map(() => 0) }),

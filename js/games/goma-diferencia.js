@@ -8,9 +8,10 @@ GAMES['goma-diferencia'] = (() => {
   const start = r => (r.op === 'A-B' ? r.A : r.op === 'B-A' ? r.B : r.op === 'Ac' ? r.U : uni(r.A, r.B));
   const target = r => start(r).filter(v => (r.op === 'A-B' ? !r.B.includes(v) : r.op === 'B-A' ? !r.A.includes(v) : r.op === 'Ac' ? !r.A.includes(v) : !(r.A.includes(v) && r.B.includes(v))));
   const left = (s, r) => start(r).filter(v => !s.gone.includes(v));
-  const ok = (s, r) => left(s, r).join() === target(r).join();
+  let ok = (s, r) => left(s, r).join() === target(r).join();
   const OP = { 'A-B': ['A - B', 'Parte de A y borra lo que también está en B'], 'B-A': ['B - A', 'Parte de B y borra lo que también está en A'], Ac: ['A^c', 'Parte de U y borra lo que está en A'], AdB: ['A \\,\\triangle\\, B', 'Parte de A ∪ B y borra lo que está en los dos'] };
   const tset = xs => (xs.length ? `\\{${xs.join(', ')}\\}` : '\\varnothing');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.45,
     init: () => ({ gone: [] }),

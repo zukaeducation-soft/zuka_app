@@ -17,7 +17,7 @@ GAMES['cuadrados-pitagoras'] = (() => {
     layout(G) { G.oxy = () => { const m = game.size(G.r, G.params), top = 104, bot = G.H - 84, u = Math.min((G.W - 24) / (2 * m), (bot - top) / (2 * m)); return { m, u, ox: G.W / 2, oy: top + m * u + (bot - top - 2 * m * u) / 2 }; }; },
     enter(G) { G.grab = null; },
     draw(G) {
-      const { p, C, r, s } = G, { m, u, ox, oy } = G.oxy(), c2 = s.a * s.a + s.b * s.b, ok = c2 === r.c2;
+      const { p, C, r, s } = G, { m, u, ox, oy } = G.oxy(), c2 = s.a * s.a + s.b * s.b, ok = !VELO.on && c2 === r.c2;
       G.u = u; G.ox = ox; G.oy = oy; G.m = m;
       // Cuadrícula tenue en la zona del triángulo.
       p.stroke(C.line); p.strokeWeight(1); for (let i = 0; i <= m; i++) { p.line(ox + i * u, oy, ox + i * u, oy - m * u); p.line(ox, oy - i * u, ox + m * u, oy - i * u); }

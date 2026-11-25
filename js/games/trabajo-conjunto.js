@@ -4,9 +4,10 @@
 // params = { rounds: [{ who: [a, b], a, b }] }   state = { rounds: [{ t }] }   (horas, de media en media)
 GAMES['trabajo-conjunto'] = (() => {
   const need = r => r.a * r.b / (r.a + r.b);
-  const ok = (s, r) => Math.abs(s.t - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.t - need(r)) < 1e-9;
   const max = r => Math.min(r.a, r.b);
   const N = r => Math.round(max(r) * 2);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ t: 0.5 }),

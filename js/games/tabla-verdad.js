@@ -5,7 +5,8 @@
 GAMES['tabla-verdad'] = (() => {
   const rows = r => Array.from({ length: 2 ** r.n }, (_, k) => Array.from({ length: r.n }, (_, j) => !((k >> (r.n - 1 - j)) & 1)));
   const need = r => rows(r).map(v => !!r.f(...v));
-  const ok = (s, r) => need(r).every((v, i) => s.c[i] === v);
+  let ok = (s, r) => need(r).every((v, i) => s.c[i] === v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: r => ({ c: rows(r).map(() => null) }),

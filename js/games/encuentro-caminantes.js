@@ -5,7 +5,8 @@
 GAMES['encuentro-caminantes'] = (() => {
   const pos = (q, t) => q[0] * t + q[1];
   const need = r => (r.B[1] - r.A[1]) / (r.A[0] - r.B[0]);
-  const ok = (s, r) => pos(r.A, s.t) === pos(r.B, s.t);
+  let ok = (s, r) => pos(r.A, s.t) === pos(r.B, s.t);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ t: 0 }),

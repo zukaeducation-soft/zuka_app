@@ -4,9 +4,10 @@
 // params = { rounds: [{ b, N }] }   state = { rounds: [{ n }] }   (entero de −4 a 8)
 GAMES['exponente-buscado'] = (() => {
   const R = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8];
-  const ok = (s, r) => Math.abs(r.b ** s.n - r.N) < 1e-9 * Math.max(1, r.N);
+  let ok = (s, r) => Math.abs(r.b ** s.n - r.N) < 1e-9 * Math.max(1, r.N);
   const answer = r => ({ n: R.find(n => ok({ n }, r)) });
   const nt = v => (v >= 1 ? RK.num(v) : `\\tfrac{1}{${RK.num(1 / v)}}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ n: 1 }),

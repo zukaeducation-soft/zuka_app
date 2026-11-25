@@ -5,8 +5,9 @@
 GAMES['anagramas'] = (() => {
   const reps = r => { const m = {}; [...r.word].forEach(c => { m[c] = (m[c] || 0) + 1; }); return Object.values(m).filter(k => k > 1).sort((a, b) => a - b); };
   const fact = n => (n <= 1 ? 1 : n * fact(n - 1));
-  const ok = (s, r) => [...s.den].sort((a, b) => a - b).join() === reps(r).join();
+  let ok = (s, r) => [...s.den].sort((a, b) => a - b).join() === reps(r).join();
   const TRAY = [2, 2, 3, 3, 4];
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ den: [] }),

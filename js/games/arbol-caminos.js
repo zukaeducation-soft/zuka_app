@@ -5,10 +5,11 @@
 GAMES['arbol-caminos'] = (() => {
   const paths = r => r.steps.reduce((acc, st) => acc.flatMap(pa => st.map((_, i) => [...pa, i])), [[]]);
   const need = r => paths(r).map(pa => !!r.f(pa));
-  const ok = (s, r) => need(r).every((v, k) => s.m[k] === v);
+  let ok = (s, r) => need(r).every((v, k) => s.m[k] === v);
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
   const prob = (r, pa) => pa.reduce(([n, d], i, k) => [n * r.steps[k][i][1], d * r.steps[k][i][2]], [1, 1]);
   const add = (a, b) => { const n = a[0] * b[1] + b[0] * a[1], d = a[1] * b[1], g = gcd(n, d) || 1; return [n / g, d / g]; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: r => ({ m: paths(r).map(() => false) }),

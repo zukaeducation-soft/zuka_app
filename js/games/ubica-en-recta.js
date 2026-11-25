@@ -63,7 +63,7 @@ GAMES['ubica-en-recta'] = (() => {
         const mp = lineMap(pt.value - 0.5, pt.value + 0.5, cx - r, cx + r);
         axis(cy, mp, pt.value - 0.5, pt.value + 0.5, 0.1, false);
         p.noStroke(); p.fill(C.ok); p.circle(mp.toPx(pt.value), cy, 12);
-        if (v !== null) { p.fill(Math.abs(v - pt.value) < params.tol ? C.ok + '99' : C.bad); p.circle(mp.toPx(v), cy, 10); }
+        if (v !== null) { p.fill(Math.abs(v - pt.value) < params.tol && !VELO.on ? C.ok + '99' : C.bad); p.circle(mp.toPx(v), cy, 10); }
         p.drawingContext.restore();
         p.noStroke(); p.fill(C.ink); p.textAlign(p.CENTER, p.TOP); p.textSize(13); p.textStyle(p.BOLD);
         p.text(`${pt.label} ≈ ${pt.value.toFixed(2).replace('-', '−')}`, cx, cy + r + 4);

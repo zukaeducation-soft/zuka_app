@@ -5,9 +5,10 @@
 GAMES['total-original'] = (() => {
   const rest = (r, t) => { let rem = t; r.steps.forEach(([n, d, of]) => { rem -= (of === 'total' ? t : rem) * n / d; }); return rem; };
   const need = r => { for (let t = r.step; t <= r.max; t += r.step) if (Math.abs(rest(r, t) - r.left) < 1e-9) return t; return null; };
-  const ok = (s, r) => Math.abs(rest(r, s.t) - r.left) < 1e-9;
+  let ok = (s, r) => Math.abs(rest(r, s.t) - r.left) < 1e-9;
   const N = r => Math.round(r.max / r.step);
   const fmt = v => (Math.abs(v - Math.round(v)) < 1e-9 ? Math.round(v).toLocaleString('es-CO') : v.toFixed(1));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ t: need(r) === r.step ? 2 * r.step : r.step }),

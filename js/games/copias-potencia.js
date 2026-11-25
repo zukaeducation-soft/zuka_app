@@ -20,7 +20,7 @@ GAMES['copias-potencia'] = (() => {
         for (let i = 0; i < r.a; i++) RK.chip(p, C, { x: x0 + i * (cw + 2), y, w: cw, h }, r.v, { on: true, col: C.sky, size: 11, r: 5 });
       }
       G.X = RK.track(p, C, 40, G.W - 40, G.tY, 6, b - 1, i => String(i + 1));
-      RK.strip(p, C, G.fb, `$(${r.v}^{${r.a}})^{${b}} = ${r.v}^{${r.a} \\cdot ${b}} = ${r.v}^{${r.a * b}}$`, { col: G.locked || b * r.a === r.total ? C.ok : C.brand, size: 18 });
+      RK.strip(p, C, G.fb, `$(${r.v}^{${r.a}})^{${b}} = ${r.v}^{${r.a} \\cdot ${b}} = ${r.v}^{${r.a * b}}$`, { col: G.locked || b * r.a === r.total && !VELO.on ? C.ok : C.brand, size: 18 });
     },
     press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
     drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },

@@ -4,7 +4,8 @@
 // params = { rounds: [{ p, q }] }   (p > q, p + q par)   state = { rounds: [{ a, b }] }   (a de 10 a 60, b de 1 a 9)
 GAMES['diferencia-cuadrados'] = (() => {
   const need = r => ({ a: (r.p + r.q) / 2, b: (r.p - r.q) / 2 });
-  const ok = (s, r) => s.a + s.b === r.p && s.a - s.b === r.q;
+  let ok = (s, r) => s.a + s.b === r.p && s.a - s.b === r.q;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ a: 20, b: 1 }),

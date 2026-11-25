@@ -4,9 +4,10 @@
 // params = { rounds: [{ base: 'rect' | 'circ' | 'tri', dims: [..], target }] }   (circ: target en múltiplos de π)   state = { rounds: [{ h }] }   (de 1 a 10)
 GAMES['prisma-capas'] = (() => {
   const A = r => (r.base === 'rect' ? r.dims[0] * r.dims[1] : r.base === 'tri' ? r.dims[0] * r.dims[1] / 2 : r.dims[0] ** 2);
-  const ok = (s, r) => A(r) * s.h === r.target;
+  let ok = (s, r) => A(r) * s.h === r.target;
   const answer = r => ({ h: r.target / A(r) });
   const pi = r => (r.base === 'circ' ? '\\pi' : '');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ h: 1 }),

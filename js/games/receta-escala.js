@@ -4,8 +4,9 @@
 // params = { rounds: [{ base, items: [[nombre, cantidad, unidad]], goal: [índice, cantidad] }] }   state = { rounds: [{ n }] }
 GAMES['receta-escala'] = (() => {
   const need = r => (r.goal[1] * r.base) / r.items[r.goal[0]][1];
-  const ok = (s, r) => s.n === need(r);
+  let ok = (s, r) => s.n === need(r);
   const MAX = 12;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ n: r.base }),

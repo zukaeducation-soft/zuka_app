@@ -4,9 +4,10 @@
 // params = { rounds: [{ tex, base, parts: [[letra, coef]], tray: [números] }] }   state = { rounds: [{ c: [índice | null] }] }
 GAMES['expande-log'] = (() => {
   const lay = G => { const n = G.r.parts.length, w = Math.min(110, (G.W - 30) / n - 8); G.slots = G.r.parts.map((_, i) => ({ i, x: G.W / 2 - (n * (w + 8) - 8) / 2 + i * (w + 8), y: 120, w, h: 54 })); G.ty = G.H * 0.56; G.fb = { x: 12, y: G.H - 72, w: G.W - 24, h: 46 }; };
-  const ok = (s, r) => r.parts.every((q, i) => s.c[i] != null && Math.abs(r.tray[s.c[i]] - q[1]) < 1e-9);
+  let ok = (s, r) => r.parts.every((q, i) => s.c[i] != null && Math.abs(r.tray[s.c[i]] - q[1]) < 1e-9);
   const answer = r => ({ c: r.parts.map(q => r.tray.findIndex(v => Math.abs(v - q[1]) < 1e-9)) });
   const ct = v => (v === 0.5 ? '\\tfrac12' : v === -0.5 ? '-\\tfrac12' : String(v));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ c: r.parts.map(() => null) }),

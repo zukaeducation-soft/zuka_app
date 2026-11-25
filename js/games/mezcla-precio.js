@@ -5,9 +5,10 @@
 GAMES['mezcla-precio'] = (() => {
   const price = (r, ka) => (ka * r.a[1] + (r.total - ka) * r.b[1]) / r.total;
   const need = r => { for (let k = 0; k <= r.total; k += r.step) if (Math.abs(price(r, k) - r.target) < 1e-9) return k; return null; };
-  const ok = (s, r) => Math.abs(price(r, s.ka) - r.target) < 1e-9;
+  let ok = (s, r) => Math.abs(price(r, s.ka) - r.target) < 1e-9;
   const N = r => Math.round(r.total / r.step) + 1;
   const fm = v => Math.round(v).toLocaleString('es-CO');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ ka: need(r) === 0 ? r.step : 0 }),

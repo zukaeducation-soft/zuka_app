@@ -3,7 +3,8 @@
 // dividendo = divisor · cociente + residuo, la misma igualdad de la división de polinomios.
 // params = { rounds: [{ N, d }] }   state = { rounds: [{ q }] }   (de 0 a 15)
 GAMES['bolsas-residuo'] = (() => {
-  const ok = (s, r) => s.q === Math.floor(r.N / r.d);
+  let ok = (s, r) => s.q === Math.floor(r.N / r.d);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ q: 1 }),

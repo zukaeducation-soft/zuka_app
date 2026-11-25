@@ -5,8 +5,9 @@
 GAMES['prueba-candidatos'] = (() => {
   const val = (P, x) => P.reduce((a, q) => a * x + q, 0);
   const goods = r => r.cands.map((c, i) => (val(r.P, c) === 0 ? i : -1)).filter(i => i >= 0);
-  const ok = (s, r) => [...s.zeros].sort().join() === goods(r).join();
+  let ok = (s, r) => [...s.zeros].sort().join() === goods(r).join();
   const poly = P => GAMES['iguala-coeficientes'].poly3([...Array(4 - P.length).fill(0), ...P]);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ zeros: [], tried: [] }),
@@ -21,13 +22,13 @@ GAMES['prueba-candidatos'] = (() => {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { zeros: goods(r), tried: goods(r) } : G.s;
       p.stroke(C.brand); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 18)); p.rect(G.tester.x, G.tester.y, G.tester.w, G.tester.h, 12);
       TK.label(p, C, 'probador', G.tester.x + G.tester.w / 2, G.tester.y - 10, C.mute, 10, 80);
-      if (G.last != null) TK.label(p, C, `P(${r.cands[G.last]}) = ${val(r.P, r.cands[G.last])}`, G.tester.x + G.tester.w / 2, G.tester.y + G.tester.h / 2, val(r.P, r.cands[G.last]) === 0 ? C.ok : C.ink, 14, G.tester.w - 8);
+      if (G.last != null) TK.label(p, C, `P(${r.cands[G.last]}) = ${val(r.P, r.cands[G.last])}`, G.tester.x + G.tester.w / 2, G.tester.y + G.tester.h / 2, val(r.P, r.cands[G.last]) === 0 && !VELO.on ? C.ok : C.ink, 14, G.tester.w - 8);
       p.stroke(C.ok); p.fill(RK.al(p, C.ok, 18)); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 12); TK.label(p, C, 'ceros', G.box.x + G.box.w / 2, G.box.y - 10, C.mute, 10, 60);
       G.spots = [];
       s.zeros.forEach((i, j) => G.spots.push({ i, x: G.box.x + 8 + j * 40, y: G.box.y + 18, w: 36, h: 32, z: true }));
       const free = r.cands.map((_, i) => i).filter(i => !s.zeros.includes(i)), w = Math.min(42, (G.W - 20) / Math.ceil(free.length / 2) - 4);
       free.forEach((i, j) => G.spots.push({ i, x: 16 + (j % Math.ceil(free.length / 2)) * (w + 4), y: G.cy + Math.floor(j / Math.ceil(free.length / 2)) * 40, w, h: 32 }));
-      G.spots.forEach(q => { if (G.drag?.i !== q.i) RK.chip(p, C, q, String(r.cands[q.i]), { on: q.z || s.tried.includes(q.i), col: q.z ? C.ok : val(r.P, r.cands[q.i]) === 0 ? C.ok : C.coral, size: 12 }); });
+      G.spots.forEach(q => { if (G.drag?.i !== q.i) RK.chip(p, C, q, String(r.cands[q.i]), { on: q.z || s.tried.includes(q.i), col: q.z ? C.ok : val(r.P, r.cands[q.i]) === 0 && !VELO.on ? C.ok : C.coral, size: 12 }); });
       if (G.drag) RK.chip(p, C, { x: G.drag.x - 20, y: G.drag.y - 16, w: 40, h: 32 }, String(r.cands[G.drag.i]), { on: true, size: 12 });
       RK.strip(p, C, G.fb, `$\\text{ceros: } ${s.zeros.map(i => r.cands[i]).join(',\\ ') || '\\varnothing'}$`, { kicker: 'Candidatos: divisores del último coeficiente', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
     },

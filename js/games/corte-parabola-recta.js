@@ -6,8 +6,9 @@
 GAMES['corte-parabola-recta'] = (() => {
   const V = { x0: -5, x1: 5, y0: -8, y1: 14 };
   const need = r => r.a * r.x0 ** 2 - r.m * r.x0;
-  const ok = (s, r) => s.n === need(r);
+  let ok = (s, r) => s.n === need(r);
   const other = r => r.m / r.a - r.x0;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ n: need(r) === 0 ? 2 : 0 }),

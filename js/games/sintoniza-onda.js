@@ -8,7 +8,7 @@
 GAMES['sintoniza-onda'] = (() => {
   const F = { sen: Math.sin, cos: Math.cos };
   const evalAt = (fn, v, x) => v.a * F[fn](v.b * x - v.cq * Math.PI / 4) + v.d;
-  const same = (fn, u, v) => { for (let k = 0; k <= 96; k++) { const x = k * 4 * Math.PI / 96; if (Math.abs(evalAt(fn, u, x) - evalAt(fn, v, x)) > 1e-6) return false; } return true; };
+  let same = (fn, u, v) => { for (let k = 0; k <= 96; k++) { const x = k * 4 * Math.PI / 96; if (Math.abs(evalAt(fn, u, x) - evalAt(fn, v, x)) > 1e-6) return false; } return true; };
   const gcd = (a, b) => (b ? gcd(b, a % b) : Math.abs(a));
   const num = v => String(v);
 
@@ -42,6 +42,7 @@ GAMES['sintoniza-onda'] = (() => {
     return `y = ${coef}${body}${tail}`;
   }
 
+  same = velo(same);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => !!state.vals?.[i] && same(r.fn, state.vals?.[i], r.target));
     return { ok, solution: params.rounds.map(r => `$${texOf(r.fn, r.target)}$`).join(' · ') };

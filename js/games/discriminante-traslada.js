@@ -6,8 +6,9 @@ GAMES['discriminante-traslada'] = (() => {
   const V = { x0: -7, x1: 7, y0: -8, y1: 12 };
   const D = (r, c) => r.b * r.b - 4 * c;
   const n = d => (d > 0 ? 2 : d === 0 ? 1 : 0);
-  const ok = (s, r) => n(D(r, s.c)) === r.want;
+  let ok = (s, r) => n(D(r, s.c)) === r.want;
   const answer = r => { for (let c = -8; c <= 12; c++) if (n(D(r, c)) === r.want) return { c }; return null; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ c: r.want === 1 ? (r.b * r.b) / 4 + 1 : r.want === 0 ? -1 : 12 }),

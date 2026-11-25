@@ -15,8 +15,8 @@ GAMES['laser-recta'] = (() => {
     const mx = d === 1 ? (n === 1 ? 'x' : n === -1 ? '−x' : `${num(n)}x`) : `${n < 0 ? '−' : ''}${Math.abs(n)}/${d} x`;
     return `y = ${mx}${bTxt}`;
   }
-  const hits = (v, P) => Math.abs(P[1] - (v.rise / v.run * P[0] + v.b)) < 1e-9;
-  const fits = (v, r) => !!v && hits(v, r.P) && hits(v, r.Q);
+  let hits = (v, P) => Math.abs(P[1] - (v.rise / v.run * P[0] + v.b)) < 1e-9;
+  let fits = (v, r) => !!v && hits(v, r.P) && hits(v, r.Q);
   function texOf(r) {
     let n = r.Q[1] - r.P[1], d = r.Q[0] - r.P[0];
     if (d < 0) { n = -n; d = -d; }
@@ -27,6 +27,8 @@ GAMES['laser-recta'] = (() => {
     return `y = ${m}${bt}`;
   }
 
+  fits = velo(fits);
+  hits = velo(hits);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => !!state.vals?.[i] && fits(state.vals[i], r));
     return { ok, solution: params.rounds.map(r => `$${texOf(r)}$`).join(' · ') };
@@ -86,7 +88,7 @@ GAMES['laser-recta'] = (() => {
         // Cristales.
         [r.P, r.Q].forEach(Pt => {
           const x = X(Pt[0]), y = Y(Pt[1]), lit = hits(v, Pt);
-          p.stroke(C.ink); p.strokeWeight(1.5); p.fill(lit ? C.ok : C.Z);
+          p.stroke(C.ink); p.strokeWeight(1.5); p.fill(lit && !VELO.on ? C.ok : C.Z);
           p.quad(x, y - 11, x + 8, y, x, y + 11, x - 8, y);
           p.noStroke(); p.fill(C.ink); p.textSize(11); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.BOTTOM);
           p.text(`(${num(Pt[0])}, ${num(Pt[1])})`, Math.max(box.x + 28, Math.min(box.x + box.w - 28, x)), y - 13);

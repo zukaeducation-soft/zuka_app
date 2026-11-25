@@ -3,7 +3,8 @@
 // se pasa abajo y queda el rectángulo (x + b)(x − b).
 // params = { rounds: [{ c }] }   state = { rounds: [{ b }] }   (de 1 a 7)
 GAMES['diferencia-esquina'] = (() => {
-  const ok = (s, r) => s.b * s.b === r.c;
+  let ok = (s, r) => s.b * s.b === r.c;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ b: 1 }),

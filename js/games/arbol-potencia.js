@@ -20,7 +20,7 @@ GAMES['arbol-potencia'] = (() => {
     foot: (r, s) => (s.b ** s.e === r.target ? `${Array(s.e).fill(s.b).join(' · ')} = ${r.target}` : 'Cada nivel multiplica las puntas por las ramas de cada nudo'),
     layout(G) { const w = (G.W - 36) / 2; G.box = [{ x: 12, y: G.H - 64, w, h: 32 }, { x: 24 + w, y: G.H - 64, w, h: 32 }]; },
     draw(G) {
-      const { p, C, W, H, s, r } = G, n = s.b ** s.e, good = n === r.target, top = 128, bot = H - 96, lv = (bot - top) / s.e;
+      const { p, C, W, H, s, r } = G, n = s.b ** s.e, good = !VELO.on && n === r.target, top = 128, bot = H - 96, lv = (bot - top) / s.e;
       p.noStroke(); p.fill(good ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(17);
       p.text(`${s.b}${sup(s.e)} = ${n} hojas`, W / 2, 94);
       // Las ramas: el nivel k tiene bᵏ puntas repartidas a lo ancho; se dibuja hasta donde se alcanzan a ver.

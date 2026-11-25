@@ -8,8 +8,9 @@ GAMES['deshaz-camino'] = (() => {
   const apply = (x, [op, v]) => (op === '+' ? x + v : x * v);
   const inv = ([op, v]) => (op === '+' ? ['+', -v] : ['×', 1 / v]);
   const same = (a, b) => a[0] === b[0] && Math.abs(a[1] - b[1]) < 1e-9;
-  const ok = (s, r) => s.slots.every((c, i) => c != null && same(r.cards[c], inv(r.ops[r.ops.length - 1 - i])));
+  let ok = (s, r) => s.slots.every((c, i) => c != null && same(r.cards[c], inv(r.ops[r.ops.length - 1 - i])));
   const lab = ([op, v]) => (op === '+' ? `+\\,${RK.par(v)}` : `\\times\\,${RK.par(v)}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ slots: r.ops.map(() => null) }),
@@ -36,7 +37,7 @@ GAMES['deshaz-camino'] = (() => {
       // Regreso: y → puerta → puerta → ¿x?
       TK.label(p, C, 'regreso', 36, G.back.y - 30, C.mute, 10, 60);
       const back = [vals.at(-1)]; s.slots.forEach(c => back.push(c == null || back.at(-1) == null ? null : apply(back.at(-1), r.cards[c])));
-      back.forEach((v, i) => { if (v == null) { p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 4]); p.rect(20 + gw * 2 * i, G.back.y - 16, gw, 32, 9); p.drawingContext.setLineDash([]); } else box(i, G.back.y, v, i === back.length - 1 ? (Math.abs(v - r.x) < 1e-9 ? C.ok : C.coral) : C.sky); });
+      back.forEach((v, i) => { if (v == null) { p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 4]); p.rect(20 + gw * 2 * i, G.back.y - 16, gw, 32, 9); p.drawingContext.setLineDash([]); } else box(i, G.back.y, v, i === back.length - 1 ? (Math.abs(v - r.x) < 1e-9 && !VELO.on ? C.ok : C.coral) : C.sky); });
       G.spots = [];
       s.slots.forEach((c, i) => { const b = G.slot(i); p.stroke(C.brand); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 24)); p.rect(b.x + 4, b.y, b.w - 8, b.h, 9); if (c != null) { G.spots.push({ c, from: i, ...b }); if (G.drag?.c !== c) TK.label(p, C, `$${lab(r.cards[c])}$`, b.x + b.w / 2, b.y + b.h / 2, C.ink, 13, b.w); } });
       // Tarjetas.

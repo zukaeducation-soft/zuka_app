@@ -6,9 +6,10 @@ GAMES['area-probabilidad'] = (() => {
   const free = r => (r.a ? 'b' : 'a');
   const known = r => r.a || r.b;
   const need = r => { const k = known(r); for (let v = 0; v <= r.grid; v++) if (k[0] * v * r.both[1] === r.both[0] * k[1] * r.grid) return v; return null; };
-  const ok = (s, r) => s.v === need(r);
+  let ok = (s, r) => s.v === need(r);
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
   const fr = (n, d) => { const g = gcd(n, d) || 1; return n ? `\\tfrac{${n / g}}{${d / g}}` : '0'; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ v: need(r) === r.grid ? 1 : r.grid }),

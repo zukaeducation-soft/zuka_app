@@ -5,9 +5,10 @@
 GAMES['cinta-ecuacion'] = (() => {
   const len = (r, x) => r.parts.reduce((a, [c, k]) => a + c * x + k, 0);
   const need = r => { for (let x = r.lo; x <= r.hi; x++) if (len(r, x) === r.total) return x; return null; };
-  const ok = (s, r) => len(r, s.x) === r.total;
+  let ok = (s, r) => len(r, s.x) === r.total;
   const N = r => r.hi - r.lo + 1;
   const term = (c, k) => { if (c === -1 && k > 0) return `${k} - x`; const a = c === 1 ? 'x' : c === -1 ? '-x' : c === 0 ? '' : `${c}x`; return k ? (a ? `${a} ${k > 0 ? '+' : '-'} ${Math.abs(k)}` : `${k}`) : a; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ x: need(r) === r.lo ? r.lo + 1 : r.lo }),

@@ -4,10 +4,11 @@
 // params = { rounds: [{ d1: [factores], d2: [factores], chips: [factores] }] }   state = { rounds: [{ box: [índices] }] }
 GAMES['denominador-comun'] = (() => {
   const lcd = r => { const o = [...r.d1], rest = [...r.d2]; r.d1.forEach(f => { const i = rest.indexOf(f); if (i >= 0) rest.splice(i, 1); }); return [...o, ...rest]; };
-  const ok = (s, r) => s.box.map(i => r.chips[i]).sort().join('|') === lcd(r).sort().join('|');
+  let ok = (s, r) => s.box.map(i => r.chips[i]).sort().join('|') === lcd(r).sort().join('|');
   const answer = r => { const used = new Set(); return { box: lcd(r).map(f => { const i = r.chips.findIndex((c, k) => c === f && !used.has(k)); used.add(i); return i; }) }; };
   // Producto de factores con potencias: ['x', 'x', 'x+1'] → x^{2}(x+1).
   const mul = fs => { const n = new Map(); fs.forEach(f => n.set(f, (n.get(f) || 0) + 1)); return [...n].map(([f, k]) => `${f.length > 2 ? `(${f})` : f}${k > 1 ? `^{${k}}` : ''}`).join(''); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ box: [] }),

@@ -12,9 +12,10 @@ GAMES['peor-caso-bolsa'] = (() => {
   };
   const meets = (r, drawn) => { const cnt = {}; drawn.forEach(c => (cnt[c] = (cnt[c] || 0) + 1)); return r.kind === 'iguales' ? Object.values(cnt).some(v => v >= r.k) : (cnt[r.color] || 0) >= r.k; };
   const need = r => { const w = worst(r); for (let n = 1; n <= w.length; n++) if (meets(r, w.slice(0, n))) return n; return null; };
-  const ok = (s, r) => s.n === need(r);
+  let ok = (s, r) => s.n === need(r);
   const NAME = { coral: 'rojas', sky: 'azules', mint: 'verdes', sun: 'amarillas', brand: 'moradas' };
   const ask = r => (r.kind === 'iguales' ? `¿Cuántas sacar para tener seguro ${r.k} del mismo color?` : `¿Cuántas sacar para tener seguro ${r.k} ${NAME[r.color]}?`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ n: 1 }),

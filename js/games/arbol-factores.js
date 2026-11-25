@@ -12,9 +12,10 @@ GAMES['arbol-factores'] = (() => {
     splits.forEach(([li, pr]) => { const L = leaves(), i = L[li]; if (i === undefined) return; const nd = nodes[i]; if (nd.v % pr || nd.v === pr) return; nodes.push({ v: pr, kids: null, depth: nd.depth + 1 }, { v: nd.v / pr, kids: null, depth: nd.depth + 1 }); nd.kids = [nodes.length - 2, nodes.length - 1]; });
     return { nodes, leaves: leaves() };
   };
-  const ok = (s, r) => build(r, s.splits).leaves.every(i => isP(build(r, s.splits).nodes[i].v));
+  let ok = (s, r) => build(r, s.splits).leaves.every(i => isP(build(r, s.splits).nodes[i].v));
   const answer = r => { const splits = []; let li = 0, v = r.n; while (!isP(v)) { const pr = PR.find(q => v % q === 0) || v; splits.push([li, pr]); li += 1; v /= pr; } return { splits }; };
   const fact = n => { const f = {}; let v = n; for (let d = 2; v > 1; d++) while (v % d === 0) { f[d] = (f[d] || 0) + 1; v /= d; } return Object.entries(f).map(([b, e]) => (e > 1 ? `${b}^{${e}}` : b)).join(' \\cdot '); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: () => ({ splits: [] }),

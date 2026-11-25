@@ -15,7 +15,7 @@ GAMES['escalera-pared'] = (() => {
     layout(G) { G.wx = 44; G.fy = G.H - 70; },
     enter(G) { G.dragging = false; },
     draw(G) {
-      const { p, C, r, s, wx, fy } = G, u = G.u = Math.min((G.W - 80) / r.L, (fy - 124) / r.L), h = Math.sqrt(r.L * r.L - s.d * s.d), ok = s.d === need(r);
+      const { p, C, r, s, wx, fy } = G, u = G.u = Math.min((G.W - 80) / r.L, (fy - 124) / r.L), h = Math.sqrt(r.L * r.L - s.d * s.d), ok = !VELO.on && s.d === need(r);
       // Pared con marcas de metro, piso y ventana.
       p.stroke(C.ink); p.strokeWeight(4); p.line(wx, fy, wx, fy - r.L * u - 8); p.line(wx - 8, fy, G.W - 14, fy);
       p.strokeWeight(1.5); p.stroke(C.line); for (let i = 1; i <= r.L; i++) { p.line(wx - 5, fy - i * u, wx, fy - i * u); p.line(wx + i * u, fy, wx + i * u, fy + 5); }

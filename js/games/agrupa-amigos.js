@@ -4,9 +4,10 @@
 // params = { rounds: [{ nums: [4 números], unit }] }   state = { rounds: [{ plates: [[i, j], [k, l]] }] }
 GAMES['agrupa-amigos'] = (() => {
   const sum = (r, P) => P.reduce((a, i) => a + r.nums[i], 0);
-  const ok = (s, r) => s.plates.every(P => P.length === 2 && sum(r, P) % r.unit === 0);
+  let ok = (s, r) => s.plates.every(P => P.length === 2 && sum(r, P) % r.unit === 0);
   // Las parejas buenas (para la solución y las pruebas).
   function answer(r) { const n = r.nums; for (let j = 1; j < 4; j++) { const a = [0, j], b = [1, 2, 3].filter(k => k !== j); if ((n[0] + n[j]) % r.unit === 0 && (n[b[0]] + n[b[1]]) % r.unit === 0) return { plates: [a, b] }; } return null; }
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ plates: [[], []] }),

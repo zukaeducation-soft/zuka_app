@@ -4,7 +4,8 @@
 // params = { rounds: [{ cyc: ['coral', 'sky', …] (colores distintos de la paleta), N }] }   state = { rounds: [{ c }] }   (c: índice en cyc o −1)
 GAMES['ciclo-colores'] = (() => {
   const need = r => (r.N - 1) % r.cyc.length;
-  const ok = (s, r) => s.c === need(r);
+  let ok = (s, r) => s.c === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ c: -1 }),

@@ -5,8 +5,9 @@
 GAMES['alcancia-monedas'] = (() => {
   const sum = (r, k) => k * r.v[0] + (r.n - k) * r.v[1];
   const need = r => { for (let k = 0; k <= r.n; k++) if (sum(r, k) === r.total) return k; return null; };
-  const ok = (s, r) => sum(r, s.k) === r.total;
+  let ok = (s, r) => sum(r, s.k) === r.total;
   const fm = v => v.toLocaleString('es-CO');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ k: need(r) === 0 ? 1 : 0 }),

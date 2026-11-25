@@ -4,9 +4,10 @@
 // params = { rounds: [{ n: [a, b], d: [c, e], target }] }   (f = (ax + b)/(cx + e))   state = { rounds: [{ x }] }   (de −6 a 6)
 GAMES['evalua-racional'] = (() => {
   const N = (r, x) => r.n[0] * x + r.n[1], D = (r, x) => r.d[0] * x + r.d[1];
-  const ok = (s, r) => D(r, s.x) !== 0 && N(r, s.x) === r.target * D(r, s.x);
+  let ok = (s, r) => D(r, s.x) !== 0 && N(r, s.x) === r.target * D(r, s.x);
   const answer = r => { for (let x = -6; x <= 6; x++) if (ok({ x }, r)) return { x }; return null; };
   const lin = ([a, b]) => `${a === 1 ? '' : a === -1 ? '-' : a}x ${b < 0 ? '-' : '+'} ${Math.abs(b)}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: r => ({ x: -r.d[1] / r.d[0] }),

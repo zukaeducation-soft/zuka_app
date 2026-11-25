@@ -4,7 +4,8 @@
 // params = { rounds: [{ data: [números], labs?, hi, step }] }   state = { rounds: [{ h }] }   (de medio en medio)
 GAMES['nivela-datos'] = (() => {
   const mean = r => r.data.reduce((a, b) => a + b, 0) / r.data.length;
-  const ok = (s, r) => s.h === mean(r);
+  let ok = (s, r) => s.h === mean(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ h: mean(r) === 0.5 ? 1 : 0.5 }),

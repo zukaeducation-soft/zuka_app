@@ -4,7 +4,8 @@
 // params = { rounds: [{ a, b }] }   (a + b es un cuadrado perfecto)   state = { rounds: [{ s }] }   (lado, de 1 a 12)
 GAMES['suma-raices'] = (() => {
   const need = r => Math.round(Math.sqrt(r.a + r.b));
-  const ok = (s, r) => s.s * s.s === r.a + r.b;
+  let ok = (s, r) => s.s * s.s === r.a + r.b;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ s: 1 }),

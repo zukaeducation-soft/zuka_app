@@ -3,8 +3,9 @@
 // (correrlo de lado no cambia el área). Se arrastra el vértice de arriba por los puntos de la cuadrícula hasta el área pedida.
 // params = { rounds: [{ b, target }] }   (base de (0, 0) a (b, 0))   state = { rounds: [{ x, y }] }   (enteros, x de 0 a 8, y de 1 a 7)
 GAMES['triangulo-cuadricula'] = (() => {
-  const ok = (s, r) => r.b * s.y === 2 * r.target;
+  let ok = (s, r) => r.b * s.y === 2 * r.target;
   const answer = r => ({ x: 1, y: 2 * r.target / r.b });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ x: 2, y: 2 * r.target / r.b === 1 ? 2 : 1 }),

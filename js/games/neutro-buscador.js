@@ -5,8 +5,9 @@
 GAMES['neutro-buscador'] = (() => {
   const good = (r, e) => r.as.every(a => r.f(a, e) === a);
   const need = r => { for (let e = r.lo; e <= r.hi; e++) if (good(r, e)) return e; return null; };
-  const ok = (s, r) => good(r, s.e);
+  let ok = (s, r) => good(r, s.e);
   const N = r => r.hi - r.lo + 1;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ e: need(r) === r.lo ? r.lo + 1 : r.lo }),
@@ -21,7 +22,7 @@ GAMES['neutro-buscador'] = (() => {
       const top = Math.max(...r.as, ...vals, 1), bot = Math.min(0, ...vals), Y = v => b.y + b.h - (v - bot) / (top - bot) * b.h, w = b.w / r.as.length;
       p.stroke(C.line); p.strokeWeight(1); p.line(b.x, Y(0), b.x + b.w, Y(0));
       r.as.forEach((a, i) => {
-        const x = b.x + i * w, v = vals[i], same = v === a;
+        const x = b.x + i * w, v = vals[i], same = !VELO.on && v === a;
         p.noStroke(); p.fill(RK.al(p, C.line, 200)); p.rect(x + w * 0.15, Math.min(Y(a), Y(0)), w * 0.3, Math.abs(Y(0) - Y(a)), 2);
         p.fill(same ? C.ok : C.coral); p.rect(x + w * 0.5, Math.min(Y(v), Y(0)), w * 0.3, Math.abs(Y(0) - Y(v)), 2);
         TK.label(p, C, `$${a} ${r.sym} ${s.e} = ${v}$`, x + w / 2, b.y + b.h + 14 + (i % 2) * 14, same ? C.ok : C.ink, 9, w * 1.6);

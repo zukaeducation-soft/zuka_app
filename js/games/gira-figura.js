@@ -5,7 +5,8 @@
 GAMES['gira-figura'] = (() => {
   const rot = (cells, q) => { let c = cells.map(p => [...p]); for (let i = 0; i < ((q % 4) + 4) % 4; i++) c = c.map(([x, y]) => [-y, x]); const mx = Math.min(...c.map(p => p[0])), my = Math.min(...c.map(p => p[1])); return c.map(([x, y]) => [x - mx, y - my]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); };
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-  const ok = (s, r) => same(rot(r.cells, s.q), rot(r.cells, r.k));
+  let ok = (s, r) => same(rot(r.cells, s.q), rot(r.cells, r.k));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ q: same(rot(r.cells, 0), rot(r.cells, r.k)) ? 1 : 0 }),

@@ -6,10 +6,11 @@
 GAMES['complemento-conteo'] = (() => {
   const P = l => l.reduce((x, y) => x * y, 1);
   const fit = (put, tray, want) => want.every((w, i) => put[i] != null && tray[put[i]] === w);
-  const ok = (s, r) => fit(s.a, r.tray, r.all) && fit(s.b, r.tray, r.none);
+  let ok = (s, r) => fit(s.a, r.tray, r.all) && fit(s.b, r.tray, r.none);
   const pick = (r, want) => want.map(w => r.tray.indexOf(w));
   const answer = r => ({ a: pick(r, r.all), b: pick(r, r.none) });
   const lay = G => { const n = G.r.slots.length, w = Math.min(54, (G.W - 120) / n - 6); G.rowA = G.r.slots.map((_, i) => ({ i, x: 104 + i * (w + 6), y: 128, w, h: 40 })); G.rowB = G.rowA.map(b => ({ ...b, y: 196 })); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ a: r.slots.map(() => null), b: r.slots.map(() => null) }),

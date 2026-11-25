@@ -5,8 +5,9 @@
 GAMES['suma-complejos'] = (() => {
   const V = { x0: -7, x1: 7, y0: -7, y1: 7 };
   const need = r => ({ a: r.target[0] - r.z1[0], b: r.target[1] - r.z1[1] });
-  const ok = (s, r) => s.a === need(r).a && s.b === need(r).b;
+  let ok = (s, r) => s.a === need(r).a && s.b === need(r).b;
   const z = (a, b) => GAMES['plano-complejo'].z(a, b);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ a: 1, b: 0 }),

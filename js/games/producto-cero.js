@@ -3,8 +3,9 @@
 // dejarlas en los dos valores de x que anulan el producto.
 // params = { rounds: [{ p, q, a? }] }   (a(x − p)(x − q) = 0)   state = { rounds: [{ m, n }] }   (de −6 a 6)
 GAMES['producto-cero'] = (() => {
-  const ok = (s, r) => [s.m, s.n].sort((x, y) => x - y).join() === [r.p, r.q].sort((x, y) => x - y).join();
+  let ok = (s, r) => [s.m, s.n].sort((x, y) => x - y).join() === [r.p, r.q].sort((x, y) => x - y).join();
   const f = (v, k) => `(x ${k < 0 ? '+' : '-'} ${Math.abs(k)})`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ m: 0, n: 1 }),
@@ -20,7 +21,7 @@ GAMES['producto-cero'] = (() => {
       [s.m, s.n].forEach((v, j) => {
         const f1 = v - r.p, f2 = v - r.q, pr = (r.a || 1) * f1 * f2, bx = j === 0 ? 20 : G.W / 2 + 6, w = G.W / 2 - 26;
         TK.label(p, C, `x = ${v}`, bx + w / 2, 104, C.ink, 13, w);
-        [[f1, `x ${r.p < 0 ? '+' : '-'} ${Math.abs(r.p)}`], [f2, `x ${r.q < 0 ? '+' : '-'} ${Math.abs(r.q)}`], [pr, 'producto']].forEach(([val, t], k) => { const y = 124 + k * 26; p.noStroke(); p.fill(val === 0 ? C.ok : val < 0 ? C.coral : C.sky); p.rect(bx + w / 2, y, Math.max(-w / 2, Math.min(w / 2, val * 4)), 16, 3); TK.label(p, C, `${t}: ${val}`, bx + w / 2, y + 8, C.ink, 10, w); });
+        [[f1, `x ${r.p < 0 ? '+' : '-'} ${Math.abs(r.p)}`], [f2, `x ${r.q < 0 ? '+' : '-'} ${Math.abs(r.q)}`], [pr, 'producto']].forEach(([val, t], k) => { const y = 124 + k * 26; p.noStroke(); p.fill(val === 0 && !VELO.on ? C.ok : val < 0 ? C.coral : C.sky); p.rect(bx + w / 2, y, Math.max(-w / 2, Math.min(w / 2, val * 4)), 16, 3); TK.label(p, C, `${t}: ${val}`, bx + w / 2, y + 8, C.ink, 10, w); });
       });
       RK.knob(p, C, X(s.m), L.y - 22, C.sky); RK.knob(p, C, X(s.n), L.y + 26, C.coral);
       RK.strip(p, C, G.fb, `$x = ${s.m}\\quad\\text{y}\\quad x = ${s.n}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });

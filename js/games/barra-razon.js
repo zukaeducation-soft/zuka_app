@@ -5,7 +5,8 @@
 GAMES['barra-razon'] = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
   const need = r => (r.T * r.p) / (r.p + r.q);
-  const ok = (s, r) => s.a * r.q === (r.T - s.a) * r.p;
+  let ok = (s, r) => s.a * r.q === (r.T - s.a) * r.p;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 0.95,
     init: r => ({ a: Math.round(r.T / 2) === need(r) ? Math.round(r.T / 2) + 1 : Math.round(r.T / 2) }),

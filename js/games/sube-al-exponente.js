@@ -5,8 +5,9 @@
 GAMES['sube-al-exponente'] = (() => {
   const V = { x0: -6, x1: 12, y0: -4, y1: 5 };
   const need = r => r.b ** r.c - r.k;
-  const ok = (s, r) => Math.abs(s.x - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.x - need(r)) < 1e-9;
   const arg = r => (r.k === 0 ? 'x' : `x ${r.k < 0 ? '-' : '+'} ${Math.abs(r.k)}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ x: need(r) === 0 ? 1 : 0 }),

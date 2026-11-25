@@ -3,7 +3,8 @@
 // luego se pega su cola a la punta de a. Donde termina es a + (−b) = a − b. Pegarla sin voltear sería sumar b.
 // params = { min, max, rounds: [{ a, b }] }   state = { rounds: [{ flip, att }] }
 GAMES['resta-opuesto'] = (() => {
-  const ok = s => s.flip && s.att;
+  let ok = s => s.flip && s.att;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ flip: false, att: false }),

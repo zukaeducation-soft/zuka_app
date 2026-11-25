@@ -11,9 +11,10 @@ GAMES['arma-silogismo'] = (() => {
     if (t === 'disj') return d >= A.r + B.r - 1e-9;
     return d < A.r + B.r && d + Math.min(A.r, B.r) > Math.max(A.r, B.r);
   };
-  const ok = (s, r) => r.rels.every(x => rel(s, r, x));
+  let ok = (s, r) => r.rels.every(x => rel(s, r, x));
   const SAY = { sub: (a, b) => `todos los ${a} son ${b}`, disj: (a, b) => `ningún ${a} es ${b}`, cross: (a, b) => `algunos ${a} son ${b}` };
   const start = r => { const pos = {}; r.sets.forEach((z, i) => { pos[z.k] = [1.6 + i * 3.4, 3]; }); return pos; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ pos: start(r) }),
@@ -26,7 +27,7 @@ GAMES['arma-silogismo'] = (() => {
     enter(G) { G.grab = null; },
     draw(G) {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { pos: r.sol } : G.s, good = ok(s, r), u = G.u, o = G.o, cols = [C.sky, C.coral, C.mint];
-      r.rels.forEach((x, i) => { const hit = rel(s, r, x); TK.label(p, C, `${hit ? '✓' : '·'} ${SAY[x[2]](r.sets.find(z => z.k === x[0]).name, r.sets.find(z => z.k === x[1]).name)}`, G.W / 2, 96 + i * 18, hit ? C.ok : C.ink, 11, G.W - 24); });
+      r.rels.forEach((x, i) => { const hit = rel(s, r, x); TK.label(p, C, `${VELO.on ? '·' : hit ? '✓' : '·'} ${SAY[x[2]](r.sets.find(z => z.k === x[0]).name, r.sets.find(z => z.k === x[1]).name)}`, G.W / 2, 96 + i * 18, hit && !VELO.on ? C.ok : C.ink, 11, G.W - 24); });
       p.stroke(C.line); p.strokeWeight(1); p.noFill(); p.rect(o.x, o.y, 10 * u, 6 * u, 10);
       r.sets.forEach((z, i) => {
         const [x, y] = s.pos[z.k], cx = o.x + x * u, cy = o.y + y * u;

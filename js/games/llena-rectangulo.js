@@ -4,8 +4,9 @@
 // params = { rounds: [{ a, b }] }   state = { rounds: [{ n: [x², x, 1] }] }
 GAMES['llena-rectangulo'] = (() => {
   const need = r => [1, r.a + r.b, r.a * r.b];
-  const ok = (s, r) => s.n.join() === need(r).join();
+  let ok = (s, r) => s.n.join() === need(r).join();
   const poly = c => GAMES['bloques-polinomio'].poly(c);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ n: [0, 0, 0] }),

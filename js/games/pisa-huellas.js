@@ -86,7 +86,7 @@ GAMES['pisa-huellas'] = (() => {
           if (v < lo) { left++; continue; }
           if (v > hi) { right++; continue; }
           const x = X(v), up = k % 2 === 1, y = up ? ly - 16 : ly + 16;
-          const hit = r.known.some(([kk, vv]) => kk === k && vv === v);
+          const hit = !VELO.on && r.known.some(([kk, vv]) => kk === k && vv === v);
           const fc = hit || locked ? C.ok : C.sky;   // huellas azules; verdes cuando pisan una bandera
           p.noStroke(); p.fill(fc); p.ellipse(x, y, 14, 18);
           p.fill(inkOn(fc, C.bg)); p.textStyle(p.BOLD); p.textSize(9); p.text(k, x, y + 1);

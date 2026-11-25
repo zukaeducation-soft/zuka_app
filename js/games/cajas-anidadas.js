@@ -7,7 +7,7 @@
 GAMES['cajas-anidadas'] = (() => {
   const kids = l => (l === '∅' ? [] : l.startsWith('{') ? l.slice(1, -1).split(', ') : null);   // null = ficha suelta
   const tex = l => (l === '∅' ? '\\varnothing' : l.startsWith('{') ? `\\{${kids(l).map(tex).join(', ')}\\}` : l);
-  const same = (s, r) => s.in.map(i => r.tray[i]).sort().join('|') === [...r.target].sort().join('|');
+  let same = (s, r) => s.in.map(i => r.tray[i]).sort().join('|') === [...r.target].sort().join('|');
   const sizeOf = l => { const k = kids(l); return k === null ? { w: 40, h: 30 } : { w: Math.max(44, 18 + k.length * 30), h: 38 }; };
   // Dibuja una pieza centrada en (x, y): ficha o bolsa con lo que tiene adentro.
   function piece(p, C, l, x, y, st, col) {
@@ -20,6 +20,7 @@ GAMES['cajas-anidadas'] = (() => {
       else SK.chip(p, C, { x: cx - 12, y: y - 10, w: 24, h: 20 }, c, { state: 'idle', size: 11, r: 7 });
     });
   }
+  same = velo(same);
   const game = roundsGame({
     aspect: 1.4,
     init: () => ({ in: [] }),

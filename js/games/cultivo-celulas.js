@@ -6,7 +6,8 @@ GAMES['cultivo-celulas'] = (() => {
   const MAX = 8;
   const val = (q, n) => q.a1 * q.r ** (n - 1);
   const need = q => { for (let n = 1; n <= MAX; n++) if (val(q, n) === q.target) return n; return -1; };
-  const ok = (s, q) => val(q, s.n) === q.target;
+  let ok = (s, q) => val(q, s.n) === q.target;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ n: 1 }),

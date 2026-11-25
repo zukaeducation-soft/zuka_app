@@ -5,7 +5,8 @@
 GAMES['ajusta-razon'] = (() => {
   const R = [-0.5, -0.25, 0.25, 0.5, 0.6, 0.75, 0.8, 0.9, 1, 1.5];
   const need = q => R.findIndex(r => Math.abs(r) < 1 && Math.abs(q.a / (1 - r) - q.S) < 1e-9);
-  const ok = (s, q) => s.k === need(q);
+  let ok = (s, q) => s.k === need(q);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ k: 8 }),

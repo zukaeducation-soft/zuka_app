@@ -4,8 +4,9 @@
 // params = { rounds: [{ kind: 'area' | 'vol', side, target }] }   (side: lado original en unidades)   state = { rounds: [{ k }] }   (k de 1 a 5)
 GAMES['factor-area'] = (() => {
   const val = (r, k) => (r.kind === 'vol' ? (r.side * k) ** 3 : (r.side * k) ** 2);
-  const ok = (s, r) => val(r, s.k) === r.target;
+  let ok = (s, r) => val(r, s.k) === r.target;
   const answer = r => { for (let k = 1; k <= 5; k++) if (val(r, k) === r.target) return { k }; return null; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ k: 1 }),

@@ -9,10 +9,11 @@ GAMES['tiene-podria'] = (() => {
   const cases = r => CR().combos(r.names, r.k).filter(S => CR().valid(r, S));
   const holds = (c, S) => (c.t === 'in' ? S.includes(c.a) : c.t === 'out' ? !S.includes(c.a) : S.includes(c.a) && S.includes(c.b));
   const kind = (r, c) => { const L = cases(r), n = L.filter(S => holds(c, S)).length; return n === L.length ? 0 : n > 0 ? 1 : 2; };
-  const ok = (s, r) => r.claims.every((c, i) => s.zone[i] === kind(r, c));
+  let ok = (s, r) => r.claims.every((c, i) => s.zone[i] === kind(r, c));
   const answer = r => ({ in: [], zone: r.claims.map(c => kind(r, c)) });
   const ZN = ['tiene que', 'podría', 'no puede'];
   const lay = G => { const n = G.r.names.length, w = Math.min(50, (G.W - 20) / n - 4); const y0 = 106 + G.r.rules.length * 13; G.home = G.r.names.map((nm, i) => ({ nm, x: G.W / 2 - (n * (w + 4) - 4) / 2 + i * (w + 4), y: y0, w, h: 26 })); G.box = { x: 24, y: y0 + 34, w: G.W - 48, h: 40 }; const zw = (G.W - 32) / 3; G.zones = ZN.map((t, z) => ({ z, x: 16 + z * zw, y: G.H - 190, w: zw - 6, h: 76 })); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.75,
     init: r => ({ in: [], zone: r.claims.map(() => null) }),

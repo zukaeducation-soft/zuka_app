@@ -6,7 +6,8 @@ GAMES['torre-geometrica'] = (() => {
   const MAX = 8;
   const S = (q, n) => (q.a * (q.r ** n - 1)) / (q.r - 1);
   const need = q => { for (let n = 1; n <= MAX; n++) if (Math.abs(S(q, n) - q.target) < 1e-9) return n; return -1; };
-  const ok = (s, q) => s.n === need(q);
+  let ok = (s, q) => s.n === need(q);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ n: 1 }),

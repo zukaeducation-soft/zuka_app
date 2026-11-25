@@ -5,8 +5,9 @@
 GAMES['tabla-dados'] = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
   const need = r => Array.from({ length: 36 }, (_, k) => !!r.f(Math.floor(k / 6) + 1, k % 6 + 1));
-  const ok = (s, r) => need(r).every((v, k) => s.m[k] === v);
+  let ok = (s, r) => need(r).every((v, k) => s.m[k] === v);
   const frac = k => { const g = gcd(k, 36) || 1; return k ? `\\tfrac{${k / g}}{${36 / g}}` : '0'; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ m: Array(36).fill(false) }),

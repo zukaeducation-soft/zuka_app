@@ -5,7 +5,7 @@
 GAMES['pares-cero'] = (() => {
   const start = r => (r.op === '+' ? { P: Math.max(r.a, 0) + Math.max(r.b, 0), N: Math.max(-r.a, 0) + Math.max(-r.b, 0), rem: 0 } : { P: Math.max(r.a, 0), N: Math.max(-r.a, 0), rem: 0 });
   const res = r => (r.op === '+' ? r.a + r.b : r.a - r.b);
-  const ok = (s, r) => Math.min(s.P, s.N) === 0 && (r.op === '+' || s.rem === Math.abs(r.b)) && s.P - s.N === res(r);
+  let ok = (s, r) => Math.min(s.P, s.N) === 0 && (r.op === '+' || s.rem === Math.abs(r.b)) && s.P - s.N === res(r);
   // Una manera de llegar (para la solución y las pruebas).
   function answer(r) {
     const s = start(r);
@@ -13,6 +13,7 @@ GAMES['pares-cero'] = (() => {
     const m = Math.min(s.P, s.N); s.P -= m; s.N -= m; return s;
   }
   const expr = r => `${RK.num(r.a)} ${r.op} ${RK.par(r.b)}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: start,

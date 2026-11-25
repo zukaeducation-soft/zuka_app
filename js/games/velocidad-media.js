@@ -5,7 +5,8 @@
 GAMES['velocidad-media'] = (() => {
   const D = r => r.legs[0][0] + r.legs[1][0], T = r => r.legs[0][0] / r.legs[0][1] + r.legs[1][0] / r.legs[1][1];
   const need = r => D(r) / T(r);
-  const ok = (s, r) => Math.abs(s.v - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.v - need(r)) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => { const avg = (r.legs[0][1] + r.legs[1][1]) / 2; const a5 = Math.round(avg / 5) * 5; return { v: a5 === need(r) ? 10 : a5 }; },

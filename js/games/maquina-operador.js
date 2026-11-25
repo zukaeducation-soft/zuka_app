@@ -4,10 +4,11 @@
 // mueve la otra).
 // params = { rounds: [{ sym, tex, f(a, b), target, lo, hi, fix?: { a?, b? } }] }   state = { rounds: [{ a, b }] }
 GAMES['maquina-operador'] = (() => {
-  const ok = (s, r) => r.f(s.a, s.b) === r.target && (r.fix?.a === undefined || s.a === r.fix.a) && (r.fix?.b === undefined || s.b === r.fix.b);
+  let ok = (s, r) => r.f(s.a, s.b) === r.target && (r.fix?.a === undefined || s.a === r.fix.a) && (r.fix?.b === undefined || s.b === r.fix.b);
   const sols = r => { const out = []; for (let a = r.lo; a <= r.hi; a++) for (let b = r.lo; b <= r.hi; b++) if (ok({ a, b }, r)) out.push({ a, b }); return out; };
   const sub = (r, a, b) => r.tex.replace(/(?<![\\a-zA-Z])a(?![a-zA-Z])/g, `(${a})`).replace(/(?<![\\a-zA-Z(])b(?![a-zA-Z])/g, `(${b})`).replace(/(\d)\(/g, '$1\\cdot(');
   const N = r => r.hi - r.lo + 1;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => { const s = { a: r.fix?.a ?? r.lo, b: r.fix?.b ?? r.lo }; if (ok(s, r)) s[r.fix?.b === undefined ? 'b' : 'a'] += 1; return s; },

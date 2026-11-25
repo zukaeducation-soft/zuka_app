@@ -5,7 +5,8 @@
 GAMES['puntos-o-porciento'] = (() => {
   const P = Array.from({ length: 31 }, (_, i) => -50 + i * 5);
   const need = r => (r.to - r.from) / r.from * 100;
-  const ok = (s, r) => Math.abs(s.p - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.p - need(r)) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ p: 0 }),

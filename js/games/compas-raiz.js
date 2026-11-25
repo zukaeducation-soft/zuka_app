@@ -5,11 +5,12 @@
 // params = { rounds: [{ n }], max }   state = { legs: [[a, b] | null] }
 
 GAMES['compas-raiz'] = (() => {
-  const fits = (lg, n) => !!lg && lg[0] >= 1 && lg[1] >= 1 && lg[0] * lg[0] + lg[1] * lg[1] === n;
+  let fits = (lg, n) => !!lg && lg[0] >= 1 && lg[1] >= 1 && lg[0] * lg[0] + lg[1] * lg[1] === n;
   function legsFor(n, max) {
     for (let a = 1; a <= max; a++) for (let b = a; b <= max; b++) if (a * a + b * b === n) return [a, b];
     return null;
   }
+  fits = velo(fits);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => fits(state.legs?.[i], r.n));
     const solution = params.rounds.map(r => { const l = legsFor(r.n, params.max); return l ? `√${r.n}: ${l[0]}² + ${l[1]}² = ${r.n}` : ''; }).join(' · ');
@@ -69,9 +70,9 @@ GAMES['compas-raiz'] = (() => {
         p.noFill(); p.stroke(C.mute); p.strokeWeight(1.2); p.drawingContext.setLineDash([4, 4]);
         p.arc(X(0), Y(0), 2 * d * view.u, 2 * d * view.u, -full, 0); p.drawingContext.setLineDash([]);
         const ex = X(0) + d * view.u * Math.cos(ang), ey = Y(0) - d * view.u * Math.sin(ang);
-        p.stroke(good && ang === 0 ? C.ok : C.sun); p.strokeWeight(5); p.line(X(0), Y(0), ex, ey);
+        p.stroke(good && ang === 0 && !VELO.on ? C.ok : C.sun); p.strokeWeight(5); p.line(X(0), Y(0), ex, ey);
         p.noStroke(); p.fill(C.ink); p.circle(X(0), Y(0), 9);
-        drawDot(p, C, ex, ey, 9, good && ang === 0 ? C.ok : C.sun);
+        drawDot(p, C, ex, ey, 9, good && ang === 0 && !VELO.on ? C.ok : C.sun);
         if (swung[cur] && ang === 0) {
           drawPill(p, C, good ? '¡Justo en la banderita!' : `Cayó en √${a * a + b * b}`, W / 2, 78, good ? C.ok : C.bad, 13);
         }

@@ -4,7 +4,8 @@
 // params = { rounds: [{ tex, bad: [..] }] }   state = { rounds: [{ marks: [..] }] }   (enteros de −6 a 6)
 GAMES['prohibidos'] = (() => {
   const L = { min: -6, max: 6 };
-  const ok = (s, r) => [...s.marks].sort((a, b) => a - b).join() === [...r.bad].sort((a, b) => a - b).join();
+  let ok = (s, r) => [...s.marks].sort((a, b) => a - b).join() === [...r.bad].sort((a, b) => a - b).join();
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 0.95,
     init: () => ({ marks: [] }),

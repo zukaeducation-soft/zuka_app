@@ -4,8 +4,9 @@
 // params = { rounds: [{ rows, cols, p, q }] }   state = { rounds: [{ on: [índices] }] }
 GAMES['rejilla-razon'] = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const ok = (s, r) => { const x = s.on.length, y = r.rows * r.cols - x; return x > 0 && x * r.q === y * r.p; };
+  let ok = (s, r) => { const x = s.on.length, y = r.rows * r.cols - x; return x > 0 && x * r.q === y * r.p; };
   const need = r => (r.rows * r.cols * r.p) / (r.p + r.q);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ on: [] }),

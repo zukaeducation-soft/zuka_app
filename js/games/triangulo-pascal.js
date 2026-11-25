@@ -6,8 +6,9 @@ GAMES['triangulo-pascal'] = (() => {
   const row = n => { let r = [1]; for (let i = 0; i < n; i++) r = [1, ...r.slice(1).map((v, j) => v + r[j]), 1]; return r; };
   const inner = n => row(n).slice(1, -1);
   const chips = r => [...inner(r.n), ...r.extra].sort((a, b) => a - b);
-  const ok = (s, r) => s.cells.every((c, i) => c != null && chips(r)[c] === inner(r.n)[i]);
+  let ok = (s, r) => s.cells.every((c, i) => c != null && chips(r)[c] === inner(r.n)[i]);
   const answer = r => { const ch = chips(r), used = new Set(); return { cells: inner(r.n).map(v => { const i = ch.findIndex((x, k) => x === v && !used.has(k)); used.add(i); return i; }) }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ cells: inner(r.n).map(() => null) }),

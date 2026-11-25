@@ -4,8 +4,9 @@
 // params = { rounds: [{ n }] }   state = { rounds: [{ d: ['i-j'] }] }
 GAMES['diagonales'] = (() => {
   const total = r => r.n * (r.n - 3) / 2;
-  const ok = (s, r) => s.d.length === total(r);
+  let ok = (s, r) => s.d.length === total(r);
   const pt = (G, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / G.r.n; return { x: G.c.x + G.R * Math.cos(a), y: G.c.y + G.R * Math.sin(a) }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: () => ({ d: [] }),

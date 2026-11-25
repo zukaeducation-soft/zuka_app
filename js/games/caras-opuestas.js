@@ -4,8 +4,9 @@
 // params = { rounds: [{ cells: [[col, fila]], letters: [..], ask: [índices] }] }   state = { rounds: [{ put: [letra | null] }] }
 GAMES['caras-opuestas'] = (() => {
   const want = r => r.ask.map(i => r.letters[CUBO.opposite(r.cells, i)]);
-  const ok = (s, r) => s.put.join() === want(r).join();
+  let ok = (s, r) => s.put.join() === want(r).join();
   const lay = G => { const r = G.r, W = Math.max(...r.cells.map(c => c[0])) + 1, H = Math.max(...r.cells.map(c => c[1])) + 1; G.u = Math.min(42, (G.W - 40) / W, 180 / H); G.o = { x: (G.W - W * G.u) / 2, y: 104 }; G.slots = r.ask.map((_, k) => ({ k, x: G.W / 2 - (r.ask.length * 96 - 8) / 2 + k * 96 + 46, y: 104 + H * G.u + 22, w: 40, h: 36 })); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.5,
     init: r => ({ put: r.ask.map(() => null) }),

@@ -9,8 +9,9 @@ GAMES['niega-todos'] = (() => {
   const truth = (k, on) => (k === 'todas' ? on.every(Boolean) : k === 'ninguna' ? !on.some(Boolean) : on.some(Boolean));
   const changes = (s, r) => s.on.filter((v, i) => v !== r.on[i]).length;
   const minCh = r => (r.kind === 'alguna' ? r.on.filter(Boolean).length : 1);
-  const ok = (s, r) => !truth(r.kind, s.on) && changes(s, r) === minCh(r);
+  let ok = (s, r) => !truth(r.kind, s.on) && changes(s, r) === minCh(r);
   const answer = r => { const on = r.on.slice(); if (r.kind === 'alguna') on.fill(false); else on[0] = !on[0]; return { on }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ on: r.on.slice() }),

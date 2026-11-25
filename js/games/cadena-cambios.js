@@ -7,7 +7,7 @@
 GAMES['cadena-cambios'] = (() => {
   const fac = s => 1 + s / 100;
   const factorOf = (stamps, pk) => pk.reduce((f, i) => f * fac(stamps[i]), 1);
-  const good = (stamps, pk, r) => !!pk && pk.length === 2 && pk[0] !== pk[1] && Math.abs(factorOf(stamps, pk) - r.goal) < 1e-9;
+  let good = (stamps, pk, r) => !!pk && pk.length === 2 && pk[0] !== pk[1] && Math.abs(factorOf(stamps, pk) - r.goal) < 1e-9;
   const pct = s => `${s > 0 ? '+' : '−'}${Math.abs(s)} %`;
   const num = v => String(+v.toFixed(2));
   function example(stamps, r) {
@@ -15,6 +15,7 @@ GAMES['cadena-cambios'] = (() => {
     return null;
   }
 
+  good = velo(good);
   function grade(state, params) {
     const S = params.stamps;
     const ok = params.rounds.every((r, i) => good(S, state.picks?.[i], r));

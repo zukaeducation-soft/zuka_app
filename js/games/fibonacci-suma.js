@@ -10,6 +10,6 @@ GAMES['fibonacci-suma'] = SUC.nextGame({
   range: r => [0, r.hi],
   extra: G => {
     const { p, C, T } = G, b = G.b, w = b.w / T.length, y = b.y + b.h + 14;
-    T.forEach((t, i) => { if (i < 2) return; const sum = T[i - 1] + T[i - 2]; TK.label(p, C, `${T[i - 2]}+${T[i - 1]}`, b.x + (i + 0.5) * w, y, sum === t ? C.ok : C.bad, 9, w); });
+    T.forEach((t, i) => { if (i < 2) return; const sum = T[i - 1] + T[i - 2]; TK.label(p, C, `${T[i - 2]}+${T[i - 1]}`, b.x + (i + 0.5) * w, y, sum === t && !VELO.on ? C.ok : C.bad, 9, w); });
   },
 });

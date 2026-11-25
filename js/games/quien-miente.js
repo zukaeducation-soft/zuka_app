@@ -6,7 +6,8 @@
 GAMES['quien-miente'] = (() => {
   const fits = (r, T) => T.every(t => t !== null) && r.people.every((q, i) => !!q.f(T) === T[i]) && (!r.cond || r.cond(T));
   const sols = r => { const n = r.people.length, out = []; for (let m = 0; m < 2 ** n; m++) { const T = Array.from({ length: n }, (_, i) => !!((m >> i) & 1)); if (fits(r, T)) out.push(T); } return out; };
-  const ok = (s, r) => fits(r, s.T);
+  let ok = (s, r) => fits(r, s.T);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ T: r.people.map(() => null) }),

@@ -6,8 +6,9 @@
 GAMES['resta-voltea'] = (() => {
   const pieces = r => { const o = []; r.Q.forEach((v, i) => { for (let j = 0; j < Math.abs(v); j++) o.push({ k: 2 - i, neg: v < 0 }); }); return o; };
   const goal = r => r.P.map((v, i) => v - r.Q[i]);
-  const ok = (s, r) => s.used.length === pieces(r).length && s.c.join() === goal(r).join();
+  let ok = (s, r) => s.used.length === pieces(r).length && s.c.join() === goal(r).join();
   const poly = c => GAMES['bloques-polinomio'].poly(c);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ c: [...r.P], used: [], flip: [] }),

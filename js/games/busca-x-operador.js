@@ -5,11 +5,12 @@
 GAMES['busca-x-operador'] = (() => {
   const val = (r, x) => (r.side === 'right' ? r.f(r.k, x) : r.f(x, r.k));
   const need = r => { for (let x = r.lo; x <= r.hi; x++) if (val(r, x) === r.target) return x; return null; };
-  const ok = (s, r) => val(r, s.x) === r.target;
+  let ok = (s, r) => val(r, s.x) === r.target;
   const N = r => r.hi - r.lo + 1;
   const eq = r => (r.side === 'right' ? `${r.k} ${r.sym} x` : `x ${r.sym} ${r.k}`);
   const sub = (r, a, b) => r.tex.replace(/(?<![\\a-zA-Z])a(?![a-zA-Z])/g, `(${a})`).replace(/(?<![\\a-zA-Z(])b(?![a-zA-Z])/g, `(${b})`).replace(/(\d)\(/g, '$1\\cdot(');
   const show = (r, x) => (r.side === 'right' ? sub(r, r.k, x) : sub(r, x, r.k));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ x: need(r) === r.lo ? r.lo + 1 : r.lo }),

@@ -6,7 +6,8 @@
 GAMES['factor-cambio'] = (() => {
   const F = Array.from({ length: 21 }, (_, i) => +(0.5 + i * 0.05).toFixed(2));
   const need = r => F.findIndex(f => Math.abs(f * r.from - r.to) < 1e-9);
-  const ok = (s, r) => s.k === need(r);
+  let ok = (s, r) => s.k === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ k: 10 }),

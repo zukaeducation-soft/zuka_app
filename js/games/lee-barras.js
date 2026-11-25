@@ -6,8 +6,9 @@
 GAMES['lee-barras'] = (() => {
   const ans = r => { const v = r.bars.map(b => b[1]); return r.q === 'sum' ? v.reduce((a, c) => a + c, 0) : r.q === 'diff' ? Math.abs(v[r.a] - v[r.b]) : v[r.a]; };
   const n = r => Math.round(r.max / r.tstep) + 1;
-  const ok = (s, r) => s.i * r.tstep === ans(r);
+  let ok = (s, r) => s.i * r.tstep === ans(r);
   const ask = r => (r.q === 'sum' ? '¿Cuánto suman todas las barras?' : r.q === 'diff' ? `¿Cuánto más tiene ${r.bars[r.a][0]} que ${r.bars[r.b][0]}?` : `¿Cuánto tiene ${r.bars[r.a][0]}?`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ i: ans(r) === 0 ? 1 : 0 }),

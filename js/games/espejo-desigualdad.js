@@ -7,7 +7,8 @@ GAMES['espejo-desigualdad'] = (() => {
   const KS = { '+': [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6], '×': [-3, -2.5, -2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2, 2.5, 3] };
   const app = (r, v, k) => (r.op === '+' ? v + k : v * k);
   const need = r => KS[r.op].find(k => app(r, r.a, k) === r.target);
-  const ok = (s, r) => app(r, r.a, s.k) === r.target;
+  let ok = (s, r) => app(r, r.a, s.k) === r.target;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ k: r.op === '+' ? 0 : 1 }),

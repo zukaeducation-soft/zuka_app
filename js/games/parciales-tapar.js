@@ -5,9 +5,10 @@
 GAMES['parciales-tapar'] = (() => {
   const R = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6];
   const num = (r, s) => [s.A + s.B, -s.A * r.q - s.B * r.p];
-  const ok = (s, r) => { const [c, d] = num(r, s); return c === r.c && d === r.d; };
+  let ok = (s, r) => { const [c, d] = num(r, s); return c === r.c && d === r.d; };
   const answer = r => { for (const A of R) for (const B of R) if (ok({ A, B }, r)) return { A, B }; return null; };
   const fac = v => `x ${v < 0 ? '+' : '-'} ${Math.abs(v)}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ A: 0, B: 0 }),
@@ -24,7 +25,7 @@ GAMES['parciales-tapar'] = (() => {
         const y = 134 + i * 46;
         TK.label(p, C, n, 34, y + 11, C.mute, 11, 56);
         p.stroke(C.line); p.strokeWeight(1); p.line(cx, y - 6, cx, y + 28);
-        p.noStroke(); p.fill(v === t ? C.ok : C.sky); p.rect(cx, y, Math.max(-cx + 70, Math.min(cx - 30, v * u)), 22, 3);
+        p.noStroke(); p.fill(v === t && !VELO.on ? C.ok : C.sky); p.rect(cx, y, Math.max(-cx + 70, Math.min(cx - 30, v * u)), 22, 3);
         p.stroke(C.ink); p.strokeWeight(2); p.drawingContext.setLineDash([4, 3]); p.line(cx + t * u, y - 6, cx + t * u, y + 28); p.drawingContext.setLineDash([]);
       });
       G.X = ['A', 'B'].map((k, j) => { TK.label(p, C, `${k} = ${s[k]}`, 40, G.tr[j] - 16, C.ink, 11, 70); return RK.track(p, C, 30, G.W - 30, G.tr[j], R.length, R.indexOf(s[k]), i => (i % 3 === 0 ? String(R[i]) : null), j ? C.coral : C.sky); });

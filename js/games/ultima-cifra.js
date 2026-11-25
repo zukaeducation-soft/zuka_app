@@ -4,7 +4,8 @@
 // params = { rounds: [{ a, n }] }   state = { rounds: [{ d }] }   (d de 0 a 9)
 GAMES['ultima-cifra'] = (() => {
   const last = (a, n) => { let x = 1; for (let i = 0; i < n; i++) x = x * a % 10; return x; };
-  const ok = (s, r) => s.d === last(r.a, r.n);
+  let ok = (s, r) => s.d === last(r.a, r.n);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ d: last(r.a, r.n) === 0 ? 1 : 0 }),

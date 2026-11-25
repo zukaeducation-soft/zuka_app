@@ -5,8 +5,9 @@
 GAMES['ciclo-reloj'] = (() => {
   const DAYS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
   const need = r => (r.start + r.n) % 7;
-  const ok = (s, r) => s.d === need(r);
+  let ok = (s, r) => s.d === need(r);
   const ang = d => -Math.PI / 2 + d * 2 * Math.PI / 7;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ d: need(r) === r.start ? (r.start + 1) % 7 : r.start }),

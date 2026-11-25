@@ -5,7 +5,8 @@
 // params = { rounds: [{ r, now, step, max }] }   (r: cambio en %, negativo = descuento)   state = { rounds: [{ old }] }
 GAMES['precio-original'] = (() => {
   const need = r => r.now / (1 + r.r / 100);
-  const ok = (s, r) => Math.abs(s.old - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.old - need(r)) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: r => ({ old: r.now }),

@@ -2125,6 +2125,12 @@ const fitScale = (h, room) => (room > 0 && h > 0 ? Math.max(FIT_MIN, Math.min(1,
 const DESK_W = 380, ZOOM_MAX = 2;   // 380: el celular para el que se diseñaron (las piezas tienen medidas fijas)
 const deskGame = () => typeof matchMedia === 'function' && matchMedia('(min-width: 1000px)').matches;
 const zoomScale = (w, h, roomW, roomH) => (w > 0 && h > 0 ? Math.max(FIT_MIN, Math.min(ZOOM_MAX, roomW / w, roomH > 0 ? roomH / h : ZOOM_MAX)) : 1);
+// En una evaluación el juego no avisa, mientras se responde, que la respuesta ya está bien: `velo(f)` hace que la
+// comprobación diga «no» solo mientras se dibuja (mountSketch prende VELO.on si el escenario lleva data-examen). La
+// calificación no cambia. Un juego por rondas lo aplica a su `ok`; uno que compara al dibujar pregunta `VELO.on`.
+const VELO = { on: false };
+const velo = f => (...a) => (VELO.on ? false : f(...a));
+
 function mountSketch(host, sketch, aspect = 1.25, gesture) {
   let inst = null, removed = false, ro = null, grabbed = false;
   let seenGesture = false, gestureTime = 0, gestureUntil = 0;
@@ -2159,7 +2165,7 @@ function mountSketch(host, sketch, aspect = 1.25, gesture) {
       if (rawBg) p.background = (...a) => { const r = rawBg(...a); if (a.length === 1 && a[0] === PALETTE.bg) drawBackdrop(p); return r; };
       const draw0 = p.draw, press0 = p.mousePressed;
       if (draw0) p.draw = () => {
-        draw0();
+        if (host.dataset?.examen) { const bad = PALETTE.bad; VELO.on = true; PALETTE.bad = PALETTE.mute; try { draw0(); } finally { VELO.on = false; PALETTE.bad = bad; } } else draw0();
         drawRipples(p, ripples);
         if (gesture) {
           gestureTime += frameDt(p);
@@ -3639,7 +3645,7 @@ GAMES['ubica-en-recta'] = (() => {
         const mp = lineMap(pt.value - 0.5, pt.value + 0.5, cx - r, cx + r);
         axis(cy, mp, pt.value - 0.5, pt.value + 0.5, 0.1, false);
         p.noStroke(); p.fill(C.ok); p.circle(mp.toPx(pt.value), cy, 12);
-        if (v !== null) { p.fill(Math.abs(v - pt.value) < params.tol ? C.ok + '99' : C.bad); p.circle(mp.toPx(v), cy, 10); }
+        if (v !== null) { p.fill(Math.abs(v - pt.value) < params.tol && !VELO.on ? C.ok + '99' : C.bad); p.circle(mp.toPx(v), cy, 10); }
         p.drawingContext.restore();
         p.noStroke(); p.fill(C.ink); p.textAlign(p.CENTER, p.TOP); p.textSize(13); p.textStyle(p.BOLD);
         p.text(`${pt.label} ≈ ${pt.value.toFixed(2).replace('-', '−')}`, cx, cy + r + 4);
@@ -5457,7 +5463,7 @@ GAMES['mide-altura'] = (() => {
         p.background(C.bg);
         const r = params.rounds[cur], dep = r.mode === 'dep', d = st.ds[cur];
         s = scaleFor(r);
-        const topY = groundY - r.h * s, good = d !== null && Math.abs(angleAt(r.h, d) - r.angle) <= 1;
+        const topY = groundY - r.h * s, good = !VELO.on && d !== null && Math.abs(angleAt(r.h, d) - r.angle) <= 1;
         tabs.forEach((t, i) => {
           const di = st.ds[i], ok = di !== null && Math.abs(angleAt(params.rounds[i].h, di) - params.rounds[i].angle) <= 1;
           const col = locked ? (ok ? C.ok : C.bad) : i === cur ? C.brand : di !== null ? C.Z : C.line;
@@ -5738,7 +5744,7 @@ GAMES['noria'] = (() => {
 GAMES['sintoniza-onda'] = (() => {
   const F = { sen: Math.sin, cos: Math.cos };
   const evalAt = (fn, v, x) => v.a * F[fn](v.b * x - v.cq * Math.PI / 4) + v.d;
-  const same = (fn, u, v) => { for (let k = 0; k <= 96; k++) { const x = k * 4 * Math.PI / 96; if (Math.abs(evalAt(fn, u, x) - evalAt(fn, v, x)) > 1e-6) return false; } return true; };
+  let same = (fn, u, v) => { for (let k = 0; k <= 96; k++) { const x = k * 4 * Math.PI / 96; if (Math.abs(evalAt(fn, u, x) - evalAt(fn, v, x)) > 1e-6) return false; } return true; };
   const gcd = (a, b) => (b ? gcd(b, a % b) : Math.abs(a));
   const num = v => String(v);
 
@@ -5772,6 +5778,7 @@ GAMES['sintoniza-onda'] = (() => {
     return `y = ${coef}${body}${tail}`;
   }
 
+  same = velo(same);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => !!state.vals?.[i] && same(r.fn, state.vals?.[i], r.target));
     return { ok, solution: params.rounds.map(r => `$${texOf(r.fn, r.target)}$`).join(' · ') };
@@ -8359,7 +8366,7 @@ GAMES['la-obra'] = (() => {
         p.noStroke(); p.fill(C.mute); p.textAlign(p.CENTER, p.TOP); p.textStyle(p.BOLD); p.textSize(12);
         p.text(`${params.workers} obreros × ${params.days} días = ${params.workers * params.days} obreros·día`, W / 2, 6);
         p.fill(C.N); p.textSize(14); p.text(`¿Cuántos obreros para terminar en ${params.askDays} días?`, W / 2, 24);
-        const col = locked ? (good ? C.ok : C.bad) : Math.round(days) === params.askDays ? C.ok : C.brand;
+        const col = locked ? (good ? C.ok : C.bad) : Math.round(days) === params.askDays && !VELO.on ? C.ok : C.brand;
         p.stroke(col); p.strokeWeight(2.5); p.fill(C.card); p.rect(W / 2 - 70, 48, 140, 50, 12);
         p.noStroke(); p.fill(col); p.rect(W / 2 - 70, 48, 140, 14, 12, 12, 0, 0);
         p.fill(C.ink); p.textSize(22); p.textAlign(p.CENTER, p.CENTER); p.text(`${Math.round(days)} días`, W / 2, 80);
@@ -8793,7 +8800,7 @@ GAMES['mezcla'] = (() => {
 
       p.draw = () => {
         p.background(C.bg);
-        const pct = pctOf(params, st.water), good = Math.abs(pct - params.target) < 1e-9;
+        const pct = pctOf(params, st.water), good = Math.abs(pct - params.target) < 1e-9 && !VELO.on;
         const col = locked ? (good ? C.ok : C.bad) : good ? C.ok : C.brand;
         p.noStroke(); p.fill(C.N); p.textAlign(p.CENTER, p.TOP); p.textStyle(p.BOLD); p.textSize(14);
         p.text(`${params.solute} g de alcohol. Añade agua hasta que sea el ${params.target} % de la mezcla`, 12, 8, W - 24, 40);
@@ -9127,7 +9134,7 @@ GAMES['cascada'] = (() => {
         shown += (target - shown) * 0.12;   // el precio cae contando hacia abajo
         if (Math.abs(target - shown) < 1) shown = target;
         const ans = answerOf(params), good = st.single === ans;
-        const col = locked ? (good && st.applied.length === params.changes.length ? C.ok : C.bad) : C.brand;
+        const col = locked ? (good && st.applied.length === params.changes.length && !VELO.on ? C.ok : C.bad) : C.brand;
         p.noStroke(); p.fill(C.N); p.textAlign(p.CENTER, p.TOP); p.textStyle(p.BOLD); p.textSize(14);
         p.text(params.changes.every(c => c < 0) ? 'Pega los dos descuentos y halla el descuento único' : 'Pega los dos cambios y halla el descuento único', 12, 8, W - 24, 40);
         // Etiqueta.
@@ -11786,7 +11793,7 @@ GAMES['balanza-exponencial'] = (() => {
       p.draw = () => {
         p.background(C.bg);
         const r = params.rounds[cur], x = xs[cur], { min, max } = range(r);
-        const l = r.L(x), rr = r.R(x), t = tilt(l, rr), good = t === 0;
+        const l = r.L(x), rr = r.R(x), t = tilt(l, rr), good = t === 0 && !VELO.on;
         tabs.forEach((tb, i) => {
           const ok = Math.abs(xs[i] - params.rounds[i].x) < 1e-9;
           const col = locked ? (ok ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Z : C.line;
@@ -12197,8 +12204,9 @@ GAMES['correa-del-perro'] = (() => {
     if (!v.out) return `${v.closed ? '[' : '('}${L}, ${R}${v.closed ? ']' : ')'}`;
     return `(−∞, ${L}${v.closed ? ']' : ')'} ∪ ${v.closed ? '[' : '('}${R}, ∞)`;
   }
-  const same = (a, b) => !!a && a.c === b.c && a.r === b.r && !!a.out === !!b.out && !!a.closed === !!b.closed;
+  let same = (a, b) => !!a && a.c === b.c && a.r === b.r && !!a.out === !!b.out && !!a.closed === !!b.closed;
 
+  same = velo(same);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => same(state.vals[i], r));
     return { ok, solution: params.rounds.map(r => `${r.txt}: ${setText(r)}`).join(' · ') };
@@ -12819,8 +12827,8 @@ GAMES['laser-recta'] = (() => {
     const mx = d === 1 ? (n === 1 ? 'x' : n === -1 ? '−x' : `${num(n)}x`) : `${n < 0 ? '−' : ''}${Math.abs(n)}/${d} x`;
     return `y = ${mx}${bTxt}`;
   }
-  const hits = (v, P) => Math.abs(P[1] - (v.rise / v.run * P[0] + v.b)) < 1e-9;
-  const fits = (v, r) => !!v && hits(v, r.P) && hits(v, r.Q);
+  let hits = (v, P) => Math.abs(P[1] - (v.rise / v.run * P[0] + v.b)) < 1e-9;
+  let fits = (v, r) => !!v && hits(v, r.P) && hits(v, r.Q);
   function texOf(r) {
     let n = r.Q[1] - r.P[1], d = r.Q[0] - r.P[0];
     if (d < 0) { n = -n; d = -d; }
@@ -12831,6 +12839,8 @@ GAMES['laser-recta'] = (() => {
     return `y = ${m}${bt}`;
   }
 
+  fits = velo(fits);
+  hits = velo(hits);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => !!state.vals?.[i] && fits(state.vals[i], r));
     return { ok, solution: params.rounds.map(r => `$${texOf(r)}$`).join(' · ') };
@@ -12890,7 +12900,7 @@ GAMES['laser-recta'] = (() => {
         // Cristales.
         [r.P, r.Q].forEach(Pt => {
           const x = X(Pt[0]), y = Y(Pt[1]), lit = hits(v, Pt);
-          p.stroke(C.ink); p.strokeWeight(1.5); p.fill(lit ? C.ok : C.Z);
+          p.stroke(C.ink); p.strokeWeight(1.5); p.fill(lit && !VELO.on ? C.ok : C.Z);
           p.quad(x, y - 11, x + 8, y, x, y + 11, x - 8, y);
           p.noStroke(); p.fill(C.ink); p.textSize(11); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.BOTTOM);
           p.text(`(${num(Pt[0])}, ${num(Pt[1])})`, Math.max(box.x + 28, Math.min(box.x + box.w - 28, x)), y - 13);
@@ -14548,11 +14558,12 @@ GAMES['candado-fraccion'] = (() => {
 // params = { rounds: [{ n }], max }   state = { legs: [[a, b] | null] }
 
 GAMES['compas-raiz'] = (() => {
-  const fits = (lg, n) => !!lg && lg[0] >= 1 && lg[1] >= 1 && lg[0] * lg[0] + lg[1] * lg[1] === n;
+  let fits = (lg, n) => !!lg && lg[0] >= 1 && lg[1] >= 1 && lg[0] * lg[0] + lg[1] * lg[1] === n;
   function legsFor(n, max) {
     for (let a = 1; a <= max; a++) for (let b = a; b <= max; b++) if (a * a + b * b === n) return [a, b];
     return null;
   }
+  fits = velo(fits);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => fits(state.legs?.[i], r.n));
     const solution = params.rounds.map(r => { const l = legsFor(r.n, params.max); return l ? `√${r.n}: ${l[0]}² + ${l[1]}² = ${r.n}` : ''; }).join(' · ');
@@ -14612,9 +14623,9 @@ GAMES['compas-raiz'] = (() => {
         p.noFill(); p.stroke(C.mute); p.strokeWeight(1.2); p.drawingContext.setLineDash([4, 4]);
         p.arc(X(0), Y(0), 2 * d * view.u, 2 * d * view.u, -full, 0); p.drawingContext.setLineDash([]);
         const ex = X(0) + d * view.u * Math.cos(ang), ey = Y(0) - d * view.u * Math.sin(ang);
-        p.stroke(good && ang === 0 ? C.ok : C.sun); p.strokeWeight(5); p.line(X(0), Y(0), ex, ey);
+        p.stroke(good && ang === 0 && !VELO.on ? C.ok : C.sun); p.strokeWeight(5); p.line(X(0), Y(0), ex, ey);
         p.noStroke(); p.fill(C.ink); p.circle(X(0), Y(0), 9);
-        drawDot(p, C, ex, ey, 9, good && ang === 0 ? C.ok : C.sun);
+        drawDot(p, C, ex, ey, 9, good && ang === 0 && !VELO.on ? C.ok : C.sun);
         if (swung[cur] && ang === 0) {
           drawPill(p, C, good ? '¡Justo en la banderita!' : `Cayó en √${a * a + b * b}`, W / 2, 78, good ? C.ok : C.bad, 13);
         }
@@ -14661,7 +14672,7 @@ GAMES['compas-raiz'] = (() => {
 // params = { rounds: [{ a: { label, value }, b: { label, value }, view: [lo, hi] }] }   state = { xs: [x | null] }
 
 GAMES['lupa-densidad'] = (() => {
-  const inside = (x, r) => x != null && x > Math.min(r.a.value, r.b.value) && x < Math.max(r.a.value, r.b.value);
+  let inside = (x, r) => x != null && x > Math.min(r.a.value, r.b.value) && x < Math.max(r.a.value, r.b.value);
   // Un número «redondo» entre a y b: el promedio con las menos cifras posibles.
   function between(r) {
     const lo = Math.min(r.a.value, r.b.value), hi = Math.max(r.a.value, r.b.value), mid = (lo + hi) / 2;
@@ -14673,6 +14684,7 @@ GAMES['lupa-densidad'] = (() => {
   const stepOf = v => 10 ** Math.floor(Math.log10((v.hi - v.lo) / 10) + 1e-9);
   const decimalsOf = st => Math.max(0, -Math.round(Math.log10(st)));
 
+  inside = velo(inside);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => inside(state.xs?.[i], r));
     const solution = params.rounds.map(r => `entre ${r.a.label} y ${r.b.label} está ${between(r)}`).join(' · ');
@@ -15253,7 +15265,7 @@ GAMES['tragamonedas'] = (() => {
 GAMES['cadena-cambios'] = (() => {
   const fac = s => 1 + s / 100;
   const factorOf = (stamps, pk) => pk.reduce((f, i) => f * fac(stamps[i]), 1);
-  const good = (stamps, pk, r) => !!pk && pk.length === 2 && pk[0] !== pk[1] && Math.abs(factorOf(stamps, pk) - r.goal) < 1e-9;
+  let good = (stamps, pk, r) => !!pk && pk.length === 2 && pk[0] !== pk[1] && Math.abs(factorOf(stamps, pk) - r.goal) < 1e-9;
   const pct = s => `${s > 0 ? '+' : '−'}${Math.abs(s)} %`;
   const num = v => String(+v.toFixed(2));
   function example(stamps, r) {
@@ -15261,6 +15273,7 @@ GAMES['cadena-cambios'] = (() => {
     return null;
   }
 
+  good = velo(good);
   function grade(state, params) {
     const S = params.stamps;
     const ok = params.rounds.every((r, i) => good(S, state.picks?.[i], r));
@@ -15494,9 +15507,10 @@ GAMES['crece-planta'] = (() => {
 
 GAMES['alcancias-gemelas'] = (() => {
   const equivalent = (r, n) => (((1 + r / 100) ** n - 1) / n) * 100;
-  const near = (x, r, tol) => x != null && Math.abs(x - equivalent(r.r, r.n)) <= tol + 1e-9;
+  let near = (x, r, tol) => x != null && Math.abs(x - equivalent(r.r, r.n)) <= tol + 1e-9;
   const fmt = v => { const r = +v.toFixed(2); return Number.isInteger(r) ? String(r).replace(/\B(?=(\d{3})+(?!\d))/g, '.') : String(r); };
 
+  near = velo(near);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => near(state.rates?.[i], r, params.tol));
     const solution = params.rounds.map(r => `${r.r} % compuesto en ${r.n} periodos ≈ ${fmt(+equivalent(r.r, r.n).toFixed(2))} % simple`).join(' · ');
@@ -16171,7 +16185,7 @@ GAMES['encuesta-venn'] = (() => {
         // Sumas en vivo: cada una se enciende cuando coincide con el dato de la encuesta.
         const sA = cnt[0] + cnt[1], sB = cnt[1] + cnt[2], tot = cnt.reduce((a, b) => a + b, 0), y0 = box.y + box.h + 44, cw = (W - 24 - 6) / 2;
         [[`${r.labels[0]}: ${sA} de ${r.a}`, sA === r.a, A.line], [`${r.labels[1]}: ${sB} de ${r.b}`, sB === r.b, B.line], [`total: ${tot} de ${r.total}`, tot === r.total, C.sky]].forEach(([txt, hit], j) =>
-          SK.chip(p, C, j < 2 ? { x: 12 + j * (cw + 6), y: y0, w: cw, h: 24 } : { x: W / 2 - cw / 2, y: y0 + 29, w: cw, h: 24 }, txt, { state: hit ? 'ok' : 'idle', size: 12, r: 9, ink: hit ? C.ink : C.mute }));
+          SK.chip(p, C, j < 2 ? { x: 12 + j * (cw + 6), y: y0, w: cw, h: 24 } : { x: W / 2 - cw / 2, y: y0 + 29, w: cw, h: 24 }, txt, { state: hit && !VELO.on ? 'ok' : 'idle', size: 12, r: 9, ink: hit ? C.ink : C.mute }));
         p.textStyle(p.NORMAL); p.textAlign(p.CENTER, p.CENTER);
         p.fill(locked && !good(cnt, r) ? C.ok : C.mute);
         fitText(p, locked && !good(cnt, r) ? `Era: ${t[0]}, ${t[1]}, ${t[2]} y ${t[3]} ninguno` : 'Cada zona cuenta a las personas una sola vez', W / 2, H - 12, W - 24, 11);
@@ -17224,7 +17238,7 @@ GAMES['tamiz-rango'] = (() => {
 GAMES['cajas-anidadas'] = (() => {
   const kids = l => (l === '∅' ? [] : l.startsWith('{') ? l.slice(1, -1).split(', ') : null);   // null = ficha suelta
   const tex = l => (l === '∅' ? '\\varnothing' : l.startsWith('{') ? `\\{${kids(l).map(tex).join(', ')}\\}` : l);
-  const same = (s, r) => s.in.map(i => r.tray[i]).sort().join('|') === [...r.target].sort().join('|');
+  let same = (s, r) => s.in.map(i => r.tray[i]).sort().join('|') === [...r.target].sort().join('|');
   const sizeOf = l => { const k = kids(l); return k === null ? { w: 40, h: 30 } : { w: Math.max(44, 18 + k.length * 30), h: 38 }; };
   // Dibuja una pieza centrada en (x, y): ficha o bolsa con lo que tiene adentro.
   function piece(p, C, l, x, y, st, col) {
@@ -17237,6 +17251,7 @@ GAMES['cajas-anidadas'] = (() => {
       else SK.chip(p, C, { x: cx - 12, y: y - 10, w: 24, h: 20 }, c, { state: 'idle', size: 11, r: 7 });
     });
   }
+  same = velo(same);
   const game = roundsGame({
     aspect: 1.4,
     init: () => ({ in: [] }),
@@ -17302,9 +17317,10 @@ GAMES['gemelos'] = (() => {
     return { A: [], B: idx(r.B, inA) };
   }
   const sorted = a => [...a].sort((x, y) => x - y).join();
-  const ok = (s, r) => { const n = need(r); return sorted(s.outA) === n.A.join() && sorted(s.outB) === n.B.join(); };
+  let ok = (s, r) => { const n = need(r); return sorted(s.outA) === n.A.join() && sorted(s.outB) === n.B.join(); };
   const GOAL = { '=': ['Haz que A = B', 'A = B'], sub: ['Haz que A ⊆ B', 'A ⊆ B'], disj: ['Haz que A y B sean disjuntos: saca solo de B', 'A ∩ B = ∅'] };
   const tset = xs => (xs.length ? `\\{${[...new Set(xs)].join(', ')}\\}` : '\\varnothing');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.45,
     init: () => ({ outA: [], outB: [] }),
@@ -17454,7 +17470,7 @@ GAMES['arbol-partes'] = (() => {
     layout(G) { const W = G.W, H = G.H; G.top = 104; G.bot = H * 0.56; G.trayY = H - 124; G.fb = { x: 12, y: H - 84, w: W - 24, h: 52 }; },
     enter(G) { G.drag = null; },
     draw(G) {
-      const { p, C, r } = G, good = 2 ** G.s.n === r.target, n = G.locked && !good ? need(r) : G.s.n, A = SK.sets(C)[0];
+      const { p, C, r } = G, good = !VELO.on && 2 ** G.s.n === r.target, n = G.locked && !good ? need(r) : G.s.n, A = SK.sets(C)[0];
       const levels = Math.max(n, 1), dy = (G.bot - G.top) / levels, xAt = (lev, k) => 16 + (k + 0.5) * (G.W - 32) / 2 ** lev;
       // Las ramas: a la izquierda «sin», a la derecha «con».
       for (let lev = 0; lev < n; lev++) for (let k = 0; k < 2 ** lev; k++) {
@@ -17578,7 +17594,7 @@ GAMES['solapa-cardinal'] = (() => {
     layout(G) { const W = G.W, H = G.H; G.cy = H * 0.46; G.R = Math.min(W * 0.25, H * 0.2); G.fb = { x: 12, y: H - 88, w: W - 24, h: 54 }; },
     enter(G) { G.grab = false; },
     draw(G) {
-      const { p, C, r } = G, [SA, SB] = SK.sets(C), good = G.s.k === need(r), k = G.locked && !good ? need(r) : G.s.k, m = Math.min(r.a, r.b);
+      const { p, C, r } = G, [SA, SB] = SK.sets(C), good = !VELO.on && G.s.k === need(r), k = G.locked && !good ? need(r) : G.s.k, m = Math.min(r.a, r.b);
       // La distancia entre centros sale de k: sin compartir, separados; todo compartido, el menor adentro del mayor.
       const R = G.R, f = m ? k / m : 0, d = 2 * R * (1 - f) + 0.15 * R * f, ax = G.W / 2 - d / 2, bx = G.W / 2 + d / 2;
       G.bx = bx;
@@ -17592,7 +17608,7 @@ GAMES['solapa-cardinal'] = (() => {
       TK.label(p, C, `${k}`, (ax + bx) / 2, G.cy + R * 0.95, C.ink, 12, 40);
       TK.label(p, C, `${r.b - k}`, bx + R * 0.55, G.cy + R * 0.95, SB.ink, 12, 40);
       const u = r.a + r.b - k;
-      SK.formal(p, C, G.fb, `$n(A \\cup B) = ${r.a} + ${r.b} - ${k} = ${u}$`, { kicker: `Meta: ${r.total}`, col: G.locked ? C.ok : u === r.total ? C.ok : SB.line, size: 17 });
+      SK.formal(p, C, G.fb, `$n(A \\cup B) = ${r.a} + ${r.b} - ${k} = ${u}$`, { kicker: `Meta: ${r.total}`, col: G.locked ? C.ok : u === r.total && !VELO.on ? C.ok : SB.line, size: 17 });
     },
     press(G, x, y) { if (Math.abs(y - G.cy) > G.R * 1.1 || x < G.W * 0.3) return false; G.grab = true; game.move(G, x); return true; },
     drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
@@ -17620,9 +17636,10 @@ GAMES['goma-diferencia'] = (() => {
   const start = r => (r.op === 'A-B' ? r.A : r.op === 'B-A' ? r.B : r.op === 'Ac' ? r.U : uni(r.A, r.B));
   const target = r => start(r).filter(v => (r.op === 'A-B' ? !r.B.includes(v) : r.op === 'B-A' ? !r.A.includes(v) : r.op === 'Ac' ? !r.A.includes(v) : !(r.A.includes(v) && r.B.includes(v))));
   const left = (s, r) => start(r).filter(v => !s.gone.includes(v));
-  const ok = (s, r) => left(s, r).join() === target(r).join();
+  let ok = (s, r) => left(s, r).join() === target(r).join();
   const OP = { 'A-B': ['A - B', 'Parte de A y borra lo que también está en B'], 'B-A': ['B - A', 'Parte de B y borra lo que también está en A'], Ac: ['A^c', 'Parte de U y borra lo que está en A'], AdB: ['A \\,\\triangle\\, B', 'Parte de A ∪ B y borra lo que está en los dos'] };
   const tset = xs => (xs.length ? `\\{${xs.join(', ')}\\}` : '\\varnothing');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.45,
     init: () => ({ gone: [] }),
@@ -17687,11 +17704,12 @@ GAMES['busca-b'] = (() => {
   const val = (k, A, B) => (k === 'union' ? [...A, ...B.filter(v => !A.includes(v))] : k === 'inter' ? A.filter(v => B.includes(v)) : k === 'BmA' ? B.filter(v => !A.includes(v)) : A.filter(v => !B.includes(v)));
   const eq = (X, Y) => X.length === Y.length && X.every(v => Y.includes(v));
   const holds = (B, r) => r.conds.map(([k, X]) => eq(val(k, r.A, B), X));
-  const ok = (s, r) => holds(s.B, r).every(Boolean);
+  let ok = (s, r) => holds(s.B, r).every(Boolean);
   // La B que pide la ronda (se prueban todos los subconjuntos de U: son pocos).
   const answer = r => { for (let m = 0; m < 2 ** r.U.length; m++) { const B = r.U.filter((_, i) => m & (1 << i)); if (holds(B, r).every(Boolean)) return B; } return null; };
   const NAME = { union: 'A \\cup B', inter: 'A \\cap B', BmA: 'B - A', AmB: 'A - B' };
   const tset = xs => (xs.length ? `\\{${xs.join(', ')}\\}` : '\\varnothing');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ B: [] }),
@@ -17824,7 +17842,7 @@ const RK = (() => {
 GAMES['pares-cero'] = (() => {
   const start = r => (r.op === '+' ? { P: Math.max(r.a, 0) + Math.max(r.b, 0), N: Math.max(-r.a, 0) + Math.max(-r.b, 0), rem: 0 } : { P: Math.max(r.a, 0), N: Math.max(-r.a, 0), rem: 0 });
   const res = r => (r.op === '+' ? r.a + r.b : r.a - r.b);
-  const ok = (s, r) => Math.min(s.P, s.N) === 0 && (r.op === '+' || s.rem === Math.abs(r.b)) && s.P - s.N === res(r);
+  let ok = (s, r) => Math.min(s.P, s.N) === 0 && (r.op === '+' || s.rem === Math.abs(r.b)) && s.P - s.N === res(r);
   // Una manera de llegar (para la solución y las pruebas).
   function answer(r) {
     const s = start(r);
@@ -17832,6 +17850,7 @@ GAMES['pares-cero'] = (() => {
     const m = Math.min(s.P, s.N); s.P -= m; s.N -= m; return s;
   }
   const expr = r => `${RK.num(r.a)} ${r.op} ${RK.par(r.b)}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: start,
@@ -17898,7 +17917,8 @@ GAMES['pares-cero'] = (() => {
 // después − antes. Si va a la izquierda el cambio es negativo, aunque los dos números sean positivos.
 // params = { min, max, rounds: [{ text, from, to }] }   state = { rounds: [{ t, h }] }   (cola y punta, enteros)
 GAMES['flecha-resta'] = (() => {
-  const ok = (s, r) => s.t === r.from && s.h === r.to;
+  let ok = (s, r) => s.t === r.from && s.h === r.to;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 0.95,
     init: () => ({ t: 0, h: 1 }),
@@ -18041,9 +18061,10 @@ GAMES['espiral-teodoro'] = (() => {
 // params = { rounds: [{ nums: [4 números], unit }] }   state = { rounds: [{ plates: [[i, j], [k, l]] }] }
 GAMES['agrupa-amigos'] = (() => {
   const sum = (r, P) => P.reduce((a, i) => a + r.nums[i], 0);
-  const ok = (s, r) => s.plates.every(P => P.length === 2 && sum(r, P) % r.unit === 0);
+  let ok = (s, r) => s.plates.every(P => P.length === 2 && sum(r, P) % r.unit === 0);
   // Las parejas buenas (para la solución y las pruebas).
   function answer(r) { const n = r.nums; for (let j = 1; j < 4; j++) { const a = [0, j], b = [1, 2, 3].filter(k => k !== j); if ((n[0] + n[j]) % r.unit === 0 && (n[b[0]] + n[b[1]]) % r.unit === 0) return { plates: [a, b] }; } return null; }
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ plates: [[], []] }),
@@ -18093,7 +18114,8 @@ GAMES['agrupa-amigos'] = (() => {
 // params = { rounds: [{ base: [alto, ancho], others: [[alto, ancho], …] }] }   state = { rounds: [{ on: [índices pegados] }] }
 GAMES['une-rectangulos'] = (() => {
   const goods = r => r.others.map((o, i) => (o[0] === r.base[0] ? i : -1)).filter(i => i >= 0);
-  const ok = (s, r) => [...s.on].sort().join() === goods(r).join();
+  let ok = (s, r) => [...s.on].sort().join() === goods(r).join();
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ on: [] }),
@@ -18155,8 +18177,9 @@ GAMES['deshaz-camino'] = (() => {
   const apply = (x, [op, v]) => (op === '+' ? x + v : x * v);
   const inv = ([op, v]) => (op === '+' ? ['+', -v] : ['×', 1 / v]);
   const same = (a, b) => a[0] === b[0] && Math.abs(a[1] - b[1]) < 1e-9;
-  const ok = (s, r) => s.slots.every((c, i) => c != null && same(r.cards[c], inv(r.ops[r.ops.length - 1 - i])));
+  let ok = (s, r) => s.slots.every((c, i) => c != null && same(r.cards[c], inv(r.ops[r.ops.length - 1 - i])));
   const lab = ([op, v]) => (op === '+' ? `+\\,${RK.par(v)}` : `\\times\\,${RK.par(v)}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ slots: r.ops.map(() => null) }),
@@ -18183,7 +18206,7 @@ GAMES['deshaz-camino'] = (() => {
       // Regreso: y → puerta → puerta → ¿x?
       TK.label(p, C, 'regreso', 36, G.back.y - 30, C.mute, 10, 60);
       const back = [vals.at(-1)]; s.slots.forEach(c => back.push(c == null || back.at(-1) == null ? null : apply(back.at(-1), r.cards[c])));
-      back.forEach((v, i) => { if (v == null) { p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 4]); p.rect(20 + gw * 2 * i, G.back.y - 16, gw, 32, 9); p.drawingContext.setLineDash([]); } else box(i, G.back.y, v, i === back.length - 1 ? (Math.abs(v - r.x) < 1e-9 ? C.ok : C.coral) : C.sky); });
+      back.forEach((v, i) => { if (v == null) { p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 4]); p.rect(20 + gw * 2 * i, G.back.y - 16, gw, 32, 9); p.drawingContext.setLineDash([]); } else box(i, G.back.y, v, i === back.length - 1 ? (Math.abs(v - r.x) < 1e-9 && !VELO.on ? C.ok : C.coral) : C.sky); });
       G.spots = [];
       s.slots.forEach((c, i) => { const b = G.slot(i); p.stroke(C.brand); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 24)); p.rect(b.x + 4, b.y, b.w - 8, b.h, 9); if (c != null) { G.spots.push({ c, from: i, ...b }); if (G.drag?.c !== c) TK.label(p, C, `$${lab(r.cards[c])}$`, b.x + b.w / 2, b.y + b.h / 2, C.ink, 13, b.w); } });
       // Tarjetas.
@@ -18327,7 +18350,8 @@ GAMES['vagon-inverso'] = (() => {
 // luego se pega su cola a la punta de a. Donde termina es a + (−b) = a − b. Pegarla sin voltear sería sumar b.
 // params = { min, max, rounds: [{ a, b }] }   state = { rounds: [{ flip, att }] }
 GAMES['resta-opuesto'] = (() => {
-  const ok = s => s.flip && s.att;
+  let ok = s => s.flip && s.att;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ flip: false, att: false }),
@@ -18382,7 +18406,8 @@ GAMES['resta-opuesto'] = (() => {
 // división y su signo: (−12) ÷ 3 = −4 y 15 ÷ (−5) = −3.
 // params = { min, max, rounds: [{ a, b }] }   state = { rounds: [{ n, flip }] }
 GAMES['parte-flecha'] = (() => {
-  const ok = (s, r) => s.n === Math.abs(r.b) && s.flip === r.b < 0;
+  let ok = (s, r) => s.n === Math.abs(r.b) && s.flip === r.b < 0;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ n: 1, flip: false }),
@@ -18485,7 +18510,8 @@ GAMES['espejo-desigualdad'] = (() => {
   const KS = { '+': [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6], '×': [-3, -2.5, -2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2, 2.5, 3] };
   const app = (r, v, k) => (r.op === '+' ? v + k : v * k);
   const need = r => KS[r.op].find(k => app(r, r.a, k) === r.target);
-  const ok = (s, r) => app(r, r.a, s.k) === r.target;
+  let ok = (s, r) => app(r, r.a, s.k) === r.target;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ k: r.op === '+' ? 0 : 1 }),
@@ -18529,7 +18555,8 @@ GAMES['espejo-desigualdad'] = (() => {
 GAMES['barra-razon'] = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
   const need = r => (r.T * r.p) / (r.p + r.q);
-  const ok = (s, r) => s.a * r.q === (r.T - s.a) * r.p;
+  let ok = (s, r) => s.a * r.q === (r.T - s.a) * r.p;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 0.95,
     init: r => ({ a: Math.round(r.T / 2) === need(r) ? Math.round(r.T / 2) + 1 : Math.round(r.T / 2) }),
@@ -18564,8 +18591,9 @@ GAMES['barra-razon'] = (() => {
 // params = { rounds: [{ rows, cols, p, q }] }   state = { rounds: [{ on: [índices] }] }
 GAMES['rejilla-razon'] = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const ok = (s, r) => { const x = s.on.length, y = r.rows * r.cols - x; return x > 0 && x * r.q === y * r.p; };
+  let ok = (s, r) => { const x = s.on.length, y = r.rows * r.cols - x; return x > 0 && x * r.q === y * r.p; };
   const need = r => (r.rows * r.cols * r.p) / (r.p + r.q);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ on: [] }),
@@ -18602,8 +18630,9 @@ GAMES['rejilla-razon'] = (() => {
 // params = { rounds: [{ base, items: [[nombre, cantidad, unidad]], goal: [índice, cantidad] }] }   state = { rounds: [{ n }] }
 GAMES['receta-escala'] = (() => {
   const need = r => (r.goal[1] * r.base) / r.items[r.goal[0]][1];
-  const ok = (s, r) => s.n === need(r);
+  let ok = (s, r) => s.n === need(r);
   const MAX = 12;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ n: r.base }),
@@ -18729,8 +18758,9 @@ GAMES['llaves-tanque'] = (() => {
 // params = { rounds: [{ cm, km, real }] }   (escala: cm centímetros = km kilómetros)   state = { rounds: [{ d }] }   (cm en el mapa)
 GAMES['mapa-escala'] = (() => {
   const need = r => (r.real * r.cm) / r.km;
-  const ok = (s, r) => Math.abs(s.d - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.d - need(r)) < 1e-9;
   const MAX = 10;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ d: 1 }),
@@ -18814,7 +18844,8 @@ GAMES['tanque-porcentaje'] = (() => {
 // params = { rounds: [{ r, now, step, max }] }   (r: cambio en %, negativo = descuento)   state = { rounds: [{ old }] }
 GAMES['precio-original'] = (() => {
   const need = r => r.now / (1 + r.r / 100);
-  const ok = (s, r) => Math.abs(s.old - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.old - need(r)) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: r => ({ old: r.now }),
@@ -18853,7 +18884,8 @@ GAMES['precio-original'] = (() => {
 GAMES['factor-cambio'] = (() => {
   const F = Array.from({ length: 21 }, (_, i) => +(0.5 + i * 0.05).toFixed(2));
   const need = r => F.findIndex(f => Math.abs(f * r.from - r.to) < 1e-9);
-  const ok = (s, r) => s.k === need(r);
+  let ok = (s, r) => s.k === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ k: 10 }),
@@ -18930,7 +18962,8 @@ GAMES['semanas-rebaja'] = (() => {
   const MAX = 12;
   const val = (r, n) => 100 * (1 + r.r / 100) ** n;
   const need = r => { for (let n = 1; n <= MAX; n++) if (r.r < 0 ? val(r, n) < r.line : val(r, n) > r.line) return n; return -1; };
-  const ok = (s, r) => s.n === need(r);
+  let ok = (s, r) => s.n === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ n: 1 }),
@@ -18965,7 +18998,8 @@ GAMES['semanas-rebaja'] = (() => {
 GAMES['sube-y-baja'] = (() => {
   const end = x => 100 * (1 + x / 100) * (1 - x / 100);
   const need = r => { for (let x = 5; x <= 60; x += 5) if (Math.abs(end(x) - r.end) < 1e-9) return x; return -1; };
-  const ok = (s, r) => s.x === need(r);
+  let ok = (s, r) => s.x === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ x: 5 }),
@@ -19000,8 +19034,9 @@ GAMES['sube-y-baja'] = (() => {
 GAMES['escalera-potencias'] = (() => {
   const val = (b, e) => b ** e;
   const need = r => { for (let e = -4; e <= 4; e++) if (Math.abs(val(r.base, e) - r.num / r.den) < 1e-12) return e; return null; };
-  const ok = (s, r) => s.e === need(r);
+  let ok = (s, r) => s.e === need(r);
   const frac = (b, e) => (e >= 0 ? `${b ** e}` : `\\tfrac{1}{${b ** -e}}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ e: 1 }),
@@ -19078,8 +19113,9 @@ GAMES['cubo-bloques'] = (() => {
 // (x/x = 1). Lo que queda dice el exponente: arriba si a > b, abajo (exponente negativo) si b > a, y 1 si son iguales.
 // params = { rounds: [{ a, b, v }] }   (v: la letra)   state = { rounds: [{ k }] }   (parejas canceladas)
 GAMES['cancela-pisos'] = (() => {
-  const ok = (s, r) => s.k === Math.min(r.a, r.b);
+  let ok = (s, r) => s.k === Math.min(r.a, r.b);
   const res = r => r.a - r.b;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ k: 0 }),
@@ -19133,7 +19169,7 @@ GAMES['copias-potencia'] = (() => {
         for (let i = 0; i < r.a; i++) RK.chip(p, C, { x: x0 + i * (cw + 2), y, w: cw, h }, r.v, { on: true, col: C.sky, size: 11, r: 5 });
       }
       G.X = RK.track(p, C, 40, G.W - 40, G.tY, 6, b - 1, i => String(i + 1));
-      RK.strip(p, C, G.fb, `$(${r.v}^{${r.a}})^{${b}} = ${r.v}^{${r.a} \\cdot ${b}} = ${r.v}^{${r.a * b}}$`, { col: G.locked || b * r.a === r.total ? C.ok : C.brand, size: 18 });
+      RK.strip(p, C, G.fb, `$(${r.v}^{${r.a}})^{${b}} = ${r.v}^{${r.a} \\cdot ${b}} = ${r.v}^{${r.a * b}}$`, { col: G.locked || b * r.a === r.total && !VELO.on ? C.ok : C.brand, size: 18 });
     },
     press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
     drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
@@ -19152,8 +19188,9 @@ GAMES['copias-potencia'] = (() => {
 // params = { rounds: [{ a, target }] }   state = { rounds: [{ n, m }] }   (n de 1 a 4; m de 1 a 4)
 GAMES['fraccion-exponente'] = (() => {
   const val = (a, n, m) => Math.round((a ** (1 / n)) ** m * 1e6) / 1e6;
-  const ok = (s, r) => Math.abs(val(r.a, s.n, s.m) - r.target) < 1e-6;
+  let ok = (s, r) => Math.abs(val(r.a, s.n, s.m) - r.target) < 1e-6;
   const answer = r => { for (let n = 1; n <= 4; n++) for (let m = 1; m <= 4; m++) if (ok({ n, m }, r)) return { n, m }; return null; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ n: 1, m: 1 }),
@@ -19170,7 +19207,7 @@ GAMES['fraccion-exponente'] = (() => {
       TK.label(p, C, `$\\sqrt[${s.n}]{\\;}$`, G.W * 0.34, 128, C.ink, 14, 50);
       box(G.W * 0.5, `$${+root.toFixed(3)}$`, C.mint); RK.arrow(p, G.W * 0.5 + 42, G.W * 0.83 - 44, 146, C.line, 2);
       TK.label(p, C, `$(\\;)^{${s.m}}$`, G.W * 0.67, 128, C.ink, 14, 50);
-      box(G.W * 0.83, `$${+v.toFixed(3)}$`, Math.abs(v - r.target) < 1e-6 ? C.ok : C.coral);
+      box(G.W * 0.83, `$${+v.toFixed(3)}$`, Math.abs(v - r.target) < 1e-6 && !VELO.on ? C.ok : C.coral);
       RK.track(p, C, 70, G.W - 30, G.t1, 4, s.n - 1, i => String(i + 1)); TK.label(p, C, 'raíz', 34, G.t1, C.mute, 11, 40);
       RK.track(p, C, 70, G.W - 30, G.t2, 4, s.m - 1, i => String(i + 1)); TK.label(p, C, 'potencia', 34, G.t2, C.mute, 11, 56);
       RK.strip(p, C, G.fb, `$${r.a}^{${s.m}/${s.n}} = (\\sqrt[${s.n}]{${r.a}})^{${s.m}} = ${+v.toFixed(3)}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 17 });
@@ -19228,7 +19265,8 @@ GAMES['absoluto-raiz'] = (() => {
 // params = { rounds: [{ a, b }] }   (a + b es un cuadrado perfecto)   state = { rounds: [{ s }] }   (lado, de 1 a 12)
 GAMES['suma-raices'] = (() => {
   const need = r => Math.round(Math.sqrt(r.a + r.b));
-  const ok = (s, r) => s.s * s.s === r.a + r.b;
+  let ok = (s, r) => s.s * s.s === r.a + r.b;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ s: 1 }),
@@ -19264,8 +19302,9 @@ GAMES['suma-raices'] = (() => {
 // fracción y se multiplica: solo la que tiene la misma raíz deja el denominador sin raíz. La fracción vale lo mismo.
 // params = { rounds: [{ k, n, cards: [m, …] }] }   (k/√n; cada tarjeta es √m/√m, o m/m si m es negativo)   state = { rounds: [{ c }] }
 GAMES['racionaliza-uno'] = (() => {
-  const ok = (s, r) => s.c != null && r.cards[s.c] === r.n;
+  let ok = (s, r) => s.c != null && r.cards[s.c] === r.n;
   const cardTex = m => (m > 0 ? `\\dfrac{\\sqrt{${m}}}{\\sqrt{${m}}}` : `\\dfrac{${-m}}{${-m}}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ c: null }),
@@ -19304,7 +19343,8 @@ GAMES['racionaliza-uno'] = (() => {
 // params = { rounds: [{ k, n }] }   state = { rounds: [{ m }] }   (de 1 a 100)
 GAMES['copias-raiz'] = (() => {
   const need = r => r.k * r.k * r.n;
-  const ok = (s, r) => s.m === need(r);
+  let ok = (s, r) => s.m === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ m: 10 }),
@@ -19342,7 +19382,8 @@ GAMES['goteo-tanque'] = (() => {
   const MAX = 12;
   const term = (r, n) => r.a1 + (n - 1) * r.d;
   const need = r => (r.target - r.a1) / r.d + 1;
-  const ok = (s, r) => term(r, s.n) === r.target;
+  let ok = (s, r) => term(r, s.n) === r.target;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ n: 1 }),
@@ -19354,7 +19395,7 @@ GAMES['goteo-tanque'] = (() => {
     enter(G) { G.grab = false; },
     draw(G) {
       const { p, C, r } = G, n = G.locked && !ok(G.s, r) ? need(r) : G.s.n, w = (G.W - 40) / MAX, Y = v => G.base - (G.base - 110) * v / r.a1;
-      for (let k = 1; k <= n; k++) { const v = term(r, k); p.noStroke(); p.fill(v === r.target && k === n ? C.ok : C.sky); p.rect(20 + (k - 1) * w + 2, Y(Math.max(0, v)), w - 4, G.base - Y(Math.max(0, v)), 3); if (w > 18) TK.label(p, C, String(v), 20 + (k - 0.5) * w, Y(Math.max(0, v)) - 9, C.mute, 9, w); }
+      for (let k = 1; k <= n; k++) { const v = term(r, k); p.noStroke(); p.fill(v === r.target && k === n && !VELO.on ? C.ok : C.sky); p.rect(20 + (k - 1) * w + 2, Y(Math.max(0, v)), w - 4, G.base - Y(Math.max(0, v)), 3); if (w > 18) TK.label(p, C, String(v), 20 + (k - 0.5) * w, Y(Math.max(0, v)) - 9, C.mute, 9, w); }
       p.stroke(C.ok); p.strokeWeight(2); p.drawingContext.setLineDash([5, 4]); p.line(16, Y(r.target), G.W - 16, Y(r.target)); p.drawingContext.setLineDash([]);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, MAX, n - 1, i => String(i + 1));
       RK.strip(p, C, G.fb, `$a_{${n}} = ${r.a1} + ${n - 1}\\cdot(${r.d}) = ${term(r, n)}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 17 });
@@ -19377,7 +19418,8 @@ GAMES['goteo-tanque'] = (() => {
 GAMES['poste-cerca'] = (() => {
   const MAX = 13;
   const need = r => r.L / r.d + 1;
-  const ok = (s, r) => s.n === need(r);
+  let ok = (s, r) => s.n === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 0.95,
     init: () => ({ n: 2 }),
@@ -19392,7 +19434,7 @@ GAMES['poste-cerca'] = (() => {
       p.stroke(C.line); p.strokeWeight(2); p.drawingContext.setLineDash([4, 4]); p.line(x0, G.y + 30, x1, G.y + 30); p.drawingContext.setLineDash([]);
       TK.label(p, C, `${r.L} m`, G.W / 2, G.y + 46, C.mute, 11, 60);
       for (let k = 0; k < n; k++) { const x = X(Math.min(k * r.d, r.L * 1.08)); if (k) { p.stroke(C.sun); p.strokeWeight(3); p.line(X((k - 1) * r.d), G.y - 10, x, G.y - 10); p.line(X((k - 1) * r.d), G.y + 6, x, G.y + 6); } p.stroke(C.ink); p.strokeWeight(5); p.line(x, G.y - 26, x, G.y + 22); }
-      TK.label(p, C, `${n - 1} tramos · ${len} m`, G.W / 2, G.y - 44, len === r.L ? C.ok : C.ink, 13, 160);
+      TK.label(p, C, `${n - 1} tramos · ${len} m`, G.W / 2, G.y - 44, len === r.L && !VELO.on ? C.ok : C.ink, 13, 160);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, MAX - 1, n - 2, i => ((i + 2) % 2 === 0 ? String(i + 2) : null));
       RK.strip(p, C, G.fb, `$${n}\\text{ postes} \\to ${n - 1}\\text{ tramos} \\cdot ${r.d} = ${len}\\text{ m}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
     },
@@ -19415,7 +19457,8 @@ GAMES['poste-cerca'] = (() => {
 GAMES['nivela-barras'] = (() => {
   const terms = r => Array.from({ length: r.n }, (_, i) => r.a1 + i * r.d);
   const avg = r => (2 * r.a1 + (r.n - 1) * r.d) / 2;
-  const ok = (s, r) => Math.abs(s.h - avg(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.h - avg(r)) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ h: r.a1 }),
@@ -19430,7 +19473,7 @@ GAMES['nivela-barras'] = (() => {
       let over = 0, under = 0;
       T.forEach((v, i) => { const x = 20 + i * w + 3; p.noStroke(); p.fill(C.sky); p.rect(x, Y(v), w - 6, G.base - Y(v), 3); if (v > h) { p.fill(RK.al(p, C.coral, 150)); p.rect(x, Y(v), w - 6, Y(h) - Y(v)); over += v - h; } else if (v < h) { p.noFill(); p.stroke(C.mint); p.strokeWeight(1.5); p.drawingContext.setLineDash([3, 3]); p.rect(x, Y(h), w - 6, Y(v) - Y(h)); p.drawingContext.setLineDash([]); under += h - v; } });
       p.stroke(C.brand); p.strokeWeight(3); p.line(14, Y(h), G.W - 14, Y(h)); RK.knob(p, C, G.W - 22, Y(h), C.brand); G.ky = Y(h); G.Y = Y; G.top = top;
-      TK.label(p, C, `sobra ${over}  ·  falta ${under}`, G.W / 2, 104, over === under ? C.ok : C.mute, 12, G.W - 30);
+      TK.label(p, C, `sobra ${over}  ·  falta ${under}`, G.W / 2, 104, over === under && !VELO.on ? C.ok : C.mute, 12, G.W - 30);
       RK.strip(p, C, G.fb, `$S = ${r.n} \\cdot ${h} = ${r.n * h}$`, { kicker: 'n · nivel', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
     },
     press(G, x, y) { if (Math.abs(y - G.ky) > 40) return false; G.grab = true; game.move(G, y); return true; },
@@ -19452,7 +19495,8 @@ GAMES['alcancia-semanas'] = (() => {
   const MAX = 12;
   const sum = (r, n) => (n * (2 * r.a1 + (n - 1) * r.d)) / 2;
   const need = r => { for (let n = 1; n <= MAX; n++) if (sum(r, n) === r.goal) return n; return -1; };
-  const ok = (s, r) => sum(r, s.n) === r.goal;
+  let ok = (s, r) => sum(r, s.n) === r.goal;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ n: 1 }),
@@ -19468,7 +19512,7 @@ GAMES['alcancia-semanas'] = (() => {
       // La alcancía con el total.
       const tot = sum(r, n), hb = 90, f = Math.min(1, tot / (r.goal * 1.3));
       p.stroke(C.ink); p.strokeWeight(2); p.fill(C.card); p.rect(G.W - 74, G.base - hb, 54, hb, 10);
-      p.noStroke(); p.fill(tot === r.goal ? C.ok : C.sun); p.rect(G.W - 72, G.base - hb * f, 50, hb * f - 2, 8);
+      p.noStroke(); p.fill(tot === r.goal && !VELO.on ? C.ok : C.sun); p.rect(G.W - 72, G.base - hb * f, 50, hb * f - 2, 8);
       p.stroke(C.ok); p.strokeWeight(2); p.line(G.W - 80, G.base - hb / 1.3, G.W - 14, G.base - hb / 1.3);
       TK.label(p, C, `${tot}`, G.W - 47, G.base - hb - 14, C.ink, 13, 60);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, MAX, n - 1, i => ((i + 1) % 2 === 0 ? String(i + 1) : null));
@@ -19492,7 +19536,8 @@ GAMES['alcancia-semanas'] = (() => {
 GAMES['razon-terminos'] = (() => {
   const R = [-3, -2, -1.5, -0.5, 0.5, 1.5, 2, 3, 4, 5];
   const need = r => R.findIndex(x => Math.abs(r.ai * x ** (r.j - r.i) - r.aj) < 1e-9);
-  const ok = (s, r) => Math.abs(r.ai * R[s.k] ** (r.j - r.i) - r.aj) < 1e-9;   // vale cualquier razón que funcione (±3 si el salto es par)
+  let ok = (s, r) => Math.abs(r.ai * R[s.k] ** (r.j - r.i) - r.aj) < 1e-9;   // vale cualquier razón que funcione (±3 si el salto es par)
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ k: 5 }),
@@ -19506,7 +19551,7 @@ GAMES['razon-terminos'] = (() => {
       const { p, C, r } = G, k = G.locked && !ok(G.s, r) ? need(r) : G.s.k, x = R[k], n = r.j - r.i + 1, w = Math.min(64, (G.W - 24) / n - 6);
       for (let t = 0; t < n; t++) {
         const v = r.ai * x ** t, b = { x: G.W / 2 - (n * (w + 6) - 6) / 2 + t * (w + 6), y: 150, w, h: 42 }, last = t === n - 1;
-        RK.chip(p, C, b, `$${RK.num(+v.toFixed(4))}$`, { on: t === 0 || last, col: last ? (Math.abs(v - r.aj) < 1e-9 ? C.ok : C.coral) : C.sky, size: 14 });
+        RK.chip(p, C, b, `$${RK.num(+v.toFixed(4))}$`, { on: t === 0 || last, col: last ? (Math.abs(v - r.aj) < 1e-9 && !VELO.on ? C.ok : C.coral) : C.sky, size: 14 });
         TK.label(p, C, `$a_{${r.i + t}}$`, b.x + w / 2, b.y - 14, C.mute, 11, w);
         if (t) TK.label(p, C, `×${RK.num(x).replace(/\\tfrac\{(\d+)\}\{(\d+)\}/, '$1/$2')}`, b.x - 3, b.y + 58, C.mute, 10, 40);
       }
@@ -19568,7 +19613,8 @@ GAMES['cultivo-celulas'] = (() => {
   const MAX = 8;
   const val = (q, n) => q.a1 * q.r ** (n - 1);
   const need = q => { for (let n = 1; n <= MAX; n++) if (val(q, n) === q.target) return n; return -1; };
-  const ok = (s, q) => val(q, s.n) === q.target;
+  let ok = (s, q) => val(q, s.n) === q.target;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ n: 1 }),
@@ -19649,7 +19695,8 @@ GAMES['torre-geometrica'] = (() => {
   const MAX = 8;
   const S = (q, n) => (q.a * (q.r ** n - 1)) / (q.r - 1);
   const need = q => { for (let n = 1; n <= MAX; n++) if (Math.abs(S(q, n) - q.target) < 1e-9) return n; return -1; };
-  const ok = (s, q) => s.n === need(q);
+  let ok = (s, q) => s.n === need(q);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ n: 1 }),
@@ -19685,7 +19732,8 @@ GAMES['torre-geometrica'] = (() => {
 GAMES['ajusta-razon'] = (() => {
   const R = [-0.5, -0.25, 0.25, 0.5, 0.6, 0.75, 0.8, 0.9, 1, 1.5];
   const need = q => R.findIndex(r => Math.abs(r) < 1 && Math.abs(q.a / (1 - r) - q.S) < 1e-9);
-  const ok = (s, q) => s.k === need(q);
+  let ok = (s, q) => s.k === need(q);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ k: 8 }),
@@ -19719,7 +19767,8 @@ GAMES['ajusta-razon'] = (() => {
 // sigma se desarrolla sola. Hay que dejar justo los términos de la suma pedida.
 // params = { rounds: [{ f: 'texto de f(k)', vals: [f(1), …, f(10)], lo, hi }] }   state = { rounds: [{ a, b }] }
 GAMES['sigma-indices'] = (() => {
-  const ok = (s, q) => s.a === q.lo && s.b === q.hi;
+  let ok = (s, q) => s.a === q.lo && s.b === q.hi;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ a: 1, b: 10 }),
@@ -19805,7 +19854,8 @@ GAMES['cambia-indice'] = (() => {
 GAMES['factorial-cajas'] = (() => {
   const fact = n => (n <= 1 ? 1 : n * fact(n - 1));
   const need = q => { for (let n = 1; n <= 7; n++) if (fact(n) === q.target) return n; return -1; };
-  const ok = (s, q) => fact(s.n) === q.target;
+  let ok = (s, q) => fact(s.n) === q.target;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ n: 2 }),
@@ -19845,9 +19895,10 @@ GAMES['factorial-cajas'] = (() => {
 // params = { rounds: [{ mode: 'arma' | 'suma', P?, Q?, target? }] }   (coeficientes [x², x, 1])   state = { rounds: [{ c: [a, b, c] }] }
 GAMES['bloques-polinomio'] = (() => {
   const goal = r => (r.mode === 'suma' ? r.P.map((v, i) => v + r.Q[i]) : r.target);
-  const ok = (s, r) => s.c.join() === goal(r).join();
+  let ok = (s, r) => s.c.join() === goal(r).join();
   const poly = c => { const t = []; [[c[0], 'x^2'], [c[1], 'x'], [c[2], '']].forEach(([v, x]) => { if (!v) return; const a = Math.abs(v), body = x ? (a === 1 ? x : a + x) : String(a); t.push((v < 0 ? '-' : t.length ? '+' : '') + body); }); return t.length ? t.join(' ') : '0'; };
   const SRC = [[2, false], [1, false], [0, false], [2, true], [1, true], [0, true]];
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ c: r.mode === 'suma' ? [...r.P] : [0, 0, 0] }),
@@ -19938,8 +19989,9 @@ GAMES['reduce-semejantes'] = (() => {
 GAMES['resta-voltea'] = (() => {
   const pieces = r => { const o = []; r.Q.forEach((v, i) => { for (let j = 0; j < Math.abs(v); j++) o.push({ k: 2 - i, neg: v < 0 }); }); return o; };
   const goal = r => r.P.map((v, i) => v - r.Q[i]);
-  const ok = (s, r) => s.used.length === pieces(r).length && s.c.join() === goal(r).join();
+  let ok = (s, r) => s.used.length === pieces(r).length && s.c.join() === goal(r).join();
   const poly = c => GAMES['bloques-polinomio'].poly(c);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ c: [...r.P], used: [], flip: [] }),
@@ -20020,8 +20072,9 @@ GAMES['evalua-polinomio'] = (() => {
 // params = { rounds: [{ a, b }] }   state = { rounds: [{ n: [x², x, 1] }] }
 GAMES['llena-rectangulo'] = (() => {
   const need = r => [1, r.a + r.b, r.a * r.b];
-  const ok = (s, r) => s.n.join() === need(r).join();
+  let ok = (s, r) => s.n.join() === need(r).join();
   const poly = c => GAMES['bloques-polinomio'].poly(c);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ n: [0, 0, 0] }),
@@ -20103,7 +20156,8 @@ GAMES['parte-cuadrado'] = (() => {
 // params = { rounds: [{ p, q }] }   (p > q, p + q par)   state = { rounds: [{ a, b }] }   (a de 10 a 60, b de 1 a 9)
 GAMES['diferencia-cuadrados'] = (() => {
   const need = r => ({ a: (r.p + r.q) / 2, b: (r.p - r.q) / 2 });
-  const ok = (s, r) => s.a + s.b === r.p && s.a - s.b === r.q;
+  let ok = (s, r) => s.a + s.b === r.p && s.a - s.b === r.q;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ a: 20, b: 1 }),
@@ -20141,8 +20195,9 @@ GAMES['diferencia-cuadrados'] = (() => {
 // las barras dicen la suma y los cuadritos el producto.
 // params = { rounds: [{ s, p }] }   (x² + s x + p)   state = { rounds: [{ a, b }] }   (de 1 a 9)
 GAMES['binomios-comun'] = (() => {
-  const ok = (st, r) => st.a + st.b === r.s && st.a * st.b === r.p;
+  let ok = (st, r) => st.a + st.b === r.s && st.a * st.b === r.p;
   const answer = r => { for (let a = 1; a <= 9; a++) for (let b = a; b <= 9; b++) if (a + b === r.s && a * b === r.p) return { a, b }; return null; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ a: 1, b: 1 }),
@@ -20218,8 +20273,9 @@ GAMES['triangulo-pascal'] = (() => {
   const row = n => { let r = [1]; for (let i = 0; i < n; i++) r = [1, ...r.slice(1).map((v, j) => v + r[j]), 1]; return r; };
   const inner = n => row(n).slice(1, -1);
   const chips = r => [...inner(r.n), ...r.extra].sort((a, b) => a - b);
-  const ok = (s, r) => s.cells.every((c, i) => c != null && chips(r)[c] === inner(r.n)[i]);
+  let ok = (s, r) => s.cells.every((c, i) => c != null && chips(r)[c] === inner(r.n)[i]);
   const answer = r => { const ch = chips(r), used = new Set(); return { cells: inner(r.n).map(v => { const i = ch.findIndex((x, k) => x === v && !used.has(k)); used.add(i); return i; }) }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ cells: inner(r.n).map(() => null) }),
@@ -20326,8 +20382,9 @@ GAMES['elige-parentesis'] = (() => {
 // params = { rounds: [{ n, c, p }] }   state = { rounds: [{ k }] }
 GAMES['exponentes-binomio'] = (() => {
   const C_ = (n, k) => (k === 0 || k === n ? 1 : C_(n - 1, k - 1) + C_(n - 1, k));
-  const ok = (s, r) => r.n - s.k === r.p;
+  let ok = (s, r) => r.n - s.k === r.p;
   const coef = (r, k) => C_(r.n, k) * r.c ** k;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ k: 0 }),
@@ -20474,7 +20531,8 @@ GAMES['factor-comun-bloques'] = (() => {
 // se pasa abajo y queda el rectángulo (x + b)(x − b).
 // params = { rounds: [{ c }] }   state = { rounds: [{ b }] }   (de 1 a 7)
 GAMES['diferencia-esquina'] = (() => {
-  const ok = (s, r) => s.b * s.b === r.c;
+  let ok = (s, r) => s.b * s.b === r.c;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ b: 1 }),
@@ -20509,9 +20567,10 @@ GAMES['diferencia-esquina'] = (() => {
 // pareja que da la suma y el producto del trinomio (con signos: si p es negativo, una ficha va a cada lado del 0).
 // params = { rounds: [{ s, p }] }   state = { rounds: [{ m, n }] }   (de −10 a 10)
 GAMES['suma-producto'] = (() => {
-  const ok = (st, r) => st.m + st.n === r.s && st.m * st.n === r.p;
+  let ok = (st, r) => st.m + st.n === r.s && st.m * st.n === r.p;
   const answer = r => { for (let m = -10; m <= 10; m++) for (let n = m; n <= 10; n++) if (m + n === r.s && m * n === r.p) return { m, n }; return null; };
   const t = (v, x = 'x') => (v === 0 ? '' : `${v < 0 ? '-' : '+'} ${Math.abs(v) === 1 && x ? '' : Math.abs(v)}${x}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ m: 1, n: 2 }),
@@ -20525,8 +20584,8 @@ GAMES['suma-producto'] = (() => {
       const { p, C, r, L } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, X = drawNumLine(p, C, L, { step: 1, every: 5 });
       G.X = X;
       RK.knob(p, C, X(s.m), L.y - 24, C.sky); RK.knob(p, C, X(s.n), L.y + 24 + 4, C.coral);
-      TK.label(p, C, `suma ${s.m + s.n} · meta ${r.s}`, G.W / 2, 116, s.m + s.n === r.s ? C.ok : C.ink, 14, G.W - 30);
-      TK.label(p, C, `producto ${s.m * s.n} · meta ${r.p}`, G.W / 2, 142, s.m * s.n === r.p ? C.ok : C.ink, 14, G.W - 30);
+      TK.label(p, C, `suma ${s.m + s.n} · meta ${r.s}`, G.W / 2, 116, s.m + s.n === r.s && !VELO.on ? C.ok : C.ink, 14, G.W - 30);
+      TK.label(p, C, `producto ${s.m * s.n} · meta ${r.p}`, G.W / 2, 142, s.m * s.n === r.p && !VELO.on ? C.ok : C.ink, 14, G.W - 30);
       const f = v => `(x ${v < 0 ? '-' : '+'} ${Math.abs(v)})`;
       RK.strip(p, C, G.fb, `$${f(s.m)}${f(s.n)} = x^2 ${t(s.m + s.n)} ${t(s.m * s.n, '')}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
     },
@@ -20667,8 +20726,9 @@ GAMES['vueltas-i'] = (() => {
 GAMES['suma-complejos'] = (() => {
   const V = { x0: -7, x1: 7, y0: -7, y1: 7 };
   const need = r => ({ a: r.target[0] - r.z1[0], b: r.target[1] - r.z1[1] });
-  const ok = (s, r) => s.a === need(r).a && s.b === need(r).b;
+  let ok = (s, r) => s.a === need(r).a && s.b === need(r).b;
   const z = (a, b) => GAMES['plano-complejo'].z(a, b);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ a: 1, b: 0 }),
@@ -20740,8 +20800,9 @@ GAMES['conjugado-espejo'] = (() => {
 // params = { rounds: [{ a, b }] }   (a² + b² es un cuadrado)   state = { rounds: [{ R }] }   (de 1 a 15)
 GAMES['modulo-circulo'] = (() => {
   const need = r => Math.round(Math.hypot(r.a, r.b));
-  const ok = (s, r) => s.R === need(r);
+  let ok = (s, r) => s.R === need(r);
   const z = (a, b) => GAMES['plano-complejo'].z(a, b);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ R: 1 }),
@@ -20780,11 +20841,12 @@ GAMES['despeja-x'] = (() => {
   const start = r => ({ k: r.div ? 1 / r.a : r.a, m: r.b, n: r.c });
   const apply = (e, [op, v]) => (op === '+' ? { k: e.k, m: e.m + v, n: e.n + v } : { k: e.k * v, m: e.m * v, n: e.n * v });
   const state = (s, r) => s.steps.reduce((e, i) => apply(e, r.cards[i]), start(r));
-  const ok = (s, r) => { const e = state(s, r); return Math.abs(e.k - 1) < 1e-9 && Math.abs(e.m) < 1e-9; };
+  let ok = (s, r) => { const e = state(s, r); return Math.abs(e.k - 1) < 1e-9 && Math.abs(e.m) < 1e-9; };
   const fmt = v => RK.num(Math.round(v * 1e6) / 1e6);
   const lhs = e => { const k = Math.abs(e.k - 1) < 1e-9 ? 'x' : Math.abs(e.k + 1) < 1e-9 ? '-x' : `${fmt(e.k)}x`; return Math.abs(e.m) < 1e-9 ? k : `${k} ${e.m < 0 ? '-' : '+'} ${fmt(Math.abs(e.m))}`; };
   const answer = r => { const steps = [], e0 = start(r); const iPlus = r.cards.findIndex(([op, v]) => op === '+' && Math.abs(v + e0.m) < 1e-9); if (e0.m && iPlus >= 0) steps.push(iPlus); const iMul = r.cards.findIndex(([op, v]) => op === '×' && Math.abs(v * e0.k - 1) < 1e-9); if (Math.abs(e0.k - 1) > 1e-9 && iMul >= 0) steps.push(iMul); return { steps }; };
   const lab = ([op, v]) => (op === '+' ? `${v < 0 ? '-' : '+'}\\,${fmt(Math.abs(v))}` : `\\times\\,${fmt(v)}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ steps: [] }),
@@ -20831,7 +20893,8 @@ GAMES['despeja-x'] = (() => {
 GAMES['encuentro-caminantes'] = (() => {
   const pos = (q, t) => q[0] * t + q[1];
   const need = r => (r.B[1] - r.A[1]) / (r.A[0] - r.B[0]);
-  const ok = (s, r) => pos(r.A, s.t) === pos(r.B, s.t);
+  let ok = (s, r) => pos(r.A, s.t) === pos(r.B, s.t);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ t: 0 }),
@@ -20866,7 +20929,8 @@ GAMES['encuentro-caminantes'] = (() => {
 GAMES['consecutivos'] = (() => {
   const sum = (r, x) => r.k * x + (r.d * r.k * (r.k - 1)) / 2;
   const need = r => (r.S - (r.d * r.k * (r.k - 1)) / 2) / r.k;
-  const ok = (s, r) => sum(r, s.x) === r.S;
+  let ok = (s, r) => sum(r, s.x) === r.S;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ x: 1 }),
@@ -20879,7 +20943,7 @@ GAMES['consecutivos'] = (() => {
     draw(G) {
       const { p, C, r } = G, x = G.locked && !ok(G.s, r) ? need(r) : G.s.x, w = (G.W - 40) / r.k, top = 60 + r.d * r.k, Y = v => G.base - (G.base - 104) * v / top;
       for (let i = 0; i < r.k; i++) { const v = x + i * r.d; p.noStroke(); p.fill(C.sky); p.rect(20 + i * w + 4, Y(v), w - 8, G.base - Y(v), 3); TK.label(p, C, String(v), 20 + i * w + w / 2, Y(v) - 10, C.ink, 12, w); }
-      TK.label(p, C, `suma: ${sum(r, x)}`, G.W / 2, 104, sum(r, x) === r.S ? C.ok : C.mute, 13, 140);
+      TK.label(p, C, `suma: ${sum(r, x)}`, G.W / 2, 104, sum(r, x) === r.S && !VELO.on ? C.ok : C.mute, 13, 140);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, 60, x - 1, i => ((i + 1) % 10 === 0 ? String(i + 1) : null));
       RK.strip(p, C, G.fb, `$${r.k}x + ${(r.d * r.k * (r.k - 1)) / 2} = ${r.S}$`, { kicker: `x = ${x}`, col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
     },
@@ -20973,7 +21037,8 @@ GAMES['perimetro-x'] = (() => {
 GAMES['simetria-parabola'] = (() => {
   const V = { x0: -6, x1: 6, y0: -8, y1: 10 };
   const f = (r, x) => r.a * (x - r.h) ** 2 + r.k;
-  const ok = (s, r) => Math.abs(s.e - r.h) < 1e-9;
+  let ok = (s, r) => Math.abs(s.e - r.h) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ e: r.h === 0 ? 1 : 0 }),
@@ -21046,8 +21111,9 @@ GAMES['abertura-a'] = (() => {
 GAMES['forma-canonica'] = (() => {
   const V = { x0: -7, x1: 7, y0: -9, y1: 12 };
   const need = r => ({ h: -r.b / 2, k: r.c - (r.b / 2) ** 2 });
-  const ok = (s, r) => s.h === need(r).h && s.k === need(r).k;
+  let ok = (s, r) => s.h === need(r).h && s.k === need(r).k;
   const sg = v => (v < 0 ? `- ${Math.abs(v)}` : `+ ${v}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ h: 0, k: 0 }),
@@ -21125,8 +21191,9 @@ GAMES['ingreso-maximo'] = (() => {
 // dejarlas en los dos valores de x que anulan el producto.
 // params = { rounds: [{ p, q, a? }] }   (a(x − p)(x − q) = 0)   state = { rounds: [{ m, n }] }   (de −6 a 6)
 GAMES['producto-cero'] = (() => {
-  const ok = (s, r) => [s.m, s.n].sort((x, y) => x - y).join() === [r.p, r.q].sort((x, y) => x - y).join();
+  let ok = (s, r) => [s.m, s.n].sort((x, y) => x - y).join() === [r.p, r.q].sort((x, y) => x - y).join();
   const f = (v, k) => `(x ${k < 0 ? '+' : '-'} ${Math.abs(k)})`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ m: 0, n: 1 }),
@@ -21142,7 +21209,7 @@ GAMES['producto-cero'] = (() => {
       [s.m, s.n].forEach((v, j) => {
         const f1 = v - r.p, f2 = v - r.q, pr = (r.a || 1) * f1 * f2, bx = j === 0 ? 20 : G.W / 2 + 6, w = G.W / 2 - 26;
         TK.label(p, C, `x = ${v}`, bx + w / 2, 104, C.ink, 13, w);
-        [[f1, `x ${r.p < 0 ? '+' : '-'} ${Math.abs(r.p)}`], [f2, `x ${r.q < 0 ? '+' : '-'} ${Math.abs(r.q)}`], [pr, 'producto']].forEach(([val, t], k) => { const y = 124 + k * 26; p.noStroke(); p.fill(val === 0 ? C.ok : val < 0 ? C.coral : C.sky); p.rect(bx + w / 2, y, Math.max(-w / 2, Math.min(w / 2, val * 4)), 16, 3); TK.label(p, C, `${t}: ${val}`, bx + w / 2, y + 8, C.ink, 10, w); });
+        [[f1, `x ${r.p < 0 ? '+' : '-'} ${Math.abs(r.p)}`], [f2, `x ${r.q < 0 ? '+' : '-'} ${Math.abs(r.q)}`], [pr, 'producto']].forEach(([val, t], k) => { const y = 124 + k * 26; p.noStroke(); p.fill(val === 0 && !VELO.on ? C.ok : val < 0 ? C.coral : C.sky); p.rect(bx + w / 2, y, Math.max(-w / 2, Math.min(w / 2, val * 4)), 16, 3); TK.label(p, C, `${t}: ${val}`, bx + w / 2, y + 8, C.ink, 10, w); });
       });
       RK.knob(p, C, X(s.m), L.y - 22, C.sky); RK.knob(p, C, X(s.n), L.y + 26, C.coral);
       RK.strip(p, C, G.fb, `$x = ${s.m}\\quad\\text{y}\\quad x = ${s.n}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
@@ -21166,8 +21233,9 @@ GAMES['discriminante-traslada'] = (() => {
   const V = { x0: -7, x1: 7, y0: -8, y1: 12 };
   const D = (r, c) => r.b * r.b - 4 * c;
   const n = d => (d > 0 ? 2 : d === 0 ? 1 : 0);
-  const ok = (s, r) => n(D(r, s.c)) === r.want;
+  let ok = (s, r) => n(D(r, s.c)) === r.want;
   const answer = r => { for (let c = -8; c <= 12; c++) if (n(D(r, c)) === r.want) return { c }; return null; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ c: r.want === 1 ? (r.b * r.b) / 4 + 1 : r.want === 0 ? -1 : 12 }),
@@ -21273,7 +21341,8 @@ GAMES['area-ecuacion'] = (() => {
 // dividendo = divisor · cociente + residuo, la misma igualdad de la división de polinomios.
 // params = { rounds: [{ N, d }] }   state = { rounds: [{ q }] }   (de 0 a 15)
 GAMES['bolsas-residuo'] = (() => {
-  const ok = (s, r) => s.q === Math.floor(r.N / r.d);
+  let ok = (s, r) => s.q === Math.floor(r.N / r.d);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ q: 1 }),
@@ -21421,8 +21490,9 @@ GAMES['completa-identidad'] = (() => {
 GAMES['iguala-coeficientes'] = (() => {
   const prod = (c, a, b) => [1, a - c, b - c * a, -c * b];
   const answer = r => ({ a: r.P[1] + r.c, b: r.P[2] + r.c * (r.P[1] + r.c) });
-  const ok = (s, r) => prod(r.c, s.a, s.b).join() === r.P.join();
+  let ok = (s, r) => prod(r.c, s.a, s.b).join() === r.P.join();
   const poly3 = P => { const t = []; [[P[0], 'x^3'], [P[1], 'x^2'], [P[2], 'x'], [P[3], '']].forEach(([v, x]) => { if (!v) return; const a = Math.abs(v); t.push((v < 0 ? '-' : t.length ? '+' : '') + (x ? (a === 1 ? x : a + x) : a)); }); return t.join(' ') || '0'; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ a: 0, b: 0 }),
@@ -21438,7 +21508,7 @@ GAMES['iguala-coeficientes'] = (() => {
         const x = 20 + i * w;
         TK.label(p, C, n, x + w / 2, 110, C.mute, 11, w);
         RK.chip(p, C, { x: x + 4, y: 122, w: w - 8, h: 32 }, String(r.P[i]), { on: true, col: C.sky, size: 14 });
-        RK.chip(p, C, { x: x + 4, y: 164, w: w - 8, h: 32 }, String(Q[i]), { on: true, col: Q[i] === r.P[i] ? C.ok : C.coral, size: 14 });
+        RK.chip(p, C, { x: x + 4, y: 164, w: w - 8, h: 32 }, String(Q[i]), { on: true, col: Q[i] === r.P[i] && !VELO.on ? C.ok : C.coral, size: 14 });
       });
       TK.label(p, C, 'meta', 14, 138, C.mute, 9, 30); TK.label(p, C, 'tuyo', 14, 180, C.mute, 9, 30);
       G.X1 = RK.track(p, C, 50, G.W - 24, G.t1, 17, s.a + 8, i => (i % 4 === 0 ? String(i - 8) : null)); TK.label(p, C, 'a', 28, G.t1, C.mute, 12, 20);
@@ -21499,8 +21569,9 @@ GAMES['signo-divisor'] = (() => {
 GAMES['llena-sintetica'] = (() => {
   const bottom = r => { const o = [r.coef[0]]; for (let i = 1; i < r.coef.length; i++) o.push(r.coef[i] + r.c * o[i - 1]); return o; };
   const chips = r => [...bottom(r), ...r.extra].sort((a, b) => a - b);
-  const ok = (s, r) => s.cells.every((c, i) => c != null && chips(r)[c] === bottom(r)[i]);
+  let ok = (s, r) => s.cells.every((c, i) => c != null && chips(r)[c] === bottom(r)[i]);
   const answer = r => { const ch = chips(r), used = new Set(); return { cells: bottom(r).map(v => { const i = ch.findIndex((x, k) => x === v && !used.has(k)); used.add(i); return i; }) }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ cells: r.coef.map(() => null) }),
@@ -21561,8 +21632,9 @@ GAMES['factor-k'] = (() => {
   const fill = (r, k) => r.P.map(v => (v == null ? k : v));
   const val = (P, x) => P.reduce((a, q) => a * x + q, 0);
   const need = r => { for (let k = -12; k <= 12; k++) if (val(fill(r, k), r.c) === 0) return k; return null; };
-  const ok = (s, r) => val(fill(r, s.k), r.c) === 0;
+  let ok = (s, r) => val(fill(r, s.k), r.c) === 0;
   const tex = r => { const n = r.P.length - 1; return r.P.map((v, i) => { const e = n - i, x = e === 0 ? '' : e === 1 ? 'x' : `x^${e}`; const co = v == null ? 'k' : v; if (co === 0) return ''; return `${i && (co === 'k' || co > 0) ? '+' : ''}${co === 1 && x ? '' : co === -1 && x ? '-' : co}${x}`; }).join(''); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ k: 0 }),
@@ -21575,7 +21647,7 @@ GAMES['factor-k'] = (() => {
     draw(G) {
       const { p, C, r } = G, k = G.locked && !ok(G.s, r) ? need(r) : G.s.k, P = fill(r, k), V = { x0: -5, x1: 5, y0: -20, y1: 20 }, M = RK.plane(p, C, G.b, V, { step: 5 });
       RK.curve(p, G.b, M, V, x => val(P, x), C.sky, 2.4);
-      const y = val(P, r.c); drawDot(p, C, M.X(r.c), M.Y(Math.max(-20, Math.min(20, y))), 12, y === 0 ? C.ok : C.coral);
+      const y = val(P, r.c); drawDot(p, C, M.X(r.c), M.Y(Math.max(-20, Math.min(20, y))), 12, y === 0 && !VELO.on ? C.ok : C.coral);
       G.X = RK.track(p, C, 24, G.W - 24, G.tY, 25, k + 12, i => (i % 4 === 0 ? String(i - 12) : null));
       RK.strip(p, C, G.fb, `$P(${r.c}) = ${y}$`, { kicker: `k = ${k}`, col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 19 });
     },
@@ -21647,9 +21719,10 @@ GAMES['arma-factores'] = (() => {
 // params = { rounds: [{ zeros: [..], want: 1 | -1, a?: 1 | -1 }] }   state = { rounds: [{ x }] }   (de −5.5 a 5.5 de medio en medio)
 GAMES['tramo-signo'] = (() => {
   const sg = (r, x) => Math.sign((r.a || 1) * r.zeros.reduce((a, c) => a * (x - c), 1));
-  const ok = (s, r) => sg(r, s.x) === r.want && !r.zeros.includes(s.x);
+  let ok = (s, r) => sg(r, s.x) === r.want && !r.zeros.includes(s.x);
   const answer = r => { for (let x = -5.5; x <= 5.5; x += 0.5) if (ok({ x }, r)) return { x }; return null; };
   const fac = c => (c === 0 ? 'x' : `x ${c < 0 ? '+' : '-'} ${Math.abs(c)}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ x: r.zeros[0] }),
@@ -21662,7 +21735,7 @@ GAMES['tramo-signo'] = (() => {
     draw(G) {
       const { p, C, r } = G, x = G.locked && !ok(G.s, r) ? answer(r).x : G.s.x, w = (G.W - 40) / (r.zeros.length + 1);
       r.zeros.forEach((c, i) => { const v = Math.sign(x - c); RK.chip(p, C, { x: 20 + i * w + 4, y: 110, w: w - 8, h: 40 }, `${fac(c)}: ${v > 0 ? '+' : v < 0 ? '−' : '0'}`, { on: true, col: v > 0 ? C.sky : v < 0 ? C.coral : C.line, size: 11 }); });
-      const t = sg(r, x); RK.chip(p, C, { x: 20 + r.zeros.length * w + 4, y: 110, w: w - 8, h: 40 }, `P: ${t > 0 ? '+' : t < 0 ? '−' : '0'}`, { on: true, col: t === r.want ? C.ok : C.coral, size: 13 });
+      const t = sg(r, x); RK.chip(p, C, { x: 20 + r.zeros.length * w + 4, y: 110, w: w - 8, h: 40 }, `P: ${t > 0 ? '+' : t < 0 ? '−' : '0'}`, { on: true, col: t === r.want && !VELO.on ? C.ok : C.coral, size: 13 });
       const X = drawNumLine(p, C, G.L, { step: 1 }); G.X = X;
       r.zeros.forEach(c => drawDot(p, C, X(c), G.L.y, 10, C.ink));
       RK.knob(p, C, X(x), G.L.y - 24, C.brand);
@@ -21722,8 +21795,9 @@ GAMES['multiplicidad'] = (() => {
 GAMES['prueba-candidatos'] = (() => {
   const val = (P, x) => P.reduce((a, q) => a * x + q, 0);
   const goods = r => r.cands.map((c, i) => (val(r.P, c) === 0 ? i : -1)).filter(i => i >= 0);
-  const ok = (s, r) => [...s.zeros].sort().join() === goods(r).join();
+  let ok = (s, r) => [...s.zeros].sort().join() === goods(r).join();
   const poly = P => GAMES['iguala-coeficientes'].poly3([...Array(4 - P.length).fill(0), ...P]);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ zeros: [], tried: [] }),
@@ -21738,13 +21812,13 @@ GAMES['prueba-candidatos'] = (() => {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { zeros: goods(r), tried: goods(r) } : G.s;
       p.stroke(C.brand); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 18)); p.rect(G.tester.x, G.tester.y, G.tester.w, G.tester.h, 12);
       TK.label(p, C, 'probador', G.tester.x + G.tester.w / 2, G.tester.y - 10, C.mute, 10, 80);
-      if (G.last != null) TK.label(p, C, `P(${r.cands[G.last]}) = ${val(r.P, r.cands[G.last])}`, G.tester.x + G.tester.w / 2, G.tester.y + G.tester.h / 2, val(r.P, r.cands[G.last]) === 0 ? C.ok : C.ink, 14, G.tester.w - 8);
+      if (G.last != null) TK.label(p, C, `P(${r.cands[G.last]}) = ${val(r.P, r.cands[G.last])}`, G.tester.x + G.tester.w / 2, G.tester.y + G.tester.h / 2, val(r.P, r.cands[G.last]) === 0 && !VELO.on ? C.ok : C.ink, 14, G.tester.w - 8);
       p.stroke(C.ok); p.fill(RK.al(p, C.ok, 18)); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 12); TK.label(p, C, 'ceros', G.box.x + G.box.w / 2, G.box.y - 10, C.mute, 10, 60);
       G.spots = [];
       s.zeros.forEach((i, j) => G.spots.push({ i, x: G.box.x + 8 + j * 40, y: G.box.y + 18, w: 36, h: 32, z: true }));
       const free = r.cands.map((_, i) => i).filter(i => !s.zeros.includes(i)), w = Math.min(42, (G.W - 20) / Math.ceil(free.length / 2) - 4);
       free.forEach((i, j) => G.spots.push({ i, x: 16 + (j % Math.ceil(free.length / 2)) * (w + 4), y: G.cy + Math.floor(j / Math.ceil(free.length / 2)) * 40, w, h: 32 }));
-      G.spots.forEach(q => { if (G.drag?.i !== q.i) RK.chip(p, C, q, String(r.cands[q.i]), { on: q.z || s.tried.includes(q.i), col: q.z ? C.ok : val(r.P, r.cands[q.i]) === 0 ? C.ok : C.coral, size: 12 }); });
+      G.spots.forEach(q => { if (G.drag?.i !== q.i) RK.chip(p, C, q, String(r.cands[q.i]), { on: q.z || s.tried.includes(q.i), col: q.z ? C.ok : val(r.P, r.cands[q.i]) === 0 && !VELO.on ? C.ok : C.coral, size: 12 }); });
       if (G.drag) RK.chip(p, C, { x: G.drag.x - 20, y: G.drag.y - 16, w: 40, h: 32 }, String(r.cands[G.drag.i]), { on: true, size: 12 });
       RK.strip(p, C, G.fb, `$\\text{ceros: } ${s.zeros.map(i => r.cands[i]).join(',\\ ') || '\\varnothing'}$`, { kicker: 'Candidatos: divisores del último coeficiente', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
     },
@@ -21860,7 +21934,8 @@ GAMES['factoriza-cubica'] = (() => {
 // params = { rounds: [{ tex, bad: [..] }] }   state = { rounds: [{ marks: [..] }] }   (enteros de −6 a 6)
 GAMES['prohibidos'] = (() => {
   const L = { min: -6, max: 6 };
-  const ok = (s, r) => [...s.marks].sort((a, b) => a - b).join() === [...r.bad].sort((a, b) => a - b).join();
+  let ok = (s, r) => [...s.marks].sort((a, b) => a - b).join() === [...r.bad].sort((a, b) => a - b).join();
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 0.95,
     init: () => ({ marks: [] }),
@@ -21906,9 +21981,10 @@ GAMES['prohibidos'] = (() => {
 // params = { rounds: [{ n: [a, b], d: [c, e], target }] }   (f = (ax + b)/(cx + e))   state = { rounds: [{ x }] }   (de −6 a 6)
 GAMES['evalua-racional'] = (() => {
   const N = (r, x) => r.n[0] * x + r.n[1], D = (r, x) => r.d[0] * x + r.d[1];
-  const ok = (s, r) => D(r, s.x) !== 0 && N(r, s.x) === r.target * D(r, s.x);
+  let ok = (s, r) => D(r, s.x) !== 0 && N(r, s.x) === r.target * D(r, s.x);
   const answer = r => { for (let x = -6; x <= 6; x++) if (ok({ x }, r)) return { x }; return null; };
   const lin = ([a, b]) => `${a === 1 ? '' : a === -1 ? '-' : a}x ${b < 0 ? '-' : '+'} ${Math.abs(b)}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: r => ({ x: -r.d[1] / r.d[0] }),
@@ -21980,10 +22056,11 @@ GAMES['cerca-asintota'] = (() => {
 // params = { rounds: [{ d1: [factores], d2: [factores], chips: [factores] }] }   state = { rounds: [{ box: [índices] }] }
 GAMES['denominador-comun'] = (() => {
   const lcd = r => { const o = [...r.d1], rest = [...r.d2]; r.d1.forEach(f => { const i = rest.indexOf(f); if (i >= 0) rest.splice(i, 1); }); return [...o, ...rest]; };
-  const ok = (s, r) => s.box.map(i => r.chips[i]).sort().join('|') === lcd(r).sort().join('|');
+  let ok = (s, r) => s.box.map(i => r.chips[i]).sort().join('|') === lcd(r).sort().join('|');
   const answer = r => { const used = new Set(); return { box: lcd(r).map(f => { const i = r.chips.findIndex((c, k) => c === f && !used.has(k)); used.add(i); return i; }) }; };
   // Producto de factores con potencias: ['x', 'x', 'x+1'] → x^{2}(x+1).
   const mul = fs => { const n = new Map(); fs.forEach(f => n.set(f, (n.get(f) || 0) + 1)); return [...n].map(([f, k]) => `${f.length > 2 ? `(${f})` : f}${k > 1 ? `^{${k}}` : ''}`).join(''); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ box: [] }),
@@ -22026,9 +22103,10 @@ GAMES['denominador-comun'] = (() => {
 // params = { rounds: [{ f1: [num, [factores]], f2: [num, [factores]], chips: [..], sum }] }   state = { rounds: [{ m: [índice | null, índice | null] }] }
 GAMES['amplifica-fraccion'] = (() => {
   const missing = (r, k) => { const L = GAMES['denominador-comun'].lcd({ d1: r.f1[1], d2: r.f2[1] }), own = [...(k ? r.f2 : r.f1)[1]]; return L.filter(f => { const i = own.indexOf(f); if (i >= 0) { own.splice(i, 1); return false; } return true; }); };
-  const ok = (s, r) => [0, 1].every(k => { const need = missing(r, k); return need.length === 0 ? s.m[k] == null : s.m[k] != null && r.chips[s.m[k]] === need[0]; });
+  let ok = (s, r) => [0, 1].every(k => { const need = missing(r, k); return need.length === 0 ? s.m[k] == null : s.m[k] != null && r.chips[s.m[k]] === need[0]; });
   const answer = r => ({ m: [0, 1].map(k => { const need = missing(r, k); return need.length ? r.chips.indexOf(need[0]) : null; }) });
   const mul = fs => GAMES['denominador-comun'].mul(fs);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ m: [null, null] }),
@@ -22073,10 +22151,11 @@ GAMES['amplifica-fraccion'] = (() => {
 // params = { rounds: [{ A: [términos], B: [términos], C?: [términos], den }] }   (términos con signo: '3x', '-2')
 // state = { rounds: [{ flip: ['b0', 'c1', …] }] }
 GAMES['resta-fracciones'] = (() => {
-  const ok = (s, r) => s.flip.length === r.B.length && r.B.every((_, i) => s.flip.includes(`b${i}`));
+  let ok = (s, r) => s.flip.length === r.B.length && r.B.every((_, i) => s.flip.includes(`b${i}`));
   const neg = t => (t.startsWith('-') ? `+${t.slice(1)}` : `-${t.replace(/^\+/, '')}`);
   const join = ts => ts.map((t, i) => (i === 0 ? t.replace(/^\+/, '') : t.startsWith('-') ? ` - ${t.slice(1)}` : ` + ${t.replace(/^\+/, '')}`)).join('');
   const result = (r, s) => [...r.A, ...r.B.map((t, i) => (s.flip.includes(`b${i}`) ? neg(t) : t)), ...(r.C || []).map((t, i) => (s.flip.includes(`c${i}`) ? neg(t) : t))];
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ flip: [] }),
@@ -22206,9 +22285,10 @@ GAMES['multiplica-cancela'] = (() => {
 GAMES['dos-rectas'] = (() => {
   const V = { x0: -6, x1: 6, y0: -6, y1: 6 };
   const on = (e, x, y) => e[0] * x + e[1] * y === e[2];
-  const ok = (s, r) => on(r.e1, s.x, s.y) && on(r.e2, s.x, s.y);
+  let ok = (s, r) => on(r.e1, s.x, s.y) && on(r.e2, s.x, s.y);
   const answer = r => { for (let x = -6; x <= 6; x++) for (let y = -6; y <= 6; y++) if (ok({ x, y }, r)) return { x, y }; return null; };
   const eq = ([a, b, c]) => b === 0 ? `${a === 1 ? '' : a}x = ${c}` : `${a === 1 ? '' : a === -1 ? '-' : a}x ${b < 0 ? '-' : '+'} ${Math.abs(b) === 1 ? '' : Math.abs(b)}y = ${c}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: r => (ok({ x: 0, y: 0 }, r) ? { x: 1, y: -1 } : { x: 0, y: 0 }),
@@ -22224,7 +22304,7 @@ GAMES['dos-rectas'] = (() => {
         if (e[1] === 0) { const x = e[2] / e[0]; p.stroke(col); p.strokeWeight(2.4); p.line(M.X(x), G.b.y, M.X(x), G.b.y + G.b.h); }
         else RK.curve(p, G.b, M, V, x => (e[2] - e[0] * x) / e[1], col, 2.4);
       });
-      [[r.e1, C.sky], [r.e2, C.coral]].forEach(([e, col], i) => { const b = { x: 12 + i * (G.W - 24) / 2 + 3, y: G.b.y + G.b.h + 8, w: (G.W - 24) / 2 - 6, h: 30 }, yes = on(e, s.x, s.y); RK.chip(p, C, b, `$${eq(e)}$`, { on: yes, col: yes ? C.ok : col, size: 12 }); });
+      [[r.e1, C.sky], [r.e2, C.coral]].forEach(([e, col], i) => { const b = { x: 12 + i * (G.W - 24) / 2 + 3, y: G.b.y + G.b.h + 8, w: (G.W - 24) / 2 - 6, h: 30 }, yes = on(e, s.x, s.y); RK.chip(p, C, b, `$${eq(e)}$`, { on: yes, col: yes && !VELO.on ? C.ok : col, size: 12 }); });
       drawDot(p, C, M.X(s.x), M.Y(s.y), 16, ok(s, r) ? C.ok : C.brand);
       RK.strip(p, C, G.fb, `$(x, y) = (${s.x}, ${s.y})$`, { kicker: ok(s, r) ? 'Cumple las dos: es la solución' : 'Busca el cruce', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
     },
@@ -22247,9 +22327,10 @@ GAMES['dos-rectas'] = (() => {
 GAMES['elimina-variable'] = (() => {
   const K = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
   const sum = (r, k) => r.e1.map((v, i) => v + k * r.e2[i]);
-  const ok = (s, r) => sum(r, s.k)[1] === 0;
+  let ok = (s, r) => sum(r, s.k)[1] === 0;
   const answer = r => ({ k: K.find(k => ok({ k }, r)) });
   const eq = ([a, b, c]) => `${a === 1 ? '' : a === -1 ? '-' : a}x ${b < 0 ? '-' : '+'} ${Math.abs(b) === 1 ? '' : Math.abs(b)}y = ${c}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ k: 0 }),
@@ -22263,7 +22344,7 @@ GAMES['elimina-variable'] = (() => {
       const { p, C, r } = G, k = G.locked && !ok(G.s, r) ? answer(r).k : G.s.k, f = sum(r, k), cx = G.W / 2;
       TK.label(p, C, `fila 1: $${eq(r.e1)}$`, cx, 104, C.ink, 14, G.W - 30);
       TK.label(p, C, `fila 2: $${eq(r.e2)}$   × ${k}`, cx, 132, C.ink, 14, G.W - 30);
-      [['x', f[0], C.sky], ['y', f[1], f[1] === 0 ? C.ok : C.coral]].forEach(([n, v, col], i) => {
+      [['x', f[0], C.sky], ['y', f[1], f[1] === 0 && !VELO.on ? C.ok : C.coral]].forEach(([n, v, col], i) => {
         const y = 176 + i * 44; TK.label(p, C, n, 26, y + 11, C.mute, 14, 24);
         p.stroke(C.line); p.strokeWeight(1); p.line(cx, y - 4, cx, y + 26);
         p.noStroke(); p.fill(col); p.rect(cx, y, Math.max(-cx + 50, Math.min(cx - 50, v * 12)), 22, 3);
@@ -22334,8 +22415,9 @@ GAMES['dos-compras'] = (() => {
 GAMES['corte-parabola-recta'] = (() => {
   const V = { x0: -5, x1: 5, y0: -8, y1: 14 };
   const need = r => r.a * r.x0 ** 2 - r.m * r.x0;
-  const ok = (s, r) => s.n === need(r);
+  let ok = (s, r) => s.n === need(r);
   const other = r => r.m / r.a - r.x0;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ n: need(r) === 0 ? 2 : 0 }),
@@ -22452,9 +22534,10 @@ GAMES['rectangulo-pa'] = (() => {
 GAMES['parciales-tapar'] = (() => {
   const R = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6];
   const num = (r, s) => [s.A + s.B, -s.A * r.q - s.B * r.p];
-  const ok = (s, r) => { const [c, d] = num(r, s); return c === r.c && d === r.d; };
+  let ok = (s, r) => { const [c, d] = num(r, s); return c === r.c && d === r.d; };
   const answer = r => { for (const A of R) for (const B of R) if (ok({ A, B }, r)) return { A, B }; return null; };
   const fac = v => `x ${v < 0 ? '+' : '-'} ${Math.abs(v)}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ A: 0, B: 0 }),
@@ -22471,7 +22554,7 @@ GAMES['parciales-tapar'] = (() => {
         const y = 134 + i * 46;
         TK.label(p, C, n, 34, y + 11, C.mute, 11, 56);
         p.stroke(C.line); p.strokeWeight(1); p.line(cx, y - 6, cx, y + 28);
-        p.noStroke(); p.fill(v === t ? C.ok : C.sky); p.rect(cx, y, Math.max(-cx + 70, Math.min(cx - 30, v * u)), 22, 3);
+        p.noStroke(); p.fill(v === t && !VELO.on ? C.ok : C.sky); p.rect(cx, y, Math.max(-cx + 70, Math.min(cx - 30, v * u)), 22, 3);
         p.stroke(C.ink); p.strokeWeight(2); p.drawingContext.setLineDash([4, 3]); p.line(cx + t * u, y - 6, cx + t * u, y + 28); p.drawingContext.setLineDash([]);
       });
       G.X = ['A', 'B'].map((k, j) => { TK.label(p, C, `${k} = ${s[k]}`, 40, G.tr[j] - 16, C.ink, 11, 70); return RK.track(p, C, 30, G.W - 30, G.tr[j], R.length, R.indexOf(s[k]), i => (i % 3 === 0 ? String(R[i]) : null), j ? C.coral : C.sky); });
@@ -22548,8 +22631,9 @@ GAMES['tapa-evalua'] = (() => {
 // params = { rounds: [{ a, b, pts: [[x, y], [x, y]] }] }   state = { rounds: [{ a, bi }] }   (a de 1 a 6; b de la lista B)
 GAMES['ajusta-exponencial'] = (() => {
   const B = [1 / 4, 1 / 3, 1 / 2, 2, 3, 4], BT = ['\\tfrac14', '\\tfrac13', '\\tfrac12', '2', '3', '4'];
-  const ok = (s, r) => s.a === r.a && Math.abs(B[s.bi] - r.b) < 1e-9;
+  let ok = (s, r) => s.a === r.a && Math.abs(B[s.bi] - r.b) < 1e-9;
   const answer = r => ({ a: r.a, bi: B.findIndex(b => Math.abs(b - r.b) < 1e-9) });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => (r.a === 1 && r.b === 2 ? { a: 2, bi: 3 } : { a: 1, bi: 3 }),
@@ -22563,7 +22647,7 @@ GAMES['ajusta-exponencial'] = (() => {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, top = Math.max(...r.pts.map(q => q[1])) * 1.35, V = { x0: -3, x1: 3, y0: 0, y1: Math.ceil(top) };
       const M = RK.plane(p, C, G.b, V, { step: 1 });
       RK.curve(p, G.b, M, V, x => s.a * B[s.bi] ** x, ok(s, r) ? C.ok : C.sky, 2.6);
-      r.pts.forEach(([x, y]) => { const hit = Math.abs(s.a * B[s.bi] ** x - y) < 1e-9; drawDot(p, C, M.X(x), M.Y(y), 13, hit ? C.ok : C.coral); });
+      r.pts.forEach(([x, y]) => { const hit = Math.abs(s.a * B[s.bi] ** x - y) < 1e-9; drawDot(p, C, M.X(x), M.Y(y), 13, hit && !VELO.on ? C.ok : C.coral); });
       G.X = [RK.track(p, C, 40, G.W - 30, G.tr[0], 6, s.a - 1, i => String(i + 1), C.sky), RK.track(p, C, 40, G.W - 30, G.tr[1], B.length, s.bi, i => `$${BT[i]}$`, C.coral)];
       TK.label(p, C, 'a', 20, G.tr[0], C.mute, 13, 20); TK.label(p, C, 'b', 20, G.tr[1], C.mute, 13, 20);
       RK.strip(p, C, G.fb, `$y = ${s.a} \\cdot \\left(${BT[s.bi]}\\right)^x$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 17 });
@@ -22623,9 +22707,10 @@ GAMES['mueve-asintota'] = (() => {
 // params = { rounds: [{ b, target }] }   state = { rounds: [{ x }] }   (entero de −5 a 5)
 GAMES['mitad-espejo'] = (() => {
   const g = (r, x) => (1 / r.b) ** x;
-  const ok = (s, r) => Math.abs(g(r, s.x) - r.target) < 1e-9;
+  let ok = (s, r) => Math.abs(g(r, s.x) - r.target) < 1e-9;
   const answer = r => { for (let x = -5; x <= 5; x++) if (ok({ x }, r)) return { x }; return null; };
   const fr = v => (v >= 1 || v === 0 ? RK.num(v) : `\\tfrac{1}{${RK.num(1 / v)}}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ x: 0 }),
@@ -22700,9 +22785,10 @@ GAMES['hacia-e'] = (() => {
 // params = { rounds: [{ b, N }] }   state = { rounds: [{ n }] }   (entero de −4 a 8)
 GAMES['exponente-buscado'] = (() => {
   const R = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8];
-  const ok = (s, r) => Math.abs(r.b ** s.n - r.N) < 1e-9 * Math.max(1, r.N);
+  let ok = (s, r) => Math.abs(r.b ** s.n - r.N) < 1e-9 * Math.max(1, r.N);
   const answer = r => ({ n: R.find(n => ok({ n }, r)) });
   const nt = v => (v >= 1 ? RK.num(v) : `\\tfrac{1}{${RK.num(1 / v)}}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ n: 1 }),
@@ -22776,9 +22862,10 @@ GAMES['entre-potencias10'] = (() => {
 // params = { rounds: [{ tex, base, parts: [[letra, coef]], tray: [números] }] }   state = { rounds: [{ c: [índice | null] }] }
 GAMES['expande-log'] = (() => {
   const lay = G => { const n = G.r.parts.length, w = Math.min(110, (G.W - 30) / n - 8); G.slots = G.r.parts.map((_, i) => ({ i, x: G.W / 2 - (n * (w + 8) - 8) / 2 + i * (w + 8), y: 120, w, h: 54 })); G.ty = G.H * 0.56; G.fb = { x: 12, y: G.H - 72, w: G.W - 24, h: 46 }; };
-  const ok = (s, r) => r.parts.every((q, i) => s.c[i] != null && Math.abs(r.tray[s.c[i]] - q[1]) < 1e-9);
+  let ok = (s, r) => r.parts.every((q, i) => s.c[i] != null && Math.abs(r.tray[s.c[i]] - q[1]) < 1e-9);
   const answer = r => ({ c: r.parts.map(q => r.tray.findIndex(v => Math.abs(v - q[1]) < 1e-9)) });
   const ct = v => (v === 0.5 ? '\\tfrac12' : v === -0.5 ? '-\\tfrac12' : String(v));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ c: r.parts.map(() => null) }),
@@ -22858,7 +22945,8 @@ GAMES['cabe-barra'] = (() => {
 // params = { rounds: [{ b, N, max }] }   state = { rounds: [{ x }] }   (x de 0 a max, de centésima en centésima)
 GAMES['baja-con-log'] = (() => {
   const sol = r => Math.log(r.N) / Math.log(r.b);
-  const ok = (s, r) => Math.abs(s.x - sol(r)) <= 0.03 * Math.max(1, r.max / 6);
+  let ok = (s, r) => Math.abs(s.x - sol(r)) <= 0.03 * Math.max(1, r.max / 6);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ x: 0 }),
@@ -22895,7 +22983,8 @@ GAMES['baja-con-log'] = (() => {
 GAMES['media-vida'] = (() => {
   const amt = (r, i) => r.A0 * 0.5 ** i;
   const need = r => Math.round(Math.log2(r.A0 / r.target));
-  const ok = (s, r) => s.i === need(r);
+  let ok = (s, r) => s.i === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ i: 0 }),
@@ -22932,8 +23021,9 @@ GAMES['media-vida'] = (() => {
 GAMES['sube-al-exponente'] = (() => {
   const V = { x0: -6, x1: 12, y0: -4, y1: 5 };
   const need = r => r.b ** r.c - r.k;
-  const ok = (s, r) => Math.abs(s.x - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.x - need(r)) < 1e-9;
   const arg = r => (r.k === 0 ? 'x' : `x ${r.k < 0 ? '-' : '+'} ${Math.abs(r.k)}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ x: need(r) === 0 ? 1 : 0 }),
@@ -23062,11 +23152,12 @@ GAMES['tasa-unitaria'] = (() => {
 // rendimiento, el juego llena la segunda cuadrícula y da la respuesta.
 // params = { rounds: [{ who, what, m1, h1, c1, m2, h2, step, max }] }   state = { rounds: [{ k }] }   (rendimiento k·step)
 GAMES['tabla-compuesta'] = (() => {
-  const ok = (s, r) => s.k * r.step * r.m1 * r.h1 === r.c1;
+  let ok = (s, r) => s.k * r.step * r.m1 * r.h1 === r.c1;
   const answer = r => ({ k: r.c1 / (r.m1 * r.h1) / r.step });
   const grid = (p, C, x, y, m, h, cell, v, col, good) => {
     for (let i = 0; i < m; i++) for (let j = 0; j < h; j++) { p.stroke(C.bg); p.strokeWeight(1.5); p.fill(good ? C.ok : col); p.rect(x + j * cell, y + i * cell, cell, cell, 3); }
   };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ k: answer(r).k === 1 ? 2 : 1 }),
@@ -23103,8 +23194,9 @@ GAMES['tabla-compuesta'] = (() => {
 // p % se mueve con él. Hay que lograr que esa marca caiga justo en la parte conocida.
 // params = { rounds: [{ part, p, step, max }] }   state = { rounds: [{ w }] }   (w múltiplo de step)
 GAMES['estira-todo'] = (() => {
-  const ok = (s, r) => Math.abs(s.w * r.p / 100 - r.part) < 1e-9;
+  let ok = (s, r) => Math.abs(s.w * r.p / 100 - r.part) < 1e-9;
   const answer = r => ({ w: r.part * 100 / r.p });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: r => ({ w: answer(r).w === r.step * 10 ? r.step * 12 : r.step * 10 }),
@@ -23182,7 +23274,8 @@ GAMES['oferta-lleve'] = (() => {
 GAMES['puntos-o-porciento'] = (() => {
   const P = Array.from({ length: 31 }, (_, i) => -50 + i * 5);
   const need = r => (r.to - r.from) / r.from * 100;
-  const ok = (s, r) => Math.abs(s.p - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.p - need(r)) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ p: 0 }),
@@ -23637,10 +23730,11 @@ GAMES['cubo-del-binomio'] = (() => {
 // params = { rounds: [{ n, ways }] }   state = { rounds: [{ k }] }   (k de 0 a n)
 GAMES['elige-comite'] = (() => {
   const C_ = (n, k) => { let v = 1; for (let i = 1; i <= k; i++) v = v * (n - k + i) / i; return Math.round(v); };
-  const ok = (s, r) => C_(r.n, s.k) === r.ways;
+  let ok = (s, r) => C_(r.n, s.k) === r.ways;
   const answer = r => ({ k: [...Array(r.n + 1).keys()].find(k => C_(r.n, k) === r.ways) });
   const groups = (n, k) => { const out = []; for (let m = 0; m < 2 ** n && out.length < 40; m++) { let c = 0; for (let i = 0; i < n; i++) if (m & (1 << i)) c++; if (c === k) out.push(m); } return out; };
   const L = 'ABCDEFGH';
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ k: C_(r.n, 0) === r.ways ? 1 : 0 }),
@@ -24302,8 +24396,9 @@ GAMES['dos-ciudades'] = (() => {
 // params = { rounds: [{ kind: 'area' | 'vol', side, target }] }   (side: lado original en unidades)   state = { rounds: [{ k }] }   (k de 1 a 5)
 GAMES['factor-area'] = (() => {
   const val = (r, k) => (r.kind === 'vol' ? (r.side * k) ** 3 : (r.side * k) ** 2);
-  const ok = (s, r) => val(r, s.k) === r.target;
+  let ok = (s, r) => val(r, s.k) === r.target;
   const answer = r => { for (let k = 1; k <= 5; k++) if (val(r, k) === r.target) return { k }; return null; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ k: 1 }),
@@ -24341,7 +24436,8 @@ GAMES['factor-area'] = (() => {
 // params = { rounds: [{ a, b, c }] }   (OA = a, AB = b, OA' = c)   state = { rounds: [{ d }] }   (A'B' de 0.5 a 12)
 GAMES['tales-rectas'] = (() => {
   const need = r => r.b * r.c / r.a;
-  const ok = (s, r) => Math.abs(s.d - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.d - need(r)) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: r => ({ d: need(r) === 2 ? 3 : 2 }),
@@ -24382,8 +24478,9 @@ GAMES['tales-rectas'] = (() => {
 // la altura y el lado inclinado; se arrastra la base hasta el área pedida. El triángulo recortado se ve pasar al otro lado.
 // params = { rounds: [{ h, slant, target }] }   (slant: lado inclinado, solo de distractor)   state = { rounds: [{ b }] }   (base de 1 a 12)
 GAMES['corta-paralelogramo'] = (() => {
-  const ok = (s, r) => s.b * r.h === r.target;
+  let ok = (s, r) => s.b * r.h === r.target;
   const answer = r => ({ b: r.target / r.h });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ b: 1 }),
@@ -24422,9 +24519,10 @@ GAMES['corta-paralelogramo'] = (() => {
 // params = { rounds: [{ ask: 'L' | 'A' | 'd', target }] }   (L y A en múltiplos de π)   state = { rounds: [{ r }] }   (de 0.5 a 10)
 GAMES['mide-circulo'] = (() => {
   const val = (ask, r) => (ask === 'L' ? 2 * r : ask === 'A' ? r * r : 2 * r);
-  const ok = (s, r) => Math.abs(val(r.ask, s.r) - r.target) < 1e-9;
+  let ok = (s, r) => Math.abs(val(r.ask, s.r) - r.target) < 1e-9;
   const answer = r => ({ r: r.ask === 'A' ? Math.sqrt(r.target) : r.target / 2 });
   const show = v => RK.num(Math.round(v * 100) / 100);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ r: answer(r).r === 1 ? 2 : 1 }),
@@ -24496,8 +24594,9 @@ GAMES['trapecio-promedio'] = (() => {
 // (correrlo de lado no cambia el área). Se arrastra el vértice de arriba por los puntos de la cuadrícula hasta el área pedida.
 // params = { rounds: [{ b, target }] }   (base de (0, 0) a (b, 0))   state = { rounds: [{ x, y }] }   (enteros, x de 0 a 8, y de 1 a 7)
 GAMES['triangulo-cuadricula'] = (() => {
-  const ok = (s, r) => r.b * s.y === 2 * r.target;
+  let ok = (s, r) => r.b * s.y === 2 * r.target;
   const answer = r => ({ x: 1, y: 2 * r.target / r.b });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ x: 2, y: 2 * r.target / r.b === 1 ? 2 : 1 }),
@@ -24568,9 +24667,10 @@ GAMES['poligono-cuadricula'] = (() => {
 // params = { rounds: [{ s, kind: 'circ' | 'sq', target }] }   (target: número o [a, b] = a − bπ)   state = { rounds: [{ t }] }   (radio o lado, de 1 a s)
 GAMES['sombreado-resta'] = (() => {
   const shaded = (r, t) => (r.kind === 'circ' ? [r.s * r.s, t * t] : [r.s * r.s - t * t, 0]);
-  const ok = (s, r) => { const [a, b] = shaded(r, s.t); return Array.isArray(r.target) ? a === r.target[0] && b === r.target[1] : a === r.target && b === 0; };
+  let ok = (s, r) => { const [a, b] = shaded(r, s.t); return Array.isArray(r.target) ? a === r.target[0] && b === r.target[1] : a === r.target && b === 0; };
   const answer = r => { for (let t = 1; t <= r.s; t++) if (ok({ t }, r)) return { t }; return null; };
   const tt = (r, t) => { const [a, b] = shaded(r, t); return b ? `${a} - ${b}\\pi` : `${a}`; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ t: 1 }),
@@ -24605,9 +24705,10 @@ GAMES['sombreado-resta'] = (() => {
 // params = { rounds: [{ base: 'rect' | 'circ' | 'tri', dims: [..], target }] }   (circ: target en múltiplos de π)   state = { rounds: [{ h }] }   (de 1 a 10)
 GAMES['prisma-capas'] = (() => {
   const A = r => (r.base === 'rect' ? r.dims[0] * r.dims[1] : r.base === 'tri' ? r.dims[0] * r.dims[1] / 2 : r.dims[0] ** 2);
-  const ok = (s, r) => A(r) * s.h === r.target;
+  let ok = (s, r) => A(r) * s.h === r.target;
   const answer = r => ({ h: r.target / A(r) });
   const pi = r => (r.base === 'circ' ? '\\pi' : '');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ h: 1 }),
@@ -24646,9 +24747,10 @@ GAMES['prisma-capas'] = (() => {
 GAMES['cono-tercio'] = (() => {
   const A = r => (r.base === 'rect' ? r.dims[0] * r.dims[1] : r.dims[0] ** 2);
   const V = (r, h) => A(r) * h / 3;
-  const ok = (s, r) => Math.abs(V(r, s.h) - r.target) < 1e-9;
+  let ok = (s, r) => Math.abs(V(r, s.h) - r.target) < 1e-9;
   const answer = r => ({ h: 3 * r.target / A(r) });
   const pi = r => (r.base === 'circ' ? '\\pi' : '');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ h: 1 }),
@@ -24950,9 +25052,10 @@ GAMES['brujula-casas'] = (() => {
 // params = { rounds: [{ cands: [[nombres]], clues, circ? }] }   state = { rounds: [{ out: [índices de tarjetas tachadas] }] }
 GAMES['descarta-casos'] = (() => {
   const good = r => r.cands.findIndex(a => r.clues.every(c => ORD.sat(a, c, !!r.circ)));
-  const ok = (s, r) => s.out.length === r.cands.length - 1 && !s.out.includes(good(r));
+  let ok = (s, r) => s.out.length === r.cands.length - 1 && !s.out.includes(good(r));
   const answer = r => ({ out: r.cands.map((_, i) => i).filter(i => i !== good(r)) });
   const lay = G => { const n = G.r.cands.length, w = G.W - 40, h = Math.min(34, (G.H * 0.42) / n - 6); G.cards = G.r.cands.map((_, i) => ({ i, x: 20, y: 100 + i * (h + 6), w, h })); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: () => ({ out: [] }),
@@ -25034,7 +25137,8 @@ GAMES['gira-mesa'] = (() => {
 // params = { rounds: [{ n, k }] }   state = { rounds: [{ pick }] }   (pick: número de la persona, de 1 a n)
 GAMES['ronda-saltos'] = (() => {
   const order = r => { const ring = Array.from({ length: r.n }, (_, i) => i + 1), out = []; let i = 0; while (ring.length > 1) { i = (i + r.k - 1) % ring.length; out.push(ring.splice(i, 1)[0]); } return { out, last: ring[0] }; };
-  const ok = (s, r) => s.pick === order(r).last;
+  let ok = (s, r) => s.pick === order(r).last;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.4,
     init: () => ({ pick: null }),
@@ -25086,9 +25190,10 @@ GAMES['tabla-cruces'] = (() => {
   const crossed = (r, a, v) => r.clues.some(c => c.t === 'not' && c.a === a && c.v === v);
   const valid = (r, pick) => pick.every(x => x != null) && new Set(pick).size === pick.length && r.clues.every(c => (c.t === 'not' ? pick[c.a] !== c.v : pick[c.a] === c.v));
   const solutions = r => ORD.perms(r.cols.map((_, i) => i)).filter(p => valid(r, p));
-  const ok = (s, r) => valid(r, s.pick);
+  let ok = (s, r) => valid(r, s.pick);
   const answer = r => ({ pick: solutions(r)[0] });
   const lay = G => { const r = G.r, cw = Math.min(64, (G.W - 90) / r.cols.length), ch = 34; G.cell = (a, v) => ({ x: 84 + v * cw, y: 128 + a * ch, w: cw - 4, h: ch - 4 }); G.cw = cw; G.ch = ch; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ pick: r.rows.map(() => null) }),
@@ -25212,10 +25317,11 @@ GAMES['comite-reglas'] = (() => {
   const rule = (c, S) => { const A = S.includes(c.a), B = S.includes(c.b); switch (c.t) {
     case 'ifNot': return !(A && B); case 'onlyIf': return !A || B; case 'must': return A; case 'out': return !A; case 'either': return A || B; default: return false; } };
   const valid = (r, S) => S.length === r.k && r.rules.every(c => rule(c, S));
-  const ok = (s, r) => valid(r, s.in) && (r.need || []).every(n => s.in.includes(n));
+  let ok = (s, r) => valid(r, s.in) && (r.need || []).every(n => s.in.includes(n));
   const combos = (list, k) => (k === 0 ? [[]] : list.flatMap((x, i) => combos(list.slice(i + 1), k - 1).map(c => [x, ...c])));
   const answer = r => ({ in: combos(r.names, r.k).find(S => ok({ in: S }, r)) });
   const lay = G => { const n = G.r.names.length, w = Math.min(54, (G.W - 20) / n - 4); G.home = G.r.names.map((nm, i) => ({ nm, x: G.W / 2 - (n * (w + 4) - 4) / 2 + i * (w + 4), y: 108, w, h: 30 })); G.box = { x: 24, y: 152, w: G.W - 48, h: 54 }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ in: [] }),
@@ -25233,7 +25339,7 @@ GAMES['comite-reglas'] = (() => {
       TK.label(p, C, `comité (${s.in.length} de ${r.k})`, G.box.x + 60, G.box.y - 8, C.mute, 10, 120);
       const w = G.home[0].w; G.inBoxes = s.in.map((nm, i) => ({ nm, x: G.box.x + 10 + i * (w + 6), y: G.box.y + 12, w, h: 30 }));
       G.inBoxes.forEach(b => { if (G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { on: true, size: 12, col: good ? C.ok : C.mint }); });
-      r.rules.forEach((c, i) => { const v = rule(c, s.in); TK.label(p, C, `${v ? '✓' : '✗'} ${c.say}`, G.W / 2, 226 + i * 15, v ? C.ok : C.bad, 10, G.W - 30); });
+      r.rules.forEach((c, i) => { const v = rule(c, s.in); TK.label(p, C, `${VELO.on ? '·' : v ? '✓' : '✗'} ${c.say}`, G.W / 2, 226 + i * 15, VELO.on ? C.ink : v ? C.ok : C.bad, 10, G.W - 30); });
       if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 15, w, h: 30 }, G.drag.nm, { on: true, col: C.brand, size: 12 });
       RK.strip(p, C, G.fb, good ? `$\\text{${s.in.join(', ')}}$` : `$\\text{faltan ${Math.max(0, r.k - s.in.length)}}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
@@ -25265,10 +25371,11 @@ GAMES['tiene-podria'] = (() => {
   const cases = r => CR().combos(r.names, r.k).filter(S => CR().valid(r, S));
   const holds = (c, S) => (c.t === 'in' ? S.includes(c.a) : c.t === 'out' ? !S.includes(c.a) : S.includes(c.a) && S.includes(c.b));
   const kind = (r, c) => { const L = cases(r), n = L.filter(S => holds(c, S)).length; return n === L.length ? 0 : n > 0 ? 1 : 2; };
-  const ok = (s, r) => r.claims.every((c, i) => s.zone[i] === kind(r, c));
+  let ok = (s, r) => r.claims.every((c, i) => s.zone[i] === kind(r, c));
   const answer = r => ({ in: [], zone: r.claims.map(c => kind(r, c)) });
   const ZN = ['tiene que', 'podría', 'no puede'];
   const lay = G => { const n = G.r.names.length, w = Math.min(50, (G.W - 20) / n - 4); const y0 = 106 + G.r.rules.length * 13; G.home = G.r.names.map((nm, i) => ({ nm, x: G.W / 2 - (n * (w + 4) - 4) / 2 + i * (w + 4), y: y0, w, h: 26 })); G.box = { x: 24, y: y0 + 34, w: G.W - 48, h: 40 }; const zw = (G.W - 32) / 3; G.zones = ZN.map((t, z) => ({ z, x: 16 + z * zw, y: G.H - 190, w: zw - 6, h: 76 })); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.75,
     init: r => ({ in: [], zone: r.claims.map(() => null) }),
@@ -25320,9 +25427,10 @@ GAMES['tiene-podria'] = (() => {
 // params = { rounds: [{ who: [a, b], a, b }] }   state = { rounds: [{ t }] }   (horas, de media en media)
 GAMES['trabajo-conjunto'] = (() => {
   const need = r => r.a * r.b / (r.a + r.b);
-  const ok = (s, r) => Math.abs(s.t - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.t - need(r)) < 1e-9;
   const max = r => Math.min(r.a, r.b);
   const N = r => Math.round(max(r) * 2);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ t: 0.5 }),
@@ -25361,7 +25469,8 @@ GAMES['trabajo-conjunto'] = (() => {
 GAMES['velocidad-media'] = (() => {
   const D = r => r.legs[0][0] + r.legs[1][0], T = r => r.legs[0][0] / r.legs[0][1] + r.legs[1][0] / r.legs[1][1];
   const need = r => D(r) / T(r);
-  const ok = (s, r) => Math.abs(s.v - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.v - need(r)) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => { const avg = (r.legs[0][1] + r.legs[1][1]) / 2; const a5 = Math.round(avg / 5) * 5; return { v: a5 === need(r) ? 10 : a5 }; },
@@ -25436,8 +25545,9 @@ GAMES['persecucion'] = (() => {
 // params = { rounds: [{ levels: [{ name, n }], miss, total }] }   (miss: nivel que falta)   state = { rounds: [{ k }] }   (de 1 a 8)
 GAMES['arbol-opciones'] = (() => {
   const prod = (r, k) => r.levels.reduce((a, l, i) => a * (i === r.miss ? k : l.n), 1);
-  const ok = (s, r) => prod(r, s.k) === r.total;
+  let ok = (s, r) => prod(r, s.k) === r.total;
   const answer = r => ({ k: r.levels[r.miss].n });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ k: r.levels[r.miss].n === 1 ? 2 : 1 }),
@@ -25476,9 +25586,10 @@ GAMES['arbol-opciones'] = (() => {
 // a cada casilla la ficha con su número de opciones; el juego multiplica.
 // params = { rounds: [{ slots: [rótulo], rule, want: [n], tray: [n], ask? }] }   (ask: la pregunta; por defecto «¿Cuántos códigos hay?»)   state = { rounds: [{ put: [índice de ficha | null] }] }
 GAMES['placas-codigo'] = (() => {
-  const ok = (s, r) => r.want.every((w, i) => s.put[i] != null && r.tray[s.put[i]] === w);
+  let ok = (s, r) => r.want.every((w, i) => s.put[i] != null && r.tray[s.put[i]] === w);
   const answer = r => { const used = new Set(); return { put: r.want.map(w => { const i = r.tray.findIndex((t, k) => t === w && !used.has(k)); used.add(i); return i; }) }; };
   const lay = G => { const n = G.r.slots.length, w = Math.min(58, (G.W - 30) / n - 6); G.boxes = G.r.slots.map((_, i) => ({ i, x: G.W / 2 - (n * (w + 6) - 6) / 2 + i * (w + 6), y: 140, w, h: 48 })); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ put: r.slots.map(() => null) }),
@@ -25525,8 +25636,9 @@ GAMES['placas-codigo'] = (() => {
 GAMES['anagramas'] = (() => {
   const reps = r => { const m = {}; [...r.word].forEach(c => { m[c] = (m[c] || 0) + 1; }); return Object.values(m).filter(k => k > 1).sort((a, b) => a - b); };
   const fact = n => (n <= 1 ? 1 : n * fact(n - 1));
-  const ok = (s, r) => [...s.den].sort((a, b) => a - b).join() === reps(r).join();
+  let ok = (s, r) => [...s.den].sort((a, b) => a - b).join() === reps(r).join();
   const TRAY = [2, 2, 3, 3, 4];
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ den: [] }),
@@ -25571,8 +25683,9 @@ GAMES['anagramas'] = (() => {
 // params = { rounds: [{ n }] }   state = { rounds: [{ pairs: ['i-j'] }] }   (i < j)
 GAMES['saludos'] = (() => {
   const total = r => r.n * (r.n - 1) / 2;
-  const ok = (s, r) => s.pairs.length === total(r);
+  let ok = (s, r) => s.pairs.length === total(r);
   const pt = (G, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / G.r.n; return { x: G.c.x + G.R * Math.cos(a), y: G.c.y + G.R * Math.sin(a) }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: () => ({ pairs: [] }),
@@ -25609,8 +25722,9 @@ GAMES['saludos'] = (() => {
 // params = { rounds: [{ n }] }   state = { rounds: [{ d: ['i-j'] }] }
 GAMES['diagonales'] = (() => {
   const total = r => r.n * (r.n - 3) / 2;
-  const ok = (s, r) => s.d.length === total(r);
+  let ok = (s, r) => s.d.length === total(r);
   const pt = (G, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / G.r.n; return { x: G.c.x + G.R * Math.cos(a), y: G.c.y + G.R * Math.sin(a) }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: () => ({ d: [] }),
@@ -25688,7 +25802,8 @@ GAMES['cuenta-triangulos'] = (() => {
 // params = { rounds: [{ n }] }   state = { rounds: [{ c: [conteo por tamaño] }] }   (conteos de 0 a 25)
 GAMES['cuenta-cuadrados'] = (() => {
   const want = r => Array.from({ length: r.n }, (_, s) => (r.n - s) ** 2);
-  const ok = (st, r) => st.c.join() === want(r).join();
+  let ok = (st, r) => st.c.join() === want(r).join();
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.45,
     init: r => ({ c: Array(r.n).fill(0) }),
@@ -25727,10 +25842,11 @@ GAMES['cuenta-cuadrados'] = (() => {
 GAMES['complemento-conteo'] = (() => {
   const P = l => l.reduce((x, y) => x * y, 1);
   const fit = (put, tray, want) => want.every((w, i) => put[i] != null && tray[put[i]] === w);
-  const ok = (s, r) => fit(s.a, r.tray, r.all) && fit(s.b, r.tray, r.none);
+  let ok = (s, r) => fit(s.a, r.tray, r.all) && fit(s.b, r.tray, r.none);
   const pick = (r, want) => want.map(w => r.tray.indexOf(w));
   const answer = r => ({ a: pick(r, r.all), b: pick(r, r.none) });
   const lay = G => { const n = G.r.slots.length, w = Math.min(54, (G.W - 120) / n - 6); G.rowA = G.r.slots.map((_, i) => ({ i, x: 104 + i * (w + 6), y: 128, w, h: 40 })); G.rowB = G.rowA.map(b => ({ ...b, y: 196 })); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ a: r.slots.map(() => null), b: r.slots.map(() => null) }),
@@ -25856,7 +25972,8 @@ GAMES['ruta-cuadras'] = (() => {
   const blocked = (r, a, b) => { if (a[0] === b[0]) { const y = Math.min(a[1], b[1]), x = a[0]; return isWall(r, x - 1, y) && isWall(r, x, y); } const x = Math.min(a[0], b[0]), y = a[1]; return isWall(r, x, y - 1) && isWall(r, x, y); };
   const nbrs = (r, p) => [[1, 0], [-1, 0], [0, 1], [0, -1]].map(d => [p[0] + d[0], p[1] + d[1]]).filter(q => q[0] >= 0 && q[1] >= 0 && q[0] <= r.w && q[1] <= r.h && !blocked(r, p, q));
   const shortest = r => { const seen = { [key(r.A)]: 0 }, Q = [r.A]; while (Q.length) { const p = Q.shift(); for (const q of nbrs(r, p)) if (seen[key(q)] == null) { seen[key(q)] = seen[key(p)] + 1; Q.push(q); } } return seen[key(r.B)]; };
-  const ok = (s, r) => s.path.length > 0 && key(s.path[s.path.length - 1]) === key(r.B) && s.path.length - 1 === shortest(r);
+  let ok = (s, r) => s.path.length > 0 && key(s.path[s.path.length - 1]) === key(r.B) && s.path.length - 1 === shortest(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ path: [r.A] }),
@@ -25898,8 +26015,9 @@ GAMES['ruta-cuadras'] = (() => {
 GAMES['brujula-pasos'] = (() => {
   const D = { N: [0, 1], S: [0, -1], E: [1, 0], O: [-1, 0] }, NAME = { N: 'norte', S: 'sur', E: 'este', O: 'oeste' };
   const end = r => r.moves.reduce((p, [d, n]) => [p[0] + D[d][0] * n, p[1] + D[d][1] * n], r.start);
-  const ok = (s, r) => s.x === end(r)[0] && s.y === end(r)[1];
+  let ok = (s, r) => s.x === end(r)[0] && s.y === end(r)[1];
   const lay = G => { const r = G.r; G.u = Math.min((G.W - 40) / r.w, (G.H - 250) / r.h); G.o = { x: (G.W - r.w * G.u) / 2, y: 104 + r.h * G.u }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ x: r.start[0], y: r.start[1] }),
@@ -25970,8 +26088,9 @@ GAMES['punto-distancia'] = (() => {
 GAMES['torres-vistas'] = (() => {
   const want = r => r.side.map(sv => r.front.map(fv => Math.min(sv, fv)));
   const views = h => ({ front: h[0].map((_, i) => Math.max(...h.map(row => row[i]))), side: h.map(row => Math.max(...row)) });
-  const ok = (s, r) => s.h.flat().join() === want(r).flat().join();
+  let ok = (s, r) => s.h.flat().join() === want(r).flat().join();
   const lay = G => { const r = G.r, c = Math.min(46, (G.W - 120) / r.front.length); G.c = c; G.o = { x: 40, y: 150 }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ h: r.side.map(() => r.front.map(() => 0)) }),
@@ -25986,9 +26105,9 @@ GAMES['torres-vistas'] = (() => {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { h: want(r) } : G.s, c = G.c, o = G.o, v = views(s.h), good = G.locked && ok(s, r);
       TK.label(p, C, 'desde arriba', o.x + r.front.length * c / 2, o.y - 34, C.mute, 10, 120);
       s.h.forEach((row, j) => row.forEach((hv, i) => { p.stroke(C.ink); p.strokeWeight(1.2); p.fill(RK.al(p, good ? C.ok : C.sky, 40 + hv * 50)); p.rect(o.x + i * c, o.y + j * c, c, c); TK.label(p, C, String(hv), o.x + i * c + c / 2, o.y + j * c + c / 2, C.ink, 13, c); }));
-      r.front.forEach((fv, i) => { const vv = v.front[i]; TK.label(p, C, `${fv}`, o.x + i * c + c / 2, o.y - 14, vv === fv ? C.ok : C.coral, 11, c); });
+      r.front.forEach((fv, i) => { const vv = v.front[i]; TK.label(p, C, `${fv}`, o.x + i * c + c / 2, o.y - 14, vv === fv && !VELO.on ? C.ok : C.coral, 11, c); });
       TK.label(p, C, 'frente ↑', o.x - 22, o.y - 14, C.mute, 8, 40);
-      r.side.forEach((sv, j) => { const vv = v.side[j]; TK.label(p, C, `${sv}`, o.x + r.front.length * c + 14, o.y + j * c + c / 2, vv === sv ? C.ok : C.coral, 11, 24); });
+      r.side.forEach((sv, j) => { const vv = v.side[j]; TK.label(p, C, `${sv}`, o.x + r.front.length * c + 14, o.y + j * c + c / 2, vv === sv && !VELO.on ? C.ok : C.coral, 11, 24); });
       TK.label(p, C, 'lado →', o.x + r.front.length * c + 40, o.y - 14, C.mute, 8, 50);
       const tot = s.h.flat().reduce((a, b) => a + b, 0);
       RK.strip(p, C, G.fb, `$\\text{${tot} cubos}$`, { kicker: 'Los números de afuera son las vistas pedidas', col: G.locked || good ? C.ok : C.brand, size: 17 });
@@ -26009,7 +26128,8 @@ GAMES['torres-vistas'] = (() => {
 // params = { rounds: [{ h: [[alturas por fila]] }] }   state = { rounds: [{ n }] }   (de 1 a 40)
 GAMES['cubos-ocultos'] = (() => {
   const total = r => r.h.flat().reduce((a, b) => a + b, 0);
-  const ok = (s, r) => s.n === total(r);
+  let ok = (s, r) => s.n === total(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ n: 1 }),
@@ -26135,8 +26255,9 @@ GAMES['arma-desarrollo'] = (() => {
 // params = { rounds: [{ cells: [[col, fila]], letters: [..], ask: [índices] }] }   state = { rounds: [{ put: [letra | null] }] }
 GAMES['caras-opuestas'] = (() => {
   const want = r => r.ask.map(i => r.letters[CUBO.opposite(r.cells, i)]);
-  const ok = (s, r) => s.put.join() === want(r).join();
+  let ok = (s, r) => s.put.join() === want(r).join();
   const lay = G => { const r = G.r, W = Math.max(...r.cells.map(c => c[0])) + 1, H = Math.max(...r.cells.map(c => c[1])) + 1; G.u = Math.min(42, (G.W - 40) / W, 180 / H); G.o = { x: (G.W - W * G.u) / 2, y: 104 }; G.slots = r.ask.map((_, k) => ({ k, x: G.W / 2 - (r.ask.length * 96 - 8) / 2 + k * 96 + 46, y: 104 + H * G.u + 22, w: 40, h: 36 })); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.5,
     init: r => ({ put: r.ask.map(() => null) }),
@@ -26172,9 +26293,10 @@ GAMES['caras-opuestas'] = (() => {
 // params = { rounds: [{ top, front, right }] }   state = { rounds: [{ bottom, back, left }] }
 GAMES['dado-siete'] = (() => {
   const want = r => ({ bottom: 7 - r.top, back: 7 - r.front, left: 7 - r.right });
-  const ok = (s, r) => ['bottom', 'back', 'left'].every(k => s[k] === want(r)[k]);
+  let ok = (s, r) => ['bottom', 'back', 'left'].every(k => s[k] === want(r)[k]);
   const NAMES = { bottom: 'abajo', back: 'atrás', left: 'izquierda' };
   const lay = G => { const u = 46, cx = G.W / 2; G.u = u; G.cells = { top: [cx - u / 2, 120], back: [cx - u / 2, 120 - u + u], left: [cx - 3 * u / 2, 120 + u], front: [cx - u / 2, 120 + u], right: [cx + u / 2, 120 + u], bottom: [cx - u / 2, 120 + 2 * u] }; G.cells.back = [cx - u / 2, 120 - 0]; G.cells.top = [cx - u / 2, 120 + u]; G.cells.front = [cx - u / 2, 120 + 2 * u]; G.cells.bottom = [cx - u / 2, 120 + 3 * u]; G.cells.left = [cx - 3 * u / 2, 120 + u]; G.cells.right = [cx + u / 2, 120 + u]; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: () => ({ bottom: null, back: null, left: null }),
@@ -26216,9 +26338,10 @@ GAMES['dado-siete'] = (() => {
 GAMES['espejo-figura'] = (() => {
   const mirror = (r, [x, y]) => (r.axis === 'v' ? [r.n - 1 - x, y] : [x, r.n - 1 - y]);
   const want = r => r.cells.map(c => mirror(r, c).join(',')).sort();
-  const ok = (s, r) => [...s.on].sort().join('|') === want(r).join('|');
+  let ok = (s, r) => [...s.on].sort().join('|') === want(r).join('|');
   const lay = G => { const r = G.r; G.u = Math.min(38, (G.W - 40) / r.n); G.o = { x: (G.W - r.n * G.u) / 2, y: 106 }; };
   const side = (r, x, y) => (r.axis === 'v' ? x >= r.n / 2 : y >= r.n / 2);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.45,
     init: () => ({ on: [] }),
@@ -26256,7 +26379,8 @@ GAMES['espejo-figura'] = (() => {
 GAMES['gira-figura'] = (() => {
   const rot = (cells, q) => { let c = cells.map(p => [...p]); for (let i = 0; i < ((q % 4) + 4) % 4; i++) c = c.map(([x, y]) => [-y, x]); const mx = Math.min(...c.map(p => p[0])), my = Math.min(...c.map(p => p[1])); return c.map(([x, y]) => [x - mx, y - my]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); };
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-  const ok = (s, r) => same(rot(r.cells, s.q), rot(r.cells, r.k));
+  let ok = (s, r) => same(rot(r.cells, s.q), rot(r.cells, r.k));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ q: same(rot(r.cells, 0), rot(r.cells, r.k)) ? 1 : 0 }),
@@ -26291,7 +26415,8 @@ GAMES['gira-figura'] = (() => {
 // params = { rounds: [{ folds, holes }] }   state = { rounds: [{ n }] }   (de 1 a 32)
 GAMES['dobla-papel'] = (() => {
   const total = r => 2 ** r.folds * r.holes;
-  const ok = (s, r) => s.n === total(r);
+  let ok = (s, r) => s.n === total(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ n: 1 }),
@@ -26333,7 +26458,7 @@ GAMES['dobla-papel'] = (() => {
 // params = { rounds: [{ seen: minutos desde las 12:00 }] }   state = { rounds: [{ t }] }   (minutos, de 5 en 5, de 0 a 715)
 GAMES['reloj-espejo'] = (() => {
   const real = r => (720 - r.seen) % 720;
-  const ok = (s, r) => s.t === real(r);
+  let ok = (s, r) => s.t === real(r);
   const hm = t => `${Math.floor(t / 60) || 12}:${String(t % 60).padStart(2, '0')}`;
   const face = (p, C, c, R, t, mirror, col) => {
     p.stroke(C.ink); p.strokeWeight(2); p.fill(RK.al(p, C.card, 220)); p.circle(c.x, c.y, 2 * R);
@@ -26343,6 +26468,7 @@ GAMES['reloj-espejo'] = (() => {
     p.strokeWeight(2); p.line(c.x, c.y, c.x + sx * R * 0.8 * Math.cos(am), c.y + R * 0.8 * Math.sin(am));
     return { mx: c.x + sx * R * 0.8 * Math.cos(am), my: c.y + R * 0.8 * Math.sin(am) };
   };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ t: r.seen }),
@@ -26497,7 +26623,7 @@ GAMES['fibonacci-suma'] = SUC.nextGame({
   range: r => [0, r.hi],
   extra: G => {
     const { p, C, T } = G, b = G.b, w = b.w / T.length, y = b.y + b.h + 14;
-    T.forEach((t, i) => { if (i < 2) return; const sum = T[i - 1] + T[i - 2]; TK.label(p, C, `${T[i - 2]}+${T[i - 1]}`, b.x + (i + 0.5) * w, y, sum === t ? C.ok : C.bad, 9, w); });
+    T.forEach((t, i) => { if (i < 2) return; const sum = T[i - 1] + T[i - 2]; TK.label(p, C, `${T[i - 2]}+${T[i - 1]}`, b.x + (i + 0.5) * w, y, sum === t && !VELO.on ? C.ok : C.bad, 9, w); });
   },
 });
 ;
@@ -26549,7 +26675,7 @@ GAMES['figura-patron'] = SUC.nextGame({
   range: r => [1, r.hi],
   noBars: true,
   extra: G => {
-    const { p, C, T, r } = G, b = G.b, w = b.w / T.length, y0 = G.Y(0), cols = r.cols || 3, good = G.s.v === r.need;
+    const { p, C, T, r } = G, b = G.b, w = b.w / T.length, y0 = G.Y(0), cols = r.cols || 3, good = !VELO.on && G.s.v === r.need;
     T.forEach((v, i) => {
       const rows = Math.ceil(v / cols), top = G.Y(v), x0 = b.x + i * w + w * 0.15, cw = w * 0.7 / cols, rh = (y0 - top) / Math.max(rows, 1), d = Math.max(3, Math.min(cw, rh) * 0.7), miss = i === G.miss;
       p.noStroke(); p.fill(miss ? (good ? C.ok : C.brand) : C.sky);
@@ -26568,8 +26694,9 @@ GAMES['figura-patron'] = SUC.nextGame({
 GAMES['ciclo-reloj'] = (() => {
   const DAYS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
   const need = r => (r.start + r.n) % 7;
-  const ok = (s, r) => s.d === need(r);
+  let ok = (s, r) => s.d === need(r);
   const ang = d => -Math.PI / 2 + d * 2 * Math.PI / 7;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ d: need(r) === r.start ? (r.start + 1) % 7 : r.start }),
@@ -26617,7 +26744,8 @@ GAMES['ciclo-reloj'] = (() => {
 // params = { rounds: [{ cyc: ['coral', 'sky', …] (colores distintos de la paleta), N }] }   state = { rounds: [{ c }] }   (c: índice en cyc o −1)
 GAMES['ciclo-colores'] = (() => {
   const need = r => (r.N - 1) % r.cyc.length;
-  const ok = (s, r) => s.c === need(r);
+  let ok = (s, r) => s.c === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ c: -1 }),
@@ -26656,7 +26784,8 @@ GAMES['ciclo-colores'] = (() => {
 // params = { rounds: [{ a, n }] }   state = { rounds: [{ d }] }   (d de 0 a 9)
 GAMES['ultima-cifra'] = (() => {
   const last = (a, n) => { let x = 1; for (let i = 0; i < n; i++) x = x * a % 10; return x; };
-  const ok = (s, r) => s.d === last(r.a, r.n);
+  let ok = (s, r) => s.d === last(r.a, r.n);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ d: last(r.a, r.n) === 0 ? 1 : 0 }),
@@ -26815,7 +26944,8 @@ GAMES['rueda-cesar'] = (() => {
   const shift = r => (idx(r.pair[1][0]) - idx(r.pair[0][0]) + 26) % 26;
   const enc = (w, k) => [...w].map(c => (idx(c) < 0 ? c : ABC[(idx(c) + k) % 26])).join('');
   const dec = (w, k) => enc(w, (26 - k) % 26);
-  const ok = (s, r) => s.k === shift(r);
+  let ok = (s, r) => s.k === shift(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: r => ({ k: shift(r) === 0 ? 1 : 0 }),
@@ -26837,7 +26967,7 @@ GAMES['rueda-cesar'] = (() => {
       }
       const a0 = -Math.PI / 2; p.stroke(C.brand); p.strokeWeight(2); p.line(c.x + R * 0.68 * Math.cos(a0), c.y + R * 0.68 * Math.sin(a0), c.x + R * 0.78 * Math.cos(a0), c.y + R * 0.78 * Math.sin(a0));
       const now = enc(r.pair[0], s.k), match = now === r.pair[1];
-      TK.label(p, C, `${r.pair[0]} → ${now}`, c.x, c.y - 12, match ? C.ok : C.ink, 13, R);
+      TK.label(p, C, `${r.pair[0]} → ${now}`, c.x, c.y - 12, match && !VELO.on ? C.ok : C.ink, 13, R);
       TK.label(p, C, `clave +${s.k}`, c.x, c.y + 12, C.mute, 10, R);
       RK.strip(p, C, G.fb, `$\\text{${r.msg} → ${dec(r.msg, s.k)}}$`, { kicker: good ? 'mensaje descifrado' : 'el mensaje con esta clave', col: G.locked || good ? C.ok : C.brand, size: 16 });
     },
@@ -26864,7 +26994,8 @@ GAMES['rueda-cesar'] = (() => {
 GAMES['altura-letras'] = (() => {
   const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', pos = c => ABC.indexOf(c) + 1;
   const need = r => [...r.word].map(pos);
-  const ok = (s, r) => need(r).every((v, i) => s.h[i] === v);
+  let ok = (s, r) => need(r).every((v, i) => s.h[i] === v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ h: need(r).map(v => (v === 1 ? 2 : 1)) }),
@@ -26910,8 +27041,9 @@ GAMES['altura-letras'] = (() => {
 // params = { rounds: [{ n, bits }] }   state = { rounds: [{ on: [0 | 1 por bombillo] }] }
 GAMES['binario-luces'] = (() => {
   const val = (on) => on.reduce((a, b) => a * 2 + b, 0);
-  const ok = (s, r) => val(s.on) === r.n;
+  let ok = (s, r) => val(s.on) === r.n;
   const bitsOf = r => Array.from({ length: r.bits }, (_, i) => (r.n >> (r.bits - 1 - i)) & 1);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ on: Array(r.bits).fill(0) }),
@@ -27015,8 +27147,9 @@ GAMES['maquina-regla'] = (() => {
     { id: 'rev', lab: 'al revés', f: x => +[...String(x)].reverse().join('') },
   ];
   const run = (s, x) => (s.op < 0 ? null : OPS[s.op].f(x, s.k));
-  const ok = (s, r) => s.op >= 0 && r.ex.every(([a, b]) => run(s, a) === b);
+  let ok = (s, r) => s.op >= 0 && r.ex.every(([a, b]) => run(s, a) === b);
   const answer = r => ({ op: OPS.findIndex(o => o.id === r.op), k: r.k ?? 0 });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.4,
     init: () => ({ op: -1, k: 0 }),
@@ -27040,7 +27173,7 @@ GAMES['maquina-regla'] = (() => {
         const y = my + 50 + i * rowH, got = run(s, a), hit = b != null && got === b;
         TK.label(p, C, String(a), G.W * 0.2, y, C.ink, 13, 60);
         TK.label(p, C, '→', G.W * 0.36, y, C.mute, 12, 20);
-        TK.label(p, C, got == null ? '?' : String(got), G.W * 0.52, y, b == null ? (good ? C.ok : C.brand) : hit ? C.ok : C.bad, 13, 70);
+        TK.label(p, C, got == null ? '?' : String(got), G.W * 0.52, y, b == null ? (good ? C.ok : C.brand) : hit && !VELO.on ? C.ok : C.bad, 13, 70);
         TK.label(p, C, b == null ? 'nuevo' : `debe dar ${b}`, G.W * 0.78, y, C.mute, 10, G.W * 0.36);
       });
       const per = 3, tw = (G.W - 32) / per - 6, ty0 = my + (r.ex.length + 1) * rowH + 56;
@@ -27108,8 +27241,9 @@ const GRAF = (() => {
 GAMES['lee-barras'] = (() => {
   const ans = r => { const v = r.bars.map(b => b[1]); return r.q === 'sum' ? v.reduce((a, c) => a + c, 0) : r.q === 'diff' ? Math.abs(v[r.a] - v[r.b]) : v[r.a]; };
   const n = r => Math.round(r.max / r.tstep) + 1;
-  const ok = (s, r) => s.i * r.tstep === ans(r);
+  let ok = (s, r) => s.i * r.tstep === ans(r);
   const ask = r => (r.q === 'sum' ? '¿Cuánto suman todas las barras?' : r.q === 'diff' ? `¿Cuánto más tiene ${r.bars[r.a][0]} que ${r.bars[r.b][0]}?` : `¿Cuánto tiene ${r.bars[r.a][0]}?`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ i: ans(r) === 0 ? 1 : 0 }),
@@ -27188,9 +27322,10 @@ GAMES['mayor-subida'] = (() => {
   const pct = (r, k) => d(r, k) / r.pts[k][1] * 100;
   const score = (r, k) => (r.q === 'down' ? -d(r, k) : r.q === 'pct' ? pct(r, k) : d(r, k));
   const best = r => { let b = 0; for (let k = 1; k < r.pts.length - 1; k++) if (score(r, k) > score(r, b)) b = k; return b; };
-  const ok = (s, r) => s.k === best(r);
+  let ok = (s, r) => s.k === best(r);
   const fmt = v => (Math.round(v * 10) / 10).toString();
   const ask = { up: '¿En qué tramo subió más?', down: '¿En qué tramo bajó más?', pct: '¿En qué tramo creció más en porcentaje?' };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ k: best(r) === 0 ? 1 : 0 }),
@@ -27267,7 +27402,8 @@ GAMES['variacion-barras'] = (() => {
 // params = { rounds: [{ data: [números], labs?, hi, step }] }   state = { rounds: [{ h }] }   (de medio en medio)
 GAMES['nivela-datos'] = (() => {
   const mean = r => r.data.reduce((a, b) => a + b, 0) / r.data.length;
-  const ok = (s, r) => s.h === mean(r);
+  let ok = (s, r) => s.h === mean(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ h: mean(r) === 0.5 ? 1 : 0.5 }),
@@ -27342,7 +27478,8 @@ GAMES['tres-centros'] = (() => {
     const cnt = {}; s.forEach(v => (cnt[v] = (cnt[v] || 0) + 1)); const mode = +Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
     return [mean, med, mode];
   };
-  const ok = (s, r) => vals(r).every((v, i) => s.m[i] === v);
+  let ok = (s, r) => vals(r).every((v, i) => s.m[i] === v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.4,
     init: r => ({ m: [r.lo, r.lo, r.lo] }),
@@ -27385,8 +27522,9 @@ GAMES['tres-centros'] = (() => {
 // params = { rounds: [{ data: [números con null en el que falta], mean, hi, step }] }   state = { rounds: [{ v }] }
 GAMES['dato-faltante'] = (() => {
   const need = r => r.mean * r.data.length - r.data.reduce((a, b) => a + (b ?? 0), 0);
-  const ok = (s, r) => s.v === need(r);
+  let ok = (s, r) => s.v === need(r);
   const cur = (r, v) => r.data.map(d => d ?? v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ v: need(r) === r.step ? 2 * r.step : r.step }),
@@ -27425,7 +27563,8 @@ GAMES['dato-faltante'] = (() => {
 GAMES['balanza-promedio'] = (() => {
   const total = r => r.groups.reduce((a, g) => a + g.n, 0);
   const need = r => r.groups.reduce((a, g) => a + g.n * g.mean, 0) / total(r);
-  const ok = (s, r) => s.f === need(r);
+  let ok = (s, r) => s.f === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ f: r.lo === need(r) ? r.lo + 0.5 : r.lo }),
@@ -27512,7 +27651,8 @@ GAMES['muestra-sesgo'] = (() => {
 // params = { rounds: [{ a: [rótulo, valor], b: [rótulo, valor], floor }] }   state = { rounds: [{ p, fl }] }   (p de 0 a 100, de 5 en 5)
 GAMES['eje-engano'] = (() => {
   const need = r => (r.a[1] - r.b[1]) / r.b[1] * 100;
-  const ok = (s, r) => s.p === need(r);
+  let ok = (s, r) => s.p === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ p: need(r) === 50 ? 45 : 50, fl: r.floor }),
@@ -27558,7 +27698,8 @@ GAMES['eje-engano'] = (() => {
 // params = { rounds: [{ rows: [[grupo, sí, total]], what }] }   state = { rounds: [{ p: [porcentaje por grupo] }] }
 GAMES['tabla-doble'] = (() => {
   const need = r => r.rows.map(([, y, t]) => y / t * 100);
-  const ok = (s, r) => need(r).every((v, i) => s.p[i] === v);
+  let ok = (s, r) => need(r).every((v, i) => s.p[i] === v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ p: r.rows.map(() => 0) }),
@@ -27603,9 +27744,10 @@ GAMES['tabla-doble'] = (() => {
 GAMES['circuito-logico'] = (() => {
   const val = (r, v) => { const a = r.neg?.[0] ? !v[0] : v[0], b = r.neg?.[1] ? !v[1] : v[1], x = r.op === 'and' ? a && b : a || b; return r.out ? !x : x; };
   const fixed = r => ['p', 'q'].map(k => r.fix?.[k]);
-  const ok = (s, r) => val(r, s.v) === r.want && fixed(r).every((f, i) => f === undefined || s.v[i] === f);
+  let ok = (s, r) => val(r, s.v) === r.want && fixed(r).every((f, i) => f === undefined || s.v[i] === f);
   const sols = r => [[false, false], [false, true], [true, false], [true, true]].filter(v => ok({ v }, r));
   const tex = r => { const a = r.neg?.[0] ? '\\neg p' : 'p', b = r.neg?.[1] ? '\\neg q' : 'q', x = `${a} ${r.op === 'and' ? '\\wedge' : '\\vee'} ${b}`; return r.out ? `\\neg(${x})` : x; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => { const f = fixed(r), v = [f[0] ?? false, f[1] ?? false]; if (ok({ v }, r)) { const i = f[1] === undefined ? 1 : 0; v[i] = !v[i]; } return { v }; },
@@ -27662,7 +27804,8 @@ GAMES['circuito-logico'] = (() => {
 GAMES['tabla-verdad'] = (() => {
   const rows = r => Array.from({ length: 2 ** r.n }, (_, k) => Array.from({ length: r.n }, (_, j) => !((k >> (r.n - 1 - j)) & 1)));
   const need = r => rows(r).map(v => !!r.f(...v));
-  const ok = (s, r) => need(r).every((v, i) => s.c[i] === v);
+  let ok = (s, r) => need(r).every((v, i) => s.c[i] === v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: r => ({ c: rows(r).map(() => null) }),
@@ -27705,7 +27848,8 @@ GAMES['tabla-verdad'] = (() => {
 GAMES['rompe-promesa'] = (() => {
   const CASES = [[true, true], [true, false], [false, true], [false, false]];
   const need = r => CASES.map(([a, b]) => !!r.f(a, b) === r.want);
-  const ok = (s, r) => need(r).every((v, i) => s.m[i] === v);
+  let ok = (s, r) => need(r).every((v, i) => s.m[i] === v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ m: [false, false, false, false] }),
@@ -27795,8 +27939,9 @@ GAMES['arma-negacion'] = CODK.fillGame({
 // frase y el juego la pone a prueba.
 // params = { rounds: [{ claim, items: [fichas], bad(x) → bool (true si la ficha tumba la frase) }] }   state = { rounds: [{ pick }] }
 GAMES['contraejemplo'] = (() => {
-  const ok = (s, r) => s.pick >= 0 && !!r.bad(r.items[s.pick]);
+  let ok = (s, r) => s.pick >= 0 && !!r.bad(r.items[s.pick]);
   const first = r => r.items.findIndex(x => r.bad(x));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ pick: -1 }),
@@ -27838,8 +27983,9 @@ GAMES['niega-todos'] = (() => {
   const truth = (k, on) => (k === 'todas' ? on.every(Boolean) : k === 'ninguna' ? !on.some(Boolean) : on.some(Boolean));
   const changes = (s, r) => s.on.filter((v, i) => v !== r.on[i]).length;
   const minCh = r => (r.kind === 'alguna' ? r.on.filter(Boolean).length : 1);
-  const ok = (s, r) => !truth(r.kind, s.on) && changes(s, r) === minCh(r);
+  let ok = (s, r) => !truth(r.kind, s.on) && changes(s, r) === minCh(r);
   const answer = r => { const on = r.on.slice(); if (r.kind === 'alguna') on.fill(false); else on[0] = !on[0]; return { on }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ on: r.on.slice() }),
@@ -27877,7 +28023,8 @@ GAMES['niega-todos'] = (() => {
 GAMES['flecha-deduce'] = (() => {
   const need = r => { const [k, b] = r.fact; return k === 'p' ? (b ? 'si' : 'nose') : (b ? 'nose' : 'no'); };
   const NAME = { si: 'sí', no: 'no', nose: 'no se sabe' };
-  const ok = (s, r) => s.v === need(r);
+  let ok = (s, r) => s.v === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ v: null }),
@@ -27924,9 +28071,10 @@ GAMES['arma-silogismo'] = (() => {
     if (t === 'disj') return d >= A.r + B.r - 1e-9;
     return d < A.r + B.r && d + Math.min(A.r, B.r) > Math.max(A.r, B.r);
   };
-  const ok = (s, r) => r.rels.every(x => rel(s, r, x));
+  let ok = (s, r) => r.rels.every(x => rel(s, r, x));
   const SAY = { sub: (a, b) => `todos los ${a} son ${b}`, disj: (a, b) => `ningún ${a} es ${b}`, cross: (a, b) => `algunos ${a} son ${b}` };
   const start = r => { const pos = {}; r.sets.forEach((z, i) => { pos[z.k] = [1.6 + i * 3.4, 3]; }); return pos; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ pos: start(r) }),
@@ -27939,7 +28087,7 @@ GAMES['arma-silogismo'] = (() => {
     enter(G) { G.grab = null; },
     draw(G) {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { pos: r.sol } : G.s, good = ok(s, r), u = G.u, o = G.o, cols = [C.sky, C.coral, C.mint];
-      r.rels.forEach((x, i) => { const hit = rel(s, r, x); TK.label(p, C, `${hit ? '✓' : '·'} ${SAY[x[2]](r.sets.find(z => z.k === x[0]).name, r.sets.find(z => z.k === x[1]).name)}`, G.W / 2, 96 + i * 18, hit ? C.ok : C.ink, 11, G.W - 24); });
+      r.rels.forEach((x, i) => { const hit = rel(s, r, x); TK.label(p, C, `${VELO.on ? '·' : hit ? '✓' : '·'} ${SAY[x[2]](r.sets.find(z => z.k === x[0]).name, r.sets.find(z => z.k === x[1]).name)}`, G.W / 2, 96 + i * 18, hit && !VELO.on ? C.ok : C.ink, 11, G.W - 24); });
       p.stroke(C.line); p.strokeWeight(1); p.noFill(); p.rect(o.x, o.y, 10 * u, 6 * u, 10);
       r.sets.forEach((z, i) => {
         const [x, y] = s.pos[z.k], cx = o.x + x * u, cy = o.y + y * u;
@@ -27975,7 +28123,8 @@ GAMES['arma-silogismo'] = (() => {
 GAMES['quien-miente'] = (() => {
   const fits = (r, T) => T.every(t => t !== null) && r.people.every((q, i) => !!q.f(T) === T[i]) && (!r.cond || r.cond(T));
   const sols = r => { const n = r.people.length, out = []; for (let m = 0; m < 2 ** n; m++) { const T = Array.from({ length: n }, (_, i) => !!((m >> i) & 1)); if (fits(r, T)) out.push(T); } return out; };
-  const ok = (s, r) => fits(r, s.T);
+  let ok = (s, r) => fits(r, s.T);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ T: r.people.map(() => null) }),
@@ -28016,10 +28165,11 @@ GAMES['quien-miente'] = (() => {
 // mueve la otra).
 // params = { rounds: [{ sym, tex, f(a, b), target, lo, hi, fix?: { a?, b? } }] }   state = { rounds: [{ a, b }] }
 GAMES['maquina-operador'] = (() => {
-  const ok = (s, r) => r.f(s.a, s.b) === r.target && (r.fix?.a === undefined || s.a === r.fix.a) && (r.fix?.b === undefined || s.b === r.fix.b);
+  let ok = (s, r) => r.f(s.a, s.b) === r.target && (r.fix?.a === undefined || s.a === r.fix.a) && (r.fix?.b === undefined || s.b === r.fix.b);
   const sols = r => { const out = []; for (let a = r.lo; a <= r.hi; a++) for (let b = r.lo; b <= r.hi; b++) if (ok({ a, b }, r)) out.push({ a, b }); return out; };
   const sub = (r, a, b) => r.tex.replace(/(?<![\\a-zA-Z])a(?![a-zA-Z])/g, `(${a})`).replace(/(?<![\\a-zA-Z(])b(?![a-zA-Z])/g, `(${b})`).replace(/(\d)\(/g, '$1\\cdot(');
   const N = r => r.hi - r.lo + 1;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => { const s = { a: r.fix?.a ?? r.lo, b: r.fix?.b ?? r.lo }; if (ok(s, r)) s[r.fix?.b === undefined ? 'b' : 'a'] += 1; return s; },
@@ -28059,8 +28209,9 @@ GAMES['maquina-operador'] = (() => {
 GAMES['cruce-tabla'] = (() => {
   const idx = (r, v) => r.set.indexOf(v);
   const steps = r => { const out = []; let cur = r.chain[0]; for (let k = 1; k < r.chain.length; k++) { const i = idx(r, cur), j = idx(r, r.chain[k]); out.push([i, j]); cur = r.tab[i][j]; } return out; };
-  const ok = (s, r) => { const st = steps(r); return s.picks.length === st.length && st.every(([i, j], k) => s.picks[k][0] === i && s.picks[k][1] === j); };
+  let ok = (s, r) => { const st = steps(r); return s.picks.length === st.length && st.every(([i, j], k) => s.picks[k][0] === i && s.picks[k][1] === j); };
   const expr = r => r.chain.length === 2 ? `${r.chain[0]} \\circ ${r.chain[1]}` : `(${r.chain[0]} \\circ ${r.chain[1]}) \\circ ${r.chain[2]}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ picks: [] }),
@@ -28108,8 +28259,9 @@ GAMES['cruce-tabla'] = (() => {
 GAMES['neutro-buscador'] = (() => {
   const good = (r, e) => r.as.every(a => r.f(a, e) === a);
   const need = r => { for (let e = r.lo; e <= r.hi; e++) if (good(r, e)) return e; return null; };
-  const ok = (s, r) => good(r, s.e);
+  let ok = (s, r) => good(r, s.e);
   const N = r => r.hi - r.lo + 1;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ e: need(r) === r.lo ? r.lo + 1 : r.lo }),
@@ -28124,7 +28276,7 @@ GAMES['neutro-buscador'] = (() => {
       const top = Math.max(...r.as, ...vals, 1), bot = Math.min(0, ...vals), Y = v => b.y + b.h - (v - bot) / (top - bot) * b.h, w = b.w / r.as.length;
       p.stroke(C.line); p.strokeWeight(1); p.line(b.x, Y(0), b.x + b.w, Y(0));
       r.as.forEach((a, i) => {
-        const x = b.x + i * w, v = vals[i], same = v === a;
+        const x = b.x + i * w, v = vals[i], same = !VELO.on && v === a;
         p.noStroke(); p.fill(RK.al(p, C.line, 200)); p.rect(x + w * 0.15, Math.min(Y(a), Y(0)), w * 0.3, Math.abs(Y(0) - Y(a)), 2);
         p.fill(same ? C.ok : C.coral); p.rect(x + w * 0.5, Math.min(Y(v), Y(0)), w * 0.3, Math.abs(Y(0) - Y(v)), 2);
         TK.label(p, C, `$${a} ${r.sym} ${s.e} = ${v}$`, x + w / 2, b.y + b.h + 14 + (i % 2) * 14, same ? C.ok : C.ink, 9, w * 1.6);
@@ -28176,7 +28328,8 @@ GAMES['adivina-operador'] = CODK.fillGame({
 // params = { rounds: [{ sym, tex, f(a, b), expr: número | [izq, der] }] }   state = { rounds: [{ done: [rutas calculadas] }] }
 GAMES['anida-operador'] = (() => {
   const nodes = (e, path = '') => (Array.isArray(e) ? [...nodes(e[0], path + '0'), ...nodes(e[1], path + '1'), path] : []);
-  const ok = (s, r) => s.done.includes('');
+  let ok = (s, r) => s.done.includes('');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ done: [] }),
@@ -28237,11 +28390,12 @@ GAMES['anida-operador'] = (() => {
 GAMES['busca-x-operador'] = (() => {
   const val = (r, x) => (r.side === 'right' ? r.f(r.k, x) : r.f(x, r.k));
   const need = r => { for (let x = r.lo; x <= r.hi; x++) if (val(r, x) === r.target) return x; return null; };
-  const ok = (s, r) => val(r, s.x) === r.target;
+  let ok = (s, r) => val(r, s.x) === r.target;
   const N = r => r.hi - r.lo + 1;
   const eq = r => (r.side === 'right' ? `${r.k} ${r.sym} x` : `x ${r.sym} ${r.k}`);
   const sub = (r, a, b) => r.tex.replace(/(?<![\\a-zA-Z])a(?![a-zA-Z])/g, `(${a})`).replace(/(?<![\\a-zA-Z(])b(?![a-zA-Z])/g, `(${b})`).replace(/(\d)\(/g, '$1\\cdot(');
   const show = (r, x) => (r.side === 'right' ? sub(r, r.k, x) : sub(r, x, r.k));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ x: need(r) === r.lo ? r.lo + 1 : r.lo }),
@@ -28282,8 +28436,9 @@ GAMES['busca-x-operador'] = (() => {
 // params = { rounds: [{ total, steps: [[num, den, 'total' | 'resto']] }] }   state = { rounds: [{ j: [partes cortadas por fila] }] }
 GAMES['corta-lo-que-queda'] = (() => {
   const run = (r, j) => { let rem = r.total; return r.steps.map(([, den, of], k) => { const base = of === 'total' ? r.total : rem, spent = base * j[k] / den; rem -= spent; return { base, spent, rem }; }); };
-  const ok = (s, r) => r.steps.every(([num], k) => s.j[k] === num);
+  let ok = (s, r) => r.steps.every(([num], k) => s.j[k] === num);
   const money = v => (Math.round(v) === v ? v.toLocaleString('es-CO') : v.toFixed(1));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ j: r.steps.map(() => 0) }),
@@ -28371,9 +28526,10 @@ GAMES['area-queda'] = (() => {
 GAMES['total-original'] = (() => {
   const rest = (r, t) => { let rem = t; r.steps.forEach(([n, d, of]) => { rem -= (of === 'total' ? t : rem) * n / d; }); return rem; };
   const need = r => { for (let t = r.step; t <= r.max; t += r.step) if (Math.abs(rest(r, t) - r.left) < 1e-9) return t; return null; };
-  const ok = (s, r) => Math.abs(rest(r, s.t) - r.left) < 1e-9;
+  let ok = (s, r) => Math.abs(rest(r, s.t) - r.left) < 1e-9;
   const N = r => Math.round(r.max / r.step);
   const fmt = v => (Math.abs(v - Math.round(v)) < 1e-9 ? Math.round(v).toLocaleString('es-CO') : v.toFixed(1));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ t: need(r) === r.step ? 2 * r.step : r.step }),
@@ -28413,7 +28569,8 @@ GAMES['nota-ponderada'] = (() => {
   const def = (r, g) => r.items.reduce((a, [, w, n]) => a + w / 100 * (n ?? g), 0);
   const r2 = v => Math.round(v * 100) / 100;
   const need = r => { for (let k = 0; k <= 50; k++) if (Math.abs(def(r, k / 10) - r.target) < 1e-9) return k / 10; return null; };
-  const ok = (s, r) => Math.abs(def(r, s.g) - r.target) < 1e-9;
+  let ok = (s, r) => Math.abs(def(r, s.g) - r.target) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ g: need(r) === 0 ? 1 : 0 }),
@@ -28459,7 +28616,8 @@ GAMES['cripto-letras'] = (() => {
   const val = (r, d) => Object.fromEntries([...r.letters].map((l, i) => [l, d[i]]));
   const valid = (r, d) => new Set(d).size === d.length && [...(r.lead || '')].every(l => val(r, d)[l] !== 0) && !!r.f(val(r, d));
   const sols = r => { const n = r.letters.length, out = []; const rec = (d) => { if (d.length === n) { if (valid(r, d)) out.push(d.slice()); return; } for (let k = 0; k <= 9; k++) if (!d.includes(k)) { d.push(k); rec(d); d.pop(); } }; rec([]); return out; };
-  const ok = (s, r) => valid(r, s.d);
+  let ok = (s, r) => valid(r, s.d);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ d: [...r.letters].map((_, i) => (i + 1) % 10) }),
@@ -28503,7 +28661,8 @@ GAMES['cripto-letras'] = (() => {
 // params = { rounds: [{ conds: [{ say, f(n) → bool }] }] }   state = { rounds: [{ n }] }
 GAMES['tablero-cifras'] = (() => {
   const all = r => Array.from({ length: 90 }, (_, k) => k + 10).filter(n => r.conds.every(c => c.f(n)));
-  const ok = (s, r) => s.n !== null && r.conds.every(c => c.f(s.n));
+  let ok = (s, r) => s.n !== null && r.conds.every(c => c.f(s.n));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.6,
     init: () => ({ n: null }),
@@ -28516,7 +28675,7 @@ GAMES['tablero-cifras'] = (() => {
     enter(G) {},
     draw(G) {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { n: all(r)[0] } : G.s, good = ok(s, r), cs = Math.min(28, (G.W - 40) / 10), x0 = (G.W - 10 * cs) / 2 + 6, y0 = 96 + r.conds.length * 18;
-      r.conds.forEach((c, i) => { const hit = s.n !== null && c.f(s.n); TK.label(p, C, `${s.n === null ? '·' : hit ? '✓' : '✗'} ${c.say}`, G.W / 2, 92 + i * 18, s.n === null ? C.ink : hit ? C.ok : C.bad, 11, G.W - 24); });
+      r.conds.forEach((c, i) => { const hit = s.n !== null && c.f(s.n); TK.label(p, C, `${s.n === null ? '·' : VELO.on ? '·' : hit ? '✓' : '✗'} ${c.say}`, G.W / 2, 92 + i * 18, s.n === null ? C.ink : hit && !VELO.on ? C.ok : C.bad, 11, G.W - 24); });
       for (let u = 0; u < 10; u++) TK.label(p, C, String(u), x0 + (u + 0.5) * cs, y0 + 6, C.coral, 9, cs);
       G.cells = [];
       for (let t = 1; t <= 9; t++) {
@@ -28552,9 +28711,10 @@ GAMES['peor-caso-bolsa'] = (() => {
   };
   const meets = (r, drawn) => { const cnt = {}; drawn.forEach(c => (cnt[c] = (cnt[c] || 0) + 1)); return r.kind === 'iguales' ? Object.values(cnt).some(v => v >= r.k) : (cnt[r.color] || 0) >= r.k; };
   const need = r => { const w = worst(r); for (let n = 1; n <= w.length; n++) if (meets(r, w.slice(0, n))) return n; return null; };
-  const ok = (s, r) => s.n === need(r);
+  let ok = (s, r) => s.n === need(r);
   const NAME = { coral: 'rojas', sky: 'azules', mint: 'verdes', sun: 'amarillas', brand: 'moradas' };
   const ask = r => (r.kind === 'iguales' ? `¿Cuántas sacar para tener seguro ${r.k} del mismo color?` : `¿Cuántas sacar para tener seguro ${r.k} ${NAME[r.color]}?`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ n: 1 }),
@@ -28634,8 +28794,9 @@ GAMES['rectangulo-max'] = (() => {
 GAMES['reparto-extremo'] = (() => {
   const target = r => { const base = r.n * (r.n - 1) / 2; if (r.ask === 'max') return r.total - base; let m = r.n; while (m * (m + 1) / 2 - (m - r.n) * (m - r.n + 1) / 2 < r.total) m++; return m; };
   const valid = (r, h) => h.every(v => v >= 1) && new Set(h).size === h.length && h.reduce((a, b) => a + b, 0) === r.total;
-  const ok = (s, r) => valid(r, s.h) && Math.max(...s.h) === target(r);
+  let ok = (s, r) => valid(r, s.h) && Math.max(...s.h) === target(r);
   const answer = r => { const n = r.n; if (r.ask === 'max') return { h: [...Array.from({ length: n - 1 }, (_, i) => i + 1), target(r)] }; const m = target(r); const h = Array.from({ length: n }, (_, i) => m - i); let extra = h.reduce((a, b) => a + b, 0) - r.total; for (let i = n - 1; i >= 0 && extra > 0; i--) { const room = h[i] - (i === n - 1 ? 1 : h[i + 1] + 1); const t = Math.min(room, extra); h[i] -= t; extra -= t; } return { h }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ h: Array(r.n).fill(1) }),
@@ -28672,9 +28833,10 @@ GAMES['reparto-extremo'] = (() => {
 GAMES['cinta-ecuacion'] = (() => {
   const len = (r, x) => r.parts.reduce((a, [c, k]) => a + c * x + k, 0);
   const need = r => { for (let x = r.lo; x <= r.hi; x++) if (len(r, x) === r.total) return x; return null; };
-  const ok = (s, r) => len(r, s.x) === r.total;
+  let ok = (s, r) => len(r, s.x) === r.total;
   const N = r => r.hi - r.lo + 1;
   const term = (c, k) => { if (c === -1 && k > 0) return `${k} - x`; const a = c === 1 ? 'x' : c === -1 ? '-x' : c === 0 ? '' : `${c}x`; return k ? (a ? `${a} ${k > 0 ? '+' : '-'} ${Math.abs(k)}` : `${k}`) : a; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ x: need(r) === r.lo ? r.lo + 1 : r.lo }),
@@ -28720,9 +28882,10 @@ GAMES['cinta-ecuacion'] = (() => {
 GAMES['mezcla-precio'] = (() => {
   const price = (r, ka) => (ka * r.a[1] + (r.total - ka) * r.b[1]) / r.total;
   const need = r => { for (let k = 0; k <= r.total; k += r.step) if (Math.abs(price(r, k) - r.target) < 1e-9) return k; return null; };
-  const ok = (s, r) => Math.abs(price(r, s.ka) - r.target) < 1e-9;
+  let ok = (s, r) => Math.abs(price(r, s.ka) - r.target) < 1e-9;
   const N = r => Math.round(r.total / r.step) + 1;
   const fm = v => Math.round(v).toLocaleString('es-CO');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ ka: need(r) === 0 ? r.step : 0 }),
@@ -28766,8 +28929,9 @@ GAMES['mezcla-precio'] = (() => {
 GAMES['alcancia-monedas'] = (() => {
   const sum = (r, k) => k * r.v[0] + (r.n - k) * r.v[1];
   const need = r => { for (let k = 0; k <= r.n; k++) if (sum(r, k) === r.total) return k; return null; };
-  const ok = (s, r) => sum(r, s.k) === r.total;
+  let ok = (s, r) => sum(r, s.k) === r.total;
   const fm = v => v.toLocaleString('es-CO');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ k: need(r) === 0 ? 1 : 0 }),
@@ -28816,8 +28980,9 @@ GAMES['alcancia-monedas'] = (() => {
 // state = { rounds: [{ b, closed, dir }] }   (dir: −1 izquierda, 1 derecha, 0 sin pintar)
 GAMES['intervalo-solucion'] = (() => {
   const need = r => { for (let b = r.lo; b <= r.hi; b++) { const L = r.f(b - 0.5), R = r.f(b + 0.5); if (L !== R) return { b, closed: !!r.f(b), dir: R ? 1 : -1 }; } return null; };
-  const ok = (s, r) => { const n = need(r); return s.b === n.b && s.closed === n.closed && s.dir === n.dir; };
+  let ok = (s, r) => { const n = need(r); return s.b === n.b && s.closed === n.closed && s.dir === n.dir; };
   const sym = s => (s.dir > 0 ? (s.closed ? '\\ge' : '>') : (s.closed ? '\\le' : '<'));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ b: need(r).b === 0 ? 1 : 0, closed: false, dir: 0 }),
@@ -28839,7 +29004,7 @@ GAMES['intervalo-solucion'] = (() => {
       if (s.dir) {
         const t = s.b + s.dir * 2, val = r.f(t);
         TK.label(p, C, `prueba con x = ${t}: ${val ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 46, val ? C.ok : C.bad, 11, G.W - 30);
-        const e = r.f(s.b); TK.label(p, C, `y con x = ${s.b}: ${e ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 64, e === s.closed ? C.ok : C.bad, 11, G.W - 30);
+        const e = r.f(s.b); TK.label(p, C, `y con x = ${s.b}: ${e ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 64, e === s.closed && !VELO.on ? C.ok : C.bad, 11, G.W - 30);
       }
       RK.strip(p, C, G.fb, s.dir ? `$x ${sym(s)} ${s.b}$` : '$\\text{toca un lado de la recta}$', { col: G.locked || good ? C.ok : C.brand, size: 18 });
     },
@@ -28876,7 +29041,8 @@ GAMES['encuesta-tres'] = (() => {
       [A, S(inA)], [B, S(inB)], [Cn, S(inC)], ['total', S(() => true)],
     ];
   };
-  const ok = (s, r) => KEYS.every(k => s.v[k] === r.z[k]);
+  let ok = (s, r) => KEYS.every(k => s.v[k] === r.z[k]);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.45,
     init: () => ({ v: Object.fromEntries(KEYS.map(k => [k, 0])) }),
@@ -28900,10 +29066,10 @@ GAMES['encuesta-tres'] = (() => {
       TK.label(p, C, r.labels[0], G.c[0][0] - G.R * 0.7, G.c[0][1] - G.R * 0.85, cols[0], 10, 80);
       TK.label(p, C, r.labels[1], G.c[1][0] + G.R * 0.7, G.c[1][1] - G.R * 0.85, cols[1], 10, 80);
       TK.label(p, C, r.labels[2], G.c[2][0] + G.R * 0.95, G.c[2][1] + G.R * 0.8, cols[2], 10, 80);
-      KEYS.forEach(k => { const [x, y] = G.cent[k], hit = s.v[k] === r.z[k]; p.noStroke(); p.fill(RK.al(p, C.card, 230)); p.rect(x - 14, y - 11, 28, 22, 6); TK.label(p, C, String(s.v[k]), x, y, G.grab?.k === k ? C.brand : good && hit ? C.ok : C.ink, 13, 26); });
+      KEYS.forEach(k => { const [x, y] = G.cent[k], hit = s.v[k] === r.z[k]; p.noStroke(); p.fill(RK.al(p, C.card, 230)); p.rect(x - 14, y - 11, 28, 22, 6); TK.label(p, C, String(s.v[k]), x, y, G.grab?.k === k ? C.brand : good && hit && !VELO.on ? C.ok : C.ink, 13, 26); });
       TK.label(p, C, 'ninguno', G.cent.none[0], G.cent.none[1] - 20, C.mute, 9, 60);
       const want = data(r, r.z), now = data(r, s.v), y0 = G.box.y + G.box.h + 12, colW = (G.W - 24) / 2;
-      want.forEach(([lab, n], i) => { const hit = now[i][1] === n, x = 12 + (i % 2) * colW + colW / 2, y = y0 + Math.floor(i / 2) * 15; TK.label(p, C, `${hit ? '✓' : '·'} ${lab}: ${n} (van ${now[i][1]})`, x, y, hit ? C.ok : C.ink, 9, colW - 4); });
+      want.forEach(([lab, n], i) => { const hit = now[i][1] === n, x = 12 + (i % 2) * colW + colW / 2, y = y0 + Math.floor(i / 2) * 15; TK.label(p, C, `${VELO.on ? '·' : hit ? '✓' : '·'} ${lab}: ${n} (van ${now[i][1]})`, x, y, hit && !VELO.on ? C.ok : C.ink, 9, colW - 4); });
       RK.strip(p, C, G.fb, good ? '$\\text{el diagrama cuadra con la encuesta}$' : `$\\text{${want.filter((w, i) => now[i][1] === w[1]).length} de ${want.length} datos}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) { const k = KEYS.find(q => Math.abs(x - G.cent[q][0]) < 22 && Math.abs(y - G.cent[q][1]) < 18); if (!k) return false; G.grab = { k, y0: y, v0: G.s.v[k] }; return true; },
@@ -28925,7 +29091,8 @@ GAMES['solapa-barras'] = (() => {
   const both = (r, s) => Math.max(0, Math.min(r.a, s + r.b) - s);
   const none = (r, s) => r.total - (r.a + r.b - both(r, s));
   const need = r => { for (let s = 0; s <= r.total - r.b; s++) if (none(r, s) === r.none) return s; return null; };
-  const ok = (s, r) => none(r, s.s) === r.none;
+  let ok = (s, r) => none(r, s.s) === r.none;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ s: need(r) === r.total - r.b ? 0 : r.total - r.b }),
@@ -29020,9 +29187,10 @@ GAMES['arbol-factores'] = (() => {
     splits.forEach(([li, pr]) => { const L = leaves(), i = L[li]; if (i === undefined) return; const nd = nodes[i]; if (nd.v % pr || nd.v === pr) return; nodes.push({ v: pr, kids: null, depth: nd.depth + 1 }, { v: nd.v / pr, kids: null, depth: nd.depth + 1 }); nd.kids = [nodes.length - 2, nodes.length - 1]; });
     return { nodes, leaves: leaves() };
   };
-  const ok = (s, r) => build(r, s.splits).leaves.every(i => isP(build(r, s.splits).nodes[i].v));
+  let ok = (s, r) => build(r, s.splits).leaves.every(i => isP(build(r, s.splits).nodes[i].v));
   const answer = r => { const splits = []; let li = 0, v = r.n; while (!isP(v)) { const pr = PR.find(q => v % q === 0) || v; splits.push([li, pr]); li += 1; v /= pr; } return { splits }; };
   const fact = n => { const f = {}; let v = n; for (let d = 2; v > 1; d++) while (v % d === 0) { f[d] = (f[d] || 0) + 1; v /= d; } return Object.entries(f).map(([b, e]) => (e > 1 ? `${b}^{${e}}` : b)).join(' \\cdot '); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: () => ({ splits: [] }),
@@ -29120,7 +29288,7 @@ GAMES['tabla-divisores'] = (() => {
 // params = { rounds: [{ tpl: '4_72', by: 3 | 4 | 9 | 11 | 6 }] }   state = { rounds: [{ d }] }   (cualquier cifra que cumpla vale)
 GAMES['cifra-faltante'] = (() => {
   const num = (r, d) => +r.tpl.replace('_', d);
-  const ok = (s, r) => s.d !== null && num(r, s.d) % r.by === 0;
+  let ok = (s, r) => s.d !== null && num(r, s.d) % r.by === 0;
   const first = r => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].find(d => num(r, d) % r.by === 0);
   const test = (r, d) => {
     const ds = String(num(r, d)).split('').map(Number), sum = ds.reduce((a, b) => a + b, 0);
@@ -29129,6 +29297,7 @@ GAMES['cifra-faltante'] = (() => {
     if (r.by === 11) { const alt = ds.reduce((a, b, i) => a + (i % 2 ? -b : b), 0); return `suma alternada: ${ds.map((b, i) => (i ? (i % 2 ? '− ' : '+ ') : '') + b).join(' ')} = ${alt}`; }
     return `par: ${ds.at(-1) % 2 === 0 ? 'sí' : 'no'} · suma de cifras ${sum}`;
   };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ d: num(r, 0) % r.by === 0 ? 1 : 0 }),
@@ -29165,7 +29334,8 @@ GAMES['cifra-faltante'] = (() => {
 // params = { rounds: [{ a, b, max, labels? }] }   state = { rounds: [{ t }] }
 GAMES['ritmos-mcm'] = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a), lcm = (a, b) => a / gcd(a, b) * b;
-  const ok = (s, r) => s.t === lcm(r.a, r.b);
+  let ok = (s, r) => s.t === lcm(r.a, r.b);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ t: r.a }),
@@ -29206,7 +29376,8 @@ GAMES['ritmos-mcm'] = (() => {
 // params = { rounds: [{ a, b }] }   state = { rounds: [{ k }] }   (lado de la baldosa, de 1 a min(a, b))
 GAMES['corta-mcd'] = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const ok = (s, r) => s.k === gcd(r.a, r.b);
+  let ok = (s, r) => s.k === gcd(r.a, r.b);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ k: 1 }),
@@ -29295,8 +29466,9 @@ GAMES['pares-primos'] = (() => {
 GAMES['tabla-dados'] = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
   const need = r => Array.from({ length: 36 }, (_, k) => !!r.f(Math.floor(k / 6) + 1, k % 6 + 1));
-  const ok = (s, r) => need(r).every((v, k) => s.m[k] === v);
+  let ok = (s, r) => need(r).every((v, k) => s.m[k] === v);
   const frac = k => { const g = gcd(k, 36) || 1; return k ? `\\tfrac{${k / g}}{${36 / g}}` : '0'; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ m: Array(36).fill(false) }),
@@ -29338,9 +29510,10 @@ GAMES['tabla-dados'] = (() => {
 GAMES['urna-fraccion'] = (() => {
   const tot = r => r.others.reduce((a, o) => a + o[1], 0);
   const need = r => { for (let k = 0; k <= 20; k++) if (k * r.target[1] === r.target[0] * (k + tot(r))) return k; return null; };
-  const ok = (s, r) => s.k * r.target[1] === r.target[0] * (s.k + tot(r));
+  let ok = (s, r) => s.k * r.target[1] === r.target[0] * (s.k + tot(r));
   const NAME = { coral: 'rojas', sky: 'azules', mint: 'verdes', sun: 'amarillas', brand: 'moradas' };
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ k: 0 }),
@@ -29427,10 +29600,11 @@ GAMES['ruleta-sectores'] = (() => {
 GAMES['arbol-caminos'] = (() => {
   const paths = r => r.steps.reduce((acc, st) => acc.flatMap(pa => st.map((_, i) => [...pa, i])), [[]]);
   const need = r => paths(r).map(pa => !!r.f(pa));
-  const ok = (s, r) => need(r).every((v, k) => s.m[k] === v);
+  let ok = (s, r) => need(r).every((v, k) => s.m[k] === v);
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
   const prob = (r, pa) => pa.reduce(([n, d], i, k) => [n * r.steps[k][i][1], d * r.steps[k][i][2]], [1, 1]);
   const add = (a, b) => { const n = a[0] * b[1] + b[0] * a[1], d = a[1] * b[1], g = gcd(n, d) || 1; return [n / g, d / g]; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: r => ({ m: paths(r).map(() => false) }),
@@ -29479,9 +29653,10 @@ GAMES['area-probabilidad'] = (() => {
   const free = r => (r.a ? 'b' : 'a');
   const known = r => r.a || r.b;
   const need = r => { const k = known(r); for (let v = 0; v <= r.grid; v++) if (k[0] * v * r.both[1] === r.both[0] * k[1] * r.grid) return v; return null; };
-  const ok = (s, r) => s.v === need(r);
+  let ok = (s, r) => s.v === need(r);
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
   const fr = (n, d) => { const g = gcd(n, d) || 1; return n ? `\\tfrac{${n / g}}{${d / g}}` : '0'; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ v: need(r) === r.grid ? 1 : r.grid }),
@@ -32843,7 +33018,7 @@ GAMES['arbol-potencia'] = (() => {
     foot: (r, s) => (s.b ** s.e === r.target ? `${Array(s.e).fill(s.b).join(' · ')} = ${r.target}` : 'Cada nivel multiplica las puntas por las ramas de cada nudo'),
     layout(G) { const w = (G.W - 36) / 2; G.box = [{ x: 12, y: G.H - 64, w, h: 32 }, { x: 24 + w, y: G.H - 64, w, h: 32 }]; },
     draw(G) {
-      const { p, C, W, H, s, r } = G, n = s.b ** s.e, good = n === r.target, top = 128, bot = H - 96, lv = (bot - top) / s.e;
+      const { p, C, W, H, s, r } = G, n = s.b ** s.e, good = !VELO.on && n === r.target, top = 128, bot = H - 96, lv = (bot - top) / s.e;
       p.noStroke(); p.fill(good ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(17);
       p.text(`${s.b}${sup(s.e)} = ${n} hojas`, W / 2, 94);
       // Las ramas: el nivel k tiene bᵏ puntas repartidas a lo ancho; se dibuja hasta donde se alcanzan a ver.
@@ -33206,7 +33381,7 @@ GAMES['salta-la-coma'] = (() => {
         p.noFill(); p.stroke(C.coral); p.strokeWeight(2);
         for (let k = r.point; k !== s.pt; k += dir) p.arc(x0 + (k + dir / 2) * cw, y + 58, cw, 20, 0, Math.PI);
       }
-      const good = s.pt === goalPt(r);
+      const good = !VELO.on && s.pt === goalPt(r);
       p.noStroke(); p.fill(good ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(24);
       fitText(p, numTxtOf(r, s.pt), W / 2, y + 108, W - 30, 24);
       p.fill(C.mute); p.textSize(12);
@@ -35261,7 +35436,7 @@ GAMES['pisa-huellas'] = (() => {
           if (v < lo) { left++; continue; }
           if (v > hi) { right++; continue; }
           const x = X(v), up = k % 2 === 1, y = up ? ly - 16 : ly + 16;
-          const hit = r.known.some(([kk, vv]) => kk === k && vv === v);
+          const hit = !VELO.on && r.known.some(([kk, vv]) => kk === k && vv === v);
           const fc = hit || locked ? C.ok : C.sky;   // huellas azules; verdes cuando pisan una bandera
           p.noStroke(); p.fill(fc); p.ellipse(x, y, 14, 18);
           p.fill(inkOn(fc, C.bg)); p.textStyle(p.BOLD); p.textSize(9); p.text(k, x, y + 1);

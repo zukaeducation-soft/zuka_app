@@ -3,9 +3,10 @@
 // pareja que da la suma y el producto del trinomio (con signos: si p es negativo, una ficha va a cada lado del 0).
 // params = { rounds: [{ s, p }] }   state = { rounds: [{ m, n }] }   (de −10 a 10)
 GAMES['suma-producto'] = (() => {
-  const ok = (st, r) => st.m + st.n === r.s && st.m * st.n === r.p;
+  let ok = (st, r) => st.m + st.n === r.s && st.m * st.n === r.p;
   const answer = r => { for (let m = -10; m <= 10; m++) for (let n = m; n <= 10; n++) if (m + n === r.s && m * n === r.p) return { m, n }; return null; };
   const t = (v, x = 'x') => (v === 0 ? '' : `${v < 0 ? '-' : '+'} ${Math.abs(v) === 1 && x ? '' : Math.abs(v)}${x}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ m: 1, n: 2 }),
@@ -19,8 +20,8 @@ GAMES['suma-producto'] = (() => {
       const { p, C, r, L } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, X = drawNumLine(p, C, L, { step: 1, every: 5 });
       G.X = X;
       RK.knob(p, C, X(s.m), L.y - 24, C.sky); RK.knob(p, C, X(s.n), L.y + 24 + 4, C.coral);
-      TK.label(p, C, `suma ${s.m + s.n} · meta ${r.s}`, G.W / 2, 116, s.m + s.n === r.s ? C.ok : C.ink, 14, G.W - 30);
-      TK.label(p, C, `producto ${s.m * s.n} · meta ${r.p}`, G.W / 2, 142, s.m * s.n === r.p ? C.ok : C.ink, 14, G.W - 30);
+      TK.label(p, C, `suma ${s.m + s.n} · meta ${r.s}`, G.W / 2, 116, s.m + s.n === r.s && !VELO.on ? C.ok : C.ink, 14, G.W - 30);
+      TK.label(p, C, `producto ${s.m * s.n} · meta ${r.p}`, G.W / 2, 142, s.m * s.n === r.p && !VELO.on ? C.ok : C.ink, 14, G.W - 30);
       const f = v => `(x ${v < 0 ? '-' : '+'} ${Math.abs(v)})`;
       RK.strip(p, C, G.fb, `$${f(s.m)}${f(s.n)} = x^2 ${t(s.m + s.n)} ${t(s.m * s.n, '')}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
     },

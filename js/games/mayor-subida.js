@@ -8,9 +8,10 @@ GAMES['mayor-subida'] = (() => {
   const pct = (r, k) => d(r, k) / r.pts[k][1] * 100;
   const score = (r, k) => (r.q === 'down' ? -d(r, k) : r.q === 'pct' ? pct(r, k) : d(r, k));
   const best = r => { let b = 0; for (let k = 1; k < r.pts.length - 1; k++) if (score(r, k) > score(r, b)) b = k; return b; };
-  const ok = (s, r) => s.k === best(r);
+  let ok = (s, r) => s.k === best(r);
   const fmt = v => (Math.round(v * 10) / 10).toString();
   const ask = { up: '¿En qué tramo subió más?', down: '¿En qué tramo bajó más?', pct: '¿En qué tramo creció más en porcentaje?' };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ k: best(r) === 0 ? 1 : 0 }),

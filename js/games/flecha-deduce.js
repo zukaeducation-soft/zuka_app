@@ -5,7 +5,8 @@
 GAMES['flecha-deduce'] = (() => {
   const need = r => { const [k, b] = r.fact; return k === 'p' ? (b ? 'si' : 'nose') : (b ? 'nose' : 'no'); };
   const NAME = { si: 'sí', no: 'no', nose: 'no se sabe' };
-  const ok = (s, r) => s.v === need(r);
+  let ok = (s, r) => s.v === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ v: null }),

@@ -7,9 +7,10 @@
 
 GAMES['alcancias-gemelas'] = (() => {
   const equivalent = (r, n) => (((1 + r / 100) ** n - 1) / n) * 100;
-  const near = (x, r, tol) => x != null && Math.abs(x - equivalent(r.r, r.n)) <= tol + 1e-9;
+  let near = (x, r, tol) => x != null && Math.abs(x - equivalent(r.r, r.n)) <= tol + 1e-9;
   const fmt = v => { const r = +v.toFixed(2); return Number.isInteger(r) ? String(r).replace(/\B(?=(\d{3})+(?!\d))/g, '.') : String(r); };
 
+  near = velo(near);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => near(state.rates?.[i], r, params.tol));
     const solution = params.rounds.map(r => `${r.r} % compuesto en ${r.n} periodos ≈ ${fmt(+equivalent(r.r, r.n).toFixed(2))} % simple`).join(' · ');

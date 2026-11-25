@@ -4,7 +4,8 @@
 // params = { rounds: [{ a, b, c }] }   (OA = a, AB = b, OA' = c)   state = { rounds: [{ d }] }   (A'B' de 0.5 a 12)
 GAMES['tales-rectas'] = (() => {
   const need = r => r.b * r.c / r.a;
-  const ok = (s, r) => Math.abs(s.d - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.d - need(r)) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: r => ({ d: need(r) === 2 ? 3 : 2 }),

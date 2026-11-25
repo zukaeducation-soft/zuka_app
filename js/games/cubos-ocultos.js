@@ -4,7 +4,8 @@
 // params = { rounds: [{ h: [[alturas por fila]] }] }   state = { rounds: [{ n }] }   (de 1 a 40)
 GAMES['cubos-ocultos'] = (() => {
   const total = r => r.h.flat().reduce((a, b) => a + b, 0);
-  const ok = (s, r) => s.n === total(r);
+  let ok = (s, r) => s.n === total(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ n: 1 }),

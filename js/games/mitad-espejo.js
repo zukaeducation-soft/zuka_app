@@ -4,9 +4,10 @@
 // params = { rounds: [{ b, target }] }   state = { rounds: [{ x }] }   (entero de −5 a 5)
 GAMES['mitad-espejo'] = (() => {
   const g = (r, x) => (1 / r.b) ** x;
-  const ok = (s, r) => Math.abs(g(r, s.x) - r.target) < 1e-9;
+  let ok = (s, r) => Math.abs(g(r, s.x) - r.target) < 1e-9;
   const answer = r => { for (let x = -5; x <= 5; x++) if (ok({ x }, r)) return { x }; return null; };
   const fr = v => (v >= 1 || v === 0 ? RK.num(v) : `\\tfrac{1}{${RK.num(1 / v)}}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ x: 0 }),

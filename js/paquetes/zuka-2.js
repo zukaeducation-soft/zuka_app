@@ -885,12 +885,13 @@ GAMES['afina-sistema'] = (() => {
 GAMES['combina-vectores'] = (() => {
   const RANGE = 6, LIM = 6;
   const n = v => String(+(+v).toFixed(3)).replace('-', '−');
-  const hits = (ab, r) => !!ab && [0, 1].every(c => Math.abs(ab[0] * r.u[c] + ab[1] * r.v[c] - r.target[c]) < 1e-9);
+  let hits = (ab, r) => !!ab && [0, 1].every(c => Math.abs(ab[0] * r.u[c] + ab[1] * r.v[c] - r.target[c]) < 1e-9);
   function coefs(r) {
     const d = r.u[0] * r.v[1] - r.u[1] * r.v[0];
     return [(r.target[0] * r.v[1] - r.target[1] * r.v[0]) / d, (r.u[0] * r.target[1] - r.u[1] * r.target[0]) / d].map(x => Math.round(x * 1e9) / 1e9 || 0);
   }
 
+  hits = velo(hits);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => hits(state.ab[i], r));
     return { ok, solution: params.rounds.map(r => { const [a, b] = coefs(r); return `a = ${n(a)}, b = ${n(b)}`; }).join(' · ') };
@@ -9964,7 +9965,7 @@ GAMES['suma-poligono'] = (() => {
       const { p, C, r, s, cx, cy, R } = G, V = Array.from({ length: r.n }, (_, i) => GEO.at(cx, cy, R, 90 - i * 360 / r.n)), tri = s.d.length + 1, done = s.d.length === r.n - 3;
       G.V = V;
       // Solo se cuentan triángulos cuando todas las piezas lo son: antes, alguna pieza todavía tiene más de tres lados.
-      TK.label(p, C, done ? `${tri} triángulos: ${tri} · 180° = ${tri * 180}°` : `${tri} ${tri === 1 ? 'pieza' : 'piezas'}: aún no son todas triángulos`, G.W / 2, 108, G.locked ? (done ? C.ok : C.bad) : done ? C.ok : C.ink, 17, G.W - 24);
+      TK.label(p, C, done ? `${tri} triángulos: ${tri} · 180° = ${tri * 180}°` : `${tri} ${tri === 1 ? 'pieza' : 'piezas'}: aún no son todas triángulos`, G.W / 2, 108, G.locked ? (done ? C.ok : C.bad) : done && !VELO.on ? C.ok : C.ink, 17, G.W - 24);
       // Los triángulos del abanico, cada uno de un tono, cuando ya están todas las diagonales de en medio.
       const cuts = [1, ...[...s.d].sort((a, b) => a - b), r.n - 1], cols = [C.sky, C.mint, C.coral, C.sun];
       for (let k = 0; k < cuts.length - 1; k++) {
@@ -10010,7 +10011,7 @@ GAMES['cuadrados-pitagoras'] = (() => {
     layout(G) { G.oxy = () => { const m = game.size(G.r, G.params), top = 104, bot = G.H - 84, u = Math.min((G.W - 24) / (2 * m), (bot - top) / (2 * m)); return { m, u, ox: G.W / 2, oy: top + m * u + (bot - top - 2 * m * u) / 2 }; }; },
     enter(G) { G.grab = null; },
     draw(G) {
-      const { p, C, r, s } = G, { m, u, ox, oy } = G.oxy(), c2 = s.a * s.a + s.b * s.b, ok = c2 === r.c2;
+      const { p, C, r, s } = G, { m, u, ox, oy } = G.oxy(), c2 = s.a * s.a + s.b * s.b, ok = !VELO.on && c2 === r.c2;
       G.u = u; G.ox = ox; G.oy = oy; G.m = m;
       // Cuadrícula tenue en la zona del triángulo.
       p.stroke(C.line); p.strokeWeight(1); for (let i = 0; i <= m; i++) { p.line(ox + i * u, oy, ox + i * u, oy - m * u); p.line(ox, oy - i * u, ox + m * u, oy - i * u); }
@@ -10069,7 +10070,7 @@ GAMES['escalera-pared'] = (() => {
     layout(G) { G.wx = 44; G.fy = G.H - 70; },
     enter(G) { G.dragging = false; },
     draw(G) {
-      const { p, C, r, s, wx, fy } = G, u = G.u = Math.min((G.W - 80) / r.L, (fy - 124) / r.L), h = Math.sqrt(r.L * r.L - s.d * s.d), ok = s.d === need(r);
+      const { p, C, r, s, wx, fy } = G, u = G.u = Math.min((G.W - 80) / r.L, (fy - 124) / r.L), h = Math.sqrt(r.L * r.L - s.d * s.d), ok = !VELO.on && s.d === need(r);
       // Pared con marcas de metro, piso y ventana.
       p.stroke(C.ink); p.strokeWeight(4); p.line(wx, fy, wx, fy - r.L * u - 8); p.line(wx - 8, fy, G.W - 14, fy);
       p.strokeWeight(1.5); p.stroke(C.line); for (let i = 1; i <= r.L; i++) { p.line(wx - 5, fy - i * u, wx, fy - i * u); p.line(wx + i * u, fy, wx + i * u, fy + 5); }
@@ -10193,7 +10194,7 @@ GAMES['voltea-flecha'] = (() => {
     },
     enter(G) { G.dragging = false; game.layoutOf(G); },
     draw(G) {
-      const { p, C, r, s, L, X } = G, R = L.max, v = r.a * s.b, ok = v === r.target, clampV = x => Math.max(-R, Math.min(R, x));
+      const { p, C, r, s, L, X } = G, R = L.max, v = r.a * s.b, ok = !VELO.on && v === r.target, clampV = x => Math.max(-R, Math.min(R, x));
       const col = G.locked ? (ok ? C.ok : C.bad) : ok ? C.ok : v < 0 ? C.coral : C.sky;
       TK.label(p, C, `${par(r.a)} · ${par(s.b)} = ${m(v)}`, G.W / 2, 104, G.locked ? (ok ? C.ok : C.bad) : ok ? C.ok : C.ink, 20, G.W - 24);
       drawNumLine(p, C, L, { step: 1, every: 5, size: 11 });

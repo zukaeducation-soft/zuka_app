@@ -10,7 +10,8 @@ GAMES['tres-centros'] = (() => {
     const cnt = {}; s.forEach(v => (cnt[v] = (cnt[v] || 0) + 1)); const mode = +Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
     return [mean, med, mode];
   };
-  const ok = (s, r) => vals(r).every((v, i) => s.m[i] === v);
+  let ok = (s, r) => vals(r).every((v, i) => s.m[i] === v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.4,
     init: r => ({ m: [r.lo, r.lo, r.lo] }),

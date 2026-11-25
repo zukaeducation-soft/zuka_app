@@ -3,7 +3,8 @@
 // sigma se desarrolla sola. Hay que dejar justo los términos de la suma pedida.
 // params = { rounds: [{ f: 'texto de f(k)', vals: [f(1), …, f(10)], lo, hi }] }   state = { rounds: [{ a, b }] }
 GAMES['sigma-indices'] = (() => {
-  const ok = (s, q) => s.a === q.lo && s.b === q.hi;
+  let ok = (s, q) => s.a === q.lo && s.b === q.hi;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ a: 1, b: 10 }),

@@ -5,7 +5,8 @@
 // params = { rounds: [{ base: [alto, ancho], others: [[alto, ancho], …] }] }   state = { rounds: [{ on: [índices pegados] }] }
 GAMES['une-rectangulos'] = (() => {
   const goods = r => r.others.map((o, i) => (o[0] === r.base[0] ? i : -1)).filter(i => i >= 0);
-  const ok = (s, r) => [...s.on].sort().join() === goods(r).join();
+  let ok = (s, r) => [...s.on].sort().join() === goods(r).join();
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ on: [] }),

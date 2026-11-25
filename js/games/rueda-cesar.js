@@ -7,7 +7,8 @@ GAMES['rueda-cesar'] = (() => {
   const shift = r => (idx(r.pair[1][0]) - idx(r.pair[0][0]) + 26) % 26;
   const enc = (w, k) => [...w].map(c => (idx(c) < 0 ? c : ABC[(idx(c) + k) % 26])).join('');
   const dec = (w, k) => enc(w, (26 - k) % 26);
-  const ok = (s, r) => s.k === shift(r);
+  let ok = (s, r) => s.k === shift(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: r => ({ k: shift(r) === 0 ? 1 : 0 }),
@@ -29,7 +30,7 @@ GAMES['rueda-cesar'] = (() => {
       }
       const a0 = -Math.PI / 2; p.stroke(C.brand); p.strokeWeight(2); p.line(c.x + R * 0.68 * Math.cos(a0), c.y + R * 0.68 * Math.sin(a0), c.x + R * 0.78 * Math.cos(a0), c.y + R * 0.78 * Math.sin(a0));
       const now = enc(r.pair[0], s.k), match = now === r.pair[1];
-      TK.label(p, C, `${r.pair[0]} → ${now}`, c.x, c.y - 12, match ? C.ok : C.ink, 13, R);
+      TK.label(p, C, `${r.pair[0]} → ${now}`, c.x, c.y - 12, match && !VELO.on ? C.ok : C.ink, 13, R);
       TK.label(p, C, `clave +${s.k}`, c.x, c.y + 12, C.mute, 10, R);
       RK.strip(p, C, G.fb, `$\\text{${r.msg} → ${dec(r.msg, s.k)}}$`, { kicker: good ? 'mensaje descifrado' : 'el mensaje con esta clave', col: G.locked || good ? C.ok : C.brand, size: 16 });
     },

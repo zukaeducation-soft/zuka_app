@@ -4,9 +4,10 @@
 // params = { rounds: [{ s, kind: 'circ' | 'sq', target }] }   (target: número o [a, b] = a − bπ)   state = { rounds: [{ t }] }   (radio o lado, de 1 a s)
 GAMES['sombreado-resta'] = (() => {
   const shaded = (r, t) => (r.kind === 'circ' ? [r.s * r.s, t * t] : [r.s * r.s - t * t, 0]);
-  const ok = (s, r) => { const [a, b] = shaded(r, s.t); return Array.isArray(r.target) ? a === r.target[0] && b === r.target[1] : a === r.target && b === 0; };
+  let ok = (s, r) => { const [a, b] = shaded(r, s.t); return Array.isArray(r.target) ? a === r.target[0] && b === r.target[1] : a === r.target && b === 0; };
   const answer = r => { for (let t = 1; t <= r.s; t++) if (ok({ t }, r)) return { t }; return null; };
   const tt = (r, t) => { const [a, b] = shaded(r, t); return b ? `${a} - ${b}\\pi` : `${a}`; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ t: 1 }),

@@ -4,8 +4,9 @@
 // params = { rounds: [{ levels: [{ name, n }], miss, total }] }   (miss: nivel que falta)   state = { rounds: [{ k }] }   (de 1 a 8)
 GAMES['arbol-opciones'] = (() => {
   const prod = (r, k) => r.levels.reduce((a, l, i) => a * (i === r.miss ? k : l.n), 1);
-  const ok = (s, r) => prod(r, s.k) === r.total;
+  let ok = (s, r) => prod(r, s.k) === r.total;
   const answer = r => ({ k: r.levels[r.miss].n });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ k: r.levels[r.miss].n === 1 ? 2 : 1 }),

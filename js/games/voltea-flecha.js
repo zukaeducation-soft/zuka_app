@@ -23,7 +23,7 @@ GAMES['voltea-flecha'] = (() => {
     },
     enter(G) { G.dragging = false; game.layoutOf(G); },
     draw(G) {
-      const { p, C, r, s, L, X } = G, R = L.max, v = r.a * s.b, ok = v === r.target, clampV = x => Math.max(-R, Math.min(R, x));
+      const { p, C, r, s, L, X } = G, R = L.max, v = r.a * s.b, ok = !VELO.on && v === r.target, clampV = x => Math.max(-R, Math.min(R, x));
       const col = G.locked ? (ok ? C.ok : C.bad) : ok ? C.ok : v < 0 ? C.coral : C.sky;
       TK.label(p, C, `${par(r.a)} · ${par(s.b)} = ${m(v)}`, G.W / 2, 104, G.locked ? (ok ? C.ok : C.bad) : ok ? C.ok : C.ink, 20, G.W - 24);
       drawNumLine(p, C, L, { step: 1, every: 5, size: 11 });

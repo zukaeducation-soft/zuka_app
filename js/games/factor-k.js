@@ -6,8 +6,9 @@ GAMES['factor-k'] = (() => {
   const fill = (r, k) => r.P.map(v => (v == null ? k : v));
   const val = (P, x) => P.reduce((a, q) => a * x + q, 0);
   const need = r => { for (let k = -12; k <= 12; k++) if (val(fill(r, k), r.c) === 0) return k; return null; };
-  const ok = (s, r) => val(fill(r, s.k), r.c) === 0;
+  let ok = (s, r) => val(fill(r, s.k), r.c) === 0;
   const tex = r => { const n = r.P.length - 1; return r.P.map((v, i) => { const e = n - i, x = e === 0 ? '' : e === 1 ? 'x' : `x^${e}`; const co = v == null ? 'k' : v; if (co === 0) return ''; return `${i && (co === 'k' || co > 0) ? '+' : ''}${co === 1 && x ? '' : co === -1 && x ? '-' : co}${x}`; }).join(''); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ k: 0 }),
@@ -20,7 +21,7 @@ GAMES['factor-k'] = (() => {
     draw(G) {
       const { p, C, r } = G, k = G.locked && !ok(G.s, r) ? need(r) : G.s.k, P = fill(r, k), V = { x0: -5, x1: 5, y0: -20, y1: 20 }, M = RK.plane(p, C, G.b, V, { step: 5 });
       RK.curve(p, G.b, M, V, x => val(P, x), C.sky, 2.4);
-      const y = val(P, r.c); drawDot(p, C, M.X(r.c), M.Y(Math.max(-20, Math.min(20, y))), 12, y === 0 ? C.ok : C.coral);
+      const y = val(P, r.c); drawDot(p, C, M.X(r.c), M.Y(Math.max(-20, Math.min(20, y))), 12, y === 0 && !VELO.on ? C.ok : C.coral);
       G.X = RK.track(p, C, 24, G.W - 24, G.tY, 25, k + 12, i => (i % 4 === 0 ? String(i - 12) : null));
       RK.strip(p, C, G.fb, `$P(${r.c}) = ${y}$`, { kicker: `k = ${k}`, col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 19 });
     },

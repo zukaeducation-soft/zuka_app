@@ -6,9 +6,10 @@
 GAMES['espejo-figura'] = (() => {
   const mirror = (r, [x, y]) => (r.axis === 'v' ? [r.n - 1 - x, y] : [x, r.n - 1 - y]);
   const want = r => r.cells.map(c => mirror(r, c).join(',')).sort();
-  const ok = (s, r) => [...s.on].sort().join('|') === want(r).join('|');
+  let ok = (s, r) => [...s.on].sort().join('|') === want(r).join('|');
   const lay = G => { const r = G.r; G.u = Math.min(38, (G.W - 40) / r.n); G.o = { x: (G.W - r.n * G.u) / 2, y: 106 }; };
   const side = (r, x, y) => (r.axis === 'v' ? x >= r.n / 2 : y >= r.n / 2);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.45,
     init: () => ({ on: [] }),

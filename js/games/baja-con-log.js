@@ -5,7 +5,8 @@
 // params = { rounds: [{ b, N, max }] }   state = { rounds: [{ x }] }   (x de 0 a max, de centésima en centésima)
 GAMES['baja-con-log'] = (() => {
   const sol = r => Math.log(r.N) / Math.log(r.b);
-  const ok = (s, r) => Math.abs(s.x - sol(r)) <= 0.03 * Math.max(1, r.max / 6);
+  let ok = (s, r) => Math.abs(s.x - sol(r)) <= 0.03 * Math.max(1, r.max / 6);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ x: 0 }),

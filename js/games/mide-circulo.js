@@ -4,9 +4,10 @@
 // params = { rounds: [{ ask: 'L' | 'A' | 'd', target }] }   (L y A en múltiplos de π)   state = { rounds: [{ r }] }   (de 0.5 a 10)
 GAMES['mide-circulo'] = (() => {
   const val = (ask, r) => (ask === 'L' ? 2 * r : ask === 'A' ? r * r : 2 * r);
-  const ok = (s, r) => Math.abs(val(r.ask, s.r) - r.target) < 1e-9;
+  let ok = (s, r) => Math.abs(val(r.ask, s.r) - r.target) < 1e-9;
   const answer = r => ({ r: r.ask === 'A' ? Math.sqrt(r.target) : r.target / 2 });
   const show = v => RK.num(Math.round(v * 100) / 100);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ r: answer(r).r === 1 ? 2 : 1 }),

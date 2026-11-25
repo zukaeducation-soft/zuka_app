@@ -5,9 +5,10 @@
 GAMES['urna-fraccion'] = (() => {
   const tot = r => r.others.reduce((a, o) => a + o[1], 0);
   const need = r => { for (let k = 0; k <= 20; k++) if (k * r.target[1] === r.target[0] * (k + tot(r))) return k; return null; };
-  const ok = (s, r) => s.k * r.target[1] === r.target[0] * (s.k + tot(r));
+  let ok = (s, r) => s.k * r.target[1] === r.target[0] * (s.k + tot(r));
   const NAME = { coral: 'rojas', sky: 'azules', mint: 'verdes', sun: 'amarillas', brand: 'moradas' };
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ k: 0 }),

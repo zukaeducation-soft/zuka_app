@@ -3,8 +3,9 @@
 // fracción y se multiplica: solo la que tiene la misma raíz deja el denominador sin raíz. La fracción vale lo mismo.
 // params = { rounds: [{ k, n, cards: [m, …] }] }   (k/√n; cada tarjeta es √m/√m, o m/m si m es negativo)   state = { rounds: [{ c }] }
 GAMES['racionaliza-uno'] = (() => {
-  const ok = (s, r) => s.c != null && r.cards[s.c] === r.n;
+  let ok = (s, r) => s.c != null && r.cards[s.c] === r.n;
   const cardTex = m => (m > 0 ? `\\dfrac{\\sqrt{${m}}}{\\sqrt{${m}}}` : `\\dfrac{${-m}}{${-m}}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ c: null }),

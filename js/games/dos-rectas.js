@@ -5,9 +5,10 @@
 GAMES['dos-rectas'] = (() => {
   const V = { x0: -6, x1: 6, y0: -6, y1: 6 };
   const on = (e, x, y) => e[0] * x + e[1] * y === e[2];
-  const ok = (s, r) => on(r.e1, s.x, s.y) && on(r.e2, s.x, s.y);
+  let ok = (s, r) => on(r.e1, s.x, s.y) && on(r.e2, s.x, s.y);
   const answer = r => { for (let x = -6; x <= 6; x++) for (let y = -6; y <= 6; y++) if (ok({ x, y }, r)) return { x, y }; return null; };
   const eq = ([a, b, c]) => b === 0 ? `${a === 1 ? '' : a}x = ${c}` : `${a === 1 ? '' : a === -1 ? '-' : a}x ${b < 0 ? '-' : '+'} ${Math.abs(b) === 1 ? '' : Math.abs(b)}y = ${c}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.35,
     init: r => (ok({ x: 0, y: 0 }, r) ? { x: 1, y: -1 } : { x: 0, y: 0 }),
@@ -23,7 +24,7 @@ GAMES['dos-rectas'] = (() => {
         if (e[1] === 0) { const x = e[2] / e[0]; p.stroke(col); p.strokeWeight(2.4); p.line(M.X(x), G.b.y, M.X(x), G.b.y + G.b.h); }
         else RK.curve(p, G.b, M, V, x => (e[2] - e[0] * x) / e[1], col, 2.4);
       });
-      [[r.e1, C.sky], [r.e2, C.coral]].forEach(([e, col], i) => { const b = { x: 12 + i * (G.W - 24) / 2 + 3, y: G.b.y + G.b.h + 8, w: (G.W - 24) / 2 - 6, h: 30 }, yes = on(e, s.x, s.y); RK.chip(p, C, b, `$${eq(e)}$`, { on: yes, col: yes ? C.ok : col, size: 12 }); });
+      [[r.e1, C.sky], [r.e2, C.coral]].forEach(([e, col], i) => { const b = { x: 12 + i * (G.W - 24) / 2 + 3, y: G.b.y + G.b.h + 8, w: (G.W - 24) / 2 - 6, h: 30 }, yes = on(e, s.x, s.y); RK.chip(p, C, b, `$${eq(e)}$`, { on: yes, col: yes && !VELO.on ? C.ok : col, size: 12 }); });
       drawDot(p, C, M.X(s.x), M.Y(s.y), 16, ok(s, r) ? C.ok : C.brand);
       RK.strip(p, C, G.fb, `$(x, y) = (${s.x}, ${s.y})$`, { kicker: ok(s, r) ? 'Cumple las dos: es la solución' : 'Busca el cruce', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
     },

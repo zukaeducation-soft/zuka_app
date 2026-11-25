@@ -4,7 +4,8 @@
 // params = { rounds: [{ a, b }] }   state = { rounds: [{ k }] }   (lado de la baldosa, de 1 a min(a, b))
 GAMES['corta-mcd'] = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const ok = (s, r) => s.k === gcd(r.a, r.b);
+  let ok = (s, r) => s.k === gcd(r.a, r.b);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: () => ({ k: 1 }),

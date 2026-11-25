@@ -4,7 +4,7 @@
 // params = { rounds: [{ seen: minutos desde las 12:00 }] }   state = { rounds: [{ t }] }   (minutos, de 5 en 5, de 0 a 715)
 GAMES['reloj-espejo'] = (() => {
   const real = r => (720 - r.seen) % 720;
-  const ok = (s, r) => s.t === real(r);
+  let ok = (s, r) => s.t === real(r);
   const hm = t => `${Math.floor(t / 60) || 12}:${String(t % 60).padStart(2, '0')}`;
   const face = (p, C, c, R, t, mirror, col) => {
     p.stroke(C.ink); p.strokeWeight(2); p.fill(RK.al(p, C.card, 220)); p.circle(c.x, c.y, 2 * R);
@@ -14,6 +14,7 @@ GAMES['reloj-espejo'] = (() => {
     p.strokeWeight(2); p.line(c.x, c.y, c.x + sx * R * 0.8 * Math.cos(am), c.y + R * 0.8 * Math.sin(am));
     return { mx: c.x + sx * R * 0.8 * Math.cos(am), my: c.y + R * 0.8 * Math.sin(am) };
   };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ t: r.seen }),

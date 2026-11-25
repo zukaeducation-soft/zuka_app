@@ -5,8 +5,9 @@
 GAMES['brujula-pasos'] = (() => {
   const D = { N: [0, 1], S: [0, -1], E: [1, 0], O: [-1, 0] }, NAME = { N: 'norte', S: 'sur', E: 'este', O: 'oeste' };
   const end = r => r.moves.reduce((p, [d, n]) => [p[0] + D[d][0] * n, p[1] + D[d][1] * n], r.start);
-  const ok = (s, r) => s.x === end(r)[0] && s.y === end(r)[1];
+  let ok = (s, r) => s.x === end(r)[0] && s.y === end(r)[1];
   const lay = G => { const r = G.r; G.u = Math.min((G.W - 40) / r.w, (G.H - 250) / r.h); G.o = { x: (G.W - r.w * G.u) / 2, y: 104 + r.h * G.u }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ x: r.start[0], y: r.start[1] }),

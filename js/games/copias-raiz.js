@@ -4,7 +4,8 @@
 // params = { rounds: [{ k, n }] }   state = { rounds: [{ m }] }   (de 1 a 100)
 GAMES['copias-raiz'] = (() => {
   const need = r => r.k * r.k * r.n;
-  const ok = (s, r) => s.m === need(r);
+  let ok = (s, r) => s.m === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ m: 10 }),

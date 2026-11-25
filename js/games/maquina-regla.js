@@ -13,8 +13,9 @@ GAMES['maquina-regla'] = (() => {
     { id: 'rev', lab: 'al revés', f: x => +[...String(x)].reverse().join('') },
   ];
   const run = (s, x) => (s.op < 0 ? null : OPS[s.op].f(x, s.k));
-  const ok = (s, r) => s.op >= 0 && r.ex.every(([a, b]) => run(s, a) === b);
+  let ok = (s, r) => s.op >= 0 && r.ex.every(([a, b]) => run(s, a) === b);
   const answer = r => ({ op: OPS.findIndex(o => o.id === r.op), k: r.k ?? 0 });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.4,
     init: () => ({ op: -1, k: 0 }),
@@ -38,7 +39,7 @@ GAMES['maquina-regla'] = (() => {
         const y = my + 50 + i * rowH, got = run(s, a), hit = b != null && got === b;
         TK.label(p, C, String(a), G.W * 0.2, y, C.ink, 13, 60);
         TK.label(p, C, '→', G.W * 0.36, y, C.mute, 12, 20);
-        TK.label(p, C, got == null ? '?' : String(got), G.W * 0.52, y, b == null ? (good ? C.ok : C.brand) : hit ? C.ok : C.bad, 13, 70);
+        TK.label(p, C, got == null ? '?' : String(got), G.W * 0.52, y, b == null ? (good ? C.ok : C.brand) : hit && !VELO.on ? C.ok : C.bad, 13, 70);
         TK.label(p, C, b == null ? 'nuevo' : `debe dar ${b}`, G.W * 0.78, y, C.mute, 10, G.W * 0.36);
       });
       const per = 3, tw = (G.W - 32) / per - 6, ty0 = my + (r.ex.length + 1) * rowH + 56;

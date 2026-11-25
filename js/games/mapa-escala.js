@@ -4,8 +4,9 @@
 // params = { rounds: [{ cm, km, real }] }   (escala: cm centímetros = km kilómetros)   state = { rounds: [{ d }] }   (cm en el mapa)
 GAMES['mapa-escala'] = (() => {
   const need = r => (r.real * r.cm) / r.km;
-  const ok = (s, r) => Math.abs(s.d - need(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.d - need(r)) < 1e-9;
   const MAX = 10;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ d: 1 }),

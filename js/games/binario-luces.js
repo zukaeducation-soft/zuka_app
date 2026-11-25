@@ -4,8 +4,9 @@
 // params = { rounds: [{ n, bits }] }   state = { rounds: [{ on: [0 | 1 por bombillo] }] }
 GAMES['binario-luces'] = (() => {
   const val = (on) => on.reduce((a, b) => a * 2 + b, 0);
-  const ok = (s, r) => val(s.on) === r.n;
+  let ok = (s, r) => val(s.on) === r.n;
   const bitsOf = r => Array.from({ length: r.bits }, (_, i) => (r.n >> (r.bits - 1 - i)) & 1);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ on: Array(r.bits).fill(0) }),

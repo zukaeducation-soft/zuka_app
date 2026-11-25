@@ -8,10 +8,11 @@ GAMES['comite-reglas'] = (() => {
   const rule = (c, S) => { const A = S.includes(c.a), B = S.includes(c.b); switch (c.t) {
     case 'ifNot': return !(A && B); case 'onlyIf': return !A || B; case 'must': return A; case 'out': return !A; case 'either': return A || B; default: return false; } };
   const valid = (r, S) => S.length === r.k && r.rules.every(c => rule(c, S));
-  const ok = (s, r) => valid(r, s.in) && (r.need || []).every(n => s.in.includes(n));
+  let ok = (s, r) => valid(r, s.in) && (r.need || []).every(n => s.in.includes(n));
   const combos = (list, k) => (k === 0 ? [[]] : list.flatMap((x, i) => combos(list.slice(i + 1), k - 1).map(c => [x, ...c])));
   const answer = r => ({ in: combos(r.names, r.k).find(S => ok({ in: S }, r)) });
   const lay = G => { const n = G.r.names.length, w = Math.min(54, (G.W - 20) / n - 4); G.home = G.r.names.map((nm, i) => ({ nm, x: G.W / 2 - (n * (w + 4) - 4) / 2 + i * (w + 4), y: 108, w, h: 30 })); G.box = { x: 24, y: 152, w: G.W - 48, h: 54 }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ in: [] }),
@@ -29,7 +30,7 @@ GAMES['comite-reglas'] = (() => {
       TK.label(p, C, `comité (${s.in.length} de ${r.k})`, G.box.x + 60, G.box.y - 8, C.mute, 10, 120);
       const w = G.home[0].w; G.inBoxes = s.in.map((nm, i) => ({ nm, x: G.box.x + 10 + i * (w + 6), y: G.box.y + 12, w, h: 30 }));
       G.inBoxes.forEach(b => { if (G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { on: true, size: 12, col: good ? C.ok : C.mint }); });
-      r.rules.forEach((c, i) => { const v = rule(c, s.in); TK.label(p, C, `${v ? '✓' : '✗'} ${c.say}`, G.W / 2, 226 + i * 15, v ? C.ok : C.bad, 10, G.W - 30); });
+      r.rules.forEach((c, i) => { const v = rule(c, s.in); TK.label(p, C, `${VELO.on ? '·' : v ? '✓' : '✗'} ${c.say}`, G.W / 2, 226 + i * 15, VELO.on ? C.ink : v ? C.ok : C.bad, 10, G.W - 30); });
       if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 15, w, h: 30 }, G.drag.nm, { on: true, col: C.brand, size: 12 });
       RK.strip(p, C, G.fb, good ? `$\\text{${s.in.join(', ')}}$` : `$\\text{faltan ${Math.max(0, r.k - s.in.length)}}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },

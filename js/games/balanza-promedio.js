@@ -6,7 +6,8 @@
 GAMES['balanza-promedio'] = (() => {
   const total = r => r.groups.reduce((a, g) => a + g.n, 0);
   const need = r => r.groups.reduce((a, g) => a + g.n * g.mean, 0) / total(r);
-  const ok = (s, r) => s.f === need(r);
+  let ok = (s, r) => s.f === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ f: r.lo === need(r) ? r.lo + 0.5 : r.lo }),

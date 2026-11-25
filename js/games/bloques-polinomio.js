@@ -5,9 +5,10 @@
 // params = { rounds: [{ mode: 'arma' | 'suma', P?, Q?, target? }] }   (coeficientes [x², x, 1])   state = { rounds: [{ c: [a, b, c] }] }
 GAMES['bloques-polinomio'] = (() => {
   const goal = r => (r.mode === 'suma' ? r.P.map((v, i) => v + r.Q[i]) : r.target);
-  const ok = (s, r) => s.c.join() === goal(r).join();
+  let ok = (s, r) => s.c.join() === goal(r).join();
   const poly = c => { const t = []; [[c[0], 'x^2'], [c[1], 'x'], [c[2], '']].forEach(([v, x]) => { if (!v) return; const a = Math.abs(v), body = x ? (a === 1 ? x : a + x) : String(a); t.push((v < 0 ? '-' : t.length ? '+' : '') + body); }); return t.length ? t.join(' ') : '0'; };
   const SRC = [[2, false], [1, false], [0, false], [2, true], [1, true], [0, true]];
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ c: r.mode === 'suma' ? [...r.P] : [0, 0, 0] }),

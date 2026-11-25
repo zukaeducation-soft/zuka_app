@@ -4,8 +4,9 @@
 // params = { rounds: [{ data: [números con null en el que falta], mean, hi, step }] }   state = { rounds: [{ v }] }
 GAMES['dato-faltante'] = (() => {
   const need = r => r.mean * r.data.length - r.data.reduce((a, b) => a + (b ?? 0), 0);
-  const ok = (s, r) => s.v === need(r);
+  let ok = (s, r) => s.v === need(r);
   const cur = (r, v) => r.data.map(d => d ?? v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ v: need(r) === r.step ? 2 * r.step : r.step }),

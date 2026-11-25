@@ -5,8 +5,9 @@
 GAMES['cruce-tabla'] = (() => {
   const idx = (r, v) => r.set.indexOf(v);
   const steps = r => { const out = []; let cur = r.chain[0]; for (let k = 1; k < r.chain.length; k++) { const i = idx(r, cur), j = idx(r, r.chain[k]); out.push([i, j]); cur = r.tab[i][j]; } return out; };
-  const ok = (s, r) => { const st = steps(r); return s.picks.length === st.length && st.every(([i, j], k) => s.picks[k][0] === i && s.picks[k][1] === j); };
+  let ok = (s, r) => { const st = steps(r); return s.picks.length === st.length && st.every(([i, j], k) => s.picks[k][0] === i && s.picks[k][1] === j); };
   const expr = r => r.chain.length === 2 ? `${r.chain[0]} \\circ ${r.chain[1]}` : `(${r.chain[0]} \\circ ${r.chain[1]}) \\circ ${r.chain[2]}`;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ picks: [] }),

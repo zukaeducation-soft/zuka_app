@@ -4,9 +4,10 @@
 // params = { rounds: [{ f1: [num, [factores]], f2: [num, [factores]], chips: [..], sum }] }   state = { rounds: [{ m: [índice | null, índice | null] }] }
 GAMES['amplifica-fraccion'] = (() => {
   const missing = (r, k) => { const L = GAMES['denominador-comun'].lcd({ d1: r.f1[1], d2: r.f2[1] }), own = [...(k ? r.f2 : r.f1)[1]]; return L.filter(f => { const i = own.indexOf(f); if (i >= 0) { own.splice(i, 1); return false; } return true; }); };
-  const ok = (s, r) => [0, 1].every(k => { const need = missing(r, k); return need.length === 0 ? s.m[k] == null : s.m[k] != null && r.chips[s.m[k]] === need[0]; });
+  let ok = (s, r) => [0, 1].every(k => { const need = missing(r, k); return need.length === 0 ? s.m[k] == null : s.m[k] != null && r.chips[s.m[k]] === need[0]; });
   const answer = r => ({ m: [0, 1].map(k => { const need = missing(r, k); return need.length ? r.chips.indexOf(need[0]) : null; }) });
   const mul = fs => GAMES['denominador-comun'].mul(fs);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ m: [null, null] }),

@@ -5,7 +5,8 @@
 GAMES['media-vida'] = (() => {
   const amt = (r, i) => r.A0 * 0.5 ** i;
   const need = r => Math.round(Math.log2(r.A0 / r.target));
-  const ok = (s, r) => s.i === need(r);
+  let ok = (s, r) => s.i === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ i: 0 }),

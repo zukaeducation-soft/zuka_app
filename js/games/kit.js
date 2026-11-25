@@ -290,6 +290,12 @@ const fitScale = (h, room) => (room > 0 && h > 0 ? Math.max(FIT_MIN, Math.min(1,
 const DESK_W = 380, ZOOM_MAX = 2;   // 380: el celular para el que se diseñaron (las piezas tienen medidas fijas)
 const deskGame = () => typeof matchMedia === 'function' && matchMedia('(min-width: 1000px)').matches;
 const zoomScale = (w, h, roomW, roomH) => (w > 0 && h > 0 ? Math.max(FIT_MIN, Math.min(ZOOM_MAX, roomW / w, roomH > 0 ? roomH / h : ZOOM_MAX)) : 1);
+// En una evaluación el juego no avisa, mientras se responde, que la respuesta ya está bien: `velo(f)` hace que la
+// comprobación diga «no» solo mientras se dibuja (mountSketch prende VELO.on si el escenario lleva data-examen). La
+// calificación no cambia. Un juego por rondas lo aplica a su `ok`; uno que compara al dibujar pregunta `VELO.on`.
+const VELO = { on: false };
+const velo = f => (...a) => (VELO.on ? false : f(...a));
+
 function mountSketch(host, sketch, aspect = 1.25, gesture) {
   let inst = null, removed = false, ro = null, grabbed = false;
   let seenGesture = false, gestureTime = 0, gestureUntil = 0;
@@ -324,7 +330,7 @@ function mountSketch(host, sketch, aspect = 1.25, gesture) {
       if (rawBg) p.background = (...a) => { const r = rawBg(...a); if (a.length === 1 && a[0] === PALETTE.bg) drawBackdrop(p); return r; };
       const draw0 = p.draw, press0 = p.mousePressed;
       if (draw0) p.draw = () => {
-        draw0();
+        if (host.dataset?.examen) { const bad = PALETTE.bad; VELO.on = true; PALETTE.bad = PALETTE.mute; try { draw0(); } finally { VELO.on = false; PALETTE.bad = bad; } } else draw0();
         drawRipples(p, ripples);
         if (gesture) {
           gestureTime += frameDt(p);

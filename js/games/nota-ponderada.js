@@ -6,7 +6,8 @@ GAMES['nota-ponderada'] = (() => {
   const def = (r, g) => r.items.reduce((a, [, w, n]) => a + w / 100 * (n ?? g), 0);
   const r2 = v => Math.round(v * 100) / 100;
   const need = r => { for (let k = 0; k <= 50; k++) if (Math.abs(def(r, k / 10) - r.target) < 1e-9) return k / 10; return null; };
-  const ok = (s, r) => Math.abs(def(r, s.g) - r.target) < 1e-9;
+  let ok = (s, r) => Math.abs(def(r, s.g) - r.target) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ g: need(r) === 0 ? 1 : 0 }),

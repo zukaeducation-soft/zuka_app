@@ -3,8 +3,9 @@
 // p % se mueve con él. Hay que lograr que esa marca caiga justo en la parte conocida.
 // params = { rounds: [{ part, p, step, max }] }   state = { rounds: [{ w }] }   (w múltiplo de step)
 GAMES['estira-todo'] = (() => {
-  const ok = (s, r) => Math.abs(s.w * r.p / 100 - r.part) < 1e-9;
+  let ok = (s, r) => Math.abs(s.w * r.p / 100 - r.part) < 1e-9;
   const answer = r => ({ w: r.part * 100 / r.p });
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: r => ({ w: answer(r).w === r.step * 10 ? r.step * 12 : r.step * 10 }),

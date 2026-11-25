@@ -7,9 +7,10 @@
 GAMES['circuito-logico'] = (() => {
   const val = (r, v) => { const a = r.neg?.[0] ? !v[0] : v[0], b = r.neg?.[1] ? !v[1] : v[1], x = r.op === 'and' ? a && b : a || b; return r.out ? !x : x; };
   const fixed = r => ['p', 'q'].map(k => r.fix?.[k]);
-  const ok = (s, r) => val(r, s.v) === r.want && fixed(r).every((f, i) => f === undefined || s.v[i] === f);
+  let ok = (s, r) => val(r, s.v) === r.want && fixed(r).every((f, i) => f === undefined || s.v[i] === f);
   const sols = r => [[false, false], [false, true], [true, false], [true, true]].filter(v => ok({ v }, r));
   const tex = r => { const a = r.neg?.[0] ? '\\neg p' : 'p', b = r.neg?.[1] ? '\\neg q' : 'q', x = `${a} ${r.op === 'and' ? '\\wedge' : '\\vee'} ${b}`; return r.out ? `\\neg(${x})` : x; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => { const f = fixed(r), v = [f[0] ?? false, f[1] ?? false]; if (ok({ v }, r)) { const i = f[1] === undefined ? 1 : 0; v[i] = !v[i]; } return { v }; },

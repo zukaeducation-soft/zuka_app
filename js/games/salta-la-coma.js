@@ -39,7 +39,7 @@ GAMES['salta-la-coma'] = (() => {
         p.noFill(); p.stroke(C.coral); p.strokeWeight(2);
         for (let k = r.point; k !== s.pt; k += dir) p.arc(x0 + (k + dir / 2) * cw, y + 58, cw, 20, 0, Math.PI);
       }
-      const good = s.pt === goalPt(r);
+      const good = !VELO.on && s.pt === goalPt(r);
       p.noStroke(); p.fill(good ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(24);
       fitText(p, numTxtOf(r, s.pt), W / 2, y + 108, W - 30, 24);
       p.fill(C.mute); p.textSize(12);

@@ -5,7 +5,7 @@
 // params = { rounds: [{ a: { label, value }, b: { label, value }, view: [lo, hi] }] }   state = { xs: [x | null] }
 
 GAMES['lupa-densidad'] = (() => {
-  const inside = (x, r) => x != null && x > Math.min(r.a.value, r.b.value) && x < Math.max(r.a.value, r.b.value);
+  let inside = (x, r) => x != null && x > Math.min(r.a.value, r.b.value) && x < Math.max(r.a.value, r.b.value);
   // Un número «redondo» entre a y b: el promedio con las menos cifras posibles.
   function between(r) {
     const lo = Math.min(r.a.value, r.b.value), hi = Math.max(r.a.value, r.b.value), mid = (lo + hi) / 2;
@@ -17,6 +17,7 @@ GAMES['lupa-densidad'] = (() => {
   const stepOf = v => 10 ** Math.floor(Math.log10((v.hi - v.lo) / 10) + 1e-9);
   const decimalsOf = st => Math.max(0, -Math.round(Math.log10(st)));
 
+  inside = velo(inside);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => inside(state.xs?.[i], r));
     const solution = params.rounds.map(r => `entre ${r.a.label} y ${r.b.label} está ${between(r)}`).join(' · ');

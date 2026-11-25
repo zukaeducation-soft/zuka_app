@@ -6,11 +6,12 @@ GAMES['busca-b'] = (() => {
   const val = (k, A, B) => (k === 'union' ? [...A, ...B.filter(v => !A.includes(v))] : k === 'inter' ? A.filter(v => B.includes(v)) : k === 'BmA' ? B.filter(v => !A.includes(v)) : A.filter(v => !B.includes(v)));
   const eq = (X, Y) => X.length === Y.length && X.every(v => Y.includes(v));
   const holds = (B, r) => r.conds.map(([k, X]) => eq(val(k, r.A, B), X));
-  const ok = (s, r) => holds(s.B, r).every(Boolean);
+  let ok = (s, r) => holds(s.B, r).every(Boolean);
   // La B que pide la ronda (se prueban todos los subconjuntos de U: son pocos).
   const answer = r => { for (let m = 0; m < 2 ** r.U.length; m++) { const B = r.U.filter((_, i) => m & (1 << i)); if (holds(B, r).every(Boolean)) return B; } return null; };
   const NAME = { union: 'A \\cup B', inter: 'A \\cap B', BmA: 'B - A', AmB: 'A - B' };
   const tset = xs => (xs.length ? `\\{${xs.join(', ')}\\}` : '\\varnothing');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: () => ({ B: [] }),

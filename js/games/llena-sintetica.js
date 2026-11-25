@@ -5,8 +5,9 @@
 GAMES['llena-sintetica'] = (() => {
   const bottom = r => { const o = [r.coef[0]]; for (let i = 1; i < r.coef.length; i++) o.push(r.coef[i] + r.c * o[i - 1]); return o; };
   const chips = r => [...bottom(r), ...r.extra].sort((a, b) => a - b);
-  const ok = (s, r) => s.cells.every((c, i) => c != null && chips(r)[c] === bottom(r)[i]);
+  let ok = (s, r) => s.cells.every((c, i) => c != null && chips(r)[c] === bottom(r)[i]);
   const answer = r => { const ch = chips(r), used = new Set(); return { cells: bottom(r).map(v => { const i = ch.findIndex((x, k) => x === v && !used.has(k)); used.add(i); return i; }) }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ cells: r.coef.map(() => null) }),

@@ -5,8 +5,9 @@
 GAMES['iguala-coeficientes'] = (() => {
   const prod = (c, a, b) => [1, a - c, b - c * a, -c * b];
   const answer = r => ({ a: r.P[1] + r.c, b: r.P[2] + r.c * (r.P[1] + r.c) });
-  const ok = (s, r) => prod(r.c, s.a, s.b).join() === r.P.join();
+  let ok = (s, r) => prod(r.c, s.a, s.b).join() === r.P.join();
   const poly3 = P => { const t = []; [[P[0], 'x^3'], [P[1], 'x^2'], [P[2], 'x'], [P[3], '']].forEach(([v, x]) => { if (!v) return; const a = Math.abs(v); t.push((v < 0 ? '-' : t.length ? '+' : '') + (x ? (a === 1 ? x : a + x) : a)); }); return t.join(' ') || '0'; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ a: 0, b: 0 }),
@@ -22,7 +23,7 @@ GAMES['iguala-coeficientes'] = (() => {
         const x = 20 + i * w;
         TK.label(p, C, n, x + w / 2, 110, C.mute, 11, w);
         RK.chip(p, C, { x: x + 4, y: 122, w: w - 8, h: 32 }, String(r.P[i]), { on: true, col: C.sky, size: 14 });
-        RK.chip(p, C, { x: x + 4, y: 164, w: w - 8, h: 32 }, String(Q[i]), { on: true, col: Q[i] === r.P[i] ? C.ok : C.coral, size: 14 });
+        RK.chip(p, C, { x: x + 4, y: 164, w: w - 8, h: 32 }, String(Q[i]), { on: true, col: Q[i] === r.P[i] && !VELO.on ? C.ok : C.coral, size: 14 });
       });
       TK.label(p, C, 'meta', 14, 138, C.mute, 9, 30); TK.label(p, C, 'tuyo', 14, 180, C.mute, 9, 30);
       G.X1 = RK.track(p, C, 50, G.W - 24, G.t1, 17, s.a + 8, i => (i % 4 === 0 ? String(i - 8) : null)); TK.label(p, C, 'a', 28, G.t1, C.mute, 12, 20);

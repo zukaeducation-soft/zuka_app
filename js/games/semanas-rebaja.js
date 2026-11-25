@@ -6,7 +6,8 @@ GAMES['semanas-rebaja'] = (() => {
   const MAX = 12;
   const val = (r, n) => 100 * (1 + r.r / 100) ** n;
   const need = r => { for (let n = 1; n <= MAX; n++) if (r.r < 0 ? val(r, n) < r.line : val(r, n) > r.line) return n; return -1; };
-  const ok = (s, r) => s.n === need(r);
+  let ok = (s, r) => s.n === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ n: 1 }),

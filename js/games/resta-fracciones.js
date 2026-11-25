@@ -4,10 +4,11 @@
 // params = { rounds: [{ A: [términos], B: [términos], C?: [términos], den }] }   (términos con signo: '3x', '-2')
 // state = { rounds: [{ flip: ['b0', 'c1', …] }] }
 GAMES['resta-fracciones'] = (() => {
-  const ok = (s, r) => s.flip.length === r.B.length && r.B.every((_, i) => s.flip.includes(`b${i}`));
+  let ok = (s, r) => s.flip.length === r.B.length && r.B.every((_, i) => s.flip.includes(`b${i}`));
   const neg = t => (t.startsWith('-') ? `+${t.slice(1)}` : `-${t.replace(/^\+/, '')}`);
   const join = ts => ts.map((t, i) => (i === 0 ? t.replace(/^\+/, '') : t.startsWith('-') ? ` - ${t.slice(1)}` : ` + ${t.replace(/^\+/, '')}`)).join('');
   const result = (r, s) => [...r.A, ...r.B.map((t, i) => (s.flip.includes(`b${i}`) ? neg(t) : t)), ...(r.C || []).map((t, i) => (s.flip.includes(`c${i}`) ? neg(t) : t))];
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.1,
     init: () => ({ flip: [] }),

@@ -5,7 +5,8 @@
 GAMES['altura-letras'] = (() => {
   const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', pos = c => ABC.indexOf(c) + 1;
   const need = r => [...r.word].map(pos);
-  const ok = (s, r) => need(r).every((v, i) => s.h[i] === v);
+  let ok = (s, r) => need(r).every((v, i) => s.h[i] === v);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.3,
     init: r => ({ h: need(r).map(v => (v === 1 ? 2 : 1)) }),

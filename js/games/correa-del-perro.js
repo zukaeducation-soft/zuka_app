@@ -11,8 +11,9 @@ GAMES['correa-del-perro'] = (() => {
     if (!v.out) return `${v.closed ? '[' : '('}${L}, ${R}${v.closed ? ']' : ')'}`;
     return `(−∞, ${L}${v.closed ? ']' : ')'} ∪ ${v.closed ? '[' : '('}${R}, ∞)`;
   }
-  const same = (a, b) => !!a && a.c === b.c && a.r === b.r && !!a.out === !!b.out && !!a.closed === !!b.closed;
+  let same = (a, b) => !!a && a.c === b.c && a.r === b.r && !!a.out === !!b.out && !!a.closed === !!b.closed;
 
+  same = velo(same);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => same(state.vals[i], r));
     return { ok, solution: params.rounds.map(r => `${r.txt}: ${setText(r)}`).join(' · ') };

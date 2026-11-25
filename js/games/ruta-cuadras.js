@@ -12,7 +12,8 @@ GAMES['ruta-cuadras'] = (() => {
   const blocked = (r, a, b) => { if (a[0] === b[0]) { const y = Math.min(a[1], b[1]), x = a[0]; return isWall(r, x - 1, y) && isWall(r, x, y); } const x = Math.min(a[0], b[0]), y = a[1]; return isWall(r, x, y - 1) && isWall(r, x, y); };
   const nbrs = (r, p) => [[1, 0], [-1, 0], [0, 1], [0, -1]].map(d => [p[0] + d[0], p[1] + d[1]]).filter(q => q[0] >= 0 && q[1] >= 0 && q[0] <= r.w && q[1] <= r.h && !blocked(r, p, q));
   const shortest = r => { const seen = { [key(r.A)]: 0 }, Q = [r.A]; while (Q.length) { const p = Q.shift(); for (const q of nbrs(r, p)) if (seen[key(q)] == null) { seen[key(q)] = seen[key(p)] + 1; Q.push(q); } } return seen[key(r.B)]; };
-  const ok = (s, r) => s.path.length > 0 && key(s.path[s.path.length - 1]) === key(r.B) && s.path.length - 1 === shortest(r);
+  let ok = (s, r) => s.path.length > 0 && key(s.path[s.path.length - 1]) === key(r.B) && s.path.length - 1 === shortest(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ path: [r.A] }),

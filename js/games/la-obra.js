@@ -55,7 +55,7 @@ GAMES['la-obra'] = (() => {
         p.noStroke(); p.fill(C.mute); p.textAlign(p.CENTER, p.TOP); p.textStyle(p.BOLD); p.textSize(12);
         p.text(`${params.workers} obreros × ${params.days} días = ${params.workers * params.days} obreros·día`, W / 2, 6);
         p.fill(C.N); p.textSize(14); p.text(`¿Cuántos obreros para terminar en ${params.askDays} días?`, W / 2, 24);
-        const col = locked ? (good ? C.ok : C.bad) : Math.round(days) === params.askDays ? C.ok : C.brand;
+        const col = locked ? (good ? C.ok : C.bad) : Math.round(days) === params.askDays && !VELO.on ? C.ok : C.brand;
         p.stroke(col); p.strokeWeight(2.5); p.fill(C.card); p.rect(W / 2 - 70, 48, 140, 50, 12);
         p.noStroke(); p.fill(col); p.rect(W / 2 - 70, 48, 140, 14, 12, 12, 0, 0);
         p.fill(C.ink); p.textSize(22); p.textAlign(p.CENTER, p.CENTER); p.text(`${Math.round(days)} días`, W / 2, 80);

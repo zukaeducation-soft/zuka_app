@@ -15,7 +15,8 @@ GAMES['encuesta-tres'] = (() => {
       [A, S(inA)], [B, S(inB)], [Cn, S(inC)], ['total', S(() => true)],
     ];
   };
-  const ok = (s, r) => KEYS.every(k => s.v[k] === r.z[k]);
+  let ok = (s, r) => KEYS.every(k => s.v[k] === r.z[k]);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.45,
     init: () => ({ v: Object.fromEntries(KEYS.map(k => [k, 0])) }),
@@ -39,10 +40,10 @@ GAMES['encuesta-tres'] = (() => {
       TK.label(p, C, r.labels[0], G.c[0][0] - G.R * 0.7, G.c[0][1] - G.R * 0.85, cols[0], 10, 80);
       TK.label(p, C, r.labels[1], G.c[1][0] + G.R * 0.7, G.c[1][1] - G.R * 0.85, cols[1], 10, 80);
       TK.label(p, C, r.labels[2], G.c[2][0] + G.R * 0.95, G.c[2][1] + G.R * 0.8, cols[2], 10, 80);
-      KEYS.forEach(k => { const [x, y] = G.cent[k], hit = s.v[k] === r.z[k]; p.noStroke(); p.fill(RK.al(p, C.card, 230)); p.rect(x - 14, y - 11, 28, 22, 6); TK.label(p, C, String(s.v[k]), x, y, G.grab?.k === k ? C.brand : good && hit ? C.ok : C.ink, 13, 26); });
+      KEYS.forEach(k => { const [x, y] = G.cent[k], hit = s.v[k] === r.z[k]; p.noStroke(); p.fill(RK.al(p, C.card, 230)); p.rect(x - 14, y - 11, 28, 22, 6); TK.label(p, C, String(s.v[k]), x, y, G.grab?.k === k ? C.brand : good && hit && !VELO.on ? C.ok : C.ink, 13, 26); });
       TK.label(p, C, 'ninguno', G.cent.none[0], G.cent.none[1] - 20, C.mute, 9, 60);
       const want = data(r, r.z), now = data(r, s.v), y0 = G.box.y + G.box.h + 12, colW = (G.W - 24) / 2;
-      want.forEach(([lab, n], i) => { const hit = now[i][1] === n, x = 12 + (i % 2) * colW + colW / 2, y = y0 + Math.floor(i / 2) * 15; TK.label(p, C, `${hit ? '✓' : '·'} ${lab}: ${n} (van ${now[i][1]})`, x, y, hit ? C.ok : C.ink, 9, colW - 4); });
+      want.forEach(([lab, n], i) => { const hit = now[i][1] === n, x = 12 + (i % 2) * colW + colW / 2, y = y0 + Math.floor(i / 2) * 15; TK.label(p, C, `${VELO.on ? '·' : hit ? '✓' : '·'} ${lab}: ${n} (van ${now[i][1]})`, x, y, hit && !VELO.on ? C.ok : C.ink, 9, colW - 4); });
       RK.strip(p, C, G.fb, good ? '$\\text{el diagrama cuadra con la encuesta}$' : `$\\text{${want.filter((w, i) => now[i][1] === w[1]).length} de ${want.length} datos}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) { const k = KEYS.find(q => Math.abs(x - G.cent[q][0]) < 22 && Math.abs(y - G.cent[q][1]) < 18); if (!k) return false; G.grab = { k, y0: y, v0: G.s.v[k] }; return true; },

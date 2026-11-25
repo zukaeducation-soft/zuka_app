@@ -5,8 +5,9 @@
 GAMES['reparto-extremo'] = (() => {
   const target = r => { const base = r.n * (r.n - 1) / 2; if (r.ask === 'max') return r.total - base; let m = r.n; while (m * (m + 1) / 2 - (m - r.n) * (m - r.n + 1) / 2 < r.total) m++; return m; };
   const valid = (r, h) => h.every(v => v >= 1) && new Set(h).size === h.length && h.reduce((a, b) => a + b, 0) === r.total;
-  const ok = (s, r) => valid(r, s.h) && Math.max(...s.h) === target(r);
+  let ok = (s, r) => valid(r, s.h) && Math.max(...s.h) === target(r);
   const answer = r => { const n = r.n; if (r.ask === 'max') return { h: [...Array.from({ length: n - 1 }, (_, i) => i + 1), target(r)] }; const m = target(r); const h = Array.from({ length: n }, (_, i) => m - i); let extra = h.reduce((a, b) => a + b, 0) - r.total; for (let i = n - 1; i >= 0 && extra > 0; i--) { const room = h[i] - (i === n - 1 ? 1 : h[i + 1] + 1); const t = Math.min(room, extra); h[i] -= t; extra -= t; } return { h }; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ h: Array(r.n).fill(1) }),

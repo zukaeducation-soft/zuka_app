@@ -6,7 +6,8 @@
 GAMES['nivela-barras'] = (() => {
   const terms = r => Array.from({ length: r.n }, (_, i) => r.a1 + i * r.d);
   const avg = r => (2 * r.a1 + (r.n - 1) * r.d) / 2;
-  const ok = (s, r) => Math.abs(s.h - avg(r)) < 1e-9;
+  let ok = (s, r) => Math.abs(s.h - avg(r)) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ h: r.a1 }),
@@ -21,7 +22,7 @@ GAMES['nivela-barras'] = (() => {
       let over = 0, under = 0;
       T.forEach((v, i) => { const x = 20 + i * w + 3; p.noStroke(); p.fill(C.sky); p.rect(x, Y(v), w - 6, G.base - Y(v), 3); if (v > h) { p.fill(RK.al(p, C.coral, 150)); p.rect(x, Y(v), w - 6, Y(h) - Y(v)); over += v - h; } else if (v < h) { p.noFill(); p.stroke(C.mint); p.strokeWeight(1.5); p.drawingContext.setLineDash([3, 3]); p.rect(x, Y(h), w - 6, Y(v) - Y(h)); p.drawingContext.setLineDash([]); under += h - v; } });
       p.stroke(C.brand); p.strokeWeight(3); p.line(14, Y(h), G.W - 14, Y(h)); RK.knob(p, C, G.W - 22, Y(h), C.brand); G.ky = Y(h); G.Y = Y; G.top = top;
-      TK.label(p, C, `sobra ${over}  ·  falta ${under}`, G.W / 2, 104, over === under ? C.ok : C.mute, 12, G.W - 30);
+      TK.label(p, C, `sobra ${over}  ·  falta ${under}`, G.W / 2, 104, over === under && !VELO.on ? C.ok : C.mute, 12, G.W - 30);
       RK.strip(p, C, G.fb, `$S = ${r.n} \\cdot ${h} = ${r.n * h}$`, { kicker: 'n · nivel', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
     },
     press(G, x, y) { if (Math.abs(y - G.ky) > 40) return false; G.grab = true; game.move(G, y); return true; },

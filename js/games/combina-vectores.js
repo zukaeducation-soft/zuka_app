@@ -7,12 +7,13 @@
 GAMES['combina-vectores'] = (() => {
   const RANGE = 6, LIM = 6;
   const n = v => String(+(+v).toFixed(3)).replace('-', '−');
-  const hits = (ab, r) => !!ab && [0, 1].every(c => Math.abs(ab[0] * r.u[c] + ab[1] * r.v[c] - r.target[c]) < 1e-9);
+  let hits = (ab, r) => !!ab && [0, 1].every(c => Math.abs(ab[0] * r.u[c] + ab[1] * r.v[c] - r.target[c]) < 1e-9);
   function coefs(r) {
     const d = r.u[0] * r.v[1] - r.u[1] * r.v[0];
     return [(r.target[0] * r.v[1] - r.target[1] * r.v[0]) / d, (r.u[0] * r.target[1] - r.u[1] * r.target[0]) / d].map(x => Math.round(x * 1e9) / 1e9 || 0);
   }
 
+  hits = velo(hits);
   function grade(state, params) {
     const ok = params.rounds.every((r, i) => hits(state.ab[i], r));
     return { ok, solution: params.rounds.map(r => { const [a, b] = coefs(r); return `a = ${n(a)}, b = ${n(b)}`; }).join(' · ') };

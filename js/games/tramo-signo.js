@@ -4,9 +4,10 @@
 // params = { rounds: [{ zeros: [..], want: 1 | -1, a?: 1 | -1 }] }   state = { rounds: [{ x }] }   (de −5.5 a 5.5 de medio en medio)
 GAMES['tramo-signo'] = (() => {
   const sg = (r, x) => Math.sign((r.a || 1) * r.zeros.reduce((a, c) => a * (x - c), 1));
-  const ok = (s, r) => sg(r, s.x) === r.want && !r.zeros.includes(s.x);
+  let ok = (s, r) => sg(r, s.x) === r.want && !r.zeros.includes(s.x);
   const answer = r => { for (let x = -5.5; x <= 5.5; x += 0.5) if (ok({ x }, r)) return { x }; return null; };
   const fac = c => (c === 0 ? 'x' : `x ${c < 0 ? '+' : '-'} ${Math.abs(c)}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ x: r.zeros[0] }),
@@ -19,7 +20,7 @@ GAMES['tramo-signo'] = (() => {
     draw(G) {
       const { p, C, r } = G, x = G.locked && !ok(G.s, r) ? answer(r).x : G.s.x, w = (G.W - 40) / (r.zeros.length + 1);
       r.zeros.forEach((c, i) => { const v = Math.sign(x - c); RK.chip(p, C, { x: 20 + i * w + 4, y: 110, w: w - 8, h: 40 }, `${fac(c)}: ${v > 0 ? '+' : v < 0 ? '−' : '0'}`, { on: true, col: v > 0 ? C.sky : v < 0 ? C.coral : C.line, size: 11 }); });
-      const t = sg(r, x); RK.chip(p, C, { x: 20 + r.zeros.length * w + 4, y: 110, w: w - 8, h: 40 }, `P: ${t > 0 ? '+' : t < 0 ? '−' : '0'}`, { on: true, col: t === r.want ? C.ok : C.coral, size: 13 });
+      const t = sg(r, x); RK.chip(p, C, { x: 20 + r.zeros.length * w + 4, y: 110, w: w - 8, h: 40 }, `P: ${t > 0 ? '+' : t < 0 ? '−' : '0'}`, { on: true, col: t === r.want && !VELO.on ? C.ok : C.coral, size: 13 });
       const X = drawNumLine(p, C, G.L, { step: 1 }); G.X = X;
       r.zeros.forEach(c => drawDot(p, C, X(c), G.L.y, 10, C.ink));
       RK.knob(p, C, X(x), G.L.y - 24, C.brand);

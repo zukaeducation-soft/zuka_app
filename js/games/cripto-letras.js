@@ -6,7 +6,8 @@ GAMES['cripto-letras'] = (() => {
   const val = (r, d) => Object.fromEntries([...r.letters].map((l, i) => [l, d[i]]));
   const valid = (r, d) => new Set(d).size === d.length && [...(r.lead || '')].every(l => val(r, d)[l] !== 0) && !!r.f(val(r, d));
   const sols = r => { const n = r.letters.length, out = []; const rec = (d) => { if (d.length === n) { if (valid(r, d)) out.push(d.slice()); return; } for (let k = 0; k <= 9; k++) if (!d.includes(k)) { d.push(k); rec(d); d.pop(); } }; rec([]); return out; };
-  const ok = (s, r) => valid(r, s.d);
+  let ok = (s, r) => valid(r, s.d);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.2,
     init: r => ({ d: [...r.letters].map((_, i) => (i + 1) % 10) }),

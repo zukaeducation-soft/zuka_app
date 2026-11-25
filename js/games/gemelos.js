@@ -12,9 +12,10 @@ GAMES['gemelos'] = (() => {
     return { A: [], B: idx(r.B, inA) };
   }
   const sorted = a => [...a].sort((x, y) => x - y).join();
-  const ok = (s, r) => { const n = need(r); return sorted(s.outA) === n.A.join() && sorted(s.outB) === n.B.join(); };
+  let ok = (s, r) => { const n = need(r); return sorted(s.outA) === n.A.join() && sorted(s.outB) === n.B.join(); };
   const GOAL = { '=': ['Haz que A = B', 'A = B'], sub: ['Haz que A ⊆ B', 'A ⊆ B'], disj: ['Haz que A y B sean disjuntos: saca solo de B', 'A ∩ B = ∅'] };
   const tset = xs => (xs.length ? `\\{${[...new Set(xs)].join(', ')}\\}` : '\\varnothing');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.45,
     init: () => ({ outA: [], outB: [] }),

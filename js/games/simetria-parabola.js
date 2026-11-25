@@ -5,7 +5,8 @@
 GAMES['simetria-parabola'] = (() => {
   const V = { x0: -6, x1: 6, y0: -8, y1: 10 };
   const f = (r, x) => r.a * (x - r.h) ** 2 + r.k;
-  const ok = (s, r) => Math.abs(s.e - r.h) < 1e-9;
+  let ok = (s, r) => Math.abs(s.e - r.h) < 1e-9;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ e: r.h === 0 ? 1 : 0 }),

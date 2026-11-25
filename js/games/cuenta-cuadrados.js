@@ -4,7 +4,8 @@
 // params = { rounds: [{ n }] }   state = { rounds: [{ c: [conteo por tamaño] }] }   (conteos de 0 a 25)
 GAMES['cuenta-cuadrados'] = (() => {
   const want = r => Array.from({ length: r.n }, (_, s) => (r.n - s) ** 2);
-  const ok = (st, r) => st.c.join() === want(r).join();
+  let ok = (st, r) => st.c.join() === want(r).join();
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.45,
     init: r => ({ c: Array(r.n).fill(0) }),

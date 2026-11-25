@@ -5,7 +5,8 @@
 GAMES['factorial-cajas'] = (() => {
   const fact = n => (n <= 1 ? 1 : n * fact(n - 1));
   const need = q => { for (let n = 1; n <= 7; n++) if (fact(n) === q.target) return n; return -1; };
-  const ok = (s, q) => fact(s.n) === q.target;
+  let ok = (s, q) => fact(s.n) === q.target;
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1,
     init: () => ({ n: 2 }),

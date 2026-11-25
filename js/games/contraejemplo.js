@@ -3,8 +3,9 @@
 // frase y el juego la pone a prueba.
 // params = { rounds: [{ claim, items: [fichas], bad(x) → bool (true si la ficha tumba la frase) }] }   state = { rounds: [{ pick }] }
 GAMES['contraejemplo'] = (() => {
-  const ok = (s, r) => s.pick >= 0 && !!r.bad(r.items[s.pick]);
+  let ok = (s, r) => s.pick >= 0 && !!r.bad(r.items[s.pick]);
   const first = r => r.items.findIndex(x => r.bad(x));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ pick: -1 }),

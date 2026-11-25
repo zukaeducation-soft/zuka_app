@@ -4,7 +4,8 @@
 // params = { rounds: [{ sym, tex, f(a, b), expr: número | [izq, der] }] }   state = { rounds: [{ done: [rutas calculadas] }] }
 GAMES['anida-operador'] = (() => {
   const nodes = (e, path = '') => (Array.isArray(e) ? [...nodes(e[0], path + '0'), ...nodes(e[1], path + '1'), path] : []);
-  const ok = (s, r) => s.done.includes('');
+  let ok = (s, r) => s.done.includes('');
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ done: [] }),

@@ -4,11 +4,12 @@
 // rendimiento, el juego llena la segunda cuadrícula y da la respuesta.
 // params = { rounds: [{ who, what, m1, h1, c1, m2, h2, step, max }] }   state = { rounds: [{ k }] }   (rendimiento k·step)
 GAMES['tabla-compuesta'] = (() => {
-  const ok = (s, r) => s.k * r.step * r.m1 * r.h1 === r.c1;
+  let ok = (s, r) => s.k * r.step * r.m1 * r.h1 === r.c1;
   const answer = r => ({ k: r.c1 / (r.m1 * r.h1) / r.step });
   const grid = (p, C, x, y, m, h, cell, v, col, good) => {
     for (let i = 0; i < m; i++) for (let j = 0; j < h; j++) { p.stroke(C.bg); p.strokeWeight(1.5); p.fill(good ? C.ok : col); p.rect(x + j * cell, y + i * cell, cell, cell, 3); }
   };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: r => ({ k: answer(r).k === 1 ? 2 : 1 }),

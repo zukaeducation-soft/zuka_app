@@ -5,8 +5,9 @@
 GAMES['forma-canonica'] = (() => {
   const V = { x0: -7, x1: 7, y0: -9, y1: 12 };
   const need = r => ({ h: -r.b / 2, k: r.c - (r.b / 2) ** 2 });
-  const ok = (s, r) => s.h === need(r).h && s.k === need(r).k;
+  let ok = (s, r) => s.h === need(r).h && s.k === need(r).k;
   const sg = v => (v < 0 ? `- ${Math.abs(v)}` : `+ ${v}`);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.25,
     init: () => ({ h: 0, k: 0 }),

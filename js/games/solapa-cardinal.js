@@ -20,7 +20,7 @@ GAMES['solapa-cardinal'] = (() => {
     layout(G) { const W = G.W, H = G.H; G.cy = H * 0.46; G.R = Math.min(W * 0.25, H * 0.2); G.fb = { x: 12, y: H - 88, w: W - 24, h: 54 }; },
     enter(G) { G.grab = false; },
     draw(G) {
-      const { p, C, r } = G, [SA, SB] = SK.sets(C), good = G.s.k === need(r), k = G.locked && !good ? need(r) : G.s.k, m = Math.min(r.a, r.b);
+      const { p, C, r } = G, [SA, SB] = SK.sets(C), good = !VELO.on && G.s.k === need(r), k = G.locked && !good ? need(r) : G.s.k, m = Math.min(r.a, r.b);
       // La distancia entre centros sale de k: sin compartir, separados; todo compartido, el menor adentro del mayor.
       const R = G.R, f = m ? k / m : 0, d = 2 * R * (1 - f) + 0.15 * R * f, ax = G.W / 2 - d / 2, bx = G.W / 2 + d / 2;
       G.bx = bx;
@@ -34,7 +34,7 @@ GAMES['solapa-cardinal'] = (() => {
       TK.label(p, C, `${k}`, (ax + bx) / 2, G.cy + R * 0.95, C.ink, 12, 40);
       TK.label(p, C, `${r.b - k}`, bx + R * 0.55, G.cy + R * 0.95, SB.ink, 12, 40);
       const u = r.a + r.b - k;
-      SK.formal(p, C, G.fb, `$n(A \\cup B) = ${r.a} + ${r.b} - ${k} = ${u}$`, { kicker: `Meta: ${r.total}`, col: G.locked ? C.ok : u === r.total ? C.ok : SB.line, size: 17 });
+      SK.formal(p, C, G.fb, `$n(A \\cup B) = ${r.a} + ${r.b} - ${k} = ${u}$`, { kicker: `Meta: ${r.total}`, col: G.locked ? C.ok : u === r.total && !VELO.on ? C.ok : SB.line, size: 17 });
     },
     press(G, x, y) { if (Math.abs(y - G.cy) > G.R * 1.1 || x < G.W * 0.3) return false; G.grab = true; game.move(G, x); return true; },
     drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },

@@ -18,7 +18,7 @@ GAMES['suma-poligono'] = (() => {
       const { p, C, r, s, cx, cy, R } = G, V = Array.from({ length: r.n }, (_, i) => GEO.at(cx, cy, R, 90 - i * 360 / r.n)), tri = s.d.length + 1, done = s.d.length === r.n - 3;
       G.V = V;
       // Solo se cuentan triángulos cuando todas las piezas lo son: antes, alguna pieza todavía tiene más de tres lados.
-      TK.label(p, C, done ? `${tri} triángulos: ${tri} · 180° = ${tri * 180}°` : `${tri} ${tri === 1 ? 'pieza' : 'piezas'}: aún no son todas triángulos`, G.W / 2, 108, G.locked ? (done ? C.ok : C.bad) : done ? C.ok : C.ink, 17, G.W - 24);
+      TK.label(p, C, done ? `${tri} triángulos: ${tri} · 180° = ${tri * 180}°` : `${tri} ${tri === 1 ? 'pieza' : 'piezas'}: aún no son todas triángulos`, G.W / 2, 108, G.locked ? (done ? C.ok : C.bad) : done && !VELO.on ? C.ok : C.ink, 17, G.W - 24);
       // Los triángulos del abanico, cada uno de un tono, cuando ya están todas las diagonales de en medio.
       const cuts = [1, ...[...s.d].sort((a, b) => a - b), r.n - 1], cols = [C.sky, C.mint, C.coral, C.sun];
       for (let k = 0; k < cuts.length - 1; k++) {

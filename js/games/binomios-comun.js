@@ -3,8 +3,9 @@
 // las barras dicen la suma y los cuadritos el producto.
 // params = { rounds: [{ s, p }] }   (x² + s x + p)   state = { rounds: [{ a, b }] }   (de 1 a 9)
 GAMES['binomios-comun'] = (() => {
-  const ok = (st, r) => st.a + st.b === r.s && st.a * st.b === r.p;
+  let ok = (st, r) => st.a + st.b === r.s && st.a * st.b === r.p;
   const answer = r => { for (let a = 1; a <= 9; a++) for (let b = a; b <= 9; b++) if (a + b === r.s && a * b === r.p) return { a, b }; return null; };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: () => ({ a: 1, b: 1 }),

@@ -5,8 +5,9 @@
 // state = { rounds: [{ b, closed, dir }] }   (dir: −1 izquierda, 1 derecha, 0 sin pintar)
 GAMES['intervalo-solucion'] = (() => {
   const need = r => { for (let b = r.lo; b <= r.hi; b++) { const L = r.f(b - 0.5), R = r.f(b + 0.5); if (L !== R) return { b, closed: !!r.f(b), dir: R ? 1 : -1 }; } return null; };
-  const ok = (s, r) => { const n = need(r); return s.b === n.b && s.closed === n.closed && s.dir === n.dir; };
+  let ok = (s, r) => { const n = need(r); return s.b === n.b && s.closed === n.closed && s.dir === n.dir; };
   const sym = s => (s.dir > 0 ? (s.closed ? '\\ge' : '>') : (s.closed ? '\\le' : '<'));
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: r => ({ b: need(r).b === 0 ? 1 : 0, closed: false, dir: 0 }),
@@ -28,7 +29,7 @@ GAMES['intervalo-solucion'] = (() => {
       if (s.dir) {
         const t = s.b + s.dir * 2, val = r.f(t);
         TK.label(p, C, `prueba con x = ${t}: ${val ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 46, val ? C.ok : C.bad, 11, G.W - 30);
-        const e = r.f(s.b); TK.label(p, C, `y con x = ${s.b}: ${e ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 64, e === s.closed ? C.ok : C.bad, 11, G.W - 30);
+        const e = r.f(s.b); TK.label(p, C, `y con x = ${s.b}: ${e ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 64, e === s.closed && !VELO.on ? C.ok : C.bad, 11, G.W - 30);
       }
       RK.strip(p, C, G.fb, s.dir ? `$x ${sym(s)} ${s.b}$` : '$\\text{toca un lado de la recta}$', { col: G.locked || good ? C.ok : C.brand, size: 18 });
     },

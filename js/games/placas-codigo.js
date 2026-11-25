@@ -3,9 +3,10 @@
 // a cada casilla la ficha con su número de opciones; el juego multiplica.
 // params = { rounds: [{ slots: [rótulo], rule, want: [n], tray: [n], ask? }] }   (ask: la pregunta; por defecto «¿Cuántos códigos hay?»)   state = { rounds: [{ put: [índice de ficha | null] }] }
 GAMES['placas-codigo'] = (() => {
-  const ok = (s, r) => r.want.every((w, i) => s.put[i] != null && r.tray[s.put[i]] === w);
+  let ok = (s, r) => r.want.every((w, i) => s.put[i] != null && r.tray[s.put[i]] === w);
   const answer = r => { const used = new Set(); return { put: r.want.map(w => { const i = r.tray.findIndex((t, k) => t === w && !used.has(k)); used.add(i); return i; }) }; };
   const lay = G => { const n = G.r.slots.length, w = Math.min(58, (G.W - 30) / n - 6); G.boxes = G.r.slots.map((_, i) => ({ i, x: G.W / 2 - (n * (w + 6) - 6) / 2 + i * (w + 6), y: 140, w, h: 48 })); };
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.15,
     init: r => ({ put: r.slots.map(() => null) }),

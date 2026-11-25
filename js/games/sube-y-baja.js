@@ -5,7 +5,8 @@
 GAMES['sube-y-baja'] = (() => {
   const end = x => 100 * (1 + x / 100) * (1 - x / 100);
   const need = r => { for (let x = 5; x <= 60; x += 5) if (Math.abs(end(x) - r.end) < 1e-9) return x; return -1; };
-  const ok = (s, r) => s.x === need(r);
+  let ok = (s, r) => s.x === need(r);
+  ok = velo(ok);
   const game = roundsGame({
     aspect: 1.05,
     init: () => ({ x: 5 }),
