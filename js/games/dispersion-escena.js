@@ -8,8 +8,8 @@
   // ---------------------------------------------------------------------------------------------- rango, varianza, desviación
   // Punto de equilibrio: las desviaciones suman 0.  params { d, hi }
   XG.figura('desvios-cero', {
-    ini: () => ({ m: 0 }), alto: () => 190, ms: 1000, pie: 'Mueve el punto de apoyo.', manijas: p => [{ k: 'm', min: 0, max: p.hi, paso: 1, et: 'apoyo' }], ok: (v, p) => v.m * p.d.length === sum(p.d), sol: p => ({ m: sum(p.d) / p.d.length }), texto: p => `${sum(p.d) / p.d.length}`,
-    dib(v, K, p, f) { const [X, h] = EJE(K, p.hi, 92, p.hi > 12 ? 2 : 1), s = sum(p.d.map(x => x - v.m)); return h + puntos(K, p.d, X, 92) + K.p([[X(v.m), 94], [X(v.m) - 8, 108], [X(v.m) + 8, 108]], 'fg') + K.f(f, K.t(170, 136, `desviaciones: ${s > 0 ? '+' : ''}${N(s)}`, 'b')); },
+    ini: () => ({ m: 0 }), alto: () => 210, ms: 1000, pie: 'Mueve el punto de apoyo.', manijas: p => [{ k: 'm', min: 0, max: p.hi, paso: 1, et: 'apoyo' }], ok: (v, p) => v.m * p.d.length === sum(p.d), sol: p => ({ m: sum(p.d) / p.d.length }), texto: p => `${sum(p.d) / p.d.length}`,
+    dib(v, K, p, f) { const [X, h] = EJE(K, p.hi, 92, p.hi > 12 ? 2 : 1), s = sum(p.d.map(x => x - v.m)); return h + puntos(K, p.d, X, 92) + K.l(X(v.m), 92, X(v.m), 70, 'lg d') + K.p([[X(v.m), 115], [X(v.m) - 8, 129], [X(v.m) + 8, 129]], 'fg') + K.f(f, K.t(170, 148, `desviaciones: ${s > 0 ? '+' : ''}${N(s)}`, 'b')); },
     aviso: (v, p) => (v.m * p.d.length < sum(p.d) ? 'Las desviaciones de la derecha pesan más.' : 'Las desviaciones de la izquierda pesan más.'), bien: (v) => `Alrededor de ${v.m} las desviaciones suman 0: es el promedio.`,
   });
   // Cambia el dato mayor hasta un rango pedido.  params { d (sin el mayor), rango, hi }
@@ -29,7 +29,7 @@
   XG.figura('arma-caja', {
     ini: () => ({ a: 0, b: 0, c: 0 }), alto: () => 300, ms: 1000, pie: 'Mueve los tres cortes.', manijas: p => [['a', 'primer cuartil'], ['b', 'mediana'], ['c', 'tercer cuartil']].map(([k, et]) => ({ k, min: 0, max: p.hi, paso: 1, et })),
     ok(v, p) { const q = cuart(p.d); return v.a === q[0] && v.b === q[1] && v.c === q[2]; }, sol(p) { const [a, b, c] = cuart(p.d); return { a, b, c }; }, texto: p => cuart(p.d).join(', '),
-    dib(v, K, p, f) { const [X, h] = EJE(K, p.hi, 84, p.hi > 12 ? 2 : 1), lo = Math.min(...p.d), hi = Math.max(...p.d); return h + puntos(K, p.d, X, 84) + K.f(f, K.l(X(lo), 124, X(hi), 124, 'gr') + K.r(X(v.a), 110, X(v.c) - X(v.a), 28, 'fa', 2) + K.l(X(v.b), 110, X(v.b), 138, 'lg gr')); },
+    dib(v, K, p, f) { const [X, h] = EJE(K, p.hi, 84, p.hi > 12 ? 2 : 1), lo = Math.min(...p.d), hi = Math.max(...p.d); return h + puntos(K, p.d, X, 84) + K.f(f, K.l(X(lo), 124, X(hi), 124, 'gr') + K.r(X(Math.min(v.a, v.c)), 110, Math.abs(X(v.c) - X(v.a)), 28, 'fa', 2) + K.l(X(v.b), 110, X(v.b), 138, 'lg gr')); },
     aviso(v, p) { const q = cuart(p.d); return v.b !== q[1] ? 'La mediana deja la misma cantidad de datos a cada lado.' : v.a !== q[0] ? 'El primer cuartil es la mediana de la mitad de abajo.' : 'El tercer cuartil es la mediana de la mitad de arriba.'; }, bien: (v) => `Cuartiles ${v.a}, ${v.b} y ${v.c}.`,
   });
   const caja = (K, q, X, y, cls) => K.l(X(q[0]), y, X(q[4]), y, 'gr') + K.l(X(q[0]), y - 8, X(q[0]), y + 8, 'gr') + K.l(X(q[4]), y - 8, X(q[4]), y + 8, 'gr') + K.r(X(q[1]), y - 12, X(q[3]) - X(q[1]), 24, cls, 2) + K.l(X(q[2]), y - 12, X(q[2]), y + 12, 'lg gr');
@@ -57,7 +57,7 @@
     sol: p => [p.raro], aviso: () => 'Ese sigue la tendencia de los demás, o falta uno: busca el que está lejos del grupo.', bien: p => p.ok, texto: p => `(${p.pts[p.raro].join(', ')})`, pie: 'Toca el punto que se sale.',
   });
   XG.renglones('signo-correlacion', { w: 92, x: 276 });
-  XG.renglones('fuerza-r', { w: 104, x: 274 });
+  XG.renglones('fuerza-r', { w: 116, x: 270 });
   XG.renglones('tercer-factor', { w: 130, x: 262 });
   XG.frases('causa-o-no');
   XG.ascensor('sube-nube', 60, 1, neutro);
@@ -74,7 +74,7 @@
   XG.figura('coma-cientifica', {
     ini: () => ({ e: 0 }), alto: () => 170, ms: 900, pie: 'Mueve el exponente.', manijas: p => [{ k: 'e', min: p.lo, max: p.hi, paso: 1, et: 'exponente' }], ok: (v, p) => v.e === p.e, sol: p => ({ e: p.e }), texto: p => `${p.m} · 10${SUP(p.e)}`,
     dib(v, K, p, f) { const e = Math.round(v.e); return K.t(170, 40, p.et, 'B') + K.t(170, 84, `${p.m} · 10${SUP(e)}`, 'B ta') + K.f(f, K.t(170, 112, e === p.e ? 'son iguales' : 'no son iguales', 's tm')); },
-    aviso: (v, p) => (Math.sign(v.e) !== Math.sign(p.e) ? 'Mira si el número es mayor que 10 o menor que 1.' : v.e > p.e ? 'Corriste la coma de más.' : 'A la coma le faltó correr.'), bien: (v, p) => `La coma corre ${Math.abs(p.e)} lugares.`,
+    aviso: (v, p) => (Math.sign(v.e) !== Math.sign(p.e) ? 'Mira si el número es mayor que 10 o menor que 1.' : Math.abs(v.e) > Math.abs(p.e) ? 'Corriste la coma de más.' : 'A la coma le faltó correr.'), bien: (v, p) => `La coma corre ${Math.abs(p.e)} lugares.`,
   });
   XG.renglones('fraccion-decimal', { w: 76, x: 280 });
   XG.renglones('opera-cientifica', { w: 96, x: 272 });
@@ -84,7 +84,7 @@
   // Cuánto se cruzan dos grupos.  params { a, b, total, A, B, fuera }
   XG.figura('cruce-grupos', {
     ini: () => ({ k: 0 }), alto: () => 200, ms: 1000, pie: 'Mueve los que están en los dos.', manijas: p => [{ k: 'k', min: 0, max: Math.min(p.a, p.b), paso: 1, et: 'en los dos' }], ok: (v, p) => p.a + p.b - v.k + p.fuera === p.total, sol: p => ({ k: p.a + p.b + p.fuera - p.total }), texto: p => `${p.a + p.b + p.fuera - p.total}`,
-    dib(v, K, p, f) { return K.r(20, 10, 300, 126, 'fn', 6) + K.c(130, 74, 50, 'fa') + K.c(210, 74, 50, 'fg') + K.t(100, 26, `${p.A}: ${p.a}`, 's ta') + K.t(240, 26, `${p.B}: ${p.b}`, 's tg') + K.t(170, 79, Math.round(v.k), 'b') + K.t(300, 128, p.fuera, 's tm') + K.f(f, K.t(112, 79, p.a - Math.round(v.k), 'b') + K.t(228, 79, p.b - Math.round(v.k), 'b')); },
+    dib(v, K, p, f) { return K.r(20, 10, 300, 126, 'fn', 6) + K.c(130, 74, 50, 'fa') + K.c(210, 74, 50, 'fg') + K.t(28, 26, `${p.A}: ${p.a}`, 's ta', 'start') + K.t(312, 26, `${p.B}: ${p.b}`, 's tg', 'end') + K.t(170, 79, Math.round(v.k), 'b') + K.t(300, 128, p.fuera, 's tm') + K.f(f, K.t(112, 79, p.a - Math.round(v.k), 'b') + K.t(228, 79, p.b - Math.round(v.k), 'b')); },
     aviso(v, p) { const t = p.a + p.b - v.k + p.fuera; return t > p.total ? 'Así habría más personas que el total: se están contando dos veces.' : 'Así sobrarían personas sin ubicar.'; }, bien: (v, p) => `${p.a} + ${p.b} − ${v.k} + ${p.fuera} = ${p.total}.`,
   });
   // Zonas de dos conjuntos.  params { pide, zonas, mira: [por zona], ok }
@@ -126,7 +126,7 @@
   // Huella: cuántos para compensar.  params { gasta, cada, max, et, u }
   XG.figura('compensa-justo', {
     ini: () => ({ n: 0 }), alto: () => 170, ms: 900, pie: 'Mueve la cantidad.', manijas: p => [{ k: 'n', min: 0, max: p.max, paso: 1, et: p.et }], ok: (v, p) => v.n * p.cada === p.gasta, sol: p => ({ n: p.gasta / p.cada }), texto: p => `${p.gasta / p.cada} ${p.et}`,
-    dib(v, K, p, f) { const u = 270 / (p.max * p.cada), n = Math.round(v.n), w = p.cada * u; return K.r(30, 22, p.gasta * u, 26, 'ff', 2) + K.t(34, 40, `${p.gasta} ${p.u}`, 's', 'start') + Array.from({ length: n }, (_, i) => K.r(30 + i * w, 58, Math.max(2, w - 1), 26 * (0.15 + 0.85 * f), 'fa', 1)).join('') + K.f(f, K.t(170, 104, `${n} · ${p.cada} = ${n * p.cada} ${p.u}`, 'b')); },
+    dib(v, K, p, f) { const u = 270 / (p.max * p.cada), n = Math.round(v.n), w = p.cada * u; return K.r(30, 22, p.gasta * u, 26, 'ff', 2) + K.t(34, 40, `${p.gasta} ${p.u}`, 's', 'start') + Array.from({ length: n }, (_, i) => K.r(30 + i * (f ? w : 5), 58, f ? Math.max(2, w - 1) : 4, 26, 'fa', 1)).join('') + K.f(f, K.t(170, 104, `${n} · ${p.cada} = ${n * p.cada} ${p.u}`, 'b')); },
     aviso: (v, p) => (v.n * p.cada < p.gasta ? 'No alcanza.' : 'Sobra: se puede con menos.'), bien: (v, p) => `${v.n} por ${p.cada}: ${p.gasta} ${p.u}.`,
   });
   XG.ascensor('sube-evidencia', 100, 2, neutro);

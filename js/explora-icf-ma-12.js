@@ -3,7 +3,7 @@
   const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
   const eje = (K, y) => { const X = x => 30 + x * 28; let h = K.l(30, y, 310, y, 'lm'); for (let i = 0; i <= 10; i++) h += K.t(X(i), y + 18, i, 's tm'); return [X, h]; };
   // Tres datos alrededor del 5, a distancia s; m enciende el promedio y c los cuadrados.
-  const datos = (v, K) => { const [X, h] = eje(K, 110); return h + K.f(v.c, K.r(X(5), 110 - v.s * 22, v.s * 22, v.s * 22, 'fg', 0)) + [5 - v.s, 5, 5 + v.s].map(x => K.c(X(x), 98, 7, 'fa')).join('') + K.f(v.m, K.l(X(5), 40, X(5), 110, 'lo d') + K.t(X(5), 32, 'promedio', 's tm')) + K.t(170, 152, v.t, 'ta'); };
+  const datos = (v, K) => { const [X, h] = eje(K, 110); return h + K.f(v.c, K.r(X(5), 110 - v.s * 28, v.s * 28, v.s * 28, 'fg', 0)) + [5 - v.s, 5, 5 + v.s].map(x => K.c(X(x), 98, 7, 'fa')).join('') + K.f(v.m, K.l(X(5), 40, X(5), 110, 'lo d') + K.t(X(5) - 8, 44, 'promedio', 's tm', 'end')) + K.t(170, 152, v.t, 'ta'); };
   // Caja 1-3-5-8-10: k tramos encendidos.
   const caja = (v, K) => { const [X, h] = eje(K, 110), Q = [1, 3, 5, 8, 10]; return h + K.l(X(1), 70, X(10), 70, 'gr') + K.r(X(3), 54, X(8) - X(3), 32, 'fa', 2) + K.l(X(5), 54, X(5), 86, 'lg gr') + [0, 1, 2, 3].map(i => K.f(v.k - i, K.l(X(Q[i]), 34, X(Q[i + 1]), 34, i % 2 ? 'lo gr' : 'la gr') + K.t((X(Q[i]) + X(Q[i + 1])) / 2, 26, '25 %', 's'))).join('') + K.t(170, 152, v.t, 'ta'); };
   // Nube con pendiente s (1, −1 o 0) y línea l.
@@ -91,7 +91,7 @@
       xpMira('dibujo', 'Segunda idea: el **coeficiente** va de **−1 a 1**; cerca de los extremos es **fuerte**.', { dib: nube, v: { s: 1, d: -0.4, l: 1, t: 'r = 1' }, alto: 166 }, [
         ['Todos en línea y subiendo: uno.', {}],
         ['Algo regados: cerca de 0.9.', { d: 0.2, t: 'r ≈ 0.9' }],
-        ['Muy regados: cerca de 0.3.', { s: 0.4, d: 1.2, t: 'r ≈ 0.3' }],
+        ['Muy regados: mucho más débil.', { s: 0.4, d: 0.6, t: 'r ≈ 0.3' }],
         ['En línea y bajando: menos uno.', { s: -1, d: -0.4, t: 'r = −1' }],
         ['El signo da el sentido, no la fuerza.', {}],
       ], 'Signo: sentido. Cercanía a 1 o −1: fuerza.'),
@@ -184,11 +184,11 @@
       ], 'Primero más (lugar − 1) saltos.'),
       xpHaz('fichas', '9, 13, 17… Pon el salto y el término del lugar 6.', { slots: fila('salto', 'lugar 6'), fichas: ['4', '29', '33', '24', '6'], meta: ['4', '29'], alto: 96, pista: 'Son cinco saltos.' }, '$9 + 5 \\cdot 4 = 29$.')],
     ['Multiplicar por lo mismo',
-      xpMira('hoja', 'Segunda idea: en la **geométrica** siempre se **multiplica** por lo mismo.', { paras: [['5, 10, 20, 40: por 2'], ['81, 27, 9, 3: por 1/3'], ['Lugar 5 de la primera: 5 · 2⁴ = 80'], ['1, 4, 9, 16: ninguna de las dos']] }, [
+      xpMira('hoja', 'Segunda idea: en la **geométrica** siempre se **multiplica** por lo mismo.', { paras: [['5, 10, 20, 40: por 2'], ['81, 27, 9, 3: por 1/3'], ['Lugar 5 de la primera: 5 · 2⁴ = 80'], ['1, 3, 6, 10: ninguna de las dos']] }, [
         ['Se divide uno entre el anterior: dos.', { luz: [0] }],
         ['También puede ir bajando.', { luz: [1] }],
         ['Cuatro pasos para el lugar cinco.', { luz: [2] }],
-        ['Los cuadrados no son ni una ni otra.', { luz: [3] }],
+        ['Los saltos crecen: no es ni una ni otra.', { luz: [3] }],
         ['Resta y divide para saber.', {}],
       ], 'Primero por razón a la (lugar − 1).'),
       xpHaz('fichas', '2, 10, 50… Pon la razón y el lugar 5.', { slots: fila('razón', 'lugar 5'), fichas: ['5', '1250', '250', '8', '6250'], meta: ['5', '1250'], alto: 96, pista: 'Multiplica por 5 cuatro veces.' }, '$2 \\cdot 5^4 = 1\\,250$.')],
