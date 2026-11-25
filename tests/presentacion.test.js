@@ -139,3 +139,15 @@ test('los clips de la app existen, con su cuadro fijo, y se pueden pausar', () =
   }
   assert.match(html, /class="pz-clips-p" type="button" aria-pressed="false"/);
 });
+
+// ---- carrusel con capas y página de instituciones (spec 2026-11-25-portada-motion) ----
+test('cada lámina tiene su palabra y su pestaña, y la pestaña dice lo que se lee', () => {
+  const con = get(ctx, 'presentacionHTML')(cursos, {}), [g, p] = ['PZ_GRAN', 'PZ_TABS'].map(n => get(ctx, n));
+  assert.equal(Object.keys(g).join(), Object.keys(p).join()); assert.equal((con.match(/class="pz-gran"/g) || []).length, (con.match(/class="pz-lamina /g) || []).length);
+  for (const m of con.matchAll(/class="pz-pto" aria-label="([^"]+), lámina \d+ de \d+"[^>]*><span aria-hidden="true">([^<]+)</g)) assert.equal(m[1], m[2]);
+  assert.match(read('css/presentacion.css'), /\.pz-hero\.parado \.pz-fichas b \{ animation-play-state: paused/);
+});
+test('la pila de instituciones solo se apila si cabe, y colegios es un servicio', () => {
+  assert.match(read('instituciones/publico.js'), /classList\.toggle\('apila', ok\)/); assert.doesNotMatch(read('instituciones/publico.css'), /(?<!\.apila )\.pl-hueco \{ position: sticky/);
+  assert.ok(html.includes('pz-prog-inst') && html.includes('href="instituciones/"'));
+});
