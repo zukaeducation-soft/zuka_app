@@ -127,11 +127,11 @@ test('a 300 px: el menú no parte «Mis cursos» y la marca de arriba se recorta
   assert.match(css, /#tabbar button \{ white-space: nowrap;/);
 });
 
-test('si el mundo no tiene retos, la hoja ofrece los que vienen más adelante', () => {
-  const g = gymWorld(ALG, 0, {}, false);
-  assert.equal(g.here.length, 0);
-  assert.ok(g.ahead.length >= 1 && g.ahead.length <= 3);
-  assert.ok(g.ahead.every(x => x.open === false), 'sin lecciones hechas, cerrados');
+test('Álgebra: el primer mundo tiene sus retos, cerrados hasta hacer sus lecciones', () => {
+  const g0 = gymWorld(ALG, 0, {}, false);
+  assert.ok(g0.here.length >= 2, 'desde el 2026-11-25 cada mundo de Álgebra tiene retos');
+  const g = g0;
+  assert.ok(g.here.every(x => x.open === false), 'sin lecciones hechas, cerrados');
 });
 
 test('con componentes, el nivel sigue al componente que se estudia; la hoja nunca queda vacía en un curso con retos', () => {

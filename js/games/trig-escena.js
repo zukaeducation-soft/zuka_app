@@ -29,6 +29,7 @@
       dib: (v, K, p, f) => dib(v, K, p, f), lee: (v, p) => (lee ? lee(v, p) : ''), aviso: (v, p) => p.mira, bien: (v, p) => p.ok,
     });
   }
+  Object.assign(XG, { mueve });
   // ----------------------------------------------------------------------------------------------- escenas
   const ola = (v, K, p, f, al = 180) => {
     const P = XM.plano(K, 0, 4 * Math.PI, -4, 4, { H: al, g: Math.PI / 2, gy: 1 }), w = { A: 1, k: 0, w: 1, f: 0, ...v }, m = { A: 1, k: 0, w: 1, f: 0, ...p.v, ...p.meta };

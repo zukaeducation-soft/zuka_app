@@ -27172,3 +27172,136 @@ GAMES['ordena-mediana'] = (() => {
     },
   });
 })();
+;
+//#archivo js/games/tres-centros.js
+// Media, mediana y moda en una gráfica de puntos (Preuniversitario, pu-gr-2; spec 2026-11-18-preuda-razonamiento-completo):
+// cada dato es un punto apilado sobre su valor. Debajo de la recta hay tres alfileres (media, mediana, moda) que se arrastran a
+// su lugar (de medio en medio). Con datos cargados a un lado, los tres no coinciden.
+// params = { rounds: [{ data: [enteros], lo, hi }] }   state = { rounds: [{ m: [media, mediana, moda] }] }
+GAMES['tres-centros'] = (() => {
+  const NAMES = ['media', 'mediana', 'moda'];
+  const vals = r => {
+    const s = r.data.slice().sort((a, b) => a - b), n = s.length, mean = s.reduce((a, b) => a + b, 0) / n;
+    const med = n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
+    const cnt = {}; s.forEach(v => (cnt[v] = (cnt[v] || 0) + 1)); const mode = +Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
+    return [mean, med, mode];
+  };
+  const ok = (s, r) => vals(r).every((v, i) => s.m[i] === v);
+  const game = roundsGame({
+    aspect: 1.4,
+    init: r => ({ m: [r.lo, r.lo, r.lo] }),
+    ok,
+    solution: r => vals(r).map((v, i) => `${NAMES[i]} ${v}`).join(', '),
+    prompt: () => 'Pon la media, la mediana y la moda en su lugar',
+    foot: () => 'Arrastra cada alfiler sobre la recta',
+    layout(G) { G.ax = { x0: 30, x1: G.W - 30, y: 200 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = -1; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { m: vals(r) } : G.s, good = ok(s, r), ax = G.ax, X = v => ax.x0 + (v - r.lo) / (r.hi - r.lo) * (ax.x1 - ax.x0), want = vals(r);
+      G.X = X;
+      p.stroke(C.ink); p.strokeWeight(1.4); p.line(ax.x0, ax.y, ax.x1, ax.y);
+      const cnt = {};
+      for (let v = r.lo; v <= r.hi; v++) { p.stroke(C.line); p.line(X(v), ax.y - 3, X(v), ax.y + 3); TK.label(p, C, String(v), X(v), ax.y + 13, C.mute, 9, 20); }
+      r.data.forEach(v => { cnt[v] = (cnt[v] || 0) + 1; p.noStroke(); p.fill(C.sky); p.circle(X(v), ax.y - 10 - (cnt[v] - 1) * 14, 11); });
+      const cols = [C.brand, C.coral, C.mint];
+      G.pins = s.m.map((v, i) => {
+        const x = X(v), y = ax.y + 40 + i * 28, right = v === want[i];
+        p.stroke(cols[i]); p.strokeWeight(1.5); p.line(x, ax.y + 4, x, y - 9);
+        p.noStroke(); p.fill(right && good ? C.ok : cols[i]); p.circle(x, y, 16);
+        TK.label(p, C, `${NAMES[i]} ${v}`, Math.min(Math.max(x, 60), G.W - 60), y + 15, C.ink, 9, 100);
+        return { x, y };
+      });
+      RK.strip(p, C, G.fb, good ? '$\\text{los tres centros, en su lugar}$' : `$\\text{${s.m.join(' · ')}}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+    },
+    press(G, x, y) { const i = (G.pins || []).findIndex(q => Math.hypot(x - q.x, y - q.y) < 18); if (i < 0) return false; G.grab = i; return true; },
+    drag(G, x) { if (G.grab < 0) return false; const r = G.r, ax = G.ax, v = Math.max(r.lo, Math.min(r.hi, Math.round((r.lo + (x - ax.x0) / (ax.x1 - ax.x0) * (r.hi - r.lo)) * 2) / 2)); if (v !== G.s.m[G.grab]) { G.s.m[G.grab] = v; G.touch(); } return true; },
+    release(G) { G.grab = -1; },
+    demo: G => (G.pins ? { from: G.pins[0], to: { x: G.pins[0].x + 80, y: G.pins[0].y }, text: 'Arrastra el alfiler', ty: 100 } : null),
+    peek: G => ({ pins: G.pins, ax: G.ax }),
+  });
+  return Object.assign(game, { answer: r => ({ m: vals(r) }) });
+})();
+;
+//#archivo js/games/dato-faltante.js
+// El dato que falta (Preuniversitario, pu-gr-2; spec 2026-11-18-preuda-razonamiento-completo): se conoce el promedio de todos
+// los datos pero falta uno. La línea del promedio pedido está marcada; se arrastra la barra que falta y el juego muestra en
+// vivo el promedio que da con ese valor. Para que el promedio sea el pedido, la suma tiene que ser promedio × cantidad.
+// params = { rounds: [{ data: [números con null en el que falta], mean, hi, step }] }   state = { rounds: [{ v }] }
+GAMES['dato-faltante'] = (() => {
+  const need = r => r.mean * r.data.length - r.data.reduce((a, b) => a + (b ?? 0), 0);
+  const ok = (s, r) => s.v === need(r);
+  const cur = (r, v) => r.data.map(d => d ?? v);
+  const game = roundsGame({
+    aspect: 1.2,
+    init: r => ({ v: need(r) === r.step ? 2 * r.step : r.step }),
+    ok,
+    solution: r => `${r.mean} · ${r.data.length} = ${r.mean * r.data.length}; falta ${need(r)}`,
+    prompt: r => `El promedio de los ${r.data.length} datos es ${r.mean}. ¿Cuál falta?`,
+    foot: () => 'Arrastra la barra que falta',
+    layout(G) { G.b = { x: 44, y: 96, w: G.W - 60, h: G.H - 224 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = false; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { v: need(r) } : G.s, good = ok(s, r), D = cur(r, s.v), k = r.data.indexOf(null);
+      const Y = GRAF.axes(p, C, G.b, 0, r.hi, r.step); G.Y = Y;
+      G.cols = GRAF.bars(p, C, G.b, D, D.map(String), Y, { col: i => (i === k ? (good ? C.ok : C.brand) : C.sky) });
+      const y = Y(r.mean); p.stroke(C.coral); p.strokeWeight(1.5); p.drawingContext.setLineDash([6, 4]); p.line(G.b.x, y, G.b.x + G.b.w, y); p.drawingContext.setLineDash([]);
+      TK.label(p, C, `promedio ${r.mean}`, G.b.x + 46, y - 10, C.coral, 9, 90);
+      const c = G.cols[k]; RK.knob(p, C, c.cx, c.top, C.brand);
+      const sum = D.reduce((a, b) => a + b, 0), m = Math.round(sum / D.length * 100) / 100;
+      RK.strip(p, C, G.fb, `$${sum} \\div ${D.length} = ${m}$`, { kicker: good ? 'el promedio da justo' : 'el promedio con este dato', col: G.locked || good ? C.ok : C.brand, size: 17 });
+    },
+    press(G, x, y) { const k = G.r.data.indexOf(null), c = G.cols?.[k]; if (!c || x < c.x - 14 || x > c.x + c.w + 14 || y < G.b.y - 20 || y > G.b.y + G.b.h + 10) return false; G.grab = true; game.move(G, y); return true; },
+    drag(G, x, y) { if (!G.grab) return false; game.move(G, y); return true; },
+    release(G) { G.grab = false; },
+    demo: G => { const c = G.cols?.[G.r.data.indexOf(null)]; return c ? { from: { x: c.cx, y: c.top }, to: { x: c.cx, y: c.top - 60 }, text: 'Sube la barra', ty: G.b.y + 10 } : null; },
+    peek: G => ({ b: G.b, cols: G.cols }),
+  });
+  game.move = (G, y) => { const r = G.r, b = G.b, v = Math.max(0, Math.min(r.hi, Math.round((b.y + b.h - y) / b.h * r.hi / r.step) * r.step)); if (v !== G.s.v || !G.touched[G.cur]) { G.s.v = v; G.touch(); } };
+  return Object.assign(game, { answer: r => ({ v: need(r) }) });
+})();
+;
+//#archivo js/games/balanza-promedio.js
+// La balanza del promedio (Preuniversitario, pu-gr-2; spec 2026-11-18-preuda-razonamiento-completo): cada grupo es una pila de
+// bloques (uno por persona) puesta sobre su promedio en una regla. Se arrastra el apoyo por debajo de la regla: la regla se
+// inclina hacia el lado que pesa más. Queda quieta justo en el promedio de todos, que se acerca al grupo más grande y no es el
+// promedio de los promedios.
+// params = { rounds: [{ groups: [{ lab, n, mean }], lo, hi }] }   state = { rounds: [{ f }] }   (apoyo, de medio en medio)
+GAMES['balanza-promedio'] = (() => {
+  const total = r => r.groups.reduce((a, g) => a + g.n, 0);
+  const need = r => r.groups.reduce((a, g) => a + g.n * g.mean, 0) / total(r);
+  const ok = (s, r) => s.f === need(r);
+  const game = roundsGame({
+    aspect: 1.15,
+    init: r => ({ f: r.lo === need(r) ? r.lo + 0.5 : r.lo }),
+    ok,
+    solution: r => `(${r.groups.map(g => `${g.n} · ${g.mean}`).join(' + ')}) ÷ ${total(r)} = ${need(r)}`,
+    prompt: () => '¿Cuál es el promedio de todos juntos?',
+    foot: () => 'Arrastra el apoyo hasta que la regla quede quieta',
+    layout(G) { G.ax = { x0: 34, x1: G.W - 34, y: 220 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = false; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { f: need(r) } : G.s, good = ok(s, r), ax = G.ax, X = v => ax.x0 + (v - r.lo) / (r.hi - r.lo) * (ax.x1 - ax.x0);
+      const torque = r.groups.reduce((a, g) => a + g.n * (g.mean - s.f), 0), ang = Math.max(-0.2, Math.min(0.2, torque / total(r) / (r.hi - r.lo) * 1.5));
+      const fx = X(s.f), cols = [C.sky, C.coral, C.mint];
+      p.push(); p.translate(fx, ax.y); p.rotate(ang);
+      p.stroke(C.ink); p.strokeWeight(3); p.line(X(r.lo) - fx, 0, X(r.hi) - fx, 0);
+      for (let v = r.lo; v <= r.hi; v++) { p.strokeWeight(1); p.line(X(v) - fx, -3, X(v) - fx, 3); TK.label(p, C, String(v), X(v) - fx, 12, C.mute, 8, 20); }
+      r.groups.forEach((g, i) => {
+        const x = X(g.mean) - fx, sz = 12, per = 3;
+        for (let k = 0; k < g.n; k++) { p.noStroke(); p.fill(cols[i % 3]); p.rect(x - per * sz / 2 + (k % per) * sz, -4 - sz - Math.floor(k / per) * sz, sz - 1, sz - 1, 2); }
+        TK.label(p, C, `${g.lab}: ${g.n} · prom. ${g.mean}`, x, -18 - Math.ceil(g.n / per) * sz - (i % 2) * 14, C.ink, 9, 120);
+      });
+      p.pop();
+      p.noStroke(); p.fill(good ? C.ok : C.brand); p.triangle(fx, ax.y + 3, fx - 14, ax.y + 30, fx + 14, ax.y + 30);
+      TK.label(p, C, String(s.f), fx, ax.y + 44, C.brand, 12, 50);
+      RK.strip(p, C, G.fb, good ? `$\\text{promedio de todos} = ${need(r)}$` : `$\\text{apoyo en}\\ ${s.f}$`, { kicker: good ? 'la regla queda quieta' : torque > 0 ? 'se inclina a la derecha' : 'se inclina a la izquierda', col: G.locked || good ? C.ok : C.brand, size: 16 });
+    },
+    press(G, x, y) { if (y < G.ax.y - 10 || y > G.ax.y + 60) return false; G.grab = true; game.move(G, x); return true; },
+    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
+    release(G) { G.grab = false; },
+    demo: G => { const r = G.r, ax = G.ax, x = ax.x0 + (G.s.f - r.lo) / (r.hi - r.lo) * (ax.x1 - ax.x0); return { from: { x, y: ax.y + 20 }, to: { x: x + 70, y: ax.y + 20 }, text: 'Arrastra el apoyo', ty: ax.y + 70 }; },
+    peek: G => ({ ax: G.ax }),
+  });
+  game.move = (G, x) => { const r = G.r, ax = G.ax, v = Math.max(r.lo, Math.min(r.hi, Math.round((r.lo + (x - ax.x0) / (ax.x1 - ax.x0) * (r.hi - r.lo)) * 2) / 2)); if (v !== G.s.f || !G.touched[G.cur]) { G.s.f = v; G.touch(); } };
+  return Object.assign(game, { answer: r => ({ f: need(r) }) });
+})();
