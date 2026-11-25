@@ -66,6 +66,6 @@
   .tu-semana { grid-template-columns: 70px repeat(var(--n), minmax(0, 1fr)); gap: 7px; padding: 18px; } .ts-hora { font-size: 15px; } .ts-dia b { font-size: 22px; } .tu-uni { flex-basis: 152px; }
   .tu-materias, .tu-unis { margin-inline: 0; padding-inline: 3px; scroll-padding-inline: 3px; }
 }
-@media (min-width: 1000px) and (max-width: 1239px) { .tu-cols { grid-template-columns: minmax(0, 1fr) 310px; gap: 24px; } .tp-reloj span { min-width: 74px; } .tp-reloj b { font-size: 36px; } }
+@media (min-width: 1000px) and (max-width: 1199px) { .tu-cols { grid-template-columns: minmax(0, 1fr) 310px; gap: 24px; } .tp-reloj span { min-width: 74px; } .tp-reloj b { font-size: 36px; } }
 @media (prefers-reduced-motion: reduce) { .tu-mat, .tu-mat .cart, button.ts-c, .tu-boleto { transition: none; } .pop, .tb-sello, .ts-c .cart { animation: none; } }
 .tu .tp-acts .tu-link { min-height: 36px; }

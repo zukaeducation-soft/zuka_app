@@ -298,6 +298,12 @@ cualquier `L(x) = R(x)`). Reutilizables:
 - Juegos propios de las evaluaciones (no usarlos en lecciones; cada uno tiene `solve(params)`): `laberinto-valor`,
   `domino-equivalencias`, `piramide-numerica`, `detective-pasos`. Pruebas: `tests/evaluaciones.test.js`.
 
+## Interfaz compacta en computador
+
+Desde 1000 px la app va con `zoom` en `body` (0.8 desde 1200 px; la landing no; spec `2026-11-25-interfaz-compacta`, pruebas
+`tests/compacta.test.js`). En CSS, `calc(100 * var(--dvh))` y `--dvw` en vez de `100dvh`/`100vw`; en JS, lo que sale de `clientX` o
+`getBoundingClientRect` se divide por `zk()` antes de escribirlo en px.
+
 ## Interfaz de la lección
 
 - Al fallar: «Incorrecto» + «La respuesta correcta es:»; la lección deja espacio abajo para ver el juego.

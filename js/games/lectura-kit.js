@@ -142,7 +142,7 @@ const LEC = (() => {
           drag.el.classList.add('lifting');
         }
         if (drag.ghost) {
-          drag.ghost.style.left = `${e.clientX}px`; drag.ghost.style.top = `${e.clientY}px`;
+          drag.ghost.style.left = `${e.clientX / zk()}px`; drag.ghost.style.top = `${e.clientY / zk()}px`;
           play.querySelectorAll('.lec-zone.over').forEach(z => z.classList.remove('over'));
           drag.ghost.hidden = true;
           document.elementFromPoint(e.clientX, e.clientY)?.closest('.lec-zone')?.classList.add('over');

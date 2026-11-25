@@ -341,7 +341,7 @@ function xpChispas(stage) {
   for (let k = 0; k < 10; k++) {
     const d = document.createElement('i'), ang = (k / 10) * 2 * Math.PI + 0.3, far = 46 + 26 * (k % 3);
     d.className = 'xp-chispa';
-    d.style.left = r.left - h.left + r.width / 2 + 'px'; d.style.top = r.top - h.top + r.height / 2 + 'px';
+    d.style.left = (r.left - h.left + r.width / 2) / zk() + 'px'; d.style.top = (r.top - h.top + r.height / 2) / zk() + 'px';
     host.appendChild(d);
     d.animate([{ transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
       { transform: `translate(calc(-50% + ${Math.cos(ang) * far}px), calc(-50% + ${Math.sin(ang) * far}px)) scale(.2)`, opacity: 0 }],
@@ -710,7 +710,7 @@ XPD.conjunto = (stage, p, s, api) => {
   };
   box.onpointermove = e => {
     if (!arr) return;
-    const dx = e.clientX - arr.x0, dy = e.clientY - arr.y0;
+    const dx = (e.clientX - arr.x0) / zk(), dy = (e.clientY - arr.y0) / zk();
     if (Math.hypot(dx, dy) > 6) arr.mov = true;
     if (arr.mov) arr.el.style.transform = `translate(${arr.bx + dx}px, ${arr.by + dy}px) scale(1.08)`;
   };

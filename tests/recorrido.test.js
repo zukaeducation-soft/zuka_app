@@ -71,7 +71,7 @@ test('una tarjeta más alta que la pantalla empieza arriba y se puede desplazar'
   assert.equal(tipPos({ left: 180, top: 170, width: 0, height: 0 }, 320, 400, 360, 340, B).top, 8);
   assert.equal(tipPos({ left: 100, top: 150, width: 80, height: 60 }, 320, 400, 360, 340, B).top, 8);
   const tip = css.match(/\.tour-tip \{[^}]*\}/)[0];
-  assert.match(tip, /max-height: calc\(100dvh - 16px\)/);
+  assert.match(tip, /max-height: calc\(calc\(100 \* var\(--dvh\)\) - 16px\)/);
   assert.match(tip, /overflow-y: auto/);
 });
 

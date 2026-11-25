@@ -37,14 +37,14 @@ const EXQ = (() => {
         const r = d.el.getBoundingClientRect();
         d.ghost = d.el.cloneNode(true);
         d.ghost.classList.add('exq-ghost');
-        Object.assign(d.ghost.style, { width: `${r.width}px`, left: `${r.left}px`, top: `${r.top}px` });
+        Object.assign(d.ghost.style, { width: `${r.width / zk()}px`, left: `${r.left / zk()}px`, top: `${r.top / zk()}px` });
         d.ox = e.clientX - r.left; d.oy = e.clientY - r.top;
         document.body.appendChild(d.ghost);
         d.el.classList.add('lift');
       }
       if (d.ghost) {
         e.preventDefault();
-        d.ghost.style.left = `${e.clientX - d.ox}px`; d.ghost.style.top = `${e.clientY - d.oy}px`;
+        d.ghost.style.left = `${(e.clientX - d.ox) / zk()}px`; d.ghost.style.top = `${(e.clientY - d.oy) / zk()}px`;
         const over = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-drop]');
         root.querySelectorAll('.over').forEach(o => o !== over && o.classList.remove('over'));
         if (over && root.contains(over)) over.classList.add('over');

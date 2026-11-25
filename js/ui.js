@@ -1,5 +1,10 @@
 // Utilidades compartidas: escape HTML, render de TeX, íconos, toasts, sonido y confeti.
 
+// Interfaz compacta (css/styles.css, al final): solo donde el navegador mide bien con `zoom` (Chrome 128, Firefox 126…).
+if (typeof document !== 'undefined' && document.documentElement?.dataset && typeof Element !== 'undefined' && 'currentCSSZoom' in Element.prototype) document.documentElement.dataset.compacta = '';
+// Cuánto mide en pantalla un píxel de la interfaz. Lo que sale de clientX o getBoundingClientRect se divide por zk() antes de escribirlo en px.
+function zk() { return (typeof document !== 'undefined' && document.body?.currentCSSZoom) || 1; }
+
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }

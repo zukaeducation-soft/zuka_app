@@ -62,6 +62,11 @@ function mascotSVG(pose = 'think', cls = '') {
 //#archivo js/ui.js
 // Utilidades compartidas: escape HTML, render de TeX, íconos, toasts, sonido y confeti.
 
+// Interfaz compacta (css/styles.css, al final): solo donde el navegador mide bien con `zoom` (Chrome 128, Firefox 126…).
+if (typeof document !== 'undefined' && document.documentElement?.dataset && typeof Element !== 'undefined' && 'currentCSSZoom' in Element.prototype) document.documentElement.dataset.compacta = '';
+// Cuánto mide en pantalla un píxel de la interfaz. Lo que sale de clientX o getBoundingClientRect se divide por zk() antes de escribirlo en px.
+function zk() { return (typeof document !== 'undefined' && document.body?.currentCSSZoom) || 1; }
+
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
@@ -1979,6 +1984,8 @@ function mountSketch(host, sketch, aspect = 1.25, gesture) {
   const fit = size => {
     const cv = inst?.canvas, body = host.closest?.('.lesson-body'), ex = body?.firstElementChild;
     if (!cv?.style) return;
+    // p5 saca la escala del ratón de scrollWidth, que no cuenta el zoom de la interfaz: se le da el tamaño en pantalla.
+    if (cv.getBoundingClientRect && !Object.hasOwn(cv, 'scrollWidth')) for (const [k, d] of [['scrollWidth', 'width'], ['scrollHeight', 'height']]) Object.defineProperty(cv, k, { configurable: true, get: () => cv.getBoundingClientRect()[d] });
     let k = 1;
     if (body && ex && typeof getComputedStyle === 'function') {
       const cs = getComputedStyle(body), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
@@ -27609,26 +27616,3 @@ GAMES['adivina-conectivo'] = (() => {
     },
   });
 })();
-;
-//#archivo js/games/arma-negacion.js
-// Arma la frase (Preuniversitario, pu-lo-2 y pu-lo-3; spec 2026-11-18-preuda-razonamiento-completo): arriba está una frase o una
-// fórmula y lo que se pide de ella (su negación, su contrarrecíproco…). Se arrastran fichas a las casillas para escribirla; las
-// fichas pueden ser símbolos ($\neg p$, $\wedge$) o palabras («algún», «no»). Sobran fichas para que no se arme sola.
-// params = { rounds: [{ ask, show, tray: [fichas], need: [índice de ficha por casilla] }] }   state = { rounds: [{ f: [ficha | −1] }] }
-GAMES['arma-negacion'] = CODK.fillGame({
-  aspect: 1.5,
-  chipW: 66,
-  perRow: 4,
-  prompt: r => r.ask,
-  foot: 'Arrastra las fichas a las casillas',
-  tray: r => r.tray,
-  need: r => r.need,
-  alt: r => r.alt,
-  done: () => 'bien escrita',
-  col: C => C.mint,
-  decor(G) {
-    const { p, C, r } = G;
-    p.stroke(C.line); p.strokeWeight(1); p.fill(RK.al(p, C.card, 200)); p.rect(20, 110, G.W - 40, 56, 10);
-    TK.label(p, C, r.show, G.W / 2, 138, C.ink, 15, G.W - 56);
-  },
-});

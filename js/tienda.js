@@ -208,7 +208,7 @@ function tiendaVitrinaViva(el) {
     if (e.pointerId !== id) return;
     if (!e.buttons) return suelta(e);
     if (!movio && Math.abs(e.clientX - x0) > 7) { movio = true; rueda.setPointerCapture(id); h.classList.add('mano'); cancelAnimationFrame(raf); raf = 0; }
-    if (movio) { p = meta = Math.max(-.35, Math.min(n - .65, p0 - (e.clientX - x0) / (its[0].offsetWidth * .72))); pinta(); }
+    if (movio) { p = meta = Math.max(-.35, Math.min(n - .65, p0 - (e.clientX - x0) / zk() / (its[0].offsetWidth * .72))); pinta(); }
   };
   const suelta = e => { if (e.pointerId !== id) return; id = null; h.classList.remove('mano'); if (movio) va(tiendaCerca(p + Math.max(-.35, Math.min(.35, (x0 - e.clientX) / 260)), n)); };
   rueda.onpointerup = suelta; rueda.onpointercancel = suelta;
@@ -301,9 +301,9 @@ function tiendaVuela(a, desde) {
   const dest = $('.td-bolsa', view);
   if (!desde || !dest || !dest.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const r = desde.getBoundingClientRect(), d = dest.getBoundingClientRect(), f = document.createElement('span');
-  f.className = 'td-vuela'; f.innerHTML = tiendaMini(a); f.style.left = `${r.left + r.width / 2}px`; f.style.top = `${r.top + r.height / 2}px`;
+  f.className = 'td-vuela'; f.innerHTML = tiendaMini(a); f.style.left = `${(r.left + r.width / 2) / zk()}px`; f.style.top = `${(r.top + r.height / 2) / zk()}px`;
   document.body.append(f);
-  const dx = d.left + d.width / 2 - r.left - r.width / 2, dy = d.top + d.height / 2 - r.top - r.height / 2;
+  const dx = (d.left + d.width / 2 - r.left - r.width / 2) / zk(), dy = (d.top + d.height / 2 - r.top - r.height / 2) / zk();
   f.animate([{ transform: 'translate(-50%, -50%) scale(1)' }, { transform: `translate(calc(-50% + ${dx * .45}px), calc(-50% + ${dy * .45 - 110}px)) scale(1.15) rotate(-8deg)`, offset: .45 }, { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.25) rotate(14deg)`, opacity: .6 }], { duration: 720, easing: 'cubic-bezier(.4, 0, .3, 1)' }).onfinish = () => f.remove();
   setTimeout(() => f.remove(), 1200);
 }
@@ -317,7 +317,7 @@ function tiendaArrastra(el) {
     s.onpointermove = e => {
       if (e.pointerId !== id) return;
       if (!f && Math.hypot(e.clientX - x0, e.clientY - y0) > 8) { f = document.createElement('span'); f.className = 'td-vuela mano'; f.innerHTML = $('.td-artes, .td-pila', s).outerHTML; document.body.append(f); view.classList.add('llevando'); }
-      if (f) { f.style.left = `${e.clientX}px`; f.style.top = `${e.clientY}px`; $('.td-carro', view)?.classList.toggle('sobre', sobre(e)); }
+      if (f) { f.style.left = `${e.clientX / zk()}px`; f.style.top = `${e.clientY / zk()}px`; $('.td-carro', view)?.classList.toggle('sobre', sobre(e)); }
     };
     const fin = e => { if (e.pointerId !== id) return; id = null; const dentro = f && e.type === 'pointerup' && sobre(e), de = f; if (dentro) tiendaCambia(art, 1, de); quita(); $('.td-carro', view)?.classList.remove('sobre'); };
     s.onpointerup = fin; s.onpointercancel = fin;

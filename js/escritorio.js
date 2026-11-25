@@ -118,7 +118,7 @@ function exploraRiel(root, d) {
   const stage = root.querySelector('.xp-stage');
   const ajusta = () => {
     const vb = stage.querySelector('.xp-svg')?.viewBox?.baseVal;
-    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight)}px`);
+    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight / zk())}px`);
   };
   ajusta();
   if (!root.dataset.ajusta) { root.dataset.ajusta = '1'; new ResizeObserver(ajusta).observe(root); }

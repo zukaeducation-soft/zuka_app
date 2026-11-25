@@ -1,5 +1,28 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
+//#archivo js/games/arma-negacion.js
+// Arma la frase (Preuniversitario, pu-lo-2 y pu-lo-3; spec 2026-11-18-preuda-razonamiento-completo): arriba está una frase o una
+// fórmula y lo que se pide de ella (su negación, su contrarrecíproco…). Se arrastran fichas a las casillas para escribirla; las
+// fichas pueden ser símbolos ($\neg p$, $\wedge$) o palabras («algún», «no»). Sobran fichas para que no se arme sola.
+// params = { rounds: [{ ask, show, tray: [fichas], need: [índice de ficha por casilla] }] }   state = { rounds: [{ f: [ficha | −1] }] }
+GAMES['arma-negacion'] = CODK.fillGame({
+  aspect: 1.5,
+  chipW: 66,
+  perRow: 4,
+  prompt: r => r.ask,
+  foot: 'Arrastra las fichas a las casillas',
+  tray: r => r.tray,
+  need: r => r.need,
+  alt: r => r.alt,
+  done: () => 'bien escrita',
+  col: C => C.mint,
+  decor(G) {
+    const { p, C, r } = G;
+    p.stroke(C.line); p.strokeWeight(1); p.fill(RK.al(p, C.card, 200)); p.rect(20, 110, G.W - 40, 56, 10);
+    TK.label(p, C, r.show, G.W / 2, 138, C.ink, 15, G.W - 56);
+  },
+});
+;
 //#archivo js/games/contraejemplo.js
 // El contraejemplo (Preuniversitario, pu-lo-2 y pu-lo-4; spec 2026-11-18-preuda-razonamiento-completo): para tumbar «todos
 // cumplen» basta UNO que no cumpla; para tumbar «ninguno cumple», uno que sí. En una caja hay fichas; se toca la que tumba la
@@ -9946,7 +9969,7 @@ const LEC = (() => {
           drag.el.classList.add('lifting');
         }
         if (drag.ghost) {
-          drag.ghost.style.left = `${e.clientX}px`; drag.ghost.style.top = `${e.clientY}px`;
+          drag.ghost.style.left = `${e.clientX / zk()}px`; drag.ghost.style.top = `${e.clientY / zk()}px`;
           play.querySelectorAll('.lec-zone.over').forEach(z => z.classList.remove('over'));
           drag.ghost.hidden = true;
           document.elementFromPoint(e.clientX, e.clientY)?.closest('.lec-zone')?.classList.add('over');
@@ -10203,9 +10226,10 @@ GAMES['hilo-referente'] = (() => {
       const wrap = play.querySelector('.lec-thread'), knob = play.querySelector('.lec-knob'), path = play.querySelector('.lec-line');
       if (!wrap || !knob || !path) return;
       const W = wrap.getBoundingClientRect(), K = knob.getBoundingClientRect();
-      const x0 = K.left + K.width / 2 - W.left, y0 = K.top + K.height / 2 - W.top;
+      const x0 = (K.left + K.width / 2 - W.left) / zk(), y0 = (K.top + K.height / 2 - W.top) / zk();
       let x1, y1;
       if (pt) { x1 = pt[0] - W.left; y1 = pt[1] - W.top; } else if (target) { const T = target.getBoundingClientRect(); x1 = T.left + T.width / 2 - W.left; y1 = T.bottom - W.top - 2; } else { path.setAttribute('d', ''); return; }
+      const z = zk(); x1 /= z; y1 /= z;
       const lift = Math.max(26, Math.abs(x1 - x0) * 0.25);
       path.setAttribute('d', `M${x0} ${y0} C ${x0} ${Math.max(y0, y1) + lift}, ${x1} ${Math.max(y0, y1) + lift}, ${x1} ${y1}`);
     }
@@ -10740,14 +10764,14 @@ const EXQ = (() => {
         const r = d.el.getBoundingClientRect();
         d.ghost = d.el.cloneNode(true);
         d.ghost.classList.add('exq-ghost');
-        Object.assign(d.ghost.style, { width: `${r.width}px`, left: `${r.left}px`, top: `${r.top}px` });
+        Object.assign(d.ghost.style, { width: `${r.width / zk()}px`, left: `${r.left / zk()}px`, top: `${r.top / zk()}px` });
         d.ox = e.clientX - r.left; d.oy = e.clientY - r.top;
         document.body.appendChild(d.ghost);
         d.el.classList.add('lift');
       }
       if (d.ghost) {
         e.preventDefault();
-        d.ghost.style.left = `${e.clientX - d.ox}px`; d.ghost.style.top = `${e.clientY - d.oy}px`;
+        d.ghost.style.left = `${(e.clientX - d.ox) / zk()}px`; d.ghost.style.top = `${(e.clientY - d.oy) / zk()}px`;
         const over = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-drop]');
         root.querySelectorAll('.over').forEach(o => o !== over && o.classList.remove('over'));
         if (over && root.contains(over)) over.classList.add('over');
@@ -10971,7 +10995,7 @@ const XG = (() => {
           const r = root.getBoundingClientRect(), f = fb.getBoundingClientRect();
           if (f.left >= r.right || f.right <= r.left) return;   // en computador el aviso va en otra columna
           const sobra = r.bottom - f.top, arriba = r.top - body.getBoundingClientRect().top;
-          if (sobra > 0) body.scrollBy({ top: Math.min(sobra, Math.max(0, arriba)), behavior: still() ? 'auto' : 'smooth' });
+          if (sobra > 0) body.scrollBy({ top: Math.min(sobra, Math.max(0, arriba)) / zk(), behavior: still() ? 'auto' : 'smooth' });
         };
         const fin = monta(stage, p, ui);
         return {
@@ -15005,7 +15029,7 @@ Object.assign(XG, (() => {
   XG.figura('barra-baja', {
     ini: p => ({ b: p.a }), manijas: p => [{ k: 'b', min: 10, max: p.max, paso: 2, r: 11, en: v => [235, 178 - v.b * 1.6], de: (x, y) => (178 - y) / 1.6 }], ok: (v, p) => v.b * 100 === p.a * (100 - p.pc), sol: p => ({ b: p.a * (100 - p.pc) / 100 }), texto: p => `${p.a} − ${p.a * p.pc / 100} = ${p.a * (100 - p.pc) / 100}`, alto: () => 208, pie: 'Arrastra la punta de la barra de ahora.',
     dib: (v, K, p, f) => K.l(40, 178, 300, 178, 'lm') + K.r(70, 178 - p.a * 1.6, 70, p.a * 1.6, 'fa') + K.r(200, 178 - v.b * 1.6, 70, v.b * 1.6, 'fg') + K.l(70, 178 - p.a * 1.6, 290, 178 - p.a * 1.6, 'lm d') + K.t(105, 198, `antes ${p.a}`, 's') + K.t(235, 198, `ahora ${R(v.b)}`, 's') + K.f(f, K.t(170, 20, `${N((v.b - p.a) / p.a * 100)} %`, 'tf')),
-    lee: (v, p) => `$\\tfrac{${N(v.b)} - ${p.a}}{${p.a}} = ${N((v.b - p.a) / p.a * 100)}\\,\\%$`, aviso: (v, p) => (v.b === p.a - p.pc ? `Quitaste ${p.pc} unidades; había que quitar el ${p.pc} % de ${p.a}.` : v.b === p.a * p.pc / 100 ? 'Eso es lo que bajó; la barra muestra lo que quedó.' : v.b > p.a ? 'Así las ventas suben.' : v.b * 100 > p.a * (100 - p.pc) ? 'Bajó menos de lo que se pide.' : 'Bajó más de lo que se pide.'), bien: (v, p) => `El ${p.pc} % de ${p.a} es ${p.a * p.pc / 100}.`,
+    lee: (v, p) => `$\\tfrac{${N(v.b)} - ${p.a}}{${p.a}} = ${N((v.b - p.a) / p.a * 100)}\\,\\%$`, aviso: (v, p) => (v.b === p.a - p.pc ? `Quitaste ${p.pc} unidades; había que quitar el ${p.pc} % de ${p.a}.` : v.b === p.a * p.pc / 100 ? 'Eso es lo que bajó; la barra muestra lo que quedó.' : v.b > p.a ? 'Así sube en vez de bajar.' : v.b * 100 > p.a * (100 - p.pc) ? 'Bajó menos de lo que se pide.' : 'Bajó más de lo que se pide.'), bien: (v, p) => `El ${p.pc} % de ${p.a} es ${p.a * p.pc / 100}.`,
   });
   XG.cuenta('ida-vuelta-porciento', 128, (K, p) => K.r(46, 106 - p.a * 1.6, 40, p.a * 1.6, 'fa', 3) + K.r(120, 106 - p.b * 1.6, 40, p.b * 1.6, 'fg', 3) + K.r(206, 106 - p.b * 1.6, 40, p.b * 1.6, 'fg', 3) + K.r(280, 106 - p.a * 1.6, 40, p.a * 1.6, 'fa', 3) + K.l(30, 106, 330, 106, 'lm') + [[66, p.a], [140, p.b], [226, p.b], [300, p.a]].map(([x, n]) => K.t(x, 123, n, 's')).join('') + K.ar(90, 94, 116, 94, 'lg') + K.ar(250, 94, 276, 94, 'lg'));
   const torta = (K, g, r = '', t = '', q = 84) => K.c(150, q + 20, q, 'fc') + (g > 0 ? K.sec(150, q + 20, q, 90 - g, 90, 'fa') : '') + (r ? K.t(...K.at(150, q + 22, q * 0.6, 90 - g / 2), r, 's') : '') + K.t(250, 34, t, 's tm', 'start');
@@ -15682,7 +15706,7 @@ const HOJA = (() => {
     const s = root.isConnected && quienRueda(root); if (!s) return;
     const r = s.getBoundingClientRect(), y = m.getBoundingClientRect().top, fb = document.querySelector('.feedback.show')?.getBoundingClientRect();
     const abajo = fb && fb.left < r.right && fb.right > r.left ? Math.min(r.bottom, fb.top) : r.bottom;
-    if (y < r.top + 10 || y > abajo - 30) s.scrollBy({ top: y - r.top - (abajo - r.top) / 3, behavior: quieto() ? 'auto' : 'smooth' });
+    if (y < r.top + 10 || y > abajo - 30) s.scrollBy({ top: (y - r.top - (abajo - r.top) / 3) / zk(), behavior: quieto() ? 'auto' : 'smooth' });
   }, 700);
   const quieto = () => typeof xpStill === 'function' && xpStill();
   const tactil = () => { if (typeof xpTick === 'function') xpTick(); };
@@ -16016,7 +16040,7 @@ const HOJA = (() => {
           ui.s.o.forEach(i => ol.appendChild(li(i)));
           [...ol.children].forEach((x, n) => {
             x.classList.toggle('fija', n < fija);
-            const dy = antes.get(x) - x.getBoundingClientRect().top;
+            const dy = (antes.get(x) - x.getBoundingClientRect().top) / zk();
             if (!dy || x === menos || quieto() || !x.animate) return;
             x.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: ms, easing: 'cubic-bezier(.2,.8,.2,1)' });
           });

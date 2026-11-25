@@ -483,7 +483,7 @@ function xpChispas(stage) {
   for (let k = 0; k < 10; k++) {
     const d = document.createElement('i'), ang = (k / 10) * 2 * Math.PI + 0.3, far = 46 + 26 * (k % 3);
     d.className = 'xp-chispa';
-    d.style.left = r.left - h.left + r.width / 2 + 'px'; d.style.top = r.top - h.top + r.height / 2 + 'px';
+    d.style.left = (r.left - h.left + r.width / 2) / zk() + 'px'; d.style.top = (r.top - h.top + r.height / 2) / zk() + 'px';
     host.appendChild(d);
     d.animate([{ transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
       { transform: `translate(calc(-50% + ${Math.cos(ang) * far}px), calc(-50% + ${Math.sin(ang) * far}px)) scale(.2)`, opacity: 0 }],
@@ -852,7 +852,7 @@ XPD.conjunto = (stage, p, s, api) => {
   };
   box.onpointermove = e => {
     if (!arr) return;
-    const dx = e.clientX - arr.x0, dy = e.clientY - arr.y0;
+    const dx = (e.clientX - arr.x0) / zk(), dy = (e.clientY - arr.y0) / zk();
     if (Math.hypot(dx, dy) > 6) arr.mov = true;
     if (arr.mov) arr.el.style.transform = `translate(${arr.bx + dx}px, ${arr.by + dy}px) scale(1.08)`;
   };
@@ -3770,11 +3770,11 @@ XPD.hoja = (stage, p, s, api) => {
       if (!dedo.g) {
         if (Math.hypot(e.clientX - dedo.x, e.clientY - dedo.y) < 7) return;
         const r = dedo.b.getBoundingClientRect();
-        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width}px`, left: `${r.left}px`, top: `${r.top}px` });
+        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width / zk()}px`, left: `${r.left / zk()}px`, top: `${r.top / zk()}px` });
         dedo.ox = e.clientX - r.left; dedo.oy = e.clientY - r.top; document.body.appendChild(dedo.g); dedo.b.classList.add('lift');
       }
       e.preventDefault();
-      dedo.g.style.left = `${e.clientX - dedo.ox}px`; dedo.g.style.top = `${e.clientY - dedo.oy}px`;
+      dedo.g.style.left = `${(e.clientX - dedo.ox) / zk()}px`; dedo.g.style.top = `${(e.clientY - dedo.oy) / zk()}px`;
       const q = document.elementFromPoint(e.clientX, e.clientY)?.closest('.hj-p');
       root.querySelectorAll('.over').forEach(o => o !== q && o.classList.remove('over'));
       if (q && root.contains(q)) q.classList.add('over');
@@ -3813,7 +3813,7 @@ XPD.hoja = (stage, p, s, api) => {
       if (m.tacha) XS.tick(-6); else if (m.luz || m.nota || m.sello) XS.pop();
       const q = m.luz?.length ? T(m.luz[0]) : m.nota ? P(Object.keys(m.nota)[0]) : null, st = root.closest('.xp-step');
       // En pantallas pequeñas la hoja puede ser más alta que el paso: lo que se nombra queda a la vista.
-      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: a.top - b.top - b.height * 0.45, behavior: xpStill() ? 'auto' : 'smooth' }); }
+      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: (a.top - b.top - b.height * 0.45) / zk(), behavior: xpStill() ? 'auto' : 'smooth' }); }
       t = setTimeout(done, xpStill() ? 0 : 750);
       return () => clearTimeout(t);
     },
@@ -7806,7 +7806,7 @@ xpLec('pu-vo-4', [
       xpMira('dibujo', 'Tercera idea: un dato muy grande **jala** el promedio, pero no la mediana.', { dib: barras, v: { vals: [1, 2, 2, 3, 2], hi: 24, st: 6, rot: ['1', '2', '2', '3', '2'], on: -1, nota: '', lin: 0 }, alto: 195 }, [
         ['Cinco sueldos parecidos: el promedio y la mediana son 2.', { lin: 2 }],
         ['El último se va a 22.', { vals: [1, 2, 2, 3, 22], rot: ['1', '2', '2', '3', '22'], on: 4 }],
-        ['El promedio salta a 6: nadie más gana eso.', { lin: 6, nota: 'promedio 6' }, '$30 \\div 5 = 6$'],
+        ['El promedio salta a 6: nadie gana eso.', { lin: 6, nota: 'promedio 6' }, '$30 \\div 5 = 6$'],
         ['La mediana sigue en 2: describe mejor al grupo.', { lin: 2, nota: 'mediana 2' }],
         ['En notas con peso, cada una jala según su porcentaje.', { nota: '' }, '$0.4 \\cdot 5 + 0.6 \\cdot 3 = 3.8$'],
       ], 'Un dato extremo mueve el promedio y casi nunca la mediana.'),
@@ -7861,7 +7861,7 @@ xpLec('icf-lc-literal-1', [
       ['Con las dos oraciones la respuesta está completa.', { luz: [0, 1] }],
       ['Recordar no es lo mismo que leer: vuelve y señala.', {}],
     ], 'La respuesta se señala con el dedo en el texto, no se recuerda.'),
-    xpHaz('hoja', 'Subraya la oración que dice **por qué** cerró la biblioteca.', { modo: 'toca', meta: [2], paras: [['La biblioteca cerró el lunes.', 'Tenía doce mil libros.'], ['Una gotera dañó el techo de la sala.', 'Volverá a abrir en marzo.']], pista: 'Esa cuenta algo del cierre, pero no su causa.' }, 'El dato que responde «por qué» es la causa.')],
+    xpHaz('hoja', 'Subraya la oración que dice **por qué** cerró la biblioteca.', { modo: 'toca', meta: [2], paras: [['La biblioteca cerró el lunes.', 'Tenía doce mil libros.'], ['Una gotera dañó el techo de la sala.', 'Volverá a abrir en marzo.']], pista: 'Esa no dice la causa del cierre.' }, 'El dato que responde «por qué» es la causa.')],
   ['Qué hace cada párrafo',
     xpMira('hoja', 'Segunda idea: cada párrafo tiene un **oficio** dentro del texto.', { paras: [['Cada año se botan toneladas de ropa.'], ['Pasa porque sale muy barata y dura poco.'], ['En un barrio abrieron un taller para remendar.'], ['Reparar es la mejor manera de no comprar.']] }, [
       ['El primero muestra un problema.', { luz: [0], nota: { 0: 'problema' } }],
@@ -7912,7 +7912,7 @@ xpLec('icf-lc-literal-2', [
       ['Y los dos puntos anuncian la explicación.', { luz: [5, 6] }],
       ['Tapa el conector y di tú qué pasa entre las dos ideas.', {}],
     ], 'El conector dice si la idea choca, resulta o suma; el signo, cómo leerla.'),
-    xpHaz('hoja', 'Subraya el conector que anuncia una **consecuencia**.', { modo: 'toca', meta: [3], paras: [['Aunque', 'el bus llegó tarde,', 'nadie protestó;'], ['así que', 'salimos tranquilos', 'y además', 'cantando.']], pista: 'Ese opone o suma. Busca el que presenta un resultado.' }, '«Así que» trae lo que resulta.')],
+    xpHaz('hoja', 'Subraya el conector que anuncia una **consecuencia**.', { modo: 'toca', meta: [3], paras: [['Aunque', 'el bus llegó tarde,', 'nadie protestó;'], ['así que', 'salimos tranquilos', 'y además', 'cantando.']], pista: 'Ese no presenta un resultado. Busca el conector que lo anuncia.' }, '«Así que» trae lo que resulta.')],
   ['Ahora sí, un problema',
     xpHaz('hoja', '«La ley buscaba frenar la tala; no obstante, esta aumentó». Subraya a qué apunta **«esta»**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['la ley'], ['la tala'], ['la búsqueda']], pista: 'Ponla en su lugar: ¿qué pudo aumentar, si la ley quería frenarlo?' }, '«Esta» recoge lo más cercano, y solo la tala aumenta.')],
 ], 'Prueba la palabra en su oración, tira el hilo hacia atrás y lee los conectores.');
@@ -7980,7 +7980,7 @@ xpLec('icf-sc-constitucion-2', [
     ], 'Tutela: derecho fundamental en juego y ningún otro medio eficaz.'),
     xpHaz('hoja', '**Tacha** los dos casos en los que la tutela **no** es el camino.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 2], paras: [['Le suspenden una quimioterapia.'], ['Un amigo no le paga un préstamo.'], ['El vecino le vendió un carro dañado.'], ['No dejan entrar a un niño al colegio por su pelo.']], pista: 'Alguna de las tachadas toca la vida, la salud o la igualdad.' }, 'Deudas y compras tienen otros jueces y otros caminos.')],
   ['Ahora sí, un problema',
-    xpHaz('hoja', 'Una ley ordena poner baños en los parques y la alcaldía no lo hace. Subraya el mecanismo.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Habeas corpus'], ['Acción de tutela'], ['Acción de cumplimiento'], ['Derecho al voto']], pista: 'Ya hay una norma: lo que falta no es un derecho nuevo.' }, 'La norma existe; se exige que se cumpla.')],
+    xpHaz('hoja', 'Una ley ordena publicar los contratos y la alcaldía no lo hace. Subraya el mecanismo.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Habeas corpus'], ['Acción de tutela'], ['Acción de cumplimiento'], ['Derecho al voto']], pista: 'Ya hay una norma: lo que falta no es un derecho nuevo.' }, 'La norma existe; se exige que se cumpla.')],
 ], 'De quién es el derecho, qué se reclama y si hay otro camino: ahí sale la herramienta.');
 ;
 //#archivo js/explora-icf-cn.js
@@ -8035,8 +8035,8 @@ xpLec('icf-sc-constitucion-2', [
         ['Y bajan parejo: 6 minutos por cucharada.', {}, '$40 - 34 = 6 \\qquad 28 - 22 = 6$'],
         ['Para cinco cucharadas se puede predecir, no asegurar.', { q: 1 }, '$22 - 6 = 16$'],
       ], 'Mira si sube, baja o sigue igual, y cuánto en cada paso.'),
-      xpHaz('dibujo', 'Con 1, 2 y 3 bombas un tanque tarda 48, 40 y 32 minutos. Si sigue igual, lleva el punto a lo que tardaría con **4**.', { dib: (v, K) => ejes(K, 50, 10, 'bombas', 'minutos') + [[1, 48], [2, 40], [3, 32]].map(([x, y]) => K.c(X(x), Y(y, 50), 6, 'fA')).join('') + K.l(X(4), 160, X(4), Y(v.y, 50), 'lm d'), v: { y: 44 }, metas: { y: 24 }, alto: 200, manijas: [{ k: 'y', min: 0, max: 50, paso: 2, r: 10, en: v => [X(4), Y(v.y, 50)], de: (x, y) => (160 - y) / 130 * 50 }],
-        lee: v => `$32 \\to ${n1(v.y)}$`, dice: v => `De 3 a 4 bombas cambiaría ${Math.abs(32 - v.y)} minutos.` }, 'Baja 8 en cada paso: $32 - 8 = 24$.')],
+      xpHaz('dibujo', 'Con 1, 2 y 3 cucharadas de levadura, una masa tarda 48, 40 y 32 minutos en crecer. Si sigue igual, lleva el punto a lo que tardaría con **4**.', { dib: (v, K) => ejes(K, 50, 10, 'cucharadas de levadura', 'minutos') + [[1, 48], [2, 40], [3, 32]].map(([x, y]) => K.c(X(x), Y(y, 50), 6, 'fA')).join('') + K.l(X(4), 160, X(4), Y(v.y, 50), 'lm d'), v: { y: 44 }, metas: { y: 24 }, alto: 200, manijas: [{ k: 'y', min: 0, max: 50, paso: 2, r: 10, en: v => [X(4), Y(v.y, 50)], de: (x, y) => (160 - y) / 130 * 50 }],
+        lee: v => `$32 \\to ${n1(v.y)}$`, dice: v => `De 3 a 4 cucharadas cambiaría ${Math.abs(32 - v.y)} minutos.` }, 'Baja 8 en cada paso: $32 - 8 = 24$.')],
     ['Qué se puede concluir',
       xpMira('hoja', 'Segunda idea: una conclusión no puede decir **más** que los datos.', { letras: ['1', 'a', 'b', 'c'], paras: [['Se probaron 20 pilas de una marca: duraron 9 horas en promedio.'], ['Esas 20 pilas duraron 9 horas en promedio.'], ['Todas las marcas duran 9 horas.'], ['Duran 9 horas por su color.']] }, [
         ['Arriba están los datos.', { luz: [0] }],
@@ -8096,11 +8096,11 @@ xpLec('icf-en-avisos-1', [
 
 xpLec('icf-en-avisos-2', [
   ['¿Persona, lugar o cosa?',
-    xpMira('hoja', 'Empecemos por la idea: la descripción dice primero **qué clase** de palabra es.', { paras: [['This person', 'drives a bus.'], ['A place', 'where you see paintings.'], ['You use it', 'to cut paper.']] }, [
+    xpMira('hoja', 'Empecemos por la idea: la descripción dice primero **qué clase** de palabra es.', { paras: [['This person', 'drives a bus.'], ['A place', 'where you see paintings.'], ['You use it', 'to cut bread.']] }, [
       ['«This person»: buscas una persona.', { luz: [0], nota: { 0: 'person' } }],
       ['Maneja un bus: «driver».', { luz: [1] }],
       ['«A place»: buscas un lugar. Pinturas: «museum».', { luz: [2, 3], nota: { 1: 'place' } }],
-      ['«You use it»: buscas una cosa. Cortar: «scissors».', { luz: [4, 5], nota: { 2: 'thing' } }],
+      ['«You use it»: buscas una cosa. Cortar pan: «knife».', { luz: [4, 5], nota: { 2: 'thing' } }],
       ['Con la clase ya descartas la mitad de las opciones.', {}],
     ], 'Primero la clase de palabra, después el significado.'),
     xpHaz('hoja', 'Pon al margen la palabra de cada descripción.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['kitchen', 'nurse', 'umbrella'], meta: [1, 2, 0], paras: [['This person helps sick people.'], ['You need it when it rains.'], ['You cook in this room.']], pista: 'Mira si pide persona, cosa o lugar.' }, '«Person», «it» y «room» ya dicen la clase.')],
@@ -9233,7 +9233,7 @@ class YouTubeClip {
     // arriba y abajo (franjas donde YouTube pinta avatar, título y logo), que quedan fuera.
     this.layout = () => {
       const f = el.querySelector('.yt-crop iframe');
-      const { width: W, height: H } = el.getBoundingClientRect();
+      const { clientWidth: W, clientHeight: H } = el;
       if (!f || !W) return;
       const vw = Math.min(W, (H * 9) / 16), vh = (vw * 16) / 9;
       // El marco recortado mide justo lo que el video; el iframe sobresale 64 px por arriba y por abajo.
@@ -12105,7 +12105,7 @@ function tuPinta(courses) {
     const marca = o => { if (sobre === o) return; sobre?.classList.remove('sobre'); sobre = o; sobre?.classList.add('sobre'); };
     const fin = e => { if (e.pointerId !== id) return; id = null; cop?.remove(); cop = null; f.classList.remove('fuera'); sem.classList.remove('espera'); const o = e.type === 'pointerup' ? sobre : null; marca(null); if (o) hora(o.dataset.d, o.dataset.t); };
     f.onpointerdown = e => { if (e.button) return; id = e.pointerId; f.setPointerCapture(id); cop = f.cloneNode(true); cop.classList.add('vuela'); document.body.append(cop); f.classList.add('fuera'); sem.classList.add('espera'); f.onpointermove(e); };
-    f.onpointermove = e => { if (e.pointerId !== id || !cop) return; if (!f.isConnected) { cop.remove(); cop = null; id = null; return; } cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; marca(document.elementFromPoint(e.clientX, e.clientY)?.closest('button.ts-c') || null); };
+    f.onpointermove = e => { if (e.pointerId !== id || !cop) return; if (!f.isConnected) { cop.remove(); cop = null; id = null; return; } cop.style.left = `${e.clientX / zk()}px`; cop.style.top = `${e.clientY / zk()}px`; marca(document.elementFromPoint(e.clientX, e.clientY)?.closest('button.ts-c') || null); };
     f.onpointerup = fin; f.onpointercancel = fin; f.onlostpointercapture = fin;
     f.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
   }
@@ -12935,7 +12935,7 @@ function renderGym() {
         movio = true; b.setPointerCapture(id); hero.classList.add('espera');
         cop = b.querySelector('.gd').cloneNode(true); cop.className = `gd gd-vuela lv${b.dataset.lv}`; G.append(cop);
       }
-      if (cop) { cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; }
+      if (cop) { cop.style.left = `${e.clientX / zk()}px`; cop.style.top = `${e.clientY / zk()}px`; }
     };
     b.onpointerup = e => {
       if (e.pointerId !== id) return;
@@ -13033,7 +13033,7 @@ function startReto(c, r) {
     if (pos >= r.steps.length) return finish();
     const s = r.steps[pos];
     // Un solo contenedor: mountSketch (kit.js) mide el primer hijo de .lesson-body para achicar el juego si no cabe.
-    body.innerHTML = `<div class="gym-step"><div class="gym-lado"><details class="gym-reto"${esEscritorio() && innerHeight > 760 ? ' open' : ''}><summary><span>El reto</span><span class="gr-n">Paso ${pos + 1} de ${r.steps.length}</span></summary><div>${tex(r.problem)}</div></details>
+    body.innerHTML = `<div class="gym-step"><div class="gym-lado"><details class="gym-reto"${esEscritorio() && innerHeight / zk() > 760 ? ' open' : ''}><summary><span>El reto</span><span class="gr-n">Paso ${pos + 1} de ${r.steps.length}</span></summary><div>${tex(r.problem)}</div></details>
       <div class="coach" role="note"><span class="coach-av">${mascotSVG('think')}</span><div><small>Paso ${pos + 1} · ${esc(s.title)}</small><p></p>${conceptOf(s) ? `<button type="button" class="con-btn" data-concept>${ICON.bulb}Recordar el concepto</button>` : ''}</div></div>
       ${notebook()}</div><div class="gym-ex"></div></div>`;
     const cb = $('[data-concept]', body);
@@ -14232,23 +14232,23 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['La intrusa', 'Lleva cada opción a su párrafo. La que se quede sin casa es la respuesta.', 'sella-parrafo', '«Con el cable pasó todo esto, **EXCEPTO**:» Ata cada opción.', { doc: CABLE, ...T(['El viaje se acortó', 1, 'Busca los minutos.'], ['Subieron arriendos', 2, 'Busca el párrafo de los problemas.'], ['Se detiene con tormentas', 2, 'Busca el párrafo de los problemas.'], ['Se quitaron los escalones', 4, 'Los escalones se nombran: ¿dice que los quitaron?']), luz: [[2, 'veinte minutos'], [3, 'Los arriendos cerca de las estaciones subieron'], [3, 'el servicio se detiene']], bien: 'Se nombran los escalones, pero nadie los quitó.' }, 'El viaje corto está en el 2; arriendos y tormentas, en el 3; que quitaran los escalones, en ninguno.', ['Dos opciones comparten párrafo.', 'Que se nombre algo no significa que le pasara eso.'], 'La intrusa: quitar los escalones']],
     'El texto va del antes a la petición; nadie quitó los escalones.', 'El mapa dice dónde buscar y la búsqueda dice cuál sobra.');
   reto('texto-2', ['icf-lc-literal-2'], 3, 'Las palabras del cable', 'Probar y tirar el hilo', 'El mismo texto, palabra por palabra.', [
-    ['La palabra justa', 'Pon cada ficha en la oración y léela entera: no basta que sea sinónimo en el diccionario.', 'cambia-palabra', 'Pon la palabra que dice lo mismo. Sobran dos.', { doc: CABLE, frases: [[1, 'subir a la loma de San Isidro ', 'tomaba', ' una hora'], [2, '«', 'Recuperé', ' dos horas al día»'], [4, 'Lo que piden es que el cable se ', 'complete', ': más estaciones']], ...F(['duraba', 0, '¿Qué hacía la subida con una hora?'], ['Gané de nuevo', 1, '¿Qué hizo con dos horas que antes perdía?'], ['termine de construir', 2, 'Mira lo que piden después de los dos puntos.'], ['bebía', null, 'Nadie bebe una hora.'], ['Curé', null, 'Las horas no estaban enfermas.']), bien: 'El sentido lo pone la oración.' }, 'Tomar es durar, recuperar es ganar de nuevo y completar, terminar de construir.', ['Lee la oración con cada ficha.', 'Dos fichas son sinónimos en otra oración.'], 'Tomaba → duraba; recuperé → gané; complete → termine'],
+    ['La palabra justa', 'Pon cada ficha en la oración y léela entera: no basta que sea sinónimo en el diccionario.', 'cambia-palabra', 'Pon la palabra que dice lo mismo. Sobran dos.', { doc: CABLE, frases: [[1, 'subir a la loma de San Isidro ', 'tomaba', ' una hora'], [2, '«', 'Recuperé', ' dos horas al día»'], [4, 'Lo que piden es que el cable se ', 'complete', ': más estaciones']], ...F(['duraba', 0, '¿Qué hacía la subida con una hora?'], ['gané de nuevo', 1, '¿Qué hizo con dos horas que antes perdía?'], ['termine de construir', 2, 'Mira lo que piden después de los dos puntos.'], ['bebía', null, 'Nadie bebe una hora.'], ['sané', null, 'Las horas no estaban enfermas.']), bien: 'El sentido lo pone la oración.' }, 'Tomar es durar, recuperar es ganar de nuevo y completar, terminar de construir.', ['Lee la oración con cada ficha.', 'Una ficha es sinónimo, pero en otra oración.'], 'Tomaba → duraba; recuperé → gané; complete → termine'],
     ['Quién lo dice', 'Busca comillas y verbos de decir. Lo que no los tiene es de quien escribe.', 'pinta-voces', 'Pinta cada idea con quien la dice.', { doc: CABLE, plumas: ['el autor', 'Ofelia', 'la gente de la loma'], ...P(['Ahora tiene dos horas más cada día.', 1, 'Busca las comillas.'], ['Debe haber más estaciones.', 2, 'Busca quiénes «piden».'], ['No todo fue ganancia.', 0, '¿Hay alguien más que lo firme?'], ['Antes se subían cuatrocientos escalones.', 0, '¿Hay comillas en ese párrafo?']), bien: 'Comillas, «piden» y lo demás.' }, 'Las comillas son de Ofelia, «piden» es de la gente y el resto lo dice el autor.', ['Mira qué va entre comillas.', 'La petición no es del autor: es de otros.'], 'Ofelia cita; la gente pide; el autor cuenta']],
     'Cada palabra se prueba en su oración y cada idea tiene su dueño.', 'Sentido en contexto y voces: dos preguntas fijas de la prueba.');
 
   // ---------------------------------------------------------------------------------------------- Sociales · Constitución
   const POZO = D('pozo', 'El pozo de Las Brisas', [
     'En la vereda Las Brisas, el único pozo se secó después de que una empresa de flores abrió otro más profundo a doscientos metros. Cuarenta familias quedaron sin agua.',
-    'Primero escribieron a la alcaldía para preguntar si la empresa tenía permiso. A los doce días les respondieron: el permiso existía, pero nadie había revisado sus condiciones.',
+    'Primero escribieron a la corporación autónoma regional, la autoridad ambiental, para preguntar si la empresa tenía permiso. A los doce días les respondieron: el permiso existía, pero nadie había revisado sus condiciones.',
     'Entonces se dividieron las tareas. Por la salud de los niños pusieron una tutela; por el agua del subsuelo, que es de todos, una acción popular.',
     'Mientras el juez decidía, la Procuraduría abrió una investigación contra el funcionario que nunca revisó el permiso.']);
   reto('estado-1', ['icf-sc-constitucion-2'], 2, 'El pozo de Las Brisas', 'De quién es el derecho', 'Un caso con varias herramientas. ¿Cuál va con cada reclamo?', [
     ['Clasifica el reclamo', 'Pregunta si el derecho es de una persona o de todos a la vez.', 'genero-o-cita', '¿**Tutela** o **acción popular**?', { doc: POZO, rot: ['acción de tutela', 'acción popular'], ...F(['Un niño enfermo por falta de agua', 0, '¿De quién es la salud en juego?'], ['El subsuelo que comparten las veredas', 1, '¿De cuántos es esa agua?'], ['Una anciana sin atención médica', 0, '¿De quién es la salud en juego?'], ['El aire con pesticidas', 1, '¿Quiénes respiran ese aire?']), bien: 'Una persona o todos: ahí se decide.' }, 'La salud de alguien va por tutela; el agua y el aire de todos, por acción popular.', ['Si al arreglarlo ganan todos, es colectivo.', 'El niño y la anciana son personas con nombre.'], 'Persona: tutela. Todos: popular'],
-    ['Ordena el caso', 'Antes de demandar se pide; después se escoge la herramienta.', 'pasos-del-proceso', 'Ordena lo que pasó. El primero está en su puesto.', { que: 'lo que pasó', de: 'El caso del pozo', fija: 1, ini: [0, 2, 3, 1], tiras: ['El pozo se secó.', 'Preguntaron por el permiso.', 'La alcaldía respondió.', 'Pusieron tutela y acción popular.'], mira: ['', 'Nadie responde lo que no se ha preguntado.', 'Se responde una pregunta ya hecha.', '«Entonces» llega después de saber la respuesta.'], bien: 'Daño, petición, respuesta y acciones.' }, 'Primero el daño, luego la petición, su respuesta y, al final, las acciones.', ['¿Qué necesitaban saber antes de demandar?', 'La respuesta llegó a los doce días.'], 'Daño, petición, respuesta, acciones']],
+    ['Ordena el caso', 'Antes de demandar se pide; después se escoge la herramienta.', 'pasos-del-proceso', 'Ordena lo que pasó. El primero está en su puesto.', { que: 'lo que pasó', de: 'El caso del pozo', fija: 1, ini: [0, 2, 3, 1], tiras: ['El pozo se secó.', 'Preguntaron por el permiso.', 'La autoridad respondió.', 'Pusieron tutela y acción popular.'], mira: ['', 'Nadie responde lo que no se ha preguntado.', 'Se responde una pregunta ya hecha.', '«Entonces» llega después de saber la respuesta.'], bien: 'Daño, petición, respuesta y acciones.' }, 'Primero el daño, luego la petición, su respuesta y, al final, las acciones.', ['¿Qué necesitaban saber antes de demandar?', 'La respuesta llegó a los doce días.'], 'Daño, petición, respuesta, acciones']],
     'Tutela por la salud, acción popular por el agua, después de preguntar.', 'Primero se pide, después se escoge la herramienta según de quién es el derecho.');
   reto('estado-2', ['icf-sc-constitucion-1'], 3, 'Quién hace qué', 'El verbo dice la rama', 'En el caso del pozo aparecen varias autoridades. Ubica cada una y lo que se puede concluir.', [
-    ['Cada autoridad', 'No mires el tema: mira el verbo. ¿Legisla, gobierna, juzga o vigila?', 'pinta-tipos', 'Pinta cada acción.', { doc: POZO, plumas: ['ejecutiva', 'judicial', 'control'], ...P(['La alcaldía da un permiso.', 0, '¿Gobierna, juzga o vigila?'], ['El juez decide la tutela.', 1, '¿Gobierna, juzga o vigila?'], ['La Procuraduría investiga al funcionario.', 2, '¿Gobierna, juzga o vigila?'], ['La Contraloría revisa el gasto.', 2, '¿Gobierna, juzga o vigila?']), bien: 'Gobernar, juzgar y vigilar.' }, 'La alcaldía gobierna, el juez decide y la Procuraduría y la Contraloría vigilan.', ['Subraya el verbo de cada acción.', 'Investigar y revisar son del mismo tipo.'], 'Permiso: ejecutiva. Fallo: judicial. Investigar: control'],
-    ['Dice o se deduce', 'Una investigación no es una condena: cuidado con lo que se agrega.', 'dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: POZO, nums: [2, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], ...F(['El permiso existía.', 0, 'Léela junto a la respuesta de la alcaldía.'], ['El funcionario pudo incumplir su deber.', 1, '¿Por qué lo investigarían?'], ['El funcionario recibió dinero.', 2, '¿Alguna oración habla de dinero?'], ['La respuesta tardó doce días.', 0, 'Léela junto a la segunda oración.']), luz: [[2, 'el permiso existía'], [4, 'abrió una investigación']], bien: 'Investigar no prueba culpa.' }, 'El permiso y los doce días están escritos; que pudo incumplir se deduce; el dinero se inventa.', ['Busca primero lo escrito.', 'Una investigación supone una sospecha, no más.'], 'Escrito: permiso y plazo. Deducido: posible falta']],
+    ['Cada autoridad', 'No mires el tema: mira el verbo. ¿Legisla, gobierna, juzga o vigila?', 'pinta-tipos', 'Pinta cada acción.', { doc: POZO, plumas: ['ejecutiva', 'judicial', 'control'], ...P(['La alcaldía manda un carrotanque con agua.', 0, '¿Gobierna, juzga o vigila?'], ['El juez decide la tutela.', 1, '¿Gobierna, juzga o vigila?'], ['La Procuraduría investiga al funcionario.', 2, '¿Gobierna, juzga o vigila?'], ['La Contraloría revisa el gasto.', 2, '¿Gobierna, juzga o vigila?']), bien: 'Gobernar, juzgar y vigilar.' }, 'La alcaldía gobierna, el juez decide y la Procuraduría y la Contraloría vigilan.', ['Subraya el verbo de cada acción.', 'Investigar y revisar son del mismo tipo.'], 'Carrotanque: ejecutiva. Fallo: judicial. Investigar: control'],
+    ['Dice o se deduce', 'Una investigación no es una condena: cuidado con lo que se agrega.', 'dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: POZO, nums: [2, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], ...F(['El permiso existía.', 0, 'Léela junto a la respuesta de la autoridad.'], ['El funcionario pudo incumplir su deber.', 1, '¿Por qué lo investigarían?'], ['El funcionario recibió dinero.', 2, '¿Alguna oración habla de dinero?'], ['La respuesta tardó doce días.', 0, 'Léela junto a la segunda oración.']), luz: [[2, 'el permiso existía'], [4, 'abrió una investigación']], bien: 'Investigar no prueba culpa.' }, 'El permiso y los doce días están escritos; que pudo incumplir se deduce; el dinero se inventa.', ['Busca primero lo escrito.', 'Una investigación supone una sospecha, no más.'], 'Escrito: permiso y plazo. Deducido: posible falta']],
     'Gobernar, juzgar y vigilar son tareas distintas, y una sospecha no es una condena.', 'El verbo muestra la rama; el texto, hasta dónde se puede concluir.');
 
   // ------------------------------------------------------------------------------------------------ Ciencias · indagación
@@ -14262,7 +14262,7 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['La tendencia', 'Lee los tres grupos en orden antes de concluir.', 'ajusta-alcance', 'Ajusta cada conclusión a los datos.', { doc: PAN, filas: [{ antes: 'Con más gotas, el moho', topes: ['disminuyó', 'quedó igual', 'aumentó'], va: 2 }, { antes: 'Sin agua, el moho a los cinco días', topes: ['no apareció', 'apareció en dos', 'apareció en todas'], va: 0 }], mira: ['Compara las manchas pequeñas y las grandes.', 'Relee lo que pasó con las secas.'], luz: [[3, 'las secas no tenían moho'], [3, 'manchas grandes en las cuatro']], bien: 'Cada frase con su dato.' }, 'Las secas sin moho, dos con manchas pequeñas, cuatro con manchas grandes: aumentó con el agua.', ['Pon los tres grupos en fila.', 'Mira cuántas tajadas tenían manchas en cada grupo.'], 'Más agua, más moho; secas, ninguno']],
     'Cambiaron el agua; a más agua, más moho en cinco días.', 'Identifica los papeles y lee la tendencia antes de explicar.');
   reto('moho-2', ['icf-cn-indaga-2'], 3, '¿De dónde sale el moho?', 'La explicación y su prueba', 'Dos explicaciones para los mismos datos. ¿Qué dato sirve para escoger?', [
-    ['Pesa los datos', 'Supón que cada dato es cierto y mira hacia dónde se inclina la balanza.', 'balanza-tesis', 'Explicación: el moho viene de esporas y la humedad le ayuda. ¿Qué hace cada dato?', { doc: PAN, tesis: 'El moho viene de esporas; el agua solo ayuda', ...F(['Pan húmedo hervido y sellado no crió moho.', 0, 'Si no había esporas, ¿qué se esperaba?'], ['Con lupa se vieron esporas en el aire.', 0, '¿Muestra de dónde puede salir?'], ['En aire sin esporas, el agua sola crió moho.', 1, 'Si no había esporas, ¿de dónde salió?'], ['El cajón era de madera.', 2, '¿Cambia alguna de las dos explicaciones?']), bien: 'Un dato pesa si podía haber salido distinto.' }, 'Sellado y sin moho, y esporas vistas, apoyan; moho sin esporas debilita; la madera no pesa.', ['Pregunta qué esperaría cada hermana.', 'El cajón era igual para todos.'], 'Apoyan: sellado y lupa. Debilita: moho sin esporas'],
+    ['Pesa los datos', 'Supón que cada dato es cierto y mira hacia dónde se inclina la balanza.', 'balanza-tesis', 'Explicación: el moho viene de esporas y la humedad le ayuda. ¿Qué hace cada dato?', { doc: PAN, tesis: 'El moho viene de esporas; el agua solo ayuda', ...F(['Pan húmedo hervido y sellado no crió moho.', 0, 'Si no había esporas, ¿qué se esperaba?'], ['Con microscopio se hallaron esporas en muestras del aire.', 0, '¿Muestra de dónde puede salir?'], ['En aire sin esporas, el agua sola crió moho.', 1, 'Si no había esporas, ¿de dónde salió?'], ['El cajón era de madera.', 2, '¿Cambia alguna de las dos explicaciones?']), bien: 'Un dato pesa si podía haber salido distinto.' }, 'Sellado y sin moho, y esporas vistas, apoyan; moho sin esporas debilita; la madera no pesa.', ['Pregunta qué esperaría cada hermana.', 'El cajón era igual para todos.'], 'Apoyan: sellado y microscopio. Debilita: moho sin esporas'],
     ['Dato, hipótesis o conclusión', 'Piensa cuándo se dice cada cosa.', 'pinta-tipos', 'Pinta cada oración.', { doc: PAN, plumas: ['dato', 'hipótesis', 'conclusión'], ...P(['Las de diez gotas tenían manchas en las cuatro.', 0, '¿Se vio o se pensó?'], ['La humedad hará que críe moho más rápido.', 1, '¿Es antes o después de mirar?'], ['El agua ayuda al moho a crecer.', 2, '¿Es una sola medida o junta varias?'], ['Las secas no tenían moho.', 0, '¿Se vio o se pensó?']), bien: 'Antes, al mirar y después.' }, 'Las manchas se vieron, «hará» se dijo antes y la idea general salió después.', ['El verbo en futuro delata una.', 'Una junta los tres grupos en una idea.'], 'Vistos: manchas. Antes: «hará». Después: la idea']],
     'La explicación de las esporas gana si los datos que podían tumbarla la apoyan.', 'Una buena prueba es la que podría salir mal.');
 
@@ -14277,7 +14277,7 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['Rule or information', 'Fíjate en el verbo: ¿te dice qué hacer o te cuenta algo?', 'genero-o-cita', 'Is it a **rule** or **information**?', { doc: POOL, rot: ['a rule', 'information'], ...F(['No running', 0, '¿Cuenta algo o prohíbe?'], ['We close at 4 p.m.', 1, '¿Te pide algo o te dice una hora?'], ['You must take a shower', 0, '¿Cuenta algo u obliga?'], ['Open from 6 a.m.', 1, '¿Te pide algo o te dice una hora?']), bien: 'Must and no -ing are rules.' }, '«Must» y «No running» son reglas; las horas solo informan.', ['Busca «must», «no» y «please».', 'Las horas informan.'], 'Rules: no running, must. Information: hours']],
     'The place is in the first word; the rule, in the verb.', 'Palabra clave para ubicar y verbo para distinguir.');
   reto('notice-2', ['icf-en-avisos-2'], 3, 'Say it another way', 'La misma idea, otras palabras', 'Los mismos avisos, dichos de otra manera.', [
-    ['Same meaning', 'Prueba cada palabra en la oración completa.', 'cambia-palabra', 'Put the word that means the same. Sobran dos.', { doc: POOL, frases: [[2, 'Please ', 'clean', ' the machines'], [3, '', 'Book', ' by phone one day before'], [2, '', 'Bring', ' your own towel']], ...F(['wash', 0, 'What do you do with a dirty machine?'], ['Reserve', 1, 'What do you do by phone before you play?'], ['Carry with you', 2, 'The towel is yours: what must you do with it?'], ['Read', null, 'It is not a book with pages.'], ['break', null, 'Nobody asks you to damage it.']), bien: 'Same idea, different word.' }, '«Clean» es «wash», «book» aquí es «reserve» y «bring» es «carry with you».', ['«Book» tiene dos sentidos: mira «by phone».', 'La toalla viene contigo de la casa.'], 'Clean: wash. Book: reserve. Bring: carry'],
+    ['Same meaning', 'Prueba cada palabra en la oración completa.', 'cambia-palabra', 'Put the word that means the same. Sobran dos.', { doc: POOL, frases: [[2, 'Please ', 'clean', ' the machines'], [3, '', 'Book', ' by phone one day before'], [2, '', 'Bring', ' your own towel']], ...F(['wash', 0, 'What do you do with a dirty machine?'], ['reserve', 1, 'What do you do by phone before you play?'], ['come with', 2, 'The towel is yours: what must you do with it?'], ['read', null, 'It is not a book with pages.'], ['break', null, 'Nobody asks you to damage it.']), bien: 'Same idea, different word.' }, '«Clean» es «wash», «book» aquí es «reserve» y «bring» es «come with».', ['«Book» tiene dos sentidos: mira «by phone».', 'La toalla viene contigo de la casa.'], 'Clean: wash. Book: reserve. Bring: come with'],
     ['True or not', 'Busca la oración que desmiente cada frase.', 'descarta-prueba', 'These are false. Ata cada una a la oración que la desmiente.', { doc: POOL, nums: [1, 2], pregunta: 'It is true', queda: 'A boy of six needs an adult in the pool.', ...T(['You can swim and shower later.', 1, 'Busca «before».'], ['You can run near the water.', 2, 'Busca «running».'], ['The centre gives you a towel.', 7, 'Busca «your own».']), bien: 'One sentence says no.' }, 'La ducha va antes, no se corre y la toalla la lleva cada uno.', ['Saca la palabra clave de cada frase.', '«Your own» dice de quién es la toalla.'], 'Before, no running, your own']],
     'Same idea, other words; and one sentence is enough to say no.', 'Compara ideas, no palabras copiadas.');
 }
@@ -14505,7 +14505,7 @@ function mcRuta(c, cur) {
   };
   let id = null, x0 = 0, s0 = 0, movio = false;   // con ratón también se arrastra
   ruta.onpointerdown = e => { movio = false; if (e.pointerType !== 'mouse' || e.button) return; id = e.pointerId; x0 = e.clientX; s0 = ruta.scrollLeft; };
-  ruta.onpointermove = e => { if (e.pointerId !== id) return; if (!e.buttons) { id = null; ruta.classList.remove('mano'); return; } if (!movio && Math.abs(e.clientX - x0) > 6) { movio = true; ruta.setPointerCapture(id); ruta.classList.add('mano'); } if (movio) ruta.scrollLeft = s0 - (e.clientX - x0); };
+  ruta.onpointermove = e => { if (e.pointerId !== id) return; if (!e.buttons) { id = null; ruta.classList.remove('mano'); return; } if (!movio && Math.abs(e.clientX - x0) > 6) { movio = true; ruta.setPointerCapture(id); ruta.classList.add('mano'); } if (movio) ruta.scrollLeft = s0 - (e.clientX - x0) / zk(); };
   ruta.onpointerup = ruta.onpointercancel = e => { if (e.pointerId === id) { id = null; ruta.classList.remove('mano'); } };
   ruta.onclick = e => { if (movio) { movio = false; return; } const b = e.target.closest('[data-mu]'); if (b) pon(+b.dataset.mu); };
   ruta.onkeydown = e => { const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (!k) return; e.preventDefault(); const i = Math.max(0, Math.min(idx.length - 1, idx.indexOf(mcVe.u[clave]) + k)); pon(idx[i], true); };
@@ -15846,7 +15846,7 @@ function tiendaVitrinaViva(el) {
     if (e.pointerId !== id) return;
     if (!e.buttons) return suelta(e);
     if (!movio && Math.abs(e.clientX - x0) > 7) { movio = true; rueda.setPointerCapture(id); h.classList.add('mano'); cancelAnimationFrame(raf); raf = 0; }
-    if (movio) { p = meta = Math.max(-.35, Math.min(n - .65, p0 - (e.clientX - x0) / (its[0].offsetWidth * .72))); pinta(); }
+    if (movio) { p = meta = Math.max(-.35, Math.min(n - .65, p0 - (e.clientX - x0) / zk() / (its[0].offsetWidth * .72))); pinta(); }
   };
   const suelta = e => { if (e.pointerId !== id) return; id = null; h.classList.remove('mano'); if (movio) va(tiendaCerca(p + Math.max(-.35, Math.min(.35, (x0 - e.clientX) / 260)), n)); };
   rueda.onpointerup = suelta; rueda.onpointercancel = suelta;
@@ -15939,9 +15939,9 @@ function tiendaVuela(a, desde) {
   const dest = $('.td-bolsa', view);
   if (!desde || !dest || !dest.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const r = desde.getBoundingClientRect(), d = dest.getBoundingClientRect(), f = document.createElement('span');
-  f.className = 'td-vuela'; f.innerHTML = tiendaMini(a); f.style.left = `${r.left + r.width / 2}px`; f.style.top = `${r.top + r.height / 2}px`;
+  f.className = 'td-vuela'; f.innerHTML = tiendaMini(a); f.style.left = `${(r.left + r.width / 2) / zk()}px`; f.style.top = `${(r.top + r.height / 2) / zk()}px`;
   document.body.append(f);
-  const dx = d.left + d.width / 2 - r.left - r.width / 2, dy = d.top + d.height / 2 - r.top - r.height / 2;
+  const dx = (d.left + d.width / 2 - r.left - r.width / 2) / zk(), dy = (d.top + d.height / 2 - r.top - r.height / 2) / zk();
   f.animate([{ transform: 'translate(-50%, -50%) scale(1)' }, { transform: `translate(calc(-50% + ${dx * .45}px), calc(-50% + ${dy * .45 - 110}px)) scale(1.15) rotate(-8deg)`, offset: .45 }, { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.25) rotate(14deg)`, opacity: .6 }], { duration: 720, easing: 'cubic-bezier(.4, 0, .3, 1)' }).onfinish = () => f.remove();
   setTimeout(() => f.remove(), 1200);
 }
@@ -15955,7 +15955,7 @@ function tiendaArrastra(el) {
     s.onpointermove = e => {
       if (e.pointerId !== id) return;
       if (!f && Math.hypot(e.clientX - x0, e.clientY - y0) > 8) { f = document.createElement('span'); f.className = 'td-vuela mano'; f.innerHTML = $('.td-artes, .td-pila', s).outerHTML; document.body.append(f); view.classList.add('llevando'); }
-      if (f) { f.style.left = `${e.clientX}px`; f.style.top = `${e.clientY}px`; $('.td-carro', view)?.classList.toggle('sobre', sobre(e)); }
+      if (f) { f.style.left = `${e.clientX / zk()}px`; f.style.top = `${e.clientY / zk()}px`; $('.td-carro', view)?.classList.toggle('sobre', sobre(e)); }
     };
     const fin = e => { if (e.pointerId !== id) return; id = null; const dentro = f && e.type === 'pointerup' && sobre(e), de = f; if (dentro) tiendaCambia(art, 1, de); quita(); $('.td-carro', view)?.classList.remove('sobre'); };
     s.onpointerup = fin; s.onpointercancel = fin;
@@ -16247,7 +16247,7 @@ async function openLector(id) {
     es.forEach(e => { const n = +e.target.dataset.n; e.isIntersecting ? L.vis.add(n) : L.vis.delete(n); });
     if (!L.vis.size) return;
     // La página que ocupa el centro de la pantalla.
-    const medio = cont.getBoundingClientRect().top + cont.clientHeight / 2;
+    const b0 = cont.getBoundingClientRect(), medio = b0.top + b0.height / 2;
     L.pag = [...L.vis].sort((a, b) => { const c = n => { const r = hojas[n - 1].getBoundingClientRect(); return Math.abs((r.top + r.bottom) / 2 - medio); }; return c(a) - c(b); })[0];
     if (document.activeElement !== input) input.value = L.pag;
     if (mio) { S.libros = { ...S.libros, [id]: L.pag }; }
@@ -17112,7 +17112,7 @@ function exploraRiel(root, d) {
   const stage = root.querySelector('.xp-stage');
   const ajusta = () => {
     const vb = stage.querySelector('.xp-svg')?.viewBox?.baseVal;
-    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight)}px`);
+    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight / zk())}px`);
   };
   ajusta();
   if (!root.dataset.ajusta) { root.dataset.ajusta = '1'; new ResizeObserver(ajusta).observe(root); }
@@ -17207,7 +17207,7 @@ function pfMapaHTML() {
 }
 function pfLogrosHTML() {
   const xs = pfLogros(pfDatos()), ok = xs.filter(x => x.ok).length;
-  return `<section class="pf-c pf-logros"><div class="pf-cab"><h2>Logros</h2><p>${ok} de ${xs.length}</p></div><ul class="lg">${xs.map(x => `<li><button type="button" class="lg-b${x.ok ? ' ok' : ''}" data-logro="${x.id}" aria-expanded="false"><span class="lg-in"><span class="lg-f">${aroHTML(x.v / x.meta, ICON[x.icono] || ICON.star)}<b>${x.t}</b><small>${x.ok ? 'Conseguido' : `${x.v} de ${x.meta}`}</small></span><span class="lg-a" aria-hidden="true">${x.p}${x.ok ? '' : `<i>Te ${x.meta - x.v === 1 ? 'falta' : 'faltan'} ${x.meta - x.v}</i>`}</span></span><span class="hm-sr">. ${x.p}</span></button></li>`).join('')}</ul></section>`;
+  return `<section class="pf-c pf-logros"><div class="pf-cab"><h2>Logros</h2><p>${ok} de ${xs.length}</p></div><ul class="pf-lg">${xs.map(x => `<li><button type="button" class="lg-b${x.ok ? ' ok' : ''}" data-logro="${x.id}" aria-expanded="false"><span class="lg-in"><span class="lg-f">${aroHTML(x.v / x.meta, ICON[x.icono] || ICON.star)}<b>${x.t}</b><small>${x.ok ? 'Conseguido' : `${x.v} de ${x.meta}`}</small></span><span class="lg-a" aria-hidden="true">${x.p}${x.ok ? '' : `<i>Te ${x.meta - x.v === 1 ? 'falta' : 'faltan'} ${x.meta - x.v}</i>`}</span></span><span class="hm-sr">. ${x.p}</span></button></li>`).join('')}</ul></section>`;
 }
 function pfCursosHTML() {
   const mine = myCourses();
@@ -17614,11 +17614,11 @@ function renderComponents(c) {
         <span class="comp-body"><small>Componente ${k + 1}${here ? ' · aquí ibas' : ''}</small><b>${esc(b.name)}</b><span class="comp-desc">${esc(b.desc)}</span>
           <span class="comp-stats">${nw} ${nw === 1 ? 'mundo' : 'mundos'} · ${bl.length} lecciones${soonOf(c, b).length ? ` · ${soonOf(c, b).length} en preparación` : ''}</span>
           <span class="comp-prog"><span class="mini-bar"><i style="width:${(d / bl.length) * 100}%"></i></span><small>${d}/${bl.length}</small></span>
-          <span class="comp-next">${nxt ? `${d ? 'Sigue' : 'Empieza'}: ${esc(nxt.title)}` : 'Componente completado'}</span></span>
+          <span class="comp-next">${nxt ? `${d ? 'Sigue' : 'Empieza'}: ${esc(nxt.title)}` : soonOf(c, b).length ? 'Al día con lo publicado' : 'Componente completado'}</span></span>
         ${dkMundosHTML(c, b)}
         <span class="comp-go" aria-hidden="true">${ICON.right}</span></button>`;
     }).join('')}</div>
-    ${doneN === ls.length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
+    ${doneN === ls.length && !soonOf(c).length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
     ${c.id === 'preuda' ? librosHTML() : ''}</div>
     ${gymFabHTML(c, courseLevelUi(c, null, { done: S.done, last: S.lastLesson }))}
   </div>`;
@@ -17668,7 +17668,7 @@ function renderLearn() {
       }).join('')}
     </div>
     ${soonHTML(c, block)}
-    ${cur ? '' : block ? `<div class="course-done">${ICON.star}<div><b>¡Componente completado!</b><p>Repasa cualquier lección o vuelve a los componentes.</p></div></div>`
+    ${cur ? '' : block ? `<div class="course-done">${ICON.star}<div><b>${soonOf(c, block).length ? 'Vas al día: terminaste los mundos publicados' : '¡Componente completado!'}</b><p>Repasa cualquier lección o vuelve a los componentes.</p></div></div>`
       : `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>`}</div>
     ${gymFabHTML(c, courseLevelUi(c, block, { done: S.done, last: S.lastLesson }))}
   </div>`;
