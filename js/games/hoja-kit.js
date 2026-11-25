@@ -129,7 +129,7 @@ const HOJA = (() => {
           d.vivo?.(root, p, s);
         };
         pinta();
-        ui.nota(d.ayuda || 'Arrastra cada ficha, o tócala y luego toca su lugar.');
+        ui.nota(p.ayuda || d.ayuda || 'Arrastra cada ficha, o tócala y luego toca su lugar.');
         manos(ui, root, (f, z) => {
           const en = [...ui.s.en], antes = en[f];
           if (z >= 0 && !d.varias) { const otra = en.findIndex((q, k) => q === z && k !== f); if (otra >= 0) en[otra] = antes; }
@@ -173,7 +173,7 @@ const HOJA = (() => {
         };
         root.addEventListener('click', e => { const t = e.target.closest('.hj-t'); if (t) pon(t.dataset.k); });
         root.addEventListener('keydown', e => { const t = e.target.closest?.('.hj-t'); if (t && !ui.locked && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); pon(t.dataset.k); } });
-        ui.nota((d.ayuda || 'Toca una oración para subrayarla; otro toque la suelta.') + (p.n > 1 ? ` Son ${p.n}.` : ''));
+        ui.nota((p.ayuda || d.ayuda || 'Toca una oración para subrayarla; otro toque la suelta.') + (p.n > 1 ? ` Son ${p.n}.` : ''));
         pinta();
         return okk => {
           const m = ui.s.m; root.classList.add('hj-fin');
@@ -326,7 +326,7 @@ const HOJA = (() => {
           if (t && sel != null) { const k = sel; elige(null); pon(k, +t.dataset.t); }
         });
         root.addEventListener('keydown', e => { if (ui.locked || e.target.dataset?.t == null || (e.key !== 'Enter' && e.key !== ' ')) return; e.preventDefault(); e.stopPropagation(); e.target.click(); });
-        ui.nota(d.ayuda || 'Tira un hilo desde cada tarjeta hasta el texto, o toca la tarjeta y luego el texto.');
+        ui.nota(p.ayuda || d.ayuda || 'Tira un hilo desde cada tarjeta hasta el texto, o toca la tarjeta y luego el texto.');
         ui.espera(60, pinta);
         return okk => {
           const s = ui.s; root.classList.add('hj-fin');
@@ -394,7 +394,7 @@ const HOJA = (() => {
           const i = +x.dataset.i;
           if (lleva(i, ui.s.o.indexOf(i) + (e.key === 'ArrowUp' ? -1 : 1))) { acomoda(); x.querySelector('.hj-asa').focus({ preventScroll: true }); }
         });
-        ui.nota(d.ayuda || 'Arrastra cada tira de su asa, o usa las flechas del teclado.');
+        ui.nota(p.ayuda || d.ayuda || 'Arrastra cada tira de su asa, o usa las flechas del teclado.');
         return okk => {
           root.classList.add('hj-fin');
           const s = ui.s;

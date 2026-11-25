@@ -143,7 +143,7 @@ test('al entrar al curso se elige primero el componente y luego se ven solo sus 
   // Pedido del usuario: «al ingresar al curso me muestre los dos componentes; si selecciono uno, me desglose sus mundos».
   assert.match(app, /let openBlock = null;/);
   assert.match(app, /if \(c\.blocks && openBlock\?\.course !== c\.id\) return renderComponents\(c\);/);
-  assert.match(app, /function renderComponents\(c\) \{[\s\S]{0,2500}class="comp-card[\s\S]{0,1500}openBlock = \{ course: c\.id, id: b\.dataset\.block \}/);
+  assert.match(app, /function renderComponents\(c\) \{[\s\S]{0,3200}class="comp-card[\s\S]{0,2400}openBlock = \{ course: c\.id, id: b\.dataset\.block \}/);
   // En el componente: botón para volver a los componentes y solo los mundos de ese componente, numerados desde 1.
   assert.match(app, /<span>Componentes<\/span>/);
   assert.match(app, /const worldNo = \(c, ui\) =>/);

@@ -1561,6 +1561,15 @@ body:not([data-tab=learn]):not([data-tab=gym]) #view { padding-top: env(safe-are
 .tour-mascot.mascot { width: 92px; }
 .tour-tip:not([data-side="center"]) .tour-mascot.mascot { width: 60px; }
 
+/* Mundos en preparación, debajo del mapa de un componente (renderLearn, soonHTML). */
+.soon { margin: 28px 16px 0; padding-top: 20px; border-top: 1px solid var(--line); }
+.soon h2 { font: 600 17px/1.3 var(--display); }
+.soon > p { margin-top: 2px; font-size: 14px; color: var(--mute); }
+.soon ol { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 18px 24px; }
+.soon li { display: grid; gap: 3px; align-content: start; }
+.soon li small { font-size: 12px; color: var(--mute); }
+.soon li b { font-weight: 600; font-size: 15px; }
+.soon li span { font-size: 13px; line-height: 1.45; color: var(--mute); }
 /* Interfaz compacta en computador (spec 2026-11-25-interfaz-compacta): lo que antes se veía con el navegador al 80 %. `data-compacta` lo pone
    js/ui.js (y admin/panel.js) si el navegador mide bien con zoom. Alto y ancho de pantalla: --dvh y --dvw, nunca dvh/vw directos. En JS, zk(). */
 :root { --z: 1; --dvh: 1dvh; --dvw: 1vw; }

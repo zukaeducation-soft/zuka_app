@@ -27719,3 +27719,234 @@ GAMES['niega-todos'] = (() => {
   });
   return Object.assign(game, { answer });
 })();
+;
+//#archivo js/games/flecha-deduce.js
+// ¿Qué se puede concluir? (Preuniversitario, pu-lo-3; spec 2026-11-18-preuda-razonamiento-completo): una regla «si p, entonces
+// q» es una flecha entre dos focos. Un dato enciende o apaga uno de ellos; el otro foco se toca para ponerle «sí», «no» o «no se
+// sabe». Modus ponens y tollens permiten concluir; afirmar el consecuente o negar el antecedente no.
+// params = { rounds: [{ p, q, fact: ['p' | 'q', bool] }] }   state = { rounds: [{ v: null | 'si' | 'no' | 'nose' }] }
+GAMES['flecha-deduce'] = (() => {
+  const need = r => { const [k, b] = r.fact; return k === 'p' ? (b ? 'si' : 'nose') : (b ? 'nose' : 'no'); };
+  const NAME = { si: 'sí', no: 'no', nose: 'no se sabe' };
+  const ok = (s, r) => s.v === need(r);
+  const game = roundsGame({
+    aspect: 1.15,
+    init: () => ({ v: null }),
+    answered: s => s.v !== null,
+    ok,
+    solution: r => `${r.fact[0] === 'p' ? r.q : r.p}: ${NAME[need(r)]}`,
+    prompt: r => `Regla: si ${r.p}, entonces ${r.q}`,
+    foot: () => 'Toca el foco que no tiene dato: sí, no o no se sabe',
+    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) {},
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { v: need(r) } : G.s, good = ok(s, r), y = 190, xs = [G.W * 0.24, G.W * 0.76], R = Math.min(42, G.W * 0.12);
+      p.stroke(C.ink); p.strokeWeight(2.5); p.line(xs[0] + R + 6, y, xs[1] - R - 12, y); p.noStroke(); p.fill(C.ink); p.triangle(xs[1] - R - 4, y, xs[1] - R - 16, y - 7, xs[1] - R - 16, y + 7);
+      G.lamps = ['p', 'q'].map((k, i) => {
+        const isFact = r.fact[0] === k, st = isFact ? (r.fact[1] ? 'si' : 'no') : s.v, x = xs[i];
+        if (st === 'si') { p.noStroke(); p.fill(RK.al(p, C.sun, 70)); p.circle(x, y, R * 2.8); }
+        p.stroke(isFact ? C.ink : good ? C.ok : C.brand); p.strokeWeight(isFact ? 1.4 : 2.5);
+        p.fill(st === 'si' ? C.sun : st === 'no' ? RK.al(p, C.line, 200) : RK.al(p, C.card, 200)); p.circle(x, y, R * 2);
+        TK.label(p, C, st === null ? '?' : st === 'nose' ? '¿?' : NAME[st], x, y, st === 'si' ? inkOn(C.sun) : C.ink, 12, R * 1.8);
+        TK.label(p, C, r[k], x, y + R + 18, C.ink, 10, G.W * 0.44);
+        TK.label(p, C, isFact ? 'dato' : 'conclusión', x, y - R - 14, isFact ? C.mute : C.brand, 9, 90);
+        return { x, y, R, isFact };
+      });
+      RK.strip(p, C, G.fb, s.v === null ? '$\\text{¿qué se concluye?}$' : `$\\text{${NAME[s.v]}}$`, { kicker: good ? (s.v === 'nose' ? 'el dato no alcanza' : 'se concluye') : '', col: G.locked || good ? C.ok : C.brand, size: 16 });
+    },
+    press(G, x, y) { const l = (G.lamps || []).find(o => !o.isFact && Math.hypot(x - o.x, y - o.y) < o.R + 10); if (!l) return false; const order = [null, 'si', 'no', 'nose']; G.s.v = order[(order.indexOf(G.s.v) + 1) % 4] || 'si'; G.touch(); return true; },
+    demo: G => { const l = G.lamps?.find(o => !o.isFact); return l ? { from: l, to: l, text: 'Toca el foco', ty: l.y + l.R + 40 } : null; },
+    peek: G => ({ lamps: G.lamps }),
+  });
+  return Object.assign(game, { answer: r => ({ v: need(r) }) });
+})();
+;
+//#archivo js/games/arma-silogismo.js
+// Los círculos del silogismo (Preuniversitario, pu-lo-4; spec 2026-11-18-preuda-razonamiento-completo): cada premisa se dibuja
+// con círculos: «todos los A son B» pone A dentro de B, «ningún A es B» los separa y «algunos A son B» los cruza sin que uno
+// quede dentro del otro. Se arrastran los círculos hasta cumplir todas las premisas; cada una se marca al cumplirse. Lo que
+// queda dibujado muestra qué conclusión sale.
+// params = { rounds: [{ sets: [{ k, name, r }], rels: [[k1, k2, 'sub' | 'disj' | 'cross']], sol: { k: [x, y] } }] }   (unidades: lienzo de 10 × 6)
+// state = { rounds: [{ pos: { k: [x, y] } }] }
+GAMES['arma-silogismo'] = (() => {
+  const rel = (s, r, [a, b, t]) => {
+    const A = r.sets.find(z => z.k === a), B = r.sets.find(z => z.k === b), [xa, ya] = s.pos[a], [xb, yb] = s.pos[b], d = Math.hypot(xa - xb, ya - yb);
+    if (t === 'sub') return d + A.r <= B.r + 1e-9;
+    if (t === 'disj') return d >= A.r + B.r - 1e-9;
+    return d < A.r + B.r && d + Math.min(A.r, B.r) > Math.max(A.r, B.r);
+  };
+  const ok = (s, r) => r.rels.every(x => rel(s, r, x));
+  const SAY = { sub: (a, b) => `todos los ${a} son ${b}`, disj: (a, b) => `ningún ${a} es ${b}`, cross: (a, b) => `algunos ${a} son ${b}` };
+  const start = r => { const pos = {}; r.sets.forEach((z, i) => { pos[z.k] = [1.6 + i * 3.4, 3]; }); return pos; };
+  const game = roundsGame({
+    aspect: 1.3,
+    init: r => ({ pos: start(r) }),
+    answered: (s, r) => JSON.stringify(s.pos) !== JSON.stringify(start(r)),
+    ok,
+    solution: r => r.rels.map(([a, b, t]) => SAY[t](r.sets.find(z => z.k === a).name, r.sets.find(z => z.k === b).name)).join('; '),
+    prompt: () => 'Dibuja las premisas con los círculos',
+    foot: () => 'Arrastra los círculos',
+    layout(G) { G.u = (G.W - 20) / 10; G.o = { x: 10, y: 150 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = null; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { pos: r.sol } : G.s, good = ok(s, r), u = G.u, o = G.o, cols = [C.sky, C.coral, C.mint];
+      r.rels.forEach((x, i) => { const hit = rel(s, r, x); TK.label(p, C, `${hit ? '✓' : '·'} ${SAY[x[2]](r.sets.find(z => z.k === x[0]).name, r.sets.find(z => z.k === x[1]).name)}`, G.W / 2, 96 + i * 18, hit ? C.ok : C.ink, 11, G.W - 24); });
+      p.stroke(C.line); p.strokeWeight(1); p.noFill(); p.rect(o.x, o.y, 10 * u, 6 * u, 10);
+      r.sets.forEach((z, i) => {
+        const [x, y] = s.pos[z.k], cx = o.x + x * u, cy = o.y + y * u;
+        p.stroke(cols[i % 3]); p.strokeWeight(2); p.fill(RK.al(p, cols[i % 3], 40)); p.circle(cx, cy, 2 * z.r * u);
+        TK.label(p, C, z.name, cx, cy - z.r * u + 12, C.ink, 10, z.r * u * 1.6);
+      });
+      RK.strip(p, C, G.fb, good ? '$\\text{todas las premisas dibujadas}$' : `$\\text{${r.rels.filter(x => rel(s, r, x)).length} de ${r.rels.length} premisas}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+    },
+    press(G, x, y) {
+      const u = G.u, o = G.o, list = G.r.sets.slice().sort((a, b) => a.r - b.r);
+      const z = list.find(z => { const [px, py] = G.s.pos[z.k]; return Math.hypot(x - (o.x + px * u), y - (o.y + py * u)) < z.r * u; });
+      if (!z) return false; const [px, py] = G.s.pos[z.k]; G.grab = { k: z.k, dx: (x - o.x) / u - px, dy: (y - o.y) / u - py }; return true;
+    },
+    drag(G, x, y) {
+      if (!G.grab) return false;
+      const u = G.u, o = G.o, z = G.r.sets.find(q => q.k === G.grab.k), nx = Math.max(z.r * 0.5, Math.min(10 - z.r * 0.5, Math.round(((x - o.x) / u - G.grab.dx) * 4) / 4)), ny = Math.max(z.r * 0.5, Math.min(6 - z.r * 0.5, Math.round(((y - o.y) / u - G.grab.dy) * 4) / 4));
+      const c = G.s.pos[z.k]; if (c[0] !== nx || c[1] !== ny) { G.s.pos[z.k] = [nx, ny]; G.touch(); }
+      return true;
+    },
+    release(G) { G.grab = null; },
+    demo: G => { const z = G.r.sets[0], [x, y] = G.s.pos[z.k]; const a = { x: G.o.x + x * G.u, y: G.o.y + y * G.u }; return { from: a, to: { x: a.x + 2.5 * G.u, y: a.y }, text: 'Arrastra un círculo', ty: G.o.y + 6 * G.u + 16 }; },
+    peek: G => ({ u: G.u, o: G.o }),
+  });
+  return Object.assign(game, { answer: r => ({ pos: r.sol }) });
+})();
+;
+//#archivo js/games/quien-miente.js
+// ¿Quién miente? (Preuniversitario, pu-lo-5; spec 2026-11-18-preuda-razonamiento-completo): cada personaje dice algo. Se toca
+// a cada uno para suponer si dice la verdad o miente; el juego revisa cada frase con esa suposición y marca en rojo las que no
+// cuadran (un sincero que dice algo falso, o un mentiroso que dice algo verdadero). La suposición buena no choca con nada.
+// params = { rounds: [{ people: [{ name, say, f(T) → bool }], cond?(T) → bool, condSay? }] }   (T[i]: true si i dice la verdad)
+// state = { rounds: [{ T: [null | true | false] }] }
+GAMES['quien-miente'] = (() => {
+  const fits = (r, T) => T.every(t => t !== null) && r.people.every((q, i) => !!q.f(T) === T[i]) && (!r.cond || r.cond(T));
+  const sols = r => { const n = r.people.length, out = []; for (let m = 0; m < 2 ** n; m++) { const T = Array.from({ length: n }, (_, i) => !!((m >> i) & 1)); if (fits(r, T)) out.push(T); } return out; };
+  const ok = (s, r) => fits(r, s.T);
+  const game = roundsGame({
+    aspect: 1.3,
+    init: r => ({ T: r.people.map(() => null) }),
+    answered: s => s.T.some(t => t !== null),
+    ok,
+    solution: r => sols(r)[0].map((t, i) => `${r.people[i].name} ${t ? 'dice la verdad' : 'miente'}`).join(', '),
+    prompt: r => r.condSay || '¿Quién dice la verdad y quién miente?',
+    foot: () => 'Toca a cada uno: verdad o mentira',
+    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) {},
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { T: sols(r)[0] } : G.s, good = ok(s, r), n = r.people.length, all = s.T.every(t => t !== null), rh = Math.min(72, (G.H - 200) / n);
+      G.cards = r.people.map((q, i) => {
+        const y = 96 + i * rh, t = s.T[i], said = all ? !!q.f(s.T) : null, clash = all && said !== t;
+        p.stroke(clash ? C.bad : C.line); p.strokeWeight(clash ? 2 : 1); p.fill(RK.al(p, C.card, 210)); p.rect(16, y, G.W - 32, rh - 8, 10);
+        const bx = 24, bw = 74;
+        p.noStroke(); p.fill(t === null ? RK.al(p, C.line, 120) : t ? C.ok : C.coral); p.rect(bx, y + 8, bw, rh - 24, 8);
+        TK.label(p, C, q.name, bx + bw / 2, y + 8 + (rh - 24) / 2 - 7, t === null ? C.ink : inkOn(t ? C.ok : C.coral), 12, bw - 6);
+        TK.label(p, C, t === null ? '?' : t ? 'verdad' : 'miente', bx + bw / 2, y + 8 + (rh - 24) / 2 + 9, t === null ? C.mute : inkOn(t ? C.ok : C.coral), 9, bw - 6);
+        TK.label(p, C, `«${q.say}»`, (bx + bw + G.W - 20) / 2, y + (rh - 8) / 2 - (all ? 7 : 0), C.ink, 11, G.W - bw - 60);
+        if (all) TK.label(p, C, `esto sería ${said ? 'verdad' : 'falso'}`, (bx + bw + G.W - 20) / 2, y + (rh - 8) / 2 + 11, clash ? C.bad : C.mute, 9, G.W - bw - 60);
+        return { x: 16, y, w: G.W - 32, h: rh - 8, i };
+      });
+      const condBad = all && r.cond && !r.cond(s.T);
+      RK.strip(p, C, G.fb, !all ? '$\\text{supón algo de cada uno}$' : good ? '$\\text{todo cuadra}$' : condBad ? '$\\text{no cumple la condición}$' : '$\\text{hay frases que chocan}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+    },
+    press(G, x, y) { const c = (G.cards || []).find(b => hitBox(b, x, y)); if (!c) return false; const t = G.s.T[c.i]; G.s.T[c.i] = t === null ? true : !t; G.touch(); return true; },
+    demo: G => (G.cards ? { from: { x: 60, y: G.cards[0].y + 24 }, to: { x: 60, y: G.cards[0].y + 24 }, text: 'Toca para suponer', ty: G.cards.at(-1).y + G.cards.at(-1).h + 18 } : null),
+    peek: G => ({ cards: G.cards }),
+  });
+  return Object.assign(game, { answer: r => ({ T: sols(r)[0] }), solutions: r => sols(r).map(T => ({ T })) });
+})();
+;
+//#archivo js/games/maquina-operador.js
+// La máquina de dos entradas (Preuniversitario, pu-op-1 y pu-op-2; spec 2026-11-18-preuda-razonamiento-completo): un operador
+// nuevo, como a ★ b = 2a − b, es una máquina con dos bocas. Se desliza el número de cada boca; la máquina muestra la regla con
+// los números ya puestos en lugar de a y b, y su resultado. Hay que lograr el resultado pedido (si una boca viene fija, solo se
+// mueve la otra).
+// params = { rounds: [{ sym, tex, f(a, b), target, lo, hi, fix?: { a?, b? } }] }   state = { rounds: [{ a, b }] }
+GAMES['maquina-operador'] = (() => {
+  const ok = (s, r) => r.f(s.a, s.b) === r.target && (r.fix?.a === undefined || s.a === r.fix.a) && (r.fix?.b === undefined || s.b === r.fix.b);
+  const sols = r => { const out = []; for (let a = r.lo; a <= r.hi; a++) for (let b = r.lo; b <= r.hi; b++) if (ok({ a, b }, r)) out.push({ a, b }); return out; };
+  const sub = (r, a, b) => r.tex.replace(/(?<![\\a-zA-Z])a(?![a-zA-Z])/g, `(${a})`).replace(/(?<![\\a-zA-Z(])b(?![a-zA-Z])/g, `(${b})`).replace(/(\d)\(/g, '$1\\cdot(');
+  const N = r => r.hi - r.lo + 1;
+  const game = roundsGame({
+    aspect: 1.25,
+    init: r => { const s = { a: r.fix?.a ?? r.lo, b: r.fix?.b ?? r.lo }; if (ok(s, r)) s[r.fix?.b === undefined ? 'b' : 'a'] += 1; return s; },
+    ok,
+    solution: r => { const s = sols(r)[0]; return `$${s.a} ${r.sym} ${s.b} = ${r.target}$`; },
+    prompt: r => `Con $a ${r.sym} b = ${r.tex}$, logra que salga ${r.target}`,
+    foot: () => 'Desliza los números de las bocas',
+    layout(G) { G.tA = G.H - 150; G.tB = G.H - 104; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = null; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? sols(r)[0] : G.s, good = ok(s, r), v = r.f(s.a, s.b), mx = G.W / 2, my = 180;
+      p.stroke(C.ink); p.strokeWeight(1.5); p.fill(RK.al(p, C.card, 220)); p.rect(mx - 110, my - 50, 220, 100, 14);
+      [['a', s.a, mx - 60], ['b', s.b, mx + 60]].forEach(([k, val, x]) => { p.noStroke(); p.fill(RK.al(p, k === 'a' ? C.sky : C.coral, 140)); p.rect(x - 26, my - 80, 52, 34, 8); TK.label(p, C, `${k} = ${val}`, x, my - 63, C.ink, 12, 50); });
+      TK.label(p, C, `$${sub(r, s.a, s.b)}$`, mx, my - 10, C.ink, 14, 200);
+      TK.label(p, C, `$= ${v}$`, mx, my + 22, good ? C.ok : C.brand, 18, 200);
+      const fa = r.fix?.a !== undefined, fbx = r.fix?.b !== undefined;
+      G.XA = RK.track(p, C, 40, G.W - 30, G.tA, N(r), s.a - r.lo, k => ((r.lo + k) % 2 === 0 ? String(r.lo + k) : null), fa ? C.mute : C.sky);
+      G.XB = RK.track(p, C, 40, G.W - 30, G.tB, N(r), s.b - r.lo, k => null, fbx ? C.mute : C.coral);
+      TK.label(p, C, 'a', 20, G.tA, C.sky, 12, 20); TK.label(p, C, 'b', 20, G.tB, C.coral, 12, 20);
+      RK.strip(p, C, G.fb, `$${s.a} ${r.sym} ${s.b} = ${v}$`, { kicker: good ? 'sale lo pedido' : `debe salir ${r.target}`, col: G.locked || good ? C.ok : C.brand, size: 17 });
+    },
+    press(G, x, y) { const r = G.r; if (Math.abs(y - G.tA) < 20 && r.fix?.a === undefined) G.grab = 'a'; else if (Math.abs(y - G.tB) < 20 && r.fix?.b === undefined) G.grab = 'b'; else return false; game.move(G, x); return true; },
+    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
+    release(G) { G.grab = null; },
+    demo: G => { const k = G.r.fix?.a === undefined ? 'a' : 'b', y = k === 'a' ? G.tA : G.tB, X = k === 'a' ? G.XA : G.XB; return { from: { x: X(G.s[k] - G.r.lo), y }, to: { x: X(G.s[k] - G.r.lo) + 60, y }, text: 'Desliza el número', ty: G.tA - 30 }; },
+    peek: G => ({ tA: G.tA, tB: G.tB }),
+  });
+  game.move = (G, x) => { const r = G.r, v = r.lo + RK.pick(x, 40, G.W - 30, N(r)); if (v !== G.s[G.grab] || !G.touched[G.cur]) { G.s[G.grab] = v; G.touch(); } };
+  return Object.assign(game, { answer: r => sols(r)[0] });
+})();
+;
+//#archivo js/games/cruce-tabla.js
+// El cruce de la tabla (Preuniversitario, pu-op-1 y pu-op-2; spec 2026-11-18-preuda-razonamiento-completo): una operación dada
+// por tabla. El resultado de x ∘ y está en el cruce de la FILA de x con la COLUMNA de y. Se toca la casilla; con una cadena
+// (x ∘ y) ∘ z, lo que salió primero pasa a ser la fila del segundo paso.
+// params = { rounds: [{ set: [elementos], tab: [[resultado]], chain: [x, y, z?] }] }   state = { rounds: [{ picks: [[fila, col]] }] }
+GAMES['cruce-tabla'] = (() => {
+  const idx = (r, v) => r.set.indexOf(v);
+  const steps = r => { const out = []; let cur = r.chain[0]; for (let k = 1; k < r.chain.length; k++) { const i = idx(r, cur), j = idx(r, r.chain[k]); out.push([i, j]); cur = r.tab[i][j]; } return out; };
+  const ok = (s, r) => { const st = steps(r); return s.picks.length === st.length && st.every(([i, j], k) => s.picks[k][0] === i && s.picks[k][1] === j); };
+  const expr = r => r.chain.length === 2 ? `${r.chain[0]} \\circ ${r.chain[1]}` : `(${r.chain[0]} \\circ ${r.chain[1]}) \\circ ${r.chain[2]}`;
+  const game = roundsGame({
+    aspect: 1.25,
+    init: () => ({ picks: [] }),
+    answered: s => s.picks.length > 0,
+    ok,
+    solution: r => { let cur = r.chain[0]; const parts = []; for (let k = 1; k < r.chain.length; k++) { const v = r.tab[idx(r, cur)][idx(r, r.chain[k])]; parts.push(`${cur} ∘ ${r.chain[k]} = ${v}`); cur = v; } return parts.join('; '); },
+    prompt: r => `Usa la tabla: ¿cuánto es $${expr(r)}$?`,
+    foot: () => 'Toca el cruce: fila del primero, columna del segundo',
+    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) {},
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { picks: steps(r) } : G.s, good = ok(s, r), n = r.set.length, cs = Math.min(46, (G.W - 60) / (n + 1)), x0 = (G.W - (n + 1) * cs) / 2, y0 = 100;
+      p.noStroke(); p.fill(RK.al(p, C.brand, 70)); p.rect(x0, y0, cs, cs, 6); TK.label(p, C, '$\\circ$', x0 + cs / 2, y0 + cs / 2, C.ink, 14, cs);
+      r.set.forEach((v, k) => { TK.label(p, C, String(v), x0 + (k + 1.5) * cs, y0 + cs / 2, C.coral, 13, cs); TK.label(p, C, String(v), x0 + cs / 2, y0 + (k + 1.5) * cs, C.sky, 13, cs); });
+      const last = s.picks.at(-1), cols = [C.brand, C.mint];
+      G.cells = [];
+      for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+        const x = x0 + (j + 1) * cs, y = y0 + (i + 1) * cs, k = s.picks.findIndex(q => q[0] === i && q[1] === j);
+        p.stroke(C.line); p.strokeWeight(1); p.fill(k >= 0 ? RK.al(p, good ? C.ok : cols[k % 2], 120) : RK.al(p, C.card, 200)); p.rect(x + 1, y + 1, cs - 2, cs - 2, 5);
+        TK.label(p, C, String(r.tab[i][j]), x + cs / 2, y + cs / 2, C.ink, 13, cs);
+        G.cells.push({ x, y, w: cs, h: cs, i, j });
+      }
+      if (last) { const [i, j] = last; p.noStroke(); p.fill(RK.al(p, C.sky, 40)); p.rect(x0, y0 + (i + 1) * cs, cs, cs); p.fill(RK.al(p, C.coral, 40)); p.rect(x0 + (j + 1) * cs, y0, cs, cs); }
+      const txt = s.picks.map(([i, j]) => `${r.set[i]} \\circ ${r.set[j]} = ${r.tab[i][j]}`).join(';\\ ');
+      RK.strip(p, C, G.fb, txt ? `$${txt}$` : '$\\text{toca un cruce}$', { kicker: `paso ${Math.min(s.picks.length + 1, r.chain.length - 1)} de ${r.chain.length - 1}`, col: G.locked || good ? C.ok : C.brand, size: 15 });
+    },
+    press(G, x, y) {
+      const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false;
+      const need = G.r.chain.length - 1, P = G.s.picks;
+      const k = P.findIndex(q => q[0] === c.i && q[1] === c.j);
+      if (k >= 0) P.splice(k); else if (P.length < need) P.push([c.i, c.j]); else P[need - 1] = [c.i, c.j];
+      G.touch(); return true;
+    },
+    demo: G => { const c = G.cells?.[0]; return c ? { from: { x: c.x + c.w / 2, y: c.y + c.h / 2 }, to: { x: c.x + c.w / 2, y: c.y + c.h / 2 }, text: 'Toca el cruce', ty: G.cells.at(-1).y + G.cells.at(-1).h + 22 } : null; },
+    peek: G => ({ cells: G.cells }),
+  });
+  return Object.assign(game, { answer: r => ({ picks: steps(r) }) });
+})();

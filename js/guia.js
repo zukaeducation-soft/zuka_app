@@ -1043,7 +1043,7 @@ const GUIDES = {
   'hilo-bordes': [['drag', 'Tira un hilo desde cada pregunta hasta el borde que la responde.', { tile: '¿quién?', slot: 'autor' }]],
   'donde-mirar': [['drag', 'Lleva cada pregunta al margen del párrafo donde la buscarías.', { tile: '¿?', slot: 'párrafo' }]],
   'portadas': [['drag', 'Pon en cada portada lo que va a hacer el texto.', { tile: 'explicar', slot: 'portada' }]],
-  'voz-de-la-fuente': [['drag', 'Tira un hilo desde cada frase hasta su fuente.', { tile: '«…»', slot: 'fuente' }]],
+  'voz-de-la-fuente': [['drag', 'Tira un hilo desde cada frase hasta la tarjeta que le toca.', { tile: '«…»', slot: 'tarjeta' }]],
   'comprueba-apuesta': [['tap', 'Toca la oración para subrayarla; otro toque la suelta.', {}]],
   'preguntas-previas': [['tap', 'Toca una pregunta para tacharla; otro toque la devuelve.', {}]],
   'orden-fuentes': [['drag', 'Arrastra cada tira de su asa hasta su puesto.', { tile: 'tira', slot: 'puesto' }]],

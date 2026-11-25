@@ -1,236 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/flecha-deduce.js
-// ¿Qué se puede concluir? (Preuniversitario, pu-lo-3; spec 2026-11-18-preuda-razonamiento-completo): una regla «si p, entonces
-// q» es una flecha entre dos focos. Un dato enciende o apaga uno de ellos; el otro foco se toca para ponerle «sí», «no» o «no se
-// sabe». Modus ponens y tollens permiten concluir; afirmar el consecuente o negar el antecedente no.
-// params = { rounds: [{ p, q, fact: ['p' | 'q', bool] }] }   state = { rounds: [{ v: null | 'si' | 'no' | 'nose' }] }
-GAMES['flecha-deduce'] = (() => {
-  const need = r => { const [k, b] = r.fact; return k === 'p' ? (b ? 'si' : 'nose') : (b ? 'nose' : 'no'); };
-  const NAME = { si: 'sí', no: 'no', nose: 'no se sabe' };
-  const ok = (s, r) => s.v === need(r);
-  const game = roundsGame({
-    aspect: 1.15,
-    init: () => ({ v: null }),
-    answered: s => s.v !== null,
-    ok,
-    solution: r => `${r.fact[0] === 'p' ? r.q : r.p}: ${NAME[need(r)]}`,
-    prompt: r => `Regla: si ${r.p}, entonces ${r.q}`,
-    foot: () => 'Toca el foco que no tiene dato: sí, no o no se sabe',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) {},
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { v: need(r) } : G.s, good = ok(s, r), y = 190, xs = [G.W * 0.24, G.W * 0.76], R = Math.min(42, G.W * 0.12);
-      p.stroke(C.ink); p.strokeWeight(2.5); p.line(xs[0] + R + 6, y, xs[1] - R - 12, y); p.noStroke(); p.fill(C.ink); p.triangle(xs[1] - R - 4, y, xs[1] - R - 16, y - 7, xs[1] - R - 16, y + 7);
-      G.lamps = ['p', 'q'].map((k, i) => {
-        const isFact = r.fact[0] === k, st = isFact ? (r.fact[1] ? 'si' : 'no') : s.v, x = xs[i];
-        if (st === 'si') { p.noStroke(); p.fill(RK.al(p, C.sun, 70)); p.circle(x, y, R * 2.8); }
-        p.stroke(isFact ? C.ink : good ? C.ok : C.brand); p.strokeWeight(isFact ? 1.4 : 2.5);
-        p.fill(st === 'si' ? C.sun : st === 'no' ? RK.al(p, C.line, 200) : RK.al(p, C.card, 200)); p.circle(x, y, R * 2);
-        TK.label(p, C, st === null ? '?' : st === 'nose' ? '¿?' : NAME[st], x, y, st === 'si' ? inkOn(C.sun) : C.ink, 12, R * 1.8);
-        TK.label(p, C, r[k], x, y + R + 18, C.ink, 10, G.W * 0.44);
-        TK.label(p, C, isFact ? 'dato' : 'conclusión', x, y - R - 14, isFact ? C.mute : C.brand, 9, 90);
-        return { x, y, R, isFact };
-      });
-      RK.strip(p, C, G.fb, s.v === null ? '$\\text{¿qué se concluye?}$' : `$\\text{${NAME[s.v]}}$`, { kicker: good ? (s.v === 'nose' ? 'el dato no alcanza' : 'se concluye') : '', col: G.locked || good ? C.ok : C.brand, size: 16 });
-    },
-    press(G, x, y) { const l = (G.lamps || []).find(o => !o.isFact && Math.hypot(x - o.x, y - o.y) < o.R + 10); if (!l) return false; const order = [null, 'si', 'no', 'nose']; G.s.v = order[(order.indexOf(G.s.v) + 1) % 4] || 'si'; G.touch(); return true; },
-    demo: G => { const l = G.lamps?.find(o => !o.isFact); return l ? { from: l, to: l, text: 'Toca el foco', ty: l.y + l.R + 40 } : null; },
-    peek: G => ({ lamps: G.lamps }),
-  });
-  return Object.assign(game, { answer: r => ({ v: need(r) }) });
-})();
-;
-//#archivo js/games/arma-silogismo.js
-// Los círculos del silogismo (Preuniversitario, pu-lo-4; spec 2026-11-18-preuda-razonamiento-completo): cada premisa se dibuja
-// con círculos: «todos los A son B» pone A dentro de B, «ningún A es B» los separa y «algunos A son B» los cruza sin que uno
-// quede dentro del otro. Se arrastran los círculos hasta cumplir todas las premisas; cada una se marca al cumplirse. Lo que
-// queda dibujado muestra qué conclusión sale.
-// params = { rounds: [{ sets: [{ k, name, r }], rels: [[k1, k2, 'sub' | 'disj' | 'cross']], sol: { k: [x, y] } }] }   (unidades: lienzo de 10 × 6)
-// state = { rounds: [{ pos: { k: [x, y] } }] }
-GAMES['arma-silogismo'] = (() => {
-  const rel = (s, r, [a, b, t]) => {
-    const A = r.sets.find(z => z.k === a), B = r.sets.find(z => z.k === b), [xa, ya] = s.pos[a], [xb, yb] = s.pos[b], d = Math.hypot(xa - xb, ya - yb);
-    if (t === 'sub') return d + A.r <= B.r + 1e-9;
-    if (t === 'disj') return d >= A.r + B.r - 1e-9;
-    return d < A.r + B.r && d + Math.min(A.r, B.r) > Math.max(A.r, B.r);
-  };
-  const ok = (s, r) => r.rels.every(x => rel(s, r, x));
-  const SAY = { sub: (a, b) => `todos los ${a} son ${b}`, disj: (a, b) => `ningún ${a} es ${b}`, cross: (a, b) => `algunos ${a} son ${b}` };
-  const start = r => { const pos = {}; r.sets.forEach((z, i) => { pos[z.k] = [1.6 + i * 3.4, 3]; }); return pos; };
-  const game = roundsGame({
-    aspect: 1.3,
-    init: r => ({ pos: start(r) }),
-    answered: (s, r) => JSON.stringify(s.pos) !== JSON.stringify(start(r)),
-    ok,
-    solution: r => r.rels.map(([a, b, t]) => SAY[t](r.sets.find(z => z.k === a).name, r.sets.find(z => z.k === b).name)).join('; '),
-    prompt: () => 'Dibuja las premisas con los círculos',
-    foot: () => 'Arrastra los círculos',
-    layout(G) { G.u = (G.W - 20) / 10; G.o = { x: 10, y: 150 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = null; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { pos: r.sol } : G.s, good = ok(s, r), u = G.u, o = G.o, cols = [C.sky, C.coral, C.mint];
-      r.rels.forEach((x, i) => { const hit = rel(s, r, x); TK.label(p, C, `${hit ? '✓' : '·'} ${SAY[x[2]](r.sets.find(z => z.k === x[0]).name, r.sets.find(z => z.k === x[1]).name)}`, G.W / 2, 96 + i * 18, hit ? C.ok : C.ink, 11, G.W - 24); });
-      p.stroke(C.line); p.strokeWeight(1); p.noFill(); p.rect(o.x, o.y, 10 * u, 6 * u, 10);
-      r.sets.forEach((z, i) => {
-        const [x, y] = s.pos[z.k], cx = o.x + x * u, cy = o.y + y * u;
-        p.stroke(cols[i % 3]); p.strokeWeight(2); p.fill(RK.al(p, cols[i % 3], 40)); p.circle(cx, cy, 2 * z.r * u);
-        TK.label(p, C, z.name, cx, cy - z.r * u + 12, C.ink, 10, z.r * u * 1.6);
-      });
-      RK.strip(p, C, G.fb, good ? '$\\text{todas las premisas dibujadas}$' : `$\\text{${r.rels.filter(x => rel(s, r, x)).length} de ${r.rels.length} premisas}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) {
-      const u = G.u, o = G.o, list = G.r.sets.slice().sort((a, b) => a.r - b.r);
-      const z = list.find(z => { const [px, py] = G.s.pos[z.k]; return Math.hypot(x - (o.x + px * u), y - (o.y + py * u)) < z.r * u; });
-      if (!z) return false; const [px, py] = G.s.pos[z.k]; G.grab = { k: z.k, dx: (x - o.x) / u - px, dy: (y - o.y) / u - py }; return true;
-    },
-    drag(G, x, y) {
-      if (!G.grab) return false;
-      const u = G.u, o = G.o, z = G.r.sets.find(q => q.k === G.grab.k), nx = Math.max(z.r * 0.5, Math.min(10 - z.r * 0.5, Math.round(((x - o.x) / u - G.grab.dx) * 4) / 4)), ny = Math.max(z.r * 0.5, Math.min(6 - z.r * 0.5, Math.round(((y - o.y) / u - G.grab.dy) * 4) / 4));
-      const c = G.s.pos[z.k]; if (c[0] !== nx || c[1] !== ny) { G.s.pos[z.k] = [nx, ny]; G.touch(); }
-      return true;
-    },
-    release(G) { G.grab = null; },
-    demo: G => { const z = G.r.sets[0], [x, y] = G.s.pos[z.k]; const a = { x: G.o.x + x * G.u, y: G.o.y + y * G.u }; return { from: a, to: { x: a.x + 2.5 * G.u, y: a.y }, text: 'Arrastra un círculo', ty: G.o.y + 6 * G.u + 16 }; },
-    peek: G => ({ u: G.u, o: G.o }),
-  });
-  return Object.assign(game, { answer: r => ({ pos: r.sol }) });
-})();
-;
-//#archivo js/games/quien-miente.js
-// ¿Quién miente? (Preuniversitario, pu-lo-5; spec 2026-11-18-preuda-razonamiento-completo): cada personaje dice algo. Se toca
-// a cada uno para suponer si dice la verdad o miente; el juego revisa cada frase con esa suposición y marca en rojo las que no
-// cuadran (un sincero que dice algo falso, o un mentiroso que dice algo verdadero). La suposición buena no choca con nada.
-// params = { rounds: [{ people: [{ name, say, f(T) → bool }], cond?(T) → bool, condSay? }] }   (T[i]: true si i dice la verdad)
-// state = { rounds: [{ T: [null | true | false] }] }
-GAMES['quien-miente'] = (() => {
-  const fits = (r, T) => T.every(t => t !== null) && r.people.every((q, i) => !!q.f(T) === T[i]) && (!r.cond || r.cond(T));
-  const sols = r => { const n = r.people.length, out = []; for (let m = 0; m < 2 ** n; m++) { const T = Array.from({ length: n }, (_, i) => !!((m >> i) & 1)); if (fits(r, T)) out.push(T); } return out; };
-  const ok = (s, r) => fits(r, s.T);
-  const game = roundsGame({
-    aspect: 1.3,
-    init: r => ({ T: r.people.map(() => null) }),
-    answered: s => s.T.some(t => t !== null),
-    ok,
-    solution: r => sols(r)[0].map((t, i) => `${r.people[i].name} ${t ? 'dice la verdad' : 'miente'}`).join(', '),
-    prompt: r => r.condSay || '¿Quién dice la verdad y quién miente?',
-    foot: () => 'Toca a cada uno: verdad o mentira',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) {},
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { T: sols(r)[0] } : G.s, good = ok(s, r), n = r.people.length, all = s.T.every(t => t !== null), rh = Math.min(72, (G.H - 200) / n);
-      G.cards = r.people.map((q, i) => {
-        const y = 96 + i * rh, t = s.T[i], said = all ? !!q.f(s.T) : null, clash = all && said !== t;
-        p.stroke(clash ? C.bad : C.line); p.strokeWeight(clash ? 2 : 1); p.fill(RK.al(p, C.card, 210)); p.rect(16, y, G.W - 32, rh - 8, 10);
-        const bx = 24, bw = 74;
-        p.noStroke(); p.fill(t === null ? RK.al(p, C.line, 120) : t ? C.ok : C.coral); p.rect(bx, y + 8, bw, rh - 24, 8);
-        TK.label(p, C, q.name, bx + bw / 2, y + 8 + (rh - 24) / 2 - 7, t === null ? C.ink : inkOn(t ? C.ok : C.coral), 12, bw - 6);
-        TK.label(p, C, t === null ? '?' : t ? 'verdad' : 'miente', bx + bw / 2, y + 8 + (rh - 24) / 2 + 9, t === null ? C.mute : inkOn(t ? C.ok : C.coral), 9, bw - 6);
-        TK.label(p, C, `«${q.say}»`, (bx + bw + G.W - 20) / 2, y + (rh - 8) / 2 - (all ? 7 : 0), C.ink, 11, G.W - bw - 60);
-        if (all) TK.label(p, C, `esto sería ${said ? 'verdad' : 'falso'}`, (bx + bw + G.W - 20) / 2, y + (rh - 8) / 2 + 11, clash ? C.bad : C.mute, 9, G.W - bw - 60);
-        return { x: 16, y, w: G.W - 32, h: rh - 8, i };
-      });
-      const condBad = all && r.cond && !r.cond(s.T);
-      RK.strip(p, C, G.fb, !all ? '$\\text{supón algo de cada uno}$' : good ? '$\\text{todo cuadra}$' : condBad ? '$\\text{no cumple la condición}$' : '$\\text{hay frases que chocan}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) { const c = (G.cards || []).find(b => hitBox(b, x, y)); if (!c) return false; const t = G.s.T[c.i]; G.s.T[c.i] = t === null ? true : !t; G.touch(); return true; },
-    demo: G => (G.cards ? { from: { x: 60, y: G.cards[0].y + 24 }, to: { x: 60, y: G.cards[0].y + 24 }, text: 'Toca para suponer', ty: G.cards.at(-1).y + G.cards.at(-1).h + 18 } : null),
-    peek: G => ({ cards: G.cards }),
-  });
-  return Object.assign(game, { answer: r => ({ T: sols(r)[0] }), solutions: r => sols(r).map(T => ({ T })) });
-})();
-;
-//#archivo js/games/maquina-operador.js
-// La máquina de dos entradas (Preuniversitario, pu-op-1 y pu-op-2; spec 2026-11-18-preuda-razonamiento-completo): un operador
-// nuevo, como a ★ b = 2a − b, es una máquina con dos bocas. Se desliza el número de cada boca; la máquina muestra la regla con
-// los números ya puestos en lugar de a y b, y su resultado. Hay que lograr el resultado pedido (si una boca viene fija, solo se
-// mueve la otra).
-// params = { rounds: [{ sym, tex, f(a, b), target, lo, hi, fix?: { a?, b? } }] }   state = { rounds: [{ a, b }] }
-GAMES['maquina-operador'] = (() => {
-  const ok = (s, r) => r.f(s.a, s.b) === r.target && (r.fix?.a === undefined || s.a === r.fix.a) && (r.fix?.b === undefined || s.b === r.fix.b);
-  const sols = r => { const out = []; for (let a = r.lo; a <= r.hi; a++) for (let b = r.lo; b <= r.hi; b++) if (ok({ a, b }, r)) out.push({ a, b }); return out; };
-  const sub = (r, a, b) => r.tex.replace(/(?<![\\a-zA-Z])a(?![a-zA-Z])/g, `(${a})`).replace(/(?<![\\a-zA-Z(])b(?![a-zA-Z])/g, `(${b})`).replace(/(\d)\(/g, '$1\\cdot(');
-  const N = r => r.hi - r.lo + 1;
-  const game = roundsGame({
-    aspect: 1.25,
-    init: r => { const s = { a: r.fix?.a ?? r.lo, b: r.fix?.b ?? r.lo }; if (ok(s, r)) s[r.fix?.b === undefined ? 'b' : 'a'] += 1; return s; },
-    ok,
-    solution: r => { const s = sols(r)[0]; return `$${s.a} ${r.sym} ${s.b} = ${r.target}$`; },
-    prompt: r => `Con $a ${r.sym} b = ${r.tex}$, logra que salga ${r.target}`,
-    foot: () => 'Desliza los números de las bocas',
-    layout(G) { G.tA = G.H - 150; G.tB = G.H - 104; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = null; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? sols(r)[0] : G.s, good = ok(s, r), v = r.f(s.a, s.b), mx = G.W / 2, my = 180;
-      p.stroke(C.ink); p.strokeWeight(1.5); p.fill(RK.al(p, C.card, 220)); p.rect(mx - 110, my - 50, 220, 100, 14);
-      [['a', s.a, mx - 60], ['b', s.b, mx + 60]].forEach(([k, val, x]) => { p.noStroke(); p.fill(RK.al(p, k === 'a' ? C.sky : C.coral, 140)); p.rect(x - 26, my - 80, 52, 34, 8); TK.label(p, C, `${k} = ${val}`, x, my - 63, C.ink, 12, 50); });
-      TK.label(p, C, `$${sub(r, s.a, s.b)}$`, mx, my - 10, C.ink, 14, 200);
-      TK.label(p, C, `$= ${v}$`, mx, my + 22, good ? C.ok : C.brand, 18, 200);
-      const fa = r.fix?.a !== undefined, fbx = r.fix?.b !== undefined;
-      G.XA = RK.track(p, C, 40, G.W - 30, G.tA, N(r), s.a - r.lo, k => ((r.lo + k) % 2 === 0 ? String(r.lo + k) : null), fa ? C.mute : C.sky);
-      G.XB = RK.track(p, C, 40, G.W - 30, G.tB, N(r), s.b - r.lo, k => null, fbx ? C.mute : C.coral);
-      TK.label(p, C, 'a', 20, G.tA, C.sky, 12, 20); TK.label(p, C, 'b', 20, G.tB, C.coral, 12, 20);
-      RK.strip(p, C, G.fb, `$${s.a} ${r.sym} ${s.b} = ${v}$`, { kicker: good ? 'sale lo pedido' : `debe salir ${r.target}`, col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { const r = G.r; if (Math.abs(y - G.tA) < 20 && r.fix?.a === undefined) G.grab = 'a'; else if (Math.abs(y - G.tB) < 20 && r.fix?.b === undefined) G.grab = 'b'; else return false; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = null; },
-    demo: G => { const k = G.r.fix?.a === undefined ? 'a' : 'b', y = k === 'a' ? G.tA : G.tB, X = k === 'a' ? G.XA : G.XB; return { from: { x: X(G.s[k] - G.r.lo), y }, to: { x: X(G.s[k] - G.r.lo) + 60, y }, text: 'Desliza el número', ty: G.tA - 30 }; },
-    peek: G => ({ tA: G.tA, tB: G.tB }),
-  });
-  game.move = (G, x) => { const r = G.r, v = r.lo + RK.pick(x, 40, G.W - 30, N(r)); if (v !== G.s[G.grab] || !G.touched[G.cur]) { G.s[G.grab] = v; G.touch(); } };
-  return Object.assign(game, { answer: r => sols(r)[0] });
-})();
-;
-//#archivo js/games/cruce-tabla.js
-// El cruce de la tabla (Preuniversitario, pu-op-1 y pu-op-2; spec 2026-11-18-preuda-razonamiento-completo): una operación dada
-// por tabla. El resultado de x ∘ y está en el cruce de la FILA de x con la COLUMNA de y. Se toca la casilla; con una cadena
-// (x ∘ y) ∘ z, lo que salió primero pasa a ser la fila del segundo paso.
-// params = { rounds: [{ set: [elementos], tab: [[resultado]], chain: [x, y, z?] }] }   state = { rounds: [{ picks: [[fila, col]] }] }
-GAMES['cruce-tabla'] = (() => {
-  const idx = (r, v) => r.set.indexOf(v);
-  const steps = r => { const out = []; let cur = r.chain[0]; for (let k = 1; k < r.chain.length; k++) { const i = idx(r, cur), j = idx(r, r.chain[k]); out.push([i, j]); cur = r.tab[i][j]; } return out; };
-  const ok = (s, r) => { const st = steps(r); return s.picks.length === st.length && st.every(([i, j], k) => s.picks[k][0] === i && s.picks[k][1] === j); };
-  const expr = r => r.chain.length === 2 ? `${r.chain[0]} \\circ ${r.chain[1]}` : `(${r.chain[0]} \\circ ${r.chain[1]}) \\circ ${r.chain[2]}`;
-  const game = roundsGame({
-    aspect: 1.25,
-    init: () => ({ picks: [] }),
-    answered: s => s.picks.length > 0,
-    ok,
-    solution: r => { let cur = r.chain[0]; const parts = []; for (let k = 1; k < r.chain.length; k++) { const v = r.tab[idx(r, cur)][idx(r, r.chain[k])]; parts.push(`${cur} ∘ ${r.chain[k]} = ${v}`); cur = v; } return parts.join('; '); },
-    prompt: r => `Usa la tabla: ¿cuánto es $${expr(r)}$?`,
-    foot: () => 'Toca el cruce: fila del primero, columna del segundo',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) {},
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { picks: steps(r) } : G.s, good = ok(s, r), n = r.set.length, cs = Math.min(46, (G.W - 60) / (n + 1)), x0 = (G.W - (n + 1) * cs) / 2, y0 = 100;
-      p.noStroke(); p.fill(RK.al(p, C.brand, 70)); p.rect(x0, y0, cs, cs, 6); TK.label(p, C, '$\\circ$', x0 + cs / 2, y0 + cs / 2, C.ink, 14, cs);
-      r.set.forEach((v, k) => { TK.label(p, C, String(v), x0 + (k + 1.5) * cs, y0 + cs / 2, C.coral, 13, cs); TK.label(p, C, String(v), x0 + cs / 2, y0 + (k + 1.5) * cs, C.sky, 13, cs); });
-      const last = s.picks.at(-1), cols = [C.brand, C.mint];
-      G.cells = [];
-      for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
-        const x = x0 + (j + 1) * cs, y = y0 + (i + 1) * cs, k = s.picks.findIndex(q => q[0] === i && q[1] === j);
-        p.stroke(C.line); p.strokeWeight(1); p.fill(k >= 0 ? RK.al(p, good ? C.ok : cols[k % 2], 120) : RK.al(p, C.card, 200)); p.rect(x + 1, y + 1, cs - 2, cs - 2, 5);
-        TK.label(p, C, String(r.tab[i][j]), x + cs / 2, y + cs / 2, C.ink, 13, cs);
-        G.cells.push({ x, y, w: cs, h: cs, i, j });
-      }
-      if (last) { const [i, j] = last; p.noStroke(); p.fill(RK.al(p, C.sky, 40)); p.rect(x0, y0 + (i + 1) * cs, cs, cs); p.fill(RK.al(p, C.coral, 40)); p.rect(x0 + (j + 1) * cs, y0, cs, cs); }
-      const txt = s.picks.map(([i, j]) => `${r.set[i]} \\circ ${r.set[j]} = ${r.tab[i][j]}`).join(';\\ ');
-      RK.strip(p, C, G.fb, txt ? `$${txt}$` : '$\\text{toca un cruce}$', { kicker: `paso ${Math.min(s.picks.length + 1, r.chain.length - 1)} de ${r.chain.length - 1}`, col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) {
-      const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false;
-      const need = G.r.chain.length - 1, P = G.s.picks;
-      const k = P.findIndex(q => q[0] === c.i && q[1] === c.j);
-      if (k >= 0) P.splice(k); else if (P.length < need) P.push([c.i, c.j]); else P[need - 1] = [c.i, c.j];
-      G.touch(); return true;
-    },
-    demo: G => { const c = G.cells?.[0]; return c ? { from: { x: c.x + c.w / 2, y: c.y + c.h / 2 }, to: { x: c.x + c.w / 2, y: c.y + c.h / 2 }, text: 'Toca el cruce', ty: G.cells.at(-1).y + G.cells.at(-1).h + 22 } : null; },
-    peek: G => ({ cells: G.cells }),
-  });
-  return Object.assign(game, { answer: r => ({ picks: steps(r) }) });
-})();
-;
 //#archivo js/games/neutro-buscador.js
 // El que no cambia nada (Preuniversitario, pu-op-1; spec 2026-11-18-preuda-razonamiento-completo): el elemento neutro e de un
 // operador cumple a ∘ e = a para TODO a. Se desliza un candidato e y el juego opera con él varios números: cada a es una barra
@@ -14926,7 +14695,7 @@ Object.assign(XG, (() => {
   XG.figura('barra-baja', {
     ini: p => ({ b: p.a }), manijas: p => [{ k: 'b', min: 10, max: p.max, paso: 2, r: 11, en: v => [235, 178 - v.b * 1.6], de: (x, y) => (178 - y) / 1.6 }], ok: (v, p) => v.b * 100 === p.a * (100 - p.pc), sol: p => ({ b: p.a * (100 - p.pc) / 100 }), texto: p => `${p.a} − ${p.a * p.pc / 100} = ${p.a * (100 - p.pc) / 100}`, alto: () => 208, pie: 'Arrastra la punta de la barra de ahora.',
     dib: (v, K, p, f) => K.l(40, 178, 300, 178, 'lm') + K.r(70, 178 - p.a * 1.6, 70, p.a * 1.6, 'fa') + K.r(200, 178 - v.b * 1.6, 70, v.b * 1.6, 'fg') + K.l(70, 178 - p.a * 1.6, 290, 178 - p.a * 1.6, 'lm d') + K.t(105, 198, `antes ${p.a}`, 's') + K.t(235, 198, `ahora ${R(v.b)}`, 's') + K.f(f, K.t(170, 20, `${N((v.b - p.a) / p.a * 100)} %`, 'tf')),
-    lee: (v, p) => `$\\tfrac{${N(v.b)} - ${p.a}}{${p.a}} = ${N((v.b - p.a) / p.a * 100)}\\,\\%$`, aviso: (v, p) => (v.b === p.a - p.pc ? `Quitaste ${p.pc} unidades; había que quitar el ${p.pc} % de ${p.a}.` : v.b === p.a * p.pc / 100 ? 'Eso es lo que bajó; la barra muestra lo que quedó.' : v.b > p.a ? 'Así las ventas suben.' : v.b * 100 > p.a * (100 - p.pc) ? 'Bajó menos de lo que se pide.' : 'Bajó más de lo que se pide.'), bien: (v, p) => `El ${p.pc} % de ${p.a} es ${p.a * p.pc / 100}.`,
+    lee: (v, p) => `$\\tfrac{${N(v.b)} - ${p.a}}{${p.a}} = ${N((v.b - p.a) / p.a * 100)}\\,\\%$`, aviso: (v, p) => (v.b === p.a - p.pc ? `Quitaste ${p.pc} unidades; había que quitar el ${p.pc} % de ${p.a}.` : v.b === p.a * p.pc / 100 ? 'Eso es lo que bajó; la barra muestra lo que quedó.' : v.b > p.a ? 'Así sube en vez de bajar.' : v.b * 100 > p.a * (100 - p.pc) ? 'Bajó menos de lo que se pide.' : 'Bajó más de lo que se pide.'), bien: (v, p) => `El ${p.pc} % de ${p.a} es ${p.a * p.pc / 100}.`,
   });
   XG.cuenta('ida-vuelta-porciento', 128, (K, p) => K.r(46, 106 - p.a * 1.6, 40, p.a * 1.6, 'fa', 3) + K.r(120, 106 - p.b * 1.6, 40, p.b * 1.6, 'fg', 3) + K.r(206, 106 - p.b * 1.6, 40, p.b * 1.6, 'fg', 3) + K.r(280, 106 - p.a * 1.6, 40, p.a * 1.6, 'fa', 3) + K.l(30, 106, 330, 106, 'lm') + [[66, p.a], [140, p.b], [226, p.b], [300, p.a]].map(([x, n]) => K.t(x, 123, n, 's')).join('') + K.ar(90, 94, 116, 94, 'lg') + K.ar(250, 94, 276, 94, 'lg'));
   const torta = (K, g, r = '', t = '', q = 84) => K.c(150, q + 20, q, 'fc') + (g > 0 ? K.sec(150, q + 20, q, 90 - g, 90, 'fa') : '') + (r ? K.t(...K.at(150, q + 22, q * 0.6, 90 - g / 2), r, 's') : '') + K.t(250, 34, t, 's tm', 'start');
@@ -15701,7 +15470,7 @@ const HOJA = (() => {
           d.vivo?.(root, p, s);
         };
         pinta();
-        ui.nota(d.ayuda || 'Arrastra cada ficha, o tócala y luego toca su lugar.');
+        ui.nota(p.ayuda || d.ayuda || 'Arrastra cada ficha, o tócala y luego toca su lugar.');
         manos(ui, root, (f, z) => {
           const en = [...ui.s.en], antes = en[f];
           if (z >= 0 && !d.varias) { const otra = en.findIndex((q, k) => q === z && k !== f); if (otra >= 0) en[otra] = antes; }
@@ -15745,7 +15514,7 @@ const HOJA = (() => {
         };
         root.addEventListener('click', e => { const t = e.target.closest('.hj-t'); if (t) pon(t.dataset.k); });
         root.addEventListener('keydown', e => { const t = e.target.closest?.('.hj-t'); if (t && !ui.locked && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); pon(t.dataset.k); } });
-        ui.nota((d.ayuda || 'Toca una oración para subrayarla; otro toque la suelta.') + (p.n > 1 ? ` Son ${p.n}.` : ''));
+        ui.nota((p.ayuda || d.ayuda || 'Toca una oración para subrayarla; otro toque la suelta.') + (p.n > 1 ? ` Son ${p.n}.` : ''));
         pinta();
         return okk => {
           const m = ui.s.m; root.classList.add('hj-fin');
@@ -15898,7 +15667,7 @@ const HOJA = (() => {
           if (t && sel != null) { const k = sel; elige(null); pon(k, +t.dataset.t); }
         });
         root.addEventListener('keydown', e => { if (ui.locked || e.target.dataset?.t == null || (e.key !== 'Enter' && e.key !== ' ')) return; e.preventDefault(); e.stopPropagation(); e.target.click(); });
-        ui.nota(d.ayuda || 'Tira un hilo desde cada tarjeta hasta el texto, o toca la tarjeta y luego el texto.');
+        ui.nota(p.ayuda || d.ayuda || 'Tira un hilo desde cada tarjeta hasta el texto, o toca la tarjeta y luego el texto.');
         ui.espera(60, pinta);
         return okk => {
           const s = ui.s; root.classList.add('hj-fin');
@@ -15966,7 +15735,7 @@ const HOJA = (() => {
           const i = +x.dataset.i;
           if (lleva(i, ui.s.o.indexOf(i) + (e.key === 'ArrowUp' ? -1 : 1))) { acomoda(); x.querySelector('.hj-asa').focus({ preventScroll: true }); }
         });
-        ui.nota(d.ayuda || 'Arrastra cada tira de su asa, o usa las flechas del teclado.');
+        ui.nota(p.ayuda || d.ayuda || 'Arrastra cada tira de su asa, o usa las flechas del teclado.');
         return okk => {
           root.classList.add('hj-fin');
           const s = ui.s;
@@ -23339,3 +23108,547 @@ const COURSE_ALGEBRA = {
   }
   for (const [w, e] of Object.entries(EXAM)) U(w).exam = { id: e.id, title: e.title, minutes: 12, items: e.items.map(([lesson, review, ex]) => ({ lesson, review, ex })) };
 })();
+;
+//#archivo js/courses/trig.js
+// Curso de Trigonometría — sigue la Parte IV «Trigonometría» (unidades 13–15) del Manual de
+// Álgebra y Trigonometría (Instituto de Matemáticas, UdeA, 2024).
+
+const PI = Math.PI;
+
+const COURSE_TRIG = {
+  id: 'trig', level: 'Fundamentos', name: 'Trigonometría', icon: 'θ', color: '#22d3ee',
+  tagline: 'Ángulos, triángulos y ondas: medir lo que no se puede alcanzar con una regla.',
+  units: [
+    {
+      world: 'ondas', title: 'Funciones trigonométricas, propiedades y gráficas',
+      lessons: [
+        {
+          id: 'trig-41a', title: 'Grados y radianes',
+          // Clase T1 (video/clase_trig_t1): escenas de respaldo hasta enlazar el video de Bunny (bunny + duration).
+          clip: { scenes: [
+            sc(5, 'Un ángulo en **posición estándar** empieza en el eje $x$ positivo. Girar en sentido antihorario es positivo.', { viz: { type: 'circle', from: 0, to: 135 } }),
+            sc(5, 'Un **radián** es el ángulo cuyo arco mide lo mismo que el radio. Media vuelta son $\\pi$ radianes.', { title: '$180^\\circ = \\pi \\text{ rad}$', viz: { type: 'circle', from: 0, to: 180 } }),
+            sc(5, 'Para convertir, multiplica por $\\tfrac{\\pi}{180}$ o por $\\tfrac{180}{\\pi}$.', { steps: ['$135^\\circ \\cdot \\dfrac{\\pi}{180} = \\dfrac{3\\pi}{4}$', '$\\dfrac{7\\pi}{6} \\cdot \\dfrac{180}{\\pi} = 210^\\circ$'] }),
+            sc(5, 'Ángulos **coterminales** terminan en el mismo lado: difieren en vueltas completas.', { title: '$\\theta + 360^\\circ k$', steps: ['$400^\\circ - 360^\\circ = 40^\\circ$', '$40^\\circ - 360^\\circ = -320^\\circ$'] }),
+          ] },
+          ex: [
+            play('rueda-angulo', 'Gira el lado terminal hasta cada ángulo en radianes', {
+              snap: 15,
+              rounds: [{ target: 150, label: '5π/6', tex: '\\tfrac{5\\pi}{6}' }, { target: -135, label: '−3π/4', tex: '-\\tfrac{3\\pi}{4}' }, { target: 300, label: '5π/3', tex: '\\tfrac{5\\pi}{3}' }],
+            }, 'Cada $\\tfrac{\\pi}{6}$ son $30^\\circ$ y cada $\\tfrac{\\pi}{4}$ son $45^\\circ$: $\\tfrac{5\\pi}{6} = 5 \\cdot 30^\\circ = 150^\\circ$, $-\\tfrac{3\\pi}{4} = -135^\\circ$ (hacia el reloj) y $\\tfrac{5\\pi}{3} = 5 \\cdot 60^\\circ = 300^\\circ$.',
+              { hint: 'Convierte primero la fracción de π: π son 180°, así que π/6 son 30°, π/4 son 45° y π/3 son 60°. Multiplica por el número de arriba. Si hay un menos, gira como las manecillas del reloj.' }),
+            play('rueda-angulo', 'Gira con vueltas completas, hacia atrás o hasta el suplemento', {
+              snap: 5,
+              rounds: [{ target: 405, label: '405°', tex: '405^\\circ' }, { target: -210, label: '−210°', tex: '-210^\\circ' }, { target: 145, label: 'el suplemento de 35°', tex: '180^\\circ - 35^\\circ' }],
+            }, '$405^\\circ$ es una vuelta completa y $45^\\circ$ más (coterminal con $45^\\circ$); $-210^\\circ$ gira hacia el reloj y queda donde $150^\\circ$; el suplemento de $35^\\circ$ completa media vuelta: $180^\\circ - 35^\\circ = 145^\\circ$.',
+              { hint: 'Puedes dar más de una vuelta: la espiral cuenta las vueltas. Para un ángulo negativo, gira como las manecillas del reloj. Dos ángulos suplementarios suman 180°.' }),
+            num('¿Cuántos grados mide, aproximadamente, un radián? (redondea a una décima)', 180 / PI, '$1 \\text{ rad} = \\tfrac{180^\\circ}{\\pi} \\approx 57.3^\\circ$: el ángulo cuyo arco mide lo mismo que el radio.',
+              { tol: 0.06, suffix: '°', answerText: '$\\approx 57.3^\\circ$', hint: 'Media vuelta se puede medir de dos maneras: en grados y en radianes. Compara las dos medidas para saber a cuánto equivale uno solo.' }),
+          ],
+        },
+        {
+          id: 'trig-41b', title: 'Arco, sector y movimiento circular',
+          // Clase T2 (video/clase_trig_t2): escenas de respaldo hasta enlazar el video de Bunny (bunny + duration).
+          clip: { scenes: [
+            sc(5, 'Con el ángulo en **radianes**, la longitud del arco es radio por ángulo.', { title: '$s = r\\theta$', viz: { type: 'sector', r: 12, anim: [30, 150], unit: 'cm' } }),
+            sc(5, 'El área del sector es una fracción del círculo:', { title: '$A = \\tfrac12 r^2 \\theta$', viz: { type: 'sector', r: 12, ang: 150, unit: 'cm' } }),
+            sc(6, 'En una rueda que gira, la **rapidez angular** $\\omega$ y la **lineal** $v$ se relacionan con el radio.', { steps: ['$\\omega = \\dfrac{\\theta}{t}$', '$v = \\dfrac{s}{t} = r\\,\\omega$', '300 rpm $= 300 \\cdot 2\\pi = 600\\pi$ rad/min'] }),
+          ] },
+          ex: [
+            play('corta-pizza', 'Corta la porción con el arco o el área que se pide', {
+              rounds: [
+                { goal: 'arc', value: 4 * PI, r: 6, label: 'arco s = 4π ≈ 12.57 con r = 6' },
+                { goal: 'area', value: 2 * PI, r: 4, label: 'área A = 2π ≈ 6.28 con r = 4' },
+                { goal: 'arc', value: 2 * PI, deg: 60, rMin: 2, rMax: 10, label: 'arco 2π ≈ 6.28 con un ángulo de 60°' },
+              ],
+            }, 'Con $s = r\\theta$: $\\theta = \\tfrac{4\\pi}{6} = \\tfrac{2\\pi}{3} = 120^\\circ$. Con $A = \\tfrac12 r^2 \\theta$: $\\theta = \\tfrac{2 \\cdot 2\\pi}{16} = \\tfrac{\\pi}{4} = 45^\\circ$. Y con $60^\\circ = \\tfrac{\\pi}{3}$: $r = \\tfrac{2\\pi}{\\pi/3} = 6$.',
+              { hint: 'Despeja antes de cortar: del arco, θ = s / r; del área, θ = 2A / r². El ángulo sale en radianes: pásalo a grados multiplicando por 180/π. En la última ronda el ángulo está fijo y lo que cambias es el radio.' }),
+            play('ordena-terminos', 'Una rueda de bicicleta de 0.3 m de radio da 3 vueltas por segundo. Ordena los pasos para hallar su rapidez con $v = r\\omega$', { tex: 'v = r\\omega', chips: ['ω = 3 · 2π = 6π rad/s', 'v = 0.3 · 6π', 'v = 1.8π ≈ 5.65 m/s', 'ω = 3 rad/s', 'v = 0.3 · 3'], order: [0, 1, 2], sep: '→' },
+              'Cada vuelta son $2\\pi$ radianes: $\\omega = 3 \\cdot 2\\pi = 6\\pi$ rad/s. Luego $v = r\\,\\omega = 0.3 \\cdot 6\\pi = 1.8\\pi \\approx 5.65$ m/s. «3 rad/s» olvida pasar las vueltas a radianes.',
+              { hint: 'Primero pasa las vueltas por segundo a radianes por segundo: una vuelta son 2π radianes. Después multiplica por el radio.' }),
+            num('Un punto del borde de una rueda de 50 cm de radio gira $120^\\circ$. ¿Cuántos centímetros recorre? (usa $\\pi \\approx 3.1416$)', 100 * PI / 3, '$120^\\circ = \\tfrac{2\\pi}{3}$ y $s = 50 \\cdot \\tfrac{2\\pi}{3} = \\tfrac{100\\pi}{3} \\approx 104.7$ cm.',
+              { tol: 0.5, suffix: 'cm', answerText: '$\\tfrac{100\\pi}{3} \\approx 104.7$ cm', hint: 'Pasa el ángulo a radianes (120° es dos tercios de π) y usa s = r θ.' }),
+          ],
+        },
+        {
+          id: 'trig-1', title: 'SOH · CAH · TOA',
+          // Clase T3 (video/clase_trig_t3): escenas de respaldo hasta enlazar el video de Bunny (bunny + duration).
+          clip: { scenes: [
+            sc(4, 'En un triángulo rectángulo nombramos los lados respecto al ángulo $\\theta$.', { viz: { type: 'triangle', from: 35 } }),
+            sc(5, '**SOH**: seno = opuesto ÷ hipotenusa.', { title: '$\\sen\\theta = \\dfrac{\\text{op}}{\\text{hip}}$', viz: { type: 'triangle', from: 20, to: 60, show: 'sin' } }),
+            sc(5, '**CAH**: coseno = adyacente ÷ hipotenusa.', { title: '$\\cos\\theta = \\dfrac{\\text{ady}}{\\text{hip}}$', viz: { type: 'triangle', from: 60, to: 20, show: 'cos' } }),
+            sc(5, '**TOA**: tangente = opuesto ÷ adyacente.', { title: '$\\tan\\theta = \\dfrac{\\text{op}}{\\text{ady}}$', viz: { type: 'triangle', from: 20, to: 70, show: 'tan' } }),
+          ] },
+          ex: [
+            play('arma-triangulo', 'Arma un triángulo rectángulo cuya razón valga lo pedido', {
+              max: 12,
+              rounds: [{ fn: 'sen', num: 4, den: 5 }, { fn: 'cos', num: 12, den: 13 }, { fn: 'tan', num: 5, den: 2 }],
+            }, 'Con catetos $3$ (adyacente) y $4$ (opuesto) la hipotenusa es $5$: $\\operatorname{sen}\\theta = \\tfrac45$. Con $12$ y $5$ la hipotenusa es $13$: $\\cos\\theta = \\tfrac{12}{13}$. Y $\\tan\\theta = \\tfrac{\\text{op}}{\\text{ady}} = \\tfrac52$ con opuesto $5$ y adyacente $2$ (o $10$ y $4$).',
+              { hint: 'SOH CAH TOA: el seno usa opuesto e hipotenusa, el coseno adyacente e hipotenusa, la tangente opuesto y adyacente. Mueve los catetos hasta que, con Pitágoras, la hipotenusa salga entera y la fracción coincida.' }),
+            num('En un triángulo rectángulo, $\\operatorname{sen}\\theta = \\tfrac35$ y la hipotenusa mide 10. ¿Cuánto mide el lado opuesto a $\\theta$?', 6, 'El seno es opuesto entre hipotenusa: $\\text{op} = 10 \\cdot \\tfrac35 = 6$.',
+              { hint: 'El seno compara dos lados: ¿cuáles? Si conoces esa fracción y uno de los dos lados, el otro sale multiplicando.' }),
+          ],
+        },
+        {
+          id: 'trig-2', title: 'Ángulos notables',
+          // Clase T4 (video/clase_trig_t4): escenas de respaldo hasta enlazar el video de Bunny (bunny + duration).
+          clip: { scenes: [
+            sc(5, 'Hay ángulos que aparecen en todas partes: 30°, 45° y 60°. Salen del triángulo equilátero y del cuadrado.', { viz: { type: 'triangle', from: 30, to: 60 } }),
+            sc(5, 'Truco: el seno sube como $\\sqrt{1}, \\sqrt{2}, \\sqrt{3}$ sobre 2.', { steps: ['$\\sen 30^\\circ = \\tfrac{1}{2}$', '$\\sen 45^\\circ = \\tfrac{\\sqrt{2}}{2}$', '$\\sen 60^\\circ = \\tfrac{\\sqrt{3}}{2}$'] }),
+            sc(5, 'El coseno va al revés:', { steps: ['$\\cos 30^\\circ = \\tfrac{\\sqrt{3}}{2}$', '$\\cos 45^\\circ = \\tfrac{\\sqrt{2}}{2}$', '$\\cos 60^\\circ = \\tfrac{1}{2}$'] }),
+            sc(4, 'Con esto calculas alturas y distancias sin calculadora.', { title: '$h = 10 \\tan 45^\\circ = 10$', viz: { type: 'triangle', from: 45, labels: { adj: '10 m', op: 'h' } } }),
+          ] },
+          ex: [
+            play('atrapa-punto', 'Atrapa en la circunferencia unitaria el punto que cumple cada pista', {
+              rounds: [
+                { prompt: 'sen θ = cos θ, con θ agudo', angles: [45] },
+                { prompt: 'cos θ = sen 30°, con θ agudo', angles: [60] },
+                { prompt: 'tan θ · tan 60° = 1, con θ agudo', angles: [30] },
+                { prompt: 'cos θ = 0 y sen θ = 1', angles: [90] },
+              ],
+            }, 'El seno y el coseno son iguales en $45^\\circ$: el medio cuadrado tiene los dos catetos iguales. $\\operatorname{sen} 30^\\circ = \\tfrac12 = \\cos 60^\\circ$: lo que es opuesto para un ángulo es adyacente para el otro. $\\tan 60^\\circ = \\sqrt3$ y su recíproco, $\\tfrac{\\sqrt3}{3}$, es $\\tan 30^\\circ$. En $90^\\circ$ el punto es $(0, 1)$.',
+              { hint: 'Piensa en los dos triángulos notables. ¿En cuál los catetos son iguales? En el otro, lo que queda al frente de 30° queda pegado a 60°: por eso sus razones se intercambian.' }),
+            num('Una escalera de 10 m se apoya en una pared formando $60^\\circ$ con el suelo. ¿A qué altura toca la pared? (en metros, con dos decimales)', 5 * Math.sqrt(3), '$h = 10 \\operatorname{sen} 60^\\circ = 10 \\cdot \\tfrac{\\sqrt3}{2} = 5\\sqrt3 \\approx 8.66$ m.',
+              { tol: 0.02, suffix: 'm', answerText: '$5\\sqrt3 \\approx 8.66$ m', hint: 'La escalera es la hipotenusa y la altura es el lado opuesto al ángulo de 60°. ¿Qué razón une opuesto e hipotenusa?' }),
+          ],
+        },
+        {
+          id: 'trig-42c', title: 'Las seis razones y la medición indirecta',
+          // Clase T5 (video/clase_trig_t5): escenas de respaldo hasta enlazar el video de Bunny (bunny + duration).
+          clip: { scenes: [
+            sc(5, 'Además de seno, coseno y tangente, están sus **recíprocas**:', { steps: ['$\\csc\\theta = \\dfrac{1}{\\sen\\theta}$', '$\\sec\\theta = \\dfrac{1}{\\cos\\theta}$', '$\\cot\\theta = \\dfrac{1}{\\tan\\theta}$'] }),
+            sc(5, 'Ángulo de **elevación**: se mide hacia arriba desde la horizontal. Con él calculas alturas sin subirte al edificio.', { title: '$h = d \\tan\\theta$', viz: { type: 'triangle', from: 25, to: 52, labels: { adj: '40 m', op: 'h' }, show: 'tan' } }),
+            sc(5, 'Ejemplo: a 40 m del edificio, el ángulo de elevación es $52^\\circ$.', { steps: ['$h = 40 \\tan 52^\\circ$', '$h \\approx 40 \\cdot 1.28 \\approx 51.2$ m'] }),
+          ] },
+          ex: [
+            play('arma-triangulo', 'Arma triángulos con las razones recíprocas', {
+              max: 12,
+              rounds: [{ fn: 'csc', num: 5, den: 3 }, { fn: 'sec', num: 13, den: 12 }, { fn: 'cot', num: 3, den: 4 }],
+            }, 'La cosecante es hipotenusa sobre opuesto: con catetos $4$ y $3$ (opuesto), $\\csc\\theta = \\tfrac53$. La secante es hipotenusa sobre adyacente: con adyacente $12$ y opuesto $5$, $\\sec\\theta = \\tfrac{13}{12}$. La cotangente es adyacente sobre opuesto: $\\cot\\theta = \\tfrac34$.',
+              { hint: 'Da vuelta la fracción: csc es el seno al revés (hip/op), sec es el coseno al revés (hip/ady) y cot es la tangente al revés (ady/op).' }),
+            play('mide-altura', 'Muévete hasta ver cada cima con el ángulo pedido', {
+              rounds: [
+                { kind: 'edificio', h: 30, angle: 45, maxD: 60 },
+                { kind: 'arbol', h: 12, angle: 60, maxD: 30 },
+                { kind: 'faro', h: 40, angle: 25, mode: 'dep', maxD: 120 },
+              ],
+            }, 'La tangente une la altura (opuesto) con la distancia (adyacente): $d = \\tfrac{h}{\\tan\\theta}$. Edificio: $\\tfrac{30}{\\tan 45^\\circ} = 30$ m; árbol: $\\tfrac{12}{\\tan 60^\\circ} \\approx 6.93$ m; barco: $\\tfrac{40}{\\tan 25^\\circ} \\approx 85.8$ m. El ángulo de depresión desde arriba es igual al de elevación desde abajo.',
+              { hint: 'Si te alejas, el ángulo se hace más pequeño; si te acercas, más grande. Puedes calcularlo antes: distancia = altura / tan(ángulo).' }),
+            num('Un avión vuela a 2000 m de altura y ve una luz del aeropuerto con un ángulo de depresión de $30^\\circ$. ¿Qué distancia hay en línea recta del avión a la luz? (en metros)', 4000, 'La altura es el opuesto y la distancia buscada la hipotenusa: $d = \\tfrac{2000}{\\operatorname{sen} 30^\\circ} = \\tfrac{2000}{1/2} = 4000$ m.',
+              { suffix: 'm', hint: 'Dibuja el triángulo: la altura del avión es el cateto opuesto al ángulo y la línea recta a la luz es la hipotenusa. ¿Qué razón une el opuesto con la hipotenusa?' }),
+          ],
+        },
+        {
+          id: 'trig-3', title: 'La circunferencia unitaria',
+          // Clase T6 (video/clase_trig_t6): escenas de respaldo hasta enlazar el video de Bunny (bunny + duration).
+          clip: { scenes: [
+            sc(4, 'Una circunferencia de radio 1 centrada en el origen.', { viz: { type: 'circle', from: 0, to: 30 } }),
+            sc(6, 'Gira un ángulo $t$: el punto terminal tiene coordenadas $(\\cos t, \\sen t)$.', { title: '$P(t) = (\\cos t, \\sen t)$', viz: { type: 'circle', from: 30, to: 360 } }),
+            sc(5, 'Así el seno y el coseno funcionan para **cualquier** número real, no solo ángulos agudos.', { viz: { type: 'circle', from: 90, to: 270 } }),
+            sc(4, 'Después de una vuelta completa, todo se repite: son funciones **periódicas**.', { steps: ['$\\sen(t + 2\\pi) = \\sen t$', '$\\cos(t + 2\\pi) = \\cos t$'] }),
+          ] },
+          ex: [
+            play('atrapa-punto', 'Atrapa el punto de la circunferencia unitaria', {
+              rounds: [
+                { prompt: '(−1/2, √3/2)', angles: [120] },
+                { prompt: '(0, −1)', angles: [270] },
+                { prompt: 't = 7π/6', angles: [210] },
+                { prompt: '(√2/2, −√2/2)', angles: [315] },
+              ],
+            }, 'El punto es $(\\cos t, \\operatorname{sen} t)$: $\\left(-\\tfrac12, \\tfrac{\\sqrt3}{2}\\right)$ está en $120^\\circ$ (referencia $60^\\circ$, cuadrante II), $(0, -1)$ abajo en $270^\\circ$, $\\tfrac{7\\pi}{6} = 210^\\circ$ y $\\left(\\tfrac{\\sqrt2}{2}, -\\tfrac{\\sqrt2}{2}\\right)$ en $315^\\circ$.',
+              { hint: 'La primera coordenada es el coseno (izquierda o derecha) y la segunda el seno (arriba o abajo). Los signos te dicen el cuadrante; el valor, el ángulo de referencia.' }),
+            num('El lado terminal de un ángulo $t$ pasa por el punto $(5, -12)$. ¿Cuánto vale $\\operatorname{sen} t$? (en decimal)', -12 / 13, '$r = \\sqrt{25 + 144} = 13$ y $\\operatorname{sen} t = \\tfrac{y}{r} = -\\tfrac{12}{13} \\approx -0.923$.',
+              { tol: 0.005, answerText: '$-\\tfrac{12}{13} \\approx -0.923$', hint: 'Primero halla r, la distancia del punto al origen, con Pitágoras. El seno es y sobre r, con el signo de y.' }),
+          ],
+        },
+        {
+          id: 'trig-43b', title: 'Signos y ángulo de referencia',
+          // Clase T7 (video/clase_trig_t7): escenas de respaldo hasta enlazar el video de Bunny (bunny + duration).
+          clip: { scenes: [
+            sc(5, 'El signo depende del cuadrante. Regla: **I** todas, **II** seno, **III** tangente, **IV** coseno.', { viz: { type: 'circle', from: 45, to: 315 } }),
+            sc(5, 'El **ángulo de referencia** es el ángulo agudo con el eje $x$. Da el valor; el cuadrante da el signo.', { steps: ['$225^\\circ$: referencia $45^\\circ$, cuadrante III', '$\\sen 225^\\circ = -\\tfrac{\\sqrt2}{2}$'] }),
+            sc(5, '**Paridad**: el coseno es par y el seno es impar.', { steps: ['$\\cos(-t) = \\cos t$', '$\\sen(-t) = -\\sen t$', '$\\tan(-t) = -\\tan t$'] }),
+          ] },
+          ex: [
+            play('noria', 'Gira la noria hasta un ángulo que cumpla cada condición', {
+              rounds: [
+                { prompt: 'sen θ < 0 y tan θ > 0', sen: '-', tan: '+' },
+                { prompt: 'Referencia 75°, en el cuadrante II', ref: 75, sen: '+', cos: '-' },
+                { prompt: 'El mismo coseno que 60°, pero con seno negativo', ref: 60, cos: '+', sen: '-' },
+                { prompt: 'cos θ < 0 y tan θ < 0', cos: '-', tan: '-' },
+              ],
+            }, 'Seno negativo y tangente positiva: cuadrante III (por ejemplo $210^\\circ$). Referencia $75^\\circ$ en el II: $180^\\circ - 75^\\circ = 105^\\circ$. Mismo coseno que $60^\\circ$ con seno negativo: $360^\\circ - 60^\\circ = 300^\\circ$. Coseno y tangente negativos: cuadrante II.',
+              { hint: 'Recuerda: I todas positivas, II solo el seno, III solo la tangente, IV solo el coseno. El ángulo de referencia es la distancia al eje x más cercano.' }),
+            play('atrapa-punto', 'Atrapa el punto que cumple el valor y el signo', {
+              rounds: [
+                { prompt: 'cos θ = −√3/2 y sen θ < 0', angles: [210] },
+                { prompt: 'cos θ = √3/2 y sen θ < 0', angles: [330] },
+                { prompt: 'tan θ = −1 en el cuadrante II', angles: [135] },
+              ],
+            }, 'El valor da el ángulo de referencia y el signo, el cuadrante: $210^\\circ$ (referencia $30^\\circ$, III), $330^\\circ$ (referencia $30^\\circ$, IV) y $135^\\circ$ (referencia $45^\\circ$, II).',
+              { hint: 'Primero busca el ángulo agudo que da ese valor (sin el signo). Luego decide el cuadrante con los signos y refleja el ángulo allí.' }),
+            num('Ángulo de referencia de $\\tfrac{7\\pi}{4}$, en grados', 45, '$\\tfrac{7\\pi}{4} = 315^\\circ$, en el cuadrante IV: $360^\\circ - 315^\\circ = 45^\\circ$.',
+              { suffix: '°', hint: 'Pasa a grados (π son 180°), mira en qué cuadrante queda y mide la distancia al eje x más cercano.' }),
+          ],
+        },
+        {
+          id: 'trig-44a', title: 'Seno y coseno: amplitud',
+          // Clase T8 (video/clase_trig_t8): escenas de respaldo hasta enlazar el video de Bunny (bunny + duration).
+          clip: { scenes: [
+            sc(5, 'Al "desenrollar" la circunferencia, la altura del punto dibuja la onda **seno**.', { title: '$y = \\sen x$', viz: { type: 'graph', xr: [0, 7], yr: [-3.5, 3.5], f: Math.sin, draw: true, ax: ['x', 'y'] } }),
+            sc(5, 'La **amplitud** $|a|$ estira la onda verticalmente.', { title: '$y = a \\sen x$', viz: { type: 'graph', xr: [0, 7], yr: [-3.5, 3.5], f: (x, a) => a * Math.sin(x), anim: [1, 3], label: a => `a = ${fmt(a, 1)}` } }),
+            sc(5, '$d$ desplaza la onda hacia arriba o abajo. El rango es $[d - |a|,\\, d + |a|]$.', { title: '$y = a \\sen x + d$', viz: { type: 'graph', xr: [0, 7], yr: [-3.5, 4.5], f: (x, d) => Math.sin(x) + d, anim: [0, 2], label: d => `d = ${fmt(d, 1)}` } }),
+          ] },
+          ex: [
+            play('sintoniza-onda', 'Sintoniza tu onda con la onda fantasma', {
+              rounds: [
+                { fn: 'sen', target: { a: 2, b: 1, cq: 0, d: 0 }, knobs: ['a'] },
+                { fn: 'cos', target: { a: -1.5, b: 1, cq: 0, d: 0 }, knobs: ['a'] },
+                { fn: 'sen', target: { a: 1.5, b: 1, cq: 0, d: -1 }, knobs: ['a', 'd'] },
+                { fn: 'cos', target: { a: 2, b: 1, cq: 0, d: 1 }, knobs: ['a', 'd'] },
+              ],
+            }, 'La amplitud $|a|$ es la distancia de la línea media a la cresta; si la onda empieza al revés, $a$ es negativo. $d$ es la altura de la línea media: $y = 2\\operatorname{sen} x$, $y = -1.5\\cos x$, $y = 1.5\\operatorname{sen} x - 1$ y $y = 2\\cos x + 1$.',
+              { hint: 'Mira primero la línea media de la onda fantasma: esa altura es d. Luego mide desde ahí hasta la cresta: es la amplitud. Si la onda fantasma va al revés que la tuya, cambia el signo de a.' }),
+            num('Amplitud de $y = -4\\cos x$', 4, 'La amplitud es $|a| = |-4| = 4$: el signo solo voltea la onda.',
+              { hint: 'La amplitud es el número que multiplica al coseno, pero siempre positivo: el signo menos solo voltea la onda.' }),
+          ],
+        },
+        {
+          id: 'trig-44b', title: 'Periodo, desfase y tangente',
+          // Clase T9 (video/clase_trig_t9): escenas de respaldo hasta enlazar el video de Bunny (bunny + duration).
+          clip: { scenes: [
+            sc(5, '$b$ comprime la onda: el **periodo** pasa a ser $\\tfrac{2\\pi}{b}$.', { title: '$y = \\sen(bx)$', viz: { type: 'graph', xr: [0, 7], yr: [-2, 2], f: (x, b) => Math.sin(b * x), anim: [1, 3], label: b => `b = ${fmt(b, 1)}  ·  periodo = ${fmt(2 * PI / b, 2)}` } }),
+            sc(5, 'El **desfase** $\\tfrac{c}{b}$ corre la onda a la derecha.', { title: '$y = a \\sen(bx - c) + d$', viz: { type: 'graph', xr: [0, 7], yr: [-2, 2], f: (x, c) => Math.sin(x - c), anim: [0, 1.5], label: c => `desfase = ${fmt(c, 2)}` } }),
+            sc(5, 'La tangente tiene periodo $\\pi$ y **asíntotas verticales** donde el coseno vale cero.', { title: '$x = \\tfrac{\\pi}{2} + k\\pi$', viz: { type: 'graph', xr: [-0.5, 7], yr: [-4, 4], f: Math.tan, draw: true } }),
+          ] },
+          ex: [
+            play('sintoniza-onda', 'Sintoniza la frecuencia y el desfase de tu onda', {
+              rounds: [
+                { fn: 'sen', target: { a: 1, b: 3, cq: 0, d: 0 }, knobs: ['b'] },
+                { fn: 'sen', target: { a: 1, b: 1, cq: 1, d: 0 }, knobs: ['c'] },
+                { fn: 'cos', target: { a: 1, b: 2, cq: 2, d: 0 }, knobs: ['b', 'c'] },
+                { fn: 'sen', target: { a: 2, b: 0.5, cq: 0, d: 1 }, knobs: ['a', 'b', 'd'] },
+              ],
+            }, 'Cuenta ondas completas en $[0, 2\\pi]$: $b$ ondas. El desfase es $\\tfrac{c}{b}$: $\\operatorname{sen}\\left(x - \\tfrac{\\pi}{4}\\right)$ se corre $\\tfrac{\\pi}{4}$; $\\cos\\left(2x - \\tfrac{\\pi}{2}\\right)$ se corre $\\tfrac{\\pi}{4}$ con periodo $\\pi$; y $y = 2\\operatorname{sen}\\tfrac{x}{2} + 1$ tiene periodo $4\\pi$.',
+              { hint: 'b es cuántas ondas completas caben entre 0 y 2π (el periodo es 2π/b). Para el desfase, mira cuánto se corrió la onda fantasma a la derecha y multiplícalo por b para obtener c.' }),
+            num('La tangente se repite cada $\\pi$. ¿Cada cuánto se repite $y = \\tan 4x$? (en decimal, con $\\pi \\approx 3.1416$)', Math.PI / 4, 'El periodo de $\\tan bx$ es $\\tfrac{\\pi}{b}$: $\\tfrac{\\pi}{4} \\approx 0.785$. Sus asíntotas también quedan separadas $\\tfrac{\\pi}{4}$.',
+              { tol: 0.005, answerText: '$\\tfrac{\\pi}{4} \\approx 0.785$', hint: 'El 4 comprime la gráfica: ahora cabe cuatro veces donde antes cabía una. Ojo: el periodo de la tangente no es el mismo del seno.' }),
+          ],
+        },
+      ],
+    },
+    {
+      world: 'inversas', title: 'Funciones trigonométricas inversas y aplicaciones',
+      lessons: [
+        {
+          id: 'trig-45', title: 'Seno, coseno y tangente inversos',
+          // Clase T10 (video/clase_trig_t10): escenas de respaldo hasta enlazar el video de Bunny (bunny + duration).
+          clip: { scenes: [
+            sc(5, 'El seno no es inyectivo: muchos ángulos dan el mismo valor. Para invertirlo, **restringimos** el dominio a $\\left[-\\tfrac{\\pi}{2}, \\tfrac{\\pi}{2}\\right]$.', { viz: { type: 'graph', xr: [-4, 4], yr: [-2, 2], fs: [{ f: Math.sin, color: 'rgba(255,255,255,.3)' }, { f: x => (Math.abs(x) <= PI / 2 ? Math.sin(x) : NaN) }] } }),
+            sc(5, '$\\sen^{-1} x$ responde: ¿qué ángulo de ese intervalo tiene seno $x$?', { title: '$y = \\sen^{-1}x \\iff \\sen y = x$', viz: { type: 'graph', xr: [-1.5, 1.5], yr: [-2, 2], f: Math.asin, draw: true } }),
+            sc(5, 'Cada inversa tiene su rango:', { steps: ['$\\sen^{-1}: \\left[-\\tfrac{\\pi}{2}, \\tfrac{\\pi}{2}\\right]$', '$\\cos^{-1}: [0, \\pi]$', '$\\tan^{-1}: \\left(-\\tfrac{\\pi}{2}, \\tfrac{\\pi}{2}\\right)$'] }),
+          ] },
+          ex: [
+            play('canon-inverso', 'Dos globos tienen el mismo valor, pero solo uno está en el rango de la inversa. Apunta el cañón al del valor principal', {
+              rounds: [
+                { fn: 'asin', x: -Math.SQRT1_2, label: '−√2/2' },
+                { fn: 'acos', x: -Math.sqrt(3) / 2, label: '−√3/2' },
+                { fn: 'atan', x: -Math.sqrt(3), label: '−√3' },
+                { fn: 'atan', x: 1, label: '1', guide: false },
+              ],
+            }, '$\\sen^{-1}\\left(-\\tfrac{\\sqrt2}{2}\\right) = -45^\\circ$ (no $225^\\circ$: el rango del seno inverso es $[-90^\\circ, 90^\\circ]$); $\\cos^{-1}\\left(-\\tfrac{\\sqrt3}{2}\\right) = 150^\\circ$, en $[0^\\circ, 180^\\circ]$; $\\tan^{-1}(-\\sqrt3) = -60^\\circ$ y $\\tan^{-1} 1 = 45^\\circ$.',
+              { hint: 'Primero busca el ángulo agudo que da ese valor sin signo. Luego ubícalo dentro del rango: para seno y tangente inversos, negativo significa por debajo del eje x; para coseno inverso, negativo significa pasar al lado izquierdo.' }),
+            play('canon-inverso', 'Ahora sin ángulos notables: apunta con precisión de 1°', {
+              rounds: [
+                { fn: 'atan', x: 5 / 12, label: '5/12', snap: 1 },
+                { fn: 'acos', x: 0.8, label: '0.8', snap: 1 },
+                { fn: 'asin', x: -0.6, label: '−0.6', snap: 1 },
+              ],
+            }, '$\\tan^{-1}\\tfrac{5}{12} \\approx 22.6^\\circ$, $\\cos^{-1} 0.8 \\approx 36.9^\\circ$ y $\\sen^{-1}(-0.6) \\approx -36.9^\\circ$: el seno negativo apunta hacia abajo, dentro de $[-90^\\circ, 90^\\circ]$.',
+              { hint: 'Antes de girar, dibuja el triángulo con esos dos lados (por ejemplo, opuesto 5 y adyacente 12) y estima: ¿el ángulo es mayor o menor que 30°?, ¿que 45°? El signo decide si el cañón apunta arriba o abajo. Al final afina con − y +.' }),
+            num('Calcula $\\cos^{-1}\\left(\\cos \\tfrac{7\\pi}{6}\\right)$, en grados', 150, '$\\cos\\tfrac{7\\pi}{6} = \\cos 210^\\circ = -\\tfrac{\\sqrt3}{2}$, y el ángulo de $[0^\\circ, 180^\\circ]$ con ese coseno es $150^\\circ$. No se cancela porque $210^\\circ$ está fuera del rango.',
+              { suffix: '°', hint: 'Calcula primero el coseno de adentro. Después busca el ángulo entre 0° y 180° que tenga ese mismo coseno: no siempre es el ángulo con el que empezaste.' }),
+            num('Una escalera de 6 m alcanza 5 m de altura en un muro. Ángulo con el piso, en grados', Math.asin(5 / 6) * 180 / PI, '$\\operatorname{sen}\\theta = \\tfrac56$, así que $\\theta = \\operatorname{sen}^{-1}\\tfrac56 \\approx 56.4^\\circ$.',
+              { tol: 0.3, suffix: '°', answerText: '$\\approx 56.4^\\circ$', hint: 'Dibuja el triángulo: la escalera es la hipotenusa y la altura es el lado opuesto al ángulo con el piso. ¿Qué razón usa esos dos lados? Despeja el ángulo con su inversa.' }),
+          ],
+        },
+        {
+          id: 'trig-4', title: 'Identidades fundamentales',
+          // Clase T11 (video/clase_trig_t11).
+          clip: { scenes: [
+            sc(5, 'En la circunferencia unitaria, coseno y seno forman un triángulo con hipotenusa 1.', { viz: { type: 'circle', from: 20, to: 70 } }),
+            sc(5, 'Por Pitágoras, siempre se cumple:', { title: '$\\sen^2\\theta + \\cos^2\\theta = 1$', viz: { type: 'circle', from: 70, to: 160 } }),
+            sc(6, 'Dividiendo entre $\\cos^2\\theta$ o entre $\\sen^2\\theta$ salen las otras dos:', { steps: ['$1 + \\tan^2\\theta = \\sec^2\\theta$', '$1 + \\cot^2\\theta = \\csc^2\\theta$'] }),
+            sc(5, '**Cofunciones**: el seno de un ángulo es el coseno de su complemento.', { steps: ['$\\sen\\left(\\tfrac{\\pi}{2} - x\\right) = \\cos x$', '$\\tan\\left(\\tfrac{\\pi}{2} - x\\right) = \\cot x$'] }),
+          ] },
+          ex: [
+            play('tanque-pitagorico', 'Llena el tanque justo hasta la marca y elige el signo según el cuadrante', {
+              rounds: [
+                { id: 'sc', given: 'sen', value: 0.6, ask: 'cos', q: 2 },
+                { id: 'sc', given: 'cos', value: 0.28, ask: 'sen', q: 4 },
+                { id: 'ts', given: 'tan', value: 0.75, ask: 'sec', q: 3 },
+                { id: 'ts', given: 'sec', value: -1.25, ask: 'tan', q: 2 },
+              ],
+            }, '$\\cos\\theta = -\\sqrt{1 - 0.36} = -0.8$ (II); $\\operatorname{sen}\\theta = -\\sqrt{1 - 0.0784} = -0.96$ (IV); $\\sec\\theta = -\\sqrt{1 + 0.5625} = -1.25$ (III, como el coseno); $\\tan\\theta = -\\sqrt{1.5625 - 1} = -0.75$ (II).',
+              { hint: 'El tanque llena cuando los cuadrados suman lo que pide la identidad: resta para hallar el cuadrado que falta y saca raíz. El signo lo decide el cuadrante: I todas positivas, II solo el seno, III solo la tangente, IV solo el coseno (la secante lleva el signo del coseno).' }),
+            num('Si $\\tan\\theta = 2$ y $\\theta$ está en el cuadrante III, ¿cuánto vale $\\sec\\theta$?', -Math.sqrt(5), '$\\sec^2\\theta = 1 + \\tan^2\\theta = 5$, y en el III el coseno (y la secante) es negativo: $\\sec\\theta = -\\sqrt5 \\approx -2.24$.',
+              { tol: 0.01, answerText: '$-\\sqrt5 \\approx -2.24$', hint: 'Usa la identidad que une la tangente con la secante y despeja el cuadrado. Para el signo, piensa en el signo del coseno en ese cuadrante.' }),
+          ],
+        },
+        {
+          id: 'trig-47b', title: 'Simplificar y demostrar',
+          // Clase T12 (video/clase_trig_t12).
+          clip: { scenes: [
+            sc(5, 'Una **identidad** es cierta para todo $x$ del dominio; una **ecuación** solo para algunos valores.', { steps: ['$\\sen^2x + \\cos^2x = 1$: identidad', '$\\sen x = \\tfrac12$: ecuación'] }),
+            sc(6, 'Estrategia: trabaja con el lado más complejo y escribe todo en senos y cosenos.', { steps: ['$\\tan x + \\cot x = \\dfrac{\\sen x}{\\cos x} + \\dfrac{\\cos x}{\\sen x}$', '$= \\dfrac{\\sen^2 x + \\cos^2 x}{\\sen x \\cos x}$', '$= \\dfrac{1}{\\sen x \\cos x} = \\sec x \\csc x$'] }),
+            sc(5, 'Para refutar una falsa identidad basta **un contraejemplo**.', { steps: ['¿$\\sen(x + y) = \\sen x + \\sen y$?', '$x = y = \\tfrac{\\pi}{2}$: $\\sen \\pi = 0 \\neq 2$'] }),
+          ] },
+          ex: [
+            play('detector-identidades', 'Detective de identidades: si las gráficas se separan, marca un contraejemplo; si no, sella «Es identidad»', {
+              rounds: [
+                { lhs: 'sen 2x', rhs: '2 sen x', f: x => Math.sin(2 * x), g: x => 2 * Math.sin(x), identity: false },
+                { lhs: 'tan x · cos x', rhs: 'sen x', f: x => Math.tan(x) * Math.cos(x), g: x => Math.sin(x), identity: true },
+                { lhs: '(sen x + cos x)²', rhs: '1', f: x => (Math.sin(x) + Math.cos(x)) ** 2, g: () => 1, identity: false },
+                { lhs: 'sec²x − tan²x', rhs: '1', f: x => 1 / Math.cos(x) ** 2 - Math.tan(x) ** 2, g: () => 1, identity: true },
+              ],
+            }, '$\\operatorname{sen} 2x \\ne 2\\operatorname{sen} x$ (en $x = \\tfrac{\\pi}{2}$: $0 \\ne 2$). $\\tan x \\cos x = \\tfrac{\\operatorname{sen} x}{\\cos x}\\cos x = \\operatorname{sen} x$: identidad. $(\\operatorname{sen} x + \\cos x)^2 = 1 + 2\\operatorname{sen} x\\cos x$, que no es 1 en $x = \\tfrac{\\pi}{4}$. $\\sec^2 x - \\tan^2 x = 1$ sale de $1 + \\tan^2 x = \\sec^2 x$.',
+              { hint: 'Mueve la lupa y mira los dos valores de abajo. Si en algún x son distintos, ese x ya es un contraejemplo. Si coinciden en todas partes (salvo donde no existen), escribe ambos lados en senos y cosenos para confirmarlo.' }),
+            play('ordena-terminos', 'Ordena la demostración de $\\operatorname{sen} x\\,(\\csc x - \\operatorname{sen} x) = \\cos^2 x$', {
+              tex: '\\operatorname{sen} x\\,(\\csc x - \\operatorname{sen} x)',
+              chips: ['sen x · csc x − sen²x', '1 − sen²x', 'cos²x', '1 + sen²x', 'sen²x − 1'],
+              order: [0, 1, 2], sep: '=',
+            }, 'Se reparte: $\\operatorname{sen} x\\csc x - \\operatorname{sen}^2 x$. Como $\\operatorname{sen} x \\csc x = 1$, queda $1 - \\operatorname{sen}^2 x$, que por la identidad pitagórica es $\\cos^2 x$.',
+              { hint: 'Primero reparte el sen x del paréntesis. Luego recuerda que la cosecante es el recíproco del seno, así que su producto vale 1. Al final usa sen² + cos² = 1.' }),
+            num('Simplifica $(1 - \\cos^2 x)(1 + \\cot^2 x)$', 1, '$1 - \\cos^2 x = \\operatorname{sen}^2 x$ y $1 + \\cot^2 x = \\csc^2 x$: su producto es $\\operatorname{sen}^2 x \\cdot \\tfrac{1}{\\operatorname{sen}^2 x} = 1$.',
+              { hint: 'Cada paréntesis es una identidad pitagórica disfrazada. Cámbialos por su forma corta y mira qué pasa al multiplicar.' }),
+          ],
+        },
+        {
+          id: 'trig-48a', title: 'Suma y resta de ángulos',
+          // Clase T13 (video/clase_trig_t13).
+          clip: { scenes: [
+            sc(6, 'El seno y el coseno de una suma **no** se reparten: tienen su propia fórmula.', { steps: ['$\\sen(x \\pm y) = \\sen x \\cos y \\pm \\cos x \\sen y$', '$\\cos(x \\pm y) = \\cos x \\cos y \\mp \\sen x \\sen y$'] }),
+            sc(6, 'Así obtienes valores exactos de ángulos "raros":', { steps: ['$\\cos 75^\\circ = \\cos(45^\\circ + 30^\\circ)$', '$= \\tfrac{\\sqrt2}{2}\\cdot\\tfrac{\\sqrt3}{2} - \\tfrac{\\sqrt2}{2}\\cdot\\tfrac12$', '$= \\dfrac{\\sqrt6 - \\sqrt2}{4}$'] }),
+            sc(5, 'Y para la tangente:', { title: '$\\tan(x \\pm y) = \\dfrac{\\tan x \\pm \\tan y}{1 \\mp \\tan x \\tan y}$' }),
+          ] },
+          ex: [
+            play('encadena-angulos', 'Encadena dos ángulos notables para llegar al ángulo «raro»', {
+              rounds: [{ target: 165 }, { target: 195 }, { target: 285 }],
+            }, 'Por ejemplo $165^\\circ = 120^\\circ + 45^\\circ$, $195^\\circ = 150^\\circ + 45^\\circ$ y $285^\\circ = 240^\\circ + 45^\\circ$ (también valen restas como $165^\\circ = 210^\\circ - 45^\\circ$).',
+              { hint: 'Los notables son los múltiplos de 30° y de 45°. Busca uno cerca del ángulo pedido y mira cuánto falta o sobra: si esa diferencia también es notable, ya lo tienes.' }),
+            num('Si $\\operatorname{sen}\\alpha = \\tfrac35$ ($\\alpha$ en I) y $\\cos\\beta = -\\tfrac{5}{13}$ ($\\beta$ en II), calcula $\\operatorname{sen}(\\alpha + \\beta)$', 33 / 65, '$\\cos\\alpha = \\tfrac45$, $\\operatorname{sen}\\beta = \\tfrac{12}{13}$: $\\tfrac35\\left(-\\tfrac{5}{13}\\right) + \\tfrac45 \\cdot \\tfrac{12}{13} = \\tfrac{33}{65}$.',
+              { tol: 0.005, answerText: '$\\tfrac{33}{65} \\approx 0.508$', hint: 'Te faltan cos α y sen β: sácalos con sen² + cos² = 1 y el signo de cada cuadrante. Luego usa sen(α + β) = sen α cos β + cos α sen β.' }),
+          ],
+        },
+        {
+          id: 'trig-48b', title: 'Ángulo doble y ángulo medio',
+          // Clase T14 (video/clase_trig_t14).
+          clip: { scenes: [
+            sc(5, 'Si en la fórmula de suma haces $y = x$, obtienes el **ángulo doble**:', { steps: ['$\\sen 2x = 2 \\sen x \\cos x$', '$\\cos 2x = \\cos^2 x - \\sen^2 x$', '$= 1 - 2\\sen^2 x = 2\\cos^2 x - 1$'] }),
+            sc(5, 'Despejando, reduces potencias (muy útil en cálculo):', { steps: ['$\\sen^2 x = \\dfrac{1 - \\cos 2x}{2}$', '$\\cos^2 x = \\dfrac{1 + \\cos 2x}{2}$'] }),
+            sc(5, '**Ángulo medio**: el signo depende del cuadrante de $\\tfrac{u}{2}$.', { title: '$\\sen\\dfrac{u}{2} = \\pm\\sqrt{\\dfrac{1 - \\cos u}{2}}$' }),
+          ] },
+          ex: [
+            play('corredores-dobles', 'El corredor rosa va siempre al doble. Mantén «Correr», suelta cerca y ajusta con − y + hasta que se cumpla cada condición', {
+              rounds: [
+                { prompt: 'El rápido llega a (0, −1) y el lento está en el cuadrante II', fast: 270, q: 2 },
+                { prompt: 'cos 2θ = −1/2 con el lento en el cuadrante III', cos2: -0.5, q: 3 },
+                { prompt: 'El rápido está en 60° y el lento tiene sen θ < 0', fast: 60, slowSen: '-' },
+                { prompt: 'sen 2θ = 1 con cos θ < 0', sen2: 1, slowCos: '-' },
+              ],
+            }, '$2\\theta = 270^\\circ$ da $\\theta = 135^\\circ$ o $315^\\circ$: en el II, $135^\\circ$. $\\cos 2\\theta = -\\tfrac12$ con $\\theta$ en III: $\\theta = 240^\\circ$ ($2\\theta = 480^\\circ$, coterminal con $120^\\circ$). Ángulo medio de $60^\\circ$: $30^\\circ$ o $210^\\circ$; con seno negativo, $210^\\circ$. $\\operatorname{sen} 2\\theta = 1$: $2\\theta = 90^\\circ$ o $450^\\circ$, y con coseno negativo $\\theta = 225^\\circ$.',
+              { hint: 'Piensa al revés: primero dónde debe estar el rápido (2θ), luego divide entre 2. Ojo, como el rápido da dos vueltas, hay dos lentos posibles separados por 180°: la condición sobre θ decide cuál.' }),
+            play('detector-identidades', '¿Cuáles fórmulas de ángulo doble son de verdad?', {
+              rounds: [
+                { lhs: 'cos 2x', rhs: '1 − 2 sen²x', f: x => Math.cos(2 * x), g: x => 1 - 2 * Math.sin(x) ** 2, identity: true },
+                { lhs: 'cos²x', rhs: '(1 − cos 2x) / 2', f: x => Math.cos(x) ** 2, g: x => (1 - Math.cos(2 * x)) / 2, identity: false },
+                { lhs: 'sen 2x', rhs: '2 sen x cos x', f: x => Math.sin(2 * x), g: x => 2 * Math.sin(x) * Math.cos(x), identity: true },
+                { lhs: 'cos 2x', rhs: '2 cos²x + 1', f: x => Math.cos(2 * x), g: x => 2 * Math.cos(x) ** 2 + 1, identity: false },
+              ],
+            }, '$\\cos 2x = 1 - 2\\operatorname{sen}^2 x$ y $\\operatorname{sen} 2x = 2\\operatorname{sen} x\\cos x$ son identidades. $\\cos^2 x = \\tfrac{1 + \\cos 2x}{2}$ (con más, no con menos) y $\\cos 2x = 2\\cos^2 x - 1$ (con menos).',
+              { hint: 'Prueba con x = 0, donde cos x = 1 y sen x = 0: si los dos lados ya no coinciden ahí, tienes el contraejemplo. Si coinciden, mueve la lupa a otros valores antes de sellar.' }),
+            num('Si $\\operatorname{sen} x = \\tfrac{5}{13}$ y $x$ está en el cuadrante II, calcula $\\operatorname{sen} 2x$', -120 / 169, '$\\cos x = -\\tfrac{12}{13}$ (II), así que $\\operatorname{sen} 2x = 2 \\cdot \\tfrac{5}{13} \\cdot \\left(-\\tfrac{12}{13}\\right) = -\\tfrac{120}{169} \\approx -0.710$.',
+              { tol: 0.005, answerText: '$-\\tfrac{120}{169} \\approx -0.710$', hint: 'Necesitas el coseno: sácalo con la identidad pitagórica y el signo del cuadrante II. Luego multiplica 2 · sen x · cos x.' }),
+          ],
+        },
+        {
+          id: 'trig-49', title: 'Resolver ecuaciones trigonométricas',
+          // Clase T15 (video/clase_trig_t15).
+          clip: { scenes: [
+            sc(5, 'Al resolver $\\sen x = \\tfrac12$ hay **dos** soluciones en cada vuelta.', { title: '$2\\sen x - 1 = 0$', viz: { type: 'graph', xr: [0, 6.6], yr: [-1.5, 1.5], fs: [{ f: Math.sin }, { f: () => 0.5, color: '#facc15', dash: true }], points: [[PI / 6, 0.5, 'π/6'], [5 * PI / 6, 0.5, '5π/6']] } }),
+            sc(5, 'Solución general: suma vueltas completas.', { steps: ['$x = \\tfrac{\\pi}{6} + 2n\\pi$', '$x = \\tfrac{5\\pi}{6} + 2n\\pi$'] }),
+            sc(6, 'Las de tipo cuadrático se factorizan como en álgebra:', { steps: ['$2\\cos^2 x + \\cos x - 1 = 0$', '$(2\\cos x - 1)(\\cos x + 1) = 0$', '$x = \\tfrac{\\pi}{3}, \\; \\pi, \\; \\tfrac{5\\pi}{3}$'] }),
+            sc(5, 'Si elevas al cuadrado, verifica: pueden aparecer **soluciones extrañas**.', { steps: ['$\\sen x + \\cos x = 1$', 'Al elevar al cuadrado: $\\sen 2x = 0$', 'Verifica cada candidato en la original'] }),
+          ] },
+          ex: [
+            play('pesca-raices', 'Los peces están donde la ola cruza o toca el agua. Atrápalos todos en $[0, 2\\pi)$ sin anzuelos de más', {
+              rounds: [
+                { label: '2 cos x = −1', g: x => 2 * Math.cos(x), k: -1, yr: 3 },
+                { label: '2 sen²x − sen x − 1 = 0', g: x => 2 * Math.sin(x) ** 2 - Math.sin(x) - 1, k: 0, yr: 3 },
+                { label: 'sen 2x − cos x = 0', g: x => Math.sin(2 * x) - Math.cos(x), k: 0, yr: 2.5 },
+                { label: 'tan x = −1', g: Math.tan, k: -1, yr: 4 },
+              ],
+            }, '$\\cos x = -\\tfrac12$: $\\tfrac{2\\pi}{3}, \\tfrac{4\\pi}{3}$. $(2\\operatorname{sen} x + 1)(\\operatorname{sen} x - 1) = 0$: $\\tfrac{\\pi}{2}, \\tfrac{7\\pi}{6}, \\tfrac{11\\pi}{6}$. $\\cos x\\,(2\\operatorname{sen} x - 1) = 0$: $\\tfrac{\\pi}{6}, \\tfrac{\\pi}{2}, \\tfrac{5\\pi}{6}, \\tfrac{3\\pi}{2}$. $\\tan x = -1$: $\\tfrac{3\\pi}{4}, \\tfrac{7\\pi}{4}$.',
+              { hint: 'Despeja la función (o factoriza como en álgebra) hasta llegar a «sen x = número», «cos x = número»… Cada una suele dar dos ángulos por vuelta; revisa también los puntos donde la ola apenas toca el agua.' }),
+            play('atrapa-punto', 'Atrapa en la circunferencia la solución que cumple cada pista', {
+              rounds: [
+                { prompt: '2 sen θ + √3 = 0, en el cuadrante IV', angles: [300] },
+                { prompt: '√2 cos θ = 1, con sen θ < 0', angles: [315] },
+                { prompt: '√3 tan θ = 1, en el cuadrante III', angles: [210] },
+              ],
+            }, '$\\operatorname{sen}\\theta = -\\tfrac{\\sqrt3}{2}$ en el IV: $300^\\circ$. $\\cos\\theta = \\tfrac{\\sqrt2}{2}$ con seno negativo: $315^\\circ$. $\\tan\\theta = \\tfrac{1}{\\sqrt3}$ en el III: $180^\\circ + 30^\\circ = 210^\\circ$.',
+              { hint: 'Despeja la razón y busca su ángulo de referencia entre los notables. Después llévalo al cuadrante que pide la pista.' }),
+            num('¿Cuántas soluciones tiene $\\tan 3x = 1$ en $[0, \\pi)$?', 3, '$3x = \\tfrac{\\pi}{4} + n\\pi \\Rightarrow x = \\tfrac{\\pi}{12} + \\tfrac{n\\pi}{3}$: $\\tfrac{\\pi}{12}, \\tfrac{5\\pi}{12}, \\tfrac{9\\pi}{12}$.',
+              { hint: 'Resuelve primero para 3x con la solución general (la tangente se repite cada π) y luego divide entre 3. Cuenta cuántos valores caen antes de π.' }),
+          ],
+        },
+        {
+          id: 'trig-46a', title: 'Ley de senos',
+          // Clase T16 (video/clase_trig_t16).
+          clip: { scenes: [
+            sc(5, 'Un triángulo **oblicuo** no tiene ángulo recto. Igual podemos resolverlo.', { viz: { type: 'oblique', a: 8, b: 10, C: 70 } }),
+            sc(6, 'Cada lado es proporcional al seno de su ángulo opuesto.', { title: '$\\dfrac{\\sen A}{a} = \\dfrac{\\sen B}{b} = \\dfrac{\\sen C}{c}$', viz: { type: 'oblique', a: 8, b: 10, anim: [50, 100], show: 'senos' } }),
+            sc(5, 'Úsala cuando conozcas dos ángulos y un lado (ALA, AAL). Con LLA puede haber 0, 1 o 2 triángulos: el **caso ambiguo**.', { steps: ['$A + B + C = 180^\\circ$', '$b = \\dfrac{a \\sen B}{\\sen A}$'] }),
+          ] },
+          ex: [
+            play('compas-ambiguo', 'El lado $a$ es el brazo de un compás clavado en $C$. Marca cada lugar donde toca la base, o di que no hay triángulo', {
+              rounds: [{ A: 30, b: 10, a: 6 }, { A: 30, b: 10, a: 4 }, { A: 30, b: 10, a: 5 }, { A: 50, b: 8, a: 10 }],
+            }, 'La altura desde $C$ es $h = b\\operatorname{sen} A = 5$ en las tres primeras. Con $a = 6 > h$ (y menor que $b$) hay dos triángulos; con $a = 4 < h$, ninguno; con $a = h = 5$, uno rectángulo. Con $a = 10 > b = 8$ solo un corte cae a la derecha de $A$: un triángulo.',
+              { hint: 'Calcula la altura h = b · sen A desde C hasta la base. Si a es menor que h, el brazo no llega; si es igual, toca en un punto; si es mayor, puede cortar dos veces, pero solo valen los cortes del lado derecho de A.' }),
+            num('Si $a = 10$, $A = 30^\\circ$ y $B = 45^\\circ$, ¿cuánto mide $b$? (con dos decimales)', 10 * Math.SQRT2, '$b = \\dfrac{10 \\operatorname{sen} 45^\\circ}{\\operatorname{sen} 30^\\circ} = 10\\sqrt2 \\approx 14.14$.',
+              { tol: 0.02, answerText: '$10\\sqrt2 \\approx 14.14$', hint: 'Tienes la pareja a y A completa. Plantea a / sen A = b / sen B y despeja b.' }),
+          ],
+        },
+        {
+          id: 'trig-46b', title: 'Ley de cosenos y área',
+          // Clase T17 (video/clase_trig_t17).
+          clip: { scenes: [
+            sc(6, 'Con dos lados y el ángulo entre ellos (LAL), la **ley de cosenos** da el tercer lado. Es un Pitágoras generalizado.', { title: '$c^2 = a^2 + b^2 - 2ab\\cos C$', viz: { type: 'oblique', a: 7, b: 9, anim: [40, 120], show: 'cosenos' } }),
+            sc(5, 'Si $C = 90^\\circ$, $\\cos C = 0$ y vuelve a ser Pitágoras.', { viz: { type: 'oblique', a: 7, b: 9, C: 90, show: 'cosenos' } }),
+            sc(6, 'Área: con dos lados y el ángulo comprendido, o con los tres lados (**Herón**).', { steps: ['$\\text{Área} = \\tfrac12 ab \\sen C$', '$\\text{Área} = \\sqrt{s(s - a)(s - b)(s - c)}$', '$s = \\tfrac{a + b + c}{2}$'] }),
+          ] },
+          ex: [
+            play('brazo-robot', 'Dobla el codo del robot para que la pinza agarre la gema', {
+              rounds: [{ a: 8, b: 15, c: 13, ring: true }, { a: 3, b: 5, c: 7 }, { a: 4, b: 7, c: 6 }, { a: 6, b: 9, c: 10 }],
+            }, 'Despejando la ley de cosenos, $\\cos C = \\dfrac{a^2 + b^2 - c^2}{2ab}$: $\\tfrac{64 + 225 - 169}{240} = \\tfrac12$ da $60^\\circ$; $\\tfrac{9 + 25 - 49}{30} = -\\tfrac12$ da $120^\\circ$; $\\tfrac{16 + 49 - 36}{56} \\approx 0.518$ da $\\approx 58.8^\\circ$; $\\tfrac{36 + 81 - 100}{108} \\approx 0.157$ da $\\approx 81^\\circ$.',
+              { hint: 'Despeja cos C de c² = a² + b² − 2ab cos C y usa la inversa del coseno. Si cos C sale negativo, el codo queda abierto: más de 90°.' }),
+            num('Halla $c$ si $a = 5$, $b = 8$ y $C = 60^\\circ$', 7, '$c^2 = 25 + 64 - 2(5)(8)(0.5) = 49 \\Rightarrow c = 7$.',
+              { hint: 'Es el caso LAL: aplica c² = a² + b² − 2ab cos C con cos 60° = 0.5 y saca la raíz al final.' }),
+          ],
+        },
+      ],
+    },
+    {
+      world: 'polar', title: 'Forma polar de números complejos',
+      lessons: [
+        {
+          id: 'trig-151', title: 'Forma trigonométrica de un complejo',
+          // Clase T18 (video/clase_trig_t18): escenas de respaldo hasta enlazar el video de Bunny. Libro UdeA §15.1.
+          clip: { scenes: [
+            sc(6, 'Un complejo $z = a + bi$ es un punto del plano; también se describe por su **módulo** $r$ y su **argumento** $\\theta$.', { title: '$z = r(\\cos\\theta + i\\,\\sen\\theta)$', steps: ['$a = r\\cos\\theta,\\quad b = r\\,\\sen\\theta$', '$r = \\sqrt{a^2 + b^2},\\quad \\tan\\theta = \\tfrac{b}{a}$'] }),
+            sc(6, 'El argumento se elige mirando el **cuadrante** del punto $(a, b)$, no solo la tangente.', { steps: ['$z = -2 - 2\\sqrt3\\,i$: $r = 4$, tercer cuadrante', '$\\tan\\theta = \\sqrt3 \\Rightarrow \\theta = \\tfrac{\\pi}{3} + \\pi = \\tfrac{4\\pi}{3}$'] }),
+            sc(5, 'Los puntos sobre los ejes son los fáciles: reales positivos $\\theta = 0$, imaginarios positivos $\\theta = \\tfrac{\\pi}{2}$, reales negativos $\\theta = \\pi$, imaginarios negativos $\\theta = \\tfrac{3\\pi}{2}$.', { steps: ['$3i = 3(\\cos\\tfrac{\\pi}{2} + i\\,\\sen\\tfrac{\\pi}{2})$'] }),
+          ] },
+          ex: [
+            play('mapa-tesoro', 'El pirata solo entiende rumbo y pasos: programa su caminata hasta la X', {
+              rounds: [
+                { a: -1, b: Math.sqrt(3), label: '−1 + √3 i' },
+                { a: 2, b: -2, label: '2 − 2i' },
+                { a: 0, b: -3, label: '−3i' },
+                { a: -Math.sqrt(3), b: -1, label: '−√3 − i' },
+              ],
+            }, '$-1 + \\sqrt3\\,i$: $r = \\sqrt{1 + 3} = 2$, segundo cuadrante, $\\theta = 120^\\circ$. $2 - 2i$: $r = 2\\sqrt2$, cuarto cuadrante, $315^\\circ$. $-3i$: $r = 3$ sobre el eje imaginario negativo, $270^\\circ$. $-\\sqrt3 - i$: $r = 2$, tercer cuadrante, $180^\\circ + 30^\\circ = 210^\\circ$.',
+              { hint: 'Los pasos son el módulo: la raíz de a² + b². El rumbo es el argumento: busca el ángulo de referencia con |b| / |a| y luego mira en qué cuadrante está la X.' }),
+            play('mapa-tesoro', 'Cuadrantes engañosos: la tangente sola no basta', {
+              rounds: [
+                { a: -3, b: 3, label: '−3 + 3i' },
+                { a: 1, b: -Math.sqrt(3), label: '1 − √3 i' },
+                { a: -4, b: 0, label: '−4' },
+              ],
+            }, '$-3 + 3i$: $r = 3\\sqrt2$ y, aunque $\\tfrac{b}{a} = -1$, el punto está en el II: $135^\\circ$ (no $-45^\\circ$). $1 - \\sqrt3\\,i$: $r = 2$, cuarto cuadrante, $300^\\circ$. $-4$: $r = 4$ sobre el eje real negativo, $180^\\circ$.',
+              { hint: 'Dos puntos opuestos tienen la misma tangente. Ubica primero el punto en el plano y decide el cuadrante; solo después calcula el ángulo.' }),
+            num('¿Cuál es el módulo de $z = -6 + 8i$?', 10, '$r = \\sqrt{36 + 64} = \\sqrt{100} = 10$.',
+              { hint: 'El módulo es la distancia del punto (−6, 8) al origen: los signos no importan, porque se elevan al cuadrado.' }),
+            num('Argumento, en grados entre $0^\\circ$ y $360^\\circ$, de $z = -1 - i$', 225, 'El punto $(-1, -1)$ está en el tercer cuadrante; el ángulo de referencia es $45^\\circ$ porque $\\tfrac{1}{1} = \\tan 45^\\circ$: $\\theta = 180^\\circ + 45^\\circ = 225^\\circ$.',
+              { suffix: '°', hint: 'Ubica el punto: a y b negativos. Halla el ángulo agudo con |b| / |a| y llévalo a ese cuadrante.' }),
+          ],
+        },
+        {
+          id: 'trig-152', title: 'Producto, cociente y potencias: De Moivre',
+          // Video zoom `demoivre` (video/trig-zoom): escenas de respaldo hasta enlazar su ID de Bunny. Las raíces son la lección trig-153.
+          clip: { scenes: [
+            sc(6, 'En forma polar, **multiplicar** es multiplicar módulos y **sumar** argumentos; **dividir** es dividir módulos y **restar** argumentos.', { steps: ['$z_1 z_2 = r_1 r_2\\,[\\cos(\\theta_1 + \\theta_2) + i\\,\\sen(\\theta_1 + \\theta_2)]$', '$\\tfrac{z_1}{z_2} = \\tfrac{r_1}{r_2}\\,[\\cos(\\theta_1 - \\theta_2) + i\\,\\sen(\\theta_1 - \\theta_2)]$'] }),
+            sc(5, 'Multiplicar por $i = \\mathrm{cis}\\,90^\\circ$ **gira** el punto un cuarto de vuelta sin cambiar su tamaño.', { steps: ['$i \\cdot (3 + 2i) = -2 + 3i$', '$i^2 = -1$: dos cuartos de vuelta'] }),
+            sc(6, '**Teorema de De Moivre**: elevar a $n$ es elevar el módulo a $n$ y multiplicar el argumento por $n$.', { title: '$z^n = r^n(\\cos n\\theta + i\\,\\sen n\\theta)$', steps: ['$(-1 + \\sqrt3\\,i)^{12} = 2^{12}(\\cos 8\\pi + i\\,\\sen 8\\pi) = 2^{12}$'] }),
+          ] },
+          ex: [
+            play('telarana-polar', 'Lleva la araña al nudo del producto', {
+              rounds: [
+                { op: '×', z1: { r: 2, deg: 150 }, z2: { r: 3, deg: 300 } },
+                { op: '×', z1: { r: 4, deg: 60 }, z2: { r: 0.5, deg: 75 } },
+                { op: '×', z1: { r: 3, deg: 200 }, z2: { r: 2, deg: 220 } },
+              ],
+            }, 'Producto: se multiplican los módulos y se suman los ángulos. $2 \\cdot 3 = 6$ y $150^\\circ + 300^\\circ = 450^\\circ \\to 90^\\circ$; $4 \\cdot 0.5 = 2$ y $60^\\circ + 75^\\circ = 135^\\circ$; $3 \\cdot 2 = 6$ y $200^\\circ + 220^\\circ = 420^\\circ \\to 60^\\circ$.',
+              { hint: 'Los hilos son módulos y los rayos son ángulos. Al multiplicar, los módulos se multiplican (no se suman) y los ángulos se suman. Si el ángulo se pasa de 360°, réstale una vuelta.' }),
+            play('telarana-polar', 'Ahora divide: lleva la araña al nudo del cociente', {
+              rounds: [
+                { op: '÷', z1: { r: 6, deg: 45 }, z2: { r: 2, deg: 120 } },
+                { op: '÷', z1: { r: 6, deg: 30 }, z2: { r: 3, deg: 210 } },
+                { op: '÷', z1: { r: 8, deg: 90 }, z2: { r: 4, deg: 300 } },
+              ],
+            }, 'Cociente: se dividen los módulos y se restan los ángulos. $6 / 2 = 3$ y $45^\\circ - 120^\\circ = -75^\\circ \\to 285^\\circ$; $6 / 3 = 2$ y $30^\\circ - 210^\\circ = -180^\\circ \\to 180^\\circ$; $8 / 4 = 2$ y $90^\\circ - 300^\\circ = -210^\\circ \\to 150^\\circ$.',
+              { hint: 'Dividir deshace multiplicar: los módulos se dividen y los ángulos se restan (el de arriba menos el de abajo). Si el ángulo queda negativo, súmale una vuelta.' }),
+            play('espiral-potencias', 'Multiplica por z hasta caer justo en la estrella', {
+              rounds: [
+                { z: { r: Math.SQRT2, deg: 315 }, goal: { r: 8, deg: 90 }, zLabel: '1 − i', label: '8i' },
+                { z: { r: 1, deg: 72 }, goal: { r: 1, deg: 0 }, zLabel: 'cis 72°', label: '1' },
+                { z: { r: 2, deg: 90 }, goal: { r: 16, deg: 0 }, zLabel: '2i', label: '16' },
+                { z: { r: 1, deg: 135 }, goal: { r: 1, deg: 270 }, zLabel: 'cis 135°', label: '−i' },
+              ],
+            }, 'De Moivre: $z^n = r^n\\,\\mathrm{cis}\\,n\\theta$. $(\\sqrt2)^6 = 8$ y $6 \\cdot 315^\\circ = 1890^\\circ$, coterminal con $90^\\circ$: $n = 6$. $5 \\cdot 72^\\circ = 360^\\circ$: $n = 5$. $2^4 = 16$ y $4 \\cdot 90^\\circ = 360^\\circ$: $n = 4$. $2 \\cdot 135^\\circ = 270^\\circ$: $n = 2$.',
+              { hint: 'Cada multiplicación suma θ al ángulo y multiplica el módulo por r. Busca un n que dé el módulo de la estrella y, a la vez, un ángulo coterminal con el suyo.' }),
+            num('Calcula $(-1 + i)^4$ (es un número real)', -4, '$-1 + i = \\sqrt2\\,\\mathrm{cis}\\,135^\\circ$, así que $(-1 + i)^4 = 4\\,\\mathrm{cis}\\,540^\\circ = 4\\,\\mathrm{cis}\\,180^\\circ = -4$.',
+              { hint: 'Pasa −1 + i a forma polar, eleva el módulo a la cuarta y multiplica el ángulo por 4. Quita vueltas completas para ver dónde cae.' }),
+          ],
+        },
+        {
+          id: 'trig-153', title: 'Raíces n-ésimas de un complejo',
+          // Video zoom `raices` (video/trig-zoom): escenas de respaldo hasta enlazar su ID de Bunny. Libro UdeA §15.2 (raíces).
+          clip: { scenes: [
+            sc(6, '¿Qué número al cubo da 1? En la recta real solo el 1, pero una ecuación de grado 3 tiene **tres** raíces: las otras dos viven en el plano complejo.', { title: '$x^3 = 1$', steps: ['$1$', '$-\\tfrac12 + \\tfrac{\\sqrt3}{2}\\,i$', '$-\\tfrac12 - \\tfrac{\\sqrt3}{2}\\,i$'] }),
+            sc(7, 'Es De Moivre al revés: si $w^n = z$, el módulo de $w$ es $\\sqrt[n]{r}$ y su ángulo es $\\tfrac{\\theta}{n}$. Como $z$ también vive en $\\theta + 360^\\circ$, $\\theta + 720^\\circ$…, salen **$n$ raíces distintas**, una cada $\\tfrac{360^\\circ}{n}$.', { title: '$w_k = \\sqrt[n]{r}\\;\\mathrm{cis}\\,\\dfrac{\\theta + 360^\\circ k}{n}$', steps: ['Raíces cuartas de $-16$ ($r = 16$, $\\theta = 180^\\circ$): $2\\,\\mathrm{cis}\\,45^\\circ, 135^\\circ, 225^\\circ, 315^\\circ$'] }),
+            sc(5, 'Las $n$ raíces tienen el mismo módulo y reparten la vuelta en partes iguales: son los **vértices de un polígono regular**.', { steps: ['Raíces cúbicas: un triángulo equilátero', 'Raíces sextas de $64$: radio $2$, cada $60^\\circ$, un hexágono'] }),
+          ] },
+          ex: [
+            play('flor-de-raices', 'Gira la flor y elige su radio para que cada pétalo sea una raíz', {
+              rounds: [
+                { n: 4, r: 16, deg: 240, label: '−8 − 8√3 i' },
+                { n: 3, r: 27, deg: 180, label: '−27' },
+                { n: 3, r: 8, deg: 270, label: '−8i' },
+              ],
+            }, 'Radio $\\sqrt[n]{r}$ y un pétalo en $\\tfrac{\\theta}{n}$; los demás cada $\\tfrac{360^\\circ}{n}$. $-8 - 8\\sqrt3\\,i = 16\\,\\mathrm{cis}\\,240^\\circ$: radio 2 y pétalos en $60^\\circ, 150^\\circ, 240^\\circ, 330^\\circ$. $-27$: radio 3, en $60^\\circ, 180^\\circ, 300^\\circ$. $-8i = 8\\,\\mathrm{cis}\\,270^\\circ$: radio 2, en $90^\\circ, 210^\\circ, 330^\\circ$.',
+              { hint: 'El radio de la flor es la raíz n-ésima del módulo, no el módulo dividido entre n. Para girarla, divide el ángulo de z entre n: ahí va un pétalo, y los demás lo siguen solos.' }),
+            play('flor-de-raices', 'Más pétalos: cuadradas, quintas y sextas', {
+              rounds: [
+                { n: 2, r: 4, deg: 90, label: '4i' },
+                { n: 5, r: 32, deg: 0, label: '32' },
+                { n: 6, r: 64, deg: 180, label: '−64' },
+              ],
+            }, '$4i = 4\\,\\mathrm{cis}\\,90^\\circ$: radio 2, pétalos en $45^\\circ$ y $225^\\circ$ (a media vuelta). $32$: radio 2, en $0^\\circ, 72^\\circ, 144^\\circ, 216^\\circ, 288^\\circ$. $-64 = 64\\,\\mathrm{cis}\\,180^\\circ$: radio $\\sqrt[6]{64} = 2$ y un pétalo cada $60^\\circ$ desde $30^\\circ$.',
+              { hint: 'Cuantos más pétalos, más juntos: el salto entre uno y otro es 360° dividido entre n. El radio es el número que, elevado a n, da el módulo.' }),
+            play('espiral-potencias', 'Comprueba la raíz: multiplica w por sí misma hasta caer en la estrella', {
+              rounds: [
+                { z: { r: 1, deg: 90 }, goal: { r: 1, deg: 0 }, zLabel: 'i', label: '1' },
+                { z: { r: 3, deg: 60 }, goal: { r: 9, deg: 120 }, zLabel: '3 cis 60°', label: '9 cis 120°' },
+                { z: { r: 2, deg: 40 }, goal: { r: 8, deg: 120 }, zLabel: '2 cis 40°', label: '8 cis 120°' },
+              ],
+            }, 'Una raíz $n$-ésima de $z$ es un $w$ que, multiplicado $n$ veces por sí mismo, da $z$. $i$ llega a 1 en $n = 4$: es raíz cuarta de 1. $3\\,\\mathrm{cis}\\,60^\\circ$ llega a $9\\,\\mathrm{cis}\\,120^\\circ$ en $n = 2$: es una raíz cuadrada. $2\\,\\mathrm{cis}\\,40^\\circ$ llega a $8\\,\\mathrm{cis}\\,120^\\circ$ en $n = 3$.',
+              { hint: 'Cada vez que multiplicas, el módulo se multiplica por el de w y el ángulo suma el de w. Busca el n que deja las dos cosas justo en la estrella.' }),
+            num('Entre las raíces cúbicas de $8i$, ¿cuál es el argumento (en grados) de la de menor argumento positivo?', 30, '$8i = 8\\,\\mathrm{cis}\\,90^\\circ$: las raíces son $2\\,\\mathrm{cis}\\,30^\\circ$, $2\\,\\mathrm{cis}\\,150^\\circ$ y $2\\,\\mathrm{cis}\\,270^\\circ$.',
+              { suffix: '°', hint: 'Escribe 8i en forma polar. Al elevar al cubo, el ángulo se multiplica por 3: aquí hay que deshacer eso. Las otras dos raíces quedan igual de separadas en la vuelta.' }),
+          ],
+        },
+      ],
+    },
+  ],
+};
