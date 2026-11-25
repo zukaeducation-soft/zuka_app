@@ -38,9 +38,10 @@ GAMES['hilo-referente'] = (() => {
       const wrap = play.querySelector('.lec-thread'), knob = play.querySelector('.lec-knob'), path = play.querySelector('.lec-line');
       if (!wrap || !knob || !path) return;
       const W = wrap.getBoundingClientRect(), K = knob.getBoundingClientRect();
-      const x0 = K.left + K.width / 2 - W.left, y0 = K.top + K.height / 2 - W.top;
+      const x0 = (K.left + K.width / 2 - W.left) / zk(), y0 = (K.top + K.height / 2 - W.top) / zk();
       let x1, y1;
       if (pt) { x1 = pt[0] - W.left; y1 = pt[1] - W.top; } else if (target) { const T = target.getBoundingClientRect(); x1 = T.left + T.width / 2 - W.left; y1 = T.bottom - W.top - 2; } else { path.setAttribute('d', ''); return; }
+      const z = zk(); x1 /= z; y1 /= z;
       const lift = Math.max(26, Math.abs(x1 - x0) * 0.25);
       path.setAttribute('d', `M${x0} ${y0} C ${x0} ${Math.max(y0, y1) + lift}, ${x1} ${Math.max(y0, y1) + lift}, ${x1} ${y1}`);
     }

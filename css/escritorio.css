@@ -8,7 +8,7 @@
 
 @media (min-width: 1000px) {
   /* el menú va a la izquierda (spec 2026-11-24-menu-lateral): nada se acomoda encima de él */
-  :root { --tabbar-h: 0px !important; --nav-h: 0px; --side: 244px; --gut: max(32px, calc(50% - 760px)); }
+  :root { --tabbar-h: 0px !important; --nav-h: 0px; --side: 244px; --gut: max(32px, calc(50% - 780px)); }
   body { background: var(--bg); }
   #app { max-width: none; border: 0; padding-left: var(--side); }
 
@@ -64,20 +64,20 @@
   .gym-top { grid-template-columns: 1fr auto; align-items: end; } .gym-top .world-back { grid-column: 1 / -1; } .gym-tit h1 { font-size: 34px; } .gh-art { width: 72px; height: 72px; } .gh-stats { gap: 30px; padding-bottom: 8px; } .gh-stats b { font-size: 28px; }
   .gym-hero { grid-template: "esc txt" 1fr "esc niv" auto / minmax(0, 1.05fr) minmax(0, 1fr); }
   .gb-escena { grid-area: esc; height: auto; min-height: 380px; } .gb-lev.gb-win { width: 340px; } .gb-win .gb-barra { margin-bottom: -78px; } .gb-win .gb-mono { width: 150px; } .gb-lev { width: min(480px, 92%); bottom: 36px; } .gb-barra { margin-bottom: -108px; } .gb-mono { width: 214px; } .gb-piso { width: 270px; height: 26px; bottom: 24px; } .gb-luz { width: 560px; height: 520px; }
-  .gym-today { grid-area: txt; align-content: center; justify-items: start; text-align: left; padding: 34px 36px 22px 8px; } .gym-today h2 { font-size: clamp(30px, 2.6vw, 40px); } .gt-sub { font-size: 16.5px; }
+  .gym-today { grid-area: txt; align-content: center; justify-items: start; text-align: left; padding: 34px 36px 22px 8px; } .gym-today h2 { font-size: clamp(30px, calc(2.6 * var(--dvw)), 40px); } .gt-sub { font-size: 16.5px; }
   .gym-levels { grid-area: niv; padding: 16px 28px 22px 0; border: 0; background: none; } .gd { width: 88px; height: 88px; } .gd-vuela { margin: -44px 0 0 -44px; } .gym-lv b { font-size: 16px; } .gym-lv small { font-size: 14px; }
   .gym-list { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; } .gi-body b { font-size: 18px; } .gi-body > small { font-size: 14px; }
   .gym-run .gym-cols { grid-template-columns: 1.15fr 1fr; gap: 28px; align-items: start; } .gym-run .gym-problem { font-size: 19px; padding: 24px; } .gym-run .gym-intro h2 { font-size: 34px; }
   .lesson.gym-run:not(.clip-mode) .lesson-body > .gym-intro { max-width: 1000px; }
   /* el paso: entrenador y reto a la izquierda, el juego grande a la derecha (no cuentan para el alto: mountSketch mide el juego) */
   .lesson.gym-run:not(.clip-mode) .lesson-body > .gym-step { position: relative; display: block; max-width: 1180px; padding-left: 372px; }
-  .gym-run .gym-lado { --h: calc(100dvh - 216px); position: sticky; top: 0; width: 336px; height: var(--h); margin: 0 0 calc(var(--h) * -1) -372px; overflow-y: auto; display: grid; gap: 14px; align-content: start; scrollbar-width: thin; }
+  .gym-run .gym-lado { --h: calc(calc(100 * var(--dvh)) - 216px); position: sticky; top: 0; width: 336px; height: var(--h); margin: 0 0 calc(var(--h) * -1) -372px; overflow-y: auto; display: grid; gap: 14px; align-content: start; scrollbar-width: thin; }
   .gym-run .gym-lado .coach, .gym-run .gym-lado .gym-reto, .gym-run .gym-lado .gym-notes { margin: 0; } .gym-run .coach { display: grid; padding: 18px; } .gym-run .coach-av, .gym-run .coach-av .mascot { width: 72px; height: auto; } .gym-run .coach p { font-size: 16px; }
   .gym-run .gym-lado .coach { order: -1; }
   /* lecturas: el texto y la actividad, uno al lado del otro; el entrenador encima */
   .lesson.gym-run:not(.clip-mode) .lesson-body > .gym-step:has(.lec) { padding-left: 0; } .gym-run .gym-step:has(.lec) .gym-lado { position: static; width: auto; height: auto; margin: 0 0 14px; overflow: visible; grid-template-columns: 1fr 1fr; align-items: start; }
-  .gym-run .gym-step:has(.lec) .lec-doc { max-height: 46dvh; overflow-y: auto; }
-  @media (max-height: 760px) { .gym-run .coach { display: flex; padding: 12px 14px; } .gym-run .coach-av, .gym-run .coach-av .mascot { width: 44px; } .gym-run .coach p { font-size: 15px; } .gym-run .gym-lado { gap: 10px; } }
+  .gym-run .gym-step:has(.lec) .lec-doc { max-height: calc(46 * var(--dvh)); overflow-y: auto; }
+  @media (max-height: 608px) { .gym-run .coach { display: flex; padding: 12px 14px; } .gym-run .coach-av, .gym-run .coach-av .mascot { width: 44px; } .gym-run .coach p { font-size: 15px; } .gym-run .gym-lado { gap: 10px; } }
 
   /* ---- dentro de un curso (spec 2026-11-24-escritorio-curso): a la izquierda la portada y por dónde se va; a la
      derecha los componentes, los mundos o las lecciones, en rejilla ---- */
@@ -93,7 +93,7 @@
   .cv-side .ch-prog { width: 100%; }
   .cv-side .home-continue { width: 100%; margin: 0; }
   .cv-side .hk-top > .cart { display: none; }   /* la figura del curso ya está arriba */
-  @media (max-height: 780px) { .cv-side { position: static; gap: 10px; } .cv-side .course-head .cart.xl { width: 64px; height: 64px; } }
+  @media (max-height: 624px) { .cv-side { position: static; gap: 10px; } .cv-side .course-head .cart.xl { width: 64px; height: 64px; } }
   .cv-main .comp-title, .cv-title { display: block; margin: 0 0 18px; font-family: var(--display); font-weight: 500; font-size: 24px; line-height: 1.2; }
 
   /* componentes: dos tarjetas altas, con los mundos que trae cada una */
@@ -154,19 +154,19 @@
 
   /* ---- Clips: el video vertical en el centro ---- */
   body[data-tab=clips] #view { background: #000; }
-  .feed-item .clip { max-width: calc((100dvh - var(--nav-h)) * 9 / 16); border-radius: 0; }
-  .chips { left: 50%; right: auto; width: calc((100dvh - var(--nav-h)) * 9 / 16); transform: translateX(-50%); }
-  .rail { right: calc(50% - (100dvh - var(--nav-h)) * 9 / 32 - 76px); bottom: 48px; }
+  .feed-item .clip { max-width: calc((calc(100 * var(--dvh)) - var(--nav-h)) * 9 / 16); border-radius: 0; }
+  .chips { left: 50%; right: auto; width: calc((calc(100 * var(--dvh)) - var(--nav-h)) * 9 / 16); transform: translateX(-50%); }
+  .rail { right: calc(50% - (calc(100 * var(--dvh)) - var(--nav-h)) * 9 / 32 - 76px); bottom: 48px; }
 
   /* ---- hojas: ventana centrada en vez de hoja que sube ---- */
   .sheet-card {
-    top: 50%; bottom: auto; max-width: 520px; max-height: 84vh; border-radius: 24px; border: 1px solid var(--line);
+    top: 50%; bottom: auto; max-width: 520px; max-height: calc(84 * var(--dvh)); border-radius: 24px; border: 1px solid var(--line);
     padding-bottom: 24px; transform: translate(-50%, -46%) scale(.97); opacity: 0; transition: transform .22s ease, opacity .22s ease;
   }
   #sheet.open .sheet-card { transform: translate(-50%, -50%); opacity: 1; }
 
   /* ---- entrada: ventana sobre la presentación (como «Sign in» de Brilliant) ---- */
-  #auth { z-index: 37; display: grid; place-items: center; padding: 4vh 16px; background: rgba(4, 6, 14, .62); backdrop-filter: blur(3px); }
+  #auth { z-index: 37; display: grid; place-items: center; padding: calc(4 * var(--dvh)) 16px; background: rgba(4, 6, 14, .62); backdrop-filter: blur(3px); }
   .auth-in { min-height: 0; width: min(100%, 460px); padding: 28px 36px 26px; border-radius: 28px; border: 1px solid var(--line); box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .6); }
 
   /* ---- lección: barra arriba, panel amplio, ejercicio en el centro ---- */
@@ -191,7 +191,7 @@
   .lesson:not(.clip-mode) .practice > .ex-area { grid-column: 2; grid-row: 1 / span 3; }
   .lesson:not(.clip-mode) .practice .ex-q { font-size: 25px; line-height: 1.25; }
   /* «Comprobar» va en la columna del enunciado: el juego gana el alto de la barra de abajo. */
-  .lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) { --pw: min(1180px, calc(100vw - 120px)); }
+  .lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) { --pw: min(1180px, calc(calc(100 * var(--dvw)) - 120px)); }
   .lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .lesson-body { margin-bottom: 18px; border-bottom: 1px solid var(--line); border-radius: 28px; }
   .lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .lesson-foot {
     position: absolute; left: calc(50% - var(--pw) / 2); bottom: 44px; width: min(320px, calc(var(--pw) * .3)); margin: 0; padding: 0;
@@ -224,7 +224,7 @@
   .feedback .btn { max-width: 460px; display: block; margin-inline: auto; }
 
   /* ---- video vertical de la lección: en el centro, con paneles a los lados ---- */
-  .lesson.clip-mode { --clipw: min(calc((100dvh - 120px) * 9 / 16), calc(100vw - 760px)); background: radial-gradient(1000px 700px at 50% 30%, color-mix(in srgb, var(--c) 14%, var(--bg)), var(--bg) 70%); }
+  .lesson.clip-mode { --clipw: min(calc((calc(100 * var(--dvh)) - 120px) * 9 / 16), calc(calc(100 * var(--dvw)) - 760px)); background: radial-gradient(1000px 700px at 50% 30%, color-mix(in srgb, var(--c) 14%, var(--bg)), var(--bg) 70%); }
   .lesson.clip-mode .lesson-top { display: flex; }
   .lesson.clip-mode .lesson-body.is-clip { padding: 0 0 24px; }
   .lesson.clip-mode .lesson-body.is-clip .clip { max-width: var(--clipw); border-radius: 22px; box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .7), 0 0 0 1px var(--line); }
@@ -262,7 +262,7 @@
 }
 
 /* riel angosto: solo iconos con su nombre debajo */
-@media (min-width: 1000px) and (max-width: 1239px) {
+@media (min-width: 1000px) and (max-width: 1199px) {
   :root { --side: 96px; }
   #topbar, body:not([data-tab=learn]):not([data-tab=gym]) #topbar, body[data-tab=clips] #topbar { padding: 18px 10px 14px; }
   .tb-logo-d { align-self: center; padding: 4px; width: 46px; overflow: hidden; justify-content: flex-start; }
@@ -271,18 +271,18 @@
   #tabbar button, body[data-tab=clips] #tabbar button { flex-direction: column; justify-content: center; gap: 5px; padding: 11px 2px; font-size: 12.5px; }
   .tb-admin { flex-direction: column; gap: 4px; padding: 9px 2px; font-size: 12px; text-align: center; }
 }
-@media (min-width: 1000px) and (max-height: 660px) {
+@media (min-width: 1000px) and (max-height: 528px) {
   #topbar .tb-stats { display: none; }
   #tabbar, body[data-tab=clips] #tabbar { top: 72px; gap: 0; }
   #tabbar button, body[data-tab=clips] #tabbar button { padding-block: 8px; }
   .tb-admin { padding-block: 7px; }
 }
-@media (min-width: 1000px) and (max-width: 1420px) {
+@media (min-width: 1000px) and (max-width: 1199px) {
   .learn.cv, .learn.cv-world { grid-template-columns: 300px minmax(0, 1fr); gap: 0 28px; }
 }
 
 /* Pantallas bajas de computador: el video y los paneles se acomodan sin taparse. */
-@media (min-width: 1000px) and (max-height: 700px) {
+@media (min-width: 1000px) and (max-height: 560px) {
   .ls-note, .ls-keys { display: none; }
 }
 
@@ -378,7 +378,7 @@
   .lesson.xp-lesson .exq-sol li, .lesson.xp-lesson .exq-step, .lesson.xp-lesson .exq-opt { font-size: 18px; transition: border-color .2s, background .2s; }
   .lesson.xp-lesson .exq-opt:hover, .lesson.xp-lesson .exq-step:hover, .lesson.xp-lesson .exq-chip:hover { border-color: var(--c-ink); }
   .lesson.xp-lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .feedback {
-    left: calc(50% - var(--pw) / 2 - 12px); right: auto; width: calc(var(--lado) + 24px); bottom: 34px; max-height: calc(100dvh - 250px); overflow: auto;
+    left: calc(50% - var(--pw) / 2 - 12px); right: auto; width: calc(var(--lado) + 24px); bottom: 34px; max-height: calc(calc(100 * var(--dvh)) - 250px); overflow: auto;
     padding: 20px; border: 1px solid var(--line); border-radius: 22px;
   }
   .lesson.xp-lesson:not(.clip-mode) .feedback .btn { position: sticky; bottom: 0; }
@@ -386,7 +386,7 @@
   .lesson.xp-lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .feedback.bad { border-color: color-mix(in srgb, var(--bad) 55%, var(--line)); }
   .lesson.xp-lesson.fb-open:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .lesson-body { padding-bottom: 16px !important; }
 }
-@media (min-width: 1000px) and (max-height: 780px) {
+@media (min-width: 1000px) and (max-height: 624px) {
   .explora .xp-text { font-size: 19px; }
   .explora .xp-step { gap: 8px; padding-bottom: 4px; }
   .explora .xp-nota, .explora .t-muestra ~ .xp-nota { min-height: 44px; font-size: 17px; }
@@ -395,7 +395,7 @@
   .lesson.xp-lesson:not(.clip-mode) .practice .ex-q { font-size: 18px; }
   .lesson.xp-lesson:not(.clip-mode) .practice > .ex-head { margin-top: 4px; }
   .lesson.xp-lesson:not(.clip-mode) .feedback .fb-exp { font-size: 14px; }
-  .lesson.xp-lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .feedback { padding: 14px 18px; max-height: calc(100dvh - 300px); }
+  .lesson.xp-lesson:has(.lesson-body > .practice):not(:has(.lec)):not(.clip-mode) .feedback { padding: 14px 18px; max-height: calc(calc(100 * var(--dvh)) - 300px); }
   .xg .xg-lona, .xg .xg-perillas, .xg .xg-muda, .xg .xp-svg { max-width: 500px; }
   .lesson.xp-lesson:not(.clip-mode) .xg { padding: 10px 24px; }
   .xg .xp-stage { gap: 12px; }

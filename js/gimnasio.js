@@ -641,7 +641,7 @@ function renderGym() {
         movio = true; b.setPointerCapture(id); hero.classList.add('espera');
         cop = b.querySelector('.gd').cloneNode(true); cop.className = `gd gd-vuela lv${b.dataset.lv}`; G.append(cop);
       }
-      if (cop) { cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; }
+      if (cop) { cop.style.left = `${e.clientX / zk()}px`; cop.style.top = `${e.clientY / zk()}px`; }
     };
     b.onpointerup = e => {
       if (e.pointerId !== id) return;
@@ -739,7 +739,7 @@ function startReto(c, r) {
     if (pos >= r.steps.length) return finish();
     const s = r.steps[pos];
     // Un solo contenedor: mountSketch (kit.js) mide el primer hijo de .lesson-body para achicar el juego si no cabe.
-    body.innerHTML = `<div class="gym-step"><div class="gym-lado"><details class="gym-reto"${esEscritorio() && innerHeight > 760 ? ' open' : ''}><summary><span>El reto</span><span class="gr-n">Paso ${pos + 1} de ${r.steps.length}</span></summary><div>${tex(r.problem)}</div></details>
+    body.innerHTML = `<div class="gym-step"><div class="gym-lado"><details class="gym-reto"${esEscritorio() && innerHeight / zk() > 760 ? ' open' : ''}><summary><span>El reto</span><span class="gr-n">Paso ${pos + 1} de ${r.steps.length}</span></summary><div>${tex(r.problem)}</div></details>
       <div class="coach" role="note"><span class="coach-av">${mascotSVG('think')}</span><div><small>Paso ${pos + 1} · ${esc(s.title)}</small><p></p>${conceptOf(s) ? `<button type="button" class="con-btn" data-concept>${ICON.bulb}Recordar el concepto</button>` : ''}</div></div>
       ${notebook()}</div><div class="gym-ex"></div></div>`;
     const cb = $('[data-concept]', body);

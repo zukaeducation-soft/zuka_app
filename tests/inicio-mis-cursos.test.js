@@ -118,7 +118,7 @@ test('el curso que se ve queda inscrito, y la vista del curso marca «Mis cursos
 
 test('el botón flotante usa la tinta del curso, queda dentro de la columna en escritorio y no se pinta fuera de Razonamiento', () => {
   assert.match(css, /\.gym-fab \{[^}]*color: var\(--c-on\)/);
-  assert.match(css, /\.gym-fab \{[^}]*right: max\(18px, calc\(\(100vw - 480px\) \/ 2 \+ 18px\)\)/);
+  assert.match(css, /\.gym-fab \{[^}]*right: max\(18px, calc\(\(calc\(100 \* var\(--dvw\)\) - 480px\) \/ 2 \+ 18px\)\)/);
   assert.match(app, /\$\{gymFabHTML\(c, ui\)\}/);
   assert.match(read('js/inicio.js'), /if \(!g\.fab\) return '';/);
 });

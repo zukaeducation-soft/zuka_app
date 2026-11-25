@@ -1,3 +1,4 @@
+if ('currentCSSZoom' in Element.prototype) document.documentElement.dataset.compacta = '';   // interfaz compacta (css/styles.css)
 // Panel de administración de Zuka (/admin). Todo lo que muestra o cambia pasa por la función admin(p_accion, p) de la base,
 // que comprueba es_admin() y deja rastro: esta página no guarda nada y sin rol admin no recibe datos.
 // Vistas por ancla: #inicio, #estudiantes, #estudiante/<id>, #codigos, #solicitudes, #ventas, #cursos, #ajustes.

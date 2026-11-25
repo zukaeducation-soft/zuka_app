@@ -298,6 +298,8 @@ function mountSketch(host, sketch, aspect = 1.25, gesture) {
   const fit = size => {
     const cv = inst?.canvas, body = host.closest?.('.lesson-body'), ex = body?.firstElementChild;
     if (!cv?.style) return;
+    // p5 saca la escala del ratón de scrollWidth, que no cuenta el zoom de la interfaz: se le da el tamaño en pantalla.
+    if (cv.getBoundingClientRect && !Object.hasOwn(cv, 'scrollWidth')) for (const [k, d] of [['scrollWidth', 'width'], ['scrollHeight', 'height']]) Object.defineProperty(cv, k, { configurable: true, get: () => cv.getBoundingClientRect()[d] });
     let k = 1;
     if (body && ex && typeof getComputedStyle === 'function') {
       const cs = getComputedStyle(body), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);

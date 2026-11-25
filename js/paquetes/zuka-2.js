@@ -10230,7 +10230,7 @@ const LEC = (() => {
           drag.el.classList.add('lifting');
         }
         if (drag.ghost) {
-          drag.ghost.style.left = `${e.clientX}px`; drag.ghost.style.top = `${e.clientY}px`;
+          drag.ghost.style.left = `${e.clientX / zk()}px`; drag.ghost.style.top = `${e.clientY / zk()}px`;
           play.querySelectorAll('.lec-zone.over').forEach(z => z.classList.remove('over'));
           drag.ghost.hidden = true;
           document.elementFromPoint(e.clientX, e.clientY)?.closest('.lec-zone')?.classList.add('over');
@@ -10487,9 +10487,10 @@ GAMES['hilo-referente'] = (() => {
       const wrap = play.querySelector('.lec-thread'), knob = play.querySelector('.lec-knob'), path = play.querySelector('.lec-line');
       if (!wrap || !knob || !path) return;
       const W = wrap.getBoundingClientRect(), K = knob.getBoundingClientRect();
-      const x0 = K.left + K.width / 2 - W.left, y0 = K.top + K.height / 2 - W.top;
+      const x0 = (K.left + K.width / 2 - W.left) / zk(), y0 = (K.top + K.height / 2 - W.top) / zk();
       let x1, y1;
       if (pt) { x1 = pt[0] - W.left; y1 = pt[1] - W.top; } else if (target) { const T = target.getBoundingClientRect(); x1 = T.left + T.width / 2 - W.left; y1 = T.bottom - W.top - 2; } else { path.setAttribute('d', ''); return; }
+      const z = zk(); x1 /= z; y1 /= z;
       const lift = Math.max(26, Math.abs(x1 - x0) * 0.25);
       path.setAttribute('d', `M${x0} ${y0} C ${x0} ${Math.max(y0, y1) + lift}, ${x1} ${Math.max(y0, y1) + lift}, ${x1} ${y1}`);
     }
@@ -11024,14 +11025,14 @@ const EXQ = (() => {
         const r = d.el.getBoundingClientRect();
         d.ghost = d.el.cloneNode(true);
         d.ghost.classList.add('exq-ghost');
-        Object.assign(d.ghost.style, { width: `${r.width}px`, left: `${r.left}px`, top: `${r.top}px` });
+        Object.assign(d.ghost.style, { width: `${r.width / zk()}px`, left: `${r.left / zk()}px`, top: `${r.top / zk()}px` });
         d.ox = e.clientX - r.left; d.oy = e.clientY - r.top;
         document.body.appendChild(d.ghost);
         d.el.classList.add('lift');
       }
       if (d.ghost) {
         e.preventDefault();
-        d.ghost.style.left = `${e.clientX - d.ox}px`; d.ghost.style.top = `${e.clientY - d.oy}px`;
+        d.ghost.style.left = `${(e.clientX - d.ox) / zk()}px`; d.ghost.style.top = `${(e.clientY - d.oy) / zk()}px`;
         const over = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-drop]');
         root.querySelectorAll('.over').forEach(o => o !== over && o.classList.remove('over'));
         if (over && root.contains(over)) over.classList.add('over');
@@ -11255,7 +11256,7 @@ const XG = (() => {
           const r = root.getBoundingClientRect(), f = fb.getBoundingClientRect();
           if (f.left >= r.right || f.right <= r.left) return;   // en computador el aviso va en otra columna
           const sobra = r.bottom - f.top, arriba = r.top - body.getBoundingClientRect().top;
-          if (sobra > 0) body.scrollBy({ top: Math.min(sobra, Math.max(0, arriba)), behavior: still() ? 'auto' : 'smooth' });
+          if (sobra > 0) body.scrollBy({ top: Math.min(sobra, Math.max(0, arriba)) / zk(), behavior: still() ? 'auto' : 'smooth' });
         };
         const fin = monta(stage, p, ui);
         return {
@@ -15966,7 +15967,7 @@ const HOJA = (() => {
     const s = root.isConnected && quienRueda(root); if (!s) return;
     const r = s.getBoundingClientRect(), y = m.getBoundingClientRect().top, fb = document.querySelector('.feedback.show')?.getBoundingClientRect();
     const abajo = fb && fb.left < r.right && fb.right > r.left ? Math.min(r.bottom, fb.top) : r.bottom;
-    if (y < r.top + 10 || y > abajo - 30) s.scrollBy({ top: y - r.top - (abajo - r.top) / 3, behavior: quieto() ? 'auto' : 'smooth' });
+    if (y < r.top + 10 || y > abajo - 30) s.scrollBy({ top: (y - r.top - (abajo - r.top) / 3) / zk(), behavior: quieto() ? 'auto' : 'smooth' });
   }, 700);
   const quieto = () => typeof xpStill === 'function' && xpStill();
   const tactil = () => { if (typeof xpTick === 'function') xpTick(); };
@@ -16300,7 +16301,7 @@ const HOJA = (() => {
           ui.s.o.forEach(i => ol.appendChild(li(i)));
           [...ol.children].forEach((x, n) => {
             x.classList.toggle('fija', n < fija);
-            const dy = antes.get(x) - x.getBoundingClientRect().top;
+            const dy = (antes.get(x) - x.getBoundingClientRect().top) / zk();
             if (!dy || x === menos || quieto() || !x.animate) return;
             x.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: ms, easing: 'cubic-bezier(.2,.8,.2,1)' });
           });

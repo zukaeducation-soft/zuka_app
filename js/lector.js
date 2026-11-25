@@ -96,7 +96,7 @@ async function openLector(id) {
     es.forEach(e => { const n = +e.target.dataset.n; e.isIntersecting ? L.vis.add(n) : L.vis.delete(n); });
     if (!L.vis.size) return;
     // La página que ocupa el centro de la pantalla.
-    const medio = cont.getBoundingClientRect().top + cont.clientHeight / 2;
+    const b0 = cont.getBoundingClientRect(), medio = b0.top + b0.height / 2;
     L.pag = [...L.vis].sort((a, b) => { const c = n => { const r = hojas[n - 1].getBoundingClientRect(); return Math.abs((r.top + r.bottom) / 2 - medio); }; return c(a) - c(b); })[0];
     if (document.activeElement !== input) input.value = L.pag;
     if (mio) { S.libros = { ...S.libros, [id]: L.pag }; }

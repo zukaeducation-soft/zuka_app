@@ -483,7 +483,7 @@ function xpChispas(stage) {
   for (let k = 0; k < 10; k++) {
     const d = document.createElement('i'), ang = (k / 10) * 2 * Math.PI + 0.3, far = 46 + 26 * (k % 3);
     d.className = 'xp-chispa';
-    d.style.left = r.left - h.left + r.width / 2 + 'px'; d.style.top = r.top - h.top + r.height / 2 + 'px';
+    d.style.left = (r.left - h.left + r.width / 2) / zk() + 'px'; d.style.top = (r.top - h.top + r.height / 2) / zk() + 'px';
     host.appendChild(d);
     d.animate([{ transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
       { transform: `translate(calc(-50% + ${Math.cos(ang) * far}px), calc(-50% + ${Math.sin(ang) * far}px)) scale(.2)`, opacity: 0 }],
@@ -852,7 +852,7 @@ XPD.conjunto = (stage, p, s, api) => {
   };
   box.onpointermove = e => {
     if (!arr) return;
-    const dx = e.clientX - arr.x0, dy = e.clientY - arr.y0;
+    const dx = (e.clientX - arr.x0) / zk(), dy = (e.clientY - arr.y0) / zk();
     if (Math.hypot(dx, dy) > 6) arr.mov = true;
     if (arr.mov) arr.el.style.transform = `translate(${arr.bx + dx}px, ${arr.by + dy}px) scale(1.08)`;
   };
@@ -3770,11 +3770,11 @@ XPD.hoja = (stage, p, s, api) => {
       if (!dedo.g) {
         if (Math.hypot(e.clientX - dedo.x, e.clientY - dedo.y) < 7) return;
         const r = dedo.b.getBoundingClientRect();
-        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width}px`, left: `${r.left}px`, top: `${r.top}px` });
+        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width / zk()}px`, left: `${r.left / zk()}px`, top: `${r.top / zk()}px` });
         dedo.ox = e.clientX - r.left; dedo.oy = e.clientY - r.top; document.body.appendChild(dedo.g); dedo.b.classList.add('lift');
       }
       e.preventDefault();
-      dedo.g.style.left = `${e.clientX - dedo.ox}px`; dedo.g.style.top = `${e.clientY - dedo.oy}px`;
+      dedo.g.style.left = `${(e.clientX - dedo.ox) / zk()}px`; dedo.g.style.top = `${(e.clientY - dedo.oy) / zk()}px`;
       const q = document.elementFromPoint(e.clientX, e.clientY)?.closest('.hj-p');
       root.querySelectorAll('.over').forEach(o => o !== q && o.classList.remove('over'));
       if (q && root.contains(q)) q.classList.add('over');
@@ -3813,7 +3813,7 @@ XPD.hoja = (stage, p, s, api) => {
       if (m.tacha) XS.tick(-6); else if (m.luz || m.nota || m.sello) XS.pop();
       const q = m.luz?.length ? T(m.luz[0]) : m.nota ? P(Object.keys(m.nota)[0]) : null, st = root.closest('.xp-step');
       // En pantallas pequeñas la hoja puede ser más alta que el paso: lo que se nombra queda a la vista.
-      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: a.top - b.top - b.height * 0.45, behavior: xpStill() ? 'auto' : 'smooth' }); }
+      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: (a.top - b.top - b.height * 0.45) / zk(), behavior: xpStill() ? 'auto' : 'smooth' }); }
       t = setTimeout(done, xpStill() ? 0 : 750);
       return () => clearTimeout(t);
     },
@@ -8840,7 +8840,7 @@ class YouTubeClip {
     // arriba y abajo (franjas donde YouTube pinta avatar, título y logo), que quedan fuera.
     this.layout = () => {
       const f = el.querySelector('.yt-crop iframe');
-      const { width: W, height: H } = el.getBoundingClientRect();
+      const { clientWidth: W, clientHeight: H } = el;
       if (!f || !W) return;
       const vw = Math.min(W, (H * 9) / 16), vh = (vw * 16) / 9;
       // El marco recortado mide justo lo que el video; el iframe sobresale 64 px por arriba y por abajo.
@@ -11712,7 +11712,7 @@ function tuPinta(courses) {
     const marca = o => { if (sobre === o) return; sobre?.classList.remove('sobre'); sobre = o; sobre?.classList.add('sobre'); };
     const fin = e => { if (e.pointerId !== id) return; id = null; cop?.remove(); cop = null; f.classList.remove('fuera'); sem.classList.remove('espera'); const o = e.type === 'pointerup' ? sobre : null; marca(null); if (o) hora(o.dataset.d, o.dataset.t); };
     f.onpointerdown = e => { if (e.button) return; id = e.pointerId; f.setPointerCapture(id); cop = f.cloneNode(true); cop.classList.add('vuela'); document.body.append(cop); f.classList.add('fuera'); sem.classList.add('espera'); f.onpointermove(e); };
-    f.onpointermove = e => { if (e.pointerId !== id || !cop) return; if (!f.isConnected) { cop.remove(); cop = null; id = null; return; } cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; marca(document.elementFromPoint(e.clientX, e.clientY)?.closest('button.ts-c') || null); };
+    f.onpointermove = e => { if (e.pointerId !== id || !cop) return; if (!f.isConnected) { cop.remove(); cop = null; id = null; return; } cop.style.left = `${e.clientX / zk()}px`; cop.style.top = `${e.clientY / zk()}px`; marca(document.elementFromPoint(e.clientX, e.clientY)?.closest('button.ts-c') || null); };
     f.onpointerup = fin; f.onpointercancel = fin; f.onlostpointercapture = fin;
     f.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
   }
@@ -12542,7 +12542,7 @@ function renderGym() {
         movio = true; b.setPointerCapture(id); hero.classList.add('espera');
         cop = b.querySelector('.gd').cloneNode(true); cop.className = `gd gd-vuela lv${b.dataset.lv}`; G.append(cop);
       }
-      if (cop) { cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; }
+      if (cop) { cop.style.left = `${e.clientX / zk()}px`; cop.style.top = `${e.clientY / zk()}px`; }
     };
     b.onpointerup = e => {
       if (e.pointerId !== id) return;
@@ -12640,7 +12640,7 @@ function startReto(c, r) {
     if (pos >= r.steps.length) return finish();
     const s = r.steps[pos];
     // Un solo contenedor: mountSketch (kit.js) mide el primer hijo de .lesson-body para achicar el juego si no cabe.
-    body.innerHTML = `<div class="gym-step"><div class="gym-lado"><details class="gym-reto"${esEscritorio() && innerHeight > 760 ? ' open' : ''}><summary><span>El reto</span><span class="gr-n">Paso ${pos + 1} de ${r.steps.length}</span></summary><div>${tex(r.problem)}</div></details>
+    body.innerHTML = `<div class="gym-step"><div class="gym-lado"><details class="gym-reto"${esEscritorio() && innerHeight / zk() > 760 ? ' open' : ''}><summary><span>El reto</span><span class="gr-n">Paso ${pos + 1} de ${r.steps.length}</span></summary><div>${tex(r.problem)}</div></details>
       <div class="coach" role="note"><span class="coach-av">${mascotSVG('think')}</span><div><small>Paso ${pos + 1} · ${esc(s.title)}</small><p></p>${conceptOf(s) ? `<button type="button" class="con-btn" data-concept>${ICON.bulb}Recordar el concepto</button>` : ''}</div></div>
       ${notebook()}</div><div class="gym-ex"></div></div>`;
     const cb = $('[data-concept]', body);
@@ -14031,7 +14031,7 @@ function mcRuta(c, cur) {
   };
   let id = null, x0 = 0, s0 = 0, movio = false;   // con ratón también se arrastra
   ruta.onpointerdown = e => { movio = false; if (e.pointerType !== 'mouse' || e.button) return; id = e.pointerId; x0 = e.clientX; s0 = ruta.scrollLeft; };
-  ruta.onpointermove = e => { if (e.pointerId !== id) return; if (!e.buttons) { id = null; ruta.classList.remove('mano'); return; } if (!movio && Math.abs(e.clientX - x0) > 6) { movio = true; ruta.setPointerCapture(id); ruta.classList.add('mano'); } if (movio) ruta.scrollLeft = s0 - (e.clientX - x0); };
+  ruta.onpointermove = e => { if (e.pointerId !== id) return; if (!e.buttons) { id = null; ruta.classList.remove('mano'); return; } if (!movio && Math.abs(e.clientX - x0) > 6) { movio = true; ruta.setPointerCapture(id); ruta.classList.add('mano'); } if (movio) ruta.scrollLeft = s0 - (e.clientX - x0) / zk(); };
   ruta.onpointerup = ruta.onpointercancel = e => { if (e.pointerId === id) { id = null; ruta.classList.remove('mano'); } };
   ruta.onclick = e => { if (movio) { movio = false; return; } const b = e.target.closest('[data-mu]'); if (b) pon(+b.dataset.mu); };
   ruta.onkeydown = e => { const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (!k) return; e.preventDefault(); const i = Math.max(0, Math.min(idx.length - 1, idx.indexOf(mcVe.u[clave]) + k)); pon(idx[i], true); };
@@ -15372,7 +15372,7 @@ function tiendaVitrinaViva(el) {
     if (e.pointerId !== id) return;
     if (!e.buttons) return suelta(e);
     if (!movio && Math.abs(e.clientX - x0) > 7) { movio = true; rueda.setPointerCapture(id); h.classList.add('mano'); cancelAnimationFrame(raf); raf = 0; }
-    if (movio) { p = meta = Math.max(-.35, Math.min(n - .65, p0 - (e.clientX - x0) / (its[0].offsetWidth * .72))); pinta(); }
+    if (movio) { p = meta = Math.max(-.35, Math.min(n - .65, p0 - (e.clientX - x0) / zk() / (its[0].offsetWidth * .72))); pinta(); }
   };
   const suelta = e => { if (e.pointerId !== id) return; id = null; h.classList.remove('mano'); if (movio) va(tiendaCerca(p + Math.max(-.35, Math.min(.35, (x0 - e.clientX) / 260)), n)); };
   rueda.onpointerup = suelta; rueda.onpointercancel = suelta;
@@ -15465,9 +15465,9 @@ function tiendaVuela(a, desde) {
   const dest = $('.td-bolsa', view);
   if (!desde || !dest || !dest.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const r = desde.getBoundingClientRect(), d = dest.getBoundingClientRect(), f = document.createElement('span');
-  f.className = 'td-vuela'; f.innerHTML = tiendaMini(a); f.style.left = `${r.left + r.width / 2}px`; f.style.top = `${r.top + r.height / 2}px`;
+  f.className = 'td-vuela'; f.innerHTML = tiendaMini(a); f.style.left = `${(r.left + r.width / 2) / zk()}px`; f.style.top = `${(r.top + r.height / 2) / zk()}px`;
   document.body.append(f);
-  const dx = d.left + d.width / 2 - r.left - r.width / 2, dy = d.top + d.height / 2 - r.top - r.height / 2;
+  const dx = (d.left + d.width / 2 - r.left - r.width / 2) / zk(), dy = (d.top + d.height / 2 - r.top - r.height / 2) / zk();
   f.animate([{ transform: 'translate(-50%, -50%) scale(1)' }, { transform: `translate(calc(-50% + ${dx * .45}px), calc(-50% + ${dy * .45 - 110}px)) scale(1.15) rotate(-8deg)`, offset: .45 }, { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.25) rotate(14deg)`, opacity: .6 }], { duration: 720, easing: 'cubic-bezier(.4, 0, .3, 1)' }).onfinish = () => f.remove();
   setTimeout(() => f.remove(), 1200);
 }
@@ -15481,7 +15481,7 @@ function tiendaArrastra(el) {
     s.onpointermove = e => {
       if (e.pointerId !== id) return;
       if (!f && Math.hypot(e.clientX - x0, e.clientY - y0) > 8) { f = document.createElement('span'); f.className = 'td-vuela mano'; f.innerHTML = $('.td-artes, .td-pila', s).outerHTML; document.body.append(f); view.classList.add('llevando'); }
-      if (f) { f.style.left = `${e.clientX}px`; f.style.top = `${e.clientY}px`; $('.td-carro', view)?.classList.toggle('sobre', sobre(e)); }
+      if (f) { f.style.left = `${e.clientX / zk()}px`; f.style.top = `${e.clientY / zk()}px`; $('.td-carro', view)?.classList.toggle('sobre', sobre(e)); }
     };
     const fin = e => { if (e.pointerId !== id) return; id = null; const dentro = f && e.type === 'pointerup' && sobre(e), de = f; if (dentro) tiendaCambia(art, 1, de); quita(); $('.td-carro', view)?.classList.remove('sobre'); };
     s.onpointerup = fin; s.onpointercancel = fin;
@@ -15773,7 +15773,7 @@ async function openLector(id) {
     es.forEach(e => { const n = +e.target.dataset.n; e.isIntersecting ? L.vis.add(n) : L.vis.delete(n); });
     if (!L.vis.size) return;
     // La página que ocupa el centro de la pantalla.
-    const medio = cont.getBoundingClientRect().top + cont.clientHeight / 2;
+    const b0 = cont.getBoundingClientRect(), medio = b0.top + b0.height / 2;
     L.pag = [...L.vis].sort((a, b) => { const c = n => { const r = hojas[n - 1].getBoundingClientRect(); return Math.abs((r.top + r.bottom) / 2 - medio); }; return c(a) - c(b); })[0];
     if (document.activeElement !== input) input.value = L.pag;
     if (mio) { S.libros = { ...S.libros, [id]: L.pag }; }
@@ -16638,7 +16638,7 @@ function exploraRiel(root, d) {
   const stage = root.querySelector('.xp-stage');
   const ajusta = () => {
     const vb = stage.querySelector('.xp-svg')?.viewBox?.baseVal;
-    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight)}px`);
+    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight / zk())}px`);
   };
   ajusta();
   if (!root.dataset.ajusta) { root.dataset.ajusta = '1'; new ResizeObserver(ajusta).observe(root); }
@@ -16733,7 +16733,7 @@ function pfMapaHTML() {
 }
 function pfLogrosHTML() {
   const xs = pfLogros(pfDatos()), ok = xs.filter(x => x.ok).length;
-  return `<section class="pf-c pf-logros"><div class="pf-cab"><h2>Logros</h2><p>${ok} de ${xs.length}</p></div><ul class="lg">${xs.map(x => `<li><button type="button" class="lg-b${x.ok ? ' ok' : ''}" data-logro="${x.id}" aria-expanded="false"><span class="lg-in"><span class="lg-f">${aroHTML(x.v / x.meta, ICON[x.icono] || ICON.star)}<b>${x.t}</b><small>${x.ok ? 'Conseguido' : `${x.v} de ${x.meta}`}</small></span><span class="lg-a" aria-hidden="true">${x.p}${x.ok ? '' : `<i>Te ${x.meta - x.v === 1 ? 'falta' : 'faltan'} ${x.meta - x.v}</i>`}</span></span><span class="hm-sr">. ${x.p}</span></button></li>`).join('')}</ul></section>`;
+  return `<section class="pf-c pf-logros"><div class="pf-cab"><h2>Logros</h2><p>${ok} de ${xs.length}</p></div><ul class="pf-lg">${xs.map(x => `<li><button type="button" class="lg-b${x.ok ? ' ok' : ''}" data-logro="${x.id}" aria-expanded="false"><span class="lg-in"><span class="lg-f">${aroHTML(x.v / x.meta, ICON[x.icono] || ICON.star)}<b>${x.t}</b><small>${x.ok ? 'Conseguido' : `${x.v} de ${x.meta}`}</small></span><span class="lg-a" aria-hidden="true">${x.p}${x.ok ? '' : `<i>Te ${x.meta - x.v === 1 ? 'falta' : 'faltan'} ${x.meta - x.v}</i>`}</span></span><span class="hm-sr">. ${x.p}</span></button></li>`).join('')}</ul></section>`;
 }
 function pfCursosHTML() {
   const mine = myCourses();

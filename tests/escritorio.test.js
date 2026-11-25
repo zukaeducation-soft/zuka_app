@@ -36,7 +36,7 @@ test('menú de escritorio a la izquierda, con el logo y quien administra; el vid
   const css = read('css/escritorio.css'), app = read('js/app.js');
   assert.match(css, /#tabbar, body\[data-tab=clips\] #tabbar \{\s*position: fixed; left: 0; top: 92px; width: var\(--side\);/);
   assert.match(css, /--tabbar-h: 0px !important/);
-  assert.match(css, /\.lesson\.clip-mode \{ --clipw: min\(calc\(\(100dvh - 120px\) \* 9 \/ 16\), calc\(100vw - 760px\)\)/);
+  assert.match(css, /\.lesson\.clip-mode \{ --clipw: min\(calc\(\(calc\(100 \* var\(--dvh\)\) - 120px\) \* 9 \/ 16\), calc\(calc\(100 \* var\(--dvw\)\) - 760px\)\)/);
   assert.match(css, /#app \{[^}]*padding-left: var\(--side\)/);
   assert.match(app, /cuentaEsAdmin\(\) \? `<a class="tb-admin" href="admin\/">/);
   assert.match(app, /class="tb-logo-d"[^`]*data-home/);

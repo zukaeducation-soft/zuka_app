@@ -493,7 +493,7 @@ class YouTubeClip {
     // arriba y abajo (franjas donde YouTube pinta avatar, título y logo), que quedan fuera.
     this.layout = () => {
       const f = el.querySelector('.yt-crop iframe');
-      const { width: W, height: H } = el.getBoundingClientRect();
+      const { clientWidth: W, clientHeight: H } = el;
       if (!f || !W) return;
       const vw = Math.min(W, (H * 9) / 16), vh = (vw * 16) / 9;
       // El marco recortado mide justo lo que el video; el iframe sobresale 64 px por arriba y por abajo.
