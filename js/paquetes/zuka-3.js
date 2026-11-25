@@ -10423,3 +10423,81 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
         'Busca el hecho que contradice el agradecimiento del abuelo.')],
   ]);
 });
+;
+//#archivo js/courses/preuda-lectura-juegos.js
+// Preuniversitario UdeA · Comprensión lectora con textos de verdad (spec 2026-11-19-preuda-lectura-textos). Va después de
+// preuda-lectura.js y de los preuda-l-<mundo>.js: en cada mundo terminado, cada lección pasa a tener 7 juegos distintos sobre un
+// mismo texto, y el mundo una evaluación en formato real (pregunta-examen). PU_LEC_HECHOS lista los mundos terminados: la prueba
+// tests/preuda-lectura.test.js les exige el estándar.
+const PU_LEC_HECHOS = [];
+// Mundos con explicación interactiva y ejercicios sobre la hoja (spec 2026-11-24-lectura-explora; tests/lectura-explora.test.js).
+const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos', 'pu-explicita', 'pu-inferencia', 'pu-vocabulario', 'pu-aplicacion', 'pu-fuentes', 'pu-conectores', 'pu-argumentacion', 'pu-dos-textos', 'pu-referencia', 'pu-figurado'];
+(() => {
+  const lessons = PU_LECTURA.flatMap(u => u.lessons);
+  const L = id => { const l = lessons.find(l => l.id === id); if (!l) throw new Error(`no existe ${id}`); return l; };
+  // La guía se dibuja sobre el lienzo solo en los juegos de p5; estos son HTML y usan la tarjeta «Cómo se juega».
+  const setLesson = (id, list) => { L(id).ex = list; };
+  // Evaluación del mundo: [lección, nota de repaso, ejercicio]. Formato real: tiempo del examen (2 min 15 s por pregunta).
+  const setExam = (world, title, items) => {
+    const u = PU_LECTURA.find(u => u.world === world), order = u.lessons.map(l => l.id);
+    u.exam = { id: `exam-${world}`, title, minutes: 0, items: items.map(([lesson, review, ex]) => ({ lesson, review, ex: { ...ex, exam: true } })) };
+    u.exam.items.sort((a, b) => order.indexOf(a.lesson) - order.indexOf(b.lesson));
+    u.exam.minutes = Math.max(8, Math.ceil(u.exam.items.length * 2.25));
+    PU_LEC_HECHOS.push(world);
+  };
+  PU_LEC_JUEGOS.forEach(f => f({ L, setLesson, setExam }));
+})();
+;
+//#archivo js/courses/preuda.js
+// Curso Preuniversitario UdeA (spec 2026-11-18-curso-preuda): preuniversitario para el examen de admisión, con dos componentes que
+// se estudian por separado: Razonamiento lógico (js/courses/preuda-razonamiento.js) y Comprensión lectora
+// (js/courses/preuda-lectura.js). Cada unidad es un mundo con `block`; `blocks` da el nombre y la descripción de cada
+// componente, que el mapa muestra como encabezado. Nace en borrador (js/cuenta.js): se habilita tras revisión docente.
+
+const COURSE_PREUDA = {
+  id: 'preuda', level: 'Admisión', name: 'Preuniversitario UdeA', icon: 'pU', color: '#a3e635',
+  tagline: 'El examen de admisión: razonamiento lógico y comprensión lectora.',
+  blocks: [
+    { id: 'razonamiento', name: 'Razonamiento lógico', desc: '40 preguntas sin calculadora · la mitad del puntaje' },
+    { id: 'lectura', name: 'Comprensión lectora', desc: '40 preguntas sobre dos textos largos · la otra mitad' },
+  ],
+  units: [...PU_RAZONAMIENTO, ...PU_LECTURA],
+};
+;
+//#archivo js/courses/preicfes-base.js
+// Curso Preicfes Saber 11 (spec 2026-11-20-curso-preicfes): ayudantes comunes. Cada mundo vive en su archivo
+// js/courses/preicfes-<área>-<mundo>.js y hace PI_MUNDOS.push(ICF.mundo(…)); js/courses/preicfes.js (después de data.js) arma el
+// curso en el orden de los componentes. PI_HECHOS lista los mundos terminados (con el estándar de la spec y su evaluación).
+const PI_MUNDOS = [];
+const PI_HECHOS = [];
+const PI_BLOCKS = [
+  { id: 'matematicas', name: 'Matemáticas', desc: '50 preguntas · datos, geometría, álgebra y finanzas' },
+  { id: 'lectura', name: 'Lectura Crítica', desc: '41 preguntas · textos continuos y discontinuos' },
+  { id: 'sociales', name: 'Sociales y Ciudadanas', desc: '50 preguntas · Constitución, historia y ciudadanía' },
+  { id: 'ciencias', name: 'Ciencias Naturales', desc: '58 preguntas · biología, química, física e indagación' },
+  { id: 'ingles', name: 'Inglés', desc: '55 preguntas · siete partes, del nivel A1 al B1' },
+];
+const ICF = (() => {
+  const KIND = { matematicas: 'Matemáticas', lectura: 'Lectura Crítica', sociales: 'Sociales y Ciudadanas', ciencias: 'Ciencias Naturales', ingles: 'Inglés' };
+  // Zona de examen (js/games/examen-kit.js). En `err` la corrección buena va primero en `fixes`: el juego las revuelve.
+  const sol = (q, lines, extra, explain, hint) => play('completa-solucion', 'Completa la solución: arrastra cada ficha a su hueco.', { q, lines, extra }, explain, { hint });
+  const err = (q, steps, wrong, fixes, explain, hint) => play('caza-error', 'Encuentra el paso equivocado y corrígelo.', { q, steps, wrong, fixes, fix: 0 }, explain, { hint });
+  const opc = (q, options, answer, explain, hint) => play('opcion-examen', 'Así sale en el examen.', { q, options, answer }, explain, { hint });
+  // Pregunta A–D sobre un texto (evaluaciones de Lectura, Sociales e Inglés).
+  const preg = (doc, block) => (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc, q, options, answer }, explain, { hint, kind: KIND[block] });
+  // Juego en movimiento al final de una lección de lectura: tres preguntas cortas sobre el texto, tres opciones cada una.
+  const mueve = (game, q, title, items, explain, hint) => play(game, q, { rounds: [{ title, items: items.map(([ask, options, answer]) => ({ ask, options, answer })) }] }, explain, { hint });
+  // Lección: en los juegos de lienzo la guía va sobre el juego; el juego en movimiento lleva `motion`.
+  const leccion = (id, title, scenes, ex) => ({ id, title, clip: { scenes }, ex: ex.map(e => ({ ...e, canvasGuide: true, motion: /^(vuela-precios|rompe-cambios|tanque-porcentaje|resortera-tres|lirios-laguna|corta-proporciones)$/.test(e.game) })) });
+  // Mundo con su evaluación: items = [[lección, nota de repaso, ejercicio]]. Tiempo: 1.5 min por juego; 2.25 por pregunta de lectura.
+  const mundo = (world, title, block, lessons, items) => {
+    const order = lessons.map(l => l.id);
+    const exam = { id: `exam-${world}`, title: `Evaluación · ${title}`, minutes: 0, items: items.map(([lesson, review, ex]) => ({ lesson, review,
+      ex: { ...ex, kind: ex.kind || KIND[block], canvasGuide: true, exam: true, params: { ...ex.params, autoDemo: false } } })) };
+    exam.items.sort((a, b) => order.indexOf(a.lesson) - order.indexOf(b.lesson));
+    exam.minutes = Math.max(8, Math.ceil(exam.items.length * (exam.items.every(it => it.ex.game === 'pregunta-examen') ? 2.25 : 1.5)));
+    PI_HECHOS.push(world);
+    return { world, title, block, lessons, exam };
+  };
+  return { sol, err, opc, preg, mueve, leccion, mundo, KIND };
+})();
