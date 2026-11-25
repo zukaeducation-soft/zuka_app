@@ -106,7 +106,7 @@ const PZ_LIBROS = [['Número y forma', 1], ['Orden, lógica y azar', 2], ['Leer 
 // Lo que cada curso es para el estudiante. `tag`: su etiqueta; `meta`: para qué sirve; `trae`: además de las lecciones.
 const PZ_PROG = {
   preuda: { color: '#22a652', foto: '<img class="pz-img-udea" src="brand/udea.webp" alt="La biblioteca y la fuente de la Universidad de Antioquia" width="900" height="600" loading="lazy">', tag: 'Admisión', h: 'Entra a la UdeA entendiendo el examen', meta: 'Llega al examen de admisión sabiendo qué se pregunta y cómo razonarlo.', trae: 'Explicaciones interactivas, ejercicios y evaluaciones por mundo' },
-  preicfes: { tag: 'Grado 11', h: 'Las cinco pruebas del Saber 11, una por una', meta: 'Prepara el Saber 11 área por área, con problemas en contexto.', trae: 'Matemáticas, Lectura, Sociales, Ciencias e Inglés' },
+  preicfes: { foto: '<img class="pz-img-saber" src="brand/saber11.webp" alt="Una mano rellena con lápiz una hoja de respuestas" width="1200" height="900" loading="lazy">', tag: 'Grado 11', h: 'Las cinco pruebas del Saber 11, una por una', meta: 'Prepara el Saber 11 área por área, con problemas en contexto.', trae: 'Matemáticas, Lectura, Sociales, Ciencias e Inglés' },
 };
 // Cursos de fundamentación en Ingeniería y Ciencias: van juntos en una lámina y una tarjeta ancha.
 const PZ_FUND = ['algebra', 'trig', 'calc', 'geo', 'int', 'lin', 'fis'], PZ_FUND_N = 'Fundamentación en Ingeniería y Ciencias', PZ_FUND_C = '#5eead4';

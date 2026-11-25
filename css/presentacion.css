@@ -92,6 +92,7 @@
 @media (min-width: 900px) { .pz-d-rueda { grid-column: 1 / -1; } }
 
 #landing .pz-foto-ing { height: auto; aspect-ratio: 1.6; border-radius: 22% 30% 24% 28% / 34% 28% 36% 30%; } .pz-foto-ing img { object-position: 60% 20%; }
+.pz-foto-ing .pz-img-saber { object-position: 55% 48%; }
 .pz-foto-ing .pz-img-udea { object-position: 72% 30%; }
 /* mazo de cursos: cartas una sobre otra que se abren bajo el puntero */
 .pz-mazo { --w: 78px; --h: 108px; --ab: 8px; display: grid; gap: 10px; width: 100%; max-width: 620px; }
