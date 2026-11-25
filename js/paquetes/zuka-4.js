@@ -6155,7 +6155,7 @@ xpLec('pu-vo-4', [
         ['Si cambias oro y plata, gana otro: importa.', { luz: [0], nota: { 0: 'con orden' } }],
         ['Mango y mora o mora y mango: el mismo vaso.', { luz: [1], nota: { 1: 'sin orden' } }],
         ['123 no abre lo que abre 321.', { luz: [2], nota: { 2: 'con orden' } }],
-        ['El equipo es el mismo aunque los nombres al revés.', { luz: [3], nota: { 3: 'sin orden' } }],
+        ['El equipo es el mismo aunque los nombres estén al revés.', { luz: [3], nota: { 3: 'sin orden' } }],
         ['Con orden es permutación; sin orden, combinación.', {}],
       ], 'Cambia el orden: si sale otra cosa, importa.'),
       xpHaz('hoja', 'Subraya los **dos** casos en que el orden **no** importa.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [0, 2], paras: [['Escoger tres cartas para quedarse'], ['Presidenta y secretaria'], ['Dos amigos para ir al cine'], ['Las letras de una placa']], pista: 'En alguno, cambiar de lugar cambia el resultado.' }, 'Las cartas y los amigos son los mismos.')],
@@ -6192,7 +6192,7 @@ xpLec('pu-vo-4', [
       ], 'Favorables entre posibles; y se compara la parte, no la cantidad.'),
       xpHaz('dibujo', 'Hay 12 bolas. Mueve las del color hasta que su probabilidad sea $\\tfrac13$.', { dib: (v, K) => bolsa({ n: 12, k: v.k }, K), v: { k: 1 }, metas: { k: 4 }, alto: 220, manijas: [{ k: 'k', min: 0, max: 12, paso: 1, et: 'del color' }], lee: v => `$\\tfrac{${v.k}}{12}$`, dice: () => 'Un tercio de doce.' }, '$\\tfrac{4}{12} = \\tfrac13$.')],
     ['De 0 a 1',
-      xpMira('fichas', 'Segunda idea: va de **0** (imposible) a **1** (seguro).', { slots: fila('sale 7', 'sale 3', 'sale par', 'sale menor que 7').map(s => ({ ...s, w: 64 })), fichas: ['0', '1/6', '1/2', '1'], alto: 96 }, [
+      xpMira('fichas', 'Segunda idea: va de **0** (imposible) a **1** (seguro).', { slots: fila('un 7', 'un 3', 'par', 'menos de 7').map(s => ({ ...s, w: 64 })), fichas: ['0', '1/6', '1/2', '1'], alto: 96 }, [
         ['Un dado de seis caras.', {}],
         ['Que salga 7 es imposible.', { pon: { 0: '0' } }],
         ['Que salga 3: una de seis.', { pon: { 1: '1/6' } }],
@@ -6208,7 +6208,7 @@ xpLec('pu-vo-4', [
         ['La suma 2, de una sola.', { luz: [2], nota: { 2: '1/36' } }],
         ['Por eso no todas las sumas son igual de fáciles.', { luz: [1, 2] }],
       ], 'Contrario: 1 menos. Dos dados: 36 parejas ordenadas.'),
-      xpHaz('fichas', 'Pon en cuántas parejas la suma es 4 y la probabilidad de que **no** sea 4.', { slots: fila('parejas', 'no es 4'), fichas: ['3', '33/36', '2', '3/36', '1/11'], meta: ['3', '33/36'], alto: 96, pista: '(1, 3), (2, 2) y (3, 1).' }, 'Tres parejas; las otras 33 no.')],
+      xpHaz('fichas', 'Pon en cuántas parejas la suma es 4 y la probabilidad de que **no** sea 4.', { slots: fila('parejas', 'no es 4'), fichas: ['3', '33/36', '2', '3/36', '1/11'], meta: ['3', '33/36'], alto: 96, pista: 'Busca las parejas ordenadas, como (1, 3), y réstalas de 36.' }, 'Tres parejas; las otras 33 no.')],
     ['Ahora sí, un problema',
       xpHaz('fichas', 'Urna A: 3 rojas de 6. Urna B: 4 rojas de 10. Pon la probabilidad de roja en cada una.', { slots: fila('urna A', 'urna B'), fichas: ['1/2', '2/5', '3/4', '1/3', '4/6'], meta: ['1/2', '2/5'], alto: 96, pista: 'Divide entre todas las bolas de su urna.' }, 'B tiene más rojas, pero A es más probable.')],
   ], 'Parte del total, entre 0 y 1, y lo contrario completa.');
@@ -6233,7 +6233,7 @@ xpLec('pu-vo-4', [
       ], 'Sin devolver hay una menos en el total, y quizá una menos que sirve.'),
       xpHaz('fichas', '4 rojas y 4 blancas. Sale una roja y **no** se devuelve. Pon la probabilidad de otra roja y de blanca.', { slots: fila('otra roja', 'blanca'), fichas: ['3/7', '4/7', '4/8', '3/8', '1/2'], meta: ['3/7', '4/7'], alto: 96, pista: 'Quedan 7 bolas.' }, 'Quedan 3 rojas y 4 blancas de 7.')],
     ['Al menos uno',
-      xpMira('fichas', 'Tercera idea: «al menos uno» es **todo menos ninguno**.', { slots: fila('falla 1.º', 'falla 2.º', 'fallan ambos', 'alguno').map(s => ({ ...s, w: 66 })), fichas: ['1/2', '3/4', '3/8', '5/8'], alto: 96 }, [
+      xpMira('fichas', 'Tercera idea: «al menos uno» es **todo menos ninguno**.', { slots: fila('falla 1.º', 'falla 2.º', 'ambos', 'alguno').map(s => ({ ...s, w: 66 })), fichas: ['1/2', '3/4', '3/8', '5/8'], alto: 96 }, [
         ['Uno acierta con un medio y otro con un cuarto.', {}],
         ['Fallan con un medio y tres cuartos.', { pon: { 0: '1/2', 1: '3/4' } }],
         ['Que fallen los dos: se multiplica.', { pon: { 2: '3/8' } }, '$\\tfrac12 \\cdot \\tfrac34 = \\tfrac38$'],
@@ -6242,7 +6242,7 @@ xpLec('pu-vo-4', [
       ], 'Alguno = 1 − ninguno.'),
       xpHaz('fichas', 'Dos focos fallan con 1/3 cada uno, sin afectarse. Pon la de que fallen ambos y la de que alguno sirva.', { slots: fila('fallan ambos', 'alguno sirve'), fichas: ['1/9', '8/9', '2/3', '4/9', '1/6'], meta: ['1/9', '8/9'], alto: 96, pista: 'Multiplica los fallos y réstalo de 1.' }, '$\\tfrac13 \\cdot \\tfrac13 = \\tfrac19$ y $1 - \\tfrac19$.')],
     ['Ahora sí, un problema',
-      xpHaz('fichas', '2 verdes y 4 azules; se sacan dos **sin devolver**. Pon la de azul primero y la de dos azules.', { slots: fila('1.ª azul', 'dos azules'), fichas: ['2/3', '2/5', '4/9', '3/5', '7/6'], meta: ['2/3', '2/5'], alto: 96, pista: 'La segunda azul es 3 de 5.' }, '$\\tfrac46 \\cdot \\tfrac35 = \\tfrac25$.')],
+      xpHaz('fichas', '2 verdes y 4 azules; se sacan dos **sin devolver**. Pon la de azul primero y la de dos azules.', { slots: fila('1.ª azul', 'dos azules'), fichas: ['2/3', '2/5', '4/9', '3/5', '7/6'], meta: ['2/3', '2/5'], alto: 96, pista: 'Después de una azul quedan cinco bolas: ¿cuántas son azules?' }, '$\\tfrac46 \\cdot \\tfrac35 = \\tfrac25$.')],
   ], 'Entre quiénes, qué queda y todo menos ninguno.');
 }
 ;
@@ -6716,7 +6716,7 @@ xpLec('icf-sc-perspectivas-3', [
       ['Los horarios son baratos, si las empresas aceptan.', { luz: [3], nota: { 3: '¿y las empresas?' } }],
       ['Para cada una: ¿quién gana y quién queda por fuera?', {}],
     ], 'No hay solución sin alguien que pierda algo: búscalo.'),
-    xpHaz('hoja', 'Cierran una vía para bicicletas. Subraya a quien **más** puede perjudicar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Ciclistas'], ['Una ambulancia que usa esa vía'], ['Peatones']], pista: 'Ese gana espacio o seguridad.' }, 'La ambulancia perdería tiempo valioso.')],
+    xpHaz('hoja', 'Cierran una vía a los carros para dársela a las bicicletas. Subraya a quien **más** puede perjudicar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Ciclistas'], ['Una ambulancia que usa esa vía'], ['Peatones']], pista: 'Ese gana espacio o seguridad.' }, 'La ambulancia perdería tiempo valioso.')],
   ['¿Se puede hacer?',
     xpMira('hoja', 'Segunda idea: una buena idea puede no ser **viable**.', { paras: [['Un hospital en cada vereda.'], ['Una lancha ambulancia.'], ['Un decreto: «prohibido enfermarse».']] }, [
       ['El hospital ayudaría, pero no alcanza el dinero.', { luz: [0], nota: { 0: 'costo' } }],
@@ -6985,10 +6985,10 @@ xpLec('icf-sc-perspectivas-3', [
       ], 'Más fuerza, más aceleración; más masa, menos.'),
       xpHaz('fichas', 'Fuerza neta 90 N, masa 30 kg. Pon la aceleración, y la que habría con 60 kg.', { slots: [{ x: 110, y: 46, w: 90, et: 'con 30 kg' }, { x: 230, y: 46, w: 90, et: 'con 60 kg' }], fichas: ['3', '1.5', '6', '2 700', '60'], meta: ['3', '1.5'], alto: 96, pista: 'Divide la fuerza entre la masa.' }, '$90 \\div 30 = 3$ y $90 \\div 60 = 1.5$.')],
     ['Fuerzas por pares',
-      xpMira('hoja', 'Tercera idea: si empujas algo, te **empuja** igual y al contrario.', { paras: [['El remo empuja el agua.', 'El agua empuja el bote.'], ['El pie empuja el suelo.', 'El suelo empuja el cuerpo.'], ['El gas sale hacia abajo.', 'El cohete sube.']] }, [
+      xpMira('hoja', 'Tercera idea: si empujas algo, te **empuja** igual y al contrario.', { paras: [['El remo empuja el agua.', 'El agua empuja el bote.'], ['El pie empuja el suelo.', 'El suelo empuja el cuerpo.'], ['El cohete empuja el gas.', 'El gas empuja el cohete.']] }, [
         ['Empujas el agua y ella empuja el bote.', { luz: [0, 1], nota: { 0: 'par' } }],
         ['Caminar es que el suelo te empuje.', { luz: [2, 3], nota: { 1: 'par' } }],
-        ['El cohete sube porque el gas baja.', { luz: [4, 5], nota: { 2: 'par' } }],
+        ['El cohete sube porque el gas lo empuja.', { luz: [4, 5], nota: { 2: 'par' } }],
         ['Son iguales y contrarias.', {}],
         ['No se anulan: actúan sobre objetos distintos.', { luz: [0, 1] }],
       ], 'Acción y reacción: iguales, contrarias y sobre cuerpos distintos.'),
@@ -7219,10 +7219,10 @@ xpLec('icf-en-gramatica-1', [
     xpMira('hoja', 'Tercera idea: hay varias maneras de hablar del **futuro**.', { paras: [['I am seeing the doctor at four.'], ['I am going to study medicine.'], ['I think it will be easy.'], ['If it rains, I will stay.']] }, [
       ['Con hora fijada: «am seeing».', { luz: [0], nota: { 0: 'cita' } }],
       ['Un plan: «going to».', { luz: [1], nota: { 1: 'plan' } }],
-      ['Lo que se cree: «will».', { luz: [2], nota: { 2: 'cálculo' } }],
+      ['Lo que se cree: «will».', { luz: [2], nota: { 2: 'predicción' } }],
       ['Después de «if» va presente; en la otra parte, «will».', { luz: [3], nota: { 3: 'condición' } }],
       ['Nunca «if it will rain».', {}],
-    ], 'Cita: am -ing. Plan: going to. Cálculo: will. If + presente.'),
+    ], 'Cita: am -ing. Plan: going to. Predicción: will. If + presente.'),
     xpHaz('hoja', '«If you ___ the red fruits, the coffee will taste good.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['pick'], ['will pick'], ['picked']], pista: 'Después de «if» no va «will».' }, '«If» con presente y «will» en la otra parte.')],
   ['Ahora sí, un problema',
     xpHaz('hoja', '«Nobody ___ this door for years.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['opened'], ['has opened'], ['have opened']], pista: '«For years» llega hasta hoy y «nobody» va en singular.' }, '«Nobody» va con «has».')],
@@ -14120,7 +14120,7 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     'Cuando se sube una niña de 20 kilos, en el hielo acelera menos.']);
   reto('mov-1', ['icf-cn-movimiento-2'], 2, 'El trineo de madera', 'Fuerza neta y masa', 'Un trineo en dos pisos distintos y con más carga.', [
     ['La neta', 'El roce va en sentido contrario: se resta.', 'ajusta-alcance', 'Ajusta cada frase a los datos.', { doc: TRINEO, filas: [{ antes: 'En la arena la fuerza neta es', topes: ['160 N', '40 N', '60 N'], va: 1 }, { antes: 'En el hielo la fuerza neta es', topes: ['110 N', '10 N', '90 N'], va: 2 }], mira: ['Resta el roce de la arena.', 'Resta el roce del hielo.'], luz: [[1, '100 newtons']], bien: 'Se restan los roces.' }, '$100 - 60 = 40$ y $100 - 10 = 90$.', ['El roce se opone al jalón.', 'Haz una resta para cada piso.'], '100 − 60 y 100 − 10 = 90'],
-    ['Con más carga', 'Con la misma fuerza, más masa acelera menos.', 'balanza-tesis', 'Tesis: con el doble de masa y la misma fuerza neta, acelera la mitad.', { doc: TRINEO, tesis: 'Con el doble de masa acelera la mitad', ...F(['Con la niña aceleró 2.25 en vez de 4.5.', 0, '¿Es la mitad?'], ['Con 40 kilos aceleró igual que con 20.', 1, '¿Cambió al duplicar la masa?'], ['La niña llevaba gorro.', 2, '¿Cuánto cambia eso?']), bien: '2.25 es la mitad de 4.5.' }, 'La mitad apoya, acelerar igual debilitaría y el gorro no pesa.', ['Compara con 4.5.', 'Busca el dato que no dice nada.'], 'Mitad: apoya. Igual: debilita']],
+    ['Con más carga', 'Con la misma fuerza, más masa acelera menos.', 'balanza-tesis', 'Tesis: con el doble de masa y la misma fuerza neta, acelera la mitad.', { doc: TRINEO, tesis: 'Con el doble de masa acelera la mitad', ...F(['Con la niña y 90 N de fuerza neta aceleró 2.25 en vez de 4.5.', 0, '¿Es la mitad?'], ['Con 40 kilos y la misma fuerza neta aceleró igual que con 20.', 1, '¿Cambió al duplicar la masa?'], ['La niña llevaba gorro.', 2, '¿Cuánto cambia eso?']), bien: '2.25 es la mitad de 4.5.' }, 'La mitad apoya, acelerar igual debilitaría y el gorro no pesa.', ['Compara con 4.5.', 'Busca el dato que no dice nada.'], 'Mitad: apoya. Igual: debilita']],
     'Netas de 40 y 90 N; el doble de masa acelera la mitad.', 'Junta las fuerzas y repártelas en la masa.');
   reto('mov-2', ['icf-cn-movimiento-1', 'icf-cn-movimiento-3'], 3, 'Viajes y caídas', 'Datos en orden', 'Completa tres movimientos y ordena una caída.', [
     ['Tres viajes', 'Distancia es velocidad por tiempo.', 'tres-viajes', 'Completa el dato que falta.', { viajes: [{ n: 'canoa', d: 18, v: 12, t: 1.5, falta: 'd' }, { n: 'patines', d: 48, v: 16, t: 3, falta: 't' }, { n: 'tren', d: 175, v: 70, t: 2.5, falta: 'v' }], fichas: ['18', '3', '70', '13.5', '32', '172'] }, '$12 \\cdot 1.5 = 18$; $48 \\div 16 = 3$; $175 \\div 2.5 = 70$.', ['Multiplica para la distancia y divide para lo demás.', 'El tren: reparte los kilómetros entre las dos horas y media.'], '12 · 1.5; 48 ÷ 16; 175 ÷ 2.5 = 70'],
