@@ -824,42 +824,21 @@ function startLesson(c, l) {
 
 // ---- pestaña Perfil ----
 // Lo que «Reiniciar progreso» no toca.
-const RESET_KEEP = ['tourDone', 'tutorias', 'cuenta', 'unlockAll', 'theme', 'name', 'goal', 'voice', 'sfx', 'videoQuality', 'videoMuted', 'videoSpeed', 'hideInstall', 'guides'];
+const RESET_KEEP = ['tourDone', 'carne', 'tutorias', 'cuenta', 'unlockAll', 'theme', 'name', 'goal', 'voice', 'sfx', 'videoQuality', 'videoMuted', 'videoSpeed', 'hideInstall', 'guides'];
 let profileSub = null;   // 'settings': pantalla de Ajustes dentro de la pestaña Perfil (null = el perfil)
 function renderProfile() {
   if (profileSub === 'settings') return renderSettings();
-  const all = cursosConAcceso().flatMap(lessonsOf), doneN = all.filter(isDone).length;
-  const acc = S.answered ? Math.round((100 * S.correct) / S.answered) : 0;
   const saved = Object.keys(S.saved).filter(id => S.saved[id]).map(id => findCurio(id) || findLesson(id)).filter(x => x && (x.l.fact || cursoVisible(x.c)));   // nada guardado de un curso oculto
-  view.innerHTML = `<div class="profile"><div class="pf-side">
-    <section class="me">
-      <div class="avatar">${esc((S.name || 'Z')[0].toUpperCase())}</div>
-      <div class="me-body">
-        <input class="name-input" value="${esc(S.name)}" placeholder="Tu nombre" maxlength="24" aria-label="Tu nombre">
-        <p class="muted">Fundamentos de ingeniería</p>
-      </div>
-      <button class="icon-btn prof-gear" data-settings aria-label="Ajustes">${ICON.gear}</button>
-    </section>
-    ${cuentaCard()}</div><div class="pf-main">
-    <section class="stats">
-      <div class="stat fire">${ICON.flame}<b>${streakNow()}</b><small>Días de racha</small></div>
-      <div class="stat gold">${ICON.bolt}<b>${S.xp}</b><small>XP total</small></div>
-      <div class="stat brand">${ICON.check}<b>${doneN}/${all.length}</b><small>Lecciones</small></div>
-      <div class="stat ok">${ICON.target}<b>${acc}%</b><small>Precisión</small></div>
-    </section>
-    <section class="card pf-goal">
-      <h3>Meta de hoy</h3>
-      <p class="muted">${todayXP()} de ${S.goal} XP</p>
-      <div class="bar"><i style="width:${Math.min(1, todayXP() / S.goal) * 100}%"></i></div>
-    </section>
-    ${librosHTML(true)}${dkMesHTML()}${dkCursosHTML()}
-    ${saved.length ? `<section class="card pf-saved"><h3>Clips guardados</h3>${saved.map(({ c, l }) =>
+  if ($('.pm-riel.mano', view)) { pfVer.pend = true; return; }   // se está arrastrando la meta: se repinta al soltar
+  const sigue = pfGuarda();   // un repintado desde afuera no mueve la página, ni el foco, ni borra el nombre a medias
+  view.innerHTML = `<div class="profile"><div class="pf">
+    ${pfCarneHTML()}${pfMetaHTML()}${pfMapaHTML()}${pfLogrosHTML()}${pfCursosHTML()}
+    <div class="pf-cuenta">${cuentaCard()}</div>${librosHTML(true)}
+    ${saved.length ? `<section class="pf-c pf-saved"><div class="pf-cab"><h2>Clips guardados</h2></div>${saved.map(({ c, l }) =>
       `<button class="saved-row" data-${l.fact ? 'curio' : 'lesson'}="${l.id}" style="--c:${c.color}">${ICON.bookmark}<span><b>${esc(l.title)}</b><small>${esc(c.name)}</small></span></button>`).join('')}</section>` : ''}
   </div></div>`;
-  const nameInp = $('.name-input', view);
-  nameInp.onchange = () => { S.name = nameInp.value = nameInp.value.trim(); save(); $('.avatar', view).textContent = (S.name || 'Z')[0].toUpperCase(); };
-  cuentaBind(view); dkBind(view); bindLibros(view);
-  $('[data-settings]', view).onclick = () => { profileSub = 'settings'; renderProfile(); view.scrollTop = 0; $('[data-back]', view).focus({ preventScroll: true }); };
+  cuentaBind(view); dkBind(view); bindLibros(view); pfBind(view);   // el piñón (aria-label="Ajustes", data-settings) pone profileSub = 'settings'
+  sigue();
   view.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => {
     const { c, l } = findLesson(b.dataset.lesson);
     if (isUnlocked(c, l)) startLesson(c, l); else toast(`Primero completa las lecciones anteriores de ${esc(c.name)}.`);
@@ -888,8 +867,7 @@ function renderSettings() {
     </section>
     <section class="set-group">
       <h3 class="eyebrow">Apariencia</h3>
-      <div class="set-row">${row('moon', 'Tema', themes.find(t => t[0] === S.theme)?.[1] || 'Según el sistema',
-        `<span class="theme-seg" role="group" aria-label="Tema">${themes.map(([v, l, ic]) => `<button data-theme-opt="${v}" aria-label="${l}" aria-pressed="${S.theme === v}">${ICON[ic]}</button>`).join('')}</span>`)}</div>
+      <div class="theme-cards" role="group" aria-label="Tema">${themes.map(([v, l, ic]) => `<button type="button" class="tc ${v}" data-theme-opt="${v}" aria-pressed="${S.theme === v}"><span class="tc-v" aria-hidden="true"><i></i><i></i><i></i></span><span class="tc-t">${ICON[ic]}${l}</span></button>`).join('')}</div>
     </section>
     ${SIN_CANDADOS ? `<section class="set-group">
       <h3 class="eyebrow">Administración</h3>

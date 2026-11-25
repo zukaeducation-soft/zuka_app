@@ -4,7 +4,7 @@
    panel amplio; el video vertical en el centro con paneles a los lados; hojas y entrada como ventanas centradas. */
 
 .tb-logo-d, .tb-admin, .ls-sides, .xp-riel, .dk { display: none; }
-.tb-pie, .pf-side, .pf-main, .cv-side, .cv-main { display: contents; }
+.tb-pie, .cv-side, .cv-main { display: contents; }
 
 @media (min-width: 1000px) {
   /* el menú va a la izquierda (spec 2026-11-24-menu-lateral): nada se acomoda encima de él */
@@ -45,15 +45,6 @@
 
   /* ---- paneles que solo salen aquí (dk…HTML en js/escritorio.js) ---- */
   section.dk { display: grid; }
-  .dk-card, .profile .card, .profile .stat { padding: 20px; border-radius: 20px; border: 1px solid var(--line); background: var(--card); }
-  .dk-card { gap: 14px; align-content: start; }
-  .dk-card h2 { font-family: var(--display); font-weight: 500; font-size: 19px; line-height: 1.2; }
-  .dk-head, .dk-tr { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-  .dk-link { font-size: 14px; font-weight: 600; color: var(--brand); padding: 4px 0; }
-  .dk-link:hover { text-decoration: underline; }
-  .dk-sub, .dk-note { color: var(--mute); font-size: 15px; line-height: 1.45; }
-  .dk-card .btn { font-size: 15px; }
-  .dk-tr small { color: var(--mute); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
   .dk .mini-bar { display: block; width: 100%; max-width: none; }
 
   /* ---- Inicio y Mis cursos: tarjetas en rejilla ---- */
@@ -62,25 +53,6 @@
   .tu-head p { font-size: 17px; }
 
   /* ---- Tú ---- */
-  .profile { grid-template-columns: 380px minmax(0, 1fr); }
-  .pf-side { display: grid; gap: 20px; align-content: start; position: sticky; top: 24px; }
-  .pf-main { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto 1fr; grid-auto-flow: dense; gap: 20px; }
-  .pf-main > .stats, .pf-main > .pf-saved { grid-column: 1 / -1; }
-  .pf-main > .dk-mes { grid-column: 1; grid-row: 2 / span 2; }
-  .pf-main > .pf-goal, .pf-main > .dk-card:not(.dk-mes) { grid-column: 2; }
-  .pf-main .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-  .profile .stat { grid-template-columns: 1fr; row-gap: 4px; }
-  .profile .stat .i { grid-row: auto; margin-bottom: 6px; }
-  .profile .stat b { font-size: 28px; }
-  .profile .stat small { font-size: 14px; }
-  .pf-goal { grid-template-columns: 1fr auto; }
-  .pf-goal .bar { grid-column: 1 / -1; }
-  .dk-month { color: var(--mute); font-size: 15px; }
-  .dk-cursos { display: grid; gap: 4px; margin-inline: -10px; }
-  .dk-curso { display: flex; align-items: center; gap: 14px; padding: 12px 10px; border-radius: 14px; text-align: left; color: var(--ink); font-size: 16px; }
-  .dk-curso:hover { background: color-mix(in srgb, var(--c) 10%, transparent); }
-  .dk-curso b { font-weight: 600; }
-  .dk-link:focus-visible, .dk-curso:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
   /* ---- Ajustes: grupos en tarjetas, en dos columnas ---- */
   .settings { display: block; columns: 2; column-gap: 24px; }
@@ -307,9 +279,6 @@
 }
 @media (min-width: 1000px) and (max-width: 1420px) {
   .learn.cv, .learn.cv-world { grid-template-columns: 300px minmax(0, 1fr); gap: 0 28px; }
-  .profile { grid-template-columns: 320px minmax(0, 1fr); }
-  .pf-main .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .dk-mes .act-grid li span { width: 32px; height: 32px; }
 }
 
 /* Pantallas bajas de computador: el video y los paneles se acomodan sin taparse. */

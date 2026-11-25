@@ -4,7 +4,7 @@
 
 const ESTADO_MAPAS = ['saved', 'likes', 'watched', 'guides'];
 const ESTADO_CAMPOS = ['reinicio', 'name', 'xp', 'correct', 'answered', 'streak', 'maxStreak', 'lastDay', 'goal', 'course', 'lastLesson', 'misCursos', 'libros',
-  'today', 'tourDone', 'days', 'exams', 'gym', ...ESTADO_MAPAS];
+  'today', 'tourDone', 'carne', 'days', 'exams', 'gym', ...ESTADO_MAPAS];
 
 const estadoToma = s => Object.fromEntries(ESTADO_CAMPOS.filter(k => s[k] !== undefined && s[k] !== null).map(k => [k, s[k]]));
 
@@ -50,6 +50,7 @@ function estadoMezcla(local, nube) {
   });
   if (a.misCursos || b.misCursos) r.misCursos = [...new Set([...(a.misCursos || []), ...(b.misCursos || [])])];
   if (!a.name && b.name) r.name = b.name;
+  if (((b.carne || {}).at || 0) > ((a.carne || {}).at || 0)) r.carne = b.carne;   // el carné, el que se cambió de último
   if (!a.answered && b.answered && b.goal) r.goal = b.goal;
   if (!a.lastLesson && b.lastLesson) { r.lastLesson = b.lastLesson; if (b.course) r.course = b.course; }
   r.tourDone = !!(a.tourDone || b.tourDone);
