@@ -7,8 +7,8 @@ PI_MUNDOS.push((() => {
     ficha: { autor: 'The Suárez family', fuente: 'Notes, emails and chats', fecha: 'One week in April 2026' },
     paras: [
       'NOTE ON THE FRIDGE. Monday, 6 a.m. Kids, I have an early meeting. There are eggs and bread. Lucas, please walk the dog before school, not after, because the neighbours don\'t like the noise at noon. Sofía, your blue shirt is in the washing machine, so wear the white one. Love, Mum.',
-      'CHAT. Monday, 3 p.m. Sofía: Mum, I have a problem. I left my project at home and it is for tomorrow morning. Can Grandpa bring it? Mum: He doesn\'t drive at night any more. Ask your teacher if you can send a photo today and bring it on Wednesday. Sofía: Good idea. She said yes!',
-      'EMAIL TO THE COACH. Tuesday. Dear Mr Ramos, Lucas hurt his foot this morning while he was walking the dog. The doctor says it isn\'t broken, but he can\'t run for two weeks. He would like to come to the training to watch and help with the water. Is that all right? Best wishes, Clara Suárez.',
+      'CHAT. Monday, 3 p.m. Sofía: Mum, I have a problem. I\'m sleeping at Ana\'s house tonight and I left my project at home. It is for tomorrow morning. Can Grandpa bring it? Mum: He doesn\'t drive at night any more. Ask your teacher if you can send a photo today and bring it on Wednesday. Sofía: Good idea. She said yes!',
+      'EMAIL TO THE COACH. Tuesday. Dear Mr Ramos, Lucas hurt his foot this morning while he was walking the dog. The doctor says it isn\'t broken, but he can\'t run for two weeks. He would like to come to training to watch and help with the water. Is that all right? Best wishes, Clara Suárez.',
       'ANSWER. Wednesday. Dear Ms Suárez, I\'m sorry to hear that. Of course he can come. In fact, I need someone to write down the points on Saturday, and Lucas is very good at maths. Tell him to bring a pencil and a hat. Regards, Andrés Ramos.',
       'NOTE ON THE FRIDGE. Saturday. Mum, Dad: we have gone to the game. Lucas is the new "assistant". He has told everybody. There is pizza in the oven for you; we made it, so don\'t worry if it looks strange. Back at six. Grandpa is coming with us, because it is in the afternoon. Sofía.',
     ],
@@ -40,7 +40,7 @@ PI_MUNDOS.push((() => {
     x('descarta-prueba', 'These sentences are false. Ata cada una a la oración que la desmiente.', { doc: MAILS, nums: [1, 4], pregunta: 'It is true', queda: 'Lucas will write down the points.',
       ...T(['Lucas must walk the dog after school.', 4, 'Busca cuándo debe pasear al perro.'], ['Sofía wears the blue shirt on Monday.', 5, 'Busca dónde está la camisa azul.'], ['Lucas is bad at maths.', 11, 'Busca en qué es muy bueno.']), bien: 'One sentence says no.' },
       'El perro va antes del colegio, la camisa azul está lavándose y Lucas es muy bueno en matemáticas.', 'Busca en cada frase la palabra que cambia la verdad.'),
-    x('tacha-resumen', 'Cross out the **two** sentences that are only details.', { doc: MAILS, lineas: ['A family leaves messages for a week.', 'There are eggs and bread.', 'Sofía forgets a project and solves it.', 'Lucas hurts his foot and gets a new job.', 'The pizza is in the oven.', 'They all go to the game.'], ...S([1, 4], { 0: 'It says what the text is.', 2: 'It is the first problem.', 3: 'It is the second problem and its solution.', 5: 'It is the end.' }), bien: 'Problems and solutions stay.' },
+    x('tacha-resumen', 'Cross out the **two** sentences that are only details.', { doc: MAILS, lineas: ['A family leaves messages for a week.', 'There are eggs and bread.', 'Sofía forgets a project and solves it.', 'Lucas hurts his foot and gets a new job.', 'The pizza is in the oven.', 'The kids and Grandpa go to the game.'], ...S([1, 4], { 0: 'It says what the text is.', 2: 'It is the first problem.', 3: 'It is the second problem and its solution.', 5: 'It is the end.' }), bien: 'Problems and solutions stay.' },
       'Los huevos y la pizza son detalles; los problemas y sus soluciones son la historia.', 'Deja lo que le pasa a cada hijo y cómo acaba.'),
   ]);
 
@@ -81,7 +81,7 @@ PI_MUNDOS.push((() => {
       ...T(['«they»', 0, 'Put it in the sentence: who gave something back?'], ['«it»', 1, 'Put it in the sentence: what did they take?']), bien: 'People, and one thing.' },
       '«They» son los ladrones y «it» es la bolsa, una sola cosa.', '«They» es para varios y «it» para una cosa.'),
     x('descarta-prueba', 'These sentences are false. Ata cada una a la oración que la desmiente.', { doc: LIBRARY, nums: [1, 4, 5], pregunta: 'It is true', queda: 'Parents changed their minds.',
-      ...T(['There was a good road to the school.', 1, 'Busca cómo se llegaba a la escuela.'], ['The wet books were thrown away.', [9, 11], 'Busca qué hicieron con los libros mojados.'], ['A motorbike would be better, Nelson says.', 13, 'Busca por qué no la usa.']), bien: 'One sentence says no.' },
+      ...T(['There was a good road to the school.', 1, 'Busca cómo se llegaba a la escuela.'], ['The wet books were thrown away.', [9, 10, 11], 'Busca qué hicieron con los libros mojados.'], ['A motorbike would be better, Nelson says.', 13, 'Busca por qué no la usa.']), bien: 'One sentence says no.' },
       'No había carretera, los libros mojados se secaron y siguen siendo favoritos, y la moto no cruza el río.', 'Busca la palabra clave de cada frase en el texto.'),
     x('tacha-resumen', 'Cross out the **two** sentences that are only details.', { doc: LIBRARY, lineas: ['A teacher takes books to farms on donkeys.', 'One donkey is called Comma.', 'Children borrow books and tell the stories.', 'Parents became interested too.', 'It takes two hours to get to town.', 'He does not change the donkeys for a motorbike.'], ...S([1, 4], { 0: 'It is the main idea.', 2: 'It is how it works.', 3: 'It is an important change.', 5: 'It is the end and the reason.' }), bien: 'Idea, system, change and reason.' },
       'El nombre del burro y las dos horas son detalles; lo demás es la historia.', 'Deja lo que contarías en una frase a un amigo.'),
@@ -90,7 +90,7 @@ PI_MUNDOS.push((() => {
   const PIANO = {
     id: 'icf-en-piano', title: 'The piano at the station',
     paras: [
-      'Last year, somebody left an old piano at the train station in our town. There was a note on it: "Play me. I am free." At first, people only looked at it. Then a cleaner called Marta sat down one night, after work, and played a song that she learned when she was six.',
+      'Last year, somebody left an old piano at the train station in our town. There was a note on it: "Play me. I am free." At first, people only looked at it. Then a cleaner called Marta sat down one night, after work, and played a song that she had learned when she was six.',
       'Someone made a video, and soon the station was full of music. Students played before class, and an old man came every day at five to play the same waltz. The trains were still late, but nobody complained as much as before.',
       'In December, the company wanted to take the piano away because some passengers could not hear the announcements. People signed a letter, and the company had a better idea: now there is a small red light on the piano. When it turns on, you stop playing for a minute.',
       'Marta still cleans the station. On Fridays she gives lessons there for free. Her oldest student is the man of the waltz. He is learning a second song.',

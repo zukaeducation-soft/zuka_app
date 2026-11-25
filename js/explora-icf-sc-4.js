@@ -42,11 +42,11 @@ xpLec('icf-sc-fuentes-2', [
     ], 'Pregunta qué se contó exactamente: solo eso queda probado.'),
     xpHaz('hoja', '«Bajaron las quejas por basura». Subraya lo que queda **probado**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['La ciudad está más limpia.'], ['La gente está contenta.'], ['Se presentaron menos quejas.']], pista: '¿Qué se contó exactamente?' }, 'Se contaron quejas, no basura ni alegría.')],
   ['Los límites',
-    xpMira('hoja', 'Segunda idea: toda fuente **deja algo por fuera**.', { paras: [['Encuesta por internet sobre el uso de internet.'], ['100 % dice que se conecta.'], ['Nadie sin conexión pudo responder.']] }, [
+    xpMira('hoja', 'Segunda idea: toda fuente **deja algo por fuera**.', { paras: [['Encuesta por internet sobre el uso de internet.'], ['100 % dice que se conecta.'], ['Nadie sin conexión pudo responder.'], ['«Toda la ciudad tiene internet».']] }, [
       ['Mira cómo se hizo la encuesta.', { luz: [0], nota: { 0: 'por internet' } }],
       ['El resultado parece perfecto: cien por ciento.', { luz: [1] }],
       ['Pero quienes no tienen red no respondieron.', { luz: [2], nota: { 2: 'por fuera' } }],
-      ['El dato es exacto; la conclusión, falsa.', { luz: [1], tacha: [1] }],
+      ['El dato es exacto; la conclusión, falsa.', { luz: [1], tacha: [3] }],
       ['Busca siempre a quién no se le preguntó.', {}],
     ], 'Busca a quién deja por fuera la fuente.'),
     xpHaz('hoja', 'Para saber cuánto lee la ciudad preguntaron a la salida de una librería. Subraya el **límite**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Allí hay más lectores que en el resto.'], ['La librería era pequeña.'], ['Preguntaron en la calle.']], pista: '¿Quiénes salen de una librería?' }, 'La muestra favorece a quienes ya leen.')],

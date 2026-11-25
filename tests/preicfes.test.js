@@ -245,3 +245,9 @@ test('ningún texto dice de qué examen o año sale', () => {
   for (const t of txt) assert.doesNotMatch(String(t), SOURCE, String(t).slice(0, 140));
 });
 
+
+test('los juegos que muestran siempre su texto lo traen, también en el gimnasio', () => {
+  const CON_TEXTO = ['ajusta-alcance', 'comprueba-apuesta', 'subraya-tesis', 'talla-idea', 'tacha-resumen', 'bisagras', 'dice-deduce', 'cambia-palabra', 'pilares'];
+  const ex = [...get(ctx, 'GYM_RETOS').filter(r => /^gym-i-/.test(r.id)).flatMap(r => r.steps.map(s => [r.id, s.ex])), ...C.units.flatMap(u => u.lessons.flatMap(l => l.ex.map(e => [l.id, e])))];
+  for (const [id, e] of ex) if (CON_TEXTO.includes(e.game)) assert.ok((e.params.docs || [e.params.doc])[0]?.paras, `${id}: ${e.game} sin texto`);
+});

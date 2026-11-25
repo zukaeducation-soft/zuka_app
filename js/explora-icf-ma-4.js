@@ -65,7 +65,7 @@
         ['Ahora un anillo: se quita un círculo de radio 3.', { a: 360, q: 3, t: '36π − 9π' }, '$36 - 9 = 27$'],
         ['Se restan las superficies, nunca los radios.', { t: '27π' }],
       ], 'Sector: fracción del círculo. Anillo: afuera menos adentro.'),
-      xpHaz('dibujo', 'El círculo mide $36\\pi$. Abre el sector hasta que mida **12π**.', { dib: (v, K) => circ({ r: 6, a: v.a, q: 0 }, K), v: { a: 60 }, metas: { a: 120 }, alto: 260, manijas: [{ k: 'a', min: 30, max: 330, paso: 30, et: 'grados' }], lee: v => `$36 \\cdot ${v.a} \\div 360 = ${v.a / 10}$`, dice: () => '¿Qué fracción del círculo es?' }, '12 es un tercio de 36: un tercio de vuelta son 120°.')],
+      xpHaz('dibujo', 'El círculo mide $36\\pi$. Abre el sector hasta que mida **15π**.', { dib: (v, K) => circ({ r: 6, a: v.a, q: 0 }, K), v: { a: 60 }, metas: { a: 150 }, alto: 260, manijas: [{ k: 'a', min: 30, max: 330, paso: 30, et: 'grados' }], lee: v => `$36 \\cdot ${v.a} \\div 360 = ${v.a / 10}$`, dice: () => '¿Qué fracción del círculo es?' }, '15 de 36 son cinco de cada doce partes: 150°.')],
     ['Sumar piezas o quitar sobras',
       xpMira('dibujo', 'Tercera idea: una figura rara se **corta** en piezas o se **completa**.', { dib: casa, v: { t0: 60, f: 0, t: '' }, alto: 200 }, [
         ['La pared mide 12 por 7: son 84.', { t: 'pared: 84' }, '$12 \\cdot 7 = 84$'],

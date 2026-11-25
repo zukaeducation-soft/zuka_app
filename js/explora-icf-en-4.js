@@ -43,7 +43,7 @@ xpLec('icf-en-corto-2', [
     xpHaz('hoja', '«The old cinema is a school now. Students paint where the seats were. The screen is a map.» Subraya la idea principal.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['The screen is a map.'], ['A cinema became a school.'], ['Students like painting.']], pista: 'Debe servir para las tres oraciones.' }, 'Todo el texto habla de un cine que hoy es escuela.')],
   ['Correct, wrong, doesn\'t say',
     xpMira('hoja', 'Segunda idea: **wrong** es que el texto dice lo contrario; **doesn\'t say**, que no lo menciona.', { letras: ['texto', 'a', 'b', 'c'], paras: [['Tom has a small boat. He fishes every morning.'], ['Tom fishes every day.'], ['Tom\'s boat is big.'], ['Tom has a brother.']] }, [
-      ['«Every morning» es todos los días: correcto.', { luz: [0, 1, 2], nota: { 1: 'correct' } }],
+      ['«Every morning» es todos los días: correcto.', { luz: [0, 1], nota: { 1: 'correct' } }],
       ['Dice «small» y aquí «big»: lo contrario.', { luz: [0, 2], nota: { 2: 'wrong' } }],
       ['Del hermano no dice nada.', { luz: [3], nota: { 3: 'doesn\'t say' } }],
       ['Aunque pueda ser verdad, no está en el texto.', { luz: [3] }],
@@ -60,5 +60,5 @@ xpLec('icf-en-corto-2', [
     ], 'Lee antes y después: el contexto la explica.'),
     xpHaz('hoja', '«The soup was tasteless, so he added salt and lemon.» Subraya lo que significa «tasteless».', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['sin sabor'], ['muy caliente'], ['deliciosa']], pista: '¿Por qué alguien agrega sal y limón?' }, 'Le agrega sal y limón porque no sabe a nada.')],
   ['Ahora sí, un problema',
-    xpHaz('hoja', '«They thought nobody would come, so they brought ten chairs. People sat on the floor.» Subraya lo que se entiende.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Nobody came.'], ['More than ten people came.'], ['The chairs were broken.']], pista: '¿Por qué se sentarían en el piso?' }, 'Faltaron sillas: llegaron más de diez.')],
+    xpHaz('hoja', '«They thought few people would come, so they brought ten chairs. People sat on the floor.» Subraya lo que se entiende.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Nobody came.'], ['More than ten people came.'], ['The chairs were broken.']], pista: '¿Por qué se sentarían en el piso?' }, 'Faltaron sillas: llegaron más de diez.')],
 ], 'La idea de todo, lo que se puede señalar y la palabra por su contexto.');

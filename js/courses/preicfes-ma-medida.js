@@ -96,6 +96,6 @@ PI_MUNDOS.push((() => {
     ['icf-ma-medida-2', 'Una vuelta de rueda avanza su borde.', opc('Una rueda de 50 cm de diámetro da 10 vueltas. La distancia que avanza, en cm, es:', ['$500\\pi$', '$250\\pi$', '$1\\,000\\pi$', '$50\\pi$'], 0, 'Cada vuelta avanza $50\\pi$; diez, $500\\pi$.', 'El borde es π por el diámetro.')],
     ['icf-ma-medida-3', 'Volumen: área de la base por altura.', play('prisma-capas', 'Apila capas en el cilindro de radio 2 hasta 20π', { rounds: [{ base: 'circ', dims: [2], target: 20 }] }, 'La base vale $4\\pi$: cinco capas.', { hint: 'Halla el área de la base redonda.' })],
     ['icf-ma-medida-3', 'Pirámide y cono: la tercera parte.', play('cono-tercio', 'La base es de 3 por 5. Dale altura para que el volumen sea 20', { rounds: [{ base: 'rect', dims: [3, 5], target: 20 }] }, '$\\tfrac{15 \\cdot h}{3} = 5h = 20$ da 4.', { hint: 'Es la tercera parte de la caja de igual base y altura.' })],
-    ['icf-ma-medida-3', 'Un metro cúbico son mil litros.', opc('Una alberca de 2 m por 1.5 m de fondo tiene agua hasta 0.5 m de altura. ¿Cuántos litros hay?', ['150', '15 000', '3 000', '1 500'], 3, '$2 \\cdot 1.5 \\cdot 0.5 = 1.5$ m³, que son 1 500 litros.', 'Halla los metros cúbicos y multiplica por mil.')],
+    ['icf-ma-medida-3', 'Un metro cúbico son mil litros.', opc('Una alberca cuyo piso mide 2 m por 1.5 m tiene agua hasta 0.5 m de altura. ¿Cuántos litros hay?', ['150', '15 000', '3 000', '1 500'], 3, '$2 \\cdot 1.5 \\cdot 0.5 = 1.5$ m³, que son 1 500 litros.', 'Halla los metros cúbicos y multiplica por mil.')],
   ]);
 })());
