@@ -172,3 +172,20 @@ test('la pesa toma los colores del curso y la base los del tema; «Sigue aprendi
   const mis = ini.slice(ini.indexOf('function renderMyCourses'), ini.indexOf('function courseHeadHTML'));
   assert.doesNotMatch(mis, /continue|home-continue/, 'ni en Mis cursos: va dentro de cada curso');
 });
+
+// ---- Inicio y Mis cursos vivos (spec 2026-11-25-inicio-y-mis-cursos) ----
+test('saludo, filtros y juguete del día', () => {
+  const s = get(ctx, 'hmSaludo'), p = get(ctx, 'hmPasa'), j = get(ctx, 'hmDeHoy');
+  assert.equal([3, 8, 15, 21].map(s).join('|'), 'Buenas noches|Buenos días|Buenas tardes|Buenas noches');
+  assert.equal(p({ id: 'preuda' }, 'entrar'), true); assert.equal(p({ id: 'preuda' }, 'carrera'), false); assert.equal(p({ id: 'x' }, 'todos'), true);
+  assert.notEqual(j(new Date(2026, 10, 25)), j(new Date(2026, 10, 26)), 'cambia de un día al otro');
+});
+test('el sendero: un trazo que pasa por todos los mundos y se enciende hasta donde va', () => {
+  const t = get(ctx, 'mcTrazo'), h = get(ctx, 'mcHasta');
+  assert.equal((t(4).match(/[ML]/g) || []).length, 31); assert.match(t(1), /^M70/);
+  assert.equal(h([0, 0, 0]), 0); assert.ok(Math.abs(h([1, .5, 0]) - 1.5) < .01); assert.equal(h([1, 1, 1]), 2); assert.ok(h([0, 1, 1]) < 1, 'se detiene en el primero sin terminar');
+});
+test('las páginas nuevas están registradas y respetan «reducir movimiento»', () => {
+  assert.ok(html.includes('css/inicio.css'));
+  assert.match(read('css/inicio.css'), /prefers-reduced-motion: reduce/);
+});

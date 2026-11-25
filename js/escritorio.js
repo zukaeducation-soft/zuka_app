@@ -23,24 +23,6 @@ function dkTramos(c, hecha) {
   return [{ name: 'Mundos completos', d: c.units.filter(u => u.lessons.every(hecha)).length, n: c.units.length }];
 }
 
-function dkSemanaHTML() {
-  const now = new Date(), n = streakNow(), sem = dkSemana(dkActive(now), now);
-  return `<section class="dk dk-card"><div class="dk-head"><h2>Tu semana</h2><button class="dk-link" type="button" data-dk="streak">Ver actividad</button></div>
-    <ol class="dk-week">${sem.map(x => `<li class="${x.lit ? 'lit' : ''}${x.today ? ' today' : ''}"${x.today ? ' aria-current="date"' : ''}><small>${x.l}</small><span>${x.lit ? ICON.check : ''}</span></li>`).join('')}</ol>
-    <p class="dk-note">${ICON.flame}<span>${n ? `<b>${n} ${n === 1 ? 'día' : 'días'}</b> de racha` : 'Completa una lección para empezar tu racha.'}</span></p></section>`;
-}
-function dkAsesoriaHTML() {
-  const now = Date.now(), b = activeTutorias(S.tutorias, now)[0], nx = b ? null : nextFree(now, []);
-  return `<section class="dk dk-card"><h2>${b ? 'Tu próxima asesoría' : '¿Te enredas con un tema?'}</h2>
-    <p class="dk-note">${ICON.calendar}<span>${b ? `<b>${esc(dayLabel(b.date, now))}, ${hourLabel(b.time)}</b><br>${esc(tuCourse(b.course)?.name || 'Asesoría')}`
-      : nx ? `Próximo cupo: <b>${esc(dayLabel(nx.date, now))}, ${hourLabel(nx.time)}</b>` : 'No quedan cupos esta semana.'}</span></p>
-    <button class="btn ghost" type="button" data-dk="tutorias">${b ? 'Ver mis asesorías' : 'Separar asesoría'}</button></section>`;
-}
-// Mis cursos: avance de un curso por componente o por mundos, dentro de su tarjeta.
-function dkCursoHTML(c) {
-  return `<span class="dk dk-tramos">${dkTramos(c, isDone).map(t => `<span class="dk-tramo">${t.b ? blockArt(c, t.b) : ''}<span><span class="dk-tr"><span>${esc(t.name)}</span><small>${t.d}/${t.n}</small></span>
-    <span class="mini-bar"><i style="width:${(t.d / t.n) * 100}%"></i></span></span></span>`).join('')}</span><span class="dk dk-enter">Entrar al curso ${ICON.right}</span>`;
-}
 // Dentro de un curso: los mundos de un componente, en su tarjeta, y de qué consta cada lección, en su fila.
 function dkMundosHTML(c, b) {
   return `<span class="dk cv-mundos" aria-hidden="true">${c.units.filter(u => u.block === b.id).map(u =>
