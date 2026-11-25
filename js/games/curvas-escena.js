@@ -7,7 +7,7 @@
   // ------------------------------------------------------------------------------------------------------ cuadráticas
   // El eje de una parábola que sale y vuelve al suelo.  params { r1, r2, h, max, et }
   XG.figura('vertice-parabola', {
-    ini: () => ({ x: 0 }), alto: () => 206, ms: 1000, pie: 'Mueve el punto de mayor altura.', manijas: p => [{ k: 'x', min: 0, max: p.max, paso: 1, et: p.et }],
+    ini: () => ({ x: 0 }), alto: () => 222, ms: 1000, pie: 'Mueve el punto de mayor altura.', manijas: p => [{ k: 'x', min: 0, max: p.max, paso: 1, et: p.et }],
     ok: (v, p) => v.x === (p.r1 + p.r2) / 2, sol: p => ({ x: (p.r1 + p.r2) / 2 }), texto: p => `${(p.r1 + p.r2) / 2}`,
     dib(v, K, p, f) { const g = plano([0, p.max, 0, p.h * 1.15]), m = (p.r1 + p.r2) / 2, d = (p.r2 - p.r1) / 2; return g.ejes(K) + K.c(g.X(p.r1), g.Y(0), 5, 'fa') + K.c(g.X(p.r2), g.Y(0), 5, 'fa') + K.t(g.X(p.r1), g.Y(0) + 16, p.r1 || '', 's') + K.t(g.X(p.r2), g.Y(0) + 16, p.r2, 's') + K.l(g.X(v.x), 12, g.X(v.x), g.Y(0), 'lg d') + K.f(f, g.curva(K, x => p.h * (1 - ((x - m) / d) ** 2), 'la gr', p.r1, p.r2)); },
     aviso: (v, p) => (v.x < (p.r1 + p.r2) / 2 ? 'Ahí todavía va subiendo.' : 'Ahí ya va bajando.'), bien: (v, p) => `A mitad de camino entre ${p.r1} y ${p.r2}.`,
@@ -66,7 +66,7 @@
   XG.figura('altura-rueda', {
     ini: () => ({ g: 0 }), alto: () => 232, ms: 1000, pie: 'Gira la cabina.', manijas: p => [{ k: 'g', min: 0, max: p.max, paso: 15, et: 'ángulo (°)' }],
     ok: (v, p) => v.g === p.g, sol: p => ({ g: p.g }), texto: p => `${p.g}°`,
-    dib(v, K, p, f) { const u = 62 / p.r, cx = 150, cy = 92, [x, y] = K.at(cx, cy, 62, v.g); return K.arc(cx, cy, 62, 0, 360, 'lm') + K.l(cx - 80, cy, cx + 80, cy, 'lm d') + K.l(cx, cy, x, y, 'la') + K.c(x, y, 8, 'fF') + K.l(40, cy + p.c * u, 300, cy + p.c * u, 'lm') + K.t(250, cy + 4, `centro a ${p.c} m`, 's tm', 'start').replace('start', 'middle') + K.f(f, K.l(x, y, x, cy + p.c * u, 'lg d') + K.t(x + 10, cy + 30, `${R(p.c + p.r * Math.sin(v.g * Math.PI / 180))} m`, 'b', 'start')); },
+    dib(v, K, p, f) { const u = 62 / p.r, cx = 150, cy = 92, [x, y] = K.at(cx, cy, 62, v.g); return K.arc(cx, cy, 62, 0, 360, 'lm') + K.l(cx - 80, cy, cx + 80, cy, 'lm d') + K.l(cx, cy, x, y, 'la') + K.c(x, y, 8, 'fF') + K.l(40, cy + p.c * u, 300, cy + p.c * u, 'lm') + K.t(334, cy - 8, `centro a ${p.c} m`, 's tm', 'end') + K.f(f, K.l(x, y, x, cy + p.c * u, 'lg d') + K.t(x + 10, cy + 30, `${R(p.c + p.r * Math.sin(v.g * Math.PI / 180))} m`, 'b', 'start')); },
     aviso(v, p) { const h = R(p.c + p.r * Math.sin(v.g * Math.PI / 180)); return Math.abs(h - p.y) < 0.01 ? 'La altura es esa, pero no es la primera vez que pasa.' : `Ahí está a ${h} m.`; }, bien: (v, p) => `${p.c} del centro y ${R(p.y - p.c)} por el giro: ${p.y} m.`,
   });
   XG.frases('es-periodica');

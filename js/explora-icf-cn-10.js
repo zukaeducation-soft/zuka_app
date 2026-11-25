@@ -11,10 +11,10 @@
   xpLec('icf-cn-ondas-1', [
     ['Viaja la energía',
       xpMira('dibujo', 'Empecemos por la idea: la onda **viaja**; la materia **vibra** y se queda.', { dib: onda, v: { n: 3, A: 34, g: 0, k: 0, t: '' }, alto: 172 }, [
-        ['Una onda avanza por el agua.', { g: 0.5 }],
+        ['Una onda avanza por el agua.', { g: 1 }],
         ['Hay un corcho flotando.', { k: 1 }],
-        ['Cuando pasa la cresta, sube.', { g: 0.75, t: 'sube y baja' }],
-        ['Después baja, en el mismo sitio.', { g: 1.25 }],
+        ['Cuando pasa la cresta, sube.', { g: 1.25, t: 'sube y baja' }],
+        ['Después baja, en el mismo sitio.', { g: 1.75 }],
         ['Lo que avanzó fue la energía.', { t: 'viaja la energía' }],
       ], 'Viaja la energía, no la materia.'),
       xpHaz('hoja', 'En un estadio, la gente hace «la ola» sin moverse de su puesto. Subraya lo que viaja.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Las personas'], ['El movimiento que pasa de uno a otro'], ['Las sillas']], pista: '¿Alguien cambia de puesto?' }, 'La perturbación pasa; cada quien se queda.')],

@@ -8,7 +8,7 @@ xpLec('icf-sc-modelos-1', [
       ['Por eso no siempre coinciden.', { luz: [3] }],
       ['Si nadie manda sobre el Estado, es soberano.', { luz: [0] }],
     ], 'Organización, personas y sentimiento de grupo.'),
-    xpHaz('hoja', 'Pon al margen el concepto.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['nación', 'Estado', 'gobierno'], meta: [2, 0, 1], paras: [['El gabinete que termina en agosto'], ['El pueblo gitano, en muchos países'], ['Quien firma los tratados a nombre del país, gane quien gane']], pista: 'Alguna no va ahí: ¿cambia con las elecciones o se siente unida?' }, 'Cambia, se siente unido y continúa.')],
+    xpHaz('hoja', 'Pon al margen el concepto.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['nación', 'Estado', 'gobierno'], meta: [2, 0, 1], paras: [['El gabinete que termina en agosto'], ['El pueblo gitano, en muchos países'], ['El que sigue obligado por un tratado, gane quien gane']], pista: 'Alguna no va ahí: ¿cambia con las elecciones o se siente unida?' }, 'Cambia, se siente unido y continúa.')],
   ['Poder y legitimidad',
     xpMira('hoja', 'Segunda idea: se puede mandar por **fuerza** o con **legitimidad**.', { paras: [['Obedecen por miedo'], ['Obedecen porque lo reconocen'], ['Ley bien aprobada'], ['Ley que casi todos sienten injusta']] }, [
       ['Sin la amenaza, no obedecerían.', { luz: [0], nota: { 0: 'fuerza' } }],
