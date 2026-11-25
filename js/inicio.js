@@ -110,7 +110,7 @@ function renderHome() {
       <button class="btn brand sm" data-install>Instalar</button>
       <button class="icon-btn" data-hide-install aria-label="Ocultar">${ICON.x}</button>
     </section>` : ''}
-    ${metasHTML()}
+    ${simulacrosHTML()}${metasHTML()}
     <section class="hm-cursos"><div class="hm-fila"><h2 class="home-h2">Cursos</h2><div class="hm-filtros" role="group" aria-label="Filtrar cursos">${HM_FILTROS.filter(f => cursosVisibles().some(c => hmPasa(c, f[0]))).map(f => `<button type="button" data-hm="${f[0]}" aria-pressed="${f[0] === hmFiltro}">${f[1]}</button>`).join('')}</div></div>
       <div class="home-courses"></div></section>
     <div class="hm-dos"><section class="hm-jug"><div class="hm-jt"><p class="hm-k">Calienta la mente</p><h2></h2><p class="hm-jp"></p><p class="pz-cuenta"></p><button class="hm-otro" type="button">Otro juguete ${ICON.right}</button></div><div class="hm-fig"></div></section>
@@ -118,7 +118,7 @@ function renderHome() {
         <p>${b ? `<b>${esc(dayLabel(b.date, +now))}, ${hourLabel(b.time)}</b> · ${esc(tuCourse(b.course)?.name || 'Asesoría')}` : nx ? `Hay cupo con un profe: <b>${esc(dayLabel(nx.date, +now))}, ${hourLabel(nx.time)}</b>` : 'No quedan cupos esta semana.'}</p>
         <button class="btn ghost" type="button" data-dk="tutorias">${b ? 'Ver mi asesoría' : 'Separar asesoría'}</button></div></section></div>
   </div></div>`;
-  metasBind(view);
+  metasBind(view); simulacrosBind(view);
   const pintaCursos = () => {
     if (!cursosVisibles().some(c => hmPasa(c, hmFiltro))) hmFiltro = 'todos';
     $('.home-courses', view).innerHTML = cursosVisibles().filter(c => hmPasa(c, hmFiltro)).map(tarjeta).join('');

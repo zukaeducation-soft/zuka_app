@@ -137,3 +137,42 @@ function instMide(avisos, mal, todos) {
   const w = (k, n) => { if (!n) return [0, 1]; const z = 1.96, p = k / n, d = 1 + z * z / n, c = p + z * z / (2 * n), m = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)); return [Math.max(0, (c - m) / d), Math.min(1, (c + m) / d)]; };
   return { vp, fp, fn, precision: vp + fp ? vp / (vp + fp) : null, cobertura: vp + fn ? vp / (vp + fn) : null, icPrecision: w(vp, vp + fp), icCobertura: w(vp, vp + fn) };
 }
+
+// ---------- docente responsable y simulacros (spec 2026-11-25-docente-responsable) ----------
+// Nota: porcentaje de aciertos, de 0 a 100. No es un puntaje del examen real.
+const instNota = (aciertos, n) => (n ? Math.round(100 * aciertos / n) : 0);
+// Elige n preguntas repartidas entre los mundos, primero las que no se han usado; las de un mismo texto quedan seguidas.
+function instElige(preguntas, mundos, n, usadas = new Set(), azar = Math.random) {
+  const revuelve = xs => { const a = [...xs]; for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(azar() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; } return a; };
+  const cola = new Map(mundos.map(m => [m, revuelve(preguntas.filter(p => p.m === m)).sort((a, b) => usadas.has(a.k) - usadas.has(b.k))])), out = [];
+  for (const nuevas of [true, false]) {
+    while (out.length < n) {
+      let puso = false;
+      for (const m of mundos) { const q = cola.get(m), j = q.findIndex(p => !nuevas || !usadas.has(p.k)); if (j < 0 || out.length >= n) continue; out.push(q.splice(j, 1)[0]); puso = true; }
+      if (!puso) break;
+    }
+  }
+  return instOrdena(out, mundos);
+}
+const instOrdena = (ps, mundos) => ps.map((p, i) => ({ p, i, j: mundos.indexOf(p.m), t: p.d == null ? -1 : ps.findIndex(x => x.d === p.d) })).sort((a, b) => a.j - b.j || (a.t < 0 ? a.i : a.t) - (b.t < 0 ? b.i : b.t) || a.i - b.i).map(x => x.p);
+// Todo lo que se lee de un simulacro. det: { preguntas, resultados } de docencia('simulacro'); gente: los que deben presentarlo.
+function instSimulacro(det, gente) {
+  const ps = det.preguntas, N = ps.length, de = new Map(det.resultados.map(r => [r.estudiante, r]));
+  const filas = gente.map(e => { const r = de.get(e.id); return { e, r: r || null, estado: !r ? 'falta' : r.entregado ? 'entregado' : 'curso', nota: r && r.entregado ? instNota(r.aciertos, N) : null }; });
+  const ok = filas.filter(f => f.estado === 'entregado'), media = xs => (xs.length ? Math.round(xs.reduce((t, x) => t + x, 0) / xs.length) : null);
+  const preguntas = ps.map((p, i) => {
+    const dist = [0, 0, 0, 0]; let blanco = 0; ok.forEach(f => { const o = f.r.respuestas[i]; if (o >= 0 && o < 4) dist[o]++; else blanco++; });
+    const mal = dist.map((x, o) => [x, o]).filter(x => x[1] !== p.r).sort((a, b) => b[0] - a[0])[0];
+    return { i, p, dist, blanco, acierto: ok.length ? dist[p.r] / ok.length : null, trampa: mal && mal[0] > 0 && mal[0] >= dist[p.r] ? mal[1] : null };
+  });
+  const por = clave => [...new Set(ps.map(clave))].map(m => { const xs = preguntas.filter(x => clave(x.p) === m); return { m, n: xs.length, acierto: ok.length ? xs.reduce((t, x) => t + x.acierto, 0) / xs.length : null, lecciones: [...new Set(xs.filter(x => x.acierto != null && x.acierto < .6).map(x => x.p.l).filter(Boolean))] }; });
+  const grupos = [...new Set(gente.map(e => e.grupo))].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })).map(g => { const xs = filas.filter(f => f.e.grupo === g), k = xs.filter(f => f.nota != null); return { grupo: g, n: xs.length, entregaron: k.length, nota: media(k.map(f => f.nota)) }; });
+  const notas = ok.map(f => f.nota), tramos = [0, 20, 40, 60, 80].map(d => ({ d, h: d === 80 ? 100 : d + 19, n: notas.filter(x => x >= d && (d === 80 || x < d + 20)).length }));
+  return { filas, n: gente.length, entregaron: ok.length, curso: filas.filter(f => f.estado === 'curso').length, nota: media(notas), min: notas.length ? Math.min(...notas) : null, max: notas.length ? Math.max(...notas) : null, preguntas, mundos: por(p => p.m).sort((a, b) => (a.acierto ?? 1) - (b.acierto ?? 1)), grupos, tramos };
+}
+// Por mundo, lo que acertó un estudiante en varios simulacros. dets: [{ preguntas, resultados }].
+function instPorMundo(dets, id) {
+  const out = new Map();
+  dets.forEach(d => { const r = d.resultados.find(x => x.estudiante === id && x.entregado); if (!r) return; d.preguntas.forEach((p, i) => { const x = out.get(p.m) || { m: p.m, n: 0, ok: 0, lecciones: new Set() }; x.n++; if (r.respuestas[i] === p.r) x.ok++; else if (p.l) x.lecciones.add(p.l); out.set(p.m, x); }); });
+  return [...out.values()].map(x => ({ ...x, lecciones: [...x.lecciones] })).sort((a, b) => a.ok / a.n - b.ok / b.n);
+}

@@ -1,109 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/tren-ordenado.js
-// El tren ordenado (Álgebra 1.3, axiomas de orden). Cada ronda trae un tren de vagones con números reales
-// (enteros, fracciones, decimales, raíces, π) en desorden. Se arrastra cada vagón a su lugar para que el tren
-// quede de menor a mayor, de izquierda a derecha como en la recta. a < b quiere decir que b − a es positivo:
-// b va más a la derecha. Al comprobar aparecen los signos < entre vagones.
-// params = { rounds: [{ items: [{ label, v }] }] }   state = { orders: [[índice de item, …] por ronda] }
-
-GAMES['tren-ordenado'] = (() => {
-  const sorted = order => order.every((v, k) => k === 0 || order[k - 1] < v);
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => {
-      const o = state.orders?.[i];
-      return Array.isArray(o) && o.length === r.items.length && new Set(o).size === o.length && o.every(k => r.items[k]) && sorted(o.map(k => r.items[k].v));
-    });
-    const solution = params.rounds.map(r => [...r.items].sort((a, b) => a.v - b.v).map(it => it.label).join(' < ')).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const O = R.map((r, i) => shuffledOrder(r.items.length, `tren${i}${r.items.map(t => t.label).join()}`));
-    const moved = R.map(() => false);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], drag = null, slot = { w: 0, y: 0 };
-
-    function layout(w, h) { W = w; H = h; tabs = roundTabs(R.length, w); }
-    const geo = () => { const n = R[cur].items.length, sw = (W - 20) / n; return { n, sw, ww: sw - 8, y: H * 0.56 }; };
-    const slotX = k => { const g = geo(); return 10 + k * g.sw + 4; };
-
-    function wagon(p, x, y, w, label, col, lifted) {
-      const h = 40;
-      // Vagón: bloque crema con relieve (color sol al levantarlo), techo del color del estado y ruedas con centro sol.
-      drawTile(p, C, { x, y: y - h, w, h: h - 3 }, '', { fill: lifted ? C.sun : C.cream, r: 7, lift: 3, ring: lifted ? C.sun : null });
-      p.noFill(); p.stroke(col); p.strokeWeight(2); p.rect(x, y - h, w, h - 3, 7);   // borde: en el tema claro el vagón crema casi no se distingue del papel
-      p.noStroke(); p.fill(col); p.rect(x, y - h, w, 7, 7, 7, 0, 0);
-      p.fill(C.ink); p.circle(x + w * 0.25, y + 5, 13); p.circle(x + w * 0.75, y + 5, 13);
-      p.fill(C.sun); p.circle(x + w * 0.25, y + 5, 5); p.circle(x + w * 0.75, y + 5, 5);
-      p.fill(inkOn(lifted ? C.sun : C.cream, C.ink)); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD); fitText(p, label, x + w / 2, y - h / 2 + 3, w - 6, 16);
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], o = O[cur], g = geo(), good = sorted(o.map(k => r.items[k].v));
-        drawTabs(p, C, tabs, cur, i => (locked ? (sorted(O[i].map(k => R[i].items[k].v)) ? C.ok : C.bad) : i === cur ? C.brand : moved[i] ? C.R : C.line));
-        drawKicker(p, C, 'Ordena el tren de menor a mayor', W / 2, 58, { center: true });
-        p.textAlign(p.CENTER, p.CENTER); p.noStroke();
-        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'Arrastra cada vagón a su lugar', W / 2, 80, W - 24, 12);
-        // Riel
-        p.stroke(C.mute); p.strokeWeight(3); p.line(6, g.y + 12, W - 6, g.y + 12);
-        for (let x = 12; x < W; x += 16) { p.strokeWeight(2); p.line(x, g.y + 12, x - 4, g.y + 18); }
-        // Vagones
-        o.forEach((k, pos) => {
-          if (drag && drag.k === k) return;
-          const col = locked ? (good ? C.ok : C.bad) : C.R;
-          wagon(p, slotX(pos), g.y, g.ww, r.items[k].label, col, false);
-          if (pos > 0) {
-            p.noStroke(); p.fill(locked ? (good ? C.ok : C.mute) : C.line); p.textStyle(p.BOLD); p.textSize(14);
-            p.text(locked && good ? '<' : '•', slotX(pos) - 4, g.y - 20);
-          }
-        });
-        if (drag) wagon(p, drag.x - g.ww / 2, g.y - 18, g.ww, r.items[drag.k].label, C.brand, true);
-        // Recta-guía: menor a la izquierda, mayor a la derecha
-        const yy = g.y + 52;
-        p.stroke(C.mute); p.strokeWeight(1.5); p.line(30, yy, W - 30, yy);
-        p.noStroke(); p.fill(C.mute); p.triangle(W - 30, yy, W - 38, yy - 4, W - 38, yy + 4); p.triangle(30, yy, 38, yy - 4, 38, yy + 4);
-        p.textStyle(p.NORMAL); p.textSize(11); p.text('menor', 52, yy + 14); p.text('mayor', W - 52, yy + 14);
-        if (locked && !good) { p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, [...r.items].sort((a, b) => a.v - b.v).map(t => t.label).join(' < '), W / 2, H - 20, W - 20, 13); }
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY, g = geo();
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; drag = null; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        if (y < g.y - 60 || y > g.y + 24) return;
-        const pos = Math.floor((x - 10) / g.sw);
-        if (pos < 0 || pos >= g.n) return;
-        drag = { k: O[cur][pos], x }; api.sfx?.tap?.(); return false;
-      };
-      p.mouseDragged = () => { if (drag) { drag.x = p.mouseX; return false; } };
-      p.mouseReleased = () => {
-        if (!drag) return;
-        const g = geo(), o = O[cur].filter(k => k !== drag.k);
-        const pos = Math.min(g.n - 1, Math.max(0, Math.floor((drag.x - 10) / g.sw)));
-        o.splice(pos, 0, drag.k); O[cur] = o; moved[cur] = true; drag = null;
-        api.ready(moved.every(Boolean));
-      };
-    }, 1.1);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ orders: O.map(o => [...o]) }),
-      lock() { locked = true; drag = null; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create };
-})();
-;
 //#archivo js/games/bolsa-razon.js
 // La bolsa de la razón (Álgebra, razones). Una bolsa transparente con bolas rojas y azules: con − / + se ponen o se
 // quitan bolas de cada color. Cada ronda pide una bolsa con una condición de razón: parte-parte («por cada 3 rojas
@@ -22706,5 +22602,187 @@ PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
     ['pu-ar-4', 'Para estar seguros hay que pensar en la peor suerte posible.',
       opc('En una bolsa hay 5 bolas rojas, 5 verdes y 5 azules. La cantidad mínima de bolas que hay que sacar sin mirar para estar seguros de tener dos del mismo color es:', ['2', '3', '4', '6'], 2,
         'Con la peor suerte salen tres de colores distintos; la cuarta repite color.', 'Imagina que cada bola sale de un color distinto mientras se pueda.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-ecuaciones.js
+// Preuniversitario · mundo 13 «Ecuaciones y planteamiento»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+// Reutiliza juegos de Álgebra (despeja-x, consecutivos, perimetro-x, edades-barras, dos-rectas, elimina-variable, dos-compras,
+// espejo-desigualdad, rectangulo-pa, balanza-cajas) con datos nuevos.
+PU_JUEGOS.push(({ setExam }) => {
+  setExam('pu-ecuaciones', 'Ecuaciones y planteamiento', [
+    ['pu-ec-1', 'Cada cantidad se escribe con la misma x.',
+      play('cinta-ecuacion', 'Cinta', { rounds: [{ say: 'Uno tiene 5 más que otro y suman 27', parts: [[1, 0, 'menor'], [1, 5, 'mayor']], total: 27, lo: 0, hi: 20 }] }, '$2x + 5 = 27$: $x = 11$.', { hint: 'Junta las x.' })],
+    ['pu-ec-1', 'Seguidos: el primero es x y los demás suman 1.',
+      play('consecutivos', 'Seguidos', { rounds: [{ k: 3, d: 1, S: 57 }] }, '$3x + 3 = 57$: $x = 18$.', { hint: 'x, x + 1, x + 2.' })],
+    ['pu-ec-2', 'En una mezcla, cantidad × precio de cada parte suma el valor total.',
+      play('mezcla-precio', 'Mezcla', { rounds: [{ a: ['té A', 10000], b: ['té B', 4000], total: 6, target: 6000, step: 1 }] }, '$10a + 4(6 - a) = 36$: $a = 2$.', { hint: 'Valor total.' })],
+    ['pu-ec-2', 'En monedas, número × valor de cada tipo.',
+      play('alcancia-monedas', 'Monedas', { rounds: [{ n: 8, v: [500, 100], total: 2800 }] }, '$500k + 100(8 - k) = 2\\,800$: $k = 5$.', { hint: 'Valor total.' })],
+    ['pu-ec-3', 'Al dividir entre un negativo, el signo se voltea.',
+      play('intervalo-solucion', 'Desigualdad', { rounds: [{ tex: '-2x + 3 < 9', f: x => -2 * x + 3 < 9, lo: -6, hi: 4 }] }, '$-2x < 6$: $x > -3$.', { hint: 'Voltea.' })],
+    ['pu-ec-3', 'La solución de un sistema es el cruce de las dos rectas.',
+      play('dos-rectas', 'Cruce', { rounds: [{ e1: [1, 1, 5], e2: [1, -1, 3] }] }, 'El punto $(4, 1)$.', { hint: 'Cruce.' })],
+  ]);
+});
+
+// Mundo 13 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/ecuaciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ec-1', [
+    play('traduce-frases', 'Une cada frase con su expresión.', { et: ['el doble de x, más 7', 'el doble de la suma de x y 7', '7 menos que x', 'la mitad de x, menos 7'], metas: ['2x + 7', '2(x + 7)', 'x − 7', 'x/2 − 7'], fichas: ['2x + 7', '2(x + 7)', 'x − 7', 'x/2 − 7', '7 − x', '(x − 7)/2'],
+      mira: ['La coma separa: primero el doble y después se suma.', 'Primero se hace la suma y después el doble de todo.', 'A x se le quitan 7.', 'Primero la mitad y después se resta.'], trampas: { '0:2(x + 7)': 'Ahí se dobla también el 7.', '2:7 − x': 'Eso es «x menos que 7»: prueba con x = 10.', '3:(x − 7)/2': 'Ahí primero se resta y después se parte.' }, ok: 'La frase dice qué operación va primero.' },
+      '$2x + 7$; $2(x + 7)$; $x - 7$ y $\\tfrac x2 - 7$.',
+      { hint: 'Cambia la x por 10, haz la cuenta como la dice la frase y mira cuál expresión da lo mismo.' }),
+    play('sigue-equilibrada', 'La balanza está derecha: $6x + 5 = 2x + 21$. Toca **todos** los cambios que la dejan derecha.', { casos: [{ t: 'quitar 2x de cada lado', si: true }, { t: 'quitar 5 de la izquierda y 21 de la derecha', no: 'Quitar 5 de un lado y 21 del otro es quitar pesos distintos.' }, { t: 'quitar 5 de cada lado', si: true }, { t: 'pasar 2x de la derecha a la izquierda', no: 'Pasar 2x al otro plato, sin cambiar nada, quita de un lado y aumenta el otro.' }, { t: 'doblar lo que hay en cada lado', si: true }], falta: 'Falta otro: sirve todo lo que se les haga a los dos lados por igual.', ok: 'Lo mismo a los dos lados: sigue derecha.' },
+      'Quitar lo mismo o doblar los dos lados no la inclina. Sacar pesos distintos, o mover cajas de un plato al otro, sí.',
+      { hint: 'En cada cambio pregúntate cuánto cambia el peso de la izquierda y cuánto el de la derecha.' }),
+    play('pasos-despeje', 'Despeja paso a paso. Cada renglón sale del anterior.', { ec: '5x + 3 = 2x + 18', et: ['sin 2x', 'sin el 3', 'entre 3'], metas: ['3x + 3 = 18', '3x = 15', 'x = 5'], fichas: ['3x + 3 = 18', '3x = 15', 'x = 5', '7x + 3 = 18', '3x = 21', 'x = 12', 'x = 7'],
+      mira: ['Quita 2x de los dos lados.', 'Quita 3 de los dos lados.', 'Reparte los dos lados entre 3.'], trampas: { '0:7x + 3 = 18': 'A 5x se le quitan 2x.', '1:3x = 21': 'El 3 se quita de los dos lados: no se suma.', '2:x = 12': 'El 3 multiplica a la x: se divide, no se resta.' }, ok: '5 · 5 + 3 = 28 y 2 · 5 + 18 = 28.' },
+      'Quitando $2x$: $3x + 3 = 18$. Quitando 3: $3x = 15$. Entre 3: $x = 5$.',
+      { hint: 'Primero deja las x en un solo lado; después, los números en el otro.' }),
+    play('misma-x', 'Eva tiene **x** años. Hugo tiene 6 más que Eva, Inés el doble de Hugo y Raúl 5 menos que Inés. Escribe cada edad.', { et: ['Hugo', 'Inés', 'Raúl'], metas: ['x + 6', '2(x + 6)', '2(x + 6) − 5'], fichas: ['x + 6', '2(x + 6)', '2(x + 6) − 5', '2x + 6', '5 − 2(x + 6)', '6x', 'x − 6'],
+      mira: ['A la edad de Eva súmale 6.', 'El doble de toda la edad de Hugo.', 'A la edad de Inés quítale 5.'], trampas: { '0:6x': 'Eso es seis veces la edad de Eva.', '0:x − 6': 'Hugo es mayor que Eva.', '1:2x + 6': 'Falta doblar también los 6 años.', '2:5 − 2(x + 6)': 'Al revés: los 5 se le quitan a Inés.' }, ok: 'Todas quedaron escritas con la misma x.' },
+      'Hugo $x + 6$; Inés $2(x + 6)$; Raúl $2(x + 6) - 5$.',
+      { hint: 'Prueba con Eva de 10 años: ¿cuántos tendrían los demás?' }),
+    play('ancho-del-marco', 'El **largo** de un marco es **2 menos que el triple del ancho**, y su borde mide **44**. Mueve el ancho.', { k: 3, q: 2, P: 44, max: 10 },
+      'Con ancho $x$, el largo es $3x - 2$: $2(x + 3x - 2) = 44$ da $4x - 2 = 22$ y $x = 6$. El largo es 16.',
+      { hint: 'El borde son dos anchos y dos largos: un ancho y un largo juntos miden la mitad.' }),
+    play('cinco-seguidos', '**Cinco** números enteros seguidos suman **95**. Encuentra estos tres.', { n: 5, et: ['el del medio', 'el menor', 'el mayor'], metas: ['19', '17', '21'], fichas: ['19', '17', '21', '20', '15', '23', '18'],
+      mira: ['Lo que les falta a los de antes les sobra a los de después.', 'Retrocede desde el del medio.', 'Avanza desde el del medio.'], trampas: { '1:18': 'Antes del medio hay dos números, no uno.', '2:20': 'Después del medio hay dos números, no uno.' }, ok: '17 + 18 + 19 + 20 + 21 = 95.' },
+      '$5x + 10 = 95$ da $x = 17$. El del medio es $95 \\div 5 = 19$ y el mayor, 21.',
+      { hint: 'El del medio es el promedio de los cinco.' }),
+    play('dos-cuerdas', 'Una cuerda mide **5 m más que el doble** de la otra, y juntas miden **44 m**. Completa.', { et: ['la corta', 'la larga', 'se llevan'], metas: ['13', '31', '18'], fichas: ['13', '31', '18', '22', '26', '5', '39'],
+      mira: ['Son tres veces la corta y 5 más: quita primero los 5.', 'El doble de la corta, más 5.', 'Resta las dos.'], trampas: { '0:39': 'Eso son las tres veces: falta repartir.', '0:22': 'No miden lo mismo.', '1:26': 'Faltan los 5 de más.', '2:5': 'Los 5 son sobre el doble, no sobre la corta.' }, ok: '13 + 31 = 44.' },
+      '$x + 2x + 5 = 44$: $3x = 39$, $x = 13$. La larga mide 31 y se llevan 18.',
+      { hint: 'Llama x a la corta y escribe la larga con esa misma x.' }),
+    play('sube-ecuacion', 'Sube al valor que se pide. Puedes fallar **una** vez.', { tiros: [
+      { q: '$6x - 9 = 3x + 21$. ¿Cuánto vale **x**?', r: 10, c: '30 \\div 3', e: { 4: 'El 9 que se resta, al otro lado, se suma.', 30: 'Eso vale 3x.' } },
+      { q: 'A un número le sumo 14 y obtengo el **triple** del número. ¿Cuál es el número?', r: 7, c: '14 \\div 2', e: { 14: 'Los 14 son dos veces el número.' } },
+      { q: 'La mitad de un número más su sexta parte es **28**. ¿Cuál es el número?', r: 42, c: '28 \\cdot \\tfrac64', e: { 56: 'Ese es el de la mitad sola.', 7: 'Esa es la sexta parte.' } }] },
+      '$3x = 30$, $x = 10$. $x + 14 = 3x$, $x = 7$. $\\tfrac12 + \\tfrac16 = \\tfrac46$, y $\\tfrac46$ de 42 son 28.',
+      { hint: 'Escribe la ecuación y, al final, prueba tu número en el enunciado.' }),
+    sol('La tercera parte de un número más la cuarta parte del mismo número es igual a 35. ¿Cuál es el número?',
+      ['Se plantea $\\tfrac{x}{3} + \\tfrac{x}{4} = 35$. En doceavos, la suma de la izquierda es [[7]] doceavos de $x$', 'Entonces $7x = 35 \\cdot 12 =$ [[420]]', 'El número es $420 \\div 7 =$ [[60]]', 'Comprobación: su tercera parte es 20 y su cuarta parte es [[15]]'],
+      ['5', '84', '12'],
+      '$\\tfrac{4x}{12} + \\tfrac{3x}{12} = \\tfrac{7x}{12}$. Multiplicando por 12 y dividiendo entre 7 sale 60, y $20 + 15 = 35$.',
+      'Para sumar un tercio y un cuarto de la misma cantidad hace falta un denominador común.'),
+    err('En una granja hay gallinas y conejos. En total se cuentan 20 cabezas y 56 patas. ¿Cuántos conejos hay?',
+      ['Sea $c$ el número de conejos: las gallinas son $20 - c$', 'Patas: $4c + 2(20 - c) = 56$', 'Se opera el paréntesis: $4c + 40 - c = 56$', '$3c = 16$: no da un número entero de conejos'], 2,
+      ['Se opera el paréntesis: $4c + 40 - 2c = 56$', 'Se opera el paréntesis: $4c + 20 - 2c = 56$', 'Se opera el paréntesis: $4c + 40 + 2c = 56$'],
+      'El 2 multiplica a los dos términos del paréntesis: $2(20 - c) = 40 - 2c$. Queda $2c + 40 = 56$ y $c = 8$ conejos.',
+      'Una cantidad de animales que no es entera avisa que algo se operó mal. Revisa cómo se abrió el paréntesis.'),
+    opc('Hace 6 años, Juan tenía la mitad de la edad que tendrá dentro de 9 años. La edad actual de Juan es:',
+      ['15', '21', '24', '12'], 1,
+      'Con $x$ para la edad actual: $x - 6 = \\tfrac{x + 9}{2}$. Entonces $2x - 12 = x + 9$ y $x = 21$.',
+      'Escribe con la misma x la edad de hace 6 años y la de dentro de 9 años.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/ecuaciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ec-2', [
+    play('hace-cuantos', 'Hoy un papá tiene **42** años y su hija **12**. Retrocede hasta que él tuviera **siete veces** la edad de ella.', { a: 42, b: 12, k: 7, na: 'papá', nb: 'hija' },
+      '$42 - t = 7(12 - t)$ da $6t = 42$ y $t = 7$: él tenía 35 y ella 5.',
+      { hint: 'A los dos se les quitan los mismos años. La diferencia sigue siendo 30.' }),
+    play('tabla-edades', 'Llena la tabla con las edades de Leo y Sol.', { fila: [['Leo', 'x'], ['Sol', 'x + 9']], col: ['hace 4 años', 'en 6 años'], metas: ['x − 4', 'x + 6', 'x + 5', 'x + 15'], fichas: ['x − 4', 'x + 6', 'x + 5', 'x + 15', 'x + 9', 'x + 13', '4x'],
+      mira: ['Hace 4 años Leo tenía 4 menos.', 'En 6 años Leo tendrá 6 más.', 'Sol también tenía 4 menos que hoy.', 'Sol también tendrá 6 más que hoy.'], trampas: { '2:x + 13': 'Hacia atrás se resta.', '2:x + 9': 'Esa es la edad de hoy.', '3:x + 9': 'Esa es la edad de hoy.' }, ok: 'En cada columna, Sol le lleva 9 a Leo.' },
+      'Leo: $x - 4$ y $x + 6$. Sol: $x + 9 - 4 = x + 5$ y $x + 9 + 6 = x + 15$.',
+      { hint: 'Los años pasan igual para los dos: a cada edad de hoy súmale o réstale lo mismo.' }),
+    play('todos-iguales', 'Se venden **18** boletos, unos de **4** mil y otros de **7** mil, por **96** mil en total. Completa.', { n: 18, et: ['todos de 4', 'faltan', 'de 7 mil', 'de 4 mil'], metas: ['72', '24', '8', '10'], fichas: ['72', '24', '8', '10', '126', '6', '24'],
+      mira: ['Supón que los 18 son de 4 mil.', 'De lo que supusiste hasta 96.', 'Cada cambio de uno de 4 por uno de 7 sube 3.', 'Los demás, hasta completar 18.'], trampas: { '0:126': 'Eso sería con todos de 7 mil.', '2:6': 'Cada cambio sube 7 − 4, no 4.', '2:24': 'Eso es lo que falta, no los cambios.' }, ok: '8 · 7 + 10 · 4 = 96.' },
+      '$18 \\cdot 4 = 72$; faltan 24 y cada cambio sube 3: 8 boletos de 7 mil y 10 de 4 mil.',
+      { hint: 'Empieza suponiendo que todos son del más barato y mira cuánto falta.' }),
+    play('aranas-hormigas', 'En un frasco hay **11** animales entre arañas (8 patas) y hormigas (6 patas), y **76** patas. Mueve la cantidad de arañas.', { n: 11, T: 76 },
+      'Si todas fueran hormigas habría 66 patas. Faltan 10 y cada araña agrega 2: 5 arañas.',
+      { hint: 'Cuenta las patas si todos fueran hormigas. ¿Cuántas agrega cada araña?' }),
+    play('aguado', 'Hay **5 L** de jugo con **40 %** de pulpa. Agrega agua hasta que la pulpa sea el **25 %** de todo.', { L: 5, pu: 2, d: 25, max: 7 },
+      'La pulpa son 2 L y no cambia. Si 2 L son el 25 %, todo son 8 L: se agregan 3 L.',
+      { hint: 'La pulpa no cambia. ¿De cuántos litros es el 25 % esa pulpa?' }),
+    play('precio-posible', 'Se mezcla café de **3 mil** con café de **9 mil** el kilo, poniendo **más del de 3 mil**. ¿Cuánto puede valer el kilo de la mezcla? Toca todos.', { a: 3, b: 9, nums: [2, 4, 5, 6, 8, 10], ok: 'Entre 3 y 6: más cerca del que más se puso.' },
+      'La mezcla queda entre los dos precios. Con la misma cantidad valdría 6 mil; con más del barato, menos de 6: 4 o 5 mil.',
+      { hint: '¿Cuánto valdría con la misma cantidad de los dos? ¿Hacia dónde se mueve si pones más del barato?' }),
+    play('se-llevan-igual', 'Un tío tiene **50** años y su sobrina **18**. Llena cada renglón.', { et: ['se llevan hoy', 'se llevarán en 10 años', 'ella, cuando él tenga el doble', 'años que faltan para eso'], metas: ['32', '32', '32', '14'], fichas: ['32', '32', '32', '14', '42', '36', '25'],
+      mira: ['Resta las dos edades.', 'A los dos se les suman 10 años.', 'Si él tiene el doble, la diferencia es igual a la edad de ella.', 'Desde la edad que ella tiene hoy.'], trampas: { '1:42': 'A los dos se les suman 10: la diferencia no crece.', '2:36': '36 es el doble de la edad de ella hoy.', '2:25': '25 es la mitad de la edad de él hoy: él también crece.' }, ok: 'Dentro de 14 años: 64 y 32.' },
+      'Se llevan 32, hoy y siempre. Él tendrá el doble cuando ella tenga 32: faltan $32 - 18 = 14$ años.',
+      { hint: 'La diferencia de edades no cambia con los años.' }),
+    play('sube-edades', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Uno tiene **45** años y otro **17**. ¿Dentro de cuántos años el mayor tendrá el **doble** que el menor?', r: 11, c: '28 - 17', e: { 28: 'Esa será la edad del menor.' } },
+      { q: 'Hay **12** monedas de 2 y de 10 que suman **64**. ¿Cuántas son de **10**?', r: 5, c: '(64 - 24) \\div 8', e: { 7: 'Esas son las de 2.', 40: 'Eso falta: cada cambio sube 8.' } },
+      { q: 'A **4 kg** de nueces de 9 mil se les agregan nueces de **5 mil** para que el kilo valga **6 mil**. ¿Cuántos kilos se agregan?', r: 12, c: '36 + 5b = 6(4 + b) \\Rightarrow b', e: { 4: 'Con 4 kg el precio quedaría en el medio: 7 mil.' } }] },
+      'Se llevan 28: el menor debe tener 28, dentro de 11 años. $(64 - 24) \\div 8 = 5$. $36 + 5b = 24 + 6b$: $b = 12$.',
+      { hint: 'Diferencia que no cambia, cambios de uno por otro, y lo que vale cada parte.' }),
+    { ...sol('Hoy Carlos tiene 4 veces la edad de su hija. Dentro de 20 años tendrá el doble de la edad de ella. ¿Qué edades tienen hoy?',
+      ['Hoy la hija tiene $x$ años y Carlos $4x$. Dentro de 20 años, a cada edad se le suma [[20]]', 'La condición es $4x + 20 = 2(x + 20)$, es decir, $4x + 20 = 2x +$ [[40]]', 'Queda $2x = 20$: la hija tiene [[10]] años', 'Carlos tiene $4 \\cdot 10 =$ [[40]] años'],
+      ['30', '5', '80'],
+      'El tiempo pasa igual para los dos: dentro de 20 años tendrán 30 y 60, y 60 es el doble de 30. La condición del futuro se escribe con las edades del futuro.',
+      'Haz una tabla con dos columnas, hoy y dentro de 20 años, y una fila para cada persona.'), q: 'Completa el procedimiento: arrastra cada ficha a su hueco.' },
+    err('Se mezclan 6 kg de café de 10 000 pesos el kilo con 4 kg de café de 15 000 pesos el kilo. ¿Cuánto vale el kilo de la mezcla?',
+      ['Valor del primer café: $6 \\cdot 10\\,000 = 60\\,000$ pesos', 'Valor del segundo café: $4 \\cdot 15\\,000 = 60\\,000$ pesos', 'Precio de la mezcla: $(10\\,000 + 15\\,000) \\div 2 = 12\\,500$ pesos el kilo'], 2,
+      ['Precio de la mezcla: $120\\,000 \\div 10 = 12\\,000$ pesos el kilo', 'Precio de la mezcla: $120\\,000 \\div 2 = 60\\,000$ pesos el kilo', 'Precio de la mezcla: $120\\,000 \\div 6 = 20\\,000$ pesos el kilo'],
+      'El precio de una mezcla es su valor total entre sus kilos: $120\\,000 \\div 10 = 12\\,000$. Queda más cerca del café que aporta más kilos.',
+      'Los dos primeros pasos calcularon el valor de cada café. ¿Los usó el último paso?'),
+    opc('En un parqueadero hay 20 vehículos entre motos y carros, y en total se cuentan 64 ruedas. La cantidad de carros que hay en el parqueadero es:',
+      ['8', '10', '16', '12'], 3,
+      'Si todos fueran motos habría 40 ruedas. Sobran 24, y cada carro aporta 2 ruedas más que una moto: $24 \\div 2 = 12$ carros.',
+      'Llama c a los carros: las motos son 20 − c. Cuenta las ruedas de unos y otros.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/ecuaciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ec-3', [
+    play('resta-recibos', 'Los cuadros son **jugos** y los círculos **panes**. Compara los dos recibos.', { f: [[3, 2, 21], [3, 5, 30]], et: ['más panes', 'más precio', 'un pan', 'un jugo'], metas: ['3', '9', '3', '5'], fichas: ['3', '3', '9', '5', '7', '51', '9'],
+      mira: ['¿En cuántos panes se diferencian?', '¿En cuánto se diferencian los totales?', 'Reparte lo que cuesta de más entre los panes de más.', 'En un recibo, quita los panes y reparte entre los jugos.'], trampas: { '0:7': 'Se restan: los jugos desaparecen al comparar.', '1:51': 'Se restan los totales.', '2:9': 'Eso valen los tres panes de más.' }, ok: '3 · 5 + 2 · 3 = 21 y 3 · 5 + 5 · 3 = 30.' },
+      'Se diferencian en 3 panes y en 9: cada pan vale 3. Tres jugos valen $21 - 6 = 15$: cada uno 5.',
+      { hint: 'Los dos recibos tienen los mismos jugos: lo que cambia se debe solo a los panes.' }),
+    play('iguala-recibos', '**3 mangos y 1 piña** valen **17**; **2 mangos y 3 piñas** valen **23**. Triplica el primero para igualar las piñas y resta.', { et: ['mangos al triplicar el primero', 'lo que vale ese triple', 'mangos que quedan al restar', 'un mango'], metas: ['9', '51', '7', '4'], fichas: ['9', '51', '7', '4', '17', '11', '28'],
+      mira: ['Se triplica todo, también los mangos.', 'También se triplica lo que vale.', 'Resta los mangos del segundo.', 'Lo que vale de más, entre los mangos que quedan.'], trampas: { '1:17': 'El precio también se triplica.', '2:11': 'Se restan los mangos, no se suman.', '3:28': 'Eso valen los siete mangos.' }, ok: 'Un mango 4 y una piña 5: 12 + 5 = 17 y 8 + 15 = 23.' },
+      'El triple: 9 mangos y 3 piñas por 51. Al restar quedan 7 mangos por 28: cada uno vale 4.',
+      { hint: 'Multiplicar un recibo es comprar lo mismo varias veces: crece todo.' }),
+    play('lleva-ventaja', 'Dos números suman **40** y el mayor le lleva **12** al menor. Mueve el menor.', { s: 40, d: 12, max: 28 },
+      '$40 - 12 = 28$ son dos veces el menor: 14. El mayor es 26.',
+      { hint: 'Si le quitas la ventaja al mayor, los dos quedan iguales.' }),
+    play('punto-comun', 'Arrastra el punto hasta el que cumple **las dos** condiciones: $x + y = 7$ y $2x - y = 2$.', { e: [[1, 1, 7], [2, -1, 2]], l: [[0, 7, 7, 0], [1, 0, 5, 8]], texto: '(3, 4)' },
+      'Sumándolas se va la $y$: $3x = 9$, $x = 3$ y $y = 4$.',
+      { hint: 'Suma las dos condiciones: ¿qué letra desaparece?' }),
+    play('voltea-o-sigue', 'Se sabe que $6 > 2$. Si se les hace lo mismo a los dos números, ¿el signo **sigue** igual o **se voltea**?', { et: ['restar 8', 'multiplicar por 3', 'multiplicar por −3', 'dividir entre −2'], metas: ['sigue', 'sigue', 'se voltea', 'se voltea'], fichas: ['sigue', 'sigue', 'sigue', 'se voltea', 'se voltea', 'se voltea'],
+      mira: ['Quedan −2 y −6: ¿cuál está más a la derecha?', 'Quedan 18 y 6: ¿cuál está más a la derecha?', 'Quedan −18 y −6: ¿cuál está más a la derecha?', 'Quedan −3 y −1: ¿cuál está más a la derecha?'], ok: 'Solo multiplicar o dividir por un negativo lo voltea.' },
+      '$-2 > -6$ y $18 > 6$ siguen; $-18 < -6$ y $-3 < -1$ se voltean.',
+      { hint: 'Haz la operación con los dos números y mira cuál queda más a la derecha en la recta.' }),
+    play('pinta-intervalo', 'Pinta todos los números que cumplen $4 - 3x > -2$.', { n: 4, m: -3, c: -2, b: 2, dir: -1, ab: 1, texto: 'x menor que 2, sin el 2' },
+      '$-3x > -6$; al dividir entre $-3$ se voltea: $x < 2$. El 2 no entra, porque $4 - 6 = -2$ no es mayor que $-2$.',
+      { hint: 'Prueba un número de cada lado del borde, y también el borde.' }),
+    play('enteros-entre', 'Toca todos los enteros que cumplen las dos partes: $-5 \\le 2x - 1 < 7$.', { nums: [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5], si: x => 2 * x - 1 >= -5 && 2 * x - 1 < 7, g: x => 2 * x - 1, ex: '2x − 1', ok: 'El −2 entra por el igual; el 4 no, porque da justo 7.' },
+      'Sumando 1: $-4 \\le 2x < 8$, y $-2 \\le x < 4$. Son −2, −1, 0, 1, 2 y 3.',
+      { hint: 'Lo que hagas, hazlo en las tres partes. Fíjate en cuál extremo tiene el igual.' }),
+    play('sube-sistema', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Dos números suman **34** y se llevan **10**. ¿Cuál es el **mayor**?', r: 22, c: '(34 + 10) \\div 2', e: { 12: 'Ese es el menor.', 27: 'Así se llevarían 20.' } },
+      { q: 'Un curso cobra **8** de inscripción y **4** por clase. Con **50**, ¿cuántas clases como **máximo**?', r: 10, c: '8 + 4n \\le 50 \\Rightarrow n_{\\text{máx}}', e: { 11: 'Para 11 clases harían falta 52.', 12: 'Faltó contar la inscripción.' } },
+      { q: 'Un casco y **dos** guantes valen **20**; un casco y **un** guante, **13**. ¿Cuánto vale el **casco**?', r: 6, c: '13 - 7', e: { 7: 'Eso vale un guante.' } }] },
+      '$(34 + 10) \\div 2 = 22$. $42 \\div 4 = 10.5$: alcanza para 10. Un guante vale 7 y el casco, 6.',
+      { hint: 'Mira bien qué se pide: el mayor, lo máximo, el casco.' }),
+    sol('En una papelería, 2 cuadernos y 3 esferos cuestan 13 000 pesos, y 4 cuadernos y 1 esfero cuestan 16 000 pesos. ¿Cuánto cuesta un cuaderno?',
+      ['Se duplica la primera compra: 4 cuadernos y 6 esferos cuestan [[26 000]] pesos', 'Se le resta la segunda compra: quedan [[5]] esferos por 10 000 pesos', 'Cada esfero cuesta [[2 000]] pesos', 'En la segunda compra, los 4 cuadernos cuestan 14 000: cada cuaderno, [[3 500]] pesos'],
+      ['13 000', '4 000', '7'],
+      'Para eliminar una incógnita se igualan sus cantidades en las dos compras y se restan. Se comprueba en la primera: $2 \\cdot 3\\,500 + 3 \\cdot 2\\,000 = 13\\,000$.',
+      'Busca que las dos compras tengan la misma cantidad de cuadernos: así, al restarlas, desaparecen.'),
+    err('¿Qué números cumplen la desigualdad $7 - 2x > 1$?',
+      ['Se resta 7 a los dos lados: $-2x > -6$', 'Se divide entre $-2$: $x > 3$', 'Comprobación con $x = 5$: $7 - 10 = -3$, que no es mayor que 1'], 1,
+      ['Se divide entre $-2$ y el signo se voltea: $x < 3$', 'Se divide entre $-2$: $x > -3$', 'Se divide entre $-2$ y el signo se voltea: $x < -3$'],
+      'Al dividir entre un negativo, la desigualdad cambia de sentido: $x < 3$. Con $x = 0$ se comprueba: $7 > 1$.',
+      'La comprobación del último paso avisa que algo falló. ¿Qué pasa con el signo al dividir entre un negativo?'),
+    opc('Un parqueadero cobra 4 000 pesos por la primera hora y 2 500 pesos por cada hora adicional. Con 20 000 pesos, la mayor cantidad de horas completas que se puede dejar un carro es:',
+      ['7', '8', '6', '5'], 0,
+      'Después de la primera hora quedan 16 000 pesos, que alcanzan para $16\\,000 \\div 2\\,500 = 6.4$: 6 horas más. En total, 7.',
+      'Separa la primera hora, que tiene otro precio, y mira para cuántas horas adicionales alcanza lo que queda.'),
+  ]);
+
+  addExam('pu-ecuaciones', [
+    ['pu-ec-1', 'Tres números consecutivos se escriben x, x + 1 y x + 2.',
+      opc('La suma de tres números enteros consecutivos es 72. El mayor de ellos es:', ['25', '24', '23', '26'], 0,
+        'El del medio es $72 \\div 3 = 24$: los números son 23, 24 y 25.', 'En tres consecutivos, el del medio es el promedio.')],
+    ['pu-ec-2', 'El tiempo pasa igual para todos: a cada edad se le suma lo mismo.',
+      opc('Una madre tiene 36 años y su hijo tiene 8. La cantidad de años que deben pasar para que la edad de la madre sea el triple de la del hijo es:', ['4', '12', '6', '10'], 2,
+        '$36 + t = 3(8 + t)$ da $36 + t = 24 + 3t$, así que $t = 6$: tendrán 42 y 14.', 'Suma la misma cantidad de años a las dos edades.')],
+    ['pu-ec-3', 'Una desigualdad se despeja como una ecuación; solo cambia de sentido al multiplicar o dividir por un negativo.',
+      opc('El mayor número entero que cumple la desigualdad $3x - 5 < 16$ es:', ['7', '6', '5', '8'], 1,
+        '$3x < 21$, así que $x < 7$: el mayor entero es 6, porque el 7 no cumple.', 'Despeja y fíjate si el extremo está incluido o no.')],
   ]);
 });

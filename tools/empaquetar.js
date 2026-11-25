@@ -55,4 +55,5 @@ module.exports = { fuentes, empaqueta, PARTES, DIR, nombre };
 {
   const f = require('fs'), q = require('path'), de = f.readFileSync(q.join(__dirname, '../js/instituciones.js'), 'utf8').replace(/\r\n/g, '\n');
   f.writeFileSync(q.join(__dirname, '../instituciones/cuentas.js'), `// Copia de js/instituciones.js (tools/empaquetar.js): no editar.\n${de}`);
+  f.writeFileSync(q.join(__dirname, '../instituciones/banco.json'), require('./banco').banco());   // preguntas de los simulacros
 }

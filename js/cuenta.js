@@ -291,7 +291,7 @@ async function cuentaPerfil() {
   if (Cuenta.perfil && Cuenta.perfil.id !== uid) Cuenta.inst = { nombres: [], metas: [] };   // otra cuenta
   const deInst = ins.data ? ins.data.accesos : (Cuenta.perfil?.id === uid ? Cuenta.accesos || [] : []).filter(a => a.institucion);
   if (acc.data) Cuenta.accesos = instJunta(acc.data, deInst);
-  if (ins.data) Cuenta.inst = { nombres: ins.data.instituciones || [], metas: ins.data.metas || [] };
+  if (ins.data) Cuenta.inst = { nombres: ins.data.instituciones || [], metas: ins.data.metas || [], simulacros: ins.data.simulacros || [], avisos: ins.data.avisos || [] };
   if (!cod.error) Cuenta.codigo = cod.data || '';
   if (data) {
     Cuenta.perfil = data;
