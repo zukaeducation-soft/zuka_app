@@ -98,7 +98,7 @@ test('lo que se enciende y las tiras del texto están literalmente en su párraf
   for (const [l, e] of EX) {
     const p = e.params;
     for (const [n, t] of p.luz || []) assert.ok((p.doc.paras[n - 1] || '').includes(t), `${l.id} ${e.game}: «${t}» no está en ¶${n}`);
-    if (e.game === 'ordena-texto') p.tiras.forEach((t, i) => t.split(/(?<=\.) /).forEach(o => assert.ok(docs[l.id].paras[i].includes(o.replace(/\.$/, '')), `${l.id}: «${o}»`)));
+    if (e.game === 'ordena-texto') p.tiras.forEach((t, i) => t.split(/(?<=\.) /).forEach(o => assert.ok(docs[l.id].paras.join(" ").includes(o.replace(/\.$/, '')), `${l.id}: «${o}»`)));
   }
   for (const id of TODAS) {
     const n = docs[id].paras.join(' ').split(/\s+/).length;

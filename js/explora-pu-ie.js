@@ -28,9 +28,9 @@ xpLec('pu-ie-1', [
       ['Una opción falsa se descarta con la oración que la contradice.', { luz: [0] }],
       ['Y si algo no está escrito pero sale de lo escrito, se deduce.', {}],
     ], '«Pidió» no es «logró». Compara el verbo de la opción con el del texto.'),
-    xpHaz('hoja', 'El texto: «El club **propuso** abrir los lunes». **Tacha** las dos opciones que no dice.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['El club abre los lunes.'], ['El club hizo una propuesta.'], ['Se habló de abrir un día más o distinto.'], ['Los lunes el club se llena.']], pista: 'Alguna de las tachadas sí sale de «propuso abrir los lunes». Proponer no es hacer.' }, 'Proponer, pedir o prometer no es hacer.')],
+    xpHaz('hoja', 'El texto: «El club **propuso** abrir los lunes». **Tacha** las dos opciones que no dice.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['El club abre los lunes.'], ['El club hizo una propuesta.'], ['Se planteó abrir los lunes.'], ['Los lunes el club se llena.']], pista: 'Alguna de las tachadas sí sale de «propuso abrir los lunes». Proponer no es hacer.' }, 'Proponer, pedir o prometer no es hacer.')],
   ['Ahora sí, un problema',
-    xpHaz('hoja', 'Subraya la oración que responde: ¿**por qué** cambiaron de lugar la feria?', { modo: 'toca', meta: [3], paras: [['La feria del libro reúne a sesenta editoriales.', 'Este año se hizo en la plaza cubierta.'], ['El público creció a casi el doble.', 'La lluvia del año pasado había dañado muchas cajas.']], pista: 'Esa dice qué pasó, no por qué se cambió. Busca lo que había salido mal antes.' }, 'La pregunta dice qué clase de dato buscar: cuánto, cuándo o por qué.')],
+    xpHaz('hoja', 'Subraya la oración que responde: ¿**por qué** cambiaron de lugar la feria?', { modo: 'toca', meta: [3], paras: [['La feria del libro reúne a sesenta editoriales.', 'Este año se hizo en la plaza cubierta.'], ['Duró cuatro días y la entrada fue gratis.', 'La lluvia del año pasado había dañado muchas cajas.']], pista: 'Esa dice qué pasó, no por qué se cambió. Busca lo que había salido mal antes.' }, 'La pregunta dice qué clase de dato buscar: cuánto, cuándo o por qué.')],
 ], 'Palabra clave, volver al texto, juntar si hace falta y comparar verbo por verbo.');
 
 xpLec('pu-ie-2', [

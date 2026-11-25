@@ -64,7 +64,7 @@ xpLec('pu-in-2', [
     ], 'Lo que dice está escrito; lo que supone, tiene que ser cierto; lo demás no está.'),
     xpHaz('hoja', 'Frase: «El coro sigue ensayando en el garaje». **Tacha** las dos que ni dice ni supone.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 2], paras: [['El coro ya ensayaba en el garaje.'], ['El garaje es pequeño.'], ['El coro canta mal.'], ['El coro ensaya hoy en el garaje.']], pista: 'Alguna de las tachadas sale de «sigue». ¿Qué tiene que ser cierto?' }, '«Sigue» dice que ahora y supone que antes.')],
   ['Ahora sí, un problema',
-    xpHaz('hoja', '«La paciencia de los vecinos es más corta de lo que cree el alcalde». Subraya lo que **da por sentado**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Los vecinos son pacientes.'], ['El alcalde es impaciente.'], ['El alcalde cree que tienen mucha paciencia.'], ['Los vecinos van a protestar.']], pista: 'Esa no hace falta para que la comparación tenga sentido. ¿Qué cree el alcalde?' }, 'Una comparación también presupone.')],
+    xpHaz('hoja', '«La paciencia de los vecinos es más corta de lo que cree el alcalde». Subraya lo que **da por sentado**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Los vecinos son pacientes.'], ['El alcalde es impaciente.'], ['El alcalde cree que tienen alguna paciencia.'], ['Los vecinos van a protestar.']], pista: 'Esa no hace falta para que la comparación tenga sentido. ¿Qué cree el alcalde?' }, 'Una comparación también presupone.')],
 ], 'Pregunta qué tiene que ser cierto para que se diga así: eso es lo que se da por hecho.');
 
 xpLec('pu-in-3', [

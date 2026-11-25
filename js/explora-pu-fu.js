@@ -1,0 +1,68 @@
+// Preuniversitario · lectura, mundo 7 «Fuentes y voces» (Explora): pu-fu-1 y pu-fu-2. Textos cortos propios.
+xpLec('pu-fu-1', [
+  ['Directa e indirecta',
+    xpMira('hoja', 'Empecemos por la idea: las palabras de otro se **copian** o se **cuentan**.', { paras: [['«El mar está cansado», dice la buzo.'], ['La buzo dice que el mar está cansado.'], ['Según la buzo, el mar está cansado.'], ['Dijo que el mar estaba «como de lata».']] }, [
+      ['Comillas y palabras exactas: cita directa.', { luz: [0], nota: { 0: 'directa' } }],
+      ['«Dice que…»: se cuenta. Cita indirecta.', { luz: [1], nota: { 1: 'indirecta' } }],
+      ['«Según…» también cuenta con otras palabras.', { luz: [2], nota: { 2: 'indirecta' } }],
+      ['A veces solo se copia una expresión, dentro de la oración de otro.', { luz: [3], nota: { 3: 'solo una expresión' } }],
+      ['Las comillas prometen: esto lo dijo tal cual.', {}],
+    ], 'Comillas: palabras exactas. «Que» o «según»: contadas por quien escribe.'),
+    xpHaz('hoja', '**Tacha** las dos citas **indirectas**.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['«Me iré al alba», anunció.'], ['Anunció que se iría al alba.'], ['«¿Y el perro?», preguntó.'], ['Según su tía, se fue temprano.']], pista: 'Alguna de las tachadas copia las palabras exactas. Mira las comillas.' }, 'Sin comillas, alguien lo cuenta a su manera.')],
+  ['Quién habla y quién escribe',
+    xpMira('hoja', 'Segunda idea: la voz de quien **escribe** no es la de quienes **cita**.', { paras: [['El doctor Paz sostiene que hay que dormir más.'], ['La entrenadora admite que no siempre se puede.'], ['Me parece que los dos tienen razón a medias.']] }, [
+      ['«Sostiene»: es la idea del doctor.', { luz: [0], nota: { 0: 'el doctor' } }],
+      ['«Admite»: la entrenadora reconoce algo que no le conviene.', { luz: [1], nota: { 1: 'la entrenadora' } }],
+      ['«Me parece»: ahora habla quien escribe.', { luz: [2], nota: { 2: 'el autor' } }],
+      ['Cada párrafo suele presentar a su voz en la primera oración.', {}],
+      ['«Eso» puede apuntar a un hecho completo, y «su», a quien habla.', {}],
+      ['Antes de atribuir una idea, busca su marca.', {}],
+    ], '«Yo», «creo», «me parece», «a mi modo de ver» son de quien escribe. Lo demás tiene otro dueño.'),
+    xpHaz('hoja', 'Pon al margen de quién es cada idea.', { modo: 'margen', rotulos: ['el autor', 'el panadero', 'la inspectora'], meta: [2, 1, 0], paras: [['Faltan extintores, afirma la inspectora.'], ['«Los compro el lunes», prometió el panadero.'], ['Creo que el lunes es tarde.']], pista: 'Alguno no va ahí. Busca el verbo y la primera persona.' }, 'La primera persona sin comillas es de quien escribe.')],
+  ['Lo que concluye el autor',
+    xpMira('hoja', 'Tercera idea: al final, el autor dice **su tesis**, y hay datos que la mueven.', { paras: [['Unos quieren más buses;', 'otros, más calles.'], ['No se trata de buses o calles,', 'sino de viajar menos.'], ['Quien trabaja cerca no necesita ni lo uno ni lo otro.']] }, [
+      ['Primero, las voces que discuten.', { luz: [0, 1], nota: { 0: 'las voces' } }],
+      ['«No se trata de… sino de…»: ahí está la tesis.', { luz: [2, 3], nota: { 1: 'la tesis' } }],
+      ['Un dato que la favorece, la apoya.', { luz: [4], nota: { 2: 'la apoya' } }],
+      ['Si un estudio dijera que nadie quiere vivir cerca, la debilitaría.', {}],
+      ['El color de los buses no le haría nada.', {}],
+      ['Un resumen guarda el tema, las voces y la tesis.', { luz: [2, 3] }],
+    ], '«No… sino…» suele decir la tesis. Un dato la apoya, la debilita o no pesa.'),
+    xpHaz('hoja', 'Tesis: «Hay que **sembrar árboles** en la avenida». Subraya el dato que la **debilita**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['La sombra baja la temperatura.'], ['La avenida tiene tres carriles.'], ['Las raíces romperían el tubo del agua.'], ['A la gente le gusta caminar con sombra.']], pista: 'Ese la apoya o no le hace nada. Busca el que daría una razón para no hacerlo.' }, 'Debilitar es dar una razón en contra.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya la oración con la **tesis del autor**.', { modo: 'toca', meta: [3], paras: [['«El circo educa», dice un payaso.', 'Una maestra opina que distrae.'], ['Los dos hablan de niños distintos.', 'A mi juicio, depende de qué circo se lleve.']], pista: 'Esa es de otra voz o prepara el terreno. Busca la primera persona.' }, '«A mi juicio» abre la tesis.')],
+], 'Distingue lo copiado de lo contado, a quien habla de quien escribe, y busca la tesis.');
+
+xpLec('pu-fu-2', [
+  ['Tres posturas',
+    xpMira('hoja', 'Empecemos por la idea: frente a un tema se está **a favor**, **en contra** o se **matiza**.', { paras: [['Sí: el tren hace falta ya.'], ['No: el tren destruirá el bosque.'], ['Sí, pero por la orilla y de noche no.']] }, [
+      ['Tres voces sobre un tren.', {}],
+      ['«Sí»: esta voz está a favor.', { luz: [0], nota: { 0: 'a favor' } }],
+      ['«No»: esta voz está en contra.', { luz: [1], nota: { 1: 'en contra' } }],
+      ['«Sí, pero»: acepta con condiciones. Matiza.', { luz: [2], nota: { 2: 'matizada' } }],
+      ['Alguien puede estar a favor y aun así pedir algo: mira qué quiere al final.', {}],
+      ['Y querer cerrar casi todo es estar en contra, aunque no diga «todo».', {}],
+    ], 'A favor, en contra o sí, pero con condiciones.'),
+    xpHaz('hoja', 'Pon al margen la postura sobre el **horario nocturno**.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['matizada', 'a favor', 'en contra'], meta: [2, 0, 1], paras: [['Nadie debería estudiar a esa hora.'], ['Está bien, si hay transporte de regreso.'], ['Es lo mejor que han hecho.']], pista: 'Alguno no va ahí. Busca el «si» que pone una condición.' }, 'La condición es la huella del matiz.')],
+  ['La cita de afuera',
+    xpMira('hoja', 'Segunda idea: el examen trae una **cita que no está** y pregunta qué le hace a la tesis.', { letras: ['1', 'a', 'b', 'c'], paras: [['Tesis: el mercado debe cerrar a las seis.'], ['«Después de las seis hay más robos.»'], ['«A las siete llegan la mitad de los clientes.»'], ['«El mercado tiene techo de zinc.»']] }, [
+      ['Se compara con la tesis, no con un detalle.', { luz: [0] }],
+      ['Más robos: le da la razón. Apoya.', { luz: [0, 1], nota: { 1: 'apoya' } }],
+      ['Se perderían clientes: le quita razón. Debilita.', { luz: [0, 2], nota: { 2: 'debilita' } }],
+      ['El techo: habla del mercado, pero no de la hora.', { luz: [3], nota: { 3: 'no pesa' } }],
+      ['Si la tesis tiene dos partes, basta con que toque una.', {}],
+    ], 'Supón que la cita es cierta: ¿la tesis queda más fuerte, más débil o igual?'),
+    xpHaz('hoja', 'Tesis: «Los murales del parque deben **conservarse**». Subraya la cita que **apoya**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [1], paras: [['«Los pintaron en una noche.»'], ['«Desde que están, hay más visitantes.»'], ['«Tapan las grietas que hay que reparar.»'], ['«El parque tiene dos entradas.»']], pista: 'Esa debilita o no pesa. ¿Cuál daría una razón para dejarlos?' }, 'Apoyar es dar una razón.')],
+  ['Cómo se matiza',
+    xpMira('hoja', 'Tercera idea: matizar tiene **sus palabras**, y hay que leer el verbo.', { paras: [['El plan es bueno, aunque se queda corto.'], ['Reconozco que costará, pero vale la pena.'], ['Propone cobrar la entrada;', 'por eso habrá dinero para cuidar.'], ['Antes talaban; ahora guían.']] }, [
+      ['«Aunque» acepta y frena.', { luz: [0], nota: { 0: 'sí, pero' } }],
+      ['«Reconozco… pero» admite algo y sigue.', { luz: [1], nota: { 1: 'sí, pero' } }],
+      ['«Propone» no es «hizo». Cuida el verbo.', { luz: [2] }],
+      ['«Por eso» trae lo que resulta.', { luz: [3] }],
+      ['De comparar «antes» con «ahora» se deduce un cambio.', { luz: [4], nota: { 3: 'se deduce' } }],
+      ['«La mayor parte» no es «todo»: una opción que exagera es falsa.', {}],
+    ], '«Aunque», «pero», «reconozco»: matiz. «Propone» no es «hizo» ni «la mayor parte» es «todo».'),
+    xpHaz('hoja', 'Subraya la oración que **matiza**.', { modo: 'toca', meta: [2], paras: [['El festival atrae a miles.', 'Los hoteles se llenan.'], ['Es una fiesta, aunque deja mucha basura.', 'Dura tres días.']], pista: 'Esa solo informa. Busca la que acepta y frena a la vez.' }, 'Aceptar y frenar: eso es matizar.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Tesis: «Las visitas al faro **necesitan guía**». Tacha las dos citas que **no** la apoyan.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 2], paras: [['«El faro mide veinte metros.»'], ['«Sin guía, la mitad se pierde.»'], ['«Con o sin guía, todos llegan bien.»'], ['«Con guía, hay menos caídas.»']], pista: 'Alguna de las tachadas sí da una razón para llevar guía.' }, 'Una no pesa y la otra debilita.')],
+], 'Ubica la postura, compara cada cita con la tesis y lee con cuidado los verbos.');

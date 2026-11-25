@@ -346,7 +346,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 // tests/preuda-lectura.test.js les exige el estándar.
 const PU_LEC_HECHOS = [];
 // Mundos con explicación interactiva y ejercicios sobre la hoja (spec 2026-11-24-lectura-explora; tests/lectura-explora.test.js).
-const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos', 'pu-explicita', 'pu-inferencia', 'pu-vocabulario'];
+const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos', 'pu-explicita', 'pu-inferencia', 'pu-vocabulario', 'pu-aplicacion', 'pu-fuentes'];
 (() => {
   const lessons = PU_LECTURA.flatMap(u => u.lessons);
   const L = id => { const l = lessons.find(l => l.id === id); if (!l) throw new Error(`no existe ${id}`); return l; };
@@ -8972,9 +8972,9 @@ xpLec('pu-ie-1', [
       ['Una opción falsa se descarta con la oración que la contradice.', { luz: [0] }],
       ['Y si algo no está escrito pero sale de lo escrito, se deduce.', {}],
     ], '«Pidió» no es «logró». Compara el verbo de la opción con el del texto.'),
-    xpHaz('hoja', 'El texto: «El club **propuso** abrir los lunes». **Tacha** las dos opciones que no dice.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['El club abre los lunes.'], ['El club hizo una propuesta.'], ['Se habló de abrir un día más o distinto.'], ['Los lunes el club se llena.']], pista: 'Alguna de las tachadas sí sale de «propuso abrir los lunes». Proponer no es hacer.' }, 'Proponer, pedir o prometer no es hacer.')],
+    xpHaz('hoja', 'El texto: «El club **propuso** abrir los lunes». **Tacha** las dos opciones que no dice.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['El club abre los lunes.'], ['El club hizo una propuesta.'], ['Se planteó abrir los lunes.'], ['Los lunes el club se llena.']], pista: 'Alguna de las tachadas sí sale de «propuso abrir los lunes». Proponer no es hacer.' }, 'Proponer, pedir o prometer no es hacer.')],
   ['Ahora sí, un problema',
-    xpHaz('hoja', 'Subraya la oración que responde: ¿**por qué** cambiaron de lugar la feria?', { modo: 'toca', meta: [3], paras: [['La feria del libro reúne a sesenta editoriales.', 'Este año se hizo en la plaza cubierta.'], ['El público creció a casi el doble.', 'La lluvia del año pasado había dañado muchas cajas.']], pista: 'Esa dice qué pasó, no por qué se cambió. Busca lo que había salido mal antes.' }, 'La pregunta dice qué clase de dato buscar: cuánto, cuándo o por qué.')],
+    xpHaz('hoja', 'Subraya la oración que responde: ¿**por qué** cambiaron de lugar la feria?', { modo: 'toca', meta: [3], paras: [['La feria del libro reúne a sesenta editoriales.', 'Este año se hizo en la plaza cubierta.'], ['Duró cuatro días y la entrada fue gratis.', 'La lluvia del año pasado había dañado muchas cajas.']], pista: 'Esa dice qué pasó, no por qué se cambió. Busca lo que había salido mal antes.' }, 'La pregunta dice qué clase de dato buscar: cuánto, cuándo o por qué.')],
 ], 'Palabra clave, volver al texto, juntar si hace falta y comparar verbo por verbo.');
 
 xpLec('pu-ie-2', [
@@ -9145,7 +9145,7 @@ xpLec('pu-in-2', [
     ], 'Lo que dice está escrito; lo que supone, tiene que ser cierto; lo demás no está.'),
     xpHaz('hoja', 'Frase: «El coro sigue ensayando en el garaje». **Tacha** las dos que ni dice ni supone.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 2], paras: [['El coro ya ensayaba en el garaje.'], ['El garaje es pequeño.'], ['El coro canta mal.'], ['El coro ensaya hoy en el garaje.']], pista: 'Alguna de las tachadas sale de «sigue». ¿Qué tiene que ser cierto?' }, '«Sigue» dice que ahora y supone que antes.')],
   ['Ahora sí, un problema',
-    xpHaz('hoja', '«La paciencia de los vecinos es más corta de lo que cree el alcalde». Subraya lo que **da por sentado**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Los vecinos son pacientes.'], ['El alcalde es impaciente.'], ['El alcalde cree que tienen mucha paciencia.'], ['Los vecinos van a protestar.']], pista: 'Esa no hace falta para que la comparación tenga sentido. ¿Qué cree el alcalde?' }, 'Una comparación también presupone.')],
+    xpHaz('hoja', '«La paciencia de los vecinos es más corta de lo que cree el alcalde». Subraya lo que **da por sentado**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Los vecinos son pacientes.'], ['El alcalde es impaciente.'], ['El alcalde cree que tienen alguna paciencia.'], ['Los vecinos van a protestar.']], pista: 'Esa no hace falta para que la comparación tenga sentido. ¿Qué cree el alcalde?' }, 'Una comparación también presupone.')],
 ], 'Pregunta qué tiene que ser cierto para que se diga así: eso es lo que se da por hecho.');
 
 xpLec('pu-in-3', [
@@ -9229,14 +9229,14 @@ xpLec('pu-vo-1', [
     ], 'Reemplaza, lee la oración completa y quédate con la que dice lo mismo.'),
     xpHaz('hoja', '«Fue una respuesta **seca**: dijo no y colgó». Subraya la palabra que encaja.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['árida'], ['deshidratada'], ['cortante'], ['delgada']], pista: 'Ponla en la oración: ¿una respuesta puede ser así? Mira «dijo no y colgó».' }, 'Lo que sigue en la oración confirma el sentido.')],
   ['Verbos concretos, ideas',
-    xpMira('hoja', 'Segunda idea: a veces un verbo de **cosas** se usa con **ideas**.', { paras: [['Con un dato desarmó la mentira.'], ['Tejieron un acuerdo durante meses.'], ['El rumor sembró dudas.']] }, [
-      ['Nadie tiene un destornillador aquí.', {}],
-      ['Desarmar una idea: mostrar que no se sostiene, refutarla.', { luz: [0], nota: { 0: 'refutar' } }],
-      ['Tejer un acuerdo: hacerlo hilo por hilo, poco a poco.', { luz: [1], nota: { 1: 'construir poco a poco' } }],
-      ['Sembrar dudas: hacerlas nacer.', { luz: [2], nota: { 2: 'provocar' } }],
+    xpMira('hoja', 'Segunda idea: a veces un verbo de **cosas** se usa con **ideas**.', { paras: [['Con un dato derribó la mentira.'], ['Cocinaron el plan durante meses.'], ['El rumor apagó el entusiasmo.']] }, [
+      ['Nadie tumba paredes ni prende una estufa aquí.', {}],
+      ['Derribar una idea: mostrar que es falsa.', { luz: [0], nota: { 0: 'mostrar que es falsa' } }],
+      ['Cocinar un plan: prepararlo con calma.', { luz: [1], nota: { 1: 'preparar con calma' } }],
+      ['Apagar el entusiasmo: hacer que se acabe.', { luz: [2], nota: { 2: 'acabar' } }],
       ['Se aplica la misma prueba: reemplazar y leer.', {}],
     ], 'Piensa qué hace el verbo con una cosa y busca lo parecido con una idea.'),
-    xpHaz('hoja', 'Pon al margen lo que quiere decir cada verbo.', { modo: 'margen', rotulos: ['aclarar', 'detener', 'aumentar'], meta: [1, 0, 2], paras: [['Frenó los rumores con un comunicado.'], ['Despejó las dudas de todos.'], ['La lluvia alimentó el río.']], pista: 'Alguno no va ahí. ¿Qué hace un freno, qué pasa cuando se despeja, qué hace un alimento?' }, 'De la cosa a la idea.')],
+    xpHaz('hoja', 'Pon al margen lo que quiere decir cada verbo.', { modo: 'margen', rotulos: ['aclarar', 'detener', 'aumentar'], meta: [1, 0, 2], paras: [['Frenó los rumores con un comunicado.'], ['Despejó las dudas de todos.'], ['El video alimentó la polémica.']], pista: 'Alguno no va ahí. ¿Qué hace un freno, qué pasa cuando se despeja, qué hace un alimento?' }, 'De la cosa a la idea.')],
   ['Ni al pie de la letra ni de más',
     xpMira('hoja', 'Tercera idea: al entender una frase, cuida **hasta dónde** llega.', { letras: ['1', 'a', 'b', 'c'], paras: [['«El coro me enseñó a oír», dice Rita.'], ['Le curó los oídos.'], ['Aprendió a prestar atención a los demás.'], ['Ahora oye todo lo que pasa en el mundo.']] }, [
       ['Rita no habla de sus oídos.', { luz: [0] }],
@@ -9261,12 +9261,12 @@ xpLec('pu-vo-2', [
       ['Las palabras vecinas eligen el sentido. Eso se llama polisemia.', {}],
     ], 'Mira las palabras vecinas: ellas eligen el sentido.'),
     xpHaz('hoja', 'Pon al margen qué es «**cabo**» en cada oración.', { modo: 'margen', rotulos: ['militar', 'punta de tierra', 'extremo o final'], meta: [1, 2, 0], paras: [['El barco rodeó el cabo.'], ['Al cabo de un rato volvió.'], ['El cabo saludó al sargento.']], pista: 'Alguno no va ahí. ¿Quién saluda, qué se rodea y qué llega al final?' }, 'El verbo de cada oración decide.')],
-  ['La trampa del sentido común',
+  ['El sentido más común',
     xpMira('hoja', 'Segunda idea: la opción trampa es el sentido **más común**, que no es el del texto.', { letras: ['1', 'a', 'b'], paras: [['El jurado falló a favor de la niña.'], ['El jurado se equivocó.'], ['El jurado decidió.']] }, [
       ['«Falló»: lo primero que uno piensa es «se equivocó».', { luz: [0] }],
       ['Pero «a favor de» no va con equivocarse.', { luz: [0, 1], tacha: [1] }],
       ['Fallar, en un jurado, es decidir.', { luz: [0, 2], nota: { 2: 'encaja' } }],
-      ['El sentido común es la trampa favorita.', {}],
+      ['El sentido más común es la trampa favorita.', {}],
       ['Desconfía de la primera que se te ocurra y haz la prueba.', {}],
     ], 'El sentido más común suele ser la trampa: pruébalo en la oración.'),
     xpHaz('hoja', '«El actor hizo un **papel** difícil». Subraya el sentido que tiene ahí.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [3], paras: [['hoja para escribir'], ['documento'], ['billete'], ['personaje']], pista: 'Esa es otra clase de papel. ¿Qué hace un actor?' }, 'Quién lo hace también elige el sentido.')],
@@ -9279,28 +9279,28 @@ xpLec('pu-vo-2', [
       ['«Al cabo de», «mientras tanto» ordenan en el tiempo.', {}],
       ['Y un hecho trae otro: el esfuerzo abre el camino.', { luz: [2, 3] }],
     ], '«Ese…» retoma, los dos puntos aclaran y la coma puede abrir algo que se quita.'),
-    xpHaz('hoja', 'Subraya la oración que **solo puede ir después** de otra.', { modo: 'toca', meta: [2], paras: [['Los vecinos pintaron la cancha.', 'La pintura costó poco.'], ['Con ese arreglo volvieron los torneos.', 'Vienen equipos de tres barrios.']], pista: 'Esa no retoma nada con «ese». Busca la que da algo por contado.' }, '«Ese arreglo» necesita un arreglo ya contado.')],
+    xpHaz('hoja', 'Subraya la oración que **solo puede ir después** de otra.', { modo: 'toca', meta: [2], paras: [['Los vecinos pintaron la cancha.', 'En la cuadra viven treinta familias.'], ['Con ese arreglo volvieron los torneos.', 'Los sábados hay mercado en la plaza.']], pista: 'Esa no retoma nada con «ese». Busca la que da algo por contado.' }, '«Ese arreglo» necesita un arreglo ya contado.')],
   ['Ahora sí, un problema',
     xpHaz('hoja', '«La **corriente** se fue a las ocho y prendimos velas». Tacha los dos sentidos que **no** son.', { modo: 'tacha', letras: ['A', 'B', 'C'], meta: [0, 1], paras: [['agua que corre'], ['moda de pensamiento'], ['electricidad']], pista: 'Alguna de las tachadas es justo la que obliga a prender velas.' }, 'Las velas eligieron el sentido.')],
-], 'Mira las vecinas, desconfía del sentido común y sigue lo que se retoma.');
+], 'Mira las vecinas, desconfía del sentido más común y sigue lo que se retoma.');
 
 xpLec('pu-vo-3', [
   ['No es la suma de las palabras',
-    xpMira('hoja', 'Empecemos por la idea: en una **frase hecha**, el sentido no sale de sumar las palabras.', { paras: [['Pedro se durmió en los laureles.'], ['A Ana se le fueron las luces.'], ['Todos hicieron vaca para la pelota.']] }, [
-      ['Aquí no hay laureles, ni luces, ni vacas.', {}],
+    xpMira('hoja', 'Empecemos por la idea: en una **frase hecha**, el sentido no sale de sumar las palabras.', { paras: [['Pedro se durmió en los laureles.'], ['A Ana se le fueron las luces.'], ['A Luis le tomaron el pelo con la rifa.']] }, [
+      ['Aquí no hay laureles, ni luces, ni pelo.', {}],
       ['Dormirse en los laureles: confiarse y dejar de esforzarse.', { luz: [0], nota: { 0: 'se confió' } }],
       ['Irse las luces: no poder pensar.', { luz: [1], nota: { 1: 'se bloqueó' } }],
-      ['Hacer vaca: juntar dinero entre varios.', { luz: [2], nota: { 2: 'juntaron dinero' } }],
+      ['Tomar el pelo: burlarse de alguien.', { luz: [2], nota: { 2: 'se burlaron de él' } }],
       ['El sentido está en la situación, no en las palabras sueltas.', {}],
     ], 'No sumes las palabras: mira qué está pasando.'),
-    xpHaz('hoja', 'Pon al margen lo que quiere decir cada expresión.', { modo: 'margen', rotulos: ['sin dinero', 'equivocarse', 'descuidarse'], meta: [1, 2, 0], paras: [['Metió la pata: saludó al que no era.'], ['Dio papaya: dejó la bicicleta sin candado.'], ['Está en la olla: no tiene ni para el bus.']], pista: 'Alguno no va ahí. Lo que va después de los dos puntos lo explica.' }, 'Lo que sigue a los dos puntos da el sentido.')],
+    xpHaz('hoja', 'Pon al margen lo que quiere decir cada expresión.', { modo: 'margen', rotulos: ['fingir no ver', 'acertar', 'excederse'], meta: [1, 2, 0], paras: [['Dio en el clavo: halló la falla al primer intento.'], ['Se le fue la mano: le echó sal tres veces.'], ['Hizo la vista gorda: los vio copiar y siguió de largo.']], pista: 'Alguno no va ahí. Lo que va después de los dos puntos lo explica.' }, 'Lo que sigue a los dos puntos da el sentido.')],
   ['El contexto la explica',
-    xpMira('hoja', 'Segunda idea: si no conoces la expresión, **la situación** la explica.', { paras: [['Llegó tarde, perdió los apuntes', 'y contestó otra pregunta:', 'no dio pie con bola.'], ['Quería rendirse;', 'el entrenador le dijo: «no tire la toalla».']] }, [
-      ['«No dio pie con bola». ¿Qué será?', { luz: [2] }],
-      ['Todo lo que pasó antes salió mal.', { luz: [0, 1], nota: { 0: 'no acertó en nada' } }],
-      ['«No tire la toalla». Quería rendirse…', { luz: [3, 4] }],
-      ['…así que tirar la toalla es rendirse.', { luz: [4], nota: { 1: 'rendirse' } }],
-      ['Viene del boxeo, pero no hace falta saberlo.', {}],
+    xpMira('hoja', 'Segunda idea: si no conoces la expresión, **la situación** la explica.', { paras: [['Probó una llave, probó otra', 'y volvió a la primera:', 'daba palos de ciego.'], ['No decía nada;', 'su hermana le dijo: «suelte la lengua».']] }, [
+      ['«Daba palos de ciego». ¿Qué será?', { luz: [2] }],
+      ['Lo que pasó antes fue probar sin saber.', { luz: [0, 1], nota: { 0: 'probar sin saber' } }],
+      ['«Suelte la lengua». No decía nada…', { luz: [3, 4] }],
+      ['…así que soltar la lengua es hablar.', { luz: [4], nota: { 1: 'hablar' } }],
+      ['No hace falta saber de dónde viene.', {}],
       ['Las comillas traen palabras exactas; sin ellas, es con otras palabras.', {}],
     ], 'Busca antes o después la situación que la explica.'),
     xpHaz('hoja', '«Sacó la mejor nota: **se lució**». Subraya lo que explica la expresión.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [1], paras: [['brilló en la oscuridad'], ['lo hizo muy bien'], ['se cansó'], ['apagó la luz']], pista: 'Esa la toma al pie de la letra o no va con la nota.' }, 'La nota explica el lucirse.')],
@@ -9324,8 +9324,8 @@ xpLec('pu-vo-4', [
       ['Bio- es vida y -logía, estudio: estudio de la vida.', { luz: [0, 1], nota: { 0: 'estudio de la vida' } }],
       ['In- niega, vis- es ver, -ible es «que se puede».', { luz: [2, 3, 4], nota: { 1: 'que no se puede ver' } }],
       ['Sub- quiere decir debajo.', { luz: [5, 6], nota: { 2: 'debajo del mar' } }],
-      ['Micro- es pequeño.', { luz: [7, 8], nota: { 3: 'para ver lo pequeño' } }],
-      ['Otras: anti- contra, foto- luz, -voro que come, -fobia rechazo, aud- oír.', {}],
+      ['Micro- quiere decir pequeño.', { luz: [7, 8], nota: { 3: 'para ver lo pequeño' } }],
+      ['Otras: anti- contra, inter- entre, foto- luz, -voro que come, -fobia rechazo, aud- oír.', {}],
       ['Una palabra nueva se parte y se arma.', {}],
     ], 'Parte la palabra: comienzo, raíz y final. Busca otras que tengan la misma pieza.'),
     xpHaz('hoja', 'Pon al margen lo que significa cada palabra.', { modo: 'margen', rotulos: ['que come hierba', 'contra el robo', 'debajo del suelo'], meta: [1, 2, 0], paras: [['antirrobo'], ['subsuelo'], ['herbívoro']], pista: 'Alguno no va ahí. Anti- es contra, sub- es debajo y -voro es que come.' }, 'Con las piezas se deduce lo que nunca se ha visto.')],
@@ -9351,6 +9351,146 @@ xpLec('pu-vo-4', [
   ['Ahora sí, un problema',
     xpHaz('hoja', '«Una planta **fotófila** no crece bajo techo». Subraya lo que significa (foto-, luz; -fila, que ama).', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [3], paras: [['que sale en fotos'], ['que le teme a la luz'], ['que forma filas'], ['que necesita mucha luz']], pista: 'Esa suena parecido, pero no va con las piezas ni con «bajo techo».' }, 'Piezas y contexto dicen lo mismo: ahí no hay duda.')],
 ], 'Parte la palabra, arma el sentido y pruébalo en la oración.');
+;
+//#archivo js/explora-pu-ap.js
+// Preuniversitario · lectura, mundo 6 «Aplicación y analogía» (Explora): pu-ap-1 y pu-ap-2. Textos cortos propios.
+xpLec('pu-ap-1', [
+  ['Sacar el principio',
+    xpMira('hoja', 'Empecemos por la idea: para llevar una idea a otro caso, primero se saca el **principio**.', { letras: ['1', 'a', 'b', 'c'], paras: [['Rosa anota cada gasto; desde entonces gasta menos.'], ['Rosa tiene una libreta.'], ['Lo que se mide, mejora.'], ['Todo el que anota se vuelve rico.']] }, [
+      ['Este es el caso.', { luz: [0] }],
+      ['La libreta es un detalle: no sirve para otro tema.', { luz: [1], nota: { 1: 'el caso' } }],
+      ['«Se vuelve rico» dice más de lo que muestra el caso.', { luz: [3], nota: { 3: 'de más' } }],
+      ['«Lo que se mide, mejora»: sirve para gastos, sueño o entrenamientos.', { luz: [2], nota: { 2: 'principio' } }],
+      ['El principio no nombra a Rosa ni su libreta.', { luz: [2] }],
+    ], 'El principio dice lo mismo sin nombrar el caso, y no exagera.'),
+    xpHaz('hoja', '«El equipo ensayó la jugada lenta cien veces; en el partido le salió rápida». Subraya el **principio**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['El equipo ganó el partido.'], ['Cien es un buen número.'], ['Lo que se practica despacio sale bien deprisa.'], ['Practicar hace perfecto todo.']], pista: 'Esa se queda en el caso, agrega algo o exagera.' }, 'Sirve también para un músico o para un cirujano.')],
+  ['La estructura, no el tema',
+    xpMira('hoja', 'Segunda idea: el caso nuevo puede ser de **otro tema**; importa la estructura.', { letras: ['1', 'a', 'b', 'c'], paras: [['Principio: quien avisa a tiempo evita un daño mayor.'], ['El conductor llama al taller al primer ruido.'], ['La vecina cuenta que anoche llovió.'], ['Un médico pide el examen ante el primer síntoma.']] }, [
+      ['Dos piezas: avisar pronto y evitar algo peor.', { luz: [0] }],
+      ['El conductor: aviso temprano y daño evitado. Cumple.', { luz: [1], nota: { 1: 'cumple' } }],
+      ['La vecina cuenta algo, pero no evita nada.', { luz: [2], nota: { 2: 'no cumple' } }],
+      ['El médico: otro tema, la misma estructura. Cumple.', { luz: [3], nota: { 3: 'cumple' } }],
+      ['Que se parezca el tema no basta; que cambie no importa.', {}],
+      ['Un dato apoya la idea, la debilita o simplemente no pesa.', {}],
+    ], 'Busca las piezas del principio en el caso. Si falta una, no se cumple.'),
+    xpHaz('hoja', 'Principio: **repartir una carga la hace liviana**. Tacha los dos casos que **no** lo cumplen.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['Diez vecinos cargan el piano.'], ['Un atleta levanta más cada mes.'], ['Cada quien estudia un capítulo y lo explica.'], ['Compran un piano más pequeño.']], pista: 'Alguna de las tachadas sí reparte algo entre varios.' }, 'Un piano o un libro: se reparte la carga.')],
+  ['Del caso al límite',
+    xpMira('hoja', 'Tercera idea: un texto va **del caso a la idea**, y a veces le pone un **límite**.', { paras: [['En la esquina, todos cruzan por el mismo hueco.'], ['Ponerle una reja no sirvió.'], ['La idea va más allá de esa esquina:', 'la gente busca lo fácil.'], ['Eso no quiere decir que todo se valga.']] }, [
+      ['Primero presenta lo que pasa.', { luz: [0], nota: { 0: 'presenta' } }],
+      ['Después cuenta lo que no funcionó.', { luz: [1], nota: { 1: 'lo que falló' } }],
+      ['«Va más allá»: de ahí sale la idea general.', { luz: [2], nota: { 2: 'la idea' } }],
+      ['Los dos puntos anuncian en qué consiste.', { luz: [3] }],
+      ['«Eso no quiere decir»: le pone un límite.', { luz: [4], nota: { 3: 'un límite' } }],
+      ['Las comillas a veces solo presentan un nombre especial.', {}],
+    ], '«Va más allá» saca la idea; «eso no significa» le pone un límite.'),
+    xpHaz('hoja', 'Subraya la oración que le pone un **límite** a la idea.', { modo: 'toca', meta: [3], paras: [['Los gatos eligen la caja y no la cama cara.', 'La idea sirve para muchos regalos.'], ['A veces lo sencillo gusta más.', 'Pero no todo lo barato gusta.']], pista: 'Esa cuenta el caso o dice la idea. Busca la que la frena.' }, 'Todo principio tiene un hasta dónde.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Principio: **un error visto a tiempo enseña**. Subraya el caso que lo cumple.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [1], paras: [['Esconden la nota mala.'], ['Revisan el examen y anotan en qué fallaron.'], ['El profesor no corrige.'], ['Nadie falló.']], pista: 'A ese le falta una pieza: que el error se vea o que enseñe.' }, 'Error, verlo y aprender: las tres piezas.')],
+], 'Saca el principio, busca sus piezas en el caso y respeta sus límites.');
+
+xpLec('pu-ap-2', [
+  ['La misma relación',
+    xpMira('hoja', 'Empecemos por la idea: en una **analogía**, la relación es la misma a los dos lados.', { letras: ['1', 'a', 'b', 'c'], paras: [['Remo es a bote como…'], ['pedal es a bicicleta'], ['agua es a río'], ['bote es a lago']] }, [
+      ['Primero se dice la relación con un verbo.', { luz: [0] }],
+      ['El remo mueve al bote.', { luz: [0], nota: { 0: 'mueve' } }],
+      ['El pedal mueve a la bicicleta: es la misma.', { luz: [1], nota: { 1: 'mueve' } }],
+      ['El agua forma el río: es otra relación.', { luz: [2], nota: { 2: 'forma' } }],
+      ['El bote flota en el lago: otra, aunque haya agua.', { luz: [3], nota: { 3: 'flota en' } }],
+      ['El tema parecido engaña; el verbo no.', {}],
+    ], 'Di la relación con un verbo y prueba el mismo verbo al otro lado.'),
+    xpHaz('hoja', '«**Llave es a puerta** como…». Subraya la que conserva la relación.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['puerta es a casa'], ['madera es a puerta'], ['contraseña es a celular'], ['ventana es a pared']], pista: 'La llave abre la puerta. ¿En esa, la primera abre la segunda?' }, 'Lo que abre y lo abierto.')],
+  ['Tipos de relación',
+    xpMira('hoja', 'Segunda idea: hay relaciones que se repiten mucho.', { letras: ['A', 'B', 'C', 'D'], paras: [['ladrillo y muro'], ['pincel y pintora'], ['chispa e incendio'], ['cachorro y perro']] }, [
+      ['El ladrillo es parte del muro: parte y todo.', { luz: [0], nota: { 0: 'parte y todo' } }],
+      ['La pintora usa el pincel: herramienta y quien la usa.', { luz: [1], nota: { 1: 'herramienta y quien la usa' } }],
+      ['La chispa trae el incendio: causa y efecto.', { luz: [2], nota: { 2: 'causa y efecto' } }],
+      ['El cachorro llega a ser perro: etapa y lo que llega a ser.', { luz: [3], nota: { 3: 'etapa y lo que llega a ser' } }],
+      ['Antes de mirar opciones, nombra la relación.', {}],
+    ], 'Parte y todo, herramienta y usuario, causa y efecto, etapa y lo que llega a ser.'),
+    xpHaz('hoja', 'Pon al margen la relación de cada pareja.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['causa y efecto', 'herramienta y quien la usa', 'parte y todo'], meta: [2, 0, 1], paras: [['pétalo y flor'], ['frío y escarcha'], ['tijera y peluquero']], pista: 'Alguno no va ahí. Arma una oración corta con cada pareja.' }, 'Una oración corta dice la relación.')],
+  ['Hasta dónde llega',
+    xpMira('hoja', 'Tercera idea: una comparación **explica**, pero siempre tiene un **límite**.', { paras: [['La memoria es como una bodega:', 'ahí se guarda lo vivido.'], ['Así como una bodega se llena, la memoria también.'], ['Pero una bodega no cambia lo que guarda,', 'y la memoria sí.']] }, [
+      ['Se presenta la comparación.', { luz: [0], nota: { 0: 'compara' } }],
+      ['«Así como… también» dice en qué se parecen.', { luz: [2], nota: { 1: 'se parecen' } }],
+      ['«Pero» señala en qué falla: el límite.', { luz: [3, 4], nota: { 2: 'el límite' } }],
+      ['Que tenga un límite no la vuelve inútil.', {}],
+      ['Una explicación avanza con «primero», «detrás», «después».', {}],
+      ['Y «por eso» trae lo que resulta.', {}],
+    ], '«Así como… también» dice en qué se parecen; «pero», en qué no.'),
+    xpHaz('hoja', 'Subraya la oración que dice el **límite** de la comparación.', { modo: 'toca', meta: [2], paras: [['Un libro es como un viaje.', 'Los dos llevan a otra parte.'], ['Solo que del libro se puede volver en un segundo.', 'Por eso se lee en el bus.']], pista: 'Esa dice en qué se parecen o qué resulta. Busca la diferencia.' }, '«Solo que» también pone límites.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«**Borrador es a novela** como…». Tacha las dos que **no** conservan la relación.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['boceto es a pintura'], ['lápiz es a escritor'], ['plano es a edificio'], ['capítulo es a novela']], pista: 'Alguna de las tachadas sí es una etapa de lo que llega a ser.' }, 'Antes fue borrador, boceto o plano.')],
+], 'Di la relación con un verbo, nómbrala y cuida el límite de la comparación.');
+;
+//#archivo js/explora-pu-fu.js
+// Preuniversitario · lectura, mundo 7 «Fuentes y voces» (Explora): pu-fu-1 y pu-fu-2. Textos cortos propios.
+xpLec('pu-fu-1', [
+  ['Directa e indirecta',
+    xpMira('hoja', 'Empecemos por la idea: las palabras de otro se **copian** o se **cuentan**.', { paras: [['«El mar está cansado», dice la buzo.'], ['La buzo dice que el mar está cansado.'], ['Según la buzo, el mar está cansado.'], ['Dijo que el mar estaba «como de lata».']] }, [
+      ['Comillas y palabras exactas: cita directa.', { luz: [0], nota: { 0: 'directa' } }],
+      ['«Dice que…»: se cuenta. Cita indirecta.', { luz: [1], nota: { 1: 'indirecta' } }],
+      ['«Según…» también cuenta con otras palabras.', { luz: [2], nota: { 2: 'indirecta' } }],
+      ['A veces solo se copia una expresión, dentro de la oración de otro.', { luz: [3], nota: { 3: 'solo una expresión' } }],
+      ['Las comillas prometen: esto lo dijo tal cual.', {}],
+    ], 'Comillas: palabras exactas. «Que» o «según»: contadas por quien escribe.'),
+    xpHaz('hoja', '**Tacha** las dos citas **indirectas**.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['«Me iré al alba», anunció.'], ['Anunció que se iría al alba.'], ['«¿Y el perro?», preguntó.'], ['Según su tía, se fue temprano.']], pista: 'Alguna de las tachadas copia las palabras exactas. Mira las comillas.' }, 'Sin comillas, alguien lo cuenta a su manera.')],
+  ['Quién habla y quién escribe',
+    xpMira('hoja', 'Segunda idea: la voz de quien **escribe** no es la de quienes **cita**.', { paras: [['El doctor Paz sostiene que hay que dormir más.'], ['La entrenadora admite que no siempre se puede.'], ['Me parece que los dos tienen razón a medias.']] }, [
+      ['«Sostiene»: es la idea del doctor.', { luz: [0], nota: { 0: 'el doctor' } }],
+      ['«Admite»: la entrenadora reconoce algo que no le conviene.', { luz: [1], nota: { 1: 'la entrenadora' } }],
+      ['«Me parece»: ahora habla quien escribe.', { luz: [2], nota: { 2: 'el autor' } }],
+      ['Cada párrafo suele presentar a su voz en la primera oración.', {}],
+      ['«Eso» puede apuntar a un hecho completo, y «su», a quien habla.', {}],
+      ['Antes de atribuir una idea, busca su marca.', {}],
+    ], '«Yo», «creo», «me parece», «a mi modo de ver» son de quien escribe. Lo demás tiene otro dueño.'),
+    xpHaz('hoja', 'Pon al margen de quién es cada idea.', { modo: 'margen', rotulos: ['el autor', 'el panadero', 'la inspectora'], meta: [2, 1, 0], paras: [['Faltan extintores, afirma la inspectora.'], ['«Los compro el lunes», prometió el panadero.'], ['Creo que el lunes es tarde.']], pista: 'Alguno no va ahí. Busca el verbo y la primera persona.' }, 'La primera persona sin comillas es de quien escribe.')],
+  ['Lo que concluye el autor',
+    xpMira('hoja', 'Tercera idea: al final, el autor dice **su tesis**, y hay datos que la mueven.', { paras: [['Unos quieren más buses;', 'otros, más calles.'], ['No se trata de buses o calles,', 'sino de viajar menos.'], ['Quien trabaja cerca no necesita ni lo uno ni lo otro.']] }, [
+      ['Primero, las voces que discuten.', { luz: [0, 1], nota: { 0: 'las voces' } }],
+      ['«No se trata de… sino de…»: ahí está la tesis.', { luz: [2, 3], nota: { 1: 'la tesis' } }],
+      ['Un dato que la favorece, la apoya.', { luz: [4], nota: { 2: 'la apoya' } }],
+      ['Si un estudio dijera que nadie quiere vivir cerca, la debilitaría.', {}],
+      ['El color de los buses no le haría nada.', {}],
+      ['Un resumen guarda el tema, las voces y la tesis.', { luz: [2, 3] }],
+    ], '«No… sino…» suele decir la tesis. Un dato la apoya, la debilita o no pesa.'),
+    xpHaz('hoja', 'Tesis: «Hay que **sembrar árboles** en la avenida». Subraya el dato que la **debilita**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['La sombra baja la temperatura.'], ['La avenida tiene tres carriles.'], ['Las raíces romperían el tubo del agua.'], ['A la gente le gusta caminar con sombra.']], pista: 'Ese la apoya o no le hace nada. Busca el que daría una razón para no hacerlo.' }, 'Debilitar es dar una razón en contra.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya la oración con la **tesis del autor**.', { modo: 'toca', meta: [3], paras: [['«El circo educa», dice un payaso.', 'Una maestra opina que distrae.'], ['Los dos hablan de niños distintos.', 'A mi juicio, depende de qué circo se lleve.']], pista: 'Esa es de otra voz o prepara el terreno. Busca la primera persona.' }, '«A mi juicio» abre la tesis.')],
+], 'Distingue lo copiado de lo contado, a quien habla de quien escribe, y busca la tesis.');
+
+xpLec('pu-fu-2', [
+  ['Tres posturas',
+    xpMira('hoja', 'Empecemos por la idea: frente a un tema se está **a favor**, **en contra** o se **matiza**.', { paras: [['Sí: el tren hace falta ya.'], ['No: el tren destruirá el bosque.'], ['Sí, pero por la orilla y de noche no.']] }, [
+      ['Tres voces sobre un tren.', {}],
+      ['«Sí»: esta voz está a favor.', { luz: [0], nota: { 0: 'a favor' } }],
+      ['«No»: esta voz está en contra.', { luz: [1], nota: { 1: 'en contra' } }],
+      ['«Sí, pero»: acepta con condiciones. Matiza.', { luz: [2], nota: { 2: 'matizada' } }],
+      ['Alguien puede estar a favor y aun así pedir algo: mira qué quiere al final.', {}],
+      ['Y querer cerrar casi todo es estar en contra, aunque no diga «todo».', {}],
+    ], 'A favor, en contra o sí, pero con condiciones.'),
+    xpHaz('hoja', 'Pon al margen la postura sobre el **horario nocturno**.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['matizada', 'a favor', 'en contra'], meta: [2, 0, 1], paras: [['Nadie debería estudiar a esa hora.'], ['Está bien, si hay transporte de regreso.'], ['Es lo mejor que han hecho.']], pista: 'Alguno no va ahí. Busca el «si» que pone una condición.' }, 'La condición es la huella del matiz.')],
+  ['La cita de afuera',
+    xpMira('hoja', 'Segunda idea: el examen trae una **cita que no está** y pregunta qué le hace a la tesis.', { letras: ['1', 'a', 'b', 'c'], paras: [['Tesis: el mercado debe cerrar a las seis.'], ['«Después de las seis hay más robos.»'], ['«A las siete llegan la mitad de los clientes.»'], ['«El mercado tiene techo de zinc.»']] }, [
+      ['Se compara con la tesis, no con un detalle.', { luz: [0] }],
+      ['Más robos: le da la razón. Apoya.', { luz: [0, 1], nota: { 1: 'apoya' } }],
+      ['Se perderían clientes: le quita razón. Debilita.', { luz: [0, 2], nota: { 2: 'debilita' } }],
+      ['El techo: habla del mercado, pero no de la hora.', { luz: [3], nota: { 3: 'no pesa' } }],
+      ['Si la tesis tiene dos partes, basta con que toque una.', {}],
+    ], 'Supón que la cita es cierta: ¿la tesis queda más fuerte, más débil o igual?'),
+    xpHaz('hoja', 'Tesis: «Los murales del parque deben **conservarse**». Subraya la cita que **apoya**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [1], paras: [['«Los pintaron en una noche.»'], ['«Desde que están, hay más visitantes.»'], ['«Tapan las grietas que hay que reparar.»'], ['«El parque tiene dos entradas.»']], pista: 'Esa debilita o no pesa. ¿Cuál daría una razón para dejarlos?' }, 'Apoyar es dar una razón.')],
+  ['Cómo se matiza',
+    xpMira('hoja', 'Tercera idea: matizar tiene **sus palabras**, y hay que leer el verbo.', { paras: [['El plan es bueno, aunque se queda corto.'], ['Reconozco que costará, pero vale la pena.'], ['Propone cobrar la entrada;', 'por eso habrá dinero para cuidar.'], ['Antes talaban; ahora guían.']] }, [
+      ['«Aunque» acepta y frena.', { luz: [0], nota: { 0: 'sí, pero' } }],
+      ['«Reconozco… pero» admite algo y sigue.', { luz: [1], nota: { 1: 'sí, pero' } }],
+      ['«Propone» no es «hizo». Cuida el verbo.', { luz: [2] }],
+      ['«Por eso» trae lo que resulta.', { luz: [3] }],
+      ['De comparar «antes» con «ahora» se deduce un cambio.', { luz: [4], nota: { 3: 'se deduce' } }],
+      ['«La mayor parte» no es «todo»: una opción que exagera es falsa.', {}],
+    ], '«Aunque», «pero», «reconozco»: matiz. «Propone» no es «hizo» ni «la mayor parte» es «todo».'),
+    xpHaz('hoja', 'Subraya la oración que **matiza**.', { modo: 'toca', meta: [2], paras: [['El festival atrae a miles.', 'Los hoteles se llenan.'], ['Es una fiesta, aunque deja mucha basura.', 'Dura tres días.']], pista: 'Esa solo informa. Busca la que acepta y frena a la vez.' }, 'Aceptar y frenar: eso es matizar.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Tesis: «Las visitas al faro **necesitan guía**». Tacha las dos citas que **no** la apoyan.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 2], paras: [['«El faro mide veinte metros.»'], ['«Sin guía, la mitad se pierde.»'], ['«Con o sin guía, todos llegan bien.»'], ['«Con guía, hay menos caídas.»']], pista: 'Alguna de las tachadas sí da una razón para llevar guía.' }, 'Una no pesa y la otra debilita.')],
+], 'Ubica la postura, compara cada cita con la tesis y lee con cuidado los verbos.');
 ;
 //#archivo js/explora-trig-41a.js
 // Trigonometría · trig-41a «Grados y radianes»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva; motor en
@@ -11019,6 +11159,7 @@ const GUIDES = {
   'subraya-rasgo': [['tap', 'Toca la oración para subrayarla; otro toque la suelta.', {}]],
   'ajusta-alcance': [['slide', 'Mueve cada perilla hasta que la oración diga lo mismo que el texto.', { label: 'algunos' }]],
   'cambia-palabra': [['drag', 'Lleva cada ficha al hueco de la palabra tachada.', { tile: 'palabra', slot: '¿…?' }]],
+  'balanza-tesis': [['drag', 'Lleva cada dato al plato que le toca: apoya, debilita o no pesa.', { tile: 'dato', slot: 'apoya' }]],
   'globo-lastre': [['drag', 'Arrastra globos o sacos de arena: el canasto sube o baja y la cuenta se escribe sola.', { tile: 'saco', slot: 'canasto' }], ['tap', 'Déjalo a la altura de la bandera. «Reiniciar» lo devuelve al comienzo.', { items: ['Reiniciar'], pick: [0] }]],
   'voltea-flecha': [['slide', 'Arrastra el multiplicador: la flecha se repite y, a la izquierda del 0, se voltea.', {}]],
   'capas-operacion': [['drag', 'Arrastra un número sobre su vecino: el juego los opera y los funde en uno.', { tile: '5', slot: '8' }], ['drag', 'Para una potencia, junta la base con su exponente (la ficha pequeña de arriba).', { tile: '(−3)', slot: '²' }]],

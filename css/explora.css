@@ -814,3 +814,15 @@
 .hj-regla b { color: var(--c-ink); }
 .hj-regla .xg-per { max-width: 340px; margin: 0 auto; }
 .hj-pares s { margin-right: 4px; color: var(--mute); text-decoration-color: var(--fire, var(--bad)); }
+
+.hj-balanza { --g: 0; display: grid; }
+.hj-tesis { margin: 0 auto; max-width: 420px; padding: 8px 16px; border: 1px solid var(--c-ink); border-radius: 12px; text-align: center; font-size: 15px; line-height: 1.35; background: color-mix(in srgb, var(--c) 12%, var(--card)); }
+.hj-tesis small { margin: 0; }
+.hj-brazo { height: 4px; margin: 14px 12%; border-radius: 3px; background: var(--c-ink); transform: rotate(calc(var(--g) * 3deg)); transition: transform .6s cubic-bezier(.3,1.4,.5,1); }
+.hj-platos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.hj-platos > div { transition: transform .6s cubic-bezier(.3,1.4,.5,1); }
+.hj-platos > div:first-child { transform: translateY(calc(var(--g) * -5px)); }
+.hj-platos > div:last-child { transform: translateY(calc(var(--g) * 5px)); }
+.hj-platos .hj-dentro { min-height: 86px; align-content: flex-start; border-radius: 10px 10px 22px 22px; }
+.hj-suelo { margin-top: 6px; padding-top: 8px; border-top: 2px solid var(--line); }
+.hj-suelo .hj-dentro { min-height: 44px; }
