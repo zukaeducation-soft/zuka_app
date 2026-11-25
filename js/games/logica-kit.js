@@ -1,7 +1,7 @@
 // Armazones de los acertijos dibujados con las escenas de la explicación (spec 2026-11-24-ejercicios-explora). Las pistas van escritas
 // y con su regla; al comprobar se encienden una por una, cumplida o rota, sobre lo que armó el estudiante.
 //   XG.puestos(nombre, d)  fichas que se llevan a sus puestos.   params { fichas, pistas: [{ t, r }], fijas?, ini? }   state { q }
-//   XG.marca(nombre, d)    se tocan los sitios que cumplen.      state { on: [bool] }
+//   XG.marca(nombre, d)    se tocan los sitios que cumplen.      state { on: [bool] }   (al comprobar se mueve: marca-mueve.js)
 //   XG.cartas(nombre, d)   se escogen k pistas que dejan un solo orden posible.   params { names, dadas?, cartas, k }   state { en }
 //   XG.tabla(nombre)       tabla de ✓ y ✗.   params { filas, cols, pistas }   state { c }
 // Reglas en js/games/logica-kit.js: XG.regla (filas, mesas), XG.reglaEq (equipos) y XG.reglaTb (tablas).
@@ -130,13 +130,35 @@ Object.assign(XG, (() => {
         const H = d.alto(p), st = d.sitios(p);
         stage.innerHTML = `<div class="xg-lona"><svg class="xp-svg xd xg-mk" viewBox="0 0 340 ${H}" role="group" aria-label="Toca los que cumplen"></svg></div><div></div>`;
         const svg = stage.querySelector('svg'), L = d.pistas ? pistas(ui, stage.children[1], d.pistas(p)) : null;
-        let juicio = null;
+        const MV = XG.MUEVE?.[name], PR = XG.PRUEBA?.[name];
+        let buena = null;
+        const vistos = new Set();   // sitios ya revisados
+        const clase = i => { const on = ui.s.on[i], c = !vistos.has(i) ? '' : buena[i] ? (on ? ' bien' : ' falta') : ' mal'; return `xg-sit${on ? ' on' : ''}${c}`; };
+        const caja = t => (t.red ? `<circle class="caja" cx="${t.x}" cy="${t.y}" r="${t.w / 2}"/>` : `<rect class="caja" x="${t.x - t.w / 2}" y="${t.y - t.h / 2}" width="${t.w}" height="${t.h}" rx="10"/>`);
+        const dos = t => t.h >= 36 && !t.red;   // cabe el dato arriba y la cuenta abajo: el dato nunca se borra
+        const prueba = (t, s) => `<text class="xt xg-prueba" x="${t.x}" y="${dos(t) ? t.y + t.h / 2 - 6 : t.y + 5}" style="text-anchor:middle;font-size:${Math.max(9, Math.min(dos(t) ? 11.5 : 15, (t.w - 10) / (s.length * 0.56))).toFixed(1)}px">${s}</text>`;
+        const dentro = i => { const t = st[i], ver = vistos.has(i); return caja(t) + (ver && PR ? (dos(t) ? `<g transform="translate(0 -8)">${d.cara(XPK, p, i, ui.s.on[i])}</g>` : '') + prueba(t, PR(p, i)) : d.cara(XPK, p, i, ui.s.on[i])) + (ver && t.w >= 90 && !t.red ? `<g class="xg-sello">${XPK.c(t.x + t.w / 2 - 9, t.y - t.h / 2 + 9, 8, buena[i] ? 'fo' : 'ff')}<text class="xt s" x="${t.x + t.w / 2 - 9}" y="${t.y - t.h / 2 + 13}" style="text-anchor:middle;font-size:11px">${buena[i] ? '✓' : '✗'}</text></g>` : ''); };
         const draw = () => {
-          svg.innerHTML = (d.fondo?.(XPK, p) || '') + st.map((t, i) => {
-            const on = ui.s.on[i], c = juicio ? (juicio[i] ? (on ? ' bien' : ' falta') : on ? ' mal' : '') : '';
-            return `<g class="xg-sit${on ? ' on' : ''}${c}" data-i="${i}" ${ui.locked ? '' : 'tabindex="0" role="button"'} aria-pressed="${on}"${d.nombre ? ` aria-label="${d.nombre(p, i)}"` : ''}>${t.red ? `<circle class="caja" cx="${t.x}" cy="${t.y}" r="${t.w / 2}"/>` : `<rect class="caja" x="${t.x - t.w / 2}" y="${t.y - t.h / 2}" width="${t.w}" height="${t.h}" rx="10"/>`}${d.cara(XPK, p, i, on)}</g>`;
-          }).join('');
+          svg.innerHTML = (d.fondo?.(XPK, p) || '') + st.map((t, i) => `<g class="${clase(i)}" data-i="${i}" ${ui.locked ? '' : 'tabindex="0" role="button"'} aria-pressed="${ui.s.on[i]}"${d.nombre ? ` aria-label="${d.nombre(p, i)}"` : ''}>${dentro(i)}</g>`).join('') + '<g class="xg-mv" aria-hidden="true"></g>';
         };
+        // La escena ejecuta lo marcado.
+        const corre = (fin, otra) => {
+          const capa = svg.querySelector('.xg-mv'), on = [...ui.s.on];
+          if (!MV || !on.some(Boolean) || (otra && MV.corta)) return fin();
+          ui.tween(0, 1, 1300, f => { capa.innerHTML = MV(XPK, p, on, f, st); }, () => { capa.innerHTML = MV(XPK, p, on, 1, st); ui.espera(250, fin); });
+        };
+        // Uno por uno: lo que sirve salta, lo que no se sacude y lo que faltaba aparece; la tarjeta muestra su cuenta.
+        const revisa = (lista, fin, nace) => {
+          let k = 0; const cada = Math.max(40, Math.min(320, (nace ? 900 : 1800) / lista.length));
+          (function sig() {
+            if (k >= lista.length) return ui.espera(260, fin);
+            const i = lista[k++], g = svg.querySelector(`[data-i="${i}"]`);
+            vistos.add(i); g.innerHTML = dentro(i); g.setAttribute('class', `${clase(i)} ${nace ? 'mv-nace' : buena[i] ? 'mv-bien' : 'mv-mal'}`);
+            buena[i] ? XS.tick(k * 2) : XS.nope();
+            ui.espera(cada, sig);
+          })();
+        };
+        const marcados = () => st.map((_, i) => i).filter(i => ui.s.on[i]);
         const toca = i => {
           if (ui.locked) return;
           ui.set({ on: ui.s.on.map((x, k) => (k === i ? !x : x)) }); XS.pop(); xpTick(); draw();
@@ -153,12 +175,22 @@ Object.assign(XG, (() => {
         draw(); ui.nota(d.pie || 'Toca todos los que cumplen. Otro toque los quita.');
         return ok => {
           ui.nota('');
-          const muestra = fin => { if (L && d.cumple) L.revisa(d.cumple(ui.s.on, p), fin); else { juicio = ok ? ui.s.on : arr(d.sol(p), p); draw(); ui.espera(700, fin); } };
-          muestra(() => {
-            if (ok) { XS.merge(); if (!juicio) { juicio = ui.s.on; } draw(); return ui.nota(d.bien(p)); }
-            XS.nope(); ui.nota(d.aviso(ui.s.on, p));
-            ui.espera(2800, () => { const b = { on: arr(d.sol(p), p) }; ui.muestra(b); juicio = b.on; draw(); if (L && d.cumple) L.revisa(d.cumple(b.on, p), () => ui.nota(d.bien(p))); else ui.nota(d.bien(p)); });
+          draw();   // ya calificado: los sitios dejan de ser botones
+          buena = ok ? [...ui.s.on] : arr(d.sol(p), p);
+          const pasa = fin => corre(() => (L && d.cumple ? L.revisa(d.cumple(ui.s.on, p), fin) : fin()));
+          pasa(() => {
+            // Puede haber varios grupos buenos: si falla, lo dicen las pistas o el aviso.
+            if (!ok && d.vale) return otra();
+            revisa(marcados(), () => { if (ok) { XS.merge(); return ui.nota(d.bien(p)); } otra(); });
           });
+          function otra() {
+            XS.nope(); ui.nota(d.aviso(ui.s.on, p));
+            ui.espera(2800, () => {
+              const antes = new Set(marcados()), b = { on: arr(d.sol(p), p) };
+              ui.muestra(b); vistos.clear(); b.on.forEach((x, i) => { if (x && antes.has(i) && !d.vale) vistos.add(i); }); draw(); ui.nota('');
+              corre(() => revisa(marcados().filter(i => !vistos.has(i)), () => { if (L && d.cumple) L.revisa(d.cumple(b.on, p), () => ui.nota(d.bien(p))); else ui.nota(d.bien(p)); }, true), true);
+            });
+          }
         };
       },
     });

@@ -551,6 +551,16 @@
 .xg-sit.bien .caja { fill: color-mix(in srgb, var(--ok) 20%, var(--card)); stroke: var(--ok); }
 .xg-sit.mal .caja { fill: color-mix(in srgb, var(--bad) 18%, var(--card)); stroke: var(--bad); }
 .xg-sit.falta .caja { stroke: var(--ok); stroke-width: 2; stroke-dasharray: 5 4; }
+.xg-sit, .xg-sello { transform-box: fill-box; transform-origin: center; }
+.xg-sit.mv-bien { animation: xg-salta 0.5s cubic-bezier(0.3, 1.5, 0.5, 1); }
+.xg-sit.mv-mal { animation: xg-sacude 0.5s ease-in-out; }
+.xg-sit.mv-nace { animation: xg-nace 0.45s cubic-bezier(0.3, 1.5, 0.5, 1); }
+.xg-sit .xg-sello { animation: xg-nace 0.4s 0.1s both; }
+.xg-mv { pointer-events: none; }
+@keyframes xg-salta { 35% { transform: translateY(-7px) scale(1.07); } }
+@keyframes xg-sacude { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+@keyframes xg-nace { from { transform: scale(0.5); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .xg-sit, .xg-sit .xg-sello { animation: none !important; } }
 .xg-sit:focus-visible { outline: none; }
 .xg-sit:focus-visible .caja { stroke: var(--ink); stroke-width: 2.6; }
 .xg-mundos { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; width: 100%; max-width: 440px; }

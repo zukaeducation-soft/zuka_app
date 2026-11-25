@@ -113,6 +113,15 @@ de la semana (manija que gira: `de` devuelve el paso desde el ángulo). Pruebas 
 cambia y el cuadrado de los dos fallos. Pruebas `tests/ejercicios-probabilidad.test.js`. Con él, los 16 mundos de Razonamiento lógico
 usan las escenas de la explicación.
 
+## Al comprobar, la escena se mueve (ejercicios de tocar, 2026-11-24)
+
+Pedido: «haz que la escena se mueva al comprobar». Los 94 ejercicios de `XG.marca` antes solo se coloreaban. Ahora, en orden: (1) la escena
+ejecuta lo marcado (`XG.MUEVE[nombre]`, en `js/games/marca-mueve.js`: la corriente prende el bombillo, la hoja se abre, el molde se dobla, el
+camino se recorre…); (2) cada sitio marcado se revisa de a uno: salta si sirve, se sacude si no, y debajo de su dato aparece la cuenta
+(`XG.PRUEBA[nombre]`); (3) si falló, después del aviso, la escena se ejecuta con la respuesta buena y aparece lo que faltaba. Las dos
+tablas son puras (pruebas `tests/marca-mueve.test.js`); sin ellas queda el salto. Con «reducir movimiento» solo se ve el estado final. Lo que
+faltaba ya no se pinta antes del aviso.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |
