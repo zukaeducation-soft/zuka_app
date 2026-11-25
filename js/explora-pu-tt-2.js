@@ -1,0 +1,35 @@
+// Preuniversitario · pu-tt-2 «Géneros del examen» (Explora). Textos cortos propios.
+xpLec('pu-tt-2', [
+  ['Quién habla y para qué',
+    xpMira('hoja', 'Empecemos por la idea: el **género** se reconoce por quién habla y para qué.', { letras: ['A', 'B', 'C', 'D', 'E'], paras: [['Yo vi crecer el puerto desde mi ventana.'], ['Cerrar el puerto fue un error.'], ['El agua sube dos veces al día por la atracción de la Luna.'], ['A las cinco de la mañana, el muelle ya olía a café.'], ['—¿Extraña el mar? —Todos los días.']] }, [
+      ['Alguien cuenta lo que vivió, en primera persona: testimonio.', { luz: [0], nota: { 0: 'testimonio' } }],
+      ['Alguien juzga algo de actualidad y firma: artículo de opinión.', { luz: [1], nota: { 1: 'opinión' } }],
+      ['Se explica ciencia para quien no es experto: texto divulgativo.', { luz: [2], nota: { 2: 'divulgativo' } }],
+      ['Se relata con hora y lugar: crónica.', { luz: [3], nota: { 3: 'crónica' } }],
+      ['Preguntas y respuestas, dos voces: entrevista.', { luz: [4], nota: { 4: 'entrevista' } }],
+      ['Y un ensayo reflexiona con calma alrededor de una tesis.', {}],
+    ], 'Testimonio: lo vivido. Opinión: un juicio. Divulgación: ciencia. Crónica: hora y lugar. Entrevista: dos voces.'),
+    xpHaz('hoja', 'Pon al margen el género de cada fragmento.', { modo: 'margen', letras: ['A', 'B', 'C', 'D'], rotulos: ['crónica', 'divulgativo', 'opinión', 'testimonio'], meta: [1, 3, 0, 2], paras: [['La miel no se daña porque tiene muy poca agua.'], ['Yo aprendí a nadar el año de la creciente.'], ['Era mediodía en la plaza y el desfile aún no llegaba.'], ['Subir el pasaje sin mejorar los buses es una burla.']], pista: 'Alguno no va ahí. ¿Explica, cuenta su propia vida, relata con hora y lugar, o juzga?' }, 'La voz y el propósito dicen el género.')],
+  ['Dos voces y sus signos',
+    xpMira('hoja', 'Segunda idea: en una entrevista, los **signos** dicen quién habla.', { paras: [['Sara Díaz arregla relojes hace veinte años.'], ['—¿Por qué relojes?'], ['—Por una razón: me gusta oír que algo vuelve a andar.'], ['—¿Y cuáles prefiere?', '—Los viejos.']] }, [
+      ['El periodista presenta: habla de ella como «ella».', { luz: [0], nota: { 0: 'periodista' } }],
+      ['La raya da el turno. Aquí pregunta el periodista.', { luz: [1], nota: { 1: 'periodista' } }],
+      ['Otra raya: ahora responde Sara, en primera persona.', { luz: [2], nota: { 2: 'Sara' } }],
+      ['Los dos puntos anuncian lo que viene: cuál es la razón.', { luz: [2] }],
+      ['Los signos de pregunta abren y cierran lo que se pregunta.', { luz: [3] }],
+      ['A veces la raya cambia en el mismo renglón: cambia la voz.', { luz: [4] }],
+    ], 'La raya da el turno, los dos puntos anuncian y los de pregunta encierran lo que se pregunta.'),
+    xpHaz('hoja', 'Subraya las **dos** oraciones que dice la entrevistada.', { modo: 'toca', meta: [2, 4], paras: [['Elena Ruiz pinta murales desde niña.', '—¿Qué es lo más difícil?', '—Esperar a que el muro se seque.'], ['Se ríe y mira sus manos.', '—Yo nunca aprendí a esperar.']], pista: 'Alguna de las subrayadas no es suya: alguien la presenta, la mira o le pregunta. Busca sus respuestas.' }, 'Quien presenta, describe o pregunta es el periodista.')],
+  ['A qué apunta una palabra',
+    xpMira('hoja', 'Tercera idea: palabras como «ese», «ella» o «lo» **apuntan** a algo ya nombrado.', { unidos: true, paras: [['Sara compró ', 'un reloj', ' y ', 'una lupa', '. ', 'Lo', ' abrió con cuidado y con ', 'ella', ' buscó la pieza rota.']] }, [
+      ['«Lo abrió». ¿Qué abrió? Hay que volver atrás.', { luz: [5] }],
+      ['Se prueba cada opción: «abrió un reloj» tiene sentido.', { luz: [1, 5] }],
+      ['«Lo» es masculino y singular, como «un reloj».', { luz: [1, 5] }],
+      ['«Con ella buscó»: femenino y sirve para mirar. Apunta a la lupa.', { luz: [3, 7] }],
+      ['Dos palabras pueden apuntar a lo mismo, o cada una a algo distinto.', {}],
+      ['Reemplaza, lee la oración entera y revisa que concuerde.', {}],
+    ], 'Para saber a qué apunta una palabra, pon cada opción en su lugar y lee toda la oración.'),
+    xpHaz('hoja', 'Subraya aquello a lo que apunta «**esta**».', { modo: 'toca', unidos: true, meta: [3], quietos: [0, 2, 4, 5, 6], paras: [['El taller tiene ', 'un banco', ' junto a ', 'una ventana', '. Por ', 'esta', ' entra la luz de la mañana.']], pista: 'Prueba: ¿por un banco entra la luz?' }, 'Concuerda en género y, sobre todo, tiene sentido.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'El género anticipa las preguntas. De un **testimonio** sobre una mudanza, tacha las dos preguntas que **no** esperarías.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['¿Qué sintió al dejar su casa?'], ['¿Cuál es la fórmula para calcular la carga?'], ['¿Por qué tuvo que irse?'], ['¿Qué ley propone el autor?']], pista: 'Alguna de las tachadas sí se responde con una vida contada. Busca las que pedirían ciencia o una postura.' }, 'En un testimonio se pregunta por lo vivido: qué sintió y por qué pasó.')],
+], 'Quién habla y para qué dicen el género; los signos, los turnos; y cada «ese» o «lo» apunta a algo ya dicho.');

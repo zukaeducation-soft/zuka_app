@@ -1,130 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/persecucion.js
-// La persecución (Preuniversitario, pu-pr-3; spec 2026-11-18-preuda-razonamiento-completo): si uno sale con ventaja y el de
-// atrás va más rápido, cada hora le descuenta la diferencia de velocidades: lo alcanza en ventaja ÷ (v₂ − v₁). Se arrastra
-// el tiempo y los dos carros avanzan por la carretera; hay que dejarlos justo en el mismo punto.
-// params = { rounds: [{ head, v1, v2 }] }   (head: km de ventaja del primero)   state = { rounds: [{ t }] }   (horas, de media en media hasta 8)
-GAMES['persecucion'] = (() => {
-  const need = r => r.head / (r.v2 - r.v1);
-  const ok = (s, r) => Math.abs(s.t - need(r)) < 1e-9;
-  const game = roundsGame({
-    aspect: 1,
-    init: () => ({ t: 0.5 }),
-    ok,
-    solution: r => `${RK.num(need(r))} h`,
-    prompt: r => `Un carro sale con ${r.head} km de ventaja a ${r.v1} km/h; otro lo sigue a ${r.v2} km/h. ¿Cuándo lo alcanza?`,
-    foot: () => 'Arrastra el tiempo',
-    layout(G) { G.tY = G.H - 108; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { t: need(r) } : G.s, good = ok(s, r), x1 = r.head + r.v1 * s.t, x2 = r.v2 * s.t, L = r.head + r.v1 * 8, u = (G.W - 50) / L, y = 150;
-      p.stroke(C.line); p.strokeWeight(14); p.line(25, y, G.W - 25, y); p.strokeWeight(1); p.stroke(C.bg); p.drawingContext.setLineDash([8, 6]); p.line(25, y, G.W - 25, y); p.drawingContext.setLineDash([]);
-      const car = (x, col, dy) => { p.noStroke(); p.fill(col); p.rect(25 + x * u - 12, y + dy - 7, 24, 14, 4); };
-      car(x1, good ? C.ok : C.sky, -14); car(x2, good ? C.ok : C.coral, 14);
-      TK.label(p, C, `${RK.num(x1)} km`, 25 + x1 * u, y - 32, C.sky, 10, 60); TK.label(p, C, `${RK.num(x2)} km`, 25 + x2 * u, y + 34, C.coral, 10, 60);
-      TK.label(p, C, `distancia entre ellos: ${RK.num(Math.abs(x1 - x2))} km`, G.W / 2, y + 64, good ? C.ok : C.ink, 11, G.W - 30);
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, 16, Math.round(s.t * 2) - 1, i => ((i + 1) % 2 === 0 ? String((i + 1) / 2) : null));
-      RK.strip(p, C, G.fb, `$${r.head} - (${r.v2} - ${r.v1}) \\cdot ${RK.num(s.t)} = ${RK.num(r.head - (r.v2 - r.v1) * s.t)}$`, { kicker: 'Cada hora descuenta la diferencia', col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(0), y: G.tY }, to: { x: G.X(1), y: G.tY }, text: 'Arrastra el tiempo', ty: G.tY - 28 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const v = (RK.pick(x, 30, G.W - 30, 16) + 1) / 2; if (v !== G.s.t || !G.touched[G.cur]) { G.s.t = v; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ t: need(r) }) });
-})();
-;
-//#archivo js/games/arbol-opciones.js
-// El árbol de opciones (Preuniversitario, pu-co-1; spec 2026-11-18-preuda-razonamiento-completo): si cada decisión se toma
-// después de la anterior, el árbol se abre en cada nivel y las hojas son el producto de las opciones. Se conocen el total y
-// casi todos los niveles; se arrastran las ramas del nivel que falta y el árbol cuenta sus hojas.
-// params = { rounds: [{ levels: [{ name, n }], miss, total }] }   (miss: nivel que falta)   state = { rounds: [{ k }] }   (de 1 a 8)
-GAMES['arbol-opciones'] = (() => {
-  const prod = (r, k) => r.levels.reduce((a, l, i) => a * (i === r.miss ? k : l.n), 1);
-  const ok = (s, r) => prod(r, s.k) === r.total;
-  const answer = r => ({ k: r.levels[r.miss].n });
-  const game = roundsGame({
-    aspect: 1.25,
-    init: r => ({ k: r.levels[r.miss].n === 1 ? 2 : 1 }),
-    ok,
-    solution: r => `${r.levels[r.miss].n} ${r.levels[r.miss].name}`,
-    prompt: r => `${r.total} combinaciones en total. ¿Cuántas opciones de ${r.levels[r.miss].name}?`,
-    foot: () => 'Arrastra cuántas ramas tiene el nivel que falta',
-    layout(G) { G.tY = G.H - 108; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, ns = r.levels.map((l, i) => (i === r.miss ? s.k : l.n)), L = ns.length, top = 104, H = G.tY - 150, good = ok(s, r);
-      let nodes = [{ x: G.W / 2, y: top }];
-      ns.forEach((n, lv) => {
-        const y = top + (lv + 1) * H / L, total = nodes.length * n, w = (G.W - 40) / total, next = [];
-        nodes.forEach((nd, j) => { for (let b = 0; b < n; b++) { const x = 20 + (j * n + b + 0.5) * w; p.stroke(lv === r.miss ? (good ? C.ok : C.coral) : C.line); p.strokeWeight(total > 40 ? 0.6 : 1.2); p.line(nd.x, nd.y, x, y); next.push({ x, y }); } });
-        TK.label(p, C, `${r.levels[lv].name}: ${n}`, 54, y - H / L / 2, lv === r.miss ? C.coral : C.mute, 9, 100);
-        nodes = next;
-      });
-      if (nodes.length <= 60) nodes.forEach(nd => drawDot(p, C, nd.x, nd.y, 4, good ? C.ok : C.sky));
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, 8, s.k - 1, i => String(i + 1));
-      RK.strip(p, C, G.fb, `$${ns.join(' \\cdot ')} = ${prod(r, s.k)}\\ \\text{hojas}$`, { col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(G.s.k - 1), y: G.tY }, to: { x: G.X([5, 6, 7].find(i => i + 1 !== answer(G.r).k)), y: G.tY }, text: 'Arrastra las ramas', ty: G.tY - 28 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const v = RK.pick(x, 30, G.W - 30, 8) + 1; if (v !== G.s.k || !G.touched[G.cur]) { G.s.k = v; G.touch(); } };
-  return Object.assign(game, { answer });
-})();
-;
-//#archivo js/games/placas-codigo.js
-// Contar códigos casilla por casilla (Preuniversitario, pu-co-1 y pu-co-2; spec 2026-11-18-preuda-razonamiento-completo): en
-// un código cada casilla tiene sus opciones; si no se puede repetir, cada casilla tiene una menos que la anterior. Se arrastra
-// a cada casilla la ficha con su número de opciones; el juego multiplica.
-// params = { rounds: [{ slots: [rótulo], rule, want: [n], tray: [n], ask? }] }   (ask: la pregunta; por defecto «¿Cuántos códigos hay?»)   state = { rounds: [{ put: [índice de ficha | null] }] }
-GAMES['placas-codigo'] = (() => {
-  const ok = (s, r) => r.want.every((w, i) => s.put[i] != null && r.tray[s.put[i]] === w);
-  const answer = r => { const used = new Set(); return { put: r.want.map(w => { const i = r.tray.findIndex((t, k) => t === w && !used.has(k)); used.add(i); return i; }) }; };
-  const lay = G => { const n = G.r.slots.length, w = Math.min(58, (G.W - 30) / n - 6); G.boxes = G.r.slots.map((_, i) => ({ i, x: G.W / 2 - (n * (w + 6) - 6) / 2 + i * (w + 6), y: 140, w, h: 48 })); };
-  const game = roundsGame({
-    aspect: 1.15,
-    init: r => ({ put: r.slots.map(() => null) }),
-    ok,
-    answered: s => s.put.some(v => v != null),
-    solution: r => `${r.want.join(' · ')} = ${r.want.reduce((a, b) => a * b, 1)}`,
-    prompt: r => `${r.ask || '¿Cuántos códigos hay?'} ${r.rule}`,
-    foot: () => 'Arrastra a cada casilla cuántas opciones tiene',
-    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.drag = null; lay(G); },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, good = ok(s, r);
-      G.boxes.forEach(b => { TK.label(p, C, r.slots[b.i], b.x + b.w / 2, b.y - 10, C.mute, 9, b.w + 6); const v = s.put[b.i]; if (v != null && G.drag?.from !== b.i) RK.chip(p, C, b, String(r.tray[v]), { on: true, col: good ? C.ok : C.sky, size: 15 }); else { p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 3]); p.rect(b.x, b.y, b.w, b.h, 8); p.drawingContext.setLineDash([]); } });
-      const free = r.tray.map((_, i) => i).filter(i => !s.put.includes(i) && G.drag?.i !== i), w = Math.min(50, (G.W - 20) / Math.max(1, r.tray.length) - 6);
-      G.tbox = free.map((i, j) => ({ i, x: G.W / 2 - (free.length * (w + 6) - 6) / 2 + j * (w + 6), y: G.H - 112, w, h: 34 }));
-      G.tbox.forEach(b => RK.chip(p, C, b, String(r.tray[b.i]), { size: 13, col: C.mint }));
-      if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 17, w, h: 34 }, String(r.tray[G.drag.i]), { on: true, col: C.brand, size: 13 });
-      const vals = s.put.map(v => (v == null ? '\\square' : r.tray[v])), tot = s.put.every(v => v != null) ? s.put.reduce((a, v) => a * r.tray[v], 1) : null;
-      RK.strip(p, C, G.fb, `$${vals.join(' \\cdot ')}${tot != null ? ` = ${tot}` : ''}$`, { col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) {
-      const t = (G.tbox || []).find(b => hitBox(b, x, y)); if (t) { G.drag = { i: t.i, from: -1, x, y }; return true; }
-      const b = G.boxes.find(b => hitBox(b, x, y)); if (b && G.s.put[b.i] != null) { G.drag = { i: G.s.put[b.i], from: b.i, x, y }; return true; }
-      return false;
-    },
-    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
-    release(G, x, y) {
-      const d = G.drag; G.drag = null; if (!d) return; const P = G.s.put, b = G.boxes.find(b => hitBox({ x: b.x - 4, y: b.y - 8, w: b.w + 8, h: b.h + 16 }, x, y));
-      if (d.from >= 0) P[d.from] = null;
-      if (b) { const prev = P[b.i]; P[b.i] = d.i; if (prev != null && d.from >= 0) P[d.from] = prev; }
-      G.touch();
-    },
-    demo(G) { const t = G.tbox?.[0], b = G.boxes.find(b => G.r.want[b.i] !== G.r.tray[t?.i]) || G.boxes[0]; return t ? { from: { x: t.x + t.w / 2, y: t.y + 17 }, to: { x: b.x + b.w / 2, y: b.y + 24 }, text: 'Arrastra a una casilla', ty: t.y - 12 } : null; },
-    peek: G => ({ boxes: G.boxes, tray: G.tbox }),
-  });
-  return Object.assign(game, { answer });
-})();
-;
 //#archivo js/games/anagramas.js
 // Anagramas con letras repetidas (Preuniversitario, pu-co-2; spec 2026-11-18-preuda-razonamiento-completo): ordenar n letras
 // distintas da n! maneras; si una letra se repite k veces, intercambiar sus copias no cambia la palabra, así que se divide
@@ -17935,6 +17810,7 @@ Object.assign(XG, (() => {
 // explora-kit.js y lectura-kit.js. Armazones sobre XG.juego (estado puro; nada dice si va bien hasta comprobar):
 //   HOJA.toca(nombre, d)    se tocan trozos del texto (subrayar, tachar).            estado { m: [claves] }
 //   HOJA.zonas(nombre, d)   fichas que van al margen o a huecos de la escena.        estado { en: [zona por ficha, −1 = bandeja] }
+//   HOJA.pinta(nombre, d)   se pintan oraciones con marcadores.                      estado { c: [marcador por línea, −1] }
 //   HOJA.hilos(nombre, d)   se tira un hilo de cada tarjeta a un punto del texto.    estado { a: [destino por tarjeta, −1] }
 //   HOJA.ordena(nombre, d)  tiras que se mueven hasta que el orden tiene sentido.    estado { o: [índices], t: ya se movió }
 // `p.mira[i]` es el aviso de la ficha o tarjeta i cuando quedó mal: cierto en cualquier sitio equivocado y sin dar la respuesta.
@@ -18120,6 +17996,46 @@ const HOJA = (() => {
     });
   }
 
+  // ------------------------------------------------------------------------------------------------ pintar con marcadores
+  // Se escoge un marcador y se tocan oraciones (o se arrastra el marcador hasta la oración).
+  // d: { escena(p, T) }   p: { lineas, plumas, va: [pluma por línea], mira }    estado { c: [pluma por línea, −1 sin pintar] }
+  function pinta(nombre, d) {
+    XG.juego(nombre, {
+      tipo: 'pinta', ini: p => ({ c: p.lineas.map(() => -1) }), listo: s => s.c.every(x => x >= 0),
+      ok: (s, p) => s.c.join() === p.va.join(), sol: p => ({ c: [...p.va] }),
+      texto: p => p.lineas.map((t, i) => `${t.length > 34 ? `«${t.split(' ').slice(0, 4).join(' ')}…»` : `«${t}»`} → ${p.plumas[p.va[i]]}`).join(' · '),
+      monta(stage, p, ui) {
+        stage.innerHTML = `<div class="hj hj-${nombre} hj-pinta"><div class="hj-esc">${d.escena(p, (i, t) => `<p class="hj-linea" data-drop="${i}" data-l="${i}" tabindex="0" role="button"><span>${fmt(t)}</span><small></small></p>`)}</div><div class="hj-mesa"><div class="hj-band">${p.plumas.map((t, k) => `<button type="button" class="hj-f hj-pluma m${k}" data-f="${k}" aria-pressed="${!k}"><i></i>${esc(t)}</button>`).join('')}</div></div></div>`;
+        const root = stage.firstChild, L = i => root.querySelector(`[data-l="${i}"]`);
+        let pluma = 0;
+        const draw = () => {
+          p.lineas.forEach((t, i) => {
+            const k = ui.s.c[i], el = L(i);
+            el.className = `hj-linea${k >= 0 ? ` m${k}` : ''}`; el.lastChild.textContent = k >= 0 ? p.plumas[k] : '';
+            el.setAttribute('aria-label', `${t} ${k >= 0 ? p.plumas[k] : 'sin pintar'}`);
+          });
+          root.querySelectorAll('.hj-pluma').forEach((b, k) => { b.classList.toggle('hj-sel', k === pluma); b.setAttribute('aria-pressed', k === pluma); });
+        };
+        const pon = (i, k) => { const c = [...ui.s.c]; c[i] = c[i] === k ? -1 : k; ui.set({ c }); XS.pop(); tactil(); draw(); };
+        XG.arrastra(ui, root, '[data-f]', { onDrop: (el, z) => { pluma = +el.dataset.f; if (ui.s.c[+z.dataset.drop] !== pluma) pon(+z.dataset.drop, pluma); else draw(); }, onTap: el => { pluma = +el.dataset.f; XS.tick(pluma * 3); draw(); } });
+        const linea = e => (ui.locked || root.dataset.dragged ? null : e.target.closest?.('.hj-linea'));
+        root.addEventListener('click', e => { const x = linea(e); if (x) pon(+x.dataset.l, pluma); });
+        root.addEventListener('keydown', e => { const x = linea(e); if (x && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); pon(+x.dataset.l, pluma); } });
+        desplaza(ui, root);
+        draw();
+        ui.nota('Escoge un marcador y toca las oraciones; con otro toque se borra.');
+        return okk => {
+          const s = ui.s; root.classList.add('hj-fin');
+          const mala = s.c.findIndex((k, i) => k !== p.va[i]);
+          cierra(ui, okk, {
+            lista: () => s.c.map((k, i) => [L(i), k === p.va[i]]), aviso: p.mira[mala] || '', bien: p.bien,
+            buena() { ui.muestra({ c: [...p.va] }); draw(); p.va.forEach((_, i) => L(i).classList.add('hj-bien')); }, final() { prende(root); },
+          });
+        };
+      },
+    });
+  }
+
   // ------------------------------------------------------------------------------------------------------- tirar hilos
   // d: { escena(p) con [data-t="i"] en los destinos; destinos(p) → cuántos; rot(p, i) }   p: { tarjetas, va: [destino | [destinos]], mira }
   function hilos(nombre, d) {
@@ -18273,7 +18189,7 @@ const HOJA = (() => {
     });
   }
 
-  return { esc, fmt, hoja, completo, cabeza, parr, zona, zonas, toca, hilos, ordena, oraciones, prende, luzDe, igual, base };
+  return { esc, fmt, hoja, completo, cabeza, parr, zona, zonas, toca, pinta, hilos, ordena, oraciones, prende, luzDe, igual, base };
 })();
 ;
 //#archivo js/games/lectura-escena.js
@@ -18397,6 +18313,50 @@ const HOJA = (() => {
     bien: (s, p) => `Quedan ${p.total - s.l - s.q} min para volver a las marcadas.`,
   });
   ordena('ruta-preguntas', { tiras: p => p.tiras });
+}
+;
+//#archivo js/games/lectura-tipos-escena.js
+// Ejercicios de lectura sobre la hoja · mundo 2, «Tipos de texto y géneros» (spec 2026-11-24-lectura-explora). Van por datos.
+{
+  const { esc, fmt, hoja, completo, zona, zonas, toca, hilos, ordena, pinta, oraciones } = HOJA;
+  const lineas = (p, T) => `<article class="hj-hoja hj-lineas">${p.lineas.map((t, i) => T(i, t)).join('')}</article>`;
+  const cajas = p => `<div class="hj-dos alto">${p.rot.map((t, i) => `<div><small>${esc(t)}</small>${zona(i, '', '', t)}</div>`).join('')}</div>`;
+  const doc = p => (p.doc?.paras ? completo(p.doc) : '');
+
+  // Marcadores de colores: cada oración se pinta con lo que hace o con quién habla.
+  for (const n of ['pinta-tipos', 'pinta-voces', 'pinta-preguntas']) pinta(n, { escena: (p, T) => lineas(p, T) + doc(p) });
+
+  // La pista se ata a la oración que la tiene.
+  const atada = p => `<article class="hj-hoja hj-lineas">${p.lineas.map((t, i) => `<p class="hj-linea" data-t="${i}" tabindex="0" role="button">${fmt(t)}</p>`).join('')}</article>${doc(p)}`;
+  const corta = t => (t.length > 46 ? `«${t.split(' ').slice(0, 6).join(' ')}…»` : `«${t}»`);
+  hilos('pista-tipo', { destinos: p => p.lineas.length, rot: (p, i) => corta(p.lineas[i]), escena: atada, ayuda: 'Tira un hilo desde cada pista hasta la oración donde está.' });
+  hilos('pieza-argumento', { destinos: p => p.lineas.length, rot: (p, i) => corta(p.lineas[i]), escena: atada, ayuda: 'Tira un hilo desde cada pieza hasta la oración que cumple ese papel.' });
+
+  // La misma idea, escrita con otro propósito.
+  zonas('cambia-tipo', {
+    rot: (p, i) => p.rot[i],
+    escena: p => `<p class="hj-apuesta"><small>${esc(p.de)}</small>${esc(p.antes)}</p><p class="hj-frase">${esc(p.frase).replace(/\[(\d)\]/g, (_, i) => zona(+i, p.rot[+i], 'en-linea'))}</p>`,
+    ayuda: 'Llena los huecos para que la oración cambie de propósito. Sobran fichas.',
+  });
+  zonas('todo-o-parte', { varias: true, rot: (p, i) => p.rot[i], escena: p => cajas(p) + doc(p) });
+  zonas('genero-o-cita', { varias: true, rot: (p, i) => p.rot[i], escena: p => cajas(p) });
+  ordena('pasos-del-proceso', { tiras: p => p.tiras, cabeza: p => `<p class="hj-apuesta"><small>${esc(p.que)}</small>${esc(p.de)}</p>` });
+
+  // Signos y referentes: el hilo llega al lugar exacto del texto. `texto` va en trozos con «|»; los impares se pueden tocar.
+  const trozos = p => p.texto.split('|');
+  const pieza = p => `<article class="hj-hoja"><p class="hj-frase corta">${trozos(p).map((t, i) => (i % 2 ? `<span class="hj-t2" data-t="${(i - 1) / 2}" tabindex="0" role="button">${esc(t)}</span>` : esc(t))).join('')}</p></article>${doc(p)}`;
+  const rotPieza = (p, i) => `«${trozos(p)[2 * i + 1].trim()}»`, cuantas = p => (trozos(p).length - 1) / 2;
+  hilos('signo-oficio', { destinos: cuantas, rot: rotPieza, escena: pieza, ayuda: 'Tira un hilo desde cada oficio hasta el signo que lo hace.' });
+  hilos('tira-referente', { destinos: cuantas, rot: rotPieza, escena: pieza, ayuda: 'Tira un hilo desde cada palabra hasta aquello a lo que apunta.' });
+
+  // La vida que se cuenta: antes, el momento del cambio y después.
+  zonas('linea-vida', {
+    varias: true, rot: (p, i) => p.rot[i],
+    escena: p => `<div class="hj-vida">${p.rot.map((t, i) => `<div><i></i><small>${esc(t)}</small>${zona(i, '', '', t)}</div>`).join('')}</div>${doc(p)}`,
+    ayuda: 'Lleva cada hecho a su momento.',
+  });
+  const suya = (p, T) => hoja(p, { nums: p.nums, trozo: (k, i, t) => T(`${k}.${i}`, t) });
+  toca('subraya-rasgo', { modo: 'subraya', claves: p => p.nums.flatMap(n => oraciones(p, n).map((_, i) => `${n}.${i}`)), texto: p => p.va.map(k => { const [n, i] = k.split('.'); return `«${oraciones(p, +n)[+i]}»`; }).join(' · '), escena: (p, T) => suya(p, T) + doc(p) });
 }
 ;
 //#archivo js/games/marca-mueve.js

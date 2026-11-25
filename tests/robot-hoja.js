@@ -40,6 +40,9 @@
     } else if (g.tipo === 'toca') {
       const m = [...s.m]; if (!bien) m[0] = [...g.claves(p)].find(k => !m.includes(k));
       for (const k of m) { $(`.hj-t[data-k="${k}"]`).click(); await esp(60); }
+    } else if (g.tipo === 'pinta') {
+      const c = s.c.map((k, i) => (!bien && !i ? (k + 1) % p.plumas.length : k));
+      for (let i = 0; i < c.length; i++) { if (toque) { $(`[data-f="${c[i]}"]`).click(); await esp(30); $(`[data-l="${i}"]`).click(); await esp(50); } else await arrastra($(`[data-f="${c[i]}"]`), $(`[data-l="${i}"]`)); }
     } else if (g.tipo === 'ordena') {
       for (let n = p.fija || 0; n < p.ini.length; n++) {
         const i = !bien && n >= p.ini.length - 2 ? 2 * p.ini.length - 3 - n : n, li = $(`.hj-tira[data-i="${i}"] .hj-asa`);

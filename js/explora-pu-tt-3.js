@@ -1,0 +1,35 @@
+// Preuniversitario · pu-tt-3 «Estructura y testimonio» (Explora). Textos cortos propios.
+xpLec('pu-tt-3', [
+  ['Cómo está armado',
+    xpMira('hoja', 'Empecemos por la idea: un texto está **armado por piezas**, y cada una cumple un papel.', { paras: [['El parque debería cerrar más tarde.'], ['De noche es cuando la gente sale del trabajo.'], ['Algunos dicen que es peligroso.'], ['Pero donde hay luz y gente, hay menos peligro.']] }, [
+      ['Este texto argumenta. Veamos sus piezas.', {}],
+      ['Lo que defiende es la tesis.', { luz: [0], nota: { 0: 'tesis' } }],
+      ['La razón que la apoya es un argumento.', { luz: [1], nota: { 1: 'argumento' } }],
+      ['Lo que dirían otros en contra es el contraargumento.', { luz: [2], nota: { 2: 'contraargumento' } }],
+      ['Y la respuesta lo contesta: «pero…».', { luz: [3], nota: { 3: 'respuesta' } }],
+      ['Un texto que cuenta una vida se arma distinto: antes, cambio y después.', {}],
+    ], 'Argumentar: tesis, argumento, contraargumento y respuesta. Contar una vida: antes, cambio y después.'),
+    xpHaz('hoja', 'Pon al margen el papel de cada oración.', { modo: 'margen', rotulos: ['contraargumento', 'tesis', 'respuesta', 'argumento'], meta: [1, 3, 0, 2], paras: [['El salón debería tener plantas.'], ['Las plantas refrescan el aire.'], ['Hay quienes creen que ensucian.'], ['Sin embargo, basta regarlas con cuidado.']], pista: 'Alguno no va ahí. ¿Qué se pide, con qué razón, qué dicen otros y cómo se les contesta?' }, 'Cada pieza responde a otra: por eso el orden importa.')],
+  ['La voz del testimonio',
+    xpMira('hoja', 'Segunda idea: el testimonio suena a **alguien que habla** de su vida.', { paras: [['Yo salí del pueblo a los quince.', 'Uno a esa edad no sabe nada, ¿sí me entiende?'], ['Un día llegó una carta.', 'Entonces decidí volver.'], ['Ahora siembro otra vez.']] }, [
+      ['«Yo salí»: primera persona. Quien habla lo vivió.', { luz: [0], nota: { 0: 'antes' } }],
+      ['«Uno», «¿sí me entiende?»: así se habla. Son marcas de oralidad.', { luz: [1], sello: { 1: 'oralidad' } }],
+      ['«Uno» parece cualquiera, pero habla de sí misma.', { luz: [1] }],
+      ['«Un día» marca el momento del cambio.', { luz: [2, 3], nota: { 1: 'cambio' } }],
+      ['«Ahora» marca el después.', { luz: [4], nota: { 2: 'después' } }],
+      ['Las palabras de tiempo ordenan la vida que se cuenta.', {}],
+    ], 'Primera persona, marcas de oralidad como «uno» y palabras de tiempo que ordenan la vida.'),
+    xpHaz('hoja', 'Subraya las **dos** oraciones con marcas de oralidad.', { modo: 'toca', meta: [1, 3], paras: [['Yo manejaba un bus escolar.', 'Mire, uno ahí aprende a tener paciencia.'], ['Los niños subían en la misma esquina.', 'Eran terribles, pues, pero qué se le va a hacer.']], pista: 'Alguna de las subrayadas no tiene muletillas del habla. Léelas en voz alta: ¿en cuáles parece que te conversan?' }, 'Las marcas de oralidad dejan oír la voz.')],
+  ['Género o cita',
+    xpMira('hoja', 'Tercera idea: «testimonio» puede ser **todo el texto** o solo **una cita** adentro.', { letras: ['A', 'B'], paras: [['Yo fui telegrafista treinta años.', 'Mandé miles de mensajes que nunca leí.'], ['La oficina de telégrafos debería ser un museo.', '«Yo mandé miles de mensajes», cuenta Ana Vega.', 'Esa memoria merece un techo.']] }, [
+      ['En A habla la misma persona de principio a fin.', { luz: [0, 1] }],
+      ['Todo el texto es su voz: el género es testimonio.', { luz: [0, 1], nota: { 0: 'testimonio' } }],
+      ['En B escribe otra persona, que defiende algo.', { luz: [2, 4] }],
+      ['Solo deja hablar un momento a Ana: es una cita testimonial.', { luz: [3], sello: { 3: 'cita' } }],
+      ['B sigue siendo un texto de opinión, aunque tenga una cita.', { nota: { 1: 'opinión con una cita' } }],
+      ['A veces quien habla pregunta sin esperar respuesta: es una pregunta retórica.', {}],
+    ], 'El género lo da quien habla en todo el texto. Una pregunta retórica no pide un dato: señala algo.'),
+    xpHaz('hoja', 'Subraya la **pregunta retórica**: la que no espera que le contesten.', { modo: 'toca', meta: [3], paras: [['«¿Qué hora es?», le preguntó al vecino.', '«¿Me ayuda con la maleta?», dijo después.'], ['Había perdido el bus, el dinero y los papeles.', '«¿Y ahora quién podría creerme?», pensó en voz alta.']], pista: 'Esa no pregunta, o alguien puede contestarla con un dato o con un gesto. Busca la que no espera contestación.' }, 'Si una respuesta sonaría rara, la pregunta es retórica.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya la **cita testimonial** de este artículo.', { modo: 'toca', meta: [2], paras: [['El molino de agua lleva dos siglos en pie.', 'Cerrarlo sería perder una escuela.'], ['«Yo aprendí a contar con los bultos de maíz», dice Pedro, el molinero.', 'Su historia es la de muchos.', 'Por eso hay que cuidarlo.']], pista: 'Esa la dice quien escribe el artículo. Busca dónde habla en primera persona alguien que lo vivió.' }, 'La cita deja oír al testigo; el artículo sigue siendo de quien lo escribe.')],
+], 'Mira cómo está armado el texto, quién habla en todo y quién solo en una cita.');

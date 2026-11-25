@@ -779,3 +779,32 @@
   .xg .hj-hoja { font-size: 15.5px; }
   .xg .hj-f, .xg .hj-o { font-size: 14.5px; }
 }
+
+.hj-lineas { display: grid; gap: 8px; }
+.hj-linea { margin: 0; padding: 9px 12px; border: 1px solid var(--line); border-left: 5px solid var(--line); border-radius: 10px; cursor: pointer; transition: border-color .2s, background .25s; }
+.hj-linea small { display: block; min-height: 15px; margin: 2px 0 0; }
+.hj-linea[data-t] { border-left-width: 1px; }
+.hj-pluma.m0, .hj-linea.m0 { --m: var(--c-ink); } .hj-pluma.m1, .hj-linea.m1 { --m: var(--gold); } .hj-pluma.m2, .hj-linea.m2 { --m: var(--fire, var(--bad)); } .hj-pluma.m3, .hj-linea.m3 { --m: var(--mute); }
+.hj-linea.m0, .hj-linea.m1, .hj-linea.m2, .hj-linea.m3 { border-left-color: var(--m); background: color-mix(in srgb, var(--m) 14%, transparent); }
+.hj-linea.hj-bien { background: color-mix(in srgb, var(--ok) 15%, var(--card)); }
+.hj-linea.hj-mal { background: color-mix(in srgb, var(--bad) 14%, var(--card)); }
+.hj-signo-oficio .hj-t2 { padding: 6px 9px; }
+.hj-linea.over { background: color-mix(in srgb, var(--c) 14%, transparent); }
+.hj-pluma i { display: inline-block; width: 12px; height: 12px; margin-right: 7px; border-radius: 4px; background: var(--m); vertical-align: -1px; }
+.hj-pluma.hj-sel { border-color: var(--m); background: color-mix(in srgb, var(--m) 18%, var(--card)); }
+.hj-fin .hj-linea { cursor: default; }
+.hj-dos.alto { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.hj-dos.alto .hj-dentro { min-height: 130px; align-content: flex-start; }
+.hj-frase.corta { line-height: 1.9; }
+.hj-vida { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 16px; }
+.hj-vida::before { content: ''; position: absolute; left: 4%; right: 4%; top: 12px; border-top: 2px solid var(--c-ink); }
+.hj-vida i { position: absolute; top: 6px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--c-ink); background: var(--bg); }
+.hj-vida > div { padding-top: 14px; }
+.hj-vida .hj-dentro { min-height: 120px; align-content: flex-start; }
+@media (max-width: 599px) {
+  .hj-vida { grid-template-columns: minmax(0, 1fr); padding: 0 0 0 22px; }
+  .hj-vida::before { left: 8px; right: auto; top: 10px; bottom: 10px; border: 0; border-left: 2px solid var(--c-ink); }
+  .hj-vida i { left: 2px; top: auto; margin-top: 2px; }
+  .hj-vida > div { padding: 0; }
+  .hj-vida .hj-dentro { min-height: 44px; }
+}

@@ -13,7 +13,7 @@ const ctx = loadScripts([...all, ...exp]);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), EXPLORA = get(ctx, 'EXPLORA'), MUNDOS = get(ctx, 'PU_LEC_EXPLORA'), HOJA = get(ctx, 'HOJA');
 const units = get(ctx, 'COURSES').find(c => c.id === 'preuda').units.filter(u => MUNDOS.includes(u.world));
 const lecciones = units.flatMap(u => u.lessons), EX = lecciones.flatMap(l => l.ex.map(e => [l, e]));
-const ANTES = ['pu-el-1', 'pu-el-2', 'pu-el-3'];
+const ANTES = ['pu-el-1', 'pu-el-2', 'pu-el-3'], TODAS = lecciones.map(l => l.id);
 const J = x => JSON.stringify(x);
 
 test('el mundo 1 de lectura está rehecho: explicación y 8 juegos distintos por lección, con pista', () => {
@@ -100,14 +100,15 @@ test('lo que se enciende y las tiras del texto están literalmente en su párraf
     for (const [n, t] of p.luz || []) assert.ok((p.doc.paras[n - 1] || '').includes(t), `${l.id} ${e.game}: «${t}» no está en ¶${n}`);
     if (e.game === 'ordena-texto') p.tiras.forEach((t, i) => t.split(/(?<=\.) /).forEach(o => assert.ok(docs[l.id].paras[i].includes(o.replace(/\.$/, '')), `${l.id}: «${o}»`)));
   }
-  for (const id of ANTES) {
+  for (const id of TODAS) {
     const n = docs[id].paras.join(' ').split(/\s+/).length;
     assert.ok(n >= 330 && n <= 560, `${id}: ${n} palabras`);
   }
 });
 
 test('la explicación no usa los textos de los ejercicios ni de la evaluación, y no pone opción múltiple', () => {
-  const t = J(ANTES.map(id => EXPLORA[id])).toLowerCase();
+  const t = J(TODAS.map(id => EXPLORA[id])).toLowerCase();
+  for (const x of ['garza', 'sabaleta', 'guitarra', 'gafas', 'chiva', 'licuadora', 'busetas', 'partera']) assert.ok(!t.includes(x), x);
   for (const x of ['decibel', 'volcán', 'panela', 'fiado', 'armero', 'biblioteca', 'tendero']) assert.ok(!t.includes(x), x);
   for (const [l, e] of EX) assert.ok(!['pregunta-examen', 'opcion-examen'].includes(e.game), l.id);
 });
@@ -119,6 +120,24 @@ test('lo que evalúan los ejercicios se enseñó: bordes, fuentes, comienzos, co
   for (const c of ['EXCEPTO', 'otro párrafo', 'deduc', 'marca', 'repas']) assert.match(t('pu-el-3'), new RegExp(c, 'i'), c);
 });
 
+test('pintar con marcadores: una pluma por línea, con aviso, y se usan todas', () => {
+  const P = EX.filter(([, e]) => GAMES[e.game].tipo === 'pinta');
+  assert.ok(P.length >= 3);
+  for (const [l, e] of P) {
+    const p = e.params;
+    assert.equal(p.va.length, p.lineas.length, l.id); assert.equal(p.mira.length, p.lineas.length, l.id);
+    assert.equal(new Set(p.va).size, p.plumas.length, `${l.id}: pluma sin usar`);
+    assert.ok(p.mira.every(m => m.length > 15));
+  }
+});
+
+test('mundo 2: las tipologías, los géneros y el testimonio se enseñaron', () => {
+  const t = id => J(EXPLORA[id]);
+  for (const c of ['narra', 'describ', 'explic', 'argument', 'debería', 'predomina']) assert.match(t('pu-tt-1'), new RegExp(c, 'i'), c);
+  for (const c of ['entrevista', 'crónica', 'divulga', 'testimonio', 'opinión', 'raya', 'dos puntos', 'apunta']) assert.match(t('pu-tt-2'), new RegExp(c, 'i'), c);
+  for (const c of ['tesis', 'contraargumento', 'oral', 'uno', 'cita', 'retórica']) assert.match(t('pu-tt-3'), new RegExp(c, 'i'), c);
+});
+
 test('reparte-tiempo: hay varios repartos buenos y llenar todo el tiempo falla', () => {
   const p = EX.find(([, e]) => e.game === 'reparte-tiempo')[1].params, g = GAMES['reparte-tiempo'];
   for (const [l, q, ok] of [[4, 12, true], [5, 13, true], [6, 12, true], [4, 16, false], [2, 14, false], [6, 13, false], [8, 10, false]]) assert.equal(g.grade({ l, q }, p).ok, ok, `${l}+${q}`);
@@ -128,7 +147,7 @@ test('escena «hoja» de la explicación: subrayar, tachar y margen', () => {
   const X = get(ctx, 'XP').hoja, m = { modo: 'margen', paras: [['a'], ['b']], rotulos: ['x', 'y'], meta: [1, 0] };
   assert.equal(X.ok({ n: [1, 0] }, m), true); assert.equal(X.ok({ n: [0, 1] }, m), false);
   assert.equal(X.ok({ m: ['t', '2'] }, { modo: 'toca', meta: [2, 't'], paras: [] }), true);
-  for (const id of ANTES) for (const p of EXPLORA[id].pasos.filter(p => p.tipo === 'hoja')) {
+  for (const id of TODAS) for (const p of EXPLORA[id].pasos.filter(p => p.tipo === 'hoja')) {
     const total = p.paras.flat().length;
     if (p.modo !== 'margen') for (const k of p.meta) assert.ok('tafd'.includes(k) || k < total, `${id}: trozo ${k}`);
     assert.ok(p.pista?.length > 30, `${id}: sin pista`);

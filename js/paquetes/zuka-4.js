@@ -576,7 +576,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 // tests/preuda-lectura.test.js les exige el estándar.
 const PU_LEC_HECHOS = [];
 // Mundos con explicación interactiva y ejercicios sobre la hoja (spec 2026-11-24-lectura-explora; tests/lectura-explora.test.js).
-const PU_LEC_EXPLORA = ['pu-estrategias'];
+const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos'];
 (() => {
   const lessons = PU_LECTURA.flatMap(u => u.lessons);
   const L = id => { const l = lessons.find(l => l.id === id); if (!l) throw new Error(`no existe ${id}`); return l; };
@@ -9044,7 +9044,7 @@ xpLec('pu-el-2', [
         ['Recibe turistas: puede ser cierto, pero el texto no lo dice.', { luz: [4], nota: { 4: 'en ninguno' } }],
         ['La que se queda sin párrafo es la respuesta.', { luz: [4] }],
       ], 'En EXCEPTO cada opción busca su párrafo. La que no lo encuentra es la respuesta.'),
-      xpHaz('hoja', '«Todo lo siguiente se dice de la laguna, EXCEPTO». **Tacha** las tres opciones que sí tienen párrafo.', { modo: 'tacha', letras: ['1', '2', 'a', 'b', 'c', 'd'], quietos: [0, 1], meta: [2, 4, 5], paras: [['La laguna se alimenta de tres quebradas y en ella anidan garzas.'], ['Desde hace un año está prohibido pescar.'], ['anidan aves'], ['se puede nadar'], ['recibe agua de quebradas'], ['no se puede pescar']], pista: 'Alguna de las tachadas no está en el texto. Vuelve a los párrafos 1 y 2 y busca cada una.' }, 'Que algo suene lógico no basta: tiene que estar escrito.')],
+      xpHaz('hoja', '«Todo lo siguiente se dice de la laguna, EXCEPTO». **Tacha** las tres opciones que sí tienen párrafo.', { modo: 'tacha', letras: ['1', '2', 'a', 'b', 'c', 'd'], quietos: [0, 1], meta: [2, 4, 5], paras: [['La laguna se alimenta de tres quebradas y en ella anidan patos.'], ['Desde hace un año está prohibido pescar.'], ['anidan aves'], ['se puede nadar'], ['recibe agua de quebradas'], ['no se puede pescar']], pista: 'Alguna de las tachadas no está en el texto. Vuelve a los párrafos 1 y 2 y busca cada una.' }, 'Que algo suene lógico no basta: tiene que estar escrito.')],
     ['La intrusa disfrazada',
       xpMira('hoja', 'Tercera idea: si la pregunta nombra **un párrafo**, solo vale lo que está ahí.', { letras: ['1', '2', 'a', 'b', 'c'], paras: [['El páramo guarda agua en su musgo y la suelta poco a poco.'], ['Las quemas y el ganado lo secan; por eso hay guardas.'], ['guarda agua'], ['hay guardas'], ['las quemas le hacen daño']] }, [
         ['«Según el párrafo 2, se dice todo, EXCEPTO». La orden nombra un párrafo.', { luz: [1] }],
@@ -9060,6 +9060,116 @@ xpLec('pu-el-2', [
       xpHaz('hoja', '«Según el **párrafo 1**, el taller hace todo lo siguiente, EXCEPTO». Subraya la respuesta.', { modo: 'toca', letras: ['1', '2', 'a', 'b', 'c'], quietos: [0, 1], meta: [3], paras: [['En el taller reparan radios viejos y enseñan a soldar.'], ['Los sábados regalan piezas sueltas a los colegios.'], ['dar clases de soldadura'], ['donar piezas'], ['arreglar aparatos']], pista: 'Esa sí está en el párrafo 1, quizá con otras palabras. Busca la que solo aparece en otro lado.' }, 'La orden manda: primero qué pide y dónde; después, las opciones.')],
   ], 'Reparte el tiempo, lee la orden, lleva cada opción a su párrafo y no dejes nada en blanco.');
 }
+;
+//#archivo js/explora-pu-tt-1.js
+// Preuniversitario · pu-tt-1 «Tipologías» (Explora). Textos cortos propios.
+xpLec('pu-tt-1', [
+  ['Cuatro maneras',
+    xpMira('hoja', 'Empecemos por la idea: con las palabras se pueden hacer **cuatro cosas** distintas.', { letras: ['A', 'B', 'C', 'D'], paras: [['Anoche un búho entró al dormitorio y nadie pudo dormir.'], ['El búho es pequeño, pardo y tiene los ojos amarillos.'], ['El búho gira la cabeza porque sus ojos no se mueven.'], ['El colegio debería conservar el árbol viejo, porque allí vive el búho.']] }, [
+      ['Cuatro oraciones sobre el mismo búho. Cada una hace algo distinto.', {}],
+      ['La primera cuenta algo que pasó: narra. Se nota en el tiempo y en la acción.', { luz: [0], nota: { 0: 'narra' } }],
+      ['La segunda muestra cómo es: describe. Se nota en colores y formas.', { luz: [1], nota: { 1: 'describe' } }],
+      ['La tercera dice cómo funciona: explica. También se llama expositiva.', { luz: [2], nota: { 2: 'explica' } }],
+      ['La cuarta pide algo y da una razón: argumenta. «Debería» la delata.', { luz: [3], nota: { 3: 'argumenta' } }],
+    ], 'Narrar es contar; describir, mostrar; explicar, decir cómo funciona; argumentar, defender.'),
+    xpHaz('hoja', 'Pon al margen qué hace cada oración.', { modo: 'margen', letras: ['A', 'B', 'C', 'D'], rotulos: ['explica', 'argumenta', 'narra', 'describe'], meta: [3, 2, 1, 0], paras: [['La feria huele a naranja y está llena de toldos verdes.'], ['El domingo se cayó un toldo y todos corrieron a levantarlo.'], ['Los toldos deberían ir amarrados, porque el viento es fuerte.'], ['El toldo se infla porque el aire entra por debajo.']], pista: 'Alguno no va ahí. Pregunta: ¿cómo es?, ¿qué pasó?, ¿qué hay que hacer? o ¿cómo funciona?' }, 'La misma feria sirve para narrar, describir, explicar o argumentar.')],
+  ['Las pistas',
+    xpMira('hoja', 'Segunda idea: cada tipología deja **pistas en las palabras**.', { paras: [['Primero se calienta el agua;', 'después se agrega la sal', 'y al final se apaga.'], ['Llegó tarde, saludó y se sentó.'], ['Es una casa baja, azul, con olor a madera.'], ['Vale la pena arreglarla porque aún sirve.']] }, [
+      ['Cuatro trozos. Busquemos la pista de cada uno.', {}],
+      ['«Primero», «después», «al final»: pasos en orden. Explica un proceso.', { luz: [0, 1, 2], nota: { 0: 'pasos' } }],
+      ['«Llegó», «saludó», «se sentó»: acciones en pasado. Narra.', { luz: [3], nota: { 1: 'acciones pasadas' } }],
+      ['«Baja», «azul», «olor»: lo que se ve y se huele. Describe.', { luz: [4], nota: { 2: 'sensaciones' } }],
+      ['«Vale la pena… porque»: un juicio y su razón. Argumenta.', { luz: [5], nota: { 3: 'juicio y razón' } }],
+      ['Si cambias la pista, cambia la tipología: «arregló la casa» ya narra.', {}],
+    ], 'Pasos: explica. Acciones en pasado: narra. Sensaciones: describe. «Debería» o «porque» con un juicio: argumenta.'),
+    xpHaz('hoja', 'Subraya las **dos** oraciones que narran.', { modo: 'toca', meta: [1, 3], paras: [['La laguna es redonda y oscura.', 'Mi tío la cruzó a nado una sola vez.', 'El fondo se oscurece porque la luz no llega.'], ['Salió temblando y no quiso volver.', 'Deberían poner un aviso en la orilla.']], pista: 'Alguna de las subrayadas no cuenta una acción que ya pasó. Busca los verbos en pasado con alguien que hace algo.' }, 'Narrar necesita que pase algo en el tiempo.')],
+  ['Se mezclan',
+    xpMira('hoja', 'Tercera idea: un texto mezcla tipologías, pero **una manda**.', { paras: [['El parque tiene bancas rotas y una fuente seca.'], ['El mes pasado se cayó un niño.'], ['Las bancas se pudren porque nadie las pinta.'], ['Por eso, el barrio debería adoptar el parque.']] }, [
+      ['Este texto empieza describiendo el parque.', { luz: [0], nota: { 0: 'describe' } }],
+      ['Después narra una caída.', { luz: [1], nota: { 1: 'narra' } }],
+      ['Y explica por qué se dañan las bancas.', { luz: [2], nota: { 2: 'explica' } }],
+      ['Al final pide: todo lo anterior estaba para llegar ahí.', { luz: [3], nota: { 3: 'argumenta' } }],
+      ['Por eso predomina la argumentación: es el propósito de todo el texto.', { luz: [3] }],
+      ['Una crónica también mezcla: relata, describe, da voz a testigos y a veces cierra con una postura.', {}],
+    ], 'Predomina la tipología que organiza todo el texto, no la que ocupa más renglones.'),
+    xpHaz('hoja', 'Subraya la oración que dice el **propósito de todo** el texto.', { modo: 'toca', meta: [3], paras: [['La panadería de la esquina abre a las cuatro.', 'Ayer se quedó sin harina y cerró a las siete.'], ['El pan se endurece porque pierde agua.'], ['Conviene comprarle a ella, para que no desaparezca.']], pista: 'Esa sirve a una parte. Busca aquello para lo que se dijeron las demás.' }, 'Pregunta para qué está cada parte: casi siempre, todas sirven a una.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'De estas cuatro oraciones, dos **explican** el eco y dos son de otra tipología. **Tacha** esas dos.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 2], paras: [['El sonido choca contra la montaña y regresa.'], ['Aquella tarde mi hermana gritó su nombre tres veces.'], ['Todos deberíamos gritar al menos una vez en un cañón.'], ['Si la pared está muy cerca, el eco no se distingue del grito.']], pista: 'Alguna de las tachadas sí dice cómo funciona el eco. Busca la que cuenta y la que pide.' }, 'Explicar es decir cómo funciona, sin contar ni pedir.')],
+], 'Narrar, describir, explicar y argumentar: busca la pista en las palabras y pregunta cuál manda en todo el texto.');
+;
+//#archivo js/explora-pu-tt-2.js
+// Preuniversitario · pu-tt-2 «Géneros del examen» (Explora). Textos cortos propios.
+xpLec('pu-tt-2', [
+  ['Quién habla y para qué',
+    xpMira('hoja', 'Empecemos por la idea: el **género** se reconoce por quién habla y para qué.', { letras: ['A', 'B', 'C', 'D', 'E'], paras: [['Yo vi crecer el puerto desde mi ventana.'], ['Cerrar el puerto fue un error.'], ['El agua sube dos veces al día por la atracción de la Luna.'], ['A las cinco de la mañana, el muelle ya olía a café.'], ['—¿Extraña el mar? —Todos los días.']] }, [
+      ['Alguien cuenta lo que vivió, en primera persona: testimonio.', { luz: [0], nota: { 0: 'testimonio' } }],
+      ['Alguien juzga algo de actualidad y firma: artículo de opinión.', { luz: [1], nota: { 1: 'opinión' } }],
+      ['Se explica ciencia para quien no es experto: texto divulgativo.', { luz: [2], nota: { 2: 'divulgativo' } }],
+      ['Se relata con hora y lugar: crónica.', { luz: [3], nota: { 3: 'crónica' } }],
+      ['Preguntas y respuestas, dos voces: entrevista.', { luz: [4], nota: { 4: 'entrevista' } }],
+      ['Y un ensayo reflexiona con calma alrededor de una tesis.', {}],
+    ], 'Testimonio: lo vivido. Opinión: un juicio. Divulgación: ciencia. Crónica: hora y lugar. Entrevista: dos voces.'),
+    xpHaz('hoja', 'Pon al margen el género de cada fragmento.', { modo: 'margen', letras: ['A', 'B', 'C', 'D'], rotulos: ['crónica', 'divulgativo', 'opinión', 'testimonio'], meta: [1, 3, 0, 2], paras: [['La miel no se daña porque tiene muy poca agua.'], ['Yo aprendí a nadar el año de la creciente.'], ['Era mediodía en la plaza y el desfile aún no llegaba.'], ['Subir el pasaje sin mejorar los buses es una burla.']], pista: 'Alguno no va ahí. ¿Explica, cuenta su propia vida, relata con hora y lugar, o juzga?' }, 'La voz y el propósito dicen el género.')],
+  ['Dos voces y sus signos',
+    xpMira('hoja', 'Segunda idea: en una entrevista, los **signos** dicen quién habla.', { paras: [['Sara Díaz arregla relojes hace veinte años.'], ['—¿Por qué relojes?'], ['—Por una razón: me gusta oír que algo vuelve a andar.'], ['—¿Y cuáles prefiere?', '—Los viejos.']] }, [
+      ['El periodista presenta: habla de ella como «ella».', { luz: [0], nota: { 0: 'periodista' } }],
+      ['La raya da el turno. Aquí pregunta el periodista.', { luz: [1], nota: { 1: 'periodista' } }],
+      ['Otra raya: ahora responde Sara, en primera persona.', { luz: [2], nota: { 2: 'Sara' } }],
+      ['Los dos puntos anuncian lo que viene: cuál es la razón.', { luz: [2] }],
+      ['Los signos de pregunta abren y cierran lo que se pregunta.', { luz: [3] }],
+      ['A veces la raya cambia en el mismo renglón: cambia la voz.', { luz: [4] }],
+    ], 'La raya da el turno, los dos puntos anuncian y los de pregunta encierran lo que se pregunta.'),
+    xpHaz('hoja', 'Subraya las **dos** oraciones que dice la entrevistada.', { modo: 'toca', meta: [2, 4], paras: [['Elena Ruiz pinta murales desde niña.', '—¿Qué es lo más difícil?', '—Esperar a que el muro se seque.'], ['Se ríe y mira sus manos.', '—Yo nunca aprendí a esperar.']], pista: 'Alguna de las subrayadas no es suya: alguien la presenta, la mira o le pregunta. Busca sus respuestas.' }, 'Quien presenta, describe o pregunta es el periodista.')],
+  ['A qué apunta una palabra',
+    xpMira('hoja', 'Tercera idea: palabras como «ese», «ella» o «lo» **apuntan** a algo ya nombrado.', { unidos: true, paras: [['Sara compró ', 'un reloj', ' y ', 'una lupa', '. ', 'Lo', ' abrió con cuidado y con ', 'ella', ' buscó la pieza rota.']] }, [
+      ['«Lo abrió». ¿Qué abrió? Hay que volver atrás.', { luz: [5] }],
+      ['Se prueba cada opción: «abrió un reloj» tiene sentido.', { luz: [1, 5] }],
+      ['«Lo» es masculino y singular, como «un reloj».', { luz: [1, 5] }],
+      ['«Con ella buscó»: femenino y sirve para mirar. Apunta a la lupa.', { luz: [3, 7] }],
+      ['Dos palabras pueden apuntar a lo mismo, o cada una a algo distinto.', {}],
+      ['Reemplaza, lee la oración entera y revisa que concuerde.', {}],
+    ], 'Para saber a qué apunta una palabra, pon cada opción en su lugar y lee toda la oración.'),
+    xpHaz('hoja', 'Subraya aquello a lo que apunta «**esta**».', { modo: 'toca', unidos: true, meta: [3], quietos: [0, 2, 4, 5, 6], paras: [['El taller tiene ', 'un banco', ' junto a ', 'una ventana', '. Por ', 'esta', ' entra la luz de la mañana.']], pista: 'Prueba: ¿por un banco entra la luz?' }, 'Concuerda en género y, sobre todo, tiene sentido.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'El género anticipa las preguntas. De un **testimonio** sobre una mudanza, tacha las dos preguntas que **no** esperarías.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['¿Qué sintió al dejar su casa?'], ['¿Cuál es la fórmula para calcular la carga?'], ['¿Por qué tuvo que irse?'], ['¿Qué ley propone el autor?']], pista: 'Alguna de las tachadas sí se responde con una vida contada. Busca las que pedirían ciencia o una postura.' }, 'En un testimonio se pregunta por lo vivido: qué sintió y por qué pasó.')],
+], 'Quién habla y para qué dicen el género; los signos, los turnos; y cada «ese» o «lo» apunta a algo ya dicho.');
+;
+//#archivo js/explora-pu-tt-3.js
+// Preuniversitario · pu-tt-3 «Estructura y testimonio» (Explora). Textos cortos propios.
+xpLec('pu-tt-3', [
+  ['Cómo está armado',
+    xpMira('hoja', 'Empecemos por la idea: un texto está **armado por piezas**, y cada una cumple un papel.', { paras: [['El parque debería cerrar más tarde.'], ['De noche es cuando la gente sale del trabajo.'], ['Algunos dicen que es peligroso.'], ['Pero donde hay luz y gente, hay menos peligro.']] }, [
+      ['Este texto argumenta. Veamos sus piezas.', {}],
+      ['Lo que defiende es la tesis.', { luz: [0], nota: { 0: 'tesis' } }],
+      ['La razón que la apoya es un argumento.', { luz: [1], nota: { 1: 'argumento' } }],
+      ['Lo que dirían otros en contra es el contraargumento.', { luz: [2], nota: { 2: 'contraargumento' } }],
+      ['Y la respuesta lo contesta: «pero…».', { luz: [3], nota: { 3: 'respuesta' } }],
+      ['Un texto que cuenta una vida se arma distinto: antes, cambio y después.', {}],
+    ], 'Argumentar: tesis, argumento, contraargumento y respuesta. Contar una vida: antes, cambio y después.'),
+    xpHaz('hoja', 'Pon al margen el papel de cada oración.', { modo: 'margen', rotulos: ['contraargumento', 'tesis', 'respuesta', 'argumento'], meta: [1, 3, 0, 2], paras: [['El salón debería tener plantas.'], ['Las plantas refrescan el aire.'], ['Hay quienes creen que ensucian.'], ['Sin embargo, basta regarlas con cuidado.']], pista: 'Alguno no va ahí. ¿Qué se pide, con qué razón, qué dicen otros y cómo se les contesta?' }, 'Cada pieza responde a otra: por eso el orden importa.')],
+  ['La voz del testimonio',
+    xpMira('hoja', 'Segunda idea: el testimonio suena a **alguien que habla** de su vida.', { paras: [['Yo salí del pueblo a los quince.', 'Uno a esa edad no sabe nada, ¿sí me entiende?'], ['Un día llegó una carta.', 'Entonces decidí volver.'], ['Ahora siembro otra vez.']] }, [
+      ['«Yo salí»: primera persona. Quien habla lo vivió.', { luz: [0], nota: { 0: 'antes' } }],
+      ['«Uno», «¿sí me entiende?»: así se habla. Son marcas de oralidad.', { luz: [1], sello: { 1: 'oralidad' } }],
+      ['«Uno» parece cualquiera, pero habla de sí misma.', { luz: [1] }],
+      ['«Un día» marca el momento del cambio.', { luz: [2, 3], nota: { 1: 'cambio' } }],
+      ['«Ahora» marca el después.', { luz: [4], nota: { 2: 'después' } }],
+      ['Las palabras de tiempo ordenan la vida que se cuenta.', {}],
+    ], 'Primera persona, marcas de oralidad como «uno» y palabras de tiempo que ordenan la vida.'),
+    xpHaz('hoja', 'Subraya las **dos** oraciones con marcas de oralidad.', { modo: 'toca', meta: [1, 3], paras: [['Yo manejaba un bus escolar.', 'Mire, uno ahí aprende a tener paciencia.'], ['Los niños subían en la misma esquina.', 'Eran terribles, pues, pero qué se le va a hacer.']], pista: 'Alguna de las subrayadas no tiene muletillas del habla. Léelas en voz alta: ¿en cuáles parece que te conversan?' }, 'Las marcas de oralidad dejan oír la voz.')],
+  ['Género o cita',
+    xpMira('hoja', 'Tercera idea: «testimonio» puede ser **todo el texto** o solo **una cita** adentro.', { letras: ['A', 'B'], paras: [['Yo fui telegrafista treinta años.', 'Mandé miles de mensajes que nunca leí.'], ['La oficina de telégrafos debería ser un museo.', '«Yo mandé miles de mensajes», cuenta Ana Vega.', 'Esa memoria merece un techo.']] }, [
+      ['En A habla la misma persona de principio a fin.', { luz: [0, 1] }],
+      ['Todo el texto es su voz: el género es testimonio.', { luz: [0, 1], nota: { 0: 'testimonio' } }],
+      ['En B escribe otra persona, que defiende algo.', { luz: [2, 4] }],
+      ['Solo deja hablar un momento a Ana: es una cita testimonial.', { luz: [3], sello: { 3: 'cita' } }],
+      ['B sigue siendo un texto de opinión, aunque tenga una cita.', { nota: { 1: 'opinión con una cita' } }],
+      ['A veces quien habla pregunta sin esperar respuesta: es una pregunta retórica.', {}],
+    ], 'El género lo da quien habla en todo el texto. Una pregunta retórica no pide un dato: señala algo.'),
+    xpHaz('hoja', 'Subraya la **pregunta retórica**: la que no espera que le contesten.', { modo: 'toca', meta: [3], paras: [['«¿Qué hora es?», le preguntó al vecino.', '«¿Me ayuda con la maleta?», dijo después.'], ['Había perdido el bus, el dinero y los papeles.', '«¿Y ahora quién podría creerme?», pensó en voz alta.']], pista: 'Esa no pregunta, o alguien puede contestarla con un dato o con un gesto. Busca la que no espera contestación.' }, 'Si una respuesta sonaría rara, la pregunta es retórica.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya la **cita testimonial** de este artículo.', { modo: 'toca', meta: [2], paras: [['El molino de agua lleva dos siglos en pie.', 'Cerrarlo sería perder una escuela.'], ['«Yo aprendí a contar con los bultos de maíz», dice Pedro, el molinero.', 'Su historia es la de muchos.', 'Por eso hay que cuidarlo.']], pista: 'Esa la dice quien escribe el artículo. Busca dónde habla en primera persona alguien que lo vivió.' }, 'La cita deja oír al testigo; el artículo sigue siendo de quien lo escribe.')],
+], 'Mira cómo está armado el texto, quién habla en todo y quién solo en una cita.');
 ;
 //#archivo js/explora-trig-41a.js
 // Trigonometría · trig-41a «Grados y radianes»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva; motor en
@@ -10713,6 +10823,19 @@ const GUIDES = {
   'descarta-prueba': [['drag', 'Tira un hilo desde cada opción falsa hasta la oración que la desmiente.', { tile: 'falsa', slot: 'prueba' }]],
   'reparte-tiempo': [['slide', 'Mueve las dos perillas para repartir los minutos.', { label: 'minutos' }]],
   'ruta-preguntas': [['drag', 'Arrastra cada paso de su asa hasta su puesto.', { tile: 'paso', slot: 'puesto' }]],
+  'pinta-tipos': [['tap', 'Escoge un marcador y toca las oraciones que le tocan.', {}]],
+  'pinta-voces': [['tap', 'Escoge un marcador y toca las oraciones que le tocan.', {}]],
+  'pinta-preguntas': [['tap', 'Escoge un marcador y toca las oraciones que le tocan.', {}]],
+  'pista-tipo': [['drag', 'Tira un hilo desde cada pista hasta su oración.', { tile: 'pista', slot: 'oración' }]],
+  'pieza-argumento': [['drag', 'Tira un hilo desde cada pieza hasta su oración.', { tile: 'tesis', slot: 'oración' }]],
+  'cambia-tipo': [['drag', 'Lleva las fichas a los huecos.', { tile: 'ficha', slot: 'hueco' }]],
+  'todo-o-parte': [['drag', 'Lleva cada propósito a su lugar.', { tile: 'propósito', slot: 'lugar' }]],
+  'genero-o-cita': [['drag', 'Lleva cada texto a su lugar.', { tile: 'texto', slot: 'lugar' }]],
+  'pasos-del-proceso': [['drag', 'Arrastra cada paso de su asa hasta su puesto.', { tile: 'paso', slot: 'puesto' }]],
+  'signo-oficio': [['drag', 'Tira un hilo desde cada oficio hasta el signo.', { tile: 'oficio', slot: '¿?' }]],
+  'tira-referente': [['drag', 'Tira un hilo desde cada palabra hasta aquello a lo que apunta.', { tile: 'ese', slot: 'quién' }]],
+  'linea-vida': [['drag', 'Lleva cada hecho a su momento.', { tile: 'hecho', slot: 'antes' }]],
+  'subraya-rasgo': [['tap', 'Toca la oración para subrayarla; otro toque la suelta.', {}]],
   'globo-lastre': [['drag', 'Arrastra globos o sacos de arena: el canasto sube o baja y la cuenta se escribe sola.', { tile: 'saco', slot: 'canasto' }], ['tap', 'Déjalo a la altura de la bandera. «Reiniciar» lo devuelve al comienzo.', { items: ['Reiniciar'], pick: [0] }]],
   'voltea-flecha': [['slide', 'Arrastra el multiplicador: la flecha se repite y, a la izquierda del 0, se voltea.', {}]],
   'capas-operacion': [['drag', 'Arrastra un número sobre su vecino: el juego los opera y los funde en uno.', { tile: '5', slot: '8' }], ['drag', 'Para una potencia, junta la base con su exponente (la ficha pequeña de arriba).', { tile: '(−3)', slot: '²' }]],

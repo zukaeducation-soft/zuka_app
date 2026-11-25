@@ -26,4 +26,5 @@ revisa cada marca, se levanta la cortina, se encienden las palabras que lo prueb
 
 ## Estado
 
-Hecho: mundo 1 (`pu-el-1`, `pu-el-2`, `pu-el-3`). Faltan los mundos 2 a 12.
+Hechos: mundo 1 (`pu-el-1` a `pu-el-3`) y mundo 2 (`pu-tt-1` a `pu-tt-3`, juegos en `js/games/lectura-tipos-escena.js` y
+armazón nuevo `HOJA.pinta`, marcadores de colores). Faltan los mundos 3 a 12.

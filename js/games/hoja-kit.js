@@ -2,6 +2,7 @@
 // explora-kit.js y lectura-kit.js. Armazones sobre XG.juego (estado puro; nada dice si va bien hasta comprobar):
 //   HOJA.toca(nombre, d)    se tocan trozos del texto (subrayar, tachar).            estado { m: [claves] }
 //   HOJA.zonas(nombre, d)   fichas que van al margen o a huecos de la escena.        estado { en: [zona por ficha, −1 = bandeja] }
+//   HOJA.pinta(nombre, d)   se pintan oraciones con marcadores.                      estado { c: [marcador por línea, −1] }
 //   HOJA.hilos(nombre, d)   se tira un hilo de cada tarjeta a un punto del texto.    estado { a: [destino por tarjeta, −1] }
 //   HOJA.ordena(nombre, d)  tiras que se mueven hasta que el orden tiene sentido.    estado { o: [índices], t: ya se movió }
 // `p.mira[i]` es el aviso de la ficha o tarjeta i cuando quedó mal: cierto en cualquier sitio equivocado y sin dar la respuesta.
@@ -187,6 +188,46 @@ const HOJA = (() => {
     });
   }
 
+  // ------------------------------------------------------------------------------------------------ pintar con marcadores
+  // Se escoge un marcador y se tocan oraciones (o se arrastra el marcador hasta la oración).
+  // d: { escena(p, T) }   p: { lineas, plumas, va: [pluma por línea], mira }    estado { c: [pluma por línea, −1 sin pintar] }
+  function pinta(nombre, d) {
+    XG.juego(nombre, {
+      tipo: 'pinta', ini: p => ({ c: p.lineas.map(() => -1) }), listo: s => s.c.every(x => x >= 0),
+      ok: (s, p) => s.c.join() === p.va.join(), sol: p => ({ c: [...p.va] }),
+      texto: p => p.lineas.map((t, i) => `${t.length > 34 ? `«${t.split(' ').slice(0, 4).join(' ')}…»` : `«${t}»`} → ${p.plumas[p.va[i]]}`).join(' · '),
+      monta(stage, p, ui) {
+        stage.innerHTML = `<div class="hj hj-${nombre} hj-pinta"><div class="hj-esc">${d.escena(p, (i, t) => `<p class="hj-linea" data-drop="${i}" data-l="${i}" tabindex="0" role="button"><span>${fmt(t)}</span><small></small></p>`)}</div><div class="hj-mesa"><div class="hj-band">${p.plumas.map((t, k) => `<button type="button" class="hj-f hj-pluma m${k}" data-f="${k}" aria-pressed="${!k}"><i></i>${esc(t)}</button>`).join('')}</div></div></div>`;
+        const root = stage.firstChild, L = i => root.querySelector(`[data-l="${i}"]`);
+        let pluma = 0;
+        const draw = () => {
+          p.lineas.forEach((t, i) => {
+            const k = ui.s.c[i], el = L(i);
+            el.className = `hj-linea${k >= 0 ? ` m${k}` : ''}`; el.lastChild.textContent = k >= 0 ? p.plumas[k] : '';
+            el.setAttribute('aria-label', `${t} ${k >= 0 ? p.plumas[k] : 'sin pintar'}`);
+          });
+          root.querySelectorAll('.hj-pluma').forEach((b, k) => { b.classList.toggle('hj-sel', k === pluma); b.setAttribute('aria-pressed', k === pluma); });
+        };
+        const pon = (i, k) => { const c = [...ui.s.c]; c[i] = c[i] === k ? -1 : k; ui.set({ c }); XS.pop(); tactil(); draw(); };
+        XG.arrastra(ui, root, '[data-f]', { onDrop: (el, z) => { pluma = +el.dataset.f; if (ui.s.c[+z.dataset.drop] !== pluma) pon(+z.dataset.drop, pluma); else draw(); }, onTap: el => { pluma = +el.dataset.f; XS.tick(pluma * 3); draw(); } });
+        const linea = e => (ui.locked || root.dataset.dragged ? null : e.target.closest?.('.hj-linea'));
+        root.addEventListener('click', e => { const x = linea(e); if (x) pon(+x.dataset.l, pluma); });
+        root.addEventListener('keydown', e => { const x = linea(e); if (x && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); pon(+x.dataset.l, pluma); } });
+        desplaza(ui, root);
+        draw();
+        ui.nota('Escoge un marcador y toca las oraciones; con otro toque se borra.');
+        return okk => {
+          const s = ui.s; root.classList.add('hj-fin');
+          const mala = s.c.findIndex((k, i) => k !== p.va[i]);
+          cierra(ui, okk, {
+            lista: () => s.c.map((k, i) => [L(i), k === p.va[i]]), aviso: p.mira[mala] || '', bien: p.bien,
+            buena() { ui.muestra({ c: [...p.va] }); draw(); p.va.forEach((_, i) => L(i).classList.add('hj-bien')); }, final() { prende(root); },
+          });
+        };
+      },
+    });
+  }
+
   // ------------------------------------------------------------------------------------------------------- tirar hilos
   // d: { escena(p) con [data-t="i"] en los destinos; destinos(p) → cuántos; rot(p, i) }   p: { tarjetas, va: [destino | [destinos]], mira }
   function hilos(nombre, d) {
@@ -340,5 +381,5 @@ const HOJA = (() => {
     });
   }
 
-  return { esc, fmt, hoja, completo, cabeza, parr, zona, zonas, toca, hilos, ordena, oraciones, prende, luzDe, igual, base };
+  return { esc, fmt, hoja, completo, cabeza, parr, zona, zonas, toca, pinta, hilos, ordena, oraciones, prende, luzDe, igual, base };
 })();
