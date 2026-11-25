@@ -408,6 +408,22 @@ const WORLDS = (() => {
     'icf-en-dialogos': { name: 'Conversaciones Cortas', art: plate('icf-en-dialogos', TEAL, `
       ${L('M50 18h38v20H66l-6 7v-7H50z', INK, 1)}${T(69, 31, 'How?', INK, 7)}${L('M74 42h36v18H100l-6 7v-7H74z', TEAL, 1.2)}${T(92, 54, 'Sure!', TEAL, 7)}
       ${D(54, 24, 1, INK)}${D(106, 48, 1, TEAL)}${D(54, 24, 1, INK)}${D(58, 24, 1, INK)}${D(106, 48, 1, TEAL)}${T(30, 60, 'ask', INK, 5.5)}${T(132, 32, 'reply', TEAL, 5.5)}`) },
+    // ---------- terceros mundos ----------
+    'icf-ma-azar': { name: 'Conteo y Probabilidad', art: plate('icf-ma-azar', TEAL, `
+      ${L('M50 40L72 24M50 40L72 56M72 24L94 16M72 24L94 32M72 56L94 48M72 56L94 64', INK, 1)}${D(50, 40, 2, TEAL)}${[16, 32, 48, 64].map(y => D(94, y, 1.8, TEAL)).join('')}
+      ${L('M104 34h12v12h-12z', TEAL, 1.2)}${D(107, 37, 1)}${D(113, 43, 1)}${T(28, 42, '2 · 2', INK, 7)}${T(134, 42, '1/4', TEAL, 8)}`) },
+    'icf-lc-argumento': { name: 'Tesis y Argumentos', art: plate('icf-lc-argumento', TEAL, `
+      ${L('M52 30l28-14 28 14z', TEAL, 1.3)}${[60, 80, 100].map(x => L(`M${x} 32v28`, INK, 1.2)).join('')}${L('M52 62h56', INK, 1)}
+      ${T(80, 28, 'tesis', TEAL, 5.5)}${T(28, 46, 'porque', INK, 6)}${T(134, 46, 'pero', TEAL, 6.5)}${D(52, 30, 1.2, TEAL)}${D(108, 30, 1.2, TEAL)}`) },
+    'icf-sc-perspectivas': { name: 'Perspectivas e Intereses', art: plate('icf-sc-perspectivas', TEAL, `
+      ${C(80, 40, 10, TEAL, 1.3)}${[[54, 22], [106, 22], [54, 58], [106, 58]].map(([x, y]) => C(x, y, 6, INK, 1) + Ld(`M${x + (80 - x) * .24} ${y + (40 - y) * .24}L${x + (80 - x) * .68} ${y + (40 - y) * .68}`)).join('')}
+      ${D(80, 40, 2, TEAL)}${T(26, 42, '¿qué?', INK, 6)}${T(136, 42, '¿para qué?', TEAL, 5.5)}`) },
+    'icf-cn-movimiento': { name: 'Movimiento y Fuerzas', art: plate('icf-cn-movimiento', TEAL, `
+      ${L('M48 62h66', INK, .9)}${L('M66 44h24v18H66z', INK, 1.2)}${A(90, 53, 112, 53, TEAL, 1.4)}${A(66, 53, 52, 53, INK, 1)}${C(72, 62, 3, INK, 1)}${C(84, 62, 3, INK, 1)}
+      ${L('M50 36C64 36 84 34 104 14', TEAL, 1.1)}${T(28, 42, 'F = m a', INK, 6.5)}${T(134, 42, 'v', TEAL, 8)}`) },
+    'icf-en-gramatica': { name: 'Gramática en Contexto', art: plate('icf-en-gramatica', TEAL, `
+      ${L('M48 40h64', INK, 1)}${[56, 80, 104].map((x, i) => D(x, 40, 2.4, i === 1 ? TEAL : INK)).join('')}${A(80, 40, 108, 40, TEAL, 1.1)}${C(80, 40, 7, TEAL, 1)}${L('M56 36v8M104 36v8', INK, .8)}
+      ${T(56, 56, 'was', INK, 6)}${T(80, 30, 'is', TEAL, 7)}${T(104, 56, 'will be', INK, 6)}${T(28, 42, 'since', INK, 5.5)}${T(134, 42, 'than', TEAL, 5.5)}`) },
   };
 })();
 

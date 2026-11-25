@@ -1,665 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/encuesta-tres.js
-// La encuesta de tres círculos (Preuniversitario, pu-cj-1 y pu-cj-2; spec 2026-11-18-preuda-razonamiento-completo): un Venn de
-// tres conjuntos con sus 8 zonas. Cada zona tiene su número: se arrastra arriba o abajo sobre la zona para cambiarlo. Al lado
-// están los datos de la encuesta (cuántos en A, en A y B, en los tres…) y el juego suma las zonas en vivo para cada dato. Se
-// llena del centro hacia afuera.
-// params = { rounds: [{ labels: [A, B, C], z: { a, b, c, ab, ac, bc, abc, none } }] }   (z: cuántos hay SOLO en cada zona)
-// state = { rounds: [{ v: { a, b, c, ab, ac, bc, abc, none } }] }
-GAMES['encuesta-tres'] = (() => {
-  const KEYS = ['abc', 'ab', 'ac', 'bc', 'a', 'b', 'c', 'none'];
-  const MASK = { a: 1, b: 2, c: 4, ab: 3, ac: 5, bc: 6, abc: 7, none: 0 };
-  const data = (r, v) => {
-    const inA = k => MASK[k] & 1, inB = k => MASK[k] & 2, inC = k => MASK[k] & 4, S = f => KEYS.filter(f).reduce((t, k) => t + v[k], 0);
-    const [A, B, Cn] = r.labels, sh = t => (t.length > 5 ? t.slice(0, 4) + '.' : t);   // rótulos cortos: caben dos columnas a 300 px
-    return [
-      ['en los 3', v.abc], [`${sh(A)} y ${sh(B)}`, S(k => inA(k) && inB(k))], [`${sh(A)} y ${sh(Cn)}`, S(k => inA(k) && inC(k))], [`${sh(B)} y ${sh(Cn)}`, S(k => inB(k) && inC(k))],
-      [A, S(inA)], [B, S(inB)], [Cn, S(inC)], ['total', S(() => true)],
-    ];
-  };
-  const ok = (s, r) => KEYS.every(k => s.v[k] === r.z[k]);
-  const game = roundsGame({
-    aspect: 1.45,
-    init: () => ({ v: Object.fromEntries(KEYS.map(k => [k, 0])) }),
-    answered: s => KEYS.some(k => s.v[k] > 0),
-    ok,
-    solution: r => KEYS.map(k => `${k === 'none' ? 'ninguno' : k.toUpperCase()}: ${r.z[k]}`).join(', '),
-    prompt: () => 'Llena el diagrama con la encuesta, del centro hacia afuera',
-    foot: () => 'Arrastra arriba o abajo sobre una zona para cambiar su número',
-    layout(G) {
-      const W = G.W, cx = W / 2, cy = 200, d = Math.min(W * 0.13, 46), R = d * 1.75;
-      G.c = [[cx - d, cy - d * 0.55], [cx + d, cy - d * 0.55], [cx, cy + d * 0.95]]; G.R = R; G.box = { x: 12, y: cy - R - d * 0.6 - 10, w: W - 24, h: 2 * R + d * 1.6 + 30 };
-      const acc = {}; for (let x = G.box.x; x < G.box.x + G.box.w; x += 4) for (let y = G.box.y; y < G.box.y + G.box.h; y += 4) { let m = 0; G.c.forEach(([a, b], i) => { if ((x - a) ** 2 + (y - b) ** 2 < R * R) m |= 1 << i; }); (acc[m] = acc[m] || []).push([x, y]); }
-      G.cent = {}; KEYS.forEach(k => { const pts = acc[MASK[k]] || [[G.box.x + 20, G.box.y + 16]]; G.cent[k] = k === 'none' ? [G.box.x + 30, G.box.y + G.box.h - 18] : [pts.reduce((a, q) => a + q[0], 0) / pts.length, pts.reduce((a, q) => a + q[1], 0) / pts.length]; });
-      G.fb = { x: 12, y: G.H - 66, w: W - 24, h: 44 };
-    },
-    enter(G) { G.grab = null; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { v: r.z } : G.s, good = ok(s, r), cols = [C.sky, C.coral, C.mint];
-      p.stroke(C.line); p.strokeWeight(1); p.noFill(); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 10);
-      G.c.forEach(([x, y], i) => { p.stroke(cols[i]); p.strokeWeight(2); p.fill(RK.al(p, cols[i], 30)); p.circle(x, y, 2 * G.R); });
-      TK.label(p, C, r.labels[0], G.c[0][0] - G.R * 0.7, G.c[0][1] - G.R * 0.85, cols[0], 10, 80);
-      TK.label(p, C, r.labels[1], G.c[1][0] + G.R * 0.7, G.c[1][1] - G.R * 0.85, cols[1], 10, 80);
-      TK.label(p, C, r.labels[2], G.c[2][0] + G.R * 0.95, G.c[2][1] + G.R * 0.8, cols[2], 10, 80);
-      KEYS.forEach(k => { const [x, y] = G.cent[k], hit = s.v[k] === r.z[k]; p.noStroke(); p.fill(RK.al(p, C.card, 230)); p.rect(x - 14, y - 11, 28, 22, 6); TK.label(p, C, String(s.v[k]), x, y, G.grab?.k === k ? C.brand : good && hit ? C.ok : C.ink, 13, 26); });
-      TK.label(p, C, 'ninguno', G.cent.none[0], G.cent.none[1] - 20, C.mute, 9, 60);
-      const want = data(r, r.z), now = data(r, s.v), y0 = G.box.y + G.box.h + 12, colW = (G.W - 24) / 2;
-      want.forEach(([lab, n], i) => { const hit = now[i][1] === n, x = 12 + (i % 2) * colW + colW / 2, y = y0 + Math.floor(i / 2) * 15; TK.label(p, C, `${hit ? '✓' : '·'} ${lab}: ${n} (van ${now[i][1]})`, x, y, hit ? C.ok : C.ink, 9, colW - 4); });
-      RK.strip(p, C, G.fb, good ? '$\\text{el diagrama cuadra con la encuesta}$' : `$\\text{${want.filter((w, i) => now[i][1] === w[1]).length} de ${want.length} datos}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) { const k = KEYS.find(q => Math.abs(x - G.cent[q][0]) < 22 && Math.abs(y - G.cent[q][1]) < 18); if (!k) return false; G.grab = { k, y0: y, v0: G.s.v[k] }; return true; },
-    drag(G, x, y) { if (!G.grab) return false; const v = Math.max(0, Math.min(60, G.grab.v0 + Math.round((G.grab.y0 - y) / 12))); if (v !== G.s.v[G.grab.k]) { G.s.v[G.grab.k] = v; G.touch(); } return true; },
-    release(G, x, y) { if (G.grab && Math.abs(y - G.grab.y0) < 5) { G.s.v[G.grab.k] += 1; G.touch(); } G.grab = null; },
-    demo: G => { const [x, y] = G.cent.abc; return { from: { x, y: y + 20 }, to: { x, y: y - 40 }, text: 'Arrastra hacia arriba', ty: G.box.y + 14 }; },
-    peek: G => ({ cent: G.cent }),
-  });
-  return Object.assign(game, { answer: r => ({ v: { ...r.z } }) });
-})();
-;
-//#archivo js/games/solapa-barras.js
-// Las barras que se solapan (Preuniversitario, pu-cj-2; spec 2026-11-18-preuda-razonamiento-completo): en una encuesta de un
-// total de personas, los de A son una barra y los de B otra. Se arrastra la barra de B: lo que se monta sobre A son los que
-// están en los dos. El juego cuenta la unión (lo que cubren las dos) y los de ninguno (lo que queda sin cubrir), y los compara
-// con el dato que da la encuesta.
-// params = { rounds: [{ labels: [A, B], total, a, b, none }] }   state = { rounds: [{ s }] }   (inicio de la barra de B)
-GAMES['solapa-barras'] = (() => {
-  const both = (r, s) => Math.max(0, Math.min(r.a, s + r.b) - s);
-  const none = (r, s) => r.total - (r.a + r.b - both(r, s));
-  const need = r => { for (let s = 0; s <= r.total - r.b; s++) if (none(r, s) === r.none) return s; return null; };
-  const ok = (s, r) => none(r, s.s) === r.none;
-  const game = roundsGame({
-    aspect: 1.05,
-    init: r => ({ s: need(r) === r.total - r.b ? 0 : r.total - r.b }),
-    ok,
-    solution: r => `los dos: ${both(r, need(r))}`,
-    prompt: r => `De ${r.total}: ${r.a} ${r.labels[0]}, ${r.b} ${r.labels[1]}, ${r.none} ninguno. ¿Cuántos los dos?`,
-    foot: () => 'Arrastra la barra de abajo',
-    layout(G) { G.x0 = 20; G.x1 = G.W - 20; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = null; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { s: need(r) } : G.s, good = ok(s, r), u = (G.x1 - G.x0) / r.total, X = v => G.x0 + v * u;
-      p.stroke(C.line); p.strokeWeight(1); p.noFill(); p.rect(G.x0, 110, G.x1 - G.x0, 110, 8);
-      TK.label(p, C, `total ${r.total}`, G.W / 2, 100, C.mute, 10, 120);
-      const bo = both(r, s.s), un = r.a + r.b - bo;
-      if (bo > 0) { p.noStroke(); p.fill(RK.al(p, C.brand, 70)); p.quad(X(s.s), 120, X(s.s + bo), 120, X(s.s + bo), 208, X(s.s), 208); }
-      p.noStroke(); p.fill(RK.al(p, C.sky, 200)); p.rect(X(0), 126, r.a * u, 30, 5);
-      p.fill(RK.al(p, C.coral, 200)); p.rect(X(s.s), 172, r.b * u, 30, 5);
-      TK.label(p, C, `${r.labels[0]} ${r.a}`, X(r.a / 2), 141, inkOn(C.sky), 10, r.a * u);
-      TK.label(p, C, `${r.labels[1]} ${r.b}`, X(s.s + r.b / 2), 187, inkOn(C.coral), 10, r.b * u);
-      p.stroke(C.ink); p.strokeWeight(1.2); p.line(X(un), 112, X(un), 218);
-      TK.label(p, C, `los dos: ${bo}`, X(s.s + bo / 2), 236, C.brand, 10, 90);
-      TK.label(p, C, `ninguno: ${r.total - un}`, X((un + r.total) / 2), 254, good ? C.ok : C.ink, 10, Math.max(80, (r.total - un) * u));
-      G.bx = X(s.s + r.b / 2); G.u = u;
-      RK.strip(p, C, G.fb, `$${r.a} + ${r.b} - ${bo} = ${un}$`, { kicker: good ? `y ${r.total - un} en ninguno: cuadra` : `unión ${un}; ninguno ${r.total - un}`, col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (y < 166 || y > 208) return false; G.grab = { dx: x - G.bx }; return true; },
-    drag(G, x) { if (!G.grab) return false; const r = G.r, s = Math.max(0, Math.min(r.total - r.b, Math.round((x - G.grab.dx - G.x0) / G.u - r.b / 2))); if (s !== G.s.s) { G.s.s = s; G.touch(); } return true; },
-    release(G) { G.grab = null; },
-    demo: G => ({ from: { x: G.bx, y: 187 }, to: { x: G.bx - 60, y: 187 }, text: 'Arrastra la barra', ty: 272 }),
-    peek: G => ({ bx: G.bx }),
-  });
-  return Object.assign(game, { answer: r => ({ s: need(r) }) });
-})();
-;
-//#archivo js/games/criba-primos.js
-// La criba (Preuniversitario, pu-nu-1; spec 2026-11-18-preuda-razonamiento-completo): los números del 2 al N en una cuadrícula.
-// Se toca un número que todavía esté libre y el juego tacha todos sus múltiplos (él queda en pie, encerrado: es primo). Tocar un
-// número ya tachado no hace nada: era múltiplo de otro. Al final quedan en pie solo los primos.
-// params = { rounds: [{ N }] }   state = { rounds: [{ sieved: [números usados para cribar] }] }
-GAMES['criba-primos'] = (() => {
-  const isP = n => { if (n < 2) return false; for (let d = 2; d * d <= n; d++) if (n % d === 0) return false; return true; };
-  const crossed = (r, sv) => { const out = new Set(); sv.forEach(p => { for (let m = 2 * p; m <= r.N; m += p) out.add(m); }); return out; };
-  const comps = r => Array.from({ length: r.N - 1 }, (_, i) => i + 2).filter(n => !isP(n));
-  const ok = (s, r) => { const X = crossed(r, s.sieved); return comps(r).every(n => X.has(n)); };
-  const answer = r => ({ sieved: Array.from({ length: r.N - 1 }, (_, i) => i + 2).filter(p => isP(p) && p * p <= r.N) });
-  const game = roundsGame({
-    aspect: 1.4,
-    init: () => ({ sieved: [] }),
-    answered: s => s.sieved.length > 0,
-    ok,
-    solution: r => `se criba con ${answer(r).sieved.join(', ')}; quedan los primos`,
-    prompt: r => `Criba del 2 al ${r.N}: deja en pie solo los primos`,
-    foot: () => 'Toca un número libre para tachar sus múltiplos',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) {},
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, good = ok(s, r), X = crossed(r, s.sieved), cols = 8, cs = Math.min(36, (G.W - 24) / cols), x0 = (G.W - cols * cs) / 2, y0 = 96;
-      G.cells = [];
-      for (let n = 2; n <= r.N; n++) {
-        const k = n - 2, x = x0 + (k % cols) * cs, y = y0 + Math.floor(k / cols) * cs, out = X.has(n), used = s.sieved.includes(n);
-        p.stroke(RK.al(p, C.line, 140)); p.strokeWeight(1); p.fill(used ? RK.al(p, C.brand, 120) : RK.al(p, C.card, out ? 90 : 220)); p.rect(x + 1, y + 1, cs - 2, cs - 2, 5);
-        TK.label(p, C, String(n), x + cs / 2, y + cs / 2, out ? C.mute : C.ink, 11, cs - 4);
-        if (out) { p.stroke(C.bad); p.strokeWeight(1.5); p.line(x + 6, y + cs - 6, x + cs - 6, y + 6); }
-        G.cells.push({ x, y, w: cs, h: cs, n });
-      }
-      const left = Array.from({ length: r.N - 1 }, (_, i) => i + 2).filter(n => !X.has(n)).length;
-      RK.strip(p, C, G.fb, good ? `$\\text{quedan ${left} primos}$` : `$\\text{quedan ${left} en pie}$`, { kicker: s.sieved.length ? `cribado con ${s.sieved.join(', ')}` : '', col: G.locked || good ? C.ok : C.brand, size: 16 });
-    },
-    press(G, x, y) {
-      const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false;
-      if (!crossed(G.r, G.s.sieved).has(c.n) && !G.s.sieved.includes(c.n)) { G.s.sieved.push(c.n); G.touch(); }
-      return true;
-    },
-    demo: G => { const c = G.cells?.[0]; return c ? { from: { x: c.x + c.w / 2, y: c.y + c.h / 2 }, to: { x: c.x + c.w / 2, y: c.y + c.h / 2 }, text: 'Toca el 2', ty: G.cells.at(-1).y + 50 } : null; },
-    peek: G => ({ cells: G.cells }),
-  });
-  return Object.assign(game, { answer });
-})();
-;
-//#archivo js/games/arbol-factores.js
-// El árbol de factores (Preuniversitario, pu-nu-1 y pu-nu-2; spec 2026-11-18-preuda-razonamiento-completo): un número arriba.
-// Se arrastra un primo de la bandeja sobre una hoja del árbol: si la divide, la hoja se abre en dos ramas (el primo y lo que
-// queda); si no, no pasa nada. Cuando todas las hojas son primos, el juego escribe la descomposición con exponentes.
-// params = { rounds: [{ n }] }   state = { rounds: [{ splits: [[índice de hoja, primo]] }] }
-GAMES['arbol-factores'] = (() => {
-  const PR = [2, 3, 5, 7, 11];
-  const isP = n => { if (n < 2) return false; for (let d = 2; d * d <= n; d++) if (n % d === 0) return false; return true; };
-  // El árbol se guarda como lista de nodos { v, kids, depth }; las hojas en orden de izquierda a derecha.
-  const build = (r, splits) => {
-    const nodes = [{ v: r.n, kids: null, depth: 0 }];
-    const leaves = () => { const out = []; const walk = i => { const nd = nodes[i]; if (!nd.kids) out.push(i); else nd.kids.forEach(walk); }; walk(0); return out; };
-    splits.forEach(([li, pr]) => { const L = leaves(), i = L[li]; if (i === undefined) return; const nd = nodes[i]; if (nd.v % pr || nd.v === pr) return; nodes.push({ v: pr, kids: null, depth: nd.depth + 1 }, { v: nd.v / pr, kids: null, depth: nd.depth + 1 }); nd.kids = [nodes.length - 2, nodes.length - 1]; });
-    return { nodes, leaves: leaves() };
-  };
-  const ok = (s, r) => build(r, s.splits).leaves.every(i => isP(build(r, s.splits).nodes[i].v));
-  const answer = r => { const splits = []; let li = 0, v = r.n; while (!isP(v)) { const pr = PR.find(q => v % q === 0) || v; splits.push([li, pr]); li += 1; v /= pr; } return { splits }; };
-  const fact = n => { const f = {}; let v = n; for (let d = 2; v > 1; d++) while (v % d === 0) { f[d] = (f[d] || 0) + 1; v /= d; } return Object.entries(f).map(([b, e]) => (e > 1 ? `${b}^{${e}}` : b)).join(' \\cdot '); };
-  const game = roundsGame({
-    aspect: 1.35,
-    init: () => ({ splits: [] }),
-    answered: s => s.splits.length > 0,
-    ok,
-    solution: r => `$${r.n} = ${fact(r.n)}$`,
-    prompt: r => `Descompón ${r.n} en primos`,
-    foot: () => 'Arrastra un primo sobre una hoja que divida',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.drag = null; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, good = ok(s, r), T = build(r, s.splits), top = 104, dy = Math.min(42, (G.H - 250) / Math.max(1, ...T.nodes.map(q => q.depth)));
-      const pos = {}; let col = 0; const nLeaves = T.leaves.length, cw = (G.W - 40) / Math.max(nLeaves, 1);
-      const place = i => { const nd = T.nodes[i]; if (!nd.kids) { pos[i] = { x: 20 + (col + 0.5) * cw, y: top + nd.depth * dy }; col++; } else { nd.kids.forEach(place); pos[i] = { x: (pos[nd.kids[0]].x + pos[nd.kids[1]].x) / 2, y: top + nd.depth * dy }; } };
-      place(0);
-      T.nodes.forEach((nd, i) => { if (nd.kids) nd.kids.forEach(k => { p.stroke(C.line); p.strokeWeight(1.5); p.line(pos[i].x, pos[i].y, pos[k].x, pos[k].y); }); });
-      G.leafBoxes = [];
-      T.nodes.forEach((nd, i) => {
-        const q = pos[i], leaf = !nd.kids, pr = leaf && isP(nd.v);
-        p.stroke(pr ? C.ok : C.line); p.strokeWeight(pr ? 2 : 1); p.fill(leaf ? (pr ? RK.al(p, C.ok, 70) : RK.al(p, C.card, 230)) : RK.al(p, C.line, 60)); p.circle(q.x, q.y, 34);
-        TK.label(p, C, String(nd.v), q.x, q.y, C.ink, 12, 32);
-        if (leaf) G.leafBoxes.push({ x: q.x, y: q.y, li: T.leaves.indexOf(i), v: nd.v });
-      });
-      const tw = (G.W - 40) / PR.length; G.tray = PR.map((v, i) => ({ x: 20 + i * tw + 4, y: G.H - 120, w: tw - 8, h: 36, v }));
-      G.tray.forEach(b => RK.chip(p, C, b, String(b.v), { on: false, size: 14 }));
-      if (G.drag) RK.chip(p, C, { x: G.drag.x - 20, y: G.drag.y - 18, w: 40, h: 36 }, String(G.drag.v), { on: true, col: C.brand, size: 14 });
-      const leavesTxt = T.leaves.map(i => T.nodes[i].v).sort((a, b) => a - b).join(' \\cdot ');
-      RK.strip(p, C, G.fb, good ? `$${r.n} = ${fact(r.n)}$` : `$${r.n} = ${leavesTxt}$`, { kicker: good ? 'todas las hojas son primos' : '', col: G.locked || good ? C.ok : C.brand, size: 16 });
-    },
-    press(G, x, y) { const t = (G.tray || []).find(b => hitBox(b, x, y)); if (!t) return false; G.drag = { v: t.v, x, y }; return true; },
-    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
-    release(G, x, y) {
-      if (!G.drag) return; const l = (G.leafBoxes || []).find(q => Math.hypot(x - q.x, y - q.y) < 26);
-      if (l && l.v % G.drag.v === 0 && l.v !== G.drag.v) { G.s.splits.push([l.li, G.drag.v]); G.touch(); }
-      G.drag = null;
-    },
-    demo: G => { const t = G.tray?.[0], l = G.leafBoxes?.[0]; return t && l ? { from: { x: t.x + t.w / 2, y: t.y + 18 }, to: l, text: 'Arrastra un primo', ty: t.y - 20 } : null; },
-    peek: G => ({ tray: G.tray, leaves: G.leafBoxes }),
-  });
-  return Object.assign(game, { answer });
-})();
-;
-//#archivo js/games/tabla-divisores.js
-// La tabla de los divisores (Preuniversitario, pu-nu-1; spec 2026-11-18-preuda-razonamiento-completo): con n = 2^a · 3^b, cada
-// divisor escoge cuántos 2 lleva (de 0 a a) y cuántos 3 (de 0 a b). Se arrastran las dos agarraderas para dar las filas y las
-// columnas de la tabla; el juego llena cada casilla con su divisor y tacha los que no dividen a n. La tabla buena tiene todos
-// los divisores y ninguno de más: (a + 1)(b + 1).
-// params = { rounds: [{ p: [primo 1, primo 2], e: [a, b] }] }   state = { rounds: [{ rows, cols }] }   (de 1 a 6)
-GAMES['tabla-divisores'] = (() => {
-  const ok = (s, r) => s.rows === r.e[0] + 1 && s.cols === r.e[1] + 1;
-  const n = r => r.p[0] ** r.e[0] * r.p[1] ** r.e[1];
-  const game = roundsGame({
-    aspect: 1.3,
-    init: () => ({ rows: 1, cols: 1 }),
-    ok,
-    solution: r => `${r.e[0] + 1} · ${r.e[1] + 1} = ${(r.e[0] + 1) * (r.e[1] + 1)} divisores`,
-    prompt: r => `¿Cuántos divisores tiene $${n(r)} = ${r.p[0]}^{${r.e[0]}} \\cdot ${r.p[1]}^{${r.e[1]}}$?`,
-    foot: () => 'Arrastra las agarraderas de filas y columnas',
-    layout(G) { G.o = { x: 56, y: 116 }; G.cs = Math.min(42, (G.W - 80) / 6); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = null; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { rows: r.e[0] + 1, cols: r.e[1] + 1 } : G.s, good = ok(s, r), o = G.o, cs = G.cs, N = n(r);
-      for (let j = 0; j < s.cols; j++) TK.label(p, C, `$${r.p[1]}^{${j}}$`, o.x + (j + 0.5) * cs, o.y - 12, C.coral, 10, cs);
-      let cnt = 0;
-      for (let i = 0; i < s.rows; i++) {
-        TK.label(p, C, `$${r.p[0]}^{${i}}$`, o.x - 18, o.y + (i + 0.5) * cs, C.sky, 10, 30);
-        for (let j = 0; j < s.cols; j++) {
-          const v = r.p[0] ** i * r.p[1] ** j, divides = N % v === 0, x = o.x + j * cs, y = o.y + i * cs;
-          if (divides) cnt++;
-          p.stroke(C.line); p.strokeWeight(1); p.fill(divides ? RK.al(p, good ? C.ok : C.sky, 90) : RK.al(p, C.bad, 50)); p.rect(x + 1, y + 1, cs - 2, cs - 2, 4);
-          TK.label(p, C, String(v), x + cs / 2, y + cs / 2, divides ? C.ink : C.bad, 10, cs - 4);
-        }
-      }
-      G.hR = { x: o.x - 30, y: o.y + s.rows * cs + 8 }; G.hC = { x: o.x + s.cols * cs + 8, y: o.y - 30 };
-      RK.knob(p, C, G.hR.x, G.hR.y, C.sky); RK.knob(p, C, G.hC.x, G.hC.y, C.coral);
-      RK.strip(p, C, G.fb, `$${s.rows} \\cdot ${s.cols} = ${s.rows * s.cols}$`, { kicker: good ? 'todos los divisores, sin sobrantes' : `${cnt} dividen a ${N}`, col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.hypot(x - G.hR.x, y - G.hR.y) < 24) G.grab = 'rows'; else if (Math.hypot(x - G.hC.x, y - G.hC.y) < 24) G.grab = 'cols'; else return false; return true; },
-    drag(G, x, y) {
-      if (!G.grab) return false; const o = G.o, cs = G.cs;
-      const v = G.grab === 'rows' ? Math.round((y - o.y - 8) / cs) : Math.round((x - o.x - 8) / cs), c = Math.max(1, Math.min(6, v));
-      if (c !== G.s[G.grab]) { G.s[G.grab] = c; G.touch(); } return true;
-    },
-    release(G) { G.grab = null; },
-    demo: G => ({ from: G.hR, to: { x: G.hR.x, y: G.hR.y + 2 * G.cs }, text: 'Arrastra la agarradera', ty: G.o.y + 3 * G.cs }),
-    peek: G => ({ hR: G.hR, hC: G.hC }),
-  });
-  return Object.assign(game, { answer: r => ({ rows: r.e[0] + 1, cols: r.e[1] + 1 }) });
-})();
-;
-//#archivo js/games/cifra-faltante.js
-// La cifra que falta (Preuniversitario, pu-nu-1; spec 2026-11-18-preuda-razonamiento-completo): a un número le falta una cifra
-// y tiene que ser divisible por algo. Se arrastra la rueda de la cifra; el juego aplica el criterio en vivo (la suma de cifras
-// para 3 y 9, las dos últimas para 4, la suma alternada para 11) y dice si ya es divisible.
-// params = { rounds: [{ tpl: '4_72', by: 3 | 4 | 9 | 11 | 6 }] }   state = { rounds: [{ d }] }   (cualquier cifra que cumpla vale)
-GAMES['cifra-faltante'] = (() => {
-  const num = (r, d) => +r.tpl.replace('_', d);
-  const ok = (s, r) => s.d !== null && num(r, s.d) % r.by === 0;
-  const first = r => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].find(d => num(r, d) % r.by === 0);
-  const test = (r, d) => {
-    const ds = String(num(r, d)).split('').map(Number), sum = ds.reduce((a, b) => a + b, 0);
-    if (r.by === 3 || r.by === 9) return `suma de cifras: ${ds.join(' + ')} = ${sum}`;
-    if (r.by === 4) return `dos últimas cifras: ${ds.slice(-2).join('')}`;
-    if (r.by === 11) { const alt = ds.reduce((a, b, i) => a + (i % 2 ? -b : b), 0); return `suma alternada: ${ds.map((b, i) => (i ? (i % 2 ? '− ' : '+ ') : '') + b).join(' ')} = ${alt}`; }
-    return `par: ${ds.at(-1) % 2 === 0 ? 'sí' : 'no'} · suma de cifras ${sum}`;
-  };
-  const game = roundsGame({
-    aspect: 1.05,
-    init: r => ({ d: num(r, 0) % r.by === 0 ? 1 : 0 }),
-    ok,
-    solution: r => `con ${first(r)}: ${num(r, first(r))}`,
-    prompt: r => `¿Qué cifra va en el hueco de ${r.tpl.replace('_', '□')} para que sea divisible por ${r.by}?`,
-    foot: () => 'Arrastra la rueda arriba o abajo',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { d: first(r) } : G.s, good = ok(s, r), chars = [...r.tpl], cw = Math.min(46, (G.W - 40) / chars.length), x0 = (G.W - chars.length * cw) / 2, y = 170;
-      chars.forEach((ch, i) => {
-        const x = x0 + (i + 0.5) * cw, gap = ch === '_';
-        p.stroke(gap ? (good ? C.ok : C.brand) : C.line); p.strokeWeight(gap ? 2 : 1); p.fill(RK.al(p, C.card, 230)); p.rect(x - cw * 0.42, y - 30, cw * 0.84, 60, 8);
-        if (gap) { TK.label(p, C, String((s.d + 9) % 10), x, y - 44, C.mute, 10, cw); TK.label(p, C, String((s.d + 1) % 10), x, y + 44, C.mute, 10, cw); G.wheel = { x, y, w: cw }; }
-        TK.label(p, C, gap ? String(s.d) : ch, x, y, gap ? C.brand : C.ink, 22, cw * 0.8);
-      });
-      TK.label(p, C, test(r, s.d), G.W / 2, 246, C.ink, 11, G.W - 24);
-      RK.strip(p, C, G.fb, `$${num(r, s.d)} \\div ${r.by} = ${Math.floor(num(r, s.d) / r.by)}\\ \\text{residuo}\\ ${num(r, s.d) % r.by}$`, { kicker: good ? 'divisible' : 'aún no es divisible', col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) { const w = G.wheel; if (!w || Math.abs(x - w.x) > w.w / 2 + 6 || Math.abs(y - w.y) > 56) return false; G.grab = true; G.y0 = y; G.d0 = G.s.d; return true; },
-    drag(G, x, y) { if (!G.grab) return false; const d = ((G.d0 + Math.round((G.y0 - y) / 20)) % 10 + 10) % 10; if (d !== G.s.d) { G.s.d = d; G.touch(); } return true; },
-    release(G, x, y) { if (G.grab && Math.abs(y - G.y0) < 5) { G.s.d = (G.s.d + (y < G.wheel.y ? 9 : 1)) % 10; G.touch(); } G.grab = false; },
-    demo: G => (G.wheel ? { from: { x: G.wheel.x, y: G.wheel.y + 20 }, to: { x: G.wheel.x, y: G.wheel.y - 30 }, text: 'Arrastra la rueda', ty: G.wheel.y - 74 } : null),
-    peek: G => ({ wheel: G.wheel }),
-  });
-  return Object.assign(game, { answer: r => ({ d: first(r) }) });
-})();
-;
-//#archivo js/games/ritmos-mcm.js
-// Los ritmos que coinciden (Preuniversitario, pu-nu-2; spec 2026-11-18-preuda-razonamiento-completo): dos cosas que se repiten
-// (un bus cada a minutos, otro cada b) son dos filas de marcas en una línea de tiempo. Se arrastra el marcador por la línea;
-// el juego dice si en ese momento hay marca en cada fila. La primera vez que coinciden después de 0 es el MCM.
-// params = { rounds: [{ a, b, max, labels? }] }   state = { rounds: [{ t }] }
-GAMES['ritmos-mcm'] = (() => {
-  const gcd = (a, b) => (b ? gcd(b, a % b) : a), lcm = (a, b) => a / gcd(a, b) * b;
-  const ok = (s, r) => s.t === lcm(r.a, r.b);
-  const game = roundsGame({
-    aspect: 1.05,
-    init: r => ({ t: r.a }),
-    ok,
-    solution: r => `a los ${lcm(r.a, r.b)}`,
-    prompt: r => `Uno cada ${r.a} y otro cada ${r.b}. ¿Cuándo coinciden otra vez?`,
-    foot: () => 'Arrastra el marcador por la línea de tiempo',
-    layout(G) { G.x0 = 24; G.x1 = G.W - 24; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { t: lcm(r.a, r.b) } : G.s, good = ok(s, r), X = t => G.x0 + t / r.max * (G.x1 - G.x0), labs = r.labels || ['A', 'B'];
-      [[r.a, 130, C.sky, labs[0]], [r.b, 190, C.coral, labs[1]]].forEach(([k, y, col, lab]) => {
-        p.stroke(C.line); p.strokeWeight(1); p.line(G.x0, y, G.x1, y);
-        for (let t = 0; t <= r.max; t += k) { p.noStroke(); p.fill(col); p.circle(X(t), y, 10); }
-        TK.label(p, C, `${lab}: cada ${k}`, G.x0 + 50, y - 16, col, 10, 110);
-      });
-      for (let t = 0; t <= r.max; t += Math.max(1, Math.round(r.max / 10))) TK.label(p, C, String(t), X(t), 226, C.mute, 8, 24);
-      const onA = s.t % r.a === 0, onB = s.t % r.b === 0, x = X(s.t);
-      p.stroke(good ? C.ok : C.brand); p.strokeWeight(2); p.line(x, 112, x, 208); RK.knob(p, C, x, 244, C.brand);
-      TK.label(p, C, `t = ${s.t}`, x, 262, C.brand, 11, 60);
-      RK.strip(p, C, G.fb, `$\\text{${labs[0]}: ${onA ? 'sí' : 'no'} · ${labs[1]}: ${onB ? 'sí' : 'no'}}$`, { kicker: good ? 'la primera vez que coinciden' : onA && onB ? 'coinciden, pero ¿es la primera vez?' : '', col: G.locked || good ? C.ok : C.brand, size: 15 });
-      G.X = X;
-    },
-    press(G, x, y) { if (y < 100 || y > 270) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(G.s.t), y: 244 }, to: { x: G.X(G.s.t) + 70, y: 244 }, text: 'Arrastra el marcador', ty: 286 }),
-    peek: G => ({ x0: G.x0, x1: G.x1 }),
-  });
-  game.move = (G, x) => { const r = G.r, t = Math.max(1, Math.min(r.max, Math.round((x - G.x0) / (G.x1 - G.x0) * r.max))); if (t !== G.s.t || !G.touched[G.cur]) { G.s.t = t; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ t: lcm(r.a, r.b) }) });
-})();
-;
-//#archivo js/games/corta-mcd.js
-// Baldosas sin cortar (Preuniversitario, pu-nu-2; spec 2026-11-18-preuda-razonamiento-completo): un piso de a × b se cubre con
-// baldosas cuadradas iguales, sin cortar ninguna. Se arrastra el tamaño de la baldosa; el juego la repite por el piso y pinta
-// de rojo lo que sobra si no cabe justo. La baldosa más grande que cubre sin sobrar mide el MCD.
-// params = { rounds: [{ a, b }] }   state = { rounds: [{ k }] }   (lado de la baldosa, de 1 a min(a, b))
-GAMES['corta-mcd'] = (() => {
-  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const ok = (s, r) => s.k === gcd(r.a, r.b);
-  const game = roundsGame({
-    aspect: 1.2,
-    init: () => ({ k: 1 }),
-    ok,
-    solution: r => `baldosas de ${gcd(r.a, r.b)}: ${(r.a / gcd(r.a, r.b)) * (r.b / gcd(r.a, r.b))} baldosas`,
-    prompt: r => `Piso de ${r.a} × ${r.b}: la baldosa cuadrada más grande sin cortar`,
-    foot: () => 'Desliza el tamaño de la baldosa',
-    layout(G) { G.tY = G.H - 104; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { k: gcd(r.a, r.b) } : G.s, good = ok(s, r), u = Math.min((G.W - 40) / r.a, (G.tY - 150) / r.b), x0 = (G.W - r.a * u) / 2, y0 = 100, k = s.k;
-      const fx = Math.floor(r.a / k), fy = Math.floor(r.b / k), fits = r.a % k === 0 && r.b % k === 0;
-      p.noStroke(); p.fill(RK.al(p, C.bad, 80)); p.rect(x0, y0, r.a * u, r.b * u, 4);
-      for (let i = 0; i < fx; i++) for (let j = 0; j < fy; j++) { p.stroke(C.ink); p.strokeWeight(1); p.fill(RK.al(p, good ? C.ok : (i + j) % 2 ? C.sky : C.mint, 170)); p.rect(x0 + i * k * u, y0 + j * k * u, k * u, k * u); }
-      p.noFill(); p.stroke(C.ink); p.strokeWeight(2); p.rect(x0, y0, r.a * u, r.b * u, 4);
-      TK.label(p, C, String(r.a), x0 + r.a * u / 2, y0 - 10, C.mute, 10, 40); TK.label(p, C, String(r.b), x0 - 12, y0 + r.b * u / 2, C.mute, 10, 20);
-      const mx = Math.min(r.a, r.b);
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, mx, k - 1, i => ((i + 1) % Math.ceil(mx / 8) === 0 || i === 0 ? String(i + 1) : null), good ? C.ok : C.brand);
-      RK.strip(p, C, G.fb, `$\\text{baldosa de ${k}}$`, { kicker: fits ? (good ? 'la más grande que cabe justo' : `cabe justo: ${fx * fy} baldosas; ¿y más grande?`) : 'sobra piso (en rojo)', col: G.locked || good ? C.ok : C.brand, size: 16 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 28) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(G.s.k - 1), y: G.tY }, to: { x: G.X(G.s.k - 1) + 60, y: G.tY }, text: 'Desliza el tamaño', ty: G.tY - 30 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const r = G.r, k = RK.pick(x, 30, G.W - 30, Math.min(r.a, r.b)) + 1; if (k !== G.s.k || !G.touched[G.cur]) { G.s.k = k; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ k: gcd(r.a, r.b) }) });
-})();
-;
-//#archivo js/games/pares-primos.js
-// Las parejas de primos (Preuniversitario, pu-nu-2; spec 2026-11-18-preuda-razonamiento-completo): arriba están los factores
-// primos de a y abajo los de b, en fichas. Se toca una ficha de arriba y luego una igual de abajo: las dos se juntan en el
-// centro (son un factor común). Cuando ya no quedan parejas, el centro es el MCD y todo junto (cada pareja contada una vez)
-// es el MCM.
-// params = { rounds: [{ a, b }] }   state = { rounds: [{ pairs: [[i de a, j de b]] }] }
-GAMES['pares-primos'] = (() => {
-  const fac = n => { const out = []; let v = n; for (let d = 2; v > 1; d++) while (v % d === 0) { out.push(d); v /= d; } return out; };
-  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const valid = (r, pairs) => { const A = fac(r.a), B = fac(r.b), ui = new Set(), uj = new Set(); return pairs.every(([i, j]) => { const good = A[i] === B[j] && !ui.has(i) && !uj.has(j); ui.add(i); uj.add(j); return good; }); };
-  const ok = (s, r) => valid(r, s.pairs) && s.pairs.reduce((m, [i]) => m * fac(r.a)[i], 1) === gcd(r.a, r.b);
-  const answer = r => { const A = fac(r.a), B = fac(r.b), used = new Set(), pairs = []; A.forEach((v, i) => { const j = B.findIndex((w, k) => w === v && !used.has(k)); if (j >= 0) { used.add(j); pairs.push([i, j]); } }); return { pairs }; };
-  const game = roundsGame({
-    aspect: 1.25,
-    init: () => ({ pairs: [] }),
-    answered: s => s.pairs.length > 0,
-    ok,
-    solution: r => `MCD ${gcd(r.a, r.b)}, MCM ${r.a / gcd(r.a, r.b) * r.b}`,
-    prompt: r => `Junta los primos comunes de ${r.a} y ${r.b}`,
-    foot: () => 'Toca una ficha de arriba y luego una igual de abajo',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.sel = null; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, good = ok(s, r), A = fac(r.a), B = fac(r.b), usedA = new Set(s.pairs.map(q => q[0])), usedB = new Set(s.pairs.map(q => q[1]));
-      const row = (L, y, used, key, col) => { const w = Math.min(44, (G.W - 40) / L.length - 6), x0 = (G.W - L.length * (w + 6) + 6) / 2; return L.map((v, i) => { const b = { x: x0 + i * (w + 6), y, w, h: 36, i, key }; if (!used.has(i)) RK.chip(p, C, b, String(v), { on: G.sel?.key === key && G.sel.i === i, col, size: 14 }); else { p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([3, 3]); p.rect(b.x, b.y, w, 36, 8); p.drawingContext.setLineDash([]); } return b; }); };
-      TK.label(p, C, `${r.a}`, 30, 118, C.sky, 12, 40); TK.label(p, C, `${r.b}`, 30, 278, C.coral, 12, 40);
-      G.ba = row(A, 100, usedA, 'a', C.sky); G.bb = row(B, 260, usedB, 'b', C.coral);
-      const mid = s.pairs.map(([i]) => A[i]), w = 40, x0 = (G.W - Math.max(1, mid.length) * (w + 6) + 6) / 2;
-      p.stroke(good ? C.ok : C.brand); p.strokeWeight(1.5); p.noFill(); p.rect(16, 168, G.W - 32, 60, 10);
-      TK.label(p, C, 'comunes', 50, 162, C.brand, 9, 70);
-      mid.forEach((v, k) => RK.chip(p, C, { x: x0 + k * (w + 6), y: 180, w, h: 36 }, String(v), { on: true, col: good ? C.ok : C.mint, size: 14 }));
-      const g = mid.reduce((a, b) => a * b, 1);
-      RK.strip(p, C, G.fb, good ? `$\\text{MCD} = ${gcd(r.a, r.b)}\\quad \\text{MCM} = ${r.a / gcd(r.a, r.b) * r.b}$` : `$\\text{comunes: ${mid.length ? mid.join(' · ') + ' = ' + g : 'ninguno'}}$`, { kicker: good ? 'no quedan parejas' : '', col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) {
-      const hitA = (G.ba || []).find(b => hitBox(b, x, y)), hitB = (G.bb || []).find(b => hitBox(b, x, y)), r = G.r;
-      if (hitA && !G.s.pairs.some(q => q[0] === hitA.i)) { G.sel = { key: 'a', i: hitA.i }; return true; }
-      if (hitB && !G.s.pairs.some(q => q[1] === hitB.i)) {
-        if (G.sel?.key === 'a' && fac(r.a)[G.sel.i] === fac(r.b)[hitB.i]) { G.s.pairs.push([G.sel.i, hitB.i]); G.touch(); }
-        G.sel = null; return true;
-      }
-      if (y > 168 && y < 228 && G.s.pairs.length) { G.s.pairs.pop(); G.touch(); return true; }
-      return false;
-    },
-    demo: G => { const a = G.ba?.[0], b = G.bb?.find(q => fac(G.r.b)[q.i] === fac(G.r.a)[0]) || G.bb?.[0]; return a && b ? { from: { x: a.x + a.w / 2, y: a.y + 18 }, to: { x: b.x + b.w / 2, y: b.y + 18 }, text: 'Toca uno y luego su pareja', ty: 240 } : null; },
-    peek: G => ({ ba: G.ba, bb: G.bb }),
-  });
-  return Object.assign(game, { answer });
-})();
-;
-//#archivo js/games/tabla-dados.js
-// La tabla de dos dados (Preuniversitario, pu-pb-1 y pu-pb-2; spec 2026-11-18-preuda-razonamiento-completo): los 36 resultados
-// de lanzar dos dados en una tabla de 6 × 6 (fila: primer dado, columna: segundo). Se tocan las casillas donde pasa el suceso
-// pedido; el juego cuenta las marcadas y escribe la probabilidad como fracción simplificada.
-// params = { rounds: [{ say, f(a, b) → bool }] }   state = { rounds: [{ m: [36 marcas] }] }
-GAMES['tabla-dados'] = (() => {
-  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const need = r => Array.from({ length: 36 }, (_, k) => !!r.f(Math.floor(k / 6) + 1, k % 6 + 1));
-  const ok = (s, r) => need(r).every((v, k) => s.m[k] === v);
-  const frac = k => { const g = gcd(k, 36) || 1; return k ? `\\tfrac{${k / g}}{${36 / g}}` : '0'; };
-  const game = roundsGame({
-    aspect: 1.3,
-    init: () => ({ m: Array(36).fill(false) }),
-    answered: s => s.m.some(Boolean),
-    ok,
-    solution: r => { const k = need(r).filter(Boolean).length; return `${k} de 36: $${frac(k)}$`; },
-    prompt: r => `Dos dados: marca los resultados en que ${r.say}`,
-    foot: () => 'Toca las casillas para marcarlas',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) {},
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { m: need(r) } : G.s, good = ok(s, r), cs = Math.min(40, (G.W - 60) / 6), x0 = (G.W - 6 * cs) / 2 + 10, y0 = 112;
-      for (let j = 0; j < 6; j++) TK.label(p, C, String(j + 1), x0 + (j + 0.5) * cs, y0 - 12, C.coral, 11, cs);
-      G.cells = [];
-      for (let i = 0; i < 6; i++) {
-        TK.label(p, C, String(i + 1), x0 - 14, y0 + (i + 0.5) * cs, C.sky, 11, 20);
-        for (let j = 0; j < 6; j++) {
-          const k = i * 6 + j, x = x0 + j * cs, y = y0 + i * cs, on = s.m[k];
-          p.stroke(RK.al(p, C.line, 150)); p.strokeWeight(1); p.fill(on ? RK.al(p, good ? C.ok : C.brand, 150) : RK.al(p, C.card, 210)); p.rect(x + 1, y + 1, cs - 2, cs - 2, 4);
-          TK.label(p, C, `${i + 1},${j + 1}`, x + cs / 2, y + cs / 2, on ? C.ink : C.mute, 8, cs - 4);
-          G.cells.push({ x, y, w: cs, h: cs, k });
-        }
-      }
-      const k = s.m.filter(Boolean).length;
-      RK.strip(p, C, G.fb, `$P = ${frac(k)}$`, { kicker: `${k} de 36 resultados`, col: G.locked || good ? C.ok : C.brand, size: 18 });
-    },
-    press(G, x, y) { const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false; G.s.m[c.k] = !G.s.m[c.k]; G.touch(); return true; },
-    demo: G => { const c = G.cells?.[7]; return c ? { from: { x: c.x + c.w / 2, y: c.y + c.h / 2 }, to: { x: c.x + c.w / 2, y: c.y + c.h / 2 }, text: 'Toca una casilla', ty: G.cells.at(-1).y + 52 } : null; },
-    peek: G => ({ cells: G.cells }),
-  });
-  return Object.assign(game, { answer: r => ({ m: need(r) }) });
-})();
-;
-//#archivo js/games/urna-fraccion.js
-// La urna (Preuniversitario, pu-pb-1; spec 2026-11-18-preuda-razonamiento-completo): en una urna hay bolas de otros colores y se
-// echan bolas del color pedido arrastrándolas desde la bandeja (o se sacan arrastrándolas afuera). El juego escribe en vivo
-// P(color) = favorables / posibles; hay que lograr la probabilidad pedida.
-// params = { rounds: [{ color, others: [[color, cantidad]], target: [num, den] }] }   state = { rounds: [{ k }] }   (bolas del color pedido)
-GAMES['urna-fraccion'] = (() => {
-  const tot = r => r.others.reduce((a, o) => a + o[1], 0);
-  const need = r => { for (let k = 0; k <= 20; k++) if (k * r.target[1] === r.target[0] * (k + tot(r))) return k; return null; };
-  const ok = (s, r) => s.k * r.target[1] === r.target[0] * (s.k + tot(r));
-  const NAME = { coral: 'rojas', sky: 'azules', mint: 'verdes', sun: 'amarillas', brand: 'moradas' };
-  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const game = roundsGame({
-    aspect: 1.25,
-    init: () => ({ k: 0 }),
-    answered: s => s.k > 0,
-    ok,
-    solution: r => `${need(r)} ${NAME[r.color]}`,
-    prompt: r => `Echa bolas ${NAME[r.color]} hasta que $P = \\tfrac{${r.target[0]}}{${r.target[1]}}$`,
-    foot: () => 'Arrastra bolas a la urna (o sácalas)',
-    layout(G) { G.urn = { x: G.W / 2 - 90, y: 110, w: 180, h: 170 }; G.tray = { x: G.W / 2, y: G.H - 110 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.drag = null; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { k: need(r) } : G.s, good = ok(s, r), u = G.urn;
-      p.stroke(C.ink); p.strokeWeight(2); p.fill(RK.al(p, C.card, 160)); p.rect(u.x, u.y, u.w, u.h, 8, 8, 40, 40);
-      const balls = [...Array(s.k).fill(r.color), ...r.others.flatMap(([c, n]) => Array(n).fill(c))], per = 6, d = 24;
-      G.mine = [];
-      balls.forEach((c, i) => { const x = u.x + 18 + (i % per) * 28, y = u.y + u.h - 20 - Math.floor(i / per) * 26; p.stroke(C.ink); p.strokeWeight(1); p.fill(C[c]); p.circle(x, y, d); if (i < s.k) G.mine.push({ x, y }); });
-      p.stroke(C.ink); p.strokeWeight(1); p.fill(C[r.color]); p.circle(G.tray.x, G.tray.y, 30);
-      TK.label(p, C, 'toma de aquí', G.tray.x, G.tray.y + 26, C.mute, 9, 100);
-      if (G.drag) { p.fill(C[r.color]); p.circle(G.drag.x, G.drag.y, 26); }
-      const n = s.k + tot(r), g = gcd(s.k, n) || 1;
-      RK.strip(p, C, G.fb, `$P = \\tfrac{${s.k}}{${n}}${s.k && g > 1 ? ` = \\tfrac{${s.k / g}}{${n / g}}` : ''}$`, { kicker: good ? 'probabilidad lograda' : 'favorables / posibles', col: G.locked || good ? C.ok : C.brand, size: 18 });
-    },
-    press(G, x, y) {
-      if (Math.hypot(x - G.tray.x, y - G.tray.y) < 24) { G.drag = { x, y, from: 'tray' }; return true; }
-      const m = (G.mine || []).find(q => Math.hypot(x - q.x, y - q.y) < 14); if (m) { G.drag = { x, y, from: 'urn' }; return true; }
-      return false;
-    },
-    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
-    release(G, x, y) {
-      if (!G.drag) return; const u = G.urn, inU = x > u.x && x < u.x + u.w && y > u.y && y < u.y + u.h;
-      if (G.drag.from === 'tray' && inU && G.s.k < 20) { G.s.k++; G.touch(); }
-      if (G.drag.from === 'urn' && !inU && G.s.k > 0) { G.s.k--; G.touch(); }
-      G.drag = null;
-    },
-    demo: G => ({ from: G.tray, to: { x: G.urn.x + G.urn.w / 2, y: G.urn.y + 60 }, text: 'Arrastra a la urna', ty: G.tray.y - 30 }),
-    peek: G => ({ tray: G.tray, urn: G.urn }),
-  });
-  return Object.assign(game, { answer: r => ({ k: need(r) }) });
-})();
-;
-//#archivo js/games/ruleta-sectores.js
-// Pinta la ruleta (Preuniversitario, pu-pb-1 y pu-pb-2; spec 2026-11-18-preuda-razonamiento-completo): una ruleta partida en
-// sectores iguales. Se tocan sectores para pintarlos; el juego dice la probabilidad de caer en lo pintado (y en lo no pintado).
-// Hay que pintar justo lo que pide la probabilidad.
-// params = { rounds: [{ n, target: [num, den], not?: bool }] }   (not: la meta es la de NO caer en lo pintado)   state = { rounds: [{ m: [n marcas] }] }
-GAMES['ruleta-sectores'] = (() => {
-  const want = r => { const p = r.target[0] / r.target[1], k = Math.round((r.not ? 1 - p : p) * r.n); return k; };
-  const ok = (s, r) => s.m.filter(Boolean).length === want(r);
-  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const fr = (k, n) => { const g = gcd(k, n) || 1; return k ? `\\tfrac{${k / g}}{${n / g}}` : '0'; };
-  const game = roundsGame({
-    aspect: 1.15,
-    init: r => ({ m: Array(r.n).fill(false) }),
-    answered: s => s.m.some(Boolean),
-    ok,
-    solution: r => `pintar ${want(r)} de ${r.n} sectores`,
-    prompt: r => `Pinta la ruleta para que ${r.not ? 'NO caer en lo pintado' : 'caer en lo pintado'} tenga $P = \\tfrac{${r.target[0]}}{${r.target[1]}}$`,
-    foot: () => 'Toca un sector para pintarlo o despintarlo',
-    layout(G) { G.c = { x: G.W / 2, y: 210 }; G.R = Math.min(G.W * 0.36, 110, G.H - 66 - 210 - 8); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) {},
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { m: Array.from({ length: r.n }, (_, i) => i < want(r)) } : G.s, good = ok(s, r), c = G.c, R = G.R, step = 2 * Math.PI / r.n;
-      for (let i = 0; i < r.n; i++) { p.stroke(C.ink); p.strokeWeight(1.2); p.fill(s.m[i] ? (good ? C.ok : C.coral) : RK.al(p, C.card, 220)); p.arc(c.x, c.y, 2 * R, 2 * R, -Math.PI / 2 + i * step, -Math.PI / 2 + (i + 1) * step, p.PIE); }
-      p.noStroke(); p.fill(C.ink); p.triangle(c.x - 8, c.y - R - 14, c.x + 8, c.y - R - 14, c.x, c.y - R + 4);
-      const k = s.m.filter(Boolean).length;
-      RK.strip(p, C, G.fb, `$P(\\text{pintado}) = ${fr(k, r.n)}\\quad P(\\text{no}) = ${fr(r.n - k, r.n)}$`, { kicker: good ? 'justo lo pedido' : '', col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) {
-      const c = G.c, d = Math.hypot(x - c.x, y - c.y); if (d > G.R) return false;
-      let a = Math.atan2(y - c.y, x - c.x) + Math.PI / 2; if (a < 0) a += 2 * Math.PI;
-      const i = Math.floor(a / (2 * Math.PI / G.r.n)) % G.r.n; G.s.m[i] = !G.s.m[i]; G.touch(); return true;
-    },
-    demo: G => ({ from: { x: G.c.x + G.R * 0.3, y: G.c.y - G.R * 0.5 }, to: { x: G.c.x + G.R * 0.3, y: G.c.y - G.R * 0.5 }, text: 'Toca un sector', ty: G.c.y + G.R + 22 }),
-    peek: G => ({ c: G.c, R: G.R }),
-  });
-  return Object.assign(game, { answer: r => ({ m: Array.from({ length: r.n }, (_, i) => i < want(r)) }) });
-})();
-;
-//#archivo js/games/arbol-caminos.js
-// El árbol de probabilidades (Preuniversitario, pu-pb-2; spec 2026-11-18-preuda-razonamiento-completo): dos o tres pasos
-// independientes (monedas, tiros) en un árbol; cada rama lleva su probabilidad. Se tocan las hojas (caminos completos) donde pasa
-// lo pedido; el juego multiplica a lo largo de cada camino y suma los caminos marcados.
-// params = { rounds: [{ steps: [[[rótulo, num, den], …]], say, f(camino de índices) → bool }] }   state = { rounds: [{ m: [marca por hoja] }] }
-GAMES['arbol-caminos'] = (() => {
-  const paths = r => r.steps.reduce((acc, st) => acc.flatMap(pa => st.map((_, i) => [...pa, i])), [[]]);
-  const need = r => paths(r).map(pa => !!r.f(pa));
-  const ok = (s, r) => need(r).every((v, k) => s.m[k] === v);
-  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const prob = (r, pa) => pa.reduce(([n, d], i, k) => [n * r.steps[k][i][1], d * r.steps[k][i][2]], [1, 1]);
-  const add = (a, b) => { const n = a[0] * b[1] + b[0] * a[1], d = a[1] * b[1], g = gcd(n, d) || 1; return [n / g, d / g]; };
-  const game = roundsGame({
-    aspect: 1.35,
-    init: r => ({ m: paths(r).map(() => false) }),
-    answered: s => s.m.some(Boolean),
-    ok,
-    solution: r => { const P = paths(r).filter((pa, k) => need(r)[k]).reduce((a, pa) => add(a, prob(r, pa)), [0, 1]); return `$P = \\tfrac{${P[0]}}{${P[1]}}$`; },
-    prompt: r => `Marca los caminos en que ${r.say}`,
-    foot: () => 'Toca las hojas del árbol',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) {},
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { m: need(r) } : G.s, good = ok(s, r), P = paths(r), L = r.steps.length, hTot = G.H - 210, x0 = 30, dx = (G.W - 110) / L;
-      const yOf = (lvl, idx, count) => 100 + (idx + 0.5) * hTot / count;
-      let level = [[]];
-      for (let l = 0; l < L; l++) {
-        const next = level.flatMap(pa => r.steps[l].map((_, i) => [...pa, i])), cnt = next.length, pc = level.length;
-        next.forEach((pa, k) => {
-          const parent = Math.floor(k / r.steps[l].length), y1 = l ? yOf(l - 1, parent, pc) : 100 + hTot / 2, y2 = yOf(l, k, cnt), xa = x0 + l * dx, xb = x0 + (l + 1) * dx, [lab, n, d] = r.steps[l][pa[l]];
-          p.stroke(C.line); p.strokeWeight(1.2); p.line(xa, y1, xb, y2);
-          if (cnt <= 8) TK.label(p, C, `${lab} $\\tfrac{${n}}{${d}}$`, (xa + xb) / 2, (y1 + y2) / 2 - 8, C.mute, 8, dx);
-        });
-        level = next;
-      }
-      G.leaves = P.map((pa, k) => {
-        const y = yOf(L - 1, k, P.length), x = x0 + L * dx, on = s.m[k], pr = prob(r, pa);
-        p.stroke(on ? (good ? C.ok : C.brand) : C.line); p.strokeWeight(on ? 2 : 1); p.fill(on ? RK.al(p, good ? C.ok : C.brand, 90) : RK.al(p, C.card, 220)); p.rect(x + 4, y - 10, 64, 20, 6);
-        TK.label(p, C, `${pa.map((i, l) => r.steps[l][i][0]).join('')} $\\tfrac{${pr[0]}}{${pr[1]}}$`, x + 36, y, C.ink, 9, 62);
-        return { x: x + 4, y: y - 10, w: 64, h: 20, k };
-      });
-      const sum = P.filter((_, k) => s.m[k]).reduce((a, pa) => add(a, prob(r, pa)), [0, 1]);
-      RK.strip(p, C, G.fb, `$P = ${sum[0] ? `\\tfrac{${sum[0]}}{${sum[1]}}` : '0'}$`, { kicker: good ? 'se multiplica por camino y se suman los caminos' : `${s.m.filter(Boolean).length} caminos marcados`, col: G.locked || good ? C.ok : C.brand, size: 18 });
-    },
-    press(G, x, y) { const c = (G.leaves || []).find(b => hitBox({ x: b.x - 4, y: b.y - 2, w: b.w + 8, h: b.h + 4 }, x, y)); if (!c) return false; G.s.m[c.k] = !G.s.m[c.k]; G.touch(); return true; },
-    demo: G => { const c = G.leaves?.[0]; return c ? { from: { x: c.x + 30, y: c.y + 10 }, to: { x: c.x + 30, y: c.y + 10 }, text: 'Toca una hoja', ty: G.leaves.at(-1).y + 40 } : null; },
-    peek: G => ({ leaves: G.leaves }),
-  });
-  return Object.assign(game, { answer: r => ({ m: need(r) }) });
-})();
-;
-//#archivo js/games/area-probabilidad.js
-// El área de la probabilidad (Preuniversitario, pu-pb-2; spec 2026-11-18-preuda-razonamiento-completo): un cuadrado de lado 1 es
-// todo lo que puede pasar. El ancho pintado es P(A) y el alto P(B); si A y B son independientes, que pasen los dos es el
-// rectángulo de la esquina: P(A) · P(B). Uno de los dos lados viene dado; se arrastra el otro hasta que el área sea la pedida.
-// params = { rounds: [{ a: [num, den] | null, b: [num, den] | null, both: [num, den], grid }] }   state = { rounds: [{ v }] }   (el lado libre, en partes de grid)
-GAMES['area-probabilidad'] = (() => {
-  const free = r => (r.a ? 'b' : 'a');
-  const known = r => r.a || r.b;
-  const need = r => { const k = known(r); for (let v = 0; v <= r.grid; v++) if (k[0] * v * r.both[1] === r.both[0] * k[1] * r.grid) return v; return null; };
-  const ok = (s, r) => s.v === need(r);
-  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const fr = (n, d) => { const g = gcd(n, d) || 1; return n ? `\\tfrac{${n / g}}{${d / g}}` : '0'; };
-  const game = roundsGame({
-    aspect: 1.25,
-    init: r => ({ v: need(r) === r.grid ? 1 : r.grid }),
-    ok,
-    solution: r => `$P(${free(r).toUpperCase()}) = ${fr(need(r), r.grid)}$`,
-    prompt: r => `$P(${free(r) === 'a' ? 'B' : 'A'}) = ${fr(known(r)[0], known(r)[1])}$ y $P(A \\text{ y } B) = ${fr(r.both[0], r.both[1])}$. ¿$P(${free(r).toUpperCase()})$?`,
-    foot: () => 'Arrastra el borde del lado que falta',
-    layout(G) { G.S = Math.min(G.W - 80, G.H - 230); G.o = { x: (G.W - G.S) / 2, y: 104 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { v: need(r) } : G.s, good = ok(s, r), S = G.S, o = G.o, k = known(r), kv = k[0] / k[1], fv = s.v / r.grid;
-      const wA = free(r) === 'a' ? fv : kv, hB = free(r) === 'b' ? fv : kv;
-      p.stroke(C.ink); p.strokeWeight(1.5); p.fill(RK.al(p, C.card, 200)); p.rect(o.x, o.y, S, S);
-      p.noStroke(); p.fill(RK.al(p, C.sky, 70)); p.rect(o.x, o.y, wA * S, S);
-      p.fill(RK.al(p, C.coral, 70)); p.rect(o.x, o.y + S - hB * S, S, hB * S);
-      p.fill(RK.al(p, good ? C.ok : C.brand, 170)); p.rect(o.x, o.y + S - hB * S, wA * S, hB * S);
-      p.stroke(RK.al(p, C.line, 120)); p.strokeWeight(1); for (let i = 1; i < r.grid; i++) { p.line(o.x + i * S / r.grid, o.y, o.x + i * S / r.grid, o.y + S); p.line(o.x, o.y + i * S / r.grid, o.x + S, o.y + i * S / r.grid); }
-      G.h = free(r) === 'a' ? { x: o.x + wA * S, y: o.y + S + 14 } : { x: o.x - 14, y: o.y + S - hB * S };
-      RK.knob(p, C, G.h.x, G.h.y, C.brand);
-      TK.label(p, C, 'A', o.x + wA * S / 2, o.y - 10, C.sky, 11, 30); TK.label(p, C, 'B', o.x + S + 12, o.y + S - hB * S / 2, C.coral, 11, 20);
-      const both = [free(r) === 'a' ? s.v * k[0] : k[0] * s.v, r.grid * k[1]];
-      RK.strip(p, C, G.fb, `$${free(r) === 'a' ? fr(s.v, r.grid) : fr(k[0], k[1])} \\cdot ${free(r) === 'b' ? fr(s.v, r.grid) : fr(k[0], k[1])} = ${fr(both[0], both[1])}$`, { kicker: good ? 'el área pedida' : 'área de los dos', col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.hypot(x - G.h.x, y - G.h.y) > 26) return false; G.grab = true; return true; },
-    drag(G, x, y) {
-      if (!G.grab) return false; const r = G.r, o = G.o, S = G.S;
-      const t = free(r) === 'a' ? (x - o.x) / S : (o.y + S - y) / S, v = Math.max(0, Math.min(r.grid, Math.round(t * r.grid)));
-      if (v !== G.s.v) { G.s.v = v; G.touch(); } return true;
-    },
-    release(G) { G.grab = false; },
-    demo: G => (G.h ? { from: G.h, to: free(G.r) === 'a' ? { x: G.h.x - 50, y: G.h.y } : { x: G.h.x, y: G.h.y + 50 }, text: 'Arrastra el borde', ty: G.o.y + G.S + 36 } : null),
-    peek: G => ({ h: G.h }),
-  });
-  return Object.assign(game, { answer: r => ({ v: need(r) }) });
-})();
-;
 //#archivo js/games/buzo-enteros.js
 // El buzo de los enteros (Álgebra 1.1, naturales y enteros; juego dinámico de la lección alg-11): una recta vertical
 // de enteros con el nivel del mar en 0 (arriba el cielo, abajo el agua). El buzo sube y baja arrastrando el dedo.
@@ -23704,3 +23044,1816 @@ const COURSE_CALC = {
     },
   ],
 };
+;
+//#archivo js/courses/geometria.js
+// Curso de Geometría Vectorial y Analítica — sigue el cronograma de Geometría Vectorial (UdeA, Facultad
+// de Ingeniería): sistemas y matrices, inversa y determinantes, vectores y lugares geométricos, productos
+// escalar y vectorial, aplicaciones a la mecánica y cónicas. Mientras llegan los videos, cada lección usa
+// sus escenas. Spec: docs/superpowers/specs/2026-11-11-geometria-vectorial-design.md
+
+const COURSE_GEO = {
+  id: 'geo', level: 'Semestre 1', name: 'Geometría Vectorial y Analítica', icon: '↗', color: '#60a5fa',
+  tagline: 'Flechas, matrices y curvas: la geometría hecha con álgebra.',
+  units: [
+    // ---------------------------------------------------------------- Parcial 1 (semanas 1–4)
+    {
+      world: 'sistemas', title: 'Sistemas de ecuaciones y matrices',
+      lessons: [
+        {
+          id: 'geo-1', title: 'Sistemas 2×2 y 3×3 y su geometría',
+          clip: { scenes: [
+            sc(6, 'Cada ecuación $ax + by = c$ dibuja una **recta**. Resolver el sistema es buscar el punto que está en las dos rectas a la vez.', { title: '$x + y = 3 \\qquad x - y = 1$', viz: { type: 'graph', xr: [-1, 5], yr: [-2, 4], fs: [{ f: x => 3 - x }, { f: x => x - 1 }], points: [[2, 1, '(2, 1)']] } }),
+            sc(7, 'Dos rectas del plano solo pueden hacer tres cosas: **cortarse** en un punto (una solución), ser **paralelas** (ninguna) o ser **la misma recta** (infinitas).', { steps: ['$x + y = 3,\\; x - y = 1$: se cortan en un punto', '$x + y = 3,\\; x + y = 5$: paralelas, sin solución', '$x + y = 3,\\; 2x + 2y = 6$: la misma recta'] }),
+            sc(7, 'Para resolver se **elimina** una incógnita. En el ejemplo, al sumar las dos ecuaciones desaparece la $y$.', { steps: ['$(x + y) + (x - y) = 3 + 1$', '$2x = 4 \\Rightarrow x = 2$', '$2 + y = 3 \\Rightarrow y = 1$'] }),
+            sc(7, 'Con tres incógnitas, cada ecuación $ax + by + cz = d$ es un **plano** del espacio. Tres planos pueden tener un punto en común, una recta entera o ningún punto.', { steps: ['un punto: solución única', 'una recta: infinitas soluciones', 'nada en común: sin solución'] }),
+            sc(7, 'El método es el mismo: eliminar hasta que una ecuación tenga una sola incógnita y luego **sustituir hacia atrás**.', { steps: ['$x + y + z = 6,\\;\\; y + z = 5,\\;\\; z = 3$', '$z = 3 \\Rightarrow y = 2 \\Rightarrow x = 1$'] }),
+          ] },
+          ex: [
+            play('afina-sistema', 'Mueve los coeficientes para cumplir la **meta** de cada ronda. Mira qué les pasa a las rectas', {
+              rounds: [
+                { e1: [2, -1, 3], e2: [4, 1, 1], free: [[1, 1]], goal: 'ninguna' },
+                { e1: [1, 3, 4], e2: [2, 5, -1], free: [[1, 1], [1, 2]], goal: 'infinitas' },
+                { e1: [1, 2, 3], e2: [3, -1, 2], free: [[0, 2], [1, 2]], goal: 'punto', P: [2, -1] },
+              ],
+            }, 'Sin solución: la segunda recta debe ser paralela, $4x - 2y = 1$ ($b_2 = -2$). Infinitas: la segunda ecuación es el doble de la primera, $2x + 6y = 8$. Con solución $(2, -1)$: $c_1 = 2 - 2 = 0$ y $c_2 = 6 + 1 = 7$.',
+            { hint: 'Paralelas quiere decir que los coeficientes de x y de y son proporcionales pero el término independiente no. La misma recta: toda la ecuación es un múltiplo de la otra. Para que pasen por un punto, reemplaza el punto en cada ecuación.' }),
+            num('Resuelve $3x + 2y = 12$, $x - 2y = -4$. ¿Cuánto vale $x$?', 2,
+              'Al sumar, $4x = 8$, así que $x = 2$ (y luego $y = 3$).',
+              { hint: 'Suma las dos ecuaciones: los términos con y se cancelan.' }),
+            play('combina-vectores', 'Ronda 1: $x + 3y = 5,\\; 2x - y = 3$. Ronda 2: $2x - y = 1,\\; x + y = 5$. Míralos **por columnas**: ¿cuántas veces cada columna para llegar al lado derecho?', {
+              rounds: [
+                { u: [1, 2], v: [3, -1], target: [5, 3], names: ['c₁', 'c₂'] },
+                { u: [2, 1], v: [-1, 1], target: [1, 5], names: ['c₁', 'c₂'] },
+              ],
+            }, 'El sistema $x + 3y = 5,\\; 2x - y = 3$ es lo mismo que $x\\,(1, 2) + y\\,(3, -1) = (5, 3)$: la solución $x = 2, y = 1$ dice cuánto de cada columna. El segundo, $2x - y = 1,\\; x + y = 5$, da $x = 2, y = 3$.',
+            { hint: 'La columna c₁ son los coeficientes de x y la c₂ los de y. Ajusta primero una perilla para acercarte y corrige con la otra.' }),
+            num('Resuelve $x + y + z = 2$, $2y - z = 5$, $3z = -3$. ¿Cuánto vale $x$?', 1,
+              'De abajo hacia arriba: $z = -1$, luego $2y = 4 \\Rightarrow y = 2$, y $x = 2 - 2 + 1 = 1$.',
+              { hint: 'El sistema ya está escalonado: empieza por la última ecuación y sustituye hacia arriba.' }),
+          ],
+        },
+        {
+          id: 'geo-2', title: 'El conjunto Rⁿ y el álgebra matricial',
+          clip: { scenes: [
+            sc(6, '$\\mathbb{R}^n$ son las listas de $n$ números reales. En $\\mathbb{R}^2$ son puntos (o flechas) del plano; en $\\mathbb{R}^3$, del espacio.', { viz: { type: 'vectors', A: [3, 1], only: 'A' } }),
+            sc(6, 'Se suman **componente a componente** y un escalar multiplica cada componente.', { steps: ['$(1, 4, -2) + (3, 0, 5) = (4, 4, 3)$', '$3\\,(2, -1, 0) = (6, -3, 0)$'], viz: { type: 'vectors', A: [3, 1], B: [1, 2] } }),
+            sc(7, 'Una matriz por un vector **combina sus columnas**: cada componente del vector dice cuánto tomar de cada columna.', { steps: ['$\\begin{pmatrix} 1 & 3 \\\\ 2 & -1 \\end{pmatrix}\\begin{pmatrix} 2 \\\\ 1 \\end{pmatrix} = 2\\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix} + 1\\begin{pmatrix} 3 \\\\ -1 \\end{pmatrix} = \\begin{pmatrix} 5 \\\\ 3 \\end{pmatrix}$'] }),
+            sc(7, 'El producto $AB$ se hace **fila por columna**: la entrada $(i, j)$ es la fila $i$ de $A$ por la columna $j$ de $B$. Solo existe si las dimensiones de adentro coinciden.', { steps: ['$(m \\times n)(n \\times p) = m \\times p$', '$\\begin{pmatrix} 1 & 2 \\\\ 3 & 0 \\end{pmatrix}\\begin{pmatrix} 4 \\\\ 5 \\end{pmatrix} = \\begin{pmatrix} 14 \\\\ 12 \\end{pmatrix}$'] }),
+            sc(6, 'Así un sistema entero cabe en una ecuación: $A\\vec x = \\vec b$, con $A$ la matriz de coeficientes. Ojo: en general $AB \\neq BA$.', { title: '$A\\vec x = \\vec b$' }),
+          ] },
+          ex: [
+            play('combina-vectores', 'Encuentra $a$ y $b$ para que $a\\,\\vec u + b\\,\\vec v$ llegue a la estrella', {
+              rounds: [
+                { u: [1, 1], v: [1, -1], target: [4, 2] },
+                { u: [2, 1], v: [0, 2], target: [-2, 3] },
+                { u: [1, 2], v: [2, 1], target: [1, -1] },
+              ],
+            }, '$3(1, 1) + 1(1, -1) = (4, 2)$; $-1(2, 1) + 2(0, 2) = (-2, 3)$; $-1(1, 2) + 1(2, 1) = (1, -1)$. Cada ronda es un sistema 2×2 escrito por columnas.',
+            { hint: 'Escribe las dos componentes por separado: te queda un sistema de dos ecuaciones con a y b.' }),
+            play('flecha-vector', 'Arrastra la punta para dibujar el vector pedido', {
+              rounds: [
+                { ask: 'Dibuja 2u − v', given: [{ v: [1, 2], name: 'u' }, { v: [3, 1], name: 'v' }], ans: [-1, 3], show: ['comp'] },
+                { ask: 'Dibuja −u + ½·w', given: [{ v: [2, -1], name: 'u' }, { v: [4, 2], name: 'w' }], ans: [0, 2], show: ['comp'] },
+              ],
+            }, '$2(1, 2) - (3, 1) = (-1, 3)$ y $-(2, -1) + \\tfrac12(4, 2) = (-2, 1) + (2, 1) = (0, 2)$.',
+            { hint: 'Calcula componente a componente: primero multiplica cada vector por su número y después suma.' }),
+            num('$A = \\begin{pmatrix} 1 & 2 \\\\ 0 & -1 \\end{pmatrix}$, $B = \\begin{pmatrix} 3 & 1 \\\\ 2 & 4 \\end{pmatrix}$. ¿Cuál es la entrada $(1, 2)$ de $AB$?', 9,
+              'Fila 1 de $A$ por columna 2 de $B$: $1 \\cdot 1 + 2 \\cdot 4 = 9$.',
+              { hint: 'La entrada (1, 2) usa la fila 1 de A y la columna 2 de B: multiplica entrada por entrada y suma.' }),
+            num('Si $A$ es $2 \\times 3$ y $B$ es $3 \\times 4$, ¿cuántas entradas tiene $AB$?', 8,
+              '$AB$ es $2 \\times 4$: tiene $8$ entradas.',
+              { hint: 'Las dimensiones de adentro deben coincidir; las de afuera dan el tamaño del producto.' }),
+            num('$A = \\begin{pmatrix} 2 & -1 \\\\ 1 & 3 \\end{pmatrix}$ y $\\vec x = (4, 1)$. ¿Cuál es la segunda componente de $A\\vec x$?', 7,
+              'Fila 2 por el vector: $1 \\cdot 4 + 3 \\cdot 1 = 7$.',
+              { hint: 'Cada componente de A x es una fila de A multiplicada por el vector x.' }),
+          ],
+        },
+        {
+          id: 'geo-3', title: 'Transpuesta, sistemas m×n y tipos de solución',
+          clip: { scenes: [
+            sc(6, 'La **transpuesta** $A^T$ cambia filas por columnas: la fila $i$ de $A$ es la columna $i$ de $A^T$.', { steps: ['$\\begin{pmatrix} 1 & 2 & 3 \\\\ 4 & 5 & 6 \\end{pmatrix}^T = \\begin{pmatrix} 1 & 4 \\\\ 2 & 5 \\\\ 3 & 6 \\end{pmatrix}$'] }),
+            sc(6, 'Sus propiedades: transponer dos veces devuelve la matriz y la de un producto **invierte el orden**. Si $A^T = A$, la matriz es **simétrica**.', { steps: ['$(A^T)^T = A \\qquad (A + B)^T = A^T + B^T$', '$(AB)^T = B^T A^T$'] }),
+            sc(7, 'Un sistema de $m$ ecuaciones y $n$ incógnitas se guarda en su **matriz aumentada** y se simplifica con operaciones de fila hasta la forma **escalonada**.', { steps: ['$\\left(\\begin{array}{cc|c} 1 & 1 & 3 \\\\ 1 & -1 & 1 \\end{array}\\right) \\xrightarrow{R_2 - R_1} \\left(\\begin{array}{cc|c} 1 & 1 & 3 \\\\ 0 & -2 & -2 \\end{array}\\right)$'] }),
+            sc(7, 'La escalonada dice el **tipo de solución**: una fila $0 \\; 0 \\mid c$ con $c \\neq 0$ es imposible (sin solución); si hay columnas sin pivote, esas variables son **libres** (infinitas); si todo tiene pivote, solución única.', { steps: ['$0 = 5$: inconsistente', 'menos pivotes que incógnitas: infinitas', 'un pivote por incógnita: única'] }),
+            sc(6, 'En la **reducida** cada pivote vale 1 y es lo único no nulo de su columna: la solución se lee directo.', { steps: ['$\\left(\\begin{array}{cc|c} 1 & 0 & 2 \\\\ 0 & 1 & 1 \\end{array}\\right) \\Rightarrow x = 2,\\; y = 1$'] }),
+          ] },
+          ex: [
+            play('fila-a-fila', 'Lleva cada matriz aumentada a forma **escalonada**', {
+              rounds: [
+                { M: [[1, 2, -1, 3], [2, 5, 1, 8], [-1, -1, 3, 1]], aug: 1, goal: 'escalonada' },
+                { M: [[2, 4, 6], [1, 3, 5]], aug: 1, goal: 'escalonada' },
+              ],
+            }, 'Primera: $R_2 - 2R_1$, $R_3 + R_1$ y luego $R_3 - R_2$ dejan pivotes en escalera. Segunda: $R_2 - \\tfrac12 R_1$ basta.',
+            { hint: 'Usa el primer pivote para hacer ceros debajo de él con «Ri ← Ri + k·Rj»; k es el número que cancela la entrada. Luego repite con la siguiente columna.' }),
+            play('fila-a-fila', 'Ahora a la forma **reducida**. Después mira qué tipo de solución tiene cada sistema', {
+              rounds: [
+                { M: [[1, 1, 2, 4], [2, 3, 5, 9], [1, 2, 3, 6]], aug: 1, goal: 'reducida' },
+                { M: [[1, -1, 2, 1], [2, -2, 5, 4]], aug: 1, goal: 'reducida' },
+              ],
+            }, 'La primera termina con la fila $0 \\; 0 \\; 0 \\mid 1$: no tiene solución. La segunda queda $x - y = -3,\\; z = 2$: la $y$ es libre y hay infinitas soluciones.',
+            { hint: 'Después de escalonar, haz 1 cada pivote (multiplica su fila) y haz ceros también encima de él. Una fila con solo ceros a la izquierda de la barra puede quedarse así.' }),
+            num('Un sistema reducido quedó $x_1 - x_2 = -3$, $x_3 = 2$. Si tomas $x_2 = 5$, ¿cuánto vale $x_1$?', 2,
+              '$x_1 = -3 + x_2 = -3 + 5 = 2$: cada valor de la variable libre da una solución distinta.',
+              { hint: 'x₂ es la variable libre: reemplázala y despeja x₁.' }),
+            num('Si $A$ es $3 \\times 2$, $A^T A$ es cuadrada. ¿Cuántas filas tiene?', 2,
+              '$A^T$ es $2 \\times 3$, así que $A^T A$ es $(2 \\times 3)(3 \\times 2) = 2 \\times 2$.',
+              { hint: 'A^T tiene las dimensiones de A al revés; luego usa la regla del tamaño de un producto.' }),
+            num('$A = \\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}$, $B = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}$. ¿Cuál es la entrada $(2, 1)$ de $(AB)^T$?', 1,
+              '$AB = \\begin{pmatrix} 2 & 1 \\\\ 4 & 3 \\end{pmatrix}$ y la entrada $(2, 1)$ de su transpuesta es la $(1, 2)$ de $AB$: $1$.',
+              { hint: 'La entrada (2, 1) de una transpuesta es la (1, 2) de la matriz original.' }),
+          ],
+        },
+        {
+          id: 'geo-4', title: 'Matrices invertibles y matrices elementales',
+          clip: { scenes: [
+            sc(6, '$A$ es **invertible** si existe $A^{-1}$ con $AA^{-1} = A^{-1}A = I$. Como dividir entre un número: deshace lo que hace $A$.', { title: '$A A^{-1} = I$' }),
+            sc(7, 'Para $2 \\times 2$ hay fórmula: se intercambia la diagonal, se cambia el signo de la otra y se divide entre $ad - bc$.', { steps: ['$\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}^{-1} = \\dfrac{1}{ad - bc}\\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}$', '$\\begin{pmatrix} 3 & 1 \\\\ 5 & 2 \\end{pmatrix}^{-1} = \\begin{pmatrix} 2 & -1 \\\\ -5 & 3 \\end{pmatrix}$'] }),
+            sc(7, 'Una **matriz elemental** es la identidad con una sola operación de fila. Multiplicar $E A$ hace esa misma operación sobre $A$.', { steps: ['$E = \\begin{pmatrix} 1 & 0 \\\\ -2 & 1 \\end{pmatrix}$ hace $R_2 \\leftarrow R_2 - 2R_1$'] }),
+            sc(7, 'Toda elemental es invertible y su inversa es la operación que la **deshace**: intercambiar otra vez, dividir entre $k$, o restar lo que se sumó.', { steps: ['$R_2 - 2R_1$ se deshace con $R_2 + 2R_1$', '$\\begin{pmatrix} 1 & 0 \\\\ -2 & 1 \\end{pmatrix}^{-1} = \\begin{pmatrix} 1 & 0 \\\\ 2 & 1 \\end{pmatrix}$'] }),
+            sc(6, 'Por eso: $A$ es invertible justo cuando se puede llevar a $I$ con operaciones de fila, es decir, cuando es un producto de elementales. Y $(AB)^{-1} = B^{-1}A^{-1}$.', { title: '$(AB)^{-1} = B^{-1}A^{-1}$' }),
+          ] },
+          ex: [
+            play('fila-a-fila', 'Cada operación es una matriz elemental. Lleva $A$ hasta la **identidad**', {
+              rounds: [
+                { M: [[2, 1], [4, 3]], goal: 'reducida' },
+                { M: [[0, 1, 0], [1, 0, 2], [0, 0, 1]], goal: 'reducida' },
+              ],
+            }, 'Primera: $R_2 - 2R_1$, $R_1 - R_2$ y $\\tfrac12 R_1$. Segunda: $R_1 \\leftrightarrow R_2$ y luego $R_1 - 2R_3$. Como se llega a $I$, las dos son invertibles.',
+            { hint: 'Si el primer pivote es cero, intercambia filas. Luego haz ceros debajo y encima de cada pivote y conviértelo en 1.' }),
+            num('La elemental de $R_2 \\leftarrow R_2 - 3R_1$ tiene $-3$ en la entrada $(2, 1)$. ¿Qué número va en esa entrada en $E^{-1}$?', 3,
+              'La inversa deshace la operación: $R_2 \\leftarrow R_2 + 3R_1$, así que lleva $3$.',
+              { hint: 'La inversa de una elemental es la operación que deshace la original.' }),
+            num('$A = \\begin{pmatrix} 5 & 3 \\\\ 3 & 2 \\end{pmatrix}$. ¿Cuál es la entrada $(1, 2)$ de $A^{-1}$?', -3,
+              '$ad - bc = 10 - 9 = 1$, así que $A^{-1} = \\begin{pmatrix} 2 & -3 \\\\ -3 & 5 \\end{pmatrix}$.',
+              { hint: 'Para 2×2: intercambia la diagonal, cambia el signo de la otra diagonal y divide entre ad − bc.' }),
+            num('$A^{-1} = \\begin{pmatrix} 1 & 2 \\\\ 0 & 1 \\end{pmatrix}$ y $B^{-1} = \\begin{pmatrix} 1 & 0 \\\\ 3 & 1 \\end{pmatrix}$. ¿Cuál es la entrada $(2, 2)$ de $(AB)^{-1}$?', 7,
+              '$(AB)^{-1} = B^{-1}A^{-1} = \\begin{pmatrix} 1 & 2 \\\\ 3 & 7 \\end{pmatrix}$: la entrada es $7$ (en el orden equivocado saldría 1).',
+              { hint: 'La inversa de un producto va en el orden contrario.' }),
+          ],
+        },
+      ],
+    },
+    // ---------------------------------------------------------------- Parcial 2 (semanas 5–8)
+    {
+      world: 'determinantes', title: 'Inversa y determinantes',
+      lessons: [
+        {
+          id: 'geo-5', title: 'Gauss-Jordan para la inversa',
+          clip: { scenes: [
+            sc(6, 'Si unas operaciones de fila llevan $A$ hasta $I$, esas mismas operaciones llevan $I$ hasta $A^{-1}$.', { title: '$[\\,A \\mid I\\,] \\longrightarrow [\\,I \\mid A^{-1}\\,]$' }),
+            sc(7, 'Por eso se escribe $A$ con la identidad al lado y se hace Gauss-Jordan a toda la fila.', { steps: ['$\\left(\\begin{array}{cc|cc} 1 & 2 & 1 & 0 \\\\ 3 & 7 & 0 & 1 \\end{array}\\right)$', '$R_2 - 3R_1:\\; \\left(\\begin{array}{cc|cc} 1 & 2 & 1 & 0 \\\\ 0 & 1 & -3 & 1 \\end{array}\\right)$'] }),
+            sc(7, 'Se hace cero encima del pivote y queda la inversa a la derecha.', { steps: ['$R_1 - 2R_2:\\; \\left(\\begin{array}{cc|cc} 1 & 0 & 7 & -2 \\\\ 0 & 1 & -3 & 1 \\end{array}\\right)$', '$A^{-1} = \\begin{pmatrix} 7 & -2 \\\\ -3 & 1 \\end{pmatrix}$'] }),
+            sc(6, 'Si a la izquierda aparece una **fila de ceros**, ya no se puede llegar a $I$: la matriz no tiene inversa.', { steps: ['$\\begin{pmatrix} 2 & 6 \\\\ 1 & 3 \\end{pmatrix} \\to \\begin{pmatrix} 2 & 6 \\\\ 0 & 0 \\end{pmatrix}$'] }),
+            sc(6, 'Con la inversa, el sistema $A\\vec x = \\vec b$ se resuelve multiplicando: $\\vec x = A^{-1}\\vec b$.', { title: '$\\vec x = A^{-1}\\vec b$' }),
+          ] },
+          ex: [
+            play('fila-a-fila', 'Convierte $[A \\mid I]$ en $[I \\mid A^{-1}]$', {
+              rounds: [
+                { M: [[2, 5, 1, 0], [1, 3, 0, 1]], aug: 2, goal: 'reducida' },
+                { M: [[1, 0, 2, 1, 0, 0], [0, 1, 1, 0, 1, 0], [1, 1, 4, 0, 0, 1]], aug: 3, goal: 'reducida' },
+              ],
+            }, 'Las mismas operaciones que llevan $A$ a $I$ llevan $I$ a $A^{-1}$: lo que queda a la derecha de la barra es la inversa. Se comprueba multiplicando $AA^{-1} = I$.',
+            { hint: 'Trabaja solo mirando el bloque de la izquierda: primero ceros debajo de los pivotes, luego pivotes en 1 y por último ceros encima. La derecha se acomoda sola.' }),
+            num('Para $A = \\begin{pmatrix} 2 & 5 \\\\ 1 & 3 \\end{pmatrix}$, ¿cuál es la entrada $(1, 2)$ de $A^{-1}$?', -5,
+              'A la derecha de la barra quedó $\\begin{pmatrix} 3 & -5 \\\\ -1 & 2 \\end{pmatrix}$.',
+              { hint: 'Es lo que quedó a la derecha de la barra en la fila 1, columna 2, en la ronda 1 del juego anterior.' }),
+            play('fila-a-fila', 'Esta matriz **no** tiene inversa. Llévala a la forma reducida y mira qué aparece', {
+              rounds: [{ M: [[1, 2, 1, 0], [2, 4, 0, 1]], aug: 2, goal: 'reducida' }],
+            }, '$R_2 - 2R_1$ deja $0 \\; 0$ a la izquierda: nunca se llegará a $I$, así que $A$ no es invertible.',
+            { hint: 'Haz cero debajo del primer pivote y observa la segunda fila del bloque izquierdo.' }),
+            num('Si $A^{-1} = \\begin{pmatrix} 3 & -5 \\\\ -1 & 2 \\end{pmatrix}$, resuelve $A\\vec x = (1, 1)$. ¿Cuánto vale la primera componente?', -2,
+              '$\\vec x = A^{-1}(1, 1) = (3 - 5,\\; -1 + 2) = (-2, 1)$.',
+              { hint: 'x = A⁻¹ b: multiplica la fila 1 de la inversa por el vector (1, 1).' }),
+          ],
+        },
+        {
+          id: 'geo-6', title: 'La función determinante',
+          clip: { scenes: [
+            sc(6, 'El **determinante** de una matriz $2 \\times 2$ mide cuánto multiplica las áreas la transformación: es el área (con signo) del paralelogramo de sus columnas.', { title: '$\\det\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix} = ad - bc$', viz: { type: 'matrix', M: [[2, 1], [0, 1.5]] } }),
+            sc(6, 'El signo dice si el plano se **voltea**; si vale cero, el plano se aplasta en una recta.', { viz: { type: 'matrix', M: [[1, 2], [0.5, 1]] } }),
+            sc(7, 'Para $3 \\times 3$ se desarrolla por **cofactores**: cada entrada de una fila por el determinante que queda al tapar su fila y su columna, con signos alternados $+\\,-\\,+$.', { steps: ['$\\det\\begin{pmatrix} 1 & 2 & 0 \\\\ 3 & 1 & 1 \\\\ 0 & 2 & 1 \\end{pmatrix} = 1(1 - 2) - 2(3 - 0) + 0$', '$= -1 - 6 = -7$'] }),
+            sc(6, 'Si la matriz es **triangular**, el determinante es el producto de la diagonal.', { steps: ['$\\det\\begin{pmatrix} 2 & 5 & 1 \\\\ 0 & 3 & 4 \\\\ 0 & 0 & -1 \\end{pmatrix} = 2 \\cdot 3 \\cdot (-1) = -6$'] }),
+            sc(6, 'Propiedades: $\\det A^T = \\det A$, $\\det(AB) = \\det A \\det B$ y multiplicar **una fila** por $k$ multiplica el determinante por $k$.', { steps: ['$\\det(kA) = k^n \\det A$ si $A$ es $n \\times n$'] }),
+          ] },
+          ex: [
+            play('flecha-vector', 'El determinante de las columnas $\\vec u, \\vec w$ es el área con signo del paralelogramo. Dibuja $\\vec w$', {
+              rounds: [
+                { ask: 'det(u, w) = 6', given: [{ v: [3, 0], name: 'u' }], check: w => 3 * w[1] === 6, sol: 'cualquier w con segunda componente 2, como (0, 2)', show: ['det'] },
+                { ask: 'det(u, w) = −4', given: [{ v: [2, 1], name: 'u' }], check: w => 2 * w[1] - w[0] === -4, sol: 'por ejemplo (4, 0) o (2, −1)', show: ['det'] },
+                { ask: 'det(u, w) = 0 sin que w sea cero', given: [{ v: [2, 3], name: 'u' }], check: w => 2 * w[1] - 3 * w[0] === 0 && (w[0] !== 0 || w[1] !== 0), sol: 'un múltiplo de (2, 3), como (−2, −3)', show: ['det'] },
+              ],
+            }, 'Con $\\vec u = (3, 0)$ el área es base 3 por altura $w_2$. Con $(2, 1)$: $2w_2 - w_1 = -4$, por ejemplo $(4, 0)$. Determinante cero es paralelogramo aplastado: $\\vec w$ paralelo a $\\vec u$.',
+            { hint: 'det(u, w) = u₁w₂ − u₂w₁. El signo es positivo si w queda girando a la izquierda de u.' }),
+            num('$\\det\\begin{pmatrix} 2 & 0 & 1 \\\\ 1 & 3 & 2 \\\\ 0 & 1 & 1 \\end{pmatrix} = \\;?$', 3,
+              'Por la primera fila: $2(3 - 2) - 0 + 1(1 - 0) = 3$.',
+              { hint: 'Desarrolla por la primera fila: el 0 te ahorra un cofactor. Ojo con los signos + − +.' }),
+            num('$\\det\\begin{pmatrix} 3 & 7 & -2 \\\\ 0 & -1 & 5 \\\\ 0 & 0 & 4 \\end{pmatrix} = \\;?$', -12,
+              'Es triangular: $3 \\cdot (-1) \\cdot 4 = -12$.',
+              { hint: 'En una matriz triangular no hace falta desarrollar por cofactores.' }),
+            num('Si $\\det A = 5$ y $A$ es $3 \\times 3$, ¿cuánto vale $\\det(2A)$?', 40,
+              '$2A$ multiplica las tres filas por 2: $2^3 \\cdot 5 = 40$.',
+              { hint: 'Multiplicar la matriz por 2 multiplica cada una de sus tres filas por 2.' }),
+          ],
+        },
+        {
+          id: 'geo-7', title: 'El determinante con matrices elementales',
+          clip: { scenes: [
+            sc(6, 'Cada operación de fila cambia el determinante de una forma conocida.', { steps: ['$R_i \\leftrightarrow R_j$: cambia el signo', '$R_i \\leftarrow k R_i$: lo multiplica por $k$', '$R_i \\leftarrow R_i + k R_j$: no lo cambia'] }),
+            sc(6, 'Es lo mismo que decir $\\det(EA) = \\det E \\cdot \\det A$, con $\\det E = -1$, $k$ o $1$.', { title: '$\\det(EA) = \\det E\\,\\det A$' }),
+            sc(7, '**Método**: triangular con operaciones de fila llevando la cuenta, y al final multiplicar la diagonal.', { steps: ['$\\begin{pmatrix} 0 & 1 & 2 \\\\ 1 & 1 & 1 \\\\ 2 & 2 & 6 \\end{pmatrix} \\xrightarrow{R_1 \\leftrightarrow R_2} \\begin{pmatrix} 1 & 1 & 1 \\\\ 0 & 1 & 2 \\\\ 2 & 2 & 6 \\end{pmatrix}$ (signo $-$)', '$R_3 - 2R_1:\\; \\begin{pmatrix} 1 & 1 & 1 \\\\ 0 & 1 & 2 \\\\ 0 & 0 & 4 \\end{pmatrix}$', '$\\det = -(1 \\cdot 1 \\cdot 4) = -4$'] }),
+            sc(6, 'Es mucho más rápido que los cofactores cuando la matriz es grande: con $n = 10$, los cofactores piden millones de productos.', { title: '$\\det A = (\\text{factor}) \\cdot \\prod \\text{diagonal}$' }),
+          ] },
+          ex: [
+            play('fila-a-fila', 'Triangula cada matriz (forma escalonada) y mira cómo cambia la cuenta del determinante', {
+              rounds: [
+                { M: [[0, 2, 4], [1, 1, 1], [2, 3, 5]], goal: 'escalonada', det: true },
+                { M: [[2, 4], [3, 1]], goal: 'escalonada', det: true },
+              ],
+            }, 'Primera: $R_1 \\leftrightarrow R_2$ (signo $-$), $R_3 - 2R_1$, $R_3 - \\tfrac12 R_2$ dejan una triangular. Segunda: $R_2 - \\tfrac32 R_1$ deja $2, -5$: $\\det = -10$.',
+            { hint: 'Sumar un múltiplo de otra fila no cambia la cuenta; intercambiar y multiplicar sí. Al terminar, el determinante es el factor de la cuenta por el producto de la diagonal.' }),
+            num('¿Cuánto vale $\\det\\begin{pmatrix} 0 & 2 & 4 \\\\ 1 & 1 & 1 \\\\ 2 & 3 & 5 \\end{pmatrix}$?', -2,
+              'Tras $R_1 \\leftrightarrow R_2$, $R_3 - 2R_1$ y $R_3 - \\tfrac12R_2$ la diagonal es $1 \\cdot 2 \\cdot 1 = 2$, y el intercambio cambia el signo: $-2$.',
+              { hint: 'Usa la primera ronda del juego: multiplica la diagonal de la triangular por el factor de la cuenta.' }),
+            num('Intercambias dos filas de $A$ y luego multiplicas una fila por 3; la matriz que resulta tiene determinante 12. ¿Cuánto vale $\\det A$?', -4,
+              '$12 = (-1)(3)\\det A$, así que $\\det A = -4$.',
+              { hint: 'Cada intercambio cambia el signo y multiplicar una fila por 3 multiplica el determinante por 3. Plantea la ecuación y despeja.' }),
+            num('¿Cuánto vale el determinante de la elemental $3 \\times 3$ que hace $R_3 \\leftarrow R_3 + 7R_1$?', 1,
+              'Es triangular con unos en la diagonal: $\\det E = 1$. Por eso esa operación no cambia determinantes.',
+              { hint: 'Escribe la matriz: es la identidad con un número fuera de la diagonal. ¿Es triangular?' }),
+          ],
+        },
+        {
+          id: 'geo-8', title: 'Determinante e inversa',
+          clip: { scenes: [
+            sc(6, 'La gran relación: $A$ es invertible **si y solo si** $\\det A \\neq 0$. Si el determinante es cero, el plano se aplasta y no hay forma de deshacerlo.', { title: '$A^{-1} \\text{ existe} \\iff \\det A \\neq 0$', viz: { type: 'matrix', M: [[1, 2], [0.5, 1]] } }),
+            sc(6, 'Como $\\det(AA^{-1}) = \\det I = 1$, el determinante de la inversa es el recíproco.', { title: '$\\det A^{-1} = \\dfrac{1}{\\det A}$' }),
+            sc(7, 'La **adjunta** (transpuesta de los cofactores) da una fórmula para la inversa.', { steps: ['$A^{-1} = \\dfrac{1}{\\det A}\\,\\operatorname{adj} A$', '$\\begin{pmatrix} 4 & 1 \\\\ 2 & 1 \\end{pmatrix}^{-1} = \\dfrac12\\begin{pmatrix} 1 & -1 \\\\ -2 & 4 \\end{pmatrix}$'] }),
+            sc(7, '**Regla de Cramer**: cada incógnita es un cociente de determinantes; arriba, la columna de esa incógnita se cambia por los términos independientes.', { steps: ['$x + y = 5,\\; x - y = 1$: $\\det A = -2$', '$x = \\dfrac{\\det\\begin{pmatrix} 5 & 1 \\\\ 1 & -1 \\end{pmatrix}}{-2} = \\dfrac{-6}{-2} = 3$'] }),
+          ] },
+          ex: [
+            play('afina-sistema', 'El sistema tiene solución única justo cuando $\\det \\neq 0$ (el juego lo muestra arriba). Ajusta para que sea cero y cumple la meta', {
+              rounds: [
+                { e1: [3, 6, 2], e2: [1, 1, 4], free: [[1, 1]], goal: 'ninguna' },
+                { e1: [2, -3, 1], e2: [1, 1, 2], free: [[1, 0], [1, 1]], goal: 'infinitas' },
+              ],
+            }, 'Primera: $\\det = 3b_2 - 6 = 0$ pide $b_2 = 2$, y $x + 2y = 4$ es paralela a $3x + 6y = 2$. Segunda: con $c_2 = 2$ la ecuación debe ser el doble de la primera, $4x - 6y = 2$.',
+            { hint: 'Con dos ecuaciones el determinante es a₁b₂ − a₂b₁. Cuando es cero las rectas son paralelas o la misma: mira los términos independientes para saber cuál.' }),
+            num('Con Cramer en $2x + y = 7$, $x - 3y = 0$: ¿cuánto vale $\\det A$?', -7,
+              '$\\det\\begin{pmatrix} 2 & 1 \\\\ 1 & -3 \\end{pmatrix} = -6 - 1 = -7$.',
+              { hint: 'det A usa solo los coeficientes de x y de y, sin los términos independientes.' }),
+            num('Por Cramer, en $2x + y = 7$, $x - 3y = 0$: ¿cuánto vale $x$?', 3,
+              '$x = \\dfrac{\\det\\begin{pmatrix} 7 & 1 \\\\ 0 & -3 \\end{pmatrix}}{-7} = \\dfrac{-21}{-7} = 3$.',
+              { hint: 'Cambia la columna de x por los términos independientes, calcula ese determinante y divide entre det A.' }),
+            num('$A$ y $B$ son $3 \\times 3$ con $\\det A = 4$ y $\\det B = -3$. ¿Cuánto vale $\\det(A^{-1}B^T)$?', -0.75,
+              '$\\det A^{-1} \\cdot \\det B^T = \\tfrac14 \\cdot (-3) = -0.75$.',
+              { tol: 0.001, hint: 'La transpuesta no cambia el determinante, el de la inversa es el recíproco y el de un producto es el producto.' }),
+            num('¿Para qué valor de $k$ la matriz $\\begin{pmatrix} k & 4 \\\\ 2 & 3 \\end{pmatrix}$ **no** es invertible?', 8 / 3,
+              '$3k - 8 = 0 \\Rightarrow k = \\tfrac83 \\approx 2.667$.',
+              { tol: 0.01, answerText: '$k = \\tfrac{8}{3}$', hint: 'Una matriz no es invertible cuando su determinante vale cero: plantea esa ecuación en k.' }),
+          ],
+        },
+      ],
+    },
+    // ---------------------------------------------------------------- Parcial 2–3 (semanas 7–9)
+    {
+      world: 'vectores', title: 'Vectores y lugares geométricos',
+      lessons: [
+        {
+          id: 'geo-9', title: 'Vectores libres y sus operaciones',
+          clip: { scenes: [
+            sc(6, 'Una flecha de $A$ a $B$ es un **segmento dirigido**. Todas las flechas con la misma longitud, dirección y sentido representan el mismo **vector libre**: se puede trasladar a donde convenga.', { viz: { type: 'vectors', A: [3, 1], only: 'A' } }),
+            sc(6, 'Para **sumar**, se pone la cola del segundo en la punta del primero: la suma va de la cola del primero a la punta del segundo (o es la diagonal del paralelogramo).', { title: '$\\vec a + \\vec b$', viz: { type: 'vectors', A: [3, 1], B: [1, 2] } }),
+            sc(6, 'Un **escalar** estira, encoge o voltea: $2\\vec a$ es el doble de largo y $-\\vec a$ apunta al revés. Restar es sumar el opuesto.', { steps: ['$\\vec a - \\vec b = \\vec a + (-\\vec b)$', '$\\overrightarrow{AB} = -\\overrightarrow{BA}$'] }),
+            sc(6, 'Las propiedades son las de siempre: conmutativa, asociativa, el vector cero y el opuesto; y $r(\\vec a + \\vec b) = r\\vec a + r\\vec b$.', { steps: ['$\\vec a + \\vec b = \\vec b + \\vec a$', '$\\vec a + (-\\vec a) = \\vec 0$'] }),
+            sc(6, 'La **norma** $\\|\\vec a\\|$ es su longitud. En el plano sale de Pitágoras con sus componentes.', { title: '$\\|(a_1, a_2)\\| = \\sqrt{a_1^2 + a_2^2}$', viz: { type: 'vectors', A: [3, 4], only: 'A', xr: [-1, 5], yr: [-1, 5] } }),
+          ] },
+          ex: [
+            play('flecha-vector', 'Un vector libre puede empezar en cualquier parte. Dibújalo desde la cola marcada', {
+              rounds: [
+                { ask: 'u + v desde (−2, −1)', given: [{ v: [3, 1], name: 'u' }, { v: [-1, 3], name: 'v' }], tail: [-2, -1], ans: [2, 4], show: ['comp'] },
+                { ask: 'u − v desde (1, 2)', given: [{ v: [2, -1], name: 'u' }, { v: [-2, 2], name: 'v' }], tail: [1, 2], ans: [4, -3], show: ['comp'] },
+                { ask: '−2u desde el origen', given: [{ v: [1, -2], name: 'u' }], ans: [-2, 4], show: ['comp'] },
+              ],
+            }, '$u + v = (2, 4)$, $u - v = (4, -3)$ y $-2u = (-2, 4)$: lo que importa es la flecha, no dónde empieza.',
+            { hint: 'Calcula primero las componentes del resultado y luego cuenta esos pasos desde la cola: tantos a la derecha y tantos hacia arriba.' }),
+            play('flecha-vector', 'Dibuja un vector **igual** a $\\overrightarrow{AB}$, pero que no empiece en $A$ (mueve la cola y la punta)', {
+              rounds: [{ ask: 'Igual a AB, en otro lugar', points: [{ p: [-3, -2], name: 'A' }, { p: [2, 1], name: 'B' }], freeTail: true, check: (w, t) => w[0] === 5 && w[1] === 3 && !(t[0] === -3 && t[1] === -2), sol: 'cualquier flecha de componentes (5, 3) que no salga de A', show: ['comp'] }],
+            }, '$\\overrightarrow{AB} = B - A = (5, 3)$; cualquier flecha con 5 pasos a la derecha y 3 hacia arriba es el mismo vector libre.',
+            { hint: 'Cuenta cuánto se avanza en x y en y para ir de A a B. Después pon la cola en otro punto y avanza lo mismo.' }),
+            num('¿Cuánto vale $\\|\\vec u\\|$ si $\\vec u = (-5, 12)$?', 13,
+              '$\\sqrt{25 + 144} = \\sqrt{169} = 13$.',
+              { hint: 'Pitágoras con las dos componentes; el signo no importa al elevar al cuadrado.' }),
+            num('¿Para qué $t$ el vector $t\\,(2, -1) + (1, 4)$ queda sobre el eje $x$?', 4,
+              'Su segunda componente es $-t + 4$, que vale cero si $t = 4$.',
+              { hint: 'Un vector sobre el eje x tiene segunda componente cero.' }),
+          ],
+        },
+        {
+          id: 'geo-10', title: 'Vectores en la geometría euclidiana',
+          clip: { scenes: [
+            sc(6, 'Con vectores, los problemas de geometría se vuelven cuentas. Por ejemplo, el **punto medio** de $AB$ es el promedio de los extremos.', { title: '$M = \\tfrac12(A + B)$' }),
+            sc(6, 'El **baricentro** (donde se cruzan las medianas) es el promedio de los tres vértices.', { title: '$G = \\tfrac13(A + B + C)$' }),
+            sc(7, 'Un punto que parte $AB$ en la razón $r$ (contada desde $A$) es $A$ más esa fracción de $\\overrightarrow{AB}$.', { steps: ['$P = A + r\\,\\overrightarrow{AB}$', '$A(0, 0),\\; B(6, 3),\\; r = \\tfrac13 \\Rightarrow P = (2, 1)$'] }),
+            sc(7, '**Demostración** en una línea: los puntos medios de dos lados forman un segmento paralelo al tercero y de la mitad de largo.', { steps: ['$\\overrightarrow{MN} = \\tfrac12\\overrightarrow{AC} - \\tfrac12\\overrightarrow{AB}$', '$= \\tfrac12(\\overrightarrow{AC} - \\overrightarrow{AB}) = \\tfrac12\\overrightarrow{BC}$'] }),
+            sc(6, 'Y en un paralelogramo $ABCD$ las diagonales se cortan en su punto medio, porque $A + C = B + D$.', { title: '$\\tfrac12(A + C) = \\tfrac12(B + D)$' }),
+          ] },
+          ex: [
+            play('flecha-vector', 'La flecha sale del origen: pon su **punta** en el punto pedido', {
+              rounds: [
+                { ask: 'Punto medio de A y B', points: [{ p: [-4, 1], name: 'A' }, { p: [2, 5], name: 'B' }], at: 'tip', ans: [-1, 3], show: ['tip'] },
+                { ask: 'Baricentro del triángulo ABC', points: [{ p: [-3, -2], name: 'A' }, { p: [4, 1], name: 'B' }, { p: [2, 4], name: 'C' }], at: 'tip', ans: [1, 1], show: ['tip'] },
+                { ask: 'P en AB con AP = ⅔ de AB', points: [{ p: [-3, 4], name: 'A' }, { p: [3, -5], name: 'B' }], at: 'tip', ans: [1, -2], show: ['tip'] },
+                { ask: 'Cuarto vértice D del paralelogramo ABCD', points: [{ p: [-2, -1], name: 'A' }, { p: [3, 0], name: 'B' }, { p: [4, 3], name: 'C' }], at: 'tip', ans: [-1, 2], show: ['tip'] },
+              ],
+            }, 'Medio: $\\tfrac12(-2, 6) = (-1, 3)$. Baricentro: $\\tfrac13(3, 3) = (1, 1)$. $P = A + \\tfrac23(6, -9) = (1, -2)$. $D = A + C - B = (-1, 2)$.',
+            { hint: 'Promedia coordenadas para el punto medio y el baricentro. Para P avanza desde A una fracción de AB. En el paralelogramo, AD es igual a BC.' }),
+            play('combina-vectores', 'Pon $A$ en el origen. Escribe el punto con los vectores de los lados $\\overrightarrow{AB}$ y $\\overrightarrow{AC}$', {
+              rounds: [
+                { u: [4, 0], v: [1, 3], target: [2.5, 1.5], step: 0.5, names: ['AB', 'AC'] },
+                { u: [4, 0], v: [1, 3], target: [5, 3], names: ['AB', 'AC'] },
+              ],
+            }, 'El punto medio de $BC$ es $\\tfrac12\\overrightarrow{AB} + \\tfrac12\\overrightarrow{AC}$. La punta $(5, 3)$ es $\\overrightarrow{AB} + \\overrightarrow{AC}$: el cuarto vértice del paralelogramo.',
+            { hint: 'El punto medio de BC es el promedio de B y C. Una diagonal del paralelogramo es la suma de los dos lados.' }),
+            num('Los vértices de un triángulo son $A(1, 2)$, $B(7, 4)$ y $C(4, 9)$. ¿Cuál es la coordenada $y$ del baricentro?', 5,
+              '$\\tfrac13(2 + 4 + 9) = 5$.',
+              { hint: 'El baricentro es el promedio de los tres vértices.' }),
+            num('En el triángulo $ABC$, $M$ y $N$ son los puntos medios de $AB$ y $AC$. Si $\\|\\overrightarrow{BC}\\| = 14$, ¿cuánto mide $MN$?', 7,
+              '$\\overrightarrow{MN} = \\tfrac12\\overrightarrow{BC}$, así que mide $7$.',
+              { hint: 'Escribe MN como AN − AM, usando mitades de AC y de AB, y compáralo con BC.' }),
+          ],
+        },
+        {
+          id: 'geo-11', title: 'Vectores geométricos y vectores coordenados',
+          clip: { scenes: [
+            sc(6, 'Se eligen dos flechas unitarias perpendiculares, $\\hat\\imath$ y $\\hat\\jmath$. Toda flecha del plano se arma con ellas: $\\vec v = x\\,\\hat\\imath + y\\,\\hat\\jmath$.', { title: '$\\vec v = x\\,\\hat\\imath + y\\,\\hat\\jmath \\;\\leftrightarrow\\; (x, y)$', viz: { type: 'matrix', M: [[1, 0], [0, 1]] } }),
+            sc(6, 'Así cada vector geométrico corresponde a un vector coordenado, y las operaciones se hacen con números. En el espacio se agrega $\\hat k$.', { steps: ['$\\vec v = 2\\hat\\imath - \\hat\\jmath + 3\\hat k \\leftrightarrow (2, -1, 3)$'] }),
+            sc(6, 'El vector de $A$ a $B$ es **punta menos cola**.', { steps: ['$A(1, 4),\\; B(5, 1)$', '$\\overrightarrow{AB} = B - A = (4, -3)$'] }),
+            sc(6, 'Su norma es la **distancia** entre los puntos, y dividir un vector entre su norma da el **unitario** en su dirección.', { steps: ['$\\|(4, -3)\\| = 5$', '$\\hat u = \\tfrac15(4, -3) = (0.8, -0.6)$'] }),
+            sc(6, 'Otras dos flechas no paralelas también sirven de base: las coordenadas cambian, el vector no.', { title: '$\\vec v = a\\,\\vec e_1 + b\\,\\vec e_2$' }),
+          ] },
+          ex: [
+            play('flecha-vector', 'Coloca la flecha según los datos de cada ronda', {
+              rounds: [
+                { ask: 'AB = (4, −3) y A = (−2, 2): ¿dónde está B?', points: [{ p: [-2, 2], name: 'A' }], tail: [-2, 2], at: 'tip', ans: [2, -1], show: ['tip'] },
+                { ask: 'AB = (−5, 1). La punta ya está en B: arrastra la cola hasta A', points: [{ p: [1, 3], name: 'B' }], freeTail: true, tip: [1, 3], check: (w, t, tip) => tip[0] === 1 && tip[1] === 3 && w[0] === -5 && w[1] === 1, sol: 'A = (6, 2)', show: ['comp'] },
+                { ask: 'Norma 5 y dirección opuesta a (−3, 4)', given: [{ v: [-3, 4], name: 'v' }], ans: [3, -4], show: ['comp', 'norm'] },
+              ],
+            }, '$B = A + (4, -3) = (2, -1)$. $A = B - (-5, 1) = (6, 2)$. El opuesto de $(-3, 4)$ es $(3, -4)$, que ya tiene norma 5.',
+            { hint: 'Punta = cola + vector y cola = punta − vector. El opuesto de un vector cambia el signo de sus dos componentes.' }),
+            play('combina-vectores', 'Encuentra las **coordenadas** del punto en cada base', {
+              rounds: [
+                { u: [1, 0], v: [0, 1], target: [-3, 4], names: ['î', 'ĵ'] },
+                { u: [1, 1], v: [-1, 1], target: [2, 4], names: ['e₁', 'e₂'] },
+              ],
+            }, 'En la base usual las coordenadas son las componentes: $(-3, 4)$. En la otra, $3\\vec e_1 + 1\\vec e_2 = (3 - 1, 3 + 1) = (2, 4)$.',
+            { hint: 'Con î y ĵ es inmediato. Con e₁ y e₂ escribe a(1, 1) + b(−1, 1) e iguala cada componente.' }),
+            num('Distancia entre $P(1, -2, 3)$ y $Q(3, 1, 9)$', 7,
+              '$\\overrightarrow{PQ} = (2, 3, 6)$ y $\\sqrt{4 + 9 + 36} = 7$.',
+              { hint: 'Resta coordenada a coordenada y usa Pitágoras con tres componentes.' }),
+            num('El vector unitario en la dirección de $(2, -1, 2)$: ¿cuál es su tercera componente?', 2 / 3,
+              'La norma es $\\sqrt{4 + 1 + 4} = 3$, así que $\\hat u = (\\tfrac23, -\\tfrac13, \\tfrac23)$.',
+              { tol: 0.01, answerText: '$\\tfrac{2}{3}$', hint: 'Divide el vector entre su norma.' }),
+          ],
+        },
+        {
+          id: 'geo-12', title: 'La recta',
+          clip: { scenes: [
+            sc(6, 'Una recta queda fija con **un punto** $P_0$ y **una dirección** $\\vec d$. Sus puntos son los que se alcanzan caminando desde $P_0$ cualquier múltiplo de $\\vec d$.', { title: '$P = P_0 + t\\,\\vec d,\\quad t \\in \\mathbb{R}$' }),
+            sc(7, 'Separando componentes salen las **ecuaciones paramétricas**; despejando $t$ e igualando, las **simétricas**.', { steps: ['$P_0(1, 2, 0),\\; \\vec d = (2, -1, 3)$', '$x = 1 + 2t,\\; y = 2 - t,\\; z = 3t$', '$\\dfrac{x - 1}{2} = \\dfrac{y - 2}{-1} = \\dfrac{z}{3}$'] }),
+            sc(6, 'Dos puntos $A$ y $B$ también la determinan: se usa $\\vec d = \\overrightarrow{AB}$.', { steps: ['$A(0, 1),\\; B(2, 5) \\Rightarrow \\vec d = (2, 4)$', '$(x, y) = (0, 1) + t\\,(2, 4)$'] }),
+            sc(6, 'En el plano, $\\vec d = (d_1, d_2)$ tiene pendiente $m = d_2/d_1$, y la recta se escribe también $y = mx + b$.', { title: '$\\vec d = (1, m)$', viz: { type: 'graph', xr: [-1, 4], yr: [-1, 7], f: x => 2 * x + 1, points: [[0, 1, 'A'], [2, 5, 'B']] } }),
+            sc(6, 'El parámetro $t$ es como un reloj: en $t = 0$ estamos en $P_0$, en $t = 1$ avanzamos un $\\vec d$ y los negativos van hacia atrás.', { steps: ['$t = 0 \\to (0, 1),\\; t = 1 \\to (2, 5),\\; t = -1 \\to (-2, -3)$'] }),
+          ] },
+          ex: [
+            play('flecha-vector', 'La recta gris es $\\ell$. Pon la **cola** en un punto de $\\ell$ y la **punta** de modo que la flecha sea un vector director', {
+              rounds: [
+                { ask: 'Cola sobre ℓ y flecha a lo largo de ℓ', lines: [[1, -2, -1]], freeTail: true, check: (w, t) => (w[0] !== 0 || w[1] !== 0) && w[0] - 2 * w[1] === 0 && t[0] - 2 * t[1] === -1, sol: 'cola en un punto de x − 2y = −1, como (1, 1), y dirección paralela a (2, 1)', show: ['comp'] },
+                { ask: 'Cola sobre ℓ y flecha a lo largo de ℓ', lines: [[2, 1, 0]], freeTail: true, check: (w, t) => (w[0] !== 0 || w[1] !== 0) && 2 * w[0] + w[1] === 0 && 2 * t[0] + t[1] === 0, sol: 'cola en un punto de 2x + y = 0, como (1, −2), y dirección paralela a (1, −2)', show: ['comp'] },
+              ],
+            }, 'La primera recta, $x - 2y = -1$, pasa por $(1, 1)$ y avanza 2 en $x$ por cada 1 en $y$: $\\vec d = (2, 1)$. La segunda, $2x + y = 0$, pasa por el origen con $\\vec d = (1, -2)$ o cualquier múltiplo.',
+            { hint: 'Busca dos puntos de la cuadrícula por donde pase la recta: la flecha de uno al otro es un vector director.' }),
+            num('La recta $\\vec r = (1, -2, 4) + t\\,(3, 1, -2)$ corta el plano $z = 0$. ¿Para qué valor de $t$?', 2,
+              '$4 - 2t = 0 \\Rightarrow t = 2$.',
+              { hint: 'Escribe la tercera componente de la recta en función de t e iguálala a cero.' }),
+            num('La recta $\\vec r = (1, -2, 4) + t\\,(3, 1, -2)$ corta el plano $z = 0$ en un punto. ¿Cuánto vale su coordenada $x$?', 7,
+              '$x = 1 + 3 \\cdot 2 = 7$ (el punto es $(7, 0, 0)$).',
+              { hint: 'Primero halla el t en que la tercera componente vale cero; luego reemplázalo en la primera.' }),
+            num('La recta que pasa por $(2, 5)$ con dirección $(3, -6)$ tiene pendiente…', -2,
+              '$m = \\dfrac{-6}{3} = -2$.',
+              { hint: 'La pendiente es la segunda componente del vector director dividida entre la primera.' }),
+          ],
+        },
+        {
+          id: 'geo-13', title: 'Lugares geométricos e intersecciones',
+          clip: { scenes: [
+            sc(6, 'Un **lugar geométrico** es el conjunto de puntos que cumplen una condición. La circunferencia: los puntos a distancia $r$ de un centro.', { title: '$\\|P - C\\| = r$' }),
+            sc(7, 'La **mediatriz** de $AB$: los puntos a igual distancia de $A$ y de $B$. Al elevar al cuadrado, los términos $x^2$ y $y^2$ se cancelan y queda una recta.', { steps: ['$A(0, 0),\\; B(4, 2)$', '$x^2 + y^2 = (x - 4)^2 + (y - 2)^2$', '$8x + 4y = 20 \\Rightarrow 2x + y = 5$'] }),
+            sc(6, 'En el espacio, los puntos $P$ con $\\overrightarrow{P_0P}$ perpendicular a un vector $\\vec n$ forman un **plano**.', { title: '$\\vec n \\cdot (P - P_0) = 0$' }),
+            sc(7, '**Intersecciones**: se igualan las ecuaciones. Dos rectas del espacio pueden cortarse, ser paralelas o **cruzarse** sin tocarse.', { steps: ['$(1, 0, 0) + t(1, 1, 0)$ y $(0, 1, 0) + s(1, -1, 0)$', '$1 + t = s,\\; t = 1 - s \\Rightarrow t = 0$: se cortan en $(1, 0, 0)$'] }),
+            sc(6, 'Recta y plano: se reemplaza la recta en la ecuación del plano y se despeja $t$.', { steps: ['$(t, t, 2t)$ en $x + y + z = 8$', '$4t = 8 \\Rightarrow t = 2$: el punto $(2, 2, 4)$'] }),
+          ] },
+          ex: [
+            play('flecha-vector', 'La flecha sale del origen. Pon la **punta** en un punto del lugar geométrico', {
+              rounds: [
+                { ask: 'A la misma distancia de A y de B', points: [{ p: [-2, 0], name: 'A' }, { p: [4, 2], name: 'B' }], at: 'tip', check: (w, t, tip) => 3 * tip[0] + tip[1] === 4, sol: 'cualquier punto de 3x + y = 4, como (1, 1)', show: ['tip'] },
+                { ask: 'Igual distancia a A y B, y sobre el eje y', points: [{ p: [-2, 0], name: 'A' }, { p: [4, 2], name: 'B' }], at: 'tip', ans: [0, 4], show: ['tip'] },
+                { ask: 'A distancia 5 de C', points: [{ p: [1, 1], name: 'C' }], at: 'tip', check: (w, t, tip) => (tip[0] - 1) ** 2 + (tip[1] - 1) ** 2 === 25, sol: 'por ejemplo (4, 5), (1, 6) o (−4, 1)', show: ['tip'] },
+              ],
+            }, 'La mediatriz de $A(-2, 0)$ y $B(4, 2)$ es $3x + y = 4$; sobre el eje $y$ toca en $(0, 4)$. A distancia 5 de $C(1, 1)$ están, por ejemplo, $(4, 5)$ y $(-4, 1)$.',
+            { hint: 'Escribe la condición con distancias al cuadrado. Para la mediatriz, al desarrollar se cancelan x² y y². Para la distancia 5 piensa en triángulos 3-4-5.' }),
+            play('afina-sistema', 'Dos rectas, dos lugares geométricos: ajusta los términos independientes para que se corten en el punto marcado', {
+              rounds: [{ e1: [2, 1, 0], e2: [1, -1, 0], free: [[0, 2], [1, 2]], goal: 'punto', P: [-1, 3] }],
+            }, 'Al reemplazar $(-1, 3)$: $c_1 = -2 + 3 = 1$ y $c_2 = -1 - 3 = -4$.',
+            { hint: 'Si el punto está en una recta, cumple su ecuación: reemplázalo en cada una.' }),
+            num('Las rectas $(1, 2) + t\\,(2, 1)$ y $(3, 6) + s\\,(1, -1)$ se cortan. ¿En qué valor de $x$?', 5,
+              '$1 + 2t = 3 + s$ y $2 + t = 6 - s$. Sumando: $3 + 3t = 9$, $t = 2$, y el punto es $(5, 4)$.',
+              { hint: 'Iguala las dos coordenadas: te queda un sistema 2×2 en t y s. Luego reemplaza en una de las rectas.' }),
+            num('La recta $(2, 0, 1) + t\\,(1, 1, 2)$ corta al plano $x + y + z = 9$. ¿Para qué valor de $t$?', 1.5,
+              '$(2 + t) + t + (1 + 2t) = 3 + 4t = 9 \\Rightarrow t = 1.5$.',
+              { tol: 0.001, hint: 'Sustituye las tres coordenadas de la recta en la ecuación del plano y despeja t.' }),
+          ],
+        },
+      ],
+    },
+    // ---------------------------------------------------------------- Parcial 3 (semanas 10–12)
+    {
+      world: 'productos', title: 'Producto escalar y producto vectorial',
+      lessons: [
+        {
+          id: 'geo-14', title: 'Producto escalar',
+          clip: { scenes: [
+            sc(6, 'El **producto escalar** mide cuánto se acompañan dos vectores: sus longitudes por el coseno del ángulo entre ellos.', { title: '$\\vec u \\cdot \\vec v = \\|\\vec u\\|\\,\\|\\vec v\\|\\cos\\theta$' }),
+            sc(6, 'Su signo dice cómo es el ángulo: positivo si es agudo, negativo si es obtuso y **cero si son perpendiculares**.', { steps: ['$\\theta < 90^\\circ \\Rightarrow \\vec u \\cdot \\vec v > 0$', '$\\theta = 90^\\circ \\iff \\vec u \\cdot \\vec v = 0$'] }),
+            sc(6, 'Con componentes es una cuenta sencilla, en $\\mathbb{R}^2$ o en $\\mathbb{R}^3$.', { steps: ['$(a_1, a_2, a_3) \\cdot (b_1, b_2, b_3) = a_1b_1 + a_2b_2 + a_3b_3$', '$(1, 2, 2) \\cdot (2, 0, -1) = 2 + 0 - 2 = 0$'] }),
+            sc(7, 'Juntando las dos formas se despeja el **ángulo**.', { steps: ['$\\cos\\theta = \\dfrac{\\vec u \\cdot \\vec v}{\\|\\vec u\\|\\,\\|\\vec v\\|}$', '$(1, 0) \\text{ y } (1, 1):\\; \\cos\\theta = \\tfrac{1}{\\sqrt2} \\Rightarrow \\theta = 45^\\circ$'] }),
+            sc(6, 'Propiedades: es conmutativo, se distribuye sobre la suma y $\\vec u \\cdot \\vec u = \\|\\vec u\\|^2$.', { title: '$\\vec u \\cdot \\vec u = \\|\\vec u\\|^2$' }),
+          ] },
+          ex: [
+            play('flecha-vector', 'Dibuja $\\vec w$ para que el producto escalar cumpla lo pedido', {
+              rounds: [
+                { ask: 'u·w = 0 con w ≠ 0', given: [{ v: [2, 3], name: 'u' }], check: w => 2 * w[0] + 3 * w[1] === 0 && (w[0] !== 0 || w[1] !== 0), sol: 'un múltiplo de (3, −2)', show: ['dot'] },
+                { ask: 'u·w = 10 con w sobre el eje x', given: [{ v: [5, 1], name: 'u' }], ans: [2, 0], show: ['dot'] },
+                { ask: 'u·w negativo y |w| = 5', given: [{ v: [1, 1], name: 'u' }], check: w => w[0] + w[1] < 0 && w[0] ** 2 + w[1] ** 2 === 25, sol: 'por ejemplo (−3, −4) o (0, −5)', show: ['dot', 'norm'] },
+              ],
+            }, 'Perpendicular a $(2, 3)$: $(3, -2)$. Sobre el eje $x$: $5w_1 = 10$, $\\vec w = (2, 0)$. Producto negativo quiere decir ángulo obtuso, y $(-3, -4)$ tiene norma 5.',
+            { hint: 'u·w = u₁w₁ + u₂w₂. Mira la lectura de arriba mientras mueves la punta: perpendicular quiere decir que esa suma da cero.' }),
+            num('¿Qué ángulo (en grados) forman $(1, 1, 0)$ y $(0, 1, 1)$?', 60,
+              '$\\cos\\theta = \\dfrac{1}{\\sqrt2\\,\\sqrt2} = \\tfrac12$, así que $\\theta = 60^\\circ$.',
+              { hint: 'Divide el producto escalar entre el producto de las normas y busca qué ángulo tiene ese coseno.' }),
+            num('¿Para qué $k$ son perpendiculares $(k, 2, -1)$ y $(3, k, 4)$?', 0.8,
+              '$3k + 2k - 4 = 0 \\Rightarrow k = 0.8$.',
+              { tol: 0.001, hint: 'Perpendiculares quiere decir producto escalar cero: plantea la ecuación en k.' }),
+            num('Si $\\|\\vec u\\| = 3$, $\\|\\vec v\\| = 4$ y $\\vec u \\cdot \\vec v = 6$, ¿cuánto vale $\\|\\vec u + \\vec v\\|^2$?', 37,
+              '$(\\vec u + \\vec v)\\cdot(\\vec u + \\vec v) = 9 + 2 \\cdot 6 + 16 = 37$.',
+              { hint: 'Desarrolla (u + v)·(u + v) como un binomio al cuadrado.' }),
+          ],
+        },
+        {
+          id: 'geo-15', title: 'Proyección ortogonal',
+          clip: { scenes: [
+            sc(6, 'Si el sol cae perpendicular a $\\vec v$, la **sombra** de $\\vec u$ sobre la recta de $\\vec v$ es su proyección ortogonal.', { title: '$\\operatorname{proy}_{\\vec v}\\vec u$' }),
+            sc(6, 'La **componente escalar** es el largo (con signo) de esa sombra.', { title: '$\\operatorname{comp}_{\\vec v}\\vec u = \\dfrac{\\vec u \\cdot \\vec v}{\\|\\vec v\\|}$' }),
+            sc(6, 'La **proyección** es ese largo en la dirección de $\\vec v$.', { title: '$\\operatorname{proy}_{\\vec v}\\vec u = \\dfrac{\\vec u \\cdot \\vec v}{\\|\\vec v\\|^2}\\,\\vec v$' }),
+            sc(7, 'Ejemplo: proyectar $(2, 4)$ sobre $(3, 1)$.', { steps: ['$\\vec u \\cdot \\vec v = 6 + 4 = 10,\\; \\|\\vec v\\|^2 = 10$', '$\\operatorname{proy} = 1 \\cdot (3, 1) = (3, 1)$'] }),
+            sc(6, 'Lo que sobra, $\\vec u - \\operatorname{proy}_{\\vec v}\\vec u$, es perpendicular a $\\vec v$: todo vector se parte en una parte paralela y otra perpendicular.', { steps: ['$(2, 4) - (3, 1) = (-1, 3)$', '$(-1, 3) \\cdot (3, 1) = 0$'] }),
+          ] },
+          ex: [
+            play('flecha-vector', 'Dibuja la **proyección** de $\\vec u$ sobre $\\vec v$', {
+              rounds: [
+                { ask: 'proy de u sobre v', given: [{ v: [3, 4], name: 'u' }, { v: [2, 0], name: 'v' }], ans: [3, 0], show: ['comp'] },
+                { ask: 'proy de u sobre v', given: [{ v: [4, 2], name: 'u' }, { v: [1, 1], name: 'v' }], ans: [3, 3], show: ['comp'] },
+                { ask: 'proy de u sobre v', given: [{ v: [-1, 3], name: 'u' }, { v: [2, -1], name: 'v' }], ans: [-2, 1], show: ['comp'] },
+              ],
+            }, 'Sobre el eje $x$ la sombra de $(3, 4)$ es $(3, 0)$. $\\tfrac{6}{2}(1, 1) = (3, 3)$. $\\tfrac{-5}{5}(2, -1) = (-2, 1)$: el coeficiente negativo voltea la sombra.',
+            { hint: 'Calcula el número (u·v)/(v·v) y multiplica v por él. La proyección siempre queda sobre la recta de v.' }),
+            play('flecha-vector', 'Ahora la parte de $\\vec u$ **perpendicular** a $\\vec v$', {
+              rounds: [
+                { ask: 'u − proy de u sobre v', given: [{ v: [4, 2], name: 'u' }, { v: [1, 1], name: 'v' }], ans: [1, -1], show: ['comp'] },
+                { ask: 'u − proy de u sobre v', given: [{ v: [-1, 3], name: 'u' }, { v: [2, -1], name: 'v' }], ans: [1, 2], show: ['comp'] },
+              ],
+            }, '$(4, 2) - (3, 3) = (1, -1)$ y $(-1, 3) - (-2, 1) = (1, 2)$. Las dos son perpendiculares a su $\\vec v$.',
+            { hint: 'Usa la proyección del juego anterior y réstasela a u. Comprueba que lo que dibujas forma ángulo recto con v.' }),
+            num('Componente escalar de $(2, -1, 3)$ sobre $(0, 3, 4)$', 1.8,
+              '$\\dfrac{0 - 3 + 12}{5} = \\dfrac95 = 1.8$.',
+              { tol: 0.001, hint: 'Producto escalar dividido entre la norma del vector sobre el que se proyecta.' }),
+            num('Si $\\operatorname{proy}_{\\vec v}\\vec u = \\vec 0$ y ninguno es el vector cero, ¿qué ángulo forman (en grados)?', 90,
+              'La proyección es cero cuando $\\vec u \\cdot \\vec v = 0$: son perpendiculares.',
+              { hint: 'Mira el número que multiplica a v en la fórmula de la proyección: ¿cuándo vale cero?' }),
+          ],
+        },
+        {
+          id: 'geo-16', title: 'Producto escalar y geometría analítica',
+          clip: { scenes: [
+            sc(6, 'En el plano, $ax + by = c$ es la recta **perpendicular** al vector $\\vec n = (a, b)$: el **vector normal** se lee en los coeficientes.', { title: '$\\vec n \\cdot (P - P_0) = 0$' }),
+            sc(6, 'En el espacio, la misma idea da la ecuación del **plano**.', { steps: ['$P_0(1, 0, 2),\\; \\vec n = (3, -1, 2)$', '$3(x - 1) - y + 2(z - 2) = 0$', '$3x - y + 2z = 7$'] }),
+            sc(7, 'La **distancia** de un punto a una recta o a un plano es la proyección sobre la normal.', { title: '$\\text{dist} = \\dfrac{|a x_0 + b y_0 + c z_0 - D|}{\\|\\vec n\\|}$', steps: ['$(1, 2, 3)$ al plano $2x - y + 2z = 1$', '$\\text{dist} = \\dfrac{|2 - 2 + 6 - 1|}{3} = \\dfrac53$'] }),
+            sc(6, 'El **ángulo entre dos planos** es el ángulo entre sus normales; son paralelos si las normales lo son y perpendiculares si $\\vec n_1 \\cdot \\vec n_2 = 0$.', { title: '$\\cos\\theta = \\dfrac{|\\vec n_1 \\cdot \\vec n_2|}{\\|\\vec n_1\\|\\,\\|\\vec n_2\\|}$' }),
+          ] },
+          ex: [
+            play('flecha-vector', 'Usa la recta gris. Dibuja lo que pide cada ronda', {
+              rounds: [
+                { ask: 'Un vector normal a 2x − y = 1', lines: [[2, -1, 1]], check: w => (w[0] !== 0 || w[1] !== 0) && -w[0] - 2 * w[1] === 0, sol: 'un múltiplo de (2, −1)', show: ['comp'] },
+                { ask: 'Un vector director de 3x + 2y = 6', lines: [[3, 2, 6]], check: w => (w[0] !== 0 || w[1] !== 0) && 3 * w[0] + 2 * w[1] === 0, sol: 'un múltiplo de (2, −3)', show: ['comp'] },
+                { ask: 'El pie de la perpendicular desde el origen a x + y = 4', lines: [[1, 1, 4]], at: 'tip', ans: [2, 2], show: ['tip'] },
+              ],
+            }, 'La normal de $2x - y = 1$ es $(2, -1)$. Un director de $3x + 2y = 6$ es perpendicular a $(3, 2)$: $(2, -3)$. Desde el origen se camina por la normal $(1, 1)$ hasta la recta: $(2, 2)$.',
+            { hint: 'Recuerda qué vector se lee en los coeficientes de la ecuación y qué ángulo forma con la recta. Un director va a lo largo de la recta.' }),
+            num('Distancia del punto $(3, -1)$ a la recta $4x + 3y = 4$', 1,
+              '$\\dfrac{|12 - 3 - 4|}{5} = 1$.',
+              { hint: 'Reemplaza el punto en ax + by − c, toma valor absoluto y divide entre la norma de la normal.' }),
+            num('Plano por $(1, 2, -1)$ con normal $(2, -1, 3)$: $2x - y + 3z = d$. ¿Cuánto vale $d$?', -3,
+              '$d = 2 - 2 - 3 = -3$.',
+              { hint: 'El punto dado tiene que cumplir la ecuación del plano.' }),
+            num('Distancia del punto $(1, 1, 1)$ al plano $2x + 2y + z = 14$', 3,
+              '$\\dfrac{|2 + 2 + 1 - 14|}{\\sqrt{9}} = \\dfrac93 = 3$.',
+              { hint: 'Misma fórmula que en el plano, ahora con tres coordenadas y la norma de (2, 2, 1).' }),
+            num('¿Qué ángulo (en grados) forman los planos $x + y + z = 1$ y $x - y = 0$?', 90,
+              'Las normales $(1, 1, 1)$ y $(1, -1, 0)$ tienen producto escalar $0$: los planos son perpendiculares.',
+              { hint: 'El ángulo entre planos es el ángulo entre sus vectores normales.' }),
+          ],
+        },
+        {
+          id: 'geo-17', title: 'Producto vectorial',
+          clip: { scenes: [
+            sc(6, 'El **producto vectorial** $\\vec u \\times \\vec v$ es un vector **perpendicular a los dos**, con el sentido de la regla de la mano derecha.', { title: '$\\vec u \\times \\vec v \\perp \\vec u,\\; \\vec v$' }),
+            sc(6, 'Su longitud es el **área del paralelogramo** que forman.', { title: '$\\|\\vec u \\times \\vec v\\| = \\|\\vec u\\|\\,\\|\\vec v\\|\\sin\\theta$' }),
+            sc(7, 'Se calcula con un determinante «simbólico», tapando una columna por vez.', { steps: ['$\\vec u \\times \\vec v = \\begin{vmatrix} \\hat\\imath & \\hat\\jmath & \\hat k \\\\ u_1 & u_2 & u_3 \\\\ v_1 & v_2 & v_3 \\end{vmatrix}$', '$(1, 0, 2) \\times (0, 1, 1) = (0 - 2,\\; -(1 - 0),\\; 1 - 0) = (-2, -1, 1)$'] }),
+            sc(6, 'No es conmutativo: cambiar el orden cambia el sentido. Y el producto de un vector por sí mismo (o por uno paralelo) es cero.', { steps: ['$\\vec v \\times \\vec u = -\\,\\vec u \\times \\vec v$', '$\\hat\\imath \\times \\hat\\jmath = \\hat k,\\; \\hat\\jmath \\times \\hat k = \\hat\\imath,\\; \\hat k \\times \\hat\\imath = \\hat\\jmath$'] }),
+            sc(6, 'En el plano solo sobrevive la componente $\\hat k$: $u_1v_2 - u_2v_1$, positiva si $\\vec v$ gira a la izquierda de $\\vec u$.', { title: '$(u_1, u_2, 0) \\times (v_1, v_2, 0) = (0, 0, u_1v_2 - u_2v_1)$' }),
+          ] },
+          ex: [
+            play('flecha-vector', 'En el plano, $\\vec u \\times \\vec w$ sale de la pantalla (+) o entra (−) y su tamaño es el área del paralelogramo. Dibuja $\\vec w$', {
+              rounds: [
+                { ask: 'u×w = 8 (área 8, saliendo)', given: [{ v: [4, 0], name: 'u' }], check: w => 4 * w[1] === 8, sol: 'w con segunda componente 2, como (0, 2)', show: ['cross'] },
+                { ask: 'u×w = −6', given: [{ v: [2, 2], name: 'u' }], check: w => 2 * w[1] - 2 * w[0] === -6, sol: 'por ejemplo (3, 0) o (0, −3)', show: ['cross'] },
+                { ask: 'u×w = 0, w ≠ 0 y opuesto a u', given: [{ v: [1, -2], name: 'u' }], check: w => -2 * w[0] - w[1] === 0 && w[0] - 2 * w[1] < 0, sol: 'un múltiplo negativo de u, como (−1, 2)', show: ['cross', 'dot'] },
+              ],
+            }, 'Con base 4 sobre el eje $x$ la altura debe ser 2. Con $(2, 2)$: $2w_2 - 2w_1 = -6$, por ejemplo $(3, 0)$. Producto cruz cero es paralelo; opuesto quiere decir producto escalar negativo: $(-1, 2)$.',
+            { hint: 'u×w = u₁w₂ − u₂w₁. Positivo si w queda a la izquierda de u (sentido antihorario).' }),
+            num('$(1, 2, 0) \\times (3, -1, 2)$: ¿cuál es la primera componente?', 4,
+              '$2 \\cdot 2 - 0 \\cdot (-1) = 4$.',
+              { hint: 'Primera componente: tapa la columna de x y calcula el determinante 2×2 que queda.' }),
+            num('$(1, 2, 0) \\times (3, -1, 2)$: ¿cuál es la tercera componente?', -7,
+              '$1 \\cdot (-1) - 2 \\cdot 3 = -7$.',
+              { hint: 'Tercera componente: tapa la columna de z.' }),
+            num('Área del triángulo de vértices $(0, 0, 0)$, $(2, 0, 0)$ y $(0, 3, 4)$', 5,
+              '$(2, 0, 0) \\times (0, 3, 4) = (0, -8, 6)$, de norma 10; el triángulo es la mitad: $5$.',
+              { hint: 'El triángulo es la mitad del paralelogramo de dos de sus lados.' }),
+            num('$\\hat\\jmath \\times \\hat\\imath = c\\,\\hat k$. ¿Cuánto vale $c$?', -1,
+              '$\\hat\\imath \\times \\hat\\jmath = \\hat k$, y al cambiar el orden cambia el signo.',
+              { hint: 'Usa que î × ĵ = k̂ y que el producto vectorial no es conmutativo.' }),
+          ],
+        },
+        {
+          id: 'geo-18', title: 'Producto vectorial y geometría analítica',
+          clip: { scenes: [
+            sc(6, '**Plano por tres puntos**: $\\overrightarrow{AB} \\times \\overrightarrow{AC}$ es perpendicular a los dos, así que es una normal del plano.', { steps: ['$A(1, 0, 0),\\; B(0, 1, 0),\\; C(0, 0, 1)$', '$\\vec n = (-1, 1, 0) \\times (-1, 0, 1) = (1, 1, 1)$', '$x + y + z = 1$'] }),
+            sc(6, '**Recta de corte de dos planos**: su dirección es perpendicular a las dos normales.', { title: '$\\vec d = \\vec n_1 \\times \\vec n_2$' }),
+            sc(6, '**Distancia de un punto a una recta** del espacio: el área del paralelogramo dividida entre la base.', { title: '$d = \\dfrac{\\|\\overrightarrow{AP} \\times \\vec d\\|}{\\|\\vec d\\|}$' }),
+            sc(7, 'El **triple producto** $\\vec u \\cdot (\\vec v \\times \\vec w)$ es el determinante de los tres vectores; su valor absoluto es el **volumen del paralelepípedo**. Si vale cero, los tres son coplanares.', { steps: ['$\\det\\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & 2 & 0 \\\\ 0 & 0 & 3 \\end{pmatrix} = 6$: una caja $1 \\times 2 \\times 3$'] }),
+          ] },
+          ex: [
+            play('flecha-vector', 'La flecha azul es $\\overrightarrow{AB}$. Arrastra la punta hasta un punto $C$ para que el triángulo $ABC$ tenga el área pedida', {
+              rounds: [
+                { ask: 'Área del triángulo ABC = 6', given: [{ v: [4, 0], at: [-2, -1], name: 'AB' }], points: [{ p: [-2, -1], name: 'A' }], tail: [-2, -1], check: w => Math.abs(4 * w[1]) === 12, sol: 'cualquier C a 3 unidades de la recta AB', show: ['cross'] },
+                { ask: 'Área del triángulo ABC = 3', given: [{ v: [3, 3], at: [-3, -2], name: 'AB' }], points: [{ p: [-3, -2], name: 'A' }], tail: [-3, -2], check: w => Math.abs(3 * w[1] - 3 * w[0]) === 6, sol: 'por ejemplo C = A + (2, 0)', show: ['cross'] },
+              ],
+            }, 'El área del triángulo es la mitad de $|\\overrightarrow{AB} \\times \\overrightarrow{AC}|$. En la primera, $|4\\,w_2| = 12$: $C$ tres unidades arriba o abajo de $AB$. En la segunda, $|3w_2 - 3w_1| = 6$.',
+            { hint: 'El producto cruz de AB con la flecha es el área del paralelogramo; el triángulo es la mitad.' }),
+            num('Plano por $A(1, 0, 0)$, $B(0, 2, 0)$, $C(0, 0, 3)$: su normal $\\overrightarrow{AB} \\times \\overrightarrow{AC}$ es $(6, 3, c)$. ¿Cuánto vale $c$?', 2,
+              '$\\overrightarrow{AB} = (-1, 2, 0)$, $\\overrightarrow{AC} = (-1, 0, 3)$; tercera componente $(-1)(0) - 2(-1) = 2$. El plano es $6x + 3y + 2z = 6$.',
+              { hint: 'Calcula los dos vectores desde A y luego la tercera componente del producto vectorial: tapa la columna de z.' }),
+            num('Volumen del paralelepípedo determinado por $(1, 0, 0)$, $(1, 2, 0)$ y $(3, 1, 4)$', 8,
+              '$\\det\\begin{pmatrix} 1 & 0 & 0 \\\\ 1 & 2 & 0 \\\\ 3 & 1 & 4 \\end{pmatrix} = 1 \\cdot 2 \\cdot 4 = 8$.',
+              { hint: 'Es el valor absoluto del determinante con los tres vectores como filas; mira si la matriz es triangular.' }),
+            num('Distancia del punto $P(1, 3, 4)$ a la recta $t\\,(1, 0, 0)$', 5,
+              '$\\overrightarrow{AP} \\times \\vec d = (1, 3, 4) \\times (1, 0, 0) = (0, 4, -3)$, de norma 5, y $\\|\\vec d\\| = 1$.',
+              { hint: 'Toma A en el origen: calcula |AP × d| / |d|.' }),
+            num('La recta de corte de $x + y + z = 1$ y $x - y = 0$ tiene dirección $\\vec n_1 \\times \\vec n_2 = (1, 1, c)$. ¿Cuánto vale $c$?', -2,
+              '$(1, 1, 1) \\times (1, -1, 0)$: tercera componente $1 \\cdot (-1) - 1 \\cdot 1 = -2$.',
+              { hint: 'Las normales son los coeficientes de cada plano; calcula la tercera componente de su producto vectorial.' }),
+          ],
+        },
+      ],
+    },
+    // ---------------------------------------------------------------- Parcial 4 (semanas 13–14)
+    {
+      world: 'mecanica', title: 'Vectores en la mecánica',
+      lessons: [
+        {
+          id: 'geo-19', title: 'Fuerzas coplanarias y concurrentes',
+          clip: { scenes: [
+            sc(6, 'Una **fuerza** es un vector: tiene magnitud (en newtons), dirección y sentido. Si todas actúan sobre el mismo punto son **concurrentes**; si están en un mismo plano, **coplanarias**.', { viz: { type: 'vectors', A: [3, 1], B: [-1, 2] } }),
+            sc(6, 'Su efecto conjunto es la **resultante**: la suma vectorial.', { title: '$\\vec R = \\vec F_1 + \\vec F_2 + \\cdots$' }),
+            sc(6, 'Con magnitud y ángulo, cada fuerza se descompone en sus componentes.', { steps: ['$\\vec F = F(\\cos\\theta, \\sin\\theta)$', '$10 \\text{ N a } 30^\\circ = (8.66,\\; 5)$'] }),
+            sc(7, 'Un cuerpo está en **equilibrio** cuando la resultante es cero: la suma de componentes en $x$ y en $y$ se anula.', { title: '$\\sum F_x = 0,\\quad \\sum F_y = 0$' }),
+            sc(7, 'Ejemplo: una lámpara de 60 N cuelga de dos cables a $45^\\circ$. Por simetría las tensiones son iguales y sus partes verticales sostienen el peso.', { steps: ['$2T\\sin 45^\\circ = 60$', '$T = \\dfrac{60}{\\sqrt2} \\approx 42.4$ N'] }),
+          ] },
+          ex: [
+            play('flecha-vector', 'Dibuja la fuerza que **equilibra** a las demás: la suma tiene que dar cero', {
+              rounds: [
+                { ask: 'Equilibra F₁ y F₂', given: [{ v: [3, 1], name: 'F₁' }, { v: [-1, 2], name: 'F₂' }], ans: [-2, -3], show: ['sum'], name: 'F' },
+                { ask: 'Equilibra F₁, F₂ y F₃', given: [{ v: [4, -2], name: 'F₁' }, { v: [-1, -3], name: 'F₂' }, { v: [-2, 1], name: 'F₃' }], ans: [-1, 4], show: ['sum'], name: 'F' },
+              ],
+            }, 'La equilibrante es la opuesta de la resultante: $-(2, 3) = (-2, -3)$ y $-(1, -4) = (-1, 4)$.',
+            { hint: 'Suma las fuerzas dadas: la que buscas tiene las mismas componentes con el signo cambiado.' }),
+            play('flecha-vector', 'Ahora dibuja la **resultante**', {
+              rounds: [{ ask: 'R = F₁ + F₂ + F₃', given: [{ v: [-3, 2], name: 'F₁' }, { v: [1, 2], name: 'F₂' }, { v: [4, -1], name: 'F₃' }], ans: [2, 3], show: ['comp'], name: 'R' }],
+            }, '$(-3 + 1 + 4,\\; 2 + 2 - 1) = (2, 3)$.',
+            { hint: 'Suma por separado las componentes x y las componentes y.' }),
+            num('Dos cables simétricos sostienen un peso de 100 N; cada uno forma $30^\\circ$ con la horizontal. ¿Tensión de cada cable (N)?', 100,
+              '$2T\\sin 30^\\circ = 100 \\Rightarrow T = 100$ N: con cables tan horizontales, cada uno soporta tanto como el peso entero.',
+              { hint: 'En equilibrio, las componentes verticales de las dos tensiones suman el peso.' }),
+            num('Resultante de 30 N hacia el este y 40 N hacia el norte (magnitud, en N)', 50,
+              '$\\sqrt{30^2 + 40^2} = 50$ N.',
+              { hint: 'Las dos fuerzas son perpendiculares: usa Pitágoras.' }),
+            num('Una fuerza de 20 N forma $60^\\circ$ con el eje $x$. ¿Cuánto vale su componente en $x$ (N)?', 10,
+              '$20\\cos 60^\\circ = 10$ N.',
+              { hint: 'La componente en x es la magnitud por el coseno del ángulo con el eje x.' }),
+          ],
+        },
+        {
+          id: 'geo-20', title: 'Cinemática',
+          clip: { scenes: [
+            sc(6, 'La **posición** de un móvil es un vector $\\vec r(t)$ que cambia con el tiempo. El **desplazamiento** es la flecha de una posición a otra.', { title: '$\\Delta\\vec r = \\vec r(t_2) - \\vec r(t_1)$' }),
+            sc(6, 'La **velocidad media** es el desplazamiento entre el tiempo; la **rapidez** es su norma.', { title: '$\\vec v_m = \\dfrac{\\Delta\\vec r}{\\Delta t}$' }),
+            sc(7, 'Con velocidad constante, el móvil recorre una **recta paramétrica**: el tiempo hace de parámetro.', { steps: ['$\\vec r(t) = \\vec r_0 + t\\,\\vec v$', '$\\vec r_0 = (0, 2),\\; \\vec v = (3, 1) \\Rightarrow \\vec r(2) = (6, 4)$'] }),
+            sc(7, '**Velocidades relativas**: lo que ve alguien en tierra es la suma de la velocidad propia y la del medio (agua, viento).', { steps: ['$\\vec v_{\\text{tierra}} = \\vec v_{\\text{propia}} + \\vec v_{\\text{medio}}$', 'nadador $(0, 1.5)$ en río $(2, 0)$: $(2, 1.5)$, rapidez $2.5$'] }),
+          ] },
+          ex: [
+            play('flecha-vector', 'Dibuja la velocidad pedida', {
+              rounds: [
+                { ask: 'Lancha (0, 4) m/s en un río a (3, 0): velocidad respecto a tierra', given: [{ v: [0, 4], name: 'lancha' }, { v: [3, 0], name: 'río' }], ans: [3, 4], show: ['comp', 'norm'], name: 'v' },
+                { ask: 'Rapidez propia 5 y río a (3, 0): ¿hacia dónde apuntar para cruzar derecho (hacia arriba)?', given: [{ v: [3, 0], name: 'río' }], check: w => w[0] === -3 && w[1] > 0 && w[0] ** 2 + w[1] ** 2 === 25, sol: '(−3, 4)', show: ['comp', 'norm', 'sum'], name: 'v' },
+              ],
+            }, 'Primera: $(0, 4) + (3, 0) = (3, 4)$, rapidez 5. Segunda: para que la suma no tenga componente $x$, la lancha debe compensar el río: $(-3, 4)$, y cruza a $(0, 4)$.',
+            { hint: 'Lo que se ve desde tierra es la suma de las velocidades. Para cruzar derecho, la suma no debe tener componente en x.' }),
+            play('flecha-vector', 'Un móvil parte de $(-4, -2)$ con velocidad constante $(2, 1)$ por segundo. Pon la **punta** donde estará a los 3 s', {
+              rounds: [{ ask: 'Posición en t = 3 s', points: [{ p: [-4, -2], name: 'r₀' }], at: 'tip', ans: [2, 1], show: ['tip'] }],
+            }, '$\\vec r(3) = (-4, -2) + 3(2, 1) = (2, 1)$.',
+            { hint: 'Usa r(t) = r₀ + t·v con t = 3.' }),
+            num('Un móvil pasa por $(1, 2)$ en $t = 0$ s y por $(9, 8)$ en $t = 2$ s. ¿Cuál es su rapidez media (m/s)?', 5,
+              '$\\Delta\\vec r = (8, 6)$, $\\vec v_m = (4, 3)$ y su norma es $5$.',
+              { hint: 'Divide el desplazamiento entre el tiempo y luego calcula la norma de ese vector.' }),
+            num('Un avión vuela a $(200, 0)$ km/h respecto al aire con viento $(0, -50)$ km/h. ¿Rapidez respecto a tierra (km/h)?', Math.hypot(200, 50),
+              '$\\|(200, -50)\\| = \\sqrt{42500} \\approx 206.2$ km/h.',
+              { tol: 0.1, answerText: '$\\approx 206.2$ km/h', hint: 'Suma las dos velocidades y calcula la norma del resultado.' }),
+          ],
+        },
+        {
+          id: 'geo-21', title: 'Trabajo y momento de una fuerza',
+          clip: { scenes: [
+            sc(6, 'Al arrastrar una caja, solo la parte de la fuerza **a lo largo del camino** la mueve. Por eso el **trabajo** es un producto escalar.', { title: '$W = \\vec F \\cdot \\vec d = \\|\\vec F\\|\\,\\|\\vec d\\|\\cos\\theta$' }),
+            sc(6, 'Si la fuerza es perpendicular al desplazamiento no hace trabajo; si va en contra, el trabajo es negativo.', { steps: ['$\\vec F = (3, 4),\\; \\vec d = (5, 0) \\Rightarrow W = 15$ J', '$\\theta = 90^\\circ \\Rightarrow W = 0$'] }),
+            sc(7, 'El **momento** de una fuerza respecto a un punto mide su tendencia a hacer **girar**. Es un producto vectorial: brazo por fuerza.', { title: '$\\vec M = \\vec r \\times \\vec F$' }),
+            sc(6, 'Su tamaño es $\\|\\vec r\\|\\,\\|\\vec F\\|\\sin\\theta$: por eso una llave larga ayuda y empujar a lo largo del brazo no sirve.', { steps: ['$\\vec r = (0.3, 0),\\; \\vec F = (0, 50)$', '$M = 0.3 \\cdot 50 = 15$ N·m, antihorario'] }),
+          ] },
+          ex: [
+            play('flecha-vector', '**Trabajo**: elige la fuerza $\\vec F$ para el desplazamiento $\\vec d$', {
+              rounds: [
+                { ask: 'W = 12 J con una fuerza inclinada (no horizontal)', given: [{ v: [4, 0], name: 'd' }], check: w => 4 * w[0] === 12 && w[1] !== 0, sol: 'cualquier F con componente x igual a 3, como (3, 2)', show: ['dot'], name: 'F' },
+                { ask: 'W = 0 J con F ≠ 0', given: [{ v: [3, 3], name: 'd' }], check: w => 3 * w[0] + 3 * w[1] === 0 && (w[0] !== 0 || w[1] !== 0), sol: 'un múltiplo de (1, −1)', show: ['dot'], name: 'F' },
+              ],
+            }, 'Solo la componente a lo largo de $\\vec d$ trabaja: con $\\vec d = (4, 0)$ hace falta $F_x = 3$, sea cual sea $F_y$. Trabajo cero es fuerza perpendicular al camino.',
+            { hint: 'W = F·d. La parte de F perpendicular al desplazamiento no aporta nada al trabajo.' }),
+            play('flecha-vector', '**Momento**: la fuerza se aplica en la punta del brazo $\\vec r$ (el giro es alrededor del origen). Dibuja $\\vec F$', {
+              rounds: [
+                { ask: 'Momento +6 (antihorario)', given: [{ v: [3, 0], name: 'r' }], tail: [3, 0], check: w => 3 * w[1] === 6, sol: 'F con componente y igual a 2, como (0, 2)', show: ['cross'], name: 'F' },
+                { ask: 'Momento cero con F ≠ 0', given: [{ v: [2, 2], name: 'r' }], tail: [2, 2], check: w => 2 * w[1] - 2 * w[0] === 0 && (w[0] !== 0 || w[1] !== 0), sol: 'una fuerza a lo largo del brazo, como (1, 1)', show: ['cross'], name: 'F' },
+                { ask: 'Momento −9 (horario)', given: [{ v: [0, 3], name: 'r' }], tail: [0, 3], check: w => -3 * w[0] === -9, sol: 'F con componente x igual a 3, como (3, 0)', show: ['cross'], name: 'F' },
+              ],
+            }, '$M = r_1F_2 - r_2F_1$. Con $\\vec r = (3, 0)$: $3F_2 = 6$. A lo largo del brazo no hay giro. Con $\\vec r = (0, 3)$: $-3F_1 = -9$, $F_1 = 3$.',
+            { hint: 'El momento es r × F = r₁F₂ − r₂F₁. Positivo hace girar en sentido antihorario.' }),
+            num('Una fuerza de 50 N forma $60^\\circ$ con un desplazamiento de 10 m. ¿Trabajo (J)?', 250,
+              '$W = 50 \\cdot 10 \\cdot \\cos 60^\\circ = 250$ J.',
+              { hint: 'Solo cuenta la parte de la fuerza en la dirección del desplazamiento: usa el coseno.' }),
+            num('Se aplican 40 N perpendiculares a una llave de 0.25 m. ¿Magnitud del momento (N·m)?', 10,
+              '$M = 0.25 \\cdot 40 \\cdot \\sin 90^\\circ = 10$ N·m.',
+              { hint: 'Momento = brazo × fuerza × seno del ángulo entre ellos.' }),
+            num('$\\vec F = (2, 1, 0)$ N se aplica en $\\vec r = (0, 0, 3)$ m. ¿Primera componente de $\\vec r \\times \\vec F$?', -3,
+              '$\\vec r \\times \\vec F = (0 \\cdot 0 - 3 \\cdot 1,\\; -(0 \\cdot 0 - 3 \\cdot 2),\\; 0) = (-3, 6, 0)$.',
+              { hint: 'Tapa la columna de x en el determinante con r en la segunda fila y F en la tercera.' }),
+          ],
+        },
+      ],
+    },
+    // ---------------------------------------------------------------- Parcial 4 (semanas 15–16)
+    {
+      world: 'conicas', title: 'Las cónicas',
+      lessons: [
+        {
+          id: 'geo-22', title: 'La circunferencia y la parábola',
+          clip: { scenes: [
+            sc(6, 'La **circunferencia** es el lugar geométrico de los puntos a distancia $r$ de un centro $(h, k)$. Elevar la distancia al cuadrado da su ecuación.', { title: '$(x - h)^2 + (y - k)^2 = r^2$', viz: { type: 'graph', xr: [-2, 6], yr: [-3, 5], fs: [{ f: x => 1 + Math.sqrt(9 - (x - 2) ** 2) }, { f: x => 1 - Math.sqrt(9 - (x - 2) ** 2), color: '#8b7bff' }], points: [[2, 1, 'centro']] } }),
+            sc(7, 'Si viene **desarrollada**, se completa el cuadrado en $x$ y en $y$ para ver centro y radio.', { steps: ['$x^2 + y^2 - 4x - 2y - 4 = 0$', '$(x - 2)^2 + (y - 1)^2 = 4 + 4 + 1 = 9$', 'centro $(2, 1)$, radio $3$'] }),
+            sc(7, 'La **parábola** es el lugar de los puntos que están a la misma distancia de un punto (el **foco**) y de una recta (la **directriz**). El vértice queda en la mitad.', { title: '$\\text{dist}(P, F) = \\text{dist}(P, \\ell)$' }),
+            sc(7, 'Con vértice $(h, k)$ y $p$ la distancia (con signo) del vértice al foco, se abre hacia el foco.', { steps: ['$(x - h)^2 = 4p\\,(y - k)$: abre arriba ($p > 0$) o abajo', '$(y - k)^2 = 4p\\,(x - h)$: abre a la derecha ($p > 0$) o a la izquierda'] }),
+            sc(6, 'Ejemplo: $x^2 = 8y$ tiene $4p = 8$, $p = 2$: foco $(0, 2)$ y directriz $y = -2$.', { viz: { type: 'graph', xr: [-5, 5], yr: [-3, 4], f: x => x * x / 8, points: [[0, 2, 'F']] } }),
+          ] },
+          ex: [
+            play('conica-viva', 'Ajusta el centro y el radio hasta que la circunferencia sea la pedida', {
+              rounds: [
+                { type: 'circ', eq: 'x² + y² + 6x − 2y − 6 = 0', ans: { h: -3, k: 1, r: 4 } },
+                { type: 'circ', eq: 'Centro (2, −1) y pasa por (5, 3)', ans: { h: 2, k: -1, r: 5 } },
+                { type: 'circ', eq: 'x² + y² − 8y = 9', ans: { h: 0, k: 4, r: 5 } },
+              ],
+            }, '$(x + 3)^2 + (y - 1)^2 = 6 + 9 + 1 = 16$. El radio es la distancia de $(2, -1)$ a $(5, 3)$: $5$. $x^2 + (y - 4)^2 = 9 + 16 = 25$.',
+            { hint: 'Completa el cuadrado: el número que acompaña a x, dividido entre 2 y con el signo cambiado, es la coordenada del centro. Lo que sumes a la izquierda súmalo también a la derecha.' }),
+            play('conica-viva', 'Ahora parábolas: mueve el vértice, $p$ y el eje', {
+              rounds: [
+                { type: 'par', eq: '(x − 1)² = 8(y + 2)', ans: { h: 1, k: -2, p: 2, dir: 'y' } },
+                { type: 'par', eq: 'Foco (−1, 0) y directriz x = 3', ans: { h: 1, k: 0, p: -2, dir: 'x' } },
+                { type: 'par', eq: 'y² − 4y − 4x = 0', ans: { h: -1, k: 2, p: 1, dir: 'x' } },
+              ],
+            }, 'Primera: vértice $(1, -2)$, $4p = 8$. Segunda: el vértice está entre foco y directriz, en $(1, 0)$, y el foco queda 2 a la izquierda: $p = -2$. Tercera: $(y - 2)^2 = 4(x + 1)$.',
+            { hint: 'Si la variable al cuadrado es x, la parábola abre en y, y al revés. El vértice está justo en la mitad entre el foco y la directriz.' }),
+            num('¿Cuál es la coordenada $y$ del foco de $x^2 = -12y$?', -3,
+              '$4p = -12 \\Rightarrow p = -3$: el foco es $(0, -3)$ y la parábola abre hacia abajo.',
+              { hint: 'Compara con x² = 4py y despeja p; el foco está a p del vértice.' }),
+            num('Una antena parabólica mide 2 m de ancho y 0.25 m de profundidad. ¿A qué distancia del vértice está el foco (m)?', 1,
+              'Con el vértice en el origen, el borde $(1, 0.25)$ cumple $x^2 = 4py$: $1 = 4p \\cdot 0.25$, así que $p = 1$ m.',
+              { hint: 'Pon el vértice en el origen: el borde de la antena es un punto de x² = 4py.' }),
+          ],
+        },
+        {
+          id: 'geo-23', title: 'La elipse y la hipérbola',
+          clip: { scenes: [
+            sc(7, 'La **elipse** es el lugar de los puntos cuya **suma** de distancias a dos focos es constante. Se dibuja con un hilo amarrado a dos clavos.', { title: '$d(P, F_1) + d(P, F_2) = 2a$' }),
+            sc(7, 'Con centro $(h, k)$ y semiejes $a$ (horizontal) y $b$ (vertical). Los focos están sobre el eje mayor, a distancia $c$ del centro.', { title: '$\\dfrac{(x - h)^2}{a^2} + \\dfrac{(y - k)^2}{b^2} = 1$', steps: ['$c^2 = (\\text{mayor})^2 - (\\text{menor})^2$', '$\\tfrac{x^2}{25} + \\tfrac{y^2}{9} = 1:\\; c = 4$, focos $(\\pm4, 0)$'] }),
+            sc(7, 'La **hipérbola**: la **diferencia** de distancias a los focos es constante. Tiene dos ramas y dos **asíntotas**.', { title: '$|d(P, F_1) - d(P, F_2)| = \\text{cte}$' }),
+            sc(7, 'Si abre en $x$, el término positivo es el de $x$. Aquí los focos están más lejos: $c^2 = a^2 + b^2$, y las asíntotas tienen pendiente $\\pm b/a$.', { title: '$\\dfrac{(x - h)^2}{a^2} - \\dfrac{(y - k)^2}{b^2} = 1$', steps: ['$\\tfrac{x^2}{4} - \\tfrac{y^2}{5} = 1:\\; c = 3$, asíntotas $y = \\pm\\tfrac{\\sqrt5}{2}x$'] }),
+            sc(6, 'La **excentricidad** ($c$ entre el semieje que va hacia los focos) mide qué tan alargada es: $0 < e < 1$ en la elipse, $e > 1$ en la hipérbola.', { title: '$e = \\dfrac{c}{\\text{semieje de los focos}}$' }),
+          ] },
+          ex: [
+            play('conica-viva', 'Ajusta el centro y los semiejes $a$ (horizontal) y $b$ (vertical) de la elipse', {
+              rounds: [
+                { type: 'eli', eq: '(x − 1)²/25 + (y + 2)²/9 = 1', ans: { h: 1, k: -2, a: 5, b: 3 } },
+                { type: 'eli', eq: 'Focos (0, −3) y (0, 5); eje menor de largo 6', ans: { h: 0, k: 1, a: 3, b: 5 } },
+                { type: 'eli', eq: '4x² + y² − 16x = 0', ans: { h: 2, k: 0, a: 2, b: 4 } },
+              ],
+            }, 'Primera: centro $(1, -2)$, $a = 5$, $b = 3$. Segunda: centro en el punto medio de los focos, $(0, 1)$, $c = 4$, semieje menor 3 (horizontal) y mayor $\\sqrt{9 + 16} = 5$ (vertical). Tercera: $4(x - 2)^2 + y^2 = 16$, o sea $\\tfrac{(x - 2)^2}{4} + \\tfrac{y^2}{16} = 1$.',
+            { hint: 'El centro está en la mitad de los focos. Mayor² = menor² + c². Si la ecuación no está igualada a 1, completa el cuadrado y divide.' }),
+            play('conica-viva', 'Ahora hipérbolas: centro, semiejes $a$ (horizontal) y $b$ (vertical) y hacia dónde abre', {
+              rounds: [
+                { type: 'hip', eq: 'x²/9 − y²/16 = 1', ans: { h: 0, k: 0, a: 3, b: 4, dir: 'x' } },
+                { type: 'hip', eq: 'Vértices (−2, 0) y (−2, 4); asíntotas de pendiente ±⅔', ans: { h: -2, k: 2, a: 3, b: 2, dir: 'y' } },
+              ],
+            }, 'Primera: abre en $x$ con $a = 3$, $b = 4$ (focos en $\\pm5$). Segunda: centro $(-2, 2)$, abre en $y$ con semieje vertical 2; la pendiente $\\tfrac{2}{a} = \\tfrac23$ da $a = 3$.',
+            { hint: 'Abre hacia el eje del término positivo. Las asíntotas tienen pendiente semieje vertical sobre semieje horizontal.' }),
+            num('Los focos de $\\dfrac{x^2}{169} + \\dfrac{y^2}{144} = 1$, ¿a qué distancia del centro están?', 5,
+              '$c = \\sqrt{169 - 144} = 5$.',
+              { hint: 'En la elipse c² es la diferencia de los cuadrados de los semiejes.' }),
+            num('Excentricidad de la hipérbola $\\dfrac{x^2}{16} - \\dfrac{y^2}{9} = 1$', 1.25,
+              '$c = \\sqrt{16 + 9} = 5$ y $e = \\tfrac54 = 1.25$.',
+              { tol: 0.001, hint: 'Primero c con c² = a² + b²; la excentricidad es c dividido entre el semieje de los focos.' }),
+            num('Un arco semielíptico mide 10 m de ancho y 3 m de alto. ¿Qué altura tiene a 4 m del centro (m)?', 1.8,
+              '$\\tfrac{16}{25} + \\tfrac{y^2}{9} = 1 \\Rightarrow y^2 = 9 \\cdot \\tfrac{9}{25} \\Rightarrow y = 1.8$ m.',
+              { tol: 0.01, hint: 'Usa x²/25 + y²/9 = 1 y reemplaza x = 4.' }),
+          ],
+        },
+      ],
+    },
+  ],
+};
+;
+//#archivo js/courses/preuda-razonamiento.js
+// preUDA · Componente 1: Razonamiento lógico (spec 2026-11-18-curso-preuda). Un mundo por tema del temario del
+// preuniversitario, en orden de prioridad. Cada lección: escenas de respaldo (intuición primero, regla después, un
+// ejemplo resuelto) y ejercicios de juego con pista. Los ejemplos de las escenas no se repiten en los ejercicios.
+// Las ayudas PU_* sirven también a preuda-lectura.js (va después de este archivo).
+
+const PU_ES = (q, levels, explain, hint) => play('escala-solucion', q, { rounds: [{ levels }] }, explain, { hint });
+// tol: el juego calcula exacto; solo se deja el margen de la coma flotante.
+const PU_CTA = (q, round, explain, hint) => play('arma-la-cuenta', q, { rounds: [{ tol: 1e-6 * Math.max(1, Math.abs(round.answer)), ...round }] }, explain, { hint });
+const PU_ORD = (q, tex, chips, order, sep, explain, hint) => play('ordena-terminos', q, { tex, chips, order, sep }, explain, { hint });
+const PU_SUB = (q, rounds, explain, hint) => play('subraya-texto', q, { rounds }, explain, { hint });
+// video: { bunny, duration } cuando la lección ya tiene su video en Bunny (duración la que reporta Bunny).
+const PU_L = (id, title, scenes, ex, video) => ({ id, title, clip: { ...video, scenes }, ex });
+
+const PU_RAZONAMIENTO = [
+  // ---------------- 1 · Cálculo mental ----------------
+  { world: 'pu-calculo', title: 'Cálculo mental', block: 'razonamiento', lessons: [
+    // Video: video/preuda-cosmos, película «enteros» (spec 2026-11-18-preuda-enteros). Las escenas cuentan lo mismo.
+    PU_L('pu-cm-1', 'Enteros, signos y jerarquía', [
+      sc(6, 'Un problema para empezar: Luisa, Juliana y Ana hacen el mismo cálculo y obtienen 33, 37 y 49. El resultado correcto difiere de los de ellas en 5, 7 y 9, no necesariamente en ese orden. Al final se sabe quién falló por cuánto.', { title: 'Tres resultados' }),
+      sc(6, 'Los enteros son **posiciones** en la recta: a la derecha del 0 los positivos, a la izquierda los negativos. $-3$ y $3$ son **opuestos**: igual de lejos del 0.', { title: 'La recta numérica' }),
+      sc(6, 'La **distancia** entre dos números es cuántos pasos hay de uno a otro: de $-3$ a $5$ hay $5 - (-3) = 8$. Se escribe $|5 - (-3)| = 8$ y nunca es negativa. A distancia 4 de 10 hay dos lugares: 6 y 14.', { title: 'La distancia en la recta' }),
+      sc(6, 'Sumar es **moverse**: $+6$ va seis pasos a la derecha. $-4 + 6$ sale de $-4$ y llega a $2$.', { title: '$-4 + 6 = 2$' }),
+      sc(7, 'Restar es sumar el opuesto: $3 - 7 = 3 + (-7) = -4$. Y restar un negativo es **quitar una deuda**: $2 - (-5) = 7$.', { title: '$2 - (-5) = 2 + 5 = 7$' }),
+      sc(7, 'Otro problema: el día siguiente de pasado mañana está tan lejos del domingo como ayer de pasado mañana. En la recta: hoy 0, ayer $-1$, pasado mañana 2 y el día siguiente 3. De $-1$ a 2 hay 3 días, así que el domingo es el día 6: hoy es lunes.', { title: 'Los días en la recta' }),
+      sc(7, 'Multiplicar es repetir saltos: $(-3) \\cdot 4$ son cuatro saltos de 3 hacia la izquierda, $-12$. Multiplicar por $-1$ es **dar la vuelta** en el 0: $(-3)(-4)$ son dos vueltas, y queda $12$.', { title: 'El menos da la vuelta' }),
+      sc(6, 'Por eso se cuentan los negativos: un número **par** de signos menos da positivo, uno **impar** da negativo. $(-1)(-2)(-3) = -6$.', { title: 'Regla de los signos' }),
+      sc(7, 'La jerarquía son **capas**: primero los paréntesis, luego las potencias, después × y ÷ de izquierda a derecha, y al final + y −. Como vestirse: medias antes que zapatos.', { title: 'Las capas de una cuenta' }),
+      sc(7, 'Capa por capa: $5 - 7 = -2$, $(-2)^2 = 4$, $2 \\cdot 4 = 8$ y $8 - 8 = 0$. Ojo: $(-2)^2 = 4$, pero $-2^2 = -4$.', { title: '$8 - 2 \\cdot (5 - 7)^2 = 0$' }),
+      sc(7, 'El reto: el correcto está a 5, 7 o 9 de 33 (24, 26, 28, 38, 40 o 42). Solo 42 cuadra con los otros: $|42 - 33| = 9$, $|42 - 37| = 5$ y $|42 - 49| = 7$. Juliana falló por 5.', { title: 'Juliana falló por 5' }),
+    ], [
+      play('recta-espejo', 'Pon en la recta el número que describe cada ronda', { min: -8, max: 8, rounds: [
+        { text: 'el opuesto de 7', value: -7 }, { text: '−(−4)', value: 4 }, { text: 'el que sumado con −6 da 0', value: 6 }, { text: 'el opuesto del opuesto de −2', value: -2 },
+      ] }, 'El opuesto de un número está a la misma distancia del 0, al otro lado: el de $7$ es $-7$. Un número y su opuesto suman $0$. Y dos signos menos se cancelan: $-(-4) = 4$.',
+        { hint: 'Busca primero el número en la recta y luego refléjalo en el 0, como en un espejo. Si hay dos «opuestos», refleja dos veces.' }),
+      play('globo-lastre', 'Lleva el canasto a la altura de la bandera', { rounds: [
+        { g: 2, s: 5, act: 'addG', target: 1 }, { g: 3, s: 1, act: 'addS', target: -4 }, { g: 6, s: 2, act: 'remG', target: -1 },
+        { g: 1, s: 6, act: 'remS', target: -1 }, { g: 4, s: 6, act: 'remS', target: 3 },
+      ] }, 'Cada globo vale $+1$ y cada saco de arena $-1$. Amarrar globos es sumar positivos y colgar sacos es sumar negativos. Soltar un globo es restar un positivo: baja. Soltar un saco es restar un negativo: **sube**. Por eso $-5 - (-4) = -1$.',
+        { hint: 'Mira si el canasto está por debajo o por encima de la bandera y cuántos niveles le faltan. Luego piensa qué le pasa a la altura cada vez que haces lo que permite esa ronda.' }),
+      play('ascensor', 'Lleva el ascensor al piso donde termina cada viaje', { min: -6, max: 7, rounds: [
+        { start: 4, move: -9, text: 'Estás en el piso 4 y bajas 9 pisos' }, { start: -5, move: 8, text: 'Estás en el sótano 5 y subes 8 pisos' },
+        { start: -2, move: -3, text: 'Estás en el sótano 2 y bajas 3 pisos más' }, { start: 6, move: -6, text: 'Estás en el piso 6 y bajas 6 pisos' },
+      ] }, 'Subir suma y bajar resta: $4 - 9 = -5$, $-5 + 8 = 3$, $-2 - 3 = -5$ y $6 - 6 = 0$. Los sótanos son los pisos negativos y la planta baja es el 0.',
+        { hint: 'Cuenta los pisos uno por uno pasando por la planta baja, que es el piso 0. Los sótanos se numeran hacia abajo.' }),
+      play('tren-ordenado', 'Ordena cada tren de menor a mayor', { rounds: [
+        { items: [{ label: '5', v: 5 }, { label: '−8', v: -8 }, { label: '0', v: 0 }, { label: '−3', v: -3 }, { label: '−12', v: -12 }] },
+        { items: [{ label: '−1', v: -1 }, { label: '|−6|', v: 6 }, { label: '−|−4|', v: -4 }, { label: '2', v: 2 }, { label: '−9', v: -9 }] },
+      ] }, 'En la recta es menor el que queda más a la izquierda. Entre negativos, el más lejano del 0 es el menor: $-12 < -8 < -3 < 0 < 5$. El valor absoluto es la distancia al 0: $|-6| = 6$, pero $-|-4| = -4$.',
+        { hint: 'Imagina cada número en la recta. Entre dos negativos, piensa cuál debe más: ese es el menor.' }),
+      play('voltea-flecha', 'Estira y voltea la flecha hasta el aro', { rounds: [
+        { a: 2, target: -12 }, { a: -4, target: -20 }, { a: -2, target: 10 }, { a: -5, target: 15 }, { a: 6, target: -18 },
+      ] }, 'El multiplicador repite la flecha y, si es negativo, la refleja en el 0. Una flecha que ya miraba a la izquierda queda a la derecha al voltearla: por eso $(-2)(-5) = 10$ y $(-5)(-3) = 15$, mientras que $2 \\cdot (-6) = -12$.',
+        { hint: 'Primero decide cuántas copias de la flecha caben hasta el aro. Después mira de qué lado del 0 está el aro y hacia dónde apunta la flecha: así sabes si hay que voltearla.' }),
+      play('pares-negativos', 'Empareja los factores **negativos** de cada potencia y decide su signo', { rounds: [
+        { base: 3, n: 2, paren: true, outer: false }, { base: 3, n: 3, paren: true, outer: false }, { base: 3, n: 2, paren: false, outer: true }, { base: 2, n: 5, paren: true, outer: true },
+      ] }, 'Con paréntesis el signo se repite con la base: $(-3)^2$ tiene dos negativos (una pareja, positivo) y $(-3)^3$ deja uno suelto (negativo). Sin paréntesis, $-3^2 = -(3^2) = -9$: solo hay un negativo, el de afuera.',
+        { hint: 'Mira si el signo menos está dentro del paréntesis: solo así se repite con cada factor. Empareja los negativos de dos en dos y fíjate si sobra alguno.' }),
+      play('capas-operacion', 'Resuelve capa por capa: junta las fichas que se operan primero', { rounds: [
+        { title: 'Primero lo de adentro', items: [{ expr: '6 + 2 * ( 5 - 8 ) ^ 2' }, { expr: '( 4 - 9 ) * ( 3 + 1 )' }, { expr: '18 - ( 2 + 4 ) * 3' }] },
+        { title: 'Izquierda a derecha', items: [{ expr: '20 / 4 * 5 - 3' }, { expr: '-12 + 18 / -3 * 2' }, { expr: '3 ^ 2 - 4 * ( 1 - 3 )' }] },
+      ] }, 'El orden es: paréntesis, potencias, × y ÷ de izquierda a derecha, y + y − de izquierda a derecha. Por ejemplo, $6 + 2(5 - 8)^2 = 6 + 2 \\cdot 9 = 24$.',
+        { hint: 'Busca primero si queda algún paréntesis con una operación adentro. Si no, mira si hay potencias; luego × y ÷, y al final + y −, siempre la que esté más a la izquierda.' }),
+      play('salta-signos', 'Salta las fichas del signo que dice la misión y atrapa las demás corriendo', { rounds: [
+        { title: 'Productos', mission: 'neg', items: [{ text: '(−6)(−2)', sign: 1 }, { text: '(−4)(3)', sign: -1 }, { text: '(7)(−1)', sign: -1 }, { text: '(−5)(−5)', sign: 1 }, { text: '(2)(9)', sign: 1 }, { text: '(−8)(2)', sign: -1 }] },
+        { title: 'Tres factores y potencias', mission: 'pos', items: [{ text: '(−1)(−4)(−2)', sign: -1 }, { text: '(−2)(3)(−4)', sign: 1 }, { text: '(−4)²', sign: 1 }, { text: '−4²', sign: -1 }, { text: '(−2)³', sign: -1 }, { text: '(−1)(−1)(5)', sign: 1 }] },
+      ] }, 'Basta contar los signos menos: si son pares, el resultado es positivo; si son impares, negativo. Ojo con $-4^2$: el menos está fuera de la potencia, así que da $-16$.',
+        { hint: 'No calcules el número: cuenta cuántos factores negativos hay. Un número par de negativos da positivo.' }),
+    ], { bunny: '1fb04a76-64d9-42e9-a931-9efec25a2135', duration: 237.1 }),
+    PU_L('pu-cm-2', 'Fracciones', [
+      sc(6, 'Un problema para empezar: Luis se comió un tercio de una torta y notó que una torta completa era el $60\\,\\%$ (tres quintos) de lo que le quedaba. Al final se sabe cuántas recibió.', { title: 'Las tortas de Luis' }),
+      sc(6, 'El número de abajo, el **denominador**, dice en cuántas partes **iguales** se corta; el de arriba, el **numerador**, cuántas se toman. $\\tfrac38$: ocho partes, se toman tres.', { title: 'Abajo se corta, arriba se cuenta' }),
+      sc(6, 'Más cortes, la misma cantidad: $\\tfrac35 = \\tfrac{6}{10} = \\tfrac{12}{20}$. Simplificar es el camino de vuelta: $\\tfrac{18}{24} = \\tfrac34$, dividiendo entre 6.', { title: '$\\tfrac{18}{24} = \\tfrac34$' }),
+      sc(6, 'Para comparar se multiplica en cruz: $\\tfrac47$ frente a $\\tfrac59$ da $36$ frente a $35$, así que $\\tfrac47$ es mayor. Es pasar las dos a sesenta y tresavos.', { title: 'Producto cruzado' }),
+      sc(6, 'La fracción de una cantidad: $\\tfrac27$ de 35 son siete grupos de 5 y se toman dos: $10$. Primero dividir, luego multiplicar.', { title: '$\\tfrac27 \\cdot 35 = 10$' }),
+      sc(7, 'Solo se suman pedazos del mismo tamaño: $\\tfrac14 + \\tfrac16 = \\tfrac{3}{12} + \\tfrac{2}{12} = \\tfrac{5}{12}$, no $\\tfrac{2}{10}$.', { title: '$\\tfrac14 + \\tfrac16 = \\tfrac{5}{12}$' }),
+      sc(7, 'La fracción **del resto**: Sara gasta $\\tfrac13$ de 120 000 y luego $\\tfrac14$ de lo que le queda (de 80 000, no de 120 000). Le queda $\\tfrac23 \\cdot \\tfrac34 = \\tfrac12$: 60 000.', { title: 'La fracción del resto' }),
+      sc(7, 'Otro problema: si sale una niña, $\\tfrac17$ del resto son niñas; si salen dos niños, $\\tfrac15$. Probando opciones: con 22, quedan 21 (3 niñas) o 20 (4 niñas). Eran 4 niñas y 18 niños.', { title: 'Probar las opciones' }),
+      sc(7, 'Las tortas: si una torta son $\\tfrac35$ de lo que quedó, cada quinto es $\\tfrac13$ de torta y quedaron $\\tfrac53$. Con el tercio comido: $\\tfrac53 + \\tfrac13 = 2$ tortas.', { title: 'Luis recibió 2 tortas' }),
+    ], [
+      play('pizzeria', 'Sirve cada pedido: corta la pizza y marca las porciones que pide', { maxSlices: 12, orders: [
+        { label: '2/6', num: 1, den: 3 }, { label: 'cinco octavos', num: 5, den: 8 }, { label: 'tres cuartos', num: 3, den: 4 }, { label: '6/9', num: 2, den: 3 },
+      ] }, 'El denominador dice en cuántas partes iguales se corta y el numerador cuántas se toman. Fracciones distintas pueden ser la misma cantidad: $\\tfrac26 = \\tfrac13$ y $\\tfrac69 = \\tfrac23$. Eso es simplificar.',
+        { hint: 'Elige primero en cuántas porciones cortar. Si el pedido no se puede con ese corte, prueba una fracción equivalente con otro número de porciones.' }),
+      play('tableta-fraccion', 'Corta la tableta y toma la fracción que pide cada ronda', { rounds: [
+        { total: 32, cols: 8, num: 5, den: 8, what: 'chocolates' }, { total: 40, cols: 10, num: 7, den: 10, what: 'chocolates' },
+        { total: 36, cols: 9, num: 5, den: 6, what: 'chocolates' }, { total: 30, cols: 10, num: 2, den: 3, what: 'chocolates' },
+      ] }, 'La fracción de una cantidad: se reparte en tantas partes iguales como dice el denominador y se toman las del numerador. $\\tfrac58$ de 32: ocho partes de 4, se toman cinco, $20$. $\\tfrac{7}{10}$ de 40 son $28$; $\\tfrac56$ de 36, $30$; y $\\tfrac23$ de 30, $20$.',
+        { hint: 'El número de abajo te dice en cuántas partes iguales cortar. El de arriba, cuántas de esas partes tomar.' }),
+      play('ubica-en-recta', 'Suelta cada fracción en su lugar de la recta', { min: 0, max: 3, tol: 0.1, points: [
+        { label: '1/2', tex: '\\tfrac12', value: 0.5 }, { label: '5/4', tex: '\\tfrac54', value: 1.25 }, { label: '7/3', tex: '\\tfrac73', value: 2.3333 }, { label: '9/5', tex: '\\tfrac95', value: 1.8 }, { label: '11/4', tex: '\\tfrac{11}{4}', value: 2.75 },
+      ] }, 'Una fracción mayor que 1 tiene más arriba que abajo: $\\tfrac54 = 1 + \\tfrac14$, $\\tfrac95 = 1 + \\tfrac45$, $\\tfrac73 = 2 + \\tfrac13$ y $\\tfrac{11}{4} = 2 + \\tfrac34$.',
+        { hint: 'Mira cuántas veces cabe el denominador en el numerador: esos son los enteros. Lo que sobra dice cuánto pasa de ese entero.' }),
+      play('tren-ordenado', 'Ordena cada tren de menor a mayor', { rounds: [
+        { items: [{ label: '1/2', v: 0.5 }, { label: '1/5', v: 0.2 }, { label: '1/3', v: 1 / 3 }, { label: '1/10', v: 0.1 }, { label: '1/4', v: 0.25 }] },
+        { items: [{ label: '5/9', v: 5 / 9 }, { label: '3/5', v: 0.6 }, { label: '2/3', v: 2 / 3 }, { label: '7/12', v: 7 / 12 }, { label: '1/2', v: 0.5 }] },
+      ] }, 'Con el mismo numerador, es menor la de denominador más grande (se reparte entre más). Para las demás se cruzan los productos o se pasa a un denominador común: $\\tfrac12 < \\tfrac59 < \\tfrac{7}{12} < \\tfrac35 < \\tfrac23$.',
+        { hint: 'Si los numeradores son iguales, piensa entre cuántos se reparte. Si no, compara dos fracciones multiplicando en cruz.' }),
+      play('corta-igual', 'Recorta las barras en pedacitos del mismo tamaño para poder operar', { rounds: [
+        { a: [1, 2], b: [1, 3] }, { a: [3, 4], b: [1, 6] }, { a: [2, 3], b: [1, 4], op: '-' }, { a: [5, 6], b: [3, 8], op: '-' },
+      ] }, 'Solo se suman o restan pedazos del mismo tamaño: por eso se busca un denominador común. $\\tfrac12 + \\tfrac13 = \\tfrac36 + \\tfrac26 = \\tfrac56$, $\\tfrac34 + \\tfrac16 = \\tfrac{11}{12}$, $\\tfrac23 - \\tfrac14 = \\tfrac{5}{12}$ y $\\tfrac56 - \\tfrac38 = \\tfrac{11}{24}$.',
+        { hint: 'Busca un número de pedacitos que se pueda repartir en los cortes de la primera barra y también en los de la segunda: un múltiplo de los dos denominadores.' }),
+      play('lupa-densidad', 'Acerca la lupa y suelta un punto **entre** las dos banderitas', { rounds: [
+        { a: { label: '1/3', value: 1 / 3 }, b: { label: '0.34', value: 0.34 }, view: [0, 1] }, { a: { label: '3/4', value: 0.75 }, b: { label: '7/9', value: 7 / 9 }, view: [0, 1] }, { a: { label: '5/3', value: 5 / 3 }, b: { label: '1.7', value: 1.7 }, view: [1, 2] },
+      ] }, 'Entre dos fracciones distintas siempre cabe otra, por cerca que estén: $\\tfrac13 = 0.333\\ldots < 0.335 < 0.34$, y entre $\\tfrac34 = 0.75$ y $\\tfrac79 = 0.777\\ldots$ está, por ejemplo, $0.76$.',
+        { hint: 'Pasa las dos a decimal con tres cifras: así ves cuál es la menor y qué número queda entre ellas.' }),
+      play('carrera-fracciones', 'Toca una puerta para **medirla** en la regla y pasa por la que mide lo mismo que el número de arriba', { rounds: [
+        { title: 'Simplificar', items: [{ ask: '6/8', options: ['3/4', '2/3', '6/4'], answer: 0 }, { ask: '10/15', options: ['2/3', '1/5', '5/3'], answer: 0 }, { ask: '9/12', options: ['3/4', '3/2', '1/3'], answer: 0 }, { ask: '4/10', options: ['2/5', '1/4', '4/5'], answer: 0 }] },
+        { title: 'Fracción y decimal', items: [{ ask: '3/4', options: ['0.75', '0.34', '3.4'], answer: 0 }, { ask: '2/5', options: ['0.4', '0.25', '2.5'], answer: 0 }, { ask: '1/8', options: ['0.125', '0.8', '1.8'], answer: 0 }, { ask: '9/10', options: ['0.9', '0.09', '9.1'], answer: 0 }] },
+      ] }, 'Simplificar es dividir arriba y abajo por lo mismo: $\\tfrac68 = \\tfrac34$, $\\tfrac{10}{15} = \\tfrac23$. Y una fracción es una división: $\\tfrac34 = 0.75$, $\\tfrac25 = 0.4$, $\\tfrac18 = 0.125$.',
+        { hint: 'No hay prisa: mide cada puerta en la regla y compara su largo con el del número de arriba.' }),
+    ]),
+    PU_L('pu-cm-3', 'Decimales y porcentajes', [
+      sc(6, 'Un problema para empezar: unos tenis de 120 000 rebajados un $10\\,\\%$ y luego con un impuesto del $10\\,\\%$. Carlos esperaba pagar lo mismo.', { title: 'Los tenis de Carlos' }),
+      sc(6, 'Por ciento es «de cada 100»: $\\tfrac14 = 0.25 = 25\\,\\%$ son 25 casillas de 100. El $100\\,\\%$ es el total y el $120\\,\\%$ es más que el total.', { title: '$\\tfrac14 = 0.25 = 25\\,\\%$' }),
+      sc(6, 'Una fracción es una división: $\\tfrac38 = 0.375 = 37.5\\,\\%$. Algunas no terminan: $\\tfrac{1}{13} = 0.\\overline{076923}$.', { title: '$\\tfrac38 = 0.375$' }),
+      sc(7, 'Un problema: la suma de las 2019 primeras cifras de $\\tfrac{1}{13}$. Bloques de 6 que suman 27: $2019 = 336 \\cdot 6 + 3$, y $336 \\cdot 27 + 0 + 7 + 6 = 9085$.', { title: 'El bloque que se repite' }),
+      sc(6, 'Para comparar, todo a decimal: $\\tfrac25 = 0.40$, $0.38$ y $41\\,\\% = 0.41$. Ordenados: $0.38 < \\tfrac25 < 41\\,\\%$.', { title: 'Todo a decimal' }),
+      sc(6, 'El $10\\,\\%$ corre el punto: de 80 000 es 8 000. El $15\\,\\%$ es $10\\,\\% + 5\\,\\%$: $8\\,000 + 4\\,000 = 12\\,000$.', { title: 'Pedazos fáciles' }),
+      sc(7, 'Cada cambio es un factor: bajar $20\\,\\%$ es multiplicar por $0.8$ ($250\\,000 \\to 200\\,000$) y subir $20\\,\\%$, por $1.2$ ($250\\,000 \\to 300\\,000$).', { title: 'Subir y bajar es multiplicar' }),
+      sc(7, 'Otro problema: Humberto $40\\,\\%$, Iván $25\\,\\%$ y Javier el resto, 70 g. El resto es $35\\,\\%$; si $35\\,\\%$ son 70 g, el $1\\,\\%$ son 2 g y la barra pesa 200 g.', { title: 'La barra de chocolate' }),
+      sc(7, 'Los tenis: $120\\,000 \\cdot 0.9 = 108\\,000$ y $108\\,000 \\cdot 1.1 = 118\\,800$. Juntos, $0.9 \\cdot 1.1 = 0.99$: el $10\\,\\%$ que se quita y el que se pone se calculan sobre bases distintas.', { title: 'Pagó 118 800' }),
+    ], [
+      play('cuadricula-cien', 'Pinta en la cuadrícula lo que pide cada ronda', { rounds: [{ ask: '35 %', count: 35 }, { ask: '2/5', count: 40 }, { ask: '0.08', count: 8 }] },
+        'Por ciento es «de cada 100»: cada casilla es el 1 %. $\\tfrac25 = \\tfrac{40}{100} = 40\\,\\%$ y $0.08 = \\tfrac{8}{100} = 8\\,\\%$.',
+        { hint: 'La cuadrícula tiene 100 casillas. Pasa cada fracción o decimal a «de cada 100» antes de pintar.' }),
+      play('candado-fraccion', 'Gira las ruedas hasta que la fracción abra el candado', { rounds: [
+        { dec: '0.45', num: 9, den: 20 }, { dec: '0.625', num: 5, den: 8 }, { dec: '0.16', num: 4, den: 25 }, { dec: '1.25', num: 5, den: 4 },
+      ] }, 'Un decimal que termina se escribe sobre 10, 100 o 1000 y se simplifica: $0.45 = \\tfrac{45}{100} = \\tfrac{9}{20}$, $0.625 = \\tfrac{625}{1000} = \\tfrac58$, $0.16 = \\tfrac{4}{25}$ y $1.25 = \\tfrac54$.',
+        { hint: 'Cuenta las cifras después del punto: una es sobre 10, dos sobre 100, tres sobre 1000. Luego simplifica. El visor muestra el decimal de lo que armas.' }),
+      play('pon-la-rayita', 'Pon la rayita sobre el bloque que se repite para siempre', { rounds: [{ num: 2, den: 3 }, { num: 5, den: 6 }, { num: 4, den: 11 }, { num: 7, den: 12 }] },
+        'Algunas fracciones dan decimales que no terminan pero se repiten: $\\tfrac23 = 0.\\overline{6}$, $\\tfrac56 = 0.8\\overline{3}$, $\\tfrac{4}{11} = 0.\\overline{36}$ y $\\tfrac{7}{12} = 0.58\\overline{3}$. La rayita cubre solo lo que se repite.',
+        { hint: 'Toca una cifra y mira su residuo: cuando un residuo vuelve a salir, las cifras se repiten desde ahí.' }),
+      play('rueda-porcentaje', 'Gira la aguja hasta cubrir la parte pedida y lee el porcentaje', { rounds: [{ part: 18, whole: 24 }, { part: 21, whole: 60 }, { part: 9, whole: 45 }, { part: 33, whole: 150 }], tol: 1 },
+        'Qué porcentaje es una parte del total: se divide y se pasa a «de cada 100». $\\tfrac{18}{24} = 75\\,\\%$, $\\tfrac{21}{60} = 35\\,\\%$, $\\tfrac{9}{45} = 20\\,\\%$ y $\\tfrac{33}{150} = 22\\,\\%$.',
+        { hint: 'Compara la parte con el total: ¿es la mitad, un cuarto, un quinto? Mientras giras, mira la parte cubierta.' }),
+      play('pinta-personas', 'Pinta a las personas que pide cada ronda', { rounds: [
+        { total: 20, pct: 45, what: 'llegan en bus' }, { total: 50, pct: 30, what: 'usan gafas' }, { total: 16, pct: 75, what: 'aprobaron' }, { total: 40, pct: 2.5, what: 'son gemelos' },
+      ] }, 'El porcentaje de un grupo: $45\\,\\%$ de 20 son 9, $30\\,\\%$ de 50 son 15, $75\\,\\%$ de 16 son 12 y $2.5\\,\\%$ de 40 es 1. Sirve pasar por el $10\\,\\%$: de 50 es 5, así que el $30\\,\\%$ es 15.',
+        { hint: 'Halla primero el 10 % del grupo (corre el punto un lugar) o el 50 % (la mitad), y arma el porcentaje con esos pedazos.' }),
+      play('estira-barra', 'Estira o encoge la barra hasta lo que pide cada ronda', { max: 200, rounds: [
+        { base: 80, text: 'El 25 % más de 80', pct: 125 }, { base: 600, text: 'El 30 % menos de 600', pct: 70 }, { base: 150, text: 'El doble de 150', pct: 200 }, { base: 40, text: 'Lo que queda de 40 si se le quita el 15 %', pct: 85 },
+      ] }, 'Aumentar un $25\\,\\%$ deja el $125\\,\\%$: $80 \\cdot 1.25 = 100$. Quitar un $30\\,\\%$ deja el $70\\,\\%$: $600 \\cdot 0.7 = 420$. El doble es el $200\\,\\%$, y quitar el $15\\,\\%$ deja el $85\\,\\%$.',
+        { hint: 'El total de antes es el 100 %. Si crece, la barra pasa de 100 %; si se le quita, queda por debajo.' }),
+      play('etiqueta-rebaja', 'Pega en cada etiqueta el sticker del precio final', {
+        items: [{ name: 'Morral', price: 60000, change: -25 }, { name: 'Libro', price: 40000, change: -10 }, { name: 'Balón', price: 50000, change: 20 }],
+        stickers: [45000, 15000, 36000, 4000, 60000, 40000],
+      }, 'El precio final es el de lista por el factor: $60\\,000 \\cdot 0.75 = 45\\,000$ (15 000 es solo el descuento), $40\\,000 \\cdot 0.9 = 36\\,000$ y, como el balón **sube** $20\\,\\%$, $50\\,000 \\cdot 1.2 = 60\\,000$.',
+        { hint: 'Cuidado: algunos stickers son solo el descuento, no el precio final. Y no todo baja: mira el signo del cambio.' }),
+      play('vuela-precios', 'Alinea el planeador con el resultado y suelta para volar', { rounds: [
+        { title: 'Porcentaje de una cantidad', items: [{ ask: '10 % de 350', options: ['35', '3.5', '340'], answer: 0 }, { ask: '50 % de 90', options: ['45', '40', '180'], answer: 0 }, { ask: '25 % de 120', options: ['30', '25', '95'], answer: 0 }, { ask: '20 % de 45', options: ['9', '20', '25'], answer: 0 }] },
+        { title: 'De fracción a porcentaje', items: [{ ask: '3/4', options: ['75 %', '34 %', '43 %'], answer: 0 }, { ask: '3/5', options: ['60 %', '35 %', '53 %'], answer: 0 }, { ask: '1/8', options: ['12.5 %', '18 %', '8 %'], answer: 0 }, { ask: '7/10', options: ['70 %', '7 %', '17 %'], answer: 0 }] },
+      ] }, 'El $10\\,\\%$ corre el punto un lugar; el $50\\,\\%$ es la mitad; el $25\\,\\%$, la cuarta parte; y el $20\\,\\%$, la quinta. Y cada fracción tiene su porcentaje: $\\tfrac34 = 75\\,\\%$, $\\tfrac35 = 60\\,\\%$, $\\tfrac18 = 12.5\\,\\%$.',
+        { hint: 'Piensa cada porcentaje como una fracción sencilla del número: la mitad, la cuarta parte, la décima parte.' }),
+    ]),
+    PU_L('pu-cm-4', 'Potencias, raíces y estimación', [
+      sc(6, 'Un problema para empezar: María escribe la suma de las cifras de $10^n - 51$. Para $10^5 - 51 = 99\\,949$ escribe 40; falta saber qué escribe para $10^{10} - 51$.', { title: 'Las cuentas de María' }),
+      sc(6, 'Una potencia es multiplicar repetido: $5^3 = 5 \\cdot 5 \\cdot 5 = 125$ cubitos, cinco capas de 25. No es $5 \\cdot 3$.', { title: '$5^3 = 125$' }),
+      sc(6, '$10^n$ es un 1 con $n$ ceros, y $10^n - 1$ son $n$ nueves. Por eso $10\\,000 - 37 = 9\\,999 - 36 = 9\\,963$.', { title: 'Las potencias de 10' }),
+      sc(7, 'Al cuadrado es un área: $13^2 = 100 + 30 + 30 + 9 = 169$. Si el lado crece $20\\,\\%$, el área se multiplica por $1.2^2 = 1.44$: crece $44\\,\\%$ (pasa igual con un círculo).', { title: 'Al cuadrado' }),
+      sc(6, 'Las leyes salen de contar: $2^3 \\cdot 2^4 = 2^7$ (siete doses) y $(2^3)^2 = 2^6$ (dos grupos de tres doses).', { title: 'Contar factores' }),
+      sc(7, 'Otro problema: cartas 1, 2, 4, 8, 16 y 32; Ana suma 7 más que Eliza. El total es 63, así que Ana tiene 35 = 32 + 2 + 1: tres cartas.', { title: 'Las cartas' }),
+      sc(7, 'Otro problema: el residuo de $2^{2019}$ entre 7. Los residuos dan vueltas: 2, 4, 1, 2, 4, 1… Como $2019 = 3 \\cdot 673$, el residuo es 1.', { title: 'Las potencias dan vueltas' }),
+      sc(7, '$\\sqrt{72} = \\sqrt{36 \\cdot 2} = 6\\sqrt2 \\approx 8.5$, entre 8 y 9 porque $64 < 72 < 81$. Y $49.7 \\cdot 20.3 \\approx 50 \\cdot 20 = 1\\,000$.', { title: 'Raíces y estimación' }),
+      sc(7, '$10^{10} - 51 = 9\\,999\\,999\\,949$: ocho nueves, un 4 y un 9. La suma es $72 + 4 + 9 = 85$, la opción C.', { title: 'María escribirá 85' }),
+    ], [
+      play('arbol-potencia', 'Haz crecer el árbol: elige cuántas **ramas** salen de cada nudo y cuántos **niveles** tiene', { rounds: [{ target: 27 }, { target: 16 }, { target: 81 }] },
+        'Con $b$ ramas por nudo y $n$ niveles hay $b^n$ hojas: $27 = 3^3$, $81 = 3^4 = 9^2$ y $16 = 2^4 = 4^2$. La base es lo que se repite; el exponente, cuántas veces.',
+        { hint: 'Prueba con pocas ramas y ve subiendo niveles: mira cómo cambia el número de hojas. Si te pasas, cambia las ramas.' }),
+      play('torre-pisos', 'Reparte los paquetes: cada número vive en el **piso** de su exponente', { rounds: [
+        { title: 'Torre del 3', base: 3, lo: -2, hi: 4, items: [{ exp: 3 }, { exp: 0 }, { exp: -1 }] },
+        { title: 'Torre del 2', base: 2, lo: -3, hi: 6, items: [{ exp: 6 }, { exp: -3 }, { exp: 5 }] },
+        { title: 'Torre del 10', base: 10, lo: -2, hi: 4, items: [{ exp: 4 }, { exp: -2 }, { exp: 1 }] },
+      ] }, 'El piso es el exponente. En la planta baja vive el $1$, porque $a^0 = 1$. Subir un piso multiplica por la base y bajar uno divide: $3^{-1} = \\tfrac13$, $2^{-3} = \\tfrac18$, $10^{-2} = 0.01$.',
+        { hint: 'Desde la planta baja, que vale 1, sube multiplicando por la base o baja dividiendo, piso por piso.' }),
+      play('cuenta-factores', 'Las leyes salen de **contar**: mira las x y escribe el exponente del resultado', { rounds: [{ kind: 'prod', m: 4, n: 3 }, { kind: 'quot', m: 6, n: 2 }, { kind: 'pow', m: 3, n: 2 }, { kind: 'quot', m: 3, n: 5 }] },
+        'Al multiplicar se juntan los factores: $x^4 \\cdot x^3 = x^7$. Al dividir se cancelan: $x^6 \\div x^2 = x^4$, y si sobran abajo queda negativo: $x^3 \\div x^5 = x^{-2}$. Una potencia de potencia repite el grupo: $(x^3)^2 = x^6$.',
+        { hint: 'No uses fórmulas: cuenta las x del dibujo. Mira si se juntan, si se tachan por parejas o si un grupo se repite.' }),
+      play('lado-del-cuadrado', 'Estira el cuadrado hasta que su área sea la pedida: su lado es la raíz cuadrada', { rounds: [{ area: 49 }, { area: 6.25 }, { area: 20 }], max: 10, step: 0.05, tol: 0.05 },
+        'La raíz cuadrada es el lado del cuadrado con esa área: $\\sqrt{49} = 7$, $\\sqrt{6.25} = 2.5$ y $\\sqrt{20} \\approx 4.47$, que está entre $4$ y $5$ porque $16 < 20 < 25$.',
+        { hint: 'Busca un número que multiplicado por sí mismo dé el área. Si no es exacto, piensa entre qué dos cuadrados conocidos está.' }),
+      play('compas-raiz', 'Elige los lados del rectángulo para que el compás caiga en la banderita', { rounds: [{ n: 10 }, { n: 2 }, { n: 20 }, { n: 18 }], max: 4 },
+        'La diagonal de un rectángulo de lados $a$ y $b$ mide $\\sqrt{a^2 + b^2}$: $1^2 + 3^2 = 10$, $1^2 + 1^2 = 2$, $2^2 + 4^2 = 20$ y $3^2 + 3^2 = 18$. Así se ubica una raíz exacta en la recta.',
+        { hint: 'Busca dos cuadrados (1, 4, 9, 16) que sumen el número de adentro de la raíz.' }),
+      play('acorrala-raiz', 'Acorrala la raíz: cada vez en un tramo más pequeño', { rounds: [{ n: 7 }, { n: 30 }], levels: 3 },
+        'Estimar es acorralar: $2.6^2 = 6.76 < 7 < 7.29 = 2.7^2$, así que $\\sqrt7$ está entre $2.6$ y $2.7$. Y $5.4^2 = 29.16 < 30 < 30.25 = 5.5^2$: $\\sqrt{30} \\approx 5.48$.',
+        { hint: 'Eleva al cuadrado los extremos de cada tramo y quédate con el tramo que deja el número de adentro en medio.' }),
+      play('siembra-raices', 'Elige en la recta los números que cumplen y **siembra** para comprobarlo', { rounds: [
+        { title: 'Cuadrados', items: [{ kind: 'eq', n: 2, a: 25 }, { kind: 'root', n: 2, a: 25 }, { kind: 'eq', n: 2, a: -16 }] },
+        { title: 'Cubos', items: [{ kind: 'eq', n: 3, a: -27 }, { kind: 'root', n: 3, a: 8 }, { kind: 'root', n: 3, a: -125 }] },
+      ] }, 'Si $x^2 = 25$ hay dos números, $5$ y $-5$; pero $\\sqrt{25}$ es uno solo, el positivo. Ningún número al cuadrado da negativo. Con cubos siempre hay exactamente una respuesta: $\\sqrt[3]{-27} = -3$.',
+        { hint: 'Prueba sembrando: un negativo por sí mismo da positivo, pero tres veces por sí mismo da negativo.' }),
+      play('serpiente-orden', 'Guía a la serpiente para que se coma los números de menor a mayor', { rounds: [
+        { title: 'Potencias', items: [{ label: '2⁵', value: 32 }, { label: '5²', value: 25 }, { label: '3³', value: 27 }, { label: '10²', value: 100 }, { label: '4³', value: 64 }] },
+        { title: 'Raíces y estimaciones', items: [{ label: '√50', value: Math.sqrt(50) }, { label: '2³', value: 8 }, { label: '√36', value: 6 }, { label: '7.5', value: 7.5 }, { label: '√80', value: Math.sqrt(80) }] },
+      ] }, 'Se estima antes de ordenar: $5^2 = 25 < 3^3 = 27 < 2^5 = 32 < 4^3 = 64 < 10^2$. Y $\\sqrt{50}$ pasa un poco de 7 porque $7^2 = 49$, mientras que $\\sqrt{80}$ casi llega a 9: $6 < \\sqrt{50} < 7.5 < 8 < \\sqrt{80}$.',
+        { hint: 'Calcula o estima cada número antes de moverte: para una raíz, piensa entre qué dos cuadrados conocidos está.' }),
+    ]),
+  ] },
+
+  // ---------------- 2 · Geometría ----------------
+  { world: 'pu-geometria', title: 'Geometría', block: 'razonamiento', lessons: [
+    PU_L('pu-ge-1', 'Ángulos y paralelas', [
+      sc(6, 'Dos ángulos **complementarios** suman 90°; **suplementarios**, 180°. Los **opuestos por el vértice** son iguales.', { title: 'Complementos y suplementos' }),
+      sc(7, 'Dos paralelas cortadas por una transversal: los alternos internos son iguales, los correspondientes son iguales y los conjugados suman 180°.', { title: 'Paralelas y transversal' }),
+      sc(7, 'Los ángulos internos de un polígono de $n$ lados suman $(n - 2) \\cdot 180°$. Un hexágono suma 720°, y si es regular cada ángulo mide 120°.', { title: '$(n-2) \\cdot 180°$' }),
+    ], [
+      play('rueda-angulo', 'Gira el lado hasta el ángulo de cada ronda', { snap: 15, rounds: [
+        { target: 90, label: '90°', tex: '90^\\circ' }, { target: 135, label: '135°', tex: '135^\\circ' }, { target: 180, label: '180°', tex: '180^\\circ' }, { target: 60, label: '60°', tex: '60^\\circ' },
+      ] }, 'Un ángulo mide cuánto se gira: un cuarto de vuelta son $90^\\circ$ (recto), media vuelta son $180^\\circ$ (llano). Menos de $90^\\circ$ es agudo, como $60^\\circ$; entre $90^\\circ$ y $180^\\circ$ es obtuso, como $135^\\circ$.',
+        { hint: 'Piensa en fracciones de vuelta: un cuarto de vuelta es un ángulo recto. Compara el ángulo pedido con ese.' }),
+      play('tijera-angulos', 'Dos rectas que se cruzan: deduce el ángulo que no se muestra', { rounds: [
+        { kind: 'opp', given: 65 }, { kind: 'sup', given: 50 }, { kind: 'comp', given: 35 }, { kind: 'ratio', k: 2 }, { kind: 'sup', given: 105 },
+      ] }, 'Los opuestos por el vértice son iguales. Los vecinos forman media vuelta: suman $180^\\circ$ (suplementarios), así que el vecino de $50^\\circ$ mide $130^\\circ$. Los complementarios suman $90^\\circ$: el de $35^\\circ$ es $55^\\circ$. Y si el vecino es el doble, $x + 2x = 180^\\circ$: $x = 60^\\circ$.',
+        { hint: 'El ángulo azul y su vecino llenan media vuelta entre los dos. El azul y el que queda hasta la vertical llenan un cuarto de vuelta.' }),
+      play('paralelas-gira', 'Usa los ángulos para dejar las dos rectas paralelas', { rounds: [
+        { t: 65, top: 0, pair: 'corr' }, { t: 70, top: 10, pair: 'alt' }, { t: 60, top: -15, pair: 'corr' }, { t: 75, top: 5, pair: 'conj' },
+      ] }, 'Cuando una transversal corta dos paralelas, los ángulos correspondientes son iguales, los alternos internos son iguales y los conjugados suman $180^\\circ$. Si eso no se cumple, las rectas se terminan cruzando.',
+        { hint: 'Mira los dos ángulos marcados mientras giras: según el par de la ronda, deben quedar iguales o sumar media vuelta.' }),
+      play('apice-triangulo', 'Mueve el vértice: los tres ángulos suman siempre lo mismo', { rounds: [
+        { mode: 'falta', A: 50, C: 70 }, { mode: 'falta', A: 35, C: 90 }, { mode: 'falta', A: 60, C: 75 }, { mode: 'falta', A: 25, C: 120 },
+      ] }, 'Los ángulos internos de un triángulo suman $180^\\circ$. Con $A = 50^\\circ$ y $C = 70^\\circ$ queda $B = 180^\\circ - 120^\\circ = 60^\\circ$; con $35^\\circ$ y $90^\\circ$, $B = 55^\\circ$; con $60^\\circ$ y $75^\\circ$, $B = 45^\\circ$; y con $25^\\circ$ y $120^\\circ$, $B = 35^\\circ$.',
+        { hint: 'El ángulo de arriba no se muestra: calcula cuánto debe medir el ángulo B para que entre los tres completen media vuelta.' }),
+      play('suma-poligono', 'Parte cada polígono en triángulos para saber cuánto suman sus ángulos', { rounds: [{ n: 4 }, { n: 5 }, { n: 7 }, { n: 8 }] },
+        'Desde un vértice, un polígono de $n$ lados se parte en $n - 2$ triángulos, y cada uno aporta $180^\\circ$: la suma es $(n - 2) \\cdot 180^\\circ$. Un cuadrilátero suma $360^\\circ$; un pentágono, $540^\\circ$; un heptágono, $900^\\circ$; un octágono, $1\\,080^\\circ$, y si es regular cada ángulo mide $135^\\circ$.',
+        { hint: 'Traza todas las diagonales que salen del punto y cuenta los triángulos que quedan: compáralos con el número de lados.' }),
+      play('rieles-paralelos', 'Gira el riel nuevo desde la estación', { rounds: [
+        { base: { m: 1 / 2, b: 0 }, baseTxt: 'y = x/2', through: [1, 3], mode: 'par' }, { base: { m: 2, b: -1 }, baseTxt: 'y = 2x − 1', through: [0, 2], mode: 'perp' },
+        { base: { m: 0, b: 2 }, baseTxt: 'y = 2', through: [3, -1], mode: 'perp' }, { base: { m: -1, b: 1 }, baseTxt: 'y = −x + 1', through: [-2, 0], mode: 'par' },
+      ] }, 'En el plano, dos rectas paralelas tienen la misma inclinación (pendiente). Una perpendicular forma $90^\\circ$: su pendiente es la recíproca con el signo cambiado ($-1/m$), y la perpendicular a una horizontal es vertical.',
+        { hint: 'Paralelo: la misma inclinación que la vía. Perpendicular: que forme un ángulo recto con ella; fíjate en el cuadrito del cruce.' }),
+      play('billar-rebote', 'Billar de un rebote: mete la bola en la tronera', { rounds: [
+        { title: 'Misma altura', items: [{ p: [1, 2], t: [9, 2] }, { p: [1, 3], t: [7, 3] }, { p: [8, 1], t: [2, 1] }] },
+        { title: 'Alturas distintas', items: [{ p: [2, 4], t: [8, 2] }, { p: [1, 1], t: [9, 3] }, { p: [9, 2], t: [3, 4] }] },
+      ] }, 'La bola rebota con el mismo ángulo con que llega. Si la bola y la tronera están a la misma altura, el rebote va justo en la mitad. Si no, sirve imaginar la tronera reflejada al otro lado de la banda y apuntar derecho hacia ella.',
+        { hint: 'Los dos ángulos con la banda tienen que ser iguales. Si la bola y la tronera están a la misma altura, piensa dónde queda el punto medio.' }),
+    ]),
+    PU_L('pu-ge-2', 'Triángulos y Pitágoras', [
+      sc(6, 'En un triángulo **rectángulo**, el cuadrado construido sobre el lado largo ocupa lo mismo que los dos cuadrados de los otros lados juntos.', { title: '$c^2 = a^2 + b^2$' }),
+      sc(6, 'Hay ternas que conviene reconocer: 3-4-5, 5-12-13, 8-15-17 y sus múltiplos. Una escalera de 13 m a 5 m de la pared llega a 12 m de altura.', { title: 'Ternas pitagóricas' }),
+      sc(7, 'Dos triángulos especiales: el de 45-45-90 tiene lados $x, x, x\\sqrt2$; el de 30-60-90, lados $x, x\\sqrt3, 2x$.', { title: '45-45-90 y 30-60-90' }),
+    ], [
+      play('apice-triangulo', 'Arma el triángulo del tipo que pide cada ronda', { rounds: [
+        { mode: 'tipo', tipo: 'isosceles', A: 40 }, { mode: 'tipo', tipo: 'rectangulo', A: 30 }, { mode: 'tipo', tipo: 'equilatero', A: 60 }, { mode: 'tipo', tipo: 'rectangulo', y: 'isosceles', A: 45 },
+      ] }, 'Por sus lados: equilátero (tres iguales, ángulos de $60^\\circ$), isósceles (dos iguales, y dos ángulos iguales) o escaleno. Por sus ángulos: rectángulo (uno de $90^\\circ$), acutángulo u obtusángulo. El rectángulo isósceles tiene ángulos de $45^\\circ$, $45^\\circ$ y $90^\\circ$.',
+        { hint: 'A lados iguales les corresponden ángulos iguales: fíjate en las rayitas que aparecen. Para un rectángulo, busca que algún ángulo sea de 90°.' }),
+      play('cuadrados-pitagoras', 'Mueve los catetos hasta que la hipotenusa mida lo pedido', { max: 12, rounds: [{ c2: 25 }, { c2: 100 }, { c2: 225 }, { c2: 20 }] },
+        'En un triángulo rectángulo, el cuadrado de la hipotenusa es la suma de los cuadrados de los catetos: $3^2 + 4^2 = 25 = 5^2$, $6^2 + 8^2 = 100 = 10^2$ y $9^2 + 12^2 = 225 = 15^2$. Son ternas pitagóricas. Y $2^2 + 4^2 = 20$: la hipotenusa mide $\\sqrt{20}$, que no es entera.',
+        { hint: 'Busca dos cuadrados (1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144) que sumen las casillas pedidas.' }),
+      play('escalera-pared', 'Apoya la escalera justo en la ventana', { rounds: [{ L: 5, h: 4 }, { L: 10, h: 6 }, { L: 17, h: 8 }, { L: 15, h: 9 }] },
+        'La escalera, la pared y el piso forman un triángulo rectángulo: $\\text{pie}^2 + \\text{altura}^2 = \\text{largo}^2$. Con largo $5$ y altura $4$, el pie queda a $3$. Las demás son múltiplos o ternas conocidas: $8$-$6$-$10$, $15$-$8$-$17$ y $12$-$9$-$15$.',
+        { hint: 'El largo de la escalera es la hipotenusa. Mira si la altura y el largo son múltiplos de una terna que conozcas, como 3-4-5.' }),
+      play('compas-raiz', 'Elige los lados del rectángulo para que el compás caiga en la banderita', { rounds: [{ n: 5 }, { n: 13 }, { n: 25 }, { n: 32 }], max: 4 },
+        'La diagonal de un rectángulo es la hipotenusa de sus dos lados: $1^2 + 2^2 = 5$, $2^2 + 3^2 = 13$, $3^2 + 4^2 = 25$ (diagonal exacta de $5$) y $4^2 + 4^2 = 32$, la diagonal de un cuadrado de lado $4$: $4\\sqrt2$.',
+        { hint: 'La diagonal al cuadrado es la suma de los cuadrados de los dos lados: busca dos cuadrados que sumen el número de la raíz.' }),
+      play('cuerdas-iguales', 'Desliza el anillo por el riel hasta que las **dos cuerdas midan lo mismo**', { rounds: [{ A: [1, 2], B: [5, 4], rail: 'x' }, { A: [-3, 1], B: [3, 3], rail: 'y' }, { A: [2, -2], B: [4, 4], rail: 'x' }] },
+        'Cada cuerda es la hipotenusa de un triángulo que se arma con su avance horizontal y su subida. El punto que queda a la misma distancia de $A$ y de $B$ hace iguales las dos hipotenusas.',
+        { hint: 'Mira cómo cambia el largo de cada cuerda al mover el anillo: una crece mientras la otra se acorta. Busca dónde se igualan.' }),
+      play('acorrala-raiz', 'La diagonal no siempre es entera: acorrala su valor', { rounds: [{ n: 2 }, { n: 20 }], levels: 3 },
+        'La diagonal de un cuadrado de lado $1$ mide $\\sqrt2 \\approx 1.414$: por eso en un triángulo de $45^\\circ$-$45^\\circ$-$90^\\circ$ los lados son $x$, $x$ y $x\\sqrt2$. Y $\\sqrt{20} \\approx 4.47$ está entre $4$ y $5$.',
+        { hint: 'Eleva al cuadrado los extremos de cada tramo y quédate con el tramo que deja el número de adentro en medio.' }),
+      play('vuela-precios', 'Alinea el planeador con la longitud que falta y suelta para volar', { rounds: [
+        { title: 'Halla la hipotenusa', items: [{ ask: 'catetos 9 y 12', options: ['15', '21', '108'], answer: 0 }, { ask: 'catetos 8 y 15', options: ['17', '23', '120'], answer: 0 }, { ask: 'catetos 7 y 24', options: ['25', '31', '17'], answer: 0 }] },
+        { title: 'Halla el cateto', items: [{ ask: 'hipotenusa 20, cateto 16', options: ['12', '4', '36'], answer: 0 }, { ask: 'hipotenusa 26, cateto 10', options: ['24', '16', '36'], answer: 0 }, { ask: 'hipotenusa 25, cateto 15', options: ['20', '10', '40'], answer: 0 }] },
+      ] }, 'Son ternas y sus múltiplos: $9$-$12$-$15$ y $12$-$16$-$20$ y $15$-$20$-$25$ vienen de $3$-$4$-$5$; $10$-$24$-$26$, de $5$-$12$-$13$; y $8$-$15$-$17$ y $7$-$24$-$25$ son ternas propias. Sumar los catetos nunca da la hipotenusa.',
+        { hint: 'Antes de elevar al cuadrado, mira si los números son múltiplos de una terna conocida: 3-4-5 o 5-12-13.' }),
+    ]),
+    PU_L('pu-ge-3', 'Semejanza y escala', [
+      sc(6, 'Dos figuras son **semejantes** si tienen la misma forma: sus lados son proporcionales (teorema de Tales).', { title: 'Misma forma, otro tamaño' }),
+      sc(7, 'Si las longitudes se multiplican por $k$, las áreas se multiplican por $k^2$ y los volúmenes por $k^3$. Duplicar el lado de un cuadrado de 9 cm² da 36 cm², no 18.', { title: '$k,\\ k^2,\\ k^3$' }),
+      sc(6, 'Las sombras al mismo tiempo forman triángulos semejantes: la razón altura/sombra es la misma para un poste y para una persona.', { title: 'Sombras proporcionales' }),
+    ], [
+      PU_ES('Un cubo de 3 cm de arista pesa 54 g. ¿Cuánto pesa uno igual de 6 cm?', [['k = 2', 'k = 3'], ['el volumen se multiplica por 8', 'el volumen se multiplica por 2', 'el volumen se multiplica por 4'], ['432 g', '108 g', '216 g']],
+        'La arista se duplica ($k = 2$), el volumen se multiplica por $2^3 = 8$ y el peso también: $54 \\cdot 8 = 432$ g.',
+        'El peso depende del volumen, no de la arista. Piensa cuántos cubos pequeños caben en el grande.'),
+      PU_CTA('Un edificio da una sombra de 24 m cuando una persona de 1.8 m da una sombra de 1.2 m. Plantea la altura del edificio', { sol: ['24', '*', '1.8', '/', '1.2'], traps: ['3'], answer: 36, unit: 'm' },
+        'Altura y sombra van en la misma razón: $\\tfrac{h}{24} = \\tfrac{1.8}{1.2}$, así $h = 24 \\cdot 1.8 \\div 1.2 = 36$ m.',
+        'La razón entre altura y sombra es la misma para la persona y para el edificio.'),
+    ]),
+    PU_L('pu-ge-4', 'Perímetros, áreas y círculos', [
+      sc(7, 'Áreas que hay que tener a mano: rectángulo y paralelogramo $b \\cdot h$, triángulo $\\tfrac{b h}{2}$, trapecio $\\tfrac{(B + b) h}{2}$, rombo $\\tfrac{D d}{2}$ y círculo $\\pi r^2$.', { title: 'Áreas básicas' }),
+      sc(6, 'La longitud de la circunferencia es $2\\pi r$. Un error frecuente: usar el diámetro donde va el radio.', { title: '$L = 2\\pi r$' }),
+      sc(7, 'Un sector es una fracción del círculo: con 90° es un cuarto. Si $r = 4$, el sector de 90° tiene área $\\tfrac{16\\pi}{4} = 4\\pi$ y arco $\\tfrac{8\\pi}{4} = 2\\pi$.', { title: 'Sector: $\\tfrac{\\theta}{360°}$ del círculo' }),
+    ], [
+      PU_CTA('Un trapecio tiene bases de 14 y 8 cm y altura de 5 cm. Plantea su área', { sol: ['(', '14', '+', '8', ')', '*', '5', '/', '2'], traps: ['22'], answer: 55, unit: 'cm²' },
+        '$\\tfrac{(14 + 8) \\cdot 5}{2} = \\tfrac{110}{2} = 55$ cm².',
+        'El trapecio es como un rectángulo cuya base es el promedio de las dos bases.'),
+      PU_ES('Un sector de 60° en un círculo de 12 cm de diámetro: halla su área', [['r = 6', 'r = 12'], ['círculo: 36π', 'círculo: 144π'], ['60/360 = 1/6', '60/360 = 1/3'], ['área: 6π cm²', 'área: 12π cm²']],
+        'El radio es la mitad del diámetro: 6. El círculo tiene $36\\pi$ y el sector es la sexta parte: $6\\pi$ cm².',
+        'Antes de usar la fórmula, revisa si el dato es el radio o el diámetro.'),
+    ]),
+    PU_L('pu-ge-5', 'Áreas sombreadas y cuadrícula', [
+      sc(6, 'Un área sombreada casi siempre es **una figura grande menos lo que se le quita**, o la suma de piezas conocidas.', { title: 'Sumar y restar figuras' }),
+      sc(7, 'Un cuadrado de lado 10 con un círculo inscrito: la zona fuera del círculo mide $100 - 25\\pi \\approx 21.5$.', { title: '$100 - 25\\pi$' }),
+      sc(7, 'En una cuadrícula se cuentan cuadros o se usa la fórmula con la base y la altura que se leen en los ejes: el triángulo de vértices (1, 1), (5, 1) y (3, 4) tiene base 4, altura 3 y área 6.', { title: 'Figuras en la cuadrícula' }),
+    ], [
+      PU_ES('Un cuadrado de lado 8 tiene en cada esquina un cuarto de círculo de radio 4. Halla el área que queda sin cubrir', [['cuadrado: 64', 'cuadrado: 32'], ['4 cuartos = 1 círculo', '4 cuartos = 4 círculos'], ['círculo: 16π', 'círculo: 64π'], ['64 − 16π ≈ 13.7', '64 − 64π']],
+        'Los cuatro cuartos forman un círculo de radio 4, de área $16\\pi$. Queda $64 - 16\\pi \\approx 13.7$.',
+        'Junta mentalmente las cuatro piezas curvas: ¿qué figura completa forman?'),
+      PU_CTA('En una cuadrícula, un triángulo tiene vértices en (0, 0), (6, 0) y (2, 5). Plantea su área', { sol: ['6', '*', '5', '/', '2'], traps: ['2'], answer: 15 },
+        'La base está sobre el eje: mide 6. La altura es la distancia del tercer vértice al eje: 5. Área $\\tfrac{6 \\cdot 5}{2} = 15$.',
+        'Usa como base el lado que está sobre un eje; la altura es qué tan lejos está el otro vértice de ese eje.'),
+    ]),
+    PU_L('pu-ge-6', 'Volúmenes y superficies', [
+      sc(6, 'Prismas y cilindros: **área de la base por la altura**. Un cilindro de radio 3 y altura 10 tiene $90\\pi$.', { title: '$V = A_b \\cdot h$' }),
+      sc(6, 'Pirámides y conos llenan **un tercio** del prisma o cilindro con la misma base y altura: ese cono tendría $30\\pi$. La esfera: $\\tfrac43 \\pi r^3$.', { title: 'Un tercio' }),
+      sc(6, 'La superficie es la suma de las caras: un cubo de arista $a$ tiene $6a^2$.', { title: 'Área superficial' }),
+    ], [
+      PU_CTA('Un tanque cilíndrico tiene radio de 2 m y altura de 5 m. Plantea su volumen', { sol: ['π', '*', '2', '^', '2', '*', '5'], traps: ['10', '4'], answer: 20 * Math.PI, unit: 'm³' },
+        'Base $\\pi \\cdot 2^2 = 4\\pi$ por altura 5: $20\\pi \\approx 62.8$ m³.',
+        'Calcula el área del círculo de la base y multiplícala por la altura.'),
+      PU_ES('Halla el área de la superficie de una caja de 4 × 3 × 2 cm', [['caras: 4·3, 4·2 y 3·2', 'caras: 4·3·2'], ['12 + 8 + 6 = 26', '12 · 8 · 6'], ['2 · 26 = 52 cm²', '26 cm²', '24 cm²']],
+        'Hay tres pares de caras iguales: $12 + 8 + 6 = 26$, y cada una aparece dos veces: $52$ cm².',
+        'Una caja tiene seis caras que vienen en parejas iguales: tapa y fondo, frente y espalda, dos lados.'),
+    ]),
+  ] },
+
+  // ---------------- 3 · Acertijos de orden ----------------
+  { world: 'pu-orden', title: 'Acertijos de orden y asignación', block: 'razonamiento', lessons: [
+    PU_L('pu-or-1', 'Orden en línea', [
+      sc(6, 'Con pistas de orden, lo primero es **dibujar**: una fila de casillas numeradas. Se ponen primero las pistas más firmes.', { title: 'Dibuja la fila' }),
+      sc(8, 'Ana, Beto, Caro y Dani en fila. Caro es la primera; Beto va justo detrás de Ana; Dani no es el último. Si Ana y Beto fueran 2 y 3, Dani quedaría de último: no puede. Entonces van 3 y 4, y Dani es el 2.', { title: 'Caro, Dani, Ana, Beto' }),
+      sc(6, 'Cuando una pista deja dos posibilidades, se prueba cada una hasta que una choque con otra pista.', { title: 'Probar y descartar' }),
+    ], [
+      PU_ES('Cinco carros en fila (1 a 5): el rojo está en 3; el azul está justo a la izquierda del verde; el negro no está en un extremo; el blanco está a la derecha del rojo', [['azul y verde en 1 y 2', 'azul y verde en 4 y 5'], ['negro en 4', 'negro en 5'], ['blanco en 5', 'blanco en 4']],
+        'Si azul y verde fueran 4 y 5, el blanco no tendría sitio a la derecha del rojo. Van en 1 y 2; el negro solo cabe en 4 y el blanco en 5.',
+        'Busca dónde caben dos carros pegados sin chocar con las demás pistas.'),
+      PU_ES('Cuatro amigos viven en los pisos 1 a 4: Luis vive más arriba que Marta, Nora justo encima de Luis y Óscar más arriba que Nora', [['Óscar en el piso 4', 'Nora en el piso 4'], ['Nora en 3 y Luis en 2', 'Nora en 2 y Luis en 1'], ['Marta en el piso 1', 'Marta en el piso 3']],
+        'Óscar tiene que estar por encima de Nora, que está encima de Luis, que está encima de Marta: 4, 3, 2 y 1.',
+        'Encadena las pistas «más arriba que»: forman una sola escalera.'),
+    ]),
+    PU_L('pu-or-2', 'Orden circular', [
+      sc(6, 'En una mesa redonda, girar a todos no cambia nada: se **fija** a una persona y el resto se ubica respecto a ella.', { title: 'Fija a uno' }),
+      sc(6, 'En una mesa de seis, «frente a» son puestos opuestos: con uno fijo en el puesto 1, el de enfrente está en el 4.', { title: 'Frente a frente' }),
+      sc(7, 'Ejemplo: cuatro amigos, Ana frente a Beto y Ciro a un lado de Ana. Entonces Dora queda frente a Ciro, el otro puesto libre junto a Ana.', { title: 'Ubicar paso a paso' }),
+    ], [
+      PU_ES('Ana, Beto, Carla, Dora, Eva y Felipe en una mesa redonda: Ana frente a Beto, Carla junto a Ana, Dora frente a Carla y Eva no está junto a Beto. ¿Quién queda frente a Eva?', [['Beto queda frente a Ana', 'Beto queda junto a Ana'], ['Dora queda junto a Beto', 'Dora queda junto a Ana'], ['Eva entre Dora y Ana', 'Eva junto a Beto'], ['Felipe frente a Eva', 'Carla frente a Eva']],
+        'Con Ana fija y Beto enfrente, Carla va a un lado de Ana y Dora enfrente de Carla, junto a Beto. Quedan dos puestos: el que toca a Beto es de Felipe y Eva va entre Dora y Ana, frente a Felipe.',
+        'Fija a Ana y ubica a quien tiene la pista de «frente a» con ella. Luego llena los puestos que quedan.'),
+      PU_ES('Cinco personas en una mesa redonda: Q está junto a P y a R, T está junto a P, y S no está junto a P', [['P entre Q y T', 'P entre Q y S'], ['R al otro lado de Q', 'R junto a T'], ['S entre R y T', 'S entre P y R']],
+        'P tiene dos vecinos: Q y T. Q tiene a P y a R. El único puesto libre, entre R y T, es de S, que así no toca a P.',
+        'Cada persona tiene exactamente dos vecinos. Empieza por quien tiene más pistas.'),
+    ]),
+    PU_L('pu-or-3', 'Tablas de doble entrada', [
+      sc(6, 'Cuando hay que emparejar personas con cosas, se arma una **tabla**: personas en las filas, opciones en las columnas.', { title: 'La tabla de doble entrada' }),
+      sc(6, 'Cada pista pone una ✗. Cada fila y cada columna tiene un solo ✓: si en una fila queda un único hueco, ese es el ✓, y su columna se tacha.', { title: 'Un solo ✓ por fila y columna' }),
+      sc(6, 'Las pistas negativas («no tiene…») son las más útiles: van tachando hasta dejar una sola posibilidad.', { title: 'Tachar hasta que quede una' }),
+    ], [
+      PU_ES('Lina, Mía y Sara estudian Medicina, Derecho e Ingeniería. Lina no estudia Medicina ni Derecho; Mía no estudia Medicina', [['Lina: Ingeniería', 'Lina: Derecho'], ['Mía: Derecho', 'Mía: Medicina'], ['Sara: Medicina', 'Sara: Ingeniería']],
+        'A Lina solo le queda Ingeniería. Mía no estudia Medicina ni Ingeniería (ya es de Lina): Derecho. Sara, Medicina.',
+        'Empieza por la persona con más carreras tachadas.'),
+      PU_ES('A, B, C y D tienen perro, gato, loro y pez. A no tiene perro ni gato, el loro no es de A ni de C, B tiene el perro y C no tiene pez', [['A tiene el pez', 'A tiene el loro'], ['C tiene el gato', 'C tiene el loro'], ['D tiene el loro', 'D tiene el gato']],
+        'A no tiene perro, gato ni loro: tiene el pez. C no tiene pez, loro ni perro: el gato. A D le queda el loro.',
+        'Tacha en la fila de A todo lo que no puede tener: queda una sola mascota.'),
+    ]),
+    PU_L('pu-or-4', 'Condiciones: tiene que, podría, no puede', [
+      sc(6, '«Si A participa, B no» solo dice algo cuando A está. Si A no está, B puede estar o no.', { title: 'Leer bien un «si…»' }),
+      sc(7, '**Necesariamente** cierto: pasa en todas las soluciones. **Podría** ser cierto: pasa en al menos una. **No puede** ser: no pasa en ninguna.', { title: 'Tiene que · podría · no puede' }),
+      sc(6, 'Cuando hay pocas posibilidades, lo más seguro es listarlas todas y revisar cada afirmación contra la lista.', { title: 'Lista los casos' }),
+    ], [
+      PU_ES('Se eligen 2 de 4 personas (F, G, H, J). Si F está, G no; H está solo si J está. ¿Qué es necesariamente cierto?', [['parejas posibles: FJ, GJ, HJ', 'parejas posibles: FG, FJ, HJ'], ['J está en todas', 'F está en todas'], ['J va en el comité', 'H va en el comité']],
+        'FG no (F excluye a G); FH y GH no (H necesita a J). Quedan FJ, GJ y HJ: J está siempre.',
+        'Escribe las seis parejas posibles y tacha las que rompen alguna condición.'),
+      PU_ES('Cinco charlas de lunes a viernes (Arte, Biología, Cine, Danza y Economía): Arte antes que Cine, Danza el miércoles y Economía el lunes o el viernes. ¿Qué se puede afirmar?', [['Arte necesita un día después', 'Arte puede ir de último'], ['Arte no puede ir el viernes', 'Cine no puede ir el martes'], ['Biología podría ir el jueves', 'Biología tiene que ir el jueves']],
+        'Arte va antes que Cine, así que nunca el viernes. Cine el martes sí puede (Arte el lunes). Biología puede ir el jueves, pero no está obligada.',
+        'Para «no puede» basta un motivo; para «podría» basta un ejemplo que cumpla todo.'),
+    ]),
+  ] },
+
+  // ---------------- 4 · Proporcionalidad ----------------
+  { world: 'pu-proporcion', title: 'Proporcionalidad y porcentajes', block: 'razonamiento', lessons: [
+    PU_L('pu-pr-1', 'Razones, repartos y escalas', [
+      sc(6, 'Una razón compara dos cantidades: 2 de agua por cada 3 de harina. Dos razones iguales forman una proporción, y en ella los productos cruzados coinciden.', { title: '$\\tfrac ab = \\tfrac cd \\Rightarrow ad = bc$' }),
+      sc(7, 'Repartir 600 000 en razón 2 : 3 es partir en $2 + 3 = 5$ partes de 120 000: unos reciben 240 000 y otros 360 000.', { title: 'Reparto directo' }),
+      sc(6, 'Escala 1 : 50 000 significa que 1 cm del mapa son 50 000 cm de la realidad: 500 m.', { title: 'Escalas' }),
+    ], [
+      PU_CTA('Tres socios aportan 2, 3 y 5 millones y reparten 40 millones de ganancia según lo aportado. Plantea cuánto recibe el que aportó 3', { sol: ['40', '/', '(', '2', '+', '3', '+', '5', ')', '*', '3'], traps: ['10'], answer: 12, unit: 'millones' },
+        'Son $2 + 3 + 5 = 10$ partes de 4 millones cada una; el socio del medio recibe 3 partes: 12 millones.',
+        'Cuenta cuántas partes iguales hay en total y cuánto vale cada parte.'),
+      PU_CTA('En un mapa a escala 1 : 25 000 dos pueblos están a 8 cm. Plantea la distancia real en km', { sol: ['8', '*', '25000', '/', '100000'], traps: ['1000'], answer: 2, unit: 'km' },
+        '$8 \\cdot 25\\,000 = 200\\,000$ cm. Un kilómetro tiene $100\\,000$ cm: son 2 km.',
+        'Pasa primero a centímetros reales y luego convierte: un kilómetro tiene cien mil centímetros.'),
+    ]),
+    PU_L('pu-pr-2', 'Regla de tres simple y compuesta', [
+      sc(6, '**Directa**: si una crece, la otra crece igual (más kilos, más precio). Se mantiene el cociente.', { title: 'Directa: cociente constante' }),
+      sc(6, '**Inversa**: si una crece, la otra decrece (más obreros, menos días). Se mantiene el producto: 6 obreros en 10 días = 4 obreros en 15 días.', { title: 'Inversa: producto constante' }),
+      sc(7, 'En la **compuesta** se compara cada magnitud con la incógnita por separado, o se cuenta el trabajo total (obreros × horas × días).', { title: 'Compuesta' }),
+    ], [
+      PU_ES('5 llaves iguales llenan un tanque en 12 h. ¿Cuánto tardan 3 llaves?', [['más llaves, menos horas: inversa', 'más llaves, más horas: directa'], ['5 · 12 = 3 · t', '5/12 = 3/t'], ['t = 20 h', 't = 7.2 h']],
+        'Es inversa: el trabajo $5 \\cdot 12 = 60$ llave-horas se mantiene, y $60 \\div 3 = 20$ h.',
+        'Pregúntate si con menos llaves el tanque se llena más rápido o más despacio.'),
+      PU_CTA('8 obreros trabajando 6 h diarias hacen una obra en 15 días. Plantea cuántos días tardan 10 obreros trabajando 8 h diarias', { sol: ['8', '*', '6', '*', '15', '/', '(', '10', '*', '8', ')'], traps: ['5'], answer: 9, unit: 'días' },
+        'La obra pide $8 \\cdot 6 \\cdot 15 = 720$ horas de trabajo; el nuevo grupo hace $10 \\cdot 8 = 80$ por día: 9 días.',
+        'Calcula cuántas horas de trabajo de un obrero necesita la obra completa.'),
+    ]),
+    PU_L('pu-pr-3', 'Velocidad y trabajo conjunto', [
+      sc(6, 'Distancia = velocidad × tiempo. Dos móviles que se acercan suman sus velocidades.', { title: '$d = v \\cdot t$' }),
+      sc(7, 'En el trabajo conjunto se suman las **rapideces**, no los tiempos: si una llave llena un tanque en 3 h (1/3 por hora) y otra en 6 h (1/6), juntas llenan 1/2 por hora: 2 h.', { title: 'Se suman las rapideces' }),
+      sc(6, 'El error típico es promediar los tiempos: juntas siempre tardan menos que la más rápida sola.', { title: 'Juntas, menos que la más rápida' }),
+    ], [
+      PU_CTA('Un pintor pinta una casa en 4 días y su ayudante en 12. Plantea cuántos días tardan juntos', { sol: ['1', '/', '(', '1', '/', '4', '+', '1', '/', '12', ')'], traps: ['16', '8'], answer: 3, unit: 'días' },
+        'Por día pintan $\\tfrac14 + \\tfrac1{12} = \\tfrac{4}{12} = \\tfrac13$ de la casa: tardan 3 días.',
+        'Halla qué parte de la casa pinta cada uno en un día y súmalas.'),
+      PU_ES('Dos ciudades están a 360 km. Un bus sale de cada una a la vez, uno hacia el otro, a 70 y 50 km/h. ¿Cuándo se cruzan?', [['se acercan a 120 km/h', 'se acercan a 20 km/h'], ['360 ÷ 120', '360 ÷ 70'], ['en 3 horas', 'en 18 horas']],
+        'La distancia entre ellos baja $70 + 50 = 120$ km cada hora: $360 \\div 120 = 3$ h.',
+        'Piensa cuántos kilómetros se acortan entre los dos buses en una hora.'),
+    ]),
+    PU_L('pu-pr-4', 'Porcentajes', [
+      sc(6, 'Tres preguntas distintas: el **p % de N** es $\\tfrac{p}{100} N$; **qué % es A de B** es $\\tfrac{A}{B} \\cdot 100$; y la **cantidad original** se halla al revés.', { title: 'Tres preguntas' }),
+      sc(6, 'Si el 30 % de un número es 45, el 10 % es 15 y el 100 % es 150.', { title: 'Del 30 % al 100 %' }),
+      sc(6, 'Pasar por el 10 % o por el 1 % es un atajo que evita cuentas largas sin calculadora.', { title: 'Atajo: el 10 %' }),
+    ], [
+      PU_CTA('En una prueba acertó 18 de 24 preguntas. Plantea el porcentaje de aciertos', { sol: ['18', '/', '24', '*', '100'], traps: ['6'], answer: 75, unit: '%' },
+        '$\\tfrac{18}{24} = \\tfrac34 = 75\\,\\%$.',
+        'Divide lo acertado entre el total y pásalo a «de cada 100».'),
+      PU_CTA('Pagué 42 000 pesos, que eran el 70 % del precio. Plantea el precio original', { sol: ['42000', '/', '70', '*', '100'], traps: ['30'], answer: 60000, unit: 'pesos' },
+        'Si 70 % son 42 000, el 1 % es 600 y el 100 % es 60 000.',
+        'Halla primero cuánto vale el 1 % del precio.'),
+    ]),
+    PU_L('pu-pr-5', 'Aumentos, descuentos e IVA', [
+      sc(6, 'Aumentar un 20 % es multiplicar por 1.2; descontar un 20 % es multiplicar por 0.8.', { title: '$\\times 1.2$ y $\\times 0.8$' }),
+      sc(7, 'Los porcentajes sucesivos **se multiplican**, no se suman: subir 20 % y bajar 20 % es $\\times 1.2 \\times 0.8 = \\times 0.96$: se pierde el 4 %.', { title: 'Sucesivos: se multiplican' }),
+      sc(7, 'El IVA del 19 %: precio con IVA = base × 1.19, y la base sale dividiendo entre 1.19. Interés simple: $I = C \\cdot r \\cdot t$.', { title: 'IVA e interés simple' }),
+    ], [
+      PU_ES('Un precio sube un 10 % y luego baja un 10 %. ¿Cuál es el cambio total?', [['× 1.1 y luego × 0.9', '+10 − 10 = 0'], ['1.1 · 0.9 = 0.99', '1.1 · 0.9 = 1'], ['baja 1 %', 'no cambia']],
+        'Los cambios se multiplican: $1.1 \\cdot 0.9 = 0.99$. El precio final es el 99 % del inicial.',
+        'El segundo 10 % se calcula sobre un precio que ya había cambiado.'),
+      PU_CTA('Un celular cuesta 1 190 000 pesos con el IVA del 19 % incluido. Plantea el precio sin IVA', { sol: ['1190000', '/', '1.19'], traps: ['0.19', '19'], answer: 1000000, unit: 'pesos' },
+        'Precio con IVA = base × 1.19, así que la base es $1\\,190\\,000 \\div 1.19 = 1\\,000\\,000$.',
+        'Restar el 19 % del precio final no funciona: el 19 % se cobró sobre la base, no sobre el total.'),
+    ]),
+  ] },
+
+  // ---------------- 5 · Conteo ----------------
+  { world: 'pu-conteo', title: 'Conteo y combinatoria', block: 'razonamiento', lessons: [
+    PU_L('pu-co-1', 'Principio multiplicativo y árboles', [
+      sc(6, 'Si una decisión tiene $m$ opciones y otra $n$, juntas tienen $m \\cdot n$. Si son excluyentes («esto **o** aquello»), se suman.', { title: 'Multiplicar y sumar' }),
+      sc(6, 'Un árbol lo muestra: 3 camisas y 2 pantalones dan 3 ramas de 2: 6 pintas.', { title: 'Diagrama de árbol' }),
+      sc(6, 'Una placa con 3 letras de 26 y 3 dígitos tiene $26^3 \\cdot 10^3$ posibilidades.', { title: '$26^3 \\cdot 10^3$' }),
+    ], [
+      PU_CTA('Un menú tiene 3 entradas, 4 platos fuertes y 2 postres. Plantea cuántos almuerzos distintos hay', { sol: ['3', '*', '4', '*', '2'], traps: ['9'], answer: 24 },
+        'Cada entrada se combina con cada plato y cada postre: $3 \\cdot 4 \\cdot 2 = 24$.',
+        'Imagina el árbol: de cada entrada salen ramas de platos, y de cada plato, ramas de postres.'),
+      PU_CTA('Plantea cuántas claves de 4 dígitos (0 a 9) tienen todos sus dígitos distintos', { sol: ['10', '*', '9', '*', '8', '*', '7'], traps: ['4'], answer: 5040 },
+        'El primer dígito tiene 10 opciones, el segundo 9, el tercero 8 y el cuarto 7: $5\\,040$.',
+        'Cada dígito que se usa ya no está disponible para el siguiente.'),
+    ]),
+    PU_L('pu-co-2', 'Permutaciones', [
+      sc(6, 'Para ordenar cinco libros en un estante hay 5 opciones para el primer puesto, 4 para el segundo, y así: $5 \\cdot 4 \\cdot 3 \\cdot 2 \\cdot 1 = 120$. Eso se escribe $5!$.', { title: '$n! = n(n-1)\\cdots 1$' }),
+      sc(6, 'Con letras repetidas se divide entre las formas de reordenar las iguales: ARROZ tiene $\\tfrac{5!}{2!} = 60$ ordenamientos.', { title: 'Con repetición' }),
+      sc(6, 'En una mesa redonda girar no cambia el orden: se fija a uno y se ordena al resto, $(n - 1)!$. Cinco personas: 24.', { title: 'Circulares: $(n-1)!$' }),
+    ], [
+      PU_CTA('Plantea de cuántas maneras se pueden sentar 6 personas en una mesa redonda', { sol: ['5', '*', '4', '*', '3', '*', '2', '*', '1'], traps: ['6'], answer: 120 },
+        'Se fija a una persona y se ordenan las otras 5: $5! = 120$.',
+        'Si todos se corren un puesto, la mesa se ve igual: fija a una persona y ordena a las demás.'),
+      PU_CTA('Plantea cuántas palabras (con o sin sentido) se forman con las letras de CASAS', { sol: ['120', '/', '(', '2', '*', '2', ')'], traps: ['5'], answer: 30 },
+        'Cinco letras dan $5! = 120$ órdenes, pero la A y la S se repiten dos veces cada una: $\\tfrac{120}{2 \\cdot 2} = 30$.',
+        'Cuenta como si las cinco letras fueran distintas y luego quita los órdenes que solo intercambian letras iguales.'),
+    ]),
+    PU_L('pu-co-3', 'Combinaciones', [
+      sc(6, 'Si el orden **no importa** (un comité, un grupo), se divide entre las formas de ordenar a los elegidos.', { title: 'Importa el orden o no' }),
+      sc(6, 'Elegir 2 de 5: hay $5 \\cdot 4 = 20$ parejas ordenadas, pero cada pareja aparece 2 veces: 10.', { title: '$C(n,k) = \\tfrac{n!}{k!(n-k)!}$' }),
+      sc(6, 'Prueba rápida: si intercambio a dos elegidos y el resultado es el mismo, el orden no importa.', { title: 'La prueba del intercambio' }),
+    ], [
+      PU_ES('De 8 jugadores se eligen 3 para un equipo sin cargos. ¿Cuántos equipos hay?', [['el orden no importa', 'el orden importa'], ['8 · 7 · 6 ÷ (3 · 2 · 1)', '8 · 7 · 6'], ['56', '336']],
+        'Sin cargos el orden no importa: $\\tfrac{8 \\cdot 7 \\cdot 6}{3!} = \\tfrac{336}{6} = 56$.',
+        'Si intercambias a dos jugadores elegidos, ¿cambia el equipo?'),
+      PU_CTA('En un torneo de 10 equipos todos juegan una vez contra todos. Plantea cuántos partidos hay', { sol: ['10', '*', '9', '/', '2'], traps: ['100'], answer: 45 },
+        'Cada equipo juega 9 partidos, pero cada partido tiene dos equipos: $\\tfrac{10 \\cdot 9}{2} = 45$.',
+        'Si cuentas los partidos de cada equipo, cada partido queda contado dos veces.'),
+    ]),
+    PU_L('pu-co-4', 'Conteo por casos y complemento', [
+      sc(6, 'Si los casos no se cruzan, se cuentan por separado y se suman.', { title: 'Por casos' }),
+      sc(7, 'A veces es más fácil contar lo que **no** sirve y restarlo del total. Números de 3 cifras con al menos un 7: $900 - 8 \\cdot 9 \\cdot 9 = 252$.', { title: 'Complemento: total menos lo que no sirve' }),
+      sc(6, 'Si dos casos se cruzan, lo que está en los dos se cuenta dos veces: hay que restarlo una vez.', { title: 'No contar dos veces' }),
+    ], [
+      PU_CTA('Con las letras A, B, C, D y E (pueden repetirse) se forman claves de 3 letras. Plantea cuántas tienen al menos una A', { sol: ['5', '^', '3', '-', '4', '^', '3'], traps: ['3'], answer: 61 },
+        'Hay $5^3 = 125$ claves; sin ninguna A hay $4^3 = 64$. Con al menos una A: $125 - 64 = 61$.',
+        '«Al menos una» tiene muchos casos. Cuenta mejor las claves que no tienen ninguna A.'),
+      PU_ES('¿Cuántos números de dos cifras son pares o múltiplos de 5?', [['pares: 45', 'pares: 50'], ['múltiplos de 5: 18', 'múltiplos de 5: 20'], ['se restan los múltiplos de 10', 'se suman sin restar'], ['45 + 18 − 9 = 54', '45 + 18 = 63']],
+        'Pares de 10 a 98: 45. Múltiplos de 5 de 10 a 95: 18. Los múltiplos de 10 (9) están en los dos grupos: $45 + 18 - 9 = 54$.',
+        'Algunos números son pares y múltiplos de 5 a la vez: revisa si los estás contando dos veces.'),
+    ]),
+    PU_L('pu-co-5', 'Contar figuras y caminos', [
+      sc(6, 'Para contar triángulos o cuadrados en un dibujo, se cuentan **por tamaños**: primero los pequeños, luego los de dos piezas, y así.', { title: 'Por tamaños' }),
+      sc(7, 'Caminos en una cuadrícula moviéndose solo a la derecha y hacia arriba: de (0, 0) a (3, 2) hay que elegir cuáles de los 5 pasos son «arriba»: $C(5, 2) = 10$.', { title: 'Caminos = combinaciones' }),
+      sc(6, 'Las diagonales de un polígono de $n$ lados: $\\tfrac{n(n - 3)}{2}$. Un hexágono tiene 9.', { title: 'Diagonales' }),
+    ], [
+      PU_CTA('Plantea cuántas diagonales tiene un decágono', { sol: ['10', '*', '(', '10', '-', '3', ')', '/', '2'], traps: ['45'], answer: 35 },
+        'Desde cada vértice salen $10 - 3 = 7$ diagonales y cada una se cuenta desde sus dos extremos: $\\tfrac{10 \\cdot 7}{2} = 35$.',
+        'Desde un vértice no se traza diagonal a sí mismo ni a sus dos vecinos.'),
+      PU_ES('Caminos más cortos de 4 cuadras a la derecha y 2 hacia arriba', [['6 pasos: 4 D y 2 A', '8 pasos'], ['elegir dónde van las 2 A', 'ordenar 6 pasos distintos'], ['6 · 5 ÷ 2 = 15', '6! = 720']],
+        'Todo camino corto tiene 6 pasos; basta elegir cuáles 2 son hacia arriba: $C(6, 2) = 15$.',
+        'Todos los caminos cortos tienen los mismos pasos; solo cambia en qué momento se sube.'),
+    ]),
+  ] },
+
+  // ---------------- 6 · Razonamiento espacial ----------------
+  { world: 'pu-espacial', title: 'Razonamiento espacial', block: 'razonamiento', lessons: [
+    PU_L('pu-es-1', 'Rejillas y caminos', [
+      sc(6, 'En una rejilla sin diagonales, el camino más corto mide lo que hay que avanzar en horizontal **más** lo que hay que avanzar en vertical.', { title: 'Distancia por cuadras' }),
+      sc(6, 'De (2, 1) a (5, 3) son 3 cuadras en horizontal y 2 en vertical: 5 cuadras, por cualquier camino que no retroceda.', { title: '$3 + 2 = 5$' }),
+      sc(6, 'Un obstáculo obliga a rodear: el camino más corto bordea el obstáculo sin devolverse.', { title: 'Rodear sin devolverse' }),
+    ], [
+      PU_ES('En una ciudad cuadriculada vas de la esquina (1, 2) a la (6, 5) sin diagonales. ¿Cuánto mide el camino más corto?', [['5 cuadras al este', '6 cuadras al este'], ['3 cuadras al norte', '5 cuadras al norte'], ['8 cuadras', '√34 cuadras']],
+        'En horizontal $6 - 1 = 5$ y en vertical $5 - 2 = 3$: $5 + 3 = 8$ cuadras. La línea recta ($\\sqrt{34}$) no se puede caminar.',
+        'Resta las coordenadas por separado. Por las calles no se puede ir en diagonal.'),
+      PU_CTA('Un robot va 3 cuadras al norte, 5 al este, 7 al sur y 2 al oeste. Plantea a cuántas cuadras queda del inicio por el camino más corto', { sol: ['7', '-', '3', '+', '5', '-', '2'], traps: ['17'], answer: 7, unit: 'cuadras' },
+        'En vertical termina $7 - 3 = 4$ al sur; en horizontal, $5 - 2 = 3$ al este. Camino más corto: $4 + 3 = 7$.',
+        'Los movimientos opuestos se cancelan entre sí. Calcula aparte cuánto quedó en vertical y en horizontal.'),
+    ]),
+    PU_L('pu-es-2', 'Vistas y cubos', [
+      sc(6, 'La vista **superior** muestra qué columnas hay; la **frontal**, la columna más alta de cada fila vista de frente.', { title: 'Vistas' }),
+      sc(6, 'Al contar cubos de una construcción, los que no se ven también cuentan: los que sostienen a los de arriba.', { title: 'Cubos ocultos' }),
+      sc(7, 'Un cubo de 3 × 3 × 3 pintado por fuera y cortado en cubitos: 8 tienen tres caras pintadas (esquinas), 12 dos (aristas), 6 una (centros de cara) y 1 ninguna.', { title: '8 · 12 · 6 · 1' }),
+    ], [
+      PU_ES('Un cubo de 4 × 4 × 4 se pinta por fuera y se corta en cubitos de 1. ¿Cuántos tienen exactamente dos caras pintadas?', [['están en las aristas, sin las esquinas', 'están en las esquinas'], ['2 por arista', '4 por arista'], ['12 · 2 = 24', '8 · 2 = 16']],
+        'Cada arista tiene 4 cubitos; quitando las 2 esquinas quedan 2. El cubo tiene 12 aristas: $24$.',
+        'Los cubitos con tres caras pintadas están en las esquinas. ¿Dónde están los que tienen dos?'),
+      PU_CTA('En ese mismo cubo de 4 × 4 × 4, plantea cuántos cubitos no tienen ninguna cara pintada', { sol: ['(', '4', '-', '2', ')', '^', '3'], traps: ['64'], answer: 8 },
+        'Los que no tocan ninguna cara forman un cubo interior de $2 \\times 2 \\times 2 = 8$.',
+        'Quita la capa exterior por todos los lados: ¿qué cubo queda adentro?'),
+    ]),
+    PU_L('pu-es-3', 'Desarrollos del cubo', [
+      sc(6, 'Un **desarrollo** es el cubo abierto y aplanado: seis cuadrados unidos por sus lados. Hay 11 formas distintas.', { title: 'Abrir el cubo' }),
+      sc(7, 'En una fila de tres cuadrados del desarrollo, el primero y el tercero quedan **opuestos** al armar el cubo. Dos caras que se tocan nunca son opuestas.', { title: 'Saltar uno = opuestos' }),
+      sc(6, 'En un dado común, las caras opuestas suman 7: 1 con 6, 2 con 5, 3 con 4.', { title: 'El dado: suman 7' }),
+    ], [
+      PU_ES('Desarrollo en cruz: fila 1-2-3-4 y las caras 5 y 6 arriba y abajo de la 2. ¿Qué cara queda opuesta a la 1?', [['en la fila se salta una', 'las vecinas son opuestas'], ['1 opuesta a 3', '1 opuesta a 2'], ['5 opuesta a 6', '5 opuesta a 1']],
+        'En la fila, la 1 queda frente a la 3 y la 2 frente a la 4. Las dos alas de la 2, la 5 y la 6, quedan una frente a la otra.',
+        'Arma el cubo con la cara 2 de fondo y dobla las demás hacia arriba.'),
+      PU_ES('Un dado muestra 1 arriba, 2 al frente y 3 a la derecha. Lo volteas hacia adelante (lo de arriba pasa al frente). ¿Qué queda arriba?', [['el 1 pasa al frente', 'el 1 pasa atrás'], ['atrás estaba el 5', 'atrás estaba el 6'], ['arriba queda el 5', 'arriba queda el 2']],
+        'Al voltear hacia adelante, la cara de atrás sube. Atrás estaba la opuesta del 2: el 5.',
+        'Las caras opuestas suman 7. Piensa cuál cara está atrás antes de voltearlo.'),
+    ]),
+    PU_L('pu-es-4', 'Giros, espejos y dobleces', [
+      sc(6, 'Girar una figura no le cambia la «mano»: una F girada sigue siendo F. **Reflejarla** en un espejo sí: la F queda al revés.', { title: 'Girar ≠ reflejar' }),
+      sc(6, 'Un espejo vertical cambia izquierda por derecha, pero no arriba por abajo.', { title: 'El espejo' }),
+      sc(7, 'Doblar una hoja duplica sus capas: con tres dobleces hay $2 \\cdot 2 \\cdot 2 = 8$ capas, y un solo corte las atraviesa todas.', { title: 'Cada doblez duplica' }),
+    ], [
+      PU_ES('Doblas una hoja por la mitad dos veces y haces un agujero que atraviesa todas las capas. Al abrirla, ¿cuántos agujeros hay?', [['cada doblez duplica las capas', 'cada doblez suma una capa'], ['4 capas', '3 capas'], ['4 agujeros', '2 agujeros']],
+        'Primer doblez: 2 capas; segundo: 4. El agujero atraviesa las 4, así que al abrir hay 4.',
+        'Cuenta cuántas capas de papel hay justo antes de perforar.'),
+      PU_ES('En el espejo, un reloj de agujas parece marcar las 3:00. ¿Qué hora es?', [['el espejo cambia izquierda y derecha', 'el espejo cambia arriba y abajo'], ['la aguja corta queda en el 9', 'la aguja corta queda en el 6'], ['son las 9:00', 'son las 3:00']],
+        'El reflejo cambia los lados: la aguja corta que se ve en el 3 está en realidad en el 9.',
+        'Un espejo vertical no mueve las 12 ni las 6, pero sí cambia los números de un lado por los del otro.'),
+    ]),
+  ] },
+
+  // ---------------- 7 · Secuencias ----------------
+  { world: 'pu-secuencias', title: 'Secuencias y patrones', block: 'razonamiento', lessons: [
+    PU_L('pu-se-1', 'Sucesiones numéricas', [
+      sc(6, 'Primera prueba: las **diferencias**. Si son iguales, es aritmética: $a_n = a_1 + (n - 1)d$. Si los cocientes son iguales, es geométrica.', { title: 'Diferencias y cocientes' }),
+      sc(6, 'Si las diferencias no son iguales, se miran las diferencias de las diferencias, o se buscan cuadrados y cubos: 1, 8, 27, 64…', { title: 'Segundo nivel' }),
+      sc(6, 'Otras familias: alternadas (dos sucesiones intercaladas) y tipo Fibonacci: 3, 4, 7, 11, 18…, cada término es la suma de los dos anteriores.', { title: 'Alternadas y Fibonacci' }),
+    ], [
+      PU_ES('Halla el término que sigue en 2, 5, 10, 17, 26, …', [['diferencias: 3, 5, 7, 9', 'diferencias: 3, 3, 3, 3'], ['la siguiente diferencia es 11', 'la siguiente diferencia es 10'], ['26 + 11 = 37', '26 + 9 = 35']],
+        'Las diferencias son los impares: la siguiente es 11 y el término es 37. Son los cuadrados más uno: $6^2 + 1$.',
+        'Resta cada término del siguiente y mira cómo cambian esas restas.'),
+      PU_CTA('En la sucesión 7, 11, 15, 19, … plantea el término 50', { sol: ['7', '+', '49', '*', '4'], traps: ['50'], answer: 203 },
+        'Diferencia 4. Del término 1 al 50 hay 49 saltos: $7 + 49 \\cdot 4 = 203$.',
+        'Del primer término al quincuagésimo no hay 50 saltos: cuenta bien cuántos hay.'),
+    ]),
+    PU_L('pu-se-2', 'Letras y figuras', [
+      sc(6, 'Con letras se pasa a números por su posición: A = 1, B = 2… Aquí se usa el alfabeto sin la Ñ, salvo que el enunciado diga otra cosa.', { title: 'Letras como números' }),
+      sc(6, 'Ejemplo: C, F, I, L son 3, 6, 9, 12: saltos de 3. La siguiente es la 15, la O.', { title: 'C, F, I, L, O' }),
+      sc(6, 'En secuencias de figuras se pregunta qué cambia (lados, giro, color, número de puntos) y cuánto cambia cada vez.', { title: 'Figuras: qué cambia' }),
+    ], [
+      PU_ES('Halla la letra que sigue (alfabeto sin Ñ): B, E, H, K, …', [['saltos de 3 letras', 'saltos de 2 letras'], ['K es la 11: sigue la 14', 'K es la 11: sigue la 13'], ['N', 'M']],
+        'B, E, H y K son 2, 5, 8 y 11: saltos de 3. Sigue la 14, la N.',
+        'Escribe la posición de cada letra en el alfabeto y mira los saltos.'),
+      PU_ES('Halla la letra que sigue (alfabeto sin Ñ): A, C, F, J, O, …', [['saltos de 2, 3, 4 y 5', 'saltos de 2'], ['el salto siguiente es 6', 'el salto siguiente es 5'], ['15 + 6 = 21: U', '15 + 5 = 20: T']],
+        'Posiciones 1, 3, 6, 10, 15: los saltos crecen de uno en uno. Sigue $15 + 6 = 21$, la U.',
+        'Los saltos no son iguales: mira cómo crecen.'),
+    ]),
+    PU_L('pu-se-3', 'Patrones cíclicos', [
+      sc(6, 'Si algo se repite cada $k$ pasos, lo que cae en la posición $n$ depende solo del **residuo** de $n \\div k$.', { title: 'El residuo manda' }),
+      sc(7, 'Hoy es martes. Dentro de 100 días: $100 = 14 \\cdot 7 + 2$, así que las 14 semanas no cuentan y quedan 2 días: jueves.', { title: '$100 = 14 \\cdot 7 + 2$' }),
+      sc(6, 'Si el residuo es 0, cae en el último elemento del ciclo, no en el primero.', { title: 'Residuo 0' }),
+    ], [
+      PU_ES('Una cinta repite rojo, verde, azul, amarillo, rojo, verde… ¿De qué color es la cuenta 2026?', [['el ciclo tiene 4 colores', 'el ciclo tiene 3 colores'], ['2026 = 4 · 506 + 2', '2026 = 4 · 506 + 0'], ['residuo 2: verde', 'residuo 2: rojo']],
+        '2026 deja residuo 2 al dividir entre 4: es como la cuenta 2, verde.',
+        'Divide la posición entre el largo del ciclo y fíjate solo en lo que sobra.'),
+      PU_ES('Si hoy es miércoles, ¿qué día será dentro de 60 días?', [['60 = 7 · 8 + 4', '60 = 7 · 8 + 2'], ['4 días después del miércoles', '4 días antes del miércoles'], ['domingo', 'sábado']],
+        'Ocho semanas completas no cambian el día; los 4 días que sobran llevan del miércoles al domingo.',
+        'Las semanas completas te devuelven al mismo día. Cuenta solo los días que sobran.'),
+    ]),
+  ] },
+
+  // ---------------- 8 · Codificación ----------------
+  { world: 'pu-codigos', title: 'Codificación', block: 'razonamiento', lessons: [
+    PU_L('pu-cd-1', 'Claves de sustitución', [
+      sc(6, 'Una clave de sustitución cambia cada letra por otra o por un símbolo, siempre con la misma regla.', { title: 'Sustituir' }),
+      sc(6, 'En la clave César cada letra se corre $k$ lugares: con $k = 3$, SOL se escribe VRO.', { title: 'César' }),
+      sc(6, 'Si el enunciado trae una tabla (Morse, binario, cifrado), se sigue al pie de la letra: el examen no pide saberla de memoria.', { title: 'Seguir la tabla' }),
+    ], [
+      PU_ES('Con la clave César de +2 (alfabeto sin Ñ), ¿cómo se escribe LUNA?', [['L → N', 'L → M'], ['U → W', 'U → V'], ['NWPC', 'NWOC']],
+        'Cada letra avanza dos: L → N, U → W, N → P, A → C: NWPC.',
+        'Avanza dos letras desde cada una; cuenta con cuidado alrededor de la N.'),
+      PU_ES('Si A = 1, B = 2, … (sin Ñ), ¿cuánto suma la palabra CASA?', [['C = 3 y A = 1', 'C = 2 y A = 1'], ['S = 19', 'S = 20'], ['3 + 1 + 19 + 1 = 24', '3 + 1 + 20 + 1 = 25']],
+        'C = 3, A = 1, S = 19 (sin Ñ): $3 + 1 + 19 + 1 = 24$.',
+        'Sin la Ñ, la S es la letra 19. Cuenta desde la A si dudas.'),
+    ]),
+    PU_L('pu-cd-2', 'Deducir la regla', [
+      sc(6, 'Para descubrir un código se comparan los ejemplos posición por posición y se propone una regla.', { title: 'Comparar ejemplos' }),
+      sc(6, 'Si GATO se escribe HBUP, cada letra avanzó una: la regla es +1.', { title: 'GATO → HBUP' }),
+      sc(6, 'La regla se **comprueba** con otro ejemplo antes de usarla: una regla que sirve para uno solo no es la regla.', { title: 'Comprobar' }),
+    ], [
+      PU_ES('En un código, MESA se escribe ASEM y LOTE se escribe ETOL. ¿Cómo se escribe RUTA?', [['se invierte el orden', 'se corre cada letra'], ['ATUR', 'SVUB']],
+        'Los dos ejemplos son la palabra al revés: RUTA se escribe ATUR.',
+        'Mira dónde quedó la primera letra de cada palabra.'),
+      PU_ES('En otro código, 25 → 7, 48 → 12 y 93 → 12. ¿Qué da 76?', [['se suman las cifras', 'se restan las cifras'], ['7 + 6', '7 · 6'], ['13', '42']],
+        '$2 + 5 = 7$, $4 + 8 = 12$, $9 + 3 = 12$: se suman las cifras. $7 + 6 = 13$.',
+        'Prueba operaciones sencillas con las dos cifras de cada número y comprueba con los tres ejemplos.'),
+    ]),
+  ] },
+
+  // ---------------- 9 · Tablas y gráficas ----------------
+  { world: 'pu-graficas', title: 'Tablas y gráficas', block: 'razonamiento', lessons: [
+    PU_L('pu-gr-1', 'Leer gráficas', [
+      sc(6, 'Antes de leer datos: el título, qué mide cada eje y la **escala**. Un eje que no empieza en cero exagera las diferencias.', { title: 'Título, ejes y escala' }),
+      sc(6, 'Barras para comparar, líneas para ver cambios en el tiempo, circulares para partes de un todo (360° = 100 %).', { title: 'Cada gráfica, su uso' }),
+      sc(6, 'La variación porcentual es $\\tfrac{\\text{nuevo} - \\text{viejo}}{\\text{viejo}} \\cdot 100$: de 50 a 60 es un aumento del 20 %.', { title: 'Variación porcentual' }),
+    ], [
+      PU_CTA('Una tienda vendió 80 unidades en enero y 100 en febrero. Plantea el aumento porcentual', { sol: ['(', '100', '-', '80', ')', '/', '80', '*', '100'], traps: ['20'], answer: 25, unit: '%' },
+        'Aumentó 20 unidades sobre 80: $\\tfrac{20}{80} = 25\\,\\%$.',
+        'El cambio se compara con el valor de antes, no con el de después.'),
+      PU_CTA('En una gráfica circular, el sector «transporte» mide 72°. Plantea qué porcentaje del gasto es', { sol: ['72', '/', '360', '*', '100'], traps: ['180'], answer: 20, unit: '%' },
+        'El círculo completo, 360°, es el 100 %: $\\tfrac{72}{360} = 20\\,\\%$.',
+        'Un círculo completo representa el total de los gastos.'),
+    ]),
+    PU_L('pu-gr-2', 'Promedio, mediana y moda', [
+      sc(6, '**Promedio**: la suma dividida entre la cantidad de datos. **Moda**: el dato que más se repite.', { title: 'Promedio y moda' }),
+      sc(6, '**Mediana**: el dato del medio con los datos **ordenados**. Si hay dos en el medio, se promedian.', { title: 'Mediana' }),
+      sc(6, 'Con 3, 7, 7, 8 y 10: el promedio es $35 \\div 5 = 7$, la mediana es 7 y la moda es 7.', { title: 'Un ejemplo' }),
+    ], [
+      PU_ES('Halla la mediana de 4, 9, 2, 9, 6, 8', [['ordenar: 2, 4, 6, 8, 9, 9', 'tomar el del medio sin ordenar'], ['en el medio están 6 y 8', 'en el medio está el 9'], ['mediana 7', 'mediana 6']],
+        'Ordenados: 2, 4, 6, 8, 9, 9. Hay dos en el medio, 6 y 8: la mediana es 7.',
+        'La mediana solo tiene sentido con los datos ordenados. Fíjate si la cantidad de datos es par.'),
+      PU_CTA('Las notas de Juan son 3.5, 4 y 2.5. Plantea qué nota necesita en la cuarta para que el promedio sea 3.5', { sol: ['3.5', '*', '4', '-', '(', '3.5', '+', '4', '+', '2.5', ')'], traps: ['3'], answer: 4 },
+        'Para promediar 3.5 en cuatro notas, la suma debe ser $3.5 \\cdot 4 = 14$. Ya lleva 10: le falta un 4.',
+        'Piensa cuánto deben sumar las cuatro notas para dar ese promedio.'),
+    ]),
+    PU_L('pu-gr-3', 'Qué se puede concluir', [
+      sc(6, 'Una conclusión vale solo si los datos la sostienen. Si la gráfica no lo muestra, no se puede afirmar.', { title: 'Lo que los datos permiten' }),
+      sc(6, 'Que dos cosas suban juntas no prueba que una cause la otra: puede haber una tercera que mueva a las dos.', { title: 'Relación no es causa' }),
+      sc(6, 'Una muestra habla de quienes respondieron, no de todo el país.', { title: 'La muestra' }),
+    ], [
+      PU_SUB('Encuesta en un colegio: toca las conclusiones que los datos permiten', [
+        { title: 'Se encuestó a 200 estudiantes de un colegio: 120 prefieren estudiar de noche y 80 de día.', text: 'El 60 % de los encuestados prefiere la noche.|Los que estudian de noche sacan mejores notas.|En el país, la mayoría estudia de noche.|Hay 40 encuestados más que prefieren la noche.', ask: 'Toca las conclusiones que se pueden sacar de la encuesta', answer: [0, 3] },
+      ], '$\\tfrac{120}{200} = 60\\,\\%$ y $120 - 80 = 40$ salen de los datos. Las notas no se midieron, y 200 estudiantes de un colegio no hablan por todo el país.',
+        'Para cada afirmación, busca el número de la encuesta que la respalda. Si no hay ninguno, no se puede concluir.'),
+      PU_ES('En una ciudad, los meses con más venta de helados tienen más ahogamientos en piscinas', [['los dos suben con el calor', 'los helados causan ahogamientos'], ['es una relación, no una causa', 'la causa está demostrada']],
+        'El calor aumenta las dos cosas a la vez: hay relación, pero los helados no causan los ahogamientos.',
+        'Busca algo que haga subir las dos cosas en los mismos meses.'),
+    ]),
+  ] },
+
+  // ---------------- 10 · Lógica proposicional ----------------
+  { world: 'pu-logica', title: 'Lógica proposicional', block: 'razonamiento', lessons: [
+    PU_L('pu-lo-1', 'Conectivos y tablas de verdad', [
+      sc(6, '$p \\wedge q$ («y») es verdadera solo si las dos lo son; $p \\vee q$ («o») es falsa solo si las dos son falsas; $\\neg p$ cambia el valor.', { title: 'Y, o, no' }),
+      sc(7, '$p \\to q$ («si p, entonces q») solo es falsa cuando $p$ es verdadera y $q$ falsa: la promesa se rompe solo así. $p \\leftrightarrow q$ es verdadera si coinciden.', { title: 'Condicional y bicondicional' }),
+      sc(6, 'Una tabla de verdad prueba todas las combinaciones: con dos letras son 4 filas.', { title: 'Tablas de verdad' }),
+    ], [
+      PU_ES('$p$: «llueve» es V y $q$: «hace frío» es F. Halla el valor de $(p \\vee q) \\to \\neg p$', [['p ∨ q es V', 'p ∨ q es F'], ['¬p es F', '¬p es V'], ['V → F es F', 'V → F es V']],
+        '$p \\vee q$ es verdadera porque $p$ lo es; $\\neg p$ es falsa; y verdadero → falso es falso.',
+        'Resuelve primero lo que está entre paréntesis y la negación; el condicional va al final.'),
+      PU_ES('¿En qué caso es falsa la promesa «Si estudio, apruebo»?', [['solo en un caso', 'en dos casos'], ['estudio y no apruebo', 'no estudio y apruebo']],
+        'Un condicional solo falla cuando se cumple la condición y no el resultado: estudiar y no aprobar.',
+        'Piensa cuándo podrías reclamar que la promesa se incumplió.'),
+    ]),
+    PU_L('pu-lo-2', 'Negación y De Morgan', [
+      sc(6, 'Leyes de De Morgan: negar un «y» da un «o» de negaciones, y negar un «o» da un «y» de negaciones.', { title: '$\\neg(p \\wedge q) \\equiv \\neg p \\vee \\neg q$' }),
+      sc(6, '«Todos son» se niega con «**alguno no es**», no con «ninguno es». «Ninguno es» se niega con «alguno es».', { title: 'Negar cuantificadores' }),
+      sc(6, 'Ejemplo: la negación de «todos los buses llegaron» es «algún bus no llegó».', { title: 'Un ejemplo' }),
+    ], [
+      PU_ES('Niega, de abajo hacia arriba, «Todos los estudiantes trajeron el carné» y luego «Juan canta y baila»', [
+        ['basta uno que no lo traiga', 'tendrían que faltar todos'], ['alguno no trajo el carné', 'ninguno trajo el carné'],
+        ['basta que falle una de las dos', 'tienen que fallar las dos'], ['Juan no canta o no baila', 'Juan no canta y no baila'],
+      ], '«Todos lo trajeron» deja de ser cierto si al menos uno no lo trajo. «Canta y baila» falla si falta cualquiera de las dos cosas.',
+        'Para negar una frase, piensa qué es lo mínimo que tendría que pasar para que deje de ser cierta.'),
+      PU_ES('Niega la frase «Si llueve, me quedo en casa»', [['p → q equivale a ¬p ∨ q', 'p → q equivale a p ∧ q'], ['su negación es p ∧ ¬q', 'su negación es ¬p → ¬q'], ['llueve y no me quedo', 'si no llueve, no me quedo']],
+        'El condicional solo falla si llueve y no me quedo: esa es su negación.',
+        'Busca el único caso en que la frase original sería falsa.'),
+    ]),
+    PU_L('pu-lo-3', 'El condicional', [
+      sc(7, 'De $p \\to q$ salen tres: recíproco $q \\to p$, contrario $\\neg p \\to \\neg q$ y contrarrecíproco $\\neg q \\to \\neg p$. Solo el contrarrecíproco es equivalente.', { title: 'Recíproco, contrario y contrarrecíproco' }),
+      sc(6, '**Modus ponens**: si $p \\to q$ y pasa $p$, pasa $q$. **Modus tollens**: si $p \\to q$ y no pasa $q$, no pasó $p$.', { title: 'Ponens y tollens' }),
+      sc(6, 'Error frecuente: «si llueve, la calle se moja; la calle está mojada, entonces llovió». La calle pudo mojarse por otra razón.', { title: 'La falacia del consecuente' }),
+    ], [
+      PU_ES('«Si un número es múltiplo de 6, es par.» ¿Qué frase es equivalente?', [['solo el contrarrecíproco equivale', 'el recíproco equivale'], ['si no es par, no es múltiplo de 6', 'si es par, es múltiplo de 6', 'si no es múltiplo de 6, no es par']],
+        'El contrarrecíproco, $\\neg q \\to \\neg p$, dice lo mismo. Las otras fallan: 4 es par y no es múltiplo de 6; 4 no es múltiplo de 6 y es par.',
+        'Prueba cada frase con un número concreto, por ejemplo el 4.'),
+      PU_ES('Premisas: «Si hay examen, Ana estudia» y «Ana no estudió». ¿Qué se concluye?', [['modus tollens', 'modus ponens'], ['no hubo examen', 'hubo examen']],
+        'Si hubiera habido examen, Ana habría estudiado. No estudió: no hubo examen (modus tollens).',
+        'La segunda premisa niega el resultado del condicional, no la condición.'),
+    ]),
+    PU_L('pu-lo-4', 'Cuantificadores y silogismos', [
+      sc(6, 'Todos, algunos, ninguno: se dibujan con círculos. «Todos los A son B» es un círculo A dentro de B.', { title: 'Dibujar con círculos' }),
+      sc(6, 'Si todos los A son B y todos los B son C, todos los A son C: los círculos quedan uno dentro de otro.', { title: 'Encadenar' }),
+      sc(6, '«Algunos A son B» solo dice que los círculos se tocan; no dice nada de los demás A.', { title: '«Algunos» es poco' }),
+    ], [
+      PU_ES('«Todos los médicos son profesionales. Algunos profesionales son deportistas.» ¿Qué se concluye de los médicos?', [['médicos dentro de profesionales', 'profesionales dentro de médicos'], ['puede haber deportistas no médicos', 'todo deportista toca a los médicos'], ['nada asegura médicos deportistas', 'algunos médicos son deportistas']],
+        'Los deportistas pueden ser profesionales que no son médicos: no se puede asegurar que haya médicos deportistas.',
+        'Dibuja los círculos y busca una forma de ponerlos que cumpla las dos frases sin que médicos y deportistas se toquen.'),
+      PU_ES('«Ningún reptil tiene plumas. Todos los loros tienen plumas.» ¿Qué se concluye?', [['loros dentro de «con plumas»', 'loros dentro de reptiles'], ['ningún loro es reptil', 'algunos loros son reptiles']],
+        'Los loros están dentro del círculo de los que tienen plumas, y ese círculo no toca a los reptiles: ningún loro es reptil.',
+        'Ubica primero el círculo de los loros respecto al de los animales con plumas.'),
+    ]),
+    PU_L('pu-lo-5', 'Verdad y mentira', [
+      sc(6, 'En los problemas de quién miente, se **supone** que alguien dice la verdad y se mira si todo cuadra.', { title: 'Suponer y revisar' }),
+      sc(7, 'A dice «B miente»; B dice «los dos decimos la verdad». Si B dijera la verdad, A también, y A dice que B miente: contradicción. Así que B miente, y A dice la verdad.', { title: 'Buscar la contradicción' }),
+      sc(6, 'Si una suposición lleva a una contradicción, se descarta; la que no choca con nada es la respuesta.', { title: 'Descartar' }),
+    ], [
+      PU_ES('Solo uno dice la verdad. Pedro: «Yo no rompí el vidrio». Luis: «Fue Pedro». Juan: «Yo no fui». ¿Quién lo rompió?', [['si fue Pedro, dos dicen la verdad', 'si fue Pedro, uno dice la verdad'], ['si fue Luis, dos dicen la verdad', 'si fue Luis, uno dice la verdad'], ['fue Juan', 'fue Luis']],
+        'Si fue Juan, solo Pedro dice la verdad, como pide el enunciado. Con Pedro o con Luis como culpables habría dos verdades.',
+        'Prueba con cada uno como culpable y cuenta cuántos dirían la verdad.'),
+      PU_ES('Ana: «Beto miente». Beto: «Carla miente». Carla: «Ana y Beto mienten». ¿Quién dice la verdad?', [['Carla no puede decir la verdad', 'Carla dice la verdad'], ['Beto dice la verdad', 'Beto miente'], ['Ana miente', 'Ana dice la verdad']],
+        'Si Carla dijera la verdad, Ana mentiría, y entonces Beto diría la verdad: contradicción. Carla miente, Beto dice la verdad y Ana miente.',
+        'Empieza suponiendo que Carla dice la verdad y sigue las consecuencias.'),
+    ]),
+  ] },
+
+  // ---------------- 11 · Operadores definidos ----------------
+  { world: 'pu-operadores', title: 'Operadores definidos', block: 'razonamiento', lessons: [
+    PU_L('pu-op-1', 'Operaciones nuevas', [
+      sc(6, 'Un símbolo nuevo es una máquina: en $a \\star b = 2a - b$ se reemplaza $a$ por el primer número y $b$ por el segundo.', { title: '$a \\star b = 2a - b$' }),
+      sc(6, 'Con esa regla $5 \\star 3 = 7$ pero $3 \\star 5 = 1$: el orden importa, la operación no es conmutativa.', { title: 'No es conmutativa' }),
+      sc(6, 'Si la operación viene en una tabla, el resultado está en el cruce de la fila del primero con la columna del segundo.', { title: 'Por tabla' }),
+    ], [
+      PU_CTA('Si $a \\triangle b = a^2 - 3b$, plantea $4 \\triangle 2$', { sol: ['4', '^', '2', '-', '3', '*', '2'], traps: ['1'], answer: 10 },
+        '$4^2 - 3 \\cdot 2 = 16 - 6 = 10$.',
+        'Reemplaza $a$ por el primer número y $b$ por el segundo, sin cambiar nada más.'),
+      PU_ES('Con $a \\circ b = ab + a + b$, ¿hay un número $e$ tal que $a \\circ e = a$ para todo $a$?', [['a ∘ e = a para todo a', 'e ∘ e = e'], ['ae + a + e = a', 'ae = a'], ['e(a + 1) = 0: e = 0', 'e = 1']],
+        'Hay que despejar $e$ en $ae + a + e = a$: $e(a + 1) = 0$, así que $e = 0$. Comprobación: $a \\circ 0 = 0 + a + 0 = a$.',
+        'Escribe $a \\circ e$ con la regla y exige que dé $a$.'),
+    ]),
+    PU_L('pu-op-2', 'Anidados y ecuaciones', [
+      sc(6, 'Las operaciones anidadas se resuelven **de adentro hacia afuera**, como los paréntesis.', { title: 'De adentro hacia afuera' }),
+      sc(6, 'Si el operador está en una ecuación, se reemplaza con su regla y se despeja como siempre.', { title: 'Ecuaciones con operador' }),
+      sc(6, 'Ejemplo: con $a \\# b = a + 2b$, $(1 \\# 1) \\# 2 = 3 \\# 2 = 7$.', { title: 'Un anidado' }),
+    ], [
+      PU_ES('Con $a \\star b = 2a - b$, calcula $(3 \\star 1) \\star 4$', [['3 ★ 1 = 5', '3 ★ 1 = 7'], ['5 ★ 4 = 6', '5 ★ 4 = 14']],
+        '$3 \\star 1 = 6 - 1 = 5$ y luego $5 \\star 4 = 10 - 4 = 6$.',
+        'Resuelve primero el paréntesis; su resultado es el primer número de la siguiente operación.'),
+      PU_ES('Con $x \\oplus y = 3x + y$, halla $x$ si $x \\oplus 4 = 19$', [['3x + 4 = 19', 'x + 12 = 19'], ['3x = 15', '3x = 23'], ['x = 5', 'x = 7']],
+        'La regla da $3x + 4 = 19$, así $3x = 15$ y $x = 5$.',
+        'Escribe la ecuación usando la regla del operador; el 4 ocupa el lugar de $y$.'),
+    ]),
+  ] },
+
+  // ---------------- 12 · Aritmética y promedios ----------------
+  { world: 'pu-aritmetica', title: 'Aritmética y promedios', block: 'razonamiento', lessons: [
+    PU_L('pu-ar-1', 'Fracciones de lo que queda', [
+      sc(7, 'Un problema para empezar: Rosa gasta $\\tfrac38$ de su dinero en el mercado y después $\\tfrac25$ de lo que le queda en un almuerzo. Al final le sobran 36 000 pesos. Al final se sabe cuánto tenía.', { title: 'El dinero de Rosa' }),
+      sc(7, 'Cuando se dice «de lo que queda», la torta ya es más pequeña: la segunda fracción se corta sobre el pedazo que sobró, no sobre la torta entera. Es como un descuento que se aplica sobre un precio ya rebajado.', { title: 'Se corta lo que sobró' }),
+      sc(7, 'Una jarra de 1 200 mL: se sirve $\\tfrac13$ y luego la mitad de lo que queda. La primera vez salen 400 mL y quedan 800; la segunda salen 400 (la mitad de 800), no 600 (la mitad de 1 200). Quedan 400 mL.', { title: 'La jarra' }),
+      sc(7, 'El método: después de cada gasto se anota la fracción que **queda**. Si se gasta $\\tfrac ab$, queda $1 - \\tfrac ab$. Lo que queda al final es el **producto** de lo que queda en cada paso.', { title: 'Multiplicar lo que queda' }),
+      sc(8, 'Ejemplo: de 300 kg de café se vende $\\tfrac16$ y luego $\\tfrac35$ de lo que queda. Primero queda $\\tfrac56$ y después $\\tfrac25$ de eso: $\\tfrac56 \\cdot \\tfrac25 = \\tfrac13$. Sobran 100 kg (se vendieron 50 y luego 150).', { title: '$\\tfrac56 \\cdot \\tfrac25 = \\tfrac13$' }),
+      sc(8, 'El error típico: restar todo del total, $1 - \\tfrac16 - \\tfrac35 = \\tfrac{7}{30}$, que serían 70 kg. Es error porque los $\\tfrac35$ se toman de los 250 kg que quedaban, no de los 300: la segunda venta fue de 150 kg, no de 180.', { title: 'La trampa: restar del total' }),
+      sc(8, 'Hacia atrás: un viaje en que el primer día se recorre $\\tfrac12$ del camino, el segundo $\\tfrac14$ de lo que falta, y todavía faltan 120 km. Falta $\\tfrac12 \\cdot \\tfrac34 = \\tfrac38$ del camino: $\\tfrac18$ son 40 km y el camino mide 320 km.', { title: 'Del final al total' }),
+      sc(7, 'En el examen aparece con dinero, tanques, libros o pizzas, casi siempre con «de lo que queda» o «del resto». Entre las opciones está la que sale de restar todo del total: es la trampa. Si piden el total, se trabaja hacia atrás desde lo que sobra.', { title: 'Cómo aparece' }),
+      sc(7, 'Rosa: después del mercado le queda $\\tfrac58$. En el almuerzo se va $\\tfrac25$ de eso, así que conserva $\\tfrac35$: le queda $\\tfrac58 \\cdot \\tfrac35 = \\tfrac38$ de su dinero, que son los 36 000.', { title: 'Le queda $\\tfrac38$' }),
+      sc(7, 'Si $\\tfrac38$ son 36 000, $\\tfrac18$ son 12 000 y todo es $8 \\cdot 12\\,000 = 96\\,000$. Comprobación: gasta 36 000 y quedan 60 000; gasta $\\tfrac25$ de 60 000, 24 000, y quedan 36 000. Rosa tenía 96 000 pesos.', { title: 'Rosa tenía 96 000' }),
+    ], [
+      PU_ES('Un tanque lleno: se usan $\\tfrac25$ y luego $\\tfrac13$ de lo que quedó. ¿Qué fracción queda?', [['quedan 3/5', 'quedan 2/5'], ['1/3 de 3/5 = 1/5', '1/3 del total'], ['quedan 2/5', 'quedan 4/15']],
+        'Tras usar $\\tfrac25$ quedan $\\tfrac35$; un tercio de eso es $\\tfrac15$ y quedan $\\tfrac35 - \\tfrac15 = \\tfrac25$.',
+        'La segunda fracción se calcula sobre lo que había después del primer gasto.'),
+      PU_CTA('Pedro gastó la mitad de su dinero en un libro y $\\tfrac13$ de lo restante en almuerzo. Le quedan 20 000 pesos. Plantea cuánto tenía', { sol: ['20000', '*', '3'], traps: ['2'], answer: 60000, unit: 'pesos' },
+        'Queda $\\tfrac12 \\cdot \\tfrac23 = \\tfrac13$ del dinero, que son 20 000: tenía 60 000.',
+        'Multiplica las fracciones que van quedando para saber qué parte del total son esos 20 000.'),
+    ]),
+    PU_L('pu-ar-2', 'Promedios', [
+      sc(7, 'Un problema para empezar: en un curso de 20 estudiantes el promedio de una prueba fue 3.6. Los 8 que estudiaron en grupo promediaron 4.2. Al final se sabe el promedio de los otros 12.', { title: 'Los dos grupos' }),
+      sc(7, 'El promedio es **repartir por igual**: cuatro amigos ponen 5 000, 7 000, 2 000 y 6 000 para una pizza y juntan 20 000. Si cada uno hubiera puesto lo mismo, serían 5 000 por cabeza: ese reparto parejo es el promedio.', { title: 'Repartir por igual' }),
+      sc(7, 'Otra imagen: torres de fichas de distintas alturas. Se pasan fichas de las altas a las bajas hasta que todas quedan iguales: esa altura común es el promedio. Ninguna ficha se pierde: la **suma** no cambia.', { title: 'Nivelar torres' }),
+      sc(7, 'La llave: **promedio × cantidad = suma**. Casi todo problema se resuelve así: cada promedio se convierte en una suma, se ajustan las sumas (agregar, quitar o juntar) y al final se divide entre la cantidad nueva.', { title: 'Promedio × cantidad = suma' }),
+      sc(7, 'Ejemplo: 7 plantas miden en promedio 30 cm y se agrega una de 54 cm. Las siete suman $7 \\cdot 30 = 210$; con la nueva, $264$. El promedio nuevo es $264 \\div 8 = 33$ cm.', { title: 'Agregar un dato' }),
+      sc(8, 'El error típico: promediar los promedios. Un grupo de 6 con promedio 50 y otro de 2 con promedio 90 no promedian 70. Sus sumas son 300 y 180: juntos, $480 \\div 8 = 60$. El grupo grande pesa más.', { title: 'La trampa: promedio de promedios' }),
+      sc(8, 'Ponderado: cada nota pesa su porcentaje. Talleres 20 % con 4.5, parcial 30 % con 3.0 y final 50 % con 3.6: $0.2 \\cdot 4.5 + 0.3 \\cdot 3.0 + 0.5 \\cdot 3.6 = 0.9 + 0.9 + 1.8 = 3.6$.', { title: 'Promedio ponderado' }),
+      sc(7, 'El examen lo pregunta con un dato que falta, uno que entra o sale, o dos grupos que se juntan. Las opciones traen el promedio de los promedios o la resta de promedios: son trampas. Siempre se pasa por la suma.', { title: 'Cómo aparece' }),
+      sc(7, 'Los dos grupos: todo el curso suma $20 \\cdot 3.6 = 72$ puntos. Los 8 que estudiaron en grupo suman $8 \\cdot 4.2 = 33.6$.', { title: 'De promedios a sumas' }),
+      sc(7, 'Los otros 12 suman $72 - 33.6 = 38.4$, y su promedio es $38.4 \\div 12 = 3.2$. Comprobación: $33.6 + 12 \\cdot 3.2 = 33.6 + 38.4 = 72$. Los otros 12 promediaron 3.2.', { title: 'Promediaron 3.2' }),
+    ], [
+      PU_CTA('9 personas pesan en promedio 70 kg. Entra una más y el promedio sube a 71 kg. Plantea cuánto pesa', { sol: ['10', '*', '71', '-', '9', '*', '70'], traps: ['1'], answer: 80, unit: 'kg' },
+        'Antes sumaban $9 \\cdot 70 = 630$; ahora $10 \\cdot 71 = 710$. La nueva persona pesa la diferencia: 80 kg.',
+        'Calcula cuánto suman los pesos antes y después de que entre.'),
+      PU_CTA('Tres parciales valen 30 %, 30 % y 40 %, con notas 3.0, 4.0 y 4.5. Plantea la nota final', { sol: ['0.3', '*', '3', '+', '0.3', '*', '4', '+', '0.4', '*', '4.5'], traps: ['3.8'], answer: 3.9 },
+        '$0.3 \\cdot 3 + 0.3 \\cdot 4 + 0.4 \\cdot 4.5 = 0.9 + 1.2 + 1.8 = 3.9$.',
+        'Cada nota se multiplica por su peso en decimal y luego se suman.'),
+    ]),
+    PU_L('pu-ar-3', 'Criptoaritmética', [
+      sc(7, 'Un problema para empezar: en la suma $\\overline{AA} + \\overline{BB} = \\overline{1B4}$, cada letra es una cifra y letras distintas son cifras distintas. Al final se sabe cuánto vale cada letra.', { title: 'Dos cifras repetidas' }),
+      sc(7, 'Una criptoaritmética es una cuenta con las cifras tapadas: cada letra esconde una cifra, siempre la misma. Es como un candado de números: no se prueba al azar, se usan las pistas de cada columna para descartar.', { title: 'Cifras tapadas' }),
+      sc(7, 'Las cifras valen por su puesto, como el dinero: en 58 el 5 son cinco billetes de 10 y el 8, ocho monedas de 1. Por eso $\\overline{AB} = 10A + B$ y $\\overline{AA} = 10A + A = 11A$.', { title: 'Cada puesto vale distinto' }),
+      sc(8, 'El método: 1) empezar por la columna con más información, casi siempre las unidades o la cifra que sale sola adelante; 2) mirar qué se **lleva** a la columna siguiente; 3) reemplazar cada letra hallada en todas partes; 4) comprobar la cuenta completa.', { title: 'Columna por columna' }),
+      sc(8, 'Ejemplo: $\\overline{A3} + \\overline{2A} = \\overline{8B}$. En las decenas, $A + 2$ da 8, o 7 si se lleva uno. Sin llevar, $A = 6$ y las unidades dan $3 + 6 = 9 = B$. Llevando, $A = 5$, pero $3 + 5 = 8$ no lleva nada. Es $63 + 26 = 89$.', { title: '$63 + 26 = 89$' }),
+      sc(8, 'El error típico: olvidar lo que se lleva. En $\\overline{A8} + \\overline{A8} = \\overline{76}$, quien escribe $A + A = 7$ llega a $A = 3.5$, que no es una cifra. Las unidades $8 + 8 = 16$ dejan 6 y llevan 1: $A + A + 1 = 7$ y $A = 3$. Es $38 + 38 = 76$.', { title: 'La trampa: lo que se lleva' }),
+      sc(7, 'Dos ideas que ahorran tiempo: dos números de dos cifras suman a lo sumo $99 + 99 = 198$, así que si el resultado tiene tres cifras empieza por 1. Y si en una columna una letra más algo da la misma letra, ese algo es 0 (o 10 si viene una llevada).', { title: 'Atajos' }),
+      sc(7, 'El examen trae sumas o restas con letras, números que se invierten o «un número de dos cifras cuyas cifras…». Piden una letra, una suma de letras o el número. Con opciones, cada una se puede comprobar en la cuenta original.', { title: 'Cómo aparece' }),
+      sc(8, 'La suma: unidades, $A + B$ termina en 4, así que vale 4 o 14. Si fuera 4, las decenas también darían 4 y no habría centena: entonces $A + B = 14$, se escribe 4 y se lleva 1.', { title: 'Las unidades' }),
+      sc(8, 'Decenas: $A + B + 1 = 15$, se escribe 5 y se lleva 1 a la centena. Esa cifra 5 es B: $B = 5$ y $A = 14 - 5 = 9$. Comprobación: $99 + 55 = 154$.', { title: 'A = 9 y B = 5' }),
+    ], [
+      PU_ES('AB + BA = 165, con A − B = 3. Halla A y B', [['10A + B + 10B + A = 11(A + B)', '10A + B + 10B + A = 10(A + B)'], ['A + B = 15', 'A + B = 16'], ['A = 9 y B = 6', 'A = 8 y B = 7']],
+        '$11(A + B) = 165$ da $A + B = 15$, y con $A - B = 3$: $A = 9$, $B = 6$. Comprobación: $96 + 69 = 165$.',
+        'Escribe cada número de dos cifras como diez veces la primera más la segunda.'),
+      PU_ES('Cada letra es una cifra distinta: E + E + E = AE (un número de dos cifras). Halla A y E', [['3E = 10A + E', '3E = A + E'], ['2E = 10A', 'E = 10A'], ['A = 1 y E = 5', 'A = 2 y E = 10']],
+        '$3E = 10A + E$ da $E = 5A$; como E es una sola cifra, $A = 1$ y $E = 5$: $5 + 5 + 5 = 15$.',
+        'AE es un número de dos cifras: escríbelo como $10A + E$.'),
+    ]),
+    PU_L('pu-ar-4', 'Máximos y mínimos', [
+      sc(8, 'Un problema para empezar: en un cajón hay 5 pares de guantes negros y 3 pares blancos, todos sueltos y revueltos; cada par tiene un guante izquierdo y uno derecho. A oscuras, se quiere asegurar un par que se pueda usar. Al final se sabe cuántos guantes hay que sacar.', { title: 'Los guantes' }),
+      sc(7, '«Asegurar» no es tener suerte: es estar seguro **aunque todo salga mal**. Se imagina a un rival que escoge lo peor posible y se cuenta hasta dónde aguanta sin que pase lo pedido. Una más y ya no puede evitarlo.', { title: 'Pensar en la peor suerte' }),
+      sc(7, 'Como el paraguas: no se lleva por el día bonito, sino por el peor día. Con 3 habitaciones y 4 huéspedes, por mal que se repartan, en alguna habitación quedan dos: es el principio del palomar.', { title: 'El palomar' }),
+      sc(8, 'El método del peor caso: 1) qué tiene que pasar; 2) cuántas sacadas caben, como máximo, sin que pase (la peor suerte); 3) la respuesta es ese máximo + 1. Para un máximo o un mínimo con condiciones, en cambio, se llevan las demás cantidades a su extremo.', { title: 'Peor caso + 1' }),
+      sc(8, 'Ejemplo: una bolsa con 6 fichas rojas, 4 azules y 2 verdes. Para asegurar **tres del mismo color**, la peor suerte es dos de cada color: 6 fichas. La séptima ya completa un trío, rojo o azul. Se necesitan 7.', { title: 'Tres del mismo color' }),
+      sc(8, 'El error típico: confundir «del mismo color» con «de un color dado». Para asegurar **dos verdes** en esa bolsa no basta con pocas: en el peor caso salen antes las 6 rojas y las 4 azules. Hacen falta $6 + 4 + 2 = 12$: todas las fichas.', { title: 'La trampa: un color dado' }),
+      sc(8, 'Un máximo con condiciones: 5 amigos se reparten 30 caramelos, cada uno con al menos 2 y todos con cantidades distintas. Para que uno tenga lo más posible, los otros cuatro toman lo mínimo: 2, 3, 4 y 5, que suman 14. El mayor se queda con $30 - 14 = 16$.', { title: 'Los otros, al mínimo' }),
+      sc(7, 'En el examen aparece como «el mínimo número que hay que sacar para estar seguros», «al menos uno recibe…» o «el mayor valor posible». Una opción suele ser la cuenta con buena suerte: esa no asegura nada.', { title: 'Cómo aparece' }),
+      sc(8, 'Los guantes: sirve un negro izquierdo con un negro derecho, o lo mismo en blanco. La peor suerte es que salgan guantes de una sola mano, por ejemplo los 8 izquierdos (5 negros y 3 blancos): ocho guantes y ningún par.', { title: 'Todos de la misma mano' }),
+      sc(8, 'El noveno guante tiene que ser derecho y, como ya salieron todos los izquierdos, forma par con uno de su color. Hacen falta 9 guantes. No bastan 3 (dos colores más uno): ese conteo olvida las manos.', { title: 'Hacen falta 9' }),
+    ], [
+      PU_ES('Un cajón tiene 10 medias rojas y 10 azules, a oscuras. ¿Cuántas hay que sacar para asegurar dos del mismo color?', [['peor caso: una de cada color', 'peor caso: todas rojas'], ['2 + 1 = 3', '10 + 1 = 11']],
+        'En el peor caso salen una roja y una azul; la tercera tiene que repetir color.',
+        'Imagina la peor suerte posible: ¿cuántas puedes sacar sin tener todavía un par?'),
+      PU_ES('En el mismo cajón, ¿cuántas hay que sacar para asegurar dos rojas?', [['peor caso: salen todas las azules', 'peor caso: una de cada color'], ['10 + 2 = 12', '2 + 1 = 3']],
+        'En el peor caso salen las 10 azules primero; luego hacen falta 2 rojas: 12.',
+        'Ahora no sirve cualquier par: piensa en todo lo que puede salir antes de la segunda roja.'),
+    ]),
+  ] },
+
+  // ---------------- 13 · Ecuaciones ----------------
+  { world: 'pu-ecuaciones', title: 'Ecuaciones y planteamiento', block: 'razonamiento', lessons: [
+    PU_L('pu-ec-1', 'Del texto a la ecuación', [
+      sc(7, 'Un problema para empezar: Pedro pagó 96 000 pesos por una camisa y un pantalón, y el pantalón costó 15 000 más que el doble de la camisa. Al final se sabe cuánto costó cada prenda.', { title: 'La camisa y el pantalón' }),
+      sc(7, 'Plantear es **traducir**: el enunciado está en español y la ecuación en el idioma de las matemáticas. Como una receta, cada frase dice una operación, y el orden de las palabras dice el orden de las operaciones.', { title: 'Traducir' }),
+      sc(8, 'Un pequeño diccionario: «el doble» es $2x$; «la mitad», $\\tfrac{x}{2}$; «aumentado en 7», $+ 7$; «excede en 7» o «tiene 7 más», $+ 7$ sobre el menor; «es igual a» o «da», $=$; y dos números consecutivos, $x$ y $x + 1$.', { title: 'El diccionario' }),
+      sc(8, 'El método: 1) decidir qué es $x$ y escribirlo con palabras; 2) escribir **todo** lo demás con esa misma $x$; 3) buscar la frase que dice «es igual» y armar la ecuación; 4) resolver y comprobar con el enunciado, no con la ecuación.', { title: 'Decide qué es $x$' }),
+      sc(7, 'Ejemplo: «un número, aumentado en su mitad, da 42». Con $x$ el número: $x + \\tfrac{x}{2} = 42$, o sea $\\tfrac{3x}{2} = 42$, y $x = 28$. Comprobación con el enunciado: $28 + 14 = 42$.', { title: '$x + \\tfrac{x}{2} = 42$' }),
+      sc(8, 'El error típico está en las comas. «El doble de un número, disminuido en 6» es $2x - 6$; «el doble de un número disminuido en 6» es $2(x - 6)$. Con $x = 10$, la primera da 14 y la segunda 8: no son lo mismo.', { title: 'La trampa: las comas' }),
+      sc(8, 'Ejemplo: Marta tiene 12 láminas más que Iván y entre los dos tienen 50. Con $x$ las de Iván, Marta tiene $x + 12$, no otra $x$: $x + (x + 12) = 50$, $2x = 38$ y $x = 19$. Iván tiene 19 y Marta 31.', { title: 'Una sola letra' }),
+      sc(7, 'El examen da una situación (precios, edades, números, figuras) y opciones con números. Además de plantear, se puede **probar cada opción** en el enunciado: la que cumple todas las condiciones es la respuesta.', { title: 'Cómo aparece' }),
+      sc(7, 'La camisa y el pantalón: $x$ es el precio de la camisa. El pantalón vale «el doble más 15 000»: $2x + 15\\,000$. Juntos: $x + 2x + 15\\,000 = 96\\,000$.', { title: 'El planteamiento' }),
+      sc(8, 'Entonces $3x = 81\\,000$ y $x = 27\\,000$. La camisa costó 27 000 y el pantalón $2 \\cdot 27\\,000 + 15\\,000 = 69\\,000$. Comprobación: $27\\,000 + 69\\,000 = 96\\,000$.', { title: 'Camisa 27 000, pantalón 69 000' }),
+    ], [
+      PU_ORD('Encadena los pasos para «la suma de tres números consecutivos es 72»', '\\text{tres consecutivos suman 72}', ['x + (x + 1) + (x + 2) = 72', '3x + 3 = 72', '3x = 69', 'x = 23', '3x = 72', '3x = 75'], [0, 1, 2, 3], '⇒',
+        'Los consecutivos son $x$, $x + 1$ y $x + 2$: $3x + 3 = 72$, $3x = 69$, $x = 23$. Son 23, 24 y 25.',
+        'Si el primero es $x$, ¿cómo se escriben los dos que le siguen?'),
+      PU_ES('«El triple de un número, disminuido en 4, es igual al doble del número, aumentado en 6.» Halla el número', [['3x − 4 = 2x + 6', '3(x − 4) = 2x + 6'], ['x = 10', 'x = 2']],
+        'La coma dice que se resta 4 al triple: $3x - 4 = 2x + 6$, y $x = 10$.',
+        'Fíjate en las comas: dicen a qué se le resta el 4 y a qué se le suma el 6.'),
+    ]),
+    PU_L('pu-ec-2', 'Edades, mezclas y monedas', [
+      sc(7, 'Un problema para empezar: hoy una abuela tiene 66 años y su nieto 12. Al final se sabe dentro de cuántos años la abuela tendrá el triple de la edad de su nieto.', { title: 'La abuela y el nieto' }),
+      sc(7, 'En las edades, el tiempo pasa igual para todos: dentro de 5 años, cada persona tiene 5 años más. Por eso la **diferencia** de edades nunca cambia, aunque la razón (el doble, el triple) sí cambia.', { title: 'Todos cumplen años' }),
+      sc(7, 'En mezclas y monedas se conserva el **valor**: 3 monedas de 500 valen $3 \\cdot 500 = 1\\,500$, igual que 2 kilos a 4 000 valen 8 000. El valor de la mezcla es la suma de los valores de sus partes.', { title: 'Cantidad × precio' }),
+      sc(8, 'El método: una tabla. En edades, columnas «hoy» y «dentro de $t$» (o «hace $t$»), y una fila por persona. En mezclas y monedas, columnas «cantidad», «precio» y «valor = cantidad × precio». La ecuación sale de la frase que compara.', { title: 'Siempre una tabla' }),
+      sc(8, 'Ejemplo: en un bolsillo hay 16 monedas de 100 y de 500 que suman 4 400. Con $x$ monedas de 500, las de 100 son $16 - x$: $500x + 100(16 - x) = 4\\,400$. Queda $400x = 2\\,800$ y $x = 7$: 7 de 500 y 9 de 100.', { title: 'Las monedas del bolsillo' }),
+      sc(8, 'Ejemplo de edades: hace 4 años Sofía tenía el triple de la edad de su primo, que hoy tiene 10. El error típico es aplicar el triple a la edad de hoy, $3 \\cdot 10 = 30$. La comparación era hace 4 años: él tenía 6 y ella 18. Hoy ella tiene 22.', { title: 'La trampa: la fecha' }),
+      sc(8, 'Mezcla: 3 kilos de un dulce de 8 000 con 1 kilo de otro de 12 000. Valor: $24\\,000 + 12\\,000 = 36\\,000$ por 4 kilos, 9 000 el kilo. No es $\\tfrac{8\\,000 + 12\\,000}{2} = 10\\,000$: hay más kilos del barato.', { title: 'El precio de la mezcla' }),
+      sc(7, 'El examen pregunta la edad de hoy, cuántos años deben pasar o cuánto hay de cada ingrediente o moneda. Una buena prueba final: con las edades halladas, la diferencia debe ser la misma hoy y en el futuro.', { title: 'Cómo aparece' }),
+      sc(7, 'La abuela y el nieto: dentro de $t$ años tendrán $66 + t$ y $12 + t$. La condición es $66 + t = 3(12 + t)$, es decir, $66 + t = 36 + 3t$.', { title: 'La tabla de edades' }),
+      sc(8, 'Entonces $30 = 2t$ y $t = 15$: tendrán 81 y 27, y $81 = 3 \\cdot 27$. La diferencia sigue siendo 54, como hoy. Será dentro de 15 años.', { title: 'Dentro de 15 años' }),
+    ], [
+      PU_ES('Hoy Laura tiene el triple de la edad de su hijo; en 10 años tendrá el doble. Halla la edad del hijo hoy', [['L = 3h', 'L = h + 3'], ['3h + 10 = 2(h + 10)', '3h + 10 = 2h + 10'], ['h = 10', 'h = 20']],
+        'En 10 años: $3h + 10 = 2(h + 10)$, así $3h + 10 = 2h + 20$ y $h = 10$. Laura tiene 30.',
+        'Dentro de 10 años los dos tienen 10 años más: súmaselos a los dos.'),
+      PU_ES('Se mezclan 6 kg de café de 20 000 $/kg con café de 30 000 $/kg para que la mezcla cueste 24 000 $/kg. ¿Cuántos kg del caro?', [['120 000 + 30 000x = 24 000(6 + x)', '20 000 + 30 000 = 24 000x'], ['6 000x = 24 000', '54 000x = 144 000'], ['x = 4 kg', 'x = 2.7 kg']],
+        'Valor de las partes = valor de la mezcla: $120\\,000 + 30\\,000x = 144\\,000 + 24\\,000x$, así $6\\,000x = 24\\,000$ y $x = 4$.',
+        'Cada parte aporta su cantidad por su precio, y la mezcla pesa la suma de las dos cantidades.'),
+    ]),
+    PU_L('pu-ec-3', 'Sistemas y desigualdades', [
+      sc(7, 'Un problema para empezar: en un cine, 3 boletas de adulto y 2 de niño cuestan 62 000 pesos, y 2 de adulto y 3 de niño cuestan 58 000. Al final se sabe cuánto vale cada boleta.', { title: 'Las boletas del cine' }),
+      sc(8, 'Con dos cosas desconocidas hacen falta **dos pistas** distintas. Una sola, «una gaseosa y un helado cuestan 7 000», deja muchas parejas: 4 000 y 3 000, 5 000 y 2 000… La segunda pista deja solo una.', { title: 'Dos datos, dos incógnitas' }),
+      sc(7, 'Es como comparar dos recibos del mismo supermercado: si un recibo tiene un artículo más que el otro, la diferencia de precio es lo que cuesta ese artículo. **Restar** las compras hace desaparecer lo que tienen en común.', { title: 'Comparar recibos' }),
+      sc(8, 'El método de eliminación: se igualan los coeficientes de una incógnita (multiplicando una ecuación si hace falta) y se suman o restan las ecuaciones para que esa incógnita desaparezca. Con la que queda se halla la otra, y se comprueba en las dos.', { title: 'Eliminar una incógnita' }),
+      sc(7, 'Ejemplo: $3x + 2y = 16$ y $x + 2y = 8$. Restando, $2x = 8$ y $x = 4$. En la segunda, $4 + 2y = 8$ y $y = 2$. Comprobación en la primera: $12 + 4 = 16$.', { title: 'Restar las ecuaciones' }),
+      sc(8, 'Una desigualdad se despeja como una ecuación, con una diferencia: al multiplicar o dividir por un **negativo** el sentido se voltea. $2 < 5$, pero $-2 > -5$: multiplicar por $-1$ refleja la recta y el orden se invierte.', { title: 'El signo se voltea' }),
+      sc(8, 'Ejemplo: $5 - 4x \\ge 13$. Se resta 5: $-4x \\ge 8$. El error típico es dividir y dejar $x \\ge -2$. Al dividir entre $-4$ se voltea: $x \\le -2$. Comprobación: con $x = -3$, $5 + 12 = 17 \\ge 13$ sí cumple; con $x = 0$, $5 \\ge 13$ no.', { title: 'La trampa: no voltear' }),
+      sc(7, 'El examen plantea sistemas con compras, entradas, animales o vehículos, y desigualdades con presupuestos («con 50 000, la mayor cantidad…»). Con números enteros se revisa si el extremo entra o no: $x < 7$ no incluye el 7.', { title: 'Cómo aparece' }),
+      sc(8, 'Las boletas: sumando las dos compras, 5 de adulto y 5 de niño cuestan 120 000, así que una de cada una vale 24 000. Restándolas, una de adulto menos una de niño da 4 000.', { title: 'Sumar y restar' }),
+      sc(8, 'Si suman 24 000 y se diferencian en 4 000, la de adulto vale 14 000 y la de niño 10 000. Comprobación: $3 \\cdot 14\\,000 + 2 \\cdot 10\\,000 = 62\\,000$ y $2 \\cdot 14\\,000 + 3 \\cdot 10\\,000 = 58\\,000$.', { title: 'Adulto 14 000, niño 10 000' }),
+    ], [
+      PU_ES('En un parqueadero hay 20 vehículos entre carros y motos, y en total 64 ruedas. ¿Cuántos carros hay?', [['c + m = 20 y 4c + 2m = 64', 'c + m = 64 y 4c + 2m = 20'], ['quitando el doble de la primera: 2c = 24', '4c = 44'], ['12 carros y 8 motos', '8 carros y 12 motos']],
+        'Al restar $2(c + m) = 40$ de $4c + 2m = 64$ queda $2c = 24$: 12 carros y 8 motos ($48 + 16 = 64$ ruedas).',
+        'Una ecuación cuenta vehículos y la otra cuenta ruedas.'),
+      PU_ES('Resuelve $5 - 2x > 11$', [['−2x > 6', '−2x > 16'], ['x < −3', 'x > −3']],
+        'Restando 5: $-2x > 6$. Al dividir entre $-2$ el signo se voltea: $x < -3$.',
+        'Pasa el 5 al otro lado y fíjate en el signo del número que acompaña a $x$.'),
+    ]),
+  ] },
+
+  // ---------------- 14 · Conjuntos ----------------
+  { world: 'pu-conjuntos', title: 'Conjuntos', block: 'razonamiento', lessons: [
+    PU_L('pu-cj-1', 'Operaciones y Venn', [
+      sc(7, 'Un problema para empezar: en un grupo, A son los que hablan inglés y B los que hablan francés. $A \\cup B$ tiene 15 personas, $A - B$ tiene 6 y $B - A$ tiene 4. Al final se sabe cuántos hablan los dos idiomas y cuántos hablan inglés.', { title: 'Dos idiomas' }),
+      sc(7, 'Un conjunto es una bolsa de cosas bien definidas. Las operaciones son maneras de **juntar o separar** bolsas: juntar todo, quedarse con lo común, quitar lo que tiene la otra o mirar lo que quedó afuera.', { title: 'Juntar y separar' }),
+      sc(8, 'Dos listas de invitados a una fiesta, la de Ana y la de Beto. La **unión** es a quién invitan entre los dos, sin repetir; la **intersección**, los amigos en común; $A - B$, los que solo invita Ana; el **complemento** de A, la gente del barrio que Ana no invitó.', { title: 'Las listas de la fiesta' }),
+      sc(8, 'En símbolos: $A \\cup B$ (en A o en B), $A \\cap B$ (en los dos a la vez), $A - B$ (en A pero no en B) y $A^c$ (en el universo U pero no en A). Dos conjuntos parten el diagrama en 4 zonas: solo A, los dos, solo B y afuera.', { title: '∪ · ∩ · − · complemento' }),
+      sc(8, 'Ejemplo: en $U = \\{1, \\dots, 12\\}$, $A = \\{4, 8, 12\\}$ (los múltiplos de 4) y $B = \\{1, 2, 3, 4, 6, 12\\}$ (los divisores de 12). En el centro van el 4 y el 12; solo en A queda el 8, y solo en B, el 1, el 2, el 3 y el 6.', { title: 'Llenar las zonas' }),
+      sc(8, 'Entonces $A \\cap B = \\{4, 12\\}$, $A - B = \\{8\\}$ y $A \\cup B = \\{1, 2, 3, 4, 6, 8, 12\\}$, con 7 elementos. Afuera de los dos quedan 5, 7, 9, 10 y 11: eso es $(A \\cup B)^c$.', { title: 'Leer las operaciones' }),
+      sc(8, 'El error típico: confundir $A - B$ con $B - A$, o creer que la diferencia es restar los tamaños. Aquí $A - B = \\{8\\}$ y $B - A = \\{1, 2, 3, 6\\}$ son distintos, y $3 - 6 = -3$ no puede ser un número de elementos.', { title: 'La trampa: el orden importa' }),
+      sc(7, 'Con tres conjuntos el diagrama tiene 8 zonas. Se llena **del centro hacia afuera**: primero lo que está en los tres, después lo que está en exactamente dos y al final lo de uno solo.', { title: 'Tres conjuntos' }),
+      sc(7, 'El examen pide nombrar una zona sombreada, hallar una operación entre listas o contar elementos. Para nombrar una zona se dice en cuáles conjuntos está y en cuáles no: «en A y en B, pero no en C» es $(A \\cap B) - C$.', { title: 'Cómo aparece' }),
+      sc(8, 'Los idiomas: la unión tiene tres zonas, solo inglés (6), solo francés (4) y los dos. Los dos idiomas los hablan $15 - 6 - 4 = 5$ personas. Hablan inglés los de solo inglés más los de los dos: $n(A) = 6 + 5 = 11$.', { title: '5 hablan los dos' }),
+    ], [
+      PU_ES('$U = \\{1, \\dots, 10\\}$, A = los pares y B = los múltiplos de 3. Halla $A - B$', [['A = {2, 4, 6, 8, 10}', 'A = {1, 3, 5, 7, 9}'], ['A ∩ B = {6}', 'A ∩ B = {3, 6, 9}'], ['A − B = {2, 4, 8, 10}', 'A − B = {2, 4, 6, 8, 10}']],
+        'Los pares que también son múltiplos de 3 solo son el 6; quitándolo queda $\\{2, 4, 8, 10\\}$.',
+        'A − B son los elementos de A que no están en B: busca cuáles de A también están en B.'),
+      PU_ES('15 personas hablan inglés; 7 inglés y francés, 5 inglés y alemán, y 3 los tres. ¿Cuántas hablan solo inglés?', [['centro: 3', 'centro: 7'], ['solo I y F: 4; solo I y A: 2', 'solo I y F: 7; solo I y A: 5'], ['solo inglés: 15 − 9 = 6', 'solo inglés: 15 − 12 = 3']],
+        'Los 7 de inglés y francés incluyen a los 3 del centro: quedan 4. Igual, $5 - 3 = 2$. Solo inglés: $15 - 3 - 4 - 2 = 6$.',
+        'Llena primero la zona de los tres idiomas; los demás datos ya la incluyen.'),
+    ]),
+    PU_L('pu-cj-2', 'Encuestas', [
+      sc(8, 'Un problema para empezar: de 100 estudiantes, 50 leen novelas, 40 cómics y 30 poesía; 15 leen novelas y cómics, 12 novelas y poesía, 10 cómics y poesía, y 5 leen las tres cosas. Al final se sabe cuántos no leen nada y cuántos leen solo novelas.', { title: 'La encuesta de lectura' }),
+      sc(8, 'Al sumar dos listas, quien está en las dos **se cuenta dos veces**. Es como contar la gente de dos fotos que se traslapan: los que salen en las dos fotos no son el doble de personas. Se cuentan una vez y se descuenta lo repetido.', { title: 'Contados dos veces' }),
+      sc(8, 'La regla: $n(A \\cup B) = n(A) + n(B) - n(A \\cap B)$. Lo demás sale de las zonas: solo A $= n(A) - n(A \\cap B)$; ninguno $=$ total $-$ unión; exactamente uno $=$ unión $-$ los dos.', { title: '$n(A \\cup B) = n(A) + n(B) - n(A \\cap B)$' }),
+      sc(8, 'Ejemplo: de 80 clientes, 45 compran pan, 38 leche y 20 las dos cosas. Compran algo $45 + 38 - 20 = 63$; ninguna, $80 - 63 = 17$; solo pan, $45 - 20 = 25$; solo leche, $38 - 20 = 18$. Las zonas suman $25 + 20 + 18 = 63$.', { title: 'Pan y leche' }),
+      sc(8, 'El error típico: decir que compran algo $45 + 38 = 83$ clientes, más que los 80 que hay. Ese exceso avisa que los 20 de las dos cosas se contaron dos veces. Otro error: responder «solo pan» con 45, que incluye a los que también llevan leche.', { title: 'La trampa: sumar las listas' }),
+      sc(8, 'Hacia atrás: de 50 viajeros, 28 llevan maleta, 30 morral y 4 no llevan nada. Llevan algo $50 - 4 = 46$; como $28 + 30 = 58$, sobran 12: son los que llevan las dos cosas.', { title: 'El exceso es la intersección' }),
+      sc(8, 'Con tres grupos se llena el diagrama del centro hacia afuera: primero los que están en los tres; luego cada pareja **restando el centro**; al final cada grupo solo, restando lo que ya quedó dentro de su círculo.', { title: 'Del centro hacia afuera' }),
+      sc(7, 'El examen da una encuesta con dos o tres preferencias y pide «ninguno», «solo uno», «exactamente dos» o «al menos uno». Lo más seguro es dibujar el diagrama y escribir un número en cada zona antes de responder.', { title: 'Cómo aparece' }),
+      sc(8, 'La encuesta: en el centro, 5. Novelas y cómics sin poesía: $15 - 5 = 10$; novelas y poesía: $12 - 5 = 7$; cómics y poesía: $10 - 5 = 5$. Solo novelas: $50 - 10 - 7 - 5 = 28$.', { title: 'Solo novelas: 28' }),
+      sc(8, 'Solo cómics: $40 - 10 - 5 - 5 = 20$; solo poesía: $30 - 7 - 5 - 5 = 13$. Las siete zonas suman $5 + 10 + 7 + 5 + 28 + 20 + 13 = 88$: no leen nada $100 - 88 = 12$ estudiantes.', { title: 'Ninguno: 12' }),
+    ], [
+      play('encuesta-venn', 'Llena el diagrama de la encuesta', { rounds: [{ text: 'De 50 personas, 30 ven fútbol, 22 ven tenis y 10 ven los dos deportes.', labels: ['Fútbol', 'Tenis'], total: 50, a: 30, b: 22, both: 10 }] },
+        'Solo fútbol: $30 - 10 = 20$; los dos: 10; solo tenis: $22 - 10 = 12$; ninguno: $50 - 42 = 8$.',
+        { hint: 'Empieza por la zona de los dos deportes; luego réstala de cada grupo.' }),
+      PU_CTA('En un salón de 40, 25 aprobaron Matemáticas, 20 Lenguaje y 8 reprobaron las dos. Plantea cuántos aprobaron las dos', { sol: ['25', '+', '20', '-', '(', '40', '-', '8', ')'], traps: ['5'], answer: 13 },
+        'Aprobaron alguna $40 - 8 = 32$. Sumando $25 + 20 = 45$ se cuentan dos veces los de ambas: $45 - 32 = 13$.',
+        'Halla primero cuántos aprobaron al menos una materia.'),
+    ]),
+  ] },
+
+  // ---------------- 15 · Teoría de números ----------------
+  { world: 'pu-numeros', title: 'Teoría de números', block: 'razonamiento', lessons: [
+    PU_L('pu-nu-1', 'Primos y divisibilidad', [
+      sc(7, 'Un problema para empezar: en el número de tres cifras $\\overline{7A6}$ se borró la cifra del medio. Se sabe que el número es divisible por 4 y por 9. Al final se sabe qué cifra es A.', { title: 'La cifra borrada' }),
+      sc(7, 'Los primos son los **ladrillos** de los números: no se pueden partir en un producto de números más pequeños (el 7 solo es $1 \\cdot 7$). Todo número se arma multiplicando primos, y de una sola manera: $90 = 2 \\cdot 3 \\cdot 3 \\cdot 5$.', { title: 'Los ladrillos' }),
+      sc(7, 'Ser divisible por 5 es poder repartir en 5 grupos iguales sin que sobre nada, como 35 dulces entre 5 niños. Los criterios de divisibilidad son atajos para saberlo sin hacer la división.', { title: 'Repartir sin que sobre' }),
+      sc(9, 'Los atajos: por 2, termina en cifra par; por 5, en 0 o 5; por 3 o por 9, la suma de cifras es múltiplo de 3 o de 9; por 4, las dos últimas cifras forman un múltiplo de 4; por 6, por 2 y por 3 a la vez. Para contar divisores, a cada exponente se le suma 1 y se multiplica.', { title: 'Criterios de divisibilidad' }),
+      sc(8, 'Ejemplo: $1\\,236$. Termina en 6: divisible por 2. Sus cifras suman 12: divisible por 3, no por 9. Sus dos últimas, 36, son múltiplo de 4: divisible por 4. Por 2 y por 3: también por 6.', { title: 'Revisar el 1 236' }),
+      sc(8, 'Ejemplo: los divisores de 48. $48 = 2^4 \\cdot 3$: cada divisor lleva el 2 de 5 maneras (de 0 a 4 veces) y el 3 de 2 maneras. Son $5 \\cdot 2 = 10$: 1, 2, 3, 4, 6, 8, 12, 16, 24 y 48.', { title: '$(4 + 1)(1 + 1) = 10$' }),
+      sc(8, 'El error típico: multiplicar los exponentes sin sumarles 1. En $48 = 2^4 \\cdot 3$, $4 \\cdot 1 = 4$ olvida que un primo también puede ir cero veces: se pierden el 1, el 3 y otros divisores. Otro error: creer que el 1 es primo, cuando tiene un solo divisor.', { title: 'La trampa: el exponente 0' }),
+      sc(8, 'El examen pide reconocer un primo entre opciones, hallar una cifra que falta para que un número sea divisible, o contar divisores. Para saber si un número menor que 121 es primo basta probar 2, 3, 5 y 7, porque $11^2 = 121$.', { title: 'Cómo aparece' }),
+      sc(8, 'La cifra borrada: para ser divisible por 4, el final $\\overline{A6}$ debe ser 16, 36, 56, 76 o 96, así que A es impar. Para ser divisible por 9, $7 + A + 6 = 13 + A$ debe ser múltiplo de 9: solo sirve $A = 5$.', { title: 'Dos condiciones' }),
+      sc(8, 'Con $A = 5$ el número es 756: termina en 56, que es $4 \\cdot 14$, y sus cifras suman 18. En efecto, $756 = 4 \\cdot 189 = 9 \\cdot 84$. La cifra borrada es 5.', { title: 'A = 5' }),
+    ], [
+      PU_ES('¿Es 2 574 divisible por 6?', [['es par: divisible por 2', 'termina en 4: no es par'], ['2 + 5 + 7 + 4 = 18: divisible por 3', 'suma 18: no es divisible por 3'], ['divisible por 6', 'no es divisible por 6']],
+        'Es par y sus cifras suman 18, múltiplo de 3: es divisible por 2 y por 3, así que por 6.',
+        'Un número es múltiplo de 6 cuando es múltiplo de 2 y de 3 a la vez.'),
+      PU_ES('¿Cuántos divisores tiene 72?', [['72 = 2³ · 3²', '72 = 2⁴ · 3'], ['(3 + 1)(2 + 1)', '3 · 2'], ['12 divisores', '6 divisores']],
+        '$72 = 8 \\cdot 9 = 2^3 \\cdot 3^2$: $(3 + 1)(2 + 1) = 12$ divisores.',
+        'Descompón en primos y suma uno a cada exponente antes de multiplicar.'),
+    ]),
+    PU_L('pu-nu-2', 'MCM y MCD', [
+      sc(8, 'Un problema para empezar: un carpintero tiene tres tablas de 90, 120 y 150 cm y quiere cortarlas en trozos iguales, lo más largos posible, sin que sobre nada. Al final se sabe cuánto mide cada trozo y cuántos salen.', { title: 'Las tablas del carpintero' }),
+      sc(8, 'El **MCM** responde «cuándo vuelven a coincidir»: dos luces que titilan cada 6 y cada 8 segundos se encienden juntas en los múltiplos comunes, 24, 48, 72… El primero, 24, es el mínimo común múltiplo.', { title: 'MCM: coincidir' }),
+      sc(8, 'El **MCD** responde «el tamaño más grande para partir en partes iguales sin que sobre»: como cortar dos cintas de 20 y 30 cm en pedazos iguales, lo más largos posible. El pedazo debe caber exacto en las dos: 10 cm.', { title: 'MCD: partir igual' }),
+      sc(8, 'Con primos: se descomponen los números. El **MCD** toma solo los primos comunes, con el menor exponente; el **MCM** toma todos los primos, con el mayor exponente. Y para dos números, $\\text{MCD} \\cdot \\text{MCM} = a \\cdot b$.', { title: 'Por factores primos' }),
+      sc(8, 'Ejemplo: $40 = 2^3 \\cdot 5$ y $140 = 2^2 \\cdot 5 \\cdot 7$. MCD: los comunes con el menor exponente, $2^2 \\cdot 5 = 20$. MCM: todos con el mayor, $2^3 \\cdot 5 \\cdot 7 = 280$. Y $20 \\cdot 280 = 5\\,600 = 40 \\cdot 140$.', { title: 'MCD 20 y MCM 280' }),
+      sc(8, 'Ejemplo: una pastilla cada 4 horas y un jarabe cada 10, los dos a las 7 a. m. Como $4 = 2^2$ y $10 = 2 \\cdot 5$, el MCM es $2^2 \\cdot 5 = 20$: vuelven a coincidir 20 horas después, a las 3 a. m.', { title: 'La pastilla y el jarabe' }),
+      sc(8, 'El error típico es confundir cuál se pide. Si hay que **repartir o cortar** sin que sobre, es el MCD, que sale menor que los datos. Si hay que **esperar a que coincidan**, es el MCM, que sale mayor. Multiplicar, $4 \\cdot 10 = 40$, da un momento en que coinciden, pero no el primero.', { title: 'La trampa: cuál de los dos' }),
+      sc(7, 'En el examen aparecen buses, alarmas, faros, baldosas, paquetes o cortes. Primero se decide qué se busca: un múltiplo común (coincidir) o un divisor común (repartir). Después, el más pequeño o el más grande, según el enunciado.', { title: 'Cómo aparece' }),
+      sc(8, 'Las tablas: el trozo debe caber exacto en 90, 120 y 150 y ser lo más largo posible: es el MCD. $90 = 2 \\cdot 3^2 \\cdot 5$, $120 = 2^3 \\cdot 3 \\cdot 5$ y $150 = 2 \\cdot 3 \\cdot 5^2$: comparten $2 \\cdot 3 \\cdot 5 = 30$.', { title: 'MCD = 30' }),
+      sc(7, 'Cada trozo mide 30 cm. Salen $90 \\div 30 = 3$, $120 \\div 30 = 4$ y $150 \\div 30 = 5$: en total 12 trozos, sin que sobre nada.', { title: '12 trozos de 30 cm' }),
+    ], [
+      PU_ES('Dos faros se encienden cada 15 y cada 20 segundos y acaban de encenderse juntos. ¿Cuándo vuelven a coincidir?', [['15 = 3 · 5 y 20 = 2² · 5', '15 = 3 · 5 y 20 = 2 · 5'], ['MCM = 2² · 3 · 5', 'MCM = 5'], ['a los 60 segundos', 'a los 300 segundos']],
+        'El MCM toma $2^2$, $3$ y $5$: 60 segundos. $15 \\cdot 20 = 300$ también es común, pero no es el primero.',
+        'Buscas el primer momento que sea múltiplo de los dos tiempos.'),
+      PU_ES('Dos cintas de 84 y 120 cm se cortan en trozos iguales, lo más largos posible, sin sobrantes. ¿Cuántos trozos salen?', [['se busca el MCD', 'se busca el MCM'], ['MCD = 12 cm', 'MCD = 6 cm'], ['7 + 10 = 17 trozos', '84 + 120 = 204 trozos']],
+        '$84 = 2^2 \\cdot 3 \\cdot 7$ y $120 = 2^3 \\cdot 3 \\cdot 5$: MCD $= 12$. Salen $7 + 10 = 17$ trozos.',
+        'El trozo debe caber exacto en las dos cintas y ser lo más largo posible.'),
+    ]),
+    PU_L('pu-nu-3', 'Paridad, residuos y última cifra', [
+      sc(6, 'Un problema para empezar: la potencia $7^{2027}$ tiene muchísimas cifras, pero no hace falta calcularla. Al final se sabe en qué cifra termina.', { title: 'La última cifra' }),
+      sc(8, 'Par es lo que se puede emparejar sin que sobre nadie; impar, lo que deja uno solo. Por eso impar + impar = par (los dos solos se emparejan) e impar · impar = impar. Basta **un** factor par para que el producto sea par.', { title: 'Paridad' }),
+      sc(8, 'El residuo es lo que sobra al repartir. Funciona como un reloj: las vueltas completas no importan, solo dónde se queda la aguja. 17 horas después de las 10 son las 3, porque $10 + 17 = 27 = 24 + 3$.', { title: 'Como un reloj' }),
+      sc(8, 'Las reglas: los residuos se suman y se multiplican, y el resultado se vuelve a reducir. Lo que se repite en ciclo se resuelve con el residuo: si el ciclo mide $k$, la posición $n$ es como la del residuo de $n \\div k$; el residuo 0 es la última del ciclo.', { title: 'Residuos y ciclos' }),
+      sc(8, 'Ejemplo: un número deja residuo 4 al dividirlo entre 7 y otro deja residuo 5. Su suma se comporta como $4 + 5 = 9$, que deja 2; su producto, como $4 \\cdot 5 = 20$, que deja 6. Con 11 y 12: $23 = 21 + 2$ y $132 = 126 + 6$.', { title: 'Operar residuos' }),
+      sc(8, 'La última cifra solo depende de la última cifra de los factores. Las potencias de 3 terminan en 3, 9, 7, 1 y vuelven a empezar: un ciclo de 4. Para $3^{22}$, $22 = 4 \\cdot 5 + 2$: la segunda del ciclo, termina en 9.', { title: 'El ciclo del 3' }),
+      sc(8, 'El error típico: con residuo 0 buscar «la posición 0». En $3^{24}$, $24 = 4 \\cdot 6$ deja residuo 0: le toca la **última** del ciclo, el 1, no la primera. Comprobación: $3^4 = 81$ también termina en 1.', { title: 'La trampa: el residuo 0' }),
+      sc(7, 'El examen lo pregunta con días de la semana, colores que se repiten, horas del reloj, cifras de potencias o sumas de impares. Casi siempre es lo mismo: hallar el largo del ciclo y el residuo.', { title: 'Cómo aparece' }),
+      sc(8, 'Las potencias de 7 terminan en 7, 9, 3, 1, porque $7^2 = 49$, $7^3 = 343$ y $7^4 = 2\\,401$; después se repiten cada 4, ya que solo importa la última cifra.', { title: 'El ciclo del 7' }),
+      sc(7, 'Para $7^{2027}$: $2027 = 4 \\cdot 506 + 3$. El residuo 3 señala la tercera cifra del ciclo 7, 9, 3, 1. $7^{2027}$ termina en 3.', { title: 'Termina en 3' }),
+    ], [
+      PU_ES('¿En qué cifra termina $3^{2026}$?', [['3, 9, 7, 1: ciclo de 4', 'ciclo de 3'], ['2026 ÷ 4 deja residuo 2', '2026 ÷ 4 deja residuo 0'], ['termina en 9', 'termina en 1']],
+        'Las potencias de 3 terminan en 3, 9, 7, 1 y se repiten. 2026 deja residuo 2: termina como $3^2$, en 9.',
+        'Calcula las últimas cifras de las primeras potencias de 3 hasta que se repitan.'),
+      PU_ES('Si $n$ es impar, ¿qué es siempre par?', [['n + 1', 'n + 2'], ['n(n + 1)', 'n²']],
+        'Impar más 1 es par; y $n(n + 1)$ tiene un factor par. $n + 2$ y $n^2$ son impares.',
+        'Prueba con $n = 3$ y con $n = 5$ antes de decidir.'),
+    ]),
+  ] },
+
+  // ---------------- 16 · Probabilidad ----------------
+  { world: 'pu-probabilidad', title: 'Probabilidad', block: 'razonamiento', lessons: [
+    PU_L('pu-pb-1', 'Espacio muestral y Laplace', [
+      sc(7, 'Un problema para empezar: se lanzan dos dados corrientes y se multiplican los dos resultados. Al final se sabe la probabilidad de que el producto sea par.', { title: 'El producto de dos dados' }),
+      sc(8, 'La probabilidad mide qué tan a menudo pasa algo si se repite muchas veces. Si en una bolsa hay 1 bola blanca entre 4 y se saca muchas veces devolviéndola, sale blanca más o menos 1 de cada 4 veces: probabilidad $\\tfrac14$.', { title: 'Qué tan a menudo' }),
+      sc(7, 'Como una rifa: con 100 boletas vendidas y 5 compradas por ti, tu posibilidad es 5 de 100. Todo depende de que cada boleta tenga la misma oportunidad de salir.', { title: 'La rifa' }),
+      sc(8, 'El **espacio muestral** es la lista de todos los resultados posibles. Si todos son igual de probables, vale la regla de Laplace: $P = \\tfrac{\\text{favorables}}{\\text{posibles}}$. Siempre queda entre 0 (imposible) y 1 (seguro).', { title: 'Regla de Laplace' }),
+      sc(8, 'Ejemplo: tres monedas. El espacio muestral tiene $2 \\cdot 2 \\cdot 2 = 8$ resultados: CCC, CCS, CSC, SCC, CSS, SCS, SSC y SSS. Exactamente dos caras salen en 3 de ellos: $P = \\tfrac38$.', { title: 'Tres monedas' }),
+      sc(8, 'El error típico: contar resultados que no son igual de probables. Con dos dados las sumas van de 2 a 12 (11 sumas), pero la suma 4 no tiene probabilidad $\\tfrac{1}{11}$. Se cuentan parejas: (1, 3), (2, 2) y (3, 1), así que $P = \\tfrac{3}{36} = \\tfrac{1}{12}$.', { title: 'La trampa: contar sumas' }),
+      sc(8, 'Ejemplo: se escoge al azar una letra de PROBABILIDAD, que tiene 12 letras. Las vocales son O, A, I, I y A: $P(\\text{vocal}) = \\tfrac{5}{12}$. Cada letra repetida cuenta cada vez: la D aparece 2 veces y su probabilidad es $\\tfrac{2}{12} = \\tfrac16$.', { title: 'Letras al azar' }),
+      sc(7, 'El examen usa dados, monedas, urnas, ruletas, cartas o personas elegidas al azar. Antes de contar se fija el espacio muestral completo. Una respuesta mayor que 1 o negativa es señal de error.', { title: 'Cómo aparece' }),
+      sc(8, 'El producto de dos dados: hay $6 \\cdot 6 = 36$ parejas igual de probables. El producto es impar solo si los dos dados son impares (1, 3 o 5): $3 \\cdot 3 = 9$ parejas.', { title: 'Contar las impares' }),
+      sc(7, 'Las otras $36 - 9 = 27$ parejas dan producto par: $P = \\tfrac{27}{36} = \\tfrac34$. Basta un dado par para que el producto sea par.', { title: 'Probabilidad $\\tfrac34$' }),
+    ], [
+      PU_CTA('Una urna tiene 4 bolas rojas, 5 azules y 3 verdes. Plantea la probabilidad de sacar una azul', { sol: ['5', '/', '(', '4', '+', '5', '+', '3', ')'], traps: ['9'], answer: 5 / 12 },
+        'Hay 12 bolas y 5 son azules: $P = \\tfrac{5}{12} \\approx 0.42$.',
+        'Cuenta todas las bolas posibles y cuántas de ellas son favorables.'),
+      PU_ES('Se lanzan dos monedas. Halla la probabilidad de obtener al menos una cara', [['4 casos iguales: CC, CS, SC, SS', '3 casos iguales: 2, 1 o 0 caras'], ['favorables: 3', 'favorables: 2'], ['P = 3/4', 'P = 2/3']],
+        'Los cuatro resultados son igual de probables; tres tienen al menos una cara: $\\tfrac34$.',
+        '«Una cara» puede salir de dos maneras distintas: cuenta los resultados de cada moneda por separado.'),
+    ]),
+    PU_L('pu-pb-2', 'Complemento e independencia', [
+      sc(7, 'Un problema para empezar: un arquero ataja un penal con probabilidad 0.2, y cada penal es independiente de los demás. En una tanda le patean 3 penales. Al final se sabe la probabilidad de que ataje al menos uno.', { title: 'El arquero' }),
+      sc(8, 'Pasar y no pasar se reparten el total: si un bus llega tarde con probabilidad 0.15, llega a tiempo con probabilidad 0.85. A veces es más fácil contar lo que **no** sirve y quitarlo del total, como contar los que faltaron para saber cuántos vinieron.', { title: 'El complemento' }),
+      sc(8, 'Dos sucesos son **independientes** si uno no cambia al otro: la moneda no recuerda lo que salió antes. Como dos semáforos en ciudades distintas: que uno esté en rojo no dice nada del otro. Entonces $P(A \\text{ y } B) = P(A) \\cdot P(B)$.', { title: 'Independientes' }),
+      sc(8, 'Las reglas: $P(\\text{no } A) = 1 - P(A)$; «al menos uno» $= 1 - P(\\text{ninguno})$; y para independientes, «A y B» se multiplica. Sumar solo vale para sucesos que **no** pueden pasar a la vez.', { title: 'Tres reglas' }),
+      sc(7, 'Ejemplo: un dado y una moneda. Sacar 5 o más en el dado y cara en la moneda: $\\tfrac26 \\cdot \\tfrac12 = \\tfrac16$. Son independientes: el dado no le cambia nada a la moneda.', { title: '$\\tfrac26 \\cdot \\tfrac12 = \\tfrac16$' }),
+      sc(8, 'Ejemplo: cuatro monedas. «Al menos una cara» reúne muchos casos, pero su contrario es uno solo: cuatro sellos, $(\\tfrac12)^4 = \\tfrac{1}{16}$. Entonces $P(\\text{al menos una cara}) = 1 - \\tfrac{1}{16} = \\tfrac{15}{16}$.', { title: 'Al menos una cara' }),
+      sc(8, 'El error típico: sumar donde se multiplica. Con 3 tiros que aciertan cada uno con probabilidad $\\tfrac12$, sumar daría $\\tfrac32$, más que 1: imposible. Otro error: olvidar que **sin devolver** la segunda sacada cambia, porque la bolsa ya no es la misma.', { title: 'La trampa: sumar' }),
+      sc(7, 'El examen lo pregunta con «al menos uno», «ninguno» o «los dos», o con sacadas con y sin devolución. La señal: si la frase dice «al menos», casi siempre conviene el complemento.', { title: 'Cómo aparece' }),
+      sc(8, 'El arquero: lo contrario de «ataja al menos uno» es «no ataja ninguno». Cada penal se le escapa con probabilidad $1 - 0.2 = 0.8$, y los penales son independientes: $0.8 \\cdot 0.8 \\cdot 0.8 = 0.512$.', { title: 'Ninguno: 0.512' }),
+      sc(8, 'Ataja al menos uno con probabilidad $1 - 0.512 = 0.488$, casi la mitad. Sumar $0.2 + 0.2 + 0.2 = 0.6$ habría contado de más las tandas en que ataja dos o tres.', { title: 'Al menos uno: 0.488' }),
+    ], [
+      PU_CTA('Plantea la probabilidad de sacar al menos un 6 al lanzar un dado dos veces', { sol: ['1', '-', '(', '5', '/', '6', ')', '^', '2'], traps: ['36'], answer: 11 / 36 },
+        'Ningún 6 en dos lanzamientos: $\\left(\\tfrac56\\right)^2 = \\tfrac{25}{36}$. Al menos uno: $1 - \\tfrac{25}{36} = \\tfrac{11}{36}$.',
+        'Es más fácil calcular la probabilidad de que no salga ningún 6.'),
+      PU_ES('Un examen tiene 2 preguntas de 4 opciones y se responde al azar. Halla la probabilidad de acertar las dos', [['acertar una: 1/4', 'acertar una: 1/2'], ['son independientes: se multiplican', 'se suman'], ['1/16', '1/2']],
+        'Cada pregunta se acierta con $\\tfrac14$ y son independientes: $\\tfrac14 \\cdot \\tfrac14 = \\tfrac1{16}$.',
+        'Acertar la primera no cambia las opciones de la segunda.'),
+    ]),
+  ] },
+];
+
+// Constructores de los juegos de cada mundo (preuda-r-*.js); los aplica preuda-razonamiento-juegos.js.
+const PU_JUEGOS = [];

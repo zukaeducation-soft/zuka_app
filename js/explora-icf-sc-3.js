@@ -1,0 +1,96 @@
+// Preicfes · Sociales, mundo 3 «Perspectivas e Intereses» (Explora, escena «hoja»). Casos cortos propios.
+xpLec('icf-sc-perspectivas-1', [
+  ['Posición e interés',
+    xpMira('hoja', 'Empecemos por la idea: una cosa es **lo que se pide** y otra, **para qué**.', { paras: [['«¡Que cierren la discoteca!»', 'Quieren dormir.'], ['«¡Que no la cierren!»', 'Necesitan el empleo.']] }, [
+      ['Unos vecinos piden cerrarla: es su posición.', { luz: [0], nota: { 0: 'posición' } }],
+      ['¿Para qué? Para dormir: es su interés.', { luz: [1] }],
+      ['Los empleados piden lo contrario.', { luz: [2], nota: { 1: 'posición' } }],
+      ['¿Para qué? Para conservar el trabajo.', { luz: [3] }],
+      ['Las posiciones chocan; los intereses quizá no: bajar el volumen.', { luz: [1, 3] }],
+    ], 'Posición: qué pide. Interés: para qué lo pide.'),
+    xpHaz('hoja', 'Subraya el **interés** de fondo.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['No al peaje.'], ['Poder llevar la cosecha sin perder plata.'], ['Que se vaya la empresa.']], pista: 'Esa dice qué se pide, no para qué.' }, 'Es la respuesta a «¿para qué?».')],
+  ['Muchos actores',
+    xpMira('hoja', 'Segunda idea: casi nunca hay **solo dos** lados.', { paras: [['Una mina quiere entrar a un pueblo.'], ['Los agricultores: temen por el agua.'], ['Los transportadores: esperan viajes.'], ['La alcaldía: quiere impuestos.'], ['Los que no han nacido: no pueden hablar.']] }, [
+      ['De aquí nace el conflicto.', { luz: [0], nota: { 0: 'de aquí parte' } }],
+      ['Unos temen perder algo.', { luz: [1], nota: { 1: 'agua' } }],
+      ['Otros esperan ganar algo.', { luz: [2], nota: { 2: 'trabajo' } }],
+      ['La autoridad también tiene su interés.', { luz: [3], nota: { 3: 'impuestos' } }],
+      ['Y hay quienes no están en la mesa.', { luz: [4], nota: { 4: 'ausentes' } }],
+    ], 'Pregunta quién gana, quién pierde, quién decide y quién falta.'),
+    xpHaz('hoja', 'Van a mover el mercado. Pon al margen el interés de cada actor.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['comprar cerca', 'vender', 'espacio para buses'], meta: [1, 0, 2], paras: [['Los puestos'], ['Las familias del barrio'], ['La secretaría de transporte']], pista: 'Alguno no va ahí: ¿quién compra, quién vende, quién ordena el tránsito?' }, 'Cada actor quiere algo distinto del mismo lugar.')],
+  ['Mismo lado, distinta razón',
+    xpMira('hoja', 'Tercera idea: se puede **coincidir** por razones distintas, y **diferir** dentro de un grupo.', { paras: [['Una bióloga: no talen, hay aves.'], ['Un hotelero: no talen, vienen turistas.'], ['Un joven: talen, quiero empleo.'], ['Otra joven: no talen, allí crecí.']] }, [
+      ['La bióloga se opone por las aves.', { luz: [0] }],
+      ['El hotelero también, pero por negocio.', { luz: [0, 1], nota: { 1: 'coincide' } }],
+      ['Un joven está a favor.', { luz: [2] }],
+      ['Otra joven, en contra.', { luz: [2, 3], nota: { 3: 'mismo grupo, distinta' } }],
+      ['No digas «los jóvenes quieren»: di cuáles.', {}],
+    ], 'Coincidir no es pensar igual, y un grupo no es una sola voz.'),
+    xpHaz('hoja', 'Subraya la frase que **generaliza** mal.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Algunos comerciantes apoyan.'], ['La mayoría de los padres duda.'], ['Los campesinos se oponen a todo.']], pista: 'Esa dice «algunos» o «la mayoría».' }, '«Los campesinos» y «todo» borran las diferencias.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Un colegio prohíbe el celular. La mamá: «lo necesito para saber de él». Subraya una salida que **atienda su interés**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Un teléfono en la secretaría para avisar.'], ['Prohibirlo también en la casa.'], ['Que cambie de colegio.']], pista: 'Ella no pide el celular: pide poder saber de él.' }, 'Atiende el «para qué» sin el celular.')],
+], 'Pregunta para qué, mira quiénes son y no los juntes a la fuerza.');
+
+xpLec('icf-sc-perspectivas-2', [
+  ['El lente',
+    xpMira('hoja', 'Empecemos por la idea: cada quien mira con su **cosmovisión**.', { paras: [['Un cerro.'], ['El geólogo: hay oro.'], ['La comunidad indígena: es sagrado.'], ['El alpinista: es un reto.']] }, [
+      ['Todos miran el mismo cerro.', { luz: [0], nota: { 0: 'el mismo lugar' } }],
+      ['Para el geólogo es un recurso.', { luz: [1], nota: { 1: 'recurso' } }],
+      ['Para la comunidad es un ser con el que se convive.', { luz: [2], nota: { 2: 'sagrado' } }],
+      ['Para el alpinista, una meta.', { luz: [3], nota: { 3: 'reto' } }],
+      ['La cosmovisión sale de la fe, el oficio, la edad y lo vivido.', {}],
+    ], 'Cosmovisión: la manera de ver el mundo desde la que se actúa.'),
+    xpHaz('hoja', 'Subraya la conducta que se explica por una **creencia religiosa**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Vende barato al final del día.'], ['No trabaja los sábados, su día santo.'], ['Madruga para evitar el trancón.']], pista: 'Esa se explica por dinero o por tiempo.' }, '«Día santo» muestra la creencia.')],
+  ['Prejuicio',
+    xpMira('hoja', 'Segunda idea: un **prejuicio** juzga a un grupo **antes de conocer**.', { paras: [['Los de ese barrio son peligrosos.'], ['Juan, de ese barrio, robó.'], ['En ese barrio hubo dos robos este año.']] }, [
+      ['Juzga a todos sin un hecho: prejuicio.', { luz: [0], nota: { 0: 'prejuicio' } }],
+      ['Habla de una persona y un hecho.', { luz: [1], nota: { 1: 'un hecho' } }],
+      ['Da un conteo que se puede revisar.', { luz: [2], nota: { 2: 'dato' } }],
+      ['De Juan no se sigue nada sobre los demás.', { luz: [1] }],
+      ['La pregunta: ¿qué dato lo sostiene y de cuántos?', { luz: [0] }],
+    ], 'Todo un grupo, sin conocerlo y sin datos: prejuicio.'),
+    xpHaz('hoja', 'Subraya los **dos** prejuicios.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['Las mujeres manejan mal.'], ['Ayer hubo un choque.'], ['En mayo hubo doce multas.'], ['Los viejos no entienden nada.']], pista: 'Alguna de las subrayadas es un hecho que se puede contar.' }, 'Juzgan a todo un grupo.')],
+  ['La misma acción',
+    xpMira('hoja', 'Tercera idea: una **misma acción** puede tener motivos distintos.', { paras: [['Siembra árboles.'], ['Porque ama el bosque.'], ['Porque le descuentan impuestos.'], ['Porque su abuelo lo hacía.']] }, [
+      ['Tres personas hacen lo mismo.', { luz: [0] }],
+      ['Una, por una convicción.', { luz: [1], nota: { 1: 'ambiental' } }],
+      ['Otra, por un beneficio.', { luz: [2], nota: { 2: 'económico' } }],
+      ['Y otra, por una tradición familiar.', { luz: [3], nota: { 3: 'cultural' } }],
+      ['El examen pregunta por el motivo, no solo por la acción.', {}],
+    ], 'Busca la razón que la persona da, no la que tú supondrías.'),
+    xpHaz('hoja', 'Pon al margen el motivo de no comer carne.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['religioso', 'salud', 'cuidado animal'], meta: [1, 2, 0], paras: [['El médico se lo pidió.'], ['No quiere que sufran.'], ['Es época de ayuno en su fe.']], pista: 'Alguno no va ahí: busca médico, sufrir y fe.' }, 'La misma dieta, tres motivos.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«No lo contrato: los jóvenes son irresponsables». Subraya la mejor **crítica**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Los jóvenes son mejores que los viejos.'], ['Él debería vestirse distinto.'], ['Lo juzga por su edad, sin conocer cómo trabaja.']], pista: 'Esa cae en otro prejuicio o cambia de tema.' }, 'Señala el prejuicio sin crear otro.')],
+], 'Todos llevamos lente; el prejuicio es no querer mirar.');
+
+xpLec('icf-sc-perspectivas-3', [
+  ['¿A quién deja por fuera?',
+    xpMira('hoja', 'Empecemos por la idea: toda solución **atiende** unos intereses y deja otros.', { paras: [['Problema: mucho trancón.'], ['Peaje en el centro.'], ['Más buses.'], ['Horarios escalonados.']] }, [
+      ['Un problema, varias salidas.', { luz: [0], nota: { 0: 'el problema' } }],
+      ['El peaje reduce carros, pero pesa a quien gana poco.', { luz: [1], nota: { 1: '¿y el que gana poco?' } }],
+      ['Más buses ayudan a muchos, pero cuestan.', { luz: [2], nota: { 2: '¿y el dinero?' } }],
+      ['Los horarios son baratos, si las empresas aceptan.', { luz: [3], nota: { 3: '¿y las empresas?' } }],
+      ['Para cada una: ¿quién gana y quién queda por fuera?', {}],
+    ], 'No hay solución sin alguien que pierda algo: búscalo.'),
+    xpHaz('hoja', 'Cierran una vía para bicicletas. Subraya a quien **más** puede perjudicar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Ciclistas'], ['Una ambulancia que usa esa vía'], ['Peatones']], pista: 'Ese gana espacio o seguridad.' }, 'La ambulancia perdería tiempo valioso.')],
+  ['¿Se puede hacer?',
+    xpMira('hoja', 'Segunda idea: una buena idea puede no ser **viable**.', { paras: [['Un hospital en cada vereda.'], ['Una lancha ambulancia.'], ['Un decreto: «prohibido enfermarse».']] }, [
+      ['El hospital ayudaría, pero no alcanza el dinero.', { luz: [0], nota: { 0: 'costo' } }],
+      ['La lancha cuesta menos y llega.', { luz: [1], nota: { 1: 'viable' } }],
+      ['El decreto no se puede cumplir.', { luz: [2], tacha: [2], nota: { 2: 'imposible' } }],
+      ['Mira costo, tiempo y quién la hace cumplir.', {}],
+      ['Viable no es perfecta: es que se puede hacer.', { luz: [1] }],
+    ], 'Viable: alcanza el dinero, el tiempo y hay quién la cumpla.'),
+    xpHaz('hoja', 'Falta agua **hoy** en una escuela. Subraya la salida que sirve **ya**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Un carrotanque.'], ['Un acueducto en tres años.'], ['Una campaña para ahorrar el próximo invierno.']], pista: 'Esa sirve, pero más adelante.' }, 'Hoy hace falta agua; lo demás es de largo plazo.')],
+  ['¿La van a cumplir?',
+    xpMira('hoja', 'Tercera idea: se cumple más lo que **se construyó entre todos**.', { paras: [['Una regla impuesta: nadie la cumple.'], ['Una regla acordada: cada quien propuso.'], ['Un registro que todos pueden ver.']] }, [
+      ['Si llega desde arriba, se busca cómo evadirla.', { luz: [0], nota: { 0: 'impuesta' } }],
+      ['Si ayudaste a hacerla, la cuidas.', { luz: [1], nota: { 1: 'acordada' } }],
+      ['Y se cumple si se puede comprobar.', { luz: [2], nota: { 2: 'a la vista' } }],
+      ['Justa, hecha entre todos y comprobable.', { luz: [1, 2] }],
+      ['El examen pregunta quién la aceptaría y por qué.', {}],
+    ], 'Acordada, justa y que se pueda comprobar.'),
+    xpHaz('hoja', 'Hay basura en el parque. Subraya la salida con **más** probabilidad de cumplirse.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Un aviso que dice «prohibido».'], ['Turnos que los vecinos acordaron y publican.'], ['Multas que nadie cobra.']], pista: 'Esa no la acordó nadie o no hay quién la haga cumplir.' }, 'Acordada y a la vista.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Pescadores y bañistas usan la misma playa. Subraya la salida que atiende **a los dos**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Prohibir la pesca.'], ['Cerrar la playa.'], ['Pesca al amanecer y baño de día.']], pista: 'Esa deja por fuera a uno o a ambos.' }, 'Usan el mismo lugar a horas distintas.')],
+], 'A quién atiende, si se puede y si la van a cumplir.');

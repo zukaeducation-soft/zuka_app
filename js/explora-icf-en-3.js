@@ -1,0 +1,96 @@
+// Preicfes · Inglés, mundo 3 «Gramática en Contexto» (Explora, escena «hoja»): se explica en español con ejemplos en inglés propios.
+xpLec('icf-en-gramatica-1', [
+  ['¿Terminó o llega hasta hoy?',
+    xpMira('hoja', 'Empecemos por la idea: la **palabra de tiempo** escoge el verbo.', { paras: [['I', 'moved', 'here', 'in 2015.'], ['I', 'have lived', 'here', 'since 2015.'], ['I', 'have lived', 'here', 'for ten years.']] }, [
+      ['«In 2015» es una fecha cerrada: pasado simple.', { luz: [1, 3], nota: { 0: 'terminó' } }],
+      ['«Since 2015» va desde entonces hasta hoy.', { luz: [5, 7], nota: { 1: 'hasta hoy' } }],
+      ['Por eso lleva «have» y participio.', { luz: [5] }],
+      ['«For ten years» dice cuánto tiempo.', { luz: [11], nota: { 2: 'cuánto' } }],
+      ['Con «yesterday», «ago» o «last»: pasado simple.', {}],
+    ], 'Yesterday, ago, in 2015: pasado. Since y for: have + participio.'),
+    xpHaz('hoja', '«She ___ three books since January.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['wrote'], ['has written'], ['writes']], pista: '«Since» llega hasta hoy: busca «has».' }, '«Since January» pide «has written».')],
+  ['Lo que estaba pasando',
+    xpMira('hoja', 'Segunda idea: «was + -ing» es lo que **estaba pasando** cuando algo ocurrió.', { paras: [['I', 'was cooking', 'when', 'the phone', 'rang.'], ['While', 'they', 'were sleeping,', 'it', 'rained.']] }, [
+      ['«Was cooking»: la acción larga.', { luz: [1], nota: { 0: 'la larga' } }],
+      ['«Rang»: la corta que la interrumpe.', { luz: [4] }],
+      ['«When» trae la corta.', { luz: [2, 4] }],
+      ['«While» trae la larga.', { luz: [5, 7], nota: { 1: 'while + larga' } }],
+      ['Con «they» es «were».', { luz: [6, 7] }],
+    ], 'Larga: was o were + -ing. Corta: pasado simple.'),
+    xpHaz('hoja', '«We ___ football when it started to rain.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['play'], ['was playing'], ['were playing']], pista: 'Es la acción larga y el sujeto es «we».' }, '«We» va con «were».')],
+  ['Mañana',
+    xpMira('hoja', 'Tercera idea: hay varias maneras de hablar del **futuro**.', { paras: [['I am seeing the doctor at four.'], ['I am going to study medicine.'], ['I think it will be easy.'], ['If it rains, I will stay.']] }, [
+      ['Con hora fijada: «am seeing».', { luz: [0], nota: { 0: 'cita' } }],
+      ['Un plan: «going to».', { luz: [1], nota: { 1: 'plan' } }],
+      ['Lo que se cree: «will».', { luz: [2], nota: { 2: 'cálculo' } }],
+      ['Después de «if» va presente; en la otra parte, «will».', { luz: [3], nota: { 3: 'condición' } }],
+      ['Nunca «if it will rain».', {}],
+    ], 'Cita: am -ing. Plan: going to. Cálculo: will. If + presente.'),
+    xpHaz('hoja', '«If you ___ the red fruits, the coffee will taste good.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['pick'], ['will pick'], ['picked']], pista: 'Después de «if» no va «will».' }, '«If» con presente y «will» en la otra parte.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Nobody ___ this door for years.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['opened'], ['has opened'], ['have opened']], pista: '«For years» llega hasta hoy y «nobody» va en singular.' }, '«Nobody» va con «has».')],
+], 'Mira la palabra de tiempo, la acción larga y la condición.');
+
+xpLec('icf-en-gramatica-2', [
+  ['In, on, at',
+    xpMira('hoja', 'Empecemos por la idea: de lo más **grande** a lo más **pequeño**: in, on, at.', { paras: [['in', 'July', 'in the garage'], ['on', 'Monday', 'on the table'], ['at', 'six o\'clock', 'at the door']] }, [
+      ['«In»: un mes, un año, un lugar cerrado.', { luz: [0, 1, 2], nota: { 0: 'grande' } }],
+      ['«On»: un día o una superficie.', { luz: [3, 4, 5], nota: { 1: 'mediano' } }],
+      ['«At»: una hora o un punto.', { luz: [6, 7, 8], nota: { 2: 'pequeño' } }],
+      ['«From… to» va de un punto a otro.', {}],
+      ['«During» con un evento; «for» con una duración.', {}],
+    ], 'In: mes o adentro. On: día o encima. At: hora o punto.'),
+    xpHaz('hoja', 'Pon al margen la palabra que falta.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['on', 'at', 'in'], meta: [2, 1, 0], paras: [['___ December'], ['___ half past nine'], ['___ Saturday']], pista: 'Alguna no va ahí: mes, hora o día.' }, 'Mes con in, hora con at y día con on.')],
+  ['¿Se puede contar?',
+    xpMira('hoja', 'Segunda idea: **many** y **a few** cuentan; **much** y **a little**, no.', { paras: [['three apples', 'many apples', 'a few apples'], ['some water', 'much water', 'a little water']] }, [
+      ['Se puede decir tres manzanas: se cuentan.', { luz: [0] }],
+      ['Muchas: «many». Unas pocas: «a few».', { luz: [1, 2], nota: { 0: 'se cuentan' } }],
+      ['No se dice «three waters» al medir agua.', { luz: [3] }],
+      ['Mucha: «much». Un poco: «a little».', { luz: [4, 5], nota: { 1: 'no se cuenta' } }],
+      ['Money, time, space y work tampoco se cuentan.', {}],
+    ], 'Cuenta: many, a few. No se cuenta: much, a little.'),
+    xpHaz('hoja', '«There isn\'t ___ milk, but there are ___ eggs.» Subraya las **dos**, en la pareja correcta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['many / a little'], ['much / a few'], ['a few / much']], pista: 'La leche no se cuenta; los huevos, sí.' }, 'Leche con much y huevos con a few.')],
+  ['Unir ideas',
+    xpMira('hoja', 'Tercera idea: la palabra que une dice **cómo** se relacionan.', { paras: [['It rained,', 'so', 'we stayed.'], ['We stayed', 'because', 'it rained.'], ['Although', 'it rained,', 'we went.'], ['It rained,', 'but', 'we went.']] }, [
+      ['«So» trae el resultado.', { luz: [1], nota: { 0: 'resultado' } }],
+      ['«Because» trae la causa.', { luz: [4], nota: { 1: 'causa' } }],
+      ['«Although»: pasó lo que no se esperaba.', { luz: [6], nota: { 2: 'a pesar de' } }],
+      ['Y «but» contrasta las dos ideas.', { luz: [10], nota: { 3: 'contraste' } }],
+      ['Al revés cambia todo: «so» no es «because».', { luz: [1, 4] }],
+    ], 'So: resultado. Because: causa. Although y but: contraste.'),
+    xpHaz('hoja', '«___ he was tired, he finished the race.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Although'], ['Because'], ['So']], pista: 'Estaba cansado y aun así terminó.' }, 'No se esperaba que terminara.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«I looked in the room, but there wasn\'t ___.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['nobody'], ['somebody'], ['anybody']], pista: '«Wasn\'t» ya niega: no se niega dos veces.' }, 'En negación va «anybody».')],
+], 'Lugar y tiempo, lo que se cuenta y lo que une.');
+
+xpLec('icf-en-gramatica-3', [
+  ['Más que',
+    xpMira('hoja', 'Empecemos por la idea: las palabras **cortas** llevan -er; las **largas**, more.', { paras: [['cold', 'colder than'], ['big', 'bigger than'], ['happy', 'happier than'], ['expensive', 'more expensive than']] }, [
+      ['Corta: se agrega -er y «than».', { luz: [0, 1] }],
+      ['A veces se dobla la última letra.', { luz: [2, 3] }],
+      ['Si termina en -y, cambia a -ier.', { luz: [4, 5] }],
+      ['Si es larga, va «more» adelante.', { luz: [6, 7], nota: { 3: 'larga' } }],
+      ['Nunca las dos: «more colder» no existe.', {}],
+    ], 'Corta: -er than. Larga: more… than. Nunca las dos juntas.'),
+    xpHaz('hoja', '«This bag is ___ than mine.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['more heavy'], ['heavier'], ['heaviest']], pista: 'Termina en -y y compara dos.' }, '«Heavy» pasa a «heavier».')],
+  ['Igual o menos',
+    xpMira('hoja', 'Segunda idea: «as… as» es **tan como**; con «not», es **menos**.', { paras: [['Leo is as tall as Ana.'], ['Leo is not as tall as Ana.'], ['Leo is shorter than Ana.']] }, [
+      ['Tan alto como: iguales.', { luz: [0], nota: { 0: 'iguales' } }],
+      ['No tan alto como: es menos.', { luz: [1], nota: { 1: 'menos' } }],
+      ['Dice lo mismo que esta.', { luz: [1, 2], nota: { 2: 'lo mismo' } }],
+      ['«Less… than» también: less tired than.', {}],
+      ['Entre «as» y «as» no va -er.', { luz: [0] }],
+    ], 'As… as: igual. Not as… as: menos.'),
+    xpHaz('hoja', '«The train isn\'t as fast as the plane.» Subraya lo que dice **lo mismo**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['The train is faster.'], ['They are equally fast.'], ['The plane is faster.']], pista: '¿Cuál de los dos es menos rápido?' }, 'El tren es menos rápido: el avión es más.')],
+  ['El más de todos',
+    xpMira('hoja', 'Tercera idea: para el **primero de todos** va «the» con -est o most.', { paras: [['the coldest month'], ['the most expensive house'], ['the best friend'], ['the worst day']] }, [
+      ['Corta: «the» y -est.', { luz: [0], nota: { 0: 'el más frío' } }],
+      ['Si es larga, va «the most».', { luz: [1], nota: { 1: 'la más cara' } }],
+      ['«Good» cambia: better, the best.', { luz: [2], nota: { 2: 'el mejor' } }],
+      ['«Bad» también: worse, the worst.', { luz: [3], nota: { 3: 'el peor' } }],
+      ['Pista: «in the world», «of all», «of my life».', {}],
+    ], 'The + -est o the most. Good: best. Bad: worst.'),
+    xpHaz('hoja', '«It was ___ film of the year.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['the best'], ['better'], ['the more good']], pista: '«Of the year» escoge entre todas.' }, 'Entre todas: «the best».')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Ana is taller than Leo. Leo is as tall as Sam.» Subraya lo que se concluye.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Sam is the tallest.'], ['Ana is taller than Sam.'], ['Leo is taller than Sam.']], pista: 'Leo y Sam son iguales. ¿Y Ana?' }, 'Si Leo y Sam son iguales, Ana es más alta que los dos.')],
+], 'Dos se comparan con than, iguales con as… as y el primero con the.');

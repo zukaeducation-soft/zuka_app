@@ -1,406 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/explora-escenas.js
-// Explora · tres escenas por datos para las lecciones de Razonamiento lógico (spec 2026-11-23-explora-leccion-interactiva):
-//   dibujo   un dibujo SVG que depende de unos valores `v` (números): `dib(v, K)` devuelve el SVG con las piezas de K. En la
-//            práctica se arrastran las `manijas` ([{ k, min, max, paso, en(v) → [x, y], de(x, y, v) → valor }]; con `k: [a, b]`
-//            mueven dos valores) o un deslizador abajo (manija sin `en`: { k, min, max, paso, et }). Meta: `metas` {k: valor} o
-//            `cumple(v)` con `sol`. En las explicaciones cada momento cambia `v` y el dibujo va solo hasta ahí.
-//   fichas   fichas que se arrastran a casilleros o zonas (`slots`: { x, y, w, h, et, n }), con un `fondo(K, v)` detrás.
-//   rejilla  una tabla de celdas que se tocan o se pintan arrastrando (marcas, ✓ / ✗, V / F).
-// Y los ayudantes con que se escriben las lecciones: xpLec, xpMira (explicación) y xpHaz (práctica). Va después de explora.js.
-
-// ------------------------------------------------------------------------------------------------- escribir lecciones
-// xpLec(id, [[capítulo, paso, paso…], …, ['Ahora sí, un problema', paso]], idea del cierre)
-function xpLec(id, caps, cierre, adios = 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.') {
-  const ult = caps.length - 1, pasos = caps.flatMap(([, ...ps], c) => ps.map(p => ({ ...p, cap: c,
-    texto: p.tipo === 'muestra' || c === ult ? p.texto : `**Tu turno.** ${p.texto}` })));
-  EXPLORA[id] = { caps: caps.map(c => c[0]), pasos: [...pasos, { cap: ult, tipo: 'cierre', clave: id, real: '', texto: adios, idea: cierre }] };
-}
-// Explicación: momentos [lo que dice, lo que cambia en la escena, cuenta].
-const xpMira = (escena, texto, en, momentos, idea) => ({ tipo: 'muestra', escena, texto, en, idea,
-  momentos: momentos.map(([dice, d = {}, cuenta]) => ({ dice, ...(escena === 'dibujo' ? { v: d } : d), ...(cuenta ? { cuenta } : {}) })) });
-const xpHaz = (tipo, texto, params, idea) => ({ tipo, texto, ...params, idea });
-
-// ------------------------------------------------------------------------------------------------- piezas de dibujo
-const XPK = {
-  n: x => Math.round(x * 100) / 100,   // coordenada corta
-  t: (x, y, s, cls = '', a = 'middle') => `<text class="xt ${cls}" x="${XPK.n(x)}" y="${XPK.n(y)}" style="text-anchor:${a}">${s}</text>`,
-  l: (x1, y1, x2, y2, cls = '') => `<line class="xl ${cls}" x1="${XPK.n(x1)}" y1="${XPK.n(y1)}" x2="${XPK.n(x2)}" y2="${XPK.n(y2)}"/>`,
-  r: (x, y, w, h, cls = '', rx = 3) => `<rect class="xf ${cls}" x="${XPK.n(x)}" y="${XPK.n(y)}" width="${XPK.n(Math.max(0, w))}" height="${XPK.n(Math.max(0, h))}" rx="${rx}"/>`,
-  c: (x, y, r, cls = '') => `<circle class="xf ${cls}" cx="${XPK.n(x)}" cy="${XPK.n(y)}" r="${XPK.n(Math.max(0, r))}"/>`,
-  p: (pts, cls = '') => `<polygon class="xf ${cls}" points="${pts.map(q => q.map(XPK.n).join(',')).join(' ')}"/>`,
-  pl: (pts, cls = '') => `<polyline class="xl ${cls}" points="${pts.map(q => q.map(XPK.n).join(',')).join(' ')}"/>`,
-  // Arco y sector, en grados contra las agujas del reloj.
-  at: (x, y, r, g) => [x + r * Math.cos(g * Math.PI / 180), y - r * Math.sin(g * Math.PI / 180)],
-  arc(x, y, r, a, b, cls = '') {
-    if (Math.abs(b - a) < 0.2) return '';
-    if (Math.abs(b - a) >= 359.9) return `<circle class="xl ${cls}" cx="${x}" cy="${y}" r="${r}"/>`;
-    const p = XPK.at(x, y, r, a), q = XPK.at(x, y, r, b);
-    return `<path class="xl ${cls}" d="M${p.map(XPK.n)} A${r} ${r} 0 ${Math.abs(b - a) > 180 ? 1 : 0} ${b > a ? 0 : 1} ${q.map(XPK.n)}"/>`;
-  },
-  sec(x, y, r, a, b, cls = '') {
-    if (Math.abs(b - a) < 0.2) return '';
-    if (Math.abs(b - a) >= 359.9) return XPK.c(x, y, r, cls);
-    const p = XPK.at(x, y, r, a), q = XPK.at(x, y, r, b);
-    return `<path class="xf ${cls}" d="M${XPK.n(x)} ${XPK.n(y)} L${p.map(XPK.n)} A${r} ${r} 0 ${Math.abs(b - a) > 180 ? 1 : 0} ${b > a ? 0 : 1} ${q.map(XPK.n)} Z"/>`;
-  },
-  // Ángulo en el vértice V entre los rayos a P y Q (el menor), con su rótulo.
-  ang(V, P, Q, r, label = '', cls = 'fa', tcls = '') {
-    const g = W => Math.atan2(V[1] - W[1], W[0] - V[0]) * 180 / Math.PI;
-    let a = g(P), b = g(Q); b = a + (((b - a) % 360) + 540) % 360 - 180;
-    const m = XPK.at(V[0], V[1], r + 15, (a + b) / 2);
-    return XPK.sec(V[0], V[1], r, a, b, cls) + (label ? XPK.t(m[0], m[1] + 5, label, tcls) : '');
-  },
-  ar(x1, y1, x2, y2, cls = '') {   // flecha
-    const a = Math.atan2(y2 - y1, x2 - x1), q = d => `${XPK.n(x2 - 9 * Math.cos(a + d))} ${XPK.n(y2 - 9 * Math.sin(a + d))}`;
-    return Math.hypot(x2 - x1, y2 - y1) < 2 ? '' : XPK.l(x1, y1, x2, y2, cls) + `<path class="xl ${cls.replace(/\bd\b/, '')}" d="M${q(0.45)} L${XPK.n(x2)} ${XPK.n(y2)} L${q(-0.45)}"/>`;
-  },
-  f: (f, s) => (f > 0.01 ? `<g opacity="${XPK.n(Math.min(1, f))}">${s}</g>` : ''),   // aparece poco a poco: f de 0 a 1
-  // Cota horizontal o vertical con su rótulo.
-  cota: (x1, y1, x2, y2, s, cls = 'tm') => XPK.l(x1, y1, x2, y2, 'lm') + (y1 === y2
-    ? XPK.l(x1, y1 - 4, x1, y1 + 4, 'lm') + XPK.l(x2, y1 - 4, x2, y1 + 4, 'lm') + XPK.t((x1 + x2) / 2, y1 + 17, s, cls)
-    : XPK.l(x1 - 4, y1, x1 + 4, y1, 'lm') + XPK.l(x1 - 4, y2, x1 + 4, y2, 'lm') + XPK.t(x1 + 9, (y1 + y2) / 2 + 5, s, cls, 'start')),
-  // Isométrica: x hacia la derecha, y hacia el fondo, z hacia arriba, en unidades de u píxeles.
-  iso: (o, u, x, y, z) => [o[0] + (x - y) * u * 0.866, o[1] - (x + y) * u * 0.5 * 0.8 - z * u],
-  // Caja de a × b × c con la esquina de enfrente en o; con `rej`, se ven los cubitos.
-  caja(o, u, a, b, c, cls = 'fa', rej = true) {
-    const I = (x, y, z) => XPK.iso(o, u, x, y, z), q = (P, cl) => XPK.p(P, cl); let h = '';
-    if (c > 0.01) h += q([I(0, 0, 0), I(a, 0, 0), I(a, 0, c), I(0, 0, c)], cls) + q([I(0, 0, 0), I(0, b, 0), I(0, b, c), I(0, 0, c)], cls);
-    h += q([I(0, 0, c), I(a, 0, c), I(a, b, c), I(0, b, c)], cls);
-    const L = (P, Q) => { h += XPK.l(P[0], P[1], Q[0], Q[1], 'lr'); };
-    if (rej) {
-      for (let k = 1; k < a; k++) { L(I(k, 0, 0), I(k, 0, c)); L(I(k, 0, c), I(k, b, c)); }
-      for (let k = 1; k < b; k++) { L(I(0, k, 0), I(0, k, c)); L(I(0, k, c), I(a, k, c)); }
-      for (let k = 1; k < c; k++) { L(I(0, 0, k), I(a, 0, k)); L(I(0, 0, k), I(0, b, k)); }
-    }
-    return h;
-  },
-  lerp: (a, b, t) => a + (b - a) * t,
-  sig: x => String(Math.round(x * 100) / 100).replace('-', '−'),
-};
-
-// -------------------------------------------------------------------------------------------------------------- dibujo
-const xpArr = x => (Array.isArray(x) ? x : [x]);
-// Manijas normalizadas: un deslizador es una manija cuya posición está en la regla de abajo.
-function xpManijas(p) {
-  const H = p.alto || 200, sl = (p.manijas || []).filter(m => !m.en), n = sl.length;
-  return (p.manijas || []).map(m => {
-    const ks = xpArr(m.k), g = (q, d) => { const a = xpArr(m[q] ?? d); return ks.map((_, i) => a[i] ?? a.at(-1)); };
-    const b = { ...m, ks, mn: g('min', 0), mx: g('max', 10), ps: g('paso', 1) };
-    if (m.en) return b;
-    const y = H - 20 - (n - 1 - sl.indexOf(m)) * 44;
-    return { ...b, regla: true, y, en: v => [34 + (v[ks[0]] - b.mn[0]) / (b.mx[0] - b.mn[0]) * 272, y], de: x => b.mn[0] + (x - 34) / 272 * (b.mx[0] - b.mn[0]) };
-  });
-}
-const xpPaso = (x, mn, mx, ps) => Math.round((Math.round((xpClamp(x, mn, mx) - mn) / ps) * ps + mn) * 1000) / 1000;
-
-XP.dibujo = {
-  ini: p => ({ v: { ...p.v } }),
-  ok: (s, p) => (p.cumple ? !!p.cumple(s.v) : Object.entries(p.metas).every(([k, x]) => Math.abs(s.v[k] - x) < 1e-6)),
-  sol: p => ({ v: { ...p.v, ...(p.sol || p.metas) } }),
-  lee: (s, p) => (p.lee ? p.lee(s.v) : ''),
-  dice: (s, p) => (p.dice ? p.dice(s.v) : ''),
-};
-
-XPD.dibujo = (stage, p, s, api) => {
-  const W = 340, H = p.alto || 200, ms = p.momentos ? [] : xpManijas(p);
-  let vis = { ...s.v }, stop = null, dedo = null, act = null, tocado = false, foco = 0, teclas = false;
-  stage.innerHTML = `<svg class="xp-svg xd" viewBox="0 0 ${W} ${H}" ${ms.length ? 'tabindex="0" role="application"' : 'role="img"'} aria-label="${ms.length ? 'Arrastra, o usa las flechas del teclado' : 'Dibujo'}"></svg>`;
-  const svg = stage.firstChild;
-  function draw() {
-    let h = p.dib(vis, XPK);
-    ms.forEach(m => {
-      const [x, y] = m.en(vis);
-      if (m.regla) {
-        h += XPK.l(34, m.y, 306, m.y, 'lm');
-        const n = (m.mx[0] - m.mn[0]) / m.ps[0];
-        if (n <= 24) for (let k = 0; k <= n; k++) h += XPK.l(34 + k / n * 272, m.y - 4, 34 + k / n * 272, m.y + 4, 'lm');
-        if (m.et) h += XPK.t(34, m.y - 22, m.et, 's tm', 'start');
-      }
-      const t = m.rot ? m.rot(vis) : m.regla ? XPK.sig(vis[m.ks[0]]) : '', r = m.r || (t.length > 2 ? 16 : 12);
-      if (!tocado) h += `<circle class="xp-halo" cx="${XPK.n(x)}" cy="${XPK.n(y)}" r="${r}"/>`;
-      if (teclas && ms[foco] === m) h += `<circle class="xl la" cx="${XPK.n(x)}" cy="${XPK.n(y)}" r="${r + 4}"/>`;
-      h += `<g class="xp-tok"><circle cx="${XPK.n(x)}" cy="${XPK.n(y)}" r="${r}"/>${t ? `<text x="${XPK.n(x)}" y="${XPK.n(y + 5)}"${t.length > 3 ? ' style="font-size:11px"' : ''}>${t}</text>` : ''}</g>`;
-    });
-    svg.innerHTML = h;
-  }
-  const at = e => { const r = svg.getBoundingClientRect(); return [(e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height]; };
-  function pon(m, raw, vivo) {
-    const nv = { ...s.v };
-    m.ks.forEach((k, i) => { nv[k] = xpPaso(raw[i], m.mn[i], m.mx[i], m.ps[i]); });
-    if (m.limita && !m.limita(nv)) return;
-    if (!m.ks.some(k => nv[k] !== s.v[k])) return;
-    XS.tick((nv[m.ks[0]] - m.mn[0]) / ((m.mx[0] - m.mn[0]) || 1) * 18 - 6); xpTick();
-    s = { v: nv }; vis = { ...nv }; draw(); api.set(s, vivo);
-  }
-  if (ms.length) {
-    svg.onpointerdown = e => {
-      if (dedo != null) return;
-      const [x, y] = at(e), cerca = ms.map((m, i) => { const q = m.en(s.v); return { i, d: m.regla ? (Math.abs(y - m.y) < 22 ? 0 : 999) : Math.hypot(q[0] - x, q[1] - y) }; }).sort((a, b) => a.d - b.d)[0];
-      if (cerca.d > 46) return;
-      dedo = e.pointerId; foco = cerca.i; act = ms[foco]; tocado = true;
-      try { svg.setPointerCapture(e.pointerId); } catch (er) { /* sin captura */ }
-      svg.classList.add('drag');
-      if (act.regla) pon(act, xpArr(act.de(x, y, s.v)), true); else draw();
-    };
-    svg.onpointermove = e => { if (e.pointerId !== dedo || !act) return; const [x, y] = at(e); pon(act, xpArr(act.de(x, y, s.v)), true); };
-    svg.onpointerup = svg.onpointercancel = e => { if (e.pointerId !== dedo) return; dedo = null; act = null; svg.classList.remove('drag'); draw(); api.set(s); };
-    svg.onkeydown = e => {
-      teclas = true;
-      const d = { ArrowRight: [1, 0], ArrowLeft: [-1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] }[e.key];
-      if (e.key === ' ' && ms.length > 1) { e.preventDefault(); foco = (foco + 1) % ms.length; tocado = true; draw(); return; }   // espacio: otra manija
-      if (!d) return;
-      e.preventDefault(); tocado = true;
-      const m = ms[foco];
-      pon(m, m.ks.map((k, i) => s.v[k] + m.ps[i] * (m.ks.length > 1 ? d[i] : d[0] + d[1]) * (m.inv?.[i] ? -1 : 1)), true); api.set(s);
-    };
-  }
-  draw();
-  const num = x => typeof x === 'number';
-  return Object.assign(() => stop?.(), {
-    anima(m, done) {
-      const a = { ...vis }, b = { ...vis, ...m.v }, ks = Object.keys(m.v || {});
-      if (ks.some(k => m.v[k] !== a[k])) XS.pop();
-      stop = xpTween(0, 1, m.ms || (ks.length ? 1200 : 250), t => {
-        vis = { ...b };
-        for (const k in b) if (num(b[k]) && num(a[k]) && t < 1) vis[k] = a[k] + (b[k] - a[k]) * t;
-        draw();
-      }, done);
-      return () => stop?.();
-    },
-    salta(l) { for (const m of l) vis = { ...vis, ...m.v }; draw(); },
-  });
-};
-
-// -------------------------------------------------------------------------------------------------------------- fichas
-// Estado: q[slot] = fichas puestas (etiquetas). `fichas`: las que hay abajo; con `repite` no se gastan. `fijas` {slot: ficha}.
-// `donde(x, y)` → casillero (o −1) decide la zona donde se suelta cuando no son rectángulos (los círculos de un Venn).
-const xpLista = x => (x == null ? [] : xpArr(x));
-const xpIgual = (a, b) => [...a].sort().join('|') === [...b].sort().join('|');
-XP.fichas = {
-  ini: p => ({ q: p.slots.map((_, i) => xpLista(p.fijas?.[i])) }),
-  ok: (s, p) => (p.cumple ? !!p.cumple(s.q) : p.meta.every((m, i) => xpIgual(s.q[i], xpLista(m)))),
-  sol: p => ({ q: (p.sol || p.meta).map(xpLista) }),
-  lee: (s, p) => (p.lee ? p.lee(s.q) : ''),
-  puestas: (s, p) => s.q.reduce((n, l, i) => n + (p.fijas?.[i] != null ? 0 : l.length), 0),
-  faltan: (s, p) => (p.sol || p.meta).reduce((n, l, i) => n + (p.fijas?.[i] != null ? 0 : xpLista(l).length), 0) - XP.fichas.puestas(s, p),
-  dice(s, p) {
-    if (p.dice) return p.dice(s.q);
-    const f = XP.fichas.faltan(s, p), n = XP.fichas.puestas(s, p);
-    return !n ? 'Arrastra cada ficha a su lugar. Con un toque también va o vuelve.' : f > 0 ? `${f === 1 ? 'Falta una ficha' : `Faltan ${f} fichas`}.` : 'Todas en su lugar: mira si cumplen.';
-  },
-  // Fichas que quedan abajo (null en el sitio de las que ya se pusieron).
-  bandeja(s, p) {
-    if (p.repite) return [...p.fichas];
-    const u = s.q.flatMap((l, i) => (p.fijas?.[i] != null ? [] : l));
-    return p.fichas.map(f => { const k = u.indexOf(f); if (k < 0) return f; u.splice(k, 1); return null; });
-  },
-};
-
-XPD.fichas = (stage, p, s, api) => {
-  const W = 340, HF = p.alto || 130, mira = !!p.momentos;
-  const ancho = f => Math.max(36, String(f).length * 8 + 16);
-  const filas = [[]];
-  { let x = 0; p.fichas.forEach((f, k) => { const w = ancho(f); if (x + w > W - 8 && filas.at(-1).length) { filas.push([]); x = 0; } filas.at(-1).push(k); x += w + 8; }); }
-  const H = HF + 14 + filas.length * 44, casa = [];   // casa: sitio de cada ficha en la bandeja
-  filas.forEach((f, r) => { let x = (W - f.reduce((a, k) => a + ancho(p.fichas[k]) + 8, -8)) / 2; for (const k of f) { const w = ancho(p.fichas[k]); casa[k] = [x + w / 2, HF + 32 + r * 44]; x += w + 8; } });
-  let v = { ...p.v }, marca = [], arr = null, stop = null, vuela = null, foco = null;
-  stage.innerHTML = `<svg class="xp-svg xd xfi" viewBox="0 0 ${W} ${H}" role="group" aria-label="Fichas y casilleros"></svg>`;
-  const svg = stage.firstChild, cap = i => p.slots[i].n || 1, SW = i => p.slots[i].w || 56, SH = i => p.slots[i].h || 42;
-  const sitios = i => {   // dónde va cada ficha dentro de su casillero
-    const sl = p.slots[i], l = s.q[i];
-    if (cap(i) === 1) return l.map(() => [sl.x, sl.y]);
-    const fs = [[]], out = []; let x = 0;
-    l.forEach((f, k) => { const w = ancho(f); if (x + w > SW(i) - 8 && fs.at(-1).length) { fs.push([]); x = 0; } fs.at(-1).push(k); x += w + 5; });
-    fs.forEach((f, r) => { let xx = sl.x - f.reduce((a, k) => a + ancho(l[k]) + 5, -5) / 2; for (const k of f) { const w = ancho(l[k]); out[k] = [xx + w / 2, sl.y + (sl.dy || 0) + (r - (fs.length - 1) / 2) * 34]; xx += w + 5; } });
-    return out;
-  };
-  const ficha = (x, y, f, cls, data) => { const w = ancho(f); return `<g class="xfi-ch ${cls}" ${data} transform="translate(${XPK.n(x)} ${XPK.n(y)})"><rect x="${-w / 2}" y="-16" width="${w}" height="32" rx="9"/><text y="5">${f}</text></g>`; };
-  const btn = (t, d) => (mira ? d : `${d} tabindex="0" role="button" aria-label="${String(t).replace(/"/g, '')}"`);
-  function draw() {
-    let h = p.fondo ? p.fondo(XPK, v, s.q) : '';
-    p.slots.forEach((sl, i) => {
-      const fija = p.fijas?.[i] != null, w = SW(i), hh = SH(i);
-      if (!sl.libre) h += sl.red ? `<ellipse class="xfi-sl" cx="${sl.x}" cy="${sl.y}" rx="${w / 2}" ry="${hh / 2}"/>` : `<rect class="xfi-sl${marca.includes(i) ? ' on' : ''}" x="${sl.x - w / 2}" y="${sl.y - hh / 2}" width="${w}" height="${hh}" rx="10"/>`;
-      if (sl.et) h += XPK.t(sl.x + (sl.ex || 0), sl.y + (sl.ey ?? hh / 2 + 16), sl.et, 's tm');
-      const pos = sitios(i);
-      s.q[i].forEach((f, k) => {
-        if ((vuela && vuela.slot === i && vuela.k === k) || (arr?.mov && arr.slot === i && arr.k === k)) return;
-        h += ficha(pos[k][0], pos[k][1], f, `in${fija ? ' fija' : ''}${marca.includes(i) ? ' mk' : ''}`, fija ? '' : btn(f, `data-slot="${i}" data-k="${k}"`));
-      });
-    });
-    XP.fichas.bandeja(s, p).forEach((f, k) => {
-      if (f == null || vuela?.casa === k || (arr?.mov && arr.casa === k && !p.repite)) return;
-      h += ficha(casa[k][0], casa[k][1], f, '', btn(f, `data-casa="${k}"`));
-    });
-    if (vuela) h += ficha(vuela.x, vuela.y, vuela.f, 'in', '');
-    if (arr?.mov) h += ficha(arr.x, arr.y, arr.f, 'drag', '');
-    svg.innerHTML = h;
-    if (mira) return;
-    if (foco) { svg.querySelector(foco)?.focus?.(); foco = null; }
-    svg.querySelectorAll('.xfi-ch[tabindex]').forEach(g => { g.onkeydown = e => { if (e.key !== 'Enter' && e.key !== ' ') return; e.preventDefault(); foco = '.xfi-ch[tabindex]'; toca(g.dataset); }; });
-  }
-  const quita = (i, k) => { s = { q: s.q.map((l, j) => (j === i ? l.filter((_, m) => m !== k) : l)) }; };
-  const mete = (i, f) => { s = { q: s.q.map((l, j) => (j !== i ? l : cap(i) === 1 ? [f] : l.length < cap(i) ? [...l, f] : l)) }; };
-  const fin = () => {
-    XS.pop(); xpTick(); api.nota(''); api.set(s); draw();
-    if (!XP.fichas.ok(s, p) && XP.fichas.faltan(s, p) <= 0) { XS.nope(); api.nota(p.pista || 'Casi: algo no cumple. Mueve una ficha y vuelve a mirar.'); }
-  };
-  const libre = i => p.fijas?.[i] == null;
-  const zonas = p.slots.every((x, i) => !libre(i) || (x.n || 1) > 1);
-  function toca(d) {
-    if (d.casa != null) {
-      const f = p.fichas[+d.casa], i = p.slots.findIndex((_, j) => libre(j) && s.q[j].length < cap(j));
-      if (i < 0) return; mete(i, f);
-    } else {
-      const i = +d.slot, f = s.q[i][+d.k]; quita(i, +d.k);
-      if (zonas) { const j = p.slots.findIndex((_, m) => m > i && libre(m) && s.q[m].length < cap(m)); if (j >= 0) mete(j, f); }   // en zonas, cada toque la pasa a la siguiente
-    }
-    fin();
-  }
-  const at = e => { const r = svg.getBoundingClientRect(); return [(e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height]; };
-  if (!mira) {
-    svg.onpointerdown = e => {
-      if (arr) return;
-      const g = e.target.closest('[data-casa],[data-slot]'); if (!g) return;
-      const d = { ...g.dataset }, [x, y] = at(e);
-      arr = { id: e.pointerId, d, f: d.casa != null ? p.fichas[+d.casa] : s.q[+d.slot][+d.k], casa: d.casa != null ? +d.casa : -1, slot: d.slot != null ? +d.slot : -1, k: +d.k, x, y, x0: x, y0: y, mov: false };
-      try { svg.setPointerCapture(e.pointerId); } catch (er) { /* sin captura */ }
-    };
-    svg.onpointermove = e => { if (!arr || e.pointerId !== arr.id) return; [arr.x, arr.y] = at(e); if (Math.hypot(arr.x - arr.x0, arr.y - arr.y0) > 7) arr.mov = true; if (arr.mov) draw(); };
-    svg.onpointercancel = e => { if (arr && e.pointerId === arr.id) { arr = null; draw(); } };
-    svg.onpointerup = e => {
-      if (!arr || e.pointerId !== arr.id) return;
-      const a = arr; arr = null;
-      if (!a.mov) return toca(a.d);
-      // El casillero donde se suelta (con un margen); si hay varios, el más cercano.
-      const z = p.donde ? p.donde(a.x, a.y) : null;
-      const c = p.donde ? (z >= 0 ? { i: z } : undefined) : p.slots.map((sl, i) => ({ i, dx: Math.abs(a.x - sl.x) - SW(i) / 2, dy: Math.abs(a.y - sl.y) - SH(i) / 2, d: Math.hypot(a.x - sl.x, a.y - sl.y) }))
-        .filter(q => q.dx < 14 && q.dy < 14 && libre(q.i)).sort((q, r) => q.d - r.d)[0];
-      if (a.slot >= 0) {
-        if (c && c.i === a.slot) return draw();
-        const sale = c && cap(c.i) === 1 ? s.q[c.i][0] : null;
-        quita(a.slot, a.k);
-        if (c) { mete(c.i, a.f); if (sale != null && cap(a.slot) === 1) mete(a.slot, sale); }   // dos fichas cambian de puesto
-      } else if (c) mete(c.i, a.f); else return draw();
-      fin();
-    };
-  }
-  draw();
-  const pasos = m => [...(m.saca || []).map(i => ({ saca: i })), ...Object.entries(m.pon || {}).flatMap(([i, l]) => xpLista(l).map(f => ({ slot: +i, f })))];
-  const aplica = q => { if (q.saca != null) s = { q: s.q.map((l, i) => (i === q.saca ? [] : l)) }; else mete(q.slot, q.f); };
-  return Object.assign(() => stop?.(), {
-    anima(m, done) {
-      if (m.v) v = { ...v, ...m.v };
-      marca = m.marca || []; draw();
-      const ps = pasos(m); let i = 0, t = 0, par = null;
-      const sig = () => {
-        if (i >= ps.length) { t = setTimeout(done, 350); return; }
-        const q = ps[i++];
-        if (q.saca != null) { aplica(q); XS.tick(-8); draw(); t = setTimeout(sig, 260); return; }
-        const k = XP.fichas.bandeja(s, p).indexOf(q.f), de = k >= 0 ? casa[k] : [p.slots[q.slot].x, HF + 30];
-        aplica(q);
-        const kk = s.q[q.slot].length - 1, a = sitios(q.slot)[kk] || [p.slots[q.slot].x, p.slots[q.slot].y];
-        par = xpTween(0, 1, 420, z => { vuela = { slot: q.slot, k: kk, casa: p.repite ? -1 : k, f: q.f, x: XPK.lerp(de[0], a[0], z), y: XPK.lerp(de[1], a[1], z) }; draw(); }, () => { vuela = null; XS.pop(); draw(); t = setTimeout(sig, 140); });
-      };
-      sig();
-      return () => { clearTimeout(t); par?.(); };
-    },
-    salta(l) { for (const m of l) { if (m.v) v = { ...v, ...m.v }; pasos(m).forEach(aplica); } marca = []; draw(); },
-  });
-};
-
-// ------------------------------------------------------------------------------------------------------------- rejilla
-// Celdas f × c con estado 0, 1 (puesta) o 2 (tachada). `rot`: rótulo de cada estado (['', '✓', '✗']); `celda(i, r, c)`: rótulo fijo;
-// `filas`, `cols`: encabezados; `dados` {i: estado} (no se cambian). Meta: índices puestos, objeto {i: estado} o cumple(celdas).
-XP.rejilla = {
-  ini: p => ({ c: Array.from({ length: p.f * p.c }, (_, i) => p.dados?.[i] ?? 0) }),
-  ok(s, p) {
-    if (p.cumple) return !!p.cumple(s.c);
-    if (Array.isArray(p.meta)) return s.c.every((x, i) => (x === 1) === (p.meta.includes(i) || p.dados?.[i] === 1));
-    return Object.entries(p.meta).every(([i, x]) => s.c[i] === x);
-  },
-  sol(p) {
-    const c = XP.rejilla.ini(p).c, m = p.sol || p.meta;
-    if (Array.isArray(m)) m.forEach(i => { c[i] = 1; }); else for (const i in m) c[i] = m[i];
-    return { c };
-  },
-  lee: (s, p) => (p.lee ? p.lee(s.c) : ''),
-  dice: (s, p) => (p.dice ? p.dice(s.c) : s.c.some((x, i) => x && !p.dados?.[i]) ? '' : `Toca${p.unoAUno ? '' : ' o arrastra sobre'} las casillas. Otro toque las cambia.`),
-};
-
-XPD.rejilla = (stage, p, s, api) => {
-  const W = 340, izq = p.filas ? (p.izq || 78) : 0, est = p.estados || 2, y0 = p.cols ? 26 : 4;
-  const cw = Math.min(p.cw || 44, (W - izq - 6) / p.c), ch = p.ch || Math.min(cw, 40), x0 = (W - izq - cw * p.c) / 2 + izq, H = y0 + ch * p.f + 6 + (p.pie ? 22 : 0);
-  let luz = [], txt = {}, stop = null, dedo = null, pinta = 0, ult = -1, v = { ...p.v }, cur = -1, previa = null;
-  stage.innerHTML = `<svg class="xp-svg xd xre" viewBox="0 0 ${W} ${H}" role="${p.momentos ? 'img' : 'application'}" aria-label="Tabla: flechas para moverse y Enter para marcar" ${p.momentos ? '' : 'tabindex="0"'}></svg>`;
-  const svg = stage.firstChild, hueco = i => p.hueco?.(i, Math.floor(i / p.c), i % p.c);
-  function draw() {
-    let h = '';
-    (p.cols || []).forEach((t, c) => { h += XPK.t(x0 + (c + 0.5) * cw, y0 - 8, t, 's'); });
-    (p.filas || []).forEach((t, r) => { h += XPK.t(x0 - 8, y0 + (r + 0.5) * ch + 5, t, 's', 'end'); });
-    for (let i = 0; i < p.f * p.c; i++) {
-      const r = Math.floor(i / p.c), c = i % p.c, e = s.c[i], g = txt[i] ?? (p.celda ? p.celda(i, r, c) : ''), t = p.rot ? (p.rot[e] || g) : g;
-      if (hueco(i)) continue;
-      h += `<rect class="xre-c e${e}${luz.includes(i) ? ' luz' : ''}${i === cur ? ' cur' : ''}${p.dados?.[i] ? ' dado' : ''}" x="${XPK.n(x0 + c * cw + 1.5)}" y="${XPK.n(y0 + r * ch + 1.5)}" width="${XPK.n(cw - 3)}" height="${XPK.n(ch - 3)}" rx="${XPK.n(Math.min(7, cw / 5))}"/>`;
-      if (t !== '') h += `<text class="xre-t e${e}" x="${XPK.n(x0 + (c + 0.5) * cw)}" y="${XPK.n(y0 + (r + 0.5) * ch + 5)}"${String(t).length * 8.4 > cw - 4 ? ' style="font-size:11px"' : ''}>${t}</text>`;
-    }
-    if (p.sobre) h += p.sobre(XPK, { x: c => x0 + c * cw, y: r => y0 + r * ch, cw, ch }, v, s.c);
-    if (p.pie) h += XPK.t(W / 2, H - 4, p.pie, 's tm');
-    svg.innerHTML = h;
-  }
-  const celda = e => {
-    const b = svg.getBoundingClientRect(), x = (e.clientX - b.left) * W / b.width - x0, y = (e.clientY - b.top) * H / b.height - y0;
-    const c = Math.floor(x / cw), r = Math.floor(y / ch);
-    return c < 0 || r < 0 || c >= p.c || r >= p.f ? -1 : r * p.c + c;
-  };
-  const puede = i => i >= 0 && !p.dados?.[i] && !hueco(i);
-  const pon = (i, e) => { if (s.c[i] === e) return; s = { c: s.c.map((x, k) => (k === i ? e : x)) }; XS.tick(i % 12); xpTick(); draw(); api.set(s, true); };
-  // Al soltar se mira la meta; el aviso espera un poco, por si se sigue tocando (para poner ✗ se pasa por ✓).
-  let aviso = 0;
-  const suelta = () => {
-    api.set(s); clearTimeout(aviso);
-    if (p.pista) aviso = setTimeout(() => { if (!XP.rejilla.ok(s, p) && p.lleno?.(s.c)) { XS.nope(); api.nota(p.pista); } }, 900);
-  };
-  if (!p.momentos) {
-    svg.onpointerdown = e => {
-      if (dedo != null) return;
-      clearTimeout(aviso);
-      const i = celda(e); if (!puede(i)) return;
-      dedo = e.pointerId; ult = i; previa = s; pinta = (s.c[i] + 1) % est;
-      try { svg.setPointerCapture(e.pointerId); } catch (er) { /* sin captura */ }
-      pon(i, pinta);
-    };
-    svg.onpointermove = e => { if (e.pointerId !== dedo || p.unoAUno || est > 2) return; const i = celda(e); if (i === ult || !puede(i)) return; ult = i; pon(i, pinta); };
-    svg.onpointerup = e => {
-      if (e.pointerId !== dedo) return;
-      dedo = null; suelta();
-    };
-    svg.onpointercancel = e => {   // el gesto era desplazar la página: la casilla vuelve a como estaba
-      if (e.pointerId !== dedo) return;
-      dedo = null; s = previa; draw(); api.set(s);
-    };
-    svg.onkeydown = e => {
-      const d = { ArrowRight: 1, ArrowLeft: -1, ArrowUp: -p.c, ArrowDown: p.c }[e.key];
-      if (d) { e.preventDefault(); const q = cur + d; if (cur < 0) cur = 0; else if (q >= 0 && q < p.f * p.c) cur = q; draw(); } else if ((e.key === 'Enter' || e.key === ' ') && puede(cur)) { e.preventDefault(); pon(cur, (s.c[cur] + 1) % est); suelta(); }
-    };
-  }
-  draw();
-  const pasos = m => [...(m.off || []).map(i => [i, 0]), ...(m.on || []).map(i => [i, 1]), ...(m.x || []).map(i => [i, 2])];
-  const antes = m => { if (m.limpia) { s = XP.rejilla.ini(p); txt = {}; } if (m.txt) txt = { ...txt, ...m.txt }; if (m.v) v = { ...v, ...m.v }; luz = m.luz || []; };
-  return Object.assign(() => { stop?.(); clearTimeout(aviso); }, {
-    anima(m, done) {
-      antes(m); draw(); if (m.txt || m.luz) XS.pop();
-      const ps = pasos(m), dt = Math.min(260, 1500 / Math.max(1, ps.length)); let i = 0, t = 0;
-      const sig = () => { if (i >= ps.length) { t = setTimeout(done, 450); return; } const [k, e] = ps[i++]; s = { c: s.c.map((x, j) => (j === k ? e : x)) }; XS.tick(i); draw(); t = setTimeout(sig, dt); };
-      sig();
-      return () => clearTimeout(t);
-    },
-    salta(l) { for (const m of l) { antes(m); for (const [k, e] of pasos(m)) s = { c: s.c.map((x, j) => (j === k ? e : x)) }; } luz = []; draw(); },
-  });
-};
-;
 //#archivo js/explora-mate.js
 // Explora · piezas de dibujo para las lecciones de Álgebra y Trigonometría (spec 2026-11-25-explora-algebra-trigonometria). Va
 // después de explora-escenas.js. Todo son funciones puras que devuelven SVG con las piezas de XPK (K).
@@ -6503,6 +6102,150 @@ xpLec('pu-vo-4', [
   ], 'Una unidad para comparar, d = v · t y suma o resta según el sentido.');
 }
 ;
+//#archivo js/explora-icf-ma-3.js
+// Preicfes · Matemáticas, mundo 3 «Conteo y Probabilidad» (Explora, escenas «dibujo», «fichas» y «hoja»). Ejemplos propios.
+{
+  // Árbol de a ramas y, en cada una, b: se ve la primera o las dos partes.
+  const arbol = (v, K) => {
+    let h = ''; const a = Math.round(v.a), b = Math.round(v.b), n = a * b, Y = k => 24 + (k + 0.5) * 160 / n;
+    for (let i = 0; i < a; i++) { const y = Y(i * b + (b - 1) / 2); h += K.l(40, 104, 140, y, 'lg gr') + K.c(140, y, 6, 'fA'); for (let j = 0; j < b; j++) h += K.f(v.f, K.l(140, y, 260, Y(i * b + j), 'lm') + K.c(260, Y(i * b + j), 5, 'fG')); }
+    return h + K.c(40, 104, 7, 'fF') + K.f(v.f, K.t(300, 108, n, 'b tg')) + K.t(170, 204, v.t || '', 's ta');
+  };
+  // Dos círculos que se cruzan: solo a, los dos, solo b.
+  const venn = (v, K) => K.c(140, 100, 70, 'fa') + K.c(210, 100, 70, 'fg') + K.t(105, 106, v.a, 'b') + K.t(245, 106, v.b, 'b') + K.f(v.f, K.t(175, 106, v.m, 'b tf')) + K.t(170, 196, v.t || '', 's ta');
+  // Bolsa: k de un color entre n; las primeras se marcan.
+  const bolsa = (v, K) => Array.from({ length: Math.round(v.n) }, (_, i) => K.c(58 + (i % 8) * 32, 60 + Math.floor(i / 8) * 36, 12, i < Math.round(v.k) ? 'fA' : 'fG')).join('') + K.t(170, 160, v.t || '', 'ta');
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 80, et: e }));
+
+  xpLec('icf-ma-azar-1', [
+    ['Y multiplica',
+      xpMira('dibujo', 'Empecemos por la idea: si haces una cosa **y además** otra, los casos se multiplican.', { dib: arbol, v: { a: 2, b: 3, f: 0, t: '' }, alto: 212 }, [
+        ['Dos camisas: dos ramas.', {}],
+        ['Con cada camisa van tres pantalones.', { f: 1 }],
+        ['Son seis pintas: cada rama se abre en tres.', { t: '2 · 3 = 6' }, '$2 \\cdot 3 = 6$'],
+        ['Con tres camisas habría nueve.', { a: 3, t: '3 · 3 = 9' }, '$3 \\cdot 3 = 9$'],
+        ['No se suma: cada una va con cada una.', {}],
+      ], 'Una cosa y además otra: se multiplica.'),
+      xpHaz('dibujo', 'Hay 3 sopas. Mueve los jugos hasta que haya **15** almuerzos de sopa y jugo.', { dib: (v, K) => arbol({ a: 3, b: v.b, f: 1 }, K), v: { b: 2 }, metas: { b: 5 }, alto: 260, manijas: [{ k: 'b', min: 1, max: 7, paso: 1, et: 'jugos' }], lee: v => `$3 \\cdot ${v.b} = ${3 * v.b}$`, dice: () => 'Cada sopa va con cada jugo.' }, '$3 \\cdot 5 = 15$.')],
+    ['O suma',
+      xpMira('fichas', 'Segunda idea: si escoges **una sola** cosa, los casos se suman.', { slots: fila('y', 'o'), fichas: ['20', '9'], alto: 96 }, [
+        ['Hay 4 buses y 5 trenes.', {}],
+        ['Ir en bus y volver en tren: dos decisiones.', { pon: { 0: '20' } }, '$4 \\cdot 5 = 20$'],
+        ['Ir en bus o en tren: una sola decisión.', { pon: { 1: '9' } }, '$4 + 5 = 9$'],
+        ['Pregúntate si al final tienes una cosa o dos.', { marca: [0, 1] }],
+        ['Y multiplica; o, escogiendo una sola, suma.', { marca: [] }],
+      ], 'Dos decisiones se multiplican; una sola elección entre grupos se suma.'),
+      xpHaz('fichas', '6 libros y 3 revistas. Pon cuántas maneras hay de llevar un libro **y** una revista, y de llevar **una sola** cosa.', { slots: fila('libro y revista', 'una sola'), fichas: ['18', '9', '63', '3', '36'], meta: ['18', '9'], alto: 96, pista: 'La primera son dos decisiones; la segunda, una.' }, '$6 \\cdot 3 = 18$ y $6 + 3 = 9$.')],
+    ['Lo que se cuenta dos veces',
+      xpMira('dibujo', 'Tercera idea: lo que está en **los dos** grupos se cuenta una sola vez.', { dib: venn, v: { a: 12, b: 8, m: 4, f: 0, t: '' }, alto: 204 }, [
+        ['A nadar van 16 y a correr 12.', { t: '16 nadan · 12 corren' }],
+        ['Pero 4 hacen las dos cosas: están en el centro.', { f: 1 }],
+        ['Solo nadan 12 y solo corren 8.', {}, '$16 - 4 = 12 \\quad 12 - 4 = 8$'],
+        ['Si sumas 16 y 12, los 4 entran dos veces.', { t: '16 + 12 = 28' }, '$16 + 12 = 28$'],
+        ['Por eso se quitan una vez: son 24.', { t: '28 − 4 = 24' }, '$28 - 4 = 24$'],
+      ], 'Alguno = suma de los dos grupos − los que están en ambos.'),
+      xpHaz('fichas', '10 cantan, 7 bailan y 3 hacen las dos. Pon cuántos solo cantan y cuántos hacen alguna.', { slots: fila('solo cantan', 'alguna'), fichas: ['7', '14', '17', '13', '20'], meta: ['7', '14'], alto: 96, pista: 'Quita los 3 a los que cantan; y a la suma, una sola vez.' }, '$10 - 3 = 7$ y $10 + 7 - 3 = 14$.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'Una clave lleva una vocal y luego dos dígitos que pueden repetirse. Pon las opciones de cada casilla y el total.', { slots: fila('vocal', 'dígito', 'dígito', 'total').map(s => ({ ...s, w: 62 })), fichas: ['5', '10', '10', '500', '9', '450', '25'], meta: ['5', '10', '10', '500'], alto: 96, pista: 'Los dígitos se pueden repetir: no se pierde ninguno.' }, '$5 \\cdot 10 \\cdot 10 = 500$.')],
+  ], 'Y multiplica, o suma, y lo repetido se quita una vez.');
+
+  xpLec('icf-ma-azar-2', [
+    ['¿Importa el orden?',
+      xpMira('hoja', 'Empecemos por la idea: cambia dos de lugar y mira si el resultado **es otro**.', { letras: ['A', 'B', 'C', 'D'], paras: [['Oro y plata entre atletas'], ['Dos sabores en un vaso'], ['Una clave de tres cifras'], ['Un equipo de cuatro']] }, [
+        ['Si cambias oro y plata, gana otro: importa.', { luz: [0], nota: { 0: 'con orden' } }],
+        ['Mango y mora o mora y mango: el mismo vaso.', { luz: [1], nota: { 1: 'sin orden' } }],
+        ['123 no abre lo que abre 321.', { luz: [2], nota: { 2: 'con orden' } }],
+        ['El equipo es el mismo aunque los nombres al revés.', { luz: [3], nota: { 3: 'sin orden' } }],
+        ['Con orden es permutación; sin orden, combinación.', {}],
+      ], 'Cambia el orden: si sale otra cosa, importa.'),
+      xpHaz('hoja', 'Subraya los **dos** casos en que el orden **no** importa.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [0, 2], paras: [['Escoger tres cartas para quedarse'], ['Presidenta y secretaria'], ['Dos amigos para ir al cine'], ['Las letras de una placa']], pista: 'En alguno, cambiar de lugar cambia el resultado.' }, 'Las cartas y los amigos son los mismos.')],
+    ['Con orden',
+      xpMira('fichas', 'Segunda idea: con orden, cada puesto **gasta** una opción.', { slots: fila('1.º', '2.º', '3.º', 'total').map(s => ({ ...s, w: 62 })), fichas: ['7', '6', '5', '210'], alto: 96 }, [
+        ['Siete corredoras y tres medallas.', {}],
+        ['Para el oro hay siete.', { pon: { 0: '7' } }],
+        ['Para la plata quedan seis.', { pon: { 1: '6' } }],
+        ['Para el bronce, cinco.', { pon: { 2: '5' } }],
+        ['Se multiplican: 210 podios.', { pon: { 3: '210' } }, '$7 \\cdot 6 \\cdot 5 = 210$'],
+      ], 'Con orden: n por (n − 1) por… tantas veces como puestos.'),
+      xpHaz('fichas', '9 personas, capitán y portero. Pon las opciones de cada puesto y el total.', { slots: fila('capitán', 'portero', 'total'), fichas: ['9', '8', '72', '81', '36', '17'], meta: ['9', '8', '72'], alto: 96, pista: 'Quien es capitán ya no puede ser portero.' }, '$9 \\cdot 8 = 72$.')],
+    ['Sin orden se divide',
+      xpMira('hoja', 'Tercera idea: sin orden, cada grupo se contó **varias veces**.', { paras: [['ABC', 'ACB', 'BAC'], ['BCA', 'CAB', 'CBA']] }, [
+        ['Escoge a Ana, Beto y Caro.', { luz: [0] }],
+        ['Contando con orden aparecen seis veces.', { luz: [0, 1, 2, 3, 4, 5] }, '$3 \\cdot 2 \\cdot 1 = 6$'],
+        ['Pero es el mismo grupo.', { nota: { 0: 'el mismo', 1: 'el mismo' } }],
+        ['Con 7 personas: 210 con orden, entre 6.', {}, '$210 \\div 6 = 35$'],
+        ['Y escoger 5 de 7 es lo mismo que dejar 2.', {}, '$\\tfrac{7 \\cdot 6}{2} = 21$'],
+      ], 'Sin orden: cuenta con orden y divide entre los órdenes del grupo.'),
+      xpHaz('fichas', 'De 6 personas se escogen 2 sin orden. Pon las parejas con orden y sin orden.', { slots: fila('con orden', 'sin orden'), fichas: ['30', '15', '12', '36', '60'], meta: ['30', '15'], alto: 96, pista: 'Cada pareja salió dos veces.' }, '$6 \\cdot 5 = 30$ y $30 \\div 2 = 15$.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', '4 médicas y 3 enfermeros; se escogen 2 médicas y 1 enfermero. Pon cada elección y el total.', { slots: fila('médicas', 'enfermero', 'total'), fichas: ['6', '3', '18', '12', '9', '35'], meta: ['6', '3', '18'], alto: 96, pista: 'Las médicas van sin orden: 4 por 3 entre 2.' }, '$6 \\cdot 3 = 18$.')],
+  ], 'Orden, puestos y división: esas tres preguntas bastan.');
+
+  xpLec('icf-ma-azar-3', [
+    ['Favorables entre posibles',
+      xpMira('dibujo', 'Empecemos por la idea: la probabilidad es **qué parte** de los casos sirve.', { dib: bolsa, v: { n: 8, k: 2, t: '' }, alto: 176 }, [
+        ['Ocho bolas; dos de un color.', {}],
+        ['Sirven dos de ocho: un cuarto.', { t: '2 de 8' }, '$\\tfrac28 = \\tfrac14$'],
+        ['Con cuatro de ocho, la mitad.', { k: 4, t: '4 de 8' }, '$\\tfrac48 = \\tfrac12$'],
+        ['Cuatro de dieciséis: otra vez un cuarto.', { n: 16, t: '4 de 16' }, '$\\tfrac{4}{16} = \\tfrac14$'],
+        ['Más favorables no es más probable: mira el total.', {}],
+      ], 'Favorables entre posibles; y se compara la parte, no la cantidad.'),
+      xpHaz('dibujo', 'Hay 12 bolas. Mueve las del color hasta que su probabilidad sea $\\tfrac13$.', { dib: (v, K) => bolsa({ n: 12, k: v.k }, K), v: { k: 1 }, metas: { k: 4 }, alto: 220, manijas: [{ k: 'k', min: 0, max: 12, paso: 1, et: 'del color' }], lee: v => `$\\tfrac{${v.k}}{12}$`, dice: () => 'Un tercio de doce.' }, '$\\tfrac{4}{12} = \\tfrac13$.')],
+    ['De 0 a 1',
+      xpMira('fichas', 'Segunda idea: va de **0** (imposible) a **1** (seguro).', { slots: fila('sale 7', 'sale 3', 'sale par', 'sale menor que 7').map(s => ({ ...s, w: 64 })), fichas: ['0', '1/6', '1/2', '1'], alto: 96 }, [
+        ['Un dado de seis caras.', {}],
+        ['Que salga 7 es imposible.', { pon: { 0: '0' } }],
+        ['Que salga 3: una de seis.', { pon: { 1: '1/6' } }],
+        ['Que salga par: tres de seis.', { pon: { 2: '1/2' } }],
+        ['Menor que 7: siempre.', { pon: { 3: '1' } }],
+      ], 'Nunca es negativa ni pasa de 1.'),
+      xpHaz('fichas', 'Una tarjeta del 1 al 5. Pon la probabilidad de que sea mayor que 3 y de que sea mayor que 5.', { slots: fila('mayor que 3', 'mayor que 5'), fichas: ['2/5', '0', '3/5', '1', '5/2'], meta: ['2/5', '0'], alto: 96, pista: 'Cuenta las que sirven: el 3 no es mayor que 3.' }, 'Sirven el 4 y el 5; mayor que 5 no hay.')],
+    ['Lo contrario y dos dados',
+      xpMira('hoja', 'Tercera idea: lo que pasa y lo que no **completan 1**; con dos dados se cuentan **parejas**.', { letras: ['1', '2', '3'], paras: [['Llueve: 30 %'], ['Suman 3: (1, 2) y (2, 1)'], ['Suman 2: (1, 1)']] }, [
+        ['Si llueve con 30 %, no llueve con 70 %.', { luz: [0], nota: { 0: 'el resto: 70 %' } }],
+        ['Dos dados: 36 parejas ordenadas.', {}, '$6 \\cdot 6 = 36$'],
+        ['La suma 3 sale de dos parejas.', { luz: [1], nota: { 1: '2/36' } }],
+        ['La suma 2, de una sola.', { luz: [2], nota: { 2: '1/36' } }],
+        ['Por eso no todas las sumas son igual de fáciles.', { luz: [1, 2] }],
+      ], 'Contrario: 1 menos. Dos dados: 36 parejas ordenadas.'),
+      xpHaz('fichas', 'Pon en cuántas parejas la suma es 4 y la probabilidad de que **no** sea 4.', { slots: fila('parejas', 'no es 4'), fichas: ['3', '33/36', '2', '3/36', '1/11'], meta: ['3', '33/36'], alto: 96, pista: '(1, 3), (2, 2) y (3, 1).' }, 'Tres parejas; las otras 33 no.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'Urna A: 3 rojas de 6. Urna B: 4 rojas de 10. Pon la probabilidad de roja en cada una.', { slots: fila('urna A', 'urna B'), fichas: ['1/2', '2/5', '3/4', '1/3', '4/6'], meta: ['1/2', '2/5'], alto: 96, pista: 'Divide entre todas las bolas de su urna.' }, 'B tiene más rojas, pero A es más probable.')],
+  ], 'Parte del total, entre 0 y 1, y lo contrario completa.');
+
+  xpLec('icf-ma-azar-4', [
+    ['¿Sobre quiénes?',
+      xpMira('hoja', 'Empecemos por la idea: la pregunta dice **entre quiénes** se escoge.', { paras: [['Mujeres: 10', 'con gafas 4'], ['Hombres: 10', 'con gafas 2'], ['Todos: 20', 'con gafas 6']] }, [
+        ['Entre todos, la de una mujer es 10 de 20.', { luz: [0, 4] }, '$\\tfrac{10}{20}$'],
+        ['Entre todos, con gafas: 6 de 20.', { luz: [4, 5] }, '$\\tfrac{6}{20}$'],
+        ['Entre las mujeres, con gafas: 4 de 10.', { luz: [0, 1], nota: { 0: 'ahora son 10' } }, '$\\tfrac{4}{10}$'],
+        ['Entre los de gafas, mujer: 4 de 6.', { luz: [1, 5], nota: { 2: 'ahora son 6' } }, '$\\tfrac46$'],
+        ['El mismo 4, sobre totales distintos.', { luz: [1] }],
+      ], 'Primero di entre quiénes se escoge: ese es el total.'),
+      xpHaz('fichas', 'De 30 trabajan 12 de noche; de esos, 3 en moto. Pon la de moto **entre los de la noche** y la de noche **entre todos**.', { slots: fila('moto | noche', 'noche'), fichas: ['1/4', '2/5', '1/10', '3/30', '12/3'], meta: ['1/4', '2/5'], alto: 96, pista: 'La primera se divide entre 12.' }, '$\\tfrac{3}{12} = \\tfrac14$ y $\\tfrac{12}{30} = \\tfrac25$.')],
+    ['Con o sin devolver',
+      xpMira('dibujo', 'Segunda idea: si no se devuelve, la **segunda vez** cambia.', { dib: bolsa, v: { n: 5, k: 3, t: '' }, alto: 176 }, [
+        ['Tres naranjas de cinco.', { t: '3/5' }],
+        ['Saco una y la devuelvo: sigue igual.', { t: 'otra vez 3/5' }, '$\\tfrac35 \\cdot \\tfrac35$'],
+        ['Saco una naranja y la guardo.', { n: 4, k: 2, t: 'quedan 2 de 4' }],
+        ['Ahora la segunda es 2 de 4.', {}, '$\\tfrac35 \\cdot \\tfrac24$'],
+        ['Cambian los dos números: las que sirven y el total.', {}],
+      ], 'Sin devolver hay una menos en el total, y quizá una menos que sirve.'),
+      xpHaz('fichas', '4 rojas y 4 blancas. Sale una roja y **no** se devuelve. Pon la probabilidad de otra roja y de blanca.', { slots: fila('otra roja', 'blanca'), fichas: ['3/7', '4/7', '4/8', '3/8', '1/2'], meta: ['3/7', '4/7'], alto: 96, pista: 'Quedan 7 bolas.' }, 'Quedan 3 rojas y 4 blancas de 7.')],
+    ['Al menos uno',
+      xpMira('fichas', 'Tercera idea: «al menos uno» es **todo menos ninguno**.', { slots: fila('falla 1.º', 'falla 2.º', 'fallan ambos', 'alguno').map(s => ({ ...s, w: 66 })), fichas: ['1/2', '3/4', '3/8', '5/8'], alto: 96 }, [
+        ['Uno acierta con un medio y otro con un cuarto.', {}],
+        ['Fallan con un medio y tres cuartos.', { pon: { 0: '1/2', 1: '3/4' } }],
+        ['Que fallen los dos: se multiplica.', { pon: { 2: '3/8' } }, '$\\tfrac12 \\cdot \\tfrac34 = \\tfrac38$'],
+        ['Lo demás es que acierte alguno.', { pon: { 3: '5/8' } }, '$1 - \\tfrac38 = \\tfrac58$'],
+        ['Sumar los aciertos contaría dos veces cuando aciertan ambos.', {}],
+      ], 'Alguno = 1 − ninguno.'),
+      xpHaz('fichas', 'Dos focos fallan con 1/3 cada uno, sin afectarse. Pon la de que fallen ambos y la de que alguno sirva.', { slots: fila('fallan ambos', 'alguno sirve'), fichas: ['1/9', '8/9', '2/3', '4/9', '1/6'], meta: ['1/9', '8/9'], alto: 96, pista: 'Multiplica los fallos y réstalo de 1.' }, '$\\tfrac13 \\cdot \\tfrac13 = \\tfrac19$ y $1 - \\tfrac19$.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', '2 verdes y 4 azules; se sacan dos **sin devolver**. Pon la de azul primero y la de dos azules.', { slots: fila('1.ª azul', 'dos azules'), fichas: ['2/3', '2/5', '4/9', '3/5', '7/6'], meta: ['2/3', '2/5'], alto: 96, pista: 'La segunda azul es 3 de 5.' }, '$\\tfrac46 \\cdot \\tfrac35 = \\tfrac25$.')],
+  ], 'Entre quiénes, qué queda y todo menos ninguno.');
+}
+;
 //#archivo js/explora-icf-lc.js
 // Preicfes · Lectura Crítica, mundo 1 «Lo que Dice el Texto» (Explora, escena «hoja»). Textos cortos propios.
 xpLec('icf-lc-literal-1', [
@@ -6668,6 +6411,72 @@ xpLec('icf-lc-estructura-3', [
     xpHaz('hoja', '«Según la directora, el coro mejoró. A mí me sonó igual». Subraya quién cree que mejoró.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['La directora'], ['Quien escribe'], ['El coro']], pista: 'Busca de quién es la idea que va después de «según».' }, '«Según» le da la idea a la directora.')],
 ], 'Marca de voz, manera de citar y palabra escogida.');
 ;
+//#archivo js/explora-icf-lc-3.js
+// Preicfes · Lectura Crítica, mundo 3 «Tesis y Argumentos» (Explora, escena «hoja»). Textos cortos propios.
+xpLec('icf-lc-argumento-1', [
+  ['Tema y tesis',
+    xpMira('hoja', 'Empecemos por la idea: el **tema** es de qué se habla; la **tesis**, lo que se quiere que aceptes.', { letras: ['A', 'B', 'C', 'D'], paras: [['Los perros en los parques'], ['Hay doce perros en el parque.'], ['Los perros deberían ir con correa.'], ['¿Van con correa?']] }, [
+      ['Esto es un tema: no afirma nada.', { luz: [0], nota: { 0: 'tema' } }],
+      ['Esto es un dato: se cuenta.', { luz: [1], nota: { 1: 'dato' } }],
+      ['Esto se puede discutir: es la tesis.', { luz: [2], nota: { 2: 'tesis' } }],
+      ['Y esto pregunta, no defiende.', { luz: [3], nota: { 3: 'pregunta' } }],
+      ['La prueba: ¿alguien podría decir que no está de acuerdo?', { luz: [2] }],
+    ], 'Tesis: una afirmación que se defiende y se puede discutir.'),
+    xpHaz('hoja', 'Subraya la **tesis**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [3], paras: [['Las tareas de vacaciones'], ['Duran tres semanas.'], ['¿Quién las revisa?'], ['Las tareas de vacaciones no enseñan.']], pista: 'Esa no se puede discutir: es un tema, un dato o una pregunta.' }, 'Con esa alguien podría no estar de acuerdo.')],
+  ['Razones y adornos',
+    xpMira('hoja', 'Segunda idea: una **razón** responde «¿por qué?».', { letras: ['tesis', 'a', 'b', 'c'], paras: [['Hay que cerrar esa calle los domingos.'], ['Los niños no tienen dónde jugar.'], ['Es la calle novena.'], ['En otro barrio bajaron los accidentes.']] }, [
+      ['La tesis: cerrar la calle.', { luz: [0] }],
+      ['¿Por qué? No hay dónde jugar.', { luz: [1], nota: { 1: 'razón' } }],
+      ['El número de la calle no responde por qué.', { luz: [2], tacha: [2], nota: { 2: 'adorno' } }],
+      ['¿Por qué? Porque funcionó en otra parte.', { luz: [3], nota: { 3: 'razón con prueba' } }],
+      ['Une la razón y la tesis con «porque»: si suena, sirve.', {}],
+    ], 'Prueba: tesis + porque + razón. Si no une, no es una razón.'),
+    xpHaz('hoja', 'Tesis: «El colegio debe abrir la biblioteca el sábado». **Tacha** las dos que no son razones.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 2], paras: [['Tiene puertas azules.'], ['Muchos no tienen dónde estudiar.'], ['El sábado va después del viernes.'], ['En semana está llena.']], pista: 'Alguna de las tachadas sí responde por qué.' }, 'Las puertas y el calendario no responden por qué.')],
+  ['El otro lado',
+    xpMira('hoja', 'Tercera idea: un buen argumento trae **lo que dirían otros** y lo contesta.', { paras: [['Propongo huertas en los techos.'], ['Se dirá que pesan mucho.'], ['Es cierto en techos de zinc.'], ['Pero en placas de cemento resisten.']] }, [
+      ['Primero, lo que se propone: la tesis.', { luz: [0], nota: { 0: 'se propone algo' } }],
+      ['«Se dirá» trae la objeción.', { luz: [1], nota: { 1: 'contraargumento' } }],
+      ['«Es cierto» le reconoce una parte.', { luz: [2], nota: { 2: 'concesión' } }],
+      ['Y «pero» responde a la objeción.', { luz: [3], nota: { 3: 'respuesta' } }],
+      ['Nombrar una objeción no es estar de acuerdo con ella.', { luz: [1] }],
+    ], '«Se dirá» objeta, «es cierto» concede y «pero» responde.'),
+    xpHaz('hoja', 'Pon al margen el papel de cada oración.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['respuesta', 'tesis', 'contraargumento'], meta: [1, 2, 0], paras: [['Conviene reducir el uniforme.'], ['Algunos dirán que así habrá burlas por la ropa.'], ['Sin embargo, donde se hizo no aumentaron.']], pista: 'Alguna no va ahí: busca «conviene», «dirán» y «sin embargo».' }, 'Se propone, se objeta y se responde.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«El puente está viejo. Hay que cerrarlo: tiene grietas, aunque sea bonito». Subraya la **tesis**.', { modo: 'toca', meta: [1], paras: [['El puente está viejo.', 'Hay que cerrarlo:', 'tiene grietas,', 'aunque sea bonito.']], pista: 'Esa es un dato, una razón o una concesión.' }, '«Hay que» pide algo que otros pueden discutir.')],
+], 'Tema no es tesis; la razón responde por qué; y la objeción se contesta.');
+
+xpLec('icf-lc-argumento-2', [
+  ['Más firme o más débil',
+    xpMira('hoja', 'Empecemos por la idea: un dato nuevo **fortalece** o **debilita** si cambia lo que crees.', { letras: ['tesis', 'a', 'b', 'c'], paras: [['Leer de noche ayuda a dormir.'], ['Quienes leyeron se durmieron antes.'], ['Quienes leyeron también apagaron el celular.'], ['Los libros eran de pasta dura.']] }, [
+      ['Arriba está la tesis que se defiende.', { luz: [0] }],
+      ['Se durmieron antes: la hace más creíble.', { luz: [1], nota: { 1: 'fortalece' } }],
+      ['Apagaron el celular: quizá fue eso.', { luz: [2], nota: { 2: 'debilita' } }],
+      ['La pasta no cambia nada.', { luz: [3], nota: { 3: 'no pesa' } }],
+      ['Pregunta: con este dato, ¿creo más, menos o igual?', {}],
+    ], 'Otra causa posible es una de las maneras más fuertes de debilitar.'),
+    xpHaz('hoja', 'Tesis: «El nuevo semáforo redujo los choques». Subraya el dato que la **debilita**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Hubo la mitad de choques.'], ['Ese mes cerraron la avenida por obras.'], ['El semáforo tiene tres luces.']], pista: 'Ese la apoya o no pesa. Busca otra causa posible.' }, 'Con la avenida cerrada habría menos choques de todos modos.')],
+  ['De pocos a todos',
+    xpMira('hoja', 'Segunda idea: de **pocos casos** no se concluye sobre **todos**.', { letras: ['1', 'a', 'b', 'c'], paras: [['Tres vecinos míos madrugan y son alegres.'], ['Esos tres madrugan y son alegres.'], ['Todo el que madruga es alegre.'], ['Madrugar da alegría.']] }, [
+      ['Esto es lo que se vio.', { luz: [0] }],
+      ['Esta dice justo lo visto.', { luz: [1], nota: { 1: 'alcance justo' } }],
+      ['Esta salta a todos.', { luz: [2], nota: { 2: 'generaliza' } }],
+      ['Esta además inventa una causa.', { luz: [3], nota: { 3: 'inventa causa' } }],
+      ['Cuidado con todos, siempre, nunca y porque.', {}],
+    ], 'La conclusión no puede ser más grande que la prueba.'),
+    xpHaz('hoja', 'En dos colegios visitados la huerta bajó la basura. **Tacha** las dos que dicen de más.', { modo: 'tacha', letras: ['A', 'B', 'C'], meta: [0, 2], paras: [['La huerta baja la basura en todos los colegios.'], ['En esos dos, bajó la basura.'], ['Sin huerta, la basura siempre sube.']], pista: 'Alguna de las tachadas dice justo lo que se vio.' }, '«Todos» y «siempre» van más allá de dos colegios.')],
+  ['Dato, ejemplo o imagen',
+    xpMira('hoja', 'Tercera idea: no todo lo que **convence** prueba.', { paras: [['De 50 casas, 30 ahorraron agua.'], ['Mi tía ahorró agua.'], ['El agua es como la paciencia: se acaba.'], ['Un experto lo recomienda.']] }, [
+      ['Un conteo prueba bastante.', { luz: [0], nota: { 0: 'dato' } }],
+      ['Un caso muestra, pero es uno solo.', { luz: [1], nota: { 1: 'ejemplo' } }],
+      ['Una comparación hace ver, no prueba.', { luz: [2], nota: { 2: 'imagen' } }],
+      ['Una autoridad pesa si sabe de eso.', { luz: [3], nota: { 3: 'autoridad' } }],
+      ['Un texto los mezcla; tú debes separarlos.', {}],
+    ], 'Dato, ejemplo, imagen y autoridad no pesan lo mismo.'),
+    xpHaz('hoja', 'Pon al margen con qué convence cada una.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['imagen', 'dato', 'ejemplo'], meta: [1, 2, 0], paras: [['Ocho de cada diez lo usan.'], ['En mi cuadra, don Luis lo usa.'], ['Es un paraguas para el alma.']], pista: 'Alguna no va ahí: ¿cuenta, muestra un caso o compara?' }, 'Contar, mostrar un caso y comparar.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Tesis: «Los grupos pequeños aprenden más». Subraya el dato que la **fortalece**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Los salones son verdes.'], ['Un grupo grande sacó la mejor nota.'], ['Con los mismos profesores, los grupos pequeños subieron más.']], pista: 'Ese no pesa o va en contra.' }, 'Con todo lo demás igual, subieron más.')],
+], 'Pesa cada dato, cuida el alcance y separa lo que prueba de lo que adorna.');
+;
 //#archivo js/explora-icf-sc.js
 // Preicfes · Sociales y Ciudadanas, mundo 1 «Constitución y Estado» (Explora, escena «hoja»). Casos cortos propios.
 xpLec('icf-sc-constitucion-1', [
@@ -6831,6 +6640,104 @@ xpLec('icf-sc-participacion-3', [
   ['Ahora sí, un problema',
     xpHaz('hoja', 'Un acuerdo municipal prohíbe un partido político. Subraya lo que se concluye.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Contradice la Constitución y no puede mantenerse.'], ['Reforma la Constitución en ese municipio.'], ['Vale si lo firma el alcalde.']], pista: 'Recuerda los escalones: ¿quién está arriba?' }, 'Una norma de abajo no cambia la de arriba.')],
 ], 'Arriba la Constitución, tres caminos para cambiarla y buenas razones para que cueste.');
+;
+//#archivo js/explora-icf-sc-3.js
+// Preicfes · Sociales, mundo 3 «Perspectivas e Intereses» (Explora, escena «hoja»). Casos cortos propios.
+xpLec('icf-sc-perspectivas-1', [
+  ['Posición e interés',
+    xpMira('hoja', 'Empecemos por la idea: una cosa es **lo que se pide** y otra, **para qué**.', { paras: [['«¡Que cierren la discoteca!»', 'Quieren dormir.'], ['«¡Que no la cierren!»', 'Necesitan el empleo.']] }, [
+      ['Unos vecinos piden cerrarla: es su posición.', { luz: [0], nota: { 0: 'posición' } }],
+      ['¿Para qué? Para dormir: es su interés.', { luz: [1] }],
+      ['Los empleados piden lo contrario.', { luz: [2], nota: { 1: 'posición' } }],
+      ['¿Para qué? Para conservar el trabajo.', { luz: [3] }],
+      ['Las posiciones chocan; los intereses quizá no: bajar el volumen.', { luz: [1, 3] }],
+    ], 'Posición: qué pide. Interés: para qué lo pide.'),
+    xpHaz('hoja', 'Subraya el **interés** de fondo.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['No al peaje.'], ['Poder llevar la cosecha sin perder plata.'], ['Que se vaya la empresa.']], pista: 'Esa dice qué se pide, no para qué.' }, 'Es la respuesta a «¿para qué?».')],
+  ['Muchos actores',
+    xpMira('hoja', 'Segunda idea: casi nunca hay **solo dos** lados.', { paras: [['Una mina quiere entrar a un pueblo.'], ['Los agricultores: temen por el agua.'], ['Los transportadores: esperan viajes.'], ['La alcaldía: quiere impuestos.'], ['Los que no han nacido: no pueden hablar.']] }, [
+      ['De aquí nace el conflicto.', { luz: [0], nota: { 0: 'de aquí parte' } }],
+      ['Unos temen perder algo.', { luz: [1], nota: { 1: 'agua' } }],
+      ['Otros esperan ganar algo.', { luz: [2], nota: { 2: 'trabajo' } }],
+      ['La autoridad también tiene su interés.', { luz: [3], nota: { 3: 'impuestos' } }],
+      ['Y hay quienes no están en la mesa.', { luz: [4], nota: { 4: 'ausentes' } }],
+    ], 'Pregunta quién gana, quién pierde, quién decide y quién falta.'),
+    xpHaz('hoja', 'Van a mover el mercado. Pon al margen el interés de cada actor.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['comprar cerca', 'vender', 'espacio para buses'], meta: [1, 0, 2], paras: [['Los puestos'], ['Las familias del barrio'], ['La secretaría de transporte']], pista: 'Alguno no va ahí: ¿quién compra, quién vende, quién ordena el tránsito?' }, 'Cada actor quiere algo distinto del mismo lugar.')],
+  ['Mismo lado, distinta razón',
+    xpMira('hoja', 'Tercera idea: se puede **coincidir** por razones distintas, y **diferir** dentro de un grupo.', { paras: [['Una bióloga: no talen, hay aves.'], ['Un hotelero: no talen, vienen turistas.'], ['Un joven: talen, quiero empleo.'], ['Otra joven: no talen, allí crecí.']] }, [
+      ['La bióloga se opone por las aves.', { luz: [0] }],
+      ['El hotelero también, pero por negocio.', { luz: [0, 1], nota: { 1: 'coincide' } }],
+      ['Un joven está a favor.', { luz: [2] }],
+      ['Otra joven, en contra.', { luz: [2, 3], nota: { 3: 'mismo grupo, distinta' } }],
+      ['No digas «los jóvenes quieren»: di cuáles.', {}],
+    ], 'Coincidir no es pensar igual, y un grupo no es una sola voz.'),
+    xpHaz('hoja', 'Subraya la frase que **generaliza** mal.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Algunos comerciantes apoyan.'], ['La mayoría de los padres duda.'], ['Los campesinos se oponen a todo.']], pista: 'Esa dice «algunos» o «la mayoría».' }, '«Los campesinos» y «todo» borran las diferencias.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Un colegio prohíbe el celular. La mamá: «lo necesito para saber de él». Subraya una salida que **atienda su interés**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Un teléfono en la secretaría para avisar.'], ['Prohibirlo también en la casa.'], ['Que cambie de colegio.']], pista: 'Ella no pide el celular: pide poder saber de él.' }, 'Atiende el «para qué» sin el celular.')],
+], 'Pregunta para qué, mira quiénes son y no los juntes a la fuerza.');
+
+xpLec('icf-sc-perspectivas-2', [
+  ['El lente',
+    xpMira('hoja', 'Empecemos por la idea: cada quien mira con su **cosmovisión**.', { paras: [['Un cerro.'], ['El geólogo: hay oro.'], ['La comunidad indígena: es sagrado.'], ['El alpinista: es un reto.']] }, [
+      ['Todos miran el mismo cerro.', { luz: [0], nota: { 0: 'el mismo lugar' } }],
+      ['Para el geólogo es un recurso.', { luz: [1], nota: { 1: 'recurso' } }],
+      ['Para la comunidad es un ser con el que se convive.', { luz: [2], nota: { 2: 'sagrado' } }],
+      ['Para el alpinista, una meta.', { luz: [3], nota: { 3: 'reto' } }],
+      ['La cosmovisión sale de la fe, el oficio, la edad y lo vivido.', {}],
+    ], 'Cosmovisión: la manera de ver el mundo desde la que se actúa.'),
+    xpHaz('hoja', 'Subraya la conducta que se explica por una **creencia religiosa**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Vende barato al final del día.'], ['No trabaja los sábados, su día santo.'], ['Madruga para evitar el trancón.']], pista: 'Esa se explica por dinero o por tiempo.' }, '«Día santo» muestra la creencia.')],
+  ['Prejuicio',
+    xpMira('hoja', 'Segunda idea: un **prejuicio** juzga a un grupo **antes de conocer**.', { paras: [['Los de ese barrio son peligrosos.'], ['Juan, de ese barrio, robó.'], ['En ese barrio hubo dos robos este año.']] }, [
+      ['Juzga a todos sin un hecho: prejuicio.', { luz: [0], nota: { 0: 'prejuicio' } }],
+      ['Habla de una persona y un hecho.', { luz: [1], nota: { 1: 'un hecho' } }],
+      ['Da un conteo que se puede revisar.', { luz: [2], nota: { 2: 'dato' } }],
+      ['De Juan no se sigue nada sobre los demás.', { luz: [1] }],
+      ['La pregunta: ¿qué dato lo sostiene y de cuántos?', { luz: [0] }],
+    ], 'Todo un grupo, sin conocerlo y sin datos: prejuicio.'),
+    xpHaz('hoja', 'Subraya los **dos** prejuicios.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['Las mujeres manejan mal.'], ['Ayer hubo un choque.'], ['En mayo hubo doce multas.'], ['Los viejos no entienden nada.']], pista: 'Alguna de las subrayadas es un hecho que se puede contar.' }, 'Juzgan a todo un grupo.')],
+  ['La misma acción',
+    xpMira('hoja', 'Tercera idea: una **misma acción** puede tener motivos distintos.', { paras: [['Siembra árboles.'], ['Porque ama el bosque.'], ['Porque le descuentan impuestos.'], ['Porque su abuelo lo hacía.']] }, [
+      ['Tres personas hacen lo mismo.', { luz: [0] }],
+      ['Una, por una convicción.', { luz: [1], nota: { 1: 'ambiental' } }],
+      ['Otra, por un beneficio.', { luz: [2], nota: { 2: 'económico' } }],
+      ['Y otra, por una tradición familiar.', { luz: [3], nota: { 3: 'cultural' } }],
+      ['El examen pregunta por el motivo, no solo por la acción.', {}],
+    ], 'Busca la razón que la persona da, no la que tú supondrías.'),
+    xpHaz('hoja', 'Pon al margen el motivo de no comer carne.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['religioso', 'salud', 'cuidado animal'], meta: [1, 2, 0], paras: [['El médico se lo pidió.'], ['No quiere que sufran.'], ['Es época de ayuno en su fe.']], pista: 'Alguno no va ahí: busca médico, sufrir y fe.' }, 'La misma dieta, tres motivos.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«No lo contrato: los jóvenes son irresponsables». Subraya la mejor **crítica**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Los jóvenes son mejores que los viejos.'], ['Él debería vestirse distinto.'], ['Lo juzga por su edad, sin conocer cómo trabaja.']], pista: 'Esa cae en otro prejuicio o cambia de tema.' }, 'Señala el prejuicio sin crear otro.')],
+], 'Todos llevamos lente; el prejuicio es no querer mirar.');
+
+xpLec('icf-sc-perspectivas-3', [
+  ['¿A quién deja por fuera?',
+    xpMira('hoja', 'Empecemos por la idea: toda solución **atiende** unos intereses y deja otros.', { paras: [['Problema: mucho trancón.'], ['Peaje en el centro.'], ['Más buses.'], ['Horarios escalonados.']] }, [
+      ['Un problema, varias salidas.', { luz: [0], nota: { 0: 'el problema' } }],
+      ['El peaje reduce carros, pero pesa a quien gana poco.', { luz: [1], nota: { 1: '¿y el que gana poco?' } }],
+      ['Más buses ayudan a muchos, pero cuestan.', { luz: [2], nota: { 2: '¿y el dinero?' } }],
+      ['Los horarios son baratos, si las empresas aceptan.', { luz: [3], nota: { 3: '¿y las empresas?' } }],
+      ['Para cada una: ¿quién gana y quién queda por fuera?', {}],
+    ], 'No hay solución sin alguien que pierda algo: búscalo.'),
+    xpHaz('hoja', 'Cierran una vía para bicicletas. Subraya a quien **más** puede perjudicar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Ciclistas'], ['Una ambulancia que usa esa vía'], ['Peatones']], pista: 'Ese gana espacio o seguridad.' }, 'La ambulancia perdería tiempo valioso.')],
+  ['¿Se puede hacer?',
+    xpMira('hoja', 'Segunda idea: una buena idea puede no ser **viable**.', { paras: [['Un hospital en cada vereda.'], ['Una lancha ambulancia.'], ['Un decreto: «prohibido enfermarse».']] }, [
+      ['El hospital ayudaría, pero no alcanza el dinero.', { luz: [0], nota: { 0: 'costo' } }],
+      ['La lancha cuesta menos y llega.', { luz: [1], nota: { 1: 'viable' } }],
+      ['El decreto no se puede cumplir.', { luz: [2], tacha: [2], nota: { 2: 'imposible' } }],
+      ['Mira costo, tiempo y quién la hace cumplir.', {}],
+      ['Viable no es perfecta: es que se puede hacer.', { luz: [1] }],
+    ], 'Viable: alcanza el dinero, el tiempo y hay quién la cumpla.'),
+    xpHaz('hoja', 'Falta agua **hoy** en una escuela. Subraya la salida que sirve **ya**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Un carrotanque.'], ['Un acueducto en tres años.'], ['Una campaña para ahorrar el próximo invierno.']], pista: 'Esa sirve, pero más adelante.' }, 'Hoy hace falta agua; lo demás es de largo plazo.')],
+  ['¿La van a cumplir?',
+    xpMira('hoja', 'Tercera idea: se cumple más lo que **se construyó entre todos**.', { paras: [['Una regla impuesta: nadie la cumple.'], ['Una regla acordada: cada quien propuso.'], ['Un registro que todos pueden ver.']] }, [
+      ['Si llega desde arriba, se busca cómo evadirla.', { luz: [0], nota: { 0: 'impuesta' } }],
+      ['Si ayudaste a hacerla, la cuidas.', { luz: [1], nota: { 1: 'acordada' } }],
+      ['Y se cumple si se puede comprobar.', { luz: [2], nota: { 2: 'a la vista' } }],
+      ['Justa, hecha entre todos y comprobable.', { luz: [1, 2] }],
+      ['El examen pregunta quién la aceptaría y por qué.', {}],
+    ], 'Acordada, justa y que se pueda comprobar.'),
+    xpHaz('hoja', 'Hay basura en el parque. Subraya la salida con **más** probabilidad de cumplirse.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Un aviso que dice «prohibido».'], ['Turnos que los vecinos acordaron y publican.'], ['Multas que nadie cobra.']], pista: 'Esa no la acordó nadie o no hay quién la haga cumplir.' }, 'Acordada y a la vista.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Pescadores y bañistas usan la misma playa. Subraya la salida que atiende **a los dos**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Prohibir la pesca.'], ['Cerrar la playa.'], ['Pesca al amanecer y baño de día.']], pista: 'Esa deja por fuera a uno o a ambos.' }, 'Usan el mismo lugar a horas distintas.')],
+], 'A quién atiende, si se puede y si la van a cumplir.');
 ;
 //#archivo js/explora-icf-cn.js
 // Preicfes · Ciencias Naturales, mundo 1 «Indagación Científica» (Explora, escenas «hoja» y «dibujo»). Experimentos cortos propios.
@@ -7015,6 +6922,114 @@ xpLec('icf-sc-participacion-3', [
   ], 'Copiar, leer de a tres y cuidar las letras.');
 }
 ;
+//#archivo js/explora-icf-cn-3.js
+// Preicfes · Ciencias Naturales, mundo 3 «Movimiento y Fuerzas» (Explora, escenas «dibujo», «fichas» y «hoja»). Ejemplos propios.
+{
+  // Gráfica posición contra tiempo: q son las posiciones de 0 a 4 s; n cuántas se ven.
+  const X = t => 56 + t * 62, Y = q => 168 - q * 1.5;
+  const pos = (v, K) => K.l(56, 168, 318, 168, 'lm') + K.l(56, 168, 56, 18, 'lm') + [0, 30, 60, 90].map(k => K.l(56, Y(k), 314, Y(k), 'ls') + K.t(48, Y(k) + 4, k, 's tm', 'end')).join('') + [0, 1, 2, 3, 4].map(t => K.t(X(t), 184, t, 's tm')).join('') + K.t(318, 200, 'segundos', 's tm', 'end') + K.t(60, 14, 'metros', 's tm', 'start') + K.pl(v.q.slice(0, v.n).map((q, t) => [X(t), Y(q)]), 'la gr') + v.q.slice(0, v.n).map((q, t) => K.c(X(t), Y(q), 5, 'fA')).join('') + K.t(190, 30, v.t || '', 'ta');
+  // Caja con fuerzas hacia la derecha (d) y hacia la izquierda (i).
+  const caja = (v, K) => K.l(20, 150, 320, 150, 'lm') + K.r(140, 100, 60, 50, 'fa', 4) + (v.d > 1 ? K.ar(200, 125, 200 + v.d, 125, 'lg gr') + K.t(204 + v.d / 2, 112, `${Math.round(v.d * 2)} N`, 's tg') : '') + (v.i > 1 ? K.ar(140, 125, 140 - v.i, 125, 'lf gr') + K.t(136 - v.i / 2, 112, `${Math.round(v.i * 2)} N`, 's tf') : '') + K.t(170, 40, v.t || '', 'ta') + K.t(170, 180, v.p || '', 's tm');
+  // Torre: dos bolas que caen; y es la altura que han bajado (0 a 1).
+  const torre = (v, K) => K.r(40, 30, 30, 140, 'fn', 2) + K.l(20, 172, 320, 172, 'lm') + K.c(120, 40 + v.y * 122, v.r1, 'fA') + K.c(210, 40 + v.z * 122, v.r2, 'fG') + K.t(120, 22, v.a || '', 's ta') + K.t(210, 22, v.b || '', 's tg') + K.t(170, 194, v.t || '', 's tm');
+
+  xpLec('icf-cn-movimiento-1', [
+    ['La gráfica cuenta un viaje',
+      xpMira('dibujo', 'Empecemos por la idea: la gráfica muestra **dónde está** en cada momento.', { dib: pos, v: { q: [0, 20, 40, 60, 80], n: 1, t: '' }, alto: 206 }, [
+        ['A los cero segundos está en cero.', {}],
+        ['Cada segundo avanza 20 metros.', { n: 5 }, '$20 \\text{ m cada segundo}$'],
+        ['Una recta: la velocidad no cambia.', { t: 'constante' }],
+        ['Si se queda en 40, la línea es horizontal: está quieto.', { q: [0, 20, 40, 40, 40], t: 'quieto desde 2 s' }],
+        ['Si baja, se devuelve.', { q: [0, 30, 60, 40, 20], t: 'se devuelve' }],
+      ], 'Recta: velocidad constante. Horizontal: quieto. Baja: se devuelve.'),
+      xpHaz('hoja', 'La posición fue 0, 10, 20, 20, 20 m. Subraya lo que pasó.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Avanzó todo el tiempo.'], ['Avanzó y luego se quedó quieto.'], ['Se devolvió.']], pista: 'Mira si los números cambian al final.' }, 'De 20 a 20 no cambia: quieto.')],
+    ['Más rápido o más lento',
+      xpMira('dibujo', 'Segunda idea: la **inclinación** es la velocidad.', { dib: pos, v: { q: [0, 10, 20, 30, 40], n: 5, t: '10 m/s' }, alto: 206 }, [
+        ['Diez metros por segundo: poca inclinación.', {}],
+        ['Veinte metros por segundo: más empinada.', { q: [0, 20, 40, 60, 80], t: '20 m/s' }],
+        ['Si cada segundo avanza más, la línea se curva.', { q: [0, 5, 20, 45, 80], t: 'acelera' }],
+        ['Avanza 5, 15, 25 y 35: gana 10 cada vez.', {}, '$15 - 5 = 25 - 15 = 10$'],
+        ['Eso es acelerar: cambiar la velocidad.', {}],
+      ], 'Velocidad: cuánto cambia la posición. Aceleración: cuánto cambia la velocidad.'),
+      xpHaz('fichas', 'Un carro pasa de 12 a 20 m/s en 4 s. Pon cuánto cambió la velocidad y la aceleración.', { slots: [{ x: 110, y: 46, w: 90, et: 'cambio (m/s)' }, { x: 230, y: 46, w: 90, et: 'm/s cada s' }], fichas: ['8', '2', '32', '5', '3'], meta: ['8', '2'], alto: 96, pista: 'Resta las velocidades y reparte en 4 segundos.' }, '$20 - 12 = 8$ y $8 \\div 4 = 2$.')],
+    ['Media y signo',
+      xpMira('hoja', 'Tercera idea: la **media** mira todo el viaje y el **signo**, el sentido.', { paras: [['100 m en 20 s, parando dos veces.'], ['100 m en 20 s, sin parar.'], ['De 100 a 0 m en 20 s.']] }, [
+        ['La media es toda la distancia entre todo el tiempo.', { luz: [0], nota: { 0: '5 m/s' } }, '$100 \\div 20 = 5$'],
+        ['Sin parar da lo mismo.', { luz: [1], nota: { 1: '5 m/s' } }],
+        ['Por eso la media no cuenta las paradas.', { luz: [0, 1] }],
+        ['De regreso la velocidad es −5.', { luz: [2], nota: { 2: '−5 m/s' } }],
+        ['El menos indica el sentido, no que vaya despacio.', {}],
+      ], 'Media: total entre total. Signo: hacia dónde.'),
+      xpHaz('fichas', 'Una ciclista hace 30 km en 2 horas, con una parada de media hora incluida. Pon su velocidad media y la que llevó mientras rodaba.', { slots: [{ x: 110, y: 46, w: 90, et: 'media (km/h)' }, { x: 230, y: 46, w: 90, et: 'rodando' }], fichas: ['15', '20', '12', '60', '17'], meta: ['15', '20'], alto: 96, pista: 'La media usa las 2 horas; rodando fue hora y media.' }, '$30 \\div 2 = 15$ y $30 \\div 1.5 = 20$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Dos gráficas de posición se cruzan a los 3 s. Subraya lo que se concluye.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['A los 3 s están en el mismo lugar.'], ['A los 3 s van igual de rápido.'], ['Chocan y se detienen.']], pista: 'El eje vertical es la posición.' }, 'El cruce es la misma posición, no la misma velocidad.')],
+  ], 'Lee el eje, mira la inclinación y separa media, signo y lugar.');
+
+  xpLec('icf-cn-movimiento-2', [
+    ['Juntar las fuerzas',
+      xpMira('dibujo', 'Empecemos por la idea: importa la **fuerza neta**, la que resulta de juntar todas.', { dib: caja, v: { d: 30, i: 0, t: '', p: '' }, alto: 196 }, [
+        ['Sesenta newtons hacia la derecha.', { t: 'neta: 60 N' }],
+        ['El piso frena con veinte: se restan.', { i: 10, t: 'neta: 40 N' }, '$60 - 20 = 40$'],
+        ['Si frena con sesenta, la neta es cero.', { i: 30, t: 'neta: 0 N' }, '$60 - 60 = 0$'],
+        ['Con neta cero no cambia su movimiento.', { p: 'quieta sigue quieta; si iba, sigue igual' }],
+        ['No quiere decir que no haya fuerzas.', {}],
+      ], 'Mismo sentido se suma; contrario se resta. Neta cero: no cambia.'),
+      xpHaz('dibujo', 'Empujan con 80 N a la derecha. Mueve el roce hasta que la neta sea **30 N**.', { dib: (v, K) => caja({ d: 40, i: v.r / 2, t: `neta: ${80 - v.r} N` }, K), v: { r: 10 }, metas: { r: 50 }, alto: 240, manijas: [{ k: 'r', min: 0, max: 80, paso: 10, et: 'roce (N)' }], lee: v => `$80 - ${v.r} = ${80 - v.r}$`, dice: () => 'El roce va en sentido contrario.' }, '$80 - 50 = 30$.')],
+    ['Fuerza, masa y aceleración',
+      xpMira('fichas', 'Segunda idea: la aceleración es la fuerza neta **repartida** en la masa.', { slots: [{ x: 70, y: 50, w: 90, et: '40 N, 10 kg' }, { x: 170, y: 50, w: 90, et: '80 N, 10 kg' }, { x: 270, y: 50, w: 90, et: '40 N, 20 kg' }], fichas: ['4', '8', '2'], alto: 100 }, [
+        ['Cuarenta newtons sobre diez kilos.', { pon: { 0: '4' } }, '$40 \\div 10 = 4$'],
+        ['El doble de fuerza: el doble de aceleración.', { pon: { 1: '8' } }, '$80 \\div 10 = 8$'],
+        ['El doble de masa: la mitad.', { pon: { 2: '2' } }, '$40 \\div 20 = 2$'],
+        ['Por eso un camión lleno arranca lento.', { marca: [2] }],
+        ['Se escribe: fuerza neta igual a masa por aceleración.', { marca: [] }, '$F = m \\cdot a$'],
+      ], 'Más fuerza, más aceleración; más masa, menos.'),
+      xpHaz('fichas', 'Fuerza neta 90 N, masa 30 kg. Pon la aceleración, y la que habría con 60 kg.', { slots: [{ x: 110, y: 46, w: 90, et: 'con 30 kg' }, { x: 230, y: 46, w: 90, et: 'con 60 kg' }], fichas: ['3', '1.5', '6', '2 700', '60'], meta: ['3', '1.5'], alto: 96, pista: 'Divide la fuerza entre la masa.' }, '$90 \\div 30 = 3$ y $90 \\div 60 = 1.5$.')],
+    ['Fuerzas por pares',
+      xpMira('hoja', 'Tercera idea: si empujas algo, te **empuja** igual y al contrario.', { paras: [['El remo empuja el agua.', 'El agua empuja el bote.'], ['El pie empuja el suelo.', 'El suelo empuja el cuerpo.'], ['El gas sale hacia abajo.', 'El cohete sube.']] }, [
+        ['Empujas el agua y ella empuja el bote.', { luz: [0, 1], nota: { 0: 'par' } }],
+        ['Caminar es que el suelo te empuje.', { luz: [2, 3], nota: { 1: 'par' } }],
+        ['El cohete sube porque el gas baja.', { luz: [4, 5], nota: { 2: 'par' } }],
+        ['Son iguales y contrarias.', {}],
+        ['No se anulan: actúan sobre objetos distintos.', { luz: [0, 1] }],
+      ], 'Acción y reacción: iguales, contrarias y sobre cuerpos distintos.'),
+      xpHaz('hoja', 'Pateas un balón. Subraya la **pareja** de esa fuerza.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['El peso del balón'], ['El balón empuja tu pie'], ['El roce del pasto']], pista: 'Debe ser entre los mismos dos: pie y balón.' }, 'Pie y balón se empujan mutuamente.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un tren va recto a 70 km/h sin cambiar. Subraya lo cierto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['No actúa ninguna fuerza.'], ['La del motor es mayor que el roce.'], ['Las fuerzas se equilibran: la neta es cero.']], pista: 'Su movimiento no cambia. ¿Qué dice eso de la neta?' }, 'Velocidad constante: neta cero, aunque haya fuerzas.')],
+  ], 'Junta las fuerzas, reparte en la masa y busca la pareja.');
+
+  xpLec('icf-cn-movimiento-3', [
+    ['Caer igual',
+      xpMira('dibujo', 'Empecemos por la idea: sin aire, **todo cae igual**.', { dib: torre, v: { y: 0, z: 0, r1: 9, r2: 14, a: '1 kg', b: '3 kg', t: '' }, alto: 202 }, [
+        ['Dos bolas de masa distinta.', {}],
+        ['Se sueltan al tiempo…', { y: 0.5, z: 0.5 }],
+        ['…y llegan al tiempo.', { y: 1, z: 1, t: 'llegan juntas' }],
+        ['Cada segundo ganan unos 10 m/s.', { t: '10, 20, 30 m/s' }, '$10 \\to 20 \\to 30$'],
+        ['En el aire una pluma se demora: el aire la frena.', { t: '' }],
+      ], 'Sin aire, la masa no cambia la caída: unos 10 m/s más cada segundo.'),
+      xpHaz('fichas', 'Se suelta una piedra. Pon su velocidad a los 2 y a los 5 segundos (10 m/s más cada segundo).', { slots: [{ x: 110, y: 46, w: 90, et: 'a los 2 s' }, { x: 230, y: 46, w: 90, et: 'a los 5 s' }], fichas: ['20', '50', '10', '12', '25'], meta: ['20', '50'], alto: 96, pista: 'Empieza en cero y gana 10 en cada segundo.' }, '$2 \\cdot 10$ y $5 \\cdot 10$.')],
+    ['Masa y peso',
+      xpMira('hoja', 'Segunda idea: la **masa** es materia; el **peso**, la fuerza con que te atraen.', { paras: [['Tierra: masa 60 kg', 'peso 600 N'], ['Luna: masa 60 kg', 'peso 100 N'], ['Lejos de todo: masa 60 kg', 'peso casi 0 N']] }, [
+        ['En la Tierra, 60 kilos y 600 newtons.', { luz: [0, 1] }, '$60 \\cdot 10 = 600$'],
+        ['En la Luna, la misma masa.', { luz: [2], nota: { 1: 'igual masa' } }],
+        ['Pero pesa seis veces menos.', { luz: [3] }],
+        ['Lejos de todo, la masa sigue ahí.', { luz: [4, 5], nota: { 2: 'igual masa' } }],
+        ['Kilogramos para masa; newtons para peso.', {}],
+      ], 'La masa no cambia de lugar a lugar; el peso, sí.'),
+      xpHaz('fichas', 'Una roca de 12 kg pesa 120 N en la Tierra. En la Luna, pon su masa y su peso.', { slots: [{ x: 110, y: 46, w: 90, et: 'masa (kg)' }, { x: 230, y: 46, w: 90, et: 'peso (N)' }], fichas: ['12', '20', '2', '120', '720'], meta: ['12', '20'], alto: 96, pista: 'La masa no cambia; el peso es la sexta parte.' }, 'Masa 12 kg y peso $120 \\div 6 = 20$ N.')],
+    ['Orbitar es caer',
+      xpMira('hoja', 'Tercera idea: una **órbita** es caer mientras se avanza de lado.', { paras: [['Lanzas una bola: cae cerca.'], ['Más rápido: cae más lejos.'], ['Muy rápido: cae siguiendo la curva de la Tierra.'], ['Nunca llega al suelo.']] }, [
+        ['Toda bola lanzada cae.', { luz: [0], nota: { 0: 'despacio' } }],
+        ['Con más velocidad llega más lejos.', { luz: [1], nota: { 1: 'más rápido' } }],
+        ['Si va muy rápido, el suelo se curva al mismo ritmo.', { luz: [2], nota: { 2: 'órbita' } }],
+        ['Cae siempre, pero no llega.', { luz: [3] }],
+        ['Por eso flotan los astronautas: caen con su nave.', {}],
+      ], 'La Luna sí cae: cae alrededor de la Tierra.'),
+      xpHaz('hoja', '¿Por qué flota una astronauta en la estación? Subraya.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Allá no hay gravedad.'], ['No tiene masa.'], ['Cae junto con la estación.']], pista: 'La gravedad llega hasta allá y la masa no se pierde.' }, 'Ella y la estación caen a la vez.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Se sueltan al tiempo, en el vacío, un tornillo y un papel. Subraya lo que ocurre.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Llegan al tiempo.'], ['Llega antes el tornillo.'], ['El papel flota.']], pista: 'En el vacío no hay aire que frene al papel.' }, 'Sin aire, caen igual.')],
+  ], 'Caer igual, pesar distinto y orbitar cayendo.');
+}
+;
 //#archivo js/explora-icf-en.js
 // Preicfes · Inglés, mundo 1 «Avisos y Vocabulario» (Explora, escena «hoja»): se explica en español con ejemplos en inglés propios.
 xpLec('icf-en-avisos-1', [
@@ -7178,6 +7193,104 @@ xpLec('icf-en-dialogos-3', [
   ['Ahora sí, un problema',
     xpHaz('hoja', '«I\'m exhausted. I worked twelve hours.» Subraya la mejor respuesta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['You should get some rest.'], ['Congratulations on your work!'], ['At twelve o\'clock.']], pista: '«Exhausted» es muy cansado: ¿qué le aconsejas?' }, 'A alguien agotado se le aconseja descansar.')],
 ], 'Sentimiento, plan y acuerdo: con eso se escoge la respuesta.');
+;
+//#archivo js/explora-icf-en-3.js
+// Preicfes · Inglés, mundo 3 «Gramática en Contexto» (Explora, escena «hoja»): se explica en español con ejemplos en inglés propios.
+xpLec('icf-en-gramatica-1', [
+  ['¿Terminó o llega hasta hoy?',
+    xpMira('hoja', 'Empecemos por la idea: la **palabra de tiempo** escoge el verbo.', { paras: [['I', 'moved', 'here', 'in 2015.'], ['I', 'have lived', 'here', 'since 2015.'], ['I', 'have lived', 'here', 'for ten years.']] }, [
+      ['«In 2015» es una fecha cerrada: pasado simple.', { luz: [1, 3], nota: { 0: 'terminó' } }],
+      ['«Since 2015» va desde entonces hasta hoy.', { luz: [5, 7], nota: { 1: 'hasta hoy' } }],
+      ['Por eso lleva «have» y participio.', { luz: [5] }],
+      ['«For ten years» dice cuánto tiempo.', { luz: [11], nota: { 2: 'cuánto' } }],
+      ['Con «yesterday», «ago» o «last»: pasado simple.', {}],
+    ], 'Yesterday, ago, in 2015: pasado. Since y for: have + participio.'),
+    xpHaz('hoja', '«She ___ three books since January.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['wrote'], ['has written'], ['writes']], pista: '«Since» llega hasta hoy: busca «has».' }, '«Since January» pide «has written».')],
+  ['Lo que estaba pasando',
+    xpMira('hoja', 'Segunda idea: «was + -ing» es lo que **estaba pasando** cuando algo ocurrió.', { paras: [['I', 'was cooking', 'when', 'the phone', 'rang.'], ['While', 'they', 'were sleeping,', 'it', 'rained.']] }, [
+      ['«Was cooking»: la acción larga.', { luz: [1], nota: { 0: 'la larga' } }],
+      ['«Rang»: la corta que la interrumpe.', { luz: [4] }],
+      ['«When» trae la corta.', { luz: [2, 4] }],
+      ['«While» trae la larga.', { luz: [5, 7], nota: { 1: 'while + larga' } }],
+      ['Con «they» es «were».', { luz: [6, 7] }],
+    ], 'Larga: was o were + -ing. Corta: pasado simple.'),
+    xpHaz('hoja', '«We ___ football when it started to rain.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['play'], ['was playing'], ['were playing']], pista: 'Es la acción larga y el sujeto es «we».' }, '«We» va con «were».')],
+  ['Mañana',
+    xpMira('hoja', 'Tercera idea: hay varias maneras de hablar del **futuro**.', { paras: [['I am seeing the doctor at four.'], ['I am going to study medicine.'], ['I think it will be easy.'], ['If it rains, I will stay.']] }, [
+      ['Con hora fijada: «am seeing».', { luz: [0], nota: { 0: 'cita' } }],
+      ['Un plan: «going to».', { luz: [1], nota: { 1: 'plan' } }],
+      ['Lo que se cree: «will».', { luz: [2], nota: { 2: 'cálculo' } }],
+      ['Después de «if» va presente; en la otra parte, «will».', { luz: [3], nota: { 3: 'condición' } }],
+      ['Nunca «if it will rain».', {}],
+    ], 'Cita: am -ing. Plan: going to. Cálculo: will. If + presente.'),
+    xpHaz('hoja', '«If you ___ the red fruits, the coffee will taste good.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['pick'], ['will pick'], ['picked']], pista: 'Después de «if» no va «will».' }, '«If» con presente y «will» en la otra parte.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Nobody ___ this door for years.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['opened'], ['has opened'], ['have opened']], pista: '«For years» llega hasta hoy y «nobody» va en singular.' }, '«Nobody» va con «has».')],
+], 'Mira la palabra de tiempo, la acción larga y la condición.');
+
+xpLec('icf-en-gramatica-2', [
+  ['In, on, at',
+    xpMira('hoja', 'Empecemos por la idea: de lo más **grande** a lo más **pequeño**: in, on, at.', { paras: [['in', 'July', 'in the garage'], ['on', 'Monday', 'on the table'], ['at', 'six o\'clock', 'at the door']] }, [
+      ['«In»: un mes, un año, un lugar cerrado.', { luz: [0, 1, 2], nota: { 0: 'grande' } }],
+      ['«On»: un día o una superficie.', { luz: [3, 4, 5], nota: { 1: 'mediano' } }],
+      ['«At»: una hora o un punto.', { luz: [6, 7, 8], nota: { 2: 'pequeño' } }],
+      ['«From… to» va de un punto a otro.', {}],
+      ['«During» con un evento; «for» con una duración.', {}],
+    ], 'In: mes o adentro. On: día o encima. At: hora o punto.'),
+    xpHaz('hoja', 'Pon al margen la palabra que falta.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['on', 'at', 'in'], meta: [2, 1, 0], paras: [['___ December'], ['___ half past nine'], ['___ Saturday']], pista: 'Alguna no va ahí: mes, hora o día.' }, 'Mes con in, hora con at y día con on.')],
+  ['¿Se puede contar?',
+    xpMira('hoja', 'Segunda idea: **many** y **a few** cuentan; **much** y **a little**, no.', { paras: [['three apples', 'many apples', 'a few apples'], ['some water', 'much water', 'a little water']] }, [
+      ['Se puede decir tres manzanas: se cuentan.', { luz: [0] }],
+      ['Muchas: «many». Unas pocas: «a few».', { luz: [1, 2], nota: { 0: 'se cuentan' } }],
+      ['No se dice «three waters» al medir agua.', { luz: [3] }],
+      ['Mucha: «much». Un poco: «a little».', { luz: [4, 5], nota: { 1: 'no se cuenta' } }],
+      ['Money, time, space y work tampoco se cuentan.', {}],
+    ], 'Cuenta: many, a few. No se cuenta: much, a little.'),
+    xpHaz('hoja', '«There isn\'t ___ milk, but there are ___ eggs.» Subraya las **dos**, en la pareja correcta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['many / a little'], ['much / a few'], ['a few / much']], pista: 'La leche no se cuenta; los huevos, sí.' }, 'Leche con much y huevos con a few.')],
+  ['Unir ideas',
+    xpMira('hoja', 'Tercera idea: la palabra que une dice **cómo** se relacionan.', { paras: [['It rained,', 'so', 'we stayed.'], ['We stayed', 'because', 'it rained.'], ['Although', 'it rained,', 'we went.'], ['It rained,', 'but', 'we went.']] }, [
+      ['«So» trae el resultado.', { luz: [1], nota: { 0: 'resultado' } }],
+      ['«Because» trae la causa.', { luz: [4], nota: { 1: 'causa' } }],
+      ['«Although»: pasó lo que no se esperaba.', { luz: [6], nota: { 2: 'a pesar de' } }],
+      ['Y «but» contrasta las dos ideas.', { luz: [10], nota: { 3: 'contraste' } }],
+      ['Al revés cambia todo: «so» no es «because».', { luz: [1, 4] }],
+    ], 'So: resultado. Because: causa. Although y but: contraste.'),
+    xpHaz('hoja', '«___ he was tired, he finished the race.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Although'], ['Because'], ['So']], pista: 'Estaba cansado y aun así terminó.' }, 'No se esperaba que terminara.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«I looked in the room, but there wasn\'t ___.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['nobody'], ['somebody'], ['anybody']], pista: '«Wasn\'t» ya niega: no se niega dos veces.' }, 'En negación va «anybody».')],
+], 'Lugar y tiempo, lo que se cuenta y lo que une.');
+
+xpLec('icf-en-gramatica-3', [
+  ['Más que',
+    xpMira('hoja', 'Empecemos por la idea: las palabras **cortas** llevan -er; las **largas**, more.', { paras: [['cold', 'colder than'], ['big', 'bigger than'], ['happy', 'happier than'], ['expensive', 'more expensive than']] }, [
+      ['Corta: se agrega -er y «than».', { luz: [0, 1] }],
+      ['A veces se dobla la última letra.', { luz: [2, 3] }],
+      ['Si termina en -y, cambia a -ier.', { luz: [4, 5] }],
+      ['Si es larga, va «more» adelante.', { luz: [6, 7], nota: { 3: 'larga' } }],
+      ['Nunca las dos: «more colder» no existe.', {}],
+    ], 'Corta: -er than. Larga: more… than. Nunca las dos juntas.'),
+    xpHaz('hoja', '«This bag is ___ than mine.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['more heavy'], ['heavier'], ['heaviest']], pista: 'Termina en -y y compara dos.' }, '«Heavy» pasa a «heavier».')],
+  ['Igual o menos',
+    xpMira('hoja', 'Segunda idea: «as… as» es **tan como**; con «not», es **menos**.', { paras: [['Leo is as tall as Ana.'], ['Leo is not as tall as Ana.'], ['Leo is shorter than Ana.']] }, [
+      ['Tan alto como: iguales.', { luz: [0], nota: { 0: 'iguales' } }],
+      ['No tan alto como: es menos.', { luz: [1], nota: { 1: 'menos' } }],
+      ['Dice lo mismo que esta.', { luz: [1, 2], nota: { 2: 'lo mismo' } }],
+      ['«Less… than» también: less tired than.', {}],
+      ['Entre «as» y «as» no va -er.', { luz: [0] }],
+    ], 'As… as: igual. Not as… as: menos.'),
+    xpHaz('hoja', '«The train isn\'t as fast as the plane.» Subraya lo que dice **lo mismo**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['The train is faster.'], ['They are equally fast.'], ['The plane is faster.']], pista: '¿Cuál de los dos es menos rápido?' }, 'El tren es menos rápido: el avión es más.')],
+  ['El más de todos',
+    xpMira('hoja', 'Tercera idea: para el **primero de todos** va «the» con -est o most.', { paras: [['the coldest month'], ['the most expensive house'], ['the best friend'], ['the worst day']] }, [
+      ['Corta: «the» y -est.', { luz: [0], nota: { 0: 'el más frío' } }],
+      ['Si es larga, va «the most».', { luz: [1], nota: { 1: 'la más cara' } }],
+      ['«Good» cambia: better, the best.', { luz: [2], nota: { 2: 'el mejor' } }],
+      ['«Bad» también: worse, the worst.', { luz: [3], nota: { 3: 'el peor' } }],
+      ['Pista: «in the world», «of all», «of my life».', {}],
+    ], 'The + -est o the most. Good: best. Bad: worst.'),
+    xpHaz('hoja', '«It was ___ film of the year.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['the best'], ['better'], ['the more good']], pista: '«Of the year» escoge entre todas.' }, 'Entre todas: «the best».')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Ana is taller than Leo. Leo is as tall as Sam.» Subraya lo que se concluye.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Sam is the tallest.'], ['Ana is taller than Sam.'], ['Leo is taller than Sam.']], pista: 'Leo y Sam son iguales. ¿Y Ana?' }, 'Si Leo y Sam son iguales, Ana es más alta que los dos.')],
+], 'Dos se comparan con than, iguales con as… as y el primero con the.');
 ;
 //#archivo js/explora-pu-ap.js
 // Preuniversitario · lectura, mundo 6 «Aplicación y analogía» (Explora): pu-ap-1 y pu-ap-2. Textos cortos propios.
@@ -13954,6 +14067,78 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['Yes or no', '«Do you mind» se responde al revés de lo que parece.', 'genero-o-cita', 'Does it say **yes** or **no**?', { doc: HOSTEL, rot: ['says yes', 'says no'], ...F(['Do you mind if I leave my bike? Not at all.', 0, 'Si no le molesta, ¿puede dejarla?'], ['Do you have a room? I\'m afraid we\'re full.', 1, '¿Hay un cuarto libre?'], ['Would you like some soup? I\'d love some.', 0, '¿Acepta la sopa?']), bien: 'Not at all gives permission.' }, '«Not at all» da permiso, «I’m afraid» niega y «I’d love some» acepta.', ['Traduce «mind» como molestar.', '«Love» muestra que sí quiere.'], 'Bike: yes. Room: no. Soup: yes'],
     ['Reactions', 'Nombra el sentimiento.', 'pista-tipo', 'Match each reaction with its situation.', { lineas: ['I cycled eighty kilometres!', 'My bike is broken.', 'I\'m hungry.'], ...T(['Congratulations!', 0, '¿Logro, problema o necesidad?'], ['I\'m sorry to hear that.', 1, '¿Logro, problema o necesidad?'], ['Would you like some soup?', 2, '¿Logro, problema o necesidad?']), bien: 'Achievement, problem and need.' }, 'Al logro se felicita, al problema se lamenta y al hambre se ofrece comida.', ['¿Cuál es una buena noticia?', 'A quien tiene hambre se le ofrece algo.'], 'Logro: congratulations. Problema: sorry. Hambre: soup']],
     'Not at all means yes, and each feeling has its answer.', 'Fórmulas de cortesía y reacciones.');
+}
+;
+//#archivo js/gimnasio-icf-3.js
+// Gimnasio del Preicfes, terceros mundos (spec 2026-11-25-preicfes-estructura): Fuerza y Élite por mundo. Va después de gimnasio-icf-2.js.
+{
+  const { F, T, P, S } = ICF;
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-i-${id}`, after, level, title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+  const D = (id, title, paras) => ({ id: `gym-icf-${id}`, title, paras });
+
+  reto('azar-1', ['icf-ma-azar-1', 'icf-ma-azar-2'], 2, 'Uniformes y cargos', 'Y multiplica; el orden decide', 'Un club diseña su uniforme y elige a su junta.', [
+    ['El uniforme', 'Cada elección se combina con todas las otras.', 'arbol-ramas', 'Se combinan **3** camisetas, varias **pantalonetas** y **4** medias. ¿Cuántas pantalonetas dan **24** uniformes?', { a: 3, c: 4, total: 24, max: 10, et: 'pantalonetas' }, '$3 \\cdot n \\cdot 4 = 24$: dos pantalonetas.', ['Multiplica lo que ya conoces.', '¿Qué número por doce da el total?'], '3 · 4 = 12; 24 ÷ 12 = 2'],
+    ['La junta', 'Los cargos son distintos: importa quién queda en cada uno.', 'cuantos-candidatos', 'Se puede elegir **presidenta y tesorera** de **42** maneras. ¿Cuántas candidatas hay?', { total: 42, max: 12, cargos: ['presidenta', 'tesorera'] }, '$7 \\cdot 6 = 42$: siete candidatas.', ['Son dos números seguidos.', 'Prueba multiplicando un número por el anterior.'], 'Dos seguidos que dan 42: el mayor es 7']],
+    'Dos pantalonetas y siete candidatas.', 'Multiplica las elecciones y mira si el orden importa.');
+  reto('azar-2', ['icf-ma-azar-3', 'icf-ma-azar-4'], 3, 'La bolsa y los sensores', 'Entre quiénes y todo menos ninguno', 'Una urna debe quedar pareja con otra y dos sensores vigilan una puerta.', [
+    ['Urnas parejas', 'Iguala la parte del total, no la cantidad.', 'iguala-urnas', 'La urna A tiene **2** naranjas de **8** bolas. La B tiene **3** naranjas: échale verdes hasta que naranja sea **igual de probable**.', { a: 2, t: 8, b: 3, max: 14 }, 'En A es un cuarto: en B, 3 de 12; faltan 9 verdes.', ['Halla qué parte de A es naranja.', 'Las tres naranjas deben ser un cuarto del total de B.'], 'Un cuarto: total 12; verdes 12 − 3 = 9'],
+    ['Al menos uno', 'Halla primero que fallen los dos.', 'falla-cuadrado', 'Dos sensores fallan con la **misma** probabilidad, sin afectarse. Al menos uno funciona con **0.91**. Mueve la de fallar.', { al: 0.91 }, 'Fallan los dos con 0.09: cada uno, con 0.3.', ['Resta de uno para saber cuándo fallan ambos.', 'Busca un número que por sí mismo dé nueve centésimas.'], '1 − 0.91 = 0.09, y su raíz = 0.3']],
+    'Nueve verdes; cada sensor falla con 0.3.', 'Parte del total, y alguno es todo menos ninguno.');
+
+  const PARED = D('mural2', '¿Pintar o no pintar?', [
+    'El concejo estudiantil quiere cubrir de murales la pared del patio. Yo creo que debe hacerlo, pero no toda.',
+    'La razón es simple: una pared que alguien pintó se cuida. En la sede vecina, los rayones bajaron a la mitad el año en que se pintó.',
+    'Algunos profesores temen que los murales distraigan. Es posible, si están frente al tablero; la pared del patio no lo está.',
+    'Por eso propongo empezar por una mitad y comparar. Si la otra amanece igual de rayada, sabremos qué hacer.']);
+  reto('tesis-1', ['icf-lc-argumento-1'], 2, '¿Pintar o no pintar?', 'Tesis, razón y respuesta', 'Una carta corta. Encuentra qué defiende y cómo.', [
+    ['La tesis', 'Busca lo que alguien podría discutir.', 'subraya-tesis', 'Subraya la oración del párrafo 1 que dice lo que se va a **defender**.', { doc: PARED, nums: [1], n: 1, va: ['1.1'], mira: { '1.0': 'Cuenta lo que quiere el concejo, no lo que defiende quien escribe.' }, bien: '«Yo creo» la anuncia.' }, '«Yo creo que debe hacerlo, pero no toda» es lo que defiende.', ['Busca quién habla en primera persona.', 'La otra oración solo cuenta un plan.'], 'Tesis: pintar, pero no toda'],
+    ['Las piezas', 'Di el papel de cada oración.', 'pieza-argumento', 'Ata cada pieza a su oración.', { doc: PARED, lineas: ['Los rayones bajaron a la mitad.', 'Temen que distraigan.', 'La pared del patio no está frente al tablero.'], ...T(['prueba de la razón', 0, 'Busca un dato.'], ['contraargumento', 1, 'Busca lo que temen otros.'], ['respuesta', 2, 'Busca lo que contesta ese temor.']), bien: 'Prueba, objeción y respuesta.' }, 'El dato prueba, el temor objeta y el lugar responde.', ['Una trae un número.', 'Otra contesta a los profesores.'], 'Dato, temor y contestación']],
+    'Defiende pintar una parte, con un dato y una respuesta.', 'Tesis, prueba, objeción y respuesta.');
+  reto('tesis-2', ['icf-lc-argumento-2'], 3, 'El peso de los datos', 'Creer más o creer menos', 'La misma carta: ¿qué datos la harían más fuerte o más débil?', [
+    ['Pesa', 'Supón cierto cada dato.', 'balanza-tesis', 'Tesis: pintar hace que la pared se cuide.', { doc: PARED, tesis: 'Pintar hace que la pared se cuide', ...F(['En tres sedes más también bajaron los rayones.', 0, '¿Se repite el resultado?'], ['Ese año la sede vecina puso cámaras.', 1, '¿Podría haber otra causa?'], ['La pintura era amarilla.', 2, '¿Cambia lo que se cuida?']), bien: 'Repetir apoya; otra causa debilita.' }, 'Más sedes apoyan, las cámaras ofrecen otra causa y el color no pesa.', ['¿Cuál ofrece otra explicación?', 'El color no cambia el cuidado.'], 'Apoya: sedes. Debilita: cámaras'],
+    ['El alcance', 'Ni más ni menos que la prueba.', 'ajusta-alcance', 'Ajusta cada frase a la carta.', { doc: PARED, filas: [{ antes: 'Propone pintar', topes: ['toda la pared', 'la mitad', 'nada'], va: 1 }, { antes: 'El dato de los rayones viene de', topes: ['todo el país', 'ninguna parte', 'una sede'], va: 2 }], mira: ['Relee la propuesta del párrafo 4.', 'Relee de dónde salen los rayones.'], luz: [[4, 'por una mitad'], [2, 'En la sede vecina']], bien: 'Una mitad, una sede.' }, 'Propone una mitad y su dato es de una sede.', ['Busca «empezar por».', 'El dato es de un solo lugar.'], 'Mitad de la pared; una sede']],
+    'Más sedes la harían fuerte; las cámaras, débil.', 'Pesa cada dato y cuida el alcance.');
+
+  const TERMINAL = D('cancha', 'La cancha de las seis', [
+    'En el barrio Los Pinos hay una sola cancha. A las seis la quieren los futbolistas, un grupo de baile de mayores y los dueños de perros.',
+    'Los futbolistas dicen: «la cancha es para deporte». Las señoras del baile, que a esa hora salen de trabajar, piden la mitad. Los dueños de perros solo necesitan un lugar cercado.',
+    'Un vecino dijo que «los jóvenes son unos egoístas». Una futbolista le recordó que su equipo limpia la cancha cada domingo.',
+    'La junta propuso turnos. El baile pidió lunes y jueves; los perros aceptaron el lote de al lado si lo cercaban.']);
+  reto('actor-1', ['icf-sc-perspectivas-1'], 2, 'La cancha de las seis', 'Posición, interés y actor', 'Tres grupos quieren el mismo lugar a la misma hora.', [
+    ['¿Qué o para qué?', 'Pregunta para qué lo piden.', 'genero-o-cita', '¿Es **posición** o **interés**?', { doc: TERMINAL, rot: ['posición', 'interés'], ...F(['La cancha es para deporte', 0, '¿Dice qué quieren o para qué?'], ['Un lugar cercado para soltar al perro', 1, '¿Dice qué quieren o para qué?'], ['Que nos den la mitad', 0, '¿Dice qué quieren o para qué?'], ['Bailar al salir del trabajo', 1, '¿Dice qué quieren o para qué?']), bien: 'Se pide algo para algo.' }, 'Pedir la cancha o la mitad es posición; bailar o soltar al perro, interés.', ['Si responde «para qué», es interés.', 'Las que exigen un espacio son posiciones.'], 'Posición: exigir. Interés: para qué'],
+    ['Quién es quién', 'Busca en el texto por qué lo pide cada quien.', 'voz-de-la-fuente', 'Ata cada interés a su actor.', { ayuda: 'Tira un hilo desde cada interés hasta su actor.', doc: TERMINAL, portadas: [['Futbolistas', 'actor'], ['Grupo de baile', 'actor'], ['Dueños de perros', 'actor']], ...T(['Jugar', 0, '¿Quién habla de deporte?'], ['Moverse después del trabajo', 1, '¿Quién sale de trabajar a esa hora?'], ['Un sitio cerrado', 2, '¿Quién necesita una cerca?']), bien: 'Jugar, bailar y soltar.' }, 'Los futbolistas juegan, las señoras bailan y los dueños necesitan cerca.', ['Uno no necesita la cancha misma.', 'Busca quién sale de trabajar.'], 'Deporte: fútbol. Salida: baile. Cerca: perros']],
+    'Tres posiciones chocan; los intereses caben.', 'Pregunta para qué y aparecen salidas.');
+  reto('actor-2', ['icf-sc-perspectivas-2', 'icf-sc-perspectivas-3'], 3, 'Turnos y prejuicios', 'Hecho contra etiqueta', 'En la discusión hay un prejuicio y una propuesta. Evalúalos.', [
+    ['Prejuicio o hecho', '¿Juzga a todo un grupo o se puede comprobar?', 'genero-o-cita', '¿**Prejuicio** o se puede **comprobar**?', { doc: TERMINAL, rot: ['prejuicio', 'se puede comprobar'], ...F(['Los jóvenes son unos egoístas', 0, '¿Habla de un hecho o de un grupo entero?'], ['El equipo limpia los domingos', 1, '¿Se podría ir a mirar?'], ['Las señoras siempre se quejan', 0, '¿Habla de un hecho o de un grupo entero?'], ['Hay una sola cancha', 1, '¿Se podría contar?']), bien: 'La etiqueta no cuenta nada.' }, 'Las etiquetas juzgan al grupo; limpiar y contar se comprueban.', ['Busca palabras como «siempre» y «son».', 'Lo que se puede ir a ver no es prejuicio.'], 'Etiquetas: prejuicio. Contar o mirar: hecho'],
+    ['La propuesta', 'Mira a quién atiende y a quién no.', 'balanza-tesis', 'Tesis: los turnos atienden a todos.', { doc: TERMINAL, tesis: 'Los turnos atienden a todos', ...F(['El baile tendría lunes y jueves.', 0, '¿Atiende a alguien?'], ['Nadie paga la cerca del lote.', 1, '¿Quién quedaría por fuera?'], ['El barrio se llama Los Pinos.', 2, '¿Cambia los turnos?']), bien: 'Sin cerca, alguien queda por fuera.' }, 'Los días del baile apoyan, la cerca sin dueño debilita y el nombre no pesa.', ['¿Quién puso una condición?', 'El nombre del barrio no decide.'], 'Apoya: días. Debilita: cerca']],
+    'Hay un prejuicio y una buena salida, si alguien paga la cerca.', 'Separa etiquetas de hechos y busca quién queda por fuera.');
+
+  const TRINEO = D('trineo', 'El trineo de madera', [
+    'Un trineo de 20 kilos es jalado con 100 newtons. Sobre arena, el roce es de 60; sobre hielo, de 10.',
+    'En la arena acelera 2 metros por segundo cada segundo; en el hielo, 4.5.',
+    'Cuando se sube una niña de 20 kilos, en el hielo acelera menos.']);
+  reto('mov-1', ['icf-cn-movimiento-2'], 2, 'El trineo de madera', 'Fuerza neta y masa', 'Un trineo en dos pisos distintos y con más carga.', [
+    ['La neta', 'El roce va en sentido contrario: se resta.', 'ajusta-alcance', 'Ajusta cada frase a los datos.', { doc: TRINEO, filas: [{ antes: 'En la arena la fuerza neta es', topes: ['160 N', '40 N', '60 N'], va: 1 }, { antes: 'En el hielo la fuerza neta es', topes: ['110 N', '10 N', '90 N'], va: 2 }], mira: ['Resta el roce de la arena.', 'Resta el roce del hielo.'], luz: [[1, '100 newtons']], bien: 'Se restan los roces.' }, '$100 - 60 = 40$ y $100 - 10 = 90$.', ['El roce se opone al jalón.', 'Haz una resta para cada piso.'], '100 − 60 y 100 − 10 = 90'],
+    ['Con más carga', 'Con la misma fuerza, más masa acelera menos.', 'balanza-tesis', 'Tesis: con el doble de masa y la misma fuerza neta, acelera la mitad.', { doc: TRINEO, tesis: 'Con el doble de masa acelera la mitad', ...F(['Con la niña aceleró 2.25 en vez de 4.5.', 0, '¿Es la mitad?'], ['Con 40 kilos aceleró igual que con 20.', 1, '¿Cambió al duplicar la masa?'], ['La niña llevaba gorro.', 2, '¿Cuánto cambia eso?']), bien: '2.25 es la mitad de 4.5.' }, 'La mitad apoya, acelerar igual debilitaría y el gorro no pesa.', ['Compara con 4.5.', 'Busca el dato que no dice nada.'], 'Mitad: apoya. Igual: debilita']],
+    'Netas de 40 y 90 N; el doble de masa acelera la mitad.', 'Junta las fuerzas y repártelas en la masa.');
+  reto('mov-2', ['icf-cn-movimiento-1', 'icf-cn-movimiento-3'], 3, 'Viajes y caídas', 'Datos en orden', 'Completa tres movimientos y ordena una caída.', [
+    ['Tres viajes', 'Distancia es velocidad por tiempo.', 'tres-viajes', 'Completa el dato que falta.', { viajes: [{ n: 'canoa', d: 18, v: 12, t: 1.5, falta: 'd' }, { n: 'patines', d: 48, v: 16, t: 3, falta: 't' }, { n: 'tren', d: 175, v: 70, t: 2.5, falta: 'v' }], fichas: ['18', '3', '70', '13.5', '32', '172'] }, '$12 \\cdot 1.5 = 18$; $48 \\div 16 = 3$; $175 \\div 2.5 = 70$.', ['Multiplica para la distancia y divide para lo demás.', 'El tren: reparte los kilómetros entre las dos horas y media.'], '12 · 1.5; 48 ÷ 16; 175 ÷ 2.5 = 70'],
+    ['La caída', 'Cada segundo gana lo mismo.', 'pasos-del-proceso', 'Ordena lo que le pasa a una paracaidista. El primero está en su puesto.', { que: 'la caída', de: 'De la avioneta al suelo', fija: 1, ini: [0, 2, 3, 1], tiras: ['Salta: solo cuenta el peso.', 'Gana velocidad y el aire la frena más.', 'El aire iguala al peso: velocidad constante.', 'Abre el paracaídas y frena.'], mira: ['', 'El aire frena más cuando ya va rápido.', 'Se equilibra después de ganar velocidad.', 'Lo abre cuando ya va a velocidad constante.'], bien: 'Acelerar, equilibrar y frenar.' }, 'Salta, gana velocidad, se equilibra y abre el paracaídas.', ['¿Cuándo frena más el aire?', 'Frenar con el paracaídas va al final.'], 'Salta, acelera, equilibra, abre']],
+    'Los tres viajes completos y la caída en orden.', 'd = v · t, y fuerza neta cero es velocidad constante.');
+
+  const PUENTE = D('bridge', 'The bridge', [
+    'My town has the oldest bridge in the region. It was built in 1890, and people have crossed it every day since then.',
+    'Last year, while engineers were painting it, they found a letter in the wood. Nobody knows who wrote it.',
+    'A new bridge is going to open in March. It will be wider and safer, but it won\'t be as beautiful as the old one, so we have asked the mayor to keep both.']);
+  reto('gram-1', ['icf-en-gramatica-1'], 2, 'The bridge', 'Palabra de tiempo y verbo', 'Un texto corto. Ubica cada hecho en su tiempo.', [
+    ['When?', 'Mira la forma del verbo.', 'linea-vida', 'Put each fact in its moment.', { doc: PUENTE, rot: ['before', 'until now', 'the future'], ...F(['It was built', 0, 'Mira la fecha.'], ['They found a letter', 0, 'Busca «last year».'], ['People have crossed it', 1, 'Busca «since».'], ['A new bridge is going to open', 2, 'Busca «going to».']), luz: [[1, 'since then'], [3, 'is going to open']], bien: 'Dates, since and going to.' }, '«Was built» y «found» terminaron, «have crossed» sigue y «going to» es futuro.', ['Busca las palabras de tiempo.', '«Since» llega hasta hoy.'], 'Was, found: antes. Have: hasta hoy. Going to: futuro'],
+    ['Match', 'Di qué hace cada verbo.', 'pista-tipo', 'Match each idea with its sentence.', { doc: PUENTE, lineas: ['They were painting it.', 'They found a letter.', 'It will be wider.'], ...T(['a long action in the past', 0, 'Busca «were» y «-ing».'], ['a short action in the past', 1, 'Busca un pasado simple.'], ['a prediction', 2, 'Busca el futuro.']), bien: 'Long, short and future.' }, 'La larga lleva «were painting», la corta «found» y la predicción «will».', ['La larga termina en -ing.', 'La predicción lleva «will».'], 'Were -ing, found, will']],
+    'Every verb has its time word.', 'Palabra de tiempo primero, verbo después.');
+  reto('gram-2', ['icf-en-gramatica-2', 'icf-en-gramatica-3'], 3, 'Old or new?', 'Comparar y unir', 'El mismo texto: compara los dos puentes y une ideas.', [
+    ['Compare', '«Not as… as» quiere decir menos.', 'ajusta-alcance', 'Move each knob until it says the same as the text.', { doc: PUENTE, filas: [{ antes: 'The new bridge will be', topes: ['narrower', 'as wide', 'wider'], va: 2 }, { antes: 'The old bridge is', topes: ['less beautiful', 'more beautiful', 'as beautiful'], va: 1 }], mira: ['Busca cómo será el nuevo.', 'Busca «as beautiful as» y mira si hay un «not».'], luz: [[3, 'wider and safer'], [3, 'won\'t be as beautiful as']], bien: 'Wider, but less beautiful.' }, 'El nuevo será más ancho y menos bonito: el viejo es más bonito.', ['«Wider» compara el ancho.', 'Si el nuevo no es tan bonito, ¿cuál lo es más?'], 'Nuevo: wider. Viejo: more beautiful'],
+    ['Join', 'Di qué hace la segunda idea.', 'bisagras', 'Put the word that joins. Sobran dos.', { doc: PUENTE, pares: [['It won\'t be as beautiful,', 'we asked the mayor to keep both.'], ['It will be safer,', 'it won\'t be as beautiful.']], ...F(['so', 0, 'Trae el resultado: ¿dónde lo segundo sale de lo primero?'], ['but', 1, 'Contrasta: ¿dónde una cosa es buena y otra no?'], ['because', null, 'Daría la causa: ninguna segunda idea lo es.'], ['when', null, 'It is about time: no pair is.']), bien: 'Result and contrast.' }, 'Pedirle al alcalde es el resultado; seguro y menos bonito contrastan.', ['Una pareja tiene algo bueno y algo malo.', 'La otra termina en lo que hicieron.'], 'Resultado: so. Contraste: but']],
+    'The new bridge is wider; the old one is more beautiful.', 'Compara con cuidado y une con sentido.');
 }
 ;
 //#archivo js/inicio.js
