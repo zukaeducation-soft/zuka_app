@@ -159,12 +159,12 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       filas: fila('dia', 'Tú eliges el día y la hora', 'Según los cupos disponibles') + fila('hoja', 'Contiene', 'Una hora virtual sobre los temas que escojas') + fila('mas', 'Materias', 'Las de los cursos que ya están abiertos') + fila('meta', 'Resuelve con una persona lo que se te puso difícil.') }),
   ]).join('');
   const prontos = todos.filter(c => !cursos.some(x => x.id === c.id));
-  // Carrusel: la promesa, un programa por lámina y los libros. `data-c`: el color de la franja.
+  // Carrusel: la promesa con la foto, un programa por lámina y los libros. `data-c`: el color de la franja.
   const lamina = (c, name, cuerpo, fig, cls = '') => `<div class="pz-lamina ${cls}" data-c="${c}" role="group" aria-roledescription="lámina" aria-label="${pzEsc(name)}"><div class="pz-in pz-lam-in"><div class="pz-lam-txt">${cuerpo}</div><div class="pz-lam-fig">${fig}</div></div></div>`;
   const mancha = f => `<div class="pz-mancha" data-inclina="7" aria-hidden="true">${f}</div>`;
   const laminas = [
     lamina('#6fd3ff', 'Zuka, tu aliado', `<h1>Tu aliado para <em>entrar</em> a la universidad y <em>terminarla</em></h1><p class="pz-lead">Cursos que se juegan, libros y asesorías para preparar la admisión y sacar adelante las matemáticas de la carrera.</p>
-      <div class="pz-ctas">${empieza()}<button class="btn ghost" type="button" data-pz-ir="#pz-programas">Ver programas</button></div>`, pzRueda(), 'pz-lam-rueda'),
+      <div class="pz-ctas">${empieza()}<button class="btn ghost" type="button" data-pz-ir="#pz-programas">Ver programas</button></div>`, '<div class="pz-mancha pz-foto" data-inclina="5"><img src="brand/estudiantes.webp" alt="Cuatro estudiantes universitarios conversan en el campus" width="1200" height="885" fetchpriority="high"></div>', 'pz-lam-foto'),
     ...orden.filter(c => PZ_PROG[c.id]).map(c => lamina(c.color, c.name, `<p class="pz-lam-k">${pzEsc(c.name)}</p><h2>${PZ_PROG[c.id].h}</h2><p class="pz-lead">${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}, a tu ritmo. El primer mundo es gratis con un código de prueba.</p>
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="${pzEsc(c.name)}">Quiero inscribirme</button><button class="btn ghost" type="button" data-pz="prueba">Probar gratis</button></div>`, mancha(celu(c.id)))),
     lamina('#f5e6c0', 'Libros de admisión', `<p class="pz-lam-k">Libros de admisión</p><h2>El examen, también en papel</h2><p class="pz-lead">Dos libros de razonamiento lógico y dos de comprensión lectora. Impresos a color, con envío.</p>
@@ -216,6 +216,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <header class="pz-head pz-rev"><h2>Cómo se aprende en Zuka</h2>
         <p>Primero ves la idea, después la fórmula. Estos dibujos funcionan: pruébalos.</p></header>
       <div class="pz-demos">
+        ${demo('pz-d-rueda', 'La rueda que dibuja la onda', 'La altura del punto es el seno del ángulo. Muévelo y mira cómo se dibuja.', pzRueda())}
         ${demo('pz-d-area', 'La fórmula deja de ser un truco', 'Mueve el corte: el cuadrado siempre se arma con las mismas cuatro piezas.', PZ_AREA,
     '<p class="pz-cuenta pz-cuenta-area"></p>')}
         ${demo('pz-d-pal', 'Practicas jugando', 'Corre el peso hasta equilibrar la palanca. La cuenta se escribe sola.', PZ_PALANCA,
