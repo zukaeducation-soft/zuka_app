@@ -808,3 +808,9 @@
   .hj-vida > div { padding: 0; }
   .hj-vida .hj-dentro { min-height: 44px; }
 }
+
+.hj-regla { padding: 12px 14px 4px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.hj-regla p { margin: 0 0 2px; font-size: 15.5px; line-height: 1.45; }
+.hj-regla b { color: var(--c-ink); }
+.hj-regla .xg-per { max-width: 340px; margin: 0 auto; }
+.hj-pares s { margin-right: 4px; color: var(--mute); text-decoration-color: var(--fire, var(--bad)); }

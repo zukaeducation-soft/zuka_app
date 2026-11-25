@@ -4,7 +4,7 @@
 // tests/preuda-lectura.test.js les exige el estándar.
 const PU_LEC_HECHOS = [];
 // Mundos con explicación interactiva y ejercicios sobre la hoja (spec 2026-11-24-lectura-explora; tests/lectura-explora.test.js).
-const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos'];
+const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos', 'pu-explicita', 'pu-inferencia', 'pu-vocabulario'];
 (() => {
   const lessons = PU_LECTURA.flatMap(u => u.lessons);
   const L = id => { const l = lessons.find(l => l.id === id); if (!l) throw new Error(`no existe ${id}`); return l; };

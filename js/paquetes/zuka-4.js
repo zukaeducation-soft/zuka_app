@@ -576,7 +576,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 // tests/preuda-lectura.test.js les exige el estándar.
 const PU_LEC_HECHOS = [];
 // Mundos con explicación interactiva y ejercicios sobre la hoja (spec 2026-11-24-lectura-explora; tests/lectura-explora.test.js).
-const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos'];
+const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos', 'pu-explicita', 'pu-inferencia'];
 (() => {
   const lessons = PU_LECTURA.flatMap(u => u.lessons);
   const L = id => { const l = lessons.find(l => l.id === id); if (!l) throw new Error(`no existe ${id}`); return l; };
@@ -9171,6 +9171,281 @@ xpLec('pu-tt-3', [
     xpHaz('hoja', 'Subraya la **cita testimonial** de este artículo.', { modo: 'toca', meta: [2], paras: [['El molino de agua lleva dos siglos en pie.', 'Cerrarlo sería perder una escuela.'], ['«Yo aprendí a contar con los bultos de maíz», dice Pedro, el molinero.', 'Su historia es la de muchos.', 'Por eso hay que cuidarlo.']], pista: 'Esa la dice quien escribe el artículo. Busca dónde habla en primera persona alguien que lo vivió.' }, 'La cita deja oír al testigo; el artículo sigue siendo de quien lo escribe.')],
 ], 'Mira cómo está armado el texto, quién habla en todo y quién solo en una cita.');
 ;
+//#archivo js/explora-pu-ie.js
+// Preuniversitario · lectura, mundo 3 «Información explícita» (Explora): pu-ie-1 a pu-ie-4. Textos cortos propios.
+xpLec('pu-ie-1', [
+  ['La palabra clave',
+    xpMira('hoja', 'Empecemos por la idea: «según el texto» pide un dato **escrito**. No se recuerda: se busca.', { paras: [['El faro se encendió por primera vez en 1907.'], ['Lo cuidaban dos familias que se turnaban cada mes.'], ['Su luz se ve a 30 kilómetros.']] }, [
+      ['Pregunta: ¿cada cuánto se turnaban? No respondas de memoria.', {}],
+      ['Se saca una palabra clave: «turnaban».', {}],
+      ['Se pasa la vista buscando solo eso.', { luz: [1], nota: { 1: 'turnos' } }],
+      ['Ahí está: cada mes. El dato queda señalado.', { luz: [1] }],
+      ['Si preguntan por una fecha o una distancia, la pista es un número.', { luz: [0, 2] }],
+    ], 'Saca una palabra clave de la pregunta (un nombre, una cifra) y vuelve al texto a buscarla.'),
+    xpHaz('hoja', 'Subraya la oración que responde: ¿**cuánto** pesa la campana?', { modo: 'toca', meta: [2], paras: [['La campana llegó en un barco en 1820.', 'La subieron entre cuarenta hombres.'], ['Pesa novecientos kilos.', 'Suena dos veces al día.']], pista: 'Esa trae un dato, pero de otra cosa. La palabra clave es «pesa».' }, 'El dato está escrito: solo hay que encontrarlo.')],
+  ['Datos que se juntan',
+    xpMira('hoja', 'Segunda idea: a veces la respuesta necesita **dos datos** de oraciones distintas.', { paras: [['Al torneo llegaron 48 equipos.', 'La lluvia obligó a cambiar de cancha.'], ['De ellos, 30 venían de otros municipios.']] }, [
+      ['Pregunta: ¿cuántos equipos eran del mismo municipio?', {}],
+      ['Nadie lo dice en una sola oración.', {}],
+      ['Aquí está el total.', { luz: [0], sello: { 0: 'total' } }],
+      ['Y aquí los que venían de afuera.', { luz: [2], sello: { 2: 'de afuera' } }],
+      ['Se juntan: 48 menos 30 son 18.', { luz: [0, 2] }],
+      ['La lluvia es cierta, pero no hace falta.', { luz: [1] }],
+    ], 'Si no está en una oración, mira si sale de juntar dos. Lo demás se deja quieto.'),
+    xpHaz('hoja', 'Subraya las **dos** oraciones que se juntan para saber cuántos años duró abierto el teatro.', { modo: 'toca', meta: [0, 3], paras: [['El teatro abrió en 1931.', 'Tenía doscientas sillas rojas.'], ['Allí cantó una vez una niña del barrio.', 'Cerró sus puertas en 1986.']], pista: 'Alguna de las subrayadas no habla de cuándo abrió ni de cuándo cerró.' }, 'Un comienzo y un final: dos datos, una respuesta.')],
+  ['Ni más ni menos que lo escrito',
+    xpMira('hoja', 'Tercera idea: al volver, se compara **verbo por verbo**.', { letras: ['1', 'a', 'b', 'c'], paras: [['Los vecinos pidieron un semáforo y la oficina prometió estudiarlo.'], ['Los vecinos pidieron un semáforo.'], ['La oficina instaló un semáforo.'], ['La oficina dijo que lo estudiaría.']] }, [
+      ['Arriba, lo que dice el texto. Abajo, tres opciones.', { luz: [0] }],
+      ['«Pidieron» está tal cual.', { luz: [0, 1], nota: { 1: 'lo dice' } }],
+      ['«Instaló» no es «prometió estudiar». Cambió el verbo.', { luz: [0, 2], tacha: [2] }],
+      ['«Dijo que lo estudiaría» usa otras palabras para lo mismo.', { luz: [0, 3], nota: { 3: 'lo mismo' } }],
+      ['Una opción falsa se descarta con la oración que la contradice.', { luz: [0] }],
+      ['Y si algo no está escrito pero sale de lo escrito, se deduce.', {}],
+    ], '«Pidió» no es «logró». Compara el verbo de la opción con el del texto.'),
+    xpHaz('hoja', 'El texto: «El club **propuso** abrir los lunes». **Tacha** las dos opciones que no dice.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['El club abre los lunes.'], ['El club hizo una propuesta.'], ['Se habló de abrir un día más o distinto.'], ['Los lunes el club se llena.']], pista: 'Alguna de las tachadas sí sale de «propuso abrir los lunes». Proponer no es hacer.' }, 'Proponer, pedir o prometer no es hacer.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya la oración que responde: ¿**por qué** cambiaron de lugar la feria?', { modo: 'toca', meta: [3], paras: [['La feria del libro reúne a sesenta editoriales.', 'Este año se hizo en la plaza cubierta.'], ['El público creció a casi el doble.', 'La lluvia del año pasado había dañado muchas cajas.']], pista: 'Esa dice qué pasó, no por qué se cambió. Busca lo que había salido mal antes.' }, 'La pregunta dice qué clase de dato buscar: cuánto, cuándo o por qué.')],
+], 'Palabra clave, volver al texto, juntar si hace falta y comparar verbo por verbo.');
+
+xpLec('pu-ie-2', [
+  ['Lo mismo, con otras palabras',
+    xpMira('hoja', 'Empecemos por la idea: parafrasear es decir **lo mismo** con otras palabras.', { letras: ['1', 'a', 'b', 'c'], paras: [['Muchos jóvenes prefieren oír un podcast que leer el periódico.'], ['A bastantes muchachos les gusta más oír un podcast.'], ['Los jóvenes ya no leen.'], ['Los podcast duran media hora.']] }, [
+      ['Arriba, el original. ¿Cuál de las tres dice lo mismo?', { luz: [0] }],
+      ['«Muchos» es «bastantes» y «prefieren» es «les gusta más»: es fiel.', { luz: [0, 1], nota: { 1: 'fiel' } }],
+      ['«Ya no leen» dice más de lo dicho: exagera.', { luz: [2], nota: { 2: 'dice de más' } }],
+      ['La duración no estaba: agrega.', { luz: [3], nota: { 3: 'agrega' } }],
+      ['Cambian las palabras; lo que se dice, no.', { luz: [0, 1] }],
+    ], 'Una paráfrasis fiel no agrega ni quita: solo cambia las palabras.'),
+    xpHaz('hoja', 'Original: «Casi siempre llueve en abril». Subraya la paráfrasis **fiel**.', { modo: 'toca', meta: [1], letras: ['A', 'B', 'C', 'D'], paras: [['En abril llueve todos los días.'], ['La lluvia es habitual en abril.'], ['A veces llueve en abril.'], ['Abril es el mes más triste.']], pista: 'Esa cambia cuánto llueve o agrega algo. Busca la que conserve «casi siempre».' }, '«Casi siempre» y «habitual» miden lo mismo.')],
+  ['El alcance',
+    xpMira('hoja', 'Segunda idea: las trampas cambian **cuánto** o **hasta dónde**.', { letras: ['A', 'B', 'C'], paras: [['Algunos…', 'varios…', 'muchos…', 'todos.'], ['Puede…', 'suele…', 'siempre.'], ['Reduce…', 'elimina.']] }, [
+      ['Estas palabras miden. Van de menos a más.', {}],
+      ['De «algunos» a «todos» hay mucho trecho.', { luz: [0, 3], nota: { 0: 'cuántos' } }],
+      ['«Puede» o «suele» no es «siempre».', { luz: [4, 5, 6], nota: { 1: 'qué tan seguido' } }],
+      ['«Reduce» deja algo; «elimina» no deja nada.', { luz: [7, 8], nota: { 2: 'hasta dónde' } }],
+      ['Si la opción sube o baja de escalón, ya no es fiel.', {}],
+      ['Otra trampa: «sugiere» propone; «demuestra» asegura.', {}],
+    ], 'Cuida las palabras que miden: cuántos, qué tan seguido y hasta dónde.'),
+    xpHaz('hoja', 'Original: «El filtro **puede reducir** el ruido». **Tacha** las dos que cambian el alcance.', { modo: 'tacha', meta: [1, 2], letras: ['A', 'B', 'C', 'D'], paras: [['Con el filtro es posible que haya menos ruido.'], ['El filtro acaba con el ruido.'], ['El filtro siempre baja el ruido.'], ['Quizá el filtro disminuya el ruido.']], pista: 'Alguna de las tachadas conserva «puede» y «reducir». Busca la que asegura o la que elimina.' }, '«Puede» es quizá; «reducir» es menos, no nada.')],
+  ['Las bisagras también dicen',
+    xpMira('hoja', 'Tercera idea: al decirlo con otras palabras, se conserva **cómo se unen** las ideas.', { paras: [['El bus se varó;', 'por eso llegamos tarde.'], ['El bus se varó;', 'sin embargo, llegamos a tiempo.'], ['El bus se varó.', 'Además, llovía.'], ['Solo había una salida:', 'caminar.']] }, [
+      ['«Por eso»: lo segundo resulta de lo primero.', { luz: [0, 1], nota: { 0: 'resulta' } }],
+      ['«Sin embargo»: lo segundo va en contra de lo esperado.', { luz: [2, 3], nota: { 1: 'se opone o limita' } }],
+      ['«Además»: se suma otra cosa del mismo lado.', { luz: [4, 5], nota: { 2: 'suma' } }],
+      ['Los dos puntos anuncian lo que viene; las rayas meten una aclaración o ejemplos.', { luz: [6, 7], nota: { 3: 'anuncia' } }],
+      ['Cambiar la bisagra cambia lo que se dice, aunque las palabras sean las mismas.', {}],
+    ], '«Por eso» resulta, «sin embargo» limita y «además» suma: la paráfrasis conserva esa relación.'),
+    xpHaz('hoja', 'Pon al margen cómo se une lo segundo con lo primero.', { modo: 'margen', rotulos: ['se opone', 'resulta', 'suma'], meta: [1, 2, 0], paras: [['Dejó la ventana abierta; por eso se mojó el libro.'], ['Es barato. Además, dura años.'], ['Es viejo; sin embargo, funciona.']], pista: 'Alguno no va ahí. Mira la palabra que une las dos mitades.' }, 'La relación entre las ideas también se parafrasea.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Original: «Varios estudios **sugieren** que caminar **ayuda** a la memoria». Subraya la fiel.', { modo: 'toca', meta: [2], letras: ['A', 'B', 'C', 'D'], paras: [['Está demostrado que caminar da memoria.'], ['Todos los estudios recomiendan caminar.'], ['Algunas investigaciones apuntan a que caminar favorece la memoria.'], ['Sin caminar no hay memoria.']], pista: 'Esa asegura, generaliza o exagera. Busca la que propone sin asegurar.' }, 'Mismo número, misma seguridad, misma fuerza.')],
+], 'Otras palabras, el mismo alcance y la misma relación entre las ideas.');
+
+xpLec('pu-ie-3', [
+  ['Verdadero no es «dicho»',
+    xpMira('hoja', 'Empecemos por la idea: algo puede ser **verdad** y aun así **no estar en el texto**.', { letras: ['1', 'a', 'b', 'c'], paras: [['Los murciélagos de la cueva salen al anochecer y comen frutas.'], ['Salen cuando oscurece.'], ['Son mamíferos.'], ['Le temen a la luz.']] }, [
+      ['Arriba, todo lo que dice el texto.', { luz: [0] }],
+      ['«Salen cuando oscurece»: está, con otras palabras.', { luz: [0, 1], nota: { 1: 'lo dice' } }],
+      ['«Son mamíferos»: es verdad, pero aquí nadie lo dijo.', { luz: [2], nota: { 2: 'no lo dice' } }],
+      ['«Le temen a la luz»: suena lógico. Tampoco está.', { luz: [3], nota: { 3: 'no lo dice' } }],
+      ['La pregunta que salva: ¿dónde lo dice?', { luz: [0] }],
+    ], 'Para aceptar una opción, señala la frase que la dice. Si no puedes, no está.'),
+    xpHaz('hoja', 'Texto: «La tortuga vuelve cada año a la misma playa a poner sus huevos». **Tacha** las dos que **no** dice.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 2], paras: [['Regresa todos los años.'], ['Vive más de cien años.'], ['Está en peligro.'], ['Pone huevos en la playa.']], pista: 'Alguna de las tachadas sí está en el texto, aunque con otras palabras.' }, 'Que lo sepas tú no significa que lo diga el texto.')],
+  ['Los huecos que uno llena',
+    xpMira('hoja', 'Segunda idea: sin darnos cuenta, **llenamos huecos** con lo que sabemos.', { paras: [['Inés llegó empapada', 'y colgó el abrigo.'], ['Su tío usa hojas de sauce para el dolor,', 'como hacía su madre.']] }, [
+      ['Uno piensa: «Llovía». El texto no lo dice: pudo caer al río.', { luz: [0] }],
+      ['El texto solo dice que llegó empapada.', { luz: [0], sello: { 0: 'dicho' } }],
+      ['Uno piensa: «El sauce cura». El texto tampoco lo dice.', { luz: [2] }],
+      ['Dice que el tío lo usa, por tradición.', { luz: [2, 3], sello: { 3: 'dicho' } }],
+      ['Que alguien haga algo no prueba que funcione.', {}],
+      ['Advertir, pedir o creer no es asegurar.', {}],
+    ], 'Que alguien lo haga, lo crea o lo pida no es que el texto lo afirme.'),
+    xpHaz('hoja', 'Subraya la única opción que el texto **dice**: «Rosa le reza a la luna para que crezca su huerta».', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [3], paras: [['La luna hace crecer las plantas.'], ['La huerta de Rosa está creciendo.'], ['Rosa no usa abono.'], ['Rosa le pide algo a la luna.']], pista: 'Esa llena un hueco. El texto solo cuenta lo que hace Rosa y para qué.' }, 'El texto cuenta lo que hace Rosa, no que funcione.')],
+  ['En otro lugar o en ninguno',
+    xpMira('hoja', 'Tercera idea: antes de decir «no está», **se busca** en todo el texto.', { letras: ['1', '2', 'a', 'b', 'c'], paras: [['El taller abrió en una cochera.'], ['Hoy ocupa una bodega y tiene seis mesas.'], ['empezó en una cochera'], ['tiene seis mesas'], ['vende por internet']] }, [
+      ['«Según el párrafo 2, se dice todo, EXCEPTO».', { luz: [1] }],
+      ['Las seis mesas están ahí: se descarta.', { luz: [1, 3], tacha: [3] }],
+      ['La cochera está, pero en el párrafo 1.', { luz: [0, 2], nota: { 2: 'en otro' } }],
+      ['Vender por internet no está en ninguno.', { luz: [4], nota: { 4: 'en ninguno' } }],
+      ['Las dos quedan fuera del párrafo 2, por razones distintas.', { luz: [2, 4] }],
+      ['Para entender una palabra como «ninguno», se busca a quién apunta.', {}],
+    ], 'Está aquí, está en otro lado o no está: se decide buscando, no recordando.'),
+    xpHaz('hoja', 'Pon al margen dónde está cada opción. Párrafo 1: «Es un pan de yuca». Párrafo 2: «Se hornea en hojas».', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['en ninguno', 'en el 1', 'en el 2'], meta: [2, 0, 1], paras: [['Se cocina envuelto.'], ['Se come con queso.'], ['Se hace con yuca.']], pista: 'Alguno no va ahí. Busca cada opción en los dos párrafos del enunciado.' }, 'Buscar antes de descartar.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Texto: «Dos alumnos cambiaron de mesa y dicen que piensan quedarse». Subraya lo que **sí** se puede afirmar.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [1], paras: [['Sus notas mejoraron.'], ['Quieren seguir en la mesa nueva.'], ['La mesa vieja era incómoda.'], ['El profesor los movió.']], pista: 'Para aceptar esa tendrías que agregar algo que el texto no dice.' }, 'Solo lo leído: lo demás lo puso uno.')],
+], 'Pregunta siempre: ¿dónde lo dice? Lo que solo suena bien se queda afuera.');
+
+xpLec('pu-ie-4', [
+  ['Cada idea tiene dueño',
+    xpMira('hoja', 'Empecemos por la idea: en un texto hablan **varias voces**, y cada idea tiene dueño.', { paras: [['Según la entrenadora, faltó descanso.'], ['«Nos sobró confianza», dijo el capitán.'], ['A mi juicio, las dos cosas son ciertas.']] }, [
+      ['Tres ideas sobre el mismo partido. ¿De quién es cada una?', {}],
+      ['«Según la entrenadora»: la idea es de ella.', { luz: [0], nota: { 0: 'la entrenadora' } }],
+      ['Comillas y «dijo»: son las palabras exactas del capitán.', { luz: [1], nota: { 1: 'el capitán' } }],
+      ['«A mi juicio»: habla quien escribe, el autor.', { luz: [2], nota: { 2: 'el autor' } }],
+      ['Otras marcas: sostiene, afirma, reconoce, a mi modo de ver.', {}],
+    ], '«Según», las comillas y verbos como «sostiene» dicen de quién es la idea; «a mi juicio», que es del autor.'),
+    xpHaz('hoja', 'Pon al margen de quién es cada idea.', { modo: 'margen', rotulos: ['el autor', 'la bióloga', 'el alcalde'], meta: [1, 2, 0], paras: [['El humedal se seca, sostiene la bióloga Paz.'], ['«Hay otras prioridades», respondió el alcalde.'], ['A mi modo de ver, sin agua no hay ninguna.']], pista: 'Alguno no va ahí. Busca el verbo o la marca junto a cada idea.' }, 'La marca manda: sin ella, la idea sería del autor.')],
+  ['La trampa de la voz',
+    xpMira('hoja', 'Segunda idea: el examen pone en boca de uno lo que dijo **otro**.', { letras: ['1', '2', 'a', 'b'], paras: [['Ruiz afirma que el tren es caro.'], ['Creo, en cambio, que es caro no tenerlo.'], ['El autor dice que el tren es caro.'], ['Ruiz dice que el tren es caro.']] }, [
+      ['Dos voces: la de Ruiz y la de quien escribe.', { luz: [0, 1] }],
+      ['La opción a: la idea está en el texto…', { luz: [0, 2] }],
+      ['…pero no es del autor. Es falsa, aunque suene conocida.', { luz: [2], tacha: [2] }],
+      ['La opción b le da la idea a su dueño.', { luz: [0, 3], nota: { 3: 'bien atribuida' } }],
+      ['«Creo» es del autor: él piensa otra cosa.', { luz: [1] }],
+      ['Por eso se revisan dos cosas: qué se dice y quién.', {}],
+    ], 'No basta con que la idea esté: tiene que ser de quien dice la opción.'),
+    xpHaz('hoja', 'Subraya la oración que podrías atribuir al **autor**.', { modo: 'toca', meta: [2], paras: [['Los taxistas alegan que perderán pasajeros.', 'Según un informe, hay menos trancones.'], ['Pienso que la ciudad gana tiempo para todos.', '«Ya era hora», comentó una ciclista.']], pista: 'Esa es de otra voz: mira «alegan», «según» o las comillas.' }, '«Pienso», «creo» y «a mi juicio» son del autor.')],
+  ['Quién va antes y quién después',
+    xpMira('hoja', 'Tercera idea: las **fechas** y las palabras que retoman ordenan lo que pasó.', { paras: [['En 2010 abrió la panadería.'], ['Dos años después llegó Luis,', 'el panadero de las trenzas.'], ['En 2015, Luis abrió la suya,', 'porque ya sabía el oficio.']] }, [
+      ['Una fecha escrita es el punto de partida.', { luz: [0], nota: { 0: '2010' } }],
+      ['«Dos años después» también es una fecha: 2012.', { luz: [1], nota: { 1: '2012' } }],
+      ['Si un párrafo nombra a Luis como conocido, va después de presentarlo.', { luz: [2, 3] }],
+      ['«Porque» dice qué trajo qué: es una cadena.', { luz: [3, 4], nota: { 2: '2015' } }],
+      ['Primero aprende, después abre. La causa va antes.', { luz: [1, 3] }],
+      ['Los dos puntos aclaran en qué consiste algo.', {}],
+    ], 'Cuenta desde la fecha escrita; quien se menciona como conocido ya apareció; la causa va antes.'),
+    xpHaz('hoja', 'Pon al margen el año de cada hecho.', { modo: 'margen', rotulos: ['2020', '2018', '2021'], meta: [1, 0, 2], paras: [['En 2018 se fundó el coro.'], ['Dos años después grabó un disco.'], ['Al año siguiente salió de gira.']], pista: 'Alguno no va ahí. Cuenta desde 2018, paso a paso.' }, '«Al año siguiente» se cuenta desde lo último que se dijo.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Según **la vecina**…» Subraya lo que dice ella y nadie más.', { modo: 'toca', meta: [3], paras: [['El parque estuvo cerrado un año.', 'La alcaldía asegura que fue por seguridad.'], ['«Fue por abandono», cuenta doña Luz, la vecina.', 'Según ella, los columpios llevaban meses rotos.'], ['Quizá las dos cosas sean ciertas.']], quietos: [2], pista: 'Esa es de otra voz. Busca a quién apunta «ella».' }, '«Según ella» retoma a la persona que se acaba de nombrar.')],
+], 'Qué se dice, quién lo dice y cuándo pasó: las tres cosas se revisan.');
+;
+//#archivo js/explora-pu-in.js
+// Preuniversitario · lectura, mundo 4 «Inferencia» (Explora): pu-in-1 a pu-in-4. Textos cortos propios.
+xpLec('pu-in-1', [
+  ['Leer entre líneas',
+    xpMira('hoja', 'Empecemos por la idea: **inferir** es ver lo que el texto no dice, pero deja ver.', { paras: [['Cerró el paraguas', 'y se quitó los lentes llenos de vaho.', 'Dejó un charco en la entrada.']] }, [
+      ['Nadie dice qué tiempo hacía.', {}],
+      ['Pero hay un paraguas…', { luz: [0], sello: { 0: 'pista' } }],
+      ['…unos lentes llenos de vaho…', { luz: [1], sello: { 1: 'pista' } }],
+      ['…y un charco. Tres pistas para lo mismo: venía de la lluvia.', { luz: [2], sello: { 2: 'pista' } }],
+      ['Eso es inferir: las pistas están en la página.', { luz: [0, 1, 2] }],
+      ['El sentido de una palabra también se infiere de lo que la rodea.', {}],
+    ], 'Una inferencia se apoya en pistas del texto: se puede señalar con el dedo.'),
+    xpHaz('hoja', 'Subraya las **dos** pistas de que Marta **no esperaba** visita.', { modo: 'toca', meta: [1, 2], paras: [['Tocaron el timbre a las ocho.', 'Marta escondió los platos sucios.', 'Salió a abrir en pantuflas.'], ['Era su prima.', 'Traía un pan bajo el brazo.']], pista: 'Alguna de las subrayadas no muestra a Marta sorprendida. Busca lo que ella hace.' }, 'Lo que alguien hace deja ver lo que no dice.')],
+  ['Inferencia o suposición',
+    xpMira('hoja', 'Segunda idea: si la idea no tiene pista, es **suposición**.', { letras: ['1', 'a', 'b', 'c'], paras: [['Iván revisa el correo cada cinco minutos y no toca el almuerzo.'], ['Está pendiente de una respuesta.'], ['Lo van a despedir.'], ['Está enamorado.']] }, [
+      ['Arriba está lo que se ve.', { luz: [0] }],
+      ['Que espera una respuesta se apoya en que revisa una y otra vez.', { luz: [0, 1], nota: { 1: 'inferencia' } }],
+      ['Que lo van a despedir: no hay pista del trabajo.', { luz: [2], nota: { 2: 'suposición' } }],
+      ['Que está enamorado: podría ser, pero lo pone uno.', { luz: [3], nota: { 3: 'suposición' } }],
+      ['Que sea posible no basta: hace falta la pista.', { luz: [0] }],
+    ], 'Si para sostenerla tienes que agregar algo tuyo, ya no es inferencia.'),
+    xpHaz('hoja', 'Texto: «El perro duerme junto a la puerta desde que Leo viajó». **Tacha** las dos suposiciones.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['El perro espera a Leo.'], ['Leo no va a volver.'], ['El perro está apegado a Leo.'], ['Nadie más cuida al perro.']], pista: 'Alguna de las tachadas sí tiene pista: la puerta y el viaje.' }, 'La puerta es la pista: lo demás sobra.')],
+  ['Gestos y cadenas',
+    xpMira('hoja', 'Tercera idea: los relatos **muestran** lo que se siente y encadenan hechos.', { paras: [['Cerró la fábrica de la esquina.', 'Desde entonces,', 'la cafetería abre solo medio día.'], ['El dueño limpia mesas que ya están limpias.']] }, [
+      ['Primero pasó algo: cerró la fábrica.', { luz: [0], nota: { 0: 'cadena' } }],
+      ['«Desde entonces» une ese hecho con el que sigue.', { luz: [1] }],
+      ['Abre menos: se deduce que tiene menos clientes.', { luz: [2] }],
+      ['Y el gesto: limpia lo limpio. Está inquieto, aunque no lo diga.', { luz: [3], nota: { 1: 'gesto' } }],
+      ['Un cambio también se muestra: alguien bota lo que antes guardaba.', {}],
+      ['Pregunta siempre: ¿qué siente quien hace eso?', { luz: [3] }],
+    ], '«Desde entonces» encadena hechos; un gesto deja ver lo que se siente.'),
+    xpHaz('hoja', 'Subraya el gesto que muestra que Sofía está **nerviosa**.', { modo: 'toca', meta: [2], paras: [['Sofía llegó temprano al teatro.', 'Se sentó en la tercera fila.', 'Dobló el programa hasta volverlo un cuadrito.'], ['Había unas cien personas.', 'A las ocho se apagaron las luces.']], pista: 'Esa cuenta un hecho, pero no deja ver nervios. Busca qué hace con las manos.' }, 'Las manos hablan.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Texto: «Tomás bajó el precio dos veces y ya no canta al abrir el puesto». Subraya lo que **se infiere**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [1], paras: [['Tomás va a cerrar.'], ['A Tomás no le está yendo bien.'], ['Tomás perdió la voz.'], ['Los vecinos son tacaños.']], pista: 'Esa agrega algo que no tiene pista. Busca la que junta el precio y el canto.' }, 'Dos pistas, una inferencia.')],
+], 'Pista en la página: inferencia. Sin pista: suposición. Y los gestos hablan.');
+
+xpLec('pu-in-2', [
+  ['Lo que se da por hecho',
+    xpMira('hoja', 'Empecemos por la idea: un **presupuesto** es lo que la frase da por cierto sin decirlo.', { paras: [['Julia dejó de fumar.'], ['Volvió a llover.'], ['Ya es hora de que arreglen el puente.']] }, [
+      ['«Dejó de fumar»: si antes no fumara, la frase no tendría sentido.', { luz: [0], nota: { 0: 'antes fumaba' } }],
+      ['«Volvió a llover»: da por hecho que ya había llovido.', { luz: [1], nota: { 1: 'ya había llovido' } }],
+      ['«Ya es hora»: da por hecho que no lo han arreglado.', { luz: [2], nota: { 2: 'sigue dañado' } }],
+      ['Nadie lo afirma: se cuela sin discutirse.', {}],
+      ['La prueba: ¿qué tiene que ser cierto para que se pueda decir así?', {}],
+    ], 'Presupuesto: lo que tiene que ser cierto para que la frase tenga sentido.'),
+    xpHaz('hoja', 'Pon al margen lo que da por hecho cada frase.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['antes vivía allí', 'ya había ganado', 'aún no llega'], meta: [1, 2, 0], paras: [['Ganó otra vez.'], ['Todavía la esperan.'], ['Ya no vive en el puerto.']], pista: 'Alguno no va ahí. Pregunta qué tuvo que pasar antes.' }, '«Otra vez», «todavía» y «ya no» cargan con algo de antes.')],
+  ['Las palabras delatoras',
+    xpMira('hoja', 'Segunda idea: hay palabras que casi siempre **cargan** un presupuesto.', { letras: ['A', 'B', 'C', 'D'], paras: [['por fin…', 'todavía…', 'ya no…'], ['otra vez…', 'volver a…', 'dejar de…'], ['Los reparan, como hacían sus abuelos.'], ['El pueblo sí sabe esperar.']] }, [
+      ['«Por fin», «todavía», «ya no»: algo venía de antes.', { luz: [0, 1, 2] }],
+      ['«Otra vez», «volver a», «dejar de»: se repite o se corta.', { luz: [3, 4, 5] }],
+      ['Sin palabra de la lista: «como hacían sus abuelos» supone años.', { luz: [6], nota: { 2: 'comparación' } }],
+      ['Y el «sí» que insiste responde a alguien que lo duda.', { luz: [7], nota: { 3: 'insiste' } }],
+      ['Verbos como «saber» también: «sabe lo que vale» lo da por cierto.', {}],
+      ['El examen lo dice así: da por sentado, supone, presupone.', {}],
+    ], 'Busca «por fin», «todavía», «ya no», «dejar de»… y también comparaciones, un «sí» que insiste o «saber».'),
+    xpHaz('hoja', 'Subraya las **dos** oraciones que dan algo por hecho.', { modo: 'toca', meta: [1, 3], paras: [['El teatro tiene cien sillas.', 'Por fin le pusieron techo.'], ['La entrada cuesta cinco mil.', 'La obra volvió a empezar tarde.']], pista: 'Alguna de las subrayadas solo informa. Busca las palabras que cargan con algo de antes.' }, '«Por fin» y «volvió a» traen historia.')],
+  ['Dar por hecho no es decir',
+    xpMira('hoja', 'Tercera idea: no confundas lo que **dice**, lo que **supone** y lo que no está.', { letras: ['1', 'a', 'b', 'c'], paras: [['La biblioteca dejó de cerrar los lunes.'], ['Antes cerraba los lunes.'], ['Ahora abre los lunes.'], ['Abre hasta la noche.']] }, [
+      ['Arriba está la frase.', { luz: [0] }],
+      ['Que ahora abre los lunes es lo que dice.', { luz: [0, 2], nota: { 2: 'lo dice' } }],
+      ['Que antes cerraba lo da por hecho.', { luz: [0, 1], nota: { 1: 'lo supone' } }],
+      ['Hasta qué hora: ni lo dice ni lo supone.', { luz: [3], nota: { 3: 'no está' } }],
+      ['Criticar una parte tampoco es rechazarlo todo.', {}],
+      ['Una razón sostiene lo que se pide; un dato suelto, no.', {}],
+    ], 'Lo que dice está escrito; lo que supone, tiene que ser cierto; lo demás no está.'),
+    xpHaz('hoja', 'Frase: «El coro sigue ensayando en el garaje». **Tacha** las dos que ni dice ni supone.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 2], paras: [['El coro ya ensayaba en el garaje.'], ['El garaje es pequeño.'], ['El coro canta mal.'], ['El coro ensaya hoy en el garaje.']], pista: 'Alguna de las tachadas sale de «sigue». ¿Qué tiene que ser cierto?' }, '«Sigue» dice que ahora y supone que antes.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«La paciencia de los vecinos es más corta de lo que cree el alcalde». Subraya lo que **da por sentado**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Los vecinos son pacientes.'], ['El alcalde es impaciente.'], ['El alcalde cree que tienen mucha paciencia.'], ['Los vecinos van a protestar.']], pista: 'Esa no hace falta para que la comparación tenga sentido. ¿Qué cree el alcalde?' }, 'Una comparación también presupone.')],
+], 'Pregunta qué tiene que ser cierto para que se diga así: eso es lo que se da por hecho.');
+
+xpLec('pu-in-3', [
+  ['Encadenar hechos',
+    xpMira('hoja', 'Empecemos por la idea: una causa **empuja** a la siguiente, como fichas de dominó.', { paras: [['Se secó la quebrada.'], ['Los molinos se quedaron sin agua.'], ['Los molineros buscaron otro oficio.'], ['El pan empezó a llegar de lejos.']] }, [
+      ['Cuatro hechos. ¿Cuál empuja a cuál?', {}],
+      ['Sin quebrada, los molinos se paran.', { luz: [0, 1], nota: { 0: 'empieza' } }],
+      ['Sin molinos, los molineros se van a otra cosa.', { luz: [1, 2] }],
+      ['Sin molineros, el pan viene de lejos.', { luz: [2, 3], nota: { 3: 'termina' } }],
+      ['«Por eso», «con menos», «desde entonces» marcan la cadena.', {}],
+      ['Y «porque» presenta la causa al revés: después del efecto.', {}],
+    ], 'De cada hecho pregunta qué tuvo que pasar antes. «Por eso» trae el efecto; «porque», la causa.'),
+    xpHaz('hoja', 'Pon al margen el lugar de cada hecho en la cadena.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['primero', 'segundo', 'tercero'], meta: [1, 2, 0], paras: [['La bodega se inundó.'], ['Se dañaron los libros.'], ['Se rompió un tubo.']], pista: 'Alguno no va ahí. ¿Qué tuvo que pasar antes de que la bodega se inundara?' }, 'El tubo, el agua, los libros.')],
+  ['Después no es por',
+    xpMira('hoja', 'Segunda idea: que algo pase **después** no prueba que pase **por** eso.', { paras: [['Estrenó zapatos y ganó el partido.'], ['Pintaron el puente y ese mes subió el arroz.'], ['Apagaron la estufa y se enfrió la sopa.']] }, [
+      ['¿Ganó por los zapatos? Solo pasó después.', { luz: [0], nota: { 0: 'coincide' } }],
+      ['¿El arroz subió por la pintura? Tampoco.', { luz: [1], nota: { 1: 'coincide' } }],
+      ['¿La sopa se enfrió por apagar la estufa? Sí: eso la mantenía caliente.', { luz: [2], nota: { 2: 'causa' } }],
+      ['La prueba: quita lo primero. ¿Lo segundo habría pasado igual?', {}],
+      ['Si algo empezó antes, lo de después no pudo causarlo.', {}],
+    ], 'Quita el primer hecho: si lo segundo pasaría igual, solo coinciden.'),
+    xpHaz('hoja', 'Subraya la oración en la que hay una **causa** de verdad.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Compró un cuaderno rojo y pasó el examen.'], ['Cambió la luna y se dañó la nevera.'], ['Dejó la puerta abierta y entró el gato.'], ['Cantó un gallo y salió el sol.']], pista: 'Quita lo primero de esa: lo segundo habría pasado igual.' }, 'Con la puerta cerrada, el gato no entra.')],
+  ['Nombrar no es afirmar',
+    xpMira('hoja', 'Tercera idea: un texto a veces nombra una causa para **descartarla**.', { paras: [['Hay quien culpa al colegio del ruido.'], ['Pero el ruido empezó antes de que abriera.'], ['Lo que cambió fue la ruta de los camiones.']] }, [
+      ['«Hay quien culpa»: no lo dice el autor, lo dicen otros.', { luz: [0], nota: { 0: 'lo que otros creen' } }],
+      ['«Pero»: la desmiente. Empezó antes.', { luz: [1], nota: { 1: 'lo desmiente' } }],
+      ['Y pone la causa de fondo.', { luz: [2], nota: { 2: 'la causa' } }],
+      ['Una opción que culpe al colegio sería falsa, aunque esté nombrado.', { luz: [0], tacha: [0] }],
+      ['Para descartarla, se señala la oración que la contradice.', { luz: [1] }],
+      ['Que la ruta causó ruido se puede apoyar con hechos; un dato suelto no ayuda.', {}],
+    ], '«Hay quien culpa… pero»: el autor nombra una causa para negarla.'),
+    xpHaz('hoja', 'Subraya la oración con la causa que el autor **sí** acepta.', { modo: 'toca', meta: [2], paras: [['Dicen que el lago se secó por los pescadores.', 'Sin embargo, ellos se habían ido años antes.'], ['El agua se desvió para regar las fincas.', 'Hoy queda un barrizal.']], pista: 'Esa la dicen otros, la niega el autor o es la consecuencia.' }, 'Entre «dicen que» y «sin embargo», busca lo que el autor afirma.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«La tienda cerró en mayo; las ventas venían cayendo desde enero, cuando abrieron la plaza». **Tacha** las dos causas que **no** sirven.', { modo: 'tacha', letras: ['A', 'B', 'C'], meta: [1, 2], paras: [['La plaza le quitó clientes.'], ['Mayo es un mal mes.'], ['El cierre hizo caer las ventas.']], pista: 'Alguna de las tachadas sí encaja: mira qué pasó en enero.' }, 'Lo que pasó después (el cierre) no pudo causar lo de antes.')],
+], 'Encadena hechos del texto, desconfía de lo que solo pasó después y distingue nombrar de afirmar.');
+
+xpLec('pu-in-4', [
+  ['Mostrar, no nombrar',
+    xpMira('hoja', 'Empecemos por la idea: en un relato, lo que se siente casi nunca se **nombra**: se **muestra**.', { letras: ['A', 'B', 'C', 'D'], paras: [['Estoy muy triste.'], ['Dejó su silla en el mismo sitio, aunque estorbaba.'], ['Infló el pecho al oír su nombre.'], ['Se encogió de hombros: «Ya qué».']] }, [
+      ['«Estoy triste» lo nombra: no hay nada que descubrir.', { luz: [0], nota: { 0: 'lo nombra' } }],
+      ['Dejar la silla de alguien que no está: nostalgia.', { luz: [1], nota: { 1: 'nostalgia' } }],
+      ['Inflar el pecho: orgullo.', { luz: [2], nota: { 2: 'orgullo' } }],
+      ['«Ya qué»: resignación, aceptar lo que no se puede cambiar.', { luz: [3], nota: { 3: 'resignación' } }],
+      ['También están el desdén (creer algo poca cosa) y la reserva (callarlo).', {}],
+    ], 'Nostalgia, orgullo, resignación, desdén, reserva: cada una deja su huella en lo que se hace.'),
+    xpHaz('hoja', 'Pon al margen lo que deja ver cada gesto.', { modo: 'margen', rotulos: ['desdén', 'nostalgia', 'reserva'], meta: [1, 2, 0], paras: [['Huele cada tanto el abrigo de su abuelo.'], ['«Nada, estoy bien», dice, y cambia de tema.'], ['«Eso lo hace cualquiera», dijo sin mirar.']], pista: 'Alguno no va ahí. ¿Quién extraña, quién calla y quién desprecia?' }, 'El gesto dice lo que la persona no.')],
+  ['Los motivos',
+    xpMira('hoja', 'Segunda idea: el **motivo** se ve en lo que se hace y en lo que se guarda.', { paras: [['Ahorró dos años en un tarro.'], ['Compró el violín de segunda.'], ['Lo dejó en la cama de su hermana', 'sin nota.']] }, [
+      ['Dos años de ahorro: algo le importa mucho.', { luz: [0] }],
+      ['Un violín: ya se sabe qué quería.', { luz: [1] }],
+      ['En la cama de su hermana: el motivo es ella.', { luz: [2], nota: { 2: 'lo hizo por ella' } }],
+      ['Sin nota: no busca que le den las gracias.', { luz: [3] }],
+      ['La respuesta se apoya en una frase, no en lo que uno sentiría.', {}],
+      ['Y lo que se calla («nadie lo admite») también es pista.', {}],
+    ], 'El motivo se prueba con una frase del texto, no con lo que uno habría sentido.'),
+    xpHaz('hoja', 'Subraya la oración que prueba que **no valoró** el regalo.', { modo: 'toca', meta: [2], paras: [['Le regalaron un reloj de pared.', 'Era de madera y sonaba cada hora.'], ['Nunca lo sacó de la caja.', 'Un día lo pidió su vecina.']], pista: 'Esa cuenta el regalo o lo que pasó después. Busca qué hizo con él.' }, 'La prueba está en lo que hizo con él.')],
+  ['Seguir el hilo del relato',
+    xpMira('hoja', 'Tercera idea: para entender, hay que saber **qué ya se contó** y **a qué apunta** cada palabra.', { paras: [['Mi abuelo tenía un bote azul.'], ['En ese bote aprendí a remar.'], ['Hoy está en el patio, boca abajo.', 'Lo cubre una lona.']] }, [
+      ['Se presenta el bote: «un bote».', { luz: [0], nota: { 0: 'se presenta' } }],
+      ['«Ese bote» ya es conocido: va después.', { luz: [1], nota: { 1: 'se retoma' } }],
+      ['«Hoy» trae el presente.', { luz: [2], nota: { 2: 'hoy' } }],
+      ['«Lo cubre»: ¿qué? El bote, que está boca abajo.', { luz: [3] }],
+      ['Lo que sigue ayuda: una lona cubre un bote, no un patio.', { luz: [2, 3] }],
+      ['El sentido de una palabra también sale de lo que la rodea.', {}],
+    ], '«Ese», «lo» y «hoy» dicen qué ya se contó; lo que sigue ayuda a decidir.'),
+    xpHaz('hoja', 'Subraya aquello a lo que apunta «**lo**».', { modo: 'toca', unidos: true, quietos: [0, 2, 4, 5], meta: [1], paras: [['Guardó ', 'el sombrero', ' en ', 'la repisa', '. ', 'Cada domingo se lo pone para salir.']], pista: 'Reemplaza: ¿se pondría la repisa para salir?' }, 'Lo que sigue dice qué se puede poner uno.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya la oración que deja ver que el padre está **orgulloso**.', { modo: 'toca', meta: [3], paras: [['Le entregaron el diploma a las seis.', 'El padre llegó tarde, con el uniforme puesto.'], ['«¿Y eso para qué sirve?», preguntó.', 'Esa noche lo colgó en la pared de la sala.']], pista: 'Esa cuenta lo que pasó o lo que dijo. Busca lo que hizo con el diploma.' }, 'Dijo una cosa; hizo otra. El gesto pesa más.')],
+], 'Busca el gesto, señala la frase y no pongas lo que sentirías tú.');
+;
 //#archivo js/explora-trig-41a.js
 // Trigonometría · trig-41a «Grados y radianes»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva; motor en
 // js/explora.js, escena «angulo» en js/explora-angulo.js). Mismo formato que pu-cm-1 y alg-0a: cada capítulo abre con una
@@ -10836,6 +11111,8 @@ const GUIDES = {
   'tira-referente': [['drag', 'Tira un hilo desde cada palabra hasta aquello a lo que apunta.', { tile: 'ese', slot: 'quién' }]],
   'linea-vida': [['drag', 'Lleva cada hecho a su momento.', { tile: 'hecho', slot: 'antes' }]],
   'subraya-rasgo': [['tap', 'Toca la oración para subrayarla; otro toque la suelta.', {}]],
+  'ajusta-alcance': [['slide', 'Mueve cada perilla hasta que la oración diga lo mismo que el texto.', { label: 'algunos' }]],
+  'cambia-palabra': [['drag', 'Lleva cada ficha al hueco de la palabra tachada.', { tile: 'palabra', slot: '¿…?' }]],
   'globo-lastre': [['drag', 'Arrastra globos o sacos de arena: el canasto sube o baja y la cuenta se escribe sola.', { tile: 'saco', slot: 'canasto' }], ['tap', 'Déjalo a la altura de la bandera. «Reiniciar» lo devuelve al comienzo.', { items: ['Reiniciar'], pick: [0] }]],
   'voltea-flecha': [['slide', 'Arrastra el multiplicador: la flecha se repite y, a la izquierda del 0, se voltea.', {}]],
   'capas-operacion': [['drag', 'Arrastra un número sobre su vecino: el juego los opera y los funde en uno.', { tile: '5', slot: '8' }], ['drag', 'Para una potencia, junta la base con su exponente (la ficha pequeña de arriba).', { tile: '(−3)', slot: '²' }]],

@@ -21,7 +21,7 @@
     ayuda: 'Llena los huecos para que la oración cambie de propósito. Sobran fichas.',
   });
   zonas('todo-o-parte', { varias: true, rot: (p, i) => p.rot[i], escena: p => cajas(p) + doc(p) });
-  zonas('genero-o-cita', { varias: true, rot: (p, i) => p.rot[i], escena: p => cajas(p) });
+  zonas('genero-o-cita', { varias: true, rot: (p, i) => p.rot[i], escena: p => cajas(p) + doc(p) });
   ordena('pasos-del-proceso', { tiras: p => p.tiras, cabeza: p => `<p class="hj-apuesta"><small>${esc(p.que)}</small>${esc(p.de)}</p>` });
 
   // Signos y referentes: el hilo llega al lugar exacto del texto. `texto` va en trozos con «|»; los impares se pueden tocar.

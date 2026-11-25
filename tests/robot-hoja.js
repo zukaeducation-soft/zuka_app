@@ -48,6 +48,10 @@
         const i = !bien && n >= p.ini.length - 2 ? 2 * p.ini.length - 3 - n : n, li = $(`.hj-tira[data-i="${i}"] .hj-asa`);
         for (let k = 0; k < 9 && [...document.querySelectorAll('.hj-tira')].findIndex(x => +x.dataset.i === i) > n; k++) { li.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true })); await esp(20); }
       }
+    } else if (g.tipo === 'regla') {
+      const sv = [...document.querySelectorAll('.hj-regla svg')];
+      p.filas.forEach((f, i) => { const a = g.inicio(f); for (let k = 0; k < Math.abs(f.va - a) - (!bien && !i ? 1 : 0) || (!bien && !i && k < 1 && Math.abs(f.va - a) === 1 && false); k++) sv[i].dispatchEvent(new KeyboardEvent('keydown', { key: f.va > a ? 'ArrowRight' : 'ArrowLeft', bubbles: true, cancelable: true })); });
+      if (!bien && p.filas.length === 1) sv[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }));
     } else {   // perillas
       const v = bien ? s : { ...s, q: 16 }, campos = g.campos(p), svgs = [...document.querySelectorAll('.xg-per svg')];
       campos.forEach((c, i) => { for (let k = c.ini; k < v[c.k]; k++) svgs[i].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true })); });

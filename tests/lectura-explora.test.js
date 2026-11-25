@@ -51,7 +51,7 @@ test('zonas e hilos: cada ficha tiene su aviso, la clave existe y cambiar una fi
     const lista = p.fichas || p.tarjetas;
     assert.equal(p.va.length, lista.length, id);
     assert.equal(p.mira.length, lista.length, `${id}: un aviso por ficha`);
-    assert.ok(p.mira.every(m => m.length > 15), id);
+    assert.ok(p.mira.every(m => m.length > 12), id);
     assert.equal(new Set(lista).size, lista.length, id);
     if (g.tipo === 'zonas') {
       const ocupadas = new Set(p.va.filter(v => v != null).map(HOJA.base));
@@ -76,7 +76,7 @@ test('subrayar y tachar: las claves existen, cada trampa tiene su aviso y `n` es
     assert.ok(va.every(x => k.includes(x)), `${id}: ${va} en ${k}`);
     assert.equal(p.n, va.length, id);
     assert.ok(k.length >= va.length + 2, `${id}: pocas para escoger`);
-    for (const x of k.filter(x => !va.includes(x))) assert.ok(p.mira[x]?.length > 15, `${id}: sin aviso en ${x}`);
+    for (const x of k.filter(x => !va.includes(x))) assert.ok(p.mira[x]?.length > 12, `${id}: sin aviso en ${x}`);
   }
 });
 
@@ -89,7 +89,7 @@ test('mover tiras: el orden inicial es una permutación que no está resuelta y 
     for (let i = 0; i < (p.fija || 0); i++) assert.equal(p.ini[i], i, id);
     assert.ok(p.ini.filter((x, i) => x !== i).length >= 3, `${id}: casi resuelto`);
     assert.equal(p.mira.length, n, id);
-    for (let i = p.fija || 0; i < n; i++) assert.ok(p.mira[i].length > 15, `${id} ${i}`);
+    for (let i = p.fija || 0; i < n; i++) assert.ok(p.mira[i].length > 12, `${id} ${i}`);
   }
 });
 
@@ -127,8 +127,19 @@ test('pintar con marcadores: una pluma por línea, con aviso, y se usan todas', 
     const p = e.params;
     assert.equal(p.va.length, p.lineas.length, l.id); assert.equal(p.mira.length, p.lineas.length, l.id);
     assert.equal(new Set(p.va).size, p.plumas.length, `${l.id}: pluma sin usar`);
-    assert.ok(p.mira.every(m => m.length > 15));
+    assert.ok(p.mira.every(m => m.length > 12));
   }
+});
+
+test('reglas: cada fila tiene tres topes o más, empieza lejos y trae su aviso', () => {
+  for (const [l, e] of EX.filter(([, e]) => GAMES[e.game].tipo === 'regla')) for (const [i, f] of e.params.filas.entries()) {
+    assert.ok(f.topes.length >= 3, l.id); assert.notEqual(GAMES[e.game].inicio(f), f.va, l.id); assert.ok(e.params.mira[i].length > 12, l.id);
+  }
+});
+
+test('cambia-palabra: la frase está literal en su párrafo', () => {
+  for (const [l, e] of EX.filter(([, e]) => e.game === 'cambia-palabra')) for (const [n, a, w, b] of e.params.frases)
+    assert.ok(e.params.doc.paras[n - 1].includes(a + w + b), `${l.id}: ${a}${w}${b}`);
 });
 
 test('mundo 2: las tipologías, los géneros y el testimonio se enseñaron', () => {

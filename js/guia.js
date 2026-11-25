@@ -976,6 +976,8 @@ const GUIDES = {
   'tira-referente': [['drag', 'Tira un hilo desde cada palabra hasta aquello a lo que apunta.', { tile: 'ese', slot: 'quién' }]],
   'linea-vida': [['drag', 'Lleva cada hecho a su momento.', { tile: 'hecho', slot: 'antes' }]],
   'subraya-rasgo': [['tap', 'Toca la oración para subrayarla; otro toque la suelta.', {}]],
+  'ajusta-alcance': [['slide', 'Mueve cada perilla hasta que la oración diga lo mismo que el texto.', { label: 'algunos' }]],
+  'cambia-palabra': [['drag', 'Lleva cada ficha al hueco de la palabra tachada.', { tile: 'palabra', slot: '¿…?' }]],
   'globo-lastre': [['drag', 'Arrastra globos o sacos de arena: el canasto sube o baja y la cuenta se escribe sola.', { tile: 'saco', slot: 'canasto' }], ['tap', 'Déjalo a la altura de la bandera. «Reiniciar» lo devuelve al comienzo.', { items: ['Reiniciar'], pick: [0] }]],
   'voltea-flecha': [['slide', 'Arrastra el multiplicador: la flecha se repite y, a la izquierda del 0, se voltea.', {}]],
   'capas-operacion': [['drag', 'Arrastra un número sobre su vecino: el juego los opera y los funde en uno.', { tile: '5', slot: '8' }], ['drag', 'Para una potencia, junta la base con su exponente (la ficha pequeña de arriba).', { tile: '(−3)', slot: '²' }]],

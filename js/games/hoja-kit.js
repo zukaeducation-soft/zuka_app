@@ -3,6 +3,7 @@
 //   HOJA.toca(nombre, d)    se tocan trozos del texto (subrayar, tachar).            estado { m: [claves] }
 //   HOJA.zonas(nombre, d)   fichas que van al margen o a huecos de la escena.        estado { en: [zona por ficha, −1 = bandeja] }
 //   HOJA.pinta(nombre, d)   se pintan oraciones con marcadores.                      estado { c: [marcador por línea, −1] }
+//   HOJA.regla(nombre, d)   perillas que recorren palabras que miden.                   estado { v: [tope por fila] }
 //   HOJA.hilos(nombre, d)   se tira un hilo de cada tarjeta a un punto del texto.    estado { a: [destino por tarjeta, −1] }
 //   HOJA.ordena(nombre, d)  tiras que se mueven hasta que el orden tiene sentido.    estado { o: [índices], t: ya se movió }
 // `p.mira[i]` es el aviso de la ficha o tarjeta i cuando quedó mal: cierto en cualquier sitio equivocado y sin dar la respuesta.
@@ -21,7 +22,7 @@ const HOJA = (() => {
       ? oraciones(p, n).map((t, i) => o.trozo(n, i, t)).join(p.trozos?.[n] ? '' : ' ') : luzDe(d.paras[n - 1], n, p.luz), o.parr?.(n))).join('')}</article>`;
   }
   // El texto entero, plegado: en el examen siempre se puede volver a él.
-  const completo = d => `<details class="hj-todo"><summary>Ver el texto completo</summary>${hoja({ doc: d })}</details>`;
+  const completo = (d, luz) => `<details class="hj-todo"><summary>Ver el texto completo</summary>${hoja({ doc: d, luz })}</details>`;
   // Lo tapado tampoco se lee con lector de pantalla hasta que se destapa.
   const tapa = (root, si) => root.querySelectorAll('.hj-hoja.cortina .hj-p, .hj-velo, .hj-queda').forEach(x => (si ? x.setAttribute('aria-hidden', 'true') : x.removeAttribute('aria-hidden')));
   const prende = root => tapa(root, false) || root.querySelectorAll('.hj-luz').forEach((m, i) => { m.style.setProperty('--d', `${i * 260}ms`); m.classList.add('on'); if (!i) aVer(root, m); });
@@ -228,6 +229,33 @@ const HOJA = (() => {
     });
   }
 
+  // ------------------------------------------------------------------------------------------------ ajustar con perillas
+  // Cada perilla recorre palabras que miden (algunos … todos) y la oración se escribe sola.
+  // d: { tras(p) }   p: { filas: [{ antes, topes, despues, va, ini }], mira }    estado { v: [tope por fila, −1 sin tocar] }
+  function regla(nombre, d) {
+    const ini = f => f.ini ?? (f.va === 0 ? f.topes.length - 1 : 0);
+    XG.juego(nombre, {
+      tipo: 'regla', ini: p => ({ v: p.filas.map(ini), t: false }), inicio: ini, listo: s => s.t,
+      ok: (s, p) => p.filas.every((f, i) => s.v[i] === f.va), sol: p => ({ v: p.filas.map(f => f.va), t: true }),
+      texto: p => p.filas.map(f => `${f.antes} ${f.topes[f.va]}${f.despues ? ` ${f.despues}` : ''}`).join(' · '),
+      monta(stage, p, ui) {
+        stage.innerHTML = `<div class="hj hj-${nombre} hj-reglas"><div class="hj-esc">${d.cabeza?.(p) || ''}${p.filas.map((f, i) => `<section class="hj-regla" data-i="${i}"><p>${esc(f.antes)} <b></b> ${esc(f.despues || '')}</p><div></div></section>`).join('')}${d.tras(p)}</div></div>`;
+        const root = stage.firstChild, S1 = i => root.querySelector(`.hj-regla[data-i="${i}"]`);
+        const di = () => p.filas.forEach((f, i) => { S1(i).querySelector('b').textContent = f.topes[ui.s.v[i]]; });
+        const ps = p.filas.map((f, i) => XG.perilla(ui, S1(i).lastElementChild, { et: '', min: 0, max: f.topes.length - 1, v: ini(f), cara: () => '', lee: v => f.topes[v], on: v => { const q = [...ui.s.v]; q[i] = v; ui.set({ v: q, t: true }); di(); } }));
+        di(); ui.nota('Mueve las perillas: la oración cambia sola.');
+        return okk => {
+          const s = ui.s; root.classList.add('hj-fin');
+          const mala = p.filas.findIndex((f, i) => s.v[i] !== f.va);
+          cierra(ui, okk, {
+            lista: () => p.filas.map((f, i) => [S1(i), s.v[i] === f.va]), aviso: p.mira[mala] || '', bien: p.bien,
+            buena() { ui.muestra({ v: p.filas.map(f => f.va), t: true }); p.filas.forEach((f, i) => { ps[i].set(f.va); S1(i).classList.remove('hj-mal'); S1(i).classList.add('hj-bien'); }); di(); }, final() { prende(root); },
+          });
+        };
+      },
+    });
+  }
+
   // ------------------------------------------------------------------------------------------------------- tirar hilos
   // d: { escena(p) con [data-t="i"] en los destinos; destinos(p) → cuántos; rot(p, i) }   p: { tarjetas, va: [destino | [destinos]], mira }
   function hilos(nombre, d) {
@@ -381,5 +409,5 @@ const HOJA = (() => {
     });
   }
 
-  return { esc, fmt, hoja, completo, cabeza, parr, zona, zonas, toca, pinta, hilos, ordena, oraciones, prende, luzDe, igual, base };
+  return { esc, fmt, hoja, completo, cabeza, parr, zona, zonas, toca, pinta, regla, hilos, ordena, oraciones, prende, luzDe, igual, base };
 })();
