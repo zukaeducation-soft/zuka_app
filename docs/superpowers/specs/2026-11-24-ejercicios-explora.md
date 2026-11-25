@@ -91,6 +91,11 @@ Pruebas `tests/ejercicios-logica.test.js`.
 rectángulos de igual suma, pesos que se reparten, columnas con llevada, bloques que se voltean, la peor suerte y corrales. Pruebas
 `tests/ejercicios-aritmetica.test.js`.
 
+## Mundo 13, Ecuaciones y planteamiento (pu-ec-1 a pu-ec-3)
+
+`js/games/ecuaciones-escena.js`: balanza en palabras, despeje por renglones, edades hacia atrás, cambios de uno por otro, jugo con agua,
+recibos, el punto que cumple dos condiciones y la recta con borde, sentido y extremo. Pruebas `tests/ejercicios-ecuaciones.test.js`.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |

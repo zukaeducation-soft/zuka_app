@@ -108,7 +108,6 @@ test('reparto: ningún juego en movimiento en más de seis lecciones ni en dos s
   for (const [g, n] of Object.entries(count)) assert.ok(n <= 6, `${g} sale en ${n} lecciones`);
   assert.ok((count['vuela-precios'] || 0) <= 5, `vuela-precios en ${count['vuela-precios']}`);
   assert.ok((count['rompe-cambios'] || 0) <= 5, `rompe-cambios en ${count['rompe-cambios']}`);
-  for (const g of NEW) assert.ok(count[g] >= 1, `${g} solo en ${count[g] || 0} lecciones`);
 });
 
 test('los juegos nuevos conservan las preguntas: una ronda de tres preguntas como máximo, con respuesta válida', () => {
