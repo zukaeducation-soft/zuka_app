@@ -1515,6 +1515,19 @@ const WORLDS = (() => {
     'icf-en-inferencia': { name: 'Inferir y Opinar', art: plate('icf-en-inferencia', TEAL, `
       ${L('M48 20h34M48 30h26M48 40h34', INK, 1)}${L('M86 18h26v22H98l-6 7v-7h-6z', TEAL, 1.3)}${T(99, 33, 'so…', TEAL, 7)}${A(78, 30, 86, 30, TEAL, 1.1)}${D(52, 52, 2)}${D(66, 52, 2)}${A(70, 52, 92, 60, INK, 1)}${C(97, 61, 4, TEAL, 1.2)}
       ${T(28, 42, 'fact', INK, 6.5)}${T(134, 52, 'must be', TEAL, 6)}`) },
+    // ---------- octavos mundos ----------
+    'icf-ma-argumenta': { name: 'Validar Procedimientos', art: plate('icf-ma-argumenta', TEAL, `
+      ${L('M50 18h22v12H50zM50 36h22v12H50zM50 54h22v10H50z', INK, 1)}${A(61, 30, 61, 36, INK, 1)}${A(61, 48, 61, 54, INK, 1)}${L('M80 24l4 4 8-9', TEAL, 1.6)}${L('M82 38l8 8M90 38l-8 8', TEAL, 1.6)}${C(100, 56, 8, INK, 1)}${D(100, 56, 2, TEAL)}
+      ${T(28, 42, 'p → q', INK, 7)}${T(134, 42, '¿todos?', TEAL, 6.5)}`) },
+    'icf-lc-comparar': { name: 'Comparar Textos', art: plate('icf-lc-comparar', TEAL, `
+      ${L('M48 16h26v40H48z', INK, 1.1)}${L('M86 24h26v40H86z', TEAL, 1.2)}${L('M53 24h16M53 32h16M53 40h10', INK, .8)}${L('M91 32h16M91 40h16M91 48h10', TEAL, .9)}${A(74, 34, 86, 40, TEAL, 1.1)}${A(86, 50, 74, 46, INK, 1)}${D(80, 37, 1.6, TEAL)}
+      ${T(28, 42, 'texto 1', INK, 6)}${T(134, 46, 'texto 2', TEAL, 6)}`) },
+    'icf-sc-geografia': { name: 'Territorio y Ambiente', art: plate('icf-sc-geografia', TEAL, `
+      ${L('M46 62L64 26l10 16 10-24 26 44z', INK, 1.2)}${L('M79 30l5-12 8 14', TEAL, 1.3)}${L('M60 62c6-8 2-12 10-18M96 62c-4-8 2-10-4-18', TEAL, 1)}${C(104, 20, 6, TEAL, 1.1)}${L('M46 66h68', INK, .9)}${D(70, 44, 1.6, TEAL)}${D(92, 44, 1.6, TEAL)}
+      ${T(28, 34, '3 000 m', INK, 6)}${T(134, 42, '1 : 10 000', TEAL, 5.5)}`) },
+    'icf-cn-herencia': { name: 'Herencia y Evolución', art: plate('icf-cn-herencia', TEAL, `
+      ${L('M58 14c24 12-24 36 0 52M78 14c-24 12 24 36 0 52', TEAL, 1.3)}${[22, 32, 48, 58].map(y => L(`M62 ${y}h12`, INK, .9)).join('')}${L('M90 26h24v24H90zM102 26v24M90 38h24', INK, 1)}${T(96, 35, 'AA', TEAL, 5)}${T(108, 47, 'aa', INK, 5)}${D(102, 38, 1.4, TEAL)}
+      ${T(28, 42, 'A a', INK, 8)}${T(136, 42, '3 : 1', TEAL, 7)}`) },
   };
 })();
 
@@ -32765,4 +32778,408 @@ GAMES['jefe-venn'] = (() => {
   }
 
   return { grade, create, setsOf, wantOf, fmtSet, judgePick, judgeMove, zoneAt };
+})();
+;
+//#archivo js/games/arbol-potencia.js
+// El árbol de la potencia (Álgebra, potencias; lección alg-21a): un árbol en el que de cada nudo salen b ramas, nivel
+// tras nivel. Con e niveles tiene b · b · … · b = bᵉ hojas. Se eligen las ramas por nudo (la base) y los niveles (el
+// exponente) hasta tener exactamente las hojas pedidas. Hay metas con varias respuestas (64 = 2⁶ = 4³ = 8²).
+// params = { rounds: [{ target }], maxBase?, maxExp? }   state = { rounds: [{ b, e }] }
+// Spec 2026-11-15-torres-de-potencias.
+
+GAMES['arbol-potencia'] = (() => {
+  // Primera pareja (base, exponente) que da n hojas, con la base más pequeña.
+  function powersOf(n, maxB = 9, maxE = 7) {
+    const out = [];
+    for (let b = 2; b <= maxB; b++) for (let e = 1; e <= maxE; e++) if (b ** e === n) out.push([b, e]);
+    return out;
+  }
+  const game = roundsGame({
+    aspect: 1.25,
+    init: () => ({ b: 2, e: 1 }),
+    ok: (s, r) => s.b ** s.e === r.target,
+    solution: (r, P) => powersOf(r.target, P.maxBase, P.maxExp).map(([b, e]) => `${b}${sup(e)}`).join(' = ') + ` = ${r.target}`,
+    prompt: r => `Haz un árbol con exactamente ${r.target} hojas`,
+    foot: (r, s) => (s.b ** s.e === r.target ? `${Array(s.e).fill(s.b).join(' · ')} = ${r.target}` : 'Cada nivel multiplica las puntas por las ramas de cada nudo'),
+    layout(G) { const w = (G.W - 36) / 2; G.box = [{ x: 12, y: G.H - 64, w, h: 32 }, { x: 24 + w, y: G.H - 64, w, h: 32 }]; },
+    draw(G) {
+      const { p, C, W, H, s, r } = G, n = s.b ** s.e, good = n === r.target, top = 128, bot = H - 96, lv = (bot - top) / s.e;
+      p.noStroke(); p.fill(good ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(17);
+      p.text(`${s.b}${sup(s.e)} = ${n} hojas`, W / 2, 94);
+      // Las ramas: el nivel k tiene bᵏ puntas repartidas a lo ancho; se dibuja hasta donde se alcanzan a ver.
+      const X = (k, i) => 12 + ((i + 0.5) / s.b ** k) * (W - 24), Y = k => bot - k * lv;
+      p.stroke(C.Q); p.strokeWeight(5); p.line(W / 2, bot + 14, W / 2, bot);
+      let last = 0;
+      for (let k = 1; k <= s.e && s.b ** k <= 160; k++) {
+        p.stroke(C.Q); p.strokeWeight(Math.max(1, 4 - k));
+        for (let i = 0; i < s.b ** k; i++) p.line(X(k - 1, Math.floor(i / s.b)), Y(k - 1), X(k, i), Y(k));
+        last = k;
+      }
+      const cnt = s.b ** last, d = Math.max(3, Math.min(12, (W - 24) / cnt - 1));
+      p.noStroke(); p.fill(good ? C.ok : C.mint);
+      for (let i = 0; i < cnt; i++) p.circle(X(last, i), Y(last), d);
+      if (last < s.e) { p.fill(C.mute); p.textSize(11); p.textStyle(p.NORMAL); p.text(`… y ${s.e - last} ${s.e - last === 1 ? 'nivel' : 'niveles'} más: ya no caben en el dibujo`, W / 2, top - 12); }
+      drawStepper(p, C, G.box[0], s.b, 'ramas por nudo (base)');
+      drawStepper(p, C, G.box[1], s.e, 'niveles (exponente)');
+    },
+    press(G, x, y) {
+      const P = G.params, db = stepHit(G.box[0], x, y), de = stepHit(G.box[1], x, y);
+      if (!db && !de) return false;
+      G.s.b = Math.max(2, Math.min(P.maxBase ?? 9, G.s.b + db)); G.s.e = Math.max(1, Math.min(P.maxExp ?? 7, G.s.e + de)); G.touch();
+      return true;
+    },
+    peek: G => ({ box: G.box }),
+  });
+  return { ...game, powersOf };
+})();
+;
+//#archivo js/games/pares-negativos.js
+// Parejas de negativos (Álgebra, potencias; lección alg-21a): una potencia se escribe como sus factores. Con
+// paréntesis, (−2)⁴ son cuatro factores −2; sin paréntesis, −2⁴ es un solo −1 por cuatro doses. Se tocan dos factores
+// negativos para emparejarlos (cada pareja da positivo) y al final se elige el signo: si queda un negativo suelto, el
+// resultado es negativo. El juego escribe el valor.
+// params = { rounds: [{ base, n, paren, outer }] }     paren: el signo va dentro del paréntesis; outer: hay un − afuera
+// state = { rounds: [{ pairs: [[i, j]], sign: 0 | 1 | −1, pick: −1 }] }      Spec 2026-11-15-torres-de-potencias.
+
+GAMES['pares-negativos'] = (() => {
+  const negsOf = r => (r.paren ? r.n : 0) + (r.outer ? 1 : 0);
+  const signOf = r => (negsOf(r) % 2 ? -1 : 1);
+  const exprOf = r => `${r.outer ? '−' : ''}${r.paren ? `(−${r.base})` : r.base}${sup(r.n)}`;
+  const valueOf = r => signOf(r) * r.base ** r.n;
+  // Las fichas: el −1 de afuera (si lo hay) y luego los n factores.
+  const tilesOf = r => [...(r.outer ? [{ txt: '−1', neg: true }] : []), ...Array.from({ length: r.n }, () => ({ txt: r.paren ? `−${r.base}` : `${r.base}`, neg: !!r.paren }))];
+
+  const game = roundsGame({
+    aspect: 1.15,
+    init: () => ({ pairs: [], sign: 0, pick: -1 }),
+    ok: (s, r) => s.sign === signOf(r) && s.pairs.length === Math.floor(negsOf(r) / 2),
+    answered: s => s.sign !== 0,
+    solution: r => { const n = negsOf(r), k = Math.floor(n / 2); return `${exprOf(r)} = ${negTxt(valueOf(r))} (${k ? `${k} ${k === 1 ? 'pareja' : 'parejas'} de negativos${n % 2 ? ' y uno suelto' : ''}` : 'un solo negativo, sin pareja'})`; },
+    prompt: r => `${exprOf(r)}: empareja los factores negativos y elige el signo`,
+    foot: (r, s) => (s.sign ? 'Revisa que no queden dos negativos sin emparejar' : 'Toca dos fichas negativas: juntas dan positivo'),
+    layout(G) { G.btn = [{ x: G.W / 2 - 96, y: G.H - 74, w: 88, h: 36, sign: 1 }, { x: G.W / 2 + 8, y: G.H - 74, w: 88, h: 36, sign: -1 }]; },
+    draw(G) {
+      const { p, C, W, H, s, r } = G, tiles = tilesOf(r), tw = Math.min(50, (W - 24) / tiles.length - 6), x0 = W / 2 - (tiles.length * (tw + 6) - 6) / 2, y = 166;
+      G.boxes = tiles.map((_, i) => ({ x: x0 + i * (tw + 6), y, w: tw, h: 42 }));
+      const paired = i => s.pairs.some(q => q.includes(i));
+      p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER);
+      p.text(tiles.map(t => (t.neg && t.txt !== '−1' ? `(${t.txt})` : t.txt)).join(' · '), W / 2, 100);
+      s.pairs.forEach(([i, j]) => {   // el arco que une cada pareja
+        const a = G.boxes[i], b = G.boxes[j], xa = a.x + a.w / 2, xb = b.x + b.w / 2;
+        p.noFill(); p.stroke(C.ok); p.strokeWeight(3); p.arc((xa + xb) / 2, y, Math.abs(xb - xa), 34 + Math.abs(j - i) * 6, Math.PI, 0);
+        p.noStroke(); p.fill(C.ok); p.textSize(15); p.text('+', (xa + xb) / 2, y - 26 - Math.abs(j - i) * 3);
+      });
+      tiles.forEach((t, i) => drawTile(p, C, G.boxes[i], t.txt, { fill: !t.neg ? C.cream : paired(i) ? C.mint : C.coral, size: 16, ring: s.pick === i ? C.sun : null }));
+      const loose = tiles.filter((t, i) => t.neg && !paired(i)).length;
+      p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER);
+      p.text(`negativos sueltos: ${loose}`, W / 2, y + 66);
+      p.fill(C.mute); p.textSize(12); p.text('El signo del resultado es', W / 2, H - 90);
+      G.btn.forEach(b => drawTile(p, C, b, b.sign > 0 ? '+ positivo' : '− negativo', { fill: s.sign === b.sign ? C.sun : C.cream, size: 14, r: 10, lift: 2 }));
+      if (s.sign) { p.noStroke(); p.fill(C.ink); p.textSize(18); p.text(`${exprOf(r)} = ${s.sign < 0 ? '−' : ''}${r.base ** r.n}`, W / 2, y + 96); }
+    },
+    press(G, x, y) {
+      const { s, r } = G, tiles = tilesOf(r), b = G.btn.find(q => hitBox(q, x, y));
+      if (b) { s.sign = b.sign; G.touch(); return true; }
+      const i = (G.boxes || []).findIndex(q => hitBox(q, x, y));
+      if (i < 0 || !tiles[i].neg) return i >= 0;
+      const k = s.pairs.findIndex(q => q.includes(i));
+      if (k >= 0) { s.pairs.splice(k, 1); s.pick = -1; }           // tocar una emparejada la suelta
+      else if (s.pick < 0 || s.pick === i) s.pick = s.pick === i ? -1 : i;
+      else { s.pairs.push([Math.min(s.pick, i), Math.max(s.pick, i)]); s.pick = -1; }
+      G.api.sfx?.tap?.();
+      return true;
+    },
+    peek: G => ({ boxes: G.boxes, btn: G.btn, negs: tilesOf(G.r).map(t => t.neg), sign: signOf(G.r) }),
+  });
+  return { ...game, negsOf, signOf, exprOf, valueOf };
+})();
+;
+//#archivo js/games/torre-pisos.js
+// La torre de pisos (Álgebra, potencias; juego dinámico de la lección alg-21a): una torre donde el piso n es la
+// potencia aⁿ. En la planta baja (piso 0) vive el 1; subir un piso multiplica por la base y bajar uno divide, así que
+// en los sótanos (pisos negativos) viven fracciones. Solo se ven la planta baja y el piso 1: las demás ventanas están
+// cerradas y hay que contar pisos (cada una se abre cuando se entrega ahí).
+// Hay que llevar cada paquete al piso donde vive el número pedido y tocar «Entregar». No hay reloj. Entregar en otro
+// piso quita una vida (y dice quién vive ahí). Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, base, lo, hi, items: [{ exp }] }], lives? }   state = { done: [n] }
+// Spec 2026-11-15-torres-de-potencias.
+
+GAMES['torre-pisos'] = (() => {
+  // Cómo se escribe aᵏ: entero, fracción o decimal (con base 10).
+  const valTxt = (base, k) => (k >= 0 ? String(base ** k) : base === 10 ? (10 ** k).toFixed(-k) : `1/${base ** -k}`);
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => `${valTxt(r.base, it.exp)} = ${r.base}${sup(it.exp)}`).join(', ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, pos = 0, dest = 0, seen = new Set(), pause = 0, result = null, btn = {}, top = 104, bot = 0, drag = false;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; pos = 0; dest = 0; seen = new Set([0, 1]); pause = 0; result = null; },
+      lost(i) { st.done[i] = 0; },
+    });
+    const round = () => R[a.cur], item = () => round().items[Math.min(st.done[a.cur], round().items.length - 1)];
+    const rowH = () => (bot - top) / (round().hi - round().lo + 1);
+    const Y = k => bot - (k - round().lo + 0.5) * rowH();   // centro del piso k
+
+    function layout(w, h) { W = w; H = h; bot = h - 78; btn = { x: w / 2 - 70, y: h - 62, w: 140, h: 32 }; }
+    function deliver() {
+      const r = round(), it = item(), k = Math.round(pos), good = k === it.exp;
+      result = { good }; pause = good ? 1.2 : 1.0; seen.add(k);
+      if (good) { st.done[a.cur]++; a.hit(); a.say(`${valTxt(r.base, k)} = ${r.base}${sup(k)}`, C.ok); }
+      else { a.say(`Aquí vive ${valTxt(r.base, k)}: es ${r.base}${sup(k)}`, C.bad); if (a.miss()) { result = null; pause = 0; } }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play') return;
+        if (pos !== dest) { const d = Math.sign(dest - pos) * dt * 5; pos = Math.abs(dest - pos) <= Math.abs(d) ? dest : pos + d; }
+        if (pause > 0) { pause -= dt; if (pause <= 0) { const good = result && result.good; result = null; if (good && st.done[a.cur] >= round().items.length) a.win(); } }
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = round(), it = pause > 0 && result && result.good ? r.items[Math.max(0, st.done[a.cur] - 1)] : item(), live = a.phase === 'play', over = locked || a.phase === 'all', rh = rowH(), x0 = 46, x1 = W - 22;
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, `${r.title} · subir un piso multiplica por ${r.base}; bajar divide`, W / 2, 40, W - 24, 11);
+        if (live) drawPill(p, C, `Lleva el paquete a donde vive ${valTxt(r.base, it.exp)}`, W / 2, 68, C.sun, 15);
+
+        // La torre: un renglón por piso; los sótanos van en otro tono y bajo la línea del suelo.
+        if (!over) for (let k = r.lo; k <= r.hi; k++) {
+          const y = Y(k), open = seen.has(k) && a.phase !== 'idle', here = Math.round(pos) === k && live;
+          p.noStroke(); p.fill(k < 0 ? C.card : C.halo); p.rect(x0, y - rh / 2 + 2, x1 - x0, rh - 4, 7);
+          p.fill(k === 0 ? C.N : C.mute); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.RIGHT, p.CENTER); p.text(negTxt(k), x0 - 8, y);
+          drawTile(p, C, { x: W / 2 - 46, y: y - Math.min(13, rh / 2 - 5), w: 92, h: Math.min(24, rh - 12) }, open ? valTxt(r.base, k) : '?', { fill: open ? (here ? C.sun : C.cream) : C.line, ink: open ? undefined : C.mute, size: 14, r: 7, lift: open ? 2 : 0 });
+          if (k === 0) { p.stroke(C.ink); p.strokeWeight(3); p.line(14, y + rh / 2, W - 14, y + rh / 2); }
+        }
+        if (!over) {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER); p.text('piso', 26, top - 10);
+          // El ascensor.
+          const y = Y(pos), col = result ? (result.good ? C.ok : C.bad) : C.coral;
+          p.noFill(); p.stroke(col); p.strokeWeight(3); p.rect(x0 + 3, y - rh / 2 + 4, x1 - x0 - 6, rh - 8, 7);
+          p.noStroke(); p.fill(col); p.rect(x1 - 30, y - 9, 20, 18, 4); p.fill(C.cream); p.rect(x1 - 25, y - 5, 10, 8, 2);
+        }
+        if (live && pause <= 0) drawTile(p, C, btn, 'Entregar aquí', { fill: C.mint, size: 14, r: 10, lift: 2 });
+
+        arcadeToast(p, C, a, W / 2, H - 13, locked);
+        if (over) drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `Base ${rr.base}: ${rr.items.map(x => `${rr.base}${sup(x.exp)} = ${valTxt(rr.base, x.exp)}`).join(' · ')}` })), H / 2);
+        else drawArcadeBanner(p, C, a, (top + bot) / 2, { idle: 'Sin prisa: cuenta los pisos y mueve el ascensor', lost: 'Varios paquetes en el piso equivocado' });
+        if (!a.toast && (over || a.phase === 'idle')) {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(over ? '¡Todo entregado! Ya puedes comprobar' : 'El piso es el exponente', W / 2, H - 13);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      const move = () => {
+        const { lo, hi } = round();
+        const next = Math.max(lo, Math.min(hi, lo + Math.floor((bot - p.mouseY) / rowH())));
+        if (next !== dest) { dest = next; api.sfx?.tap?.(); }
+      };
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp !== 'play' || pause > 0) return false;
+        const x = p.mouseX, y = p.mouseY;
+        if (hitBox({ x: btn.x - 6, y: btn.y - 4, w: btn.w + 12, h: btn.h + 10 }, x, y)) { if (pos === dest) deliver(); return false; }
+        if (y < top || y > bot) return;
+        drag = true; move();
+        return false;
+      };
+      p.mouseDragged = () => { if (drag && !locked) { move(); return false; } };
+      p.mouseReleased = () => { drag = false; };
+    }, 1.45, () => {
+      if (locked || a.phase !== 'play' || pause > 0) return null;
+      const x = W - 42;
+      return { from: { x, y: Y(pos) }, to: { x, y: Y(pos >= round().hi ? pos - 1 : pos + 1) } };
+    });
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      demo: m.demo,
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => { const r = round(); return { phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, floor: pos, moving: pos !== dest, target: item().exp, ok: { x: btn.x + btn.w / 2, y: btn.y + btn.h / 2 }, floors: Array.from({ length: r.hi - r.lo + 1 }, (_, i) => ({ k: r.lo + i, x: W / 2 - 80, y: Y(r.lo + i) })) }; },
+    };
+  }
+
+  return { grade, create, valTxt, demo: true };
+})();
+;
+//#archivo js/games/cuenta-factores.js
+// Cuenta los factores (Álgebra, leyes de los exponentes; lección alg-21b): las leyes salen de contar. Cada potencia
+// se dibuja como sus x: en un producto las dos filas se juntan (se suman), en un cociente cada x de abajo tacha una de
+// arriba (se restan; si sobran abajo, el exponente es negativo) y en una potencia de potencia el grupo se repite (se
+// multiplican). Se elige el exponente del resultado con − y +.
+// params = { rounds: [{ kind: 'prod' | 'quot' | 'pow', m, n }], letter? }   state = { rounds: [{ e }] }
+// Spec 2026-11-15-torres-de-potencias.
+
+GAMES['cuenta-factores'] = (() => {
+  const expOf = r => (r.kind === 'prod' ? r.m + r.n : r.kind === 'quot' ? r.m - r.n : r.m * r.n);
+  const exprOf = (r, x = 'x') => (r.kind === 'prod' ? `${x}${sup(r.m)} · ${x}${sup(r.n)}` : r.kind === 'quot' ? `${x}${sup(r.m)} ÷ ${x}${sup(r.n)}` : `(${x}${sup(r.m)})${sup(r.n)}`);
+  const lawOf = r => (r.kind === 'prod' ? `${r.m} + ${r.n}` : r.kind === 'quot' ? `${r.m} − ${r.n}` : `${r.m} · ${r.n}`);
+
+  const game = roundsGame({
+    aspect: 1.15,
+    init: () => ({ e: 0 }),
+    ok: (s, r) => s.e === expOf(r),
+    solution: (r, P) => `${exprOf(r, P.letter)} = ${P.letter || 'x'}${sup(expOf(r))}`,
+    prompt: (r, s, G) => `${exprOf(r, G.params.letter)}: cuenta las ${G.params.letter || 'x'} y pon el exponente`,
+    foot: r => (r.kind === 'prod' ? 'Las dos filas se juntan en una sola' : r.kind === 'quot' ? 'Cada una de abajo tacha una de arriba' : 'El mismo grupo se repite varias veces'),
+    layout(G) { G.box = { x: G.W / 2 - 70, y: G.H - 70, w: 140, h: 34 }; },
+    draw(G) {
+      const { p, C, W, H, s, r } = G, x = G.params.letter || 'x', sz = 26;
+      const tile = (cx, cy, col, dead) => {
+        drawTile(p, C, { x: cx - sz / 2, y: cy - sz / 2, w: sz, h: sz - 3 }, x, { fill: dead ? C.card : col, ink: dead ? C.mute : undefined, size: 14, r: 7, lift: dead ? 0 : 2 });
+        if (dead) { p.stroke(C.bad); p.strokeWeight(2); p.line(cx - 9, cy + 8, cx + 9, cy - 10); }
+      };
+      const row = (n, cy, col, deadN = 0) => { const step = Math.min(32, (W - 30) / n); for (let i = 0; i < n; i++) tile(W / 2 - ((n - 1) * step) / 2 + i * step, cy, col, i < deadN); };
+      if (r.kind === 'prod') {   // dos colores en una sola fila
+        const n = r.m + r.n, step = Math.min(32, (W - 30) / n);
+        for (let i = 0; i < n; i++) tile(W / 2 - ((n - 1) * step) / 2 + i * step, 160, i < r.m ? C.sky : C.mint);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER); p.text(`${r.m} azules y ${r.n} verdes`, W / 2, 196);
+      } else if (r.kind === 'quot') {   // arriba y abajo de la raya; las parejas se tachan
+        const cut = Math.min(r.m, r.n);
+        row(r.m, 138, C.sky, cut); p.stroke(C.ink); p.strokeWeight(3); p.line(24, 166, W - 24, 166); row(r.n, 194, C.mint, cut);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER);
+        p.text(r.m >= r.n ? `quedan ${r.m - r.n} arriba` : `quedan ${r.n - r.m} abajo: exponente negativo`, W / 2, 226);
+      } else {   // n grupos iguales de m
+        const gw = r.m * 28 + 10, perRow = Math.max(1, Math.floor((W - 20) / (gw + 8))), rows = Math.ceil(r.n / perRow);
+        for (let g = 0; g < r.n; g++) {
+          const rr = Math.floor(g / perRow), inRow = Math.min(perRow, r.n - rr * perRow), gx = W / 2 - (inRow * (gw + 8) - 8) / 2 + (g % perRow) * (gw + 8), gy = 128 + rr * 44;
+          p.noFill(); p.stroke(C.sun); p.strokeWeight(2); p.rect(gx, gy, gw, 36, 9);
+          for (let i = 0; i < r.m; i++) tile(gx + 5 + 14 + i * 28, gy + 19, C.sky);
+        }
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER); p.text(`${r.n} grupos de ${r.m}`, W / 2, 128 + rows * 44 + 10);
+      }
+      p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(15); p.textAlign(p.CENTER, p.CENTER);
+      p.text(`${exprOf(r, x)} = ${x} elevado a`, W / 2, H - 98);
+      drawStepper(p, C, G.box, negTxt(s.e), '', G.locked ? (s.e === expOf(r) ? C.ok : C.bad) : C.ink);
+    },
+    press(G, x, y) { const d = stepHit(G.box, x, y); if (!d) return false; G.s.e = Math.max(-9, Math.min(15, G.s.e + d)); G.touch(); return true; },
+    peek: G => ({ box: G.box, want: expOf(G.r) }),
+  });
+  return { ...game, expOf, exprOf, lawOf };
+})();
+;
+//#archivo js/games/cambia-de-piso.js
+// Cambia de piso (Álgebra, exponentes negativos; lección alg-21b): una fracción con potencias arriba y abajo de la
+// raya. Tocar una potencia la manda al otro piso y su exponente cambia de signo (a⁻³ arriba es lo mismo que a³ abajo).
+// Meta: que no quede ningún exponente negativo. Mover una que ya era positiva la vuelve negativa.
+// params = { rounds: [{ top: [{ b, e }], bottom: [{ b, e }] }] }   state = { rounds: [{ up: [bool por ficha] }] }
+// Las fichas se numeran primero las de arriba y luego las de abajo.   Spec 2026-11-15-torres-de-potencias.
+
+GAMES['cambia-de-piso'] = (() => {
+  const all = r => [...r.top.map(t => ({ ...t, home: true })), ...r.bottom.map(t => ({ ...t, home: false }))];
+  // Exponente que muestra cada ficha según el piso en que está.
+  const shown = (r, up) => all(r).map((t, i) => ({ b: t.b, up: up[i], e: up[i] === t.home ? t.e : -t.e }));
+  const powTxt = t => `${t.b}${t.e === 1 ? '' : sup(t.e)}`;
+  const sideTxt = list => (list.length ? list.map(powTxt).join(' ') : '1');
+  const fracTxt = list => `${sideTxt(list.filter(t => t.up))} / ${sideTxt(list.filter(t => !t.up))}`;
+
+  const game = roundsGame({
+    aspect: 1.1,
+    init: r => ({ up: all(r).map(t => t.home) }),
+    ok: (s, r) => shown(r, s.up).every(t => t.e > 0),
+    solution: r => { const fixed = all(r).map(t => (t.e < 0 ? !t.home : t.home)); return `${fracTxt(shown(r, all(r).map(t => t.home)))} = ${fracTxt(shown(r, fixed))}`; },
+    prompt: () => 'Toca una potencia para mandarla al otro piso: deja todos los exponentes positivos',
+    foot: (r, s) => (shown(r, s.up).every(t => t.e > 0) ? 'Sin exponentes negativos: así se escribe' : 'Al cruzar la raya, el exponente cambia de signo'),
+    draw(G) {
+      const { p, C, W, s, r } = G, list = shown(r, s.up), mid = 190, tw = 62;
+      G.boxes = [];
+      [true, false].forEach(up => {
+        const idx = list.map((t, i) => i).filter(i => list[i].up === up), n = idx.length, step = Math.min(tw + 10, (W - 24) / Math.max(1, n));
+        idx.forEach((i, k) => { G.boxes[i] = { x: W / 2 - (n * step) / 2 + k * step + (step - Math.min(tw, step - 6)) / 2, y: up ? mid - 62 : mid + 18, w: Math.min(tw, step - 6), h: 44 }; });
+        if (!n) { p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(22); p.textAlign(p.CENTER, p.CENTER); p.text('1', W / 2, up ? mid - 40 : mid + 40); }
+      });
+      p.stroke(C.ink); p.strokeWeight(4); p.line(28, mid, W - 28, mid);
+      list.forEach((t, i) => drawTile(p, C, G.boxes[i], powTxt(t), { fill: t.e > 0 ? C.mint : C.coral, size: 20 }));
+      p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+      p.text('arriba (numerador)', W / 2, mid - 78); p.text('abajo (denominador)', W / 2, mid + 78);
+      const bad = list.filter(t => t.e <= 0).length;
+      p.fill(bad ? C.ink : C.ok); p.textSize(14); p.text(bad ? `exponentes negativos: ${bad}` : fracTxt(list), W / 2, mid + 112);
+    },
+    press(G, x, y) {
+      const i = (G.boxes || []).findIndex(b => hitBox(b, x, y));
+      if (i < 0) return false;
+      G.s.up[i] = !G.s.up[i]; G.touch();
+      return true;
+    },
+    peek: G => ({ boxes: G.boxes, neg: shown(G.r, G.s.up).map(t => t.e < 0) }),
+  });
+  return { ...game, shown, fracTxt };
+})();
+;
+//#archivo js/games/salta-la-coma.js
+// Salta el punto (Álgebra, notación científica; lección alg-21b): los dígitos de un número con su punto decimal y,
+// al lado, una potencia de 10. Con ◀ y ▶ se corre el punto un lugar: el número de adelante se hace diez veces más
+// chico o más grande y el exponente de 10 lo compensa, así que el valor no cambia. Meta 'sci': dejar un solo dígito
+// (no cero) antes del punto. Meta 'std': dejar 10⁰, o sea, escribir el número completo.
+// params = { rounds: [{ digits, point, exp?, goal: 'sci' | 'std' }] }   digits: cadena; point: cuántos dígitos van antes del punto
+// state = { rounds: [{ pt }] }      Spec 2026-11-15-torres-de-potencias.
+
+GAMES['salta-la-coma'] = (() => {
+  const expAt = (r, pt) => (r.exp ?? 0) + r.point - pt;
+  const first = r => r.digits.search(/[1-9]/);
+  // Dónde debe quedar el punto.
+  const goalPt = r => (r.goal === 'sci' ? first(r) + 1 : r.point + (r.exp ?? 0));
+  // El número de adelante, sin ceros de sobra: «003.840» → «3.84».
+  function coefTxt(r, pt) {
+    const a = r.digits.slice(0, pt).replace(/^0+(?=\d)/, '') || '0', b = r.digits.slice(pt).replace(/0+$/, '');
+    return b ? `${a}.${b}` : a;
+  }
+  const numTxtOf = (r, pt) => `${coefTxt(r, pt)} × 10${sup(expAt(r, pt))}`;
+
+  const game = roundsGame({
+    aspect: 1.05,
+    init: r => ({ pt: r.point }),
+    ok: (s, r) => s.pt === goalPt(r),
+    solution: r => `${numTxtOf(r, r.point)} = ${r.goal === 'sci' ? numTxtOf(r, goalPt(r)) : coefTxt(r, goalPt(r))}`,
+    prompt: r => (r.goal === 'sci' ? 'Corre el punto hasta dejar un solo dígito, que no sea cero, antes de él' : 'Corre el punto hasta que la potencia de 10 sea 10⁰: el número completo'),
+    foot: (r, s) => `Cada salto cambia el exponente en 1 · saltos: ${Math.abs(s.pt - r.point)}`,
+    layout(G) { G.btn = [{ x: G.W / 2 - 96, y: G.H - 76, w: 88, h: 38, d: -1 }, { x: G.W / 2 + 8, y: G.H - 76, w: 88, h: 38, d: 1 }]; },
+    draw(G) {
+      const { p, C, W, H, s, r } = G, n = r.digits.length, cw = Math.min(34, (W - 30) / n), x0 = W / 2 - (n * cw) / 2, y = 128;
+      const a0 = Math.max(0, Math.min(s.pt - 1, first(r))), b1 = Math.max(s.pt, r.digits.replace(/0+$/, '').length);   // lo que de verdad se lee
+      for (let i = 0; i < n; i++) {
+        const live = i >= a0 && i < b1;
+        drawTile(p, C, { x: x0 + i * cw + 2, y, w: cw - 4, h: 44 }, r.digits[i], { fill: live ? C.cream : C.card, ink: live ? undefined : C.mute, size: 22, r: 8, lift: live ? 3 : 0 });
+      }
+      const px = x0 + s.pt * cw;
+      p.noStroke(); p.fill(C.coral); p.circle(px, y + 50, 13);
+      if (s.pt !== r.point) {   // el camino del punto, salto a salto
+        const dir = Math.sign(s.pt - r.point);
+        p.noFill(); p.stroke(C.coral); p.strokeWeight(2);
+        for (let k = r.point; k !== s.pt; k += dir) p.arc(x0 + (k + dir / 2) * cw, y + 58, cw, 20, 0, Math.PI);
+      }
+      const good = s.pt === goalPt(r);
+      p.noStroke(); p.fill(good ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(24);
+      fitText(p, numTxtOf(r, s.pt), W / 2, y + 108, W - 30, 24);
+      p.fill(C.mute); p.textSize(12);
+      p.text(r.goal === 'sci' ? 'entre 1 y 10, por una potencia de 10' : 'el mismo número, escrito de otra forma', W / 2, y + 128);
+      G.btn.forEach(b => drawTile(p, C, b, b.d < 0 ? '◀ punto' : 'punto ▶', { fill: C.cream, size: 14, r: 10, lift: 2 }));
+    },
+    press(G, x, y) {
+      const b = G.btn.find(q => hitBox(q, x, y));
+      if (!b) return false;
+      G.s.pt = Math.max(1, Math.min(G.r.digits.length, G.s.pt + b.d)); G.touch();
+      return true;
+    },
+    peek: G => ({ btn: G.btn, goal: goalPt(G.r) }),
+  });
+  return { ...game, expAt, goalPt, coefTxt, numTxtOf };
 })();

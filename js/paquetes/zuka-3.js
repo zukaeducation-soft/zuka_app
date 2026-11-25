@@ -1,552 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-r-espacial.js
-// Preuniversitario · mundo 6 «Razonamiento espacial»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setExam }) => {
-  const CROSS = [[1, 0], [0, 1], [1, 1], [2, 1], [1, 2], [1, 3]], STAIR = [[0, 0], [1, 0], [1, 1], [2, 1], [2, 2], [3, 2]];
-  setExam('pu-espacial', 'Razonamiento espacial', [
-    ['pu-es-1', 'En la rejilla, el camino más corto suma lo horizontal y lo vertical.',
-      play('ruta-cuadras', 'Camino corto', { rounds: [{ w: 5, h: 3, A: [0, 3], B: [5, 0] }] }, '5 + 3 = 8 cuadras.', { hint: 'Sin devolverte.' })],
-    ['pu-es-1', 'Los movimientos opuestos se cancelan.',
-      play('brujula-pasos', 'Instrucciones', { rounds: [{ w: 5, h: 5, start: [2, 2], moves: [['E', 2], ['N', 2], ['O', 3], ['S', 1]] }] }, 'Neto: 1 al oeste y 1 al norte.', { hint: 'Suma y resta.' })],
-    ['pu-es-2', 'Los cubos de abajo también cuentan.',
-      play('cubos-ocultos', 'Cubos', { rounds: [{ h: [[2, 2], [1, 3]] }] }, '2 + 2 + 1 + 3 = 8.', { hint: 'Suma alturas.' })],
-    ['pu-es-2', 'Con las dos vistas, cada casilla toma a lo sumo el menor límite.',
-      play('torres-vistas', 'Vistas', { rounds: [{ front: [3, 1], side: [1, 3] }] }, '1 1 / 3 1: 6 cubos.', { hint: 'El menor de los dos.' })],
-    ['pu-es-3', 'En una fila de tres, la primera y la tercera son opuestas.',
-      play('caras-opuestas', 'Opuestas', { rounds: [{ cells: CROSS, letters: ['1', '2', '3', '4', '5', '6'], ask: [0, 3] }] }, 'Arriba con la de abajo del centro; derecha con izquierda.', { hint: 'Salta una.' })],
-    ['pu-es-3', 'Las caras opuestas de un dado suman 7.',
-      play('dado-siete', 'Dado', { rounds: [{ top: 2, front: 3, right: 1 }] }, '5, 4 y 6.', { hint: 'Resta de 7.' })],
-    ['pu-es-4', 'Cada doblez duplica las capas.',
-      play('dobla-papel', 'Agujeros', { rounds: [{ folds: 4, holes: 1 }] }, '2⁴ = 16 agujeros.', { hint: 'Dobla y duplica.' })],
-    ['pu-es-4', 'La hora del espejo y la real suman 12:00.',
-      play('reloj-espejo', 'Reloj', { rounds: [{ seen: 120 }] }, 'Espejo 2:00, real 10:00.', { hint: 'Resta de 12.' })],
-  ]);
-});
-
-// Mundo 6 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
-  // Ocho juegos con las escenas de la explicación (js/games/espacial-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-es-1', [
-    play('esquina-dos', 'Lleva el punto a una esquina que esté a **6** cuadras de A y a **3** de B, caminando por las calles.', { A: [1, 1], B: [8, 3], da: 6, db: 3, ini: [4, 2] },
-      'Por las calles se suma lo que separa a lo ancho y a lo alto. Sirve, por ejemplo, la esquina que está 5 al este y 1 al norte de A: $5 + 1 = 6$, y a B le faltan $2 + 1 = 3$. Hay otras.',
-      { hint: 'Desde cada punto cuenta cuadras a lo ancho y a lo alto, y súmalas. Hay más de una respuesta.' }),
-    play('rombo-cuadras', 'Toca **todas** las esquinas que están a **3** cuadras de A por el camino más corto.', { c: 6, f: 4, A: [3, 2], d: 3 },
-      'Son las que suman 3 entre ancho y alto: 3 y 0, 2 y 1, o 1 y 2, hacia todos los lados. Aquí caben 10.',
-      { hint: 'Reparte las 3 cuadras entre ancho y alto de todas las formas, y hazlo hacia los cuatro lados.' }),
-    play('termina-ruta', 'Desde A: **4 al norte, 4 al este, 3 al sur y 5 al oeste**. Lleva el punto a donde se termina.', { a: [4, 1], ms: [['N', 4], ['E', 4], ['S', 3], ['O', 5]] },
-      'Norte contra sur: $4 - 3 = 1$ al norte. Este contra oeste: $5 - 4 = 1$ al oeste.',
-      { hint: 'Junta primero norte con sur, y después este con oeste: los contrarios se restan.' }),
-    play('mismo-destino', 'Cada letra es un rumbo: 3E son tres cuadras al este. Toca **todas** las listas que terminan en el **mismo** lugar que el modelo.', { modelo: [['E', 3], ['N', 2]], listas: [[['N', 2], ['E', 3]], [['E', 3], ['S', 2]], [['E', 5], ['N', 2], ['O', 2]], [['N', 3], ['E', 2]], [['E', 1], ['N', 2], ['E', 2]], [['O', 3], ['N', 2]]] },
-      'El modelo queda 3 al este y 2 al norte. También quedan ahí 2N 3E; 5E 2N 2O, porque $5 - 2 = 3$; y 1E 2N 2E, porque $1 + 2 = 3$.',
-      { hint: 'Para cada lista mira cuánto queda al este y cuánto al norte. El orden no importa.' }),
-    play('vuelve-corto', 'Se camina **11 al norte, 2 al este, 2 al sur y 14 al oeste**. ¿Cuántas cuadras recorrió, a cuántas de A quedó por las calles y a cuántas en línea recta?', { ms: [['N', 11], ['E', 2], ['S', 2], ['O', 14]], et: ['recorrió', 'por calles', 'línea recta'], metas: ['29', '21', '15'], fichas: ['29', '29', '21', '21', '15', '3', '225'],
-      mira: ['Suma todos los tramos.', 'Lo que quedó al norte más lo que quedó al oeste.', 'En línea recta es la hipotenusa.'], trampas: { '1:29': 'Eso es lo que caminó; los contrarios se restan.', '2:21': 'Eso es por las calles.', '2:225': 'Ese es el cuadrado de la distancia: falta la raíz.', '2:3': 'Los lados no se restan: forman un triángulo rectángulo.' }, ok: 'Recorrer, volver por calles y volar son tres cuentas distintas.' },
-      'Recorrió $11 + 2 + 2 + 14 = 29$. Quedó $11 - 2 = 9$ al norte y $14 - 2 = 12$ al oeste: por calles $9 + 12 = 21$ y en línea recta $\\sqrt{81 + 144} = 15$.',
-      { hint: 'Lo recorrido suma todo. Para lo demás, mira cuánto quedó al norte y cuánto al oeste.' }),
-    play('atajo-recto', 'B queda **8** cuadras al este de A y otras al norte. Súbelo hasta que en **línea recta** estén a **17**.', { b: 8, c: 17 },
-      'La recta es la hipotenusa: $17^2 - 8^2 = 289 - 64 = 225$, y $\\sqrt{225} = 15$ al norte.',
-      { hint: 'El este, el norte y la línea recta forman un triángulo rectángulo. ¿Cuál es la hipotenusa?' }),
-    play('regresa-ya', 'Una ciclista hizo **4 al norte, 1 al este, 7 al sur y 6 al este**. Pon lo que le falta para **volver** a A por el camino más corto.', { ms: [['N', 4], ['E', 1], ['S', 7], ['E', 6]], metas: ['3 al norte', '7 al oeste'], fichas: ['3 al norte', '7 al oeste', '3 al sur', '7 al este', '5 al oeste', '11 al norte'], mismo: ['3 al sur', '7 al este'] },
-      'Quedó $7 - 4 = 3$ al sur y $1 + 6 = 7$ al este. Para volver camina al contrario: 3 al norte y 7 al oeste.',
-      { hint: 'Primero halla dónde quedó. Para volver se camina en los sentidos contrarios.' }),
-    play('taxi-cuadras', 'Dale al taxi las cuadras justas. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Por las calles, a un lugar **12 al este y 9 al norte**', r: 21, c: '12 + 9', e: { 15: 'Eso es en línea recta; el taxi va por las calles.' } },
-      { q: 'En **línea recta**, a un lugar **7 al este y 24 al norte**', r: 25, c: '\\sqrt{49 + 576}', e: { 31: 'Eso es por las calles.' } },
-      { q: 'Hizo 9N, 2E, 3S y 6O. Por las calles, para **volver**', r: 10, c: '6 + 4', e: { 20: 'Eso es lo que recorrió.' } }] },
-      'Por calles, $12 + 9 = 21$. En línea recta, $\\sqrt{49 + 576} = \\sqrt{625} = 25$. Quedó 6 al norte y 4 al oeste: 10 para volver.',
-      { hint: 'Por calles se suman los lados; en línea recta va la hipotenusa; para volver, resta los contrarios.' }),
-    sol('Un repartidor sale de la bodega y recorre 5 cuadras al norte, 3 al este, 2 al sur y 7 al oeste. Caminando por las calles, ¿a cuántas cuadras de la bodega termina? ¿Cuántas cuadras había recorrido?',
-      ['Norte y sur se compensan: $5 - 2 =$ [[3]] cuadras al norte', 'Este y oeste: $7 - 3 =$ [[4]] cuadras al oeste', 'Para volver por las calles camina $3 + 4 =$ [[7]] cuadras', 'Había recorrido $5 + 3 + 2 + 7 =$ [[17]] cuadras'],
-      ['5', '10', '12'],
-      'El recorrido suma todos los tramos (17), pero la posición final solo depende de lo que no se compensó: 3 al norte y 4 al oeste. En línea recta estaría a 5 cuadras; por las calles, a 7.',
-      'Separa los movimientos en dos ejes: norte contra sur y este contra oeste.'),
-    err('En una cuadrícula de calles, ¿cuántos caminos más cortos hay entre dos esquinas separadas 2 cuadras al este y 2 cuadras al norte?',
-      ['Todo camino más corto tiene 4 cuadras: 2 al este y 2 al norte', 'En cada cuadra se decide entre dos direcciones: $2 \\cdot 2 \\cdot 2 \\cdot 2$ caminos', 'Hay 16 caminos más cortos'], 1,
-      ['Solo hay que escoger cuáles 2 de las 4 cuadras van al norte: $\\tfrac{4 \\cdot 3}{2} = 6$ caminos', 'Se suman las cuadras de cada dirección: $2 + 2 = 4$ caminos', 'Se multiplican las cuadras de cada dirección: $2 \\cdot 2 = 4$ caminos'],
-      'No se puede decidir libremente en cada cuadra: un camino con cuatro pasos al este no llega. Deben ser exactamente 2 y 2: EENN, ENEN, ENNE, NEEN, NENE y NNEE. Son 6.',
-      'Escribe algunos caminos con letras E y N. ¿Sirve un camino que tenga tres E?'),
-    opc('Desde su casa, Julia camina 6 cuadras al este y luego 8 cuadras al norte hasta la biblioteca. La distancia en línea recta entre su casa y la biblioteca, medida en cuadras, es:',
-      ['14', '10', '2', '7'], 1,
-      'Los dos tramos forman un ángulo recto: $\\sqrt{6^2 + 8^2} = \\sqrt{100} = 10$.',
-      'En línea recta no se suman los tramos: forman los catetos de un triángulo rectángulo.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/espacial-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-es-2', [
-    play('torres-suma', 'Los números dicen la altura de cada torre. Cuenta los cubos de cada fila y el total.', { h: [[1, 1, 2], [1, 2, 3], [2, 3, 3]], et: ['adelante', 'en medio', 'atrás', 'total'], ops: ['+', '+', '='], metas: ['4', '6', '8', '18'], fichas: ['4', '6', '8', '18', '3', '9', '12'],
-      mira: ['Suma las alturas de la fila de adelante.', 'Suma las alturas de la fila del medio.', 'Suma las alturas de la fila de atrás.', 'Suma las tres filas.'], trampas: { '0:3': 'Son tres torres, pero una tiene más de un cubo.', '3:9': 'Esas son las torres; cada una tiene varios cubos.' }, ok: 'Así se cuentan también los escondidos.' },
-      'Adelante $1 + 1 + 2 = 4$, en medio $1 + 2 + 3 = 6$ y atrás $2 + 3 + 3 = 8$: 18 cubos.',
-      { hint: 'Cada número es una torre completa, con los cubos que no se ven. Suma fila por fila.' }),
-    play('vista-frente', 'Este es el plano desde arriba, con la altura de cada torre. Toca los cuadros que se ven **de frente**.', { h: [[1, 2, 1], [3, 1, 1]], alto: 4 },
-      'Cada columna muestra su torre más alta: $3$, $2$ y $1$. La de 3 está atrás, pero sobresale.',
-      { hint: 'De frente, una torre de atrás se ve si es más alta que la de adelante. Mira columna por columna.' }),
-    play('vista-izquierda', 'Este es otro plano. Toca los cuadros que se ven **desde la izquierda**; en esa vista, la fila de atrás queda a la izquierda.', { h: [[1, 4, 2], [2, 1, 1], [1, 3, 2]], alto: 4 },
-      'Desde la izquierda cada fila muestra su torre más alta: atrás $3$, en medio $2$ y adelante $4$.',
-      { hint: 'Ahora se mira por filas. Busca la torre más alta de cada una, esté donde esté.' }),
-    play('plano-maximo', 'De frente se ven columnas de 4 y 2; desde la izquierda, 3 atrás y 4 adelante. Pon las alturas con la **mayor** cantidad de cubos.', { cols: [4, 2], filas: [3, 4], fichas: ['3', '2', '4', '2', '4', '3', '1'] },
-      'Cada torre sube hasta la menor de las dos alturas que la limitan: atrás $3$ y $2$; adelante $4$ y $2$. Son 11 cubos.',
-      { hint: 'Una torre no puede ser más alta que su columna ni que su fila. ¿Cuál de las dos la detiene?' }),
-    play('pintura-lugar', 'Un cubo de arista **10** se pinta y se corta en cubitos. ¿Cuántos tienen 3, 2, 1 y 0 caras pintadas?', { n: 10, et: ['3 caras', '2 caras', '1 cara', 'ninguna'], metas: ['8', '96', '384', '512'], fichas: ['8', '96', '384', '512', '120', '600', '64'],
-      mira: ['Las esquinas son siempre las mismas.', 'Doce aristas, sin contar las esquinas: 8 en cada una.', 'Seis caras, cada una con un cuadrado de 8 por 8 adentro.', 'Adentro queda un cubo de arista 8.'], trampas: { '1:120': 'A cada arista se le quitan las dos esquinas.', '2:600': 'En cada cara hay que quitar el borde.', '3:64': 'Adentro hay 8 · 8 · 8, no 8 · 8.' }, ok: 'La pintura depende del lugar.' },
-      '8 esquinas; $12 \\cdot 8 = 96$ en las aristas; $6 \\cdot 64 = 384$ en las caras y $8^3 = 512$ sin pintar. Juntos, 1000.',
-      { hint: 'En cada arista quita las dos esquinas. En cada cara, quita el borde. Adentro queda un cubo más pequeño.' }),
-    play('donde-pintura', 'Un cubo de arista 8 se pintó y se cortó. Esta es una de sus caras: toca **todos** los cubitos que tienen exactamente **2** caras pintadas.', { n: 8, caras: 2 },
-      'Los de 2 caras están en las aristas, sin las esquinas: 6 en cada lado, 24 en esta cara.',
-      { hint: 'Un cubito del borde pertenece a dos caras; el de la esquina, a tres; el de adentro, a una.' }),
-    play('bloque-adentro', 'Un bloque tiene base de **6 por 5**. Se pinta, se corta en cubitos y quedan **36** sin pintura. ¿Cuál es su **alto**?', { a: 6, b: 5, sin: 36, max: 8 },
-      'Adentro la base es de 4 por 3, porque se pierde una capa por lado: $4 \\cdot 3 \\cdot 3 = 36$. El alto de adentro es 3 y el del bloque, $3 + 2 = 5$.',
-      { hint: 'La pintura se lleva una capa por cada lado. ¿Cómo queda la base de adentro?' }),
-    play('sube-cubos', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Torres de 2, 4, 1 y 5. ¿Cuántos **cubos**?', r: 12, c: '2 + 4 + 1 + 5', e: { 4: 'Esas son las torres.' } },
-      { q: 'Cubo de arista 4 pintado: cubitos con **2** caras pintadas', r: 24, c: '12 \\cdot 2', e: { 8: 'Esas son las esquinas: tienen 3.' } },
-      { q: 'Columnas de frente: 3, 1, 4 y 2. ¿Cuántos **cuadros** se ven?', r: 10, c: '3 + 1 + 4 + 2', e: { 4: 'Se ven todos los cuadros de cada columna.' } }] },
-      '$2 + 4 + 1 + 5 = 12$; en cada arista de 4 quedan 2 sin esquinas, $12 \\cdot 2 = 24$; y $3 + 1 + 4 + 2 = 10$.',
-      { hint: 'Suma alturas para contar cubos. En el cubo pintado, mira cada arista sin sus esquinas.' }),
-    sol('Un cubo de 6 cm de arista se pinta de azul por fuera y luego se corta en cubitos de 1 cm de arista. ¿Cuántos cubitos quedan con exactamente una cara pintada y cuántos quedan sin pintura?',
-      ['En cada cara, los de una sola cara pintada forman un cuadrado de $4 \\cdot 4 =$ [[16]] cubitos', 'Con las 6 caras: $6 \\cdot 16 =$ [[96]] cubitos con una cara pintada', 'Sin pintura queda el cubo de adentro, de arista $6 - 2 =$ [[4]] cm', 'Son $4^3 =$ [[64]] cubitos sin pintura'],
-      ['216', '36', '24'],
-      'La pintura solo llega a la capa de afuera. En cada cara se quita el borde (que tiene más caras pintadas) y adentro queda un cubo con 2 cm menos de arista.',
-      'Mira una cara del cubo: los cubitos del borde pertenecen también a otra cara. ¿Cuáles no?'),
-    err('Un cubo macizo de 2 cm de arista pesa 40 g. ¿Cuánto pesa un cubo del mismo material que tiene 6 cm de arista?',
-      ['La arista se multiplicó por $6 \\div 2 = 3$', 'El peso depende del volumen del cubo', 'El volumen también se multiplica por 3: pesa $40 \\cdot 3 = 120$ g'], 2,
-      ['El volumen se multiplica por $3^3 = 27$: pesa $40 \\cdot 27 = 1\\,080$ g', 'El volumen se multiplica por $3^2 = 9$: pesa $40 \\cdot 9 = 360$ g', 'El volumen se multiplica por $3 + 3 = 6$: pesa $40 \\cdot 6 = 240$ g'],
-      'El cubo crece en sus tres dimensiones: largo, ancho y alto se triplican, y el volumen se multiplica por $3 \\cdot 3 \\cdot 3 = 27$.',
-      'Imagina cuántos cubos pequeños caben dentro del grande: a lo largo, a lo ancho y a lo alto.'),
-    opc('Sobre una cuadrícula de 3 por 3 se apilan cubos iguales. Vistas desde arriba, las alturas de las torres son: en la fila de atrás 1, 3 y 1; en la fila del medio 2, 1 y 1; y en la fila de adelante, la más cercana a quien mira de frente, 1, 2 y 1 (de izquierda a derecha). La cantidad de cuadrados que se ven en la vista de frente es:',
-      ['4', '6', '7', '13'], 1,
-      'De frente, cada columna de la vista junta las tres torres que quedan una detrás de otra, y se ve la más alta: a la izquierda $2$ (la del medio), en el centro $3$ (la de atrás) y a la derecha $1$. Son $2 + 3 + 1 = 6$ cuadrados. Sumar solo la fila de adelante (4) olvida las torres de atrás que sobresalen, y 13 son todos los cubos, que no se ven todos. La vista de lado se arma igual, pero con la torre más alta de cada fila: $3 + 2 + 2 = 7$.',
-      'En la vista de frente no se suman las torres: de cada línea de mirada solo se ve la más alta, esté adelante o atrás.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/espacial-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-es-3', [
-    play('opuestas-molde', 'Este molde se dobla y arma un cubo. Pon la cara **opuesta** de cada una.', { cel: [[1, 0], [1, 1], [1, 2], [1, 3], [0, 1], [2, 2]], letras: 'GHJKLM', pide: ['G', 'H', 'L'], fichas: ['J', 'K', 'M', 'H', 'G'] },
-      'G, H, J y K están en fila: salta una, G con J y H con K. Sobran L y M, que son las tapas.',
-      { hint: 'Busca la fila recta y salta una cara. Las dos que quedan por fuera de la fila son opuestas.' }),
-    play('cierra-cubo', 'Toca **todos** los moldes que, al doblarse, **cierran** un cubo.', { moldes: [
-      [[0, 1], [1, 1], [2, 1], [3, 1], [0, 0], [1, 2]], [[0, 0], [1, 0], [2, 0], [0, 1], [1, 1], [2, 1]], [[0, 0], [1, 0], [2, 0], [2, 1], [3, 1], [4, 1]],
-      [[0, 1], [1, 1], [2, 1], [3, 1], [1, 0], [2, 0]], [[0, 0], [0, 1], [0, 2], [1, 1], [2, 1], [3, 1]], [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [2, 1]]] },
-      'Cierran el primero, el tercero y el quinto. En los demás dos caras caen en el mismo sitio: el segundo es un bloque de dos filas, el cuarto tiene las dos tapas del mismo lado y el sexto tiene cinco en fila.',
-      { hint: 'Dobla en la mente: si dos cuadros terminan en el mismo sitio, falta otro y no cierra.' }),
-    play('vecinas-cara', 'Con este molde armado, toca **todas** las caras que se **tocan** con la **R**.', { cel: [[0, 1], [1, 1], [2, 1], [3, 1], [0, 0], [2, 2]], letras: 'PQRSTV', de: 'R' },
-      'P, Q, R y S están en fila: la opuesta de R es P. Las otras cuatro, Q, S, T y V, sí la tocan.',
-      { hint: 'Una cara toca a todas menos a una. ¿Cuál queda frente a ella?' }),
-    play('dado-escondidas', 'En un dado corriente, las caras opuestas suman 7. Se ven **5** arriba, **3** al frente y **1** a la derecha. Pon las escondidas.', { ve: [5, 3, 1], et: ['abajo', 'atrás', 'izquierda'], metas: ['2', '4', '6'], fichas: ['2', '4', '6', '1', '3', '5'],
-      mira: ['Abajo está la opuesta de la de arriba.', 'Atrás está la opuesta del frente.', 'A la izquierda está la opuesta de la derecha.'], ok: 'Cada una completa 7 con la que tiene enfrente.' },
-      'Abajo $7 - 5 = 2$, atrás $7 - 3 = 4$ y a la izquierda $7 - 1 = 6$.',
-      { hint: 'Cada cara escondida está enfrente de una que sí se ve, y juntas suman 7.' }),
-    play('vuelca-dado', 'Dado corriente: **6** arriba, **3** al frente y **2** a la derecha. Se vuelca una vez **hacia adelante**: el frente queda contra la mesa. ¿Qué se ve?', { ve: [6, 3, 2], hacia: 'adelante', et: ['arriba', 'frente', 'derecha'], metas: ['4', '6', '2'], fichas: ['4', '6', '2', '3', '1', '5'],
-      mira: ['Sube la de atrás, la opuesta del frente.', 'La que estaba arriba baja al frente.', 'El dado gira alrededor de la derecha y la izquierda: no cambian.'], trampas: { '0:3': 'El frente no sube: queda contra la mesa.', '0:1': 'Abajo pasa atrás, no arriba.', '2:5': 'La derecha no se mueve.' }, ok: 'Atrás sube, arriba pasa al frente y los lados no cambian.' },
-      'Sube la de atrás, $7 - 3 = 4$. La de arriba, 6, pasa al frente. La derecha no se mueve: 2.',
-      { hint: 'Hacia adelante, la de arriba cae al frente. ¿Cuál sube? ¿Cuáles no se mueven?' }),
-    play('rueda-dado', 'Dado corriente: **3** arriba, **1** al frente y **2** a la derecha. Rueda **a la derecha**. ¿Qué queda **arriba** después de 1, 2 y 4 vuelcos?', { ve: [3, 1, 2], et: ['tras 1', 'tras 2', 'tras 4'], metas: ['5', '4', '3'], fichas: ['5', '4', '3', '2', '1', '6'],
-      mira: ['Sube la de la izquierda, la opuesta de la derecha.', 'Después de dos vuelcos queda arriba la que estaba abajo.', 'Cuatro vuelcos hacia el mismo lado lo dejan como al principio.'], trampas: { '0:2': 'La de la derecha baja a la mesa; sube la de la izquierda.' }, ok: 'Izquierda, abajo, derecha y otra vez la primera.' },
-      'Sube la izquierda, $7 - 2 = 5$; con dos, la de abajo, $7 - 3 = 4$; con cuatro vuelve el 3.',
-      { hint: 'En cada vuelco sube la que está a la izquierda. El orden es arriba, derecha, abajo, izquierda.' }),
-    play('dados-imposibles', 'Toca **todos** los cubos **imposibles** con este molde: los que muestran juntas dos caras **opuestas**.', { cel: [[0, 1], [1, 1], [2, 1], [3, 1], [1, 0], [1, 2]], letras: 'ABCDEF', dados: [['E', 'B', 'C'], ['E', 'A', 'C'], ['E', 'C', 'D'], ['E', 'B', 'F'], ['A', 'B', 'E'], ['B', 'C', 'D']] },
-      'Las opuestas son A-C, B-D y E-F. Son imposibles los que muestran A con C, E con F y B con D.',
-      { hint: 'Encuentra primero las tres parejas de caras opuestas. Luego búscalas en los cubos.' }),
-    play('sube-dado', 'Sube al número que responde; los dados son corrientes. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Se ven **2, 3 y 6**. ¿Cuánto suman las tres **escondidas**?', r: 10, c: '21 - 11', e: { 11: 'Eso suman las que se ven.', 21: 'Eso suman las seis.' } },
-      { q: '¿Cuánto suman la opuesta del **5** y la opuesta del **1**?', r: 8, c: '2 + 6', e: { 6: 'Eso suman ellas, no sus opuestas.' } },
-      { q: 'Sobre la mesa hay **dos** dados separados con **1** y **4** arriba. ¿Cuánto suman las caras de los **lados**, ocho en total?', r: 28, c: '4 \\cdot 7', e: { 42: 'Eso suman todas las caras, con las de arriba y abajo.' } }] },
-      'Las seis suman 21: $21 - 11 = 10$. Las opuestas son 2 y 6: 8. En los lados hay dos parejas de 7 por dado: $4 \\cdot 7 = 28$.',
-      { hint: 'Cada pareja de opuestas suma 7 y las seis caras suman 21.' }),
-    sol('Un dado corriente (las caras opuestas suman 7) está sobre la mesa con el 1 arriba, el 2 al frente y el 3 a la derecha. Se vuelca una vez hacia adelante (el frente queda abajo) y después una vez hacia la derecha (la derecha queda abajo). ¿Qué número queda arriba?',
-      ['Al volcarlo hacia adelante, gira sobre una arista que va de izquierda a derecha: esas dos caras [[no se mueven]]', 'El frente baja, la de arriba pasa al frente y sube la de atrás: arriba queda $7 - 2 =$ [[5]]', 'Al volcarlo hacia la derecha, la derecha baja, la de arriba pasa a la derecha y sube la de la [[izquierda]]', 'La derecha seguía siendo el 3, así que la izquierda es $7 - 3 =$ [[4]], y ese número queda arriba'],
-      ['6', 'derecha', 'cambian'],
-      'En cada vuelco el dado gira un cuarto de vuelta sobre una arista: las dos caras de los extremos de esa arista se quedan quietas y las otras cuatro rotan. Hacia adelante: arriba → frente → abajo → atrás → arriba. Hacia la derecha: arriba → derecha → abajo → izquierda → arriba. Al final se comprueba con los opuestos: arriba 4 y abajo 3 suman 7.',
-      'Sigue una cara a la vez y anota dónde queda tras cada vuelco. ¿Qué caras se quedan quietas cuando el dado rueda hacia adelante?'),
-    err('Con una lámina de cartón de 16 cm por 10 cm se arma una caja sin tapa: en cada esquina se recorta un cuadrado de 2 cm de lado y se doblan los bordes hacia arriba. ¿Cuál es el volumen de la caja?',
-      ['La altura de la caja es el lado del cuadrado recortado: 2 cm', 'El largo de la base es $16 - 2 = 14$ cm', 'El ancho de la base es $10 - 4 = 6$ cm', 'Volumen: $14 \\cdot 6 \\cdot 2 = 168$ cm³'], 1,
-      ['El largo de la base es $16 - 2 \\cdot 2 = 12$ cm', 'El largo de la base es $16 + 2 = 18$ cm', 'El largo de la base sigue siendo 16 cm'],
-      'En cada lado se recortan dos esquinas, una en cada extremo: el largo pierde 4 cm y queda en 12. El volumen es $12 \\cdot 6 \\cdot 2 = 144$ cm³.',
-      'Mira un solo lado largo de la lámina: ¿cuántos cuadrados se le recortan?'),
-    opc('Para armar una caja con forma de cubo, con sus seis caras, se usan exactamente 150 cm² de cartón. La arista de la caja mide:',
-      ['25 cm', '6 cm', '12.5 cm', '5 cm'], 3,
-      'Cada cara mide $150 \\div 6 = 25$ cm², así que la arista es $\\sqrt{25} = 5$ cm.',
-      'El desarrollo del cubo son seis cuadrados iguales: reparte el cartón entre ellos.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/espacial-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-es-4', [
-    play('espejo-vertical', 'La línea es un espejo. Toca los cuadros donde queda el **reflejo**.', { f: 4, c: 4, dada: [0, 1, 5, 7, 10, 11, 13] },
-      'Cada cuadro se refleja en su mismo renglón y a la misma distancia del espejo: el que está pegado sigue pegado.',
-      { hint: 'Toma un cuadro, cuenta cuántos lo separan del espejo y cuenta los mismos al otro lado.' }),
-    play('letras-espejo', 'Se mira cada letra en un espejo puesto **a su lado**. Toca **todas** las que se ven **iguales**.', { letras: ['T', 'R', 'U', 'E', 'H', 'P', 'V', 'S'], igual: ['T', 'U', 'H', 'V'] },
-      'T, U, H y V tienen la mitad izquierda igual a la derecha. R, E, P y S se ven volteadas.',
-      { hint: 'Parte la letra en dos con una línea vertical. ¿Las dos mitades son iguales?' }),
-    play('gira-ele', 'Gira la figura **810°** en sentido **contrario** al del reloj. Déjala como queda.', { g: -810 },
-      '$810^\\circ = 2 \\cdot 360^\\circ + 90^\\circ$: dos vueltas completas y un cuarto más, hacia la izquierda. Es lo mismo que $270^\\circ$ en el sentido del reloj.',
-      { hint: 'Quita las vueltas completas. Lo que sobra se gira hacia el otro lado del reloj.' }),
-    play('giro-o-espejo', 'Toca **todas** las figuras que salen de **girar** el modelo, sin voltearlo.', { cel: [[0, 0], [0, 1], [0, 2], [1, 2], [2, 2], [1, 0]], figs: [[90, false], [0, true], [180, false], [90, true], [270, false], [180, true]] },
-      'Girar solo da vueltas. Las otras tres están en espejo y ningún giro las deja así.',
-      { hint: 'Sigue con el dedo las piezas en un mismo sentido: si el orden se invierte, está volteada.' }),
-    play('hora-espejo', 'En un espejo, un reloj de agujas sin números parece marcar las **5** en punto. Pon la hora **real**.', { h: 5 },
-      'La aguja real queda igual de lejos del 12, al otro lado: son las 7. Las dos horas suman 12.',
-      { hint: 'El espejo cambia izquierda por derecha. Mira a cuántas marcas del 12 está la aguja.' }),
-    play('papel-abierto', 'Una hoja se dobló dos veces por las líneas doradas y se perforó donde está el punto. Toca dónde quedan **todos** los huecos al abrirla.', { f: 0, c: 1 },
-      'Son cuatro capas y cada doblez refleja el hueco: uno en cada cuarto de la hoja, en espejo.',
-      { hint: 'Abre un doblez a la vez: el hueco aparece al otro lado, a la misma distancia del doblez.' }),
-    play('dobla-y-cuenta', 'Una hoja se dobla **3** veces y se hacen **3** perforaciones, lejos de los dobleces. ¿Cuántas capas hay y cuántos huecos salen? Y si **una sola** se hiciera **sobre el último doblez**, lejos de las esquinas, ¿cuántos saldrían de ella?', { d: 3, np: 3, et: ['capas', 'huecos', 'sobre doblez'], metas: ['8', '24', '4'], fichas: ['8', '8', '24', '4', '6', '9', '11'],
-      mira: ['Cada doblez duplica las capas.', 'Cada perforación sale una vez por capa.', 'Sobre un doblez, las capas quedan unidas de dos en dos.'], trampas: { '0:6': 'Cada doblez multiplica por 2; no suma 2.', '0:9': 'Cada doblez multiplica por 2: son 2 · 2 · 2.', '1:11': 'Cada perforación atraviesa todas las capas: se multiplica.', '2:8': 'Ahí las capas están unidas de dos en dos.' }, ok: 'Una vez por capa; sobre un doblez, la mitad.' },
-      '$2^3 = 8$ capas y $3 \\cdot 8 = 24$ huecos. Sobre un doblez, las dos capas que se doblan juntas dejan un solo agujero entre las dos: $8 \\div 2 = 4$.',
-      { hint: 'Duplica por cada doblez. Sobre la línea de un doblez, dos capas comparten el mismo hueco.' }),
-    play('sube-dobleces', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Una hoja con **4** dobleces y **2** perforaciones, lejos de ellos. ¿Cuántos **huecos**?', r: 32, c: '2 \\cdot 2^4', e: { 8: 'Cada doblez duplica las capas.' } },
-      { q: '**630°** son ¿cuántos **cuartos** de vuelta?', r: 7, c: '630 \\div 90' },
-      { q: 'En el espejo parecen las **4** en punto. ¿Qué **hora** es?', r: 8, c: '12 - 4', e: { 4: 'Esa es la del espejo.', 2: 'La volteaste de arriba abajo.' } }] },
-      'Cuatro dobleces duplican las capas cuatro veces, y con 2 perforaciones salen 32 huecos; $630 \\div 90 = 7$ cuartos; y $12 - 4 = 8$.',
-      { hint: 'Cada doblez duplica, cada cuarto son 90° y las dos horas del espejo suman 12.' }),
-    sol('Una hoja cuadrada se dobla por la mitad y otra vez por la mitad: queda un cuadrito de 4 capas. Con una perforadora se hacen tres huecos que atraviesan todas las capas: uno en medio del cuadrito, lejos de los dobleces; otro sobre la línea de un doblez, sin llegar a la esquina; y otro en la esquina donde se juntan los dos dobleces. ¿Cuántos huecos tiene la hoja al abrirla?',
-      ['Dos dobleces dejan $2^2 =$ [[4]] capas: el hueco que no toca ningún doblez sale una vez en cada capa', 'El hueco sobre un doblez une las capas de dos en dos: al abrir quedan $4 \\div 2 =$ [[2]] huecos', 'La esquina de los dos dobleces es el [[centro]] de la hoja: ahí se juntan las 4 capas y queda [[1]] hueco', 'En total la hoja tiene $4 + 2 + 1 =$ [[7]] huecos'],
-      ['12', 'borde', '8'],
-      'Un corte sale una vez por capa, pero cada doblez que toca junta las capas de dos en dos: con dos dobleces, $4$ huecos si no toca ninguno, $4 \\div 2 = 2$ si toca uno y $4 \\div 4 = 1$ si toca los dos (la esquina de los dobleces es el centro de la hoja). Si el corte toca un borde suelto, lo que queda son muescas en el borde y no huecos: un corte en la esquina de los bordes sueltos recorta las cuatro esquinas de la hoja.',
-      'Abre la hoja en tu cabeza: si el corte toca la línea de un doblez, ¿las dos capas que se doblan juntas dejan dos huecos o uno solo?'),
-    err('Una hoja de papel se dobla por la mitad cinco veces seguidas y luego se le hace una perforación, lejos de los dobleces, que atraviesa todas las capas. ¿Cuántos agujeros tiene la hoja al desdoblarla?',
-      ['Cada doblez duplica el número de capas', 'Con 5 dobleces hay $5 \\cdot 2 = 10$ capas', 'La perforación atraviesa todas las capas: al desdoblar hay 10 agujeros'], 1,
-      ['Con 5 dobleces hay $2^5 = 32$ capas', 'Con 5 dobleces hay $5 + 2 = 7$ capas', 'Con 5 dobleces hay $5^2 = 25$ capas'],
-      'Duplicar cinco veces es multiplicar por 2 cinco veces: 2, 4, 8 y así hasta 32 capas. Como la perforación no toca ningún doblez, al desdoblar hay 32 agujeros.',
-      'Hazlo doblez por doblez: una capa, dos, cuatro… ¿Se suma 2 cada vez o se multiplica por 2?'),
-    opc('La palabra AMO se escribe con letras mayúsculas en una hoja y se mira reflejada en un espejo colocado a la derecha de la hoja. En el espejo se lee:',
-      ['OMA', 'AMO', 'MOA', 'OAM'], 0,
-      'El espejo invierte el orden de las letras: la O queda primero. Como A, M y O son letras simétricas, se ven iguales: OMA.',
-      'En un espejo lateral, la letra que estaba más cerca del espejo sigue siendo la más cercana.'),
-  ]);
-
-  addExam('pu-espacial', [
-    ['pu-es-1', 'Los movimientos contrarios se compensan.',
-      opc('Un robot avanza 4 pasos al norte, 6 al este, 4 al sur y 2 al oeste. Para volver al punto de partida por el camino más corto debe avanzar:', ['4 pasos al este', '2 pasos al oeste', '4 pasos al oeste', '8 pasos al sur'], 2,
-        'Norte y sur se anulan. Al este queda $6 - 2 = 4$: para volver, 4 pasos al oeste.', 'Compensa norte con sur y este con oeste.')],
-    ['pu-es-2', 'En un cubo pintado, los cubitos de las aristas (sin las esquinas) tienen dos caras pintadas.',
-      opc('Un cubo de 3 cm de arista se pinta por fuera y se corta en 27 cubitos de 1 cm. La cantidad de cubitos que tienen exactamente dos caras pintadas es:', ['6', '8', '1', '12'], 3,
-        'En cada una de las 12 aristas hay un cubito que no es esquina: 12.', 'Los de dos caras están en las aristas, sin contar las esquinas.')],
-    ['pu-es-3', 'En un dado corriente las caras opuestas suman 7.',
-      opc('En un dado corriente, las caras opuestas suman 7. La cara opuesta a la del 3 es la del:', ['4', '6', '5', '2'], 0,
-        '$7 - 3 = 4$.', 'Busca el número que completa 7.')],
-    ['pu-es-4', 'Un corte sale una vez por capa, pero cada doblez que toca junta las capas de dos en dos.',
-      opc('Una hoja cuadrada se dobla por la mitad y luego otra vez por la mitad. En el cuadrito doblado se recorta un triangulito en la esquina que tiene un doblez y un borde suelto (no en la esquina donde se juntan los dos dobleces), atravesando todas las capas. Al desdoblar, la hoja tiene:',
-        ['cuatro huecos, uno en cada cuarto de la hoja', 'un hueco en el centro de la hoja', 'dos muescas, en la mitad de dos lados opuestos', 'una muesca en la mitad de un lado'], 2,
-        'Dos dobleces dejan 4 capas, pero el corte toca un doblez: las capas quedan pegadas de dos en dos y salen $4 \\div 2 = 2$ cortes. Como la esquina también toca un borde suelto, quedan en el borde de la hoja: dos muescas, en la mitad de dos lados opuestos. En la esquina de los dos dobleces saldría un solo hueco, en el centro.',
-        '¿Cuántos dobleces toca el corte? Cada doblez que toca junta las capas de dos en dos.')],
-  ]);
-});
-;
-//#archivo js/courses/preuda-r-secuencias.js
-// Preuniversitario · mundo 7 «Secuencias y patrones»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setExam }) => {
-  setExam('pu-secuencias', 'Secuencias y patrones', [
-    ['pu-se-1', 'Si las diferencias no son iguales, se miran las diferencias de las diferencias.',
-      play('diferencias-escalera', 'Lo que sigue', { rounds: [{ seq: [3, 4, 7, 12, 19], hi: 35 }] }, 'Diferencias 1, 3, 5, 7: sigue $+9$, 28.', { hint: 'Diferencias.' })],
-    ['pu-se-1', 'En las sucesiones tipo Fibonacci cada término suma los dos anteriores.',
-      play('fibonacci-suma', 'Fibonacci', { rounds: [{ seq: [3, 3, 6, null, 15, 24], hi: 30 }] }, '$3 + 6 = 9$.', { hint: 'Suma dos.' })],
-    ['pu-se-1', 'Las alternadas son dos sucesiones intercaladas.',
-      play('alterna-dos', 'Alternadas', { rounds: [{ seq: [5, 40, 10, 35, 15, 30], need: 20, hi: 45 }] }, 'Los de posición impar suben de 5 en 5: 20.', { hint: 'Una sí y otra no.' })],
-    ['pu-se-2', 'Las letras se pasan a su posición en el alfabeto.',
-      play('letras-salto', 'Letras', { rounds: [{ seq: ['B', 'F', 'J', 'N'], need: 'R' }] }, '2, 6, 10, 14: sigue 18, R.', { hint: 'Posiciones.' })],
-    ['pu-se-2', 'En las figuras se cuenta cuánto gana cada una.',
-      play('figura-patron', 'Figuras', { rounds: [{ seq: [2, 6, 10, 14], need: 18, cols: 4, hi: 22 }] }, 'Gana 4 cada vez: 18.', { hint: 'Lo que gana.' })],
-    ['pu-se-3', 'Las semanas completas no cambian el día.',
-      play('ciclo-reloj', 'Semana', { rounds: [{ start: 2, n: 150 }] }, '$150 = 21 \\cdot 7 + 3$: miércoles + 3 = sábado.', { hint: 'Residuo de 7.' })],
-    ['pu-se-3', 'La última cifra de las potencias se repite en ciclos.',
-      play('ultima-cifra', 'Última cifra', { rounds: [{ a: 2, n: 22 }] }, 'Ciclo 2, 4, 8, 6; $22$ deja residuo 2: 4.', { hint: 'Ciclo de 4.' })],
-    ['pu-se-3', 'Con residuo 0 se cae en el último del ciclo.',
-      play('ciclo-colores', 'Collar', { rounds: [{ cyc: ['mint', 'coral', 'sky'], N: 60 }] }, '$60 = 3 \\cdot 20$: la última del grupo.', { hint: 'Residuo.' })],
-  ]);
-});
-
-// Mundo 7 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
-  // Ocho juegos con las escenas de la explicación (js/games/secuencias-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-se-1', [
-    play('que-lugar', 'En la sucesión **3, 10, 17, 24…** aparece el **94**. ¿En qué **lugar** está?', { a: 3, d: 7, meta: 94, max: 20 },
-      'De 3 a 94 hay 91, que son $91 \\div 7 = 13$ saltos. El lugar es uno más: 14.',
-      { hint: '¿Cuántos saltos de 7 hay desde el primero? Recuerda que el primer término no necesita ninguno.' }),
-    play('termino-lejano', 'La sucesión es **9, 13, 17, 21…** Arma el término **25**.', { t: [9, 13, 17, 21], et: ['saltos', 'avanzan', 'término 25'], metas: ['24', '96', '105'], fichas: ['24', '96', '105', '25', '100', '109'],
-      mira: ['Del primero al 25 hay un salto menos que términos.', 'Multiplica los saltos por lo que avanza cada uno.', 'Al primer término súmale lo que avanzan.'], trampas: { '0:25': 'Del primero al 25 hay un salto menos.', '1:100': 'Son 24 saltos, no 25.', '2:109': 'Contaste un salto de más.', '2:100': 'Súmalo al primer término, que es 9.' }, ok: 'Primero más los saltos.' },
-      'Hay 24 saltos de 4: $24 \\cdot 4 = 96$, y $9 + 96 = 105$.',
-      { hint: 'Cuenta cuántos saltos hay del primer término al 25, no cuántos términos.' }),
-    play('saltos-crecen', 'Pon los dos saltos que faltan y el término que sigue.', { t: [4, 7, 13, 22, 34, null], arriba: ['+3', '+6', '+9', null, null], metas: ['+12', '+15', '49'], fichas: ['+12', '+15', '49', '+18', '46', '52', '+9'],
-      mira: ['De 22 a 34, ¿cuánto hay?', 'Los saltos crecen siempre lo mismo.', 'Súmale el último salto al 34.'], trampas: { '2:46': 'Repetiste el salto de 12; los saltos crecen.' }, ok: 'Los saltos forman otra sucesión: 3, 6, 9, 12, 15.' },
-      'Los saltos son 3, 6, 9, 12 y 15: el que sigue es $34 + 15 = 49$.',
-      { hint: 'Mira los saltos como si fueran otra sucesión. ¿Cuánto crecen cada vez?' }),
-    play('cada-regla', 'Pon la regla de cada sucesión.', { filas: [[5, 10, 20, 40], [5, 11, 17, 23], [5, 6, 11, 17]], metas: ['× 2', '+ 6', 'suma los dos'], fichas: ['× 2', '+ 6', 'suma los dos', '+ 5', '+ 1', '+ 6'],
-      mira: ['Cada término es el doble del anterior.', 'Se suma siempre lo mismo.', 'Suma los dos términos anteriores.'], trampas: { '0:+ 5': 'Solo funciona en el primer paso.', '2:+ 1': 'Solo funciona en el primer paso.', '2:+ 6': 'Solo funciona en el último paso.' } },
-      '5, 10, 20, 40 se duplica; 5, 11, 17, 23 suma 6; y en 5, 6, 11, 17 cada término suma los dos anteriores.',
-      { hint: 'Prueba una regla en todos los pasos, no solo en el primero.' }),
-    play('rompe-fila', 'En cada fila hay **un** número equivocado. Tócalos.', { filas: [[4, 7, 10, 14, 16, 19], [1, 4, 16, 62, 256, 1024]], malos: [3, 3], buenos: [13, 64], ok: 'Una suma 3 y la otra multiplica por 4.' },
-      'La primera sube de 3 en 3: el 14 debía ser 13. La segunda se multiplica por 4: el 62 debía ser $16 \\cdot 4 = 64$.',
-      { hint: 'Escribe qué pasa de un término al otro en cada fila. Casi todos los pasos son iguales.' }),
-    play('suma-dos', 'Cada término es la **suma de los dos** anteriores. Pon los que faltan.', { t: [2, null, 7, 12, null, 31], metas: ['5', '19'], fichas: ['5', '19', '4', '17', '9', '24'],
-      mira: ['El primero más el segundo debe dar 7.', 'Suma los dos que están antes del hueco.'], trampas: { '0:9': 'El tercero es la suma: el segundo es lo que falta para 7.', '1:24': 'No se duplica: suma los dos anteriores.', '1:17': 'No se suma siempre 5: suma los dos anteriores.' }, ok: 'Cada uno suma los dos de antes.' },
-      '$2 + 5 = 7$, así que el segundo es 5. Después $7 + 12 = 19$, y se comprueba: $12 + 19 = 31$.',
-      { hint: 'El primer hueco se halla al revés: ¿qué número, sumado con 2, da 7?' }),
-    play('mezcladas-siguen', 'Aquí hay **dos** sucesiones mezcladas. Pon los **dos** términos que siguen.', { t: [2, 40, 5, 36, 8, 32, null, null], metas: ['11', '28'], fichas: ['11', '28', '29', '35', '10', '24'],
-      mira: ['Le toca a la que sube: mira uno sí y otro no.', 'Le toca a la que baja: mira uno sí y otro no.'], trampas: { '1:29': 'Baja de 4 en 4, no de 3.', '0:29': 'El que sigue sale del que está dos lugares atrás.', '0:28': 'Le toca primero a la sucesión que sube.' }, ok: 'Cada término sale del que está dos lugares atrás.' },
-      'Son dos sucesiones intercaladas: 2, 5, 8 sube de 3 en 3 y sigue 11; 40, 36, 32 baja de 4 en 4 y sigue 28.',
-      { hint: 'Separa los lugares impares de los pares y resuelve cada fila por su cuenta.' }),
-    play('sube-termino', 'Sube al número que sigue o que se pide. Puedes fallar **una** vez.', { tiros: [
-      { q: '3, 8, 13, 18… ¿Cuál es el término **9**?', r: 43, c: '3 + 8 \\cdot 5', e: { 48: 'Hasta el noveno hay 8 saltos.', 45: 'Empieza en 3, no en 0.' } },
-      { q: '3, 6, 12, 24… ¿Cuál **sigue**?', r: 48, c: '24 \\cdot 2', e: { 36: 'No se suma 12 siempre: se multiplica.' } },
-      { q: '1, 2, 4, 7, 11… ¿Cuál **sigue**?', r: 16, c: '11 + 5', e: { 15: 'El salto también crece.', 22: 'No se duplica: mira los saltos.' } }] },
-      '$3 + 8 \\cdot 5 = 43$; $24 \\cdot 2 = 48$; y los saltos 1, 2, 3, 4 siguen con 5: $11 + 5 = 16$.',
-      { hint: 'Mira qué pasa de un término al otro: ¿se suma, se multiplica o cambian los saltos?' }),
-    sol('En un teatro, la primera fila tiene 12 sillas y cada fila tiene 3 sillas más que la anterior. ¿Cuántas sillas tiene la fila 20? ¿Cuántas sillas hay en las primeras 20 filas?',
-      ['De la fila 1 a la 20 hay [[19]] saltos de 3 sillas', 'Fila 20: $12 + 19 \\cdot 3 =$ [[69]] sillas', 'La primera fila y la última suman $12 + 69 =$ [[81]], igual que cada pareja de extremos', 'Hay 10 parejas: $10 \\cdot 81 =$ [[810]] sillas'],
-      ['72', '20', '1 620'],
-      'Entre el término 1 y el término $n$ hay $n - 1$ saltos. Para sumar una progresión aritmética se emparejan los extremos: todas las parejas suman lo mismo.',
-      'Cuenta los saltos, no las filas. Para la suma, junta la primera fila con la última, la segunda con la penúltima…'),
-    err('Los primeros términos de una sucesión alternada son 1, 20, 3, 17, 9, 14, 27. ¿Cuál es el término que sigue?',
-      ['Los términos suben y bajan sin una diferencia fija entre vecinos', 'Se miran de dos en dos lugares: en los impares van 1, 3, 9, 27 ($\\times 3$) y en los pares 20, 17, 14 ($-3$)', 'El que sigue continúa la de los impares: $27 \\cdot 3 = 81$'], 2,
-      ['El que sigue ocupa el lugar 8, que es par: continúa 20, 17, 14 y es $14 - 3 = 11$', 'El que sigue continúa las dos: $81 + 11 = 92$', 'El que sigue es $27 - 3 = 24$, porque las operaciones se turnan'],
-      '«Alternada» puede querer decir dos cosas. Dos operaciones que se turnan: cada término sale del anterior, como en 1, 6, 12, 17, 34 ($+5$, $\\times 2$, $+5$, $\\times 2$). Dos sucesiones intercaladas: cada término sale del que está dos lugares atrás, como aquí. Para saber cuál es, se prueba: si se turnaran operaciones, $1 \\to 20$ y $3 \\to 17$ usarían la misma, y no ($+19$ y $+14$). Después se cuenta el lugar: el término 8 es par, así que sigue $14 - 3 = 11$.',
-      'Antes de calcular, cuenta en qué lugar va el término que sigue: ¿le toca a la sucesión de los lugares impares o a la de los pares?'),
-    opc('En una sucesión, cada término se obtiene multiplicando el anterior por 3. Si el segundo término es 6, el quinto término es:',
-      ['162', '54', '486', '24'], 0,
-      'Del segundo al quinto hay tres saltos: $6 \\cdot 3 \\cdot 3 \\cdot 3 = 162$.',
-      'Cuenta cuántas veces hay que multiplicar para ir del segundo término al quinto.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/secuencias-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-se-2', [
-    play('letra-sigue', 'La secuencia es **C, D, F, I, M**. Lleva el señalador a la letra que sigue.', { seq: 'CDFIM', meta: 'R' },
-      'Con números: 3, 4, 6, 9, 13. Los saltos son 1, 2, 3 y 4; sigue 5: $13 + 5 = 18$, la R.',
-      { hint: 'Cambia cada letra por su número en el alfabeto y mira los saltos.' }),
-    play('letras-atras', 'Las letras van **hacia atrás**, siempre el mismo salto. Pon las que faltan (alfabeto sin Ñ).', { t: ['W', 'T', null, 'N', null], metas: ['Q', 'K'], fichas: ['Q', 'K', 'R', 'L', 'M', 'P'],
-      mira: ['De W a T se retroceden 3: haz lo mismo desde la T.', 'Retrocede 3 desde la N.'], trampas: { '0:R': 'Retrocediste 2; el salto es de 3.', '1:L': 'Retrocediste 2; el salto es de 3.' }, ok: 'Siempre tres letras hacia atrás.' },
-      'W, T, Q, N, K: 23, 20, 17, 14 y 11. Se restan 3 cada vez.',
-      { hint: 'Cuenta cuántas letras se retroceden de W a T y repite ese salto.' }),
-    play('brazos-estrella', 'Estas son las figuras 1, 2 y 3. ¿Qué figura tiene **56** puntos?', { total: 56, max: 16 },
-      'Hay 1 punto fijo y cinco brazos de $n$: $5n + 1 = 56$, así que $n = 11$.',
-      { hint: 'Busca lo que no cambia y lo que se agrega en cada figura.' }),
-    play('fijo-y-crece', 'Las figuras tienen **7, 12 y 17** cuadros. Pon cuánto se **agrega** cada vez, la parte **fija** y los cuadros de la figura **20**.', { t: [7, 12, 17], fijo: 2, et: ['se agrega', 'parte fija', 'figura 20'], metas: ['5', '2', '102'], fichas: ['5', '2', '102', '7', '107', '100'],
-      mira: ['Resta una figura de la siguiente.', 'Quítale a la figura 1 lo que se agrega cada vez.', 'Veinte veces lo que crece, más la parte fija.'], trampas: { '1:7': 'La figura 1 ya tiene un grupo de los que se agregan.', '2:107': 'Contaste un grupo de más.', '2:100': 'Falta la parte fija.' }, ok: 'Fijo más lo que crece: 5n + 2.' },
-      'Se agregan 5 cada vez. La figura 1 es $5 + 2$: la parte fija es 2. La figura $n$ tiene $5n + 2$, y la 20, $5 \\cdot 20 + 2 = 102$.',
-      { hint: 'Si la figura 1 tiene un grupo de los que se agregan, ¿qué le sobra? Eso es lo fijo.' }),
-    play('escalera-cuatro', 'La escalera crece así. Arma la figura **4** en la cuadrícula, pegada a la **izquierda** y al **piso**.', { n: 4, lado: 5 },
-      'Cada figura agrega una diagonal completa: $1 + 2 + 3 + 4 = 10$ cuadros.',
-      { hint: 'Mira cuántos cuadros tiene cada fila de la figura 3 y agranda cada una en uno.' }),
-    play('dos-reglas', 'Pon la letra y el número que siguen.', { t: [['E', 4], ['G', 12], ['I', 36], ['K', 108]], metas: ['M', '324'], fichas: ['M', '324', 'L', 'N', '216', '180'],
-      mira: ['Mira solo las letras: avanzan de dos en dos.', 'Mira solo los números: se multiplican por lo mismo.'], trampas: { '0:L': 'Entre letra y letra se salta una: avanzan 2.', '1:180': 'No se suma 72: se multiplica.', '1:216': 'Se multiplica por 3, no por 2.' } },
-      'Las letras avanzan de 2 en 2: E, G, I, K, M. Los números se multiplican por 3: $108 \\cdot 3 = 324$.',
-      { hint: 'Tapa los números y resuelve las letras. Después tapa las letras.' }),
-    play('mesas-hexagono', 'En una mesa de **6** lados se sientan 6, **una por lado**; en dos pegadas, 10; en tres pegadas en fila, 14. ¿Cuántas mesas en fila hacen falta para **38** personas?', { total: 38, max: 11 },
-      'Cada mesa pone 4 lugares y las dos puntas siempre están: $4n + 2 = 38$. Sin las dos puntas quedan 36, así que $n = 9$.',
-      { hint: 'De una mesa a la siguiente se agregan 4. ¿Qué parte no cambia?' }),
-    play('sube-patron', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'A, F, K, P… (alfabeto sin Ñ) ¿Qué **lugar** ocupa la letra que sigue?', r: 21, c: '16 + 5', e: { 20: 'La P es la letra 16.' } },
-      { q: 'Figuras de 6, 9, 12… puntos. ¿Cuántos tiene la figura **12**?', r: 39, c: '6 + 11 \\cdot 3', e: { 42: 'Hasta la 12 hay 11 saltos.', 36: 'Falta la parte fija.' } },
-      { q: 'Y3, W6, U12… ¿Qué **número** sigue?', r: 24, c: '12 \\cdot 2', e: { 18: 'No se suma 6: se duplica.' } }] },
-      'Los números son 1, 6, 11, 16: sigue 21, la U. La figura 12 tiene $6 + 11 \\cdot 3 = 39$. Y 3, 6, 12 se duplica: 24.',
-      { hint: 'Pasa las letras a números, cuenta saltos y separa las dos reglas.' }),
-    sol('Un patrón de baldosas crece así: la figura 1 tiene 5 baldosas, la figura 2 tiene 8 y la figura 3 tiene 11. ¿Cuántas baldosas tiene la figura 30? ¿Qué figura tiene 62 baldosas?',
-      ['Cada figura agrega [[3]] baldosas a la anterior', 'Figura 30: $5 + 29 \\cdot 3 =$ [[92]] baldosas', 'Para llegar a 62 desde 5 faltan [[57]] baldosas, que son $57 \\div 3 = 19$ saltos', 'Es la figura $1 + 19 =$ [[20]]'],
-      ['95', '90', '21'],
-      'La figura $n$ tiene $5 + 3(n - 1)$ baldosas. Para devolverse de la cantidad a la figura se cuentan los saltos y se suma 1, porque la figura 1 no necesita saltos.',
-      'De la figura 1 a la 30 no hay 30 saltos. Cuéntalos con cuidado.'),
-    err('En la secuencia B, E, H, K, … las letras siguen la misma regla (alfabeto de 26 letras, sin Ñ). ¿Cuál es la octava letra de la secuencia?',
-      ['Las letras ocupan los puestos 2, 5, 8 y 11 del alfabeto: avanzan de 3 en 3', 'Hasta la octava letra hay 8 saltos: $2 + 8 \\cdot 3 = 26$', 'La letra del puesto 26 es la Z'], 1,
-      ['Hasta la octava letra hay 7 saltos: $2 + 7 \\cdot 3 = 23$', 'Hasta la octava letra hay 9 saltos: $2 + 9 \\cdot 3 = 29$', 'Hasta la octava letra hay 8 saltos: $8 \\cdot 3 = 24$'],
-      'Del primer término al octavo hay 7 saltos, no 8. El puesto es $2 + 21 = 23$: la letra W.',
-      'Entre la primera letra y la segunda hay un solo salto. ¿Cuántos hay entre la primera y la octava?'),
-    opc('Observa la secuencia: A1, C4, E9, G16, … El término que sigue es:',
-      ['H25', 'I20', 'I25', 'J36'], 2,
-      'Las letras saltan de dos en dos (A, C, E, G, I) y los números son los cuadrados 1, 4, 9, 16, 25.',
-      'Separa el patrón en dos: mira solo las letras y después solo los números.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/secuencias-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-se-3', [
-    play('pieza-ciclo', 'Un collar repite estas **5** cuentas, empezando por la 1. Lleva la flecha a la que ocupa el lugar **88**.', { r: ['1', '2', '3', '4', '5'], de: -1, pasos: 88, color: true },
-      '$88 = 17 \\cdot 5 + 3$: después de 17 vueltas completas, es la tercera.',
-      { hint: 'Divide el lugar entre el largo del ciclo. El residuo dice cuál es.' }),
-    play('vueltas-sobran', 'Un letrero escribe **TIGRE** una y otra vez. ¿Qué letra ocupa el lugar **87**? Pon las vueltas, el residuo y la letra.', { palabra: 'TIGRE', et: ['vueltas', 'residuo', 'letra'], metas: ['17', '2', 'I'], fichas: ['17', '2', 'I', '18', 'T', 'G', '5'],
-      mira: ['¿Cuántas veces cabe TIGRE completo en 87?', 'Lo que sobra de 87 después de las vueltas.', 'Cuenta en TIGRE tantas letras como sobran.'], trampas: { '0:18': 'Con 18 vueltas te pasas de 87.', '2:G': 'La segunda letra, no la tercera.' }, ok: 'El residuo dice la letra.' },
-      '$87 = 17 \\cdot 5 + 2$: 17 vueltas y sobran 2. La segunda letra de TIGRE es la I.',
-      { hint: 'Las vueltas completas no cambian nada. ¿Cuántas letras sobran?' }),
-    play('dia-semana', 'Hoy es **jueves**. ¿Qué día fue hace **30** días? Gira la flecha.', { r: ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'], de: 3, pasos: -30 },
-      '$30 = 4 \\cdot 7 + 2$: cuatro semanas no cambian el día. Dos días antes del jueves es martes.',
-      { hint: 'Quita las semanas completas y retrocede solo lo que sobra.' }),
-    play('mismo-residuo', 'En un ciclo de **7**, el lugar 5 está marcado. Toca **todos** los números que caen en **ese mismo** lugar.', { c: 7, de: 5, nums: [12, 22, 19, 35, 26, 30, 40, 54] },
-      'Caen en el mismo lugar los que dejan residuo 5: 12, 19, 26, 40 y 54. El 22 deja 1; el 35, 0; y el 30, 2.',
-      { hint: 'Divide cada uno entre 7 y mira el residuo.' }),
-    play('ultima-ciclo', 'Estas son las potencias de 7. ¿En qué termina $7^{36}$? Pon el largo del ciclo, el residuo y la cifra.', { base: 7, et: ['largo del ciclo', 'residuo', 'cifra'], metas: ['4', '0', '1'], fichas: ['4', '0', '1', '3', '7', '9', '5'],
-      mira: ['Mira cuándo se repite la última cifra.', 'Divide 36 entre el largo del ciclo.', 'La cifra que ocupa ese lugar en el ciclo; si no sobra nada, la última.'], trampas: { '0:5': 'La quinta ya repite a la primera: el ciclo es más corto.', '2:7': 'Residuo 0 no es el primero: es el último del ciclo.' }, ok: 'El ciclo 7, 9, 3, 1 y el residuo del exponente.' },
-      'Las últimas cifras son 7, 9, 3, 1 y se repiten cada 4. $36 = 9 \\cdot 4$, residuo 0: es la última del ciclo, 1.',
-      { hint: 'Escribe solo las últimas cifras hasta que vuelva la primera.' }),
-    play('coinciden-otra', 'Dos buses salen juntos. Uno vuelve a salir cada **6** minutos y otro cada **8**. ¿A los cuántos minutos salen juntos por **primera** vez otra vez?', { a: 6, b: 8, max: 48, et: 'minutos', na: 'cada 6', nb: 'cada 8' },
-      'El primer múltiplo común de 6 y 8 es 24. A los 48 también coinciden, pero no es la primera vez.',
-      { hint: 'Busca el primer número que esté en la tabla del 6 y en la del 8.' }),
-    play('retrocede-ruleta', 'Una ruleta tiene **8** casillas. Está en la **3** y **retrocede 19** lugares. Lleva la flecha a donde queda.', { r: ['1', '2', '3', '4', '5', '6', '7', '8'], de: 2, pasos: -19 },
-      '$19 = 2 \\cdot 8 + 3$: dos vueltas no cambian nada. Desde la 3 se retroceden 3: 2, 1 y 8.',
-      { hint: 'Quita las vueltas completas. Antes de la 1 está la 8.' }),
-    play('sube-residuo', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: '¿Cuánto **sobra** al dividir **100** entre 7?', r: 2, c: '100 - 14 \\cdot 7', e: { 14: 'Esas son las vueltas.' } },
-      { q: 'Dos luces parpadean **juntas** y siguen cada **9** y cada **12** segundos. ¿A los cuántos vuelven a coincidir por **primera** vez?', r: 36, c: '\\text{mcm}(9, 12)', e: { 21: 'No se suman.', 12: 'A los 12 no le toca a la de 9.' } },
-      { q: '¿En qué **cifra** termina $4^{31}$? (4, 6, 4, 6…)', r: 4, c: '31 = 15 \\cdot 2 + 1, \\; 4^1', e: { 1: 'Ese es el residuo: busca esa cifra en el ciclo.', 6: 'Esa es la segunda del ciclo.' } }] },
-      '$100 = 14 \\cdot 7 + 2$: sobran 2. El primer múltiplo común de 9 y 12 es 36. $31 = 15 \\cdot 2 + 1$: la primera del ciclo, 4.',
-      { hint: 'Residuo para los ciclos, múltiplo común para las coincidencias.' }),
-    sol('Un semáforo repite siempre el mismo ciclo: 40 segundos en verde, 5 en amarillo y 35 en rojo. Si acaba de ponerse en verde, ¿de qué color estará 5 minutos y 30 segundos después?',
-      ['El ciclo completo dura $40 + 5 + 35 =$ [[80]] segundos', 'Cinco minutos y medio son [[330]] segundos', '$330 = 4 \\cdot 80 +$ [[10]]: pasan 4 ciclos completos y sobran 10 segundos', 'A los 10 segundos de empezar el ciclo, el semáforo está en [[verde]]'],
-      ['rojo', 'amarillo', '50'],
-      'Los ciclos completos no cambian nada: solo importa el residuo. Con 10 segundos dentro del ciclo todavía no se acaban los 40 de verde.',
-      'Halla cuánto dura una vuelta completa del semáforo y cuántas vueltas enteras caben en el tiempo que pasa.'),
-    err('En una fila de banderines, las letras repiten el ciclo P, Q, R, S, T y los colores repiten el ciclo azul, blanco, verde. El primer banderín es una P azul. ¿En qué posición está la cuarta P azul de la fila?',
-      ['Las letras se repiten cada 5 banderines y los colores, cada 3', 'Una P azul vuelve a salir cada $5 + 3 = 8$ banderines', 'Las P azules están en las posiciones 1, 9, 17 y 25: la cuarta es la 25'], 1,
-      ['Una P azul vuelve a salir cuando se completan a la vez los dos ciclos: cada MCM(5, 3) = 15 banderines', 'Una P azul vuelve a salir cada $5 \\cdot 3 \\cdot 2 = 30$ banderines', 'Una P azul vuelve a salir cada $5 - 3 = 2$ banderines'],
-      'Las P están en 1, 6, 11, 16…; los azules, en 1, 4, 7, 10, 13, 16… Coinciden por primera vez en el 16: los dos ciclos se completan juntos cada MCM(5, 3) = 15 banderines. Las P azules están en 1, 16, 31 y 46: la cuarta es la 46.',
-      'Escribe dónde caen las P y dónde caen los azules en los primeros 20 banderines. ¿Cada cuánto coinciden?'),
-    opc('Las letras de la palabra CAMINO se escriben una y otra vez, sin espacios: CAMINOCAMINOCAMINO… La letra que ocupa el lugar 100 es:',
-      ['M', 'N', 'C', 'I'], 3,
-      'La palabra tiene 6 letras y $100 = 6 \\cdot 16 + 4$: es la cuarta letra de CAMINO, la I.',
-      'Divide entre el largo de la palabra: el residuo dice qué letra es.'),
-  ]);
-
-  addExam('pu-secuencias', [
-    ['pu-se-1', 'Del término 1 al término n hay n − 1 saltos.',
-      opc('En la sucesión 4, 9, 14, 19, …, el término que ocupa el lugar 12 es:', ['64', '59', '60', '54'], 1,
-        'Sube de 5 en 5 y hasta el lugar 12 hay 11 saltos: $4 + 11 \\cdot 5 = 59$.', 'Cuenta los saltos que hay del primer término al duodécimo.')],
-    ['pu-se-2', 'Las letras siguen patrones de números: cada una es su puesto en el alfabeto.',
-      opc('En la secuencia A, D, G, J, …, la letra que sigue es:', ['K', 'L', 'N', 'M'], 3,
-        'Los puestos son 1, 4, 7, 10: avanzan de 3 en 3. Sigue el 13, la M.', 'Cuenta cuántas letras se salta cada vez.')],
-    ['pu-se-3', 'En un ciclo, el residuo de la división dice el lugar.',
-      opc('La cifra de las unidades de $2^{30}$ es:', ['4', '2', '8', '6'], 0,
-        'Las últimas cifras del 2 se repiten: 2, 4, 8, 6. Como $30 = 4 \\cdot 7 + 2$, es la segunda: 4.', 'Escribe las últimas cifras de las primeras potencias de 2 y busca el ciclo.')],
-  ]);
-});
-;
-//#archivo js/courses/preuda-r-codigos.js
-// Preuniversitario · mundo 8 «Codificación»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setExam }) => {
-  setExam('pu-codigos', 'Codificación', [
-    ['pu-cd-1', 'En la clave César todas las letras se corren lo mismo.',
-      play('rueda-cesar', 'César', { rounds: [{ pair: ['C', 'F'], msg: 'GLD' }] }, 'Clave +3: GLD dice DIA.', { hint: 'Retrocede.' })],
-    ['pu-cd-1', 'Con A = 1, …, Z = 26 (sin Ñ), una palabra vale la suma de sus letras.',
-      play('altura-letras', 'Valor', { rounds: [{ word: 'MAR' }] }, '$13 + 1 + 18 = 32$.', { hint: 'Suma lugares.' })],
-    ['pu-cd-1', 'En binario cada lugar vale el doble del de su derecha.',
-      play('binario-luces', 'Binario', { rounds: [{ n: 25, bits: 5 }] }, '$25 = 16 + 8 + 1$: 11001.', { hint: 'Del más grande.' })],
-    ['pu-cd-2', 'La regla tiene que servir para todos los ejemplos.',
-      play('maquina-regla', 'Regla', { rounds: [{ ex: [[4, 12], [7, 21], [10, 30]], ask: 9, op: 'mul', k: 3 }] }, 'Multiplicar por 3: $9 \\to 27$.', { hint: 'Todos.' })],
-    ['pu-cd-2', 'Si las letras no cambian, el código solo las reordena.',
-      play('permuta-codigo', 'Orden', { rounds: [{ ex: [['TECLA', 'ALCET']], word: 'PIANO' }] }, 'Se escribe al revés: ONAIP.', { hint: 'La primera.' })],
-    ['pu-cd-2', 'Una clave se saca comparando los ejemplos posición por posición.',
-      play('clave-simbolos', 'Clave', { rounds: [{ key: [['P', '#'], ['A', '*'], ['L', '%'], ['O', '@']], ex: [['PALO', '# * % @']], word: 'POLO', mode: 'decode' }] }, '# @ % @ dice POLO.', { hint: 'Compara.' })],
-  ]);
-});
-
-// Mundo 8 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
-  // Ocho juegos con las escenas de la explicación (js/games/codigos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-cd-1', [
-    play('avanza-clave', 'En una clave todas las letras avanzan lo mismo y, después de la Z, sigue la A (sin Ñ). La **W** se cifra con **D**. ¿Cuántos lugares **avanza** la clave?', { de: 'W', a: 'D' },
-      'X, Y, Z son 3 lugares; A, B, C, D son 4 más: la clave avanza 7.',
-      { hint: 'Cuenta desde la letra que sigue a la W y, al llegar a la Z, continúa con la A.' }),
-    play('cifra-palabra', 'La clave **avanza 4** lugares y después de la Z sigue la A (sin Ñ). Cifra la palabra **ZUMO**.', { w: 'ZUMO', metas: ['D', 'Y', 'Q', 'S'], fichas: ['D', 'Y', 'Q', 'S', 'V', 'K', 'E'],
-      mira: ['Después de la Z vienen A, B, C…', 'Avanza cuatro lugares desde la U.', 'Avanza cuatro lugares desde la M.', 'Avanza cuatro lugares desde la O.'], trampas: { '0:V': 'La V está cuatro lugares antes: para cifrar se avanza.', '0:E': 'Contaste un lugar de más: la A es el primero.', '3:K': 'La K está cuatro lugares antes: para cifrar se avanza.' }, ok: 'Cada letra avanza lo mismo.' },
-      'Z → D, dando la vuelta; U → Y; M → Q y O → S: DYQS.',
-      { hint: 'Piensa en el alfabeto como una rueda: al llegar al final se vuelve a empezar.' }),
-    play('descifra-mensaje', 'Para cifrar, cada letra **avanzó 6** lugares (sin Ñ). Llegó el mensaje **IGLK**. ¿Qué palabra era? (sin tildes)', { w: 'IGLK', metas: ['C', 'A', 'F', 'E'], fichas: ['C', 'A', 'F', 'E', 'O', 'M', 'R', 'Q'],
-      mira: ['Devuélvete seis lugares desde la I.', 'Devuélvete seis lugares desde la G.', 'Devuélvete seis lugares desde la L.', 'Devuélvete seis lugares desde la K.'], trampas: { '0:O': 'Avanzaste otra vez: descifrar es devolverse.', '1:M': 'Avanzaste otra vez: descifrar es devolverse.', '2:R': 'Avanzaste otra vez: descifrar es devolverse.', '3:Q': 'Avanzaste otra vez: descifrar es devolverse.' }, ok: 'Descifrar es hacer el camino contrario.' },
-      'Devolviendo 6: I → C, G → A, L → F y K → E. Decía CAFE.',
-      { hint: 'Si al cifrar se avanzó, ¿qué hay que hacer para volver a la palabra?' }),
-    play('suma-letras', 'A = 1, B = 2… Z = 26 (sin Ñ). Pon el valor de cada letra de **TREN** y el total.', { w: 'TREN', metas: ['20', '18', '5', '14', '57'], fichas: ['20', '18', '5', '14', '57', '21', '15', '58', '4'],
-      mira: ['La T es una de las letras de apoyo, de cinco en cinco.', 'La R está dos lugares antes de la T.', 'La E es una de las letras de apoyo.', 'La N está justo antes de la O.', 'Suma los cuatro valores.'], trampas: { '0:21': 'Contaste la Ñ: sin ella la T es la 20.', '2:4': 'Esa es la D.', '3:15': 'Esa es la O: la N va justo antes.', '4:58': 'Revisa la suma: hay uno de más.' }, ok: 'Cada letra vale su lugar.' },
-      '$20 + 18 + 5 + 14 = 57$.',
-      { hint: 'Recuerda las letras de apoyo, de cinco en cinco, y cuenta desde la más cercana.' }),
-    play('letra-falta', 'Con A = 1… Z = 26 (sin Ñ), esta palabra de tres letras vale **34**. Lleva el señalador a la letra que falta.', { w: 'M_L', total: 34, meta: 'I' },
-      'M vale 13 y L vale 12: suman 25. Falta $34 - 25 = 9$, que es la I: MIL.',
-      { hint: 'Suma las letras que se ven y mira cuánto falta para el total.' }),
-    play('prende-focos', 'Los bombillos valen 16, 8, 4, 2 y 1. Prende los que forman el **27**.', { n: 27 },
-      '$16 + 8 + 2 + 1 = 27$: se escribe 1 1 0 1 1.',
-      { hint: 'Empieza por el más grande que quepa y sigue con lo que falta.' }),
-    play('lee-tablero', 'Este tablero muestra un número. Pon **qué número** es y cómo queda el tablero con el número que **sigue**.', { b: '11100', et: ['número', 'el que sigue'], metas: ['28', '11101'], fichas: ['28', '11101', '7', '3', '11200', '11110'],
-      mira: ['Suma lo que valen los bombillos prendidos.', 'Al que sigue le falta 1: ¿qué bombillo vale 1?'], trampas: { '0:7': 'Leíste de derecha a izquierda: el 16 está a la izquierda.', '0:3': 'No se cuentan los prendidos: se suma lo que valen.', '1:11200': 'Un bombillo solo puede estar apagado (0) o prendido (1).', '1:11110': 'Prendiste el de 2: sumaste 2, no 1.' }, ok: 'Prendido vale; apagado no.' },
-      '$16 + 8 + 4 = 28$. Para el 29 se prende el de 1: 1 1 1 0 1.',
-      { hint: 'Suma lo que valen los prendidos. Para el que sigue hay que sumar uno.' }),
-    play('sube-codigo', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'En una clave la **D** se cifra con **M** (sin Ñ). ¿Cuántos lugares **avanza**?', r: 9, c: '13 - 4', e: { 10: 'La D no se cuenta: es el punto de partida.', 17: 'Ese es el camino contrario: la clave avanza.' } },
-      { q: 'Con A = 1… Z = 26 (sin Ñ), ¿cuánto vale **RIO**?', r: 42, c: '18 + 9 + 15', e: { 44: 'Contaste la Ñ: sin ella la R y la O valen uno menos.' } },
-      { q: 'Los bombillos valen 16, 8, 4, 2 y 1. ¿Qué número es **1 0 0 0 1** (1 prendido, 0 apagado)?', r: 17, c: '16 + 1', e: { 2: 'No se cuentan los prendidos: se suma lo que valen.' } }] },
-      'De D a M hay $13 - 4 = 9$ lugares; RIO vale $18 + 9 + 15 = 42$; y 1 0 0 0 1 es $16 + 1 = 17$.',
-      { hint: 'Cuenta lugares, suma valores de letras o suma bombillos prendidos.' }),
-    sol('En una clave, cada letra se reemplaza por la que está 3 puestos después en el alfabeto (de 26 letras, sin Ñ); después de la Z se vuelve a empezar por la A. ¿Cómo se cifra la palabra ZONA?',
-      ['La Z está al final: al avanzar 3 se da la vuelta y queda [[C]]', 'La O avanza 3 puestos: [[R]]', 'La N pasa a [[Q]] y la A pasa a [[D]]', 'ZONA se cifra como [[CRQD]]'],
-      ['W', 'CRQC', 'X'],
-      'El alfabeto se trata como una rueda: después de la Z siguen A, B, C. Cada letra avanza lo mismo, sin importar dónde esté.',
-      'Escribe el final del alfabeto, …X, Y, Z, y continúa con el comienzo, como si fuera un círculo.'),
-    err('En un tablero de 5 bombillos, cada bombillo vale, de izquierda a derecha, 16, 8, 4, 2 y 1. Un bombillo encendido se escribe 1 y uno apagado, 0. ¿Qué número representa el tablero 1 0 1 0 1?',
-      ['Están encendidos el primero, el tercero y el quinto bombillo', 'Sus valores son 16, 4 y 1', 'El número es $16 \\cdot 4 \\cdot 1 = 64$'], 2,
-      ['El número es $16 + 4 + 1 = 21$', 'El número es $1 + 3 + 5 = 9$', 'El número es diez mil ciento uno'],
-      'Los valores de los bombillos encendidos se suman: $16 + 4 + 1 = 21$. Así se escriben los números en binario.',
-      'Cada bombillo encendido aporta su valor al total. ¿Los aportes se juntan sumando o multiplicando?'),
-    opc('Si A = 1, B = 2, C = 3 y así sucesivamente hasta Z = 26 (alfabeto sin Ñ), el valor de la palabra CASA, que se obtiene sumando los valores de sus letras, es:',
-      ['23', '24', '25', '22'], 1,
-      'C vale 3, A vale 1 y S vale 19: $3 + 1 + 19 + 1 = 24$.',
-      'Cuenta con cuidado el puesto de la S: es la letra que más pesa.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/codigos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-cd-2', [
-    play('regla-todos', 'Una máquina hizo estas tres cosas. Toca **todas** las reglas que sirven con los tres ejemplos.', { e: [[2, 8], [5, 20], [7, 28]], casos: [{ t: 'sumar 6', f: n => n + 6 }, { t: 'multiplicar por 4', f: n => 4 * n }, { t: 'por 3 y sumar 2', f: n => 3 * n + 2 }, { t: 'duplicar y volver a duplicar', f: n => 2 * (2 * n) }] },
-      'Multiplicar por 4 funciona siempre, y duplicar dos veces es lo mismo. Sumar 6 y «por 3 y sumar 2» solo sirven con el 2.',
-      { hint: 'Prueba cada regla con el 5 y con el 7, no solo con el 2.' }),
-    play('maquina-cifras', 'La máquina hace una cuenta con las dos **cifras** de cada número. Pon qué hace y qué entrega con el **84**.', { e: [['72', '5'], ['58', '3'], ['90', '9']], ask: 84, metas: ['restar', '4'], fichas: ['restar', '4', 'sumar', 'multiplicar', '12', '32'],
-      mira: ['Prueba con 72 y después con 58: la cuenta debe servir con todos.', 'Haz esa cuenta con el 8 y el 4.'], trampas: { '0:sumar': 'Sumar sirve con 90, pero 7 + 2 no es 5.', '0:multiplicar': '7 por 2 no es 5.', '1:12': 'Esa es la suma de 8 y 4.', '1:32': 'Esa es 8 por 4.' }, ok: 'A la cifra mayor se le resta la menor.' },
-      '$7 - 2 = 5$, $8 - 5 = 3$ y $9 - 0 = 9$: se resta la menor de la mayor. Con 84, $8 - 4 = 4$.',
-      { hint: 'Con el 90 sirven varias cuentas; con el 72 solo una.' }),
-    play('maquina-dos-pasos', 'La máquina multiplica por un número y después **suma** otro, siempre los mismos. Pon los dos números y lo que entrega con el **10**.', { e: [['2', '9'], ['4', '17'], ['7', '29']], et: ['por', 'más', 'con 10'], metas: ['4', '1', '41'], fichas: ['4', '1', '41', '3', '3', '7', '17', '40'],
-      mira: ['De 2 a 4 la entrada sube 2 y la salida sube 8. ¿Cuánto sube por cada 1?', 'Multiplica 2 por ese número: ¿cuánto falta para 9?', 'Usa los dos números con el 10.'], trampas: { '0:3': 'Por 3, de 2 a 4 la salida subiría 6, y sube 8.', '1:3': 'Con 4 · 2 ya son 8: hasta 9 falta menos.', '2:17': 'Sumar 7 solo sirve con el 2.', '2:40': 'Falta sumar.' }, ok: 'Sirve con los tres ejemplos.' },
-      '$4 \\cdot 2 + 1 = 9$, $4 \\cdot 4 + 1 = 17$ y $4 \\cdot 7 + 1 = 29$. Con 10: $4 \\cdot 10 + 1 = 41$.',
-      { hint: 'Propón una regla con el primer ejemplo y pruébala con los otros dos.' }),
-    play('puestos-cambian', 'El código solo cambia las letras de **puesto**. Escribe **TIGRE** en ese código.', { de: 'CAMPO', a: 'OCAMP', ask: 'TIGRE', rot: 'con la misma regla', metas: ['E', 'T', 'I', 'G', 'R'], fichas: ['T', 'I', 'G', 'R', 'E'],
-      mira: ['Mira a qué puesto fue la O de CAMPO.', 'La primera letra pasó al segundo puesto.', 'La segunda letra pasó al tercer puesto.', 'La tercera letra pasó al cuarto puesto.', 'La cuarta letra pasó al último puesto.'], ok: 'La última pasa al principio y las demás se corren.' },
-      'La última letra pasa al principio y las demás se corren un puesto: TIGRE queda ETIGR.',
-      { hint: 'Numera los puestos de CAMPO y mira dónde quedó cada uno.' }),
-    play('devuelve-puestos', 'Con este código llegó el mensaje **OLARC**. Devuelve cada letra a su puesto y escribe la palabra.', { de: 'RUBIA', a: 'UBIAR', ask: 'OLARC', rot: 'mensaje cifrado', metas: ['C', 'O', 'L', 'A', 'R'], fichas: ['O', 'L', 'A', 'R', 'C'],
-      mira: ['Al cifrar, la primera letra pasó al último puesto: devuélvela.', 'La que llegó primera estaba de segunda.', 'La que llegó segunda estaba de tercera.', 'La que llegó tercera estaba de cuarta.', 'La que llegó cuarta estaba de última.'], ok: 'Descifrar es devolver cada letra a su puesto.' },
-      'Al cifrar, la primera letra pasa al final. Para descifrar, la última vuelve al principio: COLAR.',
-      { hint: 'Mira a dónde fue la R de RUBIA. El mensaje se lee haciendo el cambio contrario.' }),
-    play('avances-crecen', 'En este código las letras no avanzan lo mismo (sin Ñ). Pon **cuánto avanza** cada puesto y cifra **MAL**.', { de: 'RED', a: 'TIJ', ask: 'MAL', metas: ['+2', '+4', '+6', 'O', 'E', 'R'], fichas: ['+2', '+4', '+6', 'O', 'E', 'R', '+3', 'C', 'N'],
-      mira: ['De R a T, ¿cuántos lugares hay?', 'De E a I, ¿cuántos lugares hay?', 'De D a J, ¿cuántos lugares hay?', 'La M avanza lo del primer puesto.', 'La A avanza lo del segundo puesto.', 'La L avanza lo del tercer puesto.'], trampas: { '1:+3': 'De E a I: F, G, H, I son cuatro.', '4:C': 'Con 2 llega a C: el segundo puesto avanza 4.', '5:N': 'Con 2 llega a N: el tercer puesto avanza 6.' }, ok: 'Los avances también siguen una regla: 2, 4, 6.' },
-      'R → T avanza 2, E → I avanza 4 y D → J avanza 6. Entonces M → O, A → E y L → R: OER.',
-      { hint: 'Cuenta los lugares de cada letra del ejemplo, una por una.' }),
-    play('clave-comparada', 'Estas dos palabras cifradas son **OSO** y **SOL**, pero no se sabe cuál es cuál. Cada símbolo es siempre la misma letra. Escribe **LOS**.', { filas: ['●◆▲', '◆●◆'], ask: 'LOS', metas: ['▲', '◆', '●'], fichas: ['●', '■', '▲', '◆', '★'],
-      mira: ['La L es la única letra que sale en una sola palabra.', 'La O es la que se repite en OSO.', 'La S está en las dos palabras y no se repite en ninguna.'], ok: 'La palabra con un símbolo repetido solo puede ser OSO.' },
-      'Solo OSO repite letra: es ◆●◆. Entonces O es ◆ y S es ●; en ●◆▲, la L es ▲. LOS se escribe ▲◆●.',
-      { hint: 'Una de las dos palabras repite una letra. ¿Cuál de las cifradas repite un símbolo?' }),
-    play('sube-regla', 'Sube al número que entrega la máquina o la clave. Puedes fallar **una** vez.', { tiros: [
-      { q: '4 → 13, 6 → 17, 9 → 23: se **duplica** y se suma siempre lo mismo. ¿Qué entrega con **12**?', r: 29, c: '2 \\cdot 12 + 5', e: { 21: 'Sumar 9 solo sirve con el 4.', 24: 'Falta sumar.' } },
-      { q: '12 → 6, 31 → 8, 40 → 8: se suman las **cifras** y con esa suma se hace **otra cuenta**, siempre la misma. ¿Qué entrega con **57**?', r: 24, c: '2 \\cdot (5 + 7)', e: { 12: 'Falta un paso: 1 + 2 son 3, no 6.', 15: 'Sumar 3 a la suma sirve con el 12, pero el 31 daría 7.' } },
-      { q: 'En una clave las letras avanzan **1, 3, 5, 7…** ¿Cuánto avanza la **sexta**?', r: 11, c: '1 + 5 \\cdot 2', e: { 9: 'Esa es la quinta.', 13: 'Esa es la séptima.' } }] },
-      '$2 \\cdot 12 + 5 = 29$; el doble de $5 + 7$ es 24; y los avances son 1, 3, 5, 7, 9 y 11.',
-      { hint: 'Propón una regla con el primer ejemplo y compruébala con los demás.' }),
-    sol('En cierto código, la palabra GATO se escribe HBUP y la palabra LUNA se escribe MVOB. ¿Cómo se escribe PERA en ese código? ¿Qué palabra se cifró como DJOF?',
-      ['G pasa a H y A pasa a B: cada letra avanza [[1]] puesto', 'PERA se escribe [[QFSB]]', 'Para leer un mensaje cifrado se hace lo contrario: se [[retrocede]] un puesto', 'DJOF es la palabra [[CINE]]'],
-      ['avanza', 'EKPG', 'OFSB'],
-      'La regla se descubre comparando letra por letra un ejemplo y se comprueba con el otro. Cifrar y descifrar son operaciones contrarias.',
-      'Compara la primera letra de GATO con la primera de HBUP. ¿Pasa lo mismo con todas?'),
-    err('Una máquina transforma números así: $3 \\to 10$, $5 \\to 16$ y $8 \\to 25$. ¿Qué número entrega si entra el 12?',
-      ['Con $3 \\to 10$ se propone la regla «sumar 7»', 'Se comprueba con otro ejemplo: $5 + 7 = 12$, que no es 16. Esa regla no sirve', 'Se prueba «multiplicar por 3 y sumar 1»: $3 \\cdot 3 + 1 = 10$, $3 \\cdot 5 + 1 = 16$ y $3 \\cdot 8 + 1 = 25$', 'Entonces $12 \\to 12 + 7 = 19$'], 3,
-      ['Entonces $12 \\to 3 \\cdot 12 + 1 = 37$', 'Entonces $12 \\to 3 \\cdot 12 = 36$', 'Entonces $12 \\to 2 \\cdot 12 + 1 = 25$'],
-      'La regla que pasó todas las pruebas es «multiplicar por 3 y sumar 1»: con 12 da 37. El último paso usó la regla que ya se había descartado.',
-      'Una regla solo sirve si funciona con todos los ejemplos. ¿Cuál fue la que funcionó?'),
-    opc('En un código numérico, $21 \\to 3$, $45 \\to 9$, $63 \\to 9$ y $80 \\to 8$. Siguiendo la misma regla, el 76 se transforma en:',
-      ['42', '1', '13', '67'], 2,
-      'La regla suma las cifras: $2 + 1 = 3$, $4 + 5 = 9$, $6 + 3 = 9$, $8 + 0 = 8$. Con 76: $7 + 6 = 13$.',
-      'Prueba una regla con el primer ejemplo y compruébala con todos los demás antes de usarla.'),
-  ]);
-
-  addExam('pu-codigos', [
-    ['pu-cd-1', 'Para descifrar se hace el movimiento contrario al de cifrar.',
-      opc('En una clave, cada letra se cambia por la anterior en el alfabeto. La palabra que se cifra como RNK es:', ['QMJ', 'TPM', 'SOL', 'SAL'], 2,
-        'Para descifrar se avanza una letra: R → S, N → O, K → L.', 'Si cifrar es retroceder una letra, descifrar es avanzarla.')],
-    ['pu-cd-2', 'La regla se saca de un ejemplo y se comprueba con los demás.',
-      opc('En un código, CASA se escribe ASAC y PERA se escribe AREP. Con la misma regla, LIMA se escribe:', ['MILA', 'ALIM', 'LAMI', 'AMIL'], 3,
-        'La palabra se escribe al revés: LIMA queda AMIL.', 'Compara la primera letra de cada palabra con la última de su código.')],
-  ]);
-});
-;
 //#archivo js/courses/preuda-r-graficas.js
 // Preuniversitario · mundo 9 «Tablas y gráficas»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
 PU_JUEGOS.push(({ setExam }) => {
@@ -6051,7 +5504,7 @@ PI_MUNDOS.push((() => {
       'El exterior vale los dos interiores lejanos: $60^\\circ + 55^\\circ = 115^\\circ$.', 'El exterior es la suma de los dos ángulos que no lo tocan.'),
     x('tercer-lado', 'Dos varillas miden **7** y **4**. ¿Entre qué números enteros puede medir la tercera para que el triángulo **cierre**?', { a: 7, b: 4, max: 14 },
       'Más que la resta, 3, y menos que la suma, 11: de 4 a 10.', 'Si es muy corta no alcanza; si es muy larga, las otras dos no llegan.'),
-    x('cierran-o-no', 'Toca **todas** las ternas que forman un triángulo.', { casos: [{ t: '5, 6 y 10', si: true }, { t: '3, 4 y 8' }, { t: '7, 7 y 13', si: true }, { t: '2, 5 y 7' }, { t: '9, 4 y 6', si: true }], no: 'Alguna de las marcadas no cierra: compara el lado mayor con la suma de los otros.', falta: 'Falta alguna que sí cierra.', ok: 'En todas, el mayor es menor que la suma.' },
+    x('cierran-o-no', 'Toca **todas** las ternas que forman un triángulo.', { casos: [{ t: '5, 6 y 10', si: true }, { t: '3, 4 y 8', no: 'En 3, 4 y 8 las dos cortas suman 7: no alcanzan a la de 8.' }, { t: '7, 7 y 13', si: true }, { t: '2, 5 y 7', no: 'En 2, 5 y 7 las dos cortas apenas igualan a la larga: queda una línea.' }, { t: '9, 4 y 6', si: true }], no: 'Alguna de las marcadas no cierra: compara el lado mayor con la suma de los otros.', falta: 'Falta alguna que sí cierra.', ok: 'En todas, el mayor es menor que la suma.' },
       '$5 + 6 > 10$, $7 + 7 > 13$ y $4 + 6 > 9$. En 2, 5 y 7 la suma apenas iguala: queda una línea.', 'Basta con comparar el lado mayor con la suma de los otros dos.'),
     x('lanza-angulo', 'El faro gira desde la derecha. Dale el ángulo que se pide y suéltalo. Puedes fallar **una** vez.', { tiros: [
       { q: 'El vecino de $140^\\circ$ sobre una recta', r: 40, c: '180^\\circ - 140^\\circ', e: { 140: 'Ese es el dato: falta lo que completa la recta.' } },
@@ -6166,7 +5619,7 @@ PI_MUNDOS.push((() => {
     ['Comprobar', 'El valor hallado se lleva al enunciado.']), [
     x('misma-x', 'Lina tiene **x** láminas. Omar tiene el triple que Lina, Paz 8 menos que Omar y Rita la mitad de Paz. Escribe cada cantidad.', { et: ['Omar', 'Paz', 'Rita'], metas: ['3x', '3x − 8', '(3x − 8)/2'], fichas: ['3x', '3x − 8', '(3x − 8)/2', '8 − 3x', '3x/2 − 8', 'x + 3', '3(x − 8)'], mira: ['El triple es tres veces.', 'A las de Omar quítales 8.', 'La mitad de todo lo de Paz.'], trampas: { '0:x + 3': 'Eso es tener 3 más.', '1:8 − 3x': 'Al revés: se le quitan 8 a Omar.', '1:3(x − 8)': 'Los 8 se quitan después de triplicar.', '2:3x/2 − 8': 'También los 8 se parten por la mitad.' }, ok: 'Todas con la misma x.' },
       'Triple: $3x$; 8 menos: $3x - 8$; mitad de eso: $\\tfrac{3x - 8}{2}$.', 'Escribe cada persona a partir de la anterior, sin cambiar de letra.'),
-    x('sigue-equilibrada', 'La balanza está derecha: $5x + 4 = 3x + 18$. Toca **todos** los cambios que la dejan derecha.', { casos: [{ t: 'quitar 3x de cada lado', si: true }, { t: 'quitar 4 de la izquierda y sumar 4 a la derecha' }, { t: 'sumar 10 a cada lado', si: true }, { t: 'partir cada lado por la mitad', si: true }, { t: 'quitar 5x de la izquierda y 3x de la derecha' }], no: 'Alguno de los marcados no hace lo mismo en los dos lados.', falta: 'Falta otro: sirve todo lo que se les haga a los dos lados por igual.', ok: 'Lo mismo a los dos lados: sigue derecha.' },
+    x('sigue-equilibrada', 'La balanza está derecha: $5x + 4 = 3x + 18$. Toca **todos** los cambios que la dejan derecha.', { casos: [{ t: 'quitar 3x de cada lado', si: true }, { t: 'quitar 4 de la izquierda y sumar 4 a la derecha', no: 'Quitar en un lado y sumar en el otro no es hacer lo mismo.' }, { t: 'sumar 10 a cada lado', si: true }, { t: 'partir cada lado por la mitad', si: true }, { t: 'quitar 5x de la izquierda y 3x de la derecha', no: 'Se quitan cantidades distintas en cada lado.' }], no: 'Alguno de los marcados no hace lo mismo en los dos lados.', falta: 'Falta otro: sirve todo lo que se les haga a los dos lados por igual.', ok: 'Lo mismo a los dos lados: sigue derecha.' },
       'Quitar $3x$, sumar 10 o partir por la mitad, en los dos lados a la vez, la deja derecha.', 'Compara lo que se hace en un plato con lo que se hace en el otro.'),
     x('ancho-del-marco', 'El **largo** de una huerta es **1 menos que el doble del ancho**, y su borde mide **34**. Mueve el ancho.', { k: 2, q: 1, P: 34, max: 10 },
       'Ancho $a$ y largo $2a - 1$: $2(3a - 1) = 34$ da $a = 6$ y el largo, 11.', 'La mitad del borde es un ancho y un largo juntos.'),
@@ -6199,7 +5652,7 @@ PI_MUNDOS.push((() => {
       'El 6 divide a 18 y a 24, y no hay uno mayor: $6(3x + 4)$.', 'Busca el número más grande que divida a los dos.'),
     x('cuadrado-falta', 'Faltan cuadritos para completar el cuadrado: $x^2 + 6x + ?$', { a: 3, max: 14 },
       'Las tiras de $6x$ se parten en dos grupos de $3x$: la esquina es de 3 por 3, nueve.', 'La esquina mide lo mismo que el ancho de cada grupo de tiras.'),
-    x('equivalen-no', 'Toca **todas** las que equivalen a $4(x + 3)$.', { casos: [{ t: '4x + 12', si: true }, { t: '4x + 3' }, { t: '2(2x + 6)', si: true }, { t: '4x + 7' }, { t: '12 + 4x', si: true }], no: 'Alguna de las marcadas da otro número: pruébala con x = 1.', falta: 'Falta otra que da lo mismo: prueba con x = 1.', ok: 'Con x = 1 todas valen 16.' },
+    x('equivalen-no', 'Toca **todas** las que equivalen a $4(x + 3)$.', { casos: [{ t: '4x + 12', si: true }, { t: '4x + 3', no: 'Con x = 1 da 7, y la de arriba, 16: falta multiplicar el 3.' }, { t: '2(2x + 6)', si: true }, { t: '4x + 7', no: 'Con x = 1 da 11, y la de arriba, 16: el 3 se multiplica, no se suma.' }, { t: '12 + 4x', si: true }], no: 'Alguna de las marcadas da otro número: pruébala con x = 1.', falta: 'Falta otra que da lo mismo: prueba con x = 1.', ok: 'Con x = 1 todas valen 16.' },
       'El 4 multiplica a los dos: $4x + 12$, que también es $2(2x + 6)$.', 'Prueba cada una con un número cualquiera.'),
     x('tabla-lineal', 'Una máquina hace $3x - 2$. Pon lo que sale con 4, lo que entró si salió 34 y lo que sale con 0.', { ex: 'entra', ey: 'sale', t: [[1, 1], [4, null], [7, 19]], et: ['con 4', 'salió 34', 'con 0'], metas: ['10', '12', '−2'], fichas: ['10', '12', '−2', '14', '2', '100'], mira: ['Triplica y quita 2.', 'Devuélvete: suma 2 y reparte en 3.', 'Triplicar 0 da 0: falta quitar.'], trampas: { '0:14': 'Se quitan 2, no se suman.', '1:100': 'Eso es aplicarla de nuevo: aquí se devuelve.', '2:2': 'Quitar 2 a cero da un negativo.' }, ok: 'Ida y vuelta.' },
       '$3 \\cdot 4 - 2 = 10$; $(34 + 2) \\div 3 = 12$; con 0 da $-2$.', 'De ida se triplica y se quita; de vuelta, al revés.'),
@@ -6280,6 +5733,105 @@ PI_MUNDOS.push((() => {
     ['icf-ma-ecuaciones-4', 'El borde entra o no según el signo.', play('intervalo-solucion', 'Pinta la solución de la desigualdad', { rounds: [{ tex: '3x - 2 \\ge 4', f: x => 3 * x - 2 >= 4, lo: -3, hi: 7 }] }, '$3x \\ge 6$: $x \\ge 2$, con el 2.', { hint: 'Despeja y prueba si el borde cumple.' })],
     ['icf-ma-ecuaciones-4', 'Entre dos números: dos bordes.', play('dibuja-intervalo', 'Dibuja en la recta los números que cumplen $-1 \\le x < 4$', { min: -4, max: 8, a: -1, b: 4, aClosed: true, bClosed: false, set: '−1 ≤ x < 4' }, 'El $-1$ entra y el 4 no.', { hint: 'Mira qué signo lleva cada borde.' })],
     ['icf-ma-ecuaciones-4', 'Como máximo: menor o igual.', opc('Con 50 mil se compran empanadas de 3 mil y un jugo de 8 mil. Como máximo se compran:', ['14 empanadas', '16 empanadas', '13 empanadas', '15 empanadas'], 0, '$42 \\div 3 = 14$, justo.', 'Quita el jugo y reparte lo que queda.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-ma-argumenta.js
+// Preicfes · Matemáticas · mundo 8 «Validar Procedimientos» (spec 2026-11-25-preicfes-estructura). Números y contextos propios.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = ICF;
+
+  const l1 = leccion('icf-ma-argumenta-1', '¿Es correcto el razonamiento?', guion(
+    ['Del «si… entonces»', 'Si pasa lo primero, pasa lo segundo. No va al revés.'],
+    ['Al revés y negado', '«Si no pasa lo segundo, no pasó lo primero» sí vale.'],
+    ['Basta o hace falta', 'Una condición puede bastar o solo ser necesaria.'],
+    ['Paso a paso', 'Un procedimiento vale si cada paso se puede justificar.']), [
+    x('deduce-seguro', '«**Si un número termina en 0, es múltiplo de 5**». ¿Qué se concluye de cada dato?', { et: ['termina en 0', 'no es de 5', 'es de 5', 'no termina en 0'], metas: ['es de 5', 'no termina en 0', 'no se sabe', 'no se sabe'], fichas: ['es de 5', 'no termina en 0', 'no se sabe', 'no se sabe', 'termina en 0', 'no es de 5'], mira: ['Si pasa lo primero, pasa lo segundo.', 'Si terminara en 0 sería de 5.', 'Piensa en el 15 y en el 20.', 'Piensa en el 15 y en el 12.'], trampas: { '1:no se sabe': 'Sí se sabe: si terminara en 0, sería de 5.', '2:termina en 0': 'La frase no va al revés: el 15 es de 5.', '3:no es de 5': 'El 15 no termina en 0 y es de 5.' }, ok: 'Solo sirven lo primero y lo contrario de lo segundo.' },
+      'Terminar en 0 asegura ser de 5 y no ser de 5 asegura no terminar en 0; lo demás queda abierto.', 'Busca un número que cumpla el dato y mira si obliga a lo otro.'),
+    x('basta-falta', 'Ser lo **primero**, ¿**basta** o solo **hace falta** para lo segundo?', { et: ['múltiplo de 6 … para par', 'par … para múltiplo de 6', '3 lados iguales … para isósceles'], metas: ['basta', 'hace falta', 'basta'], fichas: ['basta', 'hace falta', 'basta', 'hace falta', 'hace falta'], mira: ['¿Todo múltiplo de 6 es par?', 'El 4 es par: ¿es múltiplo de 6?', '¿Todo triángulo con tres lados iguales tiene dos iguales?'], ok: 'El más exigente basta; el menos exigente hace falta.' },
+      'Todo múltiplo de 6 es par; un par puede no ser de 6; y con tres lados iguales ya hay dos.', 'Busca un caso que cumpla lo primero y no lo segundo: si no hay, basta.'),
+    x('cadena-si', 'Con estas tres cosas, ¿qué se concluye?', { da: ['Si la caja es cúbica, sus aristas son iguales.', 'Si sus aristas son iguales, sus caras son cuadradas.', 'Esta caja tiene una cara que no es cuadrada.'], et: ['¿aristas iguales?', '¿cúbica?'], metas: ['no son iguales', 'no es cúbica'], fichas: ['no son iguales', 'no es cúbica', 'son iguales', 'es cúbica', 'no se sabe', 'no se sabe'], mira: ['Si fueran iguales, todas sus caras serían cuadradas.', 'Si fuera cúbica, sus aristas serían iguales.'], trampas: { '0:no se sabe': 'Sí se sabe: mira la segunda frase al revés y negada.', '1:no se sabe': 'Sí se sabe: mira la primera frase al revés y negada.' }, ok: 'Se devuelve la cadena negando.' },
+      'Una cara no cuadrada niega las aristas iguales, y eso niega que sea cúbica.', 'Empieza por el último dato y devuélvete por la cadena.'),
+    x('revisa-regla', 'Regla: «**si el producto está en oferta, tiene etiqueta amarilla**». De cada producto se sabe **una** cosa. Toca **solo** los que hay que revisar.', { cartas: [{ t: 'está en oferta', si: true }, { t: 'no está en oferta', no: 'La regla no dice nada de los que no están en oferta.' }, { t: 'etiqueta amarilla', no: 'Con etiqueta amarilla no rompe la regla.' }, { t: 'etiqueta blanca', si: true }], falta: 'Falta otro que podría estar rompiendo la regla.', ok: 'Solo esos dos podrían romperla.' },
+      'La oferta sin amarilla la rompe: se revisan los de oferta y los de etiqueta blanca.', 'Pregunta qué combinación rompería la regla.'),
+    x('voltea-niega', 'Arma el **contrarrecíproco** de esta frase.', { frase: '«si un número es impar, su cuadrado es impar»', metas: ['su cuadrado es par', 'el número es par'], fichas: ['su cuadrado es par', 'el número es par', 'el número es impar', 'su cuadrado es impar'], mira: ['El contrarrecíproco empieza con la negación de la segunda parte.', 'Termina con la negación de la primera parte.'], trampas: { '0:el número es par': 'Falta cambiarlas de lugar.', '0:su cuadrado es impar': 'Cambiaste de lugar, pero falta negar.', '1:el número es impar': 'Falta negar la primera parte.' }, ok: 'Negar las dos y voltear.' },
+      '«Si su cuadrado es par, el número es par» dice lo mismo que la frase.', 'Se niegan las dos partes y se cambian de lugar.'),
+    x('vale-o-no', 'Para hallar el **20 % de descuento** de 45 mil, toca **todos** los procedimientos que dan el precio final.', { casos: [{ t: '45 por 0.8', si: true }, { t: '45 menos 20', no: 'Eso quita 20 mil, no el 20 %.' }, { t: '45 menos 45 por 0.2', si: true }, { t: '45 entre 1.2', no: 'Eso deshace un aumento del 20 %: da 37.5.' }, { t: '4 por la quinta parte de 45', si: true }], falta: 'Falta otro que también da 36: calcula cada uno.', ok: 'Los tres dan 36.' },
+      'Los tres dan 36: $45 \\cdot 0.8$, $45 - 9$ y $4 \\cdot 9$.', 'Calcula cada procedimiento y compáralo con el precio final.'),
+    x('sube-regla-si', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Todo el que juega ajedrez juega damas. Juegan ajedrez **14** y damas **33**. ¿Cuántos juegan damas y **no** ajedrez?', r: 19, c: '33 - 14', e: { 14: 'Esos juegan las dos.' } },
+      { q: 'Regla: si la carta es par, atrás es roja. Se ven **5** pares, **4** impares, **3** rojas y **6** azules, de cartas distintas. ¿Cuántas hay que **voltear**?', r: 11, c: '5 + 6', e: { 5: 'Hay otras que también podrían romperla.', 8: 'Las rojas no pueden romperla.' } },
+      { q: 'De 9 cajas, «todas están llenas» es **falsa**. ¿Cuántas vacías hay, **como mínimo**?', r: 1, c: '\\text{basta } 1', e: { 9: 'Para tumbarla basta menos.' } }] },
+      '$33 - 14 = 19$; pares y azules, 11; con una vacía basta.', 'Piensa quiénes pueden romper la regla y quiénes no.'),
+    sol('Alguien dice: «Si sumo dos impares, el resultado es par». Justifícalo.', ['Un impar se escribe $2a +$ [[1]]', 'Dos impares suman $2a + 2b +$ [[2]]', 'Eso es dos veces $(a + b + 1)$: es [[par]]'], ['0', 'impar', '3'], 'Los dos sueltos hacen pareja: $2(a + b + 1)$ es par.', 'Escribe cada impar como un par más uno.'),
+    err('«Como 20 es múltiplo de 4, todo múltiplo de 5 es múltiplo de 4». Revisa el razonamiento.', ['20 es múltiplo de 5', '20 es múltiplo de 4', 'Entonces todo múltiplo de 5 es múltiplo de 4'], 2, ['Entonces algún múltiplo de 5 es múltiplo de 4', 'Entonces ningún múltiplo de 5 es múltiplo de 4', 'Entonces todo múltiplo de 4 es múltiplo de 5'], 'Un caso muestra que hay alguno, no que todos: 15 no es múltiplo de 4.', '¿Un solo caso alcanza para decir «todo»?'),
+    opc('«Si un cuadrilátero es rectángulo, sus diagonales son iguales». De un cuadrilátero con diagonales iguales se puede afirmar que:', ['Es un rectángulo', 'No es un rectángulo', 'Es un cuadrado', 'No se sabe si es rectángulo'], 3, 'La frase no va al revés: hay trapecios con diagonales iguales.', 'Fíjate en qué dirección va la frase.'),
+  ]);
+
+  const l2 = leccion('icf-ma-argumenta-2', 'Contraejemplos', guion(
+    ['Uno basta', 'Una afirmación con «todos» cae con un solo caso que la incumpla.'],
+    ['Cumplir una parte no sirve', 'El contraejemplo debe cumplir la condición y fallar la conclusión.'],
+    ['Muchos casos no prueban', 'Mil ejemplos a favor no demuestran un «todos».'],
+    ['Siempre o a veces', 'Para decir «siempre» hace falta una razón general.']), [
+    x('tumba-todos', '«**Todos los múltiplos de 3 son múltiplos de 6**». Toca **todos** los números que la tumban.', { a: 3, b: 6, nums: [9, 12, 15, 18, 20, 21] },
+      '9, 15 y 21 son múltiplos de 3 y no de 6. El 20 ni siquiera es de 3: no la tumba.', 'El que la tumba debe ser múltiplo de 3 y no serlo de 6.'),
+    x('siempre-par', 'n es un número **par** cualquiera. ¿Cuáles son **siempre** impares? Toca todas.', { casos: [{ t: 'n + 1', si: true }, { t: 'n · n', no: 'Par por par es par: 2 · 2 = 4.' }, { t: '3n + 5', si: true }, { t: 'n + n', no: 'Dos pares suman par: 2 + 2 = 4.' }, { t: 'n · n + 1', si: true }], falta: 'Falta otra: mira si cada pedazo es par o impar.', ok: 'Par más impar da impar.' },
+      '$n + 1$, $3n + 5$ y $n^2 + 1$ son par más impar.', 'Mira si cada pedazo de la suma es par o impar.'),
+    x('siempre-multiplo', 'Un número es múltiplo de **18**, pero no se sabe cuál. ¿Qué es cierto **siempre**? Toca todas.', { casos: [{ t: 'es múltiplo de 9', si: true }, { t: 'es múltiplo de 4', no: 'El 18 es múltiplo de 18 y no de 4.' }, { t: 'es múltiplo de 6', si: true }, { t: 'es múltiplo de 36', no: 'El 18 es múltiplo de 18 y no de 36.' }, { t: 'es divisible entre 2', si: true }], falta: 'Falta otra: los divisores de 18 dividen a todos sus múltiplos.', ok: 'Todo divisor de 18 divide a sus múltiplos.' },
+      '9, 6 y 2 dividen a 18, así que dividen a sus múltiplos; el propio 18 tumba las otras.', 'Prueba con el más pequeño: si falla ahí, no es siempre.'),
+    x('regla-todos', 'Una máquina hizo estas tres cosas. Toca **todas** las reglas que sirven con los tres ejemplos.', { e: [[3, 9], [4, 12], [6, 18]], casos: [{ t: 'sumar 6', f: n => n + 6 }, { t: 'multiplicar por 3', f: n => 3 * n }, { t: 'doblar y sumar el número', f: n => 2 * n + n }, { t: 'por 4 y restar 3', f: n => 4 * n - 3 }] },
+      'Por 3 sirve siempre, y doblar y sumar el número también es por 3. Las otras aciertan solo con el 3.', 'Una regla cae si falla en un solo ejemplo.'),
+    x('dato-exagerado', 'El mayor de estos datos se escribió mal: **62** en lugar de 12. Alguien dice que «todo cambia». Toca solo lo que **cambia**.', { d: [3, 6, 6, 8, 12], e: [3, 6, 6, 8, 62], cols: 2, fichas: ['promedio', 'mediana', 'moda', 'suma'] },
+      'La suma y el promedio cambian; la mediana sigue en 6 y la moda también.', 'Ordena los datos: ¿quién queda en el medio y cuál se repite?'),
+    x('seguro-o-suerte', 'En una bolsa hay **5 canicas de cada uno de 3 colores**. Toca lo que pasa **siempre**, sin depender de la suerte.', { casos: [{ t: 'con 4 hay dos del mismo color', si: true }, { t: 'con 3 hay dos del mismo color', no: 'Con 3 puede salir una de cada color.' }, { t: 'con 11 salen los 3 colores', si: true }, { t: 'con 6 salen los 3 colores', no: 'Con 6 pueden salir cinco de un color y una de otro.' }, { t: 'con 7 hay tres del mismo color', si: true }], falta: 'Falta otra: piensa en la peor suerte para cada una.', ok: '3 + 1, 2 · 5 + 1 y 2 · 3 + 1.' },
+      'Con 4 se repite color; con 11 ya no caben en dos colores; con 7 alguno llega a tres.', 'Imagina la peor suerte posible en cada caso.'),
+    x('sube-niega', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'El **menor** número primo que tumba «todos los primos son impares»', r: 2, c: '2 = 2 \\cdot 1 \\to', e: { 1: 'El 1 no es primo.', 3: 'El 3 es impar: no la tumba.' } },
+      { q: 'El **menor** entero positivo $n$ que tumba «$n^2 + n + 3$ es siempre primo»', r: 2, c: '4 + 2 + 3 = 9 \\Rightarrow n', e: { 1: 'Con 1 da 5, que es primo.', 3: 'Con 3 da 15, pero hay uno menor.' } },
+      { q: 'De **15** frascos, «alguno está roto» es **falsa**. ¿Cuántos están **sanos**?', r: 15, c: '15 - 0', e: { 14: 'Si hubiera uno roto, la frase sería verdadera.' } }] },
+      'El 2 es primo y par; con $n = 2$ sale 9; si ninguno está roto, los 15 están sanos.', 'Prueba desde el más pequeño y revisa si cumple la condición.'),
+    sol('«El cuadrado de un número siempre es mayor que el número». Búscale un contraejemplo.', ['Con 3 da [[9]], que es mayor', 'Con $\\tfrac12$ da [[1/4]], que es [[menor]]', 'La afirmación es [[falsa]]'], ['1', 'verdadera', '6'], 'Entre 0 y 1 el cuadrado es menor; con 1 son iguales.', 'Prueba con un número entre 0 y 1.'),
+    err('Alguien quiere tumbar «todo rectángulo es un cuadrado».', ['Hace falta un rectángulo que no sea cuadrado', 'Un rectángulo de 3 por 5 no es cuadrado', 'Un triángulo tampoco es cuadrado: sirve también'], 2, ['Un triángulo no es rectángulo: no sirve', 'Un cuadrado de 4 por 4 también sirve', 'Un círculo también sirve'], 'El contraejemplo debe cumplir la condición: ser rectángulo.', '¿El triángulo cumple la primera parte de la frase?'),
+    opc('¿Cuál número muestra que es falsa la afirmación «si un número es divisible entre 2 y entre 4, es divisible entre 8»?', ['16', '10', '12', '24'], 2, '12 es divisible entre 2 y 4, pero no entre 8.', 'Debe cumplir las dos condiciones y fallar la conclusión.'),
+  ]);
+
+  const l3 = leccion('icf-ma-argumenta-3', '¿Alcanza la información?', guion(
+    ['¿Qué falta?', 'Antes de calcular, mira si los datos determinan una sola respuesta.'],
+    ['¿Qué sobra?', 'Un enunciado puede traer datos que no hacen falta.'],
+    ['Dos casos', 'Si con los mismos datos salen dos respuestas, no alcanza.'],
+    ['Juntos o por separado', 'A veces un dato solo no alcanza, pero dos sí.']), [
+    x('alcanza-o-no', 'Se quiere saber el **área de un rectángulo**. Con cada dato, ¿**alcanza** o **no alcanza**?', { et: ['mide 6 por 9', 'su perímetro es 30', 'es cuadrado y su lado es 7', 'su base mide 8'], metas: ['alcanza', 'no alcanza', 'alcanza', 'no alcanza'], fichas: ['alcanza', 'alcanza', 'no alcanza', 'no alcanza', 'alcanza', 'no alcanza'], mira: ['Base y altura están.', '10 por 5 y 8 por 7 tienen ese perímetro.', 'Con el lado basta.', 'Falta la altura.'], ok: 'Alcanza si solo hay una respuesta posible.' },
+      'Con dos lados o el lado de un cuadrado hay una sola área; con solo el perímetro o la base hay muchas.', 'Busca dos rectángulos distintos que cumplan el dato.'),
+    x('datos-que-sobran', 'Un bus sale a las 7:00 con 40 pasajeros, viaja 180 km y llega a las 10:00. Se quiere su **velocidad media**. Toca los datos que **sobran**.', { casos: [{ t: 'salió a las 7:00', no: 'Hace falta para saber cuánto tardó.' }, { t: 'llevaba 40 pasajeros', si: true }, { t: 'viajó 180 km', no: 'La distancia hace falta.' }, { t: 'llegó a las 10:00', no: 'Hace falta para saber cuánto tardó.' }, { t: 'el bus es azul', si: true }], falta: 'Falta otro que no cambia la velocidad.', ok: 'Bastan la distancia y el tiempo.' },
+      'La velocidad es $180 \\div 3 = 60$ km/h: los pasajeros y el color no hacen falta.', 'Pregunta si la respuesta cambiaría al cambiar ese dato.'),
+    x('basta-con', '¿En cuáles **basta** revisar esos dos números para estar seguro de que la división es exacta? Toca todas.', { casos: [{ t: 'entre 10: con el 2 y el 5', si: true }, { t: 'entre 24: con el 4 y el 6', no: 'El 12 cumple con 4 y con 6, pero no es divisible entre 24.' }, { t: 'entre 24: con el 3 y el 8', si: true }, { t: 'entre 20: con el 2 y el 10', no: 'El 10 cumple con 2 y con 10, pero no es divisible entre 20.' }, { t: 'entre 21: con el 3 y el 7', si: true }], falta: 'Falta otra: sirve si los dos no comparten primos y, multiplicados, dan el grande.', ok: 'No comparten primos y su producto es el grande.' },
+      '2 y 5, 3 y 8, 3 y 7 no comparten primos; las otras tienen contraejemplo.', 'Busca un número que cumpla los dos y falle con el grande.'),
+    x('dato-para-promedio', 'Los datos son 6, 9, 4 y **uno más**. Con el promedio sí alcanza para hallarlo: muévelo hasta que el **promedio** sea 7.', { d: [6, 9, 4], m: 7 },
+      'Con promedio 7 los cuatro suman 28: $28 - 19 = 9$.', 'Multiplica el promedio por la cantidad de datos.'),
+    x('desde-los-totales', 'De **50** personas, **28** hablan inglés, **21** francés y **9** ninguno. Con eso **sí alcanza**: completa.', { a: 'A: 28', b: 'B: 21', et: ['alguno', 'solo B', 'los dos', 'solo A'], metas: ['41', '13', '8', '20'], fichas: ['41', '13', '8', '20', '49', '21', '59'], mira: ['Quita las que no hablan ninguno.', 'De las que hablan alguno, quita las de A.', 'De las de B, quita las que solo hablan B.', 'De las de A, quita las que hablan los dos.'], trampas: { '0:49': 'Sumaste las dos listas: hay personas repetidas.', '1:21': 'Entre esas hay algunas que también hablan A.' }, ok: '20 + 8 + 13 + 9 = 50.' },
+      '$50 - 9 = 41$; $41 - 28 = 13$; $21 - 13 = 8$; $28 - 8 = 20$.', 'Empieza por las personas que hablan al menos uno.'),
+    x('punto-comun', 'Un dato solo no alcanza, los dos sí. Arrastra el punto que cumple **las dos**: $x + y = 8$ y $y = 3x$.', { e: [[1, 1, 8], [-3, 1, 0]], l: [[0, 8, 8, 0], [0, 0, 2.6, 8]], texto: '(2, 6)' },
+      'Al reemplazar, $x + 3x = 8$ da $x = 2$ y $y = 6$.', 'Cada condición sola tiene muchos puntos: busca el que está en las dos.'),
+    x('sube-extremo', 'No se sabe el valor exacto, pero sí hasta dónde llega. Sube al número. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Tres enteros positivos **distintos** suman **20**. ¿Cuánto vale, **como mucho**, uno de ellos?', r: 17, c: '20 - (1 + 2)', e: { 18: 'Los otros dos no pueden ser ambos 1.' } },
+      { q: 'Los lados de un triángulo son enteros; dos miden 5 y 8. ¿Cuánto mide el tercero, **como mucho**?', r: 12, c: '5 + 8 - 1', e: { 13: 'Con 13 queda una línea.' } },
+      { q: 'Se lanzan 4 dados y suman 15. ¿Cuánto vale, **como mínimo**, el mayor?', r: 4, c: '4 + 4 + 4 + 3 \\to', e: { 3: 'Con todos hasta 3 suman, a lo más, 12.', 6: 'Puede ser menor.' } }] },
+      '$20 - 3 = 17$; menos que 13: 12; repartiendo parejo, el mayor es al menos 4.', 'Lleva los demás al extremo y mira qué queda.'),
+    sol('¿Alcanza la información? «En una caja hay bolas rojas y azules. Hay 6 rojas más que azules».', ['Con 1 azul hay [[7]] rojas', 'Con 4 azules hay [[10]] rojas', 'Como salen varias respuestas, la información [[no alcanza]]'], ['alcanza', '6', '24'], 'Falta el total u otro dato: hay muchas parejas posibles.', 'Prueba con dos cantidades distintas de azules.'),
+    err('«Tres amigos gastaron 60 mil. Ana gastó 15. ¿Cuánto gastó Beto?». Alguien responde.', ['Entre los otros dos gastaron $60 - 15 = 45$', 'Son dos personas', 'Beto gastó la mitad: 22.5'], 2, ['No se sabe: falta cómo se repartieron los 45', 'Beto gastó 45', 'Beto gastó 15'], 'Nada dice que hayan gastado lo mismo: la información no alcanza.', '¿Dice el enunciado que gastaron igual?'),
+    opc('Se quiere saber si un número $n$ es par. Dato 1: $n + 3$ es impar. Dato 2: $n$ es múltiplo de 3. Se puede responder:', ['Solo con los dos datos juntos', 'Con el dato 2 solo', 'Con el dato 1 solo', 'Con ninguno'], 2, 'Si $n + 3$ es impar, $n$ es par. El dato 2 no dice nada: 3 y 6.', 'Prueba cada dato por separado con dos números.'),
+  ]);
+
+  return mundo('icf-ma-argumenta', 'Validar Procedimientos', 'matematicas', [l1, l2, l3], [
+    ['icf-ma-argumenta-1', 'El condicional solo se rompe en un caso.', play('rompe-promesa', 'Toca los casos en que la frase queda falsa', { rounds: [{ say: 'Si el número es de 10, termina en 0', p: 'es de 10', q: 'termina en 0', f: (p, q) => !p || q, want: false }] }, 'Solo se rompe si es de 10 y no termina en 0.', { hint: 'Busca el caso en que se cumple lo primero y no lo segundo.' })],
+    ['icf-ma-argumenta-1', 'Un procedimiento vale si cada paso se justifica.', play('despeja-x', 'Arma un procedimiento válido: aplica lo mismo a los dos lados', { rounds: [{ a: 5, b: -8, c: 27, cards: [['+', -8], ['+', 8], ['×', 0.2], ['×', 5]] }] }, 'Se suma 8: $5x = 35$. Se multiplica por 0.2: $x = 7$.', { hint: 'Cada paso vale si se hace lo mismo en los dos lados.' })],
+    ['icf-ma-argumenta-1', '«Si… entonces» no va al revés.', opc('«Si un número es múltiplo de 12, es múltiplo de 4». Si un número no es múltiplo de 4, entonces:', ['Es múltiplo de 12', 'No es múltiplo de 12', 'No se sabe', 'Es múltiplo de 3'], 1, 'Si fuera de 12 sería de 4: al negar lo segundo se niega lo primero.', 'Devuélvete por la frase negando.')],
+    ['icf-ma-argumenta-2', 'Para tumbar un «todos» basta uno.', play('contraejemplo', 'Toca la ficha que tumba la afirmación', { rounds: [{ claim: 'Todos los múltiplos de 5 de la caja son impares', items: [15, 35, 20, 25, 8], bad: x => x % 5 === 0 && x % 2 === 0 }] }, 'El 20 es múltiplo de 5 y es par; el 8 no es múltiplo de 5.', { hint: 'Debe ser múltiplo de 5 y no ser impar.' })],
+    ['icf-ma-argumenta-2', '«Todas» cae con una sola que no cumpla.', play('niega-todos', 'Cambia lo menos posible para que la frase sea falsa', { rounds: [{ kind: 'ninguna', on: [false, false, false, false] }] }, 'Con una prendida, «ninguna está prendida» ya es falsa.', { hint: 'Busca el cambio más pequeño posible.' })],
+    ['icf-ma-argumenta-2', 'El contraejemplo cumple la condición y falla la conclusión.', opc('«La suma de dos números es mayor que cada uno de ellos». La tumba la pareja:', ['4 y 7', '1 y 2', '10 y 10', '5 y −3'], 3, '$5 + (-3) = 2$, menor que 5.', 'Prueba con un número negativo.')],
+    ['icf-ma-argumenta-3', 'Con el promedio y los demás datos, alcanza.', play('dato-faltante', 'Mueve el dato que falta hasta el promedio pedido', { rounds: [{ data: [10, null, 6, 13], mean: 9, hi: 15, step: 1 }] }, '$36 - 29 = 7$: con el promedio alcanza.', { hint: 'Multiplica el promedio por los cuatro datos.' })],
+    ['icf-ma-argumenta-3', 'Con las pistas justas queda un solo acomodo.', play('descarta-casos', 'Tacha los acomodos que no cumplen las pistas', { rounds: [{ cands: [['A', 'B', 'C'], ['B', 'C', 'A'], ['C', 'A', 'B']], clues: [{ t: 'before', a: 'C', b: 'A', say: 'C va antes que A' }, { t: 'notAt', a: 'C', i: 0, say: 'C no es el primero' }] }] }, 'Las otras dos chocan con una pista: solo queda B, C, A.', { hint: 'Una pista basta para tachar un acomodo.' })],
+    ['icf-ma-argumenta-3', 'Si salen dos respuestas, no alcanza.', opc('Se quiere saber la edad de Nora. ¿Cuál dato, solo, alcanza?', ['Es mayor que Luis', 'Hace 5 años tenía 14', 'Nació un martes', 'Su edad es un número par'], 1, 'Si hace 5 años tenía 14, hoy tiene 19.', 'Busca el único que da una sola edad.')],
   ]);
 })());
 ;
@@ -7267,6 +6819,118 @@ PI_MUNDOS.push((() => {
     ['icf-lc-evalua-2', 'Un dato nuevo puede debilitar una propuesta.', Q('De los siguientes datos, el que más **debilitaría** la propuesta es:', ['Algunos estudiantes madrugan con gusto', 'El desayuno cuesta plata', 'En otras ciudades que hicieron el cambio se acostaron más tarde y durmieron igual', 'Las clases duran seis horas'], 2, 'Si no duermen más, se cae la razón principal.', 'Busca el que contradice lo que la propuesta busca lograr.')],
     ['icf-lc-evalua-3', 'Los valores se notan en lo que se defiende y en lo que se critica.', Q('Cuando dice que no le parece «seguir llamándola disciplina», el autor valora sobre todo:', ['La obediencia', 'Llamar a las cosas por su verdadera razón', 'El ahorro', 'La puntualidad'], 1, 'Acepta la razón (faltan salones), pero critica que se disfrace de disciplina.', 'Compara la razón que dio el rector con el nombre que se le da.')],
     ['icf-lc-evalua-3', 'La última frase suele mostrar la visión del autor.', Q('«La hora dice más de nosotros que de ellos» sugiere que:', ['Los relojes están dañados', 'Los jóvenes son perezosos', 'El cansancio de los jóvenes depende de decisiones de los adultos', 'Nadie mira el reloj'], 2, 'La hora la fijaron los adultos; por eso dice más de ellos.', 'Pregunta quién decidió la hora y a quién se refiere «nosotros».')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-lc-comparar.js
+// Preicfes · Lectura Crítica · mundo 8 «Comparar Textos» (spec 2026-11-25-preicfes-estructura). Parejas de textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const SILENCIO = {
+    id: 'icf-dos-siestas', title: 'Dos maneras de mirar la siesta',
+    ficha: { autor: 'Texto 1: Dra. Marta Ríos. Texto 2: Julián Pardo', fuente: 'Revista de salud y columna de humor', fecha: 'Marzo de 2026' },
+    paras: [
+      'TEXTO 1: «La siesta corta: qué se sabe». Dormir entre diez y veinte minutos después del almuerzo mejora, en promedio, la atención y el ánimo durante las dos o tres horas siguientes. Así lo muestran varios estudios con trabajadores por turnos, conductores y estudiantes, en los que se comparó a quienes dormían con quienes solo descansaban sentados.',
+      'TEXTO 1: No toda siesta ayuda. Las de más de cuarenta minutos suelen dejar una sensación de aturdimiento, porque la persona despierta en medio del sueño profundo. Además, quien duerme mal en la noche puede empeorar si lo compensa de día. La siesta no reemplaza las horas nocturnas: las acompaña.',
+      'TEXTO 1: Por eso, algunas empresas han habilitado cuartos en penumbra para un descanso breve. Los resultados son alentadores, pero todavía no hay datos suficientes para saber si el efecto se mantiene a lo largo de los años.',
+      'TEXTO 2: «Elogio del señor que ronca». Mi tío Abelardo duerme la siesta desde antes de que la ciencia le diera permiso. Se sienta en la mecedora, se pone el sombrero en la cara y anuncia: «Vuelvo en un rato». No dice cuánto. Un rato, en mi tío, es una unidad de medida que va de quince minutos a la hora de la comida.',
+      'TEXTO 2: Ahora resulta que una oficina del centro tiene un cuarto para dormir. Me parece maravilloso y un poco triste. Maravilloso, porque por fin alguien entendió lo que mi tío sabe. Triste, porque lo hicieron para que la gente rinda más. Mi tío no duerme para rendir. Duerme, dice, «para que el día no se le vaya todo seguido».',
+      'TEXTO 2: Temo el día en que le pongan un cronómetro a la mecedora. A los veinte minutos sonará una campana, y mi tío, productivo y despeinado, tendrá que explicarle a un gráfico por qué quiere cinco más. Que sigan estudiando la siesta los que saben. Yo solo pido que, entre tanto dato, dejen una libre, de esas que no sirven para nada.',
+    ],
+  };
+  const l1 = leccion('icf-lc-comparar-1', 'Dos textos, un tema', guion(
+    ['¿Qué comparten?', 'El tema, un dato o una preocupación.'],
+    ['¿En qué se diferencian?', 'El propósito, el tono, el tipo de texto y las pruebas que usan.'],
+    ['Cómo se relacionan', 'Uno puede ampliar, ejemplificar, matizar o discutir al otro.'],
+    ['Responder por los dos', 'Una afirmación sobre ambos debe valer en los dos.']), [
+    x('pinta-tipos', 'Pinta cada afirmación con el texto al que corresponde.', { doc: SILENCIO, plumas: ['texto 1', 'texto 2', 'los dos'],
+      ...P(['Da resultados de estudios.', 0, '¿Cuál cita comparaciones?'], ['Usa el humor y la exageración.', 1, '¿Cuál habla de un cronómetro en la mecedora?'], ['Menciona cuartos para dormir en el trabajo.', 2, '¿Aparece en uno o en ambos?'], ['Advierte que las siestas largas aturden.', 0, '¿Cuál habla del sueño profundo?'], ['Valora descansar sin un fin.', 1, '¿Cuál pide una siesta que no sirva para nada?']), bien: 'Uno, otro o ambos.' },
+      'Estudios y aturdimiento son del 1; humor y descanso libre, del 2; los cuartos aparecen en los dos.', 'Busca si la idea aparece en los párrafos 1 a 3, en los 4 a 6 o en ambos.'),
+    x('voz-de-la-fuente', 'Ata cada rasgo a su texto.', { ayuda: 'Tira un hilo desde cada rasgo hasta su texto.', doc: SILENCIO, portadas: [['Texto 1', 'revista de salud'], ['Texto 2', 'columna de humor']],
+      ...T(['informar con cautela', 0, '¿Cuál dice que aún faltan datos?'], ['defender una costumbre con gracia', 1, '¿Cuál habla de un tío?']), bien: 'Informar y defender.' },
+      'El primero informa y reconoce límites; el segundo defiende con humor.', 'Pregunta qué quiere lograr cada autor en su lector.'),
+    x('genero-o-cita', '¿Los dos textos **coinciden** o **difieren** en esto?', { doc: SILENCIO, rot: ['coinciden', 'difieren'],
+      ...F(['La siesta puede hacer bien', 0, '¿Alguno lo niega?'], ['Para qué sirve dormir de día', 1, '¿Uno habla de rendir y otro no?'], ['Hay oficinas con cuarto para dormir', 0, '¿Está en los dos?'], ['Cuánto debe durar', 1, '¿A los dos les importa medirla?']), bien: 'El hecho los une; el sentido los separa.' },
+      'Los dos ven algo bueno y mencionan los cuartos; difieren en el fin y en medir el tiempo.', 'Busca el mismo punto en cada texto y compara.'),
+    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: SILENCIO,
+      ...F(['¿Por qué aturden las siestas largas?', 1, 'Busca el párrafo que dice que no toda siesta ayuda.'], ['¿Qué no se sabe todavía?', 2, 'Busca el párrafo que habla de resultados alentadores.'], ['¿Qué le entristece al columnista?', 4, 'Busca el párrafo que dice «un poco triste».']),
+      luz: [[2, 'sueño profundo'], [3, 'todavía no hay datos'], [5, 'Triste, porque']], bien: 'Cada pregunta, su párrafo.' },
+      'El aturdimiento está en el 2, lo que falta en el 3 y la tristeza en el 5.', 'Primero decide en cuál de los dos textos estaría.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: SILENCIO, nums: [3, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Faltan datos sobre el efecto a largo plazo.', 0, 'Búscala en el párrafo 3.'], ['Al columnista le incomoda que todo deba ser útil.', 1, '¿Por qué le parece triste el cuarto?'], ['Los dos autores saben de los cuartos para dormir.', 1, 'Compara los dos párrafos.'], ['El tío Abelardo trabaja en esa oficina.', 2, '¿Se dice dónde trabaja?']),
+      luz: [[3, 'todavía no hay datos suficientes'], [5, 'para que la gente rinda más'], [5, 'un cuarto para dormir']], bien: 'Comparar también es deducir.' },
+      'Los datos que faltan están escritos; la incomodidad y que ambos los conocen se deducen; el trabajo del tío no.', 'Une una frase de cada texto y compara lo que valoran.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que los textos.', { doc: SILENCIO, filas: [{ antes: 'Según el texto 1, la siesta', topes: ['reemplaza la noche', 'daña siempre', 'acompaña la noche'], va: 2 }, { antes: 'El texto 2 critica', topes: ['la siesta', 'medir la siesta para rendir', 'a los médicos'], va: 1 }, { antes: 'Los efectos a largo plazo', topes: ['no se conocen aún', 'son malos', 'son excelentes'], va: 0 }], mira: ['Relee el final del párrafo 2.', 'Relee los párrafos 5 y 6.', 'Relee el final del párrafo 3.'], luz: [[2, 'las acompaña'], [6, 'un cronómetro'], [3, 'todavía no hay datos']], bien: 'Acompaña, medir y no se sabe.' },
+      'La siesta acompaña, el columnista critica medirla y el largo plazo no se conoce.', 'Busca la frase exacta en el texto que corresponde.'),
+    x('bisagras', 'Une una idea del texto 1 con una del 2. Sobran dos palabras.', { doc: SILENCIO, pares: [['El texto 1 mide minutos;', 'el texto 2 se burla de medirlos.'], ['Los dos hablan de cuartos para dormir:', 'comparten un ejemplo.'], ['El texto 2 cuenta lo de su tío', 'quiere mostrar otra manera de descansar.']],
+      ...F(['en cambio,', 0, 'Contrasta: ¿dónde hacen cosas opuestas?'], ['es decir,', 1, 'Aclara: ¿dónde lo segundo dice lo mismo con otras palabras?'], ['porque', 2, 'Da la razón: ¿dónde lo segundo explica lo primero?'], ['aunque', null, 'Opondría las dos partes sin necesidad.'], ['por ejemplo,', null, 'Anunciaría un caso: ninguna segunda parte lo es.']), bien: 'Contraste, aclaración y razón.' },
+      'Medir y burlarse contrastan, compartir un ejemplo aclara y la intención explica lo del tío.', 'Di qué hace la segunda idea con la primera.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran al comparar los textos.', { doc: SILENCIO, lineas: ['Los dos hablan de la siesta y la valoran.', 'El tío usa sombrero.', 'Uno informa con estudios y reconoce límites.', 'El otro defiende con humor descansar sin un fin.', 'Hay conductores en los estudios.', 'Difieren en para qué sirve descansar.'], ...S([1, 4], { 0: 'Es lo que comparten.', 2: 'Es el primer texto.', 3: 'Es el segundo texto.', 5: 'Es la diferencia de fondo.' }), bien: 'Lo común, cada uno y la diferencia.' },
+      'El sombrero y los conductores son detalles; lo demás compara.', 'Deja lo que sirve para comparar, no para recordar.'),
+  ]);
+
+  const ARBOLES = {
+    id: 'icf-arboles-calle', title: 'Los almendros de la avenida',
+    ficha: { autor: 'Texto 1: Germán Solano, ingeniero. Texto 2: Lucía Becerra, vecina', fuente: 'Cartas a un concejo municipal', fecha: 'Abril de 2026' },
+    paras: [
+      'TEXTO 1: Señores concejales: la avenida Los Almendros mueve treinta mil vehículos al día y fue diseñada para doce mil. En las horas pico, un recorrido de tres kilómetros tarda cuarenta minutos, y las ambulancias del hospital San José pierden en ella, según sus propios registros, un cuarto de hora por viaje. Propongo ampliarla a seis carriles. Para hacerlo hay que retirar ciento ocho árboles.',
+      'TEXTO 1: No lo propongo con gusto. Pero un trancón también contamina: un motor detenido gasta y no avanza. Según nuestro modelo, la ampliación reduciría el tiempo de viaje a la mitad durante los primeros seis años. Sembraríamos trescientos árboles en el parque del sur, tres por cada uno que se quite.',
+      'TEXTO 1: Entiendo el cariño por los almendros. Sin embargo, una ciudad no puede quedarse quieta para no incomodar a la memoria. Los que hoy protestan son los mismos que mañana pitarán en el semáforo, y entonces nadie se acordará de las hojas.',
+      'TEXTO 2: Señores concejales: en la avenida hay ciento ocho almendros y yo he barrido las hojas de once durante treinta años. No les escribo por nostalgia. A las dos de la tarde, bajo su sombra, el termómetro marca ocho grados menos que en la esquina sin árboles. Por ahí caminan cada día mil setecientos niños hacia tres colegios.',
+      'TEXTO 2: El ingeniero dice que sembrará trescientos en el sur. Los niños no caminan por el sur. Un árbol recién sembrado tarda quince años en dar la sombra que hoy tenemos. Y él mismo reconoce que el alivio del tráfico dura seis. Es decir: cuando los arbolitos den sombra, la avenida llevará nueve años trancada otra vez.',
+      'TEXTO 2: Tampoco quiero que todo quede igual. Propongo un carril solo para buses en cada sentido, que no exige talar, y entradas escalonadas en los tres colegios. No sé si bastará. Sé que se puede probar por seis meses con pintura, y que la pintura, a diferencia de los almendros, se puede borrar si nos equivocamos.',
+    ],
+  };
+  const l2 = leccion('icf-lc-comparar-2', 'Posturas que se cruzan', guion(
+    ['La tesis de cada uno', 'Di en una frase qué propone cada texto.'],
+    ['Cómo responde', 'Un texto puede refutar, conceder, matizar o usar un dato del otro.'],
+    ['Qué pruebas usa', 'Cifras, experiencia, autoridad, ejemplos.'],
+    ['Qué no responde', 'A veces lo más revelador es el argumento que nadie contestó.']), [
+    x('pinta-voces', 'Pinta cada idea con su autor.', { doc: ARBOLES, plumas: ['Solano', 'Becerra'],
+      ...P(['Ampliar a seis carriles.', 0, '¿Quién propone talar?'], ['Probar un carril de buses con pintura.', 1, '¿Quién propone algo que se pueda borrar?'], ['Un motor detenido también contamina.', 0, '¿Quién habla del trancón como contaminación?'], ['Los niños no caminan por el sur.', 1, '¿Quién responde a la siembra?'], ['El alivio dura seis años.', 0, '¿Quién lo calculó con su modelo?']), bien: 'Dos cartas, dos propuestas.' },
+      'Solano amplía, calcula y habla del motor; Becerra prueba con pintura y responde sobre los niños.', 'Busca primero en qué carta aparece cada idea.'),
+    x('pista-tipo', 'Ata cada movimiento a la frase que lo hace.', { doc: ARBOLES, lineas: ['«No lo propongo con gusto».', '«Los que hoy protestan mañana pitarán».', '«Los niños no caminan por el sur».', '«Tampoco quiero que todo quede igual».'],
+      ...T(['admite un costo', 0, '¿Cuál reconoce algo malo de su idea?'], ['ataca a quien se opone', 1, '¿Cuál habla de las personas y no de los árboles?'], ['refuta la compensación', 2, '¿Cuál responde a los trescientos árboles?'], ['acepta que hay un problema', 3, '¿Cuál concede que el tráfico importa?']), bien: 'Admitir, atacar, refutar y conceder.' },
+      'Solano admite un costo y ataca; Becerra refuta la siembra y concede que hay un problema.', 'Pregunta qué hace cada frase con la posición del otro.'),
+    x('genero-o-cita', '¿Es una respuesta **a la idea** o un ataque **a la persona**?', { doc: ARBOLES, rot: ['a la idea', 'a la persona'],
+      ...F(['Un árbol nuevo tarda quince años en dar sombra', 0, '¿Habla del plan o de alguien?'], ['Los que protestan son los que pitarán', 1, '¿Habla del plan o de alguien?'], ['El alivio dura solo seis años', 0, '¿Habla del plan o de alguien?'], ['No les escribo por nostalgia', 0, '¿Aclara una razón o insulta?']), bien: 'Solo una ataca.' },
+      'Los años y la sombra discuten el plan; pitar en el semáforo ataca a quienes se oponen.', 'Mira si la frase habla de los árboles y el tráfico o de la gente.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: ARBOLES, nums: [2, 4, 6], pregunta: 'Queda en pie', queda: 'Los dos reconocen que hay un problema de tráfico.',
+      ...T(['Solano quiere talar con gusto.', 0, 'Busca cómo lo propone.'], ['Becerra escribe solo por nostalgia.', 5, 'Busca por qué dice que no escribe.'], ['Becerra quiere que todo siga igual.', 8, 'Busca qué tampoco quiere.']), bien: 'No, no y tampoco.' },
+      'Solano no lo propone con gusto, Becerra no escribe por nostalgia y tampoco quiere dejar todo igual.', 'Saca la palabra clave: gusto, nostalgia, igual.'),
+    x('balanza-tesis', 'Propuesta de Solano: «ampliar la avenida». ¿Qué hace cada dato?', { doc: ARBOLES, tesis: 'Conviene ampliar la avenida',
+      ...F(['Reduce a la mitad el tiempo de viaje.', 0, '¿Es una razón a favor?'], ['El alivio dura seis años.', 1, '¿Qué pasa después?'], ['En otra ciudad, al ampliar llegaron más carros y el trancón volvió antes.', 1, '¿Qué sugiere ese caso?'], ['La avenida mide tres kilómetros.', 2, '¿Es una razón a favor o en contra?']), bien: 'A favor, en contra y nada.' },
+      'La mitad del tiempo la apoya; que dure poco y que lleguen más carros la debilita; el largo no pesa.', 'Supón cierto cada dato y mira si la propuesta gana o pierde.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 5 la oración en que Becerra **usa un dato de Solano contra él**.', { doc: ARBOLES, nums: [5], apuesta: 'Usa los seis años del otro.', ...S(['5.3'], { '5.0': 'Recoge lo que él propone, sin responder aún.', '5.1': 'Responde, pero con un dato suyo.', '5.2': 'Da un dato propio sobre los árboles.', '5.4': 'Saca la conclusión de los dos datos.' }), bien: '«Él mismo reconoce».' },
+      '«Y él mismo reconoce que el alivio del tráfico dura seis» toma el dato del otro texto.', 'Busca la oración que nombra lo que el otro admite.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: ARBOLES, nums: [4, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Bajo los árboles hay ocho grados menos.', 0, 'Léela junto al termómetro.'], ['Los almendros protegen a los niños del calor.', 1, '¿Quiénes caminan por esa sombra?'], ['Becerra valora las soluciones que se pueden revertir.', 1, '¿Por qué prefiere la pintura?'], ['Becerra es profesora.', 2, '¿Se dice en qué trabaja?']),
+      luz: [[4, 'ocho grados menos'], [4, 'mil setecientos niños'], [6, 'se puede borrar']], bien: 'Preferir la pintura muestra un valor.' },
+      'Los grados están escritos; la protección y el valor de revertir se deducen; el oficio no.', 'Une el dato con quien se beneficia o con lo que prefiere.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran al comparar las posturas.', { doc: ARBOLES, lineas: ['Solano propone ampliar y compensar en otro lugar.', 'La avenida se llama como los árboles.', 'Becerra muestra que la sombra y el alivio no duran lo mismo.', 'Ella propone una prueba que se pueda deshacer.', 'Ella barre hojas.', 'Los dos reconocen el problema del tráfico.'], ...S([1, 4], { 0: 'Es la primera postura.', 2: 'Es su mejor argumento.', 3: 'Es la segunda postura.', 5: 'Es lo que comparten.' }), bien: 'Dos posturas, un argumento y lo común.' },
+      'El nombre y las hojas son detalles; lo demás compara las posturas.', 'Deja lo que necesitas para decidir entre las dos.'),
+  ]);
+
+  const FOTOS = {
+    id: 'icf-dos-fotos', title: 'Dos textos sobre las fotos',
+    paras: [
+      'TEXTO 1: «Treinta mil». Mi teléfono dice que tengo treinta mil fotos. Las revisé anoche y descubrí que no recuerdo casi ninguna. Hay once de un mismo plato de sopa. Hay un atardecer repetido cuarenta veces, como si el sol hubiera tenido tos. De mi abuela, que murió antes de los teléfonos, tengo tres: en las tres la miro y la oigo.',
+      'TEXTO 1: No creo que la culpa sea de la máquina. La culpa es de la facilidad. Cuando cada foto costaba, uno miraba antes de disparar. Ahora disparamos para no tener que mirar: ya lo veremos después. Y después nunca llega, porque después está lleno de fotos nuevas.',
+      'TEXTO 1: Esta semana borré veintinueve mil novecientas. No fue valentía, fue curiosidad. Quería saber cuáles me dolía perder. Fueron setenta y dos. Las imprimí. Ocupan menos que un libro y por primera vez en años sé dónde están.',
+      'TEXTO 2: «Guardar por si acaso». Un grupo de investigadores pidió a cien personas que recorrieran un museo. Unas fotografiaron los objetos; otras solo los miraron. Al día siguiente, quienes habían tomado fotos recordaban menos detalles de lo fotografiado. Pero cuando se les pidió acercar la cámara a una parte del objeto, recordaban tan bien como los demás. No era la cámara lo que hacía olvidar: era usarla sin atención.',
+      'TEXTO 2: El estudio tiene límites. Se hizo con estudiantes, en un solo museo, y midió el recuerdo a las veinticuatro horas. No sabemos qué pasa a los diez años, cuando la memoria se gasta y una foto cualquiera, hasta la de un plato de sopa, puede devolvernos una tarde entera.',
+      'TEXTO 2: Quizá por eso conviene no elegir entre mirar y fotografiar. Conviene hacer las dos cosas en orden: primero lo uno, después lo otro. Y tener cuidado antes de borrar. La memoria no avisa qué va a necesitar.',
+    ],
+  };
+  const Q = preg(FOTOS, 'lectura');
+  return mundo('icf-lc-comparar', 'Comparar Textos', 'lectura', [l1, l2], [
+    ['icf-lc-comparar-1', 'Los dos textos comparten una idea de fondo.', Q('Los dos textos coinciden en que:', ['Las cámaras deben prohibirse', 'El problema no es la máquina, sino usarla sin atención', 'Hay que borrar casi todas las fotos', 'Los museos son aburridos'], 1, 'El 1 dice «la culpa es de la facilidad», no de la máquina; el 2, que no era la cámara sino usarla sin atención.', 'Busca qué dice cada uno sobre la culpa de la máquina.')],
+    ['icf-lc-comparar-1', 'Mira con qué sostiene cada uno su idea.', Q('La diferencia entre las pruebas que usan los textos es que:', ['El 1 usa un estudio y el 2, una anécdota', 'Los dos usan solo anécdotas', 'El 1 usa su experiencia y el 2, un estudio con sus límites', 'Ninguno da pruebas'], 2, 'El 1 cuenta lo que hizo con sus fotos; el 2 describe una investigación.', 'Pregunta de dónde saca cada uno lo que afirma.')],
+    ['icf-lc-comparar-1', 'El propósito distingue a dos textos del mismo tema.', Q('El tono del texto 1, comparado con el del 2, es más:', ['Técnico', 'Autoritario', 'Indiferente', 'Personal y humorístico'], 3, 'Habla de sí mismo y bromea: «como si el sol hubiera tenido tos».', 'Compara cómo habla cada uno de las fotos repetidas o del estudio.')],
+    ['icf-lc-comparar-2', 'Un texto puede advertir sobre lo que propone el otro.', Q('La frase «tener cuidado antes de borrar» del texto 2 puede leerse como:', ['Un matiz a lo que hizo el autor del texto 1', 'Una repetición del texto 1', 'Una burla del museo', 'Una orden de no fotografiar'], 0, 'El autor del 1 borró casi todo; el 2 advierte que la memoria no avisa qué va a necesitar.', 'Recuerda qué hizo el autor del texto 1 con sus fotos.')],
+    ['icf-lc-comparar-2', 'Busca el mejor argumento de un texto contra el otro.', Q('El autor del texto 2 podría objetarle al del 1 que:', ['Debió tomar más fotos de la sopa', 'Setenta y dos fotos son muchas', 'Una foto que hoy parece inútil puede servir para recordar años después', 'Su abuela no existió'], 2, 'El 2 dice que hasta la de un plato de sopa puede devolver una tarde.', 'Busca en el texto 2 la mención a la sopa.')],
+    ['icf-lc-comparar-2', 'Una conclusión sobre los dos debe valer en los dos.', Q('¿Cuál conclusión respeta **ambos** textos?', ['Es mejor no tomar fotos', 'Conviene mirar con atención antes de fotografiar', 'Hay que guardar todo', 'La memoria no falla'], 1, 'El 1 extraña mirar antes de disparar; el 2 propone primero mirar y después fotografiar.', 'Descarta la que contradiga a alguno.')],
   ]);
 })());
 ;
@@ -8334,6 +7998,115 @@ PI_MUNDOS.push((() => {
   ]);
 })());
 ;
+//#archivo js/courses/preicfes-sc-geografia.js
+// Preicfes · Sociales y Ciudadanas · mundo 8 «Territorio y Ambiente» (spec 2026-11-25-preicfes-estructura). Textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const REGIONES = {
+    id: 'icf-regiones', title: 'Un país en seis pedazos que se tocan',
+    ficha: { autor: 'Cuaderno de geografía', fuente: 'Colección «Territorios»', fecha: 'Febrero de 2026' },
+    paras: [
+      'Colombia suele dividirse en seis regiones naturales: Caribe, Pacífica, Andina, Orinoquía, Amazonía e Insular. La división mira el relieve, el clima y la vegetación. No es una reja: hay municipios con un pie en cada lado, y la gente, los ríos y las mercancías las cruzan todos los días.',
+      'La cordillera de los Andes entra por el sur y se abre en tres ramales. Por eso, cerca de la línea del ecuador, el clima depende sobre todo de la altura: cada mil metros que se suben, la temperatura baja unos seis grados. En un viaje de dos horas se pasa del plátano al frailejón. En la Andina vive la mayor parte de la población, aunque ocupa cerca de la cuarta parte del territorio.',
+      'La Amazonía y la Orinoquía, juntas, son más de la mitad del país y tienen menos de una décima parte de sus habitantes. El Pacífico es uno de los lugares más lluviosos del mundo; La Guajira, en el Caribe, es casi un desierto. La densidad de población, que es el número de habitantes por kilómetro cuadrado, cambia muchísimo de un lugar a otro.',
+      'Un mapa no muestra todo: escoge. El mapa político muestra límites; el físico, montañas y ríos; el temático, un solo asunto, como las lluvias o el desempleo. La escala dice cuánto se redujo la realidad. En un mapa 1 : 1 000 000, un centímetro son diez kilómetros. Con una escala más grande, por ejemplo 1 : 10 000, cabe menos territorio y se ven más detalles.',
+      'La población también se mueve. A mediados del siglo XX, la mayoría de los colombianos vivía en el campo; hoy, unas tres de cada cuatro personas viven en ciudades. Unos migraron buscando trabajo o estudio; muchos otros huyeron de la violencia. Las ciudades crecieron rápido y sin plan, y en sus bordes surgieron barrios levantados por sus propios habitantes.',
+      'Además, la población envejece. Las familias tienen menos hijos y la gente vive más años. En las pirámides de población, la base se encoge y la parte alta se ensancha. Eso obliga a pensar en más cuidados y pensiones, y en menos salones de primaria. Un dibujo de barras puede anunciar, con veinte años de ventaja, lo que una sociedad va a necesitar.',
+    ],
+  };
+  const l1 = leccion('icf-sc-geografia-1', 'Regiones, mapas y población', guion(
+    ['Seis regiones', 'Caribe, Pacífica, Andina, Orinoquía, Amazonía e Insular.'],
+    ['Altura y clima', 'Cerca del ecuador, la temperatura depende de la altura.'],
+    ['Mapas', 'Político, físico, temático; y la escala.'],
+    ['Población', 'Densidad, migración del campo a la ciudad y envejecimiento.']), [
+    x('pinta-tipos', 'Pinta cada dato con su región.', { doc: REGIONES, plumas: ['Andina', 'Caribe', 'Pacífica'],
+      ...P(['Vive la mayor parte de la población.', 0, 'Busca qué región concentra la gente.'], ['Tiene un lugar casi desértico.', 1, 'Busca dónde está La Guajira.'], ['Es de los lugares más lluviosos.', 2, 'Busca el que casi siempre se moja.'], ['La cruzan tres ramales de cordillera.', 0, 'Busca dónde se abren los Andes.']), bien: 'Gente, desierto y lluvia.' },
+      'La Andina concentra gente y cordilleras, el Caribe tiene La Guajira y el Pacífico, la lluvia.', 'Busca el nombre de la región junto a cada dato.'),
+    x('pista-tipo', 'Ata cada necesidad al mapa que la resuelve.', { doc: REGIONES, lineas: ['mapa político', 'mapa físico', 'mapa temático', 'mapa a escala 1 : 10 000'],
+      ...T(['ver los límites de un departamento', 0, '¿Cuál muestra límites?'], ['ver montañas y ríos', 1, '¿Cuál muestra el relieve?'], ['ver dónde llueve más', 2, '¿Cuál muestra un solo asunto?'], ['ver las calles de un barrio', 3, '¿Cuál deja ver más detalles?']), bien: 'Cada mapa escoge.' },
+      'Límites en el político, relieve en el físico, lluvias en el temático y detalle en la escala grande.', 'Piensa qué elige mostrar cada uno de esos mapas.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: REGIONES, filas: [{ antes: 'Al subir mil metros, la temperatura', topes: ['sube seis grados', 'no cambia', 'baja unos seis grados'], va: 2 }, { antes: 'En 1 : 1 000 000, un centímetro son', topes: ['un kilómetro', 'diez kilómetros', 'mil kilómetros'], va: 1 }, { antes: 'Hoy viven en ciudades', topes: ['tres de cada cuatro', 'uno de cada cuatro', 'todos'], va: 0 }], mira: ['Relee lo que pasa con la altura.', 'Relee el ejemplo de la escala.', 'Relee cómo se movió la población.'], luz: [[2, 'baja unos seis grados'], [4, 'diez kilómetros'], [5, 'tres de cada cuatro']], bien: 'Baja, diez y tres de cuatro.' },
+      'Baja unos seis grados, un centímetro son diez kilómetros y tres de cada cuatro viven en ciudades.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: REGIONES, nums: [2, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['La Andina ocupa cerca de la cuarta parte del territorio.', 0, 'Léela junto al párrafo 2.'], ['La densidad de la Amazonía es baja.', 1, 'Compara su tamaño con sus habitantes.'], ['A 2 000 metros hace unos doce grados menos que al nivel del mar.', 1, 'Multiplica lo que baja por cada mil metros.'], ['En la Amazonía no hay ciudades.', 2, '¿Tener poca gente es no tener ciudades?']),
+      luz: [[2, 'la cuarta parte'], [3, 'menos de una décima parte'], [2, 'unos seis grados']], bien: 'Comparar y multiplicar.' },
+      'La cuarta parte está escrita; la densidad y los doce grados se deducen; lo de las ciudades no.', 'Haz la comparación o la cuenta con los datos.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: REGIONES, nums: [1, 4, 6], pregunta: 'Queda en pie', queda: 'La población del país envejece.',
+      ...T(['Las regiones son fronteras que nadie cruza.', 2, 'Busca qué dice que no es.'], ['Un buen mapa muestra todo.', 3, 'Busca qué hace un mapa.'], ['Las familias tienen cada vez más hijos.', [9, 10], 'Busca qué pasa con los hijos.']), bien: 'No es reja, escoge y menos hijos.' },
+      'La división no es una reja, un mapa escoge y las familias tienen menos hijos.', 'Saca la palabra clave: fronteras, todo, hijos.'),
+    x('genero-o-cita', '¿Es una migración **por decisión** o **forzada**?', { doc: REGIONES, rot: ['por decisión', 'forzada'],
+      ...F(['Se fue a estudiar a Cali', 0, '¿Podía quedarse?'], ['Huyó de un grupo armado', 1, '¿Podía quedarse?'], ['Buscó un mejor empleo', 0, '¿Podía quedarse?'], ['Una amenaza la sacó de su finca', 1, '¿Podía quedarse?']), bien: 'Elegir o huir.' },
+      'Estudio y empleo son decisiones; el grupo armado y la amenaza obligan.', 'Pregunta si la persona podía quedarse sin peligro.'),
+    x('balanza-tesis', 'Idea: «esta ciudad necesitará más cuidado para mayores». ¿Qué hace cada dato?', { doc: REGIONES, tesis: 'Necesitará más cuidado para mayores',
+      ...F(['La parte alta de su pirámide se ensancha.', 0, '¿Qué edades están arriba?'], ['Llegan miles de familias jóvenes con bebés.', 1, '¿Hacia qué edades crece?'], ['Su escudo tiene un cóndor.', 2, '¿Habla de edades?']), bien: 'La pirámide anuncia.' },
+      'Ensancharse arriba la apoya; familias jóvenes la debilitan; el escudo no pesa.', 'Piensa qué edades de la población crecen con cada dato.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: REGIONES, lineas: ['El país se divide en seis regiones que se cruzan.', 'El frailejón crece arriba.', 'La altura y la lluvia cambian mucho entre lugares.', 'Los mapas escogen qué mostrar.', 'Hay barrios en los bordes.', 'La población se concentra, se mueve y envejece.'], ...S([1, 4], { 0: 'Es la idea del comienzo.', 2: 'Es el contraste natural.', 3: 'Es la idea sobre los mapas.', 5: 'Es la idea sobre la población.' }), bien: 'Regiones, contrastes, mapas y población.' },
+      'El frailejón y los bordes son detalles; lo demás resume.', 'Deja lo que sirve para explicar el país en general.'),
+  ]);
+
+  const PARAMO = {
+    id: 'icf-paramo-agua', title: 'El agua que nace en la neblina',
+    ficha: { autor: 'Cuaderno de geografía', fuente: 'Colección «Territorios»', fecha: 'Marzo de 2026' },
+    paras: [
+      'Los recursos naturales se dividen en renovables, como el agua, el bosque o el viento, que pueden recuperarse si se usan con medida, y no renovables, como el petróleo o el carbón, que tardan millones de años en formarse. Que algo sea renovable no quiere decir que sea infinito: un bosque talado más rápido de lo que crece se acaba igual.',
+      'Los páramos son un buen ejemplo. Están por encima de los tres mil metros, más o menos, y casi la mitad de los que hay en el mundo está en Colombia. Sus plantas atrapan la neblina y sus suelos la guardan como una esponja. De allí viene buena parte del agua que toman las ciudades. Un frailejón crece alrededor de un centímetro al año: si se arranca uno de dos metros, se arrancan dos siglos.',
+      'En los páramos también vive gente, muchas veces desde antes de que existieran las leyes que los protegen. Siembran papa, tienen vacas, abren caminos. Prohibirles todo de un día para otro los deja sin sustento; permitirles todo seca el agua de millones. Por eso la ley habla de reconversión: ayudarlos a cambiar, poco a poco, a actividades que no dañen el suelo.',
+      'El desarrollo sostenible busca satisfacer las necesidades de hoy sin quitarles a las generaciones futuras la posibilidad de satisfacer las suyas. Tiene tres patas: la económica, la social y la ambiental. Si una falla, la mesa se cae. Una mina que da empleo y envenena un río cojea; una reserva que protege un río y expulsa a sus habitantes, también.',
+      'El cambio climático lo complica todo. La quema de combustibles y la tala aumentan los gases que retienen calor en la atmósfera. Colombia emite una parte pequeña del total mundial, pero es muy vulnerable: hay glaciares que se derriten, costas que se inundan, sequías y lluvias más fuertes. En el país, la mayor fuente de esas emisiones no son las fábricas: es la deforestación y el uso de la tierra.',
+      'Las decisiones sobre el territorio nunca son solo técnicas. Alguien gana y alguien pierde, y no siempre quien pierde está sentado a la mesa. La consulta previa, las audiencias públicas y los planes de ordenamiento existen para que se oiga a los que viven allí. Un mapa con todos los recursos marcados y ninguna casa dibujada es un mapa peligroso.',
+    ],
+  };
+  const l2 = leccion('icf-sc-geografia-2', 'Recursos, ambiente y desarrollo', guion(
+    ['Renovables y no', 'Renovable no es infinito: depende de la velocidad a la que se use.'],
+    ['Páramos', 'Fábricas de agua donde también vive gente.'],
+    ['Sostenible', 'Tres patas: económica, social y ambiental.'],
+    ['Clima y decisiones', 'Emitimos poco, somos vulnerables y la deforestación pesa mucho.']), [
+    x('genero-o-cita', '¿Es un recurso **renovable** o **no renovable**?', { doc: PARAMO, rot: ['renovable', 'no renovable'],
+      ...F(['El viento', 0, '¿Se recupera pronto?'], ['El carbón', 1, '¿Se recupera pronto?'], ['Un bosque', 0, '¿Se recupera pronto?'], ['El petróleo', 1, '¿Se recupera pronto?'], ['El agua', 0, '¿Se recupera pronto?']), bien: 'Años o millones de años.' },
+      'Viento, bosque y agua se recuperan; carbón y petróleo tardan millones de años.', 'Pregunta cuánto tarda en volver a formarse.'),
+    x('pinta-tipos', 'Pinta cada efecto con la pata del desarrollo que toca.', { doc: PARAMO, plumas: ['económica', 'social', 'ambiental'],
+      ...P(['Se crean empleos.', 0, '¿Habla de dinero, de la gente o de la naturaleza?'], ['Se envenena un río.', 2, '¿Habla de dinero, de la gente o de la naturaleza?'], ['Se expulsa a una comunidad.', 1, '¿Habla de dinero, de la gente o de la naturaleza?'], ['Aumentan las ventas.', 0, '¿Habla de dinero, de la gente o de la naturaleza?'], ['Se recupera el suelo.', 2, '¿Habla de dinero, de la gente o de la naturaleza?']), bien: 'Dinero, gente y naturaleza.' },
+      'Empleos y ventas son económicos; la comunidad, social; río y suelo, ambientales.', 'Di quién o qué gana o pierde con cada efecto.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: PARAMO, nums: [1, 3, 5], pregunta: 'Queda en pie', queda: 'El páramo se puede proteger sin expulsar a su gente.',
+      ...T(['Lo renovable nunca se acaba.', 1, 'Busca qué pasa si se usa muy rápido.'], ['En los páramos no vive nadie.', 2, 'Busca quién vive allí.'], ['Lo que más emite el país son las fábricas.', 9, 'Busca la mayor fuente.']), bien: 'Se acaba, vive gente y deforestación.' },
+      'Un bosque talado muy rápido se acaba, en los páramos vive gente y la mayor fuente es la deforestación.', 'Saca la palabra clave: nunca, nadie, fábricas.'),
+    x('voz-de-la-fuente', 'Ata cada preocupación a quien la tendría.', { ayuda: 'Tira un hilo desde cada preocupación hasta quien la tendría.', doc: PARAMO, portadas: [['Campesina del páramo', 'actor'], ['Acueducto de la ciudad', 'actor'], ['Empresa minera', 'actor'], ['Comunidad consultada', 'actor']],
+      ...T(['perder su siembra de papa', 0, '¿Quién vive de la tierra?'], ['que disminuya el agua', 1, '¿Quién la lleva a las casas?'], ['no poder extraer', 2, '¿Quién busca minerales?'], ['que no se oiga su voz', 3, '¿Para quién existe la consulta?']), bien: 'Cada actor, su interés.' },
+      'La campesina teme por su siembra, el acueducto por el agua, la empresa por extraer y la comunidad por ser oída.', 'Piensa qué perdería cada uno si se decide sin él.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo. Sobran dos.', { doc: PARAMO, frases: [[3, 'la ley habla de ', 'reconversión', ''], [5, 'es muy ', 'vulnerable', ''], [4, 'envenena un río ', 'cojea', '']],
+      ...F(['cambio gradual de actividad', 0, '¿Qué busca la ley con los campesinos?'], ['fácil de afectar', 1, '¿Qué le pasa al país con el clima?'], ['está incompleta', 2, '¿Qué le falta a esa mesa?'], ['expulsión', null, 'Es lo contrario de lo que busca la ley.'], ['muy fuerte', null, 'Es lo contrario de lo que le pasa.']), bien: 'El contexto las explica.' },
+      'Reconversión es cambiar poco a poco, vulnerable es fácil de afectar y cojear es estar incompleta.', 'Lee el ejemplo que da el texto alrededor.'),
+    x('balanza-tesis', 'Propuesta: «prohibir toda siembra en el páramo desde mañana». ¿Qué hace cada dato?', { doc: PARAMO, tesis: 'Prohibir toda siembra desde mañana',
+      ...F(['El ganado y la siembra secan el suelo que guarda agua.', 0, '¿Es una razón a favor?'], ['Trescientas familias viven solo de esa siembra.', 1, '¿A quién deja sin sustento?'], ['Donde se ayudó a cambiar, el agua se recuperó sin expulsar a nadie.', 1, '¿Hacía falta prohibir de golpe?'], ['Las papas son amarillas.', 2, '¿Cambia la decisión?']), bien: 'Proteger sí, ¿de golpe?' },
+      'El suelo la apoya; las familias y el cambio gradual la debilitan; el color no pesa.', 'Pregunta si el dato hace más o menos conveniente prohibir ya.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 4 la oración que **define** el desarrollo sostenible.', { doc: PARAMO, nums: [4], apuesta: 'Hoy sí, sin quitarle a mañana.', ...S(['4.0'], { '4.1': 'Dice cuáles son sus partes.', '4.2': 'Dice qué pasa si falta una.', '4.3': 'Da ejemplos que cojean.' }), bien: 'Necesidades de hoy y de mañana.' },
+      'La primera oración lo define: satisfacer lo de hoy sin quitarles a las generaciones futuras.', 'Busca la oración que dice qué es lo que busca.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: PARAMO, lineas: ['Renovable no significa infinito.', 'La neblina es blanca.', 'Los páramos dan agua y allí vive gente.', 'Lo sostenible cuida economía, sociedad y ambiente.', 'Hay vacas.', 'Las decisiones deben oír a quienes viven en el territorio.'], ...S([1, 4], { 0: 'Es la primera idea.', 2: 'Es el ejemplo central.', 3: 'Es el concepto.', 5: 'Es el cierre.' }), bien: 'Recursos, páramo, sostenible y voces.' },
+      'La neblina blanca y las vacas son detalles; lo demás resume.', 'Deja lo que usarías para evaluar otro proyecto.'),
+  ]);
+
+  const PUERTO = {
+    id: 'icf-puerto', title: 'El puerto de Bahía Mangle',
+    paras: [
+      'Bahía Mangle es un municipio de ocho mil habitantes en una costa de manglares. Dos de cada tres adultos viven de la pesca o de sacar piangua, un molusco que crece entre las raíces. Un mapa físico muestra allí una entrada honda y tranquila, ideal para barcos grandes. Un mapa de biodiversidad muestra, en el mismo punto, el criadero de peces más importante de la zona.',
+      'En 2023 una empresa propuso construir un puerto. Ofreció seiscientos empleos durante la obra y noventa después. El gobierno nacional apoyó la idea: las mercancías del interior ahorrarían once horas de camino. El alcalde también, porque los impuestos alcanzarían para el hospital que el pueblo pide desde hace veinte años.',
+      'El consejo comunitario pidió la consulta previa a la que tiene derecho. En las reuniones, los jóvenes se dividieron. «Yo no quiero sacar piangua toda la vida», dijo uno. «Y yo no quiero pedirle permiso a una empresa para entrar a mi playa», contestó otra. Las mujeres piangueras llevaron un mapa hecho por ellas, con los sitios donde trabajan, los caminos de agua y los nombres que les dieron sus abuelas. Ninguno aparecía en los planos de la empresa.',
+      'Los estudios ambientales calcularon que se perdería un tercio del manglar. La empresa ofreció sembrar el doble en otra bahía, a sesenta kilómetros. Una bióloga advirtió que un manglar tarda unos quince años en volver a ser criadero y que, además, frena las olas en las tormentas, cada vez más fuertes.',
+      'Después de un año acordaron un muelle más pequeño, en una punta sin manglar, aunque menos honda. Entrarán barcos medianos. Serán menos empleos, pero con cupos y formación para gente del municipio. El mapa de las piangueras quedó pegado al acuerdo como documento oficial: es el primero de la región en el que los lugares llevan los nombres que usa quien los camina.',
+    ],
+  };
+  const Q = preg(PUERTO, 'sociales');
+  return mundo('icf-sc-geografia', 'Territorio y Ambiente', 'sociales', [l1, l2], [
+    ['icf-sc-geografia-1', 'Un mapa temático muestra un solo asunto.', Q('El mapa de biodiversidad y el físico muestran cosas distintas del mismo punto porque:', ['Uno está equivocado', 'Cada mapa escoge qué representar', 'Son de países distintos', 'Tienen el mismo tema'], 1, 'Uno muestra la profundidad y otro, el criadero: cada uno escoge.', 'Piensa qué elige mostrar cada tipo de mapa.')],
+    ['icf-sc-geografia-1', 'Un mapa puede dejar por fuera a la gente.', Q('El mapa de las piangueras es importante porque:', ['Es más bonito', 'Está a una escala menor', 'Muestra usos y nombres que los planos de la empresa no incluían', 'Fue hecho por el gobierno'], 2, 'Ninguno de esos sitios aparecía en los planos de la empresa.', 'Busca qué no aparecía en los otros planos.')],
+    ['icf-sc-geografia-1', 'La población y su trabajo dependen del territorio.', Q('El dato de que dos de cada tres adultos viven de la pesca o la piangua permite deducir que:', ['El puerto afectaría el sustento de la mayoría', 'Nadie quiere el puerto', 'El municipio es muy rico', 'Todos son pescadores'], 0, 'Si el manglar se pierde, se afecta la actividad de la mayoría.', 'Une ese dato con lo que pasaría con el manglar.')],
+    ['icf-sc-geografia-2', 'Sostenible: tres patas.', Q('El acuerdo final se acerca al desarrollo sostenible porque:', ['Elimina el puerto', 'Da el máximo de empleos', 'Busca equilibrar empleo, comunidad y manglar', 'Siembra en otra bahía'], 2, 'Menos empleos pero con formación, sin talar el manglar y con la comunidad.', 'Revisa qué pasa con cada pata.')],
+    ['icf-sc-geografia-2', 'Compensar en otro lugar puede no reemplazar.', Q('La advertencia de la bióloga cuestiona la compensación porque:', ['Sembrar es ilegal', 'La otra bahía es más grande', 'Los manglares no existen', 'El daño es aquí y ahora; la recuperación, lejos y en quince años'], 3, 'El manglar nuevo estaría a sesenta kilómetros y tardaría años.', 'Compara dónde y cuándo se pierde y dónde y cuándo se recupera.')],
+    ['icf-sc-geografia-2', 'La consulta previa busca oír a quienes viven en el territorio.', Q('La consulta previa permitió en este caso:', ['Que el gobierno decidiera solo', 'Que se prohibiera pescar', 'Que la empresa se fuera del país', 'Que la comunidad aportara información y cambiara el proyecto'], 3, 'Las piangueras llevaron su mapa y el proyecto cambió.', 'Compara el proyecto del comienzo con el acuerdo.')],
+  ]);
+})());
+;
 //#archivo js/courses/preicfes-cn-indaga.js
 // Preicfes · Ciencias Naturales · mundo 1 «Indagación Científica» (spec 2026-11-20-curso-preicfes): la competencia que más
 // pregunta la prueba de ciencias: la pregunta de un experimento, sus variables, el control, los datos y qué se puede concluir.
@@ -9266,6 +9039,154 @@ PI_MUNDOS.push((() => {
     ['icf-cn-atomo-2', 'Las sales son compuestos iónicos, más estables que el metal.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'Un elemento se comporta distinto solo que unido a otros.', cards: [['El cloro es tóxico, pero en la sal se come', true], ['El sodio reacciona con agua, la sal no', true], ['El agua caliente se enfría', false], ['Un cable se dobla', false]] }, 'Cloro y sodio cambian al unirse; enfriarse y doblarse no cambian la sustancia.', 'Busca casos en que el elemento está solo y luego unido.')],
     ['icf-cn-atomo-2', 'Metal con no metal: enlace iónico.', pl('intruso-excepto', 'La opción que no es razón para usar sales', { ask: 'Se usan sales en la pólvora por todo esto, EXCEPTO:', cards: [['Son más estables', [4]], ['Son más fáciles de manejar', [4]], ['El metal puro puede ser peligroso', [4]], ['Apagan los colores', null]] }, 'Las tres primeras están en el párrafo 4; los colores no se apagan.', 'Busca cada razón en el párrafo de las sales.')],
     ['icf-cn-atomo-2', 'En una sal, el metal entrega electrones.', opc('En el cloruro de estroncio, el estroncio (metal) y el cloro (no metal) se unen porque:', ['Comparten electrones por igual', 'Sueltan un mar de electrones', 'No tienen electrones', 'El metal entrega electrones al no metal'], 3, 'Metal con no metal: enlace iónico.', 'Pregunta qué hace un metal frente a un no metal.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-cn-herencia.js
+// Preicfes · Ciencias Naturales · mundo 8 «Herencia y Evolución» (spec 2026-11-25-preicfes-estructura). Textos y datos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, sol, err, opc, guion } = ICF;
+
+  const CONEJOS = {
+    id: 'icf-conejos', title: 'Los conejos de la profesora',
+    ficha: { autor: 'Colegio agrícola', fuente: 'Cuaderno de cruces', fecha: 'Febrero de 2026' },
+    paras: [
+      'Un gen es un tramo de ADN con información para una característica. Cada gen puede tener versiones distintas, llamadas alelos. Una coneja recibe dos alelos de cada gen: uno de la madre y otro del padre. Al conjunto de alelos se le llama genotipo; a lo que se ve, fenotipo.',
+      'En los conejos del colegio, el pelo corto es dominante y el largo, recesivo. El alelo dominante se escribe con mayúscula, A; el recesivo, con minúscula, a. Un conejo AA o Aa tiene pelo corto; solo el aa lo tiene largo. El que tiene dos alelos iguales es homocigoto; el que los tiene distintos, heterocigoto.',
+      'La profesora cruzó un macho AA con una hembra aa. Todos los hijos recibieron una A del padre y una a de la madre: los doce fueron Aa, de pelo corto. Después cruzó dos de esos hijos. Cada uno puede dar A o a. Las combinaciones son cuatro: AA, Aa, aA y aa. Se esperan tres de pelo corto por cada uno de pelo largo.',
+      'Nacieron ocho conejos: cinco cortos y tres largos. Un estudiante dijo que la regla había fallado. No había fallado: la probabilidad dice lo que se espera en muchos nacimientos, no lo que ocurre en cada camada. En los registros de cinco años, con 412 nacimientos de esa clase de cruce, 305 fueron cortos y 107 largos.',
+      'No todo se hereda tan sencillo. En algunas flores, ni el rojo ni el blanco dominan y el heterocigoto es rosado. En los grupos sanguíneos, A y B se notan los dos: el hijo puede ser AB. La estatura depende de muchos genes y también de la alimentación.',
+      'Además, hay genes en los cromosomas sexuales. El daltonismo más común está en el cromosoma X y es recesivo. Una mujer, XX, necesita dos copias para tenerlo; un hombre, XY, con una le basta. Por eso es más frecuente en ellos. Una mujer con una sola copia no lo tiene, pero puede transmitirlo: es portadora.',
+    ],
+  };
+  const l1 = leccion('icf-cn-herencia-1', 'Genes y cruces', guion(
+    ['Dos alelos', 'Uno de la madre y otro del padre. Genotipo: los alelos. Fenotipo: lo que se ve.'],
+    ['Dominante y recesivo', 'Con uno dominante basta; el recesivo necesita dos.'],
+    ['El cuadro', 'Cuatro casillas con las combinaciones posibles.'],
+    ['Probabilidad', 'Dice lo que se espera en muchos, no en cada camada.']), [
+    x('genero-o-cita', '¿Es **genotipo** o **fenotipo**?', { doc: CONEJOS, rot: ['genotipo', 'fenotipo'],
+      ...F(['Aa', 0, '¿Son letras de alelos o algo que se ve?'], ['Pelo largo', 1, '¿Son letras de alelos o algo que se ve?'], ['Tener dos alelos iguales', 0, '¿Habla de los alelos o de lo que se ve?'], ['Flor rosada', 1, '¿Habla de los alelos o de lo que se ve?']), bien: 'Lo que se tiene y lo que se ve.' },
+      'Aa y los alelos iguales son genotipo; el pelo y el color se ven: fenotipo.', 'Pregunta si lo puedes ver o si está en los genes.'),
+    x('pista-tipo', 'Ata cada nombre a su genotipo.', { doc: CONEJOS, lineas: ['AA', 'Aa', 'aa'],
+      ...T(['homocigoto de pelo corto', 0, '¿Cuál tiene dos iguales y dominantes?'], ['heterocigoto', 1, '¿Cuál tiene dos distintos?'], ['pelo largo', 2, '¿Cuál no tiene ninguna A?']), bien: 'Iguales, distintos y sin A.' },
+      'AA es homocigoto corto, Aa heterocigoto y aa de pelo largo.', 'Mira si las letras son iguales y si hay mayúscula.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CONEJOS, nums: [2, 4, 5], pregunta: 'Queda en pie', queda: 'Un hijo recibe un alelo de cada padre.',
+      ...T(['Un conejo Aa tiene el pelo largo.', 2, 'Busca qué pelo tiene el que lleva una A.'], ['Como nacieron tres largos de ocho, la regla falló.', 6, 'Busca qué dice la probabilidad.'], ['La estatura depende de un solo gen.', 11, 'Busca de qué depende.']), bien: 'Corto, no falló y muchos genes.' },
+      'El Aa tiene pelo corto, la probabilidad vale en muchos nacimientos y la estatura depende de muchos genes.', 'Saca la palabra clave: Aa, regla, estatura.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CONEJOS, nums: [3, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Los doce primeros hijos fueron de pelo corto.', 0, 'Léela junto al primer cruce.'], ['Un hijo daltónico recibió el alelo de su madre.', 1, '¿De quién recibe un hombre su X?'], ['Dos padres de pelo corto pueden tener hijos de pelo largo.', 1, '¿Qué pasó al cruzar dos Aa?'], ['Los conejos de pelo largo viven más.', 2, '¿Se habla de cuánto viven?']),
+      luz: [[3, 'los doce fueron Aa'], [6, 'un hombre, XY'], [3, 'cada uno de pelo largo']], bien: 'El Y viene del padre, la X de la madre.' },
+      'Los doce están escritos; la X de la madre y los hijos largos se deducen; la edad no aparece.', 'Piensa de quién viene cada cromosoma o alelo.'),
+    x('lee-escala', 'La gráfica muestra los nacimientos de otro registro. Pon cada valor y cuántos cortos hay **más** que largos.', { vals: [150, 50, 200], rot: ['cortos', 'largos', 'total'], hi: 200, st: 40, et: ['cortos', 'largos', 'total', 'más'], ops: ['', '', ''], metas: ['150', '50', '200', '100'], fichas: ['150', '50', '200', '100', '123', '42', '250'],
+      mira: ['Está a tres cuartos del camino entre 120 y 160.', 'Está a un cuarto del camino entre 40 y 80.', 'Mira en qué línea termina.', 'Resta los largos a los cortos.'], trampas: { '0:123': 'Cada línea vale 40: tres cuartos son 30.', '1:42': 'Cada línea vale 40: un cuarto son 10.' }, ok: 'Tres a uno.' },
+      'Las líneas van de 40 en 40: 150, 50 y 200. La diferencia es 100.', 'Mira cuánto vale cada línea y qué parte alcanza la barra.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: CONEJOS, filas: [{ antes: 'Al cruzar Aa con Aa se esperan largos', topes: ['la mitad', 'ninguno', 'uno de cada cuatro'], va: 2 }, { antes: 'Una mujer portadora', topes: ['es daltónica', 'no es daltónica, pero puede transmitirlo', 'no lo transmite'], va: 1 }, { antes: 'En las flores rosadas', topes: ['ninguno domina', 'domina el rojo', 'domina el blanco'], va: 0 }], mira: ['Relee las cuatro combinaciones.', 'Relee la última oración.', 'Relee lo de las flores.'], luz: [[3, 'tres de pelo corto por cada uno'], [6, 'es portadora'], [5, 'ni el rojo ni el blanco dominan']], bien: 'Uno de cuatro, transmite y ninguno.' },
+      'Uno de cada cuatro, la portadora transmite y en las flores ninguno domina.', 'Busca en el texto la oración exacta de cada perilla.'),
+    sol('En una planta, la flor morada (M) domina a la blanca (m). Se cruza Mm con mm. ¿Qué se espera?', ['El padre Mm puede dar M o m; la madre, solo [[m]]', 'Los hijos serán Mm o [[mm]]', 'Se espera que sean blancas el [[50]] %'], ['M', 'MM', '25'], 'Mitad Mm (moradas) y mitad mm (blancas).', 'Escribe lo que puede dar cada uno y combínalo.'),
+    err('Alguien cruza dos conejos Aa y explica lo que espera.', ['Cada uno da A o a', 'Las combinaciones son AA, Aa, aA y aa', 'Se espera que la mitad sea de pelo largo'], 2, ['Se espera que la cuarta parte sea de pelo largo', 'Se espera que todos sean de pelo largo', 'Se espera que ninguno sea de pelo largo'], 'Solo aa tiene pelo largo: una de cuatro.', 'Cuenta en cuántas combinaciones no hay mayúscula.'),
+    opc('Una pareja sin daltonismo tiene un hijo daltónico. Lo más probable es que:', ['El padre sea portador', 'La madre sea portadora', 'Los dos sean daltónicos', 'El hijo no sea de ellos'], 1, 'El hijo recibe su X de la madre; el padre sin daltonismo no tiene el alelo.', 'Pregunta de quién recibe la X un hombre.'),
+  ]);
+
+  const REPRO = {
+    id: 'icf-fresas', title: 'Las fresas y las abejas',
+    ficha: { autor: 'Vivero comunitario', fuente: 'Guía de siembra', fecha: 'Marzo de 2026' },
+    paras: [
+      'Una mata de fresa puede tener hijas de dos maneras. Con un estolón, un tallo que se arrastra y echa raíces, produce otra mata sin ayuda de nadie: es reproducción asexual. Con la flor, cuando un grano de polen llega al pistilo de otra y se forma una semilla, la reproducción es sexual.',
+      'En la asexual hay un solo progenitor y los hijos son genéticamente iguales a él, salvo que ocurra una mutación. Es rápida y no necesita pareja. Así se multiplican las bacterias, que se parten en dos; las levaduras, que forman yemas; y las papas, que se siembran por pedazos.',
+      'En la sexual se unen dos células especiales, los gametos: el óvulo y el espermatozoide, o el polen en las plantas. Cada gameto tiene la mitad de los cromosomas. Al unirse, el cigoto recupera el número completo. Los gametos humanos tienen 23 cromosomas; las demás células del cuerpo, 46.',
+      'Hay dos divisiones celulares que no conviene confundir. La mitosis produce dos células iguales a la original y sirve para crecer y reparar. La meiosis produce cuatro células con la mitad de cromosomas y sirve para formar gametos. En la meiosis los cromosomas intercambian pedazos y se reparten al azar: por eso dos hermanos no son iguales.',
+      'En el vivero hicieron una prueba. Cubrieron treinta flores con una malla que no dejaba entrar insectos; dejaron otras treinta abiertas. Las cubiertas dieron 11 fresas, casi todas deformes; las abiertas, 27. La malla dejaba pasar el sol, el aire y la lluvia.',
+      'El año siguiente apareció un hongo. En la parcela sembrada con estolones de una sola mata murieron casi todas; en la que venía de semillas, murió una de cada cuatro. Ser iguales ahorra tiempo mientras nada cambia. Cuando algo cambia, la variedad es el seguro de vida de una especie.',
+    ],
+  };
+  const l2 = leccion('icf-cn-herencia-2', 'Reproducción', guion(
+    ['Asexual', 'Un progenitor, hijos iguales, rápida.'],
+    ['Sexual', 'Dos gametos con la mitad de cromosomas: hijos variados.'],
+    ['Mitosis y meiosis', 'Dos iguales para crecer; cuatro con la mitad para gametos.'],
+    ['Variedad', 'Protege cuando el ambiente cambia.']), [
+    x('pinta-tipos', 'Pinta cada caso con su tipo de reproducción.', { doc: REPRO, plumas: ['asexual', 'sexual'],
+      ...P(['Una bacteria se parte en dos.', 0, '¿Hay uno o dos progenitores?'], ['El polen llega a otra flor.', 1, '¿Hay uno o dos progenitores?'], ['Un estolón echa raíces.', 0, '¿Hay uno o dos progenitores?'], ['Un óvulo se une a un espermatozoide.', 1, '¿Hay uno o dos progenitores?'], ['Se siembra un pedazo de papa.', 0, '¿Hay uno o dos progenitores?']), bien: 'Uno o dos progenitores.' },
+      'Bacteria, estolón y papa tienen un progenitor; polen y óvulo unen dos gametos.', 'Cuenta cuántos progenitores aportan en cada caso.'),
+    x('genero-o-cita', '¿Es **mitosis** o **meiosis**?', { doc: REPRO, rot: ['mitosis', 'meiosis'],
+      ...F(['Cierra una herida', 0, '¿Repara o forma gametos?'], ['Forma óvulos', 1, '¿Repara o forma gametos?'], ['Da dos células iguales', 0, '¿Cuántas y cómo quedan?'], ['Reduce a la mitad los cromosomas', 1, '¿Cuál divide el número?']), bien: 'Crecer o formar gametos.' },
+      'Reparar y dar dos iguales es mitosis; formar óvulos con la mitad, meiosis.', 'Pregunta para qué sirve y cuántos cromosomas quedan.'),
+    x('voz-de-la-fuente', 'Ata cada papel a lo que le corresponde en la prueba de la malla.', { ayuda: 'Tira un hilo desde cada papel hasta lo que le corresponde.', doc: REPRO, portadas: [['Flores abiertas', 'experimento'], ['Malla', 'experimento'], ['Número de fresas', 'experimento'], ['Sol, aire y lluvia', 'experimento']],
+      ...T(['el control', 0, '¿Con cuáles se compara?'], ['lo que se cambió', 1, '¿Qué impedía entrar a los insectos?'], ['lo que se midió', 2, '¿Qué contaron?'], ['lo que se mantuvo igual', 3, '¿Qué recibieron todas?']), bien: 'Control, cambio, medida e igual.' },
+      'Las abiertas son el control, la malla lo que se cambió, las fresas lo medido y sol, aire y lluvia lo igual.', 'Relee cómo se hizo la prueba con las flores.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: REPRO, nums: [5, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Las flores abiertas dieron 27 fresas.', 0, 'Léela junto a la prueba.'], ['Los insectos ayudan a que se formen buenas fresas.', 1, 'Compara cubiertas y abiertas.'], ['Entre las matas de semilla había algunas resistentes al hongo.', 1, '¿Por qué no murieron todas?'], ['El hongo llegó en las abejas.', 2, '¿Se dice cómo llegó?']),
+      luz: [[5, '27'], [5, '11 fresas'], [6, 'una de cada cuatro']], bien: 'Comparar grupos permite deducir.' },
+      'Las 27 están escritas; los insectos y la resistencia se deducen; cómo llegó el hongo no.', 'Compara qué pasó en cada grupo de plantas.'),
+    x('mayor-tramo', 'La gráfica muestra cuántas bacterias (en miles) hay cada hora. Toca el tramo que más creció **en porcentaje**.', { v: [8, 14, 24, 36] },
+      'De 8 a 14 crece 75 %; de 14 a 24, 71 %; de 24 a 36, 50 %. El último suma más, pero en porcentaje crece menos.', 'Divide lo que creció cada tramo entre el valor con que empezó.'),
+    x('balanza-tesis', 'Idea: «la variedad genética protegió a las fresas de semilla». ¿Qué hace cada dato?', { doc: REPRO, tesis: 'La variedad protegió a las de semilla',
+      ...F(['Las iguales murieron casi todas.', 0, '¿Qué pasó donde no había variedad?'], ['Las de semilla estaban en otra parcela, con menos humedad para el hongo.', 1, '¿Hay otra explicación?'], ['Se repitió en la misma parcela con igual resultado.', 0, '¿Descarta otra explicación?'], ['Las fresas son rojas.', 2, '¿Habla de la variedad?']), bien: 'Otra explicación posible debilita.' },
+      'Las iguales y la repetición la apoyan; la humedad distinta la debilita; el color no pesa.', 'Pregunta qué más pudo ser distinto entre las parcelas.'),
+    sol('Una célula del cuerpo de un perro tiene 78 cromosomas. ¿Cuántos tienen sus gametos y el cigoto?', ['El gameto tiene la mitad: [[39]]', 'El cigoto junta dos gametos: [[78]]', 'El gameto se forma por [[meiosis]]'], ['156', 'mitosis', '40'], '$78 \\div 2 = 39$ y dos gametos suman 78.', 'Los gametos llevan la mitad.'),
+    err('Alguien explica por qué dos hermanos no son iguales.', ['Cada gameto se forma por meiosis', 'En la meiosis los cromosomas se reparten al azar', 'Por eso todos los gametos de una persona son iguales'], 2, ['Por eso los gametos de una persona son distintos entre sí', 'Por eso los hermanos tienen distinto número de cromosomas', 'Por eso los hermanos son genéticamente iguales'], 'El reparto al azar hace distintos a los gametos.', '¿Qué produce un reparto al azar?'),
+    opc('Un cultivo de banano se multiplica siempre por hijuelos de la misma planta. Su mayor riesgo es que:', ['Crezca muy despacio', 'Una sola enfermedad afecte a todas las plantas', 'Las plantas sean muy distintas', 'No tenga cromosomas'], 1, 'Son genéticamente iguales: si una es vulnerable, todas lo son.', 'Recuerda qué pasó con las fresas de estolones.'),
+  ]);
+
+  const EVO = {
+    id: 'icf-lagartijas', title: 'Las lagartijas de la isla Parda',
+    ficha: { autor: 'Grupo de campo', fuente: 'Diario de observación', fecha: 'Abril de 2026' },
+    paras: [
+      'En la isla Parda, las rocas son oscuras. Hace ochenta años, un naturalista contó lagartijas: nueve de cada diez eran verdes y una era parda. Hoy, de cada diez, ocho son pardas. Nadie las pintó y ninguna lagartija verde se volvió parda. Lo que cambió fue la población.',
+      'La selección natural lo explica con cuatro pasos. Uno: los individuos de una población no son iguales; hay variación. Dos: parte de esa variación se hereda. Tres: nacen más de los que pueden sobrevivir. Cuatro: los que tienen características favorables en ese ambiente sobreviven y se reproducen más, y dejan más hijos parecidos.',
+      'Sobre roca oscura, los halcones ven mejor a las verdes. Las pardas llegaban más a menudo a tener crías, que también eran pardas. Generación tras generación, la proporción cambió. La variación apareció antes, por mutaciones al azar; el ambiente no la fabricó, la seleccionó.',
+      'Conviene evitar dos errores. El primero es pensar que los individuos se adaptan porque lo necesitan: una lagartija no se oscurece por esforzarse. El segundo es creer que lo favorable lo es siempre: en la isla vecina, de arena clara, las pardas casi no existen. Estar adaptado es estarlo a un lugar y a un momento.',
+      'Las pruebas de la evolución vienen de muchas partes. Los fósiles muestran formas intermedias. Los huesos del brazo humano, la aleta de la ballena y el ala del murciélago son los mismos, acomodados de otra manera. El ADN de especies emparentadas se parece más que el de especies lejanas.',
+      'También la vemos mientras ocurre. Si se toma un antibiótico y se abandona antes de tiempo, mueren primero las bacterias sensibles y quedan las pocas resistentes. Esas se multiplican. La siguiente infección ya no responde. No es que la bacteria «se acostumbre»: es que las otras murieron.',
+    ],
+  };
+  const l3 = leccion('icf-cn-herencia-3', 'Selección natural', guion(
+    ['Cuatro pasos', 'Variación, herencia, más nacimientos que sobrevivientes y reproducción diferente.'],
+    ['La población cambia', 'El individuo no se transforma: cambia la proporción.'],
+    ['Al azar y seleccionada', 'La mutación es al azar; el ambiente selecciona.'],
+    ['Pruebas', 'Fósiles, huesos parecidos, ADN y bacterias resistentes.']), [
+    x('pasos-del-proceso', 'Ordena lo que pasó con las lagartijas. El primer paso está en su puesto.', { doc: EVO, que: 'el cambio', de: 'De verdes a pardas', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Hay verdes y unas pocas pardas.', 'Los halcones cazan más verdes.', 'Las pardas tienen más crías.', 'Las crías heredan el color.', 'La mayoría es parda.'], mira: ['', 'Es lo que hace el ambiente.', 'Es lo que logran las que sobreviven.', 'Es lo que les pasa a sus hijas.', 'Es el resultado.'], bien: 'Variar, cazar, criar, heredar y cambiar.' },
+      'Había variación, los halcones cazan verdes, las pardas crían, heredan el color y la población cambia.', 'Sigue los cuatro pasos que explica el párrafo 2.'),
+    x('genero-o-cita', '¿La explicación es **correcta** o tiene el **error** típico?', { doc: EVO, rot: ['correcta', 'error típico'],
+      ...F(['Se oscureció porque lo necesitaba', 1, '¿El individuo cambia por esfuerzo?'], ['Las pardas dejaron más crías', 0, '¿Habla de reproducción?'], ['La bacteria se acostumbró al remedio', 1, '¿El individuo cambia por esfuerzo?'], ['Quedaron las que ya eran resistentes', 0, '¿La variación estaba antes?']), bien: 'No se esfuerzan: se seleccionan.' },
+      'Necesitar y acostumbrarse son el error; dejar crías y quedar las resistentes es la selección.', 'Pregunta si cambia el individuo o la población.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: EVO, nums: [1, 3, 4], pregunta: 'Queda en pie', queda: 'Lo favorable depende del lugar.',
+      ...T(['Cada lagartija verde se volvió parda.', 3, 'Busca qué no hizo ninguna.'], ['El ambiente fabricó el color pardo.', 8, 'Busca qué hizo el ambiente.'], ['Ser parda es ventaja en cualquier isla.', [11, 12], 'Busca la isla vecina.']), bien: 'Ninguna, seleccionó y otra isla.' },
+      'Ninguna se volvió parda, el ambiente seleccionó y en la arena clara casi no hay pardas.', 'Saca la palabra clave: cada, fabricó, cualquier.'),
+    x('pista-tipo', 'Ata cada clase de prueba a su ejemplo.', { doc: EVO, lineas: ['formas intermedias en la roca', 'brazo, aleta y ala con los mismos huesos', 'secuencias parecidas', 'bacterias resistentes'],
+      ...T(['fósiles', 0, '¿Cuál se halla en la roca?'], ['anatomía comparada', 1, '¿Cuál habla de huesos?'], ['ADN', 2, '¿Cuál compara secuencias?'], ['evolución observada hoy', 3, '¿Cuál ocurre ante nosotros?']), bien: 'Muchas pruebas, una idea.' },
+      'Los fósiles, los huesos, el ADN y las bacterias apuntan a lo mismo.', 'Mira de dónde sale cada una de las pruebas.'),
+    x('lee-escala', 'La gráfica muestra las pardas de cada cien en tres conteos. Pon cada valor y cuánto **subió** del primero al último.', { vals: [10, 45, 80], rot: ['hace 80 años', 'hace 40', 'hoy'], hi: 80, st: 20, et: ['primero', 'segundo', 'hoy', 'subió'], ops: ['', '', ''], metas: ['10', '45', '80', '70'], fichas: ['10', '45', '80', '70', '5', '41', '90'],
+      mira: ['Está a mitad de camino de la primera línea.', 'Está a un cuarto del camino entre 40 y 60.', 'Mira en qué línea termina.', 'Resta el primero al último.'], trampas: { '0:5': 'Cada línea vale 20: la mitad son 10.', '1:41': 'Cada línea vale 20: un cuarto son 5.', '3:90': 'Eso es la suma.' }, ok: 'De 10 a 80.' },
+      'Las líneas van de 20 en 20: 10, 45 y 80. Subió $80 - 10 = 70$.', 'Mira cuánto vale cada línea y qué parte alcanza la barra.'),
+    x('balanza-tesis', 'Hipótesis: «los halcones causaron el cambio». ¿Qué hace cada dato?', { doc: EVO, tesis: 'Los halcones causaron el cambio',
+      ...F(['En un islote oscuro sin halcones, siguen siendo verdes.', 0, '¿Qué pasa al quitar los halcones?'], ['En un islote oscuro sin halcones, también son pardas.', 1, '¿Hicieron falta los halcones?'], ['Los halcones anidan en marzo.', 2, '¿Explica el color?']), bien: 'Quitar una causa la pone a prueba.' },
+      'Sin halcones y verdes la apoya; sin halcones y pardas la debilita; el mes no pesa.', 'Compara lugares con halcones y lugares sin ellos.'),
+    sol('En una población de 200 polillas, 20 son oscuras. Tras un incendio sobreviven 18 oscuras y 42 claras. ¿Qué porcentaje es oscuro antes y después?', ['Antes eran oscuras el [[10]] %', 'Sobrevivieron en total [[60]]', 'Ahora son oscuras el [[30]] %'], ['18', '20', '43'], '$20 \\div 200 = 10\\%$; $18 \\div 60 = 30\\%$.', 'Compara siempre con el total de ese momento.'),
+    err('Alguien explica el cuello largo de las jirafas.', ['Había jirafas de cuello más largo y más corto', 'Las de cuello largo alcanzaban más comida', 'Al estirarse, el cuello les creció y lo heredaron'], 2, ['Dejaron más crías, que heredaron el cuello largo', 'Las de cuello corto se estiraron hasta alcanzar', 'El cuello creció porque lo necesitaban'], 'Lo que se gana por estirarse no se hereda: se seleccionó la variación que ya había.', '¿Se hereda lo que se estira en la vida?'),
+    opc('Un paciente suspende el antibiótico al sentirse mejor. Esto favorece la resistencia porque:', ['Las bacterias aprenden a defenderse', 'El antibiótico crea bacterias nuevas', 'Sobreviven y se multiplican las más resistentes', 'El cuerpo rechaza el remedio'], 2, 'Mueren las sensibles y quedan las resistentes, que se multiplican.', 'Piensa cuáles quedan vivas.'),
+  ]);
+
+  const MAIZ = {
+    id: 'icf-maiz', title: 'De dónde salió el maíz',
+    paras: [
+      'Hace unos nueve mil años, en lo que hoy es México, la gente recogía los granos de una hierba llamada teocinte. Su mazorca medía lo que un dedo y tenía una docena de granos duros.',
+      'Cada año guardaban para sembrar las semillas de las plantas con granos más grandes o más blandos. Es selección artificial: escoge la gente y no el ambiente.',
+      'Cuando los científicos compararon el ADN del maíz y del teocinte, hallaron que la diferencia de forma depende, en gran parte, de unos pocos genes. Todavía se pueden cruzar y dar hijos fértiles.',
+      'El maíz moderno ya no puede vivir solo: sus granos no se sueltan y, si la mazorca cae entera, los brotes se ahogan entre sí. Necesita quien lo desgrane.',
+      'Hay cientos de variedades: de colores, de clima frío o caliente. Cuando un hongo atacó los cultivos de un país que sembraba casi una sola, se perdió una parte enorme de la cosecha. La solución vino de una variedad vieja que nadie sembraba.',
+    ],
+  };
+  const pl = (g, q, p, e, h) => play(g, q, { doc: MAIZ, ...p }, e, { hint: h });
+  return mundo('icf-cn-herencia', 'Herencia y Evolución', 'ciencias', [l1, l2, l3], [
+    ['icf-cn-herencia-1', 'Unos pocos genes pueden cambiar mucho la forma.', pl('donde-buscar', '¿A qué párrafo vuelves para responder?', { cards: [['¿Qué se halló al comparar el ADN?', [3]], ['¿Cómo era el teocinte?', [1]], ['¿Por qué no puede vivir solo el maíz?', [4]]] }, 'El ADN está en el 3, el teocinte en el 1 y la dependencia en el 4.', 'Busca la palabra clave de cada pregunta.')],
+    ['icf-cn-herencia-1', 'Lo que se hereda pasa en las semillas.', pl('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { cards: [['El teocinte tenía una docena de granos.', 0], ['El tamaño del grano se hereda.', 1], ['Maíz y teocinte son parientes cercanos.', 1], ['El teocinte era amarillo.', 2]] }, 'La docena está escrita; que se hereda y el parentesco se deducen; el color no.', 'Piensa por qué sirvió guardar esas semillas.')],
+    ['icf-cn-herencia-1', 'El fenotipo depende del genotipo.', opc('Guardar las semillas de las plantas con granos grandes sirvió porque:', ['Las semillas grandes no necesitan agua', 'Los hijos heredan los alelos de sus padres', 'El grano crece por desearlo', 'El teocinte no tiene genes'], 1, 'Al reproducir esas plantas, sus alelos se hicieron más comunes.', 'Pregunta qué reciben las plantas hijas.')],
+    ['icf-cn-herencia-2', 'La variedad protege.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'Sembrar una sola variedad es un riesgo.', cards: [['Un cultivo de papas iguales arrasado por una plaga', true], ['Un bosque con un solo tipo de pino, enfermo', true], ['Una huerta con veinte especies', false], ['Una vaca que da más leche', false]] }, 'Papas iguales y pinos iguales muestran el riesgo; la huerta variada es lo contrario.', 'Busca casos en que todo es igual y algo lo ataca.')],
+    ['icf-cn-herencia-2', 'Hijos fértiles: parentesco cercano.', pl('intruso-excepto', 'La opción que no aparece en el texto', { ask: 'Del maíz moderno se dice todo esto, EXCEPTO:', cards: [['Necesita quien lo desgrane', [4]], ['Puede cruzarse con el teocinte', [3]], ['Tiene cientos de variedades', [5]], ['Crece bajo el agua', null]] }, 'Las tres primeras están en el 4, el 3 y el 5; la última no.', 'Busca cada una en su párrafo.')],
+    ['icf-cn-herencia-2', 'Reproducción sexual: variedad.', opc('Conservar variedades viejas de maíz es útil porque:', ['Pueden tener alelos que sirvan ante una enfermedad', 'Son más bonitas', 'No se reproducen', 'Todas son iguales'], 0, 'La solución al hongo vino de una variedad que nadie sembraba.', 'Relee cómo se resolvió la pérdida de la cosecha.')],
+    ['icf-cn-herencia-3', 'Selección artificial: escoge la gente.', pl('resume-parrafo', 'Cada párrafo en una frase', { paras: [2, 4], options: ['La gente escogió qué semillas sembrar.', 'El maíz depende de las personas.', 'El ambiente escogió las semillas.', 'El maíz se siembra solo.'], key: [0, 1] }, 'El 2 habla de escoger semillas; el 4, de su dependencia; las otras dicen lo contrario.', 'El resumen no puede contradecir el párrafo.')],
+    ['icf-cn-herencia-3', 'Las mismas reglas: variación, herencia y selección.', pl('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { labels: ['presenta al antepasado', 'explica la selección', 'da la prueba del ADN', 'muestra una consecuencia', 'cuenta un riesgo y su salida', 'enseña a cocinar'], key: [0, 1, 2, 3, 4] }, 'Antepasado, selección, prueba, consecuencia y riesgo; no hay receta.', 'Mira qué agrega cada párrafo.')],
+    ['icf-cn-herencia-3', 'Natural o artificial: quién selecciona.', opc('La diferencia entre la selección del maíz y la de las lagartijas es:', ['En el maíz no hubo herencia', 'En las lagartijas no hubo variación', 'En el maíz escogió la gente y en las lagartijas, el ambiente', 'Ninguna de las dos es selección'], 2, 'Las dos tienen variación y herencia; cambia quién selecciona.', 'Pregunta quién decidía cuáles se reproducían.')],
   ]);
 })());
 ;

@@ -263,3 +263,13 @@ test('juegos del plano y las barras: una sola respuesta (o todas las de la recta
     for (const f of [0, 0.5, 1]) for (const v of [g.ini(p), s]) assert.ok(!malo(g.dib(v, K, p, f)), `${e.game} ${f}`);
   }
 });
+
+test('ninguna figura ni lista se queda sin aviso: cada caso equivocado explica por qué', () => {
+  const ex = [...C.units.flatMap(u => u.lessons).flatMap(l => l.ex.map(e => [l.id, e])), ...get(ctx, 'GYM_RETOS').filter(r => /^gym-i-/.test(r.id)).flatMap(r => r.steps.map(s => [r.id, s.ex]))];
+  const FRASES = ['cierran-o-no', 'equivalen-no', 'sigue-equilibrada', 'datos-que-sobran', 'vale-o-no', 'siempre-par', 'siempre-multiplo', 'seguro-o-suerte', 'basta-con'];
+  for (const [id, e] of ex) {
+    if (FRASES.includes(e.game)) for (const c of e.params.casos) assert.ok(c.si || c.no?.length > 12, `${id} ${e.game}: «${c.t}» sin aviso`);
+    const g = GAMES[e.game];
+    if (g.figura && g.aviso) assert.ok(!/undefined|NaN/.test(g.aviso(g.ini(e.params), e.params) + g.bien(g.solve(e.params), e.params)), `${id} ${e.game}: aviso roto`);
+  }
+});

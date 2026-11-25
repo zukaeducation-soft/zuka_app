@@ -1,409 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/arbol-potencia.js
-// El árbol de la potencia (Álgebra, potencias; lección alg-21a): un árbol en el que de cada nudo salen b ramas, nivel
-// tras nivel. Con e niveles tiene b · b · … · b = bᵉ hojas. Se eligen las ramas por nudo (la base) y los niveles (el
-// exponente) hasta tener exactamente las hojas pedidas. Hay metas con varias respuestas (64 = 2⁶ = 4³ = 8²).
-// params = { rounds: [{ target }], maxBase?, maxExp? }   state = { rounds: [{ b, e }] }
-// Spec 2026-11-15-torres-de-potencias.
-
-GAMES['arbol-potencia'] = (() => {
-  // Primera pareja (base, exponente) que da n hojas, con la base más pequeña.
-  function powersOf(n, maxB = 9, maxE = 7) {
-    const out = [];
-    for (let b = 2; b <= maxB; b++) for (let e = 1; e <= maxE; e++) if (b ** e === n) out.push([b, e]);
-    return out;
-  }
-  const game = roundsGame({
-    aspect: 1.25,
-    init: () => ({ b: 2, e: 1 }),
-    ok: (s, r) => s.b ** s.e === r.target,
-    solution: (r, P) => powersOf(r.target, P.maxBase, P.maxExp).map(([b, e]) => `${b}${sup(e)}`).join(' = ') + ` = ${r.target}`,
-    prompt: r => `Haz un árbol con exactamente ${r.target} hojas`,
-    foot: (r, s) => (s.b ** s.e === r.target ? `${Array(s.e).fill(s.b).join(' · ')} = ${r.target}` : 'Cada nivel multiplica las puntas por las ramas de cada nudo'),
-    layout(G) { const w = (G.W - 36) / 2; G.box = [{ x: 12, y: G.H - 64, w, h: 32 }, { x: 24 + w, y: G.H - 64, w, h: 32 }]; },
-    draw(G) {
-      const { p, C, W, H, s, r } = G, n = s.b ** s.e, good = n === r.target, top = 128, bot = H - 96, lv = (bot - top) / s.e;
-      p.noStroke(); p.fill(good ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(17);
-      p.text(`${s.b}${sup(s.e)} = ${n} hojas`, W / 2, 94);
-      // Las ramas: el nivel k tiene bᵏ puntas repartidas a lo ancho; se dibuja hasta donde se alcanzan a ver.
-      const X = (k, i) => 12 + ((i + 0.5) / s.b ** k) * (W - 24), Y = k => bot - k * lv;
-      p.stroke(C.Q); p.strokeWeight(5); p.line(W / 2, bot + 14, W / 2, bot);
-      let last = 0;
-      for (let k = 1; k <= s.e && s.b ** k <= 160; k++) {
-        p.stroke(C.Q); p.strokeWeight(Math.max(1, 4 - k));
-        for (let i = 0; i < s.b ** k; i++) p.line(X(k - 1, Math.floor(i / s.b)), Y(k - 1), X(k, i), Y(k));
-        last = k;
-      }
-      const cnt = s.b ** last, d = Math.max(3, Math.min(12, (W - 24) / cnt - 1));
-      p.noStroke(); p.fill(good ? C.ok : C.mint);
-      for (let i = 0; i < cnt; i++) p.circle(X(last, i), Y(last), d);
-      if (last < s.e) { p.fill(C.mute); p.textSize(11); p.textStyle(p.NORMAL); p.text(`… y ${s.e - last} ${s.e - last === 1 ? 'nivel' : 'niveles'} más: ya no caben en el dibujo`, W / 2, top - 12); }
-      drawStepper(p, C, G.box[0], s.b, 'ramas por nudo (base)');
-      drawStepper(p, C, G.box[1], s.e, 'niveles (exponente)');
-    },
-    press(G, x, y) {
-      const P = G.params, db = stepHit(G.box[0], x, y), de = stepHit(G.box[1], x, y);
-      if (!db && !de) return false;
-      G.s.b = Math.max(2, Math.min(P.maxBase ?? 9, G.s.b + db)); G.s.e = Math.max(1, Math.min(P.maxExp ?? 7, G.s.e + de)); G.touch();
-      return true;
-    },
-    peek: G => ({ box: G.box }),
-  });
-  return { ...game, powersOf };
-})();
-;
-//#archivo js/games/pares-negativos.js
-// Parejas de negativos (Álgebra, potencias; lección alg-21a): una potencia se escribe como sus factores. Con
-// paréntesis, (−2)⁴ son cuatro factores −2; sin paréntesis, −2⁴ es un solo −1 por cuatro doses. Se tocan dos factores
-// negativos para emparejarlos (cada pareja da positivo) y al final se elige el signo: si queda un negativo suelto, el
-// resultado es negativo. El juego escribe el valor.
-// params = { rounds: [{ base, n, paren, outer }] }     paren: el signo va dentro del paréntesis; outer: hay un − afuera
-// state = { rounds: [{ pairs: [[i, j]], sign: 0 | 1 | −1, pick: −1 }] }      Spec 2026-11-15-torres-de-potencias.
-
-GAMES['pares-negativos'] = (() => {
-  const negsOf = r => (r.paren ? r.n : 0) + (r.outer ? 1 : 0);
-  const signOf = r => (negsOf(r) % 2 ? -1 : 1);
-  const exprOf = r => `${r.outer ? '−' : ''}${r.paren ? `(−${r.base})` : r.base}${sup(r.n)}`;
-  const valueOf = r => signOf(r) * r.base ** r.n;
-  // Las fichas: el −1 de afuera (si lo hay) y luego los n factores.
-  const tilesOf = r => [...(r.outer ? [{ txt: '−1', neg: true }] : []), ...Array.from({ length: r.n }, () => ({ txt: r.paren ? `−${r.base}` : `${r.base}`, neg: !!r.paren }))];
-
-  const game = roundsGame({
-    aspect: 1.15,
-    init: () => ({ pairs: [], sign: 0, pick: -1 }),
-    ok: (s, r) => s.sign === signOf(r) && s.pairs.length === Math.floor(negsOf(r) / 2),
-    answered: s => s.sign !== 0,
-    solution: r => { const n = negsOf(r), k = Math.floor(n / 2); return `${exprOf(r)} = ${negTxt(valueOf(r))} (${k ? `${k} ${k === 1 ? 'pareja' : 'parejas'} de negativos${n % 2 ? ' y uno suelto' : ''}` : 'un solo negativo, sin pareja'})`; },
-    prompt: r => `${exprOf(r)}: empareja los factores negativos y elige el signo`,
-    foot: (r, s) => (s.sign ? 'Revisa que no queden dos negativos sin emparejar' : 'Toca dos fichas negativas: juntas dan positivo'),
-    layout(G) { G.btn = [{ x: G.W / 2 - 96, y: G.H - 74, w: 88, h: 36, sign: 1 }, { x: G.W / 2 + 8, y: G.H - 74, w: 88, h: 36, sign: -1 }]; },
-    draw(G) {
-      const { p, C, W, H, s, r } = G, tiles = tilesOf(r), tw = Math.min(50, (W - 24) / tiles.length - 6), x0 = W / 2 - (tiles.length * (tw + 6) - 6) / 2, y = 166;
-      G.boxes = tiles.map((_, i) => ({ x: x0 + i * (tw + 6), y, w: tw, h: 42 }));
-      const paired = i => s.pairs.some(q => q.includes(i));
-      p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER);
-      p.text(tiles.map(t => (t.neg && t.txt !== '−1' ? `(${t.txt})` : t.txt)).join(' · '), W / 2, 100);
-      s.pairs.forEach(([i, j]) => {   // el arco que une cada pareja
-        const a = G.boxes[i], b = G.boxes[j], xa = a.x + a.w / 2, xb = b.x + b.w / 2;
-        p.noFill(); p.stroke(C.ok); p.strokeWeight(3); p.arc((xa + xb) / 2, y, Math.abs(xb - xa), 34 + Math.abs(j - i) * 6, Math.PI, 0);
-        p.noStroke(); p.fill(C.ok); p.textSize(15); p.text('+', (xa + xb) / 2, y - 26 - Math.abs(j - i) * 3);
-      });
-      tiles.forEach((t, i) => drawTile(p, C, G.boxes[i], t.txt, { fill: !t.neg ? C.cream : paired(i) ? C.mint : C.coral, size: 16, ring: s.pick === i ? C.sun : null }));
-      const loose = tiles.filter((t, i) => t.neg && !paired(i)).length;
-      p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER);
-      p.text(`negativos sueltos: ${loose}`, W / 2, y + 66);
-      p.fill(C.mute); p.textSize(12); p.text('El signo del resultado es', W / 2, H - 90);
-      G.btn.forEach(b => drawTile(p, C, b, b.sign > 0 ? '+ positivo' : '− negativo', { fill: s.sign === b.sign ? C.sun : C.cream, size: 14, r: 10, lift: 2 }));
-      if (s.sign) { p.noStroke(); p.fill(C.ink); p.textSize(18); p.text(`${exprOf(r)} = ${s.sign < 0 ? '−' : ''}${r.base ** r.n}`, W / 2, y + 96); }
-    },
-    press(G, x, y) {
-      const { s, r } = G, tiles = tilesOf(r), b = G.btn.find(q => hitBox(q, x, y));
-      if (b) { s.sign = b.sign; G.touch(); return true; }
-      const i = (G.boxes || []).findIndex(q => hitBox(q, x, y));
-      if (i < 0 || !tiles[i].neg) return i >= 0;
-      const k = s.pairs.findIndex(q => q.includes(i));
-      if (k >= 0) { s.pairs.splice(k, 1); s.pick = -1; }           // tocar una emparejada la suelta
-      else if (s.pick < 0 || s.pick === i) s.pick = s.pick === i ? -1 : i;
-      else { s.pairs.push([Math.min(s.pick, i), Math.max(s.pick, i)]); s.pick = -1; }
-      G.api.sfx?.tap?.();
-      return true;
-    },
-    peek: G => ({ boxes: G.boxes, btn: G.btn, negs: tilesOf(G.r).map(t => t.neg), sign: signOf(G.r) }),
-  });
-  return { ...game, negsOf, signOf, exprOf, valueOf };
-})();
-;
-//#archivo js/games/torre-pisos.js
-// La torre de pisos (Álgebra, potencias; juego dinámico de la lección alg-21a): una torre donde el piso n es la
-// potencia aⁿ. En la planta baja (piso 0) vive el 1; subir un piso multiplica por la base y bajar uno divide, así que
-// en los sótanos (pisos negativos) viven fracciones. Solo se ven la planta baja y el piso 1: las demás ventanas están
-// cerradas y hay que contar pisos (cada una se abre cuando se entrega ahí).
-// Hay que llevar cada paquete al piso donde vive el número pedido y tocar «Entregar». No hay reloj. Entregar en otro
-// piso quita una vida (y dice quién vive ahí). Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, base, lo, hi, items: [{ exp }] }], lives? }   state = { done: [n] }
-// Spec 2026-11-15-torres-de-potencias.
-
-GAMES['torre-pisos'] = (() => {
-  // Cómo se escribe aᵏ: entero, fracción o decimal (con base 10).
-  const valTxt = (base, k) => (k >= 0 ? String(base ** k) : base === 10 ? (10 ** k).toFixed(-k) : `1/${base ** -k}`);
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => r.items.map(it => `${valTxt(r.base, it.exp)} = ${r.base}${sup(it.exp)}`).join(', ')).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, pos = 0, dest = 0, seen = new Set(), pause = 0, result = null, btn = {}, top = 104, bot = 0, drag = false;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; pos = 0; dest = 0; seen = new Set([0, 1]); pause = 0; result = null; },
-      lost(i) { st.done[i] = 0; },
-    });
-    const round = () => R[a.cur], item = () => round().items[Math.min(st.done[a.cur], round().items.length - 1)];
-    const rowH = () => (bot - top) / (round().hi - round().lo + 1);
-    const Y = k => bot - (k - round().lo + 0.5) * rowH();   // centro del piso k
-
-    function layout(w, h) { W = w; H = h; bot = h - 78; btn = { x: w / 2 - 70, y: h - 62, w: 140, h: 32 }; }
-    function deliver() {
-      const r = round(), it = item(), k = Math.round(pos), good = k === it.exp;
-      result = { good }; pause = good ? 1.2 : 1.0; seen.add(k);
-      if (good) { st.done[a.cur]++; a.hit(); a.say(`${valTxt(r.base, k)} = ${r.base}${sup(k)}`, C.ok); }
-      else { a.say(`Aquí vive ${valTxt(r.base, k)}: es ${r.base}${sup(k)}`, C.bad); if (a.miss()) { result = null; pause = 0; } }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play') return;
-        if (pos !== dest) { const d = Math.sign(dest - pos) * dt * 5; pos = Math.abs(dest - pos) <= Math.abs(d) ? dest : pos + d; }
-        if (pause > 0) { pause -= dt; if (pause <= 0) { const good = result && result.good; result = null; if (good && st.done[a.cur] >= round().items.length) a.win(); } }
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = round(), it = pause > 0 && result && result.good ? r.items[Math.max(0, st.done[a.cur] - 1)] : item(), live = a.phase === 'play', over = locked || a.phase === 'all', rh = rowH(), x0 = 46, x1 = W - 22;
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, `${r.title} · subir un piso multiplica por ${r.base}; bajar divide`, W / 2, 40, W - 24, 11);
-        if (live) drawPill(p, C, `Lleva el paquete a donde vive ${valTxt(r.base, it.exp)}`, W / 2, 68, C.sun, 15);
-
-        // La torre: un renglón por piso; los sótanos van en otro tono y bajo la línea del suelo.
-        if (!over) for (let k = r.lo; k <= r.hi; k++) {
-          const y = Y(k), open = seen.has(k) && a.phase !== 'idle', here = Math.round(pos) === k && live;
-          p.noStroke(); p.fill(k < 0 ? C.card : C.halo); p.rect(x0, y - rh / 2 + 2, x1 - x0, rh - 4, 7);
-          p.fill(k === 0 ? C.N : C.mute); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.RIGHT, p.CENTER); p.text(negTxt(k), x0 - 8, y);
-          drawTile(p, C, { x: W / 2 - 46, y: y - Math.min(13, rh / 2 - 5), w: 92, h: Math.min(24, rh - 12) }, open ? valTxt(r.base, k) : '?', { fill: open ? (here ? C.sun : C.cream) : C.line, ink: open ? undefined : C.mute, size: 14, r: 7, lift: open ? 2 : 0 });
-          if (k === 0) { p.stroke(C.ink); p.strokeWeight(3); p.line(14, y + rh / 2, W - 14, y + rh / 2); }
-        }
-        if (!over) {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER); p.text('piso', 26, top - 10);
-          // El ascensor.
-          const y = Y(pos), col = result ? (result.good ? C.ok : C.bad) : C.coral;
-          p.noFill(); p.stroke(col); p.strokeWeight(3); p.rect(x0 + 3, y - rh / 2 + 4, x1 - x0 - 6, rh - 8, 7);
-          p.noStroke(); p.fill(col); p.rect(x1 - 30, y - 9, 20, 18, 4); p.fill(C.cream); p.rect(x1 - 25, y - 5, 10, 8, 2);
-        }
-        if (live && pause <= 0) drawTile(p, C, btn, 'Entregar aquí', { fill: C.mint, size: 14, r: 10, lift: 2 });
-
-        arcadeToast(p, C, a, W / 2, H - 13, locked);
-        if (over) drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `Base ${rr.base}: ${rr.items.map(x => `${rr.base}${sup(x.exp)} = ${valTxt(rr.base, x.exp)}`).join(' · ')}` })), H / 2);
-        else drawArcadeBanner(p, C, a, (top + bot) / 2, { idle: 'Sin prisa: cuenta los pisos y mueve el ascensor', lost: 'Varios paquetes en el piso equivocado' });
-        if (!a.toast && (over || a.phase === 'idle')) {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(over ? '¡Todo entregado! Ya puedes comprobar' : 'El piso es el exponente', W / 2, H - 13);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      const move = () => {
-        const { lo, hi } = round();
-        const next = Math.max(lo, Math.min(hi, lo + Math.floor((bot - p.mouseY) / rowH())));
-        if (next !== dest) { dest = next; api.sfx?.tap?.(); }
-      };
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp !== 'play' || pause > 0) return false;
-        const x = p.mouseX, y = p.mouseY;
-        if (hitBox({ x: btn.x - 6, y: btn.y - 4, w: btn.w + 12, h: btn.h + 10 }, x, y)) { if (pos === dest) deliver(); return false; }
-        if (y < top || y > bot) return;
-        drag = true; move();
-        return false;
-      };
-      p.mouseDragged = () => { if (drag && !locked) { move(); return false; } };
-      p.mouseReleased = () => { drag = false; };
-    }, 1.45, () => {
-      if (locked || a.phase !== 'play' || pause > 0) return null;
-      const x = W - 42;
-      return { from: { x, y: Y(pos) }, to: { x, y: Y(pos >= round().hi ? pos - 1 : pos + 1) } };
-    });
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-      demo: m.demo,
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => { const r = round(); return { phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, floor: pos, moving: pos !== dest, target: item().exp, ok: { x: btn.x + btn.w / 2, y: btn.y + btn.h / 2 }, floors: Array.from({ length: r.hi - r.lo + 1 }, (_, i) => ({ k: r.lo + i, x: W / 2 - 80, y: Y(r.lo + i) })) }; },
-    };
-  }
-
-  return { grade, create, valTxt, demo: true };
-})();
-;
-//#archivo js/games/cuenta-factores.js
-// Cuenta los factores (Álgebra, leyes de los exponentes; lección alg-21b): las leyes salen de contar. Cada potencia
-// se dibuja como sus x: en un producto las dos filas se juntan (se suman), en un cociente cada x de abajo tacha una de
-// arriba (se restan; si sobran abajo, el exponente es negativo) y en una potencia de potencia el grupo se repite (se
-// multiplican). Se elige el exponente del resultado con − y +.
-// params = { rounds: [{ kind: 'prod' | 'quot' | 'pow', m, n }], letter? }   state = { rounds: [{ e }] }
-// Spec 2026-11-15-torres-de-potencias.
-
-GAMES['cuenta-factores'] = (() => {
-  const expOf = r => (r.kind === 'prod' ? r.m + r.n : r.kind === 'quot' ? r.m - r.n : r.m * r.n);
-  const exprOf = (r, x = 'x') => (r.kind === 'prod' ? `${x}${sup(r.m)} · ${x}${sup(r.n)}` : r.kind === 'quot' ? `${x}${sup(r.m)} ÷ ${x}${sup(r.n)}` : `(${x}${sup(r.m)})${sup(r.n)}`);
-  const lawOf = r => (r.kind === 'prod' ? `${r.m} + ${r.n}` : r.kind === 'quot' ? `${r.m} − ${r.n}` : `${r.m} · ${r.n}`);
-
-  const game = roundsGame({
-    aspect: 1.15,
-    init: () => ({ e: 0 }),
-    ok: (s, r) => s.e === expOf(r),
-    solution: (r, P) => `${exprOf(r, P.letter)} = ${P.letter || 'x'}${sup(expOf(r))}`,
-    prompt: (r, s, G) => `${exprOf(r, G.params.letter)}: cuenta las ${G.params.letter || 'x'} y pon el exponente`,
-    foot: r => (r.kind === 'prod' ? 'Las dos filas se juntan en una sola' : r.kind === 'quot' ? 'Cada una de abajo tacha una de arriba' : 'El mismo grupo se repite varias veces'),
-    layout(G) { G.box = { x: G.W / 2 - 70, y: G.H - 70, w: 140, h: 34 }; },
-    draw(G) {
-      const { p, C, W, H, s, r } = G, x = G.params.letter || 'x', sz = 26;
-      const tile = (cx, cy, col, dead) => {
-        drawTile(p, C, { x: cx - sz / 2, y: cy - sz / 2, w: sz, h: sz - 3 }, x, { fill: dead ? C.card : col, ink: dead ? C.mute : undefined, size: 14, r: 7, lift: dead ? 0 : 2 });
-        if (dead) { p.stroke(C.bad); p.strokeWeight(2); p.line(cx - 9, cy + 8, cx + 9, cy - 10); }
-      };
-      const row = (n, cy, col, deadN = 0) => { const step = Math.min(32, (W - 30) / n); for (let i = 0; i < n; i++) tile(W / 2 - ((n - 1) * step) / 2 + i * step, cy, col, i < deadN); };
-      if (r.kind === 'prod') {   // dos colores en una sola fila
-        const n = r.m + r.n, step = Math.min(32, (W - 30) / n);
-        for (let i = 0; i < n; i++) tile(W / 2 - ((n - 1) * step) / 2 + i * step, 160, i < r.m ? C.sky : C.mint);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER); p.text(`${r.m} azules y ${r.n} verdes`, W / 2, 196);
-      } else if (r.kind === 'quot') {   // arriba y abajo de la raya; las parejas se tachan
-        const cut = Math.min(r.m, r.n);
-        row(r.m, 138, C.sky, cut); p.stroke(C.ink); p.strokeWeight(3); p.line(24, 166, W - 24, 166); row(r.n, 194, C.mint, cut);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER);
-        p.text(r.m >= r.n ? `quedan ${r.m - r.n} arriba` : `quedan ${r.n - r.m} abajo: exponente negativo`, W / 2, 226);
-      } else {   // n grupos iguales de m
-        const gw = r.m * 28 + 10, perRow = Math.max(1, Math.floor((W - 20) / (gw + 8))), rows = Math.ceil(r.n / perRow);
-        for (let g = 0; g < r.n; g++) {
-          const rr = Math.floor(g / perRow), inRow = Math.min(perRow, r.n - rr * perRow), gx = W / 2 - (inRow * (gw + 8) - 8) / 2 + (g % perRow) * (gw + 8), gy = 128 + rr * 44;
-          p.noFill(); p.stroke(C.sun); p.strokeWeight(2); p.rect(gx, gy, gw, 36, 9);
-          for (let i = 0; i < r.m; i++) tile(gx + 5 + 14 + i * 28, gy + 19, C.sky);
-        }
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER); p.text(`${r.n} grupos de ${r.m}`, W / 2, 128 + rows * 44 + 10);
-      }
-      p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(15); p.textAlign(p.CENTER, p.CENTER);
-      p.text(`${exprOf(r, x)} = ${x} elevado a`, W / 2, H - 98);
-      drawStepper(p, C, G.box, negTxt(s.e), '', G.locked ? (s.e === expOf(r) ? C.ok : C.bad) : C.ink);
-    },
-    press(G, x, y) { const d = stepHit(G.box, x, y); if (!d) return false; G.s.e = Math.max(-9, Math.min(15, G.s.e + d)); G.touch(); return true; },
-    peek: G => ({ box: G.box, want: expOf(G.r) }),
-  });
-  return { ...game, expOf, exprOf, lawOf };
-})();
-;
-//#archivo js/games/cambia-de-piso.js
-// Cambia de piso (Álgebra, exponentes negativos; lección alg-21b): una fracción con potencias arriba y abajo de la
-// raya. Tocar una potencia la manda al otro piso y su exponente cambia de signo (a⁻³ arriba es lo mismo que a³ abajo).
-// Meta: que no quede ningún exponente negativo. Mover una que ya era positiva la vuelve negativa.
-// params = { rounds: [{ top: [{ b, e }], bottom: [{ b, e }] }] }   state = { rounds: [{ up: [bool por ficha] }] }
-// Las fichas se numeran primero las de arriba y luego las de abajo.   Spec 2026-11-15-torres-de-potencias.
-
-GAMES['cambia-de-piso'] = (() => {
-  const all = r => [...r.top.map(t => ({ ...t, home: true })), ...r.bottom.map(t => ({ ...t, home: false }))];
-  // Exponente que muestra cada ficha según el piso en que está.
-  const shown = (r, up) => all(r).map((t, i) => ({ b: t.b, up: up[i], e: up[i] === t.home ? t.e : -t.e }));
-  const powTxt = t => `${t.b}${t.e === 1 ? '' : sup(t.e)}`;
-  const sideTxt = list => (list.length ? list.map(powTxt).join(' ') : '1');
-  const fracTxt = list => `${sideTxt(list.filter(t => t.up))} / ${sideTxt(list.filter(t => !t.up))}`;
-
-  const game = roundsGame({
-    aspect: 1.1,
-    init: r => ({ up: all(r).map(t => t.home) }),
-    ok: (s, r) => shown(r, s.up).every(t => t.e > 0),
-    solution: r => { const fixed = all(r).map(t => (t.e < 0 ? !t.home : t.home)); return `${fracTxt(shown(r, all(r).map(t => t.home)))} = ${fracTxt(shown(r, fixed))}`; },
-    prompt: () => 'Toca una potencia para mandarla al otro piso: deja todos los exponentes positivos',
-    foot: (r, s) => (shown(r, s.up).every(t => t.e > 0) ? 'Sin exponentes negativos: así se escribe' : 'Al cruzar la raya, el exponente cambia de signo'),
-    draw(G) {
-      const { p, C, W, s, r } = G, list = shown(r, s.up), mid = 190, tw = 62;
-      G.boxes = [];
-      [true, false].forEach(up => {
-        const idx = list.map((t, i) => i).filter(i => list[i].up === up), n = idx.length, step = Math.min(tw + 10, (W - 24) / Math.max(1, n));
-        idx.forEach((i, k) => { G.boxes[i] = { x: W / 2 - (n * step) / 2 + k * step + (step - Math.min(tw, step - 6)) / 2, y: up ? mid - 62 : mid + 18, w: Math.min(tw, step - 6), h: 44 }; });
-        if (!n) { p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(22); p.textAlign(p.CENTER, p.CENTER); p.text('1', W / 2, up ? mid - 40 : mid + 40); }
-      });
-      p.stroke(C.ink); p.strokeWeight(4); p.line(28, mid, W - 28, mid);
-      list.forEach((t, i) => drawTile(p, C, G.boxes[i], powTxt(t), { fill: t.e > 0 ? C.mint : C.coral, size: 20 }));
-      p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-      p.text('arriba (numerador)', W / 2, mid - 78); p.text('abajo (denominador)', W / 2, mid + 78);
-      const bad = list.filter(t => t.e <= 0).length;
-      p.fill(bad ? C.ink : C.ok); p.textSize(14); p.text(bad ? `exponentes negativos: ${bad}` : fracTxt(list), W / 2, mid + 112);
-    },
-    press(G, x, y) {
-      const i = (G.boxes || []).findIndex(b => hitBox(b, x, y));
-      if (i < 0) return false;
-      G.s.up[i] = !G.s.up[i]; G.touch();
-      return true;
-    },
-    peek: G => ({ boxes: G.boxes, neg: shown(G.r, G.s.up).map(t => t.e < 0) }),
-  });
-  return { ...game, shown, fracTxt };
-})();
-;
-//#archivo js/games/salta-la-coma.js
-// Salta el punto (Álgebra, notación científica; lección alg-21b): los dígitos de un número con su punto decimal y,
-// al lado, una potencia de 10. Con ◀ y ▶ se corre el punto un lugar: el número de adelante se hace diez veces más
-// chico o más grande y el exponente de 10 lo compensa, así que el valor no cambia. Meta 'sci': dejar un solo dígito
-// (no cero) antes del punto. Meta 'std': dejar 10⁰, o sea, escribir el número completo.
-// params = { rounds: [{ digits, point, exp?, goal: 'sci' | 'std' }] }   digits: cadena; point: cuántos dígitos van antes del punto
-// state = { rounds: [{ pt }] }      Spec 2026-11-15-torres-de-potencias.
-
-GAMES['salta-la-coma'] = (() => {
-  const expAt = (r, pt) => (r.exp ?? 0) + r.point - pt;
-  const first = r => r.digits.search(/[1-9]/);
-  // Dónde debe quedar el punto.
-  const goalPt = r => (r.goal === 'sci' ? first(r) + 1 : r.point + (r.exp ?? 0));
-  // El número de adelante, sin ceros de sobra: «003.840» → «3.84».
-  function coefTxt(r, pt) {
-    const a = r.digits.slice(0, pt).replace(/^0+(?=\d)/, '') || '0', b = r.digits.slice(pt).replace(/0+$/, '');
-    return b ? `${a}.${b}` : a;
-  }
-  const numTxtOf = (r, pt) => `${coefTxt(r, pt)} × 10${sup(expAt(r, pt))}`;
-
-  const game = roundsGame({
-    aspect: 1.05,
-    init: r => ({ pt: r.point }),
-    ok: (s, r) => s.pt === goalPt(r),
-    solution: r => `${numTxtOf(r, r.point)} = ${r.goal === 'sci' ? numTxtOf(r, goalPt(r)) : coefTxt(r, goalPt(r))}`,
-    prompt: r => (r.goal === 'sci' ? 'Corre el punto hasta dejar un solo dígito, que no sea cero, antes de él' : 'Corre el punto hasta que la potencia de 10 sea 10⁰: el número completo'),
-    foot: (r, s) => `Cada salto cambia el exponente en 1 · saltos: ${Math.abs(s.pt - r.point)}`,
-    layout(G) { G.btn = [{ x: G.W / 2 - 96, y: G.H - 76, w: 88, h: 38, d: -1 }, { x: G.W / 2 + 8, y: G.H - 76, w: 88, h: 38, d: 1 }]; },
-    draw(G) {
-      const { p, C, W, H, s, r } = G, n = r.digits.length, cw = Math.min(34, (W - 30) / n), x0 = W / 2 - (n * cw) / 2, y = 128;
-      const a0 = Math.max(0, Math.min(s.pt - 1, first(r))), b1 = Math.max(s.pt, r.digits.replace(/0+$/, '').length);   // lo que de verdad se lee
-      for (let i = 0; i < n; i++) {
-        const live = i >= a0 && i < b1;
-        drawTile(p, C, { x: x0 + i * cw + 2, y, w: cw - 4, h: 44 }, r.digits[i], { fill: live ? C.cream : C.card, ink: live ? undefined : C.mute, size: 22, r: 8, lift: live ? 3 : 0 });
-      }
-      const px = x0 + s.pt * cw;
-      p.noStroke(); p.fill(C.coral); p.circle(px, y + 50, 13);
-      if (s.pt !== r.point) {   // el camino del punto, salto a salto
-        const dir = Math.sign(s.pt - r.point);
-        p.noFill(); p.stroke(C.coral); p.strokeWeight(2);
-        for (let k = r.point; k !== s.pt; k += dir) p.arc(x0 + (k + dir / 2) * cw, y + 58, cw, 20, 0, Math.PI);
-      }
-      const good = s.pt === goalPt(r);
-      p.noStroke(); p.fill(good ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(24);
-      fitText(p, numTxtOf(r, s.pt), W / 2, y + 108, W - 30, 24);
-      p.fill(C.mute); p.textSize(12);
-      p.text(r.goal === 'sci' ? 'entre 1 y 10, por una potencia de 10' : 'el mismo número, escrito de otra forma', W / 2, y + 128);
-      G.btn.forEach(b => drawTile(p, C, b, b.d < 0 ? '◀ punto' : 'punto ▶', { fill: C.cream, size: 14, r: 10, lift: 2 }));
-    },
-    press(G, x, y) {
-      const b = G.btn.find(q => hitBox(q, x, y));
-      if (!b) return false;
-      G.s.pt = Math.max(1, Math.min(G.r.digits.length, G.s.pt + b.d)); G.touch();
-      return true;
-    },
-    peek: G => ({ btn: G.btn, goal: goalPt(G.r) }),
-  });
-  return { ...game, expAt, goalPt, coefTxt, numTxtOf };
-})();
-;
 //#archivo js/games/escala-leyes.js
 // La escalada de las leyes (Álgebra, leyes de los exponentes; juego dinámico de la lección alg-21b): un escalador
 // está en el piso del exponente de una potencia de x. Cada tarjeta es una operación: «· x³» sube 3 pisos (se suman),
@@ -10529,6 +10125,15 @@ Object.assign(XG, (() => {
     aviso: (v, p) => (v.c < p.a * p.a ? 'Queda un hueco en la esquina.' : 'Sobran cuadritos: se salen del cuadrado.'), bien: (v, p) => `x² + ${2 * p.a}x + ${p.a * p.a} = (x + ${p.a})².`,
   });
   XG.frases('equivalen-no');
+})();
+;
+//#archivo js/games/validar-escena.js
+// Ejercicios de «Validar Procedimientos» (Preicfes, icf-ma-argumenta; spec 2026-11-25-preicfes-estructura): si los datos alcanzan o sobran.
+// Armazones en proposiciones-escena (renglones y frases).
+(() => {
+  XG.renglones('alcanza-o-no', { w: 104, x: 278 });   // cada renglón es un dato: con él, ¿alcanza o no alcanza?
+  XG.frases('datos-que-sobran');                      // se tocan los datos que no hacen falta
+  XG.frases('vale-o-no');                             // se tocan los procedimientos que sí valen
 })();
 ;
 //#archivo js/games/conjuntos-escena.js
@@ -22873,5 +22478,552 @@ PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
     ['pu-co-5', 'Cada pareja de puntos determina un segmento.',
       opc('Se marcan 5 puntos sobre una circunferencia. La cantidad de segmentos que se pueden trazar uniendo esos puntos de a dos es:', ['20', '5', '10', '25'], 2,
         '$\\tfrac{5 \\cdot 4}{2} = 10$.', 'El segmento de P a Q es el mismo que el de Q a P.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-espacial.js
+// Preuniversitario · mundo 6 «Razonamiento espacial»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+PU_JUEGOS.push(({ setExam }) => {
+  const CROSS = [[1, 0], [0, 1], [1, 1], [2, 1], [1, 2], [1, 3]], STAIR = [[0, 0], [1, 0], [1, 1], [2, 1], [2, 2], [3, 2]];
+  setExam('pu-espacial', 'Razonamiento espacial', [
+    ['pu-es-1', 'En la rejilla, el camino más corto suma lo horizontal y lo vertical.',
+      play('ruta-cuadras', 'Camino corto', { rounds: [{ w: 5, h: 3, A: [0, 3], B: [5, 0] }] }, '5 + 3 = 8 cuadras.', { hint: 'Sin devolverte.' })],
+    ['pu-es-1', 'Los movimientos opuestos se cancelan.',
+      play('brujula-pasos', 'Instrucciones', { rounds: [{ w: 5, h: 5, start: [2, 2], moves: [['E', 2], ['N', 2], ['O', 3], ['S', 1]] }] }, 'Neto: 1 al oeste y 1 al norte.', { hint: 'Suma y resta.' })],
+    ['pu-es-2', 'Los cubos de abajo también cuentan.',
+      play('cubos-ocultos', 'Cubos', { rounds: [{ h: [[2, 2], [1, 3]] }] }, '2 + 2 + 1 + 3 = 8.', { hint: 'Suma alturas.' })],
+    ['pu-es-2', 'Con las dos vistas, cada casilla toma a lo sumo el menor límite.',
+      play('torres-vistas', 'Vistas', { rounds: [{ front: [3, 1], side: [1, 3] }] }, '1 1 / 3 1: 6 cubos.', { hint: 'El menor de los dos.' })],
+    ['pu-es-3', 'En una fila de tres, la primera y la tercera son opuestas.',
+      play('caras-opuestas', 'Opuestas', { rounds: [{ cells: CROSS, letters: ['1', '2', '3', '4', '5', '6'], ask: [0, 3] }] }, 'Arriba con la de abajo del centro; derecha con izquierda.', { hint: 'Salta una.' })],
+    ['pu-es-3', 'Las caras opuestas de un dado suman 7.',
+      play('dado-siete', 'Dado', { rounds: [{ top: 2, front: 3, right: 1 }] }, '5, 4 y 6.', { hint: 'Resta de 7.' })],
+    ['pu-es-4', 'Cada doblez duplica las capas.',
+      play('dobla-papel', 'Agujeros', { rounds: [{ folds: 4, holes: 1 }] }, '2⁴ = 16 agujeros.', { hint: 'Dobla y duplica.' })],
+    ['pu-es-4', 'La hora del espejo y la real suman 12:00.',
+      play('reloj-espejo', 'Reloj', { rounds: [{ seen: 120 }] }, 'Espejo 2:00, real 10:00.', { hint: 'Resta de 12.' })],
+  ]);
+});
+
+// Mundo 6 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/espacial-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-es-1', [
+    play('esquina-dos', 'Lleva el punto a una esquina que esté a **6** cuadras de A y a **3** de B, caminando por las calles.', { A: [1, 1], B: [8, 3], da: 6, db: 3, ini: [4, 2] },
+      'Por las calles se suma lo que separa a lo ancho y a lo alto. Sirve, por ejemplo, la esquina que está 5 al este y 1 al norte de A: $5 + 1 = 6$, y a B le faltan $2 + 1 = 3$. Hay otras.',
+      { hint: 'Desde cada punto cuenta cuadras a lo ancho y a lo alto, y súmalas. Hay más de una respuesta.' }),
+    play('rombo-cuadras', 'Toca **todas** las esquinas que están a **3** cuadras de A por el camino más corto.', { c: 6, f: 4, A: [3, 2], d: 3 },
+      'Son las que suman 3 entre ancho y alto: 3 y 0, 2 y 1, o 1 y 2, hacia todos los lados. Aquí caben 10.',
+      { hint: 'Reparte las 3 cuadras entre ancho y alto de todas las formas, y hazlo hacia los cuatro lados.' }),
+    play('termina-ruta', 'Desde A: **4 al norte, 4 al este, 3 al sur y 5 al oeste**. Lleva el punto a donde se termina.', { a: [4, 1], ms: [['N', 4], ['E', 4], ['S', 3], ['O', 5]] },
+      'Norte contra sur: $4 - 3 = 1$ al norte. Este contra oeste: $5 - 4 = 1$ al oeste.',
+      { hint: 'Junta primero norte con sur, y después este con oeste: los contrarios se restan.' }),
+    play('mismo-destino', 'Cada letra es un rumbo: 3E son tres cuadras al este. Toca **todas** las listas que terminan en el **mismo** lugar que el modelo.', { modelo: [['E', 3], ['N', 2]], listas: [[['N', 2], ['E', 3]], [['E', 3], ['S', 2]], [['E', 5], ['N', 2], ['O', 2]], [['N', 3], ['E', 2]], [['E', 1], ['N', 2], ['E', 2]], [['O', 3], ['N', 2]]] },
+      'El modelo queda 3 al este y 2 al norte. También quedan ahí 2N 3E; 5E 2N 2O, porque $5 - 2 = 3$; y 1E 2N 2E, porque $1 + 2 = 3$.',
+      { hint: 'Para cada lista mira cuánto queda al este y cuánto al norte. El orden no importa.' }),
+    play('vuelve-corto', 'Se camina **11 al norte, 2 al este, 2 al sur y 14 al oeste**. ¿Cuántas cuadras recorrió, a cuántas de A quedó por las calles y a cuántas en línea recta?', { ms: [['N', 11], ['E', 2], ['S', 2], ['O', 14]], et: ['recorrió', 'por calles', 'línea recta'], metas: ['29', '21', '15'], fichas: ['29', '29', '21', '21', '15', '3', '225'],
+      mira: ['Suma todos los tramos.', 'Lo que quedó al norte más lo que quedó al oeste.', 'En línea recta es la hipotenusa.'], trampas: { '1:29': 'Eso es lo que caminó; los contrarios se restan.', '2:21': 'Eso es por las calles.', '2:225': 'Ese es el cuadrado de la distancia: falta la raíz.', '2:3': 'Los lados no se restan: forman un triángulo rectángulo.' }, ok: 'Recorrer, volver por calles y volar son tres cuentas distintas.' },
+      'Recorrió $11 + 2 + 2 + 14 = 29$. Quedó $11 - 2 = 9$ al norte y $14 - 2 = 12$ al oeste: por calles $9 + 12 = 21$ y en línea recta $\\sqrt{81 + 144} = 15$.',
+      { hint: 'Lo recorrido suma todo. Para lo demás, mira cuánto quedó al norte y cuánto al oeste.' }),
+    play('atajo-recto', 'B queda **8** cuadras al este de A y otras al norte. Súbelo hasta que en **línea recta** estén a **17**.', { b: 8, c: 17 },
+      'La recta es la hipotenusa: $17^2 - 8^2 = 289 - 64 = 225$, y $\\sqrt{225} = 15$ al norte.',
+      { hint: 'El este, el norte y la línea recta forman un triángulo rectángulo. ¿Cuál es la hipotenusa?' }),
+    play('regresa-ya', 'Una ciclista hizo **4 al norte, 1 al este, 7 al sur y 6 al este**. Pon lo que le falta para **volver** a A por el camino más corto.', { ms: [['N', 4], ['E', 1], ['S', 7], ['E', 6]], metas: ['3 al norte', '7 al oeste'], fichas: ['3 al norte', '7 al oeste', '3 al sur', '7 al este', '5 al oeste', '11 al norte'], mismo: ['3 al sur', '7 al este'] },
+      'Quedó $7 - 4 = 3$ al sur y $1 + 6 = 7$ al este. Para volver camina al contrario: 3 al norte y 7 al oeste.',
+      { hint: 'Primero halla dónde quedó. Para volver se camina en los sentidos contrarios.' }),
+    play('taxi-cuadras', 'Dale al taxi las cuadras justas. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Por las calles, a un lugar **12 al este y 9 al norte**', r: 21, c: '12 + 9', e: { 15: 'Eso es en línea recta; el taxi va por las calles.' } },
+      { q: 'En **línea recta**, a un lugar **7 al este y 24 al norte**', r: 25, c: '\\sqrt{49 + 576}', e: { 31: 'Eso es por las calles.' } },
+      { q: 'Hizo 9N, 2E, 3S y 6O. Por las calles, para **volver**', r: 10, c: '6 + 4', e: { 20: 'Eso es lo que recorrió.' } }] },
+      'Por calles, $12 + 9 = 21$. En línea recta, $\\sqrt{49 + 576} = \\sqrt{625} = 25$. Quedó 6 al norte y 4 al oeste: 10 para volver.',
+      { hint: 'Por calles se suman los lados; en línea recta va la hipotenusa; para volver, resta los contrarios.' }),
+    sol('Un repartidor sale de la bodega y recorre 5 cuadras al norte, 3 al este, 2 al sur y 7 al oeste. Caminando por las calles, ¿a cuántas cuadras de la bodega termina? ¿Cuántas cuadras había recorrido?',
+      ['Norte y sur se compensan: $5 - 2 =$ [[3]] cuadras al norte', 'Este y oeste: $7 - 3 =$ [[4]] cuadras al oeste', 'Para volver por las calles camina $3 + 4 =$ [[7]] cuadras', 'Había recorrido $5 + 3 + 2 + 7 =$ [[17]] cuadras'],
+      ['5', '10', '12'],
+      'El recorrido suma todos los tramos (17), pero la posición final solo depende de lo que no se compensó: 3 al norte y 4 al oeste. En línea recta estaría a 5 cuadras; por las calles, a 7.',
+      'Separa los movimientos en dos ejes: norte contra sur y este contra oeste.'),
+    err('En una cuadrícula de calles, ¿cuántos caminos más cortos hay entre dos esquinas separadas 2 cuadras al este y 2 cuadras al norte?',
+      ['Todo camino más corto tiene 4 cuadras: 2 al este y 2 al norte', 'En cada cuadra se decide entre dos direcciones: $2 \\cdot 2 \\cdot 2 \\cdot 2$ caminos', 'Hay 16 caminos más cortos'], 1,
+      ['Solo hay que escoger cuáles 2 de las 4 cuadras van al norte: $\\tfrac{4 \\cdot 3}{2} = 6$ caminos', 'Se suman las cuadras de cada dirección: $2 + 2 = 4$ caminos', 'Se multiplican las cuadras de cada dirección: $2 \\cdot 2 = 4$ caminos'],
+      'No se puede decidir libremente en cada cuadra: un camino con cuatro pasos al este no llega. Deben ser exactamente 2 y 2: EENN, ENEN, ENNE, NEEN, NENE y NNEE. Son 6.',
+      'Escribe algunos caminos con letras E y N. ¿Sirve un camino que tenga tres E?'),
+    opc('Desde su casa, Julia camina 6 cuadras al este y luego 8 cuadras al norte hasta la biblioteca. La distancia en línea recta entre su casa y la biblioteca, medida en cuadras, es:',
+      ['14', '10', '2', '7'], 1,
+      'Los dos tramos forman un ángulo recto: $\\sqrt{6^2 + 8^2} = \\sqrt{100} = 10$.',
+      'En línea recta no se suman los tramos: forman los catetos de un triángulo rectángulo.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/espacial-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-es-2', [
+    play('torres-suma', 'Los números dicen la altura de cada torre. Cuenta los cubos de cada fila y el total.', { h: [[1, 1, 2], [1, 2, 3], [2, 3, 3]], et: ['adelante', 'en medio', 'atrás', 'total'], ops: ['+', '+', '='], metas: ['4', '6', '8', '18'], fichas: ['4', '6', '8', '18', '3', '9', '12'],
+      mira: ['Suma las alturas de la fila de adelante.', 'Suma las alturas de la fila del medio.', 'Suma las alturas de la fila de atrás.', 'Suma las tres filas.'], trampas: { '0:3': 'Son tres torres, pero una tiene más de un cubo.', '3:9': 'Esas son las torres; cada una tiene varios cubos.' }, ok: 'Así se cuentan también los escondidos.' },
+      'Adelante $1 + 1 + 2 = 4$, en medio $1 + 2 + 3 = 6$ y atrás $2 + 3 + 3 = 8$: 18 cubos.',
+      { hint: 'Cada número es una torre completa, con los cubos que no se ven. Suma fila por fila.' }),
+    play('vista-frente', 'Este es el plano desde arriba, con la altura de cada torre. Toca los cuadros que se ven **de frente**.', { h: [[1, 2, 1], [3, 1, 1]], alto: 4 },
+      'Cada columna muestra su torre más alta: $3$, $2$ y $1$. La de 3 está atrás, pero sobresale.',
+      { hint: 'De frente, una torre de atrás se ve si es más alta que la de adelante. Mira columna por columna.' }),
+    play('vista-izquierda', 'Este es otro plano. Toca los cuadros que se ven **desde la izquierda**; en esa vista, la fila de atrás queda a la izquierda.', { h: [[1, 4, 2], [2, 1, 1], [1, 3, 2]], alto: 4 },
+      'Desde la izquierda cada fila muestra su torre más alta: atrás $3$, en medio $2$ y adelante $4$.',
+      { hint: 'Ahora se mira por filas. Busca la torre más alta de cada una, esté donde esté.' }),
+    play('plano-maximo', 'De frente se ven columnas de 4 y 2; desde la izquierda, 3 atrás y 4 adelante. Pon las alturas con la **mayor** cantidad de cubos.', { cols: [4, 2], filas: [3, 4], fichas: ['3', '2', '4', '2', '4', '3', '1'] },
+      'Cada torre sube hasta la menor de las dos alturas que la limitan: atrás $3$ y $2$; adelante $4$ y $2$. Son 11 cubos.',
+      { hint: 'Una torre no puede ser más alta que su columna ni que su fila. ¿Cuál de las dos la detiene?' }),
+    play('pintura-lugar', 'Un cubo de arista **10** se pinta y se corta en cubitos. ¿Cuántos tienen 3, 2, 1 y 0 caras pintadas?', { n: 10, et: ['3 caras', '2 caras', '1 cara', 'ninguna'], metas: ['8', '96', '384', '512'], fichas: ['8', '96', '384', '512', '120', '600', '64'],
+      mira: ['Las esquinas son siempre las mismas.', 'Doce aristas, sin contar las esquinas: 8 en cada una.', 'Seis caras, cada una con un cuadrado de 8 por 8 adentro.', 'Adentro queda un cubo de arista 8.'], trampas: { '1:120': 'A cada arista se le quitan las dos esquinas.', '2:600': 'En cada cara hay que quitar el borde.', '3:64': 'Adentro hay 8 · 8 · 8, no 8 · 8.' }, ok: 'La pintura depende del lugar.' },
+      '8 esquinas; $12 \\cdot 8 = 96$ en las aristas; $6 \\cdot 64 = 384$ en las caras y $8^3 = 512$ sin pintar. Juntos, 1000.',
+      { hint: 'En cada arista quita las dos esquinas. En cada cara, quita el borde. Adentro queda un cubo más pequeño.' }),
+    play('donde-pintura', 'Un cubo de arista 8 se pintó y se cortó. Esta es una de sus caras: toca **todos** los cubitos que tienen exactamente **2** caras pintadas.', { n: 8, caras: 2 },
+      'Los de 2 caras están en las aristas, sin las esquinas: 6 en cada lado, 24 en esta cara.',
+      { hint: 'Un cubito del borde pertenece a dos caras; el de la esquina, a tres; el de adentro, a una.' }),
+    play('bloque-adentro', 'Un bloque tiene base de **6 por 5**. Se pinta, se corta en cubitos y quedan **36** sin pintura. ¿Cuál es su **alto**?', { a: 6, b: 5, sin: 36, max: 8 },
+      'Adentro la base es de 4 por 3, porque se pierde una capa por lado: $4 \\cdot 3 \\cdot 3 = 36$. El alto de adentro es 3 y el del bloque, $3 + 2 = 5$.',
+      { hint: 'La pintura se lleva una capa por cada lado. ¿Cómo queda la base de adentro?' }),
+    play('sube-cubos', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Torres de 2, 4, 1 y 5. ¿Cuántos **cubos**?', r: 12, c: '2 + 4 + 1 + 5', e: { 4: 'Esas son las torres.' } },
+      { q: 'Cubo de arista 4 pintado: cubitos con **2** caras pintadas', r: 24, c: '12 \\cdot 2', e: { 8: 'Esas son las esquinas: tienen 3.' } },
+      { q: 'Columnas de frente: 3, 1, 4 y 2. ¿Cuántos **cuadros** se ven?', r: 10, c: '3 + 1 + 4 + 2', e: { 4: 'Se ven todos los cuadros de cada columna.' } }] },
+      '$2 + 4 + 1 + 5 = 12$; en cada arista de 4 quedan 2 sin esquinas, $12 \\cdot 2 = 24$; y $3 + 1 + 4 + 2 = 10$.',
+      { hint: 'Suma alturas para contar cubos. En el cubo pintado, mira cada arista sin sus esquinas.' }),
+    sol('Un cubo de 6 cm de arista se pinta de azul por fuera y luego se corta en cubitos de 1 cm de arista. ¿Cuántos cubitos quedan con exactamente una cara pintada y cuántos quedan sin pintura?',
+      ['En cada cara, los de una sola cara pintada forman un cuadrado de $4 \\cdot 4 =$ [[16]] cubitos', 'Con las 6 caras: $6 \\cdot 16 =$ [[96]] cubitos con una cara pintada', 'Sin pintura queda el cubo de adentro, de arista $6 - 2 =$ [[4]] cm', 'Son $4^3 =$ [[64]] cubitos sin pintura'],
+      ['216', '36', '24'],
+      'La pintura solo llega a la capa de afuera. En cada cara se quita el borde (que tiene más caras pintadas) y adentro queda un cubo con 2 cm menos de arista.',
+      'Mira una cara del cubo: los cubitos del borde pertenecen también a otra cara. ¿Cuáles no?'),
+    err('Un cubo macizo de 2 cm de arista pesa 40 g. ¿Cuánto pesa un cubo del mismo material que tiene 6 cm de arista?',
+      ['La arista se multiplicó por $6 \\div 2 = 3$', 'El peso depende del volumen del cubo', 'El volumen también se multiplica por 3: pesa $40 \\cdot 3 = 120$ g'], 2,
+      ['El volumen se multiplica por $3^3 = 27$: pesa $40 \\cdot 27 = 1\\,080$ g', 'El volumen se multiplica por $3^2 = 9$: pesa $40 \\cdot 9 = 360$ g', 'El volumen se multiplica por $3 + 3 = 6$: pesa $40 \\cdot 6 = 240$ g'],
+      'El cubo crece en sus tres dimensiones: largo, ancho y alto se triplican, y el volumen se multiplica por $3 \\cdot 3 \\cdot 3 = 27$.',
+      'Imagina cuántos cubos pequeños caben dentro del grande: a lo largo, a lo ancho y a lo alto.'),
+    opc('Sobre una cuadrícula de 3 por 3 se apilan cubos iguales. Vistas desde arriba, las alturas de las torres son: en la fila de atrás 1, 3 y 1; en la fila del medio 2, 1 y 1; y en la fila de adelante, la más cercana a quien mira de frente, 1, 2 y 1 (de izquierda a derecha). La cantidad de cuadrados que se ven en la vista de frente es:',
+      ['4', '6', '7', '13'], 1,
+      'De frente, cada columna de la vista junta las tres torres que quedan una detrás de otra, y se ve la más alta: a la izquierda $2$ (la del medio), en el centro $3$ (la de atrás) y a la derecha $1$. Son $2 + 3 + 1 = 6$ cuadrados. Sumar solo la fila de adelante (4) olvida las torres de atrás que sobresalen, y 13 son todos los cubos, que no se ven todos. La vista de lado se arma igual, pero con la torre más alta de cada fila: $3 + 2 + 2 = 7$.',
+      'En la vista de frente no se suman las torres: de cada línea de mirada solo se ve la más alta, esté adelante o atrás.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/espacial-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-es-3', [
+    play('opuestas-molde', 'Este molde se dobla y arma un cubo. Pon la cara **opuesta** de cada una.', { cel: [[1, 0], [1, 1], [1, 2], [1, 3], [0, 1], [2, 2]], letras: 'GHJKLM', pide: ['G', 'H', 'L'], fichas: ['J', 'K', 'M', 'H', 'G'] },
+      'G, H, J y K están en fila: salta una, G con J y H con K. Sobran L y M, que son las tapas.',
+      { hint: 'Busca la fila recta y salta una cara. Las dos que quedan por fuera de la fila son opuestas.' }),
+    play('cierra-cubo', 'Toca **todos** los moldes que, al doblarse, **cierran** un cubo.', { moldes: [
+      [[0, 1], [1, 1], [2, 1], [3, 1], [0, 0], [1, 2]], [[0, 0], [1, 0], [2, 0], [0, 1], [1, 1], [2, 1]], [[0, 0], [1, 0], [2, 0], [2, 1], [3, 1], [4, 1]],
+      [[0, 1], [1, 1], [2, 1], [3, 1], [1, 0], [2, 0]], [[0, 0], [0, 1], [0, 2], [1, 1], [2, 1], [3, 1]], [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [2, 1]]] },
+      'Cierran el primero, el tercero y el quinto. En los demás dos caras caen en el mismo sitio: el segundo es un bloque de dos filas, el cuarto tiene las dos tapas del mismo lado y el sexto tiene cinco en fila.',
+      { hint: 'Dobla en la mente: si dos cuadros terminan en el mismo sitio, falta otro y no cierra.' }),
+    play('vecinas-cara', 'Con este molde armado, toca **todas** las caras que se **tocan** con la **R**.', { cel: [[0, 1], [1, 1], [2, 1], [3, 1], [0, 0], [2, 2]], letras: 'PQRSTV', de: 'R' },
+      'P, Q, R y S están en fila: la opuesta de R es P. Las otras cuatro, Q, S, T y V, sí la tocan.',
+      { hint: 'Una cara toca a todas menos a una. ¿Cuál queda frente a ella?' }),
+    play('dado-escondidas', 'En un dado corriente, las caras opuestas suman 7. Se ven **5** arriba, **3** al frente y **1** a la derecha. Pon las escondidas.', { ve: [5, 3, 1], et: ['abajo', 'atrás', 'izquierda'], metas: ['2', '4', '6'], fichas: ['2', '4', '6', '1', '3', '5'],
+      mira: ['Abajo está la opuesta de la de arriba.', 'Atrás está la opuesta del frente.', 'A la izquierda está la opuesta de la derecha.'], ok: 'Cada una completa 7 con la que tiene enfrente.' },
+      'Abajo $7 - 5 = 2$, atrás $7 - 3 = 4$ y a la izquierda $7 - 1 = 6$.',
+      { hint: 'Cada cara escondida está enfrente de una que sí se ve, y juntas suman 7.' }),
+    play('vuelca-dado', 'Dado corriente: **6** arriba, **3** al frente y **2** a la derecha. Se vuelca una vez **hacia adelante**: el frente queda contra la mesa. ¿Qué se ve?', { ve: [6, 3, 2], hacia: 'adelante', et: ['arriba', 'frente', 'derecha'], metas: ['4', '6', '2'], fichas: ['4', '6', '2', '3', '1', '5'],
+      mira: ['Sube la de atrás, la opuesta del frente.', 'La que estaba arriba baja al frente.', 'El dado gira alrededor de la derecha y la izquierda: no cambian.'], trampas: { '0:3': 'El frente no sube: queda contra la mesa.', '0:1': 'Abajo pasa atrás, no arriba.', '2:5': 'La derecha no se mueve.' }, ok: 'Atrás sube, arriba pasa al frente y los lados no cambian.' },
+      'Sube la de atrás, $7 - 3 = 4$. La de arriba, 6, pasa al frente. La derecha no se mueve: 2.',
+      { hint: 'Hacia adelante, la de arriba cae al frente. ¿Cuál sube? ¿Cuáles no se mueven?' }),
+    play('rueda-dado', 'Dado corriente: **3** arriba, **1** al frente y **2** a la derecha. Rueda **a la derecha**. ¿Qué queda **arriba** después de 1, 2 y 4 vuelcos?', { ve: [3, 1, 2], et: ['tras 1', 'tras 2', 'tras 4'], metas: ['5', '4', '3'], fichas: ['5', '4', '3', '2', '1', '6'],
+      mira: ['Sube la de la izquierda, la opuesta de la derecha.', 'Después de dos vuelcos queda arriba la que estaba abajo.', 'Cuatro vuelcos hacia el mismo lado lo dejan como al principio.'], trampas: { '0:2': 'La de la derecha baja a la mesa; sube la de la izquierda.' }, ok: 'Izquierda, abajo, derecha y otra vez la primera.' },
+      'Sube la izquierda, $7 - 2 = 5$; con dos, la de abajo, $7 - 3 = 4$; con cuatro vuelve el 3.',
+      { hint: 'En cada vuelco sube la que está a la izquierda. El orden es arriba, derecha, abajo, izquierda.' }),
+    play('dados-imposibles', 'Toca **todos** los cubos **imposibles** con este molde: los que muestran juntas dos caras **opuestas**.', { cel: [[0, 1], [1, 1], [2, 1], [3, 1], [1, 0], [1, 2]], letras: 'ABCDEF', dados: [['E', 'B', 'C'], ['E', 'A', 'C'], ['E', 'C', 'D'], ['E', 'B', 'F'], ['A', 'B', 'E'], ['B', 'C', 'D']] },
+      'Las opuestas son A-C, B-D y E-F. Son imposibles los que muestran A con C, E con F y B con D.',
+      { hint: 'Encuentra primero las tres parejas de caras opuestas. Luego búscalas en los cubos.' }),
+    play('sube-dado', 'Sube al número que responde; los dados son corrientes. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Se ven **2, 3 y 6**. ¿Cuánto suman las tres **escondidas**?', r: 10, c: '21 - 11', e: { 11: 'Eso suman las que se ven.', 21: 'Eso suman las seis.' } },
+      { q: '¿Cuánto suman la opuesta del **5** y la opuesta del **1**?', r: 8, c: '2 + 6', e: { 6: 'Eso suman ellas, no sus opuestas.' } },
+      { q: 'Sobre la mesa hay **dos** dados separados con **1** y **4** arriba. ¿Cuánto suman las caras de los **lados**, ocho en total?', r: 28, c: '4 \\cdot 7', e: { 42: 'Eso suman todas las caras, con las de arriba y abajo.' } }] },
+      'Las seis suman 21: $21 - 11 = 10$. Las opuestas son 2 y 6: 8. En los lados hay dos parejas de 7 por dado: $4 \\cdot 7 = 28$.',
+      { hint: 'Cada pareja de opuestas suma 7 y las seis caras suman 21.' }),
+    sol('Un dado corriente (las caras opuestas suman 7) está sobre la mesa con el 1 arriba, el 2 al frente y el 3 a la derecha. Se vuelca una vez hacia adelante (el frente queda abajo) y después una vez hacia la derecha (la derecha queda abajo). ¿Qué número queda arriba?',
+      ['Al volcarlo hacia adelante, gira sobre una arista que va de izquierda a derecha: esas dos caras [[no se mueven]]', 'El frente baja, la de arriba pasa al frente y sube la de atrás: arriba queda $7 - 2 =$ [[5]]', 'Al volcarlo hacia la derecha, la derecha baja, la de arriba pasa a la derecha y sube la de la [[izquierda]]', 'La derecha seguía siendo el 3, así que la izquierda es $7 - 3 =$ [[4]], y ese número queda arriba'],
+      ['6', 'derecha', 'cambian'],
+      'En cada vuelco el dado gira un cuarto de vuelta sobre una arista: las dos caras de los extremos de esa arista se quedan quietas y las otras cuatro rotan. Hacia adelante: arriba → frente → abajo → atrás → arriba. Hacia la derecha: arriba → derecha → abajo → izquierda → arriba. Al final se comprueba con los opuestos: arriba 4 y abajo 3 suman 7.',
+      'Sigue una cara a la vez y anota dónde queda tras cada vuelco. ¿Qué caras se quedan quietas cuando el dado rueda hacia adelante?'),
+    err('Con una lámina de cartón de 16 cm por 10 cm se arma una caja sin tapa: en cada esquina se recorta un cuadrado de 2 cm de lado y se doblan los bordes hacia arriba. ¿Cuál es el volumen de la caja?',
+      ['La altura de la caja es el lado del cuadrado recortado: 2 cm', 'El largo de la base es $16 - 2 = 14$ cm', 'El ancho de la base es $10 - 4 = 6$ cm', 'Volumen: $14 \\cdot 6 \\cdot 2 = 168$ cm³'], 1,
+      ['El largo de la base es $16 - 2 \\cdot 2 = 12$ cm', 'El largo de la base es $16 + 2 = 18$ cm', 'El largo de la base sigue siendo 16 cm'],
+      'En cada lado se recortan dos esquinas, una en cada extremo: el largo pierde 4 cm y queda en 12. El volumen es $12 \\cdot 6 \\cdot 2 = 144$ cm³.',
+      'Mira un solo lado largo de la lámina: ¿cuántos cuadrados se le recortan?'),
+    opc('Para armar una caja con forma de cubo, con sus seis caras, se usan exactamente 150 cm² de cartón. La arista de la caja mide:',
+      ['25 cm', '6 cm', '12.5 cm', '5 cm'], 3,
+      'Cada cara mide $150 \\div 6 = 25$ cm², así que la arista es $\\sqrt{25} = 5$ cm.',
+      'El desarrollo del cubo son seis cuadrados iguales: reparte el cartón entre ellos.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/espacial-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-es-4', [
+    play('espejo-vertical', 'La línea es un espejo. Toca los cuadros donde queda el **reflejo**.', { f: 4, c: 4, dada: [0, 1, 5, 7, 10, 11, 13] },
+      'Cada cuadro se refleja en su mismo renglón y a la misma distancia del espejo: el que está pegado sigue pegado.',
+      { hint: 'Toma un cuadro, cuenta cuántos lo separan del espejo y cuenta los mismos al otro lado.' }),
+    play('letras-espejo', 'Se mira cada letra en un espejo puesto **a su lado**. Toca **todas** las que se ven **iguales**.', { letras: ['T', 'R', 'U', 'E', 'H', 'P', 'V', 'S'], igual: ['T', 'U', 'H', 'V'] },
+      'T, U, H y V tienen la mitad izquierda igual a la derecha. R, E, P y S se ven volteadas.',
+      { hint: 'Parte la letra en dos con una línea vertical. ¿Las dos mitades son iguales?' }),
+    play('gira-ele', 'Gira la figura **810°** en sentido **contrario** al del reloj. Déjala como queda.', { g: -810 },
+      '$810^\\circ = 2 \\cdot 360^\\circ + 90^\\circ$: dos vueltas completas y un cuarto más, hacia la izquierda. Es lo mismo que $270^\\circ$ en el sentido del reloj.',
+      { hint: 'Quita las vueltas completas. Lo que sobra se gira hacia el otro lado del reloj.' }),
+    play('giro-o-espejo', 'Toca **todas** las figuras que salen de **girar** el modelo, sin voltearlo.', { cel: [[0, 0], [0, 1], [0, 2], [1, 2], [2, 2], [1, 0]], figs: [[90, false], [0, true], [180, false], [90, true], [270, false], [180, true]] },
+      'Girar solo da vueltas. Las otras tres están en espejo y ningún giro las deja así.',
+      { hint: 'Sigue con el dedo las piezas en un mismo sentido: si el orden se invierte, está volteada.' }),
+    play('hora-espejo', 'En un espejo, un reloj de agujas sin números parece marcar las **5** en punto. Pon la hora **real**.', { h: 5 },
+      'La aguja real queda igual de lejos del 12, al otro lado: son las 7. Las dos horas suman 12.',
+      { hint: 'El espejo cambia izquierda por derecha. Mira a cuántas marcas del 12 está la aguja.' }),
+    play('papel-abierto', 'Una hoja se dobló dos veces por las líneas doradas y se perforó donde está el punto. Toca dónde quedan **todos** los huecos al abrirla.', { f: 0, c: 1 },
+      'Son cuatro capas y cada doblez refleja el hueco: uno en cada cuarto de la hoja, en espejo.',
+      { hint: 'Abre un doblez a la vez: el hueco aparece al otro lado, a la misma distancia del doblez.' }),
+    play('dobla-y-cuenta', 'Una hoja se dobla **3** veces y se hacen **3** perforaciones, lejos de los dobleces. ¿Cuántas capas hay y cuántos huecos salen? Y si **una sola** se hiciera **sobre el último doblez**, lejos de las esquinas, ¿cuántos saldrían de ella?', { d: 3, np: 3, et: ['capas', 'huecos', 'sobre doblez'], metas: ['8', '24', '4'], fichas: ['8', '8', '24', '4', '6', '9', '11'],
+      mira: ['Cada doblez duplica las capas.', 'Cada perforación sale una vez por capa.', 'Sobre un doblez, las capas quedan unidas de dos en dos.'], trampas: { '0:6': 'Cada doblez multiplica por 2; no suma 2.', '0:9': 'Cada doblez multiplica por 2: son 2 · 2 · 2.', '1:11': 'Cada perforación atraviesa todas las capas: se multiplica.', '2:8': 'Ahí las capas están unidas de dos en dos.' }, ok: 'Una vez por capa; sobre un doblez, la mitad.' },
+      '$2^3 = 8$ capas y $3 \\cdot 8 = 24$ huecos. Sobre un doblez, las dos capas que se doblan juntas dejan un solo agujero entre las dos: $8 \\div 2 = 4$.',
+      { hint: 'Duplica por cada doblez. Sobre la línea de un doblez, dos capas comparten el mismo hueco.' }),
+    play('sube-dobleces', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Una hoja con **4** dobleces y **2** perforaciones, lejos de ellos. ¿Cuántos **huecos**?', r: 32, c: '2 \\cdot 2^4', e: { 8: 'Cada doblez duplica las capas.' } },
+      { q: '**630°** son ¿cuántos **cuartos** de vuelta?', r: 7, c: '630 \\div 90' },
+      { q: 'En el espejo parecen las **4** en punto. ¿Qué **hora** es?', r: 8, c: '12 - 4', e: { 4: 'Esa es la del espejo.', 2: 'La volteaste de arriba abajo.' } }] },
+      'Cuatro dobleces duplican las capas cuatro veces, y con 2 perforaciones salen 32 huecos; $630 \\div 90 = 7$ cuartos; y $12 - 4 = 8$.',
+      { hint: 'Cada doblez duplica, cada cuarto son 90° y las dos horas del espejo suman 12.' }),
+    sol('Una hoja cuadrada se dobla por la mitad y otra vez por la mitad: queda un cuadrito de 4 capas. Con una perforadora se hacen tres huecos que atraviesan todas las capas: uno en medio del cuadrito, lejos de los dobleces; otro sobre la línea de un doblez, sin llegar a la esquina; y otro en la esquina donde se juntan los dos dobleces. ¿Cuántos huecos tiene la hoja al abrirla?',
+      ['Dos dobleces dejan $2^2 =$ [[4]] capas: el hueco que no toca ningún doblez sale una vez en cada capa', 'El hueco sobre un doblez une las capas de dos en dos: al abrir quedan $4 \\div 2 =$ [[2]] huecos', 'La esquina de los dos dobleces es el [[centro]] de la hoja: ahí se juntan las 4 capas y queda [[1]] hueco', 'En total la hoja tiene $4 + 2 + 1 =$ [[7]] huecos'],
+      ['12', 'borde', '8'],
+      'Un corte sale una vez por capa, pero cada doblez que toca junta las capas de dos en dos: con dos dobleces, $4$ huecos si no toca ninguno, $4 \\div 2 = 2$ si toca uno y $4 \\div 4 = 1$ si toca los dos (la esquina de los dobleces es el centro de la hoja). Si el corte toca un borde suelto, lo que queda son muescas en el borde y no huecos: un corte en la esquina de los bordes sueltos recorta las cuatro esquinas de la hoja.',
+      'Abre la hoja en tu cabeza: si el corte toca la línea de un doblez, ¿las dos capas que se doblan juntas dejan dos huecos o uno solo?'),
+    err('Una hoja de papel se dobla por la mitad cinco veces seguidas y luego se le hace una perforación, lejos de los dobleces, que atraviesa todas las capas. ¿Cuántos agujeros tiene la hoja al desdoblarla?',
+      ['Cada doblez duplica el número de capas', 'Con 5 dobleces hay $5 \\cdot 2 = 10$ capas', 'La perforación atraviesa todas las capas: al desdoblar hay 10 agujeros'], 1,
+      ['Con 5 dobleces hay $2^5 = 32$ capas', 'Con 5 dobleces hay $5 + 2 = 7$ capas', 'Con 5 dobleces hay $5^2 = 25$ capas'],
+      'Duplicar cinco veces es multiplicar por 2 cinco veces: 2, 4, 8 y así hasta 32 capas. Como la perforación no toca ningún doblez, al desdoblar hay 32 agujeros.',
+      'Hazlo doblez por doblez: una capa, dos, cuatro… ¿Se suma 2 cada vez o se multiplica por 2?'),
+    opc('La palabra AMO se escribe con letras mayúsculas en una hoja y se mira reflejada en un espejo colocado a la derecha de la hoja. En el espejo se lee:',
+      ['OMA', 'AMO', 'MOA', 'OAM'], 0,
+      'El espejo invierte el orden de las letras: la O queda primero. Como A, M y O son letras simétricas, se ven iguales: OMA.',
+      'En un espejo lateral, la letra que estaba más cerca del espejo sigue siendo la más cercana.'),
+  ]);
+
+  addExam('pu-espacial', [
+    ['pu-es-1', 'Los movimientos contrarios se compensan.',
+      opc('Un robot avanza 4 pasos al norte, 6 al este, 4 al sur y 2 al oeste. Para volver al punto de partida por el camino más corto debe avanzar:', ['4 pasos al este', '2 pasos al oeste', '4 pasos al oeste', '8 pasos al sur'], 2,
+        'Norte y sur se anulan. Al este queda $6 - 2 = 4$: para volver, 4 pasos al oeste.', 'Compensa norte con sur y este con oeste.')],
+    ['pu-es-2', 'En un cubo pintado, los cubitos de las aristas (sin las esquinas) tienen dos caras pintadas.',
+      opc('Un cubo de 3 cm de arista se pinta por fuera y se corta en 27 cubitos de 1 cm. La cantidad de cubitos que tienen exactamente dos caras pintadas es:', ['6', '8', '1', '12'], 3,
+        'En cada una de las 12 aristas hay un cubito que no es esquina: 12.', 'Los de dos caras están en las aristas, sin contar las esquinas.')],
+    ['pu-es-3', 'En un dado corriente las caras opuestas suman 7.',
+      opc('En un dado corriente, las caras opuestas suman 7. La cara opuesta a la del 3 es la del:', ['4', '6', '5', '2'], 0,
+        '$7 - 3 = 4$.', 'Busca el número que completa 7.')],
+    ['pu-es-4', 'Un corte sale una vez por capa, pero cada doblez que toca junta las capas de dos en dos.',
+      opc('Una hoja cuadrada se dobla por la mitad y luego otra vez por la mitad. En el cuadrito doblado se recorta un triangulito en la esquina que tiene un doblez y un borde suelto (no en la esquina donde se juntan los dos dobleces), atravesando todas las capas. Al desdoblar, la hoja tiene:',
+        ['cuatro huecos, uno en cada cuarto de la hoja', 'un hueco en el centro de la hoja', 'dos muescas, en la mitad de dos lados opuestos', 'una muesca en la mitad de un lado'], 2,
+        'Dos dobleces dejan 4 capas, pero el corte toca un doblez: las capas quedan pegadas de dos en dos y salen $4 \\div 2 = 2$ cortes. Como la esquina también toca un borde suelto, quedan en el borde de la hoja: dos muescas, en la mitad de dos lados opuestos. En la esquina de los dos dobleces saldría un solo hueco, en el centro.',
+        '¿Cuántos dobleces toca el corte? Cada doblez que toca junta las capas de dos en dos.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-secuencias.js
+// Preuniversitario · mundo 7 «Secuencias y patrones»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+PU_JUEGOS.push(({ setExam }) => {
+  setExam('pu-secuencias', 'Secuencias y patrones', [
+    ['pu-se-1', 'Si las diferencias no son iguales, se miran las diferencias de las diferencias.',
+      play('diferencias-escalera', 'Lo que sigue', { rounds: [{ seq: [3, 4, 7, 12, 19], hi: 35 }] }, 'Diferencias 1, 3, 5, 7: sigue $+9$, 28.', { hint: 'Diferencias.' })],
+    ['pu-se-1', 'En las sucesiones tipo Fibonacci cada término suma los dos anteriores.',
+      play('fibonacci-suma', 'Fibonacci', { rounds: [{ seq: [3, 3, 6, null, 15, 24], hi: 30 }] }, '$3 + 6 = 9$.', { hint: 'Suma dos.' })],
+    ['pu-se-1', 'Las alternadas son dos sucesiones intercaladas.',
+      play('alterna-dos', 'Alternadas', { rounds: [{ seq: [5, 40, 10, 35, 15, 30], need: 20, hi: 45 }] }, 'Los de posición impar suben de 5 en 5: 20.', { hint: 'Una sí y otra no.' })],
+    ['pu-se-2', 'Las letras se pasan a su posición en el alfabeto.',
+      play('letras-salto', 'Letras', { rounds: [{ seq: ['B', 'F', 'J', 'N'], need: 'R' }] }, '2, 6, 10, 14: sigue 18, R.', { hint: 'Posiciones.' })],
+    ['pu-se-2', 'En las figuras se cuenta cuánto gana cada una.',
+      play('figura-patron', 'Figuras', { rounds: [{ seq: [2, 6, 10, 14], need: 18, cols: 4, hi: 22 }] }, 'Gana 4 cada vez: 18.', { hint: 'Lo que gana.' })],
+    ['pu-se-3', 'Las semanas completas no cambian el día.',
+      play('ciclo-reloj', 'Semana', { rounds: [{ start: 2, n: 150 }] }, '$150 = 21 \\cdot 7 + 3$: miércoles + 3 = sábado.', { hint: 'Residuo de 7.' })],
+    ['pu-se-3', 'La última cifra de las potencias se repite en ciclos.',
+      play('ultima-cifra', 'Última cifra', { rounds: [{ a: 2, n: 22 }] }, 'Ciclo 2, 4, 8, 6; $22$ deja residuo 2: 4.', { hint: 'Ciclo de 4.' })],
+    ['pu-se-3', 'Con residuo 0 se cae en el último del ciclo.',
+      play('ciclo-colores', 'Collar', { rounds: [{ cyc: ['mint', 'coral', 'sky'], N: 60 }] }, '$60 = 3 \\cdot 20$: la última del grupo.', { hint: 'Residuo.' })],
+  ]);
+});
+
+// Mundo 7 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/secuencias-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-se-1', [
+    play('que-lugar', 'En la sucesión **3, 10, 17, 24…** aparece el **94**. ¿En qué **lugar** está?', { a: 3, d: 7, meta: 94, max: 20 },
+      'De 3 a 94 hay 91, que son $91 \\div 7 = 13$ saltos. El lugar es uno más: 14.',
+      { hint: '¿Cuántos saltos de 7 hay desde el primero? Recuerda que el primer término no necesita ninguno.' }),
+    play('termino-lejano', 'La sucesión es **9, 13, 17, 21…** Arma el término **25**.', { t: [9, 13, 17, 21], et: ['saltos', 'avanzan', 'término 25'], metas: ['24', '96', '105'], fichas: ['24', '96', '105', '25', '100', '109'],
+      mira: ['Del primero al 25 hay un salto menos que términos.', 'Multiplica los saltos por lo que avanza cada uno.', 'Al primer término súmale lo que avanzan.'], trampas: { '0:25': 'Del primero al 25 hay un salto menos.', '1:100': 'Son 24 saltos, no 25.', '2:109': 'Contaste un salto de más.', '2:100': 'Súmalo al primer término, que es 9.' }, ok: 'Primero más los saltos.' },
+      'Hay 24 saltos de 4: $24 \\cdot 4 = 96$, y $9 + 96 = 105$.',
+      { hint: 'Cuenta cuántos saltos hay del primer término al 25, no cuántos términos.' }),
+    play('saltos-crecen', 'Pon los dos saltos que faltan y el término que sigue.', { t: [4, 7, 13, 22, 34, null], arriba: ['+3', '+6', '+9', null, null], metas: ['+12', '+15', '49'], fichas: ['+12', '+15', '49', '+18', '46', '52', '+9'],
+      mira: ['De 22 a 34, ¿cuánto hay?', 'Los saltos crecen siempre lo mismo.', 'Súmale el último salto al 34.'], trampas: { '2:46': 'Repetiste el salto de 12; los saltos crecen.' }, ok: 'Los saltos forman otra sucesión: 3, 6, 9, 12, 15.' },
+      'Los saltos son 3, 6, 9, 12 y 15: el que sigue es $34 + 15 = 49$.',
+      { hint: 'Mira los saltos como si fueran otra sucesión. ¿Cuánto crecen cada vez?' }),
+    play('cada-regla', 'Pon la regla de cada sucesión.', { filas: [[5, 10, 20, 40], [5, 11, 17, 23], [5, 6, 11, 17]], metas: ['× 2', '+ 6', 'suma los dos'], fichas: ['× 2', '+ 6', 'suma los dos', '+ 5', '+ 1', '+ 6'],
+      mira: ['Cada término es el doble del anterior.', 'Se suma siempre lo mismo.', 'Suma los dos términos anteriores.'], trampas: { '0:+ 5': 'Solo funciona en el primer paso.', '2:+ 1': 'Solo funciona en el primer paso.', '2:+ 6': 'Solo funciona en el último paso.' } },
+      '5, 10, 20, 40 se duplica; 5, 11, 17, 23 suma 6; y en 5, 6, 11, 17 cada término suma los dos anteriores.',
+      { hint: 'Prueba una regla en todos los pasos, no solo en el primero.' }),
+    play('rompe-fila', 'En cada fila hay **un** número equivocado. Tócalos.', { filas: [[4, 7, 10, 14, 16, 19], [1, 4, 16, 62, 256, 1024]], malos: [3, 3], buenos: [13, 64], ok: 'Una suma 3 y la otra multiplica por 4.' },
+      'La primera sube de 3 en 3: el 14 debía ser 13. La segunda se multiplica por 4: el 62 debía ser $16 \\cdot 4 = 64$.',
+      { hint: 'Escribe qué pasa de un término al otro en cada fila. Casi todos los pasos son iguales.' }),
+    play('suma-dos', 'Cada término es la **suma de los dos** anteriores. Pon los que faltan.', { t: [2, null, 7, 12, null, 31], metas: ['5', '19'], fichas: ['5', '19', '4', '17', '9', '24'],
+      mira: ['El primero más el segundo debe dar 7.', 'Suma los dos que están antes del hueco.'], trampas: { '0:9': 'El tercero es la suma: el segundo es lo que falta para 7.', '1:24': 'No se duplica: suma los dos anteriores.', '1:17': 'No se suma siempre 5: suma los dos anteriores.' }, ok: 'Cada uno suma los dos de antes.' },
+      '$2 + 5 = 7$, así que el segundo es 5. Después $7 + 12 = 19$, y se comprueba: $12 + 19 = 31$.',
+      { hint: 'El primer hueco se halla al revés: ¿qué número, sumado con 2, da 7?' }),
+    play('mezcladas-siguen', 'Aquí hay **dos** sucesiones mezcladas. Pon los **dos** términos que siguen.', { t: [2, 40, 5, 36, 8, 32, null, null], metas: ['11', '28'], fichas: ['11', '28', '29', '35', '10', '24'],
+      mira: ['Le toca a la que sube: mira uno sí y otro no.', 'Le toca a la que baja: mira uno sí y otro no.'], trampas: { '1:29': 'Baja de 4 en 4, no de 3.', '0:29': 'El que sigue sale del que está dos lugares atrás.', '0:28': 'Le toca primero a la sucesión que sube.' }, ok: 'Cada término sale del que está dos lugares atrás.' },
+      'Son dos sucesiones intercaladas: 2, 5, 8 sube de 3 en 3 y sigue 11; 40, 36, 32 baja de 4 en 4 y sigue 28.',
+      { hint: 'Separa los lugares impares de los pares y resuelve cada fila por su cuenta.' }),
+    play('sube-termino', 'Sube al número que sigue o que se pide. Puedes fallar **una** vez.', { tiros: [
+      { q: '3, 8, 13, 18… ¿Cuál es el término **9**?', r: 43, c: '3 + 8 \\cdot 5', e: { 48: 'Hasta el noveno hay 8 saltos.', 45: 'Empieza en 3, no en 0.' } },
+      { q: '3, 6, 12, 24… ¿Cuál **sigue**?', r: 48, c: '24 \\cdot 2', e: { 36: 'No se suma 12 siempre: se multiplica.' } },
+      { q: '1, 2, 4, 7, 11… ¿Cuál **sigue**?', r: 16, c: '11 + 5', e: { 15: 'El salto también crece.', 22: 'No se duplica: mira los saltos.' } }] },
+      '$3 + 8 \\cdot 5 = 43$; $24 \\cdot 2 = 48$; y los saltos 1, 2, 3, 4 siguen con 5: $11 + 5 = 16$.',
+      { hint: 'Mira qué pasa de un término al otro: ¿se suma, se multiplica o cambian los saltos?' }),
+    sol('En un teatro, la primera fila tiene 12 sillas y cada fila tiene 3 sillas más que la anterior. ¿Cuántas sillas tiene la fila 20? ¿Cuántas sillas hay en las primeras 20 filas?',
+      ['De la fila 1 a la 20 hay [[19]] saltos de 3 sillas', 'Fila 20: $12 + 19 \\cdot 3 =$ [[69]] sillas', 'La primera fila y la última suman $12 + 69 =$ [[81]], igual que cada pareja de extremos', 'Hay 10 parejas: $10 \\cdot 81 =$ [[810]] sillas'],
+      ['72', '20', '1 620'],
+      'Entre el término 1 y el término $n$ hay $n - 1$ saltos. Para sumar una progresión aritmética se emparejan los extremos: todas las parejas suman lo mismo.',
+      'Cuenta los saltos, no las filas. Para la suma, junta la primera fila con la última, la segunda con la penúltima…'),
+    err('Los primeros términos de una sucesión alternada son 1, 20, 3, 17, 9, 14, 27. ¿Cuál es el término que sigue?',
+      ['Los términos suben y bajan sin una diferencia fija entre vecinos', 'Se miran de dos en dos lugares: en los impares van 1, 3, 9, 27 ($\\times 3$) y en los pares 20, 17, 14 ($-3$)', 'El que sigue continúa la de los impares: $27 \\cdot 3 = 81$'], 2,
+      ['El que sigue ocupa el lugar 8, que es par: continúa 20, 17, 14 y es $14 - 3 = 11$', 'El que sigue continúa las dos: $81 + 11 = 92$', 'El que sigue es $27 - 3 = 24$, porque las operaciones se turnan'],
+      '«Alternada» puede querer decir dos cosas. Dos operaciones que se turnan: cada término sale del anterior, como en 1, 6, 12, 17, 34 ($+5$, $\\times 2$, $+5$, $\\times 2$). Dos sucesiones intercaladas: cada término sale del que está dos lugares atrás, como aquí. Para saber cuál es, se prueba: si se turnaran operaciones, $1 \\to 20$ y $3 \\to 17$ usarían la misma, y no ($+19$ y $+14$). Después se cuenta el lugar: el término 8 es par, así que sigue $14 - 3 = 11$.',
+      'Antes de calcular, cuenta en qué lugar va el término que sigue: ¿le toca a la sucesión de los lugares impares o a la de los pares?'),
+    opc('En una sucesión, cada término se obtiene multiplicando el anterior por 3. Si el segundo término es 6, el quinto término es:',
+      ['162', '54', '486', '24'], 0,
+      'Del segundo al quinto hay tres saltos: $6 \\cdot 3 \\cdot 3 \\cdot 3 = 162$.',
+      'Cuenta cuántas veces hay que multiplicar para ir del segundo término al quinto.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/secuencias-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-se-2', [
+    play('letra-sigue', 'La secuencia es **C, D, F, I, M**. Lleva el señalador a la letra que sigue.', { seq: 'CDFIM', meta: 'R' },
+      'Con números: 3, 4, 6, 9, 13. Los saltos son 1, 2, 3 y 4; sigue 5: $13 + 5 = 18$, la R.',
+      { hint: 'Cambia cada letra por su número en el alfabeto y mira los saltos.' }),
+    play('letras-atras', 'Las letras van **hacia atrás**, siempre el mismo salto. Pon las que faltan (alfabeto sin Ñ).', { t: ['W', 'T', null, 'N', null], metas: ['Q', 'K'], fichas: ['Q', 'K', 'R', 'L', 'M', 'P'],
+      mira: ['De W a T se retroceden 3: haz lo mismo desde la T.', 'Retrocede 3 desde la N.'], trampas: { '0:R': 'Retrocediste 2; el salto es de 3.', '1:L': 'Retrocediste 2; el salto es de 3.' }, ok: 'Siempre tres letras hacia atrás.' },
+      'W, T, Q, N, K: 23, 20, 17, 14 y 11. Se restan 3 cada vez.',
+      { hint: 'Cuenta cuántas letras se retroceden de W a T y repite ese salto.' }),
+    play('brazos-estrella', 'Estas son las figuras 1, 2 y 3. ¿Qué figura tiene **56** puntos?', { total: 56, max: 16 },
+      'Hay 1 punto fijo y cinco brazos de $n$: $5n + 1 = 56$, así que $n = 11$.',
+      { hint: 'Busca lo que no cambia y lo que se agrega en cada figura.' }),
+    play('fijo-y-crece', 'Las figuras tienen **7, 12 y 17** cuadros. Pon cuánto se **agrega** cada vez, la parte **fija** y los cuadros de la figura **20**.', { t: [7, 12, 17], fijo: 2, et: ['se agrega', 'parte fija', 'figura 20'], metas: ['5', '2', '102'], fichas: ['5', '2', '102', '7', '107', '100'],
+      mira: ['Resta una figura de la siguiente.', 'Quítale a la figura 1 lo que se agrega cada vez.', 'Veinte veces lo que crece, más la parte fija.'], trampas: { '1:7': 'La figura 1 ya tiene un grupo de los que se agregan.', '2:107': 'Contaste un grupo de más.', '2:100': 'Falta la parte fija.' }, ok: 'Fijo más lo que crece: 5n + 2.' },
+      'Se agregan 5 cada vez. La figura 1 es $5 + 2$: la parte fija es 2. La figura $n$ tiene $5n + 2$, y la 20, $5 \\cdot 20 + 2 = 102$.',
+      { hint: 'Si la figura 1 tiene un grupo de los que se agregan, ¿qué le sobra? Eso es lo fijo.' }),
+    play('escalera-cuatro', 'La escalera crece así. Arma la figura **4** en la cuadrícula, pegada a la **izquierda** y al **piso**.', { n: 4, lado: 5 },
+      'Cada figura agrega una diagonal completa: $1 + 2 + 3 + 4 = 10$ cuadros.',
+      { hint: 'Mira cuántos cuadros tiene cada fila de la figura 3 y agranda cada una en uno.' }),
+    play('dos-reglas', 'Pon la letra y el número que siguen.', { t: [['E', 4], ['G', 12], ['I', 36], ['K', 108]], metas: ['M', '324'], fichas: ['M', '324', 'L', 'N', '216', '180'],
+      mira: ['Mira solo las letras: avanzan de dos en dos.', 'Mira solo los números: se multiplican por lo mismo.'], trampas: { '0:L': 'Entre letra y letra se salta una: avanzan 2.', '1:180': 'No se suma 72: se multiplica.', '1:216': 'Se multiplica por 3, no por 2.' } },
+      'Las letras avanzan de 2 en 2: E, G, I, K, M. Los números se multiplican por 3: $108 \\cdot 3 = 324$.',
+      { hint: 'Tapa los números y resuelve las letras. Después tapa las letras.' }),
+    play('mesas-hexagono', 'En una mesa de **6** lados se sientan 6, **una por lado**; en dos pegadas, 10; en tres pegadas en fila, 14. ¿Cuántas mesas en fila hacen falta para **38** personas?', { total: 38, max: 11 },
+      'Cada mesa pone 4 lugares y las dos puntas siempre están: $4n + 2 = 38$. Sin las dos puntas quedan 36, así que $n = 9$.',
+      { hint: 'De una mesa a la siguiente se agregan 4. ¿Qué parte no cambia?' }),
+    play('sube-patron', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'A, F, K, P… (alfabeto sin Ñ) ¿Qué **lugar** ocupa la letra que sigue?', r: 21, c: '16 + 5', e: { 20: 'La P es la letra 16.' } },
+      { q: 'Figuras de 6, 9, 12… puntos. ¿Cuántos tiene la figura **12**?', r: 39, c: '6 + 11 \\cdot 3', e: { 42: 'Hasta la 12 hay 11 saltos.', 36: 'Falta la parte fija.' } },
+      { q: 'Y3, W6, U12… ¿Qué **número** sigue?', r: 24, c: '12 \\cdot 2', e: { 18: 'No se suma 6: se duplica.' } }] },
+      'Los números son 1, 6, 11, 16: sigue 21, la U. La figura 12 tiene $6 + 11 \\cdot 3 = 39$. Y 3, 6, 12 se duplica: 24.',
+      { hint: 'Pasa las letras a números, cuenta saltos y separa las dos reglas.' }),
+    sol('Un patrón de baldosas crece así: la figura 1 tiene 5 baldosas, la figura 2 tiene 8 y la figura 3 tiene 11. ¿Cuántas baldosas tiene la figura 30? ¿Qué figura tiene 62 baldosas?',
+      ['Cada figura agrega [[3]] baldosas a la anterior', 'Figura 30: $5 + 29 \\cdot 3 =$ [[92]] baldosas', 'Para llegar a 62 desde 5 faltan [[57]] baldosas, que son $57 \\div 3 = 19$ saltos', 'Es la figura $1 + 19 =$ [[20]]'],
+      ['95', '90', '21'],
+      'La figura $n$ tiene $5 + 3(n - 1)$ baldosas. Para devolverse de la cantidad a la figura se cuentan los saltos y se suma 1, porque la figura 1 no necesita saltos.',
+      'De la figura 1 a la 30 no hay 30 saltos. Cuéntalos con cuidado.'),
+    err('En la secuencia B, E, H, K, … las letras siguen la misma regla (alfabeto de 26 letras, sin Ñ). ¿Cuál es la octava letra de la secuencia?',
+      ['Las letras ocupan los puestos 2, 5, 8 y 11 del alfabeto: avanzan de 3 en 3', 'Hasta la octava letra hay 8 saltos: $2 + 8 \\cdot 3 = 26$', 'La letra del puesto 26 es la Z'], 1,
+      ['Hasta la octava letra hay 7 saltos: $2 + 7 \\cdot 3 = 23$', 'Hasta la octava letra hay 9 saltos: $2 + 9 \\cdot 3 = 29$', 'Hasta la octava letra hay 8 saltos: $8 \\cdot 3 = 24$'],
+      'Del primer término al octavo hay 7 saltos, no 8. El puesto es $2 + 21 = 23$: la letra W.',
+      'Entre la primera letra y la segunda hay un solo salto. ¿Cuántos hay entre la primera y la octava?'),
+    opc('Observa la secuencia: A1, C4, E9, G16, … El término que sigue es:',
+      ['H25', 'I20', 'I25', 'J36'], 2,
+      'Las letras saltan de dos en dos (A, C, E, G, I) y los números son los cuadrados 1, 4, 9, 16, 25.',
+      'Separa el patrón en dos: mira solo las letras y después solo los números.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/secuencias-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-se-3', [
+    play('pieza-ciclo', 'Un collar repite estas **5** cuentas, empezando por la 1. Lleva la flecha a la que ocupa el lugar **88**.', { r: ['1', '2', '3', '4', '5'], de: -1, pasos: 88, color: true },
+      '$88 = 17 \\cdot 5 + 3$: después de 17 vueltas completas, es la tercera.',
+      { hint: 'Divide el lugar entre el largo del ciclo. El residuo dice cuál es.' }),
+    play('vueltas-sobran', 'Un letrero escribe **TIGRE** una y otra vez. ¿Qué letra ocupa el lugar **87**? Pon las vueltas, el residuo y la letra.', { palabra: 'TIGRE', et: ['vueltas', 'residuo', 'letra'], metas: ['17', '2', 'I'], fichas: ['17', '2', 'I', '18', 'T', 'G', '5'],
+      mira: ['¿Cuántas veces cabe TIGRE completo en 87?', 'Lo que sobra de 87 después de las vueltas.', 'Cuenta en TIGRE tantas letras como sobran.'], trampas: { '0:18': 'Con 18 vueltas te pasas de 87.', '2:G': 'La segunda letra, no la tercera.' }, ok: 'El residuo dice la letra.' },
+      '$87 = 17 \\cdot 5 + 2$: 17 vueltas y sobran 2. La segunda letra de TIGRE es la I.',
+      { hint: 'Las vueltas completas no cambian nada. ¿Cuántas letras sobran?' }),
+    play('dia-semana', 'Hoy es **jueves**. ¿Qué día fue hace **30** días? Gira la flecha.', { r: ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'], de: 3, pasos: -30 },
+      '$30 = 4 \\cdot 7 + 2$: cuatro semanas no cambian el día. Dos días antes del jueves es martes.',
+      { hint: 'Quita las semanas completas y retrocede solo lo que sobra.' }),
+    play('mismo-residuo', 'En un ciclo de **7**, el lugar 5 está marcado. Toca **todos** los números que caen en **ese mismo** lugar.', { c: 7, de: 5, nums: [12, 22, 19, 35, 26, 30, 40, 54] },
+      'Caen en el mismo lugar los que dejan residuo 5: 12, 19, 26, 40 y 54. El 22 deja 1; el 35, 0; y el 30, 2.',
+      { hint: 'Divide cada uno entre 7 y mira el residuo.' }),
+    play('ultima-ciclo', 'Estas son las potencias de 7. ¿En qué termina $7^{36}$? Pon el largo del ciclo, el residuo y la cifra.', { base: 7, et: ['largo del ciclo', 'residuo', 'cifra'], metas: ['4', '0', '1'], fichas: ['4', '0', '1', '3', '7', '9', '5'],
+      mira: ['Mira cuándo se repite la última cifra.', 'Divide 36 entre el largo del ciclo.', 'La cifra que ocupa ese lugar en el ciclo; si no sobra nada, la última.'], trampas: { '0:5': 'La quinta ya repite a la primera: el ciclo es más corto.', '2:7': 'Residuo 0 no es el primero: es el último del ciclo.' }, ok: 'El ciclo 7, 9, 3, 1 y el residuo del exponente.' },
+      'Las últimas cifras son 7, 9, 3, 1 y se repiten cada 4. $36 = 9 \\cdot 4$, residuo 0: es la última del ciclo, 1.',
+      { hint: 'Escribe solo las últimas cifras hasta que vuelva la primera.' }),
+    play('coinciden-otra', 'Dos buses salen juntos. Uno vuelve a salir cada **6** minutos y otro cada **8**. ¿A los cuántos minutos salen juntos por **primera** vez otra vez?', { a: 6, b: 8, max: 48, et: 'minutos', na: 'cada 6', nb: 'cada 8' },
+      'El primer múltiplo común de 6 y 8 es 24. A los 48 también coinciden, pero no es la primera vez.',
+      { hint: 'Busca el primer número que esté en la tabla del 6 y en la del 8.' }),
+    play('retrocede-ruleta', 'Una ruleta tiene **8** casillas. Está en la **3** y **retrocede 19** lugares. Lleva la flecha a donde queda.', { r: ['1', '2', '3', '4', '5', '6', '7', '8'], de: 2, pasos: -19 },
+      '$19 = 2 \\cdot 8 + 3$: dos vueltas no cambian nada. Desde la 3 se retroceden 3: 2, 1 y 8.',
+      { hint: 'Quita las vueltas completas. Antes de la 1 está la 8.' }),
+    play('sube-residuo', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '¿Cuánto **sobra** al dividir **100** entre 7?', r: 2, c: '100 - 14 \\cdot 7', e: { 14: 'Esas son las vueltas.' } },
+      { q: 'Dos luces parpadean **juntas** y siguen cada **9** y cada **12** segundos. ¿A los cuántos vuelven a coincidir por **primera** vez?', r: 36, c: '\\text{mcm}(9, 12)', e: { 21: 'No se suman.', 12: 'A los 12 no le toca a la de 9.' } },
+      { q: '¿En qué **cifra** termina $4^{31}$? (4, 6, 4, 6…)', r: 4, c: '31 = 15 \\cdot 2 + 1, \\; 4^1', e: { 1: 'Ese es el residuo: busca esa cifra en el ciclo.', 6: 'Esa es la segunda del ciclo.' } }] },
+      '$100 = 14 \\cdot 7 + 2$: sobran 2. El primer múltiplo común de 9 y 12 es 36. $31 = 15 \\cdot 2 + 1$: la primera del ciclo, 4.',
+      { hint: 'Residuo para los ciclos, múltiplo común para las coincidencias.' }),
+    sol('Un semáforo repite siempre el mismo ciclo: 40 segundos en verde, 5 en amarillo y 35 en rojo. Si acaba de ponerse en verde, ¿de qué color estará 5 minutos y 30 segundos después?',
+      ['El ciclo completo dura $40 + 5 + 35 =$ [[80]] segundos', 'Cinco minutos y medio son [[330]] segundos', '$330 = 4 \\cdot 80 +$ [[10]]: pasan 4 ciclos completos y sobran 10 segundos', 'A los 10 segundos de empezar el ciclo, el semáforo está en [[verde]]'],
+      ['rojo', 'amarillo', '50'],
+      'Los ciclos completos no cambian nada: solo importa el residuo. Con 10 segundos dentro del ciclo todavía no se acaban los 40 de verde.',
+      'Halla cuánto dura una vuelta completa del semáforo y cuántas vueltas enteras caben en el tiempo que pasa.'),
+    err('En una fila de banderines, las letras repiten el ciclo P, Q, R, S, T y los colores repiten el ciclo azul, blanco, verde. El primer banderín es una P azul. ¿En qué posición está la cuarta P azul de la fila?',
+      ['Las letras se repiten cada 5 banderines y los colores, cada 3', 'Una P azul vuelve a salir cada $5 + 3 = 8$ banderines', 'Las P azules están en las posiciones 1, 9, 17 y 25: la cuarta es la 25'], 1,
+      ['Una P azul vuelve a salir cuando se completan a la vez los dos ciclos: cada MCM(5, 3) = 15 banderines', 'Una P azul vuelve a salir cada $5 \\cdot 3 \\cdot 2 = 30$ banderines', 'Una P azul vuelve a salir cada $5 - 3 = 2$ banderines'],
+      'Las P están en 1, 6, 11, 16…; los azules, en 1, 4, 7, 10, 13, 16… Coinciden por primera vez en el 16: los dos ciclos se completan juntos cada MCM(5, 3) = 15 banderines. Las P azules están en 1, 16, 31 y 46: la cuarta es la 46.',
+      'Escribe dónde caen las P y dónde caen los azules en los primeros 20 banderines. ¿Cada cuánto coinciden?'),
+    opc('Las letras de la palabra CAMINO se escriben una y otra vez, sin espacios: CAMINOCAMINOCAMINO… La letra que ocupa el lugar 100 es:',
+      ['M', 'N', 'C', 'I'], 3,
+      'La palabra tiene 6 letras y $100 = 6 \\cdot 16 + 4$: es la cuarta letra de CAMINO, la I.',
+      'Divide entre el largo de la palabra: el residuo dice qué letra es.'),
+  ]);
+
+  addExam('pu-secuencias', [
+    ['pu-se-1', 'Del término 1 al término n hay n − 1 saltos.',
+      opc('En la sucesión 4, 9, 14, 19, …, el término que ocupa el lugar 12 es:', ['64', '59', '60', '54'], 1,
+        'Sube de 5 en 5 y hasta el lugar 12 hay 11 saltos: $4 + 11 \\cdot 5 = 59$.', 'Cuenta los saltos que hay del primer término al duodécimo.')],
+    ['pu-se-2', 'Las letras siguen patrones de números: cada una es su puesto en el alfabeto.',
+      opc('En la secuencia A, D, G, J, …, la letra que sigue es:', ['K', 'L', 'N', 'M'], 3,
+        'Los puestos son 1, 4, 7, 10: avanzan de 3 en 3. Sigue el 13, la M.', 'Cuenta cuántas letras se salta cada vez.')],
+    ['pu-se-3', 'En un ciclo, el residuo de la división dice el lugar.',
+      opc('La cifra de las unidades de $2^{30}$ es:', ['4', '2', '8', '6'], 0,
+        'Las últimas cifras del 2 se repiten: 2, 4, 8, 6. Como $30 = 4 \\cdot 7 + 2$, es la segunda: 4.', 'Escribe las últimas cifras de las primeras potencias de 2 y busca el ciclo.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-codigos.js
+// Preuniversitario · mundo 8 «Codificación»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+PU_JUEGOS.push(({ setExam }) => {
+  setExam('pu-codigos', 'Codificación', [
+    ['pu-cd-1', 'En la clave César todas las letras se corren lo mismo.',
+      play('rueda-cesar', 'César', { rounds: [{ pair: ['C', 'F'], msg: 'GLD' }] }, 'Clave +3: GLD dice DIA.', { hint: 'Retrocede.' })],
+    ['pu-cd-1', 'Con A = 1, …, Z = 26 (sin Ñ), una palabra vale la suma de sus letras.',
+      play('altura-letras', 'Valor', { rounds: [{ word: 'MAR' }] }, '$13 + 1 + 18 = 32$.', { hint: 'Suma lugares.' })],
+    ['pu-cd-1', 'En binario cada lugar vale el doble del de su derecha.',
+      play('binario-luces', 'Binario', { rounds: [{ n: 25, bits: 5 }] }, '$25 = 16 + 8 + 1$: 11001.', { hint: 'Del más grande.' })],
+    ['pu-cd-2', 'La regla tiene que servir para todos los ejemplos.',
+      play('maquina-regla', 'Regla', { rounds: [{ ex: [[4, 12], [7, 21], [10, 30]], ask: 9, op: 'mul', k: 3 }] }, 'Multiplicar por 3: $9 \\to 27$.', { hint: 'Todos.' })],
+    ['pu-cd-2', 'Si las letras no cambian, el código solo las reordena.',
+      play('permuta-codigo', 'Orden', { rounds: [{ ex: [['TECLA', 'ALCET']], word: 'PIANO' }] }, 'Se escribe al revés: ONAIP.', { hint: 'La primera.' })],
+    ['pu-cd-2', 'Una clave se saca comparando los ejemplos posición por posición.',
+      play('clave-simbolos', 'Clave', { rounds: [{ key: [['P', '#'], ['A', '*'], ['L', '%'], ['O', '@']], ex: [['PALO', '# * % @']], word: 'POLO', mode: 'decode' }] }, '# @ % @ dice POLO.', { hint: 'Compara.' })],
+  ]);
+});
+
+// Mundo 8 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/codigos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-cd-1', [
+    play('avanza-clave', 'En una clave todas las letras avanzan lo mismo y, después de la Z, sigue la A (sin Ñ). La **W** se cifra con **D**. ¿Cuántos lugares **avanza** la clave?', { de: 'W', a: 'D' },
+      'X, Y, Z son 3 lugares; A, B, C, D son 4 más: la clave avanza 7.',
+      { hint: 'Cuenta desde la letra que sigue a la W y, al llegar a la Z, continúa con la A.' }),
+    play('cifra-palabra', 'La clave **avanza 4** lugares y después de la Z sigue la A (sin Ñ). Cifra la palabra **ZUMO**.', { w: 'ZUMO', metas: ['D', 'Y', 'Q', 'S'], fichas: ['D', 'Y', 'Q', 'S', 'V', 'K', 'E'],
+      mira: ['Después de la Z vienen A, B, C…', 'Avanza cuatro lugares desde la U.', 'Avanza cuatro lugares desde la M.', 'Avanza cuatro lugares desde la O.'], trampas: { '0:V': 'La V está cuatro lugares antes: para cifrar se avanza.', '0:E': 'Contaste un lugar de más: la A es el primero.', '3:K': 'La K está cuatro lugares antes: para cifrar se avanza.' }, ok: 'Cada letra avanza lo mismo.' },
+      'Z → D, dando la vuelta; U → Y; M → Q y O → S: DYQS.',
+      { hint: 'Piensa en el alfabeto como una rueda: al llegar al final se vuelve a empezar.' }),
+    play('descifra-mensaje', 'Para cifrar, cada letra **avanzó 6** lugares (sin Ñ). Llegó el mensaje **IGLK**. ¿Qué palabra era? (sin tildes)', { w: 'IGLK', metas: ['C', 'A', 'F', 'E'], fichas: ['C', 'A', 'F', 'E', 'O', 'M', 'R', 'Q'],
+      mira: ['Devuélvete seis lugares desde la I.', 'Devuélvete seis lugares desde la G.', 'Devuélvete seis lugares desde la L.', 'Devuélvete seis lugares desde la K.'], trampas: { '0:O': 'Avanzaste otra vez: descifrar es devolverse.', '1:M': 'Avanzaste otra vez: descifrar es devolverse.', '2:R': 'Avanzaste otra vez: descifrar es devolverse.', '3:Q': 'Avanzaste otra vez: descifrar es devolverse.' }, ok: 'Descifrar es hacer el camino contrario.' },
+      'Devolviendo 6: I → C, G → A, L → F y K → E. Decía CAFE.',
+      { hint: 'Si al cifrar se avanzó, ¿qué hay que hacer para volver a la palabra?' }),
+    play('suma-letras', 'A = 1, B = 2… Z = 26 (sin Ñ). Pon el valor de cada letra de **TREN** y el total.', { w: 'TREN', metas: ['20', '18', '5', '14', '57'], fichas: ['20', '18', '5', '14', '57', '21', '15', '58', '4'],
+      mira: ['La T es una de las letras de apoyo, de cinco en cinco.', 'La R está dos lugares antes de la T.', 'La E es una de las letras de apoyo.', 'La N está justo antes de la O.', 'Suma los cuatro valores.'], trampas: { '0:21': 'Contaste la Ñ: sin ella la T es la 20.', '2:4': 'Esa es la D.', '3:15': 'Esa es la O: la N va justo antes.', '4:58': 'Revisa la suma: hay uno de más.' }, ok: 'Cada letra vale su lugar.' },
+      '$20 + 18 + 5 + 14 = 57$.',
+      { hint: 'Recuerda las letras de apoyo, de cinco en cinco, y cuenta desde la más cercana.' }),
+    play('letra-falta', 'Con A = 1… Z = 26 (sin Ñ), esta palabra de tres letras vale **34**. Lleva el señalador a la letra que falta.', { w: 'M_L', total: 34, meta: 'I' },
+      'M vale 13 y L vale 12: suman 25. Falta $34 - 25 = 9$, que es la I: MIL.',
+      { hint: 'Suma las letras que se ven y mira cuánto falta para el total.' }),
+    play('prende-focos', 'Los bombillos valen 16, 8, 4, 2 y 1. Prende los que forman el **27**.', { n: 27 },
+      '$16 + 8 + 2 + 1 = 27$: se escribe 1 1 0 1 1.',
+      { hint: 'Empieza por el más grande que quepa y sigue con lo que falta.' }),
+    play('lee-tablero', 'Este tablero muestra un número. Pon **qué número** es y cómo queda el tablero con el número que **sigue**.', { b: '11100', et: ['número', 'el que sigue'], metas: ['28', '11101'], fichas: ['28', '11101', '7', '3', '11200', '11110'],
+      mira: ['Suma lo que valen los bombillos prendidos.', 'Al que sigue le falta 1: ¿qué bombillo vale 1?'], trampas: { '0:7': 'Leíste de derecha a izquierda: el 16 está a la izquierda.', '0:3': 'No se cuentan los prendidos: se suma lo que valen.', '1:11200': 'Un bombillo solo puede estar apagado (0) o prendido (1).', '1:11110': 'Prendiste el de 2: sumaste 2, no 1.' }, ok: 'Prendido vale; apagado no.' },
+      '$16 + 8 + 4 = 28$. Para el 29 se prende el de 1: 1 1 1 0 1.',
+      { hint: 'Suma lo que valen los prendidos. Para el que sigue hay que sumar uno.' }),
+    play('sube-codigo', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'En una clave la **D** se cifra con **M** (sin Ñ). ¿Cuántos lugares **avanza**?', r: 9, c: '13 - 4', e: { 10: 'La D no se cuenta: es el punto de partida.', 17: 'Ese es el camino contrario: la clave avanza.' } },
+      { q: 'Con A = 1… Z = 26 (sin Ñ), ¿cuánto vale **RIO**?', r: 42, c: '18 + 9 + 15', e: { 44: 'Contaste la Ñ: sin ella la R y la O valen uno menos.' } },
+      { q: 'Los bombillos valen 16, 8, 4, 2 y 1. ¿Qué número es **1 0 0 0 1** (1 prendido, 0 apagado)?', r: 17, c: '16 + 1', e: { 2: 'No se cuentan los prendidos: se suma lo que valen.' } }] },
+      'De D a M hay $13 - 4 = 9$ lugares; RIO vale $18 + 9 + 15 = 42$; y 1 0 0 0 1 es $16 + 1 = 17$.',
+      { hint: 'Cuenta lugares, suma valores de letras o suma bombillos prendidos.' }),
+    sol('En una clave, cada letra se reemplaza por la que está 3 puestos después en el alfabeto (de 26 letras, sin Ñ); después de la Z se vuelve a empezar por la A. ¿Cómo se cifra la palabra ZONA?',
+      ['La Z está al final: al avanzar 3 se da la vuelta y queda [[C]]', 'La O avanza 3 puestos: [[R]]', 'La N pasa a [[Q]] y la A pasa a [[D]]', 'ZONA se cifra como [[CRQD]]'],
+      ['W', 'CRQC', 'X'],
+      'El alfabeto se trata como una rueda: después de la Z siguen A, B, C. Cada letra avanza lo mismo, sin importar dónde esté.',
+      'Escribe el final del alfabeto, …X, Y, Z, y continúa con el comienzo, como si fuera un círculo.'),
+    err('En un tablero de 5 bombillos, cada bombillo vale, de izquierda a derecha, 16, 8, 4, 2 y 1. Un bombillo encendido se escribe 1 y uno apagado, 0. ¿Qué número representa el tablero 1 0 1 0 1?',
+      ['Están encendidos el primero, el tercero y el quinto bombillo', 'Sus valores son 16, 4 y 1', 'El número es $16 \\cdot 4 \\cdot 1 = 64$'], 2,
+      ['El número es $16 + 4 + 1 = 21$', 'El número es $1 + 3 + 5 = 9$', 'El número es diez mil ciento uno'],
+      'Los valores de los bombillos encendidos se suman: $16 + 4 + 1 = 21$. Así se escriben los números en binario.',
+      'Cada bombillo encendido aporta su valor al total. ¿Los aportes se juntan sumando o multiplicando?'),
+    opc('Si A = 1, B = 2, C = 3 y así sucesivamente hasta Z = 26 (alfabeto sin Ñ), el valor de la palabra CASA, que se obtiene sumando los valores de sus letras, es:',
+      ['23', '24', '25', '22'], 1,
+      'C vale 3, A vale 1 y S vale 19: $3 + 1 + 19 + 1 = 24$.',
+      'Cuenta con cuidado el puesto de la S: es la letra que más pesa.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/codigos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-cd-2', [
+    play('regla-todos', 'Una máquina hizo estas tres cosas. Toca **todas** las reglas que sirven con los tres ejemplos.', { e: [[2, 8], [5, 20], [7, 28]], casos: [{ t: 'sumar 6', f: n => n + 6 }, { t: 'multiplicar por 4', f: n => 4 * n }, { t: 'por 3 y sumar 2', f: n => 3 * n + 2 }, { t: 'duplicar y volver a duplicar', f: n => 2 * (2 * n) }] },
+      'Multiplicar por 4 funciona siempre, y duplicar dos veces es lo mismo. Sumar 6 y «por 3 y sumar 2» solo sirven con el 2.',
+      { hint: 'Prueba cada regla con el 5 y con el 7, no solo con el 2.' }),
+    play('maquina-cifras', 'La máquina hace una cuenta con las dos **cifras** de cada número. Pon qué hace y qué entrega con el **84**.', { e: [['72', '5'], ['58', '3'], ['90', '9']], ask: 84, metas: ['restar', '4'], fichas: ['restar', '4', 'sumar', 'multiplicar', '12', '32'],
+      mira: ['Prueba con 72 y después con 58: la cuenta debe servir con todos.', 'Haz esa cuenta con el 8 y el 4.'], trampas: { '0:sumar': 'Sumar sirve con 90, pero 7 + 2 no es 5.', '0:multiplicar': '7 por 2 no es 5.', '1:12': 'Esa es la suma de 8 y 4.', '1:32': 'Esa es 8 por 4.' }, ok: 'A la cifra mayor se le resta la menor.' },
+      '$7 - 2 = 5$, $8 - 5 = 3$ y $9 - 0 = 9$: se resta la menor de la mayor. Con 84, $8 - 4 = 4$.',
+      { hint: 'Con el 90 sirven varias cuentas; con el 72 solo una.' }),
+    play('maquina-dos-pasos', 'La máquina multiplica por un número y después **suma** otro, siempre los mismos. Pon los dos números y lo que entrega con el **10**.', { e: [['2', '9'], ['4', '17'], ['7', '29']], et: ['por', 'más', 'con 10'], metas: ['4', '1', '41'], fichas: ['4', '1', '41', '3', '3', '7', '17', '40'],
+      mira: ['De 2 a 4 la entrada sube 2 y la salida sube 8. ¿Cuánto sube por cada 1?', 'Multiplica 2 por ese número: ¿cuánto falta para 9?', 'Usa los dos números con el 10.'], trampas: { '0:3': 'Por 3, de 2 a 4 la salida subiría 6, y sube 8.', '1:3': 'Con 4 · 2 ya son 8: hasta 9 falta menos.', '2:17': 'Sumar 7 solo sirve con el 2.', '2:40': 'Falta sumar.' }, ok: 'Sirve con los tres ejemplos.' },
+      '$4 \\cdot 2 + 1 = 9$, $4 \\cdot 4 + 1 = 17$ y $4 \\cdot 7 + 1 = 29$. Con 10: $4 \\cdot 10 + 1 = 41$.',
+      { hint: 'Propón una regla con el primer ejemplo y pruébala con los otros dos.' }),
+    play('puestos-cambian', 'El código solo cambia las letras de **puesto**. Escribe **TIGRE** en ese código.', { de: 'CAMPO', a: 'OCAMP', ask: 'TIGRE', rot: 'con la misma regla', metas: ['E', 'T', 'I', 'G', 'R'], fichas: ['T', 'I', 'G', 'R', 'E'],
+      mira: ['Mira a qué puesto fue la O de CAMPO.', 'La primera letra pasó al segundo puesto.', 'La segunda letra pasó al tercer puesto.', 'La tercera letra pasó al cuarto puesto.', 'La cuarta letra pasó al último puesto.'], ok: 'La última pasa al principio y las demás se corren.' },
+      'La última letra pasa al principio y las demás se corren un puesto: TIGRE queda ETIGR.',
+      { hint: 'Numera los puestos de CAMPO y mira dónde quedó cada uno.' }),
+    play('devuelve-puestos', 'Con este código llegó el mensaje **OLARC**. Devuelve cada letra a su puesto y escribe la palabra.', { de: 'RUBIA', a: 'UBIAR', ask: 'OLARC', rot: 'mensaje cifrado', metas: ['C', 'O', 'L', 'A', 'R'], fichas: ['O', 'L', 'A', 'R', 'C'],
+      mira: ['Al cifrar, la primera letra pasó al último puesto: devuélvela.', 'La que llegó primera estaba de segunda.', 'La que llegó segunda estaba de tercera.', 'La que llegó tercera estaba de cuarta.', 'La que llegó cuarta estaba de última.'], ok: 'Descifrar es devolver cada letra a su puesto.' },
+      'Al cifrar, la primera letra pasa al final. Para descifrar, la última vuelve al principio: COLAR.',
+      { hint: 'Mira a dónde fue la R de RUBIA. El mensaje se lee haciendo el cambio contrario.' }),
+    play('avances-crecen', 'En este código las letras no avanzan lo mismo (sin Ñ). Pon **cuánto avanza** cada puesto y cifra **MAL**.', { de: 'RED', a: 'TIJ', ask: 'MAL', metas: ['+2', '+4', '+6', 'O', 'E', 'R'], fichas: ['+2', '+4', '+6', 'O', 'E', 'R', '+3', 'C', 'N'],
+      mira: ['De R a T, ¿cuántos lugares hay?', 'De E a I, ¿cuántos lugares hay?', 'De D a J, ¿cuántos lugares hay?', 'La M avanza lo del primer puesto.', 'La A avanza lo del segundo puesto.', 'La L avanza lo del tercer puesto.'], trampas: { '1:+3': 'De E a I: F, G, H, I son cuatro.', '4:C': 'Con 2 llega a C: el segundo puesto avanza 4.', '5:N': 'Con 2 llega a N: el tercer puesto avanza 6.' }, ok: 'Los avances también siguen una regla: 2, 4, 6.' },
+      'R → T avanza 2, E → I avanza 4 y D → J avanza 6. Entonces M → O, A → E y L → R: OER.',
+      { hint: 'Cuenta los lugares de cada letra del ejemplo, una por una.' }),
+    play('clave-comparada', 'Estas dos palabras cifradas son **OSO** y **SOL**, pero no se sabe cuál es cuál. Cada símbolo es siempre la misma letra. Escribe **LOS**.', { filas: ['●◆▲', '◆●◆'], ask: 'LOS', metas: ['▲', '◆', '●'], fichas: ['●', '■', '▲', '◆', '★'],
+      mira: ['La L es la única letra que sale en una sola palabra.', 'La O es la que se repite en OSO.', 'La S está en las dos palabras y no se repite en ninguna.'], ok: 'La palabra con un símbolo repetido solo puede ser OSO.' },
+      'Solo OSO repite letra: es ◆●◆. Entonces O es ◆ y S es ●; en ●◆▲, la L es ▲. LOS se escribe ▲◆●.',
+      { hint: 'Una de las dos palabras repite una letra. ¿Cuál de las cifradas repite un símbolo?' }),
+    play('sube-regla', 'Sube al número que entrega la máquina o la clave. Puedes fallar **una** vez.', { tiros: [
+      { q: '4 → 13, 6 → 17, 9 → 23: se **duplica** y se suma siempre lo mismo. ¿Qué entrega con **12**?', r: 29, c: '2 \\cdot 12 + 5', e: { 21: 'Sumar 9 solo sirve con el 4.', 24: 'Falta sumar.' } },
+      { q: '12 → 6, 31 → 8, 40 → 8: se suman las **cifras** y con esa suma se hace **otra cuenta**, siempre la misma. ¿Qué entrega con **57**?', r: 24, c: '2 \\cdot (5 + 7)', e: { 12: 'Falta un paso: 1 + 2 son 3, no 6.', 15: 'Sumar 3 a la suma sirve con el 12, pero el 31 daría 7.' } },
+      { q: 'En una clave las letras avanzan **1, 3, 5, 7…** ¿Cuánto avanza la **sexta**?', r: 11, c: '1 + 5 \\cdot 2', e: { 9: 'Esa es la quinta.', 13: 'Esa es la séptima.' } }] },
+      '$2 \\cdot 12 + 5 = 29$; el doble de $5 + 7$ es 24; y los avances son 1, 3, 5, 7, 9 y 11.',
+      { hint: 'Propón una regla con el primer ejemplo y compruébala con los demás.' }),
+    sol('En cierto código, la palabra GATO se escribe HBUP y la palabra LUNA se escribe MVOB. ¿Cómo se escribe PERA en ese código? ¿Qué palabra se cifró como DJOF?',
+      ['G pasa a H y A pasa a B: cada letra avanza [[1]] puesto', 'PERA se escribe [[QFSB]]', 'Para leer un mensaje cifrado se hace lo contrario: se [[retrocede]] un puesto', 'DJOF es la palabra [[CINE]]'],
+      ['avanza', 'EKPG', 'OFSB'],
+      'La regla se descubre comparando letra por letra un ejemplo y se comprueba con el otro. Cifrar y descifrar son operaciones contrarias.',
+      'Compara la primera letra de GATO con la primera de HBUP. ¿Pasa lo mismo con todas?'),
+    err('Una máquina transforma números así: $3 \\to 10$, $5 \\to 16$ y $8 \\to 25$. ¿Qué número entrega si entra el 12?',
+      ['Con $3 \\to 10$ se propone la regla «sumar 7»', 'Se comprueba con otro ejemplo: $5 + 7 = 12$, que no es 16. Esa regla no sirve', 'Se prueba «multiplicar por 3 y sumar 1»: $3 \\cdot 3 + 1 = 10$, $3 \\cdot 5 + 1 = 16$ y $3 \\cdot 8 + 1 = 25$', 'Entonces $12 \\to 12 + 7 = 19$'], 3,
+      ['Entonces $12 \\to 3 \\cdot 12 + 1 = 37$', 'Entonces $12 \\to 3 \\cdot 12 = 36$', 'Entonces $12 \\to 2 \\cdot 12 + 1 = 25$'],
+      'La regla que pasó todas las pruebas es «multiplicar por 3 y sumar 1»: con 12 da 37. El último paso usó la regla que ya se había descartado.',
+      'Una regla solo sirve si funciona con todos los ejemplos. ¿Cuál fue la que funcionó?'),
+    opc('En un código numérico, $21 \\to 3$, $45 \\to 9$, $63 \\to 9$ y $80 \\to 8$. Siguiendo la misma regla, el 76 se transforma en:',
+      ['42', '1', '13', '67'], 2,
+      'La regla suma las cifras: $2 + 1 = 3$, $4 + 5 = 9$, $6 + 3 = 9$, $8 + 0 = 8$. Con 76: $7 + 6 = 13$.',
+      'Prueba una regla con el primer ejemplo y compruébala con todos los demás antes de usarla.'),
+  ]);
+
+  addExam('pu-codigos', [
+    ['pu-cd-1', 'Para descifrar se hace el movimiento contrario al de cifrar.',
+      opc('En una clave, cada letra se cambia por la anterior en el alfabeto. La palabra que se cifra como RNK es:', ['QMJ', 'TPM', 'SOL', 'SAL'], 2,
+        'Para descifrar se avanza una letra: R → S, N → O, K → L.', 'Si cifrar es retroceder una letra, descifrar es avanzarla.')],
+    ['pu-cd-2', 'La regla se saca de un ejemplo y se comprueba con los demás.',
+      opc('En un código, CASA se escribe ASAC y PERA se escribe AREP. Con la misma regla, LIMA se escribe:', ['MILA', 'ALIM', 'LAMI', 'AMIL'], 3,
+        'La palabra se escribe al revés: LIMA queda AMIL.', 'Compara la primera letra de cada palabra con la última de su código.')],
   ]);
 });

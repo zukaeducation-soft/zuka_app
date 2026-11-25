@@ -488,6 +488,19 @@ const WORLDS = (() => {
     'icf-en-inferencia': { name: 'Inferir y Opinar', art: plate('icf-en-inferencia', TEAL, `
       ${L('M48 20h34M48 30h26M48 40h34', INK, 1)}${L('M86 18h26v22H98l-6 7v-7h-6z', TEAL, 1.3)}${T(99, 33, 'so…', TEAL, 7)}${A(78, 30, 86, 30, TEAL, 1.1)}${D(52, 52, 2)}${D(66, 52, 2)}${A(70, 52, 92, 60, INK, 1)}${C(97, 61, 4, TEAL, 1.2)}
       ${T(28, 42, 'fact', INK, 6.5)}${T(134, 52, 'must be', TEAL, 6)}`) },
+    // ---------- octavos mundos ----------
+    'icf-ma-argumenta': { name: 'Validar Procedimientos', art: plate('icf-ma-argumenta', TEAL, `
+      ${L('M50 18h22v12H50zM50 36h22v12H50zM50 54h22v10H50z', INK, 1)}${A(61, 30, 61, 36, INK, 1)}${A(61, 48, 61, 54, INK, 1)}${L('M80 24l4 4 8-9', TEAL, 1.6)}${L('M82 38l8 8M90 38l-8 8', TEAL, 1.6)}${C(100, 56, 8, INK, 1)}${D(100, 56, 2, TEAL)}
+      ${T(28, 42, 'p → q', INK, 7)}${T(134, 42, '¿todos?', TEAL, 6.5)}`) },
+    'icf-lc-comparar': { name: 'Comparar Textos', art: plate('icf-lc-comparar', TEAL, `
+      ${L('M48 16h26v40H48z', INK, 1.1)}${L('M86 24h26v40H86z', TEAL, 1.2)}${L('M53 24h16M53 32h16M53 40h10', INK, .8)}${L('M91 32h16M91 40h16M91 48h10', TEAL, .9)}${A(74, 34, 86, 40, TEAL, 1.1)}${A(86, 50, 74, 46, INK, 1)}${D(80, 37, 1.6, TEAL)}
+      ${T(28, 42, 'texto 1', INK, 6)}${T(134, 46, 'texto 2', TEAL, 6)}`) },
+    'icf-sc-geografia': { name: 'Territorio y Ambiente', art: plate('icf-sc-geografia', TEAL, `
+      ${L('M46 62L64 26l10 16 10-24 26 44z', INK, 1.2)}${L('M79 30l5-12 8 14', TEAL, 1.3)}${L('M60 62c6-8 2-12 10-18M96 62c-4-8 2-10-4-18', TEAL, 1)}${C(104, 20, 6, TEAL, 1.1)}${L('M46 66h68', INK, .9)}${D(70, 44, 1.6, TEAL)}${D(92, 44, 1.6, TEAL)}
+      ${T(28, 34, '3 000 m', INK, 6)}${T(134, 42, '1 : 10 000', TEAL, 5.5)}`) },
+    'icf-cn-herencia': { name: 'Herencia y Evolución', art: plate('icf-cn-herencia', TEAL, `
+      ${L('M58 14c24 12-24 36 0 52M78 14c-24 12 24 36 0 52', TEAL, 1.3)}${[22, 32, 48, 58].map(y => L(`M62 ${y}h12`, INK, .9)).join('')}${L('M90 26h24v24H90zM102 26v24M90 38h24', INK, 1)}${T(96, 35, 'AA', TEAL, 5)}${T(108, 47, 'aa', INK, 5)}${D(102, 38, 1.4, TEAL)}
+      ${T(28, 42, 'A a', INK, 8)}${T(136, 42, '3 : 1', TEAL, 7)}`) },
   };
 })();
 

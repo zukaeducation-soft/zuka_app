@@ -5932,6 +5932,112 @@ xpLec('pu-vo-4', [
   ], 'Pinta, cuida el signo y lee bien las palabras.');
 }
 ;
+//#archivo js/explora-icf-ma-8.js
+// Preicfes · Matemáticas, mundo 8 «Validar Procedimientos» (Explora, escenas «dibujo», «fichas» y «hoja»). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  // Dos conjuntos, uno dentro del otro; p es un punto que se mueve.
+  const dentro = (v, K) => K.c(170, 96, 76, 'fa') + K.c(150, 104, 36, 'fg') + K.t(150, 108, v.a, 's') + K.t(206, 50, v.b, 's') + K.f(v.f, K.c(v.x, v.y, 7, 'fF')) + K.t(170, 194, v.t || '', 'ta');
+  // Rectángulo de base b y altura h.
+  const rec = (v, K) => K.r(170 - v.b * 8, 150 - v.h * 14, v.b * 16, v.h * 14, 'fa', 0) + K.t(170, 168, Math.round(v.b), 's tm') + K.t(162 - v.b * 8, 154 - v.h * 7, Math.round(v.h), 's tm', 'end') + K.t(170, 24, v.t || '', 'ta');
+
+  xpLec('icf-ma-argumenta-1', [
+    ['Si… entonces',
+      xpMira('dibujo', 'Empecemos por la idea: «si es de 6, es par» pone un conjunto **dentro** de otro.', { dib: dentro, v: { a: 'de 6', b: 'pares', f: 0, x: 150, y: 120, t: '' }, alto: 202 }, [
+        ['Todos los múltiplos de 6 están entre los pares.', {}],
+        ['El 18 está adentro: es de 6 y es par.', { f: 1, t: '18' }],
+        ['El 8 es par y no es de 6: la frase no va al revés.', { x: 214, y: 110, t: '8' }],
+        ['El 7 no es par: tampoco puede ser de 6.', { x: 290, y: 60, t: '7' }],
+        ['Si no es par, no es de 6: eso sí vale.', {}],
+      ], 'Vale de ida; y de vuelta solo si se niegan las dos.'),
+      xpHaz('hoja', '«Si llueve, el piso se moja». El piso está seco. Subraya lo que se concluye.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Llovió.'], ['No llovió.'], ['No se sabe.']], pista: 'Si hubiera llovido, ¿cómo estaría el piso?' }, 'Al negar lo segundo se niega lo primero.')],
+    ['Basta o hace falta',
+      xpMira('hoja', 'Segunda idea: una condición puede **bastar** o solo **hacer falta**.', { paras: [['Ser de 10 … para ser par'], ['Ser par … para ser de 10'], ['Tener 4 lados iguales … para ser cuadrado']] }, [
+        ['Todo el que es de 10 es par: basta.', { luz: [0], nota: { 0: 'basta' } }],
+        ['Sin ser par no se puede ser de 10.', { luz: [1] }],
+        ['Pero el 6 es par y no es de 10: solo hace falta.', { luz: [1], nota: { 1: 'hace falta' } }],
+        ['El rombo tiene 4 lados iguales y no es cuadrado.', { luz: [2], nota: { 2: 'hace falta' } }],
+        ['Busca un caso que cumpla lo primero y falle lo segundo.', {}],
+      ], 'Basta: con eso alcanza. Hace falta: sin eso no se puede.'),
+      xpHaz('hoja', 'Pon al margen qué es, para que un triángulo sea **equilátero**.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['basta', 'hace falta'], meta: [1, 0], paras: [['Tener dos ángulos iguales'], ['Tener tres ángulos de 60°']], pista: 'Alguna no va ahí: ¿un isósceles siempre es equilátero?' }, 'Dos iguales no alcanzan; tres de 60°, sí.')],
+    ['Paso a paso',
+      xpMira('fichas', 'Tercera idea: un procedimiento vale si **cada paso** se justifica.', { slots: fila('paso 1', 'paso 2', 'paso 3'), fichas: ['50', '10', '60'], alto: 96 }, [
+        ['Se quiere el 12 % de 500.', {}],
+        ['El 10 % es la décima parte: cincuenta.', { pon: { 0: '50' } }, '$500 \\div 10 = 50$'],
+        ['El 2 % son dos veces el 1 %: diez.', { pon: { 1: '10' } }, '$2 \\cdot 5 = 10$'],
+        ['Al juntarlos se obtiene sesenta.', { pon: { 2: '60' } }, '$50 + 10 = 60$'],
+        ['Otro camino también vale: 500 por 0.12.', {}, '$500 \\cdot 0.12 = 60$'],
+      ], 'Dos caminos distintos valen si cada paso es cierto.'),
+      xpHaz('hoja', 'Para hallar el 15 % de 80, subraya el procedimiento **equivocado**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['80 por 0.15'], ['10 % más la mitad de ese 10 %'], ['80 entre 15']], pista: 'Calcula los tres: dos dan lo mismo.' }, 'Los dos primeros dan 12; el otro, 5.33.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', '«Si un número es de 9, es de 3». Luis dice: «21 es de 3; entonces es de 9». Subraya el error.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['21 no es de 3.'], ['Usó la frase al revés.'], ['La frase es falsa.']], pista: 'Mira en qué dirección la usó.' }, 'Ser de 3 no basta para ser de 9.')],
+  ], 'Dirección, condición y cada paso con su razón.');
+
+  xpLec('icf-ma-argumenta-2', [
+    ['Uno basta',
+      xpMira('hoja', 'Empecemos por la idea: un «todos» cae con **un solo** caso.', { letras: ['frase', '3', '5', '9'], paras: [['Todos los impares son primos.'], ['3: impar y primo'], ['5: impar y primo'], ['9: impar y no primo']] }, [
+        ['La frase habla de todos los impares.', { luz: [0] }],
+        ['El tres la cumple.', { luz: [1], nota: { 1: 'cumple' } }],
+        ['El cinco también la cumple.', { luz: [2], nota: { 2: 'cumple' } }],
+        ['El nueve es 3 por 3: no es primo.', { luz: [3], nota: { 3: 'la tumba' } }],
+        ['Con uno solo, la frase ya es falsa.', { tacha: [0], luz: [3] }],
+      ], 'Mil a favor no la prueban; uno en contra la tumba.'),
+      xpHaz('hoja', '«Todo múltiplo de 4 es múltiplo de 8». Subraya el que la tumba.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['16'], ['20'], ['10']], pista: 'Debe ser de 4 y no ser de 8.' }, '20 es de 4 y no de 8; 10 ni siquiera es de 4.')],
+    ['Cumplir y fallar',
+      xpMira('hoja', 'Segunda idea: el contraejemplo **cumple** la condición y **falla** la conclusión.', { letras: ['frase', 'a', 'b', 'c'], paras: [['Si un número es mayor que 2, su cuadrado es mayor que 5.'], ['3: cuadrado 9'], ['1: cuadrado 1'], ['2.1: cuadrado 4.41']] }, [
+        ['Condición: mayor que 2. Conclusión: cuadrado mayor que 5.', { luz: [0] }],
+        ['El tres cumple las dos: no la tumba.', { luz: [1], tacha: [1] }],
+        ['El uno no cumple la condición: no cuenta.', { luz: [2], tacha: [1, 2] }],
+        ['El 2.1 cumple la condición y falla la conclusión.', { luz: [3], nota: { 3: 'la tumba' } }],
+        ['Los decimales, el cero y los negativos suelen tumbar.', {}],
+      ], 'Cumple la primera parte y falla la segunda.'),
+      xpHaz('hoja', '«Si sumo dos números, el resultado es mayor que el primero». Subraya la pareja que la tumba.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['2 y 9'], ['10 y 1'], ['4 y 0']], pista: 'Busca una suma que no pase del primero.' }, '$4 + 0 = 4$, que no es mayor que 4.')],
+    ['Siempre o a veces',
+      xpMira('hoja', 'Tercera idea: para decir **siempre** hace falta una razón general.', { paras: [['Par + par'], ['2a + 2b'], ['2(a + b): siempre par'], ['Impar · 3 es de 3: siempre'], ['Impar + 3 es de 4: a veces']] }, [
+        ['Probar con dos pares no basta.', { luz: [0] }],
+        ['Se escriben con letras: valen por todos.', { luz: [1] }],
+        ['Es dos veces algo: siempre es par.', { luz: [2], nota: { 2: 'siempre' } }],
+        ['Multiplicar por 3 siempre da de 3.', { luz: [3], nota: { 3: 'siempre' } }],
+        ['Cinco más tres es ocho, pero siete más tres es diez.', { luz: [4], nota: { 4: 'a veces' } }],
+      ], 'Razón general: siempre. Un caso que falla: a veces.'),
+      xpHaz('hoja', 'Pon al margen si ocurre siempre o a veces, con n entero.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['a veces', 'siempre'], meta: [1, 0], paras: [['n + n es par'], ['n · n es par']], pista: 'Alguna no va ahí: prueba con 3.' }, '$2n$ siempre es par; $3 \\cdot 3 = 9$ no.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', '«Cuando el perímetro aumenta, el área aumenta». Subraya el cambio que la tumba.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['De 4 por 4 a 5 por 5'], ['De 4 por 4 a 9 por 1'], ['De 2 por 3 a 2 por 6']], pista: 'Calcula perímetro y área antes y después.' }, 'El perímetro pasa de 16 a 20 y el área, de 16 a 9.')],
+  ], 'Uno tumba, cumple y falla, y «siempre» pide razón.');
+
+  xpLec('icf-ma-argumenta-3', [
+    ['¿Una sola respuesta?',
+      xpMira('dibujo', 'Empecemos por la idea: la información **alcanza** si solo hay una respuesta.', { dib: rec, v: { b: 6, h: 4, t: '' }, alto: 180 }, [
+        ['Se sabe que el perímetro es 20. ¿Cuál es el área?', { t: 'perímetro 20' }],
+        ['Puede ser 6 por 4: área 24.', { t: 'área 24' }, '$6 \\cdot 4 = 24$'],
+        ['También 8 por 2: área 16.', { b: 8, h: 2, t: 'área 16' }, '$8 \\cdot 2 = 16$'],
+        ['Dos respuestas: no alcanza.', { t: 'no alcanza' }],
+        ['Si además es cuadrado, solo queda 5 por 5.', { b: 5, h: 5, t: 'área 25' }, '$20 \\div 4 = 5$'],
+      ], 'Dos respuestas posibles: no alcanza.'),
+      xpHaz('hoja', '¿Alcanza para saber el precio de un lápiz? Subraya el dato que **sí**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Dos lápices y un borrador valen 7'], ['Un lápiz vale menos que un borrador'], ['Cinco lápices valen 10']], pista: 'Busca el que deja un solo precio.' }, '$10 \\div 5 = 2$.')],
+    ['Lo que sobra',
+      xpMira('hoja', 'Segunda idea: un dato **sobra** si la respuesta no cambia al cambiarlo.', { letras: ['a', 'b', 'c', 'd'], paras: [['Tanque de 2 m por 3 m por 1 m'], ['Es verde'], ['Costó 900 mil'], ['¿Cuántos litros le caben?']] }, [
+        ['Lo que se pide son los litros.', { luz: [3] }],
+        ['Las medidas hacen falta.', { luz: [0], nota: { 0: 'hace falta' } }],
+        ['Si fuera rojo le cabría lo mismo.', { luz: [1], tacha: [1] }],
+        ['Y si costara el doble, también.', { luz: [2], tacha: [1, 2] }],
+        ['Primero la pregunta, después los datos.', { luz: [3, 0] }],
+      ], 'Cambia el dato: si la respuesta no cambia, sobra.'),
+      xpHaz('hoja', 'Se pide la edad promedio de 3 hermanos. **Tacha** lo que sobra.', { modo: 'tacha', letras: ['A', 'B', 'C'], meta: [1], paras: [['Sus edades suman 45'], ['Viven en Pasto'], ['Son tres']], pista: 'Cambia cada dato y mira si cambia el promedio.' }, '$45 \\div 3 = 15$, vivan donde vivan.')],
+    ['Solos o juntos',
+      xpMira('hoja', 'Tercera idea: prueba cada dato **por separado** y luego **juntos**.', { letras: ['¿?', '1', '2'], paras: [['¿Cuánto vale n, entero positivo?'], ['Dato 1: n es menor que 8'], ['Dato 2: n es múltiplo de 5']] }, [
+        ['Con el primero puede ser 1, 2, 3…', { luz: [1], nota: { 1: 'no alcanza' } }],
+        ['Con el segundo, 5, 10, 15…', { luz: [2], nota: { 2: 'no alcanza' } }],
+        ['Con los dos, solo el 5.', { luz: [1, 2] }],
+        ['Juntos, los dos datos alcanzan.', { nota: { 1: 'juntos, sí', 2: 'juntos, sí' } }],
+        ['No uses el dato 1 cuando pruebas el 2.', {}],
+      ], 'Uno, el otro y los dos: en ese orden.'),
+      xpHaz('hoja', '¿Es x mayor que y? Dato 1: x + 2 = y. Dato 2: x es par. Subraya lo correcto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Basta el dato 1.'], ['Basta el dato 2.'], ['Hacen falta los dos.']], pista: 'Con el primero, ¿quién es mayor?' }, 'Si $y = x + 2$, y es mayor: se responde que no.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', '«Entre Ana y Beto recogieron 30 tapas; Ana recogió más». Subraya lo que se puede afirmar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Ana recogió 20.'], ['Ana recogió más de 15.'], ['Beto recogió 14.']], pista: 'Busca lo que vale en todos los casos posibles.' }, 'Con 16 y 14 o con 29 y 1, Ana siempre pasa de 15.')],
+  ], 'Una respuesta, lo que sobra y cada dato por separado.');
+}
+;
 //#archivo js/explora-icf-lc.js
 // Preicfes · Lectura Crítica, mundo 1 «Lo que Dice el Texto» (Explora, escena «hoja»). Textos cortos propios.
 xpLec('icf-lc-literal-1', [
@@ -6522,6 +6628,72 @@ xpLec('icf-lc-evalua-3', [
   ['Ahora sí, un problema',
     xpHaz('hoja', '«Esos edificios viejos son arrugas: se ven mal, pero cuentan quién eres». Subraya lo que valora.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Lo nuevo'], ['La memoria de la ciudad'], ['El ahorro']], pista: '¿Qué dice que cuentan las arrugas?' }, 'Compara lo viejo con lo que cuenta la propia historia.')],
 ], 'Qué pone primero, qué imagen usa y en qué coincide con otros.');
+;
+//#archivo js/explora-icf-lc-8.js
+// Preicfes · Lectura Crítica, mundo 8 «Comparar Textos» (Explora, escena «hoja»). Parejas cortas propias.
+xpLec('icf-lc-comparar-1', [
+  ['Lo que comparten',
+    xpMira('hoja', 'Empecemos por la idea: primero busca qué **comparten** dos textos.', { letras: ['1', '2', 'sí', 'no'], paras: [['Las bicicletas reducen el ruido y el humo.'], ['Mi bicicleta cruje, pero me lleva.'], ['Los dos hablan de bicicletas.'], ['Los dos hablan del humo.']] }, [
+      ['El primero informa un efecto.', { luz: [0] }],
+      ['El segundo cuenta algo personal.', { luz: [1] }],
+      ['El tema es común.', { luz: [0, 1, 2], nota: { 2: 'vale en los dos' } }],
+      ['El humo solo está en uno.', { luz: [3], tacha: [3] }],
+      ['Para decir «los dos», debe estar en los dos.', {}],
+    ], '«Los dos» exige encontrarlo en cada uno.'),
+    xpHaz('hoja', 'T1: «Leer en voz alta une a la familia». T2: «Mi papá leía y todos callábamos». Subraya lo que vale en **los dos**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Leer es obligatorio.'], ['Leer en voz alta reúne a la gente.'], ['El papá lee mal.']], pista: 'Busca la idea que puedas señalar en ambos.' }, 'Uno lo afirma y el otro lo muestra.')],
+  ['Propósito y tono',
+    xpMira('hoja', 'Segunda idea: el mismo tema puede tener **otro propósito** y **otro tono**.', { paras: [['«Hierva el agua cinco minutos».'], ['«Esa agua, dice mi tía, tiene más bichos que el circo».'], ['«El 30 % de los pozos no es potable».']] }, [
+      ['Aquí se dan instrucciones.', { luz: [0], nota: { 0: 'instruir' } }],
+      ['Aquí, en cambio, se bromea.', { luz: [1], nota: { 1: 'humor' } }],
+      ['Aquí se informa con un dato.', { luz: [2], nota: { 2: 'informar' } }],
+      ['Las tres hablan del agua.', { luz: [0, 1, 2] }],
+      ['Pregunta qué busca cada uno en ti.', {}],
+    ], 'Instruir, informar, divertir, convencer, conmover.'),
+    xpHaz('hoja', 'Pon al margen el propósito de cada texto sobre un volcán.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['advertir', 'informar', 'conmover'], meta: [1, 2, 0], paras: [['Mide 5 321 metros y está activo.'], ['Abuela, tu casa quedó debajo de la ceniza.'], ['Si oye la sirena, salga de inmediato.']], pista: 'Alguna no va ahí: ¿da datos, hace sentir o avisa?' }, 'Datos, emoción y aviso.')],
+  ['Cómo se relacionan',
+    xpMira('hoja', 'Tercera idea: un texto puede **ejemplificar**, **ampliar**, **matizar** o **contradecir** a otro.', { letras: ['T1', 'a', 'b', 'c'], paras: [['Caminar hace bien.'], ['Doña Inés camina y ya no usa bastón.'], ['Caminar hace bien, salvo con calor extremo.'], ['Caminar no sirve para nada.']] }, [
+      ['Esta es la idea del primero.', { luz: [0] }],
+      ['Un caso la muestra.', { luz: [1], nota: { 1: 'ejemplifica' } }],
+      ['Una condición la limita.', { luz: [2], nota: { 2: 'matiza' } }],
+      ['Y esta la niega.', { luz: [3], nota: { 3: 'contradice' } }],
+      ['Matizar no es contradecir: pone un límite.', { luz: [2] }],
+    ], 'Ejemplifica, amplía, matiza o contradice.'),
+    xpHaz('hoja', 'T1: «Las redes informan rápido». T2: «Rápido no siempre es cierto: verifique». Subraya la relación.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['T2 ejemplifica a T1.'], ['T2 matiza a T1.'], ['T2 repite a T1.']], pista: '¿Niega que informen rápido o le pone un límite?' }, 'No lo niega: agrega una condición.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'T1: «El mural cubre una pared rota». T2: «Pintar no arregla grietas». Subraya lo que T2 le **objetaría** a T1.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Que taparla no resuelve el daño'], ['Que los murales son feos'], ['Que no hay paredes rotas']], pista: 'Usa la idea de T2 sobre lo que cuenta T1.' }, 'Cubrir no es reparar.')],
+], 'Qué comparten, qué busca cada uno y cómo se relacionan.');
+
+xpLec('icf-lc-comparar-2', [
+  ['La tesis de cada uno',
+    xpMira('hoja', 'Empecemos por la idea: di en una frase **qué propone** cada uno.', { letras: ['T1', 'T2', 'mal', 'bien'], paras: [['Cierren la pista: hace ruido.'], ['No la cierren: pónganle horario.'], ['T1 habla de ruido y T2 de horas.'], ['T1 pide cerrar; T2, regular.']] }, [
+      ['El primero propone cerrar.', { luz: [0], nota: { 0: 'cerrar' } }],
+      ['El segundo, poner horario.', { luz: [1], nota: { 1: 'regular' } }],
+      ['Esto nombra temas, no tesis.', { luz: [2], tacha: [2] }],
+      ['Esto sí compara lo que proponen.', { luz: [3], nota: { 3: 'compara tesis' } }],
+      ['El ruido lo reconocen los dos.', { luz: [0, 1] }],
+    ], 'Tesis contra tesis, no tema contra tema.'),
+    xpHaz('hoja', 'T1: «Más tareas, más disciplina». T2: «Más juego, más curiosidad». Subraya la mejor comparación.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Los dos hablan de niños.'], ['T1 es largo y T2 corto.'], ['T1 valora la disciplina y T2, la curiosidad.']], pista: 'Busca la que dice qué defiende cada uno.' }, 'Compara lo que cada uno pone primero.')],
+  ['Cómo responde',
+    xpMira('hoja', 'Segunda idea: un texto puede **conceder**, **refutar** o **atacar**.', { paras: [['«Es cierto que cuesta».'], ['«Pero ahorra en dos años».'], ['«Usted qué va a saber».'], ['«Su propio dato dice seis años».']] }, [
+      ['Reconoce algo del otro.', { luz: [0], nota: { 0: 'concede' } }],
+      ['Y responde con una razón.', { luz: [1], nota: { 1: 'refuta' } }],
+      ['Esto habla de la persona.', { luz: [2], tacha: [2], nota: { 2: 'ataca' } }],
+      ['Esto usa el dato del otro.', { luz: [3], nota: { 3: 'usa su dato' } }],
+      ['Usar el dato del otro suele ser lo más fuerte.', { luz: [3] }],
+    ], 'Conceder, refutar, atacar o usar su propio dato.'),
+    xpHaz('hoja', 'Pon al margen qué hace cada frase.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['refuta', 'ataca', 'concede'], meta: [2, 0, 1], paras: [['Tiene razón en que es lejos.'], ['Pero el bus llega en diez minutos.'], ['Usted siempre se queja.']], pista: 'Alguna no va ahí: ¿acepta, responde o habla de la persona?' }, 'Acepta, responde y habla de la persona.')],
+  ['Lo que nadie contestó',
+    xpMira('hoja', 'Tercera idea: mira qué argumento **quedó sin respuesta**.', { letras: ['A1', 'A2', 'B'], paras: [['A: la obra da empleo.'], ['A: y acorta el viaje.'], ['B: el viaje se acorta solo seis años.']] }, [
+      ['A dio dos razones.', { luz: [0, 1] }],
+      ['B respondió la del viaje.', { luz: [2, 1], nota: { 1: 'respondida' } }],
+      ['La del empleo sigue en pie.', { luz: [0], nota: { 0: 'sin respuesta' } }],
+      ['Eso no prueba que A tenga razón en todo.', {}],
+      ['Pero señala qué le falta a B.', { luz: [0] }],
+    ], 'Pon cada razón con su respuesta: mira cuál quedó sola.'),
+    xpHaz('hoja', 'A: «El perro cuida y acompaña». B: «Una alarma cuida igual». Subraya lo que B **no** respondió.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Que cuida'], ['Que acompaña'], ['Que ladra']], pista: 'Empareja cada razón con su respuesta.' }, 'La alarma no acompaña: esa razón quedó en pie.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'T1: «El zoológico educa: vienen mil niños». T2: «Vienen, comen helado y se van». Subraya qué hace T2.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Acepta el dato y niega lo que T1 concluye.'], ['Niega que vengan niños.'], ['Apoya la conclusión de T1.']], pista: '¿Discute que vengan o que aprendan?' }, 'Reconoce que vienen, pero no que eso eduque.')],
+], 'Tesis, respuesta y lo que quedó sin contestar.');
 ;
 //#archivo js/explora-icf-sc.js
 // Preicfes · Sociales y Ciudadanas, mundo 1 «Constitución y Estado» (Explora, escena «hoja»). Casos cortos propios.
@@ -7176,6 +7348,72 @@ xpLec('icf-sc-mundo-3', [
   ['Ahora sí, un problema',
     xpHaz('hoja', 'Unos vecinos dejan de usar un bus que cobra más a los del cerro, hasta que cambian la tarifa. Subraya qué es.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Un boicot de un movimiento social'], ['Un golpe de Estado'], ['Una descolonización']], pista: 'Dejan de usar algo para exigir un cambio.' }, 'Como el boicot de los buses de 1955.')],
 ], 'Caminos, herencias y gente que se organiza.');
+;
+//#archivo js/explora-icf-sc-8.js
+// Preicfes · Sociales y Ciudadanas, mundo 8 «Territorio y Ambiente» (Explora, escena «hoja»).
+xpLec('icf-sc-geografia-1', [
+  ['Regiones y altura',
+    xpMira('hoja', 'Empecemos por la idea: seis regiones y un clima que depende de la **altura**.', { letras: ['1', '2', '3', '4'], paras: [['Andina: montañas y mucha gente'], ['Caribe y Pacífica: costas; una seca, otra lluviosa'], ['Orinoquía y Amazonía: enormes y poco pobladas'], ['Insular: islas']] }, [
+      ['En la Andina vive la mayoría.', { luz: [0] }],
+      ['Dos costas muy distintas.', { luz: [1], nota: { 1: 'seca y lluviosa' } }],
+      ['Más de la mitad del país, con poca gente.', { luz: [2], nota: { 2: 'baja densidad' } }],
+      ['Y las islas, rodeadas de mar.', { luz: [3] }, '$1\\,000 \\text{ m} \\to 6\\,^\\circ\\text{C menos}$'],
+      ['Cada mil metros que se suben, unos seis grados menos.', {}],
+    ], 'Seis regiones; al subir mil metros, unos seis grados menos.'),
+    xpHaz('hoja', 'Al nivel del mar hay 28 °C. Subraya la temperatura aproximada a 3 000 m.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['28 °C'], ['10 °C'], ['22 °C']], pista: 'Baja unos seis grados por cada mil metros.' }, '$28 - 18 = 10$.')],
+  ['Mapas que escogen',
+    xpMira('hoja', 'Segunda idea: un mapa **escoge** qué mostrar y a qué **escala**.', { paras: [['Político: límites'], ['Físico: relieve y ríos'], ['Temático: un asunto'], ['1 : 1 000 000 → 1 cm son 10 km'], ['1 : 10 000 → 1 cm son 100 m']] }, [
+      ['Este mapa muestra las fronteras.', { luz: [0] }],
+      ['Este, montañas y agua.', { luz: [1] }],
+      ['Este, una sola cosa: lluvias, empleo…', { luz: [2] }],
+      ['Con esta escala cabe un país.', { luz: [3], nota: { 3: 'poco detalle' } }],
+      ['Con esta, un barrio y sus calles.', { luz: [4], nota: { 4: 'mucho detalle' } }],
+    ], 'Qué muestra, qué deja fuera y cuánto redujo.'),
+    xpHaz('hoja', 'En un mapa 1 : 50 000, dos pueblos están a 4 cm. Subraya la distancia real.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['50 km'], ['20 km'], ['2 km']], pista: 'Cada centímetro son 50 000 cm: 500 metros.' }, '$4 \\cdot 500 = 2\\,000$ m.')],
+  ['La población se mueve',
+    xpMira('hoja', 'Tercera idea: la población se **concentra**, se **mueve** y **envejece**.', { paras: [['Densidad: habitantes por km²'], ['Del campo a la ciudad'], ['Por decisión o a la fuerza'], ['Pirámide: base que se encoge, punta que crece']] }, [
+      ['No importa solo cuántos: también en cuánto espacio.', { luz: [0] }],
+      ['Hoy, tres de cada cuatro viven en ciudades.', { luz: [1], nota: { 1: 'migración' } }],
+      ['Unos eligieron; otros huyeron.', { luz: [2] }],
+      ['Nacen menos y se vive más.', { luz: [3], nota: { 3: 'envejece' } }],
+      ['El dibujo anuncia qué hará falta.', { luz: [3] }],
+    ], 'Densidad, migración y pirámide.'),
+    xpHaz('hoja', 'A: 10 000 personas en 50 km². B: 12 000 en 120 km². Subraya el de **mayor densidad**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['A'], ['B'], ['Igual']], pista: 'Divide personas entre kilómetros cuadrados.' }, 'A: 200 por km²; B: 100.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'La pirámide de un municipio tiene la base muy ancha. Subraya lo que más va a necesitar pronto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Hogares para ancianos'], ['Cupos en jardines y primaria'], ['Menos maestros']], pista: '¿Qué edades están en la base?' }, 'En la base están los niños.')],
+], 'Altura, mapas y gente que se mueve.');
+
+xpLec('icf-sc-geografia-2', [
+  ['Renovable no es infinito',
+    xpMira('hoja', 'Empecemos por la idea: **renovable** se recupera, si se usa con medida.', { paras: [['Agua, bosque, viento'], ['Petróleo, carbón'], ['Bosque talado más rápido de lo que crece']] }, [
+      ['Estos se recuperan con el tiempo.', { luz: [0], nota: { 0: 'renovables' } }],
+      ['Estos tardan millones de años.', { luz: [1], nota: { 1: 'no renovables' } }],
+      ['Pero este se acaba igual.', { luz: [2], tacha: [2] }],
+      ['Importa la velocidad a la que se usa.', { luz: [2] }],
+      ['Cuidar es no gastar más de lo que vuelve.', {}],
+    ], 'Se recupera si se usa despacio.'),
+    xpHaz('hoja', 'Un río recibe 100 litros por segundo y se sacan 130. Subraya lo que pasará.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Nada: el agua es renovable.'], ['El río irá bajando.'], ['El río crecerá.']], pista: 'Compara lo que entra con lo que sale.' }, 'Sale más de lo que entra.')],
+  ['Tres patas',
+    xpMira('hoja', 'Segunda idea: lo **sostenible** tiene tres patas: economía, sociedad y ambiente.', { paras: [['Da empleo'], ['No expulsa a nadie'], ['Cuida el agua'], ['Da empleo y envenena el río'], ['Cuida el río y expulsa a su gente']] }, [
+      ['Esta es la pata económica.', { luz: [0], nota: { 0: 'económica' } }],
+      ['Esta es la pata social.', { luz: [1], nota: { 1: 'social' } }],
+      ['Y esta es la pata ambiental.', { luz: [2], nota: { 2: 'ambiental' } }],
+      ['Aquí falta una: cojea.', { luz: [3], tacha: [3] }],
+      ['Aquí falta otra: también cojea.', { luz: [4], tacha: [3, 4] }],
+    ], 'Si falla una, no es sostenible.'),
+    xpHaz('hoja', 'Subraya el proyecto **más sostenible**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Hotel que seca la laguna y da empleo'], ['Parque cerrado, sin los que vivían allí'], ['Ecoturismo manejado por la comunidad, con límite de visitas']], pista: 'Revisa las tres patas en cada uno.' }, 'Da ingreso, incluye a la gente y cuida el lugar.')],
+  ['Quién está en la mesa',
+    xpMira('hoja', 'Tercera idea: toda decisión sobre el territorio **reparte** ganancias y pérdidas.', { paras: [['Empresa: gana'], ['Ciudad: gana agua'], ['Campesino: pierde su siembra'], ['Consulta, audiencias, ordenamiento']] }, [
+      ['Primero: alguien gana dinero.', { luz: [0] }],
+      ['Alguien gana un servicio.', { luz: [1] }],
+      ['Alguien pierde su sustento.', { luz: [2], nota: { 2: '¿está en la mesa?' } }],
+      ['Estas reglas buscan que se le oiga.', { luz: [3], nota: { 3: 'que se oiga' } }],
+      ['Un mapa sin casas es peligroso.', { luz: [2] }],
+    ], 'Pregunta quién gana, quién pierde y quién decide.'),
+    xpHaz('hoja', 'Se hará una represa y el plano no muestra viviendas. Subraya la mejor pregunta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['¿Quién vive allí y qué dice?'], ['¿De qué color será?'], ['¿Quién dibujó el plano más bonito?']], pista: 'Piensa qué deja por fuera el plano.' }, 'Hay que oír a quienes viven en el lugar.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'En un país poco industrial, la mayor emisión de gases viene de talar bosques. Subraya la medida que más ayudaría.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Cerrar todas las fábricas'], ['Frenar la deforestación con alternativas para quienes viven de ella'], ['Pintar los techos de verde']], pista: 'Ataca la mayor fuente sin olvidar a la gente.' }, 'Va a la fuente principal y cuida la pata social.')],
+], 'Usar con medida, tres patas y oír a todos.');
 ;
 //#archivo js/explora-icf-cn.js
 // Preicfes · Ciencias Naturales, mundo 1 «Indagación Científica» (Explora, escenas «hoja» y «dibujo»). Experimentos cortos propios.
@@ -7836,6 +8074,114 @@ xpLec('icf-sc-mundo-3', [
     ['Ahora sí, un problema',
       xpHaz('fichas', 'El calcio pierde 2 electrones y el flúor gana 1. Pon la carga del calcio y cuántos flúor hacen falta.', { slots: fila('calcio', 'flúor'), fichas: ['+2', '2', '−2', '1', '+1'], meta: ['+2', '2'], alto: 96, pista: 'Las cargas deben sumar cero.' }, '$+2 - 1 - 1 = 0$: dos flúor.')],
   ], 'Entregar, compartir o soltar: se nota en las propiedades.');
+}
+;
+//#archivo js/explora-icf-cn-8.js
+// Preicfes · Ciencias Naturales, mundo 8 «Herencia y Evolución» (Explora, escenas «dibujo», «fichas» y «hoja»). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  // Cuadro de cruces: padre p1 p2 arriba, madre m1 m2 a la izquierda; n casillas llenas.
+  const cuadro = (v, K) => { const u = 56, x = 124, y = 44, P = v.p, M = v.m; let h = ''; for (let i = 0; i < 2; i++) { h += K.t(x + u * (i + 0.5), 34, P[i], 'b ta') + K.t(x - 14, y + u * (i + 0.5) + 5, M[i], 'b tg'); for (let j = 0; j < 2; j++) { const k = i * 2 + j, g = [P[j], M[i]].sort().join(''); h += K.r(x + u * j, y + u * i, u - 3, u - 3, v.n > k ? (/[A-Z]/.test(g) ? 'fa' : 'ff') : 'fn', 3) + K.f(v.n - k, K.t(x + u * (j + 0.5) - 2, y + u * (i + 0.5) + 4, g, 'b')); } } return h + K.t(170, 186, v.t || '', 'ta'); };
+  // Población: k oscuros entre 20.
+  const pob = (v, K) => Array.from({ length: 20 }, (_, i) => K.c(70 + (i % 5) * 50, 34 + Math.floor(i / 5) * 34, 11, i < Math.round(v.k) ? 'fF' : 'fA')).join('') + K.t(170, 184, v.t || '', 'ta');
+  // División celular: n células con c cromosomas.
+  const celulas = (v, K) => Array.from({ length: Math.round(v.n) }, (_, i) => { const n = Math.round(v.n), x = 170 + (i - (n - 1) / 2) * 74; return K.c(x, 92, n > 2 ? 30 : 34, 'fn') + Array.from({ length: Math.round(v.c) }, (_, j) => K.l(x - 12 + j * 8, 80, x - 12 + j * 8, 104, j % 2 ? 'lg gr' : 'la gr')).join(''); }).join('') + K.t(170, 176, v.t || '', 'ta');
+
+  xpLec('icf-cn-herencia-1', [
+    ['Dos alelos',
+      xpMira('hoja', 'Empecemos por la idea: de cada gen recibes **dos alelos**, uno de cada progenitor.', { paras: [['A: dominante'], ['a: recesivo'], ['AA o Aa: se ve lo dominante'], ['aa: se ve lo recesivo']] }, [
+        ['Con uno dominante basta.', { luz: [0] }],
+        ['El recesivo necesita dos.', { luz: [1] }],
+        ['Estos dos se ven iguales.', { luz: [2], nota: { 2: 'mismo fenotipo' } }],
+        ['Solo este muestra lo recesivo.', { luz: [3] }],
+        ['Genotipo son las letras; fenotipo, lo que se ve.', {}],
+      ], 'Letras: genotipo. Lo que se ve: fenotipo.'),
+      xpHaz('hoja', 'La nariz ancha (N) domina. Subraya el genotipo de una persona de nariz **angosta**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['NN'], ['Nn'], ['nn']], pista: 'Lo recesivo necesita dos iguales.' }, 'Sin ninguna N se ve lo recesivo.')],
+    ['El cuadro',
+      xpMira('dibujo', 'Segunda idea: el **cuadro** muestra las cuatro combinaciones.', { dib: cuadro, v: { p: ['B', 'b'], m: ['B', 'b'], n: 0, t: '' }, alto: 196 }, [
+        ['El padre puede dar B o b; la madre también.', {}],
+        ['Primera casilla: una B de cada uno.', { n: 1 }],
+        ['Las otras tres se llenan igual.', { n: 4 }],
+        ['Tres llevan alguna B: se ve lo dominante.', { t: '3 de 4' }],
+        ['Solo una es bb: la cuarta parte.', { t: '1 de 4' }],
+      ], 'Bb con Bb: tres a uno.'),
+      xpHaz('fichas', 'Se cruza Rr con rr. Pon cuántas casillas de cuatro son Rr y cuántas rr.', { slots: fila('Rr', 'rr'), fichas: ['2', '2', '1', '3', '4'], meta: ['2', '2'], alto: 96, pista: 'Uno da R o r; el otro, solo r.' }, 'La mitad de cada una.')],
+    ['Lo que se espera',
+      xpMira('fichas', 'Tercera idea: la probabilidad vale en **muchos** nacimientos, no en cada camada.', { slots: fila('esperado', 'en 4', 'en 400'), fichas: ['1 de 4', '0 ó 2', '98'], alto: 96 }, [
+        ['Se espera uno recesivo de cada cuatro.', { pon: { 0: '1 de 4' } }],
+        ['En una camada de cuatro puede salir otra cosa.', { pon: { 1: '0 ó 2' } }],
+        ['En cuatrocientas se acerca a cien.', { pon: { 2: '98' } }, '$400 \\div 4 = 100$'],
+        ['También hay genes sin dominancia: flores rosadas.', {}],
+        ['Y genes en el cromosoma X: más frecuentes en hombres.', {}],
+      ], 'Mientras más nacimientos, más se acerca.'),
+      xpHaz('fichas', 'Dos Aa tienen 240 hijos (son plantas). Pon los recesivos y los dominantes que se esperan.', { slots: fila('recesivos', 'dominantes'), fichas: ['60', '180', '120', '80', '240'], meta: ['60', '180'], alto: 96, pista: 'La cuarta parte y el resto.' }, '$240 \\div 4 = 60$ y $240 - 60 = 180$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Dos cobayos negros tienen una cría blanca. El negro domina. Subraya los genotipos de los padres.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['NN y NN'], ['Nn y Nn'], ['NN y nn']], pista: 'La cría es nn: recibió una n de cada uno.' }, 'Cada padre tiene una n escondida.')],
+  ], 'Dos alelos, cuatro casillas y muchos nacimientos.');
+
+  xpLec('icf-cn-herencia-2', [
+    ['Uno o dos progenitores',
+      xpMira('hoja', 'Empecemos por la idea: hay reproducción con **uno** o con **dos** progenitores.', { paras: [['Bacteria que se parte'], ['Papa sembrada por pedazos'], ['Polen que llega a otra flor'], ['Óvulo y espermatozoide']] }, [
+        ['Aquí hay un solo progenitor.', { luz: [0], nota: { 0: 'asexual' } }],
+        ['Aquí también: hijas iguales.', { luz: [1], nota: { 1: 'asexual' } }],
+        ['Aquí hay dos progenitores.', { luz: [2], nota: { 2: 'sexual' } }],
+        ['Y aquí: hijos variados.', { luz: [3], nota: { 3: 'sexual' } }],
+        ['Una es rápida; la otra da variedad.', {}],
+      ], 'Asexual: uno, iguales. Sexual: dos, variados.'),
+      xpHaz('hoja', 'Subraya la ventaja de la reproducción **asexual**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Es rápida y no necesita pareja.'], ['Da hijos muy distintos.'], ['Protege de enfermedades nuevas.']], pista: 'Las otras dos son de la sexual.' }, 'Rápida y sin pareja, pero sin variedad.')],
+    ['Dos divisiones',
+      xpMira('dibujo', 'Segunda idea: **mitosis** copia; **meiosis** reduce a la mitad.', { dib: celulas, v: { n: 1, c: 4, t: 'una célula, 4 cromosomas' }, alto: 186 }, [
+        ['Una célula con cuatro cromosomas.', {}],
+        ['Por mitosis: dos iguales, con cuatro.', { n: 2, t: 'mitosis: 2 células, 4 cada una' }],
+        ['Sirve para crecer y reparar.', {}],
+        ['Por meiosis: cuatro, con la mitad.', { n: 4, c: 2, t: 'meiosis: 4 células, 2 cada una' }],
+        ['Sirve para formar gametos, y todos son distintos.', {}],
+      ], 'Mitosis: dos iguales. Meiosis: cuatro con la mitad.'),
+      xpHaz('fichas', 'Una especie tiene 20 cromosomas. Pon los de sus gametos y los del cigoto.', { slots: fila('gameto', 'cigoto'), fichas: ['10', '20', '40', '5', '80'], meta: ['10', '20'], alto: 96, pista: 'El gameto lleva la mitad; dos gametos se juntan.' }, '$20 \\div 2 = 10$ y $10 + 10 = 20$.')],
+    ['El seguro de la variedad',
+      xpMira('hoja', 'Tercera idea: la **variedad** protege cuando algo cambia.', { paras: [['Todas iguales'], ['Llega una plaga'], ['Mueren casi todas'], ['Variadas: algunas resisten']] }, [
+        ['Iguales: si nada cambia, van bien.', { luz: [0] }],
+        ['Pero llega una plaga.', { luz: [1], nota: { 1: 'cambio' } }],
+        ['Si una cae, caen todas.', { luz: [2] }],
+        ['Entre distintas, alguna aguanta.', { luz: [3], nota: { 3: 'sobreviven' } }],
+        ['Por eso se guardan semillas viejas.', {}],
+      ], 'Variedad: el seguro de vida de una especie.'),
+      xpHaz('hoja', 'Subraya el cultivo con **menor** riesgo ante un hongo nuevo.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Mil matas de un mismo esqueje'], ['Mil matas de semillas de muchas plantas'], ['Mil matas de una sola bacteria']], pista: '¿Dónde hay plantas distintas?' }, 'La variedad aumenta la opción de que alguna resista.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Una mula nace de yegua (64 cromosomas) y burro (62). Subraya cuántos tiene.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['126'], ['64'], ['63']], pista: 'Cada gameto lleva la mitad.' }, '$32 + 31 = 63$.')],
+  ], 'Uno o dos, copiar o reducir, y variar.');
+
+  xpLec('icf-cn-herencia-3', [
+    ['La población cambia',
+      xpMira('dibujo', 'Empecemos por la idea: no cambia el individuo, cambia la **proporción**.', { dib: pob, v: { k: 2, t: '2 oscuros de 20' }, alto: 194 }, [
+        ['Dos escarabajos de veinte son oscuros.', {}],
+        ['Los pájaros ven mejor a los claros.', { t: 'cazan más claros' }],
+        ['Los oscuros dejan más crías oscuras.', { k: 8, t: '8 de 20' }],
+        ['Generación tras generación aumentan.', { k: 15, t: '15 de 20' }],
+        ['Ninguno cambió de color.', {}],
+      ], 'Variación, herencia, más nacen y unos se reproducen más.'),
+      xpHaz('hoja', 'Subraya la explicación **correcta** de por qué hoy hay más ratones de pelo grueso en el frío.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Les creció porque lo necesitaban.'], ['Los de pelo grueso sobrevivieron y tuvieron más crías.'], ['El frío les cambió los genes a todos.']], pista: '¿Cambia el individuo o la población?' }, 'La variación ya existía y fue seleccionada.')],
+    ['Al azar y escogido',
+      xpMira('hoja', 'Segunda idea: la mutación es **al azar**; el ambiente **selecciona**.', { paras: [['Mutación: aparece sin propósito'], ['Ambiente: favorece a unos'], ['Otro ambiente: favorece a otros'], ['«Se adaptó porque quería»']] }, [
+        ['La mutación no la pide nadie.', { luz: [0], nota: { 0: 'al azar' } }],
+        ['Luego el lugar decide cuál conviene.', { luz: [1], nota: { 1: 'selecciona' } }],
+        ['En otra parte conviene lo contrario.', { luz: [2] }],
+        ['Este es el error típico.', { luz: [3], tacha: [3] }],
+        ['Estar adaptado es estarlo a un lugar.', { luz: [1, 2] }],
+      ], 'Primero la variación; después, la selección.'),
+      xpHaz('hoja', 'Pon al margen qué es cada cosa.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['selección', 'mutación'], meta: [1, 0], paras: [['Un cambio en el ADN de una cría'], ['Los peces rápidos escapan y se reproducen más']], pista: 'Alguna no va ahí: ¿aparece al azar o se favorece?' }, 'El ADN muta; los rápidos son seleccionados.')],
+    ['Las pruebas',
+      xpMira('hoja', 'Tercera idea: muchas **pruebas** apuntan a lo mismo.', { paras: [['Fósiles intermedios'], ['Mismos huesos en brazo, ala y aleta'], ['ADN parecido entre parientes'], ['Bacterias resistentes']] }, [
+        ['La roca guarda formas de paso.', { luz: [0] }],
+        ['Un mismo plan, acomodado distinto.', { luz: [1] }],
+        ['Mientras más cercanos, más parecido.', { luz: [2] }],
+        ['Y lo vemos ocurrir hoy.', { luz: [3], nota: { 3: 'ahora' } }],
+        ['Por eso el antibiótico se toma completo.', { luz: [3] }],
+      ], 'Roca, huesos, ADN y lo que pasa hoy.'),
+      xpHaz('hoja', 'Subraya por qué no se debe suspender un antibiótico.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Quedan vivas las más resistentes.'], ['Las bacterias aprenden.'], ['El remedio se daña.']], pista: '¿Cuáles mueren primero?' }, 'Mueren las sensibles; las otras se multiplican.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'De 100 insectos, 5 resisten un veneno. Tras fumigar quedan 4 resistentes y 6 que no. Pon el porcentaje de resistentes antes y después.', { slots: fila('antes (%)', 'después (%)'), fichas: ['5', '40', '4', '10', '60'], meta: ['5', '40'], alto: 96, pista: 'Compara con el total de cada momento.' }, '5 de 100 y 4 de 10.')],
+  ], 'Cambia la proporción, el ambiente escoge y hay pruebas.');
 }
 ;
 //#archivo js/explora-icf-en.js
@@ -10467,6 +10813,9 @@ const GUIDES = {
   'factor-comun': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'cuadrado-falta': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'equivalen-no': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'alcanza-o-no': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'datos-que-sobran': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'vale-o-no': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
   'punto-comun': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'voltea-o-sigue': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'pinta-intervalo': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
@@ -15546,6 +15895,71 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['Fact or opinion', '¿Se comprueba o se discute?', 'genero-o-cita', 'Is it a **fact** or an **opinion**?', { doc: FOUNT, rot: ['fact', 'opinion'], ...F(['The council should repair it', 1, '¿Se comprueba o se discute?'], ['The fireworks lasted nine minutes', 0, '¿Se comprueba o se discute?'], ['It has been broken for ten years', 0, '¿Se comprueba o se discute?']), bien: 'Should gives an opinion.' }, 'Los minutos y los años se comprueban; «should» opina.', ['Busca la palabra «should».', 'Los números se comprueban.'], 'Should: opinion. Números: fact'],
     ['For or against', 'Supón cierto cada dato.', 'balanza-tesis', 'Opinion: "the council can pay for it". What does each fact do?', { doc: FOUNT, tesis: 'The council can pay for it', ...F(['It spent 45 million on fireworks.', 0, '¿Muestra que hay dinero?'], ['The fireworks were paid by a company.', 1, 'Si fuera cierto, ¿gastó el concejo?'], ['The photos are from 1960.', 2, '¿Habla de dinero?']), bien: 'For, against, nothing.' }, 'Los 45 la apoyan; que pagara otro la debilita; las fotos no pesan.', ['Compara los dos gastos del texto.', 'Un dato no habla de dinero.'], 'Fireworks: apoya. Company: debilita']],
     'Facts have numbers; the money argument depends on who paid.', 'Comprueba, razona y mira quién pagó.');
+}
+;
+//#archivo js/gimnasio-icf-8.js
+// Gimnasio del Preicfes, octavos mundos (spec 2026-11-25-preicfes-estructura): Fuerza y Élite por mundo. Va después de gimnasio-icf-7.js.
+{
+  const { F, T, P, S } = ICF;
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-i-${id}`, after, level, title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+  const D = (id, title, paras) => ({ id: `gym-icf-${id}`, title, paras });
+
+  reto('argu-1', ['icf-ma-argumenta-1', 'icf-ma-argumenta-2'], 2, 'El club de los múltiplos', 'Dirección y contraejemplo', 'Un club tiene reglas sobre números. Revísalas.', [
+    ['La regla', 'No va al revés.', 'deduce-seguro', '«**Si un número es de 12, es de 3**». ¿Qué se concluye de cada dato?', { et: ['es de 12', 'no es de 3', 'es de 3', 'no es de 12'], metas: ['es de 3', 'no es de 12', 'no se sabe', 'no se sabe'], fichas: ['es de 3', 'no es de 12', 'no se sabe', 'no se sabe', 'es de 12', 'no es de 3'], mira: ['Si pasa lo primero, pasa lo segundo.', 'Si fuera de 12 sería de 3.', 'Piensa en el 9 y en el 24.', 'Piensa en el 9 y en el 10.'], trampas: {}, ok: 'Ida, o vuelta negando.' }, 'De ida vale y de vuelta solo negando las dos.', ['Busca un número que cumpla el dato y mira si obliga.', 'Dos de los datos dejan abiertas las dos opciones.'], 'Ida: sí. Vuelta: solo negando'],
+    ['El que la tumba', 'Cumple la condición y falla la conclusión.', 'tumba-todos', '«**Todos los múltiplos de 5 son múltiplos de 10**». Toca **todos** los números que la tumban.', { a: 5, b: 10, nums: [15, 20, 25, 30, 12, 45] }, '15, 25 y 45 son de 5 y no de 10; el 12 no es de 5.', ['Primero mira si cumple la condición de la regla.', 'De esos, quédate con los que no terminan en cero.'], 'Terminan en 5: los tres']],
+    'La regla va de ida; tres números tumban la otra.', 'Mira la dirección y busca quien cumpla y falle.');
+  reto('argu-2', ['icf-ma-argumenta-3'], 3, '¿Se puede saber?', 'Una sola respuesta', 'Antes de calcular, decide si la información alcanza.', [
+    ['Alcanza', 'Busca dos casos distintos.', 'alcanza-o-no', 'Se quiere saber el **perímetro de un cuadrado**. Con cada dato, ¿**alcanza** o **no alcanza**?', { et: ['su lado mide 8', 'su área es 49', 'es más grande que otro', 'está en un parque'], metas: ['alcanza', 'alcanza', 'no alcanza', 'no alcanza'], fichas: ['alcanza', 'alcanza', 'no alcanza', 'no alcanza', 'alcanza', 'no alcanza'], mira: ['Cuatro lados iguales.', 'Del área sale el lado.', 'Puede tener muchos tamaños.', 'No dice nada de sus medidas.'], ok: 'El lado o el área bastan.' }, 'Con el lado o el área hay un solo perímetro.', ['Mira si de ese dato sale el lado.', 'El área de un cuadrado deja un solo lado.'], 'Lado y área: alcanzan'],
+    ['Sobra', 'Cambia el dato y mira la respuesta.', 'datos-que-sobran', 'Una tienda vende 30 panes a 800 pesos, abre a las 6 y tiene 2 empleados. Se quiere saber **cuánto recibe** por los panes. Toca lo que **sobra**.', { casos: [{ t: 'vende 30 panes', no: 'Hace falta la cantidad.' }, { t: 'abre a las 6', si: true }, { t: 'a 800 pesos', no: 'Hace falta el precio.' }, { t: 'tiene 2 empleados', si: true }], falta: 'Falta otro que no cambia lo recibido.', ok: 'Bastan cantidad y precio.' }, 'Cantidad por precio: la hora y los empleados sobran.', ['Pregunta qué operación harías.', 'Cambia cada dato: ¿cambia lo recibido?'], 'Cantidad · precio; lo demás sobra']],
+    'Alcanzan el lado y el área; sobran la hora y los empleados.', 'Busca dos casos y cambia los datos.');
+
+  const PERROS = D('dos-perros', 'Dos textos sobre perros', [
+    'TEXTO 1: En cinco parques con zona para perros sueltos bajaron a la mitad las mordeduras en el resto del parque. Faltan datos de otras ciudades.',
+    'TEXTO 2: Mi perro Trapo no entiende de zonas. Cree que el mundo entero es su zona y que yo soy el que anda suelto. Que le pongan reja al parque: él seguirá saludando a todos.']);
+  reto('compara-1', ['icf-lc-comparar-1'], 2, 'Dos textos sobre perros', 'Comunes y distintos', 'Dos textos cortos. Compara propósito y alcance.', [
+    ['Uno, otro o ambos', 'Debe poder señalarse.', 'pinta-tipos', 'Pinta cada idea con el texto que la trae.', { doc: PERROS, plumas: ['texto 1', 'texto 2', 'los dos'], ...P(['Da un resultado medido.', 0, '¿Cuál habla de mordeduras?'], ['Usa humor.', 1, '¿Cuál bromea con el perro?'], ['Habla de perros y parques.', 2, '¿Está en uno o en ambos?']), bien: 'Dato, humor y tema.' }, 'El dato es del 1, el humor del 2 y el tema de los dos.', ['Busca en cuál de los dos hay números.', 'El tema está en los dos.'], 'Dato: 1. Humor: 2. Tema: ambos'],
+    ['El alcance', 'No digas más que el texto.', 'ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que los textos.', { doc: PERROS, filas: [{ antes: 'El texto 1 habla de', topes: ['todas las ciudades', 'ningún parque', 'cinco parques'], va: 2 }, { antes: 'El texto 2 cree que la reja', topes: ['resolverá todo', 'no cambiará a su perro', 'es ilegal'], va: 1 }], mira: ['Relee cuántos parques.', 'Relee la última oración.'], luz: [[1, 'cinco parques'], [2, 'él seguirá saludando']], bien: 'Cinco y no cambiará.' }, 'Cinco parques y un perro que seguirá igual.', ['Busca el número de parques.', 'Mira lo que dice que hará el perro.'], 'Cinco; no cambiará']],
+    'Dato en uno, humor en otro; el alcance es de cinco parques.', 'Señala cada idea en su texto.');
+  const WIFI = D('dos-wifi', 'Wifi en el parque', [
+    'TEXTO 1: Pongan wifi gratis en el parque. Cuarenta estudiantes hacen tareas en la acera de la panadería porque allí llega la señal.',
+    'TEXTO 2: Es cierto que muchos no tienen internet. Pero el parque es de los pocos sitios donde todavía se habla. Pongan el wifi en la biblioteca y ábranla hasta las nueve.']);
+  reto('compara-2', ['icf-lc-comparar-2'], 3, 'Wifi en el parque', 'Conceder y proponer', 'Dos posturas cortas. Mira cómo responde la segunda.', [
+    ['Cómo responde', 'Mira qué hace cada frase.', 'pista-tipo', 'Ata cada movimiento a su frase.', { doc: WIFI, lineas: ['Es cierto que muchos no tienen internet.', 'Pero el parque es donde se habla.', 'Pongan el wifi en la biblioteca.'], ...T(['concede', 0, '¿Cuál reconoce algo?'], ['objeta', 1, '¿Cuál empieza con contraste?'], ['propone otra salida', 2, '¿Cuál pide algo distinto?']), bien: 'Conceder, objetar y proponer.' }, 'Reconoce, contrasta y propone.', ['Fíjate en las primeras palabras.', 'La última pide algo.'], 'Concede, objeta, propone'],
+    ['Coinciden o chocan', 'Busca el punto en los dos.', 'genero-o-cita', '¿Los textos **coinciden** o **chocan**?', { doc: WIFI, rot: ['coinciden', 'chocan'], ...F(['Hay estudiantes sin internet', 0, '¿Alguno lo niega?'], ['El lugar del wifi', 1, '¿Piden el mismo sitio?'], ['Conviene ofrecer wifi', 0, '¿Los dos lo piden?']), bien: 'El problema los une; el lugar, no.' }, 'Los dos ven el problema y piden wifi; chocan en el lugar.', ['Busca lo que pide cada uno.', 'Una diferencia es de sitio.'], 'Problema y wifi: coinciden. Lugar: chocan']],
+    'Concede, objeta y propone; chocan solo en el lugar.', 'Separa el problema de la salida.');
+
+  const VALLE = D('valle-geo', 'El valle de Santa Rita', [
+    'Santa Rita está a 2 000 metros. Su pirámide de población tiene la base angosta y la parte alta ancha.',
+    'Cada año se van doscientos jóvenes a la capital: unos a estudiar; otros, porque la sequía acabó la siembra.',
+    'En un mapa 1 : 100 000, el embalse está a 3 centímetros del pueblo.']);
+  reto('geo-1', ['icf-sc-geografia-1'], 2, 'El valle de Santa Rita', 'Mapas y población', 'Tres datos de un municipio. Deduce.', [
+    ['Deducir', 'Usa la escala y la pirámide.', 'dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: VALLE, nums: [1, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], ...F(['El pueblo está a 2 000 metros.', 0, 'Búscala en el párrafo 1.'], ['El embalse está a 3 kilómetros.', 1, '¿Cuánto vale cada centímetro?'], ['Hay pocos niños en proporción.', 1, '¿Cómo es la base de la pirámide?'], ['El embalse es de agua salada.', 2, '¿Se habla de eso?']), luz: [[1, '2 000 metros'], [3, '1 : 100 000'], [1, 'la base angosta']], bien: 'Escala y pirámide.' }, 'La altura está escrita, la distancia y la base se deducen y la sal no aparece.', ['En esa escala, un centímetro es un kilómetro.', 'La base muestra a los niños.'], '3 cm → km; base angosta: pocos niños'],
+    ['Migrar', '¿Podían quedarse?', 'genero-o-cita', '¿Es migración **por estudio** o **por el ambiente**?', { doc: VALLE, rot: ['por estudio', 'por el ambiente'], ...F(['Se fue a la universidad', 0, '¿Qué la movió?'], ['Se fue por la sequía', 1, '¿Qué la movió?'], ['Perdió su siembra', 1, '¿Qué la movió?']), bien: 'Aprender o no poder sembrar.' }, 'La universidad es estudio; la sequía y la siembra, ambiente.', ['Pregunta qué la hizo irse.', 'La siembra depende del agua.'], 'Universidad: estudio. Sequía: ambiente']],
+    'A 3 km, con pocos niños; se van por estudio o por sequía.', 'Escala, pirámide y motivo.');
+  const MINITA = D('cantera', 'La cantera', [
+    'Una cantera ofrece ochenta empleos en un cerro que da agua a seis veredas. El plano marca la piedra; no marca las casas.',
+    'El estudio dice que el caudal bajaría un tercio. La empresa ofrece un acueducto a veinte kilómetros.',
+    'La junta propone una cantera más pequeña, lejos del nacimiento, con vigilancia de las veredas.']);
+  reto('geo-2', ['icf-sc-geografia-2'], 3, 'La cantera', 'Tres patas y una mesa', 'Un proyecto con tres propuestas. Evalúalo.', [
+    ['Las patas', 'Nombra lo que toca cada efecto.', 'pinta-tipos', 'Pinta cada efecto con su pata.', { doc: MINITA, plumas: ['económica', 'social', 'ambiental'], ...P(['Ochenta empleos.', 0, '¿Dinero, gente o naturaleza?'], ['El caudal baja un tercio.', 2, '¿Dinero, gente o naturaleza?'], ['Las casas no aparecen en el plano.', 1, '¿Dinero, gente o naturaleza?']), bien: 'Empleo, gente y agua.' }, 'Empleos, económica; casas, social; caudal, ambiental.', ['El agua es naturaleza.', 'Las casas son de personas.'], 'Empleos, casas, caudal'],
+    ['La balanza', 'Revisa las tres patas.', 'balanza-tesis', 'Idea: «la propuesta de la junta es más sostenible que la inicial». ¿Qué hace cada dato?', { doc: MINITA, tesis: 'La de la junta es más sostenible', ...F(['Queda lejos del nacimiento.', 0, '¿Cuida el agua?'], ['Las veredas vigilan.', 0, '¿Incluye a la gente?'], ['La cantera pequeña secaría igual el agua.', 1, 'Si fuera cierto, ¿sería mejor?']), bien: 'Agua y gente en la mesa.' }, 'Alejarse y vigilar la apoyan; secar igual la debilitaría.', ['Mira qué pasa con el agua.', 'Mira quién participa.'], 'Lejos y vigilancia: apoyan']],
+    'Empleo, gente y agua; la de la junta equilibra más.', 'Revisa las tres patas y quién decide.');
+
+  const GATOS = D('gatos', 'Los gatos de la plaza', [
+    'En los gatos de la plaza, el pelo liso (L) domina al rizado (l). Dos gatos lisos tuvieron cuatro crías: tres lisas y una rizada.',
+    'En otra camada de esa pareja, las cinco crías fueron lisas.']);
+  reto('here-1', ['icf-cn-herencia-1', 'icf-cn-herencia-2'], 2, 'Los gatos de la plaza', 'Alelos escondidos', 'Una pareja de gatos y dos camadas. Deduce sus genes.', [
+    ['Los padres', 'La cría rizada recibió dos alelos.', 'dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: GATOS, nums: [1, 2], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], ...F(['El liso domina al rizado.', 0, 'Búscala en el párrafo 1.'], ['Los dos padres son Ll.', 1, '¿De dónde salió la cría rizada?'], ['La próxima cría será rizada.', 2, '¿Se puede asegurar?']), luz: [[1, 'domina al rizado'], [1, 'una rizada']], bien: 'Cada padre dio una l.' }, 'La dominancia está escrita, los Ll se deducen y la próxima no se puede asegurar.', ['Piensa qué dos alelos tiene la cría rizada.', 'La probabilidad no asegura una cría.'], 'Domina: dice. Ll: se deduce'],
+    ['Las células', '¿Crecer o formar gametos?', 'genero-o-cita', '¿Es **mitosis** o **meiosis**?', { rot: ['mitosis', 'meiosis'], doc: GATOS, ...F(['Crece la pata de una cría', 0, '¿Crecer o formar gametos?'], ['Se forma un espermatozoide', 1, '¿Crecer o formar gametos?'], ['Se cura un rasguño', 0, '¿Crecer o formar gametos?']), bien: 'Copiar o reducir.' }, 'Crecer y curar es mitosis; el espermatozoide, meiosis.', ['Pregunta para qué sirve.', 'Solo una forma gametos.'], 'Pata y rasguño: mitosis. Espermatozoide: meiosis']],
+    'Los padres son Ll; crecer y curar es mitosis.', 'Devuélvete desde la cría recesiva.');
+  const PICOS = D('picos', 'Picos en la sequía', [
+    'En una isla, antes de la sequía, los picos de las aves medían en promedio 9 milímetros. Solo quedaron semillas grandes y duras.',
+    'Murieron ocho de cada diez aves. Entre las que sobrevivieron, el promedio fue 10. Sus crías, al año siguiente, también promediaron 10.']);
+  reto('here-2', ['icf-cn-herencia-3'], 3, 'Picos en la sequía', 'Variar, heredar, seleccionar', 'Datos de aves antes y después de una sequía. Explica el cambio.', [
+    ['Los pasos', 'Variación, selección y herencia.', 'pasos-del-proceso', 'Ordena lo que pasó. El primero está en su puesto.', { doc: PICOS, que: 'el cambio', de: 'Picos en la sequía', fija: 1, ini: [0, 2, 3, 1], tiras: ['Hay picos de varios tamaños.', 'La sequía deja semillas duras.', 'Sobreviven más los de pico grande.', 'Las crías heredan el pico.'], mira: ['', 'Es el cambio del ambiente.', 'Es a quién favorece.', 'Es lo que se ve al año.'], bien: 'Variar, cambiar, sobrevivir y heredar.' }, 'Variación, sequía, supervivencia y herencia.', ['Primero ya había picos distintos.', 'La herencia se ve en las crías.'], 'Variar, sequía, sobrevivir, heredar'],
+    ['Correcta o error', '¿Individuo o población?', 'genero-o-cita', '¿La explicación es **correcta** o tiene el **error** típico?', { doc: PICOS, rot: ['correcta', 'error típico'], ...F(['A cada ave le creció el pico por hambre', 1, '¿Cambia el individuo?'], ['Sobrevivieron más las de pico grande', 0, '¿Habla de quién quedó?'], ['El promedio de la población cambió', 0, '¿Habla del grupo?']), bien: 'Cambia el grupo.' }, 'El pico no creció por hambre: cambió quiénes quedaron.', ['Pregunta si habla de un ave o del grupo.', 'El hambre no alarga picos.'], 'Hambre: error. Grupo: correcta']],
+    'Variación, sequía, supervivencia y herencia; cambió la población.', 'Cambia el grupo, no el individuo.');
 }
 ;
 //#archivo js/inicio.js
