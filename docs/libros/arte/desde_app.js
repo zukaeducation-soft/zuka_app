@@ -35,12 +35,7 @@ fs.writeFileSync(path.join(TEX, 'zuka-logo.tex'), logo);
 // ---- rutas e ideas ----
 const files = fs.readdirSync(path.join(ROOT, 'js')).filter(f => /^explora-pu-/.test(f)).map(f => 'js/' + f);
 const X = get(loadScripts(['js/explora.js', 'js/explora-numeros.js', 'js/explora-escenas.js', ...files]), 'EXPLORA');
-const plain = s => s.replace(/\*\*(.+?)\*\*/g, '\\textbf{$1}').replace(/%/g, '\\%').replace(/\\\\%/g, '\\%')
-  .replace(/&/g, '\\&').replace(/#/g, '\\#').replace(/°/g, '\\textdegree{}').replace(/×/g, '\\ensuremath{\\times}')
-  .replace(/÷/g, '\\ensuremath{\\div}').replace(/∧/g, '\\ensuremath{\\land}').replace(/∨/g, '\\ensuremath{\\lor}')
-  .replace(/¬/g, '\\ensuremath{\\lnot}').replace(/◆/g, '\\ding{117}').replace(/±/g, '\\ensuremath{\\pm}')
-  .replace(/✗/g, '\\ding{55}').replace(/✓/g, '\\ding{51}');
-const tex = s => s.split(/(\$[^$]+\$)/).map(t => t[0] === '$' && t.length > 1 ? t.replace(/(^|[^\\])%/g, '$1\\%').replace(/\\operatorname\{sen\}/g, '\\sen') : plain(t)).join('');
+const { tex } = require('./texto');
 const out = ['% GENERADO por docs/libros/arte/desde_app.js desde js/explora-pu-*.js: no editar a mano.'];
 for (const id of Object.keys(X)) {
   const l = X[id];

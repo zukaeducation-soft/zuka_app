@@ -1,0 +1,52 @@
+% zuka-dibujo.tex — las lecciones dibujadas (2026-11-25, spec 2026-11-25-libros-dibujados): capítulos cuadro por cuadro,
+% «Tu turno» con su dibujo, ejemplos resueltos con dibujos y soluciones dibujadas. Los .tex de cada lección los genera arte/pasos.js.
+\RequirePackage{needspace}
+\newcommand{\zesc}[3]{\includegraphics[width=#3mm,page=#2]{#1}}
+\newcommand{\znum}[1]{\tikz[baseline=(n.base)]{\node[circle,fill=zolive,inner sep=0,minimum size=4.6mm,font=\sffamily\scriptsize\bfseries,text=white](n){#1};}}
+\newcommand{\zcuenta}[1]{\par\vspace{2pt}{\setlength{\fboxsep}{2.2pt}\colorbox{zsoft}{\hspace{1.5mm}#1\hspace{1.5mm}}}\par}
+\newcommand{\zcuadrotexto}[2]{{\raggedright\small\setlength{\parskip}{0pt}\hangindent=6.5mm\hangafter=0
+  \noindent\llap{\znum{#1}\hspace{1.9mm}}#2\par}}
+% dos cuadros en fila: {alto del dibujo}{dibujo}{texto}{dibujo}{texto}
+\newcommand{\zmarcoesc}[3][81.2mm]{\begin{tikzpicture}[baseline=(m.north)]\node[draw=zline,line width=.5pt,rounded corners=1.4mm,inner xsep=1.6mm,inner ysep=1.2mm,minimum height=#2,minimum width=#1](m){#3};\end{tikzpicture}}
+\newcommand{\zpar}[5]{\par\vspace{4pt}\noindent\begin{minipage}{\linewidth}%
+  \begin{minipage}[t]{82mm}\vspace{0pt}\zmarcoesc{\dimexpr#1mm+2.4mm}{#2}\par\vspace{4pt}#3\end{minipage}\hfill
+  \begin{minipage}[t]{82mm}\vspace{0pt}\zmarcoesc{\dimexpr#1mm+2.4mm}{#4}\par\vspace{4pt}#5\end{minipage}\end{minipage}\par\vspace{3pt}}
+% un dibujo con su texto al lado
+\newcommand{\zlado}[2]{\par\vspace{4pt}\noindent\begin{minipage}{\linewidth}%
+  \begin{minipage}[c]{82mm}\zmarcoesc{0mm}{#1}\end{minipage}\hfill
+  \begin{minipage}[c]{82mm}#2\end{minipage}\end{minipage}\par\vspace{3pt}}
+\newcommand{\zidea}[1]{\par\vspace{3pt}\begin{tcolorbox}[zbase,breakable=false,colback=white,borderline west={1.1mm}{0pt}{zlime},left=4mm,top=1.2mm,bottom=1.4mm,before skip=4pt,after skip=6pt]
+  {\sffamily\footnotesize\bfseries\color{zmoss}La idea}\quad #1\end{tcolorbox}}
+\newcommand{\zturno}[3]{\begin{tcolorbox}[zbase,breakable=false,colback=zlime!13]%
+  \begin{minipage}[c]{\dimexpr\linewidth-84mm}\raggedright\zuka@cab{zmoss}{reto}{Tu turno #1}\par\vspace{3pt}#2\end{minipage}\hfill
+  \begin{minipage}[c]{80mm}\hfill\setlength{\fboxsep}{1.2mm}\tikz\node[fill=white,rounded corners=1.4mm,inner sep=1.4mm]{#3};\end{minipage}\end{tcolorbox}}
+% ---------- ejemplos resueltos con dibujos ----------
+\newcounter{zejd}
+\newcommand{\zejemplo}[2]{\Needspace*{95mm}\stepcounter{zejd}\par\vspace{9pt}\noindent{\color{zline}\rule{\linewidth}{.5pt}}\par\vspace{4pt}%
+  \begin{tcolorbox}[zbase,breakable=false,colback=zsoft,before skip=2pt,after skip=4pt]\zuka@cab{zolive}{ejemplo}{Ejemplo resuelto con dibujos}%
+  {\sffamily\footnotesize\color{zmute}\quad #1}\par\vspace{3pt}#2\end{tcolorbox}\nopagebreak
+  {\sffamily\footnotesize\bfseries\color{zmute}Solución, paso a paso\par}\nopagebreak}
+\newcommand{\zrespuesta}[1]{\par\vspace{2pt}\noindent{\sffamily\footnotesize\bfseries\color{zmoss}Respuesta\quad}#1\par\vspace{4pt}}
+% ---------- dónde salen: después de la analogía ----------
+\let\zuka@lecciondib\leccion
+\renewcommand{\leccion}[3]{\setcounter{zejd}{0}\zuka@lecciondib{#1}{#2}{#3}\label{les:#1}\InputIfFileExists{salida/pasos/#1}{}{}%
+  \ifnum\pdfstrcmp{\zuka@cinco#1\@nil}{pu-cm}=0 \else\ejemplosdibujados\fi}
+\def\zuka@cinco#1#2#3#4#5#6\@nil{#1#2#3#4#5}
+\newcommand{\ejemplosdibujados}{\InputIfFileExists{salida/pasos/\zuka@lid-e}{}{}}
+% los títulos de sección no quedan solos al pie
+\let\zuka@titulodib\zuka@titulo
+\renewcommand{\zuka@titulo}[1]{\Needspace*{48mm}\zuka@titulodib{#1}}
+% mundo 1: su texto por capítulos lleva encima la explicación dibujada
+\let\zuka@capitulodib\capitulo
+\renewcommand{\capitulo}[1]{\Needspace*{80mm}\zuka@capitulodib{#1}\InputIfFileExists{salida/pasos/\zuka@lid-\arabic{zcap}}{}{}}
+% ---------- soluciones dibujadas ----------
+\newcommand{\zsolucionesde}[1]{\par\vspace{8pt}\noindent\begin{minipage}{\linewidth}{\color{zline}\rule{\linewidth}{.5pt}}\par\vspace{2pt}
+  {\sffamily\bfseries\color{zink}\ref{les:#1}\quad\nameref{les:#1}}\end{minipage}\par\nopagebreak\vspace{3pt}\noindent\ignorespaces}
+\newcommand{\zsol}[4]{\begin{minipage}[t]{55mm}\vspace{0pt}\zmarcoesc[55.2mm]{\dimexpr#4mm+2.4mm}{#2}\par\vspace{2pt}{\footnotesize\raggedright\znum{#1}\hspace{1.6mm}#3\par}\vspace{6pt}\end{minipage}\hspace{2.3mm}\ignorespaces}
+\newcommand{\zsolfin}{\par}
+\newcommand{\solucionesdibujadas}{\clearpage\phantomsection\addcontentsline{toc}{chapter}{Soluciones dibujadas}%
+  \renewcommand{\zuka@mundoactual}{Soluciones dibujadas}\setcounter{mundo}{0}%
+  {\sffamily\fontsize{24}{28}\selectfont\fontseries{sb}\selectfont\color{zink}Soluciones dibujadas de «Tu turno»\par}\vspace{3pt}
+  {\color{zlime}\rule{20mm}{1mm}}{\color{zline}\rule[.35mm]{\dimexpr\linewidth-20mm}{.4pt}}\par\vspace{4pt}
+  {\small\color{zmute}Compara tu dibujo con este. Si son distintos, no borres: busca en qué paso se separaron y vuelve a leer esa idea.\par}
+  {\raggedright\InputIfFileExists{salida/pasos/sol-\zuka@num}{}{}\par}}

@@ -35,7 +35,7 @@
 \renewenvironment{profundiza}{\begin{tcolorbox}[zlisa]\zuka@cab{zmute}{lejos}{Para ir más lejos}\par\vspace{2pt}}{\end{tcolorbox}}
 \newcommand{\zuka@titulo}[1]{\par\vspace{9pt}\noindent{\color{zlime}\rule[-.2ex]{7mm}{.9mm}}\hspace{2.5mm}%
   {\sffamily\fontsize{14}{17}\selectfont\fontseries{sb}\selectfont\color{zink}#1}\par\nopagebreak\vspace{3pt}}
-\renewenvironment{reto}{\zuka@titulo{Ahora sí, un problema}%
+\renewenvironment{reto}{\zuka@titulo{Un reto como los del examen}%
   {\small\color{zmute}Ya tienes las ideas. Resuélvelo solo, escribe tu respuesta y después mira cómo se usó el concepto.\par}
   \begin{tcolorbox}[zmarco,breakable=false]}{\zuka@miresp\end{tcolorbox}}
 \renewenvironment{retoresuelto}{\zuka@tapa{Tapa desde aquí hasta tener tu respuesta}%
@@ -54,7 +54,7 @@
 \titlespacing*{\subsection}{0pt}{11pt}{4pt}
 % la bitácora solo queda en lectura: en razonamiento la reemplaza «Lo que construiste»
 \let\zuka@bitacoravieja\bitacora
-\renewcommand{\bitacora}{\ifnum\zuka@num<3\else\zuka@bitacoravieja\fi}
+\renewcommand{\bitacora}{}
 
 \raggedbottom
 % el enunciado y su cuadrícula no se separan
@@ -96,7 +96,7 @@
 \newcommand{\zuka@poneandamio}{\ifcsname zand@\zuka@lid\endcsname\csname zand@\zuka@lid\endcsname
   \expandafter\global\expandafter\let\csname zand@\zuka@lid\endcsname\relax\fi}
 \let\zuka@notaappvieja\notaapp
-\renewcommand{\notaapp}[1]{\ifnum\zuka@num<3 \zuka@poneruta
+\renewcommand{\notaapp}[1]{\ifnum\zuka@num<9 \zuka@poneruta
     {\sffamily\footnotesize\color{zmute}\textbf{\color{zolive}En la app:} la misma ruta, para construirla con el dedo, y después los ejercicios.\par}%
   \else\zuka@notaappvieja{#1}\fi}
 \InputIfFileExists{explora-rl}{}{}
@@ -202,10 +202,11 @@
   \vspace{7mm}
   \noindent{\sffamily\fontsize{14}{17}\selectfont\fontseries{sb}\selectfont\color{zink}Cómo vas a trabajar}\par\vspace{2pt}
   {\color{zline}\rule{\linewidth}{.5pt}}\par\vspace{2pt}
-  {\small\ifnum\zuka@num<3
+  {\small\ifnum\zuka@num<9
     Cada lección es una \textbf{ruta}: los mismos pasos que construyes en la app. En cada paso \textbf{primero entiendes la
-    idea} y \textbf{después la usas}; al final viene el problema y ves cómo se usó el concepto. Cierra con «Lo que
-    construiste», el taller y las claves.
+    idea} y \textbf{después la usas}; cuadro por cuadro y con el mismo dibujo para marcar.
+    Siguen los ejemplos resueltos con dibujos, el reto, «Lo que construiste» y el taller. Las soluciones dibujadas y las
+    claves están al final del libro.
   \else
     En cada lección \textbf{primero entiendes la técnica} (analogía, idea y ejemplos comentados) y \textbf{después la usas}:
     resuelves el reto, ves cómo se aplicó, practicas en la app y cierras con el taller y las claves.

@@ -428,6 +428,10 @@ lima, líneas finas, logo nuevo) y, en razonamiento, la **ruta de la app**: `art
 `js/explora-pu-*.js` la ruta y «Lo que construiste» de las 57 lecciones. El mundo 1 ya va por pasos (`\capitulo`, `	urno`, `rmar`);
 faltan los mundos 2 a 16. Lo que sigue describe la base; donde se contradiga, manda la spec nueva.
 
+**Versión que se publica en la app: libros dibujados** (2026-11-25, spec `2026-11-25-libros-dibujados`): cada explicación de Explora
+sale cuadro por cuadro en vectorial (`arte/escenas.mjs` + `arte/pasos.js`, capa `tex/zuka-dibujo.tex`), «Tu turno» con su dibujo,
+ejemplos resueltos con dibujos en `arte/ejemplos/*.js` y «Soluciones dibujadas» al final; `SIN_ESCENAS=1` compila sin redibujar.
+
 Cuatro libros en LaTeX en `docs/libros/` (spec `2026-11-20-libros-preuda`): 1 y 2 de Razonamiento lógico («Número y forma»,
 «Orden, lógica y azar»), 3 y 4 de Comprensión lectora («Leer lo que dice», «Leer lo que quiere decir»); contenido original, un
 capítulo por mundo de la app y una sección por lección (mismo id `pu-…`). `sh docs/libros/build.sh [1 2 3 4]` deja

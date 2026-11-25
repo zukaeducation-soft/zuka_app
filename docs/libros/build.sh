@@ -11,6 +11,9 @@ node ../arte/desde_app.js || exit 1
 nums="$*"; [ -z "$nums" ] && nums="1 2 3 4"
 for n in $nums; do
   [ -f "libro$n.tex" ] || { echo "no existe libro$n.tex"; continue; }
+  # dibujos de las explicaciones, los ejemplos y las soluciones (salen de la app); SIN_ESCENAS=1 usa los que ya están
+  [ -n "$SIN_ESCENAS" ] || node ../arte/escenas.mjs $n || exit 1
+  node ../arte/pasos.js $n || exit 1
   if pdflatex -interaction=nonstopmode -halt-on-error -output-directory=salida "libro$n.tex" > "salida/c$n.txt" 2>&1 &&
      pdflatex -interaction=nonstopmode -halt-on-error -output-directory=salida "libro$n.tex" > "salida/c$n.txt" 2>&1; then
     cp "salida/libro$n.pdf" "../pdf/Zuka_Preuniversitario_Libro_$n.pdf"

@@ -296,11 +296,11 @@
 
 % opciones A–D: \opciones (en fila), \opcionesd (2 × 2), \opcionesl (una por renglón)
 \newcommand{\op}[1]{{\sffamily\footnotesize\bfseries\color{zolive}#1}\ }
-\newcommand{\opciones}[4]{\par\vspace{1pt}\noindent
+\newcommand{\opciones}[4]{\par\nopagebreak\vspace{1pt}\noindent
   \begin{tabularx}{\linewidth}{@{}XXXX@{}}\op{A}#1&\op{B}#2&\op{C}#3&\op{D}#4\end{tabularx}\par}
-\newcommand{\opcionesd}[4]{\par\vspace{1pt}\noindent
+\newcommand{\opcionesd}[4]{\par\nopagebreak\vspace{1pt}\noindent
   \begin{tabularx}{\linewidth}{@{}XX@{}}\op{A}#1&\op{B}#2\\[2pt]\op{C}#3&\op{D}#4\end{tabularx}\par}
-\newcommand{\opcionesl}[4]{\par\vspace{1pt}%
+\newcommand{\opcionesl}[4]{\par\nopagebreak\vspace{1pt}%
   \begin{list}{}{\leftmargin=1.4em\itemsep=1pt\topsep=1pt\labelwidth=1em\labelsep=.4em}
   \item[\op{A}]#1\item[\op{B}]#2\item[\op{C}]#3\item[\op{D}]#4\end{list}}
 
@@ -471,3 +471,4 @@
 \input{zuka-hacer}
 % estilo editorial, marca y ruta de la app (2026-11-24)
 \input{zuka-pro}
+\input{zuka-dibujo}
