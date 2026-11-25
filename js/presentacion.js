@@ -107,9 +107,9 @@ const PZ_LIBROS = [['Número y forma', 1], ['Orden, lógica y azar', 2], ['Leer 
 const PZ_PROG = {
   preuda: { tag: 'Admisión', h: 'Entra a la UdeA entendiendo el examen', meta: 'Llega al examen de admisión sabiendo qué se pregunta y cómo razonarlo.', trae: 'Explicaciones interactivas, ejercicios y evaluaciones por mundo' },
   preicfes: { tag: 'Grado 11', h: 'Las cinco pruebas del Saber 11, una por una', meta: 'Prepara el Saber 11 área por área, con problemas en contexto.', trae: 'Matemáticas, Lectura, Sociales, Ciencias e Inglés' },
-  algebra: { tag: 'Primer semestre', h: 'Álgebra sin vacíos, desde cero', meta: 'Cierra los vacíos del colegio y llega preparado a tus parciales.', trae: 'Videos, ejercicios que se juegan, evaluaciones y resúmenes en PDF' },
-  trig: { tag: 'Primer semestre', h: 'Trigonometría que por fin se ve', meta: 'Entiende la rueda, las ondas y los triángulos antes de memorizar.', trae: 'Videos, ejercicios que se juegan y resúmenes en PDF' },
 };
+// Cursos de fundamentación en Ingeniería y Ciencias: van juntos en una lámina y una tarjeta ancha.
+const PZ_FUND = ['algebra', 'trig', 'calc', 'geo', 'int', 'lin', 'fis'], PZ_FUND_N = 'Fundamentación en Ingeniería y Ciencias', PZ_FUND_C = '#5eead4';
 const PZ_ORDEN = ['preuda', 'preicfes', 'algebra', 'trig'];
 const pzOrdena = cs => [...cs].sort((a, b) => ((PZ_ORDEN.indexOf(a.id) + 1) || 99) - ((PZ_ORDEN.indexOf(b.id) + 1) || 99));
 // Precio más bajo que se vende hoy, de lo que publica la tienda: { precio, meses } o null (entonces no se muestra nada).
@@ -148,17 +148,26 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
   const tarjeta = ({ color, fig, cls = '', name, tag, pills, filas, pr, ir, tab }) => `<article class="pz-prog ${cls}" style="--c:${color}"><div class="pz-prog-art" aria-hidden="true">${fig}</div>
       <div class="pz-prog-txt"><h3>${pzEsc(name)}</h3><p class="pz-pills"><span>${tag}</span>${pills.map(t => `<span class="b">${t}</span>`).join('')}</p>${filas}${precio(pr)}</div>
       <div class="pz-prog-pie"><button class="btn sm" type="button" data-pz-ir="${ir}"${tab == null ? '' : ` data-tab="${tab}"`}>Más información<span class="pz-sr"> sobre ${pzEsc(name)}</span></button>${info(name)}</div></article>`;
-  const progs = orden.map(c => {
+  const fund = PZ_FUND.map(id => cursos.find(c => c.id === id) || todos.find(c => c.id === id)).filter(Boolean), hayFund = cursos.some(c => PZ_FUND.includes(c.id));
+  const foto = '<img src="brand/ingenieros.webp" alt="Dos ingenieros resuelven las reacciones de una viga en un tablero" width="1300" height="732" loading="lazy">';
+  const logos = hayFund ? `<ul class="pz-logos">${fund.map(c => `<li>${art(c)}<span>${pzEsc(c.name)}${cursos.includes(c) ? '' : '<small>Muy pronto</small>'}</span></li>`).join('')}</ul>` : '';
+  const tarjetaFund = hayFund ? `<article class="pz-prog pz-prog-fund" style="--c:${PZ_FUND_C}"><div class="pz-prog-art" aria-hidden="true">${foto}</div>
+      <div class="pz-prog-txt"><h3>${PZ_FUND_N}</h3><p class="pz-pills"><span>Primeros semestres</span><span class="b">Virtual</span></p>
+        ${fila('meta', 'Cierra los vacíos del colegio y llega preparado a tus parciales.', 'Desde cero y a tu ritmo, con ejercicios que se juegan')}
+        <ul class="pz-fcs">${fund.map(c => (cursos.includes(c) ? `<li><button type="button" data-pz-ir="#pz-cursos" data-tab="${cursos.indexOf(c)}" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}</small><small data-pz-precio="curso:${c.id}" hidden><span></span></small></span></button></li>` : `<li class="pronto" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>Muy pronto</small></span></li>`)).join('')}</ul></div>
+      <div class="pz-prog-pie"><button class="btn sm" type="button" data-pz-ir="#pz-cursos" data-tab="${cursos.findIndex(c => PZ_FUND.includes(c.id))}">Más información<span class="pz-sr"> sobre ${PZ_FUND_N}</span></button>${info(`los cursos de ${PZ_FUND_N}`)}</div></article>` : '';
+  const progs = orden.filter(c => !PZ_FUND.includes(c.id)).map(c => {
     const p = PZ_PROG[c.id] || { tag: pzEsc(c.level || 'Curso'), meta: pzEsc(c.tagline || ''), trae: 'Explicaciones y ejercicios que se juegan' };
     return tarjeta({ color: c.color, fig: PZ_PROG[c.id] ? celu(c.id) : art(c), name: c.name, tag: p.tag, pills: ['Virtual'], pr: `curso:${c.id}`, ir: '#pz-cursos', tab: cursos.indexOf(c),
       filas: fila('dia', 'Empiezas cuando quieras', 'A tu ritmo, en celular o computador') + fila('hoja', 'Contiene', `${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}`) + fila('mas', 'Incluye', p.trae) + fila('meta', p.meta) });
   }).concat([
     tarjeta({ color: '#f5c451', cls: 'pz-prog-lib', fig: libros(''), name: 'Libros de admisión', tag: 'Impresos', pills: ['Con envío'], pr: 'art:fisico', ir: '#pz-libros',
       filas: fila('dia', 'A color, en tu casa', 'Sueltos o el juego completo') + fila('hoja', 'Contiene', 'Cuatro libros: dos de razonamiento lógico y dos de comprensión lectora') + fila('mas', 'Incluye', 'Ejemplos resueltos y talleres con clave') + fila('meta', 'Estudia el examen de admisión sin pantalla, tema por tema.') }),
+    tarjetaFund,
     tarjeta({ color: '#ff8a7a', cls: 'pz-prog-ase', fig: PZ_TUTOR, name: 'Asesorías en vivo', tag: 'Por horas', pills: ['Virtual'], pr: 'art:asesoria', ir: '#pz-d-tut',
       filas: fila('dia', 'Tú eliges el día y la hora', 'Según los cupos disponibles') + fila('hoja', 'Contiene', 'Una hora virtual sobre los temas que escojas') + fila('mas', 'Materias', 'Las de los cursos que ya están abiertos') + fila('meta', 'Resuelve con una persona lo que se te puso difícil.') }),
   ]).join('');
-  const prontos = todos.filter(c => !cursos.some(x => x.id === c.id));
+  const prontos = todos.filter(c => !cursos.some(x => x.id === c.id) && !(hayFund && PZ_FUND.includes(c.id)));
   // Carrusel: la promesa con la foto, un programa por lámina y los libros. `data-c`: el color de la franja.
   const lamina = (c, name, cuerpo, fig, cls = '') => `<div class="pz-lamina ${cls}" data-c="${c}" role="group" aria-roledescription="lámina" aria-label="${pzEsc(name)}"><div class="pz-in pz-lam-in"><div class="pz-lam-txt">${cuerpo}</div><div class="pz-lam-fig">${fig}</div></div></div>`;
   const mancha = f => `<div class="pz-mancha" data-inclina="7" aria-hidden="true">${f}</div>`;
@@ -167,6 +176,8 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-ctas">${empieza()}<button class="btn ghost" type="button" data-pz-ir="#pz-programas">Ver programas</button></div>`, '<div class="pz-mancha pz-foto" data-inclina="5"><img src="brand/estudiantes.webp" alt="Cuatro estudiantes universitarios conversan en el campus" width="1200" height="885" fetchpriority="high"></div>', 'pz-lam-foto'),
     ...orden.filter(c => PZ_PROG[c.id]).map(c => lamina(c.color, c.name, `<p class="pz-lam-k">${pzEsc(c.name)}</p><h2>${PZ_PROG[c.id].h}</h2><p class="pz-lead">${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}, a tu ritmo. El primer mundo es gratis con un código de prueba.</p>
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="${pzEsc(c.name)}">Quiero inscribirme</button><button class="btn ghost" type="button" data-pz="prueba">Probar gratis</button></div>`, mancha(celu(c.id)))),
+    ...(hayFund ? [lamina(PZ_FUND_C, PZ_FUND_N, `<p class="pz-lam-k">Primeros semestres</p><h2>Fundamentación en Ingeniería y Ciencias</h2><p class="pz-lead">Las matemáticas que sostienen tu carrera, desde cero y a tu ritmo.</p>${logos}
+      <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los cursos de ${PZ_FUND_N}">Quiero inscribirme</button><button class="btn ghost" type="button" data-pz-ir=".pz-prog-fund">Ver los cursos</button></div>`, `<div class="pz-mancha pz-foto pz-foto-ing" data-inclina="5">${foto}</div>`, 'pz-lam-fund')] : []),
     lamina('#f5e6c0', 'Libros de admisión', `<p class="pz-lam-k">Libros de admisión</p><h2>El examen, también en papel</h2><p class="pz-lead">Dos libros de razonamiento lógico y dos de comprensión lectora. Impresos a color, con envío.</p>
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los libros de admisión">Quiero los libros</button><button class="btn ghost" type="button" data-pz-ir="#pz-libros">Conocerlos</button></div>`, mancha(libros('pz-est-lam')), 'pz-lam-libros'),
   ];

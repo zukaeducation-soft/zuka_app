@@ -105,9 +105,10 @@ test('el resorte llega a su meta sin dispararse, aun con cuadros largos', () => 
 // ---- portada con programas (spec 2026-11-24-portada-programas) ----
 test('una tarjeta por curso publicado, más libros y asesorías; lo demás queda en «Muy pronto»', () => {
   const con = get(ctx, 'presentacionHTML')(cursos, { todos: [...cursos, { id: 'calc', name: 'Cálculo Diferencial', color: '#f0f', units: [] }] });
-  assert.equal((con.match(/class="pz-prog /g) || []).length, 4);
+  assert.equal((con.match(/class="pz-prog /g) || []).length, 3);
   assert.ok(con.includes('data-pz-precio="curso:algebra"') && !con.includes('curso:calc'));
-  assert.match(con, /class="pz-prontos"><b>Muy pronto<\/b><span[^>]*>Cálculo Diferencial/);
+  assert.match(con, /class="pronto"[^>]*>[^\n]*?<b>Cálculo Diferencial<\/b><small>Muy pronto/);
+  assert.ok(con.includes('Fundamentación en Ingeniería y Ciencias') && con.includes('brand/ingenieros.webp'));
   for (const x of con.match(/data-pz-ir="#[^"]+/g)) assert.ok(con.includes(`id="${x.slice(13)}"`), x);
   assert.equal((con.match(/class="pz-lamina /g) || []).length, (con.match(/class="pz-pto"/g) || []).length);
 });
