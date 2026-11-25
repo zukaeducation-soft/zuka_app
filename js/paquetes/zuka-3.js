@@ -1,473 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-r-graficas.js
-// Preuniversitario · mundo 9 «Tablas y gráficas»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setExam }) => {
-  setExam('pu-graficas', 'Tablas y gráficas', [
-    ['pu-gr-1', 'Antes de leer una barra, mira cuánto vale cada raya de la escala.',
-      play('lee-barras', 'Escala', { rounds: [{ bars: [['X', 60], ['Y', 25], ['Z', 40]], hi: 80, step: 20, q: 'diff', a: 0, b: 1, max: 60, tstep: 5 }] }, '$60 - 25 = 35$.', { hint: 'Rayas.' })],
-    ['pu-gr-1', 'El cambio porcentual se mide sobre el valor de partida.',
-      play('mayor-subida', 'Tramo', { rounds: [{ pts: [['1', 5], ['2', 12], ['3', 25], ['4', 36]], hi: 40, step: 10, q: 'pct' }] }, 'De 5 a 12 es +140 %, el mayor.', { hint: 'Porcentaje.' })],
-    ['pu-gr-2', 'El promedio es el nivel donde sobra lo mismo que falta.',
-      play('nivela-datos', 'Promedio', { rounds: [{ data: [3, 10, 7, 4], hi: 12, step: 2 }] }, '$\\tfrac{24}{4} = 6$.', { hint: 'Nivela.' })],
-    ['pu-gr-2', 'Con datos cargados a un lado, media, mediana y moda no coinciden.',
-      play('tres-centros', 'Centros', { rounds: [{ data: [1, 2, 2, 2, 3, 8], lo: 0, hi: 8 }] }, 'Media 3, mediana 2, moda 2.', { hint: 'Tres.' })],
-    ['pu-gr-2', 'La suma de los datos es promedio por cantidad.',
-      play('dato-faltante', 'Falta', { rounds: [{ data: [9, null, 6], mean: 7, hi: 12, step: 1 }] }, '$21 - 15 = 6$.', { hint: 'Suma.' })],
-    ['pu-gr-3', 'Para comparar grupos de distinto tamaño se usan porcentajes.',
-      play('tabla-doble', 'Grupos', { rounds: [{ rows: [['grupo 1', 12, 40], ['grupo 2', 9, 20]], what: 'aprobó' }] }, '30 % frente a 45 %.', { hint: 'Proporción.' })],
-    ['pu-gr-3', 'Un eje que no empieza en cero exagera las diferencias.',
-      play('eje-engano', 'Eje', { rounds: [{ a: ['A', 63], b: ['B', 60], floor: 55 }] }, '$\\tfrac{3}{60} = 5\\%$.', { hint: 'Números.' })],
-  ]);
-});
-
-// Mundo 9 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
-  // Ocho juegos con las escenas de la explicación (js/games/graficas-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-gr-1', [
-    play('lee-escala', 'Estas son las entradas vendidas en tres funciones. Pon cuánto vale **cada barra** y el **total**.', { vals: [90, 50, 70], rot: ['viernes', 'sábado', 'domingo'], hi: 100, st: 20, et: ['viernes', 'sábado', 'domingo', 'total'], ops: ['+', '+', '='], metas: ['90', '50', '70', '210'], fichas: ['90', '50', '70', '210', '85', '45', '65'],
-      mira: ['Está a mitad de camino entre 80 y 100.', 'Está a mitad de camino entre 40 y 60.', 'Está a mitad de camino entre 60 y 80.', 'Suma las tres barras.'], trampas: { '0:85': 'Cada línea vale 20: la mitad son 10, no 5.', '1:45': 'Cada línea vale 20: la mitad son 10, no 5.', '2:65': 'Cada línea vale 20: la mitad son 10, no 5.' }, ok: 'Primero la escala, luego la punta.' },
-      'Las líneas van de 20 en 20, así que la mitad vale 10: $90 + 50 + 70 = 210$.',
-      { hint: 'Antes de leer, mira cuánto vale cada línea del eje. ¿Y la mitad de una línea?' }),
-    play('pasa-tabla', 'Pasa la tabla a la gráfica: Norte **150**, Centro **225**, Sur **75**. Arrastra la punta de cada barra.', { vals: [150, 225, 75], rot: ['Norte', 'Centro', 'Sur'], hi: 250, st: 50, paso: 25 },
-      'Las líneas van de 50 en 50: el 150 cae en una línea; el 225 y el 75 van a mitad de camino.',
-      { hint: 'Cada línea vale 50. ¿Qué número queda a mitad entre dos líneas?' }),
-    play('mayor-tramo', 'La gráfica muestra las ventas de cuatro meses. Toca el tramo que más creció **en porcentaje**.', { v: [15, 18, 27, 38] },
-      'De 15 a 18 sube $\\tfrac{3}{15} = 20\\,\\%$; de 18 a 27, $\\tfrac{9}{18} = 50\\,\\%$; de 27 a 38, cerca del 41 %. El último sube más unidades, pero no más porcentaje.',
-      { hint: 'Divide lo que subió cada tramo entre el valor con que empezó ese tramo.' }),
-    play('barra-baja', 'Una tienda vendía **70** y las ventas bajaron el **40 %**. Arrastra la barra de ahora hasta donde debe quedar.', { a: 70, pc: 40, max: 96 },
-      'El 40 % de 70 es 28: quedan $70 - 28 = 42$.',
-      { hint: 'El porcentaje es de lo que había antes. Halla cuánto se pierde y réstalo.' }),
-    play('ida-vuelta-porciento', 'Un precio pasa de 20 a 50 y después vuelve a 20. Pon el **cambio en porcentaje** de cada paso.', { a: 20, b: 50, et: ['20 → 50', '50 → 20'], metas: ['+150 %', '−60 %'], fichas: ['+150 %', '−60 %', '+60 %', '−150 %', '+30 %', '−30 %'],
-      mira: ['Sube 30: compáralo con los 20 de antes.', 'Baja 30: compáralo con los 50 de antes.'], trampas: { '0:+60 %': 'Dividiste entre 50; lo de antes es 20.', '0:+30 %': '30 son las unidades que subió, no el porcentaje.', '1:−150 %': 'Dividiste entre 20; ahora lo de antes es 50.', '1:−30 %': '30 son las unidades que bajó, no el porcentaje.', '0:−60 %': 'Primero sube.', '0:−30 %': 'Primero sube.', '0:−150 %': 'Primero sube.' }, ok: 'La misma diferencia, distinto porcentaje.' },
-      '$\\tfrac{30}{20} = 150\\,\\%$ de aumento; de vuelta, $\\tfrac{30}{50} = 60\\,\\%$ de bajada.',
-      { hint: 'La diferencia es la misma en los dos pasos. ¿Entre qué número se divide en cada uno?' }),
-    play('abre-sector', 'De **120** personas, **54** eligieron cine. Abre el sector del cine hasta el tamaño que le toca.', { parte: 54, total: 120 },
-      '$\\tfrac{54}{120} = 45\\,\\%$, y $45 \\cdot 3.6^\\circ = 162^\\circ$.',
-      { hint: 'Halla qué porcentaje del total son. La vuelta completa es el 100 %.' }),
-    play('sector-cantidad', 'En esta torta de **250** personas, el sector de la danza mide **72°**. Pon su porcentaje y cuántas personas son.', { g: 72, total: 250, et: ['porcentaje', 'personas'], metas: ['20 %', '50'], fichas: ['20 %', '50', '72 %', '180', '72', '36 %'],
-      mira: ['Compara 72° con la vuelta completa de 360°.', 'Saca ese porcentaje de las 250 personas.'], trampas: { '0:72 %': 'Los grados no son porcentaje: la vuelta tiene 360°.', '1:180': 'Ese es el 72 % de 250: el sector no es el 72 %.', '1:72': 'No es una persona por grado.' }, ok: 'El sector es una fracción de la vuelta.' },
-      '$\\tfrac{72}{360} = 20\\,\\%$, y el 20 % de 250 son 50 personas.',
-      { hint: '¿Cuántas veces cabe el sector en la vuelta completa?' }),
-    play('sube-grafica', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Las líneas del eje van de **20 en 20**. Una barra queda a **mitad** entre 40 y 60. ¿Cuánto vale?', r: 50, c: '40 + 10', e: { 45: 'La mitad de 20 no es 5.' } },
-      { q: 'Las ventas pasan de **60** a **75**. ¿En qué **porcentaje** aumentaron?', r: 25, c: '15 \\div 60 \\cdot 100', e: { 15: 'Esas son las unidades.', 20: 'Dividiste entre 75: se divide entre lo de antes.', 80: 'Comparaste los dos valores: halla primero cuánto subió.' } },
-      { q: 'Un sector mide **126°**. ¿Qué **porcentaje** de la torta es?', r: 35, c: '126 \\div 3.6', e: {} }] },
-      'La mitad entre 40 y 60 es 50; $\\tfrac{15}{60} = 25\\,\\%$; y $126 \\div 3.6 = 35$.',
-      { hint: 'Escala del eje, cambio entre lo de antes, y 3.6° por cada 1 %.' }),
-    sol('Una papelería vendió 120 cuadernos en la semana 1, 150 en la semana 2, 90 en la semana 3 y 180 en la semana 4. ¿En qué porcentaje aumentaron las ventas de la semana 3 a la 4? ¿Cuál fue el promedio de ventas por semana?',
-      ['De la semana 3 a la 4 las ventas subieron $180 - 90 =$ [[90]] cuadernos', 'El cambio se mide sobre el valor de antes: $90 \\div 90 = 1$, es decir, el [[100 %]]', 'En las cuatro semanas se vendieron $120 + 150 + 90 + 180 =$ [[540]] cuadernos', 'Promedio por semana: $540 \\div 4 =$ [[135]] cuadernos'],
-      ['50 %', '200 %', '180'],
-      'Duplicarse es aumentar un 100 %, no un 200 %: el aumento (90) es igual al valor de antes (90). El promedio reparte el total entre las cuatro semanas.',
-      'Para el porcentaje, compara lo que subió con lo que había antes, no con lo que hay ahora.'),
-    err('En una encuesta a 180 clientes de un restaurante, 30 eligieron el jugo de mora como su bebida favorita. Con los resultados se va a dibujar una gráfica circular. ¿Qué ángulo debe tener el sector del jugo de mora?',
-      ['Los 180 clientes llenan el círculo completo: $360^\\circ$', 'La mora es $\\tfrac{30}{180} = \\tfrac16$ de los clientes', 'El sector mide $30^\\circ$: un grado por cada cliente'], 2,
-      ['El sector es $\\tfrac16$ del círculo: $360^\\circ \\div 6 = 60^\\circ$', 'El sector mide $\\tfrac16$ de $100^\\circ$, unos $16.7^\\circ$', 'El sector mide $180^\\circ - 30^\\circ = 150^\\circ$'],
-      'Un grado por cliente solo serviría si fueran 360 clientes. Aquí cada cliente vale $360^\\circ \\div 180 = 2^\\circ$, y 30 clientes son $60^\\circ$. La regla sirve en los dos sentidos, porque el sector es la misma fracción del círculo que la parte es del total: de la cantidad al ángulo, $\\tfrac{\\text{parte}}{\\text{total}} \\cdot 360^\\circ$; del ángulo a la cantidad, $\\tfrac{\\text{ángulo}}{360^\\circ} \\cdot \\text{total}$ (un sector de $60^\\circ$ en una gráfica de 240 empleados son 40).',
-      'El círculo entero son $360^\\circ$, no 180 ni 100. ¿Qué fracción del total eligió mora? El sector ocupa esa misma fracción del círculo.'),
-    opc('Una gráfica de líneas registra la temperatura de una ciudad cada tres horas: a las 6 h, 12 °C; a las 9 h, 16 °C; a las 12 h, 23 °C; a las 15 h, 25 °C; a las 18 h, 19 °C, y a las 21 h, 14 °C. El intervalo de tres horas en el que la temperatura tuvo el mayor cambio fue:',
-      ['de 6 a 9 horas', 'de 15 a 18 horas', 'de 9 a 12 horas', 'de 18 a 21 horas'], 2,
-      'Los cambios son $+4$, $+7$, $+2$, $-6$ y $-5$ grados. El mayor, sin importar el signo, es el de 9 a 12 horas.',
-      'Calcula la diferencia en cada tramo. Un cambio puede ser una subida o una bajada.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/graficas-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-gr-2', [
-    play('nivela-linea', 'Cinco personas tienen **3, 11, 4, 8 y 9** fichas y las reparten por igual. Lleva la línea al **promedio**.', { d: [3, 11, 4, 8, 9] },
-      'En total son 35 y entre cinco, $35 \\div 5 = 7$.',
-      { hint: 'Junta todas las fichas y repártelas por igual.' }),
-    play('dato-para-promedio', 'Los datos son 3, 8, 2, 5 y **uno más**. Muévelo hasta que el **promedio** sea 6.', { d: [3, 8, 2, 5], m: 6 },
-      'Cinco datos con promedio 6 suman 30. Ya hay 18: faltan 12.',
-      { hint: '¿Cuánto deben sumar los cinco datos? ¿Cuánto suman los cuatro que ya están?' }),
-    play('ordena-centro', 'Pon los datos **en orden**, de menor a mayor, y después la **mediana**.', { d: [12, 5, 9, 20, 7, 5, 14], metas: ['5', '5', '7', '9', '12', '14', '20', '9'], fichas: ['5', '5', '7', '9', '12', '14', '20', '9', '20', '5'],
-      mira: ['Va el menor.', 'El 5 está dos veces: se escribe dos veces.', 'Después de los dos 5 sigue el 7.', 'Sigue el 9.', 'Sigue el 12.', 'Sigue el 14.', 'Va el mayor.', 'La mediana deja tres datos a cada lado.'], trampas: { '7:20': 'El 20 está en el medio sin ordenar: primero se ordena.', '7:5': 'Ese es el que se repite: la moda.' }, ok: 'Tres datos a cada lado.' },
-      'En orden: 5, 5, 7, **9**, 12, 14, 20. Quedan tres a cada lado del 9.',
-      { hint: 'Los datos repetidos se escriben todas las veces. La mediana es el del medio, ya ordenados.' }),
-    play('centros-par', 'Pon el **promedio**, la **mediana** y la **moda** de estos seis datos.', { d: [10, 2, 12, 2, 7, 15], et: ['promedio', 'mediana', 'moda'], metas: ['8', '8.5', '2'], fichas: ['8', '8.5', '2', '7', '8.5', '10', '48', '15'],
-      mira: ['Suma los seis y divide entre seis.', 'Ordena: con seis datos hay dos en el medio.', 'La moda es el que más se repite.'], trampas: { '0:48': 'Esa es la suma: falta dividir.', '0:8.5': 'Esa es la mediana.', '1:7': 'Ordena primero: con seis datos hay dos en el medio, 7 y 10.', '1:10': 'Ordena primero: con seis datos hay dos en el medio, 7 y 10.', '2:15': 'Ese es el mayor, no el más repetido.' }, ok: 'Con cantidad par, la mediana es el promedio de los dos del medio.' },
-      'La suma es 48 y $48 \\div 6 = 8$. En orden, 2, 2, 7, 10, 12, 15: en el medio están 7 y 10, mediana 8.5. Se repite el 2.',
-      { hint: 'Ordena primero. Con seis datos, la mediana queda entre dos.' }),
-    play('dato-exagerado', 'El mayor de estos datos se escribió mal: **93** en lugar de 13. Toca **todo** lo que **cambia**.', { d: [4, 5, 5, 8, 13], e: [4, 5, 5, 8, 93], cols: 2, fichas: ['promedio', 'mediana', 'moda', 'suma'] },
-      'La suma pasa de 35 a 115 y el promedio, de 7 a 23. El del medio sigue siendo 5 y el más repetido también.',
-      { hint: '¿Cambió el dato del medio? ¿Cambió el que más se repite? ¿Y el total?' }),
-    play('apoyo-grupos', 'Tres personas sacaron **1** y dos sacaron **6**. Lleva el apoyo al **promedio** de las cinco.', { g: [[3, 1], [2, 6]] },
-      '$\\tfrac{3 \\cdot 1 + 2 \\cdot 6}{5} = \\tfrac{15}{5} = 3$, más cerca del grupo grande.',
-      { hint: 'No es el centro entre 1 y 6: cuenta cada valor tantas veces como personas lo tienen.' }),
-    play('meses-mas', 'En **6** meses Lina promedió **3** libros por mes. Con **2** meses más, el promedio de los 8 subió a **4**. Pon los libros de los 6 meses, los de los 8 y los de los **dos últimos**.', { n: 6, mas: 2, et: ['en 6', 'en 8', 'en los 2'], metas: ['18', '32', '14'], fichas: ['18', '32', '14', '8', '24', '1', '2'],
-      mira: ['Libros = promedio por meses.', 'Ahora son 8 meses con promedio 4.', 'Resta los libros de antes a los de ahora.'], trampas: { '1:8': 'Esos son los meses: falta multiplicar por el promedio.', '1:24': 'Son 8 meses con promedio 4, no 8 con 3 ni 6 con 4.', '2:8': 'Multiplicaste 2 · 4, pero los dos últimos subieron el promedio de todos.', '2:1': 'Eso subió el promedio, no los libros leídos.', '2:2': 'Esos son los meses, no los libros.' }, ok: 'Promedio por cantidad da la suma.' },
-      '$6 \\cdot 3 = 18$ y $8 \\cdot 4 = 32$: en los dos últimos leyó $32 - 18 = 14$.',
-      { hint: 'Cambia cada promedio por una suma: promedio por cuántos son.' }),
-    play('sube-centro', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'El **promedio** de 5, 9, 13 y 17 es…', r: 11, c: '44 \\div 4', e: { 13: 'Ese es uno de los datos: suma y divide entre cuatro.' } },
-      { q: 'La **mediana** de 3, 14, 21, 6 y 8 es…', r: 8, c: '3, 6, [8], 14, 21 \\Rightarrow \\text{mediana}', e: { 21: 'Está en el medio sin ordenar: primero se ordena.' } },
-      { q: 'Una persona sacó **2** y cuatro sacaron **12**. El **promedio** de las cinco es…', r: 10, c: '(2 + 4 \\cdot 12) \\div 5', e: { 7: 'Ese es el centro entre 2 y 12: los grupos no son iguales.' } }] },
-      '$44 \\div 4 = 11$; en orden 3, 6, 8, 14, 21, la mediana es 8; y $50 \\div 5 = 10$.',
-      { hint: 'Promedio: suma y reparte. Mediana: ordena. Grupos: cada valor cuenta tantas veces como personas.' }),
-    sol('En un curso, la nota definitiva se calcula así: el examen parcial vale el 40 % y el examen final vale el 60 %. Andrea obtuvo 3.0 en el parcial. ¿Qué nota necesita en el final para que su definitiva sea 3.6?',
-      ['El parcial aporta $0.40 \\cdot 3.0 =$ [[1.2]]', 'Para llegar a 3.6, el final debe aportar $3.6 - 1.2 =$ [[2.4]]', 'El final pesa 0.60: la nota debe ser $2.4 \\div 0.60 =$ [[4.0]]'],
-      ['4.2', '3.6', '1.8'],
-      'Un promedio ponderado suma los aportes de cada nota por su peso. No es el promedio simple: con 4.2 en el final, la definitiva sería 3.72.',
-      'Cada examen aporta su nota multiplicada por su peso. ¿Cuánto aporta ya el parcial?'),
-    err('En un curso hay 20 mujeres y 10 hombres. En un examen, el promedio de las mujeres fue 4.0 y el de los hombres, 3.1. ¿Cuál fue el promedio de todo el curso?',
-      ['Puntos de las mujeres: $20 \\cdot 4.0 = 80$', 'Puntos de los hombres: $10 \\cdot 3.1 = 31$', 'Promedio del curso: $(4.0 + 3.1) \\div 2 = 3.55$'], 2,
-      ['Promedio del curso: $(80 + 31) \\div 30 = 3.7$', 'Promedio del curso: $(80 + 31) \\div 2 = 55.5$', 'Promedio del curso: $(80 + 31) \\div 20 = 5.55$'],
-      'Los grupos no tienen el mismo tamaño: se suman los puntos de todos y se divide entre las 30 personas. Da 3.7, más cerca del promedio del grupo grande.',
-      'Los dos primeros pasos ya calcularon los puntos de cada grupo. ¿Los usó el último paso?'),
-    opc('Las edades de cinco primos son 8, 11, 11, 14 y 21 años. De las siguientes afirmaciones, la única verdadera es:',
-      ['El promedio es igual a la mediana', 'La mediana es mayor que el promedio', 'La moda es mayor que la mediana', 'El promedio es mayor que la mediana'], 3,
-      'El promedio es $65 \\div 5 = 13$; la mediana y la moda son 11. El dato grande (21) sube el promedio por encima de la mediana.',
-      'Calcula los tres: el promedio, el dato del centro y el que más se repite.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/graficas-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-gr-3', [
-    play('sube-piso', 'A vendió 40 y B vendió 50. ¿En qué número debe **empezar el eje** para que B **parezca el triple** de alta que A?', { a: 40, b: 50, veces: 3 },
-      'Con el eje desde 35, las barras miden 5 y 15: parece el triple, pero 50 es solo un 25 % más que 40.',
-      { hint: 'Si el eje empieza más arriba, a las dos barras se les quita lo mismo. ¿Cuánto debe quedar de cada una?' }),
-    play('diferencia-real', 'Mira dónde empieza el eje. Pon cuánto **más** vendió B y qué **porcentaje** más vendió.', { vals: [90, 108], rot: ['A: 90', 'B: 108'], hi: 110, st: 10, lo: 80, et: ['unidades', 'porcentaje'], metas: ['18', '20 %'], fichas: ['18', '20 %', '28', '180 %', '18 %', '17 %'],
-      mira: ['Resta los dos valores, no las alturas.', 'Compara las 18 unidades con las 90 de A.'], trampas: { '0:28': 'Esa es la altura de B desde 80: resta los valores.', '1:180 %': 'Comparaste el dibujo, que empieza en 80: compara los números.', '1:17 %': 'Dividiste entre 108; se compara con los 90 de A.', '1:18 %': '18 son las unidades: falta compararlas con las 90 de A.' }, ok: 'Se comparan los números, no el dibujo.' },
-      '$108 - 90 = 18$ y $\\tfrac{18}{90} = 20\\,\\%$, aunque B se vea casi tres veces más alta.',
-      { hint: 'Lee los números. El porcentaje se compara con lo que vendió A.' }),
-    play('pasan-porciento', 'En cada grupo se cuenta cuántos hablan inglés. Toca **todos** los grupos donde son el **40 % o más**.', { min: 40, cols: 3, fichas: ['12 de 30', '18 de 60', '11 de 25', '25 de 80', '14 de 35', '30 de 90'] },
-      '$\\tfrac{12}{30} = 40\\,\\%$, $\\tfrac{11}{25} = 44\\,\\%$ y $\\tfrac{14}{35} = 40\\,\\%$. Los otros tienen más personas, pero menos proporción.',
-      { hint: 'El 40 % son 4 de cada 10. Compara cada cantidad con su propio total.' }),
-    play('misma-proporcion', 'En el grupo A, **15 de 25** tocan un instrumento. ¿Cuántos deben tocar en el B, que tiene **40**, para que la **proporción** sea la misma?', { ka: 15, ta: 25, tb: 40 },
-      '$\\tfrac{15}{25} = 60\\,\\%$, y el 60 % de 40 son 24.',
-      { hint: '¿Qué porcentaje es 15 de 25? Saca ese mismo porcentaje de 40.' }),
-    play('muestra-parecida', 'Un colegio tiene 50 estudiantes en la mañana, 30 en la tarde y 20 en la noche. Arma una muestra de **20** que tenga **la misma mezcla** que el colegio.', { tot: [50, 30, 20], et: ['mañana', 'tarde', 'noche'], metas: ['10', '6', '4'], fichas: ['10', '6', '4', '7', '7', '6', '20', '5'],
-      mira: ['La mañana es la mitad del colegio.', 'La tarde es el 30 % del colegio.', 'La noche es el 20 % del colegio.'], trampas: { '0:7': '7 sería la parte si las jornadas fueran iguales; la mañana es la mitad.', '0:20': '20 es toda la muestra: no queda nadie para las otras jornadas.', '1:7': '7 sería la parte si las jornadas fueran iguales; la tarde es el 30 %.' }, ok: 'La muestra se parece al total.' },
-      'La mañana es el 50 %, la tarde el 30 % y la noche el 20 %: de 20 son 10, 6 y 4.',
-      { hint: '¿Qué parte del colegio es cada jornada? Esa misma parte va en la muestra.' }),
-    play('muestras-sirven', 'Se quiere saber a qué hora se acuestan **todos** los vecinos de un edificio. Toca **todas** las muestras que sirven.', { casos: [{ t: 'sortear 20 vecinos entre todos', si: true }, { t: 'los que llegan de una fiesta', no: 'Los que salen de fiesta se acuestan más tarde que los demás.' }, { t: 'solo los del primer piso', no: 'Los vecinos de los otros pisos nunca pueden salir.' }, { t: 'sortear 3 vecinos en cada piso', si: true }, { t: 'solo el chat de los jóvenes', no: 'Los demás vecinos quedan por fuera.' }], falta: 'Falta otra donde todos los vecinos pueden salir.', ok: 'Al azar y de todas partes.' },
-      'Sirven los dos sorteos: cualquiera puede salir. Las otras dejan por fuera a muchos vecinos.',
-      { hint: 'Pregúntate si cualquier vecino puede salir escogido.' }),
-    play('se-concluye', 'De **50** personas escogidas al azar en un barrio, **35** tienen mascota y **10** tienen gato. Toca **todo** lo que se concluye de esos datos.', { casos: [{ t: 'el 70 % de la muestra tiene mascota', si: true }, { t: 'todo el país prefiere las mascotas', no: 'Solo se preguntó en un barrio: no dice nada de todo el país.' }, { t: '15 encuestados no tienen mascota', si: true }, { t: 'las tienen porque viven solos', no: 'Los datos dicen cuántos, no por qué.' }, { t: '1 de cada 5 encuestados tiene gato', si: true }], falta: 'Falta algo que también sale de los números.', ok: 'Los datos dicen cuántos, no por qué.' },
-      '$\\tfrac{35}{50} = 70\\,\\%$, $50 - 35 = 15$ y $\\tfrac{10}{50}$ es 1 de cada 5. El motivo y «todo el país» no salen de esos datos.',
-      { hint: 'Quédate con lo que se puede calcular con esos números y habla solo de los encuestados.' }),
-    play('sube-dato-real', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'El eje empieza en **40**. A llega a 50 y B llega a 60. ¿Qué **porcentaje** más vendió B?', r: 20, c: '10 \\div 50 \\cdot 100', e: { 10: 'Esas son las unidades.', 100: 'Comparaste el dibujo, que empieza en 40: compara los números.' } },
-      { q: '**18 de 40** van en bicicleta. ¿Qué **porcentaje** es?', r: 45, c: '18 \\div 40 \\cdot 100', e: {} },
-      { q: 'El 30 % de una muestra de **200** dice que sí. ¿Cuántos **son**?', r: 60, c: '200 \\cdot 0.30', e: { 30: 'Ese es el porcentaje: son de cada 100, y hay 200.' } }] },
-      '$\\tfrac{10}{50} = 20\\,\\%$; $\\tfrac{18}{40} = 45\\,\\%$; y el 30 % de 200 son 60.',
-      { hint: 'Compara los números y no el dibujo; divide cada cantidad entre su total.' }),
-    sol('Una encuesta preguntó en dos ciudades si las personas usan transporte público. En la ciudad A respondieron 80 personas y 60 dijeron que sí. En la ciudad B respondieron 120 personas y 72 dijeron que sí. ¿En cuál ciudad es mayor la proporción de usuarios?',
-      ['Ciudad A: $60 \\div 80 =$ [[75 %]]', 'Ciudad B: $72 \\div 120 =$ [[60 %]]', 'En B hay más usuarios (72 contra 60), pero la proporción es mayor en la ciudad [[A]]', 'La diferencia es de [[15]] puntos porcentuales'],
-      ['B', '12', '66 %'],
-      'Para comparar grupos de distinto tamaño no sirven las cantidades: se comparan las proporciones. Tener más usuarios no es tener mayor proporción.',
-      'Cada ciudad tiene su propio total. Divide los que dijeron que sí entre los que respondieron en esa ciudad.'),
-    err('Una tienda vendió 40 camisetas en enero, 60 en febrero y 90 en marzo. El dueño afirma: «las ventas crecieron en el mismo porcentaje en febrero y en marzo». ¿Tiene razón?',
-      ['De enero a febrero: $60 - 40 = 20$ camisetas más', 'De febrero a marzo: $90 - 60 = 30$ camisetas más', 'Como 30 es más que 20, el porcentaje de crecimiento fue mayor en marzo'], 2,
-      ['En porcentaje: $20 \\div 40 = 50\\,\\%$ y $30 \\div 60 = 50\\,\\%$. Creció lo mismo', 'En porcentaje: $20 \\div 60$ y $30 \\div 90$. Creció el 33 % cada mes', 'Como 20 es menos que 30, el porcentaje fue mayor en febrero'],
-      'Cada aumento se compara con las ventas del mes anterior: 20 sobre 40 y 30 sobre 60 son el 50 % las dos veces. El dueño tiene razón.',
-      'Un porcentaje de crecimiento no es la cantidad que se sumó: depende de cuánto había antes.'),
-    opc('En una gráfica de barras, el eje vertical empieza en 90 en lugar de 0. La barra del producto A llega a 100 y la del producto B llega a 110, de modo que la barra de B se ve el doble de alta que la de A. De las siguientes afirmaciones, la única correcta es:',
-      ['B vendió el doble que A', 'B vendió un 10 % más que A', 'B vendió un 100 % más que A', 'No se puede comparar a A con B'], 1,
-      'Los valores son 100 y 110: B vendió 10 más sobre 100, un 10 % más. El eje cortado exagera la diferencia.',
-      'Lee los números del eje, no el tamaño de las barras.'),
-  ]);
-
-  addExam('pu-graficas', [
-    ['pu-gr-1', 'En una gráfica circular, el sector es la misma fracción del total que su ángulo de 360°.',
-      opc('Una gráfica circular representa a 600 estudiantes. El sector de quienes prefieren ciencias mide $120^\\circ$. La cantidad de estudiantes que prefiere ciencias es:', ['200', '120', '72', '300'], 0,
-        '$120^\\circ$ es la tercera parte del círculo: $600 \\div 3 = 200$.', 'Halla qué fracción de la vuelta completa ocupa el sector.')],
-    ['pu-gr-2', 'El promedio por el número de datos da la suma.',
-      opc('El promedio de cuatro números es 15. Si se agrega un quinto número, el promedio pasa a ser 16. El quinto número es:', ['16', '20', '17', '31'], 1,
-        'Los cuatro suman 60 y los cinco deben sumar 80: el quinto es 20.', 'Convierte cada promedio en una suma.')],
-    ['pu-gr-3', 'Una muestra solo permite concluir sobre un grupo que se le parezca.',
-      opc('A la salida de un gimnasio se encuestó a 50 personas, y 45 dijeron que hacen ejercicio todas las semanas. De esa encuesta se puede concluir que:', ['El 90 % de la población hace ejercicio', 'La mayoría de la ciudad va al gimnasio', 'Hacer ejercicio está de moda', 'La muestra no representa a toda la población'], 3,
-        'Quienes salen de un gimnasio no se parecen al resto de la población: la muestra está sesgada.', 'Pregúntate a quiénes se les preguntó y si se parecen a todos los demás.')],
-  ]);
-});
-;
-//#archivo js/courses/preuda-r-logica.js
-// Preuniversitario · mundo 10 «Lógica proposicional»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setExam }) => {
-  const IMP = (p, q) => !p || q;
-  setExam('pu-logica', 'Lógica proposicional', [
-    ['pu-lo-1', 'Una tabla de verdad prueba todas las combinaciones.',
-      play('tabla-verdad', 'Tabla', { rounds: [{ tex: 'p \\wedge \\neg q', f: (p, q) => p && !q, n: 2 }] }, 'Solo es V en la fila V F.', { hint: 'Fila por fila.' })],
-    ['pu-lo-1', 'En serie es «y»; en paralelo es «o».',
-      play('circuito-logico', 'Circuito', { rounds: [{ op: 'or', neg: [false, true], want: false }] }, '$p \\vee \\neg q$ se apaga con $p$ F y $q$ V.', { hint: 'Paralelo.' })],
-    ['pu-lo-2', 'Negar un «y» da un «o» de negaciones.',
-      play('arma-negacion', 'Negación', { rounds: [{ ask: 'Escribe la negación con De Morgan', show: '$\\neg(\\neg p \\wedge q)$', tray: ['$p$', '$\\neg q$', '$\\wedge$', '$\\vee$', '$\\neg p$', '$q$'], need: [0, 3, 1], alt: [[1, 3, 0]] }] }, '$p \\vee \\neg q$.', { hint: 'De Morgan.' })],
-    ['pu-lo-2', '«Todos» cae con un solo caso que no cumpla.',
-      play('niega-todos', 'Negar', { rounds: [{ kind: 'todas', on: [true, true, true, true] }] }, 'Basta apagar una.', { hint: 'Mínimo.' })],
-    ['pu-lo-3', 'Ponens y tollens concluyen; afirmar el consecuente no.',
-      play('flecha-deduce', 'Concluir', { rounds: [{ p: 'llueve', q: 'el andén se moja', fact: ['q', true] }] }, 'No se sabe: pudo mojarse por otra razón.', { hint: 'Flecha.' })],
-    ['pu-lo-3', 'El condicional solo falla con antecedente verdadero y consecuente falso.',
-      play('rompe-promesa', 'Promesa', { rounds: [{ say: 'Si apruebo, hago una fiesta', p: 'apruebo', q: 'hago fiesta', f: IMP, want: false }] }, 'Solo si apruebo y no hay fiesta.', { hint: 'Un caso.' })],
-    ['pu-lo-4', '«Todos los A son B» pone el círculo A dentro de B.',
-      play('arma-silogismo', 'Círculos', { rounds: [{ sets: [{ k: 'A', name: 'rosas', r: 0.9 }, { k: 'B', name: 'flores', r: 1.8 }, { k: 'C', name: 'árboles', r: 1.4 }], rels: [['A', 'B', 'sub'], ['B', 'C', 'disj']], sol: { A: [3, 3], B: [3, 3], C: [7.5, 3] } }] }, 'Rosas dentro de flores; árboles aparte: ninguna rosa es árbol.', { hint: 'Adentro y aparte.' })],
-    ['pu-lo-4', 'Un solo contraejemplo tumba un «todos».',
-      play('contraejemplo', 'Contraejemplo', { rounds: [{ claim: 'Todos los números de la caja son menores que 50', items: [12, 49, 33, 51, 8], bad: x => x >= 50 }] }, 'El 51.', { hint: 'Uno.' })],
-    ['pu-lo-5', 'Se supone y se revisa: lo que choca se descarta.',
-      play('quien-miente', 'Mentiras', { rounds: [{ people: [{ name: 'Iris', say: 'Jaime miente', f: t => !t[1] }, { name: 'Jaime', say: 'Kiko miente', f: t => !t[2] }, { name: 'Kiko', say: 'Iris y Jaime mienten', f: t => !t[0] && !t[1] }] }] }, 'Jaime dice la verdad; Iris y Kiko mienten.', { hint: 'Supón.' })],
-    ['pu-lo-5', 'Una fila con un solo hueco tiene ahí su ✓.',
-      play('tabla-cruces', 'Cruces', { rounds: [{ rows: ['Sol', 'Tito', 'Uma'], cols: ['café', 'té', 'jugo'], clues: [{ t: 'not', a: 2, v: 2 }, { t: 'not', a: 2, v: 1 }, { t: 'not', a: 0, v: 1 }] }] }, 'Uma café, Sol jugo, Tito té.', { hint: 'Un hueco.' })],
-  ]);
-});
-
-// Mundo 10 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
-  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-lo-1', [
-    play('prende-circuito', 'El bombillo prende con «(p **o** q) **y** r». Cierra **solo** las llaves necesarias para prenderlo dejando **q abierta**.', { abierta: 1, sol: [0, 2] },
-      'Con q abierta, la corriente pasa por p. Después está r en serie: también hay que cerrarla.',
-      { hint: 'Sigue el cable desde la izquierda: ¿por qué camino puede pasar y qué encuentra después?' }),
-    play('valor-frases', 'p es **falsa** y q es **verdadera**. Pon V o F en cada frase.', { da: 'p: F · q: V', et: ['p ∨ q', 'p ∧ q', '¬p', 'p → q', 'q → p'], metas: ['V', 'F', 'V', 'V', 'F'], fichas: ['V', 'V', 'V', 'V', 'F', 'F', 'F', 'F'],
-      mira: ['A la «o» le basta una verdadera.', 'La «y» pide las dos verdaderas.', 'Negar p es decir lo contrario de p.', 'p es falsa: la promesa no obligaba a nada.', 'q promete p: q pasa y p no.'], ok: 'El condicional solo falla de V a F.' },
-      'p ∨ q: basta q, V. p ∧ q: falta p, F. ¬p: V. p → q: p es F, no se rompe, V. q → p: de V a F, se rompe, F.',
-      { hint: '«o» se conforma con una, «y» pide las dos, y el condicional solo falla si promete y no cumple.' }),
-    play('tabla-disyuncion', 'Llena la columna de **¬p ∨ ¬q**: toca las filas donde vale V.', { frase: '¬p ∨ ¬q', f: (p, q) => !p || !q, regla: 'le basta con que una de las dos sea falsa.', ok: 'Solo falla con las dos verdaderas.' },
-      'En la primera fila ¬p y ¬q son F. En las demás, alguna de las dos es V, y a la «o» le basta.',
-      { hint: 'Antes de mirar la «o», piensa cuánto valen ¬p y ¬q en cada fila.' }),
-    play('promesa-sigue', 'Promesa: «**si llego temprano, cocino**». Toca **todos** los casos en que la promesa **no** se rompe.', { casos: [{ t: 'llega temprano y cocina', si: true }, { t: 'llega temprano y no cocina', no: 'Llegó temprano y no cocinó: ahí sí rompió la promesa.' }, { t: 'llega tarde y cocina', si: true }, { t: 'llega tarde y no cocina', si: true }], falta: 'Si no llega temprano, la promesa no obligaba a nada.', ok: 'Solo se rompe si llega temprano y no cocina.' },
-      'La promesa solo habla de cuando llega temprano. Si llega tarde, cocine o no, nadie mintió.',
-      { hint: '¿A qué obliga la promesa cuando no llega temprano?' }),
-    play('cuenta-filas', 'Cuenta las filas de la tabla de esta frase y en cuántas es **verdadera**.', { frase: 'p ∧ (q ∨ r)', et: ['filas', 'verdaderas', 'falsas'], metas: ['8', '3', '5'], fichas: ['8', '3', '5', '6', '4', '1', '2'],
-      mira: ['Son tres letras y cada una duplica los casos.', 'p debe ser V y además q, r o las dos.', 'Son las filas que sobran.'], trampas: { '0:6': 'Cada letra duplica: no se suma 2 por letra.', '1:4': 'Con p verdadera hay 4 filas, pero en una q y r son falsas.', '1:1': 'También sirven las filas con solo q o solo r.', '1:2': 'También cuenta la fila con q y r verdaderas.' }, ok: 'Verdaderas y falsas suman todas las filas.' },
-      'Hay $2^3 = 8$ filas. Con p verdadera hay 4, y solo falla la de q y r falsas: 3 verdaderas y 5 falsas.',
-      { hint: 'Fija p verdadera y mira qué combinaciones de q y r sirven.' }),
-    play('nombra-columna', 'Se borraron los títulos de estas tres columnas. Ponlos.', { cols: ['VFFF', 'VVVF', 'VFVV'], metas: ['p ∧ q', 'p ∨ q', 'p → q'], fichas: ['p ∧ q', 'p ∨ q', 'p → q', 'q → p', '¬p'],
-      mira: ['Solo es V cuando las dos lo son.', 'Solo es F cuando las dos lo son.', 'Solo es F cuando p es V y q es F.'], trampas: { '2:q → p': 'Esa falla en la fila de p falsa y q verdadera.' }, ok: 'Cada conectivo se reconoce por sus F o por sus V.' },
-      'Una sola V, con las dos verdaderas: ∧. Una sola F, con las dos falsas: ∨. Una sola F, de V a F: el condicional.',
-      { hint: 'Busca en cada columna lo que sale una sola vez y mira cuánto valen p y q ahí.' }),
-    play('frase-larga', 'p es V, q es V y r es F. Pon el valor de cada pedazo y el de la frase completa.', { et: ['p → r', 'q ∧ ¬r', '(p → r) ∨ (q ∧ ¬r)'], metas: ['F', 'V', 'V'], fichas: ['F', 'V', 'V', 'F', 'F', 'V'],
-      mira: ['p es V y r es F: mira si la promesa se rompe.', 'q es V y ¬r también es V.', 'A la «o» le basta un pedazo verdadero.'], ok: 'Primero los pedazos, después la frase.' },
-      'p → r va de V a F: es F. q ∧ ¬r es V y V: V. Con la «o» basta un pedazo: V.',
-      { hint: 'Resuelve cada paréntesis por aparte y deja la «o» para el final.' }),
-    play('sube-filas', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: '¿Cuántas **filas** tiene una tabla con **5** letras?', r: 32, c: '2^5', e: { 10: 'Cada letra duplica: no se suma 2.', 25: 'Cada letra duplica: es 2 multiplicado cinco veces.' } },
-      { q: '¿En cuántas filas es **verdadera** p ∨ q ∨ r?', r: 7, c: '8 - 1', e: { 1: 'Esa es la única falsa.', 8: 'Hay una fila con las tres falsas.' } },
-      { q: '¿En cuántas filas es **falsa** p ∧ q ∧ r ∧ s?', r: 15, c: '16 - 1', e: { 1: 'Esa es la única verdadera.', 16: 'Hay una fila con las cuatro verdaderas.' } }] },
-      'Cinco letras: $2^5 = 32$. La «o» solo falla en una de 8: 7. La «y» solo acierta en una de 16: 15 falsas.',
-      { hint: 'Cada letra duplica las filas. ¿En qué fila falla una «o»? ¿En cuál acierta una «y»?' }),
-    sol('Se sabe que la proposición «Llueve y no hace frío» es verdadera. ¿Cuál es el valor de verdad de «Si llueve, entonces hace frío»? ¿Y el de «Llueve o hace frío»?',
-      ['Una conjunción es verdadera solo si sus dos partes lo son: «llueve» es [[verdadera]]', '«No hace frío» es verdadera, así que «hace frío» es [[falsa]]', '«Si llueve, entonces hace frío» va de verdadero a falso: es [[falsa]]', '«Llueve o hace frío» tiene una parte verdadera: es [[verdadera]]'],
-      ['no se sabe', 'contradictoria'],
-      'Primero se saca el valor de cada proposición simple y después se arma cada compuesta. El condicional solo falla de verdadero a falso; a la disyunción le basta una parte verdadera.',
-      'Empieza por lo que te dan: ¿qué tiene que pasar con cada parte para que una «y» sea verdadera?'),
-    err('¿En cuántas filas de su tabla de verdad es verdadera la proposición $(p \\wedge q) \\to r$?',
-      ['Con tres letras, la tabla tiene $2^3 = 8$ filas', 'Un condicional solo es falso cuando el antecedente es verdadero y el consecuente es falso', 'El antecedente $p \\wedge q$ es verdadero cuando alguna de las dos lo es: en 6 filas', 'En la mitad de esas filas r es falsa: el condicional es falso en 3 filas y verdadero en 5'], 2,
-      ['El antecedente $p \\wedge q$ es verdadero solo cuando las dos lo son: en 2 filas', 'El antecedente $p \\wedge q$ es verdadero en 4 filas', 'El antecedente $p \\wedge q$ nunca es verdadero'],
-      'La conjunción pide que p y q sean verdaderas a la vez: eso pasa en 2 de las 8 filas (una con r verdadera y otra con r falsa). El condicional solo falla en una fila: es verdadero en 7.',
-      'Cuenta en cuántas filas son verdaderas p y q a la vez. «Alguna de las dos» es otro conectivo.'),
-    opc('Si la proposición «Juan estudia o Juan trabaja» es verdadera y la proposición «Juan estudia» es falsa, entonces se puede asegurar que:',
-      ['Juan no trabaja', 'Juan estudia y trabaja', 'Juan trabaja', 'No se puede saber si Juan trabaja'], 2,
-      'Una disyunción verdadera necesita al menos una parte verdadera. Como «Juan estudia» es falsa, tiene que ser verdadera «Juan trabaja».',
-      'Para que una «o» sea verdadera, ¿cuántas de sus partes deben serlo, como mínimo?'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-lo-2', [
-    play('niega-y', 'Arma la negación, **en el mismo orden** de la frase.', { frase: '«lavé la ropa y barrí»', metas: ['no lavé la ropa', 'o', 'no barrí'], fichas: ['no lavé la ropa', 'o', 'no barrí', 'y', 'lavé la ropa', 'barrí'],
-      mira: ['Niega la primera parte.', 'Al negar, el conectivo cambia.', 'Niega la segunda parte.'], trampas: { '1:y': 'Para que la frase sea falsa basta que falle una parte: es «o».' }, ok: 'Basta que falle una parte.' },
-      'La frase pide las dos cosas, así que es falsa si falla una: no lavé la ropa **o** no barrí.',
-      { hint: '¿Cuándo deja de ser verdad la frase? ¿Tienen que fallar las dos partes?' }),
-    play('niega-mezclada', 'Arma la negación, **en el mismo orden** de la frase.', { frase: '«no salí o me mojé»', metas: ['salí', 'y', 'no me mojé'], fichas: ['salí', 'y', 'no me mojé', 'no salí', 'o', 'me mojé'],
-      mira: ['Negar «no salí» es decir que sí.', 'Al negar, el conectivo cambia.', 'Niega la segunda parte.'], trampas: { '1:o': 'Para que una «o» sea falsa tienen que fallar las dos partes: es «y».' }, ok: 'Una «o» solo es falsa si fallan las dos.' },
-      'Es falsa solo si fallan las dos partes: salí **y** no me mojé.',
-      { hint: 'Lo contrario de algo que ya tiene «no» es decirlo sin el «no».' }),
-    play('tabla-negada', 'Llena la columna de **¬(¬p ∨ ¬q)**: toca las filas donde vale V.', { frase: '¬(¬p ∨ ¬q)', f: (p, q) => p && q, regla: 'solo es V si las dos son verdaderas.', ok: 'Es lo mismo que p ∧ q.' },
-      '¬p ∨ ¬q solo es falsa con las dos verdaderas: su negación solo es V ahí, igual que p ∧ q.',
-      { hint: 'Primero busca dónde es falsa ¬p ∨ ¬q; la negación es verdadera justo ahí.' }),
-    play('casos-tumban', 'Un cartel dice «**todos los perros de este parque llevan collar**». Toca **todos** los casos que lo vuelven **falso**.', { casos: [{ t: 'un perro del parque con collar', no: 'Ese perro cumple lo que dice el cartel.' }, { t: 'un perro del parque sin collar', si: true }, { t: 'un gato del parque sin collar', no: 'El cartel habla de perros, no de gatos.' }, { t: 'dos perros del parque sin collar', si: true }, { t: 'un perro de otro parque sin collar', no: 'El cartel solo habla de este parque.' }], falta: 'Falta otro caso con un perro de este parque sin collar.', ok: 'Basta un perro de este parque sin collar.' },
-      'Para tumbar un «todos» basta uno que no cumpla, y tiene que ser un perro de ese parque.',
-      { hint: '¿De quién habla el cartel? Busca a alguno de esos que no cumpla.' }),
-    play('parejas-negacion', 'Pon la **negación** de cada frase.', { et: ['todos ríen', 'alguno canta', 'ninguno llora'], metas: ['alguno no ríe', 'ninguno canta', 'alguno llora'], fichas: ['alguno no ríe', 'ninguno canta', 'alguno llora', 'ninguno ríe', 'alguno no canta', 'todos lloran'],
-      mira: ['Para tumbar «todos» basta uno.', 'Para tumbar «alguno» no puede quedar ni uno.', 'Para tumbar «ninguno» basta uno.'], trampas: { '0:ninguno ríe': 'No hace falta que ninguno ría: basta uno que no ría.', '1:alguno no canta': 'Puede haber uno que no canta y otro que sí: no la tumba.', '2:todos lloran': 'No hace falta que lloren todos: basta uno.' }, ok: 'Todos contra alguno no; alguno contra ninguno.' },
-      '«Todos ríen» ↔ «alguno no ríe»; «alguno canta» ↔ «ninguno canta»; «ninguno llora» ↔ «alguno llora».',
-      { hint: 'Busca lo mínimo que tendría que pasar para que cada frase sea mentira.' }),
-    play('pinta-negacion', 'p: «juega fútbol». q: «juega tenis». Toca **todas** las zonas donde es verdad **¬(p ∧ q)**.', { a: 'fútbol', b: 'tenis', zonas: [0, 2, 3], mira: ['Juega fútbol y no tenis: no juega los dos.', 'Ahí juega los dos: p ∧ q es verdad, y su negación, falsa.', 'Juega tenis y no fútbol: no juega los dos.', 'No juega ninguno: tampoco juega los dos.'], ok: 'Todo menos el centro: ¬p ∨ ¬q.' },
-      'Solo en el centro juega los dos. La negación es todo lo demás: los que no juegan uno **o** no juegan el otro.',
-      { hint: 'Ubica primero dónde es verdad «juega los dos». ¿Qué queda?' }),
-    play('niega-cartel', 'Arma la negación, **en el mismo orden** de la frase.', { frase: '«todos votaron y alguno habló»', metas: ['alguno no votó', 'o', 'ninguno habló'], fichas: ['alguno no votó', 'o', 'ninguno habló', 'ninguno votó', 'y', 'alguno no habló'],
-      mira: ['Para tumbar «todos votaron» basta uno que no.', 'Al negar, el conectivo cambia.', 'Para tumbar «alguno habló» no pudo hablar nadie.'], trampas: { '0:ninguno votó': 'No hace falta que ninguno vote: basta uno que no.', '1:y': 'Basta que falle una de las dos partes: es «o».', '2:alguno no habló': 'Aunque uno no hable, otro pudo hablar.' }, ok: 'Cada parte con su negación, y «y» pasa a «o».' },
-      'Alguno no votó **o** ninguno habló.',
-      { hint: 'Niega cada parte por aparte y después mira qué pasa con la «y».' }),
-    play('sube-niega', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'De **12** ventanas, «alguna está abierta» es **falsa**. ¿Cuántas están **cerradas**?', r: 12, c: '12 - 0', e: { 1: 'Con una cerrada puede haber otras abiertas.', 11: 'Piensa qué pasa con la que falta.' } },
-      { q: 'De **8** socios, «todos tienen carné» es **falsa**. ¿Cuántos, **como mínimo**, no tienen?', r: 1, c: '\\text{basta } 1', e: { 8: 'Esos serían todos; para tumbarla basta menos.' } },
-      { q: '¿En cuántas filas de la tabla es **verdadera** ¬(p ∧ q)?', r: 3, c: '4 - 1', e: { 1: 'Esa es la fila donde es falsa.' } }] },
-      'Para tumbar «alguna» hay que cerrarlas todas: 12. Para tumbar «todos» basta 1. Y ¬(p ∧ q) solo falla en una de 4: 3.',
-      { hint: 'Piensa en lo mínimo que hace falta para que cada frase sea mentira.' }),
-    sol('Un letrero dice: «Todos los buses de esta ruta tienen aire acondicionado y ninguno cobra más de 3 000 pesos». ¿Qué tiene que pasar para que el letrero sea falso?',
-      ['El letrero une dos afirmaciones con «y»: es falso si falla [[al menos una]] de ellas', 'La negación de «todos tienen aire» es «[[alguno]] no tiene aire»', 'La negación de «ninguno cobra más» es «[[alguno]] cobra más»', 'Las dos negaciones se unen con [[o]]: es De Morgan'],
-      ['ninguno', 'todos', 'y', 'las dos'],
-      'El letrero es falso si algún bus no tiene aire o algún bus cobra más de 3 000 pesos. Para tumbar un «todos» o un «ninguno» basta un caso.',
-      'Para que una promesa doble quede incumplida, ¿hace falta que fallen sus dos partes?'),
-    err('¿Cuál es la negación de la proposición «Ana canta y no baila»?',
-      ['La frase tiene la forma $p \\wedge \\neg q$, con p: «Ana canta» y q: «Ana baila»', 'Por De Morgan, se niega cada parte y la «y» sigue siendo «y»: $\\neg p \\wedge q$', 'En palabras: «Ana no canta y baila»'], 1,
-      ['Por De Morgan, se niega cada parte y la «y» cambia por «o»: $\\neg p \\vee q$', 'Por De Morgan, solo se niega la primera parte: $\\neg p \\wedge \\neg q$', 'Por De Morgan, la «y» cambia por «o» sin negar las partes: $p \\vee \\neg q$'],
-      'De Morgan hace dos cosas a la vez: niega cada parte y cambia el conectivo. La negación es «Ana no canta o baila».',
-      'Piensa en cuándo sería falsa la frase original. ¿Hace falta que pasen las dos cosas?'),
-    opc('La negación de la proposición «Algunos empleados llegaron tarde» es:',
-      ['Algunos empleados no llegaron tarde', 'Todos los empleados llegaron tarde', 'Algunos empleados llegaron temprano', 'Ningún empleado llegó tarde'], 3,
-      '«Algunos» afirma que hay al menos uno. Negarlo es decir que no hay ninguno.',
-      'La negación debe ser verdadera exactamente cuando la frase original es falsa.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-lo-3', [
-    play('zonas-posibles', '«**Si es colibrí, vuela**». De un animal solo se sabe que **vuela**. Toca **todas** las zonas donde puede estar.', { p: 'colibríes', q: 'vuelan', zonas: [0, 1], mira: ['Puede ser un colibrí: los colibríes vuelan.', 'Puede volar sin ser colibrí.', 'Ahí están los que no vuelan, y este vuela.'], ok: 'Con solo saber que vuela, no se sabe si es colibrí.', texto: 'colibríes, o los que vuelan sin serlo' },
-      'Todos los colibríes vuelan, pero también vuelan otros. Que vuele no dice si es colibrí.',
-      { hint: '¿Puede haber animales que vuelen y no sean colibríes?' }),
-    play('voltea-niega', 'Arma el **contrarrecíproco** de esta frase.', { frase: '«si no llueve, hay partido»', metas: ['no hay partido', 'llueve'], fichas: ['no hay partido', 'llueve', 'no llueve', 'hay partido'],
-      mira: ['El contrarrecíproco empieza con la negación de la segunda parte.', 'Termina con la negación de la primera parte.'], trampas: { '0:llueve': 'Falta cambiarlas de lugar: empieza por el partido.', '0:hay partido': 'Cambiaste de lugar, pero falta negar.', '1:no llueve': 'Falta negar: lo contrario de «no llueve» es «llueve».' }, ok: 'Negar las dos y voltear.' },
-      'Se niegan las dos partes y se cambian de lugar: si **no hay partido**, entonces **llueve**.',
-      { hint: 'Niega cada parte (una ya trae «no») y cámbialas de lugar.' }),
-    play('mismo-condicional', '«**Si es lunes, hay mercado**». Toca **todas** las frases que dicen **lo mismo**.', { casos: [{ t: 'si no hay mercado, no es lunes', si: true }, { t: 'si hay mercado, es lunes', no: 'Esa está volteada: podría haber mercado otro día.' }, { t: 'si no es lunes, no hay mercado', no: 'Esa solo niega: podría haber mercado otro día.' }, { t: 'basta que sea lunes para que haya mercado', si: true }, { t: 'todos los lunes hay mercado', si: true }], falta: 'Falta otra que dice lo mismo con otras palabras.', ok: 'El contrarrecíproco y las formas de decir que el lunes basta.' },
-      'Dicen lo mismo el contrarrecíproco, «basta que sea lunes» y «todos los lunes». Voltearla sin negar, o negarla sin voltear, cambia la idea.',
-      { hint: 'Imagina que también hay mercado los jueves. ¿Qué frases siguen siendo verdad?' }),
-    play('basta-falta', 'Ser lo **primero**, ¿**basta** o solo **hace falta** para lo segundo?', { et: ['cuadrado … para 4 lados', '4 lados … para cuadrado', 'animal … para gato'], metas: ['basta', 'hace falta', 'hace falta'], fichas: ['basta', 'hace falta', 'hace falta', 'basta', 'basta'],
-      mira: ['Todo cuadrado tiene 4 lados: con eso alcanza.', 'Hay figuras de 4 lados que no son cuadrados.', 'Hay animales que no son gatos.'], ok: 'El de adentro basta; el de afuera hace falta.' },
-      'Ser cuadrado basta para tener 4 lados; tener 4 lados hace falta, pero no alcanza. Lo mismo con ser animal y ser gato.',
-      { hint: '¿Cuál está dentro de cuál? El de adentro alcanza; el de afuera solo es requisito.' }),
-    play('revisa-regla', 'Regla de una piscina: «**si nada en lo hondo, lleva gorro**». De cada persona se sabe **una** cosa. Toca **solo** a las que hay que revisar.', { cartas: [{ t: 'nada en lo hondo', si: true }, { t: 'nada en lo bajito', no: 'La regla no dice nada de los que nadan en lo bajito.' }, { t: 'lleva gorro', no: 'Con gorro no rompe la regla, nade donde nade.' }, { t: 'no lleva gorro', si: true }], falta: 'Falta otra que podría estar rompiendo la regla.', ok: 'Solo esas dos podrían romper la regla.' },
-      'Al de lo hondo hay que mirarle el gorro; al que no lleva gorro, dónde nada. Los otros dos no pueden romper la regla.',
-      { hint: '¿Quién podría estar rompiendo la regla? ¿A quién no le importa lo que falta por saber?' }),
-    play('deduce-seguro', '«**Si suena la alarma, hay humo**». ¿Qué se concluye de cada dato?', { et: ['sonó', 'no hay humo', 'hay humo', 'no sonó'], metas: ['hay humo', 'no sonó', 'no se sabe', 'no se sabe'], fichas: ['hay humo', 'no sonó', 'no se sabe', 'no se sabe', 'sonó', 'no hay humo'],
-      mira: ['Si pasa lo primero, pasa lo segundo.', 'Si no hay humo, no pudo sonar.', 'Con humo, la alarma pudo sonar o no.', 'Si no suena, puede haber humo o no.'], trampas: { '1:no se sabe': 'Sí se sabe: si hubiera sonado, habría humo.', '2:sonó': 'La frase no va al revés: puede haber humo sin alarma.', '3:no hay humo': 'Que no suene no dice nada del humo.' }, ok: 'Solo sirven p y «no q».' },
-      'Sonó → hay humo. No hay humo → no sonó. Con «hay humo» o «no sonó» no se sabe.',
-      { hint: 'Solo hay dos datos que permiten concluir algo seguro.' }),
-    play('cadena-si', 'Con estas tres cosas, ¿qué se concluye?', { da: ['Si madruga, corre.', 'Si corre, desayuna bien.', 'Hoy no desayunó bien.'], et: ['¿corrió?', '¿madrugó?'], metas: ['no corrió', 'no madrugó'], fichas: ['no corrió', 'no madrugó', 'corrió', 'madrugó', 'no se sabe', 'no se sabe'],
-      mira: ['Si hubiera corrido, habría desayunado bien.', 'Si hubiera madrugado, habría corrido.'], trampas: { '0:no se sabe': 'Sí se sabe: si hubiera corrido, habría desayunado bien.', '1:no se sabe': 'Sí se sabe: si hubiera madrugado, habría corrido.' }, ok: 'El contrarrecíproco se aplica dos veces.' },
-      'No desayunó bien → no corrió → no madrugó: el contrarrecíproco, una vez por cada frase.',
-      { hint: 'Empieza por el último dato y devuélvete una frase cada vez.' }),
-    play('sube-regla-si', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Todo socio tiene carné. Hay **18** socios y **30** personas con carné. ¿Cuántas tienen carné **sin** ser socias?', r: 12, c: '30 - 18', e: { 18: 'Esos son los socios.' } },
-      { q: '¿En cuántas filas de la tabla es **verdadero** p → q?', r: 3, c: '4 - 1', e: { 1: 'Esa es la única fila falsa.', 2: 'Con p falsa, las dos filas son verdaderas.' } },
-      { q: 'Regla: si la caja es roja, atrás dice «frágil». De unas cajas solo se ve un lado: **6** rojas, **5** azules, **4** que dicen «frágil» y **3** que no. ¿Cuántas hay que **voltear**?', r: 9, c: '6 + 3', e: { 10: 'Las que dicen «frágil» no rompen la regla, sean rojas o no.', 6: 'Hay otras que también podrían romper la regla.', 18: 'No hace falta voltearlas todas.' } }] },
-      '$30 - 18 = 12$; el condicional solo falla en una de 4: 3; y se voltean las rojas y las que no dicen «frágil»: $6 + 3 = 9$.',
-      { hint: '¿Los socios ya están contados entre los que tienen carné? ¿Qué caja podría romper la regla?' }),
-    sol('Una empresa tiene esta norma: «Si un empleado trabaja el domingo, entonces recibe un día libre». Se revisan cuatro casos: (1) trabajó el domingo y recibió día libre; (2) trabajó el domingo y no lo recibió; (3) no trabajó el domingo y recibió día libre; (4) no trabajó el domingo y no lo recibió. ¿En cuál caso se incumple la norma?',
-      ['La norma solo obliga a algo cuando el empleado [[trabajó]] el domingo', 'En los casos 3 y 4 no trabajó: ahí la norma [[no se incumple]]', 'En el caso 1 trabajó y recibió el día libre: la norma [[se cumple]]', 'El único caso que incumple la norma es el [[2]]'],
-      ['3', 'no trabajó', 'se incumple'],
-      'Un condicional solo es falso cuando se cumple la condición y falla la consecuencia. Dar un día libre a quien no trabajó el domingo (caso 3) no rompe la norma.',
-      'La norma promete algo a los que trabajan el domingo. ¿Dice algo sobre los que no trabajan?'),
-    err('Se sabe que «si un número es múltiplo de 6, entonces es par». El número 14 es par. ¿Qué se puede concluir sobre el 14?',
-      ['La regla va en un solo sentido: de «múltiplo de 6» a «par»', 'El 14 cumple la segunda parte: es par', 'Entonces el 14 es múltiplo de 6'], 2,
-      ['De que sea par no se concluye nada: hay pares que no son múltiplos de 6', 'Entonces el 14 no es par', 'Entonces la regla es falsa'],
-      'Que se cumpla el consecuente no obliga al antecedente: el 14 es par y no es múltiplo de 6. La regla no se puede leer al revés.',
-      'Busca un número par que no sea múltiplo de 6. ¿Rompe la regla?'),
-    opc('La proposición «Si Luis aprueba el examen, entonces viaja a la costa» es equivalente a:',
-      ['Si Luis no viaja a la costa, entonces no aprobó el examen', 'Si Luis viaja a la costa, entonces aprobó el examen', 'Si Luis no aprueba el examen, entonces no viaja a la costa', 'Luis aprueba el examen y viaja a la costa'], 0,
-      'Es el contrarrecíproco: se voltea el condicional y se niegan las dos partes. El recíproco y el contrario no son equivalentes al original.',
-      'Si aprobar obliga a viajar, ¿qué se sabe de alguien que no viajó?'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-lo-4', [
-    play('dibujo-contra', '«Todos los **taxis** son **carros**. Algunos carros son **eléctricos**». Mueve el círculo de los eléctricos para mostrar que tal vez **ningún taxi** lo es.', { a: 'taxis', b: 'carros', c: 'eléctricos', b1: 'carro', c1: 'eléctrico' },
-      'Los eléctricos pueden tocar a los carros sin tocar a los taxis: «algún taxi es eléctrico» no es seguro.',
-      { hint: 'Las dos frases deben cumplirse. ¿Dónde quedan los carros que no son taxis?' }),
-    play('frase-dibujo', 'Pon a cada dibujo la frase que le corresponde. Usa frases distintas.', { metas: ['todo A es B', 'algún A es B', 'ningún A es B'], fichas: ['todo A es B', 'algún A es B', 'ningún A es B', 'todo B es A', 'todo A es B'],
-      mira: ['A está completo dentro de B.', 'Los círculos se cruzan y hay un punto en el medio.', 'Los círculos no se tocan.'], trampas: { '0:todo B es A': 'B es el grande: sobra espacio fuera de A.', '1:todo B es A': 'Hay parte de B por fuera de A.', '1:todo A es B': 'Hay parte de A por fuera de B.' }, ok: 'Dentro, cruzados y separados.' },
-      'Dentro es «todo A es B», cruzados es «algún A es B» y separados es «ningún A es B».',
-      { hint: 'Mira si un círculo está dentro del otro, si se cruzan o si no se tocan.' }),
-    play('se-voltea', 'Toca **todas** las frases que siguen siendo **seguras** al voltearlas (cambiar A por B).', { casos: [{ t: 'ningún A es B', si: true }, { t: 'todo A es B', no: 'B puede ser más grande: no todo B es A.' }, { t: 'algún A es B', si: true }, { t: 'algún A no es B', no: 'B podría estar completo dentro de A: no siempre se voltea.' }], falta: 'Falta otra que también se puede voltear.', ok: '«Ningún» y «algún» se voltean.' },
-      'Separados se ven igual desde los dos lados, y el que está en la parte común está en los dos. «Todo» y «algún… no» no se voltean.',
-      { hint: 'Dibuja los círculos de cada frase y léelos empezando por B.' }),
-    play('donde-alguien', '«Algunos **cantantes** son **actores**. Algunos actores **no** son cantantes». Toca **todas** las zonas donde **seguro** hay alguien.', { a: 'cantantes', b: 'actores', zonas: [1, 2], mira: ['Nadie dijo que haya cantantes que no actúen.', 'La primera frase pone a alguien en el medio.', 'La segunda frase pone a un actor que no canta.', 'De los de afuera no se dijo nada.'], ok: 'Solo hay alguien seguro donde una frase lo dice.' },
-      'La primera frase asegura a alguien en el medio y la segunda, a un actor que no canta. De las demás zonas no se sabe.',
-      { hint: 'Cada «algunos» pone un punto en una zona. ¿En cuál?' }),
-    play('seguro-tres', 'Toca **todo** lo que es **seguro** con estas tres frases.', { da: ['Ningún pez es mamífero.', 'Todo delfín es mamífero.', 'Hay un delfín en el acuario.'], casos: [{ t: 'ningún delfín es pez', si: true }, { t: 'todo mamífero es delfín', no: 'Los delfines están dentro de los mamíferos, no al revés.' }, { t: 'hay un mamífero en el acuario', si: true }, { t: 'no hay peces en el acuario', no: 'Nadie dijo qué más hay en el acuario.' }], falta: 'Falta otra que también es segura.', ok: 'Vale si se cumple en todos los dibujos.' },
-      'Los delfines están dentro de los mamíferos, lejos de los peces; y el del acuario es mamífero. De lo demás no se sabe.',
-      { hint: 'Dibuja los círculos y pon un punto por el delfín del acuario.' }),
-    play('cadena-todos', '«Todo **sauce** es árbol. Todo **árbol** es planta. Ninguna **planta** es hongo». Pon cada palabra en su círculo.', { metas: ['sauces', 'árboles', 'plantas', 'hongos'], fichas: ['sauces', 'árboles', 'plantas', 'hongos'],
-      mira: ['El círculo más chico es el que está dentro de todos.', 'El del medio contiene al chico y está dentro del grande.', 'El grande contiene a los otros dos.', 'El que está aparte no toca a las plantas.'], ok: 'Todo sauce es planta, y ningún sauce es hongo.' },
-      'Sauces dentro de árboles, árboles dentro de plantas, y los hongos aparte: por eso ningún sauce es hongo.',
-      { hint: '«Todo A es B» pone a A dentro de B. ¿Quién queda aparte?' }),
-    play('tumba-todos', '«**Todos los múltiplos de 4 son múltiplos de 8**». Toca **todos** los números que la tumban.', { a: 4, b: 8, nums: [8, 12, 16, 18, 20, 24] },
-      '12 y 20 son múltiplos de 4 y no de 8. El 18 no cuenta: no es múltiplo de 4.',
-      { hint: 'El que la tumba tiene que ser de los que habla la frase y no cumplir.' }),
-    play('sube-circulos', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Ningún A es B. Hay **7** A y **12** B. ¿Cuántos hay **en total**, contando los A y los B?', r: 19, c: '7 + 12', e: { 12: 'Esos son solo los B: los A están aparte.', 5: 'No se restan: los círculos no se tocan.' } },
-      { q: 'Todo pintor es artista. Hay **9** pintores y **20** artistas. ¿Cuántos artistas **no** son pintores?', r: 11, c: '20 - 9', e: { 29: 'Los pintores ya están contados entre los artistas.' } },
-      { q: 'De **25** vecinos, «algún vecino es médico». ¿Cuántos médicos hay **como mínimo**?', r: 1, c: '\\text{al menos } 1', e: { 25: 'Esos serían todos los vecinos.' } }] },
-      'Separados se suman: 19. Dentro se restan: 11. Y «algún» asegura al menos 1.',
-      { hint: '¿Los círculos están separados, uno dentro del otro, o solo se sabe que comparten a alguien?' }),
-    sol('Se sabe que: todos los ingenieros de una empresa saben programar, y algunos ingenieros de la empresa hablan alemán. ¿Qué se puede concluir con certeza?',
-      ['Los ingenieros están [[dentro]] del conjunto de los que saben programar', 'Hay [[al menos uno]] que es ingeniero y habla alemán', 'Ese ingeniero también sabe programar: [[algunos]] de los que programan hablan alemán', 'No se puede concluir que [[todos]] los que hablan alemán sepan programar'],
-      ['ninguno', 'fuera'],
-      'El ingeniero que habla alemán está dentro del círculo de los ingenieros y, por eso, dentro del de los que programan. De «algunos» solo sale otro «algunos».',
-      'Dibuja un círculo dentro de otro para «todos» y marca un punto para «algunos». ¿En qué zonas queda el punto?'),
-    err('Premisas: «Todos los gatos son felinos» y «Algunos felinos son salvajes». ¿Se concluye que algunos gatos son salvajes?',
-      ['Los gatos están dentro del conjunto de los felinos', 'Hay felinos salvajes: la zona de los salvajes toca al círculo de los felinos', 'Como los gatos son felinos, la zona de los salvajes toca también a los gatos', 'Conclusión: algunos gatos son salvajes'], 2,
-      ['Los felinos salvajes pueden estar todos fuera de los gatos: no se sabe si la zona toca a los gatos', 'Como los gatos son felinos, todos los gatos son salvajes', 'Como los gatos son felinos, ningún gato es salvaje'],
-      'Los felinos salvajes podrían ser todos tigres y leones. Las premisas permiten dibujar la zona de los salvajes sin tocar a los gatos: la conclusión no es segura.',
-      'Intenta dibujar un diagrama en el que las dos premisas se cumplan y la conclusión no.'),
-    opc('Todos los médicos de un hospital usan bata. Ningún visitante usa bata. De lo anterior se concluye necesariamente que:',
-      ['Algunos visitantes son médicos', 'Ningún visitante es médico del hospital', 'Todos los que usan bata son médicos', 'Algunos médicos no usan bata'], 1,
-      'Si un visitante fuera médico del hospital, usaría bata, y ningún visitante la usa. Los dos conjuntos no se tocan.',
-      'Dibuja los médicos dentro de los que usan bata y los visitantes fuera de ese círculo.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-lo-5', [
-    play('quien-miente-tres', 'Cada uno dice siempre la verdad o siempre miente. Toca a **todos los que mienten**.', { gente: [{ n: 'Pía', d: 'Rita dice la verdad', f: v => v[2] }, { n: 'Quique', d: 'Pía y Rita mienten', f: v => !v[0] && !v[2] }, { n: 'Rita', d: 'solo uno de Quique y yo miente', f: v => v[1] !== v[2] }], ok: 'Pía y Rita se apoyan; Quique queda solo.' },
-      'Pía y Rita valen lo mismo. Si mintieran las dos, Quique diría la verdad, y lo que dice Rita sería cierto: choca. Entonces miente Quique.',
-      { hint: 'Pía y Rita van juntas: supón que las dos mienten y mira qué pasa.' }),
-    play('tabla-sospechosos', 'Uno de los tres rompió la taza y **solo una** frase es **falsa**. Llena la tabla con las V y marca quién fue.', { v: 2, gente: [{ n: 'Sara', d: 'fue Uma', f: c => c === 2 }, { n: 'Tino', d: 'yo no fui', f: c => c !== 1 }, { n: 'Uma', d: 'fue Tino', f: c => c === 1 }], ok: 'Solo con Uma hay una sola frase falsa.' },
-      'Si fue Sara, fallan la frase de Sara y la de Uma. Si fue Tino, fallan la de Sara y la de Tino. Si fue Uma, solo falla la de Uma.',
-      { hint: 'Revisa una fila a la vez: supón que fue esa persona y mira cada frase.' }),
-    play('cadena-acusan', 'Cada uno dice siempre la verdad o siempre miente. Toca a **todos los que mienten**.', { gente: [{ n: 'Abril', d: 'Bruno miente', f: v => !v[1] }, { n: 'Bruno', d: 'Dora dice la verdad', f: v => v[3] }, { n: 'Ciro', d: 'Abril miente', f: v => !v[0] }, { n: 'Dora', d: 'solo uno de Ciro y yo miente', f: v => v[2] !== v[3] }], ok: 'Solo Abril dice la verdad.' },
-      'Si Dora dijera la verdad, Ciro mentiría y Bruno no; entonces Abril mentiría, y Ciro habría dicho la verdad: choca. Dora miente, Bruno también, Abril dice la verdad y Ciro miente.',
-      { hint: 'Supón que Dora dice la verdad y sigue la cadena hasta que algo choque.' }),
-    play('frases-opuestas', 'Uno solo tomó el último pan. Toca las **dos** frases que se contradicen: siempre una es verdad y la otra, mentira.', { par: [0, 1], gente: [{ n: 'Memo', d: 'yo no fui', f: c => c !== 0 }, { n: 'Nora', d: 'fue Memo', f: c => c === 0 }, { n: 'Oto', d: 'fue Nora', f: c => c === 1 }, { n: 'Paz', d: 'yo no fui', f: c => c !== 3 }], ok: 'Una de las dos es verdad, sin saber cuál.' },
-      'Memo dice que no fue y Nora dice que fue Memo: una es verdad y la otra no, pase lo que pase.',
-      { hint: 'Busca una frase que afirme justo lo que otra niega.' }),
-    play('supone-choca', 'En la isla, **cada uno** dice siempre la verdad o siempre miente. Completa el razonamiento.', { da: 'Iván: «todos los de la isla mentimos»', et: ['si dice la verdad', 'así que Iván', 'y en la isla'], metas: ['choca', 'miente', 'alguno no miente'], fichas: ['choca', 'miente', 'alguno no miente', 'cuadra', 'dice la verdad', 'nadie miente'],
-      mira: ['Si todos mienten, él también: ¿puede decir la verdad?', 'La suposición chocó: vale la contraria.', 'Su frase es falsa: no todos mienten.'], trampas: { '0:cuadra': 'Si todos mienten, él también: no puede decir la verdad.', '1:dice la verdad': 'Esa suposición acaba de chocar.', '2:nadie miente': 'Iván miente: solo se sabe que no todos lo hacen.' }, ok: 'Lo que choca se descarta.' },
-      'Si dijera la verdad, él también mentiría: choca. Entonces miente, y como su frase es falsa, alguien en la isla dice la verdad.',
-      { hint: 'Supón que dice la verdad y mira qué diría eso de él mismo.' }),
-    play('tres-cofres', 'El tesoro está en un cofre y **solo un** letrero dice la verdad. Toca el cofre del tesoro.', { v: 1, que: 'un solo cofre', gente: [{ n: 'Rojo', d: 'está aquí', f: c => c === 0 }, { n: 'Azul', d: 'no está aquí', f: c => c !== 1 }, { n: 'Verde', d: 'no está en el rojo', f: c => c !== 0 }], ok: 'Con el azul, solo acierta el verde.' },
-      'En el rojo acertarían el rojo y el azul; en el verde, el azul y el verde. En el azul solo acierta el verde.',
-      { hint: 'Prueba cada cofre y cuenta cuántos letreros dirían la verdad.' }),
-    play('culpable-una-verdad', 'Uno de los cuatro escondió las llaves y **solo una** frase es **verdad**. Toca a quien fue.', { v: 1, que: 'una sola persona', gente: [{ n: 'Alma', d: 'fue Beto o fue Dani', f: c => c === 1 || c === 3 }, { n: 'Beto', d: 'fue Alma', f: c => c === 0 }, { n: 'Cira', d: 'Beto miente', f: c => c !== 0 }, { n: 'Dani', d: 'fue Beto o fue Cira', f: c => c === 1 || c === 2 }], ok: 'Con Alma, solo Beto dice la verdad.' },
-      'Beto y Cira se contradicen: la única verdad está ahí. Entonces Alma y Dani mienten: no fue Beto, ni Dani, ni Cira. Fue Alma.',
-      { hint: 'Dos frases se contradicen: la única verdad está entre ellas. ¿Qué pasa con las otras dos?' }),
-    play('sube-mentira', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Cada uno dice siempre la verdad o siempre miente. Hay **6** parejas y en cada una los dos se acusan: «el otro miente». ¿Cuántos **mienten** en total?', r: 6, c: '6 \\cdot 1', e: { 12: 'Si los dos mintieran, las frases serían ciertas.' } },
-      { q: 'Cinco personas dicen, en orden: «miente 1 de nosotros», «mienten 2», «mienten 3», «mienten 4», «mienten 5» (justo esa cantidad). ¿Cuántas **mienten**?', r: 4, c: '5 - 1', e: { 5: 'Si mintieran las cinco, la última diría la verdad.', 1: 'Si mintiera una sola, las otras cuatro frases serían ciertas a la vez.' } },
-      { q: 'Cada uno dice siempre la verdad o siempre miente. En una fila de **9**, el primero dice la verdad y cada uno de los demás dice «el de adelante miente». ¿Cuántos **dicen la verdad**?', r: 5, c: '1, 3, 5, 7, 9 \\to 5', e: { 4: 'Esos son los que mienten.', 1: 'El tercero acusa al segundo, que sí miente.' } }] },
-      'Uno por pareja: 6. Las cinco frases se contradicen, así que solo una es cierta: mienten 4. Y en la fila se alternan: 5 verdades.',
-      { hint: 'Si dos frases se contradicen, no pueden ser ciertas a la vez.' }),
-    sol('Alguien rompió un jarrón. Diego dice: «Yo lo rompí». Elena dice: «Diego miente». Fabio dice: «Yo no lo rompí». Se sabe que solo uno de los tres dice la verdad. ¿Quién rompió el jarrón?',
-      ['Si Diego dijera la verdad, Fabio también: habría [[dos]] verdades. Se descarta', 'Entonces Diego miente, y por eso lo que dice [[Elena]] es verdad', 'Como solo hay una verdad, Fabio [[miente]]', 'Quien rompió el jarrón fue [[Fabio]]'],
-      ['Diego', 'tres', 'dice la verdad'],
-      'Se supone un caso y se revisa si cumple la condición del problema. La única verdad es la de Elena; Fabio miente al decir «yo no lo rompí», así que fue él.',
-      'Supón que Diego dice la verdad y cuenta cuántos estarían diciendo la verdad.'),
-    err('A dice: «B miente». B dice: «C miente». C dice: «A y B dicen la verdad». ¿Quién dice la verdad?',
-      ['Se supone que C dice la verdad: entonces A y B dicen la verdad', 'Pero B afirma que C miente: hay una contradicción. Luego C miente', 'Como C miente, lo que dice B («C miente») es falso', 'Entonces B miente y A dice la verdad'], 2,
-      ['Como C miente, lo que dice B («C miente») es verdad', 'Como C miente, B no dijo nada sobre C', 'Como C miente, A y B mienten los dos'],
-      'B afirma justo lo que resultó cierto: que C miente. B dice la verdad, y entonces A, que acusa a B de mentir, miente. Solo B dice la verdad.',
-      'Compara lo que afirma B con lo que ya se demostró en el paso anterior.'),
-    opc('Cuatro niños jugaban en un patio y uno de ellos rompió una ventana. Nico dice: «Fue Olga». Olga dice: «Fue Raúl». Pilar dice: «Yo no fui». Raúl dice: «Olga miente». Si solo uno de los cuatro miente, quien rompió la ventana fue:',
-      ['Nico', 'Raúl', 'Olga', 'Pilar'], 2,
-      'Olga y Raúl se contradicen: uno de los dos es el que miente. Entonces Nico dice la verdad: fue Olga. Y, en efecto, Olga miente al culpar a Raúl.',
-      'Busca dos afirmaciones que no puedan ser verdaderas a la vez: ahí está el mentiroso.'),
-  ]);
-
-  addExam('pu-logica', [
-    ['pu-lo-1', 'La disyunción es verdadera si al menos una parte lo es; la conjunción, solo si lo son las dos.',
-      opc('Si $p$ es verdadera y $q$ es falsa, de las siguientes proposiciones la única verdadera es:', ['$p \\wedge q$', '$p \\vee q$', '$p \\to q$', '$\\neg p$'], 1,
-        'La disyunción tiene una parte verdadera. La conjunción y el condicional son falsos, y $\\neg p$ también.', 'Revisa cada conectivo con p verdadera y q falsa.')],
-    ['pu-lo-2', '«Todos» se niega con «alguno no».',
-      opc('La negación de la proposición «Todos los asistentes pagaron la entrada» es:', ['Algún asistente no pagó la entrada', 'Ningún asistente pagó la entrada', 'Todos los asistentes entraron gratis', 'Algún asistente pagó la entrada'], 0,
-        'Para que «todos pagaron» sea falso basta uno que no haya pagado.', 'Basta un solo caso para tumbar un «todos».')],
-    ['pu-lo-3', 'Si p → q y no pasa q, entonces no pasó p.',
-      opc('Se sabe que «si hay tormenta, se suspende el vuelo». El vuelo no se suspendió. Entonces:', ['Hubo tormenta', 'No se sabe si hubo tormenta', 'El vuelo salió tarde', 'No hubo tormenta'], 3,
-        'Si hubiera habido tormenta, el vuelo se habría suspendido. Como no se suspendió, no hubo tormenta.', 'Usa el contrarrecíproco de la regla.')],
-    ['pu-lo-4', 'Si A está dentro de B y B dentro de C, entonces A está dentro de C.',
-      opc('Todos los cuadrados son rectángulos y todos los rectángulos son paralelogramos. De lo anterior se concluye que:', ['Todos los cuadrados son paralelogramos', 'Todos los paralelogramos son cuadrados', 'Algunos cuadrados no son rectángulos', 'Ningún paralelogramo es cuadrado'], 0,
-        'Tres círculos, uno dentro de otro: los cuadrados quedan dentro de los paralelogramos.', 'Dibuja un círculo dentro de otro para cada «todos».')],
-    ['pu-lo-5', 'Se supone un caso y se busca la contradicción.',
-      opc('Luis dice: «Mario miente». Mario dice: «Luis y yo decimos la verdad». Entonces:', ['Los dos dicen la verdad', 'Luis dice la verdad y Mario miente', 'Luis miente y Mario dice la verdad', 'Los dos mienten'], 1,
-        'Si Mario dijera la verdad, Luis también, y Luis afirma que Mario miente: contradicción. Mario miente y Luis dice la verdad.', 'Supón que Mario dice la verdad y mira qué pasa.')],
-  ]);
-});
-;
 //#archivo js/courses/preuda-r-operadores.js
 // Preuniversitario · mundo 11 «Operadores definidos»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
 PU_JUEGOS.push(({ setExam }) => {
@@ -5835,6 +5367,75 @@ PI_MUNDOS.push((() => {
   ]);
 })());
 ;
+//#archivo js/courses/preicfes-ma-finanzas.js
+// Preicfes · Matemáticas · mundo 9 «Dinero y Créditos» (spec 2026-11-25-preicfes-estructura). Números y contextos propios.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = ICF;
+
+  const l1 = leccion('icf-ma-finanzas-1', 'Interés simple y compuesto', guion(
+    ['Simple: suma lo mismo', 'El interés se calcula siempre sobre lo que se puso al comienzo.'],
+    ['Compuesto: multiplica', 'El interés se calcula sobre todo lo que hay: gana interés el interés.'],
+    ['La tasa y el tiempo', 'Deben hablar del mismo periodo: mes con mes, año con año.'],
+    ['Comparar', 'En un periodo dan igual; después el compuesto va adelante.']), [
+    x('plazo-simple', 'Se prestan **400** mil al **5 % mensual simple**. Mueve los meses hasta que la deuda sea de **520** mil.', { C: 400, i: 20, meta: 520, max: 14, et: 'meses' },
+      'Cada mes agrega $0.05 \\cdot 400 = 20$ mil; faltan 120: son 6 meses.', 'Halla cuánto agrega un solo mes y cuánto falta en total.'),
+    x('plazo-compuesto', 'Se ahorran **100** mil al **20 % anual compuesto**. Mueve hasta el **primer** año en que haya **200** mil o más.', { C: 100, r: 20, meta: 200, max: 10 },
+      '120, 144, 172.8 y 207.36: se pasa de 200 en el año 4.', 'Multiplica por 1.2 año por año y mira cuándo pasa de la meta.'),
+    x('simple-o-compuesto', '¿Cada ahorro crece con interés **simple** o **compuesto**?', { et: ['sube 30 mil cada mes', 'por 1.03 cada mes', '100, 110, 120, 130', '100, 110, 121, 133.1'], metas: ['simple', 'compuesto', 'simple', 'compuesto'], fichas: ['simple', 'compuesto', 'simple', 'compuesto', 'simple', 'compuesto'], mira: ['Siempre suma la misma cantidad.', 'Cada mes multiplica lo que hay.', 'Mira las diferencias: 10, 10 y 10.', 'Mira las diferencias: 10, 11 y 12.1.'], ok: 'Sumar lo mismo o multiplicar por lo mismo.' },
+      'El simple suma siempre lo mismo; el compuesto multiplica siempre por lo mismo.', 'Resta los saldos seguidos: ¿la diferencia se mantiene o crece?'),
+    x('tabla-ahorro', 'Se ponen **500** mil al **10 % anual compuesto**. Llena la tabla, en miles.', { et: ['saldo al año 1', 'saldo al año 2', 'interés del año 3'], metas: ['550', '605', '60.5'], fichas: ['550', '605', '60.5', '600', '50', '55'], mira: ['Agrega el 10 % de 500.', 'Agrega el 10 % de lo que había al año 1.', 'Saca el 10 % de lo que había al año 2.'], trampas: { '1:600': 'Eso sería con interés simple.', '2:50': 'Eso sería con interés simple.', '2:55': 'Ese es el interés del año 2.' }, ok: 'Cada año, el 10 % de lo que hay.' },
+      '$500 \\cdot 1.1 = 550$; $550 \\cdot 1.1 = 605$; el interés del año 3 es 60.5.', 'El 10 % de cada año se saca del saldo del año anterior.'),
+    x('traduce-tasa', 'Con interés **simple**, pon cada tasa en el periodo que se pide.', { et: ['1 % mensual, al año', '24 % anual, al mes', '3 % trimestral, al año', '6 % semestral, en 3 años'], metas: ['12 %', '2 %', '12 %', '36 %'], fichas: ['12 %', '2 %', '12 %', '36 %', '1 %', '18 %', '9 %'], mira: ['Un año tiene 12 meses.', 'Reparte los 24 entre 12 meses.', 'Un año tiene 4 trimestres.', 'Cuenta los semestres que hay en 3 años.'], trampas: { '3:18 %': 'En 3 años hay 6 semestres, no 3.', '2:9 %': 'En un año hay 4 trimestres.' }, ok: 'Se cuentan los periodos.' },
+      '12 meses, 4 trimestres y 6 semestres: se cuenta cuántos periodos caben.', 'Pregunta cuántas veces cabe el periodo de la tasa en el que se pide.'),
+    x('da-el-saldo', 'Se ponen **200** mil al **5 % anual compuesto** por **3 años**. Toca **todas** las cuentas que dan el saldo final.', { casos: [{ t: '200 · 1.05 · 1.05 · 1.05', si: true }, { t: '200 + 3 · 10', no: 'Eso es interés simple: da 230.' }, { t: '210 · 1.05 · 1.05', si: true }, { t: '200 · 1.15', no: 'Juntar los tres 5 % es interés simple: da 230.' }, { t: '220.5 · 1.05', si: true }], falta: 'Falta otra: el saldo del año 1 es 210 y el del año 2 es 220.5.', ok: 'Todas multiplican tres veces por 1.05.' },
+      '$200 \\cdot 1.05^3 = 231.525$; 210 y 220.5 son los saldos de los años 1 y 2.', 'Mira desde qué año empieza cada cuenta y cuántas veces multiplica.'),
+    x('sube-interes', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Interés **simple** de **300** mil al **2 % mensual** en **6** meses, en miles.', r: 36, c: '300 \\cdot 0.02 \\cdot 6', e: { 6: 'Ese es el interés de un mes.' } },
+      { q: '**250** mil al **20 % anual compuesto**: ¿cuánto **interés**, en miles, se gana **en el segundo año**?', r: 60, c: '0.2 \\cdot 300', e: { 50: 'Ese es el del primer año.' } },
+      { q: 'A los **2** años, ¿cuántos miles **más** da el compuesto que el simple con **600** mil al **10 % anual**?', r: 6, c: '726 - 720', e: { 60: 'Ese es el interés de un año.' } }] },
+      '36 mil; el 20 % de 300 son 60 mil; y $726 - 720 = 6$ mil.', 'En el compuesto, el segundo año parte de un saldo mayor.'),
+    sol('Se invierten 800 mil al 10 % anual compuesto. ¿Cuánto hay a los 2 años y cuánto es interés?', ['Al año 1 hay [[880]] mil', 'Al año 2 hay $880 \\cdot 1.1 =$ [[968]] mil', 'El interés total es [[168]] mil'], ['960', '160', '88'], '$968 - 800 = 168$ mil: 80 del primer año y 88 del segundo.', 'El segundo año se calcula sobre lo que había al final del primero.'),
+    err('Un préstamo de 200 mil cobra 3 % mensual simple durante un año. Se halla el interés.', ['Un año son 12 meses', 'El interés de un mes es $0.03 \\cdot 200 = 6$ mil', 'El interés del año es 6 mil'], 2, ['El interés del año es $12 \\cdot 6 = 72$ mil', 'El interés del año es $200 + 6 = 206$ mil', 'El interés del año es $6 \\div 12 = 0.5$ mil'], 'La tasa es mensual: los 6 mil se pagan cada uno de los 12 meses.', '¿De qué periodo es la tasa y cuántos hay?'),
+    opc('Dos ahorros empiezan con 100 mil: uno al 10 % anual simple y otro al 10 % anual compuesto. Es cierto que:', ['Al final del primer año tienen lo mismo', 'Al final del primer año gana el compuesto', 'Siempre tienen lo mismo', 'Al final del segundo año gana el simple'], 0, 'Al año 1 ambos tienen 110; al año 2, 120 frente a 121.', 'Calcula los dos saldos del año 1 y del año 2.'),
+  ]);
+
+  const l2 = leccion('icf-ma-finanzas-2', 'Cuotas, IVA y descuentos', guion(
+    ['IVA', 'Se agrega al precio: con 19 % se multiplica por 1.19 y para devolverse se divide.'],
+    ['Descuentos seguidos', 'El segundo se hace sobre lo que quedó.'],
+    ['Cuotas', 'Cada cuota paga interés de lo que se debe y abona a la deuda.'],
+    ['Comparar ofertas', 'Se compara lo que se paga en total o por unidad.']), [
+    x('antes-del-iva', 'Un teclado cuesta **238** mil con el IVA del **19 %** incluido. Mueve hasta su precio **sin IVA**, en miles.', { final: 238, iva: 19, min: 150, max: 250, paso: 1 },
+      '$238 \\div 1.19 = 200$ mil. Quitar el 19 % de 238 no sirve: el IVA se calculó sobre el precio sin IVA.', 'El precio sin IVA, multiplicado por 1.19, debe dar el total.'),
+    x('un-solo-descuento', 'Una tienda descuenta **20 %** y, sobre lo que queda, otro **25 %**. Mueve el descuento **único** que equivale a los dos.', { a: 20, b: 25, max: 60 },
+      'Queda $0.8 \\cdot 0.75 = 0.6$ del precio: el descuento es del 40 %.', 'Imagina que cuesta 100 y haz los descuentos uno tras otro.'),
+    x('recibo-pago', 'Se compran **3** cuadernos de 8 mil y un morral de 76 mil. Hay **10 %** de descuento y después se agrega el IVA del **19 %**. Llena el recibo, en miles.', { et: ['subtotal', 'descuento', 'IVA', 'total a pagar'], metas: ['100', '10', '17.1', '107.1'], fichas: ['100', '10', '17.1', '107.1', '19', '109', '84'], mira: ['Suma los tres cuadernos y el morral.', 'Saca el 10 % del subtotal.', 'Se calcula sobre lo que queda después del descuento.', 'Suma el IVA a lo que quedó.'], trampas: { '2:19': 'El IVA se saca después del descuento, sobre 90.', '3:109': 'Sumaste y restaste porcentajes del subtotal.', '0:84': 'Son tres cuadernos, no uno.' }, ok: 'Descuento, IVA y total.' },
+      'El subtotal es 100; quedan 90; el IVA es $0.19 \\cdot 90 = 17.1$ y se pagan 107.1 mil.', 'Sigue el orden del enunciado: primero el descuento y luego el IVA.'),
+    x('oferta-mejor', 'Una camisa vale **60** mil. Toca **todas** las ofertas en que cada camisa sale **más barata** que con **40 % de descuento**.', { casos: [{ t: 'lleve 2 y pague 1', si: true }, { t: 'lleve 3 y pague 2', no: 'Son 120 mil por 3: cada una sale en 40.' }, { t: '20 % y, sobre lo que queda, 30 %', si: true }, { t: '20 mil menos en cada una', no: 'Cada una sale en 40, y con 40 % sale en 36.' }, { t: 'lleve 4 por 140 mil', si: true }], falta: 'Falta otra que sale en menos de 36 mil.', ok: 'Salen en 30, 33.6 y 35 mil.' },
+      'Con 40 % sale en 36 mil. Las otras: 30, 40, 33.6, 40 y 35 mil.', 'Halla cuánto se paga por una sola camisa en cada oferta.'),
+    x('cuota-partes', 'Se deben **600** mil al **2 % mensual** sobre lo que se debe. Cada mes se abonan **100** mil a la deuda, más el interés. Llena, en miles.', { et: ['interés del mes 1', 'cuota del mes 1', 'deuda que queda', 'interés del mes 2'], metas: ['12', '112', '500', '10'], fichas: ['12', '112', '500', '10', '488', '100', '14'], mira: ['Saca el 2 % de lo que se debe.', 'Suma el abono y el interés.', 'Solo el abono baja la deuda.', 'Saca el 2 % de lo que queda debiendo.'], trampas: { '2:488': 'El interés no baja la deuda.', '3:12': 'Ya se debe menos.', '1:100': 'Falta el interés.' }, ok: 'La deuda baja y el interés también.' },
+      'Interés 12, cuota 112, quedan 500 y el interés siguiente es 10: la cuota va bajando.', 'Separa lo que es interés de lo que abona a la deuda.'),
+    x('cuotas-justas', 'Una nevera vale **1 200** mil. A plazos se paga **10 % más**: **240** mil de inicial y cuotas de **90** mil. Mueve el número de cuotas.', { total: 1320, ini: 240, cuota: 90, max: 18 },
+      '$1\\,200 \\cdot 1.1 = 1\\,320$; $1\\,320 - 240 = 1\\,080$ y $1\\,080 \\div 90 = 12$ cuotas.', 'Halla primero el total a plazos y quítale la cuota inicial.'),
+    x('sube-cuota', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Una cafetera de **80** mil tiene **35 %** de descuento. ¿Cuánto se **paga**, en miles?', r: 52, c: '80 \\cdot 0.65', e: { 28: 'Eso es lo que se descuenta.' } },
+      { q: 'Se pagó **45** mil con **25 %** de descuento. ¿Cuánto **valía**, en miles?', r: 60, c: '45 \\div 0.75', e: { 56: 'El descuento se hizo sobre el precio inicial, no sobre 45.' } },
+      { q: 'De contado vale **500** mil; a plazos, **6** cuotas de **95**. ¿Cuántos miles **más** se pagan?', r: 70, c: '6 \\cdot 95 - 500', e: { 94: 'Multiplica la cuota por 6.' } }] },
+      '$80 \\cdot 0.65 = 52$; $45 \\div 0.75 = 60$; y $570 - 500 = 70$.', 'Para volver al precio de antes se divide entre la parte que se pagó.'),
+    sol('Un televisor vale 900 mil sin IVA. Se agrega el 19 % y se paga en 10 cuotas iguales sin interés. ¿De cuánto es cada cuota?', ['El IVA es [[171]] mil', 'El total es $900 + 171 =$ [[1071]] mil', 'Cada cuota es de [[107.1]] mil'], ['190', '90', '1090'], '$900 \\cdot 1.19 = 1\\,071$ y $1\\,071 \\div 10 = 107.1$ mil.', 'Halla primero el total con IVA.'),
+    err('Un precio con IVA del 19 % es de 119 mil. Se quiere el precio sin IVA.', ['El precio sin IVA es el 100 %', 'Con IVA es el 119 %', 'Se quita el 19 % de 119: queda $96.39$ mil'], 2, ['Se divide: $119 \\div 1.19 = 100$ mil', 'Se multiplica: $119 \\cdot 1.19 = 141.61$ mil', 'Se restan 19 %: queda 119 mil'], 'El 19 % se calculó sobre el precio sin IVA; por eso se divide entre 1.19.', '¿Sobre qué cantidad se calculó el IVA?'),
+    opc('Un artículo sube 20 % y después tiene un descuento del 20 %. Frente al precio inicial, al final cuesta:', ['Lo mismo', '4 % más', '40 % menos', '4 % menos'], 3, '$1.2 \\cdot 0.8 = 0.96$: un 4 % menos.', 'Prueba con un artículo de 100.'),
+  ]);
+
+  return mundo('icf-ma-finanzas', 'Dinero y Créditos', 'matematicas', [l1, l2], [
+    ['icf-ma-finanzas-1', 'El compuesto multiplica cada año por lo mismo.', play('dos-bancos', 'Toca el primer año en que el ahorro llega a la meta', { rounds: [{ title: 'Ahorro', items: [{ kind: 'comp', rate: 50, goal: 3 }] }] }, '$1.5^2 = 2.25$ y $1.5^3 = 3.375$: se triplica en el año 3.', { hint: 'Multiplica por 1.5 año tras año desde 1.' })],
+    ['icf-ma-finanzas-1', 'Para alcanzar al compuesto, la tasa simple debe ser mayor.', play('alcancias-gemelas', 'Elige la tasa simple que llena la alcancía igual que el compuesto', { tol: 0.06, max: 40, rounds: [{ C: 1000, r: 20, n: 2 }] }, '$1.2^2 = 1.44$: 44 % en dos años, es decir, 22 % simple por año.', { hint: 'Halla cuánto creció en total el compuesto y repártelo.' })],
+    ['icf-ma-finanzas-1', 'La tasa y el tiempo van en el mismo periodo.', opc('Se invierten 400 mil al 2 % mensual simple durante un año y medio. El interés es de:', ['12 mil', '8 mil', '144 mil', '96 mil'], 2, '18 meses por 8 mil: 144 mil.', 'Pasa el tiempo a meses.')],
+    ['icf-ma-finanzas-2', 'Los cambios seguidos se multiplican.', play('cadena-cambios', 'Pon dos sellos para que el precio cambie lo que se pide', { stamps: [10, 20, -10, -20, -50], rounds: [{ goal: 0.88, text: 'El precio final debe ser el 88 % del inicial' }] }, '$1.1 \\cdot 0.8 = 0.88$.', { hint: 'Busca dos factores que multiplicados den 0.88.' })],
+    ['icf-ma-finanzas-2', 'El cambio se mide sobre el valor de antes.', play('porcentaje-cambio', 'Fija en qué porcentaje cambió la cuota', { rounds: [{ from: 80, to: 92, unit: 'mil' }] }, 'Subió 12 sobre 80: 15 %.', { hint: 'Divide lo que cambió entre lo que valía antes.' })],
+    ['icf-ma-finanzas-2', 'El precio de antes se halla dividiendo.', opc('Con un descuento del 30 %, unos zapatos quedaron en 84 mil. Antes costaban:', ['120 mil', '109.2 mil', '114 mil', '58.8 mil'], 0, '$84 \\div 0.7 = 120$ mil.', '¿Qué porcentaje del precio son los 84 mil?')],
+  ]);
+})());
+;
 //#archivo js/courses/preicfes-lc-literal.js
 // Preicfes · Lectura Crítica · mundo 1 «Lo que Dice el Texto» (spec 2026-11-20-curso-preicfes): la primera competencia de la
 // prueba, identificar y entender los contenidos locales (datos, ideas de cada párrafo, palabras y referencias). Cada lección
@@ -8107,6 +7708,158 @@ PI_MUNDOS.push((() => {
   ]);
 })());
 ;
+//#archivo js/courses/preicfes-sc-economia.js
+// Preicfes · Sociales y Ciudadanas · mundo 9 «Economía y Globalización» (spec 2026-11-25-preicfes-estructura). Textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const MERCADO = {
+    id: 'icf-mercado-papa', title: 'Lo que dice un precio',
+    ficha: { autor: 'Cuaderno de economía', fuente: 'Colección «Cuentas claras»', fecha: 'Febrero de 2026' },
+    paras: [
+      'Un precio es un mensaje. Cuando mucha gente quiere algo y hay poco, sube; cuando sobra, baja. La cantidad que los compradores quieren a cada precio se llama demanda; la que los vendedores ofrecen, oferta. El precio en que las dos coinciden es el de equilibrio.',
+      'En el mercado de Villa Rica, una helada dañó la mitad de la papa. El bulto pasó de 80 mil a 140 mil pesos. Nadie se puso de acuerdo para subirlo: había menos papa y las mismas ganas de comerla. Algunas familias se pasaron a la yuca, que también subió un poco. Cuando un producto puede reemplazar a otro, se llaman sustitutos.',
+      'No todos los mercados se parecen. Si hay muchos vendedores, compiten y ninguno manda. Si hay uno solo, es un monopolio: puede cobrar caro y atender mal. Si unos pocos se ponen de acuerdo en secreto para fijar el precio, forman un cartel, y en Colombia eso es ilegal.',
+      'El Estado interviene por varias razones. Regula los monopolios, protege al consumidor y paga lo que el mercado no paga, como un faro o una campaña de vacunas. También pone límites: si una fábrica ensucia el río, el daño lo pagan otros, y a eso los economistas le dicen externalidad. Puede incluso fijar un precio máximo, pero si lo pone muy bajo los vendedores ofrecen menos y aparecen la escasez y la reventa.',
+      'Para hacer todo eso cobra impuestos. Los directos, como el de renta, dependen de lo que cada quien gana o tiene. Los indirectos, como el IVA, se pagan al comprar: el mismo peso de impuesto sale del bolsillo de un rico y del de un pobre, aunque al pobre le duele más. Un impuesto es progresivo cuando cobra una proporción mayor a quien más tiene; es regresivo cuando termina pesando más sobre quien menos tiene.',
+      'El dinero recogido va al presupuesto. En él se ve qué le importa a un gobierno: cuánto pone en escuelas, en carreteras o en pagar deudas. Si gasta más de lo que recibe hay déficit, y debe pedir prestado, recortar o cobrar más. Cada salida tiene quien la aplauda y quien la pague.',
+    ],
+  };
+  const l1 = leccion('icf-sc-economia-1', 'Mercado, precios e impuestos', guion(
+    ['Oferta y demanda', 'El precio sube si hay poco y muchos lo quieren; baja si sobra.'],
+    ['Competencia, monopolio y cartel', 'Muchos compiten; uno solo manda; unos pocos se ponen de acuerdo.'],
+    ['El papel del Estado', 'Regula, protege y paga lo que el mercado no paga.'],
+    ['Impuestos', 'Directos e indirectos; progresivos y regresivos.']), [
+    x('pinta-tipos', 'Pinta cada noticia con lo que cambió en el mercado.', { doc: MERCADO, plumas: ['baja la oferta', 'sube la oferta', 'sube la demanda'],
+      ...P(['Una plaga acabó con los limones.', 0, '¿Cambió lo que se ofrece o lo que se quiere?'], ['Hubo cosecha récord de tomate.', 1, '¿Cambió lo que se ofrece o lo que se quiere?'], ['Llegó la temporada escolar y todos buscan cuadernos.', 2, '¿Cambió lo que se ofrece o lo que se quiere?'], ['Cerró la mitad de las panaderías.', 0, '¿Cambió lo que se ofrece o lo que se quiere?']), bien: 'Vendedores o compradores.' },
+      'La plaga y los cierres bajan la oferta, la cosecha la sube y la temporada sube la demanda.', 'Pregunta si el cambio les ocurrió a los que venden o a los que compran.'),
+    x('genero-o-cita', '¿El impuesto es **directo** o **indirecto**?', { doc: MERCADO, rot: ['directo', 'indirecto'],
+      ...F(['El de renta, según lo que se gana', 0, '¿Depende de lo que se tiene o de comprar?'], ['El IVA de un jabón', 1, '¿Depende de lo que se tiene o de comprar?'], ['El predial de una casa', 0, '¿Depende de lo que se tiene o de comprar?'], ['El que va en el precio de una gaseosa', 1, '¿Depende de lo que se tiene o de comprar?']), bien: 'Tener o comprar.' },
+      'Renta y predial dependen de lo que se gana o se tiene; IVA y gaseosa, de comprar.', 'Mira si se paga por ganar o tener, o al momento de comprar.'),
+    x('pista-tipo', 'Ata cada nombre a su caso.', { doc: MERCADO, lineas: ['una sola empresa vende el agua del pueblo', 'tres fábricas acuerdan en secreto el precio del pañal', 'cuarenta puestos venden arepas', 'el humo de un horno enferma a los vecinos'],
+      ...T(['monopolio', 0, '¿Dónde hay un solo vendedor?'], ['cartel', 1, '¿Dónde hay un acuerdo secreto?'], ['competencia', 2, '¿Dónde hay muchos vendedores?'], ['externalidad', 3, '¿Dónde el daño lo pagan otros?']), bien: 'Uno, pocos, muchos y terceros.' },
+      'Uno solo es monopolio, el acuerdo es cartel, muchos compiten y el humo es externalidad.', 'Cuenta los vendedores y mira quién paga el daño.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: MERCADO, filas: [{ antes: 'La papa subió porque', topes: ['los vendedores se pusieron de acuerdo', 'el gobierno lo ordenó', 'había menos papa y la misma demanda'], va: 2 }, { antes: 'Un precio máximo muy bajo puede traer', topes: ['más producción', 'escasez y reventa', 'nada'], va: 1 }, { antes: 'Los carteles en Colombia son', topes: ['ilegales', 'legales', 'obligatorios'], va: 0 }], mira: ['Relee qué pasó después de la helada.', 'Relee el final del párrafo 4.', 'Relee el final del párrafo 3.'], luz: [[2, 'había menos papa'], [4, 'la escasez y la reventa'], [3, 'eso es ilegal']], bien: 'Menos papa, escasez e ilegales.' },
+      'Había menos papa, el precio muy bajo trae escasez y los carteles son ilegales.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: MERCADO, nums: [2, 3, 5], pregunta: 'Queda en pie', queda: 'El IVA se paga al comprar.',
+      ...T(['Los vendedores de papa hicieron un acuerdo.', 2, 'Busca qué no hizo nadie.'], ['Todos los mercados funcionan igual.', 5, 'Busca la oración más corta del párrafo 3.'], ['El IVA depende de cuánto gana cada quien.', 11, 'Busca qué se dice de los indirectos.']), bien: 'Nadie, no todos y al comprar.' },
+      'Nadie se puso de acuerdo, no todos los mercados se parecen y el IVA se paga al comprar.', 'Saca la palabra clave: acuerdo, igual, gana.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: MERCADO, nums: [2, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['El bulto llegó a 140 mil pesos.', 0, 'Léela junto a la helada.'], ['Parte de la demanda de papa se pasó a otro producto.', 1, '¿Qué hicieron algunas familias?'], ['El mismo IVA quita una proporción mayor del ingreso de un pobre.', 1, 'Compara el mismo peso en dos bolsillos.'], ['La helada duró tres días.', 2, '¿Se dice cuánto duró?']),
+      luz: [[2, '140 mil'], [2, 'se pasaron a la yuca'], [5, 'al pobre le duele más']], bien: 'Sustitutos y proporciones.' },
+      'Los 140 mil están escritos; la yuca y la proporción se deducen; los días no aparecen.', 'Piensa qué significa en la práctica cada ejemplo del texto.'),
+    x('balanza-tesis', 'Propuesta: «fijar un precio máximo a los arriendos». ¿Qué hace cada dato?', { doc: MERCADO, tesis: 'Fijar un precio máximo a los arriendos',
+      ...F(['Miles de familias gastan en arriendo más de la mitad del sueldo.', 0, '¿A quién ayudaría?'], ['Donde se hizo, muchos dueños dejaron de arrendar.', 1, '¿Qué pasó con la oferta?'], ['Las casas tienen ventanas.', 2, '¿Cambia la decisión?']), bien: 'Ayuda a unos, reduce la oferta.' },
+      'El gasto de las familias la apoya; la oferta que bajó la debilita; las ventanas no pesan.', 'Pregunta si el dato hace más o menos conveniente la medida.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: MERCADO, lineas: ['El precio depende de la oferta y la demanda.', 'El bulto es de papa.', 'Hay competencia, monopolios y carteles.', 'El Estado interviene y cobra impuestos.', 'Hay un faro.', 'El presupuesto muestra las prioridades de un gobierno.'], ...S([1, 4], { 0: 'Es la idea del comienzo.', 2: 'Son las clases de mercado.', 3: 'Es el papel del Estado.', 5: 'Es el cierre.' }), bien: 'Precio, mercados, Estado y presupuesto.' },
+      'El bulto y el faro son detalles; lo demás resume.', 'Deja lo que usarías para explicar otro mercado.'),
+  ]);
+
+  const CANASTA = {
+    id: 'icf-canasta-rosa', title: 'La canasta de Rosa',
+    ficha: { autor: 'Cuaderno de economía', fuente: 'Colección «Cuentas claras»', fecha: 'Marzo de 2026' },
+    paras: [
+      'En enero, Rosa llenaba su canasta con 100 mil pesos. En diciembre, la misma canasta le costó 110 mil. Esa subida general de los precios se llama inflación: en su caso fue del 10 %. Que suba solo el tomate no es inflación; que suba casi todo, sí.',
+      'Rosa gana lo mismo que en enero. Su salario nominal, el que dice el recibo, no cambió; su salario real, que es lo que alcanza a comprar, bajó. Si se lo hubieran subido el 10 %, estaría igual. Quien guarda billetes debajo del colchón también pierde, y quien debe plata a una tasa fija a veces gana.',
+      'El banco central de un país, que en Colombia es el Banco de la República, intenta mantener la inflación baja. Su herramienta principal es la tasa de interés. Si la sube, los préstamos salen caros, la gente gasta menos y los precios se frenan. El costo es que también se frenan las ventas y el empleo.',
+      'La tasa de desempleo mide qué parte de la fuerza laboral busca trabajo y no lo encuentra. Quien no busca no cuenta: ni el estudiante de tiempo completo, ni quien se cansó de buscar. Por eso la tasa puede bajar por dos razones muy distintas. Además, muchos de los que trabajan lo hacen en la informalidad: sin contrato, ni salud, ni pensión.',
+      'La pobreza se mide de más de una forma. La monetaria compara el ingreso con lo que cuesta una canasta básica. La multidimensional mira también la escuela, la salud, el agua y la vivienda. Una familia puede pasar la línea del ingreso y seguir sin acueducto. También hay hogares que salen de la pobreza y vuelven a entrar varias veces en pocos años.',
+      'La desigualdad es otra cosa: mira cómo se reparte. El índice de Gini va de 0, cuando todos tienen lo mismo, a 1, cuando uno solo lo tiene todo. Un país puede volverse más rico y más desigual a la vez. El producto interno bruto por persona divide la torta por igual en el papel, no en la mesa.',
+    ],
+  };
+  const l2 = leccion('icf-sc-economia-2', 'Inflación, desempleo y pobreza', guion(
+    ['Inflación', 'Subida general de los precios; baja lo que alcanza el salario.'],
+    ['Tasa de interés', 'Si sube, se gasta menos y los precios se frenan; también el empleo.'],
+    ['Desempleo', 'Solo cuenta a quien busca trabajo y no lo encuentra.'],
+    ['Pobreza y desigualdad', 'Cuánto falta y cómo se reparte son preguntas distintas.']), [
+    x('genero-o-cita', '¿La medida habla de **pobreza** o de **desigualdad**?', { doc: CANASTA, rot: ['pobreza', 'desigualdad'],
+      ...F(['Hogares que no alcanzan la canasta básica', 0, '¿Mira lo que falta o cómo se reparte?'], ['Índice de Gini', 1, '¿Mira lo que falta o cómo se reparte?'], ['Viviendas sin agua potable', 0, '¿Mira lo que falta o cómo se reparte?'], ['Parte del ingreso que recibe el 10 % más rico', 1, '¿Mira lo que falta o cómo se reparte?']), bien: 'Lo que falta o el reparto.' },
+      'La canasta y el agua miran lo que falta; el Gini y la parte del más rico, el reparto.', 'Pregunta si se compara con una línea o entre personas.'),
+    x('pasos-del-proceso', 'Ordena lo que ocurre cuando el banco central frena la inflación. El primero está en su puesto.', { doc: CANASTA, que: 'el freno', de: 'La canasta de Rosa', fija: 1, ini: [0, 2, 4, 1, 3], tiras: ['Los precios suben mucho.', 'El banco sube la tasa de interés.', 'Los préstamos salen caros.', 'La gente gasta menos.', 'Los precios se frenan.'], mira: ['', 'Es la herramienta del banco.', 'Es lo primero que cambia con la tasa.', 'Es lo que hace la gente con créditos caros.', 'Es el resultado buscado.'], bien: 'Tasa, préstamos, gasto y precios.' },
+      'Sube la tasa, se encarecen los préstamos, se gasta menos y los precios se frenan.', 'Pregunta qué tuvo que pasar antes de cada paso.'),
+    x('pinta-tipos', 'Pinta cada persona según cómo cuenta en la tasa de desempleo.', { doc: CANASTA, plumas: ['desempleada', 'ocupada', 'no está en la fuerza laboral'],
+      ...P(['Busca trabajo hace tres meses y no encuentra.', 0, '¿Trabaja? ¿Busca?'], ['Vende tintos sin contrato.', 1, '¿Trabaja? ¿Busca?'], ['Estudia todo el día y no busca trabajo.', 2, '¿Trabaja? ¿Busca?'], ['Se cansó de buscar y ya no busca.', 2, '¿Trabaja? ¿Busca?']), bien: 'Trabajar, buscar o ninguna.' },
+      'La que busca es desempleada, la que vende está ocupada y quienes no buscan no cuentan.', 'Haz dos preguntas: si trabaja y, si no, si está buscando.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: CANASTA, filas: [{ antes: 'El salario nominal de Rosa', topes: ['subió', 'bajó', 'no cambió'], va: 2 }, { antes: 'Su salario real', topes: ['subió', 'bajó', 'no cambió'], va: 1 }, { antes: 'Un Gini de 0 significa', topes: ['que todos tienen lo mismo', 'que uno lo tiene todo', 'que nadie trabaja'], va: 0 }], mira: ['Relee qué dice el recibo.', 'Relee lo que alcanza a comprar.', 'Relee entre qué números va el índice.'], luz: [[2, 'no cambió'], [2, 'lo que alcanza a comprar, bajó'], [6, 'cuando todos tienen lo mismo']], bien: 'Igual, menos y todos igual.' },
+      'El nominal no cambió, el real bajó y un Gini de 0 es que todos tienen lo mismo.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CANASTA, nums: [1, 4, 6], pregunta: 'Queda en pie', queda: 'Un país puede crecer y volverse más desigual.',
+      ...T(['Si sube el tomate, hay inflación.', 3, 'Busca el ejemplo del tomate.'], ['Todo el que no trabaja cuenta como desempleado.', 5, 'Busca quién no cuenta.'], ['El PIB por persona muestra lo que recibe cada quien.', 11, 'Busca la torta.']), bien: 'Casi todo, quien busca y el papel.' },
+      'Que suba solo el tomate no es inflación, quien no busca no cuenta y la torta se reparte igual solo en el papel.', 'Saca la palabra clave: tomate, no trabaja, por persona.'),
+    x('voz-de-la-fuente', 'Con inflación alta, ata cada efecto a quien lo vive.', { ayuda: 'Tira un hilo desde cada efecto hasta quien lo vive.', doc: CANASTA, portadas: [['Empleada con sueldo fijo', 'actor'], ['Quien guarda billetes', 'actor'], ['Quien debe a tasa fija', 'actor'], ['Banco central', 'actor']],
+      ...T(['compra menos con lo mismo que gana', 0, '¿Quién recibe igual cada mes?'], ['sus ahorros alcanzan para menos', 1, '¿Quién tiene la plata quieta?'], ['lo que paga vale cada vez menos', 2, '¿Quién puede ganar?'], ['debe subir la tasa', 3, '¿Quién tiene esa herramienta?']), bien: 'No todos la viven igual.' },
+      'El sueldo alcanza menos, los billetes pierden, la deuda fija pesa menos y el banco sube la tasa.', 'Piensa qué tiene cada uno y si ese valor cambia.'),
+    x('balanza-tesis', 'Afirmación: «bajó el desempleo, así que hay más gente trabajando». ¿Qué hace cada dato?', { doc: CANASTA, tesis: 'Hay más gente trabajando',
+      ...F(['Aumentó en 200 mil el número de ocupados.', 0, '¿Creció el número que importa?'], ['Muchos dejaron de buscar y hay los mismos ocupados.', 1, '¿Por qué bajó la tasa?'], ['La encuesta se imprimió en papel azul.', 2, '¿Dice algo del empleo?']), bien: 'La tasa baja por dos razones.' },
+      'Más ocupados la apoya; dejar de buscar la debilita; el papel no pesa.', 'Recuerda que la tasa puede bajar por dos razones.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo. Sobran dos.', { doc: CANASTA, frases: [[2, 'Su salario ', 'nominal', ', el que dice el recibo'], [4, 'lo hacen en la ', 'informalidad', ''], [1, 'Esa subida ', 'general', ' de los precios']],
+      ...F(['en pesos', 0, '¿Qué mira el recibo?'], ['falta de protección', 1, '¿Qué no tienen: contrato, salud?'], ['de casi todos', 2, '¿Sube uno o muchos?'], ['de uno solo', null, 'Es lo contrario de general.'], ['en compras', null, 'Eso sería el salario real.']), bien: 'El contexto las explica.' },
+      'Nominal es en pesos, informalidad es falta de protección y general es de casi todos.', 'Lee el ejemplo que da el texto alrededor.'),
+  ]);
+
+  const CAMISETA = {
+    id: 'icf-camiseta', title: 'La camiseta que dio la vuelta al mundo',
+    ficha: { autor: 'Cuaderno de economía', fuente: 'Colección «Cuentas claras»', fecha: 'Abril de 2026' },
+    paras: [
+      'La camiseta que lleva puesta Nico dice «Hecho en Vietnam». El algodón creció en la India, la tela se tejió en China, el diseño se dibujó en España y el barco que la trajo navega con bandera de Panamá. A esa red de países conectados por el comercio, el dinero, la información y las personas se le llama globalización.',
+      'No es nueva. Hace siglos, la seda y la plata ya cruzaban el mundo. Lo nuevo es la velocidad: los contenedores abarataron el transporte, internet acercó las oficinas y los tratados bajaron los aranceles, que son los impuestos a lo que entra de otro país.',
+      'Un tratado de libre comercio abre la puerta en los dos sentidos. Quien exporta flores o café encuentra más compradores; quien produce arroz o leche debe competir con fincas gigantes que a veces reciben subsidios de sus gobiernos. El consumidor suele pagar menos. El pequeño productor, si nadie lo ayuda a prepararse, puede quebrar.',
+      'Las multinacionales llevan empleo y tecnología a los países donde se instalan. También buscan dónde los salarios y las exigencias ambientales son menores. Si un país sube sus reglas, pueden amenazar con irse. Por eso algunos proponen reglas comunes: un impuesto mínimo y derechos laborales que valgan en todas partes.',
+      'La cultura también viaja. Millones de migrantes envían dinero a sus casas y llevan consigo recetas, palabras, canciones y fiestas de su tierra. Nico oye música coreana y, en Seúl, una muchacha baila salsa caleña. Unos temen que todo termine pareciéndose; otros ven mezclas nuevas. A lo local que se cruza con lo global algunos le dicen «glocal»: una hamburguesa con patacón.',
+      'Estar conectados también contagia los problemas. Una crisis en los bancos de un país deja sin empleo a gente de otro; un virus da la vuelta al mundo en semanas; una guerra lejana encarece el pan. Organismos como la ONU, el Fondo Monetario Internacional o la Organización Mundial del Comercio intentan coordinar respuestas. No todos los países pesan lo mismo en ellos.',
+    ],
+  };
+  const l3 = leccion('icf-sc-economia-3', 'Globalización', guion(
+    ['Una red', 'Países conectados por comercio, dinero, información y personas.'],
+    ['Libre comercio', 'Bajan los aranceles: unos ganan mercados y otros pierden el suyo.'],
+    ['Empresas y reglas', 'Las multinacionales llevan empleo y buscan costos bajos.'],
+    ['Cultura y crisis', 'También viajan las costumbres y los problemas.']), [
+    x('pinta-tipos', 'Pinta cada ejemplo con la dimensión de la globalización que muestra.', { doc: CAMISETA, plumas: ['económica', 'cultural', 'política'],
+      ...P(['Se exportan flores a otro continente.', 0, '¿Comercio, costumbres o gobierno?'], ['Se baila salsa en Seúl.', 1, '¿Comercio, costumbres o gobierno?'], ['Varios países firman un acuerdo en la ONU.', 2, '¿Comercio, costumbres o gobierno?'], ['Una hamburguesa lleva patacón.', 1, '¿Comercio, costumbres o gobierno?']), bien: 'Comercio, costumbres y acuerdos.' },
+      'Las flores son economía, la salsa y la hamburguesa cultura, y el acuerdo política.', 'Pregunta qué cruza la frontera: cosas, costumbres o decisiones.'),
+    x('genero-o-cita', 'Con un tratado de libre comercio, ¿más bien **gana** o **arriesga**?', { doc: CAMISETA, rot: ['gana', 'arriesga'],
+      ...F(['Quien exporta café', 0, '¿Encuentra compradores o competidores?'], ['Quien siembra arroz en una finca pequeña', 1, '¿Encuentra compradores o competidores?'], ['Quien compra más barato', 0, '¿Paga menos o más?'], ['Quien vende leche sin ayuda para prepararse', 1, '¿Encuentra compradores o competidores?']), bien: 'La puerta se abre en los dos sentidos.' },
+      'Exportador y consumidor ganan; arroz y leche de pequeños productores arriesgan.', 'Piensa a quién se le abre un mercado y a quién le llega un competidor.'),
+    x('pista-tipo', 'Ata cada término a su ejemplo.', { doc: CAMISETA, lineas: ['impuesto a lo que entra de otro país', 'fábrica con sedes en nueve países', 'ayuda de un gobierno a sus fincas', 'arepa rellena de sushi'],
+      ...T(['arancel', 0, '¿Cuál se cobra en la frontera?'], ['multinacional', 1, '¿Cuál está en muchos países?'], ['subsidio', 2, '¿Cuál es una ayuda?'], ['glocal', 3, '¿Cuál mezcla lo local y lo global?']), bien: 'Impuesto, empresa, ayuda y mezcla.' },
+      'El arancel se cobra al entrar, la multinacional está en varios países, el subsidio ayuda y lo glocal mezcla.', 'Busca en el texto la explicación que acompaña cada término.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: CAMISETA, filas: [{ antes: 'La globalización', topes: ['empezó con internet', 'ya terminó', 'no es nueva'], va: 2 }, { antes: 'En los organismos internacionales los países', topes: ['pesan todos igual', 'no pesan todos lo mismo', 'no participan'], va: 1 }, { antes: 'Los tratados', topes: ['bajaron los aranceles', 'subieron los aranceles', 'crearon la seda'], va: 0 }], mira: ['Relee el comienzo del párrafo 2.', 'Relee el final del texto.', 'Relee lo nuevo del párrafo 2.'], luz: [[2, 'No es nueva'], [6, 'No todos los países pesan lo mismo'], [2, 'bajaron los aranceles']], bien: 'No es nueva, no pesan igual y bajaron.' },
+      'No es nueva, los países no pesan lo mismo y los tratados bajaron los aranceles.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CAMISETA, nums: [2, 4, 6], pregunta: 'Queda en pie', queda: 'Un problema lejano puede afectar lo que se paga aquí.',
+      ...T(['El comercio entre continentes es un invento reciente.', 1, 'Busca la seda y la plata.'], ['Las multinacionales solo buscan donde hay más exigencias.', 4, 'Busca qué buscan también.'], ['Una crisis se queda siempre en el país donde nace.', 8, 'Busca el ejemplo de los bancos.']), bien: 'Seda, menores y otro país.' },
+      'La seda cruzaba hace siglos, las multinacionales buscan exigencias menores y la crisis pasa a otro país.', 'Saca la palabra clave: reciente, exigencias, crisis.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CAMISETA, nums: [1, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['El algodón creció en la India.', 0, 'Léela junto a la camiseta.'], ['La etiqueta no cuenta todos los países que participaron.', 1, 'Compara lo que dice con los países que nombra el texto.'], ['Al arrocero le convendría ayuda antes de firmar el tratado.', 1, '¿Qué le puede pasar si nadie lo prepara?'], ['Nico pagó veinte mil por la camiseta.', 2, '¿Se dice cuánto pagó?']),
+      luz: [[1, 'El algodón creció en la India'], [1, '«Hecho en Vietnam»'], [3, 'si nadie lo ayuda a prepararse']], bien: 'Comparar y prever.' },
+      'La India está escrita; la etiqueta y la ayuda se deducen; el precio no aparece.', 'Compara lo que muestra la etiqueta con lo que cuenta el texto.'),
+    x('voz-de-la-fuente', 'Ata cada opinión sobre un tratado a quien la diría.', { ayuda: 'Tira un hilo desde cada opinión hasta quien la diría.', doc: CAMISETA, portadas: [['Exportadora de flores', 'actor'], ['Arrocero pequeño', 'actor'], ['Sindicato', 'actor'], ['Comprador', 'actor']],
+      ...T(['«por fin entro a ese mercado»', 0, '¿A quién se le abre una puerta?'], ['«no puedo competir con sus subsidios»', 1, '¿Quién enfrenta fincas gigantes?'], ['«que los derechos valgan aquí y allá»', 2, '¿Quién defiende a los trabajadores?'], ['«ahora me sale más barato»', 3, '¿Quién paga menos?']), bien: 'Cada quien desde su lugar.' },
+      'La exportadora gana mercado, el arrocero compite, el sindicato pide derechos y el comprador ahorra.', 'Pregunta qué le cambia el tratado a cada uno.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: CAMISETA, lineas: ['La globalización conecta países.', 'El barco lleva bandera.', 'El libre comercio beneficia a unos y golpea a otros.', 'La cultura también viaja y se mezcla.', 'El patacón va con hamburguesa.', 'Las crisis se contagian y piden coordinación.'], ...S([1, 4], { 0: 'Es la definición.', 2: 'Es la idea sobre el comercio.', 3: 'Es la idea sobre la cultura.', 5: 'Es el cierre.' }), bien: 'Red, comercio, cultura y crisis.' },
+      'La bandera y el patacón son detalles; lo demás resume.', 'Deja lo que sirve para entender otro producto o país.'),
+  ]);
+
+  const CAFE = {
+    id: 'icf-cooperativa-cafe', title: 'La taza y la montaña',
+    paras: [
+      'En Alto Brisas, trescientas familias siembran café. Durante años se lo vendieron al único comprador que subía con camión. Pagaba lo que quería: no había otro. En 2023 las familias formaron una cooperativa, compraron su propio camión y empezaron a vender directo a tostadores de Japón y Alemania. El precio que reciben por carga subió un 40 %.',
+      'No todo fue ganancia. El precio del café se decide en una bolsa, a miles de kilómetros. Cuando en Brasil hay buena cosecha, baja en Alto Brisas, aunque allí no haya cambiado nada. En la última caída, la carga pasó de un millón a setecientos mil pesos en cuatro meses. Ese mismo año, los fertilizantes importados se encarecieron por una guerra en otro continente.',
+      'Con los ingresos de los primeros años, la cooperativa pagó mejor a los recolectores. Pero en el pueblo los precios subieron 12 % y el jornal, solo 8 %. «Gano más pesos y compro menos mercado», resumió doña Elvira, recolectora. La mayoría trabaja sin contrato, y fuera de la cosecha muchos dejan de buscar empleo porque saben que no hay. Las cifras oficiales dicen que el desempleo del municipio es bajo.',
+      'El alcalde propuso un impuesto igual para todas las familias: cien mil pesos al año para arreglar la carretera. La cooperativa respondió con otra idea: que cada quien pague un porcentaje de lo que vende. «Cien mil pesos es un almuerzo para el hotel y un mes de mercado para un recolector», dijo su gerente. Después de varias asambleas se aprobó el porcentaje.',
+      'Un estudiante calculó que el ingreso promedio por persona del municipio se había duplicado en seis años. También que casi todo el aumento había quedado en el 10 % de las familias, las dueñas de más tierra. En la plaza hay ahora un café con letrero en inglés donde una taza cuesta lo que un recolector gana en media mañana. Los turistas le toman fotos a la montaña. «Yo a esa montaña la conozco por debajo», dice doña Elvira, «que es por donde se recoge».',
+    ],
+  };
+  const Q = preg(CAFE, 'sociales');
+  return mundo('icf-sc-economia', 'Economía y Globalización', 'sociales', [l1, l2, l3], [
+    ['icf-sc-economia-1', 'Un solo comprador tiene mucho poder.', Q('Antes de la cooperativa, el comprador podía pagar lo que quería porque:', ['Era el único que compraba', 'El café era malo', 'Lo ordenaba la ley', 'Había muchos compradores'], 0, 'Sin otros compradores, las familias no tenían a quién más vender.', 'Relee qué dice el texto del único camión.')],
+    ['icf-sc-economia-1', 'Progresivo: paga más quien más tiene.', Q('El argumento del gerente contra los cien mil pesos iguales es que esa cuota:', ['Es ilegal', 'No alcanza para la carretera', 'Pesa más sobre quien menos tiene', 'La cobran en dólares'], 2, 'Es un almuerzo para el hotel y un mes de mercado para un recolector.', 'Compara qué significa esa suma para cada uno.')],
+    ['icf-sc-economia-2', 'El salario real es lo que se alcanza a comprar.', Q('La frase «gano más pesos y compro menos mercado» significa que doña Elvira:', ['Perdió su empleo', 'Tiene más salario real', 'Tiene el mismo salario nominal', 'Tiene más salario nominal y menos salario real'], 3, 'El jornal subió 8 % y los precios, 12 %.', 'Compara la subida del jornal con la de los precios.')],
+    ['icf-sc-economia-2', 'Quien no busca no cuenta como desempleado.', Q('El desempleo oficial puede ser bajo aunque fuera de la cosecha falte trabajo porque:', ['Todos tienen contrato', 'Quienes dejan de buscar no se cuentan', 'La cooperativa miente', 'Los turistas cuentan como empleados'], 1, 'Muchos dejan de buscar y salen de la cuenta.', 'Recuerda a quién cuenta la tasa de desempleo.')],
+    ['icf-sc-economia-2', 'Promedio alto y reparto desigual.', Q('Los cálculos del estudiante muestran que el municipio:', ['Es más rico y más desigual', 'Es más pobre', 'Reparte todo por igual', 'No ha cambiado'], 0, 'El promedio se duplicó y casi todo quedó en el 10 % de las familias.', 'Une los dos datos del estudiante.')],
+    ['icf-sc-economia-3', 'Lo que pasa lejos llega hasta aquí.', Q('Un ejemplo de que la globalización contagia problemas en Alto Brisas es:', ['La compra del camión', 'El letrero en inglés', 'Las asambleas', 'El alza de los fertilizantes por una guerra lejana'], 3, 'Una guerra en otro continente encareció un insumo local.', 'Busca un hecho lejano con efecto en el pueblo.')],
+    ['icf-sc-economia-3', 'La puerta se abre en los dos sentidos.', Q('La relación de la cooperativa con el mercado mundial se describe mejor como:', ['Solo beneficios', 'Una oportunidad que también trae riesgos', 'Solo pérdidas', 'Un asunto que no la afecta'], 1, 'Subió el precio que reciben, pero dependen de la bolsa y de los insumos.', 'Compara el final del párrafo 1 con el párrafo 2.')],
+  ]);
+})());
+;
 //#archivo js/courses/preicfes-cn-indaga.js
 // Preicfes · Ciencias Naturales · mundo 1 «Indagación Científica» (spec 2026-11-20-curso-preicfes): la competencia que más
 // pregunta la prueba de ciencias: la pregunta de un experimento, sus variables, el control, los datos y qué se puede concluir.
@@ -9187,6 +8940,158 @@ PI_MUNDOS.push((() => {
     ['icf-cn-herencia-3', 'Selección artificial: escoge la gente.', pl('resume-parrafo', 'Cada párrafo en una frase', { paras: [2, 4], options: ['La gente escogió qué semillas sembrar.', 'El maíz depende de las personas.', 'El ambiente escogió las semillas.', 'El maíz se siembra solo.'], key: [0, 1] }, 'El 2 habla de escoger semillas; el 4, de su dependencia; las otras dicen lo contrario.', 'El resumen no puede contradecir el párrafo.')],
     ['icf-cn-herencia-3', 'Las mismas reglas: variación, herencia y selección.', pl('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { labels: ['presenta al antepasado', 'explica la selección', 'da la prueba del ADN', 'muestra una consecuencia', 'cuenta un riesgo y su salida', 'enseña a cocinar'], key: [0, 1, 2, 3, 4] }, 'Antepasado, selección, prueba, consecuencia y riesgo; no hay receta.', 'Mira qué agrega cada párrafo.')],
     ['icf-cn-herencia-3', 'Natural o artificial: quién selecciona.', opc('La diferencia entre la selección del maíz (la gente guardaba las semillas de granos grandes) y la de unas lagartijas que los halcones cazan según su color es:', ['En el maíz no hubo herencia', 'En las lagartijas no hubo variación', 'En el maíz escogió la gente y en las lagartijas, el ambiente', 'Ninguna de las dos es selección'], 2, 'Las dos tienen variación y herencia; cambia quién selecciona.', 'Pregunta quién decidía cuáles se reproducían.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-cn-reacciones.js
+// Preicfes · Ciencias Naturales · mundo 9 «Reacciones y Cantidades» (spec 2026-11-25-preicfes-estructura). Textos y datos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, S, sol, err, opc, guion } = ICF;
+
+  const FRASCO = {
+    id: 'icf-frasco-cerrado', title: 'El frasco que no cambió de peso',
+    ficha: { autor: 'Club de ciencias', fuente: 'Cuaderno de laboratorio', fecha: 'Marzo de 2026' },
+    paras: [
+      'En un cambio físico, la sustancia sigue siendo la misma: el hielo derretido es agua. En un cambio químico, o reacción, unas sustancias se convierten en otras con propiedades distintas. Las que se gastan se llaman reactivos; las que aparecen, productos.',
+      'Hay señales que hacen sospechar una reacción: sale un gas, cambia el color, aparece un sólido en un líquido, se libera o se absorbe calor. Son pistas, no pruebas. El agua que hierve también suelta burbujas, y no es una reacción: el vapor sigue siendo agua.',
+      'El club quemó un trozo de madera en una balanza. La masa bajó de 50 a 4 gramos y alguien dijo que el resto se había destruido. Después echaron vinagre y bicarbonato en un frasco con tapa. Salió gas y, sin embargo, la balanza marcó lo mismo antes y después. Cuando abrieron la tapa, la masa bajó.',
+      'La explicación es que en una reacción los átomos no se crean ni se destruyen: se sueltan de unos y se unen a otros. Por eso la masa total se conserva. La madera parecía perder masa porque los gases se iban; y con un clavo ocurre lo contrario: al oxidarse pesa más, porque se le unen átomos de oxígeno del aire.',
+      'Una ecuación química cuenta esa historia. A la izquierda de la flecha van los reactivos; a la derecha, los productos. Debe haber los mismos átomos de cada clase en los dos lados. Para lograrlo se cambian los coeficientes, que dicen cuántas moléculas hay; nunca los subíndices, porque eso cambiaría la sustancia: el agua es H₂O y el agua oxigenada, H₂O₂.',
+      'Las reacciones pueden clasificarse. En una síntesis, varias sustancias forman una sola. En una descomposición, una sola da varias. En una combustión, una sustancia se une con oxígeno y libera energía en forma de calor y luz. Si la reacción libera calor es exotérmica; si lo absorbe, endotérmica. Encender una estufa es lo primero; la compresa que se enfría al golpearla, lo segundo. Las plantas también absorben energía, la del Sol, para formar azúcar.',
+    ],
+  };
+  const l1 = leccion('icf-cn-reacciones-1', 'Reacciones y conservación', guion(
+    ['Físico o químico', 'En una reacción aparecen sustancias nuevas.'],
+    ['La masa se conserva', 'Los átomos no se crean ni se destruyen: se reacomodan.'],
+    ['Balancear', 'Se cambian los coeficientes, nunca los subíndices.'],
+    ['Clases', 'Síntesis, descomposición y combustión; exotérmica o endotérmica.']), [
+    x('genero-o-cita', '¿Es un cambio **físico** o **químico**?', { doc: FRASCO, rot: ['físico', 'químico'],
+      ...F(['Se derrite un helado', 0, '¿Aparece una sustancia nueva?'], ['Se quema un papel', 1, '¿Aparece una sustancia nueva?'], ['Se disuelve azúcar en agua', 0, '¿Aparece una sustancia nueva?'], ['Se oxida una reja', 1, '¿Aparece una sustancia nueva?'], ['Se agria la leche', 1, '¿Aparece una sustancia nueva?']), bien: 'Misma sustancia o sustancia nueva.' },
+      'Derretir y disolver no cambian la sustancia; quemar, oxidar y agriar, sí.', 'Pregunta si al final hay una sustancia que antes no estaba.'),
+    x('balancea-atomos', 'Balancea la formación del **agua**: $H_2 + O_2 \\to H_2O$. Mueve cuántas moléculas hay de cada una, con los números **más pequeños**.', { izq: [['H₂', { H: 2 }], ['O₂', { O: 2 }]], der: [['H₂O', { H: 2, O: 1 }]], sol: [2, 1, 2], max: 6 },
+      'Con $2H_2 + O_2 \\to 2H_2O$ hay 4 hidrógenos y 2 oxígenos en cada lado.', 'Empieza por el oxígeno: ¿cuántas moléculas de agua usan los dos?'),
+    x('conserva-atomos', 'Toca **todas** las ecuaciones que están **balanceadas**.', { casos: [{ t: 'C + O₂ → CO₂', si: true }, { t: 'N₂ + H₂ → NH₃', no: 'Hay 2 nitrógenos antes y 1 después.' }, { t: '2Mg + O₂ → 2MgO', si: true }, { t: 'CH₄ + O₂ → CO₂ + 2H₂O', no: 'Hay 2 oxígenos antes y 4 después.' }, { t: '2H₂O₂ → 2H₂O + O₂', si: true }], falta: 'Falta otra: cuenta átomo por átomo en los dos lados.', ok: 'Los mismos átomos antes y después.' },
+      'Carbono, magnesio y agua oxigenada cuadran; en las otras sobran o faltan átomos.', 'Multiplica el coeficiente por el subíndice de cada átomo.'),
+    x('masa-cerrada', 'En frascos **cerrados**, pon la masa que falta, en gramos.', { et: ['24 + 32 → ?', '10 + ? → 26', '? → 44 + 56', '7 + 3 → 4 + ?'], metas: ['56', '16', '100', '6'], fichas: ['56', '16', '100', '6', '36', '12', '8'], mira: ['Suma los reactivos.', 'Lo que falta completa el producto.', 'Suma los productos.', 'Los dos lados deben pesar igual.'], trampas: { '1:36': 'Sumaste: los reactivos juntos deben dar 26.', '2:12': 'Restaste: un solo reactivo dio los dos productos.' }, ok: 'La masa total es la misma.' },
+      'Los dos lados pesan igual: 56, 16, 100 y 6 gramos.', 'Suma todo lo de un lado e iguálalo con el otro.'),
+    x('pista-tipo', 'Ata cada clase de reacción a su ejemplo.', { doc: FRASCO, lineas: ['hierro y azufre forman un solo sólido', 'el agua oxigenada da agua y oxígeno', 'el gas de la estufa arde con oxígeno', 'una compresa química se pone helada'],
+      ...T(['síntesis', 0, '¿En cuál varias dan una sola?'], ['descomposición', 1, '¿En cuál una sola da varias?'], ['combustión', 2, '¿En cuál hay llama?'], ['endotérmica', 3, '¿En cuál se absorbe calor?']), bien: 'Cuántas entran, cuántas salen y qué pasa con el calor.' },
+      'Juntarse es síntesis, partirse es descomposición, arder es combustión y enfriar es absorber calor.', 'Cuenta los reactivos y los productos, y mira el calor.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: FRASCO, nums: [2, 4, 5], pregunta: 'Queda en pie', queda: 'Un clavo pesa más al oxidarse.',
+      ...T(['Si hay burbujas, hay una reacción.', 2, 'Busca otra cosa que también suelta burbujas.'], ['Al quemarse, los átomos de la madera desaparecen.', 3, 'Busca qué no les pasa a los átomos.'], ['Para balancear se cambian los subíndices.', 9, 'Busca qué se cambia y qué nunca.']), bien: 'Burbujas, átomos y coeficientes.' },
+      'El agua que hierve suelta burbujas, los átomos no se destruyen y se cambian los coeficientes.', 'Saca la palabra clave: burbujas, desaparecen, subíndices.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: FRASCO, nums: [3, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['La madera pasó de 50 a 4 gramos en la balanza.', 0, 'Léela junto al primer experimento.'], ['Los gases de la madera se llevaron más de la mitad de la masa que marcaba.', 1, 'Compara lo que había con lo que quedó.'], ['El frasco abierto perdió gas.', 1, '¿Por qué bajó la masa al abrir la tapa?'], ['El vinagre pesaba 30 gramos.', 2, '¿Se dice cuánto pesaba?']),
+      luz: [[3, 'La masa bajó de 50 a 4 gramos'], [4, 'los gases se iban'], [3, 'Cuando abrieron la tapa']], bien: 'Comparar y explicar.' },
+      'Los 50 y 4 están escritos; los gases se deducen; el peso del vinagre no aparece.', 'Une lo que midieron con la explicación del párrafo 4.'),
+    sol('Balancea $CH_4 + O_2 \\to CO_2 + H_2O$ y cuenta los oxígenos.', ['El metano trae 4 hidrógenos: salen [[2]] moléculas de agua', 'A la derecha hay $2 + 2 =$ [[4]] oxígenos', 'Hacen falta [[2 moléculas]] de $O_2$'], ['3', '1', '4 moléculas'], '$CH_4 + 2O_2 \\to CO_2 + 2H_2O$.', 'Cuadra primero carbono e hidrógeno y deja el oxígeno para el final.'),
+    err('Alguien balancea la reacción del hidrógeno con el oxígeno.', ['Se escribe $H_2 + O_2 \\to H_2O$', 'Falta un oxígeno a la derecha', 'Se cambia la fórmula: $H_2 + O_2 \\to H_2O_2$'], 2, ['Se cambian los coeficientes: $2H_2 + O_2 \\to 2H_2O$', 'Se quita un oxígeno: $H_2 + O \\to H_2O$', 'Se agrega un oxígeno suelto a la derecha'], '$H_2O_2$ es otra sustancia: el agua oxigenada. Los subíndices no se tocan.', '¿Sigue siendo agua lo que quedó a la derecha?'),
+    opc('Una vela encendida dentro de un frasco sellado se apaga a los pocos segundos. Si se pesa el frasco completo antes y después, la masa:', ['Es la misma, porque nada entra ni sale', 'Disminuye, porque la vela se gastó', 'Aumenta, porque se forma humo', 'Disminuye, porque el oxígeno desaparece'], 0, 'Los átomos siguen dentro del frasco: la masa se conserva.', 'Piensa si algún átomo salió del frasco.'),
+  ]);
+
+  const RECETA = {
+    id: 'icf-receta-moles', title: 'La receta de los átomos',
+    ficha: { autor: 'Profesora de química', fuente: 'Hoja de clase', fecha: 'Abril de 2026' },
+    paras: [
+      'Para hacer un sándwich se necesitan dos panes y una tajada de queso. Con diez panes y cuatro tajadas salen cuatro sándwiches: se acaba el queso y sobran dos panes. El queso es lo que limita. En química pasa lo mismo, pero no se cuentan panes sino moléculas.',
+      'Las moléculas son demasiado pequeñas para contarlas una por una. Por eso se cuentan por paquetes llamados moles. Un mol tiene 6.02 · 10²³ partículas, así como una docena tiene doce. Un mol de cualquier sustancia tiene el mismo número de partículas, pero no pesa lo mismo: una docena de huevos no pesa lo que una docena de sandías.',
+      'La masa molar dice cuántos gramos pesa un mol. Se obtiene sumando las masas de los átomos: si el hidrógeno pesa 1 y el oxígeno 16, un mol de agua, H₂O, pesa 18 gramos. Con 36 gramos de agua se tienen dos moles.',
+      'La ecuación balanceada es la receta. En N₂ + 3H₂ → 2NH₃, un mol de nitrógeno necesita tres moles de hidrógeno y produce dos de amoníaco. Los coeficientes dan proporciones entre moles, no entre gramos: un mol de nitrógeno pesa 28 gramos y tres de hidrógeno, apenas 6. Suman 34, que es justo lo que pesan los dos moles de amoníaco.',
+      'El reactivo que se acaba primero se llama reactivo límite y decide cuánto producto sale. El otro queda en exceso. Si hay dos moles de nitrógeno y tres de hidrógeno, el hidrógeno alcanza solo para gastar un mol de nitrógeno: salen dos moles de amoníaco y sobra un mol de nitrógeno. El límite no es siempre el que pesa menos, ni el que tiene menos moles: depende de la receta.',
+      'En la vida real casi nunca sale todo lo calculado. Parte se pierde, parte no reacciona. El rendimiento compara lo que se obtuvo con lo que se esperaba: si se calculaban 20 gramos y salieron 15, fue del 75 %. Las fábricas gastan mucho dinero para subirlo unos pocos puntos.',
+    ],
+  };
+  const l2 = leccion('icf-cn-reacciones-2', 'Estequiometría', guion(
+    ['El mol', 'Un paquete de partículas, como la docena.'],
+    ['La receta', 'Los coeficientes dan proporciones entre moles.'],
+    ['El que limita', 'El reactivo que se acaba primero decide cuánto sale.'],
+    ['Rendimiento', 'Lo que se obtuvo comparado con lo que se esperaba.']), [
+    x('paquetes-limite', 'La receta $N_2 + 3H_2 \\to 2NH_3$ usa **1** de $N_2$ y **3** de $H_2$. Hay **5** de $N_2$ y **12** de $H_2$. Mueve cuántas veces se completa la receta.', { hay: [['N₂', 5, 1], ['H₂', 12, 3]], que: 'recetas', max: 8 },
+      'El hidrógeno alcanza para $12 \\div 3 = 4$ recetas; sobra 1 de nitrógeno.', 'Divide lo que hay de cada uno entre lo que pide la receta.'),
+    x('relacion-moles', 'En $N_2 + 3H_2 \\to 2NH_3$, pon los **moles** que faltan.', { et: ['con 2 de N₂, hidrógeno', 'con 2 de N₂, amoníaco', 'con 9 de H₂, nitrógeno', 'para 10 de NH₃, hidrógeno'], metas: ['6', '4', '3', '15'], fichas: ['6', '4', '3', '15', '2', '30', '27'], mira: ['Por cada nitrógeno van tres.', 'Por cada nitrógeno salen dos.', 'Por cada tres hidrógenos va uno.', 'Halla cuántas recetas dan 10.'], trampas: { '3:30': 'Cada receta da 2 de amoníaco, no 1.', '2:27': 'Multiplicaste: aquí se divide entre 3.', '0:2': 'La receta es 1 a 3.' }, ok: 'Los coeficientes son la receta.' },
+      'La receta 1 : 3 : 2 da 6, 4, 3 y 15 moles.', 'Cuenta primero cuántas veces se hace la receta.'),
+    x('sube-moles', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Un mol de $CO_2$, con C = 12 y O = 16, ¿cuántos **gramos** pesa?', r: 44, c: '12 + 2 \\cdot 16', e: { 28: 'Hay dos oxígenos.' } },
+      { q: 'Se esperaban **50 g** y salieron **40 g**. ¿De qué **porcentaje** fue el rendimiento?', r: 80, c: '40 \\div 50 \\cdot 100', e: { 40: 'Esos son los gramos.' } },
+      { q: 'En $2Mg + O_2 \\to 2MgO$, con Mg = 24 y O = 16, ¿cuántos **gramos** de $O_2$ gastan **48 g** de Mg?', r: 32, c: '1 \\cdot 32', e: { 16: 'El oxígeno viene en pares: $O_2$.', 48: 'Los coeficientes hablan de moles, no de gramos.' } }] },
+      '$12 + 32 = 44$ g; $40 \\div 50 = 80\\%$; 48 g son 2 moles de Mg, que gastan 1 mol de $O_2$: 32 g.', 'Pasa los gramos a moles antes de usar la receta.'),
+    x('balancea-atomos', 'Balancea la formación del **amoníaco**: $N_2 + H_2 \\to NH_3$, con los números **más pequeños**.', { izq: [['N₂', { N: 2 }], ['H₂', { H: 2 }]], der: [['NH₃', { N: 1, H: 3 }]], sol: [1, 3, 2], max: 6 },
+      'Dos nitrógenos dan 2 amoníacos, que llevan 6 hidrógenos: $3H_2$.', 'Cuadra primero el nitrógeno y después el hidrógeno.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: RECETA, filas: [{ antes: 'Un mol de agua y un mol de hierro tienen', topes: ['la misma masa', 'el mismo volumen', 'el mismo número de partículas'], va: 2 }, { antes: 'Los coeficientes dan proporciones entre', topes: ['gramos', 'moles', 'litros'], va: 1 }, { antes: 'El reactivo límite es el que', topes: ['se acaba primero', 'pesa menos', 'cuesta más'], va: 0 }], mira: ['Relee la comparación con la docena.', 'Relee qué dicen los coeficientes.', 'Relee cómo se llama el que se acaba.'], luz: [[2, 'el mismo número de partículas'], [4, 'proporciones entre moles'], [5, 'se acaba primero']], bien: 'Partículas, moles y el que se acaba.' },
+      'Igual número de partículas, proporciones entre moles y se acaba primero.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('lee-escala', 'La gráfica muestra los gramos de producto en tres intentos. Pon cada valor y cuánto **aumentó** del primero al último.', { vals: [12, 18, 27], rot: ['primero', 'segundo', 'tercero'], hi: 30, st: 6, et: ['primero', 'segundo', 'tercero', 'aumentó'], ops: ['', '', ''], metas: ['12', '18', '27', '15'], fichas: ['12', '18', '27', '15', '25', '39', '13'],
+      mira: ['Mira en qué línea termina.', 'Mira en qué línea termina.', 'Está a mitad de camino entre 24 y 30.', 'Resta el primero al último.'], trampas: { '2:25': 'Cada línea vale 6: la mitad son 3.', '3:39': 'Eso es la suma.' }, ok: 'De 12 a 27.' },
+      'Las líneas van de 6 en 6: 12, 18 y 27. Aumentó $27 - 12 = 15$ g.', 'Mira cuánto vale cada línea antes de leer.'),
+    x('balanza-tesis', 'Afirmación: «en este experimento, el oxígeno era el reactivo límite». ¿Qué hace cada dato?', { doc: RECETA, tesis: 'El oxígeno era el límite',
+      ...F(['Al agregar más oxígeno salió más producto.', 0, '¿Qué pasa si se agrega del que limita?'], ['Al final sobró oxígeno.', 1, '¿Sobra el que limita?'], ['El frasco era azul.', 2, '¿Cambia las cantidades?']), bien: 'El que limita se acaba.' },
+      'Que salga más al agregarlo la apoya; que sobre la debilita; el color no pesa.', 'Recuerda qué le pasa al reactivo límite al final.'),
+    sol('En $2H_2 + O_2 \\to 2H_2O$ se tienen 8 moles de $H_2$ y 3 de $O_2$. ¿Cuántos moles de agua salen?', ['El hidrógeno alcanza para $8 \\div 2 =$ [[4]] recetas', 'El oxígeno alcanza para [[3]] recetas: es el límite', 'Salen $3 \\cdot 2 =$ [[6]] moles de agua'], ['8', '2', '11'], 'El oxígeno limita: 3 recetas de 2 moles de agua.', 'Cuenta cuántas recetas permite cada reactivo.'),
+    err('Se tienen 10 moles de A y 6 de B para la receta $2A + B \\to C$. Alguien busca el límite.', ['Para 6 de B harían falta 12 de A', 'Solo hay 10 de A', 'B tiene menos moles: B es el límite'], 2, ['No alcanza A para todo B: A es el límite', 'Como hay más A, sobra A', 'Los dos se acaban a la vez'], 'A alcanza para 5 recetas y B, para 6: limita A, aunque tenga más moles.', '¿Cuántas recetas permite cada uno?'),
+    opc('Si en $C + O_2 \\to CO_2$ se queman 24 g de carbono (C = 12, O = 16), la masa de $CO_2$ que se produce es:', ['24 g', '44 g', '56 g', '88 g'], 3, '24 g son 2 moles: 2 moles de $CO_2$ pesan $2 \\cdot 44 = 88$ g.', 'Pasa los gramos de carbono a moles.'),
+  ]);
+
+  const PH = {
+    id: 'icf-repollo', title: 'El repollo que cambia de color',
+    ficha: { autor: 'Club de ciencias', fuente: 'Feria escolar', fecha: 'Mayo de 2026' },
+    paras: [
+      'El jugo del repollo morado cambia de color según lo que se le eche. Con limón se vuelve rojo; con agua pura queda morado; con jabón, verde. Una sustancia que hace eso se llama indicador.',
+      'Los ácidos, como el limón o el vinagre, liberan iones de hidrógeno, H⁺, cuando están en agua. Las bases, como el jabón o la leche de magnesia, liberan iones OH⁻ o atrapan los H⁺. Los ácidos suaves saben agrios y las bases se sienten jabonosas, pero probar o tocar una sustancia desconocida es peligroso: los ácidos y las bases fuertes queman.',
+      'El pH mide qué tan ácida es una disolución. Va, por lo general, de 0 a 14: menos de 7 es ácida, 7 es neutra y más de 7 es básica. La escala no avanza de uno en uno, sino por diez: una disolución de pH 3 tiene diez veces más H⁺ que una de pH 4 y cien veces más que una de pH 5.',
+      'El club midió varias cosas. El jugo de limón marcó 2; el café, 5; la leche, 6.5; la sangre ronda 7.4; el agua con jabón, 10; el blanqueador, 12. Al agregarle agua al jugo de limón, el pH subió hacia 7, pero por más agua que echaron nunca pasó de 7.',
+      'Cuando un ácido y una base se mezclan en la proporción justa, se neutralizan: los H⁺ y los OH⁻ forman agua, y queda una sal. Por eso un antiácido, que es una base suave, alivia la acidez del estómago, y por eso se echa cal a los suelos muy ácidos. Si se echa base de más, la mezcla queda básica.',
+      'El pH importa en todas partes. La sangre tiene sustancias que impiden que cambie mucho, porque con pocas décimas de más o de menos el cuerpo falla. La lluvia normal tiene pH cercano a 5.6, porque disuelve dióxido de carbono; la lluvia ácida, por gases de fábricas y carros, puede bajar de 4.5 y daña hojas, lagos y estatuas de mármol.',
+    ],
+  };
+  const l3 = leccion('icf-cn-reacciones-3', 'Ácidos, bases y pH', guion(
+    ['Ácidos y bases', 'Los ácidos liberan H⁺; las bases, OH⁻ o atrapan H⁺.'],
+    ['La escala', 'Menos de 7 ácida, 7 neutra, más de 7 básica; cada paso es por 10.'],
+    ['Neutralizar', 'Ácido y base en la proporción justa dan agua y sal.'],
+    ['Diluir', 'Con agua, el pH se acerca a 7 sin pasarlo.']), [
+    x('nivel-ph', 'La muestra A tiene pH **6**. Mueve la muestra B, que es **mil veces más ácida**.', { base: 6, k: -3 },
+      'Mil es $10^3$: tres pasos hacia lo ácido, pH 3.', 'Cada paso de pH es por diez: cuenta cuántos hacen mil.'),
+    x('genero-o-cita', '¿La sustancia es **ácida** o **básica**?', { doc: PH, rot: ['ácida', 'básica'],
+      ...F(['Jugo de limón, pH 2', 0, 'Compara su pH con 7.'], ['Agua con jabón, pH 10', 1, 'Compara su pH con 7.'], ['Café, pH 5', 0, 'Compara su pH con 7.'], ['Sangre, pH 7.4', 1, 'Compara su pH con 7.'], ['Lluvia normal, pH 5.6', 0, 'Compara su pH con 7.']), bien: 'Menos o más de 7.' },
+      'Limón, café y lluvia están por debajo de 7; jabón y sangre, por encima.', 'El 7 es el punto neutro: mira de qué lado está cada una.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: PH, nums: [3, 4, 5], pregunta: 'Queda en pie', queda: 'Un antiácido es una base suave.',
+      ...T(['Un pH de 3 es apenas un poco más ácido que uno de 4.', 2, 'Busca cómo avanza la escala.'], ['Con mucha agua, el limón se vuelve básico.', 5, 'Busca de qué número nunca pasó.'], ['Al mezclar ácido y base, la mezcla siempre queda neutra.', 8, 'Busca qué pasa si se echa base de más.']), bien: 'Por diez, hasta 7 y sin pasarse.' },
+      'La escala va por diez, el limón diluido nunca pasó de 7 y con base de más queda básica.', 'Saca la palabra clave: poco, agua, siempre.'),
+    x('lee-escala', 'La gráfica muestra el pH de tres suelos. Pon cada valor y cuánto **subió** el primero para igualar al último.', { vals: [4, 5, 7], rot: ['suelo 1', 'suelo 2', 'suelo 3'], hi: 8, st: 2, et: ['suelo 1', 'suelo 2', 'suelo 3', 'subió'], ops: ['', '', ''], metas: ['4', '5', '7', '3'], fichas: ['4', '5', '7', '3', '6.5', '11', '2'],
+      mira: ['Mira en qué línea termina.', 'Está a mitad de camino entre 4 y 6.', 'Está a mitad de camino entre 6 y 8.', 'Resta el primero al último.'], trampas: { '2:6.5': 'Cada línea vale 2: la mitad es 1.', '3:11': 'Eso es la suma.' }, ok: 'De 4 a 7.' },
+      'Las líneas van de 2 en 2: 4, 5 y 7. Subió 3 pasos: mil veces menos H⁺.', 'Mira cuánto vale cada línea antes de leer.'),
+    x('pista-tipo', 'Ata cada explicación a lo que se observó.', { doc: PH, lineas: ['el jugo de repollo se vuelve rojo', 'el antiácido alivia el estómago', 'al echar agua, el pH del limón sube hacia 7', 'el pH de la sangre casi no cambia'],
+      ...T(['le echaron un ácido', 0, '¿Cuál habla del color?'], ['se neutralizan ácido y base', 1, '¿Cuál mezcla un ácido con una base suave?'], ['se diluye', 2, '¿Cuál agrega agua?'], ['hay sustancias que lo regulan', 3, '¿Cuál se mantiene estable?']), bien: 'Indicador, neutralizar, diluir y regular.' },
+      'El rojo indica ácido, el antiácido neutraliza, el agua diluye y la sangre se regula.', 'Pregunta qué se agregó en cada caso y qué cambió.'),
+    x('balanza-tesis', 'Hipótesis: «el lago está muriendo por la lluvia ácida». ¿Qué hace cada dato?', { doc: PH, tesis: 'El lago muere por la lluvia ácida',
+      ...F(['Su pH bajó de 6.8 a 4.6 en veinte años de lluvias ácidas.', 0, '¿Hay acidez como se esperaba?'], ['Su pH no ha cambiado y apareció una fuga de petróleo.', 1, '¿Hay acidez? ¿Hay otra causa?'], ['El lago tiene forma de pera.', 2, '¿Dice algo de la acidez?']), bien: 'La causa debe dejar huella.' },
+      'Que el pH baje la apoya; sin cambio y con otra causa se debilita; la forma no pesa.', 'Piensa qué debería medirse si la causa fuera esa.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 5 la oración que explica **qué ocurre con los iones** al neutralizar.', { doc: PH, nums: [5], apuesta: 'Los iones se juntan y forman agua.', ...S(['5.0'], { '5.1': 'Da dos usos de la neutralización.', '5.2': 'Dice qué pasa si se echa de más.' }), bien: 'H⁺ y OH⁻ forman agua.' },
+      'La primera oración lo explica: los H⁺ y los OH⁻ forman agua, y queda una sal.', 'Busca la oración que nombra los dos iones.'),
+    sol('Una muestra de pH 9 se lleva a pH 7. ¿Cómo cambia la cantidad de H⁺?', ['La muestra de pH 9 es [[básica]]', 'De 9 a 7 hay [[2]] pasos', 'La cantidad de H⁺ se multiplica por [[100]]'], ['ácida', '20', '16'], 'Cada paso hacia lo ácido multiplica por 10: $10 \\cdot 10 = 100$.', 'Recuerda: a menor pH, más H⁺.'),
+    err('Alguien quiere subir el pH de un suelo de pH 4.', ['Un suelo de pH 4 es ácido', 'Para neutralizarlo hace falta una base', 'Se le echa vinagre, que tiene pH 3'], 2, ['Se le echa cal, que es una base', 'Se le echa jugo de limón, que tiene pH 2', 'Se le echa más tierra de pH 4'], 'El vinagre es un ácido y bajaría el pH: la cal lo sube.', '¿De qué lado de 7 está lo que se le echa?'),
+    opc('La muestra P tiene pH 2 y la muestra Q, pH 4. Es correcto afirmar que:', ['Q es el doble de ácida que P', 'P es cien veces más ácida que Q', 'P es el doble de ácida que Q', 'Las dos son básicas'], 1, 'Dos pasos de pH: $10 \\cdot 10 = 100$ veces.', 'Cada paso de la escala es por diez.'),
+  ]);
+
+  const ARREPA = {
+    id: 'icf-levadura', title: 'Por qué crece el pan',
+    paras: [
+      'Las levaduras son hongos diminutos que se alimentan del azúcar de la masa. Sin oxígeno, transforman cada molécula de azúcar en dos de alcohol y dos de dióxido de carbono. La ecuación es C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂.',
+      'El gas queda atrapado en la masa y la infla. Si la masa se deja en un recipiente abierto, pierde un poco de masa, porque parte del gas se escapa; en uno cerrado, la balanza no cambia.',
+      'En el horno, el alcohol se evapora, las burbujas se agrandan con el calor y las levaduras mueren. La corteza se dora por otras reacciones entre azúcares y proteínas.',
+      'Hay otra forma de inflar: el polvo de hornear. Trae bicarbonato, que es una base, y un ácido seco. Al mojarse reaccionan y sueltan dióxido de carbono. Con exceso de bicarbonato la torta queda con sabor a jabón.',
+      'Una panadera pesó: con 180 gramos de azúcar, que es un mol, esperaba 88 gramos de dióxido de carbono, que son dos moles. Obtuvo 66, porque no toda el azúcar alcanzó a fermentar.',
+    ],
+  };
+  const pl = (g, q, p, e, h) => play(g, q, { doc: ARREPA, ...p }, e, { hint: h });
+  return mundo('icf-cn-reacciones', 'Reacciones y Cantidades', 'ciencias', [l1, l2, l3], [
+    ['icf-cn-reacciones-1', 'En la fermentación aparecen sustancias nuevas.', pl('donde-buscar', '¿A qué párrafo vuelves para responder?', { cards: [['¿Qué produce la levadura?', [1]], ['¿Por qué cambia la masa en un recipiente abierto?', [2]], ['¿Cuánto gas se obtuvo?', [5]]] }, 'Los productos están en el 1, el recipiente en el 2 y lo obtenido en el 5.', 'Busca la palabra clave de cada pregunta.')],
+    ['icf-cn-reacciones-1', 'Los átomos se conservan.', pl('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { cards: [['Cada azúcar da dos moléculas de dióxido de carbono.', 0], ['En un recipiente cerrado el gas sigue adentro.', 1], ['La masa perdida es la del gas que salió.', 1], ['La levadura es de color café.', 2]] }, 'Las dos moléculas están escritas; lo del gas se deduce; el color no aparece.', 'Une el párrafo 2 con la conservación de la masa.')],
+    ['icf-cn-reacciones-1', 'Evaporarse es un cambio físico.', opc('Según el texto, en el horno ocurren cambios físicos y químicos. Un cambio físico es:', ['El dorado de la corteza', 'La fermentación', 'La evaporación del alcohol', 'La reacción del bicarbonato'], 2, 'El alcohol evaporado sigue siendo alcohol.', 'Busca dónde no aparece una sustancia nueva.')],
+    ['icf-cn-reacciones-2', 'Los coeficientes son la receta.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'Se obtuvo menos producto del que permitía la receta.', cards: [['Se esperaban 40 g y salieron 30', true], ['Parte del reactivo no reaccionó', true], ['Salió justo lo calculado', false], ['Se pesó el frasco vacío', false]] }, '30 de 40 y lo que no reaccionó muestran un rendimiento menor; los otros no.', 'Busca casos en que salga menos de lo esperado.')],
+    ['icf-cn-reacciones-2', 'La masa de los productos viene de los reactivos.', pl('intruso-excepto', 'La opción que no aparece en el texto', { ask: 'Del dióxido de carbono se dice todo esto, EXCEPTO:', cards: [['Infla la masa', [2]], ['También lo suelta el polvo de hornear', [4]], ['Se esperaban 88 gramos', [5]], ['Huele a limón', null]] }, 'Las tres primeras están en el 2, el 4 y el 5; la última no.', 'Busca cada una en su párrafo.')],
+    ['icf-cn-reacciones-2', 'Rendimiento: obtenido sobre esperado.', opc('El rendimiento de la fermentación que midió la panadera fue del:', ['75 %', '22 %', '66 %', '133 %'], 0, 'Se divide lo obtenido: $66 \\div 88 = 0.75$.', 'Divide lo que obtuvo entre lo que esperaba.')],
+    ['icf-cn-reacciones-3', 'Ácido y base reaccionan.', pl('resume-parrafo', 'Cada párrafo en una frase', { paras: [4, 3], options: ['Un ácido y una base sueltan el gas que infla.', 'El calor termina el trabajo.', 'El bicarbonato es un ácido.', 'El horno enfría la masa.'], key: [0, 1] }, 'El 4 habla del polvo de hornear; el 3, del horno; las otras dicen lo contrario.', 'El resumen no puede contradecir el párrafo.')],
+    ['icf-cn-reacciones-3', 'Con base de más, la mezcla queda básica.', pl('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { labels: ['presenta la reacción', 'explica qué pasa con la masa', 'cuenta lo que hace el horno', 'muestra otra forma de inflar', 'da una medición', 'compara panaderías'], key: [0, 1, 2, 3, 4] }, 'Reacción, masa, horno, otra forma y medición; no hay panaderías.', 'Mira qué agrega cada párrafo.')],
+    ['icf-cn-reacciones-3', 'El sabor a jabón delata una base.', opc('La torta con exceso de bicarbonato sabe a jabón porque:', ['Quedó ácida', 'Se evaporó el alcohol', 'Murió la levadura', 'Quedó básica'], 3, 'El bicarbonato sobrante es una base.', 'Recuerda qué clase de sustancia es el bicarbonato.')],
   ]);
 })());
 ;
@@ -14996,4 +14901,231 @@ const xpRegla = (k, min, max, et, paso = 1) => ({ k, min, max, paso, et });
     xpFila('Raíces cuadradas de $-9 = 9\\operatorname{cis}180^\\circ$: pon el módulo y los ángulos.', ['módulo', 'menor', 'mayor'], ['3', '90°', '270°'], ['9', '180°', '45°'], 'La mitad de 180; y media vuelta más.', '$3i$ y $-3i$.')],
     ['Ahora sí, un problema', xpFila('Resuelve $z^3 = 27$: pon el módulo y los ángulos de las tres, en orden.', ['módulo', '1.ª', '2.ª', '3.ª'], ['3', '0°', '120°', '240°'], ['9', '90°', '180°'], '27 tiene ángulo 0°.', '3, $3\\operatorname{cis}120^\\circ$ y $3\\operatorname{cis}240^\\circ$.')],
   ], 'n raíces: un círculo repartido en partes iguales.');
+}
+;
+//#archivo js/explora-alg-mundos-9-10.js
+// Álgebra · mundos 9 (Fracciones Algebraicas) y 10 (Crecimiento Exponencial), Explora. Ejemplos propios.
+{
+  const P = XM.pasos;
+  // ---------------------------------------------------------------------------------------------------------- alg-25a
+  const rio = (v, K) => { const p = XM.plano(K, -5, 5, -6, 6, { H: 200, g: 1, gy: 2 }); return p.s + K.l(p.X(v.q), 8, p.X(v.q), 192, 'lf d') + XM.curva(K, p, x => (Math.abs(x - v.q) < 0.06 ? NaN : 2 / (x - v.q))); };
+  xpLec('alg-25a', [
+    ['Lo que no se puede', xpMira('dibujo', 'Empecemos por la idea: una fracción **no existe** donde el denominador vale 0.', { dib: rio, v: { q: 1 }, alto: 210 }, [
+      ['Dos entre x − 1. En 1, el denominador se anula.', {}, '$\\tfrac{2}{x - 1}, \\ x \\neq 1$'],
+      ['Cerca de 1 el resultado crece sin parar.', {}, '$\\tfrac{2}{0.01} = 200$'],
+      ['La recta punteada es una **asíntota**: la curva se acerca y no la toca.', {}, '$x = 1$'],
+      ['Con x + 3, el prohibido es −3.', { q: -3 }, '$\\tfrac{2}{x + 3}, \\ x \\neq -3$'],
+      ['El dominio son todos los demás.', {}, '$\\mathbb{R} - \\{-3\\}$'],
+    ], 'Iguala a 0 el denominador: esos valores quedan fuera.'),
+    xpFila('En $\\tfrac{x + 1}{x^2 - 2x - 8}$, pon los valores prohibidos, el menor primero.', ['menor', 'mayor'], ['−2', '4'], ['2', '−4', '−1'], 'Factoriza: dos que sumen −2 y multipliquen −8.', '$(x - 4)(x + 2) = 0$.')],
+    ['Cancelar factores', xpMira('dibujo', 'Segunda idea: se cancelan **factores**, nunca términos.', { dib: (v, K) => P(K, v, ['(x² − 9) / (x² + 3x)', '(x + 3)(x − 3) / x(x + 3)', '(x − 3) / x'], 44, 40), v: { n: 1 }, alto: 150 }, [
+      ['Parecen no tener nada en común.', {}, '$\\tfrac{x^2 - 9}{x^2 + 3x}$'],
+      ['Factorizamos arriba y abajo.', { n: 2 }, '$\\tfrac{(x+3)(x-3)}{x(x+3)}$'],
+      ['El factor x + 3 se repite: se cancela.', { n: 3 }, '$\\tfrac{x - 3}{x}$'],
+      ['El −3 sigue prohibido: la original no existía ahí.', {}, '$x \\neq 0, \\ x \\neq -3$'],
+      ['No se tacha la x de x − 3: no es factor.', {}, '$\\tfrac{x - 3}{x} \\neq -3$'],
+    ], 'Factoriza primero; cancela factores; recuerda lo prohibido.'),
+    xpFila('$\\tfrac{x^2 + 5x}{x^2 - 25}$: pon lo que queda arriba y abajo.', ['arriba', 'abajo'], ['x', 'x − 5'], ['x + 5', '5x', '−5'], 'Arriba x(x + 5); abajo, diferencia de cuadrados.', '$\\tfrac{x}{x - 5}$.')],
+    ['Hueco o río', xpMira('dibujo', 'Tercera idea: si el factor se cancela queda un **hueco**; si no, un **río**.', { dib: (v, K) => { const p = XM.plano(K, -4, 4, -3, 5, { H: 190 }); return p.s + K.f(1 - v.r, XM.curva(K, p, x => x + 1) + K.c(p.X(1), p.Y(2), 6, 'fop') + K.c(p.X(1), p.Y(2), 6, 'fn')) + K.f(v.r, K.l(p.X(1), 8, p.X(1), 182, 'lf d') + XM.curva(K, p, x => (Math.abs(x - 1) < 0.06 ? NaN : 1 / (x - 1) + 1))); }, v: { r: 0 }, alto: 200 }, [
+      ['x² − 1 entre x − 1 es la recta x + 1.', {}, '$\\tfrac{(x-1)(x+1)}{x-1}$'],
+      ['Pero en 1 no existe: le falta un punto. Es un hueco.', {}, '$x \\neq 1$'],
+      ['En x entre x − 1 nada se cancela.', { r: 1 }, '$\\tfrac{x}{x - 1}$'],
+      ['Ahí hay un río: la curva se parte en dos orillas.', {}, '$x = 1$'],
+    ], 'Factor cancelado: hueco. Factor que queda abajo: asíntota.'),
+    xpFila('$\\tfrac{(x - 2)(x + 4)}{(x - 2)(x - 5)}$: di qué hay en cada prohibido.', ['en 2', 'en 5'], ['hueco', 'río'], ['nada'], '¿Cuál factor se cancela?', 'El de 2 se cancela; el de 5 queda abajo.')],
+    ['Ahora sí, un problema', xpMueve('Un sensor falla donde su fórmula, $\\tfrac{2}{x + 2}$, no existe. Mueve el río de $\\tfrac{2}{x - q}$ hasta ese valor.', 270, { q: 1 }, [xpRegla('q', -4, 4, 'valor prohibido')], { q: -2 }, rio, '$x + 2 = 0$ en $x = -2$.', { lee: v => `$x \\neq ${v.q}$` })],
+  ], 'Factoriza, mira lo prohibido y cancela solo factores.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-25b
+  xpLec('alg-25b', [
+    ['El mismo denominador', xpMira('dibujo', 'Empecemos por la idea: para sumar, las partes deben ser **del mismo tamaño**.', { dib: (v, K) => P(K, v, ['2/x + 3/(x + 1)', '2(x+1)/x(x+1) + 3x/x(x+1)', '(2x + 2 + 3x) / x(x+1)', '(5x + 2) / x(x+1)'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Los denominadores son x y x + 1: distintos.', {}, '$\\text{común: } x(x+1)$'],
+      ['A cada fracción se le multiplica lo que le falta, arriba y abajo.', { n: 2 }, '$\\tfrac{x+1}{x+1} = 1$'],
+      ['Se suman los de arriba.', { n: 3 }, '$2x + 2 + 3x$'],
+      ['El de abajo no se suma: es el tamaño.', { n: 4 }, '$\\tfrac{5x + 2}{x(x+1)}$'],
+    ], 'Común denominador: lo que le falta a cada una, arriba y abajo.'),
+    xpFila('$\\tfrac{4}{x} + \\tfrac{1}{x + 2}$ sobre $x(x + 2)$: arriba queda $\\square x + \\square$.', ['de x', 'número'], ['5', '8'], ['4', '6', '2'], '4(x + 2) + x.', '$5x + 8$.')],
+    ['Restar con cuidado', xpMira('dibujo', 'Segunda idea: la raya es un **paréntesis**: el menos entra a todo.', { dib: (v, K) => P(K, v, ['5x/(x−1) − (2x + 3)/(x−1)', '(5x − (2x + 3)) / (x−1)', '(5x − 2x − 3) / (x−1)', '3(x − 1)/(x−1) = 3'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Mismo denominador: se restan los de arriba.', { n: 2 }, '$5x - (2x + 3)$'],
+      ['El menos cambia el 2x y también el 3.', { n: 3 }, '$5x - 2x - 3$'],
+      ['Queda 3x − 3, que es 3 por x − 1.', { n: 4 }, '$3(x - 1)$'],
+      ['Se cancela y da 3, para x distinto de 1.', {}, '$3$'],
+    ], 'Pon paréntesis al numerador que se resta.'),
+    xpFila('$\\tfrac{7x + 2}{x + 4} - \\tfrac{3x - 5}{x + 4}$: arriba queda $\\square x + \\square$.', ['de x', 'número'], ['4', '7'], ['−3', '10', '3'], '2 menos −5.', '$4x + 7$.')],
+    ['Multiplicar y dividir', xpMira('dibujo', 'Tercera idea: multiplicar es **de frente**; dividir, por la volteada.', { dib: (v, K) => P(K, v, ['x/6 ÷ x²/9', 'x/6 · 9/x²', '9x / 6x²', '3 / 2x'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Dividir entre una fracción es multiplicar por su recíproca.', { n: 2 }, '$\\tfrac{x}{6} \\cdot \\tfrac{9}{x^2}$'],
+      ['De frente: arriba con arriba, abajo con abajo.', { n: 3 }, '$\\tfrac{9x}{6x^2}$'],
+      ['Se cancelan 3 y x.', { n: 4 }, '$\\tfrac{3}{2x}$'],
+      ['Mejor cancelar antes de multiplicar.', {}, '$\\tfrac{x}{6} \\cdot \\tfrac{9}{x \\cdot x}$'],
+    ], 'Voltea la segunda y cancela antes de multiplicar.'),
+    xpFila('$\\tfrac{x^2}{10} \\div \\tfrac{x}{15}$: pon el resultado simplificado.', ['arriba', 'abajo'], ['3x', '2'], ['x', '5', '150'], '$\\tfrac{x^2}{10} \\cdot \\tfrac{15}{x}$.', '$\\tfrac{3x}{2}$.')],
+    ['Ahora sí, un problema', xpFila('Una bomba llena en x horas y otra en $x + 5$. Juntas, en una hora: $\\tfrac1x + \\tfrac{1}{x+5}$. Arriba queda $\\square x + \\square$.', ['de x', 'número'], ['2', '5'], ['1', '10', '6'], 'x + 5 más x.', '$\\tfrac{2x + 5}{x(x + 5)}$.')],
+  ], 'Mismo tamaño para sumar; de frente para multiplicar.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-101
+  const dos = (v, K) => { const p = XM.plano(K, -1, 7, -1, 7, { H: 200 }); return p.s + XM.curva(K, p, x => v.m * x + v.b) + XM.curva(K, p, x => 6 - x, 'lf gr') + (v.px != null ? K.c(p.X(v.px), p.Y(v.py), 6, 'fA') : ''); };
+  xpLec('alg-101', [
+    ['Cumplir las dos', xpMira('dibujo', 'Empecemos por la idea: la solución es el punto que está **en las dos rectas**.', { dib: dos, v: { m: 1, b: 2, px: 5, py: 1 }, alto: 210 }, [
+      ['La roja: los pares que suman 6.', {}, '$x + y = 6$'],
+      ['El punto (5, 1) suma 6, pero no está en la otra.', {}, '$5 + 1 = 6$'],
+      ['En el cruce se cumplen las dos.', { px: 2, py: 4 }, '$(2, 4)$'],
+      ['Se comprueba en ambas ecuaciones.', {}, '$y = x + 2: \\ 4 = 2 + 2$'],
+      ['Paralelas: ninguna. La misma recta: infinitas.', { m: -1, b: 3, px: null, py: null }, '$0 = 3 \\ \\text{no}$'],
+    ], 'Una solución de un sistema cumple todas las ecuaciones.'),
+    xpMueve('La roja es $x + y = 6$ y la otra, $y = x - 2$. Lleva el punto al cruce.', 300, { m: 1, b: -2, px: 1, py: 1 }, [xpRegla('px', 0, 6, 'x'), xpRegla('py', 0, 6, 'y')], { px: 4, py: 2 }, dos, '$4 + 2 = 6$ y $2 = 4 - 2$.', { lee: v => `$(${v.px}, ${v.py})$` })],
+    ['Eliminar', xpMira('dibujo', 'Segunda idea: sumando las ecuaciones se **elimina** una letra.', { dib: (v, K) => P(K, v, ['3x + 2y = 16', '5x − 2y = 8', '8x = 24', 'x = 3,  y = 3.5'], 34, 34), v: { n: 2 }, alto: 160 }, [
+      ['Los de y son opuestos: 2y y −2y.', {}, '$2y - 2y = 0$'],
+      ['Se suman las dos ecuaciones.', { n: 3 }, '$8x = 24$'],
+      ['x vale 3; se pone en cualquiera y sale y.', { n: 4 }, '$9 + 2y = 16$'],
+      ['Si no son opuestos, se multiplica antes una ecuación entera.', {}, '$-2 \\cdot (\\ldots)$'],
+    ], 'Haz opuestos los coeficientes de una letra y suma.'),
+    xpFila('$2x + y = 11$ y $x - y = 1$. Pon 3x, x, y.', ['3x =', 'x', 'y'], ['12', '4', '3'], ['10', '5', '2'], 'Suma: la y se va.', '$3x = 12$; $4 - y = 1$.')],
+    ['Sustituir', xpMira('dibujo', 'Tercera idea: si una letra ya está despejada, se **reemplaza** en la otra.', { dib: (v, K) => P(K, v, ['y = 2x − 1', '3x + y = 14', '3x + (2x − 1) = 14', 'x = 3,  y = 5'], 34, 34), v: { n: 2 }, alto: 160 }, [
+      ['La primera dice cuánto vale y.', {}, '$y = 2x - 1$'],
+      ['Se pone ese paquete en la segunda, con paréntesis.', { n: 3 }, '$3x + (2x - 1) = 14$'],
+      ['Ahora hay una sola letra.', {}, '$5x = 15$'],
+      ['x es 3 y, al volver, y es 5.', { n: 4 }, '$y = 2 \\cdot 3 - 1$'],
+    ], 'Reemplaza el paquete completo y vuelve por la otra letra.'),
+    xpFila('$x = y + 3$ y $2x + y = 18$. Pon 3y, y, x.', ['3y =', 'y', 'x'], ['12', '4', '7'], ['15', '5', '21'], '$2(y + 3) + y = 18$.', '$3y = 12$.')],
+    ['Ahora sí, un problema', xpFila('3 jugos y 2 tortas valen 25 mil; 1 jugo y 2 tortas, 15 mil. Pon cada precio (miles).', ['jugo', 'torta'], ['5', '5'], ['10', '4', '7.5'], 'Resta las dos compras.', '2 jugos valen 10; luego $2t = 10$.')],
+  ], 'El cruce: se halla eliminando o sustituyendo.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-102
+  const cor = (v, K) => { const p = XM.plano(K, -4, 4, -2, 10, { H: 200, gy: 2 }), d = Math.max(0, v.b + 1 / 4); return p.s + XM.curva(K, p, x => x * x) + XM.curva(K, p, x => x + v.b, 'lf gr') + (v.b > -0.25 ? [1, -1].map(s => { const x = 0.5 + s * Math.sqrt(d); return K.c(p.X(x), p.Y(x * x), 6, 'fA'); }).join('') : ''); };
+  xpLec('alg-102', [
+    ['Curvas que se cruzan', xpMira('dibujo', 'Empecemos por la idea: una recta y una parábola se cruzan **0, 1 o 2 veces**.', { dib: cor, v: { b: 2 }, alto: 210 }, [
+      ['y = x² con y = x + 2: dos cruces.', {}, '$x^2 = x + 2$'],
+      ['Se iguala y sale una cuadrática.', {}, '$x^2 - x - 2 = 0$'],
+      ['x es 2 o −1: los puntos (2, 4) y (−1, 1).', {}, '$(x - 2)(x + 1) = 0$'],
+      ['Si la recta baja, los cruces se juntan y desaparecen.', { b: -1.5 }, '$\\text{discriminante} < 0$'],
+    ], 'Iguala, resuelve y vuelve por la otra coordenada.'),
+    xpMueve('Sube la recta $y = x + b$ hasta que uno de los cruces sea el punto $(-2, 4)$.', 270, { b: 0 }, [xpRegla('b', -1, 6, 'b')], { b: 6 }, cor, '$4 = -2 + 6$; el otro cruce es $(3, 9)$.', { lee: v => `$y = x + ${v.b}$` })],
+    ['Desarmar una fracción', xpMira('dibujo', 'Segunda idea: una fracción grande es **suma de fracciones simples**.', { dib: (v, K) => P(K, v, ['(5x + 1) / (x − 1)(x + 2)', 'A/(x − 1) + B/(x + 2)', '5x + 1 = A(x + 2) + B(x − 1)', 'x = 1: 6 = 3A → A = 2', 'x = −2: −9 = −3B → B = 3'], 28, 30, ''), v: { n: 1 }, alto: 170 }, [
+      ['Dos factores abajo: dos fracciones simples.', { n: 2 }, '$\\tfrac{A}{x-1} + \\tfrac{B}{x+2}$'],
+      ['Después se quitan denominadores.', { n: 3 }, '$5x + 1 = A(x+2) + B(x-1)$'],
+      ['Con x = 1 se apaga B y queda A.', { n: 4 }, '$A = 2$'],
+      ['Con x = −2 se apaga A y queda B.', { n: 5 }, '$B = 3$'],
+      ['Al sumarlas vuelve la original.', {}, '$\\tfrac{2}{x-1} + \\tfrac{3}{x+2}$'],
+    ], 'Escoge x que apague una letra y halla la otra.'),
+    xpFila('$\\tfrac{7x - 2}{x(x - 1)} = \\tfrac{A}{x} + \\tfrac{B}{x - 1}$. Pon A y B.', ['A', 'B'], ['2', '5'], ['−2', '7', '3'], 'Con x = 0: −2 = −A. Con x = 1: 5 = B.', '$\\tfrac2x + \\tfrac{5}{x-1}$.')],
+    ['Cuando se repite', xpMira('dibujo', 'Tercera idea: un factor **repetido** pide una fracción por cada potencia.', { dib: (v, K) => P(K, v, ['(3x + 1) / (x − 2)²', 'A/(x − 2) + B/(x − 2)²', '3x + 1 = A(x − 2) + B', 'x = 2: B = 7;  A = 3'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['El factor x − 2 está al cuadrado.', { n: 2 }, '$\\tfrac{A}{x-2} + \\tfrac{B}{(x-2)^2}$'],
+      ['Después se quitan denominadores.', { n: 3 }, '$3x + 1 = A(x-2) + B$'],
+      ['En 2 queda B: siete.', { n: 4 }, '$B = 7$'],
+      ['Y comparando los de x, A es 3.', {}, '$A = 3$'],
+      ['Un cuadrático que no se factoriza lleva Bx + C.', {}, '$\\tfrac{Bx + C}{x^2 + 1}$'],
+    ], 'Repetido: una por potencia. Cuadrático irreducible: $Bx + C$.'),
+    xpFila('$\\tfrac{4x + 9}{(x + 1)^2} = \\tfrac{A}{x+1} + \\tfrac{B}{(x+1)^2}$. Pon A y B.', ['A', 'B'], ['4', '5'], ['9', '13', '−4'], 'Los de x dan A; en x = −1 queda B.', '$4(x + 1) + 5$.')],
+    ['Ahora sí, un problema', xpFila('Dos números suman 11 y sus cuadrados, 73. Ponlos, el menor primero.', ['menor', 'mayor'], ['3', '8'], ['5', '6', '4'], '$x^2 + (11 - x)^2 = 73$.', '$9 + 64 = 73$.')],
+  ], 'Iguala para cruzar; apaga letras para desarmar.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-71
+  const ex = (v, K) => { const p = XM.plano(K, -4, 4, -1, 9, { H: 200, gy: 2 }); return p.s + XM.curva(K, p, x => v.a * v.b ** x + v.k) + K.l(18, p.Y(v.k), 322, p.Y(v.k), 'lf d') + K.c(p.X(0), p.Y(v.a + v.k), 6, 'fA'); };
+  xpLec('alg-71', [
+    ['Multiplicar cada paso', xpMira('dibujo', 'Empecemos por la idea: en la exponencial cada paso **multiplica** por lo mismo.', { dib: ex, v: { a: 1, b: 2, k: 0 }, alto: 210 }, [
+      ['Dos a la x: 1, 2, 4, 8… cada paso duplica.', {}, '$y = 2^x$'],
+      ['Hacia la izquierda se parte a la mitad, sin llegar a 0.', {}, '$2^{-3} = \\tfrac18$'],
+      ['En x = 0 siempre vale 1.', {}, '$b^0 = 1$'],
+      ['Con base menor que 1, baja.', { b: 0.5 }, '$y = (\\tfrac12)^x$'],
+      ['La base es positiva y distinta de 1.', {}, '$b > 0, \\ b \\neq 1$'],
+    ], '$y = b^x$: crece si $b > 1$ y decrece si $0 < b < 1$.'),
+    xpMueve('La curva $y = a \\cdot 2^x$ corta el eje y en **3**. Mueve a.', 270, { a: 1, b: 2, k: 0 }, [xpRegla('a', 1, 5, 'a')], { a: 3 }, ex, 'En 0 vale $a \\cdot 1 = 3$.', { lee: v => `$${v.a} \\cdot 2^0 = ${v.a}$` })],
+    ['El piso', xpMira('dibujo', 'Segunda idea: la **asíntota** es el piso al que se acerca.', { dib: ex, v: { a: 1, b: 2, k: 0 }, alto: 210 }, [
+      ['Sin sumar nada, el piso es 0.', {}, '$y = 0$'],
+      ['Si se suma 3, todo sube: el piso también.', { k: 3 }, '$y = 2^x + 3$'],
+      ['Un café se enfría hacia la temperatura del cuarto: ese es su piso.', { a: 5, b: 0.6, k: 2 }, '$y = 5 \\cdot 0.6^x + 2$'],
+      ['Se acerca siempre y no lo cruza.', {}, '$y > 2$'],
+    ], '$y = a \\cdot b^x + k$: asíntota $y = k$.'),
+    xpMueve('Mueve k hasta que el piso sea **4** y mira por dónde corta el eje.', 270, { a: 1, b: 2, k: 0 }, [xpRegla('k', 0, 5, 'k')], { k: 4 }, ex, '$y = 2^x + 4$ corta en 5.', { lee: v => `$y = 2^x + ${v.k}$` })],
+    ['El número e', xpMira('dibujo', 'Tercera idea: si el crecimiento se reparte en **muchos pedacitos**, aparece e.', { dib: (v, K) => [2, 2.25, 2.44, 2.61, 2.71].map((x, i) => K.f(v.n - i, K.r(30 + i * 58, 150 - x * 40, 46, x * 40, 'fa') + K.t(53 + i * 58, 142 - x * 40, x, 's') + K.t(53 + i * 58, 168, ['1', '2', '4', '12', '365'][i], 's tm'))).join(''), v: { n: 0 }, alto: 180 }, [
+      ['Un peso al 100 % anual, pagado una vez: queda 2.', { n: 1 }, '$(1 + 1)^1$'],
+      ['En dos mitades: 1.5 por 1.5.', { n: 2 }, '$(1 + \\tfrac12)^2 = 2.25$'],
+      ['En doce meses sube a 2.61.', { n: 4 }, '$(1 + \\tfrac{1}{12})^{12}$'],
+      ['Con 365 días, 2.71. Y ya casi no sube más.', { n: 5 }, '$e \\approx 2.718$'],
+    ], '$(1 + \\tfrac1n)^n$ se acerca a $e \\approx 2.718$.'),
+    xpFila('Pon los valores de $y = 3 \\cdot 2^x$.', ['x = 0', 'x = 2', 'x = −1'], ['3', '12', '1.5'], ['36', '0', '6'], 'Primero la potencia, luego por 3.', '$3$, $3 \\cdot 4$ y $3 \\div 2$.')],
+    ['Ahora sí, un problema', xpFila('Un cultivo de 50 células se triplica cada día. Pon las que hay el día 1 y el día 3.', ['día 1', 'día 3'], ['150', '1350'], ['450', '600', '200'], '$50 \\cdot 3^x$.', '$50 \\cdot 27 = 1350$.')],
+  ], 'Cada paso multiplica; k es el piso.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-13b
+  const ahorro = (v, K) => Array.from({ length: Math.round(v.n) + 1 }, (_, i) => { const s = 100 + v.r * i, c = 100 * (1 + v.r / 100) ** i, u = 0.5; return K.r(20 + i * 52, 170 - s * u, 20, s * u, 'fa') + K.f(v.c, K.r(42 + i * 52, 170 - c * u, 20, c * u, 'fg')); }).join('');
+  xpLec('alg-13b', [
+    ['Interés simple', xpMira('dibujo', 'Empecemos por la idea: en el **simple** se gana siempre sobre lo mismo.', { dib: ahorro, v: { n: 0, r: 20, c: 0 }, alto: 180 }, [
+      ['Se guardan 100 al 20 % anual simple.', {}, '$C = 100$'],
+      ['Cada año se ganan 20, siempre sobre los 100.', { n: 2 }, '$I = C \\cdot i \\cdot t$'],
+      ['A los 5 años se han ganado 100.', { n: 5 }, '$100 \\cdot 0.2 \\cdot 5 = 100$'],
+      ['Crece en línea recta, como una escalera.', {}, '$M = C(1 + it)$'],
+    ], 'Simple: $M = C(1 + it)$.'),
+    xpFila('300 mil al 4 % anual simple, 5 años. Pon lo que gana por año, en total y el monto (miles).', ['por año', 'en total', 'monto'], ['12', '60', '360'], ['20', '320', '1200'], 'El 4 % de 300.', '$12 \\cdot 5 = 60$.')],
+    ['Interés compuesto', xpMira('dibujo', 'Segunda idea: en el **compuesto** también ganan los intereses.', { dib: ahorro, v: { n: 1, r: 20, c: 1 }, alto: 180 }, [
+      ['El primer año son iguales.', {}, '$100 \\cdot 1.2 = 120$'],
+      ['El segundo, el 20 % se toma de 120: ya gana más.', { n: 2 }, '$120 \\cdot 1.2 = 144$'],
+      ['Cada año multiplica por 1.2.', { n: 5 }, '$100 \\cdot 1.2^5 \\approx 249$'],
+      ['Crece como una exponencial.', {}, '$M = C(1 + i)^t$'],
+    ], 'Compuesto: $M = C(1 + i)^t$.'),
+    xpFila('500 mil al 10 % anual compuesto. Pon el monto tras 1 y tras 2 años (miles).', ['1 año', '2 años'], ['550', '605'], ['600', '510', '1000'], 'El segundo 10 % es de 550.', '$550 \\cdot 1.1 = 605$.')],
+    ['La tasa del período', xpMira('dibujo', 'Tercera idea: si capitaliza cada mes, la tasa **se reparte** y los períodos se multiplican.', { dib: (v, K) => P(K, v, ['12 % anual, cada mes', '1 % por mes', '2 años = 24 meses', 'M = C · 1.01²⁴'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Nominal 12 % anual, capitaliza mensual.', {}, '$j = 12\\,\\%, \\ m = 12$'],
+      ['Cada mes paga la doceava parte: 1 %.', { n: 2 }, '$\\tfrac{12\\,\\%}{12}$'],
+      ['En dos años hay 24 períodos.', { n: 3 }, '$2 \\cdot 12 = 24$'],
+      ['Y se multiplica 24 veces.', { n: 4 }, '$M = C(1 + \\tfrac{j}{m})^{mt}$'],
+    ], 'Tasa por período y número de períodos.'),
+    xpFila('8 % anual, capitaliza **trimestral**, 3 años. Pon la tasa del trimestre y los períodos.', ['tasa', 'períodos'], ['2 %', '12'], ['4 %', '3', '24 %'], 'Cuatro trimestres por año.', '$8 \\div 4$ y $4 \\cdot 3$.')],
+    ['Ahora sí, un problema', xpFila('1000 (miles) al 10 % compuesto 2 años, o al 11 % simple 2 años. Pon los dos montos y el mejor.', ['compuesto', 'simple', 'mejor'], ['1210', '1220', 'simple'], ['compuesto', '1200', '1110'], '1000 · 1.21; 1000 + 220.', 'En solo dos años gana el simple.')],
+  ], 'Simple suma; compuesto multiplica.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-72
+  const lg = (v, K) => { const p = XM.plano(K, -3, 9, -3, 4, { H: 200 }); return p.s + K.f(v.e, XM.curva(K, p, x => 2 ** x, 'lg gr') + XM.curva(K, p, x => x, 'lm d')) + XM.curva(K, p, x => (x > 0.02 ? Math.log2(x) : NaN)) + (v.x > 0 ? K.c(p.X(v.x), p.Y(Math.log2(v.x)), 6, 'fF') : ''); };
+  xpLec('alg-72', [
+    ['La pregunta del exponente', xpMira('dibujo', 'Empecemos por la idea: el logaritmo pregunta **¿a qué exponente?**', { dib: lg, v: { e: 0, x: 1 }, alto: 210 }, [
+      ['¿A qué exponente va el 2 para dar 8? A 3.', { x: 8 }, '$\\log_2 8 = 3$'],
+      ['Para dar 4, a 2. Para dar 1, a 0.', { x: 1 }, '$\\log_2 1 = 0$'],
+      ['Para dar un medio, a −1.', { x: 0.5 }, '$\\log_2 \\tfrac12 = -1$'],
+      ['De 0 o de negativos no hay: ninguna potencia de 2 los da.', {}, '$x > 0$'],
+      ['Es el espejo de la exponencial.', { e: 1 }, '$\\log_b x = y \\Leftrightarrow b^y = x$'],
+    ], '$\\log_b x = y$ significa $b^y = x$, con $x > 0$.'),
+    xpFila('Pon cada logaritmo.', ['log₃ 81', 'log₅ 1/25', 'log₁₀ 1000'], ['4', '−2', '3'], ['27', '2', '100'], '¿A qué exponente?', '$3^4$, $5^{-2}$ y $10^3$.')],
+    ['Cuentas con exponentes', xpMira('dibujo', 'Segunda idea: los logaritmos **suman** donde había producto.', { dib: (v, K) => XM.barra(K, 30, [[2, 'log₂ 4 = 2', 'fa'], [3, 'log₂ 8 = 3', 'fg']], { T: 6 }) + K.f(v.n, XM.barra(K, 80, [[5, 'log₂ 32 = 5', 'ff']], { T: 6 })) + K.t(170, 140, v.p, 'ta'), v: { n: 0, p: '' }, alto: 160 }, [
+      ['4 por 8 es 32. Sus exponentes: 2 y 3.', {}, '$4 \\cdot 8 = 2^2 \\cdot 2^3$'],
+      ['El del producto es la suma: 5.', { n: 1 }, '$\\log (xy) = \\log x + \\log y$'],
+      ['El del cociente, la resta.', { p: 'log x/y = log x − log y' }, '$\\log \\tfrac{x}{y}$'],
+      ['Y el exponente baja a multiplicar.', { p: 'log xⁿ = n log x' }, '$\\log x^n = n \\log x$'],
+      ['La suma no se reparte.', {}, '$\\log(x + y) \\neq \\log x + \\log y$'],
+    ], 'Producto: suma. Cociente: resta. Potencia: multiplica.'),
+    xpFila('Si $\\log 2 = a$ y $\\log 3 = b$, pon cada uno.', ['log 6', 'log 8', 'log 3/2'], ['a + b', '3a', 'b − a'], ['ab', 'a³', 'a − b'], '6 = 2 · 3; 8 = 2³.', 'Suma, múltiplo y resta.')],
+    ['Cambiar de base', xpMira('dibujo', 'Tercera idea: con una sola base se calculan **todas**.', { dib: (v, K) => P(K, v, ['y = log₈ 32', '8ʸ = 32', '2³ʸ = 2⁵', 'y = 5/3'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['¿8 a la qué da 32? No es entero.', { n: 2 }, '$8^y = 32$'],
+      ['Los dos son potencias de 2.', { n: 3 }, '$2^{3y} = 2^5$'],
+      ['La respuesta es cinco tercios.', { n: 4 }, '$y = \\tfrac53$'],
+      ['Es un cociente de logaritmos en base 2.', {}, '$\\log_8 32 = \\tfrac{\\log_2 32}{\\log_2 8}$'],
+    ], '$\\log_b x = \\tfrac{\\log_c x}{\\log_c b}$.'),
+    xpFila('$\\log_{9} 27$ en base 3: pon arriba, abajo y el resultado.', ['log₃ 27', 'log₃ 9', 'resultado'], ['3', '2', '3/2'], ['2/3', '9', '1/3'], '¿A qué exponente va el 3?', '$\\tfrac32$.')],
+    ['Ahora sí, un problema', xpFila('En una escala, $L = \\log_{10} I$. Pon L para $I = 10^4$ y cuántas veces crece I si L sube 2.', ['L', 'veces'], ['4', '100'], ['40', '2', '20'], 'Cada unidad de L es por 10.', '$10^2 = 100$ veces.')],
+  ], 'El logaritmo es un exponente: por eso suma.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-73
+  xpLec('alg-73', [
+    ['La misma base', xpMira('dibujo', 'Empecemos por la idea: con la misma base, los **exponentes** son iguales.', { dib: (v, K) => P(K, v, ['4ˣ⁺¹ = 32', '2²ˣ⁺² = 2⁵', '2x + 2 = 5', 'x = 1.5'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['4 y 32 son potencias de 2.', {}, '$4 = 2^2, \\ 32 = 2^5$'],
+      ['Se escriben en esa base.', { n: 2 }, '$2^{2(x+1)} = 2^5$'],
+      ['Base igual: exponentes iguales.', { n: 3 }, '$2x + 2 = 5$'],
+      ['Y se despeja la x.', { n: 4 }, '$x = \\tfrac32$'],
+    ], 'Misma base: iguala exponentes.'),
+    xpFila('$9^{x} = 27$: pon el exponente de 3 a cada lado y x.', ['izquierda', 'derecha', 'x'], ['2x', '3', '3/2'], ['x²', '9', '3'], '9 es 3² y 27 es 3³.', '$2x = 3$.')],
+    ['Bajar con logaritmo', xpMira('dibujo', 'Segunda idea: si no hay base común, el **logaritmo baja** el exponente.', { dib: (v, K) => P(K, v, ['3ˣ = 20', 'x · log 3 = log 20', 'x = log 20 / log 3', 'x ≈ 2.73'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['20 no es potencia de 3: está entre 9 y 27.', {}, '$2 < x < 3$'],
+      ['Logaritmo a los dos lados.', { n: 2 }, '$x \\log 3 = \\log 20$'],
+      ['Se divide: es un cociente de logaritmos.', { n: 3 }, '$x = \\tfrac{\\log 20}{\\log 3}$'],
+      ['No es el logaritmo del cociente.', { n: 4 }, '$\\tfrac{\\log 20}{\\log 3} \\neq \\log\\tfrac{20}{3}$'],
+    ], '$b^x = c \\Rightarrow x = \\tfrac{\\log c}{\\log b}$.'),
+    xpFila('$5^x = 60$: ¿entre qué enteros está x? Ponlos.', ['más que', 'menos que'], ['2', '3'], ['12', '4', '1'], '$5^2 = 25$ y $5^3 = 125$.', '$25 < 60 < 125$.')],
+    ['Ecuaciones con logaritmo', xpMira('dibujo', 'Tercera idea: se **junta en un solo logaritmo** y se sube al exponente; luego se revisa.', { dib: (v, K) => P(K, v, ['log₂ x + log₂ (x − 2) = 3', 'log₂ x(x − 2) = 3', 'x² − 2x = 8', 'x = 4  (−2 no sirve)'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Suma de logaritmos: producto adentro.', { n: 2 }, '$\\log_2 x(x - 2) = 3$'],
+      ['Se sube: 2 al cubo.', { n: 3 }, '$x(x - 2) = 2^3$'],
+      ['De ahí salen 4 y −2.', {}, '$(x - 4)(x + 2) = 0$'],
+      ['El −2 no sirve: no hay logaritmo de un negativo.', { n: 4 }, '$x > 2$'],
+    ], 'Junta, sube y descarta lo que no exista.'),
+    xpFila('$\\log_3 (x + 6) = 2$: pon a cuánto es igual $x + 6$ y x.', ['x + 6 =', 'x'], ['9', '3'], ['6', '8', '0'], '3 al cuadrado.', '$x = 9 - 6$.')],
+    ['Ahora sí, un problema', xpFila('Un medicamento se reduce a la mitad cada 6 horas. De 80 mg, ¿cuántas mitades hasta 10 mg y cuántas horas?', ['mitades', 'horas'], ['3', '18'], ['8', '6', '24'], '80, 40, 20, 10.', '$80 \\cdot (\\tfrac12)^3 = 10$.')],
+  ], 'Misma base, bajar con logaritmo o subir al exponente.');
 }

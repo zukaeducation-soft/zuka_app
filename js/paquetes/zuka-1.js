@@ -1528,6 +1528,16 @@ const WORLDS = (() => {
     'icf-cn-herencia': { name: 'Herencia y Evolución', art: plate('icf-cn-herencia', TEAL, `
       ${L('M58 14c24 12-24 36 0 52M78 14c-24 12 24 36 0 52', TEAL, 1.3)}${[22, 32, 48, 58].map(y => L(`M62 ${y}h12`, INK, .9)).join('')}${L('M90 26h24v24H90zM102 26v24M90 38h24', INK, 1)}${T(96, 35, 'AA', TEAL, 5)}${T(108, 47, 'aa', INK, 5)}${D(102, 38, 1.4, TEAL)}
       ${T(28, 42, 'A a', INK, 8)}${T(136, 42, '3 : 1', TEAL, 7)}`) },
+    // ---------- novenos mundos ----------
+    'icf-ma-finanzas': { name: 'Dinero y Créditos', art: plate('icf-ma-finanzas', TEAL, `
+      ${L('M46 64h68M46 64V16', INK, .9)}${[0, 1, 2, 3, 4].map(i => L(`M${52 + i * 12} 64V${58 - i * i * 2.2}h8V64`, i === 4 ? TEAL : INK, 1)).join('')}${L('M52 56L112 34', INK, .9)}${C(104, 18, 8, TEAL, 1.2)}${T(104, 21, '%', TEAL, 7)}
+      ${T(28, 42, 'C·i·t', INK, 7)}${T(134, 42, '(1 + i)ⁿ', TEAL, 6.5)}`) },
+    'icf-sc-economia': { name: 'Economía y Globalización', art: plate('icf-sc-economia', TEAL, `
+      ${C(80, 40, 26, INK, 1.1)}${L('M54 40h52M80 14v52', INK, .7)}${L('M62 22c12 10 24 10 36 0M62 58c12-10 24-10 36 0', INK, .7)}${L('M60 56L100 24', TEAL, 1.3)}${L('M60 24L100 56', TEAL, 1.3)}${D(80, 40, 2.2, TEAL)}
+      ${T(28, 42, 'oferta', INK, 6)}${T(134, 42, 'demanda', TEAL, 6)}`) },
+    'icf-cn-reacciones': { name: 'Reacciones y Cantidades', art: plate('icf-cn-reacciones', TEAL, `
+      ${L('M72 14h16M76 14v16L58 62h44L84 30V14', INK, 1.2)}${L('M66 48h28', TEAL, 1.2)}${C(74, 55, 3, TEAL, 1)}${C(84, 53, 2.2, TEAL, 1)}${C(82, 40, 1.8, TEAL, 1)}${D(92, 57, 1.4, TEAL)}${A(106, 40, 116, 40, INK, 1)}
+      ${T(28, 42, '2H₂ + O₂', INK, 6)}${T(136, 43, '2H₂O', TEAL, 7)}`) },
   };
 })();
 
@@ -33182,4 +33192,445 @@ GAMES['salta-la-coma'] = (() => {
     peek: G => ({ btn: G.btn, goal: goalPt(G.r) }),
   });
   return { ...game, expAt, goalPt, coefTxt, numTxtOf };
+})();
+;
+//#archivo js/games/escala-leyes.js
+// La escalada de las leyes (Álgebra, leyes de los exponentes; juego dinámico de la lección alg-21b): un escalador
+// está en el piso del exponente de una potencia de x. Cada tarjeta es una operación: «· x³» sube 3 pisos (se suman),
+// «÷ x⁴» baja 4 (se restan) y «( )²» lo manda al doble del piso en que esté (se multiplican). Hay que usar todas las
+// tarjetas, en el orden que lo deje en la bandera: el orden importa porque elevar multiplica lo que ya se lleva.
+// No hay reloj y se puede deshacer. Terminar en otro piso quita una vida. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, items: [{ start, cards: [{ op: 'mul' | 'div' | 'pow', k }], target }] }], lives?, letter? }
+// state = { done: [n] }      Spec 2026-11-15-torres-de-potencias.
+
+GAMES['escala-leyes'] = (() => {
+  const applyCard = (e, c) => (c.op === 'mul' ? e + c.k : c.op === 'div' ? e - c.k : e * c.k);
+  const perms = xs => (xs.length <= 1 ? [xs] : xs.flatMap((x, i) => perms([...xs.slice(0, i), ...xs.slice(i + 1)]).map(q => [x, ...q])));
+  // Recorrido de un orden de tarjetas: los pisos por los que pasa.
+  const pathOf = (it, order) => order.reduce((acc, i) => [...acc, applyCard(acc[acc.length - 1], it.cards[i])], [it.start]);
+  const solutionsOf = it => perms(it.cards.map((_, i) => i)).filter(o => pathOf(it, o).pop() === it.target);
+  // Pisos más bajo y más alto que se pueden pisar con cualquier orden.
+  function reach(it) { const all = perms(it.cards.map((_, i) => i)).flatMap(o => pathOf(it, o)); return [Math.min(...all, it.target), Math.max(...all, it.target)]; }
+  const cardTxt = (c, x = 'x') => (c.op === 'mul' ? `· ${x}${sup(c.k)}` : c.op === 'div' ? `÷ ${x}${sup(c.k)}` : `( )${sup(c.k)}`);
+  const chainTxt = (it, order, x = 'x') => pathOf(it, order).map(e => `${x}${sup(e)}`).join(' → ');
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => chainTxt(it, solutionsOf(it)[0], params.letter)).join(' · ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, X = params.letter || 'x';
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, used = [], pause = 0, result = null, ey = 0, cards = [], undo = {}, top = 100, bot = 0;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; used = []; pause = 0; result = null; ey = item().start; },
+      lost(i) { st.done[i] = 0; },
+    });
+    const round = () => R[a.cur], item = () => round().items[Math.min(st.done[a.cur], round().items.length - 1)];
+    // Mientras se ve un acierto sigue en pantalla la pregunta respondida, no la siguiente.
+    const shown = () => (pause > 0 && result && result.good ? round().items[Math.max(0, st.done[a.cur] - 1)] : item());
+    const cur = () => pathOf(shown(), used).pop();
+
+    function layout(w, h) { W = w; H = h; bot = h - 128; undo = { x: w / 2 - 56, y: h - 54, w: 112, h: 28 }; }
+    function boxes() { const n = shown().cards.length, cw = Math.min(92, (W - 24) / n - 8); cards = shown().cards.map((_, i) => ({ x: W / 2 - (n * (cw + 8) - 8) / 2 + i * (cw + 8), y: H - 104, w: cw, h: 38 })); }
+    function play(i) {
+      used.push(i); api.sfx?.tap?.();
+      const it = item();
+      if (used.length < it.cards.length) return;
+      const good = cur() === it.target;
+      result = { good }; pause = good ? 1.5 : 1.3;
+      if (good) { st.done[a.cur]++; a.hit(); a.say(chainTxt(it, used, X), C.ok); }
+      else { a.say(`Quedó en ${X}${sup(cur())}, no en ${X}${sup(it.target)}: prueba otro orden`, C.bad); if (a.miss()) { result = null; pause = 0; } }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play') return;
+        ey += (cur() - ey) * Math.min(1, dt * 9);
+        if (pause > 0) { pause -= dt; if (pause <= 0) { const good = result && result.good; result = null; used = []; if (good && st.done[a.cur] >= round().items.length) { a.win(); return; } ey = item().start; } }
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = round(), it = shown(), live = a.phase === 'play', over = locked || a.phase === 'all';
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, `${r.title} · el piso es el exponente de ${X}`, W / 2, 40, W - 24, 11);
+        if (live) drawPill(p, C, `De ${X}${sup(it.start)} a ${X}${sup(it.target)} usando todas las tarjetas`, W / 2, 68, C.sun, 14);
+
+        if (live) {
+          boxes();
+          // La escalera de pisos, la bandera y el escalador.
+          const [lo, hi] = reach(it), n = hi - lo + 1, sp = (bot - top) / Math.max(1, n - 1), Y = e => bot - (e - lo) * sp, lx = 54, every = n > 16 ? 2 : 1;
+          p.stroke(C.line); p.strokeWeight(3); p.line(lx, top, lx, bot);
+          for (let e = lo; e <= hi; e++) {
+            p.stroke(C.line); p.strokeWeight(2); p.line(lx - 8, Y(e), lx + 8, Y(e));
+            if (e % every === 0 || e === it.target || e === it.start) { p.noStroke(); p.fill(e === 0 ? C.sun : C.mute); p.textStyle(p.BOLD); p.textSize(Math.min(11, sp + 2)); p.textAlign(p.RIGHT, p.CENTER); p.text(negTxt(e), lx - 13, Y(e)); }
+          }
+          p.noStroke(); p.fill(C.sun); p.triangle(lx + 10, Y(it.target) - 12, lx + 30, Y(it.target) - 6, lx + 10, Y(it.target)); p.stroke(C.sun); p.strokeWeight(2); p.line(lx + 10, Y(it.target) - 12, lx + 10, Y(it.target) + 2);
+          const path = pathOf(it, used);
+          p.noFill(); p.stroke(C.sky); p.strokeWeight(2);
+          for (let k = 1; k < path.length; k++) p.arc(lx, (Y(path[k - 1]) + Y(path[k])) / 2, 22 + k * 6, Math.abs(Y(path[k]) - Y(path[k - 1])), -Math.PI / 2, Math.PI / 2);
+          const col = result ? (result.good ? C.ok : C.bad) : C.coral;
+          p.noStroke(); p.fill(shade(col, 0.74)); p.circle(lx, Y(ey) + 2, 20); p.fill(col); p.circle(lx, Y(ey), 20); p.fill(C.cream); p.circle(lx - 3, Y(ey) - 2, 4); p.circle(lx + 4, Y(ey) - 2, 4);
+          // La cuenta, paso a paso.
+          const tx = 106;
+          p.noStroke(); p.textAlign(p.LEFT, p.CENTER); p.textStyle(p.BOLD);
+          p.fill(C.ink); p.textSize(17); p.text(`${X}${sup(it.start)}`, tx, top + 14);
+          used.forEach((ci, k) => {
+            const c = it.cards[ci], from = path[k], to = path[k + 1], y = top + 14 + (k + 1) * 34;
+            p.fill(C.mute); p.textSize(12); p.text(cardTxt(c, X), tx, y - 9);
+            p.fill(C.ink); p.textSize(15); p.text(`${c.op === 'mul' ? `${negTxt(from)} + ${c.k}` : c.op === 'div' ? `${negTxt(from)} − ${c.k}` : `${negTxt(from)} · ${c.k}`} = ${negTxt(to)}  →  ${X}${sup(to)}`, tx, y + 8);
+          });
+          it.cards.forEach((c, i) => { const done = used.includes(i); drawTile(p, C, cards[i], cardTxt(c, X), { fill: done ? C.card : c.op === 'pow' ? C.sun : c.op === 'mul' ? C.mint : C.sky, ink: done ? C.mute : undefined, size: 16, r: 10, lift: done ? 0 : 3 }); });
+          if (used.length && pause <= 0) drawTile(p, C, undo, 'Deshacer', { fill: C.cream, size: 12, r: 9, lift: 2 });
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 13, locked);
+        if (over) drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: chainTxt(x, solutionsOf(x)[0], X) }))).slice(0, 8), H / 2);
+        else drawArcadeBanner(p, C, a, (top + bot) / 2, { idle: 'Sin prisa: el orden de las tarjetas importa', lost: 'Varios órdenes no llegaron a la bandera' });
+        if (!a.toast && (over || a.phase === 'idle')) {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(over ? '¡Cumbre! Ya puedes comprobar' : 'Multiplicar suma pisos · dividir resta · elevar multiplica el piso', W / 2, H - 13);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp !== 'play' || pause > 0) return false;
+        const x = p.mouseX, y = p.mouseY;
+        if (used.length && hitBox({ x: undo.x - 4, y: undo.y - 4, w: undo.w + 8, h: undo.h + 8 }, x, y)) { used = []; api.sfx?.tap?.(); return false; }
+        const i = cards.findIndex(b => hitBox(b, x, y));
+        if (i < 0) return;
+        if (!used.includes(i)) play(i);
+        return false;
+      };
+    }, 1.4);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => { if (a.phase === 'play') boxes(); return { phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, used: [...used], cards: cards.map(b => ({ x: b.x + b.w / 2, y: b.y + b.h / 2 })), sol: solutionsOf(item())[0], undo: { x: undo.x + undo.w / 2, y: undo.y + undo.h / 2 } }; },
+    };
+  }
+
+  return { grade, create, applyCard, pathOf, solutionsOf, reach, cardTxt, chainTxt };
+})();
+;
+//#archivo js/games/reparte-factores.js
+// Reparte los factores (Álgebra, exponentes racionales; lección alg-22a): el número se muestra como sus factores
+// primos (64 = 2·2·2·2·2·2). El denominador del exponente dice en cuántos grupos iguales se reparten (eso es la raíz) y
+// el numerador cuántos de esos grupos se toman (la potencia): 64^(2/3) = tres grupos de 2·2, se toman dos: 4 · 4 = 16.
+// Si los factores no se pueden repartir parejo, el juego lo dice.
+// params = { rounds: [{ n, num, den }] }   state = { rounds: [{ split, keep }] }     Spec 2026-11-15-torres-de-potencias.
+
+GAMES['reparte-factores'] = (() => {
+  function primes(n) { const out = []; for (let f = 2; n > 1; f++) while (n % f === 0) { out.push(f); n /= f; } return out; }
+  // Un grupo, si los factores de n se reparten parejo en k grupos; si no, null.
+  function groupOf(n, k) {
+    const count = {}; primes(n).forEach(f => { count[f] = (count[f] || 0) + 1; });
+    if (Object.values(count).some(c => c % k)) return null;
+    return Object.entries(count).flatMap(([f, c]) => Array(c / k).fill(+f));
+  }
+  const prod = xs => xs.reduce((a, b) => a * b, 1);
+  const valueOf = r => prod(groupOf(r.n, r.den)) ** r.num;
+
+  const game = roundsGame({
+    aspect: 1.2,
+    init: () => ({ split: 1, keep: 1 }),
+    ok: (s, r) => s.split === r.den && s.keep === r.num,
+    solution: r => `${r.n}^(${r.num}/${r.den}) = ${prod(groupOf(r.n, r.den))}${sup(r.num)} = ${valueOf(r)}`,
+    prompt: r => `Arma ${r.n} elevado a ${r.num}/${r.den}: reparte en grupos iguales y toma algunos`,
+    foot: () => 'El de abajo reparte (raíz); el de arriba dice cuántos grupos tomar (potencia)',
+    layout(G) { const w = (G.W - 36) / 2; G.box = [{ x: 12, y: G.H - 64, w, h: 32 }, { x: 24 + w, y: G.H - 64, w, h: 32 }]; },
+    draw(G) {
+      const { p, C, W, H, s, r } = G, g = groupOf(r.n, s.split), top = 104;
+      p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(13);
+      p.text(`${r.n} = ${primes(r.n).join(' · ')}`, W / 2, top);
+      if (!g) {
+        const fs = primes(r.n), step = Math.min(34, (W - 30) / fs.length);
+        fs.forEach((f, i) => drawTile(p, C, { x: W / 2 - (fs.length * step) / 2 + i * step + 2, y: top + 44, w: step - 4, h: 30 }, f, { fill: C.card, ink: C.mute, size: 15, r: 7, lift: 0 }));
+        p.noStroke(); p.fill(C.bad); p.textSize(13); p.text(`No se pueden repartir parejo en ${s.split} grupos`, W / 2, top + 100);
+      } else {
+        const gw = Math.max(34, g.length * 30 + 8), per = Math.max(1, Math.floor((W - 16) / (gw + 6)));
+        for (let k = 0; k < s.split; k++) {
+          const row = Math.floor(k / per), inRow = Math.min(per, s.split - row * per), gx = W / 2 - (inRow * (gw + 6) - 6) / 2 + (k % per) * (gw + 6), gy = top + 22 + row * 48, on = k < s.keep;
+          p.noFill(); p.stroke(on ? C.sun : C.line); p.strokeWeight(on ? 3 : 1.5); p.rect(gx, gy, gw, 40, 10);
+          g.forEach((f, i) => drawTile(p, C, { x: gx + (gw - g.length * 30) / 2 + i * 30 + 2, y: gy + 6, w: 26, h: 25 }, f, { fill: on ? C.mint : C.card, ink: on ? undefined : C.mute, size: 14, r: 7, lift: on ? 2 : 0 }));
+        }
+        const rows = Math.ceil(s.split / per), one = prod(g), y = top + 22 + rows * 48 + 16;
+        p.noStroke(); p.fill(C.mute); p.textSize(12); p.text(s.split === 1 ? 'sin repartir: un solo grupo' : `cada grupo vale ${one}: es la raíz ${{ 2: 'cuadrada', 3: 'cúbica', 4: 'cuarta', 5: 'quinta', 6: 'sexta' }[s.split]} de ${r.n}`, W / 2, y);
+        const good = G.locked && s.split === r.den && s.keep === r.num;
+        p.fill(good ? C.ok : C.ink); p.textSize(17); p.text(`${r.n}^(${s.keep}/${s.split}) = ${one}${s.keep > 1 ? sup(s.keep) : ''} = ${one ** s.keep}`, W / 2, y + 26);
+      }
+      drawStepper(p, C, G.box[0], s.split, 'grupos iguales (índice)');
+      drawStepper(p, C, G.box[1], s.keep, 'grupos que tomo (potencia)');
+    },
+    press(G, x, y) {
+      const a = stepHit(G.box[0], x, y), b = stepHit(G.box[1], x, y);
+      if (!a && !b) return false;
+      G.s.split = Math.max(1, Math.min(6, G.s.split + a)); G.s.keep = Math.max(1, Math.min(G.s.split, G.s.keep + b)); G.touch();
+      return true;
+    },
+    peek: G => ({ box: G.box }),
+  });
+  return { ...game, primes, groupOf, valueOf };
+})();
+;
+//#archivo js/games/siembra-raices.js
+// Siembra de raíces (Álgebra, raíces; juego dinámico de la lección alg-22a): en la recta hay una semilla por cada
+// entero. La pregunta es de dos clases. 'eq': «un número elevado a la n dio a: ¿cuáles pudieron ser?» (pueden ser
+// dos, uno o ninguno). 'root': «ⁿ√a = ?» (la raíz es un solo número: con índice par, el positivo; y no existe si a es
+// negativo). Se tocan las semillas de la respuesta y «Sembrar» hace crecer cada semilla x hasta la altura xⁿ: las que
+// llegan justo a la línea de a son las que cumplen. Si ninguna cumple, se siembra sin elegir. No hay reloj.
+// Fallar quita una vida y dice por qué. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, items: [{ kind: 'eq' | 'root', n, a }] }], span?, lives? }   state = { done: [n] }
+// Spec 2026-11-15-torres-de-potencias.
+
+GAMES['siembra-raices'] = (() => {
+  const rootSym = n => ({ 2: '√', 3: '∛', 4: '∜' }[n] || `${sup(n)}√`);
+  // Los enteros de la respuesta, dentro de −span … span.
+  function wantOf(it, span = 6) {
+    const xs = []; for (let x = -span; x <= span; x++) if (x ** it.n === it.a) xs.push(x);
+    return it.kind === 'root' && it.n % 2 === 0 ? xs.filter(x => x >= 0) : xs;
+  }
+  const askTxt = it => (it.kind === 'eq' ? `x${sup(it.n)} = ${negTxt(it.a)}: ¿qué números x?` : `${rootSym(it.n)}${it.a < 0 ? `(${negTxt(it.a)})` : it.a} = ?`);
+  const ansTxt = (it, span) => { const w = wantOf(it, span).map(negTxt); return `${askTxt(it).replace(': ¿qué números x?', '').replace(' = ?', '')} → ${w.length ? w.join(' y ') : (it.kind === 'eq' ? 'ningún real' : 'no es real')}`; };
+  // ¿Lo elegido es la respuesta? Si no, por qué.
+  function judge(it, sel, span = 6) {
+    const want = wantOf(it, span), extra = sel.find(x => !want.includes(x));
+    if (extra !== undefined) {
+      if (it.kind === 'root' && it.n % 2 === 0 && want.includes(-extra)) return { ok: false, msg: `La raíz es un solo número: el positivo, ${-extra}` };
+      return { ok: false, msg: want.length ? `${extra < 0 ? `(${negTxt(extra)})` : extra}${sup(it.n)} = ${negTxt(extra ** it.n)}, no ${negTxt(it.a)}` : 'Ningún número real llega ahí' };
+    }
+    if (want.some(x => !sel.includes(x))) return { ok: false, msg: sel.length ? 'Falta otro número que también cumple' : 'Sí hay alguno que cumple: mira la recta' };
+    return { ok: true, msg: ansTxt(it, span) };
+  }
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => ansTxt(it, params.span)).join(' · ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, SPAN = params.span ?? 6;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, lineY = 0, sel = new Set(), grow = 0, sown = false, pause = 0, result = null, btn = {};
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; reset(); },
+      lost(i) { st.done[i] = 0; },
+    });
+    const round = () => R[a.cur], item = () => round().items[Math.min(st.done[a.cur], round().items.length - 1)];
+    const X = x => 14 + ((x + SPAN) / (2 * SPAN)) * (W - 28);
+    // La recta va más arriba cuando lo pedido es negativo: las plantas crecen hacia abajo y necesitan sitio.
+    const baseOf = it => H * (it.a < 0 ? 0.42 : 0.62);
+
+    function layout(w, h) { W = w; H = h; lineY = h * 0.62; btn = { x: w / 2 - 62, y: h - 60, w: 124, h: 32 }; }
+    function reset() { sel = new Set(); grow = 0; sown = false; pause = 0; result = null; }
+    function sow() {
+      const res = judge(item(), [...sel], SPAN);
+      sown = true; result = res; pause = res.ok ? 2.2 : 2.0;
+      if (res.ok) { st.done[a.cur]++; a.hit(); a.say(res.msg, C.ok); }
+      else { a.say(res.msg, C.bad); if (a.miss()) reset(); }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play') return;
+        if (sown) grow = Math.min(1, grow + dt * 1.6);
+        if (pause > 0) { pause -= dt; if (pause <= 0) { const good = result && result.ok; reset(); if (good && st.done[a.cur] >= round().items.length) a.win(); } }
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = round(), it = shownItem(), live = a.phase === 'play', over = locked || a.phase === 'all', want = wantOf(it, SPAN);
+        const lineY = baseOf(it), upMax = lineY - 104, dnMax = H - 110 - lineY, unit = (it.a < 0 ? dnMax : upMax) / (Math.max(1, Math.abs(it.a)) * 1.25);
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, `${r.title} · ${it.kind === 'eq' ? 'toca todos los que cumplen' : 'la raíz es un solo número'}`, W / 2, 40, W - 24, 11);
+        if (live) drawPill(p, C, askTxt(it), W / 2, 68, C.sun, 17);
+
+        if (!over && a.phase !== 'idle') {
+          // La línea de la altura pedida y las plantas.
+          const ty = lineY - it.a * unit, inRange = ty <= lineY + dnMax && ty >= lineY - upMax;
+          if (inRange) { p.stroke(C.sun); p.strokeWeight(2); p.drawingContext.setLineDash([6, 6]); p.line(14, ty, W - 14, ty); p.drawingContext.setLineDash([]); p.noStroke(); p.fill(C.N); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.RIGHT, p.CENTER); p.text(negTxt(it.a), W - 16, ty - 9); }
+          p.stroke(C.ink); p.strokeWeight(3); p.line(10, lineY, W - 10, lineY);
+          for (let x = -SPAN; x <= SPAN; x++) {
+            const v = x ** it.n, h = Math.max(-dnMax, Math.min(upMax, v * unit)) * grow, hitsIt = v === it.a, on = sel.has(x);
+            if (sown && v !== 0) { p.stroke(hitsIt ? C.ok : C.mint); p.strokeWeight(hitsIt ? 6 : 4); p.line(X(x), lineY, X(x), lineY - h); }
+            const fill = sown && grow >= 1 ? (on ? (want.includes(x) ? C.ok : C.bad) : want.includes(x) ? C.sun : C.cream) : on ? C.sun : C.cream;
+            p.noStroke(); p.fill(shade(fill, 0.74)); p.circle(X(x), lineY + 2, 21); p.fill(fill); p.circle(X(x), lineY, 21);
+            p.fill(inkOn(fill, C.ink)); p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER); p.text(negTxt(x), X(x), lineY + 1);
+          }
+          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER);
+          p.text(sel.size ? `Elegidos: ${[...sel].sort((u, v) => u - v).map(negTxt).join(', ')}` : 'Ninguno elegido', W / 2, H - 78);
+          if (live && pause <= 0) drawTile(p, C, btn, 'Sembrar', { fill: C.mint, size: 15, r: 10, lift: 2 });
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 13, locked);
+        if (over) drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: ansTxt(x, SPAN) }))).slice(0, 10), H / 2);
+        else drawArcadeBanner(p, C, a, lineY - 60, { idle: 'Sin prisa: elige y luego siembra', lost: 'Varias siembras no dieron la altura' });
+        if (!a.toast && (over || a.phase === 'idle')) {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(over ? '¡Buena cosecha! Ya puedes comprobar' : 'Cada semilla x crece hasta la altura de su potencia', W / 2, H - 13);
+        }
+        arcadeStop(p, a, locked);
+      };
+      // Mientras se ve el resultado sigue en pantalla la pregunta respondida.
+      function shownItem() { const r = round(); return pause > 0 && result && result.ok ? r.items[Math.max(0, st.done[a.cur] - 1)] : item(); }
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp !== 'play' || pause > 0) return false;
+        const x = p.mouseX, y = p.mouseY;
+        if (hitBox({ x: btn.x - 6, y: btn.y - 4, w: btn.w + 12, h: btn.h + 10 }, x, y)) { sow(); return false; }
+        if (Math.abs(y - baseOf(item())) > 26) return;
+        const k = Math.round(((x - 14) / (W - 28)) * 2 * SPAN - SPAN);
+        if (k < -SPAN || k > SPAN) return;
+        if (sel.has(k)) sel.delete(k); else sel.add(k);
+        api.sfx?.tap?.();
+        return false;
+      };
+    }, 1.35);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, want: wantOf(item(), SPAN), ok: { x: btn.x + btn.w / 2, y: btn.y + btn.h / 2 }, seeds: Array.from({ length: 2 * SPAN + 1 }, (_, i) => ({ v: i - SPAN, x: X(i - SPAN), y: baseOf(item()), sel: sel.has(i - SPAN) })) }),
+    };
+  }
+
+  return { grade, create, wantOf, judge, askTxt, rootSym };
+})();
+;
+//#archivo js/games/parte-baldosa.js
+// Parte la baldosa (Álgebra, simplificar radicales; lección alg-22b): una baldosa cuadrada de área n tiene lado √n.
+// Se parte en una cuadrícula de k × k baldosas iguales: cada una tiene área n/k² y el lado grande es k veces el lado
+// de una pequeña, √n = k·√(n/k²). Solo sirve si el área de la pequeña es entera. Meta: la cuadrícula más fina que
+// sirve; ahí lo de adentro de la raíz ya no tiene cuadrados escondidos.
+// params = { rounds: [{ n }], max? }   state = { rounds: [{ k }] }      Spec 2026-11-15-torres-de-potencias.
+
+GAMES['parte-baldosa'] = (() => {
+  // La cuadrícula más fina con baldosas de área entera: el mayor k con k² divisor de n.
+  function bestK(n) { let best = 1; for (let k = 2; k * k <= n; k++) if (n % (k * k) === 0) best = k; return best; }
+  const rootTxt = (k, m) => (m === 1 ? `${k}` : k === 1 ? `√${m}` : `${k}√${m}`);
+
+  const game = roundsGame({
+    aspect: 1.25,
+    init: () => ({ k: 1 }),
+    ok: (s, r) => s.k === bestK(r.n),
+    solution: r => `√${r.n} = ${rootTxt(bestK(r.n), r.n / bestK(r.n) ** 2)}`,
+    prompt: r => `Baldosa de área ${r.n}: pártela en la cuadrícula más fina con baldosas de área entera`,
+    foot: (r, s) => (r.n % (s.k * s.k) ? 'El área de cada baldosa pequeña debe ser un número entero' : 'El lado grande mide k veces el lado de una pequeña'),
+    layout(G) { G.box = { x: G.W / 2 - 80, y: G.H - 64, w: 160, h: 32 }; G.sq = Math.min(G.W - 80, G.H - 250); },
+    draw(G) {
+      const { p, C, W, H, s, r } = G, S = G.sq, x0 = W / 2 - S / 2, y0 = 100, m = r.n / (s.k * s.k), whole = Number.isInteger(m), good = G.locked && s.k === bestK(r.n);
+      const f = p.color(whole ? (good ? C.ok : C.mint) : C.coral); f.setAlpha(whole ? 110 : 60);
+      p.stroke(whole ? (good ? C.ok : C.mint) : C.coral); p.strokeWeight(2.5); p.fill(f); p.rect(x0, y0, S, S, 4);
+      p.strokeWeight(1.2);
+      for (let i = 1; i < s.k; i++) { p.line(x0 + (i * S) / s.k, y0, x0 + (i * S) / s.k, y0 + S); p.line(x0, y0 + (i * S) / s.k, x0 + S, y0 + (i * S) / s.k); }
+      // Una baldosa pequeña resaltada, con su área.
+      const c = S / s.k;
+      p.noFill(); p.stroke(C.sun); p.strokeWeight(3); p.rect(x0, y0 + S - c, c, c, 3);
+      p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
+      if (c > 30) { p.textSize(Math.min(15, c / 3)); p.text(whole ? m : numTxt(m), x0 + c / 2, y0 + S - c / 2); }
+      p.textSize(12); p.fill(C.mute); p.text(`lado √${r.n}`, x0 + S / 2, y0 + S + 12);
+      p.fill(whole ? (good ? C.ok : C.ink) : C.bad); p.textSize(16);
+      p.text(whole ? `√${r.n} = ${rootTxt(s.k, m)}` : `área de cada una: ${numTxt(m)} (no es entera)`, W / 2, y0 + S + 36);
+      drawStepper(p, C, G.box, `${s.k} × ${s.k}`, 'baldosas por lado');
+    },
+    press(G, x, y) { const d = stepHit(G.box, x, y); if (!d) return false; G.s.k = Math.max(1, Math.min(G.params.max ?? 10, G.s.k + d)); G.touch(); return true; },
+    peek: G => ({ box: G.box, want: bestK(G.r.n) }),
+  });
+  return { ...game, bestK, rootTxt };
+})();
+;
+//#archivo js/games/tabla-conjugado.js
+// La tabla del conjugado (Álgebra, racionalizar; lección alg-22b): para quitar la raíz de un denominador hay que
+// multiplicarlo por algo que la haga desaparecer. Se elige por cuál multiplicar y el juego hace la tabla de la
+// multiplicación, término por término: se ve qué casillas quedan con raíz y cuáles se cancelan (en el conjugado, las
+// dos del medio son opuestas). Se puede probar con todas antes de comprobar.
+// Un término es { c, r } = c·√r (r = 1: número sin raíz).
+// params = { rounds: [{ den: [término], options: [[término]] }] }   state = { rounds: [{ pick }] }
+// Spec 2026-11-15-torres-de-potencias.
+
+GAMES['tabla-conjugado'] = (() => {
+  // Producto de dos términos, sacando de la raíz los cuadrados perfectos.
+  function mulTerm(a, b) {
+    let c = a.c * b.c, r = a.r * b.r;
+    for (let f = Math.floor(Math.sqrt(r)); f > 1; f--) if (r % (f * f) === 0) { c *= f; r /= f * f; }
+    return { c, r };
+  }
+  // Suma de términos: junta los de la misma raíz y quita los que dan cero.
+  function sumTerms(ts) {
+    const by = new Map(); ts.forEach(t => by.set(t.r, (by.get(t.r) || 0) + t.c));
+    return [...by.entries()].filter(([, c]) => c !== 0).sort((a, b) => a[0] - b[0]).map(([r, c]) => ({ c, r }));
+  }
+  const product = (A, B) => sumTerms(A.flatMap(a => B.map(b => mulTerm(a, b))));
+  const rational = ts => ts.every(t => t.r === 1);
+  const termTxt = t => (t.r === 1 ? negTxt(t.c) : `${t.c === 1 ? '' : t.c === -1 ? '−' : negTxt(t.c)}√${t.r}`);
+  const polyTxt = ts => (ts.length ? ts.map((t, i) => (i === 0 ? termTxt(t) : `${t.c < 0 ? '−' : '+'} ${termTxt({ c: Math.abs(t.c), r: t.r })}`)).join(' ') : '0');
+  const goodOf = r => r.options.findIndex(o => rational(product(r.den, o)));
+
+  const game = roundsGame({
+    aspect: 1.25,
+    init: () => ({ pick: -1 }),
+    ok: (s, r) => s.pick >= 0 && rational(product(r.den, r.options[s.pick])),
+    answered: s => s.pick >= 0,
+    solution: r => { const o = r.options[goodOf(r)]; return `(${polyTxt(r.den)})(${polyTxt(o)}) = ${polyTxt(product(r.den, o))}`; },
+    prompt: r => `¿Por cuál multiplicas ${polyTxt(r.den)} para quitar la raíz? Prueba y mira la tabla`,
+    foot: (r, s) => (s.pick < 0 ? 'Puedes probar todas antes de comprobar' : 'Verde: sin raíz · coral: con raíz'),
+    layout(G) { const w = (G.W - 36) / 2; G.opt = [0, 1, 2, 3].map(i => ({ x: 12 + (i % 2) * (w + 12), y: 94 + Math.floor(i / 2) * 44, w, h: 36 })); },
+    draw(G) {
+      const { p, C, W, s, r } = G;
+      r.options.forEach((o, i) => drawTile(p, C, G.opt[i], polyTxt(o), { fill: s.pick === i ? C.sun : C.cream, size: 15, r: 9, lift: 2 }));
+      if (s.pick < 0) { p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER); p.text('Toca una opción para multiplicar', W / 2, 250); return; }
+      const B = r.options[s.pick], A = r.den, cw = Math.min(84, (W - 24) / (B.length + 1)), ch = 38, x0 = W / 2 - ((B.length + 1) * cw) / 2, y0 = 196;
+      const cell = (i, j, txt, fill, ink) => drawTile(p, C, { x: x0 + j * cw + 2, y: y0 + i * ch + 2, w: cw - 4, h: ch - 6 }, txt, { fill, ink, size: 14, r: 7, lift: fill === C.card ? 0 : 2 });
+      cell(0, 0, '×', C.card, C.mute);
+      B.forEach((b, j) => cell(0, j + 1, termTxt(b), C.sky));
+      A.forEach((a, i) => {
+        cell(i + 1, 0, termTxt(a), C.sky);
+        B.forEach((b, j) => { const t = mulTerm(a, b); cell(i + 1, j + 1, termTxt(t), t.r === 1 ? C.mint : C.coral); });
+      });
+      const res = product(A, B), good = rational(res), y = y0 + (A.length + 1) * ch + 22;
+      p.noStroke(); p.fill(good ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
+      fitText(p, `(${polyTxt(A)})(${polyTxt(B)}) = ${polyTxt(res)}`, W / 2, y, W - 24, 16);
+      p.fill(good ? C.ok : C.bad); p.textSize(12); p.text(good ? 'La raíz desapareció' : 'Todavía queda una raíz', W / 2, y + 22);
+    },
+    press(G, x, y) {
+      const i = G.opt.findIndex((b, k) => k < G.r.options.length && hitBox(b, x, y));
+      if (i < 0) return false;
+      G.s.pick = i; G.touch();
+      return true;
+    },
+    peek: G => ({ opt: G.opt, good: goodOf(G.r) }),
+  });
+  return { ...game, mulTerm, sumTerms, product, rational, termTxt, polyTxt, goodOf };
 })();

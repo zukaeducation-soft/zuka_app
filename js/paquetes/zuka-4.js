@@ -1,232 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/explora-alg-mundos-9-10.js
-// Álgebra · mundos 9 (Fracciones Algebraicas) y 10 (Crecimiento Exponencial), Explora. Ejemplos propios.
-{
-  const P = XM.pasos;
-  // ---------------------------------------------------------------------------------------------------------- alg-25a
-  const rio = (v, K) => { const p = XM.plano(K, -5, 5, -6, 6, { H: 200, g: 1, gy: 2 }); return p.s + K.l(p.X(v.q), 8, p.X(v.q), 192, 'lf d') + XM.curva(K, p, x => (Math.abs(x - v.q) < 0.06 ? NaN : 2 / (x - v.q))); };
-  xpLec('alg-25a', [
-    ['Lo que no se puede', xpMira('dibujo', 'Empecemos por la idea: una fracción **no existe** donde el denominador vale 0.', { dib: rio, v: { q: 1 }, alto: 210 }, [
-      ['Dos entre x − 1. En 1, el denominador se anula.', {}, '$\\tfrac{2}{x - 1}, \\ x \\neq 1$'],
-      ['Cerca de 1 el resultado crece sin parar.', {}, '$\\tfrac{2}{0.01} = 200$'],
-      ['La recta punteada es una **asíntota**: la curva se acerca y no la toca.', {}, '$x = 1$'],
-      ['Con x + 3, el prohibido es −3.', { q: -3 }, '$\\tfrac{2}{x + 3}, \\ x \\neq -3$'],
-      ['El dominio son todos los demás.', {}, '$\\mathbb{R} - \\{-3\\}$'],
-    ], 'Iguala a 0 el denominador: esos valores quedan fuera.'),
-    xpFila('En $\\tfrac{x + 1}{x^2 - 2x - 8}$, pon los valores prohibidos, el menor primero.', ['menor', 'mayor'], ['−2', '4'], ['2', '−4', '−1'], 'Factoriza: dos que sumen −2 y multipliquen −8.', '$(x - 4)(x + 2) = 0$.')],
-    ['Cancelar factores', xpMira('dibujo', 'Segunda idea: se cancelan **factores**, nunca términos.', { dib: (v, K) => P(K, v, ['(x² − 9) / (x² + 3x)', '(x + 3)(x − 3) / x(x + 3)', '(x − 3) / x'], 44, 40), v: { n: 1 }, alto: 150 }, [
-      ['Parecen no tener nada en común.', {}, '$\\tfrac{x^2 - 9}{x^2 + 3x}$'],
-      ['Factorizamos arriba y abajo.', { n: 2 }, '$\\tfrac{(x+3)(x-3)}{x(x+3)}$'],
-      ['El factor x + 3 se repite: se cancela.', { n: 3 }, '$\\tfrac{x - 3}{x}$'],
-      ['El −3 sigue prohibido: la original no existía ahí.', {}, '$x \\neq 0, \\ x \\neq -3$'],
-      ['No se tacha la x de x − 3: no es factor.', {}, '$\\tfrac{x - 3}{x} \\neq -3$'],
-    ], 'Factoriza primero; cancela factores; recuerda lo prohibido.'),
-    xpFila('$\\tfrac{x^2 + 5x}{x^2 - 25}$: pon lo que queda arriba y abajo.', ['arriba', 'abajo'], ['x', 'x − 5'], ['x + 5', '5x', '−5'], 'Arriba x(x + 5); abajo, diferencia de cuadrados.', '$\\tfrac{x}{x - 5}$.')],
-    ['Hueco o río', xpMira('dibujo', 'Tercera idea: si el factor se cancela queda un **hueco**; si no, un **río**.', { dib: (v, K) => { const p = XM.plano(K, -4, 4, -3, 5, { H: 190 }); return p.s + K.f(1 - v.r, XM.curva(K, p, x => x + 1) + K.c(p.X(1), p.Y(2), 6, 'fop') + K.c(p.X(1), p.Y(2), 6, 'fn')) + K.f(v.r, K.l(p.X(1), 8, p.X(1), 182, 'lf d') + XM.curva(K, p, x => (Math.abs(x - 1) < 0.06 ? NaN : 1 / (x - 1) + 1))); }, v: { r: 0 }, alto: 200 }, [
-      ['x² − 1 entre x − 1 es la recta x + 1.', {}, '$\\tfrac{(x-1)(x+1)}{x-1}$'],
-      ['Pero en 1 no existe: le falta un punto. Es un hueco.', {}, '$x \\neq 1$'],
-      ['En x entre x − 1 nada se cancela.', { r: 1 }, '$\\tfrac{x}{x - 1}$'],
-      ['Ahí hay un río: la curva se parte en dos orillas.', {}, '$x = 1$'],
-    ], 'Factor cancelado: hueco. Factor que queda abajo: asíntota.'),
-    xpFila('$\\tfrac{(x - 2)(x + 4)}{(x - 2)(x - 5)}$: di qué hay en cada prohibido.', ['en 2', 'en 5'], ['hueco', 'río'], ['nada'], '¿Cuál factor se cancela?', 'El de 2 se cancela; el de 5 queda abajo.')],
-    ['Ahora sí, un problema', xpMueve('Un sensor falla donde su fórmula, $\\tfrac{2}{x + 2}$, no existe. Mueve el río de $\\tfrac{2}{x - q}$ hasta ese valor.', 270, { q: 1 }, [xpRegla('q', -4, 4, 'valor prohibido')], { q: -2 }, rio, '$x + 2 = 0$ en $x = -2$.', { lee: v => `$x \\neq ${v.q}$` })],
-  ], 'Factoriza, mira lo prohibido y cancela solo factores.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-25b
-  xpLec('alg-25b', [
-    ['El mismo denominador', xpMira('dibujo', 'Empecemos por la idea: para sumar, las partes deben ser **del mismo tamaño**.', { dib: (v, K) => P(K, v, ['2/x + 3/(x + 1)', '2(x+1)/x(x+1) + 3x/x(x+1)', '(2x + 2 + 3x) / x(x+1)', '(5x + 2) / x(x+1)'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
-      ['Los denominadores son x y x + 1: distintos.', {}, '$\\text{común: } x(x+1)$'],
-      ['A cada fracción se le multiplica lo que le falta, arriba y abajo.', { n: 2 }, '$\\tfrac{x+1}{x+1} = 1$'],
-      ['Se suman los de arriba.', { n: 3 }, '$2x + 2 + 3x$'],
-      ['El de abajo no se suma: es el tamaño.', { n: 4 }, '$\\tfrac{5x + 2}{x(x+1)}$'],
-    ], 'Común denominador: lo que le falta a cada una, arriba y abajo.'),
-    xpFila('$\\tfrac{4}{x} + \\tfrac{1}{x + 2}$ sobre $x(x + 2)$: arriba queda $\\square x + \\square$.', ['de x', 'número'], ['5', '8'], ['4', '6', '2'], '4(x + 2) + x.', '$5x + 8$.')],
-    ['Restar con cuidado', xpMira('dibujo', 'Segunda idea: la raya es un **paréntesis**: el menos entra a todo.', { dib: (v, K) => P(K, v, ['5x/(x−1) − (2x + 3)/(x−1)', '(5x − (2x + 3)) / (x−1)', '(5x − 2x − 3) / (x−1)', '3(x − 1)/(x−1) = 3'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
-      ['Mismo denominador: se restan los de arriba.', { n: 2 }, '$5x - (2x + 3)$'],
-      ['El menos cambia el 2x y también el 3.', { n: 3 }, '$5x - 2x - 3$'],
-      ['Queda 3x − 3, que es 3 por x − 1.', { n: 4 }, '$3(x - 1)$'],
-      ['Se cancela y da 3, para x distinto de 1.', {}, '$3$'],
-    ], 'Pon paréntesis al numerador que se resta.'),
-    xpFila('$\\tfrac{7x + 2}{x + 4} - \\tfrac{3x - 5}{x + 4}$: arriba queda $\\square x + \\square$.', ['de x', 'número'], ['4', '7'], ['−3', '10', '3'], '2 menos −5.', '$4x + 7$.')],
-    ['Multiplicar y dividir', xpMira('dibujo', 'Tercera idea: multiplicar es **de frente**; dividir, por la volteada.', { dib: (v, K) => P(K, v, ['x/6 ÷ x²/9', 'x/6 · 9/x²', '9x / 6x²', '3 / 2x'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['Dividir entre una fracción es multiplicar por su recíproca.', { n: 2 }, '$\\tfrac{x}{6} \\cdot \\tfrac{9}{x^2}$'],
-      ['De frente: arriba con arriba, abajo con abajo.', { n: 3 }, '$\\tfrac{9x}{6x^2}$'],
-      ['Se cancelan 3 y x.', { n: 4 }, '$\\tfrac{3}{2x}$'],
-      ['Mejor cancelar antes de multiplicar.', {}, '$\\tfrac{x}{6} \\cdot \\tfrac{9}{x \\cdot x}$'],
-    ], 'Voltea la segunda y cancela antes de multiplicar.'),
-    xpFila('$\\tfrac{x^2}{10} \\div \\tfrac{x}{15}$: pon el resultado simplificado.', ['arriba', 'abajo'], ['3x', '2'], ['x', '5', '150'], '$\\tfrac{x^2}{10} \\cdot \\tfrac{15}{x}$.', '$\\tfrac{3x}{2}$.')],
-    ['Ahora sí, un problema', xpFila('Una bomba llena en x horas y otra en $x + 5$. Juntas, en una hora: $\\tfrac1x + \\tfrac{1}{x+5}$. Arriba queda $\\square x + \\square$.', ['de x', 'número'], ['2', '5'], ['1', '10', '6'], 'x + 5 más x.', '$\\tfrac{2x + 5}{x(x + 5)}$.')],
-  ], 'Mismo tamaño para sumar; de frente para multiplicar.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-101
-  const dos = (v, K) => { const p = XM.plano(K, -1, 7, -1, 7, { H: 200 }); return p.s + XM.curva(K, p, x => v.m * x + v.b) + XM.curva(K, p, x => 6 - x, 'lf gr') + (v.px != null ? K.c(p.X(v.px), p.Y(v.py), 6, 'fA') : ''); };
-  xpLec('alg-101', [
-    ['Cumplir las dos', xpMira('dibujo', 'Empecemos por la idea: la solución es el punto que está **en las dos rectas**.', { dib: dos, v: { m: 1, b: 2, px: 5, py: 1 }, alto: 210 }, [
-      ['La roja: los pares que suman 6.', {}, '$x + y = 6$'],
-      ['El punto (5, 1) suma 6, pero no está en la otra.', {}, '$5 + 1 = 6$'],
-      ['En el cruce se cumplen las dos.', { px: 2, py: 4 }, '$(2, 4)$'],
-      ['Se comprueba en ambas ecuaciones.', {}, '$y = x + 2: \\ 4 = 2 + 2$'],
-      ['Paralelas: ninguna. La misma recta: infinitas.', { m: -1, b: 3, px: null, py: null }, '$0 = 3 \\ \\text{no}$'],
-    ], 'Una solución de un sistema cumple todas las ecuaciones.'),
-    xpMueve('La roja es $x + y = 6$ y la otra, $y = x - 2$. Lleva el punto al cruce.', 300, { m: 1, b: -2, px: 1, py: 1 }, [xpRegla('px', 0, 6, 'x'), xpRegla('py', 0, 6, 'y')], { px: 4, py: 2 }, dos, '$4 + 2 = 6$ y $2 = 4 - 2$.', { lee: v => `$(${v.px}, ${v.py})$` })],
-    ['Eliminar', xpMira('dibujo', 'Segunda idea: sumando las ecuaciones se **elimina** una letra.', { dib: (v, K) => P(K, v, ['3x + 2y = 16', '5x − 2y = 8', '8x = 24', 'x = 3,  y = 3.5'], 34, 34), v: { n: 2 }, alto: 160 }, [
-      ['Los de y son opuestos: 2y y −2y.', {}, '$2y - 2y = 0$'],
-      ['Se suman las dos ecuaciones.', { n: 3 }, '$8x = 24$'],
-      ['x vale 3; se pone en cualquiera y sale y.', { n: 4 }, '$9 + 2y = 16$'],
-      ['Si no son opuestos, se multiplica antes una ecuación entera.', {}, '$-2 \\cdot (\\ldots)$'],
-    ], 'Haz opuestos los coeficientes de una letra y suma.'),
-    xpFila('$2x + y = 11$ y $x - y = 1$. Pon 3x, x, y.', ['3x =', 'x', 'y'], ['12', '4', '3'], ['10', '5', '2'], 'Suma: la y se va.', '$3x = 12$; $4 - y = 1$.')],
-    ['Sustituir', xpMira('dibujo', 'Tercera idea: si una letra ya está despejada, se **reemplaza** en la otra.', { dib: (v, K) => P(K, v, ['y = 2x − 1', '3x + y = 14', '3x + (2x − 1) = 14', 'x = 3,  y = 5'], 34, 34), v: { n: 2 }, alto: 160 }, [
-      ['La primera dice cuánto vale y.', {}, '$y = 2x - 1$'],
-      ['Se pone ese paquete en la segunda, con paréntesis.', { n: 3 }, '$3x + (2x - 1) = 14$'],
-      ['Ahora hay una sola letra.', {}, '$5x = 15$'],
-      ['x es 3 y, al volver, y es 5.', { n: 4 }, '$y = 2 \\cdot 3 - 1$'],
-    ], 'Reemplaza el paquete completo y vuelve por la otra letra.'),
-    xpFila('$x = y + 3$ y $2x + y = 18$. Pon 3y, y, x.', ['3y =', 'y', 'x'], ['12', '4', '7'], ['15', '5', '21'], '$2(y + 3) + y = 18$.', '$3y = 12$.')],
-    ['Ahora sí, un problema', xpFila('3 jugos y 2 tortas valen 25 mil; 1 jugo y 2 tortas, 15 mil. Pon cada precio (miles).', ['jugo', 'torta'], ['5', '5'], ['10', '4', '7.5'], 'Resta las dos compras.', '2 jugos valen 10; luego $2t = 10$.')],
-  ], 'El cruce: se halla eliminando o sustituyendo.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-102
-  const cor = (v, K) => { const p = XM.plano(K, -4, 4, -2, 10, { H: 200, gy: 2 }), d = Math.max(0, v.b + 1 / 4); return p.s + XM.curva(K, p, x => x * x) + XM.curva(K, p, x => x + v.b, 'lf gr') + (v.b > -0.25 ? [1, -1].map(s => { const x = 0.5 + s * Math.sqrt(d); return K.c(p.X(x), p.Y(x * x), 6, 'fA'); }).join('') : ''); };
-  xpLec('alg-102', [
-    ['Curvas que se cruzan', xpMira('dibujo', 'Empecemos por la idea: una recta y una parábola se cruzan **0, 1 o 2 veces**.', { dib: cor, v: { b: 2 }, alto: 210 }, [
-      ['y = x² con y = x + 2: dos cruces.', {}, '$x^2 = x + 2$'],
-      ['Se iguala y sale una cuadrática.', {}, '$x^2 - x - 2 = 0$'],
-      ['x es 2 o −1: los puntos (2, 4) y (−1, 1).', {}, '$(x - 2)(x + 1) = 0$'],
-      ['Si la recta baja, los cruces se juntan y desaparecen.', { b: -1.5 }, '$\\text{discriminante} < 0$'],
-    ], 'Iguala, resuelve y vuelve por la otra coordenada.'),
-    xpMueve('Sube la recta $y = x + b$ hasta que uno de los cruces sea el punto $(-2, 4)$.', 270, { b: 0 }, [xpRegla('b', -1, 6, 'b')], { b: 6 }, cor, '$4 = -2 + 6$; el otro cruce es $(3, 9)$.', { lee: v => `$y = x + ${v.b}$` })],
-    ['Desarmar una fracción', xpMira('dibujo', 'Segunda idea: una fracción grande es **suma de fracciones simples**.', { dib: (v, K) => P(K, v, ['(5x + 1) / (x − 1)(x + 2)', 'A/(x − 1) + B/(x + 2)', '5x + 1 = A(x + 2) + B(x − 1)', 'x = 1: 6 = 3A → A = 2', 'x = −2: −9 = −3B → B = 3'], 28, 30, ''), v: { n: 1 }, alto: 170 }, [
-      ['Dos factores abajo: dos fracciones simples.', { n: 2 }, '$\\tfrac{A}{x-1} + \\tfrac{B}{x+2}$'],
-      ['Después se quitan denominadores.', { n: 3 }, '$5x + 1 = A(x+2) + B(x-1)$'],
-      ['Con x = 1 se apaga B y queda A.', { n: 4 }, '$A = 2$'],
-      ['Con x = −2 se apaga A y queda B.', { n: 5 }, '$B = 3$'],
-      ['Al sumarlas vuelve la original.', {}, '$\\tfrac{2}{x-1} + \\tfrac{3}{x+2}$'],
-    ], 'Escoge x que apague una letra y halla la otra.'),
-    xpFila('$\\tfrac{7x - 2}{x(x - 1)} = \\tfrac{A}{x} + \\tfrac{B}{x - 1}$. Pon A y B.', ['A', 'B'], ['2', '5'], ['−2', '7', '3'], 'Con x = 0: −2 = −A. Con x = 1: 5 = B.', '$\\tfrac2x + \\tfrac{5}{x-1}$.')],
-    ['Cuando se repite', xpMira('dibujo', 'Tercera idea: un factor **repetido** pide una fracción por cada potencia.', { dib: (v, K) => P(K, v, ['(3x + 1) / (x − 2)²', 'A/(x − 2) + B/(x − 2)²', '3x + 1 = A(x − 2) + B', 'x = 2: B = 7;  A = 3'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
-      ['El factor x − 2 está al cuadrado.', { n: 2 }, '$\\tfrac{A}{x-2} + \\tfrac{B}{(x-2)^2}$'],
-      ['Después se quitan denominadores.', { n: 3 }, '$3x + 1 = A(x-2) + B$'],
-      ['En 2 queda B: siete.', { n: 4 }, '$B = 7$'],
-      ['Y comparando los de x, A es 3.', {}, '$A = 3$'],
-      ['Un cuadrático que no se factoriza lleva Bx + C.', {}, '$\\tfrac{Bx + C}{x^2 + 1}$'],
-    ], 'Repetido: una por potencia. Cuadrático irreducible: $Bx + C$.'),
-    xpFila('$\\tfrac{4x + 9}{(x + 1)^2} = \\tfrac{A}{x+1} + \\tfrac{B}{(x+1)^2}$. Pon A y B.', ['A', 'B'], ['4', '5'], ['9', '13', '−4'], 'Los de x dan A; en x = −1 queda B.', '$4(x + 1) + 5$.')],
-    ['Ahora sí, un problema', xpFila('Dos números suman 11 y sus cuadrados, 73. Ponlos, el menor primero.', ['menor', 'mayor'], ['3', '8'], ['5', '6', '4'], '$x^2 + (11 - x)^2 = 73$.', '$9 + 64 = 73$.')],
-  ], 'Iguala para cruzar; apaga letras para desarmar.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-71
-  const ex = (v, K) => { const p = XM.plano(K, -4, 4, -1, 9, { H: 200, gy: 2 }); return p.s + XM.curva(K, p, x => v.a * v.b ** x + v.k) + K.l(18, p.Y(v.k), 322, p.Y(v.k), 'lf d') + K.c(p.X(0), p.Y(v.a + v.k), 6, 'fA'); };
-  xpLec('alg-71', [
-    ['Multiplicar cada paso', xpMira('dibujo', 'Empecemos por la idea: en la exponencial cada paso **multiplica** por lo mismo.', { dib: ex, v: { a: 1, b: 2, k: 0 }, alto: 210 }, [
-      ['Dos a la x: 1, 2, 4, 8… cada paso duplica.', {}, '$y = 2^x$'],
-      ['Hacia la izquierda se parte a la mitad, sin llegar a 0.', {}, '$2^{-3} = \\tfrac18$'],
-      ['En x = 0 siempre vale 1.', {}, '$b^0 = 1$'],
-      ['Con base menor que 1, baja.', { b: 0.5 }, '$y = (\\tfrac12)^x$'],
-      ['La base es positiva y distinta de 1.', {}, '$b > 0, \\ b \\neq 1$'],
-    ], '$y = b^x$: crece si $b > 1$ y decrece si $0 < b < 1$.'),
-    xpMueve('La curva $y = a \\cdot 2^x$ corta el eje y en **3**. Mueve a.', 270, { a: 1, b: 2, k: 0 }, [xpRegla('a', 1, 5, 'a')], { a: 3 }, ex, 'En 0 vale $a \\cdot 1 = 3$.', { lee: v => `$${v.a} \\cdot 2^0 = ${v.a}$` })],
-    ['El piso', xpMira('dibujo', 'Segunda idea: la **asíntota** es el piso al que se acerca.', { dib: ex, v: { a: 1, b: 2, k: 0 }, alto: 210 }, [
-      ['Sin sumar nada, el piso es 0.', {}, '$y = 0$'],
-      ['Si se suma 3, todo sube: el piso también.', { k: 3 }, '$y = 2^x + 3$'],
-      ['Un café se enfría hacia la temperatura del cuarto: ese es su piso.', { a: 5, b: 0.6, k: 2 }, '$y = 5 \\cdot 0.6^x + 2$'],
-      ['Se acerca siempre y no lo cruza.', {}, '$y > 2$'],
-    ], '$y = a \\cdot b^x + k$: asíntota $y = k$.'),
-    xpMueve('Mueve k hasta que el piso sea **4** y mira por dónde corta el eje.', 270, { a: 1, b: 2, k: 0 }, [xpRegla('k', 0, 5, 'k')], { k: 4 }, ex, '$y = 2^x + 4$ corta en 5.', { lee: v => `$y = 2^x + ${v.k}$` })],
-    ['El número e', xpMira('dibujo', 'Tercera idea: si el crecimiento se reparte en **muchos pedacitos**, aparece e.', { dib: (v, K) => [2, 2.25, 2.44, 2.61, 2.71].map((x, i) => K.f(v.n - i, K.r(30 + i * 58, 150 - x * 40, 46, x * 40, 'fa') + K.t(53 + i * 58, 142 - x * 40, x, 's') + K.t(53 + i * 58, 168, ['1', '2', '4', '12', '365'][i], 's tm'))).join(''), v: { n: 0 }, alto: 180 }, [
-      ['Un peso al 100 % anual, pagado una vez: queda 2.', { n: 1 }, '$(1 + 1)^1$'],
-      ['En dos mitades: 1.5 por 1.5.', { n: 2 }, '$(1 + \\tfrac12)^2 = 2.25$'],
-      ['En doce meses sube a 2.61.', { n: 4 }, '$(1 + \\tfrac{1}{12})^{12}$'],
-      ['Con 365 días, 2.71. Y ya casi no sube más.', { n: 5 }, '$e \\approx 2.718$'],
-    ], '$(1 + \\tfrac1n)^n$ se acerca a $e \\approx 2.718$.'),
-    xpFila('Pon los valores de $y = 3 \\cdot 2^x$.', ['x = 0', 'x = 2', 'x = −1'], ['3', '12', '1.5'], ['36', '0', '6'], 'Primero la potencia, luego por 3.', '$3$, $3 \\cdot 4$ y $3 \\div 2$.')],
-    ['Ahora sí, un problema', xpFila('Un cultivo de 50 células se triplica cada día. Pon las que hay el día 1 y el día 3.', ['día 1', 'día 3'], ['150', '1350'], ['450', '600', '200'], '$50 \\cdot 3^x$.', '$50 \\cdot 27 = 1350$.')],
-  ], 'Cada paso multiplica; k es el piso.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-13b
-  const ahorro = (v, K) => Array.from({ length: Math.round(v.n) + 1 }, (_, i) => { const s = 100 + v.r * i, c = 100 * (1 + v.r / 100) ** i, u = 0.5; return K.r(20 + i * 52, 170 - s * u, 20, s * u, 'fa') + K.f(v.c, K.r(42 + i * 52, 170 - c * u, 20, c * u, 'fg')); }).join('');
-  xpLec('alg-13b', [
-    ['Interés simple', xpMira('dibujo', 'Empecemos por la idea: en el **simple** se gana siempre sobre lo mismo.', { dib: ahorro, v: { n: 0, r: 20, c: 0 }, alto: 180 }, [
-      ['Se guardan 100 al 20 % anual simple.', {}, '$C = 100$'],
-      ['Cada año se ganan 20, siempre sobre los 100.', { n: 2 }, '$I = C \\cdot i \\cdot t$'],
-      ['A los 5 años se han ganado 100.', { n: 5 }, '$100 \\cdot 0.2 \\cdot 5 = 100$'],
-      ['Crece en línea recta, como una escalera.', {}, '$M = C(1 + it)$'],
-    ], 'Simple: $M = C(1 + it)$.'),
-    xpFila('300 mil al 4 % anual simple, 5 años. Pon lo que gana por año, en total y el monto (miles).', ['por año', 'en total', 'monto'], ['12', '60', '360'], ['20', '320', '1200'], 'El 4 % de 300.', '$12 \\cdot 5 = 60$.')],
-    ['Interés compuesto', xpMira('dibujo', 'Segunda idea: en el **compuesto** también ganan los intereses.', { dib: ahorro, v: { n: 1, r: 20, c: 1 }, alto: 180 }, [
-      ['El primer año son iguales.', {}, '$100 \\cdot 1.2 = 120$'],
-      ['El segundo, el 20 % se toma de 120: ya gana más.', { n: 2 }, '$120 \\cdot 1.2 = 144$'],
-      ['Cada año multiplica por 1.2.', { n: 5 }, '$100 \\cdot 1.2^5 \\approx 249$'],
-      ['Crece como una exponencial.', {}, '$M = C(1 + i)^t$'],
-    ], 'Compuesto: $M = C(1 + i)^t$.'),
-    xpFila('500 mil al 10 % anual compuesto. Pon el monto tras 1 y tras 2 años (miles).', ['1 año', '2 años'], ['550', '605'], ['600', '510', '1000'], 'El segundo 10 % es de 550.', '$550 \\cdot 1.1 = 605$.')],
-    ['La tasa del período', xpMira('dibujo', 'Tercera idea: si capitaliza cada mes, la tasa **se reparte** y los períodos se multiplican.', { dib: (v, K) => P(K, v, ['12 % anual, cada mes', '1 % por mes', '2 años = 24 meses', 'M = C · 1.01²⁴'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['Nominal 12 % anual, capitaliza mensual.', {}, '$j = 12\\,\\%, \\ m = 12$'],
-      ['Cada mes paga la doceava parte: 1 %.', { n: 2 }, '$\\tfrac{12\\,\\%}{12}$'],
-      ['En dos años hay 24 períodos.', { n: 3 }, '$2 \\cdot 12 = 24$'],
-      ['Y se multiplica 24 veces.', { n: 4 }, '$M = C(1 + \\tfrac{j}{m})^{mt}$'],
-    ], 'Tasa por período y número de períodos.'),
-    xpFila('8 % anual, capitaliza **trimestral**, 3 años. Pon la tasa del trimestre y los períodos.', ['tasa', 'períodos'], ['2 %', '12'], ['4 %', '3', '24 %'], 'Cuatro trimestres por año.', '$8 \\div 4$ y $4 \\cdot 3$.')],
-    ['Ahora sí, un problema', xpFila('1000 (miles) al 10 % compuesto 2 años, o al 11 % simple 2 años. Pon los dos montos y el mejor.', ['compuesto', 'simple', 'mejor'], ['1210', '1220', 'simple'], ['compuesto', '1200', '1110'], '1000 · 1.21; 1000 + 220.', 'En solo dos años gana el simple.')],
-  ], 'Simple suma; compuesto multiplica.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-72
-  const lg = (v, K) => { const p = XM.plano(K, -3, 9, -3, 4, { H: 200 }); return p.s + K.f(v.e, XM.curva(K, p, x => 2 ** x, 'lg gr') + XM.curva(K, p, x => x, 'lm d')) + XM.curva(K, p, x => (x > 0.02 ? Math.log2(x) : NaN)) + (v.x > 0 ? K.c(p.X(v.x), p.Y(Math.log2(v.x)), 6, 'fF') : ''); };
-  xpLec('alg-72', [
-    ['La pregunta del exponente', xpMira('dibujo', 'Empecemos por la idea: el logaritmo pregunta **¿a qué exponente?**', { dib: lg, v: { e: 0, x: 1 }, alto: 210 }, [
-      ['¿A qué exponente va el 2 para dar 8? A 3.', { x: 8 }, '$\\log_2 8 = 3$'],
-      ['Para dar 4, a 2. Para dar 1, a 0.', { x: 1 }, '$\\log_2 1 = 0$'],
-      ['Para dar un medio, a −1.', { x: 0.5 }, '$\\log_2 \\tfrac12 = -1$'],
-      ['De 0 o de negativos no hay: ninguna potencia de 2 los da.', {}, '$x > 0$'],
-      ['Es el espejo de la exponencial.', { e: 1 }, '$\\log_b x = y \\Leftrightarrow b^y = x$'],
-    ], '$\\log_b x = y$ significa $b^y = x$, con $x > 0$.'),
-    xpFila('Pon cada logaritmo.', ['log₃ 81', 'log₅ 1/25', 'log₁₀ 1000'], ['4', '−2', '3'], ['27', '2', '100'], '¿A qué exponente?', '$3^4$, $5^{-2}$ y $10^3$.')],
-    ['Cuentas con exponentes', xpMira('dibujo', 'Segunda idea: los logaritmos **suman** donde había producto.', { dib: (v, K) => XM.barra(K, 30, [[2, 'log₂ 4 = 2', 'fa'], [3, 'log₂ 8 = 3', 'fg']], { T: 6 }) + K.f(v.n, XM.barra(K, 80, [[5, 'log₂ 32 = 5', 'ff']], { T: 6 })) + K.t(170, 140, v.p, 'ta'), v: { n: 0, p: '' }, alto: 160 }, [
-      ['4 por 8 es 32. Sus exponentes: 2 y 3.', {}, '$4 \\cdot 8 = 2^2 \\cdot 2^3$'],
-      ['El del producto es la suma: 5.', { n: 1 }, '$\\log (xy) = \\log x + \\log y$'],
-      ['El del cociente, la resta.', { p: 'log x/y = log x − log y' }, '$\\log \\tfrac{x}{y}$'],
-      ['Y el exponente baja a multiplicar.', { p: 'log xⁿ = n log x' }, '$\\log x^n = n \\log x$'],
-      ['La suma no se reparte.', {}, '$\\log(x + y) \\neq \\log x + \\log y$'],
-    ], 'Producto: suma. Cociente: resta. Potencia: multiplica.'),
-    xpFila('Si $\\log 2 = a$ y $\\log 3 = b$, pon cada uno.', ['log 6', 'log 8', 'log 3/2'], ['a + b', '3a', 'b − a'], ['ab', 'a³', 'a − b'], '6 = 2 · 3; 8 = 2³.', 'Suma, múltiplo y resta.')],
-    ['Cambiar de base', xpMira('dibujo', 'Tercera idea: con una sola base se calculan **todas**.', { dib: (v, K) => P(K, v, ['y = log₈ 32', '8ʸ = 32', '2³ʸ = 2⁵', 'y = 5/3'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['¿8 a la qué da 32? No es entero.', { n: 2 }, '$8^y = 32$'],
-      ['Los dos son potencias de 2.', { n: 3 }, '$2^{3y} = 2^5$'],
-      ['La respuesta es cinco tercios.', { n: 4 }, '$y = \\tfrac53$'],
-      ['Es un cociente de logaritmos en base 2.', {}, '$\\log_8 32 = \\tfrac{\\log_2 32}{\\log_2 8}$'],
-    ], '$\\log_b x = \\tfrac{\\log_c x}{\\log_c b}$.'),
-    xpFila('$\\log_{9} 27$ en base 3: pon arriba, abajo y el resultado.', ['log₃ 27', 'log₃ 9', 'resultado'], ['3', '2', '3/2'], ['2/3', '9', '1/3'], '¿A qué exponente va el 3?', '$\\tfrac32$.')],
-    ['Ahora sí, un problema', xpFila('En una escala, $L = \\log_{10} I$. Pon L para $I = 10^4$ y cuántas veces crece I si L sube 2.', ['L', 'veces'], ['4', '100'], ['40', '2', '20'], 'Cada unidad de L es por 10.', '$10^2 = 100$ veces.')],
-  ], 'El logaritmo es un exponente: por eso suma.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-73
-  xpLec('alg-73', [
-    ['La misma base', xpMira('dibujo', 'Empecemos por la idea: con la misma base, los **exponentes** son iguales.', { dib: (v, K) => P(K, v, ['4ˣ⁺¹ = 32', '2²ˣ⁺² = 2⁵', '2x + 2 = 5', 'x = 1.5'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['4 y 32 son potencias de 2.', {}, '$4 = 2^2, \\ 32 = 2^5$'],
-      ['Se escriben en esa base.', { n: 2 }, '$2^{2(x+1)} = 2^5$'],
-      ['Base igual: exponentes iguales.', { n: 3 }, '$2x + 2 = 5$'],
-      ['Y se despeja la x.', { n: 4 }, '$x = \\tfrac32$'],
-    ], 'Misma base: iguala exponentes.'),
-    xpFila('$9^{x} = 27$: pon el exponente de 3 a cada lado y x.', ['izquierda', 'derecha', 'x'], ['2x', '3', '3/2'], ['x²', '9', '3'], '9 es 3² y 27 es 3³.', '$2x = 3$.')],
-    ['Bajar con logaritmo', xpMira('dibujo', 'Segunda idea: si no hay base común, el **logaritmo baja** el exponente.', { dib: (v, K) => P(K, v, ['3ˣ = 20', 'x · log 3 = log 20', 'x = log 20 / log 3', 'x ≈ 2.73'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['20 no es potencia de 3: está entre 9 y 27.', {}, '$2 < x < 3$'],
-      ['Logaritmo a los dos lados.', { n: 2 }, '$x \\log 3 = \\log 20$'],
-      ['Se divide: es un cociente de logaritmos.', { n: 3 }, '$x = \\tfrac{\\log 20}{\\log 3}$'],
-      ['No es el logaritmo del cociente.', { n: 4 }, '$\\tfrac{\\log 20}{\\log 3} \\neq \\log\\tfrac{20}{3}$'],
-    ], '$b^x = c \\Rightarrow x = \\tfrac{\\log c}{\\log b}$.'),
-    xpFila('$5^x = 60$: ¿entre qué enteros está x? Ponlos.', ['más que', 'menos que'], ['2', '3'], ['12', '4', '1'], '$5^2 = 25$ y $5^3 = 125$.', '$25 < 60 < 125$.')],
-    ['Ecuaciones con logaritmo', xpMira('dibujo', 'Tercera idea: se **junta en un solo logaritmo** y se sube al exponente; luego se revisa.', { dib: (v, K) => P(K, v, ['log₂ x + log₂ (x − 2) = 3', 'log₂ x(x − 2) = 3', 'x² − 2x = 8', 'x = 4  (−2 no sirve)'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['Suma de logaritmos: producto adentro.', { n: 2 }, '$\\log_2 x(x - 2) = 3$'],
-      ['Se sube: 2 al cubo.', { n: 3 }, '$x(x - 2) = 2^3$'],
-      ['De ahí salen 4 y −2.', {}, '$(x - 4)(x + 2) = 0$'],
-      ['El −2 no sirve: no hay logaritmo de un negativo.', { n: 4 }, '$x > 2$'],
-    ], 'Junta, sube y descarta lo que no exista.'),
-    xpFila('$\\log_3 (x + 6) = 2$: pon a cuánto es igual $x + 6$ y x.', ['x + 6 =', 'x'], ['9', '3'], ['6', '8', '0'], '3 al cuadrado.', '$x = 9 - 6$.')],
-    ['Ahora sí, un problema', xpFila('Un medicamento se reduce a la mitad cada 6 horas. De 80 mg, ¿cuántas mitades hasta 10 mg y cuántas horas?', ['mitades', 'horas'], ['3', '18'], ['8', '6', '24'], '80, 40, 20, 10.', '$80 \\cdot (\\tfrac12)^3 = 10$.')],
-  ], 'Misma base, bajar con logaritmo o subir al exponente.');
-}
-;
 //#archivo js/explora-alg-mundos-6-8.js
 // Álgebra · mundos 6 (Álgebra de Polinomios), 7 (Parábolas y Complejos) y 8 (Raíces de Polinomios), Explora. Ejemplos propios.
 {
@@ -6038,6 +5811,80 @@ xpLec('pu-vo-4', [
   ], 'Una respuesta, lo que sobra y cada dato por separado.');
 }
 ;
+//#archivo js/explora-icf-ma-9.js
+// Preicfes · Matemáticas, mundo 9 «Dinero y Créditos» (Explora, escenas «dibujo», «fichas» y «hoja»). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  // Columnas de saldo: s es simple, c compuesto (años mostrados n).
+  const cols = (v, K) => { let h = K.l(20, 150, 320, 150, 'lm'); for (let i = 0; i <= 4; i++) { const a = 200 * (1 + 0.5 * i) / 12, b = 200 * 1.5 ** i / 12, x = 34 + i * 60; h += K.f(v.n - i + 1, K.r(x, 150 - a, 20, a, 'fa', 2) + K.f(v.c, K.r(x + 23, 150 - b, 20, b, 'fg', 2)) + K.t(x + 20, 166, i, 's tm')); } return h + K.t(170, 20, v.t, 'ta'); };
+  // Barra de precio: q es el porcentaje que queda.
+  const barra = (v, K) => K.r(50, 60, 240, 46, 'fc', 3) + K.r(50, 60, v.q * 2.4, 46, 'fa', 3) + K.t(50 + v.q * 1.2, 89, `${Math.round(v.q)} %`, 'b') + K.t(170, 30, v.t, 'ta');
+
+  xpLec('icf-ma-finanzas-1', [
+    ['Simple: suma lo mismo',
+      xpMira('fichas', 'Empecemos por la idea: con interés **simple** cada periodo **suma lo mismo**.', { slots: fila('mes 1', 'mes 2', 'mes 3'), fichas: ['206', '212', '218'], alto: 96 }, [
+        ['Se prestan 200 mil al 3 % mensual simple.', {}],
+        ['El interés de un mes son seis mil.', {}, '$0.03 \\cdot 200 = 6$'],
+        ['Al primer mes se deben 206 mil.', { pon: { 0: '206' } }],
+        ['Al segundo se suman otros seis.', { pon: { 1: '212' } }],
+        ['Y al tercero, los mismos seis.', { pon: { 2: '218' } }, '$200 + 3 \\cdot 6 = 218$'],
+      ], 'Capital por tasa por tiempo: siempre lo mismo.'),
+      xpHaz('fichas', 'Se prestan 150 mil al 4 % mensual simple. Pon el interés de un mes y el de cinco.', { slots: fila('un mes', 'cinco meses'), fichas: ['6', '30', '4', '20', '180'], meta: ['6', '30'], alto: 96, pista: 'Saca el 4 % de 150 y repítelo.' }, '$0.04 \\cdot 150 = 6$ y $5 \\cdot 6 = 30$.')],
+    ['Compuesto: multiplica',
+      xpMira('dibujo', 'Segunda idea: con interés **compuesto** cada periodo **multiplica** lo que hay.', { dib: cols, v: { n: 0, c: 0, t: '200 mil al 50 %' }, alto: 176 }, [
+        ['Hoy hay 200 mil en los dos ahorros.', { n: 0, c: 1 }],
+        ['Al año 1 dan lo mismo: 300 mil.', { n: 1 }, '$200 \\cdot 1.5 = 300$'],
+        ['Al año 2 el compuesto ya va adelante.', { n: 2 }, '$300 \\cdot 1.5 = 450$'],
+        ['El simple suma cien; el otro gana sobre lo ganado.', { n: 3 }],
+        ['Cada año la distancia es mayor.', { n: 4, t: 'simple y compuesto' }],
+      ], 'El interés también gana interés.'),
+      xpHaz('fichas', 'Se ponen 1 000 al 10 % anual compuesto. Pon el saldo de los años 1 y 2.', { slots: fila('año 1', 'año 2'), fichas: ['1 100', '1 210', '1 200', '1 010', '1 300'], meta: ['1 100', '1 210'], alto: 96, pista: 'El segundo año se saca el 10 % de lo que ya había.' }, '$1\\,000 \\cdot 1.1 \\cdot 1.1 = 1\\,210$.')],
+    ['El mismo periodo',
+      xpMira('hoja', 'Tercera idea: la **tasa** y el **tiempo** deben hablar del mismo periodo.', { paras: [['2 % mensual, por 6 meses'], ['2 % mensual, por 1 año'], ['12 % anual, por 1 mes'], ['2 % · 1']] }, [
+        ['Mes con mes: son seis veces.', { luz: [0], nota: { 0: '12 %' } }],
+        ['Un año son doce meses: doce veces.', { luz: [1], nota: { 1: '24 %' } }],
+        ['Con interés simple, un mes es la doceava parte.', { luz: [2], nota: { 2: '1 %' } }],
+        ['Usar un uno cuando son meses es el error típico.', { luz: [3], tacha: [3] }],
+        ['Primero se cuentan los periodos.', {}],
+      ], 'Cuenta cuántos periodos de la tasa caben en el tiempo.'),
+      xpHaz('hoja', '5 % trimestral simple durante un año. Subraya el total.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['5 %'], ['60 %'], ['20 %']], pista: '¿Cuántos trimestres tiene un año?' }, '$4 \\cdot 5 = 20$ %.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'A: 100 mil al 12 % anual simple. B: 100 mil al 11 % anual compuesto. Subraya quién tiene más a los **2 años**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['A'], ['B'], ['Igual']], pista: 'Calcula los dos saldos del año 2.' }, 'A tiene 124; B, $100 \\cdot 1.11^2 = 123.21$.')],
+  ], 'Sumar lo mismo, multiplicar por lo mismo y cuidar el periodo.');
+
+  xpLec('icf-ma-finanzas-2', [
+    ['El IVA',
+      xpMira('fichas', 'Empecemos por la idea: con IVA del 19 % se multiplica por 1.19; para **volver** se **divide**.', { slots: fila('sin IVA', 'IVA', 'con IVA'), fichas: ['300', '57', '357'], alto: 96 }, [
+        ['Sin IVA cuesta 300 mil.', { pon: { 0: '300' } }],
+        ['El IVA son 57 mil.', { pon: { 1: '57' } }, '$0.19 \\cdot 300 = 57$'],
+        ['Con IVA se pagan 357 mil.', { pon: { 2: '357' } }, '$300 \\cdot 1.19 = 357$'],
+        ['Para volver, se divide entre 1.19.', {}, '$357 \\div 1.19 = 300$'],
+        ['Quitar el 19 % de 357 no devuelve a 300.', {}],
+      ], 'Ir: por 1.19. Volver: entre 1.19.'),
+      xpHaz('fichas', 'Con un impuesto del 10 % se pagan 550 mil. Pon el precio sin impuesto y el impuesto.', { slots: fila('sin impuesto', 'impuesto'), fichas: ['500', '50', '495', '55', '540'], meta: ['500', '50'], alto: 96, pista: 'Divide entre 1.1.' }, '$550 \\div 1.1 = 500$: el impuesto son 50.')],
+    ['Descuento sobre descuento',
+      xpMira('dibujo', 'Segunda idea: el segundo descuento se hace sobre **lo que quedó**.', { dib: barra, v: { q: 100, t: 'precio completo' }, alto: 130 }, [
+        ['El precio completo es el 100 %.', {}],
+        ['Con 50 % queda la mitad.', { q: 50, t: '50 % menos' }],
+        ['Otro 20 % se saca de esa mitad.', { q: 40, t: 'y 20 % de lo que quedó' }, '$0.5 \\cdot 0.8 = 0.4$'],
+        ['Queda el 40 %: un descuento del 60 %.', { t: 'descuento total: 60 %' }],
+        ['No es el 70 %: los porcentajes no se suman.', {}],
+      ], 'Se multiplican las partes que quedan.'),
+      xpHaz('fichas', '10 % de descuento y después otro 10 %. Pon el porcentaje que queda y el descuento total.', { slots: fila('queda', 'descuento'), fichas: ['81', '19', '80', '20', '90'], meta: ['81', '19'], alto: 96, pista: 'Multiplica 0.9 por 0.9.' }, '$0.9 \\cdot 0.9 = 0.81$: descuento del 19 %.')],
+    ['La cuota',
+      xpMira('fichas', 'Tercera idea: cada cuota paga **interés** y **abona** a la deuda.', { slots: fila('interés', 'abono', 'queda'), fichas: ['9', '50', '250'], alto: 96 }, [
+        ['Se deben 300 mil al 3 % mensual.', {}],
+        ['El interés del mes son nueve mil.', { pon: { 0: '9' } }, '$0.03 \\cdot 300 = 9$'],
+        ['Además se abonan cincuenta a la deuda.', { pon: { 1: '50' } }, '$9 + 50 = 59$'],
+        ['Solo el abono baja la deuda.', { pon: { 2: '250' } }, '$300 - 50 = 250$'],
+        ['El mes siguiente el interés será menor.', {}, '$0.03 \\cdot 250 = 7.5$'],
+      ], 'Interés de lo que se debe, más lo que se abona.'),
+      xpHaz('hoja', 'Se deben 400 mil y se paga una cuota de 60, de los cuales 12 son interés. Subraya lo que queda debiendo.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['340 mil'], ['352 mil'], ['388 mil']], pista: 'Separa el interés del abono.' }, 'Se abonan 48: $400 - 48 = 352$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Una moto vale 4 000 mil. Subraya la forma de pago en que se **paga menos**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['12 cuotas de 350'], ['5 % de descuento de contado'], ['1 000 ya y 10 cuotas de 290']], pista: 'Halla el total de cada una.' }, '4 200, 3 800 y 3 900: gana la de contado.')],
+  ], 'Dividir para volver, multiplicar lo que queda y separar el interés.');
+}
+;
 //#archivo js/explora-icf-lc.js
 // Preicfes · Lectura Crítica, mundo 1 «Lo que Dice el Texto» (Explora, escena «hoja»). Textos cortos propios.
 xpLec('icf-lc-literal-1', [
@@ -7415,6 +7262,109 @@ xpLec('icf-sc-geografia-2', [
     xpHaz('hoja', 'En un país poco industrial, la mayor emisión de gases viene de talar bosques. Subraya la medida que más ayudaría.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Cerrar todas las fábricas'], ['Frenar la deforestación con alternativas para quienes viven de ella'], ['Pintar los techos de verde']], pista: 'Ataca la mayor fuente sin olvidar a la gente.' }, 'Va a la fuente principal y cuida la pata social.')],
 ], 'Usar con medida, tres patas y oír a todos.');
 ;
+//#archivo js/explora-icf-sc-9.js
+// Preicfes · Sociales y Ciudadanas, mundo 9 «Economía y Globalización» (Explora, escenas «dibujo» y «hoja»).
+{
+  // Oferta y demanda: o y d corren las curvas; e enciende el equilibrio.
+  const curvas = (v, K) => { const x0 = 70, x1 = 270, X = (x0 + x1) / 2 + (v.o + v.d) / 2, Y = 96 + (v.o - v.d) / 2; return K.l(60, 20, 60, 176, 'lm') + K.l(60, 176, 290, 176, 'lm') + K.t(54, 18, 'precio', 's tm', 'start') + K.t(290, 190, 'cantidad', 's tm', 'end') + K.l(110 + v.o, 156, 230 + v.o, 36, 'la gr') + K.t(234 + v.o, 34, 'oferta', 's ta', 'start') + K.l(110 + v.d, 36, 230 + v.d, 156, 'lg gr') + K.t(234 + v.d, 166, 'demanda', 's tg', 'start') + K.f(v.e, K.l(60, Y, X, Y, 'lm') + K.c(X, Y, 6, 'fF')); };
+
+  xpLec('icf-sc-economia-1', [
+    ['Oferta y demanda',
+      xpMira('dibujo', 'Empecemos por la idea: el precio sale del cruce entre **oferta** y **demanda**.', { dib: curvas, v: { o: 0, d: 0, e: 0 }, alto: 198 }, [
+        ['Si sube el precio, se quiere comprar menos.', {}],
+        ['Y se quiere vender más.', {}],
+        ['Donde coinciden está el equilibrio.', { e: 1 }],
+        ['Si se daña la cosecha, la oferta baja: sube el precio.', { o: -36 }],
+        ['Si todos lo buscan, sube la demanda: también sube.', { o: 0, d: 36 }],
+      ], 'Menos oferta o más demanda: sube el precio.'),
+      xpHaz('hoja', 'Hubo tanta piña que se dañaba en los camiones. Subraya qué pasó con su precio.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Subió'], ['Bajó'], ['Quedó igual']], pista: '¿Aumentó lo que se ofrece o lo que se quiere?' }, 'Más oferta con la misma demanda: baja.')],
+    ['Quién manda',
+      xpMira('hoja', 'Segunda idea: importa **cuántos venden** y si **se ponen de acuerdo**.', { paras: [['Muchos puestos de jugo'], ['Una sola empresa de luz'], ['Cuatro fábricas pactan el precio'], ['El Estado vigila']] }, [
+        ['Con muchos, ninguno manda.', { luz: [0], nota: { 0: 'competencia' } }],
+        ['Con uno solo, no hay a dónde ir.', { luz: [1], nota: { 1: 'monopolio' } }],
+        ['Este pacto secreto es ilegal.', { luz: [2], nota: { 2: 'cartel' } }],
+        ['Por eso hay reglas y multas.', { luz: [3] }],
+        ['También hay daños que pagan otros: externalidades.', {}],
+      ], 'Competencia, monopolio y cartel.'),
+      xpHaz('hoja', 'Pon al margen qué es cada caso.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['cartel', 'externalidad', 'monopolio'], meta: [2, 0, 1], paras: [['Un solo tren lleva a la isla.'], ['Dos cines acuerdan subir la boleta.'], ['El ruido de un bar no deja dormir al barrio.']], pista: 'Alguna no va ahí: ¿un vendedor, un pacto o un daño?' }, 'Uno solo, un pacto y un daño a terceros.')],
+    ['Impuestos',
+      xpMira('hoja', 'Tercera idea: pregunta **cuándo se paga** y **a quién le pesa más**.', { paras: [['Renta: según lo que se gana'], ['IVA: al comprar'], ['Cobra más proporción a quien más tiene'], ['Pesa más sobre quien menos tiene']] }, [
+        ['Este depende de la persona.', { luz: [0], nota: { 0: 'directo' } }],
+        ['Este lo paga cualquiera que compre.', { luz: [1], nota: { 1: 'indirecto' } }],
+        ['Así, el que más tiene pone más.', { luz: [2], nota: { 2: 'progresivo' } }],
+        ['Así, al que menos tiene le duele más.', { luz: [3], nota: { 3: 'regresivo' } }],
+        ['Igual en pesos no es igual en peso.', {}],
+      ], 'Directo o indirecto; progresivo o regresivo.'),
+      xpHaz('hoja', 'Subraya el cobro **más progresivo**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['50 mil por persona'], ['5 % a todos'], ['2 % al que gana poco y 20 % al que gana mucho']], pista: 'Busca el que cobra mayor proporción al que más gana.' }, 'La proporción aumenta con el ingreso.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Se fija la libra de queso en la mitad de lo que cuesta producirla. Subraya lo más probable.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Escasez y venta a escondidas'], ['Más queso en las tiendas'], ['Mejor queso']], pista: '¿Qué harán los que venden?' }, 'Los vendedores ofrecen menos a ese precio.')],
+  ], 'El cruce, cuántos venden y a quién le pesa.');
+
+  xpLec('icf-sc-economia-2', [
+    ['Inflación',
+      xpMira('hoja', 'Empecemos por la idea: hay **inflación** cuando sube **casi todo**.', { letras: ['1', '2', '3', '4'], paras: [['Canasta de ayer: 200 mil'], ['Canasta de hoy: 216 mil'], ['Sueldo: sigue en un millón'], ['Alcanza para menos']] }, [
+        ['La misma canasta, un año después.', { luz: [0, 1] }],
+        ['Subió ocho de cada cien.', { luz: [1], nota: { 1: '+8 %' } }, '$16 \\div 200 = 0.08$'],
+        ['El recibo dice lo mismo.', { luz: [2], nota: { 2: 'nominal' } }],
+        ['Pero ahora compra menos cosas.', { luz: [3], nota: { 3: 'real' } }],
+        ['Para quedar igual, debía subir 8 %.', {}],
+      ], 'Nominal es en pesos; real, en compras.'),
+      xpHaz('hoja', 'El sueldo subió 6 % y los precios 9 %. Subraya lo que pasó con el salario **real**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Subió'], ['Bajó'], ['Quedó igual']], pista: '¿Qué subió más rápido?' }, 'Los precios corrieron más que el sueldo.')],
+    ['Quién es desempleado',
+      xpMira('hoja', 'Segunda idea: cuenta como **desempleado** quien **busca y no encuentra**.', { paras: [['Busca y no encuentra'], ['Trabaja sin contrato'], ['No trabaja ni busca'], ['Tasa = desempleados ÷ fuerza laboral']] }, [
+        ['Este sí cuenta: es desempleado.', { luz: [0], nota: { 0: 'desempleado' } }],
+        ['Este trabaja, pero es informal.', { luz: [1], nota: { 1: 'ocupado' } }],
+        ['Este no entra en la cuenta.', { luz: [2], tacha: [2] }],
+        ['La fuerza laboral son los dos primeros.', { luz: [0, 1, 3] }],
+        ['Si muchos dejan de buscar, la tasa baja sin empleos.', {}],
+      ], 'Buscar y no encontrar.'),
+      xpHaz('hoja', 'En un pueblo, 90 trabajan, 10 buscan y 50 no buscan. Subraya la tasa de desempleo.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['40 %'], ['10 %'], ['60 %']], pista: 'Los que no buscan no entran.' }, '$10 \\div 100 = 10$ %.')],
+    ['Pobreza y reparto',
+      xpMira('hoja', 'Tercera idea: **cuánto falta** y **cómo se reparte** son preguntas distintas.', { paras: [['¿Alcanza la canasta?'], ['¿Hay agua, escuela y salud?'], ['¿Cómo se reparte?'], ['Promedio: 10. Uno tiene 91 y nueve tienen 1']] }, [
+        ['Esta mira solo el ingreso.', { luz: [0], nota: { 0: 'pobreza monetaria' } }],
+        ['Mira las condiciones de vida.', { luz: [1], nota: { 1: 'multidimensional' } }],
+        ['Y esta mira las diferencias.', { luz: [2], nota: { 2: 'desigualdad' } }],
+        ['El promedio esconde el reparto.', { luz: [3] }, '$(91 + 9) \\div 10 = 10$'],
+        ['El Gini va de 0, todos igual, a 1.', { luz: [2] }],
+      ], 'Lo que falta y cómo se reparte.'),
+      xpHaz('hoja', 'El Gini de A es 0.28 y el de B, 0.55. Subraya el país más **desigual**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['A'], ['B'], ['No se puede saber']], pista: 'Más cerca de 1, más desigual.' }, '0.55 está más lejos del reparto igual.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'El banco central baja la tasa de interés. Subraya el efecto más probable.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Se gasta menos'], ['Los préstamos son más caros'], ['Se gasta más y los precios pueden subir']], pista: 'Piensa en los préstamos.' }, 'Créditos baratos: más gasto y más presión en los precios.')],
+  ], 'Lo que alcanza, quién busca y cómo se reparte.');
+
+  xpLec('icf-sc-economia-3', [
+    ['Una red',
+      xpMira('hoja', 'Empecemos por la idea: un objeto puede ser hecho por **muchos países**.', { paras: [['Metal de Chile'], ['Pantalla de Corea'], ['Programas de Irlanda'], ['Armado en México'], ['Vendido en Pasto']] }, [
+        ['Un celular empieza en una mina.', { luz: [0] }],
+        ['La pantalla llega de otro continente.', { luz: [1] }],
+        ['Los programas viajan por internet.', { luz: [2] }],
+        ['Lo arman en otro lugar.', { luz: [3] }],
+        ['Y lo compra alguien en Nariño.', { luz: [4] }],
+      ], 'Comercio, dinero, información y personas.'),
+      xpHaz('hoja', 'Subraya lo que **más** aceleró esa red.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Transporte e internet más baratos'], ['Que nació el comercio'], ['Que hay menos países']], pista: 'El comercio es muy antiguo.' }, 'La velocidad es lo nuevo.')],
+    ['Abrir la puerta',
+      xpMira('hoja', 'Segunda idea: al bajar los **aranceles**, unos ganan y otros arriesgan.', { paras: [['Arancel: se cobra al entrar'], ['Vende afuera'], ['Compra más barato'], ['Compite con gigantes']] }, [
+        ['Sin él, lo de afuera entra más barato.', { luz: [0] }],
+        ['El exportador encuentra clientes.', { luz: [1], nota: { 1: 'gana' } }],
+        ['El comprador ahorra un poco.', { luz: [2], nota: { 2: 'gana' } }],
+        ['El pequeño productor puede quebrar.', { luz: [3], nota: { 3: 'arriesga' } }],
+        ['La pregunta es quién lo prepara y lo apoya.', {}],
+      ], 'La puerta se abre en los dos sentidos.'),
+      xpHaz('hoja', 'Entran zapatos muy baratos sin arancel. Pon al margen quién gana y quién arriesga.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['arriesga', 'gana'], meta: [1, 0], paras: [['Quien compra zapatos'], ['El taller que los hace en el barrio']], pista: 'Alguna no va ahí: ¿le baja el precio o le llega competencia?' }, 'El comprador ahorra; el taller compite.')],
+    ['También viajan',
+      xpMira('hoja', 'Tercera idea: viajan **costumbres**, **reglas** y **problemas**.', { paras: [['Música y comidas'], ['Empresas en muchos países'], ['Crisis y virus'], ['ONU, FMI, OMC']] }, [
+        ['Se mezclan: a eso le dicen glocal.', { luz: [0] }],
+        ['Buscan mercado y costos bajos.', { luz: [1] }],
+        ['Lo de allá golpea acá.', { luz: [2] }],
+        ['Estos intentan coordinar respuestas.', { luz: [3] }],
+        ['Y no todos los países pesan igual allí.', { luz: [3] }],
+      ], 'Lo bueno y lo malo cruzan fronteras.'),
+      xpHaz('hoja', 'Subraya el ejemplo de lo **glocal**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Un carro importado'], ['Rap en lengua nasa'], ['Un arancel']], pista: 'Busca algo mundial mezclado con algo local.' }, 'Un género mundial en una lengua local.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un país baja sus reglas ambientales para atraer fábricas. Subraya el mejor argumento en **contra**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['El daño lo pagan sus habitantes'], ['Llegan empleos'], ['Las fábricas son grandes']], pista: 'Piensa quién asume el costo.' }, 'Es una externalidad: otros pagan el daño.')],
+  ], 'Red, puertas y cosas que cruzan.');
+}
+;
 //#archivo js/explora-icf-cn.js
 // Preicfes · Ciencias Naturales, mundo 1 «Indagación Científica» (Explora, escenas «hoja» y «dibujo»). Experimentos cortos propios.
 {
@@ -8182,6 +8132,115 @@ xpLec('icf-sc-geografia-2', [
     ['Ahora sí, un problema',
       xpHaz('fichas', 'De 100 insectos, 5 resisten un veneno. Tras fumigar quedan 4 resistentes y 6 que no. Pon el porcentaje de resistentes antes y después.', { slots: fila('antes (%)', 'después (%)'), fichas: ['5', '40', '4', '10', '60'], meta: ['5', '40'], alto: 96, pista: 'Compara con el total de cada momento.' }, '5 de 100 y 4 de 10.')],
   ], 'Cambia la proporción, el ambiente escoge y hay pruebas.');
+}
+;
+//#archivo js/explora-icf-cn-9.js
+// Preicfes · Ciencias Naturales, mundo 9 «Reacciones y Cantidades» (Explora, escenas «dibujo», «fichas» y «hoja»). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  // 2 CO + O2 → 2 CO2 con bolas: a moléculas de CO, b de O2, z de CO2.
+  const C = (K, x, y) => K.c(x, y, 9, 'ff'), O = (K, x, y) => K.c(x, y, 9, 'fa');
+  const bolas = (v, K) => Array.from({ length: 2 }, (_, i) => K.f(v.a - i, C(K, 40, 50 + i * 50) + O(K, 57, 50 + i * 50)) + K.f(v.z - i, O(K, 246, 50 + i * 50) + C(K, 263, 50 + i * 50) + O(K, 280, 50 + i * 50))).join('') + K.f(v.b, O(K, 118, 75) + O(K, 135, 75)) + K.l(164, 75, 206, 75, 'gr') + K.l(206, 75, 198, 69, 'gr') + K.l(206, 75, 198, 81, 'gr') + K.t(170, 150, v.t, 'ta');
+  // Recetas: p de A (2 por receta), q de B (1 por receta), n recetas usadas.
+  const receta = (v, K) => Array.from({ length: 8 }, (_, i) => K.c(50 + i * 32, 46, 11, i < v.n * 2 ? 'ff' : 'fa')).join('') + Array.from({ length: 5 }, (_, i) => K.r(40 + i * 32, 86, 20, 20, i < v.n ? 'ff' : 'fg', 3)).join('') + K.t(20, 22, 'A', 'b') + K.t(20, 101, 'B', 'b') + K.t(170, 150, v.t, 'ta');
+  // Escala de pH con una marca.
+  const escala = (v, K) => Array.from({ length: 15 }, (_, i) => K.r(21 + i * 20, 60, 18, 28, i < 7 ? 'ff' : i > 7 ? 'fg' : 'fc', 2) + K.t(30 + i * 20, 80, i, 's')).join('') + K.c(30 + v.h * 20, 44, 7, 'fF') + K.t(170, 124, v.t, 'ta');
+
+  xpLec('icf-cn-reacciones-1', [
+    ['Físico o químico',
+      xpMira('hoja', 'Empecemos por la idea: en una **reacción** aparecen sustancias **nuevas**.', { paras: [['Se parte un vaso'], ['Se evapora alcohol'], ['Arde un fósforo'], ['Se pudre una fruta']] }, [
+        ['El vaso roto sigue siendo vidrio.', { luz: [0], nota: { 0: 'físico' } }],
+        ['El vapor sigue siendo alcohol.', { luz: [1], nota: { 1: 'físico' } }],
+        ['Salen gases y ceniza: algo nuevo.', { luz: [2], nota: { 2: 'químico' } }],
+        ['También aparecen sustancias nuevas.', { luz: [3], nota: { 3: 'químico' } }],
+        ['Gas, color o calor son pistas, no pruebas.', {}],
+      ], 'Misma sustancia: físico. Sustancia nueva: químico.'),
+      xpHaz('hoja', 'Subraya el cambio **químico**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Moler café'], ['Fermentar jugo de uva'], ['Congelar agua']], pista: '¿Dónde aparece algo que no estaba?' }, 'Al fermentar aparece alcohol.')],
+    ['Los átomos se reacomodan',
+      xpMira('dibujo', 'Segunda idea: los átomos **no se crean ni se destruyen**.', { dib: bolas, v: { a: 1, b: 1, z: 0, t: 'CO + O₂ → CO₂' }, alto: 164 }, [
+        ['Un carbono con un oxígeno, y un par de oxígenos.', {}],
+        ['Si sale una molécula, sobra un oxígeno.', { z: 1, t: 'antes 3 oxígenos, después 2' }],
+        ['Se pone otra molécula a la izquierda.', { a: 2, t: '2CO + O₂ → ?' }],
+        ['Ahora salen dos y todo cuadra.', { z: 2, t: '2CO + O₂ → 2CO₂' }],
+        ['Dos carbonos y cuatro oxígenos en cada lado.', {}],
+      ], 'Los mismos átomos antes y después.'),
+      xpHaz('fichas', 'Balancea: ? Na + Cl₂ → ? NaCl. Pon los dos números.', { slots: fila('Na', 'NaCl'), fichas: ['2', '2', '1', '3', '4'], meta: ['2', '2'], alto: 96, pista: 'El par de cloros necesita dos sodios.' }, '$2Na + Cl_2 \\to 2NaCl$.')],
+    ['La masa no cambia',
+      xpMira('fichas', 'Tercera idea: en un recipiente **cerrado** la masa es la misma.', { slots: fila('reactivos', 'sólido', 'gas'), fichas: ['50', '28', '22'], alto: 96 }, [
+        ['Se calientan 50 gramos de un mineral.', { pon: { 0: '50' } }],
+        ['Queda un sólido de 28 gramos.', { pon: { 1: '28' } }],
+        ['Lo que falta se fue como gas.', { pon: { 2: '22' } }, '$50 - 28 = 22$'],
+        ['Con tapa, la balanza no cambia.', {}],
+        ['Y si se une oxígeno del aire, pesa más.', {}],
+      ], 'Entra lo mismo que sale.'),
+      xpHaz('fichas', 'Se queman 12 g de carbono y salen 44 g de gas. Pon el oxígeno que se unió y el total de reactivos.', { slots: fila('oxígeno', 'reactivos'), fichas: ['32', '44', '56', '12', '28'], meta: ['32', '44'], alto: 96, pista: 'Los reactivos juntos pesan lo que el gas.' }, '$44 - 12 = 32$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Una lana de acero se quema en una balanza al aire y pesa **más**. Subraya la explicación.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['El fuego pesa'], ['Se crearon átomos'], ['Se le unió oxígeno del aire']], pista: '¿De dónde pueden venir esos átomos?' }, 'El oxígeno que se unió ya estaba en el aire.')],
+  ], 'Algo nuevo, los mismos átomos y la misma masa.');
+
+  xpLec('icf-cn-reacciones-2', [
+    ['El mol',
+      xpMira('fichas', 'Empecemos por la idea: el **mol** es un paquete; su masa se **suma** con los átomos.', { slots: fila('C', 'O₂', 'CO₂'), fichas: ['12', '32', '44'], alto: 96 }, [
+        ['Un mol de carbono pesa 12 gramos.', { pon: { 0: '12' } }],
+        ['Dos oxígenos de 16 pesan 32.', { pon: { 1: '32' } }, '$2 \\cdot 16 = 32$'],
+        ['Juntos, un mol pesa 44 gramos.', { pon: { 2: '44' } }, '$12 + 32 = 44$'],
+        ['Con 88 gramos hay dos moles.', {}, '$88 \\div 44 = 2$'],
+        ['Mismo número de partículas, distinta masa.', {}],
+      ], 'Gramos entre masa molar: moles.'),
+      xpHaz('fichas', 'Con H = 1, C = 12: pon la masa de un mol de CH₄ y los moles que hay en 48 g.', { slots: fila('un mol (g)', 'moles'), fichas: ['16', '3', '13', '4', '48'], meta: ['16', '3'], alto: 96, pista: 'Suma un carbono y cuatro hidrógenos.' }, '$12 + 4 = 16$ y $48 \\div 16 = 3$.')],
+    ['La receta',
+      xpMira('hoja', 'Segunda idea: los coeficientes son la **receta**, en moles.', { paras: [['2Al + 3Cl₂ → 2AlCl₃'], ['2 de Al piden 3 de Cl₂'], ['4 de Al piden 6 de Cl₂'], ['y dan 4 de AlCl₃'], ['«2 gramos piden 3 gramos»']] }, [
+        ['Esta es la ecuación balanceada.', { luz: [0] }],
+        ['Se lee como una receta.', { luz: [1] }],
+        ['Con el doble, todo se duplica.', { luz: [2] }],
+        ['También lo que sale.', { luz: [3] }],
+        ['No se lee en gramos: son moles.', { luz: [4], tacha: [4] }],
+      ], 'Cuántas veces se hace la receta.'),
+      xpHaz('fichas', 'En 4Fe + 3O₂ → 2Fe₂O₃, con 8 moles de Fe, pon los de O₂ y los de Fe₂O₃.', { slots: fila('O₂', 'Fe₂O₃'), fichas: ['6', '4', '3', '2', '8'], meta: ['6', '4'], alto: 96, pista: '8 es el doble de 4.' }, 'Receta doble: 6 y 4.')],
+    ['El que limita',
+      xpMira('dibujo', 'Tercera idea: el que se **acaba primero** decide cuánto sale.', { dib: receta, v: { n: 0, t: 'cada receta: 2 de A y 1 de B' }, alto: 164 }, [
+        ['Hay ocho de A y cinco de B.', {}],
+        ['Cada receta gasta dos de A y uno de B.', { n: 1 }],
+        ['Ya van tres recetas completas.', { n: 3 }],
+        ['A la cuarta se acaba A.', { n: 4, t: 'A se acabó; sobra 1 de B' }],
+        ['A limita, aunque había más de A que de B.', {}],
+      ], 'Divide lo que hay entre lo que pide la receta.'),
+      xpHaz('hoja', 'La receta pide 3 de P y 2 de Q. Hay 12 de P y 10 de Q. Subraya el que limita.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['P'], ['Q'], ['Ninguno']], pista: 'Cuenta cuántas recetas permite cada uno.' }, 'P permite 4 recetas; Q, 5.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'Se esperaban 60 g y se obtuvieron 45 g. Pon lo que faltó y el rendimiento en %.', { slots: fila('faltó (g)', 'rendimiento'), fichas: ['15', '75', '25', '45', '133'], meta: ['15', '75'], alto: 96, pista: 'Divide lo obtenido entre lo esperado.' }, '$45 \\div 60 = 0.75$.')],
+  ], 'Paquetes, receta y el que se acaba.');
+
+  xpLec('icf-cn-reacciones-3', [
+    ['La escala',
+      xpMira('dibujo', 'Empecemos por la idea: el **pH** dice qué tan ácida o básica es una disolución.', { dib: escala, v: { h: 7, t: 'neutra' }, alto: 136 }, [
+        ['En la mitad está el 7: neutra.', {}],
+        ['El vinagre tiene cerca de 3: ácido.', { h: 3, t: 'ácida' }],
+        ['Un limpiador de hornos llega a 13: básico.', { h: 13, t: 'básica' }],
+        ['A menor pH, más iones H⁺.', { h: 2, t: 'muchos H⁺' }],
+        ['A mayor pH, menos.', { h: 11, t: 'pocos H⁺' }],
+      ], 'Menos de 7 ácida; más de 7 básica.'),
+      xpHaz('dibujo', 'Arrastra la marca a un pH **neutro**.', { dib: escala, v: { h: 4, t: '' }, metas: { h: 7 }, manijas: [{ k: 'h', min: 0, max: 14, paso: 1, et: 'pH' }], alto: 190, pista: 'Es el punto medio de la escala.' }, 'El 7 es neutro.')],
+    ['Por diez',
+      xpMira('hoja', 'Segunda idea: cada paso de pH es **por diez**.', { paras: [['pH 6: 1 parte de H⁺'], ['pH 5: 10 partes'], ['pH 4: 100 partes'], ['«pH 4 es dos más que pH 6»']] }, [
+        ['Tomemos la de pH 6 como una parte.', { luz: [0] }],
+        ['Un paso más ácida: diez veces.', { luz: [1] }],
+        ['Dos pasos: cien veces.', { luz: [2] }, '$10 \\cdot 10 = 100$'],
+        ['No se restan: se multiplican dieces.', { luz: [3], tacha: [3] }],
+        ['Pequeños cambios de pH son grandes.', {}],
+      ], 'Cuenta los pasos: un diez por cada uno.'),
+      xpHaz('hoja', 'P tiene pH 8 y Q, pH 5. Subraya cuántas veces más H⁺ tiene Q.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['3'], ['30'], ['1 000']], pista: 'Son tres pasos.' }, '$10 \\cdot 10 \\cdot 10$.')],
+    ['Neutralizar y diluir',
+      xpMira('hoja', 'Tercera idea: **neutralizar** no es lo mismo que **diluir**.', { paras: [['Ácido + base → agua + sal'], ['Ácido + agua → menos ácido'], ['Con base de más: básica'], ['Con agua de más: se acerca a 7']] }, [
+        ['Los H⁺ y los OH⁻ forman agua.', { luz: [0], nota: { 0: 'neutralizar' } }],
+        ['Aquí solo se reparten más.', { luz: [1], nota: { 1: 'diluir' } }],
+        ['Si se pasa, cambia de lado.', { luz: [2] }],
+        ['Con agua nunca cambia de lado.', { luz: [3] }],
+        ['Ante un ácido fuerte, siempre con cuidado.', {}],
+      ], 'Con base se puede pasar de 7; con agua, no.'),
+      xpHaz('hoja', 'Pon al margen qué se hizo.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['diluir', 'neutralizar'], meta: [1, 0], paras: [['Echar bicarbonato a un jugo ácido'], ['Echarle agua al jugo ácido']], pista: 'Alguna no va ahí: ¿se agregó una base o agua?' }, 'Con base se neutraliza; con agua se diluye.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un cultivo necesita pH entre 6 y 7; el suelo tiene 8.5. Subraya lo que conviene agregar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Cal, que es básica'], ['Un abono ácido'], ['Jabón']], pista: '¿Hacia qué lado hay que moverlo?' }, 'Está básico: hay que bajarlo con algo ácido.')],
+  ], 'La escala, por diez y neutralizar.');
 }
 ;
 //#archivo js/explora-icf-en.js
@@ -10816,6 +10875,27 @@ const GUIDES = {
   'alcanza-o-no': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'datos-que-sobran': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
   'vale-o-no': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'plazo-simple': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'plazo-compuesto': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'antes-del-iva': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'un-solo-descuento': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'cuotas-justas': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'balancea-atomos': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'paquetes-limite': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'nivel-ph': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'simple-o-compuesto': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'tabla-ahorro': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'traduce-tasa': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'recibo-pago': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'cuota-partes': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'masa-cerrada': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'relacion-moles': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'da-el-saldo': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'oferta-mejor': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'conserva-atomos': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'sube-interes': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-cuota': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-moles': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
   'punto-comun': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'voltea-o-sigue': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'pinta-intervalo': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
@@ -15960,6 +16040,51 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['Los pasos', 'Variación, selección y herencia.', 'pasos-del-proceso', 'Ordena lo que pasó. El primero está en su puesto.', { doc: PICOS, que: 'el cambio', de: 'Picos en la sequía', fija: 1, ini: [0, 2, 3, 1], tiras: ['Hay picos de varios tamaños.', 'La sequía deja semillas duras.', 'Sobreviven más los de pico grande.', 'Las crías heredan el pico.'], mira: ['', 'Es el cambio del ambiente.', 'Es a quién favorece.', 'Es lo que se ve al año.'], bien: 'Variar, cambiar, sobrevivir y heredar.' }, 'Variación, sequía, supervivencia y herencia.', ['Primero ya había picos distintos.', 'La herencia se ve en las crías.'], 'Variar, sequía, sobrevivir, heredar'],
     ['Correcta o error', '¿Individuo o población?', 'genero-o-cita', '¿La explicación es **correcta** o tiene el **error** típico?', { doc: PICOS, rot: ['correcta', 'error típico'], ...F(['A cada ave le creció el pico por hambre', 1, '¿Cambia el individuo?'], ['Sobrevivieron más las de pico grande', 0, '¿Habla de quién quedó?'], ['El promedio de la población cambió', 0, '¿Habla del grupo?']), bien: 'Cambia el grupo.' }, 'El pico no creció por hambre: cambió quiénes quedaron.', ['Pregunta si habla de un ave o del grupo.', 'El hambre no alarga picos.'], 'Hambre: error. Grupo: correcta']],
     'Variación, sequía, supervivencia y herencia; cambió la población.', 'Cambia el grupo, no el individuo.');
+}
+;
+//#archivo js/gimnasio-icf-9.js
+// Gimnasio del Preicfes, novenos mundos (spec 2026-11-25-preicfes-estructura): Fuerza y Élite por mundo. Va después de gimnasio-icf-8.js.
+{
+  const { F, T, P } = ICF;
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-i-${id}`, after, level, title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+  const D = (id, title, paras) => ({ id: `gym-icf-${id}`, title, paras });
+
+  reto('plata-1', ['icf-ma-finanzas-1'], 2, 'El ahorro de la moto', 'Sumar lo mismo', 'Un ahorro crece con interés simple y otro con compuesto. Compáralos.', [
+    ['Con simple', 'Mira cuánto agrega un periodo.', 'plazo-simple', 'Hay **600** mil al **4 % mensual simple**. Mueve los meses hasta **792** mil.', { C: 600, i: 24, meta: 792, max: 14, et: 'meses' }, 'Cada mes agrega 24 y faltan 192: son 8 meses.', ['Halla lo que agrega un solo mes.', 'Reparte lo que falta entre lo que agrega cada mes.'], '24 por mes: 8 meses'],
+    ['Con compuesto', 'Multiplica año por año.', 'plazo-compuesto', 'Hay **400** mil al **30 % anual compuesto**. Mueve hasta el **primer** año con **800** mil o más.', { C: 400, r: 30, meta: 800, max: 8 }, '520, 676 y 878.8: se pasa en el año 3.', ['Cada año se multiplica por 1.3.', 'Calcula el saldo de cada año hasta pasar la meta.'], '520, 676, 878.8: año 3']],
+    '8 meses con simple; 3 años con compuesto.', 'Uno suma lo mismo, el otro multiplica por lo mismo.');
+  reto('plata-2', ['icf-ma-finanzas-2'], 3, 'La bicicleta a plazos', 'Volver y completar', 'Una bicicleta tiene IVA, descuento y cuotas.', [
+    ['Sin IVA', 'Para volver se divide.', 'antes-del-iva', 'Con IVA del **19 %** vale **833** mil. Mueve el precio **sin IVA**, en miles.', { final: 833, iva: 19, min: 600, max: 800, paso: 5 }, '$833 \\div 1.19 = 700$ mil.', ['El precio sin IVA por 1.19 da el total.', 'Prueba con números redondos y multiplica por 1.19.'], '833 ÷ 1.19 = 700'],
+    ['Las cuotas', 'Quita la inicial.', 'cuotas-justas', 'En total se pagan **833** mil: **113** de inicial y cuotas de **80**. Mueve el número de cuotas.', { total: 833, ini: 113, cuota: 80, max: 14 }, '$833 - 113 = 720$ y $720 \\div 80 = 9$ cuotas.', ['Empieza por quitar la cuota inicial.', 'Divide lo que falta entre el valor de cada cuota.'], '720 entre 80: 9 cuotas']],
+    'Sin IVA vale 700 mil y se paga en 9 cuotas.', 'Dividir para volver, quitar la inicial y repartir.');
+
+  const FERIA = D('feria-mango', 'La feria del mango', [
+    'En la feria, un mango pasó de 500 a 900 pesos después de que una tormenta tumbó la mitad de la cosecha.',
+    'Solo quedó un transportador. Cobra el doble que antes: dice que el camino está malo. Los campesinos dicen que no tienen a quién más llamar.']);
+  reto('econo-1', ['icf-sc-economia-1'], 2, 'La feria del mango', 'Oferta y poder', 'Subió el mango y subió el transporte. Explica cada alza.', [
+    ['Por qué subió', 'Mira a quién le ocurrió el cambio.', 'pinta-tipos', 'Pinta cada hecho con lo que cambió.', { doc: FERIA, plumas: ['baja la oferta', 'sube la demanda', 'hay un monopolio'], ...P(['La tormenta tumbó la cosecha.', 0, '¿Cambió lo que se vende?'], ['Llegaron mil turistas a comer mango.', 1, '¿Cambió lo que se quiere?'], ['Solo quedó un transportador.', 2, '¿Cuántos venden el servicio?']), bien: 'Vendedores, compradores y poder.' }, 'La cosecha baja la oferta, los turistas suben la demanda y un solo transportador es monopolio.', ['Pregunta si cambió lo que hay o lo que se quiere.', 'Cuenta cuántos ofrecen el transporte.'], 'Cosecha, turistas, uno solo'],
+    ['Deducir', 'Usa los datos del texto.', 'dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: FERIA, nums: [1, 2], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], ...F(['El mango llegó a 900 pesos.', 0, 'Búscala en el párrafo 1.'], ['El mango subió un 80 %.', 1, 'Compara los 400 que subió con los 500.'], ['El transportador fija el precio casi solo.', 1, '¿Hay a quién más llamar?'], ['La tormenta fue en marzo.', 2, '¿Se dice el mes?']), luz: [[1, 'de 500 a 900 pesos'], [2, 'no tienen a quién más llamar']], bien: 'Cuenta y poder.' }, 'Los 900 están escritos; el 80 % y el poder se deducen; el mes no aparece.', ['Divide lo que subió entre lo que valía.', 'Piensa qué pasa si no hay otro vendedor.'], '400 ÷ 500; un solo vendedor']],
+    'Menos oferta, más demanda y un solo transportador.', 'Pregunta qué cambió y quién tiene el poder.');
+  const FABRICA = D('fabrica-zapatos', 'La fábrica que llegó', [
+    'Una multinacional abrió en Puerto Claro una fábrica de zapatos: dio 400 empleos con contrato. Dos talleres locales cerraron ese año y 60 personas quedaron sin trabajo.',
+    'El ingreso promedio subió 20 %. El Gini del municipio pasó de 0.41 a 0.48. Los precios subieron 5 %.']);
+  reto('econo-2', ['icf-sc-economia-2', 'icf-sc-economia-3'], 3, 'La fábrica que llegó', 'Promedio y reparto', 'Llegó una multinacional. Mide sus efectos.', [
+    ['La balanza', 'Distingue ingreso de reparto.', 'balanza-tesis', 'Idea: «la llegada de la fábrica benefició a todos por igual». ¿Qué hace cada dato?', { doc: FABRICA, tesis: 'Benefició a todos por igual', ...F(['El Gini pasó de 0.41 a 0.48.', 1, '¿Se repartió más o menos parejo?'], ['Dos talleres cerraron.', 1, '¿Todos ganaron?'], ['Si todos los hogares hubieran subido 20 %.', 0, 'Si fuera cierto, ¿sería parejo?'], ['Hace zapatos.', 2, '¿Dice cómo se repartió?']), bien: 'Subió el promedio, no el reparto.' }, 'El Gini y los cierres la debilitan; que todos subieran igual la apoyaría; el producto no pesa.', ['Recuerda qué significa un Gini mayor.', 'Busca a quienes perdieron.'], 'Gini y cierres: en contra'],
+    ['Gana o arriesga', 'Mira qué le cambia a cada uno.', 'genero-o-cita', '¿Con la fábrica cada quien **gana** o **arriesga**?', { doc: FABRICA, rot: ['gana', 'arriesga'], ...F(['Quien obtuvo contrato', 0, '¿Qué le cambió?'], ['Dueña de un taller pequeño', 1, '¿Qué le llega?'], ['Quien compra zapatos más baratos', 0, '¿Paga menos o más?']), bien: 'Empleo, competencia y precio.' }, 'El contrato y el precio benefician; el taller enfrenta competencia.', ['Piensa en lo que cada uno recibe o pierde.', 'Los talleres venden lo mismo que la fábrica.'], 'Contrato y comprador: ganan; taller: arriesga']],
+    'Subió el promedio y también la desigualdad; el taller arriesga.', 'El promedio no cuenta cómo se reparte.');
+
+  reto('reac-1', ['icf-cn-reacciones-1', 'icf-cn-reacciones-2'], 2, 'El gas de la estufa', 'Cuadrar y dividir', 'Se quema un gas en una estufa. Balancea y mira cuál reactivo se acaba.', [
+    ['Balancear', 'Deja el oxígeno para el final.', 'balancea-atomos', 'Balancea la combustión del metano: $CH_4 + O_2 \\to CO_2 + H_2O$, con los números **más pequeños**.', { izq: [['CH₄', { C: 1, H: 4 }], ['O₂', { O: 2 }]], der: [['CO₂', { C: 1, O: 2 }], ['H₂O', { H: 2, O: 1 }]], sol: [1, 2, 1, 2], max: 5 }, 'Salen 1 de $CO_2$ y 2 de agua: 4 oxígenos, es decir, $2O_2$.', ['Empieza por el carbono y el hidrógeno.', 'Los cuatro hidrógenos van a moléculas que llevan dos.'], 'CH₄ + 2O₂ → CO₂ + 2H₂O'],
+    ['El que limita', 'Divide lo que hay entre lo que pide.', 'paquetes-limite', 'Cada reacción usa **1** de $CH_4$ y **2** de $O_2$. Hay **6** de $CH_4$ y **10** de $O_2$. Mueve cuántas ocurren.', { hay: [['CH₄', 6, 1], ['O₂', 10, 2]], que: 'reacciones', max: 8 }, 'El oxígeno alcanza para $10 \\div 2 = 5$; sobra 1 de metano.', ['Halla cuántas reacciones permite cada uno.', 'Manda el que permite menos.'], '6 y 5: ocurren 5']],
+    'La receta es 1 a 2 y el oxígeno limita: 5 reacciones.', 'Primero la receta; después, el que se acaba.');
+  const PECERA = D('pecera', 'La pecera', [
+    'El agua de una pecera tenía pH 7. Después de tres meses sin cambios midió 5 y varios peces murieron. Los restos de comida producen ácidos al descomponerse.',
+    'Otra pecera igual, limpiada cada semana, siguió en 7. Ninguno de sus peces murió.']);
+  reto('reac-2', ['icf-cn-reacciones-3'], 3, 'La pecera', 'Por diez', 'El agua de una pecera cambió. Mide y explica.', [
+    ['La medida', 'Cada paso es por diez.', 'nivel-ph', 'La muestra A, de otra pecera, tiene pH **8**. Mueve la muestra B, **cien veces más ácida**.', { base: 8, k: -2 }, 'Cien son dos pasos hacia lo ácido: pH 6.', ['Recuerda hacia qué lado está lo ácido.', 'Escribe cien como una multiplicación de dieces.'], '100 = dos pasos: pH 6'],
+    ['La causa', 'Compara las dos peceras.', 'balanza-tesis', 'Hipótesis: «los restos de comida acidificaron el agua». ¿Qué hace cada dato?', { doc: PECERA, tesis: 'Los restos acidificaron el agua', ...F(['La pecera limpia siguió en 7.', 0, '¿Qué pasa al quitar los restos?'], ['Otra pecera con restos siguió en 7.', 1, '¿Bastaron los restos?'], ['Los peces eran rojos.', 2, '¿Cambia el pH?']), bien: 'Quitar la causa la pone a prueba.' }, 'La limpia la apoya; con restos y sin cambio se debilita; el color no pesa.', ['Compara lo que cambia entre las peceras.', 'Piensa qué debería pasar si la causa fuera esa.'], 'Limpia en 7: apoya']],
+    'Dos pasos son cien veces; la pecera limpia apoya la causa.', 'Cuenta los pasos y compara con el control.');
 }
 ;
 //#archivo js/inicio.js

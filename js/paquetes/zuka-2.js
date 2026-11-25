@@ -1,446 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/escala-leyes.js
-// La escalada de las leyes (Álgebra, leyes de los exponentes; juego dinámico de la lección alg-21b): un escalador
-// está en el piso del exponente de una potencia de x. Cada tarjeta es una operación: «· x³» sube 3 pisos (se suman),
-// «÷ x⁴» baja 4 (se restan) y «( )²» lo manda al doble del piso en que esté (se multiplican). Hay que usar todas las
-// tarjetas, en el orden que lo deje en la bandera: el orden importa porque elevar multiplica lo que ya se lleva.
-// No hay reloj y se puede deshacer. Terminar en otro piso quita una vida. Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, items: [{ start, cards: [{ op: 'mul' | 'div' | 'pow', k }], target }] }], lives?, letter? }
-// state = { done: [n] }      Spec 2026-11-15-torres-de-potencias.
-
-GAMES['escala-leyes'] = (() => {
-  const applyCard = (e, c) => (c.op === 'mul' ? e + c.k : c.op === 'div' ? e - c.k : e * c.k);
-  const perms = xs => (xs.length <= 1 ? [xs] : xs.flatMap((x, i) => perms([...xs.slice(0, i), ...xs.slice(i + 1)]).map(q => [x, ...q])));
-  // Recorrido de un orden de tarjetas: los pisos por los que pasa.
-  const pathOf = (it, order) => order.reduce((acc, i) => [...acc, applyCard(acc[acc.length - 1], it.cards[i])], [it.start]);
-  const solutionsOf = it => perms(it.cards.map((_, i) => i)).filter(o => pathOf(it, o).pop() === it.target);
-  // Pisos más bajo y más alto que se pueden pisar con cualquier orden.
-  function reach(it) { const all = perms(it.cards.map((_, i) => i)).flatMap(o => pathOf(it, o)); return [Math.min(...all, it.target), Math.max(...all, it.target)]; }
-  const cardTxt = (c, x = 'x') => (c.op === 'mul' ? `· ${x}${sup(c.k)}` : c.op === 'div' ? `÷ ${x}${sup(c.k)}` : `( )${sup(c.k)}`);
-  const chainTxt = (it, order, x = 'x') => pathOf(it, order).map(e => `${x}${sup(e)}`).join(' → ');
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => r.items.map(it => chainTxt(it, solutionsOf(it)[0], params.letter)).join(' · ')).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, X = params.letter || 'x';
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, used = [], pause = 0, result = null, ey = 0, cards = [], undo = {}, top = 100, bot = 0;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; used = []; pause = 0; result = null; ey = item().start; },
-      lost(i) { st.done[i] = 0; },
-    });
-    const round = () => R[a.cur], item = () => round().items[Math.min(st.done[a.cur], round().items.length - 1)];
-    // Mientras se ve un acierto sigue en pantalla la pregunta respondida, no la siguiente.
-    const shown = () => (pause > 0 && result && result.good ? round().items[Math.max(0, st.done[a.cur] - 1)] : item());
-    const cur = () => pathOf(shown(), used).pop();
-
-    function layout(w, h) { W = w; H = h; bot = h - 128; undo = { x: w / 2 - 56, y: h - 54, w: 112, h: 28 }; }
-    function boxes() { const n = shown().cards.length, cw = Math.min(92, (W - 24) / n - 8); cards = shown().cards.map((_, i) => ({ x: W / 2 - (n * (cw + 8) - 8) / 2 + i * (cw + 8), y: H - 104, w: cw, h: 38 })); }
-    function play(i) {
-      used.push(i); api.sfx?.tap?.();
-      const it = item();
-      if (used.length < it.cards.length) return;
-      const good = cur() === it.target;
-      result = { good }; pause = good ? 1.5 : 1.3;
-      if (good) { st.done[a.cur]++; a.hit(); a.say(chainTxt(it, used, X), C.ok); }
-      else { a.say(`Quedó en ${X}${sup(cur())}, no en ${X}${sup(it.target)}: prueba otro orden`, C.bad); if (a.miss()) { result = null; pause = 0; } }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play') return;
-        ey += (cur() - ey) * Math.min(1, dt * 9);
-        if (pause > 0) { pause -= dt; if (pause <= 0) { const good = result && result.good; result = null; used = []; if (good && st.done[a.cur] >= round().items.length) { a.win(); return; } ey = item().start; } }
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = round(), it = shown(), live = a.phase === 'play', over = locked || a.phase === 'all';
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, `${r.title} · el piso es el exponente de ${X}`, W / 2, 40, W - 24, 11);
-        if (live) drawPill(p, C, `De ${X}${sup(it.start)} a ${X}${sup(it.target)} usando todas las tarjetas`, W / 2, 68, C.sun, 14);
-
-        if (live) {
-          boxes();
-          // La escalera de pisos, la bandera y el escalador.
-          const [lo, hi] = reach(it), n = hi - lo + 1, sp = (bot - top) / Math.max(1, n - 1), Y = e => bot - (e - lo) * sp, lx = 54, every = n > 16 ? 2 : 1;
-          p.stroke(C.line); p.strokeWeight(3); p.line(lx, top, lx, bot);
-          for (let e = lo; e <= hi; e++) {
-            p.stroke(C.line); p.strokeWeight(2); p.line(lx - 8, Y(e), lx + 8, Y(e));
-            if (e % every === 0 || e === it.target || e === it.start) { p.noStroke(); p.fill(e === 0 ? C.sun : C.mute); p.textStyle(p.BOLD); p.textSize(Math.min(11, sp + 2)); p.textAlign(p.RIGHT, p.CENTER); p.text(negTxt(e), lx - 13, Y(e)); }
-          }
-          p.noStroke(); p.fill(C.sun); p.triangle(lx + 10, Y(it.target) - 12, lx + 30, Y(it.target) - 6, lx + 10, Y(it.target)); p.stroke(C.sun); p.strokeWeight(2); p.line(lx + 10, Y(it.target) - 12, lx + 10, Y(it.target) + 2);
-          const path = pathOf(it, used);
-          p.noFill(); p.stroke(C.sky); p.strokeWeight(2);
-          for (let k = 1; k < path.length; k++) p.arc(lx, (Y(path[k - 1]) + Y(path[k])) / 2, 22 + k * 6, Math.abs(Y(path[k]) - Y(path[k - 1])), -Math.PI / 2, Math.PI / 2);
-          const col = result ? (result.good ? C.ok : C.bad) : C.coral;
-          p.noStroke(); p.fill(shade(col, 0.74)); p.circle(lx, Y(ey) + 2, 20); p.fill(col); p.circle(lx, Y(ey), 20); p.fill(C.cream); p.circle(lx - 3, Y(ey) - 2, 4); p.circle(lx + 4, Y(ey) - 2, 4);
-          // La cuenta, paso a paso.
-          const tx = 106;
-          p.noStroke(); p.textAlign(p.LEFT, p.CENTER); p.textStyle(p.BOLD);
-          p.fill(C.ink); p.textSize(17); p.text(`${X}${sup(it.start)}`, tx, top + 14);
-          used.forEach((ci, k) => {
-            const c = it.cards[ci], from = path[k], to = path[k + 1], y = top + 14 + (k + 1) * 34;
-            p.fill(C.mute); p.textSize(12); p.text(cardTxt(c, X), tx, y - 9);
-            p.fill(C.ink); p.textSize(15); p.text(`${c.op === 'mul' ? `${negTxt(from)} + ${c.k}` : c.op === 'div' ? `${negTxt(from)} − ${c.k}` : `${negTxt(from)} · ${c.k}`} = ${negTxt(to)}  →  ${X}${sup(to)}`, tx, y + 8);
-          });
-          it.cards.forEach((c, i) => { const done = used.includes(i); drawTile(p, C, cards[i], cardTxt(c, X), { fill: done ? C.card : c.op === 'pow' ? C.sun : c.op === 'mul' ? C.mint : C.sky, ink: done ? C.mute : undefined, size: 16, r: 10, lift: done ? 0 : 3 }); });
-          if (used.length && pause <= 0) drawTile(p, C, undo, 'Deshacer', { fill: C.cream, size: 12, r: 9, lift: 2 });
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 13, locked);
-        if (over) drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: chainTxt(x, solutionsOf(x)[0], X) }))).slice(0, 8), H / 2);
-        else drawArcadeBanner(p, C, a, (top + bot) / 2, { idle: 'Sin prisa: el orden de las tarjetas importa', lost: 'Varios órdenes no llegaron a la bandera' });
-        if (!a.toast && (over || a.phase === 'idle')) {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(over ? '¡Cumbre! Ya puedes comprobar' : 'Multiplicar suma pisos · dividir resta · elevar multiplica el piso', W / 2, H - 13);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp !== 'play' || pause > 0) return false;
-        const x = p.mouseX, y = p.mouseY;
-        if (used.length && hitBox({ x: undo.x - 4, y: undo.y - 4, w: undo.w + 8, h: undo.h + 8 }, x, y)) { used = []; api.sfx?.tap?.(); return false; }
-        const i = cards.findIndex(b => hitBox(b, x, y));
-        if (i < 0) return;
-        if (!used.includes(i)) play(i);
-        return false;
-      };
-    }, 1.4);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => { if (a.phase === 'play') boxes(); return { phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, used: [...used], cards: cards.map(b => ({ x: b.x + b.w / 2, y: b.y + b.h / 2 })), sol: solutionsOf(item())[0], undo: { x: undo.x + undo.w / 2, y: undo.y + undo.h / 2 } }; },
-    };
-  }
-
-  return { grade, create, applyCard, pathOf, solutionsOf, reach, cardTxt, chainTxt };
-})();
-;
-//#archivo js/games/reparte-factores.js
-// Reparte los factores (Álgebra, exponentes racionales; lección alg-22a): el número se muestra como sus factores
-// primos (64 = 2·2·2·2·2·2). El denominador del exponente dice en cuántos grupos iguales se reparten (eso es la raíz) y
-// el numerador cuántos de esos grupos se toman (la potencia): 64^(2/3) = tres grupos de 2·2, se toman dos: 4 · 4 = 16.
-// Si los factores no se pueden repartir parejo, el juego lo dice.
-// params = { rounds: [{ n, num, den }] }   state = { rounds: [{ split, keep }] }     Spec 2026-11-15-torres-de-potencias.
-
-GAMES['reparte-factores'] = (() => {
-  function primes(n) { const out = []; for (let f = 2; n > 1; f++) while (n % f === 0) { out.push(f); n /= f; } return out; }
-  // Un grupo, si los factores de n se reparten parejo en k grupos; si no, null.
-  function groupOf(n, k) {
-    const count = {}; primes(n).forEach(f => { count[f] = (count[f] || 0) + 1; });
-    if (Object.values(count).some(c => c % k)) return null;
-    return Object.entries(count).flatMap(([f, c]) => Array(c / k).fill(+f));
-  }
-  const prod = xs => xs.reduce((a, b) => a * b, 1);
-  const valueOf = r => prod(groupOf(r.n, r.den)) ** r.num;
-
-  const game = roundsGame({
-    aspect: 1.2,
-    init: () => ({ split: 1, keep: 1 }),
-    ok: (s, r) => s.split === r.den && s.keep === r.num,
-    solution: r => `${r.n}^(${r.num}/${r.den}) = ${prod(groupOf(r.n, r.den))}${sup(r.num)} = ${valueOf(r)}`,
-    prompt: r => `Arma ${r.n} elevado a ${r.num}/${r.den}: reparte en grupos iguales y toma algunos`,
-    foot: () => 'El de abajo reparte (raíz); el de arriba dice cuántos grupos tomar (potencia)',
-    layout(G) { const w = (G.W - 36) / 2; G.box = [{ x: 12, y: G.H - 64, w, h: 32 }, { x: 24 + w, y: G.H - 64, w, h: 32 }]; },
-    draw(G) {
-      const { p, C, W, H, s, r } = G, g = groupOf(r.n, s.split), top = 104;
-      p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(13);
-      p.text(`${r.n} = ${primes(r.n).join(' · ')}`, W / 2, top);
-      if (!g) {
-        const fs = primes(r.n), step = Math.min(34, (W - 30) / fs.length);
-        fs.forEach((f, i) => drawTile(p, C, { x: W / 2 - (fs.length * step) / 2 + i * step + 2, y: top + 44, w: step - 4, h: 30 }, f, { fill: C.card, ink: C.mute, size: 15, r: 7, lift: 0 }));
-        p.noStroke(); p.fill(C.bad); p.textSize(13); p.text(`No se pueden repartir parejo en ${s.split} grupos`, W / 2, top + 100);
-      } else {
-        const gw = Math.max(34, g.length * 30 + 8), per = Math.max(1, Math.floor((W - 16) / (gw + 6)));
-        for (let k = 0; k < s.split; k++) {
-          const row = Math.floor(k / per), inRow = Math.min(per, s.split - row * per), gx = W / 2 - (inRow * (gw + 6) - 6) / 2 + (k % per) * (gw + 6), gy = top + 22 + row * 48, on = k < s.keep;
-          p.noFill(); p.stroke(on ? C.sun : C.line); p.strokeWeight(on ? 3 : 1.5); p.rect(gx, gy, gw, 40, 10);
-          g.forEach((f, i) => drawTile(p, C, { x: gx + (gw - g.length * 30) / 2 + i * 30 + 2, y: gy + 6, w: 26, h: 25 }, f, { fill: on ? C.mint : C.card, ink: on ? undefined : C.mute, size: 14, r: 7, lift: on ? 2 : 0 }));
-        }
-        const rows = Math.ceil(s.split / per), one = prod(g), y = top + 22 + rows * 48 + 16;
-        p.noStroke(); p.fill(C.mute); p.textSize(12); p.text(s.split === 1 ? 'sin repartir: un solo grupo' : `cada grupo vale ${one}: es la raíz ${{ 2: 'cuadrada', 3: 'cúbica', 4: 'cuarta', 5: 'quinta', 6: 'sexta' }[s.split]} de ${r.n}`, W / 2, y);
-        const good = G.locked && s.split === r.den && s.keep === r.num;
-        p.fill(good ? C.ok : C.ink); p.textSize(17); p.text(`${r.n}^(${s.keep}/${s.split}) = ${one}${s.keep > 1 ? sup(s.keep) : ''} = ${one ** s.keep}`, W / 2, y + 26);
-      }
-      drawStepper(p, C, G.box[0], s.split, 'grupos iguales (índice)');
-      drawStepper(p, C, G.box[1], s.keep, 'grupos que tomo (potencia)');
-    },
-    press(G, x, y) {
-      const a = stepHit(G.box[0], x, y), b = stepHit(G.box[1], x, y);
-      if (!a && !b) return false;
-      G.s.split = Math.max(1, Math.min(6, G.s.split + a)); G.s.keep = Math.max(1, Math.min(G.s.split, G.s.keep + b)); G.touch();
-      return true;
-    },
-    peek: G => ({ box: G.box }),
-  });
-  return { ...game, primes, groupOf, valueOf };
-})();
-;
-//#archivo js/games/siembra-raices.js
-// Siembra de raíces (Álgebra, raíces; juego dinámico de la lección alg-22a): en la recta hay una semilla por cada
-// entero. La pregunta es de dos clases. 'eq': «un número elevado a la n dio a: ¿cuáles pudieron ser?» (pueden ser
-// dos, uno o ninguno). 'root': «ⁿ√a = ?» (la raíz es un solo número: con índice par, el positivo; y no existe si a es
-// negativo). Se tocan las semillas de la respuesta y «Sembrar» hace crecer cada semilla x hasta la altura xⁿ: las que
-// llegan justo a la línea de a son las que cumplen. Si ninguna cumple, se siembra sin elegir. No hay reloj.
-// Fallar quita una vida y dice por qué. Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, items: [{ kind: 'eq' | 'root', n, a }] }], span?, lives? }   state = { done: [n] }
-// Spec 2026-11-15-torres-de-potencias.
-
-GAMES['siembra-raices'] = (() => {
-  const rootSym = n => ({ 2: '√', 3: '∛', 4: '∜' }[n] || `${sup(n)}√`);
-  // Los enteros de la respuesta, dentro de −span … span.
-  function wantOf(it, span = 6) {
-    const xs = []; for (let x = -span; x <= span; x++) if (x ** it.n === it.a) xs.push(x);
-    return it.kind === 'root' && it.n % 2 === 0 ? xs.filter(x => x >= 0) : xs;
-  }
-  const askTxt = it => (it.kind === 'eq' ? `x${sup(it.n)} = ${negTxt(it.a)}: ¿qué números x?` : `${rootSym(it.n)}${it.a < 0 ? `(${negTxt(it.a)})` : it.a} = ?`);
-  const ansTxt = (it, span) => { const w = wantOf(it, span).map(negTxt); return `${askTxt(it).replace(': ¿qué números x?', '').replace(' = ?', '')} → ${w.length ? w.join(' y ') : (it.kind === 'eq' ? 'ningún real' : 'no es real')}`; };
-  // ¿Lo elegido es la respuesta? Si no, por qué.
-  function judge(it, sel, span = 6) {
-    const want = wantOf(it, span), extra = sel.find(x => !want.includes(x));
-    if (extra !== undefined) {
-      if (it.kind === 'root' && it.n % 2 === 0 && want.includes(-extra)) return { ok: false, msg: `La raíz es un solo número: el positivo, ${-extra}` };
-      return { ok: false, msg: want.length ? `${extra < 0 ? `(${negTxt(extra)})` : extra}${sup(it.n)} = ${negTxt(extra ** it.n)}, no ${negTxt(it.a)}` : 'Ningún número real llega ahí' };
-    }
-    if (want.some(x => !sel.includes(x))) return { ok: false, msg: sel.length ? 'Falta otro número que también cumple' : 'Sí hay alguno que cumple: mira la recta' };
-    return { ok: true, msg: ansTxt(it, span) };
-  }
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => r.items.map(it => ansTxt(it, params.span)).join(' · ')).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, SPAN = params.span ?? 6;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, lineY = 0, sel = new Set(), grow = 0, sown = false, pause = 0, result = null, btn = {};
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; reset(); },
-      lost(i) { st.done[i] = 0; },
-    });
-    const round = () => R[a.cur], item = () => round().items[Math.min(st.done[a.cur], round().items.length - 1)];
-    const X = x => 14 + ((x + SPAN) / (2 * SPAN)) * (W - 28);
-    // La recta va más arriba cuando lo pedido es negativo: las plantas crecen hacia abajo y necesitan sitio.
-    const baseOf = it => H * (it.a < 0 ? 0.42 : 0.62);
-
-    function layout(w, h) { W = w; H = h; lineY = h * 0.62; btn = { x: w / 2 - 62, y: h - 60, w: 124, h: 32 }; }
-    function reset() { sel = new Set(); grow = 0; sown = false; pause = 0; result = null; }
-    function sow() {
-      const res = judge(item(), [...sel], SPAN);
-      sown = true; result = res; pause = res.ok ? 2.2 : 2.0;
-      if (res.ok) { st.done[a.cur]++; a.hit(); a.say(res.msg, C.ok); }
-      else { a.say(res.msg, C.bad); if (a.miss()) reset(); }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play') return;
-        if (sown) grow = Math.min(1, grow + dt * 1.6);
-        if (pause > 0) { pause -= dt; if (pause <= 0) { const good = result && result.ok; reset(); if (good && st.done[a.cur] >= round().items.length) a.win(); } }
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = round(), it = shownItem(), live = a.phase === 'play', over = locked || a.phase === 'all', want = wantOf(it, SPAN);
-        const lineY = baseOf(it), upMax = lineY - 104, dnMax = H - 110 - lineY, unit = (it.a < 0 ? dnMax : upMax) / (Math.max(1, Math.abs(it.a)) * 1.25);
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, `${r.title} · ${it.kind === 'eq' ? 'toca todos los que cumplen' : 'la raíz es un solo número'}`, W / 2, 40, W - 24, 11);
-        if (live) drawPill(p, C, askTxt(it), W / 2, 68, C.sun, 17);
-
-        if (!over && a.phase !== 'idle') {
-          // La línea de la altura pedida y las plantas.
-          const ty = lineY - it.a * unit, inRange = ty <= lineY + dnMax && ty >= lineY - upMax;
-          if (inRange) { p.stroke(C.sun); p.strokeWeight(2); p.drawingContext.setLineDash([6, 6]); p.line(14, ty, W - 14, ty); p.drawingContext.setLineDash([]); p.noStroke(); p.fill(C.N); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.RIGHT, p.CENTER); p.text(negTxt(it.a), W - 16, ty - 9); }
-          p.stroke(C.ink); p.strokeWeight(3); p.line(10, lineY, W - 10, lineY);
-          for (let x = -SPAN; x <= SPAN; x++) {
-            const v = x ** it.n, h = Math.max(-dnMax, Math.min(upMax, v * unit)) * grow, hitsIt = v === it.a, on = sel.has(x);
-            if (sown && v !== 0) { p.stroke(hitsIt ? C.ok : C.mint); p.strokeWeight(hitsIt ? 6 : 4); p.line(X(x), lineY, X(x), lineY - h); }
-            const fill = sown && grow >= 1 ? (on ? (want.includes(x) ? C.ok : C.bad) : want.includes(x) ? C.sun : C.cream) : on ? C.sun : C.cream;
-            p.noStroke(); p.fill(shade(fill, 0.74)); p.circle(X(x), lineY + 2, 21); p.fill(fill); p.circle(X(x), lineY, 21);
-            p.fill(inkOn(fill, C.ink)); p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER); p.text(negTxt(x), X(x), lineY + 1);
-          }
-          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER);
-          p.text(sel.size ? `Elegidos: ${[...sel].sort((u, v) => u - v).map(negTxt).join(', ')}` : 'Ninguno elegido', W / 2, H - 78);
-          if (live && pause <= 0) drawTile(p, C, btn, 'Sembrar', { fill: C.mint, size: 15, r: 10, lift: 2 });
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 13, locked);
-        if (over) drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: ansTxt(x, SPAN) }))).slice(0, 10), H / 2);
-        else drawArcadeBanner(p, C, a, lineY - 60, { idle: 'Sin prisa: elige y luego siembra', lost: 'Varias siembras no dieron la altura' });
-        if (!a.toast && (over || a.phase === 'idle')) {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(over ? '¡Buena cosecha! Ya puedes comprobar' : 'Cada semilla x crece hasta la altura de su potencia', W / 2, H - 13);
-        }
-        arcadeStop(p, a, locked);
-      };
-      // Mientras se ve el resultado sigue en pantalla la pregunta respondida.
-      function shownItem() { const r = round(); return pause > 0 && result && result.ok ? r.items[Math.max(0, st.done[a.cur] - 1)] : item(); }
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp !== 'play' || pause > 0) return false;
-        const x = p.mouseX, y = p.mouseY;
-        if (hitBox({ x: btn.x - 6, y: btn.y - 4, w: btn.w + 12, h: btn.h + 10 }, x, y)) { sow(); return false; }
-        if (Math.abs(y - baseOf(item())) > 26) return;
-        const k = Math.round(((x - 14) / (W - 28)) * 2 * SPAN - SPAN);
-        if (k < -SPAN || k > SPAN) return;
-        if (sel.has(k)) sel.delete(k); else sel.add(k);
-        api.sfx?.tap?.();
-        return false;
-      };
-    }, 1.35);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, want: wantOf(item(), SPAN), ok: { x: btn.x + btn.w / 2, y: btn.y + btn.h / 2 }, seeds: Array.from({ length: 2 * SPAN + 1 }, (_, i) => ({ v: i - SPAN, x: X(i - SPAN), y: baseOf(item()), sel: sel.has(i - SPAN) })) }),
-    };
-  }
-
-  return { grade, create, wantOf, judge, askTxt, rootSym };
-})();
-;
-//#archivo js/games/parte-baldosa.js
-// Parte la baldosa (Álgebra, simplificar radicales; lección alg-22b): una baldosa cuadrada de área n tiene lado √n.
-// Se parte en una cuadrícula de k × k baldosas iguales: cada una tiene área n/k² y el lado grande es k veces el lado
-// de una pequeña, √n = k·√(n/k²). Solo sirve si el área de la pequeña es entera. Meta: la cuadrícula más fina que
-// sirve; ahí lo de adentro de la raíz ya no tiene cuadrados escondidos.
-// params = { rounds: [{ n }], max? }   state = { rounds: [{ k }] }      Spec 2026-11-15-torres-de-potencias.
-
-GAMES['parte-baldosa'] = (() => {
-  // La cuadrícula más fina con baldosas de área entera: el mayor k con k² divisor de n.
-  function bestK(n) { let best = 1; for (let k = 2; k * k <= n; k++) if (n % (k * k) === 0) best = k; return best; }
-  const rootTxt = (k, m) => (m === 1 ? `${k}` : k === 1 ? `√${m}` : `${k}√${m}`);
-
-  const game = roundsGame({
-    aspect: 1.25,
-    init: () => ({ k: 1 }),
-    ok: (s, r) => s.k === bestK(r.n),
-    solution: r => `√${r.n} = ${rootTxt(bestK(r.n), r.n / bestK(r.n) ** 2)}`,
-    prompt: r => `Baldosa de área ${r.n}: pártela en la cuadrícula más fina con baldosas de área entera`,
-    foot: (r, s) => (r.n % (s.k * s.k) ? 'El área de cada baldosa pequeña debe ser un número entero' : 'El lado grande mide k veces el lado de una pequeña'),
-    layout(G) { G.box = { x: G.W / 2 - 80, y: G.H - 64, w: 160, h: 32 }; G.sq = Math.min(G.W - 80, G.H - 250); },
-    draw(G) {
-      const { p, C, W, H, s, r } = G, S = G.sq, x0 = W / 2 - S / 2, y0 = 100, m = r.n / (s.k * s.k), whole = Number.isInteger(m), good = G.locked && s.k === bestK(r.n);
-      const f = p.color(whole ? (good ? C.ok : C.mint) : C.coral); f.setAlpha(whole ? 110 : 60);
-      p.stroke(whole ? (good ? C.ok : C.mint) : C.coral); p.strokeWeight(2.5); p.fill(f); p.rect(x0, y0, S, S, 4);
-      p.strokeWeight(1.2);
-      for (let i = 1; i < s.k; i++) { p.line(x0 + (i * S) / s.k, y0, x0 + (i * S) / s.k, y0 + S); p.line(x0, y0 + (i * S) / s.k, x0 + S, y0 + (i * S) / s.k); }
-      // Una baldosa pequeña resaltada, con su área.
-      const c = S / s.k;
-      p.noFill(); p.stroke(C.sun); p.strokeWeight(3); p.rect(x0, y0 + S - c, c, c, 3);
-      p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-      if (c > 30) { p.textSize(Math.min(15, c / 3)); p.text(whole ? m : numTxt(m), x0 + c / 2, y0 + S - c / 2); }
-      p.textSize(12); p.fill(C.mute); p.text(`lado √${r.n}`, x0 + S / 2, y0 + S + 12);
-      p.fill(whole ? (good ? C.ok : C.ink) : C.bad); p.textSize(16);
-      p.text(whole ? `√${r.n} = ${rootTxt(s.k, m)}` : `área de cada una: ${numTxt(m)} (no es entera)`, W / 2, y0 + S + 36);
-      drawStepper(p, C, G.box, `${s.k} × ${s.k}`, 'baldosas por lado');
-    },
-    press(G, x, y) { const d = stepHit(G.box, x, y); if (!d) return false; G.s.k = Math.max(1, Math.min(G.params.max ?? 10, G.s.k + d)); G.touch(); return true; },
-    peek: G => ({ box: G.box, want: bestK(G.r.n) }),
-  });
-  return { ...game, bestK, rootTxt };
-})();
-;
-//#archivo js/games/tabla-conjugado.js
-// La tabla del conjugado (Álgebra, racionalizar; lección alg-22b): para quitar la raíz de un denominador hay que
-// multiplicarlo por algo que la haga desaparecer. Se elige por cuál multiplicar y el juego hace la tabla de la
-// multiplicación, término por término: se ve qué casillas quedan con raíz y cuáles se cancelan (en el conjugado, las
-// dos del medio son opuestas). Se puede probar con todas antes de comprobar.
-// Un término es { c, r } = c·√r (r = 1: número sin raíz).
-// params = { rounds: [{ den: [término], options: [[término]] }] }   state = { rounds: [{ pick }] }
-// Spec 2026-11-15-torres-de-potencias.
-
-GAMES['tabla-conjugado'] = (() => {
-  // Producto de dos términos, sacando de la raíz los cuadrados perfectos.
-  function mulTerm(a, b) {
-    let c = a.c * b.c, r = a.r * b.r;
-    for (let f = Math.floor(Math.sqrt(r)); f > 1; f--) if (r % (f * f) === 0) { c *= f; r /= f * f; }
-    return { c, r };
-  }
-  // Suma de términos: junta los de la misma raíz y quita los que dan cero.
-  function sumTerms(ts) {
-    const by = new Map(); ts.forEach(t => by.set(t.r, (by.get(t.r) || 0) + t.c));
-    return [...by.entries()].filter(([, c]) => c !== 0).sort((a, b) => a[0] - b[0]).map(([r, c]) => ({ c, r }));
-  }
-  const product = (A, B) => sumTerms(A.flatMap(a => B.map(b => mulTerm(a, b))));
-  const rational = ts => ts.every(t => t.r === 1);
-  const termTxt = t => (t.r === 1 ? negTxt(t.c) : `${t.c === 1 ? '' : t.c === -1 ? '−' : negTxt(t.c)}√${t.r}`);
-  const polyTxt = ts => (ts.length ? ts.map((t, i) => (i === 0 ? termTxt(t) : `${t.c < 0 ? '−' : '+'} ${termTxt({ c: Math.abs(t.c), r: t.r })}`)).join(' ') : '0');
-  const goodOf = r => r.options.findIndex(o => rational(product(r.den, o)));
-
-  const game = roundsGame({
-    aspect: 1.25,
-    init: () => ({ pick: -1 }),
-    ok: (s, r) => s.pick >= 0 && rational(product(r.den, r.options[s.pick])),
-    answered: s => s.pick >= 0,
-    solution: r => { const o = r.options[goodOf(r)]; return `(${polyTxt(r.den)})(${polyTxt(o)}) = ${polyTxt(product(r.den, o))}`; },
-    prompt: r => `¿Por cuál multiplicas ${polyTxt(r.den)} para quitar la raíz? Prueba y mira la tabla`,
-    foot: (r, s) => (s.pick < 0 ? 'Puedes probar todas antes de comprobar' : 'Verde: sin raíz · coral: con raíz'),
-    layout(G) { const w = (G.W - 36) / 2; G.opt = [0, 1, 2, 3].map(i => ({ x: 12 + (i % 2) * (w + 12), y: 94 + Math.floor(i / 2) * 44, w, h: 36 })); },
-    draw(G) {
-      const { p, C, W, s, r } = G;
-      r.options.forEach((o, i) => drawTile(p, C, G.opt[i], polyTxt(o), { fill: s.pick === i ? C.sun : C.cream, size: 15, r: 9, lift: 2 }));
-      if (s.pick < 0) { p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER); p.text('Toca una opción para multiplicar', W / 2, 250); return; }
-      const B = r.options[s.pick], A = r.den, cw = Math.min(84, (W - 24) / (B.length + 1)), ch = 38, x0 = W / 2 - ((B.length + 1) * cw) / 2, y0 = 196;
-      const cell = (i, j, txt, fill, ink) => drawTile(p, C, { x: x0 + j * cw + 2, y: y0 + i * ch + 2, w: cw - 4, h: ch - 6 }, txt, { fill, ink, size: 14, r: 7, lift: fill === C.card ? 0 : 2 });
-      cell(0, 0, '×', C.card, C.mute);
-      B.forEach((b, j) => cell(0, j + 1, termTxt(b), C.sky));
-      A.forEach((a, i) => {
-        cell(i + 1, 0, termTxt(a), C.sky);
-        B.forEach((b, j) => { const t = mulTerm(a, b); cell(i + 1, j + 1, termTxt(t), t.r === 1 ? C.mint : C.coral); });
-      });
-      const res = product(A, B), good = rational(res), y = y0 + (A.length + 1) * ch + 22;
-      p.noStroke(); p.fill(good ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-      fitText(p, `(${polyTxt(A)})(${polyTxt(B)}) = ${polyTxt(res)}`, W / 2, y, W - 24, 16);
-      p.fill(good ? C.ok : C.bad); p.textSize(12); p.text(good ? 'La raíz desapareció' : 'Todavía queda una raíz', W / 2, y + 22);
-    },
-    press(G, x, y) {
-      const i = G.opt.findIndex((b, k) => k < G.r.options.length && hitBox(b, x, y));
-      if (i < 0) return false;
-      G.s.pick = i; G.touch();
-      return true;
-    },
-    peek: G => ({ opt: G.opt, good: goodOf(G.r) }),
-  });
-  return { ...game, mulTerm, sumTerms, product, rational, termTxt, polyTxt, goodOf };
-})();
-;
 //#archivo js/games/muro-radicales.js
 // El muro de radicales (Álgebra, radicales semejantes; juego dinámico de la lección alg-22b): cada ladrillo mide
 // √n de largo, dibujado a escala. Un ladrillo como √12 trae una costura: son dos ladrillos de √3 pegados (√12 = 2√3).
@@ -10134,6 +9693,107 @@ Object.assign(XG, (() => {
   XG.renglones('alcanza-o-no', { w: 104, x: 278 });   // cada renglón es un dato: con él, ¿alcanza o no alcanza?
   XG.frases('datos-que-sobran');                      // se tocan los datos que no hacen falta
   XG.frases('vale-o-no');                             // se tocan los procedimientos que sí valen
+})();
+;
+//#archivo js/games/finanzas-escena.js
+// Ejercicios de «Dinero y Créditos» (Preicfes, icf-ma-finanzas; spec 2026-11-25-preicfes-estructura): interés simple y compuesto, cuotas,
+// IVA y descuentos. Armazones en figura-kit, conteo-escena y proposiciones-escena. La escena no dice el resultado mientras se responde.
+(() => {
+  const neutro = ['Se pasó. Vuelve a mirar.', 'Le faltó. Vuelve a mirar.'], R = x => Math.round(x * 100) / 100;
+  // ------------------------------------------------------------------------------------------- interés simple y compuesto
+  // Cuántos periodos de interés simple: cada uno agrega un bloque igual.  params { C, i (interés de cada periodo), meta, max, et }
+  XG.figura('plazo-simple', {
+    ini: () => ({ n: 0 }), alto: () => 170, ms: 900, pie: 'Mueve el plazo.', manijas: p => [{ k: 'n', min: 0, max: p.max, paso: 1, et: p.et }],
+    ok: (v, p) => p.C + p.i * v.n === p.meta, sol: p => ({ n: (p.meta - p.C) / p.i }), texto: p => `${(p.meta - p.C) / p.i} ${p.et}`,
+    dib(v, K, p, f) { const w = 210 / p.max, n = Math.round(v.n); return K.r(20, 30, 80, 48, 'fa', 4) + K.t(60, 60, p.C, 'b') + Array.from({ length: n }, (_, i) => K.r(100 + i * w, 30, Math.max(2, w - 1), 48, 'fg', 2)).join('') + K.f(f, K.t(170, 102, `${p.C} + ${n} · ${p.i} = ${p.C + n * p.i}`, 'b')); },
+    aviso: (v, p) => (p.C + p.i * v.n < p.meta ? 'Todavía no llega a la meta.' : 'Se pasó de la meta.'), bien: (v, p) => `${v.n} veces ${p.i} y lo que había: ${p.meta}.`,
+  });
+  // Primer periodo en que el compuesto alcanza la meta.  params { C, r (%), meta, max }
+  const saldo = (p, n) => p.C * (1 + p.r / 100) ** n, primero = p => { let n = 0; while (saldo(p, n) < p.meta) n++; return n; };
+  XG.figura('plazo-compuesto', {
+    ini: () => ({ n: 0 }), alto: () => 220, ms: 1200, pie: 'Mueve los años.', manijas: p => [{ k: 'n', min: 0, max: p.max, paso: 1, et: 'años' }],
+    ok: (v, p) => v.n === primero(p), sol: p => ({ n: primero(p) }), texto: p => `${primero(p)} años`,
+    dib(v, K, p, f) {
+      const n = Math.round(v.n), hi = Math.max(p.meta, saldo(p, n)) * 1.08, w = Math.min(34, 280 / (n + 1)), y = x => 136 - 110 * x / hi; let h = K.l(20, 136, 320, 136, 'lm');
+      for (let i = 0; i <= n; i++) { const t = i ? f : 1, s = i ? saldo(p, i) : p.C; h += K.r(30 + i * w, 136 - (136 - y(s)) * (i ? Math.max(t, 0.06) : 1), w - 5, (136 - y(s)) * (i ? Math.max(t, 0.06) : 1), i ? 'fg' : 'fa', 2); }
+      return h + K.f(f, K.l(20, y(p.meta), 320, y(p.meta), 'la d') + K.t(316, y(p.meta) - 6, p.meta, 's ta', 'end') + K.t(170, 20, `${p.C} · ${R(1 + p.r / 100)}^${n} = ${R(saldo(p, n))}`.replace(/\^(\d+)/, (_, d) => [...d].map(c => '⁰¹²³⁴⁵⁶⁷⁸⁹'[c]).join('')), 'b')) + K.t(30 + w / 2, 152, 'hoy', 's tm');
+    },
+    aviso: (v, p) => (saldo(p, v.n) < p.meta ? 'Con esos años todavía no llega.' : 'Llega, pero había llegado antes.'), bien: (v, p) => `Ese es el primer año en que alcanza ${p.meta}.`,
+  });
+  XG.renglones('simple-o-compuesto', { w: 110, x: 274 });
+  XG.renglones('tabla-ahorro', { w: 84, x: 266 });
+  XG.renglones('traduce-tasa', { w: 76, x: 278 });
+  XG.frases('da-el-saldo');
+  XG.ascensor('sube-interes', 100, 2, neutro);
+
+  // ---------------------------------------------------------------------------------------------- IVA, descuentos y cuotas
+  // Precio antes del impuesto.  params { final, iva, min, max, paso }
+  XG.figura('antes-del-iva', {
+    ini: p => ({ x: p.min }), alto: () => 180, ms: 900, pie: 'Mueve el precio sin IVA.', manijas: p => [{ k: 'x', min: p.min, max: p.max, paso: p.paso, et: 'precio sin IVA' }],
+    ok: (v, p) => Math.abs(v.x * (1 + p.iva / 100) - p.final) < 1e-6, sol: p => ({ x: R(p.final / (1 + p.iva / 100)) }), texto: p => `${R(p.final / (1 + p.iva / 100))}`,
+    dib(v, K, p, f) { const u = 230 / (p.max * (1 + p.iva / 100)), w = v.x * u, t = w * p.iva / 100; return K.r(30, 24, w, 44, 'fa', 3) + K.t(30 + w / 2, 51, K.sig(v.x), 'b') + K.r(30 + w, 24, t, 44, 'ff', 3) + K.t(34 + w + t, 51, `+ ${p.iva} %`, 's tm', 'start') + K.f(f, K.t(170, 96, `${R(v.x)} + ${R(v.x * p.iva / 100)} = ${R(v.x * (1 + p.iva / 100))}`, 'b')); },
+    aviso: (v, p) => (v.x * (1 + p.iva / 100) < p.final ? 'Con ese precio, el total queda por debajo.' : 'Con ese precio, el total se pasa.'), bien: (v, p) => `${v.x} por ${R(1 + p.iva / 100)} da ${p.final}.`,
+  });
+  // Un solo descuento que equivale a dos seguidos.  params { a, b, max }
+  const unico = p => R(100 - (100 - p.a) * (100 - p.b) / 100);
+  XG.figura('un-solo-descuento', {
+    ini: () => ({ d: 0 }), alto: () => 210, ms: 1000, pie: 'Mueve el descuento único.', manijas: p => [{ k: 'd', min: 0, max: p.max, paso: 1, et: 'descuento único (%)' }],
+    ok: (v, p) => v.d === unico(p), sol: p => ({ d: unico(p) }), texto: p => `${unico(p)} %`,
+    dib(v, K, p, f) { const u = 2.4, x = 50, q1 = 100 - p.a, q2 = 100 - unico(p); return K.r(x, 20, 240, 36, 'fc', 3) + K.r(x, 20, (100 - v.d) * u, 36, 'fa', 3) + K.t(x, 14, 'uno solo', 's tm', 'start') + K.t(x, 78, `${p.a} % y después ${p.b} %`, 's tm', 'start') + K.r(x, 84, 240, 36, 'fc', 3) + K.f(f, K.r(x, 84, q1 * u, 36, 'ff', 3) + K.r(x, 84, q2 * u, 36, 'fg', 3) + K.t(x + q2 * u / 2, 107, `queda ${q2} %`, 's')); },
+    aviso: (v, p) => (v.d === p.a + p.b ? 'El segundo descuento se hace sobre lo que quedó, no sobre el precio inicial.' : v.d < unico(p) ? 'Ese descuento deja pagando más que los dos.' : 'Ese descuento deja pagando menos que los dos.'), bien: (v, p) => `Queda el ${100 - v.d} %: ${R(1 - p.a / 100)} · ${R(1 - p.b / 100)}.`,
+  });
+  // Cuántas cuotas.  params { total, ini, cuota, max }
+  XG.figura('cuotas-justas', {
+    ini: () => ({ n: 0 }), alto: () => 170, ms: 900, pie: 'Mueve el número de cuotas.', manijas: p => [{ k: 'n', min: 0, max: p.max, paso: 1, et: 'cuotas' }],
+    ok: (v, p) => p.ini + v.n * p.cuota === p.total, sol: p => ({ n: (p.total - p.ini) / p.cuota }), texto: p => `${(p.total - p.ini) / p.cuota} cuotas`,
+    dib(v, K, p, f) { const w = 220 / p.max, n = Math.round(v.n); return K.r(20, 30, 70, 48, 'ff', 4) + K.t(55, 60, p.ini, 'b') + Array.from({ length: n }, (_, i) => K.r(92 + i * w, 30, Math.max(2, w - 2), 48, 'fa', 2)).join('') + K.f(f, K.t(170, 102, `${p.ini} + ${n} · ${p.cuota} = ${p.ini + n * p.cuota}`, 'b')); },
+    aviso: (v, p) => (p.ini + v.n * p.cuota < p.total ? 'Con esas cuotas falta por pagar.' : 'Con esas cuotas se paga de más.'), bien: (v, p) => `${p.ini} y ${v.n} de ${p.cuota} completan ${p.total}.`,
+  });
+  XG.renglones('recibo-pago', { w: 84, x: 266 });
+  XG.renglones('cuota-partes', { w: 84, x: 266 });
+  XG.frases('oferta-mejor');
+  XG.ascensor('sube-cuota', 100, 2, neutro);
+})();
+;
+//#archivo js/games/quimica-escena.js
+// Ejercicios de «Reacciones y Cantidades» (Preicfes, icf-cn-reacciones; spec 2026-11-25-preicfes-estructura): átomos que se conservan,
+// reactivo límite y pH. Armazones en figura-kit, conteo-escena y proposiciones-escena. La escena no cuenta mientras se responde.
+(() => {
+  const neutro = ['Se pasó. Vuelve a mirar.', 'Le faltó. Vuelve a mirar.'];
+  // Balancear: un coeficiente por sustancia.  params { izq: [[fórmula, { átomo: n }]], der: […], sol: [coeficientes], max }
+  const todas = p => [...p.izq, ...p.der], el = p => [...new Set(todas(p).flatMap(s => Object.keys(s[1])))];
+  const cuenta = (v, p, lado, e) => todas(p).reduce((s, [, a], i) => s + ((i < p.izq.length) === (lado === 0) ? (a[e] || 0) * Math.round(v[`c${i}`]) : 0), 0);
+  const cuadra = (v, p) => el(p).every(e => cuenta(v, p, 0, e) === cuenta(v, p, 1, e));
+  const mcd = (a, b) => (b ? mcd(b, a % b) : a), comun = v => Object.values(v).reduce(mcd);
+  XG.figura('balancea-atomos', {
+    ini: p => Object.fromEntries(todas(p).map((_, i) => [`c${i}`, 1])), alto: p => 110 + todas(p).length * 44, ms: 1000, pie: 'Mueve cuántas moléculas hay de cada sustancia.',
+    manijas: p => todas(p).map((s, i) => ({ k: `c${i}`, min: 1, max: p.max, paso: 1, et: s[0] })),
+    ok: (v, p) => cuadra(v, p) && comun(v) === 1, sol: p => Object.fromEntries(p.sol.map((n, i) => [`c${i}`, n])), texto: p => `${p.izq.map((s, i) => (p.sol[i] > 1 ? p.sol[i] + ' ' : '') + s[0]).join(' + ')} → ${p.der.map((s, i) => { const n = p.sol[p.izq.length + i]; return (n > 1 ? n + ' ' : '') + s[0]; }).join(' + ')}`,
+    dib(v, K, p, f) {
+      const tx = (ss, o) => ss.map((s, i) => { const n = Math.round(v[`c${o + i}`]); return `${n > 1 ? n + ' ' : ''}${s[0]}`; }).join(' + '), E = el(p);
+      return K.t(170, 24, `${tx(p.izq, 0)} → ${tx(p.der, p.izq.length)}`, 'b') + K.f(f, E.map((e, i) => { const a = cuenta(v, p, 0, e), b = cuenta(v, p, 1, e), x = 170 + (i - (E.length - 1) / 2) * 100; return K.r(x - 44, 36, 88, 30, a === b ? 'fa' : 'ff', 6) + K.t(x, 56, `${e}: ${a} y ${b}`, 's'); }).join(''));
+    },
+    aviso(v, p) { const e = el(p).find(x => cuenta(v, p, 0, x) !== cuenta(v, p, 1, x)); return e ? `No cuadra ${e}: hay ${cuenta(v, p, 0, e)} antes y ${cuenta(v, p, 1, e)} después.` : 'Cuadra, pero se puede simplificar.'; }, bien: () => 'Hay los mismos átomos antes y después.',
+  });
+  // Reactivo límite: cuántos conjuntos se arman.  params { hay: [[nombre, cantidad, pide]], que, max }
+  const sale = p => Math.min(...p.hay.map(([, n, k]) => Math.floor(n / k)));
+  XG.figura('paquetes-limite', {
+    ini: () => ({ n: 0 }), alto: p => 96 + p.hay.length * 42, ms: 1000, pie: 'Mueve cuántos se forman.', manijas: p => [{ k: 'n', min: 0, max: p.max, paso: 1, et: p.que }],
+    ok: (v, p) => v.n === sale(p), sol: p => ({ n: sale(p) }), texto: p => `${sale(p)} ${p.que}`,
+    dib(v, K, p, f) { return p.hay.map(([t, n, k], j) => { const u = Math.min(16, 230 / n), y = 26 + j * 42, usa = Math.round(v.n) * k * f; return K.t(14, y - 8, `${t} (${k} por cada uno)`, 's tm', 'start') + Array.from({ length: n }, (_, i) => K.c(22 + i * u, y + 8, u * 0.38, i < usa ? 'ff' : 'fa')).join('') + K.f(f, K.t(326, y + 13, n - Math.round(v.n) * k < 0 ? 'falta' : `sobran ${n - Math.round(v.n) * k}`, 's tm', 'end')); }).join(''); },
+    aviso(v, p) { const r = p.hay.find(([, n, k]) => v.n * k > n); return r ? `No alcanza ${r[0]}.` : 'Alcanza, pero todavía se puede formar otro.'; }, bien(v, p) { const r = p.hay.find(([, n, k]) => Math.floor(n / k) === v.n); return `Se acaba primero ${r[0]}.`; },
+  });
+  // Escala de pH.  params { base, k (pasos con signo: negativo, más ácida), et }
+  XG.figura('nivel-ph', {
+    ini: p => ({ h: p.base }), alto: () => 180, ms: 900, pie: 'Mueve la muestra B.', manijas: () => [{ k: 'h', min: 0, max: 14, paso: 1, et: 'pH de B' }],
+    ok: (v, p) => v.h === p.base + p.k, sol: p => ({ h: p.base + p.k }), texto: p => `pH ${p.base + p.k}`,
+    dib(v, K, p, f) { const x = q => 30 + q * 20, h = v.h; return Array.from({ length: 15 }, (_, i) => K.r(x(i) - 9, 50, 18, 26, i < 7 ? 'ff' : i > 7 ? 'fg' : 'fc', 2) + K.t(x(i), 68, i, 's')).join('') + K.t(x(p.base), 24, 'A', 'b ta') + K.l(x(p.base), 30, x(p.base), 48, 'la') + K.c(x(h), 90, 6, 'fF') + K.f(f, K.t(170, 118, `${Math.abs(h - p.base)} pasos: ${h === p.base ? 'igual' : `10${'⁰¹²³⁴⁵⁶⁷⁸⁹'[Math.min(9, Math.abs(Math.round(h - p.base)))]} veces más ${h < p.base ? 'ácida' : 'básica'}`}`, 'b')); },
+    aviso: (v, p) => (Math.sign(v.h - p.base) !== Math.sign(p.k) ? 'Ese lado es el contrario: mira hacia dónde es más ácido.' : 'El lado es ese; cada paso de pH es por 10.'), bien: (v, p) => `${Math.abs(p.k)} pasos de pH: por 10 en cada paso.`,
+  });
+  XG.frases('conserva-atomos');
+  XG.renglones('masa-cerrada', { w: 84, x: 270 });
+  XG.renglones('relacion-moles', { w: 64, x: 280 });
+  XG.ascensor('sube-moles', 100, 2, neutro);
 })();
 ;
 //#archivo js/games/conjuntos-escena.js
@@ -23025,5 +22685,473 @@ PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
     ['pu-cd-2', 'La regla se saca de un ejemplo y se comprueba con los demás.',
       opc('En un código, CASA se escribe ASAC y PERA se escribe AREP. Con la misma regla, LIMA se escribe:', ['MILA', 'ALIM', 'LAMI', 'AMIL'], 3,
         'La palabra se escribe al revés: LIMA queda AMIL.', 'Compara la primera letra de cada palabra con la última de su código.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-graficas.js
+// Preuniversitario · mundo 9 «Tablas y gráficas»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+PU_JUEGOS.push(({ setExam }) => {
+  setExam('pu-graficas', 'Tablas y gráficas', [
+    ['pu-gr-1', 'Antes de leer una barra, mira cuánto vale cada raya de la escala.',
+      play('lee-barras', 'Escala', { rounds: [{ bars: [['X', 60], ['Y', 25], ['Z', 40]], hi: 80, step: 20, q: 'diff', a: 0, b: 1, max: 60, tstep: 5 }] }, '$60 - 25 = 35$.', { hint: 'Rayas.' })],
+    ['pu-gr-1', 'El cambio porcentual se mide sobre el valor de partida.',
+      play('mayor-subida', 'Tramo', { rounds: [{ pts: [['1', 5], ['2', 12], ['3', 25], ['4', 36]], hi: 40, step: 10, q: 'pct' }] }, 'De 5 a 12 es +140 %, el mayor.', { hint: 'Porcentaje.' })],
+    ['pu-gr-2', 'El promedio es el nivel donde sobra lo mismo que falta.',
+      play('nivela-datos', 'Promedio', { rounds: [{ data: [3, 10, 7, 4], hi: 12, step: 2 }] }, '$\\tfrac{24}{4} = 6$.', { hint: 'Nivela.' })],
+    ['pu-gr-2', 'Con datos cargados a un lado, media, mediana y moda no coinciden.',
+      play('tres-centros', 'Centros', { rounds: [{ data: [1, 2, 2, 2, 3, 8], lo: 0, hi: 8 }] }, 'Media 3, mediana 2, moda 2.', { hint: 'Tres.' })],
+    ['pu-gr-2', 'La suma de los datos es promedio por cantidad.',
+      play('dato-faltante', 'Falta', { rounds: [{ data: [9, null, 6], mean: 7, hi: 12, step: 1 }] }, '$21 - 15 = 6$.', { hint: 'Suma.' })],
+    ['pu-gr-3', 'Para comparar grupos de distinto tamaño se usan porcentajes.',
+      play('tabla-doble', 'Grupos', { rounds: [{ rows: [['grupo 1', 12, 40], ['grupo 2', 9, 20]], what: 'aprobó' }] }, '30 % frente a 45 %.', { hint: 'Proporción.' })],
+    ['pu-gr-3', 'Un eje que no empieza en cero exagera las diferencias.',
+      play('eje-engano', 'Eje', { rounds: [{ a: ['A', 63], b: ['B', 60], floor: 55 }] }, '$\\tfrac{3}{60} = 5\\%$.', { hint: 'Números.' })],
+  ]);
+});
+
+// Mundo 9 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/graficas-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-gr-1', [
+    play('lee-escala', 'Estas son las entradas vendidas en tres funciones. Pon cuánto vale **cada barra** y el **total**.', { vals: [90, 50, 70], rot: ['viernes', 'sábado', 'domingo'], hi: 100, st: 20, et: ['viernes', 'sábado', 'domingo', 'total'], ops: ['+', '+', '='], metas: ['90', '50', '70', '210'], fichas: ['90', '50', '70', '210', '85', '45', '65'],
+      mira: ['Está a mitad de camino entre 80 y 100.', 'Está a mitad de camino entre 40 y 60.', 'Está a mitad de camino entre 60 y 80.', 'Suma las tres barras.'], trampas: { '0:85': 'Cada línea vale 20: la mitad son 10, no 5.', '1:45': 'Cada línea vale 20: la mitad son 10, no 5.', '2:65': 'Cada línea vale 20: la mitad son 10, no 5.' }, ok: 'Primero la escala, luego la punta.' },
+      'Las líneas van de 20 en 20, así que la mitad vale 10: $90 + 50 + 70 = 210$.',
+      { hint: 'Antes de leer, mira cuánto vale cada línea del eje. ¿Y la mitad de una línea?' }),
+    play('pasa-tabla', 'Pasa la tabla a la gráfica: Norte **150**, Centro **225**, Sur **75**. Arrastra la punta de cada barra.', { vals: [150, 225, 75], rot: ['Norte', 'Centro', 'Sur'], hi: 250, st: 50, paso: 25 },
+      'Las líneas van de 50 en 50: el 150 cae en una línea; el 225 y el 75 van a mitad de camino.',
+      { hint: 'Cada línea vale 50. ¿Qué número queda a mitad entre dos líneas?' }),
+    play('mayor-tramo', 'La gráfica muestra las ventas de cuatro meses. Toca el tramo que más creció **en porcentaje**.', { v: [15, 18, 27, 38] },
+      'De 15 a 18 sube $\\tfrac{3}{15} = 20\\,\\%$; de 18 a 27, $\\tfrac{9}{18} = 50\\,\\%$; de 27 a 38, cerca del 41 %. El último sube más unidades, pero no más porcentaje.',
+      { hint: 'Divide lo que subió cada tramo entre el valor con que empezó ese tramo.' }),
+    play('barra-baja', 'Una tienda vendía **70** y las ventas bajaron el **40 %**. Arrastra la barra de ahora hasta donde debe quedar.', { a: 70, pc: 40, max: 96 },
+      'El 40 % de 70 es 28: quedan $70 - 28 = 42$.',
+      { hint: 'El porcentaje es de lo que había antes. Halla cuánto se pierde y réstalo.' }),
+    play('ida-vuelta-porciento', 'Un precio pasa de 20 a 50 y después vuelve a 20. Pon el **cambio en porcentaje** de cada paso.', { a: 20, b: 50, et: ['20 → 50', '50 → 20'], metas: ['+150 %', '−60 %'], fichas: ['+150 %', '−60 %', '+60 %', '−150 %', '+30 %', '−30 %'],
+      mira: ['Sube 30: compáralo con los 20 de antes.', 'Baja 30: compáralo con los 50 de antes.'], trampas: { '0:+60 %': 'Dividiste entre 50; lo de antes es 20.', '0:+30 %': '30 son las unidades que subió, no el porcentaje.', '1:−150 %': 'Dividiste entre 20; ahora lo de antes es 50.', '1:−30 %': '30 son las unidades que bajó, no el porcentaje.', '0:−60 %': 'Primero sube.', '0:−30 %': 'Primero sube.', '0:−150 %': 'Primero sube.' }, ok: 'La misma diferencia, distinto porcentaje.' },
+      '$\\tfrac{30}{20} = 150\\,\\%$ de aumento; de vuelta, $\\tfrac{30}{50} = 60\\,\\%$ de bajada.',
+      { hint: 'La diferencia es la misma en los dos pasos. ¿Entre qué número se divide en cada uno?' }),
+    play('abre-sector', 'De **120** personas, **54** eligieron cine. Abre el sector del cine hasta el tamaño que le toca.', { parte: 54, total: 120 },
+      '$\\tfrac{54}{120} = 45\\,\\%$, y $45 \\cdot 3.6^\\circ = 162^\\circ$.',
+      { hint: 'Halla qué porcentaje del total son. La vuelta completa es el 100 %.' }),
+    play('sector-cantidad', 'En esta torta de **250** personas, el sector de la danza mide **72°**. Pon su porcentaje y cuántas personas son.', { g: 72, total: 250, et: ['porcentaje', 'personas'], metas: ['20 %', '50'], fichas: ['20 %', '50', '72 %', '180', '72', '36 %'],
+      mira: ['Compara 72° con la vuelta completa de 360°.', 'Saca ese porcentaje de las 250 personas.'], trampas: { '0:72 %': 'Los grados no son porcentaje: la vuelta tiene 360°.', '1:180': 'Ese es el 72 % de 250: el sector no es el 72 %.', '1:72': 'No es una persona por grado.' }, ok: 'El sector es una fracción de la vuelta.' },
+      '$\\tfrac{72}{360} = 20\\,\\%$, y el 20 % de 250 son 50 personas.',
+      { hint: '¿Cuántas veces cabe el sector en la vuelta completa?' }),
+    play('sube-grafica', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Las líneas del eje van de **20 en 20**. Una barra queda a **mitad** entre 40 y 60. ¿Cuánto vale?', r: 50, c: '40 + 10', e: { 45: 'La mitad de 20 no es 5.' } },
+      { q: 'Las ventas pasan de **60** a **75**. ¿En qué **porcentaje** aumentaron?', r: 25, c: '15 \\div 60 \\cdot 100', e: { 15: 'Esas son las unidades.', 20: 'Dividiste entre 75: se divide entre lo de antes.', 80: 'Comparaste los dos valores: halla primero cuánto subió.' } },
+      { q: 'Un sector mide **126°**. ¿Qué **porcentaje** de la torta es?', r: 35, c: '126 \\div 3.6', e: {} }] },
+      'La mitad entre 40 y 60 es 50; $\\tfrac{15}{60} = 25\\,\\%$; y $126 \\div 3.6 = 35$.',
+      { hint: 'Escala del eje, cambio entre lo de antes, y 3.6° por cada 1 %.' }),
+    sol('Una papelería vendió 120 cuadernos en la semana 1, 150 en la semana 2, 90 en la semana 3 y 180 en la semana 4. ¿En qué porcentaje aumentaron las ventas de la semana 3 a la 4? ¿Cuál fue el promedio de ventas por semana?',
+      ['De la semana 3 a la 4 las ventas subieron $180 - 90 =$ [[90]] cuadernos', 'El cambio se mide sobre el valor de antes: $90 \\div 90 = 1$, es decir, el [[100 %]]', 'En las cuatro semanas se vendieron $120 + 150 + 90 + 180 =$ [[540]] cuadernos', 'Promedio por semana: $540 \\div 4 =$ [[135]] cuadernos'],
+      ['50 %', '200 %', '180'],
+      'Duplicarse es aumentar un 100 %, no un 200 %: el aumento (90) es igual al valor de antes (90). El promedio reparte el total entre las cuatro semanas.',
+      'Para el porcentaje, compara lo que subió con lo que había antes, no con lo que hay ahora.'),
+    err('En una encuesta a 180 clientes de un restaurante, 30 eligieron el jugo de mora como su bebida favorita. Con los resultados se va a dibujar una gráfica circular. ¿Qué ángulo debe tener el sector del jugo de mora?',
+      ['Los 180 clientes llenan el círculo completo: $360^\\circ$', 'La mora es $\\tfrac{30}{180} = \\tfrac16$ de los clientes', 'El sector mide $30^\\circ$: un grado por cada cliente'], 2,
+      ['El sector es $\\tfrac16$ del círculo: $360^\\circ \\div 6 = 60^\\circ$', 'El sector mide $\\tfrac16$ de $100^\\circ$, unos $16.7^\\circ$', 'El sector mide $180^\\circ - 30^\\circ = 150^\\circ$'],
+      'Un grado por cliente solo serviría si fueran 360 clientes. Aquí cada cliente vale $360^\\circ \\div 180 = 2^\\circ$, y 30 clientes son $60^\\circ$. La regla sirve en los dos sentidos, porque el sector es la misma fracción del círculo que la parte es del total: de la cantidad al ángulo, $\\tfrac{\\text{parte}}{\\text{total}} \\cdot 360^\\circ$; del ángulo a la cantidad, $\\tfrac{\\text{ángulo}}{360^\\circ} \\cdot \\text{total}$ (un sector de $60^\\circ$ en una gráfica de 240 empleados son 40).',
+      'El círculo entero son $360^\\circ$, no 180 ni 100. ¿Qué fracción del total eligió mora? El sector ocupa esa misma fracción del círculo.'),
+    opc('Una gráfica de líneas registra la temperatura de una ciudad cada tres horas: a las 6 h, 12 °C; a las 9 h, 16 °C; a las 12 h, 23 °C; a las 15 h, 25 °C; a las 18 h, 19 °C, y a las 21 h, 14 °C. El intervalo de tres horas en el que la temperatura tuvo el mayor cambio fue:',
+      ['de 6 a 9 horas', 'de 15 a 18 horas', 'de 9 a 12 horas', 'de 18 a 21 horas'], 2,
+      'Los cambios son $+4$, $+7$, $+2$, $-6$ y $-5$ grados. El mayor, sin importar el signo, es el de 9 a 12 horas.',
+      'Calcula la diferencia en cada tramo. Un cambio puede ser una subida o una bajada.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/graficas-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-gr-2', [
+    play('nivela-linea', 'Cinco personas tienen **3, 11, 4, 8 y 9** fichas y las reparten por igual. Lleva la línea al **promedio**.', { d: [3, 11, 4, 8, 9] },
+      'En total son 35 y entre cinco, $35 \\div 5 = 7$.',
+      { hint: 'Junta todas las fichas y repártelas por igual.' }),
+    play('dato-para-promedio', 'Los datos son 3, 8, 2, 5 y **uno más**. Muévelo hasta que el **promedio** sea 6.', { d: [3, 8, 2, 5], m: 6 },
+      'Cinco datos con promedio 6 suman 30. Ya hay 18: faltan 12.',
+      { hint: '¿Cuánto deben sumar los cinco datos? ¿Cuánto suman los cuatro que ya están?' }),
+    play('ordena-centro', 'Pon los datos **en orden**, de menor a mayor, y después la **mediana**.', { d: [12, 5, 9, 20, 7, 5, 14], metas: ['5', '5', '7', '9', '12', '14', '20', '9'], fichas: ['5', '5', '7', '9', '12', '14', '20', '9', '20', '5'],
+      mira: ['Va el menor.', 'El 5 está dos veces: se escribe dos veces.', 'Después de los dos 5 sigue el 7.', 'Sigue el 9.', 'Sigue el 12.', 'Sigue el 14.', 'Va el mayor.', 'La mediana deja tres datos a cada lado.'], trampas: { '7:20': 'El 20 está en el medio sin ordenar: primero se ordena.', '7:5': 'Ese es el que se repite: la moda.' }, ok: 'Tres datos a cada lado.' },
+      'En orden: 5, 5, 7, **9**, 12, 14, 20. Quedan tres a cada lado del 9.',
+      { hint: 'Los datos repetidos se escriben todas las veces. La mediana es el del medio, ya ordenados.' }),
+    play('centros-par', 'Pon el **promedio**, la **mediana** y la **moda** de estos seis datos.', { d: [10, 2, 12, 2, 7, 15], et: ['promedio', 'mediana', 'moda'], metas: ['8', '8.5', '2'], fichas: ['8', '8.5', '2', '7', '8.5', '10', '48', '15'],
+      mira: ['Suma los seis y divide entre seis.', 'Ordena: con seis datos hay dos en el medio.', 'La moda es el que más se repite.'], trampas: { '0:48': 'Esa es la suma: falta dividir.', '0:8.5': 'Esa es la mediana.', '1:7': 'Ordena primero: con seis datos hay dos en el medio, 7 y 10.', '1:10': 'Ordena primero: con seis datos hay dos en el medio, 7 y 10.', '2:15': 'Ese es el mayor, no el más repetido.' }, ok: 'Con cantidad par, la mediana es el promedio de los dos del medio.' },
+      'La suma es 48 y $48 \\div 6 = 8$. En orden, 2, 2, 7, 10, 12, 15: en el medio están 7 y 10, mediana 8.5. Se repite el 2.',
+      { hint: 'Ordena primero. Con seis datos, la mediana queda entre dos.' }),
+    play('dato-exagerado', 'El mayor de estos datos se escribió mal: **93** en lugar de 13. Toca **todo** lo que **cambia**.', { d: [4, 5, 5, 8, 13], e: [4, 5, 5, 8, 93], cols: 2, fichas: ['promedio', 'mediana', 'moda', 'suma'] },
+      'La suma pasa de 35 a 115 y el promedio, de 7 a 23. El del medio sigue siendo 5 y el más repetido también.',
+      { hint: '¿Cambió el dato del medio? ¿Cambió el que más se repite? ¿Y el total?' }),
+    play('apoyo-grupos', 'Tres personas sacaron **1** y dos sacaron **6**. Lleva el apoyo al **promedio** de las cinco.', { g: [[3, 1], [2, 6]] },
+      '$\\tfrac{3 \\cdot 1 + 2 \\cdot 6}{5} = \\tfrac{15}{5} = 3$, más cerca del grupo grande.',
+      { hint: 'No es el centro entre 1 y 6: cuenta cada valor tantas veces como personas lo tienen.' }),
+    play('meses-mas', 'En **6** meses Lina promedió **3** libros por mes. Con **2** meses más, el promedio de los 8 subió a **4**. Pon los libros de los 6 meses, los de los 8 y los de los **dos últimos**.', { n: 6, mas: 2, et: ['en 6', 'en 8', 'en los 2'], metas: ['18', '32', '14'], fichas: ['18', '32', '14', '8', '24', '1', '2'],
+      mira: ['Libros = promedio por meses.', 'Ahora son 8 meses con promedio 4.', 'Resta los libros de antes a los de ahora.'], trampas: { '1:8': 'Esos son los meses: falta multiplicar por el promedio.', '1:24': 'Son 8 meses con promedio 4, no 8 con 3 ni 6 con 4.', '2:8': 'Multiplicaste 2 · 4, pero los dos últimos subieron el promedio de todos.', '2:1': 'Eso subió el promedio, no los libros leídos.', '2:2': 'Esos son los meses, no los libros.' }, ok: 'Promedio por cantidad da la suma.' },
+      '$6 \\cdot 3 = 18$ y $8 \\cdot 4 = 32$: en los dos últimos leyó $32 - 18 = 14$.',
+      { hint: 'Cambia cada promedio por una suma: promedio por cuántos son.' }),
+    play('sube-centro', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'El **promedio** de 5, 9, 13 y 17 es…', r: 11, c: '44 \\div 4', e: { 13: 'Ese es uno de los datos: suma y divide entre cuatro.' } },
+      { q: 'La **mediana** de 3, 14, 21, 6 y 8 es…', r: 8, c: '3, 6, [8], 14, 21 \\Rightarrow \\text{mediana}', e: { 21: 'Está en el medio sin ordenar: primero se ordena.' } },
+      { q: 'Una persona sacó **2** y cuatro sacaron **12**. El **promedio** de las cinco es…', r: 10, c: '(2 + 4 \\cdot 12) \\div 5', e: { 7: 'Ese es el centro entre 2 y 12: los grupos no son iguales.' } }] },
+      '$44 \\div 4 = 11$; en orden 3, 6, 8, 14, 21, la mediana es 8; y $50 \\div 5 = 10$.',
+      { hint: 'Promedio: suma y reparte. Mediana: ordena. Grupos: cada valor cuenta tantas veces como personas.' }),
+    sol('En un curso, la nota definitiva se calcula así: el examen parcial vale el 40 % y el examen final vale el 60 %. Andrea obtuvo 3.0 en el parcial. ¿Qué nota necesita en el final para que su definitiva sea 3.6?',
+      ['El parcial aporta $0.40 \\cdot 3.0 =$ [[1.2]]', 'Para llegar a 3.6, el final debe aportar $3.6 - 1.2 =$ [[2.4]]', 'El final pesa 0.60: la nota debe ser $2.4 \\div 0.60 =$ [[4.0]]'],
+      ['4.2', '3.6', '1.8'],
+      'Un promedio ponderado suma los aportes de cada nota por su peso. No es el promedio simple: con 4.2 en el final, la definitiva sería 3.72.',
+      'Cada examen aporta su nota multiplicada por su peso. ¿Cuánto aporta ya el parcial?'),
+    err('En un curso hay 20 mujeres y 10 hombres. En un examen, el promedio de las mujeres fue 4.0 y el de los hombres, 3.1. ¿Cuál fue el promedio de todo el curso?',
+      ['Puntos de las mujeres: $20 \\cdot 4.0 = 80$', 'Puntos de los hombres: $10 \\cdot 3.1 = 31$', 'Promedio del curso: $(4.0 + 3.1) \\div 2 = 3.55$'], 2,
+      ['Promedio del curso: $(80 + 31) \\div 30 = 3.7$', 'Promedio del curso: $(80 + 31) \\div 2 = 55.5$', 'Promedio del curso: $(80 + 31) \\div 20 = 5.55$'],
+      'Los grupos no tienen el mismo tamaño: se suman los puntos de todos y se divide entre las 30 personas. Da 3.7, más cerca del promedio del grupo grande.',
+      'Los dos primeros pasos ya calcularon los puntos de cada grupo. ¿Los usó el último paso?'),
+    opc('Las edades de cinco primos son 8, 11, 11, 14 y 21 años. De las siguientes afirmaciones, la única verdadera es:',
+      ['El promedio es igual a la mediana', 'La mediana es mayor que el promedio', 'La moda es mayor que la mediana', 'El promedio es mayor que la mediana'], 3,
+      'El promedio es $65 \\div 5 = 13$; la mediana y la moda son 11. El dato grande (21) sube el promedio por encima de la mediana.',
+      'Calcula los tres: el promedio, el dato del centro y el que más se repite.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/graficas-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-gr-3', [
+    play('sube-piso', 'A vendió 40 y B vendió 50. ¿En qué número debe **empezar el eje** para que B **parezca el triple** de alta que A?', { a: 40, b: 50, veces: 3 },
+      'Con el eje desde 35, las barras miden 5 y 15: parece el triple, pero 50 es solo un 25 % más que 40.',
+      { hint: 'Si el eje empieza más arriba, a las dos barras se les quita lo mismo. ¿Cuánto debe quedar de cada una?' }),
+    play('diferencia-real', 'Mira dónde empieza el eje. Pon cuánto **más** vendió B y qué **porcentaje** más vendió.', { vals: [90, 108], rot: ['A: 90', 'B: 108'], hi: 110, st: 10, lo: 80, et: ['unidades', 'porcentaje'], metas: ['18', '20 %'], fichas: ['18', '20 %', '28', '180 %', '18 %', '17 %'],
+      mira: ['Resta los dos valores, no las alturas.', 'Compara las 18 unidades con las 90 de A.'], trampas: { '0:28': 'Esa es la altura de B desde 80: resta los valores.', '1:180 %': 'Comparaste el dibujo, que empieza en 80: compara los números.', '1:17 %': 'Dividiste entre 108; se compara con los 90 de A.', '1:18 %': '18 son las unidades: falta compararlas con las 90 de A.' }, ok: 'Se comparan los números, no el dibujo.' },
+      '$108 - 90 = 18$ y $\\tfrac{18}{90} = 20\\,\\%$, aunque B se vea casi tres veces más alta.',
+      { hint: 'Lee los números. El porcentaje se compara con lo que vendió A.' }),
+    play('pasan-porciento', 'En cada grupo se cuenta cuántos hablan inglés. Toca **todos** los grupos donde son el **40 % o más**.', { min: 40, cols: 3, fichas: ['12 de 30', '18 de 60', '11 de 25', '25 de 80', '14 de 35', '30 de 90'] },
+      '$\\tfrac{12}{30} = 40\\,\\%$, $\\tfrac{11}{25} = 44\\,\\%$ y $\\tfrac{14}{35} = 40\\,\\%$. Los otros tienen más personas, pero menos proporción.',
+      { hint: 'El 40 % son 4 de cada 10. Compara cada cantidad con su propio total.' }),
+    play('misma-proporcion', 'En el grupo A, **15 de 25** tocan un instrumento. ¿Cuántos deben tocar en el B, que tiene **40**, para que la **proporción** sea la misma?', { ka: 15, ta: 25, tb: 40 },
+      '$\\tfrac{15}{25} = 60\\,\\%$, y el 60 % de 40 son 24.',
+      { hint: '¿Qué porcentaje es 15 de 25? Saca ese mismo porcentaje de 40.' }),
+    play('muestra-parecida', 'Un colegio tiene 50 estudiantes en la mañana, 30 en la tarde y 20 en la noche. Arma una muestra de **20** que tenga **la misma mezcla** que el colegio.', { tot: [50, 30, 20], et: ['mañana', 'tarde', 'noche'], metas: ['10', '6', '4'], fichas: ['10', '6', '4', '7', '7', '6', '20', '5'],
+      mira: ['La mañana es la mitad del colegio.', 'La tarde es el 30 % del colegio.', 'La noche es el 20 % del colegio.'], trampas: { '0:7': '7 sería la parte si las jornadas fueran iguales; la mañana es la mitad.', '0:20': '20 es toda la muestra: no queda nadie para las otras jornadas.', '1:7': '7 sería la parte si las jornadas fueran iguales; la tarde es el 30 %.' }, ok: 'La muestra se parece al total.' },
+      'La mañana es el 50 %, la tarde el 30 % y la noche el 20 %: de 20 son 10, 6 y 4.',
+      { hint: '¿Qué parte del colegio es cada jornada? Esa misma parte va en la muestra.' }),
+    play('muestras-sirven', 'Se quiere saber a qué hora se acuestan **todos** los vecinos de un edificio. Toca **todas** las muestras que sirven.', { casos: [{ t: 'sortear 20 vecinos entre todos', si: true }, { t: 'los que llegan de una fiesta', no: 'Los que salen de fiesta se acuestan más tarde que los demás.' }, { t: 'solo los del primer piso', no: 'Los vecinos de los otros pisos nunca pueden salir.' }, { t: 'sortear 3 vecinos en cada piso', si: true }, { t: 'solo el chat de los jóvenes', no: 'Los demás vecinos quedan por fuera.' }], falta: 'Falta otra donde todos los vecinos pueden salir.', ok: 'Al azar y de todas partes.' },
+      'Sirven los dos sorteos: cualquiera puede salir. Las otras dejan por fuera a muchos vecinos.',
+      { hint: 'Pregúntate si cualquier vecino puede salir escogido.' }),
+    play('se-concluye', 'De **50** personas escogidas al azar en un barrio, **35** tienen mascota y **10** tienen gato. Toca **todo** lo que se concluye de esos datos.', { casos: [{ t: 'el 70 % de la muestra tiene mascota', si: true }, { t: 'todo el país prefiere las mascotas', no: 'Solo se preguntó en un barrio: no dice nada de todo el país.' }, { t: '15 encuestados no tienen mascota', si: true }, { t: 'las tienen porque viven solos', no: 'Los datos dicen cuántos, no por qué.' }, { t: '1 de cada 5 encuestados tiene gato', si: true }], falta: 'Falta algo que también sale de los números.', ok: 'Los datos dicen cuántos, no por qué.' },
+      '$\\tfrac{35}{50} = 70\\,\\%$, $50 - 35 = 15$ y $\\tfrac{10}{50}$ es 1 de cada 5. El motivo y «todo el país» no salen de esos datos.',
+      { hint: 'Quédate con lo que se puede calcular con esos números y habla solo de los encuestados.' }),
+    play('sube-dato-real', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'El eje empieza en **40**. A llega a 50 y B llega a 60. ¿Qué **porcentaje** más vendió B?', r: 20, c: '10 \\div 50 \\cdot 100', e: { 10: 'Esas son las unidades.', 100: 'Comparaste el dibujo, que empieza en 40: compara los números.' } },
+      { q: '**18 de 40** van en bicicleta. ¿Qué **porcentaje** es?', r: 45, c: '18 \\div 40 \\cdot 100', e: {} },
+      { q: 'El 30 % de una muestra de **200** dice que sí. ¿Cuántos **son**?', r: 60, c: '200 \\cdot 0.30', e: { 30: 'Ese es el porcentaje: son de cada 100, y hay 200.' } }] },
+      '$\\tfrac{10}{50} = 20\\,\\%$; $\\tfrac{18}{40} = 45\\,\\%$; y el 30 % de 200 son 60.',
+      { hint: 'Compara los números y no el dibujo; divide cada cantidad entre su total.' }),
+    sol('Una encuesta preguntó en dos ciudades si las personas usan transporte público. En la ciudad A respondieron 80 personas y 60 dijeron que sí. En la ciudad B respondieron 120 personas y 72 dijeron que sí. ¿En cuál ciudad es mayor la proporción de usuarios?',
+      ['Ciudad A: $60 \\div 80 =$ [[75 %]]', 'Ciudad B: $72 \\div 120 =$ [[60 %]]', 'En B hay más usuarios (72 contra 60), pero la proporción es mayor en la ciudad [[A]]', 'La diferencia es de [[15]] puntos porcentuales'],
+      ['B', '12', '66 %'],
+      'Para comparar grupos de distinto tamaño no sirven las cantidades: se comparan las proporciones. Tener más usuarios no es tener mayor proporción.',
+      'Cada ciudad tiene su propio total. Divide los que dijeron que sí entre los que respondieron en esa ciudad.'),
+    err('Una tienda vendió 40 camisetas en enero, 60 en febrero y 90 en marzo. El dueño afirma: «las ventas crecieron en el mismo porcentaje en febrero y en marzo». ¿Tiene razón?',
+      ['De enero a febrero: $60 - 40 = 20$ camisetas más', 'De febrero a marzo: $90 - 60 = 30$ camisetas más', 'Como 30 es más que 20, el porcentaje de crecimiento fue mayor en marzo'], 2,
+      ['En porcentaje: $20 \\div 40 = 50\\,\\%$ y $30 \\div 60 = 50\\,\\%$. Creció lo mismo', 'En porcentaje: $20 \\div 60$ y $30 \\div 90$. Creció el 33 % cada mes', 'Como 20 es menos que 30, el porcentaje fue mayor en febrero'],
+      'Cada aumento se compara con las ventas del mes anterior: 20 sobre 40 y 30 sobre 60 son el 50 % las dos veces. El dueño tiene razón.',
+      'Un porcentaje de crecimiento no es la cantidad que se sumó: depende de cuánto había antes.'),
+    opc('En una gráfica de barras, el eje vertical empieza en 90 en lugar de 0. La barra del producto A llega a 100 y la del producto B llega a 110, de modo que la barra de B se ve el doble de alta que la de A. De las siguientes afirmaciones, la única correcta es:',
+      ['B vendió el doble que A', 'B vendió un 10 % más que A', 'B vendió un 100 % más que A', 'No se puede comparar a A con B'], 1,
+      'Los valores son 100 y 110: B vendió 10 más sobre 100, un 10 % más. El eje cortado exagera la diferencia.',
+      'Lee los números del eje, no el tamaño de las barras.'),
+  ]);
+
+  addExam('pu-graficas', [
+    ['pu-gr-1', 'En una gráfica circular, el sector es la misma fracción del total que su ángulo de 360°.',
+      opc('Una gráfica circular representa a 600 estudiantes. El sector de quienes prefieren ciencias mide $120^\\circ$. La cantidad de estudiantes que prefiere ciencias es:', ['200', '120', '72', '300'], 0,
+        '$120^\\circ$ es la tercera parte del círculo: $600 \\div 3 = 200$.', 'Halla qué fracción de la vuelta completa ocupa el sector.')],
+    ['pu-gr-2', 'El promedio por el número de datos da la suma.',
+      opc('El promedio de cuatro números es 15. Si se agrega un quinto número, el promedio pasa a ser 16. El quinto número es:', ['16', '20', '17', '31'], 1,
+        'Los cuatro suman 60 y los cinco deben sumar 80: el quinto es 20.', 'Convierte cada promedio en una suma.')],
+    ['pu-gr-3', 'Una muestra solo permite concluir sobre un grupo que se le parezca.',
+      opc('A la salida de un gimnasio se encuestó a 50 personas, y 45 dijeron que hacen ejercicio todas las semanas. De esa encuesta se puede concluir que:', ['El 90 % de la población hace ejercicio', 'La mayoría de la ciudad va al gimnasio', 'Hacer ejercicio está de moda', 'La muestra no representa a toda la población'], 3,
+        'Quienes salen de un gimnasio no se parecen al resto de la población: la muestra está sesgada.', 'Pregúntate a quiénes se les preguntó y si se parecen a todos los demás.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-logica.js
+// Preuniversitario · mundo 10 «Lógica proposicional»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+PU_JUEGOS.push(({ setExam }) => {
+  const IMP = (p, q) => !p || q;
+  setExam('pu-logica', 'Lógica proposicional', [
+    ['pu-lo-1', 'Una tabla de verdad prueba todas las combinaciones.',
+      play('tabla-verdad', 'Tabla', { rounds: [{ tex: 'p \\wedge \\neg q', f: (p, q) => p && !q, n: 2 }] }, 'Solo es V en la fila V F.', { hint: 'Fila por fila.' })],
+    ['pu-lo-1', 'En serie es «y»; en paralelo es «o».',
+      play('circuito-logico', 'Circuito', { rounds: [{ op: 'or', neg: [false, true], want: false }] }, '$p \\vee \\neg q$ se apaga con $p$ F y $q$ V.', { hint: 'Paralelo.' })],
+    ['pu-lo-2', 'Negar un «y» da un «o» de negaciones.',
+      play('arma-negacion', 'Negación', { rounds: [{ ask: 'Escribe la negación con De Morgan', show: '$\\neg(\\neg p \\wedge q)$', tray: ['$p$', '$\\neg q$', '$\\wedge$', '$\\vee$', '$\\neg p$', '$q$'], need: [0, 3, 1], alt: [[1, 3, 0]] }] }, '$p \\vee \\neg q$.', { hint: 'De Morgan.' })],
+    ['pu-lo-2', '«Todos» cae con un solo caso que no cumpla.',
+      play('niega-todos', 'Negar', { rounds: [{ kind: 'todas', on: [true, true, true, true] }] }, 'Basta apagar una.', { hint: 'Mínimo.' })],
+    ['pu-lo-3', 'Ponens y tollens concluyen; afirmar el consecuente no.',
+      play('flecha-deduce', 'Concluir', { rounds: [{ p: 'llueve', q: 'el andén se moja', fact: ['q', true] }] }, 'No se sabe: pudo mojarse por otra razón.', { hint: 'Flecha.' })],
+    ['pu-lo-3', 'El condicional solo falla con antecedente verdadero y consecuente falso.',
+      play('rompe-promesa', 'Promesa', { rounds: [{ say: 'Si apruebo, hago una fiesta', p: 'apruebo', q: 'hago fiesta', f: IMP, want: false }] }, 'Solo si apruebo y no hay fiesta.', { hint: 'Un caso.' })],
+    ['pu-lo-4', '«Todos los A son B» pone el círculo A dentro de B.',
+      play('arma-silogismo', 'Círculos', { rounds: [{ sets: [{ k: 'A', name: 'rosas', r: 0.9 }, { k: 'B', name: 'flores', r: 1.8 }, { k: 'C', name: 'árboles', r: 1.4 }], rels: [['A', 'B', 'sub'], ['B', 'C', 'disj']], sol: { A: [3, 3], B: [3, 3], C: [7.5, 3] } }] }, 'Rosas dentro de flores; árboles aparte: ninguna rosa es árbol.', { hint: 'Adentro y aparte.' })],
+    ['pu-lo-4', 'Un solo contraejemplo tumba un «todos».',
+      play('contraejemplo', 'Contraejemplo', { rounds: [{ claim: 'Todos los números de la caja son menores que 50', items: [12, 49, 33, 51, 8], bad: x => x >= 50 }] }, 'El 51.', { hint: 'Uno.' })],
+    ['pu-lo-5', 'Se supone y se revisa: lo que choca se descarta.',
+      play('quien-miente', 'Mentiras', { rounds: [{ people: [{ name: 'Iris', say: 'Jaime miente', f: t => !t[1] }, { name: 'Jaime', say: 'Kiko miente', f: t => !t[2] }, { name: 'Kiko', say: 'Iris y Jaime mienten', f: t => !t[0] && !t[1] }] }] }, 'Jaime dice la verdad; Iris y Kiko mienten.', { hint: 'Supón.' })],
+    ['pu-lo-5', 'Una fila con un solo hueco tiene ahí su ✓.',
+      play('tabla-cruces', 'Cruces', { rounds: [{ rows: ['Sol', 'Tito', 'Uma'], cols: ['café', 'té', 'jugo'], clues: [{ t: 'not', a: 2, v: 2 }, { t: 'not', a: 2, v: 1 }, { t: 'not', a: 0, v: 1 }] }] }, 'Uma café, Sol jugo, Tito té.', { hint: 'Un hueco.' })],
+  ]);
+});
+
+// Mundo 10 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-lo-1', [
+    play('prende-circuito', 'El bombillo prende con «(p **o** q) **y** r». Cierra **solo** las llaves necesarias para prenderlo dejando **q abierta**.', { abierta: 1, sol: [0, 2] },
+      'Con q abierta, la corriente pasa por p. Después está r en serie: también hay que cerrarla.',
+      { hint: 'Sigue el cable desde la izquierda: ¿por qué camino puede pasar y qué encuentra después?' }),
+    play('valor-frases', 'p es **falsa** y q es **verdadera**. Pon V o F en cada frase.', { da: 'p: F · q: V', et: ['p ∨ q', 'p ∧ q', '¬p', 'p → q', 'q → p'], metas: ['V', 'F', 'V', 'V', 'F'], fichas: ['V', 'V', 'V', 'V', 'F', 'F', 'F', 'F'],
+      mira: ['A la «o» le basta una verdadera.', 'La «y» pide las dos verdaderas.', 'Negar p es decir lo contrario de p.', 'p es falsa: la promesa no obligaba a nada.', 'q promete p: q pasa y p no.'], ok: 'El condicional solo falla de V a F.' },
+      'p ∨ q: basta q, V. p ∧ q: falta p, F. ¬p: V. p → q: p es F, no se rompe, V. q → p: de V a F, se rompe, F.',
+      { hint: '«o» se conforma con una, «y» pide las dos, y el condicional solo falla si promete y no cumple.' }),
+    play('tabla-disyuncion', 'Llena la columna de **¬p ∨ ¬q**: toca las filas donde vale V.', { frase: '¬p ∨ ¬q', f: (p, q) => !p || !q, regla: 'le basta con que una de las dos sea falsa.', ok: 'Solo falla con las dos verdaderas.' },
+      'En la primera fila ¬p y ¬q son F. En las demás, alguna de las dos es V, y a la «o» le basta.',
+      { hint: 'Antes de mirar la «o», piensa cuánto valen ¬p y ¬q en cada fila.' }),
+    play('promesa-sigue', 'Promesa: «**si llego temprano, cocino**». Toca **todos** los casos en que la promesa **no** se rompe.', { casos: [{ t: 'llega temprano y cocina', si: true }, { t: 'llega temprano y no cocina', no: 'Llegó temprano y no cocinó: ahí sí rompió la promesa.' }, { t: 'llega tarde y cocina', si: true }, { t: 'llega tarde y no cocina', si: true }], falta: 'Si no llega temprano, la promesa no obligaba a nada.', ok: 'Solo se rompe si llega temprano y no cocina.' },
+      'La promesa solo habla de cuando llega temprano. Si llega tarde, cocine o no, nadie mintió.',
+      { hint: '¿A qué obliga la promesa cuando no llega temprano?' }),
+    play('cuenta-filas', 'Cuenta las filas de la tabla de esta frase y en cuántas es **verdadera**.', { frase: 'p ∧ (q ∨ r)', et: ['filas', 'verdaderas', 'falsas'], metas: ['8', '3', '5'], fichas: ['8', '3', '5', '6', '4', '1', '2'],
+      mira: ['Son tres letras y cada una duplica los casos.', 'p debe ser V y además q, r o las dos.', 'Son las filas que sobran.'], trampas: { '0:6': 'Cada letra duplica: no se suma 2 por letra.', '1:4': 'Con p verdadera hay 4 filas, pero en una q y r son falsas.', '1:1': 'También sirven las filas con solo q o solo r.', '1:2': 'También cuenta la fila con q y r verdaderas.' }, ok: 'Verdaderas y falsas suman todas las filas.' },
+      'Hay $2^3 = 8$ filas. Con p verdadera hay 4, y solo falla la de q y r falsas: 3 verdaderas y 5 falsas.',
+      { hint: 'Fija p verdadera y mira qué combinaciones de q y r sirven.' }),
+    play('nombra-columna', 'Se borraron los títulos de estas tres columnas. Ponlos.', { cols: ['VFFF', 'VVVF', 'VFVV'], metas: ['p ∧ q', 'p ∨ q', 'p → q'], fichas: ['p ∧ q', 'p ∨ q', 'p → q', 'q → p', '¬p'],
+      mira: ['Solo es V cuando las dos lo son.', 'Solo es F cuando las dos lo son.', 'Solo es F cuando p es V y q es F.'], trampas: { '2:q → p': 'Esa falla en la fila de p falsa y q verdadera.' }, ok: 'Cada conectivo se reconoce por sus F o por sus V.' },
+      'Una sola V, con las dos verdaderas: ∧. Una sola F, con las dos falsas: ∨. Una sola F, de V a F: el condicional.',
+      { hint: 'Busca en cada columna lo que sale una sola vez y mira cuánto valen p y q ahí.' }),
+    play('frase-larga', 'p es V, q es V y r es F. Pon el valor de cada pedazo y el de la frase completa.', { et: ['p → r', 'q ∧ ¬r', '(p → r) ∨ (q ∧ ¬r)'], metas: ['F', 'V', 'V'], fichas: ['F', 'V', 'V', 'F', 'F', 'V'],
+      mira: ['p es V y r es F: mira si la promesa se rompe.', 'q es V y ¬r también es V.', 'A la «o» le basta un pedazo verdadero.'], ok: 'Primero los pedazos, después la frase.' },
+      'p → r va de V a F: es F. q ∧ ¬r es V y V: V. Con la «o» basta un pedazo: V.',
+      { hint: 'Resuelve cada paréntesis por aparte y deja la «o» para el final.' }),
+    play('sube-filas', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '¿Cuántas **filas** tiene una tabla con **5** letras?', r: 32, c: '2^5', e: { 10: 'Cada letra duplica: no se suma 2.', 25: 'Cada letra duplica: es 2 multiplicado cinco veces.' } },
+      { q: '¿En cuántas filas es **verdadera** p ∨ q ∨ r?', r: 7, c: '8 - 1', e: { 1: 'Esa es la única falsa.', 8: 'Hay una fila con las tres falsas.' } },
+      { q: '¿En cuántas filas es **falsa** p ∧ q ∧ r ∧ s?', r: 15, c: '16 - 1', e: { 1: 'Esa es la única verdadera.', 16: 'Hay una fila con las cuatro verdaderas.' } }] },
+      'Cinco letras: $2^5 = 32$. La «o» solo falla en una de 8: 7. La «y» solo acierta en una de 16: 15 falsas.',
+      { hint: 'Cada letra duplica las filas. ¿En qué fila falla una «o»? ¿En cuál acierta una «y»?' }),
+    sol('Se sabe que la proposición «Llueve y no hace frío» es verdadera. ¿Cuál es el valor de verdad de «Si llueve, entonces hace frío»? ¿Y el de «Llueve o hace frío»?',
+      ['Una conjunción es verdadera solo si sus dos partes lo son: «llueve» es [[verdadera]]', '«No hace frío» es verdadera, así que «hace frío» es [[falsa]]', '«Si llueve, entonces hace frío» va de verdadero a falso: es [[falsa]]', '«Llueve o hace frío» tiene una parte verdadera: es [[verdadera]]'],
+      ['no se sabe', 'contradictoria'],
+      'Primero se saca el valor de cada proposición simple y después se arma cada compuesta. El condicional solo falla de verdadero a falso; a la disyunción le basta una parte verdadera.',
+      'Empieza por lo que te dan: ¿qué tiene que pasar con cada parte para que una «y» sea verdadera?'),
+    err('¿En cuántas filas de su tabla de verdad es verdadera la proposición $(p \\wedge q) \\to r$?',
+      ['Con tres letras, la tabla tiene $2^3 = 8$ filas', 'Un condicional solo es falso cuando el antecedente es verdadero y el consecuente es falso', 'El antecedente $p \\wedge q$ es verdadero cuando alguna de las dos lo es: en 6 filas', 'En la mitad de esas filas r es falsa: el condicional es falso en 3 filas y verdadero en 5'], 2,
+      ['El antecedente $p \\wedge q$ es verdadero solo cuando las dos lo son: en 2 filas', 'El antecedente $p \\wedge q$ es verdadero en 4 filas', 'El antecedente $p \\wedge q$ nunca es verdadero'],
+      'La conjunción pide que p y q sean verdaderas a la vez: eso pasa en 2 de las 8 filas (una con r verdadera y otra con r falsa). El condicional solo falla en una fila: es verdadero en 7.',
+      'Cuenta en cuántas filas son verdaderas p y q a la vez. «Alguna de las dos» es otro conectivo.'),
+    opc('Si la proposición «Juan estudia o Juan trabaja» es verdadera y la proposición «Juan estudia» es falsa, entonces se puede asegurar que:',
+      ['Juan no trabaja', 'Juan estudia y trabaja', 'Juan trabaja', 'No se puede saber si Juan trabaja'], 2,
+      'Una disyunción verdadera necesita al menos una parte verdadera. Como «Juan estudia» es falsa, tiene que ser verdadera «Juan trabaja».',
+      'Para que una «o» sea verdadera, ¿cuántas de sus partes deben serlo, como mínimo?'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-lo-2', [
+    play('niega-y', 'Arma la negación, **en el mismo orden** de la frase.', { frase: '«lavé la ropa y barrí»', metas: ['no lavé la ropa', 'o', 'no barrí'], fichas: ['no lavé la ropa', 'o', 'no barrí', 'y', 'lavé la ropa', 'barrí'],
+      mira: ['Niega la primera parte.', 'Al negar, el conectivo cambia.', 'Niega la segunda parte.'], trampas: { '1:y': 'Para que la frase sea falsa basta que falle una parte: es «o».' }, ok: 'Basta que falle una parte.' },
+      'La frase pide las dos cosas, así que es falsa si falla una: no lavé la ropa **o** no barrí.',
+      { hint: '¿Cuándo deja de ser verdad la frase? ¿Tienen que fallar las dos partes?' }),
+    play('niega-mezclada', 'Arma la negación, **en el mismo orden** de la frase.', { frase: '«no salí o me mojé»', metas: ['salí', 'y', 'no me mojé'], fichas: ['salí', 'y', 'no me mojé', 'no salí', 'o', 'me mojé'],
+      mira: ['Negar «no salí» es decir que sí.', 'Al negar, el conectivo cambia.', 'Niega la segunda parte.'], trampas: { '1:o': 'Para que una «o» sea falsa tienen que fallar las dos partes: es «y».' }, ok: 'Una «o» solo es falsa si fallan las dos.' },
+      'Es falsa solo si fallan las dos partes: salí **y** no me mojé.',
+      { hint: 'Lo contrario de algo que ya tiene «no» es decirlo sin el «no».' }),
+    play('tabla-negada', 'Llena la columna de **¬(¬p ∨ ¬q)**: toca las filas donde vale V.', { frase: '¬(¬p ∨ ¬q)', f: (p, q) => p && q, regla: 'solo es V si las dos son verdaderas.', ok: 'Es lo mismo que p ∧ q.' },
+      '¬p ∨ ¬q solo es falsa con las dos verdaderas: su negación solo es V ahí, igual que p ∧ q.',
+      { hint: 'Primero busca dónde es falsa ¬p ∨ ¬q; la negación es verdadera justo ahí.' }),
+    play('casos-tumban', 'Un cartel dice «**todos los perros de este parque llevan collar**». Toca **todos** los casos que lo vuelven **falso**.', { casos: [{ t: 'un perro del parque con collar', no: 'Ese perro cumple lo que dice el cartel.' }, { t: 'un perro del parque sin collar', si: true }, { t: 'un gato del parque sin collar', no: 'El cartel habla de perros, no de gatos.' }, { t: 'dos perros del parque sin collar', si: true }, { t: 'un perro de otro parque sin collar', no: 'El cartel solo habla de este parque.' }], falta: 'Falta otro caso con un perro de este parque sin collar.', ok: 'Basta un perro de este parque sin collar.' },
+      'Para tumbar un «todos» basta uno que no cumpla, y tiene que ser un perro de ese parque.',
+      { hint: '¿De quién habla el cartel? Busca a alguno de esos que no cumpla.' }),
+    play('parejas-negacion', 'Pon la **negación** de cada frase.', { et: ['todos ríen', 'alguno canta', 'ninguno llora'], metas: ['alguno no ríe', 'ninguno canta', 'alguno llora'], fichas: ['alguno no ríe', 'ninguno canta', 'alguno llora', 'ninguno ríe', 'alguno no canta', 'todos lloran'],
+      mira: ['Para tumbar «todos» basta uno.', 'Para tumbar «alguno» no puede quedar ni uno.', 'Para tumbar «ninguno» basta uno.'], trampas: { '0:ninguno ríe': 'No hace falta que ninguno ría: basta uno que no ría.', '1:alguno no canta': 'Puede haber uno que no canta y otro que sí: no la tumba.', '2:todos lloran': 'No hace falta que lloren todos: basta uno.' }, ok: 'Todos contra alguno no; alguno contra ninguno.' },
+      '«Todos ríen» ↔ «alguno no ríe»; «alguno canta» ↔ «ninguno canta»; «ninguno llora» ↔ «alguno llora».',
+      { hint: 'Busca lo mínimo que tendría que pasar para que cada frase sea mentira.' }),
+    play('pinta-negacion', 'p: «juega fútbol». q: «juega tenis». Toca **todas** las zonas donde es verdad **¬(p ∧ q)**.', { a: 'fútbol', b: 'tenis', zonas: [0, 2, 3], mira: ['Juega fútbol y no tenis: no juega los dos.', 'Ahí juega los dos: p ∧ q es verdad, y su negación, falsa.', 'Juega tenis y no fútbol: no juega los dos.', 'No juega ninguno: tampoco juega los dos.'], ok: 'Todo menos el centro: ¬p ∨ ¬q.' },
+      'Solo en el centro juega los dos. La negación es todo lo demás: los que no juegan uno **o** no juegan el otro.',
+      { hint: 'Ubica primero dónde es verdad «juega los dos». ¿Qué queda?' }),
+    play('niega-cartel', 'Arma la negación, **en el mismo orden** de la frase.', { frase: '«todos votaron y alguno habló»', metas: ['alguno no votó', 'o', 'ninguno habló'], fichas: ['alguno no votó', 'o', 'ninguno habló', 'ninguno votó', 'y', 'alguno no habló'],
+      mira: ['Para tumbar «todos votaron» basta uno que no.', 'Al negar, el conectivo cambia.', 'Para tumbar «alguno habló» no pudo hablar nadie.'], trampas: { '0:ninguno votó': 'No hace falta que ninguno vote: basta uno que no.', '1:y': 'Basta que falle una de las dos partes: es «o».', '2:alguno no habló': 'Aunque uno no hable, otro pudo hablar.' }, ok: 'Cada parte con su negación, y «y» pasa a «o».' },
+      'Alguno no votó **o** ninguno habló.',
+      { hint: 'Niega cada parte por aparte y después mira qué pasa con la «y».' }),
+    play('sube-niega', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De **12** ventanas, «alguna está abierta» es **falsa**. ¿Cuántas están **cerradas**?', r: 12, c: '12 - 0', e: { 1: 'Con una cerrada puede haber otras abiertas.', 11: 'Piensa qué pasa con la que falta.' } },
+      { q: 'De **8** socios, «todos tienen carné» es **falsa**. ¿Cuántos, **como mínimo**, no tienen?', r: 1, c: '\\text{basta } 1', e: { 8: 'Esos serían todos; para tumbarla basta menos.' } },
+      { q: '¿En cuántas filas de la tabla es **verdadera** ¬(p ∧ q)?', r: 3, c: '4 - 1', e: { 1: 'Esa es la fila donde es falsa.' } }] },
+      'Para tumbar «alguna» hay que cerrarlas todas: 12. Para tumbar «todos» basta 1. Y ¬(p ∧ q) solo falla en una de 4: 3.',
+      { hint: 'Piensa en lo mínimo que hace falta para que cada frase sea mentira.' }),
+    sol('Un letrero dice: «Todos los buses de esta ruta tienen aire acondicionado y ninguno cobra más de 3 000 pesos». ¿Qué tiene que pasar para que el letrero sea falso?',
+      ['El letrero une dos afirmaciones con «y»: es falso si falla [[al menos una]] de ellas', 'La negación de «todos tienen aire» es «[[alguno]] no tiene aire»', 'La negación de «ninguno cobra más» es «[[alguno]] cobra más»', 'Las dos negaciones se unen con [[o]]: es De Morgan'],
+      ['ninguno', 'todos', 'y', 'las dos'],
+      'El letrero es falso si algún bus no tiene aire o algún bus cobra más de 3 000 pesos. Para tumbar un «todos» o un «ninguno» basta un caso.',
+      'Para que una promesa doble quede incumplida, ¿hace falta que fallen sus dos partes?'),
+    err('¿Cuál es la negación de la proposición «Ana canta y no baila»?',
+      ['La frase tiene la forma $p \\wedge \\neg q$, con p: «Ana canta» y q: «Ana baila»', 'Por De Morgan, se niega cada parte y la «y» sigue siendo «y»: $\\neg p \\wedge q$', 'En palabras: «Ana no canta y baila»'], 1,
+      ['Por De Morgan, se niega cada parte y la «y» cambia por «o»: $\\neg p \\vee q$', 'Por De Morgan, solo se niega la primera parte: $\\neg p \\wedge \\neg q$', 'Por De Morgan, la «y» cambia por «o» sin negar las partes: $p \\vee \\neg q$'],
+      'De Morgan hace dos cosas a la vez: niega cada parte y cambia el conectivo. La negación es «Ana no canta o baila».',
+      'Piensa en cuándo sería falsa la frase original. ¿Hace falta que pasen las dos cosas?'),
+    opc('La negación de la proposición «Algunos empleados llegaron tarde» es:',
+      ['Algunos empleados no llegaron tarde', 'Todos los empleados llegaron tarde', 'Algunos empleados llegaron temprano', 'Ningún empleado llegó tarde'], 3,
+      '«Algunos» afirma que hay al menos uno. Negarlo es decir que no hay ninguno.',
+      'La negación debe ser verdadera exactamente cuando la frase original es falsa.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-lo-3', [
+    play('zonas-posibles', '«**Si es colibrí, vuela**». De un animal solo se sabe que **vuela**. Toca **todas** las zonas donde puede estar.', { p: 'colibríes', q: 'vuelan', zonas: [0, 1], mira: ['Puede ser un colibrí: los colibríes vuelan.', 'Puede volar sin ser colibrí.', 'Ahí están los que no vuelan, y este vuela.'], ok: 'Con solo saber que vuela, no se sabe si es colibrí.', texto: 'colibríes, o los que vuelan sin serlo' },
+      'Todos los colibríes vuelan, pero también vuelan otros. Que vuele no dice si es colibrí.',
+      { hint: '¿Puede haber animales que vuelen y no sean colibríes?' }),
+    play('voltea-niega', 'Arma el **contrarrecíproco** de esta frase.', { frase: '«si no llueve, hay partido»', metas: ['no hay partido', 'llueve'], fichas: ['no hay partido', 'llueve', 'no llueve', 'hay partido'],
+      mira: ['El contrarrecíproco empieza con la negación de la segunda parte.', 'Termina con la negación de la primera parte.'], trampas: { '0:llueve': 'Falta cambiarlas de lugar: empieza por el partido.', '0:hay partido': 'Cambiaste de lugar, pero falta negar.', '1:no llueve': 'Falta negar: lo contrario de «no llueve» es «llueve».' }, ok: 'Negar las dos y voltear.' },
+      'Se niegan las dos partes y se cambian de lugar: si **no hay partido**, entonces **llueve**.',
+      { hint: 'Niega cada parte (una ya trae «no») y cámbialas de lugar.' }),
+    play('mismo-condicional', '«**Si es lunes, hay mercado**». Toca **todas** las frases que dicen **lo mismo**.', { casos: [{ t: 'si no hay mercado, no es lunes', si: true }, { t: 'si hay mercado, es lunes', no: 'Esa está volteada: podría haber mercado otro día.' }, { t: 'si no es lunes, no hay mercado', no: 'Esa solo niega: podría haber mercado otro día.' }, { t: 'basta que sea lunes para que haya mercado', si: true }, { t: 'todos los lunes hay mercado', si: true }], falta: 'Falta otra que dice lo mismo con otras palabras.', ok: 'El contrarrecíproco y las formas de decir que el lunes basta.' },
+      'Dicen lo mismo el contrarrecíproco, «basta que sea lunes» y «todos los lunes». Voltearla sin negar, o negarla sin voltear, cambia la idea.',
+      { hint: 'Imagina que también hay mercado los jueves. ¿Qué frases siguen siendo verdad?' }),
+    play('basta-falta', 'Ser lo **primero**, ¿**basta** o solo **hace falta** para lo segundo?', { et: ['cuadrado … para 4 lados', '4 lados … para cuadrado', 'animal … para gato'], metas: ['basta', 'hace falta', 'hace falta'], fichas: ['basta', 'hace falta', 'hace falta', 'basta', 'basta'],
+      mira: ['Todo cuadrado tiene 4 lados: con eso alcanza.', 'Hay figuras de 4 lados que no son cuadrados.', 'Hay animales que no son gatos.'], ok: 'El de adentro basta; el de afuera hace falta.' },
+      'Ser cuadrado basta para tener 4 lados; tener 4 lados hace falta, pero no alcanza. Lo mismo con ser animal y ser gato.',
+      { hint: '¿Cuál está dentro de cuál? El de adentro alcanza; el de afuera solo es requisito.' }),
+    play('revisa-regla', 'Regla de una piscina: «**si nada en lo hondo, lleva gorro**». De cada persona se sabe **una** cosa. Toca **solo** a las que hay que revisar.', { cartas: [{ t: 'nada en lo hondo', si: true }, { t: 'nada en lo bajito', no: 'La regla no dice nada de los que nadan en lo bajito.' }, { t: 'lleva gorro', no: 'Con gorro no rompe la regla, nade donde nade.' }, { t: 'no lleva gorro', si: true }], falta: 'Falta otra que podría estar rompiendo la regla.', ok: 'Solo esas dos podrían romper la regla.' },
+      'Al de lo hondo hay que mirarle el gorro; al que no lleva gorro, dónde nada. Los otros dos no pueden romper la regla.',
+      { hint: '¿Quién podría estar rompiendo la regla? ¿A quién no le importa lo que falta por saber?' }),
+    play('deduce-seguro', '«**Si suena la alarma, hay humo**». ¿Qué se concluye de cada dato?', { et: ['sonó', 'no hay humo', 'hay humo', 'no sonó'], metas: ['hay humo', 'no sonó', 'no se sabe', 'no se sabe'], fichas: ['hay humo', 'no sonó', 'no se sabe', 'no se sabe', 'sonó', 'no hay humo'],
+      mira: ['Si pasa lo primero, pasa lo segundo.', 'Si no hay humo, no pudo sonar.', 'Con humo, la alarma pudo sonar o no.', 'Si no suena, puede haber humo o no.'], trampas: { '1:no se sabe': 'Sí se sabe: si hubiera sonado, habría humo.', '2:sonó': 'La frase no va al revés: puede haber humo sin alarma.', '3:no hay humo': 'Que no suene no dice nada del humo.' }, ok: 'Solo sirven p y «no q».' },
+      'Sonó → hay humo. No hay humo → no sonó. Con «hay humo» o «no sonó» no se sabe.',
+      { hint: 'Solo hay dos datos que permiten concluir algo seguro.' }),
+    play('cadena-si', 'Con estas tres cosas, ¿qué se concluye?', { da: ['Si madruga, corre.', 'Si corre, desayuna bien.', 'Hoy no desayunó bien.'], et: ['¿corrió?', '¿madrugó?'], metas: ['no corrió', 'no madrugó'], fichas: ['no corrió', 'no madrugó', 'corrió', 'madrugó', 'no se sabe', 'no se sabe'],
+      mira: ['Si hubiera corrido, habría desayunado bien.', 'Si hubiera madrugado, habría corrido.'], trampas: { '0:no se sabe': 'Sí se sabe: si hubiera corrido, habría desayunado bien.', '1:no se sabe': 'Sí se sabe: si hubiera madrugado, habría corrido.' }, ok: 'El contrarrecíproco se aplica dos veces.' },
+      'No desayunó bien → no corrió → no madrugó: el contrarrecíproco, una vez por cada frase.',
+      { hint: 'Empieza por el último dato y devuélvete una frase cada vez.' }),
+    play('sube-regla-si', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Todo socio tiene carné. Hay **18** socios y **30** personas con carné. ¿Cuántas tienen carné **sin** ser socias?', r: 12, c: '30 - 18', e: { 18: 'Esos son los socios.' } },
+      { q: '¿En cuántas filas de la tabla es **verdadero** p → q?', r: 3, c: '4 - 1', e: { 1: 'Esa es la única fila falsa.', 2: 'Con p falsa, las dos filas son verdaderas.' } },
+      { q: 'Regla: si la caja es roja, atrás dice «frágil». De unas cajas solo se ve un lado: **6** rojas, **5** azules, **4** que dicen «frágil» y **3** que no. ¿Cuántas hay que **voltear**?', r: 9, c: '6 + 3', e: { 10: 'Las que dicen «frágil» no rompen la regla, sean rojas o no.', 6: 'Hay otras que también podrían romper la regla.', 18: 'No hace falta voltearlas todas.' } }] },
+      '$30 - 18 = 12$; el condicional solo falla en una de 4: 3; y se voltean las rojas y las que no dicen «frágil»: $6 + 3 = 9$.',
+      { hint: '¿Los socios ya están contados entre los que tienen carné? ¿Qué caja podría romper la regla?' }),
+    sol('Una empresa tiene esta norma: «Si un empleado trabaja el domingo, entonces recibe un día libre». Se revisan cuatro casos: (1) trabajó el domingo y recibió día libre; (2) trabajó el domingo y no lo recibió; (3) no trabajó el domingo y recibió día libre; (4) no trabajó el domingo y no lo recibió. ¿En cuál caso se incumple la norma?',
+      ['La norma solo obliga a algo cuando el empleado [[trabajó]] el domingo', 'En los casos 3 y 4 no trabajó: ahí la norma [[no se incumple]]', 'En el caso 1 trabajó y recibió el día libre: la norma [[se cumple]]', 'El único caso que incumple la norma es el [[2]]'],
+      ['3', 'no trabajó', 'se incumple'],
+      'Un condicional solo es falso cuando se cumple la condición y falla la consecuencia. Dar un día libre a quien no trabajó el domingo (caso 3) no rompe la norma.',
+      'La norma promete algo a los que trabajan el domingo. ¿Dice algo sobre los que no trabajan?'),
+    err('Se sabe que «si un número es múltiplo de 6, entonces es par». El número 14 es par. ¿Qué se puede concluir sobre el 14?',
+      ['La regla va en un solo sentido: de «múltiplo de 6» a «par»', 'El 14 cumple la segunda parte: es par', 'Entonces el 14 es múltiplo de 6'], 2,
+      ['De que sea par no se concluye nada: hay pares que no son múltiplos de 6', 'Entonces el 14 no es par', 'Entonces la regla es falsa'],
+      'Que se cumpla el consecuente no obliga al antecedente: el 14 es par y no es múltiplo de 6. La regla no se puede leer al revés.',
+      'Busca un número par que no sea múltiplo de 6. ¿Rompe la regla?'),
+    opc('La proposición «Si Luis aprueba el examen, entonces viaja a la costa» es equivalente a:',
+      ['Si Luis no viaja a la costa, entonces no aprobó el examen', 'Si Luis viaja a la costa, entonces aprobó el examen', 'Si Luis no aprueba el examen, entonces no viaja a la costa', 'Luis aprueba el examen y viaja a la costa'], 0,
+      'Es el contrarrecíproco: se voltea el condicional y se niegan las dos partes. El recíproco y el contrario no son equivalentes al original.',
+      'Si aprobar obliga a viajar, ¿qué se sabe de alguien que no viajó?'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-lo-4', [
+    play('dibujo-contra', '«Todos los **taxis** son **carros**. Algunos carros son **eléctricos**». Mueve el círculo de los eléctricos para mostrar que tal vez **ningún taxi** lo es.', { a: 'taxis', b: 'carros', c: 'eléctricos', b1: 'carro', c1: 'eléctrico' },
+      'Los eléctricos pueden tocar a los carros sin tocar a los taxis: «algún taxi es eléctrico» no es seguro.',
+      { hint: 'Las dos frases deben cumplirse. ¿Dónde quedan los carros que no son taxis?' }),
+    play('frase-dibujo', 'Pon a cada dibujo la frase que le corresponde. Usa frases distintas.', { metas: ['todo A es B', 'algún A es B', 'ningún A es B'], fichas: ['todo A es B', 'algún A es B', 'ningún A es B', 'todo B es A', 'todo A es B'],
+      mira: ['A está completo dentro de B.', 'Los círculos se cruzan y hay un punto en el medio.', 'Los círculos no se tocan.'], trampas: { '0:todo B es A': 'B es el grande: sobra espacio fuera de A.', '1:todo B es A': 'Hay parte de B por fuera de A.', '1:todo A es B': 'Hay parte de A por fuera de B.' }, ok: 'Dentro, cruzados y separados.' },
+      'Dentro es «todo A es B», cruzados es «algún A es B» y separados es «ningún A es B».',
+      { hint: 'Mira si un círculo está dentro del otro, si se cruzan o si no se tocan.' }),
+    play('se-voltea', 'Toca **todas** las frases que siguen siendo **seguras** al voltearlas (cambiar A por B).', { casos: [{ t: 'ningún A es B', si: true }, { t: 'todo A es B', no: 'B puede ser más grande: no todo B es A.' }, { t: 'algún A es B', si: true }, { t: 'algún A no es B', no: 'B podría estar completo dentro de A: no siempre se voltea.' }], falta: 'Falta otra que también se puede voltear.', ok: '«Ningún» y «algún» se voltean.' },
+      'Separados se ven igual desde los dos lados, y el que está en la parte común está en los dos. «Todo» y «algún… no» no se voltean.',
+      { hint: 'Dibuja los círculos de cada frase y léelos empezando por B.' }),
+    play('donde-alguien', '«Algunos **cantantes** son **actores**. Algunos actores **no** son cantantes». Toca **todas** las zonas donde **seguro** hay alguien.', { a: 'cantantes', b: 'actores', zonas: [1, 2], mira: ['Nadie dijo que haya cantantes que no actúen.', 'La primera frase pone a alguien en el medio.', 'La segunda frase pone a un actor que no canta.', 'De los de afuera no se dijo nada.'], ok: 'Solo hay alguien seguro donde una frase lo dice.' },
+      'La primera frase asegura a alguien en el medio y la segunda, a un actor que no canta. De las demás zonas no se sabe.',
+      { hint: 'Cada «algunos» pone un punto en una zona. ¿En cuál?' }),
+    play('seguro-tres', 'Toca **todo** lo que es **seguro** con estas tres frases.', { da: ['Ningún pez es mamífero.', 'Todo delfín es mamífero.', 'Hay un delfín en el acuario.'], casos: [{ t: 'ningún delfín es pez', si: true }, { t: 'todo mamífero es delfín', no: 'Los delfines están dentro de los mamíferos, no al revés.' }, { t: 'hay un mamífero en el acuario', si: true }, { t: 'no hay peces en el acuario', no: 'Nadie dijo qué más hay en el acuario.' }], falta: 'Falta otra que también es segura.', ok: 'Vale si se cumple en todos los dibujos.' },
+      'Los delfines están dentro de los mamíferos, lejos de los peces; y el del acuario es mamífero. De lo demás no se sabe.',
+      { hint: 'Dibuja los círculos y pon un punto por el delfín del acuario.' }),
+    play('cadena-todos', '«Todo **sauce** es árbol. Todo **árbol** es planta. Ninguna **planta** es hongo». Pon cada palabra en su círculo.', { metas: ['sauces', 'árboles', 'plantas', 'hongos'], fichas: ['sauces', 'árboles', 'plantas', 'hongos'],
+      mira: ['El círculo más chico es el que está dentro de todos.', 'El del medio contiene al chico y está dentro del grande.', 'El grande contiene a los otros dos.', 'El que está aparte no toca a las plantas.'], ok: 'Todo sauce es planta, y ningún sauce es hongo.' },
+      'Sauces dentro de árboles, árboles dentro de plantas, y los hongos aparte: por eso ningún sauce es hongo.',
+      { hint: '«Todo A es B» pone a A dentro de B. ¿Quién queda aparte?' }),
+    play('tumba-todos', '«**Todos los múltiplos de 4 son múltiplos de 8**». Toca **todos** los números que la tumban.', { a: 4, b: 8, nums: [8, 12, 16, 18, 20, 24] },
+      '12 y 20 son múltiplos de 4 y no de 8. El 18 no cuenta: no es múltiplo de 4.',
+      { hint: 'El que la tumba tiene que ser de los que habla la frase y no cumplir.' }),
+    play('sube-circulos', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Ningún A es B. Hay **7** A y **12** B. ¿Cuántos hay **en total**, contando los A y los B?', r: 19, c: '7 + 12', e: { 12: 'Esos son solo los B: los A están aparte.', 5: 'No se restan: los círculos no se tocan.' } },
+      { q: 'Todo pintor es artista. Hay **9** pintores y **20** artistas. ¿Cuántos artistas **no** son pintores?', r: 11, c: '20 - 9', e: { 29: 'Los pintores ya están contados entre los artistas.' } },
+      { q: 'De **25** vecinos, «algún vecino es médico». ¿Cuántos médicos hay **como mínimo**?', r: 1, c: '\\text{al menos } 1', e: { 25: 'Esos serían todos los vecinos.' } }] },
+      'Separados se suman: 19. Dentro se restan: 11. Y «algún» asegura al menos 1.',
+      { hint: '¿Los círculos están separados, uno dentro del otro, o solo se sabe que comparten a alguien?' }),
+    sol('Se sabe que: todos los ingenieros de una empresa saben programar, y algunos ingenieros de la empresa hablan alemán. ¿Qué se puede concluir con certeza?',
+      ['Los ingenieros están [[dentro]] del conjunto de los que saben programar', 'Hay [[al menos uno]] que es ingeniero y habla alemán', 'Ese ingeniero también sabe programar: [[algunos]] de los que programan hablan alemán', 'No se puede concluir que [[todos]] los que hablan alemán sepan programar'],
+      ['ninguno', 'fuera'],
+      'El ingeniero que habla alemán está dentro del círculo de los ingenieros y, por eso, dentro del de los que programan. De «algunos» solo sale otro «algunos».',
+      'Dibuja un círculo dentro de otro para «todos» y marca un punto para «algunos». ¿En qué zonas queda el punto?'),
+    err('Premisas: «Todos los gatos son felinos» y «Algunos felinos son salvajes». ¿Se concluye que algunos gatos son salvajes?',
+      ['Los gatos están dentro del conjunto de los felinos', 'Hay felinos salvajes: la zona de los salvajes toca al círculo de los felinos', 'Como los gatos son felinos, la zona de los salvajes toca también a los gatos', 'Conclusión: algunos gatos son salvajes'], 2,
+      ['Los felinos salvajes pueden estar todos fuera de los gatos: no se sabe si la zona toca a los gatos', 'Como los gatos son felinos, todos los gatos son salvajes', 'Como los gatos son felinos, ningún gato es salvaje'],
+      'Los felinos salvajes podrían ser todos tigres y leones. Las premisas permiten dibujar la zona de los salvajes sin tocar a los gatos: la conclusión no es segura.',
+      'Intenta dibujar un diagrama en el que las dos premisas se cumplan y la conclusión no.'),
+    opc('Todos los médicos de un hospital usan bata. Ningún visitante usa bata. De lo anterior se concluye necesariamente que:',
+      ['Algunos visitantes son médicos', 'Ningún visitante es médico del hospital', 'Todos los que usan bata son médicos', 'Algunos médicos no usan bata'], 1,
+      'Si un visitante fuera médico del hospital, usaría bata, y ningún visitante la usa. Los dos conjuntos no se tocan.',
+      'Dibuja los médicos dentro de los que usan bata y los visitantes fuera de ese círculo.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/proposiciones-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-lo-5', [
+    play('quien-miente-tres', 'Cada uno dice siempre la verdad o siempre miente. Toca a **todos los que mienten**.', { gente: [{ n: 'Pía', d: 'Rita dice la verdad', f: v => v[2] }, { n: 'Quique', d: 'Pía y Rita mienten', f: v => !v[0] && !v[2] }, { n: 'Rita', d: 'solo uno de Quique y yo miente', f: v => v[1] !== v[2] }], ok: 'Pía y Rita se apoyan; Quique queda solo.' },
+      'Pía y Rita valen lo mismo. Si mintieran las dos, Quique diría la verdad, y lo que dice Rita sería cierto: choca. Entonces miente Quique.',
+      { hint: 'Pía y Rita van juntas: supón que las dos mienten y mira qué pasa.' }),
+    play('tabla-sospechosos', 'Uno de los tres rompió la taza y **solo una** frase es **falsa**. Llena la tabla con las V y marca quién fue.', { v: 2, gente: [{ n: 'Sara', d: 'fue Uma', f: c => c === 2 }, { n: 'Tino', d: 'yo no fui', f: c => c !== 1 }, { n: 'Uma', d: 'fue Tino', f: c => c === 1 }], ok: 'Solo con Uma hay una sola frase falsa.' },
+      'Si fue Sara, fallan la frase de Sara y la de Uma. Si fue Tino, fallan la de Sara y la de Tino. Si fue Uma, solo falla la de Uma.',
+      { hint: 'Revisa una fila a la vez: supón que fue esa persona y mira cada frase.' }),
+    play('cadena-acusan', 'Cada uno dice siempre la verdad o siempre miente. Toca a **todos los que mienten**.', { gente: [{ n: 'Abril', d: 'Bruno miente', f: v => !v[1] }, { n: 'Bruno', d: 'Dora dice la verdad', f: v => v[3] }, { n: 'Ciro', d: 'Abril miente', f: v => !v[0] }, { n: 'Dora', d: 'solo uno de Ciro y yo miente', f: v => v[2] !== v[3] }], ok: 'Solo Abril dice la verdad.' },
+      'Si Dora dijera la verdad, Ciro mentiría y Bruno no; entonces Abril mentiría, y Ciro habría dicho la verdad: choca. Dora miente, Bruno también, Abril dice la verdad y Ciro miente.',
+      { hint: 'Supón que Dora dice la verdad y sigue la cadena hasta que algo choque.' }),
+    play('frases-opuestas', 'Uno solo tomó el último pan. Toca las **dos** frases que se contradicen: siempre una es verdad y la otra, mentira.', { par: [0, 1], gente: [{ n: 'Memo', d: 'yo no fui', f: c => c !== 0 }, { n: 'Nora', d: 'fue Memo', f: c => c === 0 }, { n: 'Oto', d: 'fue Nora', f: c => c === 1 }, { n: 'Paz', d: 'yo no fui', f: c => c !== 3 }], ok: 'Una de las dos es verdad, sin saber cuál.' },
+      'Memo dice que no fue y Nora dice que fue Memo: una es verdad y la otra no, pase lo que pase.',
+      { hint: 'Busca una frase que afirme justo lo que otra niega.' }),
+    play('supone-choca', 'En la isla, **cada uno** dice siempre la verdad o siempre miente. Completa el razonamiento.', { da: 'Iván: «todos los de la isla mentimos»', et: ['si dice la verdad', 'así que Iván', 'y en la isla'], metas: ['choca', 'miente', 'alguno no miente'], fichas: ['choca', 'miente', 'alguno no miente', 'cuadra', 'dice la verdad', 'nadie miente'],
+      mira: ['Si todos mienten, él también: ¿puede decir la verdad?', 'La suposición chocó: vale la contraria.', 'Su frase es falsa: no todos mienten.'], trampas: { '0:cuadra': 'Si todos mienten, él también: no puede decir la verdad.', '1:dice la verdad': 'Esa suposición acaba de chocar.', '2:nadie miente': 'Iván miente: solo se sabe que no todos lo hacen.' }, ok: 'Lo que choca se descarta.' },
+      'Si dijera la verdad, él también mentiría: choca. Entonces miente, y como su frase es falsa, alguien en la isla dice la verdad.',
+      { hint: 'Supón que dice la verdad y mira qué diría eso de él mismo.' }),
+    play('tres-cofres', 'El tesoro está en un cofre y **solo un** letrero dice la verdad. Toca el cofre del tesoro.', { v: 1, que: 'un solo cofre', gente: [{ n: 'Rojo', d: 'está aquí', f: c => c === 0 }, { n: 'Azul', d: 'no está aquí', f: c => c !== 1 }, { n: 'Verde', d: 'no está en el rojo', f: c => c !== 0 }], ok: 'Con el azul, solo acierta el verde.' },
+      'En el rojo acertarían el rojo y el azul; en el verde, el azul y el verde. En el azul solo acierta el verde.',
+      { hint: 'Prueba cada cofre y cuenta cuántos letreros dirían la verdad.' }),
+    play('culpable-una-verdad', 'Uno de los cuatro escondió las llaves y **solo una** frase es **verdad**. Toca a quien fue.', { v: 1, que: 'una sola persona', gente: [{ n: 'Alma', d: 'fue Beto o fue Dani', f: c => c === 1 || c === 3 }, { n: 'Beto', d: 'fue Alma', f: c => c === 0 }, { n: 'Cira', d: 'Beto miente', f: c => c !== 0 }, { n: 'Dani', d: 'fue Beto o fue Cira', f: c => c === 1 || c === 2 }], ok: 'Con Alma, solo Beto dice la verdad.' },
+      'Beto y Cira se contradicen: la única verdad está ahí. Entonces Alma y Dani mienten: no fue Beto, ni Dani, ni Cira. Fue Alma.',
+      { hint: 'Dos frases se contradicen: la única verdad está entre ellas. ¿Qué pasa con las otras dos?' }),
+    play('sube-mentira', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Cada uno dice siempre la verdad o siempre miente. Hay **6** parejas y en cada una los dos se acusan: «el otro miente». ¿Cuántos **mienten** en total?', r: 6, c: '6 \\cdot 1', e: { 12: 'Si los dos mintieran, las frases serían ciertas.' } },
+      { q: 'Cinco personas dicen, en orden: «miente 1 de nosotros», «mienten 2», «mienten 3», «mienten 4», «mienten 5» (justo esa cantidad). ¿Cuántas **mienten**?', r: 4, c: '5 - 1', e: { 5: 'Si mintieran las cinco, la última diría la verdad.', 1: 'Si mintiera una sola, las otras cuatro frases serían ciertas a la vez.' } },
+      { q: 'Cada uno dice siempre la verdad o siempre miente. En una fila de **9**, el primero dice la verdad y cada uno de los demás dice «el de adelante miente». ¿Cuántos **dicen la verdad**?', r: 5, c: '1, 3, 5, 7, 9 \\to 5', e: { 4: 'Esos son los que mienten.', 1: 'El tercero acusa al segundo, que sí miente.' } }] },
+      'Uno por pareja: 6. Las cinco frases se contradicen, así que solo una es cierta: mienten 4. Y en la fila se alternan: 5 verdades.',
+      { hint: 'Si dos frases se contradicen, no pueden ser ciertas a la vez.' }),
+    sol('Alguien rompió un jarrón. Diego dice: «Yo lo rompí». Elena dice: «Diego miente». Fabio dice: «Yo no lo rompí». Se sabe que solo uno de los tres dice la verdad. ¿Quién rompió el jarrón?',
+      ['Si Diego dijera la verdad, Fabio también: habría [[dos]] verdades. Se descarta', 'Entonces Diego miente, y por eso lo que dice [[Elena]] es verdad', 'Como solo hay una verdad, Fabio [[miente]]', 'Quien rompió el jarrón fue [[Fabio]]'],
+      ['Diego', 'tres', 'dice la verdad'],
+      'Se supone un caso y se revisa si cumple la condición del problema. La única verdad es la de Elena; Fabio miente al decir «yo no lo rompí», así que fue él.',
+      'Supón que Diego dice la verdad y cuenta cuántos estarían diciendo la verdad.'),
+    err('A dice: «B miente». B dice: «C miente». C dice: «A y B dicen la verdad». ¿Quién dice la verdad?',
+      ['Se supone que C dice la verdad: entonces A y B dicen la verdad', 'Pero B afirma que C miente: hay una contradicción. Luego C miente', 'Como C miente, lo que dice B («C miente») es falso', 'Entonces B miente y A dice la verdad'], 2,
+      ['Como C miente, lo que dice B («C miente») es verdad', 'Como C miente, B no dijo nada sobre C', 'Como C miente, A y B mienten los dos'],
+      'B afirma justo lo que resultó cierto: que C miente. B dice la verdad, y entonces A, que acusa a B de mentir, miente. Solo B dice la verdad.',
+      'Compara lo que afirma B con lo que ya se demostró en el paso anterior.'),
+    opc('Cuatro niños jugaban en un patio y uno de ellos rompió una ventana. Nico dice: «Fue Olga». Olga dice: «Fue Raúl». Pilar dice: «Yo no fui». Raúl dice: «Olga miente». Si solo uno de los cuatro miente, quien rompió la ventana fue:',
+      ['Nico', 'Raúl', 'Olga', 'Pilar'], 2,
+      'Olga y Raúl se contradicen: uno de los dos es el que miente. Entonces Nico dice la verdad: fue Olga. Y, en efecto, Olga miente al culpar a Raúl.',
+      'Busca dos afirmaciones que no puedan ser verdaderas a la vez: ahí está el mentiroso.'),
+  ]);
+
+  addExam('pu-logica', [
+    ['pu-lo-1', 'La disyunción es verdadera si al menos una parte lo es; la conjunción, solo si lo son las dos.',
+      opc('Si $p$ es verdadera y $q$ es falsa, de las siguientes proposiciones la única verdadera es:', ['$p \\wedge q$', '$p \\vee q$', '$p \\to q$', '$\\neg p$'], 1,
+        'La disyunción tiene una parte verdadera. La conjunción y el condicional son falsos, y $\\neg p$ también.', 'Revisa cada conectivo con p verdadera y q falsa.')],
+    ['pu-lo-2', '«Todos» se niega con «alguno no».',
+      opc('La negación de la proposición «Todos los asistentes pagaron la entrada» es:', ['Algún asistente no pagó la entrada', 'Ningún asistente pagó la entrada', 'Todos los asistentes entraron gratis', 'Algún asistente pagó la entrada'], 0,
+        'Para que «todos pagaron» sea falso basta uno que no haya pagado.', 'Basta un solo caso para tumbar un «todos».')],
+    ['pu-lo-3', 'Si p → q y no pasa q, entonces no pasó p.',
+      opc('Se sabe que «si hay tormenta, se suspende el vuelo». El vuelo no se suspendió. Entonces:', ['Hubo tormenta', 'No se sabe si hubo tormenta', 'El vuelo salió tarde', 'No hubo tormenta'], 3,
+        'Si hubiera habido tormenta, el vuelo se habría suspendido. Como no se suspendió, no hubo tormenta.', 'Usa el contrarrecíproco de la regla.')],
+    ['pu-lo-4', 'Si A está dentro de B y B dentro de C, entonces A está dentro de C.',
+      opc('Todos los cuadrados son rectángulos y todos los rectángulos son paralelogramos. De lo anterior se concluye que:', ['Todos los cuadrados son paralelogramos', 'Todos los paralelogramos son cuadrados', 'Algunos cuadrados no son rectángulos', 'Ningún paralelogramo es cuadrado'], 0,
+        'Tres círculos, uno dentro de otro: los cuadrados quedan dentro de los paralelogramos.', 'Dibuja un círculo dentro de otro para cada «todos».')],
+    ['pu-lo-5', 'Se supone un caso y se busca la contradicción.',
+      opc('Luis dice: «Mario miente». Mario dice: «Luis y yo decimos la verdad». Entonces:', ['Los dos dicen la verdad', 'Luis dice la verdad y Mario miente', 'Luis miente y Mario dice la verdad', 'Los dos mienten'], 1,
+        'Si Mario dijera la verdad, Luis también, y Luis afirma que Mario miente: contradicción. Mario miente y Luis dice la verdad.', 'Supón que Mario dice la verdad y mira qué pasa.')],
   ]);
 });

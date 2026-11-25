@@ -501,6 +501,16 @@ const WORLDS = (() => {
     'icf-cn-herencia': { name: 'Herencia y Evolución', art: plate('icf-cn-herencia', TEAL, `
       ${L('M58 14c24 12-24 36 0 52M78 14c-24 12 24 36 0 52', TEAL, 1.3)}${[22, 32, 48, 58].map(y => L(`M62 ${y}h12`, INK, .9)).join('')}${L('M90 26h24v24H90zM102 26v24M90 38h24', INK, 1)}${T(96, 35, 'AA', TEAL, 5)}${T(108, 47, 'aa', INK, 5)}${D(102, 38, 1.4, TEAL)}
       ${T(28, 42, 'A a', INK, 8)}${T(136, 42, '3 : 1', TEAL, 7)}`) },
+    // ---------- novenos mundos ----------
+    'icf-ma-finanzas': { name: 'Dinero y Créditos', art: plate('icf-ma-finanzas', TEAL, `
+      ${L('M46 64h68M46 64V16', INK, .9)}${[0, 1, 2, 3, 4].map(i => L(`M${52 + i * 12} 64V${58 - i * i * 2.2}h8V64`, i === 4 ? TEAL : INK, 1)).join('')}${L('M52 56L112 34', INK, .9)}${C(104, 18, 8, TEAL, 1.2)}${T(104, 21, '%', TEAL, 7)}
+      ${T(28, 42, 'C·i·t', INK, 7)}${T(134, 42, '(1 + i)ⁿ', TEAL, 6.5)}`) },
+    'icf-sc-economia': { name: 'Economía y Globalización', art: plate('icf-sc-economia', TEAL, `
+      ${C(80, 40, 26, INK, 1.1)}${L('M54 40h52M80 14v52', INK, .7)}${L('M62 22c12 10 24 10 36 0M62 58c12-10 24-10 36 0', INK, .7)}${L('M60 56L100 24', TEAL, 1.3)}${L('M60 24L100 56', TEAL, 1.3)}${D(80, 40, 2.2, TEAL)}
+      ${T(28, 42, 'oferta', INK, 6)}${T(134, 42, 'demanda', TEAL, 6)}`) },
+    'icf-cn-reacciones': { name: 'Reacciones y Cantidades', art: plate('icf-cn-reacciones', TEAL, `
+      ${L('M72 14h16M76 14v16L58 62h44L84 30V14', INK, 1.2)}${L('M66 48h28', TEAL, 1.2)}${C(74, 55, 3, TEAL, 1)}${C(84, 53, 2.2, TEAL, 1)}${C(82, 40, 1.8, TEAL, 1)}${D(92, 57, 1.4, TEAL)}${A(106, 40, 116, 40, INK, 1)}
+      ${T(28, 42, '2H₂ + O₂', INK, 6)}${T(136, 43, '2H₂O', TEAL, 7)}`) },
   };
 })();
 
