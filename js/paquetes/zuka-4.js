@@ -1,180 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-l-figurado.js
-// Preuniversitario · Comprensión lectora · mundo 12 «Lenguaje figurado» con textos de verdad (spec
-// 2026-11-19-preuda-lectura-textos): una crónica de Medellín de madrugada llena de metáforas, comparaciones, personificaciones e
-// hipérboles (figuras literarias) y un «elogio» del trancón que dice lo contrario de lo que piensa (ironía). La evaluación usa el
-// recuerdo de un abuelo pescador del río Cauca. Textos escritos para Zuka.
-PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
-  const MADRUGADA = {
-    id: 'lec-ciudad-cinco', title: 'La ciudad a las cinco',
-    ficha: { autor: 'Crónica de un escritor de Medellín', fuente: 'Suplemento literario de un periódico', fecha: 'Enero de 2025' },
-    paras: [
-      'A las cinco de la mañana, Medellín todavía no se ha puesto los zapatos. Las montañas que la rodean son un abrazo oscuro, y las luces de las laderas parecen un pesebre que alguien se olvidó de recoger en enero. En el centro, los primeros buses bostezan en los paraderos con las puertas abiertas, y un perro callejero cruza la avenida vacía como si fuera el dueño de la ciudad.',
-      'Los que madrugan forman una ciudad aparte. Hay panaderos con los brazos blancos de harina, como estatuas que se movieran; vigilantes que llevan cien años sin dormir; vendedoras de tinto que empujan sus carritos cuesta arriba con una paciencia de piedra. Nadie habla mucho a esa hora: las palabras también están dormidas, y los saludos se hacen con la cabeza.',
-      'A las seis, el sol asoma por el oriente y la ciudad empieza a desperezarse. El río, que de noche era una cinta negra, se vuelve de plata por unos minutos. Las palomas del parque Berrío ocupan sus puestos como funcionarias puntuales, y el metro, ese gusano de acero, empieza a tragarse a la gente por montones. En los vagones, muchos dormitan de pie, agarrados de las barras, como si todavía estuvieran soñando con la cama.',
-      'A las siete ya no queda nada de aquella ciudad en voz baja. Los pitos, los gritos de los vendedores y la música de los almacenes llenan cada rincón, y uno tiene la impresión de que todo el mundo llegó tarde a la misma cita. Los semáforos cambian de color sin que nadie los mire, y hasta los edificios parecen tener prisa. Nadie se acuerda ya del perro de las cinco ni de las palabras dormidas.',
-      'Pero quien vio la ciudad a las cinco sabe que ella también tiene un rato de silencio, y que lo guarda solo para los que madrugan. Es un secreto pequeño, de una hora apenas, que no sale en las postales ni en los noticieros. Para conocerlo no hay que pagar nada: basta con poner el despertador un poco antes que el sol.',
-    ],
-  };
-
-  const TRANCON = {
-    id: 'lec-elogio-trancon', title: 'Elogio del trancón',
-    ficha: { autor: 'Columna de humor', fuente: 'Periódico de Medellín, página de opinión', fecha: 'Noviembre de 2025' },
-    paras: [
-      'Quiero dedicar estas líneas a una institución que no recibe el reconocimiento que merece: el trancón de la autopista a las seis de la tarde. Mientras otras ciudades desperdician su tiempo en trenes rápidos y carriles exclusivos, nosotros hemos sabido conservar una tradición que nos regala, cada día, hora y media de reflexión obligatoria. Todos los días, sin falta: ni el colegio fue nunca tan puntual.',
-      'Gracias al trancón, miles de personas han descubierto la música de los vendedores ambulantes, el arte de comer empanada sin soltar el volante y la paciencia, esa virtud que los monjes buscan durante años en las montañas y que nosotros encontramos entre una buseta y un camión de gaseosas. ¿Qué más se le puede pedir a una vía? Hay quienes han aprendido a leer, a rezar el rosario completo y hasta a cortarse las uñas mientras esperan que se mueva el carro de adelante.',
-      'Hay quienes se quejan, claro. Dicen que pasan más tiempo en el carro que con sus hijos, que el humo les irrita los ojos y que llegan a la casa sin ganas de nada. Son, sin duda, personas que no han entendido la belleza de quedarse quietas durante cuarenta minutos frente a la misma valla de un colchón. Allá ellos, que se lo pierden.',
-      'Las autoridades, sabias como siempre, han decidido proteger esta tradición. Llevan quince años estudiando la ampliación de la vía, y es de esperar que la sigan estudiando quince más, por si acaso. Construirla de afán sería, como todo el mundo sabe, un error imperdonable. Mientras tanto, cada año se venden más carros y la vía sigue midiendo lo mismo, lo cual garantiza que la tradición no corra ningún peligro.',
-      'Así que la próxima vez que esté detenido en la autopista, no se desespere ni pite por gusto. Apague el radio, mire a su alrededor y respire hondo el aire fresco del tubo de escape del carro de adelante: está rodeado de miles de personas que, como usted, están aprovechando al máximo su vida.',
-    ],
-  };
-
-  // ---------------- Lección 1 · Figuras literarias ----------------
-  setLesson('pu-lf-1', [
-    play('ordena-parrafos', 'Arma la crónica otra vez', { doc: MADRUGADA },
-      'La crónica sigue el reloj: las cinco, los que madrugan a esa misma hora, «A las seis», «A las siete» y el cierre con «Pero quien vio la ciudad a las cinco», que vuelve al comienzo.',
-      { hint: 'Busca las horas al comienzo de los párrafos. El último no trae hora: vuelve a una que ya pasó.' }),
-    play('palabra-a-la-medida', 'Lo que quieren decir las figuras', { doc: MADRUGADA, rounds: [
-      { p: 1, before: 'Medellín todavía no ', word: 'se ha puesto los zapatos', after: '.', options: ['ha empezado su día', 'ha comprado ropa', 'ha salido a caminar', 'se ha acostado'], answer: 0 },
-      { p: 2, before: 'empujan sus carritos cuesta arriba con una ', word: 'paciencia de piedra', after: '.', options: ['paciencia firme e incansable', 'paciencia dura y fría como una roca', 'paciencia de escultor', 'poca paciencia'], answer: 0 },
-      { p: 3, before: 'el metro, ese gusano de acero, empieza a ', word: 'tragarse', after: ' a la gente por montones', options: ['recibir en sus vagones', 'expulsar', 'asustar', 'olvidar en las estaciones'], answer: 0 },
-    ] }, 'En el examen importa lo que significa la figura: la ciudad que no se ha puesto los zapatos todavía no empieza el día; la paciencia de piedra es firme e incansable; y el metro «se traga» a la gente porque la recibe a montones en sus vagones.',
-      { hint: 'No leas la figura al pie de la letra: pregúntate qué idea real quiere transmitir.' }),
-    play('signos-que-hablan', 'Lo que hacen los signos', { doc: MADRUGADA, rounds: [
-      { p: 2, text: 'Nadie habla mucho a esa hora|:| las palabras también están dormidas', options: ['anuncia por qué nadie habla', 'abre una lista de oficios', 'marca una cita', 'separa dos preguntas'], answer: 0 },
-      { p: 2, text: 'como estatuas que se movieran|;| vigilantes que llevan cien años sin dormir', options: ['separa partes de una lista que ya tienen comas', 'cierra el párrafo', 'anuncia una explicación', 'marca una pregunta'], answer: 0 },
-      { p: 3, text: 'y el metro|,| ese gusano de acero, empieza a tragarse a la gente', options: ['abre un inciso que nombra al metro con una metáfora', 'separa dos verbos', 'reemplaza un verbo que no se repite', 'anuncia una cita'], answer: 0 },
-    ] }, 'Los dos puntos anuncian la razón poética del silencio. El punto y coma separa las partes de una lista larga cuyas partes ya llevan comas. Y las comas del párrafo 3 encierran un inciso: «ese gusano de acero» es otro nombre del metro.',
-      { hint: 'Fíjate qué viene después del signo: una razón, otra parte de una lista o un nombre nuevo para lo que se acaba de decir.' }),
-    play('termometro-tono', 'El tono de la crónica', { doc: MADRUGADA, rounds: [
-      { frag: 'Nadie habla mucho a esa hora: las palabras también están dormidas, y los saludos se hacen con la cabeza.', scale: ['poético', 'técnico', 'agresivo', 'irónico'], answer: 0 },
-      { frag: 'Pero quien vio la ciudad a las cinco sabe que ella también tiene un rato de silencio, y que lo guarda solo para los que madrugan.', scale: ['afectuoso', 'burlón', 'técnico', 'alarmado'], answer: 0 },
-    ] }, 'Las palabras «dormidas» son una imagen poética. Y el cierre habla de la ciudad con cariño, como de alguien que guarda un secreto.',
-      { hint: 'Fíjate en cómo trata el autor a la ciudad: ¿como un objeto o como alguien a quien quiere?' }),
-    play('trampa-opcion', 'Cada opción con su trampa', { doc: MADRUGADA, q: '¿Qué quiere decir el autor con «Medellín todavía no se ha puesto los zapatos»?', options: [
-      ['Que a esa hora la gente de Medellín sale descalza a la calle.', 3],
-      ['Que a esa hora la ciudad todavía no ha empezado su día.', 0],
-      ['Que nadie en la ciudad trabaja antes de las siete.', 1],
-      ['Que la ciudad nunca termina de despertar.', 2],
-    ] }, 'B lee la personificación: la ciudad es como alguien que aún no se ha arreglado para salir. A toma la frase al pie de la letra, y eso el texto no lo dice. C dice de más: a las cinco ya trabajan panaderos, vigilantes y vendedoras. D dice lo contrario de las siete, cuando todo es ruido. Sobra el sello «Mezcla datos».',
-      { hint: 'Una figura no se lee al pie de la letra. Pregúntate qué hace alguien antes de ponerse los zapatos.' }),
-    play('caso-nuevo', '¿Hay personificación?', { doc: MADRUGADA, principle: 'Una personificación les da acciones o rasgos humanos a cosas, lugares o animales.', ask: '¿En cuáles frases hay personificación?', cards: [
-      ['El viento golpeaba la puerta con rabia.', true],
-      ['La nevera ronca toda la noche.', true],
-      ['La casa era grande y vieja.', false],
-      ['Corrió como un rayo.', false],
-    ] }, 'Sentir rabia y roncar son cosas de personas: el viento y la nevera están personificados. «Grande y vieja» describe sin figura, y «como un rayo» es una comparación.',
-      { hint: 'Pregúntate si la cosa hace algo que solo haría una persona.' }),
-    play('resumen-esencial', 'El resumen en tres renglones', { doc: MADRUGADA, ideas: [
-      ['A las cinco la ciudad está en silencio y solo la recorren los que madrugan.', true],
-      ['Con el sol la ciudad despierta poco a poco, y a las siete ya es puro ruido.', true],
-      ['Ese rato de silencio es un secreto que solo conocen los madrugadores.', true],
-      ['Un perro callejero cruza la avenida vacía.', false],
-      ['Las palomas del parque Berrío ocupan sus puestos.', false],
-      ['El río se vuelve de plata por unos minutos.', false],
-    ] }, 'La crónica va de la ciudad callada de las cinco a la ciudad ruidosa de las siete, y cierra con el secreto de los que madrugan. El perro, las palomas y el río son imágenes que pintan cada hora, no lo que el texto quiere decir.',
-      { hint: 'En un texto lleno de imágenes, las ideas esenciales son las que quedan cuando se quitan las imágenes.' }),
-  ]);
-
-  // ---------------- Lección 2 · Ironía ----------------
-  setLesson('pu-lf-2', [
-    play('anticipa-texto', 'Antes de leer', { doc: TRANCON, slots: [
-      ['Tema', ['el trancón de la ciudad', 'la historia de los carros', 'cómo se construye una autopista'], 0],
-      ['Tono', ['humorístico, con ironía', 'solemne, como un informe técnico', 'triste, como una despedida'], 0],
-      ['Tipo de texto', ['columna de opinión', 'noticia de tránsito', 'manual de conducción'], 0],
-    ] }, 'Un «elogio» del trancón en una columna de humor de la página de opinión: lo que se espera es una crítica dicha al revés, con ironía.',
-      { hint: 'Piensa si alguien elogiaría de verdad un trancón. La ficha dice en qué sección se publica.' }),
-    play('termometro-tono', 'Lo que dice y lo que piensa', { doc: TRANCON, rounds: [
-      { frag: 'Las autoridades, sabias como siempre, han decidido proteger esta tradición.', scale: ['irónico', 'respetuoso', 'técnico', 'temeroso'], answer: 0 },
-      { frag: '¿Qué más se le puede pedir a una vía?', scale: ['sarcástico', 'curioso', 'preocupado', 'neutral'], answer: 0 },
-      { frag: 'está rodeado de miles de personas que, como usted, están aprovechando al máximo su vida.', scale: ['irónico', 'sincero', 'solemne', 'asustado'], answer: 0 },
-    ] }, 'Llamar «sabias» a autoridades que llevan quince años sin hacer la obra es ironía. La pregunta finge admiración por una vía que no funciona. Y nadie aprovecha su vida detenido en un trancón: el autor dice lo contrario de lo que piensa.',
-      { hint: 'Compara lo que dice cada frase con los hechos del texto: quince años de estudio, cuarenta minutos quietos, humo.' }),
-    play('balanza-argumento', 'La tesis escondida', { doc: TRANCON, ask: 'La tesis real del autor está detrás de la ironía. Pesa estas oraciones frente a ella.', thesis: 'El trancón de la autopista es un problema que las autoridades no han querido resolver.', cards: [
-      ['Llevan quince años estudiando la ampliación de la vía.', 0],
-      ['Hay quienes pasan más tiempo en el carro que con sus hijos.', 0],
-      ['Cada año se venden más carros y la vía sigue midiendo lo mismo.', 0],
-      ['La vía se amplió el año pasado y el trancón desapareció.', 1],
-      ['En la autopista hay vallas de colchones.', null],
-    ] }, 'Los quince años de estudio, el tiempo perdido y los carros que aumentan muestran el problema y la inacción. Si la vía ya se hubiera ampliado y el trancón desaparecido, la tesis sería falsa. La valla del colchón es un detalle cómico.',
-      { hint: 'Primero saca la tesis real: lo contrario de lo que dice el «elogio». Luego pesa cada oración.' }),
-    play('subraya-prueba', 'La prueba de la ironía', { doc: TRANCON, rounds: [
-      { claim: 'El autor se burla de lo mucho que tardan las autoridades en decidir.', p: 4, answer: 1 },
-      { claim: 'El autor sabe que el trancón le quita a la gente tiempo con su familia.', p: 3, answer: 1 },
-    ] }, 'La burla está en los quince años de estudio que, «es de esperar», durarán quince más. Y el tiempo con la familia aparece en lo que dicen los que se quejan: pasan más tiempo en el carro que con sus hijos.',
-      { hint: 'En una columna irónica, la verdad suele estar en lo que el autor pone en boca de otros o en lo que exagera.' }),
-    play('palabra-a-la-medida', 'Palabras con doble filo', { doc: TRANCON, rounds: [
-      { p: 1, before: 'que nos regala, cada día, hora y media de reflexión ', word: 'obligatoria', after: '.', options: ['que no se puede evitar', 'voluntaria', 'agradable', 'pagada por las empresas de buses'], answer: 0 },
-      { p: 4, before: 'Construirla de afán sería, como todo el mundo sabe, un error ', word: 'imperdonable', after: '.', options: ['muy grave', 'pequeño', 'útil', 'frecuente'], answer: 0 },
-    ] }, '«Regala» y «obligatoria» chocan: nadie regala algo obligatorio; la ironía está en ese choque. Y llamar «imperdonable» a construir rápido una vía que lleva quince años en estudio es decir lo contrario de lo que se piensa.',
-      { hint: 'Busca el choque entre la palabra y lo que la rodea: un regalo obligatorio, un error que sería hacer la obra.' }),
-    play('trampa-opcion', 'Cada opción con su trampa', { doc: TRANCON, q: '¿Qué busca el autor al llamar al trancón «una institución que no recibe el reconocimiento que merece»?', options: [
-      ['Criticar el trancón con ironía, diciendo lo contrario de lo que piensa.', 0],
-      ['Elogiar de verdad el trancón como una tradición de la ciudad.', 2],
-      ['Pedir que se construyan trenes rápidos en todas las ciudades del país.', 1],
-      ['Contar que los monjes buscan la paciencia en las montañas.', 4],
-    ] }, 'A es la ironía: el elogio es una crítica al revés. B dice lo contrario de lo que el autor piensa; C dice de más, porque los trenes rápidos solo se mencionan de otras ciudades; y D toma un detalle de una comparación como si fuera el propósito. Sobra el sello «El texto no lo dice».',
-      { hint: 'Antes de sellar, decide si el autor piensa de verdad lo que dice. Lo que exagera es la pista.' }),
-    play('signos-que-hablan', 'Signos de la ironía', { doc: TRANCON, rounds: [
-      { p: 2, text: '|¿|Qué más se le puede pedir a una vía?', options: ['abre una pregunta retórica que no espera respuesta', 'abre una duda real del autor', 'cita a un conductor', 'marca una exclamación'], answer: 0 },
-      { p: 4, text: 'Las autoridades|,| sabias como siempre, han decidido', options: ['abre un inciso irónico sobre las autoridades', 'separa los elementos de una lista', 'anuncia un ejemplo', 'marca el final de una cita'], answer: 0 },
-    ] }, 'La pregunta no espera respuesta: finge admiración. Y entre las comas va el inciso «sabias como siempre», que en este contexto quiere decir lo contrario.',
-      { hint: 'Pregúntate si el autor espera que alguien le responda, y qué va entre las dos comas.' }),
-  ]);
-
-  // ---------------- Evaluación: formato real, texto nuevo ----------------
-  const ABUELO = {
-    id: 'lec-abuelo-rio', title: 'Mi abuelo y el río',
-    paras: [
-      'Mi abuelo tenía las manos como raíces: anchas, torcidas y llenas de tierra aunque se las lavara. Decía que el río Cauca era un señor de mal genio que no avisaba antes de crecer, y que había que hablarle con respeto.',
-      'Cuando construyeron la represa, un funcionario vino a explicarnos que el río ahora sería «más ordenado». Mi abuelo lo escuchó con atención y le dio las gracias: «Qué bueno, doctor. A ver si ahora los peces también aprenden a hacer fila».',
-      'El folleto que repartió la empresa ese mismo día prometía «un río al servicio del progreso» y traía una foto del embalse al atardecer, con dos garzas muy bien ubicadas. Explicaba, con la seriedad de un manual de instrucciones, que el caudal sería «estable» todo el año y que los pescadores podrían aprovechar los cursos de turismo que se dictarían en la cabecera municipal, a dos horas en chiva.',
-      'Ese año pescó tan poco que, según él, los pescados venían a contarle chistes de lo vacía que estaba la canoa. Mi abuela, que no perdía ocasión, le decía que por lo menos ahora llegaba temprano a almorzar. Él se reía, pero se quedaba mirando el agua quieta como quien espera una visita que no llega.',
-      'Hoy el embalse sale en las postales del departamento, y los turistas se toman fotos en el mirador con las garzas de verdad, que son menos puntuales que las del folleto. Mi abuelo no volvió a hablarle al río; decía que ya no tenía con quién discutir. Yo voy de vez en cuando y le hablo por él, con el respeto que me enseñó, aunque no sé si este río nuevo todavía entiende.',
-    ],
-  };
-  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: ABUELO, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
-  setExam('pu-figurado', 'Evaluación · Lenguaje figurado', [
-    ['pu-lf-1', 'La comparación une dos cosas con «como»; la metáfora las identifica sin «como».',
-      Q('La expresión «las manos como raíces» es:', ['una ironía', 'una hipérbole', 'una comparación', 'una personificación'], 2,
-        'Une las manos y las raíces con «como»: es una comparación.',
-        '¿Hay alguna palabra que una las dos cosas?')],
-    ['pu-lf-1', 'La personificación da rasgos humanos a lo que no es humano.',
-      Q('Decir que el río «era un señor de mal genio» es una figura que:', ['exagera el tamaño del río', 'le da rasgos humanos al río', 'dice lo contrario de lo que se piensa', 'compara el río con una raíz'], 1,
-        'Tener mal genio y no avisar son rasgos de una persona: el río está personificado.',
-        'Pregúntate quién puede tener mal genio.')],
-    ['pu-lf-1', 'Una hipérbole exagera para decir algo con fuerza; se lee por su sentido.',
-      Q('La frase «los pescados venían a contarle chistes de lo vacía que estaba la canoa» quiere decir que:', ['los peces hablaban', 'la canoa estaba rota', 'el abuelo contaba chistes', 'pescó muy poco'], 3,
-        'La exageración humorística dice que la canoa estaba casi vacía: pescó muy poco ese año.',
-        'No la leas al pie de la letra: ¿qué quiere mostrar la exageración?')],
-    ['pu-lf-1', 'Una personificación les da rasgos humanos a las cosas; también puede mostrar el cariño del narrador.',
-      Q('En «no sé si este río nuevo todavía entiende» (párrafo 5), el narrador:', ['sigue tratando al río como a una persona, igual que su abuelo', 'cree que el embalse ya no tiene agua suficiente para los peces', 'compara el río de antes con una canoa vacía y quieta', 'se burla con cariño de la costumbre de su abuelo de hablarle al río'], 0,
-        'Dice que el río «entiende» y que le habla con respeto, como su abuelo: es una personificación que continúa la del párrafo 1. No se burla: hace lo mismo que él.',
-        'Pregúntate quién puede «entender», y qué hace el narrador cuando va al río.')],
-    ['pu-lf-2', 'La ironía sutil no contradice un hecho: se nota en un detalle que sobra o en un tono solemne para algo pequeño.',
-      Q('La frase «con dos garzas muy bien ubicadas» (párrafo 3) sugiere que el narrador:', ['desconfía de una foto demasiado arreglada para vender la represa', 'admira lo bien tomada que quedó la foto del folleto de la empresa', 'sabe mucho de las aves que viven cerca del embalse', 'cree que las garzas volvieron al río gracias a la nueva represa'], 0,
-        'Nadie dice que la foto sea falsa, pero «muy bien ubicadas» toma distancia: las garzas parecen puestas para la foto. Es una ironía sutil, de registro, que el párrafo 5 confirma con las garzas «menos puntuales que las del folleto».',
-        'Si solo quisiera describir la foto, ¿haría falta decir que las garzas estaban «muy bien ubicadas»?')],
-    ['pu-lf-2', 'Un dato puesto al final, sin comentario, también puede ser irónico.',
-      Q('Los cursos de turismo «en la cabecera municipal, a dos horas en chiva» muestran que el narrador piensa que:', ['la oferta de la empresa estaba lejos de servirles a los pescadores', 'los pescadores debían aprender turismo para no quedarse sin oficio', 'la chiva era el mejor transporte para llegar a la cabecera', 'la empresa se preocupó de verdad por el futuro de los pescadores'], 0,
-        'No dice que los cursos sean inútiles: lo deja ver con el dato del final, dos horas en chiva para quien vivía de pescar en el río. Esa distancia es la ironía.',
-        'Fíjate en el dato que el narrador agrega después de la coma. ¿Por qué lo pondría?')],
-    ['pu-lf-2', 'La ironía dice lo contrario de lo que se piensa; los hechos la delatan.',
-      Q('Cuando el abuelo dice «Qué bueno, doctor», su intención es:', ['agradecer de corazón la explicación del funcionario', 'burlarse con ironía de la promesa del funcionario', 'pedir un favor para la familia de pescadores', 'felicitar al funcionario por la obra terminada'], 1,
-        'Enseguida dice que los peces tendrán que «hacer fila»: se burla de la idea de un río «ordenado».',
-        'Lee lo que el abuelo dice justo después del «Qué bueno».')],
-    ['pu-lf-2', 'Las comillas pueden marcar distancia frente a la palabra de otro.',
-      Q('Las comillas en «más ordenado» indican que el narrador:', ['toma distancia de la palabra del funcionario', 'cita una frase que repetía siempre su abuelo', 'marca el título oficial del proyecto de la represa', 'destaca una palabra técnica que no conocía'], 0,
-        'Son las palabras del funcionario, y el narrador las cita con distancia, porque el resultado fue que el abuelo casi no pescó.',
-        'Pregúntate de quién son esas palabras y si el narrador está de acuerdo con ellas.')],
-    ['pu-lf-2', 'La ironía se reconoce cuando lo que se dice choca con lo que pasa.',
-      Q('Lo que delata la ironía del abuelo es que:', ['el funcionario era doctor y sabía mucho de ríos y represas', 'el río era tan grande que nadie podía ordenarlo de verdad', 'los peces no pueden hacer fila, y después casi no pescó', 'el abuelo era amable con todos los que venían a la vereda'], 2,
-        'La imagen absurda de los peces en fila y la pesca que se acabó muestran que el «Qué bueno» no era sincero.',
-        'Busca el hecho que contradice el agradecimiento del abuelo.')],
-  ]);
-});
-;
 //#archivo js/courses/preuda-lectura-juegos.js
 // Preuniversitario UdeA · Comprensión lectora con textos de verdad (spec 2026-11-19-preuda-lectura-textos). Va después de
 // preuda-lectura.js y de los preuda-l-<mundo>.js: en cada mundo terminado, cada lección pasa a tener 7 juegos distintos sobre un
@@ -9415,7 +9240,7 @@ xpLec('pu-ag-1', [
     xpMira('hoja', 'Segunda idea: las razones pueden ser de **varias clases**.', { letras: ['A', 'B', 'C', 'D', 'E'], paras: [['Ocho de cada diez lo prefieren.'], ['En Tunja lo hicieron y bajó el ruido.'], ['Según la física Ana Gil, funciona.'], ['Quitar el freno no hace mejor un carro.'], ['Si hay sombra, la gente camina más.']] }, [
       ['Cifras: argumento de datos.', { luz: [0], nota: { 0: 'datos' } }],
       ['Un caso con nombre: ejemplo.', { luz: [1], nota: { 1: 'ejemplo' } }],
-      ['Un experto: autoridad.', { luz: [2], nota: { 2: 'autoridad' } }],
+      ['Habla un experto: argumento de autoridad.', { luz: [2], nota: { 2: 'autoridad' } }],
       ['Una comparación con otra cosa: analogía.', { luz: [3], nota: { 3: 'analogía' } }],
       ['Una cosa trae otra: causa.', { luz: [4], nota: { 4: 'causa' } }],
     ], 'Datos, ejemplo, autoridad, analogía y causa.'),
@@ -9470,9 +9295,9 @@ xpLec('pu-ag-2', [
 xpLec('pu-ag-3', [
   ['Comprobar o valorar',
     xpMira('hoja', 'Empecemos por la idea: un **hecho** se puede **comprobar**; una **opinión** **valora**.', { letras: ['A', 'B', 'C'], paras: [['El puente mide 80 metros.'], ['El puente es horrible.'], ['El puente se abrió en 1960.']] }, [
-      ['Se mide: hecho.', { luz: [0], nota: { 0: 'hecho' } }],
+      ['Se puede medir: es un hecho.', { luz: [0], nota: { 0: 'hecho' } }],
       ['¿Con qué se mide lo horrible? Opinión.', { luz: [1], nota: { 1: 'opinión' } }],
-      ['Hay registro: hecho.', { luz: [2], nota: { 2: 'hecho' } }],
+      ['Hay un registro: es un hecho.', { luz: [2], nota: { 2: 'hecho' } }],
       ['«Mejor», «peor», «lamentable», «a mi juicio» suelen delatar opinión.', {}],
       ['Pero la prueba es otra: ¿se puede verificar?', {}],
     ], 'Pregunta: si alguien lo duda, ¿hay a dónde ir a mirar?'),
@@ -15704,10 +15529,11 @@ function renderTienda() {
 const tiendaPortada = (id, cls = '') => `<img class="td-portada ${cls}" src="brand/libros/${id}.webp" alt="" width="180" height="255" loading="lazy">`;
 // Las horas son para cursos comprados: se venden a quien tiene uno o lo lleva en el mismo pedido.
 const tiendaHorasOk = () => conPlan() || cuentaEsAdmin() || carroItems().some(x => (Tienda.arts.find(a => a.id === x.id).da.cursos || []).length);
-function tiendaBoton(a) {
+const tiendaBoton = a => `<span class="td-ctl" data-ctl="${esc(a.id)}">${tiendaBotonIn(a)}</span>`;
+function tiendaBotonIn(a) {
   const n = Tienda.carro[a.id] || 0;
   if (a.tipo === 'asesoria' && !n && !tiendaHorasOk()) return '<small class="td-plan td-solo">Con un curso comprado</small>';
-  if (!n) return `<button class="btn sm main brand" type="button" data-mas="${a.id}">Añadir</button>`;
+  if (!n) return `<button class="btn sm main brand" type="button" data-mas="${a.id}">Añadir<span class="td-sr"> ${esc(a.nombre)}</span></button>`;
   return a.tipo === 'fisico' || a.tipo === 'asesoria'
     ? `<span class="td-cant" role="group" aria-label="Cantidad de ${esc(a.nombre)}"><button type="button" data-menos="${a.id}" aria-label="Quitar uno">−</button><b>${n}</b><button type="button" data-mas="${a.id}" aria-label="Añadir uno"${n >= 10 ? ' disabled' : ''}>+</button></span>`
     : `<button class="btn sm ghost" type="button" data-menos="${a.id}">Quitar</button>`;
@@ -15738,7 +15564,7 @@ const tiendaPila = ids => `<span class="td-pila" aria-hidden="true">${ids.map((i
 // Paquete: banda de color con lo que trae, lista y precio con su ahorro.
 function tiendaPaqHTML(a) {
   const d = a.da || {}, cs = (d.cursos || []).map(id => COURSES.find(c => c.id === id)).filter(Boolean), meses = Math.round((d.dias || 0) / 30);
-  return `<article class="td-paq${a.destacado ? ' top' : ''}${Tienda.carro[a.id] ? ' on' : ''}" style="${tiendaColor((cs[0] || {}).id)}">
+  return `<article class="td-paq${a.destacado ? ' top' : ''}${Tienda.carro[a.id] ? ' on' : ''}" data-art="${esc(a.id)}" data-lleva="${esc(a.id)}" style="${tiendaColor((cs[0] || {}).id)}">
     <div class="td-escena${(d.libros || d.fisicos || []).length ? '' : ' luz'}">${a.destacado ? '<span class="td-top">Recomendado</span>' : ''}${tiendaAhorroHTML(a)}
       <span class="td-artes">${(d.libros || d.fisicos || []).length ? tiendaPila(d.libros || d.fisicos) : cs.map(c => courseArt(c, 'xl')).join('')}</span></div>
     <div class="td-cont"><h3>${esc(a.nombre)}</h3>
@@ -15750,29 +15576,33 @@ function tiendaPaqHTML(a) {
 function tiendaCursoHTML(c) {
   const a = accesoCurso(Cuenta.accesos, c.id), ps = productosDe(c.id), sel = ps.find(p => p.id === (Tienda.plan || {})[c.id]) || ps[ps.length - 1];
   const ex = c.units.reduce((t, u) => t + u.lessons.reduce((n, l) => n + l.ex.length, 0), 0), tiene = a.estado === 'pago' || a.estado === 'vencido';
-  return `<article class="td-curso" style="--c:${c.color};${tiendaColor(c.id)}"><div class="td-escena luz">${accesoPill(a)}<span class="td-artes">${courseArt(c, 'xl')}</span></div>
+  return `<article class="td-curso" data-curso="${esc(c.id)}" style="--c:${c.color};${tiendaColor(c.id)}"><div class="td-escena luz">${accesoPill(a)}<span class="td-artes">${courseArt(c, 'xl')}</span></div>
     <div class="td-cont"><h3>${esc(c.name)}</h3><p>${esc(c.tagline || '')}</p>
       <p class="td-datos"><span><b>${c.units.length}</b> ${c.units.length === 1 ? 'mundo' : 'mundos'}</span><span><b>${lessonsOf(c).length}</b> lecciones</span><span><b>${ex}</b> ejercicios</span></p>
+      <div class="td-mundos" tabindex="0" role="group" aria-label="Mundos de ${esc(c.name)}">${c.units.slice(0, 14).map(u => { const w = WORLDS[u.world] || { name: u.title }; return `<figure><span class="world-art" aria-hidden="true">${w.art || ''}</span><figcaption>${esc(w.name)}</figcaption></figure>`; }).join('')}${c.units.length > 14 ? `<p>y ${c.units.length - 14} más</p>` : ''}</div>
       ${ps.length > 1 ? `<div class="td-dur" role="radiogroup" aria-label="Duración de ${esc(c.name)}">${ps.map(p => `<button type="button" role="radio" aria-checked="${p === sel}" data-dur="${esc(p.id)}" data-de="${esc(c.id)}">${mesesTexto(p.meses)}</button>`).join('')}</div>` : ''}
-      <div class="td-pie"><span><strong class="td-precio">${sel && sel.precio != null ? cop(sel.precio) : 'Por WhatsApp'}</strong><small class="td-plan">${!sel ? '' : sel.precio != null && sel.meses > 1 ? `${mesesTexto(sel.meses)} · ${cop(sel.precio / sel.meses)} al mes` : mesesTexto(sel.meses)}</small></span>
+      <div class="td-pie"><span><strong class="td-precio" data-v-precio="${sel && sel.precio != null ? sel.precio : ''}">${sel && sel.precio != null ? cop(sel.precio) : 'Por WhatsApp'}</strong><small class="td-plan">${!sel ? '' : sel.precio != null && sel.meses > 1 ? `${mesesTexto(sel.meses)} · ${cop(sel.precio / sel.meses)} al mes` : mesesTexto(sel.meses)}</small></span>
         <button class="btn ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-compra="${esc(c.id)}">${tiene ? 'Renovar' : 'Comprar'}</button></div></div></article>`;
 }
 const tiendaJuegos = tipo => tiendaDe(tipo).filter(a => ((tipo === 'fisico' ? a.da.fisicos : a.da.libros) || []).length > 1);
 // Juego de libros: banda ancha con los tomos abiertos en abanico.
-const tiendaJuegoHTML = a => `<article class="td-banda${Tienda.carro[a.id] ? ' on' : ''}" style="${tiendaColor('preuda')}"><div class="td-cont"><span class="td-tipo">${a.tipo === 'fisico' ? 'Impresos, con envío' : 'Digitales, en la app'}</span><h3>${esc(a.nombre)}</h3><p>${esc(a.detalle)}</p>${tiendaAhorroHTML(a)}
+const tiendaJuegoHTML = a => `<article class="td-banda${Tienda.carro[a.id] ? ' on' : ''}" data-art="${esc(a.id)}" data-lleva="${esc(a.id)}" style="${tiendaColor('preuda')}"><div class="td-cont"><span class="td-tipo">${a.tipo === 'fisico' ? 'Impresos, con envío' : 'Digitales, en la app'}</span><h3>${esc(a.nombre)}</h3><p>${esc(a.detalle)}</p>${tiendaAhorroHTML(a)}
   <div class="td-pie"><span>${tiendaPrecioHTML(a)}</span>${tiendaBoton(a)}</div></div><div class="td-escena">${tiendaPila(Tienda.libros.map(l => l.id))}</div></article>`;
 function tiendaLibroHTML(l) {
   const suelto = (tipo, k) => tiendaDe(tipo).find(a => (a.da[k] || []).length === 1 && a.da[k][0] === l.id);
-  const fila = (a, rot) => (a ? `<div class="td-op${Tienda.carro[a.id] ? ' on' : ''}"><span><small>${rot}</small>${tiendaPrecioHTML(a)}</span>${tiendaBoton(a)}</div>` : '');
+  const fs = [['fisico', 'Impreso', suelto('fisico', 'fisicos')], ['digital', 'Digital', suelto('digital', 'libros')]].filter(x => x[2]), f = fs.find(x => x[0] === (Tienda.fmt || {})[l.id]) || fs[0];
   const ver = libroListo(l) || cuentaEsAdmin();
-  return `<article class="td-libro"><div class="td-escena"><span class="td-tomo solo">${tiendaPortada(l.id)}</span></div><div class="td-cont"><span class="td-tipo">${esc(l.subtitulo)}</span><h3>${esc(l.titulo)}</h3><p>${l.paginas ? `${l.paginas} páginas a color` : ''}</p>
+  return `<article class="td-libro" data-libro="${l.id}"${f ? ` data-art="${esc(f[2].id)}"` : ''}><div class="td-escena">${tiendaTomo3D(l)}<small class="td-gira" aria-hidden="true">Arrastra para girarlo</small></div><div class="td-cont"><span class="td-tipo">${esc(l.subtitulo)}</span><h3>${esc(l.titulo)}</h3><p>${l.paginas ? `${l.paginas} páginas a color` : ''}</p>
     ${ver ? `<button class="btn sm ${libroMio(l.id) ? 'main brand' : 'ghost'}" type="button" data-leer="${l.id}"${l.version ? '' : ' disabled'}>${libroMio(l.id) ? 'Leer' : 'Ver muestra'}</button>` : ''}
-    ${fila(suelto('fisico', 'fisicos'), 'Impreso')}${fila(suelto('digital', 'libros'), 'Digital')}</div></article>`;
+    ${fs.length > 1 ? `<div class="td-dur" role="radiogroup" aria-label="Formato de ${esc(l.titulo)}">${fs.map(x => `<button type="button" role="radio" aria-checked="${x === f}" tabindex="${x === f ? 0 : -1}" data-fmt="${x[0]}" data-de="${l.id}">${x[1]}</button>`).join('')}</div>` : ''}
+    ${f ? `<div class="td-pie"><span>${fs.length > 1 ? '' : `<small class="td-tipo">${f[1]}</small>`}${tiendaPrecioHTML(f[2])}</span>${tiendaBoton(f[2])}</div>` : ''}</div></article>`;
 }
+// Libro en tres dimensiones: tapa, lomo, hojas y contratapa; gira con --g.
+const tiendaTomo3D = l => `<span class="lb3" data-gira aria-hidden="true"><span class="lb3-in"><span class="lb3-t">${tiendaPortada(l.id)}</span><span class="lb3-l"><i>${esc(l.titulo)}</i></span><span class="lb3-h"></span><span class="lb3-c"><i>ZUKA</i></span></span></span>`;
 // Asesoría: las horas en grande y cuánto sale cada una.
 function tiendaHoraHTML(a) {
   const h = a.da.horas || 1, p = tiendaPrecio(a, conPlan());
-  return `<article class="td-hora${a.destacado ? ' top' : ''}${Tienda.carro[a.id] ? ' on' : ''}">${a.destacado ? '<span class="td-top">Recomendado</span>' : ''}
+  return `<article class="td-hora${a.destacado ? ' top' : ''}${Tienda.carro[a.id] ? ' on' : ''}" data-art="${esc(a.id)}">${a.destacado ? '<span class="td-top">Recomendado</span>' : ''}
     <div class="td-reloj" aria-hidden="true" style="--h:${Math.min(8, h)}"><b>${h}</b><small>${h === 1 ? 'hora' : 'horas'}</small></div>
     <h3>${esc(a.nombre)}</h3><p>${esc(a.detalle)}</p><small class="td-plan">${h > 1 ? `${cop(p / h)} por hora` : ''}</small>${tiendaAhorroHTML(a)}
     <div class="td-pie"><span>${tiendaPrecioHTML(a)}</span>${tiendaBoton(a)}</div></article>`;
@@ -15781,20 +15611,191 @@ const tiendaSec = (t, html, v = '', sub = '') => (html ? `<section><div class="t
 const tiendaLista = (cls, html) => (html ? `<div class="${cls}">${html}</div>` : '');
 const tiendaCursosHTML = () => tiendaLista('td-cursos', cursosVisibles().map(tiendaCursoHTML).join(''));
 
-// Portada: lo que más le sirve a esta cuenta (el Preuniversitario si no lo tiene; si ya, los libros).
+// ---------- vitrina: los productos en una rueda que se desliza ----------
+// Qué sale y en qué orden: el Preuniversitario si no lo tiene, los paquetes, el juego impreso, los demás cursos y las horas.
+function tiendaVitrinaItems() {
+  const cs = cursosVisibles(), arts = tiendaDe('paquete').concat(tiendaJuegos('fisico')), curso1 = c => {
+    const pr = productosDe(c.id).filter(p => p.precio != null).sort((x, y) => x.precio / x.meses - y.precio / y.meses)[0];
+    return { k: 'curso', id: c.id, pal: c.id, t: c.name, p: c.tagline || '', fig: courseArt(c, 'xl'), precio: pr ? pr.precio / pr.meses : null, nota: pr ? `al mes, en el plan de ${mesesTexto(pr.meses)}` : '', desde: !!pr };
+  };
+  const noTiene = cs.filter(c => !comprado(Cuenta.accesos, c.id, true)), primero = noTiene.filter(c => c.id === 'preuda'), otros = noTiene.filter(c => c.id !== 'preuda');
+  const libros = ids => tiendaPila(ids.slice(0, 4));
+  const art = a => { const c = cs.find(x => x.id === (a.da.cursos || [])[0]), ids = a.da.fisicos || a.da.libros || []; return { k: 'art', id: a.id, a, pal: (c || { id: 'preuda' }).id, t: a.nombre, p: a.detalle, fig: ids.length ? libros(ids) + (c ? `<span class="vt-mini">${courseArt(c, 'xl')}</span>` : '') : (a.da.cursos || []).map(id => cs.find(x => x.id === id)).filter(Boolean).map(x => courseArt(x, 'xl')).join(''), precio: tiendaPrecio(a, conPlan()), nota: '' }; };
+  const A = arts.map(art), B = otros.map(curso1), mez = [];   // intercalados: el color cambia de uno a otro
+  for (let i = 0; i < Math.max(A.length, B.length); i++) mez.push(...[B[i], A[i]].filter(Boolean));
+  return [...primero.map(curso1), ...mez].slice(0, 9);
+}
+// Índice más cercano de una rueda que no da la vuelta. Pura.
+const tiendaCerca = (x, n) => Math.max(0, Math.min(n - 1, Math.round(x)));
 function tiendaHeroHTML() {
-  const c = cursosVisibles().find(x => x.id === 'preuda'), tiene = c && comprado(Cuenta.accesos, 'preuda', true);
-  if (c && !tiene) {
-    const pr = productosDe('preuda').filter(p => p.precio != null).sort((x, y) => x.precio / x.meses - y.precio / y.meses)[0];
-    return `<section class="td-hero" style="${tiendaColor('preuda')}"><div class="td-hero-t"><span class="td-tipo">Preuniversitario UdeA</span><h2>Llega al examen entrenado, no adivinando</h2>
-      <p>${c.units.length} mundos, ${lessonsOf(c).length} lecciones y ${c.units.reduce((t, u) => t + u.lessons.reduce((n, l) => n + l.ex.length, 0), 0)} ejercicios que se juegan, en un solo lugar.</p>
-      <div class="td-hero-a">${pr ? `<span><small>Desde</small><strong>${cop(pr.precio / pr.meses)}</strong><small>al mes, en el plan de ${mesesTexto(pr.meses)}</small></span>` : ''}<button class="btn main" type="button" data-compra="preuda">Comprar ahora</button></div></div>
-      <div class="td-hero-v" aria-hidden="true">${courseArt(c, 'xl')}${Tienda.libros.length ? tiendaPila(Tienda.libros.map(l => l.id)) : ''}</div></section>`;
+  const xs = tiendaVitrinaItems();
+  if (!xs.length) return '';
+  return `<section class="td-hero vt" aria-roledescription="carrusel" aria-label="Destacados"><div class="vt-fondo"></div><div class="vt-rueda" tabindex="0" role="group" aria-label="Desliza o usa las flechas">${xs.map((x, i) => `<div class="vt-it" data-i="${i}" style="${tiendaColor(x.pal)}"><div class="vt-cart">${x.fig}</div><span class="vt-piso"></span></div>`).join('')}</div>
+    <div class="vt-txt" aria-live="polite"></div>
+    <button class="vt-fl ant" type="button" aria-label="Anterior">${ICON.back}</button><button class="vt-fl sig" type="button" aria-label="Siguiente">${ICON.right}</button>
+    <div class="vt-ptos">${xs.map((x, i) => `<button type="button" data-pto="${i}" aria-label="${esc(x.t)}"></button>`).join('')}</div></section>`;
+}
+function tiendaVitrinaViva(el) {
+  const h = $('.vt', el); if (!h) return;
+  const xs = tiendaVitrinaItems(), rueda = $('.vt-rueda', h), its = [...h.querySelectorAll('.vt-it')], txt = $('.vt-txt', h), n = its.length, quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let p = tiendaCerca(Tienda.vt || 0, n), meta = p, sel = -1, raf = 0, id = null, x0 = 0, y0 = 0, p0 = 0, movio = false;
+  const info = i => {
+    if (i === sel) return;
+    sel = Tienda.vt = i; const x = xs[i];
+    txt.innerHTML = `<h2>${esc(x.t)}</h2><p>${esc(x.p)}</p><div class="vt-acc">${x.precio != null ? `<span>${x.desde ? '<small>Desde</small>' : ''}<strong>${cop(x.precio)}</strong>${x.nota ? `<small>${x.nota}</small>` : ''}</span>` : ''}${x.k === 'curso' ? `<button class="btn main" type="button" data-compra="${esc(x.id)}">Comprar</button>` : tiendaBoton(x.a)}</div>${x.a ? tiendaAhorroHTML(x.a) : ''}`;
+    h.style.cssText = tiendaColor(x.pal);
+    h.querySelectorAll('[data-pto]').forEach((b, k) => { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    $('.ant', h).disabled = i === 0; $('.sig', h).disabled = i === n - 1;
+  };
+  const pinta = () => {
+    its.forEach((e, i) => { const d = i - p, a = Math.abs(d); e.style.transform = `translateX(${(d * 72).toFixed(1)}%) translateZ(${(-a * 130).toFixed(0)}px) rotateY(${(Math.max(-1, Math.min(1, d)) * -32).toFixed(1)}deg)`; e.style.opacity = Math.max(0, 1 - Math.max(0, a - .4) * .42).toFixed(2); e.style.zIndex = 20 - Math.round(a * 4); e.style.visibility = a > 2.6 ? 'hidden' : ''; });
+    info(tiendaCerca(p, n));
+  };
+  const anda = () => { raf = 0; if (!h.isConnected) return; p += (meta - p) * .16; if (Math.abs(meta - p) < .002) p = meta; else raf = requestAnimationFrame(anda); pinta(); };
+  const va = i => { meta = Math.max(0, Math.min(n - 1, i)); if (quieto) { p = meta; pinta(); } else if (!raf) raf = requestAnimationFrame(anda); };
+  rueda.onpointerdown = e => { if (e.button) return; id = e.pointerId; x0 = e.clientX; y0 = e.clientY; p0 = p; movio = false; };
+  rueda.onpointermove = e => {
+    if (e.pointerId !== id) return;
+    if (!e.buttons) return suelta(e);
+    if (!movio && Math.abs(e.clientX - x0) > 7) { movio = true; rueda.setPointerCapture(id); h.classList.add('mano'); cancelAnimationFrame(raf); raf = 0; }
+    if (movio) { p = meta = Math.max(-.35, Math.min(n - .65, p0 - (e.clientX - x0) / (its[0].offsetWidth * .72))); pinta(); }
+  };
+  const suelta = e => { if (e.pointerId !== id) return; id = null; h.classList.remove('mano'); if (movio) va(tiendaCerca(p + Math.max(-.35, Math.min(.35, (x0 - e.clientX) / 260)), n)); };
+  rueda.onpointerup = suelta; rueda.onpointercancel = suelta;
+  rueda.onclick = e => { if (movio) { movio = false; return; } const it = e.target.closest('.vt-it'); if (it) va(+it.dataset.i); };
+  rueda.onkeydown = e => { const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); va(tiendaCerca(meta, n) + d); } };
+  $('.ant', h).onclick = () => va(tiendaCerca(meta, n) - 1); $('.sig', h).onclick = () => va(tiendaCerca(meta, n) + 1);
+  h.querySelectorAll('[data-pto]').forEach(b => { b.onclick = () => va(+b.dataset.pto); });
+  pinta();
+}
+
+// ---------- horas: el reloj se gira para elegir cuántas ----------
+const tiendaHorasGen = () => tiendaDe('asesoria').filter(a => a.da.horas_tipo === 'general' && a.da.horas <= 12).sort((x, y) => x.da.horas - y.da.horas);
+// La opción cuyas horas quedan más cerca. Pura.
+const tiendaHoraCerca = (h, ops) => ops.reduce((m, o, i) => (Math.abs(o - h) < Math.abs(ops[m] - h) ? i : m), 0);
+function tiendaDialHTML() {
+  const ops = tiendaHorasGen();
+  if (ops.length < 2) return tiendaLista('td-horas', tiendaDe('asesoria').map(tiendaHoraHTML).join(''));
+  const i = Math.max(0, ops.findIndex(a => a.id === Tienda.dial) >= 0 ? ops.findIndex(a => a.id === Tienda.dial) : ops.findIndex(a => a.destacado)), a = ops[i], h = a.da.horas, p = tiendaPrecio(a, conPlan());
+  return `<div class="td-dialc" data-art="${esc(a.id)}"><div class="td-dial" role="slider" tabindex="0" aria-label="Horas de asesoría" aria-valuemin="${ops[0].da.horas}" aria-valuemax="${ops[ops.length - 1].da.horas}" aria-valuenow="${h}" aria-valuetext="${h} ${h === 1 ? 'hora' : 'horas'}, ${cop(p)}" style="--f:${h / 12}">
+      <svg viewBox="0 0 220 220" aria-hidden="true">${Array.from({ length: 12 }, (_, k) => { const t = (k + 1) * Math.PI / 6, r = ops.some(o => o.da.horas === k + 1); return `<circle class="${r ? 'op' : ''}${k + 1 <= h ? ' ll' : ''}" cx="${110 + 86 * Math.sin(t)}" cy="${110 - 86 * Math.cos(t)}" r="${r ? 9 : 4}"/>`; }).join('')}<circle class="riel" cx="110" cy="110" r="86" pathLength="12"/><circle class="arco" cx="110" cy="110" r="86" pathLength="12" style="stroke-dasharray:${h} 12"/><g class="ag" style="transform:rotate(${h * 30}deg)"><path d="M110 110V44"/><circle cx="110" cy="24" r="15"/></g></svg>
+      <div class="td-dial-n"><b>${h}</b><small>${h === 1 ? 'hora' : 'horas'}</small></div></div>
+    <div class="td-dial-t"><h3>${esc(a.nombre)} con un profe</h3><p>${esc(a.detalle)}</p>
+      <div class="td-dur" role="radiogroup" aria-label="Cuántas horas">${ops.map(o => `<button type="button" role="radio" aria-checked="${o === a}" tabindex="${o === a ? 0 : -1}" data-hora="${esc(o.id)}">${o.da.horas} h</button>`).join('')}</div>
+      ${h > 1 ? `<p class="td-cada"><b>${cop(p / h)}</b> cada hora</p>` : ''}${tiendaAhorroHTML(a)}<div class="td-pie"><span>${tiendaPrecioHTML(a)}</span>${tiendaBoton(a)}</div></div></div>
+    ${tiendaLista('td-horas', tiendaDe('asesoria').filter(x => !ops.includes(x)).map(tiendaHoraHTML).join(''))}`;
+}
+function tiendaDialVivo(el) {
+  const d = $('.td-dial', el); if (!d) return;
+  const ops = tiendaHorasGen(), hs = ops.map(o => o.da.horas), i0 = hs.indexOf(+d.getAttribute('aria-valuenow'));
+  const pon = (i, foco) => { const k = Math.max(0, Math.min(ops.length - 1, i)); if (ops[k].id === (Tienda.dial || ops[i0].id) && k === i0) return; Tienda.dial = ops[k].id; const c = $('.td-dialhueco', el); c.innerHTML = tiendaDialHTML(); tiendaDialVivo(el); tiendaLigaRadios(c); if (foco) $(foco, c)?.focus({ preventScroll: true }); };
+  d.onkeydown = e => { const k = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key]; if (k) { e.preventDefault(); pon(i0 + k, '.td-dial'); } };
+  let id = null; const ag = $('.ag', d);
+  const hora = e => { const r = d.getBoundingClientRect(); let t = Math.atan2(e.clientX - r.left - r.width / 2, r.top + r.height / 2 - e.clientY) / Math.PI * 6; if (t <= .4) t += 12; return t; };
+  d.onpointerdown = e => { if (e.button) return; id = e.pointerId; d.setPointerCapture(id); d.classList.add('mano'); d.onpointermove(e); };
+  d.onpointermove = e => { if (e.pointerId !== id) return; const t = hora(e); ag.style.transform = `rotate(${t * 30}deg)`; $('.arco', d).style.strokeDasharray = `${t} 12`; const h = hs[tiendaHoraCerca(t, hs)]; $('.td-dial-n b', d).textContent = h; $('.td-dial-n small', d).textContent = h === 1 ? 'hora' : 'horas'; };
+  const fin = e => { if (e.pointerId !== id) return; id = null; d.classList.remove('mano'); const k = e.type === 'pointerup' ? tiendaHoraCerca(hora(e), hs) : i0; if (k !== i0) return pon(k); ag.style.transform = `rotate(${hs[i0] * 30}deg)`; $('.arco', d).style.strokeDasharray = `${hs[i0]} 12`; $('.td-dial-n b', d).textContent = hs[i0]; };
+  d.onpointerup = fin; d.onpointercancel = fin;
+  d.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+}
+
+// ---------- morral: lo que se lleva ----------
+// ¿Sale mejor un juego o paquete que lo que lleva suelto? El que más ahorra: { a, quita: [ids], ahorro } o null. Pura.
+function tiendaMejora(items, arts, conPlan) {
+  const de = id => arts.find(a => a.id === id), sueltos = items.map(x => ({ ...x, a: de(x.id) })).filter(x => x.a);
+  let mejor = null;
+  for (const a of arts) {
+    const d = a.da || {}, k = (d.fisicos || []).length > 1 ? 'fisicos' : (d.libros || []).length > 1 ? 'libros' : '';
+    if (!k || (d.cursos || []).length || d.horas || sueltos.some(x => x.id === a.id)) continue;
+    const usa = d[k].map(n => sueltos.find(x => (x.a.da[k] || []).length === 1 && x.a.da[k][0] === n && !(x.a.da.cursos || []).length && x.a.tipo === a.tipo));
+    if (usa.some(x => !x)) continue;
+    const ahorro = usa.reduce((t, x) => t + tiendaPrecio(x.a, conPlan), 0) - tiendaPrecio(a, conPlan);
+    if (ahorro > 0 && (!mejor || ahorro > mejor.ahorro)) mejor = { a, quita: usa.map(x => x.id), ahorro };
   }
-  if (!Tienda.libros.length) return '';
-  return `<section class="td-hero" style="${tiendaColor('preuda')}"><div class="td-hero-t"><span class="td-tipo">Libros del Preuniversitario</span><h2>Cuatro libros para estudiar con lápiz en mano</h2>
-    <p>${Tienda.libros.reduce((t, l) => t + l.paginas, 0)} páginas a color con retos, ejemplos resueltos y las claves al final.</p>
-    <div class="td-hero-a"><button class="btn main" type="button" data-v="libros">Ver los libros</button></div></div><div class="td-hero-v" aria-hidden="true">${tiendaPila(Tienda.libros.map(l => l.id))}</div></section>`;
+  return mejor;
+}
+const tiendaMini = a => { const d = a.da || {}, id = (d.fisicos || d.libros || [])[0], c = (d.cursos || [])[0]; return id ? tiendaPortada(id) : c && typeof courseArt === 'function' ? courseArt({ id: c }, 'md') : `<b>${d.horas || 1} h</b>`; };
+const TD_MORRAL = '<svg class="td-morral" viewBox="0 0 64 64" aria-hidden="true"><path class="a" d="M22 16a10 10 0 0 1 20 0"/><path class="b" d="M12 30a16 16 0 0 1 16-16h8a16 16 0 0 1 16 16v22a6 6 0 0 1-6 6H18a6 6 0 0 1-6-6z"/><path class="c" d="M20 38h24v14a3 3 0 0 1-3 3H23a3 3 0 0 1-3-3z"/><path class="d" d="M20 44h24M32 42v5"/></svg>';
+function tiendaCarroHTML() {
+  const items = carroItems(), n = items.reduce((t, x) => t + x.cantidad, 0), k = tiendaCuenta(items, Tienda.arts, conPlan()), ver = Tienda.vista !== 'pedidos';
+  if (!ver || !Tienda.cargada) return '';
+  const abierto = n && Tienda.abierto, m = tiendaMejora(items, Tienda.arts, conPlan());
+  return `<footer class="td-carro${n ? '' : ' vacio'}${abierto ? ' abierto' : ''}">
+    ${abierto ? `<div class="td-dentro"><ul>${items.map(x => { const a = Tienda.arts.find(y => y.id === x.id); return `<li><span class="td-mi">${tiendaMini(a)}</span><span class="td-mn">${esc(a.nombre)}<small>${cop(tiendaPrecio(a, conPlan()) * x.cantidad)}</small></span>${tiendaBoton(a)}</li>`; }).join('')}</ul>
+      ${m ? `<p class="td-mejora"><span>Te sale mejor <b>${esc(m.a.nombre)}</b>: ahorras ${cop(m.ahorro)}.</span><button class="btn sm main brand" type="button" data-cambia="${esc(m.a.id)}">Cambiar</button></p>` : ''}</div>` : ''}
+    <button class="td-bolsa" type="button" data-bolsa aria-expanded="${!!abierto}"${n ? '' : ' disabled'} aria-label="${n ? `${abierto ? 'Cerrar' : 'Ver'} tu morral, ${n} ${n === 1 ? 'artículo' : 'artículos'}` : 'Tu morral está vacío'}">${TD_MORRAL}${n ? `<b class="td-n">${n}</b>` : ''}</button>
+    <span class="td-tot">${n ? `<small>${n} ${n === 1 ? 'artículo' : 'artículos'}${k.fisicos ? ' · envío aparte' : ''}</small><b>${cop(k.subtotal)}</b>` : '<small>Arrastra aquí lo que quieras llevar, o tócalo para añadirlo</small>'}</span>
+    ${n ? '<button class="btn main brand" type="button" data-td="pedir">Continuar</button>' : ''}</footer>`;
+}
+// Suma o resta sin redibujar la página: cambia los huecos de ese artículo, las horas y el morral.
+function tiendaCambia(id, delta, desde) {
+  const a = Tienda.arts.find(x => x.id === id); if (!a) return;
+  if (delta > 0 && a.tipo === 'asesoria' && !Tienda.carro[id] && !tiendaHorasOk()) return toast('Las asesorías son para cursos comprados. Añade primero un curso o un paquete.');
+  const n = Math.max(0, Math.min(a.tipo === 'fisico' || a.tipo === 'asesoria' ? 10 : 1, (Tienda.carro[id] || 0) + delta));
+  if (n === (Tienda.carro[id] || 0)) return;
+  if (n) Tienda.carro[id] = n; else delete Tienda.carro[id];
+  if (!carroItems().length) Tienda.abierto = false;
+  if (delta > 0) tiendaVuela(a, desde);
+  tiendaRefresca(delta > 0);
+}
+function tiendaRefresca(suma = false) {
+  const act = document.activeElement, hueco0 = act?.closest?.('[data-ctl]'), foco = act?.dataset && (act.dataset.mas || act.dataset.menos), enCarro = act?.closest?.('.td-carro'), bolsa = act?.hasAttribute?.('data-bolsa');
+  view.querySelectorAll('[data-art]').forEach(x => x.classList.toggle('on', !!Tienda.carro[x.dataset.art]));
+  const hueco = $('.td-carrohueco', view); hueco.innerHTML = tiendaCarroHTML();
+  view.querySelectorAll('[data-ctl]').forEach(x => { const a = Tienda.arts.find(y => y.id === x.dataset.ctl); if (a) x.innerHTML = tiendaBotonIn(a); });
+  if (suma) { const b = $('.td-bolsa', hueco); b?.classList.add('salta'); }
+  if (foco) { (enCarro ? hueco.querySelector(`[data-ctl="${CSS.escape(foco)}"] button:not(:disabled)`) : hueco0?.querySelector('button:not(:disabled)') || $('[data-bolsa]:not(:disabled)', hueco) || $('.td-tabs [aria-current]', view))?.focus({ preventScroll: true }); } else if (bolsa) $('[data-bolsa]', hueco)?.focus({ preventScroll: true });
+}
+// La figura del artículo vuela al morral.
+function tiendaVuela(a, desde) {
+  const dest = $('.td-bolsa', view);
+  if (!desde || !dest || !dest.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const r = desde.getBoundingClientRect(), d = dest.getBoundingClientRect(), f = document.createElement('span');
+  f.className = 'td-vuela'; f.innerHTML = tiendaMini(a); f.style.left = `${r.left + r.width / 2}px`; f.style.top = `${r.top + r.height / 2}px`;
+  document.body.append(f);
+  const dx = d.left + d.width / 2 - r.left - r.width / 2, dy = d.top + d.height / 2 - r.top - r.height / 2;
+  f.animate([{ transform: 'translate(-50%, -50%) scale(1)' }, { transform: `translate(calc(-50% + ${dx * .45}px), calc(-50% + ${dy * .45 - 110}px)) scale(1.15) rotate(-8deg)`, offset: .45 }, { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.25) rotate(14deg)`, opacity: .6 }], { duration: 720, easing: 'cubic-bezier(.4, 0, .3, 1)' }).onfinish = () => f.remove();
+  setTimeout(() => f.remove(), 1200);
+}
+// Con el ratón: una tarjeta se arrastra hasta el morral.
+function tiendaArrastra(el) {
+  el.querySelectorAll('[data-lleva] .td-escena').forEach(s => {
+    let id = null, x0 = 0, y0 = 0, f = null;
+    const art = s.closest('[data-lleva]').dataset.lleva, quita = () => { f?.remove(); f = null; view.classList.remove('llevando'); };
+    const sobre = e => { const r = $('.td-carro', view)?.getBoundingClientRect(); return r && e.clientY > r.top - 40 && e.clientX > r.left && e.clientX < r.right; };
+    s.onpointerdown = e => { if (e.button || e.pointerType !== 'mouse') return; id = e.pointerId; x0 = e.clientX; y0 = e.clientY; e.preventDefault(); s.setPointerCapture(id); };
+    s.onpointermove = e => {
+      if (e.pointerId !== id) return;
+      if (!f && Math.hypot(e.clientX - x0, e.clientY - y0) > 8) { f = document.createElement('span'); f.className = 'td-vuela mano'; f.innerHTML = $('.td-artes, .td-pila', s).outerHTML; document.body.append(f); view.classList.add('llevando'); }
+      if (f) { f.style.left = `${e.clientX}px`; f.style.top = `${e.clientY}px`; $('.td-carro', view)?.classList.toggle('sobre', sobre(e)); }
+    };
+    const fin = e => { if (e.pointerId !== id) return; id = null; const dentro = f && e.type === 'pointerup' && sobre(e), de = f; if (dentro) tiendaCambia(art, 1, de); quita(); $('.td-carro', view)?.classList.remove('sobre'); };
+    s.onpointerup = fin; s.onpointercancel = fin;
+  });
+}
+// Los libros giran con el dedo; se quedan donde se sueltan.
+function tiendaGira(el) {
+  el.querySelectorAll('[data-gira]').forEach(b => {
+    const caja = b.closest('.td-escena'); let id = null, x0 = 0, g0 = 0, g = -24;
+    caja.onpointerdown = e => { if (e.button) return; id = e.pointerId; x0 = e.clientX; g0 = g; caja.setPointerCapture(id); b.classList.add('mano'); };
+    caja.onpointermove = e => { if (e.pointerId !== id) return; g = g0 + (e.clientX - x0) * .7; b.style.setProperty('--g', `${g}deg`); if (Math.abs(e.clientX - x0) > 20) caja.classList.add('giro'); };
+    caja.onpointerup = caja.onpointercancel = e => { if (e.pointerId === id) { id = null; b.classList.remove('mano'); } };
+  });
+}
+// Radios en fila: flechas para cambiar.
+function tiendaLigaRadios(el) {
+  el.querySelectorAll('.td-dur').forEach(d => { d.onkeydown = e => { const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key]; if (!k) return; e.preventDefault(); const bs = [...d.querySelectorAll('button')], i = bs.findIndex(b => b.getAttribute('aria-checked') === 'true'); bs[(i + k + bs.length) % bs.length].click(); }; });
+}
+// Cambia una tarjeta en su sitio; `foco`: lo que queda enfocado.
+function tiendaTarjeta(sel, html, foco) {
+  const v = $(sel, view); if (!v) return;
+  const antes = v.querySelector('[data-v-precio]')?.dataset.vPrecio, t = document.createElement('template'); t.innerHTML = html.trim();
+  const n = t.content.firstElementChild, sc = $('.td-mundos', v)?.scrollLeft || 0; n.classList.add('quieta'); v.replaceWith(n);
+  if ($('.td-mundos', n)) $('.td-mundos', n).scrollLeft = sc;
+  tiendaGira(n); tiendaLigaRadios(n); if (n.dataset.art) n.classList.toggle('on', !!Tienda.carro[n.dataset.art]);
+  const p = n.querySelector('[data-v-precio]'), a = +antes, b = +(p?.dataset.vPrecio || 0);   // el precio corre de un valor al otro
+  if (p && a && b && a !== b && !matchMedia('(prefers-reduced-motion: reduce)').matches) { const t0 = performance.now(); const paso = now => { const u = Math.min(1, (now - t0) / 420); p.textContent = cop(u < 1 ? Math.round((a + (b - a) * (1 - (1 - u) ** 3)) / 100) * 100 : b); if (u < 1 && p.isConnected) requestAnimationFrame(paso); }; requestAnimationFrame(paso); }
+  if (foco) n.querySelector(foco)?.focus({ preventScroll: true });
 }
 const TIENDA_CONFIA = [['lock', 'Pago con QR de Bre-B'], ['bolt', 'Se activa en tu mismo código'], ['check', 'Tu avance no se pierde'], ['download', 'Envíos a todo el país']];
 const tiendaConfiaHTML = () => `<ul class="td-confia">${TIENDA_CONFIA.map(([i, t]) => `<li>${ICON[i]}<span>${t}</span></li>`).join('')}</ul>`;
@@ -15805,7 +15806,7 @@ function tiendaVistaHTML() {
       + tiendaSec('Paquetes', tiendaLista('td-paqs', tiendaDe('paquete').map(tiendaPaqHTML).join('')), '', 'Todo junto sale mejor.')
       + tiendaSec('Cursos', tiendaCursosHTML(), 'cursos', 'Elige el tiempo y empieza hoy.')
       + tiendaSec('Libros', tiendaLista('td-libros', Tienda.libros.map(tiendaLibroHTML).join('')), 'libros', 'Impresos en tu casa o digitales en la app.')
-      + tiendaSec('Asesorías', tiendaLista('td-horas', tiendaDe('asesoria').slice(0, 3).map(tiendaHoraHTML).join('')), 'asesorias', 'Una hora con un profe, sobre lo que más te cuesta.');
+      + tiendaSec('Asesorías', tiendaDe('asesoria').length ? `<div class="td-dialhueco">${tiendaDialHTML()}</div>` : '', 'asesorias', 'Una hora con un profe, sobre lo que más te cuesta.');
   }
   if (Tienda.vista === 'cursos') {
     return tiendaSec('Cursos', tiendaCursosHTML(), '', 'Elige el tiempo y empieza hoy.') + tiendaSec('Paquetes', tiendaLista('td-paqs', tiendaDe('paquete').map(tiendaPaqHTML).join('')), '', 'Todo junto sale mejor.') + tiendaConfiaHTML();
@@ -15819,7 +15820,7 @@ function tiendaVistaHTML() {
     const s = Tienda.saldo, hay = s.general + s.universidad;
     return `<section class="td-saldo"><div><h2>${hay ? `Tienes ${hay} ${hay === 1 ? 'hora' : 'horas'}` : 'Aún no tienes horas'}</h2><p>${hay ? `${s.general} ${s.general === 1 ? 'general' : 'generales'} · ${s.universidad} de universidad${s.grupo ? ` · ${s.grupo} en grupo` : ''}` : 'Elige cuántas quieres y sepáralas cuando las necesites.'}</p></div>
       ${hay && conPlan() ? '<button class="btn main brand td-ir" type="button" data-td="separar">Separar una asesoría</button>' : ''}</section>
-      ${tiendaLista('td-horas', tiendaDe('asesoria').map(tiendaHoraHTML).join(''))}
+      <div class="td-dialhueco">${tiendaDialHTML()}</div>
       <p class="td-nota">Las asesorías son de los cursos que tienes comprados. Cada una es virtual y dura 1 hora. Si cancelas con 12 horas o más de anticipación, la hora vuelve a tu saldo.</p>`;
   }
   return `<section><h2>Mis pedidos</h2>${Tienda.pedidos.length ? `<div class="td-lista">${Tienda.pedidos.map(p => `<article class="td-pedido"><div class="acct-head"><b>Pedido ${p.id}</b><span class="pill ${PEDIDO_ESTADO[p.estado][0]}">${PEDIDO_ESTADO[p.estado][1]}</span></div>
@@ -15827,26 +15828,39 @@ function tiendaVistaHTML() {
     ${p.guia ? `<p class="td-guia">${esc(p.transportadora)} · guía <b>${esc(p.guia)}</b></p>` : ''}
     ${p.estado === 'pendiente' ? `<div class="acct-actions"><button class="btn main brand" type="button" data-pago="${p.id}">Pagar</button><button class="btn ghost" type="button" data-cancela="${p.id}">Cancelar pedido</button></div>` : ''}</article>`).join('')}</div>` : '<p class="td-vacio">Aún no tienes pedidos.</p>'}</section>`;
 }
+const TD_ICO = { todo: 'bag', cursos: 'book', libros: 'doc', asesorias: 'calendar', pedidos: 'check' };
 function tiendaPinta(foco = '', mueve = true) {
   if (tab !== 'tienda') return;
   const el = view, y = $('.tienda', el) ? el.scrollTop : 0;
-  const items = carroItems(), k = tiendaCuenta(items, Tienda.arts, conPlan()), n = items.reduce((t, x) => t + x.cantidad, 0), porPagar = Tienda.pedidos.filter(p => p.estado === 'pendiente').length;
+  const porPagar = Tienda.pedidos.filter(p => p.estado === 'pendiente').length;
   const V = [['todo', 'Todo'], ['cursos', 'Cursos'], ['libros', 'Libros'], ['asesorias', 'Asesorías'], ['pedidos', `Mis pedidos${porPagar ? ` (${porPagar})` : ''}`]];
-  const tabs = $('.td-tabs', el)?.scrollLeft || 0;
+  const tabs = $('.td-tabs', el)?.scrollLeft || 0, FILAS = '.td-paqs, .td-cursos, .td-libros, .td-mundos', corrido = el.dataset.vista === Tienda.vista ? [...el.querySelectorAll(FILAS)].map(x => x.scrollLeft) : [];
+  el.dataset.vista = Tienda.vista; el.classList.remove('llevando'); document.querySelectorAll('.td-vuela.mano').forEach(x => x.remove());
   el.innerHTML = `<div class="tienda"><header class="td-head"><h1 tabindex="-1">Tienda</h1></header>
-    <nav class="td-tabs" aria-label="Secciones de la tienda">${V.map(([id, t]) => `<button type="button" data-v="${id}"${id === Tienda.vista ? ' aria-current="page"' : ''}>${t}</button>`).join('')}</nav>
+    <nav class="td-tabs" aria-label="Secciones de la tienda">${V.map(([id, t]) => `<button type="button" data-v="${id}"${id === Tienda.vista ? ' aria-current="page"' : ''}>${ICON[TD_ICO[id]] || ''}${t}</button>`).join('')}</nav>
     <div class="td-in">${tiendaVistaHTML()}</div>
-    ${n && Tienda.vista !== 'pedidos' ? `<footer class="td-carro"><span><small>${n} ${n === 1 ? 'artículo' : 'artículos'}${k.fisicos ? ' · envío aparte' : ''}</small><b>${cop(k.subtotal)}</b></span><button class="btn main brand" type="button" data-td="pedir">Continuar</button></footer>` : ''}</div>`;
+    <div class="td-carrohueco">${tiendaCarroHTML()}</div></div>`;
+  [...el.querySelectorAll(FILAS)].forEach((x, i) => { if (corrido[i]) x.scrollLeft = corrido[i]; });
   el.scrollTop = y; $('.td-tabs', el).scrollLeft = tabs;
   const A = { pedir: tiendaPedir, separar: () => go('tutorias') };
-  el.querySelectorAll('[data-td]').forEach(b => { b.onclick = () => A[b.dataset.td](); });
+  // Un solo manejador: los huecos cambian sin volver a ligar nada.
+  $('.tienda', el).onclick = e => {
+    const b = e.target.closest('button'); if (!b || b.disabled) return;
+    const d = b.dataset, esc1 = () => b.closest('article, .td-dialc, .vt')?.querySelector('.td-escena, .td-dial, .vt-rueda') || b;
+    if (d.td) return A[d.td]();
+    if (d.mas) return tiendaCambia(d.mas, 1, esc1());
+    if (d.menos) return tiendaCambia(d.menos, -1);
+    if (d.leer) return openLector(+d.leer);
+    if (d.compra) return openComprar(d.compra, (Tienda.plan || {})[d.compra]);
+    if (d.dur) { Tienda.plan = { ...Tienda.plan, [d.de]: d.dur }; return tiendaTarjeta(`[data-curso="${d.de}"]`, tiendaCursoHTML(courseById(d.de)), '[data-dur][aria-checked="true"]'); }
+    if (d.fmt) { Tienda.fmt = { ...Tienda.fmt, [d.de]: d.fmt }; return tiendaTarjeta(`[data-libro="${d.de}"]`, tiendaLibroHTML(Tienda.libros.find(l => l.id === +d.de)), '[data-fmt][aria-checked="true"]'); }
+    if (d.hora) { Tienda.dial = d.hora; const c = $('.td-dialhueco', el); c.innerHTML = tiendaDialHTML(); tiendaDialVivo(el); tiendaLigaRadios(c); tiendaRefresca(); return $('[data-hora][aria-checked="true"]', c).focus({ preventScroll: true }); }
+    if ('bolsa' in d) { Tienda.abierto = !Tienda.abierto; return tiendaRefresca(); }
+    if (d.cambia) { const m = tiendaMejora(carroItems(), Tienda.arts, conPlan()); if (!m) return; m.quita.forEach(id => { if (--Tienda.carro[id] <= 0) delete Tienda.carro[id]; }); Tienda.carro[m.a.id] = 1; tiendaRefresca(true); $('[data-bolsa]', el)?.focus({ preventScroll: true }); return toast(`Cambiado: ahorras ${cop(m.ahorro)}`); }
+  };
+  tiendaVitrinaViva(el); tiendaDialVivo(el); tiendaArrastra(el); tiendaGira(el); tiendaLigaRadios(el);
   el.querySelectorAll('[data-v]').forEach(b => { b.onclick = () => { Tienda.vista = b.dataset.v; tiendaPinta(`.td-tabs [data-v="${b.dataset.v}"]`); el.scrollTop = 0; $('.td-tabs [aria-current]', el)?.scrollIntoView({ inline: 'nearest', block: 'nearest' }); }; });
-  el.querySelectorAll('[data-mas]').forEach(b => { b.onclick = () => { const id = b.dataset.mas; Tienda.carro[id] = Math.min(10, (Tienda.carro[id] || 0) + 1); tiendaPinta(`[data-mas="${id}"], [data-menos="${id}"]`); }; });
-  el.querySelectorAll('[data-menos]').forEach(b => { b.onclick = () => { const id = b.dataset.menos; if (--Tienda.carro[id] <= 0) delete Tienda.carro[id]; tiendaPinta(`[data-menos="${id}"], [data-mas="${id}"]`); }; });
-  el.querySelectorAll('[data-compra]').forEach(b => { b.onclick = () => openComprar(b.dataset.compra, (Tienda.plan || {})[b.dataset.compra]); });
-  el.querySelectorAll('[data-dur]').forEach(b => { b.onclick = () => { Tienda.plan = { ...Tienda.plan, [b.dataset.de]: b.dataset.dur }; tiendaPinta(`[data-dur="${b.dataset.dur}"]`); }; });
   el.querySelectorAll('[data-pago]').forEach(b => { b.onclick = () => { const p = Tienda.pedidos.find(x => x.id === +b.dataset.pago); if (p) openPago(p.total, pedidoTexto(p)); }; });
-  el.querySelectorAll('[data-leer]').forEach(b => { b.onclick = () => openLector(+b.dataset.leer); });
   el.querySelectorAll('[data-cancela]').forEach(b => { b.onclick = () => ask({ title: '¿Cancelar este pedido?', text: 'Si ya pagaste, no lo canceles: envíanos el comprobante.', ok: 'Sí, cancelar', cancel: 'Conservarlo', danger: true }).then(async si => {
     if (!si) return;
     const r = await Cuenta.sb.rpc('cancelar_pedido', { p_id: +b.dataset.cancela });

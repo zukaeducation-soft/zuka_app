@@ -70,7 +70,7 @@ xpLec('pu-ag-3', [
     xpMira('hoja', 'Empecemos por la idea: un **hecho** se puede **comprobar**; una **opinión** **valora**.', { letras: ['A', 'B', 'C'], paras: [['El puente mide 80 metros.'], ['El puente es horrible.'], ['El puente se abrió en 1960.']] }, [
       ['Se puede medir: es un hecho.', { luz: [0], nota: { 0: 'hecho' } }],
       ['¿Con qué se mide lo horrible? Opinión.', { luz: [1], nota: { 1: 'opinión' } }],
-      ['Hay registro: hecho.', { luz: [2], nota: { 2: 'hecho' } }],
+      ['Hay un registro: es un hecho.', { luz: [2], nota: { 2: 'hecho' } }],
       ['«Mejor», «peor», «lamentable», «a mi juicio» suelen delatar opinión.', {}],
       ['Pero la prueba es otra: ¿se puede verificar?', {}],
     ], 'Pregunta: si alguien lo duda, ¿hay a dónde ir a mirar?'),
