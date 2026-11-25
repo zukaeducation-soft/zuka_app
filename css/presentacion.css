@@ -188,7 +188,9 @@
 @media (min-width: 1000px) { .pz-progs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; } .pz-prog { grid-template-rows: 224px 1fr auto; } }
 
 /* tarjeta ancha: fundamentación, con sus cursos adentro */
-.pz-prog-fund .pz-prog-art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; position: absolute; inset: 0; }
+.pz-prog-art > img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; position: absolute; inset: 0; transition: scale .5s var(--sal); }
+.pz-prog-art > .pz-img-udea { object-position: 72% 30%; } .pz-prog-art > .pz-img-saber { object-position: 50% 52%; }
+@media (hover: hover) and (pointer: fine) { .pz-prog:hover .pz-prog-art > img { scale: 1.05; } }
 .pz-fcs { list-style: none; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 215px), 1fr)); }
 .pz-fcs :is(button, li.pronto) { display: flex; align-items: center; gap: 12px; width: 100%; padding: 9px 12px 9px 9px; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--c) 45%, var(--line)); background: color-mix(in srgb, var(--c) 9%, transparent); color: var(--ink); text-align: left; transition: border-color .16s ease; }
 .pz-fcs button:hover { border-color: var(--c); } .pz-fcs > li.pronto { border-style: dashed; background: none; }

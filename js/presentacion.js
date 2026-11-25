@@ -171,7 +171,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-prog-pie"><button class="btn sm" type="button" data-pz-ir="#pz-cursos" data-tab="${cursos.findIndex(c => PZ_FUND.includes(c.id))}">Más información<span class="pz-sr"> sobre ${PZ_FUND_N}</span></button>${info(`los cursos de ${PZ_FUND_N}`)}</div></article>` : '';
   const progs = orden.filter(c => !PZ_FUND.includes(c.id)).map(c => {
     const p = PZ_PROG[c.id] || { tag: pzEsc(c.level || 'Curso'), meta: pzEsc(c.tagline || ''), trae: 'Explicaciones y ejercicios que se juegan' };
-    return tarjeta({ color: p.color || c.color, fig: PZ_PROG[c.id] ? celu(c.id) : art(c), name: c.name, tag: p.tag, pills: ['Virtual'], pr: `curso:${c.id}`, ir: '#pz-cursos', tab: cursos.indexOf(c),
+    return tarjeta({ color: p.color || c.color, fig: p.foto || (PZ_PROG[c.id] ? celu(c.id) : art(c)), name: c.name, tag: p.tag, pills: ['Virtual'], pr: `curso:${c.id}`, ir: '#pz-cursos', tab: cursos.indexOf(c),
       filas: fila('dia', 'Empiezas cuando quieras', 'A tu ritmo, en celular o computador') + fila('hoja', 'Contiene', `${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}`) + fila('mas', 'Incluye', p.trae) + fila('meta', p.meta) });
   }).concat([
     tarjeta({ color: '#f5c451', cls: 'pz-prog-lib', fig: libros(''), name: 'Libros de admisión', tag: 'Impresos', pills: ['Con envío'], pr: 'art:fisico', ir: '#pz-libros',
