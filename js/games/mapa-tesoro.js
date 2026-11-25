@@ -20,7 +20,7 @@ GAMES['mapa-tesoro'] = (() => {
   const okOne = (w, r) => !!w && w.k === want(r).k && Math.abs(((w.deg - want(r).deg) % 360 + 360) % 360) < 1e-6;
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okOne(state.walks[i], r));
+    const ok = params.rounds.every((r, i) => okOne(state.walks?.[i], r));
     const solution = params.rounds.map(r => { const w = want(r); return `${r.label}: ${radTxt(w.k)} pasos a ${w.deg}°`; }).join(' · ');
     return { ok, solution };
   }

@@ -1,549 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/tacha-repetidos.js
-// Tacha los repetidos (Álgebra 0, en un conjunto nada se repite): se escribe una palabra letra por letra y hay
-// que tachar (tocar) las letras que sobran para que quede el conjunto de sus letras, cada una una sola vez.
-// Abajo se arma en vivo el conjunto con las letras sin tachar y su cardinal n(L). Tocar una letra tachada la
-// recupera. Vale dejar cualquier copia de cada letra.
-// params = { rounds: [{ word, name }] }   state = { crossed: [[índices tachados]] }
-
-GAMES['tacha-repetidos'] = (() => {
-  const distinct = w => [...new Set([...w])];
-  function good(cr, r) {
-    if (!cr) return false;
-    const left = [...r.word].filter((_, i) => !cr.includes(i));
-    return left.length === distinct(r.word).length && new Set(left).size === left.length;
-  }
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => good(state.crossed?.[i], r));
-    const solution = params.rounds.map(r => `${r.name || 'L'} = {${distinct(r.word).join(', ')}}, n = ${distinct(r.word).length}`).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { crossed: R.map(() => []) };
-    const touched = R.map(() => false);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], cells = [];
-
-    function layout(w, h) {
-      W = w; H = h;
-      tabs = roundTabs(R.length, w);
-      placeCells();
-    }
-    function placeCells() {
-      const n = R[cur].word.length, per = n > 7 ? Math.ceil(n / 2) : n, cw = Math.min(46, (W - 28 - (per - 1) * 6) / per);
-      cells = [...R[cur].word].map((_, i) => {
-        const row = Math.floor(i / per), inRow = row ? n - per : per, total = inRow * cw + (inRow - 1) * 6;
-        return { x: W / 2 - total / 2 + (i % per) * (cw + 6), y: 100 + row * (cw * 1.2 + 9), w: cw, h: cw * 1.2 };
-      });
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], cr = st.crossed[cur], ok = good(cr, r), name = r.name || 'L', A = SK.sets(C)[0];
-        drawTabs(p, C, tabs, cur, i => (locked ? (good(st.crossed[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Z : C.line));
-        SK.kicker(p, C, 'En un conjunto nada se repite', 14, 56);
-        p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, `${name} = {x : x es una letra de ${r.word}}`, W / 2, 80, W - 28, 14);
-        // La palabra, letra por letra: en ámbar, la que todavía está repetida; tachada, queda el hueco.
-        cells.forEach((b, i) => {
-          const off = cr.includes(i), ch = r.word[i], dup = !off && [...r.word].some((c, j) => j !== i && c === ch && !cr.includes(j));
-          SK.chip(p, C, b, '', { state: off ? 'ghost' : dup && !locked ? 'on' : 'idle', col: C.sun, r: 9 });
-          SK.serif(p, ch, b.x + b.w / 2, b.y + b.h / 2 + 1, Math.min(25, b.w * 0.62), off ? C.mute : C.ink);
-          if (off) { p.stroke(C.coral); p.strokeWeight(2); p.line(b.x + 7, b.y + b.h - 7, b.x + b.w - 7, b.y + 7); p.noStroke(); }
-        });
-        const last = cells[cells.length - 1];
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        p.text('Resaltada: esa letra todavía está repetida', W / 2, last.y + last.h + 16);
-        // El conjunto que queda, en la franja formal.
-        const left = [...r.word].filter((_, i) => !cr.includes(i)), col = locked ? (ok ? C.ok : C.bad) : A.line;
-        SK.formal(p, C, { x: 12, y: last.y + last.h + 34, w: W - 24, h: 78 },
-          `$${name} = \\{${left.join(', ')}\\} \\quad n(${name}) = ${touched[cur] ? new Set(left).size : '?'}$`, { kicker: 'Lo que queda', col, size: 20 });
-        p.textAlign(p.CENTER, p.CENTER);
-        if (locked && !ok) { p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, `${name} = {${distinct(r.word).join(', ')}}`, W / 2, H - 14, W - 24, 12); }
-        else { p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.text('Toca una letra para tacharla o recuperarla', W / 2, H - 14); }
-      };
-
-      p.mousePressed = () => {
-        const t = tabs.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
-        if (t >= 0) { cur = t; placeCells(); api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        const i = cells.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
-        if (i >= 0) {
-          const cr = st.crossed[cur], k = cr.indexOf(i);
-          if (k >= 0) cr.splice(k, 1); else cr.push(i);
-          touched[cur] = true; api.ready(touched.every(Boolean)); api.sfx?.tap?.(); return false;
-        }
-      };
-    }, 1.4);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ crossed: st.crossed.map(c => [...c]) }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, distinct };
-})();
-;
-//#archivo js/games/recta-espejo.js
-// La recta del espejo (Álgebra 1.1, enteros y opuestos): una recta de enteros con un espejo en el 0. Cada ronda
-// describe un número con palabras o con notación («el opuesto de 5», «−(−3)», «el número que sumado con 6 da 0»).
-// Se toca o se arrastra sobre la recta para poner el punto (se ajusta a enteros) y al otro lado del espejo aparece
-// su reflejo (sin número, para que el estudiante lo razone). Califica el entero exacto.
-// params = { min, max, rounds: [{ text, value }] }   state = { xs: [entero | null] }
-
-GAMES['recta-espejo'] = (() => {
-  const snap = (v, min, max) => Math.min(max, Math.max(min, Math.round(v)));
-  const neg = v => String(v).replace('-', '−');
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => state.xs?.[i] === r.value);
-    const solution = params.rounds.map(r => `${r.text}: ${neg(r.value)}`).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, min = params.min, max = params.max;
-    const st = { xs: R.map(() => null) };
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], line = null, drag = false, t = 0;
-
-    function layout(w, h) {
-      W = w; H = h;
-      tabs = roundTabs(R.length, w);
-      line = { x0: 22, x1: w - 22, y: h * 0.66 };
-    }
-    const X = v => line.x0 + (v - min) / (max - min) * (line.x1 - line.x0);
-    const V = px => min + (px - line.x0) / (line.x1 - line.x0) * (max - min);
-    function setX(px) { st.xs[cur] = snap(V(px), min, max); api.ready(st.xs.every(x => x != null)); }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        t += 0.05;
-        const r = R[cur], x = st.xs[cur], ok = x === r.value;
-        drawTabs(p, C, tabs, cur, i => (locked ? (st.xs[i] === R[i].value ? C.ok : C.bad) : i === cur ? C.brand : st.xs[i] != null ? C.Z : C.line));
-        drawKicker(p, C, 'Pon en la recta', W / 2, 58, { center: true });
-        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); fitText(p, r.text, W / 2, 86, W - 28, 21);
-        // Espejo en el 0
-        const z = X(0);
-        p.stroke(C.sun); p.strokeWeight(2.5); p.drawingContext.setLineDash([5, 6]); p.line(z, line.y - 68, z, line.y - 12); p.drawingContext.setLineDash([]);
-        drawPill(p, C, 'espejo', z, line.y - 80, C.sun, 11);
-        // Recta y marcas
-        drawNumLine(p, C, { x0: line.x0, x1: line.x1, y: line.y, min, max });
-        if (x != null) {
-          // Reflejo (el opuesto), tenue, al otro lado del espejo
-          if (x !== 0) {
-            const c = p.color(C.mute); c.setAlpha(140);
-            p.noFill(); p.stroke(c); p.strokeWeight(2); p.circle(X(-x), line.y, 16);
-            p.noStroke(); p.fill(C.mute); p.textSize(11); p.textStyle(p.NORMAL);
-            const tw = p.textWidth('reflejo') / 2 + 4;
-            p.text('reflejo', Math.min(W - tw, Math.max(tw, X(-x))), line.y - 24);
-            p.stroke(c); p.strokeWeight(1); p.drawingContext.setLineDash([3, 4]);
-            p.noFill(); p.arc(z, line.y, Math.abs(X(x) - X(-x)), 50, Math.PI, 2 * Math.PI); p.drawingContext.setLineDash([]);
-          }
-          const pc = locked ? (ok ? C.ok : C.bad) : x < 0 ? C.coral : x > 0 ? C.sky : C.sun;
-          drawDot(p, C, X(x), line.y, 18 + 2 * Math.sin(t), pc);
-          drawPill(p, C, neg(x), X(x), line.y - 44, pc, 15);
-        }
-        p.noStroke(); p.textStyle(p.NORMAL); p.textSize(12);
-        if (locked && !ok) { p.noFill(); p.stroke(C.ok); p.strokeWeight(3); p.circle(X(r.value), line.y, 22); p.noStroke(); }
-        if (locked && !ok) { p.fill(C.ok); p.textStyle(p.BOLD); p.text(`Era ${neg(r.value)}`, W / 2, H - 16); }
-        else { p.fill(C.mute); p.text('Toca o arrastra sobre la recta', W / 2, H - 16); }
-      };
-
-      p.mousePressed = () => {
-        const tb = tabs.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
-        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        if (Math.abs(p.mouseY - line.y) < 60) { drag = true; setX(p.mouseX); api.sfx?.tap?.(); return false; }
-      };
-      p.mouseDragged = () => { if (drag && !locked) { setX(p.mouseX); return false; } };
-      p.mouseReleased = () => { drag = false; };
-    }, 1.25);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ xs: [...st.xs] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, snap };
-})();
-;
-//#archivo js/games/inversos-gemelos.js
-// Los inversos gemelos (Álgebra 1.2, axiomas de campo: opuesto y recíproco). Cada ronda trae un número y la
-// máquina opera con su «gemelo», que el estudiante arma con un botón de signo, ruedas − / + para el numerador y el
-// denominador y un interruptor √ (para raíces como √6). Con + la meta es el neutro 0 (el opuesto); con × la meta
-// es el neutro 1 (el recíproco). El 0 no tiene recíproco: para él está el botón «no tiene». La máquina muestra el
-// resultado en vivo. Cualquier fracción equivalente vale.
-// params = { op: '+' | '×', rounds: [{ label, v, sol }] }   state = { ans: [{ s, n, d, r, none } | null] }
-
-GAMES['inversos-gemelos'] = (() => {
-  const valueOf = a => a.s * (a.r ? Math.sqrt(a.n) : a.n) / a.d;
-  const close = (x, y) => Math.abs(x - y) < 1e-9;
-
-  function okRound(a, r, op) {
-    if (!a) return false;
-    if (op === '×' && r.v === 0) return !!a.none;
-    if (a.none) return false;
-    return op === '+' ? close(r.v + valueOf(a), 0) : close(r.v * valueOf(a), 1);
-  }
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okRound(state.ans?.[i], r, params.op));
-    const word = params.op === '+' ? 'opuesto' : 'recíproco';
-    const solution = params.rounds.map(r => `${word} de ${r.label}: ${r.sol}`).join(' · ');
-    return { ok, solution };
-  }
-
-  const txt = a => {
-    if (a.none) return 'no tiene';
-    const num = (a.r ? '√' : '') + a.n;
-    return (a.s < 0 ? '−' : '') + (a.d === 1 ? num : `${num}/${a.d}`);
-  };
-  const show = v => {
-    const k = Math.round(v * 1e6) / 1e6;
-    return Math.abs(k - Math.round(k)) < 1e-9 ? String(Math.round(k)).replace('-', '−') : `≈ ${numTxt(+k.toFixed(3))}`;
-  };
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, op = params.op, mul = op === '×';
-    const A = R.map(() => ({ s: 1, n: 0, d: 1, r: false, none: false, touched: false }));
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {}, shake = 0;
-
-    function layout(w, h) {
-      W = w; H = h; tabs = roundTabs(R.length, w);
-      const cx = w / 2, bw = 44, bh = 36;
-      B = {
-        nMinus: { x: cx - 92, y: 148, w: bw, h: bh }, nPlus: { x: cx + 48, y: 148, w: bw, h: bh },
-        dMinus: { x: cx - 92, y: 206, w: bw, h: bh }, dPlus: { x: cx + 48, y: 206, w: bw, h: bh },
-        sign: { x: cx - 100, y: 258, w: 92, h: 34 },
-        root: { x: cx + 8, y: 258, w: 92, h: 34 },
-        none: mul ? { x: cx - 92, y: 304, w: 184, h: 34 } : null,
-      };
-    }
-    function touch(f) {
-      if (locked) return;
-      const a = A[cur]; f(a); a.touched = true;
-      api.ready(A.every(x => x.touched)); api.sfx?.tap?.();
-    }
-    function button(b, label, on, col) {
-      if (!b) return;
-      // Ficha con relieve: crema apagada, de su color cuando está activa; los − / + van en azul.
-      drawTile(p5i, C, b, label, { fill: on ? col : label === '−' || label === '+' ? C.sky : C.cream, r: 9, lift: on ? 1 : 3, size: 16 });
-    }
-    let p5i = null;
-
-    const m = mountSketch(host, (p, size) => {
-      p5i = p;
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], a = A[cur], good = okRound(a, r, op);
-        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(A[i], R[i], op) ? C.ok : C.bad) : i === cur ? C.brand : A[i].touched ? C.Q : C.line));
-        drawKicker(p, C, mul ? 'El gemelo que al multiplicar da 1' : 'El gemelo que al sumar da 0', W / 2, 56, { center: true });
-        p.textAlign(p.CENTER, p.CENTER); p.noStroke();
-        // La máquina: número ⊕ gemelo = resultado
-        const sx = shake > 0 ? Math.sin(shake * 2) * 4 : 0; shake = Math.max(0, shake - 1);
-        p.stroke(locked ? (good ? C.ok : C.bad) : C.sun); p.strokeWeight(2.5); p.fill(C.card); p.rect(12 + sx, 74, W - 24, 58, 14);
-        const eq = `${r.label}  ${op}  ${a.none ? '?' : `(${txt(a)})`}`;
-        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); fitText(p, eq, W / 2 + sx, 94, W - 40, 19);
-        let res = '';
-        if (a.none) res = mul && r.v === 0 ? '0 · lo que sea = 0, nunca 1' : 'sí tiene: búscalo';
-        else res = '= ' + show(mul ? r.v * valueOf(a) : r.v + valueOf(a));
-        p.fill(locked ? (good ? C.ok : C.bad) : C.mute); p.textStyle(p.NORMAL); fitText(p, res, W / 2 + sx, 117, W - 40, 13);
-        // El constructor del gemelo
-        const cx = W / 2;
-        button(B.sign, a.s < 0 ? 'signo  −' : 'signo  +', a.s < 0, C.Z);
-        button(B.root, a.r ? 'con √' : 'sin √', a.r, C.I);
-        button(B.nMinus, '−', false); button(B.nPlus, '+', false); button(B.dMinus, '−', false); button(B.dPlus, '+', false);
-        p.noStroke(); p.fill(a.none ? C.mute : C.ink); p.textStyle(p.BOLD); p.textSize(24);
-        p.text((a.r ? '√' : '') + a.n, cx, 166);
-        p.stroke(a.none ? C.line : C.ink); p.strokeWeight(2.5); p.line(cx - 30, 195, cx + 30, 195);
-        p.noStroke(); p.text(a.d, cx, 224);
-        if (B.none) button(B.none, 'no tiene recíproco', a.none, C.R);
-        p.noStroke(); p.textStyle(p.NORMAL); p.textSize(12);
-        if (locked && !good) { p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, `Era: ${r.sol}`, W / 2, H - 18, W - 24, 13); }
-        else { p.fill(C.mute); fitText(p, mul ? 'Recíproco: a · (1/a) = 1' : 'Opuesto: a + (−a) = 0', W / 2, H - 18, W - 24, 12); }
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        if (hitBox(B.sign, x, y)) { touch(a => { a.s = -a.s; a.none = false; }); return false; }
-        if (hitBox(B.root, x, y)) { touch(a => { a.r = !a.r; a.none = false; }); return false; }
-        if (hitBox(B.nMinus, x, y)) { touch(a => { a.n = Math.max(0, a.n - 1); a.none = false; }); return false; }
-        if (hitBox(B.nPlus, x, y)) { touch(a => { a.n = Math.min(20, a.n + 1); a.none = false; }); return false; }
-        if (hitBox(B.dMinus, x, y)) { touch(a => { a.d = Math.max(1, a.d - 1); a.none = false; }); return false; }
-        if (hitBox(B.dPlus, x, y)) { touch(a => { a.d = Math.min(20, a.d + 1); a.none = false; }); return false; }
-        if (B.none && hitBox(B.none, x, y)) { touch(a => { a.none = !a.none; }); if (A[cur].none && R[cur].v !== 0) shake = 12; return false; }
-      };
-    }, 1.48);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ ans: A.map(a => (a.touched ? { s: a.s, n: a.n, d: a.d, r: a.r, none: a.none } : null)) }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, valueOf };
-})();
-;
-//#archivo js/games/corta-rectangulo.js
-// Corta el rectángulo (Álgebra 1.2, propiedad distributiva). Un rectángulo de h × w cuadritos tiene área h · w.
-// Se arrastra un corte vertical (salta de cuadrito en cuadrito) para partirlo en dos piezas, y debajo aparece
-// h · w = h · k + h · (w − k): la distributiva vista como áreas. La meta de cada ronda es que una de las dos piezas
-// tenga el área pedida (una pieza «redonda» que hace fácil la cuenta de cabeza).
-// params = { rounds: [{ h, w, piece }] }   state = { cuts: [k | null] }
-
-GAMES['corta-rectangulo'] = (() => {
-  const okRound = (k, r) => k != null && k > 0 && k < r.w && (r.h * k === r.piece || r.h * (r.w - k) === r.piece);
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okRound(state.cuts?.[i], r));
-    const solution = params.rounds.map(r => {
-      const k = r.piece / r.h;
-      return `${r.h} · ${r.w} = ${r.h} · ${k} + ${r.h} · ${r.w - k} = ${r.piece} + ${r.h * (r.w - k)} = ${r.h * r.w}`;
-    }).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const cuts = R.map(() => null);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], box = null, drag = false, bm = null, bp = null;
-
-    function layout(w, h) {
-      W = w; H = h; tabs = roundTabs(R.length, w);
-      const r = R[cur], u = Math.min((w - 48) / r.w, 150 / r.h);
-      box = { x: (w - u * r.w) / 2, y: 112, u, w: u * r.w, h: u * r.h };
-      bm = { x: w / 2 - 98, y: h - 62, w: 44, h: 36 }; bp = { x: w / 2 + 54, y: h - 62, w: 44, h: 36 };
-    }
-    function setCut(px) {
-      const r = R[cur];
-      cuts[cur] = Math.min(r.w - 1, Math.max(1, Math.round((px - box.x) / box.u)));
-      api.ready(cuts.every(k => k != null));
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], k = cuts[cur], good = okRound(k, r), b = box;
-        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(cuts[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : cuts[i] != null ? C.Q : C.line));
-        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
-        fitText(p, `Calcula ${r.h} · ${r.w} partiendo el rectángulo`, W / 2, 56, W - 24, 15);
-        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, `Una de las piezas debe tener área ${r.piece}`, W / 2, 78, W - 24, 12);
-        // Piezas
-        const kx = k == null ? null : b.x + k * b.u;
-        p.noStroke();
-        if (k == null) { p.fill(C.card); p.rect(b.x, b.y, b.w, b.h); }
-        else {
-          // Dos piezas rellenas: menta y sol.
-          p.fill(C.mint); p.rect(b.x, b.y, kx - b.x, b.h); p.fill(C.sun); p.rect(kx, b.y, b.x + b.w - kx, b.h);
-        }
-        // Cuadrícula
-        p.stroke(k == null ? C.line : C.night + '40'); p.strokeWeight(b.u > 7 ? 1 : 0.5);
-        for (let i = 1; i < r.w; i++) p.line(b.x + i * b.u, b.y, b.x + i * b.u, b.y + b.h);
-        for (let j = 1; j < r.h; j++) p.line(b.x, b.y + j * b.u, b.x + b.w, b.y + j * b.u);
-        p.noFill(); p.stroke(C.ink); p.strokeWeight(2); p.rect(b.x, b.y, b.w, b.h);
-        // Medidas
-        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(13);
-        p.text(r.h, b.x - 12, b.y + b.h / 2);
-        if (k == null) { p.text(r.w, b.x + b.w / 2, b.y - 12); }
-        else {
-          p.fill(C.Q); p.text(k, (b.x + kx) / 2, b.y - 12); p.fill(C.N); p.text(r.w - k, (kx + b.x + b.w) / 2, b.y - 12);
-          p.stroke(locked ? (good ? C.ok : C.bad) : C.brand); p.strokeWeight(3.5); p.line(kx, b.y - 4, kx, b.y + b.h + 4);
-          drawDot(p, C, kx, b.y + b.h + 12, 16, locked ? (good ? C.ok : C.bad) : C.brand);
-          // Áreas dentro de cada pieza (si caben)
-          p.noStroke(); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD); p.textSize(14);
-          if (kx - b.x > 26) { p.fill(inkOn(C.mint, C.ink)); p.text(r.h * k, (b.x + kx) / 2, b.y + b.h / 2); }
-          if (b.x + b.w - kx > 26) { p.fill(inkOn(C.sun, C.ink)); p.text(r.h * (r.w - k), (kx + b.x + b.w) / 2, b.y + b.h / 2); }
-        }
-        // La distributiva
-        const y0 = b.y + b.h + 40;
-        p.noStroke(); p.textStyle(p.BOLD);
-        if (k == null) { p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'Toca o arrastra sobre el rectángulo para cortarlo', W / 2, y0, W - 24, 12); }
-        else {
-          p.fill(C.ink); fitText(p, `${r.h} · ${r.w} = ${r.h} · ${k} + ${r.h} · ${r.w - k}`, W / 2, y0, W - 24, 16);
-          p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, `= ${r.h * k} + ${r.h * (r.w - k)} = ${r.h * r.w}`, W / 2, y0 + 24, W - 24, 14);
-        }
-        if (!locked) for (const [bb, t] of [[bm, '−'], [bp, '+']]) {
-          drawTile(p, C, bb, t, { fill: C.sky, r: 9, lift: 2, size: 18 });
-        }
-        if (!locked) { p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.text('mover el corte', W / 2, H - 44); }
-        if (locked && !good) { p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, `Cortar en ${r.piece / r.h}: pieza de ${r.piece}`, W / 2, H - 30, W - 24, 12); }
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(t => hitBox(t, x, y));
-        if (tb >= 0) { cur = tb; layout(W, H); api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        const step = d => { const rr = R[cur]; cuts[cur] = Math.min(rr.w - 1, Math.max(1, (cuts[cur] ?? Math.floor(rr.w / 2)) + d)); api.ready(cuts.every(k => k != null)); api.sfx?.tap?.(); };
-        if (hitBox(bm, x, y)) { step(-1); return false; }
-        if (hitBox(bp, x, y)) { step(1); return false; }
-        if (x > box.x - 10 && x < box.x + box.w + 10 && y > box.y - 24 && y < box.y + box.h + 26) { drag = true; setCut(x); api.sfx?.tap?.(); return false; }
-      };
-      p.mouseDragged = () => { if (drag && !locked) { setCut(p.mouseX); return false; } };
-      p.mouseReleased = () => { drag = false; };
-    }, 1.6);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ cuts: [...cuts] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create };
-})();
-;
-//#archivo js/games/cancela-balanza.js
-// La balanza que cancela (Álgebra 1.2, ley cancelativa). Una igualdad es una balanza en equilibrio: a cada lado hay
-// fichas que se suman (o se multiplican). Se toca una ficha de la izquierda y luego una igual de la derecha: las dos
-// se van, porque quitar lo mismo de los dos lados mantiene el equilibrio (a + b = a + c ⇒ b = c; con productos,
-// ab = ac y a ≠ 0 ⇒ b = c). Un 0 que multiplica no se deja cancelar (0 · 2 = 0 · 5 y 2 ≠ 5). Se gana cuando a la
-// izquierda queda la x sola.
-// params = { rounds: [{ op: '+' | '·', left: [texto], right: [texto], ans }] }   state = { pairs: [[[i, j], …] por ronda] }
-
-GAMES['cancela-balanza'] = (() => {
-  const canCancel = (r, i, j) => r.left[i] != null && r.left[i] !== 'x' && r.left[i] === r.right[j] && !(r.op === '·' && r.left[i] === '0');
-
-  function solved(r, pairs) {
-    if (!Array.isArray(pairs)) return false;
-    const L = new Set(), Rr = new Set();
-    for (const pr of pairs) {
-      const [i, j] = pr || [];
-      if (L.has(i) || Rr.has(j) || !canCancel(r, i, j)) return false;
-      L.add(i); Rr.add(j);
-    }
-    return r.left.every((t, i) => (t === 'x') !== L.has(i));
-  }
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => solved(r, state.pairs?.[i]));
-    return { ok, solution: params.rounds.map(r => r.ans).join(' · ') };
-  }
-
-  const expr = (tiles, op) => tiles.map((t, k) => (k && t.startsWith('−') ? `(${t})` : t)).join(` ${op} `) || (op === '+' ? '0' : '1');
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const P = R.map(() => []);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], sel = null, msg = '', msgT = 0, boxes = { L: [], R: [] }, reset = null;
-
-    function layout(w, h) { W = w; H = h; tabs = roundTabs(R.length, w); reset = { x: w / 2 - 50, y: h - 46, w: 100, h: 30 }; }
-    const goneL = () => new Set(P[cur].map(p => p[0]));
-    const goneR = () => new Set(P[cur].map(p => p[1]));
-    function say(t) { msg = t; msgT = 150; }
-
-    function placeTiles(side, tiles, gone, x0, x1, y0) {
-      const out = [], tw = Math.min(54, (x1 - x0 - 6) / 2), th = 30;
-      let col = 0, row = 0;
-      tiles.forEach((t, i) => {
-        if (gone.has(i)) { out.push(null); return; }
-        out.push({ x: x0 + 3 + col * (tw + 6), y: y0 - (row + 1) * (th + 6), w: tw, h: th, t, i });
-        if (++col === 2) { col = 0; row++; }
-      });
-      return out;
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], gL = goneL(), gR = goneR(), done = solved(r, P[cur]);
-        drawTabs(p, C, tabs, cur, i => (locked ? (solved(R[i], P[i]) ? C.ok : C.bad) : i === cur ? C.brand : P[i].length ? C.Q : C.line));
-        // La igualdad que queda
-        const left = r.left.filter((_, i) => !gL.has(i)), right = r.right.filter((_, j) => !gR.has(j));
-        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
-        fitText(p, `${expr(left, r.op)} = ${expr(right, r.op)}`, W / 2, 58, W - 24, 18);
-        // Balanza en equilibrio
-        const beamY = H * 0.6, cx = W / 2;
-        p.stroke(C.ink); p.strokeWeight(5); p.line(18, beamY, W - 18, beamY);
-        p.noStroke(); p.fill(C.sun); p.triangle(cx, beamY, cx - 20, beamY + 40, cx + 20, beamY + 40);
-        p.fill(C.card); p.stroke(C.line); p.strokeWeight(1.5);
-        p.rect(14, beamY - 2, cx - 26, 8, 4); p.rect(cx + 12, beamY - 2, cx - 26, 8, 4);
-        boxes.L = placeTiles('L', r.left, gL, 14, cx - 12, beamY - 4);
-        boxes.R = placeTiles('R', r.right, gR, cx + 12, W - 14, beamY - 4);
-        for (const [side, list] of [['L', boxes.L], ['R', boxes.R]]) for (const b of list) {
-          if (!b) continue;
-          const isX = b.t === 'x', on = side === 'L' && sel === b.i;
-          // Fichas crema; la x, color sol; la elegida lleva aro.
-          drawTile(p, C, b, b.t, { fill: isX ? C.sun : C.cream, r: 8, lift: 2, size: 15, ring: on ? C.brand : null });
-        }
-        p.noStroke(); p.textStyle(p.NORMAL); p.fill(C.mute); p.textSize(11);
-        p.text(r.op === '+' ? 'fichas que se suman' : 'fichas que se multiplican', W / 2, beamY + 56);
-        // Mensajes
-        if (msgT > 0) { msgT--; p.fill(C.bad); p.textStyle(p.BOLD); fitText(p, msg, W / 2, 86, W - 24, 12); }
-        else if (done) drawPill(p, C, '¡La x quedó sola!', W / 2, 86, locked ? C.ok : C.mint, 13);
-        else { p.fill(C.mute); fitText(p, sel == null ? 'Toca una ficha de la izquierda…' : '…y luego su gemela de la derecha', W / 2, 86, W - 24, 12); }
-        if (locked && !done) { p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, `Quedaba ${r.ans}`, W / 2, H - 31, W - 24, 13); }
-        else if (!locked) {
-          drawTile(p, C, reset, 'Reiniciar', { r: 8, lift: 2, size: 12 });
-        }
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY, r = R[cur];
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; sel = null; msgT = 0; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        if (hitBox(reset, x, y)) { P[cur] = []; sel = null; api.ready(R.every((rr, i) => P[i].length > 0)); return false; }
-        const bl = boxes.L.find(b => b && hitBox(b, x, y));
-        if (bl) {
-          if (bl.t === 'x') say('La x es la que queremos dejar sola');
-          else if (r.op === '·' && bl.t === '0') say('El 0 no se cancela: 0 · 2 = 0 · 5 y 2 ≠ 5');
-          else { sel = bl.i; api.sfx?.tap?.(); }
-          return false;
-        }
-        const br = boxes.R.find(b => b && hitBox(b, x, y));
-        if (br) {
-          if (sel == null) { say('Empieza por una ficha de la izquierda'); return false; }
-          if (canCancel(r, sel, br.i)) { P[cur].push([sel, br.i]); sel = null; api.sfx?.tap?.(); api.ready(R.every((rr, i) => P[i].length > 0)); }
-          else say('Solo se quitan dos fichas iguales');
-          return false;
-        }
-      };
-    }, 1.2);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ pairs: P.map(l => l.map(pr => [...pr])) }),
-      lock() { locked = true; sel = null; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, canCancel };
-})();
-;
 //#archivo js/games/tren-ordenado.js
 // El tren ordenado (Álgebra 1.3, axiomas de orden). Cada ronda trae un tren de vagones con números reales
 // (enteros, fracciones, decimales, raíces, π) en desorden. Se arrastra cada vagón a su lugar para que el tren
@@ -9403,6 +8859,122 @@ Object.assign(XG, (() => {
   XG.renglones('se-acerca-normal', { w: 118, x: 268 });
   XG.renglones('tono-o-volumen', { w: 96, x: 278 });
   XG.ascensor('sube-rapidez', 100, 2, neutro);
+})();
+;
+//#archivo js/games/espacio-escena.js
+// Ejercicios de «Movimientos y Vistas» (Preicfes, icf-ma-espacio; spec 2026-11-25-preicfes-estructura): movimientos en el plano y
+// coordenadas. Armazones en figura-kit, conteo-escena y proposiciones-escena. La imagen completa aparece al comprobar.
+(() => {
+  const neutro = ['Se pasó. Vuelve a mirar.', 'Le faltó. Vuelve a mirar.'], M = 6, U = 17, X = x => 170 + x * U, Y = y => 112 - y * U;
+  const red = K => { let h = ''; for (let i = -M; i <= M; i++) h += K.l(X(i), Y(-M), X(i), Y(M), i ? 'lr' : 'lm') + K.l(X(-M), Y(i), X(M), Y(i), i ? 'lr' : 'lm'); for (const i of [-4, -2, 2, 4]) h += K.t(X(i), Y(0) + 14, i, 's tm') + K.t(X(0) - 6, Y(i) + 4, i, 's tm', 'end'); return h; };
+  const poli = (K, ps, cls) => K.p(ps.map(([x, y]) => [X(x), Y(y)]), cls);
+  // Un punto de la figura y su imagen: se arrastra la imagen de A.  T(q, p) lleva cada punto a su imagen.
+  const imagen = (nombre, d) => XG.figura(nombre, {
+    ini: () => ({ x: 0, y: 0 }), alto: () => 224, ms: 1100, pie: 'Arrastra el punto a donde queda A.',
+    manijas: () => [{ k: ['x', 'y'], min: [-M, -M], max: [M, M], paso: 1, r: 10, en: v => [X(v.x), Y(v.y)], de: (x, y) => [(x - 170) / U, (112 - y) / U] }],
+    ok(v, p) { const [x, y] = d.T(p.A, p); return v.x === x && v.y === y; }, sol(p) { const [x, y] = d.T(p.A, p); return { x, y }; }, texto: p => `(${d.T(p.A, p).join(', ')})`,
+    dib: (v, K, p, f) => red(K) + (d.fondo?.(K, p) || '') + poli(K, [p.A, ...p.otros], 'fa') + K.t(X(p.A[0]), Y(p.A[1]) - 8, 'A', 'b ta') + K.f(f, poli(K, [p.A, ...p.otros].map(q => d.T(q, p)), 'fg')),
+    aviso: (v, p) => d.aviso?.(v, p) || 'A no queda ahí.', bien: (v, p) => `A queda en (${d.T(p.A, p).join(', ')}).`,
+  });
+  imagen('traslada-punto', { T: ([x, y], p) => [x + p.v[0], y + p.v[1]], aviso: (v, p) => (v.x === p.A[0] + p.v[0] ? 'El movimiento de lado está bien: mira cuánto sube o baja.' : v.y === p.A[1] + p.v[1] ? 'La altura está bien: mira cuánto va de lado.' : 'Cuenta los cuadros desde A, no desde el origen.') });
+  imagen('refleja-punto', { T: ([x, y], p) => (p.eje === 'y' ? [-x, y] : p.eje === 'x' ? [x, -y] : [y, x]), fondo: (K, p) => (p.eje === 'y' ? K.l(X(0), Y(-M), X(0), Y(M), 'lg gr') : p.eje === 'x' ? K.l(X(-M), Y(0), X(M), Y(0), 'lg gr') : K.l(X(-M), Y(-M), X(M), Y(M), 'lg gr')), aviso: () => 'La imagen queda igual de lejos de la línea, justo al frente.' });
+  imagen('rota-punto', { T: ([x, y], p) => (p.g === 90 ? [-y || 0, x] : p.g === 180 ? [-x, -y] : [y, -x || 0]), fondo: K => K.c(X(0), Y(0), 5, 'fF'), aviso: (v, p) => (Math.abs(v.x ** 2 + v.y ** 2 - p.A[0] ** 2 - p.A[1] ** 2) < 1e-9 ? 'Está a la misma distancia del centro, pero no es ese giro.' : 'Al girar no cambia la distancia al centro.') });
+  imagen('homotecia-punto', { T: ([x, y], p) => [x * p.k, y * p.k], fondo: K => K.c(X(0), Y(0), 5, 'fF'), aviso: (v, p) => (p.k < 0 && v.x === p.A[0] * -p.k && v.y === p.A[1] * -p.k ? 'Con factor negativo pasa al otro lado del centro.' : 'Multiplica la distancia desde el centro, en la misma recta.') });
+  XG.renglones('que-movimiento', { w: 108, x: 274 });
+  XG.frases('que-se-conserva');
+  XG.ascensor('sube-movimiento', 100, 2, neutro);
+
+  // ---------------------------------------------------------------------------------------------------------- coordenadas
+  const libre = (nombre, d) => XG.figura(nombre, {
+    ini: () => ({ x: 0, y: 0 }), alto: () => 224, ms: 900, pie: d.pie, manijas: () => [{ k: ['x', 'y'], min: [-M, -M], max: [M, M], paso: 1, r: 10, en: v => [X(v.x), Y(v.y)], de: (x, y) => [(x - 170) / U, (112 - y) / U] }],
+    ok(v, p) { const [x, y] = d.meta(p); return v.x === x && v.y === y; }, sol(p) { const [x, y] = d.meta(p); return { x, y }; }, texto: p => `(${d.meta(p).join(', ')})`, dib: (v, K, p, f) => red(K) + d.dib(v, K, p, f), aviso: d.aviso, bien: d.bien,
+  });
+  // Cuarto vértice de un paralelogramo ABCD: D = A + C − B.
+  const cuarto = p => [p.A[0] + p.C[0] - p.B[0], p.A[1] + p.C[1] - p.B[1]];
+  libre('cuarto-vertice', { pie: 'Arrastra el vértice D.', meta: cuarto, dib: (v, K, p, f) => K.pl([p.A, p.B, p.C].map(([x, y]) => [X(x), Y(y)]), 'la gr') + [['A', p.A], ['B', p.B], ['C', p.C]].map(([t, [x, y]]) => K.c(X(x), Y(y), 4, 'fa') + K.t(X(x) + 9, Y(y) - 7, t, 'b ta')).join('') + K.f(f, K.pl([p.C, [v.x, v.y], p.A].map(([x, y]) => [X(x), Y(y)]), 'lg gr')),
+    aviso: () => 'Los lados opuestos deben ir igual: lo que se camina de B a A, se camina de C a D.', bien: (v) => `D = (${v.x}, ${v.y}).` });
+  // Punto del segmento AB que lo parte en dos.
+  libre('punto-medio', { pie: 'Arrastra el punto medio.', meta: p => [(p.A[0] + p.B[0]) / 2, (p.A[1] + p.B[1]) / 2], dib: (v, K, p, f) => [['A', p.A], ['B', p.B]].map(([t, [x, y]]) => K.c(X(x), Y(y), 5, 'fa') + K.t(X(x) + 9, Y(y) - 7, t, 'b ta')).join('') + K.f(f, K.l(X(p.A[0]), Y(p.A[1]), X(p.B[0]), Y(p.B[1]), 'la gr')),
+    aviso: (v, p) => (2 * v.x === p.A[0] + p.B[0] ? 'La x está bien; promedia las y.' : 2 * v.y === p.A[1] + p.B[1] ? 'La y está bien; promedia las x.' : 'Promedia las x y promedia las y.'), bien: v => `(${v.x}, ${v.y}) está a igual distancia de A y de B.` });
+  // Coordenadas polares de un punto sobre un eje.  params { P: [x, y], r, g }
+  XG.figura('polar-gira', {
+    ini: () => ({ g: 0, r: 1 }), alto: () => 300, ms: 1000, pie: 'Mueve el giro y los pasos.', manijas: () => [{ k: 'g', min: 0, max: 345, paso: 15, et: 'giro (°)' }, { k: 'r', min: 1, max: 6, paso: 1, et: 'pasos' }],
+    ok: (v, p) => v.g === p.g && v.r === p.r, sol: p => ({ g: p.g, r: p.r }), texto: p => `${p.r} pasos a ${p.g}°`,
+    dib(v, K, p, f) { const q = K.at(X(0), Y(0), 70, v.g); return red(K) + K.c(X(p.P[0]), Y(p.P[1]), 6, 'fa') + K.l(X(0), Y(0), ...q, 'lg gr') + K.c(X(0), Y(0), 4, 'fF') + K.f(f, K.c(...K.at(X(0), Y(0), v.r * U, v.g), 8, 'fg')); },
+    aviso: (v, p) => (v.g !== p.g ? 'No mira hacia el punto: el giro empieza a la derecha y va contra el reloj.' : 'Mira bien, pero camina otra distancia.'), bien: (v, p) => `(${p.P.join(', ')}) es ${p.r} pasos a ${p.g}°.`,
+  });
+  XG.renglones('polar-a-cartesiana', { w: 92, x: 274 });
+  XG.frases('mismo-polar');
+  XG.rotula('caja-coordenadas', {
+    slots: p => p.metas.map((_, i) => ({ x: 262, y: 34 + i * 48, w: 112, h: 40 })), fichas: p => p.fichas, metas: p => p.metas, texto: p => p.metas.join('; '), alto: p => Math.max(190, 34 + p.metas.length * 48 - 18),
+    fondo(K, p) { const o = [84, 156], u = 22, c = (x, y, z) => K.iso(o, u, x, y, z), L = (a, b) => K.l(...c(...a), ...c(...b), 'gr'), [a, b, h] = p.d, V = [[0, 0, 0], [a, 0, 0], [0, b, 0], [0, 0, h], [a, b, 0], [a, 0, h], [0, b, h], [a, b, h]]; return [[0, 1], [0, 2], [0, 3], [1, 4], [1, 5], [2, 4], [2, 6], [3, 5], [3, 6], [4, 7], [5, 7], [6, 7]].map(([i, j]) => L(V[i], V[j])).join('') + p.ver.map(([t, q], i) => { const [x, y] = c(...q); return K.c(x, y, 5, 'fF') + K.t(x + 8, y - 6, t, 'b ta', 'start'); }).join('') + K.t(c(a + 0.6, 0, 0)[0], c(a + 0.6, 0, 0)[1] + 10, 'x', 's tm') + K.t(c(0, b + 0.6, 0)[0], c(0, b + 0.6, 0)[1], 'y', 's tm') + K.t(c(0, 0, h + 0.5)[0], c(0, 0, h + 0.5)[1], 'z', 's tm') + p.ver.map(([t], i) => K.t(196, 39 + i * 48, t, 'b', 'end')).join(''); },
+    aviso(q, p) { const i = p.metas.findIndex((m, k) => q[k][0] !== m); return p.trampas?.[`${i}:${q[i][0]}`] || p.mira[i]; }, bien: p => p.ok,
+  });
+  XG.ascensor('sube-distancia', 60, 1, neutro);
+})();
+;
+//#archivo js/games/gases-escena.js
+// Ejercicios de «Gases y Disoluciones» y «Electricidad y Magnetismo» (Preicfes; spec 2026-11-25-preicfes-estructura). Armazones en
+// figura-kit, conteo-escena y proposiciones-escena. La escena no dice el resultado mientras se responde.
+(() => {
+  const neutro = ['Se pasó. Vuelve a mirar.', 'Le faltó. Vuelve a mirar.'], N = x => Math.round(x * 100) / 100;
+  const bolas = (K, x, y, w, h, n) => Array.from({ length: n }, (_, i) => K.c(x + 8 + ((i * 37) % 97) / 97 * (w - 16), y + 8 + ((i * 59) % 83) / 83 * (h - 16), 3.2, 'ff')).join('');
+  // Émbolo: presión por volumen no cambia.  params { P, V, P2, max, paso }
+  XG.figura('boyle-embolo', {
+    ini: p => ({ v: p.V }), alto: () => 186, ms: 1000, pie: 'Mueve el émbolo.', manijas: p => [{ k: 'v', min: p.paso, max: p.max, paso: p.paso, et: 'volumen (L)' }],
+    ok: (v, p) => v.v * p.P2 === p.P * p.V, sol: p => ({ v: p.P * p.V / p.P2 }), texto: p => `${N(p.P * p.V / p.P2)} L`,
+    dib(v, K, p, f) { const w = 230 * v.v / p.max; return K.r(30, 24, 250, 70, 'fn', 4) + K.r(30, 24, w, 70, 'fa', 2) + bolas(K, 30, 24, Math.max(26, w), 70, 18) + K.r(30 + w, 20, 10, 78, 'fk', 2) + K.f(f, K.t(170, 122, `${p.P2} · ${N(v.v)} = ${N(p.P2 * v.v)}`, 'b')); },
+    aviso: (v, p) => (v.v * p.P2 === p.P * p.V ? '' : v.v === p.V * p.P2 / p.P ? 'A más presión, menos volumen: van al contrario.' : v.v * p.P2 > p.P * p.V ? 'Con ese volumen el producto es mayor que antes.' : 'Con ese volumen el producto es menor que antes.'), bien: (v, p) => `${p.P} · ${p.V} = ${p.P2} · ${N(v.v)}.`,
+  });
+  // Globo: volumen proporcional a la temperatura en kelvin.  params { V, T, T2, max, paso }
+  XG.figura('charles-globo', {
+    ini: p => ({ v: p.V }), alto: () => 200, ms: 1000, pie: 'Mueve el volumen del globo.', manijas: p => [{ k: 'v', min: p.paso, max: p.max, paso: p.paso, et: 'volumen (L)' }],
+    ok: (v, p) => v.v * p.T === p.V * p.T2, sol: p => ({ v: p.V * p.T2 / p.T }), texto: p => `${N(p.V * p.T2 / p.T)} L`,
+    dib(v, K, p, f) { const r = x => 46 * Math.cbrt(x / p.max); return K.c(90, 66, r(p.V), 'fc') + K.t(90, 128, `${p.T} K: ${p.V} L`, 's tm') + K.c(240, 66, r(v.v), 'fa') + K.t(240, 128, `${p.T2} K`, 's tm') + K.f(f, K.t(170, 20, `${N(v.v)} ÷ ${p.T2} = ${N(v.v / p.T2 * 1000) / 1000}`, 'b')); },
+    aviso: (v, p) => (Math.sign(v.v - p.V) !== Math.sign(p.T2 - p.T) ? 'Si sube la temperatura, el volumen sube; si baja, baja.' : 'La dirección es esa; volumen y kelvin cambian en la misma proporción.'), bien: (v, p) => `${p.V} es a ${p.T} como ${N(v.v)} es a ${p.T2}.`,
+  });
+  XG.renglones('gas-sube-baja', { w: 96, x: 278 });
+  XG.ascensor('sube-gas', 100, 2, neutro);
+  // ------------------------------------------------------------------------------------------------------- concentración
+  const vaso = (K, x, y, w, h, q, cls) => K.r(x, y, w, h, 'fn', 3) + K.r(x, y + h * (1 - q), w, h * q, cls, 2);
+  // Agua total para llegar a una concentración.  params { g, meta (g/L), max, paso }
+  XG.figura('concentra-agua', {
+    ini: p => ({ l: p.paso }), alto: () => 190, ms: 1000, pie: 'Mueve el volumen de la disolución.', manijas: p => [{ k: 'l', min: p.paso, max: p.max, paso: p.paso, et: 'disolución (L)' }],
+    ok: (v, p) => N(v.l * p.meta) === p.g, sol: p => ({ l: N(p.g / p.meta) }), texto: p => `${N(p.g / p.meta)} L`,
+    dib(v, K, p, f) { const q = v.l / p.max; return vaso(K, 110, 16, 120, 96, q, 'fa') + Array.from({ length: 16 }, (_, i) => K.c(122 + (i * 43 % 97), 112 - 4 - (i * 29 % 89) / 89 * Math.max(4, 96 * q - 8), 2.6, 'ff')).join('') + K.t(244, 66, `${p.g} g`, 's tm', 'start') + K.f(f, K.t(170, 132, `${p.g} ÷ ${N(v.l)} = ${N(p.g / v.l)} g/L`, 'b')); },
+    aviso: (v, p) => (p.g / v.l > p.meta ? 'Así queda más concentrada.' : 'Así queda menos concentrada.'), bien: (v, p) => `${p.g} g en ${v.l} L: ${p.meta} g por litro.`,
+  });
+  // Agua que se agrega para bajar la concentración.  params { V, C, C2, max, paso }
+  XG.figura('diluye-agua', {
+    ini: () => ({ a: 0 }), alto: () => 190, ms: 1000, pie: 'Mueve el agua que agregas.', manijas: p => [{ k: 'a', min: 0, max: p.max, paso: p.paso, et: 'agua agregada (L)' }],
+    ok: (v, p) => N((p.V + v.a) * p.C2) === N(p.V * p.C), sol: p => ({ a: N(p.V * p.C / p.C2 - p.V) }), texto: p => `${N(p.V * p.C / p.C2 - p.V)} L`,
+    dib(v, K, p, f) { const u = 96 / (p.V + p.max); return K.r(120, 14, 100, 96, 'fn', 3) + K.r(120, 110 - p.V * u, 100, p.V * u, 'ff', 0) + K.r(120, 110 - (p.V + v.a) * u, 100, v.a * u, 'fa', 0) + K.t(112, 114 - p.V * u / 2, `${p.V} L`, 's tm', 'end') + K.f(f, K.t(170, 132, `${N(p.V * p.C)} g ÷ ${N(p.V + v.a)} L = ${N(p.V * p.C / (p.V + v.a))} g/L`, 'b')); },
+    aviso: (v, p) => (N(v.a) === N(p.V * p.C / p.C2) ? 'Ese es el volumen final: se pide el agua que se agrega.' : (p.V + v.a) * p.C2 < p.V * p.C ? 'Todavía queda muy concentrada.' : 'Quedó demasiado diluida.'), bien: (v, p) => `${N(p.V * p.C)} g en ${N(p.V + v.a)} L.`,
+  });
+  XG.renglones('concentracion-tabla', { w: 88, x: 276 });
+  XG.renglones('mas-o-menos-concentrada', { w: 104, x: 276 });
+  // ----------------------------------------------------------------------------------------------------------- circuitos
+  const pila = (K, x, y, t) => K.l(x - 10, y, x + 10, y, 'gr') + K.l(x - 5, y + 8, x + 5, y + 8, 'gr') + K.t(x - 16, y + 9, t, 's tm', 'end');
+  const res = (K, x, y, t, cls = 'fa') => K.r(x - 22, y - 9, 44, 18, cls, 3) + K.t(x, y + 4, t, 's');
+  // Ley de Ohm.  params { V, R, max, paso }
+  XG.figura('corriente-resistor', {
+    ini: () => ({ i: 0 }), alto: () => 190, ms: 1000, pie: 'Mueve la corriente.', manijas: p => [{ k: 'i', min: 0, max: p.max, paso: p.paso, et: 'corriente (A)' }],
+    ok: (v, p) => N(v.i * p.R) === p.V, sol: p => ({ i: N(p.V / p.R) }), texto: p => `${N(p.V / p.R)} A`,
+    dib: (v, K, p, f) => K.pl([[80, 56], [80, 20], [260, 20], [260, 100], [80, 100], [80, 64]], 'gr') + pila(K, 80, 56, `${p.V} V`) + res(K, 170, 20, `${p.R} Ω`) + Array.from({ length: 6 }, (_, j) => K.c(100 + j * 30, 100, 2 + 3 * v.i / p.max, 'fg')).join('') + K.f(f, K.t(170, 70, `${N(v.i)} · ${p.R} = ${N(v.i * p.R)} V`, 'b')),
+    aviso: (v, p) => (v.i * p.R < p.V ? 'Con esa corriente sobraría voltaje.' : 'Para esa corriente haría falta más voltaje.'), bien: (v, p) => `${v.i} por ${p.R}: ${p.V} V.`,
+  });
+  // Dos resistencias en serie.  params { V, I, R1, max }
+  XG.figura('serie-resistencia', {
+    ini: () => ({ r: 0 }), alto: () => 190, ms: 1000, pie: 'Mueve la otra resistencia.', manijas: p => [{ k: 'r', min: 0, max: p.max, paso: 1, et: 'resistencia (Ω)' }],
+    ok: (v, p) => p.I * (p.R1 + v.r) === p.V, sol: p => ({ r: p.V / p.I - p.R1 }), texto: p => `${p.V / p.I - p.R1} Ω`,
+    dib: (v, K, p, f) => K.pl([[80, 56], [80, 20], [260, 20], [260, 100], [80, 100], [80, 64]], 'gr') + pila(K, 80, 56, `${p.V} V`) + res(K, 132, 20, `${p.R1} Ω`) + res(K, 208, 20, '?', 'ff') + K.t(170, 92, `${p.I} A`, 's tm') + K.f(f, K.t(170, 64, `${p.I} · (${p.R1} + ${N(v.r)}) = ${N(p.I * (p.R1 + v.r))} V`, 'b')),
+    aviso: (v, p) => (v.r === p.V / p.I ? 'Esa es la resistencia total: falta quitar la que ya está.' : p.I * (p.R1 + v.r) < p.V ? 'Con esa resistencia pasaría más corriente.' : 'Con esa resistencia pasaría menos corriente.'), bien: (v, p) => `${p.R1} + ${v.r} = ${p.V / p.I} Ω en total.`,
+  });
+  XG.renglones('paralelo-ramas', { w: 84, x: 280 });
+  XG.frases('que-prende');
+  XG.ascensor('sube-vatios', 100, 2, neutro);
+  XG.renglones('atrae-repele', { w: 104, x: 276 });
+  XG.renglones('fuerza-cambia', { w: 96, x: 278 });
 })();
 ;
 //#archivo js/games/conjuntos-escena.js
@@ -22893,5 +22465,246 @@ PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
     ['pu-op-2', 'Los operadores anidados se resuelven de adentro hacia afuera.',
       opc('Se define la operación $a \\star b = 2a - b$. El valor de $(5 \\star 4) \\star 3$ es:', ['9', '3', '6', '15'], 0,
         '$5 \\star 4 = 10 - 4 = 6$ y $6 \\star 3 = 12 - 3 = 9$.', 'Resuelve primero el paréntesis.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-aritmetica.js
+// Preuniversitario · mundo 12 «Aritmética y promedios»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+PU_JUEGOS.push(({ setExam }) => {
+  const N = (v, w) => [...w].reduce((a, c) => a * 10 + v[c], 0);
+  const X = n => Math.floor(n / 10), Y = n => n % 10, REV = n => 10 * Y(n) + X(n);
+
+  setExam('pu-aritmetica', 'Aritmética y promedios', [
+    ['pu-ar-1', 'Cada fracción se toma de lo que quedaba antes de esa compra.',
+      play('corta-lo-que-queda', 'De lo que queda', { rounds: [{ total: 60000, steps: [[1, 2, 'total'], [1, 3, 'resto']] }] }, 'Quedan 30 000 y luego 20 000.', { hint: 'Lo que queda.' })],
+    ['pu-ar-1', 'Lo que queda al final es el producto de lo que va quedando.',
+      play('total-original', 'Original', { rounds: [{ steps: [[1, 4, 'total'], [1, 3, 'resto']], left: 30000, step: 5000, max: 100000 }] }, 'Queda la mitad: había 60 000.', { hint: 'Fracción que queda.' })],
+    ['pu-ar-2', 'En un promedio ponderado cada nota pesa su porcentaje.',
+      play('nota-ponderada', 'Ponderado', { rounds: [{ items: [['parcial', 40, 3.5], ['final', 60, null]], target: 3.8 }] }, '$1.4 + 0.6x = 3.8$: $x = 4$.', { hint: 'Pesos.' })],
+    ['pu-ar-2', 'Promedio × cantidad = suma total.',
+      play('dato-faltante', 'Falta', { rounds: [{ data: [12, null, 9], mean: 10, hi: 15, step: 1 }] }, '$30 - 21 = 9$.', { hint: 'Suma.' })],
+    ['pu-ar-3', 'Letras distintas son cifras distintas, y ningún número empieza en 0.',
+      play('cripto-letras', 'Cripto', { rounds: [{ letters: 'AB', show: 'AB − BA = 27 y A + B = 11', f: v => N(v, 'AB') - N(v, 'BA') === 27 && v.A + v.B === 11, lead: 'AB' }] }, '$74 - 47 = 27$.', { hint: '9(A − B).' })],
+    ['pu-ar-3', 'Un número de dos cifras XY vale 10X + Y.',
+      play('tablero-cifras', 'Tablero', { rounds: [{ conds: [{ say: 'sus cifras suman 12', f: n => X(n) + Y(n) === 12 }, { say: 'al invertirlo sube 18', f: n => REV(n) - n === 18 }] }] }, 'Y − X = 2 y X + Y = 12: 57.', { hint: 'Invertir.' })],
+    ['pu-ar-4', 'Para asegurar algo se piensa en el peor caso.',
+      play('peor-caso-bolsa', 'Peor caso', { rounds: [{ bag: [['coral', 4], ['sky', 4]], kind: 'iguales', k: 3 }] }, '2 de cada color y una más: 5.', { hint: 'Peor suerte.' })],
+    ['pu-ar-4', 'Para el máximo de uno, los demás van al mínimo.',
+      play('reparto-extremo', 'Reparto', { rounds: [{ n: 3, total: 18, ask: 'max' }] }, '1 y 2 a los otros: 15.', { hint: 'Mínimo a los demás.' })],
+  ]);
+});
+
+// Mundo 12 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/aritmetica-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ar-1', [
+    play('fraccion-de-que', 'De 120 mil pesos se gasta primero $\\tfrac16$. Llena cada renglón.', { et: ['el primer gasto', 'lo que queda', '2/5 de lo que queda', '2/5 del total'], metas: ['20', '100', '40', '48'], fichas: ['20', '100', '40', '48', '40', '60', '80'],
+      mira: ['Parte 120 en seis pedazos iguales y toma uno.', 'Al total se le quita el primer gasto.', 'Parte lo que queda en cinco y toma dos.', 'Ahora el todo vuelve a ser 120.'], trampas: { '2:48': 'Eso es 2/5 de 120: el todo ya no es ese.', '3:40': 'Eso es 2/5 de lo que queda.' }, ok: 'La misma fracción da distinto si cambia el todo.' },
+      'Un sexto de 120 son 20 y quedan 100. Dos quintos de 100 son 40, pero dos quintos de 120 son 48.',
+      { hint: 'Antes de partir, pregúntate: ¿de qué cantidad se está tomando la fracción?' }),
+    play('corta-barra', 'Una barra de **40** cuadros. Se gastan $\\tfrac38$ y después $\\tfrac25$ **de lo que queda**. Pon el corte de arriba donde termina el primer gasto y el de abajo donde termina el segundo.', { n: 40, a: 15, b: 25, f1: [3, 8] },
+      'Un octavo de 40 son 5: el primer gasto es 15. Quedan 25 y dos quintos de 25 son 10: el segundo corte va en 25.',
+      { hint: 'Halla el primer gasto. Después parte en cinco solo el pedazo que quedó.' }),
+    play('queda-producto', 'Se gastan $\\tfrac27$ del dinero y luego $\\tfrac15$ de lo que queda. ¿Qué fracción **queda** al final?', { n: 7, et: ['queda del total', 'queda de eso', 'queda al final'], ops: ['·', '='], metas: ['5/7', '4/5', '4/7'], fichas: ['5/7', '4/5', '4/7', '2/7', '1/5', '2/35', '18/35'],
+      mira: ['Si se gastan dos séptimos, ¿cuántos séptimos quedan?', 'De eso se gasta un quinto: ¿qué parte de eso queda?', 'Multiplica las dos partes que quedan y simplifica.'], trampas: { '0:2/7': 'Eso es lo que se gastó, no lo que queda.', '1:1/5': 'Eso es lo que se gastó, no lo que queda.', '2:2/35': 'Multiplicaste lo gastado.', '2:18/35': 'Restaste 1/5 del total, pero es de lo que queda.' }, ok: 'Se multiplica lo que va quedando.' },
+      'Quedan $\\tfrac57$ y de eso quedan $\\tfrac45$: $\\tfrac57 \\cdot \\tfrac45 = \\tfrac47$.',
+      { hint: 'No mires lo que se gasta: mira qué parte se conserva cada vez.' }),
+    play('desde-el-final', 'Alguien gasta $\\tfrac14$ de sus ahorros y después $\\tfrac25$ de lo que le queda. Al final quedan **36** mil. Camina hacia atrás.', { s: ['gasta 1/4', 'gasta 2/5'], queda: '36', metas: ['80', '60'], fichas: ['80', '60', '90', '75', '72', '240', '50'],
+      mira: ['Lo que había después del primer gasto es solo una parte del principio: ¿cuántos cuartos?', '36 es lo que quedó al gastar dos quintos: ¿cuántos quintos son?'], trampas: { '0:75': 'Sumarle 1/4 de 60 no sirve: el cuarto se tomó del principio.', '0:240': '60 no es un cuarto: es lo que quedó.', '1:90': '36 no son los dos quintos gastados: son los que quedaron.', '1:72': '36 no es la mitad de lo que había.' }, ok: '80 − 20 = 60 y 60 − 24 = 36.' },
+      '36 son tres quintos: un quinto son 12 y antes había 60. Y 60 son tres cuartos: un cuarto son 20 y al principio había 80.',
+      { hint: 'Empieza por el final: ¿qué fracción de lo que había antes son los 36?' }),
+    play('dejan-lo-mismo', 'Toca **todas** las maneras de gastar que dejan justo $\\tfrac35$ del total.', { casos: [{ t: '1/5 y luego 1/4 de lo que queda', si: true }, { t: '1/5 y luego 1/5 de lo que queda', no: '1/5 y luego 1/5 de lo que queda deja 4/5 de 4/5: son 16/25.' }, { t: '1/4 y luego 1/5 de lo que queda', si: true }, { t: '1/5 y luego 1/5 del total', si: true }, { t: '1/4 y luego 1/5 del total', no: '1/4 y 1/5 del total juntos son 9/20: quedan 11/20.' }], falta: 'Falta otra: con «del total» se restan; con «de lo que queda» se multiplica lo que queda.', ok: 'Al multiplicar lo que queda, el orden no importa.' },
+      '$\\tfrac45 \\cdot \\tfrac34 = \\tfrac35$ en los dos órdenes, y $1 - \\tfrac15 - \\tfrac15 = \\tfrac35$ cuando las dos son del total.',
+      { hint: 'Fíjate en las últimas palabras de cada una: ¿del total o de lo que queda?' }),
+    play('tres-tandas', 'Un tanque tiene **240** litros. Salen $\\tfrac16$, luego $\\tfrac14$ de lo que queda y luego $\\tfrac25$ de lo que queda. Pon lo que hay después de cada salida.', { s: ['sale 1/6', 'sale 1/4', 'sale 2/5'], et: ['después', 'después', 'después'], metas: ['200', '150', '90'], fichas: ['200', '150', '90', '40', '140', '54', '60'],
+      mira: ['Un sexto de 240 es lo que sale: réstalo.', 'Ahora la fracción se toma de los litros que hay.', 'La última fracción también se toma de los litros que hay.'], trampas: { '0:40': 'Eso es lo que salió.', '1:140': 'Quitaste un cuarto de 240, no de lo que había.', '2:54': 'Quitaste dos quintos de 240, no de lo que había.', '2:60': 'Eso es lo que salió.' }, ok: 'Cada salida estrena un todo.' },
+      'Sale 40 y quedan 200. Sale 50 y quedan 150. Sale 60 y quedan 90.',
+      { hint: 'Cada fracción se toma de lo que había justo antes de esa salida.' }),
+    play('porciento-resto', 'De un sueldo de **500** se ahorra el **20 %** y del resto se gasta el **75 %**. Completa.', { et: ['tras ahorrar', 'se gasta', 'queda'], metas: ['400', '300', '100'], fichas: ['400', '300', '100', '480', '375', '25', '125'],
+      mira: ['El 20 % es la quinta parte: quítala.', 'El 75 % se toma del resto.', 'Al resto quítale lo que se gasta.'], trampas: { '0:480': 'El 20 % de 500 no es 20.', '1:375': 'Eso es el 75 % de 500: se toma del resto.', '1:100': 'Eso es lo que queda, no lo que se gasta.' }, ok: 'Con porcentajes pasa igual: el todo cambia.' },
+      'El 20 % de 500 son 100 y quedan 400. El 75 % de 400 son 300 y quedan 100.',
+      { hint: 'El segundo porcentaje no es del sueldo completo.' }),
+    play('sube-resto', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De **140** hojas se usan $\\tfrac27$ y luego $\\tfrac14$ de lo que queda. ¿Cuántas quedan?', r: 75, c: '140 - 40 - 25', e: { 25: 'Esas son las que se usaron la segunda vez.', 65: 'El cuarto es de lo que queda.' } },
+      { q: 'Se gasta $\\tfrac16$ y luego $\\tfrac15$ de lo que queda. Sobran **80**. ¿Cuánto había al principio?', r: 120, c: '80 \\div \\tfrac23', e: { 100: 'Eso había después del primer gasto.' } },
+      { q: 'Regala la mitad y luego la mitad de lo que le queda. Le sobran **15**. ¿Cuánto tenía?', r: 60, c: '15 \\cdot 4', e: { 30: 'Eso tenía antes de la segunda vez.', 45: 'Las dos mitades no son iguales.' } }] },
+      '$140 - 40 = 100$ y $100 - 25 = 75$. $\\tfrac56 \\cdot \\tfrac45 = \\tfrac23$ son 80: había 120. Y 15 es la cuarta parte de 60.',
+      { hint: 'Mira qué fracción del principio es lo que queda.' }),
+    sol('Camilo leyó un libro así: el lunes leyó la cuarta parte del libro; el martes, la tercera parte de lo que le faltaba; el miércoles leyó 60 páginas y terminó el libro. ¿Cuántas páginas tiene el libro?',
+      ['Después del lunes le falta [[$\\tfrac34$]] del libro', 'El martes lee $\\tfrac13$ de $\\tfrac34$, que es [[$\\tfrac14$]] del libro', 'Le queda $\\tfrac34 - \\tfrac14 =$ [[$\\tfrac12$]] del libro, que son las 60 páginas', 'El libro tiene $60 \\cdot 2 =$ [[120]] páginas'],
+      ['$\\tfrac{5}{12}$', '144', '$\\tfrac13$'],
+      'La tercera parte del martes es de lo que faltaba ($\\tfrac34$), no del libro entero. Las 60 páginas del miércoles son la mitad del libro.',
+      'Lleva la cuenta de lo que falta por leer después de cada día, siempre como fracción del libro completo.'),
+    err('De un tanque lleno de agua se sacaron primero las dos quintas partes de su contenido y luego 10 litros más. Después de esto, el tanque quedó exactamente hasta la mitad. ¿Cuál es la capacidad del tanque?',
+      ['Después de sacar $\\tfrac25$ queda $\\tfrac35$ del tanque', 'Al final queda $\\tfrac12$: los 10 litros son la diferencia, $\\tfrac35 - \\tfrac12 = \\tfrac{1}{10}$ del tanque', 'Si $\\tfrac{1}{10}$ del tanque son 10 litros, la capacidad es $10 \\div 10 = 1$ litro'], 2,
+      ['Si $\\tfrac{1}{10}$ del tanque son 10 litros, la capacidad es $10 \\cdot 10 = 100$ litros', 'Si $\\tfrac{1}{10}$ del tanque son 10 litros, la capacidad es $10 + 10 = 20$ litros', 'Si $\\tfrac{1}{10}$ del tanque son 10 litros, la capacidad es $10 \\cdot 5 = 50$ litros'],
+      'Si una décima parte son 10 litros, el tanque completo son diez de esas partes: 100 litros. Un tanque de 1 litro no deja sacar 10.',
+      'Compara la respuesta con el enunciado: ¿se pueden sacar 10 litros de ese tanque?'),
+    opc('Tres amigos se comen una pizza así: el primero come la cuarta parte de la pizza; el segundo, la tercera parte de lo que quedó, y el tercero, la mitad de lo que quedaba. La fracción de la pizza que sobra es:',
+      ['$\\tfrac14$', '$\\tfrac{1}{12}$', '$\\tfrac{1}{24}$', '$\\tfrac13$'], 0,
+      'Quedan $\\tfrac34$; el segundo deja $\\tfrac23$ de eso, $\\tfrac12$; el tercero deja la mitad: $\\tfrac14$.',
+      'Sigue lo que queda después de cada uno: cada fracción se toma de lo que queda, no de la pizza entera.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/aritmetica-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ar-2', [
+    play('misma-suma', '**Cuatro** datos promedian **9**. Otros **seis** datos suman **lo mismo**. Pon el nivel en el promedio de los seis.', { n: 4, m: 9, k: 6 },
+      'Los cuatro suman $4 \\cdot 9 = 36$. Los seis también suman 36: promedian $36 \\div 6 = 6$.',
+      { hint: 'El área de cada rectángulo es la suma de sus datos.' }),
+    play('sube-baja-igual', 'Un grupo de datos promedia **12**. En cada caso, partiendo de ese grupo, ¿qué le pasa al promedio?', { et: ['entra un 20', 'entra un 12', 'sale un 5', 'sale un 20'], metas: ['sube', 'igual', 'sube', 'baja'], fichas: ['sube', 'sube', 'igual', 'igual', 'baja', 'baja'],
+      mira: ['Entra un dato mayor que el promedio.', 'Entra un dato idéntico al promedio.', 'Se va un dato que estaba por debajo: ¿hacia dónde jalaba?', 'Se va un dato que estaba por encima: ¿hacia dónde jalaba?'], ok: 'Importa si el dato está por encima o por debajo del promedio, y si entra o sale.' },
+      'El 20 que entra jala hacia arriba; el 12 no cambia nada. Al salir el 5 desaparece algo que jalaba hacia abajo: sube. Al salir el 20, baja.',
+      { hint: 'Cada dato jala el promedio hacia su lado. Si se va, deja de jalar.' }),
+    play('cambia-uno', '**Cinco** datos promedian **14**. Uno de ellos, un **8**, se cambia por un **23**. Halla el promedio nuevo.', { n: 5, c: '8 → 23', et: ['suma', 'suma nueva', 'promedio'], ops: ['→', '→'], metas: ['70', '85', '17'], fichas: ['70', '85', '17', '93', '78', '22', '29'],
+      mira: ['Promedio por cantidad.', 'Sale el 8 y entra el 23.', 'Sigue habiendo cinco datos.'], trampas: { '1:93': 'Faltó quitar el 8.', '1:78': 'Sumaste el 8: ese sale, y entra el 23.', '2:22': 'El promedio no sube 8.', '2:29': 'El promedio no sube 15: los 15 de más se reparten.' }, ok: 'La suma sube 15 y el promedio sube 15 ÷ 5 = 3.' },
+      '$5 \\cdot 14 = 70$; $70 - 8 + 23 = 85$; $85 \\div 5 = 17$.',
+      { hint: 'Pasa el promedio a suma, arregla la suma y vuelve a dividir.' }),
+    play('reparte-sobra', '**Nueve** datos promedian **20** y entra un **50**. Reparte lo que le sobra.', { n: 9, et: ['le sobran', 'entre', 'promedio'], metas: ['30', '10', '23'], fichas: ['30', '10', '23', '9', '35', '50', '25'],
+      mira: ['¿Cuánto tiene el 50 por encima del promedio?', '¿Entre cuántos datos se reparte, contando al que entra?', 'Al promedio viejo súmale lo que le toca a cada uno.'], trampas: { '0:50': 'Solo se reparte lo que tiene por encima de 20.', '1:9': 'El que entra también cuenta.', '2:35': 'Promediaste 20 y 50, pero detrás del 20 hay nueve datos.' }, ok: 'Cada uno recibe 3 y el promedio sube 3.' },
+      'Al 50 le sobran 30 sobre el 20. Entre los 10 datos toca de a 3: el promedio sube a 23.',
+      { hint: 'Imagina que todos tienen 20 y que el nuevo reparte lo que tiene de más.' }),
+    play('parte-pesos', 'Sacó **4.5** en el taller y **2.5** en el examen, y la definitiva fue **3.3**. Arrastra la división hasta el peso del **taller**.', { a: 4.5, b: 2.5, na: 'taller', nb: 'examen', w: 40, d: 3.3 },
+      '$0.4 \\cdot 4.5 + 0.6 \\cdot 2.5 = 1.8 + 1.5 = 3.3$: el taller pesa el 40 %.',
+      { hint: 'La definitiva queda más cerca de la nota que más pesa. ¿De cuál está más cerca 3.3?' }),
+    play('cuantos-llegan', '**Cuatro** personas promedian **30** años. Llegan otras que promedian **45** y entre todos promedian **40**. Mueve la cantidad de los que llegan.', { k: 4, a: 30, b: 45, m: 40, max: 12 },
+      'A los 4 les faltan 10 a cada uno: 40 años. A los que llegan les sobran 5 a cada uno: $40 \\div 5 = 8$ personas.',
+      { hint: 'Lo que les falta a unos para llegar a 40 lo cubre lo que les sobra a los otros.' }),
+    play('aportes-nota', 'Las notas pesan 20 %, 30 % y 50 %. Con 4.0 en la primera y 3.0 en la segunda, ¿qué nota hace falta en la tercera para una definitiva de **3.7**?', { et: ['aporta el 20 % de 4.0', 'aporta el 30 % de 3.0', 'aporte que falta', 'nota de la tercera'], metas: ['0.8', '0.9', '2.0', '4.0'], fichas: ['0.8', '0.9', '2.0', '2.0', '4.0', '1.7', '3.7'],
+      mira: ['La quinta parte de 4.0.', 'Tres veces la décima parte de 3.0.', 'De 3.7 quita los dos aportes.', 'Lo que falta es el 50 % de la nota.'], trampas: { '2:1.7': 'Eso es lo que ya aportan las dos primeras.', '3:2.0': 'Ese es el aporte, no la nota: pesa la mitad.', '3:3.7': 'Esa es la definitiva.' }, ok: '0.8 + 0.9 + 2.0 = 3.7.' },
+      'Aportan 0.8 y 0.9. Faltan 2.0, y como la tercera pesa la mitad, la nota es 4.0.',
+      { hint: 'El aporte de una nota es su valor por su peso en decimal.' }),
+    play('sube-promedio', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Ocho números promedian **11**. Se quitan dos que suman **28**. ¿Cuánto promedian los que quedan?', r: 10, c: '(88 - 28) \\div 6', e: { 11: 'Los dos que salen no promedian 11.' } },
+      { q: 'Seis números promedian **15** y cinco de ellos suman **67**. ¿Cuál es el otro?', r: 23, c: '90 - 67', e: { 8: 'Usaste 5 · 15: los números son seis.' } },
+      { q: 'Diez personas promedian **24** años y llegan **cinco** que promedian **36**. ¿Cuál es el promedio de todas?', r: 28, c: '(240 + 180) \\div 15', e: { 30: 'Los grupos no son iguales: son diez y cinco personas.' } }] },
+      '$88 - 28 = 60$ y $60 \\div 6 = 10$. $90 - 67 = 23$. $\\tfrac{240 + 180}{15} = 28$.',
+      { hint: 'Convierte cada promedio en la suma que esconde.' }),
+    sol('El promedio de las edades de los 6 jugadores de un equipo es 20 años. Si se retira un jugador de 25 años, ¿cuál es el promedio de las edades de los que quedan?',
+      ['Suma de las 6 edades: $6 \\cdot 20 =$ [[120]]', 'Sin el jugador que se retira: $120 - 25 =$ [[95]]', 'Quedan [[5]] jugadores', 'Nuevo promedio: $95 \\div 5 =$ [[19]] años'],
+      ['15', '22.5', '20'],
+      'El promedio no se resta ni se promedia otra vez: se convierte en suma, se ajusta la suma y se divide entre la nueva cantidad.',
+      'Todo promedio esconde una suma. ¿Cuánto suman las seis edades?'),
+    err('Un estudiante lleva un promedio de 3.5 en 4 exámenes. ¿Qué nota debe sacar en el quinto examen para que su promedio suba a 3.8?',
+      ['Suma de los 4 exámenes: $4 \\cdot 3.5 = 14$', 'Para promediar 3.8 en 5 exámenes necesita sumar $5 \\cdot 3.8 = 19$', 'En el quinto examen necesita $3.8 + 0.3 = 4.1$'], 2,
+      ['En el quinto examen necesita $19 - 14 = 5.0$', 'En el quinto examen necesita $19 \\div 5 = 3.8$', 'En el quinto examen necesita $(3.5 + 3.8) \\div 2 = 3.65$'],
+      'La nota nueva tiene que subir el promedio de los cinco exámenes, no solo superar el anterior: le toca cubrir la suma que falta, $19 - 14 = 5.0$.',
+      'Los dos primeros pasos ya dieron la suma que lleva y la suma que necesita. ¿Qué falta?'),
+    opc('El promedio de cinco números es 12. Cuatro de ellos son 8, 10, 13 y 15. El quinto número es:',
+      ['12', '11.5', '14', '46'], 2,
+      'Los cinco suman $5 \\cdot 12 = 60$ y los cuatro conocidos suman 46: el quinto es 14.',
+      'Convierte el promedio en la suma de los cinco números.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/aritmetica-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ar-3', [
+    play('bloques-volteo', 'Arma un número de dos cifras: sus cifras suman **13** y, al voltearlas, el número **baja 45**.', { s: 13, d: 45 },
+      'Al voltear cambia 9 veces la diferencia: $45 \\div 9 = 5$. Suman 13 y se llevan 5: 9 y 4. Como baja, es el 94.',
+      { hint: 'Cada vez que una barra de diez se cambia por un cuadrito, el número pierde 9.' }),
+    play('valor-letras', 'A y B son cifras. Pon cuánto vale cada número.', { et: ['A3', '5A', 'AA', 'A0B'], metas: ['10A + 3', '50 + A', '11A', '100A + B'], fichas: ['10A + 3', '50 + A', '11A', '100A + B', '10A + B', 'A + 3', '5 · A'],
+      mira: ['A está en las decenas.', 'El 5 está en las decenas.', 'La misma letra está en las decenas y en las unidades.', 'A está en las centenas.'], trampas: { '0:A + 3': 'Aquí A vale diez veces: son decenas.', '1:5 · A': 'No es 5 por A: el 5 son decenas.', '3:10A + B': 'El 0 corre la A a las centenas.' }, ok: 'Cada puesto a la izquierda vale diez veces más.' },
+      '$10A + 3$, $50 + A$, $10A + A = 11A$ y $100A + B$.',
+      { hint: 'Prueba con una cifra, por ejemplo A = 2: ¿qué número queda y cómo se forma?' }),
+    play('suma-con-letras', 'Cada letra es una cifra: $\\overline{A8} + \\overline{4B} = 95$. Pon cada cifra y lo que se **lleva**.', { c: [[206, 60, '8'], [146, 100, '4'], [146, 158, '9'], [206, 158, '5']], rot: [[176, 22, 'se lleva'], [178, 66, ''], [238, 106, 'B'], [84, 66, 'A']], metas: ['7', '1', '4'], fichas: ['7', '1', '4', '5', '3', '0', '6'],
+      mira: ['8 más B debe terminar en 5.', '¿Cuánto dio la suma de las unidades?', 'Lo que se lleva, más A, más 4, da 9.'], trampas: { '0:3': '8 + 3 termina en 1.', '1:0': 'Las unidades pasaron de 9.', '2:5': 'Falta contar lo que se lleva.' }, ok: '48 + 47 = 95.' },
+      '$8 + 7 = 15$: B es 7 y se lleva 1. $1 + A + 4 = 9$: A es 4.',
+      { hint: 'Empieza por la columna de las unidades y mira si pasa de 9.' }),
+    play('resta-con-letras', 'Cada letra es una cifra: $\\overline{7A} - \\overline{B8} = 36$. Descúbrelas.', { c: [[146, 60, '7'], [206, 100, '8'], [146, 158, '3'], [206, 158, '6']], rot: [[238, 60, 'A'], [173, 106, 'B']], metas: ['4', '3'], fichas: ['4', '4', '3', '2', '5', '6'],
+      mira: ['Algo menos 8 termina en 6: puede hacer falta prestar una decena.', 'Si se prestó una decena, ya no quedan 7.'], trampas: { '0:2': 'Con 2 arriba sería 12 − 8 = 4, y debe terminar en 6.', '1:4': 'Se prestó una decena: quedan 6, no 7.' }, ok: '74 − 38 = 36.' },
+      '$6 + 8 = 14$: A es 4 y se presta una decena. Quedan 6 decenas: $6 - B = 3$ y B es 3.',
+      { hint: 'Puedes verla al revés: 36 más el de abajo da el de arriba.' }),
+    play('siempre-once', 'A y B son cifras distintas y ninguna es 0. ¿Cuáles son **siempre** múltiplos de 11? Toca todas.', { casos: [{ t: 'AA + BB', si: true }, { t: 'AB − BA', no: 'AB − BA es 9 veces A − B: por ejemplo, 21 − 12 = 9.' }, { t: 'AAA − A', si: true }, { t: 'A0A', no: 'A0A es 101 veces A: por ejemplo, 101 no es múltiplo de 11.' }, { t: 'ABBA', si: true }], falta: 'Falta otra: escríbela con 10 y 100, junta las letras y mira si sale un 11.', ok: '11(A + B), 11 · 10A y 11(91A + 10B).' },
+      '$11A + 11B$; $111A - A = 110A$; $1001A + 110B = 11(91A + 10B)$. En cambio $9(A - B)$ y $101A$ no tienen el factor 11.',
+      { hint: 'Escribe cada número según sus puestos: 1, 10, 100, 1000. Después junta las letras iguales.' }),
+    play('siete-veces', '¿Cuáles son iguales a **7 veces** la suma de sus cifras? Toca todos.', { k: 7, nums: [21, 35, 42, 56, 77, 84], ok: 'En todos, las decenas son el doble de las unidades.' },
+      '$21 = 7 \\cdot 3$, $42 = 7 \\cdot 6$ y $84 = 7 \\cdot 12$. Que sea múltiplo de 7 no basta.',
+      { hint: 'Suma las cifras de cada uno y multiplica por 7: ¿vuelve a salir el número?' }),
+    play('producto-con-letras', 'A y B son cifras distintas: $\\overline{A4} \\times 9 = \\overline{4B6}$. Completa.', { u: '4', k: 9, r: ['4', '6'], metas: ['3', '5', '8'], fichas: ['3', '5', '8', '4', '6', '9', '7'],
+      mira: ['4 por 9 es más que 9: escribe las unidades y lleva las decenas.', '9 · A más lo que se lleva debe dar cuarenta y algo.', 'Es la cifra de las unidades de 9 · A más lo que se lleva.'], trampas: { '0:6': 'El 6 se escribe; se lleva lo otro.', '1:4': '9 · 4 + 3 no llega a 40.', '1:6': '9 · 6 se pasa de 49.' }, ok: '54 × 9 = 486.' },
+      '$4 \\cdot 9 = 36$: se lleva 3. $9A + 3$ debe estar entre 40 y 49: solo $A = 5$, que da 48. Entonces B es 8.',
+      { hint: 'Multiplica primero las unidades y cuida lo que se lleva.' }),
+    play('sube-cifras', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '$\\overline{AB} + \\overline{BA} = 121$. ¿Cuánto vale **A + B**?', r: 11, c: '121 \\div 11', e: { 12: 'Cada letra aporta 11 veces su valor, no 10.' } },
+      { q: '$\\overline{AA} + A = 96$. ¿Cuánto vale **A**?', r: 8, c: '96 \\div 12', e: { 32: 'AA no es A + A: son 11 veces A.', 9: 'AA + A son 12 veces A.' } },
+      { q: 'Las cifras de un número suman **8** y al voltearlo **sube 18**. ¿Cuál es el número?', r: 35, c: '53 - 18', e: { 53: 'Ese baja al voltearlo.', 26: 'El 26 sube 36.' } }] },
+      '$11(A + B) = 121$: suman 11. $12A = 96$: A es 8. Se llevan $18 \\div 9 = 2$ y suman 8: 35.',
+      { hint: 'Escribe cada número como diez veces las decenas más las unidades.' }),
+    sol('La suma de las cifras de un número de dos cifras es 11. Si se invierte el orden de sus cifras, el número aumenta en 27. ¿Cuál es el número?',
+      ['Al invertir las cifras, el número cambia en 9 veces su diferencia: aquí $27 \\div 9 =$ [[3]]', 'Las cifras suman 11 y se diferencian en 3: la menor es [[4]] y la mayor es [[7]]', 'El número aumenta al invertirlo, así que la cifra menor va en las decenas: es el [[47]]'],
+      ['74', '38', '9'],
+      '$(10b + a) - (10a + b) = 9(b - a)$. Con suma 11 y diferencia 3, las cifras son 4 y 7. El 47 pasa a 74, que es 27 más.',
+      'Escribe el número como $10a + b$ y el invertido como $10b + a$, y resta.'),
+    err('En la suma $\\overline{AB} + \\overline{BA} = 132$, A y B son cifras distintas de cero. ¿Cuánto vale $A + B$?',
+      ['$\\overline{AB} = 10A + B$ y $\\overline{BA} = 10B + A$', 'La suma es $11A + 11B = 11(A + B)$', 'Entonces $A + B = 132 - 11 = 121$'], 2,
+      ['Entonces $A + B = 132 \\div 11 = 12$', 'Entonces $A + B = 132 \\div 2 = 66$', 'Entonces $A + B = 132 \\div 10 = 13.2$'],
+      'El 11 está multiplicando: para despejar se divide. $A + B = 12$, por ejemplo 75 + 57. La suma de dos cifras no puede pasar de 18.',
+      'Dos cifras son números del 0 al 9. ¿Cuánto pueden sumar como máximo?'),
+    opc('En la resta $\\overline{A7} - \\overline{4B} = 28$, las letras A y B representan cifras. El valor de $A + B$ es:',
+      ['14', '15', '13', '16'], 3,
+      '$10A + 7 - 40 - B = 28$ da $10A - B = 61$: solo sirve $A = 7$ y $B = 9$. En efecto, $77 - 49 = 28$, y $A + B = 16$.',
+      'Mira primero las unidades: ¿qué cifra B hace que $7 - B$ termine en 8 (prestando una decena)?'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/aritmetica-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ar-4', [
+    play('peor-suerte', 'Hay fichas de **5 colores**, seis de cada uno. ¿Cuántas hay que sacar sin mirar para tener **seguro 4 del mismo color**?', { g: [6, 6, 6, 6, 6], et: ['por color', 'colores', 'peor caso', 'seguro'], ops: ['·', '=', '→'], metas: ['3', '5', '15', '16'], fichas: ['3', '5', '15', '16', '4', '20', '6'],
+      mira: ['¿Cuántas de un color pueden salir sin completar las 4?', '¿Cuántos colores hay?', 'Multiplica: eso puede salir con la peor suerte.', 'Una más que el peor caso.'], trampas: { '0:4': 'Con 4 ya se completó.', '0:6': 'No importa cuántas hay de cada color.', '2:20': 'En el peor caso nadie llega a 4.', '3:20': 'Basta una más después del peor caso.' }, ok: 'La peor suerte deja tres de cada color.' },
+      'La peor suerte saca 3 de cada color: $3 \\cdot 5 = 15$. La siguiente completa cuatro de alguno: 16.',
+      { hint: 'Imagina que la suerte hace todo lo posible para que no completes cuatro.' }),
+    play('color-pedido', 'En una caja hay **7 naranjas, 5 amarillas y 4 verdes**. ¿Cuántas hay que sacar para tener **seguro 3 verdes**?', { g: [7, 5, 4], et: ['no sirven', 'más', 'seguro'], ops: ['+', '='], metas: ['12', '3', '15'], fichas: ['12', '3', '15', '2', '4', '16', '5'],
+      mira: ['Con la peor suerte salen antes todas las que no son verdes.', '¿Cuántas verdes se piden?', 'Suma las dos.'], trampas: { '0:2': 'De los otros colores pueden salir todas, no una de cada uno.', '0:5': 'Pueden salir todas las naranjas y también las amarillas.', '1:4': 'Se piden tres, no todas.' }, ok: 'Con un color dado sí importan las cantidades de los otros colores.' },
+      'Pueden salir primero las $7 + 5 = 12$ que no son verdes. Después salen 3 verdes: $12 + 3 = 15$.',
+      { hint: 'Antes de la primera verde, ¿cuántas fichas pueden salir con la peor suerte?' }),
+    play('seguro-o-suerte', 'En una caja hay **6 fichas de cada uno de 4 colores**. Toca lo que pasa **siempre**, sin depender de la suerte.', { casos: [{ t: 'con 5 hay dos del mismo color', si: true }, { t: 'con 4 hay dos del mismo color', no: 'Con 4 puede salir una de cada color.' }, { t: 'con 9 hay tres del mismo color', si: true }, { t: 'con 10 salen los 4 colores', no: 'Con 10 pueden salir seis de un color y cuatro de otro.' }, { t: 'con 19 salen los 4 colores', si: true }], falta: 'Falta otra: piensa en la peor suerte para cada una.', ok: '4 + 1, 2 · 4 + 1 y 3 · 6 + 1.' },
+      'Una de cada color son 4: la quinta repite. Dos de cada color son 8: la novena completa tres. Tres colores completos son 18: la 19 es del cuarto.',
+      { hint: 'Para tumbar una frase basta imaginar una sola sacada en la que no se cumpla.' }),
+    play('corral-pared', 'Con **20 m** de cerca se hace un corral contra una pared: solo se cercan **tres** lados. Mueve el ancho hasta la **mayor área**.', { T: 20 },
+      'Con ancho 5, el lado largo mide $20 - 10 = 10$: área 50. Con 4 o con 6 da 48. Aquí no gana el cuadrado, porque un lado sale gratis.',
+      { hint: 'Al subir el ancho 1 m, el largo pierde 2 m. Compara el área de anchos vecinos.' }),
+    play('menor-cerca', 'Un corral rectangular debe tener **64 m²**. Mueve el largo hasta gastar la **menor** cerca en los cuatro lados.', {},
+      '$8 \\cdot 8 = 64$ gasta 32 m; $4 \\cdot 16$ gasta 40 m; $1 \\cdot 64$ gasta 130 m. Con el área fija, también gana el cuadrado.',
+      { hint: 'Todos tienen la misma área. ¿Cómo se ve el que tiene menos borde?' }),
+    play('reparto-distinto', 'Se reparten **40** monedas entre **6** niños: todos reciben y las cantidades son **distintas**. Pon cuánto **suman** cinco de ellos, como mínimo; lo **máximo** que puede recibir uno; y lo **menos** que puede recibir el que más recibe.', { n: 6, et: ['suman cinco', 'máximo de uno', 'menos del mayor'], metas: ['15', '25', '10'], fichas: ['15', '25', '10', '7', '9', '35', '21'],
+      mira: ['Cinco cantidades distintas, lo más pequeñas posible: súmalas.', 'A las 40 réstales lo mínimo que reciben los otros.', 'Reparte lo más parejo posible, sin repetir, hasta gastar las 40.'], trampas: { '0:21': 'Esa es la suma de seis: aquí van solo cinco.', '1:35': 'Los otros cinco no pueden recibir todos 1: son distintas.', '2:7': 'Con 40 ÷ 6 se repetirían cantidades.', '2:9': 'Si el mayor recibe 9 y no se repite, no se alcanzan a repartir las 40.' }, ok: '1 + 2 + 3 + 4 + 5 + 25, y 4 + 5 + 6 + 7 + 8 + 10.' },
+      'Los otros cinco al mínimo: $1 + 2 + 3 + 4 + 5 = 15$, y uno recibe 25. Lo más parejo: $4 + 5 + 6 + 7 + 8 + 9 = 39$; la que falta la recibe el mayor: 10.',
+      { hint: 'Para el máximo de uno, los demás al mínimo. Para el mínimo del mayor, todos lo más parejo posible.' }),
+    play('techo-piso', 'Hay **75** latas y en cada caja caben **9**. Llena cada renglón.', { et: ['cajas para guardarlas todas', 'cajas que quedan llenas', 'latas de la caja sin llenar', 'latas que faltan para llenarla'], metas: ['9', '8', '3', '6'], fichas: ['9', '9', '8', '3', '3', '6', '10'],
+      mira: ['Que no quede ninguna por fuera.', 'Solo cuentan las cajas completas.', '¿Cuántas latas no caben en las cajas llenas?', '¿Cuánto les falta a esas para llegar a 9?'], trampas: { '0:8': 'Con 8 cajas caben 72: quedan latas por fuera.', '0:10': 'Sobraría una caja entera.', '1:9': 'La novena no se llena.', '3:3': 'Esas son las que ya están.' }, ok: 'Para guardar todo se sube; para contar las llenas se baja.' },
+      '$8 \\cdot 9 = 72$ y $9 \\cdot 9 = 81$. Hacen falta 9 cajas; 8 quedan llenas, la otra lleva 3 y le faltan 6.',
+      { hint: 'La misma división: a veces se redondea hacia arriba y a veces hacia abajo.' }),
+    play('sube-extremo', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Fichas de **6 colores**, muchas de cada uno. ¿Cuántas sacar para tener seguro **3 del mismo color**?', r: 13, c: '2 \\cdot 6 + 1', e: { 7: 'Con 7 solo es seguro tener dos iguales.', 12: 'Ese es el peor caso: falta una.', 19: 'Con menos ya es seguro.' } },
+      { q: 'Con **20 m** de cerca, ¿cuál es la **mayor área** de un corral rectangular cercado por los cuatro lados?', r: 25, c: '5 \\cdot 5', e: { 24: 'Ese es 4 por 6: hay otro mejor.' } },
+      { q: 'Cuatro enteros positivos **distintos** suman **22**. ¿Cuánto puede valer, como mucho, uno de ellos?', r: 16, c: '22 - (1 + 2 + 3)', e: { 19: 'Los otros tres no pueden ser todos 1.', 22: 'Los otros tres son positivos: no pueden ser 0.' } }] },
+      '$2 \\cdot 6 + 1 = 13$. El cuadrado de lado 5 tiene área 25. Con 1, 2 y 3 queda $22 - 6 = 16$.',
+      { hint: 'Peor suerte más uno; con la suma fija, parejos; para el máximo de uno, los demás al mínimo.' }),
+    sol('Se reparten 50 fichas entre 7 niños, sin importar cómo. ¿Cuál es la mayor cantidad de fichas que, con seguridad, recibe por lo menos uno de ellos?',
+      ['Si el reparto es lo más parejo posible, cada niño recibe [[7]] fichas y sobra [[1]]', 'La ficha que sobra le toca a alguno, que queda con [[8]]', 'En cualquier otro reparto alguien recibe todavía más: se puede asegurar que al menos uno recibe [[8]] fichas'],
+      ['50', '6', '43'],
+      'El reparto parejo es el peor caso para el que quiere asegurar algo: $50 = 7 \\cdot 7 + 1$. Si nadie tuviera 8 o más, habría como mucho 49 fichas.',
+      'Intenta repartir de modo que nadie reciba muchas: lo más parejo que puedas. ¿Qué pasa con lo que sobra?'),
+    err('En un cajón hay 7 medias negras, 9 azules y 5 grises, todas revueltas. ¿Cuántas medias hay que sacar sin mirar, como mínimo, para estar seguros de tener dos medias grises?',
+      ['Se piden dos medias de un color dado, el gris, y no dos de un color cualquiera', 'La peor suerte es que salgan primero las medias que no sirven', 'Las que no sirven son una negra y una azul: salen $1 + 1 = 2$', 'Después salen las dos grises: con $2 + 2 = 4$ medias es seguro'], 2,
+      ['Las que no sirven son todas las negras y todas las azules: pueden salir $7 + 9 = 16$', 'Las que no sirven son las grises: salen 5', 'Las que no sirven son solo las negras: salen 7'],
+      'Mientras queden negras o azules en el cajón, puede salir otra: en el peor caso salen las 16 y después 2 grises, $16 + 2 = 18$ medias. La cuenta «una de cada color y una más» solo sirve cuando se piden dos del mismo color, cualquiera: ahí las cantidades no importan, solo cuántos colores hay. Con un color dado sí importan las cantidades de los otros colores.',
+      'Antes de que salgan las grises, ¿cuántas medias de otros colores pueden salir con la peor suerte?'),
+    opc('Con 40 m de malla se quiere cercar un corral rectangular. La mayor área que puede tener el corral es:',
+      ['96 m²', '100 m²', '400 m²', '80 m²'], 1,
+      'Largo más ancho suman 20. El producto es máximo cuando los dos son iguales: $10 \\cdot 10 = 100$ m².',
+      'Prueba varios rectángulos con ese perímetro: 12 por 8, 11 por 9… ¿Cuál tiene más área?'),
+  ]);
+
+  addExam('pu-aritmetica', [
+    ['pu-ar-1', 'Una fracción «de lo que queda» se multiplica por lo que queda.',
+      opc('Ana gasta la mitad de su dinero en un regalo y la tercera parte de lo que le queda en transporte. La fracción de su dinero que le sobra es:', ['$\\tfrac16$', '$\\tfrac13$', '$\\tfrac12$', '$\\tfrac23$'], 1,
+        'Le queda $\\tfrac12$ y de eso conserva $\\tfrac23$: $\\tfrac12 \\cdot \\tfrac23 = \\tfrac13$.', 'El segundo gasto es una parte de lo que quedó, no del total.')],
+    ['pu-ar-2', 'Promedio por cantidad de datos es la suma.',
+      opc('El promedio de tres números es 10. Si dos de ellos son 7 y 9, el tercero es:', ['10', '8', '16', '14'], 3,
+        'Los tres suman 30 y los dos conocidos suman 16: el tercero es 14.', 'Convierte el promedio en una suma.')],
+    ['pu-ar-3', 'Un número de dos cifras vale 10 veces sus decenas más sus unidades.',
+      opc('Un número de dos cifras se suma con el número que resulta de invertir sus cifras. El resultado siempre es múltiplo de:', ['11', '9', '10', '2'], 0,
+        '$(10a + b) + (10b + a) = 11(a + b)$.', 'Escribe los dos números con las letras a y b y súmalos.')],
+    ['pu-ar-4', 'Para estar seguros hay que pensar en la peor suerte posible.',
+      opc('En una bolsa hay 5 bolas rojas, 5 verdes y 5 azules. La cantidad mínima de bolas que hay que sacar sin mirar para estar seguros de tener dos del mismo color es:', ['2', '3', '4', '6'], 2,
+        'Con la peor suerte salen tres de colores distintos; la cuarta repite color.', 'Imagina que cada bola sale de un color distinto mientras se pueda.')],
   ]);
 });

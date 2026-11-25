@@ -1548,6 +1548,16 @@ const WORLDS = (() => {
     'icf-cn-ondas': { name: 'Ondas, Luz y Sonido', art: plate('icf-cn-ondas', TEAL, `
       ${L('M46 30C52 14 58 14 64 30S76 46 82 30 94 14 100 30 112 46 116 30', TEAL, 1.4)}${L('M46 30h70', INK, .6)}${L('M54 64L80 48L106 64', INK, 1.2)}${L('M50 64h60', INK, 1)}${L('M80 44v20', INK, .6)}${D(80, 64, 1.8, TEAL)}
       ${T(28, 42, 'v = λ·f', INK, 7)}${T(136, 42, '340 m/s', TEAL, 6)}`) },
+    // ---------- onceavos mundos y Electricidad ----------
+    'icf-ma-espacio': { name: 'Movimientos y Vistas', art: plate('icf-ma-espacio', TEAL, `
+      ${L('M46 64h68M80 12v54', INK, .7)}${L('M52 52l16 0-16-18z', INK, 1.1)}${L('M108 52l-16 0 16-18z', TEAL, 1.2)}${L('M80 12v54', TEAL, .8)}${L('M62 18h14l6-6H68zM62 18v12h14V18M76 30l6-6V12', INK, .9)}${D(80, 52, 1.6, TEAL)}
+      ${T(28, 42, '(x, y)', INK, 7)}${T(134, 42, '(−x, y)', TEAL, 7)}`) },
+    'icf-cn-gases': { name: 'Gases y Disoluciones', art: plate('icf-cn-gases', TEAL, `
+      ${L('M56 16v48h34V16', INK, 1.2)}${L('M56 34h34', TEAL, 1.4)}${L('M73 34V10M66 10h14', INK, 1)}${[[62, 42], [80, 46], [70, 54], [84, 58], [62, 60]].map(([a, b]) => D(a, b, 1.6, TEAL)).join('')}${C(106, 44, 10, INK, 1.1)}${L('M106 54v10', INK, .8)}
+      ${T(28, 42, 'P · V', INK, 7)}${T(136, 42, 'g/L', TEAL, 7)}`) },
+    'icf-cn-electrico': { name: 'Electricidad y Magnetismo', art: plate('icf-cn-electrico', TEAL, `
+      ${L('M50 40V18h60v44H50V48', INK, 1.1)}${L('M44 40h12M47 48h6', TEAL, 1.4)}${L('M70 18l4-5 6 10 6-10 6 10 4-5', TEAL, 1.2)}${C(110, 40, 7, INK, 1.1)}${L('M105 35l10 10M115 35l-10 10', INK, .8)}${L('M68 62v-10h24v10', TEAL, 1)}
+      ${T(28, 42, 'V = I·R', INK, 6)}${T(134, 42, 'N  S', TEAL, 7)}`) },
   };
 })();
 
@@ -6941,7 +6951,7 @@ GAMES['mapa-tesoro'] = (() => {
   const okOne = (w, r) => !!w && w.k === want(r).k && Math.abs(((w.deg - want(r).deg) % 360 + 360) % 360) < 1e-6;
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okOne(state.walks[i], r));
+    const ok = params.rounds.every((r, i) => okOne(state.walks?.[i], r));
     const solution = params.rounds.map(r => { const w = want(r); return `${r.label}: ${radTxt(w.k)} pasos a ${w.deg}°`; }).join(' · ');
     return { ok, solution };
   }
@@ -34169,4 +34179,548 @@ GAMES['cumple-notacion'] = (() => {
   }
 
   return { grade, create, sentence };
+})();
+;
+//#archivo js/games/tacha-repetidos.js
+// Tacha los repetidos (Álgebra 0, en un conjunto nada se repite): se escribe una palabra letra por letra y hay
+// que tachar (tocar) las letras que sobran para que quede el conjunto de sus letras, cada una una sola vez.
+// Abajo se arma en vivo el conjunto con las letras sin tachar y su cardinal n(L). Tocar una letra tachada la
+// recupera. Vale dejar cualquier copia de cada letra.
+// params = { rounds: [{ word, name }] }   state = { crossed: [[índices tachados]] }
+
+GAMES['tacha-repetidos'] = (() => {
+  const distinct = w => [...new Set([...w])];
+  function good(cr, r) {
+    if (!cr) return false;
+    const left = [...r.word].filter((_, i) => !cr.includes(i));
+    return left.length === distinct(r.word).length && new Set(left).size === left.length;
+  }
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => good(state.crossed?.[i], r));
+    const solution = params.rounds.map(r => `${r.name || 'L'} = {${distinct(r.word).join(', ')}}, n = ${distinct(r.word).length}`).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const st = { crossed: R.map(() => []) };
+    const touched = R.map(() => false);
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], cells = [];
+
+    function layout(w, h) {
+      W = w; H = h;
+      tabs = roundTabs(R.length, w);
+      placeCells();
+    }
+    function placeCells() {
+      const n = R[cur].word.length, per = n > 7 ? Math.ceil(n / 2) : n, cw = Math.min(46, (W - 28 - (per - 1) * 6) / per);
+      cells = [...R[cur].word].map((_, i) => {
+        const row = Math.floor(i / per), inRow = row ? n - per : per, total = inRow * cw + (inRow - 1) * 6;
+        return { x: W / 2 - total / 2 + (i % per) * (cw + 6), y: 100 + row * (cw * 1.2 + 9), w: cw, h: cw * 1.2 };
+      });
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], cr = st.crossed[cur], ok = good(cr, r), name = r.name || 'L', A = SK.sets(C)[0];
+        drawTabs(p, C, tabs, cur, i => (locked ? (good(st.crossed[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Z : C.line));
+        SK.kicker(p, C, 'En un conjunto nada se repite', 14, 56);
+        p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, `${name} = {x : x es una letra de ${r.word}}`, W / 2, 80, W - 28, 14);
+        // La palabra, letra por letra: en ámbar, la que todavía está repetida; tachada, queda el hueco.
+        cells.forEach((b, i) => {
+          const off = cr.includes(i), ch = r.word[i], dup = !off && [...r.word].some((c, j) => j !== i && c === ch && !cr.includes(j));
+          SK.chip(p, C, b, '', { state: off ? 'ghost' : dup && !locked ? 'on' : 'idle', col: C.sun, r: 9 });
+          SK.serif(p, ch, b.x + b.w / 2, b.y + b.h / 2 + 1, Math.min(25, b.w * 0.62), off ? C.mute : C.ink);
+          if (off) { p.stroke(C.coral); p.strokeWeight(2); p.line(b.x + 7, b.y + b.h - 7, b.x + b.w - 7, b.y + 7); p.noStroke(); }
+        });
+        const last = cells[cells.length - 1];
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        p.text('Resaltada: esa letra todavía está repetida', W / 2, last.y + last.h + 16);
+        // El conjunto que queda, en la franja formal.
+        const left = [...r.word].filter((_, i) => !cr.includes(i)), col = locked ? (ok ? C.ok : C.bad) : A.line;
+        SK.formal(p, C, { x: 12, y: last.y + last.h + 34, w: W - 24, h: 78 },
+          `$${name} = \\{${left.join(', ')}\\} \\quad n(${name}) = ${touched[cur] ? new Set(left).size : '?'}$`, { kicker: 'Lo que queda', col, size: 20 });
+        p.textAlign(p.CENTER, p.CENTER);
+        if (locked && !ok) { p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, `${name} = {${distinct(r.word).join(', ')}}`, W / 2, H - 14, W - 24, 12); }
+        else { p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.text('Toca una letra para tacharla o recuperarla', W / 2, H - 14); }
+      };
+
+      p.mousePressed = () => {
+        const t = tabs.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
+        if (t >= 0) { cur = t; placeCells(); api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        const i = cells.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
+        if (i >= 0) {
+          const cr = st.crossed[cur], k = cr.indexOf(i);
+          if (k >= 0) cr.splice(k, 1); else cr.push(i);
+          touched[cur] = true; api.ready(touched.every(Boolean)); api.sfx?.tap?.(); return false;
+        }
+      };
+    }, 1.4);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ crossed: st.crossed.map(c => [...c]) }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create, distinct };
+})();
+;
+//#archivo js/games/recta-espejo.js
+// La recta del espejo (Álgebra 1.1, enteros y opuestos): una recta de enteros con un espejo en el 0. Cada ronda
+// describe un número con palabras o con notación («el opuesto de 5», «−(−3)», «el número que sumado con 6 da 0»).
+// Se toca o se arrastra sobre la recta para poner el punto (se ajusta a enteros) y al otro lado del espejo aparece
+// su reflejo (sin número, para que el estudiante lo razone). Califica el entero exacto.
+// params = { min, max, rounds: [{ text, value }] }   state = { xs: [entero | null] }
+
+GAMES['recta-espejo'] = (() => {
+  const snap = (v, min, max) => Math.min(max, Math.max(min, Math.round(v)));
+  const neg = v => String(v).replace('-', '−');
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => state.xs?.[i] === r.value);
+    const solution = params.rounds.map(r => `${r.text}: ${neg(r.value)}`).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, min = params.min, max = params.max;
+    const st = { xs: R.map(() => null) };
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], line = null, drag = false, t = 0;
+
+    function layout(w, h) {
+      W = w; H = h;
+      tabs = roundTabs(R.length, w);
+      line = { x0: 22, x1: w - 22, y: h * 0.66 };
+    }
+    const X = v => line.x0 + (v - min) / (max - min) * (line.x1 - line.x0);
+    const V = px => min + (px - line.x0) / (line.x1 - line.x0) * (max - min);
+    function setX(px) { st.xs[cur] = snap(V(px), min, max); api.ready(st.xs.every(x => x != null)); }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      p.draw = () => {
+        p.background(C.bg);
+        t += 0.05;
+        const r = R[cur], x = st.xs[cur], ok = x === r.value;
+        drawTabs(p, C, tabs, cur, i => (locked ? (st.xs[i] === R[i].value ? C.ok : C.bad) : i === cur ? C.brand : st.xs[i] != null ? C.Z : C.line));
+        drawKicker(p, C, 'Pon en la recta', W / 2, 58, { center: true });
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); fitText(p, r.text, W / 2, 86, W - 28, 21);
+        // Espejo en el 0
+        const z = X(0);
+        p.stroke(C.sun); p.strokeWeight(2.5); p.drawingContext.setLineDash([5, 6]); p.line(z, line.y - 68, z, line.y - 12); p.drawingContext.setLineDash([]);
+        drawPill(p, C, 'espejo', z, line.y - 80, C.sun, 11);
+        // Recta y marcas
+        drawNumLine(p, C, { x0: line.x0, x1: line.x1, y: line.y, min, max });
+        if (x != null) {
+          // Reflejo (el opuesto), tenue, al otro lado del espejo
+          if (x !== 0) {
+            const c = p.color(C.mute); c.setAlpha(140);
+            p.noFill(); p.stroke(c); p.strokeWeight(2); p.circle(X(-x), line.y, 16);
+            p.noStroke(); p.fill(C.mute); p.textSize(11); p.textStyle(p.NORMAL);
+            const tw = p.textWidth('reflejo') / 2 + 4;
+            p.text('reflejo', Math.min(W - tw, Math.max(tw, X(-x))), line.y - 24);
+            p.stroke(c); p.strokeWeight(1); p.drawingContext.setLineDash([3, 4]);
+            p.noFill(); p.arc(z, line.y, Math.abs(X(x) - X(-x)), 50, Math.PI, 2 * Math.PI); p.drawingContext.setLineDash([]);
+          }
+          const pc = locked ? (ok ? C.ok : C.bad) : x < 0 ? C.coral : x > 0 ? C.sky : C.sun;
+          drawDot(p, C, X(x), line.y, 18 + 2 * Math.sin(t), pc);
+          drawPill(p, C, neg(x), X(x), line.y - 44, pc, 15);
+        }
+        p.noStroke(); p.textStyle(p.NORMAL); p.textSize(12);
+        if (locked && !ok) { p.noFill(); p.stroke(C.ok); p.strokeWeight(3); p.circle(X(r.value), line.y, 22); p.noStroke(); }
+        if (locked && !ok) { p.fill(C.ok); p.textStyle(p.BOLD); p.text(`Era ${neg(r.value)}`, W / 2, H - 16); }
+        else { p.fill(C.mute); p.text('Toca o arrastra sobre la recta', W / 2, H - 16); }
+      };
+
+      p.mousePressed = () => {
+        const tb = tabs.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
+        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        if (Math.abs(p.mouseY - line.y) < 60) { drag = true; setX(p.mouseX); api.sfx?.tap?.(); return false; }
+      };
+      p.mouseDragged = () => { if (drag && !locked) { setX(p.mouseX); return false; } };
+      p.mouseReleased = () => { drag = false; };
+    }, 1.25);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ xs: [...st.xs] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create, snap };
+})();
+;
+//#archivo js/games/inversos-gemelos.js
+// Los inversos gemelos (Álgebra 1.2, axiomas de campo: opuesto y recíproco). Cada ronda trae un número y la
+// máquina opera con su «gemelo», que el estudiante arma con un botón de signo, ruedas − / + para el numerador y el
+// denominador y un interruptor √ (para raíces como √6). Con + la meta es el neutro 0 (el opuesto); con × la meta
+// es el neutro 1 (el recíproco). El 0 no tiene recíproco: para él está el botón «no tiene». La máquina muestra el
+// resultado en vivo. Cualquier fracción equivalente vale.
+// params = { op: '+' | '×', rounds: [{ label, v, sol }] }   state = { ans: [{ s, n, d, r, none } | null] }
+
+GAMES['inversos-gemelos'] = (() => {
+  const valueOf = a => a.s * (a.r ? Math.sqrt(a.n) : a.n) / a.d;
+  const close = (x, y) => Math.abs(x - y) < 1e-9;
+
+  function okRound(a, r, op) {
+    if (!a) return false;
+    if (op === '×' && r.v === 0) return !!a.none;
+    if (a.none) return false;
+    return op === '+' ? close(r.v + valueOf(a), 0) : close(r.v * valueOf(a), 1);
+  }
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => okRound(state.ans?.[i], r, params.op));
+    const word = params.op === '+' ? 'opuesto' : 'recíproco';
+    const solution = params.rounds.map(r => `${word} de ${r.label}: ${r.sol}`).join(' · ');
+    return { ok, solution };
+  }
+
+  const txt = a => {
+    if (a.none) return 'no tiene';
+    const num = (a.r ? '√' : '') + a.n;
+    return (a.s < 0 ? '−' : '') + (a.d === 1 ? num : `${num}/${a.d}`);
+  };
+  const show = v => {
+    const k = Math.round(v * 1e6) / 1e6;
+    return Math.abs(k - Math.round(k)) < 1e-9 ? String(Math.round(k)).replace('-', '−') : `≈ ${numTxt(+k.toFixed(3))}`;
+  };
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, op = params.op, mul = op === '×';
+    const A = R.map(() => ({ s: 1, n: 0, d: 1, r: false, none: false, touched: false }));
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {}, shake = 0;
+
+    function layout(w, h) {
+      W = w; H = h; tabs = roundTabs(R.length, w);
+      const cx = w / 2, bw = 44, bh = 36;
+      B = {
+        nMinus: { x: cx - 92, y: 148, w: bw, h: bh }, nPlus: { x: cx + 48, y: 148, w: bw, h: bh },
+        dMinus: { x: cx - 92, y: 206, w: bw, h: bh }, dPlus: { x: cx + 48, y: 206, w: bw, h: bh },
+        sign: { x: cx - 100, y: 258, w: 92, h: 34 },
+        root: { x: cx + 8, y: 258, w: 92, h: 34 },
+        none: mul ? { x: cx - 92, y: 304, w: 184, h: 34 } : null,
+      };
+    }
+    function touch(f) {
+      if (locked) return;
+      const a = A[cur]; f(a); a.touched = true;
+      api.ready(A.every(x => x.touched)); api.sfx?.tap?.();
+    }
+    function button(b, label, on, col) {
+      if (!b) return;
+      // Ficha con relieve: crema apagada, de su color cuando está activa; los − / + van en azul.
+      drawTile(p5i, C, b, label, { fill: on ? col : label === '−' || label === '+' ? C.sky : C.cream, r: 9, lift: on ? 1 : 3, size: 16 });
+    }
+    let p5i = null;
+
+    const m = mountSketch(host, (p, size) => {
+      p5i = p;
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], a = A[cur], good = okRound(a, r, op);
+        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(A[i], R[i], op) ? C.ok : C.bad) : i === cur ? C.brand : A[i].touched ? C.Q : C.line));
+        drawKicker(p, C, mul ? 'El gemelo que al multiplicar da 1' : 'El gemelo que al sumar da 0', W / 2, 56, { center: true });
+        p.textAlign(p.CENTER, p.CENTER); p.noStroke();
+        // La máquina: número ⊕ gemelo = resultado
+        const sx = shake > 0 ? Math.sin(shake * 2) * 4 : 0; shake = Math.max(0, shake - 1);
+        p.stroke(locked ? (good ? C.ok : C.bad) : C.sun); p.strokeWeight(2.5); p.fill(C.card); p.rect(12 + sx, 74, W - 24, 58, 14);
+        const eq = `${r.label}  ${op}  ${a.none ? '?' : `(${txt(a)})`}`;
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); fitText(p, eq, W / 2 + sx, 94, W - 40, 19);
+        let res = '';
+        if (a.none) res = mul && r.v === 0 ? '0 · lo que sea = 0, nunca 1' : 'sí tiene: búscalo';
+        else res = '= ' + show(mul ? r.v * valueOf(a) : r.v + valueOf(a));
+        p.fill(locked ? (good ? C.ok : C.bad) : C.mute); p.textStyle(p.NORMAL); fitText(p, res, W / 2 + sx, 117, W - 40, 13);
+        // El constructor del gemelo
+        const cx = W / 2;
+        button(B.sign, a.s < 0 ? 'signo  −' : 'signo  +', a.s < 0, C.Z);
+        button(B.root, a.r ? 'con √' : 'sin √', a.r, C.I);
+        button(B.nMinus, '−', false); button(B.nPlus, '+', false); button(B.dMinus, '−', false); button(B.dPlus, '+', false);
+        p.noStroke(); p.fill(a.none ? C.mute : C.ink); p.textStyle(p.BOLD); p.textSize(24);
+        p.text((a.r ? '√' : '') + a.n, cx, 166);
+        p.stroke(a.none ? C.line : C.ink); p.strokeWeight(2.5); p.line(cx - 30, 195, cx + 30, 195);
+        p.noStroke(); p.text(a.d, cx, 224);
+        if (B.none) button(B.none, 'no tiene recíproco', a.none, C.R);
+        p.noStroke(); p.textStyle(p.NORMAL); p.textSize(12);
+        if (locked && !good) { p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, `Era: ${r.sol}`, W / 2, H - 18, W - 24, 13); }
+        else { p.fill(C.mute); fitText(p, mul ? 'Recíproco: a · (1/a) = 1' : 'Opuesto: a + (−a) = 0', W / 2, H - 18, W - 24, 12); }
+      };
+
+      p.mousePressed = () => {
+        const x = p.mouseX, y = p.mouseY;
+        const tb = tabs.findIndex(b => hitBox(b, x, y));
+        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        if (hitBox(B.sign, x, y)) { touch(a => { a.s = -a.s; a.none = false; }); return false; }
+        if (hitBox(B.root, x, y)) { touch(a => { a.r = !a.r; a.none = false; }); return false; }
+        if (hitBox(B.nMinus, x, y)) { touch(a => { a.n = Math.max(0, a.n - 1); a.none = false; }); return false; }
+        if (hitBox(B.nPlus, x, y)) { touch(a => { a.n = Math.min(20, a.n + 1); a.none = false; }); return false; }
+        if (hitBox(B.dMinus, x, y)) { touch(a => { a.d = Math.max(1, a.d - 1); a.none = false; }); return false; }
+        if (hitBox(B.dPlus, x, y)) { touch(a => { a.d = Math.min(20, a.d + 1); a.none = false; }); return false; }
+        if (B.none && hitBox(B.none, x, y)) { touch(a => { a.none = !a.none; }); if (A[cur].none && R[cur].v !== 0) shake = 12; return false; }
+      };
+    }, 1.48);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ ans: A.map(a => (a.touched ? { s: a.s, n: a.n, d: a.d, r: a.r, none: a.none } : null)) }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create, valueOf };
+})();
+;
+//#archivo js/games/corta-rectangulo.js
+// Corta el rectángulo (Álgebra 1.2, propiedad distributiva). Un rectángulo de h × w cuadritos tiene área h · w.
+// Se arrastra un corte vertical (salta de cuadrito en cuadrito) para partirlo en dos piezas, y debajo aparece
+// h · w = h · k + h · (w − k): la distributiva vista como áreas. La meta de cada ronda es que una de las dos piezas
+// tenga el área pedida (una pieza «redonda» que hace fácil la cuenta de cabeza).
+// params = { rounds: [{ h, w, piece }] }   state = { cuts: [k | null] }
+
+GAMES['corta-rectangulo'] = (() => {
+  const okRound = (k, r) => k != null && k > 0 && k < r.w && (r.h * k === r.piece || r.h * (r.w - k) === r.piece);
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => okRound(state.cuts?.[i], r));
+    const solution = params.rounds.map(r => {
+      const k = r.piece / r.h;
+      return `${r.h} · ${r.w} = ${r.h} · ${k} + ${r.h} · ${r.w - k} = ${r.piece} + ${r.h * (r.w - k)} = ${r.h * r.w}`;
+    }).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const cuts = R.map(() => null);
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], box = null, drag = false, bm = null, bp = null;
+
+    function layout(w, h) {
+      W = w; H = h; tabs = roundTabs(R.length, w);
+      const r = R[cur], u = Math.min((w - 48) / r.w, 150 / r.h);
+      box = { x: (w - u * r.w) / 2, y: 112, u, w: u * r.w, h: u * r.h };
+      bm = { x: w / 2 - 98, y: h - 62, w: 44, h: 36 }; bp = { x: w / 2 + 54, y: h - 62, w: 44, h: 36 };
+    }
+    function setCut(px) {
+      const r = R[cur];
+      cuts[cur] = Math.min(r.w - 1, Math.max(1, Math.round((px - box.x) / box.u)));
+      api.ready(cuts.every(k => k != null));
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], k = cuts[cur], good = okRound(k, r), b = box;
+        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(cuts[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : cuts[i] != null ? C.Q : C.line));
+        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
+        fitText(p, `Calcula ${r.h} · ${r.w} partiendo el rectángulo`, W / 2, 56, W - 24, 15);
+        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, `Una de las piezas debe tener área ${r.piece}`, W / 2, 78, W - 24, 12);
+        // Piezas
+        const kx = k == null ? null : b.x + k * b.u;
+        p.noStroke();
+        if (k == null) { p.fill(C.card); p.rect(b.x, b.y, b.w, b.h); }
+        else {
+          // Dos piezas rellenas: menta y sol.
+          p.fill(C.mint); p.rect(b.x, b.y, kx - b.x, b.h); p.fill(C.sun); p.rect(kx, b.y, b.x + b.w - kx, b.h);
+        }
+        // Cuadrícula
+        p.stroke(k == null ? C.line : C.night + '40'); p.strokeWeight(b.u > 7 ? 1 : 0.5);
+        for (let i = 1; i < r.w; i++) p.line(b.x + i * b.u, b.y, b.x + i * b.u, b.y + b.h);
+        for (let j = 1; j < r.h; j++) p.line(b.x, b.y + j * b.u, b.x + b.w, b.y + j * b.u);
+        p.noFill(); p.stroke(C.ink); p.strokeWeight(2); p.rect(b.x, b.y, b.w, b.h);
+        // Medidas
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(13);
+        p.text(r.h, b.x - 12, b.y + b.h / 2);
+        if (k == null) { p.text(r.w, b.x + b.w / 2, b.y - 12); }
+        else {
+          p.fill(C.Q); p.text(k, (b.x + kx) / 2, b.y - 12); p.fill(C.N); p.text(r.w - k, (kx + b.x + b.w) / 2, b.y - 12);
+          p.stroke(locked ? (good ? C.ok : C.bad) : C.brand); p.strokeWeight(3.5); p.line(kx, b.y - 4, kx, b.y + b.h + 4);
+          drawDot(p, C, kx, b.y + b.h + 12, 16, locked ? (good ? C.ok : C.bad) : C.brand);
+          // Áreas dentro de cada pieza (si caben)
+          p.noStroke(); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD); p.textSize(14);
+          if (kx - b.x > 26) { p.fill(inkOn(C.mint, C.ink)); p.text(r.h * k, (b.x + kx) / 2, b.y + b.h / 2); }
+          if (b.x + b.w - kx > 26) { p.fill(inkOn(C.sun, C.ink)); p.text(r.h * (r.w - k), (kx + b.x + b.w) / 2, b.y + b.h / 2); }
+        }
+        // La distributiva
+        const y0 = b.y + b.h + 40;
+        p.noStroke(); p.textStyle(p.BOLD);
+        if (k == null) { p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'Toca o arrastra sobre el rectángulo para cortarlo', W / 2, y0, W - 24, 12); }
+        else {
+          p.fill(C.ink); fitText(p, `${r.h} · ${r.w} = ${r.h} · ${k} + ${r.h} · ${r.w - k}`, W / 2, y0, W - 24, 16);
+          p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, `= ${r.h * k} + ${r.h * (r.w - k)} = ${r.h * r.w}`, W / 2, y0 + 24, W - 24, 14);
+        }
+        if (!locked) for (const [bb, t] of [[bm, '−'], [bp, '+']]) {
+          drawTile(p, C, bb, t, { fill: C.sky, r: 9, lift: 2, size: 18 });
+        }
+        if (!locked) { p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.text('mover el corte', W / 2, H - 44); }
+        if (locked && !good) { p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, `Cortar en ${r.piece / r.h}: pieza de ${r.piece}`, W / 2, H - 30, W - 24, 12); }
+      };
+
+      p.mousePressed = () => {
+        const x = p.mouseX, y = p.mouseY;
+        const tb = tabs.findIndex(t => hitBox(t, x, y));
+        if (tb >= 0) { cur = tb; layout(W, H); api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        const step = d => { const rr = R[cur]; cuts[cur] = Math.min(rr.w - 1, Math.max(1, (cuts[cur] ?? Math.floor(rr.w / 2)) + d)); api.ready(cuts.every(k => k != null)); api.sfx?.tap?.(); };
+        if (hitBox(bm, x, y)) { step(-1); return false; }
+        if (hitBox(bp, x, y)) { step(1); return false; }
+        if (x > box.x - 10 && x < box.x + box.w + 10 && y > box.y - 24 && y < box.y + box.h + 26) { drag = true; setCut(x); api.sfx?.tap?.(); return false; }
+      };
+      p.mouseDragged = () => { if (drag && !locked) { setCut(p.mouseX); return false; } };
+      p.mouseReleased = () => { drag = false; };
+    }, 1.6);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ cuts: [...cuts] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create };
+})();
+;
+//#archivo js/games/cancela-balanza.js
+// La balanza que cancela (Álgebra 1.2, ley cancelativa). Una igualdad es una balanza en equilibrio: a cada lado hay
+// fichas que se suman (o se multiplican). Se toca una ficha de la izquierda y luego una igual de la derecha: las dos
+// se van, porque quitar lo mismo de los dos lados mantiene el equilibrio (a + b = a + c ⇒ b = c; con productos,
+// ab = ac y a ≠ 0 ⇒ b = c). Un 0 que multiplica no se deja cancelar (0 · 2 = 0 · 5 y 2 ≠ 5). Se gana cuando a la
+// izquierda queda la x sola.
+// params = { rounds: [{ op: '+' | '·', left: [texto], right: [texto], ans }] }   state = { pairs: [[[i, j], …] por ronda] }
+
+GAMES['cancela-balanza'] = (() => {
+  const canCancel = (r, i, j) => r.left[i] != null && r.left[i] !== 'x' && r.left[i] === r.right[j] && !(r.op === '·' && r.left[i] === '0');
+
+  function solved(r, pairs) {
+    if (!Array.isArray(pairs)) return false;
+    const L = new Set(), Rr = new Set();
+    for (const pr of pairs) {
+      const [i, j] = pr || [];
+      if (L.has(i) || Rr.has(j) || !canCancel(r, i, j)) return false;
+      L.add(i); Rr.add(j);
+    }
+    return r.left.every((t, i) => (t === 'x') !== L.has(i));
+  }
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => solved(r, state.pairs?.[i]));
+    return { ok, solution: params.rounds.map(r => r.ans).join(' · ') };
+  }
+
+  const expr = (tiles, op) => tiles.map((t, k) => (k && t.startsWith('−') ? `(${t})` : t)).join(` ${op} `) || (op === '+' ? '0' : '1');
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const P = R.map(() => []);
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], sel = null, msg = '', msgT = 0, boxes = { L: [], R: [] }, reset = null;
+
+    function layout(w, h) { W = w; H = h; tabs = roundTabs(R.length, w); reset = { x: w / 2 - 50, y: h - 46, w: 100, h: 30 }; }
+    const goneL = () => new Set(P[cur].map(p => p[0]));
+    const goneR = () => new Set(P[cur].map(p => p[1]));
+    function say(t) { msg = t; msgT = 150; }
+
+    function placeTiles(side, tiles, gone, x0, x1, y0) {
+      const out = [], tw = Math.min(54, (x1 - x0 - 6) / 2), th = 30;
+      let col = 0, row = 0;
+      tiles.forEach((t, i) => {
+        if (gone.has(i)) { out.push(null); return; }
+        out.push({ x: x0 + 3 + col * (tw + 6), y: y0 - (row + 1) * (th + 6), w: tw, h: th, t, i });
+        if (++col === 2) { col = 0; row++; }
+      });
+      return out;
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], gL = goneL(), gR = goneR(), done = solved(r, P[cur]);
+        drawTabs(p, C, tabs, cur, i => (locked ? (solved(R[i], P[i]) ? C.ok : C.bad) : i === cur ? C.brand : P[i].length ? C.Q : C.line));
+        // La igualdad que queda
+        const left = r.left.filter((_, i) => !gL.has(i)), right = r.right.filter((_, j) => !gR.has(j));
+        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
+        fitText(p, `${expr(left, r.op)} = ${expr(right, r.op)}`, W / 2, 58, W - 24, 18);
+        // Balanza en equilibrio
+        const beamY = H * 0.6, cx = W / 2;
+        p.stroke(C.ink); p.strokeWeight(5); p.line(18, beamY, W - 18, beamY);
+        p.noStroke(); p.fill(C.sun); p.triangle(cx, beamY, cx - 20, beamY + 40, cx + 20, beamY + 40);
+        p.fill(C.card); p.stroke(C.line); p.strokeWeight(1.5);
+        p.rect(14, beamY - 2, cx - 26, 8, 4); p.rect(cx + 12, beamY - 2, cx - 26, 8, 4);
+        boxes.L = placeTiles('L', r.left, gL, 14, cx - 12, beamY - 4);
+        boxes.R = placeTiles('R', r.right, gR, cx + 12, W - 14, beamY - 4);
+        for (const [side, list] of [['L', boxes.L], ['R', boxes.R]]) for (const b of list) {
+          if (!b) continue;
+          const isX = b.t === 'x', on = side === 'L' && sel === b.i;
+          // Fichas crema; la x, color sol; la elegida lleva aro.
+          drawTile(p, C, b, b.t, { fill: isX ? C.sun : C.cream, r: 8, lift: 2, size: 15, ring: on ? C.brand : null });
+        }
+        p.noStroke(); p.textStyle(p.NORMAL); p.fill(C.mute); p.textSize(11);
+        p.text(r.op === '+' ? 'fichas que se suman' : 'fichas que se multiplican', W / 2, beamY + 56);
+        // Mensajes
+        if (msgT > 0) { msgT--; p.fill(C.bad); p.textStyle(p.BOLD); fitText(p, msg, W / 2, 86, W - 24, 12); }
+        else if (done) drawPill(p, C, '¡La x quedó sola!', W / 2, 86, locked ? C.ok : C.mint, 13);
+        else { p.fill(C.mute); fitText(p, sel == null ? 'Toca una ficha de la izquierda…' : '…y luego su gemela de la derecha', W / 2, 86, W - 24, 12); }
+        if (locked && !done) { p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, `Quedaba ${r.ans}`, W / 2, H - 31, W - 24, 13); }
+        else if (!locked) {
+          drawTile(p, C, reset, 'Reiniciar', { r: 8, lift: 2, size: 12 });
+        }
+      };
+
+      p.mousePressed = () => {
+        const x = p.mouseX, y = p.mouseY, r = R[cur];
+        const tb = tabs.findIndex(b => hitBox(b, x, y));
+        if (tb >= 0) { cur = tb; sel = null; msgT = 0; api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        if (hitBox(reset, x, y)) { P[cur] = []; sel = null; api.ready(R.every((rr, i) => P[i].length > 0)); return false; }
+        const bl = boxes.L.find(b => b && hitBox(b, x, y));
+        if (bl) {
+          if (bl.t === 'x') say('La x es la que queremos dejar sola');
+          else if (r.op === '·' && bl.t === '0') say('El 0 no se cancela: 0 · 2 = 0 · 5 y 2 ≠ 5');
+          else { sel = bl.i; api.sfx?.tap?.(); }
+          return false;
+        }
+        const br = boxes.R.find(b => b && hitBox(b, x, y));
+        if (br) {
+          if (sel == null) { say('Empieza por una ficha de la izquierda'); return false; }
+          if (canCancel(r, sel, br.i)) { P[cur].push([sel, br.i]); sel = null; api.sfx?.tap?.(); api.ready(R.every((rr, i) => P[i].length > 0)); }
+          else say('Solo se quitan dos fichas iguales');
+          return false;
+        }
+      };
+    }, 1.2);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ pairs: P.map(l => l.map(pr => [...pr])) }),
+      lock() { locked = true; sel = null; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create, canCancel };
 })();

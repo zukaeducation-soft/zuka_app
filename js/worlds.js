@@ -521,6 +521,16 @@ const WORLDS = (() => {
     'icf-cn-ondas': { name: 'Ondas, Luz y Sonido', art: plate('icf-cn-ondas', TEAL, `
       ${L('M46 30C52 14 58 14 64 30S76 46 82 30 94 14 100 30 112 46 116 30', TEAL, 1.4)}${L('M46 30h70', INK, .6)}${L('M54 64L80 48L106 64', INK, 1.2)}${L('M50 64h60', INK, 1)}${L('M80 44v20', INK, .6)}${D(80, 64, 1.8, TEAL)}
       ${T(28, 42, 'v = λ·f', INK, 7)}${T(136, 42, '340 m/s', TEAL, 6)}`) },
+    // ---------- onceavos mundos y Electricidad ----------
+    'icf-ma-espacio': { name: 'Movimientos y Vistas', art: plate('icf-ma-espacio', TEAL, `
+      ${L('M46 64h68M80 12v54', INK, .7)}${L('M52 52l16 0-16-18z', INK, 1.1)}${L('M108 52l-16 0 16-18z', TEAL, 1.2)}${L('M80 12v54', TEAL, .8)}${L('M62 18h14l6-6H68zM62 18v12h14V18M76 30l6-6V12', INK, .9)}${D(80, 52, 1.6, TEAL)}
+      ${T(28, 42, '(x, y)', INK, 7)}${T(134, 42, '(−x, y)', TEAL, 7)}`) },
+    'icf-cn-gases': { name: 'Gases y Disoluciones', art: plate('icf-cn-gases', TEAL, `
+      ${L('M56 16v48h34V16', INK, 1.2)}${L('M56 34h34', TEAL, 1.4)}${L('M73 34V10M66 10h14', INK, 1)}${[[62, 42], [80, 46], [70, 54], [84, 58], [62, 60]].map(([a, b]) => D(a, b, 1.6, TEAL)).join('')}${C(106, 44, 10, INK, 1.1)}${L('M106 54v10', INK, .8)}
+      ${T(28, 42, 'P · V', INK, 7)}${T(136, 42, 'g/L', TEAL, 7)}`) },
+    'icf-cn-electrico': { name: 'Electricidad y Magnetismo', art: plate('icf-cn-electrico', TEAL, `
+      ${L('M50 40V18h60v44H50V48', INK, 1.1)}${L('M44 40h12M47 48h6', TEAL, 1.4)}${L('M70 18l4-5 6 10 6-10 6 10 4-5', TEAL, 1.2)}${C(110, 40, 7, INK, 1.1)}${L('M105 35l10 10M115 35l-10 10', INK, .8)}${L('M68 62v-10h24v10', TEAL, 1)}
+      ${T(28, 42, 'V = I·R', INK, 6)}${T(134, 42, 'N  S', TEAL, 7)}`) },
   };
 })();
 

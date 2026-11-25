@@ -1,329 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/explora-alg-mundos-6-8.js
-// Álgebra · mundos 6 (Álgebra de Polinomios), 7 (Parábolas y Complejos) y 8 (Raíces de Polinomios), Explora. Ejemplos propios.
-{
-  const P = XM.pasos;
-  // Baldosas algebraicas: a cuadrados x², b barras x y c unidades.
-  const tiles = (K, a, b, c, x = 24, y = 24) => Array.from({ length: Math.round(a) }, (_, i) => K.r(x + i * 60, y, 54, 54, 'fa') + K.t(x + 27 + i * 60, y + 32, 'x²', 's')).join('')
-    + Array.from({ length: Math.round(b) }, (_, i) => K.r(x + i * 22, y + 64, 18, 54, 'fg') + K.t(x + 9 + i * 22, y + 96, 'x', 's')).join('') + Array.from({ length: Math.round(c) }, (_, i) => K.r(x + i * 22, y + 128, 18, 18, 'ff')).join('');
-  // ---------------------------------------------------------------------------------------------------------- alg-23a
-  xpLec('alg-23a', [
-    ['Piezas semejantes', xpMira('dibujo', 'Empecemos por la idea: solo se juntan las piezas **de la misma forma**.', { dib: (v, K) => tiles(K, v.a, v.b, v.c), v: { a: 2, b: 3, c: 1 }, alto: 180 }, [
-      ['Dos cuadrados de lado x, tres barras y una unidad.', {}, '$2x^2 + 3x + 1$'],
-      ['Llegan una barra y cuatro unidades.', { b: 4, c: 5 }, '$+\\ (x + 4)$'],
-      ['Las barras se suman con barras; las unidades con unidades.', {}, '$2x^2 + 4x + 5$'],
-      ['El cuadrado no se junta con la barra: son formas distintas.', {}, '$x^2 + x \\neq x^3$'],
-      ['El **grado** es el mayor exponente: aquí, 2.', {}, '$\\text{grado } 2$'],
-    ], 'Términos semejantes: la misma letra con el mismo exponente.'),
-    xpMueve('Arma $(x^2 + 2x + 3) + (x^2 + 4x)$: mueve las piezas.', 300, { a: 1, b: 2, c: 3 }, [xpRegla('a', 0, 4, 'cuadrados'), xpRegla('b', 0, 8, 'barras')], { a: 2, b: 6 }, (v, K) => tiles(K, v.a, v.b, v.c), '$2x^2 + 6x + 3$.', { lee: v => `$${v.a}x^2 + ${v.b}x + 3$` })],
-    ['Restar cambia todo', xpMira('dibujo', 'Segunda idea: el menos entra a **todos** los términos.', { dib: (v, K) => P(K, v, ['(5x² + 2x) − (3x² − 4x + 1)', '5x² + 2x − 3x² + 4x − 1', '2x² + 6x − 1'], 44, 38, ''), v: { n: 1 }, alto: 150 }, [
-      ['Se quita un paréntesis entero.', {}, '$-(3x^2 - 4x + 1)$'],
-      ['Cada signo de adentro cambia.', { n: 2 }, '$-3x^2 + 4x - 1$'],
-      ['Se juntan los semejantes.', { n: 3 }, '$2x^2 + 6x - 1$'],
-      ['El error común: cambiar solo el primero.', {}, '$-3x^2 - 4x + 1 \\ \\text{no}$'],
-    ], 'Restar un polinomio es sumar su opuesto.'),
-    xpFila('$(4x^2 - x + 6) - (x^2 - 3x + 2)$: pon los coeficientes.', ['x²', 'x', 'número'], ['3', '2', '4'], ['5', '−4', '8'], '$-x + 3x$ y $6 - 2$.', '$3x^2 + 2x + 4$.')],
-    ['Multiplicar es llenar', xpMira('dibujo', 'Tercera idea: un producto es **un rectángulo**: cada término con cada término.', { dib: (v, K) => { const c = [['x²', '5x'], ['2x', '10']]; return c.map((f, i) => f.map((t, j) => K.f(v.n - (i * 2 + j), K.r(80 + (j ? 110 : 0), 40 + (i ? 80 : 0), j ? 70 : 110, i ? 44 : 80, ['fa', 'fg', 'fg', 'ff'][i * 2 + j]) + K.t(80 + (j ? 145 : 55), 46 + (i ? 100 : 40), t, 'b'))).join('')).join('') + K.t(135, 30, 'x', 's') + K.t(225, 30, '5', 's') + K.t(66, 84, 'x', 's') + K.t(66, 146, '2', 's'); }, v: { n: 0 }, alto: 180 }, [
-      ['Un rectángulo de lados x + 5 y x + 2.', {}, '$(x + 5)(x + 2)$'],
-      ['La primera parte es x por x.', { n: 1 }, '$x^2$'],
-      ['x por 5 y 2 por x: son barras.', { n: 3 }, '$5x + 2x = 7x$'],
-      ['Y 2 por 5, las unidades.', { n: 4 }, '$x^2 + 7x + 10$'],
-      ['Los grados se suman: 1 más 1, grado 2.', {}, '$1 + 1 = 2$'],
-    ], 'Multiplicar: todos con todos; el grado se suma.'),
-    xpFila('$(x + 3)(x + 6)$: pon el coeficiente de x y el número.', ['de x', 'número'], ['9', '18'], ['3', '6', '36'], 'Dos barras: 6x y 3x.', '$x^2 + 9x + 18$.')],
-    ['Ahora sí, un problema', xpFila('Un patio mide $x + 4$ por $x + 7$. Pon los coeficientes de su área.', ['x²', 'x', 'número'], ['1', '11', '28'], ['4', '7', '12'], 'Llena el rectángulo en cuatro partes.', '$x^2 + 11x + 28$.')],
-  ], 'Se juntan semejantes; restar cambia todo; multiplicar llena un rectángulo.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-3
-  const cuadAB = (v, K) => { const a = v.a * 18, b = v.b * 18, g = 8 * v.s; return K.r(70, 14, a, a, 'fa') + K.r(70 + a + g, 14, b, a, 'fg') + K.r(70, 14 + a + g, a, b, 'fg') + K.r(70 + a + g, 14 + a + g, b, b, 'ff') + K.t(70 + a / 2, 18 + a / 2, 'a²', 'b') + K.t(70 + a + g + b / 2, 18 + a / 2, 'ab', 's') + K.t(70 + a / 2, 20 + a + g + b / 2, 'ab', 's') + K.t(70 + a + g + b / 2, 20 + a + g + b / 2, 'b²', 's'); };
-  xpLec('alg-3', [
-    ['El cuadrado de una suma', xpMira('dibujo', 'Empecemos por la idea: el cuadrado de una suma tiene **cuatro pedazos**.', { dib: cuadAB, v: { a: 5, b: 3, s: 0 }, alto: 190 }, [
-      ['Un cuadrado de lado a más b.', {}, '$(a + b)^2$'],
-      ['Se corta: un cuadrado a², uno b²…', { s: 1 }, '$a^2 + b^2$'],
-      ['…y dos rectángulos iguales, ab.', { s: 2 }, '$2ab$'],
-      ['Olvidar los rectángulos es el error más común.', {}, '$(a + b)^2 = a^2 + 2ab + b^2$'],
-      ['Con resta, los rectángulos se quitan.', {}, '$(a - b)^2 = a^2 - 2ab + b^2$'],
-    ], '$(a \\pm b)^2 = a^2 \\pm 2ab + b^2$.'),
-    xpFila('$(x + 9)^2$: pon el término de x y el número.', ['de x', 'número'], ['18', '81'], ['9', '36', '99'], 'Dos rectángulos de 9 por x.', '$x^2 + 18x + 81$.')],
-    ['La diferencia de cuadrados', xpMira('dibujo', 'Segunda idea: suma por diferencia **cancela** lo de en medio.', { dib: (v, K) => { const A = 100, B = 40; return K.p([[40, 20], [40 + A, 20], [40 + A, 20 + A - B], [40 + A - B, 20 + A - B], [40 + A - B, 20 + A], [40, 20 + A]], 'fa') + K.r(40 + A - B, 20 + A - B, B, B, 'fc') + K.t(90, 62, 'a² − b²', 'b') + K.f(v.m, K.r(200, 16, 60, 140, 'fg') + K.t(230, 174, 'a − b', 's') + K.t(288, 90, 'a + b', 's', 'start')); }, v: { m: 0 }, alto: 180 }, [
-      ['Un cuadrado de lado a, al que se le quita uno de lado b.', {}, '$a^2 - b^2$'],
-      ['Se corta la L y se arma un rectángulo.', { m: 1 }, '$(a - b)(a + b)$'],
-      ['Sus lados son a menos b y a más b.', {}, '$(a + b)(a - b) = a^2 - b^2$'],
-      ['Sirve para cuentas: 103 por 97.', {}, '$100^2 - 3^2 = 9\\,991$'],
-    ], '$(a + b)(a - b) = a^2 - b^2$.'),
-    xpFila('$52 \\cdot 48$ como $(50 + 2)(50 - 2)$: pon los cuadrados y el resultado.', ['50²', '2²', 'resultado'], ['2500', '4', '2496'], ['2504', '100', '2400'], 'Resta los cuadrados.', '$2500 - 4$.')],
-    ['El cubo', xpMira('dibujo', 'Tercera idea: el cubo de una suma tiene **ocho piezas** de cuatro clases.', { dib: (v, K) => P(K, v, ['(a + b)³', 'a³ : 1 cubo', '3a²b : 3 losas', '3ab² : 3 barras', 'b³ : 1 cubito'], 28, 30), v: { n: 1 }, alto: 170 }, [
-      ['Un cubo de arista a más b se corta en ocho.', {}, '$(a + b)^3$'],
-      ['Primero, el cubo grande, de arista a.', { n: 2 }, '$a^3$'],
-      ['Tres losas de a por a por b.', { n: 3 }, '$3a^2b$'],
-      ['Tres barras de a por b por b, y el cubito.', { n: 5 }, '$3ab^2$'],
-      ['En orden: uno, tres, tres, uno.', {}, '$a^3 + 3a^2b + 3ab^2 + b^3$'],
-    ], '$(a + b)^3 = a^3 + 3a^2b + 3ab^2 + b^3$.'),
-    xpFila('$(x + 4)^3$: pon los coeficientes que siguen a $x^3$.', ['x²', 'x', 'número'], ['12', '48', '64'], ['4', '16', '24'], '3 · 4, 3 · 16 y 4 al cubo.', '$x^3 + 12x^2 + 48x + 64$.')],
-    ['Ahora sí, un problema', xpFila('Un lote cuadrado pasa de lado x a lado x + 8. ¿Cuánto creció su área? Pon los coeficientes de lo que se agregó.', ['de x', 'número'], ['16', '64'], ['8', '32', '24'], '$(x + 8)^2 - x^2$.', 'Dos franjas de 8x y la esquina de 64.')],
-  ], 'Los productos notables son áreas y volúmenes cortados.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-24c
-  const pascal = (v, K) => { let h = ''; for (let i = 0; i < Math.round(v.f); i++) { let c = 1; for (let j = 0; j <= i; j++) { h += K.c(170 + (j - i / 2) * 44, 24 + i * 32, 14, 'fa') + K.t(170 + (j - i / 2) * 44, 29 + i * 32, c, 's'); c = c * (i - j) / (j + 1); } } return h; };
-  xpLec('alg-24c', [
-    ['El triángulo', xpMira('dibujo', 'Empecemos por la idea: cada número es la **suma de los dos de arriba**.', { dib: pascal, v: { f: 1 }, alto: 205 }, [
-      ['Arriba, en la punta, hay un 1.', { f: 1 }, '$(a + b)^0 = 1$'],
-      ['Abajo, 1 y 1; luego 1, 2, 1.', { f: 3 }, '$(a + b)^2$'],
-      ['1, 3, 3, 1: son los del cubo.', { f: 4 }, '$(a + b)^3$'],
-      ['El 6 sale de 3 más 3.', { f: 5 }, '$1, 4, 6, 4, 1$'],
-      ['Cada fila da los coeficientes de una potencia.', { f: 6 }, '$(a + b)^5$'],
-    ], 'La fila n da los coeficientes de $(a + b)^n$.'),
-    xpFila('La fila 5 es 1, 5, 10, 10, 5, 1. Pon los cuatro primeros de la fila 6.', ['1.º', '2.º', '3.º', '4.º'], ['1', '6', '15', '20'], ['10', '11', '5'], 'Suma vecinos: 1 + 5, 5 + 10, 10 + 10.', '1, 6, 15, 20.')],
-    ['Por qué salen esos números', xpMira('dibujo', 'Segunda idea: cuentan **de cuántas maneras** se escogen los paréntesis.', { dib: (v, K) => [0, 1, 2, 3].map(i => K.r(24 + i * 76, 40, 66, 44, 'fc', 8) + K.t(57 + i * 76, 68, i < 2 ? `a + ${v.q > 0.5 ? 'b ✓' : 'b'}` : 'a + b', 's')).join('') + K.t(170, 126, v.p, 'b ta'), v: { q: 0, p: '' }, alto: 150 }, [
-      ['Cuatro paréntesis iguales. De cada uno sale a o b.', {}, '$(a + b)^4$'],
-      ['Para tener a²b² se escoge b en dos de los cuatro.', { q: 1, p: 'a²b²' }, '$\\binom42$'],
-      ['Hay 6 maneras de escoger dos de cuatro.', { p: '6 a²b²' }, '$\\binom42 = \\tfrac{4 \\cdot 3}{2} = 6$'],
-      ['Por eso el coeficiente es 6.', {}, '$6a^2b^2$'],
-    ], 'El coeficiente de $a^{n-k}b^k$ es $\\binom{n}{k}$.'),
-    xpFila('Pon cada combinación.', ['C(5, 2)', 'C(7, 1)', 'C(6, 3)'], ['10', '7', '20'], ['18', '30', '6'], '5·4/2; siete; 6·5·4/6.', '10, 7 y 20.')],
-    ['Un término suelto', xpMira('dibujo', 'Tercera idea: no hace falta abrir todo para hallar **un término**.', { dib: (v, K) => P(K, v, ['(x + 2)⁵, término con x³', 'b aparece 2 veces', 'C(5, 2) · x³ · 2²', '10 · 4x³ = 40x³'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['Queremos el de x al cubo.', {}, '$(x + 2)^5$'],
-      ['Los exponentes suman 5: el 2 va dos veces.', { n: 2 }, '$3 + 2 = 5$'],
-      ['Las maneras por los factores.', { n: 3 }, '$\\binom52 x^3 \\cdot 2^2$'],
-      ['El coeficiente es 40, no 10: el 2 también cuenta.', { n: 4 }, '$40x^3$'],
-    ], 'Término: $\\binom{n}{k}a^{n-k}b^k$; no olvides la potencia de b.'),
-    xpFila('En $(x + 3)^4$, el término con $x^2$: pon las maneras, $3^2$ y el coeficiente.', ['maneras', '3²', 'coeficiente'], ['6', '9', '54'], ['4', '12', '36'], 'Dos de cuatro; y el 3 va dos veces.', '$6 \\cdot 9 = 54$.')],
-    ['Ahora sí, un problema', xpFila('De 8 bailarines se eligen 2 para abrir el show. ¿Cuántas parejas hay? ¿Y si se eligen 6?', ['2 de 8', '6 de 8'], ['28', '28'], ['56', '16', '48'], 'Elegir 6 es dejar 2 por fuera.', '$\\binom82 = \\binom86 = 28$.')],
-  ], 'Pascal cuenta maneras de escoger: esos son los coeficientes.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-24b
-  const rectF = (v, K) => { const p = Math.round(v.p), q = Math.round(v.q), u = 18, X = 80; return K.r(60, 30, X, X, 'fa') + K.t(100, 74, 'x²', 'b') + Array.from({ length: p }, (_, i) => K.r(60 + X + i * u, 30, u, X, 'fg')).join('') + Array.from({ length: q }, (_, i) => K.r(60, 30 + X + i * u, X, u, 'fg')).join('') + XM.reja(K, 60 + X, 30 + X, p, q, u, 'ff'); };
-  xpLec('alg-24b', [
-    ['Factor común', xpMira('dibujo', 'Empecemos por la idea: factorizar es hallar **los lados** del área.', { dib: (v, K) => K.r(40, 40, 120, 60, 'fa') + K.t(100, 76, '6x²', 'b') + K.r(160 + v.s * 20, 40, 80, 60, 'fg') + K.t(200 + v.s * 20, 76, '4x', 'b') + K.f(1 - v.s, K.t(26, 76, '2x', 's') + K.t(140, 126, '3x + 2', 'b ta')), v: { s: 1 }, alto: 140 }, [
-      ['Dos áreas: 6x² y 4x.', {}, '$6x^2 + 4x$'],
-      ['Comparten una altura: 2x es el mayor factor de las dos.', { s: 0 }, '$2x$'],
-      ['Los largos son 3x y 2.', {}, '$6x^2 + 4x = 2x(3x + 2)$'],
-      ['Se comprueba multiplicando de vuelta.', {}, '$2x \\cdot 3x + 2x \\cdot 2$'],
-    ], 'Saca el mayor factor que tienen todos.'),
-    xpFila('$15x^3 - 10x^2 = \\square(\\square x - \\square)$: pon las piezas.', ['afuera', 'de x', 'número'], ['5x²', '3', '2'], ['5x', '10', '15'], '¿Qué divide a los dos, en número y en x?', '$5x^2(3x - 2)$.')],
-    ['Trinomio', xpMira('dibujo', 'Segunda idea: dos números que **sumen** las barras y **multipliquen** las unidades.', { dib: rectF, v: { p: 1, q: 5 }, alto: 220 }, [
-      ['x² + 6x + 8. Con 1 y 5 barras salen cinco unidades: no.', {}, '$1 \\cdot 5 = 5$'],
-      ['Con 2 y 4: ocho unidades. Cierra justo.', { p: 4, q: 2 }, '$4 \\cdot 2 = 8$'],
-      ['Los lados son x + 4 y x + 2.', {}, '$(x + 4)(x + 2)$'],
-      ['Suman 6 y multiplican 8.', {}, '$x^2 + 6x + 8$'],
-      ['Con unidades negativas, los signos son distintos.', {}, '$x^2 + x - 6 = (x + 3)(x - 2)$'],
-    ], '$x^2 + sx + m$: busca dos que sumen s y multipliquen m.'),
-    xpMueve('Factoriza $x^2 + 8x + 15$: reparte las 8 barras hasta tener 15 unidades (la mayor al lado).', 300, { p: 1, q: 1 }, [xpRegla('p', 1, 7, 'barras al lado'), xpRegla('q', 1, 5, 'barras abajo')], { p: 5, q: 3 }, rectF, '$(x + 5)(x + 3)$.', { lee: v => `$x^2 + ${v.p + v.q}x + ${v.p * v.q}$` })],
-    ['Reconocer patrones', xpMira('dibujo', 'Tercera idea: antes de buscar, mira si es un **notable** o si se puede **agrupar**.', { dib: (v, K) => P(K, v, ['x² − 49 = (x + 7)(x − 7)', 'x² − 14x + 49 = (x − 7)²', 'x³ + 2x² + 5x + 10', '= x²(x + 2) + 5(x + 2)', '= (x + 2)(x² + 5)'], 28, 30), v: { n: 0 }, alto: 170 }, [
-      ['Dos cuadrados que se restan.', { n: 1 }, '$a^2 - b^2$'],
-      ['Dos cuadrados y el doble producto: cuadrado perfecto.', { n: 2 }, '$(a - b)^2$'],
-      ['Cuatro términos: de a dos.', { n: 4 }, '$x^2(x + 2) + 5(x + 2)$'],
-      ['El paréntesis repetido sale.', { n: 5 }, '$(x + 2)(x^2 + 5)$'],
-    ], 'Primero factor común; luego notables; luego trinomio o agrupar.'),
-    xpFila('Pon cada factorización.', ['x² − 64', 'x² + 10x + 25'], ['(x+8)(x−8)', '(x+5)²'], ['(x−8)²', '(x+5)(x−5)'], '¿Hay término con x? ¿Es el doble producto?', 'Diferencia de cuadrados y cuadrado perfecto.')],
-    ['Ahora sí, un problema', xpMueve('El área de un salón es $x^2 + 9x + 14$. Halla sus lados repartiendo las 9 barras.', 300, { p: 1, q: 1 }, [xpRegla('p', 1, 8, 'barras al lado'), xpRegla('q', 1, 5, 'barras abajo')], { p: 7, q: 2 }, rectF, '$(x + 7)(x + 2)$.', { lee: v => `$x^2 + ${v.p + v.q}x + ${v.p * v.q}$` })],
-  ], 'Factorizar: del área a los lados.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-23c
-  const plano = (v, K) => { const p = XM.plano(K, -8.7, 8.7, -5, 5, { H: 190 }); return p.s + K.ar(p.X(0), p.Y(0), p.X(v.a), p.Y(v.b), 'la gr') + (v.c != null ? K.f(v.k ?? 1, K.ar(p.X(0), p.Y(0), p.X(v.c), p.Y(v.d), 'lf gr')) : '') + K.t(14, 24, v.p || '', 'b ta', 'start'); };
-  xpLec('alg-23c', [
-    ['Un número que gira', xpMira('dibujo', 'Empecemos por la idea: multiplicar por **i** es girar un cuarto de vuelta.', { dib: plano, v: { a: 3, b: 0, p: '3' }, alto: 200 }, [
-      ['El 3, sobre el eje real.', {}, '$3 = 3 + 0i$'],
-      ['Por i: gira 90 grados y queda en 3i.', { a: 0, b: 3, p: '3i' }, '$3 \\cdot i = 3i$'],
-      ['Otra vez por i: llega a −3.', { a: -3, b: 0, p: '−3' }, '$3i^2 = -3$'],
-      ['Por eso i al cuadrado es −1.', {}, '$i^2 = -1$'],
-      ['Un giro más, −3i; con el cuarto giro vuelve al 3.', { a: 0, b: -3, p: '−3i' }, '$i^3 = -i, \\ i^4 = 1$'],
-    ], '$i^2 = -1$; las potencias de i se repiten de cuatro en cuatro.'),
-    xpFila('Pon cada potencia.', ['i⁶', 'i¹¹', 'i²⁰'], ['−1', '−i', '1'], ['i', '0'], 'Mira el residuo entre 4: 2, 3 y 0.', '$i^2$, $i^3$ e $i^0$.')],
-    ['Sumar y multiplicar', xpMira('dibujo', 'Segunda idea: se suma **por partes** y se multiplica **como binomios**.', { dib: (v, K) => P(K, v, ['(2 + 3i) + (4 − i) = 6 + 2i', '(2 + 3i)(4 − i)', '8 − 2i + 12i − 3i²', '8 + 10i + 3 = 11 + 10i'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
-      ['Real con real e imaginaria con imaginaria.', {}, '$6 + 2i$'],
-      ['El producto: todos con todos.', { n: 3 }, '$8 - 2i + 12i - 3i^2$'],
-      ['Como i² es −1, el último se vuelve +3.', { n: 4 }, '$-3i^2 = 3$'],
-      ['Por último se juntan las partes.', {}, '$11 + 10i$'],
-    ], 'Multiplica normal y cambia $i^2$ por $-1$.'),
-    xpFila('$(1 + 2i)(3 + i)$: pon la parte real y la imaginaria.', ['real', 'imaginaria'], ['1', '7'], ['3', '5', '2'], '$3 + i + 6i + 2i^2$.', '$1 + 7i$.')],
-    ['Conjugado y tamaño', xpMira('dibujo', 'Tercera idea: el **conjugado** es el reflejo; el **módulo**, el largo.', { dib: plano, v: { a: 4, b: 3, c: 4, d: 3, k: 0, p: '4 + 3i' }, alto: 200 }, [
-      ['Aquí está el número 4 + 3i.', {}, '$z = 4 + 3i$'],
-      ['Su reflejo sobre el eje real es el conjugado.', { d: -3, k: 1 }, '$\\bar z = 4 - 3i$'],
-      ['El largo sale por Pitágoras.', {}, '$|z| = \\sqrt{16 + 9} = 5$'],
-      ['Un número por su conjugado da el largo al cuadrado: real.', {}, '$z\\bar z = 25$'],
-      ['Con eso se divide: se multiplica por el conjugado de abajo.', {}, '$\\tfrac1z = \\tfrac{\\bar z}{25}$'],
-    ], '$z\\bar z = |z|^2$: así se quita i del denominador.'),
-    xpFila('$z = 5 - 12i$. Pon la parte imaginaria del conjugado, $|z|^2$ y $|z|$.', ['imag.', '|z|²', '|z|'], ['12', '169', '13'], ['−12', '17', '119'], 'Refleja; luego 25 más 144.', '$\\bar z = 5 + 12i$ y $|z| = 13$.')],
-    ['Ahora sí, un problema', xpMueve('Un dron mira hacia $2 + 4i$. Lo multiplican por i (gira 90°). Lleva la flecha roja a donde apunta.', 290, { a: 2, b: 4, c: 2, d: 4 }, [xpRegla('c', -5, 5, 'real'), xpRegla('d', -5, 5, 'imaginaria')], { c: -4, d: 2 }, plano, '$i(2 + 4i) = 2i + 4i^2 = -4 + 2i$.', { lee: v => `$${v.c} ${v.d < 0 ? '-' : '+'} ${Math.abs(v.d)}i$` })],
-  ], 'Los complejos viven en un plano; i gira un cuarto de vuelta.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-1
-  const bal = (v, K) => K.l(40, 130, 300, 130, 'gr') + K.p([[170, 130], [150, 165], [190, 165]], 'fk') + XM.bolas(K, 60, 112, v.x, 'fa', 30, 13) + XM.bolas(K, 60, 84, v.u, 'fg', 20, 8) + XM.bolas(K, 200, 112, v.y, 'fa', 30, 13) + XM.bolas(K, 200, 84, Math.min(6, v.w), 'fg', 20, 8) + XM.bolas(K, 200, 62, Math.max(0, v.w - 6), 'fg', 20, 8) + K.t(170, 30, v.p, 'b ta');
-  xpLec('alg-1', [
-    ['La balanza', xpMira('dibujo', 'Empecemos por la idea: una ecuación es una **balanza en equilibrio**.', { dib: bal, v: { x: 3, u: 2, y: 1, w: 8, p: '3x + 2 = x + 8' }, alto: 175 }, [
-      ['Tres cajas iguales y 2 bolitas pesan como una caja y 8 bolitas.', {}, '$3x + 2 = x + 8$'],
-      ['Quitamos una caja de cada lado: sigue en equilibrio.', { x: 2, y: 0, p: '2x + 2 = 8' }, '$2x + 2 = 8$'],
-      ['Quitamos 2 bolitas de cada lado.', { u: 0, w: 6, p: '2x = 6' }, '$2x = 6$'],
-      ['Repartimos: cada caja pesa tres bolitas.', { x: 1, w: 3, p: 'x = 3' }, '$x = 3$'],
-    ], 'Lo que se hace a un lado se hace al otro.'),
-    xpFila('$5x + 4 = 2x + 19$: pon lo que queda en cada paso.', ['3x =', 'x ='], ['15', '5'], ['23', '7', '3'], 'Quita 2x de cada lado y después 4.', '$3x = 15$, $x = 5$.')],
-    ['Paréntesis y fracciones', xpMira('dibujo', 'Segunda idea: primero se abren paréntesis y se **quitan denominadores**.', { dib: (v, K) => P(K, v, ['x/2 + x/3 = 10', '3x + 2x = 60', '5x = 60', 'x = 12'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['Medios y tercios: el común es 6.', {}, '$\\text{mcm}(2, 3) = 6$'],
-      ['Todo por 6, los dos lados completos.', { n: 2 }, '$3x + 2x = 60$'],
-      ['Después se juntan las x.', { n: 3 }, '$5x = 60$'],
-      ['Y se reparte: 12.', { n: 4 }, '$x = 12$'],
-    ], 'Multiplica todos los términos por el mcm.'),
-    xpFila('$\\tfrac{x}{4} + \\tfrac{x}{6} = 5$: pon el mcm, las x juntas y x.', ['mcm', '? · x = 60', 'x'], ['12', '5', '12'], ['24', '10', '6'], '3x más 2x.', '$5x = 60$.')],
-    ['Una, ninguna o todas', xpMira('dibujo', 'Tercera idea: dos rectas se cruzan **una vez, nunca o siempre**.', { dib: (v, K) => { const p = XM.plano(K, -4, 4, -4, 6, { H: 180 }); return p.s + XM.curva(K, p, x => x + 1, 'la gr') + XM.curva(K, p, x => v.m * x + v.b, 'lf gr d'); }, v: { m: -1, b: 3 }, alto: 190 }, [
-      ['Cada lado es una recta. Se cruzan en un punto: una solución.', {}, '$x + 1 = -x + 3$'],
-      ['Paralelas: nunca se encuentran. Ninguna solución.', { m: 1, b: 4 }, '$x + 1 = x + 4$'],
-      ['La misma recta: todos los números sirven.', { m: 1, b: 1 }, '$x + 1 = x + 1$'],
-      ['Al despejar sale algo falso o algo siempre cierto.', {}, '$1 = 4 \\ \\text{o} \\ 1 = 1$'],
-    ], 'Falso: ninguna. Siempre cierto: todas.'),
-    xpFila('Pon cuántas soluciones tiene cada una.', ['2x + 3 = 2x', '4x = x + 9', '2(x+1) = 2x+2'], ['ninguna', 'una', 'todas'], ['dos'], 'Quita las x iguales y mira lo que queda.', 'Queda 3 = 0; 3x = 9; y 2 = 2.')],
-    ['Ahora sí, un problema', xpFila('Tres cuerdas miden 96 m: la segunda es el doble de la primera y la tercera, 6 m más que la segunda. Halla las tres.', ['1.ª', '2.ª', '3.ª'], ['18', '36', '42'], ['24', '30', '32'], '$x + 2x + (2x + 6) = 96$.', '$5x = 90$, $x = 18$.')],
-  ], 'Equilibrio: lo mismo a los dos lados hasta dejar sola la x.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-4a
-  const par = (v, K) => { const p = XM.plano(K, -6, 6, -5, 7, { H: 200 }); return p.s + XM.curva(K, p, x => v.a * (x - v.h) ** 2 + v.k) + K.c(p.X(v.h), p.Y(v.k), 6, 'fF') + K.l(p.X(v.h), 8, p.X(v.h), 192, 'lf d'); };
-  xpLec('alg-4a', [
-    ['Mover la parábola', xpMira('dibujo', 'Empecemos por la idea: toda parábola es **x² movida y estirada**.', { dib: par, v: { a: 1, h: 0, k: 0 }, alto: 210 }, [
-      ['La más simple: vértice en el origen.', {}, '$y = x^2$'],
-      ['Sube o baja con k.', { k: -3 }, '$y = x^2 - 3$'],
-      ['Se corre con h: hacia el 2, aunque se escriba menos 2.', { h: 2 }, '$y = (x - 2)^2 - 3$'],
-      ['Con a negativa se voltea.', { a: -0.5, k: 4 }, '$y = -\\tfrac12(x - 2)^2 + 4$'],
-      ['El vértice siempre es (h, k) y el eje, x = h.', {}, '$V = (h, k)$'],
-    ], '$y = a(x - h)^2 + k$: vértice $(h, k)$.'),
-    xpMueve('Lleva el vértice a $(-3, 2)$ con a = 1.', 300, { a: 1, h: 0, k: 0 }, [xpRegla('h', -4, 4, 'h'), xpRegla('k', -4, 4, 'k')], { h: -3, k: 2 }, par, '$y = (x + 3)^2 + 2$.', { lee: v => `$y = (x ${v.h < 0 ? '+' : '-'} ${Math.abs(v.h)})^2 ${v.k < 0 ? '-' : '+'} ${Math.abs(v.k)}$` })],
-    ['Completar el cuadrado', xpMira('dibujo', 'Segunda idea: de la forma general se llega al vértice **completando el cuadrado**.', { dib: (v, K) => { const u = 20; return K.r(60, 20, 80, 80, 'fa') + K.t(100, 64, 'x²', 'b') + [0, 1, 2].map(i => K.r(140 + i * u, 20, u, 80, 'fg') + K.r(60, 100 + i * u, 80, u, 'fg')).join('') + K.f(v.c, XM.reja(K, 140, 100, 3, 3, u, 'ff')); }, v: { c: 0 }, alto: 180 }, [
-      ['x² + 6x: un cuadrado y seis barras, tres por lado.', {}, '$x^2 + 6x$'],
-      ['Falta la esquina: 3 por 3.', { c: 1 }, '$+\\ 9$'],
-      ['Con ella es un cuadrado de lado x + 3.', {}, '$x^2 + 6x + 9 = (x + 3)^2$'],
-      ['Si se agregó 9, hay que quitarlo.', {}, '$x^2 + 6x + 5 = (x + 3)^2 - 4$'],
-      ['El atajo: el vértice está en menos b sobre dos a.', {}, '$h = -\\tfrac{b}{2a}$'],
-    ], 'La mitad de b, al cuadrado, completa; y $h = -\\tfrac{b}{2a}$.'),
-    xpFila('$y = x^2 - 8x + 10$: pon h y k.', ['h', 'k'], ['4', '−6'], ['−4', '10', '26'], 'La mitad de 8; y evalúa ahí: 16 − 32 + 10.', '$(x - 4)^2 - 6$.')],
-    ['Máximo o mínimo', xpMira('dibujo', 'Tercera idea: el vértice es el punto **más alto o más bajo**.', { dib: (v, K) => { const p = XM.plano(K, 0, 10, 0, 30, { H: 190, gy: 5 }); return p.s + XM.curva(K, p, x => x * (10 - x)) + K.c(p.X(v.x), p.Y(v.x * (10 - v.x)), 6, 'fA') + K.l(p.X(v.x), p.Y(0), p.X(v.x), p.Y(v.x * (10 - v.x)), 'la'); }, v: { x: 1 }, alto: 200 }, [
-      ['Con 20 m de malla se cercan rectángulos: lados x y 10 − x.', {}, '$A = x(10 - x)$'],
-      ['Con x = 1, área 9.', {}, '$1 \\cdot 9$'],
-      ['Con 3, área 21.', { x: 3 }, '$3 \\cdot 7$'],
-      ['En la mitad, la mayor: un cuadrado de 25.', { x: 5 }, '$5 \\cdot 5 = 25$'],
-      ['Después baja igual: es simétrica.', { x: 8 }, '$8 \\cdot 2 = 16$'],
-    ], 'Si a < 0, el vértice es el máximo; si a > 0, el mínimo.'),
-    xpMueve('La ganancia es $x(8 - x)$. Lleva el punto a la ganancia **máxima**.', 260, { x: 1 }, [xpRegla('x', 0, 8, 'x')], { x: 4 }, (v, K) => { const p = XM.plano(K, 0, 8, 0, 18, { H: 190, gy: 3 }); return p.s + XM.curva(K, p, x => x * (8 - x)) + K.c(p.X(v.x), p.Y(v.x * (8 - v.x)), 6, 'fA'); }, 'En la mitad de 0 y 8.', { lee: v => `$${v.x} \\cdot ${8 - v.x} = ${v.x * (8 - v.x)}$` })],
-    ['Ahora sí, un problema', xpFila('Una pelota va a altura $h = -5t^2 + 20t$. ¿En qué segundo llega más alto y a cuántos metros?', ['segundo', 'altura'], ['2', '20'], ['4', '10', '40'], '$t = -\\tfrac{20}{2(-5)}$.', '$-5 \\cdot 4 + 40 = 20$ m.')],
-  ], 'Vértice y eje: con ellos se dibuja y se optimiza.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-4
-  const rz = (v, K) => { const p = XM.plano(K, -5, 5, -6, 8, { H: 200, gy: 2 }); return p.s + XM.curva(K, p, x => (x - v.r) * (x - v.s)) + K.c(p.X(v.r), p.Y(0), 6, 'fA') + K.c(p.X(v.s), p.Y(0), 6, 'fA'); };
-  const ck = (v, K) => { const p = XM.plano(K, -5, 5, -6, 8, { H: 200, gy: 2 }), d = 4 - v.c; return p.s + XM.curva(K, p, x => x * x - 4 + v.c) + (d > -0.01 ? [1, -1].map(s => K.c(p.X(s * Math.sqrt(Math.max(0, d))), p.Y(0), 6, 'fA')).join('') : ''); };
-  xpLec('alg-4', [
-    ['Donde toca el piso', xpMira('dibujo', 'Empecemos por la idea: resolver es hallar **dónde corta el eje x**.', { dib: rz, v: { r: -1, s: 3 }, alto: 210 }, [
-      ['Esta parábola corta en −1 y en 3.', {}, '$x = -1, \\ x = 3$'],
-      ['Sus factores dicen lo mismo.', {}, '$(x + 1)(x - 3) = 0$'],
-      ['Un producto da 0 si algún factor es 0.', {}, '$x + 1 = 0 \\ \\text{o} \\ x - 3 = 0$'],
-      ['Abierto: x² − 2x − 3 = 0.', {}, '$x^2 - 2x - 3 = 0$'],
-    ], 'Factoriza e iguala cada factor a 0.'),
-    xpMueve('Mueve los cortes a las soluciones de $x^2 - x - 6 = 0$ (la menor primero).', 300, { r: -1, s: 1 }, [xpRegla('r', -4, 0, 'menor'), xpRegla('s', 0, 4, 'mayor')], { r: -2, s: 3 }, rz, '$(x + 2)(x - 3)$.', { lee: v => `$x^2 ${-(v.r + v.s) < 0 ? '-' : '+'} ${Math.abs(v.r + v.s)}x ${v.r * v.s < 0 ? '-' : '+'} ${Math.abs(v.r * v.s)}$` })],
-    ['Cuántas hay', xpMira('dibujo', 'Segunda idea: el **discriminante** cuenta los cortes.', { dib: ck, v: { c: 0 }, alto: 210 }, [
-      ['x² − 4: corta dos veces.', {}, '$b^2 - 4ac = 16 > 0$'],
-      ['Si sube, los cortes se acercan.', { c: 3 }, '$b^2 - 4ac = 4$'],
-      ['Al tocar apenas, es una sola solución.', { c: 4 }, '$b^2 - 4ac = 0$'],
-      ['Más arriba ya no toca: no hay reales.', { c: 6 }, '$b^2 - 4ac < 0$'],
-    ], '$b^2 - 4ac$: positivo, dos; cero, una; negativo, ninguna real.'),
-    xpMueve('Sube la parábola $x^2 - 4 + c$ hasta que tenga **una sola** solución.', 270, { c: 0 }, [xpRegla('c', 0, 8, 'c')], { c: 4 }, ck, 'Queda $x^2 = 0$.', { lee: v => `$b^2 - 4ac = ${16 - 4 * v.c}$` })],
-    ['La fórmula', xpMira('dibujo', 'Tercera idea: completar el cuadrado **una vez para siempre** da la fórmula.', { dib: (v, K) => P(K, v, ['x² + 6x + 2 = 0', '(x + 3)² = 7', 'x + 3 = ±√7', 'x = −3 ± √7'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['No hay dos enteros que multipliquen 2 y sumen 6.', {}, '$x^2 + 6x + 2 = 0$'],
-      ['Entonces se completa el cuadrado.', { n: 2 }, '$x^2 + 6x + 9 = 7$'],
-      ['Dos raíces: con más y con menos.', { n: 3 }, '$\\pm\\sqrt7$'],
-      ['Y se despeja la x.', { n: 4 }, '$x = -3 \\pm \\sqrt7$'],
-      ['Con letras sale la fórmula general.', {}, '$x = \\tfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$'],
-    ], '$x = \\tfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$.'),
-    xpFila('$2x^2 - 7x + 3 = 0$: pon el discriminante y las raíces de menor a mayor.', ['b² − 4ac', 'menor', 'mayor'], ['25', '1/2', '3'], ['73', '−3', '2'], '$49 - 24$; y $\\tfrac{7 \\pm 5}{4}$.', '$x = \\tfrac12$ y $x = 3$.')],
-    ['Ahora sí, un problema', xpFila('Un huerto mide 3 m más de largo que de ancho y tiene 40 m². Halla ancho y largo.', ['ancho', 'largo'], ['5', '8'], ['−8', '10', '4'], '$x(x + 3) = 40$; una raíz no sirve de medida.', '$(x - 5)(x + 8) = 0$.')],
-  ], 'Las raíces son los cortes: factor, cuadrado o fórmula.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-23b
-  xpLec('alg-23b', [
-    ['Repartir polinomios', xpMira('dibujo', 'Empecemos por la idea: dividir polinomios es **repartir** y mirar qué sobra.', { dib: (v, K) => P(K, v, ['x² + 5x + 8 entre x + 2', 'x · (x + 2) = x² + 2x', 'queda 3x + 8', '3 · (x + 2) = 3x + 6', 'sobra 2'], 28, 30), v: { n: 1 }, alto: 170 }, [
-      ['¿Por cuánto va la x para dar x²? Por x.', { n: 2 }, '$x^2 \\div x = x$'],
-      ['Se quita y queda 3x + 8.', { n: 3 }, '$5x - 2x = 3x$'],
-      ['Ahora toca por 3.', { n: 4 }, '$3x \\div x = 3$'],
-      ['Sobra 2, de grado menor que el divisor: se acaba.', { n: 5 }, '$r = 2$'],
-      ['Como en los números: divisor por cociente más residuo.', {}, '$x^2 + 5x + 8 = (x + 2)(x + 3) + 2$'],
-    ], 'Dividendo = divisor · cociente + residuo.'),
-    xpFila('$x^2 + 7x + 15$ entre $x + 4$: pon el número del cociente $x + \\square$ y el residuo.', ['x + ?', 'residuo'], ['3', '3'], ['7', '11', '15'], '7x − 4x = 3x; y 15 − 12.', '$(x + 4)(x + 3) + 3$.')],
-    ['El grado manda', xpMira('dibujo', 'Segunda idea: los **grados se restan** y el residuo es más pequeño que el divisor.', { dib: (v, K) => XM.barra(K, 30, [[v.d, 'divisor', 'fa'], [v.q, 'cociente', 'fg']], { T: 6 }) + XM.barra(K, 80, [[v.r, 'residuo', 'ff']], { T: 6 }) + K.t(170, 140, v.p, 'ta'), v: { d: 2, q: 3, r: 1, p: '' }, alto: 160 }, [
-      ['Grado 5 entre grado 2.', {}, '$5 \\text{ entre } 2$'],
-      ['El cociente tiene grado 3.', { p: '5 − 2 = 3' }, '$5 - 2 = 3$'],
-      ['El residuo, menos de 2: a lo sumo grado 1.', {}, '$\\text{grado } r < 2$'],
-      ['Si el dividendo es menor, el cociente es 0.', {}, '$x + 1 = (x^2)\\cdot 0 + (x + 1)$'],
-    ], 'Grado del cociente = resta; residuo con menos grado que el divisor.'),
-    xpFila('Grado 7 entre grado 3. Pon el grado del cociente y el mayor posible del residuo.', ['cociente', 'residuo'], ['4', '2'], ['10', '3', '7'], 'Resta; y el residuo queda por debajo del divisor.', '$7 - 3 = 4$; menos de 3.')],
-    ['Polinomios iguales', xpMira('dibujo', 'Tercera idea: dos polinomios son iguales si lo son **coeficiente a coeficiente**.', { dib: (v, K) => P(K, v, ['ax² + bx + 6 = 3x² − 5x + c', 'a = 3', 'b = −5', 'c = 6'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['Estos dos valen lo mismo para toda x.', {}, '$\\text{para toda } x$'],
-      ['Entonces los de x² coinciden.', { n: 2 }, '$a = 3$'],
-      ['Los de la x también.', { n: 3 }, '$b = -5$'],
-      ['Y también los números sueltos.', { n: 4 }, '$c = 6$'],
-    ], 'Iguales para toda x: los mismos coeficientes.'),
-    xpFila('$(x + 2)(x + k) = x^2 + 9x + m$. Pon k y m.', ['k', 'm'], ['7', '14'], ['9', '11', '18'], 'Compara los de x: 2 + k = 9.', '$k = 7$ y $m = 2 \\cdot 7$.')],
-    ['Ahora sí, un problema', xpFila('Un rectángulo tiene área $x^2 + 10x + 21$ y un lado $x + 3$. El otro es $x + \\square$. Pon el número y el residuo.', ['x + ?', 'residuo'], ['7', '0'], ['10', '3', '21'], 'Reparte el área entre el lado.', '$(x + 3)(x + 7)$, exacto.')],
-  ], 'Dividir es repartir: divisor por cociente más residuo.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-92
-  const cub = (v, K, f) => { const p = XM.plano(K, -4, 4, -12, 12, { H: 200, gy: 4 }); return p.s + XM.curva(K, p, f) + K.c(p.X(v.x), p.Y(f(v.x)), 6, 'fF') + K.l(p.X(v.x), p.Y(0), p.X(v.x), p.Y(f(v.x)), 'lf'); };
-  const F92 = x => x ** 3 - 2 * x * x - 5 * x + 6, G92 = x => x ** 3 - 7 * x + 6;
-  const sint = (v, K, a, r, b, s) => a.map((t, i) => K.t(110 + i * 60, 40, t, 'b') + K.f(v.n - i, i ? K.t(110 + i * 60, 76, b[i], 'b tg') : '') + K.f(v.n - i, K.t(110 + i * 60, 124, s[i], 'b ta'))).join('') + K.t(44, 40, r, 'b tf') + K.l(80, 92, 320, 92) + K.l(70, 20, 70, 92);
-  xpLec('alg-92', [
-    ['El residuo sin dividir', xpMira('dibujo', 'Empecemos por la idea: el residuo entre x − c es **el valor en c**.', { dib: (v, K) => cub(v, K, F92), v: { x: -1 }, alto: 210 }, [
-      ['P(x) = x³ − 2x² − 5x + 6. ¿Cuánto vale en −1?', {}, '$P(-1) = 8$'],
-      ['Al dividir entre x + 1 sobra justo eso: 8.', {}, '$P(x) = (x + 1)Q(x) + 8$'],
-      ['En 1 vale 0: no sobra nada.', { x: 1 }, '$P(1) = 0$'],
-      ['Entonces x − 1 es un **factor**.', {}, '$P(x) = (x - 1)Q(x)$'],
-      ['Y también lo es x − 3.', { x: 3 }, '$P(3) = 0$'],
-    ], 'Residuo entre $x - c$: $P(c)$. Si es 0, $x - c$ es factor.'),
-    xpMueve('$P(x) = x^3 - 7x + 6$. Mueve el punto a la raíz **negativa**.', 270, { x: 0 }, [xpRegla('x', -3, 3, 'x')], { x: -3 }, (v, K) => cub(v, K, G92), '$P(-3) = -27 + 21 + 6 = 0$.', { lee: v => `$P(${v.x}) = ${G92(v.x)}$` })],
-    ['La división corta', xpMira('dibujo', 'Segunda idea: la **sintética** baja, multiplica y suma.', { dib: (v, K) => sint(v, K, [1, -4, 1, 6], 2, ['', 2, -4, -6], [1, -2, -3, 0]), v: { n: 0 }, alto: 140 }, [
-      ['x³ − 4x² + x + 6 entre x − 2. Se escriben los coeficientes y el 2.', {}, '$c = 2$'],
-      ['Primero baja el 1.', { n: 1 }, '$1$'],
-      ['Por 2 y se suma: −4 + 2 = −2.', { n: 2 }, '$-2$'],
-      ['Otra vez: por 2 y se suma.', { n: 3 }, '$1 + (-4) = -3$'],
-      ['El último es el residuo: 0.', { n: 4 }, '$x^2 - 2x - 3$'],
-    ], 'Si falta una potencia, se pone 0. El último es el residuo.'),
-    xpFila('$x^3 + 2x^2 - 5x - 6$ entre $x - 2$ (coeficientes 1, 2, −5, −6). Completa la fila de abajo.', ['baja', '2.º', '3.º', 'residuo'], ['1', '4', '3', '0'], ['2', '−6', '−3'], 'Baja 1; 2 + 2; −5 + 8; −6 + 6.', '$x^2 + 4x + 3$, exacto.')],
-    ['Hallar un coeficiente', xpMira('dibujo', 'Tercera idea: si x − c es factor, **P(c) = 0** da una ecuación.', { dib: (v, K) => P(K, v, ['P(x) = x³ + kx − 10', 'x − 2 es factor: P(2) = 0', '8 + 2k − 10 = 0', 'k = 1'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['Falta la k, pero se sabe que x − 2 es factor.', { n: 2 }, '$P(2) = 0$'],
-      ['Se cambia la x por 2.', { n: 3 }, '$8 + 2k - 10 = 0$'],
-      ['Se despeja: k vale 1.', { n: 4 }, '$k = 1$'],
-      ['Si el divisor es x + 3, se usa −3.', {}, '$x + 3 = x - (-3)$'],
-    ], 'Factor $x - c$: pon c e iguala a 0.'),
-    xpFila('$x + 1$ es factor de $x^3 + kx^2 + 4$. Pon $(-1)^3 + 4$ y k.', ['sin k', 'k'], ['3', '−3'], ['5', '−5', '1'], 'Se usa −1: −1 + k + 4 = 0.', '$k = -3$.')],
-    ['Ahora sí, un problema', xpFila('Una caja tiene volumen $x^3 + 6x^2 + 11x + 6$ y altura $x + 1$. La base es $x^2 + \\square x + \\square$.', ['de x', 'número'], ['5', '6'], ['7', '4', '11'], 'Sintética con −1: 1, 6 − 1, 11 − 5.', '$x^2 + 5x + 6$.')],
-  ], 'P(c) es el residuo: si da 0, hay factor.');
-
-  // ---------------------------------------------------------------------------------------------------------- alg-93
-  const cruz = (v, K) => { const p = XM.plano(K, -4, 4, -8, 8, { H: 200, gy: 2 }); return p.s + XM.curva(K, p, x => v.k * (x + 2) * (x - 1) ** 2 * 0.8 * (1 - v.z) + v.z * (x + 2) * (x - 1) * (x - 3) * 0.5); };
-  xpLec('alg-93', [
-    ['Cruzar o rebotar', xpMira('dibujo', 'Empecemos por la idea: la **multiplicidad** dice cómo toca el eje.', { dib: cruz, v: { k: 1, z: 1 }, alto: 210 }, [
-      ['Tres raíces distintas: cruza tres veces.', {}, '$(x + 2)(x - 1)(x - 3)$'],
-      ['Si una se repite dos veces…', { z: 0 }, '$(x + 2)(x - 1)^2$'],
-      ['…en esa la curva rebota: no cambia de signo.', {}, '$(x - 1)^2 \\ge 0$'],
-      ['Multiplicidad impar cruza; par rebota.', {}, '$\\text{par: rebota}$'],
-      ['El grado cuenta las raíces con sus repeticiones.', {}, '$1 + 2 = 3$'],
-    ], 'Impar cruza, par rebota; las multiplicidades suman el grado.'),
-    xpFila('$(x - 4)^3(x + 1)^2 x$: pon el grado y qué hace en cada raíz.', ['grado', 'en 4', 'en −1'], ['6', 'cruza', 'rebota'], ['5', 'nada'], 'Suma 3, 2 y 1. Mira si es par.', 'Grado 6; cruza en 4 y rebota en −1.')],
-    ['Candidatos', xpMira('dibujo', 'Segunda idea: las raíces enteras **dividen** al término suelto.', { dib: (v, K) => { const p = XM.plano(K, -4, 4, -12, 12, { H: 200, gy: 4 }), f = x => x ** 3 - x * x - 4 * x + 4; return p.s + XM.curva(K, p, f) + [-2, 1, 2].map((r, i) => K.f(v.n - i, K.c(p.X(r), p.Y(0), 6, 'fF'))).join(''); }, v: { n: 0 }, alto: 210 }, [
-      ['x³ − x² − 4x + 4: el término suelto es 4.', {}, '$\\pm1, \\pm2, \\pm4$'],
-      ['Se prueban los divisores: −2 da cero.', { n: 1 }, '$P(-2) = 0$'],
-      ['El número 1 también.', { n: 2 }, '$P(1) = 0$'],
-      ['Y el 2. Son tres: no hay más.', { n: 3 }, '$(x + 2)(x - 1)(x - 2)$'],
-      ['Si hay coeficiente principal, también fracciones.', {}, '$\\tfrac{\\text{divisor de } a_0}{\\text{divisor de } a_n}$'],
-    ], 'Raíz racional: divisor del último sobre divisor del primero.'),
-    xpFila('En $2x^2 + \\cdots + 3$ los candidatos positivos son 1, 3 y dos fracciones. Ponlas, la menor primero.', ['menor', 'mayor'], ['1/2', '3/2'], ['2/3', '1/3', '2'], 'Arriba, divisores de 3; abajo, de 2.', '$\\tfrac12$ y $\\tfrac32$.')],
-    ['Completar las raíces', xpMira('dibujo', 'Tercera idea: hallada una raíz, se **baja de grado**.', { dib: (v, K) => P(K, v, ['x³ − 4x² + 6x − 4 = 0', 'x = 2 es raíz', '(x − 2)(x² − 2x + 2)', 'x = 1 ± i'], 34, 34), v: { n: 1 }, alto: 160 }, [
-      ['Se prueba el 2: da cero.', { n: 2 }, '$8 - 16 + 12 - 4 = 0$'],
-      ['Con la sintética queda una cuadrática.', { n: 3 }, '$x^2 - 2x + 2$'],
-      ['Su discriminante es negativo: raíces complejas.', { n: 4 }, '$4 - 8 = -4$'],
-      ['Con coeficientes reales, van en pareja con su conjugada.', {}, '$1 + i, \\ 1 - i$'],
-      ['Grado 3: tres raíces contando las complejas.', {}, '$1 + 2 = 3$'],
-    ], 'Grado n: n raíces complejas; las no reales vienen en parejas.'),
-    xpFila('Un cúbico real tiene raíces 5 y $3 + 2i$. Pon la otra y el producto de las dos complejas.', ['la otra', 'producto'], ['3 − 2i', '13'], ['−3 − 2i', '5', '−5'], 'La conjugada; y 9 + 4.', '$(3 + 2i)(3 - 2i) = 13$.')],
-    ['Ahora sí, un problema', xpFila('Un puente sigue $y = x^3 - 6x^2 + 11x - 6$. Cruza el nivel 0 en tres enteros: ponlos en orden.', ['1.º', '2.º', '3.º'], ['1', '2', '3'], ['6', '−1', '4'], 'Prueba los divisores de 6.', '$(x - 1)(x - 2)(x - 3)$.')],
-  ], 'Candidatos, sintética y bajar de grado hasta tener todas.');
-}
-;
 //#archivo js/explora-alg-mundos-3-5.js
 // Álgebra · mundos 3 (Escalas y Proporciones), 4 (Exponentes y Radicales) y 5 (Sucesiones y Series), Explora. Ejemplos propios.
 {
@@ -6029,6 +5705,119 @@ xpLec('pu-vo-4', [
   ], 'Una salida, lo que entra y sale, y los cortes.');
 }
 ;
+//#archivo js/explora-icf-ma-11.js
+// Preicfes · Matemáticas, mundo 11 «Movimientos y Vistas» (Explora, escenas «dibujo», «fichas» y «hoja»). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  const U = 20, X = x => 170 + x * U, Y = y => 100 - y * U, red = K => { let h = ''; for (let i = -4; i <= 4; i++) h += K.l(X(i), Y(-4), X(i), Y(4), i ? 'lr' : 'lm') + K.l(X(-4), Y(i), X(4), Y(i), i ? 'lr' : 'lm'); return h; };
+  const L = [[1, 1], [3, 1], [1, 3]], poli = (K, ps, c) => K.p(ps.map(([a, b]) => [X(a), Y(b)]), c);
+  // Triángulo y su imagen: t traslada, e refleja en y, g gira, k amplía.
+  const mov = (v, K) => { const q = v.g * Math.PI / 180, f = ([a, b]) => { let m = a * v.k + v.dx, n = b * v.k + v.dy; m *= v.e; return [m * Math.cos(q) - n * Math.sin(q), m * Math.sin(q) + n * Math.cos(q)]; }; return red(K) + poli(K, L, 'fa') + poli(K, L.map(f), 'fg') + K.t(170, 204, v.t, 'ta'); };
+  // Torres vistas.
+  const H = [[1, 2], [3, 1]];
+  const torres = (v, K) => { let s = ''; for (let r = 1; r >= 0; r--) for (let c = 1; c >= 0; c--) for (let z = 0; z < H[r][c]; z++) s += K.caja(K.iso([96, 150], 26, c, r, z), 26, 1, 1, 1, z % 2 ? 'cu b' : 'cu', false); return s + K.f(v.f, [3, 2].map((n, c) => Array.from({ length: n }, (_, z) => K.r(232 + c * 32, 130 - z * 32, 30, 30, 'fa', 2)).join('')).join('') + K.t(263, 182, 'de frente', 's ta')) + K.t(170, 202, v.t, 'ta'); };
+  // Tira de cuatro y dos tapas; d enciende las opuestas.
+  const CE = [['1', 1, 1], ['2', 2, 1], ['3', 3, 1], ['4', 4, 1], ['5', 2, 0], ['6', 2, 2]], molde = (v, K) => CE.map(([t, c, f], i) => { const par = [0, 2].includes(i) ? v.a : [1, 3].includes(i) ? v.b : v.c; return K.r(40 + c * 46, 14 + f * 46, 44, 44, par > 0.5 ? (i < 2 || i === 4 || i > 0 ? ['fa', 'fg', 'fa', 'fg', 'ff', 'ff'][i] : 'fc') : 'fc', 3) + K.t(62 + c * 46, 42 + f * 46, t, 'b'); }).join('') + K.t(170, 176, v.t, 'ta');
+  // Plano polar: giro g y pasos r.
+  const polar = (v, K) => { const q = K.at(150, 100, v.r * 24, v.g); return [1, 2, 3].map(i => K.arc(150, 100, i * 24, 0, 360, 'lr')).join('') + K.l(70, 100, 260, 100, 'lm') + K.l(150, 20, 150, 180, 'lm') + K.arc(150, 100, 18, 0, Math.max(0.3, v.g), 'lo gr') + K.l(150, 100, ...q, 'la gr') + K.c(...q, 6, 'fF') + K.t(170, 202, v.t, 'ta'); };
+
+  xpLec('icf-ma-espacio-1', [
+    ['Trasladar y reflejar',
+      xpMira('dibujo', 'Empecemos por la idea: **trasladar** mueve todo igual; **reflejar** pasa al otro lado.', { dib: mov, v: { dx: 0, dy: 0, e: 1, g: 0, k: 1, t: '' }, alto: 212 }, [
+        ['Este triángulo está arriba a la derecha.', {}],
+        ['Se traslada: cada punto se mueve lo mismo.', { dx: -4, dy: -3, t: '4 a la izquierda, 3 abajo' }],
+        ['A cada coordenada se le suma lo suyo.', {}, '$(1, 1) \\to (-3, -2)$'],
+        ['Ahora se refleja en el eje vertical.', { dx: 0, dy: 0, e: -1, t: 'reflejo en el eje y' }],
+        ['Queda igual de lejos: la x cambia de signo.', {}, '$(3, 1) \\to (-3, 1)$'],
+      ], 'Trasladar suma; reflejar cambia un signo.'),
+      xpHaz('fichas', 'Pon la imagen de (2, −1) al trasladarlo 3 arriba, y al reflejarlo en el eje x.', { slots: fila('trasladado', 'reflejado'), fichas: ['(2, 2)', '(2, 1)', '(5, −1)', '(−2, −1)'], meta: ['(2, 2)', '(2, 1)'], alto: 96, pista: 'Arriba cambia la y; el eje x cambia su signo.' }, '$-1 + 3 = 2$ y $-1$ pasa a 1.')],
+    ['Rotar',
+      xpMira('dibujo', 'Segunda idea: al **rotar**, cada punto gira sin cambiar su **distancia** al centro.', { dib: mov, v: { dx: 0, dy: 0, e: 1, g: 0, k: 1, t: '' }, alto: 212 }, [
+        ['El centro está en el origen.', {}],
+        ['Un cuarto de vuelta contra el reloj.', { g: 90, t: '90°' }, '$(3, 1) \\to (-1, 3)$'],
+        ['Media vuelta: cambian los dos signos.', { g: 180, t: '180°' }, '$(3, 1) \\to (-3, -1)$'],
+        ['Tres cuartos de vuelta.', { g: 270, t: '270°' }],
+        ['Los lados y los ángulos no cambiaron.', {}],
+      ], 'Gira sin cambiar de tamaño ni de forma.'),
+      xpHaz('fichas', 'Pon la imagen de (0, 5) con 90° contra el reloj y con 180°.', { slots: fila('90°', '180°'), fichas: ['(−5, 0)', '(0, −5)', '(5, 0)', '(0, 5)'], meta: ['(−5, 0)', '(0, −5)'], alto: 96, pista: 'Lo de arriba pasa a la izquierda.' }, 'Un cuarto: a la izquierda; media vuelta: abajo.')],
+    ['Homotecia',
+      xpMira('dibujo', 'Tercera idea: la **homotecia** multiplica las distancias al **centro**.', { dib: mov, v: { dx: 0, dy: 0, e: 1, g: 0, k: 1, t: '' }, alto: 212 }, [
+        ['Factor uno: queda igual.', { t: 'factor 1' }],
+        ['Con la mitad, todo se encoge.', { k: 0.5, t: 'factor 0.5' }, '$(3, 1) \\to (1.5, 0.5)$'],
+        ['Con 1.3, se agranda.', { k: 1.3, t: 'factor 1.3' }],
+        ['Con factor negativo, pasa al otro lado.', { k: -1, t: 'factor −1' }],
+        ['Los lados van por el factor; el área, por su cuadrado.', {}],
+      ], 'Lados por k; área por k al cuadrado.'),
+      xpHaz('fichas', 'Un cuadrado de lado 3 se amplía con factor 2. Pon el lado y el área nuevos.', { slots: fila('lado', 'área'), fichas: ['6', '36', '18', '9', '5'], meta: ['6', '36'], alto: 96, pista: 'Halla el lado y después el área.' }, '$3 \\cdot 2 = 6$ y $6 \\cdot 6 = 36$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un punto (4, 0) gira 90° contra el reloj y luego se traslada 2 a la derecha. Subraya dónde queda.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['(6, 4)'], ['(2, 4)'], ['(−2, 4)']], pista: 'Haz un movimiento a la vez.' }, '$(4, 0) \\to (0, 4) \\to (2, 4)$.')],
+  ], 'Sumar, cambiar signos, girar y multiplicar.');
+
+  xpLec('icf-ma-espacio-2', [
+    ['Vistas',
+      xpMira('dibujo', 'Empecemos por la idea: de cada lado solo se ve la torre **más alta**.', { dib: torres, v: { f: 0, t: '' }, alto: 210 }, [
+        ['Hay cuatro torres: dos adelante y dos atrás.', {}],
+        ['Adelante miden uno y dos.', { t: 'adelante: 1 y 2' }],
+        ['Atrás miden tres y uno.', { t: 'atrás: 3 y 1' }],
+        ['De frente se ven tres y dos.', { f: 1, t: 'la más alta de cada columna' }],
+        ['En total hay siete cubos.', {}, '$1 + 2 + 3 + 1 = 7$'],
+      ], 'La vista muestra la más alta; el total suma todas.'),
+      xpHaz('fichas', 'Una columna tiene torres de 4, 2 y 1. Pon lo que se ve de frente y los cubos que tiene.', { slots: fila('se ve', 'tiene'), fichas: ['4', '7', '2', '1', '8'], meta: ['4', '7'], alto: 96, pista: 'La más alta y la suma.' }, 'Se ve la de 4; hay $4 + 2 + 1 = 7$.')],
+    ['Desarrollos',
+      xpMira('dibujo', 'Segunda idea: en un molde, **salta una** cara para hallar la **opuesta**.', { dib: molde, v: { a: 0, b: 0, c: 0, t: '' }, alto: 186 }, [
+        ['Cuatro caras en fila dan la vuelta.', {}],
+        ['La primera y la tercera quedan opuestas.', { a: 1, t: '1 frente a 3' }],
+        ['La segunda y la cuarta también.', { b: 1, t: '2 frente a 4' }],
+        ['Las tapas, una frente a la otra.', { c: 1, t: '5 frente a 6' }],
+        ['Dos caras opuestas nunca se tocan.', {}],
+      ], 'En fila, salta una.'),
+      xpHaz('hoja', 'En una tira M-N-O-P de un cubo, subraya la opuesta de **N**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['M'], ['O'], ['P']], pista: 'Salta una cara.' }, 'N, se salta O, y sigue P.')],
+    ['Otros cuerpos',
+      xpMira('hoja', 'Tercera idea: cada cuerpo tiene su **molde**.', { paras: [['Prisma: dos bases y rectángulos'], ['Pirámide: una base y triángulos'], ['Cilindro: dos círculos y un rectángulo'], ['Cono: un círculo y un sector']] }, [
+        ['Un rectángulo por cada lado de la base.', { luz: [0] }],
+        ['Un triángulo por cada lado de la base.', { luz: [1] }],
+        ['El rectángulo da la vuelta al círculo.', { luz: [2] }],
+        ['El sector se cierra en punta.', { luz: [3] }],
+        ['Al doblarlo no debe sobrar ni faltar cara.', {}],
+      ], 'Cuenta bases y caras.'),
+      xpHaz('fichas', 'Prisma de base hexagonal. Pon cuántos hexágonos y cuántos rectángulos lleva su molde.', { slots: fila('hexágonos', 'rectángulos'), fichas: ['2', '6', '1', '8', '4'], meta: ['2', '6'], alto: 96, pista: 'Dos bases y una cara por lado.' }, 'Dos bases y seis caras.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'De frente se ve un rectángulo y desde arriba un círculo. Subraya el cuerpo.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Cilindro'], ['Cono'], ['Esfera']], pista: 'Descarta por la vista de frente.' }, 'El cono se vería como triángulo y la esfera, como círculo.')],
+  ], 'La más alta, salta una y cada cuerpo con su molde.');
+
+  xpLec('icf-ma-espacio-3', [
+    ['Cartesianas',
+      xpMira('hoja', 'Empecemos por la idea: con **restas** se hallan lados y con **promedios**, el medio.', { paras: [['A (1, 2) y B (7, 10)'], ['lado 6 y alto 8'], ['distancia 10'], ['medio (4, 6)']] }, [
+        ['Dos puntos en el plano.', { luz: [0] }],
+        ['Se restan las x y se restan las y.', { luz: [1] }, '$7 - 1 = 6, \\; 10 - 2 = 8$'],
+        ['Con Pitágoras sale la distancia.', { luz: [2] }, '$\\sqrt{36 + 64} = 10$'],
+        ['Con promedios, el punto medio.', { luz: [3] }, '$\\tfrac{1 + 7}{2} = 4$'],
+        ['Restar para medir, promediar para el medio.', {}],
+      ], 'Restar para medir; promediar para el medio.'),
+      xpHaz('fichas', 'De (2, 1) a (5, 5). Pon la distancia y la x del punto medio.', { slots: fila('distancia', 'x del medio'), fichas: ['5', '3.5', '7', '3', '4'], meta: ['5', '3.5'], alto: 96, pista: 'Los lados miden 3 y 4.' }, '$\\sqrt{9 + 16} = 5$ y $\\tfrac{2 + 5}{2} = 3.5$.')],
+    ['Polares',
+      xpMira('dibujo', 'Segunda idea: en **polares** se **gira** y se **camina**.', { dib: polar, v: { g: 0, r: 2, t: '' }, alto: 210 }, [
+        ['Se empieza mirando a la derecha.', { t: '2 pasos a 0°' }],
+        ['Un cuarto de vuelta: arriba.', { g: 90, t: '2 pasos a 90°' }],
+        ['Media vuelta: a la izquierda.', { g: 180, r: 3, t: '3 pasos a 180°' }],
+        ['Se gira contra el reloj.', { g: 225, t: '3 pasos a 225°' }],
+        ['Una vuelta más no cambia nada.', {}, '$225 + 360 = 585$'],
+      ], 'Giro desde la derecha y pasos.'),
+      xpHaz('hoja', 'Subraya el punto polar de (0, 7).', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['7 pasos a 0°'], ['7 pasos a 90°'], ['90 pasos a 7°']], pista: '¿Hacia dónde está?' }, 'Está arriba: un cuarto de vuelta.')],
+    ['En el espacio',
+      xpMira('fichas', 'Tercera idea: en **3D** se agrega la **altura**, z.', { slots: fila('x', 'y', 'z'), fichas: ['4', '2', '5'], alto: 96 }, [
+        ['Un bombillo está en una sala.', {}],
+        ['Cuatro metros hacia la derecha.', { pon: { 0: '4' } }],
+        ['Dos metros hacia el fondo.', { pon: { 1: '2' } }],
+        ['Y cinco de altura.', { pon: { 2: '5' } }, '$(4, 2, 5)$'],
+        ['La distancia suma tres cuadrados.', {}, '$\\sqrt{16 + 4 + 25}$'],
+      ], 'Derecha, fondo y altura.'),
+      xpHaz('fichas', 'De (0, 0, 0) a (2, 6, 9). Pon la suma de los cuadrados y la distancia.', { slots: fila('suma', 'distancia'), fichas: ['121', '11', '17', '81', '9'], meta: ['121', '11'], alto: 96, pista: 'Suma 4, 36 y 81.' }, '$\\sqrt{121} = 11$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un barco está a 8 pasos, a 270° del faro. Subraya dónde está.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Al norte (arriba)'], ['Al oeste (izquierda)'], ['Al sur (abajo)']], pista: 'Tres cuartos de vuelta desde la derecha.' }, 'Derecha, arriba, izquierda, abajo.')],
+  ], 'Restar, girar y agregar la altura.');
+}
+;
 //#archivo js/explora-icf-lc.js
 // Preicfes · Lectura Crítica, mundo 1 «Lo que Dice el Texto» (Explora, escena «hoja»). Textos cortos propios.
 xpLec('icf-lc-literal-1', [
@@ -8527,6 +8316,150 @@ xpLec('icf-sc-modelos-2', [
     ['Ahora sí, un problema',
       xpHaz('hoja', 'Pon al margen qué fenómeno hace posible cada cosa.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['reflexión total', 'refracción', 'absorción'], meta: [1, 0, 2], paras: [['Una lupa que agranda'], ['La luz que viaja por una fibra óptica'], ['Un estudio de grabación con espumas, sin eco']], pista: 'Alguna no va ahí: ¿se dobla, rebota adentro o se queda?' }, 'Se dobla, rebota toda adentro y se queda en la espuma.')],
   ], 'Rebotar, volver y doblarse.');
+}
+;
+//#archivo js/explora-icf-cn-11.js
+// Preicfes · Ciencias Naturales, mundos 11 «Gases y Disoluciones» y 12 «Electricidad y Magnetismo» (Explora). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  const puntos = (K, x, y, w, h, n) => Array.from({ length: n }, (_, i) => K.c(x + 8 + ((i * 37) % 97) / 97 * (w - 16), y + 8 + ((i * 59) % 83) / 83 * (h - 16), 3.2, 'ff')).join('');
+  // Émbolo con volumen w (0 a 1).
+  const emb = (v, K) => { const w = 230 * v.w; return K.r(40, 30, 250, 76, 'fn', 4) + K.r(40, 30, w, 76, 'fa', 2) + puntos(K, 40, 30, w, 76, 18) + K.r(40 + w, 26, 10, 84, 'fk', 2) + K.t(170, 140, v.t, 'ta'); };
+  const globo = (v, K) => K.c(170, 76, v.r, 'fa') + K.l(170, 76 + v.r, 170, 148, 'lm') + K.t(170, 168, v.t, 'ta');
+  // Vaso con nivel n y 16 granos de soluto.
+  const vaso = (v, K) => K.r(120, 16, 100, 110, 'fn', 4) + K.r(120, 126 - 110 * v.n, 100, 110 * v.n, 'fa', 2) + Array.from({ length: 16 }, (_, i) => K.c(130 + (i * 43 % 83), 122 - (i * 29 % 89) / 89 * Math.max(6, 110 * v.n - 10), 2.8, 'ff')).join('') + K.t(170, 152, v.t, 'ta');
+  const pila = (K, x, y) => K.l(x - 10, y, x + 10, y, 'gr') + K.l(x - 5, y + 8, x + 5, y + 8, 'gr'), bom = (K, x, y, on) => K.c(x, y, 13, on > 0.5 ? 'ff' : 'fc') + K.l(x - 6, y - 6, x + 6, y + 6, 'lm') + K.l(x - 6, y + 6, x + 6, y - 6, 'lm');
+  // Serie (p = 0) o paralelo (p = 1) con dos bombillos; a y b prendidos.
+  const circ = (v, K) => (v.p < 0.5 ? K.pl([[70, 70], [70, 24], [270, 24], [270, 120], [70, 120], [70, 78]], 'gr') + bom(K, 130, 24, v.a) + bom(K, 210, 24, v.b) : K.pl([[70, 70], [70, 24], [270, 24], [270, 120], [70, 120], [70, 78]], 'gr') + K.l(170, 24, 170, 120, 'gr') + bom(K, 170, 72, v.a) + bom(K, 270, 72, v.b)) + pila(K, 70, 70) + K.t(170, 154, v.t, 'ta');
+  const cargas = (v, K) => { const x = v.d / 2; return K.c(170 - x, 70, 20, v.s > 0 ? 'ff' : 'fa') + K.t(170 - x, 76, v.s > 0 ? '+' : '−', 'b') + K.c(170 + x, 70, 20, 'fa') + K.t(170 + x, 76, '−', 'b') + K.l(170 - x, 110, 170 - x + (v.s > 0 ? 1 : -1) * v.f, 110, 'la gr') + K.l(170 + x, 110, 170 + x - (v.s > 0 ? 1 : -1) * v.f, 110, 'la gr') + K.t(170, 148, v.t, 'ta'); };
+
+  xpLec('icf-cn-gases-1', [
+    ['Boyle',
+      xpMira('dibujo', 'Empecemos por la idea: con la **misma temperatura**, presión por volumen **no cambia**.', { dib: emb, v: { w: 1, t: '12 L a 1 atm' }, alto: 152 }, [
+        ['El gas ocupa doce litros.', {}],
+        ['Sus partículas chocan con las paredes.', {}],
+        ['A la mitad, chocan el doble de seguido.', { w: 0.5, t: '6 L a 2 atm' }, '$12 \\cdot 1 = 6 \\cdot 2$'],
+        ['A la cuarta parte, cuatro veces.', { w: 0.25, t: '3 L a 4 atm' }, '$3 \\cdot 4 = 12$'],
+        ['El producto siempre es el mismo.', {}],
+      ], 'Menos volumen, más presión.'),
+      xpHaz('fichas', 'Un gas ocupa 10 L a 3 atm. Pon el producto y el volumen a 5 atm.', { slots: fila('producto', 'litros'), fichas: ['30', '6', '15', '50', '2'], meta: ['30', '6'], alto: 96, pista: 'Multiplica y después divide entre 5.' }, '$10 \\cdot 3 = 30$ y $30 \\div 5 = 6$.')],
+    ['Charles',
+      xpMira('dibujo', 'Segunda idea: con la **misma presión**, el volumen sigue a los **kelvin**.', { dib: globo, v: { r: 40, t: '200 K: 4 L' }, alto: 178 }, [
+        ['Un globo a doscientos kelvin.', {}],
+        ['Al calentarlo, sus partículas empujan más.', { r: 46, t: '300 K: 6 L' }, '$\\tfrac{4}{200} = \\tfrac{6}{300}$'],
+        ['Con el doble de kelvin, el doble de volumen.', { r: 50, t: '400 K: 8 L' }],
+        ['Para pasar de Celsius se suman 273.', {}, '$27 + 273 = 300$'],
+        ['En Celsius la proporción no vale.', {}],
+      ], 'Volumen y kelvin, en proporción.'),
+      xpHaz('fichas', 'Pon 7 °C en kelvin, y el volumen de 5 L a 280 K si pasa a 560 K.', { slots: fila('kelvin', 'litros'), fichas: ['280', '10', '266', '2.5', '7'], meta: ['280', '10'], alto: 96, pista: 'Suma 273; los kelvin se duplican.' }, '$7 + 273 = 280$; el doble de 5 es 10.')],
+    ['Recipiente rígido',
+      xpMira('hoja', 'Tercera idea: si el **volumen** no cambia, la **presión** sigue a los kelvin.', { paras: [['Lata a 300 K: 2 atm'], ['Lata a 450 K: 3 atm'], ['Más partículas, más presión'], ['PV = nRT']] }, [
+        ['La lata no puede crecer.', { luz: [0] }],
+        ['Con 1.5 veces los kelvin, 1.5 veces la presión.', { luz: [1] }, '$2 \\cdot 1.5 = 3$'],
+        ['Por eso no se arroja al fuego.', { luz: [1] }],
+        ['Al inflar entran más partículas.', { luz: [2] }],
+        ['Una sola ecuación lo reúne todo.', { luz: [3] }],
+      ], 'Mira qué queda fijo.'),
+      xpHaz('hoja', 'Pon al margen qué queda fijo.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['el volumen', 'la temperatura'], meta: [1, 0], paras: [['Se empuja despacio una jeringa tapada'], ['Se calienta un tanque de acero cerrado']], pista: 'Alguna no va ahí: ¿cambia el tamaño o el calor?' }, 'Despacio, la temperatura no cambia; el acero no crece.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Una llanta a 2 atm y 300 K se calienta a 330 K sin cambiar de tamaño. Subraya su presión.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['1.8 atm'], ['2.2 atm'], ['32 atm']], pista: 'Los kelvin subieron un 10 %.' }, '$2 \\cdot 1.1 = 2.2$.')],
+  ], 'Boyle, Charles y lo que queda fijo.');
+
+  xpLec('icf-cn-gases-2', [
+    ['Soluto y disolución',
+      xpMira('dibujo', 'Empecemos por la idea: la concentración compara el **soluto** con la **disolución**.', { dib: vaso, v: { n: 0.4, t: '16 g en 2 L' }, alto: 162 }, [
+        ['Los puntos son el soluto.', {}],
+        ['Dieciséis gramos en dos litros.', {}, '$16 \\div 2 = 8$ g/L'],
+        ['Si hay más agua, están más separados.', { n: 0.8, t: '16 g en 4 L' }, '$16 \\div 4 = 4$ g/L'],
+        ['El soluto es el mismo.', {}],
+        ['Mucho soluto no es lo mismo que concentrado.', {}],
+      ], 'Soluto entre disolución.'),
+      xpHaz('fichas', 'Pon la concentración de 18 g en 3 L, y el porcentaje de 4 g en 80 g de disolución.', { slots: fila('g/L', '%'), fichas: ['6', '5', '54', '4', '20'], meta: ['6', '5'], alto: 96, pista: 'Divide en los dos casos.' }, '$18 \\div 3 = 6$ y $4 \\div 80 = 5\\%$.')],
+    ['Diluir',
+      xpMira('fichas', 'Segunda idea: al **diluir**, concentración por volumen **no cambia**.', { slots: fila('antes', 'después', 'se agrega'), fichas: ['1 L', '3 L', '2 L'], alto: 96 }, [
+        ['Un litro a doce gramos por litro.', { pon: { 0: '1 L' } }],
+        ['Se quiere a cuatro gramos por litro.', {}],
+        ['Los doce gramos llenan tres litros.', { pon: { 1: '3 L' } }, '$12 \\div 4 = 3$'],
+        ['Se agregan dos, no tres.', { pon: { 2: '2 L' } }, '$3 - 1 = 2$'],
+        ['Ojo: el volumen final no es lo agregado.', {}],
+      ], 'Gramos iguales; resta lo que ya había.'),
+      xpHaz('fichas', '2 L a 9 g/L se llevan a 3 g/L. Pon el volumen final y el agua que se agrega.', { slots: fila('final (L)', 'agua (L)'), fichas: ['6', '4', '18', '3', '2'], meta: ['6', '4'], alto: 96, pista: 'Hay 18 g.' }, '$18 \\div 3 = 6$ y $6 - 2 = 4$.')],
+    ['Otras cosas que se hacen',
+      xpMira('hoja', 'Tercera idea: **evaporar** concentra; **sacar** un poco no cambia nada.', { paras: [['Evaporar agua'], ['Agregar soluto'], ['Servir un vaso'], ['1 ppm = 1 mg por kg']] }, [
+        ['Menos agua, mismo soluto.', { luz: [0], nota: { 0: 'sube' } }],
+        ['Más soluto, casi el mismo volumen.', { luz: [1], nota: { 1: 'sube' } }],
+        ['Sale soluto y sale agua por igual.', { luz: [2], nota: { 2: 'no cambia' } }],
+        ['Para cantidades mínimas: partes por millón.', { luz: [3] }],
+        ['En un remedio, un cero de más importa.', {}],
+      ], 'Pregunta qué salió y qué entró.'),
+      xpHaz('hoja', 'De 1 L a 6 g/L se evapora medio litro de agua. Subraya la nueva concentración.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['3 g/L'], ['6 g/L'], ['12 g/L']], pista: 'Los 6 g quedan en medio litro.' }, '$6 \\div 0.5 = 12$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un agua tiene 5 mg de cloro en 4 kg; lo permitido es hasta 2 ppm. Subraya lo correcto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Cumple: 1.25 ppm'], ['No cumple: 5 ppm'], ['No cumple: 20 ppm']], pista: 'Divide los miligramos entre los kilogramos.' }, '$5 \\div 4 = 1.25$.')],
+  ], 'Soluto entre disolución, diluir y lo que cambia.');
+
+  xpLec('icf-cn-electrico-1', [
+    ['Ohm',
+      xpMira('fichas', 'Empecemos por la idea: **voltaje = corriente · resistencia**.', { slots: fila('voltaje', 'resistencia', 'corriente'), fichas: ['9 V', '3 Ω', '3 A'], alto: 96 }, [
+        ['La pila empuja con nueve voltios.', { pon: { 0: '9 V' } }],
+        ['La resistencia se opone: tres ohmios.', { pon: { 1: '3 Ω' } }],
+        ['Entonces pasan tres amperios.', { pon: { 2: '3 A' } }, '$9 \\div 3 = 3$'],
+        ['Con el doble de resistencia, la mitad.', {}, '$9 \\div 6 = 1.5$'],
+        ['Sin camino cerrado no pasa nada.', {}],
+      ], 'Corriente es voltaje entre resistencia.'),
+      xpHaz('fichas', 'Pon la corriente de 20 V en 5 Ω, y el voltaje que hace pasar 3 A por 7 Ω.', { slots: fila('corriente', 'voltaje'), fichas: ['4 A', '21 V', '100 A', '10 V', '2 A'], meta: ['4 A', '21 V'], alto: 96, pista: 'Divide en la primera y multiplica en la segunda.' }, '$20 \\div 5 = 4$ y $3 \\cdot 7 = 21$.')],
+    ['Serie y paralelo',
+      xpMira('dibujo', 'Segunda idea: en **serie** hay un camino; en **paralelo**, varios.', { dib: circ, v: { p: 0, a: 1, b: 1, t: 'en serie' }, alto: 164 }, [
+        ['Dos bombillos en el mismo camino.', {}],
+        ['Si uno se quema, se corta el camino.', { a: 0, b: 0, t: 'se apagan los dos' }],
+        ['Ahora cada uno tiene el suyo.', { p: 1, a: 1, b: 1, t: 'en paralelo' }],
+        ['Si uno se quema, el otro sigue.', { a: 0, t: 'el otro sigue' }],
+        ['En serie se suman las resistencias.', {}, '$4 + 6 = 10$ Ω'],
+      ], 'Serie: un camino. Paralelo: varios.'),
+      xpHaz('fichas', '6 V en paralelo a dos resistencias de 3 Ω. Pon la corriente de cada rama y la total.', { slots: fila('cada rama', 'total'), fichas: ['2 A', '4 A', '1 A', '6 A', '3 A'], meta: ['2 A', '4 A'], alto: 96, pista: 'Cada una recibe los 6 V.' }, '$6 \\div 3 = 2$ y $2 + 2 = 4$.')],
+    ['Potencia',
+      xpMira('hoja', 'Tercera idea: **potencia = voltaje · corriente**; la energía es potencia por **tiempo**.', { paras: [['120 V · 5 A = 600 W'], ['600 W · 2 h = 1 200 Wh'], ['1 000 Wh = 1 kWh'], ['Recibo: se cobran kWh']] }, [
+        ['Un horno pequeño usa esto.', { luz: [0] }],
+        ['En dos horas gasta esta energía.', { luz: [1] }],
+        ['Mil vatios hora son un kilovatio hora.', { luz: [2] }],
+        ['Eso se paga en el recibo.', { luz: [3] }],
+        ['Poca potencia por mucho tiempo también suma.', {}],
+      ], 'Vatios por horas.'),
+      xpHaz('fichas', 'Un televisor de 80 W encendido 5 h. Pon los Wh y los kWh.', { slots: fila('Wh', 'kWh'), fichas: ['400', '0.4', '16', '4', '40'], meta: ['400', '0.4'], alto: 96, pista: 'Multiplica y después divide entre mil.' }, '$80 \\cdot 5 = 400$ Wh.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'En serie, 12 V con 2 Ω y 4 Ω. Subraya el voltaje de la resistencia de **4 Ω**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['12 V'], ['8 V'], ['4 V']], pista: 'Halla primero la corriente.' }, '$12 \\div 6 = 2$ A y $2 \\cdot 4 = 8$ V.')],
+  ], 'Ohm, caminos y vatios por horas.');
+
+  xpLec('icf-cn-electrico-2', [
+    ['Cargas',
+      xpMira('dibujo', 'Empecemos por la idea: iguales se **repelen**, distintas se **atraen**; y la **distancia** importa mucho.', { dib: cargas, v: { d: 160, s: -1, f: 20, t: '' }, alto: 158 }, [
+        ['Dos cargas negativas se repelen.', { t: 'iguales: se repelen' }],
+        ['Una positiva y una negativa se atraen.', { s: 1, t: 'distintas: se atraen' }],
+        ['Al acercarse, la fuerza crece.', { d: 80, f: 36, t: 'a la mitad: 4 veces más' }],
+        ['Al alejarse, baja con el cuadrado.', { d: 200, f: 10, t: 'más lejos, menos' }],
+        ['La carga no se crea: pasa de un cuerpo a otro.', {}],
+      ], 'Al doble de lejos, la cuarta parte.'),
+      xpHaz('fichas', 'Dos cargas se atraen con fuerza 100. Pon la fuerza al doble de distancia y con una carga tres veces mayor.', { slots: fila('doble distancia', 'carga · 3'), fichas: ['25', '300', '50', '900', '200'], meta: ['25', '300'], alto: 96, pista: 'La distancia, al cuadrado; la carga, no.' }, '$100 \\div 4 = 25$ y $100 \\cdot 3 = 300$.')],
+    ['Imanes',
+      xpMira('hoja', 'Segunda idea: todo imán tiene **dos polos**, aunque se parta.', { paras: [['N con S: se atraen'], ['N con N: se repelen'], ['Partido: N-S y N-S'], ['Atrae hierro, níquel y cobalto'], ['No atrae cobre ni aluminio']] }, [
+        ['Los polos distintos se buscan.', { luz: [0] }],
+        ['Polos iguales se rechazan.', { luz: [1] }],
+        ['Al partirlo salen dos imanes completos.', { luz: [2] }],
+        ['Atrae solo algunos metales.', { luz: [3] }],
+        ['Y deja quietos a otros.', { luz: [4], tacha: [4] }],
+      ], 'Dos polos, siempre.'),
+      xpHaz('hoja', 'Subraya lo que un imán **sí** atrae.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Alambre de cobre'], ['Papel de aluminio'], ['Puntilla de hierro']], pista: 'No atrae todos los metales.' }, 'El hierro sí; cobre y aluminio, no.')],
+    ['De ida y vuelta',
+      xpMira('hoja', 'Tercera idea: la **corriente** produce magnetismo y el **imán que se mueve**, corriente.', { paras: [['Alambre + clavo + pila'], ['Más vueltas, más fuerza'], ['Imán que entra y sale de una bobina'], ['Generador de una represa']] }, [
+        ['Con corriente, el clavo atrae.', { luz: [0], nota: { 0: 'electroimán' } }],
+        ['Se puede apagar y hacer más fuerte.', { luz: [1] }],
+        ['Al mover el imán aparece corriente.', { luz: [2], nota: { 2: 'inducción' } }],
+        ['Si se queda quieto, no.', { luz: [2] }],
+        ['Así se produce casi toda la electricidad.', { luz: [3] }],
+      ], 'Ida: electroimán. Vuelta: inducción.'),
+      xpHaz('hoja', 'Pon al margen qué ocurre.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['inducción', 'electroimán'], meta: [1, 0], paras: [['Una cerradura que se abre con un botón y corriente'], ['Una bicicleta cuya rueda mueve un imán y prende una luz']], pista: 'Alguna no va ahí: ¿entra corriente o sale corriente?' }, 'La cerradura recibe corriente; la bicicleta la produce.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un imán quieto dentro de una bobina no prende la luz. Subraya qué hay que hacer.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Mover el imán'], ['Enfriar la bobina'], ['Pintar el imán']], pista: 'La corriente aparece con un cambio.' }, 'Al moverlo aparece corriente.')],
+  ], 'Cargas, polos, y de ida y vuelta.');
 }
 ;
 //#archivo js/explora-icf-en.js
@@ -11162,6 +11095,35 @@ const GUIDES = {
   'alcanza-o-no': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'datos-que-sobran': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
   'vale-o-no': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'traslada-punto': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'refleja-punto': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'rota-punto': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'homotecia-punto': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'cuarto-vertice': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'punto-medio': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'polar-gira': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'boyle-embolo': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'charles-globo': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'concentra-agua': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'diluye-agua': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'corriente-resistor': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'serie-resistencia': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'que-movimiento': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'polar-a-cartesiana': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'caja-coordenadas': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'gas-sube-baja': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'concentracion-tabla': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'mas-o-menos-concentrada': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'paralelo-ramas': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'atrae-repele': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'fuerza-cambia': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'que-se-conserva': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'mismo-polar': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'que-prende': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'sube-movimiento': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-distancia': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-gas': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-vatios': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
   'vertice-parabola': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'ancho-maximo': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'raices-parabola': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
@@ -16449,6 +16411,45 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['El eco', 'Fue y volvió.', 'eco-distancia', 'A **340 m/s**, el eco vuelve a los **5 s**. Mueve la distancia a la pared.', { v: 340, t: 5, max: 1800, paso: 10 }, '$340 \\cdot 5 = 1\\,700$; la mitad, 850 m.', ['Halla todo lo que recorrió el sonido.', 'Recuerda que recorrió el camino dos veces.'], '1 700 ÷ 2 = 850 m'],
     ['El espejo', 'Se mide desde la normal.', 'refleja-angulo', 'Un rayo llega formando **65° con el espejo**. Mueve el que sale, **desde la normal**.', { g: 25, con: true }, '$90 - 65 = 25°$, y sale igual.', ['Pasa primero el ángulo a la normal.', 'El espejo y la normal forman un ángulo recto.'], '90 − 65 = 25°']],
     'La pared está a 850 m y el rayo sale a 25° de la normal.', 'Parte el recorrido y mide desde la normal.');
+}
+;
+//#archivo js/gimnasio-icf-11.js
+// Gimnasio del Preicfes, onceavos mundos y Electricidad (spec 2026-11-25-preicfes-estructura): Fuerza y Élite por mundo. Va después de gimnasio-icf-10.js.
+{
+  const { F } = ICF;
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-i-${id}`, after, level, title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+  const D = (id, title, paras) => ({ id: `gym-icf-${id}`, title, paras });
+
+  reto('espa-1', ['icf-ma-espacio-1', 'icf-ma-espacio-2'], 2, 'El logo y la pila', 'Un movimiento a la vez', 'Un logo se mueve en el plano y una pila de cajas se mira de frente.', [
+    ['El giro', 'Igual distancia al centro.', 'rota-punto', 'El logo gira **180°** alrededor del punto resaltado. Arrastra el punto a donde queda **A**.', { A: [3, -2], otros: [[5, -2], [3, 2]], g: 180 }, 'En media vuelta cambian los dos signos: $(-3, 2)$.', ['La imagen queda al lado opuesto del centro.', 'Cambia el signo de las dos coordenadas.'], '(−3, 2)'],
+    ['La pila', 'La más alta de cada columna.', 'vista-frente', 'Plano desde arriba con la altura de cada torre. Toca lo que se ve **de frente**.', { h: [[1, 3, 1], [2, 1, 1], [1, 2, 4]], alto: 4 }, 'Se ven 2, 3 y 4.', ['Mira columna por columna.', 'De cada columna se ve la torre más alta.'], '2, 3, 4']],
+    'A queda en (−3, 2) y de frente se ven 2, 3 y 4.', 'Signos para el giro; la más alta para la vista.');
+  reto('espa-2', ['icf-ma-espacio-3'], 3, 'El terreno', 'Restar y promediar', 'Un terreno con forma de paralelogramo y un pozo en su centro.', [
+    ['La esquina', 'Los lados opuestos van igual.', 'cuarto-vertice', 'A, B y C son esquinas **seguidas** del terreno. Arrastra **D**.', { A: [-5, 1], B: [-1, 4], C: [5, 2] }, 'De B a A: 4 a la izquierda y 3 abajo; desde C: $(1, -1)$.', ['D está junto a A y a C.', 'Repite desde C lo que se camina de B a A.'], '(1, −1)'],
+    ['El pozo', 'El centro es el medio de una diagonal.', 'punto-medio', 'El pozo está en el medio de la diagonal que va de **A** a **B**. Arrástralo.', { A: [-5, 1], B: [5, 3] }, '$\\tfrac{-5 + 5}{2} = 0$ y $\\tfrac{1 + 3}{2} = 2$.', ['Promedia las dos coordenadas de lado.', 'Promedia también las dos alturas.'], '(0, 2)']],
+    'D queda en (1, −1) y el pozo en (0, 2).', 'Restar para copiar un lado, promediar para el medio.');
+
+  reto('gas-1', ['icf-cn-gases-1'], 2, 'El pistón y el globo', 'Qué queda fijo', 'Un gas en dos situaciones. Mira qué no cambia.', [
+    ['El pistón', 'El producto no cambia.', 'boyle-embolo', 'Un gas ocupa **8 L** a **3 atm**. Con la misma temperatura pasa a **4 atm**. Mueve el émbolo.', { P: 3, V: 8, P2: 4, max: 12, paso: 1 }, '$3 \\cdot 8 = 24$ y $24 \\div 4 = 6$ L.', ['Multiplica la presión por el volumen de antes.', 'Ese producto debe dar igual con la presión nueva.'], '24 ÷ 4 = 6 L'],
+    ['El globo', 'Volumen y kelvin.', 'charles-globo', 'Un globo de **4 L** a **200 K** pasa a **350 K** con la misma presión. Mueve su volumen.', { V: 4, T: 200, T2: 350, max: 10, paso: 0.5 }, '$4 \\cdot \\tfrac{350}{200} = 7$ L.', ['Compara los kelvin de antes y de después.', 'Cada 50 K de antes corresponden a un litro.'], '350 ÷ 50 = 7 L']],
+    'El gas queda en 6 L y el globo, en 7 L.', 'Primero mira qué queda fijo.');
+  reto('gas-2', ['icf-cn-gases-2'], 3, 'La limonada del bazar', 'Mismo soluto', 'Se prepara limonada y después se suaviza.', [
+    ['Preparar', 'Soluto entre disolución.', 'concentra-agua', 'Hay **90 g** de azúcar. Mueve el volumen para que quede a **40 g/L**.', { g: 90, meta: 40, max: 4, paso: 0.25 }, '$90 \\div 40 = 2.25$ L.', ['Cada litro debe llevar 40 gramos.', 'Divide los gramos que hay entre los que lleva cada litro.'], '90 ÷ 40 = 2.25 L'],
+    ['Suavizar', 'Los gramos no cambian.', 'diluye-agua', 'Quedan **1.5 L** a **40 g/L**. Mueve el agua que se **agrega** para dejarla a **30 g/L**.', { V: 1.5, C: 40, C2: 30, max: 3, paso: 0.25 }, 'Hay 60 g: a 30 g/L llenan 2 L. Se agrega 0.5 L.', ['Halla cuántos gramos de azúcar quedan.', 'Al volumen final réstale lo que ya había.'], '2 − 1.5 = 0.5 L']],
+    'Se preparan 2.25 L y se agrega medio litro de agua.', 'El azúcar es la misma; cambia el volumen.');
+
+  reto('elec-1', ['icf-cn-electrico-1'], 2, 'La linterna', 'Ohm y camino', 'Una linterna con una pila y dos resistencias.', [
+    ['La corriente', 'Voltaje entre resistencia.', 'corriente-resistor', 'La pila es de **9 V** y la resistencia, de **6 Ω**. Mueve la corriente.', { V: 9, R: 6, max: 4, paso: 0.25 }, '$9 \\div 6 = 1.5$ A.', ['La corriente por la resistencia da el voltaje.', 'Divide el voltaje entre la resistencia.'], '9 ÷ 6 = 1.5 A'],
+    ['La otra', 'En serie se suman.', 'serie-resistencia', 'Con **30 V** pasan **3 A** por dos resistencias en serie. Una es de **6 Ω**. Mueve la otra.', { V: 30, I: 3, R1: 6, max: 12 }, '$30 \\div 3 = 10$ y $10 - 6 = 4$ Ω.', ['Halla la resistencia de todo el camino.', 'Quítale la que ya conoces.'], '10 − 6 = 4 Ω']],
+    'Pasan 1.5 A y la otra resistencia es de 4 Ω.', 'Ohm para todo el camino y después resta.');
+  const CLIPS = D('clips', 'El clavo y los clips', [
+    'Un grupo enrolló alambre en un clavo de hierro y lo conectó a una pila. Con 20 vueltas atrajo 4 clips; con 40, 8 clips; con 60, 12 clips. Sin pila no atrajo ninguno.',
+    'Después usó una barra de madera con 60 vueltas: atrajo uno.']);
+  reto('elec-2', ['icf-cn-electrico-2'], 3, 'El clavo y los clips', 'Comparar con y sin', 'Un grupo prueba electroimanes. Interpreta sus datos.', [
+    ['Deducir', 'Usa los datos.', 'dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CLIPS, nums: [1, 2], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], ...F(['Con 40 vueltas atrajo 8 clips.', 0, 'Búscala en el párrafo 1.'], ['Con 50 vueltas atraería unos 10 clips.', 1, 'Mira cuántos clips hay por vuelta.'], ['El hierro ayuda a atraer más.', 1, 'Compara 60 vueltas con hierro y con madera.'], ['Los clips eran rojos.', 2, '¿Se dice el color?']), luz: [[1, 'con 40, 8 clips'], [2, 'atrajo uno']], bien: 'Proporción y comparación.' }, 'Los 8 están escritos; los 10 y el hierro se deducen; el color no.', ['Busca cuántos clips corresponden a cada diez vueltas.', 'Compara los dos casos de 60 vueltas.'], '2 clips por cada 10 vueltas'],
+    ['La fuerza', 'La distancia, al cuadrado.', 'fuerza-cambia', 'Dos cargas se repelen con fuerza **72**. ¿Cuánto vale en cada cambio?', { et: ['al doble de distancia', 'al triple de distancia', 'una carga a la mitad'], metas: ['18', '8', '36'], fichas: ['18', '8', '36', '24', '144'], mira: ['Al doble, cuatro veces menor.', 'Al triple, nueve veces menor.', 'La fuerza baja igual que la carga.'], trampas: { '1:24': 'La distancia va al cuadrado.' }, ok: 'Cuadrado para la distancia.' }, '$72 \\div 4 = 18$; $72 \\div 9 = 8$; y $72 \\div 2 = 36$.', ['La distancia cuenta al cuadrado.', 'La carga cuenta sin cuadrado.'], '18, 8 y 36']],
+    'Más vueltas y hierro atraen más; la distancia va al cuadrado.', 'Compara casos en los que cambia una sola cosa.');
 }
 ;
 //#archivo js/inicio.js
