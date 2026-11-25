@@ -14854,8 +14854,8 @@ function cuentaCard() {
       <button class="btn brand" data-acct="entrar">Entrar con mi código</button></section>`;
   }
   const p = Cuenta.perfil || {}, admin = p.rol === 'admin', mios = Cuenta.accesos || [];
-  return `<section class="card acct-card"><div class="acct-head"><h3>Mi plan</h3></div>
-    ${admin ? '<p class="muted">Cuenta administradora: todo el contenido abierto.</p>'
+  return `<section class="card acct-card"><div class="acct-head"><h3>${admin ? 'Administración' : 'Mi plan'}</h3></div>
+    ${admin ? '<p class="muted">Tienes todo el contenido abierto. Entra directo a lo que necesites:</p>'
     : mios.length ? `<ul class="plan-cursos">${mios.map(x => {
       const a = accesoCurso(mios, x.curso);
       return `<li><div class="acct-head"><b>${esc(cursoNombre(x.curso))}</b>${accesoPill(a)}</div>
@@ -14864,7 +14864,7 @@ function cuentaCard() {
         <button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-acct="comprar" data-curso="${esc(x.curso)}">${x.tipo === 'pago' ? 'Renovar' : 'Comprar acceso'}</button></li>`;
     }).join('')}</ul>` : '<p class="muted">Aún no tienes cursos en tu cuenta.</p>'}
     ${Cuenta.codigo ? `<button class="mi-codigo" type="button" data-acct="copia" aria-label="Copiar mi código ${muestraCodigo(Cuenta.codigo)}"><span><small>Mi código de acceso</small><b>${muestraCodigo(Cuenta.codigo)}</b></span><span class="mi-copia">Copiar</span></button>` : ''}
-    ${admin ? '<a class="btn ghost" href="admin/">Panel de administración</a>' : `<div class="acct-actions"><button class="btn brand" data-acct="tienda">Tienda</button><button class="btn ghost" data-acct="canje">Añadir código</button></div>`}
+    ${admin ? `<nav class="adm-atajos" aria-label="Administración">${[['estudiantes', 'Estudiantes', 'user'], ['codigos', 'Códigos', 'lock'], ['solicitudes', 'Solicitudes', 'bag'], ['pedidos', 'Pedidos', 'doc'], ['asesorias', 'Asesorías', 'calendar'], ['ventas', 'Ventas', 'trophy']].map(([h, t, i]) => `<a href="admin/#${h}">${ICON[i]}<span>${t}</span></a>`).join('')}</nav><a class="btn brand" href="admin/">Panel de administración</a>` : `<div class="acct-actions"><button class="btn brand" data-acct="tienda">Tienda</button><button class="btn ghost" data-acct="canje">Añadir código</button></div>`}
     <div class="acct-foot">${admin ? '<span></span>' : '<button class="link-btn" data-acct="datos">Mis datos</button>'}<button class="link-btn" data-acct="salir">Cerrar sesión</button></div></section>`;
 }
 async function cuentaSalir() {
@@ -16603,12 +16603,12 @@ function renderTop() {
   // Solo racha y experiencia, más grandes; sin la marca ni las vidas (las vidas se ven dentro de la lección).
   // Pedido del 2026-11-19: la app ocupa la pantalla de arriba abajo (spec 2026-11-19-pantalla-completa).
   $('#topbar').innerHTML = `<button class="tb-logo-d" type="button" data-home aria-label="Ir al inicio">${zukaWord()}</button>
-    <div class="tb-stats">
+    <div class="tb-pie">${cuentaEsAdmin() ? `<a class="tb-admin" href="admin/">${ICON.gear}<span>Administrar</span></a>` : ''}<div class="tb-stats">
       <button class="tb-stat streak${S.lastDay === today() ? ' lit' : ''}" data-streak aria-label="Racha: ${streakNow()} ${streakNow() === 1 ? 'día' : 'días'}. Ver tu actividad">${ICON.flame}<b>${streakNow()}</b></button>
       <span class="tb-stat xp" title="Experiencia: ${S.xp} XP">${ICON.bolt}<b>${shortNum(S.xp)}</b></span>
-    </div>`;
+    </div></div>`;
   $('#topbar [data-streak]').onclick = openStreakSheet;
-  $('#topbar [data-home]').onclick = () => { profileSub = null; go('home'); };   // logo de la barra de escritorio (css/escritorio.css)
+  $('#topbar [data-home]').onclick = () => { profileSub = null; go('home'); };   // logo del menú de escritorio (css/escritorio.css)
 }
 
 // ---- hojas inferiores ----

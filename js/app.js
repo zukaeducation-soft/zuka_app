@@ -160,12 +160,12 @@ function renderTop() {
   // Solo racha y experiencia, más grandes; sin la marca ni las vidas (las vidas se ven dentro de la lección).
   // Pedido del 2026-11-19: la app ocupa la pantalla de arriba abajo (spec 2026-11-19-pantalla-completa).
   $('#topbar').innerHTML = `<button class="tb-logo-d" type="button" data-home aria-label="Ir al inicio">${zukaWord()}</button>
-    <div class="tb-stats">
+    <div class="tb-pie">${cuentaEsAdmin() ? `<a class="tb-admin" href="admin/">${ICON.gear}<span>Administrar</span></a>` : ''}<div class="tb-stats">
       <button class="tb-stat streak${S.lastDay === today() ? ' lit' : ''}" data-streak aria-label="Racha: ${streakNow()} ${streakNow() === 1 ? 'día' : 'días'}. Ver tu actividad">${ICON.flame}<b>${streakNow()}</b></button>
       <span class="tb-stat xp" title="Experiencia: ${S.xp} XP">${ICON.bolt}<b>${shortNum(S.xp)}</b></span>
-    </div>`;
+    </div></div>`;
   $('#topbar [data-streak]').onclick = openStreakSheet;
-  $('#topbar [data-home]').onclick = () => { profileSub = null; go('home'); };   // logo de la barra de escritorio (css/escritorio.css)
+  $('#topbar [data-home]').onclick = () => { profileSub = null; go('home'); };   // logo del menú de escritorio (css/escritorio.css)
 }
 
 // ---- hojas inferiores ----
