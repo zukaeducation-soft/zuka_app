@@ -60,10 +60,10 @@
       ], 'Más fuerza, más aceleración; más masa, menos.'),
       xpHaz('fichas', 'Fuerza neta 90 N, masa 30 kg. Pon la aceleración, y la que habría con 60 kg.', { slots: [{ x: 110, y: 46, w: 90, et: 'con 30 kg' }, { x: 230, y: 46, w: 90, et: 'con 60 kg' }], fichas: ['3', '1.5', '6', '2 700', '60'], meta: ['3', '1.5'], alto: 96, pista: 'Divide la fuerza entre la masa.' }, '$90 \\div 30 = 3$ y $90 \\div 60 = 1.5$.')],
     ['Fuerzas por pares',
-      xpMira('hoja', 'Tercera idea: si empujas algo, te **empuja** igual y al contrario.', { paras: [['El remo empuja el agua.', 'El agua empuja el bote.'], ['El pie empuja el suelo.', 'El suelo empuja el cuerpo.'], ['El gas sale hacia abajo.', 'El cohete sube.']] }, [
+      xpMira('hoja', 'Tercera idea: si empujas algo, te **empuja** igual y al contrario.', { paras: [['El remo empuja el agua.', 'El agua empuja el bote.'], ['El pie empuja el suelo.', 'El suelo empuja el cuerpo.'], ['El cohete empuja el gas.', 'El gas empuja el cohete.']] }, [
         ['Empujas el agua y ella empuja el bote.', { luz: [0, 1], nota: { 0: 'par' } }],
         ['Caminar es que el suelo te empuje.', { luz: [2, 3], nota: { 1: 'par' } }],
-        ['El cohete sube porque el gas baja.', { luz: [4, 5], nota: { 2: 'par' } }],
+        ['El cohete sube porque el gas lo empuja.', { luz: [4, 5], nota: { 2: 'par' } }],
         ['Son iguales y contrarias.', {}],
         ['No se anulan: actúan sobre objetos distintos.', { luz: [0, 1] }],
       ], 'Acción y reacción: iguales, contrarias y sobre cuerpos distintos.'),

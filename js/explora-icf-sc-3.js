@@ -72,7 +72,7 @@ xpLec('icf-sc-perspectivas-3', [
       ['Los horarios son baratos, si las empresas aceptan.', { luz: [3], nota: { 3: '¿y las empresas?' } }],
       ['Para cada una: ¿quién gana y quién queda por fuera?', {}],
     ], 'No hay solución sin alguien que pierda algo: búscalo.'),
-    xpHaz('hoja', 'Cierran una vía para bicicletas. Subraya a quien **más** puede perjudicar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Ciclistas'], ['Una ambulancia que usa esa vía'], ['Peatones']], pista: 'Ese gana espacio o seguridad.' }, 'La ambulancia perdería tiempo valioso.')],
+    xpHaz('hoja', 'Cierran una vía a los carros para dársela a las bicicletas. Subraya a quien **más** puede perjudicar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Ciclistas'], ['Una ambulancia que usa esa vía'], ['Peatones']], pista: 'Ese gana espacio o seguridad.' }, 'La ambulancia perdería tiempo valioso.')],
   ['¿Se puede hacer?',
     xpMira('hoja', 'Segunda idea: una buena idea puede no ser **viable**.', { paras: [['Un hospital en cada vereda.'], ['Una lancha ambulancia.'], ['Un decreto: «prohibido enfermarse».']] }, [
       ['El hospital ayudaría, pero no alcanza el dinero.', { luz: [0], nota: { 0: 'costo' } }],

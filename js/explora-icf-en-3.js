@@ -22,10 +22,10 @@ xpLec('icf-en-gramatica-1', [
     xpMira('hoja', 'Tercera idea: hay varias maneras de hablar del **futuro**.', { paras: [['I am seeing the doctor at four.'], ['I am going to study medicine.'], ['I think it will be easy.'], ['If it rains, I will stay.']] }, [
       ['Con hora fijada: «am seeing».', { luz: [0], nota: { 0: 'cita' } }],
       ['Un plan: «going to».', { luz: [1], nota: { 1: 'plan' } }],
-      ['Lo que se cree: «will».', { luz: [2], nota: { 2: 'cálculo' } }],
+      ['Lo que se cree: «will».', { luz: [2], nota: { 2: 'predicción' } }],
       ['Después de «if» va presente; en la otra parte, «will».', { luz: [3], nota: { 3: 'condición' } }],
       ['Nunca «if it will rain».', {}],
-    ], 'Cita: am -ing. Plan: going to. Cálculo: will. If + presente.'),
+    ], 'Cita: am -ing. Plan: going to. Predicción: will. If + presente.'),
     xpHaz('hoja', '«If you ___ the red fruits, the coffee will taste good.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['pick'], ['will pick'], ['picked']], pista: 'Después de «if» no va «will».' }, '«If» con presente y «will» en la otra parte.')],
   ['Ahora sí, un problema',
     xpHaz('hoja', '«Nobody ___ this door for years.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['opened'], ['has opened'], ['have opened']], pista: '«For years» llega hasta hoy y «nobody» va en singular.' }, '«Nobody» va con «has».')],

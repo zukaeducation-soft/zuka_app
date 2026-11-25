@@ -50,7 +50,7 @@
         ['Si cambias oro y plata, gana otro: importa.', { luz: [0], nota: { 0: 'con orden' } }],
         ['Mango y mora o mora y mango: el mismo vaso.', { luz: [1], nota: { 1: 'sin orden' } }],
         ['123 no abre lo que abre 321.', { luz: [2], nota: { 2: 'con orden' } }],
-        ['El equipo es el mismo aunque los nombres al revés.', { luz: [3], nota: { 3: 'sin orden' } }],
+        ['El equipo es el mismo aunque los nombres estén al revés.', { luz: [3], nota: { 3: 'sin orden' } }],
         ['Con orden es permutación; sin orden, combinación.', {}],
       ], 'Cambia el orden: si sale otra cosa, importa.'),
       xpHaz('hoja', 'Subraya los **dos** casos en que el orden **no** importa.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [0, 2], paras: [['Escoger tres cartas para quedarse'], ['Presidenta y secretaria'], ['Dos amigos para ir al cine'], ['Las letras de una placa']], pista: 'En alguno, cambiar de lugar cambia el resultado.' }, 'Las cartas y los amigos son los mismos.')],
@@ -87,7 +87,7 @@
       ], 'Favorables entre posibles; y se compara la parte, no la cantidad.'),
       xpHaz('dibujo', 'Hay 12 bolas. Mueve las del color hasta que su probabilidad sea $\\tfrac13$.', { dib: (v, K) => bolsa({ n: 12, k: v.k }, K), v: { k: 1 }, metas: { k: 4 }, alto: 220, manijas: [{ k: 'k', min: 0, max: 12, paso: 1, et: 'del color' }], lee: v => `$\\tfrac{${v.k}}{12}$`, dice: () => 'Un tercio de doce.' }, '$\\tfrac{4}{12} = \\tfrac13$.')],
     ['De 0 a 1',
-      xpMira('fichas', 'Segunda idea: va de **0** (imposible) a **1** (seguro).', { slots: fila('sale 7', 'sale 3', 'sale par', 'sale menor que 7').map(s => ({ ...s, w: 64 })), fichas: ['0', '1/6', '1/2', '1'], alto: 96 }, [
+      xpMira('fichas', 'Segunda idea: va de **0** (imposible) a **1** (seguro).', { slots: fila('un 7', 'un 3', 'par', 'menos de 7').map(s => ({ ...s, w: 64 })), fichas: ['0', '1/6', '1/2', '1'], alto: 96 }, [
         ['Un dado de seis caras.', {}],
         ['Que salga 7 es imposible.', { pon: { 0: '0' } }],
         ['Que salga 3: una de seis.', { pon: { 1: '1/6' } }],
@@ -103,7 +103,7 @@
         ['La suma 2, de una sola.', { luz: [2], nota: { 2: '1/36' } }],
         ['Por eso no todas las sumas son igual de fáciles.', { luz: [1, 2] }],
       ], 'Contrario: 1 menos. Dos dados: 36 parejas ordenadas.'),
-      xpHaz('fichas', 'Pon en cuántas parejas la suma es 4 y la probabilidad de que **no** sea 4.', { slots: fila('parejas', 'no es 4'), fichas: ['3', '33/36', '2', '3/36', '1/11'], meta: ['3', '33/36'], alto: 96, pista: '(1, 3), (2, 2) y (3, 1).' }, 'Tres parejas; las otras 33 no.')],
+      xpHaz('fichas', 'Pon en cuántas parejas la suma es 4 y la probabilidad de que **no** sea 4.', { slots: fila('parejas', 'no es 4'), fichas: ['3', '33/36', '2', '3/36', '1/11'], meta: ['3', '33/36'], alto: 96, pista: 'Busca las parejas ordenadas, como (1, 3), y réstalas de 36.' }, 'Tres parejas; las otras 33 no.')],
     ['Ahora sí, un problema',
       xpHaz('fichas', 'Urna A: 3 rojas de 6. Urna B: 4 rojas de 10. Pon la probabilidad de roja en cada una.', { slots: fila('urna A', 'urna B'), fichas: ['1/2', '2/5', '3/4', '1/3', '4/6'], meta: ['1/2', '2/5'], alto: 96, pista: 'Divide entre todas las bolas de su urna.' }, 'B tiene más rojas, pero A es más probable.')],
   ], 'Parte del total, entre 0 y 1, y lo contrario completa.');
@@ -128,7 +128,7 @@
       ], 'Sin devolver hay una menos en el total, y quizá una menos que sirve.'),
       xpHaz('fichas', '4 rojas y 4 blancas. Sale una roja y **no** se devuelve. Pon la probabilidad de otra roja y de blanca.', { slots: fila('otra roja', 'blanca'), fichas: ['3/7', '4/7', '4/8', '3/8', '1/2'], meta: ['3/7', '4/7'], alto: 96, pista: 'Quedan 7 bolas.' }, 'Quedan 3 rojas y 4 blancas de 7.')],
     ['Al menos uno',
-      xpMira('fichas', 'Tercera idea: «al menos uno» es **todo menos ninguno**.', { slots: fila('falla 1.º', 'falla 2.º', 'fallan ambos', 'alguno').map(s => ({ ...s, w: 66 })), fichas: ['1/2', '3/4', '3/8', '5/8'], alto: 96 }, [
+      xpMira('fichas', 'Tercera idea: «al menos uno» es **todo menos ninguno**.', { slots: fila('falla 1.º', 'falla 2.º', 'ambos', 'alguno').map(s => ({ ...s, w: 66 })), fichas: ['1/2', '3/4', '3/8', '5/8'], alto: 96 }, [
         ['Uno acierta con un medio y otro con un cuarto.', {}],
         ['Fallan con un medio y tres cuartos.', { pon: { 0: '1/2', 1: '3/4' } }],
         ['Que fallen los dos: se multiplica.', { pon: { 2: '3/8' } }, '$\\tfrac12 \\cdot \\tfrac34 = \\tfrac38$'],
@@ -137,6 +137,6 @@
       ], 'Alguno = 1 − ninguno.'),
       xpHaz('fichas', 'Dos focos fallan con 1/3 cada uno, sin afectarse. Pon la de que fallen ambos y la de que alguno sirva.', { slots: fila('fallan ambos', 'alguno sirve'), fichas: ['1/9', '8/9', '2/3', '4/9', '1/6'], meta: ['1/9', '8/9'], alto: 96, pista: 'Multiplica los fallos y réstalo de 1.' }, '$\\tfrac13 \\cdot \\tfrac13 = \\tfrac19$ y $1 - \\tfrac19$.')],
     ['Ahora sí, un problema',
-      xpHaz('fichas', '2 verdes y 4 azules; se sacan dos **sin devolver**. Pon la de azul primero y la de dos azules.', { slots: fila('1.ª azul', 'dos azules'), fichas: ['2/3', '2/5', '4/9', '3/5', '7/6'], meta: ['2/3', '2/5'], alto: 96, pista: 'La segunda azul es 3 de 5.' }, '$\\tfrac46 \\cdot \\tfrac35 = \\tfrac25$.')],
+      xpHaz('fichas', '2 verdes y 4 azules; se sacan dos **sin devolver**. Pon la de azul primero y la de dos azules.', { slots: fila('1.ª azul', 'dos azules'), fichas: ['2/3', '2/5', '4/9', '3/5', '7/6'], meta: ['2/3', '2/5'], alto: 96, pista: 'Después de una azul quedan cinco bolas: ¿cuántas son azules?' }, '$\\tfrac46 \\cdot \\tfrac35 = \\tfrac25$.')],
   ], 'Entre quiénes, qué queda y todo menos ninguno.');
 }
