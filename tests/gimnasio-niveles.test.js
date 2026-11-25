@@ -132,7 +132,22 @@ test('revisión: el calentamiento no repite juegos ni usa los aburridos si hay o
 test('revisión: repetir un calentamiento no da XP; los pasos con la misma lección se numeran', () => {
   assert.match(gymSrc, /stars > prev \? \(r\.warm \? 5 : stars === 3 \? 15 : 10\) : r\.warm \? 0 : 5/);
   assert.match(gymSrc, /if \(xp\) \{ addXP\(xp\); newStreak = markStreak\(\); \}/);
-  assert.match(gymSrc, /aria-pressed="\$\{x\.n === lvl\}"/);
+  assert.match(gymSrc, /setAttribute\('aria-pressed', on\)/);
   const ui = uiOf(PU, 'pu-cm-1'), w = gymWarmup(PU, ui, { 'pu-cm-1': true }, false, 0);
   assert.equal(new Set(w.steps.map(s => s.title)).size, w.steps.length);
+});
+
+// ---- la zona de pesas (spec 2026-11-24-gimnasio-pesas) ----
+test('lo que toca en un nivel: lo primero abierto sin superar; si todo está hecho, lo de menos estrellas', () => {
+  const sig = get(ctx, 'gymSiguiente'), f = get(ctx, 'gymFiltra'), its = [{ id: 'a' }, { id: 'b' }, { id: 'c' }];
+  assert.equal(sig(its, { a: { best: 3 } }).id, 'b');
+  assert.equal(sig(its, { a: { best: 3 }, b: { best: 1 }, c: { best: 2 } }).id, 'b');
+  assert.equal(sig(its, {}, r => r.id === 'c').id, 'c');
+  assert.equal(sig(its, {}, () => false), null);
+  assert.equal(f(its, 'hacer', { a: {} }).length, 2); assert.equal(f(its, 'hechos', { a: {} }).length, 1); assert.equal(f(its, 'todos', {}).length, 3);
+});
+test('la barra tiene tres discos por lado y se puede usar sin arrastrar', () => {
+  assert.equal((get(ctx, 'GYM_BARRA').match(/class="gb-p /g) || []).length, 6);
+  for (const k of ['data-ir', 'data-dado', 'data-ver', 'aria-pressed', 'b.onclick']) assert.ok(gymSrc.includes(k), k);
+  assert.match(css, /prefers-reduced-motion: reduce\) \{ \.gh-art \.gf-db, \.gb-lev\.sube/);
 });
