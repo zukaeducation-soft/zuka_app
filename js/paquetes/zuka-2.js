@@ -1,467 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/bolsa-razon.js
-// La bolsa de la razón (Álgebra, razones). Una bolsa transparente con bolas rojas y azules: con − / + se ponen o se
-// quitan bolas de cada color. Cada ronda pide una bolsa con una condición de razón: parte-parte («por cada 3 rojas
-// hay 2 azules»), parte-todo («2 de cada 5 son azules») con un total o con un dato fijo. Se ven las cantidades sin
-// simplificar: el estudiante decide cuándo la razón es la pedida.
-// params = { rounds: [{ text, red, blue }], max }   state = { counts: [[rojas, azules] | null por ronda] }
-
-GAMES['bolsa-razon'] = (() => {
-  const okRound = (c, r) => Array.isArray(c) && c[0] === r.red && c[1] === r.blue;
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okRound(state.counts?.[i], r));
-    const solution = params.rounds.map(r => `${r.red} rojas y ${r.blue} azules`).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, MAX = params.max || 20;
-    const S = R.map(() => ({ red: 0, blue: 0, touched: false }));
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {};
-
-    function layout(w, h) {
-      W = w; H = h; tabs = roundTabs(R.length, w);
-      const bw = Math.min(44, (w - 48) / 6), y = h - 48, gap = w / 2;
-      B = {
-        rMinus: { x: 12, y, w: bw, h: 36 }, rPlus: { x: gap - 8 - bw, y, w: bw, h: 36 },
-        bMinus: { x: gap + 8, y, w: bw, h: 36 }, bPlus: { x: w - 12 - bw, y, w: bw, h: 36 },
-      };
-    }
-    function change(f) {
-      if (locked) return;
-      const s = S[cur]; f(s); s.touched = true;
-      api.ready(S.every(x => x.touched)); api.sfx?.tap?.();
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      function button(b, label, col) {
-        drawTile(p, C, b, label, { fill: col === C.bad ? C.coral : C.sky, r: 9, lift: 2, size: 20 });
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], s = S[cur], good = okRound([s.red, s.blue], r);
-        const v = locked && !good ? { red: r.red, blue: r.blue } : s;   // al fallar se ve la bolsa correcta en verde
-        drawTabs(p, C, tabs, cur, i => (locked ? (okRound([S[i].red, S[i].blue], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : S[i].touched ? C.Q : C.line));
-        // Enunciado (hasta tres líneas)
-        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(W < 300 ? 13 : 14); p.textAlign(p.CENTER, p.TOP); p.textLeading(17);
-        p.text(r.text, 14, 46, W - 28, 56);
-        // La bolsa
-        const top = 106, bot = H - 106, bx = 26, bwid = W - 52;
-        p.textAlign(p.CENTER, p.CENTER);
-        p.stroke(locked && !good ? C.ok : C.line); p.strokeWeight(2); p.fill(C.card);
-        p.rect(bx, top + 10, bwid, bot - top - 10, 18);
-        p.noFill(); p.stroke(C.mute); p.strokeWeight(2.5);
-        p.line(W / 2 - 22, top + 10, W / 2 - 8, top); p.line(W / 2 + 22, top + 10, W / 2 + 8, top);
-        const balls = [...Array(v.red).fill("r"), ...Array(v.blue).fill("b")];
-        const perRow = 10, d = Math.min(20, (bwid - 16) / perRow - 3), rows = Math.ceil(balls.length / perRow);
-        const step = Math.min(d + 3, (bot - top - 26) / Math.max(rows, 1));
-        balls.forEach((c, k) => {
-          const row = Math.floor(k / perRow), col = k % perRow;
-          const x = bx + 8 + (col + 0.5) * ((bwid - 16) / perRow), y = bot - 8 - (row + 0.5) * step;
-          p.noStroke(); p.fill(c === 'r' ? C.coral : C.sky); p.circle(x, y, Math.min(d, step - 2));
-        });
-        if (!balls.length) { p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(12); p.text('bolsa vacía', W / 2, (top + bot) / 2); }
-        // Cuentas
-        p.noStroke(); p.textStyle(p.BOLD);
-        const ly = H - 72;
-        p.fill(C.bad); fitText(p, `rojas: ${v.red}`, W / 4, ly, W / 2 - 16, 14);
-        p.fill(C.Z); fitText(p, `azules: ${v.blue}`, (3 * W) / 4, ly, W / 2 - 16, 14);
-        p.fill(locked ? C.ok : C.mute); p.textStyle(p.NORMAL);
-        fitText(p, locked && !good ? `Era: ${r.red} rojas y ${r.blue} azules` : `en total: ${s.red + s.blue}`, W / 2, H - 90, W - 24, 12);
-        button(B.rMinus, '−', C.bad); button(B.rPlus, '+', C.bad); button(B.bMinus, '−', C.Z); button(B.bPlus, '+', C.Z);
-        p.noStroke(); p.fill(C.coral); p.circle((B.rMinus.x + B.rMinus.w + B.rPlus.x) / 2, B.rMinus.y + 18, 18);
-        p.fill(C.sky); p.circle((B.bMinus.x + B.bMinus.w + B.bPlus.x) / 2, B.bMinus.y + 18, 18);
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        if (hitBox(B.rMinus, x, y)) { change(s => { s.red = Math.max(0, s.red - 1); }); return false; }
-        if (hitBox(B.rPlus, x, y)) { change(s => { s.red = Math.min(MAX, s.red + 1); }); return false; }
-        if (hitBox(B.bMinus, x, y)) { change(s => { s.blue = Math.max(0, s.blue - 1); }); return false; }
-        if (hitBox(B.bPlus, x, y)) { change(s => { s.blue = Math.min(MAX, s.blue + 1); }); return false; }
-      };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ counts: S.map(s => (s.touched ? [s.red, s.blue] : null)) }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create };
-})();
-;
-//#archivo js/games/estira-foto.js
-// Estira la foto (Álgebra, razones). Una foto de w0 × h0 se debe ampliar (o reducir) a un ancho nuevo sin
-// deformarla. El ancho ya está puesto; se arrastra el borde de abajo (o − / +) para fijar el alto. El dibujo se
-// estira con el marco: solo si ancho : alto es la misma razón que la original el zorrito sale bien; si se suma lo
-// mismo a los dos lados, sale aplastado o alargado.
-// params = { rounds: [{ w0, h0, w, h }], step, max }   state = { hs: [alto | null por ronda] }
-
-GAMES['estira-foto'] = (() => {
-  const okRound = (h, r) => typeof h === 'number' && Math.abs(h - r.h) < 1e-9;
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okRound(state.hs?.[i], r));
-    const solution = params.rounds.map(r => `${String(r.w0)} : ${String(r.h0)} = ${String(r.w)} : ${String(r.h)}`).join(' · ');
-    return { ok, solution };
-  }
-
-  // El dibujo en las unidades de la foto original (w0 × h0): cielo, colina, sol y una composición de círculo, cuadrado y
-  // triángulo (si la foto se deforma, el círculo deja de ser redondo).
-  function picture(p, C, w0, h0) {
-    const k = Math.min(w0, h0);
-    p.noStroke(); p.fill(C.Z); p.rect(0, 0, w0, h0);
-    p.fill(C.Q); p.rect(0, h0 * 0.8, w0, h0 * 0.2);
-    p.fill(C.N); p.circle(w0 * 0.84, h0 * 0.16, k * 0.22);
-    const cx = w0 / 2, cy = h0 * 0.52, r = k * 0.3;
-    p.fill(C.coral); p.circle(cx, cy, 2 * r);
-    p.fill(C.cream); p.rect(cx - r * 0.5, cy - r * 0.5, r, r);
-    p.fill(C.R); p.triangle(cx - r * 0.35, cy + r * 0.3, cx + r * 0.35, cy + r * 0.3, cx, cy - r * 0.32);
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, STEP = params.step || 0.5, MAX = params.max || 12;
-    const hs = R.map(r => r.h0), touched = R.map(() => false);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {}, G = null, drag = false;
-
-    function layout(w, h) {
-      W = w; H = h; tabs = roundTabs(R.length, w);
-      B = { minus: { x: 12, y: h - 46, w: 44, h: 36 }, plus: { x: w - 56, y: h - 46, w: 44, h: 36 } };
-    }
-    const geo = () => {
-      const r = R[cur], top = 120, room = H - top - 64;
-      const u = Math.min((W - 60) / Math.max(r.w, 1), room / MAX);
-      return { u, x: (W - r.w * u) / 2, top };
-    };
-    const snap = v => Math.min(MAX, Math.max(STEP, Math.round(v / STEP) * STEP));
-    function setH(v) {
-      if (locked) return;
-      hs[cur] = snap(v); touched[cur] = true; api.ready(touched.every(Boolean));
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], good = okRound(hs[cur], r), h = locked && !good ? r.h : hs[cur];   // al fallar se ve la foto correcta
-        G = geo();
-        const { u, x, top } = G;
-        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(hs[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Q : C.line));
-        // Enunciado y foto original en miniatura
-        p.textAlign(p.LEFT, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
-        fitText(p, `Ampliar a ${String(r.w)} de ancho`, 14, 56, W - 96, 14);
-        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'sin deformar la foto', 14, 76, W - 96, 12);
-        const tk = Math.min(60 / r.w0, 44 / r.h0), tw = r.w0 * tk, th = r.h0 * tk, tx = W - 14 - tw, ty = 46;
-        p.push(); p.translate(tx, ty); p.scale(tk, tk); picture(p, C, r.w0, r.h0); p.pop();
-        p.noFill(); p.stroke(C.line); p.strokeWeight(1); p.rect(tx, ty, tw, th);
-        p.noStroke(); p.fill(C.mute); p.textAlign(p.CENTER, p.TOP); p.textSize(10);
-        p.text(`original ${String(r.w0)} × ${String(r.h0)}`, Math.min(tx + tw / 2, W - 50), ty + th + 2);
-        // Cuadrícula de unidades y la foto estirada
-        p.stroke(C.line); p.strokeWeight(0.6);
-        for (let k = 0; k <= r.w; k++) p.line(x + k * u, top, x + k * u, top + MAX * u);
-        for (let k = 0; k <= MAX; k++) p.line(x, top + k * u, x + r.w * u, top + k * u);
-        p.push(); p.translate(x, top); p.scale((r.w * u) / r.w0, (h * u) / r.h0); picture(p, C, r.w0, r.h0); p.pop();
-        p.noFill(); p.stroke(locked ? C.ok : C.coral); p.strokeWeight(3); p.rect(x, top, r.w * u, h * u);
-        if (!locked) { p.noStroke(); p.fill(C.coral); p.rect(x + (r.w * u) / 2 - 18, top + h * u - 4, 36, 8, 4); }
-        // Medidas
-        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.BOTTOM); p.textSize(12);
-        p.text(String(r.w), x + (r.w * u) / 2, top - 2);
-        p.textAlign(p.RIGHT, p.CENTER); p.text(String(h), x - 4, top + (h * u) / 2);
-        // Lectura y botones
-        p.textAlign(p.CENTER, p.CENTER);
-        const msg = locked && !good ? `Era ${String(r.h)} de alto` : `ancho : alto = ${String(r.w)} : ${String(h)}`;
-        p.fill(locked ? C.ok : C.ink); fitText(p, msg, W / 2, H - 28, W - 132, 14);
-        for (const [b, t] of [[B.minus, '−'], [B.plus, '+']]) {
-          drawTile(p, C, b, t, { fill: C.sky, r: 9, lift: 2, size: 20 });
-        }
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; drag = false; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        if (hitBox(B.minus, x, y)) { setH(hs[cur] - STEP); api.sfx?.tap?.(); return false; }
-        if (hitBox(B.plus, x, y)) { setH(hs[cur] + STEP); api.sfx?.tap?.(); return false; }
-        // Se arrastra el borde de abajo del marco (no cualquier toque en la cuadrícula).
-        if (G && Math.abs(y - (G.top + hs[cur] * G.u)) < 32) { drag = true; setH((y - G.top) / G.u); return false; }
-      };
-      p.mouseDragged = () => { if (drag && G) { setH((p.mouseY - G.top) / G.u); return false; } };
-      p.mouseReleased = () => { drag = false; };
-    }, 1.45);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ hs: hs.map((h, i) => (touched[i] ? h : null)) }),
-      lock() { locked = true; drag = false; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create };
-})();
-;
-//#archivo js/games/sombra-arbol.js
-// La sombra del árbol (Álgebra, proporciones). A la misma hora los rayos del sol llegan paralelos, así que la altura
-// de cada cosa y su sombra están en la misma razón: palo / sombra del palo = árbol / sombra del árbol. Se conoce el
-// palo y su sombra, y se midió la sombra del árbol (la banderita). Se ajusta la altura del árbol (arrastre o − / +)
-// hasta que el rayo que pasa por su copa caiga justo en la banderita.
-// params = { rounds: [{ stick, shadow, treeShadow, tree }], step, max }   state = { hs: [altura | null por ronda] }
-
-GAMES['sombra-arbol'] = (() => {
-  const okRound = (h, r) => typeof h === 'number' && Math.abs(h - r.tree) < 1e-9;
-  const shadowOf = (h, r) => (h * r.shadow) / r.stick;
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okRound(state.hs?.[i], r));
-    const solution = params.rounds.map(r => `${String(r.stick)}/${String(r.shadow)} = h/${String(r.treeShadow)} → h = ${String(r.tree)} m`).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, STEP = params.step || 0.5, MAX = params.max || 12;
-    const hs = R.map(() => STEP * 4), touched = R.map(() => false);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {}, G = null, drag = false;
-
-    function layout(w, h) {
-      W = w; H = h; tabs = roundTabs(R.length, w);
-      B = { minus: { x: 12, y: h - 46, w: 44, h: 36 }, plus: { x: w - 56, y: h - 46, w: 44, h: 36 } };
-    }
-    const geo = () => {
-      const r = R[cur], ground = H - 96, room = ground - 104;
-      const u = Math.min((W - 92) / (r.shadow + r.treeShadow), room / MAX);
-      const xs = 22, xt = xs + r.shadow * u + 44;   // hueco para el rótulo del árbol, lejos del rayo del palo
-      return { u, ground, xs, xt };
-    };
-    const snap = v => Math.min(MAX, Math.max(STEP, Math.round(v / STEP) * STEP));
-    function setH(v) {
-      if (locked) return;
-      hs[cur] = snap(v); touched[cur] = true; api.ready(touched.every(Boolean));
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      function dashed(x1, y1, x2, y2) {
-        const n = Math.max(1, Math.floor(Math.hypot(x2 - x1, y2 - y1) / 8));
-        for (let k = 0; k < n; k += 2) p.line(x1 + ((x2 - x1) * k) / n, y1 + ((y2 - y1) * k) / n, x1 + ((x2 - x1) * (k + 1)) / n, y1 + ((y2 - y1) * (k + 1)) / n);
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], h = hs[cur], good = okRound(h, r);
-        G = geo();
-        const { u, ground, xs, xt } = G;
-        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(hs[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Q : C.line));
-        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
-        fitText(p, '¿Cuánto mide el árbol?', W / 2, 56, W - 24, 15);
-        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'Su sombra termina en la banderita: usa la proporción', W / 2, 76, W - 24, 12);
-        // Suelo
-        p.stroke(C.mint); p.strokeWeight(4); p.line(8, ground, W - 8, ground);
-        // Palo y su sombra
-        const sEnd = xs + r.shadow * u;
-        p.noStroke(); p.fill(C.mute); p.rect(xs, ground + 2, r.shadow * u, 5, 2);
-        p.stroke(C.ink); p.strokeWeight(4); p.line(xs, ground, xs, ground - r.stick * u);
-        p.stroke(C.N); p.strokeWeight(2); dashed(xs, ground - r.stick * u, sEnd, ground);
-        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(11);
-        p.textAlign(p.CENTER, p.BOTTOM); p.text(`${String(r.stick)} m`, Math.max(xs, 18), ground - r.stick * u - 5);
-        p.textAlign(p.CENTER, p.TOP); p.fill(C.mute); p.text(`${String(r.shadow)} m`, xs + (r.shadow * u) / 2, ground + 8);
-        // Banderita: donde termina la sombra medida del árbol
-        const fx = xt + r.treeShadow * u;
-        p.stroke(C.ink); p.strokeWeight(1.5); p.line(fx, ground, fx, ground - 16);
-        p.noStroke(); p.fill(C.coral); p.triangle(fx, ground - 18, fx + 12, ground - 13.5, fx, ground - 9);
-        p.fill(C.mute); p.textAlign(p.CENTER, p.TOP); p.text(`sombra: ${String(r.treeShadow)} m`, (xt + fx) / 2, ground + 8);
-        // Árbol. Mientras se juega solo se ve su altura (hay que calcularla con la proporción); al comprobar
-        // aparece el rayo de su copa, y si estaba mal, el árbol correcto en verde con su rayo justo a la banderita.
-        const hv = locked && !good ? r.tree : h;
-        const top = ground - hv * u, end = xt + shadowOf(hv, r) * u;
-        p.stroke('#8a5a2b'); p.strokeWeight(5); p.line(xt, ground, xt, top + Math.min(14, hv * u * 0.35));
-        const d = Math.max(16, Math.min(34, hv * u * 0.45));
-        p.noStroke(); p.fill(locked ? C.ok : C.mint); p.circle(xt, top + d / 2, d);
-        if (locked) {
-          p.stroke(C.N); p.strokeWeight(2); const x2 = Math.min(end, W - 6);   // si la sombra se sale del lienzo, el rayo se corta en el borde
-          dashed(xt, top, x2, top + ((x2 - xt) * (hv * u)) / Math.max(1e-6, end - xt));
-        }
-        // Rótulo a la izquierda del tronco: el rayo sale hacia la derecha y no lo tapa.
-        p.noStroke(); p.fill(locked ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.RIGHT, p.CENTER); p.textSize(12);
-        p.text(`${String(hv)} m`, xt - Math.max(9, d / 2 + 3), ground - Math.max(hv * u / 2, 10));
-        // Lectura y botones
-        p.textAlign(p.CENTER, p.CENTER);
-        const msg = locked && !good ? `Medía ${String(r.tree)} m` : `árbol: ${String(h)} m`;
-        p.fill(locked ? C.ok : C.ink); fitText(p, msg, W / 2, H - 28, W - 132, 14);
-        for (const [b, t] of [[B.minus, '−'], [B.plus, '+']]) {
-          drawTile(p, C, b, t, { fill: C.sky, r: 9, lift: 2, size: 20 });
-        }
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; drag = false; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        if (hitBox(B.minus, x, y)) { setH(hs[cur] - STEP); api.sfx?.tap?.(); return false; }
-        if (hitBox(B.plus, x, y)) { setH(hs[cur] + STEP); api.sfx?.tap?.(); return false; }
-        if (G && y > 88 && y < G.ground && Math.abs(x - G.xt) < 40) { drag = true; setH((G.ground - y) / G.u); return false; }
-      };
-      p.mouseDragged = () => { if (drag && G) { setH((G.ground - p.mouseY) / G.u); return false; } };
-      p.mouseReleased = () => { drag = false; };
-    }, 1.45);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ hs: hs.map((h, i) => (touched[i] ? h : null)) }),
-      lock() { locked = true; drag = false; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, shadowOf };
-})();
-;
-//#archivo js/games/pisa-huellas.js
-// Pisa las huellas (Álgebra, progresiones aritméticas). Un caminante da pasos iguales sobre la recta: el paso 1 cae
-// en a₁ y cada paso avanza d (o retrocede, si d es negativo). Dos banderas marcan dónde cayeron dos pasos conocidos.
-// Con − / + se fijan a₁ y d; las huellas numeradas se mueven en vivo. Gana cuando las dos huellas pisan sus banderas:
-// aₖ = a₁ + (k − 1)d.
-// params = { rounds: [{ known: [[k, valor], [k, valor]], a1, d }] }   state = { ans: [[a1, d] | null por ronda] }
-
-GAMES['pisa-huellas'] = (() => {
-  const termAt = (a1, d, k) => a1 + (k - 1) * d;
-  const okRound = (a, r) => Array.isArray(a) && r.known.every(([k, v]) => termAt(a[0], a[1], k) === v);
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okRound(state.ans?.[i], r));
-    return { ok, solution: params.rounds.map(r => `a₁ = ${r.a1}, d = ${r.d}`.replace(/-/g, '−')).join(' · ') };
-  }
-
-  const neg = v => String(v).replace('-', '−');
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const A = R.map(() => ({ a1: 0, d: 1, touched: false }));
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {}, hold = null;
-
-    function layout(w, h) {
-      W = w; H = h; tabs = roundTabs(R.length, w);
-      const bw = 44, y1 = h - 92, y2 = h - 48;
-      B = { aM: { x: w - 2 * bw - 22, y: y1, w: bw, h: 36 }, aP: { x: w - bw - 12, y: y1, w: bw, h: 36 },
-        dM: { x: w - 2 * bw - 22, y: y2, w: bw, h: 36 }, dP: { x: w - bw - 12, y: y2, w: bw, h: 36 } };
-    }
-    function change(f) {
-      if (locked) return;
-      const a = A[cur]; f(a); a.touched = true;
-      api.ready(A.every(x => x.touched)); api.sfx?.tap?.();
-    }
-    // Recta fija por ronda (las banderas no se mueven): abarca los pasos correctos con margen. Las huellas que caen
-    // fuera no se amontonan: se cuentan con una flecha en el borde.
-    function range(r) {
-      const n = Math.max(...r.known.map(k => k[0])) + 1;
-      const vals = Array.from({ length: n }, (_, k) => termAt(r.a1, r.d, k + 1));
-      return { n, lo: Math.min(0, ...vals) - 3, hi: Math.max(...vals) + 3 };
-    }
-    // Cada botón: qué hace al tocarlo (mantenerlo pulsado repite el paso).
-    const ACT = {
-      aM: a => { a.a1 = Math.max(-30, a.a1 - 1); }, aP: a => { a.a1 = Math.min(40, a.a1 + 1); },
-      dM: a => { a.d = Math.max(-10, a.d - 1); }, dP: a => { a.d = Math.min(10, a.d + 1); },
-    };
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      function button(b, t) {
-        drawTile(p, C, b, t, { fill: C.sky, r: 9, lift: 2, size: 20 });
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], a = locked && !okRound([A[cur].a1, A[cur].d], r) ? { a1: r.a1, d: r.d } : A[cur];
-        const good = okRound([A[cur].a1, A[cur].d], r);
-        drawTabs(p, C, tabs, cur, i => (locked ? (okRound([A[i].a1, A[i].d], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : A[i].touched ? C.Q : C.line));
-        const [[k1, v1], [k2, v2]] = r.known;
-        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
-        fitText(p, `El paso ${k1} cayó en ${neg(v1)} y el paso ${k2} en ${neg(v2)}`, W / 2, 56, W - 24, 14);
-        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'Elige el primer paso y el salto', W / 2, 76, W - 24, 12);
-        // Recta
-        if (hold && p.mouseIsPressed && !locked && p.frameCount - hold.f > 18 && p.frameCount % 4 === 0) change(ACT[hold.k]);
-        const { n, lo, hi } = range(r), x0 = 16, x1 = W - 16, ly = H * 0.47;
-        const X = v => x0 + ((v - lo) / (hi - lo)) * (x1 - x0);
-        p.stroke(C.ink); p.strokeWeight(3); p.line(x0, ly, x1, ly);
-        const every = hi - lo > 60 ? 10 : hi - lo > 30 ? 5 : hi - lo > 14 ? 2 : 1;
-        for (let v = Math.ceil(lo); v <= hi; v++) {
-          if (v % every) continue;
-          p.stroke(C.ink); p.strokeWeight(1.5); p.line(X(v), ly - 5, X(v), ly + 5);
-          if (v % (every * 2) === 0 || every >= 5) { p.noStroke(); p.fill(C.mute); p.textSize(10); p.text(neg(v), X(v), ly + 34); }
-        }
-        // Banderas de los pasos conocidos
-        for (const [k, v] of r.known) {
-          const fx = X(v);
-          p.stroke(C.ink); p.strokeWeight(1.5); p.line(fx, ly, fx, ly - 46);
-          p.noStroke(); p.fill(C.coral); p.triangle(fx, ly - 46, fx + 13, ly - 41.5, fx, ly - 37);
-          p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(10); p.text(`paso ${k}`, fx, ly - 54);
-        }
-        // Huellas: arriba y abajo de la recta, alternadas, para que no se tapen
-        let left = 0, right = 0;
-        for (let k = 1; k <= n; k++) {
-          const v = termAt(a.a1, a.d, k);
-          if (v < lo) { left++; continue; }
-          if (v > hi) { right++; continue; }
-          const x = X(v), up = k % 2 === 1, y = up ? ly - 16 : ly + 16;
-          const hit = r.known.some(([kk, vv]) => kk === k && vv === v);
-          const fc = hit || locked ? C.ok : C.sky;   // huellas azules; verdes cuando pisan una bandera
-          p.noStroke(); p.fill(fc); p.ellipse(x, y, 14, 18);
-          p.fill(inkOn(fc, C.bg)); p.textStyle(p.BOLD); p.textSize(9); p.text(k, x, y + 1);
-        }
-        p.noStroke(); p.fill(C.brand); p.textStyle(p.BOLD); p.textSize(11);
-        if (left) { p.triangle(x0 - 6, ly, x0 + 2, ly - 5, x0 + 2, ly + 5); p.textAlign(p.LEFT, p.CENTER); p.text(`${left} huellas`, x0, ly + 54); }
-        if (right) { p.triangle(x1 + 6, ly, x1 - 2, ly - 5, x1 - 2, ly + 5); p.textAlign(p.RIGHT, p.CENTER); p.text(`${right} huellas`, x1, ly + 54); }
-        p.textAlign(p.CENTER, p.CENTER);
-        // Controles y lectura
-        p.textAlign(p.LEFT, p.CENTER); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(15);
-        p.text(`a₁ = ${neg(a.a1)}`, 16, B.aM.y + 18); p.text(`d = ${neg(a.d)}`, 16, B.dM.y + 18);
-        p.textAlign(p.CENTER, p.CENTER);
-        button(B.aM, '−'); button(B.aP, '+'); button(B.dM, '−'); button(B.dP, '+');
-        const msg = locked ? (good ? '¡Las dos huellas pisan su bandera!' : `Era a₁ = ${neg(r.a1)} y d = ${neg(r.d)}`)
-          : `paso ${k2}: ${neg(a.a1)} + ${k2 - 1} · ${a.d < 0 ? `(${neg(a.d)})` : a.d} = ${neg(termAt(a.a1, a.d, k2))}`;
-        p.fill(locked ? C.ok : C.mute); p.textStyle(p.NORMAL); fitText(p, msg, W / 2, B.aM.y - 18, W - 24, 12);
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        for (const k of Object.keys(ACT)) if (hitBox(B[k], x, y)) { change(ACT[k]); hold = { k, f: p.frameCount }; return false; }
-      };
-      p.mouseReleased = () => { hold = null; };
-    }, 1.25);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ ans: A.map(a => (a.touched ? [a.a1, a.d] : null)) }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, termAt };
-})();
-;
 //#archivo js/games/dos-escaleras.js
 // Dos escaleras (Álgebra, suma de una progresión aritmética). Una escalera de n columnas mide a₁, a₁ + d, …, aₙ y
 // una copia volteada cuelga de una tapa. Se sube o baja la tapa (− / + o arrastre) hasta que las dos escaleras
@@ -8871,6 +8409,141 @@ Object.assign(XG, (() => {
   XG.ascensor('sube-vatios', 100, 2, neutro);
   XG.renglones('atrae-repele', { w: 104, x: 276 });
   XG.renglones('fuerza-cambia', { w: 96, x: 278 });
+})();
+;
+//#archivo js/games/dispersion-escena.js
+// Ejercicios de «Dispersión y Comparación», «Números y Sucesiones» y «Ciencia y Sociedad» (Preicfes; spec
+// 2026-11-25-preicfes-estructura). Armazones en figura-kit, conteo-escena, logica-kit y proposiciones-escena. La escena no dice el
+// resultado mientras se responde.
+(() => {
+  const neutro = ['Se pasó. Vuelve a mirar.', 'Le faltó. Vuelve a mirar.'], N = x => Math.round(x * 100) / 100, sum = d => d.reduce((a, b) => a + b, 0);
+  const EJE = (K, hi, y, paso = 1, lo = 0) => { const X = x => 24 + (x - lo) / (hi - lo) * 292; let h = K.l(24, y, 316, y, 'lm'); for (let i = lo; i <= hi; i += paso) h += K.l(X(i), y - 4, X(i), y + 4, 'lm') + K.t(X(i), y + 18, i, 's tm'); return [X, h]; };
+  const puntos = (K, d, X, y, cls = 'fa') => { const n = {}; return d.map(x => { n[x] = (n[x] || 0) + 1; return K.c(X(x), y - 4 - n[x] * 13, 6, cls); }).join(''); };
+  // ---------------------------------------------------------------------------------------------- rango, varianza, desviación
+  // Punto de equilibrio: las desviaciones suman 0.  params { d, hi }
+  XG.figura('desvios-cero', {
+    ini: () => ({ m: 0 }), alto: () => 190, ms: 1000, pie: 'Mueve el punto de apoyo.', manijas: p => [{ k: 'm', min: 0, max: p.hi, paso: 1, et: 'apoyo' }], ok: (v, p) => v.m * p.d.length === sum(p.d), sol: p => ({ m: sum(p.d) / p.d.length }), texto: p => `${sum(p.d) / p.d.length}`,
+    dib(v, K, p, f) { const [X, h] = EJE(K, p.hi, 92, p.hi > 12 ? 2 : 1), s = sum(p.d.map(x => x - v.m)); return h + puntos(K, p.d, X, 92) + K.p([[X(v.m), 94], [X(v.m) - 8, 108], [X(v.m) + 8, 108]], 'fg') + K.f(f, K.t(170, 136, `desviaciones: ${s > 0 ? '+' : ''}${N(s)}`, 'b')); },
+    aviso: (v, p) => (v.m * p.d.length < sum(p.d) ? 'Las desviaciones de la derecha pesan más.' : 'Las desviaciones de la izquierda pesan más.'), bien: (v) => `Alrededor de ${v.m} las desviaciones suman 0: es el promedio.`,
+  });
+  // Cambia el dato mayor hasta un rango pedido.  params { d (sin el mayor), rango, hi }
+  XG.figura('mueve-rango', {
+    ini: p => ({ x: Math.max(...p.d) }), alto: () => 190, ms: 900, pie: 'Mueve el dato mayor.', manijas: p => [{ k: 'x', min: Math.max(...p.d), max: p.hi, paso: 1, et: 'dato mayor' }], ok: (v, p) => v.x - Math.min(...p.d) === p.rango, sol: p => ({ x: Math.min(...p.d) + p.rango }), texto: p => `${Math.min(...p.d) + p.rango}`,
+    dib(v, K, p, f) { const [X, h] = EJE(K, p.hi, 92, p.hi > 12 ? 2 : 1); return h + puntos(K, p.d, X, 92) + K.c(X(v.x), 75, 6, 'ff') + K.f(f, K.l(X(Math.min(...p.d)), 120, X(v.x), 120, 'la gr') + K.t(170, 138, `${N(v.x)} − ${Math.min(...p.d)} = ${N(v.x - Math.min(...p.d))}`, 'b')); },
+    aviso: (v, p) => (v.x === p.rango ? 'Ese es el rango: falta contarlo desde el dato menor.' : v.x - Math.min(...p.d) < p.rango ? 'Con ese dato el rango es menor.' : 'Con ese dato el rango es mayor.'), bien: (v, p) => `De ${Math.min(...p.d)} a ${v.x} hay ${p.rango}.`,
+  });
+  XG.renglones('varianza-pasos', { w: 80, x: 280 });
+  XG.frases('mas-disperso');
+  XG.renglones('suma-igual', { w: 84, x: 278 });
+  XG.renglones('elige-regular', { w: 92, x: 276 });
+  XG.ascensor('sube-varianza', 60, 1, neutro);
+  // --------------------------------------------------------------------------------------------------- percentiles y cajas
+  const mediana = d => (d.length % 2 ? d[(d.length - 1) / 2] : (d[d.length / 2 - 1] + d[d.length / 2]) / 2), cuart = d => { const m = Math.floor(d.length / 2); return [mediana(d.slice(0, m)), mediana(d), mediana(d.slice(-m))]; };
+  // Arma la caja de unos datos ordenados.  params { d, hi }
+  XG.figura('arma-caja', {
+    ini: () => ({ a: 0, b: 0, c: 0 }), alto: () => 300, ms: 1000, pie: 'Mueve los tres cortes.', manijas: p => [['a', 'primer cuartil'], ['b', 'mediana'], ['c', 'tercer cuartil']].map(([k, et]) => ({ k, min: 0, max: p.hi, paso: 1, et })),
+    ok(v, p) { const q = cuart(p.d); return v.a === q[0] && v.b === q[1] && v.c === q[2]; }, sol(p) { const [a, b, c] = cuart(p.d); return { a, b, c }; }, texto: p => cuart(p.d).join(', '),
+    dib(v, K, p, f) { const [X, h] = EJE(K, p.hi, 84, p.hi > 12 ? 2 : 1), lo = Math.min(...p.d), hi = Math.max(...p.d); return h + puntos(K, p.d, X, 84) + K.f(f, K.l(X(lo), 124, X(hi), 124, 'gr') + K.r(X(v.a), 110, X(v.c) - X(v.a), 28, 'fa', 2) + K.l(X(v.b), 110, X(v.b), 138, 'lg gr')); },
+    aviso(v, p) { const q = cuart(p.d); return v.b !== q[1] ? 'La mediana deja la misma cantidad de datos a cada lado.' : v.a !== q[0] ? 'El primer cuartil es la mediana de la mitad de abajo.' : 'El tercer cuartil es la mediana de la mitad de arriba.'; }, bien: (v) => `Cuartiles ${v.a}, ${v.b} y ${v.c}.`,
+  });
+  const caja = (K, q, X, y, cls) => K.l(X(q[0]), y, X(q[4]), y, 'gr') + K.l(X(q[0]), y - 8, X(q[0]), y + 8, 'gr') + K.l(X(q[4]), y - 8, X(q[4]), y + 8, 'gr') + K.r(X(q[1]), y - 12, X(q[3]) - X(q[1]), 24, cls, 2) + K.l(X(q[2]), y - 12, X(q[2]), y + 12, 'lg gr');
+  XG.renglones('lee-caja', { w: 72, x: 282, y0: 118, fondo(K, p) { const [X, h] = EJE(K, p.hi, 58, p.paso); return h + caja(K, p.q, X, 26, 'fa'); } });
+  XG.renglones('compara-cajas', { w: 72, x: 282, y0: 148, fondo(K, p) { const [X, h] = EJE(K, p.hi, 92, p.paso); return h + caja(K, p.A, X, 20, 'fa') + caja(K, p.B, X, 60, 'ff') + K.t(10, 24, 'A', 'b ta', 'start') + K.t(10, 64, 'B', 'b tf', 'start'); } });
+  // Cuántos quedan por debajo de un percentil.  params { n, pc, max }
+  XG.figura('percentil-puesto', {
+    ini: () => ({ k: 0 }), alto: () => 190, ms: 900, pie: 'Mueve cuántos quedan por debajo.', manijas: p => [{ k: 'k', min: 0, max: p.n, paso: p.paso || 1, et: 'por debajo' }], ok: (v, p) => v.k * 100 === p.n * p.pc, sol: p => ({ k: p.n * p.pc / 100 }), texto: p => `${p.n * p.pc / 100}`,
+    dib(v, K, p, f) { const w = 292 * v.k / p.n; return K.r(24, 40, 292, 34, 'fc', 3) + K.r(24, 40, w, 34, 'fa', 3) + K.t(24, 30, '0', 's tm') + K.t(316, 30, `${p.n} personas`, 's tm', 'end') + K.f(f, K.t(170, 104, `${N(v.k)} de ${p.n}: ${N(v.k / p.n * 100)} %`, 'b')); },
+    aviso: (v, p) => (v.k === p.pc ? 'El percentil es un porcentaje, no el número de personas.' : v.k * 100 < p.n * p.pc ? 'Son menos que ese porcentaje.' : 'Son más que ese porcentaje.'), bien: (v, p) => `${v.k} de ${p.n} es el ${p.pc} %.`,
+  });
+  XG.frases('dice-la-caja');
+  XG.ascensor('sube-percentil', 100, 2, neutro);
+  // ------------------------------------------------------------------------------------------------------------ correlación
+  // Predice con la tendencia.  params { pts, m, b, x, tol, hx, hy }
+  XG.figura('predice-nube', {
+    ini: () => ({ y: 0 }), alto: () => 224, ms: 1000, pie: 'Mueve la predicción.', manijas: p => [{ k: 'y', min: 0, max: p.hy, paso: 1, et: 'predicción' }], ok: (v, p) => Math.abs(v.y - (p.m * p.x + p.b)) <= p.tol, sol: p => ({ y: p.m * p.x + p.b }), texto: p => `cerca de ${p.m * p.x + p.b}`,
+    dib(v, K, p, f) { const X = x => 36 + x / p.hx * 280, Y = y => 140 - y / p.hy * 124; return K.l(36, 140, 320, 140, 'lm') + K.l(36, 10, 36, 140, 'lm') + p.pts.map(([x, y]) => K.c(X(x), Y(y), 5, 'fa')).join('') + K.l(X(p.x), 140, X(p.x), 12, 'lm d') + K.t(X(p.x), 156, p.x, 's tm') + K.c(X(p.x), Y(v.y), 7, 'ff') + [p.hy / 2, p.hy].map(y => K.t(30, Y(y) + 4, y, 's tm', 'end')).join('') + K.f(f, K.l(X(0), Y(p.b), X(p.hx), Y(p.m * p.hx + p.b), 'lg d')); },
+    aviso: (v, p) => (v.y < p.m * p.x + p.b ? 'Queda por debajo de la tendencia.' : 'Queda por encima de la tendencia.'), bien: (v, p) => `La tendencia pasa cerca de ${p.m * p.x + p.b}.`,
+  });
+  // El punto que se sale de la tendencia.  params { pts: [[x, y]], raro, hx, hy }
+  const PX = (p, q) => [40 + q[0] / p.hx * 264, 150 - q[1] / p.hy * 130];
+  XG.marca('punto-raro', {
+    sitios: p => p.pts.map(q => ({ x: PX(p, q)[0], y: PX(p, q)[1], w: 24, h: 24 })), cara: (K, p, i) => K.c(...PX(p, p.pts[i]), 5, 'fa'), alto: () => 176, nombre: (p, i) => `punto ${i + 1}`, fondo: K => K.l(30, 160, 320, 160, 'lm') + K.l(30, 8, 30, 160, 'lm'),
+    sol: p => [p.raro], aviso: () => 'Ese sigue la tendencia de los demás, o falta uno: busca el que está lejos del grupo.', bien: p => p.ok, texto: p => `(${p.pts[p.raro].join(', ')})`, pie: 'Toca el punto que se sale.',
+  });
+  XG.renglones('signo-correlacion', { w: 92, x: 276 });
+  XG.renglones('fuerza-r', { w: 104, x: 274 });
+  XG.renglones('tercer-factor', { w: 130, x: 262 });
+  XG.frases('causa-o-no');
+  XG.ascensor('sube-nube', 60, 1, neutro);
+
+  // ===================================================================================== Números y Sucesiones
+  // Punto de una fracción en la recta.  params { n, d, hi }
+  XG.figura('fraccion-recta', {
+    ini: () => ({ k: 0 }), alto: () => 180, ms: 900, pie: 'Mueve el punto.', manijas: p => [{ k: 'k', min: 0, max: p.hi * p.partes, paso: 1, et: 'marcas' }], ok: (v, p) => v.k * p.d === p.n * p.partes, sol: p => ({ k: p.n * p.partes / p.d }), texto: p => `${p.n * p.partes / p.d} marcas`,
+    dib(v, K, p, f) { const T = p.hi * p.partes, X = k => 30 + k / T * 280; let h = K.l(30, 60, 310, 60, 'gr'); for (let i = 0; i <= T; i++) h += K.l(X(i), i % p.partes ? 55 : 50, X(i), i % p.partes ? 65 : 70, 'lm') + (i % p.partes ? '' : K.t(X(i), 86, i / p.partes, 's')); return h + K.c(X(v.k), 60, 7, 'ff') + K.t(170, 24, p.et, 'b') + K.f(f, K.t(170, 110, `${N(v.k)} de ${p.partes}: ${N(v.k / p.partes)}`, 'b')); },
+    aviso: (v, p) => (v.k * p.d < p.n * p.partes ? 'Ese punto vale menos.' : 'Ese punto vale más.'), bien: (v, p) => `${v.k} marcas de ${p.partes} por unidad.`,
+  });
+  // Exponente de una notación científica.  params { m, et, e, lo, hi }
+  const SUP = n => [...String(n)].map(c => (c === '-' ? '⁻' : '⁰¹²³⁴⁵⁶⁷⁸⁹'[c])).join('');
+  XG.figura('coma-cientifica', {
+    ini: () => ({ e: 0 }), alto: () => 170, ms: 900, pie: 'Mueve el exponente.', manijas: p => [{ k: 'e', min: p.lo, max: p.hi, paso: 1, et: 'exponente' }], ok: (v, p) => v.e === p.e, sol: p => ({ e: p.e }), texto: p => `${p.m} · 10${SUP(p.e)}`,
+    dib(v, K, p, f) { const e = Math.round(v.e); return K.t(170, 40, p.et, 'B') + K.t(170, 84, `${p.m} · 10${SUP(e)}`, 'B ta') + K.f(f, K.t(170, 112, e === p.e ? 'son iguales' : 'no son iguales', 's tm')); },
+    aviso: (v, p) => (Math.sign(v.e) !== Math.sign(p.e) ? 'Mira si el número es mayor que 10 o menor que 1.' : v.e > p.e ? 'Corriste la coma de más.' : 'A la coma le faltó correr.'), bien: (v, p) => `La coma corre ${Math.abs(p.e)} lugares.`,
+  });
+  XG.renglones('fraccion-decimal', { w: 76, x: 280 });
+  XG.renglones('opera-cientifica', { w: 96, x: 272 });
+  XG.frases('entre-los-dos');
+  XG.renglones('a-que-conjunto', { w: 112, x: 270 });
+  XG.ascensor('sube-fraccion', 100, 2, neutro);
+  // Cuánto se cruzan dos grupos.  params { a, b, total, A, B, fuera }
+  XG.figura('cruce-grupos', {
+    ini: () => ({ k: 0 }), alto: () => 200, ms: 1000, pie: 'Mueve los que están en los dos.', manijas: p => [{ k: 'k', min: 0, max: Math.min(p.a, p.b), paso: 1, et: 'en los dos' }], ok: (v, p) => p.a + p.b - v.k + p.fuera === p.total, sol: p => ({ k: p.a + p.b + p.fuera - p.total }), texto: p => `${p.a + p.b + p.fuera - p.total}`,
+    dib(v, K, p, f) { return K.r(20, 10, 300, 126, 'fn', 6) + K.c(130, 74, 50, 'fa') + K.c(210, 74, 50, 'fg') + K.t(100, 26, `${p.A}: ${p.a}`, 's ta') + K.t(240, 26, `${p.B}: ${p.b}`, 's tg') + K.t(170, 79, Math.round(v.k), 'b') + K.t(300, 128, p.fuera, 's tm') + K.f(f, K.t(112, 79, p.a - Math.round(v.k), 'b') + K.t(228, 79, p.b - Math.round(v.k), 'b')); },
+    aviso(v, p) { const t = p.a + p.b - v.k + p.fuera; return t > p.total ? 'Así habría más personas que el total: se están contando dos veces.' : 'Así sobrarían personas sin ubicar.'; }, bien: (v, p) => `${p.a} + ${p.b} − ${v.k} + ${p.fuera} = ${p.total}.`,
+  });
+  // Zonas de dos conjuntos.  params { pide, zonas, mira: [por zona], ok }
+  const ZN = [[104, 84, 'solo A'], [170, 84, 'A y B'], [236, 84, 'solo B'], [298, 146, 'fuera']];
+  XG.marca('pinta-zona', {
+    sitios: () => ZN.map(([x, y]) => ({ x, y, w: 44, h: 40 })), cara: (K, p, i, on) => K.t(ZN[i][0], ZN[i][1] + 6, on ? '✓' : '', 'b ta'), alto: () => 176, nombre: (p, i) => ZN[i][2], fondo: K => K.r(12, 8, 316, 160, 'fn', 8) + K.c(134, 84, 62, 'fa') + K.c(206, 84, 62, 'fg') + K.t(70, 30, 'A', 'b ta') + K.t(270, 30, 'B', 'b tg'),
+    sol: p => p.zonas, aviso(on, p) { const i = on.findIndex((x, k) => x !== p.zonas.includes(k)); return p.mira[i]; }, bien: p => p.ok, texto: p => p.zonas.map(i => ZN[i][2]).join('; '), pie: 'Toca todas las zonas que cumplen.',
+  });
+  XG.rotula('llena-zonas', {
+    slots: () => [{ x: 102, y: 84, w: 50, h: 38 }, { x: 170, y: 84, w: 46, h: 38 }, { x: 238, y: 84, w: 50, h: 38 }, { x: 290, y: 146, w: 50, h: 34 }], fichas: p => p.fichas, metas: p => p.metas, texto: p => p.metas.map((m, i) => `${ZN[i][2]}: ${m}`).join('; '), alto: () => 176, fondo: (K, p) => K.r(12, 8, 316, 160, 'fn', 8) + K.c(134, 84, 62, 'fa') + K.c(206, 84, 62, 'fg') + K.t(66, 28, p.A, 's ta') + K.t(274, 28, p.B, 's tg'),
+    aviso(q, p) { const i = p.metas.findIndex((m, k) => q[k][0] !== m); return p.trampas?.[`${i}:${q[i][0]}`] || p.mira[i]; }, bien: p => p.ok,
+  });
+  XG.renglones('cuantos-conjunto', { w: 64, x: 284 });
+  XG.frases('verdad-conjuntos');
+  XG.ascensor('sube-conjunto', 60, 1, neutro);
+  // Qué término vale lo pedido.  params { a, d (suma) | r (razón), meta, max }
+  const term = (p, n) => (p.r ? p.a * p.r ** (n - 1) : p.a + p.d * (n - 1)), cual = p => { let n = 1; while (n < p.max && Math.abs(term(p, n) - p.meta) > 1e-9) n++; return n; };
+  XG.figura('que-termino', {
+    ini: () => ({ n: 1 }), alto: () => 176, ms: 900, pie: 'Mueve el lugar.', manijas: p => [{ k: 'n', min: 1, max: p.max, paso: 1, et: 'lugar' }], ok: (v, p) => Math.abs(term(p, v.n) - p.meta) < 1e-9, sol: p => ({ n: cual(p) }), texto: p => `el lugar ${cual(p)}`,
+    dib(v, K, p, f) { const n = Math.round(v.n); return [1, 2, 3].map(i => K.r(28 + (i - 1) * 62, 30, 54, 38, 'fa', 5) + K.t(55 + (i - 1) * 62, 55, N(term(p, i)), 'b')).join('') + K.t(224, 55, '…', 'b') + K.r(246, 30, 66, 38, 'ff', 5) + K.t(279, 55, p.meta, 'b') + K.t(279, 84, `lugar ${n}`, 's tm') + K.f(f, K.t(170, 110, `en el lugar ${n} está ${N(term(p, n))}`, 's')); },
+    aviso(v, p) { return `En el lugar ${v.n} está ${N(term(p, v.n))}.`; }, bien: (v, p) => `En el lugar ${v.n} está ${p.meta}.`,
+  });
+  XG.renglones('suma-o-multiplica', { w: 108, x: 272 });
+  XG.renglones('se-acerca-a', { w: 76, x: 280 });
+  XG.renglones('lugar-lejano', { w: 76, x: 280 });
+  XG.frases('tiene-limite');
+  // Cuántas mitades hasta que falte a lo sumo 1/tope.  params { tope, max }
+  XG.figura('mitades-faltan', {
+    ini: () => ({ n: 0 }), alto: () => 176, ms: 1000, pie: 'Mueve cuántos pasos.', manijas: p => [{ k: 'n', min: 0, max: p.max, paso: 1, et: 'pasos' }], ok: (v, p) => v.n === Math.ceil(Math.log2(p.tope)), sol: p => ({ n: Math.ceil(Math.log2(p.tope)) }), texto: p => `${Math.ceil(Math.log2(p.tope))} pasos`,
+    dib(v, K, p, f) { const n = Math.round(v.n); return K.l(30, 60, 310, 60, 'lm') + K.t(30, 84, '0', 's') + K.t(310, 84, 'meta', 's') + [1, 2, 3].map(i => K.c(30 + 280 * (1 - 0.5 ** i), 60, 4, 'fa')).join('') + K.f(f, K.r(30, 54, 280 * (1 - 0.5 ** n), 12, 'fg', 2) + K.t(170, 110, n ? `falta 1/${2 ** n}` : 'falta todo', 'b')); },
+    aviso: (v, p) => (2 ** v.n < p.tope ? `Con ${v.n} todavía falta ${v.n ? `1/${2 ** v.n}` : 'todo'}.` : 'Ya alcanzaba con menos pasos.'), bien: (v) => `Falta 1/${2 ** v.n}.`,
+  });
+  XG.ascensor('sube-sucesion', 100, 2, neutro);
+
+  // ======================================================================================== Ciencia y Sociedad
+  XG.renglones('riesgo-grupos', { w: 84, x: 278 });
+  XG.renglones('solida-o-no', { w: 100, x: 276 });
+  XG.frases('buena-evidencia');
+  // Huella: cuántos para compensar.  params { gasta, cada, max, et, u }
+  XG.figura('compensa-justo', {
+    ini: () => ({ n: 0 }), alto: () => 170, ms: 900, pie: 'Mueve la cantidad.', manijas: p => [{ k: 'n', min: 0, max: p.max, paso: 1, et: p.et }], ok: (v, p) => v.n * p.cada === p.gasta, sol: p => ({ n: p.gasta / p.cada }), texto: p => `${p.gasta / p.cada} ${p.et}`,
+    dib(v, K, p, f) { const u = 270 / (p.max * p.cada), n = Math.round(v.n), w = p.cada * u; return K.r(30, 22, p.gasta * u, 26, 'ff', 2) + K.t(34, 40, `${p.gasta} ${p.u}`, 's', 'start') + Array.from({ length: n }, (_, i) => K.r(30 + i * w, 58, Math.max(2, w - 1), 26 * (0.15 + 0.85 * f), 'fa', 1)).join('') + K.f(f, K.t(170, 104, `${n} · ${p.cada} = ${n * p.cada} ${p.u}`, 'b')); },
+    aviso: (v, p) => (v.n * p.cada < p.gasta ? 'No alcanza.' : 'Sobra: se puede con menos.'), bien: (v, p) => `${v.n} por ${p.cada}: ${p.gasta} ${p.u}.`,
+  });
+  XG.ascensor('sube-evidencia', 100, 2, neutro);
 })();
 ;
 //#archivo js/games/conjuntos-escena.js
@@ -22784,5 +22457,311 @@ PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
     ['pu-ec-3', 'Una desigualdad se despeja como una ecuación; solo cambia de sentido al multiplicar o dividir por un negativo.',
       opc('El mayor número entero que cumple la desigualdad $3x - 5 < 16$ es:', ['7', '6', '5', '8'], 1,
         '$3x < 21$, así que $x < 7$: el mayor entero es 6, porque el 7 no cumple.', 'Despeja y fíjate si el extremo está incluido o no.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-conjuntos.js
+// Preuniversitario · mundo 14 «Conjuntos»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo). Reutiliza los
+// juegos de conjuntos de Álgebra (pinta-venn, reparte-venn, descifra-zona, mueve-circulos, orbita-conjuntos) con datos nuevos.
+PU_JUEGOS.push(({ setExam }) => {
+  setExam('pu-conjuntos', 'Conjuntos', [
+    ['pu-cj-1', 'Cada operación es un grupo de zonas del diagrama.',
+      play('pinta-venn', 'Operación', { rounds: [{ text: '(A ∪ B) − C', n: 3, f: (a, b, c) => (a || b) && !c }] }, 'Lo de A o B que no toca C.', { hint: 'Zona por zona.' })],
+    ['pu-cj-1', 'Con tres conjuntos se llena del centro hacia afuera.',
+      play('encuesta-tres', 'Tres', { rounds: [{ labels: ['A', 'B', 'C'], z: { abc: 1, ab: 2, ac: 3, bc: 2, a: 4, b: 5, c: 3, none: 2 } }] }, 'Primero el centro (1), luego cada pareja menos el centro y después cada conjunto solo.', { hint: 'Centro.' })],
+    ['pu-cj-2', '$n(A \\cup B) = n(A) + n(B) - n(A \\cap B)$.',
+      play('solapa-barras', 'Solapa', { rounds: [{ labels: ['A', 'B'], total: 40, a: 22, b: 15, none: 9 }] }, 'Unión 31; los dos: $37 - 31 = 6$.', { hint: 'Doble conteo.' })],
+    ['pu-cj-2', 'Los de ninguno son el total menos la unión.',
+      play('cinta-ecuacion', 'Incógnita', { rounds: [{ say: 'De 30: 18 en A, 14 en B, 4 en ninguno. Los dos son x', parts: [[-1, 18, 'solo A'], [1, 0, 'los dos'], [-1, 14, 'solo B'], [0, 4, 'ninguno']], total: 30, lo: 0, hi: 14 }] }, '$36 - x = 30$: $x = 6$.', { hint: 'Solo A.' })],
+  ]);
+});
+
+// Mundo 14 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/conjuntos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-cj-1', [
+    play('ubica-cada', 'A son los **múltiplos de 3** y B los **múltiplos de 4**. Lleva cada número a su zona.', { a: 'A: de 3', b: 'B: de 4', pr: 'revisa si es múltiplo de 3 y si es múltiplo de 4.', els: [{ t: '9', z: 0 }, { t: '24', z: 1 }, { t: '20', z: 2 }, { t: '14', z: 3 }, { t: '36', z: 1 }] },
+      '9 solo es múltiplo de 3; 20 solo de 4; 24 y 36, de los dos; 14, de ninguno.',
+      { hint: 'A cada número hazle dos preguntas: ¿está en A?, ¿está en B?' }),
+    play('pinta-operacion', 'Pinta $A^c \\cup B$: lo que **no** está en A, junto con todo B.', { zonas: ['o', 'i', 'b'], texto: 'afuera, los dos y solo B', mira: { o: 'Mira afuera: ¿está en el complemento de A?', a: 'Mira solo A: ¿está fuera de A, o en B?', i: 'Mira el centro: está en B.', b: 'Mira solo B: está en B.' }, ok: 'Solo queda sin pintar lo que está en A y no en B.' },
+      '$A^c$ es solo B y afuera. Al unirle todo B entra también el centro. Queda por fuera solo A.',
+      { hint: 'Pinta primero lo que no está en A y después agrega lo que falte de B.' }),
+    play('nombra-dibujo', 'Pon a cada dibujo la operación que pinta. ($A^c$ es el complemento.)', { ks: [['b'], ['a', 'o'], ['a', 'i', 'o'], ['o']], metas: ['B − A', 'Bᶜ', 'A ∪ Bᶜ', '(A ∪ B)ᶜ'], fichas: ['B − A', 'Bᶜ', 'A ∪ Bᶜ', '(A ∪ B)ᶜ', 'A − B', 'Aᶜ'],
+      mira: ['Está pintado lo de B que no toca a A.', 'Está pintado todo lo que no es B.', 'Está pintado todo, menos la luna de B.', 'Está pintado solo lo de afuera de los dos.'], trampas: { '0:A − B': 'Al revés: lo pintado es de B.', '0:Aᶜ': 'Aᶜ también pinta lo de afuera.', '1:Aᶜ': 'Aᶜ pinta lo que no está en A.', '1:A ∪ Bᶜ': 'A ∪ Bᶜ pinta también el centro.', '3:Aᶜ': 'Aᶜ pinta también la luna de B.' }, ok: 'Si afuera está pintado, hay un complemento.' },
+      'Luna de B: $B - A$. Todo menos B: $B^c$. Al unirle A entra el centro: $A \\cup B^c$. Solo afuera: $(A \\cup B)^c$.',
+      { hint: 'Fíjate primero si está pintado lo de afuera: eso avisa que hay un complemento.' }),
+    play('zonas-y-total', 'A tiene **17** elementos, en común hay **6** y la unión tiene **25**. Completa.', { et: ['solo A', 'solo B', 'n(B)'], metas: ['11', '8', '14'], fichas: ['11', '8', '14', '17', '19', '25', '23'],
+      mira: ['A los de A quítales los comunes.', 'A la unión quítale todo A.', 'B tiene los suyos solos y los comunes.'], trampas: { '0:17': 'Esos son todos los de A, con los comunes.', '1:19': 'Faltó quitar los que son solo de A.', '2:25': 'Eso tiene la unión.', '2:23': 'Esos son todos los de A más los comunes otra vez.' }, ok: '17 + 14 − 6 = 25.' },
+      'Solo A: $17 - 6 = 11$. Solo B: $25 - 17 = 8$. Todo B: $8 + 6 = 14$.',
+      { hint: 'La unión son tres pedazos: solo A, lo común y solo B.' }),
+    play('ciertas-siempre', 'A son los pares, B los impares y C los múltiplos de 4. Toca **todas** las que son ciertas.', { casos: [{ t: 'A ∩ B no tiene elementos', si: true }, { t: 'A − C no tiene elementos', no: 'El 2 está en A y no en C: A − C sí tiene elementos.' }, { t: 'A ∪ C es igual a A', si: true }, { t: 'A ∩ C es igual a A', no: 'El 2 está en A pero no en C: A ∩ C no es todo A.' }, { t: 'C − A no tiene elementos', si: true }], falta: 'Falta otra: todo múltiplo de 4 es par, y ningún par es impar.', ok: 'C está dentro de A, y B no toca a ninguno.' },
+      'Ningún número es par e impar. Todo múltiplo de 4 es par: C está dentro de A. Pero hay pares, como el 2, que no son múltiplos de 4.',
+      { hint: 'Dibuja el círculo de C con respecto al de A, y busca un número que tumbe cada frase.' }),
+    play('elementos-de', 'U son los números del 1 al 10, $A = \\{1, 2, 3, 4, 6\\}$ y $B = \\{2, 4, 6, 8, 10\\}$. Toca los elementos de $A - B^c$.', { nums: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], A: [1, 2, 3, 4, 6], si: x => [1, 2, 3, 4, 6].includes(x) && [2, 4, 6, 8, 10].includes(x), ok: 'Quitar lo que está fuera de B deja lo que está en A y en B.' },
+      '$B^c$ son los que no están en B: 1, 3, 5, 7 y 9. Al quitarlos de A quedan 2, 4 y 6: es $A \\cap B$.',
+      { hint: 'Escribe primero los que no están en B y después quítalos de A.' }),
+    play('misma-zona', '¿Cuáles dan **lo mismo** que $A - B$? Toca todas.', { casos: [{ t: 'A ∩ Bᶜ', si: true }, { t: 'B − A', no: 'B − A es la otra luna.' }, { t: 'A − (A ∩ B)', si: true }, { t: 'A ∪ Bᶜ', no: 'A ∪ Bᶜ también trae el centro y lo de afuera.' }, { t: '(A ∪ B) − B', si: true }], falta: 'Falta otra: pinta cada una y compárala con la luna de A.', ok: 'Todas pintan solo la luna de A.' },
+      'Estar en A y no en B; quitarle a A lo común; y quitarle B a la unión dejan la misma zona.',
+      { hint: 'Pinta en un papel las zonas de cada una, por partes.' }),
+    play('sube-union', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'A tiene **15** elementos, B tiene **12** y en común hay **4**. ¿Cuántos tiene $A \\cup B$?', r: 23, c: '15 + 12 - 4', e: { 27: 'Los comunes se contaron dos veces.', 19: 'Los comunes se quitan una sola vez.' } },
+      { q: 'La unión tiene **26**, A tiene **19** y B tiene **15**. ¿Cuántos hay en **común**?', r: 8, c: '19 + 15 - 26', e: { 7: 'Eso es solo B: 26 − 19.', 11: 'Eso es solo A: 26 − 15.' } },
+      { q: 'El universo tiene **35**, A tiene **16** y $A - B$ tiene **10**. ¿Cuántos tiene $(A \\cap B)^c$?', r: 29, c: '35 - 6', e: { 19: 'Eso es el complemento de A.', 25: 'Quitaste A − B: se quita lo común.' } }] },
+      '$15 + 12 - 4 = 23$. $34 - 26 = 8$. En común hay $16 - 10 = 6$ y fuera de eso, 29.',
+      { hint: 'Dibuja los círculos y escribe primero lo del centro.' }),
+    sol('Sean $A = \\{1, 2, 3, 4, 5, 6\\}$ y $B = \\{4, 5, 6, 7, 8\\}$, y el universo $U$ formado por los números del 1 al 10. ¿Cuántos elementos tienen $A \\cap B$, $A \\cup B$, $A - B$ y $(A \\cup B)^c$?',
+      ['$A \\cap B$ son los que están en los dos: 4, 5 y 6. Tiene [[3]] elementos', '$A \\cup B$ junta todo sin repetir: del 1 al 8. Tiene [[8]] elementos', '$A - B$ son los de A que no están en B: 1, 2 y 3. Tiene [[3]] elementos', '$(A \\cup B)^c$ es lo que queda del universo: 9 y 10. Tiene [[2]] elementos'],
+      ['11', '5', '10'],
+      'La unión no suma los tamaños (serían 11): los tres elementos comunes se cuentan una sola vez. El complemento se toma siempre respecto al universo.',
+      'Dibuja los dos círculos y escribe primero los elementos comunes en el centro.'),
+    err('En un diagrama de Venn de dos conjuntos, A tiene 12 elementos, B tiene 9 y la intersección tiene 4. ¿Cuántos elementos tiene $A \\cup B$?',
+      ['Solo en A: $12 - 4 = 8$', 'Solo en B: $9 - 4 = 5$', 'En la unión: $12 + 9 = 21$'], 2,
+      ['En la unión: $8 + 4 + 5 = 17$', 'En la unión: $12 + 9 + 4 = 25$', 'En la unión: $8 + 5 = 13$'],
+      'La unión son las tres zonas: solo A, los dos y solo B: $8 + 4 + 5 = 17$. Al sumar $12 + 9$ los 4 del centro quedan contados dos veces.',
+      'Los dos primeros pasos ya separaron las zonas. ¿Cuántas zonas tiene la unión?'),
+    opc('Si $A = \\{2, 4, 6, 8\\}$ y $B = \\{3, 6, 9\\}$, entonces el conjunto $(A \\cup B) - (A \\cap B)$ tiene:',
+      ['7 elementos', '6 elementos', '5 elementos', '1 elemento'], 2,
+      'La unión es $\\{2, 3, 4, 6, 8, 9\\}$ y la intersección es $\\{6\\}$. Al quitar el 6 quedan 5 elementos.',
+      'Halla primero la unión y la intersección, y después quita una de la otra.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/conjuntos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-cj-2', [
+    play('llena-encuesta', 'De **70** vecinos, **38** tienen bicicleta, **29** tienen moto y **12** tienen las dos. Llena las cuatro zonas.', { a: 'bicicleta', b: 'moto', metas: ['26', '12', '17', '15'], fichas: ['26', '12', '17', '15', '38', '29', '3'],
+      mira: ['De los de bicicleta, quita los que tienen las dos.', 'En el centro van los que tienen las dos.', 'De los de moto, quita los que tienen las dos.', 'A 70 réstale las tres zonas de adentro.'], trampas: { '0:38': 'Entre esos 38 están los que también tienen moto.', '2:29': 'Entre esos 29 están los que también tienen bicicleta.', '3:3': 'Restaste 38 y 29: los del centro se quitaron dos veces.' }, ok: '26 + 12 + 17 + 15 = 70.' },
+      'Centro 12; solo bicicleta $38 - 12 = 26$; solo moto $29 - 12 = 17$; afuera $70 - 55 = 15$.',
+      { hint: 'Empieza por el centro: esos vecinos están contados en los dos grupos.' }),
+    play('corre-solape', 'De **80** personas, **47** nadan, **41** trotan y **8** no hacen ninguna de las dos. Solapa las barras: ¿cuántas hacen **las dos** cosas?', { T: 80, a: 47, b: 41, n: 8, na: 'nadan', nb: 'trotan' },
+      'Hacen alguna $80 - 8 = 72$. $47 + 41 = 88$: sobran $88 - 72 = 16$, las que hacen las dos cosas.',
+      { hint: '¿Cuántas personas hacen alguna de las dos? Las dos barras juntas deben cubrir justo eso.' }),
+    play('tres-circulos', 'Los tres gustos los tienen **3**. Cine y teatro, **9**; cine y danza, **7**; teatro y danza, **8** (contando a los 3). En total: cine **22**, teatro **24**, danza **20**. Llena las seis zonas.', { e: ['cine', 'teatro', 'danza'], c: '3', metas: ['6', '4', '5', '9', '10', '8'], fichas: ['6', '4', '5', '9', '10', '8', '7', '13', '22'],
+      mira: ['Cine y teatro, quitando el centro.', 'Cine y danza, quitando el centro.', 'Teatro y danza, quitando el centro.', 'Al total de cine quítale las tres zonas ya llenas de su círculo.', 'Al total de teatro quítale las tres zonas ya llenas de su círculo.', 'Al total de danza quítale las tres zonas ya llenas de su círculo.'], trampas: { '0:9': 'En esos 9 están los 3 del centro.', '1:7': 'En esos 7 están los 3 del centro.', '2:8': 'En esos 8 están los 3 del centro.', '3:22': 'Faltó quitar los que tienen otro gusto.' }, ok: '9 + 6 + 4 + 3 = 22, 10 + 6 + 5 + 3 = 24 y 8 + 4 + 5 + 3 = 20.' },
+      'Parejas sin el centro: 6, 4 y 5. Solo cine $22 - 13 = 9$; solo teatro $24 - 14 = 10$; solo danza $20 - 12 = 8$.',
+      { hint: 'El centro ya está. Sigue con las parejas y deja para el final las zonas de un solo gusto.' }),
+    play('pinta-tres', 'Toca las zonas de quienes cumplen: «les gusta **C** y **al menos otro** de los dos».', { e: ['A', 'B', 'C'], zonas: [1, 2, 6], texto: 'A y C, B y C, y el centro', mira: ['Los de A y B que no tocan C: no les gusta C.', 'Mira la zona de A y C: les gusta C y otro más.', 'Mira la zona de B y C: les gusta C y otro más.', 'A los de solo A no les gusta C.', 'A los de solo B no les gusta C.', 'A los de solo C no les gusta ningún otro.', 'Mira el centro: les gustan los tres.', 'Afuera no les gusta ninguno.'], ok: 'Al menos otro es uno más o los dos.' },
+      'Deben estar dentro de C y tocar A, B o los dos: las zonas AC, BC y el centro.',
+      { hint: 'Mira solo el círculo de C: ¿cuáles de sus cuatro zonas tocan a otro círculo?' }),
+    play('lee-encuesta', 'El diagrama ya está lleno. ¿Cuántas personas cumplen cada frase?', { z: ['12', '7', '9', '4'], et: ['al menos uno', 'exactamente uno', 'no tienen A', 'en total'], metas: ['28', '21', '13', '32'], fichas: ['28', '21', '13', '32', '28', '19', '9'],
+      mira: ['Suma todas las zonas que están dentro de algún círculo.', 'Suma las dos lunas, sin el centro.', 'Suma las zonas que quedan por fuera del círculo A.', 'Suma las cuatro zonas.'], trampas: { '0:21': 'Los del centro también tienen al menos uno.', '1:28': 'Los del centro tienen dos, no uno.', '2:9': 'Los de afuera tampoco tienen A.', '3:28': 'Faltan los de afuera.' }, ok: 'Cada frase junta unas zonas.' },
+      '$12 + 7 + 9 = 28$; $12 + 9 = 21$; $9 + 4 = 13$; $28 + 4 = 32$.',
+      { hint: 'Señala con el dedo las zonas que cumplen la frase y súmalas.' }),
+    play('desde-los-totales', 'De **65** personas, **38** tienen A, **33** tienen B y **7** no tienen ninguno. Completa.', { a: 'A: 38', b: 'B: 33', et: ['alguno', 'solo B', 'los dos', 'solo A'], metas: ['58', '20', '13', '25'], fichas: ['58', '20', '13', '25', '33', '38', '6', '71'],
+      mira: ['Quita las que no tienen ninguno.', 'De las que tienen alguno, quita las que tienen A.', 'De las de B, quita las que solo tienen B.', 'De las de A, quita las que tienen los dos.'], trampas: { '0:71': 'Sumaste las dos listas: hay personas repetidas, y solo son 65.', '1:33': 'Entre esas 33 hay algunas que también tienen A.', '2:6': 'Comparaste con las 65, pero 7 no tienen ninguno.', '3:38': 'Entre esas 38 hay algunas que también tienen B.' }, ok: '25 + 13 + 20 + 7 = 65.' },
+      'Alguno: $65 - 7 = 58$. Solo B: $58 - 38 = 20$. Los dos: $33 - 20 = 13$. Solo A: $38 - 13 = 25$.',
+      { hint: 'Si a las que tienen alguno les quitas todas las de A, ¿quiénes quedan?' }),
+    play('porciento-comun', 'El **65 %** lee, el **55 %** dibuja y el **15 %** no hace ninguna de las dos. Completa los porcentajes («algo» es al menos una de las dos).', { a: 'lee', b: 'dibuja', et: ['algo', 'las dos', 'solo lee', 'solo una'], metas: ['85', '35', '30', '50'], fichas: ['85', '35', '30', '50', '20', '120', '10', '85'],
+      mira: ['Quita de 100 los que no hacen nada.', 'Las dos listas suman más que los que hacen algo: ¿cuánto sobra?', 'A los que leen quítales los que hacen las dos.', 'Los que solo leen y los que solo dibujan.'], trampas: { '0:120': 'Sumaste las dos listas: pasan de 100 porque hay repetidos.', '1:20': 'Comparaste con 100, pero el 15 % no hace nada.', '2:10': 'Eso le lleva una lista a la otra.', '3:85': 'Ahí también están los que hacen las dos.' }, ok: '30 + 35 + 20 + 15 = 100.' },
+      '$100 - 15 = 85$; $65 + 55 - 85 = 35$; $65 - 35 = 30$; solo dibuja 20: solo una, 50.',
+      { hint: 'Con porcentajes es igual: el total es 100.' }),
+    play('sube-encuesta', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De **50** personas, **31** tienen A, **24** tienen B y **6** ninguno. ¿Cuántas tienen **los dos**?', r: 11, c: '55 - 44', e: { 5: 'Compara con las que tienen algo, no con las 50.' } },
+      { q: 'De **40** personas, **18** tienen A, **15** tienen B y **7** los dos. ¿Cuántas **no tienen ninguno**?', r: 14, c: '40 - 26', e: { 7: 'Los que tienen los dos se quitaron dos veces.', 26: 'Esas tienen alguno.' } },
+      { q: 'A tiene **20**, B **18** y C **15**. Parejas: A y B **8**, A y C **6**, B y C **5**; los tres **2**. ¿Cuántas personas tienen **alguno**?', r: 36, c: '53 - 19 + 2', e: { 34: 'A los del centro se los quitó de más: súmalos otra vez.', 32: 'Los del centro se suman, no se restan.', 53: 'Los que están en varias listas se contaron varias veces.' } }] },
+      '$55 - 44 = 11$. $18 + 15 - 7 = 26$ y $40 - 26 = 14$. $53 - 19 + 2 = 36$.',
+      { hint: 'Al sumar las listas se repiten los que están en varias.' }),
+    sol('En un curso, el 70 % de los estudiantes aprobó matemáticas, el 60 % aprobó física y el 10 % no aprobó ninguna de las dos materias. ¿Qué porcentaje aprobó las dos materias? ¿Qué porcentaje aprobó solo matemáticas?',
+      ['Aprobó al menos una materia el $100 - 10 =$ [[90]] % del curso', 'Las dos listas suman $70 + 60 =$ [[130]] %', 'Lo que sobra son los que se contaron dos veces: $130 - 90 =$ [[40]] % aprobó las dos', 'Solo matemáticas: $70 - 40 =$ [[30]] %'],
+      ['20', '100', '10'],
+      'La suma de las dos listas pasa de la unión porque los que aprobaron las dos están en ambas. Ese exceso es justo la intersección.',
+      'Quita primero a los que no aprobaron nada: ¿qué porcentaje aprobó al menos una?'),
+    err('De 60 personas, 35 leen prensa, 28 oyen radio y 15 hacen las dos cosas. ¿Cuántas personas no hacen ninguna de las dos?',
+      ['Solo leen prensa: $35 - 15 = 20$', 'Solo oyen radio: $28 - 15 = 13$', 'Hacen al menos una de las dos: $20 + 13 = 33$', 'No hacen ninguna: $60 - 33 = 27$'], 2,
+      ['Hacen al menos una de las dos: $20 + 13 + 15 = 48$', 'Hacen al menos una de las dos: $35 + 28 = 63$', 'Hacen al menos una de las dos: $35 + 28 + 15 = 78$'],
+      'Los que hacen las dos cosas también hacen «al menos una»: la unión tiene tres zonas, $20 + 13 + 15 = 48$. No hacen ninguna 12 personas.',
+      '¿En cuál zona del diagrama están las 15 personas que hacen las dos cosas? ¿Se contaron?'),
+    opc('En un grupo de 40 turistas, 22 visitaron el museo, 18 visitaron el jardín botánico y 6 no visitaron ninguno de los dos sitios. La cantidad de turistas que visitó exactamente uno de los dos sitios es:',
+      ['34', '6', '22', '28'], 3,
+      'Visitaron algún sitio $40 - 6 = 34$. Como $22 + 18 = 40$, los dos sitios los visitaron 6. Exactamente uno: $34 - 6 = 28$.',
+      'Halla primero cuántos visitaron los dos sitios; «exactamente uno» deja por fuera a esos.'),
+  ]);
+
+  addExam('pu-conjuntos', [
+    ['pu-cj-1', 'En la unión, los elementos comunes se cuentan una sola vez.',
+      opc('Si el conjunto A tiene 10 elementos, el conjunto B tiene 7 y $A \\cap B$ tiene 3, entonces $A \\cup B$ tiene:', ['17 elementos', '14 elementos', '20 elementos', '11 elementos'], 1,
+        '$10 + 7 - 3 = 14$.', 'Suma los dos conjuntos y quita lo que se contó dos veces.')],
+    ['pu-cj-2', 'Lo que sobra al sumar las dos listas son los que están en las dos.',
+      opc('De 30 estudiantes, 18 juegan baloncesto, 15 juegan voleibol y 5 no juegan ninguno de los dos. La cantidad de estudiantes que juega los dos deportes es:', ['8', '3', '13', '5'], 0,
+        'Juegan algo $30 - 5 = 25$. Como $18 + 15 = 33$, sobran 8.', 'Quita primero a los que no juegan nada.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-numeros.js
+// Preuniversitario · mundo 15 «Teoría de números»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+PU_JUEGOS.push(({ setExam }) => {
+
+  setExam('pu-numeros', 'Teoría de números', [
+    ['pu-nu-1', 'Todo número se escribe como producto de primos.',
+      play('arbol-factores', 'Factores', { rounds: [{ n: 72 }] }, '$72 = 2^3 \\cdot 3^2$.', { hint: 'Divide por 2.' })],
+    ['pu-nu-1', 'Por 3 o por 9: la suma de las cifras.',
+      play('cifra-faltante', 'Cifra', { rounds: [{ tpl: '5_4', by: 3 }] }, '$9 + x$ múltiplo de 3: 0, 3, 6 o 9.', { hint: 'Suma.' })],
+    ['pu-nu-2', 'El MCM es cuándo vuelven a coincidir.',
+      play('ritmos-mcm', 'MCM', { rounds: [{ a: 4, b: 10, max: 30 }] }, 'En 20.', { hint: 'Coinciden.' })],
+    ['pu-nu-2', 'El MCD es el trozo más grande que reparte sin sobrar.',
+      play('corta-mcd', 'MCD', { rounds: [{ a: 24, b: 16 }] }, 'Baldosas de 8.', { hint: 'Divide a los dos.' })],
+    ['pu-nu-3', 'La última cifra de las potencias se repite.',
+      play('ultima-cifra', 'Última cifra', { rounds: [{ a: 8, n: 17 }] }, 'Ciclo 8, 4, 2, 6; residuo 1: 8.', { hint: 'Ciclo.' })],
+    ['pu-nu-3', 'Lo que cae en la posición n depende del residuo.',
+      play('ciclo-colores', 'Collar', { rounds: [{ cyc: ['coral', 'sky', 'mint', 'sun'], N: 50 }] }, '$50 = 4 \\cdot 12 + 2$: la segunda.', { hint: 'Residuo.' })],
+  ]);
+});
+
+// Mundo 15 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/numeros-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-nu-1', [
+    play('toca-primos', '¿Cuáles son **primos**? Toca todos.', { nums: [1, 2, 29, 33, 49, 61], ok: 'Cada uno tiene exactamente dos divisores: 1 y él.' },
+      'El 2, el 29 y el 61 solo se acomodan en una fila. $33 = 3 \\cdot 11$, $49 = 7 \\cdot 7$ y el 1 tiene un solo divisor.',
+      { hint: 'Intenta acomodar cada cantidad en filas de 2, de 3, de 5 y de 7 sin que sobre.' }),
+    play('arbol-primos', 'Descompón el **132** dividiendo siempre entre el primo **más pequeño** que se pueda: a la izquierda el primo y a la derecha lo que queda.', { n: '132', metas: ['2', '66', '2', '33', '3', '11'], fichas: ['2', '66', '2', '33', '3', '11', '6', '44', '4'],
+      mira: ['132 es par.', 'Divide 132 entre el primo que pusiste.', 'Lo que queda vuelve a ser par.', 'Divide otra vez.', 'Ya no es par: prueba con el primo que sigue.', 'Divide por última vez: debe quedar un primo.'], trampas: { '0:3': 'El 3 divide, pero hay un primo más pequeño.', '0:4': 'El 4 no es primo.', '0:6': 'El 6 no es primo.', '1:44': 'Eso es 132 entre 3.', '2:6': 'El 6 no es primo.', '2:3': 'El 3 divide, pero hay un primo más pequeño.' }, ok: '132 = 2 · 2 · 3 · 11.' },
+      '$132 = 2 \\cdot 66$, $66 = 2 \\cdot 33$ y $33 = 3 \\cdot 11$: $132 = 2^2 \\cdot 3 \\cdot 11$.',
+      { hint: 'Prueba primero con 2; cuando ya no se pueda, sigue con 3, 5, 7…' }),
+    play('opciones-divisor', '$144 = 2^4 \\cdot 3^2$. ¿De cuántas maneras puede un divisor llevar el **2**, de cuántas el **3**, y cuántos divisores hay?', { s: '2⁴ · 3²', et: ['el 2', 'el 3', 'divisores'], ops: ['·', '='], metas: ['5', '3', '15'], fichas: ['5', '3', '15', '4', '2', '8', '6'],
+      mira: ['Cuenta desde ninguna vez hasta su exponente.', 'Cuenta desde ninguna vez hasta su exponente.', 'Cada manera del 2 va con cada manera del 3.'], trampas: { '0:4': 'También puede no llevar ningún 2.', '1:2': 'También puede no llevar ningún 3.', '2:8': 'Las opciones se multiplican, no se suman.' }, ok: 'Exponente más uno, y se multiplica.' },
+      'El 2: de 0 a 4 veces, 5 maneras. El 3: de 0 a 2 veces, 3 maneras. $5 \\cdot 3 = 15$ divisores.',
+      { hint: 'Un divisor puede llevar un primo cero veces: eso también es una manera.' }),
+    play('cifra-que-falta', 'Al número **27_** se le borró la última cifra. Se sabe que es divisible entre **6**. Toca todas las cifras que sirven.', { a: '2 7', by: 6, ok: 'Terminan en par y las cifras suman un múltiplo de 3.' },
+      'Debe ser par y sus cifras sumar un múltiplo de 3: $9 + x$ con $x$ par. Sirven 0 y 6.',
+      { hint: 'Entre 6 es cumplir con 2 y con 3 a la vez.' }),
+    play('tabla-criterios', 'Sin dividir: toca las casillas en las que la división es **exacta**.', { f: [648, 735, 1332], c: [3, 4, 5, 9], ok: 'Suma de cifras para 3 y 9; dos últimas para 4; última para 5.' },
+      '648: suma 18 y termina en 48: entre 3, 4 y 9. 735: suma 15 y termina en 5: entre 3 y 5. 1332: suma 9 y termina en 32: entre 3, 4 y 9.',
+      { hint: 'Para 3 y 9 suma las cifras; para 4 mira las dos últimas; para 5, la última.' }),
+    play('siempre-multiplo', 'Un número es múltiplo de **12**, pero no se sabe cuál. ¿Qué es cierto **siempre**? Toca todas.', { casos: [{ t: 'es múltiplo de 4', si: true }, { t: 'es múltiplo de 24', no: 'El 12 es múltiplo de 12 y no de 24.' }, { t: 'es múltiplo de 6', si: true }, { t: 'es múltiplo de 8', no: 'El 12 es múltiplo de 12 y no de 8.' }, { t: 'es divisible entre 3', si: true }], falta: 'Falta otra: los divisores de 12 dividen a todos sus múltiplos.', ok: 'Todo divisor de 12 divide también a sus múltiplos.' },
+      'Un múltiplo de 12 es $2 \\cdot 2 \\cdot 3$ por algo: lleva dentro el 3, el 4 y el 6. El 8 y el 24 piden otro 2 que puede no estar.',
+      { hint: 'Escribe 12 en primos. ¿Cuáles de esos números se arman con ellos?' }),
+    play('basta-con', '¿En cuáles **basta** revisar esos dos números para estar seguro de que la división es exacta? Toca todas.', { casos: [{ t: 'entre 15: con el 3 y el 5', si: true }, { t: 'entre 12: con el 2 y el 6', no: 'El 18 cumple con 2 y con 6, pero no es divisible entre 12.' }, { t: 'entre 12: con el 3 y el 4', si: true }, { t: 'entre 8: con el 2 y el 4', no: 'El 12 cumple con 2 y con 4, pero no es divisible entre 8.' }, { t: 'entre 18: con el 2 y el 9', si: true }], falta: 'Falta otra: sirve si los dos no comparten primos y, multiplicados, dan el número grande.', ok: 'No comparten primos y, multiplicados, dan el número grande.' },
+      '3 y 5, 3 y 4, 2 y 9 no comparten primos y, multiplicados, dan 15, 12 y 18. El 2 ya está dentro del 6 y del 4: no agrega nada.',
+      { hint: 'Busca un número que cumpla los dos y no cumpla el grande. Si lo hay, no basta.' }),
+    play('sube-divisores', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '$280 = 2^3 \\cdot 5 \\cdot 7$. ¿Cuántos divisores tiene?', r: 16, c: '4 \\cdot 2 \\cdot 2', e: { 3: 'Multiplicaste los exponentes: a cada uno se le suma 1.', 8: 'Las opciones se multiplican, no se suman.' } },
+      { q: '¿Cuál es el **mayor primo** que divide a **138**?', r: 23, c: '138 \\div 6', e: { 3: 'Divide, pero hay otro mayor.', 2: 'Divide, pero hay otro mayor.' } },
+      { q: '¿Cuál es el **mayor primo** menor que **40**?', r: 37, c: '1 \\cdot 37', e: { 39: 'El 39 es 3 · 13.' } }] },
+      '$4 \\cdot 2 \\cdot 2 = 16$. $138 = 2 \\cdot 3 \\cdot 23$. El 39 es $3 \\cdot 13$ y el 38 es par: 37.',
+      { hint: 'Descompón en primos, y para saber si uno lo es usa los criterios.' }),
+    sol('¿Cuántos divisores positivos tiene el número 200?',
+      ['$200 = 8 \\cdot 25 = 2^3 \\cdot 5^2$: el exponente del 2 es [[3]] y el del 5 es [[2]]', 'Un divisor puede llevar el 2 de [[4]] maneras (0, 1, 2 o 3 veces) y el 5 de 3 maneras', 'Divisores: $4 \\cdot 3 =$ [[12]]'],
+      ['5', '6', '10'],
+      'Los divisores se arman escogiendo cuántas veces va cada primo, desde ninguna hasta su exponente: por eso a cada exponente se le suma 1 y los resultados se multiplican.',
+      'Descompón el número en primos. Un divisor es una parte de esa descomposición.'),
+    err('El número de cuatro cifras $5\\,A\\,3\\,2$ es divisible por 3. ¿Cuántos valores distintos puede tomar la cifra A?',
+      ['Un número es divisible por 3 si la suma de sus cifras lo es', 'Las cifras conocidas suman $5 + 3 + 2 = 10$', 'Hace falta que $10 + A$ sea múltiplo de 3: solo sirve $A = 2$', 'La cifra A puede tomar 1 valor'], 2,
+      ['Hace falta que $10 + A$ sea múltiplo de 3: sirven $A = 2$, $A = 5$ y $A = 8$', 'Hace falta que $10 + A$ sea múltiplo de 3: sirven $A = 0$, $3$, $6$ y $9$', 'Hace falta que $10 + A$ sea múltiplo de 3: sirve cualquier A impar'],
+      'Hay varios múltiplos de 3 al alcance: 12, 15 y 18. Las cifras que sirven son 2, 5 y 8: tres valores.',
+      'Una cifra va de 0 a 9. ¿Hasta qué múltiplos de 3 puede llegar la suma?'),
+    opc('El menor número primo mayor que 50 es:',
+      ['51', '57', '53', '59'], 2,
+      '$51 = 3 \\cdot 17$ no es primo. El 52 es par. El 53 no tiene divisores: basta probar con 2, 3, 5 y 7.',
+      'Revisa los candidatos en orden y aplica las reglas de divisibilidad: las cifras de 51 suman 6.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/numeros-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-nu-2', [
+    play('saltos-cada-una', 'Dos ranas salen juntas: una avanza **10** por salto y la otra **14**. Mueve los saltos de cada una hasta el **primer** lugar en que las dos coinciden.', { a: 10, b: 14, max: 14 },
+      'El primer múltiplo común de 10 y 14 es 70: 7 saltos de 10 y 5 de 14.',
+      { hint: 'El lugar debe ser múltiplo de 10 y de 14. ¿Cuál es el primero?' }),
+    play('paquetes-iguales', 'Hay **54** galletas y **72** dulces. Se arman bolsas **iguales**, sin que sobre nada y con la **mayor** cantidad posible de bolsas. ¿Cuántas bolsas, y qué lleva cada una?', { et: ['bolsas', 'galletas c/u', 'dulces c/u'], metas: ['18', '3', '4'], fichas: ['18', '3', '4', '9', '6', '216', '8'],
+      mira: ['El número de bolsas debe dividir a 54 y a 72, y ser el mayor.', 'Reparte las 54 galletas en las bolsas.', 'Reparte los 72 dulces en las bolsas.'], trampas: { '0:9': 'Reparte exacto, pero se pueden más bolsas.', '0:6': 'Reparte exacto, pero se pueden más bolsas.', '0:216': 'No puede haber más bolsas que galletas.' }, ok: '18 · 3 = 54 y 18 · 4 = 72.' },
+      '$54 = 2 \\cdot 3^3$ y $72 = 2^3 \\cdot 3^2$: el MCD es $2 \\cdot 3^2 = 18$. Van 3 galletas y 4 dulces en cada bolsa.',
+      { hint: 'Repartir sin que sobre es buscar divisores comunes.' }),
+    play('exponentes-mcd', 'Pon los exponentes del MCD y del MCM.', { n: ['2² · 3³ · 5', '2⁴ · 3 · 7'], r: '· 5 · 7', metas: ['2', '1', '4', '3'], fichas: ['2', '1', '4', '3', '6', '0', '2'],
+      mira: ['El MCD lleva solo los doses que tienen los dos.', 'El MCD lleva solo los treses que tienen los dos.', 'El MCM lleva los doses del que más tiene.', 'El MCM lleva los treses del que más tiene.'], trampas: { '0:4': 'El primero no tiene tantos doses.', '1:3': 'El segundo no tiene tantos treses.', '2:6': 'No se suman: basta con los del que más tiene.', '2:2': 'Con esos no alcanza para el segundo.' }, ok: 'MCD con el menor exponente; MCM con el mayor.' },
+      'MCD: $2^2 \\cdot 3$. MCM: $2^4 \\cdot 3^3 \\cdot 5 \\cdot 7$.',
+      { hint: 'El MCD cabe en los dos; en el MCM caben los dos.' }),
+    play('cual-de-los-dos', '¿Cada pregunta se resuelve con el **MCD** o con el **MCM**?', { et: ['baldosa más grande para 10 × 16', 'menor cuadrado, fichas de 10 × 16', 'cuándo suenan dos alarmas juntas', 'mayor número de grupos iguales'], metas: ['MCD', 'MCM', 'MCM', 'MCD'], fichas: ['MCD', 'MCD', 'MCD', 'MCM', 'MCM', 'MCM'],
+      mira: ['La baldosa es un pedazo del 10 y del 16.', 'El lado del cuadrado se arma juntando varias fichas.', 'Se buscan momentos que están en las dos listas, hacia adelante.', 'Se reparten cantidades en partes iguales.'], ok: 'Partir es MCD; juntar hasta coincidir es MCM.' },
+      'La baldosa divide a 10 y a 16: MCD. El cuadrado es múltiplo de 10 y de 16: MCM. Coincidir: MCM. Repartir: MCD.',
+      { hint: 'Pregúntate si la respuesta debe ser más pequeña que los datos o más grande.' }),
+    play('baldosa-mayor', 'Un piso de **30 × 42** se cubre con baldosas cuadradas iguales, sin cortar ninguna. Mueve el lado hasta la **más grande** posible.', { a: 30, b: 42, max: 15 },
+      'El lado debe dividir a 30 y a 42: sirven 1, 2, 3 y 6. La mayor es 6: $7 \\cdot 5 = 35$ baldosas.',
+      { hint: 'Busca los divisores que 30 y 42 tienen en común.' }),
+    play('producto-mcd', 'Dos números tienen **MCD 6** y **MCM 90**. Uno de ellos es **18**. Halla el producto de los dos y el otro número.', { s: 'MCD 6   MCM 90   uno: 18', et: ['el producto', 'el otro'], metas: ['540', '30'], fichas: ['540', '30', '96', '15', '108', '5'],
+      mira: ['El MCD por el MCM da lo mismo que multiplicar los dos números.', 'Divide el producto entre el número que conoces.'], trampas: { '0:96': 'Se multiplican, no se suman.', '0:108': 'Multiplicaste el 18 por el MCD.', '1:15': 'Eso es el MCM entre el MCD.', '1:5': 'Eso es el MCM entre 18.' }, ok: '18 · 30 = 6 · 90.' },
+      '$6 \\cdot 90 = 540$ y $540 \\div 18 = 30$.',
+      { hint: 'Recuerda el chequeo: el MCD por el MCM da el producto de los dos números.' }),
+    play('hora-del-cruce', 'Los buses de dos rutas salen juntos a las **8:00**: una ruta cada **15** minutos y la otra cada **25**. ¿Cada cuántos minutos coinciden, a qué hora vuelven a hacerlo y cuántos intervalos de 15 pasan?', { a: 'cada 15', b: 'cada 25', et: ['minutos', 'hora', 'intervalos'], metas: ['75', '9:15', '5'], fichas: ['75', '9:15', '5', '40', '8:40', '375', '3'],
+      mira: ['El primer múltiplo común de 15 y 25.', 'Pasa esos minutos a horas y súmalos a las 8:00.', '¿Cuántas veces cabe el 15?'], trampas: { '0:40': 'Se sumaron: 40 no es múltiplo de 25.', '0:375': 'Es múltiplo común, pero no el primero.', '2:3': 'Esos son los intervalos de 25.' }, ok: '5 · 15 = 75 y 3 · 25 = 75.' },
+      'MCM(15, 25) = 75 minutos, que es 1 hora y 15: a las 9:15. Pasan $75 \\div 15 = 5$ intervalos.',
+      { hint: 'Coincidir es mirar hacia adelante: múltiplos.' }),
+    play('sube-mcm', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '¿Cuál es el **MCM** de **16** y **40**?', r: 80, c: '2^4 \\cdot 5', e: { 8: 'Ese es el MCD.', 56: 'No se suman: 56 no es múltiplo de 40.' } },
+      { q: '¿Cuál es el **MCD** de **32** y **48**?', r: 16, c: '2^4', e: { 96: 'Ese es el MCM.', 8: 'Divide a los dos, pero hay uno mayor.', 4: 'Divide a los dos, pero hay uno mayor.' } },
+      { q: 'Tres luces titilan cada **4**, cada **6** y cada **10** segundos. Si titilan juntas, ¿en cuántos segundos vuelven a hacerlo?', r: 60, c: '2^2 \\cdot 3 \\cdot 5', e: { 120: 'Coinciden, pero ya lo habían hecho antes.', 20: 'La de 6 no titila en el 20.', 30: 'La de 4 no titila en el 30.' } }] },
+      '$16 = 2^4$ y $40 = 2^3 \\cdot 5$: 80. $32 = 2^5$ y $48 = 2^4 \\cdot 3$: 16. $2^2 \\cdot 3 \\cdot 5 = 60$.',
+      { hint: 'Descompón en primos: comunes para el MCD, todos para el MCM.' }),
+    sol('Tres corredores dan vueltas a una pista y tardan 4, 6 y 9 minutos por vuelta. Si salen juntos de la meta, ¿a los cuántos minutos vuelven a coincidir los tres en la meta? ¿Cuántas vueltas habrá dado cada uno?',
+      ['$4 = 2^2$, $6 = 2 \\cdot 3$ y $9 = 3^2$. El MCM toma cada primo con su mayor exponente: $2^2 \\cdot 3^2 =$ [[36]]', 'Vuelven a coincidir a los [[36]] minutos', 'El más rápido habrá dado $36 \\div 4 =$ [[9]] vueltas; el más lento, [[4]]'],
+      ['216', '18', '6'],
+      'Los tres pasan por la meta en los múltiplos de su tiempo: coinciden en el primer múltiplo común, el MCM. Multiplicar $4 \\cdot 6 \\cdot 9$ da un múltiplo común, pero no el primero.',
+      'Coincidir es un problema de múltiplos comunes: busca el más pequeño.'),
+    err('Se quieren armar paquetes iguales con 48 lápices y 36 borradores, sin que sobre nada y con la mayor cantidad posible de paquetes. ¿Cuántos paquetes salen?',
+      ['Las dos cantidades se reparten en partes iguales: el número de paquetes debe dividir a 48 y a 36', 'Para tener la mayor cantidad de paquetes se usa el mínimo común múltiplo: 144', 'Salen 144 paquetes'], 1,
+      ['Para tener la mayor cantidad de paquetes se usa el máximo común divisor: 12', 'Para tener la mayor cantidad de paquetes se usa la suma: $48 + 36 = 84$', 'Para tener la mayor cantidad de paquetes se usa el menor divisor común: 2'],
+      'Repartir sin que sobre es un problema de divisores, no de múltiplos: el mayor divisor común de 48 y 36 es 12. Cada paquete lleva 4 lápices y 3 borradores.',
+      'Compara la respuesta con los datos: ¿se pueden armar más paquetes que lápices hay?'),
+    opc('Dos alarmas suenan juntas en este instante. Una suena cada 8 segundos y la otra cada 20 segundos. Contando también este instante, el número de veces que suenan juntas en el minuto y medio que empieza ahora es:',
+      ['3', '2', '4', '7'], 0,
+      'Coinciden cada MCM(8, 20) = 40 segundos: en el segundo 0, en el 40 y en el 80; la siguiente, en el 120, ya se pasa de los 90. Contando el instante inicial son 3; si el enunciado dijera «sin contar el instante inicial», serían 2. Lee siempre si el comienzo cuenta.',
+      'Halla cada cuánto coinciden y haz la lista de esos momentos desde el segundo 0. ¿El 0 entra en la cuenta?'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/numeros-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-nu-3', [
+    play('siempre-par', 'n es un número **impar** cualquiera. ¿Cuáles son **siempre** pares? Toca todas.', { casos: [{ t: 'n + 1', si: true }, { t: 'n · n', no: 'Impar por impar es impar: 3 · 3 = 9.' }, { t: '3n + 1', si: true }, { t: '2n + 1', no: '2n es par, y al sumarle 1 queda impar.' }, { t: 'n · (n + 1)', si: true }], falta: 'Falta otra: mira si cada pedazo es par o impar.', ok: 'Dos sueltos hacen pareja, y un factor par basta.' },
+      'n + 1 es par. 3n es impar, y más 1 es par. n + 1 es par, así que el producto también. n · n y 2n + 1 son impares.',
+      { hint: 'Reemplaza n por 1, por 3 y por 5 y mira qué pasa.' }),
+    play('dos-residuos', 'Busca el número entre 20 y 40 que deja residuo **1** entre **4** y residuo **3** entre **5**.', { min: 20, max: 40, c: [[4, 1], [5, 3]] },
+      'Con residuo 3 entre 5: 23, 28, 33 y 38. De esos, $33 = 4 \\cdot 8 + 1$.',
+      { hint: 'Escribe los que dejan residuo 3 entre 5 y revisa cada uno entre 4.' }),
+    play('opera-residuos', 'Sin hacer el producto: ¿qué residuo deja $52 \\cdot 39$ entre **7**?', { s: '52 · 39', et: ['de 52', 'de 39', 'del producto'], metas: ['3', '4', '5'], fichas: ['3', '4', '5', '12', '7', '1', '0'],
+      mira: ['Haz grupos de 7 con 52 y mira cuánto sobra.', 'Haz grupos de 7 con 39 y mira cuánto sobra.', 'Multiplica los dos residuos y saca el residuo otra vez.'], trampas: { '0:7': 'Un residuo entre 7 siempre es menor que 7.', '2:12': 'En 12 todavía cabe un grupo de 7.', '2:7': 'Un residuo entre 7 siempre es menor que 7.' }, ok: '3 · 4 = 12, y 12 deja 5.' },
+      '$52 = 7 \\cdot 7 + 3$ y $39 = 7 \\cdot 5 + 4$. $3 \\cdot 4 = 12 = 7 + 5$: residuo 5.',
+      { hint: 'Cambia cada número por su residuo antes de multiplicar.' }),
+    play('ciclo-ultima', 'Pon la **última cifra** de cada potencia de 2. Para la última, usa el ciclo.', { et: ['2¹', '2²', '2³', '2⁴', '2⁵', '2²²'], a: '2', metas: ['4', '8', '6', '2', '4'], fichas: ['4', '4', '8', '8', '6', '6', '2', '2'],
+      mira: ['Dobla la última cifra anterior.', 'Dobla la última cifra anterior.', 'Dobla la última cifra anterior y quédate con las unidades.', 'Dobla la última cifra anterior y quédate con las unidades.', 'El ciclo tiene cuatro pasos: ¿qué sobra al dividir 22 entre 4?'], trampas: { '4:2': 'Ese sería el primero del ciclo.', '4:8': 'Ese sería el tercero del ciclo.', '4:6': 'Ese saldría si no sobrara nada.' }, ok: '2, 4, 8, 6 y vuelve a empezar.' },
+      'Cada una dobla a la anterior: 2, 4, 8, 6, 2… Como $22 = 4 \\cdot 5 + 2$, es la segunda del ciclo: 4.',
+      { hint: 'Basta multiplicar por 2 la última cifra. Fíjate cuándo se repite.' }),
+    play('rueda-semana', 'Hoy es **miércoles**. Gira la aguja hasta el día que será dentro de **100** días.', { hoy: 2, n: 100 },
+      '$100 = 7 \\cdot 14 + 2$: pasan 14 semanas completas y se avanzan 2 días. Será viernes.',
+      { hint: 'Cada 7 días vuelve a ser miércoles. ¿Cuántos días sobran?' }),
+    play('ultima-por-partes', '¿En qué termina $238 \\cdot 57 + 64$? Pon la última cifra del producto, cuánto da al sumarle la última cifra de 64, y la respuesta.', { s: '238 · 57 + 64', et: ['el producto', 'más la de 64', 'termina en'], metas: ['6', '10', '0'], fichas: ['6', '10', '0', '56', '1', '8', '5'],
+      mira: ['Multiplica las dos últimas cifras y quédate con las unidades.', 'A eso súmale la última cifra de 64.', 'De lo que dio, mira solo las unidades.'], trampas: { '0:56': 'De 56 solo queda la última cifra.', '0:5': 'De 56 queda la última cifra, no la primera.', '2:1': 'Esa es la cifra de las decenas.' }, ok: '238 · 57 + 64 = 13 630.' },
+      '$8 \\cdot 7 = 56$ termina en 6; $6 + 4 = 10$ termina en 0.',
+      { hint: 'Las decenas y las centenas no tocan la última cifra.' }),
+    play('arma-dividendo', 'Al dividir un número entre **9** da cociente **14** y residuo **5**. Pon el número, el **residuo** si se le suma 6 y el **residuo** si se dobla.', { s: 'entre 9: cociente 14, residuo 5', et: ['el número', 'si se suma 6', 'si se dobla'], metas: ['131', '2', '1'], fichas: ['131', '2', '1', '11', '10', '126', '28'],
+      mira: ['Los grupos completos y lo que sobra.', 'Al residuo súmale 6 y saca el residuo otra vez.', 'Dobla el residuo y saca el residuo otra vez.'], trampas: { '0:126': 'Faltan los 5 que sobran.', '0:28': 'El 9 y el 14 se multiplican.', '1:11': 'En 11 todavía cabe un grupo de 9.', '2:10': 'En 10 todavía cabe un grupo de 9.' }, ok: 'Lo que sobra se opera aparte.' },
+      '$9 \\cdot 14 + 5 = 131$. $5 + 6 = 11 = 9 + 2$. $2 \\cdot 5 = 10 = 9 + 1$.',
+      { hint: 'Para los residuos basta trabajar con el 5.' }),
+    play('sube-sobrante', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '¿Qué **residuo** deja **200** entre **7**?', r: 4, c: '200 - 7 \\cdot 28', e: { 28: 'Ese es el cociente.' } },
+      { q: '¿En qué cifra termina $9^{13}$?', r: 9, c: '9^{13} \\to 9^1', e: { 1: 'Así terminan las de exponente par.' } },
+      { q: '¿Cuál es el menor número **mayor que 20** que deja residuo **3** entre **8**?', r: 27, c: '8 \\cdot 3 + 3', e: { 24: 'Ese no deja residuo.', 19: 'Deja residuo 3, pero no pasa de 20.', 23: 'El 23 deja residuo 7.' } }] },
+      '$200 = 7 \\cdot 28 + 4$. Las potencias de 9 terminan en 9 y 1, alternadas: con 13, en 9. $8 \\cdot 3 + 3 = 27$.',
+      { hint: 'Piensa en grupos completos y en lo que sobra.' }),
+    sol('Un número entero deja residuo 3 cuando se divide entre 5. ¿Qué residuo deja su doble al dividirlo entre 5? ¿Y su cuadrado?',
+      ['Para los residuos basta trabajar con el residuo: el número se comporta como un [[3]]', 'Su doble se comporta como 6, que al dividir entre 5 deja residuo [[1]]', 'Su cuadrado se comporta como [[9]], que al dividir entre 5 deja residuo [[4]]'],
+      ['6', '0', '2'],
+      'Se puede comprobar con el 8 o con el 13: sus dobles (16 y 26) dejan residuo 1, y sus cuadrados (64 y 169) dejan residuo 4. Los residuos se operan entre sí y se vuelven a reducir.',
+      'Prueba con un número concreto que deje residuo 3, como el 8, y después con otro.'),
+    err('¿Es posible que la suma de 7 números impares sea igual a 100?',
+      ['La suma de dos impares es par', 'Seis de los impares forman tres parejas: su suma es par', 'Al sumar el séptimo impar, el total sigue siendo par', 'Como 100 es par, sí es posible'], 2,
+      ['Al sumar el séptimo impar, par más impar da impar', 'Al sumar el séptimo impar, el total es divisible por 7', 'Al sumar el séptimo impar, el total deja de ser un número entero'],
+      'Una cantidad impar de números impares suma impar. Como 100 es par, no es posible: la paridad lo decide sin hacer ninguna cuenta.',
+      'Prueba con números pequeños: ¿qué paridad tiene la suma de tres impares?'),
+    opc('Hoy es lunes. El día de la semana que será dentro de 500 días es:',
+      ['martes', 'miércoles', 'viernes', 'jueves'], 3,
+      '$500 = 7 \\cdot 71 + 3$: pasan 71 semanas completas y sobran 3 días. Lunes más 3 es jueves.',
+      'Las semanas completas no cambian el día: solo importa el residuo al dividir entre 7.'),
+  ]);
+
+  addExam('pu-numeros', [
+    ['pu-nu-1', 'Un número es primo si solo se deja dividir por 1 y por él mismo.',
+      opc('De los siguientes números, el único que es primo es:', ['91', '97', '87', '93'], 1,
+        '$91 = 7 \\cdot 13$, $87 = 3 \\cdot 29$ y $93 = 3 \\cdot 31$. El 97 no tiene divisores.', 'Prueba con 3 (suma de cifras) y con 7.')],
+    ['pu-nu-2', 'El MCM es el primer múltiplo que comparten los dos números.',
+      opc('El mínimo común múltiplo de 8 y 12 es:', ['4', '96', '48', '24'], 3,
+        'Múltiplos de 12: 12, 24… El 24 también es múltiplo de 8.', 'Recorre los múltiplos del mayor hasta encontrar uno del menor.')],
+    ['pu-nu-3', 'Dividendo = divisor · cociente + residuo.',
+      opc('El residuo de dividir 1 000 entre 7 es:', ['6', '1', '3', '0'], 0,
+        '$7 \\cdot 142 = 994$ y $1\\,000 - 994 = 6$.', 'Busca el múltiplo de 7 más cercano por debajo de 1 000.')],
   ]);
 });

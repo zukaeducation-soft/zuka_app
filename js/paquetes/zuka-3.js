@@ -1,311 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-r-conjuntos.js
-// Preuniversitario · mundo 14 «Conjuntos»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo). Reutiliza los
-// juegos de conjuntos de Álgebra (pinta-venn, reparte-venn, descifra-zona, mueve-circulos, orbita-conjuntos) con datos nuevos.
-PU_JUEGOS.push(({ setExam }) => {
-  setExam('pu-conjuntos', 'Conjuntos', [
-    ['pu-cj-1', 'Cada operación es un grupo de zonas del diagrama.',
-      play('pinta-venn', 'Operación', { rounds: [{ text: '(A ∪ B) − C', n: 3, f: (a, b, c) => (a || b) && !c }] }, 'Lo de A o B que no toca C.', { hint: 'Zona por zona.' })],
-    ['pu-cj-1', 'Con tres conjuntos se llena del centro hacia afuera.',
-      play('encuesta-tres', 'Tres', { rounds: [{ labels: ['A', 'B', 'C'], z: { abc: 1, ab: 2, ac: 3, bc: 2, a: 4, b: 5, c: 3, none: 2 } }] }, 'Primero el centro (1), luego cada pareja menos el centro y después cada conjunto solo.', { hint: 'Centro.' })],
-    ['pu-cj-2', '$n(A \\cup B) = n(A) + n(B) - n(A \\cap B)$.',
-      play('solapa-barras', 'Solapa', { rounds: [{ labels: ['A', 'B'], total: 40, a: 22, b: 15, none: 9 }] }, 'Unión 31; los dos: $37 - 31 = 6$.', { hint: 'Doble conteo.' })],
-    ['pu-cj-2', 'Los de ninguno son el total menos la unión.',
-      play('cinta-ecuacion', 'Incógnita', { rounds: [{ say: 'De 30: 18 en A, 14 en B, 4 en ninguno. Los dos son x', parts: [[-1, 18, 'solo A'], [1, 0, 'los dos'], [-1, 14, 'solo B'], [0, 4, 'ninguno']], total: 30, lo: 0, hi: 14 }] }, '$36 - x = 30$: $x = 6$.', { hint: 'Solo A.' })],
-  ]);
-});
-
-// Mundo 14 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
-  // Ocho juegos con las escenas de la explicación (js/games/conjuntos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-cj-1', [
-    play('ubica-cada', 'A son los **múltiplos de 3** y B los **múltiplos de 4**. Lleva cada número a su zona.', { a: 'A: de 3', b: 'B: de 4', pr: 'revisa si es múltiplo de 3 y si es múltiplo de 4.', els: [{ t: '9', z: 0 }, { t: '24', z: 1 }, { t: '20', z: 2 }, { t: '14', z: 3 }, { t: '36', z: 1 }] },
-      '9 solo es múltiplo de 3; 20 solo de 4; 24 y 36, de los dos; 14, de ninguno.',
-      { hint: 'A cada número hazle dos preguntas: ¿está en A?, ¿está en B?' }),
-    play('pinta-operacion', 'Pinta $A^c \\cup B$: lo que **no** está en A, junto con todo B.', { zonas: ['o', 'i', 'b'], texto: 'afuera, los dos y solo B', mira: { o: 'Mira afuera: ¿está en el complemento de A?', a: 'Mira solo A: ¿está fuera de A, o en B?', i: 'Mira el centro: está en B.', b: 'Mira solo B: está en B.' }, ok: 'Solo queda sin pintar lo que está en A y no en B.' },
-      '$A^c$ es solo B y afuera. Al unirle todo B entra también el centro. Queda por fuera solo A.',
-      { hint: 'Pinta primero lo que no está en A y después agrega lo que falte de B.' }),
-    play('nombra-dibujo', 'Pon a cada dibujo la operación que pinta. ($A^c$ es el complemento.)', { ks: [['b'], ['a', 'o'], ['a', 'i', 'o'], ['o']], metas: ['B − A', 'Bᶜ', 'A ∪ Bᶜ', '(A ∪ B)ᶜ'], fichas: ['B − A', 'Bᶜ', 'A ∪ Bᶜ', '(A ∪ B)ᶜ', 'A − B', 'Aᶜ'],
-      mira: ['Está pintado lo de B que no toca a A.', 'Está pintado todo lo que no es B.', 'Está pintado todo, menos la luna de B.', 'Está pintado solo lo de afuera de los dos.'], trampas: { '0:A − B': 'Al revés: lo pintado es de B.', '0:Aᶜ': 'Aᶜ también pinta lo de afuera.', '1:Aᶜ': 'Aᶜ pinta lo que no está en A.', '1:A ∪ Bᶜ': 'A ∪ Bᶜ pinta también el centro.', '3:Aᶜ': 'Aᶜ pinta también la luna de B.' }, ok: 'Si afuera está pintado, hay un complemento.' },
-      'Luna de B: $B - A$. Todo menos B: $B^c$. Al unirle A entra el centro: $A \\cup B^c$. Solo afuera: $(A \\cup B)^c$.',
-      { hint: 'Fíjate primero si está pintado lo de afuera: eso avisa que hay un complemento.' }),
-    play('zonas-y-total', 'A tiene **17** elementos, en común hay **6** y la unión tiene **25**. Completa.', { et: ['solo A', 'solo B', 'n(B)'], metas: ['11', '8', '14'], fichas: ['11', '8', '14', '17', '19', '25', '23'],
-      mira: ['A los de A quítales los comunes.', 'A la unión quítale todo A.', 'B tiene los suyos solos y los comunes.'], trampas: { '0:17': 'Esos son todos los de A, con los comunes.', '1:19': 'Faltó quitar los que son solo de A.', '2:25': 'Eso tiene la unión.', '2:23': 'Esos son todos los de A más los comunes otra vez.' }, ok: '17 + 14 − 6 = 25.' },
-      'Solo A: $17 - 6 = 11$. Solo B: $25 - 17 = 8$. Todo B: $8 + 6 = 14$.',
-      { hint: 'La unión son tres pedazos: solo A, lo común y solo B.' }),
-    play('ciertas-siempre', 'A son los pares, B los impares y C los múltiplos de 4. Toca **todas** las que son ciertas.', { casos: [{ t: 'A ∩ B no tiene elementos', si: true }, { t: 'A − C no tiene elementos', no: 'El 2 está en A y no en C: A − C sí tiene elementos.' }, { t: 'A ∪ C es igual a A', si: true }, { t: 'A ∩ C es igual a A', no: 'El 2 está en A pero no en C: A ∩ C no es todo A.' }, { t: 'C − A no tiene elementos', si: true }], falta: 'Falta otra: todo múltiplo de 4 es par, y ningún par es impar.', ok: 'C está dentro de A, y B no toca a ninguno.' },
-      'Ningún número es par e impar. Todo múltiplo de 4 es par: C está dentro de A. Pero hay pares, como el 2, que no son múltiplos de 4.',
-      { hint: 'Dibuja el círculo de C con respecto al de A, y busca un número que tumbe cada frase.' }),
-    play('elementos-de', 'U son los números del 1 al 10, $A = \\{1, 2, 3, 4, 6\\}$ y $B = \\{2, 4, 6, 8, 10\\}$. Toca los elementos de $A - B^c$.', { nums: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], A: [1, 2, 3, 4, 6], si: x => [1, 2, 3, 4, 6].includes(x) && [2, 4, 6, 8, 10].includes(x), ok: 'Quitar lo que está fuera de B deja lo que está en A y en B.' },
-      '$B^c$ son los que no están en B: 1, 3, 5, 7 y 9. Al quitarlos de A quedan 2, 4 y 6: es $A \\cap B$.',
-      { hint: 'Escribe primero los que no están en B y después quítalos de A.' }),
-    play('misma-zona', '¿Cuáles dan **lo mismo** que $A - B$? Toca todas.', { casos: [{ t: 'A ∩ Bᶜ', si: true }, { t: 'B − A', no: 'B − A es la otra luna.' }, { t: 'A − (A ∩ B)', si: true }, { t: 'A ∪ Bᶜ', no: 'A ∪ Bᶜ también trae el centro y lo de afuera.' }, { t: '(A ∪ B) − B', si: true }], falta: 'Falta otra: pinta cada una y compárala con la luna de A.', ok: 'Todas pintan solo la luna de A.' },
-      'Estar en A y no en B; quitarle a A lo común; y quitarle B a la unión dejan la misma zona.',
-      { hint: 'Pinta en un papel las zonas de cada una, por partes.' }),
-    play('sube-union', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'A tiene **15** elementos, B tiene **12** y en común hay **4**. ¿Cuántos tiene $A \\cup B$?', r: 23, c: '15 + 12 - 4', e: { 27: 'Los comunes se contaron dos veces.', 19: 'Los comunes se quitan una sola vez.' } },
-      { q: 'La unión tiene **26**, A tiene **19** y B tiene **15**. ¿Cuántos hay en **común**?', r: 8, c: '19 + 15 - 26', e: { 7: 'Eso es solo B: 26 − 19.', 11: 'Eso es solo A: 26 − 15.' } },
-      { q: 'El universo tiene **35**, A tiene **16** y $A - B$ tiene **10**. ¿Cuántos tiene $(A \\cap B)^c$?', r: 29, c: '35 - 6', e: { 19: 'Eso es el complemento de A.', 25: 'Quitaste A − B: se quita lo común.' } }] },
-      '$15 + 12 - 4 = 23$. $34 - 26 = 8$. En común hay $16 - 10 = 6$ y fuera de eso, 29.',
-      { hint: 'Dibuja los círculos y escribe primero lo del centro.' }),
-    sol('Sean $A = \\{1, 2, 3, 4, 5, 6\\}$ y $B = \\{4, 5, 6, 7, 8\\}$, y el universo $U$ formado por los números del 1 al 10. ¿Cuántos elementos tienen $A \\cap B$, $A \\cup B$, $A - B$ y $(A \\cup B)^c$?',
-      ['$A \\cap B$ son los que están en los dos: 4, 5 y 6. Tiene [[3]] elementos', '$A \\cup B$ junta todo sin repetir: del 1 al 8. Tiene [[8]] elementos', '$A - B$ son los de A que no están en B: 1, 2 y 3. Tiene [[3]] elementos', '$(A \\cup B)^c$ es lo que queda del universo: 9 y 10. Tiene [[2]] elementos'],
-      ['11', '5', '10'],
-      'La unión no suma los tamaños (serían 11): los tres elementos comunes se cuentan una sola vez. El complemento se toma siempre respecto al universo.',
-      'Dibuja los dos círculos y escribe primero los elementos comunes en el centro.'),
-    err('En un diagrama de Venn de dos conjuntos, A tiene 12 elementos, B tiene 9 y la intersección tiene 4. ¿Cuántos elementos tiene $A \\cup B$?',
-      ['Solo en A: $12 - 4 = 8$', 'Solo en B: $9 - 4 = 5$', 'En la unión: $12 + 9 = 21$'], 2,
-      ['En la unión: $8 + 4 + 5 = 17$', 'En la unión: $12 + 9 + 4 = 25$', 'En la unión: $8 + 5 = 13$'],
-      'La unión son las tres zonas: solo A, los dos y solo B: $8 + 4 + 5 = 17$. Al sumar $12 + 9$ los 4 del centro quedan contados dos veces.',
-      'Los dos primeros pasos ya separaron las zonas. ¿Cuántas zonas tiene la unión?'),
-    opc('Si $A = \\{2, 4, 6, 8\\}$ y $B = \\{3, 6, 9\\}$, entonces el conjunto $(A \\cup B) - (A \\cap B)$ tiene:',
-      ['7 elementos', '6 elementos', '5 elementos', '1 elemento'], 2,
-      'La unión es $\\{2, 3, 4, 6, 8, 9\\}$ y la intersección es $\\{6\\}$. Al quitar el 6 quedan 5 elementos.',
-      'Halla primero la unión y la intersección, y después quita una de la otra.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/conjuntos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-cj-2', [
-    play('llena-encuesta', 'De **70** vecinos, **38** tienen bicicleta, **29** tienen moto y **12** tienen las dos. Llena las cuatro zonas.', { a: 'bicicleta', b: 'moto', metas: ['26', '12', '17', '15'], fichas: ['26', '12', '17', '15', '38', '29', '3'],
-      mira: ['De los de bicicleta, quita los que tienen las dos.', 'En el centro van los que tienen las dos.', 'De los de moto, quita los que tienen las dos.', 'A 70 réstale las tres zonas de adentro.'], trampas: { '0:38': 'Entre esos 38 están los que también tienen moto.', '2:29': 'Entre esos 29 están los que también tienen bicicleta.', '3:3': 'Restaste 38 y 29: los del centro se quitaron dos veces.' }, ok: '26 + 12 + 17 + 15 = 70.' },
-      'Centro 12; solo bicicleta $38 - 12 = 26$; solo moto $29 - 12 = 17$; afuera $70 - 55 = 15$.',
-      { hint: 'Empieza por el centro: esos vecinos están contados en los dos grupos.' }),
-    play('corre-solape', 'De **80** personas, **47** nadan, **41** trotan y **8** no hacen ninguna de las dos. Solapa las barras: ¿cuántas hacen **las dos** cosas?', { T: 80, a: 47, b: 41, n: 8, na: 'nadan', nb: 'trotan' },
-      'Hacen alguna $80 - 8 = 72$. $47 + 41 = 88$: sobran $88 - 72 = 16$, las que hacen las dos cosas.',
-      { hint: '¿Cuántas personas hacen alguna de las dos? Las dos barras juntas deben cubrir justo eso.' }),
-    play('tres-circulos', 'Los tres gustos los tienen **3**. Cine y teatro, **9**; cine y danza, **7**; teatro y danza, **8** (contando a los 3). En total: cine **22**, teatro **24**, danza **20**. Llena las seis zonas.', { e: ['cine', 'teatro', 'danza'], c: '3', metas: ['6', '4', '5', '9', '10', '8'], fichas: ['6', '4', '5', '9', '10', '8', '7', '13', '22'],
-      mira: ['Cine y teatro, quitando el centro.', 'Cine y danza, quitando el centro.', 'Teatro y danza, quitando el centro.', 'Al total de cine quítale las tres zonas ya llenas de su círculo.', 'Al total de teatro quítale las tres zonas ya llenas de su círculo.', 'Al total de danza quítale las tres zonas ya llenas de su círculo.'], trampas: { '0:9': 'En esos 9 están los 3 del centro.', '1:7': 'En esos 7 están los 3 del centro.', '2:8': 'En esos 8 están los 3 del centro.', '3:22': 'Faltó quitar los que tienen otro gusto.' }, ok: '9 + 6 + 4 + 3 = 22, 10 + 6 + 5 + 3 = 24 y 8 + 4 + 5 + 3 = 20.' },
-      'Parejas sin el centro: 6, 4 y 5. Solo cine $22 - 13 = 9$; solo teatro $24 - 14 = 10$; solo danza $20 - 12 = 8$.',
-      { hint: 'El centro ya está. Sigue con las parejas y deja para el final las zonas de un solo gusto.' }),
-    play('pinta-tres', 'Toca las zonas de quienes cumplen: «les gusta **C** y **al menos otro** de los dos».', { e: ['A', 'B', 'C'], zonas: [1, 2, 6], texto: 'A y C, B y C, y el centro', mira: ['Los de A y B que no tocan C: no les gusta C.', 'Mira la zona de A y C: les gusta C y otro más.', 'Mira la zona de B y C: les gusta C y otro más.', 'A los de solo A no les gusta C.', 'A los de solo B no les gusta C.', 'A los de solo C no les gusta ningún otro.', 'Mira el centro: les gustan los tres.', 'Afuera no les gusta ninguno.'], ok: 'Al menos otro es uno más o los dos.' },
-      'Deben estar dentro de C y tocar A, B o los dos: las zonas AC, BC y el centro.',
-      { hint: 'Mira solo el círculo de C: ¿cuáles de sus cuatro zonas tocan a otro círculo?' }),
-    play('lee-encuesta', 'El diagrama ya está lleno. ¿Cuántas personas cumplen cada frase?', { z: ['12', '7', '9', '4'], et: ['al menos uno', 'exactamente uno', 'no tienen A', 'en total'], metas: ['28', '21', '13', '32'], fichas: ['28', '21', '13', '32', '28', '19', '9'],
-      mira: ['Suma todas las zonas que están dentro de algún círculo.', 'Suma las dos lunas, sin el centro.', 'Suma las zonas que quedan por fuera del círculo A.', 'Suma las cuatro zonas.'], trampas: { '0:21': 'Los del centro también tienen al menos uno.', '1:28': 'Los del centro tienen dos, no uno.', '2:9': 'Los de afuera tampoco tienen A.', '3:28': 'Faltan los de afuera.' }, ok: 'Cada frase junta unas zonas.' },
-      '$12 + 7 + 9 = 28$; $12 + 9 = 21$; $9 + 4 = 13$; $28 + 4 = 32$.',
-      { hint: 'Señala con el dedo las zonas que cumplen la frase y súmalas.' }),
-    play('desde-los-totales', 'De **65** personas, **38** tienen A, **33** tienen B y **7** no tienen ninguno. Completa.', { a: 'A: 38', b: 'B: 33', et: ['alguno', 'solo B', 'los dos', 'solo A'], metas: ['58', '20', '13', '25'], fichas: ['58', '20', '13', '25', '33', '38', '6', '71'],
-      mira: ['Quita las que no tienen ninguno.', 'De las que tienen alguno, quita las que tienen A.', 'De las de B, quita las que solo tienen B.', 'De las de A, quita las que tienen los dos.'], trampas: { '0:71': 'Sumaste las dos listas: hay personas repetidas, y solo son 65.', '1:33': 'Entre esas 33 hay algunas que también tienen A.', '2:6': 'Comparaste con las 65, pero 7 no tienen ninguno.', '3:38': 'Entre esas 38 hay algunas que también tienen B.' }, ok: '25 + 13 + 20 + 7 = 65.' },
-      'Alguno: $65 - 7 = 58$. Solo B: $58 - 38 = 20$. Los dos: $33 - 20 = 13$. Solo A: $38 - 13 = 25$.',
-      { hint: 'Si a las que tienen alguno les quitas todas las de A, ¿quiénes quedan?' }),
-    play('porciento-comun', 'El **65 %** lee, el **55 %** dibuja y el **15 %** no hace ninguna de las dos. Completa los porcentajes («algo» es al menos una de las dos).', { a: 'lee', b: 'dibuja', et: ['algo', 'las dos', 'solo lee', 'solo una'], metas: ['85', '35', '30', '50'], fichas: ['85', '35', '30', '50', '20', '120', '10', '85'],
-      mira: ['Quita de 100 los que no hacen nada.', 'Las dos listas suman más que los que hacen algo: ¿cuánto sobra?', 'A los que leen quítales los que hacen las dos.', 'Los que solo leen y los que solo dibujan.'], trampas: { '0:120': 'Sumaste las dos listas: pasan de 100 porque hay repetidos.', '1:20': 'Comparaste con 100, pero el 15 % no hace nada.', '2:10': 'Eso le lleva una lista a la otra.', '3:85': 'Ahí también están los que hacen las dos.' }, ok: '30 + 35 + 20 + 15 = 100.' },
-      '$100 - 15 = 85$; $65 + 55 - 85 = 35$; $65 - 35 = 30$; solo dibuja 20: solo una, 50.',
-      { hint: 'Con porcentajes es igual: el total es 100.' }),
-    play('sube-encuesta', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'De **50** personas, **31** tienen A, **24** tienen B y **6** ninguno. ¿Cuántas tienen **los dos**?', r: 11, c: '55 - 44', e: { 5: 'Compara con las que tienen algo, no con las 50.' } },
-      { q: 'De **40** personas, **18** tienen A, **15** tienen B y **7** los dos. ¿Cuántas **no tienen ninguno**?', r: 14, c: '40 - 26', e: { 7: 'Los que tienen los dos se quitaron dos veces.', 26: 'Esas tienen alguno.' } },
-      { q: 'A tiene **20**, B **18** y C **15**. Parejas: A y B **8**, A y C **6**, B y C **5**; los tres **2**. ¿Cuántas personas tienen **alguno**?', r: 36, c: '53 - 19 + 2', e: { 34: 'A los del centro se los quitó de más: súmalos otra vez.', 32: 'Los del centro se suman, no se restan.', 53: 'Los que están en varias listas se contaron varias veces.' } }] },
-      '$55 - 44 = 11$. $18 + 15 - 7 = 26$ y $40 - 26 = 14$. $53 - 19 + 2 = 36$.',
-      { hint: 'Al sumar las listas se repiten los que están en varias.' }),
-    sol('En un curso, el 70 % de los estudiantes aprobó matemáticas, el 60 % aprobó física y el 10 % no aprobó ninguna de las dos materias. ¿Qué porcentaje aprobó las dos materias? ¿Qué porcentaje aprobó solo matemáticas?',
-      ['Aprobó al menos una materia el $100 - 10 =$ [[90]] % del curso', 'Las dos listas suman $70 + 60 =$ [[130]] %', 'Lo que sobra son los que se contaron dos veces: $130 - 90 =$ [[40]] % aprobó las dos', 'Solo matemáticas: $70 - 40 =$ [[30]] %'],
-      ['20', '100', '10'],
-      'La suma de las dos listas pasa de la unión porque los que aprobaron las dos están en ambas. Ese exceso es justo la intersección.',
-      'Quita primero a los que no aprobaron nada: ¿qué porcentaje aprobó al menos una?'),
-    err('De 60 personas, 35 leen prensa, 28 oyen radio y 15 hacen las dos cosas. ¿Cuántas personas no hacen ninguna de las dos?',
-      ['Solo leen prensa: $35 - 15 = 20$', 'Solo oyen radio: $28 - 15 = 13$', 'Hacen al menos una de las dos: $20 + 13 = 33$', 'No hacen ninguna: $60 - 33 = 27$'], 2,
-      ['Hacen al menos una de las dos: $20 + 13 + 15 = 48$', 'Hacen al menos una de las dos: $35 + 28 = 63$', 'Hacen al menos una de las dos: $35 + 28 + 15 = 78$'],
-      'Los que hacen las dos cosas también hacen «al menos una»: la unión tiene tres zonas, $20 + 13 + 15 = 48$. No hacen ninguna 12 personas.',
-      '¿En cuál zona del diagrama están las 15 personas que hacen las dos cosas? ¿Se contaron?'),
-    opc('En un grupo de 40 turistas, 22 visitaron el museo, 18 visitaron el jardín botánico y 6 no visitaron ninguno de los dos sitios. La cantidad de turistas que visitó exactamente uno de los dos sitios es:',
-      ['34', '6', '22', '28'], 3,
-      'Visitaron algún sitio $40 - 6 = 34$. Como $22 + 18 = 40$, los dos sitios los visitaron 6. Exactamente uno: $34 - 6 = 28$.',
-      'Halla primero cuántos visitaron los dos sitios; «exactamente uno» deja por fuera a esos.'),
-  ]);
-
-  addExam('pu-conjuntos', [
-    ['pu-cj-1', 'En la unión, los elementos comunes se cuentan una sola vez.',
-      opc('Si el conjunto A tiene 10 elementos, el conjunto B tiene 7 y $A \\cap B$ tiene 3, entonces $A \\cup B$ tiene:', ['17 elementos', '14 elementos', '20 elementos', '11 elementos'], 1,
-        '$10 + 7 - 3 = 14$.', 'Suma los dos conjuntos y quita lo que se contó dos veces.')],
-    ['pu-cj-2', 'Lo que sobra al sumar las dos listas son los que están en las dos.',
-      opc('De 30 estudiantes, 18 juegan baloncesto, 15 juegan voleibol y 5 no juegan ninguno de los dos. La cantidad de estudiantes que juega los dos deportes es:', ['8', '3', '13', '5'], 0,
-        'Juegan algo $30 - 5 = 25$. Como $18 + 15 = 33$, sobran 8.', 'Quita primero a los que no juegan nada.')],
-  ]);
-});
-;
-//#archivo js/courses/preuda-r-numeros.js
-// Preuniversitario · mundo 15 «Teoría de números»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setExam }) => {
-
-  setExam('pu-numeros', 'Teoría de números', [
-    ['pu-nu-1', 'Todo número se escribe como producto de primos.',
-      play('arbol-factores', 'Factores', { rounds: [{ n: 72 }] }, '$72 = 2^3 \\cdot 3^2$.', { hint: 'Divide por 2.' })],
-    ['pu-nu-1', 'Por 3 o por 9: la suma de las cifras.',
-      play('cifra-faltante', 'Cifra', { rounds: [{ tpl: '5_4', by: 3 }] }, '$9 + x$ múltiplo de 3: 0, 3, 6 o 9.', { hint: 'Suma.' })],
-    ['pu-nu-2', 'El MCM es cuándo vuelven a coincidir.',
-      play('ritmos-mcm', 'MCM', { rounds: [{ a: 4, b: 10, max: 30 }] }, 'En 20.', { hint: 'Coinciden.' })],
-    ['pu-nu-2', 'El MCD es el trozo más grande que reparte sin sobrar.',
-      play('corta-mcd', 'MCD', { rounds: [{ a: 24, b: 16 }] }, 'Baldosas de 8.', { hint: 'Divide a los dos.' })],
-    ['pu-nu-3', 'La última cifra de las potencias se repite.',
-      play('ultima-cifra', 'Última cifra', { rounds: [{ a: 8, n: 17 }] }, 'Ciclo 8, 4, 2, 6; residuo 1: 8.', { hint: 'Ciclo.' })],
-    ['pu-nu-3', 'Lo que cae en la posición n depende del residuo.',
-      play('ciclo-colores', 'Collar', { rounds: [{ cyc: ['coral', 'sky', 'mint', 'sun'], N: 50 }] }, '$50 = 4 \\cdot 12 + 2$: la segunda.', { hint: 'Residuo.' })],
-  ]);
-});
-
-// Mundo 15 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
-  // Ocho juegos con las escenas de la explicación (js/games/numeros-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-nu-1', [
-    play('toca-primos', '¿Cuáles son **primos**? Toca todos.', { nums: [1, 2, 29, 33, 49, 61], ok: 'Cada uno tiene exactamente dos divisores: 1 y él.' },
-      'El 2, el 29 y el 61 solo se acomodan en una fila. $33 = 3 \\cdot 11$, $49 = 7 \\cdot 7$ y el 1 tiene un solo divisor.',
-      { hint: 'Intenta acomodar cada cantidad en filas de 2, de 3, de 5 y de 7 sin que sobre.' }),
-    play('arbol-primos', 'Descompón el **132** dividiendo siempre entre el primo **más pequeño** que se pueda: a la izquierda el primo y a la derecha lo que queda.', { n: '132', metas: ['2', '66', '2', '33', '3', '11'], fichas: ['2', '66', '2', '33', '3', '11', '6', '44', '4'],
-      mira: ['132 es par.', 'Divide 132 entre el primo que pusiste.', 'Lo que queda vuelve a ser par.', 'Divide otra vez.', 'Ya no es par: prueba con el primo que sigue.', 'Divide por última vez: debe quedar un primo.'], trampas: { '0:3': 'El 3 divide, pero hay un primo más pequeño.', '0:4': 'El 4 no es primo.', '0:6': 'El 6 no es primo.', '1:44': 'Eso es 132 entre 3.', '2:6': 'El 6 no es primo.', '2:3': 'El 3 divide, pero hay un primo más pequeño.' }, ok: '132 = 2 · 2 · 3 · 11.' },
-      '$132 = 2 \\cdot 66$, $66 = 2 \\cdot 33$ y $33 = 3 \\cdot 11$: $132 = 2^2 \\cdot 3 \\cdot 11$.',
-      { hint: 'Prueba primero con 2; cuando ya no se pueda, sigue con 3, 5, 7…' }),
-    play('opciones-divisor', '$144 = 2^4 \\cdot 3^2$. ¿De cuántas maneras puede un divisor llevar el **2**, de cuántas el **3**, y cuántos divisores hay?', { s: '2⁴ · 3²', et: ['el 2', 'el 3', 'divisores'], ops: ['·', '='], metas: ['5', '3', '15'], fichas: ['5', '3', '15', '4', '2', '8', '6'],
-      mira: ['Cuenta desde ninguna vez hasta su exponente.', 'Cuenta desde ninguna vez hasta su exponente.', 'Cada manera del 2 va con cada manera del 3.'], trampas: { '0:4': 'También puede no llevar ningún 2.', '1:2': 'También puede no llevar ningún 3.', '2:8': 'Las opciones se multiplican, no se suman.' }, ok: 'Exponente más uno, y se multiplica.' },
-      'El 2: de 0 a 4 veces, 5 maneras. El 3: de 0 a 2 veces, 3 maneras. $5 \\cdot 3 = 15$ divisores.',
-      { hint: 'Un divisor puede llevar un primo cero veces: eso también es una manera.' }),
-    play('cifra-que-falta', 'Al número **27_** se le borró la última cifra. Se sabe que es divisible entre **6**. Toca todas las cifras que sirven.', { a: '2 7', by: 6, ok: 'Terminan en par y las cifras suman un múltiplo de 3.' },
-      'Debe ser par y sus cifras sumar un múltiplo de 3: $9 + x$ con $x$ par. Sirven 0 y 6.',
-      { hint: 'Entre 6 es cumplir con 2 y con 3 a la vez.' }),
-    play('tabla-criterios', 'Sin dividir: toca las casillas en las que la división es **exacta**.', { f: [648, 735, 1332], c: [3, 4, 5, 9], ok: 'Suma de cifras para 3 y 9; dos últimas para 4; última para 5.' },
-      '648: suma 18 y termina en 48: entre 3, 4 y 9. 735: suma 15 y termina en 5: entre 3 y 5. 1332: suma 9 y termina en 32: entre 3, 4 y 9.',
-      { hint: 'Para 3 y 9 suma las cifras; para 4 mira las dos últimas; para 5, la última.' }),
-    play('siempre-multiplo', 'Un número es múltiplo de **12**, pero no se sabe cuál. ¿Qué es cierto **siempre**? Toca todas.', { casos: [{ t: 'es múltiplo de 4', si: true }, { t: 'es múltiplo de 24', no: 'El 12 es múltiplo de 12 y no de 24.' }, { t: 'es múltiplo de 6', si: true }, { t: 'es múltiplo de 8', no: 'El 12 es múltiplo de 12 y no de 8.' }, { t: 'es divisible entre 3', si: true }], falta: 'Falta otra: los divisores de 12 dividen a todos sus múltiplos.', ok: 'Todo divisor de 12 divide también a sus múltiplos.' },
-      'Un múltiplo de 12 es $2 \\cdot 2 \\cdot 3$ por algo: lleva dentro el 3, el 4 y el 6. El 8 y el 24 piden otro 2 que puede no estar.',
-      { hint: 'Escribe 12 en primos. ¿Cuáles de esos números se arman con ellos?' }),
-    play('basta-con', '¿En cuáles **basta** revisar esos dos números para estar seguro de que la división es exacta? Toca todas.', { casos: [{ t: 'entre 15: con el 3 y el 5', si: true }, { t: 'entre 12: con el 2 y el 6', no: 'El 18 cumple con 2 y con 6, pero no es divisible entre 12.' }, { t: 'entre 12: con el 3 y el 4', si: true }, { t: 'entre 8: con el 2 y el 4', no: 'El 12 cumple con 2 y con 4, pero no es divisible entre 8.' }, { t: 'entre 18: con el 2 y el 9', si: true }], falta: 'Falta otra: sirve si los dos no comparten primos y, multiplicados, dan el número grande.', ok: 'No comparten primos y, multiplicados, dan el número grande.' },
-      '3 y 5, 3 y 4, 2 y 9 no comparten primos y, multiplicados, dan 15, 12 y 18. El 2 ya está dentro del 6 y del 4: no agrega nada.',
-      { hint: 'Busca un número que cumpla los dos y no cumpla el grande. Si lo hay, no basta.' }),
-    play('sube-divisores', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: '$280 = 2^3 \\cdot 5 \\cdot 7$. ¿Cuántos divisores tiene?', r: 16, c: '4 \\cdot 2 \\cdot 2', e: { 3: 'Multiplicaste los exponentes: a cada uno se le suma 1.', 8: 'Las opciones se multiplican, no se suman.' } },
-      { q: '¿Cuál es el **mayor primo** que divide a **138**?', r: 23, c: '138 \\div 6', e: { 3: 'Divide, pero hay otro mayor.', 2: 'Divide, pero hay otro mayor.' } },
-      { q: '¿Cuál es el **mayor primo** menor que **40**?', r: 37, c: '1 \\cdot 37', e: { 39: 'El 39 es 3 · 13.' } }] },
-      '$4 \\cdot 2 \\cdot 2 = 16$. $138 = 2 \\cdot 3 \\cdot 23$. El 39 es $3 \\cdot 13$ y el 38 es par: 37.',
-      { hint: 'Descompón en primos, y para saber si uno lo es usa los criterios.' }),
-    sol('¿Cuántos divisores positivos tiene el número 200?',
-      ['$200 = 8 \\cdot 25 = 2^3 \\cdot 5^2$: el exponente del 2 es [[3]] y el del 5 es [[2]]', 'Un divisor puede llevar el 2 de [[4]] maneras (0, 1, 2 o 3 veces) y el 5 de 3 maneras', 'Divisores: $4 \\cdot 3 =$ [[12]]'],
-      ['5', '6', '10'],
-      'Los divisores se arman escogiendo cuántas veces va cada primo, desde ninguna hasta su exponente: por eso a cada exponente se le suma 1 y los resultados se multiplican.',
-      'Descompón el número en primos. Un divisor es una parte de esa descomposición.'),
-    err('El número de cuatro cifras $5\\,A\\,3\\,2$ es divisible por 3. ¿Cuántos valores distintos puede tomar la cifra A?',
-      ['Un número es divisible por 3 si la suma de sus cifras lo es', 'Las cifras conocidas suman $5 + 3 + 2 = 10$', 'Hace falta que $10 + A$ sea múltiplo de 3: solo sirve $A = 2$', 'La cifra A puede tomar 1 valor'], 2,
-      ['Hace falta que $10 + A$ sea múltiplo de 3: sirven $A = 2$, $A = 5$ y $A = 8$', 'Hace falta que $10 + A$ sea múltiplo de 3: sirven $A = 0$, $3$, $6$ y $9$', 'Hace falta que $10 + A$ sea múltiplo de 3: sirve cualquier A impar'],
-      'Hay varios múltiplos de 3 al alcance: 12, 15 y 18. Las cifras que sirven son 2, 5 y 8: tres valores.',
-      'Una cifra va de 0 a 9. ¿Hasta qué múltiplos de 3 puede llegar la suma?'),
-    opc('El menor número primo mayor que 50 es:',
-      ['51', '57', '53', '59'], 2,
-      '$51 = 3 \\cdot 17$ no es primo. El 52 es par. El 53 no tiene divisores: basta probar con 2, 3, 5 y 7.',
-      'Revisa los candidatos en orden y aplica las reglas de divisibilidad: las cifras de 51 suman 6.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/numeros-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-nu-2', [
-    play('saltos-cada-una', 'Dos ranas salen juntas: una avanza **10** por salto y la otra **14**. Mueve los saltos de cada una hasta el **primer** lugar en que las dos coinciden.', { a: 10, b: 14, max: 14 },
-      'El primer múltiplo común de 10 y 14 es 70: 7 saltos de 10 y 5 de 14.',
-      { hint: 'El lugar debe ser múltiplo de 10 y de 14. ¿Cuál es el primero?' }),
-    play('paquetes-iguales', 'Hay **54** galletas y **72** dulces. Se arman bolsas **iguales**, sin que sobre nada y con la **mayor** cantidad posible de bolsas. ¿Cuántas bolsas, y qué lleva cada una?', { et: ['bolsas', 'galletas c/u', 'dulces c/u'], metas: ['18', '3', '4'], fichas: ['18', '3', '4', '9', '6', '216', '8'],
-      mira: ['El número de bolsas debe dividir a 54 y a 72, y ser el mayor.', 'Reparte las 54 galletas en las bolsas.', 'Reparte los 72 dulces en las bolsas.'], trampas: { '0:9': 'Reparte exacto, pero se pueden más bolsas.', '0:6': 'Reparte exacto, pero se pueden más bolsas.', '0:216': 'No puede haber más bolsas que galletas.' }, ok: '18 · 3 = 54 y 18 · 4 = 72.' },
-      '$54 = 2 \\cdot 3^3$ y $72 = 2^3 \\cdot 3^2$: el MCD es $2 \\cdot 3^2 = 18$. Van 3 galletas y 4 dulces en cada bolsa.',
-      { hint: 'Repartir sin que sobre es buscar divisores comunes.' }),
-    play('exponentes-mcd', 'Pon los exponentes del MCD y del MCM.', { n: ['2² · 3³ · 5', '2⁴ · 3 · 7'], r: '· 5 · 7', metas: ['2', '1', '4', '3'], fichas: ['2', '1', '4', '3', '6', '0', '2'],
-      mira: ['El MCD lleva solo los doses que tienen los dos.', 'El MCD lleva solo los treses que tienen los dos.', 'El MCM lleva los doses del que más tiene.', 'El MCM lleva los treses del que más tiene.'], trampas: { '0:4': 'El primero no tiene tantos doses.', '1:3': 'El segundo no tiene tantos treses.', '2:6': 'No se suman: basta con los del que más tiene.', '2:2': 'Con esos no alcanza para el segundo.' }, ok: 'MCD con el menor exponente; MCM con el mayor.' },
-      'MCD: $2^2 \\cdot 3$. MCM: $2^4 \\cdot 3^3 \\cdot 5 \\cdot 7$.',
-      { hint: 'El MCD cabe en los dos; en el MCM caben los dos.' }),
-    play('cual-de-los-dos', '¿Cada pregunta se resuelve con el **MCD** o con el **MCM**?', { et: ['baldosa más grande para 10 × 16', 'menor cuadrado, fichas de 10 × 16', 'cuándo suenan dos alarmas juntas', 'mayor número de grupos iguales'], metas: ['MCD', 'MCM', 'MCM', 'MCD'], fichas: ['MCD', 'MCD', 'MCD', 'MCM', 'MCM', 'MCM'],
-      mira: ['La baldosa es un pedazo del 10 y del 16.', 'El lado del cuadrado se arma juntando varias fichas.', 'Se buscan momentos que están en las dos listas, hacia adelante.', 'Se reparten cantidades en partes iguales.'], ok: 'Partir es MCD; juntar hasta coincidir es MCM.' },
-      'La baldosa divide a 10 y a 16: MCD. El cuadrado es múltiplo de 10 y de 16: MCM. Coincidir: MCM. Repartir: MCD.',
-      { hint: 'Pregúntate si la respuesta debe ser más pequeña que los datos o más grande.' }),
-    play('baldosa-mayor', 'Un piso de **30 × 42** se cubre con baldosas cuadradas iguales, sin cortar ninguna. Mueve el lado hasta la **más grande** posible.', { a: 30, b: 42, max: 15 },
-      'El lado debe dividir a 30 y a 42: sirven 1, 2, 3 y 6. La mayor es 6: $7 \\cdot 5 = 35$ baldosas.',
-      { hint: 'Busca los divisores que 30 y 42 tienen en común.' }),
-    play('producto-mcd', 'Dos números tienen **MCD 6** y **MCM 90**. Uno de ellos es **18**. Halla el producto de los dos y el otro número.', { s: 'MCD 6   MCM 90   uno: 18', et: ['el producto', 'el otro'], metas: ['540', '30'], fichas: ['540', '30', '96', '15', '108', '5'],
-      mira: ['El MCD por el MCM da lo mismo que multiplicar los dos números.', 'Divide el producto entre el número que conoces.'], trampas: { '0:96': 'Se multiplican, no se suman.', '0:108': 'Multiplicaste el 18 por el MCD.', '1:15': 'Eso es el MCM entre el MCD.', '1:5': 'Eso es el MCM entre 18.' }, ok: '18 · 30 = 6 · 90.' },
-      '$6 \\cdot 90 = 540$ y $540 \\div 18 = 30$.',
-      { hint: 'Recuerda el chequeo: el MCD por el MCM da el producto de los dos números.' }),
-    play('hora-del-cruce', 'Los buses de dos rutas salen juntos a las **8:00**: una ruta cada **15** minutos y la otra cada **25**. ¿Cada cuántos minutos coinciden, a qué hora vuelven a hacerlo y cuántos intervalos de 15 pasan?', { a: 'cada 15', b: 'cada 25', et: ['minutos', 'hora', 'intervalos'], metas: ['75', '9:15', '5'], fichas: ['75', '9:15', '5', '40', '8:40', '375', '3'],
-      mira: ['El primer múltiplo común de 15 y 25.', 'Pasa esos minutos a horas y súmalos a las 8:00.', '¿Cuántas veces cabe el 15?'], trampas: { '0:40': 'Se sumaron: 40 no es múltiplo de 25.', '0:375': 'Es múltiplo común, pero no el primero.', '2:3': 'Esos son los intervalos de 25.' }, ok: '5 · 15 = 75 y 3 · 25 = 75.' },
-      'MCM(15, 25) = 75 minutos, que es 1 hora y 15: a las 9:15. Pasan $75 \\div 15 = 5$ intervalos.',
-      { hint: 'Coincidir es mirar hacia adelante: múltiplos.' }),
-    play('sube-mcm', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: '¿Cuál es el **MCM** de **16** y **40**?', r: 80, c: '2^4 \\cdot 5', e: { 8: 'Ese es el MCD.', 56: 'No se suman: 56 no es múltiplo de 40.' } },
-      { q: '¿Cuál es el **MCD** de **32** y **48**?', r: 16, c: '2^4', e: { 96: 'Ese es el MCM.', 8: 'Divide a los dos, pero hay uno mayor.', 4: 'Divide a los dos, pero hay uno mayor.' } },
-      { q: 'Tres luces titilan cada **4**, cada **6** y cada **10** segundos. Si titilan juntas, ¿en cuántos segundos vuelven a hacerlo?', r: 60, c: '2^2 \\cdot 3 \\cdot 5', e: { 120: 'Coinciden, pero ya lo habían hecho antes.', 20: 'La de 6 no titila en el 20.', 30: 'La de 4 no titila en el 30.' } }] },
-      '$16 = 2^4$ y $40 = 2^3 \\cdot 5$: 80. $32 = 2^5$ y $48 = 2^4 \\cdot 3$: 16. $2^2 \\cdot 3 \\cdot 5 = 60$.',
-      { hint: 'Descompón en primos: comunes para el MCD, todos para el MCM.' }),
-    sol('Tres corredores dan vueltas a una pista y tardan 4, 6 y 9 minutos por vuelta. Si salen juntos de la meta, ¿a los cuántos minutos vuelven a coincidir los tres en la meta? ¿Cuántas vueltas habrá dado cada uno?',
-      ['$4 = 2^2$, $6 = 2 \\cdot 3$ y $9 = 3^2$. El MCM toma cada primo con su mayor exponente: $2^2 \\cdot 3^2 =$ [[36]]', 'Vuelven a coincidir a los [[36]] minutos', 'El más rápido habrá dado $36 \\div 4 =$ [[9]] vueltas; el más lento, [[4]]'],
-      ['216', '18', '6'],
-      'Los tres pasan por la meta en los múltiplos de su tiempo: coinciden en el primer múltiplo común, el MCM. Multiplicar $4 \\cdot 6 \\cdot 9$ da un múltiplo común, pero no el primero.',
-      'Coincidir es un problema de múltiplos comunes: busca el más pequeño.'),
-    err('Se quieren armar paquetes iguales con 48 lápices y 36 borradores, sin que sobre nada y con la mayor cantidad posible de paquetes. ¿Cuántos paquetes salen?',
-      ['Las dos cantidades se reparten en partes iguales: el número de paquetes debe dividir a 48 y a 36', 'Para tener la mayor cantidad de paquetes se usa el mínimo común múltiplo: 144', 'Salen 144 paquetes'], 1,
-      ['Para tener la mayor cantidad de paquetes se usa el máximo común divisor: 12', 'Para tener la mayor cantidad de paquetes se usa la suma: $48 + 36 = 84$', 'Para tener la mayor cantidad de paquetes se usa el menor divisor común: 2'],
-      'Repartir sin que sobre es un problema de divisores, no de múltiplos: el mayor divisor común de 48 y 36 es 12. Cada paquete lleva 4 lápices y 3 borradores.',
-      'Compara la respuesta con los datos: ¿se pueden armar más paquetes que lápices hay?'),
-    opc('Dos alarmas suenan juntas en este instante. Una suena cada 8 segundos y la otra cada 20 segundos. Contando también este instante, el número de veces que suenan juntas en el minuto y medio que empieza ahora es:',
-      ['3', '2', '4', '7'], 0,
-      'Coinciden cada MCM(8, 20) = 40 segundos: en el segundo 0, en el 40 y en el 80; la siguiente, en el 120, ya se pasa de los 90. Contando el instante inicial son 3; si el enunciado dijera «sin contar el instante inicial», serían 2. Lee siempre si el comienzo cuenta.',
-      'Halla cada cuánto coinciden y haz la lista de esos momentos desde el segundo 0. ¿El 0 entra en la cuenta?'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/numeros-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-nu-3', [
-    play('siempre-par', 'n es un número **impar** cualquiera. ¿Cuáles son **siempre** pares? Toca todas.', { casos: [{ t: 'n + 1', si: true }, { t: 'n · n', no: 'Impar por impar es impar: 3 · 3 = 9.' }, { t: '3n + 1', si: true }, { t: '2n + 1', no: '2n es par, y al sumarle 1 queda impar.' }, { t: 'n · (n + 1)', si: true }], falta: 'Falta otra: mira si cada pedazo es par o impar.', ok: 'Dos sueltos hacen pareja, y un factor par basta.' },
-      'n + 1 es par. 3n es impar, y más 1 es par. n + 1 es par, así que el producto también. n · n y 2n + 1 son impares.',
-      { hint: 'Reemplaza n por 1, por 3 y por 5 y mira qué pasa.' }),
-    play('dos-residuos', 'Busca el número entre 20 y 40 que deja residuo **1** entre **4** y residuo **3** entre **5**.', { min: 20, max: 40, c: [[4, 1], [5, 3]] },
-      'Con residuo 3 entre 5: 23, 28, 33 y 38. De esos, $33 = 4 \\cdot 8 + 1$.',
-      { hint: 'Escribe los que dejan residuo 3 entre 5 y revisa cada uno entre 4.' }),
-    play('opera-residuos', 'Sin hacer el producto: ¿qué residuo deja $52 \\cdot 39$ entre **7**?', { s: '52 · 39', et: ['de 52', 'de 39', 'del producto'], metas: ['3', '4', '5'], fichas: ['3', '4', '5', '12', '7', '1', '0'],
-      mira: ['Haz grupos de 7 con 52 y mira cuánto sobra.', 'Haz grupos de 7 con 39 y mira cuánto sobra.', 'Multiplica los dos residuos y saca el residuo otra vez.'], trampas: { '0:7': 'Un residuo entre 7 siempre es menor que 7.', '2:12': 'En 12 todavía cabe un grupo de 7.', '2:7': 'Un residuo entre 7 siempre es menor que 7.' }, ok: '3 · 4 = 12, y 12 deja 5.' },
-      '$52 = 7 \\cdot 7 + 3$ y $39 = 7 \\cdot 5 + 4$. $3 \\cdot 4 = 12 = 7 + 5$: residuo 5.',
-      { hint: 'Cambia cada número por su residuo antes de multiplicar.' }),
-    play('ciclo-ultima', 'Pon la **última cifra** de cada potencia de 2. Para la última, usa el ciclo.', { et: ['2¹', '2²', '2³', '2⁴', '2⁵', '2²²'], a: '2', metas: ['4', '8', '6', '2', '4'], fichas: ['4', '4', '8', '8', '6', '6', '2', '2'],
-      mira: ['Dobla la última cifra anterior.', 'Dobla la última cifra anterior.', 'Dobla la última cifra anterior y quédate con las unidades.', 'Dobla la última cifra anterior y quédate con las unidades.', 'El ciclo tiene cuatro pasos: ¿qué sobra al dividir 22 entre 4?'], trampas: { '4:2': 'Ese sería el primero del ciclo.', '4:8': 'Ese sería el tercero del ciclo.', '4:6': 'Ese saldría si no sobrara nada.' }, ok: '2, 4, 8, 6 y vuelve a empezar.' },
-      'Cada una dobla a la anterior: 2, 4, 8, 6, 2… Como $22 = 4 \\cdot 5 + 2$, es la segunda del ciclo: 4.',
-      { hint: 'Basta multiplicar por 2 la última cifra. Fíjate cuándo se repite.' }),
-    play('rueda-semana', 'Hoy es **miércoles**. Gira la aguja hasta el día que será dentro de **100** días.', { hoy: 2, n: 100 },
-      '$100 = 7 \\cdot 14 + 2$: pasan 14 semanas completas y se avanzan 2 días. Será viernes.',
-      { hint: 'Cada 7 días vuelve a ser miércoles. ¿Cuántos días sobran?' }),
-    play('ultima-por-partes', '¿En qué termina $238 \\cdot 57 + 64$? Pon la última cifra del producto, cuánto da al sumarle la última cifra de 64, y la respuesta.', { s: '238 · 57 + 64', et: ['el producto', 'más la de 64', 'termina en'], metas: ['6', '10', '0'], fichas: ['6', '10', '0', '56', '1', '8', '5'],
-      mira: ['Multiplica las dos últimas cifras y quédate con las unidades.', 'A eso súmale la última cifra de 64.', 'De lo que dio, mira solo las unidades.'], trampas: { '0:56': 'De 56 solo queda la última cifra.', '0:5': 'De 56 queda la última cifra, no la primera.', '2:1': 'Esa es la cifra de las decenas.' }, ok: '238 · 57 + 64 = 13 630.' },
-      '$8 \\cdot 7 = 56$ termina en 6; $6 + 4 = 10$ termina en 0.',
-      { hint: 'Las decenas y las centenas no tocan la última cifra.' }),
-    play('arma-dividendo', 'Al dividir un número entre **9** da cociente **14** y residuo **5**. Pon el número, el **residuo** si se le suma 6 y el **residuo** si se dobla.', { s: 'entre 9: cociente 14, residuo 5', et: ['el número', 'si se suma 6', 'si se dobla'], metas: ['131', '2', '1'], fichas: ['131', '2', '1', '11', '10', '126', '28'],
-      mira: ['Los grupos completos y lo que sobra.', 'Al residuo súmale 6 y saca el residuo otra vez.', 'Dobla el residuo y saca el residuo otra vez.'], trampas: { '0:126': 'Faltan los 5 que sobran.', '0:28': 'El 9 y el 14 se multiplican.', '1:11': 'En 11 todavía cabe un grupo de 9.', '2:10': 'En 10 todavía cabe un grupo de 9.' }, ok: 'Lo que sobra se opera aparte.' },
-      '$9 \\cdot 14 + 5 = 131$. $5 + 6 = 11 = 9 + 2$. $2 \\cdot 5 = 10 = 9 + 1$.',
-      { hint: 'Para los residuos basta trabajar con el 5.' }),
-    play('sube-sobrante', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: '¿Qué **residuo** deja **200** entre **7**?', r: 4, c: '200 - 7 \\cdot 28', e: { 28: 'Ese es el cociente.' } },
-      { q: '¿En qué cifra termina $9^{13}$?', r: 9, c: '9^{13} \\to 9^1', e: { 1: 'Así terminan las de exponente par.' } },
-      { q: '¿Cuál es el menor número **mayor que 20** que deja residuo **3** entre **8**?', r: 27, c: '8 \\cdot 3 + 3', e: { 24: 'Ese no deja residuo.', 19: 'Deja residuo 3, pero no pasa de 20.', 23: 'El 23 deja residuo 7.' } }] },
-      '$200 = 7 \\cdot 28 + 4$. Las potencias de 9 terminan en 9 y 1, alternadas: con 13, en 9. $8 \\cdot 3 + 3 = 27$.',
-      { hint: 'Piensa en grupos completos y en lo que sobra.' }),
-    sol('Un número entero deja residuo 3 cuando se divide entre 5. ¿Qué residuo deja su doble al dividirlo entre 5? ¿Y su cuadrado?',
-      ['Para los residuos basta trabajar con el residuo: el número se comporta como un [[3]]', 'Su doble se comporta como 6, que al dividir entre 5 deja residuo [[1]]', 'Su cuadrado se comporta como [[9]], que al dividir entre 5 deja residuo [[4]]'],
-      ['6', '0', '2'],
-      'Se puede comprobar con el 8 o con el 13: sus dobles (16 y 26) dejan residuo 1, y sus cuadrados (64 y 169) dejan residuo 4. Los residuos se operan entre sí y se vuelven a reducir.',
-      'Prueba con un número concreto que deje residuo 3, como el 8, y después con otro.'),
-    err('¿Es posible que la suma de 7 números impares sea igual a 100?',
-      ['La suma de dos impares es par', 'Seis de los impares forman tres parejas: su suma es par', 'Al sumar el séptimo impar, el total sigue siendo par', 'Como 100 es par, sí es posible'], 2,
-      ['Al sumar el séptimo impar, par más impar da impar', 'Al sumar el séptimo impar, el total es divisible por 7', 'Al sumar el séptimo impar, el total deja de ser un número entero'],
-      'Una cantidad impar de números impares suma impar. Como 100 es par, no es posible: la paridad lo decide sin hacer ninguna cuenta.',
-      'Prueba con números pequeños: ¿qué paridad tiene la suma de tres impares?'),
-    opc('Hoy es lunes. El día de la semana que será dentro de 500 días es:',
-      ['martes', 'miércoles', 'viernes', 'jueves'], 3,
-      '$500 = 7 \\cdot 71 + 3$: pasan 71 semanas completas y sobran 3 días. Lunes más 3 es jueves.',
-      'Las semanas completas no cambian el día: solo importa el residuo al dividir entre 7.'),
-  ]);
-
-  addExam('pu-numeros', [
-    ['pu-nu-1', 'Un número es primo si solo se deja dividir por 1 y por él mismo.',
-      opc('De los siguientes números, el único que es primo es:', ['91', '97', '87', '93'], 1,
-        '$91 = 7 \\cdot 13$, $87 = 3 \\cdot 29$ y $93 = 3 \\cdot 31$. El 97 no tiene divisores.', 'Prueba con 3 (suma de cifras) y con 7.')],
-    ['pu-nu-2', 'El MCM es el primer múltiplo que comparten los dos números.',
-      opc('El mínimo común múltiplo de 8 y 12 es:', ['4', '96', '48', '24'], 3,
-        'Múltiplos de 12: 12, 24… El 24 también es múltiplo de 8.', 'Recorre los múltiplos del mayor hasta encontrar uno del menor.')],
-    ['pu-nu-3', 'Dividendo = divisor · cociente + residuo.',
-      opc('El residuo de dividir 1 000 entre 7 es:', ['6', '1', '3', '0'], 0,
-        '$7 \\cdot 142 = 994$ y $1\\,000 - 994 = 6$.', 'Busca el múltiplo de 7 más cercano por debajo de 1 000.')],
-  ]);
-});
-;
 //#archivo js/courses/preuda-r-probabilidad.js
 // Preuniversitario · mundo 16 «Probabilidad»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
 PU_JUEGOS.push(({ setExam }) => {
@@ -3740,7 +3434,7 @@ const PI_TEMARIO = {
     ['icf-ma-curvas', 'Funciones que Curvan', ['Cuadráticas: trayectorias y máximos', 'Exponenciales y logarítmicas', 'Trigonométricas y periódicas', 'Dominio, rango y cortes'], 'Álgebra y cálculo'],
     ['icf-ma-espacio', 'Movimientos y Vistas', ['Traslación, rotación, reflexión y homotecia', 'Vistas y desarrollos planos', 'Coordenadas cartesianas, polares y en 3D'], 'Geometría'],
     ['icf-ma-dispersion', 'Dispersión y Comparación', ['Rango, varianza y desviación', 'Percentiles y cajas', 'Correlación'], 'Estadística'],
-    ['icf-ma-numeros', 'Números, Conjuntos y Sucesiones', ['Fracciones, decimales y notación científica', 'Conjuntos y diagramas', 'Sucesiones y sus límites'], 'Álgebra y cálculo'],
+    ['icf-ma-numeros', 'Números y Sucesiones', ['Fracciones, decimales y notación científica', 'Conjuntos y diagramas', 'Sucesiones y sus límites'], 'Álgebra y cálculo'],
   ],
   lectura: [
     ['icf-lc-literal', 'Lo que Dice el Texto', ['Datos e ideas del texto', 'Palabras y referencias'], 'Contenidos locales'],
@@ -3777,7 +3471,7 @@ const PI_TEMARIO = {
     ['icf-cn-ondas', 'Ondas, Luz y Sonido', ['Frecuencia y longitud', 'Reflexión y refracción'], 'Físico'],
     ['icf-cn-gases', 'Gases y Disoluciones', ['Leyes de los gases', 'Concentración'], 'Químico'],
     ['icf-cn-electrico', 'Electricidad y Magnetismo', ['Circuitos', 'Cargas e imanes'], 'Físico'],
-    ['icf-cn-cts', 'Ciencia, Tecnología y Sociedad', ['Salud y tecnología', 'Recursos y ambiente', 'Decisiones con evidencia'], 'CTS'],
+    ['icf-cn-cts', 'Ciencia y Sociedad', ['Salud y tecnología', 'Recursos y ambiente', 'Decisiones con evidencia'], 'CTS'],
   ],
   ingles: [
     ['icf-en-avisos', 'Avisos y Vocabulario', ['Signs and notices', 'Words and meanings'], 'Partes 1 y 2 · Pre A1 y A1'],
@@ -5107,6 +4801,200 @@ PI_MUNDOS.push((() => {
     ['icf-ma-espacio-3', 'Polares: giro y pasos.', play('atrapa-punto', 'Toca el punto al que se llega con el giro pedido', { rounds: [{ prompt: 'Gira 225° desde la derecha', angles: [225] }] }, '225° es media vuelta y 45° más: abajo a la izquierda.', { hint: 'Media vuelta son 180°: mira cuánto falta.' })],
     ['icf-ma-espacio-3', 'La distancia sale de Pitágoras.', play('escalera-pared', 'Apoya la escalera en la ventana', { rounds: [{ L: 13, h: 12 }] }, '$169 - 144 = 25$: el pie queda a 5.', { hint: 'Resta los cuadrados del largo y de la altura.' })],
     ['icf-ma-espacio-3', 'Tres coordenadas en el espacio.', opc('Una caja va de $(0, 0, 0)$ a $(5, 3, 2)$. El vértice que está en el piso, opuesto al origen, es:', ['$(5, 3, 2)$', '$(0, 3, 2)$', '$(5, 0, 2)$', '$(5, 3, 0)$'], 3, 'En el piso la altura es 0 y los otros dos avances son completos.', 'En el piso, ¿cuánto vale z?')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-ma-dispersion.js
+// Preicfes · Matemáticas · mundo 12 «Dispersión y Comparación» (spec 2026-11-25-preicfes-estructura). Números y contextos propios.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = ICF;
+
+  const l1 = leccion('icf-ma-dispersion-1', 'Rango, varianza y desviación', guion(
+    ['Qué tan regados', 'Dos grupos pueden tener el mismo promedio y estar muy distintos.'],
+    ['Rango', 'El mayor menos el menor: solo mira los extremos.'],
+    ['Varianza', 'El promedio de los cuadrados de las desviaciones.'],
+    ['Desviación estándar', 'La raíz de la varianza: vuelve a la unidad de los datos.']), [
+    x('desvios-cero', 'Mueve el apoyo hasta que las **desviaciones** sumen **0** y la regla quede en equilibrio.', { d: [1, 3, 4, 8, 9], hi: 10 },
+      'El equilibrio está en el promedio: $25 \\div 5 = 5$.', 'Reparte la suma de los datos entre todos por igual.'),
+    x('mueve-rango', 'Mueve el dato **mayor** hasta que el **rango** de los datos sea **8**.', { d: [3, 5, 5, 6], rango: 8, hi: 14 },
+      'El menor es 3: el mayor debe ser $3 + 8 = 11$.', 'El rango se cuenta siempre desde el dato menor.'),
+    x('varianza-pasos', 'Para los datos **2, 4, 6** y **8**, completa.', { et: ['promedio', 'suma de los cuadrados', 'varianza', 'rango'], metas: ['5', '20', '5', '6'], fichas: ['5', '20', '5', '6', '10', '4', '0'], mira: ['Suma y reparte entre 4.', 'Las desviaciones son −3, −1, 1 y 3.', 'Promedia los cuadrados.', 'El mayor menos el menor.'], trampas: { '1:0': 'Esa es la suma sin elevar al cuadrado.', '2:20': 'Falta dividir entre los 4 datos.' }, ok: 'Promedio, cuadrados y otra vez promedio.' },
+      '$9 + 1 + 1 + 9 = 20$ y $20 \\div 4 = 5$; el rango es $8 - 2 = 6$.', 'Resta el promedio a cada dato y eleva al cuadrado.'),
+    x('mas-disperso', 'El grupo modelo es **4, 5, 6**. Toca **todos** los grupos con **mayor** desviación estándar.', { casos: [{ t: '1, 5, 9', si: true }, { t: '14, 15, 16', no: 'Está igual de regado, solo que corrido.' }, { t: '0, 5, 10', si: true }, { t: '5, 5, 5', no: 'No se aparta nada del promedio.' }, { t: '40, 50, 60', si: true }], falta: 'Falta otro: mira cuánto se apartan del promedio, no qué tan grandes son.', ok: 'Importa cuánto se apartan.' },
+      'Se apartan 4, 5 y 10 del promedio; 14, 15, 16 se aparta 1, igual que el modelo.', 'Compara las distancias al promedio de cada grupo.'),
+    x('suma-igual', 'Un grupo tiene promedio **10** y desviación estándar **2**. ¿Cómo quedan?', { et: ['promedio, si se suma 5 a todos', 'desviación, si se suma 5', 'promedio, si se duplican', 'desviación, si se duplican'], metas: ['15', '2', '20', '4'], fichas: ['15', '2', '20', '4', '7', '10'], mira: ['Todos se corren 5.', 'Al correrse juntos no se separan.', 'Todos se duplican.', 'Las distancias también se duplican.'], trampas: { '1:7': 'Correr los datos no los separa más.' }, ok: 'Correr no separa; multiplicar sí.' },
+      'Sumar corre el promedio y no cambia la desviación; duplicar duplica los dos.', 'Piensa si los datos quedan más separados entre sí.'),
+    x('elige-regular', 'Dos buses tardan en promedio **30** min. Desviación: **A, 2** y **B, 9**. ¿Cuál conviene?', { et: ['llegar casi siempre a tiempo', 'jugársela por llegar en 20', 'tiempos más parejos', 'a veces tarda más de 40'], metas: ['A', 'B', 'A', 'B'], fichas: ['A', 'B', 'A', 'B', 'A', 'B'], mira: ['Busca el más regular.', 'Busca el que varía más.', 'Menor desviación.', 'Mayor desviación.'], ok: 'Menor desviación, más regular.' },
+      'A es más regular; B varía tanto que a veces llega muy pronto o muy tarde.', 'La desviación dice cuánto se aparta del promedio.'),
+    x('sube-varianza', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Varianza de **1**, **1**, **7** y **7**.', r: 9, c: '(9 + 9 + 9 + 9) \\div 4', e: { 3: 'Esa es la desviación estándar.', 36: 'Falta dividir entre 4.' } },
+      { q: 'La varianza es **49**. ¿Cuál es la **desviación estándar**?', r: 7, c: '\\sqrt{49}', e: { 25: 'Se saca la raíz, no la mitad.' } },
+      { q: 'Rango de **−4**, **3**, **11** y **8**.', r: 15, c: '11 - (-4)', e: { 7: 'El menor es −4: se le resta.' } }] },
+      'Promedio 4 y cuadrados de 9: varianza 9; $\\sqrt{49} = 7$; y $11 + 4 = 15$.', 'La desviación estándar es la raíz de la varianza.'),
+    sol('Halla la desviación estándar de 3, 7, 7 y 11.', ['El promedio es [[7]]', 'Los cuadrados de las desviaciones suman [[32]]', 'La varianza es [[8]]: la desviación es cerca de 2.83'], ['28', '16', '4'], '$16 + 0 + 0 + 16 = 32$ y $32 \\div 4 = 8$.', 'Resta el promedio a cada dato.'),
+    err('Alguien halla la varianza de 1, 5 y 6.', ['El promedio es 4', 'Las desviaciones son $-3$, 1 y 2', 'Suman 0: la varianza es 0'], 2, ['Los cuadrados suman 14: la varianza es $14 \\div 3$', 'La varianza es 5, el rango', 'La varianza es 4, el promedio'], 'Las desviaciones siempre suman 0; por eso se elevan al cuadrado.', '¿Qué se hace con las desviaciones antes de sumarlas?'),
+    opc('Los puntajes de A son 40, 50 y 60; los de B, 49, 50 y 51. Es correcto que:', ['Tienen igual promedio y A está más disperso', 'Tienen igual promedio e igual dispersión', 'A tiene mayor promedio', 'B está más disperso'], 0, 'Los dos promedian 50; los de A se apartan 10 y los de B, 1.', 'Calcula el promedio y mira cuánto se apartan.'),
+  ]);
+
+  const l2 = leccion('icf-ma-dispersion-2', 'Percentiles y cajas', guion(
+    ['Percentil', 'El percentil 80 deja por debajo al 80 % de los datos.'],
+    ['Cuartiles', 'Parten los datos ordenados en cuatro grupos iguales.'],
+    ['La caja', 'Va del primer al tercer cuartil y guarda la mitad central.'],
+    ['Comparar', 'Una caja corta es un grupo parejo.']), [
+    x('arma-caja', 'Los datos, en orden, son 1, 3, 3, 5, 6, 6, 8, 9, 9, 10 y 12. Pon los tres **cortes** de su caja.', { d: [1, 3, 3, 5, 6, 6, 8, 9, 9, 10, 12], hi: 12 },
+      'La mediana es 6; la mitad de abajo (1, 3, 3, 5, 6) tiene mediana 3 y la de arriba, 9.', 'Primero el dato del medio; después, el medio de cada mitad.'),
+    x('lee-caja', 'Lee la caja de los puntajes de un grupo.', { q: [10, 25, 40, 55, 80], hi: 100, paso: 10, et: ['mediana', 'largo de la caja', 'rango', 'por debajo de 25'], metas: ['40', '30', '70', '25 %'], fichas: ['40', '30', '70', '25 %', '45', '50 %', '55'], mira: ['Es la línea dentro de la caja.', 'Del primer al tercer cuartil.', 'De un bigote al otro.', 'El primer cuartil deja una cuarta parte.'], trampas: { '0:45': 'No es la mitad entre los extremos: es la línea de la caja.', '3:50 %': 'La mitad queda por debajo de la mediana.' }, ok: 'Línea, caja y bigotes.' },
+      'La mediana es 40; la caja mide $55 - 25 = 30$; el rango, $80 - 10 = 70$; y queda el 25 %.', 'Cada tramo de la gráfica guarda una cuarta parte de los datos.'),
+    x('percentil-puesto', 'En un examen de **600** personas, Lía quedó en el percentil **85**. Mueve cuántas quedaron **por debajo**.', { n: 600, pc: 85, paso: 10 },
+      'Por debajo queda el 85 % de 600: son 510 personas.', 'El percentil es el porcentaje de personas que queda por debajo.'),
+    x('compara-cajas', 'A y B son los tiempos de dos equipos. ¿Cuál cumple?', { A: [10, 20, 30, 50, 70], B: [20, 35, 40, 45, 60], hi: 80, paso: 10, et: ['mayor mediana', 'mitad central más pareja', 'mayor rango', 'la cuarta parte tarda 20 o menos'], metas: ['B', 'B', 'A', 'A'], fichas: ['B', 'B', 'A', 'A', 'A', 'B'], mira: ['Compara las líneas de adentro.', 'Compara el largo de las cajas.', 'Compara de bigote a bigote.', 'Mira dónde empieza cada caja.'], ok: 'Línea, caja, bigotes y cuartil.' },
+      'Las medianas son 30 y 40; las cajas, 30 y 10; los rangos, 60 y 40; y el primer cuartil de A es 20.', 'Lee los cinco números de cada gráfica y compáralos.'),
+    x('dice-la-caja', 'Una caja va de **12** a **20**, con mediana **18**; bigotes en **5** y **26**. Toca **todo** lo que se puede **asegurar**.', { casos: [{ t: 'la mitad de los datos es de 18 o menos', si: true }, { t: 'el promedio es 18', no: 'La caja muestra la mediana, no el promedio.' }, { t: 'la cuarta parte está entre 20 y 26', si: true }, { t: 'hay más datos entre 12 y 18 que entre 18 y 20', no: 'Cada tramo guarda la cuarta parte: el corto está más apretado.' }, { t: 'el rango es 21', si: true }], falta: 'Falta otra que sale de los cinco números.', ok: 'Cuartas partes y extremos.' },
+      'Cada tramo guarda la cuarta parte; el rango es $26 - 5 = 21$; del promedio no se sabe.', 'Un tramo largo no tiene más datos: los tiene más regados.'),
+    x('sube-percentil', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De **250** atletas, **190** tardaron más que Rut. ¿Qué **porcentaje** tardó **más**?', r: 76, c: '190 \\div 250 \\cdot 100', e: { 24: 'Ese es el resto.' } },
+      { q: 'Mediana de **4**, **10**, **12**, **20**, **31** y **50**.', r: 16, c: '(12 + 20) \\div 2', e: { 12: 'Hay dos datos en el medio.', 20: 'Hay dos datos en el medio.' } },
+      { q: 'Los cuartiles son **14**, **22** y **40**. ¿Cuánto mide la **caja**?', r: 26, c: '40 - 14', e: { 18: 'Se va del primero al tercero.' } }] },
+      '$190 \\div 250 = 76\\%$; $\\tfrac{12 + 20}{2} = 16$; y $40 - 14 = 26$.', 'Con una cantidad par de datos, la mediana promedia los dos del medio.'),
+    sol('En un colegio de 400 estudiantes, 320 tienen menos puntaje que Iván. ¿En qué percentil está?', ['Se divide $320 \\div 400 =$ [[0.8]]', 'Está en el percentil [[80]]', 'Por encima o igual quedan [[80 estudiantes]]'], ['32', '0.32', '20 estudiantes'], 'El 80 % quedó por debajo; $400 - 320 = 80$.', 'Compara los de abajo con el total.'),
+    err('Alguien lee una caja con cuartiles 10, 30 y 35.', ['La mitad de los datos está entre 10 y 35', 'La mediana es 30', 'Entre 10 y 30 hay más datos que entre 30 y 35'], 2, ['Hay igual cantidad: los de 30 a 35 están más apretados', 'Entre 30 y 35 hay el doble de datos', 'Entre 10 y 30 no hay datos'], 'Cada tramo guarda la cuarta parte de los datos.', '¿Qué parte de los datos guarda cada tramo?'),
+    opc('Un bebé está en el percentil 30 de peso. Esto significa que:', ['Pesa 30 libras', 'El 30 % de los bebés de su edad pesa menos que él', 'El 30 % de los bebés pesa más que él', 'Pesa el 30 % de lo normal'], 1, 'El percentil dice qué porcentaje queda por debajo.', 'Pregunta qué parte queda por debajo.'),
+  ]);
+
+  const l3 = leccion('icf-ma-dispersion-3', 'Correlación', guion(
+    ['La nube', 'Cada punto es un caso con dos datos.'],
+    ['Positiva o negativa', 'Suben juntas, o una sube y la otra baja.'],
+    ['Qué tan fuerte', 'De −1 a 1: cerca de 0 no hay relación de línea.'],
+    ['No es causa', 'Dos cosas pueden ir juntas por una tercera o por azar.']), [
+    x('predice-nube', 'La nube muestra horas de práctica y puntos. Mueve la **predicción** para **6** horas según la tendencia.', { pts: [[1, 13], [1, 17], [2, 19], [3, 24], [3, 26], [4, 31], [5, 34], [5, 36]], m: 5, b: 10, x: 6, tol: 2, hx: 8, hy: 60 },
+      'Por cada hora hay unos 5 puntos más: cerca de 40.', 'Imagina la línea que pasa por la mitad de la nube y alárgala.'),
+    x('punto-raro', 'Toca el punto que **se sale** de la tendencia.', { pts: [[1, 18], [2, 16], [3, 13], [4, 12], [5, 4], [6, 8], [7, 6], [8, 3]], raro: 4, hx: 9, hy: 20, ok: 'Ese queda muy por debajo.' },
+      'Todos bajan poco a poco; el de (5, 4) queda muy por debajo.', 'Sigue con la vista la línea de los demás puntos.'),
+    x('signo-correlacion', '¿La correlación esperable es **positiva**, **negativa** o **ninguna**?', { et: ['edad del carro y su precio', 'área y precio de una casa', 'altura y letras del nombre', 'temperatura y venta de abrigos'], metas: ['negativa', 'positiva', 'ninguna', 'negativa'], fichas: ['negativa', 'positiva', 'ninguna', 'negativa', 'positiva', 'ninguna'], mira: ['Al envejecer, ¿vale más o menos?', 'Más grande, ¿más o menos cara?', '¿Tiene algo que ver una con otra?', 'Con más calor, ¿más o menos abrigos?'], ok: 'Juntas, al contrario o sin relación.' },
+      'El carro viejo y el calor van al contrario; el área sube con el precio; el nombre no se relaciona.', 'Piensa qué hace la segunda cuando la primera aumenta.'),
+    x('fuerza-r', '¿Qué indica cada coeficiente de correlación?', { et: ['r = 0.95', 'r = −0.9', 'r = 0.05', 'r = −0.4'], metas: ['fuerte, sube', 'fuerte, baja', 'casi nula', 'débil, baja'], fichas: ['fuerte, sube', 'fuerte, baja', 'casi nula', 'débil, baja', 'débil, sube'], mira: ['Está cerca de 1.', 'Está cerca de −1.', 'Está cerca de 0.', 'Es negativo y está lejos de −1.'], trampas: { '1:débil, baja': 'Está muy cerca de −1: es fuerte.' }, ok: 'El signo dice el sentido; la cercanía a 1 o −1, la fuerza.' },
+      'Cerca de 1 o de $-1$ es fuerte; cerca de 0, casi nula; el signo da el sentido.', 'Mira por separado el signo y qué tan lejos está de 0.'),
+    x('tercer-factor', 'Estas cosas van juntas sin que una cause la otra. Pon lo que **explica** las dos.', { et: ['helados y ahogados', 'zapato y lectura (niños)', 'bomberos y daños'], metas: ['el calor', 'la edad', 'el tamaño del fuego'], fichas: ['el calor', 'la edad', 'el tamaño del fuego', 'la lluvia', 'el dinero'], mira: ['¿Cuándo se come más helado y se nada más?', '¿Qué hace crecer el pie y leer mejor?', '¿Cuándo van más bomberos?'], ok: 'Una tercera cosa mueve a las dos.' },
+      'El calor, la edad y el tamaño del fuego hacen subir las dos a la vez.', 'Busca algo que, al aumentar, haga aumentar las dos.'),
+    x('causa-o-no', 'En una ciudad, los barrios con **más árboles** tienen **menos asma**. Toca **todo** lo que se puede decir **solo con eso**.', { casos: [{ t: 'van juntas: correlación negativa', si: true }, { t: 'los árboles curan el asma', no: 'Eso es afirmar una causa; puede haber otra.' }, { t: 'otra cosa podría explicar las dos', si: true }, { t: 'si se siembra, el asma bajará seguro', no: 'Para saberlo hace falta un experimento.' }, { t: 'haría falta un estudio para hablar de causa', si: true }], falta: 'Falta otra que no afirma una causa.', ok: 'Ir juntas no es causar.' },
+      'Se ve una correlación negativa; para hablar de causa hace falta más.', 'Separa lo que se observa de lo que se supone.'),
+    x('sube-nube', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'La tendencia es $y = 3x + 8$. ¿Cuánto predice para $x = 12$?', r: 44, c: '3 \\cdot 12 + 8', e: { 36: 'Falta sumar 8.' } },
+      { q: 'Con **2** horas hay **14** puntos y con **7** horas, **39**, en línea. ¿Cuántos puntos **por hora**?', r: 5, c: '25 \\div 5', e: { 25: 'Esa es la subida total.' } },
+      { q: 'La tendencia $y = 50 - 4x$ predice **22**. ¿Cuánto vale $x$?', r: 7, c: '(50 - 22) \\div 4', e: { 28: 'Falta dividir entre 4.' } }] },
+      '$36 + 8 = 44$; $25 \\div 5 = 5$; y $28 \\div 4 = 7$.', 'Reemplaza lo que conoces en la tendencia.'),
+    sol('La tendencia entre edad $x$ (años) y precio $y$ (millones) de una moto es $y = 12 - 1.5x$.', ['Cada año pierde [[1.5]] millones', 'A los 4 años valdría [[6]] millones', 'La correlación es [[negativa]]'], ['12', '10.5', 'positiva'], '$12 - 6 = 6$; al aumentar la edad baja el precio.', 'Reemplaza $x = 4$ y mira el signo.'),
+    err('Un informe dice que en los países con más televisores la gente vive más.', ['La correlación es positiva', 'Puede deberse a que son países más ricos', 'Regalar televisores alargaría la vida'], 2, ['Con eso no se puede decir que los televisores alarguen la vida', 'Quitar televisores alargaría la vida', 'La correlación es negativa'], 'La riqueza explica las dos: ir juntas no es causar.', '¿Hay algo que explique las dos cosas?'),
+    opc('En una nube de puntos, cuando $x$ aumenta, $y$ disminuye casi en línea recta. Un coeficiente de correlación posible es:', ['$0.97$', '$0.1$', '$-0.1$', '$-0.96$'], 3, 'Baja y casi en línea: negativo y cerca de $-1$.', 'Mira el sentido y qué tan en línea están.'),
+  ]);
+
+  return mundo('icf-ma-dispersion', 'Dispersión y Comparación', 'matematicas', [l1, l2, l3], [
+    ['icf-ma-dispersion-1', 'El promedio equilibra las desviaciones.', play('balanza-promedio', 'Pon el apoyo en el promedio de todo el grupo', { rounds: [{ groups: [{ lab: '3 notas', n: 3, mean: 4 }, { lab: '1 nota', n: 1, mean: 8 }], lo: 0, hi: 10 }] }, '$(3 \\cdot 4 + 8) \\div 4 = 5$.', { hint: 'El grupo más grande pesa más en el promedio.' })],
+    ['icf-ma-dispersion-1', 'Con el promedio se recupera un dato.', play('dato-faltante', 'Mueve el dato que falta hasta el promedio pedido', { rounds: [{ data: [5, 12, null, 9], mean: 8, hi: 15, step: 1 }] }, 'Los cuatro suman 32 y los que hay, 26: falta 6.', { hint: 'Multiplica el promedio por la cantidad de datos.' })],
+    ['icf-ma-dispersion-1', 'La dispersión mira cuánto se apartan.', opc('El grupo de datos con menor desviación estándar es:', ['2, 8, 14', '0, 8, 16', '7, 8, 9', '5, 8, 11'], 2, 'Todos promedian 8; 7, 8, 9 se aparta menos.', 'Compara cuánto se aparta cada dato del promedio.')],
+    ['icf-ma-dispersion-2', 'La mediana es el dato del medio, en orden.', play('ordena-mediana', 'Ordena los datos y encuentra la mediana', { rounds: [{ data: [9, 4, 15, 7, 12] }] }, 'En orden: 4, 7, 9, 12, 15. La mediana es 9.', { hint: 'Ordena de menor a mayor antes de buscar el medio.' })],
+    ['icf-ma-dispersion-2', 'Cada medida de centro responde otra pregunta.', play('tres-centros', 'Ubica el promedio, la mediana y la moda', { rounds: [{ data: [1, 3, 3, 4, 9], lo: 0, hi: 10 }] }, 'Promedio 4, mediana 3 y moda 3.', { hint: 'El dato grande corre el promedio, no la mediana.' })],
+    ['icf-ma-dispersion-2', 'La caja guarda la mitad central.', opc('En una caja, el primer cuartil es 20 y el tercero, 50. Se puede asegurar que:', ['El promedio es 35', 'La mitad de los datos está entre 20 y 50', 'La mediana es 35', 'Ningún dato pasa de 50'], 1, 'Entre el primer y el tercer cuartil está la mitad de los datos.', 'Cada cuartil separa una cuarta parte.')],
+    ['icf-ma-dispersion-3', 'La tendencia es una línea: pendiente y arranque.', play('laser-recta', 'Ajusta la línea de tendencia para que pase por **los dos puntos**', { rounds: [{ P: [-1, 4], Q: [3, -4] }] }, 'Baja 8 en 4: pendiente $-2$; en cero vale 2.', { hint: 'Cuenta cuánto baja de un punto al otro y cuánto avanza.' })],
+    ['icf-ma-dispersion-3', 'Un porcentaje cambia en puntos o en proporción.', play('puntos-o-porciento', 'Fija el cambio en **porcentaje** de la tasa', { rounds: [{ what: 'El asma en el barrio', from: 40, to: 50 }] }, 'Subió 10 puntos, que son el 25 % de 40.', { hint: 'Compara la diferencia con el valor de antes.' })],
+    ['icf-ma-dispersion-3', 'Ir juntas no es causar.', opc('En un colegio, quienes desayunan tienen mejores notas. Con solo este dato se puede concluir que:', ['Desayunar mejora las notas', 'Las buenas notas dan hambre', 'Quien no desayuna pierde el año', 'Desayuno y notas están relacionados, pero no se sabe la causa'], 3, 'Es una correlación; otra cosa puede explicar las dos.', 'Pregunta si hubo un experimento.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-ma-numeros.js
+// Preicfes · Matemáticas · mundo 13 «Números y Sucesiones» (spec 2026-11-25-preicfes-estructura). Números y contextos propios.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = ICF;
+
+  const l1 = leccion('icf-ma-numeros-1', 'Fracciones, decimales y notación científica', guion(
+    ['Mismo número', 'Una fracción, un decimal y un porcentaje pueden ser el mismo número.'],
+    ['Qué conjunto', 'Naturales, enteros, racionales e irracionales.'],
+    ['Notación científica', 'Un número entre 1 y 10 por una potencia de 10.'],
+    ['Operar', 'Se operan los números y se suman o restan los exponentes.']), [
+    x('fraccion-recta', 'Cada unidad tiene **12** marcas. Mueve el punto a $\\tfrac{7}{4}$.', { n: 7, d: 4, partes: 12, hi: 2, et: '7/4' },
+      'Cada cuarto son 3 marcas: $7 \\cdot 3 = 21$ marcas.', 'Halla cuántas marcas tiene un solo cuarto de unidad.'),
+    x('coma-cientifica', 'Mueve el exponente para que sea el **mismo número**.', { m: '4.6', et: '0.00046', e: -4, lo: -8, hi: 8 },
+      'La coma corre 4 lugares a la derecha: $4.6 \\cdot 10^{-4}$.', 'Cuenta cuántos lugares corre la coma y hacia qué lado.'),
+    x('fraccion-decimal', 'Pon el decimal de cada número.', { et: ['3/8', '7/20', '12.5 %', '2/3'], metas: ['0.375', '0.35', '0.125', '0.666…'], fichas: ['0.375', '0.35', '0.125', '0.666…', '0.38', '1.25', '0.23'], mira: ['Divide 3 entre 8.', 'Amplifica a 100.', 'Divide entre 100.', 'Divide 2 entre 3: se repite.'], trampas: { '0:0.38': 'Una fracción no se lee pegando los números.', '2:1.25': 'Se corre la coma dos lugares.', '3:0.23': 'Una fracción no se lee pegando los números.' }, ok: 'Dividir o amplificar.' },
+      '$3 \\div 8 = 0.375$; $\\tfrac{35}{100}$; $12.5 \\div 100$; y 2 entre 3 se repite.', 'La raya de la fracción es una división: hazla.'),
+    x('opera-cientifica', 'Resuelve y deja en **notación científica**.', { et: ['(2·10³)·(4·10⁵)', '(9·10⁷) ÷ (3·10²)', '(5·10⁴)·(6·10³)', '3·10⁴ + 2·10³'], metas: ['8·10⁸', '3·10⁵', '3·10⁸', '3.2·10⁴'], fichas: ['8·10⁸', '3·10⁵', '3·10⁸', '3.2·10⁴', '8·10¹⁵', '30·10⁷', '5·10⁷'], mira: ['Multiplica los números y suma los exponentes.', 'Divide los números y resta los exponentes.', 'Da 30: ajústalo para que quede entre 1 y 10.', 'Escríbelos con la misma potencia antes de sumar.'], trampas: { '0:8·10¹⁵': 'Los exponentes se suman, no se multiplican.', '2:30·10⁷': 'Vale lo mismo, pero el número debe quedar entre 1 y 10.', '3:5·10⁷': 'Para sumar, las potencias deben ser iguales.' }, ok: 'Exponentes que se suman, se restan o se igualan.' },
+      '$8 \\cdot 10^8$; $3 \\cdot 10^5$; $30 \\cdot 10^7 = 3 \\cdot 10^8$; y $30\\,000 + 2\\,000$.', 'Opera por aparte los números y las potencias de 10.'),
+    x('entre-los-dos', 'Toca **todos** los números que están **entre** $\\tfrac12$ y $\\tfrac34$.', { casos: [{ t: '0.6', si: true }, { t: '5/6', no: '5/6 es 0.833…: pasa de 0.75.' }, { t: '5/8', si: true }, { t: '0.49', no: 'Es menor que 0.5.' }, { t: '70 %', si: true }], falta: 'Falta otro: pásalos todos a decimal.', ok: 'Entre 0.5 y 0.75.' },
+      'En decimales, 0.6, 0.625 y 0.7 están entre 0.5 y 0.75.', 'Escríbelos todos de la misma manera y compáralos.'),
+    x('a-que-conjunto', 'Pon el conjunto **más pequeño** al que pertenece cada número.', { et: ['−6', '0.25', '√2', '√49'], metas: ['enteros', 'racionales', 'irracionales', 'naturales'], fichas: ['enteros', 'racionales', 'irracionales', 'naturales', 'racionales'], mira: ['No es natural: es negativo.', 'Se escribe como fracción.', 'Su decimal no termina ni se repite.', 'Saca la raíz.'], trampas: { '3:irracionales': 'La raíz de 49 es 7.' }, ok: 'Mira primero cuánto vale.' },
+      '$-6$ es entero, $0.25 = \\tfrac14$, $\\sqrt2$ es irracional y $\\sqrt{49} = 7$.', 'Calcula su valor antes de decidir el conjunto.'),
+    x('sube-fraccion', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Los $\\tfrac{3}{5}$ de un número son **48**. ¿Cuál es el **número**?', r: 80, c: '48 \\div 3 \\cdot 5', e: { 28: 'Esos son los tres quintos de 48.' } },
+      { q: '$\\tfrac{2}{3}$ de $\\tfrac{3}{4}$ de **100**.', r: 50, c: '\\tfrac{2}{3} \\cdot 75', e: { 66: 'Falta sacar primero los tres cuartos.' } },
+      { q: '¿Cuántas veces cabe $2 \\cdot 10^3$ en $6.4 \\cdot 10^4$?', r: 32, c: '64\\,000 \\div 2\\,000', e: {} }] },
+      '$48 \\div 3 = 16$ y $16 \\cdot 5 = 80$; $\\tfrac23$ de 75 son 50; y $64 \\div 2 = 32$.', 'Halla primero cuánto vale una sola parte.'),
+    sol('La luz recorre $3 \\cdot 10^5$ km cada segundo. ¿Cuánto tarda en recorrer $1.5 \\cdot 10^8$ km?', ['Se divide: $1.5 \\div 3 =$ [[0.5]]', 'Los exponentes: $8 - 5 =$ [[3]]', 'Son $0.5 \\cdot 10^3 =$ [[500]] segundos'], ['13', '4.5', '50'], '$0.5 \\cdot 10^3 = 500$ s: algo más de 8 minutos.', 'Divide los números y resta los exponentes.'),
+    err('Alguien suma $\\tfrac{1}{3} + \\tfrac{1}{4}$.', ['Se busca un denominador común: 12', '$\\tfrac{1}{3} = \\tfrac{4}{12}$ y $\\tfrac{1}{4} = \\tfrac{3}{12}$', 'La suma es $\\tfrac{7}{24}$'], 2, ['La suma es $\\tfrac{7}{12}$', 'La suma es $\\tfrac{2}{7}$', 'La suma es $\\tfrac{12}{7}$'], 'Las partes son doceavos: se suman y siguen siendo doceavos.', '¿De qué tamaño son las partes que se suman?'),
+    opc('Una bacteria mide $2 \\cdot 10^{-6}$ m y un cabello tiene $8 \\cdot 10^{-5}$ m de grueso. El cabello es más grueso:', ['4 veces', '40 veces', '400 veces', '0.4 veces'], 1, '$\\tfrac{8}{2} = 4$ y $10^{-5+6} = 10$: 40 veces.', 'Divide los números y resta los exponentes.'),
+  ]);
+
+  const l2 = leccion('icf-ma-numeros-2', 'Conjuntos y diagramas', guion(
+    ['Dos grupos', 'Solo A, solo B, los dos o ninguno.'],
+    ['Unión e intersección', 'En alguno, o en los dos.'],
+    ['Contar', 'Al sumar, los de los dos se cuentan dos veces: se restan una.'],
+    ['Complemento y diferencia', 'Los que no están; los que están en uno y no en el otro.']), [
+    x('cruce-grupos', 'De **50** personas, **28** hablan inglés, **20** francés y **9** ninguno. Mueve cuántas hablan **los dos**.', { a: 28, b: 20, total: 50, fuera: 9, A: 'inglés', B: 'francés' },
+      'Hablan alguno $50 - 9 = 41$; $28 + 20 - 41 = 7$.', 'Quita primero a los que no hablan ninguno de los dos.'),
+    x('llena-zonas', 'De **40** estudiantes, **22** juegan ajedrez, **15** pintan y **6** hacen las dos. Llena el diagrama.', { A: 'ajedrez', B: 'pintura', metas: ['16', '6', '9', '9'], fichas: ['16', '6', '9', '9', '22', '15', '3'], mira: ['Quita de los de ajedrez los que hacen las dos.', 'Es el dato que ya dan.', 'Quita de los de pintura los que hacen las dos.', 'Quita del total los que hacen algo.'], trampas: { '0:22': 'Entre los 22 están los que también pintan.', '2:15': 'Entre los 15 están los que también juegan.', '3:3': 'Los de las dos se restaron dos veces.' }, ok: 'Del centro hacia afuera.' },
+      '$22 - 6 = 16$, $15 - 6 = 9$ y $40 - 31 = 9$ no hacen ninguna.', 'Empieza por el centro y ve llenando hacia afuera.'),
+    x('pinta-zona', 'Toca las zonas de «**está en A o en B, pero no en los dos**».', { zonas: [0, 2], mira: ['Solo A cumple: está en uno.', 'El centro está en los dos: no cumple.', 'Solo B cumple: está en uno.', 'Los de afuera no están en ninguno.'], ok: 'Las dos lunas.' },
+      'Cumplen las dos lunas: los de solo A y los de solo B.', 'Revisa cada zona y pregunta en cuántos grupos está.'),
+    x('cuantos-conjunto', '**U** = números del 1 al 12; **A** = los pares; **B** = los múltiplos de 3. ¿Cuántos tiene cada uno?', { et: ['A', 'A y B a la vez', 'A o B', 'ni A ni B'], metas: ['6', '2', '8', '4'], fichas: ['6', '2', '8', '4', '10', '3'], mira: ['Cuenta los pares hasta 12.', 'Busca los múltiplos de 6.', 'Suma y quita los repetidos.', 'Quita del total los que están en alguno.'], trampas: { '2:10': 'Los de los dos se contaron dos veces.' }, ok: 'Contar sin repetir.' },
+      'A tiene 6, los dos son 6 y 12, la unión $6 + 4 - 2 = 8$ y quedan 4.', 'Escribe las listas y busca los repetidos.'),
+    x('verdad-conjuntos', 'A = {2, 4, 6, 8} y B = {4, 8}. Toca **todo** lo verdadero.', { casos: [{ t: 'B es subconjunto de A', si: true }, { t: 'A es subconjunto de B', no: 'El 2 está en A y no en B.' }, { t: 'A y B a la vez es B', si: true }, { t: '6 está en B', no: 'B solo tiene al 4 y al 8.' }, { t: 'A menos B es {2, 6}', si: true }], falta: 'Falta otra: revisa elemento por elemento.', ok: 'B está dentro de A.' },
+      'Todo B está en A; lo común es B y al quitarlo quedan 2 y 6.', 'Revisa cada elemento en los dos conjuntos.'),
+    x('sube-conjunto', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'A tiene **18**, B tiene **25** y en los dos hay **7**. ¿Cuántos están en **alguno**?', r: 36, c: '18 + 25 - 7', e: { 43: 'Los de los dos se contaron dos veces.' } },
+      { q: 'De **60**, **35** tienen perro y **11** de ellos también gato. ¿Cuántos tienen **solo perro**?', r: 24, c: '35 - 11', e: { 49: 'Se quitan de los que tienen perro.' } },
+      { q: 'Un conjunto tiene **4** elementos. ¿Cuántos **subconjuntos** tiene, con el vacío?', r: 16, c: '2^4', e: { 8: 'Cada elemento puede estar o no: se duplica por cada uno.', 4: 'También hay de dos, de tres, de ninguno…' } }] },
+      '$18 + 25 - 7 = 36$; $35 - 11 = 24$; y $2^4 = 16$.', 'Al sumar dos grupos se quitan una vez los repetidos.'),
+    sol('En una encuesta, el 60 % usa la red P, el 45 % la red Q y el 25 % las dos. ¿Qué porcentaje no usa ninguna?', ['Usan alguna: $60 + 45 - 25 =$ [[80]] %', 'No usan ninguna: [[20]] %', 'Usan solo P: [[35]] %'], ['105', '40', '60'], '$100 - 80 = 20$ y $60 - 25 = 35$.', 'Cuenta primero los que usan alguna.'),
+    err('De 30 niños, 18 comen mango, 16 comen fresa y todos comen alguna.', ['Suman $18 + 16 = 34$', 'Hay 4 de más: son los que se contaron dos veces', 'Entonces 4 niños no comen fruta'], 2, ['Entonces 4 niños comen las dos', 'Entonces 34 niños comen las dos', 'Entonces 26 niños comen las dos'], 'Los que sobran en la suma son los que están en los dos grupos.', '¿Por qué la suma pasa de 30?'),
+    opc('Todos los que bailan cantan, y algunos que cantan no bailan. El diagrama correcto muestra:', ['Dos círculos separados', 'El círculo de los que cantan dentro del de los que bailan', 'El círculo de los que bailan dentro del de los que cantan', 'Dos círculos iguales'], 2, 'Todo el que baila está entre los que cantan.', 'Pregunta qué grupo queda completo adentro del otro.'),
+  ]);
+
+  const l3 = leccion('icf-ma-numeros-3', 'Sucesiones y sus límites', guion(
+    ['Aritmética', 'Siempre se suma lo mismo.'],
+    ['Geométrica', 'Siempre se multiplica por lo mismo.'],
+    ['El término n', 'Para llegar al lugar n se dan $n - 1$ pasos.'],
+    ['El límite', 'El número al que se acerca cada vez más.']), [
+    x('que-termino', 'La sucesión **5, 8, 11…** sigue igual. Mueve el lugar en que está el **44**.', { a: 5, d: 3, meta: 44, max: 20 },
+      'Del 5 al 44 hay 39: 13 saltos de 3. Está en el lugar 14.', 'Cuenta los saltos: el lugar es uno más que los saltos.'),
+    x('suma-o-multiplica', '¿Cada sucesión es **aritmética**, **geométrica** o **ninguna**?', { et: ['7, 4, 1, −2', '2, 6, 18, 54', '1, 4, 9, 16', '80, 40, 20, 10'], metas: ['aritmética', 'geométrica', 'ninguna', 'geométrica'], fichas: ['aritmética', 'geométrica', 'ninguna', 'geométrica', 'aritmética', 'ninguna'], mira: ['Resta los seguidos.', 'Divide los seguidos.', 'Prueba a restar y a dividir.', 'Divide los seguidos.'], ok: 'Diferencia fija o razón fija.' },
+      'Se resta 3; se triplica; son cuadrados; y se parte en dos.', 'Resta términos seguidos y, si no sirve, divídelos.'),
+    x('lugar-lejano', 'Pon el término que se pide.', { et: ['2, 7, 12…: lugar 10', '3, 6, 12…: lugar 6', '50, 46, 42…: lugar 8', '4n − 1: lugar 9'], metas: ['47', '96', '22', '35'], fichas: ['47', '96', '22', '35', '52', '192', '18'], mira: ['Son 9 saltos de 5.', 'Se duplica 5 veces.', 'Son 7 saltos hacia abajo.', 'Reemplaza n por 9.'], trampas: { '0:52': 'Al lugar 10 se llega con 9 saltos.', '1:192': 'Al lugar 6 se llega con 5 pasos.', '2:18': 'Al lugar 8 se llega con 7 saltos.' }, ok: 'Un salto menos que el lugar.' },
+      '$2 + 9 \\cdot 5 = 47$; $3 \\cdot 2^5 = 96$; $50 - 7 \\cdot 4 = 22$; y $36 - 1 = 35$.', 'Para llegar al lugar n se dan $n - 1$ pasos.'),
+    x('se-acerca-a', '¿A qué número se **acerca** cada sucesión?', { et: ['1, 1/2, 1/4, 1/8…', '0.9, 0.99, 0.999…', '3 + 1/n', '5, 5, 5, 5…'], metas: ['0', '1', '3', '5'], fichas: ['0', '1', '3', '5', '4', '1/8', '0.9'], mira: ['Cada uno es la mitad del anterior.', 'Cada vez le falta menos.', 'La fracción se hace diminuta.', 'No cambia.'], trampas: { '0:1/8': 'Sigue bajando: no se detiene ahí.', '2:4': 'Eso vale solo el primero.' }, ok: 'Acercarse, aunque no se llegue.' },
+      'Las cuatro se acercan, en orden, a 0, a 1, a 3 y a 5.', 'Imagina un término muy lejano de cada sucesión.'),
+    x('tiene-limite', 'Toca **todas** las sucesiones que se **acercan a un número**.', { casos: [{ t: '10, 1, 0.1, 0.01…', si: true }, { t: '2, 4, 6, 8…', no: 'Crece sin parar.' }, { t: '2 − 1/n', si: true }, { t: '1, −1, 1, −1…', no: 'Salta entre dos números y no se decide.' }, { t: '0.3, 0.33, 0.333…', si: true }], falta: 'Falta otra que se acerca cada vez más a un número.', ok: '0, 2 y un tercio.' },
+      'Se acercan a 0, a 2 y a $\\tfrac13$; la otra crece y la última salta.', 'Pregunta si los términos lejanos quedan casi iguales.'),
+    x('mitades-faltan', 'En cada paso se recorre la **mitad** de lo que falta. Mueve cuántos pasos hacen que falte **1/64** del camino.', { tope: 64, max: 10 },
+      '$2^6 = 64$: después de 6 pasos falta $\\tfrac{1}{64}$.', 'Mira cuánto falta después de uno, dos y tres pasos.'),
+    x('sube-sucesion', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Suma de **1 + 2 + 3 + … + 12**.', r: 78, c: '13 \\cdot 6', e: { 72: 'Cada pareja suma 13.' } },
+      { q: 'El lugar **7** de una aritmética es **40** y el **10** es **58**. ¿Cuál es el **11**?', r: 64, c: '58 + 6', e: { 76: 'Los 18 se reparten en 3 saltos.' } },
+      { q: 'A qué se acerca $16 + 8 + 4 + 2 + \\ldots$', r: 32, c: '16 \\cdot 2', e: { 30: 'Siguen sumándose mitades.' } }] },
+      'Seis parejas de 13; saltos de 6; y cada vez falta la mitad para 32.', 'En la última, mira cuánto falta siempre para completar.'),
+    sol('Un balón rebota a la mitad de la altura. Se suelta desde 8 m. ¿Cuánto sube en total en todos sus rebotes?', ['El primer rebote sube [[4]] m', 'El segundo sube [[2]] m', 'La suma de todos se acerca a [[8]] m'], ['16', '6', '1'], '$4 + 2 + 1 + \\ldots$: siempre falta lo último que se sumó para llegar a 8.', 'Suma los primeros y mira cuánto falta.'),
+    err('Alguien halla el término 20 de 6, 10, 14…', ['Es aritmética: se suma 4', 'Para llegar al lugar 20 se dan 20 saltos', 'El término es $6 + 20 \\cdot 4 = 86$'], 1, ['Para llegar al lugar 20 se dan 19 saltos', 'Para llegar al lugar 20 se dan 21 saltos', 'Para llegar al lugar 20 se dan 10 saltos'], 'Desde el primero hasta el 20 hay 19 saltos: $6 + 76 = 82$.', '¿Cuántos saltos hay del lugar 1 al 2?'),
+    opc('La sucesión $\\dfrac{2n + 1}{n}$ da 3, 2.5, 2.33… Al crecer $n$ se acerca a:', ['0', '3', '1', '2'], 3, '$\\tfrac{2n + 1}{n} = 2 + \\tfrac1n$, y $\\tfrac1n$ se acerca a 0.', 'Prueba con un n muy grande.'),
+  ]);
+
+  return mundo('icf-ma-numeros', 'Números y Sucesiones', 'matematicas', [l1, l2, l3], [
+    ['icf-ma-numeros-1', 'Cada lugar que corre la coma cambia el exponente.', play('salta-la-coma', 'Corre el **punto decimal** hasta dejarlo en notación científica', { rounds: [{ digits: '52700', point: 5, goal: 'sci' }] }, '$52\\,700 = 5.27 \\cdot 10^4$.', { hint: 'El número de adelante queda entre 1 y 10.' })],
+    ['icf-ma-numeros-1', 'Para sumar, partes del mismo tamaño.', play('amplifica-fraccion', 'Completa cada fracción al común denominador', { rounds: [{ f1: ['1', ['2', '3']], f2: ['1', ['3', '5']], chips: ['5', '2', '3', '4'], sum: '\\dfrac{5 + 2}{30} = \\dfrac{7}{30}' }] }, 'A 6 le falta el 5 y a 15 le falta el 2 para ser 30.', { hint: 'Mira qué factor le falta a cada denominador.' })],
+    ['icf-ma-numeros-1', 'Al dividir potencias se restan exponentes.', opc('El resultado de $(8 \\cdot 10^9) \\div (4 \\cdot 10^3)$ es:', ['$2 \\cdot 10^6$', '$2 \\cdot 10^3$', '$4 \\cdot 10^6$', '$2 \\cdot 10^{12}$'], 0, '$8 \\div 4 = 2$ y $9 - 3 = 6$.', 'Divide los números y resta los exponentes.')],
+    ['icf-ma-numeros-2', 'Del centro hacia afuera.', play('encuesta-venn', 'Llena el diagrama de la encuesta', { rounds: [{ text: 'De 45 personas, 26 leen novelas, 18 leen poemas y 7 leen las dos cosas.', labels: ['Novelas', 'Poemas'], total: 45, a: 26, b: 18, both: 7 }] }, 'Solo novelas 19, las dos 7, solo poemas 11 y ninguna 8.', { hint: 'Empieza por los que leen las dos cosas.' })],
+    ['icf-ma-numeros-2', 'La diferencia quita lo común.', play('pinta-venn', 'Pinta la operación en el diagrama', { rounds: [{ text: 'B − A', n: 2, f: (a, b) => b && !a }] }, 'Lo que está en B y no en A.', { hint: 'Revisa zona por zona si está en B y falta en A.' })],
+    ['icf-ma-numeros-2', 'Los repetidos se restan una vez.', opc('En un grupo, 24 tienen bicicleta, 19 patines y 10 las dos cosas. ¿Cuántos tienen exactamente una?', ['43', '33', '23', '14'], 2, 'Solo bicicleta 14 y solo patines 9: son 23.', 'Quita los que tienen las dos a cada grupo.')],
+    ['icf-ma-numeros-3', 'Dos términos bastan para hallar el salto.', play('pisa-huellas', 'Elige el primer paso y el salto para pisar las banderas', { rounds: [{ known: [[3, 14], [6, 26]], a1: 6, d: 4 }] }, 'De 14 a 26 hay 12 en 3 saltos: 4; y $14 - 8 = 6$.', { hint: 'Reparte la diferencia entre los saltos que hay.' })],
+    ['icf-ma-numeros-3', 'Saltos que se achican tienen un límite.', play('rana-zenon', 'Toca el estanque para saltar y luego la **bandera** a la que se acerca', { rounds: [{ title: 'Saltos a la mitad', items: [{ a1: 6, r: [1, 2], flags: ['12', '9', '18'], answer: 0, max: 20 }] }] }, '$6 + 3 + 1.5 + \\ldots$ se acerca a 12.', { hint: 'Mira cuánto falta después de cada salto.' })],
+    ['icf-ma-numeros-3', 'Al lugar n se llega con n − 1 pasos.', opc('El término 8 de la sucesión 3, 9, 15, 21… es:', ['48', '51', '54', '45'], 3, '$3 + 7 \\cdot 6 = 45$: siete saltos de 6.', 'Cuenta los saltos desde el primero.')],
   ]);
 })());
 ;
@@ -9203,6 +9091,157 @@ PI_MUNDOS.push((() => {
     ['icf-cn-electrico-2', 'Polos distintos se atraen, iguales se repelen.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'Una corriente produce magnetismo que se puede prender y apagar.', cards: [['El timbre con electroimán', true], ['La grúa de chatarra', true], ['El imán de la nevera', false], ['Un globo frotado', false]] }, 'Timbre y grúa usan corriente; el de la nevera es permanente y el globo es carga quieta.', 'Busca dónde hay corriente que se enciende.')],
     ['icf-cn-electrico-2', 'Un imán que se mueve produce corriente.', pl('intruso-excepto', 'La opción que no aparece en el texto', { ask: 'Del tren se dice todo esto, EXCEPTO:', cards: [['No roza la vía', [2]], ['Los de adelante lo atraen', [3]], ['Devuelve corriente al frenar', [4]], ['Lleva ruedas de caucho', null]] }, 'Las tres primeras están en el 2, el 3 y el 4; la última no.', 'Busca cada una en su párrafo.')],
     ['icf-cn-electrico-2', 'Imán que se mueve frente a una bobina: inducción.', opc('La corriente que el tren devuelve al frenar se explica por:', ['La inducción', 'La ley de Coulomb', 'El roce con la vía', 'La carga estática'], 0, 'Imanes que se mueven frente a bobinas producen corriente: inducción.', '¿Qué se mueve frente a las bobinas?')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-cn-cts.js
+// Preicfes · Ciencias Naturales · mundo 13 «Ciencia y Sociedad» (spec 2026-11-25-preicfes-estructura). Textos y datos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, sol, err, opc, guion } = ICF;
+
+  const VACUNA = {
+    id: 'icf-vacuna-pueblo', title: 'El brote de San Roque',
+    ficha: { autor: 'Puesto de salud', fuente: 'Boletín escolar', fecha: 'Marzo de 2026' },
+    paras: [
+      'En San Roque hubo un brote de sarampión. La enfermedad la causa un virus, que se multiplica dentro de las células. Los antibióticos matan bacterias, así que no sirven contra él. Tomarlos por si acaso solo ayuda a que aparezcan bacterias resistentes.',
+      'Una vacuna le muestra al cuerpo una parte del virus, o un virus debilitado, para que las defensas aprendan a reconocerlo. Quien se vacuna queda con células de memoria: si el virus llega después, la respuesta es rápida. La vacuna no cura a quien ya está enfermo; previene.',
+      'En la escuela había 200 niños vacunados y 50 sin vacunar. Se enfermaron 4 de los vacunados y 20 de los otros. Alguien dijo: «¿Ven? También se enferman los vacunados». Es cierto, pero el riesgo fue muy distinto: 2 de cada 100 frente a 40 de cada 100.',
+      'Cuando casi todos están protegidos, el virus no encuentra a quién pasar y se protegen también los que no pueden vacunarse, como los recién nacidos. A eso se le llama inmunidad de grupo. Para el sarampión, que se contagia muchísimo, hace falta que cerca del 95 % esté protegido.',
+      'Ninguna medicina es perfecta. La vacuna puede dar fiebre o dolor en el brazo y, muy rara vez, una reacción grave. Antes de usarse se prueba en miles de voluntarios y después se sigue vigilando. Decidir es comparar el riesgo de usarla con el de no usarla: tampoco hacer nada es gratis.',
+      'La tecnología también diagnostica. Los rayos X atraviesan la carne y se detienen en el hueso; la ecografía usa sonido; la resonancia, imanes. Cada una sirve para algo distinto y tiene su cuidado: los rayos X, por ejemplo, llevan energía que puede dañar el ADN, y por eso se usan solo lo necesario. Un buen diagnóstico ahorra remedios, tiempo y miedo, pero ninguna imagen reemplaza la conversación con quien atiende.',
+    ],
+  };
+  const l1 = leccion('icf-cn-cts-1', 'Salud y tecnología', guion(
+    ['Virus y bacterias', 'El antibiótico mata bacterias, no virus.'],
+    ['Vacunas', 'Enseñan a las defensas: previenen, no curan.'],
+    ['Riesgo', 'Se compara en proporción, no en cantidad.'],
+    ['Tecnología', 'Rayos X, ecografía y resonancia sirven para cosas distintas.']), [
+    x('riesgo-grupos', 'De **400** con casco se golpearon **8**; de **50** sin casco, **10**. Completa.', { et: ['riesgo con casco', 'riesgo sin casco', 'veces mayor sin casco', 'con casco, en 1 000'], metas: ['2 %', '20 %', '10', '20'], fichas: ['2 %', '20 %', '10', '20', '8 %', '80', '12'], mira: ['Divide 8 entre 400.', 'Divide 10 entre 50.', 'Compara los dos porcentajes.', 'Saca el 2 % de 1 000.'], trampas: { '0:8 %': 'Son 8 de 400, no de 100.', '2:12': 'Compara dividiendo, no restando otras cantidades.' }, ok: 'Proporción, no cantidad.' },
+      '$8 \\div 400 = 2\\%$; $10 \\div 50 = 20\\%$; diez veces; y 20 de cada 1 000.', 'Divide cada caso entre el tamaño de su grupo.'),
+    x('genero-o-cita', '¿Serviría un **antibiótico**?', { doc: VACUNA, rot: ['sí: bacteria', 'no: virus'],
+      ...F(['Sarampión', 1, '¿La causa un virus o una bacteria?'], ['Una herida infectada por bacterias', 0, '¿Qué la infectó?'], ['Gripa', 1, '¿La causa un virus o una bacteria?'], ['Tuberculosis, causada por una bacteria', 0, '¿Qué la causa?']), bien: 'Solo contra bacterias.' },
+      'Sarampión y gripa son virus; la herida y la tuberculosis, bacterias.', 'El antibiótico actúa contra un solo tipo de microbio.'),
+    x('pista-tipo', 'Ata cada tecnología a lo que conviene mirar.', { doc: VACUNA, lineas: ['un hueso que pudo romperse', 'un bebé antes de nacer', 'prevenir el sarampión', 'una infección por bacterias'],
+      ...T(['rayos X', 0, '¿Qué se detiene en el hueso?'], ['ecografía', 1, '¿Cuál usa sonido y no daña el ADN?'], ['vacuna', 2, '¿Cuál prepara las defensas?'], ['antibiótico', 3, '¿Cuál mata bacterias?']), bien: 'Cada una para lo suyo.' },
+      'Rayos X para el hueso, sonido para el bebé, vacuna para prevenir y antibiótico para bacterias.', 'Busca cómo funciona cada una en el texto.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: VACUNA, nums: [1, 2, 4], pregunta: 'Queda en pie', queda: 'Vacunarse protege también a otros.',
+      ...T(['El antibiótico mata el virus del sarampión.', 2, 'Busca contra qué sirven.'], ['La vacuna cura a quien ya está enfermo.', 6, 'Busca qué hace y qué no.'], ['Para frenar el sarampión basta vacunar a la mitad.', 9, 'Busca el porcentaje.']), bien: 'Bacterias, previene y 95 %.' },
+      'Los antibióticos matan bacterias, la vacuna previene y hace falta cerca del 95 %.', 'Saca la palabra clave: virus, cura, mitad.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: VACUNA, nums: [3, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Se enfermaron 20 de los no vacunados.', 0, 'Léela junto a los datos de la escuela.'], ['El riesgo sin vacuna fue veinte veces mayor.', 1, 'Compara 2 y 40 de cada cien.'], ['Con 80 % de vacunados, el sarampión podría seguir pasando.', 1, 'Compara con lo que hace falta.'], ['La escuela tenía doce salones.', 2, '¿Se dice cuántos salones?']),
+      luz: [[3, '20 de los otros'], [3, '2 de cada 100 frente a 40 de cada 100'], [4, 'cerca del 95 %']], bien: 'Dividir y comparar.' },
+      'Los 20 están escritos; las veinte veces y el 80 % se deducen; los salones no aparecen.', 'Compara entre sí los números que da el texto.'),
+    x('balanza-tesis', 'Afirmación: «esta vacuna protege». ¿Qué hace cada dato?', { doc: VACUNA, tesis: 'Esta vacuna protege',
+      ...F(['Enfermaron 3 de 1 000 vacunados y 60 de 1 000 sin vacunar.', 0, '¿En qué grupo hubo más riesgo?'], ['Enfermaron 50 de 1 000 en cada grupo.', 1, '¿Hubo diferencia?'], ['El frasco es de vidrio.', 2, '¿Habla de protección?']), bien: 'Comparar grupos iguales.' },
+      'La diferencia la apoya; el empate la debilita; el frasco no pesa.', 'Compara el riesgo que hubo en los dos grupos.'),
+    sol('De 250 personas con un remedio mejoraron 200; de 250 con un placebo, 120. ¿Cuánto más mejoró el grupo del remedio?', ['Con remedio mejoró el [[80]] %', 'Con placebo, el [[48]] %', 'La diferencia son [[32]] puntos'], ['200', '120', '128'], '$200 \\div 250 = 80\\%$ y $120 \\div 250 = 48\\%$.', 'Divide cada cantidad entre 250.'),
+    err('«Se enfermaron 30 vacunados y 20 no vacunados: la vacuna empeora». Había 3 000 vacunados y 100 sin vacunar.', ['Con vacuna: 30 de 3 000, el 1 %', 'Sin vacuna: 20 de 100, el 20 %', 'Como 30 es más que 20, la vacuna empeora'], 2, ['Como 1 % es menos que 20 %, la vacuna protege', 'Como hay más vacunados, no se puede comparar', 'Como 20 es menos que 30, conviene no vacunarse'], 'Los grupos son de distinto tamaño: se comparan los porcentajes.', '¿Se comparan cantidades o proporciones?'),
+    opc('A una mujer embarazada le duele el tobillo y el médico prefiere evitar los rayos X. La razón es que:', ['No muestran los huesos', 'Son un sonido muy fuerte', 'Llevan energía que puede dañar el ADN', 'Producen campos magnéticos'], 2, 'Los rayos X pueden dañar el ADN; por eso se usan lo necesario.', 'Relaciona la técnica con su cuidado.'),
+  ]);
+
+  const RECURSO = {
+    id: 'icf-energia-isla', title: 'La isla que apagó su planta',
+    ficha: { autor: 'Grupo de energía', fuente: 'Boletín escolar', fecha: 'Abril de 2026' },
+    paras: [
+      'Una isla producía su electricidad con una planta de diésel. Cada litro quemado soltaba unos 2.7 kilogramos de dióxido de carbono, además de hollín. El combustible llegaba en barco y, si había mal tiempo, la isla se quedaba a oscuras. Los ancianos contaban que, en las noches de tormenta, el puesto de salud guardaba las vacunas en neveras con hielo.',
+      'Los habitantes estudiaron otras fuentes. El sol alcanza, pero de noche no hay; el viento sopla más en la tarde y algunos días falta. Las dos son renovables y no sueltan gases mientras funcionan, aunque fabricar los paneles y las baterías sí tiene un costo ambiental: hay que sacar minerales y, al final, reciclarlos.',
+      'Decidieron instalar paneles y turbinas, guardar energía en baterías y dejar el diésel para emergencias. Al primer año, el consumo de combustible bajó de 900 a 300 mil litros. En el segundo, a 180 mil. La factura bajó, pero la inversión tardará nueve años en pagarse.',
+      'El dióxido de carbono y el metano dejan pasar la luz del sol y retienen parte del calor que sale de la Tierra. Es el efecto invernadero, y sin él el planeta sería helado. El problema es que hoy hay más gases de los que había y el calor retenido aumenta.',
+      'También revisaron la basura. La mitad era materia orgánica, que hicieron compost. El plástico se redujo con envases que se devuelven: reducir y reutilizar ahorra más que reciclar, porque reciclar también gasta energía. Las pilas se guardan aparte: tienen metales que contaminan el agua y el suelo.',
+      'Un grupo se opuso a las turbinas: temía por las aves. En vez de discutir a ciegas, contaron aves durante un año y cambiaron de lugar dos turbinas. Murieron muchas menos. La solución no fue parar ni seguir igual, fue medir y corregir. Hoy publican cada mes el conteo en la puerta de la escuela.',
+    ],
+  };
+  const l2 = leccion('icf-cn-cts-2', 'Recursos y ambiente', guion(
+    ['Fuentes de energía', 'Renovables o no; todas tienen costos.'],
+    ['Efecto invernadero', 'Es necesario; el problema es que aumenta.'],
+    ['Residuos', 'Reducir y reutilizar antes que reciclar.'],
+    ['Medir y corregir', 'Las decisiones mejoran con datos.']), [
+    x('compensa-justo', 'Una familia suelta **1 200 kg** de CO₂ al año con su moto. Cada árbol adulto absorbe **20 kg** al año. Mueve cuántos árboles la **compensan**.', { gasta: 1200, cada: 20, max: 100, et: 'árboles', u: 'kg' },
+      'Lo que suelta entre lo que absorbe cada uno: $1\\,200 \\div 20 = 60$.', 'Divide lo que se suelta entre lo que absorbe cada uno.'),
+    x('genero-o-cita', '¿La fuente es **renovable** o **no renovable**?', { doc: RECURSO, rot: ['renovable', 'no renovable'],
+      ...F(['Viento', 0, '¿Se repone pronto?'], ['Diésel', 1, '¿Se repone pronto?'], ['Sol', 0, '¿Se repone pronto?'], ['Carbón', 1, '¿Se repone pronto?'], ['Corriente de un río', 0, '¿Se repone pronto?']), bien: 'Cada día o en millones de años.' },
+      'Viento, sol y ríos se reponen; diésel y carbón tardan millones de años.', 'Pregunta cuánto tarda en volver a formarse.'),
+    x('lee-escala', 'La gráfica muestra el diésel (en miles de litros) antes, al primer año y al segundo. Pon cada valor y cuánto **bajó** en total.', { vals: [900, 300, 180], rot: ['antes', 'año 1', 'año 2'], hi: 960, st: 120, et: ['antes', 'año 1', 'año 2', 'bajó'], ops: ['', '', ''], metas: ['900', '300', '180', '720'], fichas: ['900', '300', '180', '720', '880', '250', '1080'],
+      mira: ['Está a mitad de camino entre 840 y 960.', 'Está a mitad de camino entre 240 y 360.', 'Está a mitad de camino entre 120 y 240.', 'Resta el último al primero.'], trampas: { '1:250': 'Cada línea vale 120: la mitad son 60.', '3:1080': 'Eso es la suma.' }, ok: 'De 900 a 180.' },
+      'Las líneas van de 120 en 120: 900, 300 y 180. Bajó 720 mil litros.', 'Mira cuánto vale cada línea antes de leer.'),
+    x('pinta-tipos', 'Pinta cada dato con lo que muestra de la decisión.', { doc: RECURSO, plumas: ['ventaja', 'costo', 'corrección'],
+      ...P(['El diésel bajó a 180 mil litros.', 0, '¿Mejora, cuesta o ajusta?'], ['La inversión tardará nueve años en pagarse.', 1, '¿Mejora, cuesta o ajusta?'], ['Cambiaron de lugar dos turbinas.', 2, '¿Mejora, cuesta o ajusta?'], ['Fabricar baterías exige sacar minerales.', 1, '¿Mejora, cuesta o ajusta?']), bien: 'Mejora, cuesta y ajusta.' },
+      'Menos diésel es ventaja; pagar y sacar minerales, costos; mover turbinas, corrección.', 'Pregunta qué se gana, qué se paga y qué se arregló.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: RECURSO, nums: [2, 4, 5], pregunta: 'Queda en pie', queda: 'Medir ayudó a cuidar las aves.',
+      ...T(['Los paneles no tienen ningún costo ambiental.', 2, 'Busca qué pasa al fabricarlos.'], ['Sin efecto invernadero estaríamos mejor.', 4, 'Busca cómo sería el planeta.'], ['Reciclar es siempre lo primero que hay que hacer.', 8, 'Busca qué ahorra más.']), bien: 'Fabricar, helado y reducir.' },
+      'Fabricar paneles cuesta, sin efecto invernadero sería helado y reducir ahorra más que reciclar.', 'Saca la palabra clave: ningún, sin, primero.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: RECURSO, filas: [{ antes: 'El diésel quedó para', topes: ['uso diario', 'vender', 'emergencias'], va: 2 }, { antes: 'Las pilas se guardan aparte porque', topes: ['pesan mucho', 'tienen metales que contaminan', 'son caras'], va: 1 }, { antes: 'De la basura, la materia orgánica era', topes: ['la mitad', 'la décima parte', 'toda'], va: 0 }], mira: ['Relee qué decidieron.', 'Relee el final del párrafo 5.', 'Relee el comienzo del párrafo 5.'], luz: [[3, 'para emergencias'], [5, 'metales que contaminan'], [5, 'La mitad era materia orgánica']], bien: 'Emergencias, metales y la mitad.' },
+      'El diésel quedó para emergencias, las pilas tienen metales y la mitad era orgánica.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('balanza-tesis', 'Propuesta: «cambiar todos los buses por eléctricos». ¿Qué hace cada dato?', { doc: RECURSO, tesis: 'Cambiar todos los buses por eléctricos',
+      ...F(['La ciudad respiraría 40 % menos hollín.', 0, '¿Es una razón a favor?'], ['Su electricidad viene casi toda de quemar carbón.', 1, '¿Cuánto bajarían de verdad los gases?'], ['Los buses son azules.', 2, '¿Cambia la decisión?']), bien: 'Mirar también de dónde sale la energía.' },
+      'Menos hollín la apoya; el carbón la debilita; el color no pesa.', 'Pregunta qué se gana y de dónde sale la energía.'),
+    sol('La isla bajó de 900 a 300 mil litros de diésel y cada litro suelta 2.7 kg de CO₂.', ['Dejó de quemar [[600]] mil litros', 'Evitó $600 \\cdot 2.7 =$ [[1620]] mil kg', 'Son [[1620 toneladas]]'], ['300', '810', '16.2 toneladas'], '1 620 mil kilogramos son 1 620 toneladas.', 'Multiplica los litros que dejó de quemar.'),
+    err('Alguien explica el calentamiento global.', ['El CO₂ deja pasar la luz del sol', 'Retiene parte del calor que sale de la Tierra', 'Por eso el efecto invernadero es un invento dañino que no debería existir'], 2, ['Por eso, si los gases aumentan, aumenta el calor retenido', 'Por eso, si los gases aumentan, la Tierra se enfría', 'Por eso, sin gases la Tierra estaría más caliente'], 'El efecto invernadero es natural y necesario; el problema es su aumento.', '¿Cómo sería el planeta sin él?'),
+    opc('Una familia quiere reducir al máximo su basura plástica. Lo más efectivo es:', ['Comprar más plástico reciclable', 'Usar envases que se devuelven y comprar a granel', 'Quemar el plástico', 'Mezclarlo con lo orgánico'], 1, 'Reducir y reutilizar ahorra más que reciclar.', 'Piensa qué evita que el residuo aparezca.'),
+  ]);
+
+  const EVID = {
+    id: 'icf-pulsera', title: 'La pulsera milagrosa',
+    ficha: { autor: 'Club de ciencias', fuente: 'Boletín escolar', fecha: 'Mayo de 2026' },
+    paras: [
+      'Una página vendía una pulsera de cobre «con energía» que quitaba el dolor de rodilla. Mostraba a un deportista famoso, treinta testimonios y una frase: «probado científicamente». No decía dónde ni cómo. El club decidió revisar la afirmación. No querían burlarse de nadie: querían saber si era cierto.',
+      'Un testimonio cuenta lo que le pasó a una persona. Puede ser sincero y no probar nada: el dolor sube y baja solo, y quien espera mejorar suele sentirse mejor. Eso último se llama efecto placebo. Además, la página mostraba a los que mejoraron, no a los que siguieron igual.',
+      'Para saberlo hicieron un experimento con 60 voluntarios. A 30, escogidos al azar, les dieron la pulsera; a los otros 30, una idéntica de plástico pintado. Ni ellos ni quien les preguntaba por el dolor sabían cuál tenían: eso es doble ciego. Después de un mes mejoraron 17 con la de cobre y 16 con la de plástico.',
+      'La diferencia es tan pequeña que puede deberse al azar. Los dos grupos mejoraron, pero por igual. El club no dijo «está demostrado que no sirve jamás»; dijo que, con ese experimento, no hay evidencia de que la pulsera funcione mejor que una falsa.',
+      'En ciencia, un solo estudio casi nunca cierra un tema. Se repite, lo revisan otros expertos, se juntan muchos estudios. También importa quién paga: si lo paga quien vende el producto, hay que mirar con más cuidado. No significa que sea falso, significa que hay que pedir los datos.',
+      'Decidir con evidencia no es dejar de lado los valores. La ciencia puede decir cuánto contamina una mina o cuánto protege un casco; si se permite la mina o se exige el casco lo decide la sociedad, mirando también quién gana, quién pierde y qué le importa. Pero decidir contra los datos, o sin ellos, sale caro.',
+    ],
+  };
+  const l3 = leccion('icf-cn-cts-3', 'Decisiones con evidencia', guion(
+    ['Testimonio no es prueba', 'El dolor varía solo y existe el placebo.'],
+    ['Buen experimento', 'Grupos al azar, control y doble ciego.'],
+    ['Más de un estudio', 'Se repite y lo revisan otros.'],
+    ['Datos y valores', 'La ciencia informa; la sociedad decide.']), [
+    x('solida-o-no', '¿La evidencia es **más sólida** o **más débil**?', { et: ['treinta testimonios', 'experimento con control', 'veinte estudios juntos', '«lo dijo un famoso»'], metas: ['más débil', 'más sólida', 'más sólida', 'más débil'], fichas: ['más débil', 'más sólida', 'más sólida', 'más débil', 'más débil', 'más sólida'], mira: ['¿Con qué se comparan?', '¿Se compara con otro grupo?', '¿Coinciden muchos estudios?', '¿La fama es una prueba?'], ok: 'Comparar y repetir.' },
+      'Comparar con un control y juntar estudios es sólido; testimonios y fama, no.', 'Pregunta si hubo comparación y si se repitió.'),
+    x('buena-evidencia', 'Se quiere probar si un té ayuda a dormir. Toca **todo** lo que hace **mejor** el experimento.', { casos: [{ t: 'repartir los grupos al azar', si: true }, { t: 'que cada quien escoja su grupo', no: 'Así los grupos quedan distintos desde el comienzo.' }, { t: 'dar al otro grupo un té parecido, falso', si: true }, { t: 'contar solo a los que mejoraron', no: 'Así se esconde a quienes siguieron igual.' }, { t: 'que nadie sepa quién toma cuál', si: true }], falta: 'Falta otra que evita que los grupos se distingan.', ok: 'Azar, control y doble ciego.' },
+      'Azar, control y doble ciego dejan que solo cambie el té.', 'Busca lo que hace que los grupos sean iguales en lo demás.'),
+    x('pasos-del-proceso', 'Ordena cómo el club revisó la afirmación. El primer paso está en su puesto.', { doc: EVID, que: 'la revisión', de: 'La pulsera milagrosa', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Leen la afirmación de la página.', 'Reparten a los voluntarios al azar.', 'Dan pulseras iguales, una falsa.', 'Cuentan cuántos mejoran.', 'Comparan los dos grupos.'], mira: ['', 'Va antes de dar las pulseras.', 'Va después de repartir.', 'Va después del mes.', 'Es lo último: con los dos conteos.'], bien: 'Leer, repartir, dar, contar y comparar.' },
+      'Leen, reparten al azar, dan las pulseras, cuentan y comparan.', 'Pregunta qué necesitaban tener antes de cada paso.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: EVID, nums: [2, 4, 5], pregunta: 'Queda en pie', queda: 'Quien espera mejorar suele sentirse mejor.',
+      ...T(['Un testimonio sincero es una prueba.', 1, 'Busca la palabra sincero.'], ['El club demostró que la pulsera no sirve jamás.', 6, 'Busca qué no dijo el club.'], ['Un solo estudio basta para cerrar un tema.', 7, 'Busca cuánto vale un solo estudio.']), bien: 'No prueba, no dijo y casi nunca.' },
+      'Un testimonio puede ser sincero y no probar, el club no dijo «jamás» y un estudio casi nunca cierra un tema.', 'Saca la palabra clave: sincero, jamás, solo.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 3 la oración que explica el **doble ciego**.', { doc: EVID, nums: [3], apuesta: 'Nadie sabía cuál pulsera era cuál.', ...S(['3.2'], { '3.0': 'Dice cuántas personas participaron.', '3.1': 'Dice cómo se repartieron las pulseras.', '3.3': 'Da el resultado.' }), bien: 'Ni ellos ni quien preguntaba.' },
+      'La tercera oración: ni ellos ni quien les preguntaba sabían cuál tenían.', 'Busca la oración que dice quién no sabía.'),
+    x('genero-o-cita', '¿Es una pregunta para **la ciencia** (datos) o para **la sociedad** (valores)?', { doc: EVID, rot: ['la ciencia', 'la sociedad'],
+      ...F(['¿Cuánto mercurio hay en el río?', 0, '¿Se responde midiendo?'], ['¿Debe permitirse la mina?', 1, '¿Se responde solo midiendo?'], ['¿Cuánto baja el casco las lesiones?', 0, '¿Se responde midiendo?'], ['¿Es justo cobrar por entrar al parque?', 1, '¿Se responde solo midiendo?']), bien: 'Medir o decidir.' },
+      'El mercurio y las lesiones se miden; permitir y cobrar también dependen de valores.', 'Pregunta si bastaría con medir para responder.'),
+    x('sube-evidencia', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Mejoraron **33** de **50** voluntarios. ¿Qué **porcentaje** es?', r: 66, c: '33 \\div 50 \\cdot 100', e: { 34: 'Ese es el que no mejoró.' } },
+      { q: 'En **5** estudios de **80** personas cada uno, mejoró el **25 %**. ¿Cuántas personas **mejoraron**?', r: 100, c: '400 \\cdot 0.25', e: { 20: 'Esas son las de un solo estudio.' } },
+      { q: 'Con remedio mejoró el **70 %** y con placebo, el **42 %**. ¿Cuántos **puntos** de diferencia?', r: 28, c: '70 - 42', e: { 70: 'También mejoró el grupo del placebo.' } }] },
+      '$33 \\div 50 = 66\\%$; el 25 % de 400 son 100; y $70 - 42 = 28$.', 'El efecto del remedio es lo que supera al placebo.'),
+    sol('Con la pulsera de cobre mejoraron 17 de 30 y con la falsa, 16 de 30. ¿Qué se concluye?', ['La diferencia es de [[1]] persona', 'En porcentaje son unos [[3]] puntos', 'La diferencia puede deberse [[al azar]]'], ['17', '33', 'a la pulsera'], '$1 \\div 30$ es cerca del 3 %: muy poco para 60 personas.', 'Resta y compara con los 30 de cada grupo.'),
+    err('Un anuncio dice que una crema «funciona» porque 8 de cada 10 clientas la recomiendan.', ['8 de cada 10 la recomiendan', 'Se preguntó solo a quienes siguieron comprándola', 'Entonces funciona para cualquier persona'], 2, ['Entonces no se sabe: faltan quienes la dejaron y un grupo de control', 'Entonces funciona para 2 de cada 10', 'Entonces no funciona para nadie'], 'Solo se oyó a quienes siguieron: la muestra está sesgada y no hay control.', '¿A quién no se le preguntó?'),
+    opc('Un estudio pagado por una fábrica de gaseosas concluye que el azúcar no afecta el peso. Lo más razonable es:', ['Aceptarlo, porque es un estudio', 'Decir que es falso, porque lo pagó la fábrica', 'Creerle solo si lo dice un famoso', 'Revisar los datos y compararlo con otros estudios'], 3, 'El interés no prueba que sea falso, pero obliga a pedir los datos y comparar.', 'Evita aceptar o rechazar sin mirar.'),
+  ]);
+
+  const AGUA = {
+    id: 'icf-filtro', title: 'El filtro de barro',
+    paras: [
+      'En la vereda El Cedro muchos niños tenían diarrea. Un análisis encontró bacterias en el agua del pozo. Un grupo propuso filtros de barro con una capa de plata, que detienen y matan bacterias.',
+      'Antes de comprarlos para todos hicieron una prueba. De 100 casas, 50 escogidas al azar recibieron el filtro. A los tres meses hubo diarrea en 6 de esas casas y en 21 de las otras.',
+      'También midieron el agua: antes tenía 80 colonias de bacterias por cada 100 mililitros; filtrada, 2. El filtro no quita sales ni metales, así que no sirve para un agua contaminada por una mina.',
+      'Cada filtro cuesta 60 mil pesos y dura tres años si se lava cada mes. Hervir el agua también mata las bacterias, pero gasta leña, y la leña se saca del bosque que protege el pozo.',
+      'La vereda decidió comprar filtros para todos y cercar el pozo, porque por ahí entraban los animales. «El filtro limpia el agua», dijo la promotora, «la cerca evita que se ensucie».',
+    ],
+  };
+  const pl = (g, q, p, e, h) => play(g, q, { doc: AGUA, ...p }, e, { hint: h });
+  return mundo('icf-cn-cts', 'Ciencia y Sociedad', 'ciencias', [l1, l2, l3], [
+    ['icf-cn-cts-1', 'Las bacterias del agua enferman.', pl('donde-buscar', '¿A qué párrafo vuelves para responder?', { cards: [['¿Cuántas casas enfermaron?', [2]], ['¿Qué no quita el filtro?', [3]], ['¿Para qué la cerca?', [5]]] }, 'Las casas están en el 2, lo que no quita en el 3 y la cerca en el 5.', 'Busca la palabra clave de cada pregunta.')],
+    ['icf-cn-cts-1', 'El riesgo se compara en proporción.', pl('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { cards: [['Hubo diarrea en 21 de las casas sin filtro.', 0], ['El riesgo con filtro fue del 12 %.', 1], ['Si el agua tuviera mercurio, el filtro no bastaría.', 1], ['El pozo tiene diez metros.', 2]] }, 'Las 21 están escritas; el 12 % y el mercurio se deducen; la hondura no aparece.', 'Divide y usa lo que el filtro no quita.')],
+    ['icf-cn-cts-1', 'Comparar dos grupos.', opc('Frente a las casas sin filtro, el riesgo de las casas con filtro fue:', ['3.5 veces menor', '15 veces menor', 'Igual', '3.5 veces mayor'], 0, '$21 \\div 6 = 3.5$, y los grupos son iguales.', 'Compara 6 de 50 con 21 de 50.')],
+    ['icf-cn-cts-2', 'Evitar la contaminación es mejor que limpiarla.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'Es mejor evitar un daño que arreglarlo después.', cards: [['Cercar el nacimiento de un río', true], ['Usar menos bolsas en vez de recogerlas del mar', true], ['Limpiar el derrame cuando ya ocurrió', false], ['Medir el largo de un puente', false]] }, 'Cercar y usar menos evitan; limpiar llega después y medir no tiene que ver.', 'Busca lo que actúa antes de que aparezca el daño.')],
+    ['icf-cn-cts-2', 'Toda solución tiene costos.', pl('intruso-excepto', 'La opción que no aparece en el texto', { ask: 'Del filtro se dice todo esto, EXCEPTO:', cards: [['Lleva una capa de plata', [1]], ['No quita sales', [3]], ['Dura tres años si se lava', [4]], ['Funciona con electricidad', null]] }, 'Las tres primeras están en el 1, el 3 y el 4; la última no.', 'Busca cada una en su párrafo.')],
+    ['icf-cn-cts-2', 'Lo que pasa en un lugar afecta a otro.', opc('Hervir el agua con leña puede ser un problema a largo plazo porque:', ['No mata las bacterias', 'Agrega metales al agua', 'Acaba el bosque que protege el pozo', 'Enfría el agua'], 2, 'La leña se saca del bosque que protege el pozo.', 'Sigue de dónde sale la leña.')],
+    ['icf-cn-cts-3', 'Grupos al azar y control.', pl('resume-parrafo', 'Cada párrafo en una frase', { paras: [2, 5], options: ['Probaron el filtro en la mitad de las casas, al azar.', 'Decidieron limpiar y también prevenir.', 'Dieron el filtro a quien lo pidió primero.', 'Decidieron no hacer nada.'], key: [0, 1] }, 'El 2 cuenta la prueba; el 5, la decisión; las otras dicen lo contrario.', 'El resumen no puede contradecir el párrafo.')],
+    ['icf-cn-cts-3', 'Del problema a la decisión.', pl('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { labels: ['plantea el problema y una salida', 'describe la prueba', 'muestra alcances y límites', 'compara costos', 'cuenta la decisión', 'enseña a nadar'], key: [0, 1, 2, 3, 4] }, 'Problema, prueba, límites, costos y decisión; nadar no aparece.', 'Mira qué agrega cada párrafo.')],
+    ['icf-cn-cts-3', 'Al azar, para que los grupos sean iguales.', opc('Escoger al azar las casas que recibieron el filtro sirvió para:', ['Gastar menos', 'Que todos quedaran contentos', 'Usar menos plata', 'Que los dos grupos se parecieran en lo demás'], 3, 'Al azar, lo único distinto entre los grupos es el filtro.', 'Piensa qué pasaría si cada quien escogiera.')],
   ]);
 })());
 ;

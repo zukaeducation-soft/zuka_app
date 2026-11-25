@@ -5818,6 +5818,215 @@ xpLec('pu-vo-4', [
   ], 'Restar, girar y agregar la altura.');
 }
 ;
+//#archivo js/explora-icf-ma-12.js
+// Preicfes · Matemáticas, mundos 12 «Dispersión y Comparación» y 13 «Números y Sucesiones» (Explora). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  const eje = (K, y) => { const X = x => 30 + x * 28; let h = K.l(30, y, 310, y, 'lm'); for (let i = 0; i <= 10; i++) h += K.t(X(i), y + 18, i, 's tm'); return [X, h]; };
+  // Tres datos alrededor del 5, a distancia s; m enciende el promedio y c los cuadrados.
+  const datos = (v, K) => { const [X, h] = eje(K, 110); return h + K.f(v.c, K.r(X(5), 110 - v.s * 22, v.s * 22, v.s * 22, 'fg', 0)) + [5 - v.s, 5, 5 + v.s].map(x => K.c(X(x), 98, 7, 'fa')).join('') + K.f(v.m, K.l(X(5), 40, X(5), 110, 'lo d') + K.t(X(5), 32, 'promedio', 's tm')) + K.t(170, 152, v.t, 'ta'); };
+  // Caja 1-3-5-8-10: k tramos encendidos.
+  const caja = (v, K) => { const [X, h] = eje(K, 110), Q = [1, 3, 5, 8, 10]; return h + K.l(X(1), 70, X(10), 70, 'gr') + K.r(X(3), 54, X(8) - X(3), 32, 'fa', 2) + K.l(X(5), 54, X(5), 86, 'lg gr') + [0, 1, 2, 3].map(i => K.f(v.k - i, K.l(X(Q[i]), 34, X(Q[i + 1]), 34, i % 2 ? 'lo gr' : 'la gr') + K.t((X(Q[i]) + X(Q[i + 1])) / 2, 26, '25 %', 's'))).join('') + K.t(170, 152, v.t, 'ta'); };
+  // Nube con pendiente s (1, −1 o 0) y línea l.
+  const R = [0.4, -0.5, 0.2, -0.3, 0.5, -0.2, 0.3, -0.4], nube = (v, K) => { const X = x => 50 + x * 27, Y = y => 130 - y * 13; return K.l(40, 130, 310, 130, 'lm') + K.l(40, 10, 40, 130, 'lm') + R.map((r, i) => K.c(X(i + 1), Y(4.5 + v.s * (i - 3.5) + r * (2 + 5 * v.d)), 5, 'fa')).join('') + K.f(v.l, K.l(X(0.5), Y(4.5 - v.s * 4), X(8.5), Y(4.5 + v.s * 4), 'lg d')) + K.t(170, 156, v.t, 'ta'); };
+  // Dos círculos con zonas: n solo A, centro, solo B, fuera.
+  const venn = (v, K) => K.r(16, 8, 308, 130, 'fn', 6) + K.c(134, 73, 52, 'fa') + K.c(206, 73, 52, 'fg') + K.t(84, 28, 'A', 'b ta') + K.t(256, 28, 'B', 'b tg') + K.f(v.b, K.t(170, 78, '4', 'b')) + K.f(v.a, K.t(112, 78, '6', 'b') + K.t(228, 78, '3', 'b')) + K.f(v.u, K.t(300, 128, '7', 'b')) + K.t(170, 162, v.t, 'ta');
+  // Camino que recorre la mitad de lo que falta.
+  const mitad = (v, K) => { const q = 1 - 0.5 ** v.n; return K.l(30, 80, 310, 80, 'lm') + K.r(30, 70, 280 * q, 20, 'fa', 2) + K.t(30, 108, '0', 's') + K.t(310, 108, '1', 's') + K.t(170, 140, v.t, 'ta'); };
+
+  xpLec('icf-ma-dispersion-1', [
+    ['Regados o juntos',
+      xpMira('dibujo', 'Empecemos por la idea: con el **mismo promedio**, los datos pueden estar juntos o **regados**.', { dib: datos, v: { s: 1, m: 0, c: 0, t: '' }, alto: 162 }, [
+        ['Tres datos: cuatro, cinco y seis.', { m: 1 }],
+        ['Ahora tres, cinco y siete: igual promedio.', { s: 2 }],
+        ['Y uno, cinco y nueve: más regados.', { s: 4, t: 'mismo promedio, más dispersión' }],
+        ['El rango mira solo los extremos.', {}, '$9 - 1 = 8$'],
+        ['Hace falta mirar a todos los datos.', {}],
+      ], 'Rango: el mayor menos el menor.'),
+      xpHaz('fichas', 'Datos 2, 6, 7 y 13. Pon el promedio y el rango.', { slots: fila('promedio', 'rango'), fichas: ['7', '11', '6.5', '13', '28'], meta: ['7', '11'], alto: 96, pista: 'Suma y reparte; resta los extremos.' }, '$28 \\div 4 = 7$ y $13 - 2 = 11$.')],
+    ['Varianza',
+      xpMira('dibujo', 'Segunda idea: la **varianza** promedia los **cuadrados** de las desviaciones.', { dib: datos, v: { s: 2, m: 1, c: 0, t: '' }, alto: 162 }, [
+        ['Las desviaciones son menos dos, cero y dos.', {}],
+        ['Suman cero: por eso no sirven solas.', {}, '$-2 + 0 + 2 = 0$'],
+        ['Se elevan al cuadrado.', { c: 1 }, '$4 + 0 + 4 = 8$'],
+        ['Y esos cuadrados se promedian.', { t: 'varianza: 8 entre 3' }, '$8 \\div 3 \\approx 2.67$'],
+        ['Más lejos, cuadrados más grandes.', { s: 3, t: 'varianza: 18 entre 3' }],
+      ], 'Restar, elevar, promediar.'),
+      xpHaz('fichas', 'Datos 4 y 10. Pon la suma de los cuadrados de las desviaciones y la varianza.', { slots: fila('suma', 'varianza'), fichas: ['18', '9', '6', '3', '36'], meta: ['18', '9'], alto: 96, pista: 'El promedio es 7: se apartan 3.' }, '$9 + 9 = 18$ y $18 \\div 2 = 9$.')],
+    ['Desviación estándar',
+      xpMira('hoja', 'Tercera idea: la **desviación estándar** es la **raíz** de la varianza.', { paras: [['Varianza 25 → desviación 5'], ['Sumar 100 a todos: no cambia'], ['Multiplicar todos por 3: se triplica'], ['Menor desviación: más parejo']] }, [
+        ['Vuelve a la unidad de los datos.', { luz: [0] }],
+        ['Correr los datos no los separa.', { luz: [1] }],
+        ['Multiplicar sí los separa.', { luz: [2] }],
+        ['Sirve para saber quién es más regular.', { luz: [3] }],
+        ['No dice quién es mejor, sino más parejo.', {}],
+      ], 'Raíz de la varianza.'),
+      xpHaz('hoja', 'Dos máquinas llenan botellas de 500 mL en promedio. Subraya la **más confiable**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Desviación de 1 mL'], ['Desviación de 12 mL'], ['Da igual: mismo promedio']], pista: 'Busca la que varía menos.' }, 'Varía menos: casi todas quedan cerca de 500.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'La varianza de unos tiempos (en s) es 36. Pon la desviación, y la desviación si todos tardan 4 s más.', { slots: fila('desviación', 'con 4 s más'), fichas: ['6', '6', '10', '18', '40'], meta: ['6', '6'], alto: 96, pista: 'Correr los datos no los separa.' }, '$\\sqrt{36} = 6$, y no cambia.')],
+  ], 'Rango, cuadrados y raíz.');
+
+  xpLec('icf-ma-dispersion-2', [
+    ['Percentil',
+      xpMira('hoja', 'Empecemos por la idea: el **percentil** dice qué porcentaje queda **por debajo**.', { paras: [['200 personas'], ['150 por debajo de Ana'], ['150 ÷ 200 = 75 %'], ['Percentil 75']] }, [
+        ['Doscientas personas hicieron una prueba.', { luz: [0] }],
+        ['Ciento cincuenta sacaron menos que Ana.', { luz: [1] }],
+        ['Se divide entre el total.', { luz: [2] }],
+        ['Ana está en el percentil 75.', { luz: [3] }],
+        ['No es su nota: es su lugar entre los demás.', {}],
+      ], 'Los de abajo entre el total.'),
+      xpHaz('fichas', 'De 80 personas, 60 están por debajo. Pon el percentil y cuántas no están por debajo.', { slots: fila('percentil', 'no están'), fichas: ['75', '20', '60', '80', '25'], meta: ['75', '20'], alto: 96, pista: 'Divide 60 entre 80.' }, '$60 \\div 80 = 75\\%$ y $80 - 60 = 20$.')],
+    ['La caja',
+      xpMira('dibujo', 'Segunda idea: la caja parte los datos en **cuatro** grupos **iguales**.', { dib: caja, v: { k: 0, t: '' }, alto: 162 }, [
+        ['Bigotes en uno y diez; caja de tres a ocho.', {}],
+        ['La cuarta parte está hasta el primer corte.', { k: 1 }],
+        ['La línea de adentro es la mediana.', { k: 2, t: 'mediana 5' }],
+        ['La caja guarda la mitad central.', { k: 3, t: 'de 3 a 8: la mitad' }],
+        ['Cada tramo tiene igual cantidad de datos.', { k: 4, t: 'tramo largo: más regados' }],
+      ], 'Cuatro tramos, un cuarto en cada uno.'),
+      xpHaz('fichas', 'Cuartiles 8, 11 y 20. Pon el largo de la caja y el porcentaje de datos hasta 11.', { slots: fila('caja', '%'), fichas: ['12', '50', '9', '25', '75'], meta: ['12', '50'], alto: 96, pista: '11 es la mediana.' }, '$20 - 8 = 12$ y la mitad queda hasta 11.')],
+    ['Hallar los cortes',
+      xpMira('fichas', 'Tercera idea: se **ordena** y se busca el **medio** de cada mitad.', { slots: fila('Q1', 'mediana', 'Q3'), fichas: ['3', '6', '11'], alto: 96 }, [
+        ['Datos en orden: 2, 3, 5, 6, 9, 11 y 14.', {}],
+        ['El del medio es seis.', { pon: { 1: '6' } }],
+        ['A la izquierda: 2, 3 y 5. Su medio es tres.', { pon: { 0: '3' } }],
+        ['A la derecha: 9, 11 y 14. Su medio es once.', { pon: { 2: '11' } }],
+        ['La caja mide ocho.', {}, '$11 - 3 = 8$'],
+      ], 'Ordenar, el medio y el medio de cada mitad.'),
+      xpHaz('fichas', 'Datos: 1, 4, 4, 7, 8, 10 y 13. Pon el primer cuartil y la mediana.', { slots: fila('Q1', 'mediana'), fichas: ['4', '7', '8', '10', '1'], meta: ['4', '7'], alto: 96, pista: 'El del medio y el medio de los tres primeros.' }, 'El cuarto es 7; el medio de 1, 4 y 4 es 4.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'La caja de M va de 30 a 34; la de N, de 20 a 45. Subraya lo que se puede asegurar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['N tiene más datos'], ['La mitad central de M es más pareja'], ['M tiene mayor promedio']], pista: 'Compara el largo de las cajas.' }, 'La caja de M es más corta; lo demás no se sabe.')],
+  ], 'Por debajo, cuatro tramos y el medio de cada mitad.');
+
+  xpLec('icf-ma-dispersion-3', [
+    ['La nube',
+      xpMira('dibujo', 'Empecemos por la idea: en la **nube**, cada punto es un caso con **dos** datos.', { dib: nube, v: { s: 0.9, d: 0, l: 0, t: '' }, alto: 166 }, [
+        ['Estos puntos suben de izquierda a derecha.', { t: 'correlación positiva' }],
+        ['La línea de tendencia pasa por la mitad.', { l: 1 }],
+        ['Si bajan, la correlación es negativa.', { s: -0.9, t: 'correlación negativa' }],
+        ['Si no hay rumbo, casi no hay relación.', { s: 0, d: 1, l: 0, t: 'casi ninguna' }],
+        ['Con la línea se puede predecir.', { s: 0.9, d: 0, l: 1, t: 'predecir' }],
+      ], 'Sube, baja o no tiene rumbo.'),
+      xpHaz('hoja', 'Subraya el par con correlación **negativa**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Estudio y nota'], ['Velocidad y tiempo de viaje'], ['Estatura y talla de zapato']], pista: 'Una sube y la otra baja.' }, 'Más rápido, menos tiempo.')],
+    ['Qué tan fuerte',
+      xpMira('dibujo', 'Segunda idea: el **coeficiente** va de **−1 a 1**; cerca de los extremos es **fuerte**.', { dib: nube, v: { s: 1, d: -0.4, l: 1, t: 'r = 1' }, alto: 166 }, [
+        ['Todos en línea y subiendo: uno.', {}],
+        ['Algo regados: cerca de 0.9.', { d: 0.2, t: 'r ≈ 0.9' }],
+        ['Muy regados: cerca de 0.3.', { s: 0.4, d: 1.2, t: 'r ≈ 0.3' }],
+        ['En línea y bajando: menos uno.', { s: -1, d: -0.4, t: 'r = −1' }],
+        ['El signo da el sentido, no la fuerza.', {}],
+      ], 'Signo: sentido. Cercanía a 1 o −1: fuerza.'),
+      xpHaz('hoja', 'Subraya la correlación **más fuerte**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['0.6'], ['0.1'], ['−0.92']], pista: 'No mires el signo: mira qué tan lejos está de 0.' }, '−0.92 está más cerca de −1.')],
+    ['No es causa',
+      xpMira('hoja', 'Tercera idea: **ir juntas no es causar**.', { paras: [['Más paraguas, más choques'], ['¿Los paraguas chocan carros?'], ['La lluvia explica las dos'], ['Para hablar de causa: experimento']] }, [
+        ['Los días con más paraguas hay más choques.', { luz: [0] }],
+        ['Pero los paraguas no tienen la culpa.', { luz: [1], tacha: [1] }],
+        ['Una tercera cosa mueve a las dos.', { luz: [2] }],
+        ['Un experimento cambia una sola cosa.', { luz: [3] }],
+        ['También puede ser pura casualidad.', {}],
+      ], 'Busca la tercera cosa.'),
+      xpHaz('hoja', 'Los pueblos con más cigüeñas tienen más bebés. Subraya la mejor explicación.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Los pueblos grandes tienen más techos y más familias'], ['Las cigüeñas traen bebés'], ['Los bebés atraen cigüeñas']], pista: '¿Qué hace aumentar las dos cosas?' }, 'El tamaño del pueblo explica las dos.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'La tendencia es y = 2x + 15. Pon lo que predice para x = 10 y el x en que predice 25.', { slots: fila('x = 10', 'y = 25'), fichas: ['35', '5', '25', '10', '65'], meta: ['35', '5'], alto: 96, pista: 'Reemplaza y después despeja.' }, '$20 + 15 = 35$ y $(25 - 15) \\div 2 = 5$.')],
+  ], 'Rumbo, fuerza y cuidado con la causa.');
+
+  xpLec('icf-ma-numeros-1', [
+    ['El mismo número',
+      xpMira('hoja', 'Empecemos por la idea: una fracción, un decimal y un porcentaje pueden ser el **mismo** número.', { paras: [['2/5 = 4/10'], ['= 0.4'], ['= 40 %'], ['1/3 = 0.333…'], ['√3 = 1.7320508…']] }, [
+        ['Dos quintos son cuatro décimos.', { luz: [0] }],
+        ['Es decir, cero punto cuatro.', { luz: [1] }],
+        ['O cuarenta de cada cien.', { luz: [2] }],
+        ['Un tercio se repite: es racional.', { luz: [3], nota: { 3: 'racional' } }],
+        ['Este ni termina ni se repite.', { luz: [4], nota: { 4: 'irracional' } }],
+      ], 'La raya de la fracción es una división.'),
+      xpHaz('fichas', 'Pon 9/20 como decimal y 0.08 como porcentaje.', { slots: fila('9/20', '0.08'), fichas: ['0.45', '8 %', '0.92', '80 %', '9.20'], meta: ['0.45', '8 %'], alto: 96, pista: 'Lleva 9/20 a denominador 100.' }, '$\\tfrac{45}{100}$ y $\\tfrac{8}{100}$.')],
+    ['Sumar y multiplicar',
+      xpMira('hoja', 'Segunda idea: para **sumar** hacen falta partes **iguales**; para **multiplicar**, no.', { paras: [['1/2 + 1/5'], ['5/10 + 2/10'], ['7/10'], ['2/3 de 3/5 = 6/15 = 2/5']] }, [
+        ['Medios y quintos son de distinto tamaño.', { luz: [0] }],
+        ['Se pasan todos a décimos.', { luz: [1] }],
+        ['Y se suman: siete décimos.', { luz: [2] }],
+        ['«De» se vuelve multiplicación.', { luz: [3] }],
+        ['Se multiplica arriba y abajo.', { luz: [3] }],
+      ], 'Sumar: igualar partes. De: multiplicar.'),
+      xpHaz('fichas', 'Pon 1/4 + 1/6, y 3/4 de 2/3.', { slots: fila('suma', 'de'), fichas: ['5/12', '1/2', '2/10', '5/7', '1/12'], meta: ['5/12', '1/2'], alto: 96, pista: 'Usa doceavos en la suma.' }, '$\\tfrac{3 + 2}{12}$ y $\\tfrac{6}{12}$.')],
+    ['Notación científica',
+      xpMira('fichas', 'Tercera idea: un número **entre 1 y 10** por una **potencia de 10**.', { slots: fila('número', 'potencia'), fichas: ['7.2', '10⁶'], alto: 96 }, [
+        ['Siete millones doscientos mil.', {}, '$7\\,200\\,000$'],
+        ['El número queda entre uno y diez.', { pon: { 0: '7.2' } }],
+        ['La coma corrió seis lugares.', { pon: { 1: '10⁶' } }, '$7.2 \\cdot 10^6$'],
+        ['Los pequeños llevan exponente negativo.', {}, '$0.003 = 3 \\cdot 10^{-3}$'],
+        ['Al multiplicar, los exponentes se suman.', {}, '$10^6 \\cdot 10^2 = 10^8$'],
+      ], 'Grandes: positivo. Pequeños: negativo.'),
+      xpHaz('fichas', 'Pon el exponente de 950 000 y el de 0.00095, con 9.5 adelante.', { slots: fila('950 000', '0.00095'), fichas: ['5', '−4', '4', '−5', '6'], meta: ['5', '−4'], alto: 96, pista: 'Cuenta los lugares que corre la coma.' }, '$9.5 \\cdot 10^5$ y $9.5 \\cdot 10^{-4}$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un libro de 2 · 10² hojas mide 2 · 10⁻² m de grueso. Subraya el grueso de cada hoja.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['10⁴ m'], ['10⁻⁴ m'], ['4 · 10⁰ m']], pista: 'Divide y resta los exponentes.' }, '$\\tfrac{2}{2} = 1$ y $-2 - 2 = -4$.')],
+  ], 'El mismo número, partes iguales y potencias.');
+
+  xpLec('icf-ma-numeros-2', [
+    ['Cuatro zonas',
+      xpMira('dibujo', 'Empecemos por la idea: con **dos** grupos hay **cuatro** zonas.', { dib: venn, v: { a: 0, b: 0, u: 0, t: '' }, alto: 172 }, [
+        ['Veinte personas; diez en A y siete en B.', { t: '20 en total' }],
+        ['Cuatro están en los dos: al centro.', { b: 1 }],
+        ['Quedan seis solo en A y tres solo en B.', { a: 1 }, '$10 - 4 \\; y \\; 7 - 4$'],
+        ['Los demás quedan afuera.', { u: 1 }, '$20 - 13 = 7$'],
+        ['Se llena del centro hacia afuera.', { t: 'del centro hacia afuera' }],
+      ], 'Centro, lunas y afuera.'),
+      xpHaz('fichas', 'De 30: 18 en A, 14 en B y 8 en los dos. Pon solo A y los de afuera.', { slots: fila('solo A', 'afuera'), fichas: ['10', '6', '18', '8', '2'], meta: ['10', '6'], alto: 96, pista: 'Empieza por el centro.' }, '$18 - 8 = 10$; $30 - 24 = 6$.')],
+    ['Operaciones',
+      xpMira('hoja', 'Segunda idea: **unión**, **intersección**, **diferencia** y **complemento**.', { paras: [['A = {1, 2, 3, 4}, B = {3, 4, 5}'], ['Unión: {1, 2, 3, 4, 5}'], ['Intersección: {3, 4}'], ['A − B: {1, 2}'], ['Complemento de A: lo que no está en A']] }, [
+        ['Dos conjuntos con elementos comunes.', { luz: [0] }],
+        ['En alguno de los dos, sin repetir.', { luz: [1] }],
+        ['En los dos a la vez.', { luz: [2] }],
+        ['En A, pero no en B.', { luz: [3] }],
+        ['Todo lo demás del universo.', { luz: [4] }],
+      ], 'Alguno, los dos, uno y no el otro, lo demás.'),
+      xpHaz('hoja', 'P = {a, e, o} y Q = {e, i}. Subraya **P − Q**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['{e}'], ['{i}'], ['{a, o}']], pista: 'Quita de P lo que también está en Q.' }, 'La e está en los dos: quedan a y o.')],
+    ['Contar la unión',
+      xpMira('fichas', 'Tercera idea: al sumar, los **repetidos** se cuentan **dos** veces.', { slots: fila('A', 'B', 'en alguno'), fichas: ['12', '9', '16'], alto: 96 }, [
+        ['Doce cantan y nueve bailan.', { pon: { 0: '12', 1: '9' } }],
+        ['Cinco hacen las dos cosas.', {}],
+        ['Al sumar se contaron dos veces.', {}, '$12 + 9 = 21$'],
+        ['Se quitan una vez.', { pon: { 2: '16' } }, '$21 - 5 = 16$'],
+        ['Con esa cuenta también se halla el cruce.', {}, '$12 + 9 - 16 = 5$'],
+      ], 'Sumar y quitar una vez lo repetido.'),
+      xpHaz('fichas', 'En alguno hay 40; A tiene 25 y B, 23. Pon los de los dos y los de solo B.', { slots: fila('los dos', 'solo B'), fichas: ['8', '15', '48', '17', '23'], meta: ['8', '15'], alto: 96, pista: 'Suma y resta lo que pasa de 40.' }, '$48 - 40 = 8$ y $23 - 8 = 15$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'De 100 hogares, 70 tienen internet y 50 televisión por cable; 15 no tienen nada. Subraya cuántos tienen las dos.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['20'], ['35'], ['85']], pista: 'Quita primero los 15.' }, '$70 + 50 - 85 = 35$.')],
+  ], 'Zonas, operaciones y repetidos.');
+
+  xpLec('icf-ma-numeros-3', [
+    ['Sumar lo mismo',
+      xpMira('fichas', 'Empecemos por la idea: en la **aritmética** siempre se **suma** lo mismo.', { slots: fila('lugar 1', 'lugar 2', 'lugar 10'), fichas: ['4', '10', '58'], alto: 96 }, [
+        ['Empieza en cuatro y suma seis.', { pon: { 0: '4' } }],
+        ['El segundo es diez.', { pon: { 1: '10' } }],
+        ['Al lugar diez se llega con nueve saltos.', {}, '$9 \\cdot 6 = 54$'],
+        ['Cuatro más 54 son 58.', { pon: { 2: '58' } }],
+        ['Siempre un salto menos que el lugar.', {}],
+      ], 'Primero más (lugar − 1) saltos.'),
+      xpHaz('fichas', '9, 13, 17… Pon el salto y el término del lugar 6.', { slots: fila('salto', 'lugar 6'), fichas: ['4', '29', '33', '24', '6'], meta: ['4', '29'], alto: 96, pista: 'Son cinco saltos.' }, '$9 + 5 \\cdot 4 = 29$.')],
+    ['Multiplicar por lo mismo',
+      xpMira('hoja', 'Segunda idea: en la **geométrica** siempre se **multiplica** por lo mismo.', { paras: [['5, 10, 20, 40: por 2'], ['81, 27, 9, 3: por 1/3'], ['Lugar 5 de la primera: 5 · 2⁴ = 80'], ['1, 4, 9, 16: ninguna de las dos']] }, [
+        ['Se divide uno entre el anterior: dos.', { luz: [0] }],
+        ['También puede ir bajando.', { luz: [1] }],
+        ['Cuatro pasos para el lugar cinco.', { luz: [2] }],
+        ['Los cuadrados no son ni una ni otra.', { luz: [3] }],
+        ['Resta y divide para saber.', {}],
+      ], 'Primero por razón a la (lugar − 1).'),
+      xpHaz('fichas', '2, 10, 50… Pon la razón y el lugar 5.', { slots: fila('razón', 'lugar 5'), fichas: ['5', '1250', '250', '8', '6250'], meta: ['5', '1250'], alto: 96, pista: 'Multiplica por 5 cuatro veces.' }, '$2 \\cdot 5^4 = 1\\,250$.')],
+    ['El límite',
+      xpMira('dibujo', 'Tercera idea: algunas sucesiones se **acercan** a un número sin pasarlo.', { dib: mitad, v: { n: 0, t: '' }, alto: 150 }, [
+        ['Cada paso recorre la mitad de lo que falta.', {}],
+        ['Primero se recorre la mitad.', { n: 1, t: '1/2' }, '$\\tfrac12$'],
+        ['Luego van tres cuartos del camino.', { n: 2, t: '3/4' }],
+        ['Luego van siete octavos del camino.', { n: 3, t: '7/8' }],
+        ['Se acerca a uno todo lo que se quiera.', { n: 8, t: 'se acerca a 1' }],
+      ], 'El límite es a donde se acerca.'),
+      xpHaz('hoja', 'Subraya a qué se acerca 7 − 1/n.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['7'], ['6'], ['0']], pista: 'Piensa en un n enorme.' }, 'La fracción casi desaparece.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un remedio: 20 mg hoy y cada día la mitad. Subraya a cuánto se acerca el total.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['30 mg'], ['40 mg'], ['Crece sin parar']], pista: 'Siempre falta lo último que se tomó.' }, '$20 + 10 + 5 + \\ldots$ se acerca a 40.')],
+  ], 'Sumar, multiplicar y acercarse.');
+}
+;
 //#archivo js/explora-icf-lc.js
 // Preicfes · Lectura Crítica, mundo 1 «Lo que Dice el Texto» (Explora, escena «hoja»). Textos cortos propios.
 xpLec('icf-lc-literal-1', [
@@ -8462,6 +8671,108 @@ xpLec('icf-sc-modelos-2', [
   ], 'Cargas, polos, y de ida y vuelta.');
 }
 ;
+//#archivo js/explora-icf-cn-12.js
+// Preicfes · Ciencias Naturales, mundo 13 «Ciencia y Sociedad» (Explora, escenas «fichas» y «hoja»). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+
+  xpLec('icf-cn-cts-1', [
+    ['Prevenir y curar',
+      xpMira('hoja', 'Empecemos por la idea: **vacuna** previene, **antibiótico** mata **bacterias**; contra virus, no.', { paras: [['Vacuna: enseña a las defensas'], ['Antibiótico: contra bacterias'], ['Antibiótico para la gripa'], ['Muchos vacunados protegen a otros']] }, [
+        ['Deja memoria para reconocer al virus.', { luz: [0] }],
+        ['Este solo sirve contra bacterias.', { luz: [1] }],
+        ['La gripa es un virus: no sirve.', { luz: [2], tacha: [2] }],
+        ['Y crea bacterias resistentes.', { luz: [1] }],
+        ['Si casi todos están protegidos, no circula.', { luz: [3] }],
+      ], 'Prevenir no es curar.'),
+      xpHaz('hoja', 'Un niño tiene varicela, causada por un virus. Subraya lo que **no** sirve.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Reposo y líquidos'], ['Un antibiótico contra el virus'], ['No contagiar a otros']], pista: '¿Contra qué actúa el antibiótico?' }, 'Los antibióticos no actúan contra virus.')],
+    ['Comparar riesgos',
+      xpMira('fichas', 'Segunda idea: los riesgos se comparan en **proporción**.', { slots: fila('con', 'sin'), fichas: ['1 %', '15 %'], alto: 96 }, [
+        ['Con cinturón, 5 heridos de 500.', { pon: { 0: '1 %' } }, '$5 \\div 500$'],
+        ['Sin cinturón, 3 heridos de 20.', { pon: { 1: '15 %' } }, '$3 \\div 20$'],
+        ['Cinco es más que tres…', {}],
+        ['…pero el riesgo fue quince veces menor.', {}, '$15 \\div 1 = 15$'],
+        ['Los grupos no eran del mismo tamaño.', {}],
+      ], 'Divide cada caso entre su grupo.'),
+      xpHaz('fichas', 'Con vacuna enfermaron 6 de 300; sin ella, 9 de 90. Pon los dos riesgos.', { slots: fila('con', 'sin'), fichas: ['2 %', '10 %', '6 %', '9 %', '3 %'], meta: ['2 %', '10 %'], alto: 96, pista: 'Divide cada uno entre su grupo.' }, '$6 \\div 300$ y $9 \\div 90$.')],
+    ['Ver por dentro',
+      xpMira('hoja', 'Tercera idea: cada tecnología **ve** algo y tiene su **cuidado**.', { paras: [['Rayos X: huesos'], ['Ecografía: sonido'], ['Resonancia: imanes'], ['Rayos X: lo necesario']] }, [
+        ['Atraviesan la carne y paran en el hueso.', { luz: [0] }],
+        ['Sirve para ver a un bebé.', { luz: [1] }],
+        ['Muestra tejidos blandos; sin metales.', { luz: [2] }],
+        ['Su energía puede dañar el ADN.', { luz: [3] }],
+        ['Se compara el beneficio con el riesgo.', {}],
+      ], 'Beneficio frente a riesgo.'),
+      xpHaz('hoja', 'Pon al margen la técnica más adecuada.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['ecografía', 'rayos X'], meta: [1, 0], paras: [['Ver si un brazo se quebró'], ['Ver el corazón de un bebé por nacer']], pista: 'Alguna no va ahí: ¿hueso o bebé?' }, 'El hueso detiene los rayos X; el sonido no daña el ADN.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', '«Se enfermaron 40 vacunados y 30 sin vacunar». Subraya el dato que **falta**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['El color de la vacuna'], ['El nombre del médico'], ['Cuántos había en cada grupo']], pista: '¿Con qué se divide?' }, 'Sin el tamaño de los grupos no hay riesgo que comparar.')],
+  ], 'Prevenir, comparar y ver por dentro.');
+
+  xpLec('icf-cn-cts-2', [
+    ['Energía',
+      xpMira('hoja', 'Empecemos por la idea: toda fuente de energía tiene **ventajas** y **costos**.', { paras: [['Sol y viento: se reponen'], ['No soplan ni brillan siempre'], ['Carbón y petróleo: se acaban'], ['Todas cuestan al fabricarse']] }, [
+        ['Estas fuentes son renovables.', { luz: [0], nota: { 0: 'renovables' } }],
+        ['Por eso hacen falta baterías.', { luz: [1] }],
+        ['Sueltan gases al quemarse.', { luz: [2], nota: { 2: 'no renovables' } }],
+        ['Paneles y baterías exigen minerales.', { luz: [3] }],
+        ['Se decide mirando todo el ciclo.', {}],
+      ], 'Ventajas y costos de principio a fin.'),
+      xpHaz('hoja', 'Subraya la **desventaja** de los paneles solares.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Se repone cada día'], ['De noche no producen'], ['No sueltan humo al funcionar']], pista: 'Las otras son ventajas.' }, 'De noche hace falta guardar energía.')],
+    ['Efecto invernadero',
+      xpMira('hoja', 'Segunda idea: el efecto invernadero es **necesario**; el problema es su **aumento**.', { paras: [['Entra la luz del sol'], ['La Tierra devuelve calor'], ['Los gases retienen una parte'], ['Más gases, más calor']] }, [
+        ['La luz pasa y calienta el suelo.', { luz: [0] }],
+        ['El suelo devuelve calor.', { luz: [1] }],
+        ['Una parte no se escapa.', { luz: [2] }],
+        ['Sin eso, el planeta sería helado.', { luz: [2] }],
+        ['Al quemar y talar, los gases aumentan.', { luz: [3] }],
+      ], 'Necesario, pero sin exceso.'),
+      xpHaz('fichas', 'Un carro suelta 2 kg de CO₂ por cada 10 km. Pon los kg en 150 km y en un mes de 900 km.', { slots: fila('150 km', '900 km'), fichas: ['30', '180', '75', '300', '90'], meta: ['30', '180'], alto: 96, pista: 'Cuenta cuántos tramos de 10 km hay.' }, '$15 \\cdot 2 = 30$ y $90 \\cdot 2 = 180$.')],
+    ['Residuos',
+      xpMira('hoja', 'Tercera idea: primero **reducir**, después **reutilizar** y al final **reciclar**.', { paras: [['Reducir: no usar la bolsa'], ['Reutilizar: usarla otra vez'], ['Reciclar: fundirla'], ['Pilas: aparte']] }, [
+        ['Lo que no se produce no contamina.', { luz: [0] }],
+        ['Usar otra vez casi no gasta.', { luz: [1] }],
+        ['Reciclar también gasta energía.', { luz: [2] }],
+        ['Sus metales ensucian agua y suelo.', { luz: [3] }],
+        ['Lo orgánico sirve de compost.', {}],
+      ], 'En ese orden.'),
+      xpHaz('hoja', 'Subraya la acción que es **reducir**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Fundir botellas'], ['Sembrar en una lata vieja'], ['Llevar vaso propio y no pedir uno']], pista: 'Evita que el residuo aparezca.' }, 'No se produce el vaso desechable.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Se quiere saber si una turbina afecta a los murciélagos. Subraya lo mejor.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Contarlos antes y después, y en un lugar sin turbina'], ['Preguntar si les gustan'], ['Suponer que no']], pista: 'Mide y compara.' }, 'Comparar permite corregir.')],
+  ], 'Costos, aumento y reducir primero.');
+
+  xpLec('icf-cn-cts-3', [
+    ['Testimonio y prueba',
+      xpMira('hoja', 'Empecemos por la idea: un **testimonio** no es una **prueba**.', { paras: [['«A mí me sirvió»'], ['El dolor sube y baja solo'], ['Esperar mejorar ayuda: placebo'], ['Los que no mejoraron no aparecen']] }, [
+        ['Un testimonio puede ser sincero.', { luz: [0] }],
+        ['Pero quizá habría mejorado igual.', { luz: [1] }],
+        ['O fue el efecto de esperarlo.', { luz: [2], nota: { 2: 'placebo' } }],
+        ['Y solo se muestran los casos buenos.', { luz: [3] }],
+        ['Por eso hace falta comparar.', {}],
+      ], 'Sincero no es lo mismo que probado.'),
+      xpHaz('hoja', 'Subraya la evidencia **más sólida** de que un jarabe sirve.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Mil comentarios'], ['Lo toma una cantante'], ['Mejoró más que uno falso, al azar']], pista: 'Busca una comparación.' }, 'Hay grupo de control y azar.')],
+    ['Un buen experimento',
+      xpMira('hoja', 'Segunda idea: **azar**, **control** y **doble ciego** dejan **un solo** cambio.', { paras: [['Al azar: grupos parecidos'], ['Control: uno falso, igual'], ['Doble ciego: nadie sabe'], ['Lo único distinto: el remedio']] }, [
+        ['Así no quedan los sanos a un lado.', { luz: [0] }],
+        ['Todos creen recibir lo mismo.', { luz: [1] }],
+        ['Ni el paciente ni quien mide lo sabe.', { luz: [2] }],
+        ['Si hay diferencia, se sabe de qué es.', { luz: [3] }],
+        ['Con pocos casos, puede ser el azar.', {}],
+      ], 'Cambiar una sola cosa.'),
+      xpHaz('hoja', 'Pon al margen qué regla se **incumplió**.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['control', 'azar'], meta: [1, 0], paras: [['Los jóvenes tomaron el remedio y los viejos, el falso'], ['Todos tomaron el remedio']], pista: 'Alguna no va ahí: ¿cómo se repartieron o con quién se comparó?' }, 'Se repartió por edad; y no hubo con quién comparar.')],
+    ['Datos y valores',
+      xpMira('hoja', 'Tercera idea: la ciencia **mide**; la sociedad **decide** con datos y valores.', { paras: [['¿Cuánto contamina?'], ['¿Se permite?'], ['¿Quién pagó el estudio?'], ['¿Lo repitieron otros?']] }, [
+        ['Esta se responde midiendo.', { luz: [0], nota: { 0: 'datos' } }],
+        ['Esta también mira lo que importa.', { luz: [1], nota: { 1: 'valores' } }],
+        ['Si lo pagó el vendedor, con cuidado.', { luz: [2] }],
+        ['Un estudio solo casi nunca basta.', { luz: [3] }],
+        ['Decidir sin datos sale caro.', {}],
+      ], 'Datos primero, y después valores.'),
+      xpHaz('hoja', 'Subraya la pregunta que la ciencia **sola** puede responder.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['¿Cuántos decibeles hay en la plaza?'], ['¿Debe cerrarse la discoteca?'], ['¿Es justo el cobro?']], pista: '¿Cuál basta con medir?' }, 'Los decibeles se miden; lo demás también se valora.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'Con remedio mejoran 45 de 60; con placebo, 30 de 60. Pon los puntos de diferencia y cuántos de más mejoraron.', { slots: fila('puntos', 'de más'), fichas: ['25', '15', '75', '50', '45'], meta: ['25', '15'], alto: 96, pista: 'Pasa cada grupo a porcentaje.' }, '$75\\% - 50\\% = 25$ puntos y $45 - 30 = 15$.')],
+  ], 'Comparar, un solo cambio y decidir.');
+}
+;
 //#archivo js/explora-icf-en.js
 // Preicfes · Inglés, mundo 1 «Avisos y Vocabulario» (Explora, escena «hoja»): se explica en español con ejemplos en inglés propios.
 xpLec('icf-en-avisos-1', [
@@ -11095,6 +11406,51 @@ const GUIDES = {
   'alcanza-o-no': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'datos-que-sobran': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
   'vale-o-no': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'desvios-cero': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'mueve-rango': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'arma-caja': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'percentil-puesto': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'predice-nube': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'fraccion-recta': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'coma-cientifica': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'cruce-grupos': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'que-termino': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'mitades-faltan': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'compensa-justo': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'varianza-pasos': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'suma-igual': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'elige-regular': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'lee-caja': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'compara-cajas': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'signo-correlacion': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'fuerza-r': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'tercer-factor': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'fraccion-decimal': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'opera-cientifica': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'a-que-conjunto': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'llena-zonas': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'cuantos-conjunto': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'suma-o-multiplica': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'se-acerca-a': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'lugar-lejano': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'riesgo-grupos': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'solida-o-no': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'mas-disperso': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'dice-la-caja': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'punto-raro': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'causa-o-no': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'entre-los-dos': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'pinta-zona': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'verdad-conjuntos': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'tiene-limite': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'buena-evidencia': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'sube-varianza': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-percentil': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-nube': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-fraccion': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-conjunto': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-sucesion': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-evidencia': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
   'traslada-punto': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'refleja-punto': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'rota-punto': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
@@ -16450,6 +16806,45 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['Deducir', 'Usa los datos.', 'dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CLIPS, nums: [1, 2], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], ...F(['Con 40 vueltas atrajo 8 clips.', 0, 'Búscala en el párrafo 1.'], ['Con 50 vueltas atraería unos 10 clips.', 1, 'Mira cuántos clips hay por vuelta.'], ['El hierro ayuda a atraer más.', 1, 'Compara 60 vueltas con hierro y con madera.'], ['Los clips eran rojos.', 2, '¿Se dice el color?']), luz: [[1, 'con 40, 8 clips'], [2, 'atrajo uno']], bien: 'Proporción y comparación.' }, 'Los 8 están escritos; los 10 y el hierro se deducen; el color no.', ['Busca cuántos clips corresponden a cada diez vueltas.', 'Compara los dos casos de 60 vueltas.'], '2 clips por cada 10 vueltas'],
     ['La fuerza', 'La distancia, al cuadrado.', 'fuerza-cambia', 'Dos cargas se repelen con fuerza **72**. ¿Cuánto vale en cada cambio?', { et: ['al doble de distancia', 'al triple de distancia', 'una carga a la mitad'], metas: ['18', '8', '36'], fichas: ['18', '8', '36', '24', '144'], mira: ['Al doble, cuatro veces menor.', 'Al triple, nueve veces menor.', 'La fuerza baja igual que la carga.'], trampas: { '1:24': 'La distancia va al cuadrado.' }, ok: 'Cuadrado para la distancia.' }, '$72 \\div 4 = 18$; $72 \\div 9 = 8$; y $72 \\div 2 = 36$.', ['La distancia cuenta al cuadrado.', 'La carga cuenta sin cuadrado.'], '18, 8 y 36']],
     'Más vueltas y hierro atraen más; la distancia va al cuadrado.', 'Compara casos en los que cambia una sola cosa.');
+}
+;
+//#archivo js/gimnasio-icf-12.js
+// Gimnasio del Preicfes, últimos mundos (spec 2026-11-25-preicfes-estructura): Fuerza y Élite por mundo. Va después de gimnasio-icf-11.js.
+{
+  const { F } = ICF;
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-i-${id}`, after, level, title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+  const D = (id, title, paras) => ({ id: `gym-icf-${id}`, title, paras });
+
+  reto('disp-1', ['icf-ma-dispersion-1', 'icf-ma-dispersion-2'], 2, 'Los tiros al aro', 'Equilibrio y caja', 'Los tiros que encestó un equipo en cada partido.', [
+    ['El equilibrio', 'Reparte por igual.', 'desvios-cero', 'Mueve el apoyo hasta que las **desviaciones** sumen **0**.', { d: [2, 2, 5, 9, 12], hi: 12 }, '$30 \\div 5 = 6$.', ['Las desviaciones se equilibran en el promedio.', 'Suma los datos y repártelos entre cinco.'], '30 ÷ 5 = 6'],
+    ['La caja', 'El medio y el medio de cada mitad.', 'arma-caja', 'Los datos son 2, 4, 5, 7, 7, 8 y 11. Pon los tres **cortes** de su caja.', { d: [2, 4, 5, 7, 7, 8, 11], hi: 12 }, 'Mediana 7; 2, 4, 5 dan 4 y 7, 8, 11 dan 8.', ['Busca primero el dato del medio.', 'Después, el medio de los tres de cada lado.'], '4, 7 y 8']],
+    'El promedio es 6 y la caja va de 4 a 8, con mediana 7.', 'Reparte para el promedio; busca el medio para la caja.');
+  reto('disp-2', ['icf-ma-dispersion-3'], 3, 'El café y las horas', 'Tendencia y causa', 'Una nube de puntos y una afirmación apresurada.', [
+    ['Predecir', 'Alarga la línea.', 'predice-nube', 'La nube muestra tazas de café y clientes. Mueve la **predicción** para **7**.', { pts: [[1, 14], [2, 17], [2, 19], [3, 21], [4, 25], [4, 27], [5, 29], [6, 35]], m: 4, b: 10, x: 7, tol: 2, hx: 9, hy: 60 }, 'La tendencia sube 4 por cada una: cerca de 38.', ['Imagina la línea que pasa por la mitad de la nube.', 'Alárgala hasta la línea punteada.'], 'cerca de 38'],
+    ['La causa', 'Ir juntas no es causar.', 'causa-o-no', 'En una ciudad, quienes toman **más café** **duermen menos**. Toca **todo** lo que se puede decir **solo con eso**.', { casos: [{ t: 'hay una correlación negativa', si: true }, { t: 'el café quita el sueño a todos', no: 'Eso afirma una causa, y para todos.' }, { t: 'podría ser que quien duerme poco tome más café', si: true }, { t: 'sin café todos dormirían ocho horas', no: 'Nada en el dato permite asegurarlo.' }], falta: 'Falta otra que no afirma una causa.', ok: 'Se observa, no se asegura la causa.' }, 'Van al contrario, pero no se sabe cuál causa cuál.', ['Separa lo que se observa de lo que se supone.', 'La causa podría ir en el otro sentido.'], 'correlación, no causa']],
+    'Para 7 se predicen unos 38; la correlación es negativa y no prueba causa.', 'Alarga la tendencia y no saltes a la causa.');
+
+  reto('nume-1', ['icf-ma-numeros-1', 'icf-ma-numeros-2'], 2, 'La célula y el coro', 'Coma y cruce', 'Un número diminuto y dos grupos que se cruzan.', [
+    ['La célula', 'Cuenta los lugares.', 'coma-cientifica', 'Mueve el exponente para que sea el **mismo número**.', { m: '7.5', et: '0.0000075', e: -6, lo: -9, hi: 9 }, 'La coma corre 6 lugares: $7.5 \\cdot 10^{-6}$.', ['Cuenta cuántos lugares corre la coma.', 'El número es menor que 1: mira el signo.'], '10⁻⁶'],
+    ['El coro', 'Quita los de afuera.', 'cruce-grupos', 'De **36** jóvenes, **21** cantan, **17** tocan y **4** nada. Mueve cuántos hacen **las dos**.', { a: 21, b: 17, total: 36, fuera: 4, A: 'cantan', B: 'tocan' }, 'Hacen algo 32; $21 + 17 - 32 = 6$.', ['Quita del total a los que no hacen nada.', 'Lo que sobra al sumar los dos grupos es el cruce.'], '38 − 32 = 6']],
+    'El exponente es −6 y seis hacen las dos cosas.', 'Cuenta lugares y quita lo repetido.');
+  reto('nume-2', ['icf-ma-numeros-3'], 3, 'La escalera y la hormiga', 'Saltos y mitades', 'Una escalera que crece igual y una hormiga que se acerca a su meta.', [
+    ['La escalera', 'Un salto menos que el lugar.', 'que-termino', 'La sucesión **7, 12, 17…** sigue igual. Mueve el lugar del **72**.', { a: 7, d: 5, meta: 72, max: 20 }, 'Del 7 al 72 hay 65: 13 saltos. Lugar 14.', ['Halla cuántos saltos hay del primero al último.', 'El lugar es uno más que los saltos.'], '65 ÷ 5 + 1 = 14'],
+    ['La hormiga', 'Duplica el denominador.', 'mitades-faltan', 'En cada paso recorre la **mitad** de lo que falta. Mueve cuántos pasos hacen que falte **1/256**.', { tope: 256, max: 12 }, '$2^8 = 256$: 8 pasos.', ['Mira cuánto falta tras uno, dos y tres pasos.', 'Busca qué potencia de 2 es 256.'], '2⁸ = 256']],
+    'El 72 está en el lugar 14 y a la hormiga le toman 8 pasos.', 'Saltos para la aritmética, potencias para las mitades.');
+
+  reto('cts-1', ['icf-cn-cts-1', 'icf-cn-cts-2'], 2, 'El barrio saludable', 'Proporción y compensación', 'Un barrio compara riesgos y calcula su huella.', [
+    ['El riesgo', 'Divide entre el grupo.', 'riesgo-grupos', 'Con toldillo enfermaron **9** de **300**; sin toldillo, **24** de **200**. Completa.', { et: ['riesgo con toldillo', 'riesgo sin toldillo', 'veces mayor sin toldillo'], metas: ['3 %', '12 %', '4'], fichas: ['3 %', '12 %', '4', '9 %', '24 %'], mira: ['Divide 9 entre 300.', 'Divide 24 entre 200.', 'Compara los dos porcentajes.'], trampas: { '0:9 %': 'Son 9 de 300, no de 100.', '1:24 %': 'Son 24 de 200, no de 100.' }, ok: 'Proporción, no cantidad.' }, '$9 \\div 300 = 3\\%$; $24 \\div 200 = 12\\%$; cuatro veces.', ['Cada caso se divide entre su propio grupo.', 'Después compara los dos porcentajes dividiendo.'], '3 %, 12 % y 4 veces'],
+    ['La huella', 'Divide lo que se suelta.', 'compensa-justo', 'El barrio suelta **900 kg** de CO₂ al mes. Cada panel evita **25 kg**. Mueve cuántos **paneles** lo compensan.', { gasta: 900, cada: 25, max: 50, et: 'paneles', u: 'kg' }, '$900 \\div 25 = 36$ paneles.', ['Halla cuántas veces cabe lo que evita cada uno.', 'Divide los kilogramos entre los que evita un panel.'], '900 ÷ 25 = 36']],
+    'Sin toldillo el riesgo es cuatro veces mayor; hacen falta 36 paneles.', 'Divide entre el grupo y entre lo que evita cada uno.');
+  const TE = D('te-memoria', 'El té de la memoria', [
+    'Una empresa dice que su té mejora la memoria. Lo probó con 20 empleados, que sabían lo que tomaban. A los quince días recordaron más palabras que el primer día.',
+    'No hubo otro grupo. La prueba del día quince usó la misma lista de palabras del primer día.']);
+  reto('cts-2', ['icf-cn-cts-3'], 3, 'El té de la memoria', 'Buscar lo que falta', 'Una empresa anuncia un resultado. Revisa la prueba.', [
+    ['Deducir', 'Mira qué no se controló.', 'dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: TE, nums: [1, 2], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], ...F(['Participaron 20 empleados.', 0, 'Búscala en el párrafo 1.'], ['Pudieron mejorar porque ya conocían la lista.', 1, '¿Qué lista se usó el día quince?'], ['No fue un estudio ciego.', 1, '¿Sabían lo que tomaban?'], ['El té era verde.', 2, '¿Se dice de qué era?']), luz: [[1, '20 empleados'], [2, 'la misma lista'], [1, 'sabían lo que tomaban']], bien: 'Repetir la lista y saber.' }, 'Los 20 están escritos; la lista repetida y el no ser ciego se deducen; el color no.', ['Fíjate en qué cambió además del té.', 'Pregunta quién sabía y con qué se comparó.'], 'lista repetida; no ciego'],
+    ['Arreglar', 'Que solo cambie el té.', 'buena-evidencia', 'Toca **todo** lo que haría **mejor** la prueba.', { casos: [{ t: 'otro grupo con un té falso', si: true }, { t: 'usar una lista nueva', si: true }, { t: 'que los pruebe el dueño de la empresa', no: 'Tiene interés en el resultado.' }, { t: 'más personas, repartidas al azar', si: true }, { t: 'contar solo a los que mejoraron', no: 'Así se esconde a los demás.' }], falta: 'Falta otra que deja el té como único cambio.', ok: 'Control, lista nueva y azar.' }, 'Control, lista nueva y azar dejan que solo cambie el té.', ['Busca lo que quita otras explicaciones.', 'Cuida quién mide y a quién se cuenta.'], 'control, lista, azar']],
+    'La lista repetida y la falta de control dejan otras explicaciones.', 'Busca qué más cambió y cómo quitarlo.');
 }
 ;
 //#archivo js/inicio.js

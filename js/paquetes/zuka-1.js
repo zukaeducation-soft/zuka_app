@@ -1558,6 +1558,16 @@ const WORLDS = (() => {
     'icf-cn-electrico': { name: 'Electricidad y Magnetismo', art: plate('icf-cn-electrico', TEAL, `
       ${L('M50 40V18h60v44H50V48', INK, 1.1)}${L('M44 40h12M47 48h6', TEAL, 1.4)}${L('M70 18l4-5 6 10 6-10 6 10 4-5', TEAL, 1.2)}${C(110, 40, 7, INK, 1.1)}${L('M105 35l10 10M115 35l-10 10', INK, .8)}${L('M68 62v-10h24v10', TEAL, 1)}
       ${T(28, 42, 'V = I·R', INK, 6)}${T(134, 42, 'N  S', TEAL, 7)}`) },
+    // ---------- últimos mundos ----------
+    'icf-ma-dispersion': { name: 'Dispersión y Comparación', art: plate('icf-ma-dispersion', TEAL, `
+      ${L('M46 62h68', INK, .9)}${L('M50 26h60M50 20v12M110 20v12', INK, 1)}${L('M66 18h28v16H66z', TEAL, 1.2)}${L('M78 18v16', TEAL, 1.4)}${[[52, 58], [60, 54], [68, 55], [76, 48], [86, 47], [94, 42], [104, 41]].map(([a, b]) => D(a, b, 1.6, TEAL)).join('')}${L('M50 60L110 38', INK, .7)}
+      ${T(28, 42, 'Q₁ Q₂ Q₃', INK, 5.5)}${T(134, 42, 'r = 0.9', TEAL, 6)}`) },
+    'icf-ma-numeros': { name: 'Números y Sucesiones', art: plate('icf-ma-numeros', TEAL, `
+      ${C(68, 32, 16, INK, 1.1)}${C(88, 32, 16, TEAL, 1.2)}${D(78, 32, 1.8, TEAL)}${L('M46 62h68', INK, .8)}${[0, 1, 2, 3, 4].map(i => D(48 + 64 * (1 - 0.5 ** i), 62, 1.8 - i * 0.2, TEAL)).join('')}${L('M112 56v12', TEAL, 1)}
+      ${T(28, 42, 'A ∩ B', INK, 7)}${T(134, 42, '10ⁿ', TEAL, 8)}`) },
+    'icf-cn-cts': { name: 'Ciencia y Sociedad', art: plate('icf-cn-cts', TEAL, `
+      ${C(68, 30, 13, INK, 1.1)}${C(92, 30, 13, TEAL, 1.2)}${C(80, 50, 13, INK, 1.1)}${D(80, 37, 2.2, TEAL)}${L('M46 66h68', INK, .8)}${L('M62 30h12M86 30h12M80 46v10', TEAL, .9)}
+      ${T(28, 42, 'control', INK, 6)}${T(134, 42, 'decidir', TEAL, 6)}`) },
   };
 })();
 
@@ -34827,4 +34837,466 @@ GAMES['tren-ordenado'] = (() => {
   }
 
   return { grade, create };
+})();
+;
+//#archivo js/games/bolsa-razon.js
+// La bolsa de la razón (Álgebra, razones). Una bolsa transparente con bolas rojas y azules: con − / + se ponen o se
+// quitan bolas de cada color. Cada ronda pide una bolsa con una condición de razón: parte-parte («por cada 3 rojas
+// hay 2 azules»), parte-todo («2 de cada 5 son azules») con un total o con un dato fijo. Se ven las cantidades sin
+// simplificar: el estudiante decide cuándo la razón es la pedida.
+// params = { rounds: [{ text, red, blue }], max }   state = { counts: [[rojas, azules] | null por ronda] }
+
+GAMES['bolsa-razon'] = (() => {
+  const okRound = (c, r) => Array.isArray(c) && c[0] === r.red && c[1] === r.blue;
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => okRound(state.counts?.[i], r));
+    const solution = params.rounds.map(r => `${r.red} rojas y ${r.blue} azules`).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, MAX = params.max || 20;
+    const S = R.map(() => ({ red: 0, blue: 0, touched: false }));
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {};
+
+    function layout(w, h) {
+      W = w; H = h; tabs = roundTabs(R.length, w);
+      const bw = Math.min(44, (w - 48) / 6), y = h - 48, gap = w / 2;
+      B = {
+        rMinus: { x: 12, y, w: bw, h: 36 }, rPlus: { x: gap - 8 - bw, y, w: bw, h: 36 },
+        bMinus: { x: gap + 8, y, w: bw, h: 36 }, bPlus: { x: w - 12 - bw, y, w: bw, h: 36 },
+      };
+    }
+    function change(f) {
+      if (locked) return;
+      const s = S[cur]; f(s); s.touched = true;
+      api.ready(S.every(x => x.touched)); api.sfx?.tap?.();
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      function button(b, label, col) {
+        drawTile(p, C, b, label, { fill: col === C.bad ? C.coral : C.sky, r: 9, lift: 2, size: 20 });
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], s = S[cur], good = okRound([s.red, s.blue], r);
+        const v = locked && !good ? { red: r.red, blue: r.blue } : s;   // al fallar se ve la bolsa correcta en verde
+        drawTabs(p, C, tabs, cur, i => (locked ? (okRound([S[i].red, S[i].blue], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : S[i].touched ? C.Q : C.line));
+        // Enunciado (hasta tres líneas)
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(W < 300 ? 13 : 14); p.textAlign(p.CENTER, p.TOP); p.textLeading(17);
+        p.text(r.text, 14, 46, W - 28, 56);
+        // La bolsa
+        const top = 106, bot = H - 106, bx = 26, bwid = W - 52;
+        p.textAlign(p.CENTER, p.CENTER);
+        p.stroke(locked && !good ? C.ok : C.line); p.strokeWeight(2); p.fill(C.card);
+        p.rect(bx, top + 10, bwid, bot - top - 10, 18);
+        p.noFill(); p.stroke(C.mute); p.strokeWeight(2.5);
+        p.line(W / 2 - 22, top + 10, W / 2 - 8, top); p.line(W / 2 + 22, top + 10, W / 2 + 8, top);
+        const balls = [...Array(v.red).fill("r"), ...Array(v.blue).fill("b")];
+        const perRow = 10, d = Math.min(20, (bwid - 16) / perRow - 3), rows = Math.ceil(balls.length / perRow);
+        const step = Math.min(d + 3, (bot - top - 26) / Math.max(rows, 1));
+        balls.forEach((c, k) => {
+          const row = Math.floor(k / perRow), col = k % perRow;
+          const x = bx + 8 + (col + 0.5) * ((bwid - 16) / perRow), y = bot - 8 - (row + 0.5) * step;
+          p.noStroke(); p.fill(c === 'r' ? C.coral : C.sky); p.circle(x, y, Math.min(d, step - 2));
+        });
+        if (!balls.length) { p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(12); p.text('bolsa vacía', W / 2, (top + bot) / 2); }
+        // Cuentas
+        p.noStroke(); p.textStyle(p.BOLD);
+        const ly = H - 72;
+        p.fill(C.bad); fitText(p, `rojas: ${v.red}`, W / 4, ly, W / 2 - 16, 14);
+        p.fill(C.Z); fitText(p, `azules: ${v.blue}`, (3 * W) / 4, ly, W / 2 - 16, 14);
+        p.fill(locked ? C.ok : C.mute); p.textStyle(p.NORMAL);
+        fitText(p, locked && !good ? `Era: ${r.red} rojas y ${r.blue} azules` : `en total: ${s.red + s.blue}`, W / 2, H - 90, W - 24, 12);
+        button(B.rMinus, '−', C.bad); button(B.rPlus, '+', C.bad); button(B.bMinus, '−', C.Z); button(B.bPlus, '+', C.Z);
+        p.noStroke(); p.fill(C.coral); p.circle((B.rMinus.x + B.rMinus.w + B.rPlus.x) / 2, B.rMinus.y + 18, 18);
+        p.fill(C.sky); p.circle((B.bMinus.x + B.bMinus.w + B.bPlus.x) / 2, B.bMinus.y + 18, 18);
+      };
+
+      p.mousePressed = () => {
+        const x = p.mouseX, y = p.mouseY;
+        const tb = tabs.findIndex(b => hitBox(b, x, y));
+        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        if (hitBox(B.rMinus, x, y)) { change(s => { s.red = Math.max(0, s.red - 1); }); return false; }
+        if (hitBox(B.rPlus, x, y)) { change(s => { s.red = Math.min(MAX, s.red + 1); }); return false; }
+        if (hitBox(B.bMinus, x, y)) { change(s => { s.blue = Math.max(0, s.blue - 1); }); return false; }
+        if (hitBox(B.bPlus, x, y)) { change(s => { s.blue = Math.min(MAX, s.blue + 1); }); return false; }
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ counts: S.map(s => (s.touched ? [s.red, s.blue] : null)) }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create };
+})();
+;
+//#archivo js/games/estira-foto.js
+// Estira la foto (Álgebra, razones). Una foto de w0 × h0 se debe ampliar (o reducir) a un ancho nuevo sin
+// deformarla. El ancho ya está puesto; se arrastra el borde de abajo (o − / +) para fijar el alto. El dibujo se
+// estira con el marco: solo si ancho : alto es la misma razón que la original el zorrito sale bien; si se suma lo
+// mismo a los dos lados, sale aplastado o alargado.
+// params = { rounds: [{ w0, h0, w, h }], step, max }   state = { hs: [alto | null por ronda] }
+
+GAMES['estira-foto'] = (() => {
+  const okRound = (h, r) => typeof h === 'number' && Math.abs(h - r.h) < 1e-9;
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => okRound(state.hs?.[i], r));
+    const solution = params.rounds.map(r => `${String(r.w0)} : ${String(r.h0)} = ${String(r.w)} : ${String(r.h)}`).join(' · ');
+    return { ok, solution };
+  }
+
+  // El dibujo en las unidades de la foto original (w0 × h0): cielo, colina, sol y una composición de círculo, cuadrado y
+  // triángulo (si la foto se deforma, el círculo deja de ser redondo).
+  function picture(p, C, w0, h0) {
+    const k = Math.min(w0, h0);
+    p.noStroke(); p.fill(C.Z); p.rect(0, 0, w0, h0);
+    p.fill(C.Q); p.rect(0, h0 * 0.8, w0, h0 * 0.2);
+    p.fill(C.N); p.circle(w0 * 0.84, h0 * 0.16, k * 0.22);
+    const cx = w0 / 2, cy = h0 * 0.52, r = k * 0.3;
+    p.fill(C.coral); p.circle(cx, cy, 2 * r);
+    p.fill(C.cream); p.rect(cx - r * 0.5, cy - r * 0.5, r, r);
+    p.fill(C.R); p.triangle(cx - r * 0.35, cy + r * 0.3, cx + r * 0.35, cy + r * 0.3, cx, cy - r * 0.32);
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, STEP = params.step || 0.5, MAX = params.max || 12;
+    const hs = R.map(r => r.h0), touched = R.map(() => false);
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {}, G = null, drag = false;
+
+    function layout(w, h) {
+      W = w; H = h; tabs = roundTabs(R.length, w);
+      B = { minus: { x: 12, y: h - 46, w: 44, h: 36 }, plus: { x: w - 56, y: h - 46, w: 44, h: 36 } };
+    }
+    const geo = () => {
+      const r = R[cur], top = 120, room = H - top - 64;
+      const u = Math.min((W - 60) / Math.max(r.w, 1), room / MAX);
+      return { u, x: (W - r.w * u) / 2, top };
+    };
+    const snap = v => Math.min(MAX, Math.max(STEP, Math.round(v / STEP) * STEP));
+    function setH(v) {
+      if (locked) return;
+      hs[cur] = snap(v); touched[cur] = true; api.ready(touched.every(Boolean));
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], good = okRound(hs[cur], r), h = locked && !good ? r.h : hs[cur];   // al fallar se ve la foto correcta
+        G = geo();
+        const { u, x, top } = G;
+        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(hs[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Q : C.line));
+        // Enunciado y foto original en miniatura
+        p.textAlign(p.LEFT, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
+        fitText(p, `Ampliar a ${String(r.w)} de ancho`, 14, 56, W - 96, 14);
+        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'sin deformar la foto', 14, 76, W - 96, 12);
+        const tk = Math.min(60 / r.w0, 44 / r.h0), tw = r.w0 * tk, th = r.h0 * tk, tx = W - 14 - tw, ty = 46;
+        p.push(); p.translate(tx, ty); p.scale(tk, tk); picture(p, C, r.w0, r.h0); p.pop();
+        p.noFill(); p.stroke(C.line); p.strokeWeight(1); p.rect(tx, ty, tw, th);
+        p.noStroke(); p.fill(C.mute); p.textAlign(p.CENTER, p.TOP); p.textSize(10);
+        p.text(`original ${String(r.w0)} × ${String(r.h0)}`, Math.min(tx + tw / 2, W - 50), ty + th + 2);
+        // Cuadrícula de unidades y la foto estirada
+        p.stroke(C.line); p.strokeWeight(0.6);
+        for (let k = 0; k <= r.w; k++) p.line(x + k * u, top, x + k * u, top + MAX * u);
+        for (let k = 0; k <= MAX; k++) p.line(x, top + k * u, x + r.w * u, top + k * u);
+        p.push(); p.translate(x, top); p.scale((r.w * u) / r.w0, (h * u) / r.h0); picture(p, C, r.w0, r.h0); p.pop();
+        p.noFill(); p.stroke(locked ? C.ok : C.coral); p.strokeWeight(3); p.rect(x, top, r.w * u, h * u);
+        if (!locked) { p.noStroke(); p.fill(C.coral); p.rect(x + (r.w * u) / 2 - 18, top + h * u - 4, 36, 8, 4); }
+        // Medidas
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.BOTTOM); p.textSize(12);
+        p.text(String(r.w), x + (r.w * u) / 2, top - 2);
+        p.textAlign(p.RIGHT, p.CENTER); p.text(String(h), x - 4, top + (h * u) / 2);
+        // Lectura y botones
+        p.textAlign(p.CENTER, p.CENTER);
+        const msg = locked && !good ? `Era ${String(r.h)} de alto` : `ancho : alto = ${String(r.w)} : ${String(h)}`;
+        p.fill(locked ? C.ok : C.ink); fitText(p, msg, W / 2, H - 28, W - 132, 14);
+        for (const [b, t] of [[B.minus, '−'], [B.plus, '+']]) {
+          drawTile(p, C, b, t, { fill: C.sky, r: 9, lift: 2, size: 20 });
+        }
+      };
+
+      p.mousePressed = () => {
+        const x = p.mouseX, y = p.mouseY;
+        const tb = tabs.findIndex(b => hitBox(b, x, y));
+        if (tb >= 0) { cur = tb; drag = false; api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        if (hitBox(B.minus, x, y)) { setH(hs[cur] - STEP); api.sfx?.tap?.(); return false; }
+        if (hitBox(B.plus, x, y)) { setH(hs[cur] + STEP); api.sfx?.tap?.(); return false; }
+        // Se arrastra el borde de abajo del marco (no cualquier toque en la cuadrícula).
+        if (G && Math.abs(y - (G.top + hs[cur] * G.u)) < 32) { drag = true; setH((y - G.top) / G.u); return false; }
+      };
+      p.mouseDragged = () => { if (drag && G) { setH((p.mouseY - G.top) / G.u); return false; } };
+      p.mouseReleased = () => { drag = false; };
+    }, 1.45);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ hs: hs.map((h, i) => (touched[i] ? h : null)) }),
+      lock() { locked = true; drag = false; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create };
+})();
+;
+//#archivo js/games/sombra-arbol.js
+// La sombra del árbol (Álgebra, proporciones). A la misma hora los rayos del sol llegan paralelos, así que la altura
+// de cada cosa y su sombra están en la misma razón: palo / sombra del palo = árbol / sombra del árbol. Se conoce el
+// palo y su sombra, y se midió la sombra del árbol (la banderita). Se ajusta la altura del árbol (arrastre o − / +)
+// hasta que el rayo que pasa por su copa caiga justo en la banderita.
+// params = { rounds: [{ stick, shadow, treeShadow, tree }], step, max }   state = { hs: [altura | null por ronda] }
+
+GAMES['sombra-arbol'] = (() => {
+  const okRound = (h, r) => typeof h === 'number' && Math.abs(h - r.tree) < 1e-9;
+  const shadowOf = (h, r) => (h * r.shadow) / r.stick;
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => okRound(state.hs?.[i], r));
+    const solution = params.rounds.map(r => `${String(r.stick)}/${String(r.shadow)} = h/${String(r.treeShadow)} → h = ${String(r.tree)} m`).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, STEP = params.step || 0.5, MAX = params.max || 12;
+    const hs = R.map(() => STEP * 4), touched = R.map(() => false);
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {}, G = null, drag = false;
+
+    function layout(w, h) {
+      W = w; H = h; tabs = roundTabs(R.length, w);
+      B = { minus: { x: 12, y: h - 46, w: 44, h: 36 }, plus: { x: w - 56, y: h - 46, w: 44, h: 36 } };
+    }
+    const geo = () => {
+      const r = R[cur], ground = H - 96, room = ground - 104;
+      const u = Math.min((W - 92) / (r.shadow + r.treeShadow), room / MAX);
+      const xs = 22, xt = xs + r.shadow * u + 44;   // hueco para el rótulo del árbol, lejos del rayo del palo
+      return { u, ground, xs, xt };
+    };
+    const snap = v => Math.min(MAX, Math.max(STEP, Math.round(v / STEP) * STEP));
+    function setH(v) {
+      if (locked) return;
+      hs[cur] = snap(v); touched[cur] = true; api.ready(touched.every(Boolean));
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      function dashed(x1, y1, x2, y2) {
+        const n = Math.max(1, Math.floor(Math.hypot(x2 - x1, y2 - y1) / 8));
+        for (let k = 0; k < n; k += 2) p.line(x1 + ((x2 - x1) * k) / n, y1 + ((y2 - y1) * k) / n, x1 + ((x2 - x1) * (k + 1)) / n, y1 + ((y2 - y1) * (k + 1)) / n);
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], h = hs[cur], good = okRound(h, r);
+        G = geo();
+        const { u, ground, xs, xt } = G;
+        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(hs[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Q : C.line));
+        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
+        fitText(p, '¿Cuánto mide el árbol?', W / 2, 56, W - 24, 15);
+        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'Su sombra termina en la banderita: usa la proporción', W / 2, 76, W - 24, 12);
+        // Suelo
+        p.stroke(C.mint); p.strokeWeight(4); p.line(8, ground, W - 8, ground);
+        // Palo y su sombra
+        const sEnd = xs + r.shadow * u;
+        p.noStroke(); p.fill(C.mute); p.rect(xs, ground + 2, r.shadow * u, 5, 2);
+        p.stroke(C.ink); p.strokeWeight(4); p.line(xs, ground, xs, ground - r.stick * u);
+        p.stroke(C.N); p.strokeWeight(2); dashed(xs, ground - r.stick * u, sEnd, ground);
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(11);
+        p.textAlign(p.CENTER, p.BOTTOM); p.text(`${String(r.stick)} m`, Math.max(xs, 18), ground - r.stick * u - 5);
+        p.textAlign(p.CENTER, p.TOP); p.fill(C.mute); p.text(`${String(r.shadow)} m`, xs + (r.shadow * u) / 2, ground + 8);
+        // Banderita: donde termina la sombra medida del árbol
+        const fx = xt + r.treeShadow * u;
+        p.stroke(C.ink); p.strokeWeight(1.5); p.line(fx, ground, fx, ground - 16);
+        p.noStroke(); p.fill(C.coral); p.triangle(fx, ground - 18, fx + 12, ground - 13.5, fx, ground - 9);
+        p.fill(C.mute); p.textAlign(p.CENTER, p.TOP); p.text(`sombra: ${String(r.treeShadow)} m`, (xt + fx) / 2, ground + 8);
+        // Árbol. Mientras se juega solo se ve su altura (hay que calcularla con la proporción); al comprobar
+        // aparece el rayo de su copa, y si estaba mal, el árbol correcto en verde con su rayo justo a la banderita.
+        const hv = locked && !good ? r.tree : h;
+        const top = ground - hv * u, end = xt + shadowOf(hv, r) * u;
+        p.stroke('#8a5a2b'); p.strokeWeight(5); p.line(xt, ground, xt, top + Math.min(14, hv * u * 0.35));
+        const d = Math.max(16, Math.min(34, hv * u * 0.45));
+        p.noStroke(); p.fill(locked ? C.ok : C.mint); p.circle(xt, top + d / 2, d);
+        if (locked) {
+          p.stroke(C.N); p.strokeWeight(2); const x2 = Math.min(end, W - 6);   // si la sombra se sale del lienzo, el rayo se corta en el borde
+          dashed(xt, top, x2, top + ((x2 - xt) * (hv * u)) / Math.max(1e-6, end - xt));
+        }
+        // Rótulo a la izquierda del tronco: el rayo sale hacia la derecha y no lo tapa.
+        p.noStroke(); p.fill(locked ? C.ok : C.ink); p.textStyle(p.BOLD); p.textAlign(p.RIGHT, p.CENTER); p.textSize(12);
+        p.text(`${String(hv)} m`, xt - Math.max(9, d / 2 + 3), ground - Math.max(hv * u / 2, 10));
+        // Lectura y botones
+        p.textAlign(p.CENTER, p.CENTER);
+        const msg = locked && !good ? `Medía ${String(r.tree)} m` : `árbol: ${String(h)} m`;
+        p.fill(locked ? C.ok : C.ink); fitText(p, msg, W / 2, H - 28, W - 132, 14);
+        for (const [b, t] of [[B.minus, '−'], [B.plus, '+']]) {
+          drawTile(p, C, b, t, { fill: C.sky, r: 9, lift: 2, size: 20 });
+        }
+      };
+
+      p.mousePressed = () => {
+        const x = p.mouseX, y = p.mouseY;
+        const tb = tabs.findIndex(b => hitBox(b, x, y));
+        if (tb >= 0) { cur = tb; drag = false; api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        if (hitBox(B.minus, x, y)) { setH(hs[cur] - STEP); api.sfx?.tap?.(); return false; }
+        if (hitBox(B.plus, x, y)) { setH(hs[cur] + STEP); api.sfx?.tap?.(); return false; }
+        if (G && y > 88 && y < G.ground && Math.abs(x - G.xt) < 40) { drag = true; setH((G.ground - y) / G.u); return false; }
+      };
+      p.mouseDragged = () => { if (drag && G) { setH((G.ground - p.mouseY) / G.u); return false; } };
+      p.mouseReleased = () => { drag = false; };
+    }, 1.45);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ hs: hs.map((h, i) => (touched[i] ? h : null)) }),
+      lock() { locked = true; drag = false; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create, shadowOf };
+})();
+;
+//#archivo js/games/pisa-huellas.js
+// Pisa las huellas (Álgebra, progresiones aritméticas). Un caminante da pasos iguales sobre la recta: el paso 1 cae
+// en a₁ y cada paso avanza d (o retrocede, si d es negativo). Dos banderas marcan dónde cayeron dos pasos conocidos.
+// Con − / + se fijan a₁ y d; las huellas numeradas se mueven en vivo. Gana cuando las dos huellas pisan sus banderas:
+// aₖ = a₁ + (k − 1)d.
+// params = { rounds: [{ known: [[k, valor], [k, valor]], a1, d }] }   state = { ans: [[a1, d] | null por ronda] }
+
+GAMES['pisa-huellas'] = (() => {
+  const termAt = (a1, d, k) => a1 + (k - 1) * d;
+  const okRound = (a, r) => Array.isArray(a) && r.known.every(([k, v]) => termAt(a[0], a[1], k) === v);
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => okRound(state.ans?.[i], r));
+    return { ok, solution: params.rounds.map(r => `a₁ = ${r.a1}, d = ${r.d}`.replace(/-/g, '−')).join(' · ') };
+  }
+
+  const neg = v => String(v).replace('-', '−');
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const A = R.map(() => ({ a1: 0, d: 1, touched: false }));
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {}, hold = null;
+
+    function layout(w, h) {
+      W = w; H = h; tabs = roundTabs(R.length, w);
+      const bw = 44, y1 = h - 92, y2 = h - 48;
+      B = { aM: { x: w - 2 * bw - 22, y: y1, w: bw, h: 36 }, aP: { x: w - bw - 12, y: y1, w: bw, h: 36 },
+        dM: { x: w - 2 * bw - 22, y: y2, w: bw, h: 36 }, dP: { x: w - bw - 12, y: y2, w: bw, h: 36 } };
+    }
+    function change(f) {
+      if (locked) return;
+      const a = A[cur]; f(a); a.touched = true;
+      api.ready(A.every(x => x.touched)); api.sfx?.tap?.();
+    }
+    // Recta fija por ronda (las banderas no se mueven): abarca los pasos correctos con margen. Las huellas que caen
+    // fuera no se amontonan: se cuentan con una flecha en el borde.
+    function range(r) {
+      const n = Math.max(...r.known.map(k => k[0])) + 1;
+      const vals = Array.from({ length: n }, (_, k) => termAt(r.a1, r.d, k + 1));
+      return { n, lo: Math.min(0, ...vals) - 3, hi: Math.max(...vals) + 3 };
+    }
+    // Cada botón: qué hace al tocarlo (mantenerlo pulsado repite el paso).
+    const ACT = {
+      aM: a => { a.a1 = Math.max(-30, a.a1 - 1); }, aP: a => { a.a1 = Math.min(40, a.a1 + 1); },
+      dM: a => { a.d = Math.max(-10, a.d - 1); }, dP: a => { a.d = Math.min(10, a.d + 1); },
+    };
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      function button(b, t) {
+        drawTile(p, C, b, t, { fill: C.sky, r: 9, lift: 2, size: 20 });
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], a = locked && !okRound([A[cur].a1, A[cur].d], r) ? { a1: r.a1, d: r.d } : A[cur];
+        const good = okRound([A[cur].a1, A[cur].d], r);
+        drawTabs(p, C, tabs, cur, i => (locked ? (okRound([A[i].a1, A[i].d], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : A[i].touched ? C.Q : C.line));
+        const [[k1, v1], [k2, v2]] = r.known;
+        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
+        fitText(p, `El paso ${k1} cayó en ${neg(v1)} y el paso ${k2} en ${neg(v2)}`, W / 2, 56, W - 24, 14);
+        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'Elige el primer paso y el salto', W / 2, 76, W - 24, 12);
+        // Recta
+        if (hold && p.mouseIsPressed && !locked && p.frameCount - hold.f > 18 && p.frameCount % 4 === 0) change(ACT[hold.k]);
+        const { n, lo, hi } = range(r), x0 = 16, x1 = W - 16, ly = H * 0.47;
+        const X = v => x0 + ((v - lo) / (hi - lo)) * (x1 - x0);
+        p.stroke(C.ink); p.strokeWeight(3); p.line(x0, ly, x1, ly);
+        const every = hi - lo > 60 ? 10 : hi - lo > 30 ? 5 : hi - lo > 14 ? 2 : 1;
+        for (let v = Math.ceil(lo); v <= hi; v++) {
+          if (v % every) continue;
+          p.stroke(C.ink); p.strokeWeight(1.5); p.line(X(v), ly - 5, X(v), ly + 5);
+          if (v % (every * 2) === 0 || every >= 5) { p.noStroke(); p.fill(C.mute); p.textSize(10); p.text(neg(v), X(v), ly + 34); }
+        }
+        // Banderas de los pasos conocidos
+        for (const [k, v] of r.known) {
+          const fx = X(v);
+          p.stroke(C.ink); p.strokeWeight(1.5); p.line(fx, ly, fx, ly - 46);
+          p.noStroke(); p.fill(C.coral); p.triangle(fx, ly - 46, fx + 13, ly - 41.5, fx, ly - 37);
+          p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(10); p.text(`paso ${k}`, fx, ly - 54);
+        }
+        // Huellas: arriba y abajo de la recta, alternadas, para que no se tapen
+        let left = 0, right = 0;
+        for (let k = 1; k <= n; k++) {
+          const v = termAt(a.a1, a.d, k);
+          if (v < lo) { left++; continue; }
+          if (v > hi) { right++; continue; }
+          const x = X(v), up = k % 2 === 1, y = up ? ly - 16 : ly + 16;
+          const hit = r.known.some(([kk, vv]) => kk === k && vv === v);
+          const fc = hit || locked ? C.ok : C.sky;   // huellas azules; verdes cuando pisan una bandera
+          p.noStroke(); p.fill(fc); p.ellipse(x, y, 14, 18);
+          p.fill(inkOn(fc, C.bg)); p.textStyle(p.BOLD); p.textSize(9); p.text(k, x, y + 1);
+        }
+        p.noStroke(); p.fill(C.brand); p.textStyle(p.BOLD); p.textSize(11);
+        if (left) { p.triangle(x0 - 6, ly, x0 + 2, ly - 5, x0 + 2, ly + 5); p.textAlign(p.LEFT, p.CENTER); p.text(`${left} huellas`, x0, ly + 54); }
+        if (right) { p.triangle(x1 + 6, ly, x1 - 2, ly - 5, x1 - 2, ly + 5); p.textAlign(p.RIGHT, p.CENTER); p.text(`${right} huellas`, x1, ly + 54); }
+        p.textAlign(p.CENTER, p.CENTER);
+        // Controles y lectura
+        p.textAlign(p.LEFT, p.CENTER); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(15);
+        p.text(`a₁ = ${neg(a.a1)}`, 16, B.aM.y + 18); p.text(`d = ${neg(a.d)}`, 16, B.dM.y + 18);
+        p.textAlign(p.CENTER, p.CENTER);
+        button(B.aM, '−'); button(B.aP, '+'); button(B.dM, '−'); button(B.dP, '+');
+        const msg = locked ? (good ? '¡Las dos huellas pisan su bandera!' : `Era a₁ = ${neg(r.a1)} y d = ${neg(r.d)}`)
+          : `paso ${k2}: ${neg(a.a1)} + ${k2 - 1} · ${a.d < 0 ? `(${neg(a.d)})` : a.d} = ${neg(termAt(a.a1, a.d, k2))}`;
+        p.fill(locked ? C.ok : C.mute); p.textStyle(p.NORMAL); fitText(p, msg, W / 2, B.aM.y - 18, W - 24, 12);
+      };
+
+      p.mousePressed = () => {
+        const x = p.mouseX, y = p.mouseY;
+        const tb = tabs.findIndex(b => hitBox(b, x, y));
+        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        for (const k of Object.keys(ACT)) if (hitBox(B[k], x, y)) { change(ACT[k]); hold = { k, f: p.frameCount }; return false; }
+      };
+      p.mouseReleased = () => { hold = null; };
+    }, 1.25);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ ans: A.map(a => (a.touched ? [a.a1, a.d] : null)) }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create, termAt };
 })();

@@ -531,6 +531,16 @@ const WORLDS = (() => {
     'icf-cn-electrico': { name: 'Electricidad y Magnetismo', art: plate('icf-cn-electrico', TEAL, `
       ${L('M50 40V18h60v44H50V48', INK, 1.1)}${L('M44 40h12M47 48h6', TEAL, 1.4)}${L('M70 18l4-5 6 10 6-10 6 10 4-5', TEAL, 1.2)}${C(110, 40, 7, INK, 1.1)}${L('M105 35l10 10M115 35l-10 10', INK, .8)}${L('M68 62v-10h24v10', TEAL, 1)}
       ${T(28, 42, 'V = I·R', INK, 6)}${T(134, 42, 'N  S', TEAL, 7)}`) },
+    // ---------- últimos mundos ----------
+    'icf-ma-dispersion': { name: 'Dispersión y Comparación', art: plate('icf-ma-dispersion', TEAL, `
+      ${L('M46 62h68', INK, .9)}${L('M50 26h60M50 20v12M110 20v12', INK, 1)}${L('M66 18h28v16H66z', TEAL, 1.2)}${L('M78 18v16', TEAL, 1.4)}${[[52, 58], [60, 54], [68, 55], [76, 48], [86, 47], [94, 42], [104, 41]].map(([a, b]) => D(a, b, 1.6, TEAL)).join('')}${L('M50 60L110 38', INK, .7)}
+      ${T(28, 42, 'Q₁ Q₂ Q₃', INK, 5.5)}${T(134, 42, 'r = 0.9', TEAL, 6)}`) },
+    'icf-ma-numeros': { name: 'Números y Sucesiones', art: plate('icf-ma-numeros', TEAL, `
+      ${C(68, 32, 16, INK, 1.1)}${C(88, 32, 16, TEAL, 1.2)}${D(78, 32, 1.8, TEAL)}${L('M46 62h68', INK, .8)}${[0, 1, 2, 3, 4].map(i => D(48 + 64 * (1 - 0.5 ** i), 62, 1.8 - i * 0.2, TEAL)).join('')}${L('M112 56v12', TEAL, 1)}
+      ${T(28, 42, 'A ∩ B', INK, 7)}${T(134, 42, '10ⁿ', TEAL, 8)}`) },
+    'icf-cn-cts': { name: 'Ciencia y Sociedad', art: plate('icf-cn-cts', TEAL, `
+      ${C(68, 30, 13, INK, 1.1)}${C(92, 30, 13, TEAL, 1.2)}${C(80, 50, 13, INK, 1.1)}${D(80, 37, 2.2, TEAL)}${L('M46 66h68', INK, .8)}${L('M62 30h12M86 30h12M80 46v10', TEAL, .9)}
+      ${T(28, 42, 'control', INK, 6)}${T(134, 42, 'decidir', TEAL, 6)}`) },
   };
 })();
 

@@ -16,7 +16,7 @@ const PI_TEMARIO = {
     ['icf-ma-curvas', 'Funciones que Curvan', ['Cuadráticas: trayectorias y máximos', 'Exponenciales y logarítmicas', 'Trigonométricas y periódicas', 'Dominio, rango y cortes'], 'Álgebra y cálculo'],
     ['icf-ma-espacio', 'Movimientos y Vistas', ['Traslación, rotación, reflexión y homotecia', 'Vistas y desarrollos planos', 'Coordenadas cartesianas, polares y en 3D'], 'Geometría'],
     ['icf-ma-dispersion', 'Dispersión y Comparación', ['Rango, varianza y desviación', 'Percentiles y cajas', 'Correlación'], 'Estadística'],
-    ['icf-ma-numeros', 'Números, Conjuntos y Sucesiones', ['Fracciones, decimales y notación científica', 'Conjuntos y diagramas', 'Sucesiones y sus límites'], 'Álgebra y cálculo'],
+    ['icf-ma-numeros', 'Números y Sucesiones', ['Fracciones, decimales y notación científica', 'Conjuntos y diagramas', 'Sucesiones y sus límites'], 'Álgebra y cálculo'],
   ],
   lectura: [
     ['icf-lc-literal', 'Lo que Dice el Texto', ['Datos e ideas del texto', 'Palabras y referencias'], 'Contenidos locales'],
@@ -53,7 +53,7 @@ const PI_TEMARIO = {
     ['icf-cn-ondas', 'Ondas, Luz y Sonido', ['Frecuencia y longitud', 'Reflexión y refracción'], 'Físico'],
     ['icf-cn-gases', 'Gases y Disoluciones', ['Leyes de los gases', 'Concentración'], 'Químico'],
     ['icf-cn-electrico', 'Electricidad y Magnetismo', ['Circuitos', 'Cargas e imanes'], 'Físico'],
-    ['icf-cn-cts', 'Ciencia, Tecnología y Sociedad', ['Salud y tecnología', 'Recursos y ambiente', 'Decisiones con evidencia'], 'CTS'],
+    ['icf-cn-cts', 'Ciencia y Sociedad', ['Salud y tecnología', 'Recursos y ambiente', 'Decisiones con evidencia'], 'CTS'],
   ],
   ingles: [
     ['icf-en-avisos', 'Avisos y Vocabulario', ['Signs and notices', 'Words and meanings'], 'Partes 1 y 2 · Pre A1 y A1'],
