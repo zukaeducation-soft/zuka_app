@@ -23,7 +23,7 @@ GAMES['cubos-ocultos'] = (() => {
         p.fill(RK.al(p, C.sky, 170)); p.quad(x, y, x + c, y, x + c + dx, y - dy, x + dx, y - dy);
         p.fill(RK.al(p, C.sky, 120)); p.quad(x + c, y, x + c + dx, y - dy, x + c + dx, y - dy + c, x + c, y + c);
       }
-      const good = ok(s, r);
+      const good = G.locked && ok(s, r);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, 40, s.n - 1, i => ((i + 1) % 5 === 0 ? String(i + 1) : null));
       RK.strip(p, C, G.fb, `$\\text{${s.n} cubos}$`, { kicker: good ? 'Contaste también los de abajo' : 'Cuenta columna por columna', col: G.locked || good ? C.ok : C.brand, size: 17 });
     },

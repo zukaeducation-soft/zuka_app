@@ -19,7 +19,7 @@ GAMES['torres-vistas'] = (() => {
     layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
     enter(G) { G.grab = null; lay(G); },
     draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { h: want(r) } : G.s, c = G.c, o = G.o, v = views(s.h), good = ok(s, r);
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { h: want(r) } : G.s, c = G.c, o = G.o, v = views(s.h), good = G.locked && ok(s, r);
       TK.label(p, C, 'desde arriba', o.x + r.front.length * c / 2, o.y - 34, C.mute, 10, 120);
       s.h.forEach((row, j) => row.forEach((hv, i) => { p.stroke(C.ink); p.strokeWeight(1.2); p.fill(RK.al(p, good ? C.ok : C.sky, 40 + hv * 50)); p.rect(o.x + i * c, o.y + j * c, c, c); TK.label(p, C, String(hv), o.x + i * c + c / 2, o.y + j * c + c / 2, C.ink, 13, c); }));
       r.front.forEach((fv, i) => { const vv = v.front[i]; TK.label(p, C, `${fv}`, o.x + i * c + c / 2, o.y - 14, vv === fv ? C.ok : C.coral, 11, c); });

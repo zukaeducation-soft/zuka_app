@@ -20,7 +20,7 @@ GAMES['espejo-figura'] = (() => {
     layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
     enter(G) { G.paint = null; lay(G); },
     draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { on: want(r) } : G.s, u = G.u, o = G.o, good = ok(s, r);
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { on: want(r) } : G.s, u = G.u, o = G.o, good = G.locked && ok(s, r);
       for (let x = 0; x < r.n; x++) for (let y = 0; y < r.n; y++) {
         const k = `${x},${y}`, fig = r.cells.some(c => c[0] === x && c[1] === y), on = s.on.includes(k);
         p.stroke(RK.al(p, C.line, 140)); p.strokeWeight(1); p.fill(fig ? C.sky : on ? (good ? C.ok : C.coral) : side(r, x, y) ? RK.al(p, C.card, 200) : RK.al(p, C.card, 90)); p.rect(o.x + x * u, o.y + y * u, u, u);

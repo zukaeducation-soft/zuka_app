@@ -7,7 +7,7 @@ GAMES['atrapa-punto'] = (() => {
   const POINTS = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330];
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => r.angles.includes(state.picks[i]));
+    const ok = params.rounds.every((r, i) => r.angles.includes(state.picks?.[i]));
     return { ok, solution: params.rounds.map(r => `${r.prompt} → ${r.angles.map(a => `${a}°`).join(' o ')}`).join(' · ') };
   }
 

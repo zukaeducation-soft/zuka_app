@@ -34,7 +34,7 @@
     aviso: (v, p) => (2 * v.x === p.A[0] + p.B[0] ? 'La x está bien; promedia las y.' : 2 * v.y === p.A[1] + p.B[1] ? 'La y está bien; promedia las x.' : 'Promedia las x y promedia las y.'), bien: v => `(${v.x}, ${v.y}) está a igual distancia de A y de B.` });
   // Coordenadas polares de un punto sobre un eje.  params { P: [x, y], r, g }
   XG.figura('polar-gira', {
-    ini: () => ({ g: 0, r: 1 }), alto: () => 300, ms: 1000, pie: 'Mueve el giro y los pasos.', manijas: () => [{ k: 'g', min: 0, max: 345, paso: 15, et: 'giro (°)' }, { k: 'r', min: 1, max: 6, paso: 1, et: 'pasos' }],
+    ini: () => ({ g: 0, r: 1 }), alto: () => 312, ms: 1000, pie: 'Mueve el giro y los pasos.', manijas: () => [{ k: 'g', min: 0, max: 345, paso: 15, et: 'giro (°)' }, { k: 'r', min: 1, max: 6, paso: 1, et: 'pasos' }],
     ok: (v, p) => v.g === p.g && v.r === p.r, sol: p => ({ g: p.g, r: p.r }), texto: p => `${p.r} pasos a ${p.g}°`,
     dib(v, K, p, f) { const q = K.at(X(0), Y(0), 70, v.g); return red(K) + K.c(X(p.P[0]), Y(p.P[1]), 6, 'fa') + K.l(X(0), Y(0), ...q, 'lg gr') + K.c(X(0), Y(0), 4, 'fF') + K.f(f, K.c(...K.at(X(0), Y(0), v.r * U, v.g), 8, 'fg')); },
     aviso: (v, p) => (v.g !== p.g ? 'No mira hacia el punto: el giro empieza a la derecha y va contra el reloj.' : 'Mira bien, pero camina otra distancia.'), bien: (v, p) => `(${p.P.join(', ')}) es ${p.r} pasos a ${p.g}°.`,

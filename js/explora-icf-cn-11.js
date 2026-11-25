@@ -62,7 +62,7 @@
         ['Se agregan dos, no tres.', { pon: { 2: '2 L' } }, '$3 - 1 = 2$'],
         ['Ojo: el volumen final no es lo agregado.', {}],
       ], 'Gramos iguales; resta lo que ya había.'),
-      xpHaz('fichas', '2 L a 9 g/L se llevan a 3 g/L. Pon el volumen final y el agua que se agrega.', { slots: fila('final (L)', 'agua (L)'), fichas: ['6', '4', '18', '3', '2'], meta: ['6', '4'], alto: 96, pista: 'Hay 18 g.' }, '$18 \\div 3 = 6$ y $6 - 2 = 4$.')],
+      xpHaz('fichas', '3 L a 8 g/L se llevan a 2 g/L. Pon el volumen final y el agua que se agrega.', { slots: fila('final (L)', 'agua (L)'), fichas: ['12', '9', '24', '8', '3'], meta: ['12', '9'], alto: 96, pista: 'Hay 24 g.' }, '$24 \\div 2 = 12$ y $12 - 3 = 9$.')],
     ['Otras cosas que se hacen',
       xpMira('hoja', 'Tercera idea: **evaporar** concentra; **sacar** un poco no cambia nada.', { paras: [['Evaporar agua'], ['Agregar soluto'], ['Servir un vaso'], ['1 ppm = 1 mg por kg']] }, [
         ['Menos agua, mismo soluto.', { luz: [0], nota: { 0: 'sube' } }],
@@ -110,11 +110,11 @@
 
   xpLec('icf-cn-electrico-2', [
     ['Cargas',
-      xpMira('dibujo', 'Empecemos por la idea: iguales se **repelen**, distintas se **atraen**; y la **distancia** importa mucho.', { dib: cargas, v: { d: 160, s: -1, f: 20, t: '' }, alto: 158 }, [
+      xpMira('dibujo', 'Empecemos por la idea: iguales se **repelen**, distintas se **atraen**; y la **distancia** importa mucho.', { dib: cargas, v: { d: 160, s: -1, f: 9, t: '' }, alto: 158 }, [
         ['Dos cargas negativas se repelen.', { t: 'iguales: se repelen' }],
         ['Una positiva y una negativa se atraen.', { s: 1, t: 'distintas: se atraen' }],
         ['Al acercarse, la fuerza crece.', { d: 80, f: 36, t: 'a la mitad: 4 veces más' }],
-        ['Al alejarse, baja con el cuadrado.', { d: 200, f: 10, t: 'más lejos, menos' }],
+        ['Al alejarse, baja con el cuadrado.', { d: 200, f: 5.8, t: 'más lejos, menos' }],
         ['La carga no se crea: pasa de un cuerpo a otro.', {}],
       ], 'Al doble de lejos, la cuarta parte.'),
       xpHaz('fichas', 'Dos cargas se atraen con fuerza 100. Pon la fuerza al doble de distancia y con una carga tres veces mayor.', { slots: fila('doble distancia', 'carga · 3'), fichas: ['25', '300', '50', '900', '200'], meta: ['25', '300'], alto: 96, pista: 'La distancia, al cuadrado; la carga, no.' }, '$100 \\div 4 = 25$ y $100 \\cdot 3 = 300$.')],

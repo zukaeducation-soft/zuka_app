@@ -51,7 +51,7 @@
   XG.figura('serie-resistencia', {
     ini: () => ({ r: 0 }), alto: () => 190, ms: 1000, pie: 'Mueve la otra resistencia.', manijas: p => [{ k: 'r', min: 0, max: p.max, paso: 1, et: 'resistencia (Ω)' }],
     ok: (v, p) => p.I * (p.R1 + v.r) === p.V, sol: p => ({ r: p.V / p.I - p.R1 }), texto: p => `${p.V / p.I - p.R1} Ω`,
-    dib: (v, K, p, f) => K.pl([[80, 56], [80, 20], [260, 20], [260, 100], [80, 100], [80, 64]], 'gr') + pila(K, 80, 56, `${p.V} V`) + res(K, 132, 20, `${p.R1} Ω`) + res(K, 208, 20, '?', 'ff') + K.t(170, 92, `${p.I} A`, 's tm') + K.f(f, K.t(170, 64, `${p.I} · (${p.R1} + ${N(v.r)}) = ${N(p.I * (p.R1 + v.r))} V`, 'b')),
+    dib: (v, K, p, f) => K.pl([[80, 56], [80, 20], [260, 20], [260, 100], [80, 100], [80, 64]], 'gr') + pila(K, 80, 56, `${p.V} V`) + res(K, 132, 20, `${p.R1} Ω`) + res(K, 208, 20, '?', 'ff') + K.t(170, 92, `${p.I} A`, 's tm') + K.f(f, K.t(170, 64, `${p.I} · (${p.R1} + ${N(v.r)}) = ${N(p.I * (p.R1 + v.r))} V`, 's')),
     aviso: (v, p) => (v.r === p.V / p.I ? 'Esa es la resistencia total: falta quitar la que ya está.' : p.I * (p.R1 + v.r) < p.V ? 'Con esa resistencia pasaría más corriente.' : 'Con esa resistencia pasaría menos corriente.'), bien: (v, p) => `${p.R1} + ${v.r} = ${p.V / p.I} Ω en total.`,
   });
   XG.renglones('paralelo-ramas', { w: 84, x: 280 });
