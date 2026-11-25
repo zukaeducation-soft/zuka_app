@@ -2,5 +2,6 @@
 const EXPLORA_VOCES = {
   "pu-cm-1": "voz-05c26a14b48f.json",
   "pu-cm-2": "voz-d32f237d2c4f.json",
-  "pu-cm-3": "voz-a5cfb42918fa.json"
+  "pu-cm-3": "voz-a5cfb42918fa.json",
+  "pu-cm-4": "voz-cd3065d83bd1.json"
 };

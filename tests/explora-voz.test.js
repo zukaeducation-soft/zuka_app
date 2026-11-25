@@ -26,9 +26,9 @@ test('los rótulos repetidos se leen pero no se dicen', () => {
   assert.equal(hablar('**Tu turno.** Haz 3 − 7 con la ficha.'), 'Haz 3 menos 7 con la ficha.');
   assert.equal(hablar('Segunda idea: **el opuesto**.'), 'El opuesto.');
   assert.equal(hablar('Empecemos por la idea: ¿qué es?'), '¿Qué es?');
-  for (const id of ['pu-cm-2', 'pu-cm-3']) for (const { h } of frases(id)) assert.ok(!/tu turno|(primera|segunda|tercera|cuarta|última) idea/i.test(h), h);
+  for (const id of ['pu-cm-2', 'pu-cm-3', 'pu-cm-4']) for (const { h } of frases(id)) assert.ok(!/tu turno|(primera|segunda|tercera|cuarta|última) idea/i.test(h), h);
   // Sin muletillas: ningún arranque se repite más de dos veces en la lección.
-  for (const id of ['pu-cm-2', 'pu-cm-3']) {
+  for (const id of ['pu-cm-2', 'pu-cm-3', 'pu-cm-4']) {
     const n = {};
     for (const { h } of frases(id)) { const k = h.split(/\s+/)[0].toLowerCase(); n[k] = (n[k] || 0) + 1; }
     for (const [k, v] of Object.entries(n)) assert.ok(v <= 2, `${v} frases empiezan con «${k}»`);
