@@ -1,81 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/punto-distancia.js
-// El punto a tantas cuadras (Preuniversitario, pu-es-1; spec 2026-11-18-preuda-razonamiento-completo): en la rejilla la
-// distancia entre dos esquinas es |Δx| + |Δy| cuadras. Hay dos lugares marcados; se arrastra la casa a la esquina que queda a
-// la distancia pedida de cada uno (la solución es única dentro de la rejilla).
-// params = { rounds: [{ w, h, A: [x, y], B: [x, y], dA, dB, names: [a, b] }] }   state = { rounds: [{ x, y }] }
-GAMES['punto-distancia'] = (() => {
-  const d = (p, q) => Math.abs(p[0] - q[0]) + Math.abs(p[1] - q[1]);
-  const ok = (s, r) => d([s.x, s.y], r.A) === r.dA && d([s.x, s.y], r.B) === r.dB;
-  const sols = r => { const out = []; for (let x = 0; x <= r.w; x++) for (let y = 0; y <= r.h; y++) if (ok({ x, y }, r)) out.push({ x, y }); return out; };
-  const lay = G => { const r = G.r; G.u = Math.min((G.W - 40) / r.w, (G.H - 230) / r.h); G.o = { x: (G.W - r.w * G.u) / 2, y: 104 + r.h * G.u }; };
-  const game = roundsGame({
-    aspect: 1.25,
-    init: r => [[0, 0], [r.w, r.h], [0, r.h]].map(([x, y]) => ({ x, y })).find(s => !ok(s, r)),
-    ok,
-    solution: r => { const s = sols(r)[0]; return `(${s.x}, ${s.y})`; },
-    prompt: r => `La casa está a ${r.dA} cuadras de ${r.names[0]} y a ${r.dB} de ${r.names[1]}`,
-    foot: () => 'Arrastra la casa por las esquinas',
-    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; lay(G); },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? sols(r)[0] : G.s, u = G.u, o = G.o, X = x => o.x + x * u, Y = y => o.y - y * u, good = ok(s, r);
-      p.stroke(RK.al(p, C.line, 120)); p.strokeWeight(1); for (let i = 0; i <= r.w; i++) p.line(X(i), Y(0), X(i), Y(r.h)); for (let j = 0; j <= r.h; j++) p.line(X(0), Y(j), X(r.w), Y(j));
-      [[r.A, r.names[0], C.sky, d([s.x, s.y], r.A)], [r.B, r.names[1], C.coral, d([s.x, s.y], r.B)]].forEach(([q, t, col, dd]) => { p.noStroke(); p.fill(col); p.rect(X(q[0]) - 9, Y(q[1]) - 9, 18, 18, 3); TK.label(p, C, `${t}: ${dd}`, X(q[0]), Y(q[1]) - 16, col, 9, 80); });
-      p.fill(good ? C.ok : C.brand); p.triangle(X(s.x) - 11, Y(s.y) + 8, X(s.x) + 11, Y(s.y) + 8, X(s.x), Y(s.y) - 10);
-      RK.strip(p, C, G.fb, `$\\text{a ${d([s.x, s.y], r.A)} y ${d([s.x, s.y], r.B)} cuadras}$`, { col: G.locked || good ? C.ok : C.brand, size: 16 });
-    },
-    press(G, x, y) { if (Math.hypot(x - (G.o.x + G.s.x * G.u), y - (G.o.y - G.s.y * G.u)) > 36) return false; G.grab = true; return true; },
-    drag(G, x, y) { if (!G.grab) return false; const nx = Math.max(0, Math.min(G.r.w, Math.round((x - G.o.x) / G.u))), ny = Math.max(0, Math.min(G.r.h, Math.round((G.o.y - y) / G.u))); if (nx !== G.s.x || ny !== G.s.y || !G.touched[G.cur]) { G.s.x = nx; G.s.y = ny; G.touch(); } return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.o.x + G.s.x * G.u, y: G.o.y - G.s.y * G.u }, to: { x: G.o.x + (G.s.x + (G.s.x < G.r.w ? 1 : -1)) * G.u, y: G.o.y - G.s.y * G.u }, text: 'Arrastra la casa', ty: G.o.y + 22 }),
-    peek: G => ({ o: G.o, u: G.u }),
-  });
-  return Object.assign(game, { answer: r => sols(r)[0], solutions: sols });
-})();
-;
-//#archivo js/games/torres-vistas.js
-// Vistas de una construcción (Preuniversitario, pu-es-2; spec 2026-11-18-preuda-razonamiento-completo): la vista de frente
-// muestra la torre más alta de cada columna y la de lado, la más alta de cada fila. Con esas dos vistas, ¿cuál es la
-// construcción con más cubos? Cada casilla puede tener a lo sumo el menor de los dos límites. Se arrastra cada casilla de la
-// vista desde arriba hacia arriba o abajo para fijar su altura; las vistas se dibujan en vivo.
-// params = { rounds: [{ front: [máximo por columna], side: [máximo por fila] }] }   state = { rounds: [{ h: [[alturas]] }] }
-GAMES['torres-vistas'] = (() => {
-  const want = r => r.side.map(sv => r.front.map(fv => Math.min(sv, fv)));
-  const views = h => ({ front: h[0].map((_, i) => Math.max(...h.map(row => row[i]))), side: h.map(row => Math.max(...row)) });
-  const ok = (s, r) => s.h.flat().join() === want(r).flat().join();
-  const lay = G => { const r = G.r, c = Math.min(46, (G.W - 120) / r.front.length); G.c = c; G.o = { x: 40, y: 150 }; };
-  const game = roundsGame({
-    aspect: 1.25,
-    init: r => ({ h: r.side.map(() => r.front.map(() => 0)) }),
-    ok,
-    answered: s => s.h.flat().some(v => v > 0),
-    solution: r => `${want(r).flat().reduce((a, b) => a + b, 0)} cubos: ${want(r).map(row => row.join(' ')).join(' / ')}`,
-    prompt: () => 'Arma la construcción con más cubos que tenga estas dos vistas',
-    foot: () => 'Arrastra cada casilla hacia arriba o abajo para cambiar su altura',
-    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = null; lay(G); },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { h: want(r) } : G.s, c = G.c, o = G.o, v = views(s.h), good = ok(s, r);
-      TK.label(p, C, 'desde arriba', o.x + r.front.length * c / 2, o.y - 34, C.mute, 10, 120);
-      s.h.forEach((row, j) => row.forEach((hv, i) => { p.stroke(C.ink); p.strokeWeight(1.2); p.fill(RK.al(p, good ? C.ok : C.sky, 40 + hv * 50)); p.rect(o.x + i * c, o.y + j * c, c, c); TK.label(p, C, String(hv), o.x + i * c + c / 2, o.y + j * c + c / 2, C.ink, 13, c); }));
-      r.front.forEach((fv, i) => { const vv = v.front[i]; TK.label(p, C, `${fv}`, o.x + i * c + c / 2, o.y - 14, vv === fv ? C.ok : C.coral, 11, c); });
-      TK.label(p, C, 'frente ↑', o.x - 22, o.y - 14, C.mute, 8, 40);
-      r.side.forEach((sv, j) => { const vv = v.side[j]; TK.label(p, C, `${sv}`, o.x + r.front.length * c + 14, o.y + j * c + c / 2, vv === sv ? C.ok : C.coral, 11, 24); });
-      TK.label(p, C, 'lado →', o.x + r.front.length * c + 40, o.y - 14, C.mute, 8, 50);
-      const tot = s.h.flat().reduce((a, b) => a + b, 0);
-      RK.strip(p, C, G.fb, `$\\text{${tot} cubos}$`, { kicker: 'Los números de afuera son las vistas pedidas', col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { const i = Math.floor((x - G.o.x) / G.c), j = Math.floor((y - G.o.y) / G.c); if (i < 0 || j < 0 || i >= G.r.front.length || j >= G.r.side.length) return false; G.grab = { i, j, y0: y, h0: G.s.h[j][i] }; return true; },
-    drag(G, x, y) { const g = G.grab; if (!g) return false; const v = Math.max(0, Math.min(4, g.h0 + Math.round((g.y0 - y) / 24))); if (v !== G.s.h[g.j][g.i] || !G.touched[G.cur]) { G.s.h[g.j][g.i] = v; G.touch(); } return true; },
-    release(G) { G.grab = null; },
-    demo: G => ({ from: { x: G.o.x + G.c / 2, y: G.o.y + G.c / 2 }, to: { x: G.o.x + G.c / 2, y: G.o.y + G.c / 2 - 48 }, text: 'Arrastra hacia arriba', ty: G.o.y + G.r.side.length * G.c + 24 }),
-    peek: G => ({ o: G.o, c: G.c }),
-  });
-  return Object.assign(game, { answer: r => ({ h: want(r) }) });
-})();
-;
 //#archivo js/games/cubos-ocultos.js
 // Los cubos que no se ven (Preuniversitario, pu-es-2; spec 2026-11-18-preuda-razonamiento-completo): en una construcción de
 // cubos, los que sostienen a los de arriba también cuentan aunque no se vean. Se ve la construcción en perspectiva y su
@@ -17421,7 +17345,7 @@ const HOJA = (() => {
       ? oraciones(p, n).map((t, i) => o.trozo(n, i, t)).join(p.trozos?.[n] ? '' : ' ') : luzDe(d.paras[n - 1], n, p.luz), o.parr?.(n))).join('')}</article>`;
   }
   // El texto entero, plegado: en el examen siempre se puede volver a él.
-  const completo = (d, luz) => `<details class="hj-todo"><summary>Ver el texto completo</summary>${hoja({ doc: d, luz })}</details>`;
+  const completo = (d, luz) => (Array.isArray(d) ? d.map((x, i) => completo(x, i ? [] : luz).replace('Ver el texto completo', `Ver el Texto ${['Uno', 'Dos'][i]}`)).join('') : `<details class="hj-todo"><summary>Ver el texto completo</summary>${hoja({ doc: d, luz })}</details>`);
   // Lo tapado tampoco se lee con lector de pantalla hasta que se destapa.
   const tapa = (root, si) => root.querySelectorAll('.hj-hoja.cortina .hj-p, .hj-velo, .hj-queda').forEach(x => (si ? x.setAttribute('aria-hidden', 'true') : x.removeAttribute('aria-hidden')));
   const prende = root => tapa(root, false) || root.querySelectorAll('.hj-luz').forEach((m, i) => { m.style.setProperty('--d', `${i * 260}ms`); m.classList.add('on'); if (!i) aVer(root, m); });
@@ -17854,7 +17778,7 @@ const HOJA = (() => {
   const suya = (p, n, T) => hoja(p, { nums: n, trozo: (k, i, t) => T(`${k}.${i}`, t) });
   const claves = p => p.nums.flatMap(n => oraciones(p, n).map((_, i) => `${n}.${i}`));
   const dicho = p => p.va.map(k => { const [n, i] = k.split('.'); return `«${oraciones(p, +n)[+i]}»`; }).join(' · ');
-  toca('comprueba-apuesta', { modo: 'subraya', claves, texto: dicho, escena: (p, T) => `<p class="hj-apuesta"><small>la apuesta</small>${esc(p.apuesta)}</p>${suya(p, p.nums, T)}${completo(p.doc)}` });
+  toca('comprueba-apuesta', { modo: 'subraya', claves, texto: dicho, escena: (p, T) => `<p class="hj-apuesta"><small>la apuesta</small>${esc(p.apuesta)}</p>${suya(p, p.nums, T)}${completo(p.docs || p.doc)}` });
   const lista = (p, T) => `<ul class="hj-lista">${p.lineas.map((t, i) => `<li>${T(i, t)}</li>`).join('')}</ul>`;
   const encoge = root => { const l = root.querySelector('.hj-lista'); l.classList.add('corta'); };
   toca('preguntas-previas', { modo: 'tacha', claves: p => p.lineas.map((_, i) => i), texto: p => `Se tachan: ${p.va.map(i => p.lineas[i]).join(' · ')}`, final: encoge,
@@ -17870,25 +17794,25 @@ const HOJA = (() => {
   });
   zonas('talla-idea', {
     rot: (p, i) => p.rot[i],
-    escena: p => `${hoja(p, { nums: [p.p] })}<div class="hj-tallas">${p.rot.map((t, i) => `<div class="t${i}"><small>${esc(t)}</small>${zona(i)}</div>`).join('')}</div>${completo(p.doc)}`,
+    escena: p => `${hoja(p, { nums: [p.p] })}<div class="hj-tallas">${p.rot.map((t, i) => `<div class="t${i}"><small>${esc(t)}</small>${zona(i)}</div>`).join('')}</div>${completo(p.docs || p.doc)}`,
   });
   toca('tacha-resumen', { modo: 'tacha', claves: p => p.lineas.map((_, i) => i), texto: p => `Queda: ${p.lineas.filter((_, i) => !p.va.includes(i)).join(' ')}`, final: encoge,
-    ayuda: 'Toca una oración para tacharla; otro toque la devuelve.', escena: (p, T) => `${lista(p, T)}${completo(p.doc)}` });
-  toca('subraya-tesis', { modo: 'subraya', claves, texto: dicho, escena: (p, T) => `${suya(p, p.nums, T)}${completo(p.doc)}` });
+    ayuda: 'Toca una oración para tacharla; otro toque la devuelve.', escena: (p, T) => `${lista(p, T)}${completo(p.docs || p.doc)}` });
+  toca('subraya-tesis', { modo: 'subraya', claves, texto: dicho, escena: (p, T) => `${suya(p, p.nums, T)}${completo(p.docs || p.doc)}` });
   zonas('bisagras', {
     rot: (p, i) => p.pares[i][1].slice(0, 28) + '…',
-    escena: p => `<div class="hj-pares">${p.pares.map(([a, b], i) => `<p>${esc(a)} ${zona(i, '¿…?', 'en-linea')} ${esc(b)}</p>`).join('')}</div>${completo(p.doc)}`,
+    escena: p => `<div class="hj-pares">${p.pares.map(([a, b], i) => `<p>${esc(a)} ${zona(i, '¿…?', 'en-linea')} ${esc(b)}</p>`).join('')}</div>${completo(p.docs || p.doc)}`,
     ayuda: 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.',
   });
   zonas('arma-titulo', {
     rot: (p, i) => p.rot[i],
-    escena: p => `<h4 class="hj-titulo">${p.rot.map((r, i) => zona(i, r, 'en-linea')).join(' ')}</h4>${hoja(p, { nums: [1, 2], cab: '' })}${completo(p.doc)}`,
+    escena: p => `<h4 class="hj-titulo">${p.rot.map((r, i) => zona(i, r, 'en-linea')).join(' ')}</h4>${hoja(p, { nums: [1, 2], cab: '' })}${completo(p.docs || p.doc)}`,
     ayuda: 'Arma el título que diga la idea central. Sobran fichas.',
   });
   // El techo es la idea central: lo que la sostiene son columnas; lo demás, adornos que se caen al final.
   zonas('pilares', {
     varias: true, rot: (p, i) => ['sostiene', 'adorna'][i],
-    escena: p => `<div class="hj-casa"><div class="hj-techo">${esc(p.idea)}</div><div class="hj-cols">${zona(0, 'lo que la sostiene')}</div></div><div class="hj-patio">${zona(1, 'lo que solo adorna')}</div>${completo(p.doc)}`,
+    escena: p => `<div class="hj-casa"><div class="hj-techo">${esc(p.idea)}</div><div class="hj-cols">${zona(0, 'lo que la sostiene')}</div></div><div class="hj-patio">${zona(1, 'lo que solo adorna')}</div>${completo(p.docs || p.doc)}`,
     vivo: (root, p, s) => root.querySelector('.hj-casa').style.setProperty('--falta', Math.max(0, 1 - s.en.filter(z => z === 0).length / p.va.filter(z => z === 0).length)),
     final: root => root.querySelector('.hj-patio').classList.add('cae'),
     ayuda: 'Lleva cada oración: ¿sostiene la idea o solo la adorna?',
@@ -17897,7 +17821,7 @@ const HOJA = (() => {
   // ------------------------------------------------------------------------------------------------- tiempo y EXCEPTO
   toca('lee-la-orden', { modo: 'subraya', claves: p => p.orden.split('|').map((_, i) => i).filter(i => i % 2), texto: p => p.va.map(i => p.orden.split('|')[i]).join(' · '),
     ayuda: 'Toca un trozo para subrayarlo; otro toque lo suelta.',
-    escena: (p, T) => `<article class="hj-hoja hj-orden"><p>${p.orden.split('|').map((t, i) => (i % 2 ? T(i, t) : esc(t))).join('')}</p></article>${completo(p.doc)}` });
+    escena: (p, T) => `<article class="hj-hoja hj-orden"><p>${p.orden.split('|').map((t, i) => (i % 2 ? T(i, t) : esc(t))).join('')}</p></article>${completo(p.docs || p.doc)}` });
   // EXCEPTO: cada opción busca su párrafo; la que no lo encuentra va a «no está».
   hilos('sella-parrafo', {
     destinos: p => p.doc.paras.length + 1, rot: (p, i) => (i === p.doc.paras.length ? 'no está' : `párrafo ${i + 1}`),
@@ -17906,11 +17830,11 @@ const HOJA = (() => {
   });
   zonas('dentro-fuera', {
     varias: true, rot: (p, i) => p.rot[i],
-    escena: p => `<div class="hj-marco"><small>${esc(p.rot[0])}</small>${hoja(p, { nums: [p.p], cab: '' })}${zona(0, 'sí está aquí')}</div><div class="hj-dos"><div><small>${esc(p.rot[1])}</small>${zona(1)}</div><div><small>${esc(p.rot[2])}</small>${zona(2)}</div></div>${completo(p.doc)}`,
+    escena: p => `<div class="hj-marco"><small>${esc(p.rot[0])}</small>${hoja(p, { nums: [p.p], cab: '' })}${zona(0, 'sí está aquí')}</div><div class="hj-dos"><div><small>${esc(p.rot[1])}</small>${zona(1)}</div><div><small>${esc(p.rot[2])}</small>${zona(2)}</div></div>${completo(p.docs || p.doc)}`,
   });
   zonas('dice-deduce', {
     varias: true, rot: (p, i) => p.rot[i],
-    escena: p => `${hoja(p, { nums: p.nums })}<div class="hj-escalera">${p.rot.map((t, i) => `<div class="e${i}"><small>${esc(t)}</small>${zona(i)}</div>`).join('')}</div>${completo(p.doc)}`,
+    escena: p => `${hoja(p, { nums: p.nums })}<div class="hj-escalera">${p.rot.map((t, i) => `<div class="e${i}"><small>${esc(t)}</small>${zona(i)}</div>`).join('')}</div>${completo(p.docs || p.doc)}`,
   });
   // Cada opción falsa cae cuando se ata a la oración que la desmiente; queda en pie la respuesta.
   hilos('descarta-prueba', {
@@ -17940,7 +17864,7 @@ const HOJA = (() => {
   const { esc, fmt, hoja, completo, zona, zonas, toca, hilos, ordena, pinta, oraciones } = HOJA;
   const lineas = (p, T) => `<article class="hj-hoja hj-lineas">${p.lineas.map((t, i) => T(i, t)).join('')}</article>`;
   const cajas = p => `<div class="hj-dos alto">${p.rot.map((t, i) => `<div><small>${esc(t)}</small>${zona(i, '', '', t)}</div>`).join('')}</div>`;
-  const doc = p => (p.doc?.paras ? completo(p.doc) : '');
+  const doc = p => (p.doc?.paras ? completo(p.docs || p.doc) : '');
 
   // Marcadores de colores: cada oración se pinta con lo que hace o con quién habla.
   for (const n of ['pinta-tipos', 'pinta-voces', 'pinta-preguntas']) pinta(n, { escena: (p, T) => lineas(p, T) + doc(p) });
@@ -17983,11 +17907,11 @@ const HOJA = (() => {
 {
   const { esc, completo, zona, zonas, regla } = HOJA;
   // Paráfrasis: la perilla recorre palabras que miden hasta que la oración dice lo mismo que el texto.
-  regla('ajusta-alcance', { tras: p => completo(p.doc, p.luz) });
+  regla('ajusta-alcance', { tras: p => completo(p.docs || p.doc, p.luz) });
   // La palabra tachada se cambia por otra que dice lo mismo en esa oración.
   zonas('cambia-palabra', {
     rot: (p, i) => `«${p.frases[i][2]}»`,
-    escena: p => `<div class="hj-pares">${p.frases.map(([n, a, w, b], i) => `<p><small>párrafo ${n}</small>${esc(a)}<s>${esc(w)}</s> ${zona(i, '¿…?', 'en-linea', `en vez de ${w}`)}${esc(b)}</p>`).join('')}</div>${completo(p.doc)}`,
+    escena: p => `<div class="hj-pares">${p.frases.map(([n, a, w, b], i) => `<p><small>párrafo ${n}</small>${esc(a)}<s>${esc(w)}</s> ${zona(i, '¿…?', 'en-linea', `en vez de ${w}`)}${esc(b)}</p>`).join('')}</div>${completo(p.docs || p.doc)}`,
     ayuda: 'Pon cada ficha en vez de la palabra tachada.',
   });
 }
@@ -17999,7 +17923,7 @@ const HOJA = (() => {
   // La tesis está en el fiel: lo que se pone a cada lado solo pesa por cuánto hay (no dice si va bien).
   zonas('balanza-tesis', {
     varias: true, rot: (p, i) => ['la apoya', 'la debilita', 'no pesa'][i],
-    escena: p => `<div class="hj-balanza"><p class="hj-tesis"><small>la tesis</small>${esc(p.tesis)}</p><div class="hj-brazo"></div><div class="hj-platos"><div><small>la apoya</small>${zona(0, '', '', 'la apoya')}</div><div><small>la debilita</small>${zona(1, '', '', 'la debilita')}</div></div></div><div class="hj-suelo"><small>no pesa</small>${zona(2, '', '', 'no pesa')}</div>${p.doc?.paras ? completo(p.doc) : ''}`,
+    escena: p => `<div class="hj-balanza"><p class="hj-tesis"><small>la tesis</small>${esc(p.tesis)}</p><div class="hj-brazo"></div><div class="hj-platos"><div><small>la apoya</small>${zona(0, '', '', 'la apoya')}</div><div><small>la debilita</small>${zona(1, '', '', 'la debilita')}</div></div></div><div class="hj-suelo"><small>no pesa</small>${zona(2, '', '', 'no pesa')}</div>${p.doc?.paras ? completo(p.docs || p.doc) : ''}`,
     vivo(root, p, s) { const n = z => s.en.filter(x => x === z).length; root.querySelector('.hj-balanza').style.setProperty('--g', Math.max(-2, Math.min(2, n(1) - n(0)))); },
     ayuda: 'Supón que cada dato es cierto y llévalo a su plato.',
   });

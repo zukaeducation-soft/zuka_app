@@ -1,0 +1,65 @@
+// Preuniversitario · lectura, mundo 12 «Lenguaje figurado» (Explora): pu-lf-1 y pu-lf-2. Textos cortos propios.
+xpLec('pu-lf-1', [
+  ['Cuatro figuras',
+    xpMira('hoja', 'Empecemos por la idea: una **figura** dice una cosa para hacer ver otra.', { letras: ['A', 'B', 'C', 'D'], paras: [['Sus ojos eran dos faroles.'], ['Sus ojos brillaban como faroles.'], ['El mar susurraba su nombre.'], ['Te lo dije un millón de veces.']] }, [
+      ['«Eran faroles»: dice que A es B. Metáfora.', { luz: [0], nota: { 0: 'metáfora' } }],
+      ['«Como faroles»: con «como». Comparación.', { luz: [1], nota: { 1: 'comparación' } }],
+      ['El mar no susurra: se le da algo humano. Personificación.', { luz: [2], nota: { 2: 'personificación' } }],
+      ['Un millón de veces: exagera. Hipérbole.', { luz: [3], nota: { 3: 'hipérbole' } }],
+      ['Busca «como»; si no está, mira si es, si es humano o si exagera.', {}],
+    ], 'Es: metáfora. Como: comparación. Humano: personificación. Exagera: hipérbole.'),
+    xpHaz('hoja', 'Pon al margen la figura de cada frase.', { modo: 'margen', letras: ['A', 'B', 'C', 'D'], rotulos: ['hipérbole', 'metáfora', 'personificación', 'comparación'], meta: [3, 2, 0, 1], paras: [['Duerme como un tronco.'], ['La luna espía por la ventana.'], ['Esperé siglos.'], ['Tu risa es un cascabel.']], pista: 'Alguno no va ahí. Busca «como», algo humano, una exageración y un «es».' }, 'Cada figura tiene su seña.')],
+  ['Qué quiere decir',
+    xpMira('hoja', 'Segunda idea: el examen pregunta qué **significa** la figura, no solo su nombre.', { letras: ['1', 'a', 'b', 'c'], paras: [['El pueblo se quitó el sombrero ante ella.'], ['Todos usaban sombrero.'], ['El pueblo la admiró.'], ['El pueblo la nombró reina para siempre.']] }, [
+      ['No se trata de sombreros.', { luz: [0] }],
+      ['«Todos usaban»: al pie de la letra.', { luz: [1], nota: { 1: 'al pie de la letra' } }],
+      ['«Reina para siempre»: le agrega.', { luz: [3], nota: { 3: 'de más' } }],
+      ['Quitarse el sombrero es un gesto de admiración: justa.', { luz: [0, 2], nota: { 2: 'justa' } }],
+      ['Se traduce la imagen sin agregarle nada.', {}],
+    ], 'Pregunta qué hay de cierto detrás de la imagen y dilo sin agregar.'),
+    xpHaz('hoja', '«El invierno se quedó a vivir en la casa». Subraya lo que **quiere decir**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Un señor llamado Invierno se mudó.'], ['Nadie volverá a sentir calor.'], ['En la casa hace mucho frío.']], pista: 'Esa la toma al pie de la letra o le agrega.' }, 'El frío que no se va.')],
+  ['Dónde se esconde',
+    xpMira('hoja', 'Tercera idea: a veces la figura va en un **inciso**, y la crónica la usa para pintar cada hora.', { paras: [['El trueno, ese viejo gruñón, despertó.'], ['Nadie duerme: la noche tiene ojos.'], ['A las seis ya se calmó.'], ['Pero quien lo oyó no lo olvida.']] }, [
+      ['La coma abre otro nombre: una metáfora.', { luz: [0] }],
+      ['Los dos puntos anuncian la razón, dicha con una imagen.', { luz: [1] }],
+      ['«A las seis» ordena en el tiempo.', { luz: [2], nota: { 2: 'después' } }],
+      ['El «Pero» cierra y vuelve al comienzo.', { luz: [3], nota: { 3: 'cierra' } }],
+      ['Para resumir, las imágenes se quitan: queda lo que cambia.', {}],
+    ], 'La coma puede abrir una metáfora; los dos puntos, su razón. En el resumen no van.'),
+    xpHaz('hoja', 'Subraya el trozo que es **otro nombre** del faro.', { modo: 'toca', meta: [1], paras: [['El faro,', 'ese dedo de luz,', 'señala el puerto.'], ['Abajo duermen los barcos.']], pista: 'Ese no nombra al faro. Busca entre las comas.' }, 'El inciso guardaba la metáfora.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '**Tacha** las dos frases que **no** tienen personificación.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['El camino es largo.'], ['El reloj nos regaña.'], ['La lluvia tocó a la puerta.'], ['Corre como el viento.']], pista: 'Alguna de las tachadas le da algo humano a una cosa.' }, 'Regañar y tocar la puerta son cosas de gente.')],
+], 'Nombra la figura, tradúcela y no le agregues.');
+
+xpLec('pu-lf-2', [
+  ['Decir lo contrario',
+    xpMira('hoja', 'Empecemos por la idea: la **ironía** dice lo contrario de lo que se piensa, y los **hechos** la delatan.', { paras: [['Llegó con dos horas de retraso.', '«Qué puntual», le dijeron.'], ['La gotera cayó sobre el piano.', '«Qué buen gusto musical tiene.»']] }, [
+      ['Un hecho: llegó tarde.', { luz: [0], nota: { 0: 'hecho y elogio' } }],
+      ['«Qué puntual» choca con el hecho.', { luz: [0, 1] }],
+      ['Se piensa lo contrario: es ironía.', { luz: [1] }],
+      ['Aquí también: nadie elogia de verdad una gotera.', { luz: [2, 3], nota: { 1: 'hecho y elogio' } }],
+      ['Compara siempre lo que se dice con lo que pasa.', {}],
+    ], 'Si lo que se dice choca con lo que pasa, es ironía.'),
+    xpHaz('hoja', 'Subraya la frase **irónica**.', { modo: 'toca', meta: [1], paras: [['El plato llegó frío y sin cubiertos.', '«Aquí sí saben atender.»'], ['El mesero pidió disculpas.', 'Volvimos a los diez minutos.']], pista: 'Esa cuenta un hecho. Busca el elogio que choca con él.' }, 'Frío y sin cubiertos: no saben atender.')],
+  ['La ironía sutil',
+    xpMira('hoja', 'Segunda idea: en un texto serio la ironía puede ser **sutil**: está en el **tono**.', { letras: ['A', 'B', 'C'], paras: [['Anunció, con aire de gran noticia, una reunión más.'], ['Cargaba el formulario como quien carga una reliquia.'], ['Llegó la «solución»: otro letrero.']] }, [
+      ['No hay un hecho que la contradiga.', { luz: [0] }],
+      ['Pero el tono solemne no va con algo tan pequeño.', { luz: [0], nota: { 0: 'tono solemne' } }],
+      ['Comparar un formulario con una reliquia también se burla.', { luz: [1], nota: { 1: 'comparación' } }],
+      ['Y unas comillas toman distancia.', { luz: [2], nota: { 2: 'comillas' } }],
+      ['La pregunta: ¿el autor se lo cree o toma distancia?', {}],
+    ], 'La sutil no dice lo contrario de un hecho: pone un tono que no va con el asunto.'),
+    xpHaz('hoja', 'Subraya la ironía **sutil**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['«Qué silencio», dijo entre los pitos.'], ['El bus pasó a las ocho.'], ['Estrenó, con la solemnidad de un presidente, su nuevo lápiz.']], pista: 'Esa dice lo contrario de un hecho o solo informa.' }, 'Demasiada solemnidad para un lápiz.')],
+  ['Lo que de verdad piensa',
+    xpMira('hoja', 'Tercera idea: detrás del elogio hay una **tesis escondida**.', { paras: [['Qué sabio es nuestro comité:', 'lleva nueve años pensando.'], ['¿Para qué apurarse?', 'La calle ya aprendió a inundarse sola.']] }, [
+      ['«Sabio»: dale la vuelta.', { luz: [0] }],
+      ['Nueve años es un dato. Lo dice en serio.', { luz: [1], nota: { 0: 'elogio y dato' } }],
+      ['La pregunta no espera respuesta: es retórica.', { luz: [2], nota: { 1: 'pregunta retórica' } }],
+      ['Lo que piensa: el comité no hace nada.', { luz: [0, 1, 2, 3] }],
+      ['Los datos se pesan contra esa tesis, no contra el elogio.', {}],
+      ['Un inciso, como «sabios como son», también puede ser irónico.', {}],
+    ], 'Dale la vuelta al elogio: ahí está la tesis. Los datos van en serio.'),
+    xpHaz('hoja', '«Felicito al arquitecto: puso la puerta **a dos metros del suelo**». Subraya lo que **piensa** el autor.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['La puerta es hermosa.'], ['La puerta está mal puesta.'], ['El arquitecto ganó un premio.']], pista: 'Esa se queda en el elogio o agrega algo. Dale la vuelta.' }, 'El dato desarma el elogio.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '**Tacha** las dos oraciones que van **en serio**.', { modo: 'tacha', meta: [1, 3], paras: [['Bendito sea el ascensor.', 'Lleva tres meses dañado.'], ['Nos mantiene delgados y unidos.', 'Vivo en el piso doce.']], letras: ['A', 'B'], pista: 'Alguna de las tachadas es un elogio que choca con los hechos.' }, 'Los datos van en serio; el elogio, no.')],
+], 'Compara con los hechos, oye el tono y dale la vuelta al elogio.');

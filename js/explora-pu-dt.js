@@ -1,0 +1,67 @@
+// Preuniversitario · lectura, mundo 10 «Lectura de dos textos» (Explora): pu-dt-1 y pu-dt-2. Textos cortos propios.
+xpLec('pu-dt-1', [
+  ['En los dos o en uno',
+    xpMira('hoja', 'Empecemos por la idea: una **coincidencia** tiene que estar en **los dos** textos.', { letras: ['1', '2', 'a', 'b', 'c'], paras: [['Los patios con árboles refrescan; hay que cuidarlos.'], ['Los patios con árboles ensucian; hay que cuidarlos con turnos.'], ['Hay que cuidarlos.'], ['Refrescan.'], ['Ensucian.']] }, [
+      ['Dos textos sobre lo mismo, con enfoques distintos.', { luz: [0, 1] }],
+      ['«Hay que cuidarlos» está en los dos: coincidencia.', { luz: [0, 1, 2], nota: { 2: 'los dos' } }],
+      ['«Refrescan» solo está en el primero.', { luz: [0, 3], nota: { 3: 'solo el 1' } }],
+      ['«Ensucian», solo en el segundo.', { luz: [1, 4], nota: { 4: 'solo el 2' } }],
+      ['El enfoque: uno mira lo que dan y otro lo que quitan.', {}],
+    ], 'Busca cada idea en los dos. Si solo está en uno, es diferencia.'),
+    xpHaz('hoja', 'Texto 1: «Leer en papel cansa menos y se recuerda más». Texto 2: «Leer en papel se recuerda más, pero pesa». Subraya la **coincidencia**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Cansa menos.'], ['Se recuerda más.'], ['Pesa.']], pista: 'Esa está solo en uno. Búscala en el otro texto.' }, 'Coincidir: estar en los dos.')],
+  ['Uno explica al otro',
+    xpMira('hoja', 'Segunda idea: a veces un texto **explica** lo que el otro solo afirma.', { letras: ['1', 'a', 'b', 'c'], paras: [['Texto 1: los niños se duermen en la tercera clase.'], ['Texto 2: el almuerzo se sirve a las diez y da sueño.'], ['Texto 2: los niños se duermen en clase.'], ['Texto 2: las clases duran una hora.']] }, [
+      ['El primero cuenta algo, pero no dice por qué.', { luz: [0] }],
+      ['«El almuerzo da sueño»: esa es la causa. Lo explica.', { luz: [0, 1], nota: { 1: 'lo explica' } }],
+      ['Repetir no es explicar.', { luz: [2], nota: { 2: 'repite' } }],
+      ['Un dato que no toca la causa, tampoco.', { luz: [3], nota: { 3: 'no toca la causa' } }],
+      ['La prueba: pon «porque» entre los dos.', { luz: [0, 1] }],
+      ['Y no hace falta que los autores estén de acuerdo.', {}],
+    ], 'Pon «porque» entre los dos: si tiene sentido, uno explica al otro.'),
+    xpHaz('hoja', 'Texto 1: «En esa calle hay menos accidentes». Subraya lo que lo **explica**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['En esa calle casi no hay choques.'], ['La calle tiene nombre de pájaro.'], ['Allá pusieron reductores de velocidad.']], pista: 'Esa repite o no toca la causa. Prueba con «porque».' }, 'Menos accidentes porque van más despacio.')],
+  ['Con qué se sostiene',
+    xpMira('hoja', 'Tercera idea: también se compara **con qué** respalda cada texto lo que dice.', { paras: [['Varios estudios señalan que puede servir.'], ['Una maestra cuenta que le funcionó.'], ['Yo lo he visto en mi taller.']] }, [
+      ['«Estudios», «puede»: investigación y cautela.', { luz: [0], nota: { 0: 'investigación' } }],
+      ['Lo que cuenta otra persona.', { luz: [1], nota: { 1: 'lo cuenta otro' } }],
+      ['«Yo», «mi taller»: experiencia propia.', { luz: [2], nota: { 2: 'experiencia del autor' } }],
+      ['Es una diferencia de respaldo, no de tema.', {}],
+      ['Y los textos se unen con «en cambio», «del mismo modo», «por eso».', {}],
+    ], 'Investigación, lo que cuenta otro o experiencia propia: mira la persona y la cautela.'),
+    xpHaz('hoja', 'Pon al margen el respaldo de cada oración.', { modo: 'margen', rotulos: ['experiencia propia', 'lo cuenta otro', 'investigación'], meta: [1, 2, 0], paras: [['Mi vecino dice que su huerta mejoró.'], ['Una encuesta a mil hogares lo confirma.'], ['En mi huerta, el abono tardó un mes.']], pista: 'Alguno no va ahí. ¿Habla «yo», habla otro o habla un estudio?' }, 'La primera persona delata la experiencia.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Texto 1: «El tren une y contamina poco». Texto 2: «El tren une, pero parte el bosque». **Tacha** las dos que no son coincidencia.', { modo: 'tacha', letras: ['A', 'B', 'C'], meta: [0, 2], paras: [['Contamina poco.'], ['Une a la gente.'], ['Parte el bosque.']], pista: 'Alguna de las tachadas sí está en los dos textos.' }, 'Solo una idea está en ambos.')],
+], 'Busca en los dos, prueba con «porque» y compara los respaldos.');
+
+xpLec('pu-dt-2', [
+  ['La tesis como lente',
+    xpMira('hoja', 'Empecemos por la idea: para saber qué **diría** un autor, se usa **su tesis** como lente.', { letras: ['1', 'a', 'b', 'c'], paras: [['Autora: los museos deberían ser gratis.'], ['«Cobremos solo a los turistas.»'], ['«Que entre quien quiera, sin boleta.»'], ['«Subamos la entrada.»']] }, [
+      ['Esta es su tesis.', { luz: [0] }],
+      ['«Sin boleta»: encaja con su tesis.', { luz: [0, 2], nota: { 2: 'lo diría' } }],
+      ['«Subamos»: contradice su tesis.', { luz: [3], nota: { 3: 'no lo diría' } }],
+      ['«Solo a los turistas»: tampoco; pidió gratis, sin excepción.', { luz: [1], nota: { 1: 'no lo diría' } }],
+      ['No puede contradecir lo que ya dijo.', {}],
+    ], 'Pon la frase frente a la tesis: si la contradice, no lo diría.'),
+    xpHaz('hoja', 'Tesis: «Las tareas deben hacerse **en clase**». Subraya lo que **diría** ese autor.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['«Más tareas para el fin de semana.»'], ['«Guarden los últimos veinte minutos para practicar aquí.»'], ['«Los papás deben ayudar por la noche.»']], pista: 'Esa manda la tarea para la casa: contradice su tesis.' }, 'Lo que diría cabe dentro de su tesis.')],
+  ['Conceder, proponer, rechazar',
+    xpMira('hoja', 'Segunda idea: mira qué **sostiene**, qué **concede** y qué **rechaza** cada autor.', { paras: [['El taxi es más cómodo.'], ['Por supuesto, cuesta más.'], ['Los críticos dicen que es inseguro;'], ['pero esa crítica es vieja.'], ['Propongo compartirlo.']] }, [
+      ['Lo que sostiene: es idea suya.', { luz: [0], nota: { 0: 'sostiene' } }],
+      ['«Por supuesto», «no niego»: lo concede. También vale como idea suya.', { luz: [1], nota: { 1: 'concede' } }],
+      ['«Los críticos dicen»: no es de él.', { luz: [2], nota: { 2: 'lo dicen otros' } }],
+      ['«Pero»: la rechaza.', { luz: [3], nota: { 3: 'la rechaza' } }],
+      ['«Propongo»: ofrece una salida.', { luz: [4], nota: { 4: 'propone' } }],
+      ['Con eso se oye su tono: tajante, conciliador, propositivo…', {}],
+    ], 'Lo que concede cuenta como suyo; lo que «los críticos dicen» y él rechaza, no.'),
+    xpHaz('hoja', 'Subraya la idea que **no** se le puede atribuir al autor.', { modo: 'toca', meta: [2], paras: [['El barco es lento.', 'No niego que es bonito.'], ['Hay quienes dicen que es gratis;', 'se equivocan.'], ['Propongo un puente.']], pista: 'Esa la sostiene, la concede o la propone. Busca la que dicen otros.' }, '«Hay quienes dicen» y «se equivocan»: no es suya.')],
+  ['Un tercero en la discusión',
+    xpMira('hoja', 'Tercera idea: alguien puede tomar ideas de los dos para **discutir con uno**.', { letras: ['1', 'a', 'b', 'c'], paras: [['Tesis del Uno: todos deben ir en bicicleta.'], ['Dos: muchos viven en lomas.'], ['Uno: admito que bajo la lluvia es difícil.'], ['Uno: la bicicleta no contamina.']] }, [
+      ['Un vecino quiere argumentos contra el Uno.', { luz: [0] }],
+      ['Las lomas: idea del Dos que choca. Le sirve.', { luz: [1], nota: { 1: 'le sirve' } }],
+      ['La lluvia: la concede el propio Uno. También le sirve.', { luz: [2], nota: { 2: 'le sirve' } }],
+      ['No contaminar favorece al Uno: no le sirve.', { luz: [3], nota: { 3: 'no le sirve' } }],
+      ['Un dato apoya, debilita o no pesa frente a esa tesis.', {}],
+      ['No importa de qué texto salga.', {}],
+    ], 'Sirve lo que su autor sostiene o concede y choca con la tesis.'),
+    xpHaz('hoja', 'Tesis del Uno: «El colegio debe empezar a las seis». **Tacha** las dos que no sirven **contra** ella.', { modo: 'tacha', letras: ['A', 'B', 'C'], meta: [0, 2], paras: [['Uno: así queda la tarde libre.'], ['Dos: a esa hora nadie se concentra.'], ['Dos: el colegio tiene dos pisos.']], pista: 'Alguna de las tachadas sí choca con empezar a las seis.' }, 'Una la favorece y otra no pesa.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Autor: «Los perros deben ir **sueltos en parques cercados**». Subraya lo que diría ante «perros siempre con correa».', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['«De acuerdo: siempre con correa.»'], ['«Que anden sueltos por la calle.»'], ['«En un parque con cerca, la correa sobra.»']], pista: 'Esa contradice su tesis o dice más de lo que él pidió.' }, 'Ni se contradice ni exagera.')],
+], 'Su tesis es el lente; lo que concede es suyo; lo que rechaza, no.');

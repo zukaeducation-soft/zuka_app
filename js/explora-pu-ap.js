@@ -10,11 +10,11 @@ xpLec('pu-ap-1', [
     ], 'El principio dice lo mismo sin nombrar el caso, y no exagera.'),
     xpHaz('hoja', '«El equipo ensayó la jugada lenta cien veces; en el partido le salió rápida». Subraya el **principio**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['El equipo ganó el partido.'], ['Cien es un buen número.'], ['Lo que se practica despacio sale bien deprisa.'], ['Practicar hace perfecto todo.']], pista: 'Esa se queda en el caso, agrega algo o exagera.' }, 'Sirve también para un músico o para un cirujano.')],
   ['La estructura, no el tema',
-    xpMira('hoja', 'Segunda idea: el caso nuevo puede ser de **otro tema**; importa la estructura.', { letras: ['1', 'a', 'b', 'c'], paras: [['Principio: quien avisa a tiempo evita un daño mayor.'], ['El conductor llama al taller al primer ruido.'], ['La vecina cuenta que anoche llovió.'], ['Un médico pide el examen ante el primer síntoma.']] }, [
+    xpMira('hoja', 'Segunda idea: el caso nuevo puede ser de **otro tema**; importa la estructura.', { letras: ['1', 'a', 'b', 'c'], paras: [['Principio: quien avisa a tiempo evita un daño mayor.'], ['El conductor llama al taller al primer ruido.'], ['La vecina cuenta que anoche llovió.'], ['Una salvavidas pita al ver la primera ola grande.']] }, [
       ['Dos piezas: avisar pronto y evitar algo peor.', { luz: [0] }],
       ['El conductor: aviso temprano y daño evitado. Cumple.', { luz: [1], nota: { 1: 'cumple' } }],
       ['La vecina cuenta algo, pero no evita nada.', { luz: [2], nota: { 2: 'no cumple' } }],
-      ['El médico: otro tema, la misma estructura. Cumple.', { luz: [3], nota: { 3: 'cumple' } }],
+      ['La salvavidas: otro tema, la misma estructura. Cumple.', { luz: [3], nota: { 3: 'cumple' } }],
       ['Que se parezca el tema no basta; que cambie no importa.', {}],
       ['Un dato apoya la idea, la debilita o simplemente no pesa.', {}],
     ], 'Busca las piezas del principio en el caso. Si falta una, no se cumple.'),

@@ -27,4 +27,6 @@ revisa cada marca, se levanta la cortina, se encienden las palabras que lo prueb
 ## Estado
 
 Hechos: mundo 1 (`pu-el-1` a `pu-el-3`) y mundo 2 (`pu-tt-1` a `pu-tt-3`, juegos en `js/games/lectura-tipos-escena.js` y
-armazón nuevo `HOJA.pinta`, marcadores de colores). Faltan los mundos 3 a 12.
+armazón nuevo `HOJA.pinta`, marcadores de colores). Hechos también los mundos 3 a 12 (2026-11-25): una
+explicación por lección en `js/explora-pu-<mundo>.js` (un archivo por mundo: ie, in, vo, ap, fu, cn, ag, dt, rf, lf) y los
+juegos por datos de `js/games/lectura-*-escena.js`. Armazones nuevos: `HOJA.regla` (perillas que miden) y `balanza-tesis`.

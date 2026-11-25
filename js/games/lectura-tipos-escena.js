@@ -3,7 +3,7 @@
   const { esc, fmt, hoja, completo, zona, zonas, toca, hilos, ordena, pinta, oraciones } = HOJA;
   const lineas = (p, T) => `<article class="hj-hoja hj-lineas">${p.lineas.map((t, i) => T(i, t)).join('')}</article>`;
   const cajas = p => `<div class="hj-dos alto">${p.rot.map((t, i) => `<div><small>${esc(t)}</small>${zona(i, '', '', t)}</div>`).join('')}</div>`;
-  const doc = p => (p.doc?.paras ? completo(p.doc) : '');
+  const doc = p => (p.doc?.paras ? completo(p.docs || p.doc) : '');
 
   // Marcadores de colores: cada oración se pinta con lo que hace o con quién habla.
   for (const n of ['pinta-tipos', 'pinta-voces', 'pinta-preguntas']) pinta(n, { escena: (p, T) => lineas(p, T) + doc(p) });

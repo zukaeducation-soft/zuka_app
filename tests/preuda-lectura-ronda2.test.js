@@ -65,7 +65,7 @@ test('Prefijos y raíces: casos en que las piezas engañan y manda el contexto',
 
 test('Dos textos: una idea de un texto que encuentra explicación en el otro', () => {
   assert.match(scenes('pu-dt-1'), /encuentra explicación/i);
-  assert.ok(L('pu-dt-1').ex.some(e => /explica/i.test(e.params.principle || '') && e.params.docs?.length === 2), 'un juego de explicación entre los dos textos');
+  assert.ok(L('pu-dt-1').ex.some(e => /explica/i.test((e.params.rot || []).join()) && e.params.docs?.length === 2), 'un juego de explicación entre los dos textos');
   assert.ok(examOf('pu-dt-1').some(it => /encuentra explicación/i.test(it.ex.params.q)), 'la evaluación lo pregunta');
 });
 

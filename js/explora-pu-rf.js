@@ -1,0 +1,67 @@
+// Preuniversitario · lectura, mundo 11 «Referencia y cohesión» (Explora): pu-rf-1 y pu-rf-2. Textos cortos propios.
+xpLec('pu-rf-1', [
+  ['El referente',
+    xpMira('hoja', 'Empecemos por la idea: un **pronombre** reemplaza algo ya dicho, su **referente**.', { unidos: true, paras: [['Nora guardó ', 'la carta', ' en ', 'el cajón', '. Después ', 'la', ' buscó y no ', 'lo', ' pudo abrir.']] }, [
+      ['«La buscó». ¿Qué buscó? Se mira hacia atrás.', { luz: [5] }],
+      ['«Buscó la carta»: femenino y con sentido.', { luz: [1, 5] }],
+      ['«No lo pudo abrir». Masculino: el cajón.', { luz: [3, 7] }],
+      ['La prueba: reemplaza y lee toda la oración.', {}],
+      ['Género y número ayudan; el sentido decide.', { luz: [1, 3] }],
+    ], 'Busca hacia atrás, reemplaza y lee: si tiene sentido, ese es.'),
+    xpHaz('hoja', 'Subraya el referente de «**ellos**».', { modo: 'toca', unidos: true, quietos: [0, 2, 4, 6], meta: [3], paras: [['Las maestras', ' invitaron a ', 'la alcaldesa', 'los abuelos del barrio', ', y ', 'cada uno de ellos', ' contó una historia.']], pista: 'Ese no concuerda: «ellos» es masculino y plural.' }, 'Masculino y plural: solo uno concuerda.')],
+  ['Este y aquel',
+    xpMira('hoja', 'Segunda idea: «**este**» es lo más cercano y «**aquel**», lo más lejano.', { unidos: true, paras: [['Compró ', 'un violín', ' y ', 'un tambor', '; ', 'este', ' suena fuerte, ', 'aquel', ' suena dulce.']] }, [
+      ['Dos cosas nombradas en orden.', { luz: [1, 3] }],
+      ['«Este»: la más cercana hacia atrás. El tambor.', { luz: [3, 5] }],
+      ['«Aquel»: la más lejana. El violín.', { luz: [1, 7] }],
+      ['El sentido lo confirma: el tambor suena fuerte.', { luz: [3, 5] }],
+      ['«Esto último» es lo último de una lista.', {}],
+      ['Y «eso» puede apuntar a un hecho completo.', {}],
+    ], 'Este, el cercano; aquel, el lejano; esto último, el final de la lista.'),
+    xpHaz('hoja', '«Hablaron la jueza y la testigo; **aquella** preguntó y **esta** respondió». Pon al margen quién es cada una.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['la testigo', 'la jueza'], meta: [1, 0], paras: [['aquella'], ['esta']], pista: 'Alguna no va ahí. Cuenta hacia atrás: ¿cuál está más cerca?' }, 'La jueza, primero y lejos; la testigo, cerca.')],
+  ['Lo que da por contado',
+    xpMira('hoja', 'Tercera idea: «**la** aplicación», «**en cambio**» o «**al día siguiente**» dan algo por contado.', { paras: [['Dos hermanas tienen un molino.'], ['La mayor madruga;', 'la menor, en cambio, trasnocha.'], ['Una tarde el molino se dañó', 'porque se partió el eje.'], ['Al día siguiente lo arreglaron juntas.']] }, [
+      ['«Un molino»: se presenta.', { luz: [0], nota: { 0: 'se presenta' } }],
+      ['«En cambio» se opone a lo anterior: va después.', { luz: [1, 2] }],
+      ['«El molino»: ya es conocido.', { luz: [3], nota: { 2: 'ya conocido' } }],
+      ['«Porque»: el eje partido es la causa.', { luz: [3, 4] }],
+      ['«Al día siguiente» ¿de cuál? Del daño.', { luz: [5], nota: { 3: 'después' } }],
+      ['Una idea del relato también se lleva a otros casos: se buscan sus piezas.', {}],
+    ], '«Un» presenta, «el» retoma; «en cambio» y «al día siguiente» van después de algo.'),
+    xpHaz('hoja', 'Subraya la oración que **no puede ir de primera**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Un pescador encontró una botella.'], ['El pescador, en cambio, no quiso abrirla.'], ['En el puerto vive una niña curiosa.']], pista: 'Esa presenta a alguien: puede abrir el relato. Busca la que da algo por contado.' }, '«El» y «en cambio» piden algo antes.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya aquello a lo que apunta «**eso**».', { modo: 'toca', unidos: true, quietos: [0, 2, 4], meta: [3], paras: [['Cuentan que ', 'el capitán', ' ', 'regaló su barco', '; eso nadie lo esperaba.']], pista: 'Ese es una persona. ¿Qué fue lo que nadie esperaba?' }, '«Eso» apuntó a un hecho completo.')],
+], 'Hacia atrás, reemplaza y lee; este cerca, aquel lejos.');
+
+xpLec('pu-rf-2', [
+  ['Otro nombre para lo mismo',
+    xpMira('hoja', 'Empecemos por la idea: para no repetir, se **sustituye** con otra palabra.', { paras: [['El gato subió al techo.'], ['El felino miró abajo.'], ['El animal no se movió.'], ['El «rey del barrio» se durmió.']] }, [
+      ['Primero aparece con su nombre.', { luz: [0], nota: { 0: 'el gato' } }],
+      ['«El felino» es el mismo gato, con otra palabra.', { luz: [1], nota: { 1: 'el gato' } }],
+      ['«El animal» es más general: sigue siendo él.', { luz: [2], nota: { 2: 'el gato' } }],
+      ['Un apodo entre comillas también.', { luz: [3], nota: { 3: 'el gato' } }],
+      ['Es una sustitución: cuatro nombres, un solo gato.', {}],
+    ], 'Sinónimo, palabra más general o apodo: nombres distintos para lo mismo.'),
+    xpHaz('hoja', 'Pon al margen a quién nombra cada expresión: «El tren llevaba carbón para la reina».', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['el carbón', 'la reina', 'el tren'], meta: [1, 2, 0], paras: [['la soberana'], ['el largo gusano de hierro'], ['el mineral negro']], pista: 'Alguno no va ahí. ¿Cuál es una persona, cuál una máquina y cuál se quema?' }, 'Lo que se dice de cada uno lo delata.')],
+  ['Lo que se calla',
+    xpMira('hoja', 'Segunda idea: la **elipsis** calla lo que ya se dijo, y la **coma** guarda su lugar.', { unidos: true, paras: [['Ana estudia Medicina; Juan', ',', ' Derecho.'], ['Unos trajeron pan; otros', ',', ' queso.']] }, [
+      ['«Juan, Derecho». ¿Qué falta?', { luz: [0] }],
+      ['«Estudia». Ya se dijo: no se repite.', { luz: [0, 2] }],
+      ['La coma ocupa su lugar.', { luz: [1] }],
+      ['«Otros, queso»: falta «trajeron».', { luz: [3, 4, 5] }],
+      ['Para entenderla, se busca en la primera mitad.', {}],
+    ], 'Lo que falta está en la primera mitad; la coma guarda su puesto.'),
+    xpHaz('hoja', '«Los lunes hay teatro; los martes, cine». Subraya lo que se **calló**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['los lunes'], ['hay'], ['teatro']], pista: 'Ponlo en vez de la coma: «los martes … cine».' }, 'Los martes hay cine.')],
+  ['Contar en orden y unir',
+    xpMira('hoja', 'Tercera idea: «el primero», «la segunda» se **cuentan** en el orden en que se nombró.', { unidos: true, paras: [['Tiene ', 'cabras', ', ', 'un horno', ' y ', 'una moto', '.'], ['Las primeras dan leche; el segundo, pan; la tercera lo lleva al pueblo.'], ['Por eso vive bien; sin embargo, trabaja mucho.']] }, [
+      ['Tres cosas, en orden.', { luz: [1, 3, 5] }],
+      ['Las primeras: las cabras, en plural.', { luz: [1, 7] }],
+      ['El segundo: el horno, masculino. La tercera: la moto.', { luz: [3, 5, 7] }],
+      ['«Por eso» trae lo que resulta; «sin embargo», lo que choca.', { luz: [8] }],
+      ['Un «pero» necesita algo antes, y un balance va al final.', {}],
+      ['Un dato apoya una tesis, la debilita o no pesa.', {}],
+    ], 'Cuenta en orden y confirma con el género y el número.'),
+    xpHaz('hoja', '«Sembró maíz, papa y ají; **el último** picó y **la segunda** se heló». Pon al margen qué es cada uno.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['el ají', 'la papa'], meta: [0, 1], paras: [['el último'], ['la segunda']], pista: 'Alguno no va ahí. Cuenta en orden y mira el género.' }, 'Tercero y segunda: el orden manda.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '**Tacha** las dos expresiones que **no** nombran al río.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['El río creció; la corriente rugía.'], ['El puente aguantó.'], ['El gigante marrón se llevó la cerca.'], ['Los vecinos miraban.']], pista: 'Alguna de las tachadas sí nombra al río con otras palabras.' }, '«Corriente» y «gigante marrón»: el mismo río.')],
+], 'Otro nombre, un silencio o un número de orden: todos apuntan a algo ya dicho.');

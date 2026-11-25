@@ -69,11 +69,11 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
   // ---------------- Lección 2 · Analogías ----------------
   setLesson('pu-ap-2', [
     play('cambia-tipo', 'Completa la analogía con las palabras del texto. Sobran fichas.', { de: 'misma relación: barrera que cierra el paso', antes: 'Piel es a cuerpo como…', frase: '[0] es a [1]', rot: ['¿qué?', '¿de qué?'], fichas: ['muralla', 'ciudad', 'guardia', 'herida', 'enemigo'], va: [0, 1, null, null, null],
-      mira: ['Piel cierra el paso: ¿qué lo cierra en el otro lado?', 'La piel rodea al cuerpo: ¿qué rodea lo otro?', 'Ataca, no cierra el paso.', 'Es lo contrario: abre el paso.', 'No es lo protegido, sino de quien se protege.'], bien: 'La relación es la misma a los dos lados.' },
+      mira: ['Piel cierra el paso: ¿qué lo cierra en el otro lado?', 'Una cuida y la otra es cuidada: ¿cuál es esta?', 'Ataca, no cierra el paso.', 'Es lo contrario: abre el paso.', 'No es lo protegido, sino de quien se protege.'], bien: 'La relación es la misma a los dos lados.' },
       'La piel cierra el paso al cuerpo como la muralla a la ciudad. El guardia ataca, la herida abre y el enemigo no es lo protegido.',
       { hint: 'Di la relación en voz alta («la piel protege al cuerpo cerrando el paso») y busca qué hace eso en el otro lado.' }),
     play('pista-tipo', 'Ata cada relación a la pareja que la tiene.', { lineas: ['página y libro', 'martillo y carpintero', 'nube y lluvia', 'semilla y árbol'], tarjetas: ['parte y todo', 'herramienta y quien la usa', 'causa y efecto', 'etapa y lo que llega a ser'], va: [0, 1, 2, 3],
-      mira: ['¿Cuál pareja está una dentro de la otra?', '¿En cuál hay alguien que trabaja con algo?', '¿En cuál una trae a la otra?', '¿En cuál una se convierte en la otra?'], bien: 'Antes de comparar, di la relación.' },
+      mira: ['¿En qué pareja está una cosa dentro de la otra?', '¿En cuál hay alguien que trabaja con algo?', '¿En cuál una trae a la otra?', '¿En cuál una se convierte en la otra?'], bien: 'Antes de comparar, di la relación.' },
       'La página es parte del libro; el carpintero usa el martillo; la nube trae la lluvia; la semilla llega a ser árbol.',
       { hint: 'Arma una oración corta con cada pareja («la página está en el libro») y mira qué relación dice.' }),
     play('genero-o-cita', 'Según el artículo, ¿qué analogías conservan la relación?', { rot: ['la conserva', 'la cambia'], doc: DEFENSA, fichas: ['Anticuerpo es a invasor como llave es a cerradura.', 'Herida es a piel como guardia es a ciudad.', 'Célula de memoria es a microbio como retrato es a enemigo.', 'Glóbulo blanco es a microbio como muralla es a ladrón.'], va: [0, 1, 0, 1],

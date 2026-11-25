@@ -45,7 +45,7 @@ xpLec('pu-fu-2', [
     ], 'A favor, en contra o sí, pero con condiciones.'),
     xpHaz('hoja', 'Pon al margen la postura sobre el **horario nocturno**.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['matizada', 'a favor', 'en contra'], meta: [2, 0, 1], paras: [['Nadie debería estudiar a esa hora.'], ['Está bien, si hay transporte de regreso.'], ['Es lo mejor que han hecho.']], pista: 'Alguno no va ahí. Busca el «si» que pone una condición.' }, 'La condición es la huella del matiz.')],
   ['La cita de afuera',
-    xpMira('hoja', 'Segunda idea: el examen trae una **cita que no está** y pregunta qué le hace a la tesis.', { letras: ['1', 'a', 'b', 'c'], paras: [['Tesis: el mercado debe cerrar a las seis.'], ['«Después de las seis hay más robos.»'], ['«A las siete llegan la mitad de los clientes.»'], ['«El mercado tiene techo de zinc.»']] }, [
+    xpMira('hoja', 'Segunda idea: el examen trae una **cita que no está** y pregunta qué le hace a la tesis.', { letras: ['1', 'a', 'b', 'c'], paras: [['Tesis: el mercado debe cerrar a las seis.'], ['«Después de las seis hay más robos.»'], ['«A las siete llega la mitad de los clientes.»'], ['«El mercado tiene techo de zinc.»']] }, [
       ['Se compara con la tesis, no con un detalle.', { luz: [0] }],
       ['Más robos: le da la razón. Apoya.', { luz: [0, 1], nota: { 1: 'apoya' } }],
       ['Se perderían clientes: le quita razón. Debilita.', { luz: [0, 2], nota: { 2: 'debilita' } }],

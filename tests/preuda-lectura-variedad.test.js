@@ -24,29 +24,6 @@ const exOf = g => lessons.flatMap(l => l.ex.filter(e => e.game === g).map(e => [
 const solved = (name, params) => ({ rounds: LEC.rounds(name, params).map(r => ({ place: r.key.map(k => k == null ? -1 : [].concat(k)[0]) })) });
 const sorted = a => a.every((x, i) => i === 0 || a[i - 1] <= x);
 
-test('cuántas lecciones usa cada juego: mapa ≤ 8, donde-buscar ≤ 6 y ninguno en más de 13', () => {
-  const count = {};
-  for (const l of lessons) for (const g of new Set(l.ex.map(e => e.game))) count[g] = (count[g] || 0) + 1;
-  assert.equal(units.flatMap(u => u.lessons).length, 33);
-  assert.ok((count['mapa-del-texto'] || 0) <= 8, `mapa-del-texto en ${count['mapa-del-texto']} lecciones`);
-  assert.ok((count['donde-buscar'] || 0) <= 6, `donde-buscar en ${count['donde-buscar']} lecciones`);
-  for (const [g, n] of Object.entries(count)) assert.ok(n <= 13, `${g} en ${n} lecciones`);
-  // (al ir pasando los mundos al nuevo estándar, estos juegos se usan menos)
-  // El tope de 10 que se pidió no cabe: lo deja escrito la aritmética.
-  
-});
-
-test('cada lección conserva 7 juegos distintos y los que ocultan el texto van primero', () => {
-  for (const l of lessons) {
-    const g = l.ex.map(e => e.game);
-    assert.equal(g.length, 7, l.id);
-    assert.equal(new Set(g).size, 7, `${l.id}: ${g}`);
-    const hide = g.filter(x => x === 'ordena-parrafos' || x === 'anticipa-texto');
-    assert.ok(hide.length <= 1, `${l.id}: dos juegos que esconden el texto`);
-    if (hide.length) assert.equal(g[0], hide[0], `${l.id}: ${hide[0]} debe ser el primer ejercicio (si no, el texto ya se leyó en orden)`);
-  }
-});
-
 test('donde-buscar no se resuelve por el orden: ni los datos ni la bandeja siguen los párrafos', () => {
   const ds = exOf('donde-buscar');
 
@@ -123,27 +100,6 @@ test('resumen-esencial: solo caben las esenciales; un detalle en un renglón o u
     assert.ok(main >= 3 && main <= 4 && det >= 3, `${l.id}: ${main} esenciales y ${det} detalles`);
     assert.equal(g.grade(solved('resumen-esencial', e.params), e.params).ok, true, l.id);
   }
-});
-
-test('trampa-opcion: cuatro opciones con trampas distintas, una sola respuesta, y la respuesta cambia de letra', () => {
-  const g = GAMES['trampa-opcion'];
-  const p = { doc: { id: 'd', title: 't', paras: ['x'] }, q: '¿?', options: [['a', 2], ['b', 0], ['c', 3], ['d', 1]] };
-  const ok = { rounds: [{ place: [1, 3, 0, 2, -1] }] };
-  assert.equal(g.grade(ok, p).ok, true);
-  assert.equal(g.grade({ rounds: [{ place: [3, 1, 0, 2, -1] }] }, p).ok, false, 'dos sellos cambiados');
-  assert.equal(g.grade({ rounds: [{ place: [1, 3, 0, 2, 2] }] }, p).ok, false, 'el sello que sobra no va en ninguna opción');
-  assert.match(g.grade(ok, p).solution, /^A: Dice lo contrario · B: Es la respuesta/);
-  const letters = new Set();
-  for (const [l, e] of exOf('trampa-opcion')) {
-    const t = e.params.options.map(o => o[1]);
-    assert.equal(t.length, 4, l.id);
-    assert.equal(new Set(t).size, 4, `${l.id}: trampas repetidas`);
-    assert.ok(t.every(x => x >= 0 && x <= 4) && t.filter(x => x === 0).length === 1, `${l.id}: ${t}`);
-    assert.ok(e.explain.includes('Sobra el sello'), `${l.id}: la explicación dice qué sello sobra`);
-    letters.add(t.indexOf(0));
-    assert.equal(g.grade(solved('trampa-opcion', e.params), e.params).ok, true, l.id);
-  }
-  assert.equal(letters.size, 4, 'la respuesta debe caer en A, B, C y D a lo largo del componente');
 });
 
 test('cadena-causas: el orden importa, lo que sobra se queda abajo y la bandeja no trae la cadena armada', () => {

@@ -22,7 +22,7 @@ const HOJA = (() => {
       ? oraciones(p, n).map((t, i) => o.trozo(n, i, t)).join(p.trozos?.[n] ? '' : ' ') : luzDe(d.paras[n - 1], n, p.luz), o.parr?.(n))).join('')}</article>`;
   }
   // El texto entero, plegado: en el examen siempre se puede volver a él.
-  const completo = (d, luz) => `<details class="hj-todo"><summary>Ver el texto completo</summary>${hoja({ doc: d, luz })}</details>`;
+  const completo = (d, luz) => (Array.isArray(d) ? d.map((x, i) => completo(x, i ? [] : luz).replace('Ver el texto completo', `Ver el Texto ${['Uno', 'Dos'][i]}`)).join('') : `<details class="hj-todo"><summary>Ver el texto completo</summary>${hoja({ doc: d, luz })}</details>`);
   // Lo tapado tampoco se lee con lector de pantalla hasta que se destapa.
   const tapa = (root, si) => root.querySelectorAll('.hj-hoja.cortina .hj-p, .hj-velo, .hj-queda').forEach(x => (si ? x.setAttribute('aria-hidden', 'true') : x.removeAttribute('aria-hidden')));
   const prende = root => tapa(root, false) || root.querySelectorAll('.hj-luz').forEach((m, i) => { m.style.setProperty('--d', `${i * 260}ms`); m.classList.add('on'); if (!i) aVer(root, m); });

@@ -53,7 +53,7 @@ xpLec('pu-cn-2', [
       ['«Pero eso dice poco»: le quita peso. Relativiza.', { luz: [2, 3], nota: { 1: 'relativiza lo ajeno' } }],
       ['La pregunta es: ¿de quién es la idea que se limita?', {}],
     ], '¿De quién es la idea que se limita? Propia: matiza. Ajena: relativiza.'),
-    xpHaz('hoja', 'Subraya la oración que **matiza lo propio**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Tal vez suban las ventas, pero importa poco.'], ['No estoy en contra de los perros, sino de que anden sueltos.'], ['Es posible que guste; eso no lo hace útil.']], pista: 'En esa se acepta algo del otro y se le quita peso. Busca «no estoy en contra».' }, 'Quien matiza aclara hasta dónde llega lo suyo.')],
+    xpHaz('hoja', 'Subraya la oración que **matiza lo propio**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Tal vez suban las ventas, pero importa poco.'], ['No estoy en contra de los perros, sino de que anden sueltos.'], ['Es posible que guste; eso no lo hace útil.']], pista: 'En esa se acepta algo del otro y se le quita peso. Busca dónde alguien aclara su propia postura.' }, 'Quien matiza aclara hasta dónde llega lo suyo.')],
   ['Los signos',
     xpMira('hoja', 'Tercera idea: los **signos** también hacen cosas.', { unidos: true, paras: [['Llegó el ', '«gran»', ' cambio: un semáforo.'], ['Vende frutas ', '—mango, lulo, guama—', ' en la esquina.'], ['Cualquiera puede ir ', '(si paga antes)', '.']] }, [
       ['Comillas sobre «gran»: el autor no lo cree. Son irónicas.', { luz: [1], nota: { 0: 'ironía' } }],
