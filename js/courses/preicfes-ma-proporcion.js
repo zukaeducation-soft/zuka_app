@@ -8,7 +8,7 @@ PI_MUNDOS.push((() => {
     ['Partes iguales', 'Para repartir en razón $2 : 3$ se cuentan 5 partes iguales y se halla cuánto vale una sola.'],
     ['La escala', 'En un plano $1 : 100$, un centímetro del papel son 100 centímetros de verdad, es decir, un metro.'],
     ['Cuidado al sumar', 'Agregar lo mismo a los dos lados cambia la razón: $1 : 2$ no es igual a $2 : 3$.']), [
-    x('mismo-sabor', 'La mezcla modelo lleva 4 de concentrado y 6 de agua. Toca **todas** las jarras que saben **igual**.', { modelo: [4, 6], jarras: [[6, 9], [5, 7], [2, 3], [6, 4], [10, 15], [8, 10]] },
+    x('mismo-sabor', 'La mezcla modelo lleva 4 de jugo y 6 de agua. Toca **todas** las jarras que saben **igual**.', { modelo: [4, 6], jarras: [[6, 9], [5, 7], [2, 3], [6, 4], [10, 15], [8, 10]] },
       'Todas las que se reducen a $2 : 3$: $6 : 9$, $2 : 3$ y $10 : 15$. Agregar lo mismo a los dos cambia el sabor.', 'Simplifica la razón del modelo y compara cada jarra con esa razón, en el mismo orden.'),
     x('mezcla-total', 'Un mortero lleva **4** baldes de arena por cada **3** de cemento. Prepara **28** baldes en total.', { p: 4, q: 3, total: 28, ea: 'baldes de arena', eb: 'baldes de cemento' },
       'Son 7 partes; $28 \\div 7 = 4$ baldes por parte: 16 de arena y 12 de cemento.', 'Cuenta cuántas partes iguales forman el total y halla cuánto vale una.'),
@@ -58,10 +58,10 @@ PI_MUNDOS.push((() => {
     x('vuelta-atras', 'Tras **bajar 25 %**, unos audífonos quedaron en **60** mil. Arrastra su precio de **antes**.', { q: 60, c: -25, min: 50, max: 110, paso: 2 },
       '60 es el 75 % de lo de antes: $60 \\div 0.75 = 80$ mil.', 'Lo que quedó no es el 100 %: ¿qué porcentaje del precio viejo es?'),
     x('tiro-precio', 'Dale al balde el precio justo. Puedes fallar **una** vez.', { tiros: [
-      { q: '40 mil, **sube 30 %**', r: 52, c: '40 \\cdot 1.3', e: { 12: 'Ese es solo el aumento.', 70: 'Sumaste 30; es el 30 % de 40.' } },
-      { q: '90 mil, **baja 40 %**', r: 54, c: '90 \\cdot 0.6', e: { 36: 'Ese es solo el descuento.', 50: 'Restaste 40; es el 40 % de 90.' } },
-      { q: 'Quedó en 66 mil después de **subir 10 %**. ¿Cuánto valía **antes**?', r: 60, c: '66 \\div 1.1', e: { 56: 'Restaste 10; es un porcentaje.' } }] },
-      '$40 \\cdot 1.3 = 52$; $90 \\cdot 0.6 = 54$; $66 \\div 1.1 = 60$.', 'Convierte cada cambio en un factor. Para volver atrás, divide.'),
+      { q: '40 mil, **sube 25 %**', r: 50, c: '40 \\cdot 1.25', e: { 10: 'Ese es solo el aumento.', 65: 'Sumaste 25; es el 25 % de 40.' } },
+      { q: '50 mil, **baja 40 %**', r: 30, c: '50 \\cdot 0.6', e: { 20: 'Ese es solo el descuento.', 10: 'Restaste 40; es el 40 % de 50.' } },
+      { q: 'Quedó en 66 mil después de **subir 10 %**. ¿Cuánto valía **antes**?', r: 60, c: '66 \\div 1.1' }] },
+      '$40 \\cdot 1.25 = 50$; $50 \\cdot 0.6 = 30$; $66 \\div 1.1 = 60$.', 'Convierte cada cambio en un factor. Para volver atrás, divide.'),
     sol('Un televisor cuesta 800 mil pesos. La tienda le hace un descuento del 15 % y al valor rebajado le suma un cargo de envío del 5 %. ¿Cuánto se paga, en miles?',
       ['El descuento es $0.15 \\cdot 800 =$ [[120]]', 'El valor rebajado es $800 - 120 =$ [[680]]', 'El envío es $0.05 \\cdot 680 =$ [[34]]', 'Se paga $680 + 34 =$ [[714]]'], ['720', '40', '640'],
       'El envío se calcula sobre 680, no sobre 800: se pagan 714 mil. No es un descuento del 10 %.', 'El segundo porcentaje se saca del valor que dejó el primero.'),

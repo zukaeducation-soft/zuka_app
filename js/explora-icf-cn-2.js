@@ -47,7 +47,7 @@
         ['A las tres horas volvió cerca del comienzo.', { n: 4 }],
         ['No importa que suba: importa que vuelva.', {}],
       ], 'Homeostasis: ante un cambio, el cuerpo vuelve a su valor.'),
-      xpHaz('hoja', 'Temperatura de cuatro personas tras correr, al inicio y una hora después. Subraya a quien **no** recuperó el equilibrio.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['36.5 → 37.8 → 36.6'], ['36.6 → 38.9 → 38.7'], ['36.4 → 37.5 → 36.5']], pista: 'Esa volvió a su valor del comienzo.' }, 'B sigue en 38.7: no volvió.')],
+      xpHaz('hoja', 'Temperatura de tres personas tras correr, al inicio y una hora después. Subraya a quien **no** recuperó el equilibrio.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['36.5 → 37.8 → 36.6'], ['36.6 → 38.9 → 38.7'], ['36.4 → 37.5 → 36.5']], pista: 'Esa volvió a su valor del comienzo.' }, 'B sigue en 38.7: no volvió.')],
     ['El cuerpo se avisa',
       xpMira('hoja', 'Segunda idea: hay un **aviso**, una **respuesta** y un **efecto**.', { paras: [['Hace frío.'], ['La piel avisa al cerebro.'], ['Los músculos tiemblan.'], ['El cuerpo se calienta.']] }, [
         ['Primero ocurre un cambio: hace frío.', { luz: [0], nota: { 0: 'cambio' } }],
