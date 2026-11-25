@@ -7,5 +7,6 @@ Pedido del 2026-11-25: lo mismo que en el Preuniversitario, para los dos cursos.
   `rueda`) y los ayudantes `xpFila` (fichas en fila) y `xpMueve` (perillas). Las revisan `explora-estructura` y `explora-escenas`.
 - Trigonometría: 79 ejercicios con las escenas (`js/games/trig-escena.js`, `js/courses/trig-escenas.js`) en lugar de «arma la
   cuenta», «escala la solución», «ordena» y los juegos repetidos; el juego que cierra cada lección se conserva.
-- Álgebra: las siete prácticas de cada lección (revisión del 2026-11-18) se conservan mientras se pasan a escenas por mundos.
+- Álgebra: 301 ejercicios con escenas, siete por lección (`js/alg-practica*.js`): dos de perillas, dos o tres de fichas, uno de tocar,
+  uno de frases ciertas y, al final, uno en movimiento. Los p5 de la revisión quedan en las evaluaciones.
 - Gimnasios: `js/gimnasio-mate.js`.
