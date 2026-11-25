@@ -21,7 +21,7 @@ const pintaCursos = () => { $('.pi-serv-c ul').innerHTML = CURSOS.map(c => `<li 
 // ---- el portal, para tocar (datos de ejemplo) ----
 const EJ = [['Ana Ríos', '11A', 86, 120], ['Juan Mejía', '11A', 64, 75], ['Luisa Cano', '11B', 41, 40], ['Mateo Vélez', '11B', 12, 5], ['Sara Gil', '10A', 73, 98], ['Tomás Roa', '10A', 8, 0]];
 const DEMOS = {
-  registrar: ['Registrar', () => `<div class="pd-dos"><div><h3>Pega tu lista</h3><p>Desde Excel: nombre, grupo y documento. Cambia el texto y mira.</p><textarea aria-label="Lista de ejemplo" spellcheck="false">Ana Ríos, 11A\nJuan Mejía, 11A\nLuisa Cano, 11B\nMateo Vélez, 11B</textarea></div><div class="pd-res" aria-live="polite"></div></div>`, d => {
+  registrar: ['Registrar', () => `<div class="pd-dos"><div><h4>Pega tu lista</h4><p>Desde Excel: nombre, grupo y documento. Cambia el texto y mira.</p><textarea aria-label="Lista de ejemplo" spellcheck="false">Ana Ríos, 11A\nJuan Mejía, 11A\nLuisa Cano, 11B\nMateo Vélez, 11B</textarea></div><div class="pd-res" aria-live="polite"></div></div>`, d => {
     const ta = $('textarea', d), pinta = () => { const { lista, malas } = instLista(ta.value); $('.pd-res', d).innerHTML = `<p class="pd-cup"><b>${lista.length}</b> de 10 cupos<i style="--p:${Math.min(100, lista.length * 10)}%"></i></p><ul>${lista.slice(0, 10).map((x, i) => `<li><span>${esc(x.nombre)}<small>${esc(x.grupo)}</small></span><code>${['K7M2P', 'QX4TR', 'H9WDN', 'B3YVC', 'T8JLE', 'M5RKS', 'W2PFA', 'D6XQH', 'N4CTY', 'R9GVB'][i]}-•••••</code></li>`).join('')}</ul>${malas.length ? `<p class="pd-mal">${malas.length === 1 ? 'Un renglón' : `${malas.length} renglones`} por revisar.</p>` : ''}${lista.length > 10 ? '<p class="pd-mal">No alcanzan los cupos del ejemplo.</p>' : ''}`; };
     ta.oninput = pinta; pinta();
   }],
@@ -29,7 +29,7 @@ const DEMOS = {
     let g = 'Todos'; const pinta = () => { const xs = EJ.filter(e => g === 'Todos' || e[1] === g), m = Math.round(xs.reduce((t, e) => t + e[2], 0) / xs.length); $('.pd-seg', d).innerHTML = `<div class="pd-k"><p><b>${xs.filter(e => e[3]).length} de ${xs.length}</b>estudiaron esta semana</p><p><b>${m} %</b>de avance</p><p><b>${xs.reduce((t, e) => t + e[3], 0)}</b>minutos</p></div><ul>${xs.map(e => `<li class="${e[2] < 20 ? 'al' : ''}"><span>${e[0]}<small>${e[1]}${e[3] ? '' : ' · no ha entrado'}</small></span><i style="--p:${e[2]}%"></i><b>${e[2]} %</b></li>`).join('')}</ul>`; };
     $$('[data-g]', d).forEach(b => { b.onclick = () => { g = b.dataset.g; $$('[data-g]', d).forEach(x => x.setAttribute('aria-pressed', x === b)); pinta(); }; }); pinta();
   }],
-  metas: ['Poner metas', () => '<div class="pd-dos"><div><h3>Una meta con fecha</h3><p>Elige cuántas lecciones. El estudiante la ve al abrir la app.</p><input type="range" min="1" max="8" value="4" aria-label="Lecciones de la meta"><p class="pd-n"></p></div><div class="pd-cel" aria-live="polite"></div></div>', d => {
+  metas: ['Poner metas', () => '<div class="pd-dos"><div><h4>Una meta con fecha</h4><p>Elige cuántas lecciones. El estudiante la ve al abrir la app.</p><input type="range" min="1" max="8" value="4" aria-label="Lecciones de la meta"><p class="pd-n"></p></div><div class="pd-cel" aria-live="polite"></div></div>', d => {
     const r = $('input', d), pinta = () => { const n = +r.value; $('.pd-n', d).innerHTML = `<b>${n}</b> ${n === 1 ? 'lección' : 'lecciones'} de Álgebra para 11A`; $('.pd-cel', d).innerHTML = `<small>Lo que ve el estudiante</small><b>Conjuntos, antes del viernes</b><span>1 de ${n} ${n === 1 ? 'lección' : 'lecciones'}</span><i style="--p:${100 / n}%"></i><em>Seguir</em>`; }; r.oninput = pinta; pinta();
   }],
   docentes: ['Tus docentes', () => `<div class="pd-f" role="group" aria-label="Quién mira">${['Gestor', 'Docente de 11A', 'Docente de 10A'].map((g, i) => `<button type="button" data-g="${i}" aria-pressed="${!i}">${g}</button>`).join('')}</div><div class="pd-seg" aria-live="polite"></div>`, d => {
@@ -37,12 +37,31 @@ const DEMOS = {
     $$('[data-g]', d).forEach(b => { b.onclick = () => { $$('[data-g]', d).forEach(x => x.setAttribute('aria-pressed', x === b)); pinta(+b.dataset.g); }; }); pinta(0);
   }],
 };
-const tabs = $('.pi-tabs');
-tabs.innerHTML = Object.entries(DEMOS).map(([k, [t]], i) => `<button type="button" role="tab" id="pi-t-${k}" aria-controls="pi-demo" data-k="${k}" aria-selected="${!i}" tabindex="${i ? -1 : 0}">${t}</button>`).join('');
-function demo(k) { const d = $('#pi-demo'); $$('button', tabs).forEach(b => { const on = b.dataset.k === k; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; }); d.setAttribute('aria-labelledby', `pi-t-${k}`); d.innerHTML = DEMOS[k][1](); DEMOS[k][2](d); }
-tabs.onclick = e => { const b = e.target.closest('button'); if (b) demo(b.dataset.k); };
-tabs.onkeydown = e => { const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key], bs = $$('button', tabs); if (!d) return; e.preventDefault(); const b = bs[(bs.indexOf(document.activeElement) + d + bs.length) % bs.length]; demo(b.dataset.k); b.focus(); };
-demo('registrar');
+// Las cuatro van en una pila: cada una sube sobre la anterior (referencia: tarjetas que se apilan, MotionSites).
+const PILA = { registrar: ['#a3e635', 'Registrar', 'Tu lista de Excel, convertida en códigos'], seguir: ['#6fd3ff', 'Seguir', 'Quién va bien y a quién llamar hoy'], metas: ['#ffd257', 'Poner metas', 'Una fecha y un camino claro'], docentes: ['#ff9d8c', 'Invitar docentes', 'Cada uno con sus grupos'] };
+$('.pi-pila').innerHTML = Object.entries(PILA).map(([k, [c, t, h]], i) => `<div class="pl-hueco" style="--i:${i}"><article class="pl" style="--c:${c}"><header><span>${i + 1} de 4</span><div><p>${t}</p><h3>${h}</h3></div></header><div class="pi-demo pd-${k}" data-k="${k}"></div></article></div>`).join('');
+$$('.pi-demo').forEach(d => { d.innerHTML = DEMOS[d.dataset.k][1](); DEMOS[d.dataset.k][2](d); });
+if (!quieto) {
+  const pila = $('.pi-pila'), ts = $$('.pl', pila); let pide = 0;
+  // Solo se apilan si la más alta cabe entera: si no, quedaría contenido debajo del borde.
+  const cabe = () => { const ok = innerWidth >= 900 && ts.every((x, i) => 88 + i * 22 + x.offsetHeight <= innerHeight); pila.classList.toggle('apila', ok); return ok; };
+  const ro = new ResizeObserver(() => { cabe(); mueve(); }); ts.forEach(x => ro.observe(x));
+  // Con teclado, la tarjeta que recibe el foco vuelve a quedar a la vista.
+  pila.addEventListener('focusin', e => { const h = e.target.closest('.pl-hueco'); if (!h || !pila.classList.contains('apila') || !e.target.matches(':focus-visible')) return; const antesDe = [...pila.children].slice(0, [...pila.children].indexOf(h)).reduce((t, x) => t + x.offsetHeight, 0); scrollTo({ top: pila.getBoundingClientRect().top + scrollY + antesDe - 88 - 22 * [...pila.children].indexOf(h) }); });
+  const mueve = () => { pide = 0; if (!pila.classList.contains('apila')) return ts.forEach(x => { x.style.scale = ''; }); const b = pila.getBoundingClientRect(), p = Math.min(1, Math.max(0, -b.top / Math.max(1, b.height - innerHeight))); ts.forEach((x, i) => { const n = ts.length, q = Math.min(1, Math.max(0, (p - i / n) / (1 - i / n))); x.style.scale = (1 - (n - 1 - i) * .03 * q).toFixed(4); }); };
+  addEventListener('scroll', () => { if (!pide) pide = requestAnimationFrame(mueve); }, { passive: true }); addEventListener('resize', () => { cabe(); mueve(); }); cabe(); mueve();
+}
+// ---- la portada: el portal, en vivo ----
+{
+  const v = $('.pv'), h = [30, 44, 38, 60, 52, 18, 12, 48, 58, 50, 74, 66, 22, 16, 56, 70, 62, 84, 78, 30, 20, 66, 80, 72, 96, 88, 34, 26];
+  v.innerHTML = `<aside><img src="/brand/logo-dark.svg" alt="" width="80" height="30">${['Resumen', 'Estudiantes', 'Lecciones', 'Metas', 'Equipo'].map((x, i) => `<span class="${i ? '' : 'on'}">${x}</span>`).join('')}</aside><div class="pv-m"><p class="pv-t">Así va tu colegio<small>Ejemplo</small></p>
+    <div class="pv-k"><div class="pv-aro"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="43" pathLength="1"/><circle class="v" cx="50" cy="50" r="43" pathLength="1"/></svg><p><b data-n="84">84</b>de 100 cupos</p></div><p><b data-n="71">71</b>estudiaron esta semana</p><p><b data-n="48">48</b>minutos por estudiante</p><p><b data-n="213">213</b>lecciones nuevas</p></div>
+    <div class="pv-d"><div class="pv-g"><p>Actividad, 28 días</p><div>${h.map((x, i) => `<i style="--h:${x}%;--i:${i}"></i>`).join('')}</div></div><div class="pv-a"><p>Necesitan una mano</p>${[['MV', 'Mateo V.', 'Lleva 9 días sin entrar'], ['TR', 'Tomás R.', 'Aún no ha entrado'], ['LC', 'Luisa C.', 'Va atrás de su grupo']].map(([a, n, t], i) => `<span style="--i:${i}"><b>${a}</b><em>${n}<small>${t}</small></em></span>`).join('')}</div><div class="pv-b">${[['11A', 72], ['11B', 54], ['10A', 38]].map(([g, p], i) => `<p><span>${g}</span><i style="--p:${p / 100};--i:${i}"></i><b>${p} %</b></p>`).join('')}</div></div></div>`;
+  if (!quieto) {
+    $$('[data-n]', v).forEach(b => { const a = +b.dataset.n, t0 = performance.now() + 500; b.textContent = 0; const f = t => { const k = Math.max(0, Math.min(1, (t - t0) / 1300)); b.textContent = Math.round(a * (1 - (1 - k) ** 3)); if (k < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); });
+    const caja = $('.pi-vivo'); if (matchMedia('(hover: hover)').matches) { caja.onpointermove = e => { const r = caja.getBoundingClientRect(); caja.style.setProperty('--x', ((e.clientX - r.left) / r.width - .5).toFixed(3)); caja.style.setProperty('--y', ((e.clientY - r.top) / r.height - .5).toFixed(3)); }; caja.onpointerleave = () => { caja.style.setProperty('--x', 0); caja.style.setProperty('--y', 0); }; }
+  }
+}
 
 // ---- precios y cotizador ----
 const EXTRAS = ['Libros impresos', 'Asesorías en vivo'], TIPOS = ['Colegio', 'Preuniversitario o academia', 'Universidad o instituto', 'Fundación', 'Alcaldía o secretaría', 'Otra'];
@@ -131,5 +150,3 @@ if (sb) Promise.all([sb.from('cursos').select('id,nombre,publicado,orden').order
   const u = waLink(AJUSTES.whatsapp, 'Hola, represento a una institución y quiero información de Zuka.'), w = $('.pi-wa'); if (u) { w.href = u; w.hidden = false; }
   pintaCursos(); if ($('.pc-res')) pinta();
 }, () => {});
-// «El portal» se inclina con el puntero, como las tarjetas de la app.
-const foto = $('.pi-foto'); if (!quieto && matchMedia('(hover: hover)').matches) { foto.onpointermove = e => { const r = foto.getBoundingClientRect(); foto.style.setProperty('--x', ((e.clientX - r.left) / r.width - .5).toFixed(3)); foto.style.setProperty('--y', ((e.clientY - r.top) / r.height - .5).toFixed(3)); }; foto.onpointerleave = () => { foto.style.setProperty('--x', 0); foto.style.setProperty('--y', 0); }; }

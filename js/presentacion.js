@@ -113,6 +113,12 @@ const PZ_FUND = ['algebra', 'trig', 'calc', 'geo', 'int', 'lin', 'fis'], PZ_FUND
 const PZ_CORTO = { algebra: 'Álgebra', trig: 'Trigo', calc: 'Cálculo', geo: 'Geometría', int: 'Integral', lin: 'Lineal', fis: 'Física' };
 const PZ_ORDEN = ['preuda', 'preicfes', 'algebra', 'trig'];
 const pzOrdena = cs => [...cs].sort((a, b) => ((PZ_ORDEN.indexOf(a.id) + 1) || 99) - ((PZ_ORDEN.indexOf(b.id) + 1) || 99));
+const PZ_TABS = { 'Zuka, tu aliado': 'Inicio', 'Estudia desde cualquier lugar': 'Donde quieras', 'Preuniversitario UdeA': 'UdeA', 'Preicfes Saber 11': 'Saber 11', 'Fundamentación en Ingeniería y Ciencias': 'Ingeniería', 'Libros de admisión': 'Libros', 'Zuka para instituciones': 'Colegios' };
+// Palabra gigante y fichas de cada lámina.
+const PZ_GRAN = {
+  'Zuka, tu aliado': ['Zuka', ['x²', '√', 'π', '∑', 'θ']], 'Estudia desde cualquier lugar': ['donde sea', ['+', '÷', '=', '×', '%']], 'Preuniversitario UdeA': ['UdeA', ['A', 'B', 'C', 'D', '40']], 'Preicfes Saber 11': ['Saber', ['11', 'A', '?', '%', '¿']],
+  'Fundamentación en Ingeniería y Ciencias': ['ingeniería', ['∫', 'dx', 'lim', 'θ', 'Σ']], 'Libros de admisión': ['papel', ['Aa', '1', '2', '3', '4']], 'Zuka para instituciones': ['colegio', ['11A', '10B', '%', '✓', '9°']],
+};
 // Precio más bajo que se vende hoy, de lo que publica la tienda: { precio, meses } o null (entonces no se muestra nada).
 function pzDesdeCurso(productos, id) {
   const ps = (productos || []).filter(p => p.curso === id && p.activo && p.precio != null).sort((a, b) => a.precio - b.precio);
@@ -164,33 +170,33 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
   const celu = id => `<span class="pz-celu"><img src="brand/app/${id}.webp" alt="" width="480" height="973" loading="lazy"></span>`;
   const libros = cls => `<div class="pz-estante ${cls}" data-inclina="9">${PZ_LIBROS.map(([t, n]) => `<span style="--i:${n - 2.5}"><img src="brand/libros/${n}.webp" alt="Libro ${n}: ${t}" loading="lazy" width="340" height="480"></span>`).join('')}</div>`;
   const orden = cursos;
-  const tarjeta = ({ color, fig, cls = '', name, tag, pills, filas, pr, ir, tab }) => `<article class="pz-prog ${cls}" style="--c:${color}"><div class="pz-prog-art" aria-hidden="true">${fig}</div>
-      <div class="pz-prog-txt"><h3>${pzEsc(name)}</h3><p class="pz-pills"><span>${tag}</span>${pills.map(t => `<span class="b">${t}</span>`).join('')}</p>${filas}${precio(pr)}</div>
-      <div class="pz-prog-pie"><button class="btn sm" type="button" data-pz-ir="${ir}"${tab == null ? '' : ` data-tab="${tab}"`}>Más información<span class="pz-sr"> sobre ${pzEsc(name)}</span></button>${info(name)}</div></article>`;
+  // Tarjeta de servicio: la foto manda; una frase, los datos en un renglón y el precio.
+  const tarjeta = ({ color, fig, cls = '', name, tag, frase, datos, pr, ir, tab }) => `<article class="pz-prog ${cls} pz-rev" style="--c:${color}"><div class="pz-prog-art" aria-hidden="true">${fig}</div>
+      <div class="pz-prog-txt"><p class="pz-prog-k">${tag}</p><h3>${pzEsc(name)}</h3><p class="pz-prog-f">${frase}</p><p class="pz-prog-d">${datos.map(d => `<span>${d}</span>`).join('')}</p>
+        <div class="pz-prog-pie">${precio(pr)}<span class="pz-prog-b"><button class="btn sm" type="button" data-pz-ir="${ir}"${tab == null ? '' : ` data-tab="${tab}"`}>Ver más<span class="pz-sr"> sobre ${pzEsc(name)}</span></button>${info(name)}</span></div></div></article>`;
   const fund = PZ_FUND.map(id => cursos.find(c => c.id === id) || todos.find(c => c.id === id)).filter(Boolean), hayFund = cursos.some(c => PZ_FUND.includes(c.id));
   const foto = '<img src="brand/ingenieros.webp" alt="Dos ingenieros resuelven las reacciones de una viga en un tablero" width="1300" height="732" loading="lazy">';
   // Mazo: una carta por curso, una sobre otra; pzMazoVivo las abre bajo el puntero.
   const deCurso = c => (cursos.includes(c) ? `${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}` : 'Muy pronto');
   const mazo = hayFund ? `<div class="pz-mazo" style="--n:${fund.length}"><div class="pz-cartas">${fund.map((c, i) => `<button type="button" class="pz-carta${cursos.includes(c) ? '' : ' pronto'}" style="--i:${i};--k:${i - (fund.length - 1) / 2};--c:${c.color}" ${cursos.includes(c) ? `data-pz-ir="#pz-cursos" data-tab="${cursos.indexOf(c)}"` : 'data-pz-ir=".pz-prog-fund"'} data-n="${pzEsc(c.name)}" data-d="${deCurso(c)}" aria-label="${pzEsc(c.name)}: ${deCurso(c)}">${art(c)}<b>${PZ_CORTO[c.id] || pzEsc(c.name)}</b></button>`).join('')}</div><p class="pz-mazo-t" aria-hidden="true"><b>${pzEsc(fund[0].name)}</b><span>${deCurso(fund[0])}</span></p></div>` : '';
-  const tarjetaFund = hayFund ? `<article class="pz-prog pz-prog-fund" style="--c:${PZ_FUND_C}"><div class="pz-prog-art" aria-hidden="true">${foto}</div>
-      <div class="pz-prog-txt"><h3>${PZ_FUND_N}</h3><p class="pz-pills"><span>Primeros semestres</span><span class="b">Virtual</span></p>
-        ${fila('meta', 'Cierra los vacíos del colegio y llega preparado a tus parciales.', 'Desde cero y a tu ritmo, con ejercicios que se juegan')}
-        <ul class="pz-fcs">${fund.map(c => (cursos.includes(c) ? `<li><button type="button" data-pz-ir="#pz-cursos" data-tab="${cursos.indexOf(c)}" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}</small><small data-pz-precio="curso:${c.id}" hidden><span></span></small></span></button></li>` : `<li class="pronto" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>Muy pronto</small></span></li>`)).join('')}</ul></div>
-      <div class="pz-prog-pie"><button class="btn sm" type="button" data-pz-ir="#pz-cursos" data-tab="${cursos.findIndex(c => PZ_FUND.includes(c.id))}">Más información<span class="pz-sr"> sobre ${PZ_FUND_N}</span></button>${info(`los cursos de ${PZ_FUND_N}`)}</div></article>` : '';
+  const tarjetaFund = hayFund ? `<article class="pz-prog pz-prog-fund pz-rev" style="--c:${PZ_FUND_C}"><div class="pz-prog-art" aria-hidden="true">${foto}</div>
+      <div class="pz-prog-txt"><p class="pz-prog-k">Primeros semestres</p><h3>${PZ_FUND_N}</h3><p class="pz-prog-f">Cierra los vacíos del colegio y llega preparado a tus parciales.</p>
+        <ul class="pz-fcs">${fund.map(c => (cursos.includes(c) ? `<li><button type="button" data-pz-ir="#pz-cursos" data-tab="${cursos.indexOf(c)}" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}</small><small data-pz-precio="curso:${c.id}" hidden><span></span></small></span></button></li>` : `<li class="pronto" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>Muy pronto</small></span></li>`)).join('')}</ul>
+        <div class="pz-prog-pie"><span class="pz-prog-b"><button class="btn sm" type="button" data-pz-ir="#pz-cursos" data-tab="${cursos.findIndex(c => PZ_FUND.includes(c.id))}">Ver más<span class="pz-sr"> sobre ${PZ_FUND_N}</span></button>${info(`los cursos de ${PZ_FUND_N}`)}</span></div></div></article>` : '';
   const progs = orden.filter(c => !PZ_FUND.includes(c.id)).map(c => {
     const p = PZ_PROG[c.id] || { tag: pzEsc(c.level || 'Curso'), meta: pzEsc(c.tagline || ''), trae: 'Explicaciones y ejercicios que se juegan' };
-    return tarjeta({ color: p.color || c.color, fig: p.foto || (PZ_PROG[c.id] ? celu(c.id) : art(c)), name: c.name, tag: p.tag, pills: ['Virtual'], pr: `curso:${c.id}`, ir: '#pz-cursos', tab: cursos.indexOf(c),
-      filas: fila('dia', 'Empiezas cuando quieras', 'A tu ritmo, en celular o computador') + fila('hoja', 'Contiene', `${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}`) + fila('mas', 'Incluye', p.trae) + fila('meta', p.meta) });
+    return tarjeta({ color: p.color || c.color, cls: `pz-prog-${c.id}`, fig: p.foto || (PZ_PROG[c.id] ? celu(c.id) : art(c)), name: c.name, tag: p.tag, frase: p.meta, pr: `curso:${c.id}`, ir: '#pz-cursos', tab: cursos.indexOf(c),
+      datos: [plural((c.units || []).length, 'mundo', 'mundos'), plural(pzLessons(c), 'lección', 'lecciones'), p.trae] });
   }).concat([
-    tarjeta({ color: '#f5c451', cls: 'pz-prog-lib', fig: libros(''), name: 'Libros de admisión', tag: 'Impresos', pills: ['Con envío'], pr: 'art:fisico', ir: '#pz-libros',
-      filas: fila('dia', 'A color, en tu casa', 'Sueltos o el juego completo') + fila('hoja', 'Contiene', 'Cuatro libros: dos de razonamiento lógico y dos de comprensión lectora') + fila('mas', 'Incluye', 'Ejemplos resueltos y talleres con clave') + fila('meta', 'Estudia el examen de admisión sin pantalla, tema por tema.') }),
+    tarjeta({ color: '#f5c451', cls: 'pz-prog-lib', fig: libros(''), name: 'Libros de admisión', tag: 'Impresos, con envío', pr: 'art:fisico', ir: '#pz-libros', frase: 'Estudia el examen de admisión sin pantalla, tema por tema.', datos: ['Cuatro libros a color', 'Ejemplos resueltos y talleres con clave'] }),
+    tarjeta({ color: '#ff8a7a', cls: 'pz-prog-ase', fig: PZ_TUTOR, name: 'Asesorías en vivo', tag: 'Por horas', pr: 'art:asesoria', ir: '#pz-d-tut', frase: 'Resuelve con una persona lo que se te puso difícil.', datos: ['Una hora virtual', 'Tú eliges los temas, el día y la hora'] }),
     tarjetaFund,
-    tarjeta({ color: '#ff8a7a', cls: 'pz-prog-ase', fig: PZ_TUTOR, name: 'Asesorías en vivo', tag: 'Por horas', pills: ['Virtual'], pr: 'art:asesoria', ir: '#pz-d-tut',
-      filas: fila('dia', 'Tú eliges el día y la hora', 'Según los cupos disponibles') + fila('hoja', 'Contiene', 'Una hora virtual sobre los temas que escojas') + fila('mas', 'Materias', 'Las de los cursos que ya están abiertos') + fila('meta', 'Resuelve con una persona lo que se te puso difícil.') }),
+    `<article class="pz-prog-inst pz-rev"><div><p class="pz-prog-k">Colegios e instituciones</p><h3>Zuka para todo tu colegio</h3><p class="pz-prog-f">Cupos para tus estudiantes y un portal para registrarlos y ver cómo van.</p><span class="pz-prog-b"><a class="btn sm" href="instituciones/">Cotizar</a><button class="btn sm ghost" type="button" data-pz-ir="#pz-inst">Ver precios</button></span></div>${pzInstMini()}</article>`,
   ]).join('');
   const prontos = todos.filter(c => !cursos.some(x => x.id === c.id) && !(hayFund && PZ_FUND.includes(c.id)));
   // Carrusel: la promesa con la foto, un programa por lámina y los libros. `data-c`: el color de la franja.
-  const lamina = (c, name, cuerpo, fig, cls = '') => `<div class="pz-lamina ${cls}" data-c="${c}" role="group" aria-roledescription="lámina" aria-label="${pzEsc(name)}"><div class="pz-in pz-lam-in"><div class="pz-lam-txt">${cuerpo}</div><div class="pz-lam-fig">${fig}</div></div></div>`;
+  // Detrás de cada lámina va su palabra en gigante y alrededor flotan fichas a distinta profundidad (pzCarrusel las mueve con el paso).
+  const lamina = (c, name, cuerpo, fig, cls = '') => { const [w, fs] = PZ_GRAN[name] || [name.split(' ')[0], ['x', '+', '=', '?']]; return `<div class="pz-lamina ${cls}" data-c="${c}" data-w="${pzEsc(w)}" role="group" aria-roledescription="lámina" aria-label="${pzEsc(name)}"><span class="pz-gran" aria-hidden="true" style="--l:${[...w].length}">${pzEsc(w)}</span><span class="pz-fichas" aria-hidden="true">${fs.map((f, i) => `<i style="--i:${i}"><b>${pzEsc(f)}</b></i>`).join('')}</span><div class="pz-in pz-lam-in"><div class="pz-lam-txt">${cuerpo}</div><div class="pz-lam-fig">${fig}</div></div></div>`; };
   const mancha = f => `<div class="pz-mancha" data-inclina="7" aria-hidden="true">${f}</div>`;
   const laminas = [
     lamina('#a3e635', 'Zuka, tu aliado', `<h1>Tu aliado para <em>entrar</em> a la universidad y <em>terminarla</em></h1><p class="pz-lead">Cursos que se juegan, libros y asesorías para preparar la admisión y sacar adelante las matemáticas de la carrera.</p>
@@ -205,7 +211,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
     lamina('#f5e6c0', 'Libros de admisión', `<p class="pz-lam-k">Libros de admisión</p><h2>El examen, también en papel</h2><p class="pz-lead">Dos libros de razonamiento lógico y dos de comprensión lectora. Impresos a color, con envío.</p>
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los libros de admisión">Quiero los libros</button><button class="btn ghost" type="button" data-pz-ir="#pz-libros">Conocerlos</button></div>`, mancha(libros('pz-est-lam')), 'pz-lam-libros'),
     lamina('#bfe3ff', 'Zuka para instituciones', `<p class="pz-lam-k">Colegios e instituciones</p><h2>Zuka para todo tu colegio</h2><p class="pz-lead">Cupos para tus estudiantes y un portal donde registras, acompañas y ves cómo va cada uno.</p>
-      <div class="pz-ctas"><a class="btn main brand" href="instituciones/">Cotizar</a><button class="btn ghost" type="button" data-pz-ir="#pz-inst">Ver precios</button></div>`, mancha(pzInstMini()), 'pz-lam-inst'),
+      <div class="pz-ctas"><a class="btn main brand" href="instituciones/">Cotizar</a><button class="btn ghost" type="button" data-pz-ir="#pz-inst">Ver precios</button></div>`, `<div class="pz-mini" data-inclina="8">${pzInstMini()}</div>`, 'pz-lam-inst'),
   ];
   const mundo = u => {
     const w = worlds[u.world] || {};
@@ -226,10 +232,10 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
     <section class="pz-hero pz-tinta" aria-roledescription="carrusel" aria-label="Programas destacados">
       <div class="pz-pista">${laminas.join('')}</div>
       <button class="pz-fl pz-ant" type="button" aria-label="Lámina anterior">${pzI('fl')}</button><button class="pz-fl pz-sig" type="button" aria-label="Lámina siguiente">${pzI('fl')}</button>
-      <div class="pz-puntos"><button class="pz-pausa" type="button" aria-label="Pausar el carrusel"></button>${laminas.map((x, i) => `<button type="button" class="pz-pto" aria-label="Lámina ${i + 1} de ${laminas.length}"${i ? '' : ' aria-current="true"'}></button>`).join('')}</div>
+      <div class="pz-puntos"><button class="pz-pausa" type="button" aria-label="Pausar el carrusel"></button>${laminas.map((x, i) => { const n = (x.match(/aria-label="([^"]+)/) || [])[1] || '', tab = PZ_TABS[n] || n; return `<button type="button" class="pz-pto" aria-label="${tab}, lámina ${i + 1} de ${laminas.length}"${i ? '' : ' aria-current="true"'}><span aria-hidden="true">${tab}</span></button>`; }).join('')}</div>
     </section>
     <section class="pz-sec pz-in pz-programas" id="pz-programas">
-      <h2 class="pz-rev">Nuestros programas disponibles</h2>
+      <header class="pz-head pz-rev"><h2>Elige por dónde <em>empiezas</em></h2><p>Cursos, libros, asesorías y un plan para colegios.</p></header>
       <div class="pz-progs">${progs}</div>
       ${prontos.length ? `<p class="pz-prontos"><b>Muy pronto</b>${prontos.map(c => `<span style="--c:${c.color}">${pzEsc(c.name)}</span>`).join('')}</p>` : ''}
     </section>
@@ -519,13 +525,20 @@ const PZ_PASA = 7000;
 function pzCarrusel(el, quieto) {
   const hero = el.querySelector('.pz-hero'), pista = hero.querySelector('.pz-pista'), ls = [...pista.children], ptos = [...hero.querySelectorAll('.pz-pto')], pausa = hero.querySelector('.pz-pausa');
   let i = 0, anda = !quieto, enc = false, reloj = 0;
+  // Cada capa se corre a su ritmo con el paso de la lámina, y las fichas siguen un poco al puntero.
+  let pide = 0;
+  const capas = () => { pide = 0; const w = pista.clientWidth || 1; ls.forEach((l, j) => { const d = pista.scrollLeft / w - j; if (Math.abs(d) < 1.2) l.style.setProperty('--d', d.toFixed(4)); }); };
+  if (!quieto) {
+    pista.addEventListener('scroll', () => { if (!pide) pide = requestAnimationFrame(capas); }, { passive: true });
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) { let va2 = 0, u = null; hero.addEventListener('pointermove', e => { u = e; if (!va2) va2 = requestAnimationFrame(() => { va2 = 0; const b = hero.getBoundingClientRect(); hero.style.setProperty('--mx', ((u.clientX - b.left) / b.width - .5).toFixed(3)); hero.style.setProperty('--my', ((u.clientY - b.top) / b.height - .5).toFixed(3)); }); }); }
+  }
   const marca = k => {
-    i = k; hero.style.backgroundColor = ls[k].dataset.c; hero.classList.toggle('azul', ls[k].classList.contains('pz-azul'));
+    i = k; ls.forEach((l, j) => l.classList.toggle('va', j === k)); hero.style.backgroundColor = ls[k].dataset.c; hero.classList.toggle('azul', ls[k].classList.contains('pz-azul'));
     ls.forEach((l, j) => { l.inert = j !== k; });
     ptos.forEach((b, j) => { if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
   };
   const va = k => pista.scrollTo({ left: ((k + ls.length) % ls.length) * pista.clientWidth, behavior: quieto ? 'auto' : 'smooth' });
-  const para = () => { anda = false; clearInterval(reloj); pausa.hidden = true; };
+  const para = () => { anda = false; clearInterval(reloj); pausa.hidden = true; hero.classList.add('parado'); };   // también las fichas
   let ancho = 0;   // al cambiar de ancho la lámina se queda en su sitio
   const mira = () => { const w = pista.clientWidth; if (w !== ancho) return; const k = Math.max(0, Math.min(ls.length - 1, Math.round(pista.scrollLeft / (w || 1)))); if (k !== i) marca(k); };
   pista.addEventListener('scroll', mira, { passive: true });
