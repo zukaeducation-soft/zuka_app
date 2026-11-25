@@ -21,7 +21,7 @@ GAMES['arma-triangulo'] = (() => {
   }
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => hit(state.legs[i], r));
+    const ok = params.rounds.every((r, i) => !!state.legs?.[i] && hit(state.legs[i], r));
     const solution = params.rounds.map(r => {
       const e = example(r, params.max);
       return `$${tex(r.fn)}\\theta = \\frac{${r.num}}{${r.den}}$${e ? ` (adyacente ${e.a}, opuesto ${e.b})` : ''}`;

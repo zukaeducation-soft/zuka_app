@@ -1,325 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-r-geometria.js
-// Preuniversitario · mundo 2 «Geometría»: evaluación y las seis lecciones, cada una con ocho juegos dibujados con la escena de
-// su explicación (js/games/geo-escena-N.js; spec 2026-11-24-ejercicios-explora) y la zona de examen.
-PU_JUEGOS.push(({ setExam }) => {
-  setExam('pu-geometria', 'Geometría', [
-    ['pu-ge-1', 'Los opuestos por el vértice son iguales y los vecinos suman 180°.',
-      play('tijera-angulos', 'Deduce el ángulo', { rounds: [{ kind: 'sup', given: 70 }, { kind: 'opp', given: 40 }] }, 'El vecino de 70° mide 110°: juntos llenan media vuelta, 180°.', { hint: 'Vecinos: media vuelta.' })],
-    ['pu-ge-1', 'Los ángulos de un polígono de n lados suman (n − 2)·180°.',
-      play('suma-poligono', 'Parte el polígono', { rounds: [{ n: 10 }, { n: 9 }] }, 'Decágono: $10 - 2 = 8$ triángulos, $8 \\cdot 180^\\circ = 1\\,440^\\circ$.', { hint: 'Cuenta triángulos.' })],
-    ['pu-ge-2', 'En un triángulo los tres ángulos suman 180°.',
-      play('apice-triangulo', 'El ángulo que falta', { rounds: [{ mode: 'falta', A: 45, C: 80 }] }, 'B = 180° − 125° = 55°.', { hint: 'Completa media vuelta.' })],
-    ['pu-ge-2', 'Pitágoras: pie² + altura² = largo².',
-      play('escalera-pared', 'Apoya la escalera', { rounds: [{ L: 25, h: 24 }] }, 'Pie a 7: 7-24-25.', { hint: 'Busca una terna.' })],
-    ['pu-ge-3', 'Las longitudes por k, el área por k² y el volumen por k³.',
-      play('factor-area', 'Escala la figura', { rounds: [{ kind: 'area', side: 1, target: 25 }] }, 'De 1 a 25 cuadritos: k = 5.', { hint: 'Raíz del cociente.' })],
-    ['pu-ge-3', 'Rectas paralelas cortan segmentos proporcionales (Tales).',
-      play('tales-rectas', 'Tales', { rounds: [{ a: 3, b: 2, c: 6 }] }, '3/2 = 6/x: x = 4.', { hint: 'Mismo factor.' })],
-    ['pu-ge-4', 'El paralelogramo es base por altura, no por el lado inclinado.',
-      play('corta-paralelogramo', 'Base del paralelogramo', { rounds: [{ h: 4, slant: 5, target: 36 }] }, 'Base 9: 9 · 4 = 36.', { hint: 'Usa la altura.' })],
-    ['pu-ge-4', 'L = 2πr y A = πr²; el diámetro es dos radios.',
-      play('mide-circulo', 'Mide el círculo', { rounds: [{ ask: 'A', target: 25 }] }, 'Área 25π: r = 5.', { hint: 'Raíz cuadrada.' })],
-    ['pu-ge-5', 'Lo sombreado es la figura grande menos la de adentro.',
-      play('sombreado-resta', 'Ajusta lo de adentro', { rounds: [{ s: 8, kind: 'sq', target: 55 }] }, '64 − 9 = 55: lado 3.', { hint: 'Grande menos chica.' })],
-    ['pu-ge-5', 'Con la base sobre la cuadrícula, la altura es la distancia del vértice.',
-      play('triangulo-cuadricula', 'Triángulo en cuadrícula', { rounds: [{ b: 5, target: 15 }] }, 'Altura 6: 5 · 6 / 2 = 15.', { hint: 'Doble del área entre la base.' })],
-    ['pu-ge-6', 'Prismas y cilindros: base por altura.',
-      play('prisma-capas', 'Volumen por capas', { rounds: [{ base: 'circ', dims: [3], target: 45 }] }, '9π · 5 = 45π.', { hint: 'Área de la base primero.' })],
-    ['pu-ge-6', 'Conos y pirámides: un tercio de base por altura.',
-      play('cono-tercio', 'El cono', { rounds: [{ base: 'rect', dims: [3, 4], target: 20 }] }, '⅓ · 12 · 5 = 20.', { hint: 'Por tres, entre la base.' })],
-  ]);
-});
-
-// Mundo 2 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
-  setLesson('pu-ge-1', [
-    play('vecinos-razon', 'Dos ángulos vecinos completan una recta. Gira el rayo hasta que el de la derecha sea **4 veces** el dorado.', { k: 4 },
-      'Son cinco partes iguales en media vuelta: $180^\\circ \\div 5 = 36^\\circ$. El dorado mide $36^\\circ$ y el otro, $4 \\cdot 36^\\circ = 144^\\circ$.',
-      { hint: 'Si el dorado es una parte, el otro son cuatro. ¿En cuántas partes iguales queda la media vuelta?' }),
-    play('tres-parientes', 'En los tres dibujos el ángulo con número mide $28^\\circ$. ¿Cuánto mide el dorado en cada uno?', { a: 28, fichas: ['62°', '152°', '28°', '72°', '118°'] },
-      'Con su complementario hace una esquina recta: $90 - 28 = 62^\\circ$. Con su suplementario, media vuelta: $180 - 28 = 152^\\circ$. El opuesto por el vértice es igual: $28^\\circ$.',
-      { hint: 'Mira qué forman juntos: una esquina recta, una recta completa o una equis.' }),
-    play('cruce-ocho', 'Las dos horizontales son paralelas. Con un solo ángulo se sabe cuánto miden los demás: pon los cuatro que faltan.', { a: 72, fichas: ['72°', '72°', '72°', '108°', '108°', '18°'] },
-      'El correspondiente, el alterno interno (forma una Z) y el opuesto por el vértice miden lo mismo, $72^\\circ$. El conjugado interno, del mismo lado y entre las paralelas, completa $180^\\circ$: mide $108^\\circ$.',
-      { hint: 'Los dos cruces son idénticos. Decide si cada ángulo está en la misma esquina, forma una Z o queda del mismo lado entre las paralelas.' }),
-    play('conjugados-justos', 'Inclina la transversal hasta que el ángulo dorado mida **40° más** que el de abajo.', { dif: 40 },
-      'Son conjugados internos: suman $180^\\circ$. Si el menor es $x$, $x + (x + 40) = 180$ y $x = 70^\\circ$; el dorado mide $110^\\circ$.',
-      { hint: 'Entre los dos completan media vuelta. Aparta primero los 40° que le sobran a uno y reparte el resto.' }),
-    play('tercer-angulo', 'El techo de una casa debe abrir arriba $76^\\circ$ y tener los dos ángulos de abajo **iguales**. Ajústalo.', { top: 76 },
-      'Los tres suman $180^\\circ$: para los de abajo quedan $180 - 76 = 104^\\circ$, la mitad para cada uno, $52^\\circ$.',
-      { hint: 'Primero mira cuánto queda de media vuelta después de quitar el ángulo de arriba.' }),
-    play('exterior-alcanza', 'Corre el vértice de la derecha hasta que el ángulo **exterior** mida $130^\\circ$.', { a: 75, ext: 130 },
-      'El exterior es la suma de los dos interiores lejanos: $75^\\circ + 55^\\circ = 130^\\circ$.',
-      { hint: 'El ángulo exterior reúne los dos ángulos de adentro que no lo tocan. Uno ya lo conoces.' }),
-    play('poligono-regular', 'En un polígono regular cada ángulo mide $156^\\circ$. ¿Cuántos lados tiene?', { ang: 156 },
-      'Con $n$ lados salen $n - 2$ triángulos y la suma se reparte entre $n$ ángulos: $(n - 2) \\cdot 180 = 156n$ da $24n = 360$ y $n = 15$.',
-      { hint: 'Prueba un número de lados: cuenta los triángulos, multiplica por 180° y reparte entre los ángulos.' }),
-    play('lanza-angulo', 'El faro gira desde la derecha. Dale el ángulo que se pide y suéltalo. Puedes fallar **una** vez.', { tiros: [
-      { q: 'El vecino de $155^\\circ$ sobre una recta', r: 25, c: '180^\\circ - 155^\\circ', e: { 155: 'Ese es el dato: falta lo que completa la recta.' } },
-      { q: 'El tercer ángulo de un triángulo con $25^\\circ$ y $85^\\circ$', r: 70, c: '180^\\circ - 25^\\circ - 85^\\circ', e: { 110: 'Esa es la suma de los otros dos.' } },
-      { q: 'El conjugado interno de $95^\\circ$, entre paralelas', r: 85, c: '180^\\circ - 95^\\circ', e: { 95: 'Los conjugados no son iguales: suman 180°.' } }] },
-      'Vecino: $180 - 155 = 25^\\circ$. Tercer ángulo: $180 - 110 = 70^\\circ$. Conjugado: $180 - 95 = 85^\\circ$. En los tres casos se completa media vuelta.',
-      { hint: 'Los tres casos completan lo mismo. Piensa cuánto suman los ángulos de la frase.' }),
-    sol('Dos rectas paralelas son cortadas por una transversal. Dos ángulos conjugados internos (los que quedan entre las paralelas, del mismo lado de la transversal) miden $4x + 10$ y $2x + 20$ grados. ¿Cuánto mide cada uno?',
-      ['Los conjugados internos suman [[180]]°', '$(4x + 10) + (2x + 20) = 180$ da $x =$ [[25]]', 'Los ángulos miden $4 \\cdot 25 + 10 =$ [[110]]° y $2 \\cdot 25 + 20 =$ [[70]]°'],
-      ['90', '30', '360'],
-      'Entre paralelas, los conjugados internos son suplementarios. $6x + 30 = 180$ da $x = 25$; los ángulos son $110^\\circ$ y $70^\\circ$, que suman $180^\\circ$.',
-      'No son iguales: están del mismo lado de la transversal. Piensa cuánto suman y arma la ecuación.'),
-    err('Un reloj de agujas marca las 2:20. ¿Cuánto mide el ángulo menor que forman las dos agujas?',
-      ['La vuelta tiene 60 minutos: el minutero avanza $6^\\circ$ por minuto y a los 20 minutos está en $120^\\circ$ (contando desde el 12)', 'El horario está sobre el 2: $2 \\cdot 30^\\circ = 60^\\circ$', 'El ángulo entre las agujas es $120^\\circ - 60^\\circ = 60^\\circ$'], 1,
-      ['El horario avanza $30^\\circ$ en una hora, medio grado por minuto: está en $60^\\circ + 20 \\cdot 0.5^\\circ = 70^\\circ$', 'El horario ya está en la mitad entre el 2 y el 3: en $75^\\circ$', 'El horario avanza $6^\\circ$ por minuto: está en $60^\\circ + 120^\\circ = 180^\\circ$'],
-      'El horario no se queda quieto en el 2: en 60 minutos pasa del 2 al 3, o sea $30^\\circ$ por hora, medio grado por minuto. A las 2:20 lleva un tercio del camino: está en $70^\\circ$. El ángulo es $120^\\circ - 70^\\circ = 50^\\circ$.',
-      'Mira un reloj a las 2:20: ¿el horario apunta justo al 2, o ya se movió un poco hacia el 3?'),
-    opc('En un triángulo, dos ángulos interiores miden $48^\\circ$ y $67^\\circ$. El ángulo exterior en el tercer vértice mide:',
-      ['$65^\\circ$', '$115^\\circ$', '$125^\\circ$', '$245^\\circ$'], 1,
-      'El tercer ángulo interior mide $180 - 48 - 67 = 65^\\circ$ y su exterior, $180 - 65 = 115^\\circ$: lo mismo que $48 + 67$.',
-      'El ángulo exterior y el interior del mismo vértice forman una línea recta.'),
-  ]);
-
-  setLesson('pu-ge-2', [
-    play('cuadrado-catetos', 'El cuadrado sobre la hipotenusa debe valer **85**, y los dos catetos tienen que ser mayores que 3.', { c2: 85, mas: 3 },
-      '$6^2 + 7^2 = 36 + 49 = 85$. También $2^2 + 9^2 = 85$, pero 2 no es mayor que 3.',
-      { hint: 'Haz la lista de cuadrados: 16, 25, 36, 49, 64… y busca dos que juntos sumen lo pedido.' }),
-    play('cateto-falta', 'Un cable de **26 m** baja de la punta de un mástil hasta una estaca a **10 m** del pie. Dale al mástil su altura.', { c: 26, b: 10 },
-      'El cable es la hipotenusa: $26^2 - 10^2 = 676 - 100 = 576$ y $\\sqrt{576} = 24$ m. Restar los lados, $26 - 10$, no sirve.',
-      { hint: '¿El cable es un cateto o el lado más largo? De eso depende si los cuadrados se suman o se restan.' }),
-    play('lados-familia', 'Cada triángulo es rectángulo y le falta un lado. Pon las medidas.', { tri: [{ a: 12, b: 16 }, { a: 30, h: 50 }, { a: 27, b: 36 }], fichas: ['20', '40', '45', '28', '63', '58'] },
-      'Los tres son 3-4-5 agrandados: por 4, $12, 16, 20$; por 10, $30, 40, 50$; por 9, $27, 36, 45$.',
-      { hint: 'Divide los dos lados conocidos entre el mismo número y mira si aparecen 3, 4 o 5.' }),
-    play('diagonal-cuadrado', 'Una ventana cuadrada mide 10 dm de lado. Corta la cinta que va de una esquina a la **opuesta**, lo más justa que puedas.', { lado: 10 },
-      'La diagonal es $10\\sqrt2 = \\sqrt{200}$. Como $14^2 = 196$ y $14.5^2 = 210.25$, mide unos $14.1$: la marca de 14 es la más justa.',
-      { hint: 'El cuadrado de la diagonal vale lo que los dos cuadrados de los lados juntos. ¿Qué número por sí mismo se acerca?' }),
-    play('equilatero-partes', 'Un triángulo equilátero se parte por la mitad. Pon el lado, la media base y la altura.', { per: 36, fichas: ['12', '6', '6√3', '12√3', '6√2', '18'] },
-      'Cada lado mide $36 \\div 3 = 12$ y la media base, $6$. La altura es $\\sqrt{12^2 - 6^2} = \\sqrt{108} = 6\\sqrt3$: es el triángulo $x, x\\sqrt3, 2x$.',
-      { hint: 'Empieza por el lado. La altura cae en la mitad de la base y forma un triángulo de 30°, 60° y 90°.' }),
-    play('a-diez-pasos', 'Pon la banderita exactamente a **10** cuadros de A en línea recta, pero en diagonal: ni en su fila ni en su columna.', { A: [1, 1], d: 10 },
-      'Hacen falta dos catetos con $a^2 + b^2 = 100$: $6$ y $8$. Sirven los puntos a 6 de lado y 8 de alto, o al revés.',
-      { hint: 'La distancia es la hipotenusa. Busca dos cuadrados que sumen 100.' }),
-    play('dos-pasos', 'De la punta de un poste bajan dos cables: uno de **17 m** hasta 8 m del pie. El otro llega a **20 m** del pie. ¿Cuánto mide?', { c1: 17, b1: 8, b2: 20 },
-      'Primero la altura: $\\sqrt{17^2 - 8^2} = \\sqrt{225} = 15$. Después el otro cable: $\\sqrt{15^2 + 20^2} = \\sqrt{625} = 25$ m.',
-      { hint: 'Los dos triángulos comparten el poste. Halla su altura con el cable que conoces.' }),
-    play('lanza-cuerda', 'Lanza la cuerda con el largo justo del lado que falta. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Catetos 16 y 30: lanza la hipotenusa', a: 16, b: 30, r: 34 },
-      { q: 'Hipotenusa 39 y cateto 36: lanza el otro cateto', h: 39, b: 36, r: 15 },
-      { q: 'Hipotenusa 37 y cateto 35: lanza el otro cateto', h: 37, b: 35, r: 12 }] },
-      '$\\sqrt{16^2 + 30^2} = \\sqrt{1156} = 34$; $\\sqrt{39^2 - 36^2} = \\sqrt{225} = 15$; $\\sqrt{37^2 - 35^2} = \\sqrt{144} = 12$.',
-      { hint: 'Si buscas la hipotenusa los cuadrados se suman; si buscas un cateto, se restan. Al final va la raíz.' }),
-    sol('Una antena de 24 m de altura se sostiene con dos cables iguales. Cada cable va desde la punta de la antena hasta un punto del suelo que está a 7 m de la base. ¿Cuántos metros de cable se necesitan en total?',
-      ['Cada cable es una hipotenusa: $7^2 + 24^2 =$ [[625]]', 'Un cable mide $\\sqrt{625} =$ [[25]] m', 'Los dos cables: $2 \\cdot 25 =$ [[50]] m'],
-      ['31', '62', '49'],
-      'La antena y el suelo forman un ángulo recto: $49 + 576 = 625$ y $\\sqrt{625} = 25$. Sumar $7 + 24 = 31$ no da la hipotenusa.',
-      'Dibuja el triángulo: la antena y el suelo son los catetos. ¿Qué lado es el cable?'),
-    err('Un triángulo isósceles tiene dos lados de 10 cm y la base de 12 cm. ¿Cuál es su área?',
-      ['La altura cae en la mitad de la base: cada mitad mide 6 cm', 'Altura: $h^2 = 10^2 + 6^2 = 136$', '$h = \\sqrt{136} \\approx 11.7$ cm', 'Área: $\\tfrac{12 \\cdot 11.7}{2} \\approx 70$ cm²'], 1,
-      ['Altura: $h^2 = 10^2 - 6^2 = 64$, así que $h = 8$ cm', 'Altura: $h^2 = 10^2 - 12^2$', 'Altura: $h = 10 - 6 = 4$ cm'],
-      'El lado de 10 cm es la hipotenusa del triángulo que forma la altura: se resta, $100 - 36 = 64$, $h = 8$. Área: $\\tfrac{12 \\cdot 8}{2} = 48$ cm². Una altura mayor que el lado inclinado es imposible.',
-      'En el triángulo que forma la altura, ¿cuál es el lado más largo? Ese es la hipotenusa.'),
-    opc('La diagonal de un rectángulo mide 13 cm y uno de sus lados mide 5 cm. El perímetro del rectángulo, en centímetros, es:',
-      ['30', '36', '34', '60'], 2,
-      'El otro lado es $\\sqrt{13^2 - 5^2} = \\sqrt{144} = 12$. Perímetro: $2(5 + 12) = 34$.',
-      'La diagonal parte el rectángulo en dos triángulos rectángulos. Halla primero el lado que falta.'),
-  ]);
-
-  setLesson('pu-ge-3', [
-    play('foto-fiel', 'Amplía la foto de 6 por 4 hasta que mida **10 de alto**, sin deformarla.', { w0: 6, h0: 4, h: 10 },
-      'El alto creció $10 \\div 4 = 2.5$ veces, y el ancho también: $6 \\cdot 2.5 = 15$.',
-      { hint: 'Mira cuántas veces creció el alto. El ancho debe crecer esas mismas veces, no sumar lo mismo.' }),
-    play('sombra-poste', 'Una vara de 1.5 m da una sombra de 2 m. A la misma hora, un poste da **10 m** de sombra. Dale su altura.', { h0: 1.5, s0: 2, s: 10 },
-      'La sombra es $10 \\div 2 = 5$ veces la otra, así que el poste mide $5 \\cdot 1.5 = 7.5$ m.',
-      { hint: '¿Cuántas veces cabe la sombra de la vara en la del poste? Con la altura pasa lo mismo.' }),
-    play('tales-corte', 'Tres rectas paralelas parten una recta en trozos de 4 y 10; en la otra, el primer trozo mide 6. Pon el punto donde pasa la **tercera** paralela.', { a: 4, b: 10, c: 6 },
-      'Los segmentos guardan la misma razón: $\\tfrac{4}{10} = \\tfrac{6}{x}$ da $x = 15$.',
-      { hint: 'A la izquierda, el segundo trozo es 2.5 veces el primero. A la derecha pasa igual.' }),
-    play('escala-mapa', 'En el mapa, el camino mide 8 cm. Estira el camino real hasta su largo, en kilómetros.', { den: 25000, cm: 8 },
-      '$8 \\cdot 25\\,000 = 200\\,000$ cm, que son $2\\,000$ m: $2$ km.',
-      { hint: 'La escala dice cuántos centímetros reales hay por cada centímetro del mapa. Un kilómetro son 100 000 cm.' }),
-    play('papel-factor', 'Un mosaico cuadrado se agrandó y ahora usa **36 veces** las baldosas de antes. ¿Por cuánto se multiplicó su lado?', { veces: 36 },
-      'El área crece con el cuadrado del factor: $6^2 = 36$, así que el lado se multiplicó por 6.',
-      { hint: 'Si el lado se triplica, caben 3 filas de 3. Busca cuántas filas de cuántas hacen 36.' }),
-    play('tres-crecimientos', 'Un cubo se copia con la arista **5 veces** más larga. ¿Por cuánto se multiplica lo que gasta en cada material?', { k: 5, fichas: ['× 5', '× 25', '× 125', '× 10', '× 15'] },
-      'La cinta mide largo: por 5. La pintura cubre área: $5^2 = 25$. La arena llena volumen: $5^3 = 125$.',
-      { hint: 'Decide qué mide cada material: un largo, un área o un volumen.' }),
-    play('achica-area', 'Haz una copia con la **misma forma** y la **cuarta parte** del área.', { w: 8, h: 6, div: 4 },
-      'Si cada lado se parte a la mitad, el área se multiplica por $\\tfrac12 \\cdot \\tfrac12 = \\tfrac14$: la copia mide 4 por 3.',
-      { hint: 'No dividas cada lado entre 4. Piensa cuántas copias caben a lo largo y cuántas a lo alto.' }),
-    play('lanza-escala', 'Manda el dron al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Plano $1 : 300$. Una pared mide 5 cm: ¿cuántos metros reales?', r: 15, c: '5 \\cdot 300 \\div 100', e: { 5: 'Un centímetro de este plano son 3 metros.' } },
-      { q: 'Lados 5 y 8; en la copia semejante, el de 5 mide 15. ¿Cuánto mide el de 8?', r: 24, c: '8 \\cdot 3', e: { 18: 'Sumaste 10; los lados se multiplican.' } },
-      { q: 'Una estaca de 2 m da 5 m de sombra; un muro da 20 m. ¿Cuánto mide el muro?', r: 8, c: '2 \\cdot 4', e: { 17: 'Restaste 3; las sombras guardan la razón, no la diferencia.' } }] },
-      'A escala $1 : 300$ cada centímetro son 3 m: 15 m. La razón es $15 \\div 5 = 3$ y $8 \\cdot 3 = 24$. La sombra es 4 veces la otra: $2 \\cdot 4 = 8$ m.',
-      { hint: 'Busca cada vez por cuánto se multiplicó un dato, y multiplica el otro por lo mismo.' }),
-    sol('En un plano a escala $1 : 200$, un salón rectangular mide 4 cm por 3 cm. ¿Cuál es el área real del salón, en metros cuadrados?',
-      ['Cada centímetro del plano son 200 cm reales, es decir, [[2]] m', 'Largo real: $4 \\cdot 2 =$ [[8]] m; ancho real: $3 \\cdot 2 =$ [[6]] m', 'Área real: $8 \\cdot 6 =$ [[48]] m²'],
-      ['12', '24', '2 400'],
-      'Primero se pasan las longitudes a tamaño real y después se multiplica. Multiplicar el área del plano (12 cm²) por 200 no sirve: el área crece con el cuadrado de la escala.',
-      'La escala es de longitudes. Convierte cada lado antes de calcular el área.'),
-    err('Dos triángulos son semejantes. Los lados del menor miden 6 cm, 8 cm y 10 cm, y el lado más corto del mayor mide 15 cm. ¿Cuál es el perímetro del triángulo mayor?',
-      ['Factor de semejanza: $15 \\div 6 = 2.5$', 'Perímetro del menor: $6 + 8 + 10 = 24$ cm', 'El perímetro crece con el cuadrado del factor: $24 \\cdot 2.5^2 = 150$ cm'], 2,
-      ['El perímetro es una longitud: crece con el factor, $24 \\cdot 2.5 = 60$ cm', 'El perímetro del mayor es $24 + 2.5 = 26.5$ cm', 'El perímetro del mayor es $24 \\cdot 15 = 360$ cm'],
-      'Las longitudes (lados, alturas, perímetros) se multiplican por $k$; solo las áreas se multiplican por $k^2$. Los lados son 15, 20 y 25: suman 60 cm.',
-      '¿El perímetro es una longitud o un área? De eso depende cómo crece.'),
-    opc('Si todos los lados de un terreno rectangular se triplican, su área queda multiplicada por:',
-      ['3', '6', '27', '9'], 3,
-      'El largo se multiplica por 3 y el ancho también: el área, por $3 \\cdot 3 = 9$.',
-      'Prueba con un rectángulo pequeño, por ejemplo de $1 \\times 2$, y triplica sus dos lados.'),
-  ]);
-
-  setLesson('pu-ge-4', [
-    play('misma-area', 'Sube el vértice hasta que el triángulo ocupe **lo mismo** que el rectángulo.', { w: 10, H: 4, b: 8 },
-      'El rectángulo vale $10 \\cdot 4 = 40$. El triángulo, $\\tfrac{8 \\cdot h}{2} = 40$: la altura es $h = 10$.',
-      { hint: 'El triángulo es la mitad de su caja. ¿Cuánto debe valer la caja para que la mitad alcance?' }),
-    play('inclina-marco', 'Un marco de varillas de 9 y 10 se puede inclinar. Acuéstalo hasta que encierre un área de **72**.', { b: 9, l: 10, area: 72 },
-      'El área es base por altura: $72 \\div 9 = 8$ de altura. La varilla de 10 es la hipotenusa: $\\sqrt{10^2 - 8^2} = 6$, lo que se corrió.',
-      { hint: 'Primero halla la altura que necesita. Luego mira el triángulo que forman la varilla, la altura y lo que se corrió.' }),
-    play('trapecio-gemelo', 'Las dos figuras tienen la misma altura. Estira el rectángulo hasta que ocupe **lo mismo** que el trapecio.', { B: 11, b: 5 },
-      'El trapecio vale el promedio de las bases por la altura: $\\tfrac{11 + 5}{2} = 8$. El rectángulo debe medir 8 de base.',
-      { hint: 'Lo que sobra de la base grande debe llenar lo que le falta a la pequeña: busca el punto medio.' }),
-    play('radio-area', 'Una plaza circular ocupa $36\\pi$ m². Arrastra el borde hasta su radio.', { area: 36 },
-      '$\\pi r^2 = 36\\pi$, así que $r^2 = 36$ y $r = 6$. Con radio 18, $36\\pi$ sería el borde.',
-      { hint: 'El área usa el radio por sí mismo. ¿Qué número por sí mismo da 36?' }),
-    play('arco-justo', 'El radio mide 9. Abre el sector hasta que su **borde curvo** mida $5\\pi$.', { r: 9, arco: 5 },
-      'El borde entero mide $2\\pi \\cdot 9 = 18\\pi$. El arco es $\\tfrac{5}{18}$ de la vuelta: $\\tfrac{5}{18} \\cdot 360^\\circ = 100^\\circ$.',
-      { hint: 'Halla cuánto mide el borde del círculo entero y qué fracción de él es el arco.' }),
-    play('borde-mixto', 'Una puerta es un rectángulo de 6 por 10 con medio círculo encima. ¿Cuánto mide su **borde**?', { w: 6, h: 10, fichas: ['3π', '6π', '26', '32', '26 + 3π', '32 + 3π'] },
-      'Por fuera se recorren dos lados de 10 y uno de 6: 26. La curva es media circunferencia de diámetro 6: $3\\pi$. El borde mide $26 + 3\\pi$.',
-      { hint: 'Sigue el borde con el dedo. El lado que comparten las dos figuras queda por dentro.' }),
-    play('rombo-diagonales', 'Una diagonal del rombo mide 8. Estira la otra hasta que el área sea **40**.', { d: 8, area: 40 },
-      'El rombo es la mitad de la caja de sus diagonales, $\\tfrac{D \\cdot d}{2}$: $\\tfrac{D \\cdot 8}{2} = 40$ da $D = 10$.',
-      { hint: 'Imagina la caja que lo rodea, con los lados del largo de las diagonales. El rombo ocupa la mitad.' }),
-    play('rueda-lanza', 'Dale a la rueda las vueltas justas para parar en la bandera. Puedes fallar **una** vez.', { tiros: [
-      { q: 'La rueda tiene **radio** 2 y debe avanzar $12\\pi$', d: 'radio 2', m: '12π', r: 3, c: '12\\pi \\div 4\\pi', e: { 6: 'Usaste el radio: una vuelta mide dos radios por π.' } },
-      { q: 'La rueda tiene **diámetro** 3 y debe avanzar $18\\pi$', d: 'diámetro 3', m: '18π', r: 6, c: '18\\pi \\div 3\\pi', e: { 3: 'Ya es el diámetro: no lo dupliques.' } },
-      { q: 'La rueda tiene **radio** 5 y debe avanzar $40\\pi$', d: 'radio 5', m: '40π', r: 4, c: '40\\pi \\div 10\\pi', e: { 8: 'Usaste el radio: una vuelta mide dos radios por π.' } }] },
-      'Una vuelta avanza $2\\pi r = \\pi d$. Son $12\\pi \\div 4\\pi = 3$, $18\\pi \\div 3\\pi = 6$ y $40\\pi \\div 10\\pi = 4$ vueltas.',
-      { hint: 'En una vuelta la rueda avanza lo que mide su borde. Mira si te dieron el radio o el diámetro.' }),
-    sol('Una pista de atletismo está formada por un rectángulo de 100 m por 60 m y dos semicírculos pegados a los lados de 60 m. Tomando $\\pi \\approx 3$, ¿cuánto mide una vuelta completa a la pista?',
-      ['Los dos semicírculos forman un círculo de diámetro [[60]] m', 'Su longitud es $\\pi \\cdot d \\approx 3 \\cdot 60 =$ [[180]] m', 'Los dos tramos rectos suman $2 \\cdot 100 =$ [[200]] m', 'La vuelta mide $180 + 200 =$ [[380]] m'],
-      ['320', '120', '90'],
-      'El borde de la pista son dos rectas de 100 m y dos medias circunferencias que juntas hacen una entera. Los lados de 60 m quedan por dentro: no se recorren.',
-      'Sigue el borde con el dedo: ¿qué tramos son rectos y cuáles curvos? Los lados cortos del rectángulo no hacen parte del borde.'),
-    err('Un aspersor riega un sector circular de 6 m de radio y un ángulo de $60^\\circ$. ¿Cuál es el área que riega?',
-      ['El círculo completo tiene área $\\pi \\cdot 6^2 = 36\\pi$ m²', 'Un ángulo de $60^\\circ$ es $\\tfrac{60}{180} = \\tfrac13$ del círculo', 'Área regada: $\\tfrac13 \\cdot 36\\pi = 12\\pi$ m²'], 1,
-      ['Un ángulo de $60^\\circ$ es $\\tfrac{60}{360} = \\tfrac16$ del círculo', 'Un ángulo de $60^\\circ$ es $\\tfrac{60}{120} = \\tfrac12$ del círculo', 'Un ángulo de $60^\\circ$ es $\\tfrac{60}{90} = \\tfrac23$ del círculo'],
-      'La vuelta completa son $360^\\circ$: $60^\\circ$ es la sexta parte. El área regada es $\\tfrac16 \\cdot 36\\pi = 6\\pi$ m².',
-      '¿Cuántos grados tiene la vuelta completa? El sector es esa fracción del círculo.'),
-    opc('Una cometa tiene forma de rombo; sus diagonales, que son los dos palos que la arman, miden 50 cm y 30 cm. La tela que cubre la cometa, en cm², es:',
-      ['1500', '750', '80', '375'], 1,
-      'Las diagonales parten el rombo en cuatro triángulos que ocupan la mitad del rectángulo de $50 \\times 30$: $\\tfrac{50 \\cdot 30}{2} = 750$ cm². Con 1500 se cuenta el rectángulo entero.',
-      'Dibuja el rectángulo que rodea la cometa, con lados iguales a los dos palos: ¿qué parte de él ocupa el rombo?'),
-  ]);
-
-  setLesson('pu-ge-5', [
-    play('marco-hueco', 'A la lámina de 9 por 8 se le abre un hueco **cuadrado**. Ajústalo hasta que queden **47** cuadros.', { w: 9, h: 8, area: 47 },
-      'La lámina vale $72$. Se quitan $72 - 47 = 25$, un cuadrado de lado 5.',
-      { hint: 'Calcula cuánto hay que quitar. ¿Qué cuadrado ocupa eso?' }),
-    play('anillo-justo', 'A un disco de radio 7 se le abre un hueco redondo. Ajústalo hasta que el **área** del anillo sea $40\\pi$.', { R: 7, area: 40 },
-      'El círculo grande vale $49\\pi$. El hueco, $49\\pi - 40\\pi = 9\\pi$: su radio es 3.',
-      { hint: 'Se restan áreas, no radios. ¿Cuánto debe valer el círculo del hueco?' }),
-    play('vertice-lejos', 'La base está **parada** y mide 6. Mueve el vértice hasta que el triángulo tenga área **24**.', { base: 6, area: 24 },
-      '$\\tfrac{6 \\cdot h}{2} = 24$ da $h = 8$: el vértice debe alejarse 8 cuadros de la base. Subirlo o bajarlo no cambia el área.',
-      { hint: 'Con la base vertical, la altura es horizontal. Cuéntala desde la base, no desde el borde de la hoja.' }),
-    play('caja-torcida', 'El triángulo T está torcido. Pon el área de las tres esquinas que sobran en la caja y la de T.', { w: 7, h: 6, ya: 2, xc: 3, fichas: ['7', '12', '6', '17', '14', '24', '25'] },
-      'La caja vale $7 \\cdot 6 = 42$. Las esquinas: $\\tfrac{7 \\cdot 2}{2} = 7$, $\\tfrac{4 \\cdot 6}{2} = 12$ y $\\tfrac{4 \\cdot 3}{2} = 6$. Queda $42 - 25 = 17$.',
-      { hint: 'Cada esquina es un triángulo rectángulo: la mitad de un rectángulo. La figura es lo que queda de la caja.' }),
-    play('techo-justo', 'La casa, con techo y todo, debe medir **27** cuadros. Mueve la punta del techo.', { w: 6, h: 3, area: 27 },
-      'La pared vale $6 \\cdot 3 = 18$; al techo le tocan 9. $\\tfrac{6 \\cdot h}{2} = 9$ da $h = 3$, esté donde esté la punta.',
-      { hint: 'Aparta primero la pared. El techo es un triángulo con la misma base.' }),
-    play('bandera-onda', 'Las dos ondas de la bandera son iguales. Estira el rectángulo hasta que ocupe **lo mismo** que ella.', { w: 9, h: 6 },
-      'La onda que sobra a la derecha llena justo la que falta a la izquierda: queda un rectángulo de 9 por 6, de área 54.',
-      { hint: 'Antes de calcular, imagina que pasas la pieza que sobra de un lado al otro.' }),
-    play('anden-ancho', 'El jardín de 6 por 4 lleva un andén parejo por todo el borde. Ensánchalo hasta que **el andén** mida **56**.', { w: 6, h: 4, area: 56 },
-      'Andén y jardín suman $56 + 24 = 80$, un rectángulo de 10 por 8: creció 4 en cada lado, 2 por cada costado.',
-      { hint: 'El andén agrega su ancho a los dos costados. Prueba con un ancho de 1 y mira cuánto mide el rectángulo de afuera.' }),
-    play('llena-lanza', 'Lanza la pintura justa para cubrir lo sombreado. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Un cuadrado de lado 6 con un hueco de 3 por 4', f: { w: 6, h: 6, hueco: [3, 4] }, r: 24, c: '36 - 12', e: { 36: 'Falta quitar el hueco.' } },
-      { q: 'Un triángulo de base 8 y altura 6 con un hueco de 4 por 2', f: { w: 8, h: 6, tri: true, hueco: [4, 2] }, r: 16, c: '24 - 8', e: { 24: 'Falta quitar el hueco.', 40: 'El triángulo vale la mitad de base por altura.' } },
-      { q: 'Un rectángulo de 8 por 5 sin dos esquinas de catetos 2 y 5', f: { w: 8, h: 5, esq: 2 }, r: 30, c: '40 - 5 - 5', e: { 20: 'Cada esquina es medio rectángulo de 2 por 5.', 35: 'Son dos esquinas.' } }] },
-      '$36 - 12 = 24$; $\\tfrac{8 \\cdot 6}{2} - 8 = 16$; y $40 - 2 \\cdot \\tfrac{2 \\cdot 5}{2} = 30$. Siempre la grande menos lo que falta.',
-      { hint: 'Calcula la figura completa y réstale lo blanco. Los triángulos valen la mitad de base por altura.' }),
-    sol('A una lámina cuadrada de 8 cm de lado se le recortan, en las cuatro esquinas, triángulos rectángulos iguales cuyos catetos miden 3 cm. ¿Cuál es el área de la lámina que queda?',
-      ['Área del cuadrado: $8 \\cdot 8 =$ [[64]] cm²', 'Cada triángulo: $\\tfrac{3 \\cdot 3}{2} =$ [[4.5]] cm²', 'Los cuatro triángulos: $4 \\cdot 4.5 =$ [[18]] cm²', 'Queda el cuadrado menos los triángulos: [[46]] cm²'],
-      ['9', '36', '28'],
-      'Lo que queda es el todo menos lo recortado. Cada esquina es medio cuadrado de $3 \\times 3$: 4.5 cm², no 9.',
-      'No intentes medir la figura que queda: calcula el cuadrado completo y lo que se le quitó.'),
-    err('En un círculo de 5 cm de radio se dibuja un cuadrado con sus cuatro vértices sobre la circunferencia. ¿Cuál es el área de la región que queda entre el círculo y el cuadrado?',
-      ['Área del círculo: $\\pi \\cdot 5^2 = 25\\pi$ cm²', 'La diagonal del cuadrado es el diámetro: 10 cm', 'Área del cuadrado: $10 \\cdot 10 = 100$ cm²', 'Región: $25\\pi - 100$ cm²'], 2,
-      ['Área del cuadrado: $\\tfrac{10 \\cdot 10}{2} = 50$ cm²', 'Área del cuadrado: $5 \\cdot 5 = 25$ cm²', 'Área del cuadrado: $4 \\cdot 10 = 40$ cm²'],
-      'Los 10 cm son la diagonal, no el lado. Si el lado es $l$, la diagonal es la hipotenusa de un triángulo de catetos $l$ y $l$: $l^2 + l^2 = 10^2$, así que el área $l^2$ vale $\\tfrac{100}{2} = 50$ cm². Es lo mismo que la fórmula del rombo (un cuadrado es un rombo): $\\tfrac{D \\cdot d}{2} = \\tfrac{10 \\cdot 10}{2} = 50$. La región mide $25\\pi - 50$ cm².',
-      'El círculo mide cerca de 78.5 cm². ¿Puede caberle adentro un cuadrado más grande que él?'),
-    opc('En una cuadrícula de cuadros de 1 cm de lado se dibuja el triángulo de vértices $(1, 1)$, $(7, 1)$ y $(4, 5)$. Su área, en cm², es:',
-      ['24', '10', '12', '15'], 2,
-      'La base va de $x = 1$ a $x = 7$: mide 6. La altura va de $y = 1$ a $y = 5$: mide 4. Área: $\\tfrac{6 \\cdot 4}{2} = 12$.',
-      'Dos vértices están a la misma altura: ese lado es la base. La altura es lo que sube el tercer vértice.'),
-  ]);
-
-  setLesson('pu-ge-6', [
-    play('capas-caja', 'La base de la caja es de 4 por 4. Apila capas hasta tener **112** cubitos.', { a: 4, b: 4, vol: 112 },
-      'Cada capa tiene $4 \\cdot 4 = 16$ cubitos y $112 \\div 16 = 7$: siete capas.',
-      { hint: 'Cuenta los cubitos de una sola capa y mira cuántas capas hacen el total.' }),
-    play('cilindro-altura', 'Un tarro cilíndrico de radio 4 debe contener $96\\pi$. Dale su altura.', { r: 4, vol: 96 },
-      'La base vale $\\pi \\cdot 4^2 = 16\\pi$, y $96 \\div 16 = 6$: la altura es 6.',
-      { hint: 'La base es un círculo: usa πr². ¿Cuántas capas de esa base hacen el volumen?' }),
-    play('cono-agua', 'Los **dos** conos llenos se vacían en el cilindro de igual base y altura. Marca hasta dónde sube el agua.', { conos: 2, h: 15 },
-      'Cada cono llena un tercio del cilindro. Dos conos llenan $\\tfrac23$ de 15: el agua llega a 10.',
-      { hint: '¿Cuántos conos iguales hacen falta para llenar ese cilindro?' }),
-    play('piramide-altura', 'La base de la pirámide es un cuadrado de lado 6. Súbela hasta que su volumen sea **72**.', { a: 6, vol: 72 },
-      '$\\tfrac13 \\cdot 36 \\cdot h = 12h = 72$ da $h = 6$. El prisma de esa altura valdría 216.',
-      { hint: 'La pirámide es la tercera parte del prisma de su misma base y altura. Halla primero el volumen de ese prisma.' }),
-    play('caras-caja', 'La caja mide 6 por 3 de base y 2 de alto. Pon el área de cada cara y la de **toda** la piel.', { a: 6, b: 3, h: 2, fichas: ['18', '12', '6', '72', '36', '11'] },
-      'La tapa vale $6 \\cdot 3 = 18$, el frente $6 \\cdot 2 = 12$ y el costado $3 \\cdot 2 = 6$. Hay dos de cada una: $2 \\cdot 36 = 72$.',
-      { hint: 'Cada cara es un rectángulo con dos de las tres medidas. Y cada una tiene su gemela al otro lado.' }),
-    play('cubo-arista', 'Para pintar un cubo por todos lados se cubren **54** cm². Dale su arista.', { sup: 54 },
-      'Son seis caras iguales: $54 \\div 6 = 9$ y $\\sqrt{9} = 3$ cm.',
-      { hint: 'Reparte la pintura entre las caras del cubo. Cada cara es un cuadrado.' }),
-    play('litros-nivel', 'Un tanque tiene fondo de 3 m por 2 m. Se le echan **15 000 litros**. ¿Hasta qué altura sube el agua?', { a: 3, b: 2, litros: 15000 },
-      'Un metro cúbico son 1 000 litros: son 15 m³. El fondo mide 6 m², y $15 \\div 6 = 2.5$ m.',
-      { hint: 'Pasa los litros a metros cúbicos: cada uno son 1 000 litros. Después reparte entre el área del fondo.' }),
-    play('llena-tanque', 'Bombea el agua justa, contada en π, para llenar cada recipiente. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Un **cilindro** de radio 2 y altura 8', t: 'cil', rad: 2, h: 8, r: 32, c: '4\\pi \\cdot 8', e: { 16: 'La base es r por r, no r.' } },
-      { q: 'Un **cono** de radio 3 y altura 4', t: 'cono', rad: 3, h: 4, r: 12, c: '\\tfrac13 \\cdot 9\\pi \\cdot 4', e: { 36: 'Ese es el cilindro; el cono es la tercera parte.', 4: 'La base es π por 3 al cuadrado.' } },
-      { q: 'Una **esfera** que cabe justa en un cilindro de $54\\pi$', t: 'esf', cilindro: 54, r: 36, c: '\\tfrac23 \\cdot 54\\pi', e: { 18: 'Un tercio es el cono; la esfera llena dos tercios.', 27: 'No es la mitad: la esfera llena dos tercios.' } }] },
-      'Cilindro: $4\\pi \\cdot 8 = 32\\pi$. Cono: $\\tfrac13 \\cdot 9\\pi \\cdot 4 = 12\\pi$. Esfera: dos tercios del cilindro, $36\\pi$.',
-      { hint: 'Área de la base por altura en el cilindro; la tercera parte en el cono; dos tercios del cilindro en la esfera.' }),
-    sol('Un acuario con forma de caja rectangular mide 60 cm de largo, 40 cm de ancho y 50 cm de alto. Se llena con agua hasta las tres quintas partes de su altura. ¿Cuántos litros de agua tiene? (1 litro = 1 000 cm³)',
-      ['Altura del agua: $\\tfrac35 \\cdot 50 =$ [[30]] cm', 'Volumen del agua: $60 \\cdot 40 \\cdot 30 =$ [[72 000]] cm³', 'En litros: $72\\,000 \\div 1\\,000 =$ [[72]] litros'],
-      ['120', '120 000', '720'],
-      'El agua forma una caja con la misma base y altura 30 cm. $60 \\cdot 40 \\cdot 50 = 120\\,000$ cm³ es el acuario lleno, no el agua.',
-      'El agua tiene la misma base que el acuario, pero no su misma altura. Halla primero hasta dónde llega.'),
-    err('Un vaso con forma de cono, con la punta hacia abajo, se llena de agua hasta la mitad de su altura. ¿Qué fracción del volumen del vaso ocupa el agua?',
-      ['El agua forma un cono semejante al vaso, con la mitad de la altura', 'Su radio también es la mitad del radio del vaso', 'Con la mitad de la altura, el volumen es la mitad: $\\tfrac12$'], 2,
-      ['El volumen crece con el cubo del factor: $\\left(\\tfrac12\\right)^3 = \\tfrac18$', 'El volumen crece con el cuadrado del factor: $\\left(\\tfrac12\\right)^2 = \\tfrac14$', 'El volumen es $\\tfrac12 \\cdot \\tfrac13 = \\tfrac16$'],
-      'En figuras semejantes el volumen se multiplica por $k^3$. Con $k = \\tfrac12$: la base es un cuarto y la altura la mitad, $\\tfrac14 \\cdot \\tfrac12 = \\tfrac18$.',
-      'Al bajar a la mitad de la altura no solo cambia la altura: mira qué le pasa al círculo de arriba.'),
-    opc('Un tanque cilíndrico de 1 m de radio y 4 m de altura está lleno de agua. Toda el agua se va a pasar a recipientes cúbicos de 1 m de arista. Con $\\pi \\approx 3.14$, la menor cantidad de recipientes que se necesita es:',
-      ['12', '13', '4', '16'], 1,
-      'El tanque tiene $\\pi \\cdot 1^2 \\cdot 4 \\approx 12.56$ m³ y cada cubo recibe 1 m³: con 12 no alcanza, hacen falta 13.',
-      'Calcula el volumen del cilindro y piensa qué pasa con lo que sobra después de llenar los cubos enteros.'),
-  ]);
-
-  addExam('pu-geometria', [
-    ['pu-ge-1', 'Dos ángulos suplementarios suman 180°.',
-      opc('Dos ángulos son suplementarios y uno mide el triple del otro. El menor de los dos mide:', ['$45^\\circ$', '$60^\\circ$', '$30^\\circ$', '$135^\\circ$'], 0,
-        '$x + 3x = 180$ da $x = 45^\\circ$; el otro mide $135^\\circ$.', 'Llama x al menor y escribe cuánto suman los dos.')],
-    ['pu-ge-2', 'En un triángulo rectángulo, la hipotenusa al cuadrado es la suma de los cuadrados de los catetos.',
-      opc('Los catetos de un triángulo rectángulo miden 9 cm y 40 cm. Su hipotenusa, en centímetros, mide:', ['49', '31', '45', '41'], 3,
-        '$81 + 1600 = 1681$ y $\\sqrt{1681} = 41$.', 'Suma los cuadrados de los catetos y busca la raíz; no se suman los catetos.')],
-    ['pu-ge-3', 'La escala dice cuántas unidades reales vale cada unidad del plano.',
-      opc('En un mapa a escala $1 : 50\\,000$, dos pueblos están separados 6 cm. La distancia real entre ellos, en kilómetros, es:', ['3', '30', '0.3', '300'], 0,
-        '$6 \\cdot 50\\,000 = 300\\,000$ cm, que son 3 000 m: 3 km.', 'Multiplica y luego pasa de centímetros a metros y de metros a kilómetros.')],
-    ['pu-ge-4', 'La longitud de la circunferencia es π por el diámetro.',
-      opc('Una rueda de 50 cm de diámetro da 100 vueltas sin resbalar. Con $\\pi \\approx 3.14$, la distancia que recorre es:', ['78.5 m', '314 m', '1 570 m', '157 m'], 3,
-        'Cada vuelta avanza $3.14 \\cdot 50 = 157$ cm; cien vueltas son 15 700 cm: 157 m.', 'En una vuelta la rueda avanza lo que mide su borde. Ojo con las unidades.')],
-    ['pu-ge-5', 'Lo sombreado es la figura grande menos la de adentro.',
-      opc('A un cuadrado de 10 cm de lado se le recorta un círculo de 10 cm de diámetro. El área de lo que queda, en cm², es:', ['$100 - 100\\pi$', '$100 - 25\\pi$', '$100 - 10\\pi$', '$25\\pi$'], 1,
-        'El radio es 5: el círculo mide $25\\pi$ y queda $100 - 25\\pi$.', 'El dato del círculo es el diámetro: halla el radio antes de calcular su área.')],
-    ['pu-ge-6', 'La superficie de un cubo son seis caras cuadradas iguales.',
-      opc('La superficie total de un cubo mide 96 cm². El volumen del cubo, en cm³, es:', ['16', '512', '64', '384'], 2,
-        'Cada cara mide $96 \\div 6 = 16$ cm²: la arista es 4 y el volumen $4^3 = 64$.', 'Reparte la superficie entre las caras para hallar la arista.')],
-  ]);
-});
-;
 //#archivo js/courses/preuda-r-orden.js
 // Preuniversitario · mundo 3 «Acertijos de orden y asignación»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
 // Pistas de orden: orden-kit.js. Cada acertijo tiene una sola solución (lo comprueba tests/preuda-razonamiento.test.js).
@@ -6485,7 +6165,7 @@ const PI_TEMARIO = {
     ['icf-en-gramatica', 'Gramática en Contexto', ['Verbs and tenses', 'Small words that matter', 'Comparing things'], 'Parte 4 · A1 y A2'],
     ['icf-en-corto', 'Textos Cortos', ['Short messages', 'What the text says'], 'Parte 5 · A2'],
     ['icf-en-largo', 'Textos Largos', ['Main idea and details', 'The writer and the reader'], 'Parte 6 · B1'],
-    ['icf-en-vocabulario', 'Vocabulario en Contexto', ['Choosing the right word', 'Word families and connectors'], 'Parte 7 · A2 y B1'],
+    ['icf-en-vocabulario', 'Palabras en Contexto', ['Choosing the right word', 'Word families and connectors'], 'Parte 7 · A2 y B1'],
     ['icf-en-inferencia', 'Inferir y Opinar', ['Reading between the lines', 'Opinions and facts'], 'Partes 5 y 6 · B1'],
   ],
 };
@@ -7159,6 +6839,129 @@ PI_MUNDOS.push((() => {
     ['icf-ma-lineal-3', 'Dos rectas se cruzan donde valen lo mismo.', play('dos-rectas', 'La solución es el punto de las dos rectas', { rounds: [{ e1: [1, 1, 5], e2: [3, -1, 3] }] }, 'El punto (2, 3) cumple las dos.', { hint: 'Desliza el punto por una recta hasta cumplir la otra.' })],
     ['icf-ma-lineal-3', 'El empate: lo que se llevan entre lo que se acercan.', play('encuentro-caminantes', '¿Cuándo se encuentran los dos caminantes?', { rounds: [{ A: [70, 0], B: [50, 160], max: 14 }] }, 'Se acercan 20 por minuto: $160 \\div 20 = 8$.', { hint: 'Mira cuánto se acercan en cada minuto.' })],
     ['icf-ma-lineal-3', 'Después del cruce conviene el que sube menos.', opc('El plan X cobra 15 fijos y 1 por llamada; el Z, 3 por llamada. Para 10 llamadas conviene:', ['X, que cuesta 25', 'Z, que cuesta 13', 'Da lo mismo', 'X, que cuesta 15'], 0, 'X cuesta $15 + 10 = 25$ y Z, 30.', 'Calcula los dos para la cantidad pedida.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-ma-forma.js
+// Preicfes · Matemáticas · mundo 6 «Triángulos y Semejanza» (spec 2026-11-25-preicfes-estructura). Números y contextos propios.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = ICF;
+
+  const l1 = leccion('icf-ma-forma-1', 'Ángulos y desigualdad triangular', guion(
+    ['Media vuelta', 'Dos ángulos vecinos sobre una recta suman 180°. Los opuestos por el vértice son iguales.'],
+    ['Paralelas', 'Una recta que cruza dos paralelas repite los mismos ángulos.'],
+    ['Triángulo', 'Los tres ángulos suman 180°; el exterior vale los dos interiores lejanos.'],
+    ['¿Cierra?', 'Cada lado debe ser menor que la suma de los otros dos.']), [
+    x('vecinos-razon', 'Dos ángulos vecinos completan una recta. Gira el rayo hasta que el de la derecha sea **3 veces** el dorado.', { k: 3 },
+      'Son cuatro partes iguales en 180°: cada una vale 45°, y tres son 135°.', 'Los dos juntos llenan media vuelta: cuenta en cuántas partes iguales queda.'),
+    x('cruce-ocho', 'Las dos horizontales son paralelas. Pon los cuatro ángulos que faltan.', { a: 64, fichas: ['64°', '64°', '64°', '116°', '116°', '26°'] },
+      'El mismo ángulo se repite en el otro cruce; su vecino mide $180^\\circ - 64^\\circ = 116^\\circ$.', 'En cada cruce solo hay dos medidas: el ángulo y su vecino.'),
+    x('tercer-angulo', 'La punta de un tejado debe abrir $84^\\circ$ y tener los dos ángulos de abajo **iguales**. Ajústalo.', { top: 84 },
+      '$180^\\circ - 84^\\circ = 96^\\circ$, repartidos en dos: 48° cada uno.', 'Quita el de arriba a 180° y reparte lo que queda.'),
+    x('exterior-alcanza', 'Corre el vértice de la derecha hasta que el ángulo **exterior** mida $115^\\circ$.', { a: 60, ext: 115 },
+      'El exterior vale los dos interiores lejanos: $60^\\circ + 55^\\circ = 115^\\circ$.', 'El exterior es la suma de los dos ángulos que no lo tocan.'),
+    x('tercer-lado', 'Dos varillas miden **7** y **4**. ¿Entre qué números enteros puede medir la tercera para que el triángulo **cierre**?', { a: 7, b: 4, max: 14 },
+      'Más que la resta, 3, y menos que la suma, 11: de 4 a 10.', 'Si es muy corta no alcanza; si es muy larga, las otras dos no llegan.'),
+    x('cierran-o-no', 'Toca **todas** las ternas que forman un triángulo.', { casos: [{ t: '5, 6 y 10', si: true }, { t: '3, 4 y 8' }, { t: '7, 7 y 13', si: true }, { t: '2, 5 y 7' }, { t: '9, 4 y 6', si: true }], no: 'Alguna de las marcadas no cierra: compara el lado mayor con la suma de los otros.', falta: 'Falta alguna que sí cierra.', ok: 'En todas, el mayor es menor que la suma.' },
+      '$5 + 6 > 10$, $7 + 7 > 13$ y $4 + 6 > 9$. En 2, 5 y 7 la suma apenas iguala: queda una línea.', 'Basta con comparar el lado mayor con la suma de los otros dos.'),
+    x('lanza-angulo', 'El faro gira desde la derecha. Dale el ángulo que se pide y suéltalo. Puedes fallar **una** vez.', { tiros: [
+      { q: 'El vecino de $140^\\circ$ sobre una recta', r: 40, c: '180^\\circ - 140^\\circ', e: { 140: 'Ese es el dato: falta lo que completa la recta.' } },
+      { q: 'El tercer ángulo de un triángulo con $35^\\circ$ y $70^\\circ$', r: 75, c: '180^\\circ - 35^\\circ - 70^\\circ', e: { 105: 'Esa es la suma de los otros dos.' } },
+      { q: 'El exterior de un triángulo cuyos interiores lejanos miden $50^\\circ$ y $60^\\circ$', r: 110, c: '50^\\circ + 60^\\circ', e: { 70: 'Ese es el tercer ángulo interior.' } }] },
+      '$180 - 140 = 40$; $180 - 105 = 75$; $50 + 60 = 110$.', 'Recta y triángulo suman 180°; el exterior suma los dos lejanos.'),
+    sol('En un triángulo isósceles, el ángulo desigual mide el doble de cada uno de los otros. ¿Cuánto miden?', ['Son $1 + 1 + 2 =$ [[4]] partes iguales', 'Cada parte mide [[45]]°', 'El desigual mide [[90]]°'], ['3', '60', '120'], 'Cuatro partes en 180°: 45, 45 y 90.', 'Cuenta en cuántas partes iguales se reparten los 180°.'),
+    err('Con varillas de 3, 5 y 9 cm, ¿se arma un triángulo?', ['El lado mayor mide 9', 'Los otros dos suman $3 + 5 = 8$', 'Como 9 es mayor que 8, sí se arma'], 2, ['Como 9 es mayor que 8, no cierra', 'Como 9 es mayor que 3, sí se arma', 'Como 8 es mayor que 5, sí se arma'], 'Las dos cortas juntas no alcanzan a la larga.', '¿Las dos varillas cortas alcanzan a tocarse sobre la larga?'),
+    opc('Dos caminos paralelos son cruzados por una carretera. Uno de los ángulos mide 125°. Los ángulos que NO miden 125° miden:', ['35°', '55°', '65°', '125°'], 1, '$180^\\circ - 125^\\circ = 55^\\circ$: son los vecinos.', 'En cada cruce hay dos medidas que suman media vuelta.'),
+  ]);
+
+  const l2 = leccion('icf-ma-forma-2', 'Pitágoras', guion(
+    ['Cuadrados', 'En un triángulo rectángulo, el cuadrado de la hipotenusa vale los cuadrados de los catetos juntos.'],
+    ['Falta un lado', 'Para la hipotenusa se suma; para un cateto se resta.'],
+    ['Familias', '3-4-5, 5-12-13, 8-15-17 y sus múltiplos.'],
+    ['En la vida', 'Diagonales, escaleras, atajos y alturas.']), [
+    x('cuadrado-catetos', 'El cuadrado sobre la hipotenusa debe valer **65**, y los dos catetos tienen que ser mayores que 2.', { c2: 65, mas: 2 },
+      '$4^2 + 7^2 = 16 + 49 = 65$. También $1 + 64$, pero 1 es muy corto.', 'Haz la lista de los cuadrados y busca dos que sumen lo pedido.'),
+    x('cateto-falta', 'Un cable de **17 m** baja de la punta de una torre hasta una estaca a **8 m** del pie. Dale a la torre su altura.', { c: 17, b: 8 },
+      '$17^2 - 8^2 = 289 - 64 = 225$: la torre mide 15 m.', 'El cable es la hipotenusa: aquí se resta.'),
+    x('lados-familia', 'Cada triángulo es rectángulo y le falta un lado. Pon las medidas.', { tri: [{ a: 9, b: 12 }, { a: 10, h: 26 }, { a: 15, b: 20 }], fichas: ['15', '24', '25', '21', '16', '35'] },
+      '$9, 12 \\to 15$ (por 3); $10, 24, 26$ (por 2); $15, 20 \\to 25$ (por 5).', 'Divide cada pareja por un número y reconoce la familia.'),
+    x('a-diez-pasos', 'Pon la banderita exactamente a **5** cuadros de A en línea recta, pero en diagonal: ni en su fila ni en su columna.', { A: [2, 2], d: 5 },
+      'Con 3 hacia un lado y 4 hacia otro, la diagonal mide 5.', 'Busca dos catetos enteros cuya hipotenusa sea la pedida.'),
+    x('dos-pasos', 'De la punta de una antena bajan dos cables: uno de **13 m** hasta 5 m del pie. El otro llega a **16 m** del pie. ¿Cuánto mide?', { c1: 13, b1: 5, b2: 16 },
+      'La antena mide $\\sqrt{169 - 25} = 12$ y el otro cable $\\sqrt{144 + 256} = 20$.', 'Primero halla la altura de la antena con el cable conocido.'),
+    x('diagonal-cuadrado', 'Un potrero cuadrado mide 12 m de lado. Corta la cinta que va de una esquina a la **opuesta**, lo más justa que puedas.', { lado: 12 },
+      'La diagonal es $12\\sqrt2 \\approx 16.97$: casi 17 m.', 'La diagonal es hipotenusa de dos lados iguales.'),
+    x('lanza-cuerda', 'Lanza la cuerda con el largo justo del lado que falta. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Catetos 12 y 35: lanza la hipotenusa', a: 12, b: 35, r: 37 }, { q: 'Hipotenusa 25 y cateto 7: lanza el otro cateto', h: 25, b: 7, r: 24 }, { q: 'Hipotenusa 30 y cateto 18: lanza el otro cateto', h: 30, b: 18, r: 24 }] },
+      '$144 + 1225 = 37^2$; $625 - 49 = 24^2$; $900 - 324 = 24^2$.', 'Hipotenusa: se suman los cuadrados. Cateto: se restan.'),
+    sol('Ana camina 9 cuadras al norte y 12 al oriente. ¿Cuánto ahorra si va en línea recta?', ['Por las calles camina [[21]] cuadras', 'En línea recta son [[15]]', 'Ahorra [[6]] cuadras'], ['225', '3', '25'], '$81 + 144 = 225 = 15^2$; $21 - 15 = 6$.', 'El atajo es la hipotenusa de los dos recorridos.'),
+    err('Una escalera de 10 m se apoya con el pie a 6 m de la pared. ¿A qué altura llega?', ['La escalera es la hipotenusa', 'La altura es un cateto', 'Altura: $\\sqrt{100 + 36} \\approx 11.7$ m'], 2, ['Altura: $\\sqrt{100 - 36} = 8$ m', 'Altura: $10 - 6 = 4$ m', 'Altura: $10 + 6 = 16$ m'], 'Para un cateto se restan los cuadrados: 8 m. No puede llegar más alto que su largo.', '¿Puede la altura ser mayor que la escalera?'),
+    opc('Un televisor de 80 cm de ancho y 60 cm de alto tiene una diagonal de:', ['140 cm', '20 cm', '70 cm', '100 cm'], 3, '$6\\,400 + 3\\,600 = 10\\,000 = 100^2$.', 'Reconoce la familia 3-4-5.'),
+  ]);
+
+  const l3 = leccion('icf-ma-forma-3', 'Tales y semejanza', guion(
+    ['Misma forma', 'Dos figuras son semejantes si tienen los mismos ángulos y sus lados crecen por el mismo número.'],
+    ['Sombras', 'A la misma hora, altura y sombra forman triángulos semejantes.'],
+    ['Paralelas que cortan', 'Parten dos rectas en trozos proporcionales.'],
+    ['Al escalar', 'Los lados crecen por k; el área, por k²; el volumen, por k³.']), [
+    x('foto-fiel', 'Amplía la foto de 6 por 4 hasta que mida **7 de alto**, sin deformarla.', { w0: 6, h0: 4, h: 7 },
+      'El alto creció por 1.75: el ancho es $6 \\cdot 1.75 = 10.5$.', 'Halla por cuánto creció el alto y haz lo mismo con el ancho.'),
+    x('sombra-poste', 'Un niño de 1 m da una sombra de 1.5 m. A la misma hora, un árbol da **12 m** de sombra. Dale su altura.', { h0: 1, s0: 1.5, s: 12 },
+      'La sombra es 8 veces la del niño: el árbol mide 8 m.', 'Compara las dos sombras: ¿cuántas veces cabe una en otra?'),
+    x('tales-corte', 'Tres paralelas parten una recta en trozos de 6 y 9; en la otra, el primer trozo mide 8. Pon el punto donde pasa la **tercera** paralela.', { a: 6, b: 9, c: 8 },
+      'El segundo trozo es 1.5 veces el primero: $8 \\cdot 1.5 = 12$.', 'La razón entre los dos trozos es la misma en las dos rectas.'),
+    x('papel-factor', 'Un afiche se agrandó y ahora gasta **25 veces** el papel de antes. ¿Por cuánto se multiplicó su lado?', { veces: 25 },
+      'El papel crece con el cuadrado: $5^2 = 25$.', 'El papel es superficie: crece por el factor dos veces.'),
+    x('tres-crecimientos', 'Un cubo se copia con la arista **4 veces** más larga. ¿Por cuánto se multiplica lo que gasta en cada material?', { k: 4, fichas: ['× 4', '× 16', '× 64', '× 8', '× 12'] },
+      'Lo que se mide en largo, por 4; en superficie, por 16; en volumen, por 64.', 'Mira si el material se mide en metros, en cuadrados o en cubos.'),
+    x('escala-plano', 'Dos torres están a **4.5 km**. Ubica la segunda en el mapa, a su medida en centímetros.', { den: 90000, km: 4.5 },
+      'Cada centímetro son 900 m: $4\\,500 \\div 900 = 5$ cm.', 'Primero di cuántos metros vale cada centímetro del mapa.'),
+    x('lanza-escala', 'Manda el dron al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Plano $1 : 200$. Un corredor mide 6 cm: ¿cuántos metros reales?', r: 12, c: '6 \\cdot 200 \\div 100', e: { 6: 'Un centímetro de este plano son 2 metros.' } },
+      { q: 'Lados 4 y 7; en la copia semejante, el de 4 mide 12. ¿Cuánto mide el de 7?', r: 21, c: '7 \\cdot 3', e: { 15: 'Sumaste 8; los lados se multiplican.' } },
+      { q: 'Un palo de 3 m da 2 m de sombra; un faro da 18 m. ¿Cuánto mide el faro?', r: 27, c: '3 \\cdot 9', e: { 19: 'Sumaste; las sombras guardan la razón.', 12: 'Al revés: este palo mide más que su sombra.' } }] },
+      '$6 \\cdot 2 = 12$; $7 \\cdot 3 = 21$; $3 \\cdot 9 = 27$.', 'Halla primero por qué número se multiplica.'),
+    sol('Un triángulo de lados 6, 8 y 10 es semejante a otro cuyo lado menor mide 15. ¿Cuánto mide su perímetro?', ['El factor es $15 \\div 6 =$ [[2.5]]', 'El perímetro del pequeño es [[24]]', 'El del grande es [[60]]'], ['9', '33', '150'], 'El perímetro también crece por 2.5: $24 \\cdot 2.5 = 60$.', 'El perímetro es un largo: crece por el mismo factor.'),
+    err('Una maqueta $1 : 10$ de un tanque tiene 3 litros de capacidad. ¿Cuántos tiene el tanque real?', ['Los largos crecen por 10', 'La capacidad es un volumen', 'El tanque tiene $3 \\cdot 10 = 30$ litros'], 2, ['El tanque tiene $3 \\cdot 1\\,000 = 3\\,000$ litros', 'El tanque tiene $3 \\cdot 100 = 300$ litros', 'El tanque tiene $3 + 10 = 13$ litros'], 'El volumen crece por $10^3 = 1\\,000$.', '¿Cuántas medidas crecen cuando se trata de un volumen?'),
+    opc('Dos rectángulos son semejantes. El primero mide 4 por 10 y el segundo tiene 6 de ancho (el lado menor). Su largo es:', ['12', '15', '24', '14'], 1, 'El factor es 1.5: $10 \\cdot 1.5 = 15$.', 'Divide los anchos para hallar el factor.'),
+  ]);
+
+  const tri = (o, t) => ({ ...o, trampas: {}, t });
+  const l4 = leccion('icf-ma-forma-4', 'Razones trigonométricas', guion(
+    ['Tres lados, un ángulo', 'Desde θ: el opuesto queda enfrente, el adyacente al lado y la hipotenusa frente al ángulo recto.'],
+    ['Seno, coseno y tangente', 'sen = op/hip, cos = ady/hip, tan = op/ady.'],
+    ['Solo importa el ángulo', 'En triángulos semejantes la razón es la misma.'],
+    ['Medir sin llegar', 'Con un ángulo y una distancia se halla una altura.']), [
+    x('lados-nombra', 'Triángulo de lados 8, 15 y 17. Desde θ, el opuesto es el **15**. Pon los otros.', tri({ et: ['adyacente', 'hipotenusa'], metas: ['8', '17'], fichas: ['8', '17', '15', '23'], mira: ['Es el cateto que toca a θ.', 'Es el lado frente al ángulo recto.'], ok: 'Al lado 8 y enfrente del recto 17.' }, { co: '15' }),
+      'La hipotenusa es el mayor, 17; el otro cateto, 8, queda al lado de θ.', 'La hipotenusa siempre es el lado más largo.'),
+    x('razones-tres', 'Opuesto 9, adyacente 40, hipotenusa 41. Pon cada razón de θ.', tri({ et: ['sen', 'cos', 'tan'], metas: ['9/41', '40/41', '9/40'], fichas: ['9/41', '40/41', '9/40', '41/9', '40/9'], mira: ['Opuesto sobre hipotenusa.', 'Adyacente sobre hipotenusa.', 'Opuesto sobre adyacente.'], ok: 'SOH, CAH y TOA.' }, { co: '9', ca: '40', hi: '41' }),
+      'Seno 9/41, coseno 40/41 y tangente 9/40, cada una con sus dos lados.', 'Seno y coseno llevan abajo la hipotenusa; la tangente, no.'),
+    x('catetos-razon', 'Mueve los catetos hasta que la **tangente** de θ sea $\\tfrac{5}{8}$.', { mira: 'La tangente es opuesto sobre adyacente, en ese orden.', ok: 'Opuesto 5 y adyacente 8.', ks: [['x', 2, 12, 'adyacente'], ['y', 2, 8, 'opuesto']], v: { x: 4, y: 4 }, meta: { x: 8, y: 5 } },
+      'Tangente: opuesto entre adyacente, 5 entre 8.', 'Arriba va el cateto de enfrente y abajo, el de al lado.'),
+    x('escalera-apoya', 'El pie de una escalera queda a la **mitad** de su largo desde la pared. Inclínala.', { mira: 'Distancia sobre escalera es el coseno: busca el ángulo notable.', ok: 'El coseno de 60° es un medio.', ks: [['g', 15, 75, 'ángulo con el piso', 15]], v: { g: 15 }, meta: { g: 60 } },
+      '$\\cos 60^\\circ = \\tfrac12$: el pie queda a la mitad de la escalera.', 'La distancia al pie es el adyacente: ¿qué razón usa adyacente e hipotenusa?'),
+    x('recta-notables', 'El triángulo de **30°** tiene opuesto 6. Pon el adyacente y la hipotenusa.', tri({ et: ['adyacente', 'hipotenusa'], metas: ['6√3', '12'], fichas: ['6√3', '12', '6√2', '12√3', '3'], mira: ['Es el lado corto por raíz de tres.', 'Es el doble del lado frente a 30°.'], ok: 'Corto 6, largo 6√3 e hipotenusa 12.' }, { a: '30°', co: '6' }),
+      'Frente a 30° está la mitad de la hipotenusa: 12; el otro cateto es $6\\sqrt3$.', 'Es medio triángulo equilátero: el lado corto es la mitad de la hipotenusa.'),
+    x('mirador', 'Desde **30 m**, la altura de una torre es $30\\sqrt3$ m. Inclina la mirada.', { mira: 'Altura sobre distancia da raíz de tres: es la tangente.', ok: 'La tangente de 60° es raíz de tres.', d: 30, ks: [['g', 15, 60, 'elevación', 15]], v: { g: 15 }, meta: { g: 60 } },
+      'Altura entre distancia es $\\sqrt3$, y $\\tan 60^\\circ = \\sqrt3$.', 'La tangente compara la altura con la distancia.'),
+    sol('Una cometa vuela con 40 m de cuerda tensa que forma 30° con el suelo. ¿A qué altura está? ($\\operatorname{sen}30^\\circ = 0.5$)', ['La altura es el lado [[opuesto]] a 30°', 'La cuerda es la [[hipotenusa]]', 'Altura: $40 \\cdot 0.5 =$ [[20]] m'], ['adyacente', '80', '35'], 'Seno: opuesto sobre hipotenusa; $40 \\cdot 0.5 = 20$.', 'Dibuja el triángulo y nombra los lados desde los 30°.'),
+    err('A 50 m de un edificio se ve su techo con 40° de elevación. Halla la altura ($\\tan 40^\\circ \\approx 0.84$).', ['La distancia, 50, es el adyacente', 'La altura es el opuesto', 'Altura: $50 \\div 0.84 \\approx 59.5$ m'], 2, ['Altura: $50 \\cdot 0.84 = 42$ m', 'Altura: $50 + 0.84 = 50.84$ m', 'Altura: $0.84 \\div 50$ m'], 'Opuesto = adyacente por tangente: 42 m.', 'Tangente es opuesto sobre adyacente: despeja el opuesto.'),
+    opc('Una rampa sube 1 m por cada 2 m de recorrido sobre ella. El ángulo con el piso cumple que su seno es:', ['$\\tfrac12$', '2', '$\\tfrac{\\sqrt3}{2}$', '$\\tfrac13$'], 0, 'Opuesto 1 sobre hipotenusa 2.', 'El recorrido sobre la rampa es la hipotenusa.'),
+  ]);
+
+  return mundo('icf-ma-forma', 'Triángulos y Semejanza', 'matematicas', [l1, l2, l3, l4], [
+    ['icf-ma-forma-1', 'Vecinos: media vuelta. Opuestos: iguales.', play('tijera-angulos', 'Deduce el ángulo que se pide', { rounds: [{ kind: 'comp', given: 35 }] }, 'Dos que completan un ángulo recto suman 90: el otro mide 55°.', { hint: 'Los dos juntos llenan un ángulo recto.' })],
+    ['icf-ma-forma-1', 'Los tres ángulos de un triángulo suman 180°.', play('apice-triangulo', 'El ángulo que falta en el triángulo', { rounds: [{ mode: 'falta', A: 60, C: 75 }] }, 'B = 180° − 135° = 45°.', { hint: 'Los tres ángulos llenan media vuelta.' })],
+    ['icf-ma-forma-1', 'Cada lado, menor que la suma de los otros dos.', opc('Dos lados de un triángulo miden 6 y 10. El tercero NO puede medir:', ['5', '9', '16', '15'], 2, '$6 + 10 = 16$: con 16 queda una línea.', 'El tercero debe ser menor que la suma.')],
+    ['icf-ma-forma-2', 'Pitágoras con escaleras: el largo es la hipotenusa.', play('escalera-pared', 'Apoya la escalera en la ventana', { rounds: [{ L: 13, h: 12 }] }, 'El pie queda a 5: 5-12-13.', { hint: 'Resta los cuadrados del largo y de la altura.' })],
+    ['icf-ma-forma-2', 'Familias: 3-4-5 y 5-12-13.', play('arma-triangulo', 'Arma un triángulo rectángulo con la razón pedida', { max: 12, rounds: [{ fn: 'sen', num: 3, den: 5 }] }, 'Opuesto 3 y adyacente 4 dan hipotenusa 5.', { hint: 'Si opuesto e hipotenusa son 3 y 5, ¿cuánto es el otro cateto?' })],
+    ['icf-ma-forma-2', 'La diagonal es la hipotenusa.', opc('La diagonal de un rectángulo mide 25 y su ancho 15. Su largo es:', ['10', '40', '20', '$\\sqrt{850}$'], 2, '$625 - 225 = 400 = 20^2$.', 'El largo es un cateto: se restan los cuadrados.')],
+    ['icf-ma-forma-3', 'Paralelas: trozos proporcionales.', play('tales-rectas', 'Ubica el punto para que las rectas queden paralelas', { rounds: [{ a: 4, b: 6, c: 5 }] }, '$4/6 = 5/x$: $x = 7.5$.', { hint: 'La razón entre los trozos es la misma en las dos rectas.' })],
+    ['icf-ma-forma-3', 'El volumen crece con el cubo del factor.', play('factor-area', 'Escala el cubo hasta el volumen pedido', { rounds: [{ kind: 'vol', side: 1, target: 27 }] }, 'De 1 a 27 cubitos: el factor es 3.', { hint: 'Busca un número que tres veces por sí mismo dé el volumen.' })],
+    ['icf-ma-forma-3', 'Sombras a la misma hora: triángulos semejantes.', opc('Una persona de 1.8 m da 1.2 m de sombra. Un árbol da 6 m de sombra a la misma hora. El árbol mide:', ['4 m', '6.6 m', '9 m', '7.2 m'], 2, '$6 \\div 1.2 = 5$ y $1.8 \\cdot 5 = 9$.', 'Mira cuántas veces cabe una sombra en la otra.')],
+    ['icf-ma-forma-4', 'Con un ángulo y una distancia se halla la altura.', play('mide-altura', 'Muévete hasta ver la cima con el ángulo pedido', { rounds: [{ kind: 'edificio', h: 25, angle: 45, maxD: 60 }] }, 'Con 45° la distancia es igual a la altura: 25 m.', { hint: 'La tangente de 45° vale uno.' })],
+    ['icf-ma-forma-4', 'Seno: opuesto sobre hipotenusa.', play('toca-lados', 'Toca los lados que pide cada razón', { rounds: [{ items: [{ fn: 'sen', t: 2, len: [8, 15, 17] }, { fn: 'cos', t: 5, len: [20, 21, 29] }] }] }, 'Seno usa el opuesto y la hipotenusa.', { hint: 'Mira qué lado queda frente al ángulo.' })],
+    ['icf-ma-forma-4', 'Coseno: adyacente sobre hipotenusa.', opc('En un triángulo rectángulo, desde θ: opuesto 12, adyacente 5. El coseno de θ es:', ['12/13', '5/12', '12/5', '5/13'], 3, 'La hipotenusa es 13: adyacente sobre hipotenusa, 5/13.', 'Primero halla la hipotenusa.')],
   ]);
 })());
 ;
@@ -7836,6 +7639,165 @@ PI_MUNDOS.push((() => {
     ['icf-lc-filosofico-2', 'Distinguir dos conceptos ayuda a pensar.', Q('La diferencia entre los dos filósofos es que:', ['Uno mira la regla y el otro, los resultados', 'Uno ama a los niños y el otro no', 'Uno miente y el otro dice la verdad', 'Uno es griego y el otro no'], 0, 'El severo exige una regla para todos; el otro mide bienestar y daño.', 'Compara qué mira cada uno para decir si algo está bien.')],
     ['icf-lc-filosofico-2', 'Un ejemplo pone a prueba una idea.', Q('El caso del asesino que busca a un amigo se usa para mostrar que:', ['Los amigos deben esconderse', 'Las consecuencias nunca importan', 'Una regla sin excepciones puede llevar a algo inaceptable', 'La policía debe intervenir'], 2, 'Si nunca se puede mentir, habría que delatar al amigo: eso parece inaceptable.', 'Piensa qué obligaría a hacer la regla del filósofo severo.')],
     ['icf-lc-filosofico-2', 'Las objeciones muestran lo que una idea olvida.', Q('Según el autor, quien solo mira las consecuencias olvida que:', ['Las reglas fueron hechas por personas', 'Los efectos de una acción pueden llegar mucho después', 'Los dibujos no son arte', 'La felicidad no existe'], 1, '«Olvida que las consecuencias no terminan el mismo día».', 'Relee la última oración del párrafo 4.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-lc-discontinuo.js
+// Preicfes · Lectura Crítica · mundo 6 «Textos Discontinuos» (spec 2026-11-25-preicfes-estructura). Infografías, cómics y mezclas originales.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const AGUA = {
+    id: 'icf-ducha', title: 'Infografía: ¿En qué se va el agua de tu casa?',
+    ficha: { autor: 'Acueducto de Monteclaro', fuente: 'Afiche para las estaciones de bus', fecha: 'Marzo de 2026' },
+    paras: [
+      'RECUADRO CENTRAL. Dibujo de una casa partida por la mitad. Dentro de cada cuarto hay una gota; mientras más grande la gota, más agua se gasta allí. La del baño ocupa casi todo el cuarto. Debajo se lee: «Una persona de Monteclaro usa, en promedio, 140 litros al día. Con 50 se puede vivir bien».',
+      'TABLA A LA DERECHA, «Litros por persona al día». Ducha: 56. Sanitario: 42. Lavar ropa: 21. Cocina y platos: 14. Otros: 7. Nota al pie de la tabla: «Datos de 300 casas con contador, estratos 1 a 6, medidos durante dos meses. No incluye fincas ni industrias».',
+      'FLECHA DESDE LA DUCHA. «Una ducha de ocho minutos gasta 56 litros. Si la cierras mientras te enjabonas, gasta 28». Al lado hay un reloj de arena y una cara sonriente. La flecha es azul y gruesa, y termina en un balde con la frase: «Lo que ahorras en un mes llena 84 baldes de diez litros».',
+      'RECUADRO INFERIOR, fondo rojo. «¿Sabías que una llave que gotea pierde hasta 30 litros al día?». Dibujo de una llave con una gota colgando y, junto a ella, un calendario en el que todos los días están tachados. En letra más grande: «Llámanos: la reparación es gratis para los estratos 1 y 2».',
+      'ETIQUETA EN LA ESQUINA. Copia de la etiqueta de un sanitario: «Consumo: 4.8 litros por descarga. Los modelos anteriores a 1995 gastan entre 12 y 20. Categoría A, la de mayor ahorro». Una lupa señala la palabra «descarga».',
+      'PIE DEL AFICHE. Logotipo del acueducto, número de teléfono y una frase en letra pequeña: «El 35 % del agua que sale de nuestra planta se pierde en tuberías viejas antes de llegar a las casas. Plan de cambio de redes: 2026 a 2034». Es el único texto del afiche que no lleva dibujo.',
+      'CÓDIGO QR junto al teléfono, con la invitación: «Mide tu consumo y compárate con tu cuadra». Al abrirlo, la página pide la dirección, el número de personas y las lecturas de dos meses seguidos. Con esos datos dibuja dos barras, la tuya y la del promedio de tus vecinos, sin mostrar el nombre de nadie.',
+    ],
+  };
+  const l1 = leccion('icf-lc-discontinuo-1', 'Infografías, tablas y etiquetas', guion(
+    ['No se lee en fila', 'Primero el título y la imagen grande; después las partes.'],
+    ['Cada parte hace algo', 'La tabla da datos, la flecha explica, el recuadro avisa.'],
+    ['Tamaño y color', 'Lo grande y lo rojo quieren atención; la letra pequeña también dice cosas.'],
+    ['Nota al pie', 'Dice de dónde salen los datos y qué dejan por fuera.']), [
+    x('antes-de-leer', 'El texto está tapado. Con sus bordes, completa la apuesta. Sobran fichas.', { doc: AGUA, frase: 'Es [0] que hace [1] para [2].', rot: ['¿qué tipo de texto?', '¿quién lo hace?', '¿para qué?'],
+      ...F(['una infografía', 0, 'Lee la primera palabra del título.'], ['un acueducto', 1, 'Mira quién aparece en la ficha.'], ['informar del consumo', 2, 'Vuelve a la pregunta del título.'], ['un cuento', null, 'El título dice qué es.'], ['una fábrica de duchas', null, 'La ficha dice quién lo hizo.'], ['vender una casa', null, 'La pregunta del título es otra.']),
+      luz: [[1, 'mientras más grande la gota'], [2, 'Litros por persona al día']], bien: 'Título y ficha bastan para la apuesta.' },
+      'El título dice «infografía» y pregunta por el agua; la ficha dice quién la hizo.', 'Lee por separado la primera palabra, la ficha y la pregunta.'),
+    x('donde-mirar', 'Lleva cada pregunta a la parte del afiche donde la buscarías.', { doc: AGUA,
+      ...F(['¿De cuántas casas salen los datos?', 1, 'Busca la parte que trae números en filas.'], ['¿A qué teléfono se llama?', 5, 'Busca la parte de abajo del todo.'], ['¿Cuánto gasta cada descarga?', 4, 'Busca la parte copiada de un aparato.'], ['¿Cómo me comparo con mis vecinos?', 6, 'Busca la parte que se abre con el celular.']),
+      luz: [[2, '300 casas'], [6, 'número de teléfono'], [5, '4.8 litros por descarga'], [7, 'compárate con tu cuadra']], bien: 'Tabla, pie, etiqueta y código.' },
+      'Las casas están en la nota de la tabla; el teléfono, en el pie; la descarga, en la etiqueta; la comparación, en el código.', 'Lee solo las mayúsculas con que empieza cada parte.'),
+    x('pista-tipo', 'Ata cada función a su parte del afiche.', { doc: AGUA, lineas: ['la tabla', 'la flecha', 'el recuadro rojo', 'la nota al pie de la tabla'],
+      ...T(['da las cantidades', 0, '¿Cuál ordena números?'], ['muestra cómo ahorrar y cuánto', 1, '¿Cuál une la ducha con un balde?'], ['alerta y ofrece ayuda', 2, '¿Cuál usa un color de aviso?'], ['dice de dónde salen los datos', 3, '¿Cuál habla de casas con contador?']), bien: 'Cantidades, ahorro, alerta y origen.' },
+      'La tabla cuantifica, la flecha muestra el ahorro, el rojo alerta y la nota da el origen.', 'Pregunta para qué está cada parte y no solo qué dice.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: AGUA, nums: [2, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['La ducha gasta 56 litros por persona al día.', 0, 'Búscala en la tabla.'], ['En la ducha se va el 40 % del agua de una persona.', 1, 'Compara 56 con el total del día.'], ['La frase de los 84 baldes supone una ducha diaria.', 1, 'Reparte los litros de un mes entre los días.'], ['Las industrias gastan más que las casas.', 2, '¿La tabla incluye industrias?']),
+      luz: [[2, 'Ducha: 56'], [3, '84 baldes'], [2, 'No incluye fincas ni industrias']], bien: 'Los números también se deducen.' },
+      '56 está en la tabla; 56 de 140 es 40 %; ahorrar 28 por 30 días son 840 litros, 84 baldes; de industrias no hay datos.', 'Usa el total del recuadro central y el ahorro de la flecha.'),
+    x('voz-de-la-fuente', 'Ata cada recurso a lo que logra.', { ayuda: 'Tira un hilo desde cada efecto hasta su recurso.', doc: AGUA, portadas: [['Gotas de distinto tamaño', 'recurso'], ['Fondo rojo', 'recurso'], ['Letra pequeña sin dibujo', 'recurso'], ['Lupa sobre una palabra', 'recurso']],
+      ...T(['comparar de un vistazo', 0, '¿Qué cambia de un cuarto a otro?'], ['que parezca urgente', 1, '¿Qué color suele avisar?'], ['que pase casi sin verse', 2, '¿Qué llama menos la atención?'], ['que te fijes en el detalle', 3, '¿Qué señala algo exacto?']), bien: 'La forma también dice.' },
+      'El tamaño compara, el rojo urge, la letra pequeña esconde y la lupa señala.', 'Piensa qué mirarías primero y qué último.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: AGUA, nums: [1, 2, 6], pregunta: 'Queda en pie', queda: 'El acueducto también pierde agua.',
+      ...T(['Se necesitan 140 litros para vivir bien.', 5, 'Busca con cuánto se puede vivir bien.'], ['Los datos incluyen las industrias.', 13, 'Busca lo que la tabla deja por fuera.'], ['Toda el agua de la planta llega a las casas.', 15, 'Busca qué pasa en las tuberías.']), bien: 'Números y letra pequeña.' },
+      'Con 50 se vive bien, la tabla no incluye industrias y el 35 % se pierde antes de llegar.', 'Busca la palabra clave: vivir, industrias, planta.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo que permite el afiche.', { doc: AGUA, filas: [{ antes: 'Los datos sirven para', topes: ['todo el país', 'las casas medidas de Monteclaro', 'las fincas'], va: 1 }, { antes: 'Una llave que gotea pierde', topes: ['siempre 30 litros', 'más de 30 litros', 'hasta 30 litros'], va: 2 }, { antes: 'La reparación es gratis para', topes: ['los estratos 1 y 2', 'todos', 'nadie'], va: 0 }], mira: ['Relee la nota de la tabla.', 'Fíjate en la palabra que va antes del número.', 'Relee la letra grande del recuadro rojo.'], luz: [[2, '300 casas con contador'], [4, 'hasta 30 litros'], [4, 'gratis para los estratos 1 y 2']], bien: 'Cada dato con su alcance.' },
+      'Los datos son de las casas medidas, «hasta» pone un tope y la reparación es para dos estratos.', 'Busca en el afiche la palabra que limita cada frase.'),
+    x('balanza-tesis', 'Crítica: «el afiche carga la culpa en las personas». ¿Qué hace cada dato?', { doc: AGUA, tesis: 'El afiche carga la culpa en las personas',
+      ...F(['La pérdida de tuberías va en letra pequeña y sin dibujo.', 0, '¿Qué tanto se destaca la parte del acueducto?'], ['Casi todos los dibujos muestran gastos de la casa.', 0, '¿A quién señalan los dibujos?'], ['Otro afiche igual de grande habla solo de las tuberías.', 1, '¿Seguiría cargando la culpa en las personas?'], ['El reloj de arena es azul.', 2, '¿Cambia a quién se culpa?']), bien: 'El diseño también argumenta.' },
+      'La letra pequeña y los dibujos apoyan la crítica; otro afiche la debilitaría; el color no pesa.', 'Mira qué se destaca en el afiche y qué se esconde.'),
+  ]);
+
+  const COMIC = {
+    id: 'icf-robot', title: 'Cómic: El robot que quería ayudar',
+    ficha: { autor: 'Guion y dibujo: Samuel Ospina', fuente: 'Revista «Viñeta Sur»', fecha: 'Abril de 2026' },
+    paras: [
+      'VIÑETA 1. Plano general de una cocina. Una abuela, doña Rosa, amasa arepas. En la puerta, su nieto sostiene una caja enorme con un moño. Globo del nieto: «¡Feliz día, abuela! Le traje un robot para que no trabaje más». La abuela mira las arepas, no la caja. En la pared hay un reloj: las seis de la mañana.',
+      'VIÑETA 2. Primer plano del robot, con ojos redondos y una sonrisa pintada. Globo con bordes cuadrados: «BUENOS DÍAS, ROSA. DETECTO UNA TAREA REPETITIVA». Detrás, muy pequeña, la mano de la abuela levanta el rodillo como si fuera a defenderse. Onomatopeya sobre el rodillo: «¡ejem!».',
+      'VIÑETA 3. El robot amasa a toda velocidad; líneas de movimiento llenan el cuadro. Onomatopeya gigante: «¡PAM, PAM, PAM!». A la derecha, una torre de arepas idénticas toca el techo. La abuela está sentada en un butaco, con las manos quietas sobre el delantal. Cartela: «Cuarenta segundos después…».',
+      'VIÑETA 4. Sin globos. La abuela mira por la ventana. Afuera, tres vecinas con canastos hacen fila, como todos los días. Una levanta la mano para saludar. El reloj marca las seis y un minuto. Es la única viñeta en blanco y negro, y ocupa el ancho de toda la página.',
+      'VIÑETA 5. Las vecinas frente a la puerta. El robot les entrega las arepas sin mirarlas. Globo del robot: «TRANSACCIÓN COMPLETA. SIGUIENTE». Globo de pensamiento de una vecina: un corazón partido y, dentro, el dibujo de dos tazas de café. La fila avanza tan rápido que las figuras salen borrosas.',
+      'VIÑETA 6. Noche. La abuela, con unas gafas en la punta de la nariz, tiene un destornillador en la mano y el robot abierto sobre la mesa. Globo: «A ver, mijo, dónde es que se le pone la conversa». El nieto, en la sombra, se tapa la boca para no reírse.',
+      'VIÑETA 7. Seis de la mañana otra vez, a todo color. La abuela amasa. A su lado, el robot sostiene una taza y le dice a una vecina, con un globo de bordes redondos: «¿Y cómo sigue la rodilla, doña Nelly?». La torre de arepas es pequeña y cada arepa tiene una forma distinta. Cartela final: «Cuarenta minutos después…».',
+    ],
+  };
+  const l2 = leccion('icf-lc-discontinuo-2', 'Cómics y caricaturas', guion(
+    ['Viñetas y cartelas', 'La viñeta es el cuadro; la cartela, la voz que narra.'],
+    ['Globos', 'El borde dice cómo suena: cuadrado, de máquina; nube, pensamiento.'],
+    ['Plano y color', 'Un primer plano acerca; un cambio de color cambia el ánimo.'],
+    ['Entre viñetas', 'Lo que no se dibuja lo completa el lector.']), [
+    x('pasos-del-proceso', 'Ordena la historia. La primera parte está en su puesto.', { doc: COMIC, que: 'la historia', de: 'La abuela y el robot', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['El nieto trae el regalo.', 'El robot amasa solo.', 'La abuela queda sin oficio.', 'Ella lo abre de noche.', 'El robot aprende a conversar.'], mira: ['', 'Ocurre apenas se enciende.', 'La muestra la viñeta sin globos.', 'Ocurre con un destornillador.', 'Es el final del cómic.'], bien: 'Regalo, velocidad, vacío, arreglo y conversa.' },
+      'Llega el robot, amasa, la abuela queda sin nada que hacer, lo abre y lo cambia.', 'Sigue el reloj y la luz que hay en cada viñeta.'),
+    x('voz-de-la-fuente', 'Ata cada efecto al recurso del cómic.', { ayuda: 'Tira un hilo desde cada efecto hasta su recurso.', doc: COMIC, portadas: [['Globo de bordes cuadrados', 'viñeta 2'], ['Líneas de movimiento', 'viñeta 3'], ['Blanco y negro, sin globos', 'viñeta 4'], ['Globo de bordes redondos', 'viñeta 7']],
+      ...T(['voz de máquina', 0, '¿Cómo suena un robot al llegar?'], ['velocidad', 1, '¿Qué llena el cuadro al amasar?'], ['tristeza y silencio', 2, '¿Qué cambia cuando ella mira por la ventana?'], ['voz más humana', 3, '¿Cómo suena el robot al final?']), bien: 'El borde, la línea y el color hablan.' },
+      'El borde cuadrado suena a máquina, las líneas aceleran, el blanco y negro entristece y el redondo humaniza.', 'Compara cómo está hecha cada viñeta con la anterior.'),
+    x('genero-o-cita', '¿Se **dice** con palabras o se **muestra** con el dibujo?', { doc: COMIC, rot: ['con palabras', 'con el dibujo'],
+      ...F(['Que es un regalo del nieto', 0, '¿Está en un globo?'], ['Que la abuela se siente sin oficio', 1, '¿Está en un globo?'], ['Que el robot pregunta por la rodilla', 0, '¿Está en un globo?'], ['Que la vecina extraña el café', 1, '¿Qué se ve en su pensamiento?']), bien: 'Lo más triste no lleva palabras.' },
+      'El regalo y la rodilla están en globos; las manos quietas y las tazas se dibujan.', 'Busca si hay un globo con texto o solo una imagen.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: COMIC, nums: [4, 5, 7], rot: ['se ve o se lee', 'se deduce', 'ni se ve ni se deduce'],
+      ...F(['Las vecinas hacen fila como todos los días.', 0, 'Búscala en la viñeta 4.'], ['A las vecinas les importaba más conversar que comprar rápido.', 1, '¿Qué piensa la vecina de la viñeta 5?'], ['La abuela cambió cómo funciona el robot.', 1, 'Compara cómo habla antes y después.'], ['El nieto devolvió el robot a la tienda.', 2, '¿Aparece alguna tienda?']),
+      luz: [[4, 'como todos los días'], [5, 'dos tazas de café'], [7, 'una taza']], bien: 'El lector completa entre viñetas.' },
+      'La fila se lee; la conversa y el cambio se deducen; la tienda no aparece.', 'Compara cómo atiende el robot en la viñeta 5 y en la 7.'),
+    x('talla-idea', 'Tres mensajes del cómic: pon cada uno en su talla.', { doc: COMIC, p: 7, rot: ['se queda en un detalle', 'justo', 'dice de más'],
+      ...F(['Las arepas tienen formas distintas.', 0, 'Es cierto, pero ¿qué quiere decir?'], ['La tecnología ayuda cuando respeta lo que nos une.', 1, 'Compárala con lo que cambia del robot.'], ['Los robots deberían prohibirse.', 2, '¿El robot desaparece al final?']),
+      luz: [[7, '¿Y cómo sigue la rodilla'], [7, 'La abuela amasa']], bien: 'El robot se queda, pero conversa.' },
+      'Las formas son un detalle, no se prohíbe nada y el final une al robot con la conversa.', 'Mira qué se queda y qué cambia en la última viñeta.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo. Sobran dos.', { doc: COMIC, frases: [[3, 'una torre de arepas ', 'idénticas', ' toca el techo'], [5, '«TRANSACCIÓN ', 'COMPLETA', '. SIGUIENTE»'], [6, 'dónde es que se le pone ', 'la conversa', '»']],
+      ...F(['todas iguales', 0, '¿Cómo salen de una máquina?'], ['terminada', 1, '¿Cómo queda la venta para el robot?'], ['el hablar con la gente', 2, '¿Qué le falta al robot, según ella?'], ['muy ricas', null, 'Nadie las prueba en esa viñeta.'], ['la batería', null, 'El robot ya funciona.']), bien: 'El contexto las explica.' },
+      'Idénticas son iguales, completa es terminada y la conversa es hablar con la gente.', 'Mira qué pasa en la viñeta de cada palabra.'),
+    x('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: COMIC, texto: '|La abuela| abrió |el robot| de noche. Él no conversaba, y ella lo arregló.',
+      ...T(['«Él»', 1, 'Pon en su lugar lo que ataste: ¿quién no conversaba?'], ['«ella»', 0, 'Pon en su lugar lo que ataste: ¿quién lo arregló?']), bien: 'El robot y la abuela.' },
+      'Quien no conversaba es el robot; quien lo arregla, la abuela.', 'Comprueba género y sentido en la oración.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: COMIC, lineas: ['Un nieto regala un robot para que la abuela descanse.', 'La caja tiene un moño.', 'El robot es rápido, pero acaba con la conversa.', 'La abuela lo abre y lo cambia.', 'La puerta está en la cocina.', 'Al final trabajan y conversan juntos.'], ...S([1, 4], { 0: 'Es el comienzo.', 2: 'Es el problema.', 3: 'Es lo que hace ella.', 5: 'Es el final de la historia.' }), bien: 'Regalo, problema, arreglo y final.' },
+      'El moño y la puerta son detalles del dibujo; lo demás es la historia.', 'Deja lo que contarías sin mostrar los dibujos.'),
+  ]);
+
+  const MIXTO = {
+    id: 'icf-mercado', title: 'Los domingos sin carro',
+    ficha: { autor: 'Redacción de «El Pedal»', fuente: 'Página doble de un periódico local', fecha: 'Mayo de 2026' },
+    paras: [
+      'TITULAR: «La calle es de todos, al menos seis horas». Desde hace un año, la carrera décima de Villaluz se cierra a los carros los domingos de siete a una. Se puede caminar, montar en bicicleta o sentarse en la mitad. Muchos comerciantes se opusieron: sin carros, decían, no habría clientes. Esta página intenta responder si tenían razón, con datos, voces y un mapa que cada lector puede comparar por su cuenta.',
+      'GRÁFICA DE BARRAS, «Ventas de los domingos en 40 locales de la décima (en millones)». Antes del cierre: 60. Primer mes: 45. Sexto mes: 66. Un año: 78. La barra del primer mes es roja; las demás, verdes. Nota: «Datos entregados por los comerciantes. Doce locales no respondieron».',
+      'RECUADRO DE OPINIÓN, con foto. «Yo fui la primera en pelear contra esto», cuenta Amparo Nieto, dueña de una panadería. «El primer mes casi cierro. Después puse dos mesas afuera. Ahora el domingo es mi mejor día y contraté a dos muchachos del barrio para que me ayuden a atender». Debajo de la foto se lee: «A los de repuestos no les fue igual».',
+      'CARTA DE UN LECTOR. «Vendo llantas desde hace veinte años. Mi local no está en la gráfica, porque cerré. Un cliente no compra una llanta en bicicleta. No digo que abran la calle; digo que alguien debió sentarse con los que vendemos para carros, y digo que la página de ustedes no me cuenta». Firma: Hernando Pabón.',
+      'MAPA. Una línea verde muestra la calle cerrada; dos rojas, las paralelas por donde pasan los carros ese día. Sobre las rojas, una nube gris y el dato: «Ruido: 78 decibeles, seis más que antes». Sobre la verde, un árbol: «58 decibeles, quince menos».',
+      'CONCLUSIÓN DE LA REDACCIÓN. «El cierre le sirvió a la mayoría de los locales que respondieron, a quienes pasean y a los pulmones de la décima. No les sirvió a todos, y parte del ruido se mudó a las cuadras vecinas. Antes de extenderlo, convendría preguntarles a ellas. Y a Hernando».',
+    ],
+  };
+  const l3 = leccion('icf-lc-discontinuo-3', 'Textos que mezclan formatos', guion(
+    ['Varias piezas, un tema', 'Titular, gráfica, foto, carta y mapa hablan de lo mismo.'],
+    ['Se completan o se contradicen', 'Una carta puede mostrar lo que una gráfica deja fuera.'],
+    ['¿Quién no respondió?', 'Mira quién falta en los datos.'],
+    ['La conclusión', 'Debe tener en cuenta todas las piezas.']), [
+    x('mapa-margen', 'Lleva al margen qué hace cada pieza. Sobra una nota.', { doc: MIXTO,
+      ...F(['plantea la pregunta', 0, 'Busca lo que la página intenta responder.'], ['da las ventas en números', 1, 'Busca las barras.'], ['trae una voz que cambió de idea', 2, 'Busca a quien peleaba antes.'], ['trae una voz que falta en los datos', 3, 'Busca a quien cerró.'], ['ubica el efecto en la ciudad', 4, 'Busca las líneas de colores.'], ['junta todo con sus límites', 5, 'Busca la opinión de la redacción.'], ['vende bicicletas', null, 'Ninguna pieza vende.']),
+      luz: [[1, 'intenta responder'], [2, 'Ventas de los domingos'], [3, 'la primera en pelear'], [4, 'no está en la gráfica'], [5, 'Una línea verde'], [6, 'No les sirvió a todos']], bien: 'Pregunta, números, voces, lugar y conclusión.' },
+      'El titular pregunta, la gráfica cuantifica, dos voces opinan, el mapa ubica y la redacción concluye.', 'Mira qué aporta cada pieza que las otras no tienen.'),
+    x('genero-o-cita', '¿Es un **dato** medido o una **opinión**?', { doc: MIXTO, rot: ['dato', 'opinión'],
+      ...F(['El ruido subió seis decibeles', 0, '¿Se midió o se piensa?'], ['La calle es de todos', 1, '¿Se midió o se piensa?'], ['Doce locales no respondieron', 0, '¿Se contó o se piensa?'], ['La página no me cuenta', 1, '¿Se midió o es lo que alguien siente?']), bien: 'Medir y opinar conviven.' },
+      'Los decibeles y los locales se cuentan; el titular y el reclamo opinan.', 'Pregunta si alguien podría no estar de acuerdo.'),
+    x('voz-de-la-fuente', 'Ata cada cosa a la pieza que la muestra.', { ayuda: 'Tira un hilo desde cada cosa hasta su pieza.', doc: MIXTO, portadas: [['La gráfica', 'pieza'], ['La carta', 'pieza'], ['El mapa', 'pieza'], ['El recuadro con foto', 'pieza']],
+      ...T(['las ventas cayeron y luego subieron', 0, '¿Cuál tiene barras?'], ['un negocio que no entró en los datos', 1, '¿Quién cerró?'], ['el ruido se corrió a otras calles', 2, '¿Cuál tiene líneas rojas?'], ['cómo se adaptó una comerciante', 3, '¿Quién puso mesas?']), bien: 'Cada pieza, lo suyo.' },
+      'La gráfica muestra el recorrido, la carta la ausencia, el mapa el ruido y el recuadro la adaptación.', 'Di qué se sabría si solo tuvieras esa pieza.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: MIXTO, nums: [2, 4, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Al año se vendió más que antes del cierre.', 0, 'Compara dos barras: 60 y 78 están escritas.'], ['La gráfica puede verse mejor de lo que fue para todos.', 1, '¿Quiénes no están en ella?'], ['El ruido total de la zona no desapareció.', 1, '¿Adónde se fue una parte?'], ['Los carros contaminan menos en las paralelas.', 2, '¿Se midió la contaminación de las paralelas?']),
+      luz: [[2, 'Antes del cierre: 60'], [4, 'porque cerré'], [5, 'seis más que antes']], bien: 'Lo que falta también informa.' },
+      'Las ventas están escritas; el sesgo y el ruido mudado se deducen; la contaminación no se midió.', 'Junta la nota de la gráfica con la carta.'),
+    x('balanza-tesis', 'Afirmación: «el cierre benefició a todos los comerciantes». ¿Qué hace cada pieza?', { doc: MIXTO, tesis: 'El cierre benefició a todos los comerciantes',
+      ...F(['Las ventas pasaron de 60 a 78.', 0, '¿Apoya, al menos en parte?'], ['Hernando cerró su local.', 1, '¿Benefició a todos?'], ['A los de repuestos no les fue igual.', 1, '¿Benefició a todos?'], ['El árbol del mapa es verde.', 2, '¿Habla de comerciantes?']), bien: 'Un «todos» cae con un solo caso.' },
+      'La subida la apoya; Hernando y los repuestos la debilitan; el árbol no pesa.', 'Fíjate en la palabra «todos» de la afirmación.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 6 la oración que **reconoce los límites** del cierre.', { doc: MIXTO, nums: [6], apuesta: 'No sirvió a todos y el ruido se mudó.', ...S(['6.2'], { '6.0': 'Es el rótulo de la pieza.', '6.1': 'Dice a quiénes sirvió.', '6.3': 'Dice qué convendría hacer antes.', '6.4': 'Añade a quién más preguntarle.' }), bien: 'Reconocer límites da confianza.' },
+      'Después de decir a quién sirvió, la siguiente aclara a quién no.', 'Busca la oración con una negación y un efecto sobre los vecinos.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo que permite la página.', { doc: MIXTO, filas: [{ antes: 'El primer mes, las ventas', topes: ['subieron', 'bajaron', 'no cambiaron'], va: 1 }, { antes: 'Los datos de ventas son de', topes: ['todos los locales', 'los que cerraron', 'quienes respondieron'], va: 2 }, { antes: 'Sobre extender el cierre, recomienda', topes: ['preguntar antes', 'hacerlo ya', 'no hacerlo nunca'], va: 0 }], mira: ['Compara 60 con 45.', 'Relee la nota de la gráfica.', 'Relee la conclusión.'], luz: [[2, 'Primer mes: 45'], [2, 'Doce locales no respondieron'], [6, 'convendría preguntarles']], bien: 'Bajaron, respondieron y preguntar.' },
+      'El primer mes bajaron, los datos son de quienes respondieron y recomienda preguntar.', 'Busca el dato exacto en la pieza que corresponde.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: MIXTO, lineas: ['Una calle se cierra a los carros los domingos.', 'La foto está arriba de una frase.', 'Las ventas cayeron al comienzo y luego subieron.', 'A algunos negocios no les sirvió.', 'La nube es gris.', 'Antes de ampliarlo conviene oír a los afectados.'], ...S([1, 4], { 0: 'Es el tema de la página.', 2: 'Es el dato principal.', 3: 'Es el límite.', 5: 'Es la conclusión.' }), bien: 'Tema, dato, límite y conclusión.' },
+      'La posición de la foto y el color de la nube son detalles; lo demás responde la pregunta.', 'Deja lo que ayuda a contestar si tenían razón.'),
+  ]);
+
+  const BIBLIO = {
+    id: 'icf-cartel', title: 'Campaña «Devuélvelo»',
+    paras: [
+      'CARTEL EN LA PUERTA DE LA BIBLIOTECA. Dibujo de un libro con piernas y una maleta, parado bajo la lluvia. Globo: «¿Ya puedo volver a casa?». Abajo, en letras amarillas: «1 240 libros están perdidos. Uno puede estar debajo de tu cama. Devuélvelo en mayo: sin multa y sin preguntas».',
+      'TABLA PEGADA AL LADO, «Libros sin devolver por tipo». Novelas: 520. Cómics: 310. Cocina: 180. Escolares: 160. Poesía: 70. Nota: «Total de la colección: 31 000. La biblioteca tiene 9 000 novelas y 1 000 cómics».',
+      'CARTA DE UNA USUARIA, en el tablero de corcho. «Me da pena entrar. Saqué un libro de cocina hace muchos años, cuando mi mamá estaba enferma, y aprendí sus recetas. Después ella murió y no fui capaz de soltarlo. Está manchado de salsa. ¿Todavía lo reciben?». Sin firma.',
+      'RESPUESTA DE LA BIBLIOTECARIA, en un papel azul, pegada debajo. «Claro que sí. Y si quiere, cópienos una receta en la última página antes de entregarlo. Un libro manchado es un libro que sirvió. Si prefiere quedárselo, tráiganos otro a cambio: también vale. Aquí nadie le va a preguntar por qué se demoró».',
+      'GRÁFICA, puesta en junio sobre el cartel. Línea de devoluciones por semana en mayo: primera, 30; segunda, 45; tercera, 210; cuarta, 380. Una flecha señala el comienzo de la tercera semana y dice: «Aquí se pegó la carta». Al pie: «Total: 665. Gracias».',
+      'ÚLTIMO PAPEL, escrito a mano, sin fecha. «Devolví seis. Uno no era de aquí, pero llovía y me dio pesar dejarlo afuera». Alguien dibujó al lado el mismo libro con piernas, ahora sin maleta, sentado junto a una ventana. Debajo, en letra de niño: «¿Y el que está debajo de mi cama?». La bibliotecaria contestó con una flecha que apunta hacia la puerta y una sola palabra: «Tráelo». Al día siguiente la flecha tenía un corazón.',
+    ],
+  };
+  const Q = preg(BIBLIO, 'lectura');
+  return mundo('icf-lc-discontinuo', 'Textos Discontinuos', 'lectura', [l1, l2, l3], [
+    ['icf-lc-discontinuo-1', 'En una tabla, mira también la nota al pie.', Q('Según la tabla y su nota, el tipo con mayor **proporción** de libros sin devolver, entre novelas y cómics, es:', ['Las novelas, porque son 520', 'Los cómics: 310 de 1 000', 'Son iguales', 'No se puede saber'], 1, '520 de 9 000 es menos del 6 %; 310 de 1 000 es 31 %.', 'Compara cada número con el total de su tipo.')],
+    ['icf-lc-discontinuo-1', 'La forma también comunica.', Q('La frase «Uno puede estar debajo de tu cama» busca:', ['Acusar de robo', 'Enseñar a ordenar el cuarto', 'Que el lector se sienta parte del problema sin regañarlo', 'Vender libros'], 2, 'Habla de «tu cama» con humor y ofrece volver sin multa ni preguntas.', 'Mira a quién le habla y qué ofrece después.')],
+    ['icf-lc-discontinuo-2', 'En un dibujo, dar vida a un objeto crea cercanía.', Q('El libro con piernas, maleta y lluvia sirve para:', ['Informar cuántos libros hay', 'Despertar ternura por los libros perdidos', 'Anunciar el clima', 'Mostrar un viaje real'], 1, 'Darle rasgos de persona y pena mueve a devolverlo.', 'Pregunta qué sentimiento produce el dibujo.')],
+    ['icf-lc-discontinuo-2', 'Compara el dibujo del comienzo con el del final.', Q('Que al final el libro aparezca sin maleta y junto a una ventana sugiere que:', ['Se perdió otra vez', 'Está de viaje', 'Fue vendido', 'Ya volvió a casa'], 3, 'Sin maleta y bajo techo: llegó.', 'Recuerda qué preguntaba en el primer cartel.')],
+    ['icf-lc-discontinuo-3', 'Una pieza puede explicar a otra.', Q('La flecha de la gráfica sugiere que el aumento de devoluciones se debió a:', ['La lluvia', 'La carta y su respuesta', 'El final del año', 'Las multas'], 1, 'La flecha señala el comienzo de la tercera semana, cuando se pegó la carta.', 'Lee lo que dice la flecha y qué pasa después.')],
+    ['icf-lc-discontinuo-3', 'Que algo ocurra después no prueba que sea la causa.', Q('Alguien podría cuestionar la conclusión de la gráfica diciendo que:', ['La línea es azul', 'Había libros de poesía', 'La carta no tiene firma', 'En la última parte del mes la gente también se apura por el plazo'], 3, 'El plazo vencía en mayo: el final del plazo es otra explicación posible.', 'Busca otra causa para el aumento al final del mes.')],
   ]);
 })());
 ;
@@ -8592,6 +8554,159 @@ PI_MUNDOS.push((() => {
   ]);
 })());
 ;
+//#archivo js/courses/preicfes-sc-historia.js
+// Preicfes · Sociales y Ciudadanas · mundo 6 «Historia de Colombia» (spec 2026-11-25-preicfes-estructura). Textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const COLONIA = {
+    id: 'icf-colonia', title: 'De súbditos a ciudadanos',
+    ficha: { autor: 'Cuaderno de historia', fuente: 'Colección «Pasado presente»', fecha: 'Febrero de 2026' },
+    paras: [
+      'Durante casi tres siglos, lo que hoy es Colombia fue parte del imperio español. La Corona nombraba a quienes gobernaban, cobraba impuestos y controlaba el comercio: solo se podía vender y comprar, legalmente, con la metrópoli. La sociedad estaba ordenada por origen. Arriba, los españoles nacidos en Europa; luego sus descendientes americanos, los criollos; después mestizos, indígenas y, en la base, los africanos esclavizados.',
+      'Ese orden nunca fue tranquilo. Hubo indígenas que pleitearon por sus resguardos y esclavizados que huyeron y fundaron palenques, como el de San Basilio, reconocido por la Corona a comienzos del siglo XVIII. Resistir no era siempre pelear: también era conservar una lengua, una fiesta o una forma de sembrar.',
+      'En el siglo XVIII, los reyes de la casa de Borbón quisieron sacar más provecho de sus colonias. Subieron los impuestos, crearon monopolios como el del tabaco y prefirieron a los peninsulares para los cargos. En 1781, en El Socorro, Manuela Beltrán rompió el edicto de un nuevo impuesto, y miles de personas marcharon hacia Santafé. Los comuneros pactaron unas capitulaciones que el gobierno incumplió. José Antonio Galán, que siguió en rebeldía, fue ejecutado en 1782.',
+      'Los criollos tenían dinero y estudios, pero no el poder. Leían a los ilustrados franceses y conocían la independencia de Estados Unidos. En 1794, Antonio Nariño tradujo e imprimió los Derechos del Hombre; le costó la cárcel. Cuando en 1808 Napoleón invadió España y puso preso al rey, surgió una pregunta incómoda: si no hay rey, ¿quién manda?',
+      'El 20 de julio de 1810, en Santafé, una disputa por un florero fue la chispa de un cabildo abierto que formó una junta de gobierno. No fue todavía la independencia total: la junta decía gobernar en nombre del rey. Vinieron años de división entre centralistas y federalistas, la reconquista española de 1816 y, por fin, la campaña libertadora, que triunfó en Boyacá el 7 de agosto de 1819.',
+      'La nueva república cambió muchas cosas y dejó otras. Ya no había súbditos, sino ciudadanos; pero solo votaban los hombres libres con propiedades o renta. La esclavitud duró hasta 1851. Los indígenas perdieron, poco a poco, sus tierras comunales. La independencia cambió quién gobernaba antes de cambiar cómo se vivía.',
+    ],
+  };
+  const l1 = leccion('icf-sc-historia-1', 'De la Colonia a la República', guion(
+    ['El orden colonial', 'Un imperio que controla cargos, comercio e impuestos, y una sociedad ordenada por origen.'],
+    ['Resistencias', 'Palenques, pleitos, comuneros: el orden nunca fue tranquilo.'],
+    ['Causas y detonantes', 'Reformas, ideas y crisis del rey; el florero fue la chispa.'],
+    ['Cambios y permanencias', 'Hubo república, pero siguieron la esclavitud y el voto de pocos.']), [
+    x('linea-vida', 'Lleva cada hecho a su época.', { doc: COLONIA, rot: ['antes de 1800', 'de 1800 a 1819', 'después de 1819'],
+      ...F(['La marcha de los comuneros', 0, 'Busca el año de El Socorro.'], ['La junta de Santafé', 1, 'Busca el año del florero.'], ['El fin legal de la esclavitud', 2, 'Busca hasta cuándo duró.'], ['La batalla de Boyacá', 1, 'Busca el triunfo de la campaña.']), luz: [[3, 'En 1781'], [5, '20 de julio de 1810'], [6, 'hasta 1851']], bien: '1781, 1810, 1819 y 1851.' },
+      'Los comuneros son de 1781; la junta, de 1810; Boyacá, de 1819; la esclavitud terminó en 1851.', 'Busca la fecha de cada hecho en el texto.'),
+    x('genero-o-cita', '¿Es una **causa de fondo** o el **detonante** del 20 de julio?', { doc: COLONIA, rot: ['de fondo', 'detonante'],
+      ...F(['La disputa por el florero', 1, '¿Venía de tiempo atrás?'], ['Los cargos para los peninsulares', 0, '¿Venía de tiempo atrás?'], ['Las ideas ilustradas', 0, '¿Venía de tiempo atrás?'], ['Los impuestos y monopolios', 0, '¿Venía de tiempo atrás?']), bien: 'La chispa y la leña.' },
+      'El florero fue la chispa; cargos, ideas e impuestos venían acumulándose.', 'Pregunta si ocurrió ese día o desde antes.'),
+    x('pista-tipo', 'Ata cada grupo a lo que lo caracteriza en el texto.', { doc: COLONIA, lineas: ['peninsulares', 'criollos', 'africanos esclavizados', 'indígenas'],
+      ...T(['preferidos para los cargos', 0, '¿A quiénes prefirieron los Borbones?'], ['con dinero y estudios, sin el poder', 1, '¿Quiénes leían a los ilustrados?'], ['algunos huyeron y fundaron palenques', 2, '¿Quiénes hicieron San Basilio?'], ['pleitearon por sus resguardos', 3, '¿Quiénes defendían tierras comunales?']), bien: 'Cada grupo, su lugar y su lucha.' },
+      'Peninsulares con cargos, criollos sin poder, palenques de esclavizados y resguardos indígenas.', 'Busca en el texto qué se dice de cada grupo.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: COLONIA, nums: [3, 5, 6], pregunta: 'Queda en pie', queda: 'La independencia fue un proceso con varias etapas.',
+      ...T(['El gobierno cumplió lo pactado con los comuneros.', 3, 'Busca qué pasó con las capitulaciones.'], ['El 20 de julio fue la independencia total.', 6, 'Busca en nombre de quién gobernaba la junta.'], ['Desde 1819 votaron todos.', 9, 'Busca quiénes votaban.']), bien: 'Incumplió, todavía no y solo algunos.' },
+      'Las capitulaciones se incumplieron, la junta gobernaba en nombre del rey y votaban pocos.', 'Busca la palabra clave: comuneros, independencia, votar.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: COLONIA, nums: [4, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Nariño fue preso por imprimir los Derechos del Hombre.', 0, 'Léela junto a 1794.'], ['Al gobierno le inquietaban esas ideas.', 1, '¿Por qué castigaría una traducción?'], ['La independencia no mejoró de inmediato la vida de todos.', 1, '¿Quiénes siguieron igual?'], ['Nariño viajó con Napoleón.', 2, '¿El texto los une?']),
+      luz: [[4, 'le costó la cárcel'], [6, 'La esclavitud duró']], bien: 'El castigo muestra el miedo.' },
+      'La cárcel está escrita; la inquietud y la desigualdad que siguió se deducen; el viaje se inventa.', 'Pregunta por qué un gobierno castigaría eso.'),
+    x('balanza-tesis', 'Tesis: «la independencia cambió quién gobernaba antes de cambiar cómo se vivía». ¿Qué hace cada dato?', { doc: COLONIA, tesis: 'Cambió quién gobernaba antes de cómo se vivía',
+      ...F(['La esclavitud siguió más de treinta años.', 0, '¿Siguió algo de la vida de antes?'], ['Solo votaban hombres con propiedades o renta.', 0, '¿Cambió para la mayoría?'], ['En 1820 se repartió la tierra entre todos.', 1, 'Si fuera cierto, ¿qué diría de la tesis?'], ['El florero era de porcelana.', 2, '¿Habla de la vida o del gobierno?']), bien: 'Cambios y permanencias.' },
+      'La esclavitud y el voto restringido la apoyan; un reparto general la debilitaría; el florero no pesa.', 'Supón cierto cada dato y pregunta si la vida cambió pronto.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo. Sobran dos.', { doc: COLONIA, frases: [[1, 'legalmente, con la ', 'metrópoli', ''], [3, 'crearon ', 'monopolios', ' como el del tabaco'], [2, 'indígenas que ', 'pleitearon', ' por sus resguardos']],
+      ...F(['España', 0, '¿Quién dominaba la colonia?'], ['negocios de un solo vendedor', 1, '¿Quién podía vender el tabaco?'], ['reclamaron ante la ley', 2, '¿Cómo defendieron sus tierras?'], ['ciudad grande', null, 'Aquí se habla de un imperio.'], ['bailaron', null, 'Se trata de defender tierras.']), bien: 'Cada palabra en su época.' },
+      'La metrópoli es el país que domina, el monopolio es un solo vendedor y pleitear es reclamar ante la ley.', 'Lee la oración completa y piensa quién manda.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: COLONIA, lineas: ['La sociedad colonial estaba ordenada por origen.', 'El edicto era de papel.', 'Hubo resistencias y reformas que molestaron.', 'La crisis del rey abrió el camino a la independencia.', 'La batalla fue en agosto.', 'La república dejó muchas desigualdades.'], ...S([1, 4], { 0: 'Es el punto de partida.', 2: 'Son causas de fondo.', 3: 'Es el momento clave.', 5: 'Es lo que permaneció.' }), bien: 'Orden, resistencia, crisis y permanencias.' },
+      'El papel y el mes son detalles; lo demás explica el proceso.', 'Deja lo que ayuda a entender por qué y qué cambió.'),
+  ]);
+
+  const SIGLO = {
+    id: 'icf-siglo19', title: 'Un país que se escribía y se borraba',
+    ficha: { autor: 'Cuaderno de historia', fuente: 'Colección «Pasado presente»', fecha: 'Marzo de 2026' },
+    paras: [
+      'Pocos países estrenaron tantas constituciones en un siglo. Entre 1821 y 1886 hubo, por lo menos, ocho textos nacionales. Cada uno cambiaba el nombre del país y, sobre todo, la respuesta a tres preguntas: ¿cuánto poder tiene el gobierno central?, ¿qué lugar ocupa la Iglesia?, ¿quién puede votar?',
+      'La primera república unió a la Nueva Granada, Venezuela y Ecuador. Los historiadores la llaman Gran Colombia. Era enorme y sus regiones estaban mal comunicadas; además, Bolívar y Santander tenían ideas distintas sobre cuánto debía mandar el centro. En 1830 se separaron Venezuela y Ecuador, y ese mismo año murió Bolívar en Santa Marta.',
+      'A mitad de siglo aparecieron los dos partidos que marcarían la historia. Los conservadores defendían, en general, un Estado central fuerte y a la Iglesia católica como base del orden. Los liberales pedían más libertades, más poder para las regiones y separar a la Iglesia del Estado. Dentro de cada partido había ricos y pobres; muchas veces se era liberal o conservador por la familia o por el pueblo.',
+      'Las reformas liberales de mitad de siglo abolieron la esclavitud, expropiaron tierras de la Iglesia y, en 1863, crearon con la Constitución de Rionegro un país federal, los Estados Unidos de Colombia, con nueve estados que tenían ejército propio. Hubo muchas libertades y también muchas guerras locales.',
+      'En 1886, con Rafael Núñez y Miguel Antonio Caro, la Regeneración hizo lo contrario: un país unitario, con un presidente fuerte, y un acuerdo con la Iglesia que le entregó la educación. Los liberales quedaron casi por fuera del gobierno. El siglo terminó con la guerra de los Mil Días, entre 1899 y 1902, que dejó unos cien mil muertos según los cálculos más citados. Al año siguiente, con apoyo de Estados Unidos, se separó Panamá.',
+      'Mientras los partidos peleaban, el café crecía en las laderas. A fines de siglo ya era el principal producto que se exportaba. Con él llegaron caminos, pequeños propietarios en unas regiones y grandes haciendas en otras. La política se escribía en constituciones; la vida, en recibos de café.',
+    ],
+  };
+  const l2 = leccion('icf-sc-historia-2', 'Siglo XIX', guion(
+    ['Tres preguntas', 'Centro o regiones, Iglesia y Estado, y quién vota.'],
+    ['Dos partidos', 'Conservadores y liberales, a mitad de siglo.'],
+    ['Péndulo', '1863, federal y liberal; 1886, central y conservadora.'],
+    ['Economía', 'El café cambió el país mientras los partidos peleaban.']), [
+    x('pinta-tipos', 'Pinta cada idea con el partido que, en general, la defendía.', { doc: SIGLO, plumas: ['conservador', 'liberal'],
+      ...P(['Un Estado central fuerte.', 0, '¿Quién quería un centro fuerte?'], ['Separar a la Iglesia del Estado.', 1, '¿Quién quería separarla?'], ['Más poder para las regiones.', 1, '¿Quién quería repartir el poder?'], ['La Iglesia como base del orden.', 0, '¿Quién veía así a la Iglesia?']), bien: 'Centro e Iglesia; regiones y libertades.' },
+      'Los conservadores, centro e Iglesia; los liberales, regiones y separación.', 'Relee el párrafo que presenta a los dos partidos.'),
+    x('linea-vida', 'Lleva cada rasgo a su constitución.', { doc: SIGLO, rot: ['Rionegro, 1863', 'Regeneración, 1886'],
+      ...F(['Nueve estados con ejército', 0, 'Busca el nombre «Estados Unidos de Colombia».'], ['Un presidente fuerte', 1, 'Busca a Núñez y Caro.'], ['La Iglesia recibe la educación', 1, 'Busca el acuerdo con la Iglesia.'], ['Un país federal', 0, 'Busca la palabra en el párrafo 4.']), luz: [[4, 'un país federal'], [5, 'un país unitario']], bien: 'De un extremo al otro.' },
+      'Rionegro fue federal, con ejércitos regionales; la de 1886, unitaria, presidencial y con la Iglesia.', 'Compara lo que hizo cada reforma: párrafos 4 y 5.'),
+    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: SIGLO,
+      ...F(['¿Por qué se separó la Gran Colombia?', 1, 'Busca el comienzo que nombra la primera república.'], ['¿Qué producto se exportaba más?', 5, 'Busca el comienzo que nombra un cultivo.'], ['¿Qué tres preguntas cambiaban?', 0, 'Busca el comienzo sobre constituciones.']),
+      luz: [[2, 'mal comunicadas'], [6, 'el principal producto'], [1, 'tres preguntas']], bien: 'Comienzo, segundo y último.' },
+      'La separación está en el 2, el café en el 6 y las preguntas en el 1.', 'Lee solo la primera oración de cada párrafo.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: SIGLO, nums: [3, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['En cada partido había ricos y pobres.', 0, 'Léela junto al párrafo 3.'], ['Dejar por fuera a un partido ayudó a que hubiera guerra.', 1, '¿Qué pasó después de que los liberales quedaran por fuera?'], ['No siempre se escogía partido por las ideas.', 1, '¿Por qué se era liberal o conservador muchas veces?'], ['Panamá se separó por una guerra de religión.', 2, '¿El texto da esa causa?']),
+      luz: [[3, 'había ricos y pobres'], [5, 'casi por fuera del gobierno'], [3, 'por la familia o por el pueblo']], bien: 'La familia y el pueblo pesaban.' },
+      'Ricos y pobres está escrito; la exclusión y la herencia del partido se deducen; la religión no.', 'Une lo que pasa antes con lo que pasa después.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: SIGLO, filas: [{ antes: 'Los conservadores defendían el centro', topes: ['nunca', 'siempre y todos', 'en general'], va: 2 }, { antes: 'Con Rionegro hubo', topes: ['solo paz', 'libertades y guerras locales', 'solo guerra'], va: 1 }, { antes: 'La cifra de muertos de los Mil Días es', topes: ['un cálculo', 'exacta', 'falsa'], va: 0 }], mira: ['Busca las dos palabras que limitan la idea.', 'Relee el final del párrafo 4.', 'Busca «unos» y «según».'], luz: [[3, 'en general'], [4, 'muchas guerras locales'], [5, 'según los cálculos']], bien: 'En general, las dos cosas y un cálculo.' },
+      'En general, libertades con guerras locales y una cifra calculada.', 'Busca en el texto la palabra que pone el límite.'),
+    x('pasos-del-proceso', 'Ordena el siglo. El primer paso está en su puesto.', { doc: SIGLO, que: 'el siglo', de: 'De la Gran Colombia a Panamá', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Se une la Gran Colombia.', 'Venezuela y Ecuador se separan.', 'Se escribe la de Rionegro.', 'Llega la Regeneración.', 'Guerra de los Mil Días.'], mira: ['', 'Ocurre en 1830.', 'Ocurre en 1863.', 'Ocurre en 1886.', 'Cierra el siglo.'], bien: 'Unión, separación, federal, central y guerra.' },
+      'Primero la unión, en 1830 la separación, luego 1863, 1886 y la guerra.', 'Busca los años en el texto y ponlos en fila.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 6 la oración que **contrasta** la política con la vida diaria.', { doc: SIGLO, nums: [6], apuesta: 'Una se escribía en leyes; la otra, en café.', ...S(['6.3'], { '6.0': 'Dice que las dos cosas pasaban a la vez.', '6.1': 'Da un dato de exportación.', '6.2': 'Dice qué llegó con el café.' }), bien: 'La imagen final resume la idea.' },
+      'La última oración opone las constituciones a los recibos de café.', 'Busca la oración partida por un punto y coma.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: SIGLO, lineas: ['El siglo discutió centro, Iglesia y voto.', 'Bolívar murió en Santa Marta.', 'Dos partidos nacieron a mitad de siglo.', 'Se pasó de un país federal a uno central.', 'Rionegro queda en Antioquia.', 'El café transformó la economía.'], ...S([1, 4], { 0: 'Es la idea que organiza el texto.', 2: 'Son los actores.', 3: 'Es el péndulo.', 5: 'Es el cambio económico.' }), bien: 'Preguntas, partidos, péndulo y café.' },
+      'Los lugares son detalles; lo demás organiza el siglo.', 'Deja lo que explica los cambios del país.'),
+  ]);
+
+  const SIGLO20 = {
+    id: 'icf-siglo20', title: 'La paz y sus intentos',
+    ficha: { autor: 'Cuaderno de historia', fuente: 'Colección «Pasado presente»', fecha: 'Abril de 2026' },
+    paras: [
+      'El siglo XX empezó con ferrocarriles, café y la indemnización por Panamá. En las plantaciones y los pozos petroleros nacieron los sindicatos. En diciembre de 1928, en Ciénaga, el ejército disparó contra trabajadores en huelga de una bananera extranjera. Aún se discute cuántos murieron; nadie discute que marcó al país.',
+      'En 1930 los liberales volvieron al poder y, pocos años después, hicieron reformas: derecho a la huelga, función social de la propiedad, más educación pública. Parte del país sintió que por fin avanzaba; otra parte, que se perdía el orden. Jorge Eliécer Gaitán, que hablaba del «país político» y del «país nacional», reunió multitudes. El 9 de abril de 1948 lo asesinaron en Bogotá.',
+      'Su muerte no creó la violencia entre liberales y conservadores, que ya venía, pero la multiplicó. A los años que siguieron se les llama «La Violencia», con mayúscula: unos doscientos mil muertos y cientos de miles de personas que huyeron del campo. Entre 1953 y 1957 gobernó el general Rojas Pinilla. Para salir de la dictadura y de la guerra, los dos partidos crearon el Frente Nacional: se turnaron la presidencia durante dieciséis años.',
+      'El Frente Nacional redujo la guerra entre partidos, pero cerró la puerta a los demás. Quien no era liberal ni conservador tenía muy difícil participar. En los años sesenta, en un mundo partido por la Guerra Fría, nacieron guerrillas como las FARC y el ELN, que decían luchar por la tierra y la igualdad. Más tarde aparecieron grupos paramilitares, que decían defenderse de ellas, y el narcotráfico, que financió a unos y a otros.',
+      'La población civil puso la mayoría de las víctimas. Hubo desplazamiento, secuestros, masacres, reclutamiento de niños y ejecuciones de inocentes presentados como combatientes. Todos los grupos armados y también agentes del Estado cometieron crímenes. Decir esto no es repartir culpas por igual: es reconocer que ninguna víctima vale menos por quién la mató.',
+      'Los intentos de paz también hacen parte de la historia. En 1990 el M-19 dejó las armas; un año después, una asamblea plural escribió una nueva Constitución. En 2016 el Estado y las FARC firmaron un acuerdo, rechazado por poca diferencia en un plebiscito y luego modificado. Creó una comisión de la verdad y una justicia especial. El conflicto no terminó del todo, pero miles de personas siguen vivas porque algo cambió.',
+    ],
+  };
+  const l3 = leccion('icf-sc-historia-3', 'Siglo XX y conflicto armado', guion(
+    ['De la huelga al 9 de abril', 'Sindicatos, reformas y la muerte de Gaitán.'],
+    ['La Violencia y el Frente Nacional', 'Guerra entre partidos y un pacto que cerró la puerta a otros.'],
+    ['El conflicto armado', 'Guerrillas, paramilitares, narcotráfico y Estado; las víctimas, sobre todo civiles.'],
+    ['Intentos de paz', '1990, la Constitución de 1991, el acuerdo de 2016.']), [
+    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: SIGLO20,
+      ...F(['el comienzo del siglo y las huelgas', 0, 'Busca los sindicatos.'], ['reformas y Gaitán', 1, 'Busca el regreso de los liberales.'], ['La Violencia y el pacto', 2, 'Busca el turno en la presidencia.'], ['el origen del conflicto armado', 3, 'Busca los años sesenta.'], ['las víctimas', 4, 'Busca a la población civil.'], ['los intentos de paz', 5, 'Busca el año 1990.'], ['la llegada de los españoles', null, 'Eso fue siglos antes.']),
+      luz: [[1, 'nacieron los sindicatos'], [2, 'hicieron reformas'], [3, 'el Frente Nacional'], [4, 'nacieron guerrillas'], [5, 'La población civil'], [6, 'Los intentos de paz']], bien: 'Huelgas, reformas, violencia, conflicto, víctimas y paz.' },
+      'El texto recorre huelgas, reformas, La Violencia, el conflicto, las víctimas y la paz.', 'Lee el comienzo de cada párrafo y dale un nombre.'),
+    x('linea-vida', 'Lleva cada hecho a su momento.', { doc: SIGLO20, rot: ['antes de 1950', 'de 1950 a 1989', 'desde 1990'],
+      ...F(['La masacre de las bananeras', 0, 'Busca el año de Ciénaga.'], ['El Frente Nacional', 1, 'Busca qué vino después de Rojas.'], ['Nacen las FARC y el ELN', 1, 'Busca los años sesenta.'], ['La nueva Constitución', 2, 'Busca un año después de 1990.']), luz: [[1, '1928'], [4, 'años sesenta'], [6, 'En 1990']], bien: '1928, los cincuenta, los sesenta y 1991.' },
+      'Bananeras 1928, Frente Nacional tras 1957, guerrillas en los sesenta y Constitución en 1991.', 'Busca la fecha o la década de cada hecho.'),
+    x('genero-o-cita', 'Del Frente Nacional, ¿es un efecto **buscado** o **no buscado**?', { doc: SIGLO20, rot: ['buscado', 'no buscado'],
+      ...F(['Salir de la dictadura', 0, '¿Para eso se creó?'], ['Reducir la guerra entre partidos', 0, '¿Para eso se creó?'], ['Cerrar la puerta a otros grupos', 1, '¿El texto lo da como meta o como resultado?'], ['Alimentar que algunos buscaran las armas', 1, '¿Para eso se creó?']), bien: 'Un pacto con efectos inesperados.' },
+      'Salir de la dictadura y de la guerra era la meta; la exclusión y lo que siguió, no.', 'Mira para qué se creó y qué pasó después.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: SIGLO20, nums: [1, 3, 5], pregunta: 'Queda en pie', queda: 'La mayoría de las víctimas fueron civiles.',
+      ...T(['Se sabe exactamente cuántos murieron en Ciénaga.', 3, 'Busca lo que aún se discute.'], ['La violencia empezó con la muerte de Gaitán.', 4, 'Busca si ya venía.'], ['Solo un grupo cometió crímenes.', 10, 'Busca quiénes los cometieron.']), bien: 'Se discute, ya venía y todos.' },
+      'La cifra se discute, la violencia ya venía y los crímenes fueron de todos los grupos y de agentes del Estado.', 'Saca la palabra clave: cuántos, empezó, solo.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: SIGLO20, nums: [4, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['El narcotráfico financió a grupos enfrentados.', 0, 'Léela junto al final del párrafo 4.'], ['El país estaba dividido frente al acuerdo.', 1, '¿Cómo fue el resultado del plebiscito?'], ['Un contexto mundial influyó en el conflicto.', 1, '¿Qué pasaba en el mundo en los sesenta?'], ['El M-19 ganó la presidencia en 1990.', 2, '¿Se habla de esa elección?']),
+      luz: [[4, 'financió a unos y a otros'], [6, 'por poca diferencia'], [4, 'la Guerra Fría']], bien: 'Poca diferencia: un país dividido.' },
+      'El narcotráfico está escrito; la división y el contexto se deducen; la presidencia no aparece.', 'Piensa qué muestra un resultado tan cerrado.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 5 la oración que **aclara** cómo se debe entender lo anterior.', { doc: SIGLO20, nums: [5], apuesta: 'Ninguna víctima vale menos.', ...S(['5.3'], { '5.0': 'Dice quiénes fueron la mayoría.', '5.1': 'Da ejemplos de lo que ocurrió.', '5.2': 'Dice quiénes cometieron crímenes.' }), bien: '«No es… es…» aclara.' },
+      'La última oración aclara: no se trata de repartir culpas por igual, sino de reconocer a las víctimas.', 'Busca la oración que dice qué no es y qué sí es.'),
+    x('balanza-tesis', 'Tesis: «el Frente Nacional trajo una paz incompleta». ¿Qué hace cada dato?', { doc: SIGLO20, tesis: 'El Frente Nacional trajo una paz incompleta',
+      ...F(['Redujo la guerra entre liberales y conservadores.', 0, '¿Trajo algo de paz?'], ['Nacieron guerrillas en esos años.', 0, '¿Fue completa?'], ['Durante el pacto no hubo ningún grupo armado.', 1, 'Si fuera cierto, ¿sería incompleta?'], ['Duró un número par de años.', 2, '¿Habla de la paz?']), bien: 'Algo de paz y algo de guerra.' },
+      'Reducir una guerra y ver nacer otra apoyan «incompleta»; no haber armados la debilitaría; el número par no pesa.', 'La tesis tiene dos partes: hubo paz y no fue completa.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: SIGLO20, lineas: ['Las huelgas y las reformas abrieron el siglo.', 'Rojas era general.', 'La Violencia llevó a un pacto que excluyó a otros.', 'El conflicto armado golpeó sobre todo a civiles.', 'Ciénaga está en el Magdalena.', 'Hubo varios intentos de paz.'], ...S([1, 4], { 0: 'Es el comienzo.', 2: 'Es el puente entre dos guerras.', 3: 'Es el centro del texto.', 5: 'Es el cierre.' }), bien: 'Comienzo, pacto, conflicto y paz.' },
+      'El grado y el lugar son detalles; lo demás es el hilo del siglo.', 'Deja lo que explica cómo se llegó hasta hoy.'),
+  ]);
+
+  const VOTO = {
+    id: 'icf-voto', title: 'La cédula de doña Carmen',
+    paras: [
+      'El primero de diciembre de 1957, doña Carmen Arango, de cuarenta y seis años, hizo fila desde las cinco de la mañana. Nunca había votado. Ninguna colombiana lo había hecho en una elección nacional. Ese día se votaba un plebiscito: había que decir sí o no a las reglas del Frente Nacional, el pacto con que liberales y conservadores buscaban salir de la dictadura y de la guerra entre ellos.',
+      'El derecho no cayó del cielo. Desde los años treinta, grupos de mujeres habían pedido poder manejar sus bienes, entrar a la universidad y votar. En 1932 una ley permitió a las casadas administrar su propio dinero. En 1954, la asamblea convocada por el gobierno de Rojas Pinilla aprobó el voto femenino, aunque no hubo elecciones en que usarlo mientras él gobernó. Hubo mujeres que lucharon en la prensa, en la radio y en las salas de sus casas; algunas eran liberales, otras conservadoras, otras de ningún partido.',
+      'El plebiscito fue aprobado por una mayoría enorme. Votaron más de un millón ochocientas mil mujeres. Entre otras cosas, se confirmó que ellas tendrían los mismos derechos políticos que los hombres. El mismo texto, sin embargo, reservaba los cargos públicos a los dos partidos. Una puerta se abría y otra quedaba cerrada.',
+      'Doña Carmen contaba que un hombre de la fila le preguntó por quién le había dicho su marido que votara. Ella le contestó que era viuda y que, además, sabía leer. Guardó la cédula toda la vida en una caja de galletas, junto a las escrituras de la casa.',
+      'Su nieta, que hoy estudia historia, encontró la caja. Al lado de la cédula había un recorte de periódico con una caricatura: una señora entra a votar y, detrás, el marido carga al niño y la olla. El dibujante quiso burlarse. La abuela había escrito encima, con esfero azul: «Ojalá».',
+    ],
+  };
+  const Q = preg(VOTO, 'sociales');
+  return mundo('icf-sc-historia', 'Historia de Colombia', 'sociales', [l1, l2, l3], [
+    ['icf-sc-historia-1', 'Cambiar la ley no siempre cambia de inmediato la vida.', Q('Que en 1954 se aprobara el voto femenino y que solo se usara en 1957 muestra que:', ['La ley fue falsa', 'Un derecho puede reconocerse antes de poder ejercerse', 'Las mujeres no querían votar', 'No existía la cédula'], 1, 'Se aprobó, pero no hubo elecciones en que usarlo hasta entonces.', 'Compara el año de la ley con el de la primera fila.')],
+    ['icf-sc-historia-1', 'Los derechos suelen ser resultado de luchas largas.', Q('La expresión «El derecho no cayó del cielo» significa que:', ['Fue resultado de una lucha de años', 'Lo dio la Iglesia', 'Llegó por accidente', 'Nadie lo pidió'], 0, 'El párrafo cuenta lo que pidieron grupos de mujeres desde los años treinta.', 'Lee lo que viene después de esa frase.')],
+    ['icf-sc-historia-2', 'Mira qué abre y qué cierra una reforma.', Q('«Una puerta se abría y otra quedaba cerrada» se refiere a que el plebiscito:', ['Abrió escuelas y cerró iglesias', 'Reconoció derechos a las mujeres, pero dejó los cargos a dos partidos', 'Abrió fronteras y cerró puertos', 'Permitió votar solo a los hombres'], 1, 'Confirmó los derechos políticos de ellas y reservó los cargos a liberales y conservadores.', 'Busca las dos cosas que hizo el mismo texto.')],
+    ['icf-sc-historia-2', 'Un movimiento puede reunir gente de ideas distintas.', Q('Según el texto, las mujeres que lucharon por el voto:', ['Eran todas liberales', 'Eran todas conservadoras', 'No tenían estudios', 'Tenían posiciones políticas diversas'], 3, 'Unas eran liberales, otras conservadoras y otras de ningún partido.', 'Busca el final del párrafo 2.')],
+    ['icf-sc-historia-3', 'El Frente Nacional: un pacto entre dos partidos.', Q('El Frente Nacional buscaba principalmente:', ['Salir de la dictadura y de la guerra entre los dos partidos', 'Separar a Panamá', 'Crear un país federal', 'Abolir la esclavitud'], 0, 'El primer párrafo lo dice: salir de la dictadura y de la guerra entre ellos.', 'Relee el final del primer párrafo.')],
+    ['icf-sc-historia-3', 'Una caricatura también es una fuente de su época.', Q('La palabra «Ojalá», escrita sobre la caricatura, muestra que la abuela:', ['No entendió el dibujo', 'Admiraba al dibujante', 'Quería que nadie votara', 'Convirtió la burla en un deseo de mayor igualdad'], 3, 'El dibujante se burlaba de que el hombre cuidara; ella lo desea.', 'Compara lo que quería el dibujante con lo que escribe ella.')],
+  ]);
+})());
+;
 //#archivo js/courses/preicfes-cn-indaga.js
 // Preicfes · Ciencias Naturales · mundo 1 «Indagación Científica» (spec 2026-11-20-curso-preicfes): la competencia que más
 // pregunta la prueba de ciencias: la pregunta de un experimento, sus variables, el control, los datos y qué se puede concluir.
@@ -9319,6 +9434,110 @@ PI_MUNDOS.push((() => {
   ]);
 })());
 ;
+//#archivo js/courses/preicfes-cn-energia.js
+// Preicfes · Ciencias Naturales · mundo 6 «Energía y Calor» (spec 2026-11-25-preicfes-estructura). Experimentos y datos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, sol, err, opc, guion } = ICF;
+
+  const PISTA = {
+    id: 'icf-pista', title: 'La pista de canicas',
+    ficha: { autor: 'Curso de física de grado once', fuente: 'Bitácora de laboratorio', fecha: 'Febrero de 2026' },
+    paras: [
+      'La energía no se ve: se nota en lo que puede hacer. Un cuerpo que se mueve tiene energía cinética: depende de su masa y del cuadrado de su velocidad. Uno que está en alto tiene energía potencial gravitatoria: depende de su masa, de la gravedad y de la altura. A la suma de las dos se le llama energía mecánica.',
+      'El curso soltó una canica de 100 gramos desde una rampa de 80 centímetros de alto. Arriba, quieta, toda su energía era potencial: 0.8 julios, tomando la gravedad como 10. Al bajar, la altura disminuye y la velocidad crece: la potencial se convierte en cinética.',
+      'Si nada frenara a la canica, la suma sería siempre 0.8 julios. A mitad de la altura habría 0.4 de potencial y 0.4 de cinética; abajo, 0.8 de cinética, y la velocidad sería de 4 metros por segundo. En la otra rampa subiría de nuevo hasta 80 centímetros.',
+      'Midieron. Abajo la velocidad fue de 3.5 metros por segundo y la canica subió solo 60 centímetros en la otra rampa. Faltaba energía. No había desaparecido: el roce había calentado un poquito la pista y la canica, y parte se había ido en sonido. La energía total se conserva; la mecánica, solo si no hay roce.',
+      'Repitieron con una canica de 200 gramos, desde la misma altura. Tenía el doble de energía, pero llegó abajo con la misma velocidad. Al chocar con un taco de madera, sin embargo, lo empujó el doble de distancia. La masa no cambia la rapidez de la caída; cambia lo que la energía puede hacer.',
+      'Por último soltaron la canica desde el doble de altura. Abajo no llegó con el doble de velocidad, sino con cerca de 1.4 veces. Como la energía cinética va con el cuadrado de la velocidad, duplicarla exige menos que duplicar la rapidez. Por eso un carro que va al doble de velocidad necesita unas cuatro veces la distancia para frenar.',
+    ],
+  };
+  const l1 = leccion('icf-cn-energia-1', 'Energía mecánica', guion(
+    ['Cinética y potencial', 'Movimiento y altura. Su suma es la energía mecánica.'],
+    ['Se transforma', 'Al bajar, la potencial se vuelve cinética; al subir, al revés.'],
+    ['Se conserva', 'Sin roce, la suma no cambia; con roce, una parte pasa a calor y sonido.'],
+    ['El cuadrado', 'El doble de velocidad es cuatro veces la energía cinética.']), [
+    x('genero-o-cita', '¿Qué energía tiene **más**: potencial o cinética?', { doc: PISTA, rot: ['potencial', 'cinética'],
+      ...F(['La canica quieta, arriba', 0, '¿Está en alto o se mueve rápido?'], ['La canica al pasar por abajo', 1, '¿Está en alto o se mueve rápido?'], ['Un columpio en el punto más alto', 0, '¿Está en alto o se mueve rápido?'], ['Una flecha que pasa a ras del suelo', 1, '¿Está en alto o se mueve rápido?']), bien: 'Altura o movimiento.' },
+      'Quieta arriba y en lo alto del columpio, potencial; abajo y a ras, cinética.', 'Pregunta si lo que la tiene es la altura o el movimiento.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: PISTA, nums: [4, 5, 6], pregunta: 'Queda en pie', queda: 'Con roce, la energía mecánica disminuye.',
+      ...T(['La energía que faltaba desapareció.', [3, 4], 'Busca adónde se fue.'], ['La canica pesada cae más rápido.', [6, 8], 'Busca con qué velocidad llegó.'], ['Con el doble de altura, el doble de velocidad.', 10, 'Busca cuánto creció la velocidad.']), bien: 'Calor, misma rapidez y 1.4.' },
+      'Se fue en calor y sonido, la masa no cambia la rapidez y la velocidad creció 1.4 veces.', 'Saca la palabra clave: desapareció, pesada, doble.'),
+    x('voz-de-la-fuente', 'Ata cada momento a su energía, si no hay roce.', { ayuda: 'Tira un hilo desde cada reparto hasta su momento.', doc: PISTA, portadas: [['Arriba', 'momento'], ['A la mitad', 'momento'], ['Abajo', 'momento'], ['En la otra rampa, al parar', 'momento']],
+      ...T(['0.8 J de potencial, al soltarla', 0, '¿Cuándo está quieta al comienzo?'], ['0.4 J y 0.4 J', 1, '¿Cuándo están repartidas?'], ['0.8 J de cinética', 2, '¿Cuándo va más rápido?'], ['otra vez 0.8 J de potencial', 3, '¿Cuándo vuelve a quedar quieta?']), bien: 'La suma siempre es 0.8.' },
+      'Arriba toda es potencial, a la mitad se reparte, abajo toda es cinética y al parar vuelve a ser potencial.', 'En cada momento, las dos deben sumar 0.8 julios.'),
+    x('lee-escala', 'La gráfica muestra la energía (en mJ) de otra canica en tres momentos. Pon cada valor y cuánta se **perdió** del inicio al final.', { vals: [500, 450, 350], rot: ['inicio', 'mitad', 'final'], hi: 600, st: 100, et: ['inicio', 'mitad', 'final', 'se perdió'], ops: ['', '', ''], metas: ['500', '450', '350', '150'], fichas: ['500', '450', '350', '150', '405', '305', '850'],
+      mira: ['Mira en qué línea termina.', 'Está a mitad de camino entre 400 y 500.', 'Está a mitad de camino entre 300 y 400.', 'Resta la final a la inicial.'], trampas: { '1:405': 'Cada línea vale 100: la mitad son 50.', '2:305': 'Cada línea vale 100: la mitad son 50.', '3:850': 'Eso es la suma.' }, ok: 'El roce la convierte en calor.' },
+      'Las líneas van de 100 en 100: 500, 450 y 350. Se perdieron $500 - 350 = 150$ mJ.', 'Mira cuánto vale cada línea antes de leer.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo que muestran los datos.', { doc: PISTA, filas: [{ antes: 'En la otra rampa subió', topes: ['80 cm', 'más de 80 cm', '60 cm'], va: 2 }, { antes: 'Con doble masa, la velocidad abajo fue', topes: ['el doble', 'la misma', 'la mitad'], va: 1 }, { antes: 'La energía total', topes: ['se conserva', 'se pierde', 'se crea'], va: 0 }], mira: ['Relee lo que midieron.', 'Relee la segunda prueba.', 'Relee el final del párrafo 4.'], luz: [[4, 'subió solo 60 centímetros'], [5, 'con la misma velocidad'], [4, 'La energía total se conserva']], bien: 'Menos altura, igual rapidez, total constante.' },
+      'Subió 60 cm, la velocidad fue la misma y la energía total se conserva.', 'Busca el dato de cada perilla antes de moverla.'),
+    x('mayor-tramo', 'La gráfica muestra la velocidad (en dm/s) de un carrito en cuatro momentos. Toca el tramo que más creció **en porcentaje**.', { v: [10, 16, 24, 33] },
+      'De 10 a 16 crece 60 %; de 16 a 24, 50 %; de 24 a 33, 37.5 %.', 'Divide lo que creció cada tramo entre el valor con que empezó.'),
+    sol('Un bloque de 2 kg se suelta desde 5 m. Sin roce y con gravedad 10, ¿qué energía tiene y con qué rapidez llega?', ['Energía potencial: $2 \\cdot 10 \\cdot 5 =$ [[100]] J', 'Abajo toda es [[cinética]]', '$\\tfrac12 \\cdot 2 \\cdot v^2$ iguala ese valor: $v =$ [[10]] m/s'], ['50', 'potencial', '20'], 'La cinética de abajo vale 100 J: $v^2 = 100$ y llega a 10 m/s.', 'Iguala la energía de arriba con la de abajo.'),
+    err('Un carro pasa de 20 a 40 km/h. ¿Qué pasa con su energía cinética?', ['La velocidad se duplica', 'La energía va con el cuadrado de la velocidad', 'La energía se duplica'], 2, ['La energía se multiplica por 4', 'La energía no cambia', 'La energía se multiplica por 20'], 'La velocidad se multiplica por 2 y la energía, por $2^2 = 4$.', 'Aplica el cuadrado al factor 2.'),
+    opc('Un péndulo se suelta desde cierta altura y, sin roce, sube al otro lado:', ['Más alto, porque toma impulso', 'Hasta la misma altura', 'La mitad, porque se cansa', 'No sube'], 1, 'La energía mecánica se conserva: llega a la misma altura.', 'Si no hay roce, la suma de energías no cambia.'),
+  ]);
+
+  const CAFE = {
+    id: 'icf-termo', title: 'Tres vasos de café',
+    ficha: { autor: 'Curso de física de grado once', fuente: 'Bitácora de laboratorio', fecha: 'Marzo de 2026' },
+    paras: [
+      'Temperatura y calor no son lo mismo. La temperatura dice qué tanto se mueven, en promedio, las partículas de un cuerpo. El calor es energía que pasa de un cuerpo más caliente a uno más frío. Un lago tibio tiene menos temperatura que una taza de café hirviendo, pero muchísima más energía en sus partículas.',
+      'El calor viaja de tres maneras. Por conducción, de partícula en partícula, como en una cuchara metida en la sopa. Por convección, cuando un líquido o un gas caliente sube y el frío baja. Por radiación, en ondas que no necesitan materia: así llega el calor del Sol.',
+      'El grupo sirvió café a 80 °C en tres vasos iguales de tamaño: uno de metal, uno de vidrio y uno de icopor, todos con la misma tapa. El salón estaba a 20 °C. A los diez minutos midieron 52, 61 y 72 grados. A la hora, los dos primeros estaban casi a 20 y el de icopor, a 45.',
+      'El metal es buen conductor: deja pasar el calor con rapidez. El icopor es aislante, porque está lleno de aire quieto. Por eso, aunque los tres vasos llevan horas en el mismo salón y tienen la misma temperatura, el de metal se siente más frío al tocarlo: se lleva más rápido el calor de la mano.',
+      'Al final, si se espera lo suficiente, todos llegan a 20 grados: es el equilibrio térmico. El calor deja de pasar cuando las temperaturas se igualan. Nunca pasa «frío»: lo que sentimos como frío es calor que sale de nosotros.',
+      'No todo se calienta con la misma facilidad. Para subir un grado a un kilo de agua se necesitan unos 4 200 julios; a un kilo de arena, unos 800. A esa cantidad se le llama calor específico. Por eso en la playa, a mediodía, la arena quema y el mar no; y por la noche la arena se enfría primero.',
+    ],
+  };
+  const l2 = leccion('icf-cn-energia-2', 'Calor y temperatura', guion(
+    ['No son lo mismo', 'Temperatura: qué tanto se mueven las partículas. Calor: energía que pasa.'],
+    ['Tres caminos', 'Conducción, convección y radiación.'],
+    ['Equilibrio', 'El calor pasa hasta que las temperaturas se igualan.'],
+    ['Calor específico', 'El agua necesita mucho calor para subir un grado.']), [
+    x('pinta-tipos', 'Pinta cada caso con la manera en que viaja el calor.', { doc: CAFE, plumas: ['conducción', 'convección', 'radiación'],
+      ...P(['Una cuchara se calienta en la sopa.', 0, '¿Pasa por contacto, por un fluido que se mueve o en ondas?'], ['El aire caliente sube en un cuarto.', 1, '¿Pasa por contacto, por un fluido que se mueve o en ondas?'], ['El Sol calienta la cara.', 2, '¿Pasa por contacto, por un fluido que se mueve o en ondas?'], ['Las brasas calientan la mano puesta a un lado.', 2, '¿Pasa por contacto, por un fluido que se mueve o en ondas?'], ['La baldosa enfría el pie descalzo.', 0, '¿Pasa por contacto, por un fluido que se mueve o en ondas?']), bien: 'Contacto, fluido y ondas.' },
+      'Cuchara y baldosa por contacto, el aire sube por convección y Sol y brasas por radiación.', 'Mira si hay contacto, un fluido que se mueve o nada en medio.'),
+    x('genero-o-cita', '¿Se habla de **calor** o de **temperatura**?', { doc: CAFE, rot: ['calor', 'temperatura'],
+      ...F(['Lo que marca el termómetro', 1, '¿Se mide en grados?'], ['Energía que pasa a lo más frío', 0, '¿Es algo que pasa o algo que se tiene?'], ['Qué tanto se mueven las partículas', 1, '¿Es un promedio o una energía que pasa?'], ['Los 4 200 julios para un kilo de agua', 0, '¿En qué unidad se mide?']), bien: 'Grados o julios.' },
+      'El termómetro y el movimiento promedio son temperatura; la energía que pasa, calor.', 'Los grados miden una; los julios miden la otra.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CAFE, nums: [3, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['El salón estaba a 20 °C.', 0, 'Léela junto al experimento.'], ['En diez minutos, el de metal perdió más grados.', 1, 'Compara 80 con cada medida.'], ['El icopor es más barato que el metal.', 2, '¿Se habla de precios?'], ['Con el mismo calor, la arena sube más grados que el agua.', 1, 'Compara 800 con 4 200.']),
+      luz: [[3, 'El salón estaba a 20'], [3, '52, 61 y 72'], [6, 'unos 800']], bien: 'Restar y comparar.' },
+      'Los 20 están escritos; lo del metal y lo de la arena se deducen; el precio no.', 'Haz las restas de grados y compara los julios.'),
+    x('lee-escala', 'La gráfica muestra la temperatura (en °C) a los diez minutos de tres recipientes nuevos. Pon cada una y la diferencia entre la mayor y la menor.', { vals: [75, 60, 45], rot: ['termo', 'barro', 'lata'], hi: 80, st: 20, et: ['termo', 'barro', 'lata', 'diferencia'], ops: ['', '', ''], metas: ['75', '60', '45', '30'], fichas: ['75', '60', '45', '30', '63', '41', '120'],
+      mira: ['Está a tres cuartos del camino entre 60 y 80.', 'Mira en qué línea termina.', 'Está a un cuarto del camino entre 40 y 60.', 'Resta la menor a la mayor.'], trampas: { '0:63': 'Cada línea vale 20: tres cuartos son 15.', '2:41': 'Cada línea vale 20: un cuarto son 5.', '3:120': 'Eso es la suma de dos.' }, ok: 'El termo conserva mejor.' },
+      'Las líneas van de 20 en 20: 75, 60 y 45. La diferencia es $75 - 45 = 30$ °C.', 'Mira qué parte del tramo alcanza cada barra.'),
+    x('balanza-tesis', 'Afirmación: «el icopor conserva mejor el calor». ¿Qué hace cada dato?', { doc: CAFE, tesis: 'El icopor conserva mejor el calor',
+      ...F(['A la hora, su café estaba a 45 y los otros casi a 20.', 0, '¿Cuál quedó más caliente?'], ['Solo el vaso de icopor tenía tapa.', 1, 'Si fuera cierto, ¿sería por el material?'], ['Los tres vasos tenían la misma tapa.', 0, '¿La comparación es justa?'], ['El café era de la sierra.', 2, '¿Cambia el material del vaso?']), bien: 'Comparar cambiando una sola cosa.' },
+      'Los 45 grados y la misma tapa la apoyan; una tapa solo en uno la debilitaría; el origen no pesa.', 'Pregunta si lo único distinto era el material.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 4 la oración que explica por qué el metal **se siente** más frío.', { doc: CAFE, nums: [4], apuesta: 'Se lleva más rápido el calor de la mano.', ...S(['4.2'], { '4.0': 'Dice cómo es el metal, sin hablar de la mano.', '4.1': 'Habla del icopor.' }), bien: 'Misma temperatura, distinta rapidez.' },
+      'La tercera oración une las dos cosas: misma temperatura, pero el metal se lleva más rápido el calor.', 'Busca la oración que habla de lo que siente la mano.'),
+    sol('Se mezclan 1 kg de agua a 20 °C y 1 kg de agua a 60 °C, sin perder calor. ¿A qué temperatura quedan?', ['El agua caliente [[cede]] calor', 'La fría recibe la misma cantidad', 'Como hay igual masa, quedan a [[40]] °C', 'Cada una cambió [[20]] grados'], ['recibe', '80', '30'], 'Masas iguales de agua: el punto medio, 40 °C.', 'La que está más caliente es la que da.'),
+    err('Alguien explica por qué una cobija abriga.', ['El cuerpo está más caliente que el aire', 'El calor pasa del cuerpo al aire', 'La cobija produce calor'], 2, ['La cobija hace que el calor salga más despacio', 'La cobija enfría el aire', 'La cobija deja entrar frío al cuerpo'], 'La cobija es aislante: frena la salida del calor.', '¿De dónde sale el calor: de la cobija o del cuerpo?'),
+    opc('A mediodía la arena está a 50 °C y el mar a 27 °C. La mejor explicación es que:', ['El Sol calienta solo la arena', 'El mar refleja toda la luz', 'El agua necesita más calor para subir cada grado', 'La arena está más cerca del Sol'], 2, 'El calor específico del agua es mayor: con el mismo calor sube menos.', 'Compara los julios que pide cada kilo.'),
+  ]);
+
+  const SOLAR = {
+    id: 'icf-horno', title: 'El horno de la vereda',
+    paras: [
+      'En una vereda sin gas, los estudiantes construyeron un horno solar: una caja negra por dentro, con tapa de vidrio y paredes rellenas de papel arrugado.',
+      'La luz del Sol atraviesa el vidrio y el negro la absorbe. El interior se calienta; el vidrio deja salir poco calor y el aire quieto del papel lo retiene.',
+      'Un día despejado midieron: a las diez, 35 °C; a las once, 60; a las doce, 85; a la una, 95. Un huevo tardó cuarenta minutos en cocerse.',
+      'Pintaron de blanco otra caja igual. A la una marcaba 52 °C: el blanco refleja gran parte de la luz.',
+      'En un día nublado, la caja negra llegó a 50 °C. De noche, sin Sol, se enfrió más despacio que una olla de metal puesta al lado.',
+    ],
+  };
+  const pl = (g, q, p, e, h) => play(g, q, { doc: SOLAR, ...p }, e, { hint: h });
+  return mundo('icf-cn-energia', 'Energía y Calor', 'ciencias', [l1, l2], [
+    ['icf-cn-energia-1', 'La energía se transforma: luz en calor.', pl('donde-buscar', '¿A qué párrafo vuelves para responder?', { cards: [['¿Con qué rellenaron las paredes?', [1]], ['¿Cuánto tardó el huevo?', [3]], ['¿Qué pasó en un día nublado?', [5]]] }, 'El relleno está en el 1, el huevo en el 3 y el nublado en el 5.', 'Busca la palabra clave de cada pregunta.')],
+    ['icf-cn-energia-1', 'Nada se crea: la energía del horno viene del Sol.', pl('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { cards: [['El negro absorbe la luz.', 0], ['Sin Sol el horno no cocina.', 1], ['La caja blanca se calentó menos que la negra.', 1], ['El vidrio es irrompible.', 2]] }, 'El negro está escrito; lo de la noche y la comparación se deducen; el vidrio no.', 'Compara 95 con 52 y piensa en la noche.')],
+    ['icf-cn-energia-1', 'En el horno, energía luminosa se convierte en térmica.', opc('La transformación de energía que ocurre dentro del horno es:', ['De calor a luz', 'De movimiento a altura', 'De luz a calor', 'De sonido a luz'], 2, 'El negro absorbe la luz y se calienta.', 'Mira qué entra por el vidrio y qué se siente adentro.')],
+    ['icf-cn-energia-2', 'Aire quieto: buen aislante.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'El aire quieto retiene el calor.', cards: [['Plumas esponjadas de un pájaro con frío', true], ['Ventana de doble vidrio', true], ['Un ventilador que mueve el aire', false], ['Una cuchara de metal en la sopa', false]] }, 'Plumas y doble vidrio guardan aire quieto; el ventilador lo mueve y el metal conduce.', 'Busca dónde hay aire que no se mueve.')],
+    ['icf-cn-energia-2', 'El color cambia cuánta radiación se absorbe.', pl('intruso-excepto', 'La opción que no ayuda a calentar el horno', { ask: 'Todo esto ayuda a que el horno se caliente, EXCEPTO:', cards: [['La tapa de vidrio', [2]], ['El interior negro', [2]], ['El papel de las paredes', [2]], ['Pintarlo de blanco', null]] }, 'Vidrio, negro y papel ayudan; el blanco refleja la luz.', 'Busca lo que hace cada parte en el texto.')],
+    ['icf-cn-energia-2', 'Los aislantes frenan el paso del calor.', opc('De noche la caja se enfría más despacio que la olla porque:', ['La caja produce calor', 'El papel con aire quieto frena la salida del calor', 'El metal atrae el frío', 'La Luna la calienta'], 1, 'El aire quieto es aislante; el metal conduce.', 'Compara el material de las dos.')],
+  ]);
+})());
+;
 //#archivo js/courses/preicfes-en-avisos.js
 // Preicfes · Inglés · mundo 1 «Avisos y Vocabulario» (spec 2026-11-20-curso-preicfes): las primeras partes de la prueba de inglés:
 // qué dice un aviso, dónde se vería y qué palabra corresponde a una descripción. Las instrucciones van en español, como en el
@@ -9975,6 +10194,116 @@ PI_MUNDOS.push((() => {
     ['icf-en-largo-2', 'Pregunta para qué escribe el autor.', Q('The writer\'s main purpose is to:', ['Complain about tourists', 'Sell a map', 'Teach people to draw', 'Tell the story of an unusual project'], 3, 'Cuenta la historia de Fabio y de sus mapas, sin vender ni quejarse.', 'Piensa qué hace el autor en casi todos los párrafos.')],
     ['icf-en-largo-2', 'El final muestra lo que el autor aprendió.', Q('At the end, the writer realises that:', ['The map was perfect', 'Fabio is tired of his work', 'It is better to buy a phone', 'The people next door were strangers until that day'], 3, 'Después de veinte años nunca había hablado con su vecino.', 'Lee las dos últimas oraciones.')],
     ['icf-en-largo-2', 'El tono se nota en los gestos y las palabras.', Q('How does the mayor feel about the maps?', ['He likes them', 'He is afraid of them', 'He hasn\'t seen them', 'He wants to stop them'], 0, 'Ante la queja, mandó pedir dos mil copias: le gustan.', 'Mira qué hizo cuando recibió la queja.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-en-vocabulario.js
+// Preicfes · Inglés · mundo 6 «Palabras en Contexto» (spec 2026-11-25-preicfes-estructura): textos de nivel A2 y B1, escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const BAKERY = {
+    id: 'icf-en-bakery', title: 'A bakery without a door',
+    ficha: { autor: 'Written by Iris Vélez', fuente: 'Travel blog «Slow Streets»', fecha: 'April 2026' },
+    paras: [
+      'There is a bakery in the old part of Popayán that has no door. It has a small window, a bell, and a basket that goes down on a rope from the second floor. You ring the bell, put your money in the basket and shout what you want. A minute later, the basket comes back with warm bread. In eleven years, nobody has ever stolen it.',
+      'The owner, Fermín Ruiz, opened the place after an accident at work. He was told that he would hardly walk again, and his flat had thirty-two stairs. Moving was too expensive, so he decided to stay at home and let the bread travel instead of him. At first his neighbours laughed at the idea. Then they tried the bread.',
+      'He gets up at three. He does not use any machines, except for an old radio. While the dough is resting, he reads the notes that people leave in the basket. Some are orders for the following day. Others are jokes, recipes, or questions such as "How do you get rid of mice?" He answers every one of them, usually with a piece of cake.',
+      'Business has grown so quickly that a supermarket offered to sell his bread. He turned it down. "They wanted two thousand rolls a day, all the same size," he explains. "I make two hundred, and each one looks like the person I am thinking of." He did accept, however, a smaller offer: the hospital now sends a nurse with a long list every Friday.',
+      'Last month the rope broke. The basket fell on the street with forty rolls in it. Before Fermín could reach the window, the children of the block had already picked everything up, and someone had climbed a ladder with a new rope. There was one roll missing. The next morning he found a coin in the basket, with a note: "Sorry. I was hungry."',
+    ],
+  };
+  const l1 = leccion('icf-en-vocabulario-1', 'Choosing the right word', guion(
+    ['Mira alrededor', 'La palabra correcta encaja en sentido y en gramática.'],
+    ['Palabras parecidas', 'say / tell, make / do, look / watch: cada una tiene su compañía.'],
+    ['Verbos con partícula', 'get up, give up, turn down, look after: el sentido cambia.'],
+    ['Cantidad', 'much, many, few, any, every.']), [
+    x('cambia-palabra', 'Put the words that mean the same. Sobran dos.', { doc: BAKERY, frases: [[2, 'he would ', 'hardly', ' walk again'], [3, 'How do you ', 'get rid of', ' mice?'], [4, 'He ', 'turned it down', '.']],
+      ...F(['almost never', 0, 'After the accident, could he walk easily?'], ['make them go away', 1, 'Who wants mice at home?'], ['said no to it', 2, 'Did the supermarket sell his bread?'], ['very fast', null, 'He had an accident: think about it.'], ['accepted it', null, 'It is the opposite.']), bien: 'The sentence gives the meaning.' },
+      '«Hardly» es casi no, «get rid of» es deshacerse de y «turn down» es rechazar.', 'Lee lo que pasa antes y después de cada palabra.'),
+    x('bisagras', 'Put the word that joins. Sobran dos.', { doc: BAKERY, pares: [['He uses no machines,', 'an old radio.'], ['Moving was too expensive,', 'he stayed at home.'], ['He reads the notes', 'the dough is resting.']],
+      ...F(['except for', 0, 'One thing is different: which pair has an exception?'], ['so', 1, 'The second idea is the result of the first one.'], ['while', 2, 'Two things happen at the same time.'], ['because of', null, 'It gives a cause before a noun.'], ['unless', null, 'It is a condition: no pair has one.']), bien: 'Exception, result and time.' },
+      '«Except for» exceptúa, «so» da el resultado y «while» indica a la vez.', 'Di qué hace la segunda idea con la primera.'),
+    x('genero-o-cita', 'Which verb goes with it: **make** or **do**?', { doc: BAKERY, rot: ['make', 'do'],
+      ...F(['a cake', 0, '¿Se fabrica algo?'], ['your homework', 1, '¿Es una tarea?'], ['a mistake', 0, '¿Con qué verbo se dice «cometer un error»?'], ['the shopping', 1, '¿Es una actividad?'], ['a decision', 0, '¿Con qué verbo se dice «tomar una decisión»?']), bien: 'Make a cake, do a task.' },
+      '«Make» crea algo (cake, mistake, decision); «do» es para tareas (homework, shopping).', 'Piensa si se crea algo nuevo o se realiza una tarea.'),
+    x('dice-deduce', 'Does it say it, can you deduce it, or is it not there?', { doc: BAKERY, nums: [1, 5], rot: ['it says so', 'you can deduce it', 'it does not say'],
+      ...F(['The bakery has no door.', 0, 'Búscala al comienzo.'], ['The neighbours care about Fermín.', 1, '¿Qué hicieron cuando se rompió la cuerda?'], ['The person with the coin felt bad.', 1, '¿Qué dice la nota?'], ['The rope was made in China.', 2, '¿Se dice de dónde es?']),
+      luz: [[1, 'has no door'], [5, 'picked everything up'], [5, 'Sorry. I was hungry']], bien: 'A coin and a note say a lot.' },
+      'La puerta está escrita; el cariño y la pena se deducen; el origen de la cuerda no.', 'Mira lo que hace la gente en el último párrafo.'),
+    x('pista-tipo', 'Match each word with its opposite.', { doc: BAKERY, lineas: ['expensive', 'accept', 'warm', 'following'],
+      ...T(['cheap', 0, '¿Cuál habla de precio?'], ['turn down', 1, '¿Cuál es decir sí?'], ['cold', 2, '¿Cuál habla de temperatura?'], ['previous', 3, '¿Cuál habla de lo que viene después?']), bien: 'Price, answer, heat and time.' },
+      'Caro y barato, aceptar y rechazar, tibio y frío, siguiente y anterior.', 'Di primero de qué habla cada palabra de la lista.'),
+    x('tira-referente', 'What do these words refer to?', { doc: BAKERY, texto: '|The supermarket| wanted |the rolls|, but it wanted them all the same size.',
+      ...T(['«it»', 0, 'Put it in the sentence: who wanted?'], ['«them»', 1, 'Put it in the sentence: what was the same size?']), bien: 'One place, many things.' },
+      '«It» es el supermercado, uno solo; «them», los panes, varios.', '«It» es para uno solo y «them» es para varios.'),
+    x('descarta-prueba', 'These sentences are false. Ata cada una a la oración que la desmiente.', { doc: BAKERY, nums: [1, 2, 4], pregunta: 'It is true', queda: 'The hospital buys his bread.',
+      ...T(['People often steal the basket.', 4, 'Busca qué ha pasado en once años.'], ['The neighbours loved the idea from the beginning.', 8, 'Busca qué hicieron al comienzo.'], ['He makes two thousand rolls a day.', 13, 'Busca cuántos hace él.']), bien: 'One sentence says no.' },
+      'Nadie la ha robado, al comienzo se rieron y él hace doscientos.', 'Busca la palabra clave de cada frase en el texto.'),
+    x('tacha-resumen', 'Cross out the **two** sentences that are only details.', { doc: BAKERY, lineas: ['A man sells bread with a basket on a rope.', 'He has an old radio.', 'He started after an accident.', 'He keeps his business small.', 'A nurse comes on Fridays.', 'His neighbours help him.'], ...S([1, 4], { 0: 'It is the main idea.', 2: 'It is how it started.', 3: 'It is his decision.', 5: 'It is the end.' }), bien: 'Idea, start, decision and end.' },
+      'La radio y la enfermera son detalles; lo demás es la historia.', 'Deja lo que contarías de la historia en cuatro frases.'),
+  ]);
+
+  const RIVER = {
+    id: 'icf-en-river', title: 'The beautiful art of being bored',
+    ficha: { autor: 'Dr Marcos Lema', fuente: 'Science page for students', fecha: 'May 2026' },
+    paras: [
+      'When did you last feel bored? For many people the answer is surprising: they cannot remember. A bus is late, and we look at our phones. A film becomes slow, and we look at our phones. We have almost completely lost the ability to do nothing, and some scientists are worried about it.',
+      'Boredom is unpleasant, of course. Nevertheless, it seems to be useful. In one study, people were asked to copy numbers from a telephone book for fifteen minutes, which is a terribly boring task. Afterwards they had to think of different uses for a plastic cup. They had more original ideas than another group, who had not copied anything.',
+      'The explanation may be simple. When nothing interesting happens outside, the mind starts looking for something inside. It remembers, imagines and makes unexpected connections. In addition, boredom tells us that what we are doing is not meaningful enough, so it pushes us to change. Without it, we would probably stay in front of the same wall for ever.',
+      'This does not mean that every kind of boredom is good. A person who is bored at work for years can become unhappy or even ill. Moreover, people who get bored easily sometimes look for dangerous ways of feeling alive. As with salt, the right amount makes the difference.',
+      'So what can we do? I am not going to suggest that you throw your phone into the river. Instead, try a small experiment. The next time you are waiting for something, keep your hands in your pockets. At first you will feel uncomfortable. Then, if you are lucky, you will have an idea. And if you have no idea at all, at least you will have seen what the sky looks like on a Tuesday.',
+    ],
+  };
+  const l2 = leccion('icf-en-vocabulario-2', 'Word families and connectors', guion(
+    ['Familias', 'bore, bored, boring, boredom: el final dice qué clase de palabra es.'],
+    ['Prefijos', 'un-, dis-, in- dan lo contrario: unpleasant, unexpected.'],
+    ['Conectores', 'However y nevertheless contrastan; moreover agrega; therefore concluye.'],
+    ['-ed y -ing', 'bored es cómo te sientes; boring es lo que lo causa.']), [
+    x('genero-o-cita', 'Which one completes the idea: **bored** or **boring**?', { doc: RIVER, rot: ['bored', 'boring'],
+      ...F(['I am ___ today.', 0, '¿Habla de cómo se siente alguien?'], ['This film is ___.', 1, '¿Habla de la cosa que lo causa?'], ['The children look ___.', 0, '¿Habla de cómo se siente alguien?'], ['What a ___ task!', 1, '¿Habla de la cosa que lo causa?']), bien: 'People are bored; things are boring.' },
+      '«Bored» es cómo se siente alguien; «boring», lo que aburre.', 'Pregunta si la palabra habla de quien siente o de lo que causa.'),
+    x('pinta-tipos', 'Paint each word with its type.', { doc: RIVER, plumas: ['noun', 'adjective', 'adverb'],
+      ...P(['boredom', 0, 'Look at the end of the word.'], ['useful', 1, 'Look at the end of the word.'], ['completely', 2, 'Look at the end of the word.'], ['explanation', 0, 'Look at the end of the word.'], ['dangerous', 1, 'Look at the end of the word.']), bien: '-dom, -tion; -ful, -ous; -ly.' },
+      '«-dom» y «-tion» forman sustantivos, «-ful» y «-ous» adjetivos y «-ly» adverbios.', 'Compara las terminaciones: algunas se repiten.'),
+    x('bisagras', 'Put the connector. Sobran dos.', { doc: RIVER, pares: [['Boredom is unpleasant.', 'it seems to be useful.'], ['It helps the mind.', 'it pushes us to change.'], ['I had nothing to do,', 'I looked at the sky.']],
+      ...F(['Nevertheless,', 0, 'One idea is bad and the other one is good.'], ['In addition,', 1, 'It adds another good thing.'], ['so', 2, 'The second idea is the result.'], ['For example,', null, 'No pair gives an example.'], ['unless', null, 'No pair has a condition.']), bien: 'Contrast, addition and result.' },
+      '«Nevertheless» contrasta, «in addition» agrega y «so» da el resultado.', 'Di si la segunda idea se opone, se suma o resulta.'),
+    x('cambia-palabra', 'Put the words that mean the same. Sobran dos.', { doc: RIVER, frases: [[1, 'lost the ', 'ability', ' to do nothing'], [3, 'makes ', 'unexpected', ' connections'], [2, '', 'Afterwards', ' they had to think']],
+      ...F(['power', 0, 'It is something that we can do.'], ['surprising', 1, 'The prefix «un-» says «not».'], ['Later', 2, 'When did they do the second task?'], ['usual', null, 'It is the opposite of one of them.'], ['Before', null, 'It is the opposite of one of them.']), bien: 'Context and prefixes help.' },
+      '«Ability» es la capacidad, «unexpected» lo que sorprende y «afterwards» después.', 'Mira el prefijo de la palabra o la oración completa.'),
+    x('ajusta-alcance', 'Move each knob until it says the same as the text.', { doc: RIVER, filas: [{ antes: 'Boredom', topes: ['is useless', 'is always good', 'seems to be useful'], va: 2 }, { antes: 'The writer wants you to', topes: ['sell your phone', 'try an experiment', 'stop working'], va: 1 }, { antes: 'The bored group had', topes: ['more original ideas', 'no ideas', 'the same ideas'], va: 0 }], mira: ['Busca la palabra que suaviza la idea.', 'Relee el párrafo 5.', 'Relee el resultado del estudio.'], luz: [[2, 'it seems to be useful'], [5, 'try a small experiment'], [2, 'more original ideas']], bien: 'Seems, try and more.' },
+      'Parece útil, propone un experimento y el grupo aburrido tuvo más ideas.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('mapa-margen', 'What does each paragraph do? Sobra una nota.', { doc: RIVER,
+      ...F(['presents the problem', 0, 'Look for what we have lost.'], ['describes a study', 1, 'Look for a telephone book.'], ['gives an explanation', 2, 'Look for the mind.'], ['shows the other side', 3, 'Look for salt.'], ['suggests something to do', 4, 'Look for pockets.'], ['sells a phone', null, 'Nobody sells anything.']),
+      luz: [[1, 'lost the ability'], [2, 'In one study'], [3, 'The explanation'], [4, 'This does not mean'], [5, 'try a small experiment']], bien: 'Problem, study, why, but, so.' },
+      'Presenta el problema, un estudio, la explicación, un límite y una sugerencia.', 'Lee el comienzo de cada párrafo y dile un nombre.'),
+    x('talla-idea', 'Put each idea of paragraph 4 in its size.', { doc: RIVER, p: 4, rot: ['only a detail', 'just right', 'says too much'],
+      ...F(['Salt is in the text.', 0, 'It is true, but what does it compare?'], ['Some boredom helps, but too much can be bad.', 1, 'Compare it with the last sentence.'], ['Boredom always makes people ill.', 2, 'Does the text say «always»?']),
+      luz: [[4, 'the right amount'], [4, 'This does not mean']], bien: 'The right amount.' },
+      'La sal es una comparación, «always» dice de más y la idea justa es la cantidad adecuada.', 'Mira la palabra «every» y la última oración.'),
+    x('tacha-resumen', 'Cross out the **two** sentences that are only details.', { doc: RIVER, lineas: ['We have forgotten how to be bored.', 'The cup is plastic.', 'A little boredom can help us to have ideas.', 'Too much boredom can be bad.', 'It was a telephone book.', 'The writer suggests waiting without a phone.'], ...S([1, 4], { 0: 'It is the problem.', 2: 'It is the main idea.', 3: 'It is the limit.', 5: 'It is the suggestion.' }), bien: 'Problem, idea, limit and suggestion.' },
+      'El vaso y el directorio son detalles del estudio; lo demás es el argumento.', 'Deja lo que usarías para explicarle el texto a alguien.'),
+  ]);
+
+  const LIGHT = {
+    id: 'icf-en-light', title: 'The lighthouse keeper\'s cat',
+    paras: [
+      'Sergio Paz had lived alone in the lighthouse for nine years when a cat arrived. Nobody knows how it crossed the water. It was thin, wet and extremely angry, and it immediately chose the only comfortable chair.',
+      'At first, Sergio was not pleased. He was used to silence, and the cat complained about everything: the food, the wind and, above all, the radio. However, he soon noticed something strange. Every time that the cat hid under the bed, a storm came within two hours. The official weather service was often wrong. The cat was not.',
+      'Sergio began to write it down. He also told the fishermen, who laughed at him until one of them decided not to go out one morning because the cat was hiding. That day three boats were damaged. Since then, the fishermen have called the lighthouse before every trip. They do not ask for the weather forecast. They ask: "Where is she?"',
+      'A scientist who visited the island last year was careful. Cats, she explained, may feel changes in air pressure, so there is probably no magic in it. Nevertheless, before she left, she asked Sergio to phone her if the cat went under the bed.',
+      'Sergio has been offered a modern station with sensors and a screen. He has accepted it, although he keeps it in the kitchen, next to the fish. "The machine tells me what is happening," he says. "She tells me whether I should worry."',
+    ],
+  };
+  const Q = preg(LIGHT, 'ingles');
+  return mundo('icf-en-vocabulario', 'Palabras en Contexto', 'ingles', [l1, l2], [
+    ['icf-en-vocabulario-1', 'Mira lo que hace el personaje para entender la palabra.', Q('«At first, Sergio was not pleased» means that he was:', ['Unhappy about the cat', 'Asleep', 'Very tired of fishing', 'Glad to have a cat'], 0, '«Pleased» es contento; con «not», no le gustó.', 'Mira lo que hacía el gato y cómo vivía Sergio.')],
+    ['icf-en-vocabulario-1', '«Be used to» es estar acostumbrado.', Q('«He was used to silence» means that silence was:', ['Something he hated', 'Something new for him', 'Something normal for him', 'Something he needed to buy'], 2, 'Después de nueve años solo, el silencio era lo normal.', 'Piensa cuántos años había vivido solo.')],
+    ['icf-en-vocabulario-1', 'Escoge la palabra que encaja en sentido y gramática.', Q('Which word could replace «damaged» in paragraph 3?', ['Painted', 'Sold', 'Broken', 'Built'], 2, 'Después de una tormenta, las barcas quedaron dañadas.', 'Piensa qué hace una tormenta con una barca.')],
+    ['icf-en-vocabulario-2', 'Nevertheless contrasta.', Q('In paragraph 4, «Nevertheless» shows that the scientist:', ['Believed in magic', 'Was angry', 'Didn\'t like cats', 'Trusted the cat a little, although she had an explanation'], 3, 'Explica que no es magia y, aun así, pide que la llamen.', 'Compara lo que explicó con lo que pidió.')],
+    ['icf-en-vocabulario-2', '-ly forma adverbios: cómo se hace algo.', Q('In «it immediately chose the only comfortable chair», «immediately» tells us:', ['When it chose the chair', 'Which chair it was', 'Why it chose the chair', 'Whose chair it was'], 0, '«Immediately» es de inmediato: dice cuándo.', 'Pregunta qué información agrega la palabra.')],
+    ['icf-en-vocabulario-2', 'Although: aunque.', Q('What does Sergio mean in the last paragraph?', ['The machine is useless', 'The cat should use the machine', 'He will sell the cat', 'Both help him, but in different ways'], 3, 'La máquina informa y la gata le dice si preocuparse.', 'Compara lo que dice de la máquina con lo que dice de ella.')],
   ]);
 })());
 ;
@@ -14371,4 +14700,539 @@ const xpRegla = (k, min, max, et, paso = 1) => ({ k, min, max, paso, et });
     xpMueve('Arma $|x - 2| \\le 4$: pon el centro y la distancia.', 250, { c: 0, r: 1 }, [xpRegla('c', -4, 4, 'centro'), xpRegla('r', 1, 4, 'distancia')], { c: 2, r: 4 }, tramo, 'Centro 2 y distancia 4: de $-2$ a $6$.', { lee: v => `$[${v.c - v.r}, ${v.c + v.r}]$` })],
     ['Ahora sí, un problema', xpMueve('Un horno trabaja bien entre −1 y 7 unidades de su escala. Escríbelo como $|x - c| \\le r$: halla c y r.', 250, { c: 0, r: 1 }, [xpRegla('c', -4, 4, 'centro c'), xpRegla('r', 1, 4, 'distancia r')], { c: 3, r: 4 }, tramo, 'El medio es 3 y los bordes están a 4: $|x - 3| \\le 4$.', { lee: v => `$[${v.c - v.r}, ${v.c + v.r}]$` })],
   ], 'Orden es izquierda o derecha; valor absoluto es distancia.');
+}
+;
+//#archivo js/explora-trig-mundos.js
+// Trigonometría · los tres mundos (Funciones Periódicas, Identidades y Triángulos, El Plano Complejo), Explora. trig-41a tiene su
+// propio archivo. Ejemplos propios, que no salen en los ejercicios.
+{
+  const P = XM.pasos, rad = g => g * Math.PI / 180;
+  const R = (v, K) => XM.rueda(K, 130, 110, 84, v.g) + (v.p ? K.t(246, 60, v.p, 'b ta', 'start') : '') + (v.q ? K.t(246, 96, v.q, 'ta', 'start') : '');
+  const ang = (max = 360, paso = 15, et = 'ángulo (grados)') => [xpRegla('g', 0, max, et, paso)];
+  // Triángulo rectángulo de ángulo g en la esquina izquierda y base b.
+  const tri = (K, x, y, b, g, o = {}) => { const h = b * Math.tan(rad(g)); return K.p([[x, y], [x + b, y], [x + b, y - h]], 'fc') + K.l(x, y, x + b, y, 'lg gr') + K.l(x + b, y, x + b, y - h, 'lf gr') + K.l(x, y, x + b, y - h, 'la gr') + K.ang([x, y], [x + b, y], [x + b, y - h], 26, o.a ?? '', 'fa') + K.r(x + b - 10, y - 10, 10, 10, 'fn') + K.t(x + b / 2, y + 20, o.ca ?? '', 's tg') + K.t(x + b + 8, y - h / 2 + 5, o.co ?? '', 's tf', 'start') + K.t(x + b / 2 - 10, y - h / 2 - 10, o.hi ?? '', 's ta', 'end'); };
+
+  // ---------------------------------------------------------------------------------------------------------- trig-41b
+  const piz = (v, K) => K.c(120, 110, 84, 'fc') + K.sec(120, 110, 84, 0, v.g, 'fa') + K.arc(120, 110, 84, 0, v.g, 'lf gr') + (v.p ? K.t(226, 70, v.p, 'b ta', 'start') : '') + (v.q ? K.t(226, 104, v.q, 'ta', 'start') : '');
+  xpLec('trig-41b', [
+    ['El largo del arco', xpMira('dibujo', 'Empecemos por la idea: el arco mide **radio por ángulo**, en radianes.', { dib: piz, v: { g: 0, p: '', q: '' }, alto: 210 }, [
+      ['Un radián es el ángulo cuyo arco mide un radio.', { g: 57.3, p: '1 rad' }, '$s = r$'],
+      ['Con dos radianes, el arco mide dos radios.', { g: 114.6, p: '2 rad' }, '$s = 2r$'],
+      ['Con θ radianes, θ radios.', { p: 'θ rad' }, '$s = r\\theta$'],
+      ['La vuelta completa son dos pi.', { g: 360, p: '2π rad' }, '$s = 2\\pi r$'],
+      ['En grados no sirve: primero se pasa a radianes.', { g: 90, p: 'π/2 rad' }, '$90^\\circ = \\tfrac{\\pi}{2}$'],
+    ], '$s = r\\theta$, con θ en radianes.'),
+    xpFila('Radio 8 y ángulo $\\tfrac{3\\pi}{4}$. Pon el arco y lo que mediría con radio 4.', ['radio 8', 'radio 4'], ['6π', '3π'], ['24π', '12π', '2π'], 'Multiplica radio por ángulo.', '$8 \\cdot \\tfrac{3\\pi}{4} = 6\\pi$.')],
+    ['El pedazo de área', xpMira('dibujo', 'Segunda idea: el sector es la **misma fracción** de vuelta, pero de área.', { dib: piz, v: { g: 90, p: '', q: '' }, alto: 210 }, [
+      ['Un cuarto de vuelta es un cuarto del disco.', { p: '1/4' }, '$\\tfrac14 \\pi r^2$'],
+      ['Un sexto de vuelta, un sexto.', { g: 60, p: '1/6' }, '$\\tfrac16 \\pi r^2$'],
+      ['En general, la fracción es θ sobre 2π.', { p: 'θ/2π' }, '$\\tfrac{\\theta}{2\\pi} \\cdot \\pi r^2$'],
+      ['Al simplificar, el pi se cancela.', {}, '$A = \\tfrac12 r^2\\theta$'],
+    ], '$A = \\tfrac12 r^2\\theta$.'),
+    xpMueve('Pinta el sector que es **tres octavos** del disco.', 290, { g: 45, p: '' }, ang(360, 45), { g: 135 }, piz, '$\\tfrac38 \\cdot 360^\\circ = 135^\\circ$.', { lee: v => `$${v.g}^\\circ$` })],
+    ['Girar y avanzar', xpMira('dibujo', 'Tercera idea: la **velocidad lineal** es radio por velocidad angular.', { dib: (v, K) => K.c(120, 110, 84, 'fn') + K.c(120, 110, 42, 'fn') + [84, 42].map((r, i) => { const [x, y] = K.at(120, 110, r, v.g); return K.l(120, 110, x, y, 'lm') + K.c(x, y, 8, i ? 'fG' : 'fA'); }).join('') + K.t(226, 110, v.p, 'ta', 'start'), v: { g: 0, p: '' }, alto: 210 }, [
+      ['Dos puntos de un mismo disco, uno al doble de distancia.', {}, '$r \\ \\text{y} \\ 2r$'],
+      ['Giran el mismo ángulo en el mismo tiempo.', { g: 120 }, '$\\omega = \\tfrac{\\theta}{t}$'],
+      ['Pero el de afuera recorre el doble.', { p: '2r vs r' }, '$v = r\\omega$'],
+      ['Las vueltas por minuto se pasan a radianes: por 2π.', {}, '$1 \\ \\text{vuelta} = 2\\pi$'],
+    ], '$v = r\\omega$, con ω en radianes por unidad de tiempo.'),
+    xpFila('Una rueda de radio 3 m da 5 vueltas por minuto. Pon ω y v (por minuto).', ['ω', 'v'], ['10π', '30π'], ['5π', '15π', '3π'], 'Cada vuelta son 2π; luego por el radio.', '$\\omega = 10\\pi$ y $v = 30\\pi$ m.')],
+    ['Ahora sí, un problema', xpFila('Un aspersor riega un sector de $120^\\circ$ con radio 6 m. Pon el ángulo en radianes y el área.', ['radianes', 'área'], ['2π/3', '12π'], ['3π/2', '4π', '24π'], 'Un tercio de vuelta; un tercio del disco de 36π.', '$\\tfrac12 \\cdot 36 \\cdot \\tfrac{2\\pi}{3} = 12\\pi$.')],
+  ], 'En radianes todo es multiplicar: arco, sector y velocidad.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-1
+  const sohD = (v, K) => tri(K, 50, 170, v.b, v.g, { a: 'θ', ca: 'adyacente', co: 'opuesto', hi: 'hipotenusa' }) + K.t(300, 30, v.p || '', 'ta', 'end');
+  xpLec('trig-1', [
+    ['Los nombres de los lados', xpMira('dibujo', 'Empecemos por la idea: los catetos se nombran **desde el ángulo**.', { dib: sohD, v: { b: 170, g: 35, p: '' }, alto: 200 }, [
+      ['La hipotenusa mira al ángulo recto: es la más larga.', {}, '$\\text{hip}$'],
+      ['El **opuesto** está enfrente de θ.', {}, '$\\text{op}$'],
+      ['El **adyacente** está al lado de θ.', {}, '$\\text{ady}$'],
+      ['Si se mira desde el otro ángulo, los catetos cambian de nombre.', {}, '$\\text{op} \\leftrightarrow \\text{ady}$'],
+    ], 'Opuesto: enfrente. Adyacente: al lado. Hipotenusa: frente al recto.'),
+    xpFila('Triángulo de lados 8, 15 y 17. Desde el ángulo opuesto al **8**, pon los lados.', ['opuesto', 'adyacente', 'hipotenusa'], ['8', '15', '17'], ['23', '25'], 'La hipotenusa es la más larga.', 'Opuesto 8, adyacente 15, hipotenusa 17.')],
+    ['Razones que no cambian', xpMira('dibujo', 'Segunda idea: el tamaño cambia; **la razón, no**.', { dib: sohD, v: { b: 100, g: 35, p: '' }, alto: 200 }, [
+      ['Opuesto sobre hipotenusa: el seno.', { p: 'sen = op/hip' }, '$\\operatorname{sen}\\theta = \\tfrac{\\text{op}}{\\text{hip}}$'],
+      ['Agrandamos el triángulo con el mismo ángulo.', { b: 190 }, '$\\tfrac{2\\,\\text{op}}{2\\,\\text{hip}}$'],
+      ['Todos los lados crecen igual: la razón se conserva.', {}, '$\\operatorname{sen}\\theta$'],
+      ['Coseno: adyacente sobre hipotenusa.', { p: 'cos = ady/hip' }, '$\\cos\\theta = \\tfrac{\\text{ady}}{\\text{hip}}$'],
+      ['Tangente: opuesto sobre adyacente.', { p: 'tan = op/ady' }, '$\\tan\\theta = \\tfrac{\\text{op}}{\\text{ady}}$'],
+    ], 'SOH · CAH · TOA: razones que dependen solo del ángulo.'),
+    xpFila('Opuesto 9, adyacente 40, hipotenusa 41. Pon cada razón.', ['sen', 'cos', 'tan'], ['9/41', '40/41', '9/40'], ['41/9', '40/9'], 'SOH, CAH, TOA.', 'Cada una con sus dos lados.')],
+    ['Hallar un lado', xpMira('dibujo', 'Tercera idea: se escoge la razón que une **lo que tienes con lo que buscas**.', { dib: (v, K) => tri(K, 60, 160, 140, 40, { a: '40°', ca: v.ca, co: 'x', hi: '' }) + K.t(250, 60, v.p, 'ta', 'middle'), v: { ca: '20', p: '' }, alto: 190 }, [
+      ['Se conoce el adyacente, 20, y se busca el opuesto.', {}, '$\\text{ady} = 20$'],
+      ['La que une opuesto y adyacente es la tangente.', { p: 'tan 40° = x/20' }, '$\\tan 40^\\circ = \\tfrac{x}{20}$'],
+      ['Se despeja: veinte veces la tangente.', { p: 'x = 20 · tan 40°' }, '$x = 20\\tan 40^\\circ$'],
+      ['Con calculadora, cerca de 16.8.', {}, '$x \\approx 16.8$'],
+    ], 'Mira qué dos lados intervienen y usa su razón.'),
+    xpFila('$\\operatorname{sen}\\theta = 0.6$ e hipotenusa 25. Pon el opuesto y el adyacente.', ['opuesto', 'adyacente'], ['15', '20'], ['10', '41', '24'], '0.6 por 25; luego Pitágoras.', '$15$ y $\\sqrt{625 - 225} = 20$.')],
+    ['Ahora sí, un problema', xpFila('Una rampa de 13 m sube 5 m. Pon el seno y el coseno de su inclinación.', ['sen', 'cos'], ['5/13', '12/13'], ['13/5', '5/12', '8/13'], 'La rampa es la hipotenusa; falta el cateto del piso.', '$\\sqrt{169 - 25} = 12$.')],
+  ], 'Nombra los lados desde el ángulo y elige la razón.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-2
+  xpLec('trig-2', [
+    ['Medio cuadrado', xpMira('dibujo', 'Empecemos por la idea: el de **45°** es medio cuadrado.', { dib: (v, K) => K.r(80, 20, 140, 140, 'fc') + K.l(80, 160, 220, 20, 'la gr') + K.t(150, 180, '1', 's') + K.t(232, 94, '1', 's') + K.f(v.h, K.t(136, 80, '√2', 'b ta')), v: { h: 0 }, alto: 195 }, [
+      ['Un cuadrado de lado 1, partido por la diagonal.', {}, '$1, 1$'],
+      ['Los dos catetos son iguales: el ángulo es 45°.', {}, '$45^\\circ$'],
+      ['La diagonal mide raíz de dos.', { h: 1 }, '$\\sqrt{1 + 1}$'],
+      ['Por eso seno y coseno coinciden.', {}, '$\\operatorname{sen}45^\\circ = \\tfrac{\\sqrt2}{2}$'],
+      ['Y la tangente es 1.', {}, '$\\tan 45^\\circ = 1$'],
+    ], '45°: $\\tfrac{\\sqrt2}{2}$, $\\tfrac{\\sqrt2}{2}$ y 1.'),
+    xpFila('Un cuadrado tiene lado 6. Pon su diagonal, y el lado de uno con diagonal 10.', ['diagonal', 'lado'], ['6√2', '5√2'], ['12', '10√2', '3√2'], 'Por √2 para ir; entre √2 para volver.', '$\\tfrac{10}{\\sqrt2} = 5\\sqrt2$.')],
+    ['Medio triángulo equilátero', xpMira('dibujo', 'Segunda idea: **30° y 60°** salen de medio equilátero.', { dib: (v, K) => K.p([[80, 170], [240, 170], [160, 32]], 'fc') + K.f(v.h, K.l(160, 32, 160, 170, 'lf gr') + K.t(120, 188, '1', 's') + K.t(172, 120, '√3', 'b tf', 'start')) + K.t(108, 94, '2', 'b') + K.t(94, 162, '60°', 's', 'start'), v: { h: 0 }, alto: 200 }, [
+      ['Un triángulo equilátero de lado 2: ángulos de 60°.', {}, '$60^\\circ$'],
+      ['La altura lo parte en dos: la base queda en 1.', { h: 1 }, '$1, 2$'],
+      ['Por Pitágoras, la altura es raíz de tres.', {}, '$\\sqrt{4 - 1} = \\sqrt3$'],
+      ['Desde 60°: opuesto raíz de tres, adyacente 1.', {}, '$\\operatorname{sen}60^\\circ = \\tfrac{\\sqrt3}{2}, \\ \\cos 60^\\circ = \\tfrac12$'],
+      ['Desde 30° se intercambian.', {}, '$\\operatorname{sen}30^\\circ = \\tfrac12, \\ \\cos 30^\\circ = \\tfrac{\\sqrt3}{2}$'],
+    ], 'Lados 1, √3, 2: de ahí salen todas las de 30° y 60°.'),
+    xpFila('Pon cada valor.', ['sen 60°', 'tan 30°', 'cos 60°'], ['√3/2', '√3/3', '1/2'], ['√3', '√2/2', '1'], 'Dibuja el triángulo 1, √3, 2.', '$\\tan 30^\\circ = \\tfrac{1}{\\sqrt3} = \\tfrac{\\sqrt3}{3}$.')],
+    ['Complementarios', xpMira('dibujo', 'Tercera idea: el seno de uno es el **coseno del otro**.', { dib: (v, K) => tri(K, 60, 160, 170, v.g, { a: `${Math.round(v.g)}°`, ca: '', co: '', hi: '' }) + K.t(110, 40, `el otro: ${90 - Math.round(v.g)}°`, 's'), v: { g: 30 }, alto: 190 }, [
+      ['Los dos ángulos agudos suman 90°.', {}, '$30^\\circ + 60^\\circ$'],
+      ['El opuesto de uno es el adyacente del otro.', { g: 38 }, '$\\operatorname{sen}\\theta$'],
+      ['Entonces el seno de θ es el coseno de 90° − θ.', {}, '$\\operatorname{sen}\\theta = \\cos(90^\\circ - \\theta)$'],
+      ['Por eso el **co**seno: el seno del complemento.', {}, '$\\cos 20^\\circ = \\operatorname{sen}70^\\circ$'],
+    ], '$\\operatorname{sen}\\theta = \\cos(90^\\circ - \\theta)$.'),
+    xpFila('Pon el ángulo que falta.', ['sen 25° = cos', 'cos 48° = sen'], ['65°', '42°'], ['25°', '132°', '52°'], 'Juntos suman 90°.', '$90 - 25$ y $90 - 48$.')],
+    ['Ahora sí, un problema', xpFila('Una escalera de 8 m forma 60° con el piso. Pon la altura a la que llega y qué tan lejos está su pie.', ['altura', 'pie'], ['4√3', '4'], ['8√3', '4√2', '2'], '$8\\operatorname{sen}60^\\circ$ y $8\\cos 60^\\circ$.', 'Altura $4\\sqrt3$ y pie a 4 m.')],
+  ], 'Dos figuras bastan: medio cuadrado y medio equilátero.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-42c
+  xpLec('trig-42c', [
+    ['Las tres volteadas', xpMira('dibujo', 'Empecemos por la idea: hay **seis** razones: tres y sus recíprocas.', { dib: (v, K) => [['sen', 'csc'], ['cos', 'sec'], ['tan', 'cot']].map((r, i) => K.t(90, 50 + i * 42, r[0], 'b ta') + K.f(v.n - i, K.t(170, 50 + i * 42, '↔', 'b tm') + K.t(250, 50 + i * 42, r[1], 'b tf'))).join(''), v: { n: 0 }, alto: 160 }, [
+      ['La cosecante voltea al seno.', { n: 1 }, '$\\csc\\theta = \\tfrac{1}{\\operatorname{sen}\\theta}$'],
+      ['La secante voltea al **co**seno.', { n: 2 }, '$\\sec\\theta = \\tfrac{1}{\\cos\\theta}$'],
+      ['La cotangente voltea a la tangente.', { n: 3 }, '$\\cot\\theta = \\tfrac{1}{\\tan\\theta}$'],
+      ['Ojo: van cruzadas, seno con **co**secante.', {}, '$\\operatorname{sen} \\leftrightarrow \\csc$'],
+      ['Cada pareja multiplica 1.', {}, '$\\operatorname{sen}\\theta \\cdot \\csc\\theta = 1$'],
+    ], 'csc con sen, sec con cos, cot con tan: productos 1.'),
+    xpFila('Opuesto 7, adyacente 24, hipotenusa 25. Pon cada razón.', ['csc', 'sec', 'cot'], ['25/7', '25/24', '24/7'], ['7/25', '7/24'], 'Voltea seno, coseno y tangente.', 'Son las recíprocas.')],
+    ['De una a todas', xpMira('dibujo', 'Segunda idea: con **una** razón se dibuja el triángulo y salen las demás.', { dib: (v, K) => tri(K, 60, 160, 150, 37, { a: 'θ', ca: v.a, co: v.o, hi: v.h }), v: { a: '', o: '3', h: '' }, alto: 190 }, [
+      ['Se sabe que la tangente es tres cuartos.', { a: '4' }, '$\\tan\\theta = \\tfrac34$'],
+      ['Opuesto 3, adyacente 4. La hipotenusa, por Pitágoras.', { h: '5' }, '$\\sqrt{9 + 16} = 5$'],
+      ['Y ya salen seno y coseno.', {}, '$\\tfrac35, \\tfrac45$'],
+      ['Y también todas sus recíprocas.', {}, '$\\tfrac53, \\tfrac54, \\tfrac43$'],
+    ], 'Dibuja, completa con Pitágoras y lee.'),
+    xpFila('$\\sec\\theta = \\tfrac{17}{15}$, θ agudo. Pon el opuesto, sen y tan.', ['opuesto', 'sen', 'tan'], ['8', '8/17', '8/15'], ['15/17', '15/8', '2'], 'Hipotenusa 17 y adyacente 15.', '$\\sqrt{289 - 225} = 8$.')],
+    ['Medir sin tocar', xpMira('dibujo', 'Tercera idea: un ángulo y una distancia **miden lo que no se alcanza**.', { dib: (v, K) => tri(K, 50, 170, 190, v.g, { a: `${Math.round(v.g)}°`, ca: '30 m', co: 'altura', hi: '' }), v: { g: 20 }, alto: 200 }, [
+      ['Desde 30 m se mira la punta de un árbol.', {}, '$\\text{ángulo de elevación}$'],
+      ['El ángulo se mide desde la horizontal hacia arriba.', { g: 38 }, '$38^\\circ$'],
+      ['La altura es 30 por la tangente.', {}, '$h = 30\\tan 38^\\circ$'],
+      ['Hacia abajo se llama depresión: es igual visto desde el otro lado.', {}, '$\\text{elevación} = \\text{depresión}$'],
+    ], 'Altura = distancia · tan(elevación).'),
+    xpFila('A 40 m de una torre la punta se ve a 45°. Pon la altura; y la altura si fuera a 60°.', ['45°', '60°'], ['40', '40√3'], ['20', '20√3', '80'], 'tan 45° = 1 y tan 60° = √3.', '$40 \\cdot 1$ y $40\\sqrt3$.')],
+    ['Ahora sí, un problema', xpFila('Desde un faro de 50 m se ve un bote con depresión de 30°. Pon la tangente y la distancia del bote a la base.', ['tan 30°', 'distancia'], ['√3/3', '50√3'], ['√3', '25', '50/√3'], '$\\tan 30^\\circ = \\tfrac{50}{d}$.', '$d = \\tfrac{50}{\\tan 30^\\circ} = 50\\sqrt3$.')],
+  ], 'Una razón dibuja el triángulo; un ángulo mide de lejos.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-3
+  xpLec('trig-3', [
+    ['El punto que gira', xpMira('dibujo', 'Empecemos por la idea: en la rueda de radio 1, el punto es **(cos, sen)**.', { dib: R, v: { g: 30, p: '', q: '' }, alto: 225 }, [
+      ['Un triángulo de hipotenusa 1 dentro de la rueda.', {}, '$r = 1$'],
+      ['El cateto horizontal es el coseno; el vertical, el seno.', { p: '(cos, sen)' }, '$(\\cos\\theta, \\operatorname{sen}\\theta)$'],
+      ['Así el ángulo puede pasar de 90°.', { g: 130 }, '$\\theta = 130^\\circ$'],
+      ['El coseno quedó a la izquierda: es negativo.', { q: 'cos < 0' }, '$\\cos 130^\\circ < 0$'],
+      ['Ninguno pasa de 1 ni baja de −1.', { g: 200 }, '$-1 \\le \\operatorname{sen}\\theta \\le 1$'],
+    ], 'En radio 1: x es el coseno, y es el seno.'),
+    xpMueve('Lleva el punto a donde **cos = −1**.', 290, { g: 30 }, ang(360, 15), { g: 180 }, R, '$\\cos 180^\\circ = -1$.', { lee: v => `$\\theta = ${v.g}^\\circ$` })],
+    ['Los cuatro puntos', xpMira('dibujo', 'Segunda idea: en los ejes los valores son **0, 1 o −1**.', { dib: R, v: { g: 0, p: '(1, 0)', q: '' }, alto: 225 }, [
+      ['En 0°, el punto es (1, 0).', {}, '$\\cos 0 = 1, \\ \\operatorname{sen}0 = 0$'],
+      ['En 90°, arriba: (0, 1).', { g: 90, p: '(0, 1)' }, '$\\operatorname{sen}90^\\circ = 1$'],
+      ['En 180° está en (−1, 0).', { g: 180, p: '(−1, 0)' }, '$\\cos 180^\\circ = -1$'],
+      ['En 270°, abajo: (0, −1).', { g: 270, p: '(0, −1)' }, '$\\operatorname{sen}270^\\circ = -1$'],
+      ['La tangente no existe donde el coseno es 0.', { g: 90, p: '' }, '$\\tan 90^\\circ \\ \\text{no existe}$'],
+    ], 'La tangente es seno sobre coseno.'),
+    xpFila('Pon cada valor.', ['sen 270°', 'cos 90°', 'tan 180°'], ['−1', '0', '0'], ['1', 'no existe'], 'Mira el punto en la rueda.', '$\\tan 180^\\circ = \\tfrac{0}{-1}$.')],
+    ['Simetrías', xpMira('dibujo', 'Tercera idea: los **espejos** de la rueda dan los demás valores.', { dib: R, v: { g: 40, p: '', q: '' }, alto: 225 }, [
+      ['Empecemos con el punto de 40°.', {}, '$40^\\circ$'],
+      ['Su espejo a la izquierda es 140°: mismo seno, coseno opuesto.', { g: 140 }, '$\\operatorname{sen}140^\\circ = \\operatorname{sen}40^\\circ$'],
+      ['El de enfrente es 220°: los dos opuestos.', { g: 220 }, '$\\operatorname{sen}220^\\circ = -\\operatorname{sen}40^\\circ$'],
+      ['El de abajo es 320°: mismo coseno.', { g: 320 }, '$\\cos 320^\\circ = \\cos 40^\\circ$'],
+      ['Y cada vuelta completa repite todo.', {}, '$\\theta + 360^\\circ$'],
+    ], 'Espejos de θ: 180° − θ, 180° + θ y 360° − θ.'),
+    xpMueve('Halla el otro ángulo entre 0° y 180° con el **mismo seno** que 60°.', 290, { g: 60 }, ang(180, 15), { g: 120 }, R, '$180^\\circ - 60^\\circ$.', { lee: v => `$\\theta = ${v.g}^\\circ$` })],
+    ['Ahora sí, un problema', xpFila('Una rueda de radio 1 empieza a la derecha y gira 210°. Pon x e y del punto.', ['x', 'y'], ['−√3/2', '−1/2'], ['√3/2', '1/2', '−1'], '210° es 180° + 30°: los dos opuestos.', '$\\cos 210^\\circ$ y $\\operatorname{sen}210^\\circ$.')],
+  ], 'El punto de la rueda lleva el coseno y el seno.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-43b
+  xpLec('trig-43b', [
+    ['Los signos', xpMira('dibujo', 'Empecemos por la idea: el **cuadrante** decide los signos.', { dib: R, v: { g: 50, p: 'I', q: 'todas +' }, alto: 225 }, [
+      ['Primero: derecha y arriba. Todo positivo.', {}, '$\\text{I: } +, +$'],
+      ['Segundo: izquierda y arriba. Solo el seno.', { g: 130, p: 'II', q: 'sen +' }, '$\\text{II: } -, +$'],
+      ['Tercero: izquierda y abajo. Solo la tangente.', { g: 230, p: 'III', q: 'tan +' }, '$\\text{III: } -, -$'],
+      ['Cuarto: derecha y abajo. Solo el coseno.', { g: 310, p: 'IV', q: 'cos +' }, '$\\text{IV: } +, -$'],
+      ['Todas, seno, tangente, coseno: en orden de giro.', {}, '$\\text{T, S, T, C}$'],
+    ], 'I todas; II seno; III tangente; IV coseno.'),
+    xpFila('Pon el cuadrante.', ['sen > 0, cos < 0', 'tan > 0, sen < 0', 'cos > 0, tan < 0'], ['II', 'III', 'IV'], ['I'], '¿Derecha o izquierda? ¿Arriba o abajo?', 'Segundo, tercero y cuarto.')],
+    ['El ángulo de referencia', xpMira('dibujo', 'Segunda idea: el **de referencia** es lo que falta hasta el eje horizontal.', { dib: R, v: { g: 150, p: '', q: '' }, alto: 225 }, [
+      ['150° está a 30° del eje.', { p: 'ref 30°' }, '$180^\\circ - 150^\\circ$'],
+      ['El de 240° pasó 60° del eje.', { g: 240, p: 'ref 60°' }, '$240^\\circ - 180^\\circ$'],
+      ['A 315° le faltan 45° para la vuelta.', { g: 315, p: 'ref 45°' }, '$360^\\circ - 315^\\circ$'],
+      ['El valor es el del ángulo de referencia; el signo, el del cuadrante.', {}, '$\\cos 240^\\circ = -\\cos 60^\\circ$'],
+    ], 'Valor del de referencia con el signo del cuadrante.'),
+    xpMueve('Lleva el ángulo al **tercer cuadrante** con referencia 30°.', 290, { g: 30 }, ang(360, 15), { g: 210 }, R, '$180^\\circ + 30^\\circ$.', { lee: v => `$\\theta = ${v.g}^\\circ$` })],
+    ['De un valor a los demás', xpMira('dibujo', 'Tercera idea: con una razón y el **cuadrante** salen las demás, con su signo.', { dib: (v, K) => P(K, v, ['sen θ = 3/5, cuadrante II', 'cateto: √(25 − 9) = 4', 'cos θ = −4/5', 'tan θ = −3/4'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['El triángulo de referencia es 3, 4, 5.', { n: 2 }, '$3, 4, 5$'],
+      ['En el segundo, el coseno es negativo.', { n: 3 }, '$\\cos\\theta = -\\tfrac45$'],
+      ['La tangente también es negativa.', { n: 4 }, '$-\\tfrac34$'],
+      ['Sin saber el cuadrante habría dos respuestas.', {}, '$\\pm\\tfrac45$'],
+    ], 'Triángulo para el tamaño; cuadrante para el signo.'),
+    xpFila('$\\cos\\theta = \\tfrac{5}{13}$ en el cuarto. Pon sen y tan.', ['sen', 'tan'], ['−12/13', '−12/5'], ['12/13', '12/5', '−5/12'], 'En el cuarto el seno es negativo.', 'El cateto que falta es 12.')],
+    ['Ahora sí, un problema', xpFila('Pon cada valor.', ['sen 330°', 'cos 135°', 'tan 225°'], ['−1/2', '−√2/2', '1'], ['1/2', '√2/2', '−1'], 'Referencias 30°, 45° y 45°.', 'Cada una con el signo de su cuadrante.')],
+  ], 'Referencia para el valor, cuadrante para el signo.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-44a
+  const onda = (v, K) => { const p = XM.plano(K, 0, 12.57, -4, 4, { H: 200, g: 1.5708, gy: 1 }); return p.s + XM.curva(K, p, x => v.A * Math.sin(v.w * (x - (v.f || 0))) + v.k) + K.l(18, p.Y(v.k), 322, p.Y(v.k), 'lf d'); };
+  xpLec('trig-44a', [
+    ['De la rueda a la ola', xpMira('dibujo', 'Empecemos por la idea: la altura del punto que gira **dibuja una ola**.', { dib: (v, K) => { const [px, py] = K.at(70, 110, 54, v.g), q = []; for (let a = 0; a <= v.g; a += 5) q.push([140 + a * 0.5, 110 - 54 * Math.sin(rad(a))]); return K.c(70, 110, 54, 'fn') + K.l(70, 110, px, py, 'la gr') + K.c(px, py, 6, 'fF') + K.l(136, 110, 326, 110, 'lm') + (q.length > 1 ? K.pl(q, 'lf gr') : '') + K.l(px, py, 140 + v.g * 0.5, py, 'lm d'); }, v: { g: 0 }, alto: 190 }, [
+      ['Empieza a la derecha, a altura 0.', {}, '$\\operatorname{sen}0 = 0$'],
+      ['Un cuarto de vuelta: llega a lo más alto.', { g: 90 }, '$\\operatorname{sen}\\tfrac{\\pi}{2} = 1$'],
+      ['Media vuelta: otra vez en 0.', { g: 180 }, '$\\operatorname{sen}\\pi = 0$'],
+      ['Tres cuartos: lo más bajo.', { g: 270 }, '$\\operatorname{sen}\\tfrac{3\\pi}{2} = -1$'],
+      ['Vuelta completa: la ola se repite.', { g: 360 }, '$2\\pi$'],
+    ], 'La gráfica del seno es la altura del punto; se repite cada 2π.'),
+    xpFila('Pon la altura del seno en cada momento.', ['1/4 de vuelta', '1/2 vuelta', '3/4 de vuelta'], ['1', '0', '−1'], ['1/2', '2'], 'Arriba, en medio, abajo.', '1, 0 y −1.')],
+    ['La amplitud', xpMira('dibujo', 'Segunda idea: la **amplitud** es cuánto se aleja del centro.', { dib: onda, v: { A: 1, w: 1, k: 0 }, alto: 210 }, [
+      ['La ola simple sube 1 y baja 1.', {}, '$y = \\operatorname{sen}x$'],
+      ['Por 3: sube 3 y baja 3.', { A: 3 }, '$y = 3\\operatorname{sen}x$'],
+      ['Con signo menos se voltea, pero la amplitud es 2.', { A: -2 }, '$|{-2}| = 2$'],
+      ['El ancho de la ola no cambió.', {}, '$|A|$'],
+    ], 'Amplitud: $|A|$, la mitad entre lo más alto y lo más bajo.'),
+    xpMueve('Haz que la ola vaya de **−2 a 2** y empiece **bajando**.', 270, { A: 1, w: 1, k: 0 }, [xpRegla('A', -3, 3, 'A')], { A: -2 }, onda, '$y = -2\\operatorname{sen}x$.', { lee: v => `$y = ${v.A}\\operatorname{sen}x$` })],
+    ['El centro', xpMira('dibujo', 'Tercera idea: sumar un número **sube toda la ola**.', { dib: onda, v: { A: 1, w: 1, k: 0 }, alto: 210 }, [
+      ['La línea del medio está en 0.', {}, '$k = 0$'],
+      ['Si se suma 2, sube a 2.', { k: 2 }, '$y = \\operatorname{sen}x + 2$'],
+      ['Con amplitud 2 y centro 1, va de −1 a 3.', { A: 2, k: 1 }, '$1 \\pm 2$'],
+      ['El centro es el promedio de los extremos.', {}, '$k = \\tfrac{\\max + \\min}{2}$'],
+    ], 'Va de $k - |A|$ a $k + |A|$.'),
+    xpMueve('Arma una ola que vaya de **−1 a 3**: mueve la amplitud y el centro.', 310, { A: 1, w: 1, k: 0 }, [xpRegla('A', 1, 3, 'amplitud'), xpRegla('k', -1, 2, 'centro')], { A: 2, k: 1 }, onda, '$y = 2\\operatorname{sen}x + 1$.', { lee: v => `$${v.k - v.A} \\ \\text{a} \\ ${v.k + v.A}$` })],
+    ['Ahora sí, un problema', xpFila('La marea va de 1 m a 7 m. Pon el centro y la amplitud.', ['centro', 'amplitud'], ['4', '3'], ['6', '8', '7'], 'El promedio; y cuánto se aleja de él.', '$\\tfrac{1+7}{2} = 4$ y $7 - 4 = 3$.')],
+  ], 'Amplitud: cuánto se aleja; centro: de dónde.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-44b
+  xpLec('trig-44b', [
+    ['El periodo', xpMira('dibujo', 'Empecemos por la idea: el **periodo** es lo que tarda en repetirse.', { dib: onda, v: { A: 2, w: 1, k: 0, f: 0 }, alto: 210 }, [
+      ['La ola simple se repite cada 2π.', {}, '$T = 2\\pi$'],
+      ['Con 2x adentro va el doble de rápido: cada π.', { w: 2 }, '$T = \\tfrac{2\\pi}{2}$'],
+      ['Con x sobre 2, más lento: cada 4π.', { w: 0.5 }, '$T = \\tfrac{2\\pi}{1/2} = 4\\pi$'],
+      ['Se divide 2π entre el número que acompaña a la x.', {}, '$T = \\tfrac{2\\pi}{|\\omega|}$'],
+    ], '$T = \\tfrac{2\\pi}{|\\omega|}$.'),
+    xpMueve('Haz que la ola complete **cuatro** ciclos en el cuadro (de 0 a 4π).', 270, { A: 2, w: 1, k: 0, f: 0 }, [xpRegla('w', 0.5, 3, 'ω', 0.5)], { w: 2 }, onda, 'Cada ciclo mide π: ω = 2.', { lee: v => `$y = 2\\operatorname{sen}(${v.w}x)$` })],
+    ['El desfase', xpMira('dibujo', 'Segunda idea: restar adentro **corre la ola** a la derecha.', { dib: onda, v: { A: 2, w: 1, k: 0, f: 0 }, alto: 210 }, [
+      ['La ola empieza a subir en 0.', {}, '$y = 2\\operatorname{sen}x$'],
+      ['Con x − π/2 empieza a subir en π/2.', { f: 1.5708 }, '$y = 2\\operatorname{sen}(x - \\tfrac{\\pi}{2})$'],
+      ['Si hay número adelante, se saca factor antes.', {}, '$2x - \\pi = 2(x - \\tfrac{\\pi}{2})$'],
+      ['El coseno es el seno corrido un cuarto hacia la izquierda.', { f: -1.5708 }, '$\\cos x = \\operatorname{sen}(x + \\tfrac{\\pi}{2})$'],
+    ], '$A\\operatorname{sen}\\omega(x - c)$: desfase c.'),
+    xpFila('$y = 3\\operatorname{sen}(4x - \\pi)$. Pon el periodo y el desfase.', ['periodo', 'desfase'], ['π/2', 'π/4'], ['π', '4', '2π'], '2π entre 4; saca factor 4.', '$4(x - \\tfrac{\\pi}{4})$.')],
+    ['La tangente', xpMira('dibujo', 'Tercera idea: la tangente se repite cada **π** y tiene asíntotas.', { dib: (v, K) => { const p = XM.plano(K, -4.7, 4.7, -5, 5, { H: 200, g: 1.5708, gy: 5 }); return p.s + [-1, 0, 1].map(i => K.l(p.X(Math.PI * (i + 0.5)), 8, p.X(Math.PI * (i + 0.5)), 192, 'lf d')).join('').replace(/NaN/g, '0') + XM.curva(K, p, x => { const t = Math.tan(x); return Math.abs(Math.cos(x)) < 0.08 ? NaN : t * v.a; }); }, v: { a: 0.3 }, alto: 210 }, [
+      ['Es seno sobre coseno.', { a: 1 }, '$\\tan x = \\tfrac{\\operatorname{sen}x}{\\cos x}$'],
+      ['Donde el coseno es 0 hay una asíntota.', {}, '$x = \\tfrac{\\pi}{2} + k\\pi$'],
+      ['Entre asíntotas sube siempre.', {}, '$\\text{creciente}$'],
+      ['Se repite cada π, no cada 2π.', {}, '$T = \\pi$'],
+      ['No tiene amplitud: no hay tope.', {}, '$(-\\infty, \\infty)$'],
+    ], 'Tangente: periodo π y asíntotas en $\\tfrac{\\pi}{2} + k\\pi$.'),
+    xpFila('Pon el periodo de cada una.', ['tan x', 'tan 2x', 'sen(x/3)'], ['π', 'π/2', '6π'], ['2π', '3π', '2π/3'], 'La tangente usa π; el seno, 2π.', '$\\pi$, $\\tfrac{\\pi}{2}$ y $6\\pi$.')],
+    ['Ahora sí, un problema', xpFila('Una noria tarda 8 minutos por vuelta y va de 2 a 18 m. Pon la amplitud y ω.', ['amplitud', 'ω'], ['8', 'π/4'], ['16', '10', 'π/8'], 'La mitad de 16; y 2π entre 8.', '$\\omega = \\tfrac{2\\pi}{8}$.')],
+  ], 'Periodo por dentro, desfase con factor; la tangente va cada π.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-45
+  xpLec('trig-45', [
+    ['Preguntar por el ángulo', xpMira('dibujo', 'Empecemos por la idea: el inverso pregunta **¿de qué ángulo es?**', { dib: R, v: { g: 30, p: 'sen = 1/2', q: '' }, alto: 225 }, [
+      ['Altura un medio. ¿Qué ángulo la da?', {}, '$\\operatorname{sen}\\theta = \\tfrac12$'],
+      ['El ángulo de 30° sirve.', {}, '$30^\\circ$'],
+      ['Pero 150° también: hay dos, y más con vueltas.', { g: 150 }, '$150^\\circ$'],
+      ['Para que haya una sola respuesta se escoge una ventana.', { g: 30 }, '$-90^\\circ \\le \\theta \\le 90^\\circ$'],
+      ['Esa respuesta es el arcoseno.', {}, '$\\operatorname{arcsen}\\tfrac12 = 30^\\circ$'],
+    ], 'Arcoseno: el ángulo entre −90° y 90° con ese seno.'),
+    xpFila('Pon cada ángulo.', ['arcsen 1', 'arcsen (−1/2)', 'arcsen 0'], ['90°', '−30°', '0°'], ['210°', '330°', '180°'], 'La respuesta va de −90° a 90°.', '$-30^\\circ$, no $210^\\circ$.')],
+    ['Tres ventanas', xpMira('dibujo', 'Segunda idea: cada inversa tiene **su ventana**.', { dib: (v, K) => XM.rueda(K, 130, 110, 84, v.g, { arco: 0, cs: 0 }) + K.sec(130, 110, 84, v.a, v.b, 'fa') + K.t(240, 70, v.p, 'b ta', 'start'), v: { g: 0, a: -90, b: 90, p: 'arcsen' }, alto: 225 }, [
+      ['Arcoseno: el lado derecho.', {}, '$[-90^\\circ, 90^\\circ]$'],
+      ['Arcocoseno: la mitad de arriba.', { a: 0, b: 180, p: 'arccos' }, '$[0^\\circ, 180^\\circ]$'],
+      ['Arcotangente: el derecho, sin las puntas.', { a: -89, b: 89, p: 'arctan' }, '$(-90^\\circ, 90^\\circ)$'],
+      ['Si el coseno es negativo, el arcocoseno cae a la izquierda.', { a: 0, b: 180, g: 120, p: 'arccos' }, '$\\arccos(-\\tfrac12) = 120^\\circ$'],
+    ], 'arcsen y arctan: derecha. arccos: arriba.'),
+    xpFila('Pon cada ángulo.', ['arccos (−1)', 'arctan 1', 'arccos (−√2/2)'], ['180°', '45°', '135°'], ['0°', '225°', '−45°'], 'Arccos va de 0° a 180°.', 'Cada uno en su ventana.')],
+    ['Deshacer con cuidado', xpMira('dibujo', 'Tercera idea: deshace **solo dentro de la ventana**.', { dib: (v, K) => P(K, v, ['arcsen(sen 40°) = 40°', 'arcsen(sen 140°) = 40°', 'cos(arcsen 3/5) = 4/5'], 44, 38), v: { n: 0 }, alto: 150 }, [
+      ['40° está en la ventana: vuelve igual.', { n: 1 }, '$40^\\circ$'],
+      ['140° no: vuelve el gemelo que sí está.', { n: 2 }, '$180^\\circ - 140^\\circ$'],
+      ['Una mezcla se dibuja: seno tres quintos.', {}, '$3, 4, 5$'],
+      ['El coseno de ese ángulo es cuatro quintos.', { n: 3 }, '$\\tfrac45$'],
+    ], 'Si el ángulo está fuera, cambia por su gemelo.'),
+    xpFila('Pon cada resultado.', ['arccos(cos 300°)', 'tan(arccos 5/13)'], ['60°', '12/5'], ['300°', '−60°', '5/12'], '¿Qué ángulo entre 0° y 180° tiene ese coseno?', '$\\cos 300^\\circ = \\cos 60^\\circ$.')],
+    ['Ahora sí, un problema', xpFila('Una rampa sube 5 m en 5 m de piso; otra sube $\\sqrt3$ m por cada metro. Pon los ángulos.', ['primera', 'segunda'], ['45°', '60°'], ['30°', '90°', '1°'], 'arctan 1 y arctan √3.', '$\\arctan 1$ y $\\arctan\\sqrt3$.')],
+  ], 'La inversa responde con un ángulo de su ventana.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-4
+  xpLec('trig-4', [
+    ['Pitágoras en la rueda', xpMira('dibujo', 'Empecemos por la idea: seno y coseno son **catetos de hipotenusa 1**.', { dib: R, v: { g: 35, p: 'c²+s²=1', q: '' }, alto: 225 }, [
+      ['El triángulo de la rueda tiene hipotenusa 1.', {}, '$x^2 + y^2 = 1$'],
+      ['Con cualquier ángulo se cumple.', { g: 125 }, '$\\cos^2\\theta + \\operatorname{sen}^2\\theta = 1$'],
+      ['También abajo: los cuadrados borran el signo.', { g: 250 }, '$(-0.34)^2 + (-0.94)^2 \\approx 1$'],
+      ['Conocido uno, sale el otro, salvo el signo.', {}, '$\\operatorname{sen}\\theta = \\pm\\sqrt{1 - \\cos^2\\theta}$'],
+    ], '$\\operatorname{sen}^2\\theta + \\cos^2\\theta = 1$.'),
+    xpFila('$\\operatorname{sen}\\theta = 0.8$, agudo. Pon $\\operatorname{sen}^2\\theta$, $\\cos^2\\theta$ y $\\cos\\theta$.', ['sen²', 'cos²', 'cos'], ['0.64', '0.36', '0.6'], ['0.2', '0.4', '1.6'], 'Juntos suman 1.', '$1 - 0.64 = 0.36$.')],
+    ['Dividir por coseno', xpMira('dibujo', 'Segunda idea: al dividir todo entre cos² nace **otra pitagórica**.', { dib: (v, K) => P(K, v, ['sen² + cos² = 1', 'sen²/cos² + 1 = 1/cos²', 'tan² + 1 = sec²', '1 + cot² = csc²'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Se divide cada término entre coseno al cuadrado.', { n: 2 }, '$\\tfrac{\\operatorname{sen}^2}{\\cos^2} + 1 = \\tfrac{1}{\\cos^2}$'],
+      ['Seno sobre coseno es tangente; uno sobre coseno, secante.', { n: 3 }, '$\\tan^2\\theta + 1 = \\sec^2\\theta$'],
+      ['Si se divide entre seno al cuadrado, sale la otra.', { n: 4 }, '$1 + \\cot^2\\theta = \\csc^2\\theta$'],
+      ['Las tres son la misma, vista de tres maneras.', {}, '$x^2 + y^2 = 1$'],
+    ], '$1 + \\tan^2 = \\sec^2$ y $1 + \\cot^2 = \\csc^2$.'),
+    xpFila('$\\tan\\theta = 2$. Pon $\\sec^2\\theta$ y $\\cos^2\\theta$.', ['sec²', 'cos²'], ['5', '1/5'], ['3', '1/3', '4'], '1 + tan²; y su recíproco.', '$1 + 4 = 5$.')],
+    ['Ángulos negativos', xpMira('dibujo', 'Tercera idea: al girar al revés, **el coseno queda y el seno cambia**.', { dib: R, v: { g: 40, p: '', q: '' }, alto: 225 }, [
+      ['Miremos el punto de 40°.', {}, '$40^\\circ$'],
+      ['El de −40° es su espejo de abajo.', { g: -40 }, '$-40^\\circ$'],
+      ['Mismo x: el coseno es **par**.', {}, '$\\cos(-\\theta) = \\cos\\theta$'],
+      ['La altura y se vuelve opuesta: el seno es **impar**.', {}, '$\\operatorname{sen}(-\\theta) = -\\operatorname{sen}\\theta$'],
+      ['La tangente también es impar.', {}, '$\\tan(-\\theta) = -\\tan\\theta$'],
+    ], 'Coseno par; seno y tangente impares.'),
+    xpFila('Si $\\cos\\theta = \\tfrac13$ y $\\operatorname{sen}\\theta = a$, pon cada uno.', ['cos(−θ)', 'sen(−θ)'], ['1/3', '−a'], ['−1/3', 'a', '3'], 'El espejo conserva x y cambia y.', 'Par e impar.')],
+    ['Ahora sí, un problema', xpFila('$(1 - \\operatorname{sen}\\theta)(1 + \\operatorname{sen}\\theta)$ se simplifica. Pon el producto y lo que vale con $\\cos\\theta = \\tfrac25$.', ['es igual a', 'vale'], ['cos²θ', '4/25'], ['1', '2/5', '21/25'], 'Diferencia de cuadrados: 1 − sen².', '$\\cos^2\\theta = \\tfrac{4}{25}$.')],
+  ], 'Una sola idea, Pitágoras en radio 1, da las identidades.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-47b
+  xpLec('trig-47b', [
+    ['Todo en senos y cosenos', xpMira('dibujo', 'Empecemos por la idea: si no se ve el camino, **pasa todo a seno y coseno**.', { dib: (v, K) => P(K, v, ['tan θ · cos θ', '(sen θ / cos θ) · cos θ', 'sen θ'], 44, 38), v: { n: 1 }, alto: 150 }, [
+      ['La tangente es seno sobre coseno.', { n: 2 }, '$\\tfrac{\\operatorname{sen}\\theta}{\\cos\\theta}\\cos\\theta$'],
+      ['Ahora el coseno se cancela.', { n: 3 }, '$\\operatorname{sen}\\theta$'],
+      ['Vale para todo θ donde las dos existan.', {}, '$\\cos\\theta \\neq 0$'],
+      ['Eso es una identidad: una igualdad que siempre se cumple.', {}, '$\\tan\\theta\\cos\\theta = \\operatorname{sen}\\theta$'],
+    ], 'Cambia tan, cot, sec y csc por senos y cosenos.'),
+    xpFila('Simplifica cada una.', ['sec θ · cot θ', 'csc θ · tan θ'], ['csc θ', 'sec θ'], ['1', 'sen θ', 'cos θ'], 'Escribe seno y coseno y cancela.', '$\\tfrac{1}{\\cos}\\tfrac{\\cos}{\\operatorname{sen}}$ y $\\tfrac{1}{\\operatorname{sen}}\\tfrac{\\operatorname{sen}}{\\cos}$.')],
+    ['Trabajar un solo lado', xpMira('dibujo', 'Segunda idea: se **transforma el lado largo** hasta llegar al otro.', { dib: (v, K) => P(K, v, ['sec θ − cos θ', '1/cos θ − cos θ', '(1 − cos² θ)/cos θ', 'sen² θ/cos θ = sen θ · tan θ'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Queremos llegar a seno por tangente.', { n: 2 }, '$\\tfrac{1}{\\cos\\theta} - \\cos\\theta$'],
+      ['Se suma con denominador común.', { n: 3 }, '$\\tfrac{1 - \\cos^2\\theta}{\\cos\\theta}$'],
+      ['Arriba aparece Pitágoras: sen².', { n: 4 }, '$\\tfrac{\\operatorname{sen}^2\\theta}{\\cos\\theta}$'],
+      ['No se pasan cosas de un lado al otro: aún no se sabe si son iguales.', {}, '$\\text{un solo lado}$'],
+    ], 'Transforma un lado; no pases términos.'),
+    xpFila('$\\tfrac{1 - \\operatorname{sen}^2\\theta}{\\cos\\theta}$: pon lo que hay arriba y el resultado.', ['arriba', 'resultado'], ['cos²θ', 'cos θ'], ['sen²θ', '1', 'tan θ'], 'Pitágoras arriba.', '$\\tfrac{\\cos^2\\theta}{\\cos\\theta}$.')],
+    ['El conjugado', xpMira('dibujo', 'Tercera idea: con 1 − seno abajo, multiplica por **1 + seno**.', { dib: (v, K) => P(K, v, ['cos θ/(1 − sen θ)', '· (1 + sen θ)/(1 + sen θ)', 'cos θ(1 + sen θ)/cos² θ', '(1 + sen θ)/cos θ'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Se multiplica por un uno escogido.', { n: 2 }, '$\\tfrac{1 + \\operatorname{sen}\\theta}{1 + \\operatorname{sen}\\theta}$'],
+      ['Abajo queda 1 − sen²: coseno al cuadrado.', { n: 3 }, '$1 - \\operatorname{sen}^2\\theta = \\cos^2\\theta$'],
+      ['Por último se cancela un coseno.', { n: 4 }, '$\\tfrac{1 + \\operatorname{sen}\\theta}{\\cos\\theta}$'],
+      ['Para negar una identidad basta un ángulo que falle.', {}, '$\\operatorname{sen}2\\theta \\neq 2\\operatorname{sen}\\theta$'],
+    ], 'El conjugado hace aparecer Pitágoras; un contraejemplo niega.'),
+    xpFila('$(\\sec\\theta - 1)(\\sec\\theta + 1)$: pon el producto y su valor si $\\tan\\theta = 3$.', ['es igual a', 'vale'], ['tan²θ', '9'], ['sec²θ', '3', '10'], 'sec² − 1.', '$\\tan^2\\theta = 9$.')],
+    ['Ahora sí, un problema', xpFila('Simplifica $\\tfrac{\\operatorname{sen}\\theta}{\\csc\\theta} + \\tfrac{\\cos\\theta}{\\sec\\theta}$. Pon cada término y la suma.', ['primero', 'segundo', 'suma'], ['sen²θ', 'cos²θ', '1'], ['0', 'sen θ', '2'], 'Dividir entre csc es multiplicar por sen.', '$\\operatorname{sen}^2\\theta + \\cos^2\\theta$.')],
+  ], 'Senos y cosenos, un solo lado, Pitágoras y conjugado.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-48a
+  const dosA = (v, K) => { const [ax, ay] = K.at(60, 170, 150, v.a), [bx, by] = K.at(60, 170, 150, v.a + v.b); return K.l(50, 170, 320, 170, 'lm') + K.sec(60, 170, 60, 0, v.a, 'fa') + K.sec(60, 170, 60, v.a, v.a + v.b, 'fg') + K.l(60, 170, ax, ay, 'la gr') + K.l(60, 170, bx, by, 'lf gr') + K.l(bx, by, bx, 170, 'lf d') + K.t(250, 40, v.p || '', 'ta'); };
+  xpLec('trig-48a', [
+    ['No se reparte', xpMira('dibujo', 'Empecemos por la idea: el seno de una suma **no** es la suma de senos.', { dib: dosA, v: { a: 30, b: 0, p: '' }, alto: 190 }, [
+      ['Un ángulo de 30° y otro de 30° encima.', { b: 30 }, '$30^\\circ + 30^\\circ$'],
+      ['Juntos, 60°: la altura es 0.87.', { p: 'sen 60° ≈ 0.87' }, '$\\operatorname{sen}60^\\circ = \\tfrac{\\sqrt3}{2}$'],
+      ['Sumando los senos daría 1.', { p: '1/2 + 1/2 = 1' }, '$\\operatorname{sen}30^\\circ + \\operatorname{sen}30^\\circ$'],
+      ['El segundo ángulo ya no parte de la horizontal: sube menos.', { p: '' }, '$\\operatorname{sen}(a+b) \\neq \\operatorname{sen}a + \\operatorname{sen}b$'],
+    ], 'El seno no se distribuye.'),
+    xpFila('Pon los dos valores.', ['cos(60° + 30°)', 'cos 60° + cos 30°'], ['0', '1/2 + √3/2'], ['1', '√3'], 'El primero es cos 90°.', 'No son iguales.')],
+    ['Las fórmulas', xpMira('dibujo', 'Segunda idea: en el seno se **mezclan**; en el coseno, no.', { dib: (v, K) => P(K, v, ['sen(a + b) = sen a cos b + cos a sen b', 'cos(a + b) = cos a cos b − sen a sen b', 'sen 75° = sen(45° + 30°)', '√2/2 · √3/2 + √2/2 · 1/2'], 34, 34, 's'), v: { n: 0 }, alto: 160 }, [
+      ['Seno: cruzados y con el mismo signo.', { n: 1 }, '$\\operatorname{sen}(a \\pm b)$'],
+      ['Coseno: iguales y con el signo contrario.', { n: 2 }, '$\\cos(a \\pm b)$'],
+      ['75° se arma con 45° y 30°.', { n: 3 }, '$75^\\circ = 45^\\circ + 30^\\circ$'],
+      ['Se reemplazan los valores notables.', { n: 4 }, '$\\tfrac{\\sqrt6 + \\sqrt2}{4}$'],
+    ], 'Seno cruza y conserva signo; coseno no cruza y lo cambia.'),
+    xpFila('$\\cos 75^\\circ = \\cos(45^\\circ + 30^\\circ)$: pon los dos productos y el resultado.', ['cos · cos', 'sen · sen', 'resultado'], ['√6/4', '√2/4', '(√6−√2)/4'], ['(√6+√2)/4', '1/2'], 'El coseno resta.', '$\\tfrac{\\sqrt6 - \\sqrt2}{4}$.')],
+    ['La tangente de una suma', xpMira('dibujo', 'Tercera idea: la tangente sale de **dividir** las dos.', { dib: (v, K) => P(K, v, ['tan(a + b) = sen(a+b)/cos(a+b)', '(tan a + tan b)/(1 − tan a tan b)', 'tan 105° = tan(60° + 45°)', '(√3 + 1)/(1 − √3) = −2 − √3'], 34, 34, 's'), v: { n: 1 }, alto: 160 }, [
+      ['Se divide todo entre coseno por coseno.', { n: 2 }, '$\\tfrac{\\tan a + \\tan b}{1 - \\tan a\\tan b}$'],
+      ['Arriba la suma; abajo, uno menos el producto.', {}, '$\\tan(a + b)$'],
+      ['Probemos con 60° y 45°.', { n: 3 }, '$105^\\circ$'],
+      ['Da negativo: 105° está en el segundo cuadrante.', { n: 4 }, '$-2 - \\sqrt3$'],
+    ], '$\\tan(a \\pm b) = \\tfrac{\\tan a \\pm \\tan b}{1 \\mp \\tan a\\tan b}$.'),
+    xpFila('$\\tan a = 2$, $\\tan b = 3$. Pon arriba, abajo y $\\tan(a+b)$.', ['arriba', 'abajo', 'resultado'], ['5', '−5', '−1'], ['6', '7', '1'], 'Uno menos seis.', '$\\tfrac{5}{-5}$.')],
+    ['Ahora sí, un problema', xpFila('$\\operatorname{sen}a = \\tfrac35$ y $\\operatorname{sen}b = \\tfrac{5}{13}$, agudos. Pon $\\cos a$, $\\cos b$ y $\\operatorname{sen}(a+b)$.', ['cos a', 'cos b', 'sen(a+b)'], ['4/5', '12/13', '56/65'], ['16/65', '33/65', '3/4'], '$\\tfrac35\\cdot\\tfrac{12}{13} + \\tfrac45\\cdot\\tfrac{5}{13}$.', '$\\tfrac{36 + 20}{65}$.')],
+  ], 'Con dos ángulos conocidos se arman otros.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-48b
+  xpLec('trig-48b', [
+    ['El doble', xpMira('dibujo', 'Empecemos por la idea: el doble es **la suma consigo mismo**.', { dib: (v, K) => P(K, v, ['sen 2a = sen(a + a)', '= 2 sen a cos a', 'cos 2a = cos² a − sen² a', '= 1 − 2 sen² a = 2 cos² a − 1'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Se usa la suma con b igual a a.', { n: 2 }, '$\\operatorname{sen}2a = 2\\operatorname{sen}a\\cos a$'],
+      ['El coseno da una resta de cuadrados.', { n: 3 }, '$\\cos 2a = \\cos^2 a - \\operatorname{sen}^2 a$'],
+      ['Con Pitágoras tiene otras dos caras.', { n: 4 }, '$1 - 2\\operatorname{sen}^2 a = 2\\cos^2 a - 1$'],
+      ['Doblar el ángulo no dobla el seno.', {}, '$\\operatorname{sen}60^\\circ \\neq 2\\operatorname{sen}30^\\circ$'],
+    ], '$\\operatorname{sen}2a = 2\\operatorname{sen}a\\cos a$; $\\cos 2a = \\cos^2a - \\operatorname{sen}^2a$.'),
+    xpFila('$\\operatorname{sen}a = \\tfrac35$, agudo. Pon $\\cos a$, $\\operatorname{sen}2a$ y $\\cos 2a$.', ['cos a', 'sen 2a', 'cos 2a'], ['4/5', '24/25', '7/25'], ['6/5', '12/25', '8/5'], '$2\\cdot\\tfrac35\\cdot\\tfrac45$ y $\\tfrac{16}{25} - \\tfrac{9}{25}$.', '24/25 y 7/25.')],
+    ['La mitad', xpMira('dibujo', 'Segunda idea: de cos 2a se **despeja** la mitad.', { dib: (v, K) => P(K, v, ['cos 2a = 1 − 2 sen² a', 'sen² a = (1 − cos 2a)/2', 'sen² 15° = (1 − cos 30°)/2', '= (2 − √3)/4'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Se despeja el seno al cuadrado.', { n: 2 }, '$\\operatorname{sen}^2 a = \\tfrac{1 - \\cos 2a}{2}$'],
+      ['El coseno al cuadrado lleva más.', {}, '$\\cos^2 a = \\tfrac{1 + \\cos 2a}{2}$'],
+      ['Con a = 15° se usa el coseno de 30°.', { n: 3 }, '$\\cos 30^\\circ = \\tfrac{\\sqrt3}{2}$'],
+      ['El signo de la raíz lo da el cuadrante de la mitad.', { n: 4 }, '$\\operatorname{sen}15^\\circ = \\tfrac{\\sqrt{2 - \\sqrt3}}{2}$'],
+    ], '$\\operatorname{sen}^2a = \\tfrac{1 - \\cos2a}{2}$, $\\cos^2a = \\tfrac{1 + \\cos2a}{2}$.'),
+    xpFila('$\\cos 2a = \\tfrac{7}{25}$, a agudo. Pon $\\operatorname{sen}^2a$ y $\\operatorname{sen}a$.', ['sen² a', 'sen a'], ['9/25', '3/5'], ['16/25', '4/5', '18/25'], 'Uno menos 7/25, la mitad.', '$\\tfrac{18/25}{2}$.')],
+    ['Verlo en la rueda', xpMira('dibujo', 'Tercera idea: doblar el ángulo **salta** en la rueda.', { dib: (v, K) => XM.rueda(K, 130, 110, 84, v.g) + (([x, y]) => K.l(130, 110, x, y, 'lf gr') + K.c(x, y, 6, 'fF'))(K.at(130, 110, 84, 2 * v.g)), v: { g: 20 }, alto: 225 }, [
+      ['Un radio es a; el rojo, 2a.', {}, '$a, \\ 2a$'],
+      ['Con a = 45°, el doble está arriba.', { g: 45 }, '$\\operatorname{sen}90^\\circ = 1$'],
+      ['Con 60°, el doble ya tiene coseno negativo.', { g: 60 }, '$\\cos 120^\\circ = -\\tfrac12$'],
+      ['Con 90°, el doble está a la izquierda.', { g: 90 }, '$\\cos 180^\\circ = -1$'],
+    ], 'El doble puede cambiar de cuadrante y de signo.'),
+    xpMueve('Mueve a hasta que $\\operatorname{sen}2a$ sea **1**.', 290, { g: 15 }, ang(90, 15, 'a (grados)'), { g: 45 }, (v, K) => XM.rueda(K, 130, 110, 84, v.g) + (([x, y]) => K.l(130, 110, x, y, 'lf gr') + K.c(x, y, 6, 'fF'))(K.at(130, 110, 84, 2 * v.g)), '$2 \\cdot 45^\\circ = 90^\\circ$.', { lee: v => `$2a = ${2 * v.g}^\\circ$` })],
+    ['Ahora sí, un problema', xpFila('El alcance de un tiro depende de $\\operatorname{sen}2a$. Con $\\operatorname{sen}a\\cos a = 0.4$, pon $\\operatorname{sen}2a$; y el ángulo de mayor alcance.', ['sen 2a', 'mejor a'], ['0.8', '45°'], ['0.4', '90°', '0.16'], 'El doble del producto; y sen 2a = 1.', 'Máximo en $2a = 90^\\circ$.')],
+  ], 'Doble: suma consigo. Mitad: se despeja.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-49
+  const red = (v, K) => { const p = XM.plano(K, 0, 12.57, -1.6, 1.6, { H: 180, g: 1.5708, gy: 1 }); return p.s + XM.curva(K, p, Math.sin) + K.l(18, p.Y(v.h), 322, p.Y(v.h), 'lf gr') + (Math.abs(v.h) <= 1 ? [Math.asin(v.h), Math.PI - Math.asin(v.h)].flatMap(x => [x, x + 2 * Math.PI, x + 4 * Math.PI]).filter(x => x >= -0.001 && x <= 12.57).map(x => K.c(p.X(x), p.Y(v.h), 5, 'fF')).join('') : ''); };
+  xpLec('trig-49', [
+    ['Infinitas soluciones', xpMira('dibujo', 'Empecemos por la idea: una recta corta la ola **muchas veces**.', { dib: red, v: { h: 0.5 }, alto: 190 }, [
+      ['Seno igual a un medio: cada cruce es una solución.', {}, '$\\operatorname{sen}x = \\tfrac12$'],
+      ['En cada ciclo hay dos: 30° y 150°.', {}, '$\\tfrac{\\pi}{6}, \\tfrac{5\\pi}{6}$'],
+      ['Las demás se repiten cada vuelta.', {}, '$x = \\tfrac{\\pi}{6} + 2k\\pi$'],
+      ['Con 1 solo hay una por ciclo.', { h: 1 }, '$\\operatorname{sen}x = 1$'],
+      ['Con más de 1, ninguna.', { h: 1.4 }, '$\\operatorname{sen}x = 1.4 \\ \\text{no}$'],
+    ], 'Halla las de un ciclo y suma vueltas.'),
+    xpMueve('Sube la recta hasta que haya **una sola** solución por ciclo, arriba.', 250, { h: 0 }, [xpRegla('h', -1, 1.5, 'altura', 0.5)], { h: 1 }, red, 'La recta apenas toca la cresta.', { lee: v => `$\\operatorname{sen}x = ${v.h}$` })],
+    ['Despejar primero', xpMira('dibujo', 'Segunda idea: se **despeja la función** y luego se busca el ángulo.', { dib: (v, K) => P(K, v, ['2 cos x + 1 = 0', 'cos x = −1/2', 'x = 120° o 240°'], 44, 38), v: { n: 1 }, alto: 150 }, [
+      ['Como si cos x fuera una letra.', { n: 2 }, '$\\cos x = -\\tfrac12$'],
+      ['Referencia 60°; el coseno es negativo en II y III.', { n: 3 }, '$120^\\circ, 240^\\circ$'],
+      ['Entre 0 y 360 esas son las dos.', {}, '$0 \\le x < 360^\\circ$'],
+      ['En general se suman vueltas completas.', {}, '$+\\ 360^\\circ k$'],
+    ], 'Despeja, referencia, cuadrantes, vueltas.'),
+    xpFila('$2\\operatorname{sen}x - \\sqrt3 = 0$ entre 0° y 360°. Ponlas en orden.', ['menor', 'mayor'], ['60°', '120°'], ['30°', '240°', '150°'], 'sen x = √3/2: primero y segundo.', '60° y 120°.')],
+    ['Factorizar', xpMira('dibujo', 'Tercera idea: si hay cuadrados, se **factoriza** como cuadrática.', { dib: (v, K) => P(K, v, ['2 sen² x − sen x = 0', 'sen x (2 sen x − 1) = 0', 'sen x = 0  o  sen x = 1/2', '0°, 180°, 30°, 150°'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['No se divide entre seno: se perderían soluciones.', {}, '$\\operatorname{sen}x \\neq 0 \\ ?$'],
+      ['Mejor se saca factor común.', { n: 2 }, '$\\operatorname{sen}x(2\\operatorname{sen}x - 1)$'],
+      ['Cada factor da sus ángulos.', { n: 3 }, '$\\operatorname{sen}x = 0, \\tfrac12$'],
+      ['Son cuatro en una vuelta.', { n: 4 }, '$0^\\circ, 30^\\circ, 150^\\circ, 180^\\circ$'],
+    ], 'Factoriza; si hay dos funciones, déjalas en una.'),
+    xpFila('$\\cos^2x = 1$ entre 0° y 360° (sin 360°). Pon cuántas hay y la mayor.', ['cuántas', 'mayor'], ['2', '180°'], ['1', '4', '270°'], 'cos x = 1 o cos x = −1.', '0° y 180°.')],
+    ['Ahora sí, un problema', xpFila('Una noria está a $h = 10 + 8\\operatorname{sen}x$. ¿A qué dos ángulos está a 14 m?', ['menor', 'mayor'], ['30°', '150°'], ['60°', '120°', '210°'], '8 sen x = 4.', '$\\operatorname{sen}x = \\tfrac12$.')],
+  ], 'Un ciclo, sus dos ángulos y las vueltas.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-46a
+  const T3 = (K, A, B, C, o = {}) => K.p([A, B, C], 'fc') + K.t(A[0] - 10, A[1] + 14, 'A', 's') + K.t(B[0] + 10, B[1] + 14, 'B', 's') + K.t(C[0], C[1] - 8, 'C', 's') + K.t((A[0] + B[0]) / 2, A[1] + 18, o.c || 'c', 's ta') + K.t((B[0] + C[0]) / 2 + 12, (B[1] + C[1]) / 2, o.a || 'a', 's ta', 'start') + K.t((A[0] + C[0]) / 2 - 10, (A[1] + C[1]) / 2, o.b || 'b', 's ta', 'end');
+  const osc = (v, K) => { const A = [50, 160], C = [50 + 120 * Math.cos(rad(40)), 160 - 120 * Math.sin(rad(40))], r = v.r, hh = 160 - C[1], d = Math.sqrt(Math.max(0, r * r - hh * hh)); return K.l(30, 160, 330, 160, 'lm') + K.l(...A, ...C, 'la gr') + (r >= hh - 0.01 ? [-d, d].map(q => (C[0] + q > A[0] + 2 ? K.l(C[0], C[1], C[0] + q, 160, 'lf gr') + K.c(C[0] + q, 160, 5, 'fF') : '')).join('') : K.l(C[0], C[1], C[0], C[1] + r, 'lf gr')) + K.t(200, 40, v.p || '', 'ta'); };
+  xpLec('trig-46a', [
+    ['Cada lado con su ángulo', xpMira('dibujo', 'Empecemos por la idea: la altura une **dos lados con sus ángulos**.', { dib: (v, K) => T3(K, [50, 160], [280, 160], [150, 50]) + K.f(v.h, K.l(150, 50, 150, 160, 'lf gr') + K.t(160, 120, 'h', 'b tf', 'start')), v: { h: 0 }, alto: 190 }, [
+      ['Un triángulo cualquiera, sin ángulo recto.', {}, '$A, B, C$'],
+      ['Se traza la altura: dos triángulos rectángulos.', { h: 1 }, '$h$'],
+      ['Desde A, la altura es b por seno de A.', {}, '$h = b\\operatorname{sen}A$'],
+      ['Desde B, es a por seno de B. Es la misma.', {}, '$b\\operatorname{sen}A = a\\operatorname{sen}B$'],
+      ['Cada lado sobre el seno de su opuesto da lo mismo.', {}, '$\\tfrac{a}{\\operatorname{sen}A} = \\tfrac{b}{\\operatorname{sen}B} = \\tfrac{c}{\\operatorname{sen}C}$'],
+    ], 'Lado sobre seno del ángulo opuesto: igual en los tres.'),
+    xpFila('A = 30°, B = 45° y a = 6. Pon C y b.', ['C', 'b'], ['105°', '6√2'], ['75°', '3√2', '12'], 'Suman 180°; $b = \\tfrac{6\\operatorname{sen}45^\\circ}{\\operatorname{sen}30^\\circ}$.', '$12 \\cdot \\tfrac{\\sqrt2}{2}$.')],
+    ['Cuándo sirve', xpMira('dibujo', 'Segunda idea: hace falta **una pareja completa**: un lado y su ángulo opuesto.', { dib: (v, K) => T3(K, [50, 160], [280, 160], [150, 50], { a: v.a, b: v.b, c: v.c }) + K.t(170, 24, v.p, 'ta'), v: { a: '?', b: '9', c: '?', p: '' }, alto: 190 }, [
+      ['Dos ángulos y un lado: se halla el tercer ángulo y sirve.', { p: 'A, B y un lado ✓' }, '$180^\\circ - A - B$'],
+      ['Dos lados y el ángulo opuesto a uno: sirve, con cuidado.', { a: '7', p: 'a, b y A ✓' }, '$\\tfrac{7}{\\operatorname{sen}A}$'],
+      ['Dos lados y el ángulo entre ellos: no hay pareja.', { c: '10', a: '?', p: 'b, c y A ✗' }, '$\\text{cosenos}$'],
+      ['Con tres lados tampoco hay pareja.', { a: '7', p: 'a, b y c ✗' }, '$\\text{cosenos}$'],
+    ], 'Sin pareja lado–opuesto se usa la ley de cosenos.'),
+    xpFila('¿Cuál ley? Datos conocidos:', ['A, B, a', 'a, b, C', 'a, b, A'], ['senos', 'cosenos', 'senos'], ['ninguna', 'cosenos'], '¿Hay un lado con su opuesto?', 'En a, b, C no hay pareja.')],
+    ['El caso dudoso', xpMira('dibujo', 'Tercera idea: con dos lados y un opuesto puede haber **0, 1 o 2** triángulos.', { dib: osc, v: { r: 60, p: 'no alcanza' }, alto: 180 }, [
+      ['El lado rojo cuelga de C. Si es corto, no llega.', {}, '$a < h$'],
+      ['Si mide justo la altura, hay uno: rectángulo.', { r: 77.13, p: 'uno' }, '$a = h$'],
+      ['Un poco más largo: toca en dos sitios. Dos triángulos.', { r: 95, p: 'dos' }, '$h < a < b$'],
+      ['Más largo que b: solo uno.', { r: 140, p: 'uno' }, '$a \\ge b$'],
+    ], 'Compara a con la altura $h = b\\operatorname{sen}A$ y con b.'),
+    xpFila('A = 30° y b = 16: la altura es 8. ¿Cuántos triángulos?', ['a = 6', 'a = 11', 'a = 20'], ['0', '2', '1'], ['3'], 'Compara con 8 y con 16.', 'No llega; dos; uno.')],
+    ['Ahora sí, un problema', xpFila('Desde A y B, a 20 m, se ve un árbol C con A = 45° y B = 105°. Pon C y la distancia AC sobre $\\operatorname{sen}B$.', ['C', '20/sen C'], ['30°', '40'], ['60°', '20', '10'], 'El lado de 20 es opuesto a C.', '$\\tfrac{20}{1/2} = 40$.')],
+  ], 'Una pareja completa manda; en el dudoso, mira la altura.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-46b
+  const bis = (v, K) => { const [x, y] = K.at(130, 160, 110, v.g); return K.l(130, 160, 280, 160, 'lg gr') + K.l(130, 160, x, y, 'la gr') + K.l(x, y, 280, 160, 'lf gr') + K.ang([130, 160], [280, 160], [x, y], 26, `${Math.round(v.g)}°`, 'fa') + K.t(240, 60, v.p || '', 'ta'); };
+  xpLec('trig-46b', [
+    ['Pitágoras con corrección', xpMira('dibujo', 'Empecemos por la idea: la ley de cosenos es **Pitágoras corregido**.', { dib: bis, v: { g: 90, p: '' }, alto: 185 }, [
+      ['Con 90° vale Pitágoras.', {}, '$c^2 = a^2 + b^2$'],
+      ['Si el ángulo se cierra, el tercer lado se acorta: hay que quitar.', { g: 50 }, '$c^2 < a^2 + b^2$'],
+      ['Si se abre, se alarga: hay que agregar.', { g: 130 }, '$c^2 > a^2 + b^2$'],
+      ['La corrección es 2ab por el coseno, que cambia de signo en 90°.', {}, '$c^2 = a^2 + b^2 - 2ab\\cos C$'],
+    ], '$c^2 = a^2 + b^2 - 2ab\\cos C$.'),
+    xpFila('Lados 3 y 8 con 60° entre ellos. Pon $2ab\\cos C$, $c^2$ y c.', ['corrección', 'c²', 'c'], ['24', '49', '7'], ['48', '97', '73'], '2 · 3 · 8 · ½; 9 + 64 − 24.', '$c = 7$.')],
+    ['Hallar un ángulo', xpMira('dibujo', 'Segunda idea: con tres lados se **despeja el coseno**.', { dib: (v, K) => P(K, v, ['lados 5, 6 y 7', '49 = 25 + 36 − 60 cos C', 'cos C = 12/60 = 1/5'], 44, 38), v: { n: 1 }, alto: 150 }, [
+      ['El lado solo a la izquierda es el opuesto al ángulo buscado.', { n: 2 }, '$7^2 = 5^2 + 6^2 - 2 \\cdot 5 \\cdot 6\\cos C$'],
+      ['De ahí se despeja el coseno.', { n: 3 }, '$\\cos C = \\tfrac{12}{60}$'],
+      ['Positivo: el ángulo es agudo.', {}, '$C < 90^\\circ$'],
+      ['Si sale negativo, es obtuso.', {}, '$C > 90^\\circ$'],
+    ], '$\\cos C = \\tfrac{a^2 + b^2 - c^2}{2ab}$.'),
+    xpFila('Lados 5, 16 y 19. Para el ángulo opuesto a 19: pon arriba, abajo y el coseno.', ['a²+b²−c²', '2ab', 'cos C'], ['−80', '160', '−1/2'], ['80', '1/2', '642'], '25 + 256 − 361.', 'Ángulo de $120^\\circ$.')],
+    ['El área', xpMira('dibujo', 'Tercera idea: el área es **medio lado por lado por seno**.', { dib: bis, v: { g: 30, p: '' }, alto: 185 }, [
+      ['La base es un lado; la altura, el otro por el seno.', {}, '$h = a\\operatorname{sen}C$'],
+      ['El área es media base por altura.', {}, '$A = \\tfrac12 ab\\operatorname{sen}C$'],
+      ['Crece hasta 90° y después baja.', { g: 90 }, '$\\operatorname{sen}90^\\circ = 1$'],
+      ['Con 150° vale lo mismo que con 30°.', { g: 150 }, '$\\operatorname{sen}150^\\circ = \\operatorname{sen}30^\\circ$'],
+    ], '$A = \\tfrac12 ab\\operatorname{sen}C$; es mayor con 90°.'),
+    xpMueve('Abre la bisagra hasta que el área sea la **máxima**.', 250, { g: 30 }, ang(165, 15), { g: 90 }, bis, 'El seno vale 1 en 90°.', { lee: v => `$C = ${v.g}^\\circ$` })],
+    ['Ahora sí, un problema', xpFila('Dos caminos de 16 y 10 km salen de un pueblo con 60°. Pon la distancia entre los extremos y el área.', ['distancia', 'área'], ['14', '40√3'], ['196', '80', '2√129'], '256 + 100 − 160; y ½ · 16 · 10 · √3/2.', '$\\sqrt{196}$ y $40\\sqrt3$.')],
+  ], 'Pitágoras corregido y el área con seno.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-151
+  const Z = (v, K) => { const p = XM.plano(K, -6.6, 6.6, -4, 4, { H: 200 }), x = v.r * Math.cos(rad(v.g)), y = v.r * Math.sin(rad(v.g)); const u = (p.X(1) - p.X(0)), w = (p.Y(0) - p.Y(1)); return p.s + `<ellipse class="xl lm d" cx="${p.X(0)}" cy="${p.Y(0)}" rx="${XPK.n(v.r * u)}" ry="${XPK.n(v.r * w)}"/>` + K.l(p.X(x), p.Y(0), p.X(x), p.Y(y), 'lf') + K.ar(p.X(0), p.Y(0), p.X(x), p.Y(y), 'la gr') + K.t(14, 24, v.p || '', 'b ta', 'start'); };
+  xpLec('trig-151', [
+    ['Distancia y giro', xpMira('dibujo', 'Empecemos por la idea: un complejo se dice con **cuánto** y **hacia dónde**.', { dib: Z, v: { r: 2, g: 0, p: '' }, alto: 210 }, [
+      ['Hay dos maneras de llegar a un punto: cuadras o distancia y dirección.', {}, '$a + bi$'],
+      ['La distancia es el módulo r.', { r: 3 }, '$r = |z|$'],
+      ['La dirección es el argumento θ.', { g: 60, p: '60°' }, '$\\theta = 60^\\circ$'],
+      ['Sus cuadras salen con coseno y seno.', {}, '$a = r\\cos\\theta, \\ b = r\\operatorname{sen}\\theta$'],
+      ['Esa es la llamada forma polar.', {}, '$z = r(\\cos\\theta + i\\operatorname{sen}\\theta)$'],
+    ], '$z = r(\\cos\\theta + i\\operatorname{sen}\\theta) = r\\operatorname{cis}\\theta$.'),
+    xpMueve('Lleva la flecha a $3\\operatorname{cis}135^\\circ$.', 300, { r: 1, g: 0, p: '' }, [xpRegla('r', 1, 4, 'módulo'), xpRegla('g', 0, 315, 'ángulo', 45)], { r: 3, g: 135 }, Z, 'Distancia 3, dirección 135°.', { lee: v => `$${v.r}\\operatorname{cis}${v.g}^\\circ$` })],
+    ['De cuadras a polar', xpMira('dibujo', 'Segunda idea: **Pitágoras** da el módulo y el **cuadrante** corrige el ángulo.', { dib: Z, v: { r: 2.83, g: 45, p: '2 + 2i' }, alto: 210 }, [
+      ['2 + 2i: módulo raíz de 8, ángulo 45°.', {}, '$\\sqrt{4 + 4} = 2\\sqrt2$'],
+      ['El −2 + 2i tiene el mismo módulo.', { g: 135, p: '−2 + 2i' }, '$2\\sqrt2$'],
+      ['La calculadora da −45°, pero está en el segundo: es 135°.', {}, '$180^\\circ - 45^\\circ$'],
+      ['Dibuja siempre antes de escribir el ángulo.', {}, '$\\tan\\theta = \\tfrac{b}{a}$'],
+    ], '$r = \\sqrt{a^2 + b^2}$; θ con el cuadrante.'),
+    xpFila('$z = -\\sqrt3 + i$. Pon el módulo y el argumento.', ['módulo', 'argumento'], ['2', '150°'], ['4', '−30°', '30°'], '3 + 1; está en el segundo, referencia 30°.', '$2\\operatorname{cis}150^\\circ$.')],
+    ['De polar a cuadras', xpMira('dibujo', 'Tercera idea: para volver se **multiplica** por coseno y seno.', { dib: Z, v: { r: 4, g: 60, p: '4 cis 60°' }, alto: 210 }, [
+      ['Cuatro en dirección 60°.', {}, '$4\\operatorname{cis}60^\\circ$'],
+      ['Horizontal: 4 por un medio.', {}, '$4 \\cdot \\tfrac12 = 2$'],
+      ['Vertical: 4 por raíz de tres medios.', {}, '$4 \\cdot \\tfrac{\\sqrt3}{2} = 2\\sqrt3$'],
+      ['Sumar vueltas no cambia el número.', {}, '$60^\\circ + 360^\\circ = 420^\\circ$'],
+    ], '$a = r\\cos\\theta$ y $b = r\\operatorname{sen}\\theta$.'),
+    xpFila('$6\\operatorname{cis}120^\\circ$: pon la parte real y la imaginaria.', ['real', 'imaginaria'], ['−3', '3√3'], ['3', '−3√3', '6'], 'Segundo cuadrante: coseno −½.', '$-3 + 3\\sqrt3\\,i$.')],
+    ['Ahora sí, un problema', xpFila('Un barco está 5 al este y 5 al sur del puerto: $5 - 5i$. Pon la distancia y la dirección (0° a 360°).', ['distancia', 'dirección'], ['5√2', '315°'], ['10', '45°', '225°'], 'Cuarto cuadrante, referencia 45°.', '$5\\sqrt2\\operatorname{cis}315^\\circ$.')],
+  ], 'Cuánto y hacia dónde: módulo y argumento.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-152
+  const mul = (v, K) => { const p = XM.plano(K, -7.8, 7.8, -5, 5, { H: 210 }), q = (r, g) => [p.X(r * Math.cos(rad(g))), p.Y(r * Math.sin(rad(g)))]; return p.s + K.ar(p.X(0), p.Y(0), ...q(v.r, v.g), 'la gr') + K.ar(p.X(0), p.Y(0), ...q(v.s, v.h), 'lf gr') + K.t(14, 24, v.p || '', 'b ta', 'start'); };
+  xpLec('trig-152', [
+    ['Multiplicar es girar y estirar', xpMira('dibujo', 'Empecemos por la idea: los módulos **se multiplican** y los ángulos **se suman**.', { dib: mul, v: { r: 2, g: 30, s: 2, h: 30, p: '' }, alto: 220 }, [
+      ['Empezamos en 2 cis 30°.', {}, '$2\\operatorname{cis}30^\\circ$'],
+      ['Multiplicar por 2 cis 60°: primero gira 60°.', { h: 90 }, '$30^\\circ + 60^\\circ$'],
+      ['Y además se estira al doble.', { s: 4 }, '$2 \\cdot 2 = 4$'],
+      ['El producto: 4 cis 90°, que es 4i.', { p: '4 cis 90°' }, '$4\\operatorname{cis}90^\\circ = 4i$'],
+      ['Dividir hace lo contrario: divide y resta.', {}, '$\\tfrac{r_1}{r_2}\\operatorname{cis}(\\theta_1 - \\theta_2)$'],
+    ], 'Producto: módulos por, ángulos más. Cociente: entre y menos.'),
+    xpMueve('Lleva la flecha roja al producto de $2\\operatorname{cis}45^\\circ$ por $2\\operatorname{cis}90^\\circ$.', 310, { r: 2, g: 45, s: 2, h: 45, p: '' }, [xpRegla('s', 1, 5, 'módulo'), xpRegla('h', 0, 315, 'ángulo', 45)], { s: 4, h: 135 }, mul, '$4\\operatorname{cis}135^\\circ$.', { lee: v => `$${v.s}\\operatorname{cis}${v.h}^\\circ$` })],
+    ['Potencias: De Moivre', xpMira('dibujo', 'Segunda idea: elevar es **multiplicar muchas veces** por el mismo.', { dib: mul, v: { r: 1.5, g: 30, s: 1.5, h: 30, p: 'z' }, alto: 220 }, [
+      ['Aquí está z, con ángulo 30°.', {}, '$z = r\\operatorname{cis}30^\\circ$'],
+      ['Al cuadrado: 60° y módulo al cuadrado.', { s: 2.25, h: 60, p: 'z²' }, '$r^2\\operatorname{cis}60^\\circ$'],
+      ['Al cubo: 90° y módulo al cubo.', { s: 3.375, h: 90, p: 'z³' }, '$r^3\\operatorname{cis}90^\\circ$'],
+      ['En general, n veces el ángulo.', {}, '$z^n = r^n\\operatorname{cis}(n\\theta)$'],
+      ['Los puntos dibujan una espiral.', { s: 5, h: 120, p: 'z⁴' }, '$z^4$'],
+    ], '$(r\\operatorname{cis}\\theta)^n = r^n\\operatorname{cis}(n\\theta)$.'),
+    xpFila('$(2\\operatorname{cis}20^\\circ)^5$: pon el módulo y el ángulo.', ['módulo', 'ángulo'], ['32', '100°'], ['10', '25°', '160°'], '2 a la 5; cinco veces 20°.', '$32\\operatorname{cis}100^\\circ$.')],
+    ['Cuando conviene', xpMira('dibujo', 'Tercera idea: para potencias grandes, **pasa a polar**.', { dib: (v, K) => P(K, v, ['(1 + i)⁸', '√2 cis 45°', '(√2)⁸ cis 360°', '16'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Multiplicar ocho veces sería largo.', {}, '$(1 + i)^8$'],
+      ['En polar: raíz de dos, 45°.', { n: 2 }, '$\\sqrt2\\operatorname{cis}45^\\circ$'],
+      ['Módulo a la 8 es 16; ocho veces 45 es 360.', { n: 3 }, '$16\\operatorname{cis}360^\\circ$'],
+      ['Una vuelta completa: es el número 16.', { n: 4 }, '$16$'],
+    ], 'Polar, De Moivre y volver.'),
+    xpFila('$(1 + i)^4$: pon el módulo, el ángulo y el resultado.', ['módulo', 'ángulo', 'resultado'], ['4', '180°', '−4'], ['2', '45°', '4i'], '(√2)⁴ y 4 · 45°.', '$4\\operatorname{cis}180^\\circ = -4$.')],
+    ['Ahora sí, un problema', xpFila('Un engranaje multiplica por $3\\operatorname{cis}40^\\circ$ en cada paso. Tras 3 pasos, pon el estiramiento y el giro.', ['estira', 'gira'], ['27', '120°'], ['9', '43°', '64°'], '3 al cubo; tres veces 40°.', '$27\\operatorname{cis}120^\\circ$.')],
+  ], 'Multiplicar gira y estira; elevar lo repite.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-153
+  const flor = (v, K) => { const n = Math.round(v.n); return K.c(120, 110, 80, 'fn') + Array.from({ length: n }, (_, k) => { const [x, y] = K.at(120, 110, 80, v.a + 360 * k / n); return K.l(120, 110, x, y, 'la') + K.c(x, y, 7, k ? 'fG' : 'fF'); }).join('') + K.l(20, 110, 225, 110, 'lm') + K.t(240, 70, v.p || '', 'ta', 'start'); };
+  xpLec('trig-153', [
+    ['Deshacer la potencia', xpMira('dibujo', 'Empecemos por la idea: la raíz **parte el ángulo** y saca raíz del módulo.', { dib: (v, K) => P(K, v, ['w³ = 8 cis 60°', 'módulo: raíz cúbica de 8 = 2', 'ángulo: 60° ÷ 3 = 20°', 'w = 2 cis 20°'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Buscamos w que al cubo dé 8 cis 60°.', {}, '$w^3 = z$'],
+      ['El módulo: la raíz cúbica de 8.', { n: 2 }, '$\\sqrt[3]{8} = 2$'],
+      ['El ángulo: la tercera parte.', { n: 3 }, '$60^\\circ \\div 3 = 20^\\circ$'],
+      ['Esa es una raíz. Pero no la única.', { n: 4 }, '$2\\operatorname{cis}20^\\circ$'],
+    ], 'Primera raíz: $\\sqrt[n]{r}\\operatorname{cis}\\tfrac{\\theta}{n}$.'),
+    xpFila('Una raíz cuarta de $16\\operatorname{cis}80^\\circ$: pon módulo y ángulo.', ['módulo', 'ángulo'], ['2', '20°'], ['4', '320°', '40°'], 'Raíz cuarta de 16; la cuarta parte de 80.', '$2\\operatorname{cis}20^\\circ$.')],
+    ['Las hermanas', xpMira('dibujo', 'Segunda idea: hay **n raíces**, repartidas como pétalos.', { dib: flor, v: { n: 1, a: 20, p: '' }, alto: 220 }, [
+      ['60° y 420° son la misma dirección.', {}, '$60^\\circ + 360^\\circ$'],
+      ['420 entre 3 es 140: otra raíz, a 120° de la primera.', { n: 3, p: '3 raíces' }, '$140^\\circ$'],
+      ['La tercera, a otros 120°: 260°.', {}, '$260^\\circ$'],
+      ['La siguiente sería 380°: ya es la primera.', {}, '$380^\\circ = 20^\\circ$'],
+      ['Con n raíces, la separación es 360 entre n.', { n: 5, p: '5 raíces' }, '$\\tfrac{360^\\circ}{n}$'],
+    ], 'n raíces separadas $\\tfrac{360^\\circ}{n}$ en un círculo de radio $\\sqrt[n]{r}$.'),
+    xpMueve('Pon las raíces **octavas** con la primera en 10°.', 310, { n: 2, a: 0, p: '' }, [xpRegla('n', 2, 8, 'cuántas raíces'), xpRegla('a', 0, 60, 'primera (grados)', 10)], { n: 8, a: 10 }, flor, 'Ocho raíces, cada 45°.', { lee: v => `$\\tfrac{360^\\circ}{${v.n}}$` })],
+    ['Las raíces de 1', xpMira('dibujo', 'Tercera idea: las raíces de 1 hacen un **polígono regular**.', { dib: (v, K) => flor(v, K) + K.f(v.l, K.p(Array.from({ length: Math.max(3, Math.round(v.n)) }, (_, k) => K.at(120, 110, 80, 360 * k / Math.max(3, Math.round(v.n)))), 'fa')), v: { n: 2, a: 0, p: '', l: 0 }, alto: 220 }, [
+      ['Las raíces cuadradas de 1 son 1 y −1.', {}, '$\\pm1$'],
+      ['Las cúbicas forman un triángulo.', { n: 3, l: 1 }, '$0^\\circ, 120^\\circ, 240^\\circ$'],
+      ['Cuartas: un cuadrado, con i y −i.', { n: 4 }, '$1, i, -1, -i$'],
+      ['Si se suman todas, dan 0: se equilibran.', {}, '$1 + i - 1 - i = 0$'],
+    ], 'Las raíces de 1 son los vértices de un polígono y suman 0.'),
+    xpFila('Raíces cuadradas de $-9 = 9\\operatorname{cis}180^\\circ$: pon el módulo y los ángulos.', ['módulo', 'menor', 'mayor'], ['3', '90°', '270°'], ['9', '180°', '45°'], 'La mitad de 180; y media vuelta más.', '$3i$ y $-3i$.')],
+    ['Ahora sí, un problema', xpFila('Resuelve $z^3 = 27$: pon el módulo y los ángulos de las tres, en orden.', ['módulo', '1.ª', '2.ª', '3.ª'], ['3', '0°', '120°', '240°'], ['9', '90°', '180°'], '27 tiene ángulo 0°.', '3, $3\\operatorname{cis}120^\\circ$ y $3\\operatorname{cis}240^\\circ$.')],
+  ], 'n raíces: un círculo repartido en partes iguales.');
 }

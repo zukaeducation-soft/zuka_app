@@ -889,6 +889,8 @@ const GUIDES = {
   'historia-grafica': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'tabla-lineal': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'sube-tarifa': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'tercer-lado': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'cierran-o-no': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
   'punto-comun': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'voltea-o-sigue': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'pinta-intervalo': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],

@@ -1,0 +1,96 @@
+// Preicfes · Lectura Crítica, mundo 6 «Textos Discontinuos» (Explora, escena «hoja»). Piezas cortas propias.
+xpLec('icf-lc-discontinuo-1', [
+  ['Cada parte hace algo',
+    xpMira('hoja', 'Empecemos por la idea: una infografía no se lee en fila; **cada parte** hace algo.', { letras: ['título', 'tabla', 'flecha', 'nota'], paras: [['¿Cuánto duerme tu perro?'], ['Cachorro: 18 horas. Adulto: 13.'], ['Más juego → mejor sueño'], ['Datos de 60 perros de ciudad.']] }, [
+      ['El título pregunta y dice el tema.', { luz: [0], nota: { 0: 'tema' } }],
+      ['La tabla da las cantidades.', { luz: [1], nota: { 1: 'cuánto' } }],
+      ['La flecha une dos cosas.', { luz: [2], nota: { 2: 'qué lleva a qué' } }],
+      ['La nota dice de dónde salen los datos.', { luz: [3], nota: { 3: 'de dónde' } }],
+      ['Con eso sabes dónde buscar cada respuesta.', {}],
+    ], 'Título, tabla, flecha y nota: cada una responde algo distinto.'),
+    xpHaz('hoja', '¿Dónde buscarías si los datos valen para perros de finca? Subráyalo.', { modo: 'toca', letras: ['título', 'tabla', 'flecha', 'nota'], meta: [3], paras: [['¿Cuánto duerme tu perro?'], ['Cachorro: 18 horas. Adulto: 13.'], ['Más juego → mejor sueño'], ['Datos de 60 perros de ciudad.']], pista: 'Busca la parte que dice a quiénes se midió.' }, 'La nota aclara que son perros de ciudad.')],
+  ['Tamaño y color',
+    xpMira('hoja', 'Segunda idea: la **forma** también habla.', { paras: [['LETRA ENORME: «¡Gratis!»'], ['Fondo rojo: «Solo hoy»'], ['letra pequeña: aplican condiciones']] }, [
+      ['Lo enorme se ve primero.', { luz: [0], nota: { 0: 'se destaca' } }],
+      ['El rojo hace sentir urgencia.', { luz: [1], nota: { 1: 'apura' } }],
+      ['Lo pequeño se lee de último, o no se lee.', { luz: [2], nota: { 2: 'se esconde' } }],
+      ['Y a veces es lo más importante.', { luz: [2] }],
+      ['Pregunta qué se destaca y qué se esconde.', { luz: [0, 2] }],
+    ], 'Grande y rojo atraen; lo pequeño también dice.'),
+    xpHaz('hoja', 'Un yogur dice «0 % grasa» en grande y, en letra pequeña, «22 g de azúcar». Subraya lo que busca el diseño.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Que se note el azúcar.'], ['Que parezca saludable.'], ['Que se lea todo por igual.']], pista: '¿Qué ves primero?' }, 'Destaca lo que conviene y disimula el azúcar.')],
+  ['Números con nota',
+    xpMira('hoja', 'Tercera idea: un número necesita su **total** y su **nota**.', { paras: [['Barrio A: 30 robos. Barrio B: 20.'], ['A: 60 000 personas. B: 10 000.'], ['A: 1 por cada 2 000. B: 1 por cada 500.']] }, [
+      ['Parece que A está peor.', { luz: [0] }],
+      ['Pero A tiene mucha más gente.', { luz: [1], nota: { 1: 'el total' } }],
+      ['Por persona, B está peor.', { luz: [2], nota: { 2: 'comparado' } }],
+      ['El mismo dato cambia con su total.', { luz: [0, 2] }],
+      ['Antes de comparar, busca de cuántos se habla.', {}],
+    ], 'Compara con el total: no solo cuenta cuántos, sino de cuántos.'),
+    xpHaz('hoja', 'Curso A: 6 perdieron de 30. Curso B: 5 perdieron de 20. Subraya lo correcto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Le fue peor a A, porque son 6.'], ['Les fue igual.'], ['Le fue peor a B: uno de cada cuatro.']], pista: 'Saca la parte de cada curso.' }, '6 de 30 es un quinto; 5 de 20, un cuarto.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Etiqueta: «Jugo de mora. Contenido de fruta: 8 %». Al lado, una foto enorme de moras. Subraya lo que se concluye.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['La imagen sugiere más fruta de la que hay.'], ['Es casi todo mora.'], ['La etiqueta miente sobre el porcentaje.']], pista: 'Compara la foto con el número.' }, 'El dato está, pero la foto da otra idea.')],
+], 'Mira qué hace cada parte, qué se destaca y con qué total se compara.');
+
+xpLec('icf-lc-discontinuo-2', [
+  ['Globos y cartelas',
+    xpMira('hoja', 'Empecemos por la idea: en un cómic, el **borde** y el lugar del texto dicen quién habla y cómo.', { letras: ['1', '2', '3', '4'], paras: [['Globo liso: «Ya voy».'], ['Globo de nube: «Qué pereza».'], ['Globo con puntas: «¡YA VOY!»'], ['Cartela: «Dos horas después…»']] }, [
+      ['Liso: lo dice en voz normal.', { luz: [0], nota: { 0: 'habla' } }],
+      ['Nube: lo piensa y nadie lo oye.', { luz: [1], nota: { 1: 'piensa' } }],
+      ['Con puntas: lo grita.', { luz: [2], nota: { 2: 'grita' } }],
+      ['La cartela es la voz que narra.', { luz: [3], nota: { 3: 'narra' } }],
+      ['Lo que dice y lo que piensa no coinciden: ahí está el chiste.', { luz: [0, 1] }],
+    ], 'Liso habla, nube piensa, puntas grita, cartela narra.'),
+    xpHaz('hoja', 'Pon al margen qué hace cada texto.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['grita', 'narra', 'piensa'], meta: [2, 0, 1], paras: [['Nube: «Ojalá no me vea».'], ['Puntas: «¡CUIDADO!»'], ['Recuadro: «Esa noche…»']], pista: 'Alguna no va ahí: mira el borde de cada uno.' }, 'La nube piensa, las puntas gritan y el recuadro narra.')],
+  ['Planos y color',
+    xpMira('hoja', 'Segunda idea: el **plano** y el **color** cambian lo que sientes.', { paras: [['Plano general: una niña diminuta en un patio enorme.'], ['Primer plano: sus ojos.'], ['Última viñeta, de repente a color: alguien le da la mano.']] }, [
+      ['Verla diminuta la hace ver sola.', { luz: [0], nota: { 0: 'soledad' } }],
+      ['Acercarse a los ojos muestra lo que siente.', { luz: [1], nota: { 1: 'emoción' } }],
+      ['El color aparece con la compañía.', { luz: [2], nota: { 2: 'cambio' } }],
+      ['Nadie dijo «estaba triste».', { luz: [0, 1] }],
+      ['El dibujo lo dijo.', { luz: [2] }],
+    ], 'Lejos empequeñece, cerca emociona, el color marca un cambio.'),
+    xpHaz('hoja', 'Un jefe se dibuja visto desde abajo, gigante, ante un empleado pequeño. Subraya lo que sugiere.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['El poder que tiene sobre el otro'], ['Que el empleado es un niño'], ['Que el edificio es alto']], pista: '¿Qué sientes al ver a alguien desde abajo?' }, 'El ángulo hace sentir el poder.')],
+  ['Entre viñetas',
+    xpMira('hoja', 'Tercera idea: lo que **no se dibuja** lo completas tú.', { paras: [['Viñeta 1: un jarrón en la mesa; un balón en el aire.'], ['Viñeta 2: un niño barre, con cara inocente.'], ['Viñeta 3: la mamá mira la mesa vacía.']] }, [
+      ['Aquí el jarrón está entero.', { luz: [0] }],
+      ['Aquí ya se está limpiando algo.', { luz: [1] }],
+      ['¿Qué pasó en medio? El balón lo rompió.', { luz: [0, 1], nota: { 1: 'lo completas tú' } }],
+      ['No se ve, pero se deduce.', {}],
+      ['El humor está en lo que todos sabemos.', { luz: [2] }],
+    ], 'Une una viñeta con la siguiente: lo que falta se deduce.'),
+    xpHaz('hoja', 'Viñeta 1: un gato mira una pecera. Viñeta 2: el gato, mojado; el pez, en su sitio. Subraya lo que se deduce.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['El gato se comió el pez.'], ['Llovió en la sala.'], ['El gato intentó sacarlo y no pudo.']], pista: 'Une las dos viñetas.' }, 'Está mojado y el pez sigue: lo intentó sin éxito.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Viñeta: todos miran el celular en una mesa; el abuelo le sirve sopa a una silla vacía. Globo del abuelo: «Al menos usted me escucha». Subraya lo que critica.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['La comida del abuelo'], ['Que la familia está, pero no se atiende'], ['Que falta una persona en la mesa']], pista: 'Compara a quién le habla con quienes están presentes.' }, 'Prefiere una silla a quienes no lo oyen.')],
+], 'Lee el borde, el plano, el color y lo que ocurre entre viñetas.');
+
+xpLec('icf-lc-discontinuo-3', [
+  ['Varias piezas, un tema',
+    xpMira('hoja', 'Empecemos por la idea: una página puede mezclar **titular, dato, voz y foto** sobre lo mismo.', { letras: ['titular', 'dato', 'voz', 'foto'], paras: [['«El río volvió a tener peces»'], ['De 3 especies a 11 en cinco años'], ['«Yo no pescaba desde niño», dice Luis'], ['Pie de foto: la orilla, antes y ahora']] }, [
+      ['El titular da la noticia.', { luz: [0], nota: { 0: 'qué pasó' } }],
+      ['El dato dice cuánto.', { luz: [1], nota: { 1: 'cuánto' } }],
+      ['La voz dice qué significó para alguien.', { luz: [2], nota: { 2: 'para quién' } }],
+      ['La foto deja comparar.', { luz: [3], nota: { 3: 'cómo se ve' } }],
+      ['Cada una aporta lo que las otras no tienen.', {}],
+    ], 'Pregunta qué se sabría solo con cada pieza.'),
+    xpHaz('hoja', 'Subraya la pieza que dice **cuánto** cambió.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['«Nos cambió la vida», cuenta Rosa.'], ['La basura bajó de 40 a 12 toneladas.'], ['Foto: una cuadra limpia.']], pista: 'Busca números.' }, 'La voz y la foto no dicen cuánto.')],
+  ['Completan o contradicen',
+    xpMira('hoja', 'Segunda idea: una pieza puede **completar** a otra o **contradecirla**.', { paras: [['Gráfica: suben las ventas de los locales que respondieron.'], ['Carta: «Yo cerré, por eso no respondí».'], ['Conclusión posible: les fue bien a todos.'], ['Conclusión justa: les fue bien a los que respondieron.']] }, [
+      ['La gráfica muestra una parte.', { luz: [0] }],
+      ['La carta trae a quien falta.', { luz: [1], nota: { 1: 'falta en la gráfica' } }],
+      ['Con la carta, «todos» ya no se sostiene.', { luz: [2], tacha: [2] }],
+      ['Esta conclusión usa las dos piezas.', { luz: [3], nota: { 3: 'justa' } }],
+      ['Busca siempre quién no respondió.', { luz: [1] }],
+    ], 'Una pieza puede mostrar lo que otra deja por fuera.'),
+    xpHaz('hoja', 'Encuesta en la página web: el 95 % usa internet a diario. Nota: «Se respondió por internet». Subraya lo que falta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Un dibujo más grande'], ['El color de la página'], ['Quienes no tienen internet']], pista: '¿Quién no pudo responder?' }, 'Sin ellos, el 95 % dice de más.')],
+  ['Concluir con todo',
+    xpMira('hoja', 'Tercera idea: la mejor conclusión **cabe en todas las piezas**.', { paras: [['Mapa: menos ruido en la calle cerrada, más en la vecina.'], ['Voz: «Duermo mejor», dice alguien de la calle cerrada.'], ['«El ruido se acabó».'], ['«El ruido bajó aquí y subió al lado».']] }, [
+      ['El mapa muestra las dos calles.', { luz: [0] }],
+      ['La voz habla de una sola.', { luz: [1], nota: { 1: 'una parte' } }],
+      ['Esta conclusión olvida la otra calle.', { luz: [2], tacha: [2] }],
+      ['Esta cabe en el mapa y en la voz.', { luz: [3], nota: { 3: 'cabe en las dos' } }],
+      ['Revisa tu conclusión con cada pieza.', {}],
+    ], 'Si una pieza la contradice, la conclusión dice de más.'),
+    xpHaz('hoja', 'Tabla: 8 de 10 pasaron. Voz: «A mí nadie me explicó». Subraya la conclusión que cabe en **las dos**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['La mayoría pasó, pero a alguien le faltó apoyo.'], ['A todos les fue bien.'], ['El curso fue un fracaso.']], pista: 'Prueba cada una con la tabla y con la voz.' }, 'Solo la primera respeta el dato y la voz.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Titular: «Ciudad feliz». Gráfica: 6 de cada 10 se sienten bien. Foto: un parque lleno. Subraya la crítica **justa** al titular.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Es mentira: nadie está bien.'], ['Generaliza: 4 de cada 10 no se sienten bien.'], ['La foto debería ser más grande.']], pista: 'Compara la palabra del titular con el dato.' }, 'El titular dice de toda la ciudad lo que vale para seis de diez.')],
+], 'Qué aporta cada pieza, quién falta y qué conclusión cabe en todas.');

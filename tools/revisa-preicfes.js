@@ -6,7 +6,7 @@ const W=d=>d.paras.join(' ').split(/\s+/).filter(Boolean).length;
 const rev=(id,e,gym)=>{const g=G[e.game],p=e.params;const say=m=>console.log(id,e.game,m);try{
 if(!gym&&g.xp){if(e.hint.length<=40)say('HINT '+e.hint);if(e.explain.length<=40)say('EXPL '+e.explain)}
 if(e.hint.length<=20)say('HINT20');
-if(g.xp)for(const m of [].concat(p.mira&&!Array.isArray(p.mira)?Object.values(p.mira):p.mira||[]))if(m.length<=12&&!(g.tipo==='ordena'&&m==='')&&!p.metas)say('MIRA '+m);
+if(g.xp)for(const m of [].concat(typeof p.mira==='string'?p.mira:p.mira&&!Array.isArray(p.mira)?Object.values(p.mira):p.mira||[]))if(m.length<=12&&!(g.tipo==='ordena'&&m==='')&&!p.metas)say('MIRA '+m);
 for(const[n,t]of p.luz||[])if(!(p.doc.paras[n-1]||'').includes(t))say('LUZ '+t);
 for(const[n,a,w,b]of p.frases||[])if(!(p.doc.paras[n-1]||'').includes(a+w+b))say('FRASE '+a+w+b);
 const k=p.fichas||p.tarjetas||p.lineas;if(['zonas','hilos','pinta'].includes(g.tipo)){if(p.va.length!==k.length)say('VA');if(new Set(k).size!==k.length)say('DUP')}

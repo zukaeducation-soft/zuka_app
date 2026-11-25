@@ -11,7 +11,7 @@ GAMES['mide-altura'] = (() => {
   const NAMES = { edificio: 'la azotea del edificio', arbol: 'la copa del árbol', faro: 'el barco desde el faro' };
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => state.ds[i] != null && Math.abs(angleAt(r.h, state.ds[i]) - r.angle) <= 1);
+    const ok = params.rounds.every((r, i) => state.ds?.[i] != null && Math.abs(angleAt(r.h, state.ds[i]) - r.angle) <= 1);
     const solution = params.rounds.map(r => `$d = \\frac{${r.h}}{\\tan ${r.angle}^\\circ} \\approx ${(r.h / Math.tan(r.angle * Math.PI / 180)).toFixed(2)}$ m`).join(' · ');
     return { ok, solution };
   }

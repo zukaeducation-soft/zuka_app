@@ -61,7 +61,7 @@ const PI_TEMARIO = {
     ['icf-en-gramatica', 'Gramática en Contexto', ['Verbs and tenses', 'Small words that matter', 'Comparing things'], 'Parte 4 · A1 y A2'],
     ['icf-en-corto', 'Textos Cortos', ['Short messages', 'What the text says'], 'Parte 5 · A2'],
     ['icf-en-largo', 'Textos Largos', ['Main idea and details', 'The writer and the reader'], 'Parte 6 · B1'],
-    ['icf-en-vocabulario', 'Vocabulario en Contexto', ['Choosing the right word', 'Word families and connectors'], 'Parte 7 · A2 y B1'],
+    ['icf-en-vocabulario', 'Palabras en Contexto', ['Choosing the right word', 'Word families and connectors'], 'Parte 7 · A2 y B1'],
     ['icf-en-inferencia', 'Inferir y Opinar', ['Reading between the lines', 'Opinions and facts'], 'Partes 5 y 6 · B1'],
   ],
 };

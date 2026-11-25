@@ -1483,6 +1483,22 @@ const WORLDS = (() => {
     'icf-en-largo': { name: 'Textos Largos', art: plate('icf-en-largo', TEAL, `
       ${L('M56 14h48v52H56z', INK, 1.1)}${L('M62 22h36', TEAL, 1.6)}${L('M62 30h36M62 35h36M62 40h22', INK, .8)}${L('M62 48h36M62 53h36M62 58h18', INK, .8)}${C(94, 42, 9, TEAL, 1.3)}${L('M101 49l8 8', TEAL, 1.5)}
       ${T(28, 42, 'main idea', INK, 5.5)}${T(134, 42, 'why?', TEAL, 7)}`) },
+    // ---------- sextos mundos ----------
+    'icf-ma-forma': { name: 'Triángulos y Semejanza', art: plate('icf-ma-forma', TEAL, `
+      ${L('M50 60h58V24z', INK, 1.1)}${L('M50 60h28V42.6z', TEAL, 1.4)}${L('M102 60v-6h6', INK, .8)}${L('M72 60v-4h6', TEAL, .8)}${L('M62 60a12 12 0 0 0-1.8-6.3', TEAL, 1)}${D(50, 60, 1.6, TEAL)}${D(108, 24, 1.6)}
+      ${T(28, 42, 'a²+b²', INK, 7)}${T(134, 42, 'k', TEAL, 9)}`) },
+    'icf-lc-discontinuo': { name: 'Textos Discontinuos', art: plate('icf-lc-discontinuo', TEAL, `
+      ${L('M48 16h28v22H48z', INK, 1)}${L('M82 16h28v22H82z', INK, 1)}${L('M48 44h62v20H48z', TEAL, 1.2)}${L('M54 34v-6M60 34V24M66 34v-9', TEAL, 1.6)}${L('M88 22h14v8h-8l-3 4v-4h-3z', INK, .9)}${L('M56 58l12-8 12 5 12-9 12 6', TEAL, 1.1)}${D(96, 26, 1, TEAL)}
+      ${T(28, 42, 'imagen', INK, 6)}${T(134, 42, 'texto', TEAL, 6.5)}`) },
+    'icf-sc-historia': { name: 'Historia de Colombia', art: plate('icf-sc-historia', TEAL, `
+      ${L('M44 42h72', INK, 1.2)}${[52, 70, 88, 106].map((x, i) => L(`M${x} 36v12`, INK, .9) + D(x, 42, 2.2, i === 1 ? TEAL : INK)).join('')}${L('M60 34V16h20l-5 5 5 5H60', TEAL, 1.2)}${L('M92 60h14v-8H92z', INK, .9)}${L('M95 55h8', TEAL, .9)}
+      ${T(52, 62, '1781', INK, 5)}${T(70, 62, '1810', TEAL, 5)}${T(28, 32, 'antes', INK, 6)}${T(134, 32, 'hoy', TEAL, 6.5)}`) },
+    'icf-cn-energia': { name: 'Energía y Calor', art: plate('icf-cn-energia', TEAL, `
+      ${L('M46 20C58 62 76 64 88 46 96 34 104 30 114 30', INK, 1.3)}${C(50, 24, 4, TEAL, 1.3)}${C(80, 54, 4, TEAL, 1)}${A(56, 34, 64, 50, TEAL, 1)}${L('M100 62c-4-4 4-6 0-10M107 62c-4-4 4-6 0-10M114 62c-4-4 4-6 0-10', TEAL, 1)}${D(50, 24, 1.4, TEAL)}
+      ${T(28, 42, 'm g h', INK, 7)}${T(136, 42, '½mv²', TEAL, 7)}`) },
+    'icf-en-vocabulario': { name: 'Palabras en Contexto', art: plate('icf-en-vocabulario', TEAL, `
+      ${L('M48 24h20M74 24h38M48 34h30', INK, 1)}${L('M84 30h20v9H84z', TEAL, 1.3)}${L('M108 34h6M48 48h12M66 48h46M48 58h34', INK, 1)}${A(94, 62, 94, 42, TEAL, 1.2)}${D(94, 64, 2, TEAL)}${L('M86 64h16', TEAL, 1)}
+      ${T(28, 42, 'bore-dom', INK, 5.5)}${T(134, 42, 'un-, -ly', TEAL, 6)}`) },
   };
 })();
 
@@ -5215,7 +5231,7 @@ GAMES['arma-triangulo'] = (() => {
   }
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => hit(state.legs[i], r));
+    const ok = params.rounds.every((r, i) => !!state.legs?.[i] && hit(state.legs[i], r));
     const solution = params.rounds.map(r => {
       const e = example(r, params.max);
       return `$${tex(r.fn)}\\theta = \\frac{${r.num}}{${r.den}}$${e ? ` (adyacente ${e.a}, opuesto ${e.b})` : ''}`;
@@ -5329,7 +5345,7 @@ GAMES['mide-altura'] = (() => {
   const NAMES = { edificio: 'la azotea del edificio', arbol: 'la copa del árbol', faro: 'el barco desde el faro' };
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => state.ds[i] != null && Math.abs(angleAt(r.h, state.ds[i]) - r.angle) <= 1);
+    const ok = params.rounds.every((r, i) => state.ds?.[i] != null && Math.abs(angleAt(r.h, state.ds[i]) - r.angle) <= 1);
     const solution = params.rounds.map(r => `$d = \\frac{${r.h}}{\\tan ${r.angle}^\\circ} \\approx ${(r.h / Math.tan(r.angle * Math.PI / 180)).toFixed(2)}$ m`).join(' · ');
     return { ok, solution };
   }
@@ -31114,4 +31130,693 @@ GAMES['vuela-precios'] = (() => {
     };
   }
   return { grade, create, flightAt, ringAt, demo: true };
+})();
+;
+//#archivo js/games/rompe-cambios.js
+// Rompe los cambios (Álgebra, cambios sucesivos; juego dinámico de la lección alg-13d): arriba hay una cuenta con dos
+// cambios seguidos («100 → +10 % → −10 %») y tres ladrillos con posibles resultados. Abajo, una paleta que se mueve
+// con el dedo hace rebotar una pelota: se pone la paleta donde se quiere y, al soltar el dedo, la pelota sale hacia
+// arriba; después, el lado de la paleta donde pega decide hacia dónde rebota. Hay que mandarla al
+// ladrillo del resultado. Pegarle a otro quita una vida (ese ladrillo se apaga); si la pelota se cae no pasa nada,
+// vuelve a salir. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, items: [{ ask, options: [a, b, c], answer }] }], lives?, miss? }   (miss: consejo al fallar)   state = { done: [n] }
+// Spec 2026-11-13-juegos-dinamicos-razones.
+
+GAMES['rompe-cambios'] = (() => {
+  const SPEED = 250, PW = 78;
+  // Velocidad de la pelota al rebotar en la paleta: en el centro sale recta hacia arriba; hacia los bordes sale
+  // inclinada (hasta 60°) hacia ese lado. offset = cuánto a la derecha del centro pegó; half = media paleta.
+  function bounce(offset, half, speed) {
+    const ang = (Math.max(-1, Math.min(1, offset / half)) * Math.PI) / 3;
+    return { vx: speed * Math.sin(ang), vy: -speed * Math.cos(ang) };
+  }
+  const brickAt = (x, w) => Math.max(0, Math.min(2, Math.floor(((x - 14) / (w - 28)) * 3)));   // los ladrillos van de 14 a w − 14
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.ask} = ${it.options[it.answer]}`).join(', ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, top = 108, padY = 0, pad = { x: 0, tx: 0 }, queue = [], ball = null, bricks = [], pause = 0, n = 0, drag = false, starting = false;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); load(); },
+      lost(i) { st.done[i] = 0; ball = null; bricks = []; },
+    });
+    const item = () => R[a.cur].items[queue[0] ?? 0];
+
+    function layout(w, h) { W = w; H = h; padY = h - 62; if (!pad.x) pad.x = pad.tx = w / 2; }
+    // Carga la pregunta: los tres ladrillos en orden barajado y la pelota lista sobre la paleta.
+    function load() {
+      const it = item(), perm = shuffledOrder(3, it.ask + (n++));
+      bricks = perm.map(k => ({ label: it.options[k], good: k === it.answer, dead: false, hit: 0 }));
+      ball = null; pause = 0;
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        pad.x += (pad.tx - pad.x) * Math.min(1, dt * 20);
+        bricks.forEach(b => { b.hit = Math.max(0, b.hit - dt * 2.5); });
+        if (a.phase !== 'play') return;
+        if (pause > 0) { pause -= dt; if (pause <= 0) { queue.shift(); if (!queue.length) { a.win(); bricks = []; return; } load(); } return; }
+        if (!ball) return;
+        ball.x += ball.vx * dt; ball.y += ball.vy * dt;
+        if (ball.x < 16) { ball.x = 16; ball.vx = Math.abs(ball.vx); }
+        if (ball.x > W - 16) { ball.x = W - 16; ball.vx = -Math.abs(ball.vx); }
+        // Rebote en la paleta.
+        if (ball.vy > 0 && ball.y >= padY - 12 && ball.y <= padY + 6 && Math.abs(ball.x - pad.x) <= PW / 2 + 8) { Object.assign(ball, bounce(ball.x - pad.x, PW / 2, SPEED)); ball.y = padY - 12; api.sfx?.tap?.(); }
+        // Llegó a la fila de ladrillos.
+        if (ball.vy < 0 && ball.y <= top + 56) {
+          const b = bricks[brickAt(ball.x, W)];
+          ball.vy = Math.abs(ball.vy); ball.y = top + 56;
+          if (b.dead) return;
+          b.hit = 1;
+          if (b.good) { const it = item(); st.done[a.cur]++; a.hit(); a.say(`${it.ask} = ${b.label}`, C.ok); ball = null; pause = 1.1; }
+          else { b.dead = true; a.say(`${b.label} no es: ${params.miss || 'aplica un cambio y luego el otro'}`, C.bad); a.miss(); }
+          return;
+        }
+        if (ball.y > H + 20) ball = null;   // se cayó: vuelve a salir de la paleta, sin castigo
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], bw = (W - 28) / 3;
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        p.text(`${r.title} · manda la pelota al resultado`, W / 2, 40);
+        if (a.phase === 'play') drawPill(p, C, item().ask, W / 2, 70, C.sun, 15);
+
+        // Los ladrillos.
+        bricks.forEach((b, i) => {
+          const fill = b.dead ? C.card : pause > 0 && b.good ? C.ok : b.hit > 0 && !b.good ? C.bad : [C.sky, C.coral, C.mint][i];
+          drawTile(p, C, { x: 14 + i * bw + 3, y: top + 12, w: bw - 6, h: 40 }, b.label, { fill, ink: b.dead ? C.mute : undefined, size: 18, lift: b.dead ? 0 : 3 });
+        });
+        // La paleta y la pelota (o la pelota esperando sobre la paleta, con cuenta atrás).
+        p.noStroke(); p.fill(shade(C.sun, 0.74)); p.rect(pad.x - PW / 2, padY + 3, PW, 12, 6);
+        p.fill(C.sun); p.rect(pad.x - PW / 2, padY, PW, 12, 6);
+        if (ball) { p.fill(C.cream); p.circle(ball.x, ball.y, 16); }
+        else if (a.phase === 'play' && pause <= 0) {
+          p.fill(C.cream); p.circle(pad.x, padY - 14, 16);
+          p.fill(C.N); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER); p.text('suelta para lanzar', W / 2, padY - 44);
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = (top + 60 + padY) / 2;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${Math.min(st.done[i], rr.items.length)} de ${rr.items.length}` })), mid);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Mueve la paleta y suelta para lanzar', lost: 'Demasiados ladrillos equivocados' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Ladrillos rotos! Ya puedes comprobar' : ball ? 'Rebota hacia el lado de la paleta donde pega' : 'Pon la paleta bajo el resultado y suelta', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      const aim = () => { pad.tx = Math.max(14 + PW / 2, Math.min(W - 14 - PW / 2, p.mouseX)); };
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        starting = tp === 'start';   // el toque de «empezar» no lanza la pelota
+        if (tp !== 'wait') { drag = true; aim(); }
+        return false;
+      };
+      p.mouseDragged = () => { if (drag && a.phase === 'play' && !locked) { aim(); return false; } };
+      p.mouseReleased = () => {
+        const was = drag; drag = false;
+        if (was && !starting && !locked && a.phase === 'play' && !ball && pause <= 0 && bricks.length) { pad.x = pad.tx; ball = { x: pad.x, y: padY - 14, vx: 0, vy: -SPEED }; api.sfx?.tap?.(); }
+        starting = false;
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, padX: pad.x, padY, half: PW / 2, brickY: top + 56, ball: ball && { ...ball }, bricks: bricks.map(b => ({ good: b.good, dead: b.dead })) }),
+    };
+  }
+
+  return { grade, create, bounce, brickAt };
+})();
+;
+//#archivo js/games/mueve-kit.js
+// Kit de los juegos en movimiento por preguntas (Preuniversitario UdeA, razonamiento; spec 2026-11-20-preuda-movimiento).
+// Seis juegos que reciben lo mismo que vuela-precios y rompe-cambios, pero con una mecánica física distinta cada uno:
+// params = { rounds: [{ title, items: [{ ask, options: [...], answer }] }], miss? }. Va después de kit.js.
+// Nada se mueve si no lo mueve el estudiante: lo que avanza solo (un aro en el aire, una carga que baja) se detiene y espera.
+// s = { pick: opción elegida (índice de `options`) o −1, order: orden en pantalla, wrong: posición en pantalla del último
+// error }. ok(s, item) = s.pick === item.answer.
+const MV = (() => {
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const orderOf = it => shuffledOrder(it.options.length, it.ask);
+  // Definición para questGame (cada juego hace questGame(MV.quiz({ … }))): el enunciado es la pregunta y la solución,
+  // «pregunta: respuesta».
+  function quiz(def) {
+    return {
+      aspect: 1.3,
+      idle: 'Sin prisa: solo se mueve lo que tú muevas',
+      prompt: it => it.ask,
+      solution: it => `${it.ask}: ${it.options[it.answer]}`,
+      ok: (s, it) => !!s && s.pick === it.answer,
+      answer: it => ({ pick: it.answer }),
+      yes: it => `${it.options[it.answer]}. ¡Bien!`,
+      ...def,
+      init: (it, r, G) => ({ pick: -1, wrong: -1, order: orderOf(it), ...(def.init ? def.init(it, r, G) : {}) }),
+      retry: G => { const w = G.s.wrong, s = def.init ? def.init(G.item, G.round, G) : {}; G.s = { pick: -1, wrong: w, order: G.s.order, ...s }; G._gl = null; },
+    };
+  }
+  // El objeto llegó a la opción de la posición k: se califica. Fallar quita una vida y vuelve todo al inicio.
+  function choose(G, k) {
+    const s = G.s, it = G.item;
+    s.pick = s.order[k]; s.wrong = k;
+    const miss = G.params.miss;
+    return G.submit(`«${it.options[s.pick]}» no es${miss ? `: ${miss}` : ''}`);
+  }
+  // Tono de la opción k: verde al acertar, rojo la del último error.
+  const toneOf = (G, k) => (G.solved && G.s.order[k] === G.item.answer ? G.C.ok : G.s.wrong === k && !G.solved ? G.C.bad : null);
+  // Rótulo de una opción: tarjeta con borde; si no cabe en un renglón, en dos.
+  function tag(p, C, txt, cx, cy, w, h, tone) {
+    drawPracticePanel(p, { x: cx - w / 2, y: cy - h / 2, w, h }, C.card, tone ?? C.line, 8, tone ? 2 : 1);
+    p.noStroke(); p.fill(tone === C.ok ? C.ok : C.ink); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD);
+    const s = String(txt);
+    p.textSize(13);
+    if (p.textWidth(s) <= w - 10 || !s.includes(' ') || (typeof formulaWanted === 'function' && formulaWanted(s))) { fitText(p, s, cx, cy + 1, w - 10, 13, h - 4); return; }
+    p.textSize(12);
+    const lines = wrapWords(s, w - 10, t => p.textWidth(t)).slice(0, 2);
+    lines.forEach((ln, i) => fitText(p, ln, cx, cy + 1 + (i - (lines.length - 1) / 2) * 14, w - 8, 12));
+  }
+  // Puntos de un camino para el robot (cajas de tamaño cero, como las de questGame).
+  const pt = (x, y) => ({ x, y, w: 0, h: 0 });
+  // Color con transparencia (0 a 255).
+  const alpha = (p, col, a) => { const c = p.color(col); c.setAlpha(a); return c; };
+  return { clamp, orderOf, quiz, choose, toneOf, tag, pt, alpha };
+})();
+;
+//#archivo js/games/barco-muelle.js
+// Barco al muelle (juego en movimiento por preguntas; spec 2026-11-20-preuda-movimiento). Una bahía vista desde arriba con
+// un muelle por opción a la derecha y boyas que separan los carriles. Se arrastra el barco con el dedo: va detrás del
+// dedo, no atraviesa las boyas y se queda quieto al soltarlo. Al atracar en un muelle se califica la respuesta de ese
+// muelle; si no era, el barco vuelve al inicio y se pierde una vida.
+// params = { rounds: [{ title, items: [{ ask, options, answer }] }], miss? }      s = { x, y (en píxeles), pick, wrong, order }
+GAMES['barco-muelle'] = (() => {
+  const BOAT = 13, BUOY = 8, SPEED = 380;
+  // Geometría de la bahía para un lienzo de W × [top, bottom] y n muelles.
+  function bay(W, top, bottom, n) {
+    const x0 = 12, x1 = W - 12, y0 = top + 4, y1 = bottom - 4, lane = (y1 - y0) / n, pier = Math.min(150, Math.round(W * 0.4));
+    const docks = Array.from({ length: n }, (_, k) => ({ y: y0 + (k + 0.5) * lane, x: x1 - pier }));
+    const buoys = [];
+    for (let j = 1; j < n; j++) for (const f of [0.34, 0.5]) buoys.push({ x: x0 + (x1 - x0) * f, y: y0 + j * lane });
+    return { x0, x1, y0, y1, lane, pier, docks, buoys, start: { x: x0 + 30, y: (y0 + y1) / 2 } };
+  }
+  // Un paso del barco hacia el dedo: avanza a lo sumo `step` píxeles, sale de las boyas y no se mete en los muelles
+  // fuera de su carril. Devuelve la posición nueva (pura: se prueba en Node).
+  function stepBoat(b, boat, to, step) {
+    const dx = to.x - boat.x, dy = to.y - boat.y, d = Math.hypot(dx, dy), k = d > step ? step / d : 1;
+    let x = boat.x + dx * k, y = boat.y + dy * k;
+    for (const o of b.buoys) {
+      const ex = x - o.x, ey = y - o.y, e = Math.hypot(ex, ey) || 1;
+      if (e < BOAT + BUOY) { x = o.x + ex / e * (BOAT + BUOY); y = o.y + ey / e * (BOAT + BUOY); }
+    }
+    x = MV.clamp(x, b.x0 + BOAT, b.x1 - BOAT); y = MV.clamp(y, b.y0 + BOAT, b.y1 - BOAT);
+    if (x + BOAT > b.docks[0].x && dockAt(b, { x: b.x1, y }) < 0) x = b.docks[0].x - BOAT;
+    return { x, y };
+  }
+  // Muelle donde está atracado el barco (−1 si no está en ninguno).
+  const dockAt = (b, boat) => (boat.x + BOAT < b.docks[0].x + 14 ? -1 : b.docks.findIndex(d => Math.abs(boat.y - d.y) < b.lane * 0.3));
+  const geo = G => (G._bay ||= bay(G.W, G.top, G.bottom, G.item.options.length));
+  const game = questGame(MV.quiz({
+    init: (it, r, G) => { G._bay = null; const s = geo(G).start; G.hold = false; return { x: s.x, y: s.y, hx: 0 }; },
+    layout(G) { G._bay = null; if (G.s && G.item) { const b = geo(G); G.s.x = b.start.x; G.s.y = b.start.y; } },
+    foot: () => 'Las boyas no se atraviesan: pasa entre ellas',
+    draw(G) {
+      const { p, C, s, item: it } = G, b = geo(G);
+      // Movimiento: solo mientras el dedo arrastra.
+      if (G.hold && G.to && s.pick < 0 && !G.solved) {
+        const nb = stepBoat(b, s, G.to, SPEED * (G.dt || 0.016));
+        if (Math.hypot(nb.x - s.x, nb.y - s.y) > 0.5) s.hx = Math.atan2(nb.y - s.y, nb.x - s.x);
+        s.x = nb.x; s.y = nb.y;
+        const k = dockAt(b, s);
+        if (k >= 0) { G.hold = false; MV.choose(G, k); }
+      }
+      // Agua y olas quietas.
+      p.noStroke(); p.fill(MV.alpha(p, C.sky, 46)); p.rect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0, 12);
+      p.noFill(); p.stroke(MV.alpha(p, C.sky, 120)); p.strokeWeight(1.2);
+      for (let i = 0; i < 7; i++) { const wx = b.x0 + 20 + ((i * 53) % (b.docks[0].x - b.x0 - 30)), wy = b.y0 + 18 + ((i * 71) % (b.y1 - b.y0 - 30)); p.arc(wx, wy + Math.sin(G.t * 1.5 + i) * 1.5, 14, 6, Math.PI, 2 * Math.PI); }
+      // Muelles: tablones de madera con el rótulo de la opción.
+      b.docks.forEach((d, k) => {
+        const tone = MV.toneOf(G, k), h = Math.min(34, b.lane * 0.62);
+        p.stroke(C.mute); p.strokeWeight(1); p.fill(C.creamD); p.rect(d.x, d.y - h / 2 - 4, b.pier, h + 8, 4);
+        p.stroke(C.line); p.strokeWeight(1); for (let x = d.x + 10; x < b.x1 - 4; x += 12) p.line(x, d.y - h / 2 - 4, x, d.y + h / 2 + 4);
+        p.noStroke(); p.fill(C.night ?? C.ink); p.circle(d.x + 3, d.y - h / 2 - 2, 6); p.circle(d.x + 3, d.y + h / 2 + 2, 6);
+        MV.tag(p, C, it.options[s.order[k]], d.x + b.pier / 2 + 4, d.y, b.pier - 16, h, tone);
+      });
+      // Boyas.
+      for (const o of b.buoys) { p.stroke(C.night ?? C.ink); p.strokeWeight(1.5); p.fill(C.coral); p.circle(o.x, o.y, BUOY * 2); p.noStroke(); p.fill(C.cream); p.rect(o.x - BUOY, o.y - 1.5, BUOY * 2, 3); }
+      // El barco, apuntando hacia donde va.
+      p.push(); p.translate(s.x, s.y); p.rotate(s.hx ?? 0);
+      p.stroke(C.night ?? C.ink); p.strokeWeight(1.5); p.fill(C.sun);
+      p.beginShape(); p.vertex(BOAT + 5, 0); p.vertex(BOAT - 5, -9); p.vertex(-BOAT, -8); p.vertex(-BOAT, 8); p.vertex(BOAT - 5, 9); p.endShape(p.CLOSE);
+      p.fill(C.cream); p.rect(-7, -5, 10, 10, 2);
+      p.pop();
+      if (G.hold) { p.noFill(); p.stroke(C.brand); p.strokeWeight(2); p.circle(s.x, s.y, BOAT * 2 + 12); }
+    },
+    press(G, x, y) { if (G.s.pick >= 0 || Math.hypot(x - G.s.x, y - G.s.y) > 42) return false; G.hold = true; G.to = { x, y }; return true; },
+    drag(G, x, y) { if (!G.hold) return false; G.to = { x, y }; return true; },
+    release(G) { G.hold = false; },
+    cancel(G) { G.hold = false; },
+    demo(G) { const b = geo(G), s = G.s; return { from: { x: s.x, y: s.y }, to: { x: b.docks[0].x - 30, y: b.docks[0].y }, text: 'Arrastra el barco hasta un muelle', ty: G.bottom - 14 }; },
+    peek(G) {
+      const b = geo(G), s = G.s, path = k => [MV.pt(s.x, s.y), MV.pt(s.x, b.docks[k].y), MV.pt(b.docks[k].x + 30, b.docks[k].y)];
+      const k = s.order.indexOf(G.item.answer), w = s.order.findIndex(i => i !== G.item.answer);
+      return { solve: path(k), wrongPath: path(w), boat: { x: s.x, y: s.y } };
+    },
+  }));
+  return Object.assign(game, { bay, stepBoat, dockAt });
+})();
+;
+//#archivo js/games/aro-lanza.js
+// Lanza el aro (juego en movimiento por preguntas; spec 2026-11-20-preuda-movimiento). Una cancha vista desde arriba con
+// una estaca por opción. Se agarra el aro y se desliza el dedo hacia donde se quiere lanzar: mientras el dedo está abajo
+// se ve, punteado, dónde caerá (el aro llega más lejos que el dedo: K veces el deslizamiento). Al soltar, el aro vuela y
+// cae ahí. Si ensarta una estaca se califica esa opción; si cae en el pasto, vuelve sin costar vida.
+// params = { rounds: [{ title, items: [{ ask, options, answer }] }], miss? }      s = { aim: punto de caída | null, fly }
+GAMES['aro-lanza'] = (() => {
+  const K = 2.4, RING = 14, PEG = 20, FLY = 0.75;
+  function court(W, top, bottom, n) {
+    const x0 = 12, x1 = W - 12, y0 = top + 4, y1 = bottom - 4, col = (x1 - x0) / n;
+    const pegs = Array.from({ length: n }, (_, k) => ({ x: x0 + (k + 0.5) * col, y: top + 76 }));
+    return { x0, x1, y0, y1, col, pegs, ring: { x: W / 2, y: bottom - 38 } };
+  }
+  // Dónde cae el aro si el dedo va de `ring` a `finger` (pura). Nunca sale de la cancha.
+  const landOf = (c, finger) => ({ x: MV.clamp(c.ring.x + (finger.x - c.ring.x) * K, c.x0 + RING, c.x1 - RING), y: MV.clamp(c.ring.y + (finger.y - c.ring.y) * K, c.y0 + RING, c.ring.y) });
+  // Estaca ensartada por un aro que cae en `pt` (−1 si ninguna).
+  const pegAt = (c, pt) => c.pegs.findIndex(g => Math.hypot(pt.x - g.x, pt.y - g.y) <= PEG);
+  const geo = G => (G._court ||= court(G.W, G.top, G.bottom, G.item.options.length));
+  const game = questGame(MV.quiz({
+    init: (it, r, G) => { G._court = null; G.hold = false; return { aim: null, fly: null }; },
+    layout(G) { G._court = null; },
+    foot: (it, s) => (s.aim ? 'Suelta cuando el aro punteado esté sobre la estaca' : 'El aro llega más lejos que tu dedo'),
+    draw(G) {
+      const { p, C, s, item: it } = G, c = geo(G);
+      // Cancha: pasto y la raya de lanzamiento.
+      p.noStroke(); p.fill(MV.alpha(p, C.mint, 34)); p.rect(c.x0, c.y0, c.x1 - c.x0, c.y1 - c.y0, 12);
+      p.stroke(C.line); p.strokeWeight(1.5); p.drawingContext.setLineDash([6, 6]); p.line(c.x0 + 10, c.ring.y - 30, c.x1 - 10, c.ring.y - 30); p.drawingContext.setLineDash([]);
+      // Estacas y sus rótulos.
+      c.pegs.forEach((g, k) => {
+        const tone = MV.toneOf(G, k);
+        MV.tag(p, C, it.options[s.order[k]], g.x, G.top + 28, c.col - 8, 36, tone);
+        p.noFill(); p.stroke(tone ?? C.line); p.strokeWeight(1.2); p.circle(g.x, g.y, PEG * 2);
+        p.noStroke(); p.fill(MV.alpha(p, C.night ?? C.ink, 70)); p.ellipse(g.x + 3, g.y + 4, 14, 8);
+        p.stroke(C.night ?? C.ink); p.strokeWeight(1.5); p.fill(C.creamD); p.circle(g.x, g.y, 11);
+      });
+      // El aro: quieto, apuntando (con la caída punteada) o en el aire.
+      let at = c.ring, scale = 1;
+      if (s.fly) {
+        const u = !G.dt || reducedMotion() ? 1 : Math.min(1, (G.t - s.fly.t0) / FLY);
+        at = { x: c.ring.x + (s.fly.to.x - c.ring.x) * u, y: c.ring.y + (s.fly.to.y - c.ring.y) * u }; scale = 1 + 0.7 * Math.sin(Math.PI * u);
+        if (u >= 1 && s.pick < 0 && !G.solved) {
+          const k = pegAt(c, s.fly.to);
+          if (k >= 0) { s.landed = s.fly.to; MV.choose(G, k); }
+          else { G.a.say('Cayó en el pasto: prueba otra vez', C.mute); s.fly = null; s.aim = null; }
+        }
+        if (s.landed) at = s.landed;
+      } else if (s.aim) {
+        p.stroke(C.brand); p.strokeWeight(2); p.drawingContext.setLineDash([5, 6]); p.line(c.ring.x, c.ring.y, s.aim.x, s.aim.y); p.noFill(); p.circle(s.aim.x, s.aim.y, RING * 2); p.drawingContext.setLineDash([]);
+      }
+      if (s.fly && scale > 1.05) { p.noStroke(); p.fill(MV.alpha(p, C.night ?? C.ink, 60)); p.ellipse(at.x + 4, at.y + 6, RING * 2, RING); }
+      p.noFill(); p.stroke(C.night ?? C.ink); p.strokeWeight(7 * scale); p.circle(at.x, at.y, RING * 2 * scale);
+      p.stroke(C.coral); p.strokeWeight(4.5 * scale); p.circle(at.x, at.y, RING * 2 * scale);
+    },
+    press(G, x, y) { const c = geo(G); if (G.s.fly || Math.hypot(x - c.ring.x, y - c.ring.y) > 44) return false; G.hold = true; G.s.aim = null; return true; },
+    drag(G, x, y) { if (!G.hold) return false; const c = geo(G); G.s.aim = Math.hypot(x - c.ring.x, y - c.ring.y) > 10 ? landOf(c, { x, y }) : null; return true; },
+    release(G) {
+      if (!G.hold) return; G.hold = false;
+      const s = G.s; if (!s.aim || s.fly) return;
+      s.fly = { t0: G.t, to: s.aim }; s.aim = null; G.api.sfx?.tap?.();
+    },
+    cancel(G) { G.hold = false; G.s.aim = null; },
+    demo(G) { const c = geo(G), g = c.pegs[1] ?? c.pegs[0]; return { from: c.ring, to: { x: c.ring.x + (g.x - c.ring.x) / K, y: c.ring.y + (g.y - c.ring.y) / K }, text: 'Desliza desde el aro hacia una estaca y suelta', ty: c.ring.y - 52 }; },
+    peek(G) {
+      const c = geo(G), s = G.s, path = k => [MV.pt(c.ring.x, c.ring.y), MV.pt(c.ring.x + (c.pegs[k].x - c.ring.x) / K, c.ring.y + (c.pegs[k].y - c.ring.y) / K)];
+      const k = s.order.indexOf(G.item.answer), w = s.order.findIndex(i => i !== G.item.answer);
+      return { solve: path(k), wrongPath: path(w), flying: !!s.fly };
+    },
+  }));
+  return Object.assign(game, { court, landOf, pegAt, K });
+})();
+;
+//#archivo js/games/canica-tablero.js
+// Canica en el tablero (juego en movimiento por preguntas; spec 2026-11-20-preuda-movimiento). Un tablero sobre un apoyo
+// con un hueco por opción y una canica en la punta izquierda. Se agarra el tablero y se sube o se baja ese lado con el
+// dedo: el tablero se inclina y la canica rueda hacia el lado bajo, más rápido cuanto más inclinado. Al soltar, el
+// tablero vuelve a quedar plano y la canica se detiene. Si se detiene sobre un hueco, cae y se califica esa opción.
+// params = { rounds: [{ title, items: [{ ask, options, answer }] }], miss? }      s = { f: lugar de la canica (0 a 1), tilt }
+GAMES['canica-tablero'] = (() => {
+  const MAX = 14, VMAX = 0.5, HOLE = 0.045, BALL = 9;
+  const holeF = (k, n) => (k + 0.75) / (n + 0.5);
+  // Velocidad de la canica (fracción del tablero por segundo) con el tablero inclinado `tilt` grados (positivo: la
+  // punta derecha arriba, la canica va a la izquierda). Pura.
+  const speedOf = tilt => -MV.clamp(tilt, -MAX, MAX) / MAX * VMAX;
+  const roll = (f, tilt, dt) => MV.clamp(f + speedOf(tilt) * dt, 0.03, 0.97);
+  // Hueco sobre el que quedó la canica (−1 si ninguno).
+  const holeAt = (f, n) => { for (let k = 0; k < n; k++) if (Math.abs(f - holeF(k, n)) <= HOLE) return k; return -1; };
+  const geo = G => { const L = G.W - 44, cx = G.W / 2, cy = G.top + 96; return { L, cx, cy, tagY: cy + 92 }; };
+  const along = (b, f, tilt, up = 0) => { const a = tilt * Math.PI / 180, d = (f - 0.5) * b.L; return { x: b.cx + d * Math.cos(a) - up * Math.sin(a), y: b.cy - d * Math.sin(a) - up * Math.cos(a) }; };
+  const game = questGame(MV.quiz({
+    init: (it, r, G) => { G.hold = false; return { f: 0.03, tilt: 0, fell: -1 }; },
+    foot: (it, s, G) => (G.hold ? 'Suelta encima del hueco: el tablero vuelve a quedar plano' : 'Agarra el tablero y sube o baja un lado'),
+    draw(G) {
+      const { p, C, s, item: it } = G, b = geo(G), n = it.options.length;
+      if (s.fell < 0 && !G.solved) {
+        if (G.hold) s.f = roll(s.f, s.tilt, G.dt || 0);
+        else {
+          s.tilt = TK.glide(G, 'tilt', 0, 8);
+          if (Math.abs(s.tilt) < 0.4 && s.pick < 0) { const k = holeAt(s.f, n); if (k >= 0) { s.fell = k; s.f = holeF(k, n); MV.choose(G, k); } }
+        }
+      }
+      if (G.hold) G._gl = { tilt: s.tilt };
+      // Rótulos fijos debajo de cada hueco (con el tablero plano).
+      for (let k = 0; k < n; k++) {
+        const x = b.cx + (holeF(k, n) - 0.5) * b.L;
+        MV.tag(p, C, it.options[s.order[k]], x, b.tagY, b.L / (n + 0.5) - 6, 40, MV.toneOf(G, k));
+        p.stroke(C.line); p.strokeWeight(1); p.drawingContext.setLineDash([3, 4]); p.line(x, b.cy + 34, x, b.tagY - 22); p.drawingContext.setLineDash([]);
+      }
+      // Apoyo.
+      p.stroke(C.night ?? C.ink); p.strokeWeight(1.5); p.fill(C.creamD); p.triangle(b.cx, b.cy + 4, b.cx - 18, b.cy + 34, b.cx + 18, b.cy + 34);
+      // Tablero inclinado, con sus huecos y vasos.
+      const a = along(b, 0, s.tilt), z = along(b, 1, s.tilt);
+      p.stroke(G.hold ? C.brand : C.night ?? C.ink); p.strokeWeight(G.hold ? 2.5 : 1.5); p.fill(C.sun);
+      p.push(); p.translate(b.cx, b.cy); p.rotate(-s.tilt * Math.PI / 180); p.rect(-b.L / 2, -4, b.L, 9, 3);
+      for (let k = 0; k < n; k++) {
+        const x = (holeF(k, n) - 0.5) * b.L, w = HOLE * b.L * 2;
+        p.noStroke(); p.fill(C.bg); p.rect(x - w / 2, -5, w, 11);
+        p.stroke(MV.toneOf(G, k) ?? C.night ?? C.ink); p.strokeWeight(1.5); p.noFill(); p.arc(x, 5, w, 26, 0, Math.PI);
+      }
+      p.pop();
+      p.noStroke(); p.fill(C.mute); p.circle(a.x, a.y, 6); p.circle(z.x, z.y, 6);
+      // La canica.
+      const m = s.fell >= 0 ? along(b, s.f, s.tilt, -10) : along(b, s.f, s.tilt, BALL + 4);
+      p.stroke(C.night ?? C.ink); p.strokeWeight(1.5); p.fill(C.sky); p.circle(m.x, m.y, BALL * 2);
+      p.noStroke(); p.fill(C.cream); p.circle(m.x - 3, m.y - 3, 5);
+    },
+    press(G, x, y) {
+      const b = geo(G);
+      if (G.s.fell >= 0 || Math.abs(y - b.cy) > 60 || Math.abs(x - b.cx) > b.L / 2 + 14) return false;
+      G.hold = true; G.grab = { x, y, tilt: G.s.tilt, side: x < b.cx - 24 ? -1 : 1 };
+      return true;
+    },
+    drag(G, x, y) { if (!G.hold) return false; const g = G.grab; G.s.tilt = MV.clamp(g.tilt + (g.y - y) * 0.3 * g.side, -MAX, MAX); return true; },
+    release(G) { G.hold = false; G._gl = { tilt: G.s.tilt }; },
+    cancel(G) { G.hold = false; },
+    demo(G) { const b = geo(G), x = b.cx + b.L * 0.38; return { from: { x, y: b.cy }, to: { x, y: b.cy + 34 }, text: 'Baja este lado: la canica rueda hacia acá', ty: b.cy - 52 }; },
+    peek(G) {
+      const b = geo(G), s = G.s, n = G.item.options.length, x = b.cx + b.L * 0.38;
+      const k = s.order.indexOf(G.item.answer), w = s.order.findIndex(i => i !== G.item.answer);
+      const path = j => [MV.pt(x, b.cy), MV.pt(x, b.cy + (holeF(j, n) > s.f ? 40 : -40))];
+      // El robot suelta cuando la canica pasa por el hueco que busca.
+      return { solve: path(k), wrongPath: path(w), until: j => Math.abs(G.s.f - holeF(j, n)) < HOLE * 0.5, target: k, wrongTarget: w, f: s.f };
+    },
+  }));
+  return Object.assign(game, { speedOf, roll, holeAt, holeF });
+})();
+;
+//#archivo js/games/tren-aguja.js
+// Tren y aguja (juego en movimiento por preguntas; spec 2026-11-20-preuda-movimiento). Una vía sale de la izquierda y en el
+// cambio se abre en un ramal por opción, cada uno hasta su estación. Primero se gira la aguja (la flecha del cambio) hacia
+// un ramal; luego se empuja el tren con el dedo por la vía: avanza solo mientras se arrastra y sigue el ramal que marca
+// la aguja. Pasado el cambio la aguja ya no se mueve. Al llegar a una estación se califica esa opción.
+// params = { rounds: [{ title, items: [{ ask, options, answer }] }], miss? }      s = { lever: ramal, d: distancia recorrida }
+GAMES['tren-aguja'] = (() => {
+  // Vías para un lienzo de W × [top, bottom] y n ramales: el tramo común y, por ramal, la curva hasta la estación.
+  function tracks(W, top, bottom, n) {
+    const y0 = top + 8, y1 = bottom - 8, lane = (y1 - y0) / n, mid = (y0 + y1) / 2, st = Math.min(140, Math.round(W * 0.4));
+    const xj = Math.round(W * 0.3), xs = W - 12 - st, start = { x: 22, y: mid };
+    const stations = Array.from({ length: n }, (_, k) => ({ x: xs, y: y0 + (k + 0.5) * lane, w: st, h: Math.min(40, lane * 0.66) }));
+    const paths = stations.map(s => {
+      const pts = [];
+      for (let i = 0; i <= 12; i++) pts.push({ x: start.x + (xj - start.x) * i / 12, y: mid });
+      for (let i = 1; i <= 32; i++) {
+        const u = i / 32, a = 1 - u, c1 = { x: xj + 50, y: mid }, c2 = { x: xs - 50, y: s.y }, e = { x: xs - 4, y: s.y };
+        pts.push({ x: a * a * a * xj + 3 * a * a * u * c1.x + 3 * a * u * u * c2.x + u * u * u * e.x, y: a * a * a * mid + 3 * a * a * u * c1.y + 3 * a * u * u * c2.y + u * u * u * e.y });
+      }
+      let L = 0; const len = [0];
+      for (let i = 1; i < pts.length; i++) len.push(L += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y));
+      return { pts, len, total: L };
+    });
+    const knobs = stations.map(s => { const an = Math.atan2(s.y - mid, xs - xj); return { x: xj + 34 * Math.cos(an), y: mid + 34 * Math.sin(an), an }; });
+    return { y0, y1, mid, xj, xs, start, stations, paths, knobs, joint: xj - start.x };
+  }
+  // Punto del camino a la distancia d (y su dirección).
+  function at(path, d) {
+    const { pts, len } = path; d = MV.clamp(d, 0, path.total);
+    let i = 1; while (i < len.length - 1 && len[i] < d) i++;
+    const f = (d - len[i - 1]) / (len[i] - len[i - 1] || 1), a = pts[i - 1], b = pts[i];
+    return { x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f, an: Math.atan2(b.y - a.y, b.x - a.x) };
+  }
+  // Distancia del camino más cercana al dedo, sin saltar más de `reach` desde donde está el tren (pura).
+  function follow(path, d, finger, reach = 60) {
+    let best = d, bd = Infinity;
+    for (let i = 0; i < path.pts.length; i++) {
+      if (Math.abs(path.len[i] - d) > reach) continue;
+      const e = Math.hypot(path.pts[i].x - finger.x, path.pts[i].y - finger.y);
+      if (e < bd) { bd = e; best = path.len[i]; }
+    }
+    return best;
+  }
+  // Ramal más cercano a la dirección del dedo vista desde el cambio.
+  const leverOf = (t, x, y) => { const an = Math.atan2(y - t.mid, Math.max(8, x - t.xj)); let k = 0; t.knobs.forEach((kb, i) => { if (Math.abs(kb.an - an) < Math.abs(t.knobs[k].an - an)) k = i; }); return k; };
+  const geo = G => (G._tr ||= tracks(G.W, G.top, G.bottom, G.item.options.length));
+  const game = questGame(MV.quiz({
+    init: (it, r, G) => { G._tr = null; G.hold = null; return { lever: Math.floor((it.options.length - 1) / 2), d: 0 }; },
+    layout(G) { G._tr = null; },
+    foot: (it, s, G) => (s.d > geo(G).joint ? 'Empuja el tren hasta la estación' : 'Gira la aguja y luego empuja el tren'),
+    draw(G) {
+      const { p, C, s, item: it } = G, t = geo(G), path = t.paths[s.lever];
+      if (s.pick < 0 && !G.solved && s.d >= path.total - 3) { G.hold = null; MV.choose(G, s.lever); }
+      // Estaciones con su rótulo.
+      t.stations.forEach((st, k) => {
+        p.noStroke(); p.fill(C.creamD); p.rect(st.x, st.y - st.h / 2 - 5, st.w, st.h + 10, 5);
+        MV.tag(p, C, it.options[s.order[k]], st.x + st.w / 2 + 3, st.y, st.w - 14, st.h, MV.toneOf(G, k));
+      });
+      // Vías: los ramales apagados finos; el que marca la aguja, con durmientes.
+      t.paths.forEach((pa, k) => {
+        const on = k === s.lever;
+        if (on) { p.stroke(C.creamD); p.strokeWeight(1.5); for (let d = 8; d < pa.total; d += 13) { const q = at(pa, d), nx = -Math.sin(q.an) * 7, ny = Math.cos(q.an) * 7; p.line(q.x - nx, q.y - ny, q.x + nx, q.y + ny); } }
+        p.noFill(); p.stroke(on ? C.ink : C.line); p.strokeWeight(on ? 3 : 2);
+        p.beginShape(); for (const q of pa.pts) p.vertex(q.x, q.y); p.endShape();
+      });
+      // La aguja: flecha en el cambio con su perilla.
+      const kb = t.knobs[s.lever], locked = s.d > t.joint - 6;
+      p.stroke(locked ? C.mute : C.brand); p.strokeWeight(3); p.line(t.xj, t.mid, kb.x, kb.y);
+      p.stroke(C.night ?? C.ink); p.strokeWeight(1.5); p.fill(locked ? C.creamD : G.hold === 'lever' ? C.brand : C.coral); p.circle(kb.x, kb.y, 18);
+      // El tren.
+      const q = at(path, s.d);
+      p.push(); p.translate(q.x, q.y); p.rotate(q.an);
+      p.stroke(C.night ?? C.ink); p.strokeWeight(1.5); p.fill(C.sun); p.rect(-20, -10, 30, 20, 4); p.fill(C.cream); p.rect(-14, -6, 10, 12, 2);
+      p.fill(C.coral); p.triangle(10, -10, 20, 0, 10, 10);
+      p.pop();
+      if (G.hold === 'train') { p.noFill(); p.stroke(C.brand); p.strokeWeight(2); p.circle(q.x, q.y, 50); }
+    },
+    press(G, x, y) {
+      const t = geo(G), s = G.s, kb = t.knobs[s.lever], q = at(t.paths[s.lever], s.d);
+      if (s.pick >= 0) return false;
+      if (s.d <= t.joint - 6 && Math.hypot(x - kb.x, y - kb.y) < 26) { G.hold = 'lever'; return true; }
+      if (Math.hypot(x - q.x, y - q.y) < 40) { G.hold = 'train'; return true; }
+      return false;
+    },
+    drag(G, x, y) {
+      const t = geo(G), s = G.s;
+      if (G.hold === 'lever') { if (s.d <= t.joint - 6) s.lever = leverOf(t, x, y); return true; }
+      if (G.hold === 'train') { s.d = follow(t.paths[s.lever], s.d, { x, y }); return true; }
+      return false;
+    },
+    release(G) { G.hold = null; },
+    cancel(G) { G.hold = null; },
+    demo(G) {
+      const t = geo(G), s = G.s;
+      if (s.d < 4) { const kb = t.knobs[s.lever], o = t.knobs[(s.lever + 1) % t.knobs.length]; return { from: kb, to: o, text: 'Gira la aguja hacia un ramal', ty: t.y1 - 12 }; }
+      const q = at(t.paths[s.lever], s.d), e = at(t.paths[s.lever], s.d + 90); return { from: q, to: e, text: 'Empuja el tren por la vía', ty: t.y1 - 12 };
+    },
+    peek(G) {
+      const t = geo(G), s = G.s, k = s.order.indexOf(G.item.answer), w = s.order.findIndex(i => i !== G.item.answer);
+      const stroke = j => {
+        if (s.lever !== j && s.d <= t.joint - 6) { const kb = t.knobs[s.lever], to = t.knobs[j]; return [MV.pt(kb.x, kb.y), MV.pt(to.x, to.y)]; }
+        const pa = t.paths[s.lever], out = []; for (let d = s.d; d < pa.total + 20; d += 18) { const q = at(pa, d); out.push(MV.pt(q.x, q.y)); }
+        const e = pa.pts.at(-1); out.push(MV.pt(e.x + 2, e.y));
+        return out;
+      };
+      return { solve: stroke(k), wrongPath: stroke(w), lever: s.lever, d: s.d };
+    },
+  }));
+  return Object.assign(game, { tracks, at, follow, leverOf });
+})();
+;
+//#archivo js/games/grua-carga.js
+// Grúa de carga (juego en movimiento por preguntas; spec 2026-11-20-preuda-movimiento). Una grúa con el carro en una viga y
+// una caja colgada del cable; abajo, un camión por opción. Se arrastra el carro por la viga: la caja se queda atrás y se
+// mece como un péndulo (el balanceo se apaga solo). Al soltar, la grúa espera a que la caja quede quieta y la baja. Si cae
+// en la plataforma de un camión se califica esa opción; si cae al suelo, sube otra vez sin costar vida.
+// params = { rounds: [{ title, items: [{ ask, options, answer }] }], miss? }
+// s = { x: carro, v: su velocidad, phi / w: ángulo del cable y su velocidad, drop: largo extra del cable al bajar | null }
+GAMES['grua-carga'] = (() => {
+  const CABLE = 78, GRAV = 900, DAMP = 1.7, BOX = 30, SPEED = 320;
+  function yard(W, top, bottom, n) {
+    const x0 = 12, x1 = W - 12, beam = top + 12, ground = bottom - 6, col = (x1 - x0) / n;
+    const trucks = Array.from({ length: n }, (_, k) => ({ x: x0 + (k + 0.5) * col, w: col - 16, bed: ground - 52 }));
+    return { x0, x1, beam, ground, col, trucks, home: x0 + 16 };
+  }
+  // Un paso del péndulo: el carro acelera `acc` (px/s²); devuelve el ángulo y la velocidad nuevos (pura).
+  function swing(phi, w, acc, dt, L = CABLE) {
+    const n = Math.max(1, Math.ceil(dt / 0.008)), h = dt / n;
+    for (let i = 0; i < n; i++) { const al = -(GRAV / L) * Math.sin(phi) - (acc / L) * Math.cos(phi) - DAMP * w; w += al * h; phi += w * h; }
+    return { phi, w };
+  }
+  const still = s => Math.abs(s.phi) < 0.02 && Math.abs(s.w) < 0.06 && Math.abs(s.v) < 1;
+  // Camión en cuya plataforma cae una caja centrada en x (−1 si en ninguno).
+  const truckAt = (y, x) => y.trucks.findIndex(t => Math.abs(x - t.x) <= t.w / 2 - BOX / 2 + 6);
+  const geo = G => (G._yd ||= yard(G.W, G.top, G.bottom, G.item.options.length));
+  const game = questGame(MV.quiz({
+    init: (it, r, G) => { G._yd = null; G.hold = false; return { x: geo(G).home, v: 0, phi: 0, w: 0, drop: null, moved: 0, ready: false }; },
+    layout(G) { G._yd = null; },
+    foot: (it, s) => (s.drop != null ? 'Bajando la carga' : s.ready ? 'Esperando a que la caja quede quieta' : 'Arrastra el carro por la viga y suelta'),
+    draw(G) {
+      const { p, C, s, item: it } = G, y = geo(G), dt = G.dt || 0;
+      // Física: el carro va hacia el dedo; el cable se mece; al soltar se espera la calma y se baja la caja.
+      if (dt && s.pick < 0 && !G.solved) {
+        const to = G.hold && G.to != null ? MV.clamp(G.to, y.x0 + 16, y.x1 - 16) : s.x, step = MV.clamp(to - s.x, -SPEED * dt, SPEED * dt);
+        const v = step / dt, acc = (v - s.v) / dt;
+        s.x += step; s.moved += Math.abs(step);
+        const sw = reducedMotion() ? { phi: 0, w: 0 } : swing(s.phi, s.w, MV.clamp(acc, -4000, 4000), dt); s.phi = sw.phi; s.w = sw.w; s.v = v;
+        if (s.ready && s.drop == null && still(s)) s.drop = 0;
+        if (s.drop != null) {
+          const far = y.trucks[0].bed - y.beam - CABLE - BOX;
+          s.drop = Math.min(far, s.drop + 150 * dt);
+          if (s.drop >= far) {
+            const k = truckAt(y, s.x + CABLE * Math.sin(s.phi));
+            if (k >= 0) MV.choose(G, k);
+            else { G.a.say('La caja cayó al suelo: súbela y prueba otra vez', C.mute); s.drop = null; s.ready = false; }
+          }
+        }
+      }
+      const L = CABLE + (s.drop ?? 0), bx = s.x + L * Math.sin(s.phi), by = y.beam + L * Math.cos(s.phi);
+      // Camiones con su rótulo.
+      y.trucks.forEach((t, k) => {
+        const tone = MV.toneOf(G, k);
+        p.stroke(tone ?? C.line); p.strokeWeight(tone ? 2 : 1.2); p.noFill(); p.rect(t.x - t.w / 2, t.bed, t.w, 6, 2);
+        p.noStroke(); p.fill(C.creamD); p.rect(t.x - t.w / 2, t.bed + 6, t.w, 8, 2);
+        MV.tag(p, C, it.options[s.order[k]], t.x, t.bed + 40, t.w, 28, tone);
+        p.stroke(C.night ?? C.ink); p.strokeWeight(1.5); p.fill(C.mute); p.circle(t.x - t.w / 3, t.bed + 18, 9); p.circle(t.x + t.w / 3, t.bed + 18, 9);
+      });
+      // La viga y el carro.
+      p.stroke(C.line); p.strokeWeight(1.5); p.fill(C.card); p.rect(y.x0, y.beam - 7, y.x1 - y.x0, 10, 3);
+      for (let x = y.x0 + 10; x < y.x1 - 6; x += 16) p.line(x, y.beam - 7, x + 8, y.beam + 3);
+      p.stroke(C.night ?? C.ink); p.strokeWeight(1.5); p.fill(G.hold ? C.brand : C.coral); p.rect(s.x - 14, y.beam - 11, 28, 16, 4);
+      // Cable y caja.
+      p.stroke(C.ink); p.strokeWeight(1.5); p.line(s.x, y.beam + 5, bx, by);
+      p.push(); p.translate(bx, by); p.rotate(-s.phi);
+      p.stroke(C.night ?? C.ink); p.fill(C.sun); p.rect(-BOX / 2, 0, BOX, BOX, 4); p.line(-BOX / 2, 0, BOX / 2, BOX); p.line(BOX / 2, 0, -BOX / 2, BOX);
+      p.pop();
+      // Dónde caería la caja ahora: una línea tenue hasta los camiones.
+      if (s.drop == null && !G.solved) { p.stroke(MV.alpha(p, C.brand, 120)); p.strokeWeight(1); p.drawingContext.setLineDash([3, 5]); p.line(bx, by + BOX + 2, bx, y.trucks[0].bed - 2); p.drawingContext.setLineDash([]); }
+    },
+    press(G, x, y) {
+      const s = G.s, yd = geo(G);
+      if (s.pick >= 0 || s.drop != null || Math.abs(x - s.x) > 46 || y > yd.beam + CABLE + BOX + 20 || y < yd.beam - 30) return false;
+      G.hold = true; G.to = x; s.ready = false; return true;
+    },
+    drag(G, x) { if (!G.hold) return false; G.to = x; return true; },
+    release(G) { if (!G.hold) return; G.hold = false; if (G.s.moved > 14) G.s.ready = true; },
+    cancel(G) { G.hold = false; },
+    demo(G) { const yd = geo(G), t = yd.trucks[1] ?? yd.trucks[0]; return { from: { x: G.s.x, y: yd.beam }, to: { x: t.x, y: yd.beam }, text: 'Arrastra el carro y suelta sobre un camión', ty: yd.beam + CABLE + BOX + 22 }; },
+    peek(G) {
+      const yd = geo(G), s = G.s, k = s.order.indexOf(G.item.answer), w = s.order.findIndex(i => i !== G.item.answer);
+      const path = j => [MV.pt(s.x, yd.beam), MV.pt((s.x + yd.trucks[j].x) / 2, yd.beam), MV.pt(yd.trucks[j].x, yd.beam)];
+      return { solve: path(k), wrongPath: path(w), dropping: s.drop != null || s.ready };
+    },
+  }));
+  return Object.assign(game, { yard, swing, still, truckAt });
+})();
+;
+//#archivo js/games/rueda-cabinas.js
+// Rueda de cabinas (juego en movimiento por preguntas; spec 2026-11-20-preuda-movimiento). Una rueda de feria con una
+// cabina por opción y un andén abajo. Se gira la rueda arrastrando el dedo alrededor del centro; al soltar sigue un poco
+// por su impulso, frena sola y se acomoda con la cabina más cercana en el andén. La cabina que queda en el andén es la
+// respuesta (si la rueda se giró de verdad: un toque sin girar no cuenta).
+// params = { rounds: [{ title, items: [{ ask, options, answer }] }], miss? }      s = { th: giro, om: velocidad, turned }
+GAMES['rueda-cabinas'] = (() => {
+  const TAU = Math.PI * 2, DOWN = Math.PI / 2, FRICTION = 2.4;
+  const wrap = a => ((a + Math.PI) % TAU + TAU) % TAU - Math.PI;
+  const cabinAngle = (th, k, n) => th + TAU * k / n;
+  // Cabina más cercana al andén y cuánto falta para que llegue (puras).
+  const nearestCabin = (th, n) => { let best = 0; for (let k = 1; k < n; k++) if (Math.abs(wrap(cabinAngle(th, k, n) - DOWN)) < Math.abs(wrap(cabinAngle(th, best, n) - DOWN))) best = k; return best; };
+  const snapOf = (th, n) => th - wrap(cabinAngle(th, nearestCabin(th, n), n) - DOWN);
+  const startOf = n => DOWN + Math.PI / n;
+  const geo = G => { const R = Math.min(G.W * 0.3, (G.bottom - G.top - 92) / 2); return { R, cx: G.W / 2, cy: G.top + 12 + R, cw: Math.min(112, G.W * 0.34), ch: 34 }; };
+  const game = questGame(MV.quiz({
+    init: (it, r, G) => { G.hold = false; return { th: startOf(it.options.length), om: 0, turned: 0, spin: false }; },
+    foot: (it, s) => (s.spin ? 'La rueda frena sola y se acomoda' : 'Gira la rueda hasta dejar una cabina en el andén'),
+    draw(G) {
+      const { p, C, s, item: it } = G, b = geo(G), n = it.options.length, dt = G.dt || 0;
+      if (G.hold) s.om *= Math.exp(-8 * dt);
+      else if (s.spin && s.pick < 0 && !G.solved) {
+        if (Math.abs(s.om) > 0.5 && !reducedMotion()) { s.th += s.om * dt; s.om *= Math.exp(-FRICTION * dt); }
+        else {
+          const to = snapOf(s.th, n), d = to - s.th;
+          s.th = Math.abs(d) < 0.004 || !dt || reducedMotion() ? to : s.th + d * Math.min(1, dt * 7);
+          if (s.th === to) { s.spin = false; s.om = 0; if (s.turned > 0.35) MV.choose(G, nearestCabin(s.th, n)); }
+        }
+      }
+      // Andén.
+      const ay = b.cy + b.R + 24 + b.ch / 2 + 4;
+      p.noStroke(); p.fill(C.creamD); p.rect(b.cx - b.cw / 2 - 18, ay, b.cw + 36, 8, 3);
+      p.stroke(C.line); p.strokeWeight(1); p.line(b.cx - b.cw / 2 - 18, ay + 12, b.cx + b.cw / 2 + 18, ay + 12);
+      // Soportes, rueda y radios.
+      p.stroke(C.line); p.strokeWeight(3); p.line(b.cx, b.cy, b.cx - b.R * 0.55, ay); p.line(b.cx, b.cy, b.cx + b.R * 0.55, ay);
+      p.noFill(); p.stroke(G.hold ? C.brand : C.mute); p.strokeWeight(G.hold ? 3 : 2); p.circle(b.cx, b.cy, b.R * 2); p.strokeWeight(1); p.circle(b.cx, b.cy, b.R * 1.6);
+      for (let i = 0; i < 2 * n; i++) { const a = s.th + TAU * i / (2 * n); p.stroke(C.line); p.strokeWeight(1.2); p.line(b.cx, b.cy, b.cx + b.R * Math.cos(a), b.cy + b.R * Math.sin(a)); }
+      p.stroke(C.night ?? C.ink); p.strokeWeight(1.5); p.fill(C.coral); p.circle(b.cx, b.cy, 14);
+      // Cabinas colgadas: siempre derechas.
+      for (let k = 0; k < n; k++) {
+        const a = cabinAngle(s.th, k, n), rx = b.cx + b.R * Math.cos(a), ry = b.cy + b.R * Math.sin(a);
+        p.stroke(C.ink); p.strokeWeight(1.5); p.line(rx, ry, rx, ry + 24 - b.ch / 2);
+        p.noStroke(); p.fill(C.sun); p.circle(rx, ry, 8);
+        MV.tag(p, C, it.options[s.order[k]], rx, ry + 24, b.cw, b.ch, MV.toneOf(G, k));
+      }
+    },
+    press(G, x, y) {
+      const b = geo(G), s = G.s, d = Math.hypot(x - b.cx, y - b.cy);
+      if (s.pick >= 0 || d > b.R + 46 || d < 16) return false;
+      G.hold = true; s.spin = false; s.turned = 0; s.om = 0; G.grab = Math.atan2(y - b.cy, x - b.cx); G.grabT = G.t; return true;
+    },
+    drag(G, x, y) {
+      if (!G.hold) return false;
+      const b = geo(G), s = G.s, a = Math.atan2(y - b.cy, x - b.cx), da = wrap(a - G.grab), dt = Math.max(0.016, G.t - G.grabT);
+      s.th += da; s.turned += Math.abs(da); s.om = 0.6 * s.om + 0.4 * MV.clamp(da / dt, -4, 4); G.grab = a; G.grabT = G.t;
+      return true;
+    },
+    release(G) { if (!G.hold) return; G.hold = false; G.s.spin = true; },
+    cancel(G) { G.hold = false; G.s.spin = true; },
+    demo(G) { const b = geo(G), a0 = -Math.PI * 0.2, a1 = Math.PI * 0.25, r = b.R + 6; return { from: { x: b.cx + r * Math.cos(a0), y: b.cy + r * Math.sin(a0) }, path: [0, 1, 2, 3, 4].map(i => { const a = a0 + (a1 - a0) * i / 4; return { x: b.cx + r * Math.cos(a), y: b.cy + r * Math.sin(a) }; }), text: 'Gira la rueda con el dedo y suelta', ty: G.bottom - 4 }; },
+    peek(G) {
+      const b = geo(G), s = G.s, n = G.item.options.length, k = s.order.indexOf(G.item.answer), w = s.order.findIndex(i => i !== G.item.answer);
+      const path = j => {
+        const a0 = cabinAngle(s.th, j, n), need = wrap(DOWN - a0), steps = Math.max(2, Math.ceil(Math.abs(need) / 0.2)), out = [];
+        for (let i = 0; i <= steps; i++) { const a = a0 + need * i / steps; out.push(MV.pt(b.cx + b.R * Math.cos(a), b.cy + b.R * Math.sin(a))); }
+        return out;
+      };
+      return { solve: path(k), wrongPath: path(w), spinning: s.spin };
+    },
+  }));
+  return Object.assign(game, { nearestCabin, snapOf, startOf, wrap });
 })();

@@ -456,6 +456,22 @@ const WORLDS = (() => {
     'icf-en-largo': { name: 'Textos Largos', art: plate('icf-en-largo', TEAL, `
       ${L('M56 14h48v52H56z', INK, 1.1)}${L('M62 22h36', TEAL, 1.6)}${L('M62 30h36M62 35h36M62 40h22', INK, .8)}${L('M62 48h36M62 53h36M62 58h18', INK, .8)}${C(94, 42, 9, TEAL, 1.3)}${L('M101 49l8 8', TEAL, 1.5)}
       ${T(28, 42, 'main idea', INK, 5.5)}${T(134, 42, 'why?', TEAL, 7)}`) },
+    // ---------- sextos mundos ----------
+    'icf-ma-forma': { name: 'Triángulos y Semejanza', art: plate('icf-ma-forma', TEAL, `
+      ${L('M50 60h58V24z', INK, 1.1)}${L('M50 60h28V42.6z', TEAL, 1.4)}${L('M102 60v-6h6', INK, .8)}${L('M72 60v-4h6', TEAL, .8)}${L('M62 60a12 12 0 0 0-1.8-6.3', TEAL, 1)}${D(50, 60, 1.6, TEAL)}${D(108, 24, 1.6)}
+      ${T(28, 42, 'a²+b²', INK, 7)}${T(134, 42, 'k', TEAL, 9)}`) },
+    'icf-lc-discontinuo': { name: 'Textos Discontinuos', art: plate('icf-lc-discontinuo', TEAL, `
+      ${L('M48 16h28v22H48z', INK, 1)}${L('M82 16h28v22H82z', INK, 1)}${L('M48 44h62v20H48z', TEAL, 1.2)}${L('M54 34v-6M60 34V24M66 34v-9', TEAL, 1.6)}${L('M88 22h14v8h-8l-3 4v-4h-3z', INK, .9)}${L('M56 58l12-8 12 5 12-9 12 6', TEAL, 1.1)}${D(96, 26, 1, TEAL)}
+      ${T(28, 42, 'imagen', INK, 6)}${T(134, 42, 'texto', TEAL, 6.5)}`) },
+    'icf-sc-historia': { name: 'Historia de Colombia', art: plate('icf-sc-historia', TEAL, `
+      ${L('M44 42h72', INK, 1.2)}${[52, 70, 88, 106].map((x, i) => L(`M${x} 36v12`, INK, .9) + D(x, 42, 2.2, i === 1 ? TEAL : INK)).join('')}${L('M60 34V16h20l-5 5 5 5H60', TEAL, 1.2)}${L('M92 60h14v-8H92z', INK, .9)}${L('M95 55h8', TEAL, .9)}
+      ${T(52, 62, '1781', INK, 5)}${T(70, 62, '1810', TEAL, 5)}${T(28, 32, 'antes', INK, 6)}${T(134, 32, 'hoy', TEAL, 6.5)}`) },
+    'icf-cn-energia': { name: 'Energía y Calor', art: plate('icf-cn-energia', TEAL, `
+      ${L('M46 20C58 62 76 64 88 46 96 34 104 30 114 30', INK, 1.3)}${C(50, 24, 4, TEAL, 1.3)}${C(80, 54, 4, TEAL, 1)}${A(56, 34, 64, 50, TEAL, 1)}${L('M100 62c-4-4 4-6 0-10M107 62c-4-4 4-6 0-10M114 62c-4-4 4-6 0-10', TEAL, 1)}${D(50, 24, 1.4, TEAL)}
+      ${T(28, 42, 'm g h', INK, 7)}${T(136, 42, '½mv²', TEAL, 7)}`) },
+    'icf-en-vocabulario': { name: 'Palabras en Contexto', art: plate('icf-en-vocabulario', TEAL, `
+      ${L('M48 24h20M74 24h38M48 34h30', INK, 1)}${L('M84 30h20v9H84z', TEAL, 1.3)}${L('M108 34h6M48 48h12M66 48h46M48 58h34', INK, 1)}${A(94, 62, 94, 42, TEAL, 1.2)}${D(94, 64, 2, TEAL)}${L('M86 64h16', TEAL, 1)}
+      ${T(28, 42, 'bore-dom', INK, 5.5)}${T(134, 42, 'un-, -ly', TEAL, 6)}`) },
   };
 })();
 
