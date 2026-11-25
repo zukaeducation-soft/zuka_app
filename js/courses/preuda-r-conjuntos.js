@@ -1,66 +1,6 @@
 // Preuniversitario · mundo 14 «Conjuntos»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo). Reutiliza los
 // juegos de conjuntos de Álgebra (pinta-venn, reparte-venn, descifra-zona, mueve-circulos, orbita-conjuntos) con datos nuevos.
-PU_JUEGOS.push(({ setLesson, setExam }) => {
-  setLesson('pu-cj-1', [
-    play('pinta-venn', 'Pinta la operación', { rounds: [
-      { text: 'A ∪ B', n: 2, f: (a, b) => a || b },
-      { text: '(A ∩ B) ∪ C', n: 3, f: (a, b, c) => (a && b) || c },
-      { text: 'A − (B ∪ C)', n: 3, f: (a, b, c) => a && !(b || c) },
-    ] }, 'La unión junta todas las zonas de A y de B. $(A \\cap B) \\cup C$ es la parte común de A y B más todo C. $A - (B \\cup C)$ es lo de A que no toca ni a B ni a C.',
-      { hint: 'Revisa zona por zona: ¿está en A? ¿en B? ¿en C? Y aplica la operación.' }),
-    play('reparte-venn', 'Ubica cada número', { rounds: [{ U: ['2', '3', '4', '5', '6', '8', '9', '10'], A: ['2', '4', '6', '8', '10'], B: ['3', '6', '9'] }] },
-      'A son los pares y B los múltiplos de 3: el 6 está en los dos, el 5 en ninguno.',
-      { hint: 'Pregunta por cada número: ¿es par? ¿es múltiplo de 3?' }),
-    play('descifra-zona', 'Nombra la zona', { rounds: [{ title: 'Operaciones', items: [{ zones: [2] }, { zones: [1, 2] }, { zones: [0] }] }] },
-      'Solo B es $B - A$. Las dos lunas son la diferencia simétrica $A \\triangle B$. Lo de afuera es $(A \\cup B)^c$.',
-      { hint: 'Mira si la zona rayada está dentro o fuera de cada círculo.' }),
-    play('encuesta-tres', 'Tres conjuntos, del centro hacia afuera', { rounds: [{ labels: ['fútbol', 'tenis', 'natación'], z: { abc: 2, ab: 3, ac: 4, bc: 1, a: 10, b: 5, c: 6, none: 4 } }] },
-      'Primero el centro (los tres: 2); luego cada pareja menos el centro; luego cada deporte menos lo que ya está en sus zonas compartidas; al final, los de ninguno.',
-      { hint: 'Empieza por el centro: cada zona de dos se calcula restando lo del centro.' }),
-    play('mueve-circulos', 'Cómo se relacionan', { rounds: [{ A: '{a, e, i, o, u}', B: '{a, e}', rB: 0.5, rel: 'sub' }, { A: '{1, 2, 3}', B: '{4, 5}', rB: 0.7, rel: 'disjoint' }] },
-      '{a, e} está dentro de las vocales: subconjunto. {1, 2, 3} y {4, 5} no comparten nada: disjuntos.',
-      { hint: 'Revisa si todos los de B están en A, o si no comparten ninguno.' }),
-    play('arma-negacion', 'Escribe la operación', { rounds: [
-      { ask: 'Escribe con símbolos', show: 'lo que está en A pero no en B', tray: ['$A$', '$B$', '$-$', '$\\cup$', '$\\cap$', '$C$'], need: [0, 2, 1] },
-      { ask: 'Escribe con símbolos', show: 'lo que está en B y también en C', tray: ['$A$', '$B$', '$-$', '$\\cup$', '$\\cap$', '$C$'], need: [1, 4, 5], alt: [[5, 4, 1]] },
-    ] }, '«Pero no» es diferencia: $A - B$. «Y también» es intersección: $B \\cap C$.',
-      { hint: '«O» es unión, «y» es intersección, «pero no» es diferencia.' }),
-    play('orbita-conjuntos', 'Marca los que cumplen', { rounds: [{ title: 'Relaciones', items: [
-      { kind: 'sub', A: ['1', '2', '3', '4'], sets: [['1', '2'], ['5'], ['2', '4'], ['1', '6'], [], ['3', '4', '1']] },
-      { kind: 'disj', A: ['a', 'b', 'c'], sets: [['d'], ['a', 'd'], ['e', 'f'], ['c'], ['b', 'g'], ['h']] },
-    ] }] }, 'Son subconjuntos de A los que solo tienen elementos de A (también el vacío). Son disjuntos de A los que no comparten nada con él.',
-      { hint: 'Revisa cada conjunto elemento por elemento.' }),
-  ]);
-
-  setLesson('pu-cj-2', [
-    play('solapa-barras', 'Los que están en los dos', { rounds: [
-      { labels: ['leen', 'dibujan'], total: 50, a: 30, b: 25, none: 10 },
-      { labels: ['café', 'té'], total: 60, a: 35, b: 20, none: 13 },
-    ] }, 'La unión es el total menos los de ninguno: $50 - 10 = 40$. Como $30 + 25 = 55$, sobran 15: esos están en los dos. En la otra: $60 - 13 = 47$ y $55 - 47 = 8$.',
-      { hint: 'Si sumas los dos grupos, los de la intersección quedan contados dos veces.' }),
-    play('encuesta-tres', 'La encuesta de tres materias', { rounds: [{ labels: ['Mat', 'Fís', 'Quí'], z: { abc: 3, ab: 5, ac: 2, bc: 4, a: 8, b: 6, c: 7, none: 5 } }] },
-      'Del centro hacia afuera: los tres, luego cada pareja sin el centro, luego cada materia sola, y al final los de ninguna.',
-      { hint: 'Cada dato de dos materias incluye a los del centro: réstalos.' }),
-    play('complemento-conteo', 'Al menos uno = todos menos ninguno', { rounds: [{ ask: 'Números de 2 cifras con al menos un 4', slots: ['decenas', 'unidades'], all: [9, 10], none: [8, 9], tray: [10, 9, 8, 7] }] },
-      'Todos los de dos cifras son $9 \\cdot 10 = 90$; sin ningún 4 son $8 \\cdot 9 = 72$; con al menos un 4: $90 - 72 = 18$.',
-      { hint: 'Cuenta los que no tienen ningún 4 y réstalos del total.' }),
-    play('cinta-ecuacion', 'La encuesta con una incógnita', { rounds: [{ say: 'De 40: 25 en A, 22 en B, 3 en ninguno. Los dos son x', parts: [[-1, 25, 'solo A'], [1, 0, 'los dos'], [-1, 22, 'solo B'], [0, 3, 'ninguno']], total: 40, lo: 0, hi: 20 }] },
-      '$(25 - x) + x + (22 - x) + 3 = 40$ da $50 - x = 40$: $x = 10$.',
-      { hint: 'Solo A es A menos los de los dos.' }),
-    play('tabla-doble', 'Comparar grupos', { rounds: [{ rows: [['hombres', 12, 30], ['mujeres', 27, 45]], what: 'practica deporte' }] },
-      'Hay más mujeres que practican (27 frente a 12) y también en proporción: 60 % frente a 40 %.',
-      { hint: 'Divide entre el total de cada grupo.' }),
-    play('pinta-venn', 'Solo y exactamente', { rounds: [{ text: 'solo A', n: 2, f: (a, b) => a && !b }, { text: 'exactamente dos de los tres', n: 3, f: (a, b, c) => a + b + c === 2 }] },
-      '«Solo A» es la luna de A sin B. «Exactamente dos» son las tres zonas de parejas, sin el centro.',
-      { hint: '«Exactamente dos» no incluye a los que están en los tres.' }),
-    play('rompe-cambios', 'Manda la pelota a la cuenta de la encuesta', { miss: 'la intersección no se cuenta dos veces', rounds: [{ title: 'Encuestas', items: [
-      { ask: '30 en A, 20 en B, 8 en los dos: la unión', options: ['42', '50', '58'], answer: 0 },
-      { ask: 'Total 50 y unión 42: ninguno', options: ['8', '42', '92'], answer: 0 },
-      { ask: 'A tiene 30 y 8 están en los dos: solo A', options: ['22', '38', '30'], answer: 0 },
-    ] }] }, '$30 + 20 - 8 = 42$. $50 - 42 = 8$. $30 - 8 = 22$.',
-      { hint: 'Unión = A + B − los dos.' }),
-  ]);
-
+PU_JUEGOS.push(({ setExam }) => {
   setExam('pu-conjuntos', 'Conjuntos', [
     ['pu-cj-1', 'Cada operación es un grupo de zonas del diagrama.',
       play('pinta-venn', 'Operación', { rounds: [{ text: '(A ∪ B) − C', n: 3, f: (a, b, c) => (a || b) && !c }] }, 'Lo de A o B que no toca C.', { hint: 'Zona por zona.' })],
@@ -74,16 +14,38 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 });
 
 // Mundo 14 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
-  diezLesson('pu-cj-1', [
-    ['pinta-venn', 2, 'Pinta la operación $A - (B \\cup C)$', 'Son los elementos de A que no están en B ni en C: la parte de A que no toca a los otros dos círculos.'],
-    ['reparte-venn', 0, 'A son los pares y B los múltiplos de 3. Ubica cada número en su zona', 'El 6 es par y múltiplo de 3: va en el centro. El 5 no es ninguna de las dos cosas: queda afuera.'],
-    ['descifra-zona', 0, 'Nombra cada zona rayada con una operación'],
-    ['encuesta-tres', 0, 'Una encuesta sobre tres deportes. Llena el diagrama del centro hacia afuera'],
-    ['mueve-circulos', 0, 'Acomoda los círculos según cómo se relacionan $\\{a, e\\}$ y las vocales', 'Todos los elementos de $\\{a, e\\}$ son vocales: es un subconjunto y su círculo queda adentro.'],
-    ['arma-negacion', 0, 'Escribe con símbolos: «lo que está en A pero no en B»', 'Es la diferencia: $A - B$. Se quita de A todo lo que también está en B.'],
-    ['orbita-conjuntos', 0, 'Marca los conjuntos que cumplen la relación'],
-  ], [
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/conjuntos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-cj-1', [
+    play('ubica-cada', 'A son los **múltiplos de 3** y B los **múltiplos de 4**. Lleva cada número a su zona.', { a: 'A: de 3', b: 'B: de 4', pr: 'revisa si es múltiplo de 3 y si es múltiplo de 4.', els: [{ t: '9', z: 0 }, { t: '24', z: 1 }, { t: '20', z: 2 }, { t: '14', z: 3 }, { t: '36', z: 1 }] },
+      '9 solo es múltiplo de 3; 20 solo de 4; 24 y 36, de los dos; 14, de ninguno.',
+      { hint: 'A cada número hazle dos preguntas: ¿está en A?, ¿está en B?' }),
+    play('pinta-operacion', 'Pinta $A^c \\cup B$: lo que **no** está en A, junto con todo B.', { zonas: ['o', 'i', 'b'], texto: 'afuera, los dos y solo B', mira: { o: 'Mira afuera: ¿está en el complemento de A?', a: 'Mira solo A: ¿está fuera de A, o en B?', i: 'Mira el centro: está en B.', b: 'Mira solo B: está en B.' }, ok: 'Solo queda sin pintar lo que está en A y no en B.' },
+      '$A^c$ es solo B y afuera. Al unirle todo B entra también el centro. Queda por fuera solo A.',
+      { hint: 'Pinta primero lo que no está en A y después agrega lo que falte de B.' }),
+    play('nombra-dibujo', 'Pon a cada dibujo la operación que pinta. ($A^c$ es el complemento.)', { ks: [['b'], ['a', 'o'], ['a', 'i', 'o'], ['o']], metas: ['B − A', 'Bᶜ', 'A ∪ Bᶜ', '(A ∪ B)ᶜ'], fichas: ['B − A', 'Bᶜ', 'A ∪ Bᶜ', '(A ∪ B)ᶜ', 'A − B', 'Aᶜ'],
+      mira: ['Está pintado lo de B que no toca a A.', 'Está pintado todo lo que no es B.', 'Está pintado todo, menos la luna de B.', 'Está pintado solo lo de afuera de los dos.'], trampas: { '0:A − B': 'Al revés: lo pintado es de B.', '0:Aᶜ': 'Aᶜ también pinta lo de afuera.', '1:Aᶜ': 'Aᶜ pinta lo que no está en A.', '1:A ∪ Bᶜ': 'A ∪ Bᶜ pinta también el centro.', '3:Aᶜ': 'Aᶜ pinta también la luna de B.' }, ok: 'Si afuera está pintado, hay un complemento.' },
+      'Luna de B: $B - A$. Todo menos B: $B^c$. Al unirle A entra el centro: $A \\cup B^c$. Solo afuera: $(A \\cup B)^c$.',
+      { hint: 'Fíjate primero si está pintado lo de afuera: eso avisa que hay un complemento.' }),
+    play('zonas-y-total', 'A tiene **17** elementos, en común hay **6** y la unión tiene **25**. Completa.', { et: ['solo A', 'solo B', 'n(B)'], metas: ['11', '8', '14'], fichas: ['11', '8', '14', '17', '19', '25', '23'],
+      mira: ['A los de A quítales los comunes.', 'A la unión quítale todo A.', 'B tiene los suyos solos y los comunes.'], trampas: { '0:17': 'Esos son todos los de A, con los comunes.', '1:19': 'Faltó quitar los que son solo de A.', '2:25': 'Eso tiene la unión.', '2:23': 'Esos son todos los de A más los comunes otra vez.' }, ok: '17 + 14 − 6 = 25.' },
+      'Solo A: $17 - 6 = 11$. Solo B: $25 - 17 = 8$. Todo B: $8 + 6 = 14$.',
+      { hint: 'La unión son tres pedazos: solo A, lo común y solo B.' }),
+    play('ciertas-siempre', 'A son los pares, B los impares y C los múltiplos de 4. Toca **todas** las que son ciertas.', { casos: [{ t: 'A ∩ B no tiene elementos', si: true }, { t: 'A − C no tiene elementos', no: 'El 2 está en A y no en C: A − C sí tiene elementos.' }, { t: 'A ∪ C es igual a A', si: true }, { t: 'A ∩ C es igual a A', no: 'El 2 está en A pero no en C: A ∩ C no es todo A.' }, { t: 'C − A no tiene elementos', si: true }], falta: 'Falta otra: todo múltiplo de 4 es par, y ningún par es impar.', ok: 'C está dentro de A, y B no toca a ninguno.' },
+      'Ningún número es par e impar. Todo múltiplo de 4 es par: C está dentro de A. Pero hay pares, como el 2, que no son múltiplos de 4.',
+      { hint: 'Dibuja el círculo de C con respecto al de A, y busca un número que tumbe cada frase.' }),
+    play('elementos-de', 'U son los números del 1 al 10, $A = \\{1, 2, 3, 4, 6\\}$ y $B = \\{2, 4, 6, 8, 10\\}$. Toca los elementos de $A - B^c$.', { nums: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], A: [1, 2, 3, 4, 6], si: x => [1, 2, 3, 4, 6].includes(x) && [2, 4, 6, 8, 10].includes(x), ok: 'Quitar lo que está fuera de B deja lo que está en A y en B.' },
+      '$B^c$ son los que no están en B: 1, 3, 5, 7 y 9. Al quitarlos de A quedan 2, 4 y 6: es $A \\cap B$.',
+      { hint: 'Escribe primero los que no están en B y después quítalos de A.' }),
+    play('misma-zona', '¿Cuáles dan **lo mismo** que $A - B$? Toca todas.', { casos: [{ t: 'A ∩ Bᶜ', si: true }, { t: 'B − A', no: 'B − A es la otra luna.' }, { t: 'A − (A ∩ B)', si: true }, { t: 'A ∪ Bᶜ', no: 'A ∪ Bᶜ también trae el centro y lo de afuera.' }, { t: '(A ∪ B) − B', si: true }], falta: 'Falta otra: pinta cada una y compárala con la luna de A.', ok: 'Todas pintan solo la luna de A.' },
+      'Estar en A y no en B; quitarle a A lo común; y quitarle B a la unión dejan la misma zona.',
+      { hint: 'Pinta en un papel las zonas de cada una, por partes.' }),
+    play('sube-union', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'A tiene **15** elementos, B tiene **12** y en común hay **4**. ¿Cuántos tiene $A \\cup B$?', r: 23, c: '15 + 12 - 4', e: { 27: 'Los comunes se contaron dos veces.', 19: 'Los comunes se quitan una sola vez.' } },
+      { q: 'La unión tiene **26**, A tiene **19** y B tiene **15**. ¿Cuántos hay en **común**?', r: 8, c: '19 + 15 - 26', e: { 7: 'Eso es solo B: 26 − 19.', 11: 'Eso es solo A: 26 − 15.' } },
+      { q: 'El universo tiene **35**, A tiene **16** y $A - B$ tiene **10**. ¿Cuántos tiene $(A \\cap B)^c$?', r: 29, c: '35 - 6', e: { 19: 'Eso es el complemento de A.', 25: 'Quitaste A − B: se quita lo común.' } }] },
+      '$15 + 12 - 4 = 23$. $34 - 26 = 8$. En común hay $16 - 10 = 6$ y fuera de eso, 29.',
+      { hint: 'Dibuja los círculos y escribe primero lo del centro.' }),
     sol('Sean $A = \\{1, 2, 3, 4, 5, 6\\}$ y $B = \\{4, 5, 6, 7, 8\\}$, y el universo $U$ formado por los números del 1 al 10. ¿Cuántos elementos tienen $A \\cap B$, $A \\cup B$, $A - B$ y $(A \\cup B)^c$?',
       ['$A \\cap B$ son los que están en los dos: 4, 5 y 6. Tiene [[3]] elementos', '$A \\cup B$ junta todo sin repetir: del 1 al 8. Tiene [[8]] elementos', '$A - B$ son los de A que no están en B: 1, 2 y 3. Tiene [[3]] elementos', '$(A \\cup B)^c$ es lo que queda del universo: 9 y 10. Tiene [[2]] elementos'],
       ['11', '5', '10'],
@@ -100,15 +62,40 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Halla primero la unión y la intersección, y después quita una de la otra.'),
   ]);
 
-  diezLesson('pu-cj-2', [
-    ['solapa-barras', 1, 'De 60 personas, 35 toman café, 20 toman té y 13 no toman ninguno. Solapa las barras para hallar los que toman los dos', 'Toman algo $60 - 13 = 47$. Como $35 + 20 = 55$, sobran 8: los que toman las dos bebidas.'],
-    ['encuesta-tres', 0, 'Una encuesta sobre tres materias. Llena el diagrama del centro hacia afuera'],
-    ['complemento-conteo', 0, 'Cuenta los números de 2 cifras que tienen al menos un 4', 'Todos: $9 \\cdot 10 = 90$. Sin ningún 4: $8 \\cdot 9 = 72$. Con al menos un 4: 18.'],
-    ['cinta-ecuacion', 0, 'De 40 encuestados, 25 están en A, 22 en B y 3 en ninguno. Halla los que están en los dos', '$(25 - x) + x + (22 - x) + 3 = 40$ da $50 - x = 40$: en los dos hay 10.'],
-    ['tabla-doble', 0, 'Practican deporte 12 de 30 hombres y 27 de 45 mujeres. ¿En qué grupo es mayor la proporción?', '$12 \\div 30 = 40\\,\\%$ y $27 \\div 45 = 60\\,\\%$: es mayor entre las mujeres.'],
-    ['pinta-venn', 1, 'Pinta en el diagrama: «exactamente dos de los tres»', 'Son las tres zonas donde se cruzan solo dos círculos. El centro no cuenta: ahí están los que cumplen las tres.'],
-    ['rompe-cambios', 0, 'Manda la pelota a la cuenta de la encuesta', 'Unión: $30 + 20 - 8 = 42$. Ninguno: $50 - 42 = 8$. Solo A: $30 - 8 = 22$.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/conjuntos-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-cj-2', [
+    play('llena-encuesta', 'De **70** vecinos, **38** tienen bicicleta, **29** tienen moto y **12** tienen las dos. Llena las cuatro zonas.', { a: 'bicicleta', b: 'moto', metas: ['26', '12', '17', '15'], fichas: ['26', '12', '17', '15', '38', '29', '3'],
+      mira: ['De los de bicicleta, quita los que tienen las dos.', 'En el centro van los que tienen las dos.', 'De los de moto, quita los que tienen las dos.', 'A 70 réstale las tres zonas de adentro.'], trampas: { '0:38': 'Entre esos 38 están los que también tienen moto.', '2:29': 'Entre esos 29 están los que también tienen bicicleta.', '3:3': 'Restaste 38 y 29: los del centro se quitaron dos veces.' }, ok: '26 + 12 + 17 + 15 = 70.' },
+      'Centro 12; solo bicicleta $38 - 12 = 26$; solo moto $29 - 12 = 17$; afuera $70 - 55 = 15$.',
+      { hint: 'Empieza por el centro: esos vecinos están contados en los dos grupos.' }),
+    play('corre-solape', 'De **80** personas, **47** nadan, **41** trotan y **8** no hacen ninguna de las dos. Solapa las barras: ¿cuántas hacen **las dos** cosas?', { T: 80, a: 47, b: 41, n: 8, na: 'nadan', nb: 'trotan' },
+      'Hacen alguna $80 - 8 = 72$. $47 + 41 = 88$: sobran $88 - 72 = 16$, las que hacen las dos cosas.',
+      { hint: '¿Cuántas personas hacen alguna de las dos? Las dos barras juntas deben cubrir justo eso.' }),
+    play('tres-circulos', 'Los tres gustos los tienen **3**. Cine y teatro, **9**; cine y danza, **7**; teatro y danza, **8** (contando a los 3). En total: cine **22**, teatro **24**, danza **20**. Llena las seis zonas.', { e: ['cine', 'teatro', 'danza'], c: '3', metas: ['6', '4', '5', '9', '10', '8'], fichas: ['6', '4', '5', '9', '10', '8', '7', '13', '22'],
+      mira: ['Cine y teatro, quitando el centro.', 'Cine y danza, quitando el centro.', 'Teatro y danza, quitando el centro.', 'Al total de cine quítale las tres zonas ya llenas de su círculo.', 'Al total de teatro quítale las tres zonas ya llenas de su círculo.', 'Al total de danza quítale las tres zonas ya llenas de su círculo.'], trampas: { '0:9': 'En esos 9 están los 3 del centro.', '1:7': 'En esos 7 están los 3 del centro.', '2:8': 'En esos 8 están los 3 del centro.', '3:22': 'Faltó quitar los que tienen otro gusto.' }, ok: '9 + 6 + 4 + 3 = 22, 10 + 6 + 5 + 3 = 24 y 8 + 4 + 5 + 3 = 20.' },
+      'Parejas sin el centro: 6, 4 y 5. Solo cine $22 - 13 = 9$; solo teatro $24 - 14 = 10$; solo danza $20 - 12 = 8$.',
+      { hint: 'El centro ya está. Sigue con las parejas y deja para el final las zonas de un solo gusto.' }),
+    play('pinta-tres', 'Toca las zonas de quienes cumplen: «les gusta **C** y **al menos otro** de los dos».', { e: ['A', 'B', 'C'], zonas: [1, 2, 6], texto: 'A y C, B y C, y el centro', mira: ['Los de A y B que no tocan C: no les gusta C.', 'Mira la zona de A y C: les gusta C y otro más.', 'Mira la zona de B y C: les gusta C y otro más.', 'A los de solo A no les gusta C.', 'A los de solo B no les gusta C.', 'A los de solo C no les gusta ningún otro.', 'Mira el centro: les gustan los tres.', 'Afuera no les gusta ninguno.'], ok: 'Al menos otro es uno más o los dos.' },
+      'Deben estar dentro de C y tocar A, B o los dos: las zonas AC, BC y el centro.',
+      { hint: 'Mira solo el círculo de C: ¿cuáles de sus cuatro zonas tocan a otro círculo?' }),
+    play('lee-encuesta', 'El diagrama ya está lleno. ¿Cuántas personas cumplen cada frase?', { z: ['12', '7', '9', '4'], et: ['al menos uno', 'exactamente uno', 'no tienen A', 'en total'], metas: ['28', '21', '13', '32'], fichas: ['28', '21', '13', '32', '28', '19', '9'],
+      mira: ['Suma todas las zonas que están dentro de algún círculo.', 'Suma las dos lunas, sin el centro.', 'Suma las zonas que quedan por fuera del círculo A.', 'Suma las cuatro zonas.'], trampas: { '0:21': 'Los del centro también tienen al menos uno.', '1:28': 'Los del centro tienen dos, no uno.', '2:9': 'Los de afuera tampoco tienen A.', '3:28': 'Faltan los de afuera.' }, ok: 'Cada frase junta unas zonas.' },
+      '$12 + 7 + 9 = 28$; $12 + 9 = 21$; $9 + 4 = 13$; $28 + 4 = 32$.',
+      { hint: 'Señala con el dedo las zonas que cumplen la frase y súmalas.' }),
+    play('desde-los-totales', 'De **65** personas, **38** tienen A, **33** tienen B y **7** no tienen ninguno. Completa.', { a: 'A: 38', b: 'B: 33', et: ['alguno', 'solo B', 'los dos', 'solo A'], metas: ['58', '20', '13', '25'], fichas: ['58', '20', '13', '25', '33', '38', '6', '71'],
+      mira: ['Quita las que no tienen ninguno.', 'De las que tienen alguno, quita las que tienen A.', 'De las de B, quita las que solo tienen B.', 'De las de A, quita las que tienen los dos.'], trampas: { '0:71': 'Sumaste las dos listas: hay personas repetidas, y solo son 65.', '1:33': 'Entre esas 33 hay algunas que también tienen A.', '2:6': 'Comparaste con las 65, pero 7 no tienen ninguno.', '3:38': 'Entre esas 38 hay algunas que también tienen B.' }, ok: '25 + 13 + 20 + 7 = 65.' },
+      'Alguno: $65 - 7 = 58$. Solo B: $58 - 38 = 20$. Los dos: $33 - 20 = 13$. Solo A: $38 - 13 = 25$.',
+      { hint: 'Si a las que tienen alguno les quitas todas las de A, ¿quiénes quedan?' }),
+    play('porciento-comun', 'El **65 %** lee, el **55 %** dibuja y el **15 %** no hace ninguna de las dos. Completa los porcentajes («algo» es al menos una de las dos).', { a: 'lee', b: 'dibuja', et: ['algo', 'las dos', 'solo lee', 'solo una'], metas: ['85', '35', '30', '50'], fichas: ['85', '35', '30', '50', '20', '120', '10', '85'],
+      mira: ['Quita de 100 los que no hacen nada.', 'Las dos listas suman más que los que hacen algo: ¿cuánto sobra?', 'A los que leen quítales los que hacen las dos.', 'Los que solo leen y los que solo dibujan.'], trampas: { '0:120': 'Sumaste las dos listas: pasan de 100 porque hay repetidos.', '1:20': 'Comparaste con 100, pero el 15 % no hace nada.', '2:10': 'Eso le lleva una lista a la otra.', '3:85': 'Ahí también están los que hacen las dos.' }, ok: '30 + 35 + 20 + 15 = 100.' },
+      '$100 - 15 = 85$; $65 + 55 - 85 = 35$; $65 - 35 = 30$; solo dibuja 20: solo una, 50.',
+      { hint: 'Con porcentajes es igual: el total es 100.' }),
+    play('sube-encuesta', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De **50** personas, **31** tienen A, **24** tienen B y **6** ninguno. ¿Cuántas tienen **los dos**?', r: 11, c: '55 - 44', e: { 5: 'Compara con las que tienen algo, no con las 50.' } },
+      { q: 'De **40** personas, **18** tienen A, **15** tienen B y **7** los dos. ¿Cuántas **no tienen ninguno**?', r: 14, c: '40 - 26', e: { 7: 'Los que tienen los dos se quitaron dos veces.', 26: 'Esas tienen alguno.' } },
+      { q: 'A tiene **20**, B **18** y C **15**. Parejas: A y B **8**, A y C **6**, B y C **5**; los tres **2**. ¿Cuántas personas tienen **alguno**?', r: 36, c: '53 - 19 + 2', e: { 34: 'A los del centro se los quitó de más: súmalos otra vez.', 32: 'Los del centro se suman, no se restan.', 53: 'Los que están en varias listas se contaron varias veces.' } }] },
+      '$55 - 44 = 11$. $18 + 15 - 7 = 26$ y $40 - 26 = 14$. $53 - 19 + 2 = 36$.',
+      { hint: 'Al sumar las listas se repiten los que están en varias.' }),
     sol('En un curso, el 70 % de los estudiantes aprobó matemáticas, el 60 % aprobó física y el 10 % no aprobó ninguna de las dos materias. ¿Qué porcentaje aprobó las dos materias? ¿Qué porcentaje aprobó solo matemáticas?',
       ['Aprobó al menos una materia el $100 - 10 =$ [[90]] % del curso', 'Las dos listas suman $70 + 60 =$ [[130]] %', 'Lo que sobra son los que se contaron dos veces: $130 - 90 =$ [[40]] % aprobó las dos', 'Solo matemáticas: $70 - 40 =$ [[30]] %'],
       ['20', '100', '10'],

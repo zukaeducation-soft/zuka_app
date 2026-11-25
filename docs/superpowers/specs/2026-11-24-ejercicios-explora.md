@@ -96,6 +96,12 @@ rectángulos de igual suma, pesos que se reparten, columnas con llevada, bloques
 `js/games/ecuaciones-escena.js`: balanza en palabras, despeje por renglones, edades hacia atrás, cambios de uno por otro, jugo con agua,
 recibos, el punto que cumple dos condiciones y la recta con borde, sentido y extremo. Pruebas `tests/ejercicios-ecuaciones.test.js`.
 
+## Mundo 14, Conjuntos (pu-cj-1 y pu-cj-2)
+
+`js/games/conjuntos-escena.js`: números que se arrastran a su zona (varias manijas libres), zonas que se pintan al tocarlas, dibujos que se
+nombran, barras que se solapan y tres círculos que se llenan desde el centro (el aviso mira primero el centro). Pruebas
+`tests/ejercicios-conjuntos.test.js`.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |
