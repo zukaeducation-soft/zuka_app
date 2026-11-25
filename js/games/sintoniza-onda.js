@@ -43,7 +43,7 @@ GAMES['sintoniza-onda'] = (() => {
   }
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => !!state.vals[i] && same(r.fn, state.vals[i], r.target));
+    const ok = params.rounds.every((r, i) => !!state.vals?.[i] && same(r.fn, state.vals?.[i], r.target));
     return { ok, solution: params.rounds.map(r => `$${texOf(r.fn, r.target)}$`).join(' · ') };
   }
 

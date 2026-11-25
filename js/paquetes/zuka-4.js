@@ -5885,6 +5885,149 @@ xpLec('pu-vo-4', [
   ], 'Dividir para volver, multiplicar lo que queda y separar el interés.');
 }
 ;
+//#archivo js/explora-icf-ma-10.js
+// Preicfes · Matemáticas, mundo 10 «Funciones que Curvan» (Explora, escenas «dibujo», «fichas» y «hoja»). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  const curva = (K, f, X, Y, a, b, cls = 'la gr') => K.pl(Array.from({ length: 61 }, (_, i) => { const x = a + (b - a) * i / 60; return [X(x), Y(f(x))]; }), cls);
+  // Parábola y = −(x − 2)(x − 10)/4 con eje e y vértice v; c enciende los ceros.
+  const para = (v, K) => { const X = x => 30 + x * 23, Y = y => 140 - y * 26; return K.l(24, 140, 320, 140, 'lm') + curva(K, x => -(x - 2) * (x - 10) / 4, X, Y, 2, 10) + K.f(v.c, K.c(X(2), 140, 5, 'fF') + K.c(X(10), 140, 5, 'fF') + K.t(X(2), 158, 2, 's') + K.t(X(10), 158, 10, 's')) + K.f(v.e, K.l(X(6), 20, X(6), 140, 'lg d') + K.t(X(6), 158, 6, 's')) + K.f(v.v, K.c(X(6), Y(4), 6, 'fg') + K.t(X(6) + 14, Y(4) - 6, '4', 's', 'start')); };
+  // Barras que multiplican por k.
+  const expo = (v, K) => { let h = K.l(20, 150, 320, 150, 'lm'); for (let i = 0; i <= 5; i++) { const q = v.k > 1 ? 4 * v.k ** i : 128 * v.k ** i; h += K.f(v.n - i + 1, K.r(34 + i * 48, 150 - Math.min(132, q), 34, Math.min(132, q), 'fa', 2) + K.t(51 + i * 48, 166, i, 's tm')); } return h + K.t(170, 16, v.t, 'ta'); };
+  // Onda con media m y amplitud a; q enciende el periodo.
+  const onda = (v, K) => { const X = x => 24 + x * 24, Y = y => 140 - y * 10; return K.l(24, 140, 320, 140, 'lm') + curva(K, x => 6 + 4 * Math.sin(x * Math.PI / 3), X, Y, 0, 12) + K.f(v.m, K.l(24, Y(6), 320, Y(6), 'lg d') + K.t(330, Y(6) + 4, 6, 's tg')) + K.f(v.a, K.l(X(1.5), Y(6), X(1.5), Y(10), 'lo gr') + K.t(X(1.5) + 8, Y(8) + 4, 4, 's', 'start')) + K.f(v.q, K.l(X(1.5), 24, X(7.5), 24, 'la') + K.t(X(4.5), 18, 'periodo 6', 's ta')) + K.t(170, 162, v.t, 's tm'); };
+  // Máquina: entra x, sale y.
+  const maq = (v, K) => K.r(120, 40, 100, 60, 'fa', 8) + K.t(170, 76, v.r, 'b') + K.l(40, 70, 112, 70, 'gr') + K.l(228, 70, 300, 70, 'gr') + K.t(70, 60, Math.round(v.x), 'b') + K.f(v.s, K.t(268, 60, Math.round(v.y), 'b')) + K.t(170, 130, v.t, 'ta');
+
+  xpLec('icf-ma-curvas-1', [
+    ['Simetría',
+      xpMira('dibujo', 'Empecemos por la idea: la parábola es **simétrica** y su vértice está en el medio.', { dib: para, v: { c: 0, e: 0, v: 0 }, alto: 168 }, [
+        ['Un chorro sube y baja dibujando esta curva.', {}],
+        ['Sale en dos y cae en diez.', { c: 1 }],
+        ['El eje está a mitad de camino.', { e: 1 }, '$\\tfrac{2 + 10}{2} = 6$'],
+        ['Ahí está el punto más alto.', { v: 1 }],
+        ['En el eje está dónde; en la altura, cuánto.', {}],
+      ], 'El eje está entre dos puntos de igual altura.'),
+      xpHaz('fichas', 'Un salto empieza en 1 m y cae en 7 m. Pon el eje y cuánto hay del eje a la caída.', { slots: fila('eje', 'hasta caer'), fichas: ['4', '3', '8', '6', '7'], meta: ['4', '3'], alto: 96, pista: 'Busca la mitad entre 1 y 7.' }, '$\\tfrac{1 + 7}{2} = 4$ y $7 - 4 = 3$.')],
+    ['Los ceros',
+      xpMira('hoja', 'Segunda idea: los **ceros** salen de escribirla como **producto**.', { paras: [['y = x² − 7x + 12'], ['= (x − 3)(x − 4)'], ['vale 0 si x = 3'], ['o si x = 4']] }, [
+        ['Se busca dónde la altura es cero.', { luz: [0] }],
+        ['Multiplicados dan doce; sumados, siete.', { luz: [1] }],
+        ['Un producto es cero si un factor es cero.', { luz: [2] }],
+        ['Por eso hay dos cortes.', { luz: [2, 3] }],
+        ['Cuidado con el signo: x menos tres da tres.', {}],
+      ], 'Producto igual a 0: alguno de los dos es 0.'),
+      xpHaz('fichas', 'y = (x − 2)(x + 5). Pon los dos ceros, de menor a mayor.', { slots: fila('menor', 'mayor'), fichas: ['−5', '2', '−2', '5', '0'], meta: ['−5', '2'], alto: 96, pista: 'Mira qué x hace 0 cada paréntesis.' }, '$x + 5 = 0$ da $-5$; $x - 2 = 0$ da 2.')],
+    ['Máximo o mínimo',
+      xpMira('hoja', 'Tercera idea: el **signo** de x² dice hacia dónde **abre**.', { paras: [['y = 2x² …'], ['y = −2x² …'], ['ingreso = p(40 − p)'], ['máximo en p = 20']] }, [
+        ['Positivo: abre hacia arriba, hay mínimo.', { luz: [0], nota: { 0: 'mínimo' } }],
+        ['Negativo: abre hacia abajo, hay máximo.', { luz: [1], nota: { 1: 'máximo' } }],
+        ['Aquí, al multiplicar, queda menos p al cuadrado.', { luz: [2] }],
+        ['Sus ceros son cero y cuarenta.', { luz: [2, 3] }, '$\\tfrac{0 + 40}{2} = 20$'],
+        ['El máximo se halla reemplazando.', { luz: [3] }, '$20 \\cdot 20 = 400$'],
+      ], 'Ceros, mitad y reemplazo.'),
+      xpHaz('hoja', 'Subraya la que tiene **máximo**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['y = x² − 9'], ['y = 9 − x²'], ['y = (x + 9)²']], pista: 'Busca el x² negativo.' }, 'Con $-x^2$ abre hacia abajo.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'Altura: h = −5t² + 30t. Pon el instante más alto y el instante en que cae.', { slots: fila('más alto (s)', 'cae (s)'), fichas: ['3', '6', '30', '5', '45'], meta: ['3', '6'], alto: 96, pista: 'Vale 0 al salir y al caer.' }, '$-5t(t - 6) = 0$: cae en 6 y el eje es 3.')],
+  ], 'Simetría, ceros y signo.');
+
+  xpLec('icf-ma-curvas-2', [
+    ['Por lo mismo',
+      xpMira('dibujo', 'Empecemos por la idea: en una exponencial cada paso **multiplica** por lo mismo.', { dib: expo, v: { n: 0, k: 2, t: 'por 2' }, alto: 176 }, [
+        ['Se empieza con cuatro.', {}],
+        ['Cada paso duplica lo que hay.', { n: 2 }],
+        ['Al principio parece poco.', { n: 3 }],
+        ['Después se dispara hacia arriba.', { n: 5 }, '$4 \\cdot 2^5 = 128$'],
+        ['Eso no lo hace una recta.', {}],
+      ], 'Inicio por base a la x.'),
+      xpHaz('fichas', 'y = 5 · 3ˣ. Pon el valor en x = 0 y en x = 2.', { slots: fila('x = 0', 'x = 2'), fichas: ['5', '45', '0', '30', '15'], meta: ['5', '45'], alto: 96, pista: 'Todo número no cero a la cero es 1.' }, '$5 \\cdot 1 = 5$ y $5 \\cdot 9 = 45$.')],
+    ['También baja',
+      xpMira('dibujo', 'Segunda idea: con base entre **0 y 1** baja, sin llegar a **0**.', { dib: expo, v: { n: 0, k: 0.5, t: 'por 0.5' }, alto: 176 }, [
+        ['Hay ciento veintiocho gramos.', {}],
+        ['Cada hora queda la mitad.', { n: 1 }],
+        ['Y la mitad de la mitad.', { n: 2 }, '$128 \\cdot 0.5^2 = 32$'],
+        ['Cada vez baja menos.', { n: 4 }],
+        ['Se acerca a cero y no llega.', { n: 5 }],
+      ], 'Perder 20 % es quedar con 0.8.'),
+      xpHaz('fichas', 'Cada año se pierde el 25 %. Pon por cuánto se multiplica y lo que queda de 80 en un año.', { slots: fila('por', 'queda'), fichas: ['0.75', '60', '0.25', '20', '55'], meta: ['0.75', '60'], alto: 96, pista: 'Piensa en la parte que queda.' }, '$80 \\cdot 0.75 = 60$.')],
+    ['El logaritmo',
+      xpMira('hoja', 'Tercera idea: el **logaritmo** pregunta por el **exponente**.', { paras: [['2³ = 8 → log₂ 8 = 3'], ['10⁴ = 10 000 → log₁₀ 10 000 = 4'], ['log₂ 8 + log₂ 4 = 3 + 2'], ['8 · 4 = 32 = 2⁵']] }, [
+        ['A qué exponente se eleva dos para dar ocho.', { luz: [0] }],
+        ['En base diez cuenta los ceros.', { luz: [1] }],
+        ['Al multiplicar, los exponentes se suman.', { luz: [2] }],
+        ['Es la misma cuenta, vista de otro modo.', { luz: [3] }],
+        ['Por eso sirve para números enormes.', {}],
+      ], 'El logaritmo es el exponente que falta.'),
+      xpHaz('fichas', 'Pon log₂ 64 y log₁₀ 100.', { slots: fila('log₂ 64', 'log₁₀ 100'), fichas: ['6', '2', '32', '10', '8'], meta: ['6', '2'], alto: 96, pista: 'Pregunta por el exponente.' }, '$2^6 = 64$ y $10^2 = 100$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un video tiene 100 vistas y se triplica cada día. Subraya el día en que pasa de 2 500.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Día 2'], ['Día 3'], ['Día 8']], pista: 'Multiplica por 3 día tras día.' }, '300, 900, 2 700.')],
+  ], 'Multiplicar, bajar sin llegar y buscar el exponente.');
+
+  xpLec('icf-ma-curvas-3', [
+    ['Se repite',
+      xpMira('dibujo', 'Empecemos por la idea: el **periodo** es lo que tarda en **repetirse**.', { dib: onda, v: { m: 0, a: 0, q: 0, t: '' }, alto: 170 }, [
+        ['Este nivel sube y baja.', {}],
+        ['De una cresta a la siguiente hay un periodo.', { q: 1 }],
+        ['Pasado ese tiempo hace lo mismo.', { t: 'se repite cada 6' }],
+        ['De cresta a valle hay medio periodo.', {}],
+        ['Con el periodo se sabe lo que pasará.', {}],
+      ], 'De cresta a cresta: un periodo.'),
+      xpHaz('fichas', 'Un péndulo hace 10 idas y vueltas en 40 s. Pon el periodo y el tiempo de cresta a valle.', { slots: fila('periodo', 'medio'), fichas: ['4', '2', '10', '40', '8'], meta: ['4', '2'], alto: 96, pista: 'Divide el tiempo entre las repeticiones.' }, '$40 \\div 10 = 4$ y la mitad, 2.')],
+    ['Centro y amplitud',
+      xpMira('dibujo', 'Segunda idea: la **amplitud** se mide desde la **línea media**.', { dib: onda, v: { m: 0, a: 0, q: 0, t: 'de 2 a 10' }, alto: 170 }, [
+        ['Va de dos a diez.', {}],
+        ['La línea media está en seis.', { m: 1 }, '$\\tfrac{2 + 10}{2} = 6$'],
+        ['De ahí al máximo hay cuatro.', { a: 1 }, '$10 - 6 = 4$'],
+        ['De mínimo a máximo hay dos amplitudes.', {}],
+        ['Se escribe seis más cuatro por el seno.', { t: 'y = 6 + 4 sen(…)' }],
+      ], 'Centro más y menos amplitud.'),
+      xpHaz('fichas', 'Una onda va de 5 a 25. Pon la línea media y la amplitud.', { slots: fila('media', 'amplitud'), fichas: ['15', '10', '20', '30', '5'], meta: ['15', '10'], alto: 96, pista: 'Busca el centro primero.' }, '$\\tfrac{5 + 25}{2} = 15$ y $25 - 15 = 10$.')],
+    ['El seno',
+      xpMira('hoja', 'Tercera idea: el **seno** es la **altura** de un punto que gira: de **−1 a 1**.', { paras: [['0°: altura 0'], ['30°: la mitad, 0.5'], ['90°: lo más alto, 1'], ['270°: lo más bajo, −1']] }, [
+        ['Empieza a la derecha, sin altura.', { luz: [0] }],
+        ['A los treinta grados sube la mitad.', { luz: [1] }],
+        ['En lo más alto vale uno.', { luz: [2] }],
+        ['Abajo vale menos uno.', { luz: [3] }],
+        ['Nunca pasa de ahí.', {}],
+      ], 'El seno va de −1 a 1.'),
+      xpHaz('hoja', 'Subraya el valor que el seno **no** puede tener.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['0.3'], ['−1'], ['1.2']], pista: 'Va de −1 a 1.' }, '1.2 se sale.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'Un resorte: y = 8 + 3 sen(…). Pon el máximo y el mínimo.', { slots: fila('máximo', 'mínimo'), fichas: ['11', '5', '8', '3', '24'], meta: ['11', '5'], alto: 96, pista: 'El seno llega a 1 y a −1.' }, '$8 + 3$ y $8 - 3$.')],
+  ], 'Periodo, centro con amplitud y seno.');
+
+  xpLec('icf-ma-curvas-4', [
+    ['Una sola salida',
+      xpMira('dibujo', 'Empecemos por la idea: en una **función** cada entrada tiene **una sola** salida.', { dib: maq, v: { r: '2x + 1', x: 3, y: 7, s: 0, t: '' }, alto: 146 }, [
+        ['A la máquina entra un tres.', {}],
+        ['Sale un siete, siempre.', { s: 1 }, '$2 \\cdot 3 + 1 = 7$'],
+        ['Dos entradas pueden dar la misma salida.', { r: 'x²', x: -3, y: 9, t: '3 y −3 dan 9' }],
+        ['Pero una entrada no puede dar dos.', { t: 'una entrada, una salida' }],
+        ['Si da dos, no es función.', {}],
+      ], 'Una entrada, una salida.'),
+      xpHaz('hoja', 'Subraya la que **no** es función.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['(1, 5), (2, 5)'], ['(3, 1), (3, 2)'], ['(0, 0), (4, 8)']], pista: 'Busca una entrada repetida.' }, 'El 3 tiene dos salidas.')],
+    ['Dominio y rango',
+      xpMira('hoja', 'Segunda idea: **dominio**, lo que puede entrar; **rango**, lo que puede salir.', { paras: [['1 ÷ (x − 7): no entra 7'], ['√(x − 1): entra desde 1'], ['x²: sale desde 0'], ['boletas: 0, 1, 2…']] }, [
+        ['No se puede dividir entre cero.', { luz: [0], nota: { 0: 'dominio' } }],
+        ['Ni sacar raíz cuadrada de un negativo.', { luz: [1], nota: { 1: 'dominio' } }],
+        ['Un cuadrado nunca es negativo.', { luz: [2], nota: { 2: 'rango' } }],
+        ['El contexto también pone límites.', { luz: [3] }],
+        ['No hay media boleta ni menos dos.', {}],
+      ], 'Entra: dominio. Sale: rango.'),
+      xpHaz('hoja', 'Subraya el valor que **no** puede entrar en 8 ÷ (x + 2).', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['−2'], ['0'], ['2']], pista: 'Busca cuál hace 0 el denominador.' }, '$-2 + 2 = 0$.')],
+    ['Cortes',
+      xpMira('fichas', 'Tercera idea: sobre un eje, la **otra** coordenada es **0**.', { slots: fila('eje y', 'eje x'), fichas: ['−10', '5'], alto: 96 }, [
+        ['Tomemos y igual a dos x menos diez.', {}],
+        ['En el eje y, la x es cero.', { pon: { 0: '−10' } }, '$2 \\cdot 0 - 10 = -10$'],
+        ['En el eje x, la y es cero.', {}, '$0 = 2x - 10$'],
+        ['Se despeja: x es cinco.', { pon: { 1: '5' } }],
+        ['Son dos cuentas distintas, una por eje.', {}],
+      ], 'Eje y: x = 0. Eje x: y = 0.'),
+      xpHaz('fichas', 'y = 3x + 12. Pon el corte con el eje y y con el eje x.', { slots: fila('eje y', 'eje x'), fichas: ['12', '−4', '4', '3', '−12'], meta: ['12', '−4'], alto: 96, pista: 'Cambia por 0 la x y después la y.' }, 'Con $x = 0$, 12; con $y = 0$, $-4$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Un taxi cobra 5 + 2k (miles) por k kilómetros, hasta 30 km. Subraya el **rango**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['De 0 a 30'], ['De 0 a 65'], ['De 5 a 65']], pista: 'Halla el menor y el mayor cobro.' }, 'Con 0 km, 5; con 30, 65.')],
+  ], 'Una salida, lo que entra y sale, y los cortes.');
+}
+;
 //#archivo js/explora-icf-lc.js
 // Preicfes · Lectura Crítica, mundo 1 «Lo que Dice el Texto» (Explora, escena «hoja»). Textos cortos propios.
 xpLec('icf-lc-literal-1', [
@@ -7365,6 +7508,72 @@ xpLec('icf-sc-geografia-2', [
   ], 'Red, puertas y cosas que cruzan.');
 }
 ;
+//#archivo js/explora-icf-sc-10.js
+// Preicfes · Sociales y Ciudadanas, mundo 10 «Modelos para Decidir» (Explora, escena «hoja»).
+xpLec('icf-sc-modelos-1', [
+  ['Tres que se confunden',
+    xpMira('hoja', 'Empecemos por la idea: **Estado**, **gobierno** y **nación** no son lo mismo.', { paras: [['Organización con leyes y territorio'], ['Personas que dirigen por un tiempo'], ['Grupo que se siente unido'], ['Una nación en dos Estados']] }, [
+      ['Esta continúa con los años.', { luz: [0], nota: { 0: 'Estado' } }],
+      ['Estas cambian en las elecciones.', { luz: [1], nota: { 1: 'gobierno' } }],
+      ['Este comparte historia o lengua.', { luz: [2], nota: { 2: 'nación' } }],
+      ['Por eso no siempre coinciden.', { luz: [3] }],
+      ['Si nadie manda sobre el Estado, es soberano.', { luz: [0] }],
+    ], 'Organización, personas y sentimiento de grupo.'),
+    xpHaz('hoja', 'Pon al margen el concepto.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['nación', 'Estado', 'gobierno'], meta: [2, 0, 1], paras: [['El gabinete que termina en agosto'], ['El pueblo gitano, en muchos países'], ['Quien firma los tratados a nombre del país, gane quien gane']], pista: 'Alguna no va ahí: ¿cambia con las elecciones o se siente unida?' }, 'Cambia, se siente unido y continúa.')],
+  ['Poder y legitimidad',
+    xpMira('hoja', 'Segunda idea: se puede mandar por **fuerza** o con **legitimidad**.', { paras: [['Obedecen por miedo'], ['Obedecen porque lo reconocen'], ['Ley bien aprobada'], ['Ley que casi todos sienten injusta']] }, [
+      ['Sin la amenaza, no obedecerían.', { luz: [0], nota: { 0: 'fuerza' } }],
+      ['Aquí aceptan su derecho a mandar.', { luz: [1], nota: { 1: 'legitimidad' } }],
+      ['Cumplir las reglas la hace legal.', { luz: [2], nota: { 2: 'legal' } }],
+      ['Puede ser legal y no legítima.', { luz: [3], nota: { 3: 'poco legítima' } }],
+      ['Una cosa es la norma; otra, que la acepten.', {}],
+    ], 'Legal: según la norma. Legítimo: reconocido.'),
+    xpHaz('hoja', 'Subraya el caso **legal pero poco legítimo**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Un robo'], ['Un impuesto aprobado que todo el pueblo rechaza'], ['Una elección limpia y aceptada']], pista: 'Debe cumplir la norma y no ser reconocido.' }, 'Se aprobó según la norma, pero casi nadie lo acepta.')],
+  ['Mirar a la gente',
+    xpMira('hoja', 'Tercera idea: **clase**, **etnia** y **género** son capas; la **cultura** se aprende.', { paras: [['Ingresos y trabajo'], ['Origen y cultura'], ['Lo que se espera de hombres y mujeres'], ['Juzgar con mi medida'], ['Entender sus razones']] }, [
+      ['Esta es la clase social.', { luz: [0], nota: { 0: 'clase' } }],
+      ['Esta es la etnia.', { luz: [1], nota: { 1: 'etnia' } }],
+      ['Y este es el género.', { luz: [2], nota: { 2: 'género' } }],
+      ['Frente a otra cultura, esto es etnocentrismo.', { luz: [3] }],
+      ['Y esto es relativismo, con los derechos como límite.', { luz: [4] }],
+    ], 'Capas que se cruzan y culturas que se entienden.'),
+    xpHaz('hoja', 'Subraya la frase **etnocentrista**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['«¿Por qué celebran así?»'], ['«Celebran de otra forma»'], ['«Celebran mal: lo correcto es como aquí»']], pista: 'Busca la que juzga con la medida propia.' }, 'Pone lo propio como la medida de todo.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Una nieta de campesinos sin escuela llega a ser médica. Subraya el concepto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Movilidad social'], ['Soberanía'], ['Etnocentrismo']], pista: '¿Qué cambió en su familia?' }, 'Cambió de posición social.')],
+], 'Tres que se confunden, dos modos de mandar y capas.');
+
+xpLec('icf-sc-modelos-2', [
+  ['Un modelo',
+    xpMira('hoja', 'Empecemos por la idea: un **modelo** simplifica para **comparar**, como un mapa.', { paras: [['Quién decide'], ['Quién es dueño'], ['Quién paga'], ['Quién queda por fuera']] }, [
+      ['Un mapa no es el territorio.', {}],
+      ['Estas preguntas sirven para cualquier propuesta.', { luz: [0, 1] }],
+      ['También sirven estas otras dos.', { luz: [2, 3] }],
+      ['Se comparan respuestas, no nombres.', {}],
+      ['La realidad casi siempre mezcla.', {}],
+    ], 'Cuatro preguntas para comparar.'),
+    xpHaz('hoja', 'Subraya la mejor razón para usar modelos.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Dicen qué gobierno es el bueno'], ['Ayudan a comparar ideas complicadas'], ['Describen cada detalle de un país']], pista: 'Simplifican: ¿para qué?' }, 'Simplificar permite comparar.')],
+  ['Cuatro lógicas',
+    xpMira('hoja', 'Segunda idea: hay varias **lógicas** sobre lo que debe hacer el Estado.', { paras: [['Estado pequeño y mercado'], ['Mercado, impuestos y derechos para todos'], ['Empresas de todos'], ['Asamblea y vida en común']] }, [
+      ['Esta pone primero la libertad.', { luz: [0], nota: { 0: 'liberal' } }],
+      ['Esta reparte para igualar.', { luz: [1], nota: { 1: 'bienestar' } }],
+      ['Esta prefiere la propiedad común.', { luz: [2], nota: { 2: 'socialista' } }],
+      ['Esta, la comunidad y sus costumbres.', { luz: [3], nota: { 3: 'comunitaria' } }],
+      ['Cada una recibe críticas serias.', {}],
+    ], 'Libertad, igualdad, propiedad común y comunidad.'),
+    xpHaz('hoja', 'Pon al margen la lógica de cada medida.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['bienestar', 'comunitaria', 'liberal'], meta: [2, 0, 1], paras: [['Vender los buses públicos a quien compita mejor'], ['Pensión para todos, pagada con impuestos'], ['El cabildo reparte las tierras según la costumbre']], pista: 'Alguna no va ahí: ¿mercado, reparto o asamblea?' }, 'Competir, repartir y decidir en comunidad.')],
+  ['Evaluar una decisión',
+    xpMira('hoja', 'Tercera idea: ante una decisión, mira **valor**, **beneficio** y **costo**.', { paras: [['«Cobrar por entrar al parque»'], ['Valor: quien lo usa lo paga'], ['Gana: el mantenimiento'], ['Pierde: quien no puede pagar']] }, [
+      ['Esta es la decisión.', { luz: [0] }],
+      ['Detrás hay un valor.', { luz: [1] }],
+      ['Alguien se beneficia de ella.', { luz: [2] }],
+      ['Y alguien queda por fuera.', { luz: [3] }],
+      ['Se puede ajustar: gratis para algunos.', {}],
+    ], 'Qué valor, quién gana y quién queda por fuera.'),
+    xpHaz('hoja', 'Se propone educación privada con becas solo para los mejores. Subraya la mejor **crítica** desde la igualdad.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Los colegios competirían'], ['Quedan por fuera quienes no pagan ni ganan beca'], ['Habría muchos uniformes']], pista: 'Desde la igualdad, ¿quién preocupa?' }, 'Deja por fuera a una parte.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Un país tiene empresas privadas y salud pública gratuita. Subraya lo correcto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Es un modelo puro'], ['No tiene modelo'], ['Mezcla lógicas']], pista: 'Casi ningún país usa uno solo.' }, 'Mercado y derechos: una mezcla.')],
+], 'Simplificar, cuatro lógicas y evaluar.');
+;
 //#archivo js/explora-icf-cn.js
 // Preicfes · Ciencias Naturales, mundo 1 «Indagación Científica» (Explora, escenas «hoja» y «dibujo»). Experimentos cortos propios.
 {
@@ -8241,6 +8450,82 @@ xpLec('icf-sc-geografia-2', [
     ['Ahora sí, un problema',
       xpHaz('hoja', 'Un cultivo necesita pH entre 6 y 7; el suelo tiene 8.5. Subraya lo que conviene agregar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Cal, que es básica'], ['Un abono ácido'], ['Jabón']], pista: '¿Hacia qué lado hay que moverlo?' }, 'Está básico: hay que bajarlo con algo ácido.')],
   ], 'La escala, por diez y neutralizar.');
+}
+;
+//#archivo js/explora-icf-cn-10.js
+// Preicfes · Ciencias Naturales, mundo 10 «Ondas, Luz y Sonido» (Explora, escenas «dibujo», «fichas» y «hoja»). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  // Onda con n vueltas, amplitud A y fase g; un corcho en x = 170.
+  const onda = (v, K) => { const y = x => 80 - v.A * Math.sin(2 * Math.PI * (v.n * (x - 24) / 292 - v.g)); return K.l(24, 80, 316, 80, 'lm') + K.pl(Array.from({ length: 121 }, (_, i) => { const x = 24 + 292 * i / 120; return [x, y(x)]; }), 'la gr') + K.f(v.k, K.c(170, y(170), 8, 'ff')) + K.t(170, 160, v.t, 'ta'); };
+  // Espejo: llega a g de la normal y sale a s.
+  const espejo = (v, K) => { const c = [170, 140]; return K.l(40, 140, 300, 140, 'gr') + K.f(v.nn, K.l(170, 20, 170, 140, 'lm d') + K.t(178, 26, 'normal', 's tm', 'start')) + K.l(...K.at(...c, 110, 90 + v.g), ...c, 'la gr') + K.f(v.s, K.l(...c, ...K.at(...c, 110, 90 - v.g), 'lg gr')) + K.t(170, 170, v.t, 'ta'); };
+  // Aire arriba, agua abajo: entra a g, sale a r.
+  const agua = (v, K) => { const c = [170, 90]; return K.r(20, 90, 300, 86, 'fa', 0) + K.l(170, 14, 170, 172, 'lm d') + K.l(...K.at(...c, 84, 90 + v.g), ...c, 'gr') + K.f(v.s, K.l(...c, ...K.at(...c, 84, 270 + v.r), 'lg gr')) + K.t(30, 24, 'aire', 's tm', 'start') + K.t(30, 168, 'agua', 's tm', 'start') + K.t(170, 196, v.t, 'ta'); };
+
+  xpLec('icf-cn-ondas-1', [
+    ['Viaja la energía',
+      xpMira('dibujo', 'Empecemos por la idea: la onda **viaja**; la materia **vibra** y se queda.', { dib: onda, v: { n: 3, A: 34, g: 0, k: 0, t: '' }, alto: 172 }, [
+        ['Una onda avanza por el agua.', { g: 0.5 }],
+        ['Hay un corcho flotando.', { k: 1 }],
+        ['Cuando pasa la cresta, sube.', { g: 0.75, t: 'sube y baja' }],
+        ['Después baja, en el mismo sitio.', { g: 1.25 }],
+        ['Lo que avanzó fue la energía.', { t: 'viaja la energía' }],
+      ], 'Viaja la energía, no la materia.'),
+      xpHaz('hoja', 'En un estadio, la gente hace «la ola» sin moverse de su puesto. Subraya lo que viaja.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Las personas'], ['El movimiento que pasa de uno a otro'], ['Las sillas']], pista: '¿Alguien cambia de puesto?' }, 'La perturbación pasa; cada quien se queda.')],
+    ['Medir una onda',
+      xpMira('dibujo', 'Segunda idea: **amplitud**, **longitud** y **frecuencia** son medidas distintas.', { dib: onda, v: { n: 2, A: 20, g: 0, k: 0, t: '' }, alto: 172 }, [
+        ['De cresta a cresta: la longitud de onda.', { t: 'longitud: cresta a cresta' }],
+        ['Si crece la altura, crece la amplitud.', { A: 46, t: 'más amplitud: más fuerte' }],
+        ['Si hay más crestas, la longitud es menor.', { A: 30, n: 5, t: 'menos longitud' }],
+        ['La frecuencia cuenta vibraciones por segundo.', { t: 'frecuencia en hertz' }],
+        ['El periodo es lo que tarda una.', {}, '$T = \\tfrac{1}{f}$'],
+      ], 'Altura, distancia y cuántas por segundo.'),
+      xpHaz('fichas', 'Un punto vibra 30 veces en 6 s. Pon la frecuencia (Hz) y el periodo (s).', { slots: fila('frecuencia', 'periodo'), fichas: ['5', '0.2', '6', '30', '2'], meta: ['5', '0.2'], alto: 96, pista: 'Divide las vibraciones entre los segundos.' }, '$30 \\div 6 = 5$ Hz y $1 \\div 5 = 0.2$ s.')],
+    ['La rapidez',
+      xpMira('fichas', 'Tercera idea: **rapidez = longitud por frecuencia**, y la pone el **medio**.', { slots: fila('longitud', 'frecuencia', 'rapidez'), fichas: ['2 m', '170 Hz', '340 m/s'], alto: 96 }, [
+        ['En el aire el sonido va a 340.', { pon: { 2: '340 m/s' } }],
+        ['Con 170 vibraciones por segundo…', { pon: { 1: '170 Hz' } }],
+        ['…cada onda mide dos metros.', { pon: { 0: '2 m' } }, '$2 \\cdot 170 = 340$'],
+        ['Con el doble de frecuencia mediría uno.', {}, '$1 \\cdot 340 = 340$'],
+        ['La rapidez no cambió: el medio es el mismo.', {}],
+      ], 'Si una sube, la otra baja.'),
+      xpHaz('fichas', 'Una ola viaja a 6 m/s con longitud de 3 m. Pon la frecuencia, y la longitud si la frecuencia sube a 6 Hz.', { slots: fila('frecuencia', 'nueva longitud'), fichas: ['2', '1', '18', '3', '6'], meta: ['2', '1'], alto: 96, pista: 'El producto debe dar 6.' }, '$3 \\cdot 2 = 6$ y $1 \\cdot 6 = 6$.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'En el mismo aire, un pito agudo y un tambor grave. Subraya lo correcto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['El pito llega primero'], ['El tambor llega primero'], ['Llegan a la vez, si suenan juntos y a igual distancia']], pista: '¿Quién pone la rapidez?' }, 'El medio pone la rapidez: es la misma.')],
+  ], 'Energía, medidas y rapidez.');
+
+  xpLec('icf-cn-ondas-2', [
+    ['Rebotar',
+      xpMira('dibujo', 'Empecemos por la idea: en la **reflexión** sale con el **mismo ángulo**.', { dib: espejo, v: { g: 30, nn: 0, s: 0, t: '' }, alto: 180 }, [
+        ['Un rayo llega a un espejo.', {}],
+        ['La normal es perpendicular al espejo.', { nn: 1 }],
+        ['Sale al otro lado, con el mismo ángulo.', { s: 1, t: '30° y 30°' }],
+        ['Si llega más inclinado, sale más inclinado.', { g: 60, t: '60° y 60°' }],
+        ['Los ángulos se miden desde la normal.', {}],
+      ], 'El ángulo que llega es igual al que sale.'),
+      xpHaz('fichas', 'Un rayo llega a 25° de la normal. Pon el ángulo de salida y el que hay entre los dos rayos.', { slots: fila('sale', 'entre los dos'), fichas: ['25', '50', '65', '90', '130'], meta: ['25', '50'], alto: 96, pista: 'La normal está en medio de los dos.' }, '25° a cada lado: 50°.')],
+    ['El eco',
+      xpMira('fichas', 'Segunda idea: el **eco** recorre **ida y vuelta**.', { slots: fila('tiempo', 'recorrido', 'distancia'), fichas: ['1 s', '340 m', '170 m'], alto: 96 }, [
+        ['El eco vuelve en un segundo.', { pon: { 0: '1 s' } }],
+        ['El sonido recorrió 340 metros.', { pon: { 1: '340 m' } }],
+        ['Pero fue y volvió.', {}],
+        ['La pared está a la mitad.', { pon: { 2: '170 m' } }, '$340 \\div 2 = 170$'],
+        ['Así miden los barcos y los murciélagos.', {}],
+      ], 'Recorrido entre dos.'),
+      xpHaz('fichas', 'En el agua (1 500 m/s) el eco vuelve en 2 s. Pon el recorrido y la profundidad, en metros.', { slots: fila('recorrido', 'profundidad'), fichas: ['3 000', '1 500', '750', '6 000', '2'], meta: ['3 000', '1 500'], alto: 96, pista: 'Multiplica y después parte en dos.' }, '$1\\,500 \\cdot 2 = 3\\,000$; la mitad, 1 500.')],
+    ['Doblarse',
+      xpMira('dibujo', 'Tercera idea: en la **refracción** cambia la rapidez y, si entra inclinada, la **dirección**.', { dib: agua, v: { g: 50, r: 35, s: 0, t: '' }, alto: 206 }, [
+        ['Un rayo llega inclinado al agua.', {}],
+        ['En el agua va más despacio.', { t: 'más despacio' }],
+        ['Por eso se acerca a la normal.', { s: 1, t: 'se acerca a la normal' }],
+        ['Si llega derecho, no se desvía.', { g: 0, r: 0, t: 'derecho: sin desvío' }],
+        ['Al salir al aire ocurre lo contrario.', { g: 50, r: 35, t: 'al salir, se aleja' }],
+      ], 'Más despacio, se acerca; más rápido, se aleja.'),
+      xpHaz('hoja', 'La luz sale inclinada de un diamante al aire, donde va más rápido. Subraya lo que hace.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Se aleja de la normal'], ['Se acerca a la normal'], ['Cambia de color']], pista: '¿Va más rápido o más despacio al salir?' }, 'Al ir más rápido se aleja de la normal.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Pon al margen qué fenómeno hace posible cada cosa.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['reflexión total', 'refracción', 'absorción'], meta: [1, 0, 2], paras: [['Una lupa que agranda'], ['La luz que viaja por una fibra óptica'], ['Un estudio de grabación con espumas, sin eco']], pista: 'Alguna no va ahí: ¿se dobla, rebota adentro o se queda?' }, 'Se dobla, rebota toda adentro y se queda en la espuma.')],
+  ], 'Rebotar, volver y doblarse.');
 }
 ;
 //#archivo js/explora-icf-en.js
@@ -10876,6 +11161,41 @@ const GUIDES = {
   'alcanza-o-no': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'datos-que-sobran': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
   'vale-o-no': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'vertice-parabola': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'ancho-maximo': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'raices-parabola': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'veces-factor': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'amplitud-onda': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'periodo-onda': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'altura-rueda': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'rango-ventana': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'corte-ejes': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'largo-onda': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'cuenta-vibraciones': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'refleja-angulo': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'eco-distancia': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'lee-parabola': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'abre-arriba': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'tabla-exponencial': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'crece-como': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'log-es': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'sube-o-baja-base': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'lee-onda': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'en-que-momento': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'lee-cortes': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'contexto-dominio': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'se-acerca-normal': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'tono-o-volumen': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'punto-en-curva': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'igual-potencia': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'es-periodica': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'dominio-valores': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'es-funcion': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'sube-parabola': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-logaritmo': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-onda': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-funcion': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'sube-rapidez': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
   'plazo-simple': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'plazo-compuesto': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'antes-del-iva': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
@@ -16086,6 +16406,48 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['La medida', 'Cada paso es por diez.', 'nivel-ph', 'La muestra A, de otra pecera, tiene pH **8**. Mueve la muestra B, **cien veces más ácida**.', { base: 8, k: -2 }, 'Cien son dos pasos hacia lo ácido: pH 6.', ['Recuerda hacia qué lado está lo ácido.', 'Escribe cien como una multiplicación de dieces.'], '100 = dos pasos: pH 6'],
     ['La causa', 'Compara las dos peceras.', 'balanza-tesis', 'Hipótesis: «los restos de comida acidificaron el agua». ¿Qué hace cada dato?', { doc: PECERA, tesis: 'Los restos acidificaron el agua', ...F(['La pecera limpia siguió en 7.', 0, '¿Qué pasa al quitar los restos?'], ['Otra pecera con restos siguió en 7.', 1, '¿Bastaron los restos?'], ['Los peces eran rojos.', 2, '¿Cambia el pH?']), bien: 'Quitar la causa la pone a prueba.' }, 'La limpia la apoya; con restos y sin cambio se debilita; el color no pesa.', ['Compara lo que cambia entre las peceras.', 'Piensa qué debería pasar si la causa fuera esa.'], 'Limpia en 7: apoya']],
     'Dos pasos son cien veces; la pecera limpia apoya la causa.', 'Cuenta los pasos y compara con el control.');
+}
+;
+//#archivo js/gimnasio-icf-10.js
+// Gimnasio del Preicfes, décimos mundos (spec 2026-11-25-preicfes-estructura): Fuerza y Élite por mundo. Va después de gimnasio-icf-9.js.
+{
+  const { F, T, P } = ICF;
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-i-${id}`, after, level, title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+  const D = (id, title, paras) => ({ id: `gym-icf-${id}`, title, paras });
+
+  reto('curva-1', ['icf-ma-curvas-1', 'icf-ma-curvas-2'], 2, 'El puente y el cultivo', 'Simetría y factores', 'Un arco de puente y un cultivo que crece. Dos curvas distintas.', [
+    ['El arco', 'Busca la mitad.', 'vertice-parabola', 'Un arco toca el suelo en **3 m** y en **17 m**. Mueve la distancia de su punto **más alto**.', { r1: 3, r2: 17, h: 10, max: 20, et: 'distancia (m)' }, '$\\tfrac{3 + 17}{2} = 10$ m.', ['El arco es simétrico: los dos apoyos están a igual altura.', 'Busca el punto a igual distancia de los apoyos.'], 'Mitad entre 3 y 17: 10'],
+    ['El cultivo', 'Mira qué potencia es.', 'veces-factor', 'Hay **2** algas y se **triplican** cada semana. Mueve las semanas hasta **162**.', { C: 2, k: 3, meta: 162, max: 8, et: 'semanas' }, '$162 \\div 2 = 81 = 3^4$: 4 semanas.', ['Divide la meta entre lo que había.', 'Busca qué potencia de 3 es ese número.'], '81 = 3⁴']],
+    'El arco sube hasta los 10 m y el cultivo tarda 4 semanas.', 'La simetría para la parábola; los factores para la exponencial.');
+  reto('curva-2', ['icf-ma-curvas-3', 'icf-ma-curvas-4'], 3, 'La marea y la recta', 'Centro y cortes', 'Lee una onda y una recta sin dibujarlas enteras.', [
+    ['La marea', 'Primero el centro.', 'amplitud-onda', 'La marea va de **1 m** a **11 m**. Mueve la línea media y la amplitud.', { min: 1, max: 11, hi: 12 }, 'La media es 6 y la amplitud, 5.', ['Busca el punto a igual distancia del máximo y del mínimo.', 'La amplitud se mide desde el centro.'], 'Media 6, amplitud 5'],
+    ['La recta', 'Sobre un eje, la otra coordenada es 0.', 'corte-ejes', 'Mueve los cortes de $5x + 2y = 20$ con los ejes.', { a: 5, b: 2, c: 20, max: 12 }, 'Con $y = 0$, $x = 4$; con $x = 0$, $y = 10$.', ['Reemplaza por 0 una coordenada y despeja la otra.', 'Haz las dos cuentas por separado.'], '(4, 0) y (0, 10)']],
+    'Media 6, amplitud 5; cortes (4, 0) y (0, 10).', 'Busca el centro y reemplaza por 0.');
+
+  const ISLA = D('isla-norte', 'La Isla Norte', [
+    'La Isla Norte tiene parlamento propio y hace sus leyes, pero otro país decide sobre su defensa. Sus habitantes hablan una lengua que no se habla en ninguna otra parte.',
+    'El año pasado el parlamento aprobó, según las reglas, prohibir esa lengua en las escuelas. Ocho de cada diez habitantes dijeron que la norma es injusta.']);
+  reto('modelo-1', ['icf-sc-modelos-1'], 2, 'La Isla Norte', 'Conceptos en un caso', 'Un caso inventado. Aplica los conceptos.', [
+    ['Deducir', 'Usa las definiciones.', 'dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: ISLA, nums: [1, 2], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], ...F(['Ocho de cada diez la consideran injusta.', 0, 'Búscala en el párrafo 2.'], ['Su soberanía no es completa.', 1, '¿Quién decide sobre la defensa?'], ['La norma es legal, pero poco legítima.', 1, 'Compara cómo se aprobó con lo que opinan.'], ['La isla exporta pescado.', 2, '¿Se habla de eso?']), luz: [[2, 'Ocho de cada diez'], [1, 'otro país decide sobre su defensa'], [2, 'según las reglas']], bien: 'Soberanía y legitimidad.' }, 'El ocho de diez está escrito; la soberanía y la legitimidad se deducen; el pescado no.', ['Recuerda qué significa soberanía.', 'Legal es según las reglas; legítimo, que lo reconozcan.'], 'Defensa ajena; legal y rechazada'],
+    ['El concepto', 'Cada dato, su palabra.', 'pinta-tipos', 'Pinta cada dato con el concepto que muestra.', { doc: ISLA, plumas: ['nación', 'Estado', 'legitimidad'], ...P(['Comparten una lengua propia.', 0, '¿Habla de sentirse unidos?'], ['Tiene un parlamento que hace leyes.', 1, '¿Habla de la organización?'], ['Casi todos rechazan la norma.', 2, '¿Habla de reconocer o no?']), bien: 'Lengua, leyes y rechazo.' }, 'La lengua es de la nación, las leyes del Estado y el rechazo toca la legitimidad.', ['Pregunta si habla del grupo, de la organización o de aceptar.', 'Busca la palabra que más se acerca a cada definición.'], 'Lengua, leyes, rechazo']],
+    'Soberanía incompleta y una norma legal poco legítima.', 'Ata cada dato a una definición.');
+  const BUSES = D('buses', 'Los buses de Santa Fe', [
+    'Santa Fe discute qué hacer con sus buses. Propuesta A: venderlos a tres empresas que compitan. Propuesta B: que sigan siendo públicos y que los paguen los impuestos de los más ricos.',
+    'Propuesta C: que cada barrio maneje los suyos y decida en asamblea las rutas. Con A, los barrios altos, donde hay pocos pasajeros, quedarían sin ruta.']);
+  reto('modelo-2', ['icf-sc-modelos-2'], 3, 'Los buses de Santa Fe', 'Lógicas y consecuencias', 'Tres propuestas para el transporte. Reconócelas y evalúalas.', [
+    ['Las lógicas', 'Quién decide y quién paga.', 'pista-tipo', 'Ata cada lógica a su propuesta.', { doc: BUSES, lineas: ['A: vender a empresas que compitan', 'B: públicos, con impuestos a los más ricos', 'C: cada barrio decide en asamblea'], ...T(['liberal', 0, '¿Cuál confía en la competencia?'], ['de igualdad, con impuestos', 1, '¿Cuál reparte?'], ['comunitaria', 2, '¿Cuál decide en asamblea?']), bien: 'Competir, repartir y decidir juntos.' }, 'A confía en el mercado, B reparte y C decide en comunidad.', ['Mira quién toma la decisión en cada una.', 'Busca las palabras competir, impuestos y asamblea.'], 'A: mercado; B: impuestos; C: asamblea'],
+    ['La balanza', 'Mira a quién deja por fuera.', 'balanza-tesis', 'Idea: «la propuesta A es la mejor para todos los barrios». ¿Qué hace cada dato?', { doc: BUSES, tesis: 'A es la mejor para todos los barrios', ...F(['Los barrios altos quedarían sin ruta.', 1, '¿Es mejor para todos?'], ['En una ciudad parecida, al competir llegaron rutas a todos los barrios.', 0, '¿A quiénes llegó?'], ['Los buses son verdes.', 2, '¿Cambia algo?']), bien: '«Todos» es mucho decir.' }, 'Quedar sin ruta la debilita; que llegara a todos la apoya; el color no pesa.', ['Fíjate en la palabra todos de la idea.', 'Busca a quiénes beneficia y a quiénes no.'], 'Barrios altos: en contra']],
+    'Tres lógicas; A deja por fuera a los barrios altos.', 'Pregunta quién decide, quién paga y quién queda por fuera.');
+
+  reto('onda-1', ['icf-cn-ondas-1'], 2, 'La cuerda del gimnasio', 'Frecuencia y longitud', 'Se sacude una cuerda gruesa. Mide su onda.', [
+    ['La frecuencia', 'Cuenta y reparte.', 'cuenta-vibraciones', 'El dibujo muestra lo que vibró un punto en **5 s**. Mueve su **frecuencia**.', { n: 10, t: 5, max: 10 }, '10 vibraciones en 5 s: 2 Hz.', ['Cuenta las vibraciones completas del dibujo.', 'Repártelas entre los segundos.'], '10 ÷ 5 = 2 Hz'],
+    ['La longitud', 'El producto da la rapidez.', 'largo-onda', 'La onda viaja a **10 m/s** con esos **2 Hz**. Mueve su **longitud de onda**.', { v: 10, f: 2, max: 12, u: 'm' }, '$10 \\div 2 = 5$ m.', ['La longitud por la frecuencia da la rapidez.', 'Divide la rapidez entre la frecuencia.'], '10 ÷ 2 = 5 m']],
+    'Vibra a 2 Hz y cada onda mide 5 m.', 'Vibraciones por segundo y producto igual a la rapidez.');
+  reto('onda-2', ['icf-cn-ondas-2'], 3, 'El cañón y el espejo', 'Ida y vuelta, igual ángulo', 'Un eco en un cañón y un rayo en un espejo.', [
+    ['El eco', 'Fue y volvió.', 'eco-distancia', 'A **340 m/s**, el eco vuelve a los **5 s**. Mueve la distancia a la pared.', { v: 340, t: 5, max: 1800, paso: 10 }, '$340 \\cdot 5 = 1\\,700$; la mitad, 850 m.', ['Halla todo lo que recorrió el sonido.', 'Recuerda que recorrió el camino dos veces.'], '1 700 ÷ 2 = 850 m'],
+    ['El espejo', 'Se mide desde la normal.', 'refleja-angulo', 'Un rayo llega formando **65° con el espejo**. Mueve el que sale, **desde la normal**.', { g: 25, con: true }, '$90 - 65 = 25°$, y sale igual.', ['Pasa primero el ángulo a la normal.', 'El espejo y la normal forman un ángulo recto.'], '90 − 65 = 25°']],
+    'La pared está a 850 m y el rayo sale a 25° de la normal.', 'Parte el recorrido y mide desde la normal.');
 }
 ;
 //#archivo js/inicio.js

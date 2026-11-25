@@ -45,7 +45,7 @@ test('el curso está registrado: después del Preuniversitario, con arte, paleta
   }
   assert.ok(at('js/courses/preicfes.js') > at('js/data.js') && at('js/courses/preicfes.js') < at('js/courses/sin-escribir.js'));
   assert.ok(at('js/courses/preicfes-base.js') > at('js/games/lectura-kit.js'));
-  assert.match(read('tools/sync-lecciones.js'), /preicfes\.js/);
+  assert.match(read('tools/sync-lecciones.js'), /index.html/);   // la lista de archivos sale de index.html
 });
 
 test('cinco componentes, el primer mundo de cada uno terminado, en orden, con lámina y evaluación', () => {

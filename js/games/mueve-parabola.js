@@ -22,7 +22,7 @@ GAMES['mueve-parabola'] = (() => {
   const same = (v, r) => { const t = vertexOf(r); return !!v && v.a === r.a && v.h === t.h && v.k === t.k; };
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => same(state.vals[i], r));
+    const ok = params.rounds.every((r, i) => same(state.vals?.[i], r));
     return { ok, solution: params.rounds.map(r => `$${texStd(r)} = ${texVertex({ a: r.a, ...vertexOf(r) }).slice(4)}$`).join(' · ') };
   }
 

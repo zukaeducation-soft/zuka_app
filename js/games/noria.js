@@ -23,7 +23,7 @@ GAMES['noria'] = (() => {
   const valid = cond => Array.from({ length: 24 }, (_, k) => k * 15).filter(a => fits(a, cond));
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => state.angles[i] != null && fits(state.angles[i], r));
+    const ok = params.rounds.every((r, i) => state.angles?.[i] != null && fits(state.angles?.[i], r));
     return { ok, solution: params.rounds.map(r => `${r.prompt}: por ejemplo ${valid(r).slice(0, 3).map(a => `${a}°`).join(', ')}`).join(' · ') };
   }
 

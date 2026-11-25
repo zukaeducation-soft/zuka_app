@@ -38,7 +38,7 @@ const PI_TEMARIO = {
     ['icf-sc-mundo', 'Historia del Mundo', ['Revoluciones y democracia', 'Guerras y Guerra Fría', 'Descolonización y movimientos sociales'], 'Pensamiento social'],
     ['icf-sc-geografia', 'Territorio y Ambiente', ['Regiones, mapas y población', 'Recursos, ambiente y desarrollo'], 'Pensamiento social'],
     ['icf-sc-economia', 'Economía y Globalización', ['Mercado, precios e impuestos', 'Inflación, desempleo y pobreza', 'Globalización'], 'Pensamiento social'],
-    ['icf-sc-modelos', 'Modelos de las Ciencias Sociales', ['Conceptos básicos', 'Modelos y decisiones públicas'], 'Pensamiento reflexivo y sistémico'],
+    ['icf-sc-modelos', 'Modelos para Decidir', ['Conceptos básicos', 'Modelos y decisiones públicas'], 'Pensamiento reflexivo y sistémico'],
   ],
   ciencias: [
     ['icf-cn-indaga', 'Indagación Científica', ['Preguntas, variables y control', 'Datos y conclusiones'], 'Indagación'],

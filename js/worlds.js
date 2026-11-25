@@ -511,6 +511,16 @@ const WORLDS = (() => {
     'icf-cn-reacciones': { name: 'Reacciones y Cantidades', art: plate('icf-cn-reacciones', TEAL, `
       ${L('M72 14h16M76 14v16L58 62h44L84 30V14', INK, 1.2)}${L('M66 48h28', TEAL, 1.2)}${C(74, 55, 3, TEAL, 1)}${C(84, 53, 2.2, TEAL, 1)}${C(82, 40, 1.8, TEAL, 1)}${D(92, 57, 1.4, TEAL)}${A(106, 40, 116, 40, INK, 1)}
       ${T(28, 42, '2H₂ + O₂', INK, 6)}${T(136, 43, '2H₂O', TEAL, 7)}`) },
+    // ---------- décimos mundos ----------
+    'icf-ma-curvas': { name: 'Funciones que Curvan', art: plate('icf-ma-curvas', TEAL, `
+      ${L('M46 62h68M80 14v52', INK, .9)}${L('M50 18C62 74 98 74 110 18', TEAL, 1.4)}${L('M48 52C60 34 68 34 80 48S102 62 114 44', INK, 1)}${D(80, 60, 2, TEAL)}${L('M80 60v-40', INK, .6)}
+      ${T(28, 42, 'x²', INK, 8)}${T(134, 42, '2ˣ', TEAL, 8)}`) },
+    'icf-sc-modelos': { name: 'Modelos para Decidir', art: plate('icf-sc-modelos', TEAL, `
+      ${L('M56 24h48M56 24l-8 20h16zM104 24l-8 20h16zM80 14v50M66 64h28', INK, 1.1)}${L('M48 44c2 8 14 8 16 0', TEAL, 1.3)}${L('M96 44c2 8 14 8 16 0', TEAL, 1.3)}${D(56, 40, 1.4, TEAL)}${D(104, 40, 1.4, TEAL)}${D(80, 24, 2.2, TEAL)}
+      ${T(28, 42, 'quién decide', INK, 5)}${T(134, 42, 'quién paga', TEAL, 5)}`) },
+    'icf-cn-ondas': { name: 'Ondas, Luz y Sonido', art: plate('icf-cn-ondas', TEAL, `
+      ${L('M46 30C52 14 58 14 64 30S76 46 82 30 94 14 100 30 112 46 116 30', TEAL, 1.4)}${L('M46 30h70', INK, .6)}${L('M54 64L80 48L106 64', INK, 1.2)}${L('M50 64h60', INK, 1)}${L('M80 44v20', INK, .6)}${D(80, 64, 1.8, TEAL)}
+      ${T(28, 42, 'v = λ·f', INK, 7)}${T(136, 42, '340 m/s', TEAL, 6)}`) },
   };
 })();
 

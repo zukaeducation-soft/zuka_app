@@ -1,136 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-r-operadores.js
-// Preuniversitario · mundo 11 «Operadores definidos»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setExam }) => {
-  const TAB4 = [[1, 2, 3, 4], [2, 4, 1, 3], [3, 1, 4, 2], [4, 3, 2, 1]];
-  setExam('pu-operadores', 'Operadores definidos', [
-    ['pu-op-1', 'En un operador, el primer número reemplaza a $a$ y el segundo a $b$.',
-      play('maquina-operador', 'Máquina', { rounds: [{ sym: '\\star', tex: '3a - b', f: (a, b) => 3 * a - b, target: 10, lo: 0, hi: 10, fix: { a: 4 } }] }, '$12 - b = 10$: $b = 2$.', { hint: 'Reemplaza.' })],
-    ['pu-op-1', 'Por tabla: fila del primero, columna del segundo.',
-      play('cruce-tabla', 'Tabla', { rounds: [{ set: [1, 2, 3, 4], tab: TAB4, chain: [4, 2] }] }, '$4 \\circ 2 = 3$.', { hint: 'Fila 4.' })],
-    ['pu-op-1', 'El neutro cumple $a \\circ e = a$ para todo $a$.',
-      play('neutro-buscador', 'Neutro', { rounds: [{ sym: '\\circ', tex: 'a + b + 5', f: (a, b) => a + b + 5, lo: -8, hi: 5, as: [1, 3, 5, 7] }] }, '$e = -5$.', { hint: 'Despeja.' })],
-    ['pu-op-2', 'Los anidados se resuelven de adentro hacia afuera.',
-      play('anida-operador', 'Anidado', { rounds: [{ sym: '\\star', tex: 'a + 3b', f: (a, b) => a + 3 * b, expr: [[1, 2], 1] }] }, '$1 \\star 2 = 7$ y $7 \\star 1 = 10$.', { hint: 'Adentro.' })],
-    ['pu-op-2', 'Con el operador en una ecuación, se reemplaza y se despeja.',
-      play('busca-x-operador', 'Ecuación', { rounds: [{ sym: '\\oplus', tex: '2a + 3b', f: (a, b) => 2 * a + 3 * b, k: 2, side: 'left', target: 14, lo: -5, hi: 10 }] }, '$2x + 6 = 14$: $x = 4$.', { hint: 'Reemplaza.' })],
-  ]);
-});
-
-// Mundo 11 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
-  // Ocho juegos con las escenas de la explicación (js/games/operadores-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-op-1', [
-    play('arma-receta', 'Con $a \\star b = 4a - b^2$, pon cada número en su lugar y calcula $3 \\star 2$ y $2 \\star 3$.', { et: ['3 ★ 2', '2 ★ 3'], metas: ['3', '2', '8', '2', '3', '−1'], fichas: ['3', '3', '2', '2', '8', '−1', '17', '10'],
-      mira: ['Donde la receta dice a entra el primero: el 3.', 'Donde dice b entra el segundo: el 2.', 'Doce menos el cuadrado de 2.', 'Ahora el primero es el 2.', 'Ahora el segundo es el 3.', 'Ocho menos el cuadrado de 3.'],
-      trampas: { '0:2': 'El 2 es el segundo: no va en el lugar de a.', '3:3': 'Al voltear, el primero es el 2.', '2:10': '12 − 2 olvida el cuadrado.', '5:17': 'Sumaste el 9: la receta lo resta.' }, ok: 'Voltear los números cambió el resultado.' },
-      'Con 3 ★ 2 queda $4 \\cdot 3 - 2^2 = 8$. Con 2 ★ 3 queda $4 \\cdot 2 - 3^2 = -1$.',
-      { hint: 'Primero marca cuál es a y cuál es b en cada renglón; después haz la cuenta.' }),
-    play('maquina-ida-vuelta', 'La máquina hace $a \\star b = 2b - a$. Abajo entran los mismos números **volteados**. Mueve las entradas para que **arriba salga 7** y **abajo salga 1**.', { f: (a, b) => 2 * b - a, m: [7, 1], texto: 'a = 3 y b = 5' },
-      'Arriba, $2 \\cdot 5 - 3 = 7$. Abajo, volteados, $2 \\cdot 3 - 5 = 1$.',
-      { hint: 'Arriba el que se dobla es b; abajo, el que se dobla es a. ¿Cuál de los dos conviene que sea mayor?' }),
-    play('cuales-conmutan', '¿En cuáles recetas **no importa el orden** de los números, sean los que sean? Toca todas.', { casos: [{ t: 'a · b + 5', si: true }, { t: 'a + 5b', no: 'En a + 5b solo se multiplica por 5 el segundo: con 1 y 2 da 11; con 2 y 1 da 7.' }, { t: '(a − b)²', si: true }, { t: 'a · b − b', no: 'En a · b − b se resta el segundo: con 1 y 2 da 0; con 2 y 1 da 1.' }, { t: 'a² + b²', si: true }], falta: 'Falta otra que da lo mismo al voltear: pruébalas con 1 y 2, y luego con 2 y 1.', ok: 'Esas recetas tratan igual a las dos letras.' },
-      'El producto, la suma de cuadrados y el cuadrado de la diferencia no distinguen a de b. En a + 5b solo b se multiplica por 5, y en a · b − b solo se resta b.',
-      { hint: 'Cambia a por b y b por a en la receta y mira si queda la misma.' }),
-    play('entran-negativos', 'La máquina hace $a \\star b = a \\cdot b - b^2$. Entran $-2$ y $-3$. Llena cada parte.', { a: '−2', b: '−3', et: ['a · b', 'b²', 'sale'], ops: ['−', '='], metas: ['6', '9', '−3'], fichas: ['6', '−6', '9', '−9', '−3', '15', '3', '4'],
-      mira: ['Multiplica (−2) por (−3), con sus signos.', 'El cuadrado es de todo el −3.', 'Al producto se le resta el cuadrado.'],
-      trampas: { '0:−6': 'Menos por menos da más.', '1:−9': '(−3)² es (−3) · (−3).', '1:4': 'Ese es el cuadrado del primero; la receta pide el del segundo.', '2:15': 'La receta resta el 9.', '2:3': 'Restaste al revés: es 6 − 9.' }, ok: 'Con paréntesis, los signos no se pierden.' },
-      '$(-2) \\cdot (-3) = 6$ y $(-3)^2 = 9$: sale $6 - 9 = -3$.',
-      { hint: 'Reemplaza cada letra por su número entre paréntesis antes de calcular.' }),
-    play('lee-operacion', 'La operación está en la tabla: las **filas** son del primero y las **columnas** del segundo. Completa y halla la **x**.', { letras: ['p', 'q', 'r', 's'], tab: [['r', 's', 'p', 'q'], ['p', 'r', 'q', 's'], ['q', 'p', 's', 'r'], ['s', 'q', 'r', 'p']], et: ['q ✱ s =', 's ✱ q =', 'r ✱ x = p, x ='], metas: ['s', 'q', 'q'], fichas: ['p', 'q', 'q', 'q', 'r', 's', 's'],
-      mira: ['El primero, q, manda la fila.', 'Ahora el primero es s: cambia la fila.', 'Recorre la fila de r hasta encontrar p; la respuesta es el nombre de su columna.'], trampas: { '0:q': 'Eso es s ✱ q: leíste la fila de s.', '1:s': 'Eso es q ✱ s: leíste la fila de q.', '2:p': 'p es el resultado; se pide la columna.' }, ok: 'Al cambiar el orden, la casilla es otra.' },
-      'Fila de q, columna de s: s. Fila de s, columna de q: q. En la fila de r, la p está en la columna de q.',
-      { hint: 'Pon un dedo en la fila del primero y otro en la columna del segundo.' }),
-    play('tabla-desigual', 'Toca **todas** las casillas en las que **cambiar el orden** de las dos letras cambia el resultado.', { letras: ['p', 'q', 'r', 's'], tab: [['q', 'r', 'p', 's'], ['r', 'p', 'q', 'r'], ['p', 'q', 's', 'p'], ['p', 's', 'p', 'q']], texto: 'p ✱ s con s ✱ p, y q ✱ s con s ✱ q', ok: 'Esas casillas no son iguales a su reflejo en la diagonal.' },
-      'p ✱ s = s, pero s ✱ p = p. Y q ✱ s = r, pero s ✱ q = s. Las demás son iguales a su reflejo.',
-      { hint: 'Cada casilla tiene su pareja al otro lado de la diagonal: compara las dos.' }),
-    play('neutro-de-cada', 'El neutro $e$ no cambia a nadie: $a$ operado con $e$ da $a$, sea cual sea $a$. Pon el de cada receta.', { et: ['a + b − 4', 'a + b + 9', 'a · b', 'a · b ÷ 3'], metas: ['4', '−9', '1', '3'], fichas: ['4', '−4', '9', '−9', '1', '1', '0', '3'],
-      mira: ['Pon e en el lugar de b: lo que se suma debe deshacer el −4.', 'Pon e en el lugar de b: lo que se suma debe deshacer el +9.', '¿Por qué número se multiplica para no cambiar nada?', 'Se divide entre 3: ¿por cuánto hay que multiplicar antes?'], trampas: { '0:−4': 'Con −4 se restaría 4 dos veces.', '1:9': 'Con 9 se sumaría 9 dos veces.', '2:0': 'Con 0 todo se vuelve 0.', '3:1': 'Con 1 el número queda dividido entre 3.' }, ok: 'Cada neutro deshace lo que la receta añade.' },
-      '$a + 4 - 4 = a$; $a + (-9) + 9 = a$; $a \\cdot 1 = a$; $a \\cdot 3 \\div 3 = a$.',
-      { hint: 'Prueba con un número, por ejemplo 5: ¿qué tiene que entrar por b para que salga 5 otra vez?' }),
-    play('sube-operador', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Con $a \\diamond b = a^2 + 2b$, ¿cuánto vale $4 \\diamond 5$?', r: 26, c: '4^2 + 2 \\cdot 5', e: { 33: 'Eso es 5 ◆ 4: los volteaste.', 18: 'El cuadrado de 4 es 4 · 4.' } },
-      { q: 'Con $a \\circ b = 3b - a$, ¿cuánto vale $(-6) \\circ 5$?', r: 21, c: '3 \\cdot 5 - (-6)', e: { 9: 'Restar −6 es sumar 6.' } },
-      { q: 'Con $a \\odot b = a \\cdot b \\div 12$, ¿cuál es el neutro, el que no cambia a nadie?', r: 12, c: 'a \\cdot 12 \\div 12 = a \\Rightarrow e', e: { 1: 'Con 1 cada número queda dividido entre 12.' } }] },
-      '$16 + 10 = 26$; $15 + 6 = 21$; y con 12 queda $a \\cdot 12 \\div 12 = a$.',
-      { hint: 'En cada tiro, escribe quién es a y quién es b, y pon los negativos entre paréntesis.' }),
-    sol('En los números enteros se define la operación $a \\diamond b = 3a - 2b$. Calcula $5 \\diamond 4$ y $4 \\diamond 5$. ¿La operación es conmutativa?',
-      ['En $5 \\diamond 4$ el primero es 5 y el segundo es 4: $3 \\cdot 5 - 2 \\cdot 4 =$ [[7]]', 'En $4 \\diamond 5$ el primero es 4: $3 \\cdot 4 - 2 \\cdot 5 =$ [[2]]', 'Los resultados son [[distintos]]: la operación [[no es]] conmutativa'],
-      ['iguales', 'es', '−2'],
-      'Un operador definido es una receta con dos puestos: lo que se hace con el primer número no es lo mismo que con el segundo. Por eso el orden puede cambiar el resultado.',
-      'Marca cuál número ocupa el lugar de a y cuál el de b antes de reemplazar.'),
-    err('Se define la operación $a \\circ b = a^2 - b$. ¿Cuánto vale $(-3) \\circ 4$?',
-      ['El primer número es $-3$ y el segundo es 4', 'Se eleva el primero al cuadrado: $(-3)^2 = -9$', 'Se resta el segundo: $-9 - 4 = -13$'], 1,
-      ['Se eleva el primero al cuadrado: $(-3)^2 = 9$', 'Se eleva el primero al cuadrado: $(-3)^2 = -6$', 'Se eleva el primero al cuadrado: $(-3)^2 = 6$'],
-      'Al reemplazar un número negativo va con su paréntesis: $(-3)^2 = 9$. El resultado es $9 - 4 = 5$.',
-      'Reemplaza la letra por el número completo, con su signo y entre paréntesis.'),
-    opc('En los números reales se define la operación $a \\star b = a \\cdot b - a$. El valor de $3 \\star 5$ menos el valor de $5 \\star 3$ es:',
-      ['0', '2', '$-2$', '4'], 1,
-      '$3 \\star 5 = 15 - 3 = 12$ y $5 \\star 3 = 15 - 5 = 10$. La diferencia es 2.',
-      'Calcula cada uno por separado: en cada caso, el número que se resta es el primero.'),
-  ]);
-
-  // Ocho juegos con las escenas de la explicación (js/games/operadores-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
-  setLesson('pu-op-2', [
-    play('dos-parentesis', 'Con $a \\star b = a \\cdot b + 1$, llena cada renglón. ¿Importa dónde van los paréntesis?', { et: ['2 ★ 3', '(2 ★ 3) ★ 4', '3 ★ 4', '2 ★ (3 ★ 4)'], metas: ['7', '29', '13', '27'], fichas: ['7', '29', '13', '27', '25', '24', '28'],
-      mira: ['Dos por tres, más 1.', 'El paréntesis ya vale un número: opéralo con 4.', 'Tres por cuatro, más 1.', 'Dos operado con lo que dio el paréntesis.'], trampas: { '1:25': 'El +1 se hace en cada operación, no solo al final.', '3:25': 'El +1 se hace en cada operación, no solo al final.', '1:28': 'Falta el +1 de la operación de afuera.' }, ok: 'Mover los paréntesis cambió el resultado.' },
-      '$2 \\star 3 = 7$ y $7 \\star 4 = 29$. $3 \\star 4 = 13$ y $2 \\star 13 = 27$.',
-      { hint: 'Resuelve primero el paréntesis y cámbialo por un solo número.' }),
-    play('arbol-operador', 'Con $a \\ast b = a + 4b$ y $a \\diamond b = a^2 - b$, sube por el árbol de $(4 \\ast 1) \\diamond (2 \\diamond 3)$.', { h: ['4', '1', '2', '3'], s: ['✱', '◆', '◆'], metas: ['8', '1', '63'], fichas: ['8', '1', '63', '17', '7', '15', '−7'],
-      mira: ['4 más el cuádruple de 1.', 'El cuadrado de 2, menos 3.', 'Arriba está ◆: el cuadrado de lo de la izquierda menos lo de la derecha.'], trampas: { '0:17': 'Volteaste: el que se multiplica por 4 es el segundo.', '1:7': 'Volteaste: el cuadrado es del primero.', '2:15': '8 al cuadrado no es 16.', '2:−7': 'Volteaste: el primero es el de la izquierda.' }, ok: 'Cada nudo usó la receta de su símbolo.' },
-      '$4 + 4 \\cdot 1 = 8$; $2^2 - 3 = 1$; y $8^2 - 1 = 63$.',
-      { hint: 'Cada nudo se llena con los dos de abajo y la receta del símbolo que los une.' }),
-    play('lugar-x', 'Con $a \\oplus b = 2a - 3b$, une cada ecuación con la que queda al reemplazar.', { et: ['x ⊕ 4 = 10', '4 ⊕ x = 10', 'x ⊕ x = 10'], metas: ['2x − 12 = 10', '8 − 3x = 10', '2x − 3x = 10'], fichas: ['2x − 12 = 10', '8 − 3x = 10', '2x − 3x = 10', '2x − 4 = 10', '12 − 2x = 10'],
-      mira: ['La x entra por a y el 4 por b.', 'El 4 entra por a y la x por b.', 'La x entra por las dos partes.'], trampas: { '0:8 − 3x = 10': 'Ahí el primero es el 4.', '0:2x − 4 = 10': 'Falta triplicar el 4.', '1:12 − 2x = 10': 'El primero se dobla y el segundo se triplica.' }, ok: 'Lo primero es ver en qué lugar está la x.' },
-      'El doble del primero menos el triple del segundo: $2x - 12$, $8 - 3x$ y $2x - 3x$.',
-      { hint: 'Di en voz alta: «el doble del primero menos el triple del segundo».' }),
-    play('iguala-lados', 'Con $a \\circ b = 4a + b$, mueve la $x$ hasta que $x \\circ 2$ y $5 \\circ x$ valgan **lo mismo**.', { l: x => 4 * x + 2, r: x => 20 + x, et: ['x ∘ 2', '5 ∘ x'], max: 12, texto: 'x = 6' },
-      '$4x + 2 = 20 + x$: $3x = 18$ y $x = 6$. Los dos lados valen 26.',
-      { hint: 'Reemplaza en cada lado: en uno la x se cuadruplica y en el otro solo se suma.' }),
-    play('cadena-en-tabla', 'Las filas son del **primero** y las columnas del **segundo**. Halla cada resultado y la **x** de la última.', { letras: ['t', 'u', 'v'], tab: [['u', 'v', 't'], ['t', 't', 'v'], ['v', 'u', 'u']], et: ['(t ✱ u) ✱ v =', 't ✱ (u ✱ v) =', 'x ✱ u = u, x ='], metas: ['u', 't', 'v'], fichas: ['t', 't', 'u', 'u', 'v', 'v'],
-      mira: ['Primero t ✱ u; lo que sale es la fila del siguiente cruce.', 'Primero u ✱ v; lo que sale es la columna del siguiente cruce.', 'La x es una fila: busca en la columna de u dónde sale u.'], trampas: { '0:v': 'v es solo t ✱ u: falta operarlo con v.', '1:v': 'v es solo u ✱ v: falta operarlo con t.', '2:t': 'En t ✱ u sale v.', '2:u': 'En u ✱ u sale t.' }, ok: 'Con los paréntesis en otro lugar, el resultado es otro.' },
-      't ✱ u = v y v ✱ v = u. En cambio u ✱ v = v y t ✱ v = t. Y en la columna de u, la u está en la fila de v.',
-      { hint: 'Un cruce a la vez: resuelve el paréntesis y reemplázalo por la letra que salió.' }),
-    play('x-consigo', 'Con $a \\diamond b = a \\cdot b - 2b$, toca **todos** los números que operados **consigo mismos** dan 8.', { nums: [-4, -2, 2, 4, 6, 8], f: (a, b) => a * b - 2 * b, t: 8, ok: '4 · 4 − 2 · 4 = 8 y (−2) · (−2) − 2 · (−2) = 8.' },
-      '$4 \\diamond 4 = 16 - 8 = 8$ y $(-2) \\diamond (-2) = 4 + 4 = 8$. Los demás dan 24, 0, 24 y 48.',
-      { hint: 'Reemplaza el mismo número en a y en b. Con los negativos, cuida los paréntesis.' }),
-    play('deshace-operador', 'Con $a \\star b = a \\cdot b + 3$, en dos máquinas seguidas $(x \\star 2) \\star 4 = 55$. Ve **hacia atrás** y llena las casillas.', { s: ['★ 2', '★ 4'], sale: '55', metas: ['5', '13'], fichas: ['5', '13', '8', '10', '52', '58', '6'],
-      mira: ['Lo de la mitad salió de x por 2, más 3: deshazlo.', 'El 55 salió de lo de la mitad por 4, más 3: deshazlo.'], trampas: { '0:8': 'Sumaste el 3: para deshacer se resta.', '0:10': 'Falta dividir entre 2.', '1:52': 'Falta dividir entre 4.', '1:58': 'Para deshacer el +3 se resta, y después se divide entre 4.' }, ok: '5 ★ 2 = 13 y 13 ★ 4 = 55.' },
-      'Antes del 55: $(55 - 3) \\div 4 = 13$. Antes del 13: $(13 - 3) \\div 2 = 5$.',
-      { hint: 'La última cuenta que se hizo es la primera que se deshace.' }),
-    play('sube-anidado', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Con $a \\oplus b = 3a + b$, ¿cuánto vale $(2 \\oplus 1) \\oplus 4$?', r: 25, c: '3 \\cdot 7 + 4', e: { 13: 'Eso es 2 ⊕ (1 ⊕ 4): el paréntesis está al otro lado.', 7: 'Ese es solo el paréntesis.' } },
-      { q: 'Con $a \\circ b = 5b - a$, ¿qué $x$ cumple $7 \\circ x = 33$?', r: 8, c: '(33 + 7) \\div 5', e: { 2: 'La x es el segundo: es la que se multiplica por 5.', 40: 'Falta dividir entre 5.' } },
-      { q: 'Con $a \\star b = a \\cdot b - a$, ¿qué $x$ cumple $(x \\star 3) \\star 2 = 28$?', r: 14, c: '28 \\div 2', e: { 28: 'Eso es lo que da el paréntesis: falta la x.', 7: 'La segunda operación no duplica: 2 veces lo del paréntesis menos una vez.' } }] },
-      '$2 \\oplus 1 = 7$ y $7 \\oplus 4 = 25$. $5x - 7 = 33$ da $x = 8$. $x \\star 3 = 2x$ y $2x \\star 2 = 2x$: $x = 14$.',
-      { hint: 'Primero lo de adentro, y fíjate si la x es el primero o el segundo.' }),
-    sol('En los números enteros se define la operación $a \\ast b = a \\cdot b - (a + b)$. ¿Cuánto vale $(4 \\ast 3) \\ast 2$?',
-      ['Primero el paréntesis: $4 \\ast 3 = 12 - 7 =$ [[5]]', 'Ese resultado ocupa el lugar del paréntesis: queda $5 \\ast 2$, con producto [[10]] y suma [[7]]', '$5 \\ast 2 = 10 - 7 =$ [[3]]'],
-      ['8', '24', '−3'],
-      'Un anidado se resuelve de adentro hacia afuera: el resultado del paréntesis pasa a ser un número más de la operación siguiente. Y en cada paso se usa la misma regla: el producto menos la suma.',
-      'Lee primero la regla de esta operación. Después olvida por un momento el 2 de afuera y resuelve solo el paréntesis.'),
-    err('Otra operación, con otra regla: se define $a \\odot b = 4a - 3b$. ¿Para qué valor de $x$ se cumple $2 \\odot x = -7$?',
-      ['Se reemplaza: el 2 ocupa el lugar de a y la x el de b, así que $2 \\odot x = 4 \\cdot 2 - 3x$', 'Se simplifica: $8 - 3x$', 'Se plantea $8 - 3x = -7$, así que $-3x = 1$', 'Entonces $x = -\\tfrac13$'], 2,
-      ['Se plantea $8 - 3x = -7$, así que $-3x = -15$', 'Se plantea $8 - 3x = -7$, así que $3x = -15$', 'Se plantea $8 - 3x = -7$, así que $-3x = -7$'],
-      'Al pasar el 8 al otro lado se resta: $-7 - 8 = -15$. Entonces $x = 5$, y se comprueba: $4 \\cdot 2 - 3 \\cdot 5 = 8 - 15 = -7$. Cada problema trae su propia regla: antes de reemplazar, lee qué hace la operación con a y con b. Aquí es $4a - 3b$, no el producto menos la suma del ejercicio anterior.',
-      'Lee bien la regla de esta operación y mira qué número va en el lugar de a y cuál en el de b. Al final, comprueba tu x reemplazándola.'),
-    opc('Para números reales se define $a \\,\\#\\, b = 2a + b$. El valor de $x$ que cumple $x \\,\\#\\, 3 = 3 \\,\\#\\, x$ es:',
-      ['0', '1', '6', '3'], 3,
-      '$x \\,\\#\\, 3 = 2x + 3$ y $3 \\,\\#\\, x = 6 + x$. Igualando: $2x + 3 = 6 + x$, así que $x = 3$.',
-      'Reemplaza en los dos lados con cuidado: la x ocupa un puesto distinto en cada uno.'),
-  ]);
-
-  addExam('pu-operadores', [
-    ['pu-op-1', 'Un operador definido es una receta: cada letra se reemplaza por el número que ocupa su lugar.',
-      opc('Se define la operación $a \\triangle b = a^2 + b$. El valor de $3 \\triangle 4$ es:', ['10', '19', '13', '7'], 2,
-        '$3^2 + 4 = 9 + 4 = 13$.', 'El cuadrado es solo para el primer número.')],
-    ['pu-op-2', 'Los operadores anidados se resuelven de adentro hacia afuera.',
-      opc('Se define la operación $a \\star b = 2a - b$. El valor de $(5 \\star 4) \\star 3$ es:', ['9', '3', '6', '15'], 0,
-        '$5 \\star 4 = 10 - 4 = 6$ y $6 \\star 3 = 12 - 3 = 9$.', 'Resuelve primero el paréntesis.')],
-  ]);
-});
-;
 //#archivo js/courses/preuda-r-aritmetica.js
 // Preuniversitario · mundo 12 «Aritmética y promedios»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
 PU_JUEGOS.push(({ setExam }) => {
@@ -4316,7 +4185,7 @@ const PI_TEMARIO = {
     ['icf-sc-mundo', 'Historia del Mundo', ['Revoluciones y democracia', 'Guerras y Guerra Fría', 'Descolonización y movimientos sociales'], 'Pensamiento social'],
     ['icf-sc-geografia', 'Territorio y Ambiente', ['Regiones, mapas y población', 'Recursos, ambiente y desarrollo'], 'Pensamiento social'],
     ['icf-sc-economia', 'Economía y Globalización', ['Mercado, precios e impuestos', 'Inflación, desempleo y pobreza', 'Globalización'], 'Pensamiento social'],
-    ['icf-sc-modelos', 'Modelos de las Ciencias Sociales', ['Conceptos básicos', 'Modelos y decisiones públicas'], 'Pensamiento reflexivo y sistémico'],
+    ['icf-sc-modelos', 'Modelos para Decidir', ['Conceptos básicos', 'Modelos y decisiones públicas'], 'Pensamiento reflexivo y sistémico'],
   ],
   ciencias: [
     ['icf-cn-indaga', 'Indagación Científica', ['Preguntas, variables y control', 'Datos y conclusiones'], 'Indagación'],
@@ -5433,6 +5302,135 @@ PI_MUNDOS.push((() => {
     ['icf-ma-finanzas-2', 'Los cambios seguidos se multiplican.', play('cadena-cambios', 'Pon dos sellos para que el precio cambie lo que se pide', { stamps: [10, 20, -10, -20, -50], rounds: [{ goal: 0.88, text: 'El precio final debe ser el 88 % del inicial' }] }, '$1.1 \\cdot 0.8 = 0.88$.', { hint: 'Busca dos factores que multiplicados den 0.88.' })],
     ['icf-ma-finanzas-2', 'El cambio se mide sobre el valor de antes.', play('porcentaje-cambio', 'Fija en qué porcentaje cambió la cuota', { rounds: [{ from: 80, to: 92, unit: 'mil' }] }, 'Subió 12 sobre 80: 15 %.', { hint: 'Divide lo que cambió entre lo que valía antes.' })],
     ['icf-ma-finanzas-2', 'El precio de antes se halla dividiendo.', opc('Con un descuento del 30 %, unos zapatos quedaron en 84 mil. Antes costaban:', ['120 mil', '109.2 mil', '114 mil', '58.8 mil'], 0, '$84 \\div 0.7 = 120$ mil.', '¿Qué porcentaje del precio son los 84 mil?')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-ma-curvas.js
+// Preicfes · Matemáticas · mundo 10 «Funciones que Curvan» (spec 2026-11-25-preicfes-estructura). Números y contextos propios.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = ICF;
+
+  const l1 = leccion('icf-ma-curvas-1', 'Cuadráticas: trayectorias y máximos', guion(
+    ['La parábola', 'Una función con $x^2$ dibuja una curva simétrica.'],
+    ['El vértice', 'Está a mitad de camino entre dos puntos de igual altura.'],
+    ['Los ceros', 'Donde la curva toca el eje x: ahí la función vale 0.'],
+    ['Máximos', 'Si abre hacia abajo, el vértice es el punto más alto.']), [
+    x('vertice-parabola', 'Un balón sale del suelo en **2 m** y cae en **14 m**. Mueve hasta la distancia en que llega **más alto**.', { r1: 2, r2: 14, h: 9, max: 18, et: 'distancia (m)' },
+      'La parábola es simétrica: el punto más alto está en $\\tfrac{2 + 14}{2} = 8$ m.', 'Sale y cae a la misma altura: busca el punto que está a igual distancia de los dos.'),
+    x('ancho-maximo', 'Con **24 m** de cerca se hace un corral contra un muro, que sirve de cuarto lado. Mueve el lado **perpendicular al muro** que da la **mayor área**.', { total: 24, muro: true },
+      'El área es $x(24 - 2x)$: vale 0 en 0 y en 12, y es mayor en $x = 6$ (72 m²).', 'Busca los lados que dan área 0 y piensa en la simetría.'),
+    x('raices-parabola', 'Mueve los dos puntos donde $y = x^2 - 2x - 8$ corta el **eje x**.', { b: -2, c: -8, r: [-2, 4], lo: -6, hi: 6 },
+      '$x^2 - 2x - 8 = (x - 4)(x + 2)$: vale 0 en $-2$ y en 4.', 'Busca dos números que multiplicados den $-8$ y sumados $-2$.'),
+    x('lee-parabola', 'La altura de una pelota es $h = -5t^2 + 20t + 25$ (metros, segundos). Completa.', { et: ['altura al salir', 'instante más alto', 'altura máxima', 'instante en que cae'], metas: ['25 m', '2 s', '45 m', '5 s'], fichas: ['25 m', '2 s', '45 m', '5 s', '20 m', '4 s', '40 m'], mira: ['Reemplaza $t = 0$.', 'En 0 y en 4 tiene la misma altura: ¿qué está en medio?', 'Reemplaza el instante más alto.', 'Busca cuándo la altura es 0.'], trampas: { '1:4 s': 'A los 4 s vuelve a la altura de salida.', '2:20 m': 'Ese es el número que acompaña a t.' }, ok: 'Sale, sube, baja y cae.' },
+      'En 0, 25 m; en $t = 2$, $-20 + 40 + 25 = 45$ m; y en $t = 5$ vale 0.', 'Reemplaza los instantes y usa la simetría.'),
+    x('abre-arriba', '¿Cada parábola tiene **máximo** o **mínimo**?', { et: ['y = 3x² − 1', 'y = −x² + 8x', 'y = 5 − 2x²', 'y = (x − 4)²'], metas: ['mínimo', 'máximo', 'máximo', 'mínimo'], fichas: ['mínimo', 'máximo', 'máximo', 'mínimo', 'máximo', 'mínimo'], mira: ['Mira el signo del que acompaña a x².', 'Mira el signo del que acompaña a x².', 'El término con x² va de segundo: mira su signo.', 'Al desarrollar, x² queda positivo.'], ok: 'Positivo abre arriba; negativo, abajo.' },
+      'Con $x^2$ positivo abre hacia arriba y tiene mínimo; con negativo, máximo.', 'Busca el número que multiplica a x² y mira su signo.'),
+    x('punto-en-curva', 'Toca **todos** los puntos por los que pasa $y = x^2 - 3x$.', { casos: [{ t: '(3, 0)', si: true }, { t: '(2, 2)', no: 'Con 2 da 4 − 6 = −2.' }, { t: '(−1, 4)', si: true }, { t: '(−2, −2)', no: 'Con −2 da 4 + 6 = 10.' }, { t: '(5, 10)', si: true }], falta: 'Falta otro: reemplaza cada x y compara.', ok: 'Los tres cumplen la ecuación.' },
+      '$9 - 9 = 0$, $1 + 3 = 4$ y $25 - 15 = 10$.', 'Reemplaza la primera coordenada y mira si sale la segunda.'),
+    x('sube-parabola', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'La ganancia es $g = -x^2 + 16x$ (miles). ¿Cuál es la ganancia **máxima**?', r: 64, c: '8 \\cdot 8', e: { 8: 'Esa es la cantidad que la produce.', 16: 'Ahí la ganancia es 0.' } },
+      { q: 'Dos números suman **14**. ¿Cuál es el **mayor** producto posible?', r: 48, c: '7 \\cdot 7 - 1', e: { 14: 'Esa es la suma.' } },
+      { q: '¿Cuánto vale $y = 2x^2 - 6$ en $x = -4$?', r: 26, c: '2 \\cdot 16 - 6', e: { 38: 'Los 6 se restan.' } }] },
+      'En $x = 8$ hay 64; $7 \\cdot 7 = 49$; y $32 - 6 = 26$.', 'El máximo está a mitad de camino entre los dos ceros.'),
+    sol('Se venden entradas: con precio $p$ (miles) llegan $60 - 2p$ personas. ¿Con qué precio se recibe más?', ['El ingreso es $p(60 - 2p)$: vale 0 con $p = 0$ y con $p =$ [[30]]', 'El máximo está en la mitad: $p =$ [[15]] mil', 'Llegan [[30 personas]]'], ['60', '20', '45 personas'], '$15 \\cdot 30 = 450$ mil, el mayor ingreso.', 'Halla los precios con ingreso 0 y busca la mitad.'),
+    err('Alguien busca el punto más alto de $y = -x^2 + 10x$.', ['Los ceros están en $x = 0$ y $x = 10$', 'El eje está en $x = 5$', 'La altura máxima es 5'], 2, ['La altura máxima es $-25 + 50 = 25$', 'La altura máxima es 10', 'La altura máxima es $0$'], '5 es dónde ocurre; la altura se halla reemplazando.', '¿Ese número es una x o una y?'),
+    opc('La trayectoria de un chorro es $y = -x^2 + 6x$. El chorro alcanza su altura máxima en:', ['$x = 3$ y la altura es 9', '$x = 6$ y la altura es 0', '$x = 3$ y la altura es 6', '$x = 9$ y la altura es 3'], 0, 'Los ceros son 0 y 6: el eje es 3 y $-9 + 18 = 9$.', 'Busca la mitad entre los dos cortes.'),
+  ]);
+
+  const l2 = leccion('icf-ma-curvas-2', 'Exponenciales y logarítmicas', guion(
+    ['Multiplicar siempre por lo mismo', '$y = C \\cdot k^x$: en cada paso se multiplica por $k$.'],
+    ['Crece o baja', 'Con base mayor que 1 crece; entre 0 y 1, baja sin llegar a 0.'],
+    ['El logaritmo', 'Pregunta a qué exponente hay que elevar.'],
+    ['Escalas', 'En una escala logarítmica cada paso es multiplicar.']), [
+    x('veces-factor', 'Un cultivo tiene **5** bacterias y se **duplica** cada hora. Mueve las horas hasta tener **160**.', { C: 5, k: 2, meta: 160, max: 10, et: 'horas' },
+      'Debe multiplicarse por $160 \\div 5 = 32 = 2^5$: 5 horas.', 'Divide la meta entre lo que había y mira qué potencia de 2 es.'),
+    x('tabla-exponencial', 'La función es $y = 3 \\cdot 2^x$. Completa la tabla.', { et: ['x = 0', 'x = 1', 'x = 3', 'x = −1'], metas: ['3', '6', '24', '1.5'], fichas: ['3', '6', '24', '1.5', '0', '18', '−6'], mira: ['Todo número (no cero) a la cero es 1.', 'Multiplica por 2 una vez.', 'Multiplica por 2 tres veces.', 'Un exponente negativo divide.'], trampas: { '0:0': '$2^0$ es 1, no 0.', '2:18': '$2^3$ es 8, no 6.', '3:−6': 'El exponente negativo no cambia el signo: divide.' }, ok: 'Por 2 en cada paso.' },
+      '$3 \\cdot 1$, $3 \\cdot 2$, $3 \\cdot 8$ y $3 \\div 2$.', 'Halla primero la potencia de 2 y después multiplica por 3.'),
+    x('crece-como', '¿Cada tabla crece de forma **lineal** o **exponencial**?', { et: ['4, 8, 12, 16', '4, 8, 16, 32', '100, 50, 25, 12.5', '100, 80, 60, 40'], metas: ['lineal', 'exponencial', 'exponencial', 'lineal'], fichas: ['lineal', 'exponencial', 'exponencial', 'lineal', 'lineal', 'exponencial'], mira: ['Resta los seguidos.', 'Divide los seguidos.', 'Cada uno es la mitad del anterior.', 'Cada uno es 20 menos que el anterior.'], ok: 'Sumar lo mismo o multiplicar por lo mismo.' },
+      'Con diferencia fija es lineal; con razón fija, exponencial, aunque baje.', 'Prueba restando y dividiendo términos seguidos.'),
+    x('log-es', 'Pon cada logaritmo.', { et: ['log₂ 8', 'log₁₀ 1 000 000', 'log₅ 25', 'log₃ 1'], metas: ['3', '6', '2', '0'], fichas: ['3', '6', '2', '0', '4', '5', '1'], mira: ['¿2 a qué potencia da 8?', 'Cuenta los ceros.', '¿5 a qué potencia da 25?', '¿3 a qué potencia da 1?'], trampas: { '0:4': '$2^4$ es 16.', '2:5': 'Dividiste: se busca el exponente.', '3:1': '$3^1$ es 3.' }, ok: 'El exponente que falta.' },
+      '$2^3 = 8$, $10^6$, $5^2 = 25$ y $3^0 = 1$.', 'Pregunta a qué exponente hay que elevar la base.'),
+    x('sube-o-baja-base', 'Al aumentar x, ¿cada función **crece** o **baja**?', { et: ['y = 1.04ˣ', 'y = 0.9ˣ', 'y = 5 · (1/2)ˣ', 'y = 2 · 3ˣ'], metas: ['crece', 'baja', 'baja', 'crece'], fichas: ['crece', 'baja', 'baja', 'crece', 'crece', 'baja'], mira: ['Compara la base con 1.', 'Compara la base con 1.', 'La base es un medio.', 'La base es 3.'], ok: 'Se compara la base con 1.' },
+      'Con base mayor que 1 crece; con base entre 0 y 1 baja.', 'Mira el número que está elevado, no el que multiplica.'),
+    x('igual-potencia', 'Toca **todas** las expresiones iguales a $2^6$.', { casos: [{ t: '4³', si: true }, { t: '2³ + 2³', no: 'Eso es 8 + 8 = 16.' }, { t: '2² · 2⁴', si: true }, { t: '2² · 2³', no: 'Los exponentes se suman: da 2⁵.' }, { t: '8²', si: true }], falta: 'Falta otra: escribe la base como potencia de 2.', ok: 'Todas valen 64.' },
+      'Como $2^6 = 64$, sirven $4^3$, $2^2 \\cdot 2^4$ y $8^2$.', 'Calcula $2^6$ y compara con él cada expresión.'),
+    x('sube-logaritmo', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Un medicamento de **80 mg** baja a la **mitad** cada 4 horas. ¿Cuántas **horas** pasan hasta que quedan **5 mg**?', r: 16, c: '4 \\cdot 4', e: { 4: 'Son 4 mitades, de 4 horas cada una.' } },
+      { q: '¿Cuánto vale $2^x$ si $x = \\log_2 13$?', r: 13, c: '2^{\\log_2 13}', e: {} },
+      { q: 'Un sismo de magnitud **7** mueve el suelo $10^2$ veces lo que uno de **5**. ¿Cuánto vale $\\log_{10} 100 + \\log_{10} 1\\,000$?', r: 5, c: '2 + 3', e: { 6: 'Los exponentes se suman.' } }] },
+      'Cuatro mitades de 4 horas: 16; el logaritmo deshace la potencia: 13; y $2 + 3 = 5$.', 'Cuenta cuántas veces se multiplica o se divide.'),
+    sol('Un carro de 40 millones pierde cada año el 10 % de su valor. ¿Cuánto vale a los 2 años?', ['Cada año queda el [[90]] %', 'Al año 1 vale [[36]] millones', 'Al año 2 vale [[32.4]] millones'], ['10', '32', '30'], '$40 \\cdot 0.9^2 = 32.4$ millones.', 'El segundo 10 % se saca de lo que quedó.'),
+    err('Alguien resuelve $3^x = 81$.', ['Se escribe 81 como potencia de 3', '$81 = 3^4$', 'Entonces $x = 81 \\div 3 = 27$'], 2, ['Entonces $x = 4$', 'Entonces $x = 3$', 'Entonces $x = 78$'], 'Si las bases son iguales, los exponentes son iguales: $x = 4$.', 'Compara los exponentes de las dos potencias.'),
+    opc('Una población se triplica cada año y hoy hay 20. La expresión que da la población a los $t$ años es:', ['$20 + 3t$', '$20 \\cdot 3t$', '$3 \\cdot 20^t$', '$20 \\cdot 3^t$'], 3, 'Se empieza en 20 y se multiplica por 3 una vez cada año.', 'Prueba con $t = 1$ y $t = 2$.'),
+  ]);
+
+  const l3 = leccion('icf-ma-curvas-3', 'Trigonométricas y periódicas', guion(
+    ['Periódica', 'Se repite igual cada cierto tiempo: ese tiempo es el periodo.'],
+    ['Línea media', 'Está a mitad de camino entre el máximo y el mínimo.'],
+    ['Amplitud', 'Es la distancia de la línea media al máximo.'],
+    ['Seno y giro', 'El seno da la altura de un punto que gira.']), [
+    x('amplitud-onda', 'La marea sube hasta **10 m** y baja hasta **2 m**. Mueve la **línea media** y la **amplitud**.', { min: 2, max: 10, hi: 12 },
+      'La media es $\\tfrac{10 + 2}{2} = 6$ y la amplitud, $10 - 6 = 4$.', 'Primero busca el punto que está a igual distancia del máximo y del mínimo.'),
+    x('periodo-onda', 'Una rueda da **6** vueltas en **72 s**. Mueve su **periodo**.', { n: 6, total: 72, max: 24, u: 's' },
+      'Se reparten los segundos entre las vueltas: $72 \\div 6 = 12$ s.', 'El periodo es lo que tarda una sola vuelta.'),
+    x('lee-onda', 'La temperatura es $T = 18 + 5\\operatorname{sen}(\\ldots)$, con periodo de 24 h. Completa.', { et: ['línea media', 'amplitud', 'temperatura máxima', 'temperatura mínima'], metas: ['18', '5', '23', '13'], fichas: ['18', '5', '23', '13', '24', '10', '0'], mira: ['Es el valor del centro.', 'Es lo que multiplica al seno.', 'El seno llega a 1.', 'El seno llega a −1.'], trampas: { '1:10': 'De mínimo a máximo hay 10: la amplitud es la mitad.', '2:24': 'Ese es el periodo.' }, ok: 'Centro, más y menos la amplitud.' },
+      'El seno va de $-1$ a 1: de $18 - 5 = 13$ a $18 + 5 = 23$.', 'Recuerda entre qué valores se mueve el seno.'),
+    x('en-que-momento', 'Un fenómeno con periodo de **8 h** tuvo un máximo a las **3**. Pon el momento de cada uno.', { et: ['próximo máximo', 'primer mínimo después de las 3', 'segundo máximo después', 'máximo anterior (la víspera)'], metas: ['11', '7', '19', '19 h ayer'], fichas: ['11', '7', '19', '19 h ayer', '8', '5', '24'], mira: ['Suma un periodo.', 'El mínimo está a medio periodo.', 'Suma dos periodos.', 'Resta un periodo a las 3.'], trampas: { '1:5': 'Medio periodo son 4 horas.', '0:8': 'Se suma el periodo a la hora del máximo.' }, ok: 'Periodos y medios periodos.' },
+      '$3 + 8 = 11$, $3 + 4 = 7$, $3 + 16 = 19$ y $3 - 8$ son las 19 h de ayer.', 'Recuerda que de máximo a mínimo hay medio periodo.'),
+    x('altura-rueda', 'La rueda tiene radio **10 m** y su centro está a **12 m**. Gira la cabina hasta que esté, por **primera** vez, a **17 m**.', { r: 10, c: 12, y: 17, g: 30, max: 180 },
+      'Falta subir 5 de 10: $\\operatorname{sen}\\theta = 0.5$, es decir, 30°.', 'Compara lo que sube sobre el centro con el radio.'),
+    x('es-periodica', 'Toca **todas** las situaciones **periódicas**.', { casos: [{ t: 'altura de una cabina de noria', si: true }, { t: 'altura de un niño al crecer', no: 'Crece, pero no vuelve a repetirse.' }, { t: 'hora del amanecer en un año y otro', si: true }, { t: 'dinero que se va gastando', no: 'Baja sin repetir su recorrido.' }, { t: 'posición de un péndulo', si: true }], falta: 'Falta otra que se repite igual.', ok: 'Se repiten cada cierto tiempo.' },
+      'La noria, el amanecer de cada año y el péndulo se repiten.', 'Pregunta si, pasado un tiempo, vuelve a hacer lo mismo.'),
+    x('sube-onda', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Una onda va de **7** a **31**. ¿Cuál es su **amplitud**?', r: 12, c: '24 \\div 2', e: { 24: 'Eso es del mínimo al máximo.', 19: 'Esa es la línea media.' } },
+      { q: 'Un faro da **5** destellos en **60 s**. ¿Cuál es su **periodo** en segundos?', r: 12, c: '60 \\div 5', e: { 5: 'Esos son los destellos.' } },
+      { q: '¿Cuál es el **máximo** de $y = 20 + 15\\cos x$?', r: 35, c: '20 + 15', e: { 20: 'Esa es la línea media.', 15: 'Esa es la amplitud.' } }] },
+      '$24 \\div 2 = 12$; $60 \\div 5 = 12$; y $20 + 15 = 35$.', 'Recuerda que el coseno, como el seno, va de $-1$ a 1.'),
+    sol('El nivel de un tanque va de 4 m a 16 m y se repite cada 6 h. Escribe sus medidas.', ['La línea media es [[10]] m', 'La amplitud es [[6]] m', 'En un día se repite [[4 veces]]'], ['12', '20', '3 veces'], '$\\tfrac{4 + 16}{2} = 10$, $16 - 10 = 6$ y $24 \\div 6 = 4$.', 'Busca primero el centro.'),
+    err('Alguien lee una onda que va de 2 a 8 con periodo 5.', ['La línea media es 5', 'La amplitud es $8 - 2 = 6$', 'Un máximo se repite cada 5'], 1, ['La amplitud es $8 - 5 = 3$', 'La amplitud es 8', 'La amplitud es 5'], 'La amplitud va de la línea media al máximo: 3.', '¿Desde dónde se mide la amplitud?'),
+    opc('El seno de un ángulo puede valer:', ['2', '0.8', '−1.5', '10'], 1, 'El seno va de $-1$ a 1: solo 0.8 está ahí.', 'Piensa en la altura de un punto en un círculo de radio 1.'),
+  ]);
+
+  const l4 = leccion('icf-ma-curvas-4', 'Dominio, rango y cortes', guion(
+    ['Función', 'A cada entrada le toca una sola salida.'],
+    ['Dominio', 'Las entradas que se pueden usar: no se divide entre 0 ni se saca raíz cuadrada de un negativo.'],
+    ['Rango', 'Las salidas que sí aparecen.'],
+    ['Cortes', 'Con el eje y, $x = 0$; con el eje x, $y = 0$.']), [
+    x('rango-ventana', 'La curva va de un extremo al otro. Mueve el piso y el techo hasta su **rango**.', { f: t => t * t - 2, dom: [-1, 3], win: [-2, 4, -4, 8], lo: -2, hi: 7 },
+      'El punto más bajo está en $-2$ (en el vértice) y el más alto, en 7.', 'Recorre la curva y busca el punto más bajo y el más alto, no solo los extremos.'),
+    x('corte-ejes', 'Mueve los cortes de $2x + 3y = 24$ con los ejes.', { a: 2, b: 3, c: 24, max: 14 },
+      'Con $y = 0$, $x = 12$; con $x = 0$, $y = 8$.', 'Piensa cuánto vale la otra coordenada sobre un eje.'),
+    x('dominio-valores', 'Toca **todos** los valores que **no** se pueden usar en $\\dfrac{\\sqrt{x - 2}}{x - 5}$.', { casos: [{ t: 'x = 0', si: true }, { t: 'x = 2', no: 'La raíz de 0 es 0: sí se puede.' }, { t: 'x = 5', si: true }, { t: 'x = 6', no: 'Da raíz de 4 entre 1: sí se puede.' }, { t: 'x = −3', si: true }], falta: 'Falta otro: mira la raíz y también el denominador.', ok: 'Raíz de negativo o división entre 0.' },
+      'Con 0 y $-3$ la raíz es de un negativo; con 5 se divide entre 0.', 'Reemplaza cada valor y mira la raíz y el denominador.'),
+    x('es-funcion', 'Toca **todas** las listas de parejas (entrada, salida) que **sí** son una función.', { casos: [{ t: '(1, 4), (2, 4), (3, 4)', si: true }, { t: '(1, 2), (1, 3), (2, 5)', no: 'La entrada 1 tiene dos salidas.' }, { t: '(0, 7), (5, 1), (9, 0)', si: true }, { t: '(4, 2), (4, −2)', no: 'La entrada 4 tiene dos salidas.' }, { t: '(−1, 1), (1, 1)', si: true }], falta: 'Falta otra: dos entradas sí pueden dar la misma salida.', ok: 'Una sola salida por entrada.' },
+      'Repetir salidas está permitido; repetir una entrada con salidas distintas, no.', 'Mira si alguna entrada aparece con dos salidas.'),
+    x('lee-cortes', 'Para $y = x^2 - 9$, completa.', { et: ['corte con el eje y', 'corte izquierdo con x', 'corte derecho con x', 'menor valor de y'], metas: ['−9', '−3', '3', '−9'], fichas: ['−9', '−3', '3', '−9', '9', '0', '−6'], mira: ['Reemplaza $x = 0$.', 'Busca dónde vale 0.', 'Busca dónde vale 0.', 'El cuadrado es, por lo menos, 0.'], trampas: { '0:0': 'Ese es el valor de x.', '2:9': 'Con 9 da 72.' }, ok: 'Ejes y mínimo.' },
+      'En $x = 0$ vale $-9$; vale 0 en $-3$ y 3; y su mínimo es $-9$.', 'Para cada corte, una de las coordenadas es 0.'),
+    x('contexto-dominio', 'Pon el **dominio** que tiene sentido en cada caso.', { et: ['precio según personas', 'bus de 40 puestos', 'hora de un día', 'lado de un cuadrado'], metas: ['0, 1, 2, 3…', '0, 1, …, 40', 'de 0 a 24', 'más de 0'], fichas: ['0, 1, 2, 3…', '0, 1, …, 40', 'de 0 a 24', 'más de 0', 'todos', 'menos de 0'], mira: ['No hay media persona.', 'Hay un tope de puestos.', 'El tiempo no va a saltos.', 'Puede medir 2.5, pero no 0.'], trampas: { '0:todos': 'No hay menos tres personas.', '2:0, 1, …, 40': 'Un día tiene 24 horas.', '3:todos': 'Un lado no puede ser negativo.' }, ok: 'El contexto manda.' },
+      'Las personas se cuentan, el bus tiene tope, el día va de 0 a 24 y el lado es positivo.', 'Piensa qué números tendrían sentido en la vida real.'),
+    x('sube-funcion', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'La entrada **más pequeña** que se puede usar en $\\sqrt{3x - 36}$.', r: 12, c: '36 \\div 3', e: { 36: 'Con 36 la raíz es de 72: hay menores que sirven.' } },
+      { q: 'Si $f(x) = x^2 + 5$, ¿cuánto vale $f(-6)$?', r: 41, c: '36 + 5', e: { 31: 'El cuadrado de −6 es positivo y se suma 5.' } },
+      { q: '¿Con qué **número** se corta el eje y en $y = 4(x - 2)^2 + 7$?', r: 23, c: '4 \\cdot 4 + 7', e: { 7: 'Ese es el valor del vértice.' } }] },
+      '$36 \\div 3 = 12$; $36 + 5 = 41$; y con $x = 0$, $16 + 7 = 23$.', 'En el eje y la x vale 0; dentro de la raíz no puede haber negativos.'),
+    sol('Analiza $f(x) = \\dfrac{12}{x - 4}$.', ['No se puede usar $x =$ [[4]]', 'Corta el eje y en [[−3]]', 'Con el eje x: [[no corta]]'], ['0', '3', 'corta en 12'], '$12 \\div (-4) = -3$; y 12 entre algo nunca da 0.', 'Reemplaza 0 para el eje y; para el eje x pregunta si puede dar 0.'),
+    err('Alguien busca el dominio de $\\sqrt{10 - x}$.', ['La raíz cuadrada necesita un número que no sea negativo', 'Entonces $10 - x \\geq 0$', 'Por eso $x \\geq 10$'], 2, ['Por eso $x \\leq 10$', 'Por eso $x = 10$', 'Por eso x puede ser cualquiera'], 'Con 11 la raíz sería de $-1$: sirven los números hasta 10.', 'Prueba con 11 y con 9.'),
+    opc('El rango de $y = x^2 + 3$, con x cualquier número real, es:', ['Todos los reales', 'Los reales mayores que 0', 'Los reales mayores o iguales a 3', 'Los reales menores o iguales a 3'], 2, 'El cuadrado es por lo menos 0: y es por lo menos 3, y llega a 3 con $x = 0$.', '¿Cuál es el menor valor que puede tomar el cuadrado?'),
+  ]);
+
+  return mundo('icf-ma-curvas', 'Funciones que Curvan', 'matematicas', [l1, l2, l3, l4], [
+    ['icf-ma-curvas-1', 'El vértice y la abertura dan la parábola.', play('mueve-parabola', 'Pon el **vértice** y la **abertura** de la ecuación', { rounds: [{ a: -1, b: 4, c: -1 }] }, 'El eje está en 2 y la altura es $-4 + 8 - 1 = 3$; abre hacia abajo.', { hint: 'Busca el eje y reemplaza para hallar la altura.' })],
+    ['icf-ma-curvas-1', 'El vértice es donde da la vuelta.', play('apunta-chorro', 'Toca el punto donde el chorro **da la vuelta** y lánzalo', { rounds: [{ title: 'El chorro', items: [{ a: -1, h: 2, k: 5, std: true }] }] }, 'El eje está en 2 y ahí la altura es 5.', { hint: 'Halla el eje y reemplaza en la ecuación.' })],
+    ['icf-ma-curvas-1', 'El máximo está a mitad de camino entre los ceros.', opc('El área de un rectángulo de perímetro 40 y lado $x$ es $x(20 - x)$. El área máxima es:', ['20', '400', '10', '100'], 3, 'Los ceros son 0 y 20; en 10 hay $10 \\cdot 10 = 100$.', 'Busca el lado que está entre los dos que dan área 0.')],
+    ['icf-ma-curvas-2', 'Duplicar hacia adelante es partir hacia atrás.', play('lirios-laguna', 'Los lirios se duplican cada día. Retrocede hasta el día que te piden', { rounds: [{ title: 'La laguna', items: [{ full: 10, ask: 'eighth' }] }] }, 'Un octavo son tres mitades: 3 días antes, el 7.', { hint: 'Cada día hacia atrás es la mitad.' })],
+    ['icf-ma-curvas-2', 'Multiplicar potencias es sumar exponentes.', play('regla-de-calculo', 'Multiplica **sumando distancias** en la regla', { rounds: [{ title: 'Potencias de 3', items: [{ base: 3, a: 9, b: 27 }] }] }, '$3^2 \\cdot 3^3 = 3^5 = 243$.', { hint: 'Escribe cada número como potencia de 3.' })],
+    ['icf-ma-curvas-2', 'El logaritmo es un exponente.', opc('Si $\\log_2 x = 5$, entonces $x$ vale:', ['10', '32', '25', '7'], 1, '$2^5 = 32$.  El logaritmo es el exponente.', 'Escríbelo como potencia.')],
+    ['icf-ma-curvas-3', 'Amplitud, repeticiones y línea media.', play('sintoniza-onda', 'Sintoniza tu onda con la onda fantasma', { rounds: [{ fn: 'sen', target: { a: 2, b: 2, cq: 0, d: 1 }, knobs: ['a', 'b', 'd'] }] }, 'Amplitud 2, dos repeticiones y línea media 1.', { hint: 'Empieza por la línea media y sigue con la altura.' })],
+    ['icf-ma-curvas-3', 'El seno es la altura; el coseno, el avance.', play('noria', 'Gira la noria hasta un ángulo que cumpla la condición', { rounds: [{ prompt: 'Seno positivo y coseno negativo', sen: '+', cos: '-' }] }, 'Arriba y a la izquierda: entre 90° y 180°.', { hint: 'El seno es la altura y el coseno, qué tan a la derecha está.' })],
+    ['icf-ma-curvas-3', 'De mínimo a máximo hay dos amplitudes.', opc('Una onda tiene línea media 30 y amplitud 12. Sus valores van:', ['De 18 a 42', 'De 12 a 30', 'De 0 a 42', 'De 24 a 36'], 0, '$30 - 12 = 18$ y $30 + 12 = 42$.', 'La amplitud se suma y se resta al centro.')],
+    ['icf-ma-curvas-4', 'En el eje x la función vale 0.', play('donde-cae', 'Pon un balde donde **cae el agua** (solo adelante de la boquilla) y abre la llave', { rounds: [{ title: 'El corte', items: [{ eq: '-x^2 + 3x + 10 = 0', roots: [5, -2] }] }] }, '$-x^2 + 3x + 10 = -(x - 5)(x + 2)$: cae en 5.', { hint: 'Busca dos números con producto −10 y suma 3.' })],
+    ['icf-ma-curvas-4', 'En un corte, las dos funciones valen lo mismo.', play('corte-parabola-recta', 'Arrastra la recta hasta que pase por el corte marcado', { rounds: [{ a: 1, m: 2, x0: 3 }] }, 'En $x = 3$ la parábola vale 9: $9 = 6 + n$ y $n = 3$.', { hint: 'En el corte, la recta y la parábola tienen la misma altura.' })],
+    ['icf-ma-curvas-4', 'No se divide entre 0.', opc('El dominio de $f(x) = \\dfrac{x + 1}{x^2 - 16}$ son todos los reales, excepto:', ['$-1$', '16', '4 y $-4$', 'Solo 4'], 2, '$x^2 = 16$ con 4 y con $-4$: ahí se divide entre 0.', 'Busca todos los valores que hacen 0 el denominador.')],
   ]);
 })());
 ;
@@ -7860,6 +7858,114 @@ PI_MUNDOS.push((() => {
   ]);
 })());
 ;
+//#archivo js/courses/preicfes-sc-modelos.js
+// Preicfes · Sociales y Ciudadanas · mundo 10 «Modelos para Decidir» (spec 2026-11-25-preicfes-estructura). Textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const CONCEPTOS = {
+    id: 'icf-conceptos', title: 'Las palabras que ordenan el mundo',
+    ficha: { autor: 'Cuaderno de ciencias sociales', fuente: 'Colección «Ideas»', fecha: 'Febrero de 2026' },
+    paras: [
+      'En una clase, Samir preguntó si Colombia es un Estado, una nación o un país. La profesora contestó que depende de qué se quiera mirar. Un concepto es una herramienta: sirve para ver una parte de la realidad y deja otra en la sombra. Usar uno por otro hace que dos personas discutan sin hablar de lo mismo.',
+      'El Estado es una organización que gobierna un territorio y una población, y que tiene la autoridad para hacer leyes y hacerlas cumplir. Tiene soberanía cuando ningún otro manda sobre él. El gobierno es apenas el grupo de personas que lo dirige por un tiempo: los gobiernos cambian y el Estado continúa.',
+      'La nación es otra cosa: un grupo que se reconoce unido por una historia, una lengua o unas costumbres. Un Estado puede reunir varias naciones, como ocurre en Bolivia, que se define como plurinacional. Y hay naciones sin Estado propio, como el pueblo kurdo, repartido entre varios países.',
+      'Poder es la capacidad de influir en lo que hacen otros. A veces se ejerce por la fuerza; a veces, porque la gente reconoce que quien manda tiene derecho a hacerlo. A eso último se le llama legitimidad. Algo puede ser legal y perder legitimidad: una norma aprobada según las reglas, pero que casi todos consideran injusta.',
+      'La sociedad también se mira por capas. La clase social agrupa según los ingresos, el trabajo o la propiedad; la etnia, según una cultura y un origen compartidos; el género, según lo que una sociedad espera de hombres y mujeres. Una misma persona está en todas a la vez. Cuando es posible subir o bajar de posición, se habla de movilidad social.',
+      'La cultura no es solo arte ni folclor: son los modos de vivir, creer y hacer que se aprenden. Juzgar otra cultura con la medida de la propia es etnocentrismo; tratar de entenderla desde sus propias razones es relativismo cultural. Entender, aclaró la profesora, no obliga a aprobarlo todo: los derechos humanos ponen un límite.',
+    ],
+  };
+  const l1 = leccion('icf-sc-modelos-1', 'Conceptos básicos', guion(
+    ['Para qué un concepto', 'Deja ver una parte de la realidad.'],
+    ['Estado, gobierno y nación', 'Una organización, quienes la dirigen y un grupo que se siente unido.'],
+    ['Poder y legitimidad', 'Influir en otros; y que reconozcan el derecho a mandar.'],
+    ['Sociedad y cultura', 'Clase, etnia, género; y modos de vivir que se aprenden.']), [
+    x('pinta-tipos', 'Pinta cada ejemplo con el concepto que le corresponde.', { doc: CONCEPTOS, plumas: ['Estado', 'gobierno', 'nación'],
+      ...P(['El presidente y sus ministros de este periodo.', 1, '¿Organización, personas o grupo unido?'], ['Un pueblo que comparte lengua e historia, sin país propio.', 2, '¿Organización, personas o grupo unido?'], ['La organización que hace leyes en un territorio.', 0, '¿Organización, personas o grupo unido?'], ['Lo que continúa cuando cambian los gobernantes.', 0, '¿Organización, personas o grupo unido?']), bien: 'Organización, personas y grupo.' },
+      'Los ministros son gobierno, el pueblo es nación y la organización que continúa, Estado.', 'Pregunta si cambia con las elecciones y si depende de sentirse unidos.'),
+    x('genero-o-cita', '¿Es poder por la **fuerza** o por **legitimidad**?', { doc: CONCEPTOS, rot: ['fuerza', 'legitimidad'],
+      ...F(['Obedecen porque los amenazan con armas', 0, '¿Reconocen el derecho a mandar?'], ['Aceptan al alcalde porque lo eligieron', 1, '¿Reconocen el derecho a mandar?'], ['Siguen a la mayora por respeto a su sabiduría', 1, '¿Reconocen el derecho a mandar?'], ['Pagan una «vacuna» por miedo', 0, '¿Reconocen el derecho a mandar?']), bien: 'Miedo o reconocimiento.' },
+      'Armas y miedo son fuerza; la elección y el respeto, legitimidad.', 'Piensa si obedecerían aunque nadie los amenazara.'),
+    x('pista-tipo', 'Ata cada concepto a su caso.', { doc: CONCEPTOS, lineas: ['la hija de un obrero llega a ser jueza', '«qué raro comen ellos, lo normal es lo nuestro»', 'estudiar por qué otro pueblo entierra así a sus muertos', 'ningún otro país decide por este'],
+      ...T(['movilidad social', 0, '¿Dónde cambia la posición?'], ['etnocentrismo', 1, '¿Dónde se juzga con la medida propia?'], ['relativismo cultural', 2, '¿Dónde se intenta entender?'], ['soberanía', 3, '¿Dónde nadie manda de afuera?']), bien: 'Cada caso, su palabra.' },
+      'Subir es movilidad, juzgar es etnocentrismo, entender es relativismo y no recibir órdenes, soberanía.', 'Busca en el texto la explicación que acompaña cada palabra.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: CONCEPTOS, filas: [{ antes: 'Un Estado', topes: ['tiene una sola nación', 'no tiene naciones', 'puede reunir varias naciones'], va: 2 }, { antes: 'Algo legal', topes: ['siempre es legítimo', 'puede perder legitimidad', 'nunca es legítimo'], va: 1 }, { antes: 'Entender otra cultura', topes: ['no obliga a aprobarlo todo', 'obliga a aprobarlo todo', 'es imposible'], va: 0 }], mira: ['Relee el ejemplo de Bolivia.', 'Relee el final del párrafo 4.', 'Relee lo que aclaró la profesora.'], luz: [[3, 'puede reunir varias naciones'], [4, 'puede ser legal y perder legitimidad'], [6, 'no obliga a aprobarlo todo']], bien: 'Varias, puede y no obliga.' },
+      'Puede reunir varias naciones, lo legal puede perder legitimidad y entender no obliga a aprobar.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CONCEPTOS, nums: [2, 3, 6], pregunta: 'Queda en pie', queda: 'El gobierno dirige el Estado por un tiempo.',
+      ...T(['Cuando cambia el gobierno, el Estado termina.', 2, 'Busca qué cambia y qué continúa.'], ['Toda nación tiene su propio Estado.', 5, 'Busca el pueblo kurdo.'], ['La cultura es solo el arte y el folclor.', 6, 'Busca qué no es la cultura solamente.']), bien: 'Continúa, sin Estado y no solo.' },
+      'El Estado continúa, hay naciones sin Estado y la cultura no es solo arte.', 'Saca la palabra clave: termina, toda, solo.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CONCEPTOS, nums: [3, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Bolivia se define como plurinacional.', 0, 'Léela junto al ejemplo.'], ['Estado y nación no siempre coinciden.', 1, 'Compara los dos ejemplos del párrafo 3.'], ['Dos personas de la misma clase pueden ser de distinta etnia.', 1, '¿Por qué cosas agrupa cada capa?'], ['El pueblo kurdo tiene treinta lenguas.', 2, '¿Se dice cuántas tiene?']),
+      luz: [[3, 'se define como plurinacional'], [3, 'naciones sin Estado propio'], [5, 'Una misma persona está en todas a la vez']], bien: 'Comparar ejemplos.' },
+      'Lo plurinacional está escrito; que no coinciden y las capas se deducen; las lenguas no aparecen.', 'Une los ejemplos con las definiciones del texto.'),
+    x('balanza-tesis', 'Idea: «en este municipio hay poca movilidad social». ¿Qué hace cada dato?', { doc: CONCEPTOS, tesis: 'Hay poca movilidad social',
+      ...F(['Nueve de cada diez hijos de jornaleros son jornaleros.', 0, '¿Cambian de posición?'], ['La mitad de los hijos de jornaleros terminó la universidad y cambió de oficio.', 1, '¿Cambian de posición?'], ['El municipio tiene un río.', 2, '¿Habla de posiciones?']), bien: 'Subir o quedarse.' },
+      'Que repitan el oficio la apoya; que cambien la debilita; el río no pesa.', 'Recuerda qué significa movilidad social y compara padres e hijos.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: CONCEPTOS, lineas: ['Un concepto deja ver una parte de la realidad.', 'Samir hizo una pregunta en clase.', 'Estado, gobierno y nación son cosas distintas.', 'El poder puede apoyarse en la fuerza o en la legitimidad.', 'Los kurdos viven en varios países.', 'Clase, etnia, género y cultura ayudan a mirar la sociedad.'], ...S([1, 4], { 0: 'Es la idea del comienzo.', 2: 'Es la primera distinción.', 3: 'Es la idea sobre el poder.', 5: 'Son las otras herramientas.' }), bien: 'Herramientas y distinciones.' },
+      'La pregunta de Samir y los kurdos son ejemplos; lo demás resume.', 'Deja lo que serviría para analizar otro país.'),
+  ]);
+
+  const MODELOS = {
+    id: 'icf-rio-manso', title: 'Cuatro maneras de arreglar un pueblo',
+    ficha: { autor: 'Cuaderno de ciencias sociales', fuente: 'Colección «Ideas»', fecha: 'Marzo de 2026' },
+    paras: [
+      'Río Manso tiene un hospital viejo, una escuela llena y poco dinero. El concejo pidió propuestas. Llegaron cuatro, y detrás de cada una había una idea distinta de lo que debe hacer un Estado. A esas ideas simplificadas, que ayudan a comparar, las ciencias sociales les dicen modelos.',
+      'La primera propone bajar impuestos y dejar que empresas privadas compitan por atender a la gente. Confía en la libertad de cada quien y en el mercado: el Estado debe ser pequeño y cuidar las reglas. Es la lógica liberal en lo económico. Sus críticos preguntan qué pasa con quien no puede pagar.',
+      'La segunda propone cobrar más a quienes más tienen y ofrecer salud y escuela gratuitas para todos. Es la lógica del Estado de bienestar, que mantiene el mercado y reparte una parte de lo que produce. Sus críticos preguntan cuánto puede cobrarse antes de que las empresas se vayan.',
+      'La tercera propone que el municipio sea dueño de las principales empresas y decida qué producir. Es la lógica socialista: lo que es de todos debe servir a todos. Sus críticos señalan que, sin competencia ni controles, quien administra puede volverse ineficiente o abusar del poder.',
+      'La cuarta viene de la vereda: que las comunidades decidan en asamblea, según sus costumbres, y que el bienestar no se mida solo en dinero, sino en agua limpia, tiempo y vida en común. Es la lógica comunitaria, cercana a lo que varios pueblos andinos llaman buen vivir. Sus críticos preguntan si funciona para una ciudad de un millón de personas.',
+      'El concejo terminó mezclando: salud pública, un parque industrial privado y presupuesto votado en las veredas. Casi ningún país usa un modelo puro. Reconocerlos sirve para otra cosa: ante una decisión, preguntar qué valor pone primero, si la libertad, la igualdad, la propiedad común o la comunidad; a quién beneficia, y qué deja por fuera. Ningún modelo es neutral; tampoco lo es quien lo critica. Por eso conviene comparar las respuestas que da cada uno y no solo su nombre.',
+    ],
+  };
+  const l2 = leccion('icf-sc-modelos-2', 'Modelos y decisiones públicas', guion(
+    ['Modelo', 'Una idea simplificada que ayuda a comparar.'],
+    ['Cuatro lógicas', 'Liberal, de bienestar, socialista y comunitaria.'],
+    ['Valores', 'Cada una pone primero un valor y recibe críticas.'],
+    ['Mezclas', 'Casi ningún país usa un modelo puro.']), [
+    x('pista-tipo', 'Ata cada medida a la lógica que tiene detrás.', { doc: MODELOS, lineas: ['menos impuestos y más competencia', 'impuesto progresivo para salud gratuita', 'el municipio compra la fábrica de leche', 'la asamblea decide el turno del agua'],
+      ...T(['liberal', 0, '¿Cuál confía en el mercado?'], ['de bienestar', 1, '¿Cuál mantiene el mercado y reparte?'], ['socialista', 2, '¿Cuál vuelve pública la empresa?'], ['comunitaria', 3, '¿Cuál decide en asamblea?']), bien: 'Mercado, reparto, propiedad y asamblea.' },
+      'Competir es liberal, repartir es de bienestar, ser dueños es socialista y la asamblea, comunitaria.', 'Pregunta quién decide y quién es dueño en cada medida.'),
+    x('pinta-tipos', 'Pinta cada frase con el valor que pone primero.', { doc: MODELOS, plumas: ['libertad', 'igualdad', 'comunidad'],
+      ...P(['«Que cada quien escoja su médico y lo pague».', 0, '¿Escoger, repartir o vivir juntos?'], ['«Que nadie se quede sin escuela por ser pobre».', 1, '¿Escoger, repartir o vivir juntos?'], ['«Decidamos juntos, como nos enseñaron los mayores».', 2, '¿Escoger, repartir o vivir juntos?'], ['«El Estado no debe decirme qué vender».', 0, '¿Escoger, repartir o vivir juntos?']), bien: 'Escoger, repartir y juntos.' },
+      'Escoger y vender sin permiso es libertad, la escuela para todos igualdad y decidir juntos, comunidad.', 'Busca la palabra que delata lo que más le importa a quien habla.'),
+    x('voz-de-la-fuente', 'Ata cada crítica a la propuesta que la recibe.', { ayuda: 'Tira un hilo desde cada crítica hasta la propuesta.', doc: MODELOS, portadas: [['Primera: mercado', 'propuesta'], ['Segunda: bienestar', 'propuesta'], ['Tercera: socialista', 'propuesta'], ['Cuarta: comunitaria', 'propuesta']],
+      ...T(['deja por fuera a quien no puede pagar', 0, '¿Cuál depende de pagar?'], ['las empresas podrían irse', 1, '¿Cuál cobra más?'], ['quien administra puede abusar', 2, '¿Cuál concentra la propiedad?'], ['quizás no sirve en una gran ciudad', 3, '¿Cuál se piensa para comunidades?']), bien: 'Cada modelo, su crítica.' },
+      'El mercado excluye a quien no paga, cobrar espanta empresas, concentrar permite abusos y la asamblea es difícil en grande.', 'Busca la última oración del párrafo de cada propuesta.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: MODELOS, filas: [{ antes: 'Los modelos son', topes: ['copias exactas de un país', 'leyes', 'ideas simplificadas'], va: 2 }, { antes: 'El Estado de bienestar', topes: ['elimina el mercado', 'mantiene el mercado', 'no cobra impuestos'], va: 1 }, { antes: 'Un modelo puro lo usa', topes: ['casi ningún país', 'la mitad de los países', 'todo país'], va: 0 }], mira: ['Relee el final del párrafo 1.', 'Relee la segunda propuesta.', 'Relee el párrafo 6.'], luz: [[1, 'ideas simplificadas'], [3, 'mantiene el mercado'], [6, 'Casi ningún país usa un modelo puro']], bien: 'Simplificadas, mantiene y casi ninguno.' },
+      'Son ideas simplificadas, el de bienestar mantiene el mercado y casi ningún país usa uno puro.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: MODELOS, nums: [2, 5, 6], pregunta: 'Queda en pie', queda: 'Conviene preguntar a quién beneficia una decisión.',
+      ...T(['Para la lógica liberal, el Estado debe ser grande.', 1, 'Busca cómo debe ser el Estado.'], ['El buen vivir mide el bienestar solo en dinero.', 4, 'Busca en qué más se mide.'], ['El concejo escogió una sola propuesta.', 7, 'Busca qué terminó haciendo.']), bien: 'Pequeño, no solo y mezclando.' },
+      'El Estado debe ser pequeño, el bienestar no se mide solo en dinero y el concejo mezcló.', 'Saca la palabra clave: grande, solo, una sola.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 1 la oración que **define** qué es un modelo.', { doc: MODELOS, nums: [1], apuesta: 'Una idea simplificada para comparar.', ...S(['1.3'], { '1.0': 'Describe los problemas del pueblo.', '1.1': 'Cuenta lo que hizo el concejo.', '1.2': 'Dice qué había detrás, pero no lo define.' }), bien: 'Ideas simplificadas que ayudan a comparar.' },
+      'La última oración lo define: ideas simplificadas, que ayudan a comparar.', 'Busca la oración que pone el nombre y dice para qué sirve.'),
+    x('balanza-tesis', 'Propuesta: «que una empresa privada maneje el hospital de Río Manso». ¿Qué hace cada dato?', { doc: MODELOS, tesis: 'Que una empresa privada maneje el hospital',
+      ...F(['En un pueblo parecido, la empresa redujo a la mitad las filas sin cobrar más.', 0, '¿Mejoró la atención?'], ['Seis de cada diez habitantes no podrían pagar las tarifas previstas.', 1, '¿A quién deja por fuera?'], ['El hospital está pintado de blanco.', 2, '¿Cambia la decisión?']), bien: 'Eficiencia y acceso.' },
+      'Las filas la apoyan; las tarifas la debilitan; el color no pesa.', 'Pregunta si el dato hace más o menos conveniente la medida para la gente.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: MODELOS, lineas: ['Los modelos son ideas simplificadas sobre lo que debe hacer un Estado.', 'La escuela está llena.', 'Hay lógicas liberal, de bienestar, socialista y comunitaria.', 'Cada una pone primero un valor y recibe críticas.', 'Habrá un parque industrial.', 'Casi siempre se mezclan.'], ...S([1, 4], { 0: 'Es la definición.', 2: 'Son los modelos.', 3: 'Es lo que permite compararlos.', 5: 'Es la conclusión.' }), bien: 'Definición, modelos, valores y mezcla.' },
+      'La escuela y el parque son detalles; lo demás resume.', 'Deja lo que usarías para analizar otra decisión.'),
+  ]);
+
+  const AGUA = {
+    id: 'icf-acueducto-alto', title: 'El agua de Cerro Alto',
+    paras: [
+      'Cerro Alto tiene cuatro mil habitantes y un acueducto construido a mano por sus abuelos. Lo maneja una junta de vecinos elegida cada dos años. Cobra una tarifa baja e igual para todos y, cuando falta plata, se llama a convite: un día de trabajo por familia. «Aquí el agua no es de nadie, por eso la cuidamos todos», dice la fundadora.',
+      'En 2023 la sequía bajó el caudal y los nuevos conjuntos de casas aumentaron el consumo. Hubo semanas con agua un día sí y otro no. La alcaldía, elegida el año anterior con una votación alta, propuso entregar el servicio a una empresa privada por veinte años. La empresa prometió arreglar las tuberías, poner contadores y cobrar según lo que gaste cada casa. «El que gasta más debe pagar más; así nadie desperdicia», explicó su representante.',
+      'El contrato era legal: cumplía todas las normas. Pero en la audiencia casi nadie lo apoyó. «Ustedes fueron elegidos para dirigir, no para entregar lo que hicimos nosotros», dijo un vecino. Una concejala propuso otra salida: que el municipio fuera el dueño y que las casas de mayor valor pagaran una tarifa más alta para subsidiar a las de menor valor. Un grupo de jóvenes recordó que en la vereda de abajo vive una comunidad indígena que considera sagrado el nacimiento y que nadie la había consultado.',
+      'Un profesor hizo un cuadro en el tablero. En cada columna puso una propuesta; en cada fila, una pregunta: quién decide, quién es dueño, quién paga y quién queda por fuera. «No les voy a decir cuál es mejor», advirtió. «Les pido que no comparen los nombres, sino las respuestas».',
+      'Después de cinco meses acordaron que la junta siguiera administrando, con contadores y cobro según el consumo, una tarifa menor para los hogares de menos ingresos y apoyo técnico del municipio. La comunidad indígena quedó con un puesto y con derecho a opinar sobre el nacimiento. El profesor borró el tablero y dejó solo las preguntas. «Esas sirven para el próximo problema», dijo.',
+    ],
+  };
+  const Q = preg(AGUA, 'sociales');
+  return mundo('icf-sc-modelos', 'Modelos para Decidir', 'sociales', [l1, l2], [
+    ['icf-sc-modelos-1', 'Legal y legítimo no son lo mismo.', Q('El contrato con la empresa era legal, pero en la audiencia se mostró que le faltaba:', ['Soberanía', 'Legitimidad', 'Movilidad social', 'Territorio'], 1, 'Cumplía las normas, pero casi nadie lo reconocía como aceptable.', 'Compara lo que dice la norma con lo que aceptó la gente.')],
+    ['icf-sc-modelos-1', 'El gobierno dirige por un tiempo.', Q('La frase «fueron elegidos para dirigir, no para entregar lo que hicimos nosotros» distingue entre:', ['Etnia y género', 'Nación y cultura', 'El gobierno de turno y lo que pertenece a la comunidad', 'La clase alta y la clase baja'], 2, 'El vecino reconoce que pueden dirigir, pero no disponer de lo construido por todos.', 'Pregunta qué les reconoce y qué les niega.')],
+    ['icf-sc-modelos-1', 'La cultura son modos de vivir y creer.', Q('Que la comunidad indígena considere sagrado el nacimiento muestra que:', ['El agua es también un asunto cultural', 'El agua no sirve para beber', 'El acueducto es ilegal', 'La alcaldía es indígena'], 0, 'Un mismo lugar tiene un sentido que viene de los modos de creer de un grupo.', 'Relee qué significa el nacimiento para esa comunidad.')],
+    ['icf-sc-modelos-2', 'Cada lógica responde distinto quién decide y quién paga.', Q('La forma en que la junta manejaba el acueducto al comienzo corresponde sobre todo a una lógica:', ['Liberal', 'De bienestar', 'Colonial', 'Comunitaria'], 3, 'Decisión de vecinos, convite y cuidado común.', 'Mira quién decide y cómo se trabaja.')],
+    ['icf-sc-modelos-2', 'Propiedad pública y subsidio.', Q('La propuesta de la concejala pone primero:', ['La igualdad, porque quien más tiene ayuda a quien menos tiene', 'La libertad de escoger empresa', 'La competencia', 'El lucro del municipio'], 0, 'Las casas de mayor valor subsidian a las de menor valor.', 'Relee quién pagaría más y para qué.')],
+    ['icf-sc-modelos-2', 'Comparar respuestas, no nombres.', Q('El cuadro del profesor sirve para:', ['Mostrar que todas son iguales', 'Escoger la más barata', 'Comparar propuestas con los mismos criterios', 'Defender a la empresa'], 2, 'Las mismas preguntas se aplican a cada propuesta.', 'Mira qué puso en las filas y qué pidió.')],
+  ]);
+})());
+;
 //#archivo js/courses/preicfes-cn-indaga.js
 // Preicfes · Ciencias Naturales · mundo 1 «Indagación Científica» (spec 2026-11-20-curso-preicfes): la competencia que más
 // pregunta la prueba de ciencias: la pregunta de un experimento, sus variables, el control, los datos y qué se puede concluir.
@@ -9092,6 +9198,118 @@ PI_MUNDOS.push((() => {
     ['icf-cn-reacciones-3', 'Ácido y base reaccionan.', pl('resume-parrafo', 'Cada párrafo en una frase', { paras: [4, 3], options: ['Un ácido y una base sueltan el gas que infla.', 'El calor termina el trabajo.', 'El bicarbonato es un ácido.', 'El horno enfría la masa.'], key: [0, 1] }, 'El 4 habla del polvo de hornear; el 3, del horno; las otras dicen lo contrario.', 'El resumen no puede contradecir el párrafo.')],
     ['icf-cn-reacciones-3', 'Con base de más, la mezcla queda básica.', pl('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { labels: ['presenta la reacción', 'explica qué pasa con la masa', 'cuenta lo que hace el horno', 'muestra otra forma de inflar', 'da una medición', 'compara panaderías'], key: [0, 1, 2, 3, 4] }, 'Reacción, masa, horno, otra forma y medición; no hay panaderías.', 'Mira qué agrega cada párrafo.')],
     ['icf-cn-reacciones-3', 'El sabor a jabón delata una base.', opc('La torta con exceso de bicarbonato sabe a jabón porque:', ['Quedó ácida', 'Se evaporó el alcohol', 'Murió la levadura', 'Quedó básica'], 3, 'El bicarbonato sobrante es una base.', 'Recuerda qué clase de sustancia es el bicarbonato.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-cn-ondas.js
+// Preicfes · Ciencias Naturales · mundo 10 «Ondas, Luz y Sonido» (spec 2026-11-25-preicfes-estructura). Textos y datos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, sol, err, opc, guion } = ICF;
+
+  const CUERDA = {
+    id: 'icf-cuerda', title: 'Lo que viaja y lo que se queda',
+    ficha: { autor: 'Club de ciencias', fuente: 'Cuaderno de laboratorio', fecha: 'Marzo de 2026' },
+    paras: [
+      'Una onda es una perturbación que viaja. Lleva energía de un lugar a otro, pero no lleva la materia: un corcho en un estanque sube y baja mientras la onda pasa, y se queda casi en el mismo sitio. Las que necesitan un medio, como el sonido o las olas, se llaman mecánicas; la luz no lo necesita: es electromagnética y cruza el vacío.',
+      'Si el medio vibra de lado a lado mientras la onda avanza, como una cuerda sacudida, es transversal. Si vibra en la misma dirección en que avanza, como un resorte que se aprieta y se suelta, es longitudinal. El sonido en el aire es de esta última clase: zonas apretadas y zonas sueltas que viajan.',
+      'Para describirla se mide la amplitud, que es cuánto se aparta del centro; la longitud de onda, que es la distancia entre dos crestas seguidas, y la frecuencia, que es cuántas vibraciones ocurren en un segundo y se mide en hertz. El periodo es lo que tarda una vibración: si hay cinco por segundo, cada una tarda un quinto de segundo.',
+      'La rapidez es la longitud de onda multiplicada por la frecuencia. La pone el medio, no quien produce la onda: en el aire, a unos 20 °C, el sonido viaja a cerca de 340 metros por segundo, sea grave o agudo. Por eso, si la frecuencia se duplica, la longitud de onda se reduce a la mitad. En el agua, el sonido va más de cuatro veces más rápido que en el aire.',
+      'En el sonido, la frecuencia es el tono: más frecuencia, más agudo. La amplitud es la intensidad: más amplitud, más fuerte. Los humanos oímos, más o menos, de 20 a 20 000 hertz; los perros llegan más arriba. Lo que pasa de nuestro límite se llama ultrasonido.',
+      'En la luz visible, la frecuencia es el color: el rojo tiene la menor y el violeta, la mayor. En el vacío todos los colores van igual de rápido, a unos 300 000 kilómetros por segundo. Por eso se ve el rayo antes de oír el trueno: contar los segundos y multiplicarlos por 340 da, más o menos, la distancia en metros.',
+    ],
+  };
+  const l1 = leccion('icf-cn-ondas-1', 'Frecuencia y longitud', guion(
+    ['Qué viaja', 'La energía; la materia vibra y se queda.'],
+    ['Transversal y longitudinal', 'Vibra de lado o en la misma dirección.'],
+    ['Medidas', 'Amplitud, longitud de onda, frecuencia y periodo.'],
+    ['Rapidez', 'Longitud por frecuencia; la pone el medio.']), [
+    x('largo-onda', 'Una onda viaja a **24 m/s** con frecuencia de **3 Hz**. Mueve su **longitud de onda**.', { v: 24, f: 3, max: 16, u: 'm' },
+      'La rapidez entre la frecuencia: $24 \\div 3 = 8$ m de longitud.', 'La longitud por la frecuencia debe dar la rapidez: ¿qué número falta?'),
+    x('cuenta-vibraciones', 'El dibujo muestra lo que vibró un punto en **4 s**. Mueve su **frecuencia**.', { n: 12, t: 4, max: 12 },
+      'Hay 12 vibraciones en 4 s: 3 cada segundo, 3 Hz.', 'Cuenta las vibraciones completas y repártelas entre los segundos.'),
+    x('genero-o-cita', '¿La onda es **mecánica** o **electromagnética**?', { doc: CUERDA, rot: ['mecánica', 'electromagnética'],
+      ...F(['El sonido de una flauta', 0, '¿Necesita un medio?'], ['La luz de una estrella', 1, '¿Necesita un medio?'], ['Las olas de un lago', 0, '¿Necesita un medio?'], ['La señal de radio de un satélite', 1, '¿Necesita un medio?'], ['El temblor del suelo', 0, '¿Necesita un medio?']), bien: 'Con medio o en el vacío.' },
+      'Sonido, olas y temblores necesitan un medio; luz y radio cruzan el vacío.', 'Pregunta si podría llegar atravesando el espacio vacío.'),
+    x('tono-o-volumen', '¿Qué se cambia en el sonido de cada caso?', { et: ['subir el volumen', 'cantar más agudo', 'tocar más suave', 'voz más grave'], metas: ['amplitud', 'frecuencia', 'amplitud', 'frecuencia'], fichas: ['amplitud', 'frecuencia', 'amplitud', 'frecuencia', 'rapidez', 'rapidez'], mira: ['¿Es más fuerte o más agudo?', '¿Es más fuerte o más agudo?', '¿Cambia la fuerza o el tono?', '¿Cambia la fuerza o el tono?'], trampas: { '0:rapidez': 'La rapidez la pone el medio.', '1:rapidez': 'La rapidez la pone el medio.', '2:rapidez': 'La rapidez la pone el medio.', '3:rapidez': 'La rapidez la pone el medio.' }, ok: 'Fuerza: amplitud. Tono: frecuencia.' },
+      'El volumen es amplitud; el tono, frecuencia; la rapidez no cambia.', 'Separa lo fuerte o suave de lo agudo o grave.'),
+    x('pista-tipo', 'Ata cada medida a su definición.', { doc: CUERDA, lineas: ['cuánto se aparta del centro', 'distancia entre dos crestas seguidas', 'vibraciones en un segundo', 'lo que tarda una vibración'],
+      ...T(['amplitud', 0, '¿Cuál mide qué tan alta es?'], ['longitud de onda', 1, '¿Cuál es una distancia entre crestas?'], ['frecuencia', 2, '¿Cuál cuenta en cada segundo?'], ['periodo', 3, '¿Cuál es un tiempo?']), bien: 'Altura, distancia, cuántas y cuánto tarda.' },
+      'La amplitud se aparta, la longitud separa crestas, la frecuencia cuenta y el periodo tarda.', 'Mira si cada una es una distancia, un número por segundo o un tiempo.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CUERDA, nums: [1, 4, 6], pregunta: 'Queda en pie', queda: 'El sonido viaja más rápido en el agua que en el aire.',
+      ...T(['La onda arrastra el corcho hasta la orilla.', 1, 'Busca qué hace el corcho.'], ['Los sonidos agudos viajan más rápido por el aire.', 4, 'Busca quién pone la rapidez.'], ['En el vacío, la luz roja es más lenta que la violeta.', 8, 'Busca cómo van los colores en el vacío.']), bien: 'Se queda, el medio e igual.' },
+      'El corcho se queda, la rapidez la pone el medio y los colores van igual en el vacío.', 'Saca la palabra clave: corcho, agudos, roja.'),
+    x('lee-escala', 'La gráfica muestra la rapidez del sonido (en m/s) en tres gases. Pon cada valor y cuánto **mayor** es la tercera que la primera.', { vals: [250, 350, 450], rot: ['gas 1', 'gas 2', 'gas 3'], hi: 500, st: 100, et: ['gas 1', 'gas 2', 'gas 3', 'diferencia'], ops: ['', '', ''], metas: ['250', '350', '450', '200'], fichas: ['250', '350', '450', '200', '205', '305', '700'],
+      mira: ['Está a mitad de camino entre 200 y 300.', 'Está a mitad de camino entre 300 y 400.', 'Está a mitad de camino entre 400 y 500.', 'Resta la primera a la tercera.'], trampas: { '0:205': 'Cada línea vale 100: la mitad son 50.', '1:305': 'Cada línea vale 100: la mitad son 50.', '3:700': 'Eso es la suma.' }, ok: 'El medio cambia la rapidez.' },
+      'Las líneas van de 100 en 100: 250, 350 y 450. La diferencia es 200 m/s.', 'Mira cuánto vale cada línea antes de leer.'),
+    x('sube-rapidez', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Longitud de **0.5 m** y frecuencia de **80 Hz**. ¿Cuál es la **rapidez** en m/s?', r: 40, c: '0.5 \\cdot 80', e: { 80: 'Esa es la frecuencia.' } },
+      { q: 'Cada vibración tarda **0.05 s**. ¿Cuál es la **frecuencia** en Hz?', r: 20, c: '1 \\div 0.05', e: { 6: 'Se divide 1 entre el periodo.' } },
+      { q: 'La rapidez no cambia y la frecuencia se **triplica**. Si la longitud era **60 cm**, ¿cuánto mide ahora?', r: 20, c: '60 \\div 3', e: { 60: 'Con otra frecuencia cambia.' } }] },
+      '$0.5 \\cdot 80 = 40$; $1 \\div 0.05 = 20$; y $60 \\div 3 = 20$ cm.', 'Con la misma rapidez, si una sube, la otra baja en la misma proporción.'),
+    sol('Se ve un rayo y el trueno se oye 5 s después. ¿A qué distancia cayó?', ['El sonido recorre cada segundo [[340]] m', 'En 5 s recorre [[1700]] m', 'En kilómetros son [[1.7]]'], ['300', '68', '17'], '$340 \\cdot 5 = 1\\,700$ m: 1.7 km.', 'La luz llega casi al instante: usa la rapidez del sonido.'),
+    err('Alguien compara dos sonidos en el mismo aire: uno de 200 Hz y otro de 400 Hz.', ['El de 400 Hz es más agudo', 'Los dos viajan igual de rápido', 'El de 400 Hz tiene el doble de longitud de onda'], 2, ['El de 400 Hz tiene la mitad de longitud de onda', 'Los dos tienen la misma longitud de onda', 'El de 400 Hz no tiene longitud de onda'], 'Con la misma rapidez, doble frecuencia es mitad de longitud.', '¿Qué producto debe quedar igual?'),
+    opc('En una cuerda se aumenta solo la amplitud de la onda, sin cambiar la cuerda ni la frecuencia. Entonces:', ['La onda transporta más energía', 'La onda viaja más rápido', 'La longitud de onda se duplica', 'El periodo se reduce'], 0, 'La rapidez la pone la cuerda; más amplitud es más energía.', 'Piensa qué depende del medio y qué no.'),
+  ]);
+
+  const ESPEJO = {
+    id: 'icf-espejo', title: 'Rebotar, doblarse o quedarse',
+    ficha: { autor: 'Club de ciencias', fuente: 'Cuaderno de laboratorio', fecha: 'Abril de 2026' },
+    paras: [
+      'Cuando una onda llega a una superficie pueden pasar tres cosas: que rebote, que siga del otro lado o que sea absorbida. Casi siempre ocurre un poco de cada una. Un vidrio deja pasar la mayor parte de la luz y devuelve una pequeña parte: por eso, de noche, nos vemos en la ventana.',
+      'Al rebotar, o reflejarse, el ángulo con que sale es igual al ángulo con que llega. Los dos se miden desde la normal, una línea perpendicular a la superficie. En un espejo los rayos salen ordenados y forman una imagen; en una hoja de papel, que es rugosa, salen en todas direcciones.',
+      'El eco es el sonido reflejado. Si grito frente a un cerro y el eco vuelve a los dos segundos, el sonido hizo ida y vuelta: el cerro está a la mitad de los 680 metros que recorrió. Los murciélagos y los barcos usan esa idea con ultrasonido. En una sala llena de cortinas casi no hay eco, porque las telas lo absorben.',
+      'Al pasar de un medio a otro, la onda cambia de rapidez y, si entra inclinada, de dirección. Eso es la refracción. Cuando la luz pasa del aire al agua, va más despacio y se acerca a la normal; al salir del agua al aire, se aleja. Si llega derecha, sobre la normal, no se desvía.',
+      'Por la refracción, un lápiz metido en un vaso parece partido y una moneda en el fondo parece más cerca de la superficie. La frecuencia no cambia al pasar de un medio a otro; la longitud de onda, sí. Como cada color se desvía un poco distinto, un prisma, o una gota de lluvia, separa la luz blanca: de ahí sale el arcoíris.',
+      'Si la luz va del agua hacia el aire y llega muy inclinada, ya no puede salir: se refleja toda hacia adentro. Se llama reflexión total interna. Con ella funciona la fibra óptica, un hilo de vidrio por el que la luz viaja rebotando y lleva los mensajes de internet a miles de kilómetros.',
+    ],
+  };
+  const l2 = leccion('icf-cn-ondas-2', 'Reflexión y refracción', guion(
+    ['Tres destinos', 'Rebotar, pasar o ser absorbida.'],
+    ['Reflexión', 'Sale con el mismo ángulo con que llega, desde la normal.'],
+    ['Eco', 'El sonido va y vuelve: la distancia es la mitad.'],
+    ['Refracción', 'Al cambiar de medio cambia la rapidez y, si entra inclinada, la dirección.']), [
+    x('refleja-angulo', 'Un rayo llega al espejo formando **35° con el espejo**. Mueve el rayo que sale, medido **desde la normal**.', { g: 55, con: true },
+      'Con la normal forma $90 - 35 = 55°$, y sale con el mismo ángulo.', 'El ángulo con el espejo y el de la normal completan 90°.'),
+    x('eco-distancia', 'En un aire donde el sonido va a **340 m/s**, el eco vuelve a los **3 s**. Mueve la distancia al cerro.', { v: 340, t: 3, max: 1200, paso: 10 },
+      'Recorrió $340 \\cdot 3 = 1\\,020$ m en ida y vuelta: el cerro está a 510 m.', 'Halla lo que recorrió en total y piensa que fue y volvió.'),
+    x('se-acerca-normal', 'La luz pasa de un medio a otro. ¿Qué hace el rayo?', { et: ['del aire al agua, inclinado', 'del agua al aire, inclinado', 'del aire al agua, sobre la normal', 'del aire al vidrio, inclinado'], metas: ['se acerca', 'se aleja', 'no se desvía', 'se acerca'], fichas: ['se acerca', 'se aleja', 'no se desvía', 'se acerca', 'se aleja', 'no se desvía'], mira: ['En el agua va más despacio.', 'En el aire va más rápido.', 'Llega derecho.', 'En el vidrio va más despacio.'], trampas: { '2:se acerca': 'Cambia la rapidez, pero no la dirección.' }, ok: 'Más despacio, se acerca; más rápido, se aleja.' },
+      'Al ir más despacio se acerca a la normal; al ir más rápido, se aleja; derecho no se desvía.', 'Pregunta en qué medio va más despacio y si entra inclinado.'),
+    x('genero-o-cita', '¿Es **reflexión** o **refracción**?', { doc: ESPEJO, rot: ['reflexión', 'refracción'],
+      ...F(['El eco en un cañón', 0, '¿Rebota o cambia de medio?'], ['Un lápiz que parece partido en el agua', 1, '¿Rebota o cambia de medio?'], ['La luna vista en un charco', 0, '¿Rebota o cambia de medio?'], ['La lente de unas gafas', 1, '¿Rebota o cambia de medio?']), bien: 'Rebotar o cambiar de medio.' },
+      'Eco y charco rebotan; el lápiz y la lente cambian de medio.', 'Mira si la onda vuelve o atraviesa la superficie.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: ESPEJO, nums: [1, 4, 5], pregunta: 'Queda en pie', queda: 'Una gota de lluvia puede separar los colores.',
+      ...T(['El vidrio deja pasar toda la luz.', 2, 'Busca qué devuelve el vidrio.'], ['Un rayo que llega sobre la normal se desvía.', 6, 'Busca qué pasa si llega derecha.'], ['Al entrar al agua cambia la frecuencia de la luz.', 8, 'Busca qué no cambia.']), bien: 'Devuelve, no se desvía y no cambia.' },
+      'El vidrio devuelve una parte, el rayo derecho no se desvía y la frecuencia no cambia.', 'Saca la palabra clave: toda, normal, frecuencia.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: ESPEJO, nums: [2, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Las telas absorben el sonido.', 0, 'Léela junto a la sala de cortinas.'], ['Una pared lisa y dura da más eco que una cortina.', 1, '¿Qué hacen las telas con el sonido?'], ['Si el eco volviera en un segundo, el cerro estaría a 170 metros.', 1, 'Usa la misma cuenta del párrafo 3.'], ['El cerro está cubierto de pinos.', 2, '¿Se dice qué tiene?']),
+      luz: [[3, 'las telas lo absorben'], [3, 'a la mitad de los 680 metros']], bien: 'Comparar y calcular.' },
+      'Las telas están escritas; la pared y los 170 m se deducen; los pinos no aparecen.', 'Haz la cuenta de ida y vuelta con otro tiempo.'),
+    x('balanza-tesis', 'Hipótesis: «la luz se desvía porque cambia de rapidez». ¿Qué hace cada dato?', { doc: ESPEJO, tesis: 'Se desvía porque cambia de rapidez',
+      ...F(['Entre dos líquidos en los que va igual de rápido, no se desvía.', 0, '¿Qué pasa si la rapidez no cambia?'], ['Entre dos medios con la misma rapidez, se desvía mucho.', 1, 'Si fuera cierto, ¿haría falta el cambio de rapidez?'], ['El vaso es de plástico rojo.', 2, '¿Habla de la rapidez?']), bien: 'Quitar la causa la pone a prueba.' },
+      'Sin cambio y sin desvío la apoya; sin cambio y con desvío la debilita; el color no pesa.', 'Compara lo que pasa cuando la rapidez cambia y cuando no.'),
+    sol('Un barco envía un sonido al fondo y lo recibe 0.4 s después. En el agua va a 1 500 m/s. ¿Qué profundidad hay?', ['En total recorre $1\\,500 \\cdot 0.4 =$ [[600]] m', 'Fue ida y [[vuelta]]', 'La profundidad es [[300]] m'], ['1500', 'sola', '1200'], '$600 \\div 2 = 300$ m.', 'El sonido baja y sube.'),
+    err('Un rayo llega a un espejo a 20° de la normal. Alguien halla el ángulo entre el rayo que llega y el que sale.', ['Sale a 20° de la normal', 'Los dos están a lados distintos de la normal', 'Entre los dos hay 20°'], 2, ['Entre los dos hay 40°', 'Entre los dos hay 70°', 'Entre los dos hay 0°'], '20° a un lado y 20° al otro: 40°.', 'Dibuja la normal en medio de los dos rayos.'),
+    opc('Una moneda en el fondo de una piscina parece más cerca de la superficie porque, al salir del agua, la luz:', ['Se refleja toda', 'Se acerca a la normal', 'Se absorbe', 'Se aleja de la normal'], 3, 'Al pasar al aire va más rápido y se aleja de la normal: el ojo la ve más arriba.', 'Piensa en qué medio va más rápido.'),
+  ]);
+
+  const ECO = {
+    id: 'icf-ecografia', title: 'Ver con sonido',
+    paras: [
+      'Una ecografía usa ultrasonido: sonido de millones de hertz, muy por encima de lo que oímos. Un aparato que se apoya en la piel envía pulsos cortos y escucha lo que vuelve.',
+      'Cada vez que el pulso pasa de un tejido a otro, una parte se refleja y otra sigue. Un computador mide cuánto tarda cada eco y calcula a qué profundidad está la superficie que lo devolvió.',
+      'Entre la piel y el aparato se pone un gel. Sin él quedaría una capa de aire, y el aire devuelve casi todo el ultrasonido: nada entraría al cuerpo.',
+      'Con más frecuencia se ven detalles más pequeños, pero el sonido se absorbe más y no llega tan hondo. Por eso se usa una frecuencia alta para el cuello y una más baja para el abdomen.',
+      'Si la superficie que refleja se mueve, como la sangre, el eco vuelve con una frecuencia un poco distinta. Con ese cambio se calcula qué tan rápido va la sangre.',
+    ],
+  };
+  const pl = (g, q, p, e, h) => play(g, q, { doc: ECO, ...p }, e, { hint: h });
+  return mundo('icf-cn-ondas', 'Ondas, Luz y Sonido', 'ciencias', [l1, l2], [
+    ['icf-cn-ondas-1', 'Ultrasonido: más frecuencia de la que oímos.', pl('donde-buscar', '¿A qué párrafo vuelves para responder?', { cards: [['¿Para qué sirve el gel?', [3]], ['¿Qué cambia con la frecuencia?', [4]], ['¿Cómo se mide la sangre?', [5]]] }, 'El gel está en el 3, la frecuencia en el 4 y la sangre en el 5.', 'Busca la palabra clave de cada pregunta.')],
+    ['icf-cn-ondas-1', 'Con la misma rapidez, más frecuencia es menos longitud.', pl('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { cards: [['El aire devuelve casi todo el ultrasonido.', 0], ['Con más frecuencia, la longitud de onda es menor.', 1], ['Para ver hondo conviene una frecuencia menor.', 1], ['El gel es de color azul.', 2]] }, 'Lo del aire está escrito; la longitud y la hondura se deducen; el color no aparece.', 'Une la rapidez fija con la frecuencia.')],
+    ['icf-cn-ondas-1', 'No oímos por encima de unos 20 000 Hz.', opc('El paciente no oye los pulsos de la ecografía porque:', ['Son muy suaves', 'Su frecuencia es mayor que la que oímos', 'Son electromagnéticos', 'No hay gel'], 1, 'Son millones de hertz; oímos hasta unos 20 000.', 'Compara la frecuencia del aparato con la que oímos.')],
+    ['icf-cn-ondas-2', 'El tiempo del eco da la distancia.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'Se halla una distancia con el tiempo que tarda un eco.', cards: [['El murciélago que encuentra un insecto', true], ['El barco que mide la profundidad', true], ['La linterna que alumbra un cuarto', false], ['El termómetro que marca la fiebre', false]] }, 'El murciélago y el barco usan ecos; la linterna y el termómetro, no.', 'Busca casos en que algo va, rebota y vuelve.')],
+    ['icf-cn-ondas-2', 'En cada cambio de medio, una parte se refleja.', pl('intruso-excepto', 'La opción que no aparece en el texto', { ask: 'Del ultrasonido se dice todo esto, EXCEPTO:', cards: [['Una parte se refleja y otra sigue', [2]], ['El aire lo devuelve casi todo', [3]], ['Se absorbe más con más frecuencia', [4]], ['Viaja en el vacío', null]] }, 'Las tres primeras están en el 2, el 3 y el 4; la última no.', 'Busca cada una en su párrafo.')],
+    ['icf-cn-ondas-2', 'El eco va y vuelve.', opc('Un pulso viaja a 1 500 m/s dentro del cuerpo y su eco vuelve en 0.0001 s. La superficie que lo reflejó está a:', ['15 cm', '30 cm', '7.5 cm', '1.5 cm'], 2, 'Recorre 0.15 m en ida y vuelta: 7.5 cm.', 'Halla lo que recorre en total y pártelo en dos.')],
   ]);
 })());
 ;

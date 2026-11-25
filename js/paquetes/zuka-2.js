@@ -1,531 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/muro-radicales.js
-// El muro de radicales (Álgebra, radicales semejantes; juego dinámico de la lección alg-22b): cada ladrillo mide
-// √n de largo, dibujado a escala. Un ladrillo como √12 trae una costura: son dos ladrillos de √3 pegados (√12 = 2√3).
-// (la costura y el color del tipo solo se ven al ponerlo en la fila: el montón es neutro).
-// Se tocan ladrillos del montón para ponerlos en fila (tocarlos en la fila los devuelve) hasta que la fila mida lo
-// pedido, por ejemplo 4√3. Solo se juntan en un solo radical los ladrillos del mismo tipo: √2 con √3 no se suman.
-// No hay reloj. «¡Listo!» comprueba; fallar quita una vida y dice por qué. Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, items: [{ target: { c, r }, bricks: [n, …] }] }], lives? }   state = { done: [n] }
-// Spec 2026-11-15-torres-de-potencias.
-
-GAMES['muro-radicales'] = (() => {
-  // √n = c·√r, con r sin cuadrados escondidos.
-  function simp(n) { let c = 1, r = n; for (let f = Math.floor(Math.sqrt(n)); f > 1; f--) if (r % (f * f) === 0) { c *= f; r /= f * f; } return { c, r }; }
-  const radTxt = t => (t.r === 1 ? `${t.c}` : `${t.c === 1 ? '' : t.c}√${t.r}`);
-  // Largo total de unos ladrillos: cuántos √r de cada tipo.
-  function totalOf(ns) {
-    const by = new Map(); ns.forEach(n => { const t = simp(n); by.set(t.r, (by.get(t.r) || 0) + t.c); });
-    return [...by.entries()].sort((a, b) => a[0] - b[0]).map(([r, c]) => ({ c, r }));
-  }
-  const totalTxt = ts => (ts.length ? ts.map(radTxt).join(' + ') : '0');
-  function judge(it, ns) {
-    const tot = totalOf(ns), g = it.target;
-    if (!ns.length) return { ok: false, msg: 'Pon ladrillos en la fila' };
-    if (tot.length > 1) return { ok: false, msg: `Hay ladrillos de ${tot.map(t => `√${t.r}`).join(' y de ')}: no se juntan en uno solo` };
-    if (tot[0].r !== g.r) return { ok: false, msg: `La fila es de √${tot[0].r} y la meta es de √${g.r}` };
-    if (tot[0].c !== g.c) return { ok: false, msg: `Mide ${radTxt(tot[0])}: ${tot[0].c < g.c ? 'le falta' : 'le sobra'}` };
-    return { ok: true, msg: `${ns.map(n => `√${n}`).join(' + ')} = ${radTxt(g)}` };
-  }
-  // Un grupo de ladrillos (sus posiciones) que da la meta, o null.
-  function solve(it) {
-    for (let mask = 1; mask < 1 << it.bricks.length; mask++) {
-      const idx = it.bricks.map((_, i) => i).filter(i => mask & (1 << i));
-      if (judge(it, idx.map(i => it.bricks[i])).ok) return idx;
-    }
-    return null;
-  }
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => r.items.map(it => judge(it, solve(it).map(i => it.bricks[i])).msg).join(' · ')).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, row = [], pause = 0, result = null, btn = {}, pile = [];
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; row = []; pause = 0; result = null; },
-      lost(i) { st.done[i] = 0; },
-    });
-    const round = () => R[a.cur], item = () => round().items[Math.min(st.done[a.cur], round().items.length - 1)];
-    const colOf = r => ({ 2: C.sky, 3: C.mint, 5: C.coral, 7: C.sun }[r] || C.Q);
-    const unit = () => (W - 28) / 13;
-
-    function layout(w, h) { W = w; H = h; btn = { x: w / 2 - 62, y: h - 60, w: 124, h: 32 }; }
-    function boxes(it = item()) { const n = it.bricks.length, per = Math.min(n, 3), bw = Math.min(96, (W - 24) / per - 8); pile = it.bricks.map((_, i) => ({ x: W / 2 - (per * (bw + 8) - 8) / 2 + (i % per) * (bw + 8), y: 262 + Math.floor(i / per) * 46, w: bw, h: 36 })); }
-    function check() {
-      const it = item(), res = judge(it, row.map(i => it.bricks[i]));
-      if (!row.length) { a.say(res.msg, C.sun); return; }
-      result = res; pause = res.ok ? 1.6 : 1.3;
-      if (res.ok) { st.done[a.cur]++; a.hit(); a.say(res.msg, C.ok); }
-      else { a.say(res.msg, C.bad); if (a.miss()) { result = null; pause = 0; row = []; } }
-    }
-    // Una barra de ladrillos a escala, con la costura de cada ladrillo compuesto.
-    function bar(p, ns, y, h, ghost) {
-      let x = 14; const u = unit(), cells = [];
-      ns.forEach((n, k) => {
-        const t = simp(n), len = Math.sqrt(n) * u, w = Math.min(len, W - 14 - x);
-        if (w <= 0) return;
-        if (ghost) { p.noFill(); p.stroke(C.mute); p.strokeWeight(2); p.drawingContext.setLineDash([5, 5]); p.rect(x, y, w, h, 5); p.drawingContext.setLineDash([]); }
-        else {
-          p.noStroke(); p.fill(shade(colOf(t.r), 0.74)); p.rect(x, y + 3, w, h, 5); p.fill(colOf(t.r)); p.rect(x, y, w, h, 5);
-          p.stroke(C.night); p.strokeWeight(1.5); for (let j = 1; j < t.c; j++) { const sx = x + (j * len) / t.c; if (sx < W - 14) p.line(sx, y + 3, sx, y + h - 3); }
-          p.noStroke(); p.fill(inkOn(colOf(t.r), C.ink)); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); fitText(p, `√${n}`, x + w / 2, y + h / 2 + 1, w - 4, 13);
-        }
-        cells.push({ x, y, w, h, k }); x += len;
-      });
-      return cells;
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play' || pause <= 0) return;
-        pause -= dt;
-        if (pause <= 0) { const good = result && result.ok; result = null; if (good) { row = []; if (st.done[a.cur] >= round().items.length) a.win(); } }
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = round(), live = a.phase === 'play', over = locked || a.phase === 'all';
-        const it = pause > 0 && result && result.ok ? r.items[Math.max(0, st.done[a.cur] - 1)] : item();
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, `${r.title} · cada ladrillo mide lo que dice, a escala`, W / 2, 40, W - 24, 11);
-        if (live) {
-          drawPill(p, C, `Arma una fila que mida ${radTxt(it.target)}`, W / 2, 68, C.sun, 16);
-          boxes(it);   // el montón de la pregunta que se ve (mientras se muestra un acierto, la anterior)
-          const g = it.target, ns = row.map(i => it.bricks[i]), tot = totalOf(ns);
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.LEFT, p.CENTER); p.text('meta', 14, 98);
-          bar(p, Array(g.c).fill(g.r), 106, 22, true);
-          p.noStroke(); p.fill(C.mute); p.textSize(11); p.textAlign(p.LEFT, p.CENTER); p.text('tu fila', 14, 144);
-          G_row = bar(p, ns, 152, 30, false);
-          p.noStroke(); p.fill(result ? (result.ok ? C.ok : C.bad) : C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-          fitText(p, ns.length ? `${ns.map(n => `√${n}`).join(' + ')} = ${totalTxt(tot)}` : 'Toca ladrillos del montón para ponerlos en fila', W / 2, 206, W - 24, 15);
-          p.fill(C.mute); p.textSize(11); p.text('montón', W / 2, 246);
-          it.bricks.forEach((n, i) => { const usedB = row.includes(i), t = simp(n); drawTile(p, C, pile[i], `√${n}`, { fill: usedB ? C.card : C.cream, ink: usedB ? C.mute : undefined, size: 16, r: 9, lift: usedB ? 0 : 3 }); });
-          if (pause <= 0) drawTile(p, C, btn, '¡Listo!', { fill: C.mint, size: 15, r: 10, lift: 2 });
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 13, locked);
-        if (over) drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: judge(x, solve(x).map(k => x.bricks[k])).msg }))).slice(0, 8), H / 2);
-        else drawArcadeBanner(p, C, a, H / 2 - 20, { idle: 'Sin prisa: mira las costuras de cada ladrillo', lost: 'Varias filas no midieron lo pedido' });
-        if (!a.toast && (over || a.phase === 'idle')) {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(over ? '¡Muro terminado! Ya puedes comprobar' : 'Solo se juntan los ladrillos del mismo tipo', W / 2, H - 13);
-        }
-        arcadeStop(p, a, locked);
-      };
-      let G_row = [];
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp !== 'play' || pause > 0) return false;
-        const x = p.mouseX, y = p.mouseY;
-        if (hitBox({ x: btn.x - 6, y: btn.y - 4, w: btn.w + 12, h: btn.h + 10 }, x, y)) { check(); return false; }
-        const i = pile.findIndex(b => hitBox(b, x, y));
-        if (i >= 0) { if (row.includes(i)) row = row.filter(k => k !== i); else row.push(i); api.sfx?.tap?.(); return false; }
-        const c = G_row.find(b => hitBox(b, x, y));
-        if (c) { row.splice(c.k, 1); api.sfx?.tap?.(); return false; }
-      };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => { if (a.phase === 'play') boxes(); return { phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, row: [...row], sol: solve(item()), ok: { x: btn.x + btn.w / 2, y: btn.y + btn.h / 2 }, pile: pile.map(b => ({ x: b.x + b.w / 2, y: b.y + b.h / 2 })) }; },
-    };
-  }
-
-  return { grade, create, simp, totalOf, judge, solve, radTxt };
-})();
-;
-//#archivo js/games/cuenta-saltos.js
-// Saltos, no términos (Álgebra, progresiones; lecciones alg-14, alg-14b y alg-14c): la trampa de siempre es contar
-// términos cuando hay que contar saltos. Del término 1 al término n hay n − 1 saltos (como los postes de una cerca).
-// Se eligen los saltos con − y + y el juego dibuja los postes y hace la cuenta; los postes no llevan número hasta
-// comprobar: contarlos es justo la idea.
-//   mode 'value': hay que caer justo en el término pedido (su valor lo calcula el juego).
-//   mode 'count': hay que llegar al último número de la lista y decir además cuántos términos son.
-// kind 'arit' suma `step` en cada salto; 'geo' multiplica por `step`.
-// params = { rounds: [{ kind, mode, a1, step, n? (value), last? (count) }] }   state = { rounds: [{ j, t }] }
-// Spec 2026-11-15-escalera-de-sigma.
-
-GAMES['cuenta-saltos'] = (() => {
-  const at = (r, j) => (r.kind === 'geo' ? r.a1 * r.step ** j : r.a1 + j * r.step);
-  // Saltos que hacen falta: n − 1 para el término n; en 'count', los que llevan del primero al último.
-  function jumpsOf(r) {
-    if (r.mode === 'value') return r.n - 1;
-    for (let j = 0; j <= 40; j++) if (Math.abs(at(r, j) - r.last) < 1e-9) return j;
-    return -1;
-  }
-  const opTxt = r => (r.kind === 'geo' ? `× ${numTxt(r.step)}` : r.step < 0 ? `− ${-r.step}` : `+ ${r.step}`);
-  const listTxt = r => `${[0, 1, 2].map(j => numTxt(at(r, j))).join(', ')}, …`;
-
-  const game = roundsGame({
-    aspect: 1.15,
-    init: () => ({ j: 0, t: 1 }),
-    ok: (s, r) => s.j === jumpsOf(r) && (r.mode === 'value' || s.t === s.j + 1),
-    solution: r => { const j = jumpsOf(r); return r.mode === 'value' ? `término ${r.n}: ${j} saltos desde ${numTxt(r.a1)} → ${numTxt(at(r, j))}` : `de ${numTxt(r.a1)} a ${numTxt(r.last)} hay ${j} saltos y ${j + 1} términos`; },
-    prompt: r => (r.mode === 'value' ? `${listTxt(r)} Da los saltos justos para caer en el término ${r.n}` : `${listTxt(r)} hasta ${numTxt(r.last)}: ¿cuántos saltos y cuántos términos?`),
-    foot: r => (r.mode === 'value' ? 'Cuenta los postes: el primero ya está puesto' : 'Entre dos postes hay un salto: cuenta los postes'),
-    layout(G) { const w = (G.W - 36) / 2; G.box = [{ x: G.r.mode === 'count' ? 12 : G.W / 2 - w / 2, y: G.H - 66, w, h: 32 }, { x: 24 + w, y: G.H - 66, w, h: 32 }]; },
-    enter(G) { const w = (G.W - 36) / 2; G.box[0].x = G.r.mode === 'count' ? 12 : G.W / 2 - w / 2; },
-    draw(G) {
-      const { p, C, W, H, s, r } = G, n = s.j + 1, show = n, y = 168, x0 = 26, x1 = W - 26;
-      const X = i => (show === 1 ? W / 2 : x0 + (i / (show - 1)) * (x1 - x0)), few = show <= 7;
-      // Los postes (términos) y los saltos entre ellos.
-      p.stroke(C.line); p.strokeWeight(3); p.line(x0 - 8, y + 14, x1 + 8, y + 14);
-      for (let i = 0; i < show; i++) {
-        if (i > 0) { p.noFill(); p.stroke(C.sky); p.strokeWeight(2); p.arc((X(i - 1) + X(i)) / 2, y - 12, X(i) - X(i - 1), Math.min(40, (X(i) - X(i - 1)) * 0.9), Math.PI, 0); if (few) { p.noStroke(); p.fill(C.sky); p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER); p.text(opTxt(r), (X(i - 1) + X(i)) / 2, y - 12 - Math.min(40, (X(i) - X(i - 1)) * 0.9) / 2 - 8); } }
-        const last = i === show - 1;
-        p.stroke(last ? C.sun : C.ink); p.strokeWeight(4); p.line(X(i), y - 12, X(i), y + 14);
-        p.noStroke(); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-        if (G.locked) { p.fill(last ? C.N : C.mute); p.textSize(few ? 11 : 9); p.text(i + 1, X(i), y + 26); }
-        if (few || last || i === 0) { p.fill(last ? C.ink : C.mute); p.textSize(few ? 12 : 10); p.text(numTxt(at(r, i)), X(i), y + 42); }
-      }
-      p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(16); p.textAlign(p.CENTER, p.CENTER);
-      const v = at(r, s.j);
-      const word = r.kind === 'geo' ? (s.j === 1 ? 'multiplicación' : 'multiplicaciones') : s.j === 1 ? 'salto' : 'saltos';
-      fitText(p, `${s.j} ${word}: llegas a ${numTxt(v)}${G.locked ? `, el término ${n}` : ''}`, W / 2, y + 86, W - 20, 16);
-      drawStepper(p, C, G.box[0], s.j, r.kind === 'geo' ? 'multiplicaciones' : 'saltos');
-      if (r.mode === 'count') drawStepper(p, C, G.box[1], s.t, 'términos de la lista');
-    },
-    press(G, x, y) {
-      const a = stepHit(G.box[0], x, y), b = G.r.mode === 'count' ? stepHit(G.box[1], x, y) : 0;
-      if (!a && !b) return false;
-      G.s.j = Math.max(0, Math.min(14, G.s.j + a)); G.s.t = Math.max(1, Math.min(16, G.s.t + b)); G.touch();
-      return true;
-    },
-    peek: G => ({ box: G.box, want: jumpsOf(G.r), mode: G.r.mode }),
-  });
-  return { ...game, at, jumpsOf };
-})();
-;
-//#archivo js/games/resta-corrida.js
-// La resta corrida (Álgebra, suma de una progresión geométrica; lección alg-14d): el truco para sumar
-// S = a + ar + ar² + … es multiplicar toda la suma por la razón: sale la misma lista corrida un lugar. Arriba está
-// r·S y abajo S, cada término en la columna de su valor. Se tocan las columnas con dos números iguales para tacharlos:
-// al restar sobreviven solo el último de arriba y el primero de abajo, y el juego termina la cuenta.
-// params = { rounds: [{ a1, r, n }] }   state = { rounds: [{ cut: [bool por pareja] }] }
-// Spec 2026-11-15-escalera-de-sigma.
-
-GAMES['resta-corrida'] = (() => {
-  const term = (r, k) => r.a1 * r.r ** k;
-  const sumOf = r => (term(r, r.n) - r.a1) / (r.r - 1);
-
-  const game = roundsGame({
-    aspect: 1.1,
-    init: r => ({ cut: Array(r.n - 1).fill(false) }),
-    ok: s => s.cut.every(Boolean),
-    solution: r => `${r.r}S − S = ${term(r, r.n)} − ${r.a1}, así que S = ${term(r, r.n) - r.a1} ÷ ${r.r - 1} = ${sumOf(r)}`,
-    prompt: r => `S = ${[0, 1, 2].map(k => term(r, k)).join(' + ')} + … (${r.n} términos). Tacha las parejas iguales de ${r.r}S y S`,
-    foot: (r, s) => (s.cut.every(Boolean) ? 'Solo quedan el último de arriba y el primero de abajo' : 'Al multiplicar por la razón, la lista se corre un lugar'),
-    draw(G) {
-      const { p, C, W, s, r } = G, cols = r.n + 1, cw = (W - 56) / cols, x0 = 50, yT = 122, yB = 172, done = s.cut.every(Boolean);
-      G.cols = [];
-      p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(14); p.textAlign(p.RIGHT, p.CENTER);
-      p.text(`${r.r}S =`, x0 - 6, yT + 16); p.text('S =', x0 - 6, yB + 16);
-      for (let c = 0; c < cols; c++) {
-        const x = x0 + c * cw, pair = c >= 1 && c <= r.n - 1, dead = pair && s.cut[c - 1], v = term(r, c);
-        G.cols.push({ x, y: yT - 4, w: cw, h: yB + 40 - yT, pair });
-        const tile = (y, col) => {
-          drawTile(p, C, { x: x + 2, y, w: cw - 4, h: 30 }, v, { fill: dead ? C.card : col, ink: dead ? C.mute : undefined, size: 14, r: 7, lift: dead ? 0 : 2 });
-          if (dead) { p.stroke(C.bad); p.strokeWeight(2); p.line(x + 6, y + 26, x + cw - 6, y + 4); }
-        };
-        if (c >= 1) tile(yT, c === r.n ? C.sun : C.sky);         // r·S ocupa las columnas 1 … n
-        if (c <= r.n - 1) tile(yB, c === 0 ? C.sun : C.mint);    // S ocupa las columnas 0 … n − 1
-      }
-      p.stroke(C.ink); p.strokeWeight(2); p.line(x0 - 34, yB + 44, W - 8, yB + 44);
-      p.noStroke(); p.fill(done ? C.ink : C.mute); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-      const left = s.cut.filter(c => !c).length;
-      fitText(p, done ? `${r.r}S − S = ${term(r, r.n)} − ${r.a1} = ${term(r, r.n) - r.a1}` : `Faltan ${left} ${left === 1 ? 'pareja' : 'parejas'} por tachar`, W / 2, yB + 66, W - 20, 16);
-      if (done) {
-        if (r.r - 1 > 1) { p.fill(C.ink); fitText(p, `${r.r - 1}S = ${term(r, r.n) - r.a1}`, W / 2, yB + 92, W - 20, 16); }
-        p.fill(C.N); fitText(p, `S = ${sumOf(r)}`, W / 2, yB + 120, W - 20, 20);
-      }
-    },
-    press(G, x, y) {
-      const c = (G.cols || []).findIndex(b => hitBox(b, x, y));
-      if (c < 0) return false;
-      if (G.cols[c].pair) { G.s.cut[c - 1] = !G.s.cut[c - 1]; G.touch(); }
-      return true;
-    },
-    peek: G => ({ cols: G.cols }),
-  });
-  return { ...game, term, sumOf };
-})();
-;
-//#archivo js/games/parte-sigma.js
-// Parte la sigma (Álgebra, propiedades de la sumatoria; lección alg-15): la suma Σ (c·k + d) se dibuja columna por
-// columna: en la columna k hay c·k piezas azules y d piezas amarillas. Las azules de todas las columnas son c veces
-// Σk; las amarillas se repiten una vez por cada k, así que suman d·n (y no d: esa es la trampa). Se escribe la suma
-// como «a · Σk + b» eligiendo a y b con − y +.
-// params = { rounds: [{ c, d, hi }] }   (k va de 1 a hi)   state = { rounds: [{ a, b }] }
-// Spec 2026-11-15-escalera-de-sigma.
-
-GAMES['parte-sigma'] = (() => {
-  const termTxt = r => (r.c === 0 ? `${r.d}` : `${r.c === 1 ? '' : r.c}k${r.d ? ` + ${r.d}` : ''}`);
-  const gauss = n => (n * (n + 1)) / 2;
-  const totalOf = r => r.c * gauss(r.hi) + r.d * r.hi;
-
-  const game = roundsGame({
-    aspect: 1.25,
-    init: () => ({ a: 0, b: 0 }),
-    ok: (s, r) => s.a === r.c && s.b === r.d * r.hi,
-    solution: r => `Σ (${termTxt(r)}) = ${r.c}·Σk + ${r.d * r.hi} = ${r.c}·${gauss(r.hi)} + ${r.d * r.hi} = ${totalOf(r)}`,
-    prompt: r => `Σ (${termTxt(r)}), con k de 1 a ${r.hi}: sepárala en azules y amarillas`,
-    foot: () => 'Las amarillas se repiten una vez por cada valor de k',
-    layout(G) { const w = (G.W - 36) / 2; G.box = [{ x: 12, y: G.H - 64, w, h: 32 }, { x: 24 + w, y: G.H - 64, w, h: 32 }]; },
-    draw(G) {
-      const { p, C, W, H, s, r } = G, n = r.hi, base = H - 150, top = 100, tall = r.c * n + r.d, u = Math.min(16, (base - top) / tall), cw = Math.min(46, (W - 40) / n), x0 = W / 2 - (n * cw) / 2;
-      for (let k = 1; k <= n; k++) {
-        const x = x0 + (k - 1) * cw + 4, w = cw - 8;
-        for (let i = 0; i < r.c * k; i++) { p.noStroke(); p.fill(C.sky); p.rect(x, base - (i + 1) * u + 1, w, u - 2, 3); }
-        for (let i = 0; i < r.d; i++) { p.noStroke(); p.fill(C.sun); p.rect(x, base - (r.c * k + i + 1) * u + 1, w, u - 2, 3); }
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER); p.text(`k = ${k}`, x + w / 2, base + 12);
-      }
-      p.stroke(C.ink); p.strokeWeight(2); p.line(x0 - 6, base, x0 + n * cw + 6, base);
-      p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-      fitText(p, `Σ (${termTxt(r)}) = ${s.a} · Σk + ${s.b} = ${s.a} · ${gauss(n)} + ${s.b} = ${s.a * gauss(n) + s.b}`, W / 2, base + 38, W - 20, 15);
-      drawStepper(p, C, G.box[0], s.a, 'veces Σk (azules)', C.sky);
-      drawStepper(p, C, G.box[1], s.b, 'amarillas en total', C.N);
-    },
-    press(G, x, y) {
-      const a = stepHit(G.box[0], x, y), b = stepHit(G.box[1], x, y);
-      if (!a && !b) return false;
-      G.s.a = Math.max(0, Math.min(9, G.s.a + a)); G.s.b = Math.max(0, Math.min(60, G.s.b + b)); G.touch();
-      return true;
-    },
-    peek: G => ({ box: G.box, want: [G.r.c, G.r.d * G.r.hi] }),
-  });
-  return { ...game, termTxt, totalOf };
-})();
-;
-//#archivo js/games/arma-notacion.js
-// Arma la notación (Álgebra 0, cómo se escribe un conjunto): cada ronda describe un conjunto con palabras
-// («los colores de la bandera de Colombia») y hay fichas con el nombre, «=», llaves, comas, elementos y algunas
-// trampas («(», «[», elementos que no van). Se tocan las fichas en orden para escribir el conjunto por extensión
-// en la pizarra; «⌫» borra la última. Vale cualquier orden de los elementos, pero sin repetir y con las comas
-// entre ellos. Las fichas se pueden usar varias veces (las comas se necesitan muchas).
-// params = { rounds: [{ prompt, name, members: [etiquetas], chips: [etiquetas] }] }   state = { seqs: [[índice de ficha]] }
-
-GAMES['arma-notacion'] = (() => {
-  const SYMS = ['=', '{', '}', ',', '(', ')', '[', ']'];
-  // Lee una secuencia de etiquetas como «N = { a , b }»; devuelve { name, elems } o null si la forma está mal.
-  function parse(labels) {
-    if (labels.length < 4 || labels[1] !== '=' || labels[2] !== '{' || labels[labels.length - 1] !== '}') return null;
-    const inner = labels.slice(3, -1), elems = [];
-    for (let k = 0; k < inner.length; k++) {
-      const isComma = inner[k] === ',';
-      if (k % 2 === 1 ? !isComma : isComma || ['=', '{', '}', '(', ')', '[', ']'].includes(inner[k])) return null;
-      if (k % 2 === 0) elems.push(inner[k]);
-    }
-    if (inner.length && inner.length % 2 === 0) return null;   // termina en coma
-    return { name: labels[0], elems };
-  }
-  const labelsOf = (seq, r) => (seq || []).map(i => r.chips[i]);
-  function good(seq, r) {
-    const p = parse(labelsOf(seq, r));
-    return !!p && p.name === r.name && p.elems.length === r.members.length && new Set(p.elems).size === p.elems.length && r.members.every(m => p.elems.includes(m));
-  }
-  const setText = r => `${r.name} = {${r.members.join(', ')}}`;
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => good(state.seqs?.[i], r));
-    return { ok, solution: params.rounds.map(setText).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { seqs: R.map(() => []) };
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], board = null, chipBoxes = [], back = null, pop = { i: -1, t: 0 };
-
-    function layout(w, h) {
-      W = w; H = h;
-      tabs = roundTabs(R.length, w);
-      board = { x: 12, y: 100, w: w - 24, h: 74 };
-      back = { x: w - 12 - 56, y: board.y + board.h + 9, w: 56, h: 30 };
-      placeChips();
-    }
-    function placeChips() {
-      const chips = R[cur].chips, gap = 7, rowH = 34;
-      let x = 12, y = back.y + 44;
-      chipBoxes = chips.map(label => {
-        const short = SYMS.includes(label) || label.length <= 1;
-        const w = short ? 38 : Math.min(W - 24, 26 + label.length * 9);
-        if (x + w > W - 12) { x = 12; y += rowH + gap; }
-        const b = { x, y, w, h: rowH }; x += w + gap; return b;
-      });
-    }
-    const ready = () => api.ready(st.seqs.every(s => s.length > 0));
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], seq = st.seqs[cur], ok = good(seq, r), labels = labelsOf(seq, r), A = SK.sets(C)[0];
-        drawTabs(p, C, tabs, cur, i => (locked ? (good(st.seqs[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : st.seqs[i].length ? C.Z : C.line));
-        SK.kicker(p, C, 'Escribe por extensión', 14, 56);
-        p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(14); p.textAlign(p.LEFT, p.TOP);
-        p.text(r.prompt, 14, 64, W - 28, 36);
-        // La pizarra: lo que se va escribiendo, en la franja formal.
-        const text = labels.length ? labels.map(l => (l === ',' ? ',' : ` ${l}`)).join('').replace(/\{ /g, '{').replace(/ \}/g, '}').trim() : '';
-        SK.panel(p, C, board, { col: locked ? (ok ? C.ok : C.bad) : null });
-        p.noStroke(); p.fill(locked ? (ok ? C.ok : C.bad) : A.line); p.rect(board.x + 1, board.y + 10, 3, board.h - 20, 2);
-        p.fill(labels.length ? C.ink : C.mute); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, text || 'Toca las fichas en orden', W / 2, board.y + board.h / 2, board.w - 28, labels.length ? 23 : 13, board.h - 14);
-        // Borrar la última ficha
-        SK.chip(p, C, back, '⌫', { size: 15, r: 10 });
-        p.fill(C.mute); p.textStyle(p.NORMAL); p.textAlign(p.LEFT, p.CENTER);
-        fitText(p, 'Las fichas se pueden usar varias veces', 14, back.y + back.h / 2, back.x - 26, 11);
-        // Fichas: los signos de la notación, en el color del mundo; los elementos, en píldoras.
-        pop.t = Math.max(0, pop.t - 0.08);
-        chipBoxes.forEach((b, i) => {
-          const lab = r.chips[i], k = pop.i === i ? 1 + 0.12 * pop.t : 1;
-          if (SYMS.includes(lab)) drawTile(p, C, b, lab, { fill: C.mint, r: 9, lift: 2, size: 20, k });
-          else SK.chip(p, C, b, lab, { size: 14, k });
-        });
-        p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-        if (locked && !ok) { p.fill(C.ok); fitText(p, `Así: ${setText(r)}`, W / 2, H - 12, W - 24, 12); }
-      };
-
-      p.mousePressed = () => {
-        const t = tabs.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
-        if (t >= 0) { cur = t; placeChips(); api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        if (hitBox(back, p.mouseX, p.mouseY)) { st.seqs[cur].pop(); ready(); api.sfx?.tap?.(); return false; }
-        const i = chipBoxes.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
-        if (i >= 0 && st.seqs[cur].length < 30) { st.seqs[cur].push(i); pop = { i, t: 1 }; ready(); api.sfx?.tap?.(); return false; }
-      };
-    }, 1.32);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ seqs: st.seqs.map(s => [...s]) }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, parse };
-})();
-;
-//#archivo js/games/cumple-notacion.js
-// Haz que se cumpla (Álgebra 0, pertenece ∈ / no pertenece ∉): arriba hay frases escritas con símbolos,
-// como «perro ∈ M» o «pez ∉ M». Abajo está la bolsa del conjunto M y, afuera, las fichas. Tocar una ficha la
-// mete a la bolsa o la saca. Meta: que todas las frases sean ciertas. Al lado de cada frase se ve en vivo si ya
-// se cumple, para aprender a leer los símbolos.
-// params = { rounds: [{ set, tokens: [etiquetas], inside: [bool por ficha] }] }   state = { inside: [[bool]] }
-
-GAMES['cumple-notacion'] = (() => {
-  const sentence = (tok, set, inn) => `${tok} ${inn ? '∈' : '∉'} ${set}`;
-  const good = (ins, r) => !!ins && r.inside.every((v, k) => ins[k] === v);
-  const setText = r => `${r.set} = {${r.tokens.filter((_, k) => r.inside[k]).join(', ')}}`;
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => good(state.inside?.[i], r));
-    return { ok, solution: params.rounds.map(setText).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { inside: R.map(r => r.tokens.map(() => false)) };
-    const touched = R.map(() => false);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], bag = null, spots = [], pos = [], fb = null, listH = 0;
-
-    function layout(w, h) {
-      W = w; H = h;
-      tabs = roundTabs(R.length, w);
-      placeAll();
-    }
-    function placeAll() {
-      const r = R[cur], n = r.tokens.length;
-      listH = Math.ceil(n / 2) * 26 + 12;
-      const top = 48 + listH + 8;
-      fb = { x: 12, y: H - 60, w: W - 24, h: 50 };
-      const rows = Math.ceil(n / Math.min(4, n)), trayH = rows * 38;
-      bag = { x: W / 2, rx: (W - 44) / 2 };
-      bag.ry = Math.max(46, (fb.y - 10 - trayH - 8 - top) / 2 - 4); bag.y = top + bag.ry + 4;
-      // Lugares dentro de la membrana (dos columnas) y afuera (fila de abajo, dentro del universo).
-      const half = Math.ceil(n / 2), step = Math.min(36, (bag.ry * 1.56) / Math.max(1, half));
-      const cols = Math.min(4, n), tw = (W - 24 - 16 - (cols - 1) * 6) / cols, y0 = fb.y - 10 - trayH + 4;
-      const cw = Math.min(tw, bag.rx * 0.78);
-      spots = r.tokens.map((_, k) => ({
-        inn: { x: bag.x + (k % 2 ? 1 : -1) * bag.rx * 0.42, y: bag.y + (Math.floor(k / 2) - (half - 1) / 2) * step + 6 },
-        out: { x: 20 + (k % cols) * (tw + 6) + tw / 2, y: y0 + Math.floor(k / cols) * 38 + 15 }, w: cw,
-      }));
-      pos = spots.map((s, k) => ({ ...(st.inside[cur][k] ? s.inn : s.out) }));
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], ins = st.inside[cur], dt = frameDt(p), A = locked ? (good(ins, r) ? { line: C.ok, ink: C.ok } : { line: C.bad, ink: C.bad }) : SK.sets(C)[0];
-        drawTabs(p, C, tabs, cur, i => (locked ? (good(st.inside[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Z : C.line));
-        // Las frases que deben cumplirse, con su marca.
-        SK.panel(p, C, { x: 12, y: 46, w: W - 24, h: listH }, { r: 12 });
-        r.tokens.forEach((tok, k) => {
-          const x = 24 + (k % 2) * (W - 24) / 2, y = 65 + Math.floor(k / 2) * 26, ok = ins[k] === r.inside[k];
-          if (ok) { p.noStroke(); p.fill(C.ok); p.circle(x, y, 9); } else { p.noFill(); p.stroke(C.mute); p.strokeWeight(1.3); p.circle(x, y, 8); p.noStroke(); }
-          p.fill(ok ? C.ink : C.mute); p.textStyle(p.BOLD); p.textAlign(p.LEFT, p.CENTER);
-          fitText(p, sentence(tok, r.set, r.inside[k]), x + 12, y + 1, (W - 24) / 2 - 30, 14);
-        });
-        // El universo, con la membrana del conjunto.
-        const U = { x: 12, y: 48 + listH + 8, w: W - 24, h: fb.y - 10 - (48 + listH + 8) };
-        SK.panel(p, C, U, { u: true });
-        SK.membrane(p, C, bag.x, bag.y, bag.rx, bag.ry, A.line);
-        SK.tag(p, C, r.set, bag.x - bag.rx * 0.74, bag.y - bag.ry * 0.82, A);
-        // Píldoras: se deslizan entre adentro y afuera.
-        r.tokens.forEach((tok, k) => {
-          const s = spots[k], t = ins[k] ? s.inn : s.out, b = pos[k], bad = locked && ins[k] !== r.inside[k];
-          SK.ease(b, 'x', t.x, dt); SK.ease(b, 'y', t.y, dt);
-          SK.chip(p, C, { x: b.x - s.w / 2, y: b.y - 13, w: s.w, h: 26 }, tok, { state: bad ? 'bad' : ins[k] ? (locked ? 'ok' : 'on') : 'idle', size: 13 });
-        });
-        const list = r.tokens.filter((_, k) => ins[k]);
-        SK.formal(p, C, fb, SK.setTex(r.set, list), { kicker: 'Así queda escrito', col: A.line, size: 17 });
-      };
-
-      p.mousePressed = () => {
-        const t = tabs.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
-        if (t >= 0) { cur = t; placeAll(); api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        const ins = st.inside[cur];
-        const k = spots.findIndex((s, k) => { const pt = ins[k] ? s.inn : s.out; return Math.abs(p.mouseX - pt.x) < s.w / 2 && Math.abs(p.mouseY - pt.y) < 16; });
-        if (k >= 0) { ins[k] = !ins[k]; touched[cur] = true; api.ready(touched.every(Boolean)); api.sfx?.tap?.(); return false; }
-      };
-    }, 1.45);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ inside: st.inside.map(x => [...x]) }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, sentence };
-})();
-;
 //#archivo js/games/tacha-repetidos.js
 // Tacha los repetidos (Álgebra 0, en un conjunto nada se repite): se escribe una palabra letra por letra y hay
 // que tachar (tocar) las letras que sobran para que quede el conjunto de sus letras, cada una una sola vez.
@@ -9794,6 +9268,141 @@ Object.assign(XG, (() => {
   XG.renglones('masa-cerrada', { w: 84, x: 270 });
   XG.renglones('relacion-moles', { w: 64, x: 280 });
   XG.ascensor('sube-moles', 100, 2, neutro);
+})();
+;
+//#archivo js/games/curvas-escena.js
+// Ejercicios de «Funciones que Curvan» (Preicfes, icf-ma-curvas; spec 2026-11-25-preicfes-estructura): parábolas, exponenciales, ondas,
+// dominio y rango. Armazones en figura-kit, conteo-escena y proposiciones-escena. La curva aparece al comprobar.
+(() => {
+  const neutro = ['Se pasó. Vuelve a mirar.', 'Le faltó. Vuelve a mirar.'], R = x => Math.round(x * 100) / 100;
+  // Plano de [x0, x1] por [y0, y1] en un cuadro de 300 por alto.
+  const plano = ([x0, x1, y0, y1], alto = 130) => { const X = x => 24 + (x - x0) / (x1 - x0) * 296, Y = y => 10 + (y1 - y) / (y1 - y0) * alto; return { X, Y, ejes: K => K.l(24, Y(0), 320, Y(0), 'lm') + K.l(X(0), 10, X(0), 10 + alto, 'lm'), curva: (K, f, cls = 'la gr', a = x0, b = x1) => K.pl(Array.from({ length: 61 }, (_, i) => { const x = a + (b - a) * i / 60; return [X(x), Math.max(4, Math.min(16 + alto, Y(f(x))))]; }), cls) }; };
+  // ------------------------------------------------------------------------------------------------------ cuadráticas
+  // El eje de una parábola que sale y vuelve al suelo.  params { r1, r2, h, max, et }
+  XG.figura('vertice-parabola', {
+    ini: () => ({ x: 0 }), alto: () => 206, ms: 1000, pie: 'Mueve el punto de mayor altura.', manijas: p => [{ k: 'x', min: 0, max: p.max, paso: 1, et: p.et }],
+    ok: (v, p) => v.x === (p.r1 + p.r2) / 2, sol: p => ({ x: (p.r1 + p.r2) / 2 }), texto: p => `${(p.r1 + p.r2) / 2}`,
+    dib(v, K, p, f) { const g = plano([0, p.max, 0, p.h * 1.15]), m = (p.r1 + p.r2) / 2, d = (p.r2 - p.r1) / 2; return g.ejes(K) + K.c(g.X(p.r1), g.Y(0), 5, 'fa') + K.c(g.X(p.r2), g.Y(0), 5, 'fa') + K.t(g.X(p.r1), g.Y(0) + 16, p.r1 || '', 's') + K.t(g.X(p.r2), g.Y(0) + 16, p.r2, 's') + K.l(g.X(v.x), 12, g.X(v.x), g.Y(0), 'lg d') + K.f(f, g.curva(K, x => p.h * (1 - ((x - m) / d) ** 2), 'la gr', p.r1, p.r2)); },
+    aviso: (v, p) => (v.x < (p.r1 + p.r2) / 2 ? 'Ahí todavía va subiendo.' : 'Ahí ya va bajando.'), bien: (v, p) => `A mitad de camino entre ${p.r1} y ${p.r2}.`,
+  });
+  // Corral con una cantidad fija de cerca: lado que da la mayor área.  params { total, muro (bool) }
+  const otro = (p, x) => (p.muro ? p.total - 2 * x : p.total / 2 - x), mejor = p => p.total / 4;
+  XG.figura('ancho-maximo', {
+    ini: () => ({ x: 1 }), alto: () => 204, ms: 1000, pie: 'Mueve el lado.', manijas: p => [{ k: 'x', min: 1, max: p.total / 2 - 1, paso: 1, et: 'lado (m)' }],
+    ok: (v, p) => v.x === mejor(p), sol: p => ({ x: mejor(p) }), texto: p => `${mejor(p)} m`,
+    dib(v, K, p, f) { const u = Math.min(250 / (p.muro ? p.total : p.total / 2), 108 / (p.total / 2)), w = otro(p, v.x) * u, h = v.x * u, x = 170 - w / 2; return (p.muro ? K.r(30, 14, 280, 8, 'fk', 0) : '') + K.r(x, 24, w, h, 'fa', 0) + K.t(x - 8, 28 + h / 2, R(v.x), 's tm', 'end') + K.f(f, K.t(170, 30 + h / 2, `${R(v.x)} · ${R(otro(p, v.x))} = ${R(v.x * otro(p, v.x))}`, 'b')); },
+    aviso: (v, p) => `Con ese lado el área no es la mayor: prueba con uno ${v.x < mejor(p) ? 'más grande' : 'más pequeño'}.`, bien: (v, p) => `${v.x} por ${otro(p, v.x)}: ${v.x * otro(p, v.x)}.`,
+  });
+  // Dos ceros de x² + bx + c.  params { b, c, r: [menor, mayor], lo, hi, eq }
+  XG.figura('raices-parabola', {
+    ini: p => ({ a: p.lo, b: p.hi }), alto: () => 232, ms: 1000, pie: 'Mueve los dos cortes.', manijas: p => [{ k: 'a', min: p.lo, max: p.hi, paso: 1, et: 'corte menor' }, { k: 'b', min: p.lo, max: p.hi, paso: 1, et: 'corte mayor' }],
+    ok: (v, p) => v.a === p.r[0] && v.b === p.r[1], sol: p => ({ a: p.r[0], b: p.r[1] }), texto: p => p.r.join(' y '),
+    dib(v, K, p, f) { const y0 = (p.c - p.b * p.b / 4), g = plano([p.lo - 1, p.hi + 1, Math.min(-2, y0 * 1.2), Math.max(6, -y0)], 104); return g.ejes(K) + K.c(g.X(v.a), g.Y(0), 6, 'fF') + K.c(g.X(v.b), g.Y(0), 6, 'fg') + K.f(f, g.curva(K, x => x * x + p.b * x + p.c)); },
+    aviso(v, p) { const g = x => x * x + p.b * x + p.c, m = [v.a, v.b].find(x => g(x) !== 0); return m != null ? `En ${m} la expresión vale ${g(m)}, no 0.` : 'Falta el otro corte, o están cambiados.'; }, bien: (v, p) => `En ${p.r[0]} y en ${p.r[1]} vale 0.`,
+  });
+  XG.renglones('lee-parabola', { w: 72, x: 280 });
+  XG.renglones('abre-arriba', { w: 110, x: 272 });
+  XG.frases('punto-en-curva');
+  XG.ascensor('sube-parabola', 100, 2, neutro);
+  // ----------------------------------------------------------------------------------------- exponenciales y logaritmos
+  // Cuántas veces se duplica (o se parte).  params { C, k, meta, max, et }
+  XG.figura('veces-factor', {
+    ini: () => ({ n: 0 }), alto: () => 160, ms: 1000, pie: 'Mueve cuántas veces.', manijas: p => [{ k: 'n', min: 0, max: p.max, paso: 1, et: p.et }],
+    ok: (v, p) => Math.abs(p.C * p.k ** v.n - p.meta) < 1e-9, sol: p => ({ n: Math.round(Math.log(p.meta / p.C) / Math.log(p.k)) }), texto: p => `${Math.round(Math.log(p.meta / p.C) / Math.log(p.k))}`,
+    dib(v, K, p, f) { const n = Math.round(v.n), w = Math.min(44, 290 / (n + 1)); return Array.from({ length: n + 1 }, (_, i) => K.c(30 + i * w, 44, i ? 5 : 9, i ? 'fg' : 'fa') + (i ? K.l(30 + (i - 1) * w + 8, 44, 30 + i * w - 8, 44, 'lm') : '')).join('') + K.t(30, 24, p.C, 's') + K.f(f, K.t(170, 88, `${p.C} → ${R(p.C * p.k ** n)}`, 'b')); },
+    aviso: (v, p) => `Con ese número llega a ${R(p.C * p.k ** v.n)}.`, bien: (v, p) => `${v.n} veces por ${R(p.k)}: ${R(p.meta)}.`,
+  });
+  XG.renglones('tabla-exponencial', { w: 72, x: 280 });
+  XG.renglones('crece-como', { w: 112, x: 272 });
+  XG.renglones('log-es', { w: 60, x: 284 });
+  XG.renglones('sube-o-baja-base', { w: 100, x: 276 });
+  XG.frases('igual-potencia');
+  XG.ascensor('sube-logaritmo', 40, 1, neutro);
+  // ----------------------------------------------------------------------------------------------------------- periódicas
+  // Centro y amplitud de una onda que va de mín a máx.  params { min, max, hi }
+  XG.figura('amplitud-onda', {
+    ini: () => ({ m: 0, a: 0 }), alto: () => 236, ms: 1100, pie: 'Mueve la línea media y la amplitud.', manijas: p => [{ k: 'm', min: 0, max: p.hi, paso: 1, et: 'línea media' }, { k: 'a', min: 0, max: p.hi / 2, paso: 1, et: 'amplitud' }],
+    ok: (v, p) => v.m === (p.max + p.min) / 2 && v.a === (p.max - p.min) / 2, sol: p => ({ m: (p.max + p.min) / 2, a: (p.max - p.min) / 2 }), texto: p => `media ${(p.max + p.min) / 2}, amplitud ${(p.max - p.min) / 2}`,
+    dib(v, K, p, f) { const g = plano([0, 10, 0, p.hi], 108); return g.ejes(K) + K.l(24, g.Y(p.max), 320, g.Y(p.max), 'lm') + K.l(24, g.Y(p.min), 320, g.Y(p.min), 'lm') + K.t(330, g.Y(p.max) + 4, p.max, 's tm') + K.t(330, g.Y(p.min) + 4, p.min, 's tm') + K.l(24, g.Y(v.m), 320, g.Y(v.m), 'lg d') + K.f(f, g.curva(K, x => v.m + v.a * Math.sin(x * Math.PI / 2.5))); },
+    aviso: (v, p) => (v.m !== (p.max + p.min) / 2 ? 'La línea media no queda a igual distancia del máximo y del mínimo.' : 'La amplitud va de la línea media al máximo.'), bien: (v, p) => `De ${p.min} a ${p.max}: media ${v.m} y amplitud ${v.a}.`,
+  });
+  // Periodo: cuánto tarda una vuelta.  params { n, total, max, u }
+  XG.figura('periodo-onda', {
+    ini: () => ({ t: 1 }), alto: () => 196, ms: 1100, pie: 'Mueve lo que dura una vuelta.', manijas: p => [{ k: 't', min: 1, max: p.max, paso: 1, et: `periodo (${p.u})` }],
+    ok: (v, p) => v.t * p.n === p.total, sol: p => ({ t: p.total / p.n }), texto: p => `${p.total / p.n} ${p.u}`,
+    dib(v, K, p, f) { const g = plano([0, p.total, -1.3, 1.3], 100); return K.l(24, g.Y(0), 320, g.Y(0), 'lm') + g.curva(K, x => Math.sin(2 * Math.PI * x * p.n / p.total) * (0.001 + f), 'la gr', 0, p.total) + K.f(f, K.r(24, g.Y(1.2), g.X(Math.min(p.total, v.t)) - 24, g.Y(-1.2) - g.Y(1.2), 'ff', 0)) + K.t(320, 124, `${p.total} ${p.u}`, 's tm', 'end'); },
+    aviso: (v, p) => (v.t * p.n < p.total ? `${p.n} vueltas de ${v.t} no completan ${p.total}.` : `${p.n} vueltas de ${v.t} se pasan de ${p.total}.`), bien: (v, p) => `${p.n} vueltas de ${v.t}: ${p.total}.`,
+  });
+  XG.renglones('lee-onda', { w: 72, x: 280 });
+  XG.renglones('en-que-momento', { w: 72, x: 280 });
+  // Altura de una cabina en una rueda: ángulo desde la horizontal de la derecha.  params { r, c (altura del centro), y, g, max }
+  XG.figura('altura-rueda', {
+    ini: () => ({ g: 0 }), alto: () => 232, ms: 1000, pie: 'Gira la cabina.', manijas: p => [{ k: 'g', min: 0, max: p.max, paso: 15, et: 'ángulo (°)' }],
+    ok: (v, p) => v.g === p.g, sol: p => ({ g: p.g }), texto: p => `${p.g}°`,
+    dib(v, K, p, f) { const u = 62 / p.r, cx = 150, cy = 92, [x, y] = K.at(cx, cy, 62, v.g); return K.arc(cx, cy, 62, 0, 360, 'lm') + K.l(cx - 80, cy, cx + 80, cy, 'lm d') + K.l(cx, cy, x, y, 'la') + K.c(x, y, 8, 'fF') + K.l(40, cy + p.c * u, 300, cy + p.c * u, 'lm') + K.t(250, cy + 4, `centro a ${p.c} m`, 's tm', 'start').replace('start', 'middle') + K.f(f, K.l(x, y, x, cy + p.c * u, 'lg d') + K.t(x + 10, cy + 30, `${R(p.c + p.r * Math.sin(v.g * Math.PI / 180))} m`, 'b', 'start')); },
+    aviso(v, p) { const h = R(p.c + p.r * Math.sin(v.g * Math.PI / 180)); return Math.abs(h - p.y) < 0.01 ? 'La altura es esa, pero no es la primera vez que pasa.' : `Ahí está a ${h} m.`; }, bien: (v, p) => `${p.c} del centro y ${R(p.y - p.c)} por el giro: ${p.y} m.`,
+  });
+  XG.frases('es-periodica');
+  XG.ascensor('sube-onda', 60, 1, neutro);
+  // ------------------------------------------------------------------------------------------------ dominio, rango y cortes
+  // Rango leído en la gráfica.  params { f, dom: [a, b], win, lo, hi }
+  XG.figura('rango-ventana', {
+    ini: p => ({ a: p.win[2], b: p.win[3] }), alto: () => 236, ms: 1000, pie: 'Mueve el piso y el techo.', manijas: p => [{ k: 'a', min: p.win[2], max: p.win[3], paso: 1, et: 'valor menor' }, { k: 'b', min: p.win[2], max: p.win[3], paso: 1, et: 'valor mayor' }],
+    ok: (v, p) => v.a === p.lo && v.b === p.hi, sol: p => ({ a: p.lo, b: p.hi }), texto: p => `de ${p.lo} a ${p.hi}`,
+    dib(v, K, p, f) { const g = plano(p.win, 110), [a, b] = p.dom; let h = g.ejes(K) + g.curva(K, p.f, 'la gr', a, b) + K.c(g.X(a), g.Y(p.f(a)), 5, 'fa') + K.c(g.X(b), g.Y(p.f(b)), 5, 'fa'); for (let y = p.win[2]; y <= p.win[3]; y++) h += K.l(g.X(0) - 3, g.Y(y), g.X(0) + 3, g.Y(y), 'lm') + (y % 2 === 0 && y ? K.t(g.X(0) - 7, g.Y(y) + 4, y, 's tm', 'end') : ''); return h + K.f(f, K.l(24, g.Y(v.a), 320, g.Y(v.a), 'lg d') + K.l(24, g.Y(v.b), 320, g.Y(v.b), 'lg d')); },
+    aviso: (v, p) => (v.a > p.lo || v.b < p.hi ? 'Parte de la curva queda por fuera.' : 'Hay alturas a las que la curva no llega.'), bien: (v, p) => `La curva va de ${p.lo} a ${p.hi}.`,
+  });
+  // Cortes de una recta ax + by = c con los ejes.  params { a, b, c, max }
+  XG.figura('corte-ejes', {
+    ini: () => ({ x: 0, y: 0 }), alto: () => 232, ms: 1000, pie: 'Mueve los dos cortes.', manijas: p => [{ k: 'x', min: 0, max: p.max, paso: 1, et: 'corte con el eje x' }, { k: 'y', min: 0, max: p.max, paso: 1, et: 'corte con el eje y' }],
+    ok: (v, p) => v.x * p.a === p.c && v.y * p.b === p.c, sol: p => ({ x: p.c / p.a, y: p.c / p.b }), texto: p => `(${p.c / p.a}, 0) y (0, ${p.c / p.b})`,
+    dib(v, K, p, f) { const g = plano([-1, p.max + 1, -1, p.max + 1], 108); return g.ejes(K) + K.c(g.X(v.x), g.Y(0), 6, 'fF') + K.c(g.X(0), g.Y(v.y), 6, 'fg') + K.f(f, K.l(g.X(v.x), g.Y(0), g.X(0), g.Y(v.y), 'la gr')); },
+    aviso: (v, p) => (v.x * p.a !== p.c ? `Con y = 0 y x = ${v.x} no da ${p.c}.` : `Con x = 0 y y = ${v.y} no da ${p.c}.`), bien: (v, p) => `(${v.x}, 0) y (0, ${v.y}).`,
+  });
+  XG.frases('dominio-valores');
+  XG.frases('es-funcion');
+  XG.renglones('lee-cortes', { w: 72, x: 280 });
+  XG.renglones('contexto-dominio', { w: 120, x: 268 });
+  XG.ascensor('sube-funcion', 60, 1, neutro);
+})();
+;
+//#archivo js/games/ondas-escena.js
+// Ejercicios de «Ondas, Luz y Sonido» (Preicfes, icf-cn-ondas; spec 2026-11-25-preicfes-estructura). Armazones en figura-kit, conteo-escena y
+// proposiciones-escena. La escena no dice el resultado mientras se responde.
+(() => {
+  const neutro = ['Se pasó. Vuelve a mirar.', 'Le faltó. Vuelve a mirar.'], N = x => Math.round(x * 100) / 100;
+  const onda = (K, y, A, n, cls = 'la gr', x0 = 24, x1 = 316) => K.pl(Array.from({ length: 121 }, (_, i) => [x0 + (x1 - x0) * i / 120, y - A * Math.sin(2 * Math.PI * n * i / 120)]), cls);
+  // Longitud de onda para una rapidez y una frecuencia.  params { v, f, max, u }
+  XG.figura('largo-onda', {
+    ini: () => ({ l: 1 }), alto: () => 176, ms: 1000, pie: 'Mueve la longitud de onda.', manijas: p => [{ k: 'l', min: 1, max: p.max, paso: 1, et: `longitud de onda (${p.u})` }],
+    ok: (v, p) => v.l * p.f === p.v, sol: p => ({ l: p.v / p.f }), texto: p => `${p.v / p.f} ${p.u}`,
+    dib(v, K, p, f) { return K.l(24, 60, 316, 60, 'lm') + onda(K, 60, 26, p.max / v.l) + K.f(f, K.t(170, 118, `${N(v.l)} · ${p.f} = ${N(v.l * p.f)} ${p.u}/s`, 'b')); },
+    aviso: (v, p) => (v.l * p.f < p.v ? 'Con esa longitud viajaría más despacio.' : 'Con esa longitud viajaría más rápido.'), bien: (v, p) => `${v.l} por ${p.f}: ${p.v}.`,
+  });
+  // Frecuencia: vibraciones en cierto tiempo.  params { n, t, max }
+  XG.figura('cuenta-vibraciones', {
+    ini: () => ({ f: 0 }), alto: () => 176, ms: 1000, pie: 'Mueve la frecuencia.', manijas: p => [{ k: 'f', min: 0, max: p.max, paso: 1, et: 'frecuencia (Hz)' }],
+    ok: (v, p) => v.f * p.t === p.n, sol: p => ({ f: p.n / p.t }), texto: p => `${p.n / p.t} Hz`,
+    dib(v, K, p, f) { const q = Array.from({ length: p.t + 1 }, (_, i) => 24 + 292 * i / p.t); return onda(K, 56, 24, p.n) + K.t(316, 100, `${p.t} s`, 's tm', 'end') + K.f(f, q.map(x => K.l(x, 24, x, 88, 'lg d')).join('')); },
+    aviso: (v, p) => `Con ${v.f} por segundo, en ${p.t} s habría ${v.f * p.t}.`, bien: (v, p) => `${p.n} en ${p.t} s: ${v.f} cada segundo.`,
+  });
+  // Espejo: ángulo de salida medido desde la normal.  params { g }
+  XG.figura('refleja-angulo', {
+    ini: () => ({ a: 0 }), alto: () => 206, ms: 1000, pie: 'Mueve el rayo que sale.', manijas: () => [{ k: 'a', min: 0, max: 80, paso: 5, et: 'ángulo desde la normal (°)' }],
+    ok: (v, p) => v.a === p.g, sol: p => ({ a: p.g }), texto: p => `${p.g}°`,
+    dib(v, K, p, f) { const c = [170, 130], a = K.at(...c, 104, 90 + p.g), b = K.at(...c, 104, 90 - v.a); return K.l(40, 130, 300, 130, 'gr') + K.l(170, 20, 170, 130, 'lm d') + K.l(...a, ...c, 'la gr') + K.l(...c, ...b, 'lg gr') + K.t(46, 22, `${p.con ? `con el espejo: ${90 - p.g}°` : `con la normal: ${p.g}°`}`, 's tm', 'start') + K.f(f, K.arc(...c, 40, 90, 90 + p.g, 'la') + K.arc(...c, 40, 90 - p.g, 90, 'lo')); },
+    aviso: (v, p) => (p.con && v.a === 90 - p.g ? 'Ese es el ángulo con el espejo: se mide desde la normal.' : v.a < p.g ? 'Sale demasiado pegado a la normal.' : 'Sale demasiado inclinado.'), bien: (v, p) => `Llega a ${p.g}° de la normal y sale a ${p.g}°.`,
+  });
+  // Eco.  params { v (m/s), t (s), max, paso }
+  XG.figura('eco-distancia', {
+    ini: () => ({ d: 0 }), alto: () => 180, ms: 1100, pie: 'Mueve la distancia a la pared.', manijas: p => [{ k: 'd', min: 0, max: p.max, paso: p.paso, et: 'distancia (m)' }],
+    ok: (v, p) => 2 * v.d === p.v * p.t, sol: p => ({ d: p.v * p.t / 2 }), texto: p => `${p.v * p.t / 2} m`,
+    dib(v, K, p, f) { const x = 40 + 250 * v.d / p.max; return K.c(30, 64, 10, 'fa') + K.r(x + 4, 24, 12, 80, 'fk', 2) + K.l(42, 56, x, 56, 'la') + K.l(42, 74, x, 74, 'lg') + K.t(60, 46, 'ida', 's ta', 'start') + K.t(60, 92, 'vuelta', 's tg', 'start') + K.f(f, K.t(170, 122, `2 · ${N(v.d)} = ${N(2 * v.d)} m`, 'b')); },
+    aviso: (v, p) => (v.d === p.v * p.t ? 'Eso es lo que recorrió en ida y vuelta.' : 2 * v.d < p.v * p.t ? 'El eco volvería antes.' : 'El eco tardaría más.'), bien: (v, p) => `Ida y vuelta: ${p.v * p.t} m.`,
+  });
+  XG.renglones('se-acerca-normal', { w: 118, x: 268 });
+  XG.renglones('tono-o-volumen', { w: 96, x: 278 });
+  XG.ascensor('sube-rapidez', 100, 2, neutro);
 })();
 ;
 //#archivo js/games/conjuntos-escena.js
@@ -23153,5 +22762,136 @@ PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
     ['pu-lo-5', 'Se supone un caso y se busca la contradicción.',
       opc('Luis dice: «Mario miente». Mario dice: «Luis y yo decimos la verdad». Entonces:', ['Los dos dicen la verdad', 'Luis dice la verdad y Mario miente', 'Luis miente y Mario dice la verdad', 'Los dos mienten'], 1,
         'Si Mario dijera la verdad, Luis también, y Luis afirma que Mario miente: contradicción. Mario miente y Luis dice la verdad.', 'Supón que Mario dice la verdad y mira qué pasa.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-operadores.js
+// Preuniversitario · mundo 11 «Operadores definidos»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+PU_JUEGOS.push(({ setExam }) => {
+  const TAB4 = [[1, 2, 3, 4], [2, 4, 1, 3], [3, 1, 4, 2], [4, 3, 2, 1]];
+  setExam('pu-operadores', 'Operadores definidos', [
+    ['pu-op-1', 'En un operador, el primer número reemplaza a $a$ y el segundo a $b$.',
+      play('maquina-operador', 'Máquina', { rounds: [{ sym: '\\star', tex: '3a - b', f: (a, b) => 3 * a - b, target: 10, lo: 0, hi: 10, fix: { a: 4 } }] }, '$12 - b = 10$: $b = 2$.', { hint: 'Reemplaza.' })],
+    ['pu-op-1', 'Por tabla: fila del primero, columna del segundo.',
+      play('cruce-tabla', 'Tabla', { rounds: [{ set: [1, 2, 3, 4], tab: TAB4, chain: [4, 2] }] }, '$4 \\circ 2 = 3$.', { hint: 'Fila 4.' })],
+    ['pu-op-1', 'El neutro cumple $a \\circ e = a$ para todo $a$.',
+      play('neutro-buscador', 'Neutro', { rounds: [{ sym: '\\circ', tex: 'a + b + 5', f: (a, b) => a + b + 5, lo: -8, hi: 5, as: [1, 3, 5, 7] }] }, '$e = -5$.', { hint: 'Despeja.' })],
+    ['pu-op-2', 'Los anidados se resuelven de adentro hacia afuera.',
+      play('anida-operador', 'Anidado', { rounds: [{ sym: '\\star', tex: 'a + 3b', f: (a, b) => a + 3 * b, expr: [[1, 2], 1] }] }, '$1 \\star 2 = 7$ y $7 \\star 1 = 10$.', { hint: 'Adentro.' })],
+    ['pu-op-2', 'Con el operador en una ecuación, se reemplaza y se despeja.',
+      play('busca-x-operador', 'Ecuación', { rounds: [{ sym: '\\oplus', tex: '2a + 3b', f: (a, b) => 2 * a + 3 * b, k: 2, side: 'left', target: 14, lo: -5, hi: 10 }] }, '$2x + 6 = 14$: $x = 4$.', { hint: 'Reemplaza.' })],
+  ]);
+});
+
+// Mundo 11 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/operadores-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-op-1', [
+    play('arma-receta', 'Con $a \\star b = 4a - b^2$, pon cada número en su lugar y calcula $3 \\star 2$ y $2 \\star 3$.', { et: ['3 ★ 2', '2 ★ 3'], metas: ['3', '2', '8', '2', '3', '−1'], fichas: ['3', '3', '2', '2', '8', '−1', '17', '10'],
+      mira: ['Donde la receta dice a entra el primero: el 3.', 'Donde dice b entra el segundo: el 2.', 'Doce menos el cuadrado de 2.', 'Ahora el primero es el 2.', 'Ahora el segundo es el 3.', 'Ocho menos el cuadrado de 3.'],
+      trampas: { '0:2': 'El 2 es el segundo: no va en el lugar de a.', '3:3': 'Al voltear, el primero es el 2.', '2:10': '12 − 2 olvida el cuadrado.', '5:17': 'Sumaste el 9: la receta lo resta.' }, ok: 'Voltear los números cambió el resultado.' },
+      'Con 3 ★ 2 queda $4 \\cdot 3 - 2^2 = 8$. Con 2 ★ 3 queda $4 \\cdot 2 - 3^2 = -1$.',
+      { hint: 'Primero marca cuál es a y cuál es b en cada renglón; después haz la cuenta.' }),
+    play('maquina-ida-vuelta', 'La máquina hace $a \\star b = 2b - a$. Abajo entran los mismos números **volteados**. Mueve las entradas para que **arriba salga 7** y **abajo salga 1**.', { f: (a, b) => 2 * b - a, m: [7, 1], texto: 'a = 3 y b = 5' },
+      'Arriba, $2 \\cdot 5 - 3 = 7$. Abajo, volteados, $2 \\cdot 3 - 5 = 1$.',
+      { hint: 'Arriba el que se dobla es b; abajo, el que se dobla es a. ¿Cuál de los dos conviene que sea mayor?' }),
+    play('cuales-conmutan', '¿En cuáles recetas **no importa el orden** de los números, sean los que sean? Toca todas.', { casos: [{ t: 'a · b + 5', si: true }, { t: 'a + 5b', no: 'En a + 5b solo se multiplica por 5 el segundo: con 1 y 2 da 11; con 2 y 1 da 7.' }, { t: '(a − b)²', si: true }, { t: 'a · b − b', no: 'En a · b − b se resta el segundo: con 1 y 2 da 0; con 2 y 1 da 1.' }, { t: 'a² + b²', si: true }], falta: 'Falta otra que da lo mismo al voltear: pruébalas con 1 y 2, y luego con 2 y 1.', ok: 'Esas recetas tratan igual a las dos letras.' },
+      'El producto, la suma de cuadrados y el cuadrado de la diferencia no distinguen a de b. En a + 5b solo b se multiplica por 5, y en a · b − b solo se resta b.',
+      { hint: 'Cambia a por b y b por a en la receta y mira si queda la misma.' }),
+    play('entran-negativos', 'La máquina hace $a \\star b = a \\cdot b - b^2$. Entran $-2$ y $-3$. Llena cada parte.', { a: '−2', b: '−3', et: ['a · b', 'b²', 'sale'], ops: ['−', '='], metas: ['6', '9', '−3'], fichas: ['6', '−6', '9', '−9', '−3', '15', '3', '4'],
+      mira: ['Multiplica (−2) por (−3), con sus signos.', 'El cuadrado es de todo el −3.', 'Al producto se le resta el cuadrado.'],
+      trampas: { '0:−6': 'Menos por menos da más.', '1:−9': '(−3)² es (−3) · (−3).', '1:4': 'Ese es el cuadrado del primero; la receta pide el del segundo.', '2:15': 'La receta resta el 9.', '2:3': 'Restaste al revés: es 6 − 9.' }, ok: 'Con paréntesis, los signos no se pierden.' },
+      '$(-2) \\cdot (-3) = 6$ y $(-3)^2 = 9$: sale $6 - 9 = -3$.',
+      { hint: 'Reemplaza cada letra por su número entre paréntesis antes de calcular.' }),
+    play('lee-operacion', 'La operación está en la tabla: las **filas** son del primero y las **columnas** del segundo. Completa y halla la **x**.', { letras: ['p', 'q', 'r', 's'], tab: [['r', 's', 'p', 'q'], ['p', 'r', 'q', 's'], ['q', 'p', 's', 'r'], ['s', 'q', 'r', 'p']], et: ['q ✱ s =', 's ✱ q =', 'r ✱ x = p, x ='], metas: ['s', 'q', 'q'], fichas: ['p', 'q', 'q', 'q', 'r', 's', 's'],
+      mira: ['El primero, q, manda la fila.', 'Ahora el primero es s: cambia la fila.', 'Recorre la fila de r hasta encontrar p; la respuesta es el nombre de su columna.'], trampas: { '0:q': 'Eso es s ✱ q: leíste la fila de s.', '1:s': 'Eso es q ✱ s: leíste la fila de q.', '2:p': 'p es el resultado; se pide la columna.' }, ok: 'Al cambiar el orden, la casilla es otra.' },
+      'Fila de q, columna de s: s. Fila de s, columna de q: q. En la fila de r, la p está en la columna de q.',
+      { hint: 'Pon un dedo en la fila del primero y otro en la columna del segundo.' }),
+    play('tabla-desigual', 'Toca **todas** las casillas en las que **cambiar el orden** de las dos letras cambia el resultado.', { letras: ['p', 'q', 'r', 's'], tab: [['q', 'r', 'p', 's'], ['r', 'p', 'q', 'r'], ['p', 'q', 's', 'p'], ['p', 's', 'p', 'q']], texto: 'p ✱ s con s ✱ p, y q ✱ s con s ✱ q', ok: 'Esas casillas no son iguales a su reflejo en la diagonal.' },
+      'p ✱ s = s, pero s ✱ p = p. Y q ✱ s = r, pero s ✱ q = s. Las demás son iguales a su reflejo.',
+      { hint: 'Cada casilla tiene su pareja al otro lado de la diagonal: compara las dos.' }),
+    play('neutro-de-cada', 'El neutro $e$ no cambia a nadie: $a$ operado con $e$ da $a$, sea cual sea $a$. Pon el de cada receta.', { et: ['a + b − 4', 'a + b + 9', 'a · b', 'a · b ÷ 3'], metas: ['4', '−9', '1', '3'], fichas: ['4', '−4', '9', '−9', '1', '1', '0', '3'],
+      mira: ['Pon e en el lugar de b: lo que se suma debe deshacer el −4.', 'Pon e en el lugar de b: lo que se suma debe deshacer el +9.', '¿Por qué número se multiplica para no cambiar nada?', 'Se divide entre 3: ¿por cuánto hay que multiplicar antes?'], trampas: { '0:−4': 'Con −4 se restaría 4 dos veces.', '1:9': 'Con 9 se sumaría 9 dos veces.', '2:0': 'Con 0 todo se vuelve 0.', '3:1': 'Con 1 el número queda dividido entre 3.' }, ok: 'Cada neutro deshace lo que la receta añade.' },
+      '$a + 4 - 4 = a$; $a + (-9) + 9 = a$; $a \\cdot 1 = a$; $a \\cdot 3 \\div 3 = a$.',
+      { hint: 'Prueba con un número, por ejemplo 5: ¿qué tiene que entrar por b para que salga 5 otra vez?' }),
+    play('sube-operador', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Con $a \\diamond b = a^2 + 2b$, ¿cuánto vale $4 \\diamond 5$?', r: 26, c: '4^2 + 2 \\cdot 5', e: { 33: 'Eso es 5 ◆ 4: los volteaste.', 18: 'El cuadrado de 4 es 4 · 4.' } },
+      { q: 'Con $a \\circ b = 3b - a$, ¿cuánto vale $(-6) \\circ 5$?', r: 21, c: '3 \\cdot 5 - (-6)', e: { 9: 'Restar −6 es sumar 6.' } },
+      { q: 'Con $a \\odot b = a \\cdot b \\div 12$, ¿cuál es el neutro, el que no cambia a nadie?', r: 12, c: 'a \\cdot 12 \\div 12 = a \\Rightarrow e', e: { 1: 'Con 1 cada número queda dividido entre 12.' } }] },
+      '$16 + 10 = 26$; $15 + 6 = 21$; y con 12 queda $a \\cdot 12 \\div 12 = a$.',
+      { hint: 'En cada tiro, escribe quién es a y quién es b, y pon los negativos entre paréntesis.' }),
+    sol('En los números enteros se define la operación $a \\diamond b = 3a - 2b$. Calcula $5 \\diamond 4$ y $4 \\diamond 5$. ¿La operación es conmutativa?',
+      ['En $5 \\diamond 4$ el primero es 5 y el segundo es 4: $3 \\cdot 5 - 2 \\cdot 4 =$ [[7]]', 'En $4 \\diamond 5$ el primero es 4: $3 \\cdot 4 - 2 \\cdot 5 =$ [[2]]', 'Los resultados son [[distintos]]: la operación [[no es]] conmutativa'],
+      ['iguales', 'es', '−2'],
+      'Un operador definido es una receta con dos puestos: lo que se hace con el primer número no es lo mismo que con el segundo. Por eso el orden puede cambiar el resultado.',
+      'Marca cuál número ocupa el lugar de a y cuál el de b antes de reemplazar.'),
+    err('Se define la operación $a \\circ b = a^2 - b$. ¿Cuánto vale $(-3) \\circ 4$?',
+      ['El primer número es $-3$ y el segundo es 4', 'Se eleva el primero al cuadrado: $(-3)^2 = -9$', 'Se resta el segundo: $-9 - 4 = -13$'], 1,
+      ['Se eleva el primero al cuadrado: $(-3)^2 = 9$', 'Se eleva el primero al cuadrado: $(-3)^2 = -6$', 'Se eleva el primero al cuadrado: $(-3)^2 = 6$'],
+      'Al reemplazar un número negativo va con su paréntesis: $(-3)^2 = 9$. El resultado es $9 - 4 = 5$.',
+      'Reemplaza la letra por el número completo, con su signo y entre paréntesis.'),
+    opc('En los números reales se define la operación $a \\star b = a \\cdot b - a$. El valor de $3 \\star 5$ menos el valor de $5 \\star 3$ es:',
+      ['0', '2', '$-2$', '4'], 1,
+      '$3 \\star 5 = 15 - 3 = 12$ y $5 \\star 3 = 15 - 5 = 10$. La diferencia es 2.',
+      'Calcula cada uno por separado: en cada caso, el número que se resta es el primero.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/operadores-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-op-2', [
+    play('dos-parentesis', 'Con $a \\star b = a \\cdot b + 1$, llena cada renglón. ¿Importa dónde van los paréntesis?', { et: ['2 ★ 3', '(2 ★ 3) ★ 4', '3 ★ 4', '2 ★ (3 ★ 4)'], metas: ['7', '29', '13', '27'], fichas: ['7', '29', '13', '27', '25', '24', '28'],
+      mira: ['Dos por tres, más 1.', 'El paréntesis ya vale un número: opéralo con 4.', 'Tres por cuatro, más 1.', 'Dos operado con lo que dio el paréntesis.'], trampas: { '1:25': 'El +1 se hace en cada operación, no solo al final.', '3:25': 'El +1 se hace en cada operación, no solo al final.', '1:28': 'Falta el +1 de la operación de afuera.' }, ok: 'Mover los paréntesis cambió el resultado.' },
+      '$2 \\star 3 = 7$ y $7 \\star 4 = 29$. $3 \\star 4 = 13$ y $2 \\star 13 = 27$.',
+      { hint: 'Resuelve primero el paréntesis y cámbialo por un solo número.' }),
+    play('arbol-operador', 'Con $a \\ast b = a + 4b$ y $a \\diamond b = a^2 - b$, sube por el árbol de $(4 \\ast 1) \\diamond (2 \\diamond 3)$.', { h: ['4', '1', '2', '3'], s: ['✱', '◆', '◆'], metas: ['8', '1', '63'], fichas: ['8', '1', '63', '17', '7', '15', '−7'],
+      mira: ['4 más el cuádruple de 1.', 'El cuadrado de 2, menos 3.', 'Arriba está ◆: el cuadrado de lo de la izquierda menos lo de la derecha.'], trampas: { '0:17': 'Volteaste: el que se multiplica por 4 es el segundo.', '1:7': 'Volteaste: el cuadrado es del primero.', '2:15': '8 al cuadrado no es 16.', '2:−7': 'Volteaste: el primero es el de la izquierda.' }, ok: 'Cada nudo usó la receta de su símbolo.' },
+      '$4 + 4 \\cdot 1 = 8$; $2^2 - 3 = 1$; y $8^2 - 1 = 63$.',
+      { hint: 'Cada nudo se llena con los dos de abajo y la receta del símbolo que los une.' }),
+    play('lugar-x', 'Con $a \\oplus b = 2a - 3b$, une cada ecuación con la que queda al reemplazar.', { et: ['x ⊕ 4 = 10', '4 ⊕ x = 10', 'x ⊕ x = 10'], metas: ['2x − 12 = 10', '8 − 3x = 10', '2x − 3x = 10'], fichas: ['2x − 12 = 10', '8 − 3x = 10', '2x − 3x = 10', '2x − 4 = 10', '12 − 2x = 10'],
+      mira: ['La x entra por a y el 4 por b.', 'El 4 entra por a y la x por b.', 'La x entra por las dos partes.'], trampas: { '0:8 − 3x = 10': 'Ahí el primero es el 4.', '0:2x − 4 = 10': 'Falta triplicar el 4.', '1:12 − 2x = 10': 'El primero se dobla y el segundo se triplica.' }, ok: 'Lo primero es ver en qué lugar está la x.' },
+      'El doble del primero menos el triple del segundo: $2x - 12$, $8 - 3x$ y $2x - 3x$.',
+      { hint: 'Di en voz alta: «el doble del primero menos el triple del segundo».' }),
+    play('iguala-lados', 'Con $a \\circ b = 4a + b$, mueve la $x$ hasta que $x \\circ 2$ y $5 \\circ x$ valgan **lo mismo**.', { l: x => 4 * x + 2, r: x => 20 + x, et: ['x ∘ 2', '5 ∘ x'], max: 12, texto: 'x = 6' },
+      '$4x + 2 = 20 + x$: $3x = 18$ y $x = 6$. Los dos lados valen 26.',
+      { hint: 'Reemplaza en cada lado: en uno la x se cuadruplica y en el otro solo se suma.' }),
+    play('cadena-en-tabla', 'Las filas son del **primero** y las columnas del **segundo**. Halla cada resultado y la **x** de la última.', { letras: ['t', 'u', 'v'], tab: [['u', 'v', 't'], ['t', 't', 'v'], ['v', 'u', 'u']], et: ['(t ✱ u) ✱ v =', 't ✱ (u ✱ v) =', 'x ✱ u = u, x ='], metas: ['u', 't', 'v'], fichas: ['t', 't', 'u', 'u', 'v', 'v'],
+      mira: ['Primero t ✱ u; lo que sale es la fila del siguiente cruce.', 'Primero u ✱ v; lo que sale es la columna del siguiente cruce.', 'La x es una fila: busca en la columna de u dónde sale u.'], trampas: { '0:v': 'v es solo t ✱ u: falta operarlo con v.', '1:v': 'v es solo u ✱ v: falta operarlo con t.', '2:t': 'En t ✱ u sale v.', '2:u': 'En u ✱ u sale t.' }, ok: 'Con los paréntesis en otro lugar, el resultado es otro.' },
+      't ✱ u = v y v ✱ v = u. En cambio u ✱ v = v y t ✱ v = t. Y en la columna de u, la u está en la fila de v.',
+      { hint: 'Un cruce a la vez: resuelve el paréntesis y reemplázalo por la letra que salió.' }),
+    play('x-consigo', 'Con $a \\diamond b = a \\cdot b - 2b$, toca **todos** los números que operados **consigo mismos** dan 8.', { nums: [-4, -2, 2, 4, 6, 8], f: (a, b) => a * b - 2 * b, t: 8, ok: '4 · 4 − 2 · 4 = 8 y (−2) · (−2) − 2 · (−2) = 8.' },
+      '$4 \\diamond 4 = 16 - 8 = 8$ y $(-2) \\diamond (-2) = 4 + 4 = 8$. Los demás dan 24, 0, 24 y 48.',
+      { hint: 'Reemplaza el mismo número en a y en b. Con los negativos, cuida los paréntesis.' }),
+    play('deshace-operador', 'Con $a \\star b = a \\cdot b + 3$, en dos máquinas seguidas $(x \\star 2) \\star 4 = 55$. Ve **hacia atrás** y llena las casillas.', { s: ['★ 2', '★ 4'], sale: '55', metas: ['5', '13'], fichas: ['5', '13', '8', '10', '52', '58', '6'],
+      mira: ['Lo de la mitad salió de x por 2, más 3: deshazlo.', 'El 55 salió de lo de la mitad por 4, más 3: deshazlo.'], trampas: { '0:8': 'Sumaste el 3: para deshacer se resta.', '0:10': 'Falta dividir entre 2.', '1:52': 'Falta dividir entre 4.', '1:58': 'Para deshacer el +3 se resta, y después se divide entre 4.' }, ok: '5 ★ 2 = 13 y 13 ★ 4 = 55.' },
+      'Antes del 55: $(55 - 3) \\div 4 = 13$. Antes del 13: $(13 - 3) \\div 2 = 5$.',
+      { hint: 'La última cuenta que se hizo es la primera que se deshace.' }),
+    play('sube-anidado', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Con $a \\oplus b = 3a + b$, ¿cuánto vale $(2 \\oplus 1) \\oplus 4$?', r: 25, c: '3 \\cdot 7 + 4', e: { 13: 'Eso es 2 ⊕ (1 ⊕ 4): el paréntesis está al otro lado.', 7: 'Ese es solo el paréntesis.' } },
+      { q: 'Con $a \\circ b = 5b - a$, ¿qué $x$ cumple $7 \\circ x = 33$?', r: 8, c: '(33 + 7) \\div 5', e: { 2: 'La x es el segundo: es la que se multiplica por 5.', 40: 'Falta dividir entre 5.' } },
+      { q: 'Con $a \\star b = a \\cdot b - a$, ¿qué $x$ cumple $(x \\star 3) \\star 2 = 28$?', r: 14, c: '28 \\div 2', e: { 28: 'Eso es lo que da el paréntesis: falta la x.', 7: 'La segunda operación no duplica: 2 veces lo del paréntesis menos una vez.' } }] },
+      '$2 \\oplus 1 = 7$ y $7 \\oplus 4 = 25$. $5x - 7 = 33$ da $x = 8$. $x \\star 3 = 2x$ y $2x \\star 2 = 2x$: $x = 14$.',
+      { hint: 'Primero lo de adentro, y fíjate si la x es el primero o el segundo.' }),
+    sol('En los números enteros se define la operación $a \\ast b = a \\cdot b - (a + b)$. ¿Cuánto vale $(4 \\ast 3) \\ast 2$?',
+      ['Primero el paréntesis: $4 \\ast 3 = 12 - 7 =$ [[5]]', 'Ese resultado ocupa el lugar del paréntesis: queda $5 \\ast 2$, con producto [[10]] y suma [[7]]', '$5 \\ast 2 = 10 - 7 =$ [[3]]'],
+      ['8', '24', '−3'],
+      'Un anidado se resuelve de adentro hacia afuera: el resultado del paréntesis pasa a ser un número más de la operación siguiente. Y en cada paso se usa la misma regla: el producto menos la suma.',
+      'Lee primero la regla de esta operación. Después olvida por un momento el 2 de afuera y resuelve solo el paréntesis.'),
+    err('Otra operación, con otra regla: se define $a \\odot b = 4a - 3b$. ¿Para qué valor de $x$ se cumple $2 \\odot x = -7$?',
+      ['Se reemplaza: el 2 ocupa el lugar de a y la x el de b, así que $2 \\odot x = 4 \\cdot 2 - 3x$', 'Se simplifica: $8 - 3x$', 'Se plantea $8 - 3x = -7$, así que $-3x = 1$', 'Entonces $x = -\\tfrac13$'], 2,
+      ['Se plantea $8 - 3x = -7$, así que $-3x = -15$', 'Se plantea $8 - 3x = -7$, así que $3x = -15$', 'Se plantea $8 - 3x = -7$, así que $-3x = -7$'],
+      'Al pasar el 8 al otro lado se resta: $-7 - 8 = -15$. Entonces $x = 5$, y se comprueba: $4 \\cdot 2 - 3 \\cdot 5 = 8 - 15 = -7$. Cada problema trae su propia regla: antes de reemplazar, lee qué hace la operación con a y con b. Aquí es $4a - 3b$, no el producto menos la suma del ejercicio anterior.',
+      'Lee bien la regla de esta operación y mira qué número va en el lugar de a y cuál en el de b. Al final, comprueba tu x reemplazándola.'),
+    opc('Para números reales se define $a \\,\\#\\, b = 2a + b$. El valor de $x$ que cumple $x \\,\\#\\, 3 = 3 \\,\\#\\, x$ es:',
+      ['0', '1', '6', '3'], 3,
+      '$x \\,\\#\\, 3 = 2x + 3$ y $3 \\,\\#\\, x = 6 + x$. Igualando: $2x + 3 = 6 + x$, así que $x = 3$.',
+      'Reemplaza en los dos lados con cuidado: la x ocupa un puesto distinto en cada uno.'),
+  ]);
+
+  addExam('pu-operadores', [
+    ['pu-op-1', 'Un operador definido es una receta: cada letra se reemplaza por el número que ocupa su lugar.',
+      opc('Se define la operación $a \\triangle b = a^2 + b$. El valor de $3 \\triangle 4$ es:', ['10', '19', '13', '7'], 2,
+        '$3^2 + 4 = 9 + 4 = 13$.', 'El cuadrado es solo para el primer número.')],
+    ['pu-op-2', 'Los operadores anidados se resuelven de adentro hacia afuera.',
+      opc('Se define la operación $a \\star b = 2a - b$. El valor de $(5 \\star 4) \\star 3$ es:', ['9', '3', '6', '15'], 0,
+        '$5 \\star 4 = 10 - 4 = 6$ y $6 \\star 3 = 12 - 3 = 9$.', 'Resuelve primero el paréntesis.')],
   ]);
 });
