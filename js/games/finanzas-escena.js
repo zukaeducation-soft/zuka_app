@@ -16,8 +16,8 @@
     ini: () => ({ n: 0 }), alto: () => 220, ms: 1200, pie: 'Mueve los años.', manijas: p => [{ k: 'n', min: 0, max: p.max, paso: 1, et: 'años' }],
     ok: (v, p) => v.n === primero(p), sol: p => ({ n: primero(p) }), texto: p => `${primero(p)} años`,
     dib(v, K, p, f) {
-      const n = Math.round(v.n), hi = Math.max(p.meta, saldo(p, n)) * 1.08, w = Math.min(34, 280 / (n + 1)), y = x => 136 - 110 * x / hi; let h = K.l(20, 136, 320, 136, 'lm');
-      for (let i = 0; i <= n; i++) { const t = i ? f : 1, s = i ? saldo(p, i) : p.C; h += K.r(30 + i * w, 136 - (136 - y(s)) * (i ? Math.max(t, 0.06) : 1), w - 5, (136 - y(s)) * (i ? Math.max(t, 0.06) : 1), i ? 'fg' : 'fa', 2); }
+      const n = Math.round(v.n), hi = (p.meta + f * (Math.max(p.meta, saldo(p, n)) - p.meta)) * 1.08, w = Math.min(34, 280 / (n + 1)), y = x => 136 - 110 * x / hi; let h = K.l(20, 136, 320, 136, 'lm');
+      for (let i = 0; i <= n; i++) { const a = 136 - y(i ? saldo(p, i) : p.C), q = i ? 4 + f * (a - 4) : a; h += K.r(30 + i * w, 136 - q, w - 5, q, i ? 'fg' : 'fa', 2); }
       return h + K.f(f, K.l(20, y(p.meta), 320, y(p.meta), 'la d') + K.t(316, y(p.meta) - 6, p.meta, 's ta', 'end') + K.t(170, 20, `${p.C} · ${R(1 + p.r / 100)}^${n} = ${R(saldo(p, n))}`.replace(/\^(\d+)/, (_, d) => [...d].map(c => '⁰¹²³⁴⁵⁶⁷⁸⁹'[c]).join('')), 'b')) + K.t(30 + w / 2, 152, 'hoy', 's tm');
     },
     aviso: (v, p) => (saldo(p, v.n) < p.meta ? 'Con esos años todavía no llega.' : 'Llega, pero había llegado antes.'), bien: (v, p) => `Ese es el primer año en que alcanza ${p.meta}.`,
