@@ -8,7 +8,7 @@
   const plano = (K, p) => {
     let h = '';
     for (let x = 0; x <= p.xm + 1e-9; x += p.sx || 1) h += K.l(PX(p, x), 30, PX(p, x), 180, x ? 'lr' : 'lm') + K.t(PX(p, x), 196, N(x), 's tm');
-    for (let y = 0; y <= p.ym + 1e-9; y += p.sy || 1) h += K.l(52, PY(p, y), 308, PY(p, y), y ? 'lr' : 'lm') + (y ? K.t(45, PY(p, y) + 4, N(y), 's tm', 'end') : '');
+    for (let y = 0; y <= p.ym + 1e-9; y += p.sy || 1) h += K.l(52, PY(p, y), 308, PY(p, y), y ? 'lr' : 'lm') + (y && Math.round(y / (p.sy || 1)) % (p.ym / (p.sy || 1) > 8 ? 2 : 1) === 0 ? K.t(45, PY(p, y) + 4, N(y), 's tm', 'end') : '');
     return h + K.t(308, 212, p.ex || 'x', 's tm', 'end') + K.t(40, 16, p.ey || 'y', 's tm', 'start');
   };
   const linea = (K, p, pts, cls) => K.pl(pts.map(([x, y]) => [PX(p, x), PY(p, y)]), cls);
@@ -20,7 +20,7 @@
     manijas: p => [{ k: ['x', 'y'], min: [p.a[0] + 1, 0], max: [p.xm, p.ym], paso: 1, r: 10, en: v => [PX(p, v.x), PY(p, v.y)], de: (x, y) => [(x - 52) / 256 * p.xm, (180 - y) / 150 * p.ym] }],
     ok: (v, p) => Math.abs((v.y - p.a[1]) - p.m * (v.x - p.a[0])) < 1e-9,
     sol: llega, texto: p => `por ejemplo, (${llega(p).x}, ${llega(p).y})`,
-    dib: (v, K, p, f) => plano(K, p) + linea(K, p, [p.a, [v.x, v.y]], 'la gr') + K.f(f, linea(K, p, [p.a, [v.x, p.a[1]], [v.x, v.y]], 'lg d')) + K.c(PX(p, p.a[0]), PY(p, p.a[1]), 6, 'fG') + (f ? K.c(PX(p, v.x), PY(p, v.y), 7, 'fA') : ''),
+    dib: (v, K, p, f) => plano(K, p) + linea(K, p, [p.a, [v.x, v.y]], 'la gr') + K.f(f, linea(K, p, [p.a, [v.x, p.a[1]], [v.x, v.y]], 'lg d')) + K.c(PX(p, p.a[0]), PY(p, p.a[1]), 6, 'fG') + K.t(PX(p, p.a[0]) - 12, PY(p, p.a[1]) - 8, 'A', 'b tg') + (f ? K.c(PX(p, v.x), PY(p, v.y), 7, 'fA') : ''),
     aviso: (v, p) => `De A a tu punto avanza ${v.x - p.a[0]} y ${v.y < p.a[1] ? 'baja' : 'sube'} ${Math.abs(v.y - p.a[1])}: compara con lo que se pide por cada 1.`, bien: (v, p) => `Cambia ${N(v.y - p.a[1])} en ${v.x - p.a[0]}: ${N(p.m)} por cada 1.`,
   });
   // Se arma la recta con lo que vale en 0 y lo que vale en xm.

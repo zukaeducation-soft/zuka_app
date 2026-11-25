@@ -17,7 +17,7 @@ xpLec('icf-sc-sistemico-1', [
       ['Que vuelve a bajar las ventas: un círculo.', { luz: [3, 0], nota: { 3: 'vuelve al inicio' } }],
       ['Para romperlo basta con cambiar un punto.', {}],
     ], 'Sigue las flechas: algunas vuelven al comienzo.'),
-    xpHaz('hoja', 'Pon al margen el orden de la cadena.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['tercero', 'primero', 'segundo'], meta: [0, 1, 2], paras: [['Los niños faltan a clase.'], ['Se daña el puente.'], ['El bus deja de pasar.']], pista: 'Alguna no va ahí: ¿qué tuvo que pasar antes?' }, 'Se daña el puente, el bus no pasa y los niños faltan.')],
+    xpHaz('hoja', 'Pon al margen el orden de la cadena.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['primero', 'segundo', 'tercero'], meta: [2, 0, 1], paras: [['Los niños faltan a clase.'], ['Se daña el puente.'], ['El bus deja de pasar.']], pista: 'Alguna no va ahí: ¿qué tuvo que pasar antes?' }, 'Se daña el puente, el bus no pasa y los niños faltan.')],
   ['Juntas no es por',
     xpMira('hoja', 'Tercera idea: que dos cosas pasen **juntas** no prueba que una **cause** la otra.', { paras: [['En enero llegó una familia nueva.'], ['En enero subió el precio del agua.'], ['«El agua subió por ellos».'], ['Ese mes subió en todo el país.']] }, [
       ['Dos hechos en el mismo mes.', { luz: [0, 1], nota: { 0: 'a la vez' } }],
