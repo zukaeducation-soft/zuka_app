@@ -1,2572 +1,143 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preicfes-cn-indaga.js
-// Preicfes · Ciencias Naturales · mundo 1 «Indagación Científica» (spec 2026-11-20-curso-preicfes): la competencia que más
-// pregunta la prueba de ciencias: la pregunta de un experimento, sus variables, el control, los datos y qué se puede concluir.
-// Estándar de diez: el experimento se lee con juegos LEC y sus datos se manejan con juegos de lienzo; un juego en movimiento y la
-// zona de examen al final. Experimentos escritos para Zuka (los resultados siguen lo que pasa de verdad).
-PI_MUNDOS.push((() => {
-  const { leccion, mundo, sol, err, opc } = ICF;
-
-  const FRIJOL = {
-    id: 'icf-frijol', title: 'Frijoles a oscuras',
-    ficha: { autor: 'Grupo de ciencias de un colegio público', fuente: 'Informe de laboratorio de grado once', fecha: 'Abril de 2026' },
-    paras: [
-      'Un grupo de grado once se preguntó si la cantidad de luz que recibe una planta de frijol cambia lo que crece en sus primeras dos semanas de vida.',
-      'Antes de empezar escribieron su hipótesis: «Las plantas que reciben más horas de luz crecerán más altas». Les parecía evidente, porque las plantas necesitan luz para fabricar su alimento.',
-      'Sembraron 40 semillas del mismo paquete en 40 vasos con la misma tierra y las repartieron en cuatro grupos de diez. Cada grupo recibió 0, 4, 8 o 12 horas diarias de luz de una lámpara, dentro de cajas que se mantuvieron a la misma temperatura. Todas recibieron 20 mililitros de agua al día. Lo único que cambiaba de un grupo a otro era la luz.',
-      'A los 14 días midieron la altura de cada plántula y contaron sus hojas. Germinaron casi todas las semillas en los cuatro grupos. La altura promedio fue de 12 cm en el grupo sin luz, 10 cm con 4 horas, 8 cm con 8 horas y 7 cm con 12 horas. Las plántulas que crecieron a oscuras eran amarillas, delgadas y casi no tenían hojas; las de 12 horas eran verdes, gruesas y tenían en promedio seis hojas.',
-      'El resultado contradijo la hipótesis. La profesora les explicó que una plántula a oscuras se estira buscando la luz, con la energía que tenía guardada en la semilla: es más alta, pero no más sana. El grupo concluyó que la altura no era una buena medida de lo que querían saber.',
-      'Para mejorar el estudio propusieron medir también la masa de las plantas secas y repetir el experimento con otra variedad de frijol, para saber si el resultado se mantiene.',
-    ],
-  };
-
-  const PENDULO = {
-    id: 'icf-pendulo', title: 'El péndulo de la clase',
-    ficha: { autor: 'Profesora de física', fuente: 'Bitácora de laboratorio', fecha: 'Mayo de 2026' },
-    paras: [
-      'En una clase de física, dos equipos se preguntaron de qué depende el tiempo que tarda un péndulo en ir y volver, lo que se llama su período. El equipo de Samuel pensaba que dependía de la masa: una pesa más pesada debería oscilar más rápido. El equipo de Lucía creía que dependía de la longitud de la cuerda.',
-      'Para probar la primera idea, ataron a una cuerda de un metro pesas de 50, 100 y 200 gramos. Soltaron cada una desde el mismo ángulo pequeño y midieron con un cronómetro el tiempo de diez oscilaciones completas, para dividirlo después entre diez. El período fue de 2.0 segundos en los tres casos.',
-      'Para probar la segunda, usaron siempre la pesa de 100 gramos y cambiaron la longitud: 25, 50, 100 y 200 centímetros. Los períodos fueron 1.0, 1.4, 2.0 y 2.8 segundos. Al cuadruplicar la longitud, de 25 a 100 centímetros, el período se duplicó.',
-      'Samuel propuso una conclusión: «Ninguna variable importa mucho, porque el período casi no cambió». Lucía le mostró la tabla: con la masa el período no cambió nada, pero con la longitud sí, y siempre en la misma dirección: a mayor longitud, mayor período. Además, la relación no es proporcional, porque duplicar la longitud no duplica el período.',
-      'La profesora agregó dos advertencias. Primero, medir diez oscilaciones y dividir reduce el error del cronómetro, que depende de los reflejos de quien lo maneja. Segundo, los resultados valen para ángulos pequeños; con oscilaciones muy amplias el período cambia un poco.',
-      'Al final, los dos equipos escribieron una conclusión común: en sus mediciones, el período depende de la longitud de la cuerda y no de la masa de la pesa.',
-    ],
-  };
-
-  const l1 = leccion('icf-cn-indaga-1', 'Preguntas, variables y control', [
-    sc(6, 'Casi un tercio de la prueba de Ciencias es **indagación**: no pregunta un dato de memoria, sino cómo se averigua algo con un experimento.', { title: 'Cómo se averigua' }),
-    sc(7, 'Todo experimento empieza con una **pregunta** y una **hipótesis**, una respuesta posible que se puede poner a prueba.', { title: 'Pregunta e hipótesis' }),
-    sc(7, 'La **variable independiente** es la que el investigador cambia; la **dependiente**, la que mide para ver el efecto; las **controladas** se mantienen iguales para que no confundan el resultado.', { title: 'Tres clases de variables' }),
-    sc(7, 'Ejemplo: para saber si el abono hace crecer más el pasto, se abonan unas macetas y otras no, con la misma semilla, la misma agua y la misma luz. Si se riega más a las abonadas, ya no se sabe qué causó la diferencia.', { title: 'Cambiar una sola cosa' }),
-    sc(6, 'Un resultado que contradice la hipótesis no es un fracaso: es información. La hipótesis se corrige y el experimento se mejora.', { title: 'Cuando la hipótesis falla' }),
-  ], [
-    play('mapa-del-texto', 'Las partes del informe de laboratorio', { doc: FRIJOL, labels: ['plantea la pregunta', 'presenta la hipótesis', 'describe el procedimiento', 'presenta los resultados', 'interpreta y concluye', 'propone cómo mejorar el estudio', 'cuenta la historia del frijol'], key: [0, 1, 2, 3, 4, 5] },
-      'El informe sigue el orden de una indagación: pregunta, hipótesis, procedimiento, resultados, interpretación y mejoras. Ningún párrafo cuenta la historia del frijol.',
-      { hint: 'Piensa en el orden en que se hace un experimento: qué se quiere saber, qué se espera, cómo se hace, qué salió y qué significa.' }),
-    play('quien-lo-dice', 'Clasifica las variables del experimento', { doc: FRIJOL, ask: 'Lleva cada cosa del experimento a la clase de variable que es.', voices: ['Variable independiente', 'Variable dependiente', 'Variable controlada'], cards: [
-      ['Las horas diarias de luz', 0], ['La altura de las plántulas', 1], ['El número de hojas', 1],
-      ['Los 20 mL de agua al día', 2], ['El tipo de tierra', 2], ['La temperatura de las cajas', 2],
-    ] }, 'Los estudiantes cambiaron la luz (independiente), midieron la altura y las hojas (dependientes) y dejaron iguales el agua, la tierra y la temperatura (controladas).',
-      { hint: 'Pregúntate de cada cosa: ¿la cambiaron a propósito, la midieron al final o la dejaron igual en todos los grupos?' }),
-    play('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { doc: FRIJOL, cards: [
-      ['El grupo sin luz tuvo la mayor altura promedio.', 0],
-      ['Todas las plantas recibieron la misma cantidad de agua.', 0],
-      ['Si el grupo sin luz hubiera recibido más agua, no se sabría qué causó su altura.', 1],
-      ['Las plantas con 12 horas de luz estaban más sanas que las de cero horas.', 1],
-      ['Con 16 horas de luz las plantas medirían 5 cm.', 2],
-      ['La lámpara era de luz solar artificial de 100 vatios.', 2],
-    ] }, 'Las dos primeras están en los párrafos 3 y 4. Que otra diferencia confundiría el resultado se deduce del párrafo 3, y que las de 12 horas estaban más sanas, de su color, su grosor y sus hojas (párrafos 4 y 5). Nada se midió con 16 horas ni se describe la lámpara.',
-      { hint: 'Cuidado con extender los datos a casos que nadie midió: eso no lo dice el informe.' }),
-    play('caso-nuevo', '¿Está bien diseñado el experimento?', { doc: FRIJOL, principle: 'Para saber si un factor influye, se cambia solo ese factor y todo lo demás se mantiene igual en los grupos que se comparan.', cards: [
-      ['Para probar un abono, dos grupos de matas iguales reciben la misma agua y la misma luz; solo uno recibe abono.', true],
-      ['Para probar si la música ayuda a memorizar, dos grupos estudian la misma lista el mismo tiempo; solo uno oye música.', true],
-      ['Para probar un jabón, se lava una camisa con él en agua caliente y otra con un jabón distinto en agua fría.', false],
-      ['Para probar si la sal acelera la cocción, se cocina una olla con sal en la estufa y otra sin sal en una fogata.', false],
-    ] }, 'Los dos primeros cambian una sola cosa. En los dos últimos cambian dos a la vez (jabón y temperatura; sal y fuego): si hay diferencia, no se sabe a cuál de las dos se debe.',
-      { hint: 'Cuenta cuántas cosas son distintas entre los grupos que se comparan: debe ser una sola.' }),
-    play('lee-barras', 'Los resultados del experimento a los 14 días. ¿Cuántos centímetros más midió el grupo sin luz que el de 12 horas?', { rounds: [
-      { bars: [['0 h', 12], ['4 h', 10], ['8 h', 8], ['12 h', 7]], hi: 14, step: 2, q: 'diff', a: 0, b: 3, max: 14, tstep: 1 }] },
-      'Con rayas de 2 en 2 cm: el grupo sin luz llega a 12 y el de 12 horas a 7, entre 6 y 8. La diferencia es $12 - 7 = 5$ cm.',
-      { hint: 'Lee la escala antes que las barras: cada raya vale 2 cm, así que algunas barras quedan entre dos rayas.' }),
-    play('grafica-relacion', 'En otro experimento, un resorte se estira 3 cm al colgarle un peso de 2 N. Si estiramiento y peso son directamente proporcionales, mueve los puntos', { kind: 'directa', k: 1.5, given: [[2, 3]], xs: [4, 6, 8], tol: 0.25, xmax: 10, ymax: 14 },
-      'Si es directa, el cociente se mantiene: 1.5 cm por cada newton. Con 4 N se estira 6 cm, con 6 N, 9 cm y con 8 N, 12 cm: los puntos quedan en una recta que pasa por el origen.',
-      { hint: 'Halla cuánto se estira por cada newton con el punto que ya está, y úsalo para los demás.' }),
-    play('balanza-argumento', '¿Qué apoya y qué debilita la hipótesis?', { doc: FRIJOL, thesis: 'Las plantas que reciben más horas de luz crecen más altas.', cards: [
-      ['Sin luz, las plántulas midieron 12 cm en promedio.', 1],
-      ['Con 12 horas de luz, las plántulas midieron 7 cm.', 1],
-      ['En otro estudio, al cabo de dos meses, las plantas con más luz fueron las más altas.', 0],
-      ['Germinaron casi todas las semillas en los cuatro grupos.', null],
-    ] }, 'Los dos datos de altura debilitan la hipótesis: a más luz, menos altura en dos semanas. Un estudio más largo con el resultado contrario la apoyaría. La germinación no dice nada sobre la altura.',
-      { hint: 'Un dato apoya la hipótesis si coincide con lo que ella predice; la debilita si muestra lo contrario.' }),
-    play('resortera-tres', 'En la resortera, el estirón (lo que cambias) y la distancia (lo que mides) son proporcionales. Estira lo justo para la bandera', { rounds: [
-      { title: 'Variable y efecto', ref: [2, 6], items: [{ target: 9 }, { target: 15 }, { target: 12 }] }] },
-      'Con 2 de estirón la piedra llega a 6 m: 3 m por cada unidad de estirón. Para 9 m hacen falta 3; para 15 m, 5; y para 12 m, 4.',
-      { hint: 'Calcula cuántos metros avanza la piedra por cada unidad de estirón con el tiro de muestra.' }),
-    sol('Una estudiante quiere saber si la temperatura del agua cambia el tiempo que tarda en disolverse una pastilla efervescente. ¿Cómo debe organizar su experimento?',
-      ['La variable que ella cambia es [[la temperatura del agua]]', 'La variable que mide es [[el tiempo de disolución]]', 'Debe mantener igual [[la cantidad de agua]] y el tipo de pastilla', 'Para confiar en el resultado, cada temperatura se prueba [[varias veces]]'],
-      ['una sola vez', 'la opinión de sus compañeros', 'el color de la pastilla al final'],
-      'La temperatura es la independiente y el tiempo la dependiente. Si cambiara también la cantidad de agua, no sabría qué causó la diferencia; y repetir cada prueba reduce el efecto de los errores al medir.',
-      'Pregúntate qué cambia ella a propósito, qué mide con el cronómetro y qué podría confundir el resultado si no lo deja igual.'),
-    err('Para saber si un fertilizante hace crecer más el maíz, un agricultor diseña este experimento.',
-      ['Siembra dos parcelas iguales con la misma semilla', 'A la parcela A le pone fertilizante y a la B no', 'Riega la parcela A todos los días y la B una vez por semana', 'Al mes compara la altura de las plantas de las dos parcelas'], 2,
-      ['Riega las dos parcelas con la misma cantidad y frecuencia', 'Riega la parcela B todos los días y la A una vez por semana', 'Riega más la parcela que vaya creciendo menos'],
-      'El riego distinto agrega una segunda diferencia: si A crece más, no se sabría si fue el fertilizante o el agua. El agua debe ser una variable controlada, igual en las dos parcelas.',
-      'Busca el paso en que las dos parcelas dejan de ser iguales en algo distinto del fertilizante.'),
-    opc('Una investigadora quiere saber si la cantidad de sal en el agua afecta la germinación de semillas de rábano. Pone 20 semillas en cada uno de cuatro platos con agua que tiene 0, 1, 2 y 4 gramos de sal por litro. ¿Cuál de las siguientes condiciones debe ser igual en los cuatro platos?',
-      ['La cantidad de sal del agua', 'El número de semillas que germinan', 'La temperatura y la luz que reciben', 'El tiempo que tarda cada semilla en germinar'], 2,
-      'La sal es la variable que ella cambia y las semillas que germinan (y cuándo) son lo que mide. La temperatura y la luz deben ser iguales para que no confundan el resultado.',
-      'Separa lo que se cambia a propósito, lo que se mide y lo que hay que dejar fijo.'),
-  ]);
-
-  const l2 = leccion('icf-cn-indaga-2', 'Datos y conclusiones', [
-    sc(6, 'Una conclusión vale si los datos la respaldan. La prueba pregunta mucho: «¿cuál conclusión es válida según la tabla?».', { title: 'Lo que dicen los datos' }),
-    sc(7, 'Una variable **no influye** si al cambiarla el resultado no cambia; **influye** si el resultado cambia siempre en la misma dirección.', { title: 'Influye o no influye' }),
-    sc(7, 'Ejemplo: si al duplicar la carga de una bicicleta el frenado pasa de 4 a 8 metros, la relación parece **proporcional**. Si pasa de 4 a 6, aumenta, pero no es proporcional.', { title: 'Proporcional o solo creciente' }),
-    sc(7, 'Repetir una medición y promediar reduce el error. Y una conclusión solo vale para las condiciones medidas: no se puede extender a lo que nadie probó.', { title: 'Errores y límites' }),
-    sc(6, 'Muchos fenómenos crecen o decrecen por multiplicación: las bacterias se duplican y los medicamentos se reducen a la mitad. Se reconocen porque cada paso multiplica por lo mismo.', { title: 'Patrones que multiplican' }),
-  ], [
-    play('donde-buscar', '¿A qué parte de la bitácora vuelves?', { doc: PENDULO, cards: [
-      ['¿Qué es el período de un péndulo?', [1]], ['¿Qué pasó al cambiar la masa?', [2]], ['¿Qué pasó al cambiar la longitud?', [3]],
-      ['¿Por qué se midieron diez oscilaciones?', [5]], ['¿Cuál fue la conclusión final?', [6]],
-    ] }, 'La definición está en el 1; los resultados con la masa, en el 2; con la longitud, en el 3; la razón de medir diez oscilaciones, en el 5; y la conclusión común, en el 6.',
-      { hint: 'Ubica la palabra clave de cada pregunta: período, masa, longitud, diez oscilaciones, conclusión.' }),
-    play('resume-parrafo', 'Cada parte en una frase', { doc: PENDULO, paras: [2, 3, 5], options: [
-      'Con distintas masas y la misma cuerda, el período no cambió.',
-      'Al alargar la cuerda, el período aumentó, aunque no en proporción.',
-      'Medir varias oscilaciones reduce el error, y los resultados valen para ángulos pequeños.',
-      'Las pesas más pesadas oscilaron más rápido.',
-      'El período es proporcional a la longitud de la cuerda.',
-    ], key: [0, 1, 2] },
-      'El párrafo 2 muestra el mismo período con las tres masas; el 3, que el período crece con la longitud (cuadruplicarla lo duplica); el 5, las advertencias de la profesora. Las dos frases que sobran contradicen los datos.',
-      { hint: 'Compara cada frase con los números del párrafo: algunas dicen lo que se esperaba, no lo que se midió.' }),
-    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: PENDULO, ask: 'Según la bitácora, son cuidados que se tuvieron para obtener datos confiables, EXCEPTO:', cards: [
-      ['Soltar cada pesa desde el mismo ángulo', [2]], ['Medir diez oscilaciones y dividir entre diez', [2, 5]], ['Usar la misma pesa al cambiar la longitud', [3]], ['Hacer las mediciones en una cámara sin aire', null],
-    ] }, 'El mismo ángulo y las diez oscilaciones están en el párrafo 2 (y se explican en el 5); usar la misma pesa, en el 3. Nadie habla de una cámara sin aire.',
-      { hint: 'Busca cada cuidado en los párrafos del procedimiento; el que no encuentres es la respuesta.' }),
-    play('balanza-argumento', '¿Qué apoya y qué debilita la idea de Samuel?', { doc: PENDULO, thesis: 'El período de un péndulo depende de la masa de la pesa.', cards: [
-      ['Con pesas de 50, 100 y 200 g, el período fue de 2.0 s.', 1],
-      ['Otro equipo halla que, con la misma cuerda y el mismo ángulo, una pesa de hierro tarda menos que una de corcho.', 0],
-      ['El período pasó de 1.0 s a 2.0 s al cambiar la cuerda de 25 a 100 cm.', null],
-      ['Las mediciones se hicieron con ángulos pequeños.', null],
-    ] }, 'El período igual con las tres masas debilita la idea de Samuel. Un resultado distinto con dos materiales, en las mismas condiciones, la apoyaría. Los datos de la longitud y el ángulo no dicen nada sobre la masa.',
-      { hint: 'Fíjate si cada dato habla de la masa: los que hablan de otra variable no pesan en esta balanza.' }),
-    play('cultivo-celulas', 'Un cultivo empieza con 3 bacterias y se duplica cada generación. ¿En qué generación hay 96?', { rounds: [{ a1: 3, r: 2, target: 96 }] },
-      'Cada generación multiplica por 2: 3, 6, 12, 24, 48, 96. Hay 96 bacterias en la generación 6, porque $3 \\cdot 2^5 = 96$.',
-      { hint: 'Divide 96 entre 3 y busca cuántas veces hay que multiplicar por 2 para llegar a ese número.' }),
-    play('media-vida', 'Un paciente recibe 400 mg de un medicamento que su cuerpo reduce a la mitad cada 6 horas. ¿Cuándo le quedan 50 mg?', { rounds: [{ A0: 400, T: 6, target: 50, thing: 'medicamento', unit: 'mg' }] },
-      'Cada 6 horas queda la mitad: 400, 200, 100 y 50 mg. Son tres medias vidas: 18 horas.',
-      { hint: 'Cuenta cuántas veces hay que partir 400 por la mitad para llegar a 50; cada vez son 6 horas.' }),
-    play('mezcla', 'Para un experimento de densidad se necesita una solución con 20 % de alcohol. Hay 30 g de alcohol: añade el agua justa', { solute: 30, target: 20, step: 10, max: 300 },
-      'Si 30 g son el 20 % de la mezcla, la mezcla completa pesa $30 \\div 0.2 = 150$ g: hay que añadir 120 g de agua. Al agregar agua, el porcentaje baja.',
-      { hint: 'Piensa primero cuánto debe pesar toda la mezcla para que 30 g sean la quinta parte.' }),
-    play('lirios-laguna', 'Una planta acuática cubre la laguna duplicándose cada día. Retrocede en el calendario hasta el día que te piden', { rounds: [
-      { title: 'Crecimiento que se duplica', items: [{ full: 10, ask: 'half' }, { full: 8, ask: 'quarter' }] }] },
-      'Si cada día hay el doble, el día anterior había la mitad: si la laguna se llena el día 10, estaba medio llena el día 9. Si se llena el 8, estaba a la cuarta parte el día 6.',
-      { hint: 'No busques a mitad del calendario: piensa cuántas veces hay que dividir entre 2 para llegar a lo que te piden.' }),
-    sol('Una estudiante calienta agua y registra la temperatura cada minuto: 20, 26, 32, 38 y 44 °C en los minutos 0 a 4. Si la tendencia sigue igual, ¿qué temperatura tendrá a los 7 minutos y hasta cuándo vale la predicción?',
-      ['Cada minuto la temperatura sube [[6]] °C', 'A los 7 minutos: 20 °C más 7 veces lo que sube por minuto, [[62]] °C', 'La temperatura cambia de forma [[constante]] mientras se calienta', 'La predicción vale solo hasta que el agua llegue a unos [[100]] °C, donde hierve'],
-      ['44', 'variable', '50'],
-      'Los datos suben 6 °C por minuto, así que a los 7 minutos el agua estaría a 62 °C. La tendencia no sigue para siempre: al hervir, la temperatura deja de subir aunque se siga calentando.',
-      'Halla cuánto sube por minuto restando dos datos seguidos, y piensa qué le pasa al agua cuando hierve.'),
-    err('Un estudiante cuelga masas de un resorte y mide cuánto se estira: 100 g, 2 cm; 200 g, 4 cm; 300 g, 6 cm. Este es su análisis.',
-      ['Cada 100 g, el resorte se estira 2 cm más', 'El estiramiento es directamente proporcional a la masa', 'Con 500 g el resorte se estirará 8 cm', 'Con 50 g se estirará 1 cm'], 2,
-      ['Con 500 g el resorte se estirará 10 cm', 'Con 500 g el resorte se estirará 5 cm', 'Con 500 g el resorte ya no se estirará más'],
-      'Si son proporcionales, 500 g son 5 veces 100 g: $5 \\cdot 2 = 10$ cm. El 8 sale de sumar 2 cm a los 6 que había con 300 g, como si 500 g fueran solo 100 g más.',
-      'Revisa la predicción con 500 g: ¿cuántas veces cabe 100 g en 500 g?'),
-    opc('Una investigadora mide el oxígeno disuelto en un río en cinco puntos, desde su nacimiento hasta la salida de una ciudad: 9, 9, 8, 5 y 3 mg/L. Los dos últimos puntos están después de una descarga de aguas residuales. La conclusión mejor respaldada por estos datos es:',
-      ['Las aguas residuales son la única causa de la falta de oxígeno en todos los ríos', 'El oxígeno del río aumenta a medida que se acerca a la ciudad', 'En el nacimiento del río no hay peces', 'En este río hay menos oxígeno después de la descarga de aguas residuales'], 3,
-      'Los datos muestran que el oxígeno baja a 5 y 3 mg/L justo después de la descarga. No permiten hablar de todos los ríos ni de los peces, y el oxígeno disminuye, no aumenta.',
-      'Descarta las conclusiones que hablan de algo que no se midió o que van más allá de este río.'),
-  ]);
-
-  return mundo('icf-cn-indaga', 'Indagación Científica', 'ciencias', [l1, l2], [
-    ['icf-cn-indaga-1', 'Dos variables son inversamente proporcionales cuando su producto se mantiene.',
-      play('grafica-relacion', 'A temperatura constante, un gas ocupa 6 L con una presión de 2 atm. Si presión y volumen son inversamente proporcionales, mueve los puntos', { kind: 'inversa', k: 12, given: [[2, 6]], xs: [3, 4, 6], tol: 0.25, xmax: 8, ymax: 8 },
-        'El producto presión por volumen se mantiene en 12: con 3 atm, 4 L; con 4 atm, 3 L; con 6 atm, 2 L.', { hint: 'Multiplica las coordenadas del punto dado: ese producto debe ser igual en todos los puntos.' })],
-    ['icf-cn-indaga-1', 'Antes de leer una barra, mira cuánto vale cada raya de la escala.',
-      play('lee-barras', 'Plantas de tomate con distintas dosis de abono: altura a las tres semanas, en cm. ¿Cuánto mide el grupo C?', { rounds: [{ bars: [['A', 18], ['B', 24], ['C', 27], ['D', 21]], hi: 30, step: 6, q: 'val', a: 2, max: 30, tstep: 1 }] },
-        'Las rayas van de 6 en 6: la barra C llega a la mitad entre 24 y 30, es decir, 27 cm.', { hint: 'Calcula cuánto vale cada raya del eje y ubica la barra entre dos de ellas.' })],
-    ['icf-cn-indaga-1', 'La variable dependiente es la que se mide para ver el efecto de la que se cambia.',
-      opc('Un estudiante quiere saber si la cantidad de sal disuelta cambia la temperatura a la que se congela el agua. Prepara vasos con 0, 5, 10 y 15 g de sal en 100 mL de agua y los pone en el mismo congelador. La variable dependiente de su experimento es:',
-        ['La cantidad de sal de cada vaso', 'La cantidad de agua de cada vaso', 'La temperatura a la que se congela el agua', 'El congelador que usa'], 2,
-        'Él cambia la sal (independiente) y mide la temperatura de congelación (dependiente). El agua y el congelador son iguales en todos los vasos: son variables controladas.', 'Pregúntate qué mide el estudiante al final para saber si la sal tuvo efecto.')],
-    ['icf-cn-indaga-2', 'Cuando una cantidad se reduce a la mitad cada cierto tiempo, se cuentan las mitades.',
-      play('media-vida', 'Una muestra de 160 g de una sustancia radiactiva se reduce a la mitad cada 5 horas. ¿Cuándo quedan 20 g?', { rounds: [{ A0: 160, T: 5, target: 20, thing: 'sustancia', unit: 'g' }] },
-        '160, 80, 40 y 20 g: tres medias vidas, 15 horas.', { hint: 'Parte 160 por la mitad hasta llegar a 20 y cuenta cuántas veces lo hiciste.' })],
-    ['icf-cn-indaga-2', 'En una mezcla, el porcentaje compara una parte con el total.',
-      play('mezcla', 'Hay 40 g de alcohol. Añade agua hasta que la solución tenga 25 % de alcohol', { solute: 40, target: 25, step: 10, max: 300 },
-        'Si 40 g son el 25 %, la mezcla pesa 160 g: se añaden 120 g de agua.', { hint: 'El alcohol tiene que ser la cuarta parte de toda la mezcla.' })],
-    ['icf-cn-indaga-2', 'Una conclusión válida describe lo que muestran los datos medidos, sin ir más allá.',
-      opc('En el experimento de la sal, los vasos con 0, 5, 10 y 15 g de sal se congelaron a 0, −3, −6 y −9 °C. La conclusión que mejor se apoya en estos datos es:',
-        ['La sal hace que el agua hierva a menor temperatura', 'A más sal disuelta, más baja es la temperatura a la que se congela el agua', 'Con 20 g de sal el agua ya no se congela nunca', 'La sal no tiene ningún efecto sobre el agua'], 1,
-        'Cada 5 g de sal bajan 3 °C la temperatura de congelación. Nadie midió la ebullición ni 20 g de sal, y los datos sí muestran un efecto.', 'Quédate con la opción que describe la tendencia de la tabla sin hablar de lo que no se midió.')],
-  ]);
-})());
-;
-//#archivo js/courses/preicfes-en-avisos.js
-// Preicfes · Inglés · mundo 1 «Avisos y Vocabulario» (spec 2026-11-20-curso-preicfes): las primeras partes de la prueba de inglés:
-// qué dice un aviso, dónde se vería y qué palabra corresponde a una descripción. Las instrucciones van en español, como en el
-// examen; los textos, en inglés. Cada lección trabaja un texto original en 7 juegos LEC y un juego en movimiento; la evaluación,
-// otros avisos con preguntas A–D. Textos escritos para Zuka.
-PI_MUNDOS.push((() => {
-  const { leccion, mundo, mueve, preg } = ICF;
-
-  const AVISOS = {
-    id: 'icf-avisos', title: 'Notices around town',
-    paras: [
-      'SCHOOL LIBRARY. Please return books by Friday. Students who return books late cannot borrow new ones for two weeks. If you need more time, ask the librarian before the date on your card.',
-      'CITY PARK. No cycling on the grass. Bicycles must stay on the path, and dogs must be on a lead at all times. The park closes at 7 p.m. from November to February.',
-      'DANGER: WET FLOOR. The cleaning team is working in this area. Please use the stairs on the left until the floor is dry. Thank you for your patience.',
-      'SCIENCE MUSEUM. Free entry for students on Wednesdays. Show your student card at the ticket office. Groups of more than ten people must book their visit one week before.',
-      'BUS STATION. The 8:15 bus to the airport is cancelled today because of the storm. Passengers can take the 9:00 bus with the same ticket. We are sorry for any problems this may cause.',
-      'LOST AND FOUND. Did you lose a blue jacket in the gym on Monday? Come to the main office before 3 p.m. and describe it to collect it. Things that nobody collects go to charity after one month.',
-    ],
-  };
-
-  const MERCADO = {
-    id: 'icf-mercado', title: 'Saturday at the market',
-    ficha: { autor: 'Students of an English class', fuente: 'School magazine', fecha: 'June 2026' },
-    paras: [
-      'Every Saturday morning, the main square of San Rafael changes. At six o\'clock, farmers from the mountains arrive in old trucks full of potatoes, oranges, cheese and fresh flowers. By seven, the square is full of tables, voices and the smell of coffee.',
-      'Doña Rosa has sold vegetables here for thirty years. She grows everything on her small farm, two hours away, without chemicals. "People come back because they know where their food comes from," she says. Her daughter Camila helps her now, and she uses a phone to take payments, so customers do not need cash.',
-      'Next to them, a young baker called Julián sells bread made with corn and cheese. He started with one basket two years ago. Now he bakes three hundred pieces every Friday night, and he usually sells everything before ten o\'clock.',
-      'The market is not only a place to shop. Children run between the tables, old friends meet for breakfast, and on the first Saturday of the month a band plays music in the square. For many families, it is the most important day of the week.',
-      'However, life is not easy for the farmers. Transport is expensive, and when it rains the roads become dangerous. Some young people prefer to move to the city. "If nobody buys from us, the farms will disappear," Doña Rosa explains. That is why the town council now gives free stalls to farmers who come every week.',
-    ],
-  };
-
-  const l1 = leccion('icf-en-avisos-1', 'Signs and notices', [
-    sc(6, 'La prueba de inglés empieza con avisos cortos: hay que saber **qué dicen** y **dónde se verían**. No hace falta entender cada palabra, sino la idea.', { title: 'Avisos cortos' }),
-    sc(7, 'Las palabras que mandan: **No** + verbo en -ing prohíbe (*No smoking*); **must** obliga (*You must wear a helmet*); **Please** pide con cortesía (*Please close the door*).', { title: 'Prohibir, obligar, pedir' }),
-    sc(7, 'Ejemplo: *Staff only* quiere decir «solo empleados»: no se puede entrar si no trabajas allí. *Out of order* quiere decir «no funciona».', { title: 'Avisos que se repiten' }),
-    sc(7, 'Las palabras de tiempo cambian todo: *until* (hasta), *before* (antes de), *after* (después de), *from … to …* (de … a …).', { title: 'Hasta, antes, después' }),
-    sc(6, 'Truco del examen: lee la opción y vuelve al aviso. Una opción que agrega algo que el aviso no dice es incorrecta, aunque suene lógica.', { title: 'Volver al aviso' }),
-  ], [
-    play('mapa-del-texto', '¿Qué hace cada aviso?', { doc: AVISOS, labels: ['da un plazo y una regla', 'prohíbe y pone condiciones', 'advierte un peligro', 'ofrece algo gratis con condiciones', 'informa un cambio de horario', 'pide al dueño reclamar algo', 'vende un producto en oferta'], key: [0, 1, 2, 3, 4, 5] },
-      'La biblioteca pone un plazo (*by Friday*); el parque prohíbe (*No cycling*) y obliga (*must*); el piso mojado advierte (*Danger*); el museo ofrece entrada gratis los miércoles; la terminal informa un bus cancelado; y objetos perdidos pide reclamar una chaqueta. Ningún aviso vende algo.',
-      { hint: 'Busca la palabra que manda en cada aviso: *Please*, *No*, *must*, *Danger*, *Free*, *cancelled*…' }),
-    play('donde-buscar', '¿Qué aviso te sirve en cada situación?', { doc: AVISOS, ask: 'Lleva cada situación al aviso que la responde.', cards: [
-      ['You want to visit the museum and pay nothing.', [4]], ['Your morning bus to the airport did not come.', [5]], ['You lost your jacket after a basketball game.', [6]],
-      ['You want to ride your bike near the trees.', [2]], ['You need to go upstairs but the floor is wet.', [3]], ['Your book is late and you want a new one.', [1]],
-    ] }, 'Museo gratis: aviso 4. Bus cancelado: aviso 5. Chaqueta en el gimnasio: aviso 6. Bicicleta en el parque: aviso 2. Piso mojado: aviso 3. Libro atrasado: aviso 1.',
-      { hint: 'Busca en cada situación una palabra clave (*museum*, *bus*, *jacket*, *bike*, *floor*, *book*) y el aviso donde aparece.' }),
-    play('resume-parrafo', '¿Qué dice el aviso? Elige la frase que lo explica', { doc: AVISOS, paras: [1, 3, 5], options: [
-      'If your books are late, you cannot borrow more for a while.',
-      'Do not walk on this floor now; there is another way up.',
-      'There is a later bus you can take with your ticket.',
-      'The library is closed on Fridays.',
-      'The airport is closed because of the storm.',
-    ], key: [0, 1, 2] },
-      'El aviso 1 castiga la demora: dos semanas sin préstamos. El 3 pide usar las escaleras hasta que el piso seque. El 5 ofrece el bus de las 9:00 con el mismo tiquete. La biblioteca no cierra los viernes y el aeropuerto no está cerrado.',
-      { hint: 'Compara cada frase con el aviso: la correcta dice lo mismo con otras palabras; las otras agregan o cambian un dato.' }),
-    play('lupa-evidencia', '¿El aviso lo dice, se deduce o no lo dice?', { doc: AVISOS, cards: [
-      ['Dogs must be on a lead in the park.', 0],
-      ['Students can enter the museum free on Wednesdays.', 0],
-      ['You will not pay again if you take the 9:00 bus.', 1],
-      ['If you ask before the date, you may keep a book longer.', 1],
-      ['The museum is closed on Mondays.', 2],
-      ['The blue jacket belongs to a teacher.', 2],
-    ] }, 'Lo de los perros y el museo está escrito. Que no se paga otra vez por el bus de las 9:00 se deduce de *with the same ticket*, y que se puede tener un libro más tiempo, de *ask the librarian before the date*. Ningún aviso dice qué día cierra el museo ni de quién es la chaqueta.',
-      { hint: 'Si la frase está casi igual en el aviso, lo dice; si sale de entender una palabra (como *cancelled*), se deduce; si no hay de dónde sacarla, no lo dice.' }),
-    play('palabra-a-la-medida', 'La palabra que dice lo mismo en el aviso', { doc: AVISOS, rounds: [
-      { p: 1, before: 'Students who return books ', word: 'late', after: ' cannot borrow', options: ['after the date', 'early', 'quickly', 'together'], answer: 0 },
-      { p: 2, before: 'dogs must be on a ', word: 'lead', after: ' at all times', options: ['rope held by the owner', 'special diet', 'small bed', 'long walk'], answer: 0 },
-      { p: 5, before: 'The 8:15 bus to the airport is ', word: 'cancelled', after: ' today', options: ['not running', 'full', 'early', 'free'], answer: 0 },
-    ] }, '*Late* es después de la fecha; *lead* es la cuerda o correa que sostiene el dueño; *cancelled* quiere decir que el bus no sale.',
-      { hint: 'Lee el aviso con cada opción puesta en lugar de la palabra: la buena no cambia lo que el aviso quiere decir.' }),
-    play('caso-nuevo', '¿Quién entra gratis al museo?', { doc: AVISOS, principle: 'Según el aviso 4, entran gratis los estudiantes que van un miércoles y muestran su carné.', cards: [
-      ['Ana is a student. She goes on Wednesday and shows her student card.', true],
-      ['Luis is a student. He goes on Wednesday with his card and two friends from his class, who also show their cards.', true],
-      ['Marta is a student, but she goes on Saturday.', false],
-      ['Pedro goes on Wednesday, but he forgot his student card at home.', false],
-    ] }, 'Ana y Luis cumplen las dos condiciones (miércoles y carné). Marta no va un miércoles y Pedro no tiene su carné: a ellos el aviso no les da la entrada gratis.',
-      { hint: 'El aviso pone dos condiciones: revisa en cada caso si se cumplen las dos.' }),
-    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: AVISOS, ask: 'El aviso del parque dice todas estas cosas, EXCEPTO:', cards: [
-      ['You cannot cycle on the grass', [2]], ['Dogs must be on a lead', [2]], ['The park closes at 7 p.m. in some months', [2]], ['You cannot eat in the park', null],
-    ] }, 'El aviso 2 prohíbe montar en bicicleta sobre el pasto, obliga a llevar los perros con correa y da la hora de cierre de noviembre a febrero. No dice nada sobre comer.',
-      { hint: 'Lee el aviso 2 y marca cada opción que encuentres en él.' }),
-    mueve('vuela-precios', 'Vuela al significado del aviso', 'Avisos', [
-      ['NO PARKING means you cannot…', ['leave your car', 'walk here', 'eat here'], 0],
-      ['WET FLOOR is a…', ['warning', 'gift', 'question'], 0],
-      ['FREE ENTRY means you…', ['pay nothing', 'pay double', 'cannot enter'], 0],
-    ], '*No parking*: no se puede dejar el carro. *Wet floor* es una advertencia. *Free entry*: la entrada no cuesta.',
-      'Piensa dónde verías cada aviso y qué te pide hacer o no hacer.'),
-  ]);
-
-  const l2 = leccion('icf-en-avisos-2', 'Words and meanings', [
-    sc(6, 'Otra parte del examen da una **descripción** en inglés y pide la palabra: *This person makes bread* → *baker*.', { title: 'De la descripción a la palabra' }),
-    sc(7, 'Las profesiones se reconocen por lo que la persona **hace**: *a farmer grows food*, *a nurse helps doctors*, *a driver takes you from one place to another*.', { title: 'Lo que hace cada uno' }),
-    sc(7, 'En un texto, *he*, *she*, *it* y *they* apuntan a algo dicho antes. Ejemplo: *My aunt has a dog. She walks it every day*: *she* es la tía y *it* el perro.', { title: 'He, she, it, they' }),
-    sc(7, 'Una palabra se entiende por su oración: en *the roads become dangerous*, *dangerous* tiene que ser algo malo que causa la lluvia.', { title: 'El contexto ayuda' }),
-    sc(6, 'Palabras que cambian el sentido: *however* (sin embargo), *because* (porque), *so* (así que), *but* (pero).', { title: 'Bisagras en inglés' }),
-  ], [
-    play('anticipa-texto', 'Antes de leer, mira la ficha', { doc: MERCADO, slots: [
-      ['Tema', ['un mercado de campesinos', 'un viaje en avión', 'una receta de pan'], 0],
-      ['Propósito', ['describir un lugar y a su gente', 'vender boletas para un concierto', 'dar instrucciones de un juego'], 0],
-      ['Tipo de texto', ['artículo de revista escolar', 'aviso de seguridad', 'carta de queja'], 0],
-    ] }, 'El título habla de un sábado en el mercado y sale en una revista escolar: se espera un artículo que describa el lugar y a las personas.',
-      { hint: 'Mira el título (*Saturday at the market*) y la fuente (*School magazine*).' }),
-    play('quien-lo-dice', 'Cada descripción con su palabra', { doc: MERCADO, ask: 'Lleva cada descripción a la palabra que le corresponde, como en la primera parte del examen.', voices: ['farmer', 'baker', 'customer', 'band'], cards: [
-      ['A person who grows food on a farm.', 0], ['A person who makes bread to sell.', 1], ['A person who buys things in a shop or market.', 2], ['A group of people who play music together.', 3],
-    ] }, '*Farmer*: Doña Rosa cultiva en su finca. *Baker*: Julián hace pan. *Customer*: quien compra. *Band*: el grupo que toca el primer sábado del mes.',
-      { hint: 'Busca el verbo de cada descripción (*grows*, *makes bread*, *buys*, *play music*) y piensa en quién lo hace en el texto.' }),
-    play('palabra-a-la-medida', 'La palabra en su oración', { doc: MERCADO, rounds: [
-      { p: 1, before: 'farmers from the mountains ', word: 'arrive', after: ' in old trucks', options: ['come', 'leave', 'sleep', 'cook'], answer: 0 },
-      { p: 3, before: 'and he usually sells ', word: 'everything', after: ' before ten', options: ['all of it', 'nothing', 'a little', 'only cheese'], answer: 0 },
-      { p: 5, before: 'when it rains the roads become ', word: 'dangerous', after: '.', options: ['unsafe', 'dry', 'cheap', 'quiet'], answer: 0 },
-    ] }, 'Los campesinos llegan (*come*) en camiones; Julián vende todo (*all of it*) antes de las diez; y con la lluvia las vías se vuelven peligrosas (*unsafe*).',
-      { hint: 'Pon cada opción en lugar de la palabra subrayada y mira si la oración sigue diciendo lo mismo.' }),
-    play('hilo-referente', '¿A quién se refiere?', { doc: MERCADO, rounds: [
-      { p: 2, text: '|Doña Rosa| has sold vegetables here for thirty years. |She| grows everything on |her small farm|, two hours away', from: 3, answer: 1 },
-      { p: 3, text: 'Next to them, a young baker called |Julián| sells |bread made with corn and cheese|. |He| started with one basket', from: 5, answer: 1 },
-    ] }, '*She* es Doña Rosa, la persona nombrada antes; *he* es Julián, el panadero.',
-      { hint: '*She* es una mujer y *he* un hombre: busca hacia atrás la persona que concuerda.' }),
-    play('donde-buscar', '¿En qué párrafo está la respuesta?', { doc: MERCADO, cards: [
-      ['What time do the farmers arrive?', [1]], ['How do customers pay Camila?', [2]], ['When does Julián bake?', [3]],
-      ['When does the band play?', [4]], ['What does the town council give the farmers?', [5]],
-    ] }, 'La hora de llegada está en el 1; el pago con el celular, en el 2; el horario de Julián, en el 3; la banda, en el 4; y los puestos gratis, en el 5.',
-      { hint: 'Busca las palabras de la pregunta (*arrive*, *pay*, *bake*, *band*, *council*) en el texto.' }),
-    play('lupa-evidencia', '¿El texto lo dice, se deduce o no lo dice?', { doc: MERCADO, cards: [
-      ['Doña Rosa has sold vegetables for thirty years.', 0],
-      ['Julián sells more bread now than when he started.', 1],
-      ['Rain makes it harder for farmers to come to the market.', 1],
-      ['Julián is Doña Rosa\'s son.', 2],
-      ['The market is open every day of the week.', 2],
-    ] }, 'Los treinta años están escritos (párrafo 2). Que Julián vende más se deduce de pasar de una canasta a trescientos panes, y lo de la lluvia, de las vías peligrosas. Nada dice que sea hijo de Doña Rosa, y el mercado es los sábados.',
-      { hint: 'Si la frase agrega una relación o un día que el texto no menciona, no lo dice.' }),
-    play('termometro-tono', 'La actitud de quien habla', { doc: MERCADO, rounds: [
-      { frag: '"If nobody buys from us, the farms will disappear," Doña Rosa explains.', scale: ['preocupado', 'alegre', 'aburrido', 'burlón'], answer: 0 },
-      { frag: 'For many families, it is the most important day of the week.', scale: ['entusiasta', 'triste', 'irónico'], answer: 0 },
-    ] }, 'Doña Rosa teme que las fincas desaparezcan: está preocupada. La frase sobre las familias muestra entusiasmo por el mercado.',
-      { hint: 'Busca la palabra que delata la emoción: *disappear* en la primera, *most important* en la segunda.' }),
-    mueve('rompe-cambios', 'Manda la pelota a lo que dice el texto', 'In the text', [
-      ['Doña Rosa sells…', ['vegetables', 'bread', 'music'], 0],
-      ['Julián is a…', ['baker', 'farmer', 'driver'], 0],
-      ['The council gives farmers…', ['free stalls', 'new trucks', 'phones'], 0],
-    ], 'Doña Rosa vende verduras (párrafo 2), Julián es panadero (párrafo 3) y el concejo da puestos gratis (párrafo 5).',
-      'Ubica a cada persona en el texto antes de lanzar la pelota.'),
-  ]);
-
-  const TERMINAL = {
-    id: 'icf-terminal', title: 'Notices at the bus station',
-    paras: [
-      'TICKETS. Buy your ticket before you get on the bus. Drivers do not sell tickets. Students pay half price from Monday to Friday if they show their student card at the ticket office.',
-      'WAITING ROOM. Please keep your bags with you at all times. Bags left alone will be removed by security. Do not leave food on the seats, and please keep the room clean for other passengers.',
-      'PLATFORM 4. Closed for repairs until 15 July. Buses to the coast now leave from Platform 6. Ask at the information desk if you are not sure where to go.',
-      'CAFÉ. Open every day from 5 a.m. to 10 p.m. Fresh coffee, fruit and sandwiches. Bring your own cup and get a 10 % discount on hot drinks.',
-      'LOST TICKETS. If you lose your ticket, go to Window 2 with your ID. We cannot give you a new ticket without it, so always carry it when you travel.',
-    ],
-  };
-  const Q = preg(TERMINAL, 'ingles');
-  return mundo('icf-en-avisos', 'Avisos y Vocabulario', 'ingles', [l1, l2], [
-    ['icf-en-avisos-1', 'Un aviso da información concreta: búscala en él antes de elegir.',
-      Q('According to the notices, buses to the coast now leave from:', ['Platform 4', 'Window 2', 'Platform 6', 'The café'], 2,
-        'El aviso del andén 4 dice que está cerrado por reparaciones y que los buses a la costa salen ahora del andén 6.', 'Lee el aviso PLATFORM 4 completo: dice dónde salen ahora los buses.')],
-    ['icf-en-avisos-1', '*Please keep* pide algo y *will be removed* dice lo que pasa si no se cumple.',
-      Q('What does the WAITING ROOM notice ask you to do?', ['Give your bags to the driver', 'Leave your bags with security', 'Eat only in the café', 'Keep your bags with you'], 3,
-        'El aviso pide tener las maletas con uno todo el tiempo; las que se dejan solas se las lleva seguridad. No obliga a comer en la cafetería.', 'Mira qué pasa con las maletas que se dejan solas.')],
-    ['icf-en-avisos-1', 'Las condiciones de un aviso deben cumplirse todas.',
-      Q('The TICKETS notice says that students:', ['Always travel free', 'Pay half price on weekdays if they show their card', 'Can buy tickets from the driver', 'Pay half price only on Sundays'], 1,
-        'Pagan la mitad de lunes a viernes mostrando el carné. Los conductores no venden tiquetes y nadie viaja gratis.', 'Busca dos condiciones en el aviso: qué días y qué deben mostrar.')],
-    ['icf-en-avisos-2', 'Una palabra se entiende por lo que la rodea en el aviso.',
-      Q('In the CAFÉ notice, "discount" means:', ['Less money to pay', 'A bigger cup', 'A free sandwich', 'A later closing time'], 0,
-        'Si traes tu propio vaso te cobran un 10 % menos por las bebidas calientes: *discount* es pagar menos.', 'Fíjate en el «10 %»: ¿qué le pasa al precio si traes tu vaso?')],
-    ['icf-en-avisos-2', '*It* apunta a algo dicho antes que concuerda con él.',
-      Q('In the LOST TICKETS notice, the word "it" in "without it" refers to:', ['Your ticket', 'Your ID', 'Window 2', 'The bus'], 1,
-        'Para dar un tiquete nuevo hace falta el documento: *without it* es sin tu ID. Por eso dicen que lo lleves siempre.', 'Pregúntate qué hay que llevar a la ventanilla 2 para recibir un tiquete nuevo.')],
-    ['icf-en-avisos-2', 'Muchas palabras del examen describen el estado de un lugar.',
-      Q('"Closed for repairs" means that Platform 4:', ['Is very busy', 'Is only for students', 'Is being fixed', 'Is a new platform'], 2,
-        '*Repairs* son arreglos: el andén está cerrado mientras lo arreglan.', 'Piensa por qué cerrarían un andén hasta una fecha.')],
-  ]);
-})());
-;
-//#archivo js/data.js
-// Contenido de Zuka: cursos → unidades → lecciones. Cada lección = 1 clip vertical + ejercicios.
-// Álgebra, Trigonometría, Cálculo Diferencial y Geometría Vectorial viven en js/courses/; las ayudas para escribir contenido, en js/content.js.
-
-const COURSES = [
-  COURSE_ALGEBRA,
-  COURSE_TRIG,
-  COURSE_CALC,
-  COURSE_GEO,
-  COURSE_PREUDA,
-  {
-    id: 'fis', level: 'Semestre 1', name: 'Física Mecánica', icon: 'F', color: '#facc15',
-    tagline: 'Por qué las cosas se mueven: fuerzas, energía y movimiento.',
-    units: [
-      {
-        world: 'cinematica', title: 'Cinemática',
-        lessons: [
-          {
-            id: 'fis-1', title: 'MRU y MRUA',
-            clip: { scenes: [
-              sc(5, '**MRU**: velocidad constante. La posición crece en línea recta.', { title: '$x = x_0 + v\\,t$', viz: { type: 'graph', xr: [0, 5], yr: [0, 22], f: t => 4 * t, draw: true, ax: ['t (s)', 'x (m)'] } }),
-              sc(5, '**MRUA**: la velocidad cambia de forma constante. La gráfica es una parábola.', { title: '$x = x_0 + v_0 t + \\tfrac{1}{2} a t^2$', viz: { type: 'graph', xr: [0, 5], yr: [0, 26], f: t => t * t, draw: true, ax: ['t (s)', 'x (m)'] } }),
-              sc(5, 'Y la velocidad crece linealmente con el tiempo.', { title: '$v = v_0 + a\\,t$', viz: { type: 'graph', xr: [0, 5], yr: [0, 12], f: t => 2 * t, draw: true, ax: ['t (s)', 'v (m/s)'] } }),
-            ] },
-            ex: [
-              num('Un auto va a 20 m/s constantes. ¿Qué distancia recorre en 5 s?', 100, '$x = v\\,t = 20 \\cdot 5 = 100$ m.', { suffix: 'm' }),
-              num('Parte del reposo con $a = 2$ m/s². ¿Velocidad a los 6 s?', 12, '$v = 0 + 2 \\cdot 6 = 12$ m/s.', { suffix: 'm/s' }),
-              num('¿Y qué distancia recorrió en esos 6 s?', 36, '$x = \\tfrac{1}{2} \\cdot 2 \\cdot 6^2 = 36$ m.', { suffix: 'm' }),
-              mc('En el MRU la aceleración es…', ['Cero', 'Constante y positiva', 'Igual a la velocidad', 'Igual a $g$'], 0, 'Velocidad constante ⇒ no hay aceleración.'),
-            ],
-          },
-          {
-            id: 'fis-2', title: 'Tiro parabólico',
-            clip: { scenes: [
-              sc(6, 'Un proyectil combina **dos movimientos**: MRU en $x$ y caída libre en $y$.', { viz: { type: 'projectile', v0: 20, ang: 50 } }),
-              sc(5, 'Cambia el ángulo y cambia el alcance.', { viz: { type: 'projectile', v0: 20, anim: [15, 75] } }),
-              sc(5, 'Sin resistencia del aire, el alcance máximo se logra a 45°.', { title: '$R = \\dfrac{v_0^2 \\sin 2\\theta}{g}$', viz: { type: 'projectile', v0: 20, ang: 45 } }),
-            ] },
-            ex: [
-              sld('Ajusta el ángulo de lanzamiento para lograr el **máximo alcance**', {
-                viz: { type: 'projectile', v0: 20 }, min: 10, max: 80, step: 5, init: 20,
-                readout: v => `$\\theta = ${v}^\\circ$`, check: v => v === 45, answerText: '$\\theta = 45^\\circ$',
-                explain: '$\\sin 2\\theta$ es máximo cuando $2\\theta = 90^\\circ$.',
-              }),
-              mc('En el punto más alto de la trayectoria, la velocidad vertical es…', ['Cero', 'Máxima', 'Igual a $v_0$', 'Igual a $g$'], 0, 'Deja de subir y empieza a bajar: $v_y = 0$.'),
-              num('Caída libre desde 20 m con $g = 10$ m/s². ¿Tiempo en llegar al suelo?', 2, '$20 = \\tfrac{1}{2} \\cdot 10\\,t^2 \\Rightarrow t = 2$ s.', { suffix: 's' }),
-            ],
-          },
-        ],
-      },
-      {
-        world: 'dinamica', title: 'Dinámica',
-        lessons: [
-          {
-            id: 'fis-3', title: 'Leyes de Newton',
-            clip: { scenes: [
-              sc(5, '**1ª ley**: sin fuerza neta, un cuerpo mantiene su velocidad.', { title: '$\\sum \\vec F = 0 \\Rightarrow \\vec v = \\text{cte}$', viz: { type: 'push', F: 0 } }),
-              sc(5, '**2ª ley**: la fuerza neta produce aceleración.', { title: '$\\sum \\vec F = m\\,\\vec a$', viz: { type: 'push', F: 10, m: 2 } }),
-              sc(5, '**3ª ley**: a toda acción corresponde una reacción igual y opuesta.', { viz: { type: 'push', pair: true } }),
-            ] },
-            ex: [
-              num('Una masa de 5 kg acelera a 3 m/s². ¿Fuerza neta?', 15, '$F = m\\,a = 5 \\cdot 3 = 15$ N.', { suffix: 'N' }),
-              sld('Ajusta la fuerza para que el bloque de 4 kg acelere a $2$ m/s²', {
-                viz: { type: 'push', m: 4 }, min: 0, max: 20, step: 1, init: 2,
-                readout: v => `$F = ${v}$ N`, check: v => v === 8, answerText: '$F = 8$ N', explain: '$F = m\\,a = 4 \\cdot 2 = 8$ N.',
-              }),
-              num('¿Cuánto pesa un objeto de 10 kg? ($g = 9.8$ m/s²)', 98, '$W = m\\,g = 98$ N.', { suffix: 'N' }),
-              mc('Si empujas una pared con 50 N, la pared te empuja con…', ['50 N en sentido contrario', '0 N', 'Más de 50 N', 'Menos de 50 N'], 0, 'Tercera ley de Newton.'),
-            ],
-          },
-          {
-            id: 'fis-4', title: 'Plano inclinado',
-            clip: { scenes: [
-              sc(5, 'Un bloque sobre un plano inclinado. ¿Qué fuerzas actúan?', { viz: { type: 'incline', ang: 30 } }),
-              sc(6, 'Descompón el peso en una parte paralela y otra perpendicular al plano.', { title: '$mg\\sin\\theta \\quad mg\\cos\\theta$', viz: { type: 'incline', ang: 30, comps: true } }),
-              sc(5, 'Más inclinación → más componente que lo hace deslizar.', { viz: { type: 'incline', anim: [15, 55], comps: true } }),
-            ] },
-            ex: [
-              sld('Ajusta $\\theta$ para que la componente paralela sea **la mitad** del peso', {
-                viz: { type: 'incline', comps: true }, min: 5, max: 60, step: 5, init: 15,
-                readout: v => `$\\theta = ${v}^\\circ$`, check: v => v === 30, answerText: '$\\theta = 30^\\circ$',
-                explain: '$mg\\sin\\theta = \\tfrac{1}{2} mg \\Rightarrow \\sin\\theta = \\tfrac{1}{2} \\Rightarrow \\theta = 30^\\circ$.',
-              }),
-              num('Un bloque sin fricción baja por un plano de 30°. ¿Su aceleración? ($g = 10$)', 5, '$a = g \\sin 30^\\circ = 5$ m/s².', { suffix: 'm/s²' }),
-              mc('La fuerza normal sobre el bloque vale…', ['$mg\\cos\\theta$', '$mg\\sin\\theta$', '$mg$', '$mg\\tan\\theta$'], 0, 'Equilibra la componente perpendicular del peso.'),
-            ],
-          },
-          {
-            id: 'fis-5', title: 'Trabajo y energía',
-            clip: { scenes: [
-              sc(5, 'La energía del movimiento es la **energía cinética**.', { title: '$E_c = \\tfrac{1}{2} m v^2$', viz: { type: 'graph', xr: [0, 5], yr: [0, 26], f: sq, draw: true, ax: ['v', 'Ec'] } }),
-              sc(5, 'La energía por estar a cierta altura es la **potencial gravitatoria**.', { title: '$E_p = m\\,g\\,h$', viz: { type: 'energy' } }),
-              sc(6, 'Sin fricción, al caer la potencial se convierte en cinética: la total se conserva.', { title: '$E_c + E_p = \\text{cte}$', viz: { type: 'energy' } }),
-            ] },
-            ex: [
-              num('Energía cinética de una masa de 2 kg a 3 m/s', 9, '$\\tfrac{1}{2} \\cdot 2 \\cdot 3^2 = 9$ J.', { suffix: 'J' }),
-              num('Energía potencial de 1 kg a 5 m de altura ($g = 10$)', 50, '$m\\,g\\,h = 1 \\cdot 10 \\cdot 5 = 50$ J.', { suffix: 'J' }),
-              num('Un objeto cae desde 5 m ($g = 10$). ¿Con qué velocidad llega al suelo?', 10, '$m g h = \\tfrac{1}{2} m v^2 \\Rightarrow v = \\sqrt{2gh} = 10$ m/s.', { suffix: 'm/s' }),
-              mc('Si no hay fricción, al caer la energía potencial…', ['Se convierte en cinética', 'Desaparece', 'Se duplica', 'Permanece igual'], 0, 'Conservación de la energía mecánica.'),
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'int', level: 'Semestre 2', name: 'Cálculo Integral', icon: '∫', color: '#34d399',
-    tagline: 'Sumar lo infinitamente pequeño: áreas, volúmenes y acumulación.',
-    units: [
-      {
-        world: 'integral', title: 'La integral',
-        lessons: [
-          {
-            id: 'int-1', title: 'Área bajo la curva',
-            clip: { scenes: [
-              sc(5, '¿Cuál es el área bajo $y = x^2$ entre 0 y 2? Usemos rectángulos.', { viz: { type: 'riemann', f: sq, a: 0, b: 2, n: [4, 4], xr: [-0.3, 2.4], yr: [-0.5, 4.5] } }),
-              sc(6, 'Más rectángulos → mejor aproximación.', { viz: { type: 'riemann', f: sq, a: 0, b: 2, n: [4, 80], xr: [-0.3, 2.4], yr: [-0.5, 4.5], exact: '8/3 ≈ 2.667' } }),
-              sc(5, 'En el límite, la suma se vuelve una **integral**.', { title: '$\\displaystyle\\int_0^2 x^2\\,dx = \\dfrac{8}{3}$', viz: { type: 'riemann', f: sq, a: 0, b: 2, n: [300, 300], xr: [-0.3, 2.4], yr: [-0.5, 4.5] } }),
-            ] },
-            ex: [
-              num('$\\displaystyle\\int_0^2 2x\\,dx = \\;?$ (pista: es un triángulo)', 4, 'Triángulo de base 2 y altura 4: área $= \\tfrac{1}{2} \\cdot 2 \\cdot 4 = 4$.'),
-              mc('Si $n \\to \\infty$, la suma de Riemann…', ['Tiende al área exacta', 'Tiende a cero', 'Siempre diverge', 'No cambia'], 0, 'Esa es justamente la definición de la integral definida.'),
-              sld('El área exacta es $\\tfrac{8}{3} \\approx 2.667$. Elige $n$ para que el error sea menor que $0.1$', {
-                viz: { type: 'riemann', f: sq, a: 0, b: 2, xr: [-0.3, 2.4], yr: [-0.5, 4.5], exact: '2.667' }, min: 2, max: 60, step: 1, init: 4,
-                readout: v => `$n = ${v}$`, check: v => v >= 40, answerText: '$n \\geq 40$',
-                explain: 'Con rectángulos izquierdos el error es $\\tfrac{4}{3}\\cdot\\tfrac{3n - 1}{n^2} \\approx \\tfrac{4}{n}$: necesitas $n \\geq 40$.',
-              }),
-            ],
-          },
-          {
-            id: 'int-2', title: 'Antiderivadas',
-            clip: { scenes: [
-              sc(5, 'Integrar es el proceso **inverso** de derivar.', { steps: ['$\\dfrac{d}{dx}\\left(\\tfrac{x^3}{3}\\right) = x^2$', '$\\Rightarrow \\displaystyle\\int x^2\\,dx = \\tfrac{x^3}{3} + C$'] }),
-              sc(5, 'Regla de la potencia para integrales:', { title: '$\\displaystyle\\int x^n\\,dx = \\dfrac{x^{n+1}}{n+1} + C$', steps: ['$\\displaystyle\\int x^4\\,dx = \\tfrac{x^5}{5} + C$'] }),
-              sc(6, '**Teorema fundamental**: evalúa la antiderivada en los extremos.', { title: '$\\displaystyle\\int_a^b f(x)\\,dx = F(b) - F(a)$', steps: ['$\\displaystyle\\int_0^3 x^2\\,dx = \\tfrac{27}{3} - 0 = 9$'] }),
-            ] },
-            ex: [
-              mc('$\\displaystyle\\int x^2\\,dx$', ['$\\tfrac{x^3}{3} + C$', '$2x + C$', '$x^3 + C$', '$\\tfrac{x^2}{2} + C$'], 0, 'Sube el exponente y divide entre el nuevo exponente.'),
-              num('$\\displaystyle\\int_0^3 x^2\\,dx = \\;?$', 9, '$\\left[\\tfrac{x^3}{3}\\right]_0^3 = 9$.'),
-              mc('$\\displaystyle\\int \\cos x\\,dx$', ['$\\sin x + C$', '$-\\sin x + C$', '$\\cos x + C$', '$-\\cos x + C$'], 0, "Porque $(\\sin x)' = \\cos x$."),
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'lin', level: 'Semestre 2', name: 'Álgebra Lineal', icon: 'M', color: '#fb923c',
-    tagline: 'Vectores y matrices: el idioma del espacio y sus transformaciones.',
-    units: [
-      {
-        world: 'lineal', title: 'Vectores y matrices',
-        lessons: [
-          {
-            id: 'lin-1', title: 'Vectores',
-            clip: { scenes: [
-              sc(5, 'Un vector tiene **magnitud** y **dirección**.', { viz: { type: 'vectors', A: [3, 1], only: 'A' } }),
-              sc(6, 'Para sumar, pon la cola de uno en la punta del otro.', { title: '$\\vec a + \\vec b$', viz: { type: 'vectors', A: [3, 1], B: [1, 2] } }),
-              sc(5, 'La magnitud sale de Pitágoras:', { title: '$|\\vec v| = \\sqrt{v_x^2 + v_y^2}$', viz: { type: 'vectors', A: [3, 4], only: 'A', xr: [-1, 5], yr: [-1, 5] } }),
-            ] },
-            ex: [
-              mc('$(1, 2) + (3, 1) = \\;?$', ['$(4, 3)$', '$(3, 2)$', '$(4, 2)$', '$(2, 3)$'], 0, 'Se suma componente a componente.'),
-              num('Magnitud de $\\vec v = (3, 4)$', 5, '$\\sqrt{9 + 16} = 5$.'),
-              num('Producto punto $(1, 2) \\cdot (3, 4)$', 11, '$1 \\cdot 3 + 2 \\cdot 4 = 11$.'),
-            ],
-          },
-          {
-            id: 'lin-2', title: 'Matrices como transformaciones',
-            clip: { scenes: [
-              sc(4, 'Una matriz $2 \\times 2$ **transforma** el plano entero.', { viz: { type: 'matrix', M: [[1, 0], [0, 1]] } }),
-              sc(5, 'Esta estira el eje $x$ al doble.', { title: '$\\begin{pmatrix} 2 & 0 \\\\ 0 & 1 \\end{pmatrix}$', viz: { type: 'matrix', M: [[2, 0], [0, 1]] } }),
-              sc(5, 'Esta gira el plano 90°.', { title: '$\\begin{pmatrix} 0 & -1 \\\\ 1 & 0 \\end{pmatrix}$', viz: { type: 'matrix', M: [[0, -1], [1, 0]] } }),
-              sc(5, 'El **determinante** mide cuánto escala las áreas.', { title: '$\\det = ad - bc$', viz: { type: 'matrix', M: [[1, 1], [0, 2]] } }),
-            ] },
-            ex: [
-              mc('¿Qué matriz gira el plano $90^\\circ$ en sentido antihorario?', ['$\\begin{pmatrix} 0 & -1 \\\\ 1 & 0 \\end{pmatrix}$', '$\\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix}$', '$\\begin{pmatrix} 2 & 0 \\\\ 0 & 2 \\end{pmatrix}$', '$\\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}$'], 0, 'Envía $\\hat\\imath \\to (0, 1)$ y $\\hat\\jmath \\to (-1, 0)$.'),
-              num('$\\det\\begin{pmatrix} 2 & 1 \\\\ 1 & 3 \\end{pmatrix} = \\;?$', 5, '$2 \\cdot 3 - 1 \\cdot 1 = 5$.'),
-              mc('Si $\\det A = 0$, la transformación…', ['Aplasta el plano a una recta o un punto', 'Rota el plano', 'No cambia nada', 'Duplica las áreas'], 0, 'Las áreas se multiplican por 0: se pierde una dimensión.'),
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
-;
-//#archivo js/courses/preicfes.js
-// Curso Preicfes Saber 11 (spec 2026-11-20-curso-preicfes): preparación para el examen de Estado de grado 11, con cinco
-// componentes que se estudian por separado (como el Preuniversitario UdeA): al entrar se elige el componente y luego se ven solo
-// sus mundos. Va después de data.js: arma el curso con los mundos de js/courses/preicfes-*.js y lo pone en COURSES después del
-// Preuniversitario. Nace en borrador (supabase/migrations/20261120000001_curso_preicfes.sql) hasta la revisión docente.
-const COURSE_PREICFES = {
-  id: 'preicfes', level: 'Saber 11', name: 'Preicfes Saber 11', icon: '11', color: '#e879f9',
-  tagline: 'Las cinco pruebas del examen de grado 11, una por una.',
-  blocks: PI_BLOCKS,
-  units: PI_BLOCKS.flatMap(b => PI_MUNDOS.filter(u => u.block === b.id)),
-};
-COURSES.splice(COURSES.findIndex(c => c.id === 'preuda') + 1, 0, COURSE_PREICFES);
-;
-//#archivo js/courses/sin-escribir.js
-// Sin escribir (spec 2026-11-17-sin-escribir): ningún ejercicio pide teclear un número. Cada ejercicio `num(...)` de los
-// cursos se cambia aquí, al cargar, por un juego: «Arma la cuenta» (el estudiante plantea la operación con fichas y el
-// juego la calcula) o «Escala la solución» (elige el paso válido en cada nivel del razonamiento). El enunciado, la
-// explicación y la pista del ejercicio original se conservan.
-// La tabla va por `lección#posición` (las evaluaciones: `exam-<mundo>#posición`). Si alguien mueve un ejercicio y la
-// ficha deja de dar su respuesta, el cambio no se aplica (queda el ejercicio de escribir) y `tests/sin-escribir.test.js` avisa.
-//   C('7 * 200000 / 100000', ['1000'])  → Arma la cuenta: una cuenta correcta y las fichas que sobran.
-//   E([paso válido, falso, falso], …)   → Escala la solución: un nivel por paso; el válido va primero.
-
-const SIN_ESCRIBIR = (() => {
-  const C = (sol, traps = []) => ({ game: 'arma-la-cuenta', sol: sol.split(' '), traps });
-  const E = (...levels) => ({ game: 'escala-solucion', levels });
+//#archivo js/courses/trig-escenas.js
+// Trigonometría: ejercicios con las escenas de la explicación (spec 2026-11-25-explora-algebra-trigonometria). Va después de
+// sin-escribir.js: quita «arma la cuenta», «escala la solución», «ordena» y los juegos repetidos de cada lección, y pone los nuevos
+// antes del juego que cierra. Los juegos están en js/games/trig-escena.js.
+const TRIG_ESCENAS = (() => {
+  const E = (game, q, params, explain, hint) => ({ ...play(game, q, { mira: hint, ok: 'Esa era la idea.', ...params }, explain, { hint }) });
+  // Fichas: [rótulos], [buenas], [sobran]
+  const C = (game, q, et, metas, sobra, explain, hint, x = {}) => E(game, q, { et, metas, fichas: [...metas, ...sobra], mira: metas.map(() => hint), trampas: {}, ...x }, explain, hint);
+  const r = (metas, x = {}) => ({ metas, ...x });
   return {
-    // ---------- Álgebra ----------
-    'alg-0a#4': C('7 - 2', ['3', '1']),
-    'alg-0b#3': C('2 ^ 4', ['1', '6', '8']),
-    'exam-conjuntos#3': C('2 ^ 5', ['10', '4']),
-    'alg-12b#4': E(['Junta 4 · 25 = 100', 'Junta 4 · 19 = 100', 'Junta 4 · 25 = 29'], ['19 · 100 = 1900', '19 · 100 = 190', '19 + 100 = 119']),
-    'alg-12c#3': C('5/6 * 9/10', ['6/5']),
-    'exam-numeros#6': C('2.25 - -3.5', ['3.5']),
-    'alg-12#3': C('7 * 200000 / 100000', ['1000', '100']),
-    'alg-12#4': C('13500 / 5', ['5600', '2']),
-    'alg-13c#5': C('476000 / 1.19', ['0.19', '0.81']),
-    'exam-razones#6': C('7 * 15 / 2', ['100']),
-    'alg-22a#3': C('r ( 64 + 36 )', ['8', '6']),
-    'alg-22b#2': C('2 + 4', ['20', '80', '5']),
-    'exam-potencias#5': C('( r r 16 ) ^ 3', ['4', '12']),
-    'alg-14d#3': C('6 + 2 * 6', ['12', '3']),
-    'alg-4a#3': C('-5 * 3 ^ 2 + 30 * 3 + 1', ['6']),
-    'alg-4a#4': C('15 * 15', ['30', '2']),
-    'alg-73#3': C('ln(30) / ln(4)', ['30', '4']),
-    'alg-73#4': C('ln(2) / 0.04', ['2', '4']),
-    // ---------- Trigonometría ----------
-    'trig-41a#2': C('180 / π', ['360', '2']),
-    'trig-41b#2': C('50 * 120 * π / 180', ['360']),
-    'trig-1#1': C('10 * 3/5', ['5/3', '4/5']),
-    'trig-2#1': C('10 * sen(60°)', ['cos(60°)', 'tan(60°)']),
-    'trig-42c#2': C('2000 / sen(30°)', ['cos(30°)', 'tan(30°)']),
-    'trig-3#1': C('-12 / r ( 5 ^ 2 + 12 ^ 2 )', ['13', '17']),
-    'trig-43b#2': C('360 - 315', ['180', '270']),
-    'trig-44a#1': E(['La amplitud es |a|', 'La amplitud es a', 'La amplitud es 2π ÷ |a|'], ['4', '−4', 'π/2']),
-    'trig-44b#1': C('π / 4', ['2', '8']),
-    'trig-45#2': C('360 - 210', ['180', '30']),
-    'trig-45#3': E(['sen θ = 5/6', 'cos θ = 5/6', 'tan θ = 5/6'], ['θ = sen⁻¹(5/6)', 'θ = cos⁻¹(5/6)', 'θ = tan⁻¹(5/6)'], ['θ ≈ 56.4°', 'θ ≈ 33.6°', 'θ ≈ 39.8°']),
-    'trig-4#1': C('-1 * r ( 1 + 2 ^ 2 )'),
-    'trig-47b#2': E(['1 − cos²x = sen²x', '1 − cos²x = −sen²x'], ['1 + cot²x = csc²x', '1 + cot²x = sec²x'], ['sen²x · csc²x = 1', 'sen²x · csc²x = sen⁴x', 'sen²x · csc²x = 0']),
-    'trig-48a#1': C('3/5 * -5/13 + 4/5 * 12/13', ['-4/5', '-12/13']),
-    'trig-48b#2': C('2 * 5/13 * -12/13', ['12/13']),
-    'trig-49#2': E(['3x = π/4 + kπ', '3x = π/4 + kπ/2'], ['x = π/12 + kπ/3', 'x = π/12 + kπ/6'], ['k = 0, 1, 2: tres soluciones', 'k = 0 a 5: seis soluciones', 'k = 0: una solución']),
-    'trig-46a#1': C('10 * sen(45°) / sen(30°)', ['cos(30°)']),
-    'trig-46b#1': E(['c² = 5² + 8² − 2·5·8·cos 60°', 'c² = 5² + 8² + 2·5·8·cos 60°', 'c² = 5² + 8² − 2·5·8'], ['c² = 89 − 40 = 49', 'c² = 89 + 40 = 129', 'c² = 89 − 80 = 9'], ['c = √49 = 7', 'c = √129 ≈ 11.36', 'c = √9 = 3']),
-    'trig-151#2': C('r ( 6 ^ 2 + 8 ^ 2 )', ['14']),
-    'trig-151#3': C('180 + 45', ['360', '90']),
-    'trig-152#3': E(['z = √2 cis 135°', 'z = √2 cis 45°', 'z = 2 cis 135°'], ['z⁴ = (√2)⁴ cis (4 · 135°)', 'z⁴ = 4 · √2 cis (135° + 4°)'], ['4 cis 540° = 4 cis 180°', '4 cis 540° = 4 cis 0°'], ['−4', '4']),
-    'trig-153#3': C('90 / 3', ['8', '360', '2']),
-    // ---------- Cálculo ----------
-    'alg-32#4': E(['15 > 5x', '15 < 5x', '−1 > 5x'], ['x < 3', 'x > 3', 'x ≤ 3'], ['mayor entero: 2', 'mayor entero: 3', 'mayor entero: 4']),
-    'alg-26c#3': C('75 - 0.4', ['2']),
-    'alg-26c#4': C('7 * -2', ['2', '-7', '9', '5']),
-    'alg-51#3': C('6 + 8 + r ( 6 * 6 + 8 * 8 )', ['0']),
-    'alg-51#4': C('2 * -1 - 4', ['3']),
-    'calc-recta#3': C('12 / 3', ['2', '-2']),
-    'calc-recta#4': C('-1 / -1/4 + 1', ['1/4']),
-    'alg-52#3': C('( -2 ) ^ 2 - 3 * -2'),
-    'alg-52#4': C('6 / 2', ['-6', '1']),
-    'calc-tipos#3': C('5 - 3', ['11', '1']),
-    'calc-tipos#4': C('24 / 2 ^ 3', ['6']),
-    'alg-53#3': E(['Primero g: g(1) = 1', 'Primero f: f(1) = 2'], ['Luego f(1) = 1² + 1', 'Luego g(2) = 3 · 2 − 2'], ['2', '4']),
-    'alg-53#4': E(['Primero f: f(2) = 5', 'Primero g: g(2) = 4'], ['Luego g(5) = 3 · 5 − 2', 'Luego f(4) = 4² + 1'], ['13', '17']),
-    'calc-tramos#3': C('6 + 1.5 * ( 6 - 2 )'),
-    'calc-tramos#4': C('5 - 3', ['-5', '7']),
-    'alg-61#3': C('3 * 5 - 4', ['2']),
-    'alg-61#4': C('1 - 3', ['6']),
-    'alg-62#3': C('( 13 + 7 ) / 4'),
-    'alg-62#4': C('( 29 - 2 ) ^ 1/3'),
-    'calc-1#0': C('3 * 2 + 1'),
-    'calc-1#1': E(['(x − 1)(x + 1) ÷ (x − 1)', '(x − 1)² ÷ (x − 1)'], ['x + 1, con x → 1', 'x − 1, con x → 1'], ['2', '0']),
-    'calc-2#0': E(['Divide todo entre x²', 'Reemplaza x por ∞ y resta'], ['3 + 1/x²', '3x² + 1'], ['3', '∞']),
-    'calc-3#1': C('2 * 3', ['9']),
-    'calc-4#1': C('6 * 1 + 2', ['3']),
-    'calc-5#1': C('6 / 2', ['-6', '1']),
-    // ---------- Geometría vectorial ----------
-    'geo-1#1': E(['Suma las dos: 4x = 8', 'Suma las dos: 4x = 16', 'Resta las dos: 2x = 8'], ['x = 2', 'x = 4', 'x = 8']),
-    'geo-1#3': E(['z = −1', 'z = 1'], ['2y + 1 = 5, y = 2', '2y − 1 = 5, y = 3'], ['x = 2 − 2 + 1 = 1', 'x = 2 − 2 − 1 = −1', 'x = 2 − 3 + 1 = 0']),
-    'geo-2#2': C('1 * 1 + 2 * 4', ['3', '0', '-1']),
-    'geo-2#3': C('2 * 4', ['3']),
-    'geo-2#4': C('1 * 4 + 3 * 1', ['2', '-1']),
-    'geo-3#2': C('-3 + 5', ['8']),
-    'geo-3#3': E(['Aᵀ es 2 × 3', 'Aᵀ es 3 × 2'], ['AᵀA: (2 × 3)(3 × 2) = 2 × 2', 'AᵀA: (3 × 2)(2 × 3) = 3 × 3'], ['2 filas', '3 filas']),
-    'geo-3#4': E(['(AB)ᵀ(2, 1) = AB(1, 2)', '(AB)ᵀ(2, 1) = AB(2, 1)'], ['fila 1 de A · columna 2 de B', 'fila 2 de A · columna 1 de B'], ['1 · 1 + 2 · 0 = 1', '3 · 0 + 4 · 1 = 4']),
-    'geo-4#1': C('-1 * -3', ['1/3', '0']),
-    'geo-4#2': C('-1 * 3 / ( 5 * 2 - 3 * 3 )'),
-    'geo-4#3': E(['(AB)⁻¹ = B⁻¹A⁻¹', '(AB)⁻¹ = A⁻¹B⁻¹'], ['fila 2 de B⁻¹ · columna 2 de A⁻¹', 'fila 2 de A⁻¹ · columna 2 de B⁻¹'], ['3 · 2 + 1 · 1 = 7', '0 · 0 + 1 · 1 = 1']),
-    'geo-5#1': C('-1 * 5 / ( 2 * 3 - 5 * 1 )'),
-    'geo-5#3': C('3 * 1 + -5 * 1', ['-1', '2']),
-    'geo-6#1': E(['Desarrolla por la fila 1', 'Multiplica la diagonal'], ['2 · (3 − 2) − 0 + 1 · (1 − 0)', '2 · (3 + 2) − 0 + 1 · (1 + 0)', '2 · 3 · 1'], ['3', '11', '6']),
-    'geo-6#2': C('3 * -1 * 4', ['7', '-2', '5', '0']),
-    'geo-6#3': C('2 ^ 3 * 5'),
-    'geo-7#1': E(['0 · (5 − 3) − 2 · (5 − 2) + 4 · (3 − 2)', '0 · (5 − 3) + 2 · (5 − 2) + 4 · (3 − 2)'], ['−6 + 4', '6 + 4'], ['−2', '10']),
-    'geo-7#2': C('12 / 3 / -1', ['2']),
-    'geo-7#3': E(['Sumar a una fila un múltiplo de otra', 'Multiplicar una fila por 7'], ['no cambia el determinante', 'multiplica el determinante por 7'], ['det = 1', 'det = 7']),
-    'geo-8#1': C('2 * -3 - 1 * 1', ['7', '0']),
-    'geo-8#2': C('( 7 * -3 - 1 * 0 ) / -7'),
-    'geo-8#3': C('-3 / 4', ['3']),
-    'geo-8#4': C('8 / 3', ['4', '2']),
-    'geo-9#2': C('r ( ( -5 ) ^ 2 + 12 ^ 2 )', ['17', '7']),
-    'geo-9#3': E(['El vector es (2t + 1, −t + 4)', 'El vector es (2t + 4, −t + 1)'], ['Anula la y: −t + 4 = 0', 'Anula la x: 2t + 1 = 0'], ['t = 4', 't = −½']),
-    'geo-10#2': C('( 2 + 4 + 9 ) / 3', ['1', '7']),
-    'geo-10#3': C('14 / 2', ['3']),
-    'geo-11#2': C('r ( 2 ^ 2 + 3 ^ 2 + 6 ^ 2 )'),
-    'geo-11#3': C('2 / 3', ['-1', '9']),
-    'geo-12#1': C('4 / 2', ['1', '3']),
-    'geo-12#2': C('1 + 3 * 2', ['-2', '4']),
-    'geo-12#3': C('-6 / 3', ['2', '5']),
-    'geo-13#2': E(['1 + 2t = 3 + s  y  2 + t = 6 − s', '1 + 2t = 6 − s  y  2 + t = 3 + s'], ['Sumando: 3 + 3t = 9, t = 2', 'Sumando: 3 + 3t = 9, t = 3'], ['x = 1 + 2 · 2 = 5', 'x = 1 + 2 · 3 = 7']),
-    'geo-13#3': C('( 9 - 3 ) / 4', ['2', '1']),
-    'geo-14#1': E(['u · v = 1', 'u · v = 2'], ['cos θ = 1 ÷ (√2 · √2) = ½', 'cos θ = 1 ÷ (2 · 2) = ¼'], ['θ = 60°', 'θ = 30°', 'θ = 45°']),
-    'geo-14#2': C('4 / ( 3 + 2 )', ['-1']),
-    'geo-14#3': C('3 ^ 2 + 2 * 6 + 4 ^ 2'),
-    'geo-15#2': C('( -1 * 3 + 3 * 4 ) / 5', ['2', '0']),
-    'geo-15#3': E(['La proyección es el vector cero', 'La proyección es lo más larga posible'], ['u · v = 0', 'u · v = ‖u‖‖v‖'], ['90°', '0°', '180°']),
-    'geo-16#1': C('( 4 * 3 + 3 * -1 - 4 ) / 5'),
-    'geo-16#2': C('2 * 1 - 2 + 3 * -1'),
-    'geo-16#3': C('( 14 - 2 - 2 - 1 ) / 3'),
-    'geo-16#4': E(['Normales: (1, 1, 1) y (1, −1, 0)', 'Normales: (1, 1, 1) y (1, 1, 0)'], ['n₁ · n₂ = 1 − 1 + 0 = 0', 'n₁ · n₂ = 1 + 1 + 0 = 2'], ['90°', '0°', '45°']),
-    'geo-17#1': C('2 * 2 - 0 * -1', ['3', '1']),
-    'geo-17#2': C('1 * -1 - 2 * 3', ['0']),
-    'geo-17#3': C('r ( 8 ^ 2 + 6 ^ 2 ) / 2'),
-    'geo-17#4': E(['î × ĵ = k̂', 'î × ĵ = −k̂'], ['Al cambiar el orden cambia el signo', 'El orden no importa'], ['c = −1', 'c = 1']),
-    'geo-18#1': C('-1 * 0 - 2 * -1', ['3', '6']),
-    'geo-18#2': C('1 * 2 * 4', ['3', '0']),
-    'geo-18#3': C('r ( 3 ^ 2 + 4 ^ 2 )', ['1']),
-    'geo-18#4': C('1 * -1 - 1 * 1', ['0']),
-    'geo-19#2': C('100 / ( 2 * sen(30°) )', ['cos(30°)']),
-    'geo-19#3': C('r ( 30 ^ 2 + 40 ^ 2 )', ['70']),
-    'geo-19#4': C('20 * cos(60°)', ['sen(60°)']),
-    'geo-20#2': C('r ( 8 ^ 2 + 6 ^ 2 ) / 2'),
-    'geo-20#3': C('r ( 200 ^ 2 + 50 ^ 2 )', ['250', '150']),
-    'geo-21#2': C('50 * 10 * cos(60°)', ['sen(60°)']),
-    'geo-21#3': C('40 * 0.25', ['4']),
-    'geo-21#4': C('0 * 0 - 3 * 1', ['2']),
-    'geo-22#2': C('-12 / 4', ['2', '12']),
-    'geo-22#3': C('1 ^ 2 / ( 4 * 0.25 )', ['2']),
-    'geo-23#2': C('r ( 169 - 144 )', ['13', '12']),
-    'geo-23#3': C('r ( 16 + 9 ) / 4', ['3']),
-    'geo-23#4': C('3 * r ( 1 - 4 ^ 2 / 5 ^ 2 )'),
-    // ---------- Física, Cálculo integral, Álgebra lineal ----------
-    'fis-1#0': C('20 * 5', ['2']),
-    'fis-1#1': C('2 * 6', ['0']),
-    'fis-1#2': C('2 * 6 ^ 2 / 2'),
-    'fis-2#2': C('r ( 2 * 20 / 10 )'),
-    'fis-3#0': C('5 * 3', ['2']),
-    'fis-3#2': C('10 * 9.8'),
-    'fis-4#1': C('10 * sen(30°)', ['cos(30°)']),
-    'fis-5#0': C('2 * 3 ^ 2 / 2'),
-    'fis-5#1': C('1 * 10 * 5'),
-    'fis-5#2': C('r ( 2 * 10 * 5 )'),
-    'int-1#0': C('2 * 4 / 2'),
-    'int-2#1': C('3 ^ 3 / 3', ['2']),
-    'lin-1#1': C('r ( 3 ^ 2 + 4 ^ 2 )', ['7']),
-    'lin-1#2': C('1 * 3 + 2 * 4'),
-    'lin-2#1': C('2 * 3 - 1 * 1'),
+    'trig-41a': [
+      E('coterminal-rueda', 'Un ángulo de **−120°** termina en un punto de la rueda. Lleva el punto hasta allá.', r([240]), '$-120^\\circ + 360^\\circ = 240^\\circ$: los dos terminan en el mismo lugar.', 'El signo menos gira hacia el otro lado. ¿En qué cuadrante acaba si vas hacia abajo?'),
+      E('radianes-rueda', 'Lleva el punto al ángulo de $\\tfrac{7\\pi}{6}$ radianes.', r([210]), '$\\pi$ es media vuelta: $\\tfrac{7}{6} \\cdot 180^\\circ = 210^\\circ$.', 'Un sexto de π son 30 grados. Cuenta cuántos sextos hay.'),
+      C('grados-radianes', 'Pasa cada ángulo a radianes.', ['72°', '225°', '−90°'], ['2π/5', '5π/4', '−π/2'], ['5π/2', '4π/5', 'π/2'], 'Se multiplica por $\\tfrac{\\pi}{180}$: $\\tfrac{72\\pi}{180} = \\tfrac{2\\pi}{5}$.', 'Cada ángulo es una fracción de 180. Simplifica esa fracción y ponle π.', { g: 72 }),
+      C('vueltas-sobran-trig', 'A **1100°** se le quitan vueltas completas. ¿Cuántas y qué ángulo queda?', ['vueltas', 'queda'], ['3', '20'], ['2', '380', '30'], '$3 \\cdot 360 = 1080$ y sobran $20^\\circ$.', 'Cada vuelta son 360 grados. Quita todas las que quepan enteras.', { g: 300, cap: '1100°' }),
+    ],
+    'trig-41b': [
+      E('sector-fraccion', 'Pinta el sector que es **cinco doceavos** del disco.', { ks: [['g', 0, 360, 'ángulo', 30]], v: { g: 30 }, meta: { g: 150 } }, '$\\tfrac{5}{12} \\cdot 360^\\circ = 150^\\circ$ de la vuelta.', 'Un doceavo de vuelta son 30 grados. Cuenta cuántos necesitas.'),
+      E('vuelta-arco', 'Una rueda de radio 1 rueda hasta que su arco mide $\\tfrac{4\\pi}{3}$. Lleva el punto al ángulo que giró.', r([240]), 'Con radio 1 el arco es el ángulo: $\\tfrac{4\\pi}{3} = 240^\\circ$.', 'Con radio 1, el arco y el ángulo en radianes miden lo mismo.'),
+      C('arco-cuenta', 'Un péndulo de 60 cm barre **30°**. Pon el ángulo en radianes y el arco en centímetros.', ['radianes', 'arco'], ['π/6', '10π'], ['π/3', '1800', '20π'], '$s = r\\theta = 60 \\cdot \\tfrac{\\pi}{6} = 10\\pi$.', 'Primero pasa los grados a radianes; luego, radio por ángulo.', { g: 30, cap: '30°' }),
+      C('velocidad-cuenta', 'Una rueda de 2 m de radio da **3 vueltas** por minuto. Pon cuántos radianes y cuántos metros por minuto recorre el borde.', ['rad/min', 'm/min'], ['6π', '12π'], ['3π', '6', '24π'], 'Cada vuelta son $2\\pi$: $\\omega = 6\\pi$ y $v = r\\omega = 12\\pi$.', 'Cada vuelta tiene dos pi radianes; la velocidad del borde es radio por eso.', { g: 360, cap: '3 vueltas' }),
+    ],
+    'trig-1': [
+      E('catetos-razon', 'Mueve los catetos hasta que la **tangente** de θ sea $\\tfrac{4}{7}$, con el adyacente más largo.', { ks: [['x', 2, 12, 'adyacente'], ['y', 2, 8, 'opuesto']], v: { x: 4, y: 4 }, meta: { x: 7, y: 4 } }, 'Tangente es opuesto sobre adyacente: 4 sobre 7.', 'La tangente compara el cateto de enfrente con el de al lado, en ese orden. Usa los números de la fracción.'),
+      C('lados-nombra', 'Triángulo de lados 20, 21 y 29. Desde θ, el opuesto es el **20**. Pon los otros.', ['adyacente', 'hipotenusa'], ['21', '29'], ['20', '41'], 'La hipotenusa es el lado más largo y el adyacente, el cateto que queda.', '¿Cuál lado mira al ángulo recto? El otro cateto está al lado de θ.', { t: { co: '20' } }),
+      C('razones-tres', 'Opuesto 33, adyacente 56, hipotenusa 65. Pon cada razón de θ.', ['sen', 'cos', 'tan'], ['33/65', '56/65', '33/56'], ['65/33', '56/33'], 'SOH, CAH y TOA: cada razón con sus dos lados.', 'Seno y coseno llevan abajo la hipotenusa. La tangente no la usa.', { t: { co: '33', ca: '56', hi: '65' } }),
+      E('escalera-apoya', 'La altura a la que llega una escalera es la **mitad** de su largo. Inclínala.', { ks: [['g', 15, 75, 'ángulo con el piso', 15]], v: { g: 75 }, meta: { g: 30 } }, '$\\operatorname{sen}30^\\circ = \\tfrac12$: la altura es la mitad de la hipotenusa.', 'Altura sobre escalera es el seno. ¿De qué ángulo notable el seno es un medio?'),
+    ],
+    'trig-2': [
+      E('notables-rueda', 'Marca los **dos** ángulos del primer cuadrante con $\\operatorname{sen} = \\tfrac{\\sqrt2}{2}$ y con $\\operatorname{sen} = \\tfrac{\\sqrt3}{2}$.', r([45, 60], { ini: [15, 75] }), 'El de 45° viene del medio cuadrado y el de 60°, del medio equilátero.', 'Uno sale de partir un cuadrado y otro, de partir un triángulo equilátero.'),
+      C('recta-notables', 'El triángulo de **60°** tiene adyacente 5. Pon el opuesto y la hipotenusa.', ['opuesto', 'hipotenusa'], ['5√3', '10'], ['5√2', '10√3', '5'], 'En 30–60 los lados son 1, √3 y 2: aquí, por 5.', 'Frente a 60° está la raíz de tres veces el lado corto; la hipotenusa es su doble.', { t: { a: '60°', ca: '5' } }),
+      C('recta-mitad', 'La diagonal de una cancha cuadrada mide **14√2** m. Pon el lado y el perímetro.', ['lado', 'perímetro'], ['14', '56'], ['28', '14√2', '196'], 'La diagonal es lado por √2: el lado mide 14.', 'La diagonal de un cuadrado es el lado por raíz de dos.', { t: { a: '45°', hi: '14√2', b: 110, h: 110 } }),
+      E('mirador', 'Desde **50 m**, la altura de una torre es justo de 50 m. Inclina la mirada.', { d: 50, ks: [['g', 15, 60, 'elevación', 15]], v: { g: 15 }, meta: { g: 45 } }, '$\\tan 45^\\circ = 1$: altura y distancia iguales.', 'Altura sobre distancia da 1. ¿De qué ángulo notable es la tangente 1?'),
+    ],
+    'trig-42c': [
+      C('seis-razones', 'Opuesto 5, adyacente 12, hipotenusa 13. Pon las recíprocas.', ['csc', 'sec', 'cot'], ['13/5', '13/12', '12/5'], ['5/13', '5/12'], 'Son seno, coseno y tangente dados vuelta.', 'Cosecante voltea al seno; secante, al coseno; cotangente, a la tangente.', { t: { co: '5', ca: '12', hi: '13' } }),
+      C('de-una-todas', 'θ es agudo y $\\cot\\theta = \\tfrac{24}{7}$. Pon la hipotenusa y el seno.', ['hipotenusa', 'sen'], ['25', '7/25'], ['31', '24/25', '25/7'], 'Adyacente 24 y opuesto 7: $\\sqrt{576 + 49} = 25$.', 'La cotangente es adyacente sobre opuesto. Completa con Pitágoras.', { t: { ca: '24', co: '7' } }),
+      C('depresion-faro', 'Desde una torre de 60 m se ve un auto con depresión de **45°**; otro, con **30°**. Pon la distancia de cada uno a la base.', ['a 45°', 'a 30°'], ['60', '60√3'], ['30', '20√3', '120'], 'Distancia es altura entre tangente: $\\tfrac{60}{1}$ y $\\tfrac{60}{\\sqrt3/3} = 60\\sqrt3$.', 'La depresión es igual al ángulo en el auto. Altura sobre distancia es su tangente.', { t: { co: '60' } }),
+    ],
+    'trig-3': [
+      E('punto-unidad', 'Lleva el punto a donde está $\\left(-\\tfrac12, \\tfrac{\\sqrt3}{2}\\right)$.', r([120]), 'Coseno $-\\tfrac12$ y seno positivo: $120^\\circ$.', 'Izquierda y arriba. La altura es raíz de tres medios.'),
+      E('gemelos-seno', 'Marca los **dos** ángulos cuya altura es la línea punteada: $\\operatorname{sen}\\theta = -\\tfrac12$.', r([210, 330], { linea: ['y', -0.5] }), 'Referencia 30° por debajo del eje: 210° y 330°.', 'Los dos puntos están a la misma altura, uno a cada lado.'),
+      C('valores-eje', 'Pon el valor en los ejes.', ['cos 270°', 'sen 90°', 'tan 360°'], ['0', '1', '0'], ['−1', 'no existe'], 'Los puntos son (0, −1), (0, 1) y (1, 0).', 'Mira x para el coseno, y para el seno, y divide para la tangente.', { gs: [270, 90] }),
+      E('gemelos-coseno', 'Marca los **dos** ángulos sobre la línea vertical: $\\cos\\theta = \\tfrac{\\sqrt2}{2}$.', r([45, 315], { linea: ['x', 0.707], ini: [90, 180] }), 'Mismo coseno: un ángulo y su espejo de abajo.', 'El espejo sobre el eje horizontal conserva x.'),
+    ],
+    'trig-43b': [
+      E('cuadrante-referencia', 'Lleva el punto al ángulo del **cuarto cuadrante** con referencia **60°**.', r([300]), '$360^\\circ - 60^\\circ = 300^\\circ$.', 'Desde el eje derecho, baja lo que diga la referencia.'),
+      C('signo-valor', 'Pon cada valor con su signo.', ['cos 150°', 'sen 225°', 'tan 300°'], ['−√3/2', '−√2/2', '−√3'], ['√3/2', '√3', '√2/2'], 'Referencias 30°, 45° y 60° con el signo del cuadrante.', 'Halla la referencia y después mira si ese lado es positivo en el cuadrante.', { gs: [150, 225, 300] }),
+      C('referencia-valor', '$\\tan\\theta = \\tfrac{8}{15}$ y θ está en el **tercer** cuadrante. Pon sen y cos.', ['sen', 'cos'], ['−8/17', '−15/17'], ['8/17', '15/17', '−8/15'], 'Hipotenusa 17; en el tercero, los dos negativos.', 'Arma el triángulo con Pitágoras y luego mira los signos del tercer cuadrante.', { gs: [208] }),
+    ],
+    'trig-44a': [
+      E('ola-amplitud', 'Ajusta la ola para que toque justo las **dos líneas** y empiece **subiendo**.', { franja: [3, -3], ks: [['A', -4, 4, 'A']], v: { A: 1 }, meta: { A: 3 } }, 'Va de −3 a 3: amplitud 3, y empieza subiendo con signo positivo.', 'La amplitud es lo que se aleja del centro. Un signo menos la voltearía.'),
+      E('ola-centro', 'Lleva la ola hasta que quede entre **las dos líneas** (arriba 3, abajo −1).', { franja: [3, -1], ks: [['A', 1, 3, 'amplitud'], ['k', -2, 2, 'centro']], v: { A: 1, k: 0 }, meta: { A: 2, k: 1 } }, 'Centro $\\tfrac{3 - 1}{2} = 1$ y amplitud $3 - 1 = 2$.', 'El centro es el promedio de los extremos; la amplitud, de ahí hasta el tope.'),
+      C('lee-ola', 'Lee la ola del dibujo: pon su máximo, su mínimo y su amplitud.', ['máximo', 'mínimo', 'amplitud'], ['3', '1', '1'], ['2', '−1', '4'], 'Se mueve alrededor de 2 y se aleja 1: de 1 a 3.', 'Mira el punto más alto y el más bajo; la amplitud es la mitad de lo que los separa. Cada raya vale 1.', { o: { A: 1, k: 2 } }),
+      C('ficha-ola', 'La ola $y = -2\\operatorname{sen}x - 1$ está dibujada. Pon su amplitud, su centro y su máximo.', ['amplitud', 'centro', 'máximo'], ['2', '−1', '1'], ['−2', '3', '−3'], 'La amplitud es $|{-2}| = 2$; el máximo, $-1 + 2 = 1$.', 'La amplitud nunca es negativa. Al centro se le suma para hallar el máximo.', { o: { A: -2, k: -1 } }),
+    ],
+    'trig-44b': [
+      E('ola-periodo', 'Haz que la ola coincida con la **sombra**: mueve ω.', { sombra: 1, ks: [['w', 0.5, 3, 'ω', 0.5]], v: { A: 2, w: 1 }, meta: { w: 1.5 } }, 'En 4π caben tres ciclos: cada uno mide $\\tfrac{4\\pi}{3}$ y $\\omega = 1.5$.', 'Cuenta cuántos ciclos completos hace la sombra en el cuadro, que mide 4π.'),
+      E('ola-desfase', 'La sombra es la misma ola **corrida**. Mueve cuánto, en cuartos de π.', { sombra: 1, ks: [['f', 0, 3.1415926, 'corrimiento', 0.78539815]], v: { A: 2, w: 1, f: 0 }, meta: { f: 2.356 } }, 'Se corrió $\\tfrac{3\\pi}{4}$ hacia la derecha.', 'Mira dónde empieza a subir la sombra y llévala hasta allí.'),
+      C('lee-periodo', 'Lee la ola: pon el periodo, ω y la amplitud. Cada columna mide π/2.', ['periodo', 'ω', 'amplitud'], ['π', '2', '3'], ['2π', '4π', '1'], 'Un ciclo ocupa dos columnas: π, y $\\omega = \\tfrac{2\\pi}{\\pi} = 2$.', 'Mide una ola completa en columnas y divide 2π entre ese largo.', { o: { A: 3, w: 2 } }),
+      C('ficha-desfase', '$y = 2\\operatorname{sen}(3x - \\pi)$ se escribe $2\\operatorname{sen}\\,3(x - \\square)$. Pon el desfase y el periodo.', ['desfase', 'periodo'], ['π/3', '2π/3'], ['π', '3π', '6π'], 'Se saca factor 3: $3(x - \\tfrac{\\pi}{3})$; y $T = \\tfrac{2\\pi}{3}$.', 'Saca el 3 de los dos términos antes de leer el desfase.', { o: { A: 2, w: 3, f: 1.047 } }),
+    ],
+    'trig-45': [
+      E('arco-inverso', 'Lleva el punto a $\\arccos\\left(-\\tfrac{\\sqrt3}{2}\\right)$.', r([150]), 'El arcocoseno responde entre 0° y 180°: 150°.', 'La respuesta tiene que estar en la mitad de arriba.'),
+      C('rango-inversa', 'Pon cada ángulo, en su ventana.', ['arcsen(√3/2)', 'arctan(−1)', 'arccos 0'], ['60°', '−45°', '90°'], ['120°', '135°', '0°'], 'arcsen y arctan van de −90° a 90°; arccos, de 0° a 180°.', 'Pregunta de qué ángulo es ese valor y escoge el de la ventana.', { cap: '¿de qué ángulo?' }),
+      C('triangulo-inversa', '¿Cuánto valen $\\cos(\\arcsen\\tfrac{12}{13})$ y $\\tan(\\arcsen\\tfrac{12}{13})$?', ['cos', 'tan'], ['5/13', '12/5'], ['13/5', '5/12', '12/13'], 'El ángulo tiene opuesto 12 e hipotenusa 13: adyacente 5.', 'Dibuja el triángulo de ese ángulo y completa con Pitágoras.', { t: { co: '12', hi: '13' } }),
+      C('deshace-inversa', 'Deshacer solo funciona dentro de la ventana. Pon cada resultado.', ['arcsen(sen 70°)', 'arcsen(sen 110°)', 'arccos(cos 200°)'], ['70°', '70°', '160°'], ['110°', '200°', '−20°'], '110° tiene el mismo seno que 70°, y 200° el mismo coseno que 160°.', 'Si el ángulo está fuera de la ventana, busca el gemelo que sí está.', { cap: 'deshacer' }),
+    ],
+    'trig-4': [
+      E('pitagoras-uno', '$\\cos^2\\theta$ vale **0.28**. Mueve $\\operatorname{sen}^2\\theta$ (en centésimas) hasta que se cumpla Pitágoras.', { cs: 28, ks: [['s', 0, 100, 'centésimas', 4]], v: { s: 0 }, meta: { s: 72 } }, '$0.72 + 0.28 = 1$: juntos siempre hacen uno.', 'Los dos cuadrados juntos tienen que completar 1.'),
+      E('secante-barra', '$\\tan^2\\theta = 6$. Mueve $\\sec^2\\theta$ hasta que sea la suma correcta.', { t: 6, ks: [['s', 1, 10, 'sec²']], v: { s: 1 }, meta: { s: 7 } }, '$\\sec^2\\theta = 1 + \\tan^2\\theta = 7$.', 'La secante al cuadrado es la tangente al cuadrado y algo más.'),
+      E('negativo-espejo', 'El punto de **150°** tiene un espejo: lleva el punto a **−150°**.', r([210]), 'El ángulo negativo es el espejo de abajo: $-150^\\circ = 210^\\circ$.', 'Girar al revés refleja sobre el eje horizontal.'),
+      C('par-impar', '$\\cos\\theta = 0.6$ y $\\operatorname{sen}\\theta = 0.8$. Pon los valores en −θ.', ['cos(−θ)', 'sen(−θ)', 'tan(−θ)'], ['0.6', '−0.8', '−4/3'], ['−0.6', '0.8', '4/3'], 'El coseno es par; seno y tangente, impares.', 'El espejo de abajo conserva x y cambia el signo de y.', { gs: [53, 307] }),
+    ],
+    'trig-47b': [
+      C('simplifica-senos', 'Pasa todo a seno y coseno y simplifica.', ['cot θ · sen θ', 'tan θ · csc θ'], ['cos θ', 'sec θ'], ['sen θ', '1', 'csc θ'], '$\\tfrac{\\cos}{\\operatorname{sen}}\\operatorname{sen} = \\cos$ y $\\tfrac{\\operatorname{sen}}{\\cos}\\tfrac{1}{\\operatorname{sen}} = \\sec$.', 'Escribe cada una con seno y coseno y cancela lo repetido.', { cap: 'todo en sen y cos' }),
+      C('demuestra-pasos', '$\\csc\\theta - \\operatorname{sen}\\theta$ con denominador sen θ: pon lo de arriba y el resultado.', ['arriba', 'resultado'], ['cos²θ', 'cos θ · cot θ'], ['1', 'sen²θ', 'tan θ'], '$\\tfrac{1 - \\operatorname{sen}^2}{\\operatorname{sen}} = \\tfrac{\\cos^2}{\\operatorname{sen}}$.', 'Uno menos seno al cuadrado es una identidad conocida.', { cap: 'csc θ − sen θ' }),
+      C('conjugado-trig', '$\\tfrac{1}{1 - \\cos\\theta}$ por su conjugado: pon arriba y abajo.', ['arriba', 'abajo'], ['1 + cos θ', 'sen²θ'], ['1 − cos θ', 'cos²θ', '1'], '$(1 - \\cos)(1 + \\cos) = 1 - \\cos^2 = \\operatorname{sen}^2$.', 'El conjugado tiene el signo contrario; abajo queda una diferencia de cuadrados.', { cap: '1 / (1 − cos θ)' }),
+      C('reemplaza-identidad', 'Con $\\operatorname{sen}^2\\theta = \\tfrac{1}{4}$, pon el valor de cada una.', ['cos²θ', 'csc²θ', 'cot²θ'], ['3/4', '4', '3'], ['1/4', '1/3', '2'], '$1 - \\tfrac14$, $\\tfrac{1}{1/4}$ y $4 - 1$.', 'Usa Pitágoras, la recíproca y después csc² menos 1.', { cap: 'sen²θ = 1/4' }),
+    ],
+    'trig-48a': [
+      E('suma-angulos', 'El primer ángulo es de **45°**. Agrega el que hace falta para llegar a **105°**.', { a: 45, ks: [['b', 0, 90, 'segundo ángulo', 15]], v: { b: 0 }, meta: { b: 60 } }, '$105^\\circ = 45^\\circ + 60^\\circ$: dos notables.', 'Resta para saber cuánto falta: debe salir otro ángulo notable.'),
+      E('resta-angulos', 'Quita a **60°** el ángulo notable que deja **15°**.', { a: 60, ks: [['b', 0, 60, 'se quita', 15]], v: { b: 0 }, meta: { b: 45 } }, '$15^\\circ = 60^\\circ - 45^\\circ$.', 'Piensa cuánto hay entre 60 y 15.'),
+      C('suma-formula', '$\\operatorname{sen}15^\\circ = \\operatorname{sen}(45^\\circ - 30^\\circ)$: pon los dos productos que se restan.', ['sen·cos', 'cos·sen'], ['√6/4', '√2/4'], ['1/2', '√3/2', '√8/4'], '$\\tfrac{\\sqrt2}{2}\\cdot\\tfrac{\\sqrt3}{2} - \\tfrac{\\sqrt2}{2}\\cdot\\tfrac12 = \\tfrac{\\sqrt6 - \\sqrt2}{4}$.', 'El seno cruza: seno por coseno, y coseno por seno.', { ops: ['−'], cap: 'sen(45° − 30°)' }),
+      C('suma-tangente', '$\\tan a = \\tfrac12$ y $\\tan b = \\tfrac13$. Pon arriba, abajo y $\\tan(a + b)$.', ['arriba', 'abajo', 'resultado'], ['5/6', '5/6', '1'], ['1/6', '7/6', '2/5'], '$\\tfrac12 + \\tfrac13 = \\tfrac56$ y $1 - \\tfrac16 = \\tfrac56$: el cociente es 1.', 'Arriba la suma; abajo, uno menos el producto.', { cap: 'tan(a + b)' }),
+    ],
+    'trig-48b': [
+      E('doble-vuelta', 'El punto está en **75°**. Llévalo al **doble** de ese ángulo.', r([150], { ini: [75] }), '$2 \\cdot 75^\\circ = 150^\\circ$: cambió de cuadrante.', 'Suma el ángulo consigo mismo.'),
+      E('mitad-angulo', 'El radio amarillo está en **210°**. Pon el otro en la **mitad** de ese ángulo.', { g: 210, ks: [['m', 0, 180, 'mitad', 15]], v: { m: 0 }, meta: { m: 105 } }, 'La mitad de 210° es 105°, en el segundo cuadrante.', 'La mitad de un ángulo del tercer cuadrante no está en el tercero.'),
+      C('doble-cuenta', '$\\cos a = \\tfrac{8}{17}$, a agudo. Pon sen a, sen 2a y cos 2a.', ['sen a', 'sen 2a', 'cos 2a'], ['15/17', '240/289', '−161/289'], ['161/289', '30/17', '120/289'], '$2 \\cdot \\tfrac{15}{17} \\cdot \\tfrac{8}{17}$ y $\\tfrac{64 - 225}{289}$.', 'El doble del producto; y coseno al cuadrado menos seno al cuadrado.', { cap: 'cos a = 8/17' }),
+      C('mitad-cuenta', '$\\cos 2a = -\\tfrac{1}{9}$, a agudo. Pon sen²a, cos²a y tan²a.', ['sen²a', 'cos²a', 'tan²a'], ['5/9', '4/9', '5/4'], ['1/9', '10/9', '4/5'], '$\\tfrac{1 + 1/9}{2} = \\tfrac59$ y $\\tfrac{1 - 1/9}{2} = \\tfrac49$.', 'Seno al cuadrado lleva uno menos; coseno al cuadrado, uno más; y la mitad.', { cap: 'cos 2a = −1/9' }),
+    ],
+    'trig-49': [
+      E('corta-ola', 'Mueve la recta hasta que haya **una sola** solución por ciclo y esté **abajo**.', { ks: [['h', -1.5, 1.5, 'altura', 0.5]], v: { h: 0 }, meta: { h: -1 } }, '$\\operatorname{sen}x = -1$ toca solo el valle de cada ciclo.', 'La recta debe rozar la ola sin cruzarla, en la parte baja.'),
+      E('pareja-ecuacion', 'Marca las **dos** soluciones de $2\\cos x + \\sqrt3 = 0$ en una vuelta.', r([150, 210]), '$\\cos x = -\\tfrac{\\sqrt3}{2}$: referencia 30° a la izquierda.', 'Despeja el coseno y mira de qué lado de la rueda es negativo.'),
+      C('despeja-trig', '$4\\operatorname{sen}^2x - 3 = 0$: pon sen²x, la referencia y cuántas soluciones hay en una vuelta.', ['sen²x', 'referencia', 'cuántas'], ['3/4', '60°', '4'], ['2', '30°', '4/3'], '$\\operatorname{sen}x = \\pm\\tfrac{\\sqrt3}{2}$: una por cuadrante.', 'El cuadrado permite dos signos: piensa en los cuatro cuadrantes.', { cap: '4 sen²x − 3 = 0' }),
+      C('factoriza-trig', '$2\\cos^2x + \\cos x = 0$: pon los dos valores de cos x, el mayor primero.', ['uno', 'otro'], ['0', '−1/2'], ['1/2', '1', '−2'], '$\\cos x(2\\cos x + 1) = 0$.', 'Saca factor común: cada factor puede ser cero.', { cap: 'factor común' }),
+    ],
+    'trig-46a': [
+      E('angulo-tercero', 'En un triángulo, A = 47° y B = 68°. Mueve C hasta completar.', { A: 47, B: 68, ks: [['C', 20, 100, 'C (grados)', 5]], v: { C: 20 }, meta: { C: 65 } }, '$180 - 47 - 68 = 65$.', 'Los tres ángulos juntos llenan 180 grados.'),
+      E('cuelga-lado', 'Con A = 30° y b = 12, mueve a hasta que haya **un triángulo rectángulo**.', { b: 12, ks: [['a', 3, 14, 'lado a']], v: { a: 3 }, meta: { a: 6 } }, 'La altura es $12\\operatorname{sen}30^\\circ = 6$: el lado cae derecho.', 'El lado que cuelga debe medir justo la altura: b por el seno de 30°.'),
+      C('senos-ley', 'A = 45°, B = 60° y a = 4. Pon C y b.', ['C', 'b'], ['75°', '2√6'], ['105°', '4√3', '2√3'], '$b = \\tfrac{4\\operatorname{sen}60^\\circ}{\\operatorname{sen}45^\\circ} = 4\\cdot\\tfrac{\\sqrt3}{\\sqrt2} = 2\\sqrt6$.', 'Primero el ángulo que falta; luego, lado sobre seno de su opuesto.', { a: '4', b: 'b' }),
+      C('senos-pareja', '¿Qué ley empieza? Datos: **a, B, C**; **a, b, c**; **b, c, A**.', ['a, B, C', 'a, b, c', 'b, c, A'], ['senos', 'cosenos', 'cosenos'], ['ninguna', 'senos'], 'Con dos ángulos sale el tercero y hay pareja; en las otras no hay ángulo opuesto conocido.', 'Busca si puedes tener un lado y su ángulo opuesto.', { a: 'a', b: 'b', c: 'c' }),
+    ],
+    'trig-46b': [
+      E('abre-bisagra', 'Lados 6 y 6. Abre el ángulo hasta que el tercer lado mida también **6**.', { a: 6, b: 6, ks: [['g', 15, 150, 'ángulo', 15]], v: { g: 15 }, meta: { g: 60 } }, 'Tres lados iguales: cada ángulo mide 60°.', '¿Qué triángulo tiene los tres lados iguales? ¿Cuánto miden sus ángulos?'),
+      E('area-bisagra', 'Lados 5 y 8. Abre el ángulo, **más de 90°**, para que el área sea la **misma que con 30°**.', { a: 5, b: 8, ks: [['g', 30, 165, 'ángulo', 15]], v: { g: 30 }, meta: { g: 150 } }, '$\\operatorname{sen}150^\\circ = \\operatorname{sen}30^\\circ$: la misma altura.', 'Busca el ángulo obtuso que tiene el mismo seno.'),
+      C('cosenos-ley', 'Lados 7 y 8 con **120°** entre ellos. Pon $-2ab\\cos C$, c² y c.', ['corrección', 'c²', 'c'], ['56', '169', '13'], ['−56', '57', '113'], '$49 + 64 + 56 = 169$: el ángulo obtuso agrega.', 'El coseno de 120° es menos un medio: la corrección suma.', { a: '7', b: '8', c: 'c' }),
+      C('cosenos-angulo', 'Lados 7, 8 y 13. Para el ángulo opuesto a **13**, pon a² + b² − c², 2ab y el coseno.', ['a²+b²−c²', '2ab', 'cos'], ['−56', '112', '−1/2'], ['56', '1/2', '282'], '$49 + 64 - 169 = -56$ y $-\\tfrac{56}{112} = -\\tfrac12$.', 'El lado que se resta es el opuesto al ángulo buscado.', { a: '7', b: '8', c: '13' }),
+      C('area-senos', 'Lados 6 y 10 con **30°** entre ellos. Pon la altura sobre el 10 y el área.', ['altura', 'área'], ['3', '15'], ['6', '30', '5'], 'Altura $6\\operatorname{sen}30^\\circ = 3$; área $\\tfrac12\\cdot10\\cdot3$.', 'La altura es un lado por el seno; el área, media base por altura.', { a: '6', c: '10' }),
+    ],
+    'trig-151': [
+      E('argumento-plano', 'Lleva el radio a la dirección del número $-1 - i$.', r([225]), 'Está en el tercer cuadrante, a 45° del eje: 225°.', 'Izquierda y abajo por igual. ¿Cuánto se pasó de media vuelta?'),
+      E('polar-flecha', 'Lleva la flecha hasta el punto amarillo, $-4i$: pon módulo y ángulo.', { pto: [0, -4], ks: [['r', 1, 5, 'módulo'], ['g', 0, 330, 'ángulo', 30]], v: { r: 2, g: 30 }, meta: { r: 4, g: 270 } }, '$-4i = 4\\operatorname{cis}270^\\circ$.', 'El módulo es la distancia al centro; el ángulo se cuenta desde la derecha.'),
+      C('componentes-polar', '$10\\operatorname{cis}150^\\circ$: pon la parte real y la imaginaria.', ['real', 'imaginaria'], ['−5√3', '5'], ['5√3', '−5', '10'], '$10\\cos150^\\circ = -5\\sqrt3$ y $10\\operatorname{sen}150^\\circ = 5$.', 'Segundo cuadrante: la parte real es negativa. Referencia 30°.', { t: { a: '30°', hi: '10' } }),
+      C('modulo-argumento', '$z = 3 - 3\\sqrt3\\,i$: pon el módulo y el argumento entre 0° y 360°.', ['módulo', 'argumento'], ['6', '300°'], ['36', '60°', '240°'], '$\\sqrt{9 + 27} = 6$; cuarto cuadrante con referencia 60°.', 'Pitágoras para el módulo; dibuja el cuadrante antes de decir el ángulo.', { cap: '3 − 3√3 i' }),
+    ],
+    'trig-152': [
+      E('producto-polar', 'z (amarillo) es $2\\operatorname{cis}30^\\circ$. Lleva la flecha a $z \\cdot 2\\operatorname{cis}120^\\circ$.', { z: [2, 30], ks: [['r', 1, 5, 'módulo'], ['g', 0, 330, 'ángulo', 30]], v: { r: 1, g: 0 }, meta: { r: 4, g: 150 } }, 'Módulos: $2 \\cdot 2 = 4$. Ángulos: $30^\\circ + 120^\\circ$.', 'Los módulos se multiplican y los ángulos se suman.'),
+      E('cociente-polar', 'z es $4\\operatorname{cis}210^\\circ$. Lleva la flecha a $z \\div 2\\operatorname{cis}60^\\circ$.', { z: [4, 210], ks: [['r', 1, 5, 'módulo'], ['g', 0, 330, 'ángulo', 30]], v: { r: 1, g: 0 }, meta: { r: 2, g: 150 } }, 'Módulos: $4 \\div 2 = 2$. Ángulos: $210^\\circ - 60^\\circ$.', 'Dividir hace lo contrario de multiplicar.'),
+      E('demoivre-rueda', 'w tiene módulo 1 y ángulo **75°**. Lleva el punto a $w^4$.', r([300], { ini: [75] }), '$4 \\cdot 75^\\circ = 300^\\circ$.', 'Elevar repite el giro tantas veces como diga el exponente.'),
+      C('potencia-polar', '$(\\sqrt3 + i)^3$: pon el módulo, el ángulo y el resultado.', ['módulo', 'ángulo', 'resultado'], ['8', '90°', '8i'], ['2', '30°', '−8'], '$2\\operatorname{cis}30^\\circ$ al cubo es $8\\operatorname{cis}90^\\circ = 8i$.', 'Pasa a polar; el módulo al cubo y tres veces el ángulo.', { cap: '(√3 + i)³' }),
+    ],
+    'trig-153': [
+      E('raiz-primera', 'Lleva el punto a la primera raíz **cuarta** de $\\operatorname{cis}240^\\circ$.', r([60]), '$240^\\circ \\div 4 = 60^\\circ$.', 'La raíz parte el ángulo en tantas partes como el índice.'),
+      E('raices-opuestas', 'Marca las **dos** raíces cuadradas de $\\operatorname{cis}150^\\circ$.', r([75, 255], { ini: [15, 120] }), 'La mitad de 150° y media vuelta más.', 'Una es la mitad del ángulo; la otra está enfrente.'),
+      E('petalos', 'Arma las raíces **quintas** de un número cuya primera raíz está en **20°**.', { ks: [['n', 2, 8, 'cuántas raíces'], ['a', 0, 60, 'primera', 10]], v: { n: 2, a: 0 }, meta: { n: 5, a: 20 } }, 'Cinco raíces, cada $72^\\circ$, empezando en $20^\\circ$.', 'El índice dice cuántas son; la primera ya la conoces.'),
+      C('raices-ordenadas', 'Raíces cúbicas de $8\\operatorname{cis}90^\\circ$: pon el módulo y los tres ángulos en orden.', ['módulo', '1.ª', '2.ª', '3.ª'], ['2', '30°', '150°', '270°'], ['8', '90°', '120°'], '$90 \\div 3 = 30$ y luego cada $120^\\circ$.', 'Parte el ángulo en tres y después suma un tercio de vuelta.', { cap: 'cada 120°' }),
+    ],
   };
 })();
-
-// Cambia en los cursos cada ejercicio de escribir por su juego. Devuelve cuántos cambió y cuáles no pudo.
-function sinEscribir(courses, table = SIN_ESCRIBIR) {
-  const out = { done: 0, missing: [], mismatch: [], unused: new Set(Object.keys(table)) };
-  const swap = (list, id) => (list || []).forEach((ex, i) => {
-    if (!ex || ex.type !== 'input') return;
-    const key = `${id}#${i}`, t = table[key];
-    if (!t) { out.missing.push(key); return; }
-    out.unused.delete(key);
-    const { type, answer, tol, prefix, suffix, answerText, ...rest } = ex;
-    let params;
-    if (t.game === 'arma-la-cuenta') {
-      const v = GAMES['arma-la-cuenta']?.evaluate(t.sol), lim = tol ?? 1e-6 * Math.max(1, Math.abs(answer));
-      if (!(Math.abs(v - answer) <= lim)) { out.mismatch.push(key); return; }   // la ficha ya no es de este ejercicio: se deja como estaba
-      // El juego calcula exacto: vale la cuenta de la ficha, no el redondeo que se aceptaba al escribir (con ese margen
-      // pasaban cuentas falsas). La tolerancia vieja solo dice cuántos decimales mostrar.
-      const round = { sol: t.sol, traps: t.traps, answer: v, tol: 1e-9 * Math.max(1, Math.abs(v)), ...(tol != null ? { digits: tol } : {}), ...(suffix ? { unit: suffix } : {}) };
-      params = { rounds: [round] };
-    } else params = { rounds: [{ levels: t.levels }] };
-    list[i] = { ...rest, type: 'play', game: t.game, params };
-    out.done++;
-  });
-  for (const c of courses) for (const u of c.units || []) {
-    for (const l of u.lessons || []) swap(l.ex, l.id);
-    if (u.exam) { const exs = u.exam.items.map(it => it.ex); swap(exs, `exam-${u.world}`); exs.forEach((ex, i) => { u.exam.items[i].ex = ex; }); }
-    if (u.boss) swap(u.boss.ex, u.boss.id);
+{
+  const FUERA = ['arma-la-cuenta', 'escala-solucion', 'ordena-terminos', 'une-parejas'];
+  for (const l of COURSE_TRIG.units.flatMap(u => u.lessons)) {
+    const vistos = new Set(), fin = l.ex.at(-1), base = l.ex.slice(0, -1).filter(e => !FUERA.includes(e.game) && e.type === 'play' && e.game !== fin.game && !vistos.has(e.game) && vistos.add(e.game));
+    l.ex = [...base, ...(TRIG_ESCENAS[l.id] || []), fin];
   }
-  out.unused = [...out.unused];
-  return out;
 }
-if (typeof COURSES !== 'undefined') {
-  const r = sinEscribir(COURSES);
-  if ((r.missing.length || r.mismatch.length) && typeof console !== 'undefined') console.warn('sin-escribir: quedan ejercicios de escribir', r.missing, r.mismatch);
-}
-;
-//#archivo js/courses/algebra-taller.js
-// Práctica final del curso. Los id de las lecciones, el progreso y los medios se conservan.
-(() => {
-  const algebra = COURSE_ALGEBRA.units.flatMap(u => u.lessons);
-  const lessons = new Map(algebra.map(l => [l.id, l]));
-  const tex = s => '$' + s + '$';
-  const n = x => +x.toFixed(5);
-  const grid = (size, fn) => Array.from({ length: size }, (_, i) => fn(i));
-  const pick = (size, fn) => grid(size, i => i).filter(fn);
-  const xy = v => tex('(' + v.join(',') + ')');
-  const line = (a, b) => x => a * x + b;
-  const par = (a, h, k) => x => a * (x - h) ** 2 + k;
-  const format = (v, symbol = 'x') => tex(symbol + '=' + n(v));
-  const lab = (mode, q, r, hint, explain, motion = false) => play('taller-' + mode, q,
-    { rounds: [r], ...(motion ? { motion: true } : {}) },
-    explain || hint + ' ' + (r.solution || r.read(r.goal)), { hint, canvasGuide: true, ...(motion ? { motion: true } : {}) });
-  const rail = (q, [lo, hi, start, goal, step], read, hint, more = {}) =>
-    lab(more.loads ? 'balanza' : 'barra', q, { lo, hi, start, goal, step, read, ...more }, hint, more.explain, more.motion);
-  const rect = (q, max, goal, hint, { start = [1, 2], read = ([a, b]) => tex(`${a}\\cdot ${b}=${a * b}`), valid, explain } = {}) =>
-    lab('area', q, { max, start, goal, read, valid }, hint, explain);
-  const point = (q, bounds, start, goal, curves, hint, more = {}) =>
-    lab('plano', q, { bounds, start, goal, curves, read: xy, ...more }, hint, more.explain, more.motion);
-  const probe = (q, bounds, start, goal, fn, hint, more = {}) => lab('sonda', q,
-    { bounds, start, goal, curves: [fn, ...(more.other || [])],
-      read: x => Number.isFinite(fn(x)) ? tex(`f(${x})=${n(fn(x))}`) : `Sin valor en ${x}`,
-      ...more }, hint, more.explain, more.motion);
-  const dial = (q, values, goal, read, hint, more = {}) =>
-    lab('giro', q, { values, goal, start: more.start ?? 0, read: i => read(values[i], i), ...more }, hint, more.explain, more.motion);
-  const tiles = (q, cols, values, goal, hint, more = {}) => lab('mosaico', q,
-    { tiles: values, cols, start: [], goal, read: v => 'Celdas pintadas · ' + v.length, ...more }, hint, more.explain);
-  const groups = (q, regions, values, goal, hint, more = {}) => lab('membrana', q,
-    { regions, tiles: values, start: values.map(() => -1), goal,
-      read: v => regions.map((label, i) => label + ' ' + v.filter(x => x === i).length).join('  ·  '),
-      solution: regions.map((label, i) => label + ' → ' + values.filter((_, j) => goal[j] === i).join(', ')).join(' · '),
-      ...more }, hint, more.explain, more.motion);
-  const bridges = (q, fractions, den, cards, goal, hint, explain) => lab('puentes', q,
-    { fractions: fractions.map(([a, b]) => tex('\\frac{' + a + '}{' + b + '}')), tiles: cards.map(tex), start: [-1, -1], goal,
-      read: v => tex(v.map((j, i) => j < 0 ? den[i] : '(' + den[i] + ')(' + cards[j] + ')').join('\\quad | \\quad')),
-      solution: explain }, hint, explain);
-  function route(q, labels, goal, hint, more = {}) {
-    const nodes = [[.5, .07, labels[0]], [.22, .38, labels[1]], [.78, .38, labels[2]],
-      [.22, .68, labels[3]], [.78, .68, labels[4]], [.5, .94, labels[5]]];
-    const edges = [[0, 1], [0, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 5], [4, 5]];
-    const read = v => v.map(i => labels[i]).join(' → ');
-    return lab('trazo', q, { nodes, edges, start: [0], goal: [0, ...goal, 5], minLength: 4, read, ...more }, hint, more.explain, more.motion);
-  }
-  function tune(id, keep, additions, close) {
-    const l = lessons.get(id), previous = l.ex;
-    const selected = keep.map(g => {
-      const e = previous.find(e => e.game === g);
-      if (!e) throw new Error(id + ' no contiene el juego ' + g);
-      return { ...e, canvasGuide: true };
-    });
-    const ending = close || previous.at(-1);
-    l.ex = [...selected, ...additions, { ...ending, canvasGuide: true, motion: true }];
-  }
-
-  // Teoría de Conjuntos
-  tune('alg-0a', ['cumple-notacion', 'tacha-repetidos', 'atrapa-elementos'], [
-    groups('Separa las letras de SOL del resto del universo.', ['En SOL', 'Fuera'], ['S', 'M', 'O', 'L', 'R'], [0, 1, 0, 0, 1], 'Cada letra cuenta una vez. Busca las que puedes señalar en SOL.', { explain: 'El conjunto de letras de SOL es $\\{S,O,L\\}$. M y R quedan fuera.' }),
-    tiles('Pinta todas las palabras que terminan en «a».', 3, ['mesa', 'sol', 'nube', 'silla', 'papel', 'tiza'], [0, 3, 5], 'Comprueba la última letra de cada palabra.', { read: v => 'Elementos elegidos · ' + v.length, explain: 'Mesa, silla y tiza comparten la propiedad de terminar en «a».' }),
-    rail('Ajusta la cardinalidad del conjunto de letras de ARENA.', [0, 7, 1, 4], v => tex('n(A)=' + v), 'Las dos apariciones de A representan el mismo elemento.', { input: v => v + ' elementos', bars: v => [['Letras distintas', v]], explain: '$A=\\{A,R,E,N\\}$ contiene cuatro elementos.' }),
-  ]);
-  tune('alg-0b', ['arma-conjunto', 'mueve-circulos', 'cubo-partes'], [
-    groups('Construye dos conjuntos disjuntos. Pon las vocales en A y las consonantes en B.', ['A', 'B'], ['A', 'R', 'U', 'S', 'I', 'T'], [0, 1, 0, 1, 0, 1], 'Si los conjuntos son disjuntos, ningún elemento puede pertenecer a ambos.', { explain: '$A\\cap B=\\varnothing$. Ninguna letra de A está en B.' }),
-    tiles('Pinta dos elementos del conjunto $B=\\{A,C,E\\}$.', 3, ['A', 'b', 'C', 'd', 'E', 'f'], [0, 2], 'Elige dos de las letras mayúsculas. Cualquier pareja de ellas sirve.', { valid: v => v.length === 2 && v.every(i => i % 2 === 0), explain: 'Cualquier pareja tomada de $B=\\{A,C,E\\}$ es un subconjunto de dos elementos.' }),
-    rail('Cuenta los subconjuntos de un conjunto con tres elementos, incluido el vacío.', [0, 12, 3, 8], v => tex('n(\\mathcal P(A))=' + v), 'Haz dos elecciones por elemento: incluirlo o dejarlo fuera.', { bars: v => [['Subconjuntos', v]], explain: 'Hay $2^3=8$ combinaciones de incluir o excluir elementos.' }),
-  ]);
-  tune('alg-0c', ['reparte-venn', 'pinta-venn', 'encuesta-venn'], [
-    tiles('Pinta la intersección. M marca múltiplos de 2 y T marca múltiplos de 3.', 4,
-      ['2M', '3T', '4M', '6MT', '7', '8M', '9T', '12MT'], [3, 7], 'La intersección conserva cada elemento que cumple las dos condiciones.', { explain: 'Los únicos números que pertenecen a las dos familias de la escena son 6 y 12.' }),
-    groups('Construye A menos B. A contiene las letras de CASTOR y B las de CARTA.', ['$A-B$', 'Resto'], ['A', 'S', 'T', 'O', 'R', 'C'], [1, 0, 1, 0, 1, 1], 'Parte de las letras de CASTOR y retira las que también se usan en CARTA.', { explain: '$A-B=\\{S,O\\}$.' }),
-    rail('Entre 18 personas, 10 usan bus, 11 usan metro y 6 usan ambos. Ajusta cuántas usan al menos uno.', [0, 18, 7, 15], v => tex('n(B\\cup M)=' + v), 'Entre las dos listas, las seis personas en común aparecen dos veces.', { bars: v => [['Al menos uno', v], ['Ninguno', 18 - v]], explain: '$10+11-6=15$ personas usan al menos uno. Tres no usan ninguno.' }),
-  ]);
-
-  // La Recta Real
-  tune('alg-11', ['ascensor', 'recta-espejo', 'fuga-de-familia'], [
-    point('Marca en el eje horizontal dónde terminas después de avanzar 4 desde −7.', [-8, 8, -2, 2], [0, 0], [-3, 0], [], 'Cada avance es un paso hacia la derecha. Conserva la altura cero.', { explain: '$-7+4=-3$.' }),
-    groups('Distribuye los enteros según queden antes o después de cero.', ['Negativos', 'Cero', 'Positivos'], ['$-7$', '$0$', '$4$', '$-3$', '$9$'], [0, 1, 2, 0, 2], 'Usa la posición respecto del cero. El cero queda en su propia región.'),
-    rail('Eleva una sonda que parte de la cota −9 hasta la cota 2.', [0, 15, 3, 11], v => tex('(-9)+' + v + '=' + (v - 9)),
-      'Cuenta los pasos hasta la cota cero y luego añade los que faltan.', { bars: v => [['Distancia al cero', 9], ['Tramo recorrido', v]] }),
-  ]);
-  tune('alg-11b', ['pizzeria', 'candado-fraccion', 'pon-la-rayita', 'fuga-de-familia'], [
-    tiles('Cubre con un color exactamente tres octavos del tablero.', 4, grid(8, () => ''), [0, 1, 2], 'El tablero tiene ocho partes del mismo tamaño. El numerador cuenta las que se cubren.', { valid: v => v.length === 3, read: v => tex('\\frac{' + v.length + '}{8}'), explain: 'Tres celdas de ocho representan $\\tfrac38$ sin importar su ubicación.' }),
-    rect('Construye 18 casillas organizadas en 3 filas iguales.', [9, 6], [6, 3], 'Reparte las 18 unidades entre las tres filas. Cada fila es un tercio del total.', { read: ([a, b]) => tex(a + '\\cdot' + b + '=' + (a * b)) }),
-    point('Pon el punto en el eje horizontal donde están $\\tfrac54$ y 1.25.', [0, 2, -1, 1], [.25, 0], [1.25, 0], [], 'Completa primero una unidad de cuatro cuartos. Mira cuánto sobra.', { dx: .25, explain: '$\\tfrac54=1+\\tfrac14=1.25$.' }),
-  ]);
-  tune('alg-11c', ['cajas-numericas', 'lupa-densidad', 'ubica-en-recta', 'compas-raiz', 'acorrala-raiz'], [
-    dial('Gira hasta una marca situada entre $\\sqrt{19}$ y $\\sqrt{27}$.', [3, 4, 5, 6, 7, 8], 2, v => tex(v + '^2=' + v * v), 'Eleva al cuadrado las marcas positivas para compararlas con 19 y 27.', { explain: '$19<25<27$, de modo que $5$ queda entre las dos raíces.' }),
-    point('Busca en el eje horizontal un racional estrictamente entre 1.41 y 1.42.', [1.405, 1.425, -1, 1], [1.405, 0], [1.415, 0], [], 'Mira las milésimas que hay entre las dos centésimas dadas.', { dx: .001, valid: ([x, y]) => y === 0 && x > 1.41 && x < 1.42, explain: '$1.415$ es una de varias opciones racionales dentro del intervalo.' }),
-  ]);
-  tune('alg-12b', ['corta-rectangulo', 'inversos-gemelos'], [
-    rect('Reagrupa el área de $4(2+3)$ en dos filas iguales.', [10, 6], [10, 2], 'La distributiva conserva las 20 unidades de área. Cambia la forma sin cambiar la cantidad.'),
-    rail('Iguala $4(3+x)$ con 32.', [0, 9, 2, 5], x => tex('4(3+' + x + ')=' + (4 * (3 + x))), 'Divide 32 entre los cuatro grupos y mira qué parte de cada grupo ya está fija.', { loads: x => [4 * (3 + x), 32] }),
-    tiles('Pinta el rectángulo de 3 filas que forman las columnas B, C y D.', 5, grid(15, i => 'ABCDE'[i % 5]), [1, 2, 3, 6, 7, 8, 11, 12, 13], 'El área de cada columna suma lo mismo. Tres columnas por tres filas forman nueve celdas.', { read: v => tex('A=' + v.length), explain: 'Puedes repartir el cálculo como $3(1+2)=3+6=9$.' }),
-    route('Desde 1, recorre las estaciones aplicando primero ×4 y después +3.', ['1', '4', '5', '7', '8', 'fin'], [1, 3], 'Multiplica primero lo que hay en la estación de salida. Suma después.'),
-  ], probe('Lleva la sonda al valor que deja $3x+12$ en cero y suéltala.', [-7, 6, -10, 32], 1, -4, line(3, 12), 'Busca el opuesto aditivo de 12 antes de dividir entre 3.', { motion: true }));
-  tune('alg-12c', ['arma-producto', 'cancela-balanza'], [
-    rail('Mueve el contrapeso hasta que $(-3)x$ sea 18.', [-8, 8, 2, -6], x => tex('(-3)(' + x + ')=' + (-3 * x)), 'Con un factor negativo, ¿qué signo necesita el otro para que el producto sea positivo?', { loads: x => [-3 * x, 18] }),
-    point('Representa en el eje horizontal el resultado de $-3-(-5)$.', [-7, 7, -3, 3], [0, 0], [2, 0], [], 'Restar un negativo equivale a sumar su opuesto.'),
-    tiles('Pinta los productos de signo negativo.', 3, ['$(-2)(-5)$', '$3(-4)$', '$(-7)2$', '$2(6)$', '$0(-4)$', '$(-6)(-1)$'], [1, 2], 'Un producto de dos factores distintos de cero es negativo cuando exactamente uno de ellos lo es.', { explain: 'Los productos negativos son $3(-4)$ y $(-7)2$.' }),
-    groups('Lleva cada cociente a la región de su signo.', ['$+$', '$-$'], ['$8/2$', '$-6/3$', '$-9/-3$', '$9/-3$'], [0, 1, 0, 1], 'Los signos iguales dan cociente positivo. Los distintos dan negativo.'),
-  ], route('Traza la ruta que aplica ×(−2) dos veces desde 3. Suelta para recorrerla.', ['3', '6', '$-6$', '$-12$', '12', 'fin'], [2, 4], 'Cada multiplicación por un negativo invierte el signo.', { motion: true, explain: '$3\\to -6\\to12$.' }));
-  tune('alg-12d', ['tren-ordenado', 'dobla-la-recta', 'distancia-justa', 'dibuja-intervalo'], [
-    point('En el eje horizontal, marca el punto a cuatro unidades de −2 que queda a su izquierda.', [-8, 8, -2, 2], [0, 0], [-6, 0], [], 'La distancia admite dos direcciones. La consigna fija la que necesitas.', { marks: [[-2, 0]], explain: '$|-6-(-2)|=4$ y $-6<-2$.' }),
-    rail('Iguala la distancia de $x$ a 3 con la distancia de $x$ a −5.', [-8, 8, 2, -1], x => tex('|' + x + '-3|=' + Math.abs(x - 3) + '\\quad |' + x + '+5|=' + Math.abs(x + 5)), 'El punto medio de dos marcas queda a la misma distancia de ambas.', { loads: x => [Math.abs(x - 3), Math.abs(x + 5)] }),
-  ]);
-
-  // Escalas y Proporciones
-  tune('alg-12', ['limonada', 'estira-foto'], [
-    rect('Haz un panel de 12 celdas cuyo ancho sea tres veces su alto.', [10, 5], [6, 2], 'Si cada fila es tres veces el alto, prueba con alturas pequeñas y compara las áreas.', { read: ([a, b]) => tex(a + ':' + b + '\\qquad A=' + a * b) }),
-    tiles('Pinta exactamente dos celdas por cada tres que dejes sin pintar.', 5, grid(10, () => ''), [0, 1, 2, 3], 'Una copia de la razón ocupa cinco celdas. El tablero admite dos copias.', { valid: v => v.length === 4, read: v => tex(v.length + ':' + (10 - v.length)), explain: '$4:6$ y $2:3$ representan la misma razón.' }),
-    point('Coloca en el plano una mezcla de 9 vasos con razón limón a agua de 1:2. El eje horizontal mide limón.', [0, 9, 0, 9], [1, 2], [3, 6], [line(2, 0)], 'Cada grupo completo tiene un vaso de limón y dos de agua.', { read: ([x, y]) => tex(x + ':' + y + '\\qquad ' + x + '+' + y + '=' + (x + y)) }),
-    rail('Ajusta el número de tandas para servir 20 porciones, con 5 por tanda.', [0, 8, 1, 4], x => tex('5\\cdot' + x + '=' + 5 * x), 'Cada tanda añade el mismo volumen.', { bars: x => [['Porciones servidas', 5 * x]], scale: 40 }),
-  ], dial('Ajusta el brazo de la válvula para servir 15 medidas en razón jarabe a agua de 2:3. Suelta para verter.', [0, 1, 2, 3, 4, 5], 3,
-    k => tex(2 * k + ':' + 3 * k + '\\qquad V=' + 5 * k), 'Una vuelta a otra marca selecciona cuántos lotes de cinco medidas sirves.', { motion: true }));
-  tune('alg-12e', ['balanza-proporcion', 'sombra-arbol', 'cuadrado-media', 'duplica-magnitud', 'grafica-relacion', 'reparto'], [],
-    lab('fraccion', 'Ajusta la segunda cinta hasta representar la misma fracción que la primera.',
-      { parts: 5, filled: 3, lo: 0, hi: 10, start: 2, goal: 6, read: v => tex('\\frac35\\qquad\\frac{' + v + '}{10}') },
-      'Cada quinto ocupa exactamente dos décimos. Compara las dos longitudes.', '$\\frac35=\\frac6{10}$.', true));
-  tune('alg-12f', ['arma-regla', 'bascula', 'la-obra', 'engranajes'], [
-    probe('Tres bombas llenan un tanque en 20 minutos. Sitúa la sonda en cinco bombas para leer el tiempo.', [1, 8, 0, 30], 3, 5, x => 60 / x,
-      'Duplica el número de bombas y el tiempo se reduce a la mitad. El producto se conserva.',
-      { read: x => tex('t=' + (60 % x ? '\\frac{60}{' + x + '}' : 60 / x) + '\\ \\mathrm{min}'), explain: 'Con cinco bombas tarda $60/5=12$ minutos.' }),
-    rect('Ocho personas hacen un trabajo en seis turnos. Organiza la misma carga en cuatro turnos.', [14, 8], [12, 4], 'Conserva las 48 unidades persona-turno. Déjalas en cuatro filas.', { explain: 'Se necesitan $48/4=12$ personas a ese ritmo.' }),
-  ]);
-  tune('alg-13', ['cuadricula-cien', 'rueda-porcentaje', 'cruz-porcentaje', 'mezcla'], [
-    rect('Forma 20 casillas en 5 filas. La primera fila será exactamente el 20 % del rectángulo.', [8, 7], [4, 5], 'Cinco filas iguales hacen que cada fila sea la quinta parte.', { read: ([x, y]) => tex(x + '\\cdot' + y + '=' + x * y + '\\qquad \\frac{1}{' + y + '}') }),
-    point('Marca la compra de 80 mil pesos con un ahorro del 30 %. El eje horizontal es el precio, el vertical es el ahorro.', [0, 100, 0, 40], [20, 6], [80, 24], [line(.3, 0)], 'Por cada diez mil pesos de precio ahorras tres mil.', { dx: 10, dy: 1 }),
-  ], rail('Desliza la banda del precio para cobrar el 35 % de $80 mil. Suelta para aplicar el cobro.', [0, 100, 15, 35, 5],
-    p => tex('\\frac{' + p + '}{100}\\cdot 80=' + n(.8 * p)), 'El precio completo representa el 100 %. Busca qué parte del total te piden cobrar.',
-    { input: p => p + ' %', bars: p => [['Precio completo', 80], ['Cobro · ' + n(.8 * p) + ' mil', .8 * p]], scale: 80, motion: true }));
-  tune('alg-13c', ['estira-barra', 'etiqueta-rebaja', 'bodegas'], [
-    rail('Halla el descuento para que 150 mil pesos se conviertan en 120 mil.', [0, 50, 10, 20, 5], p => tex('150(1-' + p + '/100)=' + n(150 * (1 - p / 100))), 'Compara el ahorro con los 150 mil iniciales.', { input: p => p + ' %', bars: p => [['Antes', 150], ['Después', 150 * (1 - p / 100)]], scale: 150 }),
-    tiles('Un artículo pierde una cuarta parte de su valor. Pinta el valor que conserva.', 4, grid(12, () => ''), grid(9, i => i), 'El descuento ocupa una de cuatro partes iguales. Pinta las restantes.', { valid: v => v.length === 9, read: v => tex('100\\%\\cdot\\frac{' + v.length + '}{12}=' + n(v.length * 100 / 12) + '\\%'), explain: 'Conserva el 75 % del valor inicial.' }),
-    point('Marca en la gráfica la pareja de precios antes y después de aumentar 25 % a 48 mil pesos.', [0, 80, 0, 100], [16, 20], [48, 60], [line(1.25, 0)], 'El precio original sigue allí y se suma una cuarta parte.', { dx: 4, dy: 5 }),
-  ], lab('recibo', 'Recorta el precio de 72 mil para que vuelva a 60 mil.',
-    { price: 72, lo: 0, hi: 12, start: 0, goal: 2, read: v => tex('72\\cdot\\frac{' + (12 - v) + '}{12}=' + (72 - 6 * v)) },
-    'La rebaja se mide sobre 72. Cada división de la banda descuenta seis mil.',
-    'La rebaja exacta es $\\tfrac16$ del precio vigente, es decir, $16\\tfrac23\\%$.', true));
-  tune('alg-13d', ['cascada', 'mejor-oferta', 'rebote', 'dos-etapas'], [
-    rail('Después de un aumento del 25 %, ajusta el descuento que devuelve un precio al valor inicial.', [0, 50, 10, 20, 5],
-      p => tex('1.25(1-' + p + '/100)=' + n(1.25 * (1 - p / 100))), 'El descuento se aplica sobre un total mayor que el original.', { input: v => v + ' %', loads: v => [1.25 * (1 - v / 100), 1] }),
-    point('Marca el par de precios de un artículo de 50 mil tras descuentos del 10 % y del 20 %.', [0, 70, 0, 70], [20, 14], [50, 36], [line(.72, 0)], 'Multiplica los factores de lo que queda: 90 % y 80 %.', { dx: 2, dy: 1 }),
-  ], lab('cascada', 'Aplica a 100 mil una rebaja del 30 % y luego un aumento del 20 %.',
-    { price: 100, start: [0, 0], goal: [-30, 20], read: ([a, b]) => tex('100(' + (1 + a / 100) + ')(' + (1 + b / 100) + ')=' + n(100 * (1 + a / 100) * (1 + b / 100))) },
-    'El segundo porcentaje se calcula sobre el resultado de la primera etapa.', 'Primero quedan 70 mil. Al aumentar ese valor un 20 %, quedan 84 mil.', true));
-
-  // Exponentes y Radicales
-  tune('alg-21a', ['arbol-potencia', 'torre-producto', 'pares-negativos'], [
-    rail('Ajusta el exponente de base 3 para producir 243.', [0, 6, 1, 5], x => tex('3^{' + x + '}=' + 3 ** x), 'Cada paso multiplica otra vez por 3.', { bars: x => [['Cantidad producida', 3 ** x]], scale: 3 ** 6 }),
-    tiles('Identifica las potencias de base negativa que dan un valor positivo.', 3, ['$(-3)^2$', '$(-3)^3$', '$(-2)^4$', '$(-2)^5$', '$(-5)^6$', '$(-5)^7$'], [0, 2, 4], 'Agrupa los signos negativos en pares. Cuando sobra uno, el resultado queda negativo.', { explain: 'Los exponentes 2, 4 y 6 forman pares completos de signos.' }),
-    dial('Gira al exponente que produce $\\tfrac{1}{8}$ con base 2.', [-4, -3, -2, -1, 0, 1], 1, v => tex('2^{' + v + '}=' + n(2 ** v)), 'Un exponente negativo da el recíproco de la potencia con exponente positivo.'),
-  ]);
-  tune('alg-21b', ['cuenta-factores', 'cambia-de-piso', 'salta-la-coma'], [
-    rail('Ajusta el exponente de $2^x$ para que $2^5\\cdot 2^x=2^9$.', [-5, 7, 1, 4], x => tex('2^5\\cdot2^{' + x + '}=2^{' + (5 + x) + '}'), 'Al unir las dos cadenas se cuentan juntos todos los factores.'),
-    rect('Representa los factores de $(a^4)^3$ como tres filas iguales de factores $a$.', [7, 6], [4, 3], 'Cada fila representa una copia completa de $a^4$.', { read: ([x, y]) => tex('(a^{' + x + '})^{' + y + '}=a^{' + x * y + '}') }),
-    groups('Distribuye las potencias según el signo de su exponente tras simplificarlas.', ['Negativo', 'Cero', 'Positivo'], ['$a^2/a^5$', '$a^2a^3$', '$a^4/a^4$', '$(a^{-1})^3$'], [0, 2, 1, 0],
-      'En un cociente de la misma base, elimina los factores que están en ambos lados.', { explain: 'Los exponentes finales son −3, 5, 0 y −3, respectivamente.' }),
-  ], lab('factores', 'Simplifica $a^6/a^3$ arrastrando los factores de abajo sobre sus copias de arriba.',
-    { top: 6, bottom: 3, factor: '$a$', start: 0, goal: 3,
-      read: k => tex('\\frac{a^{' + (6 - k) + '}}{a^{' + (3 - k) + '}}' + (k === 3 ? '=a^3' : '')) },
-    'Cada pareja cancelada reduce en uno los dos exponentes.', '$a^6/a^3=a^{6-3}=a^3$ para $a\\ne0$.', true));
-  tune('alg-22a', ['lado-del-cuadrado', 'reparte-factores'], [
-    rail('Mueve el lado del cuadrado hasta que su área sea 49.', [0, 10, 3, 7], x => tex(x + '^2=' + x * x), 'La raíz cuadrada principal mide una longitud y es no negativa.', { loads: x => [x * x, 49] }),
-    groups('Agrupa los radicandos según si tienen raíz cuadrada entera.', ['Entera', 'No entera'], ['16', '18', '25', '27', '36', '38'], [0, 1, 0, 1, 0, 1], 'Busca los números que aparecen al cuadrar un entero.', { explain: '$16=4^2$, $25=5^2$ y $36=6^2$.' }),
-    probe('Mueve la sonda de $x^3$ hasta la altura −27.', [-4, 4, -30, 30], 2, -3, x => x ** 3, 'Una potencia impar conserva el signo de la base.'),
-    dial('Ajusta el exponente de 64 que equivale a sacar la raíz cúbica y luego elevar al cuadrado.', ['$0$', '$1/3$', '$1/2$', '$2/3$', '$3/2$', '$2$'], 3,
-      (v, i) => tex('64^{' + ['0', '1/3', '1/2', '2/3', '3/2', '2'][i] + '}=' + n(64 ** [0, 1 / 3, 1 / 2, 2 / 3, 3 / 2, 2][i])), 'El índice de la raíz queda en el denominador y la potencia en el numerador.'),
-  ]);
-  tune('alg-22b', ['saca-del-radical', 'parte-baldosa', 'tabla-conjugado'], [
-    groups('Agrupa las longitudes radicales por su parte irracional simplificada.', ['$\\sqrt2$', '$\\sqrt3$'],
-      ['$\\sqrt8$', '$\\sqrt{12}$', '$\\sqrt{18}$', '$\\sqrt{27}$'], [0, 1, 0, 1], 'Separa primero un factor cuadrado perfecto de cada radicando.', { explain: '$2\\sqrt2,2\\sqrt3,3\\sqrt2,3\\sqrt3$.' }),
-    rect('Construye una baldosa de área 24 con base cuadrada perfecta 4.', [8, 8], [4, 6], 'Extraer la raíz de 4 solo deja el otro factor dentro del radical.',
-      { read: ([a, b]) => tex('\\sqrt{' + (a * b) + '}=\\sqrt{' + a + '}\\sqrt{' + b + '}'), explain: '$\\sqrt{24}=2\\sqrt6$.' }),
-    rail('Ajusta el multiplicador entero de $\\sqrt3$ para igualar $\\sqrt{75}$.', [1, 9, 2, 5], x => tex('(' + x + '\\sqrt3)^2=' + 3 * x * x), 'Busca el cuadrado perfecto que acompaña al 3 dentro de 75.', { loads: x => [3 * x * x, 75], explain: '$\\sqrt{75}=5\\sqrt3$.' }),
-  ]);
-
-  // Sucesiones y Series
-  tune('alg-14', ['pisa-huellas', 'escalera-aritmetica', 'rellena-medios', 'cuenta-saltos'], [
-    point('Ubica el quinto término de la secuencia 4, 7, 10, … . El eje horizontal es el índice.', [0, 7, 0, 25], [1, 4], [5, 16], [line(3, 1)], 'Desde la primera posición hasta la quinta hay cuatro saltos.'),
-    rail('Ajusta la diferencia para que una progresión que empieza en 24 tenga cuarto término 9.', [-8, 6, 1, -5], d => tex('a_4=24+3(' + d + ')=' + (24 + 3 * d)), 'Hay tres saltos y el total disminuye 15 unidades.', { bars: d => [['Primer término', 24], ['Cuarto término', 24 + 3 * d]], scale: 42 }),
-  ]);
-  tune('alg-14b', ['dos-escaleras', 'parejas-gauss', 'suma-filas'], [
-    rect('Construye el rectángulo formado por dos escaleras de cinco peldaños, con extremos 4 y 12.', [7, 18], [5, 16], 'Los extremos de las escaleras se emparejan para producir la altura de cada columna.', { explain: 'El rectángulo tiene cinco columnas de altura 16. Cada escalera tiene área 40.' }),
-    rail('Ajusta el número de términos de 3, 6, 9, … cuya suma sea 63.', [1, 10, 3, 6], x => tex('S_{' + x + '}=' + (3 * x * (x + 1) / 2)), 'La suma es la media del primer y último término por el número de términos.', { bars: x => [['Suma', 3 * x * (x + 1) / 2]], scale: 165 }),
-    tiles('Pinta las parejas que permiten sumar 5, 8, 11, 14, 17 por los extremos.', 3, ['$5+17$', '$5+14$', '$8+14$', '$8+17$', '$11+11$', '$11+14$'], [0, 2, 4],
-      'Cada término emparejado con su reflejo en la lista suma lo mismo. El central se empareja consigo al duplicar la lista.', { explain: 'Las parejas valen 22. Para calcular una sola suma, divides en dos la suma de la lista duplicada.' }),
-  ]);
-  tune('alg-14c', ['rebota-pelota', 'torre-producto', 'rellena-medios'], [
-    probe('Una pelota parte de 64 cm y conserva la mitad de la altura en cada rebote. Busca cuándo queda en 8 cm.', [0, 6, 0, 64], 1, 3, x => 64 * .5 ** x,
-      'Cada rebote multiplica la altura anterior por la misma razón.'),
-    dial('Gira a la razón que transforma 5 en 20 después de dos pasos.', ['$1/2$', '$1$', '$2$', '$3$', '$4$', '$5$'], 2,
-      (_, i) => tex('a_3=' + n(5 * [.5, 1, 2, 3, 4, 5][i] ** 2)), 'La misma razón debe aplicarse dos veces para que el resultado se cuadruplique.'),
-    point('Ubica el cuarto término de 3, 6, 12, … en el plano índice–valor.', [0, 6, 0, 32], [1, 3], [4, 24], [x => 3 * 2 ** (x - 1)], 'Al pasar del índice 1 al 4 aplicas tres veces la razón.', { dy: 1 }),
-  ]);
-  tune('alg-14d', ['resta-corrida', 'limite-serie'], [
-    tiles('En un mosaico de 16 celdas pinta lo que cubren las tres primeras capas: mitad, cuarto y octavo.', 4, grid(16, () => ''), grid(14, i => i), 'Parte de la mitad. Cada nueva contribución ocupa la mitad de la anterior.', { valid: v => v.length === 14, read: v => tex('\\frac{' + v.length + '}{16}'), explain: '$\\frac12+\\frac14+\\frac18=\\frac{14}{16}$.' }),
-    rail('Ajusta cuántos términos de $12+6+3+\\cdots$ suman 21.', [1, 8, 1, 3], x => tex('S_{' + x + '}=' + n(24 * (1 - .5 ** x))), 'Al agregar un término, se suma la mitad del último que ya tienes.', { bars: x => [['Suma acumulada', 24 * (1 - .5 ** x)], ['Distancia a 24', 24 * .5 ** x]], scale: 24 }),
-    point('Ubica el punto que muestra cuánto falta para 2 después de sumar $1+\\tfrac12+\\tfrac14$. El eje horizontal cuenta términos.', [0, 6, 0, 2], [1, 1], [3, .25], [x => 2 * .5 ** x], 'Resta la suma parcial al límite. La distancia restante va disminuyendo.', { dy: .125 }),
-    dial('Ajusta la razón de una serie geométrica cuyo primer término es 8 y cuya suma infinita es 16.', ['$0$', '$1/4$', '$1/3$', '$1/2$', '$3/4$', '$7/8$'], 3,
-      (_, i) => tex('S_\\infty=' + n(8 / (1 - [0, .25, 1 / 3, .5, .75, .875][i]))), 'Si la suma es el doble del primer término, compara cuánto queda al quitar la primera contribución.'),
-  ]);
-  tune('alg-15', ['arma-sigma', 'parte-sigma', 'suma-filas', 'torre-producto'], [
-    groups('Lleva a la región de suma los términos que intervienen en $\\sum_{k=2}^{4}(2k+1)$.', ['Suma', 'Fuera'], ['3', '5', '7', '9', '11'], [1, 0, 0, 0, 1],
-      'Los índices de 2 a 4 se incluyen en ambos extremos.', { explain: 'Los términos son 5, 7 y 9. El total es 21.' }),
-    rail('Ajusta el último índice para que $\\prod_{k=2}^{m}k=120$.', [2, 7, 3, 5],
-      m => tex('\\prod_{k=2}^{' + m + '}k=' + grid(m - 1, i => i + 2).reduce((a, b) => a * b, 1)), 'Cada nuevo índice aporta un factor y el producto anterior se conserva como factor parcial.'),
-  ]);
-
-  // Álgebra de Polinomios
-  tune('alg-23a', [], [
-    groups('Agrupa los términos por su grado para ver cuáles se pueden sumar.', ['$x^2$', '$x$', 'Constante'],
-      ['$-5x$', '$7$', '$-x^2$', '$4x^2$', '$3x$', '$-2$'], [1, 2, 0, 0, 1, 2], 'El coeficiente puede variar. Los términos semejantes conservan la misma potencia de x.'),
-    tiles('En la expresión $7x^5-5x^5-2x^5+4x^2+x-3$, pinta los términos de grado 5 que se cancelan.', 3,
-      ['$7x^5$', '$-5x^5$', '$-2x^5$', '$4x^2$', '$x$', '$-3$'], [0, 1, 2], 'Suma los coeficientes de la potencia mayor antes de leer el grado.', { explain: 'Los términos de grado 5 suman cero. El polinomio resultante tiene grado 2.' }),
-    probe('Evalúa $2x^2-x+3$ en $x=-2$ con la sonda.', [-4, 4, 0, 32], 1, -2, x => 2 * x ** 2 - x + 3, 'Sustituye el número negativo entre paréntesis antes de elevarlo.'),
-    rail('Ajusta $k$ para que $kx^3-6x^3+2x^2$ tenga grado 2.', [0, 10, 2, 6], x => tex('(' + (x - 6) + ')x^3+2x^2'),
-      'El grado baja cuando el coeficiente del término cúbico se vuelve cero.'),
-    rect('Construye la malla de cruces al multiplicar un polinomio de tres términos por uno de cuatro.', [6, 6], [4, 3],
-      'Cada término de un polinomio se multiplica por cada término del otro.', { valid: ([a, b]) => a * b === 12 && Math.min(a, b) === 3, explain: 'Se calculan 12 productos antes de reunir términos semejantes.' }),
-    point('Marca el intercepto vertical de $x^2+2x-3$.', [-5, 5, -6, 10], [1, 0], [0, -3], [x => x * x + 2 * x - 3],
-      'En el eje vertical, la entrada es cero y solo queda el término constante.'),
-  ]);
-  tune('alg-3', ['bloques-area'], [
-    rect('Arma el cuadrado que representa $(3+4)^2$.', [9, 9], [7, 7], 'El lado tiene las dos partes juntas. El cuadrado incluye también los dos rectángulos mixtos.',
-      { explain: '$7^2=3^2+2\\cdot3\\cdot4+4^2=49$.' }),
-    rail('Equilibra $(x+3)^2$ con $x^2+6x+9$ y llévalos juntos a 64.', [0, 8, 1, 5],
-      x => tex('(' + x + '+3)^2=' + (x + 3) ** 2), 'La expansión da el mismo valor para todo x. Busca primero qué lado positivo tiene área 64.',
-      { loads: x => [(x + 3) ** 2, 64], explain: 'El lado mide 8. Por eso $x=5$ y ambas escrituras valen 64.' }),
-    tiles('Pinta las piezas que quedan al repartir $(x+3)(x-3)$.', 2, ['$x^2$', '$3x$', '$-3x$', '$-9$'], [0, 3],
-      'Los dos productos mixtos tienen el mismo tamaño y signos opuestos.', { explain: 'Se cancelan $3x$ y $-3x$. Queda $x^2-9$.' }),
-    probe('Usa la sonda de $(x-4)^2$ para encontrar dónde vale cero.', [-1, 8, 0, 30], 1, 4, par(1, 4, 0),
-      'Un cuadrado es cero cuando la cantidad que se eleva es cero.'),
-    groups('Separa por tipo las piezas del área de $(x+2)(x+5)$.', ['$x^2$', 'Término lineal', 'Constante'],
-      ['$x^2$', '$2x$', '$5x$', '$10$'], [0, 1, 1, 2], 'Las bandas mixtas llevan una sola x y se pueden juntar.', { explain: 'El área total es $x^2+7x+10$.' }),
-  ]);
-  tune('alg-24c', [], [
-    rail('Ajusta el coeficiente central en $(a+b)^4$.', [0, 10, 2, 6], v => tex(v + 'a^2b^2'),
-      'Cuenta cuántas formas hay de escoger dos de los cuatro factores para tomar b.', { bars: v => [['Término central', v]] }),
-    tiles('Para obtener $a^2b^3$ en $(a+b)^5$, pinta tres factores de los que tomas $b$.', 5,
-      ['1', '2', '3', '4', '5'], [0, 2, 4], 'Cada casilla pintada representa un factor del que tomas b.', { valid: v => v.length === 3,
-        read: v => tex('a^{' + (5 - v.length) + '}b^{' + v.length + '}'), explain: 'Hay $\\binom53=10$ maneras de pintar tres de las cinco posiciones.' }),
-    groups('Agrupa los términos de $(a-b)^4$ según el signo de su coeficiente.', ['Positivos', 'Negativos'],
-      ['$a^4$', '$a^3b$', '$a^2b^2$', '$ab^3$', '$b^4$'], [0, 1, 0, 1, 0], 'Cada b viene de elegir un factor −b. Cuenta cuántos signos negativos se multiplican.'),
-    rect('En $(a+b)^3$ dibuja tres columnas con dos opciones por columna.', [6, 6], [3, 2],
-      'Cada columna representa un factor, y sus dos celdas son las opciones a y b.', { read: ([x, y]) => tex(y + '^{' + x + '}=' + y ** x), explain: 'Hay 8 productos antes de reunirlos en los términos de la expansión.' }),
-    dial('Gira hasta el exponente de b del término con coeficiente 5 que tiene menor exponente de a en $(a+b)^5$.', [0, 1, 2, 3, 4, 5], 4,
-      (k, i) => tex([1, 5, 10, 10, 5, 1][i] + 'a^{' + (5 - k) + '}b^{' + k + '}'), 'Hay dos coeficientes 5. Compara en cuál el exponente de a queda más pequeño.'),
-    route('Sigue la potencia de a al avanzar dos términos desde el primer término de $(a+b)^5$.', ['5', '4', '6', '3', '2', 'fin'], [1, 3],
-      'En cada paso, cambias una elección de a por una de b.'),
-  ]);
-  tune('alg-24b', ['bloques-area', 'completa-cuadrado'], [
-    rect('Encuentra dos factores positivos de 24 que sumen 11.', [12, 10], [8, 3],
-      'El área representa el producto y la suma de los dos lados representa el término lineal.', { valid: ([a, b]) => a * b === 24 && a + b === 11,
-        read: ([a, b]) => tex('u+v=' + (a + b) + '\\quad uv=' + a * b), explain: '$x^2+11x+24=(x+3)(x+8)$.' }),
-    rail('Ajusta el factor común de $18x^3+12x^2$ para que el factor restante tenga coeficientes 3 y 2.', [1, 18, 3, 6],
-      v => tex(v + 'x^2\\left(\\frac{18}{' + v + '}x+\\frac{12}{' + v + '}\\right)'), 'El número debe dividir ambos coeficientes. Usa además la menor potencia común de x.'),
-    probe('Encuentra el cero negativo de $x^2-25$ sobre la curva.', [-7, 7, -27, 26], 1, -5, x => x * x - 25,
-      'Factoriza como diferencia de cuadrados. Busca el cruce que está a la izquierda del origen.'),
-    groups('Separa los factores de $x^2+x-20$ de las otras expresiones.', ['Factores', 'Fuera'], ['$x+5$', '$x-4$', '$x+4$', '$x-5$'], [0, 0, 1, 1],
-      'Los dos números deben sumar 1 y multiplicar −20.', { explain: '$x^2+x-20=(x+5)(x-4)$.' }),
-  ]);
-
-  // Parábolas y Complejos
-  tune('alg-23c', [], [
-    point('Arrastra el punto hasta representar $-3+2i$.', [-5, 5, -5, 5], [1, 1], [-3, 2], [],
-      'El eje horizontal mide la parte real y el vertical la parte imaginaria.'),
-    dial('Gira el brazo desde $i^0$ hasta la quinta multiplicación por $i$.', [0, 1, 2, 3, 4, 5, 6, 7], 5,
-      k => tex('i^{' + k + '}=' + ['1', 'i', '-1', '-i'][k % 4]), 'Cada paso multiplica por i. Cuatro pasos completan una vuelta.'),
-    rail('Ajusta la parte imaginaria de $3+bi$ hasta que el módulo sea 5. Usa un b positivo.', [0, 7, 2, 4],
-      b => tex('|3+' + b + 'i|=\\sqrt{' + (9 + b * b) + '}'), 'Las partes real e imaginaria son catetos de un triángulo rectángulo.',
-      { bars: b => [['Cuadrado de la parte real', 9], ['Cuadrado de la parte imaginaria', b * b]], scale: 49 }),
-    groups('Mueve cada complejo a su lado del eje real.', ['Arriba', 'Abajo', 'En el eje'], ['$5-2i$', '$-i$', '$2i$', '$-3$', '$2+i$'],
-      [1, 1, 0, 2, 0], 'Solo el coeficiente de i decide la altura.'),
-    tiles('Pinta las operaciones que dejan un número real.', 2, ['$i^2$', '$i^3$', '$(2+i)(2-i)$', '$2+i$'], [0, 2],
-      'Busca productos de conjugados y potencias pares de i.', { explain: '$i^2=-1$ y $(2+i)(2-i)=5$ son reales.' }),
-    route('Parte de $1+i$ y multiplica por i dos veces.', ['$1+i$', '$-1+i$', '$1-i$', '$-1-i$', '$1+i$', 'fin'], [1, 3],
-      'Multiplicar por i gira el vector 90° en sentido antihorario.'),
-  ]);
-  tune('alg-1', ['balanza-exponencial'], [
-    rail('Quita la misma cantidad a ambos lados de $3x+7=19$ hasta aislar $3x$.', [0, 14, 0, 7],
-      v => tex('3x+' + (7 - v) + '=' + (19 - v)), 'El 7 debe quedar en cero y los dos miembros deben recibir el mismo cambio.', { explain: 'Quitar 7 deja $3x=12$ y luego $x=4$.' }),
-    rect('Construye tres filas de fichas iguales para representar $3x=21$.', [10, 7], [7, 3],
-      'El total se reparte en tres filas iguales. La fila representa una copia de x.', { explain: '$x=7$.' }),
-    point('Coloca el punto donde $y=2x-1$ y $y=7$ tienen el mismo valor.', [-4, 8, -5, 12], [1, 1], [4, 7], [line(2, -1), line(0, 7)],
-      'El punto de intersección debe tener la misma altura en las dos rectas.'),
-    tiles('Pinta las ecuaciones cuyo único valor solución sea 3.', 2, ['$2x=6$', '$x+2=6$', '$5x-7=8$', '$3x=12$'], [0, 2],
-      'Sustituye x por 3 y compara los miembros de cada igualdad.', { explain: 'Tres cumple $2x=6$ y $5x-7=8$.' }),
-    route('Traza las cantidades correctas al resolver $4x-5=23$: primero elimina el −5 y luego despeja.', ['23', '$4x=28$', '$4x=18$', '$x=7$', '$x=4$', 'fin'],
-      [1, 3], 'Suma 5 a ambos lados. Después divide ambos lados entre 4.'),
-  ]);
-  tune('alg-4a', ['completa-cuadrado', 'mueve-parabola'], [
-    point('Marca el vértice de $y=2(x+1)^2-3$.', [-5, 5, -6, 12], [1, 2], [-1, -3], [par(2, -1, -3)],
-      'El vértice aparece donde se anula la parte al cuadrado.'),
-    probe('Busca en $f(x)=-(x-2)^2+7$ el máximo de la altura.', [-3, 7, -11, 9], -1, 2, par(-1, 2, 7), 'El término cuadrático se resta. La altura es mayor cuando ese término es cero.'),
-    rail('Ajusta el coeficiente $a$ para que $y=ax^2+1$ pase por $(2,13)$.', [-4, 7, 1, 3], a => tex('y(2)=4(' + a + ')+1=' + (4 * a + 1)),
-      'Sustituye el valor horizontal en el cuadrado y compara la altura resultante con 13.', { loads: a => [4 * a + 1, 13] }),
-    groups('Mueve cada parábola al lado que indica su abertura.', ['Hacia arriba', 'Hacia abajo'],
-      ['$2x^2$', '$-x^2+4$', '$(x-2)^2$', '$-3(x+1)^2$'], [0, 1, 0, 1], 'El signo del factor que multiplica el cuadrado controla la abertura.'),
-  ]);
-  tune('alg-4', ['raices-imanes'], [
-    point('Marca la raíz positiva de $y=x^2-9$.', [-6, 6, -10, 12], [1, 3], [3, 0], [par(1, 0, -9)], 'Una raíz es un cruce con la altura cero. La raíz positiva queda a la derecha.'),
-    rail('Ajusta $c$ para que el discriminante de $x^2-6x+c=0$ sea cero.', [0, 14, 5, 9], c => tex('\\Delta=36-4(' + c + ')=' + (36 - 4 * c)),
-      'Iguala el cuadrado del coeficiente lineal con cuatro veces el independiente.', { loads: c => [36, 4 * c] }),
-    groups('Separa las ecuaciones por la cantidad de raíces reales distintas.', ['Ninguna', 'Una', 'Dos'],
-      ['$x^2+1=0$', '$x^2-4=0$', '$(x-2)^2=0$', '$x^2+9=0$'], [0, 2, 1, 0],
-      'Compara lo que tendría que valer el cuadrado con cero.'),
-    tiles('Pinta todas las raíces enteras de $x^2-3x-10=0$.', 3, ['$-5$', '$-2$', '$0$', '$2$', '$3$', '$5$'], [1, 5],
-      'Busca dos números cuyo producto sea −10 y cuya suma sea 3 para leer las raíces.', { explain: 'Los cruces son $-2$ y $5$, pues $(x+2)(x-5)=0$.' }),
-    route('Empieza en $x^2-10x=-21$ y sigue hasta la raíz mayor por completar el cuadrado.', ['$x^2-10x$', 'suma 25', 'suma 10', '$5+2$', '$5-2$', 'fin'],
-      [1, 3], 'La mitad de −10 se eleva al cuadrado. Luego usa el signo que produce la raíz mayor.'),
-  ]);
-
-  // Raíces de Polinomios
-  tune('alg-23b', [], [
-    rect('Empaca 32 unidades como cuatro filas de ocho para representar una división exacta en el arreglo.', [10, 8], [8, 4],
-      'Cada fila tiene el tamaño del divisor. El número de filas es el cociente.', { explain: '$32=8\\cdot4+0$.' }),
-    rail('Ajusta el coeficiente de $x^2$ para que $kx^2+5x+6=(x+2)(x+3)$.', [0, 8, 4, 1],
-      k => tex(k + 'x^2+5x+6'), 'El coeficiente del término de mayor grado se obtiene multiplicando los dos términos x.'),
-    groups('Pon los términos del dividendo en su columna y detecta qué grado falta.', ['Grado 3', 'Grado 2', 'Grado 1'],
-      ['$2x^3$', '$0x$', '$-4x^2$', '$0x^2$'], [0, 2, 1, 1],
-      'Un término con coeficiente cero sirve como marcador de posición en una columna.', { explain: 'El polinomio $2x^3-4x^2$ tiene coeficiente lineal cero.' }),
-    probe('Sondea $x^2+2x+7$ en $x=2$ para medir el residuo al dividir por $x-2$.', [-4, 4, 0, 30], 0, 2, x => x * x + 2 * x + 7,
-      'La identidad del dividendo se simplifica cuando el divisor se vuelve cero.'),
-    tiles('Pinta las divisiones cuyo cociente, si la división es exacta, tiene grado 2.', 2,
-      ['$x^5/x^3$', '$x^4/x^3$', '$x^6/x^4$', '$x^3/x^3$'], [0, 2], 'Resta el grado del divisor al grado del dividendo.',
-      { explain: 'Las diferencias $5-3$ y $6-4$ valen 2.' }),
-    route('Parte del grado 7. Divide por un polinomio de grado 3 y luego divide el cociente por otro de grado 2.',
-      ['7', '4', '10', '2', '6', 'fin'], [1, 3], 'En cada división, resta el grado del divisor al del dividendo.'),
-  ]);
-  tune('alg-92', ['division-sintetica'], [
-    probe('Mide el residuo de dividir $x^3-2x+5$ por $x+2$.', [-4, 4, -14, 18], 0, -2, x => x ** 3 - 2 * x + 5,
-      'Busca primero el valor que hace que el divisor valga cero.'),
-    point('Marca el punto que da el residuo de dividir $x^2-3x+4$ por $x-4$.', [-2, 6, 0, 22], [1, 3], [4, 8],
-      [x => x * x - 3 * x + 4], 'El dato horizontal viene del divisor. El vertical es el valor del polinomio en ese punto.'),
-    tiles('Pinta los valores de r que hacen de $x-r$ un factor de $(x-1)(x+3)(x-4)$.', 3, ['$-4$', '$-3$', '$-1$', '$0$', '$1$', '$4$'],
-      [1, 4, 5], 'Para cada factor, encuentra qué valor de x lo hace cero.', { explain: '$r=-3,1,4$.' }),
-    rail('Ajusta $k$ para que $x-3$ sea factor de $x^2+kx-15$.', [-5, 6, 0, 2],
-      k => tex('P(3)=9+3(' + k + ')-15=' + (3 * k - 6)), 'Si el divisor es un factor, el residuo de evaluar en 3 debe ser cero.', { loads: k => [9 + 3 * k, 15] }),
-    groups('Agrupa divisores de $P(x)=x^2-4$ según produzcan división exacta o residuo.', ['Exacta', 'Con residuo'],
-      ['$x-2$', '$x+1$', '$x+2$', '$x-3$'], [0, 1, 0, 1], 'El divisor es factor cuando el polinomio se anula en su raíz.'),
-  ]);
-  tune('alg-93', ['raices-imanes'], [
-    tiles('Marca las raíces en las que la gráfica de $(x+3)(x-1)^2(x-4)^3$ cruza el eje.', 3, ['$-3$', '$1$', '$4$'],
-      [0, 2], 'Un factor de potencia impar cambia de signo al pasar por su cero.', { explain: 'Cruza en −3 y 4. En 1 toca el eje y rebota.' }),
-    probe('Alumbra la raíz negativa de $(x+2)^2(x-3)$.', [-4, 5, -30, 24], 0, -2, x => (x + 2) ** 2 * (x - 3),
-      'Un cero doble toca el eje aunque la gráfica no cambie de lado.'),
-    groups('Coloca cada potencia en su región. Mira el comportamiento de la curva en 2.', ['Cruza', 'Toca y vuelve'],
-      ['$(x-2)^2$', '$(x-2)^3$', '$(x-2)^4$', '$x-2$'], [1, 0, 1, 0], 'Los exponentes pares mantienen el signo alrededor de la raíz.'),
-    point('Marca la altura de $y=-(x+2)(x-4)$ en $x=0$.', [-5, 6, -12, 10], [1, 1], [0, 8],
-      [x => -(x + 2) * (x - 4)], 'Sustituye cero y observa los signos de los dos factores.'),
-    rail('Ajusta la multiplicidad del primer cero para que $(x+1)^m(x-4)^2$ tenga grado 7.', [1, 8, 2, 5],
-      m => tex('\\deg P=' + m + '+2=' + (m + 2)), 'Cada copia de un factor lineal aporta uno al grado total.'),
-  ]);
-
-  // Fracciones Algebraicas
-  tune('alg-25a', ['cancela-factores', 'cruz-asintotas'], [
-    point('Marca el hueco que queda al simplificar $(x^2-9)/(x-3)$.', [-5, 6, -4, 11], [1, 4], [3, 6], [line(1, 3)],
-      'La recta simplificada da la altura. La coordenada horizontal se excluye por el denominador original.', { explain: 'El hueco queda en $(3,6)$ porque la expresión original excluye $x=3$.' }),
-    tiles('Pinta todos los valores que deja fuera $\\dfrac{x+5}{(x-2)(x+3)}$.', 3, ['$-5$', '$-3$', '$-2$', '$0$', '$2$', '$3$'],
-      [1, 4], 'Se excluyen los ceros del denominador original, incluso si otro factor pudiera cancelarse.', { explain: 'Se excluyen $x=-3$ y $x=2$.' }),
-    groups('Para $\\dfrac{(x-1)(x+4)}{(x-1)(x+2)}$, separa hueco, asíntota y valor permitido.', ['Hueco', 'Asíntota', 'Permitido'],
-      ['$1$', '$-2$', '$-4$', '$0$'], [0, 1, 2, 2], 'Un cero de un factor cancelado deja un hueco. Si el factor sigue en el denominador, hay asíntota.'),
-    probe('Sigue la gráfica de $\\dfrac{x^2-4}{x-2}$ y busca dónde llega a 7.', [-5, 8, -4, 12], 0, 5, x => x === 2 ? NaN : x + 2,
-      'El factor compartido deja $x+2$ en todos los puntos permitidos.', { holes: [[2, 4]] }),
-  ]);
-  tune('alg-25b', ['cancela-factores'], [
-    bridges('Amplía las dos fracciones hasta construir el mismo denominador.', [['1', 'x-2'], ['2', 'x+3']], ['x-2', 'x+3'],
-      ['x+3', 'x-2', 'x+2', 'x-3'], [0, 1], 'Cada fracción necesita el factor que ya aparece en la otra.',
-      'Las dos fracciones quedan sobre $(x-2)(x+3)$. La suma es $\\frac{3x-1}{(x-2)(x+3)}$, con $x\\ne2,-3$.'),
-    tiles('Para $1/(x-2)+1/(x+3)$, pinta los factores que deben estar en el denominador común.', 2,
-      ['$x-2$', '$x+3$', '$x-3$', '$x+2$'], [0, 1], 'Cada factor original debe poder dividir al denominador común sin residuo.',
-      { explain: 'El denominador común más corto es $(x-2)(x+3)$.' }),
-    groups('Construye el numerador de $\\frac{2}{x}+\\frac{3}{x+1}$ sobre $x(x+1)$ llevando cada pieza a su lugar.',
-      ['Primer sumando', 'Segundo sumando', 'Sobra'], ['$2x$', '$2$', '$3x$', '$3$'], [0, 0, 1, 2],
-      'Multiplica cada numerador por el factor que le falta a su denominador.', { explain: '$2(x+1)+3x=5x+2$.' }),
-    probe('Sondea en $x=3$ la suma $\\dfrac1x+\\dfrac1{x+1}$.', [1, 7, 0, 2], 1, 3, x => 1 / x + 1 / (x + 1),
-      'Al sustituir 3, compara los dos denominadores para convertirlos a doceavos.', { explain: '$\\frac13+\\frac14=\\frac7{12}$.' }),
-    route('Traza los factores al convertir $\\dfrac{x}{x-1}\\div\\dfrac{x+2}{x-1}$ en un producto y simplificar.',
-      ['inicio', '$\\times\\frac{x-1}{x+2}$', '$\\times\\frac{x+2}{x-1}$', '$\\frac{x}{x+2}$', '$\\frac{x+2}{x}$', 'fin'],
-      [1, 3], 'Invierte solo el divisor. Conserva las restricciones de la operación original.',
-      { explain: 'El resultado es $x/(x+2)$ con $x\\ne1$ y $x\\ne-2$.' }),
-  ]);
-  tune('alg-101', ['afina-sistema', 'combina-vectores'], [
-    point('Encuentra la intersección de $y=x+2$ y $y=8-x$.', [-3, 9, -2, 11], [1, 3], [3, 5], [line(1, 2), line(-1, 8)],
-      'Una solución debe quedar sobre las dos rectas al mismo tiempo.'),
-    groups('Distribuye los puntos según si cumplen $x+y=5$.', ['En la recta', 'Fuera'], ['$(1,4)$', '$(2,4)$', '$(5,0)$', '$(-1,6)$'], [0, 1, 0, 0],
-      'Suma las dos coordenadas de cada punto para comprobar la ecuación.'),
-    rail('Ajusta el multiplicador de $x-2y$ para sumarlo a $3x+6y$ y eliminar y.', [-5, 7, 1, 3],
-      m => tex((3 + m) + 'x+(' + (6 - 2 * m) + ')y'), 'Busca qué múltiplo de −2 cancela el coeficiente +6.', { loads: m => [2 * m, 6] }),
-    tiles('Pinta las ecuaciones de rectas paralelas a $y=2x+1$ que no coinciden con ella.', 2,
-      ['$y=2x-4$', '$y=-2x+1$', '$y=2x+1$', '$y=2x+5$'], [0, 3], 'Las rectas paralelas tienen la misma pendiente. Compara sus interceptos.',
-      { explain: 'Los interceptos −4 y 5 son distintos de 1, y ambas pendientes valen 2.' }),
-  ]);
-  tune('alg-102', [], [
-    point('Encuentra la intersección positiva de $y=x^2$ y $y=4$.', [-4, 4, -2, 10], [1, 1], [2, 4], [par(1, 0, 0), line(0, 4)],
-      'Compara la rama derecha de la parábola con la altura de la recta.'),
-    probe('Sigue $y=x^2-1$ hasta su intersección de abscisa negativa con $y=2x+2$.', [-4, 5, -7, 15], 0, -1, x => x * x - 1,
-      'Iguala las dos alturas y conserva la candidata que queda a la izquierda del cero.', { other: [line(2, 2)] }),
-    tiles('Pinta las parejas que resuelven simultáneamente $x+y=5$ y $xy=6$.', 2, ['$(2,3)$', '$(1,4)$', '$(3,2)$', '$(0,5)$'],
-      [0, 2], 'Cada pareja debe pasar las dos pruebas. Cambiar el orden puede dejar las dos relaciones intactas.', { explain: 'Las parejas $(2,3)$ y $(3,2)$ tienen suma 5 y producto 6.' }),
-    rail('En $A/(x-1)+2/(x+1)$, ajusta $A$ para que el numerador común contenga $5x$.', [-4, 8, 1, 3],
-      a => tex((a + 2) + 'x+(' + (a - 2) + ')'), 'Al expandir el numerador, el coeficiente de x reúne una copia de A y una de 2.'),
-    groups('Al eliminar los denominadores de $A/(x-2)+B/(x+3)$, asigna a cada letra su factor.', ['Multiplica A', 'Multiplica B', 'Fuera'],
-      ['$x-2$', '$x+3$', '$x$', '$x+2$'], [1, 0, 2, 2], 'Completa cada denominador con el factor del otro término.'),
-    route('En $\\dfrac{7x-1}{(x-1)(x+2)}$, usa $x=1$ para despejar $A$.',
-      ['inicio', '$6=3A$', '$6=3B$', '$A=2$', '$A=3$', 'fin'], [1, 3],
-      'A acompaña a $1/(x-1)$. Tras multiplicar por el denominador común, el término con $x-1$ desaparece al sustituir 1.'),
-  ]);
-
-  // Crecimiento Exponencial
-  tune('alg-71', ['balanza-exponencial', 'proyector-sombras'], [
-    probe('Sigue la gráfica de $3^x$ hasta la altura 27.', [-3, 4, 0, 30], 0, 3, x => 3 ** x,
-      'La curva sube multiplicando por 3 con cada paso de una unidad.'),
-    point('Marca el intercepto vertical de $f(x)=2\\cdot4^x$.', [-3, 3, 0, 16], [1, 2], [0, 2], [x => 2 * 4 ** x],
-      'En el eje vertical el exponente vale cero.'),
-    groups('Separa las funciones según aumenten o disminuyan al mover x hacia la derecha.', ['Crecen', 'Decrecen'],
-      ['$2^x$', '$(1/3)^x$', '$4^x$', '$(3/4)^x$'], [0, 1, 0, 1], 'Una base entre 0 y 1 reduce la altura de cada paso siguiente.'),
-    rail('Ajusta la cantidad inicial para que, después de triplicarse dos veces, queden 54 unidades.', [1, 10, 2, 6],
-      v => tex(v + '\\cdot3^2=' + v * 9), 'Deshaz las dos multiplicaciones por 3.', { bars: v => [['Inicio', v], ['Tras dos etapas', v * 9]], scale: 90 }),
-  ]);
-  tune('alg-13b', ['crece-planta', 'carrera-interes', 'ajusta-capital', 'mejor-oferta', 'alcancias-gemelas'], [
-    rail('Ajusta los periodos hasta duplicar un capital de 100 con interés simple de 20 % por periodo.', [0, 9, 1, 5],
-      t => tex('M=100(1+0.2\\cdot' + t + ')=' + n(100 * (1 + .2 * t))), 'Cada vez se añaden 20 unidades calculadas sobre el capital inicial.',
-      { bars: t => [['Capital', 100], ['Monto acumulado', 100 + 20 * t]], scale: 280 }),
-    point('Marca en la curva el monto de 200 tras tres periodos al 10 % compuesto.',
-      [0, 5, 210, 300], [1, 220], [3, 266], [t => 200 * 1.1 ** t],
-      'Cada crecimiento se aplica al monto completo del periodo anterior.',
-      { valid: ([x, y]) => x === 3 && Math.abs(y - 266.2) <= 1.25, explain: '$200\\cdot1.1^3=266.2$.' }),
-  ]);
-  tune('alg-72', ['espejo-diagonal'], [
-    point('Refleja $(3,8)$ de $y=2^x$ sobre $y=x$.', [0, 9, 0, 9], [3, 8], [8, 3],
-      [x => 2 ** x, x => Math.log2(x), x => x], 'La entrada de la exponencial se vuelve la salida del logaritmo.', { explain: '$2^3=8$ equivale a $\\log_2(8)=3$.' }),
-    rail('Ajusta el argumento $b$ para que $\\log_2 4 + \\log_2 b=\\log_2 32$.', [1, 12, 2, 8],
-      b => tex('\\log_2(4\\cdot' + b + ')=\\log_2(' + (4 * b) + ')'), 'Sumar logaritmos de la misma base corresponde a multiplicar los argumentos.', { loads: b => [4 * b, 32] }),
-    dial('Gira hasta el exponente de 5 que produce $1/25$.', [-3, -2, -1, 0, 1, 2], 1,
-      v => tex('5^{' + v + '}=' + n(5 ** v)), 'El exponente que buscas es el logaritmo en base 5 de esa fracción.'),
-    groups('Agrupa los argumentos de $\\log_3 x$ por el signo del resultado.', ['Negativo', 'Cero', 'Positivo'],
-      ['$1/3$', '$1$', '$9$', '$1/9$', '$3$'], [0, 1, 2, 0, 2], 'Para una base mayor que 1, las potencias de exponente negativo quedan entre 0 y 1.'),
-    tiles('Pinta los argumentos que admite $\\ln(x-2)$.', 3, ['$-3$', '$0$', '$1$', '$2$', '$3$', '$8$'], [4, 5],
-      'El argumento completo, x menos 2, debe quedar estrictamente positivo.', { explain: 'El dominio es $x>2$. De la lista sirven 3 y 8.' }),
-  ]);
-  tune('alg-73', ['balanza-exponencial'], [
-    point('Marca el punto donde $2^x$ iguala a 16.', [-2, 6, 0, 22], [1, 2], [4, 16], [x => 2 ** x, line(0, 16)],
-      'Busca qué potencia de 2 da la altura de la recta horizontal.'),
-    probe('Sondea $\\log_2(x-1)$ hasta que la altura sea 3.', [2, 12, 0, 4], 3, 9, x => Math.log2(x - 1),
-      'Convierte la igualdad a forma exponencial y añade el desplazamiento de una unidad.'),
-    groups('Clasifica los valores para resolver $\\log_2(x-1)+\\log_2(x+1)=3$.', ['Solución', 'Admitido', 'Fuera del dominio'],
-      ['$-3$', '$1$', '$2$', '$3$', '$5$'], [2, 2, 1, 0, 1], 'Primero exige que ambos argumentos sean positivos. Luego prueba el producto en la ecuación.',
-      { explain: '$x^2-1=8$ produce las candidatas −3 y 3. La única válida es 3.' }),
-    tiles('Pinta las ecuaciones que tienen $x=2$ como solución.', 2, ['$3^x=9$', '$2^x=2$', '$\\log_2(x+2)=2$', '$\\ln(x-2)=0$'],
-      [0, 2], 'Sustituye 2 en cada caso. Para evaluar un logaritmo, verifica antes el dominio.',
-      { explain: '$3^2=9$ y $\\log_2(2+2)=2$.' }),
-    route('Despeja $x$ en $3^{2x-1}=27$ aumentando de estación cuando la igualdad sea equivalente.', ['inicio', '$2x-1=3$', '$2x-1=9$', '$x=2$', '$x=5$', 'fin'],
-      [1, 3], 'Expresa 27 como potencia de 3. Luego iguala exponentes.'),
-  ]);
-
-  // Sin jefes (spec 2026-11-18-algebra-revision): la evaluación conserva sus preguntas, suma las variantes y los retos
-  // que eran del jefe (cada uno ligado a la lección que repasa) y el nodo del jefe desaparece del mundo.
-  function assess(world, boss, replacements, bossLessons) {
-    const u = COURSE_ALGEBRA.units.find(u => u.world === world);
-    const item = (lesson, ex, review) => ({ lesson, review: review || ((ex.hint || '') + ' ' + (ex.explain || '')).trim(),
-      ex: { ...ex, canvasGuide: true, exam: true, motion: false, params: { ...ex.params, motion: false, autoDemo: false } } });
-    // Las preguntas de escoger o de armar con fichas de tocar no siguen: el usuario las descartó.
-    const dull = ['escala-solucion', 'arma-la-cuenta', 'une-parejas', 'clasifica-cartas', 'ordena-terminos', 'verdadero-falso'];
-    const items = u.exam.items.filter(it => !dull.includes(it.ex.game)).map(it => item(it.lesson, it.ex, it.review));
-    for (const [i, ex] of Object.entries(replacements)) items.push(item(u.exam.items[i].lesson, ex));
-    boss.forEach((ex, i) => items.push(item(bossLessons[i], ex)));
-    // Orden del mundo: primero las preguntas de la primera lección.
-    const order = u.lessons.map(l => l.id);
-    u.exam.items = items.map((it, k) => [it, k]).sort((a, b) => order.indexOf(a[0].lesson) - order.indexOf(b[0].lesson) || a[1] - b[1]).map(([it]) => it);
-    u.exam.minutes = Math.max(12, Math.round(u.exam.items.length * 1.5));
-    delete u.boss;
-  }
-
-  assess('conjuntos', [
-    groups('El universo son las letras de CLIMA. Separa las que pertenecen también a MAR.', ['En común', 'Solo en CLIMA'],
-      ['C', 'L', 'I', 'M', 'A'], [1, 1, 1, 0, 0], 'Un elemento en común aparece en las dos palabras.'),
-    tiles('Colorea el complemento de $A=\\{2,4,6\\}$ en $U=\\{1,2,3,4,5,6\\}$.', 3,
-      ['1', '2', '3', '4', '5', '6'], [0, 2, 4], 'Parte de U y excluye los elementos que aparecen en A.', { explain: '$A^c=\\{1,3,5\\}$.' }),
-    route('Traza las cardinalidades. Parte de 3 elementos, añade uno nuevo y luego añade dos que ya estaban.', ['3', '4', '5', '4', '6', 'fin'],
-      [1, 3], 'Añadir una copia de un elemento no cambia la cardinalidad.', { motion: true }),
-  ], {
-    3: rail('Ajusta el número de subconjuntos de $\\{P,L,A,T,O\\}$.', [0, 40, 10, 32], v => tex('n(\\mathcal P(A))=' + v),
-      'Incluye o deja fuera cada uno de los cinco elementos.', { explain: '$2^5=32$ subconjuntos, incluido el vacío.' }),
-  }, ['alg-0c', 'alg-0c', 'alg-0a']);
-  assess('numeros', [
-    play('ubica-en-recta', 'Suelta cada número en su lugar de la recta', { min: -3, max: 3, tol: 0.15, points: [
-      { label: '−7/4', tex: '-\\tfrac74', value: -1.75 }, { label: '2/3', tex: '\\tfrac23', value: 0.6667 }, { label: '−√2', tex: '-\\sqrt2', value: -1.4142 }, { label: '2.25', tex: '2.25', value: 2.25 },
-    ] }, 'Siete cuartos son una unidad y tres cuartos, a la izquierda del cero; $-\\sqrt2 \\approx -1.41$ queda un poco a su derecha, y $\\tfrac23$ y $2.25$ a la derecha del cero.',
-      { hint: 'Antes de soltar, convierte cada número a decimal: así ves entre qué enteros cae y de qué lado del cero está.' }),
-    groups('Pon cada valor en la familia más pequeña que lo contiene.', ['Enteros', 'Racionales no enteros', 'Irracionales'],
-      ['$-3$', '$1/7$', '$\\sqrt5$', '$\\sqrt{16}$', '$0.25$'], [0, 1, 2, 0, 1],
-      'Reduce una raíz cuadrada exacta antes de clasificarla.'),
-    probe('Desplaza la sonda de $y=|x+2|$ hasta la rama izquierda con altura 3 y suéltala.', [-7, 5, 0, 7], 0, -5, x => Math.abs(x + 2),
-      'Busca el punto que se aleja tres unidades hacia la izquierda de −2.', { motion: true }),
-  ], {
-    6: rail('Ajusta la distancia entre $-3.5$ y $2.25$.', [0, 8, 3, 5.75, .25], v => format(v, 'd'),
-      'Mide cada tramo hasta cero y suma las longitudes.', { explain: '$|2.25-(-3.5)|=5.75$.' }),
-  }, ['alg-11b', 'alg-11c', 'alg-12d']);
-  assess('razones', [
-    rect('Construye un rectángulo de 24 unidades cuya razón ancho a alto sea 3:2.', [10, 8], [6, 4],
-      'Multiplica los lados del modelo por el mismo número y comprueba el área.', { read: ([a, b]) => tex(a + ':' + b + '\\quad A=' + a * b) }),
-    point('Marca cuánto cuesta comprar seis unidades si cuatro cuestan 18 mil pesos.', [0, 10, 0, 40], [2, 9], [6, 27], [line(4.5, 0)],
-      'Dos unidades cuestan la mitad del precio conocido.'),
-    route('Desde 200 mil, aplica una rebaja de 25 % y después un aumento de 10 %.', ['200', '150', '175', '165', '160', 'fin'], [1, 3],
-      'El segundo cambio toma como base el precio tras la rebaja.', { motion: true }),
-  ], {
-    6: probe('En un mapa, 2 cm representan 15 km. Pon la sonda en la distancia que representan 7 cm.',
-      [0, 8, 0, 64], 2, 7, line(7.5, 0), 'Un centímetro representa la mitad de 15 km.', { explain: '$7\\cdot7.5=52.5$ km.' }),
-  }, ['alg-12', 'alg-12f', 'alg-13d']);
-  assess('potencias', [
-    rect('Empaca $(2^3)^2$ como dos filas de tres factores 2. Muestra cuántos factores hay en total.', [6, 5], [3, 2],
-      'Cada fila repite completa la potencia de adentro.', { read: ([x, y]) => tex('(2^{' + x + '})^{' + y + '}=2^{' + x * y + '}') }),
-    rail('Equilibra $k\\sqrt5$ con $\\sqrt{180}$ usando un entero positivo.', [1, 9, 3, 6], k => tex('(' + k + '\\sqrt5)^2=' + 5 * k * k),
-      'Factoriza 180 como cinco veces un cuadrado perfecto.', { loads: k => [5 * k * k, 180], explain: '$\\sqrt{180}=6\\sqrt5$.' }),
-    probe('Lleva la sonda a $x=-3$ en $y=4^x$ y sigue el cambio de escala.', [-4, 2, 0, 5], 0, -3, x => 4 ** x,
-      'Un paso hacia la izquierda divide la altura entre 4.', { motion: true, explain: '$4^{-3}=\\tfrac1{64}$.' }),
-  ], {
-    5: dial('En la rueda de potencias de 81, identifica el exponente que saca la raíz cuarta y luego eleva al cubo.',
-      ['$1/4$', '$1/3$', '$3/4$', '$4/3$', '$2$', '$3$'], 2, (v, i) => tex('81^{' + v.slice(1, -1) + '}=' + n(81 ** [.25, 1 / 3, .75, 4 / 3, 2, 3][i])),
-      'El índice de la raíz es el denominador de la potencia fraccionaria.', { explain: '$81^{3/4}=3^3=27$.' }),
-  }, ['alg-21b', 'alg-22b', 'alg-21a']);
-  assess('progresiones', [
-    point('Marca en la gráfica el séptimo término de 2, 6, 10, … .', [0, 8, 0, 35], [1, 2], [7, 26], [line(4, -2)],
-      'Entre los términos 1 y 7 hay seis saltos de la misma longitud.'),
-    tiles('Pinta cuatro capas sobre 32 celdas: mitad, cuarto, octavo y dieciseisavo.', 8, grid(32, () => ''), grid(30, i => i),
-      'La primera capa usa 16 celdas. Cada capa posterior usa la mitad de la anterior.', { valid: v => v.length === 30, read: v => tex('\\frac{' + v.length + '}{32}'), explain: '$16+8+4+2=30$ celdas.' }),
-    probe('Busca cuántas etapas necesita un acumulado de $1+2+4+\\cdots$ para llegar a 31.', [0, 6, 0, 65], 1, 5, x => 2 ** x - 1,
-      'Al duplicar la suma y restar la original, queda la siguiente potencia menos uno.', { motion: true }),
-  ], {
-    0: point('Marca el término 12 de $5,8,11,\\ldots$.', [0, 14, 0, 48], [2, 8], [12, 38], [line(3, 2)], 'Cuenta los saltos que separan el término 1 del 12.'),
-    1: rect('Forma un rectángulo de diez columnas con dos copias de la suma $2+4+\\cdots+20$.', [12, 24], [10, 22],
-      'Los términos se emparejan por los extremos. Cada pareja suma lo mismo.', { explain: 'El rectángulo tiene 220 unidades. Una copia de la suma vale 110.' }),
-    2: probe('Sondea el número de bacterias tras seis horas, si empieza una y la cantidad se duplica cada hora.', [0, 7, 0, 130], 2, 6, x => 2 ** x,
-      'El número de duplicaciones es el número de horas.'),
-  }, ['alg-14', 'alg-14d', 'alg-14d']);
-  assess('polinomios', [
-    groups('Reúne las piezas semejantes de $(x+2)(x+7)$ para construir el polinomio.', ['Cuadrado', 'Lineales', 'Constante'],
-      ['$7x$', '$x^2$', '$14$', '$2x$'], [1, 0, 2, 1], 'Solo las dos piezas lineales comparten la misma potencia de x.', { explain: '$x^2+9x+14$.' }),
-    tiles('Para el término $a^3b^2$ de $(a+b)^5$, marca exactamente las dos posiciones que aportan b.', 5,
-      ['1', '2', '3', '4', '5'], [1, 3], 'Puedes elegir cualquier par de las cinco posiciones.', { valid: v => v.length === 2, explain: 'Hay diez pares. El término completo es $10a^3b^2$.' }),
-    probe('Lleva la sonda al cero positivo de $y=x^2-2x-15$ y suéltala.', [-6, 7, -18, 20], 0, 5, x => x * x - 2 * x - 15,
-      'El factor que corresponde a la raíz positiva se anula en la rama derecha.', { motion: true }),
-  ], {
-    0: probe('Evalúa $x^2-4x+7$ en $x=-2$.', [-4, 5, 0, 42], 1, -2, x => x * x - 4 * x + 7, 'Sustituye con paréntesis en los dos términos variables.'),
-    1: tiles('Pinta los tres términos que quedan al desarrollar $(3x-2)^2$.', 3,
-      ['$9x^2$', '$-12x$', '$9x$', '$4$', '$-4x$', '$-4$'], [0, 1, 3],
-      'La parte de grado 1 suma los productos mixtos.', { explain: 'Al desarrollar sale $9x^2-12x+4$.' }),
-    2: rect('Construye una tabla de parejas ordenadas de siete objetos, sin repetir un objeto consigo mismo.', [9, 8], [7, 6],
-      'Una primera elección deja seis posibilidades para la segunda. Cada pareja sin orden aparece dos veces.',
-      { explain: '$\\binom72=7\\cdot6/2=21$.' }),
-    4: tiles('Pinta los dos factores que recomponen $x^3+27$.', 2,
-      ['$x+3$', '$x^2-3x+9$', '$x-3$', '$x^2+3x+9$'], [0, 1],
-      'Es una suma de cubos. Al multiplicar, los términos mixtos se cancelan.', { explain: '$x^3+27=(x+3)(x^2-3x+9)$.' }),
-  }, ['alg-3', 'alg-24c', 'alg-24b']);
-  assess('cuadraticas', [
-    point('Coloca el conjugado de $-2+3i$ en el plano complejo.', [-5, 5, -5, 5], [1, 0], [-2, -3], [],
-      'Refleja sobre el eje real. La parte real queda fija y la imaginaria cambia de signo.'),
-    rail('Equilibra la ecuación $5x-8=2x+7$.', [0, 10, 2, 5], x => tex(5 * x - 8 + '\\quad\\text{y}\\quad' + (2 * x + 7)),
-      'Junta las copias de x en un miembro y las constantes en el otro.', { loads: x => [5 * x - 8, 2 * x + 7] }),
-    probe('Encuentra la abscisa del máximo de $y=-(x-3)^2+8$.', [-2, 8, -9, 10], 0, 3, par(-1, 3, 8),
-      'El término que se resta es un cuadrado y puede valer cero.', { motion: true }),
-  ], {
-    0: rail('Ajusta el valor real del producto $(2-i)(2+i)$.', [0, 10, 2, 5], v => format(v),
-      'Multiplica como una diferencia de cuadrados y usa $i^2=-1$.', { explain: 'El producto es $4-i^2=5$.' }),
-    1: point('Marca la intersección de $y=2(x+3)$ y $y=x-4$.', [-12, 2, -17, 10], [-3, 0], [-10, -14], [line(2, 6), line(1, -4)],
-      'Simplifica primero la distributiva. El punto debe estar en las dos rectas.'),
-    3: rail('Desliza hasta indicar el discriminante de $3x^2-2x-1$.', [-12, 24, 0, 16], v => format(v, '\\Delta'),
-      'Eleva b al cuadrado y resta $4ac$, conservando el signo del término independiente.', { explain: '$(-2)^2-4\\cdot3(-1)=16$.' }),
-    4: tiles('Marca en el tablero las raíces de $x^2+2x-8=0$.', 3, ['$-4$', '$-2$', '$0$', '$2$', '$4$', '$8$'],
-      [0, 3], 'Dos factores lineales con constantes de producto −8 y suma 2 dejan ver las raíces.', { explain: 'Los factores son $(x+4)(x-2)$.' }),
-  }, ['alg-23c', 'alg-1', 'alg-4a']);
-  assess('grado-superior', [
-    tiles('Pinta los puntos donde cruza el eje $y=(x+1)^2(x-2)(x-4)^3$.', 3, ['$-1$', '$2$', '$4$'],
-      [1, 2], 'Solo la multiplicidad impar cambia el signo de la gráfica.', { explain: 'Cruza en 2 y 4. Rebota en −1.' }),
-    rail('Ajusta el coeficiente de $x$ para que $x+2$ sea factor de $x^2+kx+6$.', [-2, 9, 1, 5],
-      k => tex('P(-2)=10-2(' + k + ')=' + (10 - 2 * k)), 'El residuo que se obtiene al evaluar en −2 debe valer cero.', { loads: k => [10, 2 * k] }),
-    probe('Lleva la sonda al valor que da el residuo de dividir $x^3-2x+1$ por $x+3$.', [-5, 5, -45, 45], 0, -3, x => x ** 3 - 2 * x + 1,
-      'Para un divisor de la forma $x-r$, el residuo es $P(r)$.', { motion: true }),
-  ], {
-    0: groups('Reconstruye el cociente de $(x^2+2x-3)/(x-1)$ arrastrando las piezas que contiene.', ['Cociente', 'Fuera'], ['$x$', '$3$', '$-3$', '$x^2$'],
-      [0, 0, 1, 1], 'Factoriza el dividendo y retira el factor que coincide con el divisor.', { explain: '$x^2+2x-3=(x-1)(x+3)$.' }),
-    2: probe('Marca el valor de entrada que revela el residuo de dividir $2x^3-x+5$ entre $x+1$.', [-4, 4, -16, 22], 1, -1, x => 2 * x ** 3 - x + 5,
-      'Evalúa donde el divisor es cero.'),
-    4: tiles('Para $x^3-3x^2+2x+5$, pinta cada coeficiente que cambia de signo con respecto al anterior.', 4,
-      ['1', '$-3$', '2', '5'], [1, 2], 'Recorre los coeficientes en orden descendente de grado.',
-      { explain: 'Hay dos cambios de signo. Por la regla de Descartes puede haber dos raíces positivas o ninguna.' }),
-  }, ['alg-93', 'alg-92', 'alg-92']);
-  assess('racionales', [
-    bridges('Construye el denominador común para sumar las dos expresiones.',
-      [['3', 'x+1'], ['1', 'x-4']], ['x+1', 'x-4'], ['x+1', 'x-4', 'x-1', 'x+4'], [1, 0],
-      'Cada expresión necesita el factor que le falta.', 'Queda $\\frac{4x-11}{(x+1)(x-4)}$, con $x\\ne-1,4$.'),
-    groups('Clasifica los valores para $\\dfrac{(x+2)(x-5)}{(x+2)(x-1)}$.', ['Hueco', 'Asíntota', 'Permitido'],
-      ['$-2$', '$1$', '$5$', '$0$'], [0, 1, 2, 2], 'Conserva todas las restricciones del denominador original.'),
-    point('Encuentra la intersección con $x>0$ de $y=x^2-4$ y $y=2x+4$. Suelta para recorrer el plano.', [-5, 6, -6, 14],
-      [0, 1], [4, 12], [par(1, 0, -4), line(2, 4)], 'Iguala las alturas y conserva la solución positiva.', { motion: true }),
-  ], {
-    2: bridges('Amplía lo necesario para sumar $\\frac3x+\\frac2{x^2}$.', [['3', 'x'], ['2', 'x^2']], ['x', 'x^2'],
-      ['x', '1', 'x^2', 'x+1'], [0, 1], 'Solo falta un factor de x a la primera fracción.',
-      '$\\frac3x+\\frac2{x^2}=\\frac{3x+2}{x^2}$, con $x\\ne0$.'),
-    4: point('Encuentra el punto de corte de $y=x^2$ y $y=x+2$ que tiene abscisa negativa.', [-4, 4, -2, 12], [1, 1], [-1, 1],
-      [par(1, 0, 0), line(1, 2)], 'Las dos curvas pueden tener más de un punto en común. Usa el que queda a la izquierda del eje vertical.'),
-  }, ['alg-25b', 'alg-25a', 'alg-102']);
-  assess('exp-log', [
-    point('Marca en $y=2^x$ la altura que corresponde a dos pasos a la izquierda de cero.', [-4, 5, 0, 8], [1, 2], [-2, .25],
-      [x => 2 ** x], 'Cada paso a la izquierda divide la altura anterior por 2.', { dy: .25 }),
-    tiles('Pinta los argumentos que hacen que $\\log_2(x-4)$ sea positivo.', 3, ['$2$', '$4$', '$5$', '$6$', '$8$', '$3$'],
-      [3, 4], 'Para un logaritmo en base mayor que 1, la salida positiva pide un argumento estrictamente mayor que 1.',
-      { explain: '$x-4>1$, así que sirven 6 y 8.' }),
-    probe('Encuentra el valor que hace $\\log_2(x+2)=4$. Suelta para recorrer la curva.', [-1, 20, 0, 5], 2, 14, x => Math.log2(x + 2),
-      'Vuelve a la forma exponencial. Luego deshaz el desplazamiento de dos unidades.', { motion: true }),
-  ], {
-    1: rail('Ajusta el interés simple en miles que generan 200 mil pesos durante seis meses al 2 % mensual.',
-      [0, 42, 10, 24], v => format(v, 'I'), 'Cada mes se añaden 4 mil pesos sobre el capital original.', { explain: '$200\\cdot0.02\\cdot6=24$ mil pesos.' }),
-    2: dial('Elige en la rueda el exponente de base 4 que produce 64.', [0, 1, 2, 3, 4, 5], 3, v => tex('4^{' + v + '}=' + 4 ** v),
-      'Parte de la unidad y cuenta las multiplicaciones por 4.'),
-    3: probe('Sondea $3^x$ hasta alcanzar el producto $9\\cdot27$ que corresponde a la suma de logaritmos.', [0, 6, 0, 300], 2, 5, x => 3 ** x,
-      'La suma de logaritmos de la misma base se convierte en el logaritmo de un producto.'),
-    4: probe('Busca el valor aproximado de x que hace que $5^x$ llegue a 20.', [1, 2, 0, 26], 1, 1.86, x => 5 ** x,
-      'La solución queda entre 1 y 2. Acerca la sonda a la altura dada.',
-      { dx: .01, valid: x => Math.abs(5 ** x - 20) < .2, explain: '$x=\\log_5 20\\approx1.861$.' }),
-  }, ['alg-71', 'alg-72', 'alg-73']);
-})();
-;
-//#archivo js/courses/algebra-revision.js
-// Revisión de la práctica de Álgebra (spec 2026-11-18-algebra-revision). Va después de algebra-taller.js. Rehace, mundo
-// por mundo, las lecciones ya revisadas: sin los motores genéricos del taller, sin juegos repetidos en el curso y con
-// una escena propia por idea; y su evaluación, con al menos dos preguntas por lección hechas con juegos de sus lecciones.
-// ALG_REVISADOS lista los mundos terminados (las pruebas los revisan con las reglas nuevas).
-const ALG_REVISADOS = [];
-// Mecánicas que el usuario descartó (escoger, tarjetas, armar con fichas de solo tocar).
-const ALG_ABURRIDOS = ['escala-solucion', 'arma-la-cuenta', 'une-parejas', 'clasifica-cartas', 'ordena-terminos', 'verdadero-falso'];
-(() => {
-  const units = COURSE_ALGEBRA.units, lessons = units.flatMap(u => u.lessons);
-  const L = id => lessons.find(l => l.id === id);
-  // Un ejercicio que la lección ya tenía.
-  const keep = (id, game) => { const e = L(id).ex.find(e => e.game === game); if (!e) throw new Error(`${id} no tiene ${game}`); return e; };
-  const setLesson = (id, list) => { L(id).ex = list.map((e, i) => ({ ...e, canvasGuide: true, motion: i === list.length - 1 })); };
-  // Evaluación: lo que tenía (sin motores del taller) más las preguntas nuevas, en el orden de las lecciones.
-  function setExam(world, extra) {
-    const u = units.find(u => u.world === world), order = u.lessons.map(l => l.id);
-    const old = u.exam.items.filter(it => !String(it.ex.game).startsWith('taller-') && !ALG_ABURRIDOS.includes(it.ex.game));
-    // La pista de una pregunta corta se completa con la idea que repasa (orienta sin dar el resultado).
-    const items = [...old, ...extra.map(([lesson, review, ex]) => ({ lesson, review: review.length > 30 ? review : `${review} ${ex.explain}`, ex: { ...ex, hint: ex.hint.length >= 30 ? ex.hint : `${ex.hint} ${review}`, canvasGuide: true, exam: true, params: { ...ex.params, autoDemo: false } } }))];
-    u.exam.items = items.map((it, k) => [it, k]).sort((a, b) => order.indexOf(a[0].lesson) - order.indexOf(b[0].lesson) || a[1] - b[1]).map(([it]) => it);
-    u.exam.minutes = Math.max(12, Math.round(u.exam.items.length * 1.5));
-    ALG_REVISADOS.push(world);
-  }
-
-  // ───────── Mundo 1 · Teoría de Conjuntos ─────────
-  {
-    const a = ['cumple-notacion', 'tacha-repetidos', 'atrapa-elementos', 'lazo-conjunto'].map(g => keep('alg-0a', g));
-    setLesson('alg-0a', [a[0], a[1],
-      play('tamiz-rango', 'De la regla a la lista: deja adentro solo lo que cumple', { rounds: [
-        { name: 'A', text: 'los días después del martes y antes del sábado', labels: ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'], lo: 2, hi: 4 },
-        { name: 'B', text: 'los días desde el viernes hasta el domingo', labels: ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'], lo: 4, hi: 6 },
-        { name: 'C', text: 'las letras desde la c hasta la g', labels: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'], lo: 2, hi: 6 },
-        { name: 'D', text: 'los días que hay entre el lunes y el martes', labels: ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'], lo: 1, hi: 0 },
-      ] }, 'Por comprensión se da la regla; por extensión se escriben los elementos. «Después del martes y antes del sábado» deja por fuera al martes y al sábado: $A = \\{\\text{mié}, \\text{jue}, \\text{vie}\\}$. «Desde… hasta» incluye los dos extremos: $B$ tiene tres días y $C$ cinco letras. Entre el lunes y el martes no hay ningún día: $D = \\varnothing$.',
-      { hint: '«Después de» y «antes de» dejan por fuera lo que nombran; «desde» y «hasta» lo incluyen. Si nada cumple, junta los corchetes.' }),
-      play('cajas-anidadas', 'Un conjunto puede guardar conjuntos: arma cada uno', { rounds: [
-        { name: 'A', target: ['1', '{2, 3}'], tray: ['1', '2', '3', '{2, 3}', '{1}'] },
-        { name: 'B', target: ['{a}', 'b'], tray: ['a', 'b', '{a}', '{b}', '{a, b}'] },
-        { name: 'C', target: ['{x, y}'], tray: ['x', 'y', '{x}', '{y}', '{x, y}'] },
-        { name: 'D', target: ['{1}', '{1, 2}'], tray: ['1', '2', '{1}', '{2}', '{1, 2}'] },
-      ] }, '$A = \\{1, \\{2, 3\\}\\}$ tiene dos elementos: el 1 y la bolsa $\\{2, 3\\}$; el 2 y el 3 sueltos no son elementos de A. $B = \\{\\{a\\}, b\\}$ tiene dos. $C = \\{\\{x, y\\}\\}$ tiene un solo elemento, aunque dentro de la bolsa haya dos. Y $D = \\{\\{1\\}, \\{1, 2\\}\\}$ tiene dos elementos, los dos conjuntos.',
-      { hint: 'Lee la notación por capas: cada coma de afuera separa un elemento. Una llave dentro de otra es una bolsa que entra entera, tenga lo que tenga.' }),
-      a[2],
-      play('gemelos', 'Cada hilo une elementos iguales. Deja A = B sin sacar de más', { rounds: [
-        { goal: '=', A: ['t', 'e', 'l', 'a', 's'], B: ['l', 'a', 't', 'e', 'e'] },
-        { goal: '=', A: ['m', 'a', 'r'], B: ['r', 'a', 'm', 'o'] },
-        { goal: '=', A: ['c', 'a', 's', 'o'], B: ['s', 'a', 'c', 'a', 'r'] },
-        { goal: '=', A: ['1', '3', '5', '7'], B: ['7', '5', '9', '1', '3', '3'] },
-      ] }, 'Dos conjuntos son iguales si tienen los mismos elementos: el orden y las repeticiones no cuentan. Por eso la e repetida no estorba y solo sobra la s; luego sobra la o de B; en la tercera sobran la o de A y la r de B; en la última, el 3 repetido no estorba y sobra el 9.',
-      { hint: 'Sigue los hilos: un elemento sin hilo no tiene gemelo al otro lado y no deja que los conjuntos sean iguales. Los repetidos sí tienen hilo.' }),
-      a[3]]);
-
-    const b = ['arma-conjunto', 'mueve-circulos', 'cubo-partes', 'orbita-conjuntos'].map(g => keep('alg-0b', g));
-    setLesson('alg-0b', [b[0], b[1],
-      play('escalera-inclusion', 'Muñecas de conjuntos: cada uno envuelve al de adentro', { rounds: [
-        { sets: [['a', 'b', 'c'], [], ['a'], ['a', 'c'], ['b', 'd']] },
-        { sets: [['1', '2'], ['1', '2', '3', '4'], ['2'], ['1', '2', '4'], ['3']] },
-        { sets: [['x'], ['x', 'y', 'z'], [], ['y'], ['x', 'y']] },
-      ] }, 'Cada conjunto de la cadena tiene todos los elementos del anterior y alguno más. El vacío está contenido en cualquier conjunto, así que va en el centro cuando aparece. $\\{b, d\\}$ no cabe en la cadena de $\\{a, c\\}$ porque no contiene a $a$. En la tercera hay dos cadenas igual de largas: por $\\{x\\}$ o por $\\{y\\}$.',
-      { hint: 'Empieza por el conjunto con menos elementos. Antes de soltar uno nuevo, revisa que tenga todos los elementos del que ya está adentro.' }),
-      b[2],
-      play('arbol-partes', 'El árbol de los subconjuntos: cada elemento parte las ramas en dos', { rounds: [
-        { target: 8, pool: ['p', 'q', 'r', 's', 't'] },
-        { target: 1, pool: ['p', 'q', 'r'] },
-        { target: 16, pool: ['p', 'q', 'r', 's', 't'] },
-        { target: 32, pool: ['p', 'q', 'r', 's', 't'] },
-      ] }, 'Cada elemento nuevo parte cada hoja en dos: sin él y con él. Por eso las hojas se duplican: $2, 4, 8, 16, 32$. Un conjunto de $n$ elementos tiene $2^n$ subconjuntos, y el vacío tiene uno solo, él mismo: $2^0 = 1$.',
-      { hint: 'Mira cuánto cambia el número de hojas cada vez que agregas un elemento. ¿Cuántas veces hay que duplicar para llegar a la meta?' }),
-      b[3],
-      play('anillos-subconjunto', 'Aros de subconjuntos: el aro solo encaja si la estaca lo contiene', { rounds: [
-        { title: 'Encaja el aro', items: [
-          { ring: ['a', 'c'], pegs: [['a', 'b'], ['a', 'b', 'c'], ['c', 'd']] },
-          { ring: ['1', '2'], pegs: [['2', '3'], ['1', '3', '4'], ['1', '2', '5']] },
-          { ring: ['m'], pegs: [['n', 'o'], ['l', 'm'], ['p']] }] },
-        { title: 'Casos especiales', items: [
-          { ring: [], pegs: [['a'], ['b'], ['c']] },
-          { ring: ['x', 'y', 'z'], pegs: [['x', 'y'], ['x', 'y', 'z'], ['y', 'z', 'w']] },
-          { ring: ['2', '4'], pegs: [['4'], ['1', '2', '3'], ['2', '4', '6']] }] },
-      ] }, '$X \\subseteq Y$ cuando cada elemento de X está en Y. El vacío encaja en cualquier estaca, y todo conjunto es subconjunto de sí mismo: $\\{x, y, z\\} \\subseteq \\{x, y, z\\}$.',
-      { hint: 'Antes de lanzar, busca cada elemento del aro en la estaca. Basta que falte uno para que no encaje.' })]);
-
-    const c = ['reparte-venn', 'pinta-venn', 'encuesta-venn', 'descifra-zona'].map(g => keep('alg-0c', g));
-    setLesson('alg-0c', [c[0], c[1],
-      play('solapa-cardinal', 'Solapa B sobre A hasta que la unión tenga el total', { rounds: [
-        { a: 12, b: 9, total: 17, A: 'leen', B: 'escuchan pódcast' },
-        { a: 15, b: 10, total: 15, A: 'usan bici', B: 'usan casco' },
-        { a: 7, b: 8, total: 15, A: 'estudian de día', B: 'de noche' },
-        { a: 20, b: 14, total: 26, A: 'toman café', B: 'toman té' },
-      ] }, 'Al sumar $n(A) + n(B)$, los que están en los dos se cuentan dos veces; por eso se resta una vez la intersección: $n(A \\cup B) = n(A) + n(B) - n(A \\cap B)$. $12 + 9 - 17 = 4$; $15 + 10 - 15 = 10$ (todos los del casco usan bici: $B \\subseteq A$); $7 + 8 - 15 = 0$ (disjuntos); $20 + 14 - 26 = 8$.',
-      { hint: 'Suma los dos grupos y compara con el total: lo que sobra son personas contadas dos veces.' }),
-      play('goma-diferencia', 'Borra lo que la operación deja por fuera', { rounds: [
-        { op: 'A-B', U: ['1', '2', '3', '4', '5', '6', '7', '8'], A: ['1', '2', '3', '4', '6'], B: ['2', '4', '5', '7'] },
-        { op: 'Ac', U: ['a', 'b', 'c', 'd', 'e', 'f', 'g'], A: ['a', 'c', 'e'], B: ['e', 'f'] },
-        { op: 'B-A', U: ['m', 'a', 'r', 'i', 'o', 's'], A: ['m', 'a', 'r'], B: ['r', 'i', 'o', 'm'] },
-        { op: 'AdB', U: ['1', '2', '3', '4', '5', '6', '7'], A: ['1', '2', '3', '4'], B: ['3', '4', '5', '6'] },
-      ] }, '$A - B$ deja lo de A que no está en B: $\\{1, 3, 6\\}$. El complemento deja lo de U que no está en A: $\\{b, d, f, g\\}$. $B - A = \\{i, o\\}$: no es lo mismo que $A - B$. Y la diferencia simétrica quita de la unión lo que es común: $\\{1, 2, 5, 6\\}$.',
-      { hint: 'Antes de borrar, busca en el diagrama la zona de cada elemento: solo se borra lo que cae en la parte que la operación excluye.' }),
-      c[2],
-      play('busca-b', 'Las operaciones al revés: encuentra el conjunto B', { rounds: [
-        { U: ['1', '2', '3', '4', '5', '6'], A: ['1', '2', '3'], conds: [['union', ['1', '2', '3', '4', '5']], ['inter', ['2']]] },
-        { U: ['a', 'e', 'i', 'o', 'u', 'y'], A: ['a', 'e', 'i'], conds: [['union', ['a', 'e', 'i', 'o', 'u']], ['inter', []]] },
-        { U: ['1', '2', '3', '4', '5', '6', '7', '8'], A: ['2', '4', '6', '8'], conds: [['inter', ['4', '8']], ['BmA', ['1']]] },
-        { U: ['w', 'x', 'y', 'z'], A: ['x', 'y'], conds: [['union', ['w', 'x', 'y', 'z']], ['inter', ['x', 'y']]] },
-      ] }, 'La intersección dice qué elementos de A están en B, y la unión, qué más puede tener B. En la primera, B tiene el 2 (lo común) y el 4 y el 5 (lo que la unión agrega): $B = \\{2, 4, 5\\}$. Luego $B = \\{o, u\\}$, $B = \\{1, 4, 8\\}$ y $B = \\{w, x, y, z\\}$, que contiene a A.',
-      { hint: 'Empieza por la pista de la intersección: eso de A va en B. Luego mira qué agrega la otra pista y qué elementos no pueden estar.' }),
-      c[3]]);
-
-    setExam('conjuntos', [
-      ['alg-0a', 'Por comprensión se da la regla y por extensión se escriben los elementos; «desde» y «hasta» incluyen los extremos, «antes de» y «después de» no.',
-        play('tamiz-rango', 'Deja adentro solo lo que cumple', { rounds: [
-          { name: 'P', text: 'las vocales que van después de la e', labels: ['a', 'e', 'i', 'o', 'u'], lo: 2, hi: 4 },
-          { name: 'Q', text: 'los días antes del jueves', labels: ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'], lo: 0, hi: 2 }] },
-        '$P = \\{i, o, u\\}$ y $Q = \\{\\text{lun}, \\text{mar}, \\text{mié}\\}$.', { hint: 'Revisa los extremos uno por uno.' })],
-      ['alg-0a', 'Una bolsa dentro de un conjunto es un solo elemento, tenga lo que tenga.',
-        play('cajas-anidadas', 'Arma el conjunto', { rounds: [{ name: 'E', target: ['a', '{b, c}'], tray: ['a', 'b', 'c', '{b, c}', '{a}'] }] },
-        '$E = \\{a, \\{b, c\\}\\}$ tiene dos elementos.', { hint: 'Cada coma de afuera separa un elemento.' })],
-      ['alg-0a', 'Dos conjuntos son iguales si tienen los mismos elementos; el orden y las repeticiones no cuentan.',
-        play('gemelos', 'Deja A = B sin sacar de más', { rounds: [{ goal: '=', A: ['c', 'a', 'm', 'p', 'o'], B: ['m', 'o', 'c', 'a', 'a'] }] },
-        'Sobra la p: $\\{m, o, c, a, a\\} = \\{c, a, m, o\\}$.', { hint: 'Busca el elemento sin hilo.' })],
-      ['alg-0b', 'El vacío no tiene elementos; $\\{\\varnothing\\}$ tiene uno, y 0 no es el vacío.',
-        play('cajas-anidadas', 'Arma cada conjunto', { rounds: [
-          { name: 'F', target: ['∅'], tray: ['∅', '{∅}', '0', '{0}'] },
-          { name: 'H', target: ['0', '∅'], tray: ['0', '∅', '{0}', '{∅}', '1'] }] },
-        '$F = \\{\\varnothing\\}$ tiene un elemento, el vacío. $H = \\{0, \\varnothing\\}$ tiene dos: el número 0 y el conjunto vacío.', { hint: 'Una bolsa vacía también es una pieza.' })],
-      ['alg-0b', '$A \\subseteq B$ pide que todo elemento de A esté en B; disjuntos es no compartir nada.',
-        play('gemelos', 'Logra la relación sin sacar de más', { rounds: [
-          { goal: 'sub', A: ['3', '6', '9'], B: ['1', '3', '6', '12'] },
-          { goal: 'disj', A: ['p', 'e', 'z'], B: ['p', 'a', 'z', 'o'] }] },
-        'Para $A \\subseteq B$ sobra el 9. Para que sean disjuntos salen de B la p y la z.', { hint: 'Mira qué elementos tienen hilo.' })],
-      ['alg-0b', 'En una cadena de inclusión cada conjunto contiene al anterior; el vacío está contenido en todos.',
-        play('escalera-inclusion', 'Arma la cadena más larga', { rounds: [{ sets: [['m', 'n'], [], ['m', 'n', 'o'], ['n'], ['o', 'p']] }] },
-        '$\\varnothing \\subseteq \\{n\\} \\subseteq \\{m, n\\} \\subseteq \\{m, n, o\\}$.', { hint: 'Empieza por el más pequeño.' })],
-      ['alg-0b', 'Un conjunto de $n$ elementos tiene $2^n$ subconjuntos: cada elemento duplica las posibilidades.',
-        play('arbol-partes', 'Haz crecer el árbol', { rounds: [{ target: 4, pool: ['a', 'b', 'c', 'd'] }] },
-        '$2^2 = 4$: dos elementos.', { hint: 'Cada elemento duplica las hojas.' })],
-      ['alg-0c', 'La intersección es lo común. A − B quita de A lo que también está en B.',
-        play('goma-diferencia', 'Borra lo que la operación deja por fuera', { rounds: [
-          { op: 'A-B', U: ['C', 'L', 'I', 'M', 'A', 'R'], A: ['C', 'L', 'I', 'M', 'A'], B: ['M', 'A', 'R'] },
-          { op: 'Ac', U: ['1', '2', '3', '4', '5', '6'], A: ['2', '4', '6'], B: ['1', '2'] }] },
-        'Las letras de CLIMA que no están en MAR son $\\{C, L, I\\}$. El complemento de $\\{2, 4, 6\\}$ en $\\{1, \\dots, 6\\}$ es $\\{1, 3, 5\\}$.', { hint: 'Ubica cada elemento en su zona.' })],
-      ['alg-0c', 'Lo común de A va en B; lo que la unión agrega fuera de A también; nada más.',
-        play('busca-b', 'Encuentra el conjunto B', { rounds: [{ U: ['1', '2', '3', '4', '5', '6'], A: ['1', '2', '4'], conds: [['union', ['1', '2', '3', '4']], ['inter', ['1']]] }] },
-        '$B = \\{1, 3\\}$.', { hint: 'Empieza por la intersección.' })],
-      ['alg-0c', 'Al sumar dos grupos, los que están en ambos se cuentan dos veces.',
-        play('solapa-cardinal', 'Solapa B sobre A', { rounds: [{ a: 9, b: 6, total: 11, A: 'hablan inglés', B: 'hablan francés' }] },
-        '$9 + 6 - 11 = 4$ hablan los dos idiomas.', { hint: 'Suma y compara con el total.' })],
-    ]);
-  }
-  // ───────── Mundo 2 · La Recta Real ─────────
-  {
-    const n11 = ['ascensor', 'recta-espejo', 'fuga-de-familia', 'buzo-enteros'].map(g => keep('alg-11', g));
-    setLesson('alg-11', [n11[0], n11[1],
-      play('globo-lastre', 'Lleva el canasto a la altura de la bandera', { rounds: [
-        { g: 3, s: 7, act: 'addG', target: -1 }, { g: 5, s: 2, act: 'addS', target: -2 }, { g: 4, s: 4, act: 'remS', target: 3 }, { g: 6, s: 1, act: 'remG', target: -1 },
-      ] }, 'Cada globo vale $+1$ y cada saco $-1$: la altura es globos menos sacos. Amarrar globos es sumar positivos y colgar sacos es sumar negativos. Soltar un globo es restar un positivo: baja. Soltar un saco es restar un negativo: **sube**. Por eso $0 - (-3) = 3$.',
-        { hint: 'Calcula primero a qué altura está el canasto y cuántos niveles le faltan hasta la bandera. Luego piensa qué le hace a la altura cada cosa que permite la ronda.' }),
-      play('pares-cero', 'Suma y resta enteros con fichas + y −', { rounds: [
-        { op: '+', a: 5, b: -8 }, { op: '+', a: -4, b: 6 }, { op: '-', a: 3, b: -4 }, { op: '-', a: -2, b: 5 },
-      ] }, 'Una ficha $+$ y una $-$ juntas valen 0: se anulan. $5 + (-8)$: se anulan cinco parejas y quedan tres $-$, o sea $-3$. Para restar se quitan fichas: en $3 - (-4)$ no hay fichas $-$ que quitar, así que se agregan cuatro pares cero (no cambian el valor) y se quitan las cuatro $-$: quedan siete $+$. Igual, $-2 - 5 = -7$.',
-        { hint: 'Restar es quitar. Si en la mesa no hay fichas del signo que hay que quitar, agrega pares cero: un par + y − vale 0, así que no cambia nada.' }),
-      n11[2],
-      play('flecha-resta', 'Pon la flecha del cambio: de antes a después', { min: -9, max: 9, rounds: [
-        { text: 'La temperatura pasa de −3 °C a 5 °C', from: -3, to: 5 }, { text: 'Un dron baja de 4 m a 6 m bajo el agua', from: 4, to: -6 },
-        { text: 'Un buzo sube de −8 m a −2 m', from: -8, to: -2 }, { text: 'La temperatura baja de 7 °C a 0 °C', from: 7, to: 0 },
-      ] }, 'El cambio es después menos antes, y la flecha lo dibuja: $5 - (-3) = 8$ (sube 8 grados), $-6 - 4 = -10$ (el dron baja 10 metros), $-2 - (-8) = 6$ (el buzo sube 6 metros) y $0 - 7 = -7$.',
-        { hint: 'La cola de la flecha va en el valor de antes y la punta en el de después. Si la flecha va hacia la izquierda, el cambio es negativo.' }),
-      n11[3]]);
-
-    const n11b = ['pizzeria', 'candado-fraccion', 'pon-la-rayita', 'carrera-fracciones'].map(g => keep('alg-11b', g));
-    setLesson('alg-11b', [n11b[0], n11b[1],
-      play('tableta-fraccion', 'Corta la tableta y toma la fracción que pide cada ronda', { rounds: [
-        { total: 24, cols: 6, num: 3, den: 4, what: 'galletas' }, { total: 30, cols: 6, num: 2, den: 5, what: 'galletas' },
-        { total: 42, cols: 7, num: 5, den: 6, what: 'galletas' }, { total: 20, cols: 5, num: 3, den: 10, what: 'galletas' },
-      ] }, 'La fracción de una cantidad se reparte en tantas partes iguales como dice el denominador y se toman las del numerador. $\\tfrac34$ de 24: cuatro partes de 6, se toman tres, $18$. $\\tfrac25$ de 30 es $12$; $\\tfrac56$ de 42, $35$; y $\\tfrac{3}{10}$ de 20, $6$.',
-        { hint: 'El número de abajo dice en cuántas partes iguales cortar; el de arriba, cuántas de esas partes tomar.' }),
-      play('agrupa-fraccion', 'Simplifica agrupando las partes de la barra', { rounds: [
-        { num: 6, den: 8 }, { num: 9, den: 12 }, { num: 10, den: 15 }, { num: 12, den: 18 },
-      ] }, 'Simplificar es juntar las partes en grupos iguales sin cortar ninguno: el grupo tiene que repartir justo las partes pintadas y las de toda la barra. El grupo más grande que sirve es el máximo común divisor: $\\tfrac68 = \\tfrac34$ (de a 2), $\\tfrac{9}{12} = \\tfrac34$ (de a 3), $\\tfrac{10}{15} = \\tfrac23$ (de a 5) y $\\tfrac{12}{18} = \\tfrac23$ (de a 6).',
-        { hint: 'Un grupo sirve si cabe un número exacto de veces en las partes pintadas y también en toda la barra. Prueba grupos cada vez más grandes.' }),
-      play('corta-igual', 'Recorta las barras en pedacitos del mismo tamaño para poder operar', { rounds: [
-        { a: [1, 4], b: [2, 3] }, { a: [5, 6], b: [1, 4] }, { a: [3, 5], b: [1, 2], op: '-' }, { a: [7, 8], b: [1, 6], op: '-' },
-      ] }, 'Solo se suman o restan pedazos del mismo tamaño: por eso se busca un denominador común. $\\tfrac14 + \\tfrac23 = \\tfrac{3}{12} + \\tfrac{8}{12} = \\tfrac{11}{12}$, $\\tfrac56 + \\tfrac14 = \\tfrac{13}{12}$, $\\tfrac35 - \\tfrac12 = \\tfrac{1}{10}$ y $\\tfrac78 - \\tfrac16 = \\tfrac{17}{24}$.',
-        { hint: 'Busca un número de pedacitos que se pueda repartir en los cortes de la primera barra y también en los de la segunda: un múltiplo de los dos denominadores.' }),
-      n11b[2], n11b[3]]);
-
-    const n11c = ['cajas-numericas', 'lupa-densidad', 'ubica-en-recta', 'compas-raiz', 'acorrala-raiz', 'frena-aguja'].map(g => keep('alg-11c', g));
-    setLesson('alg-11c', [n11c[0], n11c[1], n11c[2], n11c[3],
-      play('espiral-teodoro', 'Arma la espiral de las raíces', { rounds: [{ n: 5 }, { n: 3 }, { n: 7 }, { n: 10 }] },
-        'Cada triángulo tiene un cateto de 1 y otro igual a la hipotenusa anterior. Por Pitágoras, si la anterior mide $\\sqrt{k}$, la nueva mide $\\sqrt{k + 1}$: con 4 triángulos se llega a $\\sqrt5 \\approx 2.236$, con 2 a $\\sqrt3$, con 6 a $\\sqrt7$ y con 9 a $\\sqrt{10}$. En la recta quedan entre dos enteros: no son fracciones.',
-        { hint: 'Mira la hipotenusa que tienes y cuánto aumenta lo de adentro de la raíz con cada triángulo nuevo.' }),
-      n11c[4], n11c[5]]);
-
-    const n12b = ['corta-rectangulo', 'inversos-gemelos'].map(g => keep('alg-12b', g));
-    setLesson('alg-12b', [n12b[0],
-      play('agrupa-amigos', 'Reagrupa la suma en parejas redondas', { rounds: [
-        { nums: [17, 38, 83, 62], unit: 100 }, { nums: [26, 45, 74, 55], unit: 100 }, { nums: [8, 13, 92, 87], unit: 100 }, { nums: [36, 19, 64, 81], unit: 100 },
-      ] }, 'Por la conmutativa y la asociativa se puede sumar en cualquier orden y agrupar como se quiera. $(17 + 83) + (38 + 62) = 100 + 100 = 200$; $(26 + 74) + (45 + 55) = 200$; $(8 + 92) + (13 + 87) = 200$ y $(36 + 64) + (19 + 81) = 200$.',
-        { hint: 'Mira las unidades: busca parejas cuyas unidades sumen 10, y luego revisa si las decenas completan la centena.' }),
-      play('multiplica-primero', 'Multiplica primero la pareja que da una cifra redonda', { rounds: [
-        { nums: [25, 13, 4] }, { nums: [2, 37, 5] }, { nums: [17, 20, 5] }, { nums: [125, 3, 8] },
-      ] }, 'En un producto el orden y los paréntesis tampoco cambian el resultado: $(25 \\cdot 4) \\cdot 13 = 1300$, $(2 \\cdot 5) \\cdot 37 = 370$, $17 \\cdot (20 \\cdot 5) = 1700$ y $(125 \\cdot 8) \\cdot 3 = 3000$. Elegir bien la primera pareja vuelve la cuenta fácil.',
-        { hint: 'Busca dos factores que juntos den 10, 100 o 1000: 2 y 5, 4 y 25, 8 y 125.' }),
-      n12b[1],
-      play('une-rectangulos', 'Factor común: junta los rectángulos que comparten el alto', { rounds: [
-        { base: [6, 7], others: [[6, 3], [4, 3]] }, { base: [4, 9], others: [[3, 9], [4, 6]] },
-        { base: [5, 8], others: [[5, 2], [8, 5]] }, { base: [7, 4], others: [[7, 3], [2, 4], [7, 3]] },
-      ] }, 'La distributiva leída al revés: si dos productos comparten un factor, sus rectángulos tienen el mismo alto y se pegan en uno solo. $6 \\cdot 7 + 6 \\cdot 3 = 6 \\cdot 10 = 60$; $4 \\cdot 9 + 4 \\cdot 6 = 4 \\cdot 15$; $5 \\cdot 8 + 5 \\cdot 2 = 5 \\cdot 10$; $7 \\cdot 4 + 7 \\cdot 3 + 7 \\cdot 3 = 7 \\cdot 10$. Un $8 \\cdot 5$ tiene alto 8: no comparte el 5 como alto.',
-        { hint: 'Fíjate solo en el alto de cada rectángulo, el primer número: tiene que ser igual al de la base.' }),
-      play('deshaz-camino', 'Regresa al número de partida deshaciendo los pasos', { rounds: [
-        { x: 2, ops: [['×', 4], ['+', 3]], cards: [['+', -3], ['×', 0.25], ['+', 3], ['×', 4], ['×', -0.25]] },
-        { x: -5, ops: [['+', 6], ['×', -2]], cards: [['×', -0.5], ['+', -6], ['×', 2], ['+', 6], ['×', 0.5]] },
-        { x: 3, ops: [['×', 1 / 3], ['+', 4]], cards: [['+', -4], ['×', 3], ['+', 4], ['×', 1 / 3], ['×', -3]] },
-      ] }, 'Sumar el opuesto deshace una suma y multiplicar por el recíproco deshace un producto, porque llevan al neutro: $a + (-a) = 0$ y $a \\cdot \\tfrac1a = 1$. Y se deshace al revés: lo último que se hizo es lo primero que se quita. $2 \\to 8 \\to 11$, y de regreso $11 - 3 = 8$, $8 \\cdot \\tfrac14 = 2$.',
-        { hint: 'Empieza por la última puerta de la ida. ¿Qué número la deshace: el opuesto o el recíproco?' }),
-      play('vagon-inverso', 'Inversos: lleva el vagón al 0 y la liga al largo 1', { rounds: [
-        { title: 'Opuestos', items: [{ kind: '+', a: 5 }, { kind: '+', a: -3 }, { kind: '+', a: -6 }] },
-        { title: 'Recíprocos', items: [{ kind: '×', a: [3, 1] }, { kind: '×', a: [2, 3] }, { kind: '×', a: [1, 4] }] },
-      ] }, 'El opuesto lleva al neutro de la suma: $5 + (-5) = 0$. El recíproco lleva al neutro del producto: $3 \\cdot \\tfrac13 = 1$, $\\tfrac23 \\cdot \\tfrac32 = 1$ y $\\tfrac14 \\cdot 4 = 1$. El 0 no tendría recíproco: ninguna liga de largo 0 se estira hasta 1.',
-        { hint: 'Para el vagón, suma lo mismo que está lejos del 0 pero hacia el otro lado. Para la liga, voltea la fracción.' })]);
-
-    const n12c = ['arma-producto', 'cancela-balanza'].map(g => keep('alg-12c', g));
-    setLesson('alg-12c', [n12c[0],
-      play('resta-opuesto', 'Resta sumando el opuesto, con flechas', { min: -12, max: 12, rounds: [
-        { a: 5, b: 8 }, { a: -3, b: -6 }, { a: 2, b: -4 }, { a: -1, b: 5 },
-      ] }, 'Restar $b$ es sumar su opuesto: $a - b = a + (-b)$. Se voltea la flecha de $b$ y se pega a la de $a$: $5 - 8 = 5 + (-8) = -3$; $-3 - (-6) = -3 + 6 = 3$; $2 - (-4) = 6$; $-1 - 5 = -6$.',
-        { hint: 'Primero voltea la flecha de abajo: el opuesto apunta al otro lado. Después pega su cola en la punta de la flecha de arriba.' }),
-      play('voltea-flecha', 'Estira y voltea la flecha hasta el aro', { rounds: [
-        { a: 3, target: -9 }, { a: -2, target: 8 }, { a: -6, target: -12 }, { a: 4, target: -16 },
-      ] }, 'El multiplicador repite la flecha y, si es negativo, la refleja en el 0: $3 \\cdot (-3) = -9$, $(-2)(-4) = 8$, $(-6) \\cdot 2 = -12$ y $4 \\cdot (-4) = -16$. Dos negativos dan positivo porque voltear dos veces deja la flecha como estaba.',
-        { hint: 'Decide cuántas copias de la flecha caben hasta el aro y mira de qué lado del 0 está el aro: así sabes si hay que voltear.' }),
-      play('parte-flecha', 'Divide partiendo la flecha y volteando si hace falta', { min: -18, max: 18, rounds: [
-        { a: -12, b: 3 }, { a: 15, b: -5 }, { a: -18, b: -6 }, { a: 7, b: 2 },
-      ] }, 'Dividir es multiplicar por el recíproco: $a \\div b = a \\cdot \\tfrac1b$. Partir en 3 es tomar $\\tfrac13$: $(-12) \\div 3 = -4$. Si el divisor es negativo se voltea además: $15 \\div (-5) = -3$ y $(-18) \\div (-6) = 3$. Y $7 \\div 2 = 3.5$.',
-        { hint: 'El número de pedazos es el valor del divisor sin signo. El signo del divisor dice si hay que voltear el pedazo.' }),
-      n12c[1],
-      play('capas-operacion', 'Resuelve capa por capa, cuidando los signos', { rounds: [
-        { title: 'Con signos', items: [{ expr: '-3 * ( 4 - 6 ) + 5' }, { expr: '12 / -4 - 2 * -3' }, { expr: '-8 - ( 2 - 7 ) * 2' }] },
-      ] }, 'Primero los paréntesis, luego × y ÷ de izquierda a derecha, y al final + y −, con la ley de los signos en cada paso: $-3(4 - 6) + 5 = -3(-2) + 5 = 11$; $12 \\div (-4) - 2(-3) = -3 + 6 = 3$; $-8 - (-5) \\cdot 2 = -8 + 10 = 2$.',
-        { hint: 'Antes de operar dos números, mira sus signos: dos iguales dan positivo y dos distintos, negativo.' }),
-      play('rebote-signos', 'Saltos con signo: cada salto multiplica por un negativo', { rounds: [
-        { title: 'Saltos con signo', items: [{ f: -2, n: 2, target: 12 }, { f: -2, n: 3, target: 24 }, { f: -3, n: 2, target: -18 }] },
-        { title: 'Pares e impares', items: [{ f: -1, n: 5, target: 4 }, { f: -2, n: 1, target: -10 }, { f: -2, n: 4, target: -16 }] },
-      ] }, 'Cada salto multiplica por un negativo y cambia de lado del 0. Con un número par de saltos el signo vuelve a ser el del comienzo; con un número impar, cambia: $3 \\cdot (-2)^2 = 12$, $-3 \\cdot (-2)^3 = 24$, $-2 \\cdot (-3)^2 = -18$, $-4 \\cdot (-1)^5 = 4$.',
-        { hint: 'Calcula primero cuánto multiplican todos los saltos juntos y con qué signo; después busca de dónde hay que salir.' })]);
-
-    const n12d = ['tren-ordenado', 'dobla-la-recta', 'distancia-justa', 'dibuja-intervalo', 'serpiente-orden'].map(g => keep('alg-12d', g));
-    setLesson('alg-12d', [n12d[0], n12d[1],
-      play('espejo-desigualdad', 'Mira qué le pasa al orden al sumar o multiplicar', { rounds: [
-        { op: '×', a: 2, b: 5, target: -6 }, { op: '+', a: -3, b: 1, target: 2 }, { op: '×', a: -4, b: 2, target: 2 }, { op: '×', a: 1, b: 3, target: 2 },
-      ] }, 'Sumar el mismo número corre los dos puntos igual: el orden se conserva ($-3 < 1 \\Rightarrow 2 < 6$). Multiplicar por un positivo también lo conserva ($1 < 3 \\Rightarrow 2 < 6$). Multiplicar por un negativo refleja la recta en el 0 y el orden **se voltea**: $2 < 5 \\Rightarrow -6 > -15$ y $-4 < 2 \\Rightarrow 2 > -1$.',
-        { hint: 'Busca el número que lleva a a la bandera. Luego compara: ¿b quedó a la derecha o a la izquierda de a?' }),
-      n12d[2], n12d[3],
-      play('correa-del-perro', 'Pon el poste, la correa y la zona de cada desigualdad', { min: -8, max: 8, rounds: [
-        { txt: '|x − 3| > 2', c: 3, r: 2, out: true, closed: false }, { txt: '|x + 2| ≥ 4', c: -2, r: 4, out: true, closed: true }, { txt: '|x| < 5', c: 0, r: 5, out: false, closed: false },
-      ] }, '$|x - c|$ es la distancia de $x$ al poste $c$. «Menor que» es lo que alcanza la correa; «mayor que» es lo que queda fuera de su alcance, a los dos lados. $|x - 3| > 2$: $x < 1$ o $x > 5$. $|x + 2| \\ge 4$: $x \\le -6$ o $x \\ge 2$ (el poste está en $-2$). $|x| < 5$: $-5 < x < 5$.',
-        { hint: 'Escribe la desigualdad como distancia: |x + 2| es la distancia de x a −2. Luego decide si la zona es adentro o afuera del alcance.' }),
-      n12d[4]]);
-
-    setExam('numeros', [
-      ['alg-11', 'Restar es quitar fichas; si no hay de las que hay que quitar, se agregan pares cero.',
-        play('pares-cero', 'Calcula con fichas', { rounds: [{ op: '-', a: -1, b: -3 }, { op: '+', a: 4, b: -7 }] }, '$-1 - (-3) = 2$ y $4 + (-7) = -3$.', { hint: 'Un par + y − vale cero.' })],
-      ['alg-11', 'El cambio es después menos antes, con su signo.',
-        play('flecha-resta', 'Pon la flecha del cambio', { min: -9, max: 9, rounds: [{ text: 'La temperatura sube de −6 °C a −1 °C', from: -6, to: -1 }] }, '$-1 - (-6) = 5$.', { hint: 'Cola en el antes, punta en el después.' })],
-      ['alg-11b', 'Simplificar es agrupar partes sin cortar ninguna: el grupo más grande es el máximo común divisor.',
-        play('agrupa-fraccion', 'Simplifica agrupando', { rounds: [{ num: 8, den: 12 }] }, '$\\tfrac{8}{12} = \\tfrac23$, de a 4.', { hint: 'Prueba grupos cada vez más grandes.' })],
-      ['alg-11b', 'Para sumar fracciones hace falta un denominador común.',
-        play('corta-igual', 'Recorta en pedacitos iguales', { rounds: [{ a: [2, 5], b: [1, 3] }] }, '$\\tfrac25 + \\tfrac13 = \\tfrac{6}{15} + \\tfrac{5}{15} = \\tfrac{11}{15}$.', { hint: 'Busca un múltiplo de los dos denominadores.' })],
-      ['alg-11c', 'Cada triángulo de la espiral suma uno bajo la raíz: $\\sqrt{k} \\to \\sqrt{k + 1}$.',
-        play('espiral-teodoro', 'Arma la espiral', { rounds: [{ n: 6 }] }, 'Con 5 triángulos se llega a $\\sqrt6 \\approx 2.449$.', { hint: 'Cuenta los triángulos desde $\\sqrt2$.' })],
-      ['alg-11c', 'La diagonal de un rectángulo de lados a y b mide $\\sqrt{a^2 + b^2}$.',
-        play('compas-raiz', 'Elige los lados del rectángulo para que el compás caiga en la banderita', { rounds: [{ n: 13 }], max: 4 }, '$2^2 + 3^2 = 13$: la diagonal mide $\\sqrt{13}$.', { hint: 'Busca dos cuadrados que sumen 13.' })],
-      ['alg-12b', 'El opuesto deshace una suma y el recíproco un producto; se deshace en orden contrario.',
-        play('deshaz-camino', 'Regresa al número de partida', { rounds: [{ x: 4, ops: [['+', -7], ['×', 2]], cards: [['×', 0.5], ['+', 7], ['×', 2], ['+', -7]] }] }, '$4 \\to -3 \\to -6$; de regreso $-6 \\cdot \\tfrac12 = -3$ y $-3 + 7 = 4$.', { hint: 'Empieza por la última puerta.' })],
-      ['alg-12b', 'La conmutativa y la asociativa permiten sumar en el orden más cómodo.',
-        play('agrupa-amigos', 'Suma en parejas redondas', { rounds: [{ nums: [47, 29, 53, 71], unit: 100 }] }, '$(47 + 53) + (29 + 71) = 200$.', { hint: 'Mira las unidades.' })],
-      ['alg-12c', 'Restar es sumar el opuesto.',
-        play('resta-opuesto', 'Resta sumando el opuesto', { min: -12, max: 12, rounds: [{ a: -4, b: 3 }] }, '$-4 - 3 = -4 + (-3) = -7$.', { hint: 'Voltea y pega.' })],
-      ['alg-12c', 'Dividir es multiplicar por el recíproco; el signo sigue la ley de los signos.',
-        play('parte-flecha', 'Divide partiendo la flecha', { min: -18, max: 18, rounds: [{ a: -15, b: -3 }] }, '$(-15) \\div (-3) = 5$.', { hint: 'Tres pedazos y voltear.' })],
-      ['alg-12d', 'Multiplicar por un negativo voltea el orden.',
-        play('espejo-desigualdad', 'Mira qué le pasa al orden', { rounds: [{ op: '×', a: -3, b: 1, target: 6 }] }, 'Por $-2$: $-3 < 1 \\Rightarrow 6 > -2$.', { hint: 'Busca el factor que lleva a a la bandera.' })],
-      ['alg-12d', '$|x - c| > r$ son los puntos a más de r del poste c, a los dos lados.',
-        play('correa-del-perro', 'Pon el poste, la correa y la zona', { min: -8, max: 8, rounds: [{ txt: '|x + 1| > 3', c: -1, r: 3, out: true, closed: false }] }, '$x < -4$ o $x > 2$.', { hint: 'El poste está en −1.' })],
-    ]);
-  }
-  // ───────── Mundo 3 · Escalas y Proporciones ─────────
-  {
-    const r12 = ['limonada', 'estira-foto'].map(g => keep('alg-12', g));
-    setLesson('alg-12', [r12[0],
-      play('barra-razon', 'Parte la cinta en la razón pedida', { rounds: [
-        { T: 35, p: 2, q: 5, A: 'jugo', B: 'agua' }, { T: 24, p: 5, q: 3, A: 'rojas', B: 'azules' },
-        { T: 36, p: 4, q: 5, A: 'niños', B: 'adultos' }, { T: 30, p: 1, q: 4, A: 'vinagre', B: 'aceite' },
-      ] }, 'En $p : q$ el todo tiene $p + q$ partes iguales. En 35 con $2 : 5$ hay 7 partes de 5: quedan $10$ y $25$. Con $5 : 3$ en 24, 8 partes de 3: $15$ y $9$. Con $4 : 5$ en 36, partes de 4: $16$ y $20$. Con $1 : 4$ en 30, partes de 6: $6$ y $24$.',
-        { hint: 'Suma los dos números de la razón: así sabes en cuántas partes iguales se reparte la cinta. Luego mira cuánto vale cada parte.' }),
-      r12[1],
-      play('rejilla-razon', 'Pinta las baldosas en la razón pedida', { rounds: [
-        { rows: 3, cols: 5, p: 2, q: 3 }, { rows: 4, cols: 6, p: 1, q: 2 }, { rows: 3, cols: 6, p: 5, q: 1 }, { rows: 4, cols: 5, p: 3, q: 7 },
-      ] }, 'Razones equivalentes: multiplicar los dos términos por el mismo número no cambia la razón. En 15 baldosas $2 : 3$ es $6 : 9$; en 24, $1 : 2$ es $8 : 16$; en 18, $5 : 1$ es $15 : 3$; en 20, $3 : 7$ es $6 : 14$.',
-        { hint: 'El total de baldosas tiene que repartirse en p + q partes iguales: pinta p de esas partes.' }),
-      play('receta-escala', 'Agranda o achica la receta', { rounds: [
-        { base: 4, items: [['harina', 300, 'g'], ['leche', 200, 'mL'], ['azúcar', 80, 'g']], goal: [0, 450] },
-        { base: 6, items: [['arroz', 450, 'g'], ['agua', 900, 'mL']], goal: [1, 300] },
-        { base: 2, items: [['avena', 60, 'g'], ['leche', 250, 'mL']], goal: [1, 1250] },
-      ] }, 'La razón entre ingredientes y porciones se conserva: si la harina pasa de 300 g a 450 g, se multiplicó por $\\tfrac32$, y las porciones también: $4 \\cdot \\tfrac32 = 6$. Con 300 mL de agua en lugar de 900 se divide entre 3: $2$ porciones. Y $1250$ mL de leche son 5 veces 250: $10$ porciones.',
-        { hint: 'Compara la cantidad pedida con la de la receta: ¿por cuánto se multiplicó? Multiplica por lo mismo las porciones.' }),
-      play('bici-cambios', 'Elige el piñón para llegar a la bandera', { rounds: [
-        { title: 'Cambios', items: [{ front: 48, cogs: [16, 12, 24], turns: 3, target: 12 }, { front: 36, cogs: [12, 24, 18], turns: 4, target: 8 }, { front: 40, cogs: [10, 20, 16], turns: 2, target: 5 }] },
-      ] }, 'Por cada pedalada la rueda da plato : piñón vueltas. $48 : 12 = 4$, y 3 pedaladas dan 12 vueltas. $36 : 18 = 2$, por 4 son 8. $40 : 16 = 2.5$, por 2 son 5.',
-        { hint: 'Divide las vueltas de la meta entre las pedaladas: eso debe dar el plato dividido entre el piñón.' })]);
-
-    const r12e = ['balanza-proporcion', 'sombra-arbol', 'cuadrado-media', 'duplica-magnitud', 'grafica-relacion', 'reparto'].map(g => keep('alg-12e', g));
-    setLesson('alg-12e', [...r12e,
-      play('llaves-tanque', 'Proporción inversa: llena el tanque a tiempo', { rounds: [
-        { title: 'Más llaves, menos tiempo', items: [{ taps: 2, hours: 6, target: 3 }, { taps: 3, hours: 8, target: 6 }, { taps: 4, hours: 3, target: 2 }] },
-      ] }, 'Llaves y horas son inversamente proporcionales: el producto se conserva. $2 \\cdot 6 = 12$, así que en 3 horas hacen falta $12 \\div 3 = 4$ llaves; $3 \\cdot 8 = 24$ da 4 llaves para 6 horas; $4 \\cdot 3 = 12$ da 6 llaves para 2 horas.',
-        { hint: 'Multiplica las llaves por las horas del dato: ese producto se mantiene. Divide entre las horas de la meta.' })]);
-
-    const r12f = ['arma-regla', 'bascula', 'la-obra', 'engranajes', 'resortera-tres'].map(g => keep('alg-12f', g));
-    setLesson('alg-12f', [r12f[0], r12f[1], r12f[2],
-      play('mapa-escala', 'Ubica el pueblo a la distancia real', { rounds: [
-        { cm: 1, km: 25, real: 150 }, { cm: 2, km: 15, real: 60 }, { cm: 1, km: 40, real: 100 }, { cm: 4, km: 50, real: 75 },
-      ] }, 'Es una regla de tres directa: más kilómetros, más centímetros. $150 \\div 25 = 6$ cm; $60$ km son 4 veces 15, así que $4 \\cdot 2 = 8$ cm; $100 \\div 40 = 2.5$ cm; y 75 km son $\\tfrac32$ de 50: $6$ cm.',
-        { hint: 'Busca cuántos km vale un solo centímetro (reducir a la unidad) y cuántos de esos caben en la distancia real.' }),
-      r12f[3], r12f[4]]);
-
-    const r13 = ['cuadricula-cien', 'rueda-porcentaje', 'cruz-porcentaje', 'mezcla'].map(g => keep('alg-13', g));
-    setLesson('alg-13', [r13[0], r13[1],
-      play('pinta-personas', 'Pinta a las personas que pide cada ronda', { rounds: [
-        { total: 20, pct: 45, what: 'usan gafas' }, { total: 40, pct: 15, what: 'trotan' }, { total: 25, pct: 68, what: 'leen' }, { total: 8, pct: 75, what: 'cantan' },
-      ] }, 'El por ciento es de cada 100: en un grupo de 20, cada persona es el 5 %, así que el 45 % son 9. En 40, cada una es 2.5 %: el 15 % son 6. En 25, cada una es 4 %: el 68 % son 17. En 8, el 75 % son tres cuartos: 6.',
-        { hint: 'Averigua qué porcentaje vale una sola persona del grupo (100 entre el total) y cuántas hacen falta.' }),
-      r13[2], r13[3],
-      play('tanque-porcentaje', 'Llena el tanque al porcentaje pedido', { rounds: [
-        { title: 'Litros', items: [{ cap: 80, pct: 35, step: 2 }, { cap: 60, pct: 15, step: 3 }, { cap: 200, pct: 12, step: 4 }] },
-        { title: 'Más finos', items: [{ cap: 50, pct: 8, step: 2 }, { cap: 120, pct: 75, step: 6 }, { cap: 40, pct: 5, step: 1 }] },
-      ] }, 'El $p\\,\\%$ de una capacidad es $\\tfrac{p}{100}$ de ella: $0.35 \\cdot 80 = 28$ L, $0.15 \\cdot 60 = 9$ L, $0.12 \\cdot 200 = 24$ L, $0.08 \\cdot 50 = 4$ L, $\\tfrac34$ de 120 son 90 L y el 5 % de 40 son 2 L.',
-        { hint: 'Calcula primero el 1 % o el 10 % del tanque y luego junta las veces que haga falta.' })]);
-
-    const r13c = ['estira-barra', 'etiqueta-rebaja', 'bodegas'].map(g => keep('alg-13c', g));
-    setLesson('alg-13c', [r13c[0], r13c[1],
-      play('factor-cambio', 'Encuentra el factor del cambio', { rounds: [
-        { from: 80, to: 92 }, { from: 120, to: 90 }, { from: 40, to: 50 }, { from: 50, to: 40 },
-      ] }, 'Cambiar un $r\\,\\%$ es multiplicar por $1 \\pm \\tfrac{r}{100}$, y el porcentaje se mide sobre el valor de antes: $80 \\cdot 1.15 = 92$ (+15 %), $120 \\cdot 0.75 = 90$ (−25 %). De 40 a 50 es $\\times 1.25$ (+25 %), pero de 50 a 40 es $\\times 0.8$ (−20 %): no es simétrico.',
-        { hint: 'Divide el valor de después entre el de antes: ese es el factor. Si es mayor que 1 aumentó; si es menor, bajó.' }),
-      r13c[2],
-      play('precio-original', 'Encuentra el precio de antes', { rounds: [
-        { r: -20, now: 48, step: 5, max: 100 }, { r: -25, now: 90, step: 5, max: 160 }, { r: 15, now: 69, step: 5, max: 100 }, { r: -40, now: 27, step: 5, max: 60 },
-      ] }, 'Para volver se divide entre el factor: $48 \\div 0.8 = 60$, $90 \\div 0.75 = 120$, $69 \\div 1.15 = 60$, $27 \\div 0.6 = 45$. Sumar el 20 % a 48 daría 57.6, no 60: el porcentaje se calculó sobre el precio de antes.',
-        { hint: 'El precio de ahora es el de antes por el factor. Prueba un precio de antes y mira si al aplicar el cambio sale la etiqueta.' }),
-      play('rampa-precio', 'Elige el sello para que la etiqueta llegue con su precio', { rounds: [
-        { title: 'Descuentos', items: [{ from: 200, to: 170 }, { from: 80, to: 60 }, { from: 50, to: 45 }] },
-        { title: 'Aumentos', items: [{ from: 120, to: 150 }, { from: 40, to: 46 }, { from: 300, to: 345 }] },
-      ] }, 'El porcentaje es el cambio dividido entre el precio de arriba: de 200 a 170 bajan 30, que es el 15 % de 200; de 80 a 60, el 25 %; de 50 a 45, el 10 %. De 120 a 150 sube 30: el 25 %; de 40 a 46 y de 300 a 345, el 15 %.',
-        { hint: 'Mira cuánto cambió el precio y qué parte es eso del precio de arriba.' })]);
-
-    const r13d = ['cascada', 'rebote', 'dos-etapas'].map(g => keep('alg-13d', g));
-    setLesson('alg-13d', [r13d[0], r13d[1],
-      play('semanas-rebaja', 'Cambios repetidos: ¿en qué semana cruza la línea?', { rounds: [
-        { r: -10, line: 50 }, { r: -20, line: 30 }, { r: 5, line: 150 }, { r: -30, line: 10 },
-      ] }, 'Repetir un cambio es multiplicar otra vez por el mismo factor: $100 \\cdot 0.9^n$. $0.9^6 \\approx 0.53$ y $0.9^7 \\approx 0.48$: la semana 7. $0.8^6 \\approx 0.26$: la 6. $1.05^9 \\approx 1.55$: la 9. $0.7^7 \\approx 0.08$: la 7. No basta con multiplicar el porcentaje por las semanas.',
-        { hint: 'Cada semana se multiplica por el mismo factor. Mira las barras: ¿cuál es la primera que cruza la línea?' }),
-      r13d[2],
-      play('sube-y-baja', 'Sube y baja el mismo porcentaje', { rounds: [{ end: 91 }, { end: 84 }, { end: 96 }, { end: 75 }] },
-        'Subir $x$ y bajar $x$ multiplica por $(1 + x)(1 - x) = 1 - x^2$: siempre queda por debajo. Con 30 % queda $100(1 - 0.09) = 91$; con 40 %, 84; con 20 %, 96; con 50 %, 75.',
-        { hint: 'Después de subir, el porcentaje de bajada se calcula sobre un precio más grande. Mira cuánto se pierde con cada porcentaje.' }),
-      play('rompe-cambios', 'Mueve la paleta y manda la pelota al ladrillo del resultado', { rounds: [
-        { title: 'Dos cambios', items: [
-          { ask: '100 → −20 % → −10 %', options: ['72', '70', '80'], answer: 0 },
-          { ask: '200 → +10 % → +10 %', options: ['240', '220', '242'], answer: 2 },
-          { ask: '50 → −50 % → +50 %', options: ['50', '37.5', '25'], answer: 1 }] },
-      ] }, 'Los cambios seguidos se multiplican: $100 \\cdot 0.8 \\cdot 0.9 = 72$; $200 \\cdot 1.1 \\cdot 1.1 = 242$; $50 \\cdot 0.5 \\cdot 1.5 = 37.5$. Sumar los porcentajes daría otra cosa.',
-        { hint: 'Aplica el primer cambio, y el segundo sobre lo que resultó.' })]);
-
-    setExam('razones', [
-      ['alg-12', 'En $p : q$ el todo tiene $p + q$ partes iguales.',
-        play('barra-razon', 'Parte la cinta', { rounds: [{ T: 28, p: 3, q: 4, A: 'té', B: 'leche' }] }, '$12$ de té y $16$ de leche.', { hint: 'Siete partes de 4.' })],
-      ['alg-12', 'Las razones equivalentes multiplican los dos términos por lo mismo.',
-        play('rejilla-razon', 'Pinta en la razón', { rounds: [{ rows: 2, cols: 6, p: 1, q: 3 }] }, '$3 : 9 = 1 : 3$.', { hint: 'Cuatro partes de 3.' })],
-      ['alg-12e', 'En el reparto proporcional se suman las partes y el total se divide en esa razón.',
-        play('barra-razon', 'Reparte la cinta', { rounds: [{ T: 45, p: 4, q: 5, A: 'Ana', B: 'Beto' }] }, 'Nueve partes de 5: 20 y 25.', { hint: 'Suma 4 + 5.' })],
-      ['alg-12e', 'En una proporción directa el cociente se conserva.',
-        play('receta-escala', 'Ajusta la receta', { rounds: [{ base: 3, items: [['tomate', 6, 'u'], ['cebolla', 2, 'u']], goal: [0, 14] }] }, 'Dos tomates por porción: 7 porciones.', { hint: 'Reduce a una porción.' })],
-      ['alg-12f', 'Con una escala se arma una regla de tres directa.',
-        play('mapa-escala', 'Ubica el pueblo', { rounds: [{ cm: 1, km: 30, real: 105 }, { cm: 3, km: 20, real: 50 }] }, '$105 \\div 30 = 3.5$ cm y $50 \\cdot 3 \\div 20 = 7.5$ cm.', { hint: 'Reduce a la unidad.' })],
-      ['alg-12f', 'En la proporción inversa lo que se conserva es el producto.',
-        play('la-obra', 'Deja en la obra los obreros justos', { workers: 6, days: 20, askDays: 15, max: 12 }, '$6 \\cdot 20 = 120$ jornadas: en 15 días hacen falta 8 obreros.', { hint: 'Obreros × días se mantiene.' })],
-      ['alg-13', 'El $p\\,\\%$ es $p$ de cada 100.',
-        play('pinta-personas', 'Pinta a las personas', { rounds: [{ total: 20, pct: 65, what: 'votaron' }] }, 'Cada persona es el 5 %: 13.', { hint: '100 entre 20.' })],
-      ['alg-13', 'Un porcentaje es una razón parte : todo con el todo en 100.',
-        play('cuadricula-cien', 'Pinta en la cuadrícula el porcentaje', { rounds: [{ ask: '3 de cada 4', count: 75 }] }, '$\\tfrac34 = \\tfrac{75}{100}$.', { hint: 'Lleva el denominador a 100.' })],
-      ['alg-13c', 'Un cambio porcentual es un factor sobre el valor de antes.',
-        play('factor-cambio', 'Encuentra el factor', { rounds: [{ from: 60, to: 45 }] }, '$\\times 0.75$: −25 %.', { hint: 'Divide después entre antes.' })],
-      ['alg-13c', 'Para recuperar el precio de antes se divide entre el factor.',
-        play('precio-original', 'Encuentra el precio de antes', { rounds: [{ r: -30, now: 56, step: 5, max: 120 }] }, '$56 \\div 0.7 = 80$.', { hint: 'Prueba precios y aplica el cambio.' })],
-      ['alg-13d', 'Un cambio repetido es una potencia del factor.',
-        play('semanas-rebaja', '¿En qué semana cruza la línea?', { rounds: [{ r: -15, line: 50 }] }, '$0.85^4 \\approx 0.52$ y $0.85^5 \\approx 0.44$: la semana 5.', { hint: 'Mira las barras.' })],
-      ['alg-13d', 'Subir y bajar el mismo porcentaje deja el precio por debajo: $(1 + x)(1 - x) = 1 - x^2$.',
-        play('sube-y-baja', 'Sube y baja el mismo porcentaje', { rounds: [{ end: 99 }] }, 'Con 10 %: $100 \\cdot 0.99 = 99$.', { hint: '$1 - x^2$.' })],
-    ]);
-  }
-  // ───────── Mundo 4 · Exponentes y Radicales ─────────
-  {
-    const p21a = ['arbol-potencia', 'torre-producto', 'pares-negativos', 'torre-pisos'].map(g => keep('alg-21a', g));
-    setLesson('alg-21a', [p21a[0], p21a[1],
-      play('escalera-potencias', 'Sube y baja por la escalera de potencias', { rounds: [
-        { base: 2, num: 1, den: 8 }, { base: 5, num: 1, den: 1 }, { base: 10, num: 1, den: 100 }, { base: 4, num: 64, den: 1 },
-      ] }, 'Bajar un escalón es dividir entre la base. Por eso $5^0 = 5 \\div 5 = 1$ (no 0), y por debajo del cero salen fracciones: $2^{-3} = \\tfrac18$ y $10^{-2} = \\tfrac{1}{100}$. Y $4^3 = 64$.',
-        { hint: 'Desde $b^1 = b$, cada escalón hacia abajo divide entre la base y cada uno hacia arriba multiplica.' }),
-      p21a[2],
-      play('cubo-bloques', 'Arma el cubo con los bloques pedidos', { rounds: [{ vol: 27 }, { vol: 64 }, { vol: 8 }, { vol: 125 }] },
-        'El cubo de un número es el volumen de un cubo de esa arista: $3^3 = 27$, $4^3 = 64$, $2^3 = 8$ y $5^3 = 125$. Al doblar la arista el volumen se multiplica por 8.',
-        { hint: 'Multiplica la arista por sí misma tres veces: largo por ancho por alto.' }),
-      p21a[3]]);
-
-    const p21b = ['cuenta-factores', 'cambia-de-piso', 'salta-la-coma'].map(g => keep('alg-21b', g));
-    setLesson('alg-21b', [p21b[0],
-      play('cancela-pisos', 'Divide potencias cancelando por parejas', { rounds: [
-        { a: 7, b: 3, v: 'x' }, { a: 2, b: 5, v: 'y' }, { a: 4, b: 4, v: 'a' }, { a: 6, b: 1, v: 'm' },
-      ] }, 'Cada pareja $\\tfrac{x}{x}$ vale 1, así que se restan los exponentes: $\\tfrac{x^7}{x^3} = x^4$. Si abajo hay más, sobran abajo: $\\tfrac{y^2}{y^5} = \\tfrac{1}{y^3} = y^{-3}$. Con los mismos, todo se cancela: $\\tfrac{a^4}{a^4} = a^0 = 1$.',
-        { hint: 'Cancela de a una pareja: una de arriba con una de abajo. Al final cuenta cuántas quedan y dónde.' }),
-      p21b[1],
-      play('copias-potencia', 'Potencia de una potencia: copia la caja', { rounds: [
-        { a: 3, total: 12, v: 'x' }, { a: 2, total: 10, v: 'y' }, { a: 4, total: 8, v: 'a' }, { a: 5, total: 15, v: 'b' },
-      ] }, 'Elevar $x^a$ a la $b$ es poner $b$ copias de la caja, y cada caja trae $a$ factores: $(x^a)^b = x^{ab}$. $(x^3)^4 = x^{12}$, $(y^2)^5 = y^{10}$, $(a^4)^2 = a^8$, $(b^5)^3 = b^{15}$.',
-        { hint: 'Cada copia trae los mismos factores. ¿Cuántas cajas iguales hacen falta para juntar todos los pedidos?' }),
-      p21b[2],
-      play('escala-leyes', 'Lleva al escalador a la bandera usando **todas** las tarjetas: el orden importa', { rounds: [
-        { title: 'Dos tarjetas', items: [{ start: 2, cards: [{ op: 'mul', k: 1 }, { op: 'pow', k: 3 }], target: 7 }, { start: 3, cards: [{ op: 'pow', k: 2 }, { op: 'div', k: 1 }], target: 4 }] },
-        { title: 'Tres tarjetas', items: [{ start: 2, cards: [{ op: 'pow', k: 2 }, { op: 'div', k: 4 }, { op: 'mul', k: 3 }], target: 6 }, { start: 1, cards: [{ op: 'div', k: 5 }, { op: 'mul', k: 2 }, { op: 'pow', k: 3 }], target: 4 }] },
-      ] }, 'Multiplicar por $x^k$ suma $k$ al exponente, dividir lo resta y elevar a la $k$ lo multiplica. Como elevar multiplica todo lo que se lleva, el orden cambia el resultado: desde $x^2$, primero $(\\;)^3$ y luego $\\cdot x$ deja $x^7$; al revés daría $x^9$.',
-        { hint: 'Fíjate cuándo te conviene elevar: multiplica todo lo que llevas hasta ese momento.' })]);
-
-    const p22a = ['lado-del-cuadrado', 'reparte-factores', 'siembra-raices'].map(g => keep('alg-22a', g));
-    setLesson('alg-22a', [p22a[0], p22a[1],
-      play('fraccion-exponente', 'El exponente fraccionario: raíz y potencia', { rounds: [
-        { a: 27, target: 9 }, { a: 16, target: 8 }, { a: 64, target: 16 }, { a: 81, target: 27 },
-      ] }, 'En $a^{m/n}$ el denominador es el índice de la raíz y el numerador la potencia: $27^{2/3} = (\\sqrt[3]{27})^2 = 3^2 = 9$, $16^{3/4} = 2^3 = 8$, $64^{2/3} = 4^2 = 16$ y $81^{3/4} = 3^3 = 27$.',
-        { hint: 'Busca primero una raíz que deje un número entero pequeño; después mira a qué potencia hay que elevarlo.' }),
-      play('absoluto-raiz', 'La raíz de un cuadrado es el valor absoluto', { rounds: [
-        { kind: 'eq', v: 4, neg: true }, { kind: 'neq' }, { kind: 'eq', v: 3, neg: false }, { kind: 'eq', v: 6, neg: true },
-      ] }, 'Al elevar al cuadrado se pierde el signo y la raíz devuelve el positivo: $\\sqrt{(-4)^2} = \\sqrt{16} = 4 = |-4|$. Por eso $\\sqrt{x^2} = |x|$, que es distinto de $x$ cuando $x$ es negativo.',
-        { hint: 'Prueba con un número negativo: ¿qué queda después de elevarlo al cuadrado y sacarle raíz?' }),
-      play('suma-raices', 'La raíz no se reparte en una suma', { rounds: [{ a: 9, b: 16 }, { a: 36, b: 64 }, { a: 1, b: 3 }, { a: 4, b: 5 }] },
-        'El cuadrado nuevo tiene el área de los dos: $\\sqrt{9 + 16} = \\sqrt{25} = 5$, pero $\\sqrt9 + \\sqrt{16} = 7$. Igual $\\sqrt{100} = 10 \\ne 14$, $\\sqrt4 = 2 \\ne 1 + \\sqrt3$ y $\\sqrt9 = 3 \\ne 2 + \\sqrt5$.',
-        { hint: 'Suma primero las dos áreas y busca el lado de un cuadrado con esa área.' }),
-      p22a[2]]);
-
-    const p22b = ['saca-del-radical', 'parte-baldosa', 'tabla-conjugado', 'muro-radicales'].map(g => keep('alg-22b', g));
-    setLesson('alg-22b', [p22b[0], p22b[1],
-      play('copias-raiz', 'Mete el coeficiente al radical', { rounds: [{ k: 3, n: 5 }, { k: 2, n: 7 }, { k: 4, n: 2 }, { k: 5, n: 3 }] },
-        '$k\\sqrt n$ son $k$ segmentos de $\\sqrt n$, y miden lo mismo que $\\sqrt{k^2 n}$: $3\\sqrt5 = \\sqrt{45}$, $2\\sqrt7 = \\sqrt{28}$, $4\\sqrt2 = \\sqrt{32}$ y $5\\sqrt3 = \\sqrt{75}$. Al revés, sacar del radical es encontrar ese cuadrado escondido.',
-        { hint: 'Para entrar a la raíz, el coeficiente entra elevado al cuadrado.' }),
-      play('racionaliza-uno', 'Racionaliza con un uno disfrazado', { rounds: [
-        { k: 6, n: 3, cards: [2, 3, -3, 6] }, { k: 5, n: 2, cards: [-2, 5, 2, 3] }, { k: 10, n: 5, cards: [5, 10, -5, 2] },
-      ] }, 'Multiplicar por $\\tfrac{\\sqrt n}{\\sqrt n}$ es multiplicar por 1, y abajo queda $\\sqrt n \\cdot \\sqrt n = n$: $\\tfrac{6}{\\sqrt3} = \\tfrac{6\\sqrt3}{3} = 2\\sqrt3$, $\\tfrac{5}{\\sqrt2} = \\tfrac{5\\sqrt2}{2}$, $\\tfrac{10}{\\sqrt5} = 2\\sqrt5$. Otro uno deja la raíz abajo.',
-        { hint: '¿Qué hay que multiplicar por la raíz de abajo para que deje de ser raíz?' }),
-      p22b[2], p22b[3]]);
-
-    setExam('potencias', [
-      ['alg-21a', 'Bajar un escalón divide entre la base: $b^0 = 1$ y $b^{-n} = \\tfrac{1}{b^n}$.',
-        play('escalera-potencias', 'Busca el exponente', { rounds: [{ base: 2, num: 1, den: 4 }, { base: 10, num: 1000, den: 1 }] }, '$2^{-2} = \\tfrac14$ y $10^3 = 1000$.', { hint: 'Cuenta escalones desde $b^1$.' })],
-      ['alg-21b', 'Al dividir potencias de la misma base se restan los exponentes.',
-        play('cancela-pisos', 'Cancela por parejas', { rounds: [{ a: 9, b: 4, v: 'z' }] }, '$\\tfrac{z^9}{z^4} = z^5$.', { hint: 'Cada pareja vale 1.' })],
-      ['alg-21b', 'Potencia de una potencia: se multiplican los exponentes.',
-        play('copias-potencia', 'Copia la caja', { rounds: [{ a: 2, total: 12, v: 'x' }] }, '$(x^2)^6 = x^{12}$.', { hint: 'Cada caja trae 2 factores.' })],
-      ['alg-22a', '$a^{m/n} = (\\sqrt[n]{a})^m$.',
-        play('fraccion-exponente', 'Raíz y potencia', { rounds: [{ a: 125, target: 25 }] }, '$125^{2/3} = 5^2 = 25$.', { hint: 'Saca primero la raíz.' })],
-      ['alg-22a', 'La raíz no se reparte en una suma.',
-        play('suma-raices', 'Arma el cuadrado', { rounds: [{ a: 64, b: 36 }] }, '$\\sqrt{100} = 10 \\ne 8 + 6$.', { hint: 'Suma las áreas.' })],
-      ['alg-22b', '$k\\sqrt n = \\sqrt{k^2 n}$.',
-        play('copias-raiz', 'Una sola raíz', { rounds: [{ k: 3, n: 7 }] }, '$3\\sqrt7 = \\sqrt{63}$.', { hint: 'El 3 entra como 9.' })],
-      ['alg-22b', 'Racionalizar es multiplicar por un uno que quita la raíz de abajo.',
-        play('racionaliza-uno', 'Quita la raíz de abajo', { rounds: [{ k: 4, n: 7, cards: [7, -7, 2] }] }, '$\\tfrac{4}{\\sqrt7} = \\tfrac{4\\sqrt7}{7}$.', { hint: 'La misma raíz arriba y abajo.' })],
-    ]);
-  }
-  // ───────── Mundo 5 · Sucesiones y Series ─────────
-  {
-    const s14 = ['pisa-huellas', 'escalera-aritmetica', 'cuenta-saltos', 'traza-progresion'].map(g => keep('alg-14', g));
-    setLesson('alg-14', [s14[0], s14[1],
-      play('goteo-tanque', 'El tanque que gotea: una progresión que baja', { rounds: [
-        { a1: 60, d: -4, target: 36 }, { a1: 90, d: -8, target: 34 }, { a1: 75, d: -6, target: 9 },
-      ] }, 'Con diferencia negativa la progresión baja: $a_n = a_1 + (n - 1)d$. $60 - 4(n - 1) = 36$ da $n - 1 = 6$: la medición 7. $90 - 8 \\cdot 7 = 34$: la 8. $75 - 6 \\cdot 11 = 9$: la 12.',
-        { hint: 'Calcula cuánto tiene que bajar y cuántas horas tarda en bajar eso; la medición es una más que las horas.' }),
-      s14[2],
-      play('poste-cerca', 'Los postes de la cerca: términos y saltos', { rounds: [
-        { L: 24, d: 3 }, { L: 50, d: 5 }, { L: 18, d: 2 }, { L: 36, d: 4 },
-      ] }, 'Entre el primer poste y el último hay un tramo menos que postes, igual que entre $a_1$ y $a_n$ hay $n - 1$ saltos: $24 \\div 3 = 8$ tramos, 9 postes; $50 \\div 5 = 10$ tramos, 11 postes; 9 tramos, 10 postes; 9 tramos, 10 postes.',
-        { hint: 'Cuenta primero los tramos que caben en la cerca; los postes son uno más, porque las dos puntas llevan poste.' }),
-      s14[3]]);
-
-    const s14b = ['dos-escaleras', 'parejas-gauss', 'suma-filas', 'encesta-suma'].map(g => keep('alg-14b', g));
-    setLesson('alg-14b', [s14b[0], s14b[1],
-      play('nivela-barras', 'Nivela las barras: la suma es n por el promedio', { rounds: [
-        { a1: 3, d: 2, n: 6 }, { a1: 2, d: 3, n: 5 }, { a1: 5, d: 4, n: 4 }, { a1: 1, d: 1, n: 8 },
-      ] }, 'En una progresión aritmética lo que sobra a un lado del promedio llena lo que falta al otro: todas las barras quedan a la altura $\\tfrac{a_1 + a_n}{2}$. Por eso $S_n = n \\cdot \\tfrac{a_1 + a_n}{2}$: $6 \\cdot 8 = 48$, $5 \\cdot 8 = 40$, $4 \\cdot 11 = 44$ y $8 \\cdot 4.5 = 36$.',
-        { hint: 'La línea queda justo entre la primera y la última barra: promedia esas dos alturas.' }),
-      s14b[2],
-      play('alcancia-semanas', 'La alcancía: ahorra un poco más cada semana', { rounds: [
-        { a1: 2, d: 1, goal: 27 }, { a1: 4, d: 4, goal: 40 }, { a1: 2, d: 2, goal: 56 }, { a1: 5, d: 2, goal: 60 },
-      ] }, 'El total es la suma de la progresión: $S_n = \\tfrac{n(a_1 + a_n)}{2}$. $2 + 3 + \\cdots + 7 = 27$ en 6 semanas; $4 + 8 + 12 + 16 = 40$ en 4; $2 + 4 + \\cdots + 14 = 56$ en 7; $5 + 7 + \\cdots + 15 = 60$ en 6.',
-        { hint: 'Ve sumando semana a semana, o usa n por el promedio de la primera y la última semana.' }),
-      s14b[3]]);
-
-    const s14c = ['rebota-pelota', 'rellena-medios', 'dobla-fichas'].map(g => keep('alg-14c', g));
-    setLesson('alg-14c', [s14c[0],
-      play('razon-terminos', 'Halla la razón con dos términos', { rounds: [
-        { i: 2, ai: 3, j: 5, aj: 81 }, { i: 1, ai: 64, j: 4, aj: 8 }, { i: 3, ai: 2, j: 5, aj: 50 }, { i: 1, ai: 5, j: 3, aj: 45 },
-      ] }, 'Entre $a_i$ y $a_j$ hay $j - i$ multiplicaciones por $r$: $r^{j - i} = \\tfrac{a_j}{a_i}$. $r^3 = 27$ da $r = 3$; $r^3 = \\tfrac18$ da $r = \\tfrac12$; $r^2 = 25$ da $r = 5$ (o $-5$); $r^2 = 9$ da $r = 3$ o $r = -3$: con un número par de pasos, el signo no se ve.',
-        { hint: 'Divide el término de adelante entre el de atrás y cuenta cuántas veces se multiplicó.' }),
-      s14c[1],
-      play('carrera-crecimiento', 'Sumar o multiplicar: ¿cuándo gana la geométrica?', { rounds: [
-        { a: 10, d: 5, g: 1, r: 2 }, { a: 20, d: 10, g: 2, r: 3 }, { a: 50, d: 20, g: 1, r: 3 },
-      ] }, 'La aritmética suma siempre lo mismo y la geométrica multiplica: al principio la primera va adelante, pero la segunda termina pasándola. $2^6 = 64 > 40$ en el término 7; $2 \\cdot 3^3 = 54 > 50$ en el 4; $3^5 = 243 > 150$ en el 6.',
-        { hint: 'Compara las dos barras puesto por puesto y busca la primera vez que la coral es más alta.' }),
-      play('cultivo-celulas', 'El cultivo: ¿qué generación tiene tantas células?', { rounds: [
-        { a1: 3, r: 2, target: 96 }, { a1: 1, r: 3, target: 243 }, { a1: 5, r: 4, target: 320 }, { a1: 2, r: 5, target: 250 },
-      ] }, '$a_n = a_1 \\cdot r^{n - 1}$: $3 \\cdot 2^5 = 96$ (generación 6), $3^5 = 243$ (6), $5 \\cdot 4^3 = 320$ (4) y $2 \\cdot 5^3 = 250$ (4).',
-        { hint: 'Divide la meta entre lo del comienzo y busca qué potencia de la razón da eso.' }),
-      s14c[2]]);
-
-    const s14d = ['resta-corrida', 'limite-serie', 'rana-zenon'].map(g => keep('alg-14d', g));
-    setLesson('alg-14d', [s14d[0],
-      play('torre-geometrica', 'Apila términos de una geométrica', { rounds: [
-        { a: 3, r: 2, target: 45 }, { a: 1, r: 3, target: 121 }, { a: 5, r: 2, target: 155 }, { a: 2, r: 4, target: 42 },
-      ] }, '$S_n = \\tfrac{a(r^n - 1)}{r - 1}$: $3 + 6 + 12 + 24 = 3(2^4 - 1) = 45$; $1 + 3 + 9 + 27 + 81 = \\tfrac{3^5 - 1}{2} = 121$; $5(2^5 - 1) = 155$; $\\tfrac{2(4^3 - 1)}{3} = 42$.',
-        { hint: 'Suma de a un bloque y mira cuánto falta; o usa la fórmula con varios n.' }),
-      s14d[1],
-      play('cuadrado-mitades', 'Pinta un cuadrado por capas que se achican', { rounds: [
-        { r: [1, 2], target: [15, 16] }, { r: [1, 3], target: [26, 27] }, { r: [1, 2], target: [63, 64] }, { r: [1, 4], target: [63, 64] },
-      ] }, 'Cada capa pinta una parte de lo que falta, así que lo que falta se multiplica por $r$ en cada capa: después de $n$ capas falta $r^n$ y está pintado $1 - r^n$. $1 - (\\tfrac12)^4 = \\tfrac{15}{16}$, $1 - (\\tfrac13)^3 = \\tfrac{26}{27}$, $1 - (\\tfrac12)^6 = \\tfrac{63}{64}$ y $1 - (\\tfrac14)^3 = \\tfrac{63}{64}$. Nunca se llena: la suma infinita es 1.',
-        { hint: 'Fíjate en lo que falta por pintar: ¿qué fracción queda después de cada capa?' }),
-      play('ajusta-razon', 'Elige la razón de la suma infinita', { rounds: [
-        { a: 6, S: 12 }, { a: 3, S: 12 }, { a: 8, S: 40 }, { a: 5, S: 4 },
-      ] }, 'Con $|r| < 1$ la suma infinita es $S = \\tfrac{a}{1 - r}$: $\\tfrac{6}{1 - 0.5} = 12$, $\\tfrac{3}{0.25} = 12$, $\\tfrac{8}{0.2} = 40$ y $\\tfrac{5}{1.25} = 4$ con $r = -0.25$. Con $r = 1$ o más los puntos se escapan: diverge.',
-        { hint: 'Despeja: $1 - r = \\tfrac{a}{S}$.' }),
-      s14d[2]]);
-
-    const s15 = ['arma-sigma', 'parte-sigma', 'maquina-sigma'].map(g => keep('alg-15', g));
-    setLesson('alg-15', [s15[0],
-      play('sigma-indices', 'Pon los límites de la sigma', { rounds: [
-        { f: '2k', vals: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20], lo: 2, hi: 6 },
-        { f: 'k^2', vals: [1, 4, 9, 16, 25, 36, 49, 64, 81, 100], lo: 3, hi: 7 },
-        { f: '(3k - 1)', vals: [2, 5, 8, 11, 14, 17, 20, 23, 26, 29], lo: 1, hi: 5 },
-        { f: '(k + 4)', vals: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14], lo: 4, hi: 9 },
-      ] }, 'El índice $k$ va del límite de abajo al de arriba, y cada valor de $k$ da un término: $4 + 6 + \\cdots + 12 = \\sum_{k=2}^{6} 2k$, $9 + 16 + \\cdots + 49 = \\sum_{k=3}^{7} k^2$, $2 + 5 + 8 + 11 + 14 = \\sum_{k=1}^{5}(3k - 1)$ y $8 + \\cdots + 13 = \\sum_{k=4}^{9}(k + 4)$.',
-        { hint: 'Busca en la fila qué k da el primer término de la suma y cuál da el último.' }),
-      s15[1],
-      play('cambia-indice', 'Corre el índice de la sigma', { rounds: [
-        { lo: 1, hi: 5, add: 2 }, { lo: 0, hi: 4, add: 3 }, { lo: 2, hi: 6, add: 1 }, { lo: 1, hi: 4, add: 5 },
-      ] }, 'Con $j = k + c$ los términos son los mismos y solo cambian los límites: $\\sum_{k=1}^{5}(k + 2) = \\sum_{j=3}^{7} j$, $\\sum_{k=0}^{4}(k + 3) = \\sum_{j=3}^{7} j$, $\\sum_{k=2}^{6}(k + 1) = \\sum_{j=3}^{7} j$ y $\\sum_{k=1}^{4}(k + 5) = \\sum_{j=6}^{9} j$.',
-        { hint: 'El primer término de arriba tiene que quedar sobre el primero de abajo.' }),
-      play('factorial-cajas', 'El factorial: ¿cuántos objetos en fila?', { rounds: [{ target: 120 }, { target: 24 }, { target: 720 }, { target: 6 }] },
-        'Para la primera casilla hay $n$ opciones, para la segunda $n - 1$, y así: $n! = n(n - 1)\\cdots 1$. $5! = 120$, $4! = 24$, $6! = 720$ y $3! = 6$.',
-        { hint: 'Multiplica las opciones de cada casilla: cada una tiene una menos que la anterior.' }),
-      s15[2]]);
-
-    setExam('progresiones', [
-      ['alg-14', 'En una progresión aritmética del primer término al n-ésimo hay $n - 1$ saltos.',
-        play('goteo-tanque', 'El tanque que gotea', { rounds: [{ a1: 40, d: -3, target: 16 }] }, '$40 - 3 \\cdot 8 = 16$: la medición 9.', { hint: 'Cuenta horas.' })],
-      ['alg-14', 'Entre el primer término y el n-ésimo hay n − 1 saltos.',
-        play('poste-cerca', 'Los postes de la cerca', { rounds: [{ L: 42, d: 6 }] }, '7 tramos, 8 postes.', { hint: 'Cuenta los tramos y suma uno.' })],
-      ['alg-14b', 'La suma de una progresión aritmética es n por el promedio de los extremos.',
-        play('nivela-barras', 'Nivela las barras', { rounds: [{ a1: 4, d: 3, n: 5 }] }, 'Promedio 10: $S = 50$.', { hint: 'Promedia la primera y la última.' })],
-      ['alg-14b', '$S_n = \\tfrac{n(a_1 + a_n)}{2}$.',
-        play('alcancia-semanas', 'La alcancía', { rounds: [{ a1: 3, d: 3, goal: 45 }] }, '$3 + 6 + 9 + 12 + 15 = 45$.', { hint: 'Suma semana a semana.' })],
-      ['alg-14c', '$r^{j - i} = \\tfrac{a_j}{a_i}$.',
-        play('razon-terminos', 'Halla la razón', { rounds: [{ i: 1, ai: 2, j: 4, aj: 54 }] }, '$r^3 = 27$: $r = 3$.', { hint: 'Divide y cuenta pasos.' })],
-      ['alg-14c', '$a_n = a_1 r^{n - 1}$.',
-        play('cultivo-celulas', 'El cultivo', { rounds: [{ a1: 4, r: 3, target: 324 }] }, '$4 \\cdot 3^4 = 324$: generación 5.', { hint: 'Divide entre 4.' })],
-      ['alg-14d', '$S_n = \\tfrac{a(r^n - 1)}{r - 1}$.',
-        play('torre-geometrica', 'Apila términos', { rounds: [{ a: 4, r: 3, target: 52 }] }, '$4 + 12 + 36 = 52$.', { hint: 'Suma bloque a bloque.' })],
-      ['alg-14d', 'Con $|r| < 1$ la suma infinita es $\\tfrac{a}{1 - r}$.',
-        play('ajusta-razon', 'Elige la razón', { rounds: [{ a: 9, S: 12 }] }, '$\\tfrac{9}{1 - 0.25} = 12$.', { hint: '$1 - r = a/S$.' })],
-      ['alg-15', 'En Σ el índice recorre de un límite a otro.',
-        play('sigma-indices', 'Pon los límites', { rounds: [{ f: '3k', vals: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30], lo: 2, hi: 5 }] }, '$6 + 9 + 12 + 15 = \\sum_{k=2}^{5} 3k$.', { hint: '¿Qué k da el 6?' })],
-      ['alg-15', '$n! = n(n - 1)\\cdots 1$ cuenta las filas posibles.',
-        play('factorial-cajas', 'El factorial', { rounds: [{ target: 5040 }] }, '$7! = 5040$.', { hint: 'Multiplica las opciones.' })],
-    ]);
-  }
-  // ───────── Mundo 6 · Álgebra de Polinomios ─────────
-  {
-    setLesson('alg-23a', [
-      play('bloques-polinomio', 'Arma y suma polinomios con bloques', { rounds: [
-        { mode: 'arma', target: [1, -2, 3] }, { mode: 'arma', target: [-2, 1, -1] }, { mode: 'suma', P: [1, 2, -1], Q: [1, -3, 2] }, { mode: 'suma', P: [2, 0, 3], Q: [-1, 1, -3] },
-      ] }, 'Cada término es un tipo de bloque: los cuadrados son $x^2$, las barras $x$ y los cuadritos 1; el signo menos es el color rojo. Para sumar se juntan bloques del mismo tipo y un bloque con su opuesto se anula: $(x^2 + 2x - 1) + (x^2 - 3x + 2) = 2x^2 - x + 1$.',
-        { hint: 'Cuenta cuántos bloques de cada tipo pide el polinomio y de qué color. Al sumar, las barras rojas se comen las azules.' }),
-      play('reduce-semejantes', 'Reduce: anula los bloques opuestos', { rounds: [
-        { tiles: [[2, 0], [1, 0], [1, 1], [0, 0], [1, 0], [0, 1], [0, 1]] },
-        { tiles: [[2, 0], [2, 1], [2, 0], [1, 1], [1, 1], [0, 0], [0, 0], [0, 1]] },
-        { tiles: [[1, 0], [1, 0], [1, 1], [1, 1], [1, 1], [0, 1], [0, 0]] },
-      ] }, 'Solo se anulan piezas iguales de signo contrario: una barra con una barra roja, un cuadrito con uno rojo. Un cuadrado y una barra no son semejantes. Quedan $x^2 + x - 1$, $x^2 - 2x + 1$ y $-x$.',
-        { hint: 'Busca parejas del mismo tipo y distinto color. Lo que queda sin pareja es el resultado.' }),
-      play('resta-voltea', 'Resta polinomios volteando los bloques', { rounds: [
-        { P: [1, 3, 2], Q: [0, 1, 4] }, { P: [2, -1, 0], Q: [1, -2, 3] }, { P: [0, 2, 5], Q: [1, 2, -1] },
-      ] }, 'Restar Q es sumar su opuesto: se voltean todos sus bloques. $(x^2 + 3x + 2) - (x + 4) = x^2 + 2x - 2$; $(2x^2 - x) - (x^2 - 2x + 3) = x^2 + x - 3$; $(2x + 5) - (x^2 + 2x - 1) = -x^2 + 6$.',
-        { hint: 'Antes de llevar un bloque de Q a la mesa, pásalo por el volteador: restar es sumar el opuesto.' }),
-      play('evalua-polinomio', 'Evalúa el polinomio con bloques', { rounds: [
-        { c: [1, -2, 3], target: 11 }, { c: [2, 1, -1], target: 14 }, { c: [-1, 0, 10], target: 1 }, { c: [1, 3, 0], target: -2 },
-      ] }, 'Evaluar es poner el número en lugar de $x$, con paréntesis: $4^2 - 2\\cdot4 + 3 = 11$ (también sirve $x = -2$). $2(-3)^2 + (-3) - 1 = 14$. $-3^2$ no es lo mismo que $-(3)^2$… y aquí $-(\\pm3)^2 + 10 = 1$. $(-1)^2 + 3(-1) = -2$.',
-        { hint: 'Mueve x y mira cómo cambia cada término. El cuadrado de un negativo es positivo.' }),
-      play('llena-rectangulo', 'Multiplica llenando el rectángulo', { rounds: [{ a: 2, b: 3 }, { a: 3, b: 4 }, { a: 2, b: 5 }, { a: 1, b: 3 }] },
-        'Multiplicar es llenar el rectángulo de lados $(x + a)$ y $(x + b)$: un cuadrado $x^2$, $a + b$ barras y $a\\cdot b$ cuadritos. $(x + 2)(x + 3) = x^2 + 5x + 6$; $(x + 3)(x + 4) = x^2 + 7x + 12$; $(x + 2)(x + 5) = x^2 + 7x + 10$; $(x + 1)(x + 3) = x^2 + 4x + 3$.',
-        { hint: 'Mira el marco: la esquina grande es x por x, las franjas son x por 1 y la esquina chica es a por b.' }),
-      keep('alg-23a', 'torre-grados')]);
-
-    setLesson('alg-3', [keep('alg-3', 'bloques-area'),
-      play('parte-cuadrado', 'El cuadrado de un binomio, de cabeza', { rounds: [{ N: 23 }, { N: 41 }, { N: 58 }, { N: 72 }] },
-        '$(a + b)^2 = a^2 + 2ab + b^2$: el cuadrado se parte en $a^2$, dos rectángulos $ab$ y $b^2$. Con un corte en la decena se calcula de cabeza: $23^2 = 400 + 120 + 9 = 529$, $41^2 = 1600 + 80 + 1 = 1681$, $58^2 = 2500 + 800 + 64 = 3364$, $72^2 = 4900 + 280 + 4 = 5184$.',
-        { hint: 'Corta el lado en la decena: los cuadrados y el rectángulo de la decena son fáciles de calcular.' }),
-      play('diferencia-cuadrados', 'Suma por diferencia: mueve la esquina', { rounds: [{ p: 32, q: 28 }, { p: 43, q: 37 }, { p: 55, q: 45 }, { p: 26, q: 14 }] },
-        '$(a + b)(a - b) = a^2 - b^2$: $a$ es el punto medio y $b$ la distancia a él. $32 \\cdot 28 = 30^2 - 2^2 = 896$; $43 \\cdot 37 = 40^2 - 3^2 = 1591$; $55 \\cdot 45 = 50^2 - 5^2 = 2475$; $26 \\cdot 14 = 20^2 - 6^2 = 364$.',
-        { hint: 'a queda justo en la mitad de los dos factores y b es cuánto se aleja cada uno de esa mitad.' }),
-      play('binomios-comun', 'Dos binomios con x: suma y producto', { rounds: [{ s: 7, p: 10 }, { s: 9, p: 20 }, { s: 6, p: 5 }, { s: 10, p: 21 }] },
-        'En $(x + a)(x + b)$ las barras son $a + b$ y los cuadritos $a\\cdot b$: $x^2 + 7x + 10 = (x + 2)(x + 5)$, $x^2 + 9x + 20 = (x + 4)(x + 5)$, $x^2 + 6x + 5 = (x + 1)(x + 5)$, $x^2 + 10x + 21 = (x + 3)(x + 7)$.',
-        { hint: 'Busca dos números que multiplicados den los cuadritos y sumados den las barras.' }),
-      play('marco-cuadro', 'El marco del cuadro', { rounds: [{ w: 1, area: 44 }, { w: 2, area: 64 }, { w: 3, area: 84 }, { w: 1, area: 20 }] },
-        'El marco es el cuadrado grande menos el cuadro: $(x + 2w)^2 - x^2 = 4wx + 4w^2$. Con $w = 1$: $4x + 4 = 44$, $x = 10$. Con $w = 2$: $8x + 16 = 64$, $x = 6$. Con $w = 3$: $12x + 36 = 84$, $x = 4$. Y $4x + 4 = 20$ da $x = 4$.',
-        { hint: 'Desarrolla el cuadrado grande: los $x^2$ se cancelan y queda algo que crece de a poco con x.' }),
-      keep('alg-3', 'arma-la-mesa')]);
-
-    setLesson('alg-24c', [
-      play('triangulo-pascal', 'Completa la fila del triángulo de Pascal', { rounds: [{ n: 3, extra: [2, 4] }, { n: 5, extra: [6, 8] }, { n: 6, extra: [12, 18] }] },
-        'Cada número es la suma de los dos de arriba: la fila 3 es $1, 3, 3, 1$; la 5, $1, 5, 10, 10, 5, 1$; la 6, $1, 6, 15, 20, 15, 6, 1$. Son los coeficientes de $(a + b)^n$.',
-        { hint: 'Para cada casilla vacía suma los dos números que tiene justo encima.' }),
-      play('elige-parentesis', '¿De cuántas maneras sale el término?', { rounds: [{ n: 3, k: 2 }, { n: 4, k: 1 }, { n: 5, k: 2 }] },
-        'Cada término sale de elegir a o b en cada paréntesis. $a b^2$ en $(a + b)^3$ sale de 3 maneras (bba, bab, abb); $a^3b$ en $(a + b)^4$, de 4; $a^3b^2$ en $(a + b)^5$, de 10. Ese número es el coeficiente: $\\binom{n}{k}$.',
-        { hint: 'Cambia una ficha a la vez de paréntesis para no repetir maneras. Piensa en qué paréntesis van las b.' }),
-      play('exponentes-binomio', 'Busca el término con la potencia pedida', { rounds: [{ n: 5, c: 2, p: 3 }, { n: 6, c: 1, p: 4 }, { n: 4, c: 3, p: 1 }, { n: 7, c: 1, p: 2 }] },
-        'En $(x + c)^n$ el término $k$ es $\\binom{n}{k} x^{n - k} c^k$: los exponentes de $x$ bajan y los de $c$ suben. $10 \\cdot 2^2 x^3 = 40x^3$; $15x^4$; $4 \\cdot 27x = 108x$; $21x^2$.',
-        { hint: 'El exponente de x más el del número siempre suman n.' }),
-      play('fila-potencia', 'Cada fila suma una potencia de 2', { rounds: [{ total: 32 }, { total: 8 }, { total: 128 }, { total: 1 }] },
-        'La fila $n$ cuenta todas las maneras de elegir a o b en $n$ paréntesis, que son $2^n$: $2^5 = 32$, $2^3 = 8$, $2^7 = 128$ y la fila 0, que es solo un 1, suma $2^0 = 1$.',
-        { hint: 'Mira cuánto suma cada fila al pasar a la siguiente: se duplica.' }),
-      play('once-potencias', 'Las potencias de 11 y Pascal', { rounds: [{ value: 1331 }, { value: 121 }, { value: 14641 }, { value: 161051 }] },
-        '$11^n = (10 + 1)^n$ y sus cifras son la fila $n$ de Pascal: $11^2 = 121$, $11^3 = 1331$, $11^4 = 14641$. En la fila 5 hay un 10, que se lleva: $1, 5, 10, 10, 5, 1$ da $161051 = 11^5$.',
-        { hint: 'Compara las cifras del número con las filas del triángulo.' }),
-      keep('alg-24c', 'camino-pascal')]);
-
-    setLesson('alg-24b', [
-      play('factor-comun-bloques', 'Factor común: reparte en filas iguales', { rounds: [{ p: 6, q: 9 }, { p: 4, q: 10 }, { p: 12, q: 18 }, { p: 5, q: 15 }] },
-        'Sacar factor común es acomodar los bloques en filas iguales: $6x + 9 = 3(2x + 3)$, $4x + 10 = 2(2x + 5)$, $12x + 18 = 6(2x + 3)$, $5x + 15 = 5(x + 3)$. El mayor número de filas que reparte justo es el máximo común divisor.',
-        { hint: 'Busca el número más grande que divide tanto a las barras como a los cuadritos.' }),
-      play('diferencia-esquina', 'Diferencia de cuadrados: quita una esquina', { rounds: [{ c: 9 }, { c: 25 }, { c: 36 }, { c: 4 }] },
-        'Si $c = b^2$, se quita una esquina de $b$ por $b$ y la tira se pasa abajo: $x^2 - 9 = (x + 3)(x - 3)$, $x^2 - 25 = (x + 5)(x - 5)$, $x^2 - 36 = (x + 6)(x - 6)$, $x^2 - 4 = (x + 2)(x - 2)$.',
-        { hint: '¿Qué número al cuadrado da lo que se resta?' }),
-      play('suma-producto', 'Factoriza con suma y producto', { rounds: [{ s: -1, p: -12 }, { s: 7, p: 12 }, { s: -8, p: 15 }, { s: 2, p: -15 }] },
-        '$x^2 + sx + p = (x + m)(x + n)$ con $m + n = s$ y $mn = p$: $x^2 - x - 12 = (x - 4)(x + 3)$, $x^2 + 7x + 12 = (x + 3)(x + 4)$, $x^2 - 8x + 15 = (x - 3)(x - 5)$, $x^2 + 2x - 15 = (x + 5)(x - 3)$.',
-        { hint: 'Si el producto es negativo, un número es positivo y el otro negativo; si es positivo, tienen el mismo signo que la suma.' }),
-      play('agrupa-terminos', 'Factoriza agrupando de a dos', { rounds: [
-        { terms: ['x^3', '2x^2', '3x', '6'], groups: { '0,1': ['x^2', 'x + 2'], '2,3': ['3', 'x + 2'], '0,2': ['x', 'x^2 + 3'], '1,3': ['2', 'x^2 + 3'] }, goods: [['0,1', '2,3'], ['0,2', '1,3']], result: '(x + 2)(x^2 + 3)' },
-        { terms: ['ax', 'ay', 'bx', 'by'], groups: { '0,1': ['a', 'x + y'], '2,3': ['b', 'x + y'], '0,2': ['x', 'a + b'], '1,3': ['y', 'a + b'] }, goods: [['0,1', '2,3'], ['0,2', '1,3']], result: '(a + b)(x + y)' },
-        { terms: ['2x^2', '6x', '5x', '15'], groups: { '0,1': ['2x', 'x + 3'], '2,3': ['5', 'x + 3'], '0,2': ['x', '2x + 5'], '1,3': ['3', '2x + 5'] }, goods: [['0,1', '2,3'], ['0,2', '1,3']], result: '(x + 3)(2x + 5)' },
-      ] }, 'Se agrupan de a dos para que cada grupo tenga un factor común y deje el mismo paréntesis: $x^2(x + 2) + 3(x + 2) = (x + 2)(x^2 + 3)$. Otra agrupación puede servir igual; otras no dejan el mismo paréntesis.',
-        { hint: 'En cada caja saca el factor común. Si los dos paréntesis salen iguales, ya está.' }),
-      keep('alg-24b', 'completa-cuadrado'), keep('alg-24b', 'reparte-barras')]);
-
-    setExam('polinomios', [
-      ['alg-23a', 'Un polinomio se arma con bloques de cada grado; el signo menos es el color contrario.',
-        play('bloques-polinomio', 'Arma el polinomio', { rounds: [{ mode: 'arma', target: [2, -3, 1] }] }, '$2x^2 - 3x + 1$: dos cuadrados, tres barras rojas y un cuadrito.', { hint: 'Cuenta los bloques de cada tipo y su color.' })],
-      ['alg-23a', 'Restar un polinomio es sumar su opuesto.',
-        play('resta-voltea', 'Resta volteando', { rounds: [{ P: [1, 0, 4], Q: [1, -2, 1] }] }, '$(x^2 + 4) - (x^2 - 2x + 1) = 2x + 3$.', { hint: 'Voltea todo Q antes de sumarlo.' })],
-      ['alg-3', '$(x + a)(x + b) = x^2 + (a + b)x + ab$.',
-        play('binomios-comun', 'Dos binomios con x', { rounds: [{ s: 8, p: 15 }] }, '$(x + 3)(x + 5)$.', { hint: 'Suma 8 y producto 15.' })],
-      ['alg-3', '$(a + b)(a - b) = a^2 - b^2$.',
-        play('diferencia-cuadrados', 'Mueve la esquina', { rounds: [{ p: 62, q: 58 }] }, '$62 \\cdot 58 = 60^2 - 2^2 = 3596$.', { hint: 'a está en la mitad.' })],
-      ['alg-24c', 'El término $k$ de $(x + c)^n$ es $\\binom{n}{k}x^{n - k}c^k$.',
-        play('exponentes-binomio', 'Busca el término', { rounds: [{ n: 6, c: 2, p: 4 }] }, '$\\binom62 x^4 \\cdot 2^2 = 60x^4$.', { hint: 'Los exponentes suman 6.' })],
-      ['alg-24c', 'Cada número del triángulo de Pascal suma los dos de arriba.',
-        play('triangulo-pascal', 'Completa la fila', { rounds: [{ n: 7, extra: [14, 28] }] }, 'Fila 7: $1, 7, 21, 35, 35, 21, 7, 1$.', { hint: 'Suma los dos de arriba.' })],
-      ['alg-24b', 'Factorizar un trinomio es buscar dos números con esa suma y ese producto.',
-        play('suma-producto', 'Factoriza', { rounds: [{ s: 2, p: -8 }] }, '$x^2 + 2x - 8 = (x + 4)(x - 2)$.', { hint: 'Producto negativo: signos distintos.' })],
-      ['alg-24b', '$x^2 - b^2 = (x + b)(x - b)$.',
-        play('diferencia-esquina', 'Quita una esquina', { rounds: [{ c: 49 }] }, '$x^2 - 49 = (x + 7)(x - 7)$.', { hint: '¿Qué número al cuadrado da 49?' })],
-    ]);
-  }
-  // ───────── Mundo 7 · Parábolas y Complejos ─────────
-  {
-    setLesson('alg-23c', [
-      play('plano-complejo', 'Ubica cada complejo en su plano', { rounds: [{ a: -1, b: 4 }, { a: 3, b: -2 }, { a: -2, b: -3 }, { a: 0, b: 4 }] },
-        'El complejo $a + bi$ es el punto que está $a$ a lo ancho y $b$ a lo alto: $-1 + 4i$ va a la izquierda y arriba; $3 - 2i$, a la derecha y abajo. $4i$ no tiene parte real: vive en el eje vertical.',
-        { hint: 'La parte real se mide a lo ancho (eje horizontal) y la imaginaria a lo alto.' }),
-      play('vueltas-i', 'Las potencias de i dan cuartos de vuelta', { rounds: [{ n: 7 }, { n: 10 }, { n: 16 }, { n: 11 }] },
-        'Multiplicar por $i$ es un cuarto de vuelta y cuatro cuartos vuelven al 1, así que solo importa el residuo de dividir entre 4: $i^7 = i^3 = -i$, $i^{10} = i^2 = -1$, $i^{16} = 1$, $i^{11} = -i$.',
-        { hint: 'Quita todas las vueltas completas (de 4 en 4) y mira cuántos cuartos sobran.' }),
-      play('suma-complejos', 'Suma complejos flecha tras flecha', { rounds: [
-        { z1: [2, 1], target: [5, -1] }, { z1: [-3, 2], target: [1, 4] }, { z1: [1, -4], target: [-2, -1] },
-      ] }, 'Se suma real con real e imaginaria con imaginaria: $z_2 = \\text{meta} - z_1$. $(5 - i) - (2 + i) = 3 - 2i$; $(1 + 4i) - (-3 + 2i) = 4 + 2i$; $(-2 - i) - (1 - 4i) = -3 + 3i$.',
-        { hint: 'Cuenta cuánto le falta a la punta de z₁ para llegar a la estrella, a lo ancho y a lo alto.' }),
-      play('conjugado-espejo', 'El conjugado es el reflejo en el eje real', { rounds: [{ a: 2, b: 5 }, { a: -3, b: 1 }, { a: 4, b: -2 }] },
-        'El conjugado cambia el signo de la parte imaginaria: es el reflejo en el eje real. Y $z \\cdot \\bar z = a^2 + b^2$ siempre es real: $(2 + 5i)(2 - 5i) = 29$, $(-3 + i)(-3 - i) = 10$, $(4 - 2i)(4 + 2i) = 20$.',
-        { hint: 'La parte real no cambia; la imaginaria queda igual de lejos del eje, del otro lado.' }),
-      play('modulo-circulo', 'El módulo es la distancia al origen', { rounds: [{ a: 6, b: 8 }, { a: 5, b: 12 }, { a: -8, b: 6 }, { a: 0, b: -7 }] },
-        '$|a + bi| = \\sqrt{a^2 + b^2}$, por Pitágoras con catetos $|a|$ y $|b|$: $|6 + 8i| = 10$, $|5 + 12i| = 13$, $|-8 + 6i| = 10$, $|-7i| = 7$.',
-        { hint: 'Arma el triángulo con la parte real y la imaginaria como catetos: el módulo es la hipotenusa.' }),
-      keep('alg-23c', 'gira-complejos')]);
-
-    setLesson('alg-1', [
-      play('despeja-x', 'Despeja x aplicando lo mismo a los dos lados', { rounds: [
-        { a: 4, b: -5, c: 23, cards: [['+', 5], ['+', -5], ['×', 0.25], ['×', 4]] },
-        { a: 3, b: 7, c: -2, cards: [['+', -7], ['+', 7], ['×', 1 / 3], ['×', 3]] },
-        { a: 5, div: true, b: 2, c: 6, cards: [['+', -2], ['+', 2], ['×', 5], ['×', 0.2]] },
-        { a: -2, b: 3, c: 11, cards: [['+', -3], ['×', -0.5], ['×', 0.5], ['+', 3]] },
-      ] }, 'Se deshace primero lo que se sumó y luego lo que multiplica, con la misma operación a los dos lados: $4x - 5 = 23 \\Rightarrow 4x = 28 \\Rightarrow x = 7$; $3x = -9$, $x = -3$; $\\tfrac{x}{5} = 4$, $x = 20$; $-2x = 8$, $x = -4$.',
-        { hint: 'Primero quita el número que se suma o resta; después lo que multiplica a x, multiplicando por su recíproco.' }),
-      play('encuentro-caminantes', '¿Cuándo se encuentran?', { rounds: [
-        { A: [60, 0], B: [40, 300], max: 20 }, { A: [80, 100], B: [50, 400], max: 14 }, { A: [90, 0], B: [60, 240], max: 12 },
-      ] }, 'Se encuentran cuando sus posiciones son iguales: $60t = 40t + 300$ da $20t = 300$, $t = 15$; $80t + 100 = 50t + 400$ da $t = 10$; $90t = 60t + 240$ da $t = 8$.',
-        { hint: 'El de atrás descuenta cada minuto la diferencia de velocidades. ¿Cuántos minutos tarda en descontar la ventaja?' }),
-      play('consecutivos', 'Números seguidos que suman', { rounds: [{ k: 3, d: 1, S: 72 }, { k: 4, d: 1, S: 90 }, { k: 3, d: 2, S: 51 }, { k: 5, d: 1, S: 115 }] },
-        'Si el primero es $x$, los siguientes son $x + 1$, $x + 2$…: $3x + 3 = 72$ da $x = 23$; $4x + 6 = 90$ da $x = 21$; de dos en dos, $3x + 6 = 51$ da $x = 15$; $5x + 10 = 115$ da $x = 21$.',
-        { hint: 'Escribe todos con x: el primero es x y cada uno suma lo mismo al anterior. Junta las x y los números.' }),
-      play('sin-o-infinitas', 'Ninguna o infinitas soluciones', { rounds: [
-        { a: 2, b: 3, c: 2, want: 'infinitas' }, { a: 3, b: -1, c: 3, want: 'ninguna' }, { a: -2, b: 5, c: -2, want: 'infinitas' }, { a: 4, b: 0, c: 4, want: 'ninguna' },
-      ] }, 'Con la misma $x$ a los dos lados, al restar se va la $x$. Si quedan iguales ($0 = 0$) toda $x$ sirve: las rectas son la misma. Si quedan distintas ($3 = 5$) ninguna sirve: las rectas son paralelas.',
-        { hint: 'Resta lo mismo a los dos lados: ¿queda una igualdad cierta o una falsa?' }),
-      play('perimetro-x', 'El rectángulo de perímetro dado', { rounds: [{ m: 3, P: 26 }, { k: 2, P: 36 }, { m: 5, P: 50 }, { k: 3, P: 48 }] },
-        'El perímetro es dos veces ancho más largo: $2(x + x + 3) = 26$ da $4x + 6 = 26$, $x = 5$; $2(x + 2x) = 36$ da $x = 6$; $2(2x + 5) = 50$ da $x = 10$; $2(x + 3x) = 48$ da $x = 6$.',
-        { hint: 'Escribe el largo con x y suma los cuatro lados.' }),
-      keep('alg-1', 'balanza-cajas')]);
-
-    setLesson('alg-4a', [keep('alg-4a', 'mueve-parabola'),
-      play('simetria-parabola', 'Encuentra el eje de simetría', { rounds: [
-        { a: 1, h: 2, k: -3, x1: -1 }, { a: -1, h: -1, k: 4, x1: 1 }, { a: 0.5, h: 0.5, k: -2, x1: 3 }, { a: 2, h: -2, k: 1, x1: -3 },
-      ] }, 'Dos puntos de la parábola a la misma altura están a igual distancia del eje: el eje pasa por el punto medio. Entre $-1$ y $5$ el medio es 2; entre 1 y $-3$, $-1$; entre 3 y $-2$, $0.5$; entre $-3$ y $-1$, $-2$.',
-        { hint: 'Suma las dos x y divide entre 2.' }),
-      play('abertura-a', 'Ajusta la abertura de la parábola', { rounds: [
-        { h: 1, k: -2, pt: [3, 6] }, { h: -2, k: 5, pt: [0, 1] }, { h: 0, k: -4, pt: [4, 0] }, { h: 2, k: 3, pt: [4, 1] },
-      ] }, 'Con el vértice fijo, $a$ se halla con un punto: $a \\cdot 2^2 - 2 = 6$ da $a = 2$; $a \\cdot 2^2 + 5 = 1$ da $a = -1$; $16a - 4 = 0$ da $a = \\tfrac14$; $4a + 3 = 1$ da $a = -\\tfrac12$.',
-        { hint: 'Si el punto está más abajo que el vértice, a es negativo. Cuenta cuánto sube o baja desde el vértice y a qué distancia horizontal.' }),
-      play('forma-canonica', 'Pasa a la forma canónica', { rounds: [{ b: -4, c: 1 }, { b: 6, c: 5 }, { b: 2, c: -3 }, { b: -6, c: 8 }] },
-        'Se completa el cuadrado: $x^2 - 4x + 1 = (x - 2)^2 - 3$, $x^2 + 6x + 5 = (x + 3)^2 - 4$, $x^2 + 2x - 3 = (x + 1)^2 - 4$, $x^2 - 6x + 8 = (x - 3)^2 - 1$. El vértice queda a la vista: $h = -\\tfrac{b}{2}$.',
-        { hint: 'h es la mitad del número que acompaña a x, con el signo cambiado. Para k, mira qué le falta o le sobra al cuadrado.' }),
-      play('ingreso-maximo', 'El precio del mayor ingreso', { rounds: [{ base: 40, drop: 2 }, { base: 60, drop: 3 }, { base: 30, drop: 1 }, { base: 48, drop: 4 }] },
-        'El ingreso es precio por ventas, $I = p(b - dp)$: una parábola que abre hacia abajo con ceros en $0$ y en $\\tfrac{b}{d}$. Su vértice está en la mitad: $p = 10$ (ingreso 200), $p = 10$ (300), $p = 15$ (225) y $p = 6$ (144). Subir más el precio hace vender tan poco que el ingreso baja.',
-        { hint: 'El ingreso vale cero si el precio es 0 y también si ya no se vende nada. El mejor precio está a medio camino.' }),
-      keep('alg-4a', 'apunta-chorro')]);
-
-    setLesson('alg-4', [keep('alg-4', 'raices-imanes'),
-      play('producto-cero', 'Si un producto es cero, algún factor es cero', { rounds: [{ p: 3, q: -2 }, { p: -4, q: -1 }, { p: 5, q: 0 }, { p: 2, q: 2 }] },
-        'Un producto vale cero solo si algún factor vale cero: $(x - 3)(x + 2) = 0$ da $x = 3$ o $x = -2$. Si un factor es $x$ solo, una raíz es 0. Y $(x - 2)^2 = 0$ tiene una raíz doble: $x = 2$ dos veces.',
-        { hint: 'Busca para qué x cada paréntesis vale cero: el signo dentro del paréntesis es el contrario de la raíz.' }),
-      play('discriminante-traslada', '¿Cuántas veces corta el eje?', { rounds: [{ b: 4, want: 1 }, { b: -6, want: 0 }, { b: 2, want: 2 }, { b: -4, want: 1 }] },
-        'Subir la parábola cambia $\\Delta = b^2 - 4c$: si es positivo hay dos cortes, si es cero toca una vez y si es negativo no corta. Con $b = 4$, toca cuando $c = 4$; con $b = -6$, no corta si $c > 9$; con $b = 2$, corta dos veces si $c < 1$.',
-        { hint: 'Calcula para qué c el discriminante vale cero; arriba de eso no corta y abajo corta dos veces.' }),
-      play('raices-simetricas', 'Las raíces a los dos lados del eje', { rounds: [{ a: 1, b: -2, c: -8 }, { a: 1, b: 4, c: -5 }, { a: 2, b: -4, c: -6 }, { a: -1, b: 2, c: 3 }] },
-        'La fórmula general es $x = h \\pm d$ con $h = -\\tfrac{b}{2a}$ y $d = \\tfrac{\\sqrt{\\Delta}}{2|a|}$: $1 \\pm 3$; $-2 \\pm 3$; $1 \\pm \\tfrac{\\sqrt{64}}{4} = 1 \\pm 2$; $1 \\pm \\tfrac{\\sqrt{16}}{2} = 1 \\pm 2$.',
-        { hint: 'Las dos raíces están a la misma distancia del eje. Calcula el discriminante y divide su raíz entre 2a.' }),
-      play('area-ecuacion', 'El terreno de área dada', { rounds: [{ m: 3, area: 40 }, { m: 2, area: 63 }, { m: 5, area: 84 }, { m: 4, area: 96 }] },
-        '$x(x + 3) = 40$ es $x^2 + 3x - 40 = 0 = (x + 8)(x - 5)$: sirve $x = 5$; la raíz $-8$ no es una medida. Igual $x = 7$ ($7\\cdot9 = 63$), $x = 7$ ($7 \\cdot 12 = 84$) y $x = 8$ ($8 \\cdot 12 = 96$).',
-        { hint: 'Prueba anchos y multiplica por el largo; o factoriza la ecuación y quédate con la raíz positiva.' }),
-      keep('alg-4', 'donde-cae')]);
-
-    setExam('cuadraticas', [
-      ['alg-23c', 'Los complejos se suman parte por parte: es poner una flecha después de la otra.',
-        play('suma-complejos', 'Suma complejos', { rounds: [{ z1: [-1, 3], target: [2, 1] }] }, '$z_2 = 3 - 2i$.', { hint: 'Meta menos z₁.' })],
-      ['alg-23c', '$|a + bi| = \\sqrt{a^2 + b^2}$.',
-        play('modulo-circulo', 'El módulo', { rounds: [{ a: 9, b: 12 }] }, '$\\sqrt{81 + 144} = 15$.', { hint: 'Catetos 9 y 12.' })],
-      ['alg-1', 'Para despejar se aplica la misma operación a los dos lados.',
-        play('despeja-x', 'Despeja x', { rounds: [{ a: 6, b: -4, c: 20, cards: [['+', 4], ['+', -4], ['×', 1 / 6], ['×', 6]] }] }, '$6x = 24$, $x = 4$.', { hint: 'Primero el −4.' })],
-      ['alg-1', 'Plantear es escribir lo desconocido con una letra.',
-        play('consecutivos', 'Números seguidos', { rounds: [{ k: 3, d: 1, S: 48 }] }, '$3x + 3 = 48$: 15, 16 y 17.', { hint: 'x, x + 1 y x + 2.' })],
-      ['alg-4a', 'Completar el cuadrado deja el vértice a la vista.',
-        play('forma-canonica', 'Forma canónica', { rounds: [{ b: -8, c: 10 }] }, '$(x - 4)^2 - 6$.', { hint: 'h es la mitad de −8 cambiada de signo.' })],
-      ['alg-4a', 'El eje de la parábola pasa por el punto medio de dos puntos a la misma altura.',
-        play('simetria-parabola', 'El eje de simetría', { rounds: [{ a: 1, h: -3, k: -5, x1: 0 }] }, 'Entre 0 y −6: $x = -3$.', { hint: 'Promedia las x.' })],
-      ['alg-4', 'Si un producto vale cero, algún factor vale cero.',
-        play('producto-cero', 'Producto cero', { rounds: [{ p: -3, q: 6 }] }, '$x = -3$ o $x = 6$.', { hint: 'Cada paréntesis por separado.' })],
-      ['alg-4', 'El discriminante cuenta los cortes con el eje.',
-        play('discriminante-traslada', '¿Cuántos cortes?', { rounds: [{ b: -2, want: 1 }] }, 'Toca una vez con $c = 1$.', { hint: '$\\Delta = 0$.' })],
-    ]);
-  }
-  // ───────── Mundo 8 · Raíces de Polinomios ─────────
-  {
-    setLesson('alg-23b', [
-      play('bolsas-residuo', 'Empaca y mira lo que sobra', { rounds: [{ N: 53, d: 6 }, { N: 40, d: 7 }, { N: 62, d: 9 }, { N: 35, d: 5 }] },
-        'Dividir es empacar: $53 = 6 \\cdot 8 + 5$, $40 = 7 \\cdot 5 + 5$, $62 = 9 \\cdot 6 + 8$ y $35 = 5 \\cdot 7 + 0$. El residuo siempre es menor que el divisor; si alcanza para otra bolsa, se empaca. Con polinomios pasa igual: el residuo tiene grado menor que el divisor.',
-        { hint: 'Llena bolsas mientras alcance para una completa. Lo que queda suelto, si es menos que una bolsa, es el residuo.' }),
-      play('grado-cociente', 'Los grados en la división', { rounds: [{ n: 5, m: 2 }, { n: 4, m: 1 }, { n: 3, m: 1 }, { n: 6, m: 4 }] },
-        'Si $P = D \\cdot Q + R$, al multiplicar $D \\cdot Q$ se suman los grados: el grado de $Q$ es el de $P$ menos el de $D$. Grado 5 entre grado 2 da cociente de grado 3; 4 entre 1, grado 3; 3 entre 1, grado 2; 6 entre 4, grado 2.',
-        { hint: 'Al multiplicar dos polinomios, el término de mayor grado sale de multiplicar los dos de mayor grado: los exponentes se suman.' }),
-      play('lado-faltante', 'Divide buscando el lado que falta', { rounds: [{ a: 2, s: 7, p: 13 }, { a: 3, s: 5, p: 6 }, { a: 1, s: 6, p: 8 }, { a: 4, s: 7, p: 15 }] },
-        'Dividir entre $x + a$ es armar un rectángulo con ese lado: el otro lado es el cociente y lo que no cabe, el residuo. $x^2 + 7x + 13 = (x + 2)(x + 5) + 3$; $x^2 + 5x + 6 = (x + 3)(x + 2)$, exacta; $x^2 + 6x + 8 = (x + 1)(x + 5) + 3$; $x^2 + 7x + 15 = (x + 4)(x + 3) + 3$.',
-        { hint: 'Las barras deben cuadrar: a + b tiene que ser el número de barras. Después mira cuántos cuadritos sobran.' }),
-      play('completa-identidad', 'La prueba de la división', { rounds: [
-        { P: [1, 5, 9], d: 2, Q: [1, 3] }, { P: [1, 1, -4], d: -3, Q: [1, 4] }, { P: [2, 7, 10], d: 1, Q: [2, 5] }, { P: [1, -6, 7], d: -2, Q: [1, -4] },
-      ] }, 'Dividendo = divisor · cociente + residuo: $(x + 2)(x + 3) = x^2 + 5x + 6$, así que el residuo es $9 - 6 = 3$. Igual: $8$, $5$ y $-1$.',
-        { hint: 'Multiplica el divisor por el cociente y compara con el dividendo: lo que le falta es el residuo.' }),
-      play('iguala-coeficientes', 'Polinomios iguales, coeficientes iguales', { rounds: [
-        { c: 2, P: [1, -3, -4, 12] }, { c: -1, P: [1, 4, 5, 2] }, { c: 3, P: [1, -1, -5, -3] }, { c: -2, P: [1, 2, -3, -6] },
-      ] }, 'Dos polinomios son iguales si tienen los mismos coeficientes. Al desarrollar $(x - c)(x^2 + ax + b)$ sale $x^3 + (a - c)x^2 + (b - ca)x - cb$: se iguala término a término. $(x - 2)(x^2 - x - 6)$, $(x + 1)(x^2 + 3x + 2)$, $(x - 3)(x^2 + 2x + 1)$, $(x + 2)(x^2 - 3)$.',
-        { hint: 'Empieza por el coeficiente de x²: solo depende de a. Luego busca b con el de x.' }),
-      keep('alg-23b', 'empaca-filas')]);
-
-    setLesson('alg-92', [keep('alg-92', 'division-sintetica'),
-      play('signo-divisor', 'El residuo es P(c): ojo con el signo', { rounds: [
-        { P: [1, 0, -3, 2], c: -2 }, { P: [2, -1, 0, 5], c: 1 }, { P: [1, 2, -5], c: 3 }, { P: [1, 0, 1], c: -3 },
-      ] }, 'Al dividir entre $x - c$ el residuo es $P(c)$, y $x + 2$ es $x - (-2)$: se evalúa en $-2$. $P(-2) = -8 + 6 + 2 = 0$ (división exacta); $P(1) = 6$; $P(3) = 10$; $P(-3) = 10$.',
-        { hint: 'El número que va en lugar de x es el que anula el divisor: si el divisor es x + 3, es −3.' }),
-      play('llena-sintetica', 'Completa la división sintética', { rounds: [
-        { coef: [1, -4, 1, 6], c: 3, extra: [2, -6] }, { coef: [2, 3, -5, 1], c: -2, extra: [4, 5] }, { coef: [1, 0, -7, 6], c: 2, extra: [-1, 5] },
-      ] }, 'Se baja el primer coeficiente; luego se multiplica por $c$ y se suma en la columna siguiente. Entre $x - 3$: $1, -1, -2, 0$ (exacta). Entre $x + 2$: $2, -1, -3, 7$ (residuo 7). Entre $x - 2$: $1, 2, -3, 0$.',
-        { hint: 'Cada número de abajo es el de arriba más c por el de abajo de la columna anterior.' }),
-      play('factor-k', 'Ajusta k para que haya un factor', { rounds: [
-        { P: [1, null, -4, 4], c: 2 }, { P: [1, 3, null, 6], c: -1 }, { P: [1, null, -6], c: 2 },
-      ] }, 'Por el teorema del factor, $x - c$ es factor si $P(c) = 0$: $8 + 4k - 8 + 4 = 0$ da $k = -1$; $-1 + 3 - k + 6 = 0$ da $k = 8$; $4 + 2k - 6 = 0$ da $k = 1$.',
-        { hint: 'Evalúa el polinomio en c con k como letra e iguala a cero.' }),
-      play('arma-factores', 'De los ceros a los factores', { rounds: [
-        { roots: [-2, 1, 3], chips: [-3, -2, -1, 1, 2, 3] }, { roots: [0, 4], chips: [-4, 0, 2, 4] }, { roots: [-3, -1, 2], chips: [-3, -2, -1, 1, 2, 3] },
-      ] }, 'Si $c$ es un cero, $x - c$ es un factor: el número dentro del factor tiene el signo contrario al cero. Ceros $-2, 1, 3$: $(x + 2)(x - 1)(x - 3)$. Un cero en 0 da el factor $x$.',
-        { hint: 'En cada casilla pon el número que hace cero ese paréntesis: es el cero de la gráfica.' }),
-      keep('alg-92', 'sondea-niebla')]);
-
-    setLesson('alg-93', [
-      play('tramo-signo', 'El signo del polinomio en cada tramo', { rounds: [
-        { zeros: [-2, 3], want: -1 }, { zeros: [-1, 1, 4], want: 1 }, { zeros: [0, 2], want: 1, a: -1 }, { zeros: [-3, 2], want: 1 },
-      ] }, 'Entre dos ceros seguidos el polinomio no cambia de signo, y en un cero simple cambia. Cada factor $x - c$ es negativo a la izquierda de $c$ y positivo a la derecha; el signo del producto sale de contar los negativos.',
-        { hint: 'Mira cuántos factores son negativos en el tramo: si son pares, el producto es positivo.' }),
-      play('multiplicidad', 'Cruza o rebota: la multiplicidad', { rounds: [
-        { zeros: [-3, 1], want: ['cruza', 'rebota'], deg: 3 }, { zeros: [-2, 1], want: ['rebota', 'cruza'], deg: 5 }, { zeros: [0, 3], want: ['cruza', 'cruza'], deg: 4 }, { zeros: [-1, 2], want: ['rebota', 'rebota'], deg: 4 },
-      ] }, 'Con exponente impar la gráfica cruza el eje; con exponente par, lo toca y se devuelve. El grado es la suma de los exponentes: $(x + 3)(x - 1)^2$ tiene grado 3; $(x + 2)^2(x - 1)^3$, grado 5; $x(x - 3)^3$ o $x^3(x - 3)$, grado 4; $(x + 1)^2(x - 2)^2$, grado 4.',
-        { hint: 'Elige primero exponentes con la paridad correcta y luego ajústalos para que sumen el grado.' }),
-      play('prueba-candidatos', 'Prueba los candidatos a cero', { rounds: [
-        { P: [1, 0, -7, 6], cands: [-6, -3, -2, -1, 1, 2, 3, 6] }, { P: [1, 2, -1, -2], cands: [-2, -1, 1, 2] }, { P: [1, -1, -4, 4], cands: [-4, -2, -1, 1, 2, 4] },
-      ] }, 'Un cero entero debe dividir al término independiente. $x^3 - 7x + 6$ tiene ceros $1, 2, -3$; $x^3 + 2x^2 - x - 2$, ceros $-2, -1, 1$; $x^3 - x^2 - 4x + 4$, ceros $1, 2, -2$.',
-        { hint: 'Prueba cada candidato: si P(c) da cero, es un cero. Un cúbico tiene a lo más tres.' }),
-      play('arma-ceros', 'Pon los ceros con su multiplicidad', { rounds: [
-        { zeros: [[-2, 1], [1, 2]] }, { zeros: [[-1, 2], [3, 1]] }, { zeros: [[0, 1], [2, 1], [-3, 1]] },
-      ] }, 'Un polinomio de grado $n$ tiene $n$ ceros contando los repetidos: donde la gráfica rebota hay un cero doble. $(x + 2)(x - 1)^2$; $(x + 1)^2(x - 3)$; $x(x - 2)(x + 3)$.',
-        { hint: 'Donde la curva cruza el eje pon un cero; donde lo toca y se devuelve, pon dos en el mismo lugar.' }),
-      play('factoriza-cubica', 'Del cúbico a la parábola', { rounds: [
-        { P: [1, -1, -4, 4], c: 1 }, { P: [1, 0, 0, -8], c: 2 }, { P: [1, -1, 1, -1], c: 1 }, { P: [1, 4, 1, -6], c: 1 },
-      ] }, 'Con un cero $c$ se divide entre $x - c$ y queda una parábola. $x^3 - 8 = (x - 2)(x^2 + 2x + 4)$, cuyos otros ceros son complejos: $-1 \\pm \\sqrt3\\, i$. $x^3 - x^2 + x - 1 = (x - 1)(x^2 + 1)$ tiene $\\pm i$. Los ceros complejos llegan en parejas conjugadas.',
-        { hint: 'Prueba los divisores del último coeficiente hasta que P(c) dé cero.' }),
-      keep('alg-93', 'cruza-o-rebota')]);
-
-    setExam('grado-superior', [
-      ['alg-23b', 'Dividendo = divisor · cociente + residuo, con residuo menor que el divisor.',
-        play('bolsas-residuo', 'Empaca', { rounds: [{ N: 71, d: 8 }] }, '$71 = 8 \\cdot 8 + 7$.', { hint: 'El residuo es menor que 8.' })],
-      ['alg-23b', 'Dos polinomios iguales tienen los mismos coeficientes.',
-        play('iguala-coeficientes', 'Iguala coeficientes', { rounds: [{ c: 1, P: [1, 1, -5, 3] }] }, '$(x - 1)(x^2 + 2x - 3)$.', { hint: 'Empieza por x².' })],
-      ['alg-92', 'La división sintética baja, multiplica y suma.',
-        play('llena-sintetica', 'Completa la tabla', { rounds: [{ coef: [1, -3, 0, 4], c: 2, extra: [1, 6] }] }, 'Abajo: $1, -1, -2, 0$.', { hint: 'Baja el primero.' })],
-      ['alg-92', 'x − c es factor si P(c) = 0.',
-        play('factor-k', 'Ajusta k', { rounds: [{ P: [1, null, 2, -8], c: 2 }] }, '$8 + 4k + 4 - 8 = 0$: $k = -1$.', { hint: 'Evalúa en 2.' })],
-      ['alg-93', 'Los ceros enteros dividen al término independiente.',
-        play('prueba-candidatos', 'Prueba candidatos', { rounds: [{ P: [1, -6, 11, -6], cands: [-3, -2, -1, 1, 2, 3, 6] }] }, 'Ceros $1, 2, 3$.', { hint: 'Divisores de 6.' })],
-      ['alg-93', 'Entre dos ceros seguidos el polinomio no cambia de signo.',
-        play('tramo-signo', 'El signo en cada tramo', { rounds: [{ zeros: [-1, 2, 5], want: -1 }] }, 'Negativo antes de −1 y entre 2 y 5.', { hint: 'Cuenta factores negativos.' })],
-    ]);
-  }
-  // ───────── Mundo 9 · Fracciones Algebraicas ─────────
-  {
-    setLesson('alg-25a', [
-      play('prohibidos', 'Los valores prohibidos: donde el denominador vale cero', { rounds: [
-        { tex: '\\dfrac{x + 3}{(x - 2)(x + 4)}', bad: [2, -4] }, { tex: '\\dfrac{5}{x^2 - 16}', bad: [4, -4] },
-        { tex: '\\dfrac{x - 6}{x^2 + 2x}', bad: [0, -2] }, { tex: '\\dfrac{2x}{x^2 - 5x + 6}', bad: [2, 3] },
-      ] }, 'No se puede dividir entre cero: se excluyen los valores que anulan el denominador. $(x - 2)(x + 4) = 0$ en $2$ y $-4$; $x^2 - 16 = (x - 4)(x + 4)$; $x^2 + 2x = x(x + 2)$; $x^2 - 5x + 6 = (x - 2)(x - 3)$. El numerador no importa: si vale cero, la fracción vale 0 y existe.',
-        { hint: 'Factoriza el denominador y busca qué número anula cada factor. Lo de arriba puede valer cero sin problema.' }),
-      keep('alg-25a', 'cancela-factores'),
-      play('evalua-racional', 'Evalúa la fracción: busca el x que da la meta', { rounds: [
-        { n: [1, 4], d: [1, -2], target: 3 }, { n: [2, 1], d: [1, 1], target: 3 }, { n: [1, -6], d: [1, 2], target: 0 }, { n: [3, 0], d: [1, -3], target: 2 },
-      ] }, 'El valor de la fracción es numerador entre denominador. $\\dfrac{5 + 4}{5 - 2} = 3$; $\\dfrac{2(-2) + 1}{-2 + 1} = 3$; la fracción vale 0 donde el numerador es 0 (en $x = 6$); $\\dfrac{3(-6)}{-6 - 3} = 2$. Donde el denominador vale 0 la fracción no existe.',
-        { hint: 'Mira las dos barras: la fracción vale la meta cuando el numerador es la meta veces el denominador.' }),
-      play('cerca-asintota', 'Acércate al valor prohibido', { rounds: [
-        { k: 1, a: 2, side: 1, target: 30 }, { k: 2, a: -3, side: -1, target: 15 }, { k: 3, a: 1, side: 1, target: 1000 },
-      ] }, 'Cerca del valor que anula el denominador, se divide entre un número muy pequeño y la fracción se dispara: $\\dfrac{1}{0.02} = 50$, $\\dfrac{2}{-0.1} = -20$, $\\dfrac{3}{0.001} = 3000$. Por eso la gráfica sube (o baja) sin fin junto a la asíntota vertical.',
-        { hint: 'Dividir entre 0.1 es multiplicar por 10; entre 0.01, por 100. Cuanto más cerca, más grande el resultado.' }),
-      play('cruz-asintotas', 'Lleva la cruz de asíntotas a su lugar', { rounds: [
-        { p: 3, q: -1, h: -1, xr: [-7, 6], yr: [-4, 9] }, { p: -2, q: 5, h: 4, xr: [-4, 9], yr: [-7, 5] },
-      ] }, 'En $y = \\dfrac{3x - 1}{x + 1}$ la vertical está en $x = -1$ (ahí se anula el denominador) y la horizontal en $y = 3$, el cociente de los coeficientes de $x$. En $y = \\dfrac{-2x + 5}{x - 4}$: $x = 4$ y $y = -2$.',
-        { hint: 'La vertical va donde se anula el denominador. Para la horizontal piensa en x enorme: los números sueltos dejan de pesar.' }),
-      keep('alg-25a', 'rio-o-hueco')]);
-
-    setLesson('alg-25b', [
-      play('denominador-comun', 'Arma el mínimo común denominador', { rounds: [
-        { d1: ['x', 'x-3'], d2: ['x-3', 'x+2'], chips: ['x', 'x-3', 'x+2', 'x-2', 'x^2'] },
-        { d1: ['x', 'x'], d2: ['x', 'x+1'], chips: ['x', 'x', 'x', 'x+1', 'x-1'] },
-        { d1: ['x+1', 'x-1'], d2: ['x+1', 'x+1'], chips: ['x+1', 'x+1', 'x+1', 'x-1', 'x'] },
-        { d1: ['x-2'], d2: ['x+5', 'x-2'], chips: ['x-2', 'x-2', 'x+5', 'x+2'] },
-      ] }, 'Cada factor entra con la mayor potencia que aparece, y un factor que comparten no se repite: $x(x - 3)(x + 2)$; $x^2(x + 1)$; $(x + 1)^2(x - 1)$; y $(x - 2)(x + 5)$, porque el primer denominador ya está dentro del segundo.',
-        { hint: 'Factor por factor: ¿cuántas veces aparece como máximo en un mismo denominador? Esa es la cantidad de copias.' }),
-      play('amplifica-fraccion', 'Completa cada fracción al común denominador', { rounds: [
-        { f1: ['3', ['x']], f2: ['2', ['x+4']], chips: ['x', 'x+4', 'x-4', '4'], sum: '\\dfrac{3(x + 4) + 2x}{x(x + 4)} = \\dfrac{5x + 12}{x(x + 4)}' },
-        { f1: ['5', ['x+2']], f2: ['1', ['x-2']], chips: ['x-2', 'x+2', 'x', '2'], sum: '\\dfrac{5(x - 2) + (x + 2)}{(x + 2)(x - 2)} = \\dfrac{6x - 8}{x^2 - 4}' },
-        { f1: ['x', ['x+1', 'x-1']], f2: ['2', ['x+1']], chips: ['x-1', 'x+1', 'x'], sum: '\\dfrac{x + 2(x - 1)}{(x + 1)(x - 1)} = \\dfrac{3x - 2}{x^2 - 1}' },
-      ] }, 'Se multiplica arriba y abajo por el factor que le falta a cada denominador: eso es multiplicar por 1 y la fracción no cambia. Si una fracción ya tiene el común denominador, no se toca. Luego se suman los numeradores.',
-        { hint: 'Compara cada denominador con el común: el factor que le falta es el que va arriba y abajo.' }),
-      play('resta-fracciones', 'El menos de la resta va a todo el numerador', { rounds: [
-        { A: ['3x', '+1'], B: ['x', '-4'], den: 'x + 2' }, { A: ['x^2'], B: ['x', '-6'], C: ['2x', '-1'], den: 'x - 3' }, { A: ['4x', '-2'], B: ['-x', '+5'], C: ['x'], den: '2x' },
-      ] }, 'Al restar una fracción, el signo menos multiplica a todo su numerador; la que se suma queda igual: $3x + 1 - (x - 4) = 2x + 5$; $x^2 - (x - 6) + (2x - 1) = x^2 + x + 5$; $4x - 2 - (-x + 5) + x = 6x - 7$. Olvidar un término es el error más común.',
-        { hint: 'Mira qué signo hay delante de cada paréntesis: solo el menos cambia los signos, y los cambia todos.' }),
-      play('multiplica-cancela', 'Multiplica y cancela cruzado', { rounds: [
-        { top: ['x', 'x+5'], bottom: ['x+5', '3', 'x'] }, { top: ['x-4', 'x+1'], bottom: ['x+1', 'x+4', 'x-4'] }, { top: ['x', 'x', 'x-3'], bottom: ['x-3', 'x', '5'] },
-      ] }, 'Al multiplicar fracciones todo lo de arriba queda multiplicando, y todo lo de abajo también: un factor de un numerador se cancela con uno igual de cualquier denominador. Quedan $\\dfrac{1}{3}$, $\\dfrac{1}{x + 4}$ y $\\dfrac{x}{5}$.',
-        { hint: 'Busca parejas iguales: una arriba y otra abajo, sin importar de qué fracción venga cada una.' }),
-      play('voltea-divide', 'Dividir es multiplicar por la recíproca', { rounds: [
-        { a: ['x + 1', '4'], b: ['x + 1', '8'], res: '\\dfrac{(x + 1) \\cdot 8}{4 (x + 1)} = 2', wrong: '\\tfrac12' },
-        { a: ['x^2', 'x - 2'], b: ['x', 'x - 2'], res: '\\dfrac{x^2 (x - 2)}{(x - 2)\\, x} = x', wrong: '\\tfrac1x' },
-        { a: ['3', 'x + 5'], b: ['6', 'x(x + 5)'], res: '\\dfrac{3 \\cdot x(x + 5)}{(x + 5) \\cdot 6} = \\dfrac{x}{2}', wrong: '\\tfrac2x' },
-        { a: ['x^2 - 1', '3'], b: ['x - 1', '1'], res: '\\dfrac{(x - 1)(x + 1)}{3 (x - 1)} = \\dfrac{x + 1}{3}', wrong: '\\tfrac{3}{x + 1}' },
-      ] }, 'Dividir entre una fracción es multiplicar por la fracción volteada: $\\dfrac{a}{b} \\div \\dfrac{c}{d} = \\dfrac{a}{b} \\cdot \\dfrac{d}{c}$; se voltea solo el divisor. Una expresión sola es una fracción con 1 abajo: $x - 1 = \\tfrac{x - 1}{1}$. Después se cancelan los factores comunes.',
-        { hint: 'Pregúntate cuál es el divisor: la fracción que va después del signo ÷. Solo esa cambia.' }),
-      keep('alg-25b', 'llena-estanque')]);
-
-    setLesson('alg-101', [
-      play('dos-rectas', 'La solución es el punto de las dos rectas', { rounds: [
-        { e1: [1, 1, 3], e2: [1, -1, -1] }, { e1: [2, 1, 1], e2: [1, -1, 5] }, { e1: [1, 2, -4], e2: [3, -1, 2] }, { e1: [1, 0, -3], e2: [1, 1, 1] },
-      ] }, 'Cada ecuación es una recta: sus puntos la cumplen. El punto que cumple las dos está en las dos rectas, en su cruce: $(1, 2)$, $(2, -3)$, $(0, -2)$ y $(-3, 4)$. La ecuación $x = -3$ es una recta vertical.',
-        { hint: 'Pon el punto sobre una de las rectas y deslízalo por ella hasta que la otra ecuación también se encienda.' }),
-      keep('alg-101', 'afina-sistema'),
-      play('elimina-variable', 'Suma las ecuaciones para que se vaya la y', { rounds: [
-        { e1: [3, 2, 12], e2: [1, 1, 5] }, { e1: [2, -3, 1], e2: [1, 1, 3] }, { e1: [1, 4, 7], e2: [3, -2, 7] },
-      ] }, 'Sumar a una ecuación otra multiplicada por un número no cambia la solución. Con $k = -2$, $3x + 2y - 2(x + y) = 12 - 10$ da $x = 2$; con $k = 3$, $5x = 10$; con $k = 2$, $7x = 21$ y $x = 3$.',
-        { hint: 'La y se va cuando su coeficiente de la fila 1 y k veces el de la fila 2 son opuestos.' }),
-      play('dos-compras', 'Dos recibos, los mismos precios', { rounds: [
-        { names: ['cuaderno', 'lápiz'], e1: [2, 1, 11], e2: [1, 1, 7], max: 8 },
-        { names: ['empanada', 'jugo'], e1: [3, 2, 12], e2: [1, 1, 5], max: 8 },
-        { names: ['boleta', 'crispeta'], e1: [2, 3, 34], e2: [1, 2, 20], max: 10 },
-      ] }, 'Cada recibo es una ecuación y los dos se cumplen a la vez. Entre $2a + b = 11$ y $a + b = 7$ la única diferencia es un cuaderno, que cuesta 4; el lápiz, 3. Luego empanada 2 y jugo 3; boleta 8 y crispeta 6.',
-        { hint: 'Compara los dos recibos: ¿qué tiene de más uno que el otro, y cuánto más cuesta?' }),
-      keep('alg-101', 'combina-vectores'),
-      keep('alg-101', 'bote-corriente')]);
-
-    setLesson('alg-102', [
-      play('corte-parabola-recta', 'La recta que corta a la parábola', { rounds: [
-        { a: 1, m: -1, x0: -3 }, { a: 1, m: -2, x0: 1 }, { a: 2, m: 2, x0: -1 }, { a: 1, m: 0, x0: 2 },
-      ] }, 'En un corte las dos expresiones de $y$ valen lo mismo: al igualarlas queda una cuadrática. $x^2 = -x + 6$ da $x^2 + x - 6 = 0$, con cortes $-3$ y $2$; $x^2 = -2x + 3$, cortes $1$ y $-3$; $2x^2 = 2x + 4$, cortes $-1$ y $2$; $x^2 = 4$, cortes $\\pm 2$.',
-        { hint: 'La recta debe pasar por el punto de la parábola en la línea punteada: su altura es a por x al cuadrado.' }),
-      play('circulo-recta', 'Dos, uno o ningún corte', { rounds: [
-        { R: 5, m: 0, want: 1 }, { R: 4, m: 0.75, want: 1 }, { R: 3, m: 1, want: 0 }, { R: 5, m: -0.75, want: 2 },
-      ] }, 'Al sustituir la recta en el círculo queda una cuadrática: si su discriminante es positivo hay dos cortes, si es cero la recta solo toca el círculo y si es negativo no lo corta. La horizontal $y = 5$ toca a $x^2 + y^2 = 25$ en $(0, 5)$.',
-        { hint: 'Mira el discriminante abajo: un solo corte es exactamente cero, cuando la recta apenas roza el círculo.' }),
-      play('rectangulo-pa', 'Perímetro y área a la vez', { rounds: [{ P: 18, A: 20, max: 9 }, { P: 20, A: 21, max: 9 }, { P: 16, A: 15, max: 8 }] },
-        'Pedir perímetro y área es un sistema no lineal: $x + y = 9$ y $xy = 20$ dan $x^2 - 9x + 20 = 0$, lados 4 y 5. Igual: 3 y 7; 3 y 5. Muchos rectángulos tienen el perímetro pedido, pero solo uno tiene además el área.',
-        { hint: 'Primero consigue el perímetro; luego desliza la esquina sin cambiarlo (lo que gana un lado lo pierde el otro) hasta el área.' }),
-      play('parciales-tapar', 'Fracciones parciales: iguala los numeradores', { rounds: [{ p: 2, q: -1, c: 2, d: 5 }, { p: 3, q: -2, c: 1, d: 7 }, { p: 1, q: 4, c: 2, d: 1 }] },
-        'Al juntar $\\dfrac{A}{x - p} + \\dfrac{B}{x - q}$ el numerador es $A(x - q) + B(x - p)$. Igualar el coeficiente de $x$ y el número suelto da un sistema: $A = 3$, $B = -1$; $A = 2$, $B = -1$; $A = -1$, $B = 3$.',
-        { hint: 'La barra de x pide A + B; la del número depende de los dos de otra manera. Ajusta uno y corrige con el otro.' }),
-      play('tapa-evalua', 'Tapa un factor y evalúa', { rounds: [
-        { num: [1, 9], ps: [3, -3] }, { num: [3, 9], ps: [-1, -4] }, { num: [1, -4], ps: [0, 1, -2] },
-      ] }, 'Para hallar el numerador de $\\dfrac{A}{x - p}$ se tapa $x - p$ en la fracción original y lo que queda se evalúa en $x = p$: $\\dfrac{3 + 9}{3 + 3} = 2$. Funciona porque, al multiplicar todo por $x - p$ y poner $x = p$, las demás fracciones se anulan.',
-        { hint: 'Cada factor se tapa con el número que lo vuelve cero: cuidado con el signo dentro del paréntesis.' }),
-      keep('alg-102', 'cruce-curvas')]);
-
-    setExam('racionales', [
-      ['alg-25a', 'Los valores prohibidos son los que anulan el denominador.',
-        play('prohibidos', 'Tacha los valores prohibidos', { rounds: [{ tex: '\\dfrac{x + 1}{x^2 - 25}', bad: [5, -5] }] }, '$x^2 - 25 = (x - 5)(x + 5)$: se excluyen $5$ y $-5$.', { hint: 'Factoriza el denominador.' })],
-      ['alg-25a', 'La fracción vale la meta cuando el numerador es la meta veces el denominador.',
-        play('evalua-racional', 'Busca el x', { rounds: [{ n: [1, 1], d: [1, -3], target: 3 }] }, '$\\dfrac{5 + 1}{5 - 3} = 3$.', { hint: 'Compara las barras.' })],
-      ['alg-25b', 'El común denominador lleva cada factor con su mayor potencia.',
-        play('denominador-comun', 'Arma el común denominador', { rounds: [{ d1: ['x', 'x+6'], d2: ['x+6', 'x-5'], chips: ['x', 'x+6', 'x-5', 'x-6'] }] }, '$x(x + 6)(x - 5)$.', { hint: 'El factor compartido va una vez.' })],
-      ['alg-25b', 'Al restar, el menos cambia el signo de todo el numerador.',
-        play('resta-fracciones', 'Resta y suma', { rounds: [{ A: ['2x'], B: ['x', '-3'], C: ['-x', '+4'], den: 'x + 1' }] }, '$2x - (x - 3) + (-x + 4) = 7$.', { hint: 'Solo el menos cambia signos.' })],
-      ['alg-101', 'La solución de un sistema está en el cruce de las rectas.',
-        play('dos-rectas', 'Busca el cruce', { rounds: [{ e1: [1, 1, 4], e2: [2, -1, 5] }] }, 'El punto $(3, 1)$ cumple las dos.', { hint: 'Desliza el punto por una recta.' })],
-      ['alg-101', 'Sumando un múltiplo de una ecuación se elimina una incógnita.',
-        play('elimina-variable', 'Elimina la y', { rounds: [{ e1: [4, 3, 10], e2: [1, 1, 3] }] }, 'Con $k = -3$: $x = 1$, y luego $y = 2$.', { hint: 'Coeficientes de y opuestos.' })],
-      ['alg-102', 'En los cortes de dos curvas las dos expresiones de y son iguales.',
-        play('corte-parabola-recta', 'Corta la parábola', { rounds: [{ a: 1, m: 1, x0: -2 }] }, '$x^2 = x + 6$: cortes en $-2$ y $3$.', { hint: 'Pasa por el punto marcado.' })],
-      ['alg-102', 'Cada fracción parcial sale de igualar los numeradores.',
-        play('parciales-tapar', 'Halla A y B', { rounds: [{ p: 4, q: -1, c: 3, d: -2 }] }, '$A = 2$, $B = 1$.', { hint: 'La barra de x pide A + B.' })],
-    ]);
-  }
-  // ───────── Mundo 10 · Crecimiento Exponencial ─────────
-  {
-    setLesson('alg-71', [
-      play('ajusta-exponencial', 'La curva exponencial por dos puntos', { rounds: [
-        { a: 2, b: 3, pts: [[0, 2], [1, 6]] }, { a: 5, b: 0.5, pts: [[0, 5], [1, 2.5]] }, { a: 3, b: 2, pts: [[1, 6], [2, 12]] }, { a: 4, b: 0.25, pts: [[-1, 16], [0, 4]] },
-      ] }, 'En $y = a \\cdot b^x$, $a$ es la altura en $x = 0$ y $b$ es el factor por el que se multiplica la altura en cada paso a la derecha: de 2 a 6 se multiplica por 3; de 5 a 2.5, por $\\tfrac12$. Si no está el punto de $x = 0$, se retrocede un paso dividiendo: $6 \\div 2 = 3$.',
-        { hint: 'Divide la altura de un punto entre la del punto anterior: ese cociente es b. La altura en x = 0 es a.' }),
-      keep('alg-71', 'proyector-sombras'),
-      play('mueve-asintota', 'Corre la exponencial y su asíntota', { rounds: [
-        { b: 2, h: 1, k: -3 }, { b: 2, h: -2, k: 2 }, { b: 0.5, h: 0, k: 1 }, { b: 3, h: 1, k: -4 },
-      ] }, '$y = b^{x - h} + k$ es $b^x$ corrida $h$ a la derecha y $k$ hacia arriba. Su asíntota horizontal sube con ella: queda en $y = k$. El punto $(0, 1)$ de $b^x$ pasa a $(h, k + 1)$.',
-        { hint: 'Primero sube o baja hasta que la curva tenga la forma de los puntos; luego córrela a los lados.' }),
-      play('mitad-espejo', 'Base menor que 1: el reflejo', { rounds: [{ b: 2, target: 8 }, { b: 3, target: 9 }, { b: 2, target: 0.25 }, { b: 2, target: 32 }] },
-        '$\\left(\\tfrac1b\\right)^x = b^{-x}$: la curva de base $\\tfrac1b$ es el reflejo de $b^x$ en el eje $y$ y decrece. Para pasar de 1 hay que ir a la izquierda: $\\left(\\tfrac12\\right)^{-3} = 2^3 = 8$, $\\left(\\tfrac13\\right)^{-2} = 9$; en cambio $\\left(\\tfrac12\\right)^{2} = \\tfrac14$.',
-        { hint: 'Un exponente negativo voltea la fracción. Mira la curva clara: su reflejo te dice dónde está la altura pedida.' }),
-      play('hacia-e', 'Repartir el interés: el número e', { rounds: [{ target: 2.5 }, { target: 2.65 }, { target: 2.7 }] },
-        'Con el 100 % anual pagado en $n$ partes, un peso se vuelve $\\left(1 + \\tfrac1n\\right)^n$: 2 con un pago, 2.25 con dos, 2.59 con diez, 2.705 con cien. Crece, pero cada vez menos, y nunca pasa de $e \\approx 2.718$.',
-        { hint: 'Desliza n y mira cómo se frena la barra: entre más pagos, menos gana cada pago nuevo.' }),
-      keep('alg-71', 'lirios-laguna')]);
-
-    setLesson('alg-13b', ['crece-planta', 'carrera-interes', 'ajusta-capital', 'mejor-oferta', 'alcancias-gemelas', 'dos-bancos'].map(g => keep('alg-13b', g)));
-
-    setLesson('alg-72', [
-      play('exponente-buscado', 'El logaritmo es un exponente', { rounds: [{ b: 2, N: 64 }, { b: 3, N: 81 }, { b: 10, N: 0.001 }, { b: 5, N: 1 }] },
-        '$\\log_b N$ es cuántas veces hay que multiplicar por $b$ para pasar de 1 a $N$: $2^6 = 64$, $3^4 = 81$. Si $N$ es menor que 1 hay que dividir: $10^{-3} = 0.001$. Y $\\log_5 1 = 0$, porque sin multiplicar se queda en 1.',
-        { hint: 'Empieza en 1 y multiplica por la base hasta llegar al número; si el número es menor que 1, divide.' }),
-      keep('alg-72', 'espejo-diagonal'),
-      play('entre-potencias10', 'El logaritmo decimal cuenta cifras', { rounds: [
-        { N: 1024, tex: '2^{10}' }, { N: 16807, tex: '7^{5}' }, { N: 0.05, tex: '0.05' }, { N: 1048576, tex: '2^{20}' },
-      ] }, 'Si $10^k \\le N < 10^{k + 1}$, el logaritmo de $N$ está entre $k$ y $k + 1$, y $N$ tiene $k + 1$ cifras antes de la coma: $2^{10} = 1024$ (4 cifras, $\\log \\approx 3.01$); $7^5 = 16\\,807$; $0.05$ está entre $10^{-2}$ y $10^{-1}$; $2^{20}$ pasa del millón.',
-        { hint: 'Cuenta las cifras del número antes de la coma; para un decimal, mira cuántas posiciones tiene detrás.' }),
-      play('expande-log', 'Abre el logaritmo en una suma', { rounds: [
-        { tex: '\\log \\dfrac{x^2 y}{z}', parts: [['x', 2], ['y', 1], ['z', -1]], tray: [-2, -1, 0.5, 1, 2, 3] },
-        { tex: '\\log \\dfrac{\\sqrt{x}}{y^3}', parts: [['x', 0.5], ['y', -3]], tray: [-3, -0.5, 0.5, 1, 3] },
-        { tex: '\\log_2 (8x^4)', base: 2, parts: [['8', 1], ['x', 4]], tray: [1, 2, 3, 4, 8] },
-        { tex: '\\log \\dfrac{1}{x\\,y^2}', parts: [['x', -1], ['y', -2]], tray: [-2, -1, 0.5, 1, 2] },
-      ] }, 'El logaritmo de un producto es la suma de los logaritmos; el de un cociente, la resta; y un exponente baja como factor: $\\log \\dfrac{x^2 y}{z} = 2\\log x + \\log y - \\log z$. Una raíz cuadrada es el exponente $\\tfrac12$. Y $\\log_2 8 = 3$.',
-        { hint: 'Lo que está abajo de la fracción entra restando; el exponente de cada letra pasa a multiplicar.' }),
-      play('cabe-barra', 'Cambio de base: cuántas veces cabe', { rounds: [{ b: 4, a: 64 }, { b: 9, a: 27 }, { b: 2, a: 32 }, { b: 25, a: 5 }] },
-        '$\\log_b a = \\dfrac{\\log a}{\\log b}$: cuántas barras de $\\log b$ caben en la de $\\log a$. $\\log_4 64 = 3$; $\\log_9 27 = \\tfrac32$, porque $9^{1.5} = 27$; $\\log_{25} 5 = \\tfrac12$, porque $\\sqrt{25} = 5$. Así se calcula cualquier base con la tecla log.',
-        { hint: 'Pon copias de la barra de abajo hasta igualar el largo de la de arriba; puede caber media barra.' }),
-      keep('alg-72', 'regla-de-calculo')]);
-
-    setLesson('alg-73', [keep('alg-73', 'balanza-exponencial'),
-      play('baja-con-log', 'Cuando las bases no coinciden: logaritmo', { rounds: [{ b: 5, N: 20, max: 4 }, { b: 2, N: 10, max: 6 }, { b: 1.05, N: 2, max: 20 }] },
-        'Si no se puede escribir con la misma base, se toma logaritmo a los dos lados: $x \\log b = \\log N$, y se divide entre $\\log b$. $5^x = 20$ da $x \\approx 1.86$; $2^x = 10$, $x \\approx 3.32$; y al 5 % el dinero se duplica en $x \\approx 14.2$ periodos.',
-        { hint: 'Con logaritmos la potencia se vuelve un producto: busca la x donde la barra que crece alcanza a la fija.' }),
-      play('sube-al-exponente', 'Del logaritmo a la potencia', { rounds: [{ b: 2, k: -1, c: 3 }, { b: 3, k: 4, c: 2 }, { b: 5, k: -5, c: 1 }, { b: 2, k: 3, c: -1 }] },
-        '$\\log_b(x + k) = c$ quiere decir $x + k = b^c$: $x - 1 = 8$, $x = 9$; $x + 4 = 9$, $x = 5$; $x - 5 = 5$, $x = 10$; $x + 3 = \\tfrac12$, $x = -2.5$. La solución debe dejar positivo lo de adentro del logaritmo.',
-        { hint: 'Escribe la ecuación como potencia: la base del logaritmo elevada al otro lado es lo de adentro.' }),
-      play('media-vida', 'La vida media', { rounds: [
-        { A0: 200, T: 5, target: 25, thing: 'cafeína', unit: 'mg' }, { A0: 80, T: 8, target: 5, thing: 'un medicamento', unit: 'mg' }, { A0: 1000, T: 2, target: 62.5, thing: 'cloro', unit: 'g' },
-      ] }, 'Cada vida media la cantidad se divide entre 2: $200 \\to 100 \\to 50 \\to 25$ en 3 vidas medias, 15 horas. En general $A_0\\left(\\tfrac12\\right)^{t/T} = A$ da $t = T \\log_2 \\tfrac{A_0}{A}$.',
-        { hint: 'Cuenta cuántas veces hay que partir por la mitad la cantidad inicial para llegar a la pedida.' }),
-      play('cambio-u', 'La incógnita escondida: u = aˣ', { rounds: [{ a: 2, p: -6, q: 8 }, { a: 3, p: -4, q: 3 }, { a: 2, p: -1, q: -2 }] },
-        'Con $u = a^x$ la ecuación queda $u^2 + pu + q = 0$. $u^2 - 6u + 8 = 0$ da $u = 2$ y $u = 4$: $x = 1$ y $x = 2$. $u^2 - 4u + 3 = 0$: $u = 1$ ($x = 0$) y $u = 3$ ($x = 1$). En $u^2 - u - 2 = 0$ el cero $u = -1$ no sirve: $2^x$ nunca es negativo.',
-        { hint: 'Busca dónde la parábola corta el eje u, pero recuerda que una potencia de base positiva nunca es negativa.' }),
-      keep('alg-73', 'piedras-selva')]);
-
-    setExam('exp-log', [
-      ['alg-71', 'En y = a·bˣ, a es la altura en x = 0 y b el factor de cada paso.',
-        play('ajusta-exponencial', 'Curva por dos puntos', { rounds: [{ a: 2, b: 4, pts: [[0, 2], [1, 8]] }] }, '$y = 2 \\cdot 4^x$.', { hint: 'Divide las alturas.' })],
-      ['alg-71', 'Una base menor que 1 refleja la curva: (1/b)ˣ = b⁻ˣ.',
-        play('mitad-espejo', 'Base menor que 1', { rounds: [{ b: 3, target: 27 }] }, '$\\left(\\tfrac13\\right)^{-3} = 27$.', { hint: 'Exponente negativo.' })],
-      ['alg-13b', 'En el interés compuesto cada periodo gana sobre lo ya ganado.',
-        play('crece-planta', 'Haz crecer la planta', { rounds: [{ kind: 'compuesto', C: 800, M1: 880, step: 1 }] }, 'Cada mes se multiplica por 1.1: $880$, $968$, $1064.8$.', { hint: 'Compuesto multiplica.' })],
-      ['alg-13b', 'Una tasa simple que iguale a la compuesta debe ser mayor.',
-        play('alcancias-gemelas', 'Alcancías gemelas', { tol: 0.06, max: 40, rounds: [{ C: 1000, r: 30, n: 2 }] }, '$1000 \\cdot 1.3^2 = 1690$: la simple necesita $34.5\\,\\%$.', { hint: 'Mayor que 30 %.' })],
-      ['alg-72', 'El logaritmo es el exponente que lleva la base al número.',
-        play('exponente-buscado', 'Busca el exponente', { rounds: [{ b: 4, N: 0.0625 }] }, '$4^{-2} = \\tfrac{1}{16}$.', { hint: 'Divide entre 4.' })],
-      ['alg-72', 'Productos se vuelven sumas y exponentes, factores.',
-        play('expande-log', 'Abre el logaritmo', { rounds: [{ tex: '\\log (x^3 y)', parts: [['x', 3], ['y', 1]], tray: [-1, 1, 2, 3] }] }, '$3\\log x + \\log y$.', { hint: 'El exponente baja.' })],
-      ['alg-73', 'log_b(x + k) = c quiere decir x + k = bᶜ.',
-        play('sube-al-exponente', 'Del logaritmo a la potencia', { rounds: [{ b: 3, k: -2, c: 2 }] }, '$x - 2 = 9$: $x = 11$.', { hint: 'Pasa a potencia.' })],
-      ['alg-73', 'Con bases distintas se toma logaritmo a los dos lados.',
-        play('baja-con-log', 'Resuelve', { rounds: [{ b: 3, N: 50, max: 5 }] }, '$x = \\dfrac{\\log 50}{\\log 3} \\approx 3.56$.', { hint: 'Iguala las barras.' })],
-    ]);
-  }
-  // ───────── Séptimo juego de las lecciones que tenían seis (pedido del 2026-11-18) ─────────
-  {
-    // Entra antes del juego en movimiento, que sigue siendo el último.
-    const add7 = (id, ex) => { const l = L(id); l.ex.splice(l.ex.length - 1, 0, { ...ex, canvasGuide: true, motion: false }); };
-    add7('alg-12', play('tasa-unitaria', 'Compara precios por unidad', { rounds: [
-      { names: ['paquete A', 'paquete B'], packs: [[6, 9000], [4, 7200]], step: 100, max: 2500 },
-      { names: ['paquete A', 'paquete B'], packs: [[12, 18000], [8, 10400]], step: 100, max: 2500 },
-      { names: ['paquete A', 'paquete B'], packs: [[3, 4500], [5, 8000]], step: 100, max: 2500 },
-    ] }, 'Para comparar paquetes de distinto tamaño se divide: precio ÷ unidades. $9000 \\div 6 = 1500$ frente a $7200 \\div 4 = 1800$; $18\\,000 \\div 12 = 1500$ frente a $10\\,400 \\div 8 = 1300$; $1500$ frente a $1600$. El paquete más grande no siempre es el más barato.',
-      { hint: 'Las copias del precio unitario deben llenar la barra del paquete exactamente: ni sobra ni falta.' }));
-    add7('alg-12f', play('tabla-compuesta', 'Regla de tres compuesta: reduce a la unidad', { rounds: [
-      { who: 'hornos', what: 'panes', m1: 2, h1: 3, c1: 1200, m2: 3, h2: 5, step: 50, max: 500 },
-      { who: 'pintores', what: 'paredes', m1: 4, h1: 2, c1: 16, m2: 6, h2: 3, step: 1, max: 10 },
-      { who: 'bombas', what: 'litros', m1: 5, h1: 2, c1: 3000, m2: 2, h2: 7, step: 50, max: 500 },
-    ] }, 'Si el resultado es proporcional a dos magnitudes, se busca lo que hace una unidad de cada una: $1200 \\div (2 \\cdot 3) = 200$ panes por horno y hora, y $200 \\cdot 3 \\cdot 5 = 3000$. Luego $16 \\div 8 = 2$ y $2 \\cdot 18 = 36$; $3000 \\div 10 = 300$ y $300 \\cdot 14 = 4200$.',
-      { hint: 'Cada casilla es un trabajador durante una hora; reparte el total conocido entre todas las casillas.' }));
-    add7('alg-13', play('estira-todo', '¿De qué número es ese porcentaje?', { rounds: [
-      { part: 15, p: 25, step: 5, max: 150 }, { part: 9, p: 12, step: 5, max: 150 }, { part: 36, p: 120, step: 5, max: 150 }, { part: 14, p: 35, step: 5, max: 150 },
-    ] }, 'Si la parte es el $p\\,\\%$ del total, el total es parte $\\div p \\cdot 100$: $15 \\div 25 \\cdot 100 = 60$, $9 \\div 12 \\cdot 100 = 75$, $36 \\div 120 \\cdot 100 = 30$ y $14 \\div 35 \\cdot 100 = 40$. Si el porcentaje pasa de 100, la parte es mayor que el total.',
-      { hint: 'Estira el total hasta que la marca del porcentaje caiga sobre la parte: la barra entera es el 100 %.' }));
-    add7('alg-13c', play('oferta-lleve', '«Lleve tantos, pague menos» en porcentaje', { rounds: [{ take: 5, pay: 4 }, { take: 4, pay: 3 }, { take: 2, pay: 1 }, { take: 10, pay: 7 }] },
-      'En «lleve $n$, pague $m$» se regalan $n - m$ de cada $n$: el descuento es $\\tfrac{n - m}{n}$. Lleve 5 pague 4: $\\tfrac15 = 20\\,\\%$; 4 por 3: $25\\,\\%$; 2 por 1: $50\\,\\%$; 10 por 7: $30\\,\\%$.',
-      { hint: 'El descuento es la parte que no se paga comparada con todo lo que te llevas.' }));
-    add7('alg-13d', play('puntos-o-porciento', 'Puntos porcentuales o por ciento', { rounds: [
-      { what: 'El desempleo', from: 20, to: 25 }, { what: 'La humedad', from: 40, to: 30 }, { what: 'La aprobación', from: 10, to: 15 }, { what: 'La tasa', from: 50, to: 60 },
-    ] }, 'La diferencia entre dos porcentajes se mide en puntos; el cambio relativo, sobre el valor de antes: de 20 % a 25 % son 5 puntos, pero $\\tfrac{5}{20} = 25\\,\\%$ de aumento. De 40 a 30: $-25\\,\\%$; de 10 a 15: $+50\\,\\%$; de 50 a 60: $+20\\,\\%$.',
-      { hint: 'Compara la diferencia con el valor de antes, no con 100.' }));
-
-    add7('alg-21a', play('ubica-potencias', 'Ubica las potencias en la recta', { rounds: [
-      { chips: [['2^5', 32], ['3^3', 27], ['5^2', 25], ['4^3', 64]], max: 70, snap: 1 },
-      { chips: [['2^{-1}', 0.5], ['3^0', 1], ['10^{-1}', 0.1], ['2^1', 2]], max: 2.5, snap: 0.1 },
-    ] }, 'Para comparar potencias hay que calcularlas: $2^5 = 32$ pasa a $5^2 = 25$ aunque su base sea menor, y $4^3 = 64$ queda lejos. Un exponente 0 da 1 y uno negativo da una fracción: $2^{-1} = \\tfrac12$, $10^{-1} = 0.1$.',
-      { hint: 'Calcula cada potencia multiplicando la base tantas veces como dice el exponente; un exponente negativo divide.' }));
-    add7('alg-21b', play('reparte-exponente', 'El exponente le llega a cada factor', { rounds: [{ a: 2, b: 5, n: 3 }, { a: 3, b: 2, n: 2 }, { a: 6, b: 2, n: 3, div: true }, { a: 2, b: 3, n: 4 }] },
-      '$(a \\cdot b)^n = a^n \\cdot b^n$ porque al repetir el producto $n$ veces cada factor aparece $n$ veces: $(2 \\cdot 5)^3 = 2^3 \\cdot 5^3 = 1000$. Con un cociente pasa igual: $(6 \\div 2)^3 = 6^3 \\div 2^3 = 27$.',
-      { hint: 'Escribe la potencia como el producto repetido y cuenta cuántas veces aparece cada factor.' }));
-    add7('alg-22a', play('lado-cubo', 'La raíz cúbica es el lado del cubo', { rounds: [{ V: 27 }, { V: 125 }, { V: 64 }, { V: 8 }] },
-      '$\\sqrt[3]{V}$ es el lado del cubo de volumen $V$: $3^3 = 27$, $5^3 = 125$, $4^3 = 64$ y $2^3 = 8$.',
-      { hint: 'Cuenta los cubitos de una capa y multiplícalos por el número de capas.' }));
-    add7('alg-22b', play('indice-radical', 'Simplifica el índice', { rounds: [{ n0: 6, m0: 8, n: 2, m: 2 }, { n0: 4, m0: 9, n: 2, m: 3 }, { n0: 6, m0: 25, n: 3, m: 5 }, { n0: 9, m0: 27, n: 3, m: 3 }] },
-      'Si el radicando es una potencia, índice y exponente se dividen entre lo mismo: $\\sqrt[6]{8} = \\sqrt[6]{2^3} = 2^{3/6} = \\sqrt{2}$; $\\sqrt[4]{9} = \\sqrt[4]{3^2} = \\sqrt3$; $\\sqrt[6]{25} = \\sqrt[3]{5}$; $\\sqrt[9]{27} = \\sqrt[3]{3}$.',
-      { hint: 'Escribe el radicando como potencia de un número primo y simplifica la fracción exponente.' }));
-
-    add7('alg-14', play('arregla-termino', 'Un término rompe la progresión', { rounds: [
-      { terms: [3, 7, 11, 16, 19], fix: [3, 15] }, { terms: [20, 17, 13, 11, 8], fix: [2, 14] }, { terms: [-5, -2, 1, 4, 8], fix: [4, 7] }, { terms: [2, 8, 10, 14, 18], fix: [1, 6] },
-    ] }, 'En una progresión aritmética la diferencia es constante. En $3, 7, 11, 16, 19$ casi todas son $+4$: el cuarto debía ser 15. Luego $-3$ pide 14; $+3$ pide 7; y $+4$ pide 6 en el segundo lugar.',
-      { hint: 'Busca la diferencia que más se repite; el término mal es el que tiene diferencias raras a sus dos lados.' }));
-    add7('alg-14b', play('suma-impares', 'La suma de los impares es un cuadrado', { rounds: [{ S: 49 }, { S: 36 }, { S: 81 }, { S: 100 }] },
-      'Cada impar es una escuadra que agranda el cuadrado: $1 + 3 + \\dots + (2n - 1) = n^2$. Con 7 impares la suma es 49; con 6, 36; con 9, 81; con 10, 100. Es la suma aritmética: $n \\cdot \\tfrac{1 + (2n - 1)}{2} = n^2$.',
-      { hint: 'Mira la forma: con n escuadras tienes un cuadrado de lado n.' }));
-    add7('alg-14c', play('zigzag-razon', 'Razón negativa o menor que 1', { rounds: [{ a: 1, r: -2 }, { a: 8, r: -0.5 }, { a: 2, r: -1 }, { a: 1, r: 3 }] },
-      'La razón es cada término dividido entre el anterior: $-2 \\div 1 = -2$ (los signos se alternan), $-4 \\div 8 = -\\tfrac12$ (se alternan y se achican), $-2 \\div 2 = -1$ (vaivén) y $3 \\div 1 = 3$.',
-      { hint: 'Divide un término entre el anterior; el signo del cociente dice si la cadena hace zigzag.' }));
-    add7('alg-14d', play('periodico-serie', 'El decimal periódico es una serie', { rounds: [{ block: '3' }, { block: '45' }, { block: '12' }, { block: '6' }] },
-      '$0.\\overline{45} = \\tfrac{45}{100} + \\tfrac{45}{100^2} + \\dots$ es geométrica de razón $\\tfrac1{100}$: suma $\\tfrac{45/100}{1 - 1/100} = \\tfrac{45}{99} = \\tfrac{5}{11}$. Igual: $0.\\overline3 = \\tfrac13$, $0.\\overline{12} = \\tfrac{4}{33}$, $0.\\overline6 = \\tfrac23$.',
-      { hint: 'El bloque que se repite va sobre tantos nueves como cifras tenga; luego simplifica.' }));
-    add7('alg-15', play('producto-telescopico', 'Productoria telescópica', { rounds: [{ kind: 'up', target: 6 }, { kind: 'down', target: 0.125 }, { kind: 'up', target: 11 }] },
-      'En $\\prod \\tfrac{k + 1}{k}$ cada numerador se cancela con el denominador siguiente y quedan los extremos: $\\tfrac{n + 1}{1}$. En $\\prod_{k = 2}^{n} \\tfrac{k - 1}{k}$ queda $\\tfrac1n$.',
-      { hint: 'Escribe los primeros factores y tacha lo que se repite arriba y abajo: ¿qué sobrevive?' }));
-
-    add7('alg-23a', play('monomio-area', 'El producto de monomios es un área', { rounds: [{ f: [[3, 1], [2, 2]] }, { f: [[4, 2], [5, 1]] }, { f: [[2, 3], [4, 2]] }, { f: [[3, 1], [3, 1]] }] },
-      'Los números se multiplican y los exponentes de la misma letra se suman: $3x \\cdot 2x^2 = 6x^3$, $4x^2 \\cdot 5x = 20x^3$, $2x^3 \\cdot 4x^2 = 8x^5$, $3x \\cdot 3x = 9x^2$.',
-      { hint: 'Separa: primero el producto de los números, después cuántas x quedan multiplicándose en total.' }));
-    add7('alg-3', play('cubo-del-binomio', 'El cubo de un binomio', { rounds: [{ b: 1 }, { b: 2 }, { b: 3 }] },
-      'El cubo de arista $x + b$ se parte en un cubo $x^3$, tres losas $b x^2$, tres barras $b^2 x$ y un cubito $b^3$: $(x + 2)^3 = x^3 + 6x^2 + 12x + 8$.',
-      { hint: 'Hay tres losas iguales y tres barras iguales: cada coeficiente es 3 por el área o el largo de una pieza.' }));
-    add7('alg-24c', play('elige-comite', 'Comités: los números de Pascal', { rounds: [{ n: 4, ways: 6 }, { n: 5, ways: 10 }, { n: 6, ways: 15 }, { n: 7, ways: 35 }] },
-      'Cada persona es un paréntesis $(1 + x)$: entra al comité (se toma la $x$) o no. Las maneras de escoger $k$ entre $n$ son $\\binom{n}{k}$, un número de la fila $n$ de Pascal: $\\binom42 = 6$, $\\binom52 = 10$, $\\binom62 = 15$, $\\binom73 = 35$. Escoger a $k$ es lo mismo que dejar por fuera a $n - k$.',
-      { hint: 'Busca el número en la fila del triángulo de Pascal que corresponde al número de personas.' }));
-    add7('alg-24b', play('parte-medio', 'Parte el término del medio', { rounds: [{ a: 2, b: 7, c: 3 }, { a: 3, b: -1, c: -2 }, { a: 6, b: 5, c: 1 }, { a: 2, b: -5, c: 2 }] },
-      'Se buscan $m$ y $n$ con $m + n = b$ y $mn = ac$: $2x^2 + 7x + 3$ pide $6$ y $1$, y $2x^2 + 6x + x + 3 = (2x + 1)(x + 3)$. Luego $-3, 2$; $3, 2$; $-4, -1$.',
-      { hint: 'Primero multiplica a por c; luego busca entre los divisores de ese número dos que sumen b.' }));
-
-    add7('alg-23c', play('cuadrado-complejo', 'La raíz cuadrada de un complejo', { rounds: [{ t: [-4, 0] }, { t: [0, 2] }, { t: [3, 4] }, { t: [-5, 12] }] },
-      'Al elevar $a + bi$ al cuadrado sale $a^2 - b^2 + 2ab\\,i$: el ángulo se duplica y el módulo se eleva al cuadrado. Así $(2i)^2 = -4$, $(1 + i)^2 = 2i$, $(2 + i)^2 = 3 + 4i$ y $(2 + 3i)^2 = -5 + 12i$. El opuesto también sirve.',
-      { hint: 'El módulo de z debe ser la raíz del módulo de la estrella, y su ángulo la mitad.' }));
-    add7('alg-1', play('edades-barras', 'Un problema de edades', { rounds: [{ k1: 3, L: 10, k2: 2 }, { k1: 4, L: 6, k2: 2 }, { k1: 5, L: 4, k2: 3 }, { k1: 3, L: 12, k2: 2 }] },
-      'Con $x$ la edad del hijo: $3x + 10 = 2(x + 10)$ da $x = 10$. Luego $4x + 6 = 2(x + 6)$, $x = 3$; $5x + 4 = 3(x + 4)$, $x = 4$; $3x + 12 = 2(x + 12)$, $x = 12$. Los dos envejecen lo mismo.',
-      { hint: 'La primera condición ya la cumple la barra; mueve la edad hasta que también se cumpla la segunda.' }));
-    add7('alg-4a', play('tres-puntos', 'La parábola por tres puntos', { rounds: [{ a: 1, b: -2, c: -3, xs: [-1, 0, 3] }, { a: -1, b: 2, c: 3, xs: [0, 1, 3] }, { a: 2, b: 0, c: -4, xs: [0, 1, 2] }] },
-      'Tres puntos con $x$ distintas fijan una sola parábola. El punto con $x = 0$ da $c$ directamente; los otros dos dan un sistema para $a$ y $b$: $y = x^2 - 2x - 3$, $y = -x^2 + 2x + 3$ y $y = 2x^2 - 4$.',
-      { hint: 'Empieza por c: es la altura del punto que está sobre el eje y.' }));
-    add7('alg-4', play('vieta-raices', 'Suma y producto de las raíces', { rounds: [{ S: 5, P: 6 }, { S: -1, P: -6 }, { S: 0, P: -9 }, { S: -4, P: 4 }] },
-      'Si $x^2 - Sx + P = (x - r_1)(x - r_2)$, entonces $r_1 + r_2 = S$ y $r_1 r_2 = P$: raíces 2 y 3; $-3$ y 2; $3$ y $-3$; y $-2$ doble.',
-      { hint: 'Con producto negativo las raíces tienen signos distintos; con suma cero son opuestas.' }));
-
-    add7('alg-23b', play('reparte-terminos', 'Divide término a término', { rounds: [
-      { terms: ['6x^3', '+4x^2', '-2x'], d: '2x', ans: ['3x^2', '+2x', '-1'], tray: ['3x^2', '+2x', '-1', '3x^3', '+2x^2', '-x'] },
-      { terms: ['9x^4', '-3x^2'], d: '3x^2', ans: ['3x^2', '-1'], tray: ['3x^2', '-1', '6x^2', '-x', '3x^6'] },
-      { terms: ['10x^5', '+5x^3', '+15x'], d: '5x', ans: ['2x^4', '+x^2', '+3'], tray: ['2x^4', '+x^2', '+3', '2x^5', '+x^3', '+3x'] },
-    ] }, 'Un divisor monomio reparte: cada término se divide por separado, números entre números y exponentes que se restan: $\\tfrac{6x^3}{2x} = 3x^2$, $\\tfrac{-2x}{2x} = -1$. Un término igual al divisor da 1, no 0.',
-      { hint: 'En cada término: divide los números y resta el exponente del divisor al del término.' }));
-    add7('alg-92', play('divisor-fraccion', 'Dividir entre ax − b', { rounds: [{ P: [2, -1, 3, -1], a: 2, b: 1 }, { P: [4, 0, -1, 5], a: 2, b: -1 }, { P: [1, 2, 0, -3], a: 1, b: 2 }] },
-      'El residuo de dividir entre $ax - b$ es $P\\left(\\tfrac ba\\right)$: el número que anula el divisor. Entre $2x - 1$ se evalúa en $\\tfrac12$ y el residuo es $0.5$; entre $2x + 1$, en $-\\tfrac12$ (residuo 5); entre $x - 2$, en 2 (residuo 13).',
-      { hint: 'Busca el valor de x que hace cero al divisor completo, con su coeficiente incluido.' }));
-    add7('alg-93', play('ceros-fraccion', 'Ceros que son fracciones', { rounds: [{ P: [2, -3, -3, 2], zeros: [-1, 0.5, 2] }, { P: [2, -1, -1], zeros: [-0.5, 1] }, { P: [4, 0, -1], zeros: [-0.5, 0.5] }] },
-      'Un cero racional $\\tfrac pq$ tiene $p$ divisor del término independiente y $q$ divisor del coeficiente principal; por eso con 2 o 4 adelante aparecen mitades: $2x^3 - 3x^2 - 3x + 2 = (x + 1)(2x - 1)(x - 2)$.',
-      { hint: 'Prueba enteros y mitades: si el primer coeficiente es 2 o 4, los ceros pueden ser medios.' }));
-
-    add7('alg-25a', play('signo-afuera', 'Factores opuestos', { rounds: [
-      { top: ['2-x'], bottom: ['x-2'], pairs: [[0, 0]], res: '-1' },
-      { top: ['x+3', '5-x'], bottom: ['x-5', 'x'], pairs: [[1, 0]], res: '-\\dfrac{x+3}{x}' },
-      { top: ['x-4'], bottom: ['4-x', 'x+1'], pairs: [[0, 0]], res: '-\\dfrac{1}{x+1}' },
-      { top: ['3-x', 'x+2'], bottom: ['x+2', 'x-3'], pairs: [[0, 1]], res: '-1' },
-    ] }, '$a - b$ y $b - a$ son opuestos: $2 - x = -(x - 2)$. Se saca el signo de uno, los factores iguales se cancelan y queda un $-1$: $\\tfrac{2 - x}{x - 2} = -1$. Un factor como $x + 3$ no tiene opuesto aquí.',
-      { hint: 'Busca parejas que tengan los mismos números pero restados al revés; basta voltear uno de los dos.' }));
-    add7('alg-25b', play('fraccion-compuesta', 'Simplifica la fracción compuesta', { rounds: [
-      { tex: '\\dfrac{\\frac1x + \\frac12}{x + 2}', chips: ['x', '2', '2x', 'x^2'], good: 2, res: '\\dfrac{2 + x}{2x(x + 2)} = \\dfrac{1}{2x}', why: ['queda el 1/2 adentro', 'queda el 1/x adentro', '', 'queda el 1/2 adentro'] },
-      { tex: '\\dfrac{1 - \\frac1x}{1 - \\frac{1}{x^2}}', chips: ['x', 'x^2', 'x - 1', '2x'], good: 1, res: '\\dfrac{x^2 - x}{x^2 - 1} = \\dfrac{x}{x + 1}', why: ['queda el 1/x² adentro', '', 'no quita ninguna fracción', 'queda el 1/x² adentro'] },
-      { tex: '\\dfrac{\\frac3x}{\\frac{6}{x^2}}', chips: ['3', 'x', 'x^2', '6'], good: 2, res: '\\dfrac{3x}{6} = \\dfrac{x}{2}', why: ['quedan las dos fracciones', 'queda el 6/x² como 6/x', '', 'quedan las dos fracciones'] },
-    ] }, 'Se multiplica arriba y abajo por el común denominador de las fracciones de adentro; así todas desaparecen a la vez: con $2x$, $\\tfrac{\\frac1x + \\frac12}{x + 2} = \\tfrac{2 + x}{2x(x + 2)} = \\tfrac1{2x}$.',
-      { hint: 'Mira los denominadores pequeños de adentro: el multiplicador debe ser múltiplo de todos.' }));
-    add7('alg-101', play('escalera-sistema', 'Tres ecuaciones en escalera', { rounds: [
-      { eqs: [[1, 2, -1, -6], [0, 1, 1, 1], [0, 0, 2, 6]], sol: [1, -2, 3] },
-      { eqs: [[1, -1, 3, -2], [0, 2, 1, 1], [0, 0, 1, -1]], sol: [2, 1, -1] },
-      { eqs: [[1, 1, 1, -1], [0, 1, -2, -4], [0, 0, 3, 6]], sol: [-3, 0, 2] },
-    ] }, 'En un sistema escalonado la última ecuación tiene una sola incógnita: $2z = 6$ da $z = 3$; con ella, $y + 3 = 1$ da $y = -2$; y con las dos, $x - 4 - 3 = -6$ da $x = 1$.',
-      { hint: 'Empieza por la ecuación de abajo, que solo tiene z; cada valor hallado sirve para la de arriba.' }));
-    add7('alg-102', play('parciales-repetido', 'Fracciones parciales con factor repetido', { rounds: [{ p: 1, c: 2, d: -1 }, { p: -2, c: 3, d: 5 }, { p: 3, c: 1, d: 4 }, { p: -1, c: -1, d: 3 }] },
-      'Un factor al cuadrado pide dos fracciones: $\\tfrac{A}{x - p} + \\tfrac{B}{(x - p)^2}$, cuyo numerador común es $A(x - p) + B$. El coeficiente de $x$ da $A$ y el número suelto da $B$: $\\tfrac{2x - 1}{(x - 1)^2} = \\tfrac{2}{x - 1} + \\tfrac{1}{(x - 1)^2}$.',
-      { hint: 'Solo A acompaña a la x: empieza por A con la barra de x y luego ajusta B con la del número.' }));
-
-    add7('alg-71', play('cruce-potencias', 'Exponencial contra polinomio', { rounds: [{ b: 2, g: 'sq', zeros: [2, 4] }, { b: 2, g: 'lin', zeros: [1, 2] }, { b: 2, g: 'plus1', zeros: [0, 1] }] },
-      '$2^x$ y $x^2$ valen lo mismo en $x = 2$ y $x = 4$; después la exponencial gana para siempre: $2^5 = 32 > 25$. Con $2x$ se cruzan en 1 y 2; con $x + 1$, en 0 y 1. Multiplicar siempre por lo mismo termina superando a cualquier polinomio.',
-      { hint: 'Compara las dos tablas de valores en x = 0, 1, 2, …: busca dónde dan el mismo número.' }));
-    add7('alg-13b', play('regla-del-72', 'La regla del 72', { rounds: [{ r: 8 }, { r: 12 }, { r: 9 }, { r: 24 }] },
-      'Al $r\\,\\%$ compuesto el dinero se duplica en unos $72 \\div r$ periodos: al 8 % la regla dice 9 años y $1.08^9 \\approx 1.999$, así que se duplica al décimo. Al 12 %: regla 6, real 7; al 9 %: regla 8, real 9; al 24 %: regla 3, real 4.',
-      { hint: 'La barra debe pasar la marca de 2 pesos; la regla del 72 te da un buen punto de partida.' }));
-    add7('alg-72', play('escala-sonido', 'Los decibeles son un logaritmo', { rounds: [{ tex: '10^{3}', db: 30 }, { tex: '1\\,000\\,000', db: 60 }, { tex: '1', db: 0 }, { tex: '10^{11}', db: 110 }] },
-      'El nivel en decibeles es $10 \\log \\tfrac{I}{I_0}$: diez veces el exponente de la intensidad relativa. $10^3$ da 30 dB; $1\\,000\\,000 = 10^6$ da 60; $1 = 10^0$ da 0 (el umbral); $10^{11}$ da 110. Cada 10 dB más es diez veces más intensidad.',
-      { hint: 'Escribe la intensidad como potencia de 10 y multiplica su exponente por 10.' }));
-    add7('alg-73', play('dos-ciudades', '¿Cuándo una ciudad alcanza a la otra?', { rounds: [
-      { names: ['Villa Sol', 'Río Claro'], A: 50000, a: 2, B: 40000, b: 5 },
-      { names: ['El Alto', 'La Vega'], A: 90000, a: 1, B: 60000, b: 4 },
-      { names: ['Norte', 'Sur'], A: 30000, a: 3, B: 20000, b: 8 },
-    ] }, 'Con tasas $a\\,\\%$ y $b\\,\\%$ se iguala $A\\left(1 + \\tfrac{a}{100}\\right)^t = B\\left(1 + \\tfrac{b}{100}\\right)^t$ y se toma logaritmo: $t = \\dfrac{\\log(A/B)}{\\log\\frac{1 + b/100}{1 + a/100}}$. Para la primera, $t \\approx 7.7$: el pueblo de abajo pasa en el año 8.',
-      { hint: 'Compara las barras año tras año: la de crecimiento rápido acorta la distancia cada vez más.' }));
-  }
-})();
 ;
 //#archivo js/explora.js
 // Explora: la explicación interactiva que ocupa el lugar del video (spec 2026-11-23-explora-leccion-interactiva).
@@ -4320,6 +1891,1811 @@ XPD.rejilla = (stage, p, s, api) => {
     salta(l) { for (const m of l) { antes(m); for (const [k, e] of pasos(m)) s = { c: s.c.map((x, j) => (j === k ? e : x)) }; } luz = []; draw(); },
   });
 };
+;
+//#archivo js/explora-mate.js
+// Explora · piezas de dibujo para las lecciones de Álgebra y Trigonometría (spec 2026-11-25-explora-algebra-trigonometria). Va
+// después de explora-escenas.js. Todo son funciones puras que devuelven SVG con las piezas de XPK (K).
+const XM = {
+  // Recta numérica de a a b en la altura y: { X(valor) → píxel, s: dibujo }. o = { p: cada cuánto hay marca, n: 0 sin números, f: rótulo }
+  linea(K, a, b, y = 100, o = {}) {
+    const X = x => 24 + (x - a) / (b - a) * 292; let s = K.ar(12, y, 330, y);
+    for (let x = a; x <= b + 1e-9; x += o.p || 1) s += K.l(X(x), y - 5, X(x), y + 5) + (o.n === 0 ? '' : K.t(X(x), y + 22, o.f ? o.f(x) : K.sig(x), 's tm'));
+    return { X, s };
+  },
+  // Plano cartesiano: { X, Y, s }. o = { H alto, g paso de la cuadrícula, ex, ey rótulos de los ejes, num: cada cuánto números }
+  plano(K, a, b, c, d, o = {}) {
+    const H = o.H || 210, X = x => 18 + (x - a) / (b - a) * 304, Y = y => 8 + (d - y) / (d - c) * (H - 16), g = o.g || 1; let s = '';
+    for (let x = Math.ceil(a / g) * g; x <= b; x += g) s += K.l(X(x), 8, X(x), H - 8, 'ls');
+    for (let y = Math.ceil(c / (o.gy || g)) * (o.gy || g); y <= d; y += o.gy || g) s += K.l(18, Y(y), 322, Y(y), 'ls');
+    if (c <= 0 && d >= 0) s += K.l(18, Y(0), 322, Y(0), 'lm'); if (a <= 0 && b >= 0) s += K.l(X(0), 8, X(0), H - 8, 'lm');
+    return { X, Y, s, a, b, c, d };
+  },
+  curva(K, P, f, cls = 'la gr', u = P.a, w = P.b, n = 120) {
+    let out = '', q = []; const cierra = () => { if (q.length > 1) out += K.pl(q, cls); q = []; };
+    for (let i = 0; i <= n; i++) { const x = u + (w - u) * i / n, y = f(x); if (Number.isFinite(y) && y >= P.c && y <= P.d) q.push([P.X(x), P.Y(y)]); else cierra(); }
+    cierra(); return out;
+  },
+  // Barra partida: segs = [[ancho, rótulo, clase]], anchos en partes de W.
+  barra(K, y, segs, o = {}) {
+    const x0 = o.x ?? 20, W = o.W || 300, h = o.h || 34, T = o.T || segs.reduce((a, s) => a + s[0], 0); let x = x0, s = '';
+    for (const [w, t, c] of segs) { const p = w / T * W; s += K.r(x, y, p, h, c || 'fa') + (t !== '' && t != null && p > 10 ? K.t(x + p / 2, y + h / 2 + 5, t, 's') : ''); x += p; }
+    return s;
+  },
+  // Renglones que van saliendo: se ven los primeros v.n.
+  pasos: (K, v, l, y = 40, d = 36, cls = 'b') => l.map((t, i) => K.f(v.n - i, K.t(170, y + i * d, t, cls))).join(''),
+  bolas: (K, x, y, n, cls = 'fa', u = 26, r = 10) => Array.from({ length: Math.round(n) }, (_, i) => K.c(x + i * u, y, r, cls)).join(''),
+  // Rejilla de a × b cuadros de lado u.
+  reja(K, x, y, a, b, u, cls = 'fa') { let s = ''; for (let i = 0; i < Math.round(a); i++) for (let j = 0; j < Math.round(b); j++) s += K.r(x + i * u, y + j * u, u - 2, u - 2, cls); return s; },
+  // Rueda de radio r con el radio a g grados y sus proyecciones.
+  rueda(K, x, y, r, g, o = {}) {
+    const [px, py] = K.at(x, y, r, g);
+    return K.l(x - r - 14, y, x + r + 14, y, 'lm') + K.l(x, y - r - 14, x, y + r + 14, 'lm') + K.arc(x, y, r, 0, 360, 'lm') + (o.arco === 0 ? '' : K.sec(x, y, 22, 0, g, 'fa'))
+      + (o.cs === 0 ? '' : K.l(x, y, px, y, 'lg gr') + K.l(px, y, px, py, 'lf gr')) + K.l(x, y, px, py, 'la gr') + K.c(px, py, 5, 'fA');
+  },
+};
+// Práctica de fichas en fila: rótulos de los casilleros, fichas buenas (en orden) y fichas que sobran.
+const xpFila = (texto, et, ok, sobra, pista, idea, o = {}) => {
+  const n = et.length, y = o.y || 58, W = Math.min(104, 340 / n - 12);
+  return xpHaz('fichas', texto, { slots: et.map((e, i) => ({ x: 340 * (i + 0.5) / n, y, w: W, et: e })), fichas: [...ok, ...sobra].sort((a, b) => (a < b ? 1 : -1)), meta: ok, alto: y + 48, pista, ...(o.fondo ? { fondo: o.fondo } : {}) }, idea);
+};
+// Práctica de dibujo que se mueve.
+const xpMueve = (texto, alto, v, manijas, metas, dib, idea, o = {}) => xpHaz('dibujo', texto, { alto, v, manijas, ...(typeof metas === 'function' ? { cumple: metas } : { metas }), dib, ...o }, idea);
+const xpRegla = (k, min, max, et, paso = 1) => ({ k, min, max, paso, et });
+;
+//#archivo js/explora-alg-mundos-1-2.js
+// Álgebra · mundos 1 (Teoría de Conjuntos: alg-0b y alg-0c) y 2 (La Recta Real), Explora. Ejemplos propios, que no salen en los ejercicios.
+{
+  const bola = (K, x, y, r, t, cls, tx = 'b') => K.c(x, y, r, cls) + K.t(x, y - r + 20, t, tx);
+  // ---------------------------------------------------------------------------------------------------------- alg-0b
+  const dentro = (v, K) => K.r(14, 8, 312, 160, 'fc', 10) + K.c(150 + 40 * (1 - v.in), 92, 66, 'fa') + K.t(150 + 40 * (1 - v.in) - 44, 46, 'B', 'b ta') + K.c(60 + 90 * v.in, 104, 30, 'fg') + K.t(60 + 90 * v.in, 110, 'A', 'b tg') + (v.p ? K.t(170, 190, v.p, 'ta') : '');
+  const partes = (v, K) => {
+    const n = Math.round(v.n), N = 2 ** n, e = ['t', 'c', 'm', 'q', 'n'], w = Math.min(58, 310 / Math.min(N, 8)); let h = K.t(170, 24, `{${e.slice(0, n).join(', ')}}`, 'b ta');
+    for (let i = 0; i < N; i++) { const s = e.filter((_, k) => i >> k & 1).join(''); const f = Math.floor(i / 8), c = i % 8, x = 170 + (c - (Math.min(N, 8) - 1) / 2) * w; h += K.r(x - w / 2 + 2, 40 + f * 30, w - 4, 26, 'fa', 6) + K.t(x, 57 + f * 30, s || '∅', 's'); }
+    return h;
+  };
+  xpLec('alg-0b', [
+    ['Estar contenido', xpMira('dibujo', 'Empecemos por la idea: un conjunto puede estar **dentro** de otro.', { dib: dentro, v: { in: 0, p: '' }, alto: 200 }, [
+      ['A son los perros callejeros del barrio; B, todos los perros del barrio.', {}],
+      ['Cada elemento de A también está en B: A cabe entero dentro.', { in: 1 }, '$A \\subseteq B$'],
+      ['Se dice que A es **subconjunto** de B. Basta un solo elemento afuera para que no lo sea.', {}, '$A \\subseteq B$'],
+      ['Además, B tiene perros con dueño, que no están en A: es un subconjunto propio.', {}, '$A \\subset B$'],
+      ['Ojo: ∈ une un elemento con un conjunto; ⊆ une dos conjuntos.', {}, '$x \\in A, \\quad A \\subseteq B$'],
+    ], '$A \\subseteq B$: todo elemento de A está en B. El elemento usa $\\in$; el conjunto, $\\subseteq$.'),
+    xpHaz('fichas', 'Deja en A solo letras que hagan cierto $A \\subseteq B$, con B = {r, i, o, s}. Son tres.', { slots: [{ x: 170, y: 50, w: 220, h: 56, n: 3 }], fichas: ['r', 'a', 's', 'm', 'o'], meta: [['r', 's', 'o']], alto: 90, pista: 'Alguna de tus letras no está en B.' }, 'r, s y o están en B: $\\{r, s, o\\} \\subseteq B$.')],
+    ['El vacío y los iguales', xpMira('dibujo', 'Segunda idea: el **vacío** cabe en todos, y dos iguales caben uno en el otro.', { dib: (v, K) => K.c(90, 84, 54, 'fa') + K.t(90, 90, v.a, 's') + K.c(250, 84, 54, 'fg') + K.t(250, 90, v.b, 's') + K.t(170, 92, v.m, 'b'), v: { a: 'a, m, o, r', b: 'r, o, m, a', m: '?' }, alto: 160 }, [
+      ['Letras de AMOR y letras de ROMA. ¿Son conjuntos distintos?', {}],
+      ['Cada uno está dentro del otro: son el mismo conjunto.', { m: '=' }, '$A \\subseteq B \\text{ y } B \\subseteq A$'],
+      ['Ahora A son los triángulos de cuatro lados. No hay ninguno.', { a: '∅', b: 'figuras', m: '⊆' }, '$A = \\varnothing$'],
+      ['El vacío no tiene elementos que se salgan: está contenido en todo conjunto.', {}, '$\\varnothing \\subseteq B$'],
+      ['Pero {∅} no está vacío: es una caja con una caja vacía adentro.', { a: '{∅}', b: '1 cosa', m: '→' }, '$\\{\\varnothing\\} \\neq \\varnothing$'],
+    ], 'Iguales: cada uno contenido en el otro. El vacío está contenido en todos.'),
+    xpFila('Pon entre cada pareja el símbolo que va: 3 □ {1, 3}; {3} □ {1, 3}; {3, 1} □ {1, 3}.', ['3 □ {1, 3}', '{3} □ {1, 3}', '{3, 1} □ {1, 3}'], ['∈', '⊂', '='], ['∉'], 'Elemento con conjunto: pertenece. Uno menor que el otro: contenido. Los mismos: iguales.', 'Elemento, subconjunto propio e iguales.')],
+    ['Todos los subconjuntos', xpMira('dibujo', 'Tercera idea: el **conjunto de partes** reúne todos los subconjuntos.', { dib: partes, v: { n: 0 }, alto: 150 }, [
+      ['El vacío tiene un solo subconjunto: él mismo.', {}, '$2^0 = 1$'],
+      ['Con un elemento hay dos: no llevarlo o llevarlo.', { n: 1 }, '$2^1 = 2$'],
+      ['Con dos, cuatro: cada subconjunto anterior sin el nuevo y con el nuevo.', { n: 2 }, '$2^2 = 4$'],
+      ['Con tres, ocho. Cada elemento nuevo duplica.', { n: 3 }, '$2^3 = 8$'],
+      ['Con n elementos: dos opciones por cada uno.', { n: 3 }, '$2^n$'],
+    ], 'Un conjunto de n elementos tiene $2^n$ subconjuntos.'),
+    xpMueve('¿Cuántos elementos hacen falta para tener **32** subconjuntos?', 230, { n: 1 }, [xpRegla('n', 0, 5, 'elementos')], { n: 5 }, partes, '$2^5 = 32$.', { lee: v => `$2^{${v.n}} = ${2 ** v.n}$` })],
+    ['Ahora sí, un problema', xpMueve('Una hamburguesería cobra lo mismo por cualquier combinación de salsas, incluso ninguna. Quiere ofrecer **16** combinaciones. ¿Cuántas salsas necesita?', 230, { n: 1 }, [xpRegla('n', 0, 5, 'salsas')], { n: 4 }, partes, 'Cada salsa se pone o no: $2^4 = 16$.', { lee: v => `$2^{${v.n}} = ${2 ** v.n}$` })],
+  ], 'Contenido es «todos los de uno están en el otro»; y hay $2^n$ subconjuntos.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-0c
+  const R = 62, h0 = Math.sqrt(R * R - 1444), T = 92 - h0, U = 92 + h0, ar = `A${R} ${R} 0`;
+  const Z = { a: `M170 ${T} ${ar} 1 0 170 ${U} ${ar} 0 1 170 ${T} Z`, i: `M170 ${T} ${ar} 0 0 170 ${U} ${ar} 0 0 170 ${T} Z`, b: `M170 ${T} ${ar} 1 1 170 ${U} ${ar} 0 0 170 ${T} Z` };
+  const pz = (k, c) => `<path class="xf ${c} sn" d="${Z[k]}"/>`;
+  const venn = (v, K) => K.r(14, 10, 312, 164, v.o > 0.5 ? 'fa' : 'fc', 10) + ['a', 'i', 'b'].map(k => pz(k, v[k] > 0.5 ? 'fa' : 'fop')).join('') + K.c(132, 92, R, 'fn') + K.c(208, 92, R, 'fn') + K.t(66, 34, 'A', 'b ta') + K.t(274, 34, 'B', 'b tg') + [['ta', 102], ['ti', 170], ['tb', 238]].map(([k, x]) => K.t(x, 98, v[k] || '', 's')).join('') + (v.p ? K.t(170, 196, v.p, 'ta') : '');
+  const num = (v, K) => { const i = v.i, a = v.A - i, b = v.B - i; return venn({ a: 1, i: 1, b: 1 }, K) + K.t(102, 98, K.sig(a), 'b') + K.t(170, 98, K.sig(i), 'b') + K.t(238, 98, K.sig(b), 'b') + K.t(170, 194, `en total ${K.sig(a + i + b)}`, 's'); };
+  xpLec('alg-0c', [
+    ['Unir y cruzar', xpMira('dibujo', 'Empecemos por la idea: la **unión** junta y la **intersección** deja lo común.', { dib: venn, v: { a: 0, i: 0, b: 0, o: 0, ta: 'bus', ti: 'a pie', tb: 'bici' }, alto: 180 }, [
+      ['A: como llega Lina al trabajo, en bus o a pie. B: como llega Óscar, en bici o a pie.', {}],
+      ['La unión toma lo que está en A, en B o en los dos, sin repetir.', { a: 1, i: 1, b: 1 }, '$A \\cup B$'],
+      ['La intersección, solo lo que está en los dos: a pie.', { a: 0, b: 0 }, '$A \\cap B$'],
+      ['«O» une y «y» cruza.', {}, '$A \\cap B$'],
+      ['Si no comparten nada, la intersección es el vacío: son disjuntos.', { i: 0, ti: '' }, '$A \\cap B = \\varnothing$'],
+    ], '$\\cup$: en uno o en el otro. $\\cap$: en los dos.'),
+    xpFila('A = {lun, mié, vie}; B = {mié, jue}. ¿Cuántos elementos hay?', ['A ∪ B', 'A ∩ B', 'A'], ['4', '1', '3'], ['5', '2'], 'El miércoles está en los dos: en la unión se cuenta una sola vez.', 'La unión tiene 4, porque mié no se repite.')],
+    ['Quitar', xpMira('dibujo', 'Segunda idea: la **diferencia** quita y el **complemento** toma lo de afuera.', { dib: venn, v: { a: 0, i: 0, b: 0, o: 0 }, alto: 180 }, [
+      ['A menos B: lo de A que no está en B.', { a: 1 }, '$A - B$'],
+      ['B menos A es otra zona: el orden importa.', { a: 0, b: 1 }, '$B - A$'],
+      ['Las dos a la vez: en uno o en otro, pero no en ambos.', { a: 1 }, '$A \\triangle B$'],
+      ['El complemento de A es todo lo del universo que no está en A.', { a: 0, b: 1, o: 1 }, "$A'$"],
+      ['Afuera de la unión: ni en A ni en B.', { b: 0 }, "$(A \\cup B)' = A' \\cap B'$"],
+    ], 'La diferencia parte de uno y quita el otro; el complemento necesita el universo.'),
+    xpFila('U = {1, …, 8}; A = {2, 3, 5, 7}; B = {3, 6}. ¿Cuántos elementos?', ['A − B', 'B − A', 'A△B', "A'"], ['3', '1', '4', '4'], ['2', '8'], 'Empieza por lo común, el 3. La diferencia simétrica junta las dos diferencias.', 'A − B = {2, 5, 7}; B − A = {6}; juntas, cuatro.')],
+    ['Contar sin repetir', xpMira('dibujo', 'Tercera idea: al sumar A y B, lo común se cuenta **dos veces**.', { dib: num, v: { A: 9, B: 7, i: 0 }, alto: 205 }, [
+      ['9 personas tocan tambor y 7 cantan. Si nadie hace las dos cosas, son 16.', {}, '$9 + 7 = 16$'],
+      ['Si una hace las dos, va en la zona del medio y el total baja.', { i: 1 }, '$9 + 7 - 1 = 15$'],
+      ['Con cuatro comunes, baja cuatro.', { i: 4 }, '$9 + 7 - 4 = 12$'],
+      ['Se suma todo y se resta una vez lo común.', {}, '$n(A \\cup B) = n(A) + n(B) - n(A \\cap B)$'],
+    ], '$n(A \\cup B) = n(A) + n(B) - n(A \\cap B)$.'),
+    xpMueve('11 personas tienen moto y 8, bicicleta. En total son **14**. Mueve cuántas tienen las dos.', 270, { A: 11, B: 8, i: 0 }, [xpRegla('i', 0, 8, 'tienen las dos')], { i: 5 }, num, '$11 + 8 - 5 = 14$.', { lee: v => `$11 + 8 - ${v.i} = ${19 - v.i}$` })],
+    ['Ahora sí, un problema', xpFila('De 40 viajeros, 22 llevan mapa, 17 brújula y 8 las dos. Llena las cuatro zonas.', ['solo mapa', 'las dos', 'solo brújula', 'nada'], ['14', '8', '9', '9'], ['22', '17', '1'], 'Empieza por las dos y réstalo a cada total; lo que falte para 40 no lleva nada.', '$14 + 8 + 9 = 31$ y quedan 9 sin nada.')],
+  ], 'Unir, cruzar, quitar y mirar afuera: cada operación es una zona.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-11
+  const recta = (v, K) => { const L = XM.linea(K, -6, 6, 110); return L.s + K.c(L.X(v.x), 110, 8, 'fA') + (v.q > 0.5 ? K.ar(L.X(v.d), 84, L.X(v.x), 84, 'la gr') : '') + (v.e > 0.5 ? K.c(L.X(-v.x), 110, 8, 'fF') + K.l(L.X(0), 60, L.X(0), 140, 'lm d') : '') + (v.p ? K.t(170, 40, v.p, 'b ta') : ''); };
+  xpLec('alg-11', [
+    ['Contar y deber', xpMira('dibujo', 'Empecemos por la idea: los **naturales** cuentan; los **enteros** también pueden deber.', { dib: recta, v: { x: 3, d: 0, q: 0, e: 0, p: '' }, alto: 160 }, [
+      ['1, 2, 3… sirven para contar: son los naturales.', {}, '$\\mathbb{N}$'],
+      ['Un buzo está 3 metros sobre el agua y baja 5. ¿Dónde queda?', { d: 3, q: 1, x: -2 }, '$3 - 5 = -2$'],
+      ['No hay natural para eso: hacen falta los negativos.', { q: 0 }, '$-2$'],
+      ['Con el cero y los negativos se arman los enteros.', {}, '$\\mathbb{Z} = \\{\\ldots, -2, -1, 0, 1, 2, \\ldots\\}$'],
+      ['Todo natural es entero, pero no al revés.', {}, '$\\mathbb{N} \\subset \\mathbb{Z}$'],
+    ], '$\\mathbb{N} \\subset \\mathbb{Z}$: los enteros suman el cero y los negativos.'),
+    xpMueve('Un ascensor está en el piso 4 y baja 7. Llévalo a donde queda.', 220, { x: 4, d: 4, q: 1, e: 0 }, [xpRegla('x', -6, 6, 'piso')], { x: -3 }, recta, '$4 - 7 = -3$: tercer sótano.', { lee: v => `$${v.x}$` })],
+    ['El espejo del cero', xpMira('dibujo', 'Segunda idea: cada entero tiene un **opuesto**, a la misma distancia del cero.', { dib: recta, v: { x: 4, d: 0, q: 0, e: 0, p: '' }, alto: 160 }, [
+      ['El 4 está a cuatro pasos del cero.', {}],
+      ['Al otro lado, a los mismos pasos, está su opuesto: −4.', { e: 1 }, '$4 + (-4) = 0$'],
+      ['El opuesto de −5 es 5: dos cambios de lado.', { x: -5 }, '$-(-5) = 5$'],
+      ['Juntos siempre dan cero.', {}, '$a + (-a) = 0$'],
+      ['El cero es su propio opuesto.', { x: 0 }, '$-0 = 0$'],
+    ], 'El opuesto está a la misma distancia del cero y juntos dan 0.'),
+    xpMueve('Mueve el punto hasta que su opuesto (el otro color) quede en **5**.', 220, { x: 2, d: 0, q: 0, e: 1 }, [xpRegla('x', -6, 6, 'punto')], { x: -5 }, recta, 'El opuesto de $-5$ es 5.', { lee: v => `$-(${v.x}) = ${-v.x}$` })],
+    ['Restar es sumar el opuesto', xpMira('dibujo', 'Tercera idea: restar un negativo **quita una deuda**.', { dib: recta, v: { x: -2, d: -2, q: 0, e: 0, p: '' }, alto: 160 }, [
+      ['Tienes −2: debes dos.', {}, '$-2$'],
+      ['Te quitan una deuda de 5: quedas mejor.', { q: 1, x: 3, p: '−2 − (−5)' }, '$-2 - (-5)$'],
+      ['Es lo mismo que sumar 5.', { p: '−2 + 5 = 3' }, '$-2 + 5 = 3$'],
+      ['Siempre: restar es sumar el opuesto.', {}, '$a - b = a + (-b)$'],
+    ], '$a - b = a + (-b)$.'),
+    xpMueve('Lleva el punto al resultado de $-3 - (-7)$.', 220, { x: -3, d: -3, q: 1, e: 0 }, [xpRegla('x', -6, 6, 'resultado')], { x: 4 }, recta, '$-3 + 7 = 4$.', { lee: v => `$${v.x}$` })],
+    ['Ahora sí, un problema', xpFila('A las 6 a. m. hay −5 °C; sube 9 y luego baja 7. Pon la temperatura después de cada cambio.', ['sube 9', 'baja 7'], ['4', '−3'], ['14', '3', '−4'], 'Desde −5, nueve pasos a la derecha; y desde ahí, siete a la izquierda.', '$-5 + 9 = 4$ y $4 - 7 = -3$.')],
+  ], 'Los enteros tienen opuestos, y restar es sumar el opuesto.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-11b
+  const frac = (v, K) => { const d = Math.round(v.d), n = Math.round(v.n); return Array.from({ length: d }, (_, i) => K.r(20 + i * 300 / d, 50, 300 / d, 50, i < n ? 'fa' : 'fc')).join('') + K.t(170, 34, `${n}/${d}`, 'b ta') + (v.m > 0.5 ? XM.barra(K, 112, [[v.mn, '', 'fg'], [v.md - v.mn, '', 'fc']], { h: 26 }) : ''); };
+  xpLec('alg-11b', [
+    ['Partes iguales', xpMira('dibujo', 'Empecemos por la idea: un **racional** es un reparto en partes iguales.', { dib: frac, v: { d: 1, n: 1 }, alto: 130 }, [
+      ['Una cinta entera, sin cortes.', {}],
+      ['Se parte en 5 pedazos iguales: cada uno es un quinto.', { d: 5, n: 1 }, '$\\tfrac15$'],
+      ['Tomamos tres: tres quintos.', { n: 3 }, '$\\tfrac35$'],
+      ['Abajo, en cuántas partes; arriba, cuántas se toman.', {}, '$\\tfrac{a}{b}, \\ b \\neq 0$'],
+      ['Abajo no puede ir 0: no se puede partir en cero pedazos.', {}, '$b \\neq 0$'],
+    ], 'Racional: un cociente de enteros con denominador distinto de 0.'),
+    xpMueve('Arma $\\tfrac{4}{7}$ de la cinta.', 240, { d: 2, n: 1 }, [xpRegla('d', 2, 9, 'partes'), xpRegla('n', 0, 9, 'tomadas')], { d: 7, n: 4 }, frac, 'Siete partes y cuatro tomadas.', { lee: v => `$\\tfrac{${v.n}}{${v.d}}$` })],
+    ['El mismo pedazo', xpMira('dibujo', 'Segunda idea: fracciones distintas pueden valer **lo mismo**.', { dib: frac, v: { d: 3, n: 2, m: 1, mn: 2, md: 3 }, alto: 150 }, [
+      ['Arriba, dos tercios. Abajo, la misma cantidad sin cortes.', {}, '$\\tfrac23$'],
+      ['Cortamos cada tercio en dos: seis pedazos, cuatro tomados.', { d: 6, n: 4 }, '$\\tfrac46$'],
+      ['El largo no cambió: se multiplicó arriba y abajo por 2.', {}, '$\\tfrac23 = \\tfrac46$'],
+      ['Al revés, dividir arriba y abajo simplifica.', { d: 3, n: 2 }, '$\\tfrac46 = \\tfrac23$'],
+    ], 'Multiplicar o dividir arriba y abajo por lo mismo no cambia el valor.'),
+    xpMueve('Con **12** partes, toma las que valen lo mismo que la barra de abajo, $\\tfrac34$.', 230, { d: 12, n: 2, m: 1, mn: 3, md: 4 }, [xpRegla('n', 0, 12, 'tomadas')], { n: 9 }, frac, '$\\tfrac34 = \\tfrac{9}{12}$.', { lee: v => `$\\tfrac{${v.n}}{12}$` })],
+    ['Decimales que paran o se repiten', xpMira('dibujo', 'Tercera idea: al dividir, el decimal **se detiene** o **se repite**.', { dib: (v, K) => XM.pasos(K, v, ['3 ÷ 4 = 0.75', '2 ÷ 11 = 0.18 18…', '0.18 18… = 2/11'], 44, 40), v: { n: 1 }, alto: 150 }, [
+      ['3 ÷ 4: el residuo llega a cero y se detiene.', {}, '$\\tfrac34 = 0.75$'],
+      ['2 ÷ 11: los residuos se repiten y las cifras también.', { n: 2 }, '$\\tfrac{2}{11} = 0.\\overline{18}$'],
+      ['Solo hay unos pocos residuos posibles: tarde o temprano vuelve alguno.', {}],
+      ['Y al revés: todo decimal que para o se repite viene de una fracción.', { n: 3 }, '$0.\\overline{18} = \\tfrac{18}{99} = \\tfrac{2}{11}$'],
+    ], 'Racional = decimal que termina o que se repite.'),
+    xpFila('Pon cada decimal bajo su fracción.', ['1/4', '4/9', '7/20'], ['0.25', '0.444…', '0.35'], ['0.4', '0.14', '0.49'], 'Los novenos se repiten; los cuartos y veinteavos se vuelven centésimos.', 'Dos se detienen y los novenos se repiten.')],
+    ['Ahora sí, un problema', xpMueve('De una pista de 1 km, Iván corrió $\\tfrac25$. Con marcas cada **décimo**, ¿cuántas marcas pasó?', 230, { d: 10, n: 0, m: 1, mn: 2, md: 5 }, [xpRegla('n', 0, 10, 'décimos')], { n: 4 }, frac, '$\\tfrac25 = \\tfrac{4}{10} = 0.4$.', { lee: v => `$\\tfrac{${v.n}}{10}$` })],
+  ], 'Un racional es un reparto: muchas fracciones lo nombran y su decimal para o se repite.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-11c
+  const diag = (v, K) => K.p([[40, 150], [40 + v.l * 40, 150], [40 + v.l * 40, 150 - v.l * 40], [40, 150 - v.l * 40]], 'fa') + K.l(40, 150, 40 + v.l * 40, 150 - v.l * 40, 'lf gr') + K.f(v.g, K.ar(40, 170, 40 + v.l * 56.57, 170, 'lf gr') + K.t(50 + v.l * 56.57, 176, v.t || '√2', 'b tf', 'start'));
+  const lupa = (v, K) => { const a = Math.round(v.a * 10) / 10, L = XM.linea(K, 0, 6, 90); return L.s + K.r(L.X(v.a), 70, L.X(v.a + v.w) - L.X(v.a), 40, 'fa') + K.t(170, 40, `${K.sig(a * a)}  y  ${K.sig((a + v.w) ** 2)}`, 'b ta'); };
+  xpLec('alg-11c', [
+    ['Un largo sin fracción', xpMira('dibujo', 'Empecemos por la idea: hay largos que **ninguna fracción** mide.', { dib: diag, v: { l: 2, g: 0 }, alto: 190 }, [
+      ['Un cuadrado de lado 1. Su diagonal parte la figura en dos triángulos.', {}],
+      ['Por Pitágoras, la diagonal al cuadrado es 1 + 1.', {}, '$d^2 = 1^2 + 1^2 = 2$'],
+      ['La diagonal mide raíz de dos.', { g: 1 }, '$d = \\sqrt2$'],
+      ['Su decimal ni para ni se repite: 1.41421356…', {}, '$1.41421356\\ldots$'],
+      ['No es racional: se llama **irracional**. π es otro.', {}, '$\\sqrt2, \\pi \\in \\mathbb{I}$'],
+    ], 'Irracional: su decimal no termina ni se repite.'),
+    xpFila('Pon cada número en su familia más pequeña.', ['√9', '−2.5', '√5'], ['natural', 'racional', 'irracional'], ['entero'], 'Primero calcula la raíz si es exacta. −2.5 es una división de enteros.', '$\\sqrt9 = 3$ es natural; $\\sqrt5$ no es exacta.')],
+    ['Encerrar una raíz', xpMira('dibujo', 'Segunda idea: una raíz se **encierra** entre dos números que sí conocemos.', { dib: lupa, v: { a: 2, w: 1 }, alto: 130 }, [
+      ['¿Dónde está raíz de siete? Probemos entre 2 y 3.', {}],
+      ['Dos al cuadrado es 4 y tres al cuadrado, 9. El 7 queda en medio.', {}, '$2 < \\sqrt7 < 3$'],
+      ['Se angosta: 2.5 al cuadrado es 6.25.', { a: 2.5, w: 0.5 }, '$2.5 < \\sqrt7 < 3$'],
+      ['Y 2.6 al cuadrado es 6.76; 2.7, 7.29.', { a: 2.6, w: 0.1 }, '$2.6 < \\sqrt7 < 2.7$'],
+      ['Nunca se llega exacto, pero se puede acercar cuanto se quiera.', {}, '$\\sqrt7 \\approx 2.65$'],
+    ], 'Si $a^2 < n < b^2$, entonces $a < \\sqrt{n} < b$.'),
+    xpMueve('Mueve la ventana de ancho 1 hasta encerrar $\\sqrt{20}$.', 190, { a: 0, w: 1 }, [xpRegla('a', 0, 4, 'empieza en')], { a: 4 }, lupa, '$4^2 = 16$ y $5^2 = 25$.', { lee: v => `$${v.a}^2 = ${v.a ** 2}, \\ ${v.a + 1}^2 = ${(v.a + 1) ** 2}$` })],
+    ['La recta llena', xpMira('dibujo', 'Tercera idea: racionales e irracionales juntos llenan la recta: los **reales**.', { dib: (v, K) => { const L = XM.linea(K, -2, 4, 80); return L.s + [[-1.5, 'fa', 1], [0.75, 'fa', 1], [2, 'fa', 1], [1.414, 'fF', 2], [3.1416, 'fF', 2]].map(([x, c, k]) => K.f(v.n - k + 1, K.c(L.X(x), 80, 6, c))).join('') + K.f(v.n - 2, K.r(L.X(-2), 76, 292, 8, 'fo')); }, v: { n: 0 }, alto: 120 }, [
+      ['Primero, algunos racionales en la recta.', { n: 1 }, '$\\mathbb{Q}$'],
+      ['Entre dos racionales cualquiera siempre hay otro.', {}, '$\\tfrac{a+b}{2}$'],
+      ['Aun así quedan huecos: ahí están los irracionales.', { n: 2 }, '$\\mathbb{I}$'],
+      ['Juntos, sin huecos, son los reales.', { n: 3 }, '$\\mathbb{R} = \\mathbb{Q} \\cup \\mathbb{I}$'],
+    ], '$\\mathbb{R} = \\mathbb{Q} \\cup \\mathbb{I}$ y $\\mathbb{Q} \\cap \\mathbb{I} = \\varnothing$.'),
+    xpFila('Ordena de menor a mayor.', ['1.º', '2.º', '3.º'], ['1.4', '√2', '3/2'], [], 'Raíz de dos vale 1.414…', '$1.4 < 1.414\\ldots < 1.5$.')],
+    ['Ahora sí, un problema', xpMueve('Un jardín cuadrado tiene **30** m² de área. ¿Entre qué enteros está su lado? Mueve la ventana (hasta 6).', 190, { a: 0, w: 1 }, [xpRegla('a', 0, 5, 'empieza en')], { a: 5 }, lupa, '$5^2 = 25 < 30 < 36 = 6^2$.', { lee: v => `$${v.a ** 2} \\ \\text{y} \\ ${(v.a + 1) ** 2}$` })],
+  ], 'Los irracionales llenan los huecos; juntos con los racionales son los reales.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-12b
+  const rec = (v, K) => XM.reja(K, 40, 30, v.b, v.a, 26, 'fa') + XM.reja(K, 40 + v.b * 26 + v.s * 24, 30, v.c, v.a, 26, 'fg');
+  xpLec('alg-12b', [
+    ['Cambiar y agrupar', xpMira('dibujo', 'Empecemos por la idea: sumar y multiplicar dejan **cambiar el orden** y **agrupar**.', { dib: (v, K) => K.f(1 - v.g, XM.reja(K, 60, 20, 5, 3, 30)) + K.f(v.g, XM.reja(K, 120, 20, 3, 5, 26, 'fg')), v: { g: 0 }, alto: 165 }, [
+      ['Una bandeja de 3 filas con 5 panes.', {}, '$3 \\cdot 5$'],
+      ['Se gira: 5 filas de 3. Son los mismos panes.', { g: 1 }, '$5 \\cdot 3$'],
+      ['Es la propiedad **conmutativa**: vale para sumar y para multiplicar.', {}, '$a \\cdot b = b \\cdot a$'],
+      ['La **asociativa** deja escoger qué se hace primero.', {}, '$(a + b) + c = a + (b + c)$'],
+      ['Restar y dividir no dejan: 8 − 3 no es 3 − 8.', {}, '$8 - 3 \\neq 3 - 8$'],
+    ], 'Conmutativa cambia el orden; asociativa, la agrupación. Solo suma y producto.'),
+    xpFila('Agrupa para calcular fácil: $25 \\cdot 7 \\cdot 4$. Pon la pareja y el resultado.', ['25 · 4', 'por 7'], ['100', '700'], ['175', '28', '107'], 'Cambia el orden: multiplica 25 por 4 antes.', '$(25 \\cdot 4) \\cdot 7 = 700$.')],
+    ['Repartir', xpMira('dibujo', 'Segunda idea: la **distributiva** une la suma con el producto.', { dib: rec, v: { a: 3, b: 4, c: 3, s: 1 }, alto: 120 }, [
+      ['Dos bloques de 3 filas: uno de 4 y otro de 3.', {}, '$3 \\cdot 4 + 3 \\cdot 3$'],
+      ['Se juntan: un solo bloque de 3 filas y 7 columnas.', { s: 0 }, '$3 \\cdot (4 + 3)$'],
+      ['Son los mismos cuadros: 12 y 9, o 21 de una vez.', {}, '$3(4 + 3) = 12 + 9$'],
+      ['Separar es distribuir; juntar es sacar factor común.', { s: 1 }, '$a(b + c) = ab + ac$'],
+    ], '$a(b + c) = ab + ac$: se lee en los dos sentidos.'),
+    xpMueve('Haz que los dos bloques sumen **32** cuadros con 4 filas y el primero de 5 columnas.', 260, { a: 4, b: 5, c: 1, s: 0.5 }, [xpRegla('c', 1, 6, 'columnas del segundo')], { c: 3 }, rec, '$4(5 + 3) = 32$.', { lee: v => `$4(5 + ${v.c}) = ${4 * (5 + v.c)}$` })],
+    ['Neutros e inversos', xpMira('dibujo', 'Tercera idea: hay números que **no cambian nada** y otros que **deshacen**.', { dib: (v, K) => { const L = XM.linea(K, -4, 4, 60); return L.s + K.c(L.X(v.x), 60, 8, 'fA') + K.t(170, 116, v.p, 'b ta'); }, v: { x: 3, p: '3 + 0 = 3' }, alto: 140 }, [
+      ['Sumar 0 deja igual: es el neutro de la suma.', {}, '$a + 0 = a$'],
+      ['Su inverso aditivo lo lleva a 0.', { x: 0, p: '3 + (−3) = 0' }, '$a + (-a) = 0$'],
+      ['Multiplicar por 1 deja igual.', { x: 4, p: '4 · 1 = 4' }, '$a \\cdot 1 = a$'],
+      ['El recíproco lo lleva a 1.', { x: 1, p: '4 · 1/4 = 1' }, '$a \\cdot \\tfrac1a = 1$'],
+      ['El 0 no tiene recíproco: nada por 0 da 1.', { x: 0, p: '0 · ? = 1' }, '$a \\neq 0$'],
+    ], 'Neutros: 0 y 1. Inversos: el opuesto lleva a 0; el recíproco, a 1.'),
+    xpFila('Pon lo que deshace cada cosa.', ['+ (−6)', '· 5/3', '· (−2)'], ['+ 6', '· 3/5', '· (−1/2)'], ['· 2', '− 6', '· 5/3'], 'A una suma la deshace el opuesto; a un producto, el recíproco, que conserva el signo.', 'Opuesto para la suma; recíproco para el producto.')],
+    ['Ahora sí, un problema', xpFila('6 cajas con 18 limas y 6 con 12 limones. Saca el 6 y calcula.', ['18 + 12', 'por 6'], ['30', '180'], ['108', '72', '36'], 'Es $6 \\cdot 18 + 6 \\cdot 12$: junta primero.', '$6(18 + 12) = 6 \\cdot 30 = 180$.')],
+  ], 'Cambiar, agrupar, repartir y deshacer: con eso se mueve todo el álgebra.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-12c
+  const giro = (v, K) => { const L = XM.linea(K, -8, 8, 100, { p: 2 }); return L.s + K.ar(L.X(0), 78, L.X(v.x), 78, 'la gr') + K.t(170, 40, v.p || '', 'b ta'); };
+  xpLec('alg-12c', [
+    ['Restar y dividir se deshacen', xpMira('dibujo', 'Empecemos por la idea: restar y dividir son **sumar y multiplicar disfrazados**.', { dib: (v, K) => XM.pasos(K, v, ['10 − 4 = 10 + (−4)', '12 ÷ 3 = 12 · 1/3', '12 ÷ 2/5 = 12 · 5/2 = 30'], 44, 40), v: { n: 0 }, alto: 150 }, [
+      ['Restar 4 es sumar su opuesto.', { n: 1 }, '$a - b = a + (-b)$'],
+      ['Dividir entre 3 es multiplicar por su recíproco.', { n: 2 }, '$a \\div b = a \\cdot \\tfrac1b$'],
+      ['Por eso, dividir entre dos quintos es multiplicar por cinco medios.', { n: 3 }, '$12 \\cdot \\tfrac52 = 30$'],
+      ['Y por eso no se divide entre 0: no tiene recíproco.', {}, '$a \\div 0 \\ \\text{no existe}$'],
+    ], 'Restar: sumar el opuesto. Dividir: multiplicar por el recíproco.'),
+    xpFila('Pon cada resultado.', ['8 ÷ 1/2', '6 ÷ 3/4', '−5 − (−9)'], ['16', '8', '4'], ['4.5', '−14', '2'], 'Multiplica por el recíproco; y quitar −9 es sumar 9.', '$8 \\cdot 2$, $6 \\cdot \\tfrac43$ y $-5 + 9$.')],
+    ['Por qué menos por menos es más', xpMira('dibujo', 'Segunda idea: multiplicar por −1 **voltea** la flecha.', { dib: giro, v: { x: 3, p: '3' }, alto: 140 }, [
+      ['Una flecha de 3 hacia la derecha.', {}],
+      ['Por 2: el doble de larga, misma dirección.', { x: 6, p: '2 · 3 = 6' }, '$2 \\cdot 3 = 6$'],
+      ['Por −2: el doble de larga y volteada.', { x: -6, p: '−2 · 3 = −6' }, '$-2 \\cdot 3 = -6$'],
+      ['Otra vez por −1: se voltea y vuelve a la derecha.', { x: 6, p: '(−1)(−6) = 6' }, '$(-1)(-6) = 6$'],
+      ['Dos vueltas dejan la flecha como estaba.', {}, '$(-a)(-b) = ab$'],
+    ], 'Cada factor negativo voltea; dos vueltas se anulan.'),
+    xpMueve('Lleva la flecha a $(-2)(-4)$.', 200, { x: -4, p: '' }, [xpRegla('x', -8, 8, 'flecha', 2)], { x: 8 }, giro, 'Dos negativos: $8$.', { lee: v => `$${v.x}$` })],
+    ['El cero y cancelar', xpMira('dibujo', 'Tercera idea: si un producto da 0, **algún factor es 0**; y se cancela lo que no es 0.', { dib: (v, K) => XM.pasos(K, v, ['a · 0 = 0', '5 · x = 0  →  x = 0', '3x = 3 · 7  →  x = 7', '0 · 2 = 0 · 9, pero 2 ≠ 9'], 34, 34), v: { n: 0 }, alto: 160 }, [
+      ['Cero veces cualquier cosa es cero.', { n: 1 }, '$a \\cdot 0 = 0$'],
+      ['Si el producto da cero, alguno de los factores lo es.', { n: 2 }, '$ab = 0 \\Rightarrow a = 0 \\text{ o } b = 0$'],
+      ['Un factor que no es 0 se puede cancelar a ambos lados.', { n: 3 }, '$3x = 3 \\cdot 7$'],
+      ['El 0 no se cancela: borraría números distintos.', { n: 4 }, '$0 \\cdot 2 = 0 \\cdot 9$'],
+    ], 'Producto 0: algún factor es 0. Se cancela solo lo que no es 0.'),
+    xpFila('$(x - 3)(x + 8) = 0$. Pon los valores de x, de menor a mayor.', ['menor', 'mayor'], ['−8', '3'], ['8', '−3', '0'], 'Cada paréntesis puede ser el que vale 0.', '$x = -8$ o $x = 3$.')],
+    ['Ahora sí, un problema', xpMueve('Un submarino baja 2 m por minuto: velocidad −2. ¿A qué altura, respecto de ahora, estaba **hace 3 minutos**?', 200, { x: 0, p: '' }, [xpRegla('x', -8, 8, 'altura', 2)], { x: 6 }, giro, '$(-2)(-3) = 6$: seis metros más arriba.', { lee: v => `$${v.x}$` })],
+  ], 'Los signos y el cero salen de los axiomas: no hay que creerlos, se deducen.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-12d
+  const ord = (v, K) => { const L = XM.linea(K, -8, 8, 100, { p: 2 }); return L.s + K.c(L.X(v.a), 100, 8, 'fA') + K.t(L.X(v.a), 82, 'a', 'ta') + K.c(L.X(v.b), 100, 8, 'fF') + K.t(L.X(v.b), 82, 'b', 'tf') + K.t(170, 40, v.p || '', 'b'); };
+  const tramo = (v, K) => { const L = XM.linea(K, -8, 8, 100, { p: 2 }); return L.s + K.r(L.X(v.c - v.r), 94, L.X(v.c + v.r) - L.X(v.c - v.r), 12, 'fa') + K.c(L.X(v.c), 100, 5, 'fF') + K.l(L.X(v.c), 70, L.X(v.c + v.r), 70, 'lf') + K.t(L.X(v.c + v.r / 2), 62, `${K.sig(v.r)}`, 's tf'); };
+  xpLec('alg-12d', [
+    ['Quién va a la izquierda', xpMira('dibujo', 'Empecemos por la idea: **menor** es estar a la izquierda.', { dib: ord, v: { a: -4, b: 1, p: 'a < b' }, alto: 140 }, [
+      ['a está a la izquierda de b: a es menor.', {}, '$a < b$'],
+      ['Sumar lo mismo a los dos los corre juntos: el orden sigue.', { a: -1, b: 4, p: 'a + 3 < b + 3' }, '$a + c < b + c$'],
+      ['Por un positivo, se estiran: el orden sigue.', { a: -2, b: 8, p: '' }, '$c > 0: \\ ac < bc$'],
+      ['Por un negativo, se voltean como en un espejo: ¡cambia el orden!', { a: 2, b: -8, p: '−a > −b' }, '$c < 0: \\ ac > bc$'],
+    ], 'Al multiplicar por un negativo, la desigualdad se voltea.'),
+    xpFila('Pon el signo que va.', ['−7 □ −2', '(−1)(−7) □ (−1)(−2)', '−7 + 10 □ −2 + 10'], ['<', '>', '<'], ['='], 'El −1 voltea; sumar no.', 'Solo el producto por un negativo cambia el sentido.')],
+    ['La distancia', xpMira('dibujo', 'Segunda idea: el **valor absoluto** es una distancia, y nunca es negativa.', { dib: tramo, v: { c: 0, r: 5 }, alto: 130 }, [
+      ['El valor absoluto de −5 es 5: su distancia al cero.', {}, '$|-5| = 5$'],
+      ['El de 5 también: están igual de lejos.', {}, '$|5| = 5$'],
+      ['La distancia entre dos números es el valor absoluto de su resta.', { c: 2, r: 4 }, '$|6 - 2| = 4$'],
+      ['Los que están a 4 del 2 son dos: 6 y −2.', {}, '$|x - 2| = 4$'],
+    ], '$|x - c|$ es la distancia de x a c.'),
+    xpMueve('Mueve la distancia hasta que los bordes queden en **−7 y 3**.', 200, { c: -2, r: 1 }, [xpRegla('r', 1, 6, 'distancia')], { r: 5 }, tramo, '$|x + 2| = 5$: $-7$ y $3$.', { lee: v => `$|x + 2| = ${v.r}$` })],
+    ['Cerca o lejos', xpMira('dibujo', 'Tercera idea: «menor que» es **cerca**; «mayor que» es **lejos**.', { dib: tramo, v: { c: 1, r: 0 }, alto: 130 }, [
+      ['Los números a menos de 3 del 1: crece desde el 1.', { r: 3 }, '$|x - 1| < 3$'],
+      ['Es un solo tramo: entre −2 y 4.', {}, '$-2 < x < 4$'],
+      ['Lejos es lo demás: dos pedazos.', {}, '$|x - 1| > 3: \\ x < -2 \\text{ o } x > 4$'],
+      ['Y una distancia menor que −1 no existe.', {}, '$|x| < -1: \\ \\varnothing$'],
+    ], 'Cerca: un tramo. Lejos: dos pedazos.'),
+    xpMueve('Arma $|x - 2| \\le 4$: pon el centro y la distancia.', 250, { c: 0, r: 1 }, [xpRegla('c', -4, 4, 'centro'), xpRegla('r', 1, 4, 'distancia')], { c: 2, r: 4 }, tramo, 'Centro 2 y distancia 4: de $-2$ a $6$.', { lee: v => `$[${v.c - v.r}, ${v.c + v.r}]$` })],
+    ['Ahora sí, un problema', xpMueve('Un horno trabaja bien entre −1 y 7 unidades de su escala. Escríbelo como $|x - c| \\le r$: halla c y r.', 250, { c: 0, r: 1 }, [xpRegla('c', -4, 4, 'centro c'), xpRegla('r', 1, 4, 'distancia r')], { c: 3, r: 4 }, tramo, 'El medio es 3 y los bordes están a 4: $|x - 3| \\le 4$.', { lee: v => `$[${v.c - v.r}, ${v.c + v.r}]$` })],
+  ], 'Orden es izquierda o derecha; valor absoluto es distancia.');
+}
+;
+//#archivo js/explora-trig-mundos.js
+// Trigonometría · los tres mundos (Funciones Periódicas, Identidades y Triángulos, El Plano Complejo), Explora. trig-41a tiene su
+// propio archivo. Ejemplos propios, que no salen en los ejercicios.
+{
+  const P = XM.pasos, rad = g => g * Math.PI / 180;
+  const R = (v, K) => XM.rueda(K, 130, 110, 84, v.g) + (v.p ? K.t(246, 60, v.p, 'b ta', 'start') : '') + (v.q ? K.t(246, 96, v.q, 'ta', 'start') : '');
+  const ang = (max = 360, paso = 15, et = 'ángulo (grados)') => [xpRegla('g', 0, max, et, paso)];
+  // Triángulo rectángulo de ángulo g en la esquina izquierda y base b.
+  const tri = (K, x, y, b, g, o = {}) => { const h = b * Math.tan(rad(g)); return K.p([[x, y], [x + b, y], [x + b, y - h]], 'fc') + K.l(x, y, x + b, y, 'lg gr') + K.l(x + b, y, x + b, y - h, 'lf gr') + K.l(x, y, x + b, y - h, 'la gr') + K.ang([x, y], [x + b, y], [x + b, y - h], 26, o.a ?? '', 'fa') + K.r(x + b - 10, y - 10, 10, 10, 'fn') + K.t(x + b / 2, y + 20, o.ca ?? '', 's tg') + K.t(x + b + 8, y - h / 2 + 5, o.co ?? '', 's tf', 'start') + K.t(x + b / 2 - 10, y - h / 2 - 10, o.hi ?? '', 's ta', 'end'); };
+
+  // ---------------------------------------------------------------------------------------------------------- trig-41b
+  const piz = (v, K) => K.c(120, 110, 84, 'fc') + K.sec(120, 110, 84, 0, v.g, 'fa') + K.arc(120, 110, 84, 0, v.g, 'lf gr') + (v.p ? K.t(226, 70, v.p, 'b ta', 'start') : '') + (v.q ? K.t(226, 104, v.q, 'ta', 'start') : '');
+  xpLec('trig-41b', [
+    ['El largo del arco', xpMira('dibujo', 'Empecemos por la idea: el arco mide **radio por ángulo**, en radianes.', { dib: piz, v: { g: 0, p: '', q: '' }, alto: 210 }, [
+      ['Un radián es el ángulo cuyo arco mide un radio.', { g: 57.3, p: '1 rad' }, '$s = r$'],
+      ['Con dos radianes, el arco mide dos radios.', { g: 114.6, p: '2 rad' }, '$s = 2r$'],
+      ['Con θ radianes, θ radios.', { p: 'θ rad' }, '$s = r\\theta$'],
+      ['La vuelta completa son dos pi.', { g: 360, p: '2π rad' }, '$s = 2\\pi r$'],
+      ['En grados no sirve: primero se pasa a radianes.', { g: 90, p: 'π/2 rad' }, '$90^\\circ = \\tfrac{\\pi}{2}$'],
+    ], '$s = r\\theta$, con θ en radianes.'),
+    xpFila('Radio 8 y ángulo $\\tfrac{3\\pi}{4}$. Pon el arco y lo que mediría con radio 4.', ['radio 8', 'radio 4'], ['6π', '3π'], ['24π', '12π', '2π'], 'Multiplica radio por ángulo.', '$8 \\cdot \\tfrac{3\\pi}{4} = 6\\pi$.')],
+    ['El pedazo de área', xpMira('dibujo', 'Segunda idea: el sector es la **misma fracción** de vuelta, pero de área.', { dib: piz, v: { g: 90, p: '', q: '' }, alto: 210 }, [
+      ['Un cuarto de vuelta es un cuarto del disco.', { p: '1/4' }, '$\\tfrac14 \\pi r^2$'],
+      ['Un sexto de vuelta, un sexto.', { g: 60, p: '1/6' }, '$\\tfrac16 \\pi r^2$'],
+      ['En general, la fracción es θ sobre 2π.', { p: 'θ/2π' }, '$\\tfrac{\\theta}{2\\pi} \\cdot \\pi r^2$'],
+      ['Al simplificar, el pi se cancela.', {}, '$A = \\tfrac12 r^2\\theta$'],
+    ], '$A = \\tfrac12 r^2\\theta$.'),
+    xpMueve('Pinta el sector que es **tres octavos** del disco.', 290, { g: 45, p: '' }, ang(360, 45), { g: 135 }, piz, '$\\tfrac38 \\cdot 360^\\circ = 135^\\circ$.', { lee: v => `$${v.g}^\\circ$` })],
+    ['Girar y avanzar', xpMira('dibujo', 'Tercera idea: la **velocidad lineal** es radio por velocidad angular.', { dib: (v, K) => K.c(120, 110, 84, 'fn') + K.c(120, 110, 42, 'fn') + [84, 42].map((r, i) => { const [x, y] = K.at(120, 110, r, v.g); return K.l(120, 110, x, y, 'lm') + K.c(x, y, 8, i ? 'fG' : 'fA'); }).join('') + K.t(226, 110, v.p, 'ta', 'start'), v: { g: 0, p: '' }, alto: 210 }, [
+      ['Dos puntos de un mismo disco, uno al doble de distancia.', {}, '$r \\ \\text{y} \\ 2r$'],
+      ['Giran el mismo ángulo en el mismo tiempo.', { g: 120 }, '$\\omega = \\tfrac{\\theta}{t}$'],
+      ['Pero el de afuera recorre el doble.', { p: '2r vs r' }, '$v = r\\omega$'],
+      ['Las vueltas por minuto se pasan a radianes: por 2π.', {}, '$1 \\ \\text{vuelta} = 2\\pi$'],
+    ], '$v = r\\omega$, con ω en radianes por unidad de tiempo.'),
+    xpFila('Una rueda de radio 3 m da 5 vueltas por minuto. Pon ω y v (por minuto).', ['ω', 'v'], ['10π', '30π'], ['5π', '15π', '3π'], 'Cada vuelta son 2π; luego por el radio.', '$\\omega = 10\\pi$ y $v = 30\\pi$ m.')],
+    ['Ahora sí, un problema', xpFila('Un aspersor riega un sector de $120^\\circ$ con radio 6 m. Pon el ángulo en radianes y el área.', ['radianes', 'área'], ['2π/3', '12π'], ['3π/2', '4π', '24π'], 'Un tercio de vuelta; un tercio del disco de 36π.', '$\\tfrac12 \\cdot 36 \\cdot \\tfrac{2\\pi}{3} = 12\\pi$.')],
+  ], 'En radianes todo es multiplicar: arco, sector y velocidad.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-1
+  const sohD = (v, K) => tri(K, 50, 170, v.b, v.g, { a: 'θ', ca: 'adyacente', co: 'opuesto', hi: 'hipotenusa' }) + K.t(300, 30, v.p || '', 'ta', 'end');
+  xpLec('trig-1', [
+    ['Los nombres de los lados', xpMira('dibujo', 'Empecemos por la idea: los catetos se nombran **desde el ángulo**.', { dib: sohD, v: { b: 170, g: 35, p: '' }, alto: 200 }, [
+      ['La hipotenusa mira al ángulo recto: es la más larga.', {}, '$\\text{hip}$'],
+      ['El **opuesto** está enfrente de θ.', {}, '$\\text{op}$'],
+      ['El **adyacente** está al lado de θ.', {}, '$\\text{ady}$'],
+      ['Si se mira desde el otro ángulo, los catetos cambian de nombre.', {}, '$\\text{op} \\leftrightarrow \\text{ady}$'],
+    ], 'Opuesto: enfrente. Adyacente: al lado. Hipotenusa: frente al recto.'),
+    xpFila('Triángulo de lados 8, 15 y 17. Desde el ángulo opuesto al **8**, pon los lados.', ['opuesto', 'adyacente', 'hipotenusa'], ['8', '15', '17'], ['23', '25'], 'La hipotenusa es la más larga.', 'Opuesto 8, adyacente 15, hipotenusa 17.')],
+    ['Razones que no cambian', xpMira('dibujo', 'Segunda idea: el tamaño cambia; **la razón, no**.', { dib: sohD, v: { b: 100, g: 35, p: '' }, alto: 200 }, [
+      ['Opuesto sobre hipotenusa: el seno.', { p: 'sen = op/hip' }, '$\\operatorname{sen}\\theta = \\tfrac{\\text{op}}{\\text{hip}}$'],
+      ['Agrandamos el triángulo con el mismo ángulo.', { b: 190 }, '$\\tfrac{2\\,\\text{op}}{2\\,\\text{hip}}$'],
+      ['Todos los lados crecen igual: la razón se conserva.', {}, '$\\operatorname{sen}\\theta$'],
+      ['Coseno: adyacente sobre hipotenusa.', { p: 'cos = ady/hip' }, '$\\cos\\theta = \\tfrac{\\text{ady}}{\\text{hip}}$'],
+      ['Tangente: opuesto sobre adyacente.', { p: 'tan = op/ady' }, '$\\tan\\theta = \\tfrac{\\text{op}}{\\text{ady}}$'],
+    ], 'SOH · CAH · TOA: razones que dependen solo del ángulo.'),
+    xpFila('Opuesto 9, adyacente 40, hipotenusa 41. Pon cada razón.', ['sen', 'cos', 'tan'], ['9/41', '40/41', '9/40'], ['41/9', '40/9'], 'SOH, CAH, TOA.', 'Cada una con sus dos lados.')],
+    ['Hallar un lado', xpMira('dibujo', 'Tercera idea: se escoge la razón que une **lo que tienes con lo que buscas**.', { dib: (v, K) => tri(K, 60, 160, 140, 40, { a: '40°', ca: v.ca, co: 'x', hi: '' }) + K.t(250, 60, v.p, 'ta', 'middle'), v: { ca: '20', p: '' }, alto: 190 }, [
+      ['Se conoce el adyacente, 20, y se busca el opuesto.', {}, '$\\text{ady} = 20$'],
+      ['La que une opuesto y adyacente es la tangente.', { p: 'tan 40° = x/20' }, '$\\tan 40^\\circ = \\tfrac{x}{20}$'],
+      ['Se despeja: veinte veces la tangente.', { p: 'x = 20 · tan 40°' }, '$x = 20\\tan 40^\\circ$'],
+      ['Con calculadora, cerca de 16.8.', {}, '$x \\approx 16.8$'],
+    ], 'Mira qué dos lados intervienen y usa su razón.'),
+    xpFila('$\\operatorname{sen}\\theta = 0.6$ e hipotenusa 25. Pon el opuesto y el adyacente.', ['opuesto', 'adyacente'], ['15', '20'], ['10', '41', '24'], '0.6 por 25; luego Pitágoras.', '$15$ y $\\sqrt{625 - 225} = 20$.')],
+    ['Ahora sí, un problema', xpFila('Una rampa de 13 m sube 5 m. Pon el seno y el coseno de su inclinación.', ['sen', 'cos'], ['5/13', '12/13'], ['13/5', '5/12', '8/13'], 'La rampa es la hipotenusa; falta el cateto del piso.', '$\\sqrt{169 - 25} = 12$.')],
+  ], 'Nombra los lados desde el ángulo y elige la razón.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-2
+  xpLec('trig-2', [
+    ['Medio cuadrado', xpMira('dibujo', 'Empecemos por la idea: el de **45°** es medio cuadrado.', { dib: (v, K) => K.r(80, 20, 140, 140, 'fc') + K.l(80, 160, 220, 20, 'la gr') + K.t(150, 180, '1', 's') + K.t(232, 94, '1', 's') + K.f(v.h, K.t(136, 80, '√2', 'b ta')), v: { h: 0 }, alto: 195 }, [
+      ['Un cuadrado de lado 1, partido por la diagonal.', {}, '$1, 1$'],
+      ['Los dos catetos son iguales: el ángulo es 45°.', {}, '$45^\\circ$'],
+      ['La diagonal mide raíz de dos.', { h: 1 }, '$\\sqrt{1 + 1}$'],
+      ['Por eso seno y coseno coinciden.', {}, '$\\operatorname{sen}45^\\circ = \\tfrac{\\sqrt2}{2}$'],
+      ['Y la tangente es 1.', {}, '$\\tan 45^\\circ = 1$'],
+    ], '45°: $\\tfrac{\\sqrt2}{2}$, $\\tfrac{\\sqrt2}{2}$ y 1.'),
+    xpFila('Un cuadrado tiene lado 6. Pon su diagonal, y el lado de uno con diagonal 10.', ['diagonal', 'lado'], ['6√2', '5√2'], ['12', '10√2', '3√2'], 'Por √2 para ir; entre √2 para volver.', '$\\tfrac{10}{\\sqrt2} = 5\\sqrt2$.')],
+    ['Medio triángulo equilátero', xpMira('dibujo', 'Segunda idea: **30° y 60°** salen de medio equilátero.', { dib: (v, K) => K.p([[80, 170], [240, 170], [160, 32]], 'fc') + K.f(v.h, K.l(160, 32, 160, 170, 'lf gr') + K.t(120, 188, '1', 's') + K.t(172, 120, '√3', 'b tf', 'start')) + K.t(108, 94, '2', 'b') + K.t(94, 162, '60°', 's', 'start'), v: { h: 0 }, alto: 200 }, [
+      ['Un triángulo equilátero de lado 2: ángulos de 60°.', {}, '$60^\\circ$'],
+      ['La altura lo parte en dos: la base queda en 1.', { h: 1 }, '$1, 2$'],
+      ['Por Pitágoras, la altura es raíz de tres.', {}, '$\\sqrt{4 - 1} = \\sqrt3$'],
+      ['Desde 60°: opuesto raíz de tres, adyacente 1.', {}, '$\\operatorname{sen}60^\\circ = \\tfrac{\\sqrt3}{2}, \\ \\cos 60^\\circ = \\tfrac12$'],
+      ['Desde 30° se intercambian.', {}, '$\\operatorname{sen}30^\\circ = \\tfrac12, \\ \\cos 30^\\circ = \\tfrac{\\sqrt3}{2}$'],
+    ], 'Lados 1, √3, 2: de ahí salen todas las de 30° y 60°.'),
+    xpFila('Pon cada valor.', ['sen 60°', 'tan 30°', 'cos 60°'], ['√3/2', '√3/3', '1/2'], ['√3', '√2/2', '1'], 'Dibuja el triángulo 1, √3, 2.', '$\\tan 30^\\circ = \\tfrac{1}{\\sqrt3} = \\tfrac{\\sqrt3}{3}$.')],
+    ['Complementarios', xpMira('dibujo', 'Tercera idea: el seno de uno es el **coseno del otro**.', { dib: (v, K) => tri(K, 60, 160, 170, v.g, { a: `${Math.round(v.g)}°`, ca: '', co: '', hi: '' }) + K.t(110, 40, `el otro: ${90 - Math.round(v.g)}°`, 's'), v: { g: 30 }, alto: 190 }, [
+      ['Los dos ángulos agudos suman 90°.', {}, '$30^\\circ + 60^\\circ$'],
+      ['El opuesto de uno es el adyacente del otro.', { g: 38 }, '$\\operatorname{sen}\\theta$'],
+      ['Entonces el seno de θ es el coseno de 90° − θ.', {}, '$\\operatorname{sen}\\theta = \\cos(90^\\circ - \\theta)$'],
+      ['Por eso el **co**seno: el seno del complemento.', {}, '$\\cos 20^\\circ = \\operatorname{sen}70^\\circ$'],
+    ], '$\\operatorname{sen}\\theta = \\cos(90^\\circ - \\theta)$.'),
+    xpFila('Pon el ángulo que falta.', ['sen 25° = cos', 'cos 48° = sen'], ['65°', '42°'], ['25°', '132°', '52°'], 'Juntos suman 90°.', '$90 - 25$ y $90 - 48$.')],
+    ['Ahora sí, un problema', xpFila('Una escalera de 8 m forma 60° con el piso. Pon la altura a la que llega y qué tan lejos está su pie.', ['altura', 'pie'], ['4√3', '4'], ['8√3', '4√2', '2'], '$8\\operatorname{sen}60^\\circ$ y $8\\cos 60^\\circ$.', 'Altura $4\\sqrt3$ y pie a 4 m.')],
+  ], 'Dos figuras bastan: medio cuadrado y medio equilátero.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-42c
+  xpLec('trig-42c', [
+    ['Las tres volteadas', xpMira('dibujo', 'Empecemos por la idea: hay **seis** razones: tres y sus recíprocas.', { dib: (v, K) => [['sen', 'csc'], ['cos', 'sec'], ['tan', 'cot']].map((r, i) => K.t(90, 50 + i * 42, r[0], 'b ta') + K.f(v.n - i, K.t(170, 50 + i * 42, '↔', 'b tm') + K.t(250, 50 + i * 42, r[1], 'b tf'))).join(''), v: { n: 0 }, alto: 160 }, [
+      ['La cosecante voltea al seno.', { n: 1 }, '$\\csc\\theta = \\tfrac{1}{\\operatorname{sen}\\theta}$'],
+      ['La secante voltea al **co**seno.', { n: 2 }, '$\\sec\\theta = \\tfrac{1}{\\cos\\theta}$'],
+      ['La cotangente voltea a la tangente.', { n: 3 }, '$\\cot\\theta = \\tfrac{1}{\\tan\\theta}$'],
+      ['Ojo: van cruzadas, seno con **co**secante.', {}, '$\\operatorname{sen} \\leftrightarrow \\csc$'],
+      ['Cada pareja multiplica 1.', {}, '$\\operatorname{sen}\\theta \\cdot \\csc\\theta = 1$'],
+    ], 'csc con sen, sec con cos, cot con tan: productos 1.'),
+    xpFila('Opuesto 7, adyacente 24, hipotenusa 25. Pon cada razón.', ['csc', 'sec', 'cot'], ['25/7', '25/24', '24/7'], ['7/25', '7/24'], 'Voltea seno, coseno y tangente.', 'Son las recíprocas.')],
+    ['De una a todas', xpMira('dibujo', 'Segunda idea: con **una** razón se dibuja el triángulo y salen las demás.', { dib: (v, K) => tri(K, 60, 160, 150, 37, { a: 'θ', ca: v.a, co: v.o, hi: v.h }), v: { a: '', o: '3', h: '' }, alto: 190 }, [
+      ['Se sabe que la tangente es tres cuartos.', { a: '4' }, '$\\tan\\theta = \\tfrac34$'],
+      ['Opuesto 3, adyacente 4. La hipotenusa, por Pitágoras.', { h: '5' }, '$\\sqrt{9 + 16} = 5$'],
+      ['Y ya salen seno y coseno.', {}, '$\\tfrac35, \\tfrac45$'],
+      ['Y también todas sus recíprocas.', {}, '$\\tfrac53, \\tfrac54, \\tfrac43$'],
+    ], 'Dibuja, completa con Pitágoras y lee.'),
+    xpFila('$\\sec\\theta = \\tfrac{17}{15}$, θ agudo. Pon el opuesto, sen y tan.', ['opuesto', 'sen', 'tan'], ['8', '8/17', '8/15'], ['15/17', '15/8', '2'], 'Hipotenusa 17 y adyacente 15.', '$\\sqrt{289 - 225} = 8$.')],
+    ['Medir sin tocar', xpMira('dibujo', 'Tercera idea: un ángulo y una distancia **miden lo que no se alcanza**.', { dib: (v, K) => tri(K, 50, 170, 190, v.g, { a: `${Math.round(v.g)}°`, ca: '30 m', co: 'altura', hi: '' }), v: { g: 20 }, alto: 200 }, [
+      ['Desde 30 m se mira la punta de un árbol.', {}, '$\\text{ángulo de elevación}$'],
+      ['El ángulo se mide desde la horizontal hacia arriba.', { g: 38 }, '$38^\\circ$'],
+      ['La altura es 30 por la tangente.', {}, '$h = 30\\tan 38^\\circ$'],
+      ['Hacia abajo se llama depresión: es igual visto desde el otro lado.', {}, '$\\text{elevación} = \\text{depresión}$'],
+    ], 'Altura = distancia · tan(elevación).'),
+    xpFila('A 40 m de una torre la punta se ve a 45°. Pon la altura; y la altura si fuera a 60°.', ['45°', '60°'], ['40', '40√3'], ['20', '20√3', '80'], 'tan 45° = 1 y tan 60° = √3.', '$40 \\cdot 1$ y $40\\sqrt3$.')],
+    ['Ahora sí, un problema', xpFila('Desde un faro de 50 m se ve un bote con depresión de 30°. Pon la tangente y la distancia del bote a la base.', ['tan 30°', 'distancia'], ['√3/3', '50√3'], ['√3', '25', '50/√3'], '$\\tan 30^\\circ = \\tfrac{50}{d}$.', '$d = \\tfrac{50}{\\tan 30^\\circ} = 50\\sqrt3$.')],
+  ], 'Una razón dibuja el triángulo; un ángulo mide de lejos.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-3
+  xpLec('trig-3', [
+    ['El punto que gira', xpMira('dibujo', 'Empecemos por la idea: en la rueda de radio 1, el punto es **(cos, sen)**.', { dib: R, v: { g: 30, p: '', q: '' }, alto: 225 }, [
+      ['Un triángulo de hipotenusa 1 dentro de la rueda.', {}, '$r = 1$'],
+      ['El cateto horizontal es el coseno; el vertical, el seno.', { p: '(cos, sen)' }, '$(\\cos\\theta, \\operatorname{sen}\\theta)$'],
+      ['Así el ángulo puede pasar de 90°.', { g: 130 }, '$\\theta = 130^\\circ$'],
+      ['El coseno quedó a la izquierda: es negativo.', { q: 'cos < 0' }, '$\\cos 130^\\circ < 0$'],
+      ['Ninguno pasa de 1 ni baja de −1.', { g: 200 }, '$-1 \\le \\operatorname{sen}\\theta \\le 1$'],
+    ], 'En radio 1: x es el coseno, y es el seno.'),
+    xpMueve('Lleva el punto a donde **cos = −1**.', 290, { g: 30 }, ang(360, 15), { g: 180 }, R, '$\\cos 180^\\circ = -1$.', { lee: v => `$\\theta = ${v.g}^\\circ$` })],
+    ['Los cuatro puntos', xpMira('dibujo', 'Segunda idea: en los ejes los valores son **0, 1 o −1**.', { dib: R, v: { g: 0, p: '(1, 0)', q: '' }, alto: 225 }, [
+      ['En 0°, el punto es (1, 0).', {}, '$\\cos 0 = 1, \\ \\operatorname{sen}0 = 0$'],
+      ['En 90°, arriba: (0, 1).', { g: 90, p: '(0, 1)' }, '$\\operatorname{sen}90^\\circ = 1$'],
+      ['En 180° está en (−1, 0).', { g: 180, p: '(−1, 0)' }, '$\\cos 180^\\circ = -1$'],
+      ['En 270°, abajo: (0, −1).', { g: 270, p: '(0, −1)' }, '$\\operatorname{sen}270^\\circ = -1$'],
+      ['La tangente no existe donde el coseno es 0.', { g: 90, p: '' }, '$\\tan 90^\\circ \\ \\text{no existe}$'],
+    ], 'La tangente es seno sobre coseno.'),
+    xpFila('Pon cada valor.', ['sen 270°', 'cos 90°', 'tan 180°'], ['−1', '0', '0'], ['1', 'no existe'], 'Mira el punto en la rueda.', '$\\tan 180^\\circ = \\tfrac{0}{-1}$.')],
+    ['Simetrías', xpMira('dibujo', 'Tercera idea: los **espejos** de la rueda dan los demás valores.', { dib: R, v: { g: 40, p: '', q: '' }, alto: 225 }, [
+      ['Empecemos con el punto de 40°.', {}, '$40^\\circ$'],
+      ['Su espejo a la izquierda es 140°: mismo seno, coseno opuesto.', { g: 140 }, '$\\operatorname{sen}140^\\circ = \\operatorname{sen}40^\\circ$'],
+      ['El de enfrente es 220°: los dos opuestos.', { g: 220 }, '$\\operatorname{sen}220^\\circ = -\\operatorname{sen}40^\\circ$'],
+      ['El de abajo es 320°: mismo coseno.', { g: 320 }, '$\\cos 320^\\circ = \\cos 40^\\circ$'],
+      ['Y cada vuelta completa repite todo.', {}, '$\\theta + 360^\\circ$'],
+    ], 'Espejos de θ: 180° − θ, 180° + θ y 360° − θ.'),
+    xpMueve('Halla el otro ángulo entre 0° y 180° con el **mismo seno** que 60°.', 290, { g: 60 }, ang(180, 15), { g: 120 }, R, '$180^\\circ - 60^\\circ$.', { lee: v => `$\\theta = ${v.g}^\\circ$` })],
+    ['Ahora sí, un problema', xpFila('Una rueda de radio 1 empieza a la derecha y gira 210°. Pon x e y del punto.', ['x', 'y'], ['−√3/2', '−1/2'], ['√3/2', '1/2', '−1'], '210° es 180° + 30°: los dos opuestos.', '$\\cos 210^\\circ$ y $\\operatorname{sen}210^\\circ$.')],
+  ], 'El punto de la rueda lleva el coseno y el seno.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-43b
+  xpLec('trig-43b', [
+    ['Los signos', xpMira('dibujo', 'Empecemos por la idea: el **cuadrante** decide los signos.', { dib: R, v: { g: 50, p: 'I', q: 'todas +' }, alto: 225 }, [
+      ['Primero: derecha y arriba. Todo positivo.', {}, '$\\text{I: } +, +$'],
+      ['Segundo: izquierda y arriba. Solo el seno.', { g: 130, p: 'II', q: 'sen +' }, '$\\text{II: } -, +$'],
+      ['Tercero: izquierda y abajo. Solo la tangente.', { g: 230, p: 'III', q: 'tan +' }, '$\\text{III: } -, -$'],
+      ['Cuarto: derecha y abajo. Solo el coseno.', { g: 310, p: 'IV', q: 'cos +' }, '$\\text{IV: } +, -$'],
+      ['Todas, seno, tangente, coseno: en orden de giro.', {}, '$\\text{T, S, T, C}$'],
+    ], 'I todas; II seno; III tangente; IV coseno.'),
+    xpFila('Pon el cuadrante.', ['sen > 0, cos < 0', 'tan > 0, sen < 0', 'cos > 0, tan < 0'], ['II', 'III', 'IV'], ['I'], '¿Derecha o izquierda? ¿Arriba o abajo?', 'Segundo, tercero y cuarto.')],
+    ['El ángulo de referencia', xpMira('dibujo', 'Segunda idea: el **de referencia** es lo que falta hasta el eje horizontal.', { dib: R, v: { g: 150, p: '', q: '' }, alto: 225 }, [
+      ['150° está a 30° del eje.', { p: 'ref 30°' }, '$180^\\circ - 150^\\circ$'],
+      ['El de 240° pasó 60° del eje.', { g: 240, p: 'ref 60°' }, '$240^\\circ - 180^\\circ$'],
+      ['A 315° le faltan 45° para la vuelta.', { g: 315, p: 'ref 45°' }, '$360^\\circ - 315^\\circ$'],
+      ['El valor es el del ángulo de referencia; el signo, el del cuadrante.', {}, '$\\cos 240^\\circ = -\\cos 60^\\circ$'],
+    ], 'Valor del de referencia con el signo del cuadrante.'),
+    xpMueve('Lleva el ángulo al **tercer cuadrante** con referencia 30°.', 290, { g: 30 }, ang(360, 15), { g: 210 }, R, '$180^\\circ + 30^\\circ$.', { lee: v => `$\\theta = ${v.g}^\\circ$` })],
+    ['De un valor a los demás', xpMira('dibujo', 'Tercera idea: con una razón y el **cuadrante** salen las demás, con su signo.', { dib: (v, K) => P(K, v, ['sen θ = 3/5, cuadrante II', 'cateto: √(25 − 9) = 4', 'cos θ = −4/5', 'tan θ = −3/4'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['El triángulo de referencia es 3, 4, 5.', { n: 2 }, '$3, 4, 5$'],
+      ['En el segundo, el coseno es negativo.', { n: 3 }, '$\\cos\\theta = -\\tfrac45$'],
+      ['La tangente también es negativa.', { n: 4 }, '$-\\tfrac34$'],
+      ['Sin saber el cuadrante habría dos respuestas.', {}, '$\\pm\\tfrac45$'],
+    ], 'Triángulo para el tamaño; cuadrante para el signo.'),
+    xpFila('$\\cos\\theta = \\tfrac{5}{13}$ en el cuarto. Pon sen y tan.', ['sen', 'tan'], ['−12/13', '−12/5'], ['12/13', '12/5', '−5/12'], 'En el cuarto el seno es negativo.', 'El cateto que falta es 12.')],
+    ['Ahora sí, un problema', xpFila('Pon cada valor.', ['sen 330°', 'cos 135°', 'tan 225°'], ['−1/2', '−√2/2', '1'], ['1/2', '√2/2', '−1'], 'Referencias 30°, 45° y 45°.', 'Cada una con el signo de su cuadrante.')],
+  ], 'Referencia para el valor, cuadrante para el signo.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-44a
+  const onda = (v, K) => { const p = XM.plano(K, 0, 12.57, -4, 4, { H: 200, g: 1.5708, gy: 1 }); return p.s + XM.curva(K, p, x => v.A * Math.sin(v.w * (x - (v.f || 0))) + v.k) + K.l(18, p.Y(v.k), 322, p.Y(v.k), 'lf d'); };
+  xpLec('trig-44a', [
+    ['De la rueda a la ola', xpMira('dibujo', 'Empecemos por la idea: la altura del punto que gira **dibuja una ola**.', { dib: (v, K) => { const [px, py] = K.at(70, 110, 54, v.g), q = []; for (let a = 0; a <= v.g; a += 5) q.push([140 + a * 0.5, 110 - 54 * Math.sin(rad(a))]); return K.c(70, 110, 54, 'fn') + K.l(70, 110, px, py, 'la gr') + K.c(px, py, 6, 'fF') + K.l(136, 110, 326, 110, 'lm') + (q.length > 1 ? K.pl(q, 'lf gr') : '') + K.l(px, py, 140 + v.g * 0.5, py, 'lm d'); }, v: { g: 0 }, alto: 190 }, [
+      ['Empieza a la derecha, a altura 0.', {}, '$\\operatorname{sen}0 = 0$'],
+      ['Un cuarto de vuelta: llega a lo más alto.', { g: 90 }, '$\\operatorname{sen}\\tfrac{\\pi}{2} = 1$'],
+      ['Media vuelta: otra vez en 0.', { g: 180 }, '$\\operatorname{sen}\\pi = 0$'],
+      ['Tres cuartos: lo más bajo.', { g: 270 }, '$\\operatorname{sen}\\tfrac{3\\pi}{2} = -1$'],
+      ['Vuelta completa: la ola se repite.', { g: 360 }, '$2\\pi$'],
+    ], 'La gráfica del seno es la altura del punto; se repite cada 2π.'),
+    xpFila('Pon la altura del seno en cada momento.', ['1/4 de vuelta', '1/2 vuelta', '3/4 de vuelta'], ['1', '0', '−1'], ['1/2', '2'], 'Arriba, en medio, abajo.', '1, 0 y −1.')],
+    ['La amplitud', xpMira('dibujo', 'Segunda idea: la **amplitud** es cuánto se aleja del centro.', { dib: onda, v: { A: 1, w: 1, k: 0 }, alto: 210 }, [
+      ['La ola simple sube 1 y baja 1.', {}, '$y = \\operatorname{sen}x$'],
+      ['Por 3: sube 3 y baja 3.', { A: 3 }, '$y = 3\\operatorname{sen}x$'],
+      ['Con signo menos se voltea, pero la amplitud es 2.', { A: -2 }, '$|{-2}| = 2$'],
+      ['El ancho de la ola no cambió.', {}, '$|A|$'],
+    ], 'Amplitud: $|A|$, la mitad entre lo más alto y lo más bajo.'),
+    xpMueve('Haz que la ola vaya de **−2 a 2** y empiece **bajando**.', 270, { A: 1, w: 1, k: 0 }, [xpRegla('A', -3, 3, 'A')], { A: -2 }, onda, '$y = -2\\operatorname{sen}x$.', { lee: v => `$y = ${v.A}\\operatorname{sen}x$` })],
+    ['El centro', xpMira('dibujo', 'Tercera idea: sumar un número **sube toda la ola**.', { dib: onda, v: { A: 1, w: 1, k: 0 }, alto: 210 }, [
+      ['La línea del medio está en 0.', {}, '$k = 0$'],
+      ['Si se suma 2, sube a 2.', { k: 2 }, '$y = \\operatorname{sen}x + 2$'],
+      ['Con amplitud 2 y centro 1, va de −1 a 3.', { A: 2, k: 1 }, '$1 \\pm 2$'],
+      ['El centro es el promedio de los extremos.', {}, '$k = \\tfrac{\\max + \\min}{2}$'],
+    ], 'Va de $k - |A|$ a $k + |A|$.'),
+    xpMueve('Arma una ola que vaya de **−1 a 3**: mueve la amplitud y el centro.', 310, { A: 1, w: 1, k: 0 }, [xpRegla('A', 1, 3, 'amplitud'), xpRegla('k', -1, 2, 'centro')], { A: 2, k: 1 }, onda, '$y = 2\\operatorname{sen}x + 1$.', { lee: v => `$${v.k - v.A} \\ \\text{a} \\ ${v.k + v.A}$` })],
+    ['Ahora sí, un problema', xpFila('La marea va de 1 m a 7 m. Pon el centro y la amplitud.', ['centro', 'amplitud'], ['4', '3'], ['6', '8', '7'], 'El promedio; y cuánto se aleja de él.', '$\\tfrac{1+7}{2} = 4$ y $7 - 4 = 3$.')],
+  ], 'Amplitud: cuánto se aleja; centro: de dónde.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-44b
+  xpLec('trig-44b', [
+    ['El periodo', xpMira('dibujo', 'Empecemos por la idea: el **periodo** es lo que tarda en repetirse.', { dib: onda, v: { A: 2, w: 1, k: 0, f: 0 }, alto: 210 }, [
+      ['La ola simple se repite cada 2π.', {}, '$T = 2\\pi$'],
+      ['Con 2x adentro va el doble de rápido: cada π.', { w: 2 }, '$T = \\tfrac{2\\pi}{2}$'],
+      ['Con x sobre 2, más lento: cada 4π.', { w: 0.5 }, '$T = \\tfrac{2\\pi}{1/2} = 4\\pi$'],
+      ['Se divide 2π entre el número que acompaña a la x.', {}, '$T = \\tfrac{2\\pi}{|\\omega|}$'],
+    ], '$T = \\tfrac{2\\pi}{|\\omega|}$.'),
+    xpMueve('Haz que la ola complete **cuatro** ciclos en el cuadro (de 0 a 4π).', 270, { A: 2, w: 1, k: 0, f: 0 }, [xpRegla('w', 0.5, 3, 'ω', 0.5)], { w: 2 }, onda, 'Cada ciclo mide π: ω = 2.', { lee: v => `$y = 2\\operatorname{sen}(${v.w}x)$` })],
+    ['El desfase', xpMira('dibujo', 'Segunda idea: restar adentro **corre la ola** a la derecha.', { dib: onda, v: { A: 2, w: 1, k: 0, f: 0 }, alto: 210 }, [
+      ['La ola empieza a subir en 0.', {}, '$y = 2\\operatorname{sen}x$'],
+      ['Con x − π/2 empieza a subir en π/2.', { f: 1.5708 }, '$y = 2\\operatorname{sen}(x - \\tfrac{\\pi}{2})$'],
+      ['Si hay número adelante, se saca factor antes.', {}, '$2x - \\pi = 2(x - \\tfrac{\\pi}{2})$'],
+      ['El coseno es el seno corrido un cuarto hacia la izquierda.', { f: -1.5708 }, '$\\cos x = \\operatorname{sen}(x + \\tfrac{\\pi}{2})$'],
+    ], '$A\\operatorname{sen}\\omega(x - c)$: desfase c.'),
+    xpFila('$y = 3\\operatorname{sen}(4x - \\pi)$. Pon el periodo y el desfase.', ['periodo', 'desfase'], ['π/2', 'π/4'], ['π', '4', '2π'], '2π entre 4; saca factor 4.', '$4(x - \\tfrac{\\pi}{4})$.')],
+    ['La tangente', xpMira('dibujo', 'Tercera idea: la tangente se repite cada **π** y tiene asíntotas.', { dib: (v, K) => { const p = XM.plano(K, -4.7, 4.7, -5, 5, { H: 200, g: 1.5708, gy: 5 }); return p.s + [-1, 0, 1].map(i => K.l(p.X(Math.PI * (i + 0.5)), 8, p.X(Math.PI * (i + 0.5)), 192, 'lf d')).join('').replace(/NaN/g, '0') + XM.curva(K, p, x => { const t = Math.tan(x); return Math.abs(Math.cos(x)) < 0.08 ? NaN : t * v.a; }); }, v: { a: 0.3 }, alto: 210 }, [
+      ['Es seno sobre coseno.', { a: 1 }, '$\\tan x = \\tfrac{\\operatorname{sen}x}{\\cos x}$'],
+      ['Donde el coseno es 0 hay una asíntota.', {}, '$x = \\tfrac{\\pi}{2} + k\\pi$'],
+      ['Entre asíntotas sube siempre.', {}, '$\\text{creciente}$'],
+      ['Se repite cada π, no cada 2π.', {}, '$T = \\pi$'],
+      ['No tiene amplitud: no hay tope.', {}, '$(-\\infty, \\infty)$'],
+    ], 'Tangente: periodo π y asíntotas en $\\tfrac{\\pi}{2} + k\\pi$.'),
+    xpFila('Pon el periodo de cada una.', ['tan x', 'tan 2x', 'sen(x/3)'], ['π', 'π/2', '6π'], ['2π', '3π', '2π/3'], 'La tangente usa π; el seno, 2π.', '$\\pi$, $\\tfrac{\\pi}{2}$ y $6\\pi$.')],
+    ['Ahora sí, un problema', xpFila('Una noria tarda 8 minutos por vuelta y va de 2 a 18 m. Pon la amplitud y ω.', ['amplitud', 'ω'], ['8', 'π/4'], ['16', '10', 'π/8'], 'La mitad de 16; y 2π entre 8.', '$\\omega = \\tfrac{2\\pi}{8}$.')],
+  ], 'Periodo por dentro, desfase con factor; la tangente va cada π.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-45
+  xpLec('trig-45', [
+    ['Preguntar por el ángulo', xpMira('dibujo', 'Empecemos por la idea: el inverso pregunta **¿de qué ángulo es?**', { dib: R, v: { g: 30, p: 'sen = 1/2', q: '' }, alto: 225 }, [
+      ['Altura un medio. ¿Qué ángulo la da?', {}, '$\\operatorname{sen}\\theta = \\tfrac12$'],
+      ['El ángulo de 30° sirve.', {}, '$30^\\circ$'],
+      ['Pero 150° también: hay dos, y más con vueltas.', { g: 150 }, '$150^\\circ$'],
+      ['Para que haya una sola respuesta se escoge una ventana.', { g: 30 }, '$-90^\\circ \\le \\theta \\le 90^\\circ$'],
+      ['Esa respuesta es el arcoseno.', {}, '$\\operatorname{arcsen}\\tfrac12 = 30^\\circ$'],
+    ], 'Arcoseno: el ángulo entre −90° y 90° con ese seno.'),
+    xpFila('Pon cada ángulo.', ['arcsen 1', 'arcsen (−1/2)', 'arcsen 0'], ['90°', '−30°', '0°'], ['210°', '330°', '180°'], 'La respuesta va de −90° a 90°.', '$-30^\\circ$, no $210^\\circ$.')],
+    ['Tres ventanas', xpMira('dibujo', 'Segunda idea: cada inversa tiene **su ventana**.', { dib: (v, K) => XM.rueda(K, 130, 110, 84, v.g, { arco: 0, cs: 0 }) + K.sec(130, 110, 84, v.a, v.b, 'fa') + K.t(240, 70, v.p, 'b ta', 'start'), v: { g: 0, a: -90, b: 90, p: 'arcsen' }, alto: 225 }, [
+      ['Arcoseno: el lado derecho.', {}, '$[-90^\\circ, 90^\\circ]$'],
+      ['Arcocoseno: la mitad de arriba.', { a: 0, b: 180, p: 'arccos' }, '$[0^\\circ, 180^\\circ]$'],
+      ['Arcotangente: el derecho, sin las puntas.', { a: -89, b: 89, p: 'arctan' }, '$(-90^\\circ, 90^\\circ)$'],
+      ['Si el coseno es negativo, el arcocoseno cae a la izquierda.', { a: 0, b: 180, g: 120, p: 'arccos' }, '$\\arccos(-\\tfrac12) = 120^\\circ$'],
+    ], 'arcsen y arctan: derecha. arccos: arriba.'),
+    xpFila('Pon cada ángulo.', ['arccos (−1)', 'arctan 1', 'arccos (−√2/2)'], ['180°', '45°', '135°'], ['0°', '225°', '−45°'], 'Arccos va de 0° a 180°.', 'Cada uno en su ventana.')],
+    ['Deshacer con cuidado', xpMira('dibujo', 'Tercera idea: deshace **solo dentro de la ventana**.', { dib: (v, K) => P(K, v, ['arcsen(sen 40°) = 40°', 'arcsen(sen 140°) = 40°', 'cos(arcsen 3/5) = 4/5'], 44, 38), v: { n: 0 }, alto: 150 }, [
+      ['40° está en la ventana: vuelve igual.', { n: 1 }, '$40^\\circ$'],
+      ['140° no: vuelve el gemelo que sí está.', { n: 2 }, '$180^\\circ - 140^\\circ$'],
+      ['Una mezcla se dibuja: seno tres quintos.', {}, '$3, 4, 5$'],
+      ['El coseno de ese ángulo es cuatro quintos.', { n: 3 }, '$\\tfrac45$'],
+    ], 'Si el ángulo está fuera, cambia por su gemelo.'),
+    xpFila('Pon cada resultado.', ['arccos(cos 300°)', 'tan(arccos 5/13)'], ['60°', '12/5'], ['300°', '−60°', '5/12'], '¿Qué ángulo entre 0° y 180° tiene ese coseno?', '$\\cos 300^\\circ = \\cos 60^\\circ$.')],
+    ['Ahora sí, un problema', xpFila('Una rampa sube 5 m en 5 m de piso; otra sube $\\sqrt3$ m por cada metro. Pon los ángulos.', ['primera', 'segunda'], ['45°', '60°'], ['30°', '90°', '1°'], 'arctan 1 y arctan √3.', '$\\arctan 1$ y $\\arctan\\sqrt3$.')],
+  ], 'La inversa responde con un ángulo de su ventana.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-4
+  xpLec('trig-4', [
+    ['Pitágoras en la rueda', xpMira('dibujo', 'Empecemos por la idea: seno y coseno son **catetos de hipotenusa 1**.', { dib: R, v: { g: 35, p: 'c²+s²=1', q: '' }, alto: 225 }, [
+      ['El triángulo de la rueda tiene hipotenusa 1.', {}, '$x^2 + y^2 = 1$'],
+      ['Con cualquier ángulo se cumple.', { g: 125 }, '$\\cos^2\\theta + \\operatorname{sen}^2\\theta = 1$'],
+      ['También abajo: los cuadrados borran el signo.', { g: 250 }, '$(-0.34)^2 + (-0.94)^2 \\approx 1$'],
+      ['Conocido uno, sale el otro, salvo el signo.', {}, '$\\operatorname{sen}\\theta = \\pm\\sqrt{1 - \\cos^2\\theta}$'],
+    ], '$\\operatorname{sen}^2\\theta + \\cos^2\\theta = 1$.'),
+    xpFila('$\\operatorname{sen}\\theta = 0.8$, agudo. Pon $\\operatorname{sen}^2\\theta$, $\\cos^2\\theta$ y $\\cos\\theta$.', ['sen²', 'cos²', 'cos'], ['0.64', '0.36', '0.6'], ['0.2', '0.4', '1.6'], 'Juntos suman 1.', '$1 - 0.64 = 0.36$.')],
+    ['Dividir por coseno', xpMira('dibujo', 'Segunda idea: al dividir todo entre cos² nace **otra pitagórica**.', { dib: (v, K) => P(K, v, ['sen² + cos² = 1', 'sen²/cos² + 1 = 1/cos²', 'tan² + 1 = sec²', '1 + cot² = csc²'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Se divide cada término entre coseno al cuadrado.', { n: 2 }, '$\\tfrac{\\operatorname{sen}^2}{\\cos^2} + 1 = \\tfrac{1}{\\cos^2}$'],
+      ['Seno sobre coseno es tangente; uno sobre coseno, secante.', { n: 3 }, '$\\tan^2\\theta + 1 = \\sec^2\\theta$'],
+      ['Si se divide entre seno al cuadrado, sale la otra.', { n: 4 }, '$1 + \\cot^2\\theta = \\csc^2\\theta$'],
+      ['Las tres son la misma, vista de tres maneras.', {}, '$x^2 + y^2 = 1$'],
+    ], '$1 + \\tan^2 = \\sec^2$ y $1 + \\cot^2 = \\csc^2$.'),
+    xpFila('$\\tan\\theta = 2$. Pon $\\sec^2\\theta$ y $\\cos^2\\theta$.', ['sec²', 'cos²'], ['5', '1/5'], ['3', '1/3', '4'], '1 + tan²; y su recíproco.', '$1 + 4 = 5$.')],
+    ['Ángulos negativos', xpMira('dibujo', 'Tercera idea: al girar al revés, **el coseno queda y el seno cambia**.', { dib: R, v: { g: 40, p: '', q: '' }, alto: 225 }, [
+      ['Miremos el punto de 40°.', {}, '$40^\\circ$'],
+      ['El de −40° es su espejo de abajo.', { g: -40 }, '$-40^\\circ$'],
+      ['Mismo x: el coseno es **par**.', {}, '$\\cos(-\\theta) = \\cos\\theta$'],
+      ['La altura y se vuelve opuesta: el seno es **impar**.', {}, '$\\operatorname{sen}(-\\theta) = -\\operatorname{sen}\\theta$'],
+      ['La tangente también es impar.', {}, '$\\tan(-\\theta) = -\\tan\\theta$'],
+    ], 'Coseno par; seno y tangente impares.'),
+    xpFila('Si $\\cos\\theta = \\tfrac13$ y $\\operatorname{sen}\\theta = a$, pon cada uno.', ['cos(−θ)', 'sen(−θ)'], ['1/3', '−a'], ['−1/3', 'a', '3'], 'El espejo conserva x y cambia y.', 'Par e impar.')],
+    ['Ahora sí, un problema', xpFila('$(1 - \\operatorname{sen}\\theta)(1 + \\operatorname{sen}\\theta)$ se simplifica. Pon el producto y lo que vale con $\\cos\\theta = \\tfrac25$.', ['es igual a', 'vale'], ['cos²θ', '4/25'], ['1', '2/5', '21/25'], 'Diferencia de cuadrados: 1 − sen².', '$\\cos^2\\theta = \\tfrac{4}{25}$.')],
+  ], 'Una sola idea, Pitágoras en radio 1, da las identidades.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-47b
+  xpLec('trig-47b', [
+    ['Todo en senos y cosenos', xpMira('dibujo', 'Empecemos por la idea: si no se ve el camino, **pasa todo a seno y coseno**.', { dib: (v, K) => P(K, v, ['tan θ · cos θ', '(sen θ / cos θ) · cos θ', 'sen θ'], 44, 38), v: { n: 1 }, alto: 150 }, [
+      ['La tangente es seno sobre coseno.', { n: 2 }, '$\\tfrac{\\operatorname{sen}\\theta}{\\cos\\theta}\\cos\\theta$'],
+      ['Ahora el coseno se cancela.', { n: 3 }, '$\\operatorname{sen}\\theta$'],
+      ['Vale para todo θ donde las dos existan.', {}, '$\\cos\\theta \\neq 0$'],
+      ['Eso es una identidad: una igualdad que siempre se cumple.', {}, '$\\tan\\theta\\cos\\theta = \\operatorname{sen}\\theta$'],
+    ], 'Cambia tan, cot, sec y csc por senos y cosenos.'),
+    xpFila('Simplifica cada una.', ['sec θ · cot θ', 'csc θ · tan θ'], ['csc θ', 'sec θ'], ['1', 'sen θ', 'cos θ'], 'Escribe seno y coseno y cancela.', '$\\tfrac{1}{\\cos}\\tfrac{\\cos}{\\operatorname{sen}}$ y $\\tfrac{1}{\\operatorname{sen}}\\tfrac{\\operatorname{sen}}{\\cos}$.')],
+    ['Trabajar un solo lado', xpMira('dibujo', 'Segunda idea: se **transforma el lado largo** hasta llegar al otro.', { dib: (v, K) => P(K, v, ['sec θ − cos θ', '1/cos θ − cos θ', '(1 − cos² θ)/cos θ', 'sen² θ/cos θ = sen θ · tan θ'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Queremos llegar a seno por tangente.', { n: 2 }, '$\\tfrac{1}{\\cos\\theta} - \\cos\\theta$'],
+      ['Se suma con denominador común.', { n: 3 }, '$\\tfrac{1 - \\cos^2\\theta}{\\cos\\theta}$'],
+      ['Arriba aparece Pitágoras: sen².', { n: 4 }, '$\\tfrac{\\operatorname{sen}^2\\theta}{\\cos\\theta}$'],
+      ['No se pasan cosas de un lado al otro: aún no se sabe si son iguales.', {}, '$\\text{un solo lado}$'],
+    ], 'Transforma un lado; no pases términos.'),
+    xpFila('$\\tfrac{1 - \\operatorname{sen}^2\\theta}{\\cos\\theta}$: pon lo que hay arriba y el resultado.', ['arriba', 'resultado'], ['cos²θ', 'cos θ'], ['sen²θ', '1', 'tan θ'], 'Pitágoras arriba.', '$\\tfrac{\\cos^2\\theta}{\\cos\\theta}$.')],
+    ['El conjugado', xpMira('dibujo', 'Tercera idea: con 1 − seno abajo, multiplica por **1 + seno**.', { dib: (v, K) => P(K, v, ['cos θ/(1 − sen θ)', '· (1 + sen θ)/(1 + sen θ)', 'cos θ(1 + sen θ)/cos² θ', '(1 + sen θ)/cos θ'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Se multiplica por un uno escogido.', { n: 2 }, '$\\tfrac{1 + \\operatorname{sen}\\theta}{1 + \\operatorname{sen}\\theta}$'],
+      ['Abajo queda 1 − sen²: coseno al cuadrado.', { n: 3 }, '$1 - \\operatorname{sen}^2\\theta = \\cos^2\\theta$'],
+      ['Por último se cancela un coseno.', { n: 4 }, '$\\tfrac{1 + \\operatorname{sen}\\theta}{\\cos\\theta}$'],
+      ['Para negar una identidad basta un ángulo que falle.', {}, '$\\operatorname{sen}2\\theta \\neq 2\\operatorname{sen}\\theta$'],
+    ], 'El conjugado hace aparecer Pitágoras; un contraejemplo niega.'),
+    xpFila('$(\\sec\\theta - 1)(\\sec\\theta + 1)$: pon el producto y su valor si $\\tan\\theta = 3$.', ['es igual a', 'vale'], ['tan²θ', '9'], ['sec²θ', '3', '10'], 'sec² − 1.', '$\\tan^2\\theta = 9$.')],
+    ['Ahora sí, un problema', xpFila('Simplifica $\\tfrac{\\operatorname{sen}\\theta}{\\csc\\theta} + \\tfrac{\\cos\\theta}{\\sec\\theta}$. Pon cada término y la suma.', ['primero', 'segundo', 'suma'], ['sen²θ', 'cos²θ', '1'], ['0', 'sen θ', '2'], 'Dividir entre csc es multiplicar por sen.', '$\\operatorname{sen}^2\\theta + \\cos^2\\theta$.')],
+  ], 'Senos y cosenos, un solo lado, Pitágoras y conjugado.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-48a
+  const dosA = (v, K) => { const [ax, ay] = K.at(60, 170, 150, v.a), [bx, by] = K.at(60, 170, 150, v.a + v.b); return K.l(50, 170, 320, 170, 'lm') + K.sec(60, 170, 60, 0, v.a, 'fa') + K.sec(60, 170, 60, v.a, v.a + v.b, 'fg') + K.l(60, 170, ax, ay, 'la gr') + K.l(60, 170, bx, by, 'lf gr') + K.l(bx, by, bx, 170, 'lf d') + K.t(250, 40, v.p || '', 'ta'); };
+  xpLec('trig-48a', [
+    ['No se reparte', xpMira('dibujo', 'Empecemos por la idea: el seno de una suma **no** es la suma de senos.', { dib: dosA, v: { a: 30, b: 0, p: '' }, alto: 190 }, [
+      ['Un ángulo de 30° y otro de 30° encima.', { b: 30 }, '$30^\\circ + 30^\\circ$'],
+      ['Juntos, 60°: la altura es 0.87.', { p: 'sen 60° ≈ 0.87' }, '$\\operatorname{sen}60^\\circ = \\tfrac{\\sqrt3}{2}$'],
+      ['Sumando los senos daría 1.', { p: '1/2 + 1/2 = 1' }, '$\\operatorname{sen}30^\\circ + \\operatorname{sen}30^\\circ$'],
+      ['El segundo ángulo ya no parte de la horizontal: sube menos.', { p: '' }, '$\\operatorname{sen}(a+b) \\neq \\operatorname{sen}a + \\operatorname{sen}b$'],
+    ], 'El seno no se distribuye.'),
+    xpFila('Pon los dos valores.', ['cos(60° + 30°)', 'cos 60° + cos 30°'], ['0', '1/2 + √3/2'], ['1', '√3'], 'El primero es cos 90°.', 'No son iguales.')],
+    ['Las fórmulas', xpMira('dibujo', 'Segunda idea: en el seno se **mezclan**; en el coseno, no.', { dib: (v, K) => P(K, v, ['sen(a + b) = sen a cos b + cos a sen b', 'cos(a + b) = cos a cos b − sen a sen b', 'sen 75° = sen(45° + 30°)', '√2/2 · √3/2 + √2/2 · 1/2'], 34, 34, 's'), v: { n: 0 }, alto: 160 }, [
+      ['Seno: cruzados y con el mismo signo.', { n: 1 }, '$\\operatorname{sen}(a \\pm b)$'],
+      ['Coseno: iguales y con el signo contrario.', { n: 2 }, '$\\cos(a \\pm b)$'],
+      ['75° se arma con 45° y 30°.', { n: 3 }, '$75^\\circ = 45^\\circ + 30^\\circ$'],
+      ['Se reemplazan los valores notables.', { n: 4 }, '$\\tfrac{\\sqrt6 + \\sqrt2}{4}$'],
+    ], 'Seno cruza y conserva signo; coseno no cruza y lo cambia.'),
+    xpFila('$\\cos 75^\\circ = \\cos(45^\\circ + 30^\\circ)$: pon los dos productos y el resultado.', ['cos · cos', 'sen · sen', 'resultado'], ['√6/4', '√2/4', '(√6−√2)/4'], ['(√6+√2)/4', '1/2'], 'El coseno resta.', '$\\tfrac{\\sqrt6 - \\sqrt2}{4}$.')],
+    ['La tangente de una suma', xpMira('dibujo', 'Tercera idea: la tangente sale de **dividir** las dos.', { dib: (v, K) => P(K, v, ['tan(a + b) = sen(a+b)/cos(a+b)', '(tan a + tan b)/(1 − tan a tan b)', 'tan 105° = tan(60° + 45°)', '(√3 + 1)/(1 − √3) = −2 − √3'], 34, 34, 's'), v: { n: 1 }, alto: 160 }, [
+      ['Se divide todo entre coseno por coseno.', { n: 2 }, '$\\tfrac{\\tan a + \\tan b}{1 - \\tan a\\tan b}$'],
+      ['Arriba la suma; abajo, uno menos el producto.', {}, '$\\tan(a + b)$'],
+      ['Probemos con 60° y 45°.', { n: 3 }, '$105^\\circ$'],
+      ['Da negativo: 105° está en el segundo cuadrante.', { n: 4 }, '$-2 - \\sqrt3$'],
+    ], '$\\tan(a \\pm b) = \\tfrac{\\tan a \\pm \\tan b}{1 \\mp \\tan a\\tan b}$.'),
+    xpFila('$\\tan a = 2$, $\\tan b = 3$. Pon arriba, abajo y $\\tan(a+b)$.', ['arriba', 'abajo', 'resultado'], ['5', '−5', '−1'], ['6', '7', '1'], 'Uno menos seis.', '$\\tfrac{5}{-5}$.')],
+    ['Ahora sí, un problema', xpFila('$\\operatorname{sen}a = \\tfrac35$ y $\\operatorname{sen}b = \\tfrac{5}{13}$, agudos. Pon $\\cos a$, $\\cos b$ y $\\operatorname{sen}(a+b)$.', ['cos a', 'cos b', 'sen(a+b)'], ['4/5', '12/13', '56/65'], ['16/65', '33/65', '3/4'], '$\\tfrac35\\cdot\\tfrac{12}{13} + \\tfrac45\\cdot\\tfrac{5}{13}$.', '$\\tfrac{36 + 20}{65}$.')],
+  ], 'Con dos ángulos conocidos se arman otros.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-48b
+  xpLec('trig-48b', [
+    ['El doble', xpMira('dibujo', 'Empecemos por la idea: el doble es **la suma consigo mismo**.', { dib: (v, K) => P(K, v, ['sen 2a = sen(a + a)', '= 2 sen a cos a', 'cos 2a = cos² a − sen² a', '= 1 − 2 sen² a = 2 cos² a − 1'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Se usa la suma con b igual a a.', { n: 2 }, '$\\operatorname{sen}2a = 2\\operatorname{sen}a\\cos a$'],
+      ['El coseno da una resta de cuadrados.', { n: 3 }, '$\\cos 2a = \\cos^2 a - \\operatorname{sen}^2 a$'],
+      ['Con Pitágoras tiene otras dos caras.', { n: 4 }, '$1 - 2\\operatorname{sen}^2 a = 2\\cos^2 a - 1$'],
+      ['Doblar el ángulo no dobla el seno.', {}, '$\\operatorname{sen}60^\\circ \\neq 2\\operatorname{sen}30^\\circ$'],
+    ], '$\\operatorname{sen}2a = 2\\operatorname{sen}a\\cos a$; $\\cos 2a = \\cos^2a - \\operatorname{sen}^2a$.'),
+    xpFila('$\\operatorname{sen}a = \\tfrac35$, agudo. Pon $\\cos a$, $\\operatorname{sen}2a$ y $\\cos 2a$.', ['cos a', 'sen 2a', 'cos 2a'], ['4/5', '24/25', '7/25'], ['6/5', '12/25', '8/5'], '$2\\cdot\\tfrac35\\cdot\\tfrac45$ y $\\tfrac{16}{25} - \\tfrac{9}{25}$.', '24/25 y 7/25.')],
+    ['La mitad', xpMira('dibujo', 'Segunda idea: de cos 2a se **despeja** la mitad.', { dib: (v, K) => P(K, v, ['cos 2a = 1 − 2 sen² a', 'sen² a = (1 − cos 2a)/2', 'sen² 15° = (1 − cos 30°)/2', '= (2 − √3)/4'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Se despeja el seno al cuadrado.', { n: 2 }, '$\\operatorname{sen}^2 a = \\tfrac{1 - \\cos 2a}{2}$'],
+      ['El coseno al cuadrado lleva más.', {}, '$\\cos^2 a = \\tfrac{1 + \\cos 2a}{2}$'],
+      ['Con a = 15° se usa el coseno de 30°.', { n: 3 }, '$\\cos 30^\\circ = \\tfrac{\\sqrt3}{2}$'],
+      ['El signo de la raíz lo da el cuadrante de la mitad.', { n: 4 }, '$\\operatorname{sen}15^\\circ = \\tfrac{\\sqrt{2 - \\sqrt3}}{2}$'],
+    ], '$\\operatorname{sen}^2a = \\tfrac{1 - \\cos2a}{2}$, $\\cos^2a = \\tfrac{1 + \\cos2a}{2}$.'),
+    xpFila('$\\cos 2a = \\tfrac{7}{25}$, a agudo. Pon $\\operatorname{sen}^2a$ y $\\operatorname{sen}a$.', ['sen² a', 'sen a'], ['9/25', '3/5'], ['16/25', '4/5', '18/25'], 'Uno menos 7/25, la mitad.', '$\\tfrac{18/25}{2}$.')],
+    ['Verlo en la rueda', xpMira('dibujo', 'Tercera idea: doblar el ángulo **salta** en la rueda.', { dib: (v, K) => XM.rueda(K, 130, 110, 84, v.g) + (([x, y]) => K.l(130, 110, x, y, 'lf gr') + K.c(x, y, 6, 'fF'))(K.at(130, 110, 84, 2 * v.g)), v: { g: 20 }, alto: 225 }, [
+      ['Un radio es a; el rojo, 2a.', {}, '$a, \\ 2a$'],
+      ['Con a = 45°, el doble está arriba.', { g: 45 }, '$\\operatorname{sen}90^\\circ = 1$'],
+      ['Con 60°, el doble ya tiene coseno negativo.', { g: 60 }, '$\\cos 120^\\circ = -\\tfrac12$'],
+      ['Con 90°, el doble está a la izquierda.', { g: 90 }, '$\\cos 180^\\circ = -1$'],
+    ], 'El doble puede cambiar de cuadrante y de signo.'),
+    xpMueve('Mueve a hasta que $\\operatorname{sen}2a$ sea **1**.', 290, { g: 15 }, ang(90, 15, 'a (grados)'), { g: 45 }, (v, K) => XM.rueda(K, 130, 110, 84, v.g) + (([x, y]) => K.l(130, 110, x, y, 'lf gr') + K.c(x, y, 6, 'fF'))(K.at(130, 110, 84, 2 * v.g)), '$2 \\cdot 45^\\circ = 90^\\circ$.', { lee: v => `$2a = ${2 * v.g}^\\circ$` })],
+    ['Ahora sí, un problema', xpFila('El alcance de un tiro depende de $\\operatorname{sen}2a$. Con $\\operatorname{sen}a\\cos a = 0.4$, pon $\\operatorname{sen}2a$; y el ángulo de mayor alcance.', ['sen 2a', 'mejor a'], ['0.8', '45°'], ['0.4', '90°', '0.16'], 'El doble del producto; y sen 2a = 1.', 'Máximo en $2a = 90^\\circ$.')],
+  ], 'Doble: suma consigo. Mitad: se despeja.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-49
+  const red = (v, K) => { const p = XM.plano(K, 0, 12.57, -1.6, 1.6, { H: 180, g: 1.5708, gy: 1 }); return p.s + XM.curva(K, p, Math.sin) + K.l(18, p.Y(v.h), 322, p.Y(v.h), 'lf gr') + (Math.abs(v.h) <= 1 ? [Math.asin(v.h), Math.PI - Math.asin(v.h)].flatMap(x => [x, x + 2 * Math.PI, x + 4 * Math.PI]).filter(x => x >= -0.001 && x <= 12.57).map(x => K.c(p.X(x), p.Y(v.h), 5, 'fF')).join('') : ''); };
+  xpLec('trig-49', [
+    ['Infinitas soluciones', xpMira('dibujo', 'Empecemos por la idea: una recta corta la ola **muchas veces**.', { dib: red, v: { h: 0.5 }, alto: 190 }, [
+      ['Seno igual a un medio: cada cruce es una solución.', {}, '$\\operatorname{sen}x = \\tfrac12$'],
+      ['En cada ciclo hay dos: 30° y 150°.', {}, '$\\tfrac{\\pi}{6}, \\tfrac{5\\pi}{6}$'],
+      ['Las demás se repiten cada vuelta.', {}, '$x = \\tfrac{\\pi}{6} + 2k\\pi$'],
+      ['Con 1 solo hay una por ciclo.', { h: 1 }, '$\\operatorname{sen}x = 1$'],
+      ['Con más de 1, ninguna.', { h: 1.4 }, '$\\operatorname{sen}x = 1.4 \\ \\text{no}$'],
+    ], 'Halla las de un ciclo y suma vueltas.'),
+    xpMueve('Sube la recta hasta que haya **una sola** solución por ciclo, arriba.', 250, { h: 0 }, [xpRegla('h', -1, 1.5, 'altura', 0.5)], { h: 1 }, red, 'La recta apenas toca la cresta.', { lee: v => `$\\operatorname{sen}x = ${v.h}$` })],
+    ['Despejar primero', xpMira('dibujo', 'Segunda idea: se **despeja la función** y luego se busca el ángulo.', { dib: (v, K) => P(K, v, ['2 cos x + 1 = 0', 'cos x = −1/2', 'x = 120° o 240°'], 44, 38), v: { n: 1 }, alto: 150 }, [
+      ['Como si cos x fuera una letra.', { n: 2 }, '$\\cos x = -\\tfrac12$'],
+      ['Referencia 60°; el coseno es negativo en II y III.', { n: 3 }, '$120^\\circ, 240^\\circ$'],
+      ['Entre 0 y 360 esas son las dos.', {}, '$0 \\le x < 360^\\circ$'],
+      ['En general se suman vueltas completas.', {}, '$+\\ 360^\\circ k$'],
+    ], 'Despeja, referencia, cuadrantes, vueltas.'),
+    xpFila('$2\\operatorname{sen}x - \\sqrt3 = 0$ entre 0° y 360°. Ponlas en orden.', ['menor', 'mayor'], ['60°', '120°'], ['30°', '240°', '150°'], 'sen x = √3/2: primero y segundo.', '60° y 120°.')],
+    ['Factorizar', xpMira('dibujo', 'Tercera idea: si hay cuadrados, se **factoriza** como cuadrática.', { dib: (v, K) => P(K, v, ['2 sen² x − sen x = 0', 'sen x (2 sen x − 1) = 0', 'sen x = 0  o  sen x = 1/2', '0°, 180°, 30°, 150°'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['No se divide entre seno: se perderían soluciones.', {}, '$\\operatorname{sen}x \\neq 0 \\ ?$'],
+      ['Mejor se saca factor común.', { n: 2 }, '$\\operatorname{sen}x(2\\operatorname{sen}x - 1)$'],
+      ['Cada factor da sus ángulos.', { n: 3 }, '$\\operatorname{sen}x = 0, \\tfrac12$'],
+      ['Son cuatro en una vuelta.', { n: 4 }, '$0^\\circ, 30^\\circ, 150^\\circ, 180^\\circ$'],
+    ], 'Factoriza; si hay dos funciones, déjalas en una.'),
+    xpFila('$\\cos^2x = 1$ entre 0° y 360° (sin 360°). Pon cuántas hay y la mayor.', ['cuántas', 'mayor'], ['2', '180°'], ['1', '4', '270°'], 'cos x = 1 o cos x = −1.', '0° y 180°.')],
+    ['Ahora sí, un problema', xpFila('Una noria está a $h = 10 + 8\\operatorname{sen}x$. ¿A qué dos ángulos está a 14 m?', ['menor', 'mayor'], ['30°', '150°'], ['60°', '120°', '210°'], '8 sen x = 4.', '$\\operatorname{sen}x = \\tfrac12$.')],
+  ], 'Un ciclo, sus dos ángulos y las vueltas.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-46a
+  const T3 = (K, A, B, C, o = {}) => K.p([A, B, C], 'fc') + K.t(A[0] - 10, A[1] + 14, 'A', 's') + K.t(B[0] + 10, B[1] + 14, 'B', 's') + K.t(C[0], C[1] - 8, 'C', 's') + K.t((A[0] + B[0]) / 2, A[1] + 18, o.c || 'c', 's ta') + K.t((B[0] + C[0]) / 2 + 12, (B[1] + C[1]) / 2, o.a || 'a', 's ta', 'start') + K.t((A[0] + C[0]) / 2 - 10, (A[1] + C[1]) / 2, o.b || 'b', 's ta', 'end');
+  const osc = (v, K) => { const A = [50, 160], C = [50 + 120 * Math.cos(rad(40)), 160 - 120 * Math.sin(rad(40))], r = v.r, hh = 160 - C[1], d = Math.sqrt(Math.max(0, r * r - hh * hh)); return K.l(30, 160, 330, 160, 'lm') + K.l(...A, ...C, 'la gr') + (r >= hh - 0.01 ? [-d, d].map(q => (C[0] + q > A[0] + 2 ? K.l(C[0], C[1], C[0] + q, 160, 'lf gr') + K.c(C[0] + q, 160, 5, 'fF') : '')).join('') : K.l(C[0], C[1], C[0], C[1] + r, 'lf gr')) + K.t(200, 40, v.p || '', 'ta'); };
+  xpLec('trig-46a', [
+    ['Cada lado con su ángulo', xpMira('dibujo', 'Empecemos por la idea: la altura une **dos lados con sus ángulos**.', { dib: (v, K) => T3(K, [50, 160], [280, 160], [150, 50]) + K.f(v.h, K.l(150, 50, 150, 160, 'lf gr') + K.t(160, 120, 'h', 'b tf', 'start')), v: { h: 0 }, alto: 190 }, [
+      ['Un triángulo cualquiera, sin ángulo recto.', {}, '$A, B, C$'],
+      ['Se traza la altura: dos triángulos rectángulos.', { h: 1 }, '$h$'],
+      ['Desde A, la altura es b por seno de A.', {}, '$h = b\\operatorname{sen}A$'],
+      ['Desde B, es a por seno de B. Es la misma.', {}, '$b\\operatorname{sen}A = a\\operatorname{sen}B$'],
+      ['Cada lado sobre el seno de su opuesto da lo mismo.', {}, '$\\tfrac{a}{\\operatorname{sen}A} = \\tfrac{b}{\\operatorname{sen}B} = \\tfrac{c}{\\operatorname{sen}C}$'],
+    ], 'Lado sobre seno del ángulo opuesto: igual en los tres.'),
+    xpFila('A = 30°, B = 45° y a = 6. Pon C y b.', ['C', 'b'], ['105°', '6√2'], ['75°', '3√2', '12'], 'Suman 180°; $b = \\tfrac{6\\operatorname{sen}45^\\circ}{\\operatorname{sen}30^\\circ}$.', '$12 \\cdot \\tfrac{\\sqrt2}{2}$.')],
+    ['Cuándo sirve', xpMira('dibujo', 'Segunda idea: hace falta **una pareja completa**: un lado y su ángulo opuesto.', { dib: (v, K) => T3(K, [50, 160], [280, 160], [150, 50], { a: v.a, b: v.b, c: v.c }) + K.t(170, 24, v.p, 'ta'), v: { a: '?', b: '9', c: '?', p: '' }, alto: 190 }, [
+      ['Dos ángulos y un lado: se halla el tercer ángulo y sirve.', { p: 'A, B y un lado ✓' }, '$180^\\circ - A - B$'],
+      ['Dos lados y el ángulo opuesto a uno: sirve, con cuidado.', { a: '7', p: 'a, b y A ✓' }, '$\\tfrac{7}{\\operatorname{sen}A}$'],
+      ['Dos lados y el ángulo entre ellos: no hay pareja.', { c: '10', a: '?', p: 'b, c y A ✗' }, '$\\text{cosenos}$'],
+      ['Con tres lados tampoco hay pareja.', { a: '7', p: 'a, b y c ✗' }, '$\\text{cosenos}$'],
+    ], 'Sin pareja lado–opuesto se usa la ley de cosenos.'),
+    xpFila('¿Cuál ley? Datos conocidos:', ['A, B, a', 'a, b, C', 'a, b, A'], ['senos', 'cosenos', 'senos'], ['ninguna', 'cosenos'], '¿Hay un lado con su opuesto?', 'En a, b, C no hay pareja.')],
+    ['El caso dudoso', xpMira('dibujo', 'Tercera idea: con dos lados y un opuesto puede haber **0, 1 o 2** triángulos.', { dib: osc, v: { r: 60, p: 'no alcanza' }, alto: 180 }, [
+      ['El lado rojo cuelga de C. Si es corto, no llega.', {}, '$a < h$'],
+      ['Si mide justo la altura, hay uno: rectángulo.', { r: 77.13, p: 'uno' }, '$a = h$'],
+      ['Un poco más largo: toca en dos sitios. Dos triángulos.', { r: 95, p: 'dos' }, '$h < a < b$'],
+      ['Más largo que b: solo uno.', { r: 140, p: 'uno' }, '$a \\ge b$'],
+    ], 'Compara a con la altura $h = b\\operatorname{sen}A$ y con b.'),
+    xpFila('A = 30° y b = 16: la altura es 8. ¿Cuántos triángulos?', ['a = 6', 'a = 11', 'a = 20'], ['0', '2', '1'], ['3'], 'Compara con 8 y con 16.', 'No llega; dos; uno.')],
+    ['Ahora sí, un problema', xpFila('Desde A y B, a 20 m, se ve un árbol C con A = 45° y B = 105°. Pon C y la distancia AC sobre $\\operatorname{sen}B$.', ['C', '20/sen C'], ['30°', '40'], ['60°', '20', '10'], 'El lado de 20 es opuesto a C.', '$\\tfrac{20}{1/2} = 40$.')],
+  ], 'Una pareja completa manda; en el dudoso, mira la altura.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-46b
+  const bis = (v, K) => { const [x, y] = K.at(130, 160, 110, v.g); return K.l(130, 160, 280, 160, 'lg gr') + K.l(130, 160, x, y, 'la gr') + K.l(x, y, 280, 160, 'lf gr') + K.ang([130, 160], [280, 160], [x, y], 26, `${Math.round(v.g)}°`, 'fa') + K.t(240, 60, v.p || '', 'ta'); };
+  xpLec('trig-46b', [
+    ['Pitágoras con corrección', xpMira('dibujo', 'Empecemos por la idea: la ley de cosenos es **Pitágoras corregido**.', { dib: bis, v: { g: 90, p: '' }, alto: 185 }, [
+      ['Con 90° vale Pitágoras.', {}, '$c^2 = a^2 + b^2$'],
+      ['Si el ángulo se cierra, el tercer lado se acorta: hay que quitar.', { g: 50 }, '$c^2 < a^2 + b^2$'],
+      ['Si se abre, se alarga: hay que agregar.', { g: 130 }, '$c^2 > a^2 + b^2$'],
+      ['La corrección es 2ab por el coseno, que cambia de signo en 90°.', {}, '$c^2 = a^2 + b^2 - 2ab\\cos C$'],
+    ], '$c^2 = a^2 + b^2 - 2ab\\cos C$.'),
+    xpFila('Lados 3 y 8 con 60° entre ellos. Pon $2ab\\cos C$, $c^2$ y c.', ['corrección', 'c²', 'c'], ['24', '49', '7'], ['48', '97', '73'], '2 · 3 · 8 · ½; 9 + 64 − 24.', '$c = 7$.')],
+    ['Hallar un ángulo', xpMira('dibujo', 'Segunda idea: con tres lados se **despeja el coseno**.', { dib: (v, K) => P(K, v, ['lados 5, 6 y 7', '49 = 25 + 36 − 60 cos C', 'cos C = 12/60 = 1/5'], 44, 38), v: { n: 1 }, alto: 150 }, [
+      ['El lado solo a la izquierda es el opuesto al ángulo buscado.', { n: 2 }, '$7^2 = 5^2 + 6^2 - 2 \\cdot 5 \\cdot 6\\cos C$'],
+      ['De ahí se despeja el coseno.', { n: 3 }, '$\\cos C = \\tfrac{12}{60}$'],
+      ['Positivo: el ángulo es agudo.', {}, '$C < 90^\\circ$'],
+      ['Si sale negativo, es obtuso.', {}, '$C > 90^\\circ$'],
+    ], '$\\cos C = \\tfrac{a^2 + b^2 - c^2}{2ab}$.'),
+    xpFila('Lados 5, 16 y 19. Para el ángulo opuesto a 19: pon arriba, abajo y el coseno.', ['a²+b²−c²', '2ab', 'cos C'], ['−80', '160', '−1/2'], ['80', '1/2', '642'], '25 + 256 − 361.', 'Ángulo de $120^\\circ$.')],
+    ['El área', xpMira('dibujo', 'Tercera idea: el área es **medio lado por lado por seno**.', { dib: bis, v: { g: 30, p: '' }, alto: 185 }, [
+      ['La base es un lado; la altura, el otro por el seno.', {}, '$h = a\\operatorname{sen}C$'],
+      ['El área es media base por altura.', {}, '$A = \\tfrac12 ab\\operatorname{sen}C$'],
+      ['Crece hasta 90° y después baja.', { g: 90 }, '$\\operatorname{sen}90^\\circ = 1$'],
+      ['Con 150° vale lo mismo que con 30°.', { g: 150 }, '$\\operatorname{sen}150^\\circ = \\operatorname{sen}30^\\circ$'],
+    ], '$A = \\tfrac12 ab\\operatorname{sen}C$; es mayor con 90°.'),
+    xpMueve('Abre la bisagra hasta que el área sea la **máxima**.', 250, { g: 30 }, ang(165, 15), { g: 90 }, bis, 'El seno vale 1 en 90°.', { lee: v => `$C = ${v.g}^\\circ$` })],
+    ['Ahora sí, un problema', xpFila('Dos caminos de 16 y 10 km salen de un pueblo con 60°. Pon la distancia entre los extremos y el área.', ['distancia', 'área'], ['14', '40√3'], ['196', '80', '2√129'], '256 + 100 − 160; y ½ · 16 · 10 · √3/2.', '$\\sqrt{196}$ y $40\\sqrt3$.')],
+  ], 'Pitágoras corregido y el área con seno.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-151
+  const Z = (v, K) => { const p = XM.plano(K, -6.6, 6.6, -4, 4, { H: 200 }), x = v.r * Math.cos(rad(v.g)), y = v.r * Math.sin(rad(v.g)); const u = (p.X(1) - p.X(0)), w = (p.Y(0) - p.Y(1)); return p.s + `<ellipse class="xl lm d" cx="${p.X(0)}" cy="${p.Y(0)}" rx="${XPK.n(v.r * u)}" ry="${XPK.n(v.r * w)}"/>` + K.l(p.X(x), p.Y(0), p.X(x), p.Y(y), 'lf') + K.ar(p.X(0), p.Y(0), p.X(x), p.Y(y), 'la gr') + K.t(14, 24, v.p || '', 'b ta', 'start'); };
+  xpLec('trig-151', [
+    ['Distancia y giro', xpMira('dibujo', 'Empecemos por la idea: un complejo se dice con **cuánto** y **hacia dónde**.', { dib: Z, v: { r: 2, g: 0, p: '' }, alto: 210 }, [
+      ['Hay dos maneras de llegar a un punto: cuadras o distancia y dirección.', {}, '$a + bi$'],
+      ['La distancia es el módulo r.', { r: 3 }, '$r = |z|$'],
+      ['La dirección es el argumento θ.', { g: 60, p: '60°' }, '$\\theta = 60^\\circ$'],
+      ['Sus cuadras salen con coseno y seno.', {}, '$a = r\\cos\\theta, \\ b = r\\operatorname{sen}\\theta$'],
+      ['Esa es la llamada forma polar.', {}, '$z = r(\\cos\\theta + i\\operatorname{sen}\\theta)$'],
+    ], '$z = r(\\cos\\theta + i\\operatorname{sen}\\theta) = r\\operatorname{cis}\\theta$.'),
+    xpMueve('Lleva la flecha a $3\\operatorname{cis}135^\\circ$.', 300, { r: 1, g: 0, p: '' }, [xpRegla('r', 1, 4, 'módulo'), xpRegla('g', 0, 315, 'ángulo', 45)], { r: 3, g: 135 }, Z, 'Distancia 3, dirección 135°.', { lee: v => `$${v.r}\\operatorname{cis}${v.g}^\\circ$` })],
+    ['De cuadras a polar', xpMira('dibujo', 'Segunda idea: **Pitágoras** da el módulo y el **cuadrante** corrige el ángulo.', { dib: Z, v: { r: 2.83, g: 45, p: '2 + 2i' }, alto: 210 }, [
+      ['2 + 2i: módulo raíz de 8, ángulo 45°.', {}, '$\\sqrt{4 + 4} = 2\\sqrt2$'],
+      ['El −2 + 2i tiene el mismo módulo.', { g: 135, p: '−2 + 2i' }, '$2\\sqrt2$'],
+      ['La calculadora da −45°, pero está en el segundo: es 135°.', {}, '$180^\\circ - 45^\\circ$'],
+      ['Dibuja siempre antes de escribir el ángulo.', {}, '$\\tan\\theta = \\tfrac{b}{a}$'],
+    ], '$r = \\sqrt{a^2 + b^2}$; θ con el cuadrante.'),
+    xpFila('$z = -\\sqrt3 + i$. Pon el módulo y el argumento.', ['módulo', 'argumento'], ['2', '150°'], ['4', '−30°', '30°'], '3 + 1; está en el segundo, referencia 30°.', '$2\\operatorname{cis}150^\\circ$.')],
+    ['De polar a cuadras', xpMira('dibujo', 'Tercera idea: para volver se **multiplica** por coseno y seno.', { dib: Z, v: { r: 4, g: 60, p: '4 cis 60°' }, alto: 210 }, [
+      ['Cuatro en dirección 60°.', {}, '$4\\operatorname{cis}60^\\circ$'],
+      ['Horizontal: 4 por un medio.', {}, '$4 \\cdot \\tfrac12 = 2$'],
+      ['Vertical: 4 por raíz de tres medios.', {}, '$4 \\cdot \\tfrac{\\sqrt3}{2} = 2\\sqrt3$'],
+      ['Sumar vueltas no cambia el número.', {}, '$60^\\circ + 360^\\circ = 420^\\circ$'],
+    ], '$a = r\\cos\\theta$ y $b = r\\operatorname{sen}\\theta$.'),
+    xpFila('$6\\operatorname{cis}120^\\circ$: pon la parte real y la imaginaria.', ['real', 'imaginaria'], ['−3', '3√3'], ['3', '−3√3', '6'], 'Segundo cuadrante: coseno −½.', '$-3 + 3\\sqrt3\\,i$.')],
+    ['Ahora sí, un problema', xpFila('Un barco está 5 al este y 5 al sur del puerto: $5 - 5i$. Pon la distancia y la dirección (0° a 360°).', ['distancia', 'dirección'], ['5√2', '315°'], ['10', '45°', '225°'], 'Cuarto cuadrante, referencia 45°.', '$5\\sqrt2\\operatorname{cis}315^\\circ$.')],
+  ], 'Cuánto y hacia dónde: módulo y argumento.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-152
+  const mul = (v, K) => { const p = XM.plano(K, -7.8, 7.8, -5, 5, { H: 210 }), q = (r, g) => [p.X(r * Math.cos(rad(g))), p.Y(r * Math.sin(rad(g)))]; return p.s + K.ar(p.X(0), p.Y(0), ...q(v.r, v.g), 'la gr') + K.ar(p.X(0), p.Y(0), ...q(v.s, v.h), 'lf gr') + K.t(14, 24, v.p || '', 'b ta', 'start'); };
+  xpLec('trig-152', [
+    ['Multiplicar es girar y estirar', xpMira('dibujo', 'Empecemos por la idea: los módulos **se multiplican** y los ángulos **se suman**.', { dib: mul, v: { r: 2, g: 30, s: 2, h: 30, p: '' }, alto: 220 }, [
+      ['Empezamos en 2 cis 30°.', {}, '$2\\operatorname{cis}30^\\circ$'],
+      ['Multiplicar por 2 cis 60°: primero gira 60°.', { h: 90 }, '$30^\\circ + 60^\\circ$'],
+      ['Y además se estira al doble.', { s: 4 }, '$2 \\cdot 2 = 4$'],
+      ['El producto: 4 cis 90°, que es 4i.', { p: '4 cis 90°' }, '$4\\operatorname{cis}90^\\circ = 4i$'],
+      ['Dividir hace lo contrario: divide y resta.', {}, '$\\tfrac{r_1}{r_2}\\operatorname{cis}(\\theta_1 - \\theta_2)$'],
+    ], 'Producto: módulos por, ángulos más. Cociente: entre y menos.'),
+    xpMueve('Lleva la flecha roja al producto de $2\\operatorname{cis}45^\\circ$ por $2\\operatorname{cis}90^\\circ$.', 310, { r: 2, g: 45, s: 2, h: 45, p: '' }, [xpRegla('s', 1, 5, 'módulo'), xpRegla('h', 0, 315, 'ángulo', 45)], { s: 4, h: 135 }, mul, '$4\\operatorname{cis}135^\\circ$.', { lee: v => `$${v.s}\\operatorname{cis}${v.h}^\\circ$` })],
+    ['Potencias: De Moivre', xpMira('dibujo', 'Segunda idea: elevar es **multiplicar muchas veces** por el mismo.', { dib: mul, v: { r: 1.5, g: 30, s: 1.5, h: 30, p: 'z' }, alto: 220 }, [
+      ['Aquí está z, con ángulo 30°.', {}, '$z = r\\operatorname{cis}30^\\circ$'],
+      ['Al cuadrado: 60° y módulo al cuadrado.', { s: 2.25, h: 60, p: 'z²' }, '$r^2\\operatorname{cis}60^\\circ$'],
+      ['Al cubo: 90° y módulo al cubo.', { s: 3.375, h: 90, p: 'z³' }, '$r^3\\operatorname{cis}90^\\circ$'],
+      ['En general, n veces el ángulo.', {}, '$z^n = r^n\\operatorname{cis}(n\\theta)$'],
+      ['Los puntos dibujan una espiral.', { s: 5, h: 120, p: 'z⁴' }, '$z^4$'],
+    ], '$(r\\operatorname{cis}\\theta)^n = r^n\\operatorname{cis}(n\\theta)$.'),
+    xpFila('$(2\\operatorname{cis}20^\\circ)^5$: pon el módulo y el ángulo.', ['módulo', 'ángulo'], ['32', '100°'], ['10', '25°', '160°'], '2 a la 5; cinco veces 20°.', '$32\\operatorname{cis}100^\\circ$.')],
+    ['Cuando conviene', xpMira('dibujo', 'Tercera idea: para potencias grandes, **pasa a polar**.', { dib: (v, K) => P(K, v, ['(1 + i)⁸', '√2 cis 45°', '(√2)⁸ cis 360°', '16'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Multiplicar ocho veces sería largo.', {}, '$(1 + i)^8$'],
+      ['En polar: raíz de dos, 45°.', { n: 2 }, '$\\sqrt2\\operatorname{cis}45^\\circ$'],
+      ['Módulo a la 8 es 16; ocho veces 45 es 360.', { n: 3 }, '$16\\operatorname{cis}360^\\circ$'],
+      ['Una vuelta completa: es el número 16.', { n: 4 }, '$16$'],
+    ], 'Polar, De Moivre y volver.'),
+    xpFila('$(1 + i)^4$: pon el módulo, el ángulo y el resultado.', ['módulo', 'ángulo', 'resultado'], ['4', '180°', '−4'], ['2', '45°', '4i'], '(√2)⁴ y 4 · 45°.', '$4\\operatorname{cis}180^\\circ = -4$.')],
+    ['Ahora sí, un problema', xpFila('Un engranaje multiplica por $3\\operatorname{cis}40^\\circ$ en cada paso. Tras 3 pasos, pon el estiramiento y el giro.', ['estira', 'gira'], ['27', '120°'], ['9', '43°', '64°'], '3 al cubo; tres veces 40°.', '$27\\operatorname{cis}120^\\circ$.')],
+  ], 'Multiplicar gira y estira; elevar lo repite.');
+
+  // ---------------------------------------------------------------------------------------------------------- trig-153
+  const flor = (v, K) => { const n = Math.round(v.n); return K.c(120, 110, 80, 'fn') + Array.from({ length: n }, (_, k) => { const [x, y] = K.at(120, 110, 80, v.a + 360 * k / n); return K.l(120, 110, x, y, 'la') + K.c(x, y, 7, k ? 'fG' : 'fF'); }).join('') + K.l(20, 110, 225, 110, 'lm') + K.t(240, 70, v.p || '', 'ta', 'start'); };
+  xpLec('trig-153', [
+    ['Deshacer la potencia', xpMira('dibujo', 'Empecemos por la idea: la raíz **parte el ángulo** y saca raíz del módulo.', { dib: (v, K) => P(K, v, ['w³ = 8 cis 60°', 'módulo: raíz cúbica de 8 = 2', 'ángulo: 60° ÷ 3 = 20°', 'w = 2 cis 20°'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Buscamos w que al cubo dé 8 cis 60°.', {}, '$w^3 = z$'],
+      ['El módulo: la raíz cúbica de 8.', { n: 2 }, '$\\sqrt[3]{8} = 2$'],
+      ['El ángulo: la tercera parte.', { n: 3 }, '$60^\\circ \\div 3 = 20^\\circ$'],
+      ['Esa es una raíz. Pero no la única.', { n: 4 }, '$2\\operatorname{cis}20^\\circ$'],
+    ], 'Primera raíz: $\\sqrt[n]{r}\\operatorname{cis}\\tfrac{\\theta}{n}$.'),
+    xpFila('Una raíz cuarta de $16\\operatorname{cis}80^\\circ$: pon módulo y ángulo.', ['módulo', 'ángulo'], ['2', '20°'], ['4', '320°', '40°'], 'Raíz cuarta de 16; la cuarta parte de 80.', '$2\\operatorname{cis}20^\\circ$.')],
+    ['Las hermanas', xpMira('dibujo', 'Segunda idea: hay **n raíces**, repartidas como pétalos.', { dib: flor, v: { n: 1, a: 20, p: '' }, alto: 220 }, [
+      ['60° y 420° son la misma dirección.', {}, '$60^\\circ + 360^\\circ$'],
+      ['420 entre 3 es 140: otra raíz, a 120° de la primera.', { n: 3, p: '3 raíces' }, '$140^\\circ$'],
+      ['La tercera, a otros 120°: 260°.', {}, '$260^\\circ$'],
+      ['La siguiente sería 380°: ya es la primera.', {}, '$380^\\circ = 20^\\circ$'],
+      ['Con n raíces, la separación es 360 entre n.', { n: 5, p: '5 raíces' }, '$\\tfrac{360^\\circ}{n}$'],
+    ], 'n raíces separadas $\\tfrac{360^\\circ}{n}$ en un círculo de radio $\\sqrt[n]{r}$.'),
+    xpMueve('Pon las raíces **octavas** con la primera en 10°.', 310, { n: 2, a: 0, p: '' }, [xpRegla('n', 2, 8, 'cuántas raíces'), xpRegla('a', 0, 60, 'primera (grados)', 10)], { n: 8, a: 10 }, flor, 'Ocho raíces, cada 45°.', { lee: v => `$\\tfrac{360^\\circ}{${v.n}}$` })],
+    ['Las raíces de 1', xpMira('dibujo', 'Tercera idea: las raíces de 1 hacen un **polígono regular**.', { dib: (v, K) => flor(v, K) + K.f(v.l, K.p(Array.from({ length: Math.max(3, Math.round(v.n)) }, (_, k) => K.at(120, 110, 80, 360 * k / Math.max(3, Math.round(v.n)))), 'fa')), v: { n: 2, a: 0, p: '', l: 0 }, alto: 220 }, [
+      ['Las raíces cuadradas de 1 son 1 y −1.', {}, '$\\pm1$'],
+      ['Las cúbicas forman un triángulo.', { n: 3, l: 1 }, '$0^\\circ, 120^\\circ, 240^\\circ$'],
+      ['Cuartas: un cuadrado, con i y −i.', { n: 4 }, '$1, i, -1, -i$'],
+      ['Si se suman todas, dan 0: se equilibran.', {}, '$1 + i - 1 - i = 0$'],
+    ], 'Las raíces de 1 son los vértices de un polígono y suman 0.'),
+    xpFila('Raíces cuadradas de $-9 = 9\\operatorname{cis}180^\\circ$: pon el módulo y los ángulos.', ['módulo', 'menor', 'mayor'], ['3', '90°', '270°'], ['9', '180°', '45°'], 'La mitad de 180; y media vuelta más.', '$3i$ y $-3i$.')],
+    ['Ahora sí, un problema', xpFila('Resuelve $z^3 = 27$: pon el módulo y los ángulos de las tres, en orden.', ['módulo', '1.ª', '2.ª', '3.ª'], ['3', '0°', '120°', '240°'], ['9', '90°', '180°'], '27 tiene ángulo 0°.', '3, $3\\operatorname{cis}120^\\circ$ y $3\\operatorname{cis}240^\\circ$.')],
+  ], 'n raíces: un círculo repartido en partes iguales.');
+}
+;
+//#archivo js/explora-alg-mundos-9-10.js
+// Álgebra · mundos 9 (Fracciones Algebraicas) y 10 (Crecimiento Exponencial), Explora. Ejemplos propios.
+{
+  const P = XM.pasos;
+  // ---------------------------------------------------------------------------------------------------------- alg-25a
+  const rio = (v, K) => { const p = XM.plano(K, -5, 5, -6, 6, { H: 200, g: 1, gy: 2 }); return p.s + K.l(p.X(v.q), 8, p.X(v.q), 192, 'lf d') + XM.curva(K, p, x => (Math.abs(x - v.q) < 0.06 ? NaN : 2 / (x - v.q))); };
+  xpLec('alg-25a', [
+    ['Lo que no se puede', xpMira('dibujo', 'Empecemos por la idea: una fracción **no existe** donde el denominador vale 0.', { dib: rio, v: { q: 1 }, alto: 210 }, [
+      ['Dos entre x − 1. En 1, el denominador se anula.', {}, '$\\tfrac{2}{x - 1}, \\ x \\neq 1$'],
+      ['Cerca de 1 el resultado crece sin parar.', {}, '$\\tfrac{2}{0.01} = 200$'],
+      ['La recta punteada es una **asíntota**: la curva se acerca y no la toca.', {}, '$x = 1$'],
+      ['Con x + 3, el prohibido es −3.', { q: -3 }, '$\\tfrac{2}{x + 3}, \\ x \\neq -3$'],
+      ['El dominio son todos los demás.', {}, '$\\mathbb{R} - \\{-3\\}$'],
+    ], 'Iguala a 0 el denominador: esos valores quedan fuera.'),
+    xpFila('En $\\tfrac{x + 1}{x^2 - 2x - 8}$, pon los valores prohibidos, el menor primero.', ['menor', 'mayor'], ['−2', '4'], ['2', '−4', '−1'], 'Factoriza: dos que sumen −2 y multipliquen −8.', '$(x - 4)(x + 2) = 0$.')],
+    ['Cancelar factores', xpMira('dibujo', 'Segunda idea: se cancelan **factores**, nunca términos.', { dib: (v, K) => P(K, v, ['(x² − 9) / (x² + 3x)', '(x + 3)(x − 3) / x(x + 3)', '(x − 3) / x'], 44, 40), v: { n: 1 }, alto: 150 }, [
+      ['Parecen no tener nada en común.', {}, '$\\tfrac{x^2 - 9}{x^2 + 3x}$'],
+      ['Factorizamos arriba y abajo.', { n: 2 }, '$\\tfrac{(x+3)(x-3)}{x(x+3)}$'],
+      ['El factor x + 3 se repite: se cancela.', { n: 3 }, '$\\tfrac{x - 3}{x}$'],
+      ['El −3 sigue prohibido: la original no existía ahí.', {}, '$x \\neq 0, \\ x \\neq -3$'],
+      ['No se tacha la x de x − 3: no es factor.', {}, '$\\tfrac{x - 3}{x} \\neq -3$'],
+    ], 'Factoriza primero; cancela factores; recuerda lo prohibido.'),
+    xpFila('$\\tfrac{x^2 + 5x}{x^2 - 25}$: pon lo que queda arriba y abajo.', ['arriba', 'abajo'], ['x', 'x − 5'], ['x + 5', '5x', '−5'], 'Arriba x(x + 5); abajo, diferencia de cuadrados.', '$\\tfrac{x}{x - 5}$.')],
+    ['Hueco o río', xpMira('dibujo', 'Tercera idea: si el factor se cancela queda un **hueco**; si no, un **río**.', { dib: (v, K) => { const p = XM.plano(K, -4, 4, -3, 5, { H: 190 }); return p.s + K.f(1 - v.r, XM.curva(K, p, x => x + 1) + K.c(p.X(1), p.Y(2), 6, 'fop') + K.c(p.X(1), p.Y(2), 6, 'fn')) + K.f(v.r, K.l(p.X(1), 8, p.X(1), 182, 'lf d') + XM.curva(K, p, x => (Math.abs(x - 1) < 0.06 ? NaN : 1 / (x - 1) + 1))); }, v: { r: 0 }, alto: 200 }, [
+      ['x² − 1 entre x − 1 es la recta x + 1.', {}, '$\\tfrac{(x-1)(x+1)}{x-1}$'],
+      ['Pero en 1 no existe: le falta un punto. Es un hueco.', {}, '$x \\neq 1$'],
+      ['En x entre x − 1 nada se cancela.', { r: 1 }, '$\\tfrac{x}{x - 1}$'],
+      ['Ahí hay un río: la curva se parte en dos orillas.', {}, '$x = 1$'],
+    ], 'Factor cancelado: hueco. Factor que queda abajo: asíntota.'),
+    xpFila('$\\tfrac{(x - 2)(x + 4)}{(x - 2)(x - 5)}$: di qué hay en cada prohibido.', ['en 2', 'en 5'], ['hueco', 'río'], ['nada'], '¿Cuál factor se cancela?', 'El de 2 se cancela; el de 5 queda abajo.')],
+    ['Ahora sí, un problema', xpMueve('Un sensor falla donde su fórmula, $\\tfrac{2}{x + 2}$, no existe. Mueve el río de $\\tfrac{2}{x - q}$ hasta ese valor.', 270, { q: 1 }, [xpRegla('q', -4, 4, 'valor prohibido')], { q: -2 }, rio, '$x + 2 = 0$ en $x = -2$.', { lee: v => `$x \\neq ${v.q}$` })],
+  ], 'Factoriza, mira lo prohibido y cancela solo factores.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-25b
+  xpLec('alg-25b', [
+    ['El mismo denominador', xpMira('dibujo', 'Empecemos por la idea: para sumar, las partes deben ser **del mismo tamaño**.', { dib: (v, K) => P(K, v, ['2/x + 3/(x + 1)', '2(x+1)/x(x+1) + 3x/x(x+1)', '(2x + 2 + 3x) / x(x+1)', '(5x + 2) / x(x+1)'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Los denominadores son x y x + 1: distintos.', {}, '$\\text{común: } x(x+1)$'],
+      ['A cada fracción se le multiplica lo que le falta, arriba y abajo.', { n: 2 }, '$\\tfrac{x+1}{x+1} = 1$'],
+      ['Se suman los de arriba.', { n: 3 }, '$2x + 2 + 3x$'],
+      ['El de abajo no se suma: es el tamaño.', { n: 4 }, '$\\tfrac{5x + 2}{x(x+1)}$'],
+    ], 'Común denominador: lo que le falta a cada una, arriba y abajo.'),
+    xpFila('$\\tfrac{4}{x} + \\tfrac{1}{x + 2}$ sobre $x(x + 2)$: arriba queda $\\square x + \\square$.', ['de x', 'número'], ['5', '8'], ['4', '6', '2'], '4(x + 2) + x.', '$5x + 8$.')],
+    ['Restar con cuidado', xpMira('dibujo', 'Segunda idea: la raya es un **paréntesis**: el menos entra a todo.', { dib: (v, K) => P(K, v, ['5x/(x−1) − (2x + 3)/(x−1)', '(5x − (2x + 3)) / (x−1)', '(5x − 2x − 3) / (x−1)', '3(x − 1)/(x−1) = 3'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Mismo denominador: se restan los de arriba.', { n: 2 }, '$5x - (2x + 3)$'],
+      ['El menos cambia el 2x y también el 3.', { n: 3 }, '$5x - 2x - 3$'],
+      ['Queda 3x − 3, que es 3 por x − 1.', { n: 4 }, '$3(x - 1)$'],
+      ['Se cancela y da 3, para x distinto de 1.', {}, '$3$'],
+    ], 'Pon paréntesis al numerador que se resta.'),
+    xpFila('$\\tfrac{7x + 2}{x + 4} - \\tfrac{3x - 5}{x + 4}$: arriba queda $\\square x + \\square$.', ['de x', 'número'], ['4', '7'], ['−3', '10', '3'], '2 menos −5.', '$4x + 7$.')],
+    ['Multiplicar y dividir', xpMira('dibujo', 'Tercera idea: multiplicar es **de frente**; dividir, por la volteada.', { dib: (v, K) => P(K, v, ['x/6 ÷ x²/9', 'x/6 · 9/x²', '9x / 6x²', '3 / 2x'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Dividir entre una fracción es multiplicar por su recíproca.', { n: 2 }, '$\\tfrac{x}{6} \\cdot \\tfrac{9}{x^2}$'],
+      ['De frente: arriba con arriba, abajo con abajo.', { n: 3 }, '$\\tfrac{9x}{6x^2}$'],
+      ['Se cancelan 3 y x.', { n: 4 }, '$\\tfrac{3}{2x}$'],
+      ['Mejor cancelar antes de multiplicar.', {}, '$\\tfrac{x}{6} \\cdot \\tfrac{9}{x \\cdot x}$'],
+    ], 'Voltea la segunda y cancela antes de multiplicar.'),
+    xpFila('$\\tfrac{x^2}{10} \\div \\tfrac{x}{15}$: pon el resultado simplificado.', ['arriba', 'abajo'], ['3x', '2'], ['x', '5', '150'], '$\\tfrac{x^2}{10} \\cdot \\tfrac{15}{x}$.', '$\\tfrac{3x}{2}$.')],
+    ['Ahora sí, un problema', xpFila('Una bomba llena en x horas y otra en $x + 5$. Juntas, en una hora: $\\tfrac1x + \\tfrac{1}{x+5}$. Arriba queda $\\square x + \\square$.', ['de x', 'número'], ['2', '5'], ['1', '10', '6'], 'x + 5 más x.', '$\\tfrac{2x + 5}{x(x + 5)}$.')],
+  ], 'Mismo tamaño para sumar; de frente para multiplicar.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-101
+  const dos = (v, K) => { const p = XM.plano(K, -1, 7, -1, 7, { H: 200 }); return p.s + XM.curva(K, p, x => v.m * x + v.b) + XM.curva(K, p, x => 6 - x, 'lf gr') + (v.px != null ? K.c(p.X(v.px), p.Y(v.py), 6, 'fA') : ''); };
+  xpLec('alg-101', [
+    ['Cumplir las dos', xpMira('dibujo', 'Empecemos por la idea: la solución es el punto que está **en las dos rectas**.', { dib: dos, v: { m: 1, b: 2, px: 5, py: 1 }, alto: 210 }, [
+      ['La roja: los pares que suman 6.', {}, '$x + y = 6$'],
+      ['El punto (5, 1) suma 6, pero no está en la otra.', {}, '$5 + 1 = 6$'],
+      ['En el cruce se cumplen las dos.', { px: 2, py: 4 }, '$(2, 4)$'],
+      ['Se comprueba en ambas ecuaciones.', {}, '$y = x + 2: \\ 4 = 2 + 2$'],
+      ['Paralelas: ninguna. La misma recta: infinitas.', { m: -1, b: 3, px: null, py: null }, '$0 = 3 \\ \\text{no}$'],
+    ], 'Una solución de un sistema cumple todas las ecuaciones.'),
+    xpMueve('La roja es $x + y = 6$ y la otra, $y = x - 2$. Lleva el punto al cruce.', 300, { m: 1, b: -2, px: 1, py: 1 }, [xpRegla('px', 0, 6, 'x'), xpRegla('py', 0, 6, 'y')], { px: 4, py: 2 }, dos, '$4 + 2 = 6$ y $2 = 4 - 2$.', { lee: v => `$(${v.px}, ${v.py})$` })],
+    ['Eliminar', xpMira('dibujo', 'Segunda idea: sumando las ecuaciones se **elimina** una letra.', { dib: (v, K) => P(K, v, ['3x + 2y = 16', '5x − 2y = 8', '8x = 24', 'x = 3,  y = 3.5'], 34, 34), v: { n: 2 }, alto: 160 }, [
+      ['Los de y son opuestos: 2y y −2y.', {}, '$2y - 2y = 0$'],
+      ['Se suman las dos ecuaciones.', { n: 3 }, '$8x = 24$'],
+      ['x vale 3; se pone en cualquiera y sale y.', { n: 4 }, '$9 + 2y = 16$'],
+      ['Si no son opuestos, se multiplica antes una ecuación entera.', {}, '$-2 \\cdot (\\ldots)$'],
+    ], 'Haz opuestos los coeficientes de una letra y suma.'),
+    xpFila('$2x + y = 11$ y $x - y = 1$. Pon 3x, x, y.', ['3x =', 'x', 'y'], ['12', '4', '3'], ['10', '5', '2'], 'Suma: la y se va.', '$3x = 12$; $4 - y = 1$.')],
+    ['Sustituir', xpMira('dibujo', 'Tercera idea: si una letra ya está despejada, se **reemplaza** en la otra.', { dib: (v, K) => P(K, v, ['y = 2x − 1', '3x + y = 14', '3x + (2x − 1) = 14', 'x = 3,  y = 5'], 34, 34), v: { n: 2 }, alto: 160 }, [
+      ['La primera dice cuánto vale y.', {}, '$y = 2x - 1$'],
+      ['Se pone ese paquete en la segunda, con paréntesis.', { n: 3 }, '$3x + (2x - 1) = 14$'],
+      ['Ahora hay una sola letra.', {}, '$5x = 15$'],
+      ['x es 3 y, al volver, y es 5.', { n: 4 }, '$y = 2 \\cdot 3 - 1$'],
+    ], 'Reemplaza el paquete completo y vuelve por la otra letra.'),
+    xpFila('$x = y + 3$ y $2x + y = 18$. Pon 3y, y, x.', ['3y =', 'y', 'x'], ['12', '4', '7'], ['15', '5', '21'], '$2(y + 3) + y = 18$.', '$3y = 12$.')],
+    ['Ahora sí, un problema', xpFila('3 jugos y 2 tortas valen 25 mil; 1 jugo y 2 tortas, 15 mil. Pon cada precio (miles).', ['jugo', 'torta'], ['5', '5'], ['10', '4', '7.5'], 'Resta las dos compras.', '2 jugos valen 10; luego $2t = 10$.')],
+  ], 'El cruce: se halla eliminando o sustituyendo.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-102
+  const cor = (v, K) => { const p = XM.plano(K, -4, 4, -2, 10, { H: 200, gy: 2 }), d = Math.max(0, v.b + 1 / 4); return p.s + XM.curva(K, p, x => x * x) + XM.curva(K, p, x => x + v.b, 'lf gr') + (v.b > -0.25 ? [1, -1].map(s => { const x = 0.5 + s * Math.sqrt(d); return K.c(p.X(x), p.Y(x * x), 6, 'fA'); }).join('') : ''); };
+  xpLec('alg-102', [
+    ['Curvas que se cruzan', xpMira('dibujo', 'Empecemos por la idea: una recta y una parábola se cruzan **0, 1 o 2 veces**.', { dib: cor, v: { b: 2 }, alto: 210 }, [
+      ['y = x² con y = x + 2: dos cruces.', {}, '$x^2 = x + 2$'],
+      ['Se iguala y sale una cuadrática.', {}, '$x^2 - x - 2 = 0$'],
+      ['x es 2 o −1: los puntos (2, 4) y (−1, 1).', {}, '$(x - 2)(x + 1) = 0$'],
+      ['Si la recta baja, los cruces se juntan y desaparecen.', { b: -1.5 }, '$\\text{discriminante} < 0$'],
+    ], 'Iguala, resuelve y vuelve por la otra coordenada.'),
+    xpMueve('Sube la recta $y = x + b$ hasta que uno de los cruces sea el punto $(-2, 4)$.', 270, { b: 0 }, [xpRegla('b', -1, 6, 'b')], { b: 6 }, cor, '$4 = -2 + 6$; el otro cruce es $(3, 9)$.', { lee: v => `$y = x + ${v.b}$` })],
+    ['Desarmar una fracción', xpMira('dibujo', 'Segunda idea: una fracción grande es **suma de fracciones simples**.', { dib: (v, K) => P(K, v, ['(5x + 1) / (x − 1)(x + 2)', 'A/(x − 1) + B/(x + 2)', '5x + 1 = A(x + 2) + B(x − 1)', 'x = 1: 6 = 3A → A = 2', 'x = −2: −9 = −3B → B = 3'], 28, 30, ''), v: { n: 1 }, alto: 170 }, [
+      ['Dos factores abajo: dos fracciones simples.', { n: 2 }, '$\\tfrac{A}{x-1} + \\tfrac{B}{x+2}$'],
+      ['Después se quitan denominadores.', { n: 3 }, '$5x + 1 = A(x+2) + B(x-1)$'],
+      ['Con x = 1 se apaga B y queda A.', { n: 4 }, '$A = 2$'],
+      ['Con x = −2 se apaga A y queda B.', { n: 5 }, '$B = 3$'],
+      ['Al sumarlas vuelve la original.', {}, '$\\tfrac{2}{x-1} + \\tfrac{3}{x+2}$'],
+    ], 'Escoge x que apague una letra y halla la otra.'),
+    xpFila('$\\tfrac{7x - 2}{x(x - 1)} = \\tfrac{A}{x} + \\tfrac{B}{x - 1}$. Pon A y B.', ['A', 'B'], ['2', '5'], ['−2', '7', '3'], 'Con x = 0: −2 = −A. Con x = 1: 5 = B.', '$\\tfrac2x + \\tfrac{5}{x-1}$.')],
+    ['Cuando se repite', xpMira('dibujo', 'Tercera idea: un factor **repetido** pide una fracción por cada potencia.', { dib: (v, K) => P(K, v, ['(3x + 1) / (x − 2)²', 'A/(x − 2) + B/(x − 2)²', '3x + 1 = A(x − 2) + B', 'x = 2: B = 7;  A = 3'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['El factor x − 2 está al cuadrado.', { n: 2 }, '$\\tfrac{A}{x-2} + \\tfrac{B}{(x-2)^2}$'],
+      ['Después se quitan denominadores.', { n: 3 }, '$3x + 1 = A(x-2) + B$'],
+      ['En 2 queda B: siete.', { n: 4 }, '$B = 7$'],
+      ['Y comparando los de x, A es 3.', {}, '$A = 3$'],
+      ['Un cuadrático que no se factoriza lleva Bx + C.', {}, '$\\tfrac{Bx + C}{x^2 + 1}$'],
+    ], 'Repetido: una por potencia. Cuadrático irreducible: $Bx + C$.'),
+    xpFila('$\\tfrac{4x + 9}{(x + 1)^2} = \\tfrac{A}{x+1} + \\tfrac{B}{(x+1)^2}$. Pon A y B.', ['A', 'B'], ['4', '5'], ['9', '13', '−4'], 'Los de x dan A; en x = −1 queda B.', '$4(x + 1) + 5$.')],
+    ['Ahora sí, un problema', xpFila('Dos números suman 11 y sus cuadrados, 73. Ponlos, el menor primero.', ['menor', 'mayor'], ['3', '8'], ['5', '6', '4'], '$x^2 + (11 - x)^2 = 73$.', '$9 + 64 = 73$.')],
+  ], 'Iguala para cruzar; apaga letras para desarmar.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-71
+  const ex = (v, K) => { const p = XM.plano(K, -4, 4, -1, 9, { H: 200, gy: 2 }); return p.s + XM.curva(K, p, x => v.a * v.b ** x + v.k) + K.l(18, p.Y(v.k), 322, p.Y(v.k), 'lf d') + K.c(p.X(0), p.Y(v.a + v.k), 6, 'fA'); };
+  xpLec('alg-71', [
+    ['Multiplicar cada paso', xpMira('dibujo', 'Empecemos por la idea: en la exponencial cada paso **multiplica** por lo mismo.', { dib: ex, v: { a: 1, b: 2, k: 0 }, alto: 210 }, [
+      ['Dos a la x: 1, 2, 4, 8… cada paso duplica.', {}, '$y = 2^x$'],
+      ['Hacia la izquierda se parte a la mitad, sin llegar a 0.', {}, '$2^{-3} = \\tfrac18$'],
+      ['En x = 0 siempre vale 1.', {}, '$b^0 = 1$'],
+      ['Con base menor que 1, baja.', { b: 0.5 }, '$y = (\\tfrac12)^x$'],
+      ['La base es positiva y distinta de 1.', {}, '$b > 0, \\ b \\neq 1$'],
+    ], '$y = b^x$: crece si $b > 1$ y decrece si $0 < b < 1$.'),
+    xpMueve('La curva $y = a \\cdot 2^x$ corta el eje y en **3**. Mueve a.', 270, { a: 1, b: 2, k: 0 }, [xpRegla('a', 1, 5, 'a')], { a: 3 }, ex, 'En 0 vale $a \\cdot 1 = 3$.', { lee: v => `$${v.a} \\cdot 2^0 = ${v.a}$` })],
+    ['El piso', xpMira('dibujo', 'Segunda idea: la **asíntota** es el piso al que se acerca.', { dib: ex, v: { a: 1, b: 2, k: 0 }, alto: 210 }, [
+      ['Sin sumar nada, el piso es 0.', {}, '$y = 0$'],
+      ['Si se suma 3, todo sube: el piso también.', { k: 3 }, '$y = 2^x + 3$'],
+      ['Un café se enfría hacia la temperatura del cuarto: ese es su piso.', { a: 5, b: 0.6, k: 2 }, '$y = 5 \\cdot 0.6^x + 2$'],
+      ['Se acerca siempre y no lo cruza.', {}, '$y > 2$'],
+    ], '$y = a \\cdot b^x + k$: asíntota $y = k$.'),
+    xpMueve('Mueve k hasta que el piso sea **4** y mira por dónde corta el eje.', 270, { a: 1, b: 2, k: 0 }, [xpRegla('k', 0, 5, 'k')], { k: 4 }, ex, '$y = 2^x + 4$ corta en 5.', { lee: v => `$y = 2^x + ${v.k}$` })],
+    ['El número e', xpMira('dibujo', 'Tercera idea: si el crecimiento se reparte en **muchos pedacitos**, aparece e.', { dib: (v, K) => [2, 2.25, 2.44, 2.61, 2.71].map((x, i) => K.f(v.n - i, K.r(30 + i * 58, 150 - x * 40, 46, x * 40, 'fa') + K.t(53 + i * 58, 142 - x * 40, x, 's') + K.t(53 + i * 58, 168, ['1', '2', '4', '12', '365'][i], 's tm'))).join(''), v: { n: 0 }, alto: 180 }, [
+      ['Un peso al 100 % anual, pagado una vez: queda 2.', { n: 1 }, '$(1 + 1)^1$'],
+      ['En dos mitades: 1.5 por 1.5.', { n: 2 }, '$(1 + \\tfrac12)^2 = 2.25$'],
+      ['En doce meses sube a 2.61.', { n: 4 }, '$(1 + \\tfrac{1}{12})^{12}$'],
+      ['Con 365 días, 2.71. Y ya casi no sube más.', { n: 5 }, '$e \\approx 2.718$'],
+    ], '$(1 + \\tfrac1n)^n$ se acerca a $e \\approx 2.718$.'),
+    xpFila('Pon los valores de $y = 3 \\cdot 2^x$.', ['x = 0', 'x = 2', 'x = −1'], ['3', '12', '1.5'], ['36', '0', '6'], 'Primero la potencia, luego por 3.', '$3$, $3 \\cdot 4$ y $3 \\div 2$.')],
+    ['Ahora sí, un problema', xpFila('Un cultivo de 50 células se triplica cada día. Pon las que hay el día 1 y el día 3.', ['día 1', 'día 3'], ['150', '1350'], ['450', '600', '200'], '$50 \\cdot 3^x$.', '$50 \\cdot 27 = 1350$.')],
+  ], 'Cada paso multiplica; k es el piso.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-13b
+  const ahorro = (v, K) => Array.from({ length: Math.round(v.n) + 1 }, (_, i) => { const s = 100 + v.r * i, c = 100 * (1 + v.r / 100) ** i, u = 0.5; return K.r(20 + i * 52, 170 - s * u, 20, s * u, 'fa') + K.f(v.c, K.r(42 + i * 52, 170 - c * u, 20, c * u, 'fg')); }).join('');
+  xpLec('alg-13b', [
+    ['Interés simple', xpMira('dibujo', 'Empecemos por la idea: en el **simple** se gana siempre sobre lo mismo.', { dib: ahorro, v: { n: 0, r: 20, c: 0 }, alto: 180 }, [
+      ['Se guardan 100 al 20 % anual simple.', {}, '$C = 100$'],
+      ['Cada año se ganan 20, siempre sobre los 100.', { n: 2 }, '$I = C \\cdot i \\cdot t$'],
+      ['A los 5 años se han ganado 100.', { n: 5 }, '$100 \\cdot 0.2 \\cdot 5 = 100$'],
+      ['Crece en línea recta, como una escalera.', {}, '$M = C(1 + it)$'],
+    ], 'Simple: $M = C(1 + it)$.'),
+    xpFila('300 mil al 4 % anual simple, 5 años. Pon lo que gana por año, en total y el monto (miles).', ['por año', 'en total', 'monto'], ['12', '60', '360'], ['20', '320', '1200'], 'El 4 % de 300.', '$12 \\cdot 5 = 60$.')],
+    ['Interés compuesto', xpMira('dibujo', 'Segunda idea: en el **compuesto** también ganan los intereses.', { dib: ahorro, v: { n: 1, r: 20, c: 1 }, alto: 180 }, [
+      ['El primer año son iguales.', {}, '$100 \\cdot 1.2 = 120$'],
+      ['El segundo, el 20 % se toma de 120: ya gana más.', { n: 2 }, '$120 \\cdot 1.2 = 144$'],
+      ['Cada año multiplica por 1.2.', { n: 5 }, '$100 \\cdot 1.2^5 \\approx 249$'],
+      ['Crece como una exponencial.', {}, '$M = C(1 + i)^t$'],
+    ], 'Compuesto: $M = C(1 + i)^t$.'),
+    xpFila('500 mil al 10 % anual compuesto. Pon el monto tras 1 y tras 2 años (miles).', ['1 año', '2 años'], ['550', '605'], ['600', '510', '1000'], 'El segundo 10 % es de 550.', '$550 \\cdot 1.1 = 605$.')],
+    ['La tasa del período', xpMira('dibujo', 'Tercera idea: si capitaliza cada mes, la tasa **se reparte** y los períodos se multiplican.', { dib: (v, K) => P(K, v, ['12 % anual, cada mes', '1 % por mes', '2 años = 24 meses', 'M = C · 1.01²⁴'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Nominal 12 % anual, capitaliza mensual.', {}, '$j = 12\\,\\%, \\ m = 12$'],
+      ['Cada mes paga la doceava parte: 1 %.', { n: 2 }, '$\\tfrac{12\\,\\%}{12}$'],
+      ['En dos años hay 24 períodos.', { n: 3 }, '$2 \\cdot 12 = 24$'],
+      ['Y se multiplica 24 veces.', { n: 4 }, '$M = C(1 + \\tfrac{j}{m})^{mt}$'],
+    ], 'Tasa por período y número de períodos.'),
+    xpFila('8 % anual, capitaliza **trimestral**, 3 años. Pon la tasa del trimestre y los períodos.', ['tasa', 'períodos'], ['2 %', '12'], ['4 %', '3', '24 %'], 'Cuatro trimestres por año.', '$8 \\div 4$ y $4 \\cdot 3$.')],
+    ['Ahora sí, un problema', xpFila('1000 (miles) al 10 % compuesto 2 años, o al 11 % simple 2 años. Pon los dos montos y el mejor.', ['compuesto', 'simple', 'mejor'], ['1210', '1220', 'simple'], ['compuesto', '1200', '1110'], '1000 · 1.21; 1000 + 220.', 'En solo dos años gana el simple.')],
+  ], 'Simple suma; compuesto multiplica.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-72
+  const lg = (v, K) => { const p = XM.plano(K, -3, 9, -3, 4, { H: 200 }); return p.s + K.f(v.e, XM.curva(K, p, x => 2 ** x, 'lg gr') + XM.curva(K, p, x => x, 'lm d')) + XM.curva(K, p, x => (x > 0.02 ? Math.log2(x) : NaN)) + (v.x > 0 ? K.c(p.X(v.x), p.Y(Math.log2(v.x)), 6, 'fF') : ''); };
+  xpLec('alg-72', [
+    ['La pregunta del exponente', xpMira('dibujo', 'Empecemos por la idea: el logaritmo pregunta **¿a qué exponente?**', { dib: lg, v: { e: 0, x: 1 }, alto: 210 }, [
+      ['¿A qué exponente va el 2 para dar 8? A 3.', { x: 8 }, '$\\log_2 8 = 3$'],
+      ['Para dar 4, a 2. Para dar 1, a 0.', { x: 1 }, '$\\log_2 1 = 0$'],
+      ['Para dar un medio, a −1.', { x: 0.5 }, '$\\log_2 \\tfrac12 = -1$'],
+      ['De 0 o de negativos no hay: ninguna potencia de 2 los da.', {}, '$x > 0$'],
+      ['Es el espejo de la exponencial.', { e: 1 }, '$\\log_b x = y \\Leftrightarrow b^y = x$'],
+    ], '$\\log_b x = y$ significa $b^y = x$, con $x > 0$.'),
+    xpFila('Pon cada logaritmo.', ['log₃ 81', 'log₅ 1/25', 'log₁₀ 1000'], ['4', '−2', '3'], ['27', '2', '100'], '¿A qué exponente?', '$3^4$, $5^{-2}$ y $10^3$.')],
+    ['Cuentas con exponentes', xpMira('dibujo', 'Segunda idea: los logaritmos **suman** donde había producto.', { dib: (v, K) => XM.barra(K, 30, [[2, 'log₂ 4 = 2', 'fa'], [3, 'log₂ 8 = 3', 'fg']], { T: 6 }) + K.f(v.n, XM.barra(K, 80, [[5, 'log₂ 32 = 5', 'ff']], { T: 6 })) + K.t(170, 140, v.p, 'ta'), v: { n: 0, p: '' }, alto: 160 }, [
+      ['4 por 8 es 32. Sus exponentes: 2 y 3.', {}, '$4 \\cdot 8 = 2^2 \\cdot 2^3$'],
+      ['El del producto es la suma: 5.', { n: 1 }, '$\\log (xy) = \\log x + \\log y$'],
+      ['El del cociente, la resta.', { p: 'log x/y = log x − log y' }, '$\\log \\tfrac{x}{y}$'],
+      ['Y el exponente baja a multiplicar.', { p: 'log xⁿ = n log x' }, '$\\log x^n = n \\log x$'],
+      ['La suma no se reparte.', {}, '$\\log(x + y) \\neq \\log x + \\log y$'],
+    ], 'Producto: suma. Cociente: resta. Potencia: multiplica.'),
+    xpFila('Si $\\log 2 = a$ y $\\log 3 = b$, pon cada uno.', ['log 6', 'log 8', 'log 3/2'], ['a + b', '3a', 'b − a'], ['ab', 'a³', 'a − b'], '6 = 2 · 3; 8 = 2³.', 'Suma, múltiplo y resta.')],
+    ['Cambiar de base', xpMira('dibujo', 'Tercera idea: con una sola base se calculan **todas**.', { dib: (v, K) => P(K, v, ['y = log₈ 32', '8ʸ = 32', '2³ʸ = 2⁵', 'y = 5/3'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['¿8 a la qué da 32? No es entero.', { n: 2 }, '$8^y = 32$'],
+      ['Los dos son potencias de 2.', { n: 3 }, '$2^{3y} = 2^5$'],
+      ['La respuesta es cinco tercios.', { n: 4 }, '$y = \\tfrac53$'],
+      ['Es un cociente de logaritmos en base 2.', {}, '$\\log_8 32 = \\tfrac{\\log_2 32}{\\log_2 8}$'],
+    ], '$\\log_b x = \\tfrac{\\log_c x}{\\log_c b}$.'),
+    xpFila('$\\log_{9} 27$ en base 3: pon arriba, abajo y el resultado.', ['log₃ 27', 'log₃ 9', 'resultado'], ['3', '2', '3/2'], ['2/3', '9', '1/3'], '¿A qué exponente va el 3?', '$\\tfrac32$.')],
+    ['Ahora sí, un problema', xpFila('En una escala, $L = \\log_{10} I$. Pon L para $I = 10^4$ y cuántas veces crece I si L sube 2.', ['L', 'veces'], ['4', '100'], ['40', '2', '20'], 'Cada unidad de L es por 10.', '$10^2 = 100$ veces.')],
+  ], 'El logaritmo es un exponente: por eso suma.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-73
+  xpLec('alg-73', [
+    ['La misma base', xpMira('dibujo', 'Empecemos por la idea: con la misma base, los **exponentes** son iguales.', { dib: (v, K) => P(K, v, ['4ˣ⁺¹ = 32', '2²ˣ⁺² = 2⁵', '2x + 2 = 5', 'x = 1.5'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['4 y 32 son potencias de 2.', {}, '$4 = 2^2, \\ 32 = 2^5$'],
+      ['Se escriben en esa base.', { n: 2 }, '$2^{2(x+1)} = 2^5$'],
+      ['Base igual: exponentes iguales.', { n: 3 }, '$2x + 2 = 5$'],
+      ['Y se despeja la x.', { n: 4 }, '$x = \\tfrac32$'],
+    ], 'Misma base: iguala exponentes.'),
+    xpFila('$9^{x} = 27$: pon el exponente de 3 a cada lado y x.', ['izquierda', 'derecha', 'x'], ['2x', '3', '3/2'], ['x²', '9', '3'], '9 es 3² y 27 es 3³.', '$2x = 3$.')],
+    ['Bajar con logaritmo', xpMira('dibujo', 'Segunda idea: si no hay base común, el **logaritmo baja** el exponente.', { dib: (v, K) => P(K, v, ['3ˣ = 20', 'x · log 3 = log 20', 'x = log 20 / log 3', 'x ≈ 2.73'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['20 no es potencia de 3: está entre 9 y 27.', {}, '$2 < x < 3$'],
+      ['Logaritmo a los dos lados.', { n: 2 }, '$x \\log 3 = \\log 20$'],
+      ['Se divide: es un cociente de logaritmos.', { n: 3 }, '$x = \\tfrac{\\log 20}{\\log 3}$'],
+      ['No es el logaritmo del cociente.', { n: 4 }, '$\\tfrac{\\log 20}{\\log 3} \\neq \\log\\tfrac{20}{3}$'],
+    ], '$b^x = c \\Rightarrow x = \\tfrac{\\log c}{\\log b}$.'),
+    xpFila('$5^x = 60$: ¿entre qué enteros está x? Ponlos.', ['más que', 'menos que'], ['2', '3'], ['12', '4', '1'], '$5^2 = 25$ y $5^3 = 125$.', '$25 < 60 < 125$.')],
+    ['Ecuaciones con logaritmo', xpMira('dibujo', 'Tercera idea: se **junta en un solo logaritmo** y se sube al exponente; luego se revisa.', { dib: (v, K) => P(K, v, ['log₂ x + log₂ (x − 2) = 3', 'log₂ x(x − 2) = 3', 'x² − 2x = 8', 'x = 4  (−2 no sirve)'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Suma de logaritmos: producto adentro.', { n: 2 }, '$\\log_2 x(x - 2) = 3$'],
+      ['Se sube: 2 al cubo.', { n: 3 }, '$x(x - 2) = 2^3$'],
+      ['De ahí salen 4 y −2.', {}, '$(x - 4)(x + 2) = 0$'],
+      ['El −2 no sirve: no hay logaritmo de un negativo.', { n: 4 }, '$x > 2$'],
+    ], 'Junta, sube y descarta lo que no exista.'),
+    xpFila('$\\log_3 (x + 6) = 2$: pon a cuánto es igual $x + 6$ y x.', ['x + 6 =', 'x'], ['9', '3'], ['6', '8', '0'], '3 al cuadrado.', '$x = 9 - 6$.')],
+    ['Ahora sí, un problema', xpFila('Un medicamento se reduce a la mitad cada 6 horas. De 80 mg, ¿cuántas mitades hasta 10 mg y cuántas horas?', ['mitades', 'horas'], ['3', '18'], ['8', '6', '24'], '80, 40, 20, 10.', '$80 \\cdot (\\tfrac12)^3 = 10$.')],
+  ], 'Misma base, bajar con logaritmo o subir al exponente.');
+}
+;
+//#archivo js/explora-alg-mundos-6-8.js
+// Álgebra · mundos 6 (Álgebra de Polinomios), 7 (Parábolas y Complejos) y 8 (Raíces de Polinomios), Explora. Ejemplos propios.
+{
+  const P = XM.pasos;
+  // Baldosas algebraicas: a cuadrados x², b barras x y c unidades.
+  const tiles = (K, a, b, c, x = 24, y = 24) => Array.from({ length: Math.round(a) }, (_, i) => K.r(x + i * 60, y, 54, 54, 'fa') + K.t(x + 27 + i * 60, y + 32, 'x²', 's')).join('')
+    + Array.from({ length: Math.round(b) }, (_, i) => K.r(x + i * 22, y + 64, 18, 54, 'fg') + K.t(x + 9 + i * 22, y + 96, 'x', 's')).join('') + Array.from({ length: Math.round(c) }, (_, i) => K.r(x + i * 22, y + 128, 18, 18, 'ff')).join('');
+  // ---------------------------------------------------------------------------------------------------------- alg-23a
+  xpLec('alg-23a', [
+    ['Piezas semejantes', xpMira('dibujo', 'Empecemos por la idea: solo se juntan las piezas **de la misma forma**.', { dib: (v, K) => tiles(K, v.a, v.b, v.c), v: { a: 2, b: 3, c: 1 }, alto: 180 }, [
+      ['Dos cuadrados de lado x, tres barras y una unidad.', {}, '$2x^2 + 3x + 1$'],
+      ['Llegan una barra y cuatro unidades.', { b: 4, c: 5 }, '$+\\ (x + 4)$'],
+      ['Las barras se suman con barras; las unidades con unidades.', {}, '$2x^2 + 4x + 5$'],
+      ['El cuadrado no se junta con la barra: son formas distintas.', {}, '$x^2 + x \\neq x^3$'],
+      ['El **grado** es el mayor exponente: aquí, 2.', {}, '$\\text{grado } 2$'],
+    ], 'Términos semejantes: la misma letra con el mismo exponente.'),
+    xpMueve('Arma $(x^2 + 2x + 3) + (x^2 + 4x)$: mueve las piezas.', 300, { a: 1, b: 2, c: 3 }, [xpRegla('a', 0, 4, 'cuadrados'), xpRegla('b', 0, 8, 'barras')], { a: 2, b: 6 }, (v, K) => tiles(K, v.a, v.b, v.c), '$2x^2 + 6x + 3$.', { lee: v => `$${v.a}x^2 + ${v.b}x + 3$` })],
+    ['Restar cambia todo', xpMira('dibujo', 'Segunda idea: el menos entra a **todos** los términos.', { dib: (v, K) => P(K, v, ['(5x² + 2x) − (3x² − 4x + 1)', '5x² + 2x − 3x² + 4x − 1', '2x² + 6x − 1'], 44, 38, ''), v: { n: 1 }, alto: 150 }, [
+      ['Se quita un paréntesis entero.', {}, '$-(3x^2 - 4x + 1)$'],
+      ['Cada signo de adentro cambia.', { n: 2 }, '$-3x^2 + 4x - 1$'],
+      ['Se juntan los semejantes.', { n: 3 }, '$2x^2 + 6x - 1$'],
+      ['El error común: cambiar solo el primero.', {}, '$-3x^2 - 4x + 1 \\ \\text{no}$'],
+    ], 'Restar un polinomio es sumar su opuesto.'),
+    xpFila('$(4x^2 - x + 6) - (x^2 - 3x + 2)$: pon los coeficientes.', ['x²', 'x', 'número'], ['3', '2', '4'], ['5', '−4', '8'], '$-x + 3x$ y $6 - 2$.', '$3x^2 + 2x + 4$.')],
+    ['Multiplicar es llenar', xpMira('dibujo', 'Tercera idea: un producto es **un rectángulo**: cada término con cada término.', { dib: (v, K) => { const c = [['x²', '5x'], ['2x', '10']]; return c.map((f, i) => f.map((t, j) => K.f(v.n - (i * 2 + j), K.r(80 + (j ? 110 : 0), 40 + (i ? 80 : 0), j ? 70 : 110, i ? 44 : 80, ['fa', 'fg', 'fg', 'ff'][i * 2 + j]) + K.t(80 + (j ? 145 : 55), 46 + (i ? 100 : 40), t, 'b'))).join('')).join('') + K.t(135, 30, 'x', 's') + K.t(225, 30, '5', 's') + K.t(66, 84, 'x', 's') + K.t(66, 146, '2', 's'); }, v: { n: 0 }, alto: 180 }, [
+      ['Un rectángulo de lados x + 5 y x + 2.', {}, '$(x + 5)(x + 2)$'],
+      ['La primera parte es x por x.', { n: 1 }, '$x^2$'],
+      ['x por 5 y 2 por x: son barras.', { n: 3 }, '$5x + 2x = 7x$'],
+      ['Y 2 por 5, las unidades.', { n: 4 }, '$x^2 + 7x + 10$'],
+      ['Los grados se suman: 1 más 1, grado 2.', {}, '$1 + 1 = 2$'],
+    ], 'Multiplicar: todos con todos; el grado se suma.'),
+    xpFila('$(x + 3)(x + 6)$: pon el coeficiente de x y el número.', ['de x', 'número'], ['9', '18'], ['3', '6', '36'], 'Dos barras: 6x y 3x.', '$x^2 + 9x + 18$.')],
+    ['Ahora sí, un problema', xpFila('Un patio mide $x + 4$ por $x + 7$. Pon los coeficientes de su área.', ['x²', 'x', 'número'], ['1', '11', '28'], ['4', '7', '12'], 'Llena el rectángulo en cuatro partes.', '$x^2 + 11x + 28$.')],
+  ], 'Se juntan semejantes; restar cambia todo; multiplicar llena un rectángulo.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-3
+  const cuadAB = (v, K) => { const a = v.a * 18, b = v.b * 18, g = 8 * v.s; return K.r(70, 14, a, a, 'fa') + K.r(70 + a + g, 14, b, a, 'fg') + K.r(70, 14 + a + g, a, b, 'fg') + K.r(70 + a + g, 14 + a + g, b, b, 'ff') + K.t(70 + a / 2, 18 + a / 2, 'a²', 'b') + K.t(70 + a + g + b / 2, 18 + a / 2, 'ab', 's') + K.t(70 + a / 2, 20 + a + g + b / 2, 'ab', 's') + K.t(70 + a + g + b / 2, 20 + a + g + b / 2, 'b²', 's'); };
+  xpLec('alg-3', [
+    ['El cuadrado de una suma', xpMira('dibujo', 'Empecemos por la idea: el cuadrado de una suma tiene **cuatro pedazos**.', { dib: cuadAB, v: { a: 5, b: 3, s: 0 }, alto: 190 }, [
+      ['Un cuadrado de lado a más b.', {}, '$(a + b)^2$'],
+      ['Se corta: un cuadrado a², uno b²…', { s: 1 }, '$a^2 + b^2$'],
+      ['…y dos rectángulos iguales, ab.', { s: 2 }, '$2ab$'],
+      ['Olvidar los rectángulos es el error más común.', {}, '$(a + b)^2 = a^2 + 2ab + b^2$'],
+      ['Con resta, los rectángulos se quitan.', {}, '$(a - b)^2 = a^2 - 2ab + b^2$'],
+    ], '$(a \\pm b)^2 = a^2 \\pm 2ab + b^2$.'),
+    xpFila('$(x + 9)^2$: pon el término de x y el número.', ['de x', 'número'], ['18', '81'], ['9', '36', '99'], 'Dos rectángulos de 9 por x.', '$x^2 + 18x + 81$.')],
+    ['La diferencia de cuadrados', xpMira('dibujo', 'Segunda idea: suma por diferencia **cancela** lo de en medio.', { dib: (v, K) => { const A = 100, B = 40; return K.p([[40, 20], [40 + A, 20], [40 + A, 20 + A - B], [40 + A - B, 20 + A - B], [40 + A - B, 20 + A], [40, 20 + A]], 'fa') + K.r(40 + A - B, 20 + A - B, B, B, 'fc') + K.t(90, 62, 'a² − b²', 'b') + K.f(v.m, K.r(200, 16, 60, 140, 'fg') + K.t(230, 174, 'a − b', 's') + K.t(288, 90, 'a + b', 's', 'start')); }, v: { m: 0 }, alto: 180 }, [
+      ['Un cuadrado de lado a, al que se le quita uno de lado b.', {}, '$a^2 - b^2$'],
+      ['Se corta la L y se arma un rectángulo.', { m: 1 }, '$(a - b)(a + b)$'],
+      ['Sus lados son a menos b y a más b.', {}, '$(a + b)(a - b) = a^2 - b^2$'],
+      ['Sirve para cuentas: 103 por 97.', {}, '$100^2 - 3^2 = 9\\,991$'],
+    ], '$(a + b)(a - b) = a^2 - b^2$.'),
+    xpFila('$52 \\cdot 48$ como $(50 + 2)(50 - 2)$: pon los cuadrados y el resultado.', ['50²', '2²', 'resultado'], ['2500', '4', '2496'], ['2504', '100', '2400'], 'Resta los cuadrados.', '$2500 - 4$.')],
+    ['El cubo', xpMira('dibujo', 'Tercera idea: el cubo de una suma tiene **ocho piezas** de cuatro clases.', { dib: (v, K) => P(K, v, ['(a + b)³', 'a³ : 1 cubo', '3a²b : 3 losas', '3ab² : 3 barras', 'b³ : 1 cubito'], 28, 30), v: { n: 1 }, alto: 170 }, [
+      ['Un cubo de arista a más b se corta en ocho.', {}, '$(a + b)^3$'],
+      ['Primero, el cubo grande, de arista a.', { n: 2 }, '$a^3$'],
+      ['Tres losas de a por a por b.', { n: 3 }, '$3a^2b$'],
+      ['Tres barras de a por b por b, y el cubito.', { n: 5 }, '$3ab^2$'],
+      ['En orden: uno, tres, tres, uno.', {}, '$a^3 + 3a^2b + 3ab^2 + b^3$'],
+    ], '$(a + b)^3 = a^3 + 3a^2b + 3ab^2 + b^3$.'),
+    xpFila('$(x + 4)^3$: pon los coeficientes que siguen a $x^3$.', ['x²', 'x', 'número'], ['12', '48', '64'], ['4', '16', '24'], '3 · 4, 3 · 16 y 4 al cubo.', '$x^3 + 12x^2 + 48x + 64$.')],
+    ['Ahora sí, un problema', xpFila('Un lote cuadrado pasa de lado x a lado x + 8. ¿Cuánto creció su área? Pon los coeficientes de lo que se agregó.', ['de x', 'número'], ['16', '64'], ['8', '32', '24'], '$(x + 8)^2 - x^2$.', 'Dos franjas de 8x y la esquina de 64.')],
+  ], 'Los productos notables son áreas y volúmenes cortados.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-24c
+  const pascal = (v, K) => { let h = ''; for (let i = 0; i < Math.round(v.f); i++) { let c = 1; for (let j = 0; j <= i; j++) { h += K.c(170 + (j - i / 2) * 44, 24 + i * 32, 14, 'fa') + K.t(170 + (j - i / 2) * 44, 29 + i * 32, c, 's'); c = c * (i - j) / (j + 1); } } return h; };
+  xpLec('alg-24c', [
+    ['El triángulo', xpMira('dibujo', 'Empecemos por la idea: cada número es la **suma de los dos de arriba**.', { dib: pascal, v: { f: 1 }, alto: 205 }, [
+      ['Arriba, en la punta, hay un 1.', { f: 1 }, '$(a + b)^0 = 1$'],
+      ['Abajo, 1 y 1; luego 1, 2, 1.', { f: 3 }, '$(a + b)^2$'],
+      ['1, 3, 3, 1: son los del cubo.', { f: 4 }, '$(a + b)^3$'],
+      ['El 6 sale de 3 más 3.', { f: 5 }, '$1, 4, 6, 4, 1$'],
+      ['Cada fila da los coeficientes de una potencia.', { f: 6 }, '$(a + b)^5$'],
+    ], 'La fila n da los coeficientes de $(a + b)^n$.'),
+    xpFila('La fila 5 es 1, 5, 10, 10, 5, 1. Pon los cuatro primeros de la fila 6.', ['1.º', '2.º', '3.º', '4.º'], ['1', '6', '15', '20'], ['10', '11', '5'], 'Suma vecinos: 1 + 5, 5 + 10, 10 + 10.', '1, 6, 15, 20.')],
+    ['Por qué salen esos números', xpMira('dibujo', 'Segunda idea: cuentan **de cuántas maneras** se escogen los paréntesis.', { dib: (v, K) => [0, 1, 2, 3].map(i => K.r(24 + i * 76, 40, 66, 44, 'fc', 8) + K.t(57 + i * 76, 68, i < 2 ? `a + ${v.q > 0.5 ? 'b ✓' : 'b'}` : 'a + b', 's')).join('') + K.t(170, 126, v.p, 'b ta'), v: { q: 0, p: '' }, alto: 150 }, [
+      ['Cuatro paréntesis iguales. De cada uno sale a o b.', {}, '$(a + b)^4$'],
+      ['Para tener a²b² se escoge b en dos de los cuatro.', { q: 1, p: 'a²b²' }, '$\\binom42$'],
+      ['Hay 6 maneras de escoger dos de cuatro.', { p: '6 a²b²' }, '$\\binom42 = \\tfrac{4 \\cdot 3}{2} = 6$'],
+      ['Por eso el coeficiente es 6.', {}, '$6a^2b^2$'],
+    ], 'El coeficiente de $a^{n-k}b^k$ es $\\binom{n}{k}$.'),
+    xpFila('Pon cada combinación.', ['C(5, 2)', 'C(7, 1)', 'C(6, 3)'], ['10', '7', '20'], ['18', '30', '6'], '5·4/2; siete; 6·5·4/6.', '10, 7 y 20.')],
+    ['Un término suelto', xpMira('dibujo', 'Tercera idea: no hace falta abrir todo para hallar **un término**.', { dib: (v, K) => P(K, v, ['(x + 2)⁵, término con x³', 'b aparece 2 veces', 'C(5, 2) · x³ · 2²', '10 · 4x³ = 40x³'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Queremos el de x al cubo.', {}, '$(x + 2)^5$'],
+      ['Los exponentes suman 5: el 2 va dos veces.', { n: 2 }, '$3 + 2 = 5$'],
+      ['Las maneras por los factores.', { n: 3 }, '$\\binom52 x^3 \\cdot 2^2$'],
+      ['El coeficiente es 40, no 10: el 2 también cuenta.', { n: 4 }, '$40x^3$'],
+    ], 'Término: $\\binom{n}{k}a^{n-k}b^k$; no olvides la potencia de b.'),
+    xpFila('En $(x + 3)^4$, el término con $x^2$: pon las maneras, $3^2$ y el coeficiente.', ['maneras', '3²', 'coeficiente'], ['6', '9', '54'], ['4', '12', '36'], 'Dos de cuatro; y el 3 va dos veces.', '$6 \\cdot 9 = 54$.')],
+    ['Ahora sí, un problema', xpFila('De 8 bailarines se eligen 2 para abrir el show. ¿Cuántas parejas hay? ¿Y si se eligen 6?', ['2 de 8', '6 de 8'], ['28', '28'], ['56', '16', '48'], 'Elegir 6 es dejar 2 por fuera.', '$\\binom82 = \\binom86 = 28$.')],
+  ], 'Pascal cuenta maneras de escoger: esos son los coeficientes.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-24b
+  const rectF = (v, K) => { const p = Math.round(v.p), q = Math.round(v.q), u = 18, X = 80; return K.r(60, 30, X, X, 'fa') + K.t(100, 74, 'x²', 'b') + Array.from({ length: p }, (_, i) => K.r(60 + X + i * u, 30, u, X, 'fg')).join('') + Array.from({ length: q }, (_, i) => K.r(60, 30 + X + i * u, X, u, 'fg')).join('') + XM.reja(K, 60 + X, 30 + X, p, q, u, 'ff'); };
+  xpLec('alg-24b', [
+    ['Factor común', xpMira('dibujo', 'Empecemos por la idea: factorizar es hallar **los lados** del área.', { dib: (v, K) => K.r(40, 40, 120, 60, 'fa') + K.t(100, 76, '6x²', 'b') + K.r(160 + v.s * 20, 40, 80, 60, 'fg') + K.t(200 + v.s * 20, 76, '4x', 'b') + K.f(1 - v.s, K.t(26, 76, '2x', 's') + K.t(140, 126, '3x + 2', 'b ta')), v: { s: 1 }, alto: 140 }, [
+      ['Dos áreas: 6x² y 4x.', {}, '$6x^2 + 4x$'],
+      ['Comparten una altura: 2x es el mayor factor de las dos.', { s: 0 }, '$2x$'],
+      ['Los largos son 3x y 2.', {}, '$6x^2 + 4x = 2x(3x + 2)$'],
+      ['Se comprueba multiplicando de vuelta.', {}, '$2x \\cdot 3x + 2x \\cdot 2$'],
+    ], 'Saca el mayor factor que tienen todos.'),
+    xpFila('$15x^3 - 10x^2 = \\square(\\square x - \\square)$: pon las piezas.', ['afuera', 'de x', 'número'], ['5x²', '3', '2'], ['5x', '10', '15'], '¿Qué divide a los dos, en número y en x?', '$5x^2(3x - 2)$.')],
+    ['Trinomio', xpMira('dibujo', 'Segunda idea: dos números que **sumen** las barras y **multipliquen** las unidades.', { dib: rectF, v: { p: 1, q: 5 }, alto: 220 }, [
+      ['x² + 6x + 8. Con 1 y 5 barras salen cinco unidades: no.', {}, '$1 \\cdot 5 = 5$'],
+      ['Con 2 y 4: ocho unidades. Cierra justo.', { p: 4, q: 2 }, '$4 \\cdot 2 = 8$'],
+      ['Los lados son x + 4 y x + 2.', {}, '$(x + 4)(x + 2)$'],
+      ['Suman 6 y multiplican 8.', {}, '$x^2 + 6x + 8$'],
+      ['Con unidades negativas, los signos son distintos.', {}, '$x^2 + x - 6 = (x + 3)(x - 2)$'],
+    ], '$x^2 + sx + m$: busca dos que sumen s y multipliquen m.'),
+    xpMueve('Factoriza $x^2 + 8x + 15$: reparte las 8 barras hasta tener 15 unidades (la mayor al lado).', 300, { p: 1, q: 1 }, [xpRegla('p', 1, 7, 'barras al lado'), xpRegla('q', 1, 5, 'barras abajo')], { p: 5, q: 3 }, rectF, '$(x + 5)(x + 3)$.', { lee: v => `$x^2 + ${v.p + v.q}x + ${v.p * v.q}$` })],
+    ['Reconocer patrones', xpMira('dibujo', 'Tercera idea: antes de buscar, mira si es un **notable** o si se puede **agrupar**.', { dib: (v, K) => P(K, v, ['x² − 49 = (x + 7)(x − 7)', 'x² − 14x + 49 = (x − 7)²', 'x³ + 2x² + 5x + 10', '= x²(x + 2) + 5(x + 2)', '= (x + 2)(x² + 5)'], 28, 30), v: { n: 0 }, alto: 170 }, [
+      ['Dos cuadrados que se restan.', { n: 1 }, '$a^2 - b^2$'],
+      ['Dos cuadrados y el doble producto: cuadrado perfecto.', { n: 2 }, '$(a - b)^2$'],
+      ['Cuatro términos: de a dos.', { n: 4 }, '$x^2(x + 2) + 5(x + 2)$'],
+      ['El paréntesis repetido sale.', { n: 5 }, '$(x + 2)(x^2 + 5)$'],
+    ], 'Primero factor común; luego notables; luego trinomio o agrupar.'),
+    xpFila('Pon cada factorización.', ['x² − 64', 'x² + 10x + 25'], ['(x+8)(x−8)', '(x+5)²'], ['(x−8)²', '(x+5)(x−5)'], '¿Hay término con x? ¿Es el doble producto?', 'Diferencia de cuadrados y cuadrado perfecto.')],
+    ['Ahora sí, un problema', xpMueve('El área de un salón es $x^2 + 9x + 14$. Halla sus lados repartiendo las 9 barras.', 300, { p: 1, q: 1 }, [xpRegla('p', 1, 8, 'barras al lado'), xpRegla('q', 1, 5, 'barras abajo')], { p: 7, q: 2 }, rectF, '$(x + 7)(x + 2)$.', { lee: v => `$x^2 + ${v.p + v.q}x + ${v.p * v.q}$` })],
+  ], 'Factorizar: del área a los lados.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-23c
+  const plano = (v, K) => { const p = XM.plano(K, -8.7, 8.7, -5, 5, { H: 190 }); return p.s + K.ar(p.X(0), p.Y(0), p.X(v.a), p.Y(v.b), 'la gr') + (v.c != null ? K.f(v.k ?? 1, K.ar(p.X(0), p.Y(0), p.X(v.c), p.Y(v.d), 'lf gr')) : '') + K.t(14, 24, v.p || '', 'b ta', 'start'); };
+  xpLec('alg-23c', [
+    ['Un número que gira', xpMira('dibujo', 'Empecemos por la idea: multiplicar por **i** es girar un cuarto de vuelta.', { dib: plano, v: { a: 3, b: 0, p: '3' }, alto: 200 }, [
+      ['El 3, sobre el eje real.', {}, '$3 = 3 + 0i$'],
+      ['Por i: gira 90 grados y queda en 3i.', { a: 0, b: 3, p: '3i' }, '$3 \\cdot i = 3i$'],
+      ['Otra vez por i: llega a −3.', { a: -3, b: 0, p: '−3' }, '$3i^2 = -3$'],
+      ['Por eso i al cuadrado es −1.', {}, '$i^2 = -1$'],
+      ['Un giro más, −3i; con el cuarto giro vuelve al 3.', { a: 0, b: -3, p: '−3i' }, '$i^3 = -i, \\ i^4 = 1$'],
+    ], '$i^2 = -1$; las potencias de i se repiten de cuatro en cuatro.'),
+    xpFila('Pon cada potencia.', ['i⁶', 'i¹¹', 'i²⁰'], ['−1', '−i', '1'], ['i', '0'], 'Mira el residuo entre 4: 2, 3 y 0.', '$i^2$, $i^3$ e $i^0$.')],
+    ['Sumar y multiplicar', xpMira('dibujo', 'Segunda idea: se suma **por partes** y se multiplica **como binomios**.', { dib: (v, K) => P(K, v, ['(2 + 3i) + (4 − i) = 6 + 2i', '(2 + 3i)(4 − i)', '8 − 2i + 12i − 3i²', '8 + 10i + 3 = 11 + 10i'], 34, 34, ''), v: { n: 1 }, alto: 160 }, [
+      ['Real con real e imaginaria con imaginaria.', {}, '$6 + 2i$'],
+      ['El producto: todos con todos.', { n: 3 }, '$8 - 2i + 12i - 3i^2$'],
+      ['Como i² es −1, el último se vuelve +3.', { n: 4 }, '$-3i^2 = 3$'],
+      ['Por último se juntan las partes.', {}, '$11 + 10i$'],
+    ], 'Multiplica normal y cambia $i^2$ por $-1$.'),
+    xpFila('$(1 + 2i)(3 + i)$: pon la parte real y la imaginaria.', ['real', 'imaginaria'], ['1', '7'], ['3', '5', '2'], '$3 + i + 6i + 2i^2$.', '$1 + 7i$.')],
+    ['Conjugado y tamaño', xpMira('dibujo', 'Tercera idea: el **conjugado** es el reflejo; el **módulo**, el largo.', { dib: plano, v: { a: 4, b: 3, c: 4, d: 3, k: 0, p: '4 + 3i' }, alto: 200 }, [
+      ['Aquí está el número 4 + 3i.', {}, '$z = 4 + 3i$'],
+      ['Su reflejo sobre el eje real es el conjugado.', { d: -3, k: 1 }, '$\\bar z = 4 - 3i$'],
+      ['El largo sale por Pitágoras.', {}, '$|z| = \\sqrt{16 + 9} = 5$'],
+      ['Un número por su conjugado da el largo al cuadrado: real.', {}, '$z\\bar z = 25$'],
+      ['Con eso se divide: se multiplica por el conjugado de abajo.', {}, '$\\tfrac1z = \\tfrac{\\bar z}{25}$'],
+    ], '$z\\bar z = |z|^2$: así se quita i del denominador.'),
+    xpFila('$z = 5 - 12i$. Pon la parte imaginaria del conjugado, $|z|^2$ y $|z|$.', ['imag.', '|z|²', '|z|'], ['12', '169', '13'], ['−12', '17', '119'], 'Refleja; luego 25 más 144.', '$\\bar z = 5 + 12i$ y $|z| = 13$.')],
+    ['Ahora sí, un problema', xpMueve('Un dron mira hacia $2 + 4i$. Lo multiplican por i (gira 90°). Lleva la flecha roja a donde apunta.', 290, { a: 2, b: 4, c: 2, d: 4 }, [xpRegla('c', -5, 5, 'real'), xpRegla('d', -5, 5, 'imaginaria')], { c: -4, d: 2 }, plano, '$i(2 + 4i) = 2i + 4i^2 = -4 + 2i$.', { lee: v => `$${v.c} ${v.d < 0 ? '-' : '+'} ${Math.abs(v.d)}i$` })],
+  ], 'Los complejos viven en un plano; i gira un cuarto de vuelta.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-1
+  const bal = (v, K) => K.l(40, 130, 300, 130, 'gr') + K.p([[170, 130], [150, 165], [190, 165]], 'fk') + XM.bolas(K, 60, 112, v.x, 'fa', 30, 13) + XM.bolas(K, 60, 84, v.u, 'fg', 20, 8) + XM.bolas(K, 200, 112, v.y, 'fa', 30, 13) + XM.bolas(K, 200, 84, Math.min(6, v.w), 'fg', 20, 8) + XM.bolas(K, 200, 62, Math.max(0, v.w - 6), 'fg', 20, 8) + K.t(170, 30, v.p, 'b ta');
+  xpLec('alg-1', [
+    ['La balanza', xpMira('dibujo', 'Empecemos por la idea: una ecuación es una **balanza en equilibrio**.', { dib: bal, v: { x: 3, u: 2, y: 1, w: 8, p: '3x + 2 = x + 8' }, alto: 175 }, [
+      ['Tres cajas iguales y 2 bolitas pesan como una caja y 8 bolitas.', {}, '$3x + 2 = x + 8$'],
+      ['Quitamos una caja de cada lado: sigue en equilibrio.', { x: 2, y: 0, p: '2x + 2 = 8' }, '$2x + 2 = 8$'],
+      ['Quitamos 2 bolitas de cada lado.', { u: 0, w: 6, p: '2x = 6' }, '$2x = 6$'],
+      ['Repartimos: cada caja pesa tres bolitas.', { x: 1, w: 3, p: 'x = 3' }, '$x = 3$'],
+    ], 'Lo que se hace a un lado se hace al otro.'),
+    xpFila('$5x + 4 = 2x + 19$: pon lo que queda en cada paso.', ['3x =', 'x ='], ['15', '5'], ['23', '7', '3'], 'Quita 2x de cada lado y después 4.', '$3x = 15$, $x = 5$.')],
+    ['Paréntesis y fracciones', xpMira('dibujo', 'Segunda idea: primero se abren paréntesis y se **quitan denominadores**.', { dib: (v, K) => P(K, v, ['x/2 + x/3 = 10', '3x + 2x = 60', '5x = 60', 'x = 12'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Medios y tercios: el común es 6.', {}, '$\\text{mcm}(2, 3) = 6$'],
+      ['Todo por 6, los dos lados completos.', { n: 2 }, '$3x + 2x = 60$'],
+      ['Después se juntan las x.', { n: 3 }, '$5x = 60$'],
+      ['Y se reparte: 12.', { n: 4 }, '$x = 12$'],
+    ], 'Multiplica todos los términos por el mcm.'),
+    xpFila('$\\tfrac{x}{4} + \\tfrac{x}{6} = 5$: pon el mcm, las x juntas y x.', ['mcm', '? · x = 60', 'x'], ['12', '5', '12'], ['24', '10', '6'], '3x más 2x.', '$5x = 60$.')],
+    ['Una, ninguna o todas', xpMira('dibujo', 'Tercera idea: dos rectas se cruzan **una vez, nunca o siempre**.', { dib: (v, K) => { const p = XM.plano(K, -4, 4, -4, 6, { H: 180 }); return p.s + XM.curva(K, p, x => x + 1, 'la gr') + XM.curva(K, p, x => v.m * x + v.b, 'lf gr d'); }, v: { m: -1, b: 3 }, alto: 190 }, [
+      ['Cada lado es una recta. Se cruzan en un punto: una solución.', {}, '$x + 1 = -x + 3$'],
+      ['Paralelas: nunca se encuentran. Ninguna solución.', { m: 1, b: 4 }, '$x + 1 = x + 4$'],
+      ['La misma recta: todos los números sirven.', { m: 1, b: 1 }, '$x + 1 = x + 1$'],
+      ['Al despejar sale algo falso o algo siempre cierto.', {}, '$1 = 4 \\ \\text{o} \\ 1 = 1$'],
+    ], 'Falso: ninguna. Siempre cierto: todas.'),
+    xpFila('Pon cuántas soluciones tiene cada una.', ['2x + 3 = 2x', '4x = x + 9', '2(x+1) = 2x+2'], ['ninguna', 'una', 'todas'], ['dos'], 'Quita las x iguales y mira lo que queda.', 'Queda 3 = 0; 3x = 9; y 2 = 2.')],
+    ['Ahora sí, un problema', xpFila('Tres cuerdas miden 96 m: la segunda es el doble de la primera y la tercera, 6 m más que la segunda. Halla las tres.', ['1.ª', '2.ª', '3.ª'], ['18', '36', '42'], ['24', '30', '32'], '$x + 2x + (2x + 6) = 96$.', '$5x = 90$, $x = 18$.')],
+  ], 'Equilibrio: lo mismo a los dos lados hasta dejar sola la x.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-4a
+  const par = (v, K) => { const p = XM.plano(K, -6, 6, -5, 7, { H: 200 }); return p.s + XM.curva(K, p, x => v.a * (x - v.h) ** 2 + v.k) + K.c(p.X(v.h), p.Y(v.k), 6, 'fF') + K.l(p.X(v.h), 8, p.X(v.h), 192, 'lf d'); };
+  xpLec('alg-4a', [
+    ['Mover la parábola', xpMira('dibujo', 'Empecemos por la idea: toda parábola es **x² movida y estirada**.', { dib: par, v: { a: 1, h: 0, k: 0 }, alto: 210 }, [
+      ['La más simple: vértice en el origen.', {}, '$y = x^2$'],
+      ['Sube o baja con k.', { k: -3 }, '$y = x^2 - 3$'],
+      ['Se corre con h: hacia el 2, aunque se escriba menos 2.', { h: 2 }, '$y = (x - 2)^2 - 3$'],
+      ['Con a negativa se voltea.', { a: -0.5, k: 4 }, '$y = -\\tfrac12(x - 2)^2 + 4$'],
+      ['El vértice siempre es (h, k) y el eje, x = h.', {}, '$V = (h, k)$'],
+    ], '$y = a(x - h)^2 + k$: vértice $(h, k)$.'),
+    xpMueve('Lleva el vértice a $(-3, 2)$ con a = 1.', 300, { a: 1, h: 0, k: 0 }, [xpRegla('h', -4, 4, 'h'), xpRegla('k', -4, 4, 'k')], { h: -3, k: 2 }, par, '$y = (x + 3)^2 + 2$.', { lee: v => `$y = (x ${v.h < 0 ? '+' : '-'} ${Math.abs(v.h)})^2 ${v.k < 0 ? '-' : '+'} ${Math.abs(v.k)}$` })],
+    ['Completar el cuadrado', xpMira('dibujo', 'Segunda idea: de la forma general se llega al vértice **completando el cuadrado**.', { dib: (v, K) => { const u = 20; return K.r(60, 20, 80, 80, 'fa') + K.t(100, 64, 'x²', 'b') + [0, 1, 2].map(i => K.r(140 + i * u, 20, u, 80, 'fg') + K.r(60, 100 + i * u, 80, u, 'fg')).join('') + K.f(v.c, XM.reja(K, 140, 100, 3, 3, u, 'ff')); }, v: { c: 0 }, alto: 180 }, [
+      ['x² + 6x: un cuadrado y seis barras, tres por lado.', {}, '$x^2 + 6x$'],
+      ['Falta la esquina: 3 por 3.', { c: 1 }, '$+\\ 9$'],
+      ['Con ella es un cuadrado de lado x + 3.', {}, '$x^2 + 6x + 9 = (x + 3)^2$'],
+      ['Si se agregó 9, hay que quitarlo.', {}, '$x^2 + 6x + 5 = (x + 3)^2 - 4$'],
+      ['El atajo: el vértice está en menos b sobre dos a.', {}, '$h = -\\tfrac{b}{2a}$'],
+    ], 'La mitad de b, al cuadrado, completa; y $h = -\\tfrac{b}{2a}$.'),
+    xpFila('$y = x^2 - 8x + 10$: pon h y k.', ['h', 'k'], ['4', '−6'], ['−4', '10', '26'], 'La mitad de 8; y evalúa ahí: 16 − 32 + 10.', '$(x - 4)^2 - 6$.')],
+    ['Máximo o mínimo', xpMira('dibujo', 'Tercera idea: el vértice es el punto **más alto o más bajo**.', { dib: (v, K) => { const p = XM.plano(K, 0, 10, 0, 30, { H: 190, gy: 5 }); return p.s + XM.curva(K, p, x => x * (10 - x)) + K.c(p.X(v.x), p.Y(v.x * (10 - v.x)), 6, 'fA') + K.l(p.X(v.x), p.Y(0), p.X(v.x), p.Y(v.x * (10 - v.x)), 'la'); }, v: { x: 1 }, alto: 200 }, [
+      ['Con 20 m de malla se cercan rectángulos: lados x y 10 − x.', {}, '$A = x(10 - x)$'],
+      ['Con x = 1, área 9.', {}, '$1 \\cdot 9$'],
+      ['Con 3, área 21.', { x: 3 }, '$3 \\cdot 7$'],
+      ['En la mitad, la mayor: un cuadrado de 25.', { x: 5 }, '$5 \\cdot 5 = 25$'],
+      ['Después baja igual: es simétrica.', { x: 8 }, '$8 \\cdot 2 = 16$'],
+    ], 'Si a < 0, el vértice es el máximo; si a > 0, el mínimo.'),
+    xpMueve('La ganancia es $x(8 - x)$. Lleva el punto a la ganancia **máxima**.', 260, { x: 1 }, [xpRegla('x', 0, 8, 'x')], { x: 4 }, (v, K) => { const p = XM.plano(K, 0, 8, 0, 18, { H: 190, gy: 3 }); return p.s + XM.curva(K, p, x => x * (8 - x)) + K.c(p.X(v.x), p.Y(v.x * (8 - v.x)), 6, 'fA'); }, 'En la mitad de 0 y 8.', { lee: v => `$${v.x} \\cdot ${8 - v.x} = ${v.x * (8 - v.x)}$` })],
+    ['Ahora sí, un problema', xpFila('Una pelota va a altura $h = -5t^2 + 20t$. ¿En qué segundo llega más alto y a cuántos metros?', ['segundo', 'altura'], ['2', '20'], ['4', '10', '40'], '$t = -\\tfrac{20}{2(-5)}$.', '$-5 \\cdot 4 + 40 = 20$ m.')],
+  ], 'Vértice y eje: con ellos se dibuja y se optimiza.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-4
+  const rz = (v, K) => { const p = XM.plano(K, -5, 5, -6, 8, { H: 200, gy: 2 }); return p.s + XM.curva(K, p, x => (x - v.r) * (x - v.s)) + K.c(p.X(v.r), p.Y(0), 6, 'fA') + K.c(p.X(v.s), p.Y(0), 6, 'fA'); };
+  const ck = (v, K) => { const p = XM.plano(K, -5, 5, -6, 8, { H: 200, gy: 2 }), d = 4 - v.c; return p.s + XM.curva(K, p, x => x * x - 4 + v.c) + (d > -0.01 ? [1, -1].map(s => K.c(p.X(s * Math.sqrt(Math.max(0, d))), p.Y(0), 6, 'fA')).join('') : ''); };
+  xpLec('alg-4', [
+    ['Donde toca el piso', xpMira('dibujo', 'Empecemos por la idea: resolver es hallar **dónde corta el eje x**.', { dib: rz, v: { r: -1, s: 3 }, alto: 210 }, [
+      ['Esta parábola corta en −1 y en 3.', {}, '$x = -1, \\ x = 3$'],
+      ['Sus factores dicen lo mismo.', {}, '$(x + 1)(x - 3) = 0$'],
+      ['Un producto da 0 si algún factor es 0.', {}, '$x + 1 = 0 \\ \\text{o} \\ x - 3 = 0$'],
+      ['Abierto: x² − 2x − 3 = 0.', {}, '$x^2 - 2x - 3 = 0$'],
+    ], 'Factoriza e iguala cada factor a 0.'),
+    xpMueve('Mueve los cortes a las soluciones de $x^2 - x - 6 = 0$ (la menor primero).', 300, { r: -1, s: 1 }, [xpRegla('r', -4, 0, 'menor'), xpRegla('s', 0, 4, 'mayor')], { r: -2, s: 3 }, rz, '$(x + 2)(x - 3)$.', { lee: v => `$x^2 ${-(v.r + v.s) < 0 ? '-' : '+'} ${Math.abs(v.r + v.s)}x ${v.r * v.s < 0 ? '-' : '+'} ${Math.abs(v.r * v.s)}$` })],
+    ['Cuántas hay', xpMira('dibujo', 'Segunda idea: el **discriminante** cuenta los cortes.', { dib: ck, v: { c: 0 }, alto: 210 }, [
+      ['x² − 4: corta dos veces.', {}, '$b^2 - 4ac = 16 > 0$'],
+      ['Si sube, los cortes se acercan.', { c: 3 }, '$b^2 - 4ac = 4$'],
+      ['Al tocar apenas, es una sola solución.', { c: 4 }, '$b^2 - 4ac = 0$'],
+      ['Más arriba ya no toca: no hay reales.', { c: 6 }, '$b^2 - 4ac < 0$'],
+    ], '$b^2 - 4ac$: positivo, dos; cero, una; negativo, ninguna real.'),
+    xpMueve('Sube la parábola $x^2 - 4 + c$ hasta que tenga **una sola** solución.', 270, { c: 0 }, [xpRegla('c', 0, 8, 'c')], { c: 4 }, ck, 'Queda $x^2 = 0$.', { lee: v => `$b^2 - 4ac = ${16 - 4 * v.c}$` })],
+    ['La fórmula', xpMira('dibujo', 'Tercera idea: completar el cuadrado **una vez para siempre** da la fórmula.', { dib: (v, K) => P(K, v, ['x² + 6x + 2 = 0', '(x + 3)² = 7', 'x + 3 = ±√7', 'x = −3 ± √7'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['No hay dos enteros que multipliquen 2 y sumen 6.', {}, '$x^2 + 6x + 2 = 0$'],
+      ['Entonces se completa el cuadrado.', { n: 2 }, '$x^2 + 6x + 9 = 7$'],
+      ['Dos raíces: con más y con menos.', { n: 3 }, '$\\pm\\sqrt7$'],
+      ['Y se despeja la x.', { n: 4 }, '$x = -3 \\pm \\sqrt7$'],
+      ['Con letras sale la fórmula general.', {}, '$x = \\tfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$'],
+    ], '$x = \\tfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$.'),
+    xpFila('$2x^2 - 7x + 3 = 0$: pon el discriminante y las raíces de menor a mayor.', ['b² − 4ac', 'menor', 'mayor'], ['25', '1/2', '3'], ['73', '−3', '2'], '$49 - 24$; y $\\tfrac{7 \\pm 5}{4}$.', '$x = \\tfrac12$ y $x = 3$.')],
+    ['Ahora sí, un problema', xpFila('Un huerto mide 3 m más de largo que de ancho y tiene 40 m². Halla ancho y largo.', ['ancho', 'largo'], ['5', '8'], ['−8', '10', '4'], '$x(x + 3) = 40$; una raíz no sirve de medida.', '$(x - 5)(x + 8) = 0$.')],
+  ], 'Las raíces son los cortes: factor, cuadrado o fórmula.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-23b
+  xpLec('alg-23b', [
+    ['Repartir polinomios', xpMira('dibujo', 'Empecemos por la idea: dividir polinomios es **repartir** y mirar qué sobra.', { dib: (v, K) => P(K, v, ['x² + 5x + 8 entre x + 2', 'x · (x + 2) = x² + 2x', 'queda 3x + 8', '3 · (x + 2) = 3x + 6', 'sobra 2'], 28, 30), v: { n: 1 }, alto: 170 }, [
+      ['¿Por cuánto va la x para dar x²? Por x.', { n: 2 }, '$x^2 \\div x = x$'],
+      ['Se quita y queda 3x + 8.', { n: 3 }, '$5x - 2x = 3x$'],
+      ['Ahora toca por 3.', { n: 4 }, '$3x \\div x = 3$'],
+      ['Sobra 2, de grado menor que el divisor: se acaba.', { n: 5 }, '$r = 2$'],
+      ['Como en los números: divisor por cociente más residuo.', {}, '$x^2 + 5x + 8 = (x + 2)(x + 3) + 2$'],
+    ], 'Dividendo = divisor · cociente + residuo.'),
+    xpFila('$x^2 + 7x + 15$ entre $x + 4$: pon el número del cociente $x + \\square$ y el residuo.', ['x + ?', 'residuo'], ['3', '3'], ['7', '11', '15'], '7x − 4x = 3x; y 15 − 12.', '$(x + 4)(x + 3) + 3$.')],
+    ['El grado manda', xpMira('dibujo', 'Segunda idea: los **grados se restan** y el residuo es más pequeño que el divisor.', { dib: (v, K) => XM.barra(K, 30, [[v.d, 'divisor', 'fa'], [v.q, 'cociente', 'fg']], { T: 6 }) + XM.barra(K, 80, [[v.r, 'residuo', 'ff']], { T: 6 }) + K.t(170, 140, v.p, 'ta'), v: { d: 2, q: 3, r: 1, p: '' }, alto: 160 }, [
+      ['Grado 5 entre grado 2.', {}, '$5 \\text{ entre } 2$'],
+      ['El cociente tiene grado 3.', { p: '5 − 2 = 3' }, '$5 - 2 = 3$'],
+      ['El residuo, menos de 2: a lo sumo grado 1.', {}, '$\\text{grado } r < 2$'],
+      ['Si el dividendo es menor, el cociente es 0.', {}, '$x + 1 = (x^2)\\cdot 0 + (x + 1)$'],
+    ], 'Grado del cociente = resta; residuo con menos grado que el divisor.'),
+    xpFila('Grado 7 entre grado 3. Pon el grado del cociente y el mayor posible del residuo.', ['cociente', 'residuo'], ['4', '2'], ['10', '3', '7'], 'Resta; y el residuo queda por debajo del divisor.', '$7 - 3 = 4$; menos de 3.')],
+    ['Polinomios iguales', xpMira('dibujo', 'Tercera idea: dos polinomios son iguales si lo son **coeficiente a coeficiente**.', { dib: (v, K) => P(K, v, ['ax² + bx + 6 = 3x² − 5x + c', 'a = 3', 'b = −5', 'c = 6'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Estos dos valen lo mismo para toda x.', {}, '$\\text{para toda } x$'],
+      ['Entonces los de x² coinciden.', { n: 2 }, '$a = 3$'],
+      ['Los de la x también.', { n: 3 }, '$b = -5$'],
+      ['Y también los números sueltos.', { n: 4 }, '$c = 6$'],
+    ], 'Iguales para toda x: los mismos coeficientes.'),
+    xpFila('$(x + 2)(x + k) = x^2 + 9x + m$. Pon k y m.', ['k', 'm'], ['7', '14'], ['9', '11', '18'], 'Compara los de x: 2 + k = 9.', '$k = 7$ y $m = 2 \\cdot 7$.')],
+    ['Ahora sí, un problema', xpFila('Un rectángulo tiene área $x^2 + 10x + 21$ y un lado $x + 3$. El otro es $x + \\square$. Pon el número y el residuo.', ['x + ?', 'residuo'], ['7', '0'], ['10', '3', '21'], 'Reparte el área entre el lado.', '$(x + 3)(x + 7)$, exacto.')],
+  ], 'Dividir es repartir: divisor por cociente más residuo.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-92
+  const cub = (v, K, f) => { const p = XM.plano(K, -4, 4, -12, 12, { H: 200, gy: 4 }); return p.s + XM.curva(K, p, f) + K.c(p.X(v.x), p.Y(f(v.x)), 6, 'fF') + K.l(p.X(v.x), p.Y(0), p.X(v.x), p.Y(f(v.x)), 'lf'); };
+  const F92 = x => x ** 3 - 2 * x * x - 5 * x + 6, G92 = x => x ** 3 - 7 * x + 6;
+  const sint = (v, K, a, r, b, s) => a.map((t, i) => K.t(110 + i * 60, 40, t, 'b') + K.f(v.n - i, i ? K.t(110 + i * 60, 76, b[i], 'b tg') : '') + K.f(v.n - i, K.t(110 + i * 60, 124, s[i], 'b ta'))).join('') + K.t(44, 40, r, 'b tf') + K.l(80, 92, 320, 92) + K.l(70, 20, 70, 92);
+  xpLec('alg-92', [
+    ['El residuo sin dividir', xpMira('dibujo', 'Empecemos por la idea: el residuo entre x − c es **el valor en c**.', { dib: (v, K) => cub(v, K, F92), v: { x: -1 }, alto: 210 }, [
+      ['P(x) = x³ − 2x² − 5x + 6. ¿Cuánto vale en −1?', {}, '$P(-1) = 8$'],
+      ['Al dividir entre x + 1 sobra justo eso: 8.', {}, '$P(x) = (x + 1)Q(x) + 8$'],
+      ['En 1 vale 0: no sobra nada.', { x: 1 }, '$P(1) = 0$'],
+      ['Entonces x − 1 es un **factor**.', {}, '$P(x) = (x - 1)Q(x)$'],
+      ['Y también lo es x − 3.', { x: 3 }, '$P(3) = 0$'],
+    ], 'Residuo entre $x - c$: $P(c)$. Si es 0, $x - c$ es factor.'),
+    xpMueve('$P(x) = x^3 - 7x + 6$. Mueve el punto a la raíz **negativa**.', 270, { x: 0 }, [xpRegla('x', -3, 3, 'x')], { x: -3 }, (v, K) => cub(v, K, G92), '$P(-3) = -27 + 21 + 6 = 0$.', { lee: v => `$P(${v.x}) = ${G92(v.x)}$` })],
+    ['La división corta', xpMira('dibujo', 'Segunda idea: la **sintética** baja, multiplica y suma.', { dib: (v, K) => sint(v, K, [1, -4, 1, 6], 2, ['', 2, -4, -6], [1, -2, -3, 0]), v: { n: 0 }, alto: 140 }, [
+      ['x³ − 4x² + x + 6 entre x − 2. Se escriben los coeficientes y el 2.', {}, '$c = 2$'],
+      ['Primero baja el 1.', { n: 1 }, '$1$'],
+      ['Por 2 y se suma: −4 + 2 = −2.', { n: 2 }, '$-2$'],
+      ['Otra vez: por 2 y se suma.', { n: 3 }, '$1 + (-4) = -3$'],
+      ['El último es el residuo: 0.', { n: 4 }, '$x^2 - 2x - 3$'],
+    ], 'Si falta una potencia, se pone 0. El último es el residuo.'),
+    xpFila('$x^3 + 2x^2 - 5x - 6$ entre $x - 2$ (coeficientes 1, 2, −5, −6). Completa la fila de abajo.', ['baja', '2.º', '3.º', 'residuo'], ['1', '4', '3', '0'], ['2', '−6', '−3'], 'Baja 1; 2 + 2; −5 + 8; −6 + 6.', '$x^2 + 4x + 3$, exacto.')],
+    ['Hallar un coeficiente', xpMira('dibujo', 'Tercera idea: si x − c es factor, **P(c) = 0** da una ecuación.', { dib: (v, K) => P(K, v, ['P(x) = x³ + kx − 10', 'x − 2 es factor: P(2) = 0', '8 + 2k − 10 = 0', 'k = 1'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Falta la k, pero se sabe que x − 2 es factor.', { n: 2 }, '$P(2) = 0$'],
+      ['Se cambia la x por 2.', { n: 3 }, '$8 + 2k - 10 = 0$'],
+      ['Se despeja: k vale 1.', { n: 4 }, '$k = 1$'],
+      ['Si el divisor es x + 3, se usa −3.', {}, '$x + 3 = x - (-3)$'],
+    ], 'Factor $x - c$: pon c e iguala a 0.'),
+    xpFila('$x + 1$ es factor de $x^3 + kx^2 + 4$. Pon $(-1)^3 + 4$ y k.', ['sin k', 'k'], ['3', '−3'], ['5', '−5', '1'], 'Se usa −1: −1 + k + 4 = 0.', '$k = -3$.')],
+    ['Ahora sí, un problema', xpFila('Una caja tiene volumen $x^3 + 6x^2 + 11x + 6$ y altura $x + 1$. La base es $x^2 + \\square x + \\square$.', ['de x', 'número'], ['5', '6'], ['7', '4', '11'], 'Sintética con −1: 1, 6 − 1, 11 − 5.', '$x^2 + 5x + 6$.')],
+  ], 'P(c) es el residuo: si da 0, hay factor.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-93
+  const cruz = (v, K) => { const p = XM.plano(K, -4, 4, -8, 8, { H: 200, gy: 2 }); return p.s + XM.curva(K, p, x => v.k * (x + 2) * (x - 1) ** 2 * 0.8 * (1 - v.z) + v.z * (x + 2) * (x - 1) * (x - 3) * 0.5); };
+  xpLec('alg-93', [
+    ['Cruzar o rebotar', xpMira('dibujo', 'Empecemos por la idea: la **multiplicidad** dice cómo toca el eje.', { dib: cruz, v: { k: 1, z: 1 }, alto: 210 }, [
+      ['Tres raíces distintas: cruza tres veces.', {}, '$(x + 2)(x - 1)(x - 3)$'],
+      ['Si una se repite dos veces…', { z: 0 }, '$(x + 2)(x - 1)^2$'],
+      ['…en esa la curva rebota: no cambia de signo.', {}, '$(x - 1)^2 \\ge 0$'],
+      ['Multiplicidad impar cruza; par rebota.', {}, '$\\text{par: rebota}$'],
+      ['El grado cuenta las raíces con sus repeticiones.', {}, '$1 + 2 = 3$'],
+    ], 'Impar cruza, par rebota; las multiplicidades suman el grado.'),
+    xpFila('$(x - 4)^3(x + 1)^2 x$: pon el grado y qué hace en cada raíz.', ['grado', 'en 4', 'en −1'], ['6', 'cruza', 'rebota'], ['5', 'nada'], 'Suma 3, 2 y 1. Mira si es par.', 'Grado 6; cruza en 4 y rebota en −1.')],
+    ['Candidatos', xpMira('dibujo', 'Segunda idea: las raíces enteras **dividen** al término suelto.', { dib: (v, K) => { const p = XM.plano(K, -4, 4, -12, 12, { H: 200, gy: 4 }), f = x => x ** 3 - x * x - 4 * x + 4; return p.s + XM.curva(K, p, f) + [-2, 1, 2].map((r, i) => K.f(v.n - i, K.c(p.X(r), p.Y(0), 6, 'fF'))).join(''); }, v: { n: 0 }, alto: 210 }, [
+      ['x³ − x² − 4x + 4: el término suelto es 4.', {}, '$\\pm1, \\pm2, \\pm4$'],
+      ['Se prueban los divisores: −2 da cero.', { n: 1 }, '$P(-2) = 0$'],
+      ['El número 1 también.', { n: 2 }, '$P(1) = 0$'],
+      ['Y el 2. Son tres: no hay más.', { n: 3 }, '$(x + 2)(x - 1)(x - 2)$'],
+      ['Si hay coeficiente principal, también fracciones.', {}, '$\\tfrac{\\text{divisor de } a_0}{\\text{divisor de } a_n}$'],
+    ], 'Raíz racional: divisor del último sobre divisor del primero.'),
+    xpFila('En $2x^2 + \\cdots + 3$ los candidatos positivos son 1, 3 y dos fracciones. Ponlas, la menor primero.', ['menor', 'mayor'], ['1/2', '3/2'], ['2/3', '1/3', '2'], 'Arriba, divisores de 3; abajo, de 2.', '$\\tfrac12$ y $\\tfrac32$.')],
+    ['Completar las raíces', xpMira('dibujo', 'Tercera idea: hallada una raíz, se **baja de grado**.', { dib: (v, K) => P(K, v, ['x³ − 4x² + 6x − 4 = 0', 'x = 2 es raíz', '(x − 2)(x² − 2x + 2)', 'x = 1 ± i'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Se prueba el 2: da cero.', { n: 2 }, '$8 - 16 + 12 - 4 = 0$'],
+      ['Con la sintética queda una cuadrática.', { n: 3 }, '$x^2 - 2x + 2$'],
+      ['Su discriminante es negativo: raíces complejas.', { n: 4 }, '$4 - 8 = -4$'],
+      ['Con coeficientes reales, van en pareja con su conjugada.', {}, '$1 + i, \\ 1 - i$'],
+      ['Grado 3: tres raíces contando las complejas.', {}, '$1 + 2 = 3$'],
+    ], 'Grado n: n raíces complejas; las no reales vienen en parejas.'),
+    xpFila('Un cúbico real tiene raíces 5 y $3 + 2i$. Pon la otra y el producto de las dos complejas.', ['la otra', 'producto'], ['3 − 2i', '13'], ['−3 − 2i', '5', '−5'], 'La conjugada; y 9 + 4.', '$(3 + 2i)(3 - 2i) = 13$.')],
+    ['Ahora sí, un problema', xpFila('Un puente sigue $y = x^3 - 6x^2 + 11x - 6$. Cruza el nivel 0 en tres enteros: ponlos en orden.', ['1.º', '2.º', '3.º'], ['1', '2', '3'], ['6', '−1', '4'], 'Prueba los divisores de 6.', '$(x - 1)(x - 2)(x - 3)$.')],
+  ], 'Candidatos, sintética y bajar de grado hasta tener todas.');
+}
+;
+//#archivo js/explora-alg-mundos-3-5.js
+// Álgebra · mundos 3 (Escalas y Proporciones), 4 (Exponentes y Radicales) y 5 (Sucesiones y Series), Explora. Ejemplos propios.
+{
+  // ---------------------------------------------------------------------------------------------------------- alg-12
+  const dosB = (v, K) => XM.bolas(K, 40, 50, v.a, 'fa', 24, 10) + XM.bolas(K, 40, 90, v.b, 'fg', 24, 10) + (v.p ? K.t(170, 136, v.p, 'b ta') : '');
+  const parte = (v, K) => XM.barra(K, 50, [...Array.from({ length: Math.round(v.a) }, () => [1, '', 'fa']), ...Array.from({ length: Math.round(v.b) }, () => [1, '', 'fg'])], { h: 44 }) + K.t(170, 34, `${Math.round(v.a)} : ${Math.round(v.b)}`, 'b ta');
+  xpLec('alg-12', [
+    ['Comparar dividiendo', xpMira('dibujo', 'Empecemos por la idea: una **razón** compara dividiendo.', { dib: dosB, v: { a: 8, b: 4, p: '' }, alto: 150 }, [
+      ['Un arroz con 8 tazas de agua y 4 de arroz.', {}],
+      ['Restando, hay 4 más de agua. Dividiendo, hay el doble.', { p: '8 : 4' }, '$\\tfrac84 = 2$'],
+      ['Con 4 de agua y 2 de arroz sabe igual: la razón es la misma.', { a: 4, b: 2, p: '4 : 2 = 2 : 1' }, '$\\tfrac42 = 2$'],
+      ['La resta cambió; la razón, no.', {}, '$8 : 4 = 4 : 2$'],
+      ['El orden importa: agua a arroz no es arroz a agua.', { p: '2 : 1 ≠ 1 : 2' }, '$2 : 1 \\neq 1 : 2$'],
+    ], 'La razón de a a b es $\\tfrac{a}{b}$; se conserva al agrandar las dos partes por igual.'),
+    xpMueve('Con **9** tazas de agua, pon el arroz para conservar la razón 3 : 1.', 220, { a: 9, b: 1, p: '' }, [xpRegla('b', 1, 8, 'tazas de arroz')], { b: 3 }, dosB, '$9 : 3 = 3 : 1$.', { lee: v => `$9 : ${v.b}$` })],
+    ['Parte y todo', xpMira('dibujo', 'Segunda idea: de una razón salen las **fracciones del todo**.', { dib: parte, v: { a: 2, b: 3 }, alto: 120 }, [
+      ['Una pintura lleva 2 partes de rojo por 3 de blanco.', {}, '$2 : 3$'],
+      ['Son 5 partes en total.', {}, '$2 + 3 = 5$'],
+      ['El rojo es dos quintos del total, no dos tercios.', {}, '$\\tfrac25$'],
+      ['Dos tercios compara rojo con blanco.', {}, '$\\tfrac23$'],
+    ], 'Si la razón es a : b, la primera parte es $\\tfrac{a}{a+b}$ del todo.'),
+    xpFila('La razón de gatos a perros es 3 : 5 y hay 40 animales. Completa.', ['una parte', 'gatos', 'perros'], ['5', '15', '25'], ['8', '24', '16'], 'Son ocho partes iguales.', '$40 \\div 8 = 5$: $15$ gatos y $25$ perros.')],
+    ['Por cada uno', xpMira('dibujo', 'Tercera idea: la **tasa** dice cuánto por cada uno.', { dib: (v, K) => XM.barra(K, 50, Array.from({ length: Math.round(v.k) }, () => [1, v.t, 'fa']), { h: 44, T: 4 }) + K.t(170, 34, v.p, 'b ta'), v: { k: 4, t: '', p: '240 km en 4 h' }, alto: 120 }, [
+      ['Un tren hace 240 km en 4 horas.', {}, '$\\tfrac{240}{4}$'],
+      ['Se reparte en cuatro horas iguales: 60 por hora.', { t: '60' }, '$60 \\ \\tfrac{\\text{km}}{\\text{h}}$'],
+      ['En una hora, 60.', { k: 1, p: '60 km en 1 h' }, '$60$'],
+      ['En tres horas, tres veces eso.', { k: 3, p: '180 km en 3 h' }, '$3 \\cdot 60 = 180$'],
+    ], 'La tasa por unidad permite comparar y calcular cualquier cantidad.'),
+    xpFila('A: 6 libras por 24 mil. B: 4 libras por 18 mil. Pon el precio por libra (en miles) y la más barata.', ['A', 'B', 'barata'], ['4', '4.5', 'tienda A'], ['tienda B', '6'], 'Divide pesos entre libras en cada una.', '$24 \\div 6 = 4$ y $18 \\div 4 = 4.5$.')],
+    ['Ahora sí, un problema', xpFila('Una mezcla lleva 3 partes de té por 1 de miel. Para 20 vasos, ¿cuántos de cada una?', ['té', 'miel'], ['15', '5'], ['60', '10', '4'], 'Son cuatro partes: ¿de cuántos vasos cada una?', '$20 \\div 4 = 5$: 15 y 5.')],
+  ], 'Razón: comparar dividiendo. Se conserva al escalar y reparte el todo.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-12e
+  const rayo = (v, K) => { const P = XM.plano(K, 0, 6, 0, 12, { H: 170, gy: 2 }); return P.s + XM.curva(K, P, x => v.k * x) + K.c(P.X(v.x), P.Y(v.k * v.x), 6, 'fA') + K.t(P.X(v.x) - 10, P.Y(v.k * v.x) - 8, `(${K.sig(v.x)}, ${K.sig(v.k * v.x)})`, 's', 'end'); };
+  const hip = (v, K) => { const P = XM.plano(K, 0, 12, 0, 12, { H: 190, g: 2 }); const y = 24 / v.x; return P.s + XM.curva(K, P, x => 24 / x) + `<rect class="xf fa" x="${P.X(0)}" y="${P.Y(y)}" width="${P.X(v.x) - P.X(0)}" height="${P.Y(0) - P.Y(y)}"/>` + K.c(P.X(v.x), P.Y(y), 6, 'fA') + K.t(Math.min(P.X(v.x) + 8, 236), Math.max(18, P.Y(y) - 8), `${K.sig(v.x)} · ${K.sig(y)} = 24`, 's', 'start'); };
+  xpLec('alg-12e', [
+    ['Dos razones iguales', xpMira('dibujo', 'Empecemos por la idea: una **proporción** son dos razones iguales.', { dib: (v, K) => XM.pasos(K, v, ['4/6 = 10/15', '4 · 15 = 6 · 10', '60 = 60'], 44, 38), v: { n: 1 }, alto: 150 }, [
+      ['Cuatro sextos y diez quinceavos: las dos valen dos tercios.', {}, '$\\tfrac46 = \\tfrac{10}{15}$'],
+      ['En cruz: 4 por 15 y 6 por 10.', { n: 2 }, '$4 \\cdot 15 = 6 \\cdot 10$'],
+      ['Dan lo mismo. Siempre pasa si las razones son iguales.', { n: 3 }, '$60 = 60$'],
+      ['Con eso se halla el que falte.', {}, '$\\tfrac{a}{b} = \\tfrac{c}{d} \\Leftrightarrow ad = bc$'],
+    ], '$\\tfrac{a}{b} = \\tfrac{c}{d}$ cuando $ad = bc$.'),
+    xpFila('Completa: $\\tfrac{6}{9} = \\tfrac{14}{x}$.', ['9 · 14', 'x'], ['126', '21'], ['84', '17', '20'], 'Seis por x es lo mismo que nueve por catorce.', '$x = \\tfrac{126}{6} = 21$.')],
+    ['Crecen juntas', xpMira('dibujo', 'Segunda idea: en la **directa**, el cociente no cambia y la gráfica es una recta por el origen.', { dib: rayo, v: { k: 2, x: 1 }, alto: 180 }, [
+      ['Cada metro de cinta vale 2 mil: un metro, dos mil.', {}, '$\\tfrac21 = 2$'],
+      ['Al doble de metros, el doble de pesos.', { x: 2 }, '$\\tfrac42 = 2$'],
+      ['Con 5 metros, 10 mil. El cociente sigue en 2.', { x: 5 }, '$\\tfrac{10}{5} = 2$'],
+      ['Todos los puntos caen en una recta que sale del cero.', {}, '$y = 2x$'],
+    ], 'Directa: $\\tfrac{y}{x} = k$; si una se multiplica, la otra también.'),
+    xpMueve('Mueve la constante hasta que con 4 metros se paguen **6** mil.', 260, { k: 2.5, x: 4 }, [xpRegla('k', 0.5, 2.5, 'miles por metro', 0.5)], { k: 1.5 }, rayo, '$\\tfrac64 = 1.5$.', { lee: v => `$4 \\cdot ${v.k} = ${4 * v.k}$` })],
+    ['Una sube y la otra baja', xpMira('dibujo', 'Tercera idea: en la **inversa**, lo que no cambia es el **producto**.', { dib: hip, v: { x: 2 }, alto: 200 }, [
+      ['2 pintores tardan 12 horas: 24 horas de trabajo.', {}, '$2 \\cdot 12 = 24$'],
+      ['Con el doble de pintores, la mitad del tiempo.', { x: 4 }, '$4 \\cdot 6 = 24$'],
+      ['Con 8, tres horas. El área del rectángulo no cambia.', { x: 8 }, '$8 \\cdot 3 = 24$'],
+      ['La gráfica baja y nunca toca los ejes.', {}, '$y = \\tfrac{24}{x}$'],
+    ], 'Inversa: $x \\cdot y = k$; si una se duplica, la otra queda en la mitad.'),
+    xpMueve('El trabajo son 24 horas. ¿Cuántos pintores para terminar en **4** horas?', 280, { x: 2 }, [xpRegla('x', 2, 12, 'pintores')], { x: 6 }, hip, '$24 \\div 4 = 6$.', { lee: v => `$${v.x} \\cdot ${Math.round(2400 / v.x) / 100}$` })],
+    ['Ahora sí, un problema', xpFila('Una reserva alcanza para 10 caballos durante 18 días. ¿Cuántas raciones hay y cuánto dura con 12 caballos?', ['raciones', 'días'], ['180', '15'], ['120', '21.6', '20'], 'Más caballos, menos días: se conserva el producto.', '$10 \\cdot 18 = 180$; $180 \\div 12 = 15$.')],
+  ], 'Directa conserva el cociente; inversa conserva el producto.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-12f
+  const tabla = (f, v, K) => f.map((r, i) => r.map((t, j) => K.f(v.n - i, K.r(22 + j * 100, 24 + i * 42, 96, 36, i ? 'fc' : 'fa', 6) + K.t(70 + j * 100, 47 + i * 42, t, i ? 'b' : 's'))).join('')).join('');
+  xpLec('alg-12f', [
+    ['Pasar por uno', xpMira('dibujo', 'Empecemos por la idea: la **regla de tres** pasa por uno.', { dib: (v, K) => tabla([['frascos', 'gramos', ''], ['6', '270', ''], ['1', '45', '÷ 6'], ['10', '450', '· 10']], v, K), v: { n: 1 }, alto: 200 }, [
+      ['Seis frascos traen 270 gramos. ¿Cuánto traen diez?', { n: 2 }, '$6 \\to 270$'],
+      ['Uno solo trae la sexta parte: 45.', { n: 3 }, '$270 \\div 6 = 45$'],
+      ['Diez, diez veces eso.', { n: 4 }, '$10 \\cdot 45 = 450$'],
+      ['Es lo mismo que la cruz: diez por 270 entre seis.', {}, '$x = \\tfrac{10 \\cdot 270}{6}$'],
+    ], 'Primero cuánto toca a uno; luego, a los que pidan.'),
+    xpFila('8 m de tela valen 56 mil. ¿Cuánto vale 1 m y cuánto 5 m (en miles)?', ['1 m', '5 m'], ['7', '35'], ['40', '8', '30'], 'Reparte 56 en ocho.', '$56 \\div 8 = 7$ y $7 \\cdot 5 = 35$.')],
+    ['Primero, ¿directa o inversa?', xpMira('dibujo', 'Segunda idea: antes de la cuenta se pregunta **qué pasa con más**.', { dib: (v, K) => tabla([['grifos', 'minutos', ''], ['3', '20', '60'], ['1', '60', '· 3'], ['5', '12', '÷ 5']], v, K), v: { n: 1 }, alto: 200 }, [
+      ['Tres grifos llenan un tanque en 20 minutos. ¿Y cinco?', { n: 2 }, '$3 \\to 20$'],
+      ['Más grifos, **menos** tiempo: es inversa.', {}, '$3 \\cdot 20 = 60$'],
+      ['Uno solo tardaría el triple.', { n: 3 }, '$60$'],
+      ['Entre cinco, la quinta parte.', { n: 4 }, '$60 \\div 5 = 12$'],
+    ], 'Si más trae menos, se multiplica primero: es inversa.'),
+    xpFila('4 tractores aran en 15 h. ¿Cuánto tarda 1 y cuánto tardan 6?', ['1 tractor', '6 tractores'], ['60', '10'], ['22.5', '90', '2.5'], 'Más tractores, menos horas.', '$4 \\cdot 15 = 60$; $60 \\div 6 = 10$.')],
+    ['Más de dos cantidades', xpMira('dibujo', 'Tercera idea: en la **compuesta** se lleva todo a uno, paso a paso.', { dib: (v, K) => tabla([['obreros', 'días', 'metros'], ['4', '3', '60'], ['1', '1', '5'], ['6', '2', '60']], v, K), v: { n: 1 }, alto: 200 }, [
+      ['Cuatro obreros en 3 días hacen 60 m de muro.', { n: 2 }, '$4 \\cdot 3 = 12$'],
+      ['Son doce días de obrero: cada uno vale 5 metros.', { n: 3 }, '$60 \\div 12 = 5$'],
+      ['Seis obreros en 2 días son otra vez doce.', { n: 4 }, '$6 \\cdot 2 \\cdot 5 = 60$'],
+      ['Cada cantidad se mira por aparte con lo que se pide.', {}, '$\\text{uno, en un día}$'],
+    ], 'Compuesta: halla lo que hace uno en una unidad y vuelve a armar.'),
+    xpFila('3 máquinas en 4 h llenan 240 frascos. ¿Cuántos llena una en 1 h? ¿Y 5 en 2 h?', ['una en 1 h', '5 en 2 h'], ['20', '200'], ['60', '80', '400'], 'Son doce horas de máquina.', '$240 \\div 12 = 20$ y $5 \\cdot 2 \\cdot 20 = 200$.')],
+    ['Ahora sí, un problema', xpFila('6 personas comen 36 panes en 3 días. ¿Cuántos panes por persona y día? ¿Cuántos comen 5 en 4 días?', ['por día', 'total'], ['2', '40'], ['6', '30', '24'], 'Son 18 raciones.', '$36 \\div 18 = 2$; $5 \\cdot 4 \\cdot 2 = 40$.')],
+  ], 'Directa o inversa primero; después, pasar por uno.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-13
+  const cien = (v, K) => { const n = Math.round(v.k); let h = ''; for (let i = 0; i < 100; i++) h += K.r(80 + (i % 10) * 18, 12 + Math.floor(i / 10) * 14, 16, 12, i < n ? 'fa' : 'fc', 2); return h + (v.p ? K.t(170, 174, v.p, 'ta') : ''); };
+  const doble = (v, K) => XM.barra(K, 60, [[v.k, `${K.sig(v.k)} %`, 'fa'], [100 - v.k, '', 'fc']], { h: 40 }) + K.t(20, 48, '0', 's tm') + K.t(320, 48, v.T, 's tm') + K.t(20 + v.k * 3, 120, K.sig(v.k * v.T / 100), 'b ta');
+  xpLec('alg-13', [
+    ['De cada cien', xpMira('dibujo', 'Empecemos por la idea: **por ciento** es «de cada cien».', { dib: cien, v: { k: 0, p: '' }, alto: 185 }, [
+      ['Cien semillas. Germinan 35.', { k: 35 }, '$35\\,\\%$'],
+      ['Es la fracción 35 sobre 100.', {}, '$\\tfrac{35}{100} = 0.35$'],
+      ['La mitad es 50 de cada cien.', { k: 50 }, '$50\\,\\% = \\tfrac12$'],
+      ['El total completo, cien.', { k: 100 }, '$100\\,\\% = 1$'],
+      ['Se puede pasar de 100: 150 % es una vez y media.', {}, '$150\\,\\% = 1.5$'],
+    ], '$p\\,\\%$ es $\\tfrac{p}{100}$.'),
+    xpMueve('Pinta el porcentaje que equivale a $\\tfrac{3}{20}$.', 250, { k: 50, p: '' }, [xpRegla('k', 0, 60, 'por ciento', 5)], { k: 15 }, cien, '$\\tfrac{3}{20} = \\tfrac{15}{100}$.', { lee: v => `$${v.k}\\,\\%$` })],
+    ['El porcentaje de algo', xpMira('dibujo', 'Segunda idea: el **10 %** y la **mitad** sirven para casi todo.', { dib: doble, v: { k: 10, T: 80 }, alto: 140 }, [
+      ['De 80 sillas, el 10 % son 8.', {}, '$80 \\div 10 = 8$'],
+      ['El 30 %, tres veces eso.', { k: 30 }, '$3 \\cdot 8 = 24$'],
+      ['El 5 %, la mitad del 10 %.', { k: 5 }, '$4$'],
+      ['El 35 %: 30 más 5.', { k: 35 }, '$24 + 4 = 28$'],
+      ['O de una: 0.35 por 80.', {}, '$0.35 \\cdot 80 = 28$'],
+    ], '$p\\,\\%$ de T es $\\tfrac{p}{100} \\cdot T$; se arma con el 10 % y el 5 %.'),
+    xpMueve('Mueve la barra hasta que la parte sea **33** de 60.', 210, { k: 10, T: 60 }, [xpRegla('k', 0, 100, 'por ciento', 5)], { k: 55 }, doble, '50 % son 30 y 5 % son 3.', { lee: v => `$${v.k}\\,\\% \\to ${v.k * 0.6}$` })],
+    ['Qué porcentaje y cuál era el todo', xpMira('dibujo', 'Tercera idea: hay tres preguntas con la misma barra.', { dib: doble, v: { k: 20, T: 150 }, alto: 140 }, [
+      ['Parte: el 20 % de 150 es 30.', {}, '$0.2 \\cdot 150 = 30$'],
+      ['Porcentaje: 60 de 150. Se divide.', { k: 40 }, '$\\tfrac{60}{150} = 40\\,\\%$'],
+      ['Todo: si 45 es el 30 %, el 10 % es 15…', { k: 30 }, '$45 \\div 3 = 15$'],
+      ['…y el total, diez veces eso.', { k: 100 }, '$150$'],
+    ], 'Parte = porcentaje · todo; las otras dos se despejan.'),
+    xpFila('18 es el 24 % de un número. Pon el 1 % y el número.', ['1 %', 'el número'], ['0.75', '75'], ['4.32', '43', '0.24'], 'Reparte 18 en veinticuatro.', '$18 \\div 24 = 0.75$ y $100 \\cdot 0.75 = 75$.')],
+    ['Ahora sí, un problema', xpFila('De 250 boletas, se vendió el 64 %. ¿Cuántas se vendieron y cuántas faltan?', ['vendidas', 'faltan'], ['160', '90'], ['64', '186', '100'], 'El 1 % son 2.5 boletas; o la mitad (125) más el 14 %.', '$0.64 \\cdot 250 = 160$.')],
+  ], 'Un porcentaje es una razón sobre cien: siempre di de qué todo.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-13c
+  const sube = (v, K) => XM.barra(K, 40, [[100, 'antes: 100', 'fa']], { h: 34, W: 200, T: 100 }) + K.r(20, 96, 2 * v.f, 34, 'fg') + K.t(30, 118, `ahora: ${K.sig(v.f)}`, 's', 'start') + K.l(220, 30, 220, 140, 'lm d');
+  xpLec('alg-13c', [
+    ['Un solo factor', xpMira('dibujo', 'Empecemos por la idea: subir o bajar es **multiplicar** por un factor.', { dib: sube, v: { f: 100 }, alto: 150 }, [
+      ['El precio de antes es el 100 %.', {}, '$100\\,\\%$'],
+      ['Sube 30 %: queda el 130 %, o 1.3 veces.', { f: 130 }, '$1 + 0.3 = 1.3$'],
+      ['Baja 30 %: queda el 70 %, o 0.7 veces.', { f: 70 }, '$1 - 0.3 = 0.7$'],
+      ['Lo que se paga es lo que queda, no lo que se quita.', {}, '$0.7 \\cdot \\text{precio}$'],
+    ], 'Subir p %: $\\cdot (1 + \\tfrac{p}{100})$. Bajar p %: $\\cdot (1 - \\tfrac{p}{100})$.'),
+    xpMueve('Pon el nuevo valor de 100 después de **bajar 15 %**.', 230, { f: 100 }, [xpRegla('f', 50, 150, 'de cada 100', 5)], { f: 85 }, sube, 'Queda el 85 %: factor $0.85$.', { lee: v => `$\\cdot ${v.f / 100}$` })],
+    ['Cuánto cambió', xpMira('dibujo', 'Segunda idea: el cambio se compara con lo **de antes**.', { dib: (v, K) => XM.barra(K, 40, [[v.a, K.sig(v.a), 'fa']], { h: 34, T: 100 }) + XM.barra(K, 90, [[v.b, K.sig(v.b), 'fg']], { h: 34, T: 100 }), v: { a: 50, b: 50 }, alto: 140 }, [
+      ['Un club pasó de 50 socios…', {}],
+      ['…a 70. Subió 20.', { b: 70 }, '$70 - 50 = 20$'],
+      ['De los 50 que había, 20 es el 40 %.', {}, '$\\tfrac{20}{50} = 40\\,\\%$'],
+      ['Si vuelve de 70 a 50, baja 20 de 70: menos del 29 %.', { a: 70, b: 50 }, '$\\tfrac{20}{70} \\approx 28.6\\,\\%$'],
+    ], 'Cambio porcentual: $\\tfrac{\\text{nuevo} - \\text{viejo}}{\\text{viejo}}$.'),
+    xpFila('De 80 a 92. Pon lo que subió y el porcentaje.', ['subió', 'por ciento'], ['12', '15 %'], ['12 %', '13 %', '172'], 'Compara con el 80.', '$\\tfrac{12}{80} = 0.15$.')],
+    ['Volver al precio', xpMira('dibujo', 'Tercera idea: para volver atrás se **divide** entre el factor.', { dib: (v, K) => XM.pasos(K, v, ['antes · 0.8 = 48', 'antes = 48 ÷ 0.8', 'antes = 60'], 44, 38), v: { n: 1 }, alto: 150 }, [
+      ['Con 20 % de rebaja un libro quedó en 48 mil.', {}, '$x \\cdot 0.8 = 48$'],
+      ['48 es el 80 %, no el 100 %.', { n: 2 }, '$x = 48 \\div 0.8$'],
+      ['Antes del descuento valía 60.', { n: 3 }, '$60$'],
+      ['Sumarle el 20 % a 48 da 57.6: no es lo mismo.', {}, '$48 \\cdot 1.2 = 57.6$'],
+    ], 'El precio anterior es el nuevo dividido entre el factor.'),
+    xpFila('Tras subir 25 %, un arriendo quedó en 900 mil. Pon el factor y el valor de antes.', ['factor', 'antes'], ['1.25', '720'], ['0.75', '675', '0.25'], '900 es el 125 %.', '$900 \\div 1.25 = 720$.')],
+    ['Ahora sí, un problema', xpFila('Una silla de 160 mil baja 35 %. Pon el factor y lo que se paga.', ['factor', 'se paga'], ['0.65', '104'], ['0.35', '56', '125'], 'Queda el 65 %.', '$160 \\cdot 0.65 = 104$.')],
+  ], 'Un cambio es un factor; volver es dividir; comparar, con lo de antes.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-13d
+  const casc = (v, K) => [100, 100 * v.f, 100 * v.f * v.g].map((x, i) => K.r(40 + i * 95, 160 - x * 0.75, 70, x * 0.75, ['fa', 'fg', 'ff'][i]) + K.t(75 + i * 95, 152 - x * 0.75, K.sig(Math.round(x * 10) / 10), 'b')).join('');
+  xpLec('alg-13d', [
+    ['Los factores se multiplican', xpMira('dibujo', 'Empecemos por la idea: cambios seguidos **se multiplican**, no se suman.', { dib: casc, v: { f: 1, g: 1 }, alto: 170 }, [
+      ['El precio empieza en 100.', {}, '$100 \\text{ al principio}$'],
+      ['Baja 20 %: quedan 80.', { f: 0.8 }, '$100 \\cdot 0.8 = 80$'],
+      ['Baja otro 50 %, pero de 80: quedan 40.', { g: 0.5 }, '$80 \\cdot 0.5 = 40$'],
+      ['En total bajó 60 %, no 70 %.', {}, '$0.8 \\cdot 0.5 = 0.4$'],
+    ], 'Factor total = producto de los factores.'),
+    xpMueve('El primero sube 20 % (120). Mueve el segundo hasta que termine en **90**.', 250, { f: 1.2, g: 1.5 }, [xpRegla('g', 0.5, 1.5, 'segundo factor', 0.25)], { g: 0.75 }, casc, '$1.2 \\cdot 0.75 = 0.9$.', { lee: v => `$1.2 \\cdot ${v.g} = ${Math.round(120 * v.g) / 100}$` })],
+    ['Subir y bajar lo mismo', xpMira('dibujo', 'Segunda idea: subir p % y bajar p % **no** deja igual.', { dib: casc, v: { f: 1, g: 1 }, alto: 170 }, [
+      ['Sube 30 %: de 100 a 130.', { f: 1.3 }, '$\\cdot 1.3$'],
+      ['Baja 30 %, pero de 130: son 39.', { g: 0.7 }, '$\\cdot 0.7$'],
+      ['Queda 91: se perdió 9 %.', {}, '$1.3 \\cdot 0.7 = 0.91$'],
+      ['El orden no importa: multiplicar es conmutativo.', { f: 0.7, g: 1.3 }, '$0.7 \\cdot 1.3 = 0.91$'],
+    ], '$(1 + r)(1 - r) = 1 - r^2$: siempre menos de 1.'),
+    xpFila('Sube 10 % y luego baja 10 %. Pon el factor total y el cambio.', ['factor', 'cambio'], ['0.99', '−1 %'], ['1', '0 %', '1.01'], '$1.1 \\cdot 0.9$.', 'Se pierde el 1 %.')],
+    ['Repetir el mismo cambio', xpMira('dibujo', 'Tercera idea: el mismo cambio muchas veces es una **potencia**.', { dib: (v, K) => Array.from({ length: Math.round(v.n) + 1 }, (_, i) => K.r(22 + i * 50, 170 - 20 * 1.5 ** i, 40, 20 * 1.5 ** i, 'fa') + K.t(42 + i * 50, 162 - 20 * 1.5 ** i, K.sig(Math.round(20 * 1.5 ** i)), 's')).join(''), v: { n: 0 }, alto: 180 }, [
+      ['20 abejas; cada mes hay 50 % más.', {}, '$20 \\text{ abejas}$'],
+      ['Un mes: por 1.5.', { n: 1 }, '$20 \\cdot 1.5$'],
+      ['Dos meses: por 1.5 otra vez.', { n: 2 }, '$20 \\cdot 1.5^2$'],
+      ['A los cuatro meses ya pasan de 100.', { n: 4 }, '$20 \\cdot 1.5^4 \\approx 101$'],
+    ], 'n veces el factor f: $\\cdot f^n$.'),
+    xpFila('Un valor baja a la mitad tres veces. Pon el factor total y la baja en por ciento.', ['factor', 'baja'], ['1/8', '87.5 %'], ['1/6', '150 %', '12.5 %'], 'Un medio por un medio por un medio.', '$\\tfrac18 = 12.5\\,\\%$ queda.')],
+    ['Ahora sí, un problema', xpFila('«20 % de descuento más otro 25 %». De 100, ¿cuánto se paga y de cuánto fue el descuento?', ['se paga', 'descuento'], ['60', '40 %'], ['55', '45 %', '80'], '$0.8 \\cdot 0.75$.', 'No es 45 %: el segundo se toma sobre 80.')],
+  ], 'Cambios en cadena: multiplica factores.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-21a
+  const torre = (v, K) => { const b = v.b, e = Math.round(v.e), N = Math.round(b ** e); const c = N > 32 ? 16 : Math.max(1, Math.round(Math.sqrt(N))), u = N > 32 ? 13 : 24; return Array.from({ length: Math.min(N, 130) }, (_, i) => K.r(170 - c * u / 2 + (i % c) * u, 40 + Math.floor(i / c) * u, u - 2, u - 2, 'fa', 2)).join('') + K.t(170, 26, `${b}${['⁰', '¹', '²', '³', '⁴', '⁵', '⁶'][e]} = ${N}`, 'b ta'); };
+  xpLec('alg-21a', [
+    ['Multiplicar repetido', xpMira('dibujo', 'Empecemos por la idea: una **potencia** cuenta factores iguales.', { dib: torre, v: { b: 3, e: 1 }, alto: 190 }, [
+      ['Empecemos con un solo factor: el 3.', {}, '$3^1 = 3$'],
+      ['Dos factores de 3.', { e: 2 }, '$3^2 = 3 \\cdot 3 = 9$'],
+      ['Tres factores: 27, no 9.', { e: 3 }, '$3^3 = 3 \\cdot 3 \\cdot 3 = 27$'],
+      ['La base se repite; el exponente dice cuántas veces.', {}, '$a^n$'],
+      ['Bajar un exponente divide entre 3. Por eso a la cero da 1.', { e: 0 }, '$3^0 = 1$'],
+    ], '$a^n$: n factores iguales a a. Y $a^0 = 1$ si $a \\neq 0$.'),
+    xpMueve('¿Qué exponente hace que 2 llegue a **64**?', 240, { b: 2, e: 1 }, [xpRegla('e', 0, 6, 'exponente')], { e: 6 }, torre, '$2^6 = 64$.', { lee: v => `$2^{${v.e}}$` })],
+    ['El signo', xpMira('dibujo', 'Segunda idea: con base negativa manda la **cantidad** de factores.', { dib: (v, K) => { const e = Math.round(v.e); return Array.from({ length: e }, (_, i) => K.c(50 + i * 50, 60, 20, 'ff') + K.t(50 + i * 50, 66, v.q > 0.5 ? '2' : '−2', 'b')).join('') + K.t(170, 130, v.q > 0.5 ? '−(2 · 2 · 2 · 2) = −16' : e % 2 ? 'sobra uno: negativo' : 'en parejas: positivo', 'ta'); }, v: { e: 1, q: 0 }, alto: 150 }, [
+      ['Un factor −2: negativo.', {}, '$(-2)^1 = -2$'],
+      ['Dos: una pareja da positivo.', { e: 2 }, '$(-2)^2 = 4$'],
+      ['Con tres factores sobra uno.', { e: 3 }, '$(-2)^3 = -8$'],
+      ['Con cuatro hay dos parejas.', { e: 4 }, '$(-2)^4 = 16$'],
+      ['Sin paréntesis, el menos no entra en la potencia.', { q: 1 }, '$-2^4 = -16$'],
+    ], 'Exponente par: positivo; impar: negativo. Sin paréntesis el signo queda afuera.'),
+    xpFila('Pon cada resultado.', ['(−3)²', '−3²', '(−1)⁷'], ['9', '−9', '−1'], ['1', '6', '−6'], '¿El menos está dentro del paréntesis? ¿Cuántos factores hay?', 'El paréntesis mete el signo.')],
+    ['Exponentes negativos', xpMira('dibujo', 'Tercera idea: bajar más allá de cero **divide**.', { dib: (v, K) => XM.pasos(K, v, ['5² = 25', '5¹ = 5', '5⁰ = 1', '5⁻¹ = 1/5', '5⁻² = 1/25'], 30, 30), v: { n: 1 }, alto: 170 }, [
+      ['Cada escalón divide entre 5.', { n: 2 }, '$25 \\div 5 = 5$'],
+      ['El siguiente es 1.', { n: 3 }, '$5^0 = 1$'],
+      ['Uno más: un quinto.', { n: 4 }, '$5^{-1} = \\tfrac15$'],
+      ['Y otro: uno sobre 25.', { n: 5 }, '$5^{-2} = \\tfrac{1}{25}$'],
+      ['El exponente negativo no hace negativo: invierte.', {}, '$a^{-n} = \\tfrac{1}{a^n}$'],
+    ], '$a^{-n} = \\tfrac{1}{a^n}$: invierte, no cambia el signo.'),
+    xpFila('Pon cada resultado.', ['2⁻³', '10⁻²', '(1/4)⁻¹'], ['1/8', '1/100', '4'], ['−8', '−4', '1/6'], 'El negativo voltea la fracción.', 'Invertir: $\\tfrac18$, $\\tfrac1{100}$ y 4.')],
+    ['Ahora sí, un problema', xpMueve('Una hoja se corta en 3 y cada pedazo otra vez en 3. ¿Cuántas rondas para tener **81** pedazos?', 240, { b: 3, e: 0 }, [xpRegla('e', 0, 4, 'rondas')], { e: 4 }, torre, '$3^4 = 81$.', { lee: v => `$3^{${v.e}}$` })],
+  ], 'El exponente cuenta factores; el cero da 1 y el negativo invierte.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-21b
+  const fac = (K, x, y, n, t, c) => Array.from({ length: Math.round(n) }, (_, i) => K.r(x + i * 30, y, 26, 26, c, 5) + K.t(x + 13 + i * 30, y + 19, t, 's')).join('');
+  xpLec('alg-21b', [
+    ['Juntar y quitar', xpMira('dibujo', 'Empecemos por la idea: las leyes solo **cuentan factores**.', { dib: (v, K) => fac(K, 40, 40, v.a, 'x', 'fa') + fac(K, 40 + v.a * 30 + 6 * v.s, 40, v.b, 'x', 'fg') + K.f(v.d, K.l(30, 80, 300, 80) + fac(K, 40, 90, v.c, 'x', 'ff')), v: { a: 3, b: 2, s: 5, d: 0, c: 2 }, alto: 130 }, [
+      ['Tres factores de x y otros dos.', {}, '$x^3 \\cdot x^2$'],
+      ['Juntos son cinco: los exponentes se suman.', { s: 0 }, '$x^{3+2} = x^5$'],
+      ['Si abajo hay dos, se cancelan dos de arriba.', { d: 1 }, '$\\tfrac{x^5}{x^2}$'],
+      ['Quedan tres: los exponentes se restan.', { b: 0, c: 0 }, '$x^{5-2} = x^3$'],
+    ], '$x^m x^n = x^{m+n}$ y $\\tfrac{x^m}{x^n} = x^{m-n}$.'),
+    xpFila('Pon cada exponente.', ['x⁴ · x³', 'x⁹ ÷ x²', 'x ÷ x⁴'], ['7', '7', '−3'], ['12', '4', '11'], 'Suma al multiplicar y resta al dividir. x es x a la 1.', '$4+3$, $9-2$ y $1-4$.')],
+    ['Potencia de potencia', xpMira('dibujo', 'Segunda idea: repetir un paquete **multiplica** exponentes.', { dib: (v, K) => Array.from({ length: Math.round(v.k) }, (_, i) => K.r(60, 18 + i * 40, 220, 34, 'fc', 8) + fac(K, 110, 22 + i * 40, 4, 'x', 'fa')).join(''), v: { k: 1 }, alto: 150 }, [
+      ['Un paquete de cuatro x.', {}, '$x^4 = x \\cdot x \\cdot x \\cdot x$'],
+      ['El cubo son tres paquetes.', { k: 3 }, '$(x^4)^3$'],
+      ['Tres por cuatro: doce factores.', {}, '$x^{4 \\cdot 3} = x^{12}$'],
+      ['El exponente entra a cada factor de un producto.', {}, '$(ab)^n = a^n b^n$'],
+      ['Pero no a una suma.', {}, '$(a + b)^2 \\neq a^2 + b^2$'],
+    ], '$(x^m)^n = x^{mn}$ y $(ab)^n = a^n b^n$.'),
+    xpFila('$(2x^3)^4$: pon el número y el exponente.', ['número', 'exponente'], ['16', '12'], ['8', '7', '2'], 'El 4 entra al 2 y a la x.', '$2^4 x^{12} = 16x^{12}$.')],
+    ['Notación científica', xpMira('dibujo', 'Tercera idea: el 10 elevado **corre la coma**.', { dib: (v, K) => K.t(170, 60, v.a, 'B') + K.t(170, 110, v.b, 'b ta'), v: { a: '45 000', b: '' }, alto: 140 }, [
+      ['Este es un número grande.', {}, '$45\\,000$'],
+      ['La coma corre cuatro puestos a la izquierda.', { b: '4.5 · 10⁴' }, '$4.5 \\cdot 10^4$'],
+      ['Uno pequeño la corre a la derecha: exponente negativo.', { a: '0.05', b: '5 · 10⁻²' }, '$5 \\cdot 10^{-2}$'],
+      ['Al multiplicar, se suman los exponentes del 10.', { a: '(2·10³)(4·10⁵)', b: '8 · 10⁸' }, '$8 \\cdot 10^8$'],
+    ], 'El exponente del 10 dice cuántos puestos corre la coma.'),
+    xpFila('Pon el exponente del 10.', ['7 200 000', '0.00006', '(3·10⁴)(2·10⁻⁷)'], ['6', '−5', '−3'], ['5', '−4', '−28'], 'Cuenta los puestos hasta dejar una sola cifra antes de la coma.', '$7.2 \\cdot 10^6$, $6 \\cdot 10^{-5}$ y $6 \\cdot 10^{-3}$.')],
+    ['Ahora sí, un problema', xpFila('Un cubo tiene arista $3a^2$. Su volumen es $(3a^2)^3$: pon el número y el exponente.', ['número', 'exponente'], ['27', '6'], ['9', '5', '8'], 'Tres veces el paquete.', '$27a^6$.')],
+  ], 'Juntar suma, quitar resta, repetir multiplica.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-22a
+  const cuad = (v, K) => { const s = v.s * 20; return XM.reja(K, 90, 14, v.s, v.s, 20) + K.t(90 + s / 2, 30 + s, `lado ${K.sig(v.s)}`, 's') + K.t(300, 60, `área ${K.sig(v.s * v.s)}`, 'ta', 'end'); };
+  xpLec('alg-22a', [
+    ['Deshacer la potencia', xpMira('dibujo', 'Empecemos por la idea: la **raíz** pregunta por el lado.', { dib: cuad, v: { s: 2 }, alto: 190 }, [
+      ['Un cuadrado de lado 2 tiene área 4.', {}, '$2^2 = 4$'],
+      ['Con área 25, el lado es 5.', { s: 5 }, '$\\sqrt{25} = 5$'],
+      ['La raíz cúbica pregunta por la arista de un cubo.', {}, '$\\sqrt[3]{27} = 3$'],
+      ['El cuadrado borra el signo: raíz de x² es |x|.', {}, '$\\sqrt{x^2} = |x|$'],
+      ['De un negativo no hay raíz cuadrada real; cúbica sí.', {}, '$\\sqrt[3]{-8} = -2$'],
+    ], '$\\sqrt[n]{a} = b$ si $b^n = a$ (con índice par, $b \\ge 0$).'),
+    xpMueve('Halla $\\sqrt{49}$: mueve el lado.', 250, { s: 3 }, [xpRegla('s', 1, 8, 'lado')], { s: 7 }, cuad, '$7^2 = 49$.', { lee: v => `$${v.s}^2 = ${v.s ** 2}$` })],
+    ['El exponente fracción', xpMira('dibujo', 'Segunda idea: la raíz es un **exponente partido**.', { dib: (v, K) => XM.pasos(K, v, ['x^½ · x^½ = x¹', 'x^½ = √x', '8^⅔ = 2² = 4'], 44, 40), v: { n: 0 }, alto: 150 }, [
+      ['¿Qué exponente, sumado consigo mismo, da 1? Un medio.', { n: 1 }, '$x^{1/2} \\cdot x^{1/2} = x$'],
+      ['Por eso elevar a un medio es sacar raíz cuadrada.', { n: 2 }, '$x^{1/2} = \\sqrt{x}$'],
+      ['Abajo va el índice; arriba, la potencia.', {}, '$x^{m/n} = \\sqrt[n]{x^m}$'],
+      ['Ocho a los dos tercios: raíz cúbica y luego al cuadrado.', { n: 3 }, '$8^{2/3} = 2^2 = 4$'],
+    ], '$x^{m/n} = \\sqrt[n]{x^m}$: abajo el índice.'),
+    xpFila('Pon cada resultado.', ['81^½', '27^⅔', '16^¾'], ['9', '9', '8'], ['40', '18', '12'], 'Primero la raíz que dice abajo; luego la potencia.', '$9$, $3^2 = 9$ y $2^3 = 8$.')],
+    ['La raíz de un producto', xpMira('dibujo', 'Tercera idea: la raíz **entra en productos**, no en sumas.', { dib: (v, K) => XM.pasos(K, v, ['√(4 · 25) = 2 · 5 = 10', '√(9 + 16) = √25 = 5', '√9 + √16 = 3 + 4 = 7'], 44, 40), v: { n: 0 }, alto: 150 }, [
+      ['Raíz de 4 por 25: se puede separar.', { n: 1 }, '$\\sqrt{ab} = \\sqrt{a}\\sqrt{b}$'],
+      ['Con una suma, primero se suma.', { n: 2 }, '$\\sqrt{9 + 16} = 5$'],
+      ['Separarla daría 7: no es igual.', { n: 3 }, '$\\sqrt{9} + \\sqrt{16} = 7$'],
+      ['Lo mismo con cocientes: sí; con restas: no.', {}, '$\\sqrt{\\tfrac{a}{b}} = \\tfrac{\\sqrt a}{\\sqrt b}$'],
+    ], 'La raíz se reparte en productos y cocientes, nunca en sumas.'),
+    xpFila('Pon cada resultado.', ['√(36 · 4)', '√(100/25)', '√(64 + 36)'], ['12', '2', '10'], ['14', '4', '20'], 'Solo la última no se separa.', '$6 \\cdot 2$, $10 \\div 5$ y $\\sqrt{100}$.')],
+    ['Ahora sí, un problema', xpMueve('Un mosaico cuadrado usa **36** baldosas. ¿Cuántas van en cada lado?', 250, { s: 2 }, [xpRegla('s', 1, 8, 'por lado')], { s: 6 }, cuad, '$\\sqrt{36} = 6$.', { lee: v => `$${v.s}^2 = ${v.s ** 2}$` })],
+  ], 'La raíz deshace la potencia y es un exponente fraccionario.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-22b
+  const sacar = (v, K) => XM.pasos(K, v, v.l || [], 44, 38);
+  xpLec('alg-22b', [
+    ['Sacar del radical', xpMira('dibujo', 'Empecemos por la idea: de una raíz cuadrada sale **uno por cada pareja**.', { dib: (v, K) => XM.pasos(K, v, ['√50 = √(2 · 5 · 5)', 'pareja de 5: sale un 5', '√50 = 5√2'], 44, 38), v: { n: 0 }, alto: 150 }, [
+      ['Se parte 50 en factores primos.', { n: 1 }, '$50 = 2 \\cdot 5 \\cdot 5$'],
+      ['Los dos cincos hacen pareja: sale uno.', { n: 2 }, '$\\sqrt{5 \\cdot 5} = 5$'],
+      ['El 2 no tiene pareja: se queda.', { n: 3 }, '$5\\sqrt2$'],
+      ['En la raíz cúbica salen de a tríos.', {}, '$\\sqrt[3]{54} = 3\\sqrt[3]{2}$'],
+    ], 'Índice n: sale uno por cada grupo de n factores iguales.'),
+    xpFila('$\\sqrt{72}$ simplificada al máximo: pon lo que sale y lo que queda.', ['afuera', 'adentro'], ['6', '2'], ['3', '8', '9'], '72 es 36 por 2.', '$\\sqrt{72} = 6\\sqrt2$.')],
+    ['Sumar raíces', xpMira('dibujo', 'Segunda idea: solo se suman raíces **iguales por dentro**.', { dib: (v, K) => XM.pasos(K, v, ['√12 + √27', '2√3 + 3√3', '5√3'], 44, 38), v: { n: 1 }, alto: 150 }, [
+      ['Parecen distintas. Simplifiquemos cada una.', {}, '$\\sqrt{12} + \\sqrt{27}$'],
+      ['Las dos traen raíz de tres.', { n: 2 }, '$2\\sqrt3 + 3\\sqrt3$'],
+      ['Dos y tres de lo mismo: cinco.', { n: 3 }, '$5\\sqrt3$'],
+      ['Raíz de 2 más raíz de 3 no se junta.', {}, '$\\sqrt2 + \\sqrt3 \\neq \\sqrt5$'],
+    ], 'Simplifica y suma los de la misma raíz.'),
+    xpFila('$\\sqrt{8} + \\sqrt{18}$: simplifica cada una y suma.', ['√8', '√18', 'suma'], ['2√2', '3√2', '5√2'], ['√26', '6√2', '4√2'], '8 es 4 por 2; 18 es 9 por 2.', 'Cinco de $\\sqrt2$.')],
+    ['Racionalizar', xpMira('dibujo', 'Tercera idea: se multiplica por **un uno bien escogido** para limpiar el denominador.', { dib: (v, K) => XM.pasos(K, v, ['6/√3 · √3/√3 = 2√3', '1/(√5 − 2) · (√5 + 2)/(√5 + 2)', '= (√5 + 2)/(5 − 4) = √5 + 2'], 44, 38, 'x'), v: { n: 0 }, alto: 150 }, [
+      ['Con una sola raíz, por ella misma.', { n: 1 }, '$\\tfrac{6}{\\sqrt3} = 2\\sqrt3$'],
+      ['Con una resta, por su conjugado: la misma con más.', { n: 2 }, '$(a - b)(a + b) = a^2 - b^2$'],
+      ['Los cuadrados borran la raíz.', { n: 3 }, '$5 - 4 = 1$'],
+      ['El valor no cambió: se multiplicó por 1.', {}, '$\\tfrac{\\sqrt5 + 2}{\\sqrt5 + 2} = 1$'],
+    ], 'Una raíz: por ella. Suma o resta: por el conjugado.'),
+    xpFila('$\\tfrac{4}{\\sqrt7 - \\sqrt3}$: pon el denominador que queda y el resultado.', ['abajo', 'resultado'], ['4', '√7 + √3'], ['10', '√7 − √3', '16'], 'Por el conjugado: $7 - 3$.', 'El 4 se cancela.')],
+    ['Ahora sí, un problema', xpFila('Un lote cuadrado mide 80 m². Pon su lado simplificado y su perímetro.', ['lado', 'perímetro'], ['4√5', '16√5'], ['8√10', '20√5', '2√20'], '80 es 16 por 5.', '$\\sqrt{80} = 4\\sqrt5$; por cuatro lados, $16\\sqrt5$.')],
+  ], 'Sacar grupos, sumar iguales y limpiar el denominador.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-14
+  const esc = (v, K) => Array.from({ length: Math.round(v.n) }, (_, i) => { const x = v.a + v.d * i; return K.r(24 + i * 50, 170 - x * 6, 40, Math.max(2, x * 6), 'fa') + K.t(44 + i * 50, 162 - x * 6, K.sig(x), 'b'); }).join('');
+  xpLec('alg-14', [
+    ['La diferencia', xpMira('dibujo', 'Empecemos por la idea: en una **aritmética** se suma siempre lo mismo.', { dib: esc, v: { a: 4, d: 3, n: 1 }, alto: 180 }, [
+      ['El primero es 4.', {}, '$a_1 = 4$'],
+      ['Se suma 3: 7, 10, 13…', { n: 4 }, '$d = 3$'],
+      ['Para llegar al sexto se dan cinco saltos.', { n: 6 }, '$a_6 = 4 + 5 \\cdot 3 = 19$'],
+      ['Siempre un salto menos que el puesto.', {}, '$a_n = a_1 + (n - 1)d$'],
+    ], '$a_n = a_1 + (n-1)d$.'),
+    xpMueve('El primero es 5. Mueve la diferencia hasta que el **quinto** sea 21.', 250, { a: 5, d: 1, n: 5 }, [xpRegla('d', 1, 5, 'diferencia')], { d: 4 }, esc, '$5 + 4 \\cdot 4 = 21$.', { lee: v => `$5 + 4 \\cdot ${v.d} = ${5 + 4 * v.d}$` })],
+    ['Con dos términos basta', xpMira('dibujo', 'Segunda idea: dos términos y los **saltos que los separan** dan la diferencia.', { dib: (v, K) => { const L = XM.linea(K, 3, 8, 110, {}); return L.s + K.t(L.X(3), 80, '11', 'b ta') + K.t(L.X(8), 80, '31', 'b ta') + Array.from({ length: Math.round(v.k) }, (_, i) => K.pl([[L.X(3 + i), 100], [L.X(3.5 + i), 86], [L.X(4 + i), 100]], 'la')).join(''); }, v: { k: 0 }, alto: 150 }, [
+      ['El tercero es 11 y el octavo, 31.', {}, '$a_3 = 11, \\ a_8 = 31$'],
+      ['Del 3 al 8 hay cinco saltos.', { k: 5 }, '$8 - 3 = 5$'],
+      ['Subió 20 en cinco saltos: 4 cada uno.', {}, '$d = \\tfrac{20}{5} = 4$'],
+      ['Hacia atrás dos saltos: el primero es 3.', {}, '$11 - 2 \\cdot 4 = 3$'],
+    ], '$d = \\tfrac{a_m - a_k}{m - k}$.'),
+    xpFila('$a_4 = 17$ y $a_{10} = 47$. Pon los saltos, d y $a_1$.', ['saltos', 'd', 'primero'], ['6', '5', '2'], ['30', '7', '10'], 'De 4 a 10; luego, tres saltos hacia atrás.', '$30 \\div 6 = 5$; $17 - 15 = 2$.')],
+    ['¿Está en la lista?', xpMira('dibujo', 'Tercera idea: un número está si cae en un **salto entero**.', { dib: (v, K) => { const L = XM.linea(K, 0, 40, 100, { p: 5 }); return L.s + [0, 1, 2, 3, 4, 5].map(i => K.c(L.X(2 + 7 * i), 100, 6, 'fa')).join('') + K.c(L.X(v.x), 70, 7, 'fF'); }, v: { x: 30 }, alto: 140 }, [
+      ['2, 9, 16, 23, 30, 37…: suma 7.', {}, '$a_n = 2 + 7(n-1)$'],
+      ['¿El 30? Faltan 28: cuatro saltos justos.', {}, '$28 \\div 7 = 4$'],
+      ['¿El 33? Faltan 31: no son saltos enteros.', { x: 33 }, '$31 \\div 7 = 4.4\\ldots$'],
+      ['Entonces 33 no está en la lista.', {}],
+    ], 'Está si $\\tfrac{x - a_1}{d}$ es un entero no negativo.'),
+    xpFila('En 6, 11, 16, … ¿cuántos saltos hay hasta 91 y qué puesto ocupa?', ['saltos', 'puesto'], ['17', '18'], ['16', '91', '15'], 'Faltan 85, de a cinco.', '$85 \\div 5 = 17$; puesto 18.')],
+    ['Ahora sí, un problema', xpMueve('Un sendero tiene 3 farolas en la primera cuadra y en cada una siguiente suma las mismas. En la **sexta** hay 18. ¿Cuántas suma?', 250, { a: 3, d: 1, n: 6 }, [xpRegla('d', 1, 4, 'suma')], { d: 3 }, esc, '$3 + 5 \\cdot 3 = 18$.', { lee: v => `$3 + 5 \\cdot ${v.d}$` })],
+  ], 'Primero más los saltos: un salto menos que el puesto.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-14b
+  const par = (v, K) => { const n = 6; let h = ''; for (let i = 0; i < n; i++) { const a = 2 + i * 2, b = 2 + (n - 1 - i) * 2; h += K.r(50 + i * 42, 160 - a * 8, 34, a * 8, 'fa') + K.f(v.g, K.r(50 + i * 42, 160 - (a + b) * 8, 34, b * 8, 'fg')); } return h; };
+  xpLec('alg-14b', [
+    ['La escalera doble', xpMira('dibujo', 'Empecemos por la idea: dos escaleras iguales hacen **un rectángulo**.', { dib: par, v: { g: 0 }, alto: 175 }, [
+      ['Sumar 2 + 4 + 6 + 8 + 10 + 12: una escalera.', {}, '$S$'],
+      ['Se pone otra igual, volteada, encima.', { g: 1 }, '$2S$'],
+      ['Todas las columnas miden lo mismo: 14.', {}, '$2 + 12 = 14$'],
+      ['Seis columnas de 14 son dos escaleras.', {}, '$S = \\tfrac{6 \\cdot 14}{2} = 42$'],
+      ['Cuántos, por primero más último, sobre dos.', {}, '$S_n = \\tfrac{n(a_1 + a_n)}{2}$'],
+    ], '$S_n = \\tfrac{n(a_1 + a_n)}{2}$.'),
+    xpFila('$5 + 8 + 11 + \\cdots + 32$ tiene 10 términos. Pon el primero más el último y la suma.', ['1.º + último', 'suma'], ['37', '185'], ['370', '27', '160'], 'Diez columnas de ese alto, la mitad.', '$\\tfrac{10 \\cdot 37}{2} = 185$.')],
+    ['Contar los términos', xpMira('dibujo', 'Segunda idea: antes de sumar hay que saber **cuántos son**.', { dib: (v, K) => XM.pasos(K, v, ['7, 11, 15, …, 47', '(47 − 7) ÷ 4 = 10 saltos', '11 términos', '11 · 54 ÷ 2 = 297'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['De 7 a 47, de cuatro en cuatro.', {}, '$d = 4$'],
+      ['Son 40 de diferencia: diez saltos.', { n: 2 }, '$40 \\div 4 = 10$'],
+      ['Y un término más que saltos.', { n: 3 }, '$n = 11$'],
+      ['Ahora sí, la suma.', { n: 4 }, '$\\tfrac{11 \\cdot 54}{2} = 297$'],
+    ], 'Términos = saltos + 1.'),
+    xpFila('$10 + 13 + \\cdots + 40$. Pon los saltos, los términos y la suma.', ['saltos', 'términos', 'suma'], ['10', '11', '275'], ['30', '250', '12'], 'De 10 a 40, de a tres.', '$\\tfrac{11 \\cdot 50}{2} = 275$.')],
+    ['El promedio', xpMira('dibujo', 'Tercera idea: la suma es el **promedio** por cuántos hay.', { dib: (v, K) => [3, 5, 7, 9, 11].map((a, i) => { const y = K.lerp(a, 7, v.t); return K.r(60 + i * 46, 160 - y * 11, 38, y * 11, 'fa') + K.t(79 + i * 46, 152 - y * 11, K.sig(Math.round(y)), 's'); }).join(''), v: { t: 0 }, alto: 170 }, [
+      ['3, 5, 7, 9, 11: cinco barras.', {}, '$n = 5$'],
+      ['Se emparejan: lo que sobra a las altas cubre las bajas.', { t: 1 }, '$\\tfrac{3 + 11}{2} = 7$'],
+      ['Quedan cinco de siete.', {}, '$5 \\cdot 7 = 35$'],
+      ['El promedio es la mitad del primero y el último.', {}, '$\\tfrac{a_1 + a_n}{2}$'],
+    ], 'Suma = promedio de los extremos · cantidad.'),
+    xpFila('9 términos que van de 4 a 36 en aritmética. Pon el promedio y la suma.', ['promedio', 'suma'], ['20', '180'], ['40', '360', '16'], 'La mitad de 4 más 36.', '$9 \\cdot 20 = 180$.')],
+    ['Ahora sí, un problema', xpFila('Un coro tiene 12 filas: la primera con 8 sillas y cada una suma 2. Pon la última fila y el total.', ['última', 'total'], ['30', '228'], ['32', '240', '456'], 'Once saltos de dos; luego, doce columnas.', '$8 + 22 = 30$; $\\tfrac{12 \\cdot 38}{2} = 228$.')],
+  ], 'Dos escaleras hacen un rectángulo: $n$ por primero más último, la mitad.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-14c
+  const geo = (v, K) => Array.from({ length: Math.round(v.n) }, (_, i) => { const x = v.a * v.r ** i, h = Math.min(140, x * v.u); return K.r(24 + i * 50, 170 - h, 40, h, 'fa') + K.t(44 + i * 50, 162 - h, K.sig(x), 's'); }).join('');
+  xpLec('alg-14c', [
+    ['La razón', xpMira('dibujo', 'Empecemos por la idea: en una **geométrica** se multiplica siempre por lo mismo.', { dib: geo, v: { a: 2, r: 3, n: 1, u: 0.8 }, alto: 180 }, [
+      ['El primer término es 2.', {}, '$a_1 = 2 \\text{ primero}$'],
+      ['Por 3 cada vez: 6, 18, 54…', { n: 4 }, '$r = 3$'],
+      ['El quinto: cuatro veces por 3.', { n: 5 }, '$2 \\cdot 3^4 = 162$'],
+      ['Un salto menos que el puesto, pero ahora en el exponente.', {}, '$a_n = a_1 r^{n-1}$'],
+    ], '$a_n = a_1 \\cdot r^{\\,n-1}$.'),
+    xpMueve('Empieza en 3. ¿Qué razón lleva al **cuarto** a 24?', 250, { a: 3, r: 1, n: 4, u: 1 }, [xpRegla('r', 1, 3, 'razón')], { r: 2 }, geo, '$3 \\cdot 2^3 = 24$.', { lee: v => `$3 \\cdot ${v.r}^3 = ${3 * v.r ** 3}$` })],
+    ['Crecer, encoger y alternar', xpMira('dibujo', 'Segunda idea: la **razón** decide cómo se mueve.', { dib: (v, K) => { const P = XM.plano(K, 0, 6, -8, 8, { H: 180, gy: 4 }); return P.s + [0, 1, 2, 3, 4, 5].map(i => { const y = v.a * v.r ** i; return Math.abs(y) <= 8 ? K.c(P.X(i + 0.3), P.Y(y), 6, 'fA') + K.l(P.X(i + 0.3), P.Y(0), P.X(i + 0.3), P.Y(y), 'la') : ''; }).join(''); }, v: { a: 1, r: 1.5 }, alto: 190 }, [
+      ['Razón mayor que 1: crece.', {}, '$r > 1$'],
+      ['Entre 0 y 1: se encoge hacia cero.', { a: 8, r: 0.5 }, '$0 < r < 1$'],
+      ['Negativa: salta de un lado a otro.', { a: 8, r: -0.75 }, '$r < 0$'],
+      ['Igual a 1: no se mueve.', { a: 5, r: 1 }, '$r = 1$'],
+    ], 'El tamaño de r dice si crece; su signo, si alterna.'),
+    xpMueve('Mueve la razón para que, desde 8, los puntos **alternen y se encojan** a la cuarta parte.', 270, { a: 8, r: 1 }, [xpRegla('r', -1, 1, 'razón', 0.25)], { r: -0.25 }, (v, K) => { const P = XM.plano(K, 0, 6, -8, 8, { H: 180, gy: 4 }); return P.s + [0, 1, 2, 3, 4, 5].map(i => { const y = 8 * v.r ** i; return K.c(P.X(i + 0.3), P.Y(y), 6, 'fA') + K.l(P.X(i + 0.3), P.Y(0), P.X(i + 0.3), P.Y(y), 'la'); }).join(''); }, '$r = -\\tfrac14$.', { lee: v => `$r = ${v.r}$` })],
+    ['Con dos términos', xpMira('dibujo', 'Tercera idea: entre dos términos se **divide** y se saca la raíz de los saltos.', { dib: (v, K) => XM.pasos(K, v, ['a₂ = 10,  a₅ = 80', '80 ÷ 10 = 8 = r³', 'r = 2', 'a₁ = 10 ÷ 2 = 5'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Del segundo al quinto hay tres saltos.', {}, '$5 - 2 = 3$'],
+      ['Se multiplicó por 8 en tres saltos.', { n: 2 }, '$r^3 = 8$'],
+      ['Cada salto es por 2.', { n: 3 }, '$r = \\sqrt[3]{8} = 2$'],
+      ['Un salto atrás, el primero.', { n: 4 }, '$a_1 = 5$'],
+    ], '$r^{\\,m-k} = \\tfrac{a_m}{a_k}$.'),
+    xpFila('$a_2 = 12$ y $a_4 = 108$, con razón positiva. Pon $r^2$, r y $a_1$.', ['r²', 'r', 'primero'], ['9', '3', '4'], ['96', '48', '6'], 'Divide 108 entre 12.', '$r = 3$ y $12 \\div 3 = 4$.')],
+    ['Ahora sí, un problema', xpMueve('Un rumor empieza con 4 personas y cada hora se multiplica igual. A las 2 horas lo saben **36** (tercer término). ¿Por cuánto?', 250, { a: 4, r: 1, n: 3, u: 1 }, [xpRegla('r', 1, 4, 'razón')], { r: 3 }, geo, '$4 \\cdot 3^2 = 36$.', { lee: v => `$4 \\cdot ${v.r}^2 = ${4 * v.r ** 2}$` })],
+  ], 'Se multiplica por la razón en cada salto.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-14d
+  const cinta = (v, K) => { let x = 20, h = '', w = 150; for (let i = 0; i < Math.round(v.n); i++) { h += K.r(x, 60, w, 50, ['fa', 'fg', 'ff', 'fo'][i % 4]) + (w > 30 ? K.t(x + w / 2, 90, `1/${2 ** (i + 1)}`, 's') : ''); x += w; w /= 2; } return h + K.r(20, 60, 300, 50, 'fn') + K.t(170, 140, v.p, 'b ta'); };
+  xpLec('alg-14d', [
+    ['Multiplicar y restar', xpMira('dibujo', 'Empecemos por la idea: si se multiplica por r y se resta, **casi todo se cancela**.', { dib: (v, K) => XM.pasos(K, v, ['S = 2 + 6 + 18 + 54', '3S = 6 + 18 + 54 + 162', '3S − S = 162 − 2', 'S = 160 ÷ 2 = 80'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Una suma geométrica de razón 3.', {}, '$S$'],
+      ['Por 3, cada término se corre un puesto.', { n: 2 }, '$3S$'],
+      ['Al restar solo sobreviven los de las puntas.', { n: 3 }, '$2S = 162 - 2$'],
+      ['Y de ahí se despeja.', { n: 4 }, '$S = 80$'],
+      ['Con letras, la fórmula.', {}, '$S_n = a_1\\tfrac{r^n - 1}{r - 1}$'],
+    ], '$S_n = a_1\\tfrac{r^n - 1}{r - 1}$, si $r \\neq 1$.'),
+    xpFila('$S = 2 + 8 + 32 + 128$. Pon el término que sobra al hacer 4S, la resta y S.', ['sobra', '3S', 'S'], ['512', '510', '170'], ['128', '168', '126'], 'El siguiente sería 128 por 4; menos 2.', '$510 \\div 3 = 170$.')],
+    ['Infinitos y una suma finita', xpMira('dibujo', 'Segunda idea: si cada pedazo se encoge, infinitos pedazos **caben**.', { dib: cinta, v: { n: 0, p: '' }, alto: 160 }, [
+      ['Una cinta de largo 1. Se pinta la mitad.', { n: 1 }, '$\\tfrac12$'],
+      ['Luego la mitad de lo que falta.', { n: 2 }, '$\\tfrac12 + \\tfrac14$'],
+      ['Y así. Siempre falta, pero cada vez menos.', { n: 6 }, '$\\tfrac12 + \\tfrac14 + \\tfrac18 + \\cdots$'],
+      ['El total al que se acerca es 1.', { n: 8, p: '→ 1' }, '$S = 1$'],
+      ['Si la razón está entre −1 y 1, hay suma.', {}, '$S = \\tfrac{a_1}{1 - r}$'],
+    ], 'Si $|r| < 1$: $S = \\tfrac{a_1}{1 - r}$.'),
+    xpFila('$12 + 3 + \\tfrac34 + \\cdots$ Pon r, $1 - r$ y la suma.', ['r', '1 − r', 'suma'], ['1/4', '3/4', '16'], ['4', '9', '48'], 'Cada uno es un cuarto del anterior.', '$12 \\div \\tfrac34 = 16$.')],
+    ['Decimales periódicos', xpMira('dibujo', 'Tercera idea: un decimal periódico es una **suma infinita**.', { dib: (v, K) => XM.pasos(K, v, ['0.27 27 27…', '27/100 + 27/10 000 + …', 'a = 27/100,  r = 1/100', '27/99 = 3/11'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Cero punto 27 que se repite.', {}, '$0.\\overline{27}$'],
+      ['Es 27 centésimas, más 27 diezmilésimas…', { n: 2 }, '$\\tfrac{27}{100} + \\tfrac{27}{10\\,000} + \\cdots$'],
+      ['Geométrica de razón un centésimo.', { n: 3 }, '$r = \\tfrac{1}{100}$'],
+      ['La suma es 27 sobre 99.', { n: 4 }, '$\\tfrac{27}{99} = \\tfrac{3}{11}$'],
+    ], 'El período sobre tantos nueves como cifras.'),
+    xpFila('Pon cada fracción simplificada.', ['0.555…', '0.3636…'], ['5/9', '4/11'], ['55/100', '36/90', '5/10'], 'Cinco novenos y treinta y seis noventa y nueveavos.', '$\\tfrac59$ y $\\tfrac{36}{99} = \\tfrac{4}{11}$.')],
+    ['Ahora sí, un problema', xpFila('Un péndulo recorre 20 cm y cada vez el 80 % del anterior. Pon $1 - r$ y el recorrido total (cm).', ['1 − r', 'total'], ['0.2', '100'], ['0.8', '25', '36'], 'La razón es 0.8.', '$20 \\div 0.2 = 100$ cm.')],
+  ], 'Multiplicar y restar cancela; con $|r| < 1$ hay suma infinita.');
+
+  // ---------------------------------------------------------------------------------------------------------- alg-15
+  xpLec('alg-15', [
+    ['Sumar con instrucciones', xpMira('dibujo', 'Empecemos por la idea: **sigma** es una orden de sumar.', { dib: (v, K) => [1, 2, 3, 4].map((k, i) => K.f(v.n - i, K.r(30 + i * 74, 70, 60, 46, 'fa', 8) + K.t(60 + i * 74, 98, `${3 * k - 1}`, 'b') + K.t(60 + i * 74, 60, `k = ${k}`, 's tm'))).join('') + K.t(170, 30, 'Σ (3k − 1),  k de 1 a 4', 'b ta'), v: { n: 0 }, alto: 135 }, [
+      ['Abajo dice dónde empieza k; arriba, dónde acaba.', {}, '$\\sum_{k=1}^{4}(3k - 1)$'],
+      ['k vale 1: el término es 2.', { n: 1 }, '$3 \\cdot 1 - 1 = 2$'],
+      ['k vale 2, 3 y 4: 5, 8 y 11.', { n: 4 }, '$5, 8, 11$'],
+      ['Al final se suman todos.', {}, '$2 + 5 + 8 + 11 = 26$'],
+      ['La letra k no importa: puede ser cualquiera.', {}, '$\\sum_{j=1}^{4}(3j - 1)$'],
+    ], 'Sigma: pon cada k en la receta y suma.'),
+    xpFila('$\\sum_{k=2}^{4} k^2$: pon los términos y la suma.', ['k = 2', 'k = 3', 'k = 4', 'suma'], ['4', '9', '16', '29'], ['30', '6', '8'], 'Empieza en 2, no en 1.', '$4 + 9 + 16 = 29$.')],
+    ['Partir y sacar', xpMira('dibujo', 'Segunda idea: la suma se **parte** y el número sale.', { dib: (v, K) => XM.pasos(K, v, ['Σ (2k + 5), 10 términos', '2 Σ k + Σ 5', '2 · 55 + 10 · 5', '160'], 34, 34), v: { n: 1 }, alto: 160 }, [
+      ['Diez términos, cada uno con un 2k y un 5.', {}, '$\\sum_{k=1}^{10}(2k + 5)$'],
+      ['Se agrupan: el 2 sale y los cincos se suman aparte.', { n: 2 }, '$2\\sum k + \\sum 5$'],
+      ['La suma de 1 a 10 es 55; diez cincos, 50.', { n: 3 }, '$\\sum_{k=1}^{n} k = \\tfrac{n(n+1)}{2}$'],
+      ['En total son 160.', { n: 4 }, '$110 + 50$'],
+      ['Un producto no se parte: solo sumas.', {}, '$\\sum ab \\neq \\sum a \\sum b$'],
+    ], '$\\sum (ca_k + d) = c\\sum a_k + nd$.'),
+    xpFila('$\\sum_{k=1}^{8}(3k + 2)$: pon $\\sum k$, la suma de los 2 y el total.', ['Σ k', 'los 2', 'total'], ['36', '16', '124'], ['52', '2', '110'], 'De 1 a 8; ocho veces 2; y tres por la primera.', '$3 \\cdot 36 + 16 = 124$.')],
+    ['Telescopios y productos', xpMira('dibujo', 'Tercera idea: a veces los de en medio **se cancelan**; y con Π se multiplica.', { dib: (v, K) => XM.pasos(K, v, ['(1/1 − 1/2) + (1/2 − 1/3) + (1/3 − 1/4)', '= 1 − 1/4 = 3/4', 'Π k, de 1 a 5 = 5! = 120'], 44, 38, 'x'), v: { n: 1 }, alto: 150 }, [
+      ['Cada pedazo quita lo que el siguiente pone.', {}, '$\\sum (\\tfrac1k - \\tfrac{1}{k+1})$'],
+      ['Sobreviven el primero y el último.', { n: 2 }, '$1 - \\tfrac14$'],
+      ['La letra pi mayúscula manda a multiplicar.', { n: 3 }, '$\\prod_{k=1}^{5} k = 5!$'],
+      ['El factorial de 0 es 1, por acuerdo.', {}, '$0! = 1$'],
+    ], 'Telescópica: quedan las puntas. $\\prod$ multiplica.'),
+    xpFila('$\\sum_{k=1}^{9}(\\tfrac1k - \\tfrac{1}{k+1})$: pon el primero, lo que se resta al final y la suma.', ['queda', 'se resta', 'suma'], ['1', '1/10', '9/10'], ['1/9', '8/9', '0'], 'El último término lleva 1/(9 + 1).', '$1 - \\tfrac{1}{10}$.')],
+    ['Ahora sí, un problema', xpFila('Un taller paga 4k + 1 miles el día k, durante 6 días. Pon $\\sum k$, la suma de los 1 y el pago total.', ['Σ k', 'los 1', 'total'], ['21', '6', '90'], ['25', '85', '24'], 'De 1 a 6 la suma es 21.', '$4 \\cdot 21 + 6 = 90$.')],
+  ], 'Sigma ordena sumar: se parte, se saca el número y a veces se cancela.');
+}
 ;
 //#archivo js/explora-lectura.js
 // Explora · escena «hoja» para las lecciones de comprensión lectora (spec 2026-11-24-lectura-explora): el texto es la escena.
@@ -10491,6 +9867,85 @@ const GUIDES = {
   'ruleta-favorables': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
   'iguala-urnas': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'tabla-diferencia': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'coterminal-rueda': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'radianes-rueda': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'grados-radianes': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'vueltas-sobran-trig': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'sector-fraccion': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'vuelta-arco': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'arco-cuenta': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'velocidad-cuenta': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'catetos-razon': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'lados-nombra': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'razones-tres': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'escalera-apoya': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'notables-rueda': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'recta-notables': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'recta-mitad': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'mirador': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'seis-razones': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'de-una-todas': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'depresion-faro': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'punto-unidad': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'gemelos-seno': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'valores-eje': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'gemelos-coseno': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'cuadrante-referencia': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'signo-valor': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'referencia-valor': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'ola-amplitud': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'ola-centro': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'lee-ola': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'ficha-ola': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'ola-periodo': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'ola-desfase': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'lee-periodo': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'ficha-desfase': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'arco-inverso': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'rango-inversa': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'triangulo-inversa': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'deshace-inversa': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'pitagoras-uno': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'secante-barra': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'negativo-espejo': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'par-impar': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'simplifica-senos': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'demuestra-pasos': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'conjugado-trig': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'reemplaza-identidad': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'suma-angulos': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'resta-angulos': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'suma-formula': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'suma-tangente': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'doble-vuelta': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'mitad-angulo': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'doble-cuenta': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'mitad-cuenta': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'corta-ola': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'pareja-ecuacion': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'despeja-trig': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'factoriza-trig': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'angulo-tercero': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'cuelga-lado': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'senos-ley': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'senos-pareja': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'abre-bisagra': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'area-bisagra': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'cosenos-ley': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'cosenos-angulo': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'area-senos': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'argumento-plano': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'polar-flecha': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'componentes-polar': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'modulo-argumento': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'producto-polar': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'cociente-polar': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'demoivre-rueda': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'potencia-polar': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'raiz-primera': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'raices-opuestas': [['drag', 'Arrastra el punto por la rueda y comprueba.', { tile: '30°', slot: 'rueda' }]],
+  'petalos': [['slide', 'Mueve la perilla hasta tu respuesta y comprueba.', { label: 'valor' }]],
+  'raices-ordenadas': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'cuantas-parejas': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'cero-a-uno': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'punto-escala': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],

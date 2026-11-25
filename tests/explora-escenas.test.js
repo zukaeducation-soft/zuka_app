@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
-const MOTOR = ['js/explora.js', 'js/explora-angulo.js', 'js/explora-numeros.js', 'js/explora-escenas.js'];
+const MOTOR = ['js/explora.js', 'js/explora-angulo.js', 'js/explora-numeros.js', 'js/explora-escenas.js', 'js/explora-mate.js'];
 const contenido = fs.readdirSync(path.join(ROOT, 'js')).filter(f => /^explora-.+\.js$/.test(f) && !MOTOR.includes(`js/${f}`)).map(f => `js/${f}`);
 const ctx = loadScripts([...MOTOR, ...contenido]);
 const XP = get(ctx, 'XP'), EXPLORA = get(ctx, 'EXPLORA'), K = get(ctx, 'XPK'), manijas = get(ctx, 'xpManijas'), paso = get(ctx, 'xpPaso');
