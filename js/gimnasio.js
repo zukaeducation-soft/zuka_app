@@ -483,18 +483,20 @@ function gymWarmup(c, ui, done, unlockAll, n = 0) {
     });
   }
   return {
-    id: `cal-${c.id}-${ui}`, level: 1, warm: true, ui, after: u.lessons.map(l => l.id), open: steps.length > 0,
+    id: gymCal(c, ui), level: 1, warm: true, ui, after: u.lessons.map(l => l.id), open: steps.length > 0,
     title: `Calentamiento · ${w.name}`, strategy: 'Recuerda la idea del video antes de mover nada.',
     problem: 'Tres juegos de las lecciones que ya hiciste en este mundo, para entrar en calor antes de los retos.',
     answer: '', wrap: 'Ya calentaste. Cuando quieras, sube a Fuerza: retos más largos con el entrenador a tu lado.', steps,
   };
 }
+// El número del mundo en el curso entero: un docente ve el curso recortado (js/portal.js) y la marca debe ser la misma.
+function gymCal(c, ui) { return `cal-${c.id}-${c.entero ? c.entero.units.indexOf(c.units[ui]) : ui}`; }
 // Un reto guiado o un calentamiento por su id.
 function gymFind(c, id, done, unlockAll, mine) {
   if (done === undefined && typeof S !== 'undefined') ({ done, unlockAll, gym: mine } = S);
   mine ||= {};
   const m = /^cal-.+-(\d+)$/.exec(id);
-  if (m) return c.units[+m[1]] ? gymWarmup(c, +m[1], done, unlockAll, mine[id]?.n || 0) : undefined;
+  if (m) { const ui = c.units.indexOf((c.entero || c).units[+m[1]]); return ui >= 0 ? gymWarmup(c, ui, done, unlockAll, mine[id]?.n || 0) : undefined; }
   return GYM_RETOS.find(r => r.id === id);
 }
 // Mundos del componente de ui hasta ui o hasta el último donde ya hizo alguna lección (si se adelantó), en orden.
@@ -506,7 +508,7 @@ function gymUpTo(c, ui, done = {}) {
 // Tu nivel: calentar el mundo, luego el primer reto de Fuerza sin superar, luego Élite; todo superado: calentar.
 function gymRecommend(c, ui, done, unlockAll, mine = {}) {
   const near = gymUpTo(c, ui, done || {}).reverse();
-  const warmOf = i => gymWarmup(c, i, done, unlockAll, mine[`cal-${c.id}-${i}`]?.n || 0);
+  const warmOf = i => gymWarmup(c, i, done, unlockAll, mine[gymCal(c, i)]?.n || 0);
   const mineW = warmOf(ui);
   // si su mundo aún no tiene lecciones hechas, el calentamiento abierto más cercano
   const warm = mineW.open ? mineW : near.map(warmOf).find(w => w.open) || mineW;
@@ -544,7 +546,7 @@ function renderGym() {
   gymFocus = { course: c.id, ui, lvl: gymFocus?.course === c.id && gymFocus.lvl ? gymFocus.lvl : rec.level, ver: (gymFocus?.course === c.id && gymFocus.ver) || 'todos' };
   const u = c.units[ui], blockName = c.blocks?.find(b => b.id === u.block)?.name;
   const worlds = gymUpTo(c, ui, S.done || {}), block = c.units.map((x, i) => i).filter(i => c.units[i].block === u.block);
-  const warms = worlds.map(i => gymWarmup(c, i, S.done, S.unlockAll, mine[`cal-${c.id}-${i}`]?.n || 0)).filter(w => w.open || w.ui === ui);
+  const warms = worlds.map(i => gymWarmup(c, i, S.done, S.unlockAll, mine[gymCal(c, i)]?.n || 0)).filter(w => w.open || w.ui === ui);
   const groups = gymRetos(c).filter(g => block.includes(g.ui));
   const byLevel = lv => (lv === 1 ? warms.slice().reverse() : groups.flatMap(g => g.retos).filter(r => r.level === lv));
   const isOpen = r => (r.warm ? r.open : gymOpen(r, S.done, S.unlockAll));

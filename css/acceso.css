@@ -50,3 +50,7 @@
 /* Estudiante de un colegio: solo Inicio, Mis cursos y Tú; sin compras ni asesorías (spec 2026-11-25-estudiante-colegio) */
 .de-colegio :is(#tabbar [data-tab="tienda"], #tabbar [data-tab="tutorias"], .hm-ase, .mc-more, [data-tut], [data-renueva], [data-comprar], [data-tienda], [data-dk="tienda"], [data-dk="tutorias"], [data-acct="tienda"], [data-acct="canje"], [data-acct="comprar"]) { display: none !important; }
 .de-colegio .hm-dos { grid-template-columns: minmax(0, 1fr) !important; } .de-colegio #tabbar { grid-template-columns: repeat(3, 1fr); }
+
+/* Portal dentro de la app (spec 2026-11-25-portal-en-la-app): un marco a pantalla completa con su propio menú */
+#portal { position: fixed; inset: 0; z-index: 45; width: 100%; height: 100%; border: 0; background: var(--bg); } #portal[hidden], #tabbar [data-tab="portal"][hidden] { display: none !important; }
+#portal:not([data-listo]) { visibility: hidden; pointer-events: none; } .portal-espera { display: grid; justify-items: center; align-content: center; gap: 16px; min-height: 60%; padding: 40px 20px; text-align: center; color: var(--mute); font-size: 17px; } .portal-espera .btn { width: auto; }

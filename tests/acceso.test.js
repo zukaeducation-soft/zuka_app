@@ -132,7 +132,7 @@ test('los candados por plan están en la hoja de lección, al empezarla, en jefe
 
 test('solo el administrador ve todo abierto; a los demás se les abre de a una lección', () => {
   const cuenta = read('js/cuenta.js'), app = read('js/app.js');
-  assert.match(cuenta, /function cuentaRol\(\) \{\s+if \(SIN_CANDADOS\) return;\s+S\.unlockAll = cuentaEsAdmin\(\);/, 'el admin siempre todo abierto; nadie más');
+  assert.match(cuenta, /function cuentaRol\(\) \{\s+if \(SIN_CANDADOS\) return;\s+S\.unlockAll = cuentaEsAdmin\(\) \|\| \(Cuenta\.perfil \|\| \{\}\)\.rol === 'gestor';/, 'el admin y quien enseña; nadie más');
   assert.match(app, /cuentaInit\(\);[^\n]*\ngo\(tabFromURL/, 'el rol se aplica antes de pintar la primera pantalla');
   assert.match(app, /\$\{SIN_CANDADOS \? `<section class="set-group">\s*<h3 class="eyebrow">Administración<\/h3>\s*<button class="set-row" data-set="unlockAll"/, 'el interruptor solo existe en el computador de desarrollo');
   assert.match(app, /: cuentaEsAdmin\(\) \? `<section class="set-group">[\s\S]{0,200}Acceso total/, 'el admin ve que tiene acceso total, sin interruptor para apagarlo');
@@ -159,7 +159,7 @@ test('el panel no usa clases «ad-…»: los bloqueadores de anuncios las escond
 
 test('los estudiantes ven los cursos de su cuenta y los publicados', () => {
   const cuenta = read('js/cuenta.js'), app = read('js/app.js');
-  assert.match(cuenta, /const cursoVisible = c => SIN_CANDADOS \|\| cuentaEsAdmin\(\) \|\| \(Cuenta\.accesos \|\| \[\]\)\.some\(a => a\.curso === c\.id\) \|\| \(!cuentaDeColegio\(\) && !cursoBorrador\(c\)\);/);
+  assert.match(cuenta, /const cursoVisible = c => \(portalMios\(\) \? c\.id === 'preicfes' : SIN_CANDADOS \|\| cuentaEsAdmin\(\) \|\| \(Cuenta\.accesos \|\| \[\]\)\.some\(a => a\.curso === c\.id\) \|\| \(!cuentaDeColegio\(\) && !cursoBorrador\(c\)\)\);/);
   assert.match(cuenta, /from\('cursos'\)\.select\('id,publicado'\)/);
   assert.match(app, /const courseById = id => cursosVisibles\(\)\.find/, 'un curso oculto no queda como curso actual');
   assert.match(app, /<div class="course-list">\$\{cursosVisibles\(\)\.map/, 'el selector de cursos');

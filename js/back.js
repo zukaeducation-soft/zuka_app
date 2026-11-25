@@ -34,6 +34,7 @@ function setupBack() {
     if (!e.state) { history.replaceState({ zuka: 'top' }, '', location.pathname + location.search); return; }
     if (typeof presentacionAtras === 'function' && presentacionAtras()) { cover(); return; }   // js/presentacion.js
     if (typeof tiendaAtras === 'function' && tiendaAtras()) { cover(); return; }   // js/tienda.js y js/lector.js
+    if (typeof portalAtras === 'function' && portalAtras()) { cover(); return; }   // js/portal.js
     const step = backStep({
       exitAsk, tab, dialog: dialogOpen(), tour: tourOpen(), guide: typeof guideOpen !== 'undefined' && !!guideOpen, sheet: $('#sheet').classList.contains('open'),
       lesson: !!lessonClose, world: (tab === 'learn' && (!!openWorld || !!openBlock)) || (tab === 'profile' && !!profileSub),   // Ajustes vuelve al Perfil por su [data-back]

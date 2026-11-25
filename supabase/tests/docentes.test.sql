@@ -122,6 +122,14 @@ select pg_temp.soy('gB'); select throws_ok(format('select pg_temp.doc(''observac
 select pg_temp.soy('uBeto'); select is(public.mi_institucion() -> 'avisos' -> 0 ->> 'texto', 'Traer regla', 'Beto ve el de su grupo'); select is(jsonb_array_length(public.mi_institucion() -> 'avisos'), 1, 'y no el de Ana');
 select ok(position('Va muy bien' in public.mi_institucion()::text) = 0, 'las observaciones no llegan al estudiante');
 
+-- ---------- el docente en la app (migración 4) ----------
+reset role; update public.instituciones set cursos = '{preicfes,algebra}' where id = pg_temp.de('A')::uuid; set local role authenticated;
+select pg_temp.soy('dM'); select is((select string_agg(x ->> 'curso', ',') from jsonb_array_elements(public.mi_institucion() -> 'accesos') x), 'preicfes', 'responsable: solo el Preicfes');
+select is(public.mi_institucion() -> 'equipo' -> 0 -> 'componentes', '["matematicas"]', 'y su componente');
+select pg_temp.soy('gA'); select is(jsonb_array_length(public.mi_institucion() -> 'accesos'), 2, 'el gestor, todo el contrato'); select is(public.mi_institucion() -> 'equipo' -> 0 ->> 'papel', 'gestor', 'y su papel');
+select pg_temp.soy('uAna'); select is(public.mi_institucion() -> 'equipo', '[]', 'un estudiante no es del equipo');
+select throws_ok('select * from privado.inst_cursos(auth.uid())', '42501', null, 'auxiliar cerrada');
+
 -- ---------- cambios de grupo y de equipo ----------
 select pg_temp.soy('dM'); insert into quien select 'sd', pg_temp.doc('simulacro_crear', pg_temp.nuevo('matematicas', '["11A","11B"]', '-1 hour', '1 day')::jsonb) ->> 'id';
 select pg_temp.soy('gA'); select pg_temp.doc('asignar', jsonb_build_object('componente', 'matematicas', 'grupos', '["11B"]'::jsonb, 'gestor', pg_temp.de('r2')));
