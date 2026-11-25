@@ -97,6 +97,7 @@ function waLink(numero, texto) {
 const mesesTexto = n => (n === 1 ? '1 mes' : `${n} meses`);
 const WA = {
   prueba: () => 'Hola, quiero un código de prueba de Zuka.',
+  info: que => `Hola, quiero información${que ? ` sobre ${que}` : ''} de Zuka.`,
   compra: ({ curso, meses, precio, codigo, nombre }) => `Hola, quiero comprar ${curso} por ${mesesTexto(meses)}${precio != null ? ` (${cop(precio)})` : ''}.${nombre ? ` Soy ${nombre}.` : ''}${codigo ? ` Mi código de Zuka es ${muestraCodigo(codigo)}.` : ''}`,
   ayuda: codigo => `Hola, necesito ayuda con mi acceso a Zuka.${codigo ? ` Mi código es ${muestraCodigo(codigo)}.` : ''}`,
   envio: ({ nombre, codigo, cursos, prueba, dias, url }) => `Hola${nombre ? ` ${nombre}` : ''}, este es tu código de acceso a Zuka: *${muestraCodigo(codigo)}*\n\nEntra en ${url} y escríbelo. ${prueba

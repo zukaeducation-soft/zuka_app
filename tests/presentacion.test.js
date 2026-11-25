@@ -101,3 +101,23 @@ test('el resorte llega a su meta sin dispararse, aun con cuadros largos', () => 
   const r = get(ctx, 'pzResorte');
   for (const dt of [.008, .016, .2]) { let [x, v] = [0, 0], max = 0; for (let i = 0; i < 400; i++) { [x, v] = r(x, v, 100, dt, 220, 18); max = Math.max(max, x); } assert.ok(Math.abs(x - 100) < .5 && max < 140, `${dt}: ${x} ${max}`); }
 });
+
+// ---- portada con programas (spec 2026-11-24-portada-programas) ----
+test('una tarjeta por curso publicado, más libros y asesorías; lo demás queda en «Muy pronto»', () => {
+  const con = get(ctx, 'presentacionHTML')(cursos, { todos: [...cursos, { id: 'calc', name: 'Cálculo Diferencial', color: '#f0f', units: [] }] });
+  assert.equal((con.match(/class="pz-prog /g) || []).length, 4);
+  assert.ok(con.includes('data-pz-precio="curso:algebra"') && !con.includes('curso:calc'));
+  assert.match(con, /class="pz-prontos"><b>Muy pronto<\/b><span[^>]*>Cálculo Diferencial/);
+  for (const x of con.match(/data-pz-ir="#[^"]+/g)) assert.ok(con.includes(`id="${x.slice(13)}"`), x);
+  assert.equal((con.match(/class="pz-lamina /g) || []).length, (con.match(/class="pz-pto"/g) || []).length);
+});
+test('el precio «desde» sale de la tienda: el más bajo activo, o nada', () => {
+  const [c, a] = ['pzDesdeCurso', 'pzDesdeArt'].map(n => get(ctx, n));
+  const ps = [{ curso: 'x', activo: true, precio: 90, meses: 3 }, { curso: 'x', activo: true, precio: 40, meses: 1 }, { curso: 'x', activo: false, precio: 5, meses: 1 }, { curso: 'y', activo: true, precio: null, meses: 6 }];
+  assert.equal(JSON.stringify(c(ps, 'x')), '{"precio":40,"meses":1}'); assert.equal(c(ps, 'y'), null); assert.equal(c(null, 'x'), null);
+  const as = [{ tipo: 'asesoria', activo: true, precio: 25, da: { horas: 1, horas_tipo: 'grupo' } }, { tipo: 'asesoria', activo: true, precio: 45, da: { horas: 1, horas_tipo: 'general' } }, { tipo: 'fisico', activo: true, precio: 60, da: {} }];
+  assert.equal(a(as, 'asesoria').precio, 45); assert.equal(a(as, 'fisico').precio, 60); assert.equal(a([], 'fisico'), null);
+});
+test('cada programa con lámina tiene su pantalla real', () => {
+  for (const id of Object.keys(get(ctx, 'PZ_PROG'))) assert.ok(fs.existsSync(path.join(ROOT, 'brand/app', `${id}.webp`)), id);
+});
