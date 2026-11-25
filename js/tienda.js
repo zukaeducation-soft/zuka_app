@@ -4,6 +4,8 @@
 // confirma en el panel.
 
 // ---------- lógica pura ----------
+// Los libros no se venden sueltos, solo el paquete (spec 2026-11-25-paquete-libros).
+const libroSuelto = a => ['fisico', 'digital'].includes(a.tipo) && ((a.da || {}).fisicos || (a.da || {}).libros || []).length === 1;
 const tiendaPrecio = (a, conPlan) => (conPlan && a.precio_plan != null ? a.precio_plan : a.precio);
 const tiendaFisicos = (items, arts) => items.reduce((t, x) => t + ((arts.find(a => a.id === x.id) || { da: {} }).da.fisicos || []).length * x.cantidad, 0);
 // Cuentas del carrito: { subtotal, fisicos, envio, total }. `items`: [{ id, cantidad }].
@@ -28,7 +30,7 @@ async function tiendaCarga() {
   Tienda.libros = l.data.sort((x, y) => x.id - y.id);
   // Lo digital no se vende hasta que sus libros estén subidos y publicados.
   const listo = x => (x.da.libros || []).every(id => Tienda.libros.some(b => b.id === id && libroListo(b)));
-  Tienda.arts = a.data.filter(x => x.activo && x.precio != null && listo(x)).sort(orden);
+  Tienda.arts = a.data.filter(x => x.activo && x.precio != null && !libroSuelto(x) && listo(x)).sort(orden);
   Tienda.envios = e.data.filter(x => x.activo).sort(orden);
   Tienda.cargada = true;
   return tiendaMios();
@@ -96,17 +98,16 @@ function tiendaPrecioHTML(a) {
 const tiendaDe = tipo => Tienda.arts.filter(a => a.tipo === tipo);
 const tiendaPal = id => (typeof ART_PAL !== 'undefined' && ART_PAL[id]) || { blue: '#4f7cff', deep: '#24419c', soft: '#9db7ff', pale: '#dbe5ff', sun: '#6fd3ff' };
 const tiendaColor = id => { const p = tiendaPal(id); return `--a:${p.blue};--b:${p.deep};--d:${p.soft};--e:${p.sun};--f:${p.pale}`; };
-// Lo que costaría por separado lo que trae un paquete o un juego (0 si algo no se vende suelto): el ahorro es de verdad.
-function tiendaSuelto(a, arts, productos) {
-  const d = a.da || {}, uno = (tipo, k, id) => (arts.find(x => x.id !== a.id && x.tipo === tipo && ((x.da || {})[k] || []).length === 1 && x.da[k][0] === id) || {}).precio;
+// Lo que costaría por separado lo que trae un paquete (0 si algo no se vende aparte): el ahorro es de verdad. Los libros cuentan como su paquete.
+function tiendaSuelto(a, arts, productos, plan = false) {
+  const d = a.da || {}, vale = x => (x ? tiendaPrecio(x, plan) : NaN), juego = (tipo, k, ids) => vale(arts.find(x => x.id !== a.id && x.tipo === tipo && !((x.da || {}).cursos || []).length && ((x.da || {})[k] || []).join() === ids.join()));
   const partes = [...(d.cursos || []).map(c => (productos || []).filter(p => p.curso === c && p.activo && p.dias === d.dias).map(p => p.precio)[0]),
-    ...(d.fisicos || []).map(i => uno('fisico', 'fisicos', i)),
     // Los digitales que acompañan a los mismos impresos van de regalo: no se cuentan.
-    ...((d.fisicos || []).length ? [] : (d.libros || []).map(i => uno('digital', 'libros', i))),
-    ...(d.horas ? [((arts.find(x => x.id !== a.id && x.tipo === 'asesoria' && x.da.horas === 1 && x.da.horas_tipo === d.horas_tipo) || {}).precio || NaN) * d.horas] : [])];
+    ...((d.fisicos || []).length ? [juego('fisico', 'fisicos', d.fisicos)] : (d.libros || []).length ? [juego('digital', 'libros', d.libros)] : []),
+    ...(d.horas ? [vale(arts.find(x => x.id !== a.id && x.tipo === 'asesoria' && x.da.horas === 1 && x.da.horas_tipo === d.horas_tipo)) * d.horas] : [])];
   return partes.length > 1 || (d.horas > 1) ? (partes.every(Number.isFinite) ? partes.reduce((x, y) => x + y, 0) : 0) : 0;
 }
-const tiendaAhorro = a => Math.max(0, tiendaSuelto(a, Tienda.arts, Cuenta.productos) - tiendaPrecio(a, conPlan()));
+const tiendaAhorro = a => Math.max(0, tiendaSuelto(a, Tienda.arts, Cuenta.productos, conPlan()) - tiendaPrecio(a, conPlan()));
 const tiendaAhorroHTML = a => { const n = tiendaAhorro(a); return n >= 1000 ? `<span class="td-ahorro">Ahorras ${cop(n)}</span>` : ''; };
 const tiendaCheck = xs => `<ul class="td-check">${xs.filter(Boolean).map(x => `<li>${ICON.check}<span>${x}</span></li>`).join('')}</ul>`;
 // Pila de libros en perspectiva.
@@ -136,17 +137,16 @@ function tiendaCursoHTML(c) {
         <button class="btn ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-compra="${esc(c.id)}">${tiene ? 'Renovar' : 'Comprar'}</button></div></div></article>`;
 }
 const tiendaJuegos = tipo => tiendaDe(tipo).filter(a => ((tipo === 'fisico' ? a.da.fisicos : a.da.libros) || []).length > 1);
-// Juego de libros: banda ancha con los tomos abiertos en abanico.
-const tiendaJuegoHTML = a => `<article class="td-banda${Tienda.carro[a.id] ? ' on' : ''}" data-art="${esc(a.id)}" data-lleva="${esc(a.id)}" style="${tiendaColor('preuda')}"><div class="td-cont"><span class="td-tipo">${a.tipo === 'fisico' ? 'Impresos, con envío' : 'Digitales, en la app'}</span><h3>${esc(a.nombre)}</h3><p>${esc(a.detalle)}</p>${tiendaAhorroHTML(a)}
+const librosPaginas = () => Tienda.libros.reduce((s, l) => s + (l.paginas || 0), 0);
+// Paquete de libros: banda ancha con los tomos abiertos en abanico y lo que trae.
+const tiendaJuegoHTML = a => `<article class="td-banda${Tienda.carro[a.id] ? ' on' : ''}" data-art="${esc(a.id)}" data-lleva="${esc(a.id)}" style="${tiendaColor('preuda')}"><div class="td-cont"><span class="td-tipo">${a.tipo === 'fisico' ? 'Impresos, con envío' : 'Digitales, en la app'}</span><h3>${esc(a.nombre)}</h3><p>${esc(a.detalle)}</p>${tiendaCheck(Tienda.libros.map(l => `${esc(l.titulo)}${l.paginas ? `, ${l.paginas} páginas` : ''}`))}${librosPaginas() ? `<p class="td-pags"><b>${librosPaginas()}</b> páginas a color en total</p>` : ''}
   <div class="td-pie"><span>${tiendaPrecioHTML(a)}</span>${tiendaBoton(a)}</div></div><div class="td-escena">${tiendaPila(Tienda.libros.map(l => l.id))}</div></article>`;
+const tiendaBandas = () => tiendaLista('td-bandas', [...tiendaJuegos('fisico'), ...tiendaJuegos('digital')].map(tiendaJuegoHTML).join(''));
+// Cada tomo se mira y se gira; se compra el paquete.
 function tiendaLibroHTML(l) {
-  const suelto = (tipo, k) => tiendaDe(tipo).find(a => (a.da[k] || []).length === 1 && a.da[k][0] === l.id);
-  const fs = [['fisico', 'Impreso', suelto('fisico', 'fisicos')], ['digital', 'Digital', suelto('digital', 'libros')]].filter(x => x[2]), f = fs.find(x => x[0] === (Tienda.fmt || {})[l.id]) || fs[0];
   const ver = libroListo(l) || cuentaEsAdmin();
-  return `<article class="td-libro" data-libro="${l.id}"${f ? ` data-art="${esc(f[2].id)}"` : ''}><div class="td-escena">${tiendaTomo3D(l)}<small class="td-gira" aria-hidden="true">Arrastra para girarlo</small></div><div class="td-cont"><span class="td-tipo">${esc(l.subtitulo)}</span><h3>${esc(l.titulo)}</h3><p>${l.paginas ? `${l.paginas} páginas a color` : ''}</p>
-    ${ver ? `<button class="btn sm ${libroMio(l.id) ? 'main brand' : 'ghost'}" type="button" data-leer="${l.id}"${l.version ? '' : ' disabled'}>${libroMio(l.id) ? 'Leer' : 'Ver muestra'}</button>` : ''}
-    ${fs.length > 1 ? `<div class="td-dur" role="radiogroup" aria-label="Formato de ${esc(l.titulo)}">${fs.map(x => `<button type="button" role="radio" aria-checked="${x === f}" tabindex="${x === f ? 0 : -1}" data-fmt="${x[0]}" data-de="${l.id}">${x[1]}</button>`).join('')}</div>` : ''}
-    ${f ? `<div class="td-pie"><span>${fs.length > 1 ? '' : `<small class="td-tipo">${f[1]}</small>`}${tiendaPrecioHTML(f[2])}</span>${tiendaBoton(f[2])}</div>` : ''}</div></article>`;
+  return `<article class="td-libro" data-libro="${l.id}"><div class="td-escena">${tiendaTomo3D(l)}<small class="td-gira" aria-hidden="true">Arrastra para girarlo</small></div><div class="td-cont"><span class="td-tipo">${esc(l.subtitulo)}</span><h3>${esc(l.titulo)}</h3><p>${l.paginas ? `${l.paginas} páginas a color` : ''}</p>
+    ${ver ? `<button class="btn sm ${libroMio(l.id) ? 'main brand' : 'ghost'}" type="button" data-leer="${l.id}"${l.version ? '' : ' disabled'}>${libroMio(l.id) ? 'Leer' : 'Ver muestra'}</button>` : ''}</div></article>`;
 }
 // Libro en tres dimensiones: tapa, lomo, hojas y contratapa; gira con --g.
 const tiendaTomo3D = l => `<span class="lb3" data-gira aria-hidden="true"><span class="lb3-in"><span class="lb3-t">${tiendaPortada(l.id)}</span><span class="lb3-l"><i>${esc(l.titulo)}</i></span><span class="lb3-h"></span><span class="lb3-c"><i>ZUKA</i></span></span></span>`;
@@ -251,29 +251,14 @@ function tiendaDialVivo(el) {
 }
 
 // ---------- morral: lo que se lleva ----------
-// ¿Sale mejor un juego o paquete que lo que lleva suelto? El que más ahorra: { a, quita: [ids], ahorro } o null. Pura.
-function tiendaMejora(items, arts, conPlan) {
-  const de = id => arts.find(a => a.id === id), sueltos = items.map(x => ({ ...x, a: de(x.id) })).filter(x => x.a);
-  let mejor = null;
-  for (const a of arts) {
-    const d = a.da || {}, k = (d.fisicos || []).length > 1 ? 'fisicos' : (d.libros || []).length > 1 ? 'libros' : '';
-    if (!k || (d.cursos || []).length || d.horas || sueltos.some(x => x.id === a.id)) continue;
-    const usa = d[k].map(n => sueltos.find(x => (x.a.da[k] || []).length === 1 && x.a.da[k][0] === n && !(x.a.da.cursos || []).length && x.a.tipo === a.tipo));
-    if (usa.some(x => !x)) continue;
-    const ahorro = usa.reduce((t, x) => t + tiendaPrecio(x.a, conPlan), 0) - tiendaPrecio(a, conPlan);
-    if (ahorro > 0 && (!mejor || ahorro > mejor.ahorro)) mejor = { a, quita: usa.map(x => x.id), ahorro };
-  }
-  return mejor;
-}
 const tiendaMini = a => { const d = a.da || {}, id = (d.fisicos || d.libros || [])[0], c = (d.cursos || [])[0]; return id ? tiendaPortada(id) : c && typeof courseArt === 'function' ? courseArt({ id: c }, 'md') : `<b>${d.horas || 1} h</b>`; };
 const TD_MORRAL = '<svg class="td-morral" viewBox="0 0 64 64" aria-hidden="true"><path class="a" d="M22 16a10 10 0 0 1 20 0"/><path class="b" d="M12 30a16 16 0 0 1 16-16h8a16 16 0 0 1 16 16v22a6 6 0 0 1-6 6H18a6 6 0 0 1-6-6z"/><path class="c" d="M20 38h24v14a3 3 0 0 1-3 3H23a3 3 0 0 1-3-3z"/><path class="d" d="M20 44h24M32 42v5"/></svg>';
 function tiendaCarroHTML() {
   const items = carroItems(), n = items.reduce((t, x) => t + x.cantidad, 0), k = tiendaCuenta(items, Tienda.arts, conPlan()), ver = Tienda.vista !== 'pedidos';
   if (!ver || !Tienda.cargada) return '';
-  const abierto = n && Tienda.abierto, m = tiendaMejora(items, Tienda.arts, conPlan());
+  const abierto = n && Tienda.abierto;
   return `<footer class="td-carro${n ? '' : ' vacio'}${abierto ? ' abierto' : ''}">
-    ${abierto ? `<div class="td-dentro"><ul>${items.map(x => { const a = Tienda.arts.find(y => y.id === x.id); return `<li><span class="td-mi">${tiendaMini(a)}</span><span class="td-mn">${esc(a.nombre)}<small>${cop(tiendaPrecio(a, conPlan()) * x.cantidad)}</small></span>${tiendaBoton(a)}</li>`; }).join('')}</ul>
-      ${m ? `<p class="td-mejora"><span>Te sale mejor <b>${esc(m.a.nombre)}</b>: ahorras ${cop(m.ahorro)}.</span><button class="btn sm main brand" type="button" data-cambia="${esc(m.a.id)}">Cambiar</button></p>` : ''}</div>` : ''}
+    ${abierto ? `<div class="td-dentro"><ul>${items.map(x => { const a = Tienda.arts.find(y => y.id === x.id); return `<li><span class="td-mi">${tiendaMini(a)}</span><span class="td-mn">${esc(a.nombre)}<small>${cop(tiendaPrecio(a, conPlan()) * x.cantidad)}</small></span>${tiendaBoton(a)}</li>`; }).join('')}</ul></div>` : ''}
     <button class="td-bolsa" type="button" data-bolsa aria-expanded="${!!abierto}"${n ? '' : ' disabled'} aria-label="${n ? `${abierto ? 'Cerrar' : 'Ver'} tu morral, ${n} ${n === 1 ? 'artículo' : 'artículos'}` : 'Tu morral está vacío'}">${TD_MORRAL}${n ? `<b class="td-n">${n}</b>` : ''}</button>
     <span class="td-tot">${n ? `<small>${n} ${n === 1 ? 'artículo' : 'artículos'}${k.fisicos ? ' · envío aparte' : ''}</small><b>${cop(k.subtotal)}</b>` : '<small>Arrastra aquí lo que quieras llevar, o tócalo para añadirlo</small>'}</span>
     ${n ? '<button class="btn main brand" type="button" data-td="pedir">Continuar</button>' : ''}</footer>`;
@@ -356,16 +341,16 @@ function tiendaVistaHTML() {
     return `${tiendaHeroHTML()}${tiendaConfiaHTML()}${Tienda.cargada ? '' : '<p class="td-vacio">Cargando…</p>'}`
       + tiendaSec('Paquetes', tiendaLista('td-paqs', tiendaDe('paquete').map(tiendaPaqHTML).join('')), '', 'Todo junto sale mejor.')
       + tiendaSec('Cursos', tiendaCursosHTML(), 'cursos', 'Elige el tiempo y empieza hoy.')
-      + tiendaSec('Libros', tiendaLista('td-libros', Tienda.libros.map(tiendaLibroHTML).join('')), 'libros', 'Impresos en tu casa o digitales en la app.')
+      + tiendaSec('Libros', tiendaBandas(), 'libros', 'Los cuatro en un paquete: impresos en tu casa o digitales en la app.')
       + tiendaSec('Asesorías', tiendaDe('asesoria').length ? `<div class="td-dialhueco">${tiendaDialHTML()}</div>` : '', 'asesorias', 'Una hora con un profe, sobre lo que más te cuesta.');
   }
   if (Tienda.vista === 'cursos') {
     return tiendaSec('Cursos', tiendaCursosHTML(), '', 'Elige el tiempo y empieza hoy.') + tiendaSec('Paquetes', tiendaLista('td-paqs', tiendaDe('paquete').map(tiendaPaqHTML).join('')), '', 'Todo junto sale mejor.') + tiendaConfiaHTML();
   }
   if (Tienda.vista === 'libros') {
-    return `${tiendaLista('td-bandas', [...tiendaJuegos('fisico'), ...tiendaJuegos('digital')].map(tiendaJuegoHTML).join(''))}
-      ${tiendaSec('Uno por uno', tiendaLista('td-libros', Tienda.libros.map(tiendaLibroHTML).join('')))}
-      <p class="td-nota">Los digitales se leen dentro de la app por 12 meses, con conexión; no se descargan. Los impresos se envían a todo el país.</p>`;
+    return `${tiendaBandas() || (Tienda.cargada ? '<p class="td-vacio">El paquete no está disponible por ahora. Escríbenos por WhatsApp y te avisamos.</p>' : '')}
+      ${tiendaSec('Lo que trae el paquete', tiendaLista('td-libros', Tienda.libros.map(tiendaLibroHTML).join('')), '', 'Gíralos y mira la muestra de cada uno.')}
+      <p class="td-nota">Los libros se venden solo en el paquete de los cuatro. Los digitales se leen dentro de la app por 12 meses, con conexión; no se descargan. Los impresos se envían a todo el país.</p>`;
   }
   if (Tienda.vista === 'asesorias') {
     const s = Tienda.saldo, hay = s.general + s.universidad;
@@ -404,10 +389,8 @@ function tiendaPinta(foco = '', mueve = true) {
     if (d.leer) return openLector(+d.leer);
     if (d.compra) return openComprar(d.compra, (Tienda.plan || {})[d.compra]);
     if (d.dur) { Tienda.plan = { ...Tienda.plan, [d.de]: d.dur }; return tiendaTarjeta(`[data-curso="${d.de}"]`, tiendaCursoHTML(courseById(d.de)), '[data-dur][aria-checked="true"]'); }
-    if (d.fmt) { Tienda.fmt = { ...Tienda.fmt, [d.de]: d.fmt }; return tiendaTarjeta(`[data-libro="${d.de}"]`, tiendaLibroHTML(Tienda.libros.find(l => l.id === +d.de)), '[data-fmt][aria-checked="true"]'); }
     if (d.hora) { Tienda.dial = d.hora; const c = $('.td-dialhueco', el); c.innerHTML = tiendaDialHTML(); tiendaDialVivo(el); tiendaLigaRadios(c); tiendaRefresca(); return $('[data-hora][aria-checked="true"]', c).focus({ preventScroll: true }); }
     if ('bolsa' in d) { Tienda.abierto = !Tienda.abierto; return tiendaRefresca(); }
-    if (d.cambia) { const m = tiendaMejora(carroItems(), Tienda.arts, conPlan()); if (!m) return; m.quita.forEach(id => { if (--Tienda.carro[id] <= 0) delete Tienda.carro[id]; }); Tienda.carro[m.a.id] = 1; tiendaRefresca(true); $('[data-bolsa]', el)?.focus({ preventScroll: true }); return toast(`Cambiado: ahorras ${cop(m.ahorro)}`); }
   };
   tiendaVitrinaViva(el); tiendaDialVivo(el); tiendaArrastra(el); tiendaGira(el); tiendaLigaRadios(el);
   el.querySelectorAll('[data-v]').forEach(b => { b.onclick = () => { Tienda.vista = b.dataset.v; tiendaPinta(`.td-tabs [data-v="${b.dataset.v}"]`); el.scrollTop = 0; $('.td-tabs [aria-current]', el)?.scrollIntoView({ inline: 'nearest', block: 'nearest' }); }; });
@@ -496,7 +479,7 @@ function tiendaListo(p) {
 function librosHTML(soloMios = false) {
   const ls = Tienda.libros.filter(l => (soloMios ? libroListo(l) && Tienda.mios.some(x => x.libro === l.id) : true));
   if (!ls.length || (!soloMios && !Tienda.arts.length)) return '';
-  return `<section class="td-estante"><div class="acct-head"><h2>${soloMios ? 'Mis libros' : 'Libros del Preuniversitario'}</h2>${soloMios ? '' : '<button class="link-btn" type="button" data-tienda="libros">Ver y comprar</button>'}</div>
+  return `<section class="td-estante"><div class="acct-head"><h2>${soloMios ? 'Mis libros' : 'Libros del Preuniversitario'}</h2>${soloMios ? '' : '<button class="link-btn" type="button" data-tienda="libros">Ver el paquete</button>'}</div>
     <div class="td-fila-libros">${ls.map(l => `<button type="button" class="td-lomo" data-libro="${l.id}" aria-label="${esc(l.titulo)}: ${libroMio(l.id) && libroListo(l) ? 'leer' : 'ver en la tienda'}">${tiendaPortada(l.id)}<b>${esc(l.titulo)}</b><small>${libroMio(l.id) && libroListo(l) ? 'Leer' : esc(l.subtitulo)}</small></button>`).join('')}</div></section>`;
 }
 function bindLibros(root) {

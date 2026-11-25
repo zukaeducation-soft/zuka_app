@@ -301,7 +301,6 @@
 .llevando .td-carro { border-color: var(--brand); border-style: dashed; transform: scale(1.02); } .td-carro.sobre { border-color: var(--ok) !important; background: color-mix(in srgb, var(--ok) 16%, var(--card)); }
 .td-dentro { grid-column: 1 / -1; display: grid; gap: 12px; max-height: calc(44 * var(--dvh)); overflow-y: auto; padding: 8px 4px 10px; border-bottom: 1px solid var(--line); } .td-dentro ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; } .td-dentro li { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 12px; } .td-mn { font-weight: 600; line-height: 1.25; } .td-dentro .btn.sm { width: auto; }
 .td-mi { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; overflow: hidden; background: color-mix(in srgb, var(--brand) 12%, transparent); } .td-mi .td-portada { width: 30px; } .td-mi .cart { width: 38px; height: 38px; } .td-mi b { font-size: 15px; }
-.td-in p.td-mejora, .td-mejora { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 16px; background: color-mix(in srgb, #ffd54a 22%, var(--card)); font-size: 15px; line-height: 1.35; }
 .td-vuela { position: fixed; z-index: 70; display: grid; place-items: center; pointer-events: none; transform: translate(-50%, -50%); } .td-vuela > .td-portada { width: 84px; } .td-vuela > .cart { width: 92px; height: 92px; } .td-vuela > b { padding: 18px 22px; border-radius: 50%; background: var(--brand); color: var(--on-brand); font: 600 24px var(--display); } .td-vuela.mano { rotate: -5deg; filter: drop-shadow(0 20px 26px rgba(2, 8, 26, .5)); } .td-vuela.mano .cart.xl { width: 90px; height: 90px; }
 @media (min-width: 1000px) { .td-carro { width: min(760px, calc(100% - 64px)); margin: 0 auto 18px; } .tienda .td-in { padding-bottom: 40px; } }
 @media (prefers-reduced-motion: reduce) { .vt-fondo, .lb3-in, .td-dial :is(.ag, .arco), .td-carro, .td-artes .cart.xl, .td-escena .cart.xl { transition: none !important; } .td-bolsa.salta { animation: none; } .td-paq:hover .cart.xl, .td-curso:hover .cart.xl { transform: none !important; } }
@@ -320,3 +319,6 @@
 .td-in > section { min-width: 0; }
 
 @media (max-width: 359px) { .td-pie { flex-wrap: wrap; } .td-carro:not(.vacio) { grid-template-columns: auto minmax(0, 1fr); } .td-carro > .btn { grid-column: 1 / -1; width: 100%; } }
+
+/* Paquete de libros (spec 2026-11-25-paquete-libros) */
+.td-banda .td-pags { font-size: 15px; color: var(--mute); } .td-banda .td-pags b { font: 600 24px var(--display); color: var(--ink); }

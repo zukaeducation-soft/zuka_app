@@ -117,7 +117,7 @@ test('el precio «desde» sale de la tienda: el más bajo activo, o nada', () =>
   const ps = [{ curso: 'x', activo: true, precio: 90, meses: 3 }, { curso: 'x', activo: true, precio: 40, meses: 1 }, { curso: 'x', activo: false, precio: 5, meses: 1 }, { curso: 'y', activo: true, precio: null, meses: 6 }];
   assert.equal(JSON.stringify(c(ps, 'x')), '{"precio":40,"meses":1}'); assert.equal(c(ps, 'y'), null); assert.equal(c(null, 'x'), null);
   const as = [{ tipo: 'asesoria', activo: true, precio: 25, da: { horas: 1, horas_tipo: 'grupo' } }, { tipo: 'asesoria', activo: true, precio: 45, da: { horas: 1, horas_tipo: 'general' } }, { tipo: 'fisico', activo: true, precio: 60, da: {} }];
-  assert.equal(a(as, 'asesoria').precio, 45); assert.equal(a(as, 'fisico').precio, 60); assert.equal(a([], 'fisico'), null);
+  assert.equal(a(as, 'asesoria').precio, 45); assert.equal(a(as, 'fisico').precio, 60); assert.equal(a([], 'fisico'), null); assert.equal(a([{ tipo: 'digital', activo: true, precio: 5, da: { libros: [1] } }, { tipo: 'digital', activo: true, precio: 50, da: { libros: [1, 2] } }, { tipo: 'fisico', activo: true, precio: 90, da: { fisicos: [1, 2] } }], 'libros').precio, 50);
 });
 test('cada programa con lámina tiene su pantalla real', () => {
   for (const id of Object.keys(get(ctx, 'PZ_PROG'))) assert.ok(fs.existsSync(path.join(ROOT, 'brand/app', `${id}.webp`)), id);

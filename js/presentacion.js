@@ -126,7 +126,9 @@ function pzDesdeCurso(productos, id) {
 }
 function pzDesdeArt(arts, tipo) {
   // la hora en grupo se anuncia aparte: el precio de la tarjeta es el de una hora individual
-  const ps = (arts || []).filter(a => a.tipo === tipo && a.activo && a.precio != null && (tipo !== 'asesoria' || (a.da.horas === 1 && a.da.horas_tipo === 'general'))).map(a => a.precio);
+  // «libros»: el paquete de los cuatro, impreso o digital (sueltos no se venden)
+  const es = a => (tipo === 'libros' ? ['fisico', 'digital'].includes(a.tipo) && ((a.da || {}).fisicos || (a.da || {}).libros || []).length > 1 : a.tipo === tipo);
+  const ps = (arts || []).filter(a => es(a) && a.activo && a.precio != null && (tipo !== 'asesoria' || (a.da.horas === 1 && a.da.horas_tipo === 'general'))).map(a => a.precio);
   return ps.length ? { precio: Math.min(...ps) } : null;
 }
 const PZ_I = {
@@ -188,7 +190,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
     return tarjeta({ color: p.color || c.color, cls: `pz-prog-${c.id}`, fig: p.foto || (PZ_PROG[c.id] ? celu(c.id) : art(c)), name: c.name, tag: p.tag, frase: p.meta, pr: `curso:${c.id}`, ir: '#pz-cursos', tab: cursos.indexOf(c),
       datos: [plural((c.units || []).length, 'mundo', 'mundos'), plural(pzLessons(c), 'lección', 'lecciones'), p.trae] });
   }).concat([
-    tarjeta({ color: '#f5c451', cls: 'pz-prog-lib', fig: libros(''), name: 'Libros de admisión', tag: 'Impresos, con envío', pr: 'art:fisico', ir: '#pz-libros', frase: 'Estudia el examen de admisión sin pantalla, tema por tema.', datos: ['Cuatro libros a color', 'Ejemplos resueltos y talleres con clave'] }),
+    tarjeta({ color: '#f5c451', cls: 'pz-prog-lib', fig: libros(''), name: 'Libros de admisión', tag: 'Paquete de 4, impresos o digitales', pr: 'art:libros', ir: '#pz-libros', frase: 'Estudia el examen de admisión tema por tema, en papel o en la app.', datos: ['Los cuatro libros juntos, a color', 'Ejemplos resueltos y talleres con clave'] }),
     tarjeta({ color: '#ff8a7a', cls: 'pz-prog-ase', fig: PZ_TUTOR, name: 'Asesorías en vivo', tag: 'Por horas', pr: 'art:asesoria', ir: '#pz-d-tut', frase: 'Resuelve con una persona lo que se te puso difícil.', datos: ['Una hora virtual', 'Tú eliges los temas, el día y la hora'] }),
     tarjetaFund,
     `<article class="pz-prog-inst pz-rev"><div><p class="pz-prog-k">Colegios e instituciones</p><h3>Zuka para todo tu colegio</h3><p class="pz-prog-f">Cupos para tus estudiantes y un portal para registrarlos y ver cómo van.</p><span class="pz-prog-b"><a class="btn sm" href="instituciones/">Cotizar</a><button class="btn sm ghost" type="button" data-pz-ir="#pz-inst">Ver precios</button></span></div>${pzInstMini()}</article>`,
@@ -208,7 +210,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="${pzEsc(c.name)}">Quiero inscribirme</button><button class="btn ghost" type="button" data-pz="prueba">Probar gratis</button></div>`, PZ_PROG[c.id].foto ? `<div class="pz-mancha pz-foto pz-foto-ing" data-inclina="5">${PZ_PROG[c.id].foto}</div>` : mancha(celu(c.id)))),
     ...(hayFund ? [lamina(PZ_FUND_C, PZ_FUND_N, `<p class="pz-lam-k">Primeros semestres</p><h2>Fundamentación en Ingeniería y Ciencias</h2><p class="pz-lead">Las matemáticas que sostienen tu carrera, desde cero y a tu ritmo.</p>${mazo}
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los cursos de ${PZ_FUND_N}">Quiero inscribirme</button><button class="btn ghost" type="button" data-pz-ir=".pz-prog-fund">Ver los cursos</button></div>`, `<div class="pz-mancha pz-foto pz-foto-ing" data-inclina="5">${foto}</div>`, 'pz-lam-fund')] : []),
-    lamina('#f5e6c0', 'Libros de admisión', `<p class="pz-lam-k">Libros de admisión</p><h2>El examen, también en papel</h2><p class="pz-lead">Dos libros de razonamiento lógico y dos de comprensión lectora. Impresos a color, con envío.</p>
+    lamina('#f5e6c0', 'Libros de admisión', `<p class="pz-lam-k">Libros de admisión</p><h2>El examen, en cuatro libros</h2><p class="pz-lead">Un paquete de cuatro libros: dos de razonamiento lógico y dos de comprensión lectora. Impresos a color con envío, o digitales en la app.</p>
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los libros de admisión">Quiero los libros</button><button class="btn ghost" type="button" data-pz-ir="#pz-libros">Conocerlos</button></div>`, mancha(libros('pz-est-lam')), 'pz-lam-libros'),
     lamina('#bfe3ff', 'Zuka para instituciones', `<p class="pz-lam-k">Colegios e instituciones</p><h2>Zuka para todo tu colegio</h2><p class="pz-lead">Cupos para tus estudiantes y un portal donde registras, acompañas y ves cómo va cada uno.</p>
       <div class="pz-ctas"><a class="btn main brand" href="instituciones/">Cotizar</a><button class="btn ghost" type="button" data-pz-ir="#pz-inst">Ver precios</button></div>`, `<div class="pz-mini" data-inclina="8">${pzInstMini()}</div>`, 'pz-lam-inst'),
@@ -284,8 +286,8 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
     </section>
     ${pzInstHTML(cursos)}
     <section class="pz-sec pz-in pz-libros" id="pz-libros">
-      <div class="pz-libros-txt pz-rev"><h2>También en papel</h2>
-        <p>Cuatro libros para el examen de admisión: dos de razonamiento lógico y dos de comprensión lectora. Ejemplos resueltos, talleres con clave y la forma en que se pregunta cada tema. Impresos a color, con envío.</p></div>
+      <div class="pz-libros-txt pz-rev"><h2>Los libros, en un paquete</h2>
+        <p>Cuatro libros para el examen de admisión: dos de razonamiento lógico y dos de comprensión lectora. Ejemplos resueltos, talleres con clave y la forma en que se pregunta cada tema. Se venden juntos, en un paquete: impresos a color con envío, o digitales en la app.</p></div>
       <div class="pz-rev">${libros('')}</div>
     </section>
     <section class="pz-sec pz-in pz-dudas" id="pz-dudas">
@@ -343,7 +345,7 @@ function pzPrecios(el, productos, arts) {
   el.querySelectorAll('[data-pz-precio]').forEach(p => {
     const [k, v] = p.dataset.pzPrecio.split(':'), d = k === 'curso' ? pzDesdeCurso(productos, v) : pzDesdeArt(arts, v);
     p.hidden = !d;
-    if (d) p.querySelector('span').innerHTML = `Desde <b>${cop(d.precio)}</b>${d.meses ? ` por ${mesesTexto(d.meses)}` : v === 'asesoria' ? ' la hora' : ' cada libro'}`;
+    if (d) p.querySelector('span').innerHTML = `Desde <b>${cop(d.precio)}</b>${d.meses ? ` por ${mesesTexto(d.meses)}` : v === 'asesoria' ? ' la hora' : ' los 4 libros'}`;
   });
 }
 

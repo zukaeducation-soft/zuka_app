@@ -69,27 +69,26 @@ test('la tienda es una pestaña con cursos, paquetes, libros, asesorías y pedid
   for (const v of ['todo', 'cursos', 'libros', 'asesorias', 'pedidos']) assert.ok(s.includes(`['${v}', `), v);
   assert.match(s, /function tiendaCapa\(paso\)/);
 });
-test('el ahorro de un paquete es de verdad: suma lo que se vende suelto y, si algo no se vende, no promete nada', () => {
+test('el ahorro de un paquete es de verdad: suma lo que se vende aparte y, si algo no se vende, no promete nada', () => {
   const t = f('tiendaSuelto');
-  const A = [{ id: 'f1', tipo: 'fisico', precio: 60, da: { fisicos: [1] } }, { id: 'f2', tipo: 'fisico', precio: 50, da: { fisicos: [2] } }, { id: 'd1', tipo: 'digital', precio: 20, da: { libros: [1] } }, { id: 'h', tipo: 'asesoria', precio: 45, da: { horas: 1, horas_tipo: 'general' } }];
+  const A = [{ id: 'j', tipo: 'fisico', precio: 110, da: { fisicos: [1, 2], libros: [1, 2] } }, { id: 'k', tipo: 'digital', precio: 20, da: { libros: [1, 2] } }, { id: 'h', tipo: 'asesoria', precio: 45, da: { horas: 1, horas_tipo: 'general' } }];
   const P = [{ curso: 'preuda', dias: 180, activo: true, precio: 140 }];
-  assert.equal(t({ id: 'x', da: { cursos: ['preuda'], dias: 180, libros: [1] } }, A, P), 160);
-  assert.equal(t({ id: 'x', da: { fisicos: [1, 2], libros: [1, 2] } }, A, P), 110, 'el digital de regalo no infla el ahorro');
+  assert.equal(t({ id: 'x', da: { cursos: ['preuda'], dias: 180, libros: [1, 2] } }, A, P), 160);
+  assert.equal(t({ id: 'x', da: { cursos: ['preuda'], dias: 180, fisicos: [1, 2], libros: [1, 2], horas: 1, horas_tipo: 'general' } }, A, P), 295, 'el digital de regalo no infla el ahorro');
+  assert.equal(t({ id: 'x', da: { cursos: ['preuda'], dias: 180, libros: [1, 2] } }, A.map(x => ({ ...x, precio_plan: 5 })), P, true), 145, 'con plan se compara con el precio con plan');
   assert.equal(t({ id: 'x', da: { horas: 4, horas_tipo: 'general' } }, A, P), 180);
-  assert.equal(t({ id: 'x', da: { cursos: ['preuda'], dias: 90, libros: [1] } }, A, P), 0);
-  assert.equal(t({ id: 'x', da: { fisicos: [1] } }, A, P), 0);
+  assert.equal(t({ id: 'x', da: { cursos: ['preuda'], dias: 90, libros: [1, 2] } }, A, P), 0); assert.equal(t({ id: 'x', da: { cursos: ['preuda'], dias: 180, libros: [1] } }, A, P), 0);
+});
+test('los libros solo se venden en paquete y su precio sale de sus páginas', () => {
+  const s = f('libroSuelto');
+  for (const [a, v] of [[{ tipo: 'fisico', da: { fisicos: [1] } }, true], [{ tipo: 'digital', da: { libros: [2] } }, true], [{ tipo: 'fisico', da: { fisicos: [1, 2, 3, 4], libros: [1, 2, 3, 4] } }, false], [{ tipo: 'paquete', da: { cursos: ['x'] } }, false], [{ tipo: 'asesoria', da: { horas: 1 } }, false]]) assert.equal(s(a), v);
+  const js = read('js/tienda.js'), sql = read('supabase/migrations/20261125000006_paquete_libros.sql');
+  assert.doesNotMatch(js, /Uno por uno|data-fmt|tiendaMejora/); assert.match(js, /!libroSuelto\(x\)/); assert.match(sql, /create trigger libro_suelto before insert or update on public\.articulos/);
+  const red = x => Math.round((x + 100) / 1000) * 1000 - 100, pag = 283 + 281 + 185 + 145;   // termina en 900
+  for (const [viejo, id] of [[179900, 'fis-juego'], [59900, 'dig-juego']]) assert.match(sql, new RegExp(`precio = ${red(viejo / 496 * pag)}[^\\n]*'${id}'`), id);
 });
 
 // ---- tienda viva (spec 2026-11-24-tienda-viva) ----
-test('el morral propone el juego solo si de verdad sale mejor que lo suelto', () => {
-  const m = f('tiendaMejora'), L = (id, n, p) => ({ id, tipo: 'fisico', precio: p, da: { fisicos: [n] } });
-  const arts = [L('a', 1, 60), L('b', 2, 50), { id: 'j', tipo: 'fisico', precio: 90, da: { fisicos: [1, 2], libros: [1, 2] } }, { id: 'p', tipo: 'paquete', precio: 10, da: { cursos: ['x'], fisicos: [1, 2] } }, { id: 'd', tipo: 'digital', precio: 5, da: { libros: [1] } }];
-  const it = (...ids) => ids.map(id => ({ id, cantidad: 1 }));
-  const r = m(it('a', 'b'), arts, false);
-  assert.equal(r.a.id, 'j'); assert.equal(r.quita.join(), 'a,b'); assert.equal(r.ahorro, 20);
-  assert.equal(m(it('a'), arts, false), null); assert.equal(m(it('a', 'b', 'j'), arts, false), null, 'ya lo lleva');
-  assert.equal(m(it('a', 'b'), arts.map(x => (x.id === 'j' ? { ...x, precio: 200 } : x)), false), null, 'más caro no se propone');
-});
 test('la rueda no se sale y el reloj cae en la opción más cercana', () => {
   const c = f('tiendaCerca'), h = f('tiendaHoraCerca');
   assert.equal([c(-.6, 5), c(1.6, 5), c(9, 5)].join(), '0,2,4');
