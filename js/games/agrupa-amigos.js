@@ -24,7 +24,7 @@ GAMES['agrupa-amigos'] = (() => {
       const free = r.nums.map((_, i) => i).filter(i => !s.plates.some(P => P.includes(i)));
       free.forEach((i, j) => { const x = G.W / 2 - (free.length * (w + 8) - 8) / 2 + j * (w + 8); G.spots.push({ i, x, y: G.trayY, w, h }); });
       s.plates.forEach((P, k) => {
-        const b = G.pl[k], full = P.length === 2, round = full && sum(r, P) % r.unit === 0;
+        const b = G.pl[k], full = P.length === 2, round = !VELO.on && full && sum(r, P) % r.unit === 0;
         p.stroke(G.locked ? C.ok : round ? C.ok : C.line); p.strokeWeight(round ? 2 : 1.2); p.fill(RK.al(p, C.card, 220)); p.rect(b.x, b.y, b.w, b.h, 14);
         P.forEach((i, j) => G.spots.push({ i, x: b.x + 8 + j * (b.w - 16 - w) , y: b.y + 10, w, h }));
         TK.label(p, C, P.length ? `= ${sum(r, P)}` : 'plato', b.x + b.w / 2, b.y + b.h - 18, round ? C.ok : C.mute, 15, b.w - 10);

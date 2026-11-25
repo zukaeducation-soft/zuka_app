@@ -24,7 +24,7 @@ GAMES['dos-rectas'] = (() => {
         if (e[1] === 0) { const x = e[2] / e[0]; p.stroke(col); p.strokeWeight(2.4); p.line(M.X(x), G.b.y, M.X(x), G.b.y + G.b.h); }
         else RK.curve(p, G.b, M, V, x => (e[2] - e[0] * x) / e[1], col, 2.4);
       });
-      [[r.e1, C.sky], [r.e2, C.coral]].forEach(([e, col], i) => { const b = { x: 12 + i * (G.W - 24) / 2 + 3, y: G.b.y + G.b.h + 8, w: (G.W - 24) / 2 - 6, h: 30 }, yes = on(e, s.x, s.y); RK.chip(p, C, b, `$${eq(e)}$`, { on: yes, col: yes && !VELO.on ? C.ok : col, size: 12 }); });
+      [[r.e1, C.sky], [r.e2, C.coral]].forEach(([e, col], i) => { const b = { x: 12 + i * (G.W - 24) / 2 + 3, y: G.b.y + G.b.h + 8, w: (G.W - 24) / 2 - 6, h: 30 }, yes = on(e, s.x, s.y); RK.chip(p, C, b, `$${eq(e)}$`, { on: yes && !VELO.on, col: yes && !VELO.on ? C.ok : col, size: 12 }); });
       drawDot(p, C, M.X(s.x), M.Y(s.y), 16, ok(s, r) ? C.ok : C.brand);
       RK.strip(p, C, G.fb, `$(x, y) = (${s.x}, ${s.y})$`, { kicker: ok(s, r) ? 'Cumple las dos: es la solución' : 'Busca el cruce', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
     },

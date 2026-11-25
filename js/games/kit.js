@@ -810,7 +810,7 @@ function roundsGame(def) {
   });
   function create(host, params, api) {
     const C = api.palette, R = params.rounds;
-    const G = { C, api, params, W: 0, H: 0, cur: 0, locked: false, t: 0, dt: 0, tabs: [], p: null, st: R.map(r => def.init(r, params)), touched: R.map(() => false), down: false, demoUntil: 0, demoT0: 0,
+    const G = { C, api, params, W: 0, H: 0, cur: 0, locked: false, t: 0, dt: 0, tabs: [], p: null, st: R.map(r => def.init(r, params)), s0: [], touched: R.map(() => false), down: false, demoUntil: 0, demoT0: 0,
       get r() { return R[this.cur]; }, get s() { return this.st[this.cur]; },
       touch() { this.touched[this.cur] = true; api.ready(R.every((r, i) => (def.answered ? def.answered(G.st[i], r) : G.touched[i]))); api.sfx?.tap?.(); } };
     const answered = i => (def.answered ? def.answered(G.st[i], R[i]) : G.touched[i]);
@@ -841,9 +841,9 @@ function roundsGame(def) {
         def.draw(G);
         // La mano que muestra el gesto: hasta que se toca esta ronda, o un rato si se pidió con «Cómo se juega».
         const autoDemo = api.guideAuto !== false && !G.touched[G.cur] && G.focus == null;
-        if (def.demo && !G.locked && !G.down && (autoDemo || G.t < G.demoUntil)) drawDemo(p, C, G.t - G.demoT0, def.demo(G));
+        if (def.demo && !G.locked && !G.down && (autoDemo || G.t < G.demoUntil)) { const v = VELO.on; VELO.on = false; const d = def.demo(G); VELO.on = v; drawDemo(p, C, G.t - G.demoT0, d); }
         const good = def.ok(G.s, G.r, params), pend = R.findIndex((_, i) => !answered(i) && i !== G.cur);
-        const foot = G.locked ? (good ? '¡Bien!' : 'La respuesta correcta quedó marcada') : answered(G.cur) && pend >= 0 ? `Sigue con la pestaña ${pend + 1}` : def.foot?.(G.r, G.s, G) ?? '';
+        const foot = G.locked ? (good ? '¡Bien!' : 'La respuesta correcta quedó marcada') : answered(G.cur) && pend >= 0 ? `Sigue con la pestaña ${pend + 1}` : def.foot?.(G.r, VELO.on ? (G.s0[G.cur] ??= def.init(G.r, params)) : G.s, G) ?? '';
         p.noStroke(); p.fill(G.locked ? (good ? C.ok : C.bad) : C.mute); p.textStyle(G.locked ? p.BOLD : p.NORMAL); p.textAlign(p.CENTER, p.CENTER); fitText(p, foot, G.W / 2, G.H - 14, G.W - 20, 11);
       };
       p.mousePressed = () => {

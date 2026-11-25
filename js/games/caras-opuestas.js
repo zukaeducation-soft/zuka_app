@@ -24,7 +24,7 @@ GAMES['caras-opuestas'] = (() => {
       G.tray = r.letters.map((L, i) => ({ L, x: G.W / 2 - (r.letters.length * 40 - 6) / 2 + i * 40, y: G.H - 110, w: 34, h: 32 }));
       G.tray.forEach(b => RK.chip(p, C, b, b.L, { size: 13, col: C.coral }));
       if (G.drag) RK.chip(p, C, { x: G.drag.x - 17, y: G.drag.y - 16, w: 34, h: 32 }, G.drag.L, { on: true, col: C.brand, size: 13 });
-      RK.strip(p, C, G.fb, good ? '$\\text{bien doblado}$' : '$\\text{dobla el desarrollo en tu cabeza}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{una cara para cada casilla}$' : good ? '$\\text{bien doblado}$' : '$\\text{dobla el desarrollo en tu cabeza}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) { const t = (G.tray || []).find(b => hitBox(b, x, y)); if (t) { G.drag = { L: t.L, x, y }; return true; } const b = G.slots.find(b => hitBox(b, x, y)); if (b && G.s.put[b.k] != null) { G.drag = { L: G.s.put[b.k], x, y }; G.s.put[b.k] = null; return true; } return false; },
     drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },

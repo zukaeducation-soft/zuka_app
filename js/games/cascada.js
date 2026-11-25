@@ -53,7 +53,7 @@ GAMES['cascada'] = (() => {
         shown += (target - shown) * 0.12;   // el precio cae contando hacia abajo
         if (Math.abs(target - shown) < 1) shown = target;
         const ans = answerOf(params), good = st.single === ans;
-        const col = locked ? (good && st.applied.length === params.changes.length && !VELO.on ? C.ok : C.bad) : C.brand;
+        const col = locked ? (good && st.applied.length === params.changes.length ? C.ok : C.bad) : C.brand;
         p.noStroke(); p.fill(C.N); p.textAlign(p.CENTER, p.TOP); p.textStyle(p.BOLD); p.textSize(14);
         p.text(params.changes.every(c => c < 0) ? 'Pega los dos descuentos y halla el descuento único' : 'Pega los dos cambios y halla el descuento único', 12, 8, W - 24, 40);
         // Etiqueta.

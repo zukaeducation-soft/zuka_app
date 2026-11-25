@@ -30,7 +30,7 @@ GAMES['amplifica-fraccion'] = (() => {
       G.cards = r.chips.map((_, i) => ({ i, x: G.W / 2 - (r.chips.length * (w + 6) - 6) / 2 + i * (w + 6), y: G.cy, w, h: 36 }));
       G.cards.forEach(b => { if (G.drag?.i !== b.i) RK.chip(p, C, b, `$${r.chips[b.i]}$`, { size: 13 }); });
       if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 18, w, h: 36 }, `$${r.chips[G.drag.i]}$`, { on: true, size: 13 });
-      RK.strip(p, C, G.fb, ok(s, r) ? `$${r.sum}$` : '$\\text{completa las dos fracciones}$', { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{elige un factor para cada una}$' : ok(s, r) ? `$${r.sum}$` : '$\\text{completa las dos fracciones}$', { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
     },
     press(G, x, y) {
       const b = (G.cards || []).find(b => hitBox(b, x, y)); if (b) { G.drag = { i: b.i, x, y }; return true; }

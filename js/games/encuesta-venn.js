@@ -61,7 +61,7 @@ GAMES['encuesta-venn'] = (() => {
         // Sumas en vivo: cada una se enciende cuando coincide con el dato de la encuesta.
         const sA = cnt[0] + cnt[1], sB = cnt[1] + cnt[2], tot = cnt.reduce((a, b) => a + b, 0), y0 = box.y + box.h + 44, cw = (W - 24 - 6) / 2;
         [[`${r.labels[0]}: ${sA} de ${r.a}`, sA === r.a, A.line], [`${r.labels[1]}: ${sB} de ${r.b}`, sB === r.b, B.line], [`total: ${tot} de ${r.total}`, tot === r.total, C.sky]].forEach(([txt, hit], j) =>
-          SK.chip(p, C, j < 2 ? { x: 12 + j * (cw + 6), y: y0, w: cw, h: 24 } : { x: W / 2 - cw / 2, y: y0 + 29, w: cw, h: 24 }, txt, { state: hit && !VELO.on ? 'ok' : 'idle', size: 12, r: 9, ink: hit ? C.ink : C.mute }));
+          SK.chip(p, C, j < 2 ? { x: 12 + j * (cw + 6), y: y0, w: cw, h: 24 } : { x: W / 2 - cw / 2, y: y0 + 29, w: cw, h: 24 }, txt, { state: hit && !VELO.on ? 'ok' : 'idle', size: 12, r: 9, ink: hit || VELO.on ? C.ink : C.mute }));
         p.textStyle(p.NORMAL); p.textAlign(p.CENTER, p.CENTER);
         p.fill(locked && !good(cnt, r) ? C.ok : C.mute);
         fitText(p, locked && !good(cnt, r) ? `Era: ${t[0]}, ${t[1]}, ${t[2]} y ${t[3]} ninguno` : 'Cada zona cuenta a las personas una sola vez', W / 2, H - 12, W - 24, 11);

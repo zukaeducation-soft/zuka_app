@@ -9705,7 +9705,7 @@ GAMES['corta-igual'] = (() => {
     layout(G) { G.x0 = 20; G.uw = (G.W - 40) / U; G.slY = G.H - 62; G.px = n => 26 + (n - 1) / (MAXN - 1) * (G.W - 52); },
     enter(G) { G.dragging = false; },
     draw(G) {
-      const { p, C, r, s, x0, uw } = G, ok = fits(r, s.n), n = s.n;
+      const { p, C, r, s, x0, uw } = G, ok = !VELO.on && fits(r, s.n), n = s.n;
       TK.label(p, C, ok && n > 1 ? text(r, n) : `${r.a[0]}/${r.a[1]} ${r.op === '-' ? '−' : '+'} ${r.b[0]}/${r.b[1]}`, G.W / 2, 108, G.locked ? (ok ? C.ok : C.bad) : ok && n > 1 ? C.ok : C.ink, 17, G.W - 20);
       const bar = (y, fr, col, lab) => {
         p.noStroke(); p.fill(col); p.rect(x0, y, uw * fr[0] / fr[1], 34, 5);

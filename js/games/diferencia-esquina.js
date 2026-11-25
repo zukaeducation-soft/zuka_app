@@ -15,7 +15,7 @@ GAMES['diferencia-esquina'] = (() => {
     layout(G) { G.tY = G.H - 104; G.fb = { x: 12, y: G.H - 70, w: G.W - 24, h: 46 }; },
     enter(G) { G.grab = false; },
     draw(G) {
-      const { p, C, r } = G, b = G.locked && !ok(G.s, r) ? Math.sqrt(r.c) : G.s.b, X = 150, k = X / 10, ox = 24, oy = 108, good = b * b === r.c;
+      const { p, C, r } = G, b = G.locked && !ok(G.s, r) ? Math.sqrt(r.c) : G.s.b, X = 150, k = X / 10, ox = 24, oy = 108, good = !VELO.on && b * b === r.c;
       p.stroke(C.bg); p.strokeWeight(1.5); p.fill(C.mint); p.rect(ox, oy, X - b * k, X); p.fill(C.sky); p.rect(ox + X - b * k, oy, b * k, X - b * k);
       p.noFill(); p.stroke(C.coral); p.drawingContext.setLineDash([3, 3]); p.rect(ox + X - b * k, oy + X - b * k, b * k, b * k); p.drawingContext.setLineDash([]);
       TK.label(p, C, `${b}²`, ox + X - b * k / 2, oy + X - b * k / 2, C.coral, 11, 30); TK.label(p, C, 'x', ox + X / 2, oy - 10, C.mute, 11, 20);

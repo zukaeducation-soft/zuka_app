@@ -23,7 +23,7 @@ GAMES['puntos-o-porciento'] = (() => {
       p.noStroke(); p.fill(RK.al(p, good ? C.ok : C.coral, 150)); p.rect(x0, y + 80, pred * u, 24, 4);
       TK.label(p, C, `${r.from} con ${pc > 0 ? '+' : ''}${pc} %: ${+pred.toFixed(2)}`, G.W / 2, y + 120, good ? C.ok : C.mute, 11, G.W - 30);
       G.X = RK.track(p, C, 24, G.W - 24, G.tY, P.length, P.indexOf(pc), i => (i % 5 === 0 ? `${P[i]}` : null));
-      RK.strip(p, C, G.fb, `$\\dfrac{${r.to} - ${r.from}}{${r.from}} ${good ? '=' : '\\ne'} ${pc}\\%$`, { kicker: `${Math.abs(r.to - r.from)} puntos de diferencia`, col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
+      RK.strip(p, C, G.fb, `$\\dfrac{${r.to} - ${r.from}}{${r.from}} ${VELO.on ? '\\;?\\;' : good ? '=' : '\\ne'} ${pc}\\%$`, { kicker: `${Math.abs(r.to - r.from)} puntos de diferencia`, col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
     },
     press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
     drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },

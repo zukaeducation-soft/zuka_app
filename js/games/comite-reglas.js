@@ -32,7 +32,7 @@ GAMES['comite-reglas'] = (() => {
       G.inBoxes.forEach(b => { if (G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { on: true, size: 12, col: good ? C.ok : C.mint }); });
       r.rules.forEach((c, i) => { const v = rule(c, s.in); TK.label(p, C, `${VELO.on ? '·' : v ? '✓' : '✗'} ${c.say}`, G.W / 2, 226 + i * 15, VELO.on ? C.ink : v ? C.ok : C.bad, 10, G.W - 30); });
       if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 15, w, h: 30 }, G.drag.nm, { on: true, col: C.brand, size: 12 });
-      RK.strip(p, C, G.fb, good ? `$\\text{${s.in.join(', ')}}$` : `$\\text{faltan ${Math.max(0, r.k - s.in.length)}}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, good || (VELO.on && s.in.length >= r.k) ? `$\\text{${s.in.join(', ')}}$` : `$\\text{faltan ${Math.max(0, r.k - s.in.length)}}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) {
       const b = [...(G.inBoxes || []), ...G.home.filter(b => !G.s.in.includes(b.nm))].find(b => hitBox(b, x, y)); if (!b) return false;

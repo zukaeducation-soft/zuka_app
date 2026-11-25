@@ -25,7 +25,7 @@ GAMES['tales-rectas'] = (() => {
       [[A, 'A'], [B, 'B'], [A2, "A'"], [O, 'O']].forEach(([q, t]) => { drawDot(p, C, q.x, q.y, 9, C.ink); TK.label(p, C, t, q.x, q.y + 14, C.mute, 10, 24); });
       RK.knob(p, C, B2.x, B2.y, C.brand); TK.label(p, C, "B'", B2.x, B2.y - 18, C.ink, 11, 24); G.B2 = B2;
       TK.label(p, C, String(r.a), (O.x + A.x) / 2, O.y + 14, C.ink, 10, 30); TK.label(p, C, String(r.b), (A.x + B.x) / 2, O.y + 14, C.ink, 10, 30);
-      RK.strip(p, C, G.fb, `$\\dfrac{${r.a}}{${r.b}} ${good ? '=' : '\\ne'} \\dfrac{${r.c}}{${RK.num(s.d)}}$`, { kicker: `A'B' = ${String(s.d)}`, col: G.locked || good ? C.ok : C.brand, size: 17 });
+      RK.strip(p, C, G.fb, `$\\dfrac{${r.a}}{${r.b}} ${VELO.on ? '\\;?\\;' : good ? '=' : '\\ne'} \\dfrac{${r.c}}{${RK.num(s.d)}}$`, { kicker: `A'B' = ${String(s.d)}`, col: G.locked || good ? C.ok : C.brand, size: 17 });
     },
     press(G, x, y) { if (Math.hypot(x - G.B2.x, y - G.B2.y) > 44) return false; G.grab = true; return true; },
     drag(G, x, y) {

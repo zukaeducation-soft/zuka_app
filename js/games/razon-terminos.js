@@ -20,7 +20,7 @@ GAMES['razon-terminos'] = (() => {
       const { p, C, r } = G, k = G.locked && !ok(G.s, r) ? need(r) : G.s.k, x = R[k], n = r.j - r.i + 1, w = Math.min(64, (G.W - 24) / n - 6);
       for (let t = 0; t < n; t++) {
         const v = r.ai * x ** t, b = { x: G.W / 2 - (n * (w + 6) - 6) / 2 + t * (w + 6), y: 150, w, h: 42 }, last = t === n - 1;
-        RK.chip(p, C, b, `$${RK.num(+v.toFixed(4))}$`, { on: t === 0 || last, col: last ? (Math.abs(v - r.aj) < 1e-9 && !VELO.on ? C.ok : C.coral) : C.sky, size: 14 });
+        RK.chip(p, C, b, `$${RK.num(+v.toFixed(4))}$`, { on: t === 0 || last, col: last ? (Math.abs(v - r.aj) < 1e-9 && !VELO.on ? C.ok : VELO.on ? C.sky : C.coral) : C.sky, size: 14 });
         TK.label(p, C, `$a_{${r.i + t}}$`, b.x + w / 2, b.y - 14, C.mute, 11, w);
         if (t) TK.label(p, C, `×${RK.num(x).replace(/\\tfrac\{(\d+)\}\{(\d+)\}/, '$1/$2')}`, b.x - 3, b.y + 58, C.mute, 10, 40);
       }

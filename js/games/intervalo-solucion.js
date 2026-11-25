@@ -28,8 +28,8 @@ GAMES['intervalo-solucion'] = (() => {
       RK.knob(p, C, X(s.b), ax.y - 30, C.brand);
       if (s.dir) {
         const t = s.b + s.dir * 2, val = r.f(t);
-        TK.label(p, C, `prueba con x = ${t}: ${val ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 46, val ? C.ok : C.bad, 11, G.W - 30);
-        const e = r.f(s.b); TK.label(p, C, `y con x = ${s.b}: ${e ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 64, e === s.closed && !VELO.on ? C.ok : C.bad, 11, G.W - 30);
+        TK.label(p, C, `prueba con x = ${t}: ${val ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 46, VELO.on ? C.ink : val ? C.ok : C.bad, 11, G.W - 30);
+        const e = r.f(s.b); TK.label(p, C, `y con x = ${s.b}: ${e ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 64, VELO.on ? C.ink : e === s.closed ? C.ok : C.bad, 11, G.W - 30);
       }
       RK.strip(p, C, G.fb, s.dir ? `$x ${sym(s)} ${s.b}$` : '$\\text{toca un lado de la recta}$', { col: G.locked || good ? C.ok : C.brand, size: 18 });
     },

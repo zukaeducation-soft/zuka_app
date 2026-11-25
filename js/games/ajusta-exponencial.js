@@ -20,7 +20,7 @@ GAMES['ajusta-exponencial'] = (() => {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, top = Math.max(...r.pts.map(q => q[1])) * 1.35, V = { x0: -3, x1: 3, y0: 0, y1: Math.ceil(top) };
       const M = RK.plane(p, C, G.b, V, { step: 1 });
       RK.curve(p, G.b, M, V, x => s.a * B[s.bi] ** x, ok(s, r) ? C.ok : C.sky, 2.6);
-      r.pts.forEach(([x, y]) => { const hit = Math.abs(s.a * B[s.bi] ** x - y) < 1e-9; drawDot(p, C, M.X(x), M.Y(y), 13, hit && !VELO.on ? C.ok : C.coral); });
+      r.pts.forEach(([x, y]) => { const hit = Math.abs(s.a * B[s.bi] ** x - y) < 1e-9; drawDot(p, C, M.X(x), M.Y(y), 13, hit && !VELO.on ? C.ok : VELO.on ? C.sky : C.coral); });
       G.X = [RK.track(p, C, 40, G.W - 30, G.tr[0], 6, s.a - 1, i => String(i + 1), C.sky), RK.track(p, C, 40, G.W - 30, G.tr[1], B.length, s.bi, i => `$${BT[i]}$`, C.coral)];
       TK.label(p, C, 'a', 20, G.tr[0], C.mute, 13, 20); TK.label(p, C, 'b', 20, G.tr[1], C.mute, 13, 20);
       RK.strip(p, C, G.fb, `$y = ${s.a} \\cdot \\left(${BT[s.bi]}\\right)^x$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 17 });

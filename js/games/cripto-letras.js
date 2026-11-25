@@ -33,7 +33,7 @@ GAMES['cripto-letras'] = (() => {
         return { x, y, w };
       });
       const eqOk = !!r.f(v);
-      RK.strip(p, C, G.fb, good ? '$\\text{se cumple}$' : dup.length ? '$\\text{hay dos letras con la misma cifra}$' : eqOk ? '$\\text{revisa: ¿empieza en 0?}$' : '$\\text{la cuenta no se cumple}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{una cifra para cada letra}$' : good ? '$\\text{se cumple}$' : dup.length ? '$\\text{hay dos letras con la misma cifra}$' : eqOk ? '$\\text{revisa: ¿empieza en 0?}$' : '$\\text{la cuenta no se cumple}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) { const i = (G.wheels || []).findIndex(q => Math.abs(x - q.x) < q.w * 0.4 && Math.abs(y - q.y) < 52); if (i < 0) return false; G.grab = i; G.y0 = y; G.d0 = G.s.d[i]; return true; },
     drag(G, x, y) { if (G.grab < 0) return false; const d = ((G.d0 + Math.round((G.y0 - y) / 22)) % 10 + 10) % 10; if (d !== G.s.d[G.grab]) { G.s.d[G.grab] = d; G.touch(); } return true; },

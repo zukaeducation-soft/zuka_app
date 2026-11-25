@@ -28,10 +28,10 @@ GAMES['tiene-podria'] = (() => {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, w = G.home[0].w;
       G.home.forEach(b => { if (!s.in.includes(b.nm) && G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { size: 11, col: C.sky }); });
       const v = CR().valid(r, s.in);
-      p.stroke(s.in.length === r.k ? (v ? C.ok : C.bad) : C.line); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 16)); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 10);
+      p.stroke(s.in.length === r.k && !VELO.on ? (v ? C.ok : C.bad) : C.line); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 16)); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 10);
       G.inBoxes = s.in.map((nm, i) => ({ nm, x: G.box.x + 8 + i * (w + 4), y: G.box.y + 7, w, h: 26 }));
       G.inBoxes.forEach(b => { if (G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { on: true, size: 11, col: C.mint }); });
-      TK.label(p, C, s.in.length < r.k ? `prueba un caso (${s.in.length} de ${r.k})` : v ? 'este caso cumple las reglas' : 'este caso no cumple', G.W / 2, G.box.y + G.box.h + 10, s.in.length < r.k ? C.mute : v ? C.ok : C.bad, 10, G.W - 30);
+      TK.label(p, C, s.in.length < r.k ? `prueba un caso (${s.in.length} de ${r.k})` : VELO.on ? 'un caso posible de prueba' : v ? 'este caso cumple las reglas' : 'este caso no cumple', G.W / 2, G.box.y + G.box.h + 10, s.in.length < r.k || VELO.on ? C.mute : v ? C.ok : C.bad, 10, G.W - 30);
       r.rules.forEach((c, i) => TK.label(p, C, c.say, G.W / 2, 100 + i * 13, C.ink, 10, G.W - 30));
       G.zones.forEach(z => { p.stroke(C.line); p.strokeWeight(1.2); p.fill(RK.al(p, C.card, 170)); p.rect(z.x, z.y, z.w, z.h, 8); TK.label(p, C, ZN[z.z], z.x + z.w / 2, z.y + 10, C.ink, 10, z.w); });
       const cw = G.W - 40, n = r.claims.length;

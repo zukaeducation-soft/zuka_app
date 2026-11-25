@@ -23,7 +23,7 @@ GAMES['fraccion-exponente'] = (() => {
       TK.label(p, C, `$\\sqrt[${s.n}]{\\;}$`, G.W * 0.34, 128, C.ink, 14, 50);
       box(G.W * 0.5, `$${+root.toFixed(3)}$`, C.mint); RK.arrow(p, G.W * 0.5 + 42, G.W * 0.83 - 44, 146, C.line, 2);
       TK.label(p, C, `$(\\;)^{${s.m}}$`, G.W * 0.67, 128, C.ink, 14, 50);
-      box(G.W * 0.83, `$${+v.toFixed(3)}$`, Math.abs(v - r.target) < 1e-6 && !VELO.on ? C.ok : C.coral);
+      box(G.W * 0.83, `$${+v.toFixed(3)}$`, Math.abs(v - r.target) < 1e-6 && !VELO.on ? C.ok : VELO.on ? C.sky : C.coral);
       RK.track(p, C, 70, G.W - 30, G.t1, 4, s.n - 1, i => String(i + 1)); TK.label(p, C, 'raíz', 34, G.t1, C.mute, 11, 40);
       RK.track(p, C, 70, G.W - 30, G.t2, 4, s.m - 1, i => String(i + 1)); TK.label(p, C, 'potencia', 34, G.t2, C.mute, 11, 56);
       RK.strip(p, C, G.fb, `$${r.a}^{${s.m}/${s.n}} = (\\sqrt[${s.n}]{${r.a}})^{${s.m}} = ${+v.toFixed(3)}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 17 });

@@ -44,7 +44,7 @@ GAMES['encuesta-tres'] = (() => {
       TK.label(p, C, 'ninguno', G.cent.none[0], G.cent.none[1] - 20, C.mute, 9, 60);
       const want = data(r, r.z), now = data(r, s.v), y0 = G.box.y + G.box.h + 12, colW = (G.W - 24) / 2;
       want.forEach(([lab, n], i) => { const hit = now[i][1] === n, x = 12 + (i % 2) * colW + colW / 2, y = y0 + Math.floor(i / 2) * 15; TK.label(p, C, `${VELO.on ? '·' : hit ? '✓' : '·'} ${lab}: ${n} (van ${now[i][1]})`, x, y, hit && !VELO.on ? C.ok : C.ink, 9, colW - 4); });
-      RK.strip(p, C, G.fb, good ? '$\\text{el diagrama cuadra con la encuesta}$' : `$\\text{${want.filter((w, i) => now[i][1] === w[1]).length} de ${want.length} datos}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{una cuenta para cada zona}$' : good ? '$\\text{el diagrama cuadra con la encuesta}$' : `$\\text{${want.filter((w, i) => now[i][1] === w[1]).length} de ${want.length} datos}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) { const k = KEYS.find(q => Math.abs(x - G.cent[q][0]) < 22 && Math.abs(y - G.cent[q][1]) < 18); if (!k) return false; G.grab = { k, y0: y, v0: G.s.v[k] }; return true; },
     drag(G, x, y) { if (!G.grab) return false; const v = Math.max(0, Math.min(60, G.grab.v0 + Math.round((G.grab.y0 - y) / 12))); if (v !== G.s.v[G.grab.k]) { G.s.v[G.grab.k] = v; G.touch(); } return true; },

@@ -23,7 +23,7 @@ GAMES['iguala-coeficientes'] = (() => {
         const x = 20 + i * w;
         TK.label(p, C, n, x + w / 2, 110, C.mute, 11, w);
         RK.chip(p, C, { x: x + 4, y: 122, w: w - 8, h: 32 }, String(r.P[i]), { on: true, col: C.sky, size: 14 });
-        RK.chip(p, C, { x: x + 4, y: 164, w: w - 8, h: 32 }, String(Q[i]), { on: true, col: Q[i] === r.P[i] && !VELO.on ? C.ok : C.coral, size: 14 });
+        RK.chip(p, C, { x: x + 4, y: 164, w: w - 8, h: 32 }, String(Q[i]), { on: true, col: Q[i] === r.P[i] && !VELO.on ? C.ok : VELO.on ? C.sky : C.coral, size: 14 });
       });
       TK.label(p, C, 'meta', 14, 138, C.mute, 9, 30); TK.label(p, C, 'tuyo', 14, 180, C.mute, 9, 30);
       G.X1 = RK.track(p, C, 50, G.W - 24, G.t1, 17, s.a + 8, i => (i % 4 === 0 ? String(i - 8) : null)); TK.label(p, C, 'a', 28, G.t1, C.mute, 12, 20);

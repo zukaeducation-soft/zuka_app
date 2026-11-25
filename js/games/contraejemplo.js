@@ -26,7 +26,7 @@ GAMES['contraejemplo'] = (() => {
         return b;
       });
       const it = s.pick >= 0 ? r.items[s.pick] : null;
-      RK.strip(p, C, G.fb, it === null ? '$\\text{elige una ficha}$' : good ? `$\\text{${it}: la frase cae}$` : `$\\text{${it}: la frase sigue en pie}$`, { col: G.locked || good ? C.ok : C.brand, size: 16 });
+      RK.strip(p, C, G.fb, it === null ? '$\\text{elige una ficha}$' : VELO.on ? `$\\text{${it}}$` : good ? `$\\text{${it}: la frase cae}$` : `$\\text{${it}: la frase sigue en pie}$`, { col: G.locked || good ? C.ok : C.brand, size: 16 });
     },
     press(G, x, y) { const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false; G.s.pick = c.i; G.touch(); return true; },
     demo: G => (G.cells ? { from: { x: G.cells[0].x + 20, y: G.cells[0].y + 20 }, to: { x: G.cells[0].x + 20, y: G.cells[0].y + 20 }, text: 'Toca una ficha', ty: G.cells.at(-1).y + 76 } : null),

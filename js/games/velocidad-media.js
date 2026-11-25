@@ -25,7 +25,7 @@ GAMES['velocidad-media'] = (() => {
       p.fill(good ? C.ok : C.mint); p.rect(30, 186, tv * u, 24, 3);
       TK.label(p, C, `${D(r)} km ÷ ${s.v} = ${RK.num(Math.round(tv * 100) / 100)} h`, G.W / 2, 222, C.ink, 11, G.W - 30);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, 24, s.v / 5 - 1, i => ((i + 1) % 4 === 0 ? String((i + 1) * 5) : null));
-      RK.strip(p, C, G.fb, `$v_m = \\dfrac{${D(r)}}{${RK.num(T(r))}} ${good ? '=' : '\\ne'} ${s.v}$`, { kicker: 'Distancia total ÷ tiempo total', col: G.locked || good ? C.ok : C.brand, size: 17 });
+      RK.strip(p, C, G.fb, `$v_m = \\dfrac{${D(r)}}{${RK.num(T(r))}} ${VELO.on ? '\\;?\\;' : good ? '=' : '\\ne'} ${s.v}$`, { kicker: 'Distancia total ÷ tiempo total', col: G.locked || good ? C.ok : C.brand, size: 17 });
     },
     press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
     drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },

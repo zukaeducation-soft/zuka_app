@@ -23,9 +23,9 @@ GAMES['torres-vistas'] = (() => {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { h: want(r) } : G.s, c = G.c, o = G.o, v = views(s.h), good = G.locked && ok(s, r);
       TK.label(p, C, 'desde arriba', o.x + r.front.length * c / 2, o.y - 34, C.mute, 10, 120);
       s.h.forEach((row, j) => row.forEach((hv, i) => { p.stroke(C.ink); p.strokeWeight(1.2); p.fill(RK.al(p, good ? C.ok : C.sky, 40 + hv * 50)); p.rect(o.x + i * c, o.y + j * c, c, c); TK.label(p, C, String(hv), o.x + i * c + c / 2, o.y + j * c + c / 2, C.ink, 13, c); }));
-      r.front.forEach((fv, i) => { const vv = v.front[i]; TK.label(p, C, `${fv}`, o.x + i * c + c / 2, o.y - 14, vv === fv && !VELO.on ? C.ok : C.coral, 11, c); });
+      r.front.forEach((fv, i) => { const vv = v.front[i]; TK.label(p, C, `${fv}`, o.x + i * c + c / 2, o.y - 14, VELO.on ? C.ink : vv === fv ? C.ok : C.coral, 11, c); });
       TK.label(p, C, 'frente ↑', o.x - 22, o.y - 14, C.mute, 8, 40);
-      r.side.forEach((sv, j) => { const vv = v.side[j]; TK.label(p, C, `${sv}`, o.x + r.front.length * c + 14, o.y + j * c + c / 2, vv === sv && !VELO.on ? C.ok : C.coral, 11, 24); });
+      r.side.forEach((sv, j) => { const vv = v.side[j]; TK.label(p, C, `${sv}`, o.x + r.front.length * c + 14, o.y + j * c + c / 2, VELO.on ? C.ink : vv === sv ? C.ok : C.coral, 11, 24); });
       TK.label(p, C, 'lado →', o.x + r.front.length * c + 40, o.y - 14, C.mute, 8, 50);
       const tot = s.h.flat().reduce((a, b) => a + b, 0);
       RK.strip(p, C, G.fb, `$\\text{${tot} cubos}$`, { kicker: 'Los números de afuera son las vistas pedidas', col: G.locked || good ? C.ok : C.brand, size: 17 });

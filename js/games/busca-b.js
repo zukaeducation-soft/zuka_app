@@ -45,7 +45,7 @@ GAMES['busca-b'] = (() => {
       const h = holds(B, r);
       r.conds.forEach(([k, X], j) => {
         const b = { x: 12, y: G.cy + j * 50, w: G.W - 24, h: 44 };
-        SK.formal(p, C, b, `$${NAME[k]} = ${tset(X)}$`, { raw: true, kicker: `ahora: ${tset(val(k, r.A, B)).replace(/\\\{|\\\}/g, m => (m === '\\{' ? '{' : '}')).replace('\\varnothing', '∅')}`, col: h[j] ? C.ok : SB.line, size: 15 });
+        SK.formal(p, C, b, `$${NAME[k]} = ${tset(X)}$`, { raw: true, kicker: `ahora: ${tset(val(k, r.A, B)).replace(/\\\{|\\\}/g, m => (m === '\\{' ? '{' : '}')).replace('\\varnothing', '∅')}`, col: h[j] && !VELO.on ? C.ok : SB.line, size: 15 });
       });
     },
     press(G, x, y) { const q = (G.spots || []).find(q => hitBox(q, x, y)); if (!q) return false; G.drag = { v: q.v, tray: !!q.tray, x, y }; return true; },

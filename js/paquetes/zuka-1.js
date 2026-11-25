@@ -2645,7 +2645,7 @@ function roundsGame(def) {
   });
   function create(host, params, api) {
     const C = api.palette, R = params.rounds;
-    const G = { C, api, params, W: 0, H: 0, cur: 0, locked: false, t: 0, dt: 0, tabs: [], p: null, st: R.map(r => def.init(r, params)), touched: R.map(() => false), down: false, demoUntil: 0, demoT0: 0,
+    const G = { C, api, params, W: 0, H: 0, cur: 0, locked: false, t: 0, dt: 0, tabs: [], p: null, st: R.map(r => def.init(r, params)), s0: [], touched: R.map(() => false), down: false, demoUntil: 0, demoT0: 0,
       get r() { return R[this.cur]; }, get s() { return this.st[this.cur]; },
       touch() { this.touched[this.cur] = true; api.ready(R.every((r, i) => (def.answered ? def.answered(G.st[i], r) : G.touched[i]))); api.sfx?.tap?.(); } };
     const answered = i => (def.answered ? def.answered(G.st[i], R[i]) : G.touched[i]);
@@ -2676,9 +2676,9 @@ function roundsGame(def) {
         def.draw(G);
         // La mano que muestra el gesto: hasta que se toca esta ronda, o un rato si se pidió con «Cómo se juega».
         const autoDemo = api.guideAuto !== false && !G.touched[G.cur] && G.focus == null;
-        if (def.demo && !G.locked && !G.down && (autoDemo || G.t < G.demoUntil)) drawDemo(p, C, G.t - G.demoT0, def.demo(G));
+        if (def.demo && !G.locked && !G.down && (autoDemo || G.t < G.demoUntil)) { const v = VELO.on; VELO.on = false; const d = def.demo(G); VELO.on = v; drawDemo(p, C, G.t - G.demoT0, d); }
         const good = def.ok(G.s, G.r, params), pend = R.findIndex((_, i) => !answered(i) && i !== G.cur);
-        const foot = G.locked ? (good ? '¡Bien!' : 'La respuesta correcta quedó marcada') : answered(G.cur) && pend >= 0 ? `Sigue con la pestaña ${pend + 1}` : def.foot?.(G.r, G.s, G) ?? '';
+        const foot = G.locked ? (good ? '¡Bien!' : 'La respuesta correcta quedó marcada') : answered(G.cur) && pend >= 0 ? `Sigue con la pestaña ${pend + 1}` : def.foot?.(G.r, VELO.on ? (G.s0[G.cur] ??= def.init(G.r, params)) : G.s, G) ?? '';
         p.noStroke(); p.fill(G.locked ? (good ? C.ok : C.bad) : C.mute); p.textStyle(G.locked ? p.BOLD : p.NORMAL); p.textAlign(p.CENTER, p.CENTER); fitText(p, foot, G.W / 2, G.H - 14, G.W - 20, 11);
       };
       p.mousePressed = () => {
@@ -9134,7 +9134,7 @@ GAMES['cascada'] = (() => {
         shown += (target - shown) * 0.12;   // el precio cae contando hacia abajo
         if (Math.abs(target - shown) < 1) shown = target;
         const ans = answerOf(params), good = st.single === ans;
-        const col = locked ? (good && st.applied.length === params.changes.length && !VELO.on ? C.ok : C.bad) : C.brand;
+        const col = locked ? (good && st.applied.length === params.changes.length ? C.ok : C.bad) : C.brand;
         p.noStroke(); p.fill(C.N); p.textAlign(p.CENTER, p.TOP); p.textStyle(p.BOLD); p.textSize(14);
         p.text(params.changes.every(c => c < 0) ? 'Pega los dos descuentos y halla el descuento único' : 'Pega los dos cambios y halla el descuento único', 12, 8, W - 24, 40);
         // Etiqueta.
@@ -16185,7 +16185,7 @@ GAMES['encuesta-venn'] = (() => {
         // Sumas en vivo: cada una se enciende cuando coincide con el dato de la encuesta.
         const sA = cnt[0] + cnt[1], sB = cnt[1] + cnt[2], tot = cnt.reduce((a, b) => a + b, 0), y0 = box.y + box.h + 44, cw = (W - 24 - 6) / 2;
         [[`${r.labels[0]}: ${sA} de ${r.a}`, sA === r.a, A.line], [`${r.labels[1]}: ${sB} de ${r.b}`, sB === r.b, B.line], [`total: ${tot} de ${r.total}`, tot === r.total, C.sky]].forEach(([txt, hit], j) =>
-          SK.chip(p, C, j < 2 ? { x: 12 + j * (cw + 6), y: y0, w: cw, h: 24 } : { x: W / 2 - cw / 2, y: y0 + 29, w: cw, h: 24 }, txt, { state: hit && !VELO.on ? 'ok' : 'idle', size: 12, r: 9, ink: hit ? C.ink : C.mute }));
+          SK.chip(p, C, j < 2 ? { x: 12 + j * (cw + 6), y: y0, w: cw, h: 24 } : { x: W / 2 - cw / 2, y: y0 + 29, w: cw, h: 24 }, txt, { state: hit && !VELO.on ? 'ok' : 'idle', size: 12, r: 9, ink: hit || VELO.on ? C.ink : C.mute }));
         p.textStyle(p.NORMAL); p.textAlign(p.CENTER, p.CENTER);
         p.fill(locked && !good(cnt, r) ? C.ok : C.mute);
         fitText(p, locked && !good(cnt, r) ? `Era: ${t[0]}, ${t[1]}, ${t[2]} y ${t[3]} ninguno` : 'Cada zona cuenta a las personas una sola vez', W / 2, H - 12, W - 24, 11);
@@ -17743,7 +17743,7 @@ GAMES['busca-b'] = (() => {
       const h = holds(B, r);
       r.conds.forEach(([k, X], j) => {
         const b = { x: 12, y: G.cy + j * 50, w: G.W - 24, h: 44 };
-        SK.formal(p, C, b, `$${NAME[k]} = ${tset(X)}$`, { raw: true, kicker: `ahora: ${tset(val(k, r.A, B)).replace(/\\\{|\\\}/g, m => (m === '\\{' ? '{' : '}')).replace('\\varnothing', '∅')}`, col: h[j] ? C.ok : SB.line, size: 15 });
+        SK.formal(p, C, b, `$${NAME[k]} = ${tset(X)}$`, { raw: true, kicker: `ahora: ${tset(val(k, r.A, B)).replace(/\\\{|\\\}/g, m => (m === '\\{' ? '{' : '}')).replace('\\varnothing', '∅')}`, col: h[j] && !VELO.on ? C.ok : SB.line, size: 15 });
       });
     },
     press(G, x, y) { const q = (G.spots || []).find(q => hitBox(q, x, y)); if (!q) return false; G.drag = { v: q.v, tray: !!q.tray, x, y }; return true; },
@@ -17780,6 +17780,7 @@ const RK = (() => {
   function knob(p, C, x, y, col) { p.stroke(col); p.strokeWeight(3); p.fill(C.cream ?? C.card); p.circle(x, y, 22); }
   // Franja de escritura formal, con rótulo pequeño opcional.
   function strip(p, C, b, tex, o = {}) {
+    if (VELO.on) o = { ...o, kicker: '' };   // en evaluación el rótulo no comenta la respuesta
     p.stroke(C.line); p.strokeWeight(1); p.fill(al(p, C.card, 230)); p.rect(b.x, b.y, b.w, b.h, 12);
     p.noStroke(); p.fill(o.col ?? C.brand); p.rect(b.x + 1, b.y + 9, 3, b.h - 18, 2);
     if (o.kicker) { p.fill(C.mute); p.textStyle(p.BOLD); p.textAlign(p.LEFT, p.CENTER); p.textSize(10); p.text(o.kicker, b.x + 14, b.y + 12); }
@@ -18081,7 +18082,7 @@ GAMES['agrupa-amigos'] = (() => {
       const free = r.nums.map((_, i) => i).filter(i => !s.plates.some(P => P.includes(i)));
       free.forEach((i, j) => { const x = G.W / 2 - (free.length * (w + 8) - 8) / 2 + j * (w + 8); G.spots.push({ i, x, y: G.trayY, w, h }); });
       s.plates.forEach((P, k) => {
-        const b = G.pl[k], full = P.length === 2, round = full && sum(r, P) % r.unit === 0;
+        const b = G.pl[k], full = P.length === 2, round = !VELO.on && full && sum(r, P) % r.unit === 0;
         p.stroke(G.locked ? C.ok : round ? C.ok : C.line); p.strokeWeight(round ? 2 : 1.2); p.fill(RK.al(p, C.card, 220)); p.rect(b.x, b.y, b.w, b.h, 14);
         P.forEach((i, j) => G.spots.push({ i, x: b.x + 8 + j * (b.w - 16 - w) , y: b.y + 10, w, h }));
         TK.label(p, C, P.length ? `= ${sum(r, P)}` : 'plato', b.x + b.w / 2, b.y + b.h - 18, round ? C.ok : C.mute, 15, b.w - 10);
@@ -18206,7 +18207,7 @@ GAMES['deshaz-camino'] = (() => {
       // Regreso: y → puerta → puerta → ¿x?
       TK.label(p, C, 'regreso', 36, G.back.y - 30, C.mute, 10, 60);
       const back = [vals.at(-1)]; s.slots.forEach(c => back.push(c == null || back.at(-1) == null ? null : apply(back.at(-1), r.cards[c])));
-      back.forEach((v, i) => { if (v == null) { p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 4]); p.rect(20 + gw * 2 * i, G.back.y - 16, gw, 32, 9); p.drawingContext.setLineDash([]); } else box(i, G.back.y, v, i === back.length - 1 ? (Math.abs(v - r.x) < 1e-9 && !VELO.on ? C.ok : C.coral) : C.sky); });
+      back.forEach((v, i) => { if (v == null) { p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 4]); p.rect(20 + gw * 2 * i, G.back.y - 16, gw, 32, 9); p.drawingContext.setLineDash([]); } else box(i, G.back.y, v, i === back.length - 1 ? (Math.abs(v - r.x) < 1e-9 && !VELO.on ? C.ok : VELO.on ? C.sky : C.coral) : C.sky); });
       G.spots = [];
       s.slots.forEach((c, i) => { const b = G.slot(i); p.stroke(C.brand); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 24)); p.rect(b.x + 4, b.y, b.w - 8, b.h, 9); if (c != null) { G.spots.push({ c, from: i, ...b }); if (G.drag?.c !== c) TK.label(p, C, `$${lab(r.cards[c])}$`, b.x + b.w / 2, b.y + b.h / 2, C.ink, 13, b.w); } });
       // Tarjetas.
@@ -19207,7 +19208,7 @@ GAMES['fraccion-exponente'] = (() => {
       TK.label(p, C, `$\\sqrt[${s.n}]{\\;}$`, G.W * 0.34, 128, C.ink, 14, 50);
       box(G.W * 0.5, `$${+root.toFixed(3)}$`, C.mint); RK.arrow(p, G.W * 0.5 + 42, G.W * 0.83 - 44, 146, C.line, 2);
       TK.label(p, C, `$(\\;)^{${s.m}}$`, G.W * 0.67, 128, C.ink, 14, 50);
-      box(G.W * 0.83, `$${+v.toFixed(3)}$`, Math.abs(v - r.target) < 1e-6 && !VELO.on ? C.ok : C.coral);
+      box(G.W * 0.83, `$${+v.toFixed(3)}$`, Math.abs(v - r.target) < 1e-6 && !VELO.on ? C.ok : VELO.on ? C.sky : C.coral);
       RK.track(p, C, 70, G.W - 30, G.t1, 4, s.n - 1, i => String(i + 1)); TK.label(p, C, 'raíz', 34, G.t1, C.mute, 11, 40);
       RK.track(p, C, 70, G.W - 30, G.t2, 4, s.m - 1, i => String(i + 1)); TK.label(p, C, 'potencia', 34, G.t2, C.mute, 11, 56);
       RK.strip(p, C, G.fb, `$${r.a}^{${s.m}/${s.n}} = (\\sqrt[${s.n}]{${r.a}})^{${s.m}} = ${+v.toFixed(3)}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 17 });
@@ -19551,7 +19552,7 @@ GAMES['razon-terminos'] = (() => {
       const { p, C, r } = G, k = G.locked && !ok(G.s, r) ? need(r) : G.s.k, x = R[k], n = r.j - r.i + 1, w = Math.min(64, (G.W - 24) / n - 6);
       for (let t = 0; t < n; t++) {
         const v = r.ai * x ** t, b = { x: G.W / 2 - (n * (w + 6) - 6) / 2 + t * (w + 6), y: 150, w, h: 42 }, last = t === n - 1;
-        RK.chip(p, C, b, `$${RK.num(+v.toFixed(4))}$`, { on: t === 0 || last, col: last ? (Math.abs(v - r.aj) < 1e-9 && !VELO.on ? C.ok : C.coral) : C.sky, size: 14 });
+        RK.chip(p, C, b, `$${RK.num(+v.toFixed(4))}$`, { on: t === 0 || last, col: last ? (Math.abs(v - r.aj) < 1e-9 && !VELO.on ? C.ok : VELO.on ? C.sky : C.coral) : C.sky, size: 14 });
         TK.label(p, C, `$a_{${r.i + t}}$`, b.x + w / 2, b.y - 14, C.mute, 11, w);
         if (t) TK.label(p, C, `×${RK.num(x).replace(/\\tfrac\{(\d+)\}\{(\d+)\}/, '$1/$2')}`, b.x - 3, b.y + 58, C.mute, 10, 40);
       }
@@ -20543,7 +20544,7 @@ GAMES['diferencia-esquina'] = (() => {
     layout(G) { G.tY = G.H - 104; G.fb = { x: 12, y: G.H - 70, w: G.W - 24, h: 46 }; },
     enter(G) { G.grab = false; },
     draw(G) {
-      const { p, C, r } = G, b = G.locked && !ok(G.s, r) ? Math.sqrt(r.c) : G.s.b, X = 150, k = X / 10, ox = 24, oy = 108, good = b * b === r.c;
+      const { p, C, r } = G, b = G.locked && !ok(G.s, r) ? Math.sqrt(r.c) : G.s.b, X = 150, k = X / 10, ox = 24, oy = 108, good = !VELO.on && b * b === r.c;
       p.stroke(C.bg); p.strokeWeight(1.5); p.fill(C.mint); p.rect(ox, oy, X - b * k, X); p.fill(C.sky); p.rect(ox + X - b * k, oy, b * k, X - b * k);
       p.noFill(); p.stroke(C.coral); p.drawingContext.setLineDash([3, 3]); p.rect(ox + X - b * k, oy + X - b * k, b * k, b * k); p.drawingContext.setLineDash([]);
       TK.label(p, C, `${b}²`, ox + X - b * k / 2, oy + X - b * k / 2, C.coral, 11, 30); TK.label(p, C, 'x', ox + X / 2, oy - 10, C.mute, 11, 20);
@@ -20866,7 +20867,7 @@ GAMES['despeja-x'] = (() => {
       G.cards = r.cards.map((c, i) => ({ i, x: G.W / 2 - (r.cards.length * (w + 6) - 6) / 2 + i * (w + 6), y: G.cardY, w, h: 40 }));
       G.cards.forEach(b => { if (G.drag?.i !== b.i) RK.chip(p, C, b, `$${lab(r.cards[b.i])}$`, { size: 14 }); });
       if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 20, w, h: 40 }, `$${lab(r.cards[G.drag.i])}$`, { on: true, size: 14 });
-      RK.strip(p, C, G.fb, ok(s, r) ? `$x = ${fmt(e.n)}$` : '$\\text{deja la x sola}$', { kicker: 'Lo mismo a los dos lados', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 19 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{lo mismo a los dos lados}$' : ok(s, r) ? `$x = ${fmt(e.n)}$` : '$\\text{deja la x sola}$', { kicker: 'Lo mismo a los dos lados', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 19 });
     },
     press(G, x, y) {
       const b = (G.cards || []).find(b => hitBox(b, x, y)); if (b) { G.drag = { i: b.i, x, y }; return true; }
@@ -21508,7 +21509,7 @@ GAMES['iguala-coeficientes'] = (() => {
         const x = 20 + i * w;
         TK.label(p, C, n, x + w / 2, 110, C.mute, 11, w);
         RK.chip(p, C, { x: x + 4, y: 122, w: w - 8, h: 32 }, String(r.P[i]), { on: true, col: C.sky, size: 14 });
-        RK.chip(p, C, { x: x + 4, y: 164, w: w - 8, h: 32 }, String(Q[i]), { on: true, col: Q[i] === r.P[i] && !VELO.on ? C.ok : C.coral, size: 14 });
+        RK.chip(p, C, { x: x + 4, y: 164, w: w - 8, h: 32 }, String(Q[i]), { on: true, col: Q[i] === r.P[i] && !VELO.on ? C.ok : VELO.on ? C.sky : C.coral, size: 14 });
       });
       TK.label(p, C, 'meta', 14, 138, C.mute, 9, 30); TK.label(p, C, 'tuyo', 14, 180, C.mute, 9, 30);
       G.X1 = RK.track(p, C, 50, G.W - 24, G.t1, 17, s.a + 8, i => (i % 4 === 0 ? String(i - 8) : null)); TK.label(p, C, 'a', 28, G.t1, C.mute, 12, 20);
@@ -22129,7 +22130,7 @@ GAMES['amplifica-fraccion'] = (() => {
       G.cards = r.chips.map((_, i) => ({ i, x: G.W / 2 - (r.chips.length * (w + 6) - 6) / 2 + i * (w + 6), y: G.cy, w, h: 36 }));
       G.cards.forEach(b => { if (G.drag?.i !== b.i) RK.chip(p, C, b, `$${r.chips[b.i]}$`, { size: 13 }); });
       if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 18, w, h: 36 }, `$${r.chips[G.drag.i]}$`, { on: true, size: 13 });
-      RK.strip(p, C, G.fb, ok(s, r) ? `$${r.sum}$` : '$\\text{completa las dos fracciones}$', { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{elige un factor para cada una}$' : ok(s, r) ? `$${r.sum}$` : '$\\text{completa las dos fracciones}$', { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
     },
     press(G, x, y) {
       const b = (G.cards || []).find(b => hitBox(b, x, y)); if (b) { G.drag = { i: b.i, x, y }; return true; }
@@ -22304,7 +22305,7 @@ GAMES['dos-rectas'] = (() => {
         if (e[1] === 0) { const x = e[2] / e[0]; p.stroke(col); p.strokeWeight(2.4); p.line(M.X(x), G.b.y, M.X(x), G.b.y + G.b.h); }
         else RK.curve(p, G.b, M, V, x => (e[2] - e[0] * x) / e[1], col, 2.4);
       });
-      [[r.e1, C.sky], [r.e2, C.coral]].forEach(([e, col], i) => { const b = { x: 12 + i * (G.W - 24) / 2 + 3, y: G.b.y + G.b.h + 8, w: (G.W - 24) / 2 - 6, h: 30 }, yes = on(e, s.x, s.y); RK.chip(p, C, b, `$${eq(e)}$`, { on: yes, col: yes && !VELO.on ? C.ok : col, size: 12 }); });
+      [[r.e1, C.sky], [r.e2, C.coral]].forEach(([e, col], i) => { const b = { x: 12 + i * (G.W - 24) / 2 + 3, y: G.b.y + G.b.h + 8, w: (G.W - 24) / 2 - 6, h: 30 }, yes = on(e, s.x, s.y); RK.chip(p, C, b, `$${eq(e)}$`, { on: yes && !VELO.on, col: yes && !VELO.on ? C.ok : col, size: 12 }); });
       drawDot(p, C, M.X(s.x), M.Y(s.y), 16, ok(s, r) ? C.ok : C.brand);
       RK.strip(p, C, G.fb, `$(x, y) = (${s.x}, ${s.y})$`, { kicker: ok(s, r) ? 'Cumple las dos: es la solución' : 'Busca el cruce', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
     },
@@ -22647,7 +22648,7 @@ GAMES['ajusta-exponencial'] = (() => {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, top = Math.max(...r.pts.map(q => q[1])) * 1.35, V = { x0: -3, x1: 3, y0: 0, y1: Math.ceil(top) };
       const M = RK.plane(p, C, G.b, V, { step: 1 });
       RK.curve(p, G.b, M, V, x => s.a * B[s.bi] ** x, ok(s, r) ? C.ok : C.sky, 2.6);
-      r.pts.forEach(([x, y]) => { const hit = Math.abs(s.a * B[s.bi] ** x - y) < 1e-9; drawDot(p, C, M.X(x), M.Y(y), 13, hit && !VELO.on ? C.ok : C.coral); });
+      r.pts.forEach(([x, y]) => { const hit = Math.abs(s.a * B[s.bi] ** x - y) < 1e-9; drawDot(p, C, M.X(x), M.Y(y), 13, hit && !VELO.on ? C.ok : VELO.on ? C.sky : C.coral); });
       G.X = [RK.track(p, C, 40, G.W - 30, G.tr[0], 6, s.a - 1, i => String(i + 1), C.sky), RK.track(p, C, 40, G.W - 30, G.tr[1], B.length, s.bi, i => `$${BT[i]}$`, C.coral)];
       TK.label(p, C, 'a', 20, G.tr[0], C.mute, 13, 20); TK.label(p, C, 'b', 20, G.tr[1], C.mute, 13, 20);
       RK.strip(p, C, G.fb, `$y = ${s.a} \\cdot \\left(${BT[s.bi]}\\right)^x$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 17 });
@@ -23292,7 +23293,7 @@ GAMES['puntos-o-porciento'] = (() => {
       p.noStroke(); p.fill(RK.al(p, good ? C.ok : C.coral, 150)); p.rect(x0, y + 80, pred * u, 24, 4);
       TK.label(p, C, `${r.from} con ${pc > 0 ? '+' : ''}${pc} %: ${+pred.toFixed(2)}`, G.W / 2, y + 120, good ? C.ok : C.mute, 11, G.W - 30);
       G.X = RK.track(p, C, 24, G.W - 24, G.tY, P.length, P.indexOf(pc), i => (i % 5 === 0 ? `${P[i]}` : null));
-      RK.strip(p, C, G.fb, `$\\dfrac{${r.to} - ${r.from}}{${r.from}} ${good ? '=' : '\\ne'} ${pc}\\%$`, { kicker: `${Math.abs(r.to - r.from)} puntos de diferencia`, col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
+      RK.strip(p, C, G.fb, `$\\dfrac{${r.to} - ${r.from}}{${r.from}} ${VELO.on ? '\\;?\\;' : good ? '=' : '\\ne'} ${pc}\\%$`, { kicker: `${Math.abs(r.to - r.from)} puntos de diferencia`, col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 18 });
     },
     press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
     drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
@@ -24457,7 +24458,7 @@ GAMES['tales-rectas'] = (() => {
       [[A, 'A'], [B, 'B'], [A2, "A'"], [O, 'O']].forEach(([q, t]) => { drawDot(p, C, q.x, q.y, 9, C.ink); TK.label(p, C, t, q.x, q.y + 14, C.mute, 10, 24); });
       RK.knob(p, C, B2.x, B2.y, C.brand); TK.label(p, C, "B'", B2.x, B2.y - 18, C.ink, 11, 24); G.B2 = B2;
       TK.label(p, C, String(r.a), (O.x + A.x) / 2, O.y + 14, C.ink, 10, 30); TK.label(p, C, String(r.b), (A.x + B.x) / 2, O.y + 14, C.ink, 10, 30);
-      RK.strip(p, C, G.fb, `$\\dfrac{${r.a}}{${r.b}} ${good ? '=' : '\\ne'} \\dfrac{${r.c}}{${RK.num(s.d)}}$`, { kicker: `A'B' = ${String(s.d)}`, col: G.locked || good ? C.ok : C.brand, size: 17 });
+      RK.strip(p, C, G.fb, `$\\dfrac{${r.a}}{${r.b}} ${VELO.on ? '\\;?\\;' : good ? '=' : '\\ne'} \\dfrac{${r.c}}{${RK.num(s.d)}}$`, { kicker: `A'B' = ${String(s.d)}`, col: G.locked || good ? C.ok : C.brand, size: 17 });
     },
     press(G, x, y) { if (Math.hypot(x - G.B2.x, y - G.B2.y) > 44) return false; G.grab = true; return true; },
     drag(G, x, y) {
@@ -24881,13 +24882,13 @@ const ORD = (() => {
   // Lista de pistas con ✓ cuando ya se cumplen (en gris si todavía no se pueden juzgar).
   function drawClues(G, x, y, w, circ) {
     const { p, C, r } = G;
-    r.clues.forEach((c, i) => { const v = sat(G.s.arr, c, circ); TK.label(p, C, `${v === true ? '✓' : v === false ? '✗' : '·'} ${c.say}`, x + w / 2, y + i * 15, v === true ? C.ok : v === false ? C.bad : C.mute, 10, w); });
+    r.clues.forEach((c, i) => { const v = VELO.on ? null : sat(G.s.arr, c, circ); TK.label(p, C, `${v === true ? '✓' : v === false ? '✗' : '·'} ${c.say}`, x + w / 2, y + i * 15, v === true ? C.ok : v === false ? C.bad : C.mute, 10, w); });
   }
   // Juego de acomodar nombres en casillas con pistas. o = { circ, fixFirst (la primera persona ya está en la casilla 0), aspect, slots(G) → [{x, y, w, h}], label(i, r) → rótulo de la
   // casilla, decor(G) (dibujo de la escena, debajo de las fichas), cluesY(G), prompt(r), foot, color }.
   function slotGame(o) {
     const circ = !!o.circ;
-    const ok = (s, r) => s.arr.every(x => x != null) && r.clues.every(c => sat(s.arr, c, circ));
+    const ok = velo((s, r) => s.arr.every(x => x != null) && r.clues.every(c => sat(s.arr, c, circ)));
     const sols = r => solutions(r.names, r.clues, circ, !!o.fixFirst);
     // En círculo cualquier giro de la solución también vale: se muestra la que deja a la primera persona en la casilla 0.
     const answer = r => ({ arr: sols(r)[0] });
@@ -25341,7 +25342,7 @@ GAMES['comite-reglas'] = (() => {
       G.inBoxes.forEach(b => { if (G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { on: true, size: 12, col: good ? C.ok : C.mint }); });
       r.rules.forEach((c, i) => { const v = rule(c, s.in); TK.label(p, C, `${VELO.on ? '·' : v ? '✓' : '✗'} ${c.say}`, G.W / 2, 226 + i * 15, VELO.on ? C.ink : v ? C.ok : C.bad, 10, G.W - 30); });
       if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 15, w, h: 30 }, G.drag.nm, { on: true, col: C.brand, size: 12 });
-      RK.strip(p, C, G.fb, good ? `$\\text{${s.in.join(', ')}}$` : `$\\text{faltan ${Math.max(0, r.k - s.in.length)}}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, good || (VELO.on && s.in.length >= r.k) ? `$\\text{${s.in.join(', ')}}$` : `$\\text{faltan ${Math.max(0, r.k - s.in.length)}}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) {
       const b = [...(G.inBoxes || []), ...G.home.filter(b => !G.s.in.includes(b.nm))].find(b => hitBox(b, x, y)); if (!b) return false;
@@ -25390,10 +25391,10 @@ GAMES['tiene-podria'] = (() => {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, w = G.home[0].w;
       G.home.forEach(b => { if (!s.in.includes(b.nm) && G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { size: 11, col: C.sky }); });
       const v = CR().valid(r, s.in);
-      p.stroke(s.in.length === r.k ? (v ? C.ok : C.bad) : C.line); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 16)); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 10);
+      p.stroke(s.in.length === r.k && !VELO.on ? (v ? C.ok : C.bad) : C.line); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 16)); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 10);
       G.inBoxes = s.in.map((nm, i) => ({ nm, x: G.box.x + 8 + i * (w + 4), y: G.box.y + 7, w, h: 26 }));
       G.inBoxes.forEach(b => { if (G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { on: true, size: 11, col: C.mint }); });
-      TK.label(p, C, s.in.length < r.k ? `prueba un caso (${s.in.length} de ${r.k})` : v ? 'este caso cumple las reglas' : 'este caso no cumple', G.W / 2, G.box.y + G.box.h + 10, s.in.length < r.k ? C.mute : v ? C.ok : C.bad, 10, G.W - 30);
+      TK.label(p, C, s.in.length < r.k ? `prueba un caso (${s.in.length} de ${r.k})` : VELO.on ? 'un caso posible de prueba' : v ? 'este caso cumple las reglas' : 'este caso no cumple', G.W / 2, G.box.y + G.box.h + 10, s.in.length < r.k || VELO.on ? C.mute : v ? C.ok : C.bad, 10, G.W - 30);
       r.rules.forEach((c, i) => TK.label(p, C, c.say, G.W / 2, 100 + i * 13, C.ink, 10, G.W - 30));
       G.zones.forEach(z => { p.stroke(C.line); p.strokeWeight(1.2); p.fill(RK.al(p, C.card, 170)); p.rect(z.x, z.y, z.w, z.h, 8); TK.label(p, C, ZN[z.z], z.x + z.w / 2, z.y + 10, C.ink, 10, z.w); });
       const cw = G.W - 40, n = r.claims.length;
@@ -25449,7 +25450,7 @@ GAMES['trabajo-conjunto'] = (() => {
       TK.label(p, C, `${r.who[0]}: ${RK.num(Math.round(fa * 1000) / 1000)}`, x0 - 50, y0 + h - ha / 2, C.sky, 10, 90);
       TK.label(p, C, `${r.who[1]}: ${RK.num(Math.round(fb * 1000) / 1000)}`, x0 + 150, y0 + h - ha - hb / 2, C.coral, 10, 90);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, N(r), Math.round(s.t * 2) - 1, i => ((i + 1) % 2 === 0 ? String((i + 1) / 2) : null));
-      RK.strip(p, C, G.fb, `$\\tfrac{${RK.num(s.t)}}{${r.a}} + \\tfrac{${RK.num(s.t)}}{${r.b}} ${good ? '= 1' : tot > 1 ? '> 1' : '< 1'}$`, { kicker: 'Lo que hace cada uno se suma', col: G.locked || good ? C.ok : C.brand, size: 18 });
+      RK.strip(p, C, G.fb, `$\\tfrac{${RK.num(s.t)}}{${r.a}} + \\tfrac{${RK.num(s.t)}}{${r.b}} ${VELO.on ? '' : good ? '= 1' : tot > 1 ? '> 1' : '< 1'}$`, { kicker: 'Lo que hace cada uno se suma', col: G.locked || good ? C.ok : C.brand, size: 18 });
     },
     press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
     drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
@@ -25489,7 +25490,7 @@ GAMES['velocidad-media'] = (() => {
       p.fill(good ? C.ok : C.mint); p.rect(30, 186, tv * u, 24, 3);
       TK.label(p, C, `${D(r)} km ÷ ${s.v} = ${RK.num(Math.round(tv * 100) / 100)} h`, G.W / 2, 222, C.ink, 11, G.W - 30);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, 24, s.v / 5 - 1, i => ((i + 1) % 4 === 0 ? String((i + 1) * 5) : null));
-      RK.strip(p, C, G.fb, `$v_m = \\dfrac{${D(r)}}{${RK.num(T(r))}} ${good ? '=' : '\\ne'} ${s.v}$`, { kicker: 'Distancia total ÷ tiempo total', col: G.locked || good ? C.ok : C.brand, size: 17 });
+      RK.strip(p, C, G.fb, `$v_m = \\dfrac{${D(r)}}{${RK.num(T(r))}} ${VELO.on ? '\\;?\\;' : good ? '=' : '\\ne'} ${s.v}$`, { kicker: 'Distancia total ÷ tiempo total', col: G.locked || good ? C.ok : C.brand, size: 17 });
     },
     press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
     drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
@@ -26105,9 +26106,9 @@ GAMES['torres-vistas'] = (() => {
       const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { h: want(r) } : G.s, c = G.c, o = G.o, v = views(s.h), good = G.locked && ok(s, r);
       TK.label(p, C, 'desde arriba', o.x + r.front.length * c / 2, o.y - 34, C.mute, 10, 120);
       s.h.forEach((row, j) => row.forEach((hv, i) => { p.stroke(C.ink); p.strokeWeight(1.2); p.fill(RK.al(p, good ? C.ok : C.sky, 40 + hv * 50)); p.rect(o.x + i * c, o.y + j * c, c, c); TK.label(p, C, String(hv), o.x + i * c + c / 2, o.y + j * c + c / 2, C.ink, 13, c); }));
-      r.front.forEach((fv, i) => { const vv = v.front[i]; TK.label(p, C, `${fv}`, o.x + i * c + c / 2, o.y - 14, vv === fv && !VELO.on ? C.ok : C.coral, 11, c); });
+      r.front.forEach((fv, i) => { const vv = v.front[i]; TK.label(p, C, `${fv}`, o.x + i * c + c / 2, o.y - 14, VELO.on ? C.ink : vv === fv ? C.ok : C.coral, 11, c); });
       TK.label(p, C, 'frente ↑', o.x - 22, o.y - 14, C.mute, 8, 40);
-      r.side.forEach((sv, j) => { const vv = v.side[j]; TK.label(p, C, `${sv}`, o.x + r.front.length * c + 14, o.y + j * c + c / 2, vv === sv && !VELO.on ? C.ok : C.coral, 11, 24); });
+      r.side.forEach((sv, j) => { const vv = v.side[j]; TK.label(p, C, `${sv}`, o.x + r.front.length * c + 14, o.y + j * c + c / 2, VELO.on ? C.ink : vv === sv ? C.ok : C.coral, 11, 24); });
       TK.label(p, C, 'lado →', o.x + r.front.length * c + 40, o.y - 14, C.mute, 8, 50);
       const tot = s.h.flat().reduce((a, b) => a + b, 0);
       RK.strip(p, C, G.fb, `$\\text{${tot} cubos}$`, { kicker: 'Los números de afuera son las vistas pedidas', col: G.locked || good ? C.ok : C.brand, size: 17 });
@@ -26275,7 +26276,7 @@ GAMES['caras-opuestas'] = (() => {
       G.tray = r.letters.map((L, i) => ({ L, x: G.W / 2 - (r.letters.length * 40 - 6) / 2 + i * 40, y: G.H - 110, w: 34, h: 32 }));
       G.tray.forEach(b => RK.chip(p, C, b, b.L, { size: 13, col: C.coral }));
       if (G.drag) RK.chip(p, C, { x: G.drag.x - 17, y: G.drag.y - 16, w: 34, h: 32 }, G.drag.L, { on: true, col: C.brand, size: 13 });
-      RK.strip(p, C, G.fb, good ? '$\\text{bien doblado}$' : '$\\text{dobla el desarrollo en tu cabeza}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{una cara para cada casilla}$' : good ? '$\\text{bien doblado}$' : '$\\text{dobla el desarrollo en tu cabeza}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) { const t = (G.tray || []).find(b => hitBox(b, x, y)); if (t) { G.drag = { L: t.L, x, y }; return true; } const b = G.slots.find(b => hitBox(b, x, y)); if (b && G.s.put[b.k] != null) { G.drag = { L: G.s.put[b.k], x, y }; G.s.put[b.k] = null; return true; } return false; },
     drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
@@ -26555,7 +26556,7 @@ GAMES['espejo-palabra'] = (() => {
 // o = { aspect, prompt(r), foot, terms(r) → [números] (con null en el que falta), need(r), range(r) → [mín, máx] del valor, extra(G), fmt(v) → rótulo, noBars }
 const SUC = (() => {
   function nextGame(o) {
-    const ok = (s, r) => s.v === o.need(r);
+    const ok = velo((s, r) => s.v === o.need(r));
     const game = roundsGame({
       aspect: o.aspect || 1.25,
       init: r => { const [lo] = o.range(r); return { v: o.need(r) === lo ? lo + 1 : lo }; },
@@ -26825,7 +26826,7 @@ GAMES['ultima-cifra'] = (() => {
 //       casilla i, decor(G), done(r) → texto al acertar, col(C), alt(r) → [[otras respuestas igual de válidas]] (p. ej. ¬q ∨ ¬p) }
 const CODK = (() => {
   function fillGame(o) {
-    const ok = (s, r) => [o.need(r), ...(o.alt ? o.alt(r) || [] : [])].some(nd => nd.every((k, i) => s.f[i] === k));
+    const ok = velo((s, r) => [o.need(r), ...(o.alt ? o.alt(r) || [] : [])].some(nd => nd.every((k, i) => s.f[i] === k)));
     const answer = r => ({ f: o.need(r).slice() });
     const game = roundsGame({
       aspect: o.aspect || 1.25,
@@ -26852,7 +26853,7 @@ const CODK = (() => {
         G.tray = T.map((t, i) => { const row = Math.floor(i / per), inRow = Math.min(per, T.length - row * per), tx0 = (G.W - inRow * (tw + 6) + 6) / 2; return { x: tx0 + (i % per) * (tw + 6), y: ty0 + row * 46, w: tw, h: 38, k: i }; });
         G.tray.forEach(b => RK.chip(p, C, b, T[b.k], { on: false, size: 14 }));
         if (G.drag) RK.chip(p, C, { x: G.drag.x - tw / 2, y: G.drag.y - 19, w: tw, h: 38 }, T[G.drag.k], { on: true, col: C.brand, size: 14 });
-        RK.strip(p, C, G.fb, good ? ((d => (d.includes('$') ? d : `$\\text{${d}}$`))(o.done ? o.done(r) : 'código correcto')) : '$\\text{completa todas las casillas}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+        RK.strip(p, C, G.fb, good ? ((d => (d.includes('$') ? d : `$\\text{${d}}$`))(o.done ? o.done(r) : 'código correcto')) : VELO.on ? '$\\text{una ficha en cada casilla}$' : '$\\text{completa todas las casillas}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
       },
       press(G, x, y) {
         const t = (G.tray || []).find(b => hitBox(b, x, y));
@@ -27962,7 +27963,7 @@ GAMES['contraejemplo'] = (() => {
         return b;
       });
       const it = s.pick >= 0 ? r.items[s.pick] : null;
-      RK.strip(p, C, G.fb, it === null ? '$\\text{elige una ficha}$' : good ? `$\\text{${it}: la frase cae}$` : `$\\text{${it}: la frase sigue en pie}$`, { col: G.locked || good ? C.ok : C.brand, size: 16 });
+      RK.strip(p, C, G.fb, it === null ? '$\\text{elige una ficha}$' : VELO.on ? `$\\text{${it}}$` : good ? `$\\text{${it}: la frase cae}$` : `$\\text{${it}: la frase sigue en pie}$`, { col: G.locked || good ? C.ok : C.brand, size: 16 });
     },
     press(G, x, y) { const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false; G.s.pick = c.i; G.touch(); return true; },
     demo: G => (G.cells ? { from: { x: G.cells[0].x + 20, y: G.cells[0].y + 20 }, to: { x: G.cells[0].x + 20, y: G.cells[0].y + 20 }, text: 'Toca una ficha', ty: G.cells.at(-1).y + 76 } : null),
@@ -28094,7 +28095,7 @@ GAMES['arma-silogismo'] = (() => {
         p.stroke(cols[i % 3]); p.strokeWeight(2); p.fill(RK.al(p, cols[i % 3], 40)); p.circle(cx, cy, 2 * z.r * u);
         TK.label(p, C, z.name, cx, cy - z.r * u + 12, C.ink, 10, z.r * u * 1.6);
       });
-      RK.strip(p, C, G.fb, good ? '$\\text{todas las premisas dibujadas}$' : `$\\text{${r.rels.filter(x => rel(s, r, x)).length} de ${r.rels.length} premisas}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{acomoda los círculos}$' : good ? '$\\text{todas las premisas dibujadas}$' : `$\\text{${r.rels.filter(x => rel(s, r, x)).length} de ${r.rels.length} premisas}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) {
       const u = G.u, o = G.o, list = G.r.sets.slice().sort((a, b) => a.r - b.r);
@@ -28149,7 +28150,7 @@ GAMES['quien-miente'] = (() => {
         return { x: 16, y, w: G.W - 32, h: rh - 8, i };
       });
       const condBad = all && r.cond && !r.cond(s.T);
-      RK.strip(p, C, G.fb, !all ? '$\\text{supón algo de cada uno}$' : good ? '$\\text{todo cuadra}$' : condBad ? '$\\text{no cumple la condición}$' : '$\\text{hay frases que chocan}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, !all ? '$\\text{supón algo de cada uno}$' : VELO.on ? '$\\text{todos tienen su papel}$' : good ? '$\\text{todo cuadra}$' : condBad ? '$\\text{no cumple la condición}$' : '$\\text{hay frases que chocan}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) { const c = (G.cards || []).find(b => hitBox(b, x, y)); if (!c) return false; const t = G.s.T[c.i]; G.s.T[c.i] = t === null ? true : !t; G.touch(); return true; },
     demo: G => (G.cards ? { from: { x: 60, y: G.cards[0].y + 24 }, to: { x: 60, y: G.cards[0].y + 24 }, text: 'Toca para suponer', ty: G.cards.at(-1).y + G.cards.at(-1).h + 18 } : null),
@@ -28643,7 +28644,7 @@ GAMES['cripto-letras'] = (() => {
         return { x, y, w };
       });
       const eqOk = !!r.f(v);
-      RK.strip(p, C, G.fb, good ? '$\\text{se cumple}$' : dup.length ? '$\\text{hay dos letras con la misma cifra}$' : eqOk ? '$\\text{revisa: ¿empieza en 0?}$' : '$\\text{la cuenta no se cumple}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{una cifra para cada letra}$' : good ? '$\\text{se cumple}$' : dup.length ? '$\\text{hay dos letras con la misma cifra}$' : eqOk ? '$\\text{revisa: ¿empieza en 0?}$' : '$\\text{la cuenta no se cumple}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) { const i = (G.wheels || []).findIndex(q => Math.abs(x - q.x) < q.w * 0.4 && Math.abs(y - q.y) < 52); if (i < 0) return false; G.grab = i; G.y0 = y; G.d0 = G.s.d[i]; return true; },
     drag(G, x, y) { if (G.grab < 0) return false; const d = ((G.d0 + Math.round((G.y0 - y) / 22)) % 10 + 10) % 10; if (d !== G.s.d[G.grab]) { G.s.d[G.grab] = d; G.touch(); } return true; },
@@ -28732,7 +28733,7 @@ GAMES['peor-caso-bolsa'] = (() => {
         p.stroke(C.ink); p.strokeWeight(out ? 1.5 : 0.6); p.fill(out ? C[c] : RK.al(p, C[c], 50)); p.circle(x, y, d * 0.8);
       });
       const m = meets(r, w.slice(0, s.n)), prev = s.n > 1 && meets(r, w.slice(0, s.n - 1));
-      TK.label(p, C, m ? (prev ? 'se cumple, pero con menos también' : 'aun con la peor suerte, se cumple') : 'con mala suerte, todavía no', G.W / 2, 130 + Math.ceil(T / per) * d + 10, m ? (prev ? C.coral : C.ok) : C.bad, 11, G.W - 24);
+      if (!VELO.on) TK.label(p, C, m ? (prev ? 'se cumple, pero con menos también' : 'aun con la peor suerte, se cumple') : 'con mala suerte, todavía no', G.W / 2, 130 + Math.ceil(T / per) * d + 10, m ? (prev ? C.coral : C.ok) : C.bad, 11, G.W - 24);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, T, s.n - 1, k => ((k + 1) % 5 === 0 || k === 0 ? String(k + 1) : null), good ? C.ok : C.brand);
       RK.strip(p, C, G.fb, `$\\text{sacar ${s.n}}$`, { kicker: good ? 'el menor número seguro' : '', col: G.locked || good ? C.ok : C.brand, size: 17 });
     },
@@ -29003,8 +29004,8 @@ GAMES['intervalo-solucion'] = (() => {
       RK.knob(p, C, X(s.b), ax.y - 30, C.brand);
       if (s.dir) {
         const t = s.b + s.dir * 2, val = r.f(t);
-        TK.label(p, C, `prueba con x = ${t}: ${val ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 46, val ? C.ok : C.bad, 11, G.W - 30);
-        const e = r.f(s.b); TK.label(p, C, `y con x = ${s.b}: ${e ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 64, e === s.closed && !VELO.on ? C.ok : C.bad, 11, G.W - 30);
+        TK.label(p, C, `prueba con x = ${t}: ${val ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 46, VELO.on ? C.ink : val ? C.ok : C.bad, 11, G.W - 30);
+        const e = r.f(s.b); TK.label(p, C, `y con x = ${s.b}: ${e ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 64, VELO.on ? C.ink : e === s.closed ? C.ok : C.bad, 11, G.W - 30);
       }
       RK.strip(p, C, G.fb, s.dir ? `$x ${sym(s)} ${s.b}$` : '$\\text{toca un lado de la recta}$', { col: G.locked || good ? C.ok : C.brand, size: 18 });
     },
@@ -29070,7 +29071,7 @@ GAMES['encuesta-tres'] = (() => {
       TK.label(p, C, 'ninguno', G.cent.none[0], G.cent.none[1] - 20, C.mute, 9, 60);
       const want = data(r, r.z), now = data(r, s.v), y0 = G.box.y + G.box.h + 12, colW = (G.W - 24) / 2;
       want.forEach(([lab, n], i) => { const hit = now[i][1] === n, x = 12 + (i % 2) * colW + colW / 2, y = y0 + Math.floor(i / 2) * 15; TK.label(p, C, `${VELO.on ? '·' : hit ? '✓' : '·'} ${lab}: ${n} (van ${now[i][1]})`, x, y, hit && !VELO.on ? C.ok : C.ink, 9, colW - 4); });
-      RK.strip(p, C, G.fb, good ? '$\\text{el diagrama cuadra con la encuesta}$' : `$\\text{${want.filter((w, i) => now[i][1] === w[1]).length} de ${want.length} datos}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{una cuenta para cada zona}$' : good ? '$\\text{el diagrama cuadra con la encuesta}$' : `$\\text{${want.filter((w, i) => now[i][1] === w[1]).length} de ${want.length} datos}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) { const k = KEYS.find(q => Math.abs(x - G.cent[q][0]) < 22 && Math.abs(y - G.cent[q][1]) < 18); if (!k) return false; G.grab = { k, y0: y, v0: G.s.v[k] }; return true; },
     drag(G, x, y) { if (!G.grab) return false; const v = Math.max(0, Math.min(60, G.grab.v0 + Math.round((G.grab.y0 - y) / 12))); if (v !== G.s.v[G.grab.k]) { G.s.v[G.grab.k] = v; G.touch(); } return true; },
@@ -29209,7 +29210,7 @@ GAMES['arbol-factores'] = (() => {
       T.nodes.forEach((nd, i) => { if (nd.kids) nd.kids.forEach(k => { p.stroke(C.line); p.strokeWeight(1.5); p.line(pos[i].x, pos[i].y, pos[k].x, pos[k].y); }); });
       G.leafBoxes = [];
       T.nodes.forEach((nd, i) => {
-        const q = pos[i], leaf = !nd.kids, pr = leaf && isP(nd.v);
+        const q = pos[i], leaf = !nd.kids, pr = !VELO.on && leaf && isP(nd.v);
         p.stroke(pr ? C.ok : C.line); p.strokeWeight(pr ? 2 : 1); p.fill(leaf ? (pr ? RK.al(p, C.ok, 70) : RK.al(p, C.card, 230)) : RK.al(p, C.line, 60)); p.circle(q.x, q.y, 34);
         TK.label(p, C, String(nd.v), q.x, q.y, C.ink, 12, 32);
         if (leaf) G.leafBoxes.push({ x: q.x, y: q.y, li: T.leaves.indexOf(i), v: nd.v });

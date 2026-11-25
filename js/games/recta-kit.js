@@ -18,6 +18,7 @@ const RK = (() => {
   function knob(p, C, x, y, col) { p.stroke(col); p.strokeWeight(3); p.fill(C.cream ?? C.card); p.circle(x, y, 22); }
   // Franja de escritura formal, con rótulo pequeño opcional.
   function strip(p, C, b, tex, o = {}) {
+    if (VELO.on) o = { ...o, kicker: '' };   // en evaluación el rótulo no comenta la respuesta
     p.stroke(C.line); p.strokeWeight(1); p.fill(al(p, C.card, 230)); p.rect(b.x, b.y, b.w, b.h, 12);
     p.noStroke(); p.fill(o.col ?? C.brand); p.rect(b.x + 1, b.y + 9, 3, b.h - 18, 2);
     if (o.kicker) { p.fill(C.mute); p.textStyle(p.BOLD); p.textAlign(p.LEFT, p.CENTER); p.textSize(10); p.text(o.kicker, b.x + 14, b.y + 12); }

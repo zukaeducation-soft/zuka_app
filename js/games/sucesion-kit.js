@@ -4,7 +4,7 @@
 // o = { aspect, prompt(r), foot, terms(r) → [números] (con null en el que falta), need(r), range(r) → [mín, máx] del valor, extra(G), fmt(v) → rótulo, noBars }
 const SUC = (() => {
   function nextGame(o) {
-    const ok = (s, r) => s.v === o.need(r);
+    const ok = velo((s, r) => s.v === o.need(r));
     const game = roundsGame({
       aspect: o.aspect || 1.25,
       init: r => { const [lo] = o.range(r); return { v: o.need(r) === lo ? lo + 1 : lo }; },

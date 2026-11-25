@@ -34,7 +34,7 @@ GAMES['arbol-factores'] = (() => {
       T.nodes.forEach((nd, i) => { if (nd.kids) nd.kids.forEach(k => { p.stroke(C.line); p.strokeWeight(1.5); p.line(pos[i].x, pos[i].y, pos[k].x, pos[k].y); }); });
       G.leafBoxes = [];
       T.nodes.forEach((nd, i) => {
-        const q = pos[i], leaf = !nd.kids, pr = leaf && isP(nd.v);
+        const q = pos[i], leaf = !nd.kids, pr = !VELO.on && leaf && isP(nd.v);
         p.stroke(pr ? C.ok : C.line); p.strokeWeight(pr ? 2 : 1); p.fill(leaf ? (pr ? RK.al(p, C.ok, 70) : RK.al(p, C.card, 230)) : RK.al(p, C.line, 60)); p.circle(q.x, q.y, 34);
         TK.label(p, C, String(nd.v), q.x, q.y, C.ink, 12, 32);
         if (leaf) G.leafBoxes.push({ x: q.x, y: q.y, li: T.leaves.indexOf(i), v: nd.v });

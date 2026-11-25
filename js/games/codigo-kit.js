@@ -5,7 +5,7 @@
 //       casilla i, decor(G), done(r) → texto al acertar, col(C), alt(r) → [[otras respuestas igual de válidas]] (p. ej. ¬q ∨ ¬p) }
 const CODK = (() => {
   function fillGame(o) {
-    const ok = (s, r) => [o.need(r), ...(o.alt ? o.alt(r) || [] : [])].some(nd => nd.every((k, i) => s.f[i] === k));
+    const ok = velo((s, r) => [o.need(r), ...(o.alt ? o.alt(r) || [] : [])].some(nd => nd.every((k, i) => s.f[i] === k)));
     const answer = r => ({ f: o.need(r).slice() });
     const game = roundsGame({
       aspect: o.aspect || 1.25,
@@ -32,7 +32,7 @@ const CODK = (() => {
         G.tray = T.map((t, i) => { const row = Math.floor(i / per), inRow = Math.min(per, T.length - row * per), tx0 = (G.W - inRow * (tw + 6) + 6) / 2; return { x: tx0 + (i % per) * (tw + 6), y: ty0 + row * 46, w: tw, h: 38, k: i }; });
         G.tray.forEach(b => RK.chip(p, C, b, T[b.k], { on: false, size: 14 }));
         if (G.drag) RK.chip(p, C, { x: G.drag.x - tw / 2, y: G.drag.y - 19, w: tw, h: 38 }, T[G.drag.k], { on: true, col: C.brand, size: 14 });
-        RK.strip(p, C, G.fb, good ? ((d => (d.includes('$') ? d : `$\\text{${d}}$`))(o.done ? o.done(r) : 'código correcto')) : '$\\text{completa todas las casillas}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+        RK.strip(p, C, G.fb, good ? ((d => (d.includes('$') ? d : `$\\text{${d}}$`))(o.done ? o.done(r) : 'código correcto')) : VELO.on ? '$\\text{una ficha en cada casilla}$' : '$\\text{completa todas las casillas}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
       },
       press(G, x, y) {
         const t = (G.tray || []).find(b => hitBox(b, x, y));

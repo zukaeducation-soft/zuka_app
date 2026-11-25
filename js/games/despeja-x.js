@@ -33,7 +33,7 @@ GAMES['despeja-x'] = (() => {
       G.cards = r.cards.map((c, i) => ({ i, x: G.W / 2 - (r.cards.length * (w + 6) - 6) / 2 + i * (w + 6), y: G.cardY, w, h: 40 }));
       G.cards.forEach(b => { if (G.drag?.i !== b.i) RK.chip(p, C, b, `$${lab(r.cards[b.i])}$`, { size: 14 }); });
       if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 20, w, h: 40 }, `$${lab(r.cards[G.drag.i])}$`, { on: true, size: 14 });
-      RK.strip(p, C, G.fb, ok(s, r) ? `$x = ${fmt(e.n)}$` : '$\\text{deja la x sola}$', { kicker: 'Lo mismo a los dos lados', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 19 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{lo mismo a los dos lados}$' : ok(s, r) ? `$x = ${fmt(e.n)}$` : '$\\text{deja la x sola}$', { kicker: 'Lo mismo a los dos lados', col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 19 });
     },
     press(G, x, y) {
       const b = (G.cards || []).find(b => hitBox(b, x, y)); if (b) { G.drag = { i: b.i, x, y }; return true; }

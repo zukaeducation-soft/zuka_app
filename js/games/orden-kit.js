@@ -62,13 +62,13 @@ const ORD = (() => {
   // Lista de pistas con ✓ cuando ya se cumplen (en gris si todavía no se pueden juzgar).
   function drawClues(G, x, y, w, circ) {
     const { p, C, r } = G;
-    r.clues.forEach((c, i) => { const v = sat(G.s.arr, c, circ); TK.label(p, C, `${v === true ? '✓' : v === false ? '✗' : '·'} ${c.say}`, x + w / 2, y + i * 15, v === true ? C.ok : v === false ? C.bad : C.mute, 10, w); });
+    r.clues.forEach((c, i) => { const v = VELO.on ? null : sat(G.s.arr, c, circ); TK.label(p, C, `${v === true ? '✓' : v === false ? '✗' : '·'} ${c.say}`, x + w / 2, y + i * 15, v === true ? C.ok : v === false ? C.bad : C.mute, 10, w); });
   }
   // Juego de acomodar nombres en casillas con pistas. o = { circ, fixFirst (la primera persona ya está en la casilla 0), aspect, slots(G) → [{x, y, w, h}], label(i, r) → rótulo de la
   // casilla, decor(G) (dibujo de la escena, debajo de las fichas), cluesY(G), prompt(r), foot, color }.
   function slotGame(o) {
     const circ = !!o.circ;
-    const ok = (s, r) => s.arr.every(x => x != null) && r.clues.every(c => sat(s.arr, c, circ));
+    const ok = velo((s, r) => s.arr.every(x => x != null) && r.clues.every(c => sat(s.arr, c, circ)));
     const sols = r => solutions(r.names, r.clues, circ, !!o.fixFirst);
     // En círculo cualquier giro de la solución también vale: se muestra la que deja a la primera persona en la casilla 0.
     const answer = r => ({ arr: sols(r)[0] });

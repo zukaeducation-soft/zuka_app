@@ -16,6 +16,14 @@ test('el velo se prende al dibujar en evaluación y se apaga siempre', () => {
   assert.match(read('js/games/kit.js'), /dataset\?\.examen\) \{[^\n]*VELO\.on = true;[^\n]*finally \{ VELO\.on = false;/);
 });
 
+test('la demostración se dibuja sin velo, el pie y el rótulo no comentan la respuesta y los armazones también callan', () => {
+  const kit = read('js/games/kit.js');
+  assert.match(kit, /VELO\.on = false; const d = def\.demo\(G\); VELO\.on = v;/);
+  assert.match(kit, /def\.foot\?\.\(G\.r, VELO\.on \?/);
+  assert.match(read('js/games/recta-kit.js'), /if \(VELO\.on\) o = \{ \.\.\.o, kicker: '' \}/);
+  for (const k of ['sucesion-kit', 'codigo-kit', 'orden-kit']) assert.match(read(`js/games/${k}.js`), /const ok = velo\(/, k);
+});
+
 test('los juegos por rondas de las evaluaciones tapan su comprobación y la calificación no cambia', () => {
   const html = read('index.html');
   const all = [...new Set([...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]))].filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso|conceptos|gimnasio|explora(?!-voces)/.test(f) && fs.existsSync(path.join(ROOT, f)));

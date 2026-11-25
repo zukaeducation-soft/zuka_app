@@ -311,6 +311,8 @@ Desde 1000 px la app va con `zoom` en `body` (0.8 desde 1200 px; la landing no; 
 `tests/compacta.test.js`). En CSS, `calc(100 * var(--dvh))` y `--dvw` en vez de `100dvh`/`100vw`; en JS, lo que sale de `clientX` o
 `getBoundingClientRect` se divide por `zk()` antes de escribirlo en px.
 
+- **Sin avisos en vivo en las evaluaciones** (`tests/velo-examen.test.js`): `velo(ok)` y `VELO.on` (kit.js) callan la comprobación mientras se dibuja con `data-examen`; un juego nuevo por rondas pone `ok = velo(ok);` antes de `roundsGame`, y su texto neutro no debe decir que está mal (`VELO.on ? …`).
+
 ## Interfaz de la lección
 
 - Al fallar: «Incorrecto» + «La respuesta correcta es:»; la lección deja espacio abajo para ver el juego.

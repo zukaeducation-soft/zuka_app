@@ -34,7 +34,7 @@ GAMES['arma-silogismo'] = (() => {
         p.stroke(cols[i % 3]); p.strokeWeight(2); p.fill(RK.al(p, cols[i % 3], 40)); p.circle(cx, cy, 2 * z.r * u);
         TK.label(p, C, z.name, cx, cy - z.r * u + 12, C.ink, 10, z.r * u * 1.6);
       });
-      RK.strip(p, C, G.fb, good ? '$\\text{todas las premisas dibujadas}$' : `$\\text{${r.rels.filter(x => rel(s, r, x)).length} de ${r.rels.length} premisas}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, VELO.on ? '$\\text{acomoda los círculos}$' : good ? '$\\text{todas las premisas dibujadas}$' : `$\\text{${r.rels.filter(x => rel(s, r, x)).length} de ${r.rels.length} premisas}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) {
       const u = G.u, o = G.o, list = G.r.sets.slice().sort((a, b) => a.r - b.r);

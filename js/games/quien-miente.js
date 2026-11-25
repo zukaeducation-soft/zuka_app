@@ -32,7 +32,7 @@ GAMES['quien-miente'] = (() => {
         return { x: 16, y, w: G.W - 32, h: rh - 8, i };
       });
       const condBad = all && r.cond && !r.cond(s.T);
-      RK.strip(p, C, G.fb, !all ? '$\\text{supón algo de cada uno}$' : good ? '$\\text{todo cuadra}$' : condBad ? '$\\text{no cumple la condición}$' : '$\\text{hay frases que chocan}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+      RK.strip(p, C, G.fb, !all ? '$\\text{supón algo de cada uno}$' : VELO.on ? '$\\text{todos tienen su papel}$' : good ? '$\\text{todo cuadra}$' : condBad ? '$\\text{no cumple la condición}$' : '$\\text{hay frases que chocan}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
     },
     press(G, x, y) { const c = (G.cards || []).find(b => hitBox(b, x, y)); if (!c) return false; const t = G.s.T[c.i]; G.s.T[c.i] = t === null ? true : !t; G.touch(); return true; },
     demo: G => (G.cards ? { from: { x: 60, y: G.cards[0].y + 24 }, to: { x: 60, y: G.cards[0].y + 24 }, text: 'Toca para suponer', ty: G.cards.at(-1).y + G.cards.at(-1).h + 18 } : null),
