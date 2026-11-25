@@ -440,6 +440,22 @@ const WORLDS = (() => {
     'icf-en-corto': { name: 'Textos Cortos', art: plate('icf-en-corto', TEAL, `
       ${L('M48 22h44v30H48z', INK, 1.1)}${L('M48 22l22 16 22-16', INK, 1)}${L('M84 34h28v26H84z', TEAL, 1.2)}${L('M89 42h18M89 48h18M89 54h10', TEAL, .9)}${D(98, 34, 1.8, TEAL)}
       ${T(28, 42, 'Dear…', INK, 6.5)}${T(134, 42, 'Love', TEAL, 6.5)}`) },
+    // ---------- quintos mundos ----------
+    'icf-ma-lineal': { name: 'Funciones Lineales', art: plate('icf-ma-lineal', TEAL, `
+      ${L('M50 14v50h62', INK, 1)}${L('M50 54L110 22', TEAL, 1.5)}${L('M50 34L110 46', INK, 1.1)}${D(74, 41, 2.4, TEAL)}${Ld('M74 41V64')}${L('M86 35h16v-9', TEAL, .9)}
+      ${T(26, 42, 'b + mx', INK, 7)}${T(134, 42, 'm', TEAL, 9)}`) },
+    'icf-lc-filosofico': { name: 'Textos Filosóficos', art: plate('icf-lc-filosofico', TEAL, `
+      ${C(80, 38, 20, INK, 1.1)}${C(80, 38, 12, TEAL, 1.1)}${L('M76 34c0-6 9-6 9 0 0 4-5 4-5 8', TEAL, 1.4)}${D(80, 47, 1.4, TEAL)}${L('M60 62h40', INK, 1)}${D(60, 38, 1.4)}${D(100, 38, 1.4)}${D(80, 18, 1.4)}
+      ${T(28, 42, '¿qué es?', INK, 6)}${T(134, 42, 'pero…', TEAL, 6.5)}`) },
+    'icf-sc-sistemico': { name: 'Problemas Complejos', art: plate('icf-sc-sistemico', TEAL, `
+      ${C(80, 18, 7, TEAL, 1.2)}${C(54, 52, 7, INK, 1.1)}${C(106, 52, 7, INK, 1.1)}${A(76, 25, 58, 45, INK, 1)}${A(62, 52, 98, 52, TEAL, 1.2)}${A(102, 45, 84, 25, INK, 1)}${D(80, 18, 1.8, TEAL)}${D(54, 52, 1.8)}${D(106, 52, 1.8)}
+      ${T(26, 42, 'causa', INK, 6.5)}${T(134, 42, 'efecto', TEAL, 6.5)}`) },
+    'icf-cn-ecosistemas': { name: 'Ecosistemas y Energía', art: plate('icf-cn-ecosistemas', TEAL, `
+      ${L('M50 62h60v-11H50z', INK, 1.1)}${L('M58 51h44V40H58z', INK, 1.1)}${L('M66 40h28V29H66z', INK, 1.1)}${L('M74 29h12V18H74z', TEAL, 1.3)}${A(114, 60, 114, 24, TEAL, 1.2)}${D(80, 56, 1.4, TEAL)}${D(80, 45, 1.4, TEAL)}
+      ${T(28, 42, '10 %', INK, 7)}${T(136, 42, 'kcal', TEAL, 7)}`) },
+    'icf-en-largo': { name: 'Textos Largos', art: plate('icf-en-largo', TEAL, `
+      ${L('M56 14h48v52H56z', INK, 1.1)}${L('M62 22h36', TEAL, 1.6)}${L('M62 30h36M62 35h36M62 40h22', INK, .8)}${L('M62 48h36M62 53h36M62 58h18', INK, .8)}${C(94, 42, 9, TEAL, 1.3)}${L('M101 49l8 8', TEAL, 1.5)}
+      ${T(28, 42, 'main idea', INK, 5.5)}${T(134, 42, 'why?', TEAL, 7)}`) },
   };
 })();
 

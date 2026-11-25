@@ -1,0 +1,96 @@
+// Preicfes · Sociales y Ciudadanas, mundo 5 «Problemas Complejos» (Explora, escena «hoja»). Casos propios.
+xpLec('icf-sc-sistemico-1', [
+  ['Detonante y fondo',
+    xpMira('hoja', 'Empecemos por la idea: algo **dispara** el hecho y algo lo **venía preparando**.', { letras: ['A', 'B', 'C', 'D'], paras: [['Un bombillo se fundió y hubo protesta.'], ['Llevaban un año sin alumbrado en la cuadra.'], ['Hubo tres robos ese mes.'], ['Nadie respondía las cartas.']] }, [
+      ['El bombillo fue lo último: el detonante.', { luz: [0], nota: { 0: 'detonante' } }],
+      ['Un año a oscuras lo venía preparando.', { luz: [1], nota: { 1: 'de fondo' } }],
+      ['Los robos también pesaban.', { luz: [2], nota: { 2: 'de fondo' } }],
+      ['Y que nadie respondiera.', { luz: [3], nota: { 3: 'de fondo' } }],
+      ['Cambiar solo el bombillo no resuelve el fondo.', { luz: [0] }],
+    ], 'El detonante dispara; las causas de fondo explican.'),
+    xpHaz('hoja', 'Una fábrica estalló por una chispa. Subraya la causa **de fondo**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['La chispa'], ['Años sin revisar los tanques'], ['El ruido del estallido']], pista: 'Busca lo que venía de tiempo atrás.' }, 'La chispa dispara; la falta de revisión lo preparó.')],
+  ['En cadena y en círculo',
+    xpMira('hoja', 'Segunda idea: una consecuencia puede ser **causa** de otra, y volver al principio.', { paras: [['Baja la venta de una panadería.'], ['Despide a dos personas.'], ['Ellas compran menos en el barrio.'], ['Bajan más las ventas.']] }, [
+      ['Primero baja la venta.', { luz: [0], nota: { 0: 'causa' } }],
+      ['Por eso despide a dos personas.', { luz: [1], nota: { 1: 'consecuencia' } }],
+      ['Y ese despido causa otra cosa.', { luz: [1, 2], nota: { 2: 'y otra más' } }],
+      ['Que vuelve a bajar las ventas: un círculo.', { luz: [3, 0], nota: { 3: 'vuelve al inicio' } }],
+      ['Para romperlo basta con cambiar un punto.', {}],
+    ], 'Sigue las flechas: algunas vuelven al comienzo.'),
+    xpHaz('hoja', 'Pon al margen el orden de la cadena.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['tercero', 'primero', 'segundo'], meta: [0, 1, 2], paras: [['Los niños faltan a clase.'], ['Se daña el puente.'], ['El bus deja de pasar.']], pista: 'Alguna no va ahí: ¿qué tuvo que pasar antes?' }, 'Se daña el puente, el bus no pasa y los niños faltan.')],
+  ['Juntas no es por',
+    xpMira('hoja', 'Tercera idea: que dos cosas pasen **juntas** no prueba que una **cause** la otra.', { paras: [['En enero llegó una familia nueva.'], ['En enero subió el precio del agua.'], ['«El agua subió por ellos».'], ['Ese mes subió en todo el país.']] }, [
+      ['Dos hechos en el mismo mes.', { luz: [0, 1], nota: { 0: 'a la vez' } }],
+      ['Alguien los une sin prueba.', { luz: [2], nota: { 2: 'sin prueba' } }],
+      ['Otro dato muestra otra explicación.', { luz: [3], nota: { 3: 'otra causa' } }],
+      ['Entonces se descarta la acusación.', { tacha: [2], luz: [3] }],
+      ['Busca siempre qué más cambió.', {}],
+    ], 'Antes de culpar, busca qué más cambió y compara casos.'),
+    xpHaz('hoja', '«Desde que pintaron la escuela hay más gripa». Subraya la mejor pregunta para revisarlo.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['¿Subió también en escuelas sin pintar?'], ['¿De qué color la pintaron?'], ['¿Quién la pintó?']], pista: 'Compara con un lugar donde no se hizo.' }, 'Si subió en todas, la pintura no es la causa.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Con la sequía bajó el río y hubo pelea por el agua entre dos veredas que llevaban años sin acuerdo de turnos. Subraya la causa **de fondo**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['La pelea'], ['La sequía de este año'], ['No tener acuerdo de turnos']], pista: 'La sequía disparó; ¿qué faltaba desde antes?' }, 'Sin acuerdo, cualquier sequía dispara la pelea.')],
+], 'Separa lo que dispara, sigue la cadena y no confundas junto con por.');
+
+xpLec('icf-sc-sistemico-2', [
+  ['Las dimensiones',
+    xpMira('hoja', 'Empecemos por la idea: un problema tiene varias **dimensiones** a la vez.', { letras: ['A', 'B', 'C', 'D'], paras: [['Da empleo a cien personas.'], ['Seca un humedal.'], ['Tapa un camino sagrado.'], ['Falta un permiso.']] }, [
+      ['Empleo y dinero: económica.', { luz: [0], nota: { 0: 'económica' } }],
+      ['Agua y animales: ambiental.', { luz: [1], nota: { 1: 'ambiental' } }],
+      ['Creencias y costumbres: cultural.', { luz: [2], nota: { 2: 'cultural' } }],
+      ['Permisos y normas: legal.', { luz: [3], nota: { 3: 'legal' } }],
+      ['El mismo proyecto toca las cuatro.', { luz: [0, 1, 2, 3] }],
+    ], 'Económica, ambiental, cultural, legal, política, social.'),
+    xpHaz('hoja', 'Pon al margen la dimensión.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['cultural', 'económica', 'ambiental'], meta: [2, 0, 1], paras: [['El ruido espanta las aves.'], ['Se pierde la fiesta del patrono.'], ['Sube el precio del arriendo.']], pista: 'Alguna no va ahí: ¿naturaleza, costumbres o dinero?' }, 'Aves, fiesta y arriendo: ambiental, cultural y económica.')],
+  ['Chocan',
+    xpMira('hoja', 'Segunda idea: mejorar una dimensión puede **empeorar** otra.', { paras: [['Prohibir vender en la acera:'], ['se camina mejor,'], ['pero veinte familias pierden su ingreso.']] }, [
+      ['La medida parece sencilla.', { luz: [0] }],
+      ['Mejora el uso de la calle.', { luz: [1], nota: { 1: 'mejora lo urbano' } }],
+      ['Y empeora lo económico.', { luz: [2], nota: { 2: 'empeora lo económico' } }],
+      ['No hay un bueno y un malo: hay un choque.', { luz: [1, 2] }],
+      ['Nombrarlo bien ayuda a buscar una salida.', {}],
+    ], 'Di qué mejora y qué empeora: ese es el choque.'),
+    xpHaz('hoja', 'Se cierra un parque de noche: hay menos robos, pero los jóvenes pierden su lugar. Subraya el choque.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Economía contra ambiente'], ['Seguridad contra vida social'], ['Cultura contra ley']], pista: 'Nombra lo que gana y lo que se pierde.' }, 'Gana la seguridad y pierde el encuentro de los jóvenes.')],
+  ['Ceder en cada una',
+    xpMira('hoja', 'Tercera idea: una buena salida **cede un poco** en cada dimensión.', { paras: [['Opción 1: se prohíbe todo.'], ['Opción 2: no se toca nada.'], ['Opción 3: puestos por turnos y una franja libre.']] }, [
+      ['La primera solo cuida la calle.', { luz: [0], nota: { 0: 'solo una' } }],
+      ['La segunda solo cuida el ingreso.', { luz: [1], nota: { 1: 'solo una' } }],
+      ['La tercera cuida algo de las dos.', { luz: [2], nota: { 2: 'cede en ambas' } }],
+      ['Nadie gana todo, pero se puede sostener.', { luz: [2] }],
+      ['Pregunta quién aceptaría cada opción.', {}],
+    ], 'La salida que atiende varias dimensiones dura más.'),
+    xpHaz('hoja', 'Una fábrica contamina, pero da empleo. Subraya la salida que atiende **las dos** cosas.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Cerrarla mañana'], ['Dejarla igual'], ['Darle un plazo para poner filtros']], pista: 'Busca la que cuida el aire y el trabajo.' }, 'El plazo protege el empleo y limpia el aire.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Una vía rápida acorta el viaje, pero parte en dos una reserva y un pueblo. Subraya la propuesta que atiende **más** dimensiones.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Túneles para animales y un puente peatonal'], ['Doble ancho para ir más rápido'], ['Una estatua a la entrada']], pista: 'Cuenta a cuántos afectados ayuda cada una.' }, 'Los túneles cuidan la reserva y el puente, al pueblo.')],
+], 'Nombra las dimensiones, di cuáles chocan y busca ceder en cada una.');
+
+xpLec('icf-sc-sistemico-3', [
+  ['Lo que no se busca',
+    xpMira('hoja', 'Empecemos por la idea: la gente **se acomoda**, y aparecen efectos que nadie quería.', { paras: [['Se paga por cada rata muerta.'], ['Bajan las ratas.'], ['Alguien empieza a criarlas para cobrar.']] }, [
+      ['La medida busca menos ratas.', { luz: [0], nota: { 0: 'medida' } }],
+      ['Al comienzo funciona: efecto buscado.', { luz: [1], nota: { 1: 'buscado' } }],
+      ['Pero alguien se acomoda a la regla.', { luz: [2], nota: { 2: 'no buscado' } }],
+      ['Y el resultado es lo contrario.', { luz: [2] }],
+      ['Pregunta qué hará la gente al día siguiente.', {}],
+    ], 'Efecto no buscado: lo que produce la gente al acomodarse.'),
+    xpHaz('hoja', 'Se regalan bolsas de tela y la gente las bota como si fueran de plástico. Subraya el efecto **no buscado**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Menos bolsas plásticas'], ['Más basura de tela'], ['La gente recibe bolsas']], pista: '¿Para eso se regalaron?' }, 'Nadie quería más basura.')],
+  ['Para quién',
+    xpMira('hoja', 'Segunda idea: la misma regla **pesa distinto** según quién la cargue.', { paras: [['Regla: pagar 50 mil por una cita.'], ['Para Ana es lo de un café.'], ['Para Luis es lo de tres días.'], ['Promedio: «todos pueden pagar».']] }, [
+      ['La regla es igual para los dos.', { luz: [0] }],
+      ['A Ana casi no le pesa.', { luz: [1], nota: { 1: 'pesa poco' } }],
+      ['A Luis le quita tres días de comida.', { luz: [2], nota: { 2: 'pesa mucho' } }],
+      ['El promedio esconde esa diferencia.', { luz: [3], tacha: [3] }],
+      ['Mira siempre los efectos por grupos.', { luz: [1, 2] }],
+    ], 'Pregunta a quién le pesa más y qué esconde el promedio.'),
+    xpHaz('hoja', 'Un trámite solo se puede hacer por internet. Subraya a quién le pesa **más**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['A quien tiene datos en el celular'], ['A quien trabaja con computador'], ['A quien vive en una vereda sin señal']], pista: '¿Quién no puede cumplirla?' }, 'La regla es igual, pero sin señal no se puede cumplir.')],
+  ['Medir y corregir',
+    xpMira('hoja', 'Tercera idea: una buena medida dice **qué va a medir** y se deja corregir.', { paras: [['Meta: menos accidentes.'], ['Se mide: número de multas.'], ['Se mide: heridos por mes.'], ['Si en un año no baja, se cambia.']] }, [
+      ['La meta es tener menos accidentes.', { luz: [0], nota: { 0: 'meta' } }],
+      ['Contar multas no mide accidentes.', { luz: [1], tacha: [1] }],
+      ['Contar heridos sí se acerca.', { luz: [2], nota: { 2: 'mide la meta' } }],
+      ['Y hay una regla para corregir.', { luz: [3], nota: { 3: 'se corrige' } }],
+      ['Mide lo que importa, no lo más fácil.', {}],
+    ], 'Mide la meta y decide antes cuándo corregir.'),
+    xpHaz('hoja', 'Meta: que los niños lean mejor. Subraya lo que **mide** la meta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Cuánto comprenden de un texto nuevo'], ['Cuántos libros se compraron'], ['Cuántas fotos se tomaron']], pista: 'Busca lo que habla de leer, no de comprar.' }, 'Comprar no es leer: se mide la comprensión.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Para bajar el ruido se multó a los bares. Ahora la fiesta se hace en las casas. Subraya lo que **faltó** pensar.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['De qué color era la multa'], ['Qué haría la gente después de la multa'], ['Cuántos bares había antes']], pista: 'Piensa en cómo se acomoda la gente.' }, 'El ruido no desapareció: se mudó.')],
+], 'Qué hará la gente, a quién le pesa y cómo sabremos si sirvió.');

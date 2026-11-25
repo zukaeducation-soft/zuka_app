@@ -33,7 +33,7 @@ const PI_TEMARIO = {
     ['icf-sc-participacion', 'Participación y Control', ['Voto y mecanismos de participación', 'Organismos de control', 'Reformar la Constitución'], 'Pensamiento social'],
     ['icf-sc-perspectivas', 'Perspectivas e Intereses', ['Actores de un conflicto', 'Cosmovisiones y prejuicios', 'Soluciones y quién las acepta'], 'Interpretación y análisis de perspectivas'],
     ['icf-sc-fuentes', 'Fuentes y Argumentos', ['Leer una fuente en su contexto', 'Qué prueba y qué no una fuente', 'Caricaturas y discursos'], 'Interpretación y análisis de perspectivas'],
-    ['icf-sc-sistemico', 'Problemas con Muchas Dimensiones', ['Causas y consecuencias', 'Dimensiones en choque', 'Efectos de una intervención'], 'Pensamiento reflexivo y sistémico'],
+    ['icf-sc-sistemico', 'Problemas Complejos', ['Causas y consecuencias', 'Dimensiones en choque', 'Efectos de una intervención'], 'Pensamiento reflexivo y sistémico'],
     ['icf-sc-historia', 'Historia de Colombia', ['De la Colonia a la República', 'Siglo XIX', 'Siglo XX y conflicto armado'], 'Pensamiento social'],
     ['icf-sc-mundo', 'Historia del Mundo', ['Revoluciones y democracia', 'Guerras y Guerra Fría', 'Descolonización y movimientos sociales'], 'Pensamiento social'],
     ['icf-sc-geografia', 'Territorio y Ambiente', ['Regiones, mapas y población', 'Recursos, ambiente y desarrollo'], 'Pensamiento social'],

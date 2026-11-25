@@ -28,7 +28,7 @@ GAMES['laser-recta'] = (() => {
   }
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => fits(state.vals[i], r));
+    const ok = params.rounds.every((r, i) => !!state.vals?.[i] && fits(state.vals[i], r));
     return { ok, solution: params.rounds.map(r => `$${texOf(r)}$`).join(' · ') };
   }
 

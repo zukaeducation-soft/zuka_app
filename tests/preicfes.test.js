@@ -251,3 +251,15 @@ test('los juegos que muestran siempre su texto lo traen, también en el gimnasio
   const ex = [...get(ctx, 'GYM_RETOS').filter(r => /^gym-i-/.test(r.id)).flatMap(r => r.steps.map(s => [r.id, s.ex])), ...C.units.flatMap(u => u.lessons.flatMap(l => l.ex.map(e => [l.id, e])))];
   for (const [id, e] of ex) if (CON_TEXTO.includes(e.game)) assert.ok((e.params.docs || [e.params.doc])[0]?.paras, `${id}: ${e.game} sin texto`);
 });
+
+test('juegos del plano y las barras: una sola respuesta (o todas las de la recta) y dibujo sin números rotos', () => {
+  const K = get(ctx, 'XPK'), malo = s => /NaN|undefined|Infinity|(width|height|r)="-/.test(s);
+  const U = C.units.find(u => u.world === 'icf-ma-lineal');
+  for (const l of U.lessons) for (const e of l.ex) {
+    const g = GAMES[e.game], p = e.params;
+    if (!g.figura || !['tarifa-recta', 'llega-presupuesto', 'vacia-tanque', 'cruce-planes', 'zona-conviene', 'pendiente-escalon'].includes(e.game)) continue;
+    const s = g.solve(p); assert.equal(g.grade(s, p).ok, true, e.game); assert.equal(g.grade(g.ini(p), p).ok, false, e.game);
+    if ('x' in s && !('y' in s) && !('d' in s)) assert.equal(Array.from({ length: p.max + 1 }, (_, x) => g.grade({ x }, p).ok).filter(Boolean).length, 1, e.game);
+    for (const f of [0, 0.5, 1]) for (const v of [g.ini(p), s]) assert.ok(!malo(g.dib(v, K, p, f)), `${e.game} ${f}`);
+  }
+});

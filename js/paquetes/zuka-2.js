@@ -1,826 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/serpiente-orden.js
-// La serpiente ordenada (Álgebra 1.2, axiomas de orden y valor absoluto; juego dinámico de la lección alg-12d): una
-// serpiente espera cada gesto para avanzar una casilla. En la cuadrícula hay fichas con números
-// («−5», «3/2», «|−4|») y hay que comérselas de menor a mayor. Morder una que no es la menor quita una vida (la ficha
-// se queda). Al salir por un borde, la serpiente entra por el otro. Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, items: [{ label, value }] }], lives? }   state = { done: [n] }
-// Spec 2026-11-13-juegos-dinamicos-valle.
-
-GAMES['serpiente-orden'] = (() => {
-  const COLS = 7, ROWS = 8;
-  // Índice de la ficha que toca comer: la de menor valor entre las que quedan (−1 si no queda ninguna).
-  function nextIndex(items, eaten) {
-    let best = -1;
-    items.forEach((it, i) => { if (!eaten.includes(i) && (best < 0 || it.value < items[best].value)) best = i; });
-    return best;
-  }
-  // Nueva dirección al tocar a (dx, dy) de la cabeza: hacia el lado donde más lejos quedó el toque; nunca se devuelve.
-  function turnTo(dir, dx, dy) {
-    const nd = Math.abs(dx) > Math.abs(dy) ? { x: Math.sign(dx), y: 0 } : { x: 0, y: Math.sign(dy) };
-    if ((nd.x === 0 && nd.y === 0) || (nd.x === -dir.x && nd.y === -dir.y)) return { x: dir.x, y: dir.y };
-    return nd;
-  }
-  const stepCell = (cell, dir, cols, rows) => ({ c: (cell.c + dir.x + cols) % cols, r: (cell.r + dir.y + rows) % rows });
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => [...r.items].sort((x, y) => x.value - y.value).map(it => it.label).join(' < ')).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, grid = { x0: 0, y0: 0, cell: 0 }, snake = [], dir = { x: 1, y: 0 }, want = null, acc = 0, eaten = [], spots = [], safeK = -1, n = 0;
-    let drag = null, preview = null;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; reset(i); },
-      lost(i) { st.done[i] = 0; },
-    });
-    const px = cell => ({ x: grid.x0 + (cell.c + 0.5) * grid.cell, y: grid.y0 + (cell.r + 0.5) * grid.cell });
-
-    function layout(w, h) {
-      W = w; H = h;
-      const top = 96, cell = Math.min((w - 20) / COLS, (h - top - 34) / ROWS);
-      grid = { x0: (w - cell * COLS) / 2, y0: top, cell };
-    }
-    // Empieza la ronda: la serpiente en el centro y las fichas repartidas lejos de ella y sin tocarse.
-    function reset(i) {
-      snake = [{ c: 2, r: 4 }, { c: 1, r: 4 }, { c: 0, r: 4 }]; dir = { x: 1, y: 0 }; want = null; acc = 0; eaten = []; safeK = -1;
-      drag = preview = null;
-      const free = [];
-      for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (r !== 4 && (c + r) % 2 === 0) free.push({ c, r });
-      const order = shuffledOrder(free.length, R[i].title + (n++));
-      spots = R[i].items.map((_, k) => free[order[k]]);
-    }
-    const travel = .17;
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function advance() {
-        if (want) { dir = want; want = null; }
-        const head = stepCell(snake[0], dir, COLS, ROWS), items = R[a.cur].items;
-        snake.unshift(head);
-        const k = spots.findIndex((s, i) => !eaten.includes(i) && s.c === head.c && s.r === head.r);
-        if (k >= 0 && k === nextIndex(items, eaten)) {
-          eaten.push(k); st.done[a.cur]++; a.hit(); a.say(`${items[k].label}: era la menor`, C.ok);   // crece: no se quita la cola
-          if (eaten.length === items.length) { a.win(); return; }
-        } else {
-          snake.pop();
-          if (k >= 0 && k !== safeK) { a.say(`${items[k].label} no es la menor que queda`, C.bad); a.miss(); }
-          safeK = k;
-        }
-      }
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play' || !want) return;
-        acc += dt;
-        if (acc >= travel || reducedMotion()) advance();
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = R[a.cur], g = grid, items = r.items;
-
-        // La cuadrícula.
-        p.noStroke(); p.fill(C.card); p.rect(g.x0 - 4, g.y0 - 4, g.cell * COLS + 8, g.cell * ROWS + 8, 12);
-        p.stroke(C.line); p.strokeWeight(0.8);
-        for (let c = 1; c < COLS; c++) p.line(g.x0 + c * g.cell, g.y0, g.x0 + c * g.cell, g.y0 + ROWS * g.cell);
-        for (let k = 1; k < ROWS; k++) p.line(g.x0, g.y0 + k * g.cell, g.x0 + COLS * g.cell, g.y0 + k * g.cell);
-        // Las fichas que quedan.
-        if (a.phase !== 'idle') spots.forEach((s, i) => {
-          if (eaten.includes(i)) return;
-          drawTile(p, C, { x: g.x0 + s.c * g.cell + 2, y: g.y0 + s.r * g.cell + 2, w: g.cell - 4, h: g.cell - 6 }, items[i].label, { size: Math.min(15, g.cell * 0.4), r: 7, lift: 2 });
-        });
-        // La serpiente: cuerpo menta y cabeza con una flecha que marca hacia dónde va.
-        if (a.phase !== 'idle') snake.forEach((s, i) => {
-          const c = px(s), d = g.cell * (i === 0 ? 0.86 : 0.7);
-          if (i === 0 && want) {
-            const end = stepCell(s, want, COLS, ROWS), to = px(end);
-            if (Math.abs(s.c - end.c) + Math.abs(s.r - end.r) === 1) {
-              const u = Math.min(1, acc / travel);
-              c.x += (to.x - c.x) * u; c.y += (to.y - c.y) * u;
-            }
-          }
-          p.noStroke(); p.fill(i === 0 ? C.mint : shade(C.mint, i % 2 ? 0.86 : 0.94)); p.rect(c.x - d / 2, c.y - d / 2, d, d, d * 0.32);
-          if (i === 0) { const ux = dir.x * d * 0.28, uy = dir.y * d * 0.28, vx = dir.y * d * 0.2, vy = dir.x * d * 0.2; p.fill(inkOn(C.mint, C.ink)); p.triangle(c.x + ux, c.y + uy, c.x - ux * 0.4 + vx, c.y - uy * 0.4 + vy, c.x - ux * 0.4 - vx, c.y - uy * 0.4 - vy); }
-        });
-
-        // Encabezado: ronda, vidas y qué se lleva comido, en orden.
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, 'Cómelas de menor a mayor', W / 2, 44, W - 24, 15);
-        p.fill(C.N); fitText(p, eaten.length ? eaten.map(i => items[i].label).join(' < ') + (eaten.length < items.length ? ' < …' : '') : r.title, W / 2, 70, W - 24, 13);
-
-        arcadeToast(p, C, a, W / 2, H - 17, locked);
-        const mid = g.y0 + (g.cell * ROWS) / 2;
-        if (locked || a.phase === 'all') {
-          p.noStroke(); p.fill(C.card); p.rect(g.x0, mid - R.length * 13 - 8, g.cell * COLS, R.length * 26 + 16, 10);
-          drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: [...rr.items].sort((x, y) => x.value - y.value).map(it => it.label).join(' < ') })), mid, g.cell * COLS - 16);
-        } else drawArcadeBanner(p, C, a, mid, { idle: 'Desliza para avanzar una casilla', lost: 'Demasiados mordiscos fuera de orden' });
-        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(locked || a.phase === 'all' ? '¡Todo en orden! Ya puedes comprobar' : 'Rodea las fichas que todavía no tocan', W / 2, H - 16);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp === 'play' && !want) drag = { x: p.mouseX, y: p.mouseY };
-        return false;
-      };
-      p.mouseDragged = () => {
-        if (!drag) return;
-        const dx = p.mouseX - drag.x, dy = p.mouseY - drag.y;
-        if (Math.hypot(dx, dy) >= 10) preview = turnTo(dir, dx, dy);
-        return false;
-      };
-      p.mouseReleased = e => {
-        if (preview && !locked && a.phase === 'play' && e?.type !== 'touchcancel') { want = preview; acc = 0; }
-        drag = preview = null;
-      };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, grid, cols: COLS, rows: ROWS, head: snake[0], dir, next: nextIndex(R[a.cur].items, eaten), spots: spots.map((s, i) => ({ c: s.c, r: s.r, gone: eaten.includes(i) })) }),
-    };
-  }
-
-  return { grade, create, nextIndex, turnTo, stepCell };
-})();
-;
-//#archivo js/games/sirve-la-razon.js
-// Sirve la razón (Álgebra, razones; juego dinámico de la lección alg-12): dos vasos con marcas. El primero ya tiene
-// un ingrediente; arriba está la receta («por cada 2 de jugo, 3 de agua»). Se mantiene presionada la pantalla para
-// servir el otro ingrediente y se suelta cuando la cantidad mantiene la razón. Soltar lejos (de menos o de más) quita
-// una vida y la pregunta vuelve después. Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, a, b, items: [{ p, q, have, max }] }], lives? }   (razón p : q, `have` unidades de a)
-// state = { done: [n] }      Spec 2026-11-13-juegos-dinamicos-razones.
-
-GAMES['sirve-la-razon'] = (() => {
-  const TOL = 0.5, RATE = 2.2;   // margen (en unidades del vaso) y unidades que se sirven por segundo
-  const targetOf = it => (it.have * it.q) / it.p;
-  // Cómo quedó lo servido: 'ok' si está a menos de TOL de la marca justa, 'low' si faltó, 'high' si sobró.
-  const judge = (level, it) => (Math.abs(level - targetOf(it)) <= TOL ? 'ok' : level < targetOf(it) ? 'low' : 'high');
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.p} : ${it.q} = ${it.have} : ${targetOf(it)}`).join(', ')).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, top = 118, bottom = 0, queue = [], level = 0, pouring = false, pause = 0, result = null;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); level = 0; pouring = false; pause = 0; result = null; },
-      lost(i) { st.done[i] = 0; pouring = false; },
-    });
-    const item = () => R[a.cur].items[queue[0] ?? 0];
-
-    function layout(w, h) { W = w; H = h; bottom = h - 64; }
-    function release() {
-      if (!pouring) return;
-      pouring = false;
-      const it = item(), j = judge(level, it);
-      result = j; pause = j === 'ok' ? 1.2 : 1.4;
-      if (j === 'ok') { st.done[a.cur]++; a.hit(); a.say(`${it.p} : ${it.q} = ${it.have} : ${targetOf(it)}`, C.ok); }
-      else { a.say(j === 'low' ? 'Faltó: así no queda la misma razón' : 'Sobró: así no queda la misma razón', C.bad); a.miss(); }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play') return;
-        const it = item();
-        if (pause > 0) {
-          pause -= dt;
-          if (pause <= 0) {   // tras la pausa: siguiente pregunta (la fallada vuelve al final) con el vaso vacío
-            if (result === 'ok') queue.shift(); else queue.push(queue.shift());
-            result = null; level = 0;
-            if (!queue.length) a.win();
-          }
-          return;
-        }
-        if (pouring) { level += RATE * dt; if (level >= it.max) { level = it.max; release(); } }
-      }
-
-      // Un vaso con marcas cada unidad y números; `fill` es hasta dónde está lleno.
-      function glass(x, w, it, fill, col, name) {
-        const hgt = bottom - top, y = v => bottom - (v / it.max) * hgt, every = it.max > 8 ? 2 : 1;
-        p.noStroke(); p.fill(col); p.rect(x + 3, y(fill), w - 6, bottom - y(fill) - 3, 0, 0, 10, 10);
-        p.stroke(C.ink); p.strokeWeight(3); p.noFill(); p.line(x, top - 6, x, bottom); p.line(x + w, top - 6, x + w, bottom); p.line(x, bottom, x + w, bottom);
-        for (let v = 1; v <= it.max; v++) {
-          p.stroke(C.ink); p.strokeWeight(v % every ? 1 : 2); p.line(x + w - (v % every ? 8 : 14), y(v), x + w, y(v));
-          if (v % every === 0) { p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.LEFT, p.CENTER); p.text(v, x + w + 5, y(v)); }
-        }
-        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); fitText(p, name, x + w / 2, bottom + 16, w + 30, 13);
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = R[a.cur], it = item(), gw = Math.min(84, W * 0.27), xa = W * 0.25 - gw / 2, xb = W * 0.7 - gw / 2;
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        p.text(`${r.title} · sirve para mantener la razón`, W / 2, 42);
-        drawPill(p, C, `Por cada ${it.p} de ${r.a}, ${it.q} de ${r.b}`, W / 2, 70, C.sun, 15);
-
-        if (a.phase !== 'idle') {
-          glass(xa, gw, it, it.have, C.coral, r.a);
-          const colB = result === 'ok' ? C.ok : result ? C.bad : C.sky;
-          glass(xb, gw, it, level, colB, r.b);
-          // El chorro mientras se sirve y la cantidad que va.
-          if (pouring) { p.stroke(C.sky); p.strokeWeight(6); p.line(xb + gw / 2, top - 22, xb + gw / 2, bottom - (level / it.max) * (bottom - top)); }
-          p.noStroke(); p.fill(C.mute); p.rect(xb + gw / 2 - 16, top - 30, 32, 10, 5);
-          if (result === 'ok') { p.stroke(C.ok); p.strokeWeight(3); const y = bottom - (targetOf(it) / it.max) * (bottom - top); p.line(xb - 8, y, xb + gw + 8, y); }
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 17, locked);
-        const mid = (top + bottom) / 2;
-        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${Math.min(st.done[i], rr.items.length)} de ${rr.items.length}` })), mid);
-        else drawArcadeBanner(p, C, a, mid, { idle: 'Mantén presionado para servir y suelta', lost: 'Demasiados vasos mal servidos' });
-        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(locked || a.phase === 'all' ? '¡Recetas en su punto! Ya puedes comprobar' : 'Mantén presionado · suelta en la marca justa', W / 2, H - 16);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp === 'play' && pause <= 0 && !pouring) { pouring = true; api.sfx?.tap?.(); }
-        return false;
-      };
-      p.mouseReleased = () => { if (!locked && a.phase === 'play') release(); };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; pouring = false; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, level, pouring, pause, target: targetOf(item()), tol: TOL }),
-    };
-  }
-
-  return { grade, create, targetOf, judge, TOL };
-})();
-;
-//#archivo js/games/corta-proporciones.js
-// Corta las proporciones (Álgebra, proporciones; juego dinámico de la lección alg-12e): arriba hay una fracción de
-// referencia («2/3») y desde abajo saltan fichas con otras fracciones, como frutas. Se desliza el dedo para cortar
-// solo las que forman proporción con la de arriba (valen lo mismo). Cortar una que no, quita una vida; dejar caer una
-// buena no quita nada (vuelve a saltar). Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, ref, items: [{ label }], traps: [...] }], lives? }   state = { done: [n] }
-// Spec 2026-11-13-juegos-dinamicos-razones.
-
-GAMES['corta-proporciones'] = (() => {
-  const parse = s => String(s).split('/').map(Number);
-  // a/b y c/d forman proporción si ad = bc.
-  const sameRatio = (x, y) => { const [a, b] = parse(x), [c, d] = parse(y); return a * d === b * c; };
-  // Distancia del punto (px, py) al segmento (x1, y1)–(x2, y2).
-  function segDist(px, py, x1, y1, x2, y2) {
-    const dx = x2 - x1, dy = y2 - y1, len = dx * dx + dy * dy, t = len ? Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / len)) : 0;
-    return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
-  }
-  const BEAT = [1, 0, 1, 1, 0, 1, 0, 0];
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => `${r.ref} = ${r.items.map(it => it.label).join(' = ')}`).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, GRAV = 190;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, top = 104, queue = [], tiles = [], spawnT = 0, k = 0, trail = [], cutting = false, last = null;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; queue = R[i].items.map((_, n) => n); tiles = []; spawnT = 0.3; k = 0; },
-      lost(i) { st.done[i] = 0; tiles = []; },
-    });
-
-    function layout(w, h) { W = w; H = h; }
-    function spawn() {
-      const r = R[a.cur], flying = tiles.filter(t => t.state === 'fly').map(t => t.label);
-      const goods = queue.map(n => r.items[n].label).filter(l => !flying.includes(l)), bads = r.traps.filter(l => !flying.includes(l));
-      const pool = (BEAT[k++ % 8] && goods.length) || !bads.length ? goods : bads;
-      if (!pool.length) return;
-      const label = pool[Math.floor(Math.random() * pool.length)], x = 46 + Math.random() * (W - 92);
-      // Sale desde abajo con el impulso justo para llegar un poco por debajo del encabezado.
-      const apex = top + 46 + Math.random() * 40, vy = -Math.sqrt(2 * GRAV * (H + 24 - apex));
-      tiles.push({ label, good: sameRatio(r.ref, label), x, y: H + 24, vx: (W / 2 - x) * 0.12, vy, state: 'fly', t: 0 });
-    }
-    function cut(x1, y1, x2, y2) {
-      for (const t of tiles) {
-        if (t.state !== 'fly' || segDist(t.x, t.y, x1, y1, x2, y2) > 24) continue;
-        t.state = 'cut'; t.t = 0;
-        if (t.good) {
-          const r = R[a.cur], n = queue.findIndex(q => r.items[q].label === t.label);
-          if (n >= 0) { queue.splice(n, 1); st.done[a.cur]++; }
-          a.hit(); a.say(`${t.label} = ${r.ref}`, C.ok);
-          if (!queue.length) { a.win(); return; }
-        } else { t.state = 'no'; a.say(`${t.label} no vale lo mismo que ${R[a.cur].ref}`, C.bad); if (a.miss()) return; }
-      }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        trail = trail.filter(s => (s.t -= dt) > 0);
-        for (const t of tiles) { t.t += dt; t.vy += GRAV * dt; t.x += t.vx * dt; t.y += t.vy * dt; }
-        tiles = tiles.filter(t => t.y < H + 40 && !(t.state !== 'fly' && t.t > 0.5));
-        if (a.phase !== 'play') return;
-        spawnT -= dt;
-        if (spawnT <= 0) { spawn(); spawnT = 1.7; }
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = R[a.cur];
-
-        for (const t of tiles) {
-          const b = { x: t.x - 34, y: t.y - 19, w: 68, h: 38 };
-          if (t.state === 'fly') drawTile(p, C, b, t.label, { size: 17 });
-          else {
-            // Cortada: dos mitades que se separan (verde si era buena, roja si no).
-            const q = Math.min(1, t.t / 0.5), col = p.color(t.state === 'cut' ? C.ok : C.bad); col.setAlpha(255 * (1 - q));
-            p.noStroke(); p.fill(col); p.rect(b.x - q * 16, b.y - q * 6, b.w / 2 - 2, b.h, 9, 0, 0, 9); p.rect(b.x + b.w / 2 + 2 + q * 16, b.y + q * 6, b.w / 2 - 2, b.h, 0, 9, 9, 0);
-          }
-        }
-        // El trazo del corte.
-        p.stroke(C.sun); p.strokeWeight(4); p.noFill();
-        for (const s of trail) { p.drawingContext.globalAlpha = Math.max(0, s.t / 0.25); p.line(s.x1, s.y1, s.x2, s.y2); }
-        p.drawingContext.globalAlpha = 1;
-
-        // Encabezado (tapa las fichas que suben): ronda, vidas y la fracción de referencia.
-        p.noStroke(); p.fill(C.bg); p.rect(0, 0, W, top - 8);
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, `${r.title} · corta las que forman proporción con`, W / 2, 40, W - 24, 11);
-        drawPill(p, C, r.ref, W / 2, 68, C.sun, 20);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.RIGHT, p.CENTER);
-        p.text(`${Math.min(st.done[a.cur], r.items.length)} de ${r.items.length}`, W - 14, 68);
-
-        arcadeToast(p, C, a, W / 2, H - 17, locked);
-        const mid = (top + H) / 2 - 20;
-        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.ref} = ${rr.items.map(it => it.label).join(' = ')}` })), mid);
-        else drawArcadeBanner(p, C, a, mid, { idle: 'Desliza el dedo sobre la ficha para cortarla', lost: 'Demasiadas fichas mal cortadas' });
-        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(locked || a.phase === 'all' ? '¡Cortes limpios! Ya puedes comprobar' : 'Corta solo las que valen lo mismo', W / 2, H - 16);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp === 'play') { cutting = true; last = { x: p.mouseX, y: p.mouseY }; }
-        return false;
-      };
-      p.mouseDragged = () => {
-        if (!cutting || locked || a.phase !== 'play') return;
-        const now = { x: p.mouseX, y: p.mouseY };
-        trail.push({ x1: last.x, y1: last.y, x2: now.x, y2: now.y, t: 0.25 });
-        cut(last.x, last.y, now.x, now.y); last = now;
-        return false;
-      };
-      p.mouseReleased = () => { cutting = false; };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; tiles = []; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, top, tiles: tiles.filter(t => t.state === 'fly').map(t => ({ x: t.x, y: t.y, good: t.good })) }),
-    };
-  }
-
-  return { grade, create, sameRatio, segDist };
-})();
-;
-//#archivo js/games/resortera-tres.js
-// La resortera de la regla de tres (Álgebra, regla de tres; juego dinámico de la lección alg-12f): una resortera
-// lanza una piedra sobre una regla en metros. El estirón y la distancia son directamente proporcionales, y arriba
-// está el tiro de muestra («con 2 de estirón llega a 6 m»). Se arrastra hacia atrás para estirar (el número del
-// estirón se ve mientras se arrastra) y se suelta: la piedra tiene que caer en la bandera. Caer en otro lado quita
-// una vida y la pregunta vuelve después. Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, ref: [estirón, metros], items: [{ target }] }], lives? }   state = { done: [n] }
-// Spec 2026-11-13-juegos-dinamicos-razones.
-
-GAMES['resortera-tres'] = (() => {
-  const MAX_PULL = 8;
-  const pullFor = it => (it.target * it.ref[0]) / it.ref[1];
-  const landing = (it, pull) => (pull * it.ref[1]) / it.ref[0];
-  // Estirón (en medios) que corresponde a arrastrar `px` píxeles hacia atrás.
-  const snapPull = (px, unitPx, max) => Math.max(0, Math.min(max, Math.round((px / unitPx) * 2) / 2));
-  const fmt = v => String(+v.toFixed(1));
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    const solution = params.rounds.map(r => r.items.map(it => `${it.target} m: estirón ${fmt(pullFor({ ref: r.ref, target: it.target }))}`).join(', ')).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, UNIT = 12;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, ground = 0, sling = { x: 0, y: 0 }, queue = [], pull = 0, drag = null, shot = null, pause = 0, result = null;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); pull = 0; drag = null; shot = null; pause = 0; result = null; },
-      lost(i) { st.done[i] = 0; shot = null; drag = null; },
-    });
-    const item = () => R[a.cur].items[queue[0] ?? 0];
-    const maxD = () => landing({ ref: R[a.cur].ref }, MAX_PULL);
-    const X = mts => sling.x + 20 + (mts / maxD()) * (W - sling.x - 38);
-
-    function layout(w, h) { W = w; H = h; ground = h - 70; sling = { x: 64, y: ground - 44 }; }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play') return;
-        if (shot) {
-          shot.t += dt / 0.9;
-          if (shot.t >= 1) {
-            const r = R[a.cur], it = item(), good = Math.abs(shot.dist - it.target) < 1e-6;
-            result = { dist: shot.dist, good }; shot = null; pause = good ? 1.2 : 1.5;
-            if (good) { st.done[a.cur]++; a.hit(); a.say(`${fmt(pullFor({ ref: r.ref, target: it.target }))} de estirón: ${it.target} m`, C.ok); }
-            else { a.say(result.dist < it.target ? `Cayó en ${fmt(result.dist)} m: se quedó corta` : `Cayó en ${fmt(result.dist)} m: se pasó`, C.bad); a.miss(); }
-          }
-          return;
-        }
-        if (pause > 0) {
-          pause -= dt;
-          if (pause <= 0) { if (result.good) queue.shift(); else queue.push(queue.shift()); result = null; pull = 0; if (!queue.length) a.win(); }
-        }
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = R[a.cur], it = item(), md = maxD(), stepM = md > 30 ? 10 : 5;
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        p.text(`${r.title} · tiro de muestra`, W / 2, 40);
-        drawPill(p, C, `Con ${r.ref[0]} de estirón llega a ${r.ref[1]} m`, W / 2, 66, C.sun, 14);
-        if (a.phase === 'play') { p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); fitText(p, `La bandera está a ${it.target} m`, W / 2, 96, W - 24, 15); }
-
-        // El suelo, la regla en metros y la bandera.
-        p.stroke(C.mint); p.strokeWeight(4); p.line(8, ground, W - 8, ground);
-        p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER);
-        for (let v = 0; v <= md; v += stepM) { p.stroke(C.ink); p.strokeWeight(1.5); p.line(X(v), ground, X(v), ground + 7); p.noStroke(); p.fill(C.mute); p.text(v, X(v), ground + 17); }
-        if (a.phase !== 'idle') {
-          const fx = X(it.target);
-          p.stroke(C.ink); p.strokeWeight(2); p.line(fx, ground, fx, ground - 34);
-          p.noStroke(); p.fill(C.coral); p.triangle(fx, ground - 34, fx + 16, ground - 28, fx, ground - 22);
-        }
-        if (result) { p.noStroke(); p.fill(result.good ? C.ok : C.bad); p.circle(X(result.dist), ground - 6, 12); }
-
-        // La resortera: horquilla, liga estirada y la piedra.
-        const px = drag ? pull * UNIT : 0, sx = Math.max(12, sling.x - px * 0.6), sy = Math.min(ground - 8, sling.y + px * 0.4);
-        p.stroke(shade(C.sun, 0.7)); p.strokeWeight(6); p.line(sling.x, ground, sling.x, sling.y + 10); p.line(sling.x, sling.y + 10, sling.x - 10, sling.y - 8); p.line(sling.x, sling.y + 10, sling.x + 10, sling.y - 8);
-        if (!shot && !result && a.phase === 'play') {
-          p.stroke(C.coral); p.strokeWeight(3); p.line(sling.x - 10, sling.y - 8, sx, sy); p.line(sling.x + 10, sling.y - 8, sx, sy);
-          p.noStroke(); p.fill(C.cream); p.circle(sx, sy, 15);
-          if (drag) drawPill(p, C, `estirón ${fmt(pull)}`, Math.max(60, sx + 54), sy - 26, C.sky, 14);
-        }
-        if (shot) {
-          const q = shot.t, x = sling.x + (X(shot.dist) - sling.x) * q, y = sling.y + (ground - 6 - sling.y) * q - Math.sin(q * Math.PI) * 110;
-          p.noStroke(); p.fill(C.cream); p.circle(x, y, 15);
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 17, locked);
-        const mid = (110 + ground) / 2 - 10;
-        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${rr.ref[0]} de estirón → ${rr.ref[1]} m` })), mid);
-        else drawArcadeBanner(p, C, a, mid, { idle: 'Arrastra hacia atrás para estirar y suelta', lost: 'Demasiados tiros fuera' });
-        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(locked || a.phase === 'all' ? '¡Puntería de regla de tres! Ya puedes comprobar' : 'Arrastra hacia atrás o hacia abajo · suelta para lanzar', W / 2, H - 16);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp === 'play' && !shot && pause <= 0) { drag = { x: p.mouseX, y: p.mouseY }; pull = 0; }
-        return false;
-      };
-      p.mouseDragged = () => { if (drag && !locked && a.phase === 'play') { pull = snapPull(Math.max(drag.x - p.mouseX, p.mouseY - drag.y), UNIT, MAX_PULL); return false; } };
-      p.mouseReleased = () => {
-        if (!drag || locked || a.phase !== 'play') { drag = null; return; }
-        drag = null;
-        if (pull > 0) { shot = { t: 0, dist: landing({ ref: R[a.cur].ref }, pull) }; api.sfx?.tap?.(); }
-      };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; drag = null; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, unit: UNIT, busy: !!shot || pause > 0, need: pullFor({ ref: R[a.cur].ref, target: item().target }) }),
-    };
-  }
-
-  return { grade, create, pullFor, landing, snapPull, MAX_PULL };
-})();
-;
-//#archivo js/games/caja-veloz.js
-// La caja veloz (Álgebra, porcentajes; juego dinámico de la lección alg-13): en la caja de una tienda llegan clientes
-// con una cuenta («25 % de 80», «¿Qué % es 12 de 48?»). Se escribe el resultado en el teclado y se toca OK antes de
-// que al cliente se le acabe la paciencia (la barra). Un resultado equivocado quita una vida; si el cliente se cansa
-// no se pierde nada, pero vuelve a la fila. Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, items: [{ ask, answer }] }], patience?, lives? }   state = { done: [n] }
-// Spec 2026-11-13-juegos-dinamicos-razones.
-
-GAMES['caja-veloz'] = (() => {
-  const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '⌫', '0', 'OK'];
-  // Lo que queda escrito al tocar una tecla: hasta cuatro cifras, sin ceros a la izquierda; ⌫ borra la última.
-  function typeKey(buf, key) {
-    if (key === '⌫') return buf.slice(0, -1);
-    if (!/^\d$/.test(key) || buf.length >= 4) return buf;
-    return buf === '0' ? key : buf + key;
-  }
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.ask}: ${it.answer}`).join(', ')).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, PATIENCE = params.patience ?? 14;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, keys = [], queue = [], buf = '', left = PATIENCE, pause = 0, result = null, press = -1;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); next(); },
-      lost(i) { st.done[i] = 0; },
-    });
-    const item = () => R[a.cur].items[queue[0] ?? 0];
-    function next() { buf = ''; left = PATIENCE; pause = 0; result = null; }
-
-    function layout(w, h) {
-      W = w; H = h;
-      const kw = (w - 28 - 16) / 3, kh = 40, y0 = h - 30 - 4 * (kh + 7);
-      keys = KEYS.map((k, i) => ({ k, x: 14 + (i % 3) * (kw + 8), y: y0 + Math.floor(i / 3) * (kh + 7), w: kw, h: kh }));
-    }
-    function submit() {
-      const it = item(), good = buf !== '' && +buf === it.answer;
-      result = good ? 'ok' : 'bad'; pause = good ? 0.9 : 1.2;
-      if (good) { st.done[a.cur]++; a.hit(); a.say(`${it.ask}: ${it.answer}`, C.ok); }
-      else { a.say(`${buf || '—'} no es: revisa la cuenta`, C.bad); a.miss(); }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play') return;
-        if (pause > 0) {
-          pause -= dt;
-          if (pause <= 0) { if (result === 'ok') queue.shift(); else queue.push(queue.shift()); if (!queue.length) { a.win(); return; } next(); }
-          return;
-        }
-        left -= dt;
-        if (left <= 0) { result = 'gone'; pause = 1; a.say('Se acabó la paciencia: esa cuenta vuelve a la fila', C.sun); }
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = R[a.cur], it = item(), y0 = keys[0].y;
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        p.text(`${r.title} · ${Math.min(st.done[a.cur], r.items.length)} de ${r.items.length}`, W / 2, 40);
-
-        if (a.phase !== 'idle' && !(locked || a.phase === 'all')) {
-          // El pedido: un indicador de estado (anillo de color) con la cuenta y la barra de paciencia.
-          const cy = 78, face = result === 'ok' ? C.ok : result === 'bad' || result === 'gone' ? C.coral : C.sun;
-          p.noFill(); p.stroke(C.line); p.strokeWeight(3); p.circle(34, cy, 30);
-          p.stroke(face); p.arc(34, cy, 30, 30, -Math.PI / 2, Math.PI * 1.5);
-          p.noStroke(); p.fill(face); p.circle(34, cy, 10);
-          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.LEFT, p.CENTER);
-          p.textSize(20); while (p.textWidth(it.ask) > W - 76 && p.textSize() > 12) p.textSize(p.textSize() - 1);
-          p.text(it.ask, 60, cy - 6);
-          p.noStroke(); p.fill(C.line); p.rect(60, cy + 12, W - 76, 7, 4);
-          p.fill(left < PATIENCE * 0.3 ? C.coral : C.mint); p.rect(60, cy + 12, Math.max(0, (W - 76) * (left / PATIENCE)), 7, 4);
-          // La pantalla de la caja.
-          p.stroke(result === 'ok' ? C.ok : result === 'bad' ? C.bad : C.sun); p.strokeWeight(2.5); p.fill(C.card); p.rect(14, y0 - 52, W - 28, 42, 10);
-          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(24); p.textAlign(p.RIGHT, p.CENTER); p.text(buf || '0', W - 28, y0 - 30);
-        }
-        // El teclado.
-        keys.forEach((k, i) => drawTile(p, C, k, k.k, { fill: k.k === 'OK' ? C.mint : k.k === '⌫' ? C.coral : C.cream, size: 18, lift: press === i ? 1 : 3 }));
-        press = -1;
-
-        arcadeToast(p, C, a, W / 2, H - 15, locked);
-        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${Math.min(st.done[i], rr.items.length)} de ${rr.items.length}` })), 108);
-        else drawArcadeBanner(p, C, a, 108, { idle: 'Escribe el resultado y toca OK', lost: 'Demasiadas cuentas equivocadas' });
-        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(locked || a.phase === 'all' ? '¡Fila atendida! Ya puedes comprobar' : 'Escribe el número y toca OK', W / 2, H - 14);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp !== 'play' || pause > 0) return false;
-        const i = keys.findIndex(k => hitBox(k, p.mouseX, p.mouseY));
-        if (i < 0) return false;
-        press = i; api.sfx?.tap?.();
-        if (keys[i].k === 'OK') { if (buf !== '') submit(); } else buf = typeKey(buf, keys[i].k);
-        return false;
-      };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, buf, pause, answer: item().answer, keys: keys.map(k => ({ k: k.k, x: k.x + k.w / 2, y: k.y + k.h / 2 })) }),
-    };
-  }
-
-  return { grade, create, typeKey };
-})();
-;
-//#archivo js/games/vuela-precios.js
-// Ajusta el planeador en vertical. El vuelo empieza al soltar y usa la altura que ya elegiste.
-GAMES['vuela-precios'] = (() => {
-  const flightAt = (x0, x1, y, t) => ({ x: x0 + (x1 - x0) * t, y: y - 10 * Math.sin(Math.PI * t) });
-  function ringAt(y, centers, radius) {
-    let best = -1, distance = radius;
-    centers.forEach((c, i) => {
-      const d = Math.abs(y - c);
-      if (d <= distance) { distance = d; best = i; }
-    });
-    return best;
-  }
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.ask}: ${it.options[it.answer]}`).join(', ')).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, st = { done: R.map(() => 0) };
-    let W = 0, H = 0, y = 0, locked = false, held = false, flight = null, result, queue = [], order = [];
-    const top = 102, rail = 44;
-    const rings = () => [1, 2, 3].map(i => top + (H - top - 52) * i / 4);
-    const dock = () => W * .59;
-    const item = () => R[a.cur].items[queue[0]];
-    const reset = () => {
-      const it = item();
-      flight = null; result = null; held = false; y = rings()[1];
-      order = shuffledOrder(it.options.length, it.ask + a.cur);
-    };
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); reset(); },
-      lost(i) { st.done[i] = 0; held = false; },
-    });
-    const layout = (w, h) => {
-      const old = rings();
-      const position = H ? (y - old[0]) / (old[2] - old[0]) : .5;
-      W = w; H = h;
-      const next = rings();
-      y = next[0] + position * (next[2] - next[0]);
-    };
-    function advance(dt) {
-      a.tick(dt);
-      if (a.phase !== 'play') return;
-      if (result) {
-        result.wait -= dt;
-        if (result.wait > 0) return;
-        const answered = queue.shift();
-        if (!result.ok) queue.push(answered);
-        if (!queue.length) a.win();
-        else reset();
-        return;
-      }
-      if (!flight) return;
-      flight.t = reducedMotion() ? 1 : Math.min(1, flight.t + dt / .78);
-      if (flight.t < 1) return;
-      const it = item(), centers = rings(), i = ringAt(y, centers, (centers[1] - centers[0]) * .36);
-      const ok = order[i] === it.answer;
-      result = { i, ok, wait: .85 };
-      if (ok) { st.done[a.cur]++; a.hit(); a.say(`${it.ask}: ${it.options[it.answer]}`, C.ok); }
-      else if (i < 0) a.say('Quedaste entre dos aros. Ajusta la altura y vuelve a intentar.', C.mute);
-      else { a.say(`${it.options[order[i]]} no es el resultado`, C.bad); a.miss(); }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-      p.draw = () => {
-        p.background(C.bg);
-        if (!locked) advance(frameDt(p) * a.slow);
-        const cs = rings(), x = dock(), it = item(), live = a.phase === 'play' && !locked;
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.ink); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD);
-        fitText(p, live && it ? it.ask : R[a.cur].title, W / 2, 67, W - 28, 16);
-        drawPracticePanel(p, { x: 13, y: top, w: W - 26, h: H - top - 51 }, C.card, C.line, 12);
-        if (live && it) {
-          p.stroke(C.mute); p.strokeWeight(1); p.line(rail, cs[0], rail, cs[2]);
-          for (const [i, cy] of cs.entries()) {
-            const tint = result?.i === i ? (result.ok ? C.ok : C.bad) : C.brand;
-            p.stroke(C.line); p.line(rail, cy, x - 20, cy);
-            p.noFill(); p.stroke(tint); p.strokeWeight(2); p.circle(x, cy, Math.min(34, (cs[1] - cs[0]) * .72));
-            p.noStroke(); p.fill(C.ink); p.textAlign(p.CENTER, p.CENTER);
-            fitText(p, it.options[order[i]], (x + W) / 2 + 8, cy, W - x - 36, 15);
-          }
-          const pos = flight ? flightAt(rail, x, y, flight.t) : { x: rail, y };
-          p.noFill(); p.stroke(C.brand); p.strokeWeight(2);
-          if (!flight) {
-            p.drawingContext.setLineDash([4, 5]); p.line(rail + 14, y, x - 16, y); p.drawingContext.setLineDash([]);
-            p.fill(C.card); p.circle(rail, y, 29);
-          }
-          p.noStroke(); p.fill(C.brand);
-          p.triangle(pos.x - 10, pos.y - 7, pos.x + 12, pos.y, pos.x - 10, pos.y + 7);
-          p.fill(C.mute); p.textStyle(p.NORMAL); p.textAlign(p.CENTER, p.CENTER);
-          fitText(p, flight ? 'Trayectoria del planeador' : 'Arrastra en vertical y suelta', W / 2, H - 33, W - 32, 12);
-        }
-        const mid = (top + H - 51) / 2;
-        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((r, i) => ({ ok: st.done[i] >= r.items.length, text: `${r.title} · ${st.done[i]} de ${r.items.length}` })), mid);
-        else drawArcadeBanner(p, C, a, mid, { idle: 'Alinea el planeador con un aro', lost: 'Vuelve a comparar las alturas' });
-        arcadeToast(p, C, a, W / 2, H - 14, locked);
-        arcadeStop(p, a, locked);
-      };
-      const aim = () => { const cs = rings(); y = Math.min(cs[2], Math.max(cs[0], p.mouseY)); };
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const phase = a.tap(locked);
-        if (phase === 'off') return;
-        if (phase !== 'play') return false;
-        if (flight || p.mouseX > rail + 31 || p.mouseY < top || p.mouseY > H - 51) return;
-        held = true; aim();
-        return false;
-      };
-      p.mouseDragged = () => { if (held && !locked) { aim(); return false; } };
-      p.mouseReleased = e => {
-        if (held && !locked && e?.type !== 'touchcancel') flight = { t: 0 };
-        held = false;
-      };
-    }, 1.12, () => {
-      if (locked || flight || a.phase !== 'play') return null;
-      return { from: { x: rail, y }, to: { x: rail, y: y - 22 } };
-    });
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-      demo: m.demo,
-      peek: () => ({ phase: a.phase, flight, rail, y, W, H, target: item() && rings()[order.indexOf(item().answer)] }),
-    };
-  }
-  return { grade, create, flightAt, ringAt, demo: true };
-})();
-;
 //#archivo js/games/rompe-cambios.js
 // Rompe los cambios (Álgebra, cambios sucesivos; juego dinámico de la lección alg-13d): arriba hay una cuenta con dos
 // cambios seguidos («100 → +10 % → −10 %») y tres ladrillos con posibles resultados. Abajo, una paleta que se mueve
@@ -12849,6 +12028,77 @@ Object.assign(XG, (() => {
   XG.ascensor('sube-sistema', 40, 1, neutro);
 })();
 ;
+//#archivo js/games/lineal-escena.js
+// Ejercicios de «Funciones Lineales» (Preicfes, icf-ma-lineal; spec 2026-11-25-preicfes-estructura) con el plano y las barras de la
+// explicación. Armazones en figura-kit y conteo-escena. La escena no dice el resultado mientras se responde.
+(() => {
+  const N = x => String(Math.round(x * 100) / 100).replace('-', '−');
+  const neutro = ['Se pasó. Comprueba ese número en el enunciado.', 'Le faltó. Comprueba ese número en el enunciado.'];
+  // Plano: x de 0 a p.xm y y de 0 a p.ym, con rayas cada p.sx y p.sy.
+  const PX = (p, x) => 52 + x / p.xm * 256, PY = (p, y) => 180 - y / p.ym * 150;
+  const plano = (K, p) => {
+    let h = '';
+    for (let x = 0; x <= p.xm + 1e-9; x += p.sx || 1) h += K.l(PX(p, x), 30, PX(p, x), 180, x ? 'lr' : 'lm') + K.t(PX(p, x), 196, N(x), 's tm');
+    for (let y = 0; y <= p.ym + 1e-9; y += p.sy || 1) h += K.l(52, PY(p, y), 308, PY(p, y), y ? 'lr' : 'lm') + (y ? K.t(45, PY(p, y) + 4, N(y), 's tm', 'end') : '');
+    return h + K.t(308, 212, p.ex || 'x', 's tm', 'end') + K.t(40, 16, p.ey || 'y', 's tm', 'start');
+  };
+  const linea = (K, p, pts, cls) => K.pl(pts.map(([x, y]) => [PX(p, x), PY(p, y)]), cls);
+
+  // Un punto fijo A y otro que se arrastra: la recta entre los dos debe cambiar m por cada 1.
+  const llega = p => { for (let x = p.xm; x > p.a[0]; x--) { const y = p.a[1] + p.m * (x - p.a[0]); if (y >= 0 && y <= p.ym && Number.isInteger(y)) return { x, y }; } return null; };
+  XG.figura('pendiente-escalon', {
+    ini: p => ({ x: p.xm, y: p.a[1] }), alto: () => 218, ms: 900, pie: 'Arrastra el punto.',
+    manijas: p => [{ k: ['x', 'y'], min: [p.a[0] + 1, 0], max: [p.xm, p.ym], paso: 1, r: 10, en: v => [PX(p, v.x), PY(p, v.y)], de: (x, y) => [(x - 52) / 256 * p.xm, (180 - y) / 150 * p.ym] }],
+    ok: (v, p) => Math.abs((v.y - p.a[1]) - p.m * (v.x - p.a[0])) < 1e-9,
+    sol: llega, texto: p => `por ejemplo, (${llega(p).x}, ${llega(p).y})`,
+    dib: (v, K, p, f) => plano(K, p) + linea(K, p, [p.a, [v.x, v.y]], 'la gr') + K.f(f, linea(K, p, [p.a, [v.x, p.a[1]], [v.x, v.y]], 'lg d')) + K.c(PX(p, p.a[0]), PY(p, p.a[1]), 6, 'fG') + (f ? K.c(PX(p, v.x), PY(p, v.y), 7, 'fA') : ''),
+    aviso: (v, p) => `De A a tu punto avanza ${v.x - p.a[0]} y ${v.y < p.a[1] ? 'baja' : 'sube'} ${Math.abs(v.y - p.a[1])}: compara con lo que se pide por cada 1.`, bien: (v, p) => `Cambia ${N(v.y - p.a[1])} en ${v.x - p.a[0]}: ${N(p.m)} por cada 1.`,
+  });
+  // Se arma la recta con lo que vale en 0 y lo que vale en xm.
+  XG.figura('tarifa-recta', {
+    ini: () => ({ b: 0, e: 0 }), alto: () => 218, ms: 900, pie: 'Arrastra los dos extremos de la recta.',
+    manijas: p => [{ k: 'b', min: 0, max: p.ym, paso: p.sy, r: 10, en: v => [PX(p, 0), PY(p, v.b)], de: (x, y) => (180 - y) / 150 * p.ym }, { k: 'e', min: 0, max: p.ym, paso: p.sy, r: 10, en: v => [PX(p, p.xm), PY(p, v.e)], de: (x, y) => (180 - y) / 150 * p.ym }],
+    ok: (v, p) => v.b === p.b && v.e === p.b + p.m * p.xm, sol: p => ({ b: p.b, e: p.b + p.m * p.xm }), texto: p => `empieza en ${N(p.b)} y llega a ${N(p.b + p.m * p.xm)}`,
+    dib: (v, K, p, f) => plano(K, p) + linea(K, p, [[0, v.b], [p.xm, v.e]], 'la gr') + (f ? K.c(PX(p, 0), PY(p, v.b), 7, 'fA') + K.c(PX(p, p.xm), PY(p, v.e), 7, 'fA') : ''),
+    aviso: (v, p) => (v.b !== p.b ? `Tu recta empieza en ${N(v.b)}: mira cuánto hay antes de avanzar.` : `Tu recta cambia ${N((v.e - v.b) / p.xm)} por cada 1.`), bien: (v, p) => `Empieza en ${N(p.b)} y cambia ${N(p.m)} por cada 1.`,
+  });
+  // Barras: lo fijo y x veces m. La escena solo muestra los datos hasta comprobar.
+  const barra = (K, y, fijo, m, n, u, f) => K.r(30, y, fijo * u, 28, 'fg', 0) + (f ? Array.from({ length: n }, (_, i) => K.f(Math.min(1, Math.max(0, f * n - i)), K.r(30 + (fijo + i * m) * u, y, m * u, 28, 'fa', 0))).join('') : '');
+  XG.figura('llega-presupuesto', {
+    ini: () => ({ x: 0 }), alto: () => 176, ms: 1200, pie: 'Mueve la perilla.',
+    manijas: p => [{ k: 'x', min: 0, max: p.max, paso: 1, et: p.et }], ok: (v, p) => p.b + p.m * v.x === p.total, sol: p => ({ x: (p.total - p.b) / p.m }), texto: p => `${(p.total - p.b) / p.m}`,
+    dib: (v, K, p, f) => { const u = 270 / Math.max(p.total, f ? p.b + p.m * v.x : 0); return K.t(30, 24, `fijo ${N(p.b)} · ${N(p.m)} por cada ${p.uno}`, 's tm', 'start') + K.r(30, 34, p.total * u, 18, 'fn', 0) + K.t(Math.max(250, 30 + p.total * u), 24, N(p.total), 's', 'end') + barra(K, 62, p.b, p.m, v.x, u, f); },
+    aviso: (v, p) => `Con ${v.x} se llega a ${N(p.b + p.m * v.x)}.`, bien: (v, p) => `${N(p.b)} + ${N(p.m)} · ${v.x} = ${N(p.total)}.`,
+  });
+  XG.figura('vacia-tanque', {
+    ini: () => ({ x: 0 }), alto: () => 206, ms: 1200, pie: 'Mueve la perilla.',
+    manijas: p => [{ k: 'x', min: 0, max: p.max, paso: 1, et: 'minutos' }], ok: (v, p) => p.b - p.m * v.x === p.q, sol: p => ({ x: (p.b - p.q) / p.m }), texto: p => `${(p.b - p.q) / p.m} minutos`,
+    dib: (v, K, p, f) => { const alt = Math.max(0, p.b - p.m * v.x * f) / p.b * 110; return K.r(110, 14, 120, 116, 'fn', 4) + K.r(112, 128 - alt, 116, alt, 'fa', 2) + K.t(240, 24, `${N(p.b)} L`, 's tm', 'start') + K.t(240, 124, `−${N(p.m)} L/min`, 's tm', 'start') + K.f(f, K.l(104, 128 - p.q / p.b * 110, 236, 128 - p.q / p.b * 110, 'lf d')); },
+    aviso: (v, p) => (p.b - p.m * v.x < 0 ? 'A esa hora ya no quedaba agua.' : `En ${v.x} minutos quedan ${N(p.b - p.m * v.x)}.`), bien: (v, p) => `${N(p.b)} − ${N(p.m)} · ${v.x} = ${N(p.q)}.`,
+  });
+  const cruce = p => (p.c[0] - p.a[0]) / (p.a[1] - p.c[1]);
+  XG.figura('cruce-planes', {
+    ini: () => ({ x: 0 }), alto: () => 206, ms: 1200, pie: 'Mueve la perilla.',
+    manijas: p => [{ k: 'x', min: 0, max: p.max, paso: 1, et: p.et }], ok: (v, p) => p.a[0] + p.a[1] * v.x === p.c[0] + p.c[1] * v.x, sol: p => ({ x: cruce(p) }), texto: p => `${cruce(p)}`,
+    dib: (v, K, p, f) => { const u = 280 / Math.max(p.a[0] + p.a[1] * p.max, p.c[0] + p.c[1] * p.max); return [[p.a, 'A', 30], [p.c, 'B', 92]].map(([t, n, y]) => K.t(30, y - 6, `${n}: fijo ${N(t[0])} · ${N(t[1])} por cada ${p.uno}`, 's tm', 'start') + barra(K, y, t[0], t[1], v.x, u, f)).join(''); },
+    aviso: (v, p) => { const a = p.a[0] + p.a[1] * v.x, c = p.c[0] + p.c[1] * v.x; return `Con ${v.x}, A vale ${N(a)} y B, ${N(c)}: se llevan ${N(Math.abs(a - c))}.`; }, bien: (v, p) => `Los dos valen ${N(p.a[0] + p.a[1] * v.x)}.`,
+  });
+  // Desde dónde y hacia dónde conviene un plan.
+  const ZX = (p, x) => 34 + x / p.max * 272;
+  XG.figura('zona-conviene', {
+    ini: () => ({ x: 0, d: 1 }), alto: () => 190, ms: 900, pie: 'Mueve el borde y cambia el lado.',
+    manijas: p => [{ k: 'x', min: 0, max: p.max, paso: 1, r: 12, en: v => [ZX(p, v.x), 46], de: x => (x - 34) / 272 * p.max }, { k: 'd', min: -1, max: 1, paso: 2, et: 'el lado', rot: v => (v.d > 0 ? '→' : '←') }],
+    ok: (v, p) => v.x === p.x && v.d === p.d, sol: p => ({ x: p.x, d: p.d }), texto: p => `${p.d > 0 ? 'más' : 'menos'} de ${p.x}`,
+    dib: (v, K, p, f) => { let h = K.l(34, 80, 306, 80, 'lm'); for (let i = 0; i <= p.max; i += p.st || 1) h += K.l(ZX(p, i), 76, ZX(p, i), 84, 'lm') + K.t(ZX(p, i), 100, i, 's tm'); return h + K.l(ZX(p, v.x), 46, ZX(p, v.x), 80, 'lg') + (v.d > 0 ? K.r(ZX(p, v.x), 68, 306 - ZX(p, v.x), 12, 'fa', 0) : K.r(34, 68, ZX(p, v.x) - 34, 12, 'fa', 0)) + K.t(170, 22, p.et, 's tm') + (f ? K.c(ZX(p, v.x), 46, 8, 'fG') : ''); },
+    aviso: (v, p) => (v.x === p.x ? 'El borde está bien: prueba con un número de ese lado.' : `Con ${v.x}, ¿los dos planes cuestan lo mismo?`), bien: (v, p) => p.ok,
+  });
+  // Se ponen medidas bajo una gráfica de puntos unidos, o bajo una tabla.
+  XG.cuenta('lee-pendiente', 222, (K, p) => plano(K, p) + linea(K, p, p.q, 'la gr') + (p.marca || p.q).map(([x, y]) => K.c(PX(p, x), PY(p, y), 5, 'fG')).join(''));
+  XG.cuenta('historia-grafica', 222, (K, p) => plano(K, p) + linea(K, p, p.q, 'la gr') + p.q.slice(1).map(([x, y], i) => K.t((PX(p, x) + PX(p, p.q[i][0])) / 2, (PY(p, y) + PY(p, p.q[i][1])) / 2 - 9, 'ABCD'[i], 'b tg')).join(''));
+  XG.cuenta('tabla-lineal', 92, (K, p) => { const n = p.t.length, w = 232 / n; return K.t(16, 34, p.ex, 's tm', 'start') + K.t(16, 72, p.ey, 's tm', 'start') + p.t.map(([x, y], i) => K.r(96 + i * w, 12, w - 4, 34, 'fc', 4) + K.r(96 + i * w, 50, w - 4, 34, 'fc', 4) + K.t(94 + (i + 0.5) * w, 34, N(x), 's') + K.t(94 + (i + 0.5) * w, 72, y == null ? '?' : N(y), y == null ? 'b tf' : 's')).join(''); });
+  XG.ascensor('sube-tarifa', 60, 1, neutro);
+})();
+;
 //#archivo js/games/conjuntos-escena.js
 // Ejercicios de «Conjuntos» (pu-cj-1 y pu-cj-2) con las escenas de la explicación: los círculos y sus zonas, y las barras que se solapan.
 // Armazones en figura-kit, logica-kit, conteo-escena (XG.cuenta, XG.ascensor) y proposiciones-escena (XG.renglones, XG.frases).
@@ -23995,3 +23245,70 @@ const PU_RAZONAMIENTO = [
 
 // Constructores de los juegos de cada mundo (preuda-r-*.js); los aplica preuda-razonamiento-juegos.js.
 const PU_JUEGOS = [];
+;
+//#archivo js/courses/preuda-videos.js
+// Videos del Preuniversitario ya subidos a Bunny (biblioteca 811556), con voz. GENERADO por
+// video/preuda-cosmos/tools/app-videos.js desde out/voz/bunny.json: no editar a mano. Va después de preuda-razonamiento.js.
+// Cada entrada: { bunny, duration (s, la que reporta Bunny), film, scenes: [[segundos, título, texto]] } (escenas de respaldo).
+const PU_VIDEOS = {
+  "pu-ar-1": {"bunny":"1bbaad9b-b8db-41d8-8be3-f11167b63d95","duration":180.2,"film":"queda","scenes":[[12,"El testamento","La mitad a la esposa: la tercera parte de lo restante al hijo mayor. Lo que queda, igual para dos hijas: cada hija recibió 6 millones. Cuánto eran los ahorros: al final lo resolvemos."],[12,"Fracción de qué","Una barra de 12 cuadros: se gasta un tercio del total: 4. Luego, la mitad de lo que queda: la mitad de 8, no de 12: otros 4. Cada fracción tiene su total: el total, o lo que queda en ese momento."],[12,"Lo que queda se multiplica","Gastar 1/3 deja 2/3: se mira lo que queda, no lo gastado. Gastar 1/2 de eso deja 1/2 de 2/3: 2/3 · 1/2 = 1/3. Queda un tercio del total: los 4 cuadros que sobran de 12."],[12,"La pieza de tela","Vende 2/5 de la tela: y luego 1/3 de lo que queda. Queda 3/5 · 2/3 = 2/5: y eso son 24 metros. 2/5 de la pieza = 24 m: la pieza medía 60 m."],[12,"Hacia atrás","Julián: 1/3 en un libro: y 1/4 de lo que le queda en almuerzo. Queda 2/3 · 3/4 = 1/2: y le quedan 30 000. Si la mitad es 30 000: tenía 60 000."],[12,"La biblioteca","25 % en inglés, el resto en español: del español, el 30 % son novelas. 420 = 70 % del español: en español hay 600 libros. 600 son el 75 % del total: 800: en inglés hay 200."],[12,"El error de restar","1 − 1/3 − 1/4 no sirve: el 1/4 no es del total. Daría 5/12 y no 1/2: se restó 1/4 del total, pero se gastó 1/4 de 2/3. Solo se restan fracciones: cuando son del mismo total."],[10,"Comprobar hacia adelante","La tela: 60 m: vende 2/5: 24 m; quedan 36. Vende 1/3 de 36: 12: quedan 24 m. Coincide con el enunciado: la respuesta queda comprobada."],[12,"El testamento, resuelto","Esposa 1/2: queda 1/2: hijo 1/3 de 1/2 = 1/6: queda 1/3. Cada hija, la mitad de 1/3: 1/6 del total = 6 millones. El total: 6 · 6 = 36 millones: 18 + 6 + 6 + 6 = 36."],[5,"Cierre","Los ahorros: 36 millones: la opción A."]]},
+  "pu-ar-2": {"bunny":"41ffe8b7-7b89-49f0-85a1-a45ce4e13c77","duration":187.9,"film":"medias","scenes":[[12,"Hombres y mujeres","Un grupo promedió 3.9: en una prueba de 0 a 5. Los hombres, 3.5; las mujeres, 4.1: el del grupo queda en medio. Qué se sabe de cuántos son: al final lo resolvemos."],[12,"Promedio por cantidad","Promedio × cantidad = suma: el promedio esconde una suma. Daniela: 5 notas de promedio 3.8: suman 19; con 6 de promedio 4.0, suman 24. La sexta nota: 24 − 19 = 5.0: se trabaja con sumas, no con promedios."],[12,"El quinto amigo","4 amigos con promedio de 25 años: llega otro y el promedio sube a 27. Antes: 4 · 25 = 100: después: 5 · 27 = 135. El quinto: 135 − 100 = 35: tiene 35 años."],[10,"Quitar datos","8 números de promedio 15: suman 120. Se quitan 2 de promedio 9: que suman 18. Quedan 6 que suman 102: promedio: 102 ÷ 6 = 17."],[12,"El promedio ponderado","Un carro: 2 h a 80 y 3 h a 60: el promedio no es 70. Distancia: 160 + 180 = 340 km: tiempo: 5 horas. 340 ÷ 5 = 68 km/h: pesan más las horas a 60."],[12,"Ida y vuelta","Ida a 60 km/h, vuelta a 40: por el mismo camino. Con 120 km: 2 h de ida y 3 de vuelta: 240 km en 5 horas. 240 ÷ 5 = 48 km/h: no 50: a 40 va más tiempo."],[12,"Tachar sin cambiar","3, 4, 7, 8, 10, 12, 13, 15: promedio: 72 ÷ 8 = 9. Quedan 6 con promedio 9: suman 54: los dos tachados suman 18. 3 y 15, u 8 y 10: hay 2 maneras."],[12,"La balanza","El promedio es un equilibrio: lo que falta de un lado sobra del otro. Cada grupo jala con su tamaño: por la distancia al promedio. El grupo más grande: queda más cerca del promedio."],[12,"El grupo, resuelto","Hombres: 0.4 por debajo de 3.9: mujeres: 0.2 por encima. Equilibrio: 0.4 · h = 0.2 · m: m = 2h. Las mujeres son el doble: p. ej., 10 hombres y 20 mujeres."],[5,"Cierre","Las mujeres son el doble: la opción A."]]},
+  "pu-ar-3": {"bunny":"af9ad6f2-3e3d-4b65-a9c0-2e73b7ee56b9","duration":199.6,"film":"cifras","scenes":[[12,"La edad al revés","La edad del padre: dos cifras: al invertirlas sale la del hijo. El padre es 27 años mayor: y las dos cifras suman 9. Qué edad tiene el padre: al final lo resolvemos."],[12,"Cada cifra vale su lugar","En 47, el 4 vale 40: la cifra de las decenas vale diez veces. AB = 10A + B: con letras, igual. ABC = 100A + 10B + C: cada lugar a la izquierda, diez veces más."],[12,"Invertir las cifras","AB − BA = 9A − 9B = 9(A − B): la resta siempre es múltiplo de 9. AB + BA = 11A + 11B = 11(A + B): la suma siempre es múltiplo de 11. 52 − 25 = 27 = 9 · 3: 52 + 25 = 77 = 11 · 7."],[10,"La suma 165","AB + BA = 165: cuántos números AB cumplen. 11(A + B) = 165: A + B = 15. 69, 78, 87 y 96: son 4 números."],[12,"Cuatro veces sus cifras","AB = 4 · (A + B): un número es 4 veces la suma de sus cifras. 10A + B = 4A + 4B: 6A = 3B: B = 2A. 12, 24, 36 y 48: B no pasa de 9: A llega hasta 4."],[12,"Letras que esconden cifras","AB + B = BA: cada letra es una cifra distinta. 10A + 2B = 10B + A: 9A = 8B. A = 8 y B = 9: 89 + 9 = 98."],[12,"El mayor de tres cifras","Producto de las cifras: 24: suma de las cifras: 9. 2 · 3 · 4 = 24 y 2 + 3 + 4 = 9: otras ternas fallan en la suma. Ordenadas de mayor a menor: el número es 432."],[12,"Cuántas cifras tiene","2¹⁰ · 5⁷: cuántas cifras: sin calcularlo todo. Cada 2 · 5 es un 10: 2¹⁰ · 5⁷ = 2³ · 10⁷. 8 · 10⁷ = 80 000 000: tiene 8 cifras."],[12,"La edad, resuelta","AB − BA = 9(A − B) = 27: A − B = 3. A + B = 9 y A − B = 3: A = 6 y B = 3. El padre tiene 63 y el hijo 36: 63 − 36 = 27."],[5,"Cierre","El padre tiene 63 años: la opción A."]]},
+  "pu-ar-4": {"bunny":"282d32a4-5bdd-46db-80ff-19c03a8b79fa","duration":193.9,"film":"extremos","scenes":[[12,"El cajón oscuro","10 negras, 8 azules y 6 grises: medias sueltas en un cajón oscuro. Se sacan sin mirar: hasta tener tres del mismo color. La menor cantidad que lo asegura: al final lo resolvemos."],[12,"Pensar en la peor suerte","Certeza: tiene que pasar siempre: aun con la peor suerte. 12 personas, 12 meses distintos: una por mes, sin repetir. La persona 13 repite un mes: con 13, dos comparten mes seguro."],[12,"Tres en el mismo mes","Para tres en el mismo mes: la peor suerte llena cada mes con dos. 2 · 12 = 24 personas: sin ningún mes con tres. La 25 completa un trío: peor caso + 1."],[12,"Una de cada color","12 rojas, 9 verdes y 7 azules: se quiere al menos una de cada color. Peor suerte: salen las 12 rojas: y luego las 9 verdes. 12 + 9 + 1 = 22: la siguiente es azul seguro."],[12,"El más grande posible","Cinco enteros positivos distintos: que suman 30. Para que uno sea grande: los otros cuatro, lo más pequeños: 1, 2, 3, 4. 30 − 10 = 20: el más grande puede ser 20."],[12,"El mayor producto","Dos enteros que suman 21: cuál es su mayor producto. 1 · 20 = 20 · 5 · 16 = 80 · 10 · 11: 110: el producto crece al acercarse. Lo más parejo posible: como el rectángulo que se acerca al cuadrado."],[12,"El ingrediente que limita","Azul y amarilla en razón 3 : 5: hay 12 L de azul y 15 de amarilla. La amarilla alcanza para 3 tandas: la azul alcanzaría para 4. 3 tandas: 9 L azul + 15 L amarilla: la mayor cantidad: 24 L."],[11,"Sin casillas vecinas","Cuadrícula de 3 × 3: colorear sin que dos compartan lado. Las cuatro esquinas y el centro: 5 casillas. Con 6, dos quedarían vecinas: el máximo es 5."],[12,"El cajón, resuelto","Peor suerte: dos de cada color: 2 negras, 2 azules, 2 grises. Con 6 medias, todavía no hay tres: la séptima repite un color por tercera vez. 2 · 3 + 1 = 7: no importa cuántas haya de cada color."],[5,"Cierre","Hay que sacar 7 medias: la opción A."]]},
+  "pu-cd-1": {"bunny":"bffa688f-5e8b-47c8-a65f-104ddfb6f1a4","duration":192.2,"film":"cifrados","scenes":[[12,"Sol, luz y sur","Cada letra tiene su símbolo: SOL, LUZ y SUR, con sus tres símbolos. Los símbolos van en desorden: no se sabe cuál es de cuál letra. El código de LOROS: al final lo resolvemos."],[12,"Una letra, un símbolo","Una clave de sustitución: cada letra se cambia siempre por lo mismo. La misma letra, el mismo símbolo: en cualquier palabra donde aparezca. Letras distintas, símbolos distintos: así el mensaje se puede devolver."],[12,"Correr tres lugares","Cada letra avanza 3 lugares: A → D, B → E, C → F. Después de la Z se vuelve a empezar: X → A, Y → B, Z → C. ZUKA → CXND: el alfabeto como una rueda."],[12,"Descifrar","Se recibe OLEUR: con la misma clave de +3. Para descifrar, se retrocede 3: O → L, L → I, E → B. OLEUR → LIBRO: la operación al revés."],[12,"Fila y columna","Las letras en una tabla de 5 × 5: sin la W, para que quepan 25; cada letra: dos cifras. Primero la fila, después la columna: H está en la fila 2, columna 3: 23. El orden de las cifras importa: 23 es H; 32 es otra letra."],[12,"Tres pares de cifras","El mensaje 33 11 43: con la tabla de filas y columnas. 33: fila 3, columna 3: la M. 11 es la A y 43 la R: el mensaje dice MAR."],[12,"Letras en dos palabras","La L está en SOL y en LUZ: su símbolo está en las dos listas. El único símbolo repetido: entre SOL y LUZ es de la L. Cruzar las listas: lo común delata a la letra común."],[12,"Un método","1. Buscar letras repetidas: que estén en dos palabras. 2. Cruzar sus símbolos: el común es el de esa letra. 3. Lo que sobra se reparte: la última letra de cada palabra."],[12,"Loros, resuelto","L: el común de SOL y LUZ: S: el común de SOL y SUR. U: el común de LUZ y SUR: O, Z y R: el que sobra en cada palabra. LOROS = ○ □ ● □ △: la opción A."],[5,"Cierre","LOROS = ○ □ ● □ △: la opción A."]]},
+  "pu-cd-2": {"bunny":"116353cf-2787-4c83-8eb3-84fadfbe46dd","duration":207.5,"film":"reglas","scenes":[[12,"El dígito borrado","Códigos de cinco dígitos: el quinto es un dígito de control. Residuo de la suma ÷ 7: de los cuatro primeros dígitos. Se borró uno: 5 _ 2 8 4: al final lo resolvemos."],[12,"Leer la regla","La regla se sigue al pie de la letra: no hay que saberla de memoria. El ejemplo sirve para comprobar: 2 5 1 3 4: 2 + 5 + 1 + 3 = 11. 11 ÷ 7 = 1, sobran 4: el control es 4: entendido."],[12,"Aplicar la regla","Primeros dígitos 3, 4, 6, 2: cuál es el control. 3 + 4 + 6 + 2 = 15: 15 = 2 · 7 + 1. El control es 1: el código completo: 3 4 6 2 1."],[12,"Tres máquinas","A: × 2 · B: − 3 · C: al cuadrado: un número pasa por varias. 5 por A, luego B, luego C: 5 → 10 → 7 → 49. El orden importa: por C, luego A, luego B: 5 → 25 → 50 → 47."],[12,"Deshacer en orden inverso","Salió 47 tras C, A y B: qué número entró. Se deshace de atrás hacia adelante: +3 → 50 · ÷2 → 25 · raíz → 5. Cada paso, con su contraria: como quitarse los zapatos antes que las medias."],[12,"Una numeración antigua","○ = 1, △ = 5, □ = 25, ★ = 125: el valor es la suma de los símbolos. ★ □□ △△△△ ○○: 125 + 50 + 20 + 2. Representa el 197: se agrupa por símbolo y se suma."],[12,"Con pocos símbolos","Escribir 318 en ese sistema: ningún símbolo más de cuatro veces. Del más grande al más pequeño: 2 · 125 + 2 · 25 + 3 · 5 + 3. 2 + 2 + 3 + 3 = 10 símbolos: como dar vueltas con pocas monedas."],[12,"Tres luces","Rojo 0, amarillo 1, verde 2: izquierda × 9, centro × 3, derecha × 1. Verde, rojo, amarillo: 2 · 9 + 0 · 3 + 1 · 1 = 19. El mayor: verde, verde, verde: 18 + 6 + 2 = 26."],[12,"El dígito, resuelto","5 + x + 2 + 8 = 15 + x: debe dejar residuo 4 al dividir entre 7. 15 + x = 18 o 25: los que dejan residuo 4 cerca. x = 3: 25 daría x = 10: no es un dígito."],[5,"Cierre","El dígito borrado es 3: la opción A."]]},
+  "pu-cj-1": {"bunny":"0ce7abae-29cd-475e-8e70-4f6f678b9e1a","duration":182.6,"film":"venn","scenes":[[11,"Dos idiomas","200 empleados: 60 % inglés, 25 % francés. El 30 % no habla ninguno: los porcentajes suman más de 100. Cuántos hablan los dos: al final lo resolvemos."],[12,"Las cuatro zonas","Dos conjuntos dentro del universo: el rectángulo es todo el grupo. Solo A, los dos, solo B: cada persona cae en una sola zona. Y afuera: ninguno: las cuatro zonas suman el total."],[12,"Las operaciones","Unión A ∪ B: A o B: intersección A ∩ B: A y B. Diferencia A − B: A pero no B: la luna de A que no toca B. Complemento Aᶜ: lo que no es A: todo el resto del universo."],[12,"Perros y gatos","60 familias: 32 perro, 25 gato: 8 tienen perro y gato. Unión: 32 + 25 − 8 = 49: el 8 se había contado dos veces. Ninguno: 60 − 49 = 11: 11 familias sin perro ni gato."],[12,"El doble conteo","n(A) + n(B) cuenta dos veces: a los que están en los dos. n(A ∪ B) = n(A) + n(B) − n(A ∩ B): se resta una vez lo repetido. Si la suma pasa de la unión: lo que sobra es la intersección."],[12,"Con porcentajes","70 % ve fútbol, 50 % ve tenis: y 10 % no ve ninguno. Alguno: 100 − 10 = 90 %: 70 + 50 = 120 %. Sobran 30 %: ven los dos: los porcentajes se tratan igual."],[12,"Solo y exactamente uno","Solo fútbol: 70 − 30 = 40 %: se quita la intersección. Solo tenis: 50 − 30 = 20 %: la otra luna. Exactamente uno: 40 + 20 = 60 %: la unión menos la intersección."],[12,"Desde el centro","El orden para llenar un Venn: primero la intersección. Luego las lunas: cada conjunto menos lo del centro. Al final, lo de afuera: el total menos todo lo de adentro."],[12,"Los idiomas, resueltos","Alguno: 100 − 30 = 70 %: 60 + 25 = 85 %. Los dos: 85 − 70 = 15 %: el 15 % de 200 = 30. Solo francés: 25 − 15 = 10 %: 20 empleados."],[5,"Cierre","30 empleados hablan los dos: la opción A."]]},
+  "pu-cj-2": {"bunny":"8e30c12f-ebbd-45f4-9c86-a17322a000bb","duration":196.2,"film":"encuestas","scenes":[[11,"El instituto de idiomas","100 estudiantes, tres idiomas: inglés 50, francés 40, alemán 30. Parejas: 15, 10 y 8: y 3 estudian los tres. Cuántos no estudian ninguno: al final lo resolvemos."],[12,"Ocho zonas","Tres círculos que se cruzan: forman siete zonas adentro. Solo uno, exactamente dos, los tres: 3 + 3 + 1 zonas. Y la octava: ninguno: las ocho suman el total."],[12,"Del centro hacia afuera","Primero el centro: los 3 de los tres: ese número va solo. Luego las parejas, menos el centro: inglés y francés solamente: 15 − 3 = 12. Luego las lunas: solo inglés: 50 − 12 − 7 − 3 = 28."],[12,"Series y novelas","45 personas: 28 ven series: 21 ven novelas, 6 no ven ninguna. Alguna: 45 − 6 = 39: las dos: 28 + 21 − 39 = 10. Solo series: 28 − 10 = 18: 18 personas."],[12,"La x en el centro","Si no se sabe la intersección: se llama x. (28 − x) + x + (21 − x) + 6 = 45: las zonas suman el total. 55 − x = 45 → x = 10: el mismo resultado, con ecuación."],[12,"Sumar, restar, sumar","Al sumar los tres conjuntos: las parejas quedan contadas dos veces. Se restan las tres parejas: pero el centro se quita de más. Se suma otra vez el centro: A + B + C − parejas + los tres."],[12,"La tabla del club","50 socios: 30 hombres: 10 zurdos, de ellos 6 hombres. Cada fila y columna suma su total: la tabla es otro diagrama. Hombres diestros: 30 − 6 = 24: se completa casilla por casilla."],[12,"Exactamente dos","Exactamente dos idiomas: las tres parejas sin el centro. 12 + 7 + 5 = 24 estudiantes: el centro no cuenta. Al menos dos: 24 + 3 = 27: una palabra cambia la cuenta."],[12,"Los idiomas, resueltos","50 + 40 + 30 = 120: se suman los tres. 120 − 15 − 10 − 8 + 3 = 90: estudian al menos uno. Ninguno: 100 − 90 = 10: diez estudiantes."],[5,"Cierre","10 no estudian ninguno: la opción A."]]},
+  "pu-co-1": {"bunny":"b3a2cd0a-b6a7-4c8d-896c-2a022741b7b6","duration":194.4,"film":"multiplicativo","scenes":[[10,"La bandera de tres franjas","Tres franjas, cuatro colores: se puede repetir color. Dos franjas vecinas, distintas: arriba y abajo sí pueden coincidir. Cuántas banderas distintas: al final lo resolvemos."],[12,"El árbol","2 camisas y 3 pantalones: cuántas pintas distintas. Cada camisa abre 3 ramas: el árbol muestra todas las parejas. 2 · 3 = 6 pintas: cada hoja es una pinta."],[12,"El principio multiplicativo","3 entradas, 4 platos, 2 postres: un menú: se escoge uno de cada cosa. 3 · 4 · 2 = 24 menús: un árbol de tres niveles. Decisiones seguidas se multiplican: sin dibujar el árbol entero."],[12,"Las casillas","Tres letras y dos dígitos: letras A, B o C; dígitos impares distintos. Una casilla por decisión: 3 · 3 · 3 · 5 · 4. 540 códigos: el cuarto dígito ya no puede repetir."],[12,"La clave de camilo","Clave de 4 cifras con 1, 2 y 3: nunca dos iguales juntos. La primera: 3 opciones: cada siguiente: 2, la que no repite. 3 · 2 · 2 · 2 = 24: no 81: eso sería sin la condición."],[12,"Primero la restricción","Números de tres cifras sin el 5: la primera cifra no puede ser 0. Primera: 8 opciones: ni 0 ni 5; las otras dos: 9 cada una. 8 · 9 · 9 = 648: se empieza por la casilla más exigente."],[12,"Los capicúas","Capicúa: se lee igual al revés: 3443, 5005, 7117. Forma a b b a: solo se eligen a y b. 9 · 10 = 90: a no puede ser 0; las otras dos se copian."],[12,"«y» multiplica, «o» suma","De A a C pasando por B: 3 caminos y luego 2: 3 · 2 = 6. O directo de A a C: 2 caminos más. 6 + 2 = 8 caminos: pasos seguidos: ×; caminos distintos: +."],[12,"La bandera, resuelta","Franja de arriba: 4 colores: cualquiera. Del medio: 3; de abajo: 3: cada una evita solo a su vecina de arriba. 4 · 3 · 3 = 36 banderas: la de abajo puede repetir la de arriba."],[5,"Cierre","Hay 36 banderas: la opción A."]]},
+  "pu-co-2": {"bunny":"59f45102-aa00-4ed8-a14e-5243271808b6","duration":194.1,"film":"permutaciones","scenes":[[11,"Las letras de libro","Ordenar L, I, B, R, O: todas las letras, sin repetir. Las vocales, juntas: I y O una al lado de la otra. Cuántas maneras: al final lo resolvemos."],[12,"Ordenar tres libros","Tres libros en un estante: el primer lugar: 3 opciones. El segundo: 2; el último: 1: el que queda. 3 · 2 · 1 = 6 órdenes: cada orden es una permutación."],[12,"El factorial","n! = n · (n − 1) · … · 1: se lee «ene factorial». Crece muy rápido: 4! = 24, 5! = 120, 6! = 720. 10! = 3 628 800: diez libros: más de tres millones de órdenes."],[12,"El podio","8 corredores, 3 medallas: oro, plata y bronce. 8 · 7 · 6 = 336: se ordenan solo tres de los ocho. Ordenar r de n: se multiplican r factores, bajando de a uno."],[12,"Tres cargos","Presidente, secretario y tesorero: de un grupo de 6 personas. Los cargos son distintos: Ana presidenta no es Ana tesorera. 6 · 5 · 4 = 120: el orden importa."],[12,"Amarrar un bloque","Cuatro amigos; dos quieren ir juntos: se amarran como un solo bloque. Ahora son 3 cosas para ordenar: 3! = 6. Y el bloque tiene 2 órdenes: 6 · 2 = 12."],[12,"Letras repetidas","Anagramas de PAPA: si las letras fueran distintas: 4! = 24. Las P son iguales; las A también: cada palabra sale 2 · 2 = 4 veces. 24 ÷ 4 = 6 palabras: PAPA, PAAP, PPAA, APAP, APPA, AAPP."],[12,"Cuándo importa el orden","Una clave, una fila, unos cargos: cambiar el orden da otro resultado. Un comité, un equipo, un grupo: cambiar el orden da lo mismo. Si importa: permutaciones: si no importa: combinaciones, la próxima lección."],[12,"Libro, resuelto","Se amarran I y O: quedan 4 piezas: L, B, R y el bloque. 4! = 24 órdenes: para las cuatro piezas. IO u OI: × 2 = 48: las vocales juntas, de 48 maneras."],[5,"Cierre","Hay 48 maneras: la opción A."]]},
+  "pu-co-3": {"bunny":"e101440e-9715-4f87-96c9-d55d1220c17f","duration":217.4,"film":"combinaciones","scenes":[[10,"El comité","5 hombres y 4 mujeres: se escoge un comité de 3. Exactamente 2 mujeres: y por lo tanto 1 hombre. Cuántos comités distintos: al final lo resolvemos."],[12,"Sin orden","3 sabores de helado entre 5: en una copa, sin orden. Con orden serían 5 · 4 · 3 = 60: pero cada copa sale 3! = 6 veces. 60 ÷ 6 = 10 copas: se divide entre los órdenes repetidos."],[12,"La fórmula","C(n, r): escoger r de n: sin importar el orden. Arriba r factores bajando desde n: abajo r!. C(5, 3) = 5 · 4 · 3 / 3! = 10: C(7, 2) = 7 · 6 / 2 = 21."],[12,"Escoger es dejar","Números de 4 cifras con 1 a 6: cada cifra mayor que la anterior. Basta escoger las 4 cifras: el orden creciente es uno solo. C(6, 4) = C(6, 2) = 15: escoger 4 es lo mismo que dejar 2."],[12,"Triángulos en un círculo","6 puntos sobre una circunferencia: cada tres forman un triángulo. Un triángulo = 3 puntos, sin orden: ABC es el mismo que CAB. C(6, 3) = 6 · 5 · 4 / 6 = 20: veinte triángulos."],[12,"Los 45 saludos","Cada uno saluda una vez a cada otro: hubo 45 saludos. Un saludo = una pareja: C(n, 2) = n · (n − 1) / 2. n · (n − 1) = 90: 10 · 9 = 90: eran 10 personas."],[12,"Las diagonales","Un decágono: 10 vértices: parejas de vértices: C(10, 2) = 45. 10 de esas parejas son lados: el resto son diagonales. 45 − 10 = 35 diagonales: o 10 · 7 / 2."],[11,"Grupos mixtos","Dos condiciones a la vez: se escoge por separado. Una parte de cada grupo: cada parte con su C(n, r). Y se multiplican: una elección y luego la otra."],[12,"El comité, resuelto","2 de las 4 mujeres: C(4, 2) = 4 · 3 / 2 = 6. 1 de los 5 hombres: C(5, 1) = 5. 6 · 5 = 30 comités: no 60: el orden no importa."],[5,"Cierre","Hay 30 comités: la opción A."]]},
+  "pu-co-4": {"bunny":"f09086fc-e494-4eba-9516-169461897d48","duration":192.4,"film":"casos","scenes":[[12,"Múltiplos de 3 o de 5","Del 1 al 100: los múltiplos de 3 o de 5. «O» incluye a los dos: el 15 es de los dos y cuenta una vez. Cuántos son: al final lo resolvemos."],[12,"Contar por casos","Tres cifras que suman 4: se separa por la primera cifra. Empieza en 1: 4 · empieza en 2: 3: empieza en 3: 2 · empieza en 4: 1. 4 + 3 + 2 + 1 = 10: cada caso, fácil de contar."],[12,"Casos que no se pisan","Cada número cae en un solo caso: la primera cifra es una sola. Y ninguno se queda por fuera: los casos cubren todo. Así se puede sumar: sin contar dos veces ni olvidar."],[12,"El complemento","Cuatro sillas: Ana y Beto separados: contar los separados es engorroso. Total: 4! = 24 · juntos: 3! · 2 = 12: se cuentan los que no sirven. 24 − 12 = 12: lo que sirve = todo − lo que no sirve."],[12,"«al menos uno»","Números de dos cifras con algún 7: uno, o dos: muchos casos. Sin ningún 7: 8 · 9 = 72: la primera ni 0 ni 7; la segunda, no 7. 90 − 72 = 18: «al menos uno» pide complemento."],[12,"Los pares de tres cifras","Con 1, 2, 3, 4 y 5, sin repetir: números de tres cifras pares. La última cifra: 2 o 4: la casilla más exigente va primero. 2 · 4 · 3 = 24: después las otras dos, sin repetir."],[12,"Contar múltiplos","Múltiplos de 3 hasta 100: 3, 6, 9, …, 99. 100 ÷ 3 = 33.3…: la parte entera: 33 múltiplos. De 5: 20 · de 15: 6: se divide y se quita lo decimal."],[12,"Los que se cuentan dos veces","Dos grupos que se cruzan: los del cruce están en los dos. Al sumar, el cruce cuenta doble: por eso se resta una vez. |A ∪ B| = |A| + |B| − |A ∩ B|: sumar los dos y restar el cruce."],[12,"Los múltiplos, resueltos","Múltiplos de 3: 33: múltiplos de 5: 20. De los dos: múltiplos de 15: 15, 30, 45, 60, 75, 90: seis. 33 + 20 − 6 = 47: cada número, una sola vez."],[5,"Cierre","Son 47 números: la opción A."]]},
+  "pu-co-5": {"bunny":"35b6ae75-a261-4cb0-9b4b-4c58dba616ea","duration":198.2,"film":"caminos","scenes":[[12,"El mensajero","De P a Q por las calles: solo hacia la derecha o hacia arriba. El cruce R está cerrado: no se puede pasar por ahí. Cuántos caminos quedan: al final lo resolvemos."],[12,"Sumar en cada cruce","A cada cruce se llega de dos lados: desde la izquierda o desde abajo. Caminos = izquierda + abajo: los bordes tienen un solo camino. Cuadrícula de 3 × 2: 10 caminos: se va sumando cruce por cruce."],[12,"Caminos como palabras","Cada camino: 3 pasos D y 2 pasos N: D D N D N, N D D D N…. Escoger dónde van las 2 N: entre 5 lugares. C(5, 2) = 10: el mismo diez de la suma."],[12,"Los cuadrados","Una cuadrícula de 3 × 3: cuántos cuadrados de cualquier tamaño. Por tamaños: 9 de 1 · 4 de 2: y 1 de 3. 9 + 4 + 1 = 14: los cuadrados perfectos, sumados."],[12,"Los rectángulos","Cuadrícula de 3 × 2: todos los rectángulos, también los cuadrados. Rectángulo = 2 líneas horizontales: y 2 verticales. C(3, 2) · C(4, 2) = 3 · 6 = 18: escoger los bordes."],[12,"Triángulos desde un vértice","Del vértice salen 5 líneas: los dos lados y tres segmentos. Dos líneas y la base: un triángulo: escoger 2 de 5. C(5, 2) = 10 triángulos: no solo los 4 pequeños."],[12,"La escalera","Subir de a 1 o de a 2 peldaños: cuántas maneras para 5 peldaños. Al último se llega desde el 4 o el 3: maneras(5) = maneras(4) + maneras(3). 1, 2, 3, 5, 8: se suman las dos anteriores."],[12,"Pasar por un punto","Caminos que pasan por R: de P a R, y luego de R a Q. Se multiplican: una parte y luego la otra. Los que evitan R: todos menos los que pasan por R."],[12,"El mensajero, resuelto","Todos: C(6, 3) = 20: 3 pasos D y 3 pasos N. Por R: 2 · 6 = 12: de P a R hay 2; de R a Q hay 6. 20 − 12 = 8 caminos: o sumando, con un 0 en R."],[5,"Cierre","Quedan 8 caminos: la opción A."]]},
+  "pu-ec-1": {"bunny":"276de5e7-62f1-4656-9f32-447520931018","duration":214.7,"film":"traducir","scenes":[[12,"Tres generaciones","El abuelo: el doble de su hijo: el hijo: el triple de su propio hijo. Las tres edades suman 120: tres personas, una sola pista. La edad del abuelo: al final lo resolvemos."],[12,"Traducir con cuidado","«El doble de un número, más 3»: 2x + 3: primero el doble. «El doble de la suma de x y 3»: 2(x + 3): primero la suma. «La mitad de un número» es x ÷ 2: la frase dice qué va primero."],[12,"Menos que, más que","«Ana tiene 4 menos que Beto»: A = B − 4, no 4 − B. Se le resta al nombrado al final: Beto tiene más: a él se le quitan 4. Probar con números: si Beto tiene 10, Ana tiene 6."],[12,"Escoger la x","Lápiz: la tercera parte del cuaderno: juntos cuestan 8 000. x para el más pequeño: lápiz = x: cuaderno = 3x; sin fracciones. x + 3x = 8 000 → x = 2 000: lápiz 2 000, cuaderno 6 000."],[12,"El libro de valentina","Lunes 1/5; martes 1/4 del resto: miércoles 40 páginas; falta 1/3. Tras el martes falta 4/5 · 3/4 = 3/5: 3/5 · x − 40 = x/3. 4x/15 = 40: el libro tiene 150 páginas."],[12,"Despejar es equilibrar","4x + 5 = x + 17: una balanza en equilibrio. Quitar x y quitar 5 de los dos lados: 3x = 12. x = 4: lo que se hace a un lado, al otro también."],[12,"El terreno","Perímetro 36 m: el largo es el doble del ancho. Ancho x, largo 2x: 2(x + 2x) = 36 → x = 6. Área: 6 · 12 = 72 m²: la ecuación da el ancho; la pregunta, el área."],[11,"Comprobar con el texto","El libro: 150 páginas: lunes 30; faltan 120. Martes: 1/4 de 120 = 30: faltan 90; miércoles 40, faltan 50. 50 = 150 ÷ 3: el texto se cumple."],[12,"Las edades, resueltas","x: la edad del nieto, el más joven: hijo 3x, abuelo 2 · 3x = 6x. x + 3x + 6x = 120: 10x = 120 → x = 12. Nieto 12, hijo 36, abuelo 72: 12 + 36 + 72 = 120."],[5,"Cierre","El abuelo tiene 72 años: la opción A."]]},
+  "pu-ec-2": {"bunny":"6b8a9943-772c-4fa5-9d6c-896e4776613a","duration":174.2,"film":"edades","scenes":[[12,"El padre y el hijo","Hace 4 años: padre = 3 · hijo: dentro de 8 años: padre = 2 · hijo. Dos momentos distintos: y dos edades que no se conocen. La suma de sus edades actuales: al final lo resolvemos."],[12,"La tabla del tiempo","Una fila por persona: una columna por momento: antes, hoy, después. Sara 10 y su mamá 38: en 5 años: 15 y 43. La diferencia siempre es 28: los dos cumplen años al mismo ritmo."],[12,"El año de marta","En 2030, Marta tendrá el triple: de la edad que tenía en 2000. Edad en 2000: x; en 2030: x + 30: x + 30 = 3x → x = 15. En 2000 tenía 15 años: nació en 1985."],[12,"Dos soluciones salinas","200 g al 10 % de sal: y 300 g al 20 %. Sal: 20 g + 60 g = 80 g: en 500 g de mezcla. 80 ÷ 500 = 16 %: se suma lo que se conserva: la sal."],[12,"La mezcla es un promedio","El 16 % queda entre 10 % y 20 %: pero no en el medio. Más cerca del 20 %: porque de esa hay más: 300 g. Como un promedio ponderado: pesa más lo que más cantidad tiene."],[12,"Agua al alcohol","40 L de mezcla con 25 % de alcohol: se agrega agua hasta el 20 %. El alcohol no cambia: 10 L: 10 L serán el 20 % del total. Total 50 L: hay que agregar 10 L de agua."],[12,"Lo que se conserva","50 kg de agua de mar con 4 % de sal: se evapora agua hasta el 5 %. La sal no se evapora: 2 kg: 2 kg = 5 % de 40 kg. Se evaporan 10 kg de agua: busca siempre lo que no cambia."],[12,"Las monedas","20 monedas de 200 y de 500: suman 7 000 pesos. k de 500 y 20 − k de 200: 500k + 200(20 − k) = 7 000. 300k = 3 000 → k = 10: 10 de cada una."],[12,"Las edades, resueltas","Hace 4: hijo h − 4, padre 3(h − 4): diferencia: 2(h − 4). En 8: hijo h + 8, padre 2(h + 8): diferencia: h + 8. 2(h − 4) = h + 8 → h = 16: padre 40; suman 56."],[5,"Cierre","Las edades suman 56: la opción A."]]},
+  "pu-ec-3": {"bunny":"88aa1403-2de8-4eb1-ba78-93c4dddb0032","duration":199.3,"film":"sistemas","scenes":[[12,"La balanza de formas","2 cubos pesan como 3 esferas: cada forma tiene su propio peso. 1 esfera y 1 pirámide, como 1 cubo: dos balanzas en equilibrio. Cuántas pirámides pesan como 1 cubo: al final lo resolvemos."],[12,"Dos incógnitas, dos pistas","x + y = 12 tiene muchas soluciones: 1 y 11, 5 y 7, 7 y 5…. Una segunda pista: x − y = 2: se suman: 2x = 14. x = 7 y y = 5: dos incógnitas necesitan dos pistas."],[12,"Sustituir","y = 2x y x + y = 18: una ya dice cuánto vale y. Se reemplaza: x + 2x = 18: 3x = 18 → x = 6. y = 2 · 6 = 12: comprobación: 6 + 12 = 18."],[12,"Las entradas del teatro","Adulto 12 000, niño 7 000: se vendieron 50 entradas por 450 000. a + n = 50: 12 000a + 7 000n = 450 000. 5 000a = 100 000 → a = 20: 20 adultos y 30 niños."],[12,"Dos rectas que se cruzan","Cada ecuación es una recta: todos sus puntos la cumplen. x + y = 12 y x − y = 2: se cruzan en un solo punto. El cruce: (7, 5): la solución del sistema."],[12,"El signo se voltea","4 − 2x > −6: se resuelve casi como una ecuación. −2x > −10: al dividir entre −2, el signo se voltea. x < 5: 3 < 5, pero −3 > −5."],[12,"Cuántos enteros","3x − 7 < 20: enteros positivos que la cumplen. 3x < 27 → x < 9: el 9 no entra: es menor estricto. 1, 2, 3, …, 8: son 8 enteros positivos."],[12,"Dos desigualdades a la vez","−1 < 2x + 3 ≤ 9: tres partes: se opera en todas. −4 < 2x ≤ 6 → −2 < x ≤ 3: el −2 no entra; el 3 sí. −1, 0, 1, 2, 3: cinco enteros."],[12,"La balanza, resuelta","Se duplica la segunda balanza: 2 esferas + 2 pirámides = 2 cubos. 2 cubos = 3 esferas: así que 2 pirámides = 1 esfera. 1 cubo = 1 esfera + 1 pirámide: = 2 pirámides + 1 = 3 pirámides."],[5,"Cierre","Un cubo pesa como 3 pirámides: la opción A."]]},
+  "pu-es-1": {"bunny":"1d4694cf-5c32-4492-b9bf-83db94baef2e","duration":202.1,"film":"rejillas","scenes":[[12,"El robot","Un robot en una cuadrícula: empieza en (0, 0) mirando al norte. A avanza; D e I giran 90°: girar no lo mueve de casilla. Órdenes: A A D A I A: al final lo resolvemos."],[12,"Coordenadas","(x, y): primero este, luego norte: la primera cuenta a la derecha. (2, 3): 2 a la derecha, 3 arriba: el orden de los números importa. (2, 3) no es (3, 2): son dos puntos distintos."],[12,"Derecha de quién","La derecha depende de adónde mira: mirando al norte, la derecha es el este. Mirando al sur, derecha es oeste: se gira con el robot, no con la pantalla. Cuatro giros iguales: una vuelta: D D D D vuelve a mirar igual."],[12,"Seguir la secuencia","Una orden a la vez: anotar posición y dirección. Una tabla de dos columnas: dónde está · hacia dónde mira. Los giros cambian solo la dirección: los avances, solo la posición."],[12,"Volver al inicio","Cuál secuencia vuelve al inicio: ADADADA, ADAIADA, AIAIADA o ADADAIA. ADADADA: avanza y gira a la derecha: cuatro lados de un cuadrado. Las otras se escapan: un giro al otro lado cambia el camino."],[12,"Colorear sin vecinas","Cuadrícula de 3 × 3: sin dos casillas pintadas con un lado común. Las cuatro esquinas y el centro: cinco, y ninguna toca a otra por un lado. Con seis siempre habría vecinas: la mayor cantidad es 5."],[12,"El tablero de ajedrez","Se colorea como un tablero: 5 casillas oscuras y 4 claras. Las oscuras nunca son vecinas: por eso las 5 sirven. Pintar el tablero ayuda a pensar: vecinas siempre tienen colores distintos."],[12,"Fichas de dominó","Cubrir un tablero de 2 × 4: con fichas de 1 × 2, sin encimarlas. Se mira la primera columna: una ficha de pie, o dos acostadas. 1, 2, 3, 5 maneras: cada tablero suma los dos anteriores."],[12,"El robot, resuelto","A A: sube a (0, 2): sigue mirando al norte. D: mira al este · A: (1, 2): I: vuelve a mirar al norte. A: termina en (1, 3): la opción A."],[5,"Cierre","El robot queda en (1, 3): la opción A."]]},
+  "pu-es-2": {"bunny":"5b8abd2c-7e12-474c-9a28-7f67d0f6f11f","duration":189.7,"film":"cubos","scenes":[[12,"El cubo pintado","Un cubo de 6 cm de arista: se pinta de rojo por fuera. Se corta en cubitos de 1 cm: 6 · 6 · 6 = 216 cubitos. Cuántos tienen dos caras rojas: al final lo resolvemos."],[12,"Contar por capas","Una pirámide de cubos: se cuenta piso por piso. Abajo 9, en medio 4, arriba 1: 3 · 3 + 2 · 2 + 1 · 1. En total, 14 cubos: aunque solo se vean algunos."],[11,"Los que no se ven","Un cubo no flota: si hay uno arriba, hay otro debajo. Los de adentro también cuentan: sostienen a los de arriba. Contar columnas: la altura de cada columna, sumada."],[12,"Tres vistas","De frente, de lado y desde arriba: tres sombras de la misma construcción. Arriba: qué casillas tienen cubos: de frente y de lado: las alturas máximas. Cada vista: la columna más alta: en cada fila de mirada."],[12,"El máximo de cubitos","Base de 3 × 3, todas con cubos: frente: 3, 1, 2 · lado: 2, 3, 1. Cada columna, lo más alta posible: el menor de los dos límites que la tocan. 5 + 6 + 3 = 14 cubitos: la mayor cantidad posible."],[12,"Y el mínimo","Con las mismas vistas, lo menos: cada casilla de la base: al menos 1. Una columna de 3 y una de 2: cumplen dos vistas a la vez. 9 + 2 + 1 = 12: las vistas no fijan una sola construcción."],[12,"Un ladrillo pintado","Un ladrillo de 3 × 3 × 2: pintado por fuera y cortado: 18 cubitos. Esquinas: 8 · aristas: 8: y el centro de cada cara grande: 2. 8 + 8 + 2 = 18: tan delgado que ninguno queda sin pintar."],[12,"Para cualquier cubo","Esquinas: siempre 8: un cubo tiene ocho vértices. Dos caras: 12 · (n − 2): en cada arista, sin sus dos esquinas. Una cara: 6(n−2)²; ninguna: (n−2)³: el centro de cada cara y el corazón."],[12,"El cubo de 6, resuelto","En cada arista hay 6 cubitos: los 2 de los extremos son esquinas. Quedan 4 por arista: con exactamente dos caras rojas. 12 aristas · 4 = 48: 8 + 48 + 96 + 64 = 216."],[5,"Cierre","Son 48 cubitos: la opción A."]]},
+  "pu-es-3": {"bunny":"eb7bfe6e-7095-4892-9bcd-da470b3b0c2c","duration":179.6,"film":"desarrollos","scenes":[[10,"La torre de dados","Tres dados en una torre: sobre una mesa. Arriba se ve un 4: cinco caras quedan ocultas. Cuánto suman las ocultas: al final lo resolvemos."],[12,"Caras opuestas","En un dado, las opuestas suman 7: 1 y 6 · 2 y 5 · 3 y 4. Si se ve una cara: la de enfrente es 7 menos esa. Las seis caras suman 21: tres parejas de 7."],[12,"El cubo desdoblado","Se corta un cubo por algunas aristas: y se extiende sobre la mesa. Seis cuadrados unidos: eso es un desarrollo del cubo. Hay 11 desarrollos distintos: la cruz es solo uno de ellos."],[12,"En línea recta","Tres cuadrados en línea: al doblar, el primero y el tercero quedan enfrentados. Cuatro en línea: el 1.º con el 3.º y el 2.º con el 4.º. Un salto de por medio: en línea recta, uno sí y uno no."],[10,"Los vecinos","Dos cuadrados que se tocan: comparten una arista: nunca son opuestos. Cada cara tiene 4 vecinas: y una sola opuesta. Descartar vecinos: reduce las opciones rápido."],[12,"La opuesta del 1","Una fila de 4: 2, 3, 4 y 5: el 1 sobre el 2 y el 6 bajo el 4. En la fila: 2 con 4 y 3 con 5: quedan el 1 y el 6. Frente al 1 está el 6: las dos que sobran forman pareja."],[12,"Los que no cierran","Cinco en línea no sirven: al enrollar, dos caras caen en el mismo lugar. Un bloque de 2 × 3 tampoco: cuatro cuadrados juntos se montan. Revisar que nada se monte: cada cara debe caer en un lugar distinto."],[12,"Cada dado, una pareja","En un dado de la torre: la cara de arriba y la de abajo son opuestas. Arriba y abajo suman 7: aunque no se vean. Solo el dado de arriba: deja ver una de las dos."],[12,"La torre, resuelta","Dado de arriba: se ve el 4: abajo tiene 7 − 4 = 3. Dados del medio y de abajo: arriba y abajo ocultos: 7 cada uno. 3 + 7 + 7 = 17: las cinco caras ocultas."],[5,"Cierre","Las ocultas suman 17: la opción A."]]},
+  "pu-es-4": {"bunny":"0fbca183-324a-480e-8f45-2e0ce1a5edf6","duration":187.9,"film":"giros","scenes":[[12,"El reloj en el espejo","Un reloj de agujas, sin números: se mira en un espejo. En el espejo parece 8:25: las agujas se ven al revés. Qué hora es en realidad: al final lo resolvemos."],[12,"El espejo","Cada punto se refleja: a la misma distancia, del otro lado. Un espejo vertical: cambia izquierda y derecha; arriba y abajo no. Una flecha a la derecha: en el espejo apunta a la izquierda."],[12,"Letras simétricas","A, H, M, T, U, V, W, X, Y: iguales en un espejo vertical. B, C, D, E, K: iguales en un espejo horizontal. H, I, O, X: tienen los dos ejes."],[12,"Girar","Un giro de 90° a la derecha: arriba pasa a la derecha. Dos giros de 90°: 180°: arriba pasa a abajo. Cuatro giros: la figura vuelve: girar no cambia la forma."],[12,"Girar no es reflejar","Una L y su reflejo: la L y la J de la misma forma. Por más que se gire la L: nunca coincide con su reflejo. Como la mano izquierda y la derecha: iguales, pero no se superponen."],[12,"Relojes en el espejo","En el espejo, el 12 y el 6 se quedan: el 3 y el 9 se cambian de lado. Cada aguja se refleja en la vertical: lo que en uno avanza, en el otro retrocede. Real + espejo = 12:00: 2:10 en el espejo son las 9:50."],[10,"Cada doblez duplica","Una hoja doblada por la mitad: queda con 2 capas. Otro doblez: 4 capas: luego 8, 16…. Un agujero atraviesa todas: un agujero por capa al desdoblar."],[12,"La tira doblada","Una tira se dobla por la mitad: cuatro veces seguidas. 2 · 2 · 2 · 2 = 16 capas: cada doblez duplica. Un agujero: 16 agujeros: al desdoblar la tira."],[9,"El reloj, resuelto","Espejo: 8:25: se refleja cada aguja en la vertical. 12:00 − 8:25 = 3:35: o 11:60 − 8:25. Son las 3:35: la opción A."],[5,"Cierre","Son las 3:35: la opción A."]]},
+  "pu-ge-1": {"bunny":"fa49712c-b633-483d-8a80-1a6645864adf","duration":205.6,"film":"angulos","scenes":[[10,"Una cadena de isósceles","Una cadena de isósceles: cuatro lados iguales, uno tras otro. 17° en la punta: falta el ángulo marcado en E. Cuatro opciones: al final la resolvemos."],[12,"Un ángulo es un giro","Un ángulo es un giro: vuelta entera 360°, media 180°, un cuarto 90°. Vecinos sobre una recta: 40° + 140° = 180°: suplementarios. Opuestos por el vértice: como unas tijeras: siempre iguales."],[12,"Paralelas y transversal","Dos paralelas y una transversal: la recta las corta con la misma inclinación. Correspondientes y alternos: forma de F y forma de Z: iguales. Conjugados: suman 180°: 55° y 125°, del mismo lado."],[12,"La suma de un triángulo","Se cortan las tres esquinas: y se ponen una al lado de la otra. Juntas forman media vuelta: los tres ángulos suman 180°. Con dos, sale el tercero: 180° − 50° − 60° = 70°."],[12,"El ángulo exterior","Se prolonga un lado: aparece el ángulo exterior. Exterior = suma de los lejanos: 50° + 60° = 110°. En un isósceles: base 17° y 17°: el exterior mide 34°."],[12,"Polígonos","Un pentágono en triángulos: desde un vértice salen 3 triángulos. (n − 2) · 180°: pentágono 540°; hexágono 720°. Por fuera, siempre 360°: al rodearlo se da una vuelta entera."],[12,"Ángulos de 150°","Un polígono regular: cada ángulo interior mide 150°. En cada esquina se giran 30°: el exterior es 180° − 150°. 360° ÷ 30° = 12 lados: doce giros para dar la vuelta."],[12,"El reloj","Las 3:30: el menor ángulo entre las manecillas. Cada hora son 30°: y el horario avanza mientras pasan los minutos. 180° − 105° = 75°: a las 3:30 el horario va en 105°."],[12,"La cadena, resuelta","ABC: 17° y 17°: el exterior en B mide 34°. BCD: 34° y 34°: el exterior en C mide 17° + 34° = 51°. CDE: 51° y 51°: el ángulo en E mide 51°."],[5,"Cierre","El ángulo en E mide 51°: la opción D."]]},
+  "pu-ge-2": {"bunny":"261dea8d-58a8-4a97-b78e-16aca70ca291","duration":226.8,"film":"pitagoras","scenes":[[12,"La escalera que resbala","La escalera que resbala: 13 m de largo, con la base a 5 m de la pared. La base se aleja 7 m más: la punta baja: falta saber cuánto. Cuatro opciones: al final la resolvemos."],[12,"Cuadrados sobre los lados","Un cuadrado en cada lado: catetos 5 y 12; hipotenusa 13. 25 + 144 = 169: los dos pequeños llenan el grande. c² = a² + b²: solo en triángulos con un ángulo recto."],[12,"Agudo, recto u obtuso","Se abre la bisagra: los mismos lados 5 y 12, otro ángulo. Ángulo recto: c² = 169: más cerrado, menos; más abierto, más. El cuadrado delata el ángulo: menor: agudo · igual: recto · mayor: obtuso."],[12,"Ternas pitagóricas","Ternas que conviene reconocer: 3-4-5, 5-12-13, 8-15-17. Sus múltiplos también sirven: 3-4-5 por 2: 6-8-10; por 3: 9-12-15. Sumar catetos no da la hipotenusa: 5 + 12 = 17, no 13."],[12,"Cerrar el triángulo","Lados de 5 y 9: el tercero es entero: cuántos valores caben. Entre 9 − 5 y 9 + 5: aplastado mide 4 o 14: ahí ya no cierra. De 5 a 13: nueve valores: cada lado, menor que la suma de los otros."],[12,"El rombo","Diagonales de 10 y 24: falta el perímetro del rombo. Se cortan a la mitad, en cruz: cuatro triángulos de catetos 5 y 12. Cada lado mide 13: perímetro: 4 · 13 = 52 cm."],[12,"El triángulo de 45°","Un cuadrado y su diagonal: dos triángulos de 45°, 45° y 90°. Lados x, x y x√2: x² + x² = 2x². Cuadrado de lado 7: su diagonal mide 7√2 ≈ 9.9."],[12,"El triángulo de 30° y 60°","Un equilátero partido a la mitad: ángulos de 30°, 60° y 90°. Lados x, x√3 y 2x: el corto es la mitad del largo. Equilátero de lado 8: su altura mide 4√3 ≈ 6.9."],[12,"La escalera, resuelta","Antes: base 5, punta a 12 m: 5² + 12² = 13². Después: base 12: 13² − 12² = 25: la punta queda a 5 m. Baja 12 − 5 = 7 m: esta vez coincide con lo que se alejó."],[5,"Cierre","La punta baja 7 m: la opción A."]]},
+  "pu-ge-3": {"bunny":"b49462ce-e8b5-4b52-b049-8b2ccbf77ba0","duration":201.7,"film":"semejanza","scenes":[[12,"El vaso a medias","Un vaso en forma de cono: con la punta hacia abajo. Agua hasta la mitad de la altura: qué fracción del vaso ocupa. Cuatro opciones: la intuición dice un medio; al final se verá."],[12,"Misma forma, otro tamaño","Dos figuras semejantes: todas las medidas por el mismo número k. Estirar solo el ancho deforma: eso ya no es semejanza. Los ángulos no cambian: cambian las longitudes, en la misma razón."],[12,"Un corte paralelo","Un corte paralelo a la base: deja un triángulo pequeño adentro. Los dos son semejantes: mismos ángulos, lados proporcionales. 6 / 4 = 9 / 6 = 1.5: la razón k es la misma en todos los lados."],[12,"El poste y el edificio","Poste de 3 m, sombra de 4 m: el edificio da una sombra de 28 m. Los rayos del sol son paralelos: los dos triángulos son semejantes. 28 es 7 veces 4: el edificio mide 7 · 3 = 21 m."],[12,"Las áreas: k²","Se duplica el lado: caben cuatro cuadrados, no dos. Lado por 3: área por 9: el área crece a lo largo y a lo ancho. Longitudes por k, áreas por k²: vale para cualquier figura."],[12,"El lado crece 30 %","El lado aumenta 30 %: cuánto aumenta el área. 10 × 10 pasa a 13 × 13: 100 casillas pasan a 169. 1.3² = 1.69: el área aumenta 69 %."],[12,"Los volúmenes: k³","Cubo de arista doble: caben 2 · 2 · 2 = 8 cubitos. Arista triple: 27 cubitos: largo, ancho y alto crecen a la vez. Volúmenes por k³: y el peso también, si el material es igual."],[12,"k, k² y k³","Ampliar: k = 2: longitud × 2, área × 4, volumen × 8. Reducir: k = 1/2: longitud × 1/2, área × 1/4, volumen × 1/8. Primero se halla k: después se eleva según lo que se mide."],[12,"El vaso, resuelto","El agua forma otro cono: semejante al vaso. Altura a la mitad: k = 1/2: el radio del agua también es la mitad. (1/2)³ = 1/8: el agua ocupa un octavo del vaso."],[5,"Cierre","El agua ocupa 1/8: la opción A."]]},
+  "pu-ge-4": {"bunny":"cc4a984b-6719-40c7-bc7e-3c50a56e2127","duration":204.1,"film":"areas","scenes":[[11,"La pista de atletismo","Una pista de atletismo: un rectángulo con dos semicírculos. 100 m de largo, 60 m de ancho: falta el largo del borde. Cuatro opciones: al final la resolvemos."],[12,"Borde y relleno","El perímetro es el borde: lo que mide la cerca: 6 + 4 + 6 + 4 = 20. El área es el relleno: las baldosas que caben: 6 · 4 = 24. Uno se mide en m, otro en m²: metros de cerca frente a baldosas."],[12,"El paralelogramo","Un paralelogramo inclinado: base 7, altura 5. Se corta y se pega al otro lado: queda un rectángulo de 7 por 5. Área = base · altura: la altura es la recta que baja, no el lado."],[12,"El triángulo","Dos triángulos iguales: base 9 y altura 4. Juntos forman un paralelogramo: de área 9 · 4 = 36. Área = base · altura / 2: cada triángulo es la mitad: 18."],[12,"El trapecio","Bases de 11 y 5, altura 4: dos lados paralelos de distinto largo. Dos copias: un paralelogramo: de base 11 + 5 = 16. (B + b) · h / 2: 16 · 4 / 2 = 32."],[12,"π al desenrollar","Una rueda da una vuelta: el borde se desenrolla sobre el piso. Un poco más de tres diámetros: esa razón es π ≈ 3.14. L = π · d = 2π · r: el diámetro es el doble del radio."],[11,"El área del círculo","Se corta en tajadas: como una pizza de muchas porciones. Se acomodan alternadas: casi un rectángulo de πr por r. A = π · r²: radio 7: área 49π."],[12,"La ventana","Rectángulo de 2 m por 1 m: con un semicírculo encima. Se suman las piezas: rectángulo 2 · 1 = 2. Medio círculo de radio 1: π · 1² / 2 = π/2: total 2 + π/2."],[12,"La pista, resuelta","Dos rectas de 100 m: los lados de 60 m no son borde. Dos semicírculos: juntos forman un círculo de diámetro 60. 200 + 60π metros: π · d = 60π."],[5,"Cierre","El borde mide 200 + 60π: la opción A."]]},
+  "pu-ge-5": {"bunny":"ea5e423c-336d-4b6d-87d1-62cff10b2bcd","duration":183.2,"film":"sombreadas","scenes":[[12,"Cuatro cuartos de círculo","Un cuadrado de lado 8: con un cuarto de círculo en cada esquina. Radios de 4: falta el área de lo sombreado, en el centro. Cuatro opciones con π: al final la resolvemos."],[12,"Sumar o restar","Sumar piezas: 9 · 3 + 4 · 4 = 27 + 16 = 43. O restar lo que falta: 9 · 7 − 5 · 4 = 63 − 20 = 43. Dos caminos, el mismo resultado: se elige el que tenga menos cuentas."],[12,"Esquinas cortadas","Un cuadrado de lado 6: se le cortan las cuatro esquinas. Cada esquina: catetos de 2: área de cada una: 2 · 2 / 2 = 2. 36 − 4 · 2 = 28: el octágono es lo que queda."],[12,"El rectángulo que encierra","Un triángulo torcido: ningún lado sigue las líneas de la cuadrícula. Se encierra en un rectángulo: 6 · 5 = 30, con tres triángulos de sobra. 30 − 6 − 6 − 5 = 13: cada triángulo de sobra es fácil."],[12,"El pentágono","Un pentágono en la cuadrícula: cada cuadrito tiene 1 unidad de lado. Rectángulo de 6 · 5 = 30: sobran tres esquinas: 3, 4 y 2. 30 − 9 = 21: el área sombreada es 21."],[12,"Mover sin cambiar","Una figura con un mordisco: y una joroba igual del otro lado. La joroba tapa el mordisco: mover una pieza no cambia el área. Queda un rectángulo: 6 · 4 = 24, sin usar π."],[12,"Cuartos que se juntan","Cuatro cuartos de círculo: del mismo radio, en lugares distintos. Juntos forman un círculo: cuatro esquinas de 90°: 360°. Su área: π · r²: dos medios círculos también hacen uno."],[12,"Estimar con π","Un círculo dentro de un cuadrado: lado 4, radio 2. Afuera queda 16 − 4π: con π ≈ 3.14: unas 3.4 unidades. Estimar descarta opciones: lo sombreado debe verse de ese tamaño."],[12,"Los cuartos, resueltos","Los cuatro cuartos: un círculo: radio 4: área 16π. El cuadrado mide 8 · 8 = 64: lo sombreado es lo que sobra. 64 − 16π ≈ 13.7: cerca de 14 cuadritos de 64."],[5,"Cierre","Lo sombreado mide 64 − 16π: la opción A."]]},
+  "pu-ge-6": {"bunny":"4d78aade-9eec-461f-a3d7-fc2fd6183011","duration":203.8,"film":"volumenes","scenes":[[12,"La vela fundida","Una vela cilíndrica: radio 3 cm y altura 8 cm. Se funde en velitas de cono: radio 1 cm y altura 2 cm, sin perder cera. Cuatro opciones: al final la resolvemos."],[12,"Base por altura","Una caja se llena por capas: la base de 4 · 3 tiene 12 cubitos. Cinco capas iguales: 12 · 5 = 60 cubitos. V = área de la base · altura: vale para todo prisma."],[12,"El cilindro","Una pila de monedas: cada capa es un círculo. V = π · r² · h: base circular por altura. Radio 4, altura 3: π · 16 · 3 = 48π."],[12,"El cono: un tercio","Un cono y un cilindro: misma base y misma altura. Tres conos llenos: llenan justo el cilindro. V = ⅓ · π · r² · h: igual para la pirámide frente al prisma."],[12,"La esfera","Una esfera dentro de un cilindro: lo toca arriba, abajo y por los lados. Ocupa dos tercios del cilindro: el descubrimiento de Arquímedes. V = ⁴⁄₃ · π · r³: radio 6: 288π."],[12,"La caja de cartón","Una lámina de 20 cm por 14 cm: se recorta un cuadrado de 3 cm en cada esquina. Se doblan los bordes: base de 14 por 8, altura 3. 14 · 8 · 3 = 336: el volumen de la caja, en cm³."],[12,"La superficie","Un cubo se desdobla: seis caras cuadradas iguales. Superficie 150 cm²: cada cara: 150 / 6 = 25; arista 5. Volumen 5 · 5 · 5 = 125: superficie se mide en cm², volumen en cm³."],[12,"La piedra en el agua","Un recipiente de radio 10 cm: se sumerge una piedra. El agua sube 2 cm: la piedra ocupa ese espacio. π · 10² · 2 = 200π: el volumen de la piedra, en cm³."],[12,"La vela, resuelta","La vela: π · 9 · 8 = 72π: cilindro de radio 3 y altura 8. Una velita: ⅓ · π · 1 · 2: cada cono tiene 2π/3. 72π ÷ (2π/3) = 108: π se cancela: 72 · 3 / 2."],[5,"Cierre","Salen 108 velitas: la opción A."]]},
+  "pu-gr-1": {"bunny":"881034da-d47a-4611-8c2e-e28d889d8052","duration":181.4,"film":"graficas","scenes":[[11,"La lluvia del semestre","Lluvia de enero a junio: 40, 50, 90, 120, 80 y 40 mm. El mayor aumento porcentual: respecto al mes anterior. Cuatro meses posibles: al final lo resolvemos."],[12,"Leer los ejes","Primero, qué mide cada eje: abajo los meses; al lado, milímetros. La escala: de 20 en 20: cada raya vale 20 mm. Leer con una regla imaginaria: del techo de la barra al eje."],[11,"Cuánto sube","Aumento absoluto: la resta: febrero +10, marzo +40, abril +30. Porcentual: sobre lo de antes: resta ÷ valor anterior. Abril sube 30 sobre 90: marzo sube 40 sobre 50."],[12,"La cooperativa de café","Producción: 30, 45, 36, 45, 60 t: de 2019 a 2023. 2020: +15 sobre 30 = +50 %: 2022: +9 sobre 36 = +25 %. 2023: +15 sobre 45 ≈ +33 %: el mayor aumento porcentual: 2020."],[12,"El diagrama circular","La torta completa es el total: 360° son el 100 %. Un sector de 90°: es 90 / 360 = un cuarto. Fracción del círculo · total: así se pasa de grados a personas."],[12,"El deporte favorito","180 estudiantes, cuatro deportes: fútbol 150°, baloncesto 90°, natación 72°. Baloncesto: 90 / 360 = 1/4: un cuarto de los 180. 180 / 4 = 45 estudiantes: prefieren el baloncesto."],[12,"Gráficas de líneas","Una línea muestra un cambio: en el tiempo: sube, baja o se queda plana. Más empinada, cambio más rápido: plana: no cambia. Comparar tramos de igual ancho: la pendiente se ve sin calcular."],[12,"Tres cuidados","1. El eje no siempre empieza en 0: una diferencia pequeña parece enorme. 2. Absoluto o porcentual: leer qué pide la pregunta. 3. Porcentaje de qué: del total, del grupo o del mes anterior."],[12,"La lluvia, resuelta","Febrero: 10 / 40 = 25 %: marzo: 40 / 50 = 80 %. Abril: 30 / 90 ≈ 33 %: mayo y junio bajan. El mayor: marzo, +80 %: aunque abril tenga la barra más alta."],[5,"Cierre","Marzo: +80 %: la opción A."]]},
+  "pu-gr-2": {"bunny":"6bbaac5b-6918-42e4-a877-c1ea326b277d","duration":206.6,"film":"promedios","scenes":[[12,"Las notas del grupo","Notas de 1 a 5 en un grupo de 30: la gráfica dice cuántos sacaron cada nota. 3, 3, 12, 9 y 3 estudiantes: para las notas 1, 2, 3, 4 y 5. La nota promedio del grupo: al final lo resolvemos."],[12,"El promedio nivela","Cuatro torres: 6, 2, 9 y 3: el promedio las deja parejas. Lo que sobra llena lo que falta: a la altura 5 todo queda igual. Suma ÷ cantidad: 20 ÷ 4 = 5."],[12,"La tabla de frecuencias","Libros leídos por 10 personas: 0 libros: 2 · 1 libro: 5 · 2 libros: 3. Cada fila vale dato × veces: 0 · 2 + 1 · 5 + 2 · 3 = 11. Promedio: 11 ÷ 10 = 1.1: se divide entre las personas, no entre 3."],[12,"Los goles del torneo","20 partidos de un torneo: 0 a 4 goles: 4, 6, 5, 3 y 2 partidos. 0 · 4 + 1 · 6 + 2 · 5: + 3 · 3 + 4 · 2. 0 + 6 + 10 + 9 + 8 = 33: el total de goles del torneo."],[12,"La mediana","La mediana es el dato del medio: pero primero hay que ordenar. 6, 2, 9, 4, 7 → 2, 4, 6, 7, 9: la mediana es 6. Con un 11 más, son seis datos: se promedian los dos del medio: 6.5."],[12,"La mediana de los goles","Los 20 partidos, en fila y en orden: cuatro ceros, seis unos, cinco doses. Con 20 datos, el medio: 10.º y 11.º: el décimo es 1 y el undécimo es 2. Mediana: (1 + 2) ÷ 2 = 1.5: sin escribir los veinte datos."],[12,"La moda y el dato extremo","La moda: el dato que más se repite: la barra más alta de la gráfica. 3, 4, 4, 5 y 34: media 10 · mediana 4 · moda 4. Un dato extremo jala la media: la mediana casi no se mueve."],[12,"Las horas de celular","Horas de celular en una semana: 3, 4, 2, 5, 4, 7 y 10. Promedio: 35 ÷ 7 = 5 horas: lo superan el sábado y el domingo. Ordenados: 2, 3, 4, 4, 5, 7, 10: la mediana es 4."],[12,"Las notas, resueltas","Cada nota por sus estudiantes: 1 · 3 + 2 · 3 + 3 · 12 + 4 · 9 + 5 · 3. 3 + 6 + 36 + 36 + 15 = 96: los puntos de todo el grupo. 96 ÷ 30 = 3.2: entre los 30 estudiantes, no entre 5."],[5,"Cierre","El promedio es 3.2: la opción A."]]},
+  "pu-gr-3": {"bunny":"54b6245a-384a-4484-95bd-85ea2aa30b04","duration":190.1,"film":"concluir","scenes":[[10,"Las ventas de la librería","Libros vendidos en un año: por género y por trimestre. Cuatro afirmaciones: solo una es falsa. Cada una se comprueba con números: al final lo resolvemos."],[12,"La tabla de doble entrada","200 personas: papel o celular: filas: jóvenes y adultos. Cada casilla: una fila y una columna: 40 adultos leen en papel. Los totales cierran la cuenta: cada fila y cada columna suman."],[12,"Porcentaje de qué","40 de los 100 adultos: 40 %: el total es la fila. 40 de los 50 que leen en papel: 80 %: el total es la columna. 40 de las 200 personas: 20 %: el mismo 40, tres porcentajes."],[12,"Tres planes de telefonía","A: 20 000 + 100 por minuto: B: 35 000 + 50 por minuto · C: 60 000. Para 250 minutos: A: 45 000 · B: 47 500 · C: 60 000. El más económico: el plan A: aunque B cobre menos por minuto."],[12,"Dónde se cruzan","Cada plan es una recta: el costo según los minutos. A y B se cruzan en 300 minutos: B y C, en 500. Hasta 300 conviene A: de 300 a 500, B; desde 500, C."],[12,"El torneo incompleto","10 partidos; ganar 3, empatar 1: a la tabla le faltan casillas. Búfalos: 5 ganados, 1 perdido: empatados: 10 − 5 − 1 = 4. 5 · 3 + 4 · 1 = 19 puntos: la fila se completa con sus reglas."],[12,"Llenar los huecos","Cóndores: 3 empates y 18 puntos: faltan ganados y perdidos. 3 · G + 3 = 18: G = 5 partidos ganados. Perdidos: 10 − 5 − 3 = 2: cada regla es una ecuación."],[12,"Cómo cae una afirmación","Todos, siempre, cada: un caso basta: basta un contraejemplo. Más de 1/4 no es lo mismo que 1/4: exactamente 25 % no es más de 25 %. El porcentaje, con su total: de la fila, de la columna o de todo."],[12,"La librería, resuelta","T3: novela 150 de 300 = 50 %: poesía: 150 de 1 200 = 12.5 %. T4: ensayo 60, infantil 50: también es cierta. Infantil en T3 y T4: 100 de 300: es el 33.3 %, no el 40 %."],[5,"Cierre","La falsa: el 40 % de los infantiles: la opción A."]]},
+  "pu-lo-1": {"bunny":"a4627fb2-2782-44c7-9a77-c93337cf745d","duration":193.3,"film":"conectivos","scenes":[[12,"El circuito de bits","Tres dispositivos: Y, O y N: trabajan con bits, 0 y 1. x y y van a un Y; z va a un N: las dos salidas entran a un O. La salida del circuito es 0: qué se sabe con certeza."],[12,"Qué es una proposición","Una frase que es verdadera o falsa: Medellín está en Antioquia: V. También cuenta si es falsa: 2 + 2 = 5 es una proposición: F. Preguntas y órdenes no lo son: no tienen valor de verdad."],[12,"El «y»","p ∧ q: «y»: verdadera solo si las dos lo son. Dos interruptores en fila: la luz pide los dos cerrados. Una sola falsa la tumba: V y F da F."],[12,"El «o»","p ∨ q: «o»: verdadera si al menos una lo es. Dos interruptores lado a lado: la luz prende con cualquiera. Solo falla si las dos fallan: y vale también si son las dos."],[12,"La tabla de verdad","Todas las combinaciones de p y q: 2 · 2 = 4 filas. La columna del «y»: V solo en la primera fila. La columna del «o»: F solo en la última."],[12,"La negación","¬p cambia el valor de verdad: V pasa a F y F pasa a V. En bits: el N cambia 0 por 1: y 1 por 0. Y es un «y», O es un «o»: 1 es verdadero, 0 es falso."],[12,"El objeto misterioso","Es negro o es rojo: si es rojo, es un lapicero. Si fuera rojo, sería lapicero: y todo lapicero es azul: choca. Es negro, y si es negro es marcador: un marcador negro."],[12,"Solo una es cierta","Par · múltiplo de 3 · mayor que 10: de las tres, exactamente una es verdadera. 6: par y múltiplo de 3, dos: 12: las tres · 14: par y mayor que 10. 9: solo múltiplo de 3: el número puede ser 9."],[12,"El circuito, resuelto","El O dio 0: sus dos entradas son 0: un «o» solo falla así. El N dio 0: entonces z = 1: esto es seguro. El Y dio 0: x o y es 0: pero no se sabe cuál."],[5,"Cierre","Lo seguro: z vale 1: la opción A."]]},
+  "pu-lo-2": {"bunny":"2c39e208-cb7d-40fc-8e43-80328f5f3398","duration":178.7,"film":"negacion","scenes":[[12,"Los salones y las gafas","En todos los salones: hay algún estudiante que usa gafas. Hay que escribir su negación: lo que la hace falsa, ni más ni menos. Dos palabras para negar: al final lo resolvemos."],[12,"Negar no es lo opuesto","Negar: lo que pasa si la frase falla: ni más ni menos. «El café está caliente»: su negación: «no está caliente». «Está frío» se pasa de largo: el café tibio también la niega."],[12,"Alto y rubio","«Juan es alto y es rubio»: cuál es su negación. El «y» cae con una sola falla: basta que no sea alto, o que no sea rubio. No es alto o no es rubio: el «y» se vuelve «o»."],[12,"Las leyes de de morgan","¬(p ∧ q) = ¬p ∨ ¬q: el «y» negado da un «o». ¬(p ∨ q) = ¬p ∧ ¬q: el «o» negado da un «y». «Voy a cine o a teatro»: negada: no voy a cine ni a teatro."],[10,"No todos los pájaros","«No todos los pájaros vuelan»: a qué equivale. Para tumbar un «todos»: basta un pájaro que no vuele. Algún pájaro no vuela: el pingüino, el avestruz."],[10,"Alguno y ninguno","«Algún estudiante llegó tarde»: basta uno para que sea cierta. Para que sea falsa: no puede haber ni uno. Ningún estudiante llegó tarde: alguno ↔ ninguno."],[12,"El cuadro de las negaciones","Todos ↔ alguno no: cada par: uno es cierto y el otro no. Ninguno ↔ alguno: nunca los dos, nunca ninguno. Todos y ninguno no son negaciones: pueden fallar los dos a la vez."],[12,"Frases anidadas","Cada estudiante entregó: por lo menos cuatro tareas. Se niega de afuera hacia adentro: cada → alguno · por lo menos 4 → menos de 4. Algún estudiante entregó: menos de cuatro tareas."],[10,"Las gafas, resueltas","Afuera: «todos los salones»: se vuelve «algún salón». Adentro: «alguno usa gafas»: se vuelve «ningún estudiante usa gafas». En algún salón: ningún estudiante usa gafas."],[5,"Cierre","En algún salón, ninguno usa gafas: la opción A."]]},
+  "pu-lo-3": {"bunny":"1415c72e-9f1e-4914-8b74-ce83fcbb37fa","duration":200.4,"film":"condicional","scenes":[[12,"Las cuatro tarjetas","Letra de un lado, número del otro: se ven A, K, 4 y 7. Regla: si hay vocal por un lado: hay un número par por el otro. Cuáles hay que voltear: al final lo resolvemos."],[12,"Una promesa","«Si llueve, llevo paraguas»: p → q: p es la condición. Cuatro casos posibles: solo uno rompe la promesa. Llueve y no llevo paraguas: si no llueve, la promesa no se rompe."],[9,"El equivalente de camila","«Si Camila estudia, aprueba»: cuál frase dice lo mismo. Si no aprueba: es que no estudió. Contrarrecíproco: ¬q → ¬p: es el único equivalente."],[11,"El recíproco engaña","«Si es de Medellín, es antioqueño»: Medellín queda dentro de Antioquia. Recíproco: si es antioqueño...: puede ser de Envigado: no equivale. Contrario: si no es de Medellín...: tampoco equivale."],[12,"El banco en festivo","Si hoy es festivo, el banco no abre: y hoy el banco abrió. Si fuera festivo, no habría abierto: pero abrió. Hoy no es festivo: pasa lo contrario de q: no pasó p."],[12,"Lo que no se concluye","Si hoy el banco no abrió: no se sabe si es festivo. Pudo cerrar por otra razón: un domingo, un daño. Pasa q: no se sabe p: no pasa p: no se sabe q."],[12,"El «o» es un condicional","«Estudio o repruebo el curso»: al menos una de las dos pasa. Si no estudio...: la otra tiene que pasar: repruebo. p ∨ q equivale a ¬p → q: y p → q equivale a ¬p ∨ q."],[12,"Negar un condicional","«Si llueve, no voy al parque»: cuándo es falsa. Solo cuando llueve: y aun así voy al parque. ¬(p → q) = p ∧ ¬q: la negación no lleva «si»."],[12,"Las tarjetas, resueltas","La A: si atrás hay un impar, falla: hay que voltearla. La K y el 4 no pueden romperla: la regla no dice nada de ellas. El 7: si atrás hay una vocal, falla: contrarrecíproco: impar → consonante."],[5,"Cierre","Hay que voltear la A y el 7: la opción A."]]},
+  "pu-lo-4": {"bunny":"fb49f7e6-8037-439f-9821-c842b7986466","duration":192.1,"film":"silogismos","scenes":[[10,"Los músicos de la banda","Todos los músicos de la banda: leen partituras. Algunos estudiantes de once: son músicos de la banda. Lo que es necesariamente verdad: al final lo resolvemos."],[12,"Todos: un círculo dentro","«Todas las violetas son flores»: el círculo de violetas, dentro. Ninguna violeta queda afuera: pero hay flores que no son violetas. Todo A es B: A dentro de B: no dice que todo B sea A."],[12,"Ninguno: separados","Ningún triángulo tiene 4 lados: los dos círculos no se tocan. Ninguno funciona en los dos sentidos: ninguna figura de cuatro lados es triángulo. Ningún A es B = ningún B es A: no comparten nada."],[12,"Algunos: al menos uno","«Algunos músicos son zurdos»: los círculos se cruzan. Algunos = al menos uno: hay alguien en la parte común. No dice nada del resto: puede haber músicos no zurdos, o no."],[12,"Los gatos de marta","Todos los gatos de Marta son negros: y Tom no es negro. Tom queda fuera de los negros: y los gatos de Marta están adentro. Tom no es un gato de Marta: puede ser gato, pero no de ella."],[10,"La cadena","Todos los bogotanos son colombianos: todos los colombianos son americanos. Un círculo dentro del otro: como muñecas rusas. Todos los bogotanos son americanos: la conclusión sale sola."],[12,"Ningún reptil tiene pelo","Ningún reptil tiene pelo: algunos animales del zoológico tienen pelo. Los del zoológico con pelo: quedan fuera de los reptiles. Algunos no son reptiles: puede haber reptiles, pero no esos."],[12,"Puede ser no es seguro","Todos los A son B; algunos B son C: se cumple que algunos A son C. Otro dibujo cumple las premisas: y deja a C fuera de A. Necesariamente: en todos los dibujos: si hay uno en contra, no es seguro."],[12,"La banda, resuelta","Músicos de la banda, dentro: del círculo de los que leen partituras. Los de once que están en la banda: quedan dentro de los lectores. Algunos de once leen partituras: en cualquier dibujo posible."],[5,"Cierre","Algunos de once leen partituras: la opción A."]]},
+  "pu-lo-5": {"bunny":"345bda9d-9823-439e-a51e-0fde62b54a05","duration":204,"film":"mentiras","scenes":[[12,"La semana de pedro","Pedro miente de lunes a miércoles: y dice la verdad los demás días. Hoy dijo: «Ayer mentí»: y «dentro de tres días diré la verdad». Qué día es hoy: al final lo resolvemos."],[12,"Suponer y buscar el choque","Lucía: «Mateo miente»: Mateo: «Lucía y yo decimos la verdad». Si Mateo dijera la verdad...: Lucía también, y ella dice que él miente. Choca: Mateo miente: y Lucía dice la verdad."],[12,"La isla de los veraces","Veraces siempre dicen la verdad: falaces siempre mienten. X: «Al menos uno de los dos miente»: si X fuera falaz, la frase sería cierta. X es veraz: y entonces Y es falaz."],[10,"Nadie dice «soy falaz»","Un veraz no puede decirlo: estaría mintiendo. Un falaz tampoco: estaría diciendo la verdad. «Soy veraz» la dicen los dos: esa frase no da información."],[12,"Los dos somos falaces","Z: «Los dos somos falaces»: Z no puede ser veraz. Z es falaz: la frase es falsa: no son falaces los dos. Entonces W es veraz: una mentira también informa."],[12,"El vidrio roto","Andrés: «Fue Bruno»: Bruno: «Yo no fui» · Camilo: «Yo no fui». Solo uno dice la verdad: se prueba cada culpable posible. Si fue Camilo, hay una sola verdad: fue Camilo."],[12,"Mentir con dos partes","Un falaz dice: «Llueve y hace frío»: la frase completa es falsa. No llueve, o no hace frío: basta que falle una parte. Mentir es negar toda la frase: con las leyes de De Morgan."],[12,"La fila de la semana","Pedro dice: «Mañana mentiré»: se prueba día por día. Día de verdad: frase cierta: día de mentira: debe ser falsa. Encaja el miércoles y el domingo: los demás días chocan."],[12,"La semana, resuelta","«Ayer mentí»: encaja lunes y jueves: lunes mintiendo, jueves con verdad. Lunes: «en tres días diré la verdad»: el jueves sí la dice: sería cierta, choca. Jueves: el domingo dirá la verdad: cierta en día de verdad: hoy es jueves."],[5,"Cierre","Hoy es jueves: la opción A."]]},
+  "pu-nu-1": {"bunny":"d1055ba9-d8a8-4f11-ae1e-93839584794c","duration":210.2,"film":"primos","scenes":[[12,"Los divisores de 72","Cuántos divisores positivos tiene 72: los números que lo dividen exacto. Listarlos uno por uno es lento: y es fácil que se escape alguno. Hay una forma de contarlos: al final lo resolvemos."],[12,"Qué es un primo","Primo: exactamente dos divisores: el 1 y él mismo. 7 es primo; 9 = 3 · 3 no lo es: los no primos se llaman compuestos. El 1 no es primo: tiene un divisor: el 2 es el único primo par."],[12,"El árbol de factores","90 se parte en dos factores: 90 = 9 · 10. Cada rama se parte hasta los primos: 9 = 3 · 3 y 10 = 2 · 5. 90 = 2 · 3² · 5: los primos son los ladrillos."],[12,"Contar sin listar","18 = 2 · 3²: cada divisor usa 2⁰ o 2¹, y 3⁰, 3¹ o 3². 2 opciones por 3 opciones: 2 · 3 = 6 divisores. 1, 2, 3, 6, 9, 18: exponente + 1, y se multiplica."],[12,"Los criterios","Por 2: termina en par; por 5: 0 o 5: por 10: termina en 0. Por 3 y por 9: la suma de las cifras: 4 851: 4 + 8 + 5 + 1 = 18. Por 4: las dos últimas cifras: 7 316: 16 es múltiplo de 4."],[12,"Sin divisor común con 60","Del 1 al 60, sin divisores con 60: aparte del 1. 60 = 2² · 3 · 5: se quitan múltiplos de 2, de 3 y de 5. 60 · 1/2 · 2/3 · 4/5 = 16: quedan 16 números."],[10,"Hasta la raíz","Es 119 primo: parece, pero hay que probar. Basta probar hasta √119 ≈ 10.9: 2, 3, 5 y 7. 119 = 7 · 17: no es primo."],[12,"Los primos de 2 310","Divisores primos distintos de 2 310: cuántos son. 2 310 = 2 · 1 155 = 2 · 3 · 385: 385 = 5 · 77 = 5 · 7 · 11. 2 · 3 · 5 · 7 · 11: 5 divisores primos."],[12,"Los divisores, resueltos","72 = 8 · 9 = 2³ · 3²: la factorización. 2⁰, 2¹, 2², 2³: 4 opciones: 3⁰, 3¹, 3²: 3 opciones. 4 · 3 = 12 divisores: 1, 2, 3, 4, 6, 8, 9, 12, 18, 24, 36, 72."],[5,"Cierre","72 tiene 12 divisores: la opción A."]]},
+  "pu-nu-2": {"bunny":"2fd331cf-0a79-4f3e-a73d-e9e6f76f4519","duration":200.1,"film":"mcm","scenes":[[11,"Tres luces","Luces cada 12, 18 y 30 segundos: ahora se encienden las tres juntas. Cuándo vuelven a coincidir: durante los próximos 30 minutos. Cuántas veces coinciden: al final lo resolvemos."],[12,"Cuándo coinciden","Una cada 4, otra cada 6: 4, 8, 12, 16… y 6, 12, 18…. El primero de las dos listas: 12: el mínimo común múltiplo. Después coinciden cada 12: 12, 24, 36…."],[12,"Con los factores","8 = 2³ y 12 = 2² · 3: se factoriza cada número. MCM: cada primo, mayor exponente: 2³ · 3 = 24. MCD: solo los comunes, con el menor: 2² = 4."],[12,"Los buses de dos rutas","Ruta 1: cada 12 min desde las 6:00: ruta 2: cada 20 min desde las 6:20. Ruta 1: 6:00, 6:12, … 6:48, 7:00: ruta 2: 6:20, 6:40, 7:00. Salen juntos a las 7:00 a. m.: luego cada mcm(12, 20) = 60 min."],[12,"Partir en pedazos iguales","Cintas de 24 y 36 cm: en trozos iguales, lo más largos posible. El trozo debe dividir a los dos: divisores comunes: 1, 2, 3, 4, 6, 12. El mayor: 12 cm: el máximo común divisor."],[12,"El piso del salón","Piso de 360 × 270 cm: baldosas cuadradas lo más grandes posible. El lado: mcd(360, 270) = 90 cm: cabe exacto a lo largo y a lo ancho. 360 ÷ 90 = 4 y 270 ÷ 90 = 3: 4 · 3 = 12 baldosas."],[12,"Mcm o mcd","Volver a coincidir, encontrarse: el mínimo común múltiplo: hacia arriba. Partir, repartir, el mayor tamaño: el máximo común divisor: hacia abajo. El MCM no es menor que los números: el MCD, menor o igual."],[12,"Sobran tres","Residuo 3 al dividir entre 4, 5 y 6: el menor posible. Si sobran 3, al quitarlos: queda un múltiplo de 4, 5 y 6. mcm(4, 5, 6) = 60: 60 + 3 = 63."],[12,"Las luces, resueltas","Se factorizan 12, 18 y 30: 2² · 3; 2 · 3²; 2 · 3 · 5. mcm = 2² · 3² · 5 = 180 s: 180 s = 3 minutos. 30 ÷ 3 = 10 veces: en los próximos 30 minutos."],[5,"Cierre","Coinciden 10 veces: la opción A."]]},
+  "pu-nu-3": {"bunny":"cbeaeb7e-c47a-4f7f-8c44-dc26b202afff","duration":203.4,"film":"residuos","scenes":[[12,"Una suma de potencias","3¹ + 3² + 3³ + … + 3⁸: ocho potencias de 3. Solo se pregunta la última cifra: no hace falta el número completo. La cifra de las unidades: al final lo resolvemos."],[12,"El ciclo de las unidades","3, 9, 27, 81, 243, 729: solo importa la última cifra. Unidades: 3, 9, 7, 1, 3, 9…: cada vez se multiplica por 3. Un ciclo de 4: después de 1, vuelve a empezar."],[12,"El residuo da el lugar","La unidad de 3¹⁰: el ciclo tiene 4 pasos. 10 = 4 · 2 + 2: dos vueltas completas y 2 pasos más. El 2.º del ciclo: 9: residuo 0 sería el último: 1."],[12,"La unidad de 7²⁰²⁵","Unidades de 7ⁿ: 7, 9, 3, 1: también un ciclo de 4. 2025 = 4 · 506 + 1: residuo 1. El 1.º del ciclo: 7: 7²⁰²⁵ termina en 7."],[12,"El tablero circular","Casillas de 0 a 7 en un círculo: la ficha avanza 3 por turno. En 10 turnos avanza 30: pero cada 8 casillas vuelve a empezar. 30 = 3 · 8 + 6: queda en la casilla 6."],[12,"Par e impar","Impar + impar = par: par + par = par; par + impar = impar. Cinco impares que sumen 50: cuatro hacen par, el quinto lo vuelve impar. Imposible: la suma es impar: la paridad descarta sin calcular."],[12,"Los residuos se suman","47 deja 2 al dividir entre 5: 38 deja 3. La suma deja 2 + 3 = 5: y 5 entre 5 deja 0. 47 + 38 = 85 = 5 · 17: se trabaja con los residuos."],[10,"La última cifra de un producto","1 237 · 4 569: termina en qué cifra. Solo importan las unidades: 7 · 9 = 63. Termina en 3: lo demás no toca las unidades."],[12,"La suma, resuelta","Unidades: 3, 9, 7, 1, 3, 9, 7, 1: dos ciclos completos. Cada ciclo suma 3 + 9 + 7 + 1 = 20: dos ciclos: 40. 40 termina en 0: la suma termina en 0."],[5,"Cierre","La suma termina en 0: la opción A."]]},
+  "pu-op-1": {"bunny":"35054578-30ea-4a37-bfd5-6c09da1356e9","duration":205.9,"film":"operadores","scenes":[[12,"Una resta de potencias","a # b = a a la b, menos b a la a: por ejemplo, 2 # 3 = 8 − 9 = −1. Se pide 3 # 2 más 4 # 2: cada uno con su regla. El orden de a y b importa: al final lo resolvemos."],[12,"La regla es una máquina","a ∗ b = a · b + a: el símbolo es nuevo; la regla lo explica. El primero por a, el segundo por b: 4 ∗ 3: a = 4 y b = 3. 4 · 3 + 4 = 16: reemplazar y calcular."],[12,"Paréntesis al reemplazar","(−2) ∗ 3 = (−2) · 3 + (−2): el negativo entra con su paréntesis. −6 − 2 = −8: sin paréntesis, los signos se pierden. Si la regla tiene a²: con a = −3: (−3)² = 9, no −9."],[12,"El orden importa","4 ∗ 3 = 16: pero 3 ∗ 4 = 3 · 4 + 3 = 15. Cambiar el orden cambia el resultado: la operación no es conmutativa. Solo si la regla es simétrica: como a + b o a · b, el orden no importa."],[12,"La operación en tabla","x ∘ y: fila de x, columna de y: la tabla es la regla. a ∘ b = c y b ∘ b = a: primero cada paréntesis. c ∘ a = a: el resultado es a."],[12,"Una regla por casos","a ⋄ b: el mayor menos el menor: la regla mira primero cuál es mayor. 7 ⋄ 2 = 7 − 2 = 5: 2 ⋄ 7 = 7 − 2 = 5. Primero se decide el caso: luego se usa la fórmula de ese caso."],[12,"La parte entera","⌊x⌋: el mayor entero hasta x: ⌊2.7⌋ = 2. ⌊3.5⌋ = 3: pero ⌊−3.5⌋ = −4: el entero de abajo. 3 + (−4) = −1: hacia la izquierda, salvo si ya es entero."],[12,"El que no cambia nada","a ▲ b = a + b + 5: hay un número e que deja todo igual. a ▲ e = a: a + e + 5 = a. e = −5: comprobación: 8 ▲ (−5) = 8."],[12,"La resta, resuelta","3 # 2 = 3² − 2³: 9 − 8 = 1. 4 # 2 = 4² − 2⁴: 16 − 16 = 0. 1 + 0 = 1: distinto de 2 # 3 = −1."],[5,"Cierre","3 # 2 + 4 # 2 = 1: la opción A."]]},
+  "pu-op-2": {"bunny":"f8a19868-d4e8-4812-a4ed-2a148aa6e8da","duration":206.4,"film":"anidados","scenes":[[12,"Una operación con dos casos","a ⊗ b = a² − ab si a ≥ b: y b² − ab si a < b. Se pide (3 ⊗ 5) ⊗ (4 ⊗ 2): una operación dentro de otra. Cada paréntesis con su caso: al final lo resolvemos."],[12,"De adentro hacia afuera","⟨n⟩ = n² − n: se pide ⟨⟨3⟩⟩. Primero el de adentro: ⟨3⟩ = 9 − 3 = 6. Ese resultado entra al de afuera: ⟨6⟩ = 36 − 6 = 30."],[12,"Un cociente anidado","a ∗ b = (a + b) ÷ (a − b): se pide (5 ∗ 3) ∗ 2. 5 ∗ 3 = 8 ÷ 2 = 4: el paréntesis primero. 4 ∗ 2 = 6 ÷ 2 = 3: el resultado es 3."],[12,"La misma regla tres veces","f(n) = n ÷ 2 si n es par: y n + 3 si n es impar. f(f(f(11))): 11 → 14 → 7 → 10. En cada paso se mira el caso: par o impar, de nuevo."],[12,"La regla que se usa a sí misma","f(1) = 2 y f(n + 1) = 2 · f(n) − 1: cada valor sale del anterior. 2 → 3 → 5 → 9 → 17: f(5) = 17. Se sube peldaño a peldaño: sin saltarse ninguno."],[12,"La x dentro del operador","a ▽ b = ab − a − b: y x ▽ 3 = 9. x entra por a, 3 por b: 3x − x − 3 = 9. 2x = 12: x = 6."],[12,"Comprobar siempre","6 ▽ 3 = 18 − 6 − 3 = 9: la respuesta cumple. a ⊕ b = a + b − ab y x ⊕ 2 = −5: x + 2 − 2x = −5. −x = −7, x = 7: 7 + 2 − 14 = −5: cumple."],[12,"La x a los dos lados","a ∘ b = 2a + b: y x ∘ 1 = 3 ∘ x. 2x + 1 = 6 + x: en un lado x va por a; en el otro, por b. x = 5: 11 = 11: cumple."],[12,"Los dos casos, resueltos","3 ⊗ 5: 3 < 5, segundo caso: 5² − 3 · 5 = 25 − 15 = 10. 4 ⊗ 2: 4 ≥ 2, primer caso: 4² − 4 · 2 = 16 − 8 = 8. 10 ⊗ 8: primer caso: 100 − 80 = 20."],[5,"Cierre","(3 ⊗ 5) ⊗ (4 ⊗ 2) = 20: la opción A."]]},
+  "pu-or-1": {"bunny":"8eeea1fe-833c-4514-b3b9-f9f1ce72cc5f","duration":221.7,"film":"fila","scenes":[[10,"Cinco sillas","Cinco personas, cinco sillas: numeradas de 1 a 5, de izquierda a derecha. Cuatro pistas: una afirmación es cierta con certeza. Cuatro opciones: al final lo resolvemos."],[12,"Las pistas en dibujo","«Justo a la derecha»: pegados: forman un bloque. «A la derecha» o «menor que»: más adelante, pero no necesariamente pegado. «No en un extremo», «no junto a»: tachan lugares: dejan menos opciones."],[11,"Más alto, más bajo","Cuatro estaturas: Carlos, Diana, Esteban y Fabio. Se encadenan las comparaciones: Diana < Carlos < Fabio < Esteban. El segundo más alto: Fabio: una sola escalera con todos."],[12,"El bloque","Un bloque de dos: en cinco sillas cabe en 4 lugares. Se empieza por lo más firme: el bloque deja pocos casos. Cada caso se prueba: si choca con una pista, se tacha."],[12,"La carrera de cinco","Cinco corredores, sin empates: Andrés dos puestos antes que Bruno. Andrés en 1, 2 o 3: con Andrés en 2 no cabe el bloque Daniel-Camilo. Quedan dos órdenes: en los dos, Esteban va justo antes que Bruno."],[11,"Certeza o posibilidad","«Con certeza»: se cumple en todos los órdenes posibles. «Es posible»: basta un orden donde se cumpla. Andrés primero: posible, no seguro: en el otro orden llega tercero."],[12,"Orden vertical","Un edificio es una fila de pie: piso 1 abajo, piso 5 arriba. «Justo encima»: un bloque: «más alto»: más arriba, pegado o no. Las mismas reglas: se dibuja, se fija lo firme y se prueba."],[12,"Tres pasos","1. Dibujar las casillas: y cada pista con su símbolo. 2. Fijar lo más firme: bloques y lugares prohibidos primero. 3. Listar los casos que quedan: y revisar las opciones contra todos."],[12,"Las sillas, resueltas","El bloque Carla-Beto: cuatro lugares posibles. Dos casos sobreviven: C B A D E y D A C B E. En los dos, Elsa en la silla 5: esa es la afirmación segura."],[5,"Cierre","Elsa ocupa la silla 5: la opción A."]]},
+  "pu-or-2": {"bunny":"d5e301a2-8cf0-446d-8e9f-4d8066303b24","duration":205.3,"film":"circular","scenes":[[12,"Tres parejas","Una mesa redonda de seis: cada esposo frente a su pareja. Dos pistas más: Tatiana junto a Ricardo; Natalia a la derecha de Jaime. A la izquierda de Santiago: quién está ahí: al final lo resolvemos."],[12,"Fijar a uno","Si todos giran un puesto: nadie cambia de vecinos. Las posiciones exactas no importan: importa quién está junto a quién. Se fija a una persona: y las demás se ubican respecto a ella."],[12,"La mesa se cierra","En una fila, los extremos: tienen un solo vecino. En una mesa, todos tienen dos: el primero y el último quedan juntos. No hay extremos: cada pista de «junto a» tiene dos lados."],[10,"Frente a frente","Mesa de seis: enfrente: tres puestos más allá. Mesa de cuatro: enfrente: dos puestos más allá. Los opuestos van por parejas: si sabes uno, sabes el otro."],[12,"Izquierda y derecha","Todos miran al centro: la derecha depende de dónde se sienta. Desde arriba, la derecha: va contra las agujas del reloj. Abajo y arriba se invierten: por eso se gira con la persona."],[11,"Cuatro amigos","Ana frente a Beto: se fija a Ana; Beto queda enfrente. Ciro junto a Ana: cualquiera de los dos lados. Dora, en el puesto que queda: frente a Ciro."],[12,"La mesa de los instrumentos","Cuatro músicos, una mesa cuadrada: Sara y Nicolás están juntos. Tomás y Valeria no quedan enfrente: si así fuera, Sara y Nicolás quedarían opuestos. La guitarra es de Tomás: Valeria tiene a Tomás y al pianista al lado."],[12,"El método","1. Fijar a quien más se nombra: su puesto no importa. 2. Poner los opuestos: parejas frente a frente. 3. Usar «junto a» y los lados: izquierda y derecha mirando al centro."],[12,"Las parejas, resueltas","Jaime fijo; Karen enfrente: Natalia a su derecha, Ricardo frente a ella. Tatiana junto a Ricardo: Santiago enfrente de Tatiana. A la izquierda de Santiago: Natalia: y con la convención contraria, también."],[5,"Cierre","A la izquierda de Santiago, Natalia: la opción B."]]},
+  "pu-or-3": {"bunny":"153596ee-e9a5-4ead-9bc1-bbe50d322f44","duration":207.8,"film":"tablas","scenes":[[11,"Tres profesionales","Tres profesiones, tres ciudades: Laura, Mónica y Natalia. Cuatro pistas: dos hablan de ciudades, una une las dos cosas. Qué es Natalia y dónde vive: al final lo resolvemos."],[12,"La tabla","Personas en las filas: opciones en las columnas. Cada casilla es una pregunta: Pía toma agua: sí o no. ✓ para sí, ✗ para no: la tabla guarda lo que ya se sabe."],[12,"Las pistas con no","«Pía no toma agua»: una ✗ en su fila. «Quique no toma chocolate ni agua»: dos ✗: solo le queda la limonada. Las pistas con no son las más útiles: van tachando hasta dejar una."],[12,"Un solo ✓ por fila","La limonada es de Quique: nadie más puede tomarla. Se tacha toda su columna: y en la fila de Pía solo queda el chocolate. Rosa se queda con el agua: cada ✓ provoca otras ✗."],[12,"Pistas que unen","Dos cosas por persona: profesión y ciudad: dos tablas. «La abogada vive en Cali»: no dice quién: une las dos tablas. Quien viva en Cali es la abogada: se resuelve primero la tabla más fácil."],[12,"Las cuatro cajas","Cuatro cajas, cuatro pesos: 3, 5, 8 y 12 kilogramos. Verde + azul = negra: la única suma posible: 3 + 5 = 8. La verde no es la más liviana: verde 5, azul 3 y roja 12."],[12,"Pistas con cuentas","Una pista con suma: se prueban todas las parejas. Seis parejas de cuatro pesos: solo una suma da otro de los pesos. Una lista corta lo dice todo: la cuenta se vuelve una casilla."],[11,"El método","1. Armar la tabla: una por cada tipo de dato. 2. Primero las pistas directas: y las negativas. 3. Propagar: cada ✓ tacha su fila y su columna."],[12,"Las tres, resueltas","Ciudades: Mónica en Bogotá: Natalia no en Cali: Medellín; Laura, Cali. Laura vive en Cali: entonces Laura es la abogada. La ingeniera no vive en Bogotá: Mónica es médica; Natalia, ingeniera."],[5,"Cierre","Natalia: ingeniera, en Medellín: la opción A."]]},
+  "pu-or-4": {"bunny":"a4b75a62-13f5-4837-ac86-16b36a5650a9","duration":209.9,"film":"condiciones","scenes":[[12,"Los libros de la biblioteca","Seis libros, tres estantes: de uno a tres libros por estante. Tres reglas y una condición: C en el estante 1 y F en el 2. Qué es seguro: al final lo resolvemos."],[12,"Leer un «si…»","«Si A participa, B no»: solo habla del caso en que A está. Cuatro casos, uno prohibido: A y B juntos: lo único que no puede pasar. Si A no está, B es libre: puede estar o no estar."],[12,"Tiene que · podría · no puede","Se listan los casos posibles: los que cumplen todas las reglas. Tiene que: en todos: podría: en al menos uno. No puede: en ninguno: cada palabra es una cuenta distinta."],[12,"Juntos y separados","«C y D van juntos»: se mueven como un solo paquete. «A y B no van juntos»: cada uno busca su propio estante. «E en un estante mayor que F»: F nunca en el 3; E nunca en el 1."],[12,"La carrera de cuatro","Cuatro corredores, sin empates: Juan llega después de Pablo y de Carlos. Tres órdenes posibles: Juan siempre es el último. Si Carlos va después de Pablo…: solo queda L P C J: Carlos es tercero."],[12,"El equipo de cuatro","Cuatro de seis candidatos: A o B, no ambos; si C, también D. Exactamente uno de E y F: quedan dos lugares para C y D. Cuatro equipos posibles: C y D están en todos."],[12,"«si además…»","Una pregunta trae un dato extra: «si C queda en el estante 1…». Se vale solo para esa pregunta: la siguiente vuelve a las reglas de base. El dato extra recorta la lista: menos casos, más certezas."],[12,"Listar con orden","Primero lo que ya está fijo: C y D en el 1; F en el 2. Luego la regla más fuerte: E en el 3: mayor que el 2. Al final lo que queda libre: A y B se reparten sin juntarse."],[12,"Los libros, resueltos","Seis acomodos posibles: C, D en el 1; F en el 2; E en el 3. A y B cambian de estante: y el estante 2 tiene uno o dos libros. E en el estante 3: en los seis: esa es la certeza."],[5,"Cierre","E queda en el estante 3: la opción A."]]},
+  "pu-pb-1": {"bunny":"99f0c6a4-895e-4a9d-a31f-84f01fd795c1","duration":199.2,"film":"laplace","scenes":[[11,"Números con 1, 2, 3 y 4","Dos cifras con los dígitos 1 a 4: se pueden repetir dígitos. Se escoge uno al azar: que sea múltiplo de 3. La probabilidad: al final lo resolvemos."],[11,"Favorables sobre posibles","Un dado: 6 resultados posibles: todos igual de probables. Múltiplo de 3: el 3 y el 6: 2 favorables. P = 2 / 6 = 1/3: favorables ÷ posibles."],[12,"El espacio muestral","Dos monedas: qué puede salir: CC, CS, SC, SS. CS y SC son distintos: la primera moneda y la segunda. Una cara y un sello: 2 de 4: P = 1/2, no 1/3."],[12,"Un primo al azar","Un número del 1 al 30, al azar: que sea primo. 2, 3, 5, 7, 11, 13, 17, 19, 23, 29: 10 primos. P = 10 / 30 = 1/3: favorables sobre posibles."],[12,"Entre los zurdos","Club: 10 zurdos, 6 de ellos hombres: se escoge un zurdo al azar. Los posibles ya no son 50: son solo los 10 zurdos. Mujeres zurdas: 4: P = 4 / 10 = 2/5."],[12,"Igual de probables","La suma de dos dados: de 2 a 12: 11 valores. Pero el 7 sale de 6 maneras: y el 2 de una sola. Se cuentan los 36 pares: no las 11 sumas."],[12,"Entre 0 y 1","Imposible: P = 0: sacar 7 en un dado. Seguro: P = 1: sacar menos de 7 en un dado. Toda probabilidad está entre 0 y 1: una respuesta de 5/4 está mal."],[12,"Dos fichas a la vez","Fichas del 1 al 5, se sacan dos: parejas posibles: 10. Suma par: dos impares o dos pares: 1-3, 1-5, 3-5 y 2-4. P = 4 / 10 = 2/5: al mismo tiempo, sin orden."],[12,"Los números, resueltos","Posibles: 4 · 4 = 16 números: de 11 a 44. Múltiplo de 3: cifras suman 3 o 6: 12, 21, 24, 42 y 33. P = 5 / 16: 5 favorables de 16."],[5,"Cierre","La probabilidad es 5/16: la opción A."]]},
+  "pu-pb-2": {"bunny":"2e41fb52-54f8-462c-84e0-3e3fde2e14ed","duration":183.8,"film":"complemento","scenes":[[11,"Tres hijos","Una pareja tiene tres hijos: niño o niña, igual de probable. Por lo menos un niño: y por lo menos una niña. La probabilidad: al final lo resolvemos."],[12,"El complemento","P(no A) = 1 − P(A): lo que no pasa completa lo que pasa. No sacar 6 en un dado: 1 − 1/6 = 5/6. «Al menos uno» se cuenta al revés: todo menos «ninguno»."],[12,"El árbol de caminos","Cada nacimiento abre dos ramas: niño o niña, 1/2 cada una. Tres nacimientos: 8 caminos: cada camino: 1/2 · 1/2 · 1/2 = 1/8. Por un camino se multiplica: entre caminos se suma."],[10,"Al menos dos caras","Una moneda, tres lanzamientos: por lo menos dos caras. Dos caras: CCS, CSC, SCC: tres caras: CCC. 4 de 8 caminos: P = 4/8 = 1/2."],[12,"Dos balotas del mismo color","4 rojas, 3 azules y 2 verdes: se sacan dos al mismo tiempo. Parejas posibles: 9 · 8 ÷ 2 = 36: mismo color: 6 + 3 + 1 = 10. P = 10/36 = 5/18: las parejas, sin orden."],[10,"Con o sin devolver","Dos rojas, devolviendo la primera: 4/9 · 4/9 = 16/81. Sin devolverla: la segunda: 3 rojas de 8. 4/9 · 3/8 = 1/6: la bolsa cambió."],[12,"La condición achica el total","32 familias tienen perro: 8 de ellas también tienen gato. Una de las que tienen perro, al azar: los posibles son solo esas 32. P = 8/32 = 1/4: no 8/60."],[10,"Sin memoria","Salieron 5 caras seguidas: la sexta: sigue siendo 1/2. Independientes: no se afectan: la moneda no recuerda. Dos dados: 6 y 6: 1/6 · 1/6 = 1/36."],[12,"Los hijos, resueltos","Lo contrario: todos del mismo sexo: tres niños o tres niñas. Son 2 caminos de 8: P(contrario) = 2/8 = 1/4. 1 − 1/4 = 3/4: por lo menos uno de cada uno."],[5,"Cierre","La probabilidad es 3/4: la opción A."]]},
+  "pu-pr-1": {"bunny":"54d41ff8-1cf5-4b2a-9cd1-4888807f474b","duration":199.1,"film":"razones","scenes":[[12,"El salón de clase","Hombres y mujeres: 3 : 5: por cada 3 hombres hay 5 mujeres. Llegan 6 hombres más: la razón pasa a 3 : 4. Cuántas mujeres hay: al final lo resolvemos."],[12,"Qué es una razón","2 de agua por cada 3 de harina: la razón 2 : 3 compara dos cantidades. 4 : 6 y 6 : 9 son la misma razón: la mezcla sabe igual, solo hay más. Una razón no dice cuántos hay: dice cómo se reparten."],[12,"Partes iguales","3 : 5 son 8 partes iguales: 3 para unos, 5 para otros. Cada parte vale lo mismo: k: hombres 3k, mujeres 5k. Si una parte vale 4: hay 12 hombres y 20 mujeres."],[12,"El reparto","Repartir 840 000 en razón 3 : 4: son 3 + 4 = 7 partes. Cada parte: 840 000 ÷ 7: 120 000. 360 000 y 480 000: tres partes y cuatro partes."],[12,"La herencia","Tres hermanos, razón 2 : 3 : 5: el mayor recibe 18 millones más que el menor. La diferencia son 3 partes: 5 − 2 = 3 partes = 18 millones. Cada parte, 6 millones: 10 partes: la herencia es de 60."],[12,"La escala de un mapa","Escala 1 : 50 000: 1 cm del mapa son 50 000 cm reales. Dos pueblos a 6 cm: 6 · 50 000 = 300 000 cm. 300 000 cm = 3 km: cien centímetros por metro, mil metros por km."],[12,"El producto cruzado","Dos razones iguales: una proporción: 4 / 6 = 10 / x. Los productos cruzados son iguales: 4 · x = 6 · 10. x = 60 ÷ 4 = 15: se comprueba: 10 / 15 = 2 / 3."],[12,"Razones encadenadas","a / b = 2 / 3 y b / c = 4 / 5: b aparece en las dos. Se iguala b: a : b : c = 8 : 12 : 15. a / c = 8 / 15: o multiplicando: 2/3 · 4/5."],[12,"El salón, resuelto","Hombres 3k, mujeres 5k: con 6 más: (3k + 6) / 5k = 3 / 4. 12k + 24 = 15k: k = 8. Mujeres: 5 · 8 = 40: se comprueba: 30 : 40 = 3 : 4."],[5,"Cierre","Hay 40 mujeres: la opción A."]]},
+  "pu-pr-2": {"bunny":"ad537a8a-98ed-478b-ad74-c330be6a4d90","duration":206.5,"film":"reglatres","scenes":[[12,"Los obreros que se van","Seis obreros, doce días: todos trabajan al mismo ritmo. A los 4 días se retiran 2: los otros cuatro terminan solos. Cuántos días duró la obra: al final lo resolvemos."],[12,"Directa","12 galletas con 200 g de harina: para 30 galletas. Más galletas, más harina: en la misma proporción. 200 ÷ 12 · 30 = 500 g: el cociente se mantiene."],[12,"Inversa","3 pintores tardan 8 días: con 4 pintores. Más pintores, menos días: el trabajo total es el mismo. 3 · 8 = 24 = 4 · 6: el producto se mantiene: 6 días."],[12,"Directa o inversa","La pregunta clave: si una se duplica, qué le pasa a la otra. Se duplica: directa: kilos y precio, galletas y harina. Se reduce a la mitad: inversa: obreros y días, velocidad y tiempo."],[12,"Las ocho llaves","8 llaves llenan la piscina en 15 h: con 12 llaves iguales. Más llaves, menos horas: inversa: 8 · 15 = 120 horas-llave. 120 ÷ 12 = 10 horas: no 22.5: esa sería la directa."],[12,"Medir el trabajo","Trabajo = trabajadores · tiempo: una casilla por obrero y por día. Una obra de 72 jornadas: 6 obreros en 12 días. Si cambia la gente a mitad: se resta lo hecho y se reparte lo que falta."],[12,"La regla de tres compuesta","4 máquinas: 600 piezas en 5 h: cuántas hacen 6 máquinas en 8 h. Reducir a una máquina y una hora: 600 ÷ 4 ÷ 5 = 30 piezas. 30 · 6 · 8 = 1 440: más máquinas y más horas: más piezas."],[12,"Pasar por la unidad","Siempre funciona: cuánto hace uno, en una unidad de tiempo. Luego se multiplica: por lo que pide la pregunta. Revisar el sentido: el resultado debe crecer o bajar como se espera."],[12,"Los obreros, resueltos","La obra: 6 · 12 = 72 jornadas: en 4 días se hacen 6 · 4 = 24. Faltan 72 − 24 = 48 jornadas: ahora trabajan 4 obreros. 48 ÷ 4 = 12 días más: en total, 4 + 12 = 16 días."],[5,"Cierre","La obra duró 16 días: la opción A."]]},
+  "pu-pr-3": {"bunny":"1a48cb9e-6da2-4602-8c84-aeeb300c2ece","duration":202.9,"film":"velocidad","scenes":[[12,"Dos llaves y un desagüe","Dos llaves: 6 horas y 3 horas: cada una llenaría el tanque sola. Un desagüe: lo vacía en 4 horas: se abren las tres a la vez. Cuánto tarda en llenarse: al final lo resolvemos."],[12,"Distancia, velocidad, tiempo","d = v · t: a 80 km/h durante 3 h: 240 km. Tapar la que se busca: t = d ÷ v · v = d ÷ t. Las unidades deben coincidir: km con horas; metros con segundos."],[12,"Los trenes que se cruzan","360 km entre M y N: un tren a 70 km/h y otro a 50 km/h. Se acercan a 70 + 50 = 120 km/h: se cruzan a las 3 horas. A 70 · 3 = 210 km de M: y a 150 km de N."],[12,"El alcance","Un ciclista a 15 km/h: dos horas después sale una moto a 45 km/h. Ventaja: 30 km: la moto la recorta a 45 − 15 = 30 km/h. La alcanza en 1 hora: mismo sentido: las velocidades se restan."],[12,"El bus de ida y vuelta","Ida a 60 km/h, vuelta a 40 km/h: la velocidad promedio no es 50. Se inventa una distancia: 120 km: ida 2 horas, vuelta 3 horas. 240 km en 5 horas: velocidad promedio: 48 km/h."],[12,"La rapidez de un trabajo","Una llave llena el tanque en 3 h: cada hora llena 1/3. Rapidez = 1 / tiempo: en 6 h: 1/6 del tanque por hora. Lo que se suma son las rapideces: los tiempos no se suman ni se promedian."],[12,"Dos obreras","Una sola tarda 10 días; otra, 15: juntas. 1/10 + 1/15 = 3/30 + 2/30 = 1/6: juntas hacen un sexto por día. Terminan en 6 días: menos que la más rápida sola."],[12,"Lo que se resta","Un desagüe trabaja en contra: si vacía en 4 h, quita 1/4 por hora. Se resta su rapidez: llave 1/2 − desagüe 1/4 = 1/4. Si el resultado es negativo: el tanque nunca se llena."],[12,"El tanque, resuelto","Llaves: 1/6 + 1/3 = 1/2 por hora: juntas llenan medio tanque cada hora. Desagüe: − 1/4 por hora: 1/2 − 1/4 = 1/4 del tanque por hora. Un cuarto por hora: 4 horas: cuatro cuartos llenan el tanque."],[5,"Cierre","Se llena en 4 horas: la opción A."]]},
+  "pu-pr-4": {"bunny":"0327686a-d0d1-49f6-8b16-d003718c887a","duration":193.4,"film":"porcientos","scenes":[[12,"La elección","Votó el 60 % de los habilitados: el resto no fue a votar. El ganador: 55 % de los votos: esos fueron 6 600 votos. Cuántos podían votar: al final lo resolvemos."],[12,"Tres preguntas","El 30 % de 250: se conoce el total: se calcula la parte. Qué porcentaje es 18 de 24: se conocen las dos: se divide. El 30 % es 45: cuál es el total: se conoce la parte: se va al revés."],[11,"Qué porcentaje es","18 de 24: se escribe como fracción: 18/24. 18/24 = 3/4 = 0.75: se simplifica y se divide. 0.75 · 100 = 75 %: parte entre total, por cien."],[12,"Hallar el total","Se gastó el 35 % del tanque: quedan 26 litros. Lo que queda es el 65 %: 65 % = 26 litros. 1 % = 0.4 L · 100 % = 40 L: se pasa por el uno por ciento."],[12,"Del 40 % al 65 %","Un tanque al 40 %: se le agregan 30 litros y queda al 65 %. Los 30 litros son el 25 %: lo que subió, no lo que hay. 25 % = 30 L → 100 % = 120 L: cuatro veces 30."],[12,"Un porcentaje de otro","El 25 % del 40 %: una parte de una parte. 0.25 · 0.40 = 0.10: se multiplican los decimales. Es el 10 % del total: no el 65 %: no se suman."],[12,"Llegan en bicicleta","40 % mujeres, 60 % hombres: en bici: 25 % de ellas y 10 % de ellos. Con 100 personas: 25 % de 40 = 10; 10 % de 60 = 6. 10 + 6 = 16 de 100: el 16 % del grupo, no el 35 %."],[12,"Puntos porcentuales","De 40 % a 50 %: subió 10 puntos porcentuales. Pero creció un 25 %: 10 más sobre 40 de antes. Dos cosas distintas: la diferencia, o la diferencia sobre lo de antes."],[12,"La elección, resuelta","55 % de los votos = 6 600: votaron 6 600 ÷ 0.55 = 12 000. 12 000 son el 60 %: de los habilitados. 12 000 ÷ 0.6 = 20 000: o de una vez: 0.6 · 0.55 = 0.33."],[5,"Cierre","Había 20 000 habilitados: la opción A."]]},
+  "pu-pr-5": {"bunny":"521b6a30-fd18-4cba-bc1f-ff2a855d4995","duration":194.8,"film":"aumentos","scenes":[[12,"El salario de rosa","Un aumento del 8 %: el salario quedó en 1 620 000. Cuánto ganaba antes: el 8 % se calculó sobre el salario viejo. Cuatro opciones muy parecidas: al final lo resolvemos."],[12,"Cada cambio, un factor","Subir 8 %: quedar con el 108 %: multiplicar por 1.08. Bajar 8 %: quedar con el 92 %: multiplicar por 0.92. El factor sale de 100 % ± el cambio: un solo paso, sin calcular el porcentaje aparte."],[12,"Volver atrás","Para volver se divide: precio nuevo ÷ factor. Restar el 8 % no devuelve: el 8 % del nuevo es más que el 8 % del viejo. La trampa: 1 490 400: el camino: 1 620 000 ÷ 1.08."],[12,"El iva","IVA del 19 %: precio con IVA = precio · 1.19. Un artículo cuesta 595 000 con IVA: el precio sin IVA se halla dividiendo. 595 000 ÷ 1.19 = 500 000: el IVA fue de 95 000."],[12,"Sube 20 %, baja 20 %","Sube 20 % y luego baja 20 %: no vuelve al precio inicial. 1.2 · 0.8 = 0.96: el segundo 20 % es de un precio mayor. Disminuyó un 4 %: 100 → 120 → 96."],[12,"Dos aumentos","Sube 10 % y luego 20 %: no es 30 %. 1.1 · 1.2 = 1.32: el segundo aumento crece sobre el primero. Aumento total: 32 %: los cambios seguidos se multiplican."],[12,"La ganancia del comerciante","Compra en 80 000, quiere ganar 25 %: luego hace un descuento del 10 %. 80 000 · 1.25 = 100 000: con descuento: 100 000 · 0.9 = 90 000. Gana 10 000 sobre 80 000: un 12.5 % del costo."],[12,"Interés compuesto","1 000 000 al 10 % anual: el interés se suma al capital. Cada año, por 1.1: 1 100 000 → 1 210 000 → 1 331 000. 3 años: 1.1³ = 1.331: no 1 300 000: el interés gana interés."],[12,"El salario, resuelto","Salario viejo · 1.08 = 1 620 000: se deshace dividiendo. 1 620 000 ÷ 1.08 = 1 500 000: el aumento fue de 120 000. Se comprueba: 8 % de 1 500 000: es 120 000, y 1 500 000 + 120 000 = 1 620 000."],[5,"Cierre","Ganaba 1 500 000: la opción A."]]},
+  "pu-se-1": {"bunny":"db3d0b2e-55bf-48f3-af98-b4e0d755ad66","duration":206,"film":"sucesiones","scenes":[[11,"Cinco, ocho, trece…","5, 8, 13, 20, 29, …: la misma regla sigue para siempre. Falta el término 12: escribir doce términos es lento y arriesgado. Cuatro opciones: al final lo resolvemos."],[12,"Las diferencias","Se resta cada término del siguiente: 8 − 5, 13 − 8, 20 − 13, 29 − 20. Diferencias: 3, 5, 7, 9: no son iguales: no es aritmética. Si fueran iguales: se sumaría siempre lo mismo."],[11,"Segundas diferencias","Diferencias de las diferencias: 5 − 3, 7 − 5, 9 − 7. Siempre 2: las diferencias crecen de 2 en 2. Segunda diferencia constante: hay un n² escondido."],[12,"La progresión aritmética","El tercero es 11 y el séptimo, 27: falta el término 20. Del 3.º al 7.º hay 4 saltos: 27 − 11 = 16: cada salto vale 4. a₂₀ = a₃ + 17 · 4 = 79: diecisiete saltos desde el tercero."],[12,"Comparar con los cuadrados","Cuadrados: 1, 4, 9, 16, 25: debajo de 5, 8, 13, 20, 29. Cada término es el cuadrado + 4: 5 = 1 + 4, 8 = 4 + 4, 13 = 9 + 4. Término n = n² + 4: se comprueba con todos."],[12,"Dos reglas turnándose","3, 6, 5, 10, 9, 18, 17, …: sube, baja, sube, baja. × 2, − 1, × 2, − 1: dos operaciones que se turnan. 17 → 34 → 33 → 66: el término 10 es 66."],[12,"Las que se duplican","1, 3, 7, 15, 31: diferencias 2, 4, 8, 16: se duplican. Casi potencias de 2: 2 − 1, 4 − 1, 8 − 1, 16 − 1. Término n = 2ⁿ − 1: el 10.º: 1 024 − 1 = 1 023."],[8,"Un método","1. Diferencias: iguales: aritmética. 2. Segundas diferencias o cocientes: constantes: cuadrados o potencias. 3. Si sube y baja: buscar dos reglas turnándose."],[11,"La sucesión, resuelta","Término n = n² + 4: comprobada con los cinco términos. n = 12: 12² + 4: 144 + 4. El término 12 es 148: la opción A."],[5,"Cierre","El término 12 es 148: la opción A."]]},
+  "pu-se-2": {"bunny":"972953b2-312f-4ec0-b17e-01d3028825ad","duration":218.4,"film":"letras","scenes":[[12,"A, c, f, j, o…","A, C, F, J, O, …: alfabeto de 26 letras, sin la ñ. Las letras se van separando: cada salto es un poco más largo. Cuál letra sigue: al final lo resolvemos."],[12,"Cada letra, un número","A = 1, B = 2, …, Z = 26: sin la ñ, como dice el enunciado. Con números se pueden ver saltos: la regla aparece en las posiciones. Truco: E = 5, J = 10, O = 15, T = 20: puntos de referencia para contar rápido."],[12,"Saltos que crecen","Posiciones 1, 3, 6, 10, 15: A, C, F, J, O. Saltos +2, +3, +4, +5: cada salto, uno más que el anterior. Son los números triangulares: el siguiente salto: +6."],[12,"Número y letra","3C, 6F, 9I, 12L, …: cada término lleva número y letra. El número sube de 3 en 3: y la letra está en esa misma posición. Sigue 15O: la letra 15 es la O."],[12,"Figuras que crecen","Cuadrados en fila hechos con palitos: 4, 7, 10 palitos. Cada cuadrado nuevo pide 3: el primero necesita 4. Figura n: 3n + 1 palitos: lo que se agrega dice la regla."],[11,"Cien palitos","Se tienen 100 palitos: cuál es la figura más grande posible. 3n + 1 ≤ 100: n ≤ 33. La figura 33 usa 100 palitos: la 34 pediría 103."],[12,"Marcos cuadrados","Marcos de cuadritos: lados 3, 4, 5…. Figura n: lado n + 2: el cuadrado menos el hueco. (n + 2)² − n² = 4n + 4: figura 15: 64 cuadritos."],[12,"Qué se agrega","Comparar una figura con la anterior: qué pieza nueva aparece. Si se agrega siempre lo mismo: la regla es lineal: a · n + b. Si lo agregado crece siempre igual: aparece un n²."],[12,"Las letras, resueltas","O es la 15: el último salto fue +5. El siguiente salto: +6: 15 + 6 = 21. La letra 21 es la U: T es 20; la siguiente, U."],[5,"Cierre","Sigue la U: la opción A."]]},
+  "pu-se-3": {"bunny":"b6534f36-e49e-4bd2-b6a6-f60ef8fbde87","duration":196.7,"film":"ciclos","scenes":[[11,"Abbcccd","ABBCCCD ABBCCCD ABBCCCD…: el mismo grupo, repetido sin fin. La letra de la posición 150: escribir 150 letras no es buena idea. Cuatro opciones: al final lo resolvemos."],[12,"El bloque","Primero, el grupo que se repite: A B B C C C D: 7 letras. Cada 7 posiciones, todo vuelve: la 8.ª es otra vez A. El largo del bloque: es el número que importa."],[12,"El residuo","Posición ÷ largo del bloque: 150 ÷ 7 = 21, sobran 3. 21 bloques completos: no cambian nada: vuelven a empezar. Lo que sobra decide: la posición 150 es la 3.ª del bloque."],[11,"Si sobra cero","Posición 147 = 7 · 21: residuo 0. Residuo 0 no es la «posición 0»: es la última del bloque. La 147 es una D: termina el bloque 21."],[12,"Los días de la semana","La semana es un ciclo de 7: cada 7 días, el mismo día. Mes de 30 días: el 15 es miércoles: del 15 al 30 hay 15 días. 15 = 2 · 7 + 1: el 30 es jueves."],[12,"De marzo a junio","El 1 de marzo fue viernes: qué día fue el 1 de junio. Marzo 31 + abril 30 + mayo 31: pasan 92 días. 92 = 7 · 13 + 1: un día después del viernes: sábado."],[12,"El horno de 100 horas","Encendido: lunes, 8:00 a. m.: debe estar 100 horas seguidas. 100 = 4 · 24 + 4: cuatro días completos y 4 horas. Viernes 8:00 + 4 horas: se apaga el viernes al mediodía."],[12,"La última cifra","Potencias de 2: 2, 4, 8, 16, 32, 64…: la última cifra: 2, 4, 8, 6, 2, 4…. Un ciclo de 4 cifras: 2, 4, 8, 6 y vuelve a empezar. 2⁹⁹: 99 = 4 · 24 + 3: la 3.ª del ciclo: termina en 8."],[12,"La letra 150, resuelta","150 = 7 · 21 + 3: 21 bloques completos y 3 letras más. A, B, B: la 3.ª letra: del bloque A B B C C C D. La posición 150 es una B: no una C: la tercera es la segunda B."],[5,"Cierre","La letra 150 es B: la opción A."]]},
+};
+(() => {
+  const lessons = PU_RAZONAMIENTO.flatMap(u => u.lessons);
+  for (const [id, v] of Object.entries(PU_VIDEOS)) {
+    const l = lessons.find(l => l.id === id);
+    if (l) l.clip = { bunny: v.bunny, duration: v.duration, scenes: v.scenes.map(([d, title, text]) => sc(d, text, { title })) };
+  }
+})();

@@ -1,0 +1,109 @@
+// Preicfes · Lectura Crítica · mundo 5 «Textos Filosóficos» (spec 2026-11-25-preicfes-estructura). Ensayos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const BARCO = {
+    id: 'icf-chiva', title: 'La chiva que nunca fue la misma',
+    ficha: { autor: 'Ensayo de Elías Montoya', fuente: 'Revista escolar de filosofía', fecha: 'Febrero de 2026' },
+    paras: [
+      'La chiva de mi abuelo cumplió sesenta años y el pueblo le hizo una fiesta. Pero don Arcadio, el mecánico, bebía su aguardiente con cara de duda. «En estos años», dijo, «le cambiamos el motor, las llantas, las bancas, la lata y hasta el nombre. No queda un solo tornillo del comienzo. ¿A quién le estamos cantando?».',
+      'La pregunta parece un chiste y es muy vieja. Los griegos la hacían sobre un barco al que se le reemplazaban las tablas. Es una pregunta filosófica porque no se contesta mirando más de cerca: todos los datos están sobre la mesa y, sin embargo, no sabemos qué decir. Lo que falta no es información, sino entender qué significa «la misma».',
+      'Una primera respuesta dice que una cosa es la materia de la que está hecha. Si cambió la materia, cambió la cosa. Es una respuesta clara, pero cuesta cara: nuestro cuerpo también renueva casi todo lo que lo compone. Si la regla vale para la chiva, yo no sería quien aprendió a leer en primero de primaria, y nadie podría cobrarme hoy una promesa de ayer.',
+      'Una segunda respuesta dice que lo que importa es la forma: la chiva es la misma mientras conserve su figura y su oficio. Suena mejor. Pero supongamos que alguien guardó las piezas viejas y las volvió a armar en un garaje. Habría dos chivas con la misma figura, una con el oficio y otra con los tornillos. ¿Las dos serían la de mi abuelo?',
+      'Yo creo que la identidad de una cosa no está en sus piezas ni en su figura, sino en su historia: en que cada cambio se haya hecho sobre lo anterior, sin cortes. La chiva de la fiesta es la de mi abuelo porque nunca dejó de serlo por el camino. La del garaje es un recuerdo muy bien hecho.',
+      'Sé lo que dirá don Arcadio: que una historia también puede partirse en dos, y que entonces volveríamos al principio. Tiene razón. No creo haber cerrado la pregunta. Pero ahora sé que, cuando cantamos, no le cantamos a una lata, sino a un camino. Y eso, por lo menos, se puede celebrar.',
+    ],
+  };
+  const l1 = leccion('icf-lc-filosofico-1', 'La pregunta del filósofo', guion(
+    ['Una pregunta distinta', 'No se contesta con más datos: pregunta qué significa una idea.'],
+    ['Respuestas en fila', 'El filósofo prueba una respuesta, le busca un problema y pasa a otra.'],
+    ['El experimento mental', '«Supongamos que…» imagina un caso para poner a prueba una idea.'],
+    ['La tesis', 'Casi siempre llega después de descartar, con «yo creo» o «sostengo».']), [
+    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: BARCO,
+      ...F(['cuenta el caso que despierta la duda', 0, 'Busca la fiesta.'], ['explica por qué es filosófica', 1, 'Busca qué falta, si no es información.'], ['prueba la materia y la objeta', 2, 'Busca la primera respuesta.'], ['prueba la forma y la objeta', 3, 'Busca el garaje.'], ['da su propia respuesta', 4, 'Busca «Yo creo».'], ['reconoce un límite y cierra', 5, 'Busca lo que dirá don Arcadio.'], ['explica cómo reparar un motor', null, 'Ningún párrafo enseña mecánica.']),
+      luz: [[1, '¿A quién le estamos cantando?'], [2, 'una pregunta filosófica'], [3, 'Una primera respuesta'], [4, 'Una segunda respuesta'], [5, 'Yo creo'], [6, 'Tiene razón']], bien: 'Caso, pregunta, dos intentos, tesis y límite.' },
+      'Del caso pasa a la pregunta, prueba dos respuestas, da la suya y reconoce un límite.', 'Lee el comienzo de cada párrafo y di qué hace con la pregunta.'),
+    x('subraya-tesis', 'Subraya en el párrafo 5 la oración que dice la **tesis** del autor.', { doc: BARCO, nums: [5], n: 1, va: ['5.0'], mira: { '5.1': 'Aplica la tesis al caso de la fiesta.', '5.2': 'Aplica la tesis a la otra chiva.' }, bien: 'La anuncia en primera persona.' },
+      'La primera oración afirma que la identidad está en la historia sin cortes; las otras la aplican.', 'Busca la afirmación general, no los casos en que se aplica.'),
+    x('genero-o-cita', '¿Se contesta con **datos** o es una pregunta **filosófica**?', { doc: BARCO, rot: ['con datos', 'filosófica'],
+      ...F(['¿Cuántos años cumple la chiva?', 0, '¿Alguien lo puede comprobar?'], ['¿Qué hace que algo siga siendo lo mismo?', 1, '¿Bastaría con mirar mejor?'], ['¿Cuándo le cambiaron el motor?', 0, '¿Alguien lo puede comprobar?'], ['¿Está obligado a cumplir quien ya cambió?', 1, '¿Bastaría con mirar mejor?']), bien: 'Comprobar o entender.' },
+      'Los años y el motor se averiguan; qué es ser lo mismo y qué obliga se piensan.', 'Pregunta si un dato nuevo cerraría la discusión.'),
+    x('pieza-argumento', 'Ata cada papel a su oración.', { doc: BARCO, lineas: ['Si cambió la materia, cambió la cosa.', 'Nuestro cuerpo también se renueva.', 'Supongamos que alguien guardó las piezas.', 'La identidad está en su historia.'],
+      ...T(['respuesta que se prueba primero', 0, 'Busca la que habla de lo que compone.'], ['objeción con un ejemplo real', 1, 'Busca la que habla de personas.'], ['caso imaginado para probar', 2, 'Busca un verbo que invite a imaginar.'], ['lo que defiende el autor', 3, 'Busca lo que queda al final.']), bien: 'Prueba, objeta, imagina y sostiene.' },
+      'La materia se prueba, el cuerpo la objeta, el garaje es imaginado y la historia es la tesis.', 'Busca primero la respuesta que el autor conserva.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: BARCO, nums: [3, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['El cuerpo renueva casi todo lo que lo compone.', 0, 'Léela junto al párrafo 3.'], ['Cobrar una promesa supone que la persona es la misma.', 1, '¿Por qué nadie podría cobrarla?'], ['El autor acepta que su respuesta puede fallar.', 1, '¿Qué reconoce después de «Tiene razón»?'], ['Don Arcadio estudió filosofía.', 2, '¿Se dice qué estudió?']),
+      luz: [[3, 'casi todo lo que lo compone'], [3, 'cobrarme hoy una promesa'], [6, 'No creo haber cerrado la pregunta']], bien: 'Las promesas suponen identidad.' },
+      'Lo del cuerpo está escrito; lo de la promesa y la duda se deducen; el estudio no aparece.', 'Pregunta qué tendría que ser cierto para que esa frase tenga sentido.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: BARCO, nums: [2, 5, 6], pregunta: 'Queda en pie', queda: 'La identidad depende de la historia de la cosa.',
+      ...T(['Faltan datos para contestar la pregunta.', 3, 'Busca qué es lo que falta y lo que no.'], ['La chiva del garaje es la verdadera.', 6, 'Busca qué es la del garaje.'], ['El autor cree haber resuelto todo.', 9, 'Busca qué confiesa el autor.']), bien: 'Una oración desmiente cada una.' },
+      'No falta información, la del garaje es un recuerdo y el autor no cree haber cerrado la pregunta.', 'Saca la palabra clave: datos, garaje, resuelto.'),
+    x('balanza-tesis', 'Tesis: «la identidad está en la historia sin cortes». ¿Qué hace cada caso?', { doc: BARCO, tesis: 'La identidad está en la historia sin cortes',
+      ...F(['Reconozco mi barrio aunque cambió casa por casa.', 0, '¿Hubo cambio poco a poco?'], ['Un río se divide en dos y ambos vienen del mismo.', 1, '¿Cuál sería el mismo si los dos tienen esa historia?'], ['La chiva está pintada de colores.', 2, '¿Dice algo de ser la misma?']), bien: 'Dos herederos la ponen en aprietos.' },
+      'El barrio la apoya, el río partido la pone en problemas y el color no pesa.', 'Supón cierto cada caso y pregunta si la tesis sale ganando.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: BARCO, lineas: ['Una chiva cambió todas sus piezas: ¿es la misma?', 'Don Arcadio bebía aguardiente.', 'Ni la materia ni la forma bastan.', 'El autor propone la historia sin cortes.', 'La chiva tenía bancas.', 'Reconoce que la pregunta sigue abierta.'], ...S([1, 4], { 0: 'Es la pregunta del ensayo.', 2: 'Son las respuestas descartadas.', 3: 'Es la tesis del autor.', 5: 'Es el límite que reconoce.' }), bien: 'Pregunta, descartes, tesis y límite.' },
+      'El aguardiente y las bancas ambientan; lo demás es el hilo del razonamiento.', 'Deja lo que necesitas para entender la discusión.'),
+  ]);
+
+  const LIBRE = {
+    id: 'icf-fila', title: 'Libre de o libre para',
+    ficha: { autor: 'Ensayo de Noemí Arbeláez', fuente: 'Libro «Pensar en la fila»', fecha: 'Segunda edición, 2026' },
+    paras: [
+      'Decimos «libre» de muchas cosas: una tarde, una línea telefónica, un pájaro, un preso que sale. Como la palabra es una, creemos que la idea también lo es. Propongo separar dos ideas que se esconden en ella, porque buena parte de nuestras discusiones consiste en que uno habla de la primera y el otro le contesta con la segunda.',
+      'Llamaré «libertad de» a la ausencia de obstáculos puestos por otros. Soy libre de salir si nadie cierra la puerta con llave. Esta libertad se mide por lo que no hay: ni candados, ni amenazas, ni permisos. Un muchacho que vive junto a una universidad sin que nadie le prohíba entrar tiene, en este sentido, toda la libertad de estudiar.',
+      'Llamaré «libertad para» a la capacidad real de hacer algo. Ese mismo muchacho trabaja doce horas y no aprendió a leer bien. Nadie se lo impide, pero no puede. Esta libertad se mide por lo que sí hay: tiempo, salud, educación, transporte. Se parece menos a una puerta abierta que a unas piernas que caminan, y casi siempre cuesta más, porque no basta con que alguien se aparte.',
+      'Alguien objetará que confundo libertad con poder. No poder volar, dirá, no me quita libertad: solo me faltan alas. La objeción es buena y me obliga a precisar. No llamo falta de libertad a cualquier incapacidad, sino a la que depende de cómo vivimos juntos y podría ser de otro modo. Que nadie vuele no es culpa de nadie. Que un niño no aprenda a leer, sí.',
+      'La distinción importa al decidir. Quien solo ve la primera dirá que el Estado debe apartarse; quien solo ve la segunda, que debe darlo todo. La primera sin la segunda es una puerta abierta frente a quien no puede cruzarla. La segunda sin la primera es una casa muy cómoda de la que no dejan salir.',
+      'No sé cuánto de cada una necesita un país. Sí sé que, cuando en la fila alguien diga «aquí somos libres», vale la pena preguntar, con toda cortesía: ¿libres de qué?, ¿y para qué?',
+    ],
+  };
+  const l2 = leccion('icf-lc-filosofico-2', 'Conceptos y ejemplos', guion(
+    ['Definir', 'El autor le pone nombre a una idea: «llamaré… a…».'],
+    ['Distinguir', 'Separa dos ideas que se confunden y dice en qué se diferencian.'],
+    ['Ejemplo y analogía', 'El ejemplo es un caso; la analogía compara con otra cosa.'],
+    ['Objeción y precisión', 'Una buena objeción obliga a ajustar el concepto.']), [
+    x('pinta-tipos', 'Pinta cada caso con el concepto que muestra.', { doc: LIBRE, plumas: ['libertad de', 'libertad para'],
+      ...P(['Nadie cierra la puerta con llave.', 0, '¿Habla de un obstáculo que no hay o de una capacidad que sí hay?'], ['Hay un bus que llega hasta la escuela.', 1, '¿Habla de un obstáculo que no hay o de una capacidad que sí hay?'], ['Se quita la censura a un periódico.', 0, '¿Habla de un obstáculo que no hay o de una capacidad que sí hay?'], ['Una persona aprende a leer.', 1, '¿Habla de un obstáculo que no hay o de una capacidad que sí hay?']), bien: 'Lo que no hay y lo que sí hay.' },
+      'La puerta y la censura son obstáculos que se quitan; el bus y la lectura son capacidades.', 'Pregunta si alguien dejó de impedir o si ahora se puede más.'),
+    x('voz-de-la-fuente', 'Ata cada comparación a lo que explica.', { ayuda: 'Tira un hilo desde cada imagen hasta lo que explica.', doc: LIBRE, portadas: [['Libertad de', 'concepto'], ['Libertad para', 'concepto'], ['La primera sin la segunda', 'riesgo'], ['La segunda sin la primera', 'riesgo']],
+      ...T(['una puerta abierta', 0, '¿Qué se mide por lo que no hay?'], ['unas piernas que caminan', 1, '¿Qué se mide por lo que sí hay?'], ['una puerta abierta que no se puede cruzar', 2, '¿A cuál le faltan las capacidades?'], ['una casa cómoda de la que no dejan salir', 3, '¿A cuál le sobra cuidado y le falta permiso?']), bien: 'Cada imagen, su idea.' },
+      'La puerta es no tener obstáculos; las piernas, poder; y cada una sola deja un problema.', 'Mira si la imagen habla de permiso o de capacidad.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo. Sobran dos.', { doc: LIBRE, frases: [[2, 'la ', 'ausencia', ' de obstáculos puestos por otros'], [4, 'me obliga a ', 'precisar', ''], [5, 'dirá que el Estado debe ', 'apartarse', '']],
+      ...F(['falta', 0, '¿Qué pasa con los obstáculos?'], ['aclarar', 1, '¿Qué hace la autora con su concepto?'], ['no intervenir', 2, '¿Qué pediría quien solo cuida que no haya obstáculos?'], ['abundancia', null, 'Es lo contrario de lo que se define.'], ['gobernar más', null, 'Es lo contrario de lo que pediría.']), bien: 'El contexto las explica.' },
+      'Ausencia es falta, precisar es aclarar y apartarse es no intervenir.', 'Lee lo que viene después de cada palabra.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 4 la oración que **ajusta** el concepto después de la objeción.', { doc: LIBRE, nums: [4], apuesta: 'Solo cuenta la incapacidad que podría ser de otro modo.', ...S(['4.3'], { '4.0': 'Presenta la objeción.', '4.1': 'Da el ejemplo de quien objeta.', '4.2': 'Reconoce la objeción, pero aún no ajusta nada.', '4.4': 'Da un ejemplo de lo que no cuenta.', '4.5': 'Da un ejemplo de lo que sí cuenta.' }), bien: '«No… sino» marca el ajuste.' },
+      'La cuarta oración dice qué cuenta y qué no como falta de libertad.', 'Busca la oración con «no… sino» que fija qué se llama falta de libertad.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: LIBRE, nums: [1, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Muchas discusiones mezclan las dos ideas.', 0, 'Léela junto al final del párrafo 1.'], ['Para la autora, hacen falta las dos libertades.', 1, '¿Qué muestran las dos imágenes del párrafo 5?'], ['Ningún país tiene libertad.', 2, '¿Habla de todos los países?'], ['Quitar prohibiciones no basta para que todos estudien.', 1, '¿A quién se le abre la puerta en el párrafo 5?']),
+      luz: [[1, 'uno habla de la primera'], [5, 'La primera sin la segunda'], [5, 'La segunda sin la primera']], bien: 'Cada una sola se queda corta.' },
+      'La mezcla está escrita; que se necesiten las dos y que no baste quitar prohibiciones se deducen; lo de todo país no.', 'Mira qué le falta a cada libertad cuando va sola.'),
+    x('bisagras', 'Pon en cada hueco la palabra que une. Sobran dos.', { doc: LIBRE, pares: [['Nadie se lo impide,', 'no puede.'], ['Muchos no tienen tiempo;', 'no estudian.'], ['Conviene separar las dos ideas,', 'se confunden al discutir.']],
+      ...F(['pero', 0, 'Contrasta: ¿dónde lo segundo no es lo que se esperaba?'], ['por eso', 1, 'Trae el resultado: ¿dónde lo segundo sale de lo primero?'], ['porque', 2, 'Trae la razón: ¿dónde lo segundo explica lo primero?'], ['por ejemplo,', null, 'Anunciaría un caso: ninguna segunda parte lo es.'], ['es decir,', null, 'Repetiría lo mismo: ninguna pareja repite.']), bien: 'Contraste, resultado y razón.' },
+      'No hay obstáculo y aun así no puede; la falta de tiempo trae un resultado; y se da la razón de separar.', 'Di qué hace la segunda idea: contrasta, resulta o explica.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el ensayo.', { doc: LIBRE, filas: [{ antes: 'Es falta de libertad', topes: ['toda incapacidad', 'ninguna incapacidad', 'la incapacidad que podría evitarse'], va: 2 }, { antes: 'La objeción de las alas le parece', topes: ['mala', 'buena', 'ofensiva'], va: 1 }, { antes: 'Cuánto de cada una necesita un país', topes: ['no lo sabe', 'lo sabe', 'no le importa'], va: 0 }], mira: ['Relee lo que precisa en el párrafo 4.', 'Relee cómo recibe la objeción.', 'Relee el comienzo del párrafo 6.'], luz: [[4, 'podría ser de otro modo'], [4, 'La objeción es buena'], [6, 'No sé cuánto']], bien: 'Precisa, reconoce y duda.' },
+      'Cuenta la que podría ser de otro modo, la objeción es buena y no sabe cuánto de cada una.', 'Busca la oración exacta que pone el alcance.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: LIBRE, lineas: ['«Libre» esconde dos ideas distintas.', 'Los pájaros vuelan.', 'Una es no tener obstáculos; otra, poder de verdad.', 'La objeción obliga a precisar la segunda.', 'El muchacho vive cerca.', 'Cada una, sola, se queda corta.'], ...S([1, 4], { 0: 'Es el punto de partida.', 2: 'Son los dos conceptos.', 3: 'Es el ajuste.', 5: 'Es por qué importa.' }), bien: 'Distinguir, definir, ajustar y usar.' },
+      'El pájaro y la cercanía son ejemplos; lo demás es el razonamiento.', 'Quita los ejemplos y deja los conceptos y el ajuste.'),
+  ]);
+
+  const MENTIRA = {
+    id: 'icf-mentira', title: 'La mentira del dibujo',
+    paras: [
+      'Mi sobrina de cinco años me mostró un dibujo: cuatro manchas y una raya. «Es usted», dijo. «Me quedó bonito, ¿cierto?». Le contesté que sí. No era cierto. Pasé la noche pensando si hice algo malo.',
+      'Un filósofo muy severo, al que leí en el colegio, diría que sí. Según él, hay que actuar solo como querríamos que todos actuaran siempre. Si todos mintieran cuando les conviene, nadie creería en la palabra de nadie y hasta mentir sería inútil. Por tanto, no se debe mentir, ni siquiera por cariño.',
+      'Otro filósofo, menos severo, miraría las consecuencias. Una acción es buena si produce más bienestar que daño. Mi «sí» hizo feliz a una niña y no le quitó nada a nadie. Para él, la mentira del dibujo no solo está permitida: casi era mi deber.',
+      'Los dos me convencen un rato y ninguno toda la noche. Al primero le pregunto: ¿también habría que decirle la verdad al asesino que busca a un amigo escondido en mi casa? Al segundo: ¿y si la niña crece creyendo que todo le sale bien, y un día nadie le miente? El primero olvida que las reglas se hicieron para las personas. El segundo olvida que las consecuencias no terminan el mismo día.',
+      'Tal vez la pregunta estaba mal hecha. Yo pensaba en mi frase, verdadera o falsa, como quien califica un examen. Pero mi sobrina no me pidió un juicio sobre el arte. Me pidió que mirara con ella. A la mañana siguiente le dije: «Cuénteme de esta raya». Era mi bigote. No tengo bigote. «Es para cuando sea grande», me explicó.',
+      'No mentí, no la herí y entendí el dibujo. A veces, entre decir la verdad y decir una mentira, hay una tercera cosa que cuesta más trabajo: prestar atención. Ni el severo ni el otro la incluyeron en sus libros, o yo no llegué a esa página. Desde entonces, cuando alguien me muestra algo que hizo, pregunto antes de opinar; y casi siempre descubro que no me estaban pidiendo una nota.',
+    ],
+  };
+  const Q = preg(MENTIRA, 'lectura');
+  return mundo('icf-lc-filosofico', 'Textos Filosóficos', 'lectura', [l1, l2], [
+    ['icf-lc-filosofico-1', 'Una pregunta filosófica no se cierra con más datos.', Q('La pregunta que pone en marcha el ensayo es:', ['Cómo dibujan los niños', 'Si está mal mentir por cariño', 'Quién inventó la mentira', 'Si el autor tiene bigote'], 1, '«Pasé la noche pensando si hice algo malo»: pregunta por el valor de su mentira.', 'Mira en qué se quedó pensando el autor.')],
+    ['icf-lc-filosofico-1', 'El filósofo prueba respuestas y les busca problemas.', Q('En el párrafo 4, las dos preguntas sirven para:', ['Mostrar un problema en cada respuesta', 'Pedirle consejo al lector', 'Defender al filósofo severo', 'Contar lo que le pasó a un amigo'], 0, 'Cada pregunta plantea un caso que pone en aprietos a una de las dos posturas.', 'Fíjate a quién va dirigida cada pregunta y qué busca.')],
+    ['icf-lc-filosofico-1', 'La tesis suele llegar al final, después de descartar.', Q('La conclusión del autor es que:', ['Siempre hay que decir la verdad', 'Mentir es bueno si alguien queda feliz', 'Los filósofos no sirven para la vida', 'A veces hay algo mejor que escoger entre la verdad y la mentira: prestar atención'], 3, '«Hay una tercera cosa que cuesta más trabajo: prestar atención».', 'Busca la «tercera cosa» del último párrafo.')],
+    ['icf-lc-filosofico-2', 'Distinguir dos conceptos ayuda a pensar.', Q('La diferencia entre los dos filósofos es que:', ['Uno mira la regla y el otro, los resultados', 'Uno ama a los niños y el otro no', 'Uno miente y el otro dice la verdad', 'Uno es griego y el otro no'], 0, 'El severo exige una regla para todos; el otro mide bienestar y daño.', 'Compara qué mira cada uno para decir si algo está bien.')],
+    ['icf-lc-filosofico-2', 'Un ejemplo pone a prueba una idea.', Q('El caso del asesino que busca a un amigo se usa para mostrar que:', ['Los amigos deben esconderse', 'Las consecuencias nunca importan', 'Una regla sin excepciones puede llevar a algo inaceptable', 'La policía debe intervenir'], 2, 'Si nunca se puede mentir, habría que delatar al amigo: eso parece inaceptable.', 'Piensa qué obligaría a hacer la regla del filósofo severo.')],
+    ['icf-lc-filosofico-2', 'Las objeciones muestran lo que una idea olvida.', Q('Según el autor, quien solo mira las consecuencias olvida que:', ['Las reglas fueron hechas por personas', 'Los efectos de una acción pueden llegar mucho después', 'Los dibujos no son arte', 'La felicidad no existe'], 1, '«Olvida que las consecuencias no terminan el mismo día».', 'Relee la última oración del párrafo 4.')],
+  ]);
+})());

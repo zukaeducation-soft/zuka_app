@@ -1467,6 +1467,22 @@ const WORLDS = (() => {
     'icf-en-corto': { name: 'Textos Cortos', art: plate('icf-en-corto', TEAL, `
       ${L('M48 22h44v30H48z', INK, 1.1)}${L('M48 22l22 16 22-16', INK, 1)}${L('M84 34h28v26H84z', TEAL, 1.2)}${L('M89 42h18M89 48h18M89 54h10', TEAL, .9)}${D(98, 34, 1.8, TEAL)}
       ${T(28, 42, 'Dear…', INK, 6.5)}${T(134, 42, 'Love', TEAL, 6.5)}`) },
+    // ---------- quintos mundos ----------
+    'icf-ma-lineal': { name: 'Funciones Lineales', art: plate('icf-ma-lineal', TEAL, `
+      ${L('M50 14v50h62', INK, 1)}${L('M50 54L110 22', TEAL, 1.5)}${L('M50 34L110 46', INK, 1.1)}${D(74, 41, 2.4, TEAL)}${Ld('M74 41V64')}${L('M86 35h16v-9', TEAL, .9)}
+      ${T(26, 42, 'b + mx', INK, 7)}${T(134, 42, 'm', TEAL, 9)}`) },
+    'icf-lc-filosofico': { name: 'Textos Filosóficos', art: plate('icf-lc-filosofico', TEAL, `
+      ${C(80, 38, 20, INK, 1.1)}${C(80, 38, 12, TEAL, 1.1)}${L('M76 34c0-6 9-6 9 0 0 4-5 4-5 8', TEAL, 1.4)}${D(80, 47, 1.4, TEAL)}${L('M60 62h40', INK, 1)}${D(60, 38, 1.4)}${D(100, 38, 1.4)}${D(80, 18, 1.4)}
+      ${T(28, 42, '¿qué es?', INK, 6)}${T(134, 42, 'pero…', TEAL, 6.5)}`) },
+    'icf-sc-sistemico': { name: 'Problemas Complejos', art: plate('icf-sc-sistemico', TEAL, `
+      ${C(80, 18, 7, TEAL, 1.2)}${C(54, 52, 7, INK, 1.1)}${C(106, 52, 7, INK, 1.1)}${A(76, 25, 58, 45, INK, 1)}${A(62, 52, 98, 52, TEAL, 1.2)}${A(102, 45, 84, 25, INK, 1)}${D(80, 18, 1.8, TEAL)}${D(54, 52, 1.8)}${D(106, 52, 1.8)}
+      ${T(26, 42, 'causa', INK, 6.5)}${T(134, 42, 'efecto', TEAL, 6.5)}`) },
+    'icf-cn-ecosistemas': { name: 'Ecosistemas y Energía', art: plate('icf-cn-ecosistemas', TEAL, `
+      ${L('M50 62h60v-11H50z', INK, 1.1)}${L('M58 51h44V40H58z', INK, 1.1)}${L('M66 40h28V29H66z', INK, 1.1)}${L('M74 29h12V18H74z', TEAL, 1.3)}${A(114, 60, 114, 24, TEAL, 1.2)}${D(80, 56, 1.4, TEAL)}${D(80, 45, 1.4, TEAL)}
+      ${T(28, 42, '10 %', INK, 7)}${T(136, 42, 'kcal', TEAL, 7)}`) },
+    'icf-en-largo': { name: 'Textos Largos', art: plate('icf-en-largo', TEAL, `
+      ${L('M56 14h48v52H56z', INK, 1.1)}${L('M62 22h36', TEAL, 1.6)}${L('M62 30h36M62 35h36M62 40h22', INK, .8)}${L('M62 48h36M62 53h36M62 58h18', INK, .8)}${C(94, 42, 9, TEAL, 1.3)}${L('M101 49l8 8', TEAL, 1.5)}
+      ${T(28, 42, 'main idea', INK, 5.5)}${T(134, 42, 'why?', TEAL, 7)}`) },
   };
 })();
 
@@ -7656,7 +7672,7 @@ GAMES['grafica-relacion'] = (() => {
   const f = (params, x) => (params.kind === 'directa' ? params.k * x : params.k / x);
 
   function grade(state, params) {
-    const ok = params.xs.every((x, i) => state.ys[i] !== null && Math.abs(state.ys[i] - f(params, x)) <= params.tol);
+    const ok = params.xs.every((x, i) => state.ys?.[i] != null && Math.abs(state.ys[i] - f(params, x)) <= params.tol);
     const rule = params.kind === 'directa' ? `y = ${params.k}x` : `xy = ${params.k}`;
     return { ok, solution: `$${rule}$: ${params.xs.map(x => `$(${x}, ${+f(params, x).toFixed(2)})$`).join(', ')}` };
   }
@@ -12731,7 +12747,7 @@ GAMES['laser-recta'] = (() => {
   }
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => fits(state.vals[i], r));
+    const ok = params.rounds.every((r, i) => !!state.vals?.[i] && fits(state.vals[i], r));
     return { ok, solution: params.rounds.map(r => `$${texOf(r)}$`).join(' · ') };
   }
 
@@ -30277,4 +30293,825 @@ GAMES['salta-signos'] = (() => {
   }
 
   return { grade, create, mustJump, jumpHeight, AIR };
+})();
+;
+//#archivo js/games/serpiente-orden.js
+// La serpiente ordenada (Álgebra 1.2, axiomas de orden y valor absoluto; juego dinámico de la lección alg-12d): una
+// serpiente espera cada gesto para avanzar una casilla. En la cuadrícula hay fichas con números
+// («−5», «3/2», «|−4|») y hay que comérselas de menor a mayor. Morder una que no es la menor quita una vida (la ficha
+// se queda). Al salir por un borde, la serpiente entra por el otro. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, items: [{ label, value }] }], lives? }   state = { done: [n] }
+// Spec 2026-11-13-juegos-dinamicos-valle.
+
+GAMES['serpiente-orden'] = (() => {
+  const COLS = 7, ROWS = 8;
+  // Índice de la ficha que toca comer: la de menor valor entre las que quedan (−1 si no queda ninguna).
+  function nextIndex(items, eaten) {
+    let best = -1;
+    items.forEach((it, i) => { if (!eaten.includes(i) && (best < 0 || it.value < items[best].value)) best = i; });
+    return best;
+  }
+  // Nueva dirección al tocar a (dx, dy) de la cabeza: hacia el lado donde más lejos quedó el toque; nunca se devuelve.
+  function turnTo(dir, dx, dy) {
+    const nd = Math.abs(dx) > Math.abs(dy) ? { x: Math.sign(dx), y: 0 } : { x: 0, y: Math.sign(dy) };
+    if ((nd.x === 0 && nd.y === 0) || (nd.x === -dir.x && nd.y === -dir.y)) return { x: dir.x, y: dir.y };
+    return nd;
+  }
+  const stepCell = (cell, dir, cols, rows) => ({ c: (cell.c + dir.x + cols) % cols, r: (cell.r + dir.y + rows) % rows });
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => [...r.items].sort((x, y) => x.value - y.value).map(it => it.label).join(' < ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, grid = { x0: 0, y0: 0, cell: 0 }, snake = [], dir = { x: 1, y: 0 }, want = null, acc = 0, eaten = [], spots = [], safeK = -1, n = 0;
+    let drag = null, preview = null;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; reset(i); },
+      lost(i) { st.done[i] = 0; },
+    });
+    const px = cell => ({ x: grid.x0 + (cell.c + 0.5) * grid.cell, y: grid.y0 + (cell.r + 0.5) * grid.cell });
+
+    function layout(w, h) {
+      W = w; H = h;
+      const top = 96, cell = Math.min((w - 20) / COLS, (h - top - 34) / ROWS);
+      grid = { x0: (w - cell * COLS) / 2, y0: top, cell };
+    }
+    // Empieza la ronda: la serpiente en el centro y las fichas repartidas lejos de ella y sin tocarse.
+    function reset(i) {
+      snake = [{ c: 2, r: 4 }, { c: 1, r: 4 }, { c: 0, r: 4 }]; dir = { x: 1, y: 0 }; want = null; acc = 0; eaten = []; safeK = -1;
+      drag = preview = null;
+      const free = [];
+      for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (r !== 4 && (c + r) % 2 === 0) free.push({ c, r });
+      const order = shuffledOrder(free.length, R[i].title + (n++));
+      spots = R[i].items.map((_, k) => free[order[k]]);
+    }
+    const travel = .17;
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function advance() {
+        if (want) { dir = want; want = null; }
+        const head = stepCell(snake[0], dir, COLS, ROWS), items = R[a.cur].items;
+        snake.unshift(head);
+        const k = spots.findIndex((s, i) => !eaten.includes(i) && s.c === head.c && s.r === head.r);
+        if (k >= 0 && k === nextIndex(items, eaten)) {
+          eaten.push(k); st.done[a.cur]++; a.hit(); a.say(`${items[k].label}: era la menor`, C.ok);   // crece: no se quita la cola
+          if (eaten.length === items.length) { a.win(); return; }
+        } else {
+          snake.pop();
+          if (k >= 0 && k !== safeK) { a.say(`${items[k].label} no es la menor que queda`, C.bad); a.miss(); }
+          safeK = k;
+        }
+      }
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play' || !want) return;
+        acc += dt;
+        if (acc >= travel || reducedMotion()) advance();
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], g = grid, items = r.items;
+
+        // La cuadrícula.
+        p.noStroke(); p.fill(C.card); p.rect(g.x0 - 4, g.y0 - 4, g.cell * COLS + 8, g.cell * ROWS + 8, 12);
+        p.stroke(C.line); p.strokeWeight(0.8);
+        for (let c = 1; c < COLS; c++) p.line(g.x0 + c * g.cell, g.y0, g.x0 + c * g.cell, g.y0 + ROWS * g.cell);
+        for (let k = 1; k < ROWS; k++) p.line(g.x0, g.y0 + k * g.cell, g.x0 + COLS * g.cell, g.y0 + k * g.cell);
+        // Las fichas que quedan.
+        if (a.phase !== 'idle') spots.forEach((s, i) => {
+          if (eaten.includes(i)) return;
+          drawTile(p, C, { x: g.x0 + s.c * g.cell + 2, y: g.y0 + s.r * g.cell + 2, w: g.cell - 4, h: g.cell - 6 }, items[i].label, { size: Math.min(15, g.cell * 0.4), r: 7, lift: 2 });
+        });
+        // La serpiente: cuerpo menta y cabeza con una flecha que marca hacia dónde va.
+        if (a.phase !== 'idle') snake.forEach((s, i) => {
+          const c = px(s), d = g.cell * (i === 0 ? 0.86 : 0.7);
+          if (i === 0 && want) {
+            const end = stepCell(s, want, COLS, ROWS), to = px(end);
+            if (Math.abs(s.c - end.c) + Math.abs(s.r - end.r) === 1) {
+              const u = Math.min(1, acc / travel);
+              c.x += (to.x - c.x) * u; c.y += (to.y - c.y) * u;
+            }
+          }
+          p.noStroke(); p.fill(i === 0 ? C.mint : shade(C.mint, i % 2 ? 0.86 : 0.94)); p.rect(c.x - d / 2, c.y - d / 2, d, d, d * 0.32);
+          if (i === 0) { const ux = dir.x * d * 0.28, uy = dir.y * d * 0.28, vx = dir.y * d * 0.2, vy = dir.x * d * 0.2; p.fill(inkOn(C.mint, C.ink)); p.triangle(c.x + ux, c.y + uy, c.x - ux * 0.4 + vx, c.y - uy * 0.4 + vy, c.x - ux * 0.4 - vx, c.y - uy * 0.4 - vy); }
+        });
+
+        // Encabezado: ronda, vidas y qué se lleva comido, en orden.
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, 'Cómelas de menor a mayor', W / 2, 44, W - 24, 15);
+        p.fill(C.N); fitText(p, eaten.length ? eaten.map(i => items[i].label).join(' < ') + (eaten.length < items.length ? ' < …' : '') : r.title, W / 2, 70, W - 24, 13);
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = g.y0 + (g.cell * ROWS) / 2;
+        if (locked || a.phase === 'all') {
+          p.noStroke(); p.fill(C.card); p.rect(g.x0, mid - R.length * 13 - 8, g.cell * COLS, R.length * 26 + 16, 10);
+          drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: [...rr.items].sort((x, y) => x.value - y.value).map(it => it.label).join(' < ') })), mid, g.cell * COLS - 16);
+        } else drawArcadeBanner(p, C, a, mid, { idle: 'Desliza para avanzar una casilla', lost: 'Demasiados mordiscos fuera de orden' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Todo en orden! Ya puedes comprobar' : 'Rodea las fichas que todavía no tocan', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp === 'play' && !want) drag = { x: p.mouseX, y: p.mouseY };
+        return false;
+      };
+      p.mouseDragged = () => {
+        if (!drag) return;
+        const dx = p.mouseX - drag.x, dy = p.mouseY - drag.y;
+        if (Math.hypot(dx, dy) >= 10) preview = turnTo(dir, dx, dy);
+        return false;
+      };
+      p.mouseReleased = e => {
+        if (preview && !locked && a.phase === 'play' && e?.type !== 'touchcancel') { want = preview; acc = 0; }
+        drag = preview = null;
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, grid, cols: COLS, rows: ROWS, head: snake[0], dir, next: nextIndex(R[a.cur].items, eaten), spots: spots.map((s, i) => ({ c: s.c, r: s.r, gone: eaten.includes(i) })) }),
+    };
+  }
+
+  return { grade, create, nextIndex, turnTo, stepCell };
+})();
+;
+//#archivo js/games/sirve-la-razon.js
+// Sirve la razón (Álgebra, razones; juego dinámico de la lección alg-12): dos vasos con marcas. El primero ya tiene
+// un ingrediente; arriba está la receta («por cada 2 de jugo, 3 de agua»). Se mantiene presionada la pantalla para
+// servir el otro ingrediente y se suelta cuando la cantidad mantiene la razón. Soltar lejos (de menos o de más) quita
+// una vida y la pregunta vuelve después. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, a, b, items: [{ p, q, have, max }] }], lives? }   (razón p : q, `have` unidades de a)
+// state = { done: [n] }      Spec 2026-11-13-juegos-dinamicos-razones.
+
+GAMES['sirve-la-razon'] = (() => {
+  const TOL = 0.5, RATE = 2.2;   // margen (en unidades del vaso) y unidades que se sirven por segundo
+  const targetOf = it => (it.have * it.q) / it.p;
+  // Cómo quedó lo servido: 'ok' si está a menos de TOL de la marca justa, 'low' si faltó, 'high' si sobró.
+  const judge = (level, it) => (Math.abs(level - targetOf(it)) <= TOL ? 'ok' : level < targetOf(it) ? 'low' : 'high');
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.p} : ${it.q} = ${it.have} : ${targetOf(it)}`).join(', ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, top = 118, bottom = 0, queue = [], level = 0, pouring = false, pause = 0, result = null;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); level = 0; pouring = false; pause = 0; result = null; },
+      lost(i) { st.done[i] = 0; pouring = false; },
+    });
+    const item = () => R[a.cur].items[queue[0] ?? 0];
+
+    function layout(w, h) { W = w; H = h; bottom = h - 64; }
+    function release() {
+      if (!pouring) return;
+      pouring = false;
+      const it = item(), j = judge(level, it);
+      result = j; pause = j === 'ok' ? 1.2 : 1.4;
+      if (j === 'ok') { st.done[a.cur]++; a.hit(); a.say(`${it.p} : ${it.q} = ${it.have} : ${targetOf(it)}`, C.ok); }
+      else { a.say(j === 'low' ? 'Faltó: así no queda la misma razón' : 'Sobró: así no queda la misma razón', C.bad); a.miss(); }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play') return;
+        const it = item();
+        if (pause > 0) {
+          pause -= dt;
+          if (pause <= 0) {   // tras la pausa: siguiente pregunta (la fallada vuelve al final) con el vaso vacío
+            if (result === 'ok') queue.shift(); else queue.push(queue.shift());
+            result = null; level = 0;
+            if (!queue.length) a.win();
+          }
+          return;
+        }
+        if (pouring) { level += RATE * dt; if (level >= it.max) { level = it.max; release(); } }
+      }
+
+      // Un vaso con marcas cada unidad y números; `fill` es hasta dónde está lleno.
+      function glass(x, w, it, fill, col, name) {
+        const hgt = bottom - top, y = v => bottom - (v / it.max) * hgt, every = it.max > 8 ? 2 : 1;
+        p.noStroke(); p.fill(col); p.rect(x + 3, y(fill), w - 6, bottom - y(fill) - 3, 0, 0, 10, 10);
+        p.stroke(C.ink); p.strokeWeight(3); p.noFill(); p.line(x, top - 6, x, bottom); p.line(x + w, top - 6, x + w, bottom); p.line(x, bottom, x + w, bottom);
+        for (let v = 1; v <= it.max; v++) {
+          p.stroke(C.ink); p.strokeWeight(v % every ? 1 : 2); p.line(x + w - (v % every ? 8 : 14), y(v), x + w, y(v));
+          if (v % every === 0) { p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.LEFT, p.CENTER); p.text(v, x + w + 5, y(v)); }
+        }
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); fitText(p, name, x + w / 2, bottom + 16, w + 30, 13);
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], it = item(), gw = Math.min(84, W * 0.27), xa = W * 0.25 - gw / 2, xb = W * 0.7 - gw / 2;
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        p.text(`${r.title} · sirve para mantener la razón`, W / 2, 42);
+        drawPill(p, C, `Por cada ${it.p} de ${r.a}, ${it.q} de ${r.b}`, W / 2, 70, C.sun, 15);
+
+        if (a.phase !== 'idle') {
+          glass(xa, gw, it, it.have, C.coral, r.a);
+          const colB = result === 'ok' ? C.ok : result ? C.bad : C.sky;
+          glass(xb, gw, it, level, colB, r.b);
+          // El chorro mientras se sirve y la cantidad que va.
+          if (pouring) { p.stroke(C.sky); p.strokeWeight(6); p.line(xb + gw / 2, top - 22, xb + gw / 2, bottom - (level / it.max) * (bottom - top)); }
+          p.noStroke(); p.fill(C.mute); p.rect(xb + gw / 2 - 16, top - 30, 32, 10, 5);
+          if (result === 'ok') { p.stroke(C.ok); p.strokeWeight(3); const y = bottom - (targetOf(it) / it.max) * (bottom - top); p.line(xb - 8, y, xb + gw + 8, y); }
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = (top + bottom) / 2;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${Math.min(st.done[i], rr.items.length)} de ${rr.items.length}` })), mid);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Mantén presionado para servir y suelta', lost: 'Demasiados vasos mal servidos' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Recetas en su punto! Ya puedes comprobar' : 'Mantén presionado · suelta en la marca justa', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp === 'play' && pause <= 0 && !pouring) { pouring = true; api.sfx?.tap?.(); }
+        return false;
+      };
+      p.mouseReleased = () => { if (!locked && a.phase === 'play') release(); };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; pouring = false; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, level, pouring, pause, target: targetOf(item()), tol: TOL }),
+    };
+  }
+
+  return { grade, create, targetOf, judge, TOL };
+})();
+;
+//#archivo js/games/corta-proporciones.js
+// Corta las proporciones (Álgebra, proporciones; juego dinámico de la lección alg-12e): arriba hay una fracción de
+// referencia («2/3») y desde abajo saltan fichas con otras fracciones, como frutas. Se desliza el dedo para cortar
+// solo las que forman proporción con la de arriba (valen lo mismo). Cortar una que no, quita una vida; dejar caer una
+// buena no quita nada (vuelve a saltar). Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, ref, items: [{ label }], traps: [...] }], lives? }   state = { done: [n] }
+// Spec 2026-11-13-juegos-dinamicos-razones.
+
+GAMES['corta-proporciones'] = (() => {
+  const parse = s => String(s).split('/').map(Number);
+  // a/b y c/d forman proporción si ad = bc.
+  const sameRatio = (x, y) => { const [a, b] = parse(x), [c, d] = parse(y); return a * d === b * c; };
+  // Distancia del punto (px, py) al segmento (x1, y1)–(x2, y2).
+  function segDist(px, py, x1, y1, x2, y2) {
+    const dx = x2 - x1, dy = y2 - y1, len = dx * dx + dy * dy, t = len ? Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / len)) : 0;
+    return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+  }
+  const BEAT = [1, 0, 1, 1, 0, 1, 0, 0];
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => `${r.ref} = ${r.items.map(it => it.label).join(' = ')}`).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, GRAV = 190;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, top = 104, queue = [], tiles = [], spawnT = 0, k = 0, trail = [], cutting = false, last = null;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, n) => n); tiles = []; spawnT = 0.3; k = 0; },
+      lost(i) { st.done[i] = 0; tiles = []; },
+    });
+
+    function layout(w, h) { W = w; H = h; }
+    function spawn() {
+      const r = R[a.cur], flying = tiles.filter(t => t.state === 'fly').map(t => t.label);
+      const goods = queue.map(n => r.items[n].label).filter(l => !flying.includes(l)), bads = r.traps.filter(l => !flying.includes(l));
+      const pool = (BEAT[k++ % 8] && goods.length) || !bads.length ? goods : bads;
+      if (!pool.length) return;
+      const label = pool[Math.floor(Math.random() * pool.length)], x = 46 + Math.random() * (W - 92);
+      // Sale desde abajo con el impulso justo para llegar un poco por debajo del encabezado.
+      const apex = top + 46 + Math.random() * 40, vy = -Math.sqrt(2 * GRAV * (H + 24 - apex));
+      tiles.push({ label, good: sameRatio(r.ref, label), x, y: H + 24, vx: (W / 2 - x) * 0.12, vy, state: 'fly', t: 0 });
+    }
+    function cut(x1, y1, x2, y2) {
+      for (const t of tiles) {
+        if (t.state !== 'fly' || segDist(t.x, t.y, x1, y1, x2, y2) > 24) continue;
+        t.state = 'cut'; t.t = 0;
+        if (t.good) {
+          const r = R[a.cur], n = queue.findIndex(q => r.items[q].label === t.label);
+          if (n >= 0) { queue.splice(n, 1); st.done[a.cur]++; }
+          a.hit(); a.say(`${t.label} = ${r.ref}`, C.ok);
+          if (!queue.length) { a.win(); return; }
+        } else { t.state = 'no'; a.say(`${t.label} no vale lo mismo que ${R[a.cur].ref}`, C.bad); if (a.miss()) return; }
+      }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        trail = trail.filter(s => (s.t -= dt) > 0);
+        for (const t of tiles) { t.t += dt; t.vy += GRAV * dt; t.x += t.vx * dt; t.y += t.vy * dt; }
+        tiles = tiles.filter(t => t.y < H + 40 && !(t.state !== 'fly' && t.t > 0.5));
+        if (a.phase !== 'play') return;
+        spawnT -= dt;
+        if (spawnT <= 0) { spawn(); spawnT = 1.7; }
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur];
+
+        for (const t of tiles) {
+          const b = { x: t.x - 34, y: t.y - 19, w: 68, h: 38 };
+          if (t.state === 'fly') drawTile(p, C, b, t.label, { size: 17 });
+          else {
+            // Cortada: dos mitades que se separan (verde si era buena, roja si no).
+            const q = Math.min(1, t.t / 0.5), col = p.color(t.state === 'cut' ? C.ok : C.bad); col.setAlpha(255 * (1 - q));
+            p.noStroke(); p.fill(col); p.rect(b.x - q * 16, b.y - q * 6, b.w / 2 - 2, b.h, 9, 0, 0, 9); p.rect(b.x + b.w / 2 + 2 + q * 16, b.y + q * 6, b.w / 2 - 2, b.h, 0, 9, 9, 0);
+          }
+        }
+        // El trazo del corte.
+        p.stroke(C.sun); p.strokeWeight(4); p.noFill();
+        for (const s of trail) { p.drawingContext.globalAlpha = Math.max(0, s.t / 0.25); p.line(s.x1, s.y1, s.x2, s.y2); }
+        p.drawingContext.globalAlpha = 1;
+
+        // Encabezado (tapa las fichas que suben): ronda, vidas y la fracción de referencia.
+        p.noStroke(); p.fill(C.bg); p.rect(0, 0, W, top - 8);
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, `${r.title} · corta las que forman proporción con`, W / 2, 40, W - 24, 11);
+        drawPill(p, C, r.ref, W / 2, 68, C.sun, 20);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.RIGHT, p.CENTER);
+        p.text(`${Math.min(st.done[a.cur], r.items.length)} de ${r.items.length}`, W - 14, 68);
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = (top + H) / 2 - 20;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.ref} = ${rr.items.map(it => it.label).join(' = ')}` })), mid);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Desliza el dedo sobre la ficha para cortarla', lost: 'Demasiadas fichas mal cortadas' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Cortes limpios! Ya puedes comprobar' : 'Corta solo las que valen lo mismo', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp === 'play') { cutting = true; last = { x: p.mouseX, y: p.mouseY }; }
+        return false;
+      };
+      p.mouseDragged = () => {
+        if (!cutting || locked || a.phase !== 'play') return;
+        const now = { x: p.mouseX, y: p.mouseY };
+        trail.push({ x1: last.x, y1: last.y, x2: now.x, y2: now.y, t: 0.25 });
+        cut(last.x, last.y, now.x, now.y); last = now;
+        return false;
+      };
+      p.mouseReleased = () => { cutting = false; };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; tiles = []; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, top, tiles: tiles.filter(t => t.state === 'fly').map(t => ({ x: t.x, y: t.y, good: t.good })) }),
+    };
+  }
+
+  return { grade, create, sameRatio, segDist };
+})();
+;
+//#archivo js/games/resortera-tres.js
+// La resortera de la regla de tres (Álgebra, regla de tres; juego dinámico de la lección alg-12f): una resortera
+// lanza una piedra sobre una regla en metros. El estirón y la distancia son directamente proporcionales, y arriba
+// está el tiro de muestra («con 2 de estirón llega a 6 m»). Se arrastra hacia atrás para estirar (el número del
+// estirón se ve mientras se arrastra) y se suelta: la piedra tiene que caer en la bandera. Caer en otro lado quita
+// una vida y la pregunta vuelve después. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, ref: [estirón, metros], items: [{ target }] }], lives? }   state = { done: [n] }
+// Spec 2026-11-13-juegos-dinamicos-razones.
+
+GAMES['resortera-tres'] = (() => {
+  const MAX_PULL = 8;
+  const pullFor = it => (it.target * it.ref[0]) / it.ref[1];
+  const landing = (it, pull) => (pull * it.ref[1]) / it.ref[0];
+  // Estirón (en medios) que corresponde a arrastrar `px` píxeles hacia atrás.
+  const snapPull = (px, unitPx, max) => Math.max(0, Math.min(max, Math.round((px / unitPx) * 2) / 2));
+  const fmt = v => String(+v.toFixed(1));
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    const solution = params.rounds.map(r => r.items.map(it => `${it.target} m: estirón ${fmt(pullFor({ ref: r.ref, target: it.target }))}`).join(', ')).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, UNIT = 12;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, ground = 0, sling = { x: 0, y: 0 }, queue = [], pull = 0, drag = null, shot = null, pause = 0, result = null;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); pull = 0; drag = null; shot = null; pause = 0; result = null; },
+      lost(i) { st.done[i] = 0; shot = null; drag = null; },
+    });
+    const item = () => R[a.cur].items[queue[0] ?? 0];
+    const maxD = () => landing({ ref: R[a.cur].ref }, MAX_PULL);
+    const X = mts => sling.x + 20 + (mts / maxD()) * (W - sling.x - 38);
+
+    function layout(w, h) { W = w; H = h; ground = h - 70; sling = { x: 64, y: ground - 44 }; }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play') return;
+        if (shot) {
+          shot.t += dt / 0.9;
+          if (shot.t >= 1) {
+            const r = R[a.cur], it = item(), good = Math.abs(shot.dist - it.target) < 1e-6;
+            result = { dist: shot.dist, good }; shot = null; pause = good ? 1.2 : 1.5;
+            if (good) { st.done[a.cur]++; a.hit(); a.say(`${fmt(pullFor({ ref: r.ref, target: it.target }))} de estirón: ${it.target} m`, C.ok); }
+            else { a.say(result.dist < it.target ? `Cayó en ${fmt(result.dist)} m: se quedó corta` : `Cayó en ${fmt(result.dist)} m: se pasó`, C.bad); a.miss(); }
+          }
+          return;
+        }
+        if (pause > 0) {
+          pause -= dt;
+          if (pause <= 0) { if (result.good) queue.shift(); else queue.push(queue.shift()); result = null; pull = 0; if (!queue.length) a.win(); }
+        }
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], it = item(), md = maxD(), stepM = md > 30 ? 10 : 5;
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        p.text(`${r.title} · tiro de muestra`, W / 2, 40);
+        drawPill(p, C, `Con ${r.ref[0]} de estirón llega a ${r.ref[1]} m`, W / 2, 66, C.sun, 14);
+        if (a.phase === 'play') { p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); fitText(p, `La bandera está a ${it.target} m`, W / 2, 96, W - 24, 15); }
+
+        // El suelo, la regla en metros y la bandera.
+        p.stroke(C.mint); p.strokeWeight(4); p.line(8, ground, W - 8, ground);
+        p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER);
+        for (let v = 0; v <= md; v += stepM) { p.stroke(C.ink); p.strokeWeight(1.5); p.line(X(v), ground, X(v), ground + 7); p.noStroke(); p.fill(C.mute); p.text(v, X(v), ground + 17); }
+        if (a.phase !== 'idle') {
+          const fx = X(it.target);
+          p.stroke(C.ink); p.strokeWeight(2); p.line(fx, ground, fx, ground - 34);
+          p.noStroke(); p.fill(C.coral); p.triangle(fx, ground - 34, fx + 16, ground - 28, fx, ground - 22);
+        }
+        if (result) { p.noStroke(); p.fill(result.good ? C.ok : C.bad); p.circle(X(result.dist), ground - 6, 12); }
+
+        // La resortera: horquilla, liga estirada y la piedra.
+        const px = drag ? pull * UNIT : 0, sx = Math.max(12, sling.x - px * 0.6), sy = Math.min(ground - 8, sling.y + px * 0.4);
+        p.stroke(shade(C.sun, 0.7)); p.strokeWeight(6); p.line(sling.x, ground, sling.x, sling.y + 10); p.line(sling.x, sling.y + 10, sling.x - 10, sling.y - 8); p.line(sling.x, sling.y + 10, sling.x + 10, sling.y - 8);
+        if (!shot && !result && a.phase === 'play') {
+          p.stroke(C.coral); p.strokeWeight(3); p.line(sling.x - 10, sling.y - 8, sx, sy); p.line(sling.x + 10, sling.y - 8, sx, sy);
+          p.noStroke(); p.fill(C.cream); p.circle(sx, sy, 15);
+          if (drag) drawPill(p, C, `estirón ${fmt(pull)}`, Math.max(60, sx + 54), sy - 26, C.sky, 14);
+        }
+        if (shot) {
+          const q = shot.t, x = sling.x + (X(shot.dist) - sling.x) * q, y = sling.y + (ground - 6 - sling.y) * q - Math.sin(q * Math.PI) * 110;
+          p.noStroke(); p.fill(C.cream); p.circle(x, y, 15);
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = (110 + ground) / 2 - 10;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${rr.ref[0]} de estirón → ${rr.ref[1]} m` })), mid);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Arrastra hacia atrás para estirar y suelta', lost: 'Demasiados tiros fuera' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Puntería de regla de tres! Ya puedes comprobar' : 'Arrastra hacia atrás o hacia abajo · suelta para lanzar', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp === 'play' && !shot && pause <= 0) { drag = { x: p.mouseX, y: p.mouseY }; pull = 0; }
+        return false;
+      };
+      p.mouseDragged = () => { if (drag && !locked && a.phase === 'play') { pull = snapPull(Math.max(drag.x - p.mouseX, p.mouseY - drag.y), UNIT, MAX_PULL); return false; } };
+      p.mouseReleased = () => {
+        if (!drag || locked || a.phase !== 'play') { drag = null; return; }
+        drag = null;
+        if (pull > 0) { shot = { t: 0, dist: landing({ ref: R[a.cur].ref }, pull) }; api.sfx?.tap?.(); }
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; drag = null; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, unit: UNIT, busy: !!shot || pause > 0, need: pullFor({ ref: R[a.cur].ref, target: item().target }) }),
+    };
+  }
+
+  return { grade, create, pullFor, landing, snapPull, MAX_PULL };
+})();
+;
+//#archivo js/games/caja-veloz.js
+// La caja veloz (Álgebra, porcentajes; juego dinámico de la lección alg-13): en la caja de una tienda llegan clientes
+// con una cuenta («25 % de 80», «¿Qué % es 12 de 48?»). Se escribe el resultado en el teclado y se toca OK antes de
+// que al cliente se le acabe la paciencia (la barra). Un resultado equivocado quita una vida; si el cliente se cansa
+// no se pierde nada, pero vuelve a la fila. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, items: [{ ask, answer }] }], patience?, lives? }   state = { done: [n] }
+// Spec 2026-11-13-juegos-dinamicos-razones.
+
+GAMES['caja-veloz'] = (() => {
+  const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '⌫', '0', 'OK'];
+  // Lo que queda escrito al tocar una tecla: hasta cuatro cifras, sin ceros a la izquierda; ⌫ borra la última.
+  function typeKey(buf, key) {
+    if (key === '⌫') return buf.slice(0, -1);
+    if (!/^\d$/.test(key) || buf.length >= 4) return buf;
+    return buf === '0' ? key : buf + key;
+  }
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.ask}: ${it.answer}`).join(', ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, PATIENCE = params.patience ?? 14;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, keys = [], queue = [], buf = '', left = PATIENCE, pause = 0, result = null, press = -1;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); next(); },
+      lost(i) { st.done[i] = 0; },
+    });
+    const item = () => R[a.cur].items[queue[0] ?? 0];
+    function next() { buf = ''; left = PATIENCE; pause = 0; result = null; }
+
+    function layout(w, h) {
+      W = w; H = h;
+      const kw = (w - 28 - 16) / 3, kh = 40, y0 = h - 30 - 4 * (kh + 7);
+      keys = KEYS.map((k, i) => ({ k, x: 14 + (i % 3) * (kw + 8), y: y0 + Math.floor(i / 3) * (kh + 7), w: kw, h: kh }));
+    }
+    function submit() {
+      const it = item(), good = buf !== '' && +buf === it.answer;
+      result = good ? 'ok' : 'bad'; pause = good ? 0.9 : 1.2;
+      if (good) { st.done[a.cur]++; a.hit(); a.say(`${it.ask}: ${it.answer}`, C.ok); }
+      else { a.say(`${buf || '—'} no es: revisa la cuenta`, C.bad); a.miss(); }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play') return;
+        if (pause > 0) {
+          pause -= dt;
+          if (pause <= 0) { if (result === 'ok') queue.shift(); else queue.push(queue.shift()); if (!queue.length) { a.win(); return; } next(); }
+          return;
+        }
+        left -= dt;
+        if (left <= 0) { result = 'gone'; pause = 1; a.say('Se acabó la paciencia: esa cuenta vuelve a la fila', C.sun); }
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], it = item(), y0 = keys[0].y;
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        p.text(`${r.title} · ${Math.min(st.done[a.cur], r.items.length)} de ${r.items.length}`, W / 2, 40);
+
+        if (a.phase !== 'idle' && !(locked || a.phase === 'all')) {
+          // El pedido: un indicador de estado (anillo de color) con la cuenta y la barra de paciencia.
+          const cy = 78, face = result === 'ok' ? C.ok : result === 'bad' || result === 'gone' ? C.coral : C.sun;
+          p.noFill(); p.stroke(C.line); p.strokeWeight(3); p.circle(34, cy, 30);
+          p.stroke(face); p.arc(34, cy, 30, 30, -Math.PI / 2, Math.PI * 1.5);
+          p.noStroke(); p.fill(face); p.circle(34, cy, 10);
+          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.LEFT, p.CENTER);
+          p.textSize(20); while (p.textWidth(it.ask) > W - 76 && p.textSize() > 12) p.textSize(p.textSize() - 1);
+          p.text(it.ask, 60, cy - 6);
+          p.noStroke(); p.fill(C.line); p.rect(60, cy + 12, W - 76, 7, 4);
+          p.fill(left < PATIENCE * 0.3 ? C.coral : C.mint); p.rect(60, cy + 12, Math.max(0, (W - 76) * (left / PATIENCE)), 7, 4);
+          // La pantalla de la caja.
+          p.stroke(result === 'ok' ? C.ok : result === 'bad' ? C.bad : C.sun); p.strokeWeight(2.5); p.fill(C.card); p.rect(14, y0 - 52, W - 28, 42, 10);
+          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(24); p.textAlign(p.RIGHT, p.CENTER); p.text(buf || '0', W - 28, y0 - 30);
+        }
+        // El teclado.
+        keys.forEach((k, i) => drawTile(p, C, k, k.k, { fill: k.k === 'OK' ? C.mint : k.k === '⌫' ? C.coral : C.cream, size: 18, lift: press === i ? 1 : 3 }));
+        press = -1;
+
+        arcadeToast(p, C, a, W / 2, H - 15, locked);
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${Math.min(st.done[i], rr.items.length)} de ${rr.items.length}` })), 108);
+        else drawArcadeBanner(p, C, a, 108, { idle: 'Escribe el resultado y toca OK', lost: 'Demasiadas cuentas equivocadas' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Fila atendida! Ya puedes comprobar' : 'Escribe el número y toca OK', W / 2, H - 14);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp !== 'play' || pause > 0) return false;
+        const i = keys.findIndex(k => hitBox(k, p.mouseX, p.mouseY));
+        if (i < 0) return false;
+        press = i; api.sfx?.tap?.();
+        if (keys[i].k === 'OK') { if (buf !== '') submit(); } else buf = typeKey(buf, keys[i].k);
+        return false;
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, buf, pause, answer: item().answer, keys: keys.map(k => ({ k: k.k, x: k.x + k.w / 2, y: k.y + k.h / 2 })) }),
+    };
+  }
+
+  return { grade, create, typeKey };
+})();
+;
+//#archivo js/games/vuela-precios.js
+// Ajusta el planeador en vertical. El vuelo empieza al soltar y usa la altura que ya elegiste.
+GAMES['vuela-precios'] = (() => {
+  const flightAt = (x0, x1, y, t) => ({ x: x0 + (x1 - x0) * t, y: y - 10 * Math.sin(Math.PI * t) });
+  function ringAt(y, centers, radius) {
+    let best = -1, distance = radius;
+    centers.forEach((c, i) => {
+      const d = Math.abs(y - c);
+      if (d <= distance) { distance = d; best = i; }
+    });
+    return best;
+  }
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.ask}: ${it.options[it.answer]}`).join(', ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, st = { done: R.map(() => 0) };
+    let W = 0, H = 0, y = 0, locked = false, held = false, flight = null, result, queue = [], order = [];
+    const top = 102, rail = 44;
+    const rings = () => [1, 2, 3].map(i => top + (H - top - 52) * i / 4);
+    const dock = () => W * .59;
+    const item = () => R[a.cur].items[queue[0]];
+    const reset = () => {
+      const it = item();
+      flight = null; result = null; held = false; y = rings()[1];
+      order = shuffledOrder(it.options.length, it.ask + a.cur);
+    };
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); reset(); },
+      lost(i) { st.done[i] = 0; held = false; },
+    });
+    const layout = (w, h) => {
+      const old = rings();
+      const position = H ? (y - old[0]) / (old[2] - old[0]) : .5;
+      W = w; H = h;
+      const next = rings();
+      y = next[0] + position * (next[2] - next[0]);
+    };
+    function advance(dt) {
+      a.tick(dt);
+      if (a.phase !== 'play') return;
+      if (result) {
+        result.wait -= dt;
+        if (result.wait > 0) return;
+        const answered = queue.shift();
+        if (!result.ok) queue.push(answered);
+        if (!queue.length) a.win();
+        else reset();
+        return;
+      }
+      if (!flight) return;
+      flight.t = reducedMotion() ? 1 : Math.min(1, flight.t + dt / .78);
+      if (flight.t < 1) return;
+      const it = item(), centers = rings(), i = ringAt(y, centers, (centers[1] - centers[0]) * .36);
+      const ok = order[i] === it.answer;
+      result = { i, ok, wait: .85 };
+      if (ok) { st.done[a.cur]++; a.hit(); a.say(`${it.ask}: ${it.options[it.answer]}`, C.ok); }
+      else if (i < 0) a.say('Quedaste entre dos aros. Ajusta la altura y vuelve a intentar.', C.mute);
+      else { a.say(`${it.options[order[i]]} no es el resultado`, C.bad); a.miss(); }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+      p.draw = () => {
+        p.background(C.bg);
+        if (!locked) advance(frameDt(p) * a.slow);
+        const cs = rings(), x = dock(), it = item(), live = a.phase === 'play' && !locked;
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.ink); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD);
+        fitText(p, live && it ? it.ask : R[a.cur].title, W / 2, 67, W - 28, 16);
+        drawPracticePanel(p, { x: 13, y: top, w: W - 26, h: H - top - 51 }, C.card, C.line, 12);
+        if (live && it) {
+          p.stroke(C.mute); p.strokeWeight(1); p.line(rail, cs[0], rail, cs[2]);
+          for (const [i, cy] of cs.entries()) {
+            const tint = result?.i === i ? (result.ok ? C.ok : C.bad) : C.brand;
+            p.stroke(C.line); p.line(rail, cy, x - 20, cy);
+            p.noFill(); p.stroke(tint); p.strokeWeight(2); p.circle(x, cy, Math.min(34, (cs[1] - cs[0]) * .72));
+            p.noStroke(); p.fill(C.ink); p.textAlign(p.CENTER, p.CENTER);
+            fitText(p, it.options[order[i]], (x + W) / 2 + 8, cy, W - x - 36, 15);
+          }
+          const pos = flight ? flightAt(rail, x, y, flight.t) : { x: rail, y };
+          p.noFill(); p.stroke(C.brand); p.strokeWeight(2);
+          if (!flight) {
+            p.drawingContext.setLineDash([4, 5]); p.line(rail + 14, y, x - 16, y); p.drawingContext.setLineDash([]);
+            p.fill(C.card); p.circle(rail, y, 29);
+          }
+          p.noStroke(); p.fill(C.brand);
+          p.triangle(pos.x - 10, pos.y - 7, pos.x + 12, pos.y, pos.x - 10, pos.y + 7);
+          p.fill(C.mute); p.textStyle(p.NORMAL); p.textAlign(p.CENTER, p.CENTER);
+          fitText(p, flight ? 'Trayectoria del planeador' : 'Arrastra en vertical y suelta', W / 2, H - 33, W - 32, 12);
+        }
+        const mid = (top + H - 51) / 2;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((r, i) => ({ ok: st.done[i] >= r.items.length, text: `${r.title} · ${st.done[i]} de ${r.items.length}` })), mid);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Alinea el planeador con un aro', lost: 'Vuelve a comparar las alturas' });
+        arcadeToast(p, C, a, W / 2, H - 14, locked);
+        arcadeStop(p, a, locked);
+      };
+      const aim = () => { const cs = rings(); y = Math.min(cs[2], Math.max(cs[0], p.mouseY)); };
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const phase = a.tap(locked);
+        if (phase === 'off') return;
+        if (phase !== 'play') return false;
+        if (flight || p.mouseX > rail + 31 || p.mouseY < top || p.mouseY > H - 51) return;
+        held = true; aim();
+        return false;
+      };
+      p.mouseDragged = () => { if (held && !locked) { aim(); return false; } };
+      p.mouseReleased = e => {
+        if (held && !locked && e?.type !== 'touchcancel') flight = { t: 0 };
+        held = false;
+      };
+    }, 1.12, () => {
+      if (locked || flight || a.phase !== 'play') return null;
+      return { from: { x: rail, y }, to: { x: rail, y: y - 22 } };
+    });
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      demo: m.demo,
+      peek: () => ({ phase: a.phase, flight, rail, y, W, H, target: item() && rings()[order.indexOf(item().answer)] }),
+    };
+  }
+  return { grade, create, flightAt, ringAt, demo: true };
 })();

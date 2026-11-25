@@ -8,7 +8,7 @@ GAMES['grafica-relacion'] = (() => {
   const f = (params, x) => (params.kind === 'directa' ? params.k * x : params.k / x);
 
   function grade(state, params) {
-    const ok = params.xs.every((x, i) => state.ys[i] !== null && Math.abs(state.ys[i] - f(params, x)) <= params.tol);
+    const ok = params.xs.every((x, i) => state.ys?.[i] != null && Math.abs(state.ys[i] - f(params, x)) <= params.tol);
     const rule = params.kind === 'directa' ? `y = ${params.k}x` : `xy = ${params.k}`;
     return { ok, solution: `$${rule}$: ${params.xs.map(x => `$(${x}, ${+f(params, x).toFixed(2)})$`).join(', ')}` };
   }
