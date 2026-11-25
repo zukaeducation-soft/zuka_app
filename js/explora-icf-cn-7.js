@@ -65,7 +65,7 @@
         ['Y se dobla: las capas se deslizan.', {}],
         ['La sal, en cambio, se parte.', {}],
       ], 'Metálico: conduce sólido y se dobla.'),
-      xpHaz('hoja', 'Subraya la prueba que distingue un **metal** de una sal.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Si conduce estando sólido'], ['Si es brillante o blanco'], ['Si cabe en un frasco']], pista: 'La sal sólida no conduce.' }, 'Solo el metal conduce sólido.')],
+      xpHaz('hoja', 'Subraya la prueba que distingue un **metal** de una sal.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Si conduce estando sólido'], ['Si es blanco o gris'], ['Si cabe en un frasco']], pista: 'La sal sólida no conduce.' }, 'Solo el metal conduce sólido.')],
     ['Ahora sí, un problema',
       xpHaz('fichas', 'El calcio pierde 2 electrones y el flúor gana 1. Pon la carga del calcio y cuántos flúor hacen falta.', { slots: fila('calcio', 'flúor'), fichas: ['+2', '2', '−2', '1', '+1'], meta: ['+2', '2'], alto: 96, pista: 'Las cargas deben sumar cero.' }, '$+2 - 1 - 1 = 0$: dos flúor.')],
   ], 'Entregar, compartir o soltar: se nota en las propiedades.');

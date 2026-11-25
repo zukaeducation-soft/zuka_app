@@ -26,7 +26,7 @@ xpLec('icf-sc-mundo-1', [
       ['Y se discute cómo repartir.', { luz: [3], nota: { 3: 'ideas' } }],
       ['El voto se amplía despacio.', {}],
     ], 'Del conflicto salen sindicatos, leyes e ideas.'),
-    xpHaz('hoja', 'Pon al margen qué defendía cada idea.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['liberalismo', 'socialismo'], meta: [1, 0], paras: [['Que la riqueza se reparta'], ['Propiedad y libertades del individuo']], pista: 'Alguna no va ahí: ¿repartir o proteger al individuo?' }, 'Repartir, socialismo; individuo, liberalismo.')],
+    xpHaz('hoja', 'Pon al margen la idea de cada persona.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['liberalismo', 'socialismo'], meta: [1, 0], paras: [['Un obrero: «La fábrica debería ser de todos».'], ['Un dueño: «Que el gobierno no toque mi negocio».']], pista: 'Alguna no va ahí: ¿quién quiere compartir y quién, que no se metan?' }, 'El obrero, socialismo; el dueño, liberalismo.')],
   ['Ahora sí, un problema',
     xpHaz('hoja', 'En 1789 un panadero francés paga impuestos y un conde no. Subraya qué cuestionó la revolución.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Los privilegios de nacimiento'], ['El precio de los telares'], ['La esclavitud en Haití']], pista: '¿Por qué el conde no paga?' }, 'Los estamentos daban privilegios según el nacimiento.')],
 ], 'Qué cambió, para quién y qué lucha quedó abierta.');

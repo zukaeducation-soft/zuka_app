@@ -29,7 +29,7 @@ PI_MUNDOS.push((() => {
       mira: ['Está a tres cuartos del camino entre 120 y 160.', 'Está a tres cuartos del camino entre 160 y 200.', 'Está a tres cuartos del camino entre 200 y 240.', 'Resta el primero al tercero.'], trampas: { '0:143': 'Cada línea vale 40: tres cuartos son 30.', '1:195': 'Cada línea vale 40: tres cuartos son 30.', '3:380': 'Eso es una suma.' }, ok: 'Al bajar por el grupo, crecen.' },
       'Las líneas van de 40 en 40: 150, 190 y 230. La diferencia es $230 - 150 = 80$ pm.', 'Mira cuánto vale cada línea y qué parte alcanza la barra.'),
     x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: ATOMO, nums: [2, 4, 5], pregunta: 'Queda en pie', queda: 'Los elementos de un grupo se parecen.',
-      ...T(['El número de neutrones decide qué elemento es.', 0, 'Busca cuál número lo decide.'], ['Al volverse ion, cambia el elemento.', 7, 'Busca qué no cambia.'], ['Al bajar por un grupo los átomos son más pequeños.', 11, 'Busca cómo cambia el tamaño.']), bien: 'Protones, mismo elemento y más grandes.' },
+      ...T(['El número de neutrones decide qué elemento es.', [0, 1], 'Busca cuál número lo decide.'], ['Al volverse ion, cambia el elemento.', 7, 'Busca qué no cambia.'], ['Al bajar por un grupo los átomos son más pequeños.', 11, 'Busca cómo cambia el tamaño.']), bien: 'Protones, mismo elemento y más grandes.' },
       'Deciden los protones, el núcleo no cambia y al bajar son más grandes.', 'Saca la palabra clave: neutrones, ion, bajar.'),
     x('voz-de-la-fuente', 'Ata cada idea al científico.', { ayuda: 'Tira un hilo desde cada idea hasta su autor.', doc: ATOMO, portadas: [['Dalton', 'modelo'], ['Thomson', 'modelo'], ['Rutherford', 'modelo'], ['Bohr', 'modelo']],
       ...T(['esferas', 0, '¿Quién las imaginó?'], ['el electrón', 1, '¿Quién lo descubrió?'], ['el núcleo', 2, '¿Quién lo descubrió?'], ['niveles de energía', 3, '¿Quién los propuso?']), bien: 'Un modelo se corrige con otro.' },
@@ -42,7 +42,7 @@ PI_MUNDOS.push((() => {
   ]);
 
   const ENLACE = {
-    id: 'icf-enlace', title: 'Cuatro polvos blancos',
+    id: 'icf-enlace', title: 'Cuatro polvos sin nombre',
     ficha: { autor: 'Grupo de laboratorio', fuente: 'Bitácora de química', fecha: 'Marzo de 2026' },
     paras: [
       'Los átomos se unen porque juntos quedan más estables. La mayoría busca completar ocho electrones en su última capa. Hay tres maneras principales de lograrlo y cada una deja su huella en las propiedades de la sustancia.',
@@ -71,7 +71,7 @@ PI_MUNDOS.push((() => {
       ...F(['El polvo A se fundió a 801 °C.', 0, 'Léela junto a los datos.'], ['Al disolver B no se forman iones.', 1, '¿Por qué no encendió el bombillo?'], ['Si se funde A, encendería el bombillo.', 1, '¿Qué pasa con los iones de una sal fundida?'], ['C es más barato que D.', 2, '¿Se habla de precios?']),
       luz: [[5, 'A se fundió a 801'], [5, 'no lo encendió'], [2, 'fundidas']], bien: 'Sin iones que se muevan, no conduce.' },
       'Los 801 están escritos; que B no forma iones y que A fundida conduce se deducen; el precio no.', 'Usa la regla de los iones para explicar el bombillo.'),
-    x('mayor-tramo', 'La gráfica muestra la temperatura de fusión (en decenas de °C) de cuatro sales. Toca el tramo en que más crece **en porcentaje**.', { v: [10, 16, 24, 33] },
+    x('mayor-tramo', 'La gráfica muestra los gramos de una sal que se disuelven en el mismo vaso de agua a cuatro temperaturas. Toca el tramo en que más crece **en porcentaje**.', { v: [10, 16, 24, 33] },
       'De 10 a 16 crece 60 %; de 16 a 24, 50 %; de 24 a 33, 37.5 %.', 'Divide lo que creció cada tramo entre el valor con que empezó.'),
     x('balanza-tesis', 'Hipótesis: «este polvo es una sal». ¿Qué hace cada dato?', { doc: ENLACE, tesis: 'Este polvo es una sal',
       ...F(['Se funde a 770 °C y disuelto conduce.', 0, '¿Se parece a A?'], ['Conduce estando sólido.', 1, '¿Los iones fijos conducen?'], ['Se funde a 60 °C.', 1, '¿Las sales se funden tan bajo?'], ['Es blanco.', 2, '¿El color decide?']), bien: 'Fusión y electricidad, no color.' },
@@ -93,7 +93,7 @@ PI_MUNDOS.push((() => {
   const pl = (g, q, p, e, h) => play(g, q, { doc: FUEGO, ...p }, e, { hint: h });
   return mundo('icf-cn-atomo', 'Átomo y Enlaces', 'ciencias', [l1, l2], [
     ['icf-cn-atomo-1', 'Cada elemento tiene sus propios niveles de energía.', pl('donde-buscar', '¿A qué párrafo vuelves para responder?', { cards: [['¿Qué metal da el rojo?', [1]], ['¿Por qué se emite luz?', [2]], ['¿Cómo se descubrió el helio?', [5]]] }, 'El rojo está en el 1, la luz en el 2 y el helio en el 5.', 'Busca la palabra clave de cada pregunta.')],
-    ['icf-cn-atomo-1', 'La luz emitida identifica al elemento.', pl('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { cards: [['El sodio da amarillo.', 0], ['La luz de una estrella permite saber si tiene sodio.', 1], ['Dos elementos no tienen los mismos niveles.', 1], ['El bario es el metal más caro.', 2]] }, 'El sodio está escrito; la estrella y los niveles se deducen; el precio no.', 'Une los párrafos 1 y 3.')],
+    ['icf-cn-atomo-1', 'La luz emitida identifica al elemento.', pl('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { cards: [['El sodio da amarillo.', 0], ['La luz de una estrella permite saber si tiene sodio.', 1], ['Con la luz se podría saber qué metal lleva un cohete.', 1], ['El bario es el metal más caro.', 2]] }, 'El sodio está escrito; la estrella y el cohete se deducen; el precio no.', 'Une los párrafos 1 y 3.')],
     ['icf-cn-atomo-1', 'Los electrones suben y bajan de nivel.', opc('La luz de un fuego artificial se produce cuando los electrones:', ['Salen del núcleo', 'Regresan a un nivel de menor energía', 'Se vuelven protones', 'Se detienen'], 1, 'Al regresar sueltan energía en forma de luz.', 'Relee qué pasa cuando regresan.')],
     ['icf-cn-atomo-2', 'Las sales son compuestos iónicos, más estables que el metal.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'Un elemento se comporta distinto solo que unido a otros.', cards: [['El cloro es tóxico, pero en la sal se come', true], ['El sodio reacciona con agua, la sal no', true], ['El agua caliente se enfría', false], ['Un cable se dobla', false]] }, 'Cloro y sodio cambian al unirse; enfriarse y doblarse no cambian la sustancia.', 'Busca casos en que el elemento está solo y luego unido.')],
     ['icf-cn-atomo-2', 'Metal con no metal: enlace iónico.', pl('intruso-excepto', 'La opción que no es razón para usar sales', { ask: 'Se usan sales en la pólvora por todo esto, EXCEPTO:', cards: [['Son más estables', [4]], ['Son más fáciles de manejar', [4]], ['El metal puro puede ser peligroso', [4]], ['Apagan los colores', null]] }, 'Las tres primeras están en el párrafo 4; los colores no se apagan.', 'Busca cada razón en el párrafo de las sales.')],

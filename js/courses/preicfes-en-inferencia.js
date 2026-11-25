@@ -24,7 +24,7 @@ PI_MUNDOS.push((() => {
       'Nueve está escrito; que hoy se escribe menos y que ella extraña a su hijo se deducen; España no.', 'Une dos datos: si no puedes señalarlos, no está.'),
     x('pista-tipo', 'Match each action with the feeling it shows.', { doc: LETTER, lineas: ['He polished his shoes twice.', 'He gave the leaflet with great care.', 'He walked around the drawing.', 'The man looked at his own hands.'],
       ...T(['it is a special day for him', 0, '¿Cuál es de su último día?'], ['kindness to a lonely person', 1, '¿A quién le dio algo sin importancia?'], ['respect for what children made', 2, '¿Qué evitó pisar?'], ['he feels ashamed', 3, '¿Quién llevaba años sin hablar?']), bien: 'Actions speak.' },
-      'Lustrar es por el día especial, el cuidado por bondad, rodear el dibujo por respeto y mirarse las manos por vergüenza.', 'Pregunta por qué una persona haría eso.'),
+      'Lustrar es por el día especial, el cuidado por bondad, rodear el dibujo por respeto y mirarse las manos por vergüenza.', 'Pregunta por qué una persona haría ese gesto.'),
     x('genero-o-cita', 'From the clues: **it must be true** or **it might be true**?', { doc: LETTER, rot: ['must be true', 'might be true'],
       ...F(['He worked for more than thirty years', 0, '¿Hay un dato que lo asegura?'], ['The letter was from the man\'s family', 1, '¿Se dice de quién era?'], ['The new post person uses a motorbike', 0, '¿Hay un dato que lo asegura?'], ['The baker felt sad', 1, '¿Es seguro o solo posible?']), bien: 'Must needs proof; might is possible.' },
       'Los 38 años y la moto están seguros; la familia y la tristeza son posibles.', '«Must» pide una prueba; «might» solo una posibilidad.'),
