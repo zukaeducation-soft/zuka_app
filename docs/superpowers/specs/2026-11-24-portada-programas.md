@@ -10,7 +10,7 @@ El usuario pidió acomodar la portada como instruimos.com. Se toma su **estructu
    contiene, incluye, para qué, precio), «Más información» (salta a su sección) y WhatsApp (`WA.info`). El precio es el más
    bajo activo de `productos` / `articulos`; si no hay, la ficha no sale. Lo no publicado queda en «Muy pronto».
    Álgebra, Trigonometría y los demás cursos de carrera (`PZ_FUND`) van juntos como «Fundamentación en Ingeniería y Ciencias»:
-   una lámina con la foto `brand/ingenieros.webp` y los logos, y una tarjeta ancha con cada curso, su precio o «Muy pronto».
+   una lámina con la foto `brand/ingenieros.webp` y un mazo de cartas que se abre bajo el puntero (`pzMazoVivo`), y una tarjeta ancha con cada curso, su precio o «Muy pronto».
    Lámina «Estudia desde cualquier lugar, a tu ritmo»: la estudiante recortada (`brand/dispositivos.webp`, sin fondo) y la app
    real en celular, computador y tablet (`brand/app/`).
 4. **Quiénes somos**: «Acá nadie se queda por fuera»: lenguaje cercano y colombiano, y tres afiches con símbolos de Phosphor Icons y la misión

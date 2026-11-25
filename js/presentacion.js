@@ -110,6 +110,7 @@ const PZ_PROG = {
 };
 // Cursos de fundamentación en Ingeniería y Ciencias: van juntos en una lámina y una tarjeta ancha.
 const PZ_FUND = ['algebra', 'trig', 'calc', 'geo', 'int', 'lin', 'fis'], PZ_FUND_N = 'Fundamentación en Ingeniería y Ciencias', PZ_FUND_C = '#5eead4';
+const PZ_CORTO = { algebra: 'Álgebra', trig: 'Trigo', calc: 'Cálculo', geo: 'Geometría', int: 'Integral', lin: 'Lineal', fis: 'Física' };
 const PZ_ORDEN = ['preuda', 'preicfes', 'algebra', 'trig'];
 const pzOrdena = cs => [...cs].sort((a, b) => ((PZ_ORDEN.indexOf(a.id) + 1) || 99) - ((PZ_ORDEN.indexOf(b.id) + 1) || 99));
 // Precio más bajo que se vende hoy, de lo que publica la tienda: { precio, meses } o null (entonces no se muestra nada).
@@ -160,7 +161,9 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-prog-pie"><button class="btn sm" type="button" data-pz-ir="${ir}"${tab == null ? '' : ` data-tab="${tab}"`}>Más información<span class="pz-sr"> sobre ${pzEsc(name)}</span></button>${info(name)}</div></article>`;
   const fund = PZ_FUND.map(id => cursos.find(c => c.id === id) || todos.find(c => c.id === id)).filter(Boolean), hayFund = cursos.some(c => PZ_FUND.includes(c.id));
   const foto = '<img src="brand/ingenieros.webp" alt="Dos ingenieros resuelven las reacciones de una viga en un tablero" width="1300" height="732" loading="lazy">';
-  const logos = hayFund ? `<ul class="pz-logos">${fund.map(c => `<li>${art(c)}<span>${pzEsc(c.name)}${cursos.includes(c) ? '' : '<small>Muy pronto</small>'}</span></li>`).join('')}</ul>` : '';
+  // Mazo: una carta por curso, una sobre otra; pzMazoVivo las abre bajo el puntero.
+  const deCurso = c => (cursos.includes(c) ? `${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}` : 'Muy pronto');
+  const mazo = hayFund ? `<div class="pz-mazo" style="--n:${fund.length}"><div class="pz-cartas">${fund.map((c, i) => `<button type="button" class="pz-carta${cursos.includes(c) ? '' : ' pronto'}" style="--i:${i};--k:${i - (fund.length - 1) / 2};--c:${c.color}" ${cursos.includes(c) ? `data-pz-ir="#pz-cursos" data-tab="${cursos.indexOf(c)}"` : 'data-pz-ir=".pz-prog-fund"'} data-n="${pzEsc(c.name)}" data-d="${deCurso(c)}" aria-label="${pzEsc(c.name)}: ${deCurso(c)}">${art(c)}<b>${PZ_CORTO[c.id] || pzEsc(c.name)}</b></button>`).join('')}</div><p class="pz-mazo-t" aria-hidden="true"><b>${pzEsc(fund[0].name)}</b><span>${deCurso(fund[0])}</span></p></div>` : '';
   const tarjetaFund = hayFund ? `<article class="pz-prog pz-prog-fund" style="--c:${PZ_FUND_C}"><div class="pz-prog-art" aria-hidden="true">${foto}</div>
       <div class="pz-prog-txt"><h3>${PZ_FUND_N}</h3><p class="pz-pills"><span>Primeros semestres</span><span class="b">Virtual</span></p>
         ${fila('meta', 'Cierra los vacíos del colegio y llega preparado a tus parciales.', 'Desde cero y a tu ritmo, con ejercicios que se juegan')}
@@ -189,7 +192,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-equipos" role="img" aria-label="La app Zuka en un celular, un computador y una tablet"><span class="pz-eq-cel"><img src="brand/app/preuda.webp" alt="" width="480" height="973" loading="lazy"></span><span class="pz-eq-pc"><img src="brand/app/computador.webp" alt="" width="880" height="550" loading="lazy"><i></i></span><span class="pz-eq-tab"><img src="brand/app/tablet.webp" alt="" width="480" height="662" loading="lazy"></span></div></div>`, 'pz-lam-disp'),
     ...orden.filter(c => PZ_PROG[c.id]).map(c => lamina(PZ_PROG[c.id].color || c.color, c.name, `<p class="pz-lam-k">${pzEsc(c.name)}</p><h2>${PZ_PROG[c.id].h}</h2><p class="pz-lead">${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}, a tu ritmo. El primer mundo es gratis con un código de prueba.</p>
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="${pzEsc(c.name)}">Quiero inscribirme</button><button class="btn ghost" type="button" data-pz="prueba">Probar gratis</button></div>`, PZ_PROG[c.id].foto ? `<div class="pz-mancha pz-foto pz-foto-ing" data-inclina="5">${PZ_PROG[c.id].foto}</div>` : mancha(celu(c.id)))),
-    ...(hayFund ? [lamina(PZ_FUND_C, PZ_FUND_N, `<p class="pz-lam-k">Primeros semestres</p><h2>Fundamentación en Ingeniería y Ciencias</h2><p class="pz-lead">Las matemáticas que sostienen tu carrera, desde cero y a tu ritmo.</p>${logos}
+    ...(hayFund ? [lamina(PZ_FUND_C, PZ_FUND_N, `<p class="pz-lam-k">Primeros semestres</p><h2>Fundamentación en Ingeniería y Ciencias</h2><p class="pz-lead">Las matemáticas que sostienen tu carrera, desde cero y a tu ritmo.</p>${mazo}
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los cursos de ${PZ_FUND_N}">Quiero inscribirme</button><button class="btn ghost" type="button" data-pz-ir=".pz-prog-fund">Ver los cursos</button></div>`, `<div class="pz-mancha pz-foto pz-foto-ing" data-inclina="5">${foto}</div>`, 'pz-lam-fund')] : []),
     lamina('#f5e6c0', 'Libros de admisión', `<p class="pz-lam-k">Libros de admisión</p><h2>El examen, también en papel</h2><p class="pz-lead">Dos libros de razonamiento lógico y dos de comprensión lectora. Impresos a color, con envío.</p>
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los libros de admisión">Quiero los libros</button><button class="btn ghost" type="button" data-pz-ir="#pz-libros">Conocerlos</button></div>`, mancha(libros('pz-est-lam')), 'pz-lam-libros'),
@@ -495,6 +498,42 @@ function pzCarrusel(el, quieto) {
     if (!enc && !document.hidden && !el.inert && el.scrollTop < 200 && !(hero.contains(document.activeElement) && document.activeElement.matches(':focus-visible'))) va(i + 1);
   }, PZ_PASA);
 }
+// Cuánto se abre cada carta según su distancia (en cartas) al puntero: 1 encima, 0 desde carta y media.
+const pzAbre = d => { const f = Math.max(0, 1 - Math.abs(d) / 1.6); return f * f * (3 - 2 * f); };
+// El mazo de cursos: las cartas se abren bajo el puntero o el dedo y la de encima dice su nombre completo.
+function pzMazoVivo(el) {
+  const m = el.querySelector('.pz-mazo');
+  if (!m) return;
+  const caja = m.querySelector('.pz-cartas'), cs = [...caja.children], [nom, det] = m.querySelector('.pz-mazo-t').children;
+  let sel = -1, antes = -1;
+  const pon = (p, vivo) => {
+    const k = Math.max(0, Math.min(cs.length - 1, Math.round(p)));
+    cs.forEach((c, i) => {
+      const d = i - p;
+      c.style.setProperty('--f', vivo ? pzAbre(d).toFixed(3) : (i === k ? .35 : 0));
+      c.style.setProperty('--e', vivo ? Math.max(-1, Math.min(1, d)).toFixed(3) : 0);
+      c.style.zIndex = vivo && i === k ? 60 : i + 1;
+      c.classList.toggle('on', vivo && i === k);
+    });
+    if (k === sel) return;
+    sel = k; nom.textContent = cs[k].dataset.n; det.textContent = cs[k].dataset.d;
+  };
+  const donde = e => { const r = caja.getBoundingClientRect(), w = cs[0].offsetWidth, paso = cs.length > 1 ? (r.width - w) / (cs.length - 1) : w; return (e.clientX - r.left - w / 2) / paso; };
+  caja.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') pon(donde(e), true); });
+  // Con el dedo: el primer toque la saca del mazo y el segundo la abre.
+  caja.addEventListener('pointerdown', e => {
+    const i = cs.indexOf(e.target.closest('.pz-carta'));
+    antes = e.pointerType === 'mouse' || i < 0 ? -1 : sel === i && cs[i].dataset.vista ? -1 : i;
+  });
+  caja.addEventListener('click', e => {
+    const i = cs.indexOf(e.target.closest('.pz-carta'));
+    if (i < 0 || antes !== i) return;
+    antes = -1; e.stopPropagation(); e.preventDefault(); cs.forEach((c, k) => { if (k === i) c.dataset.vista = '1'; else delete c.dataset.vista; }); pon(i, true);
+  }, true);
+  caja.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') pon(sel, false); });
+  cs.forEach((c, i) => { c.addEventListener('focus', () => { if (c.matches(':focus-visible')) pon(i, true); }); });
+  pon(0, false);
+}
 function pzAreaViva(el) {
   const svg = el.querySelector('.pz-area'), knob = svg.querySelector('.pz-knob'), out = el.querySelector('.pz-cuenta-area');
   const L = 232, X = 52, Y = 44;
@@ -637,7 +676,7 @@ function presentacionAbrir() {
   // Precios: primero los guardados; después, los de la base.
   pzPrecios(el, Cuenta.productos, Tienda.arts);
   if (Cuenta.sb) Promise.all([cuentaTienda(), tiendaCarga()]).then(() => { if (el.isConnected) pzPrecios(el, Cuenta.productos, Tienda.arts); }, () => {});
-  pzCarrusel(el, quieto); pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el); pzCaminoVivo(el, quieto);
+  pzCarrusel(el, quieto); pzMazoVivo(el); pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el); pzCaminoVivo(el, quieto);
   const raton = matchMedia('(hover: hover) and (pointer: fine)').matches;
   pzQuejasVivas(el, raton);
   if (raton && !quieto) pzPuntero(el);

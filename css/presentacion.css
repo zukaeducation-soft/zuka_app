@@ -93,12 +93,20 @@
 
 #landing .pz-foto-ing { height: auto; aspect-ratio: 1.6; border-radius: 22% 30% 24% 28% / 34% 28% 36% 30%; } .pz-foto-ing img { object-position: 60% 20%; }
 .pz-foto-ing .pz-img-udea { object-position: 72% 30%; }
-.pz-logos { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; position: relative; }
-.pz-logos li { position: relative; display: flex; align-items: center; gap: 8px; padding: 5px 13px 5px 5px; border-radius: 14px; background: #0b0e1a; color: #f7f9ff; font-weight: 600; font-size: 14px; line-height: 1.1; }
-.pz-logos .cart { width: 34px; height: 34px; flex: none; } .pz-logos .cart svg { width: 100%; height: 100%; display: block; }
-.pz-logos small { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; color: #a9b1d0; }
-@media (max-width: 899px) { .pz-logos { gap: 5px; } .pz-logos li { padding: 4px; border-radius: 12px; } .pz-logos .cart { width: 31px; height: 31px; } .pz-logos li > span:last-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } }
-@media (min-width: 900px) { #landing .pz-lam-fund h2 { font-size: clamp(36px, 3.6vw, 52px); } .pz-lam-fund .pz-lam-txt { gap: 16px; } }
+/* mazo de cursos: cartas una sobre otra que se abren bajo el puntero */
+.pz-mazo { --w: 78px; --h: 108px; --ab: 8px; display: grid; gap: 10px; width: 100%; max-width: 620px; }
+.pz-cartas { position: relative; height: calc(var(--h) + 52px); margin-inline: 12px; }
+.pz-carta { --f: 0; --e: 0; position: absolute; left: calc((100% - var(--w)) * var(--i) / (var(--n) - 1)); bottom: 20px; width: var(--w); height: var(--h); display: grid; grid-template-rows: auto 1fr; gap: 6px; justify-items: start; padding: 10px 0 10px 6px; border-radius: 16px; overflow: hidden; text-align: left;
+  color: #f7f9ff; background: linear-gradient(160deg, color-mix(in srgb, var(--c) 46%, #0b0e1a), #0b0e1a 68%); border: 2px solid color-mix(in srgb, var(--c) 70%, #0b0e1a); box-shadow: -6px 8px 18px -8px rgb(0 0 0 / .55);
+  transform-origin: 50% 120%; transform: translate(calc(var(--e) * var(--ab)), calc(var(--k) * var(--k) * 1.5px - var(--f) * 34px)) rotate(calc(var(--k) * 2.6deg * (1 - var(--f)))) scale(calc(1 + var(--f) * .14)); transition: transform .22s var(--sal); }
+.pz-carta .cart { width: 30px; height: 30px; } .pz-carta .cart svg { width: 100%; height: 100%; display: block; }
+.pz-carta b { align-self: end; font: 600 13px/1.1 var(--display); white-space: nowrap; opacity: 0; transition: opacity .15s ease; } .pz-carta.on b { opacity: 1; }
+.pz-carta.pronto .cart { opacity: .8; }
+#landing .pz-carta:focus-visible { outline: 3px solid #07080f; border-radius: 16px; }
+.pz-mazo-t { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; min-height: 52px; align-content: start; } .pz-mazo-t b { font: 600 20px/1.2 var(--display); } .pz-mazo-t span { font-size: 15.5px; color: var(--mute); }
+@media (min-width: 900px) { .pz-mazo { --w: 104px; --h: 140px; --ab: 10px; } .pz-cartas { margin-inline: 26px 22px; height: calc(var(--h) + 66px); } .pz-mazo-t { min-height: 26px; } .pz-carta { padding: 14px 0 13px 13px; border-radius: 20px; } .pz-carta .cart { width: 54px; height: 54px; } .pz-carta b { font-size: 14px; } .pz-carta.on b { font-size: 16px; } }
+@media (min-width: 1240px) { .pz-mazo { --ab: 18px; --w: 112px; --h: 146px; } .pz-carta b { opacity: 1; } }
+@media (min-width: 900px) { #landing .pz-lam-fund h2 { font-size: clamp(36px, 3.6vw, 52px); } .pz-lam-fund .pz-lam-txt { gap: 14px; } }
 
 /* estudia desde cualquier lugar: la estudiante y la app en tres pantallas */
 #landing .pz-hero .pz-lam-disp em { text-decoration: none; display: inline-block; line-height: 1; padding: .02em .28em .16em; margin: .16em 0 0 -.12em; border-radius: .5em .6em .55em .5em; background: #a8dc1e; white-space: nowrap; }

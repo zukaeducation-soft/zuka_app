@@ -122,3 +122,11 @@ test('el precio «desde» sale de la tienda: el más bajo activo, o nada', () =>
 test('cada programa con lámina tiene su pantalla real', () => {
   for (const id of Object.keys(get(ctx, 'PZ_PROG'))) assert.ok(fs.existsSync(path.join(ROOT, 'brand/app', `${id}.webp`)), id);
 });
+
+test('el mazo de cursos: una carta por curso de fundamentación y se abre solo cerca del puntero', () => {
+  const con = get(ctx, 'presentacionHTML')(cursos, { todos: [...cursos, { id: 'calc', name: 'Cálculo Diferencial', color: '#f0f', units: [] }] });
+  assert.equal((con.match(/class="pz-carta[ "]/g) || []).length, 3);
+  assert.match(con, /class="pz-carta pronto"[^>]*data-pz-ir="\.pz-prog-fund"[^>]*aria-label="Cálculo Diferencial: Muy pronto"/);
+  const f = get(ctx, 'pzAbre');
+  assert.equal(f(0), 1); assert.equal(f(2), 0); assert.ok(f(.5) > f(1) && f(-1) === f(1));
+});
