@@ -172,8 +172,8 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
   const lamina = (c, name, cuerpo, fig, cls = '') => `<div class="pz-lamina ${cls}" data-c="${c}" role="group" aria-roledescription="lámina" aria-label="${pzEsc(name)}"><div class="pz-in pz-lam-in"><div class="pz-lam-txt">${cuerpo}</div><div class="pz-lam-fig">${fig}</div></div></div>`;
   const mancha = f => `<div class="pz-mancha" data-inclina="7" aria-hidden="true">${f}</div>`;
   const laminas = [
-    lamina('#6fd3ff', 'Zuka, tu aliado', `<h1>Tu aliado para <em>entrar</em> a la universidad y <em>terminarla</em></h1><p class="pz-lead">Cursos que se juegan, libros y asesorías para preparar la admisión y sacar adelante las matemáticas de la carrera.</p>
-      <div class="pz-ctas">${empieza()}<button class="btn ghost" type="button" data-pz-ir="#pz-programas">Ver programas</button></div>`, '<div class="pz-mancha pz-foto" data-inclina="5"><img src="brand/estudiantes.webp" alt="Cuatro estudiantes universitarios conversan en el campus" width="1200" height="885" fetchpriority="high"></div>', 'pz-lam-foto'),
+    lamina('#0b5ed7', 'Zuka, tu aliado', `<h1>Tu aliado para <em>entrar</em> a la universidad y <em>terminarla</em></h1><p class="pz-lead">Cursos que se juegan, libros y asesorías para preparar la admisión y sacar adelante las matemáticas de la carrera.</p>
+      <div class="pz-ctas">${empieza()}<button class="btn ghost" type="button" data-pz-ir="#pz-programas">Ver programas</button></div>`, '<div class="pz-mancha pz-foto" data-inclina="5"><img src="brand/estudiantes.webp" alt="Cuatro estudiantes universitarios conversan en el campus" width="1200" height="885" fetchpriority="high"></div>', 'pz-lam-foto pz-azul'),
     lamina('#fdeee0', 'Estudia desde cualquier lugar', `<h2>Estudia desde cualquier lugar, <em>a tu ritmo</em></h2><p class="pz-lead">Desde tu celular, computador o tablet. Entras con el mismo código y tu avance te sigue.</p>
       <div class="pz-ctas">${empieza()}<button class="btn ghost" type="button" data-pz-ir="#pz-dudas">Cómo funciona</button></div>`, `<div class="pz-disp"><img class="pz-disp-f" src="brand/dispositivos.webp" alt="Una estudiante sonríe con su computador en un parque" width="1072" height="694" loading="lazy">
       <div class="pz-equipos" role="img" aria-label="La app Zuka en un celular, un computador y una tablet"><span class="pz-eq-cel"><img src="brand/app/preuda.webp" alt="" width="480" height="973" loading="lazy"></span><span class="pz-eq-pc"><img src="brand/app/computador.webp" alt="" width="880" height="550" loading="lazy"><i></i></span><span class="pz-eq-tab"><img src="brand/app/tablet.webp" alt="" width="480" height="662" loading="lazy"></span></div></div>`, 'pz-lam-disp'),
@@ -210,7 +210,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-progs">${progs}</div>
       ${prontos.length ? `<p class="pz-prontos"><b>Muy pronto</b>${prontos.map(c => `<span style="--c:${c.color}">${pzEsc(c.name)}</span>`).join('')}</p>` : ''}
     </section>
-    <section class="pz-franja pz-tinta" id="pz-somos"><div class="pz-in"><h2>Quiénes somos</h2>
+    <section class="pz-franja pz-azul" id="pz-somos"><div class="pz-in"><h2>Quiénes somos</h2>
       <p class="pz-lead">Nadie es «malo para las matemáticas». Casi siempre faltó ver la idea.</p>
       <div class="pz-tres">
         <article>${pzI('que')}<h3>¿Qué es Zuka?</h3><p>Una app colombiana para aprender a tu ritmo, pensada para quienes terminan el colegio, se preparan para entrar a la universidad o cursan sus primeros semestres.</p></article>
@@ -438,7 +438,7 @@ function pzCampoVivo(el, quieto) {
     if (Math.abs(mx - p.x) + Math.abs(my - p.y) > .3 || Math.abs(meta - fuerza) > .01) raf = requestAnimationFrame(bucle); else t0 = 0;
   };
   const ro = new ResizeObserver(() => (cv.isConnected ? mide() : ro.disconnect())); ro.observe(hero);
-  const mo = new MutationObserver(() => (cv.isConnected ? mide() : mo.disconnect())); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  const mo = new MutationObserver(() => (cv.isConnected ? mide() : mo.disconnect())); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); mo.observe(hero, { attributes: true, attributeFilter: ['class'] });
   [p.x, p.y] = bola(); mide();
   if (quieto) return;
   hero.addEventListener('pointermove', e => {
@@ -507,7 +507,7 @@ function pzCarrusel(el, quieto) {
   const hero = el.querySelector('.pz-hero'), pista = hero.querySelector('.pz-pista'), ls = [...pista.children], ptos = [...hero.querySelectorAll('.pz-pto')], pausa = hero.querySelector('.pz-pausa');
   let i = 0, anda = !quieto, enc = false, reloj = 0;
   const marca = k => {
-    i = k; hero.style.backgroundColor = ls[k].dataset.c;
+    i = k; hero.style.backgroundColor = ls[k].dataset.c; hero.classList.toggle('azul', ls[k].classList.contains('pz-azul'));
     ls.forEach((l, j) => { l.inert = j !== k; });
     ptos.forEach((b, j) => { if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
   };
@@ -575,10 +575,12 @@ function presentacionPide() {
   if (ok) presentacionAbrir();
   return ok;
 }
+// Se ve la portada (o la entrada abierta desde ella): tema claro por defecto (applyTheme, js/app.js).
+const presentacionClara = () => !!document.getElementById('landing') || (pzDesde && !!document.getElementById('auth'));
 function presentacionCerrar() {
   pzDesde = false;
   document.getElementById('landing')?.remove();
-  pzInerte(false);
+  pzInerte(false); applyTheme();
 }
 // Mientras se ve, lo de atrás no se alcanza con Tab ni con el lector de pantalla.
 const PZ_DETRAS = ['#topbar', '#view', '#tabbar', '#overlay'];
@@ -616,6 +618,7 @@ function presentacionAbrir() {
     el = document.createElement('div'); el.id = 'landing';
     el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Conoce Zuka');
     document.body.appendChild(el);
+    applyTheme();
   }
   el.innerHTML = presentacionHTML(cursosVisibles(), { worlds: typeof WORLDS === 'undefined' ? {} : WORLDS, install: presentacionInstall(), todos: COURSES });
   el.scrollTop = 0;
@@ -629,7 +632,7 @@ function presentacionAbrir() {
     // En el computador la entrada es una ventana sobre la presentación (css/escritorio.css); en el celular la reemplaza.
     const encima = esEscritorio();
     if (!encima) presentacionCerrar();
-    pzDesde = true; authScreen();
+    pzDesde = true; authScreen(); applyTheme();
     const auth = document.getElementById('auth'), h1 = auth.querySelector('h1');
     h1.tabIndex = -1;
     if (encima) {

@@ -17,5 +17,8 @@ El usuario pidió acomodar la portada como instruimos.com. Se toma su **estructu
 5. Siguen: tu camino, ¿te ha pasado?, cómo se aprende, mundos, libros y preguntas.
 6. **¿Qué estás esperando?**, pie con columnas y WhatsApp flotante.
 
+La portada (y la entrada abierta desde ella) va en **tema claro** salvo que se haya elegido el oscuro (`presentacionClara`,
+`applyTheme`). La primera lámina, «Quiénes somos» y el pie usan el azul de «Plataforma virtual» (`.pz-azul`).
+
 `.pz-tinta` pone tinta oscura sobre franjas claras en los dos temas. Sin premios, descuentos, cifras de estudiantes ni
 testimonios: solo lo que Zuka ofrece hoy. Pruebas: `tests/presentacion.test.js`.

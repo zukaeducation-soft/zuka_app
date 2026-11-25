@@ -67,7 +67,7 @@ function cuentaPideEntrar() {
 function authCerrar() {
   const el = $('#auth'), pz = $('#landing');   // también la presentación (js/presentacion.js), si seguía abierta
   if (!el && !pz) return;
-  el?.remove(); if (pz) presentacionCerrar();
+  el?.remove(); if (pz) presentacionCerrar(); else if (typeof applyTheme === 'function') applyTheme();
   if (!datosFaltan(Cuenta.perfil, Cuenta.accesos) && typeof tourShouldStart === 'function' && tourShouldStart(S)) startTour();   // el recorrido de bienvenida esperaba (los datos van antes)
 }
 const waBoton = (texto, rotulo, cls = 'ghost') => {
