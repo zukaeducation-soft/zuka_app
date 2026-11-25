@@ -6,11 +6,11 @@
 // La narración (Bunny Storage, o media/voz de respaldo) va en su propia caché, que no se borra al cambiar de versión.
 // Spec: docs/superpowers/specs/2026-11-24-configuracion-rapida-segura.md
 
-const VERSION = 'zuka-v374';
+const VERSION = 'zuka-v376';
 // Los scripts van en paquetes (js/paquetes, los arma tools/empaquetar.js con la lista de index.html): guardar cuatro
 // archivos en vez de 750 hace que la app se instale y abra mucho más rápido.
 const SHELL = [
-  './', 'index.html', 'manifest.json', 'css/styles.css', 'css/examen.css', 'css/explora.css', 'css/presentacion.css', 'css/clave.css', 'css/acceso.css', 'css/tienda.css', 'css/escritorio.css', 'css/tutorias.css',
+  './', 'index.html', 'manifest.json', 'css/styles.css', 'css/examen.css', 'css/explora.css', 'css/presentacion.css', 'css/clave.css', 'css/acceso.css', 'css/tienda.css', 'css/escritorio.css', 'css/tutorias.css', 'css/inicio.css',
   'js/paquetes/zuka-1.js', 'js/paquetes/zuka-2.js', 'js/paquetes/zuka-3.js', 'js/paquetes/zuka-4.js',
   'icons/zuka-claro-192.png', 'icons/zuka-claro-512.png', 'icons/zuka-claro-maskable-512.png', 'icons/zuka-claro-apple-180.png', 'icons/zuka-claro-favicon-48.png', 'icons/zuka-claro-favicon.svg',
   'brand/pago-breb.png', 'brand/libros/1.webp', 'brand/libros/2.webp', 'brand/libros/3.webp', 'brand/libros/4.webp', 'brand/logo-light.svg', 'brand/logo-dark.svg', 'brand/cerebro.svg',
