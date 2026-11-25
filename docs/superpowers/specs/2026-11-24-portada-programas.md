@@ -9,6 +9,8 @@ El usuario pidió acomodar la portada como instruimos.com. Se toma su **estructu
 3. **Nuestros programas disponibles**: una tarjeta por curso publicado (`PZ_PROG`), libros y asesorías, con fichas (inicio,
    contiene, incluye, para qué, precio), «Más información» (salta a su sección) y WhatsApp (`WA.info`). El precio es el más
    bajo activo de `productos` / `articulos`; si no hay, la ficha no sale. Lo no publicado queda en «Muy pronto».
+   Álgebra, Trigonometría y los demás cursos de carrera (`PZ_FUND`) van juntos como «Fundamentación en Ingeniería y Ciencias»:
+   una lámina con la foto `brand/ingenieros.webp` y los logos, y una tarjeta ancha con cada curso, su precio o «Muy pronto».
 4. **Quiénes somos**: franja de color con tres tarjetas (qué, cómo, por qué). Reemplaza la sección anterior.
 5. Siguen: tu camino, ¿te ha pasado?, cómo se aprende, mundos, libros y preguntas.
 6. **¿Qué estás esperando?**, pie con columnas y WhatsApp flotante.

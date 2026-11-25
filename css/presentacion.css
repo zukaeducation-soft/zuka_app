@@ -87,6 +87,14 @@
 .pz-d-rueda .pz-demo-fig { display: block; } .pz-d-rueda .pz-demo-fig svg { max-width: none; overflow: hidden; }
 @media (min-width: 900px) { .pz-d-rueda { grid-column: 1 / -1; } }
 
+#landing .pz-foto-ing { height: auto; aspect-ratio: 1.6; border-radius: 22% 30% 24% 28% / 34% 28% 36% 30%; } .pz-foto-ing img { object-position: 60% 20%; }
+.pz-logos { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; position: relative; }
+.pz-logos li { position: relative; display: flex; align-items: center; gap: 8px; padding: 5px 13px 5px 5px; border-radius: 14px; background: #0b0e1a; color: #f7f9ff; font-weight: 600; font-size: 14px; line-height: 1.1; }
+.pz-logos .cart { width: 34px; height: 34px; flex: none; } .pz-logos .cart svg { width: 100%; height: 100%; display: block; }
+.pz-logos small { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; color: #a9b1d0; }
+@media (max-width: 899px) { .pz-logos { gap: 5px; } .pz-logos li { padding: 4px; border-radius: 12px; } .pz-logos .cart { width: 31px; height: 31px; } .pz-logos li > span:last-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } }
+@media (min-width: 900px) { #landing .pz-lam-fund h2 { font-size: clamp(36px, 3.6vw, 52px); } .pz-lam-fund .pz-lam-txt { gap: 16px; } }
+
 /* la rueda que dibuja la onda, de lado a lado */
 .pz-stage { position: relative; width: 100%; }
 .pz-rueda { display: block; width: 100%; height: 210px; overflow: hidden; user-select: none; -webkit-user-select: none; }
@@ -152,6 +160,17 @@
 .pz-prontos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 10px; font-size: 15px; } .pz-prontos b { margin-right: 6px; }
 .pz-prontos span { padding: 8px 14px; border-radius: 999px; border: 1px dashed color-mix(in srgb, var(--c) 60%, var(--line)); color: var(--mute); font-weight: 600; }
 @media (min-width: 1000px) { .pz-progs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; } .pz-prog { grid-template-rows: 224px 1fr auto; } }
+
+/* tarjeta ancha: fundamentación, con sus cursos adentro */
+.pz-prog-fund .pz-prog-art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; position: absolute; inset: 0; }
+.pz-fcs { list-style: none; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 215px), 1fr)); }
+.pz-fcs :is(button, li.pronto) { display: flex; align-items: center; gap: 12px; width: 100%; padding: 9px 12px 9px 9px; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--c) 45%, var(--line)); background: color-mix(in srgb, var(--c) 9%, transparent); color: var(--ink); text-align: left; transition: border-color .16s ease; }
+.pz-fcs button:hover { border-color: var(--c); } .pz-fcs > li.pronto { border-style: dashed; background: none; }
+.pz-fcs .cart { width: 44px; height: 44px; flex: none; } .pz-fcs .cart svg { width: 100%; height: 100%; display: block; } .pz-fcs .pronto .cart { opacity: .6; }
+.pz-fcs b { display: block; font: 600 16px/1.2 var(--display); } .pz-fcs small { display: block; font-size: 13px; color: var(--mute); } .pz-fcs small[hidden] { display: none; }
+.pz-fcs small b { display: inline; font: 600 13.5px var(--font); color: var(--ink); }
+@media (min-width: 1000px) { .pz-prog-fund { grid-column: span 2; } .pz-prog-fund .pz-fcs { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1240px) { .pz-prog-fund .pz-fcs { grid-template-columns: repeat(3, 1fr); } }
 
 /* quiénes somos: franja de color con tres tarjetas */
 .pz-franja { margin-top: clamp(84px, 10vw, 140px); background: #6fd3ff; }
