@@ -11,7 +11,7 @@
   M('tramo-recta', 130, (v, K, p, f) => { const L = XM.linea(K, -10, 10, 80, { p: 2 }); return L.s + K.r(L.X(v.c - v.r), 74, L.X(v.c + v.r) - L.X(v.c - v.r), 12, 'fa') + K.c(L.X(v.c), 80, 5, 'fF') + K.f(f, K.t(170, 36, `de ${N(v.c - v.r)} a ${N(v.c + v.r)}`, 'b ta')); }, v => `$c = ${v.c}, \\ r = ${v.r}$`);
   // 3 · Escalas y proporciones
   C('fichas-barra', 100, (K, p) => cap(K, p) + XM.barra(K, 44, p.segs || [[1, '', 'fa']], { h: 38 }));
-  M('barra-factor', 150, (v, K, p, f) => XM.barra(K, 36, [[p.base, `antes ${p.base}`, 'fa']], { T: p.T, h: 34 }) + XM.barra(K, 92, [[v.x, '', 'fg']], { T: p.T, h: 34 }) + K.f(f, K.t(170, 146, `${v.x} ÷ ${p.base} = ${N(v.x / p.base)}`, 's')), v => `$${v.x}$`);
+  M('barra-factor', 150, (v, K, p, f) => XM.barra(K, 36, [[p.base, `${p.rb || 'antes'} ${p.base}`, 'fa']], { T: p.T, h: 34 }) + XM.barra(K, 92, [[v.x, '', 'fg']], { T: p.T, h: 34 }) + K.f(f, K.t(170, 146, p.rb ? `${p.base} ÷ ${v.x} = ${N(p.base / v.x)}` : `${v.x} ÷ ${p.base} = ${N(v.x / p.base)}`, 's')), v => `$${v.x}$`);
   // 4 · Exponentes y radicales
   C('fichas-torre', 120, (K, p) => cap(K, p) + Array.from({ length: p.n || 4 }, (_, i) => K.r(170 - (p.n || 4) * 17 + i * 34, 50, 30, 30, 'fa', 5) + K.t(185 - (p.n || 4) * 17 + i * 34, 71, p.b || 'x', 's')).join(''));
   M('lado-area', 190, (v, K, p, f) => XM.reja(K, 170 - v.s * 9, 16, v.s, v.s, 18) + K.f(f, K.t(300, 30, `área ${v.s * v.s}`, 's', 'end')), v => `$\\text{lado } ${v.s}$`);
