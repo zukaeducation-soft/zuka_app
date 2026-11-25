@@ -55,7 +55,7 @@ test('la app abre rápido: la portada no espera la fuente más de 300 ms y se va
   assert.ok(cap > 0 && cap <= 300, `espera máxima por la fuente: ${cap} ms`);
   assert.ok(inline.includes('transition:opacity .15s'), 'desvanecido corto');
   assert.doesNotMatch(app, /BOOT_MIN_MS/, 'sin tiempo mínimo de portada');
-  // La única espera extra es la animación de entrada (primera vez de la sesión), y sin ella no se espera nada.
-  assert.match(app, /Promise\.all\(\[Promise\.race\(\[fontsReady, [^\n]*\]\), introWait\(\)\]\)/);
-  assert.match(app, /if \(!document\.documentElement\.dataset\.intro \|\| !b\) return Promise\.resolve\(\);/);
+  // Sin animación de entrada: lo único que se espera es la fuente, con tope.
+  assert.ok(/setTimeout\(r, 300\)\)\]\)\s*\.then\(\(\) => requestAnimationFrame/.test(app), 'la portada se va apenas hay fuente o pasan 300 ms');
+  assert.doesNotMatch(app, /introWait|INTRO_MS/);
 });

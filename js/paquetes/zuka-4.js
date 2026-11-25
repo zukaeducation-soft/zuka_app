@@ -16467,8 +16467,7 @@ function applyTheme() {
   // La portada abre en claro; solo va oscura si alguien eligió el tema oscuro.
   const t = S.theme === 'system' ? (darkQuery.matches && !presentacionClara() ? 'dark' : 'light') : S.theme;
   document.documentElement.dataset.theme = t;
-  // Mientras se ve la animación de entrada (data-intro), la barra del celular sigue oscura como la portada.
-  $('meta[name="theme-color"]').content = document.documentElement.dataset.intro ? '#07080f' : t === 'dark' ? '#07080f' : '#f4f6fb';
+  $('meta[name="theme-color"]').content = t === 'dark' ? '#07080f' : '#f4f6fb';
   setGameTheme(t);   // los minijuegos abiertos se repintan con la paleta del tema
 }
 darkQuery.addEventListener('change', () => S.theme === 'system' && applyTheme());
@@ -17391,26 +17390,11 @@ function hideBoot() {
   if (!b || b.classList.contains('out')) return;
   b.classList.add('out');
   setTimeout(() => b.remove(), 400);
-  // Se acabó la entrada: el documento y la barra del celular vuelven al color del tema.
-  if (document.documentElement.dataset.intro) { delete document.documentElement.dataset.intro; applyTheme(); }
-}
-// Animación de entrada: vive en la portada misma (bloque .intro de index.html, estilos en css/styles.css), así se ve
-// desde el primer cuadro, mientras la app carga, sin esperar a este archivo. El script del <head> pone data-intro la
-// primera vez de cada sesión (y no con «reducir movimiento»). Aquí solo se espera a que termine antes de quitar la
-// portada: INTRO_MS desde que empezó a verse (zukaIntroT0); un toque la salta. Sin data-intro no se espera nada.
-const INTRO_MS = 2700;
-function introWait() {
-  const b = $('#boot');
-  if (!document.documentElement.dataset.intro || !b) return Promise.resolve();
-  return new Promise(done => {
-    const t = setTimeout(done, Math.max(0, INTRO_MS - (performance.now() - (window.zukaIntroT0 ?? performance.now()))));
-    b.addEventListener('click', () => { clearTimeout(t); done(); }, { once: true });
-  });
 }
 const fontsReady = document.fonts?.load
   ? Promise.all(['400', '600', '700'].map(w => document.fonts.load(`${w} 1em "Plus Jakarta Sans"`))).catch(() => {})
   : null;
-Promise.all([Promise.race([fontsReady, new Promise(r => setTimeout(r, 300))]), introWait()])
+Promise.race([fontsReady, new Promise(r => setTimeout(r, 300))])
   .then(() => requestAnimationFrame(() => requestAnimationFrame(hideBoot)));
 applyTheme();
 cuentaInit();   // cuenta guardada y modo revisión solo para el administrador (js/cuenta.js), antes de pintar

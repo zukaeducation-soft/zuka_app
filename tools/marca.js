@@ -23,22 +23,6 @@ const brain = ({ ink = 'currentColor', cls = ' class="brain"' } = {}) =>
 const wordmark = (ink = 'currentColor') =>
   `<svg class="wordmark" viewBox="${WORD_BOX}" fill="${ink}" aria-hidden="true" focusable="false">${WORD}</svg>`;
 
-// Animación de entrada (va dentro de la portada #boot de index.html, entre las marcas <!-- intro -->): el cerebro aparece
-// en el centro, se encienden los destellos, sale el nombre y luego el eslogan, palabra por palabra (.intro en css/styles.css).
-const SLOGAN = 'Potencia tu mente';
-function introBlock() {
-  const words = SLOGAN.toLowerCase().split(' ').map((w, k) => `<i style="--k:${k}">${w}</i>`).join(' ');
-  return `<div class="intro"><div class="intro-hero">${brain()}</div>`
-    + `<div class="intro-name">${wordmark()}</div><p class="intro-say">${words}</p></div>`;
-}
-const INTRO_MARKS = ['<!-- intro: generado por tools/marca.js, no editar -->', '<!-- /intro -->'];
-// Pone el bloque de la animación en index.html, entre sus marcas.
-function withIntro(index) {
-  const a = index.indexOf(INTRO_MARKS[0]), b = index.indexOf(INTRO_MARKS[1]);
-  if (a < 0 || b < a) throw new Error('index.html: faltan las marcas de la animación de entrada');
-  return index.slice(0, a + INTRO_MARKS[0].length) + introBlock() + index.slice(b);
-}
-
 // Archivos sueltos (panel de administración, libros, documentos): colores fijos.
 const XMLNS = 'xmlns="http://www.w3.org/2000/svg"';
 const file = (box, ink, body) => `<svg ${XMLNS} viewBox="${box}" fill="${ink}" role="img" aria-label="Zuka"><title>Zuka</title>${body}</svg>\n`;
@@ -55,7 +39,6 @@ const WORDMARK = '${wordmark()}';
 const logoHTML = () => \`<span class="logo" role="img" aria-label="Zuka">\${BRAIN}\${WORDMARK}</span>\`;
 `;
   return {
-    intro: introBlock(), withIntro,
     files: {
       'js/marca.js': js,
       'brand/logo-dark.svg': horizontal(WHITE),     // para fondo oscuro
@@ -107,9 +90,6 @@ async function pngs() {
 if (require.main === module) {
   const { files } = build();
   for (const [f, text] of Object.entries(files)) { fs.writeFileSync(path.join(ROOT, f), text); console.log('  ' + f); }
-  const index = path.join(ROOT, 'index.html');
-  fs.writeFileSync(index, withIntro(fs.readFileSync(index, 'utf8')));
-  console.log('  index.html (animación de entrada)');
   if (process.argv.includes('--png')) pngs().catch(e => { console.error(e); process.exit(1); });
 }
 

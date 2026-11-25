@@ -97,50 +97,18 @@ test('la marca: un solo color, dentro del cuadro y con nombre accesible (spec 20
   assert.match(read('js/presentacion.js'), /zukaWord = \(\) => logoHTML\(\)/, 'la barra, la cuenta y la presentación llevan el logo');
 });
 
-test('animación de entrada: vive en la portada; cerebro, nombre y eslogan (spec 2026-11-24-logo-nuevo)', () => {
-  // El bloque de index.html es el que genera tools/marca.js y va dentro de #boot: se ve sin esperar a ningún script.
-  assert.equal(index, built.withIntro(index), 'correr: node tools/marca.js');
+test('no hay animación de entrada: la portada va vacía y la app no espera nada (pedido del 2026-11-24)', () => {
   const boot = index.slice(index.indexOf('<div id="boot"'), index.indexOf('<div id="app"'));
-  assert.ok(boot.includes(built.intro), 'la animación va dentro de la portada');
-  const html = built.intro;
-  assert.match(html, /<div class="intro-hero"><svg class="brain"/);
-  assert.match(html, /<div class="intro-name"><svg class="wordmark"/);
-  assert.match(html, /<p class="intro-say"><i style="--k:0">potencia<\/i> <i style="--k:1">tu<\/i> <i style="--k:2">mente<\/i><\/p>/);
-  // El orden: aparece el cerebro, luego el nombre, luego las palabras; y la app espera a que termine.
-  const hero = Number(block('.intro-hero').match(/intro-pop [\d.]+s [^;]* ([\d.]+)s both/)[1]);
-  const say = Number(block('.intro-name').match(/intro-pop [\d.]+s [^;]* ([\d.]+)s both/)[1]);
-  const words = Number(block('.intro-say i').match(/animation-delay: calc\(([\d.]+)s/)[1]);
-  assert.ok(hero < say && say < words, `${hero} ${say} ${words}`);
-  const ms = Number((app.match(/const INTRO_MS = (\d+)/) || [])[1]);
-  assert.ok(ms >= (words + 2 * .3 + .3) * 1000 && ms <= 3500, `la portada espera ${ms} ms`);
-  assert.match(css, /@keyframes intro-in \{ to \{ opacity: 1; \} \}/);
+  assert.match(boot, /<div id="boot" aria-hidden="true"><\/div>/, 'la portada no lleva nada dentro');
+  for (const [nombre, texto] of [['index.html', index.slice(0, index.indexOf('<template'))], ['js/app.js', app], ['css/styles.css', css], ['tools/marca.js', read('tools/marca.js')], ['js/marca.js', read('js/marca.js')]]) {
+    assert.doesNotMatch(texto, /data-intro|dataset\.intro|zuka-intro|zukaIntroT0|INTRO_MS|introWait|class="intro|\.intro[ -{]/, nombre);
+  }
 });
 
 test('el icono de la app es el cerebro azul noche sobre blanco', () => {
   assert.match(read('tools/marca.js'), /brain\(\{ ink: NAVY \}\)/);
   for (const f of ['icons/zuka-claro-192.png', 'icons/zuka-claro-512.png', 'icons/zuka-claro-maskable-512.png', 'icons/zuka-claro-apple-180.png', 'icons/zuka-claro-favicon-48.png'])
     assert.ok(fs.statSync(path.join(ROOT, f)).size > 500, f);
-});
-
-test('la entrada no deja bordes claros: documento, portada y barra del celular oscuros mientras dura', () => {
-  const inline = (index.match(/<style>([^<]*)<\/style>/) || [])[1] || '';
-  assert.ok(inline.includes('html[data-intro],html[data-intro] body,html[data-intro] #boot{background:#07080f}'));
-  assert.ok(inline.indexOf('html[data-intro]') > inline.indexOf('html[data-theme="light"] #boot'), 'gana al tema claro');
-  assert.ok(inline.includes('html:not([data-intro]) .intro{display:none}'), 'sin entrada, la portada va vacía');
-  // Una vez por sesión y no con «reducir movimiento»; lo decide el script del <head>, antes de pintar.
-  const head = index.slice(0, index.indexOf('<style>'));
-  assert.match(head, /!sessionStorage\.getItem\('zuka-intro'\) && !matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches/);
-  assert.match(head, /document\.documentElement\.dataset\.intro = '1'/);
-  // La barra del celular (theme-color) sigue oscura durante la entrada y vuelve al tema al quitar la portada.
-  assert.match(app, /content = document\.documentElement\.dataset\.intro \? '#07080f' : t === 'dark'/);
-  const hide = app.slice(app.indexOf('function hideBoot('), app.indexOf('const INTRO_MS'));
-  assert.match(hide, /delete document\.documentElement\.dataset\.intro; applyTheme\(\);/);
-  // Sin entrada no se espera nada; con entrada, un toque la salta; y el respaldo en línea también limpia data-intro.
-  const wait = app.slice(app.indexOf('function introWait('), app.indexOf('const fontsReady'));
-  assert.match(wait, /if \(!document\.documentElement\.dataset\.intro \|\| !b\) return Promise\.resolve\(\);/);
-  assert.match(wait, /b\.addEventListener\('click'/);
-  assert.match(index, /setTimeout\(function \(\) \{[^}]*removeAttribute\('data-intro'\)/);
-  assert.doesNotMatch(read('js/marca.js'), /intro/i, 'la entrada ya no viaja en js/marca.js');
 });
 
 test('la mascota y los logos viejos ya no se usan', () => {

@@ -43,4 +43,5 @@ JavaScript, ≈ 0.45 s, y pintar).
 
 - Ejecutar los 6 MB sigue costando ≈ 0.45 s en PC (más en un celular modesto). El siguiente paso sería cargar los juegos
   y los cursos solo cuando se abren (hoy todo se ejecuta al inicio).
-- La animación de entrada dura 3.1 s la primera vez de cada sesión (`INTRO_MS`); es diseño, no carga.
+- (Hecho el mismo día, a pedido del usuario) Se quitó la animación de entrada, que retenía la portada 2.7 s la primera
+  vez de cada sesión: la portada `#boot` va vacía y se va apenas la app pintó.

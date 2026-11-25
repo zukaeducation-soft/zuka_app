@@ -992,20 +992,6 @@ img.logo { display: block; width: auto; }   /* panel de administración: brand/l
 .install-banner img { flex: none; border-radius: 12px; }
 .install-banner > div { flex: 1; min-width: 0; }
 .install-banner p { color: var(--mute); font-size: 12.5px; }
-/* Animación de entrada (bloque .intro de la portada #boot, generado por tools/marca.js; js/app.js espera a que termine).
-   Spec 2026-11-24-logo-nuevo: el cerebro aparece en el centro, se encienden los destellos, sale ZUKA y luego
-   «potencia tu mente», palabra por palabra. Dura unos 2.6 s (INTRO_MS en js/app.js).
-   Siempre oscura, como el icono: data-intro oscurece también el documento. No sale con «reducir movimiento». */
-html[data-intro] #boot { display: block; cursor: pointer; transition: opacity .35s ease-out; }
-.intro { position: absolute; inset: 0; display: grid; justify-items: center; align-content: center; gap: 22px; color: #fff; }
-.intro-hero { width: min(44vw, 190px); animation: intro-pop .6s cubic-bezier(.2, 1.3, .4, 1) .1s both; }
-.intro-hero .rays { opacity: 0; animation: intro-in .25s ease-out .75s forwards; }
-.intro-name { animation: intro-pop .45s ease-out .6s both; }
-.intro-name .wordmark { display: block; height: 30px; width: auto; }
-.intro-say { margin: 0; font-family: var(--display); font-size: 19px; font-weight: 400; color: #c3ccdf; }
-.intro-say i { font-style: normal; display: inline-block; opacity: 0; animation: intro-in .3s ease-out forwards; animation-delay: calc(1.05s + var(--k) * .25s); }
-@keyframes intro-in { to { opacity: 1; } }
-@keyframes intro-pop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
 
 @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
 @keyframes drop { from { opacity: 0; transform: translate(-50%, -12px); } }
