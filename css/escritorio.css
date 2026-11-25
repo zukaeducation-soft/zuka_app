@@ -4,7 +4,7 @@
    panel amplio; el video vertical en el centro con paneles a los lados; hojas y entrada como ventanas centradas. */
 
 .tb-logo-d, .tb-admin, .ls-sides, .xp-riel, .dk { display: none; }
-.tb-pie, .home-side, .tu-side, .pf-side, .pf-main, .cv-side, .cv-main { display: contents; }
+.tb-pie, .home-side, .pf-side, .pf-main, .cv-side, .cv-main { display: contents; }
 
 @media (min-width: 1000px) {
   /* el menú va a la izquierda (spec 2026-11-24-menu-lateral): nada se acomoda encima de él */
@@ -42,13 +42,13 @@
   /* ---- contenido centrado ---- */
   #view { scrollbar-width: thin; }
   .home, .mycourses, .tutorias, .profile, .settings { width: 100%; padding: 40px var(--gut) 72px; gap: 24px 32px; align-items: start; }
-  .home, .tutorias { grid-template-columns: minmax(0, 1fr) 340px; }
-  .home > *, .tutorias > * { grid-column: 1; min-width: 0; }
-  .home > .home-head, .home > .install-banner, .tutorias > .tu-head, .tutorias > .tu-note { grid-column: 1 / -1; }
-  .home-side, .tu-side { display: grid; gap: 16px; align-content: start; position: sticky; top: 24px; }
-  .home > .home-side, .tutorias > .tu-side { grid-column: 2; }
+  .home { grid-template-columns: minmax(0, 1fr) 340px; }
+  .home > * { grid-column: 1; min-width: 0; }
+  .home > .home-head, .home > .install-banner { grid-column: 1 / -1; }
+  .home-side { display: grid; gap: 16px; align-content: start; position: sticky; top: 24px; }
+  .home > .home-side { grid-column: 2; }
   .home > .home-side { grid-row-end: span 2; }
-  .home, .tutorias { grid-auto-flow: dense; }
+  .home { grid-auto-flow: dense; }
   .home { grid-template-rows: auto auto 1fr; }
   .home:has(> .install-banner) { grid-template-rows: auto auto auto 1fr; }
   .home > .install-banner { margin: 0; }
@@ -57,7 +57,7 @@
   section.dk { display: grid; }
   .dk-card, .home-side .home-goal, .profile .card, .profile .stat { padding: 20px; border-radius: 20px; border: 1px solid var(--line); background: var(--card); }
   .dk-card { gap: 14px; align-content: start; }
-  .dk-card h2, .tu-mine-card h2 { font-family: var(--display); font-weight: 500; font-size: 19px; line-height: 1.2; }
+  .dk-card h2 { font-family: var(--display); font-weight: 500; font-size: 19px; line-height: 1.2; }
   .dk-head, .dk-tr { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
   .dk-link { font-size: 14px; font-weight: 600; color: var(--brand); padding: 4px 0; }
   .dk-link:hover { text-decoration: underline; }
@@ -75,14 +75,6 @@
   .dk-week .lit span { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
   .dk-week .i { width: 16px; height: 16px; }
   .dk-week .today small { color: var(--ink); }
-  .dk-days, .dk-steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; font-size: 15px; line-height: 1.4; }
-  .dk-days li { display: flex; justify-content: space-between; gap: 12px; }
-  .dk-days b { display: inline-block; font-weight: 600; }
-  .dk-days b::first-letter, .dk-month::first-letter { text-transform: uppercase; }
-  .dk-days span { color: var(--mute); }
-  .dk-steps { counter-reset: paso; color: var(--mute); }
-  .dk-steps li { counter-increment: paso; display: flex; gap: 12px; align-items: baseline; }
-  .dk-steps li::before { content: counter(paso); flex: none; color: var(--brand); font-family: var(--display); font-size: 18px; font-weight: 600; }
   .dk-tr small { color: var(--mute); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
   .dk .mini-bar { display: block; width: 100%; max-width: none; }
 
@@ -120,12 +112,6 @@
 
   /* ---- Tutorías ---- */
   .tu-head p { font-size: 17px; }
-  .tu-pick { gap: 16px; }
-  .tu-pick h2 { font-size: 23px; }
-  .tu-pick .course-list { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
-  .tu-course { padding: 22px 20px; gap: 16px; }
-  .tu-course:not(:disabled):hover { border-color: color-mix(in srgb, var(--c) 55%, var(--line)); }
-  .tu-mine-card { padding: 20px; border-radius: 20px; }
 
   /* ---- Tú ---- */
   .profile { grid-template-columns: 380px minmax(0, 1fr); }
@@ -372,7 +358,7 @@
   .tb-admin { padding-block: 7px; }
 }
 @media (min-width: 1000px) and (max-width: 1420px) {
-  .home, .tutorias { grid-template-columns: minmax(0, 1fr) 290px; }
+  .home { grid-template-columns: minmax(0, 1fr) 290px; }
   .learn.cv, .learn.cv-world { grid-template-columns: 300px minmax(0, 1fr); gap: 0 28px; }
   .profile { grid-template-columns: 320px minmax(0, 1fr); }
   .pf-main .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }

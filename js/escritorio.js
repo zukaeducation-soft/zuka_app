@@ -36,13 +36,6 @@ function dkAsesoriaHTML() {
       : nx ? `Próximo cupo: <b>${esc(dayLabel(nx.date, now))}, ${hourLabel(nx.time)}</b>` : 'No quedan cupos esta semana.'}</span></p>
     <button class="btn ghost" type="button" data-dk="tutorias">${b ? 'Ver mis asesorías' : 'Separar asesoría'}</button></section>`;
 }
-// Tutorías: los próximos días con cupo y los pasos para separar una.
-function dkTutoriasHTML(mine) {
-  const now = Date.now(), days = tutoriaDays(now, mine).map(d => ({ date: d.date, n: d.slots.filter(s => s.free).length })).filter(d => d.n).slice(0, 5);
-  return `${mine.length ? '' : `<section class="dk dk-card"><h2>Tus asesorías</h2><p class="dk-sub">Aún no tienes ninguna. Cuando separes una, aquí verás el día, la hora y los temas.</p></section>`}
-    ${days.length && mine.length < TUTORIAS.max ? `<section class="dk dk-card"><h2>Próximos cupos</h2><ul class="dk-days">${days.map(d => `<li><b>${esc(dayLabel(d.date, now))}</b><span>${d.n} ${d.n === 1 ? 'hora' : 'horas'}</span></li>`).join('')}</ul></section>` : ''}
-    <section class="dk dk-card"><h2>Cómo funciona</h2><ol class="dk-steps"><li>Elige la materia y hasta ${TUTORIAS.maxTopics} temas.</li><li>Elige el día y la hora.</li><li>Cuenta qué te cuesta más, si quieres.</li></ol></section>`;
-}
 // Mis cursos: avance de un curso por componente o por mundos, dentro de su tarjeta.
 function dkCursoHTML(c) {
   return `<span class="dk dk-tramos">${dkTramos(c, isDone).map(t => `<span class="dk-tramo">${t.b ? blockArt(c, t.b) : ''}<span><span class="dk-tr"><span>${esc(t.name)}</span><small>${t.d}/${t.n}</small></span>

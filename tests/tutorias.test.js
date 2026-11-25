@@ -197,3 +197,19 @@ test('Tutorías está en el menú, en index.html, en el service worker y en el r
   assert.match(step.target.join(), /data-tab="tutorias"/);
   assert.match(step.text, /materia/);
 });
+
+// ---- arma tu clase (spec 2026-11-25-tutorias-agenda) ----
+test('cuenta regresiva, rejilla de la semana y enlace de calendario', () => {
+  const falta = get(ctx, 'tuFalta'), rej = get(ctx, 'tuRejilla'), cal = get(ctx, 'tuCalendario');
+  assert.equal(JSON.stringify(falta((26 * 60 + 5) * 60000)), '{"d":1,"h":2,"m":5}'); assert.equal(falta(0), null); assert.equal(falta(1).m, 1);
+  const r = rej(tutoriaDays(NOW, [{ id: 'x', course: 'algebra', topics: [], date: '2026-11-12', time: '17:00' }], H), H);
+  assert.ok(r.dias.every(d => (H[new Date(`${d.date}T12:00:00`).getDay()] || []).length), 'solo días con atención');
+  assert.equal(r.filas.join(), [...r.filas].sort().join());
+  const hoy = r.dias.find(d => d.date === '2026-11-12'); assert.equal(r.celda(hoy, '17:00'), 'tuya'); assert.equal(r.celda(hoy, '18:00'), 'libre'); assert.equal(r.celda(hoy, '16:00'), '', 'ya no se alcanza');
+  assert.match(cal({ date: '2026-11-12', time: '17:00' }, 'Asesoría & más', 'x'), /text=Asesor%C3%ADa%20%26%20m%C3%A1s&dates=20261112T220000Z\/20261112T230000Z/);
+});
+test('la página se arma sin hoja, se puede usar sin arrastrar y está registrada', () => {
+  const s = fs.readFileSync(path.join(ROOT, 'js/tutorias.js'), 'utf8');
+  for (const k of ['data-mat', 'data-lec', 'data-quita', 'ArrowDown', 'aria-pressed', 'role="timer"', "planMotivo('tutorias')", 'separar_asesoria']) assert.ok(s.includes(k), k);
+  assert.ok(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').includes('css/tutorias.css'));
+});

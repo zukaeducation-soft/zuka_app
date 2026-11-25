@@ -12078,141 +12078,196 @@ async function asesoriasCarga() {
   return true;
 }
 
+// ---- arma tu clase (spec 2026-11-25-tutorias-agenda): materia, hora y temas en la misma página, y un boleto que se llena ----
+// Lo que falta para una asesoría: { d, h, m } o null si ya empezó. Pura.
+function tuFalta(ms) {
+  if (ms <= 0) return null;
+  const m = Math.ceil(ms / 60000);
+  return { d: Math.floor(m / 1440), h: Math.floor(m % 1440 / 60), m: m % 60 };
+}
+// La semana en rejilla: horas (filas) y días con atención (columnas). Cada casilla: 'libre', 'tuya' o '' (no hay o ya pasó). Pura.
+function tuRejilla(days, hours = TUTORIAS.hours) {
+  const dias = days.filter(d => (hours[tuDate(d.date).getDay()] || []).length), filas = [...new Set(dias.flatMap(d => hours[tuDate(d.date).getDay()]))].sort();
+  return { dias, filas, celda: (d, t) => { const x = d.slots.find(y => y.time === t); return x ? (x.free ? 'libre' : 'tuya') : ''; } };
+}
+// Enlace para guardarla en Google Calendar (horas en UTC). Pura.
+function tuCalendario(b, titulo, detalle) {
+  const f = t => new Date(t).toISOString().replace(/[-:]|\.\d{3}/g, '');
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titulo)}&dates=${f(tuStart(b))}/${f(tuEnd(b))}&details=${encodeURIComponent(detalle)}`;
+}
+// Borrador: se conserva al cambiar de pestaña. `hecha`: la que se acaba de separar.
+const tuNuevo = () => ({ c: '', unit: 0, topics: [], date: null, time: null, note: '', hecha: null });
+let tuB = tuNuevo(), tuDe = null, tuOcupado = false;   // tuDe: de qué cuenta es el borrador
+const tuUid = () => (typeof Cuenta !== 'undefined' && Cuenta.user?.id) || '';
+const tuCursos = () => cursosVisibles().filter(c => cursoComprado(c, true)).sort((a, b) => (b.id === S.course) - (a.id === S.course));
+function tuElige(c) {
+  tuB = { ...tuB, c: c.id, topics: [], hecha: null, unit: Math.max(0, c.units.findIndex(u => u.lessons.some(l => !S.done[l.id]))) };
+}
+const tuHuso = () => (new Date().getTimezoneOffset() === 300 ? '' : ' · hora de Colombia');
+
+// La próxima, en grande y con cuenta regresiva; las demás, debajo.
+function tuProximaHTML(mine, now) {
+  if (!mine.length) return '';
+  const una = (b, grande) => {
+    const c = tuCourse(b.course), titles = tuTitles(b), n = c?.name || 'Asesoría';
+    return `<article class="tu-prox${grande ? ' grande' : ''}" style="--c:${c?.color || 'var(--brand)'}">
+      ${c ? courseArt(c, grande ? 'xl' : 'lg') : ''}<div class="tp-txt">${grande ? '<p class="tp-eyebrow">Tu próxima clase</p>' : ''}<h2>${esc(n)}</h2><p class="tp-cuando"><b>${esc(dayLabel(b.date, now))}, ${hourLabel(b.time)}</b>${tuHuso()}${b.ok ? '<span class="tu-ok">Confirmada</span>' : ''}</p>
+        ${titles.length || b.note ? `<p class="tp-temas">${esc(titles.join(' · '))}${b.note ? `${titles.length ? ' · ' : ''}«${esc(b.note)}»` : ''}</p>` : ''}
+        <div class="tp-acts">${/^https:/.test(b.enlace || '') ? `<a class="btn brand" href="${esc(b.enlace)}" target="_blank" rel="noopener">Entrar a la reunión</a>` : ''}<a class="tu-link" href="${esc(tuCalendario(b, `Asesoría Zuka: ${n}`, titles.join('; ')))}" target="_blank" rel="noopener">Guardar en mi calendario</a><button class="tu-link mal" type="button" data-cancel="${esc(b.id)}" aria-label="Cancelar la asesoría de ${esc(n)}">Cancelar</button></div></div>
+      ${grande ? `<div class="tp-reloj" data-inicio="${tuStart(b)}" role="timer" aria-label="Lo que falta"></div>` : ''}</article>`;
+  };
+  return `<section class="tu-mias" aria-label="Tus asesorías">${una(mine[0], true)}${mine.length > 1 ? `<div class="tu-otras">${mine.slice(1).map(b => una(b, false)).join('')}</div>` : ''}</section>`;
+}
+function tuRelojPinta(el) {
+  const f = tuFalta(+el.dataset.inicio - Date.now());
+  el.innerHTML = f ? [[f.d, f.d === 1 ? 'día' : 'días'], [f.h, f.h === 1 ? 'hora' : 'horas'], [f.m, 'min']].filter((x, i) => i || x[0]).map(([n, t]) => `<span><b>${n}</b><small>${t}</small></span>`).join('') : '<span class="ya"><b>¡Ya empezó!</b></span>';
+}
+let tuReloj = 0;
+
 function renderTutorias() {
   const now = Date.now(), mine = activeTutorias(S.tutorias, now);
   if (!Array.isArray(S.tutorias) || mine.length !== S.tutorias.length) { S.tutorias = mine; save(); }   // las que ya pasaron se van
-  const full = mine.length >= TUTORIAS.max, nx = nextFree(now, mine);
-  // Primero la materia que se está estudiando.
-  // Solo los cursos comprados y vigentes.
-  const courses = cursosVisibles().filter(c => cursoComprado(c, true)).sort((a, b) => (b.id === S.course) - (a.id === S.course));
-  view.innerHTML = `<div class="tutorias">
-    <header class="tu-head"><h1>Tutorías</h1>
-      <p class="muted">Separa una asesoría virtual para reforzar lo que más te cuesta. Eliges la materia, los temas, el día y la hora.</p></header>
-    ${tuServidor() && (courses.length || Tienda.saldo.general + Tienda.saldo.universidad) ? `<section class="tu-horas"><p><b>${Tienda.saldo.general}</b> ${Tienda.saldo.general === 1 ? 'hora general' : 'horas generales'}${Tienda.saldo.universidad ? ` · <b>${Tienda.saldo.universidad}</b> de universidad` : ''}</p><button class="btn sm main brand" type="button" data-horas>Comprar horas</button></section>` : ''}
-    <aside class="tu-side" aria-label="Tus asesorías y cupos">${mine.length ? `<section class="card tu-mine-card"><h2>Tus asesorías</h2>${mine.map(b => {
-      const c = tuCourse(b.course), titles = tuTitles(b);
-      return `<div class="tu-mine" style="--c:${c?.color || 'var(--brand)'}">
-        <span class="tu-when"><b>${esc(dayLabel(b.date, now))}</b><small>${hourLabel(b.time)}</small></span>
-        <span class="tu-what"><b>${esc(c?.name || 'Asesoría')}</b><small>${esc(titles.join(' · '))}${b.note ? `${titles.length ? ' · ' : ''}«${esc(b.note)}»` : ''}</small>${b.ok ? `<small class="tu-ok">Confirmada</small>` : ''}${/^https:/.test(b.enlace || '') ? `<a class="tu-enlace" href="${esc(b.enlace)}" target="_blank" rel="noopener">Entrar a la reunión</a>` : ''}</span>
-        <span class="tu-acts"><button class="tu-cancel" data-cancel="${esc(b.id)}" aria-label="Cancelar la asesoría de ${esc(c?.name || 'la materia')}">Cancelar</button></span>
-      </div>`;
-    }).join('')}</section>` : ''}${dkTutoriasHTML(mine)}</aside>
-    <section class="tu-pick">
-      ${courses.length ? '<h2>¿En qué materia quieres reforzar?</h2>' : ''}
-      <p class="tu-nextfree"${courses.length ? '' : ' hidden'}>${ICON.calendar}<span>${full ? `Ya tienes ${TUTORIAS.max} asesorías pendientes. Cancela una para separar otra.`
-        : nx ? `Próximo cupo: <b>${esc(dayLabel(nx.date, now))} · ${hourLabel(nx.time)}</b>` : 'No quedan cupos esta semana.'}</span></p>
-      ${courses.length ? '' : `<div class="m-empty tu-vacio">${mascotSVG('think')}<p>Las asesorías son de los cursos que tienes comprados. Compra uno y sepáralas aquí.</p><button class="btn brand" type="button" data-cursos>Ver los cursos</button></div>`}
-      <div class="course-list">${courses.map(c => `<button class="course-row tu-course" data-book="${c.id}" style="--c:${c.color}"${full || !nx ? ' disabled' : ''}>
-        ${courseArt(c, 'lg')}
-        <span class="cr-body"><b>${esc(c.name)}</b><small>${c.units.length} ${c.units.length === 1 ? 'unidad' : 'unidades'} · ${lessonsOf(c).length} temas</small></span>
-        ${ICON.right}</button>`).join('')}</div>
-    </section>
-    ${tuServidor() || tutoriaLink('x') ? '' : '<p class="tu-note">Por ahora la asesoría se guarda solo en este dispositivo.</p>'}
-  </div>`;
+  if (tuDe !== tuUid()) { tuB = tuNuevo(); tuDe = tuUid(); }
+  // Un repintado desde afuera (vuelve a la app, llega el pago) no mueve la página ni quita el foco de la nota.
+  const nota = $('#tu-nota', view), sel = nota && document.activeElement === nota ? [nota.selectionStart, nota.selectionEnd] : null, y = $('.tu', view) ? view.scrollTop : 0;
+  const courses = tuCursos(), srv = tuServidor();
+  if (!courses.some(c => c.id === tuB.c)) { if (courses[0]) tuElige(courses[0]); else tuB.c = ''; }
+  const fichas = (n, t) => `<span class="tu-saldo"><span aria-hidden="true">${Array.from({ length: Math.min(8, n) }, () => ICON.clock).join('')}</span><b>${n}</b> ${t}</span>`;
+  view.innerHTML = `<div class="tutorias"><div class="tu">
+    <header class="tu-head"><div><h1>Tutorías</h1><p class="muted">Una hora con un profe, en vivo, sobre lo que más te cuesta.</p></div>
+      ${srv && (courses.length || Tienda.saldo.general + Tienda.saldo.universidad) ? `<div class="tu-horas">${fichas(Tienda.saldo.general, Tienda.saldo.general === 1 ? 'hora general' : 'horas generales')}${Tienda.saldo.universidad ? fichas(Tienda.saldo.universidad, 'de universidad') : ''}<button class="btn sm ghost" type="button" data-horas>Comprar horas</button></div>` : ''}</header>
+    ${tuProximaHTML(mine, now)}
+    ${courses.length ? `<section class="tu-arma" aria-label="Arma tu clase"><h2 class="tu-t">${mine.length ? 'Arma otra clase' : 'Arma tu clase'}</h2><div class="tu-cols"><div class="tu-pasos"></div><aside class="tu-boleto" aria-label="Tu boleto"></aside></div></section>`
+    : `<div class="m-empty tu-vacio">${mascotSVG('think')}<p>Las asesorías son de los cursos que tienes comprados. Compra uno y sepáralas aquí.</p><button class="btn brand" type="button" data-cursos>Ver los cursos</button></div>`}
+    ${srv || tutoriaLink('x') ? '' : '<p class="tu-note">Por ahora la asesoría se guarda solo en este dispositivo.</p>'}
+  </div></div>`;
   $('[data-cursos]', view)?.addEventListener('click', () => openTienda('cursos'));
   $('[data-horas]', view)?.addEventListener('click', () => openTienda('asesorias'));
-  view.querySelectorAll('[data-book]').forEach(b => b.onclick = () => openBooking(tuCourse(b.dataset.book)));
-  view.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => {
-    const bk = S.tutorias.find(x => x.id === b.dataset.cancel);
-    if (!bk) return renderTutorias();
-    if (bk.id.startsWith('srv-') && !tuServidor()) return toast('Necesitas conexión para cancelarla.');
-    ask({ title: '¿Cancelar esta asesoría?', text: `${tuCourse(bk.course)?.name || 'Asesoría'}: ${dayLabel(bk.date, Date.now())}, ${hourLabel(bk.time)} ${!tuServidor() ? 'Puedes separar otra cuando quieras.' : tuStart(bk) - Date.now() >= 12 * 3600000 ? 'La hora vuelve a tu saldo.' : 'Faltan menos de 12 horas: la hora no vuelve a tu saldo.'}`, ok: 'Sí, cancelar', cancel: 'Conservarla', danger: true })
-      .then(async yes => {
-        if (yes && tuServidor()) {
-          const r = await Cuenta.sb.rpc('cancelar_asesoria', { p_id: Number(bk.id.slice(4)) }).then(x => x, x => ({ error: x }));
-          if (r.error) return toast('No se pudo cancelar. Revisa tu conexión.');
-          await Promise.all([asesoriasCarga(), tiendaMios()]); if (tab === 'tutorias') renderTutorias();
-          return toast(r.data && r.data.vuelve ? 'Cancelada: la hora volvió a tu saldo.' : 'Asesoría cancelada.');
-        }
-        if (yes) { S.tutorias = cancelTutoria(S.tutorias, bk.id); save(); if (tab === 'tutorias') renderTutorias(); toast('Asesoría cancelada.'); }
-      });
-  });
+  clearInterval(tuReloj);
+  const reloj = $('.tp-reloj', view);
+  if (reloj) { tuRelojPinta(reloj); tuReloj = setInterval(() => (reloj.isConnected ? tuRelojPinta(reloj) : clearInterval(tuReloj)), 15000); }
+  view.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => tuCancela(b.dataset.cancel));
+  if (courses.length) tuPinta(courses);
+  view.scrollTop = y;
+  if (sel && $('#tu-nota', view)) { $('#tu-nota', view).focus({ preventScroll: true }); $('#tu-nota', view).setSelectionRange(...sel); }
 }
-
-// Hoja para separar: temas → día → hora → nota → confirmar. Al confirmar, la misma hoja dice qué quedó.
-function openBooking(c) {
+function tuCancela(id) {
+  const bk = S.tutorias.find(x => x.id === id);
+  if (!bk) return renderTutorias();
+  if (tuServidor() && !bk.id.startsWith('srv-')) return asesoriasCarga().catch(() => false).then(ok => { if (tab === 'tutorias') renderTutorias(); toast(ok ? 'Listo: ya puedes cancelarla.' : 'No se pudo cargar. Revisa tu conexión.'); });
+  if (bk.id.startsWith('srv-') && !tuServidor()) return toast('Necesitas conexión para cancelarla.');
+  ask({ title: '¿Cancelar esta asesoría?', text: `${tuCourse(bk.course)?.name || 'Asesoría'}: ${dayLabel(bk.date, Date.now())}, ${hourLabel(bk.time)}. ${!tuServidor() ? 'Puedes separar otra cuando quieras.' : tuStart(bk) - Date.now() >= 12 * 3600000 ? 'La hora vuelve a tu saldo.' : 'Faltan menos de 12 horas: la hora no vuelve a tu saldo.'}`, ok: 'Sí, cancelar', cancel: 'Conservarla', danger: true })
+    .then(async yes => {
+      if (!yes) return;
+      if (tuB.hecha?.id === bk.id || tuB.hecha?.date === bk.date && tuB.hecha?.time === bk.time) tuB.hecha = null;
+      if (tuServidor()) {
+        const r = await Cuenta.sb.rpc('cancelar_asesoria', { p_id: Number(bk.id.slice(4)) }).then(x => x, x => ({ error: x }));
+        if (r.error) return toast('No se pudo cancelar. Revisa tu conexión.');
+        await Promise.all([asesoriasCarga(), tiendaMios()]); if (tab === 'tutorias') renderTutorias();
+        return toast(r.data && r.data.vuelve ? 'Cancelada: la hora volvió a tu saldo.' : 'Asesoría cancelada.');
+      }
+      S.tutorias = cancelTutoria(S.tutorias, bk.id); save(); if (tab === 'tutorias') renderTutorias(); toast('Asesoría cancelada.');
+    });
+}
+// Los tres pasos y el boleto. Cambiar algo redibuja solo lo suyo.
+function tuPinta(courses) {
+  const pasos = $('.tu-pasos', view), boleto = $('.tu-boleto', view), now = Date.now(), days = tutoriaDays(now, S.tutorias), R = tuRejilla(days);
+  const lleno = activeTutorias(S.tutorias, now).length >= TUTORIAS.max, c = () => tuCourse(tuB.c);
+  const dia = () => days.find(d => d.date === tuB.date), sigue = () => dia()?.slots.some(s => s.time === tuB.time && s.free);
+  if (!tuB.hecha && tuB.time && !sigue()) { tuB.date = tuB.time = null; }
+  const hayCupo = R.dias.some(d => d.slots.some(s => s.free));
+  pasos.innerHTML = `<section class="tu-paso"><h3><i>1</i>La materia</h3><div class="tu-materias" role="radiogroup" aria-label="Materia">${courses.map(x => `<button type="button" class="tu-mat" role="radio" data-mat="${x.id}" style="--c:${x.color}">${courseArt(x, 'lg')}<b>${esc(x.name)}</b></button>`).join('')}</div></section>
+    <section class="tu-paso"><h3><i>2</i>El día y la hora<small>${tuHuso().slice(3)}</small></h3>${lleno ? `<p class="tu-aviso">Ya tienes ${TUTORIAS.max} asesorías pendientes. Cancela una para separar otra.</p>` : !hayCupo ? '<p class="tu-aviso">No quedan cupos esta semana.</p>' : `<div class="tu-ficha-fila"><span class="tu-ficha" aria-hidden="true"></span><p>Toca una casilla, o arrastra la ficha hasta la hora que te sirva.</p></div>
+      <div class="tu-semana" role="group" aria-label="Horas de la semana" style="--n:${R.dias.length}"><span></span>${R.dias.map(d => { const x = tuDate(d.date), l = dayLabel(d.date, now); return `<span class="ts-dia${l === 'Hoy' ? ' hoy' : ''}"><small>${l === 'Hoy' ? 'hoy' : TU_DOW[x.getDay()]}</small><b>${x.getDate()}</b></span>`; }).join('')}
+      ${R.filas.map(t => `<span class="ts-hora">${hourLabel(t).replace(':00', '').replace('a. m.', 'am').replace('p. m.', 'pm')}</span>${R.dias.map(d => { const e = R.celda(d, t); return e === 'libre' ? `<button type="button" class="ts-c" data-d="${d.date}" data-t="${t}" aria-label="${esc(dayLabel(d.date, now))}, ${hourLabel(t)}"></button>` : `<span class="ts-c ${e}"${e ? ` title="Ya tienes una asesoría a esa hora"` : ''}></span>`; }).join('')}`).join('')}</div>`}</section>
+    <section class="tu-paso"><h3><i>3</i>Los temas<small class="tu-cuenta"></small></h3><div class="tu-unis" role="group" aria-label="Mundo"></div><div class="tu-lecs" role="group" aria-label="Temas"></div>
+      <label class="tu-nota" for="tu-nota">¿Algo más que deba saber el profe? (opcional)</label><textarea id="tu-nota" class="ag-topic" rows="2" maxlength="140" placeholder="Ej.: tengo parcial el viernes y me enredo con los signos">${esc(tuB.note)}</textarea></section>`;
+  const q = s => $(s, pasos), qa = s => [...pasos.querySelectorAll(s)];
+  const pintaMat = () => { qa('[data-mat]').forEach(b => { const on = b.dataset.mat === tuB.c; b.setAttribute('aria-checked', on); b.tabIndex = on ? 0 : -1; }); $('.tu-arma', view).style.setProperty('--c', c().color); const f = q('.tu-ficha'); if (f) f.innerHTML = courseArt(c(), 'md'); };
+  const pintaHora = () => qa('button.ts-c').forEach(b => { const on = !tuB.hecha && b.dataset.d === tuB.date && b.dataset.t === tuB.time; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); b.innerHTML = on ? courseArt(c(), 'md') : ''; });
+  const pintaTemas = () => {
+    const us = c().units, x = q('.tu-unis').scrollLeft, lleno4 = tuB.topics.length >= TUTORIAS.maxTopics;
+    q('.tu-unis').innerHTML = us.map((u, i) => { const w = WORLDS[u.world] || { name: u.title }, n = u.lessons.filter(l => tuB.topics.includes(l.id)).length; return `<button type="button" class="tu-uni" data-uni="${i}" aria-pressed="${i === tuB.unit}" style="--c:${c().color}"><span class="world-art" aria-hidden="true">${w.art || ''}</span><span>${esc(w.name)}</span>${n ? `<b>${n}<span class="tu-sr"> elegidos</span></b>` : ''}</button>`; }).join('');
+    q('.tu-unis').scrollLeft = x;
+    q('.tu-lecs').innerHTML = us[tuB.unit].lessons.map(l => { const on = tuB.topics.includes(l.id); return `<button type="button" class="tu-lec" data-lec="${l.id}" aria-pressed="${on}"${!on && lleno4 ? ' disabled' : ''}><i>${on ? ICON.check : ''}</i><span>${esc(l.title)}</span></button>`; }).join('');
+    q('.tu-cuenta').textContent = `${tuB.topics.length} de ${TUTORIAS.maxTopics}`;
+  };
+  const pintaBoleto = (nuevo = '') => {
+    if (tuOcupado) { if (!boleto.firstChild) boleto.innerHTML = '<p role="status">Separando tu asesoría…</p>'; return; }   // el boleto no cambia
+    const h = tuB.hecha, b = h || tuB, x = h ? tuCourse(h.course) : c(), sin = tuServidor() && !h && tuSaldo(x.id) < 1, ts = h ? tuTitles(h) : tuB.topics.map(id => findLesson(id)?.l.title || '');
+    const fecha = b.date && b.time, falta = lleno ? 'Ya tienes el máximo de asesorías.' : sin ? 'No te quedan horas para esta materia.' : !fecha ? 'Elige el día y la hora.' : !tuB.topics.length ? 'Elige al menos un tema.' : '';
+    boleto.style.setProperty('--c', x.color); boleto.classList.toggle('listo', !h && !falta); boleto.classList.toggle('hecha', !!h);
+    boleto.innerHTML = `<div class="tb-cab">${courseArt(x, 'lg')}<div><small>Asesoría virtual · ${b.mins || TUTORIAS.mins} min</small><b>${esc(x.name)}</b></div></div>
+      <div class="tb-corte" aria-hidden="true"></div>
+      <dl><div class="${nuevo === 'hora' ? 'pop' : ''}"><dt>Cuándo</dt><dd>${fecha ? `<b>${esc(dayLabel(b.date, now))}</b>, ${hourLabel(b.time)}` : '<i>Por elegir</i>'}</dd></div></dl>
+      <ul class="tb-temas" aria-label="Temas">${Array.from({ length: h ? ts.length : TUTORIAS.maxTopics }, (_, i) => (ts[i] ? `<li class="${nuevo === 'tema' && i === ts.length - 1 ? 'pop' : ''}"><span>${esc(ts[i])}</span>${h ? '' : `<button type="button" data-quita="${esc(tuB.topics[i])}" aria-label="Quitar ${esc(ts[i])}">${ICON.x}</button>`}</li>` : `<li class="hueco"><span>${i ? '' : 'Tu primer tema'}</span></li>`)).join('')}</ul>
+      ${h ? `<span class="tb-sello" aria-hidden="true">Separada</span><div class="tb-pie" role="status"><p><b class="tu-fin" tabindex="-1">¡Asesoría separada!</b> ${h.wa ? 'Avísale a coordinación por WhatsApp para confirmar tu cupo y recibir el enlace.' : h.srv ? 'Te confirmamos y te enviamos el enlace. Lo verás arriba.' : 'Quedó guardada en este dispositivo. Todavía no le avisa a ningún tutor.'}</p>
+        ${h.wa ? `<a class="btn brand" href="${esc(h.wa)}" target="_blank" rel="noopener">Avisar por WhatsApp</a>` : ''}<button class="btn ghost" type="button" data-otra>Armar otra</button></div>`
+        : `<div class="tb-pie"><p role="status">${falta || 'Todo listo.'}</p>${sin ? '<button class="btn brand" type="button" data-horas2>Comprar horas</button>' : `<button class="btn brand" type="button" data-ok${falta ? ' disabled' : ''}>Separar asesoría</button>`}</div>`}`;
+    const z = s => $(s, boleto);
+    boleto.querySelectorAll('[data-quita]').forEach(k => { k.onclick = () => { if (tuOcupado) return; tuB.topics = toggleTopic(tuB.topics, k.dataset.quita); pintaTemas(); pintaBoleto(); (z('[data-quita]') || q('.tu-lec:not(:disabled)'))?.focus({ preventScroll: true }); }; });
+    if (z('[data-ok]')) z('[data-ok]').onclick = () => tuSepara();
+    if (z('[data-horas2]')) z('[data-horas2]').onclick = () => openTienda('asesorias');
+    if (z('[data-otra]')) z('[data-otra]').onclick = () => { tuB = { ...tuB, hecha: null, topics: [], date: null, time: null, note: '' }; renderTutorias(); $('.tu-mat[aria-checked="true"]', view)?.focus({ preventScroll: true }); };
+  };
+  const limpia = () => { if (tuB.hecha) tuB.hecha = null; };
+  const mat = id => { if (tuOcupado) return; tuElige(tuCourse(id)); pintaMat(); pintaHora(); pintaTemas(); pintaBoleto(); q('.tu-unis').scrollLeft = Math.max(0, (q('.tu-uni[aria-pressed="true"]')?.offsetLeft || 0) - q('.tu-unis').offsetLeft - 16); };
+  const hora = (d, t) => { if (tuOcupado) return; limpia(); tuB.date = d; tuB.time = t; pintaHora(); pintaBoleto('hora'); };
+  pasos.onclick = e => {
+    const b = e.target.closest('button'); if (!b || b.disabled || tuOcupado) return;
+    const d = b.dataset;
+    if (d.mat) return mat(d.mat);
+    if (d.t) return hora(d.d, d.t);
+    if (d.uni) { tuB.unit = +d.uni; pintaTemas(); return q(`[data-uni="${d.uni}"]`).focus({ preventScroll: true }); }
+    if (d.lec) { limpia(); const n = tuB.topics.length; tuB.topics = toggleTopic(tuB.topics, d.lec); pintaTemas(); pintaBoleto(tuB.topics.length > n ? 'tema' : ''); q(`[data-lec="${d.lec}"]`)?.focus({ preventScroll: true }); }
+  };
+  q('.tu-materias').onkeydown = e => { const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key]; if (!k) return; e.preventDefault(); const i = (courses.findIndex(x => x.id === tuB.c) + k + courses.length) % courses.length; mat(courses[i].id); q(`[data-mat="${courses[i].id}"]`).focus({ preventScroll: true }); };
+  // La semana con flechas: se salta a la casilla libre más cercana en esa dirección.
+  const sem = q('.tu-semana');
+  if (sem) sem.onkeydown = e => {
+    const k = { ArrowRight: [1, 0], ArrowLeft: [-1, 0], ArrowDown: [0, 1], ArrowUp: [0, -1] }[e.key], b = e.target.closest('button.ts-c'); if (!k || !b) return;
+    e.preventDefault(); let x = R.dias.findIndex(d => d.date === b.dataset.d), y = R.filas.indexOf(b.dataset.t);
+    for (let n = 0; n < 12; n++) { x += k[0]; y += k[1]; if (x < 0 || y < 0 || x >= R.dias.length || y >= R.filas.length) return; const o = q(`button.ts-c[data-d="${R.dias[x].date}"][data-t="${R.filas[y]}"]`); if (o) return o.focus(); }
+  };
+  $('#tu-nota', pasos).oninput = e => { tuB.note = e.target.value; };
+  // La ficha se arrastra a una casilla.
+  const f = q('.tu-ficha');
+  if (f) {
+    let id = null, cop = null, sobre = null;
+    const marca = o => { if (sobre === o) return; sobre?.classList.remove('sobre'); sobre = o; sobre?.classList.add('sobre'); };
+    const fin = e => { if (e.pointerId !== id) return; id = null; cop?.remove(); cop = null; f.classList.remove('fuera'); sem.classList.remove('espera'); const o = e.type === 'pointerup' ? sobre : null; marca(null); if (o) hora(o.dataset.d, o.dataset.t); };
+    f.onpointerdown = e => { if (e.button) return; id = e.pointerId; f.setPointerCapture(id); cop = f.cloneNode(true); cop.classList.add('vuela'); document.body.append(cop); f.classList.add('fuera'); sem.classList.add('espera'); f.onpointermove(e); };
+    f.onpointermove = e => { if (e.pointerId !== id || !cop) return; if (!f.isConnected) { cop.remove(); cop = null; id = null; return; } cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; marca(document.elementFromPoint(e.clientX, e.clientY)?.closest('button.ts-c') || null); };
+    f.onpointerup = fin; f.onpointercancel = fin; f.onlostpointercapture = fin;
+    f.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+  }
+  document.querySelectorAll('body > .tu-ficha').forEach(x => x.remove());
+  pintaMat(); pintaHora(); pintaTemas(); pintaBoleto();
+  q('.tu-unis').scrollLeft = Math.max(0, (q('.tu-uni[aria-pressed="true"]')?.offsetLeft || 0) - q('.tu-unis').offsetLeft - 16);
+}
+async function tuSepara() {
+  const c = tuCourse(tuB.c), ok = $('.tu-boleto [data-ok]', view), n = Date.now();
+  if (!c || !ok || ok.disabled || tuOcupado) return;
   if (!cursoComprado(c, true)) return toast(TU_ERRORS.curso);
   if (typeof planMotivo === 'function' && planMotivo('tutorias')) return openBloqueo('tutorias');   // tutorías: con horas en el saldo
-  if (tuServidor() && tuSaldo(c.id) < 1) { toast(TU_ERRORS.saldo); return openTienda('asesorias'); }
-  const now = Date.now(), days = tutoriaDays(now, S.tutorias);
-  let date = days.find(d => d.slots.some(s => s.free))?.date || null, time = null, topics = [];
-  // Arranca en la unidad donde va el estudiante (la de su primera lección sin terminar).
-  let unit = Math.max(0, c.units.findIndex(u => u.lessons.some(l => !S.done[l.id])));
-  openSheet(`<div class="ag" style="--c:${c.color}">
-    <div class="ag-head">${courseArt(c, 'lg')}<div><h3>${esc(c.name)}</h3><p class="muted">Asesoría virtual · ${TUTORIAS.mins} min${new Date().getTimezoneOffset() === 300 ? '' : ' · hora de Colombia'}</p></div></div>
-    <h4 id="ag-l1"><i>1</i>¿Qué temas quieres reforzar? <span class="ag-count"></span></h4>
-    ${c.units.length > 1 ? `<div class="ag-units" role="group" aria-label="Unidad">${c.units.map((u, i) =>
-      `<button class="tu-chip" data-unit="${i}">${esc(u.title)}</button>`).join('')}</div>` : ''}
-    <div class="ag-topics" role="group" aria-labelledby="ag-l1"></div>
-    <h4 id="ag-l2"><i>2</i>Elige el día</h4>
-    <div class="ag-days" role="group" aria-labelledby="ag-l2">${days.map(d => {
-      const dt = tuDate(d.date), open = d.slots.some(s => s.free);
-      return `<button class="ag-day" data-day="${d.date}"${open ? '' : ' disabled'} aria-label="${TU_DOW[dt.getDay()]} ${dt.getDate()}, ${esc(dayLabel(d.date, now))}${open ? '' : ', sin cupos'}">
-        <small>${TU_DOW[dt.getDay()]}</small><b>${dt.getDate()}</b></button>`;
-    }).join('')}</div>
-    <h4 id="ag-l3"><i>3</i>Elige la hora <span class="ag-daytxt"></span></h4>
-    <div class="ag-slots" role="group" aria-labelledby="ag-l3"></div>
-    <h4><i>4</i><label for="ag-note">¿Algo más? (opcional)</label></h4>
-    <textarea id="ag-note" class="ag-topic" rows="2" maxlength="140" placeholder="Ej.: tengo parcial el viernes y me enredo con los signos"></textarea>
-    <div class="ag-foot"><p class="ag-sum" role="status"></p>
-      <button class="btn brand" data-ok disabled>Separar asesoría</button></div>
-  </div>`, sh => {
-    const q = s => sh.querySelector(s), qa = s => sh.querySelectorAll(s);
-    const press = (b, on) => { b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); };
-    const paint = () => {
-      qa('[data-unit]').forEach(b => {
-        const i = +b.dataset.unit, n = c.units[i].lessons.filter(l => topics.includes(l.id)).length;
-        press(b, i === unit);
-        b.textContent = c.units[i].title + (n ? ` (${n})` : '');
-      });
-      const fullT = topics.length >= TUTORIAS.maxTopics;
-      q('.ag-topics').innerHTML = c.units[unit].lessons.map(l => {
-        const on = topics.includes(l.id);
-        return `<button class="ag-topic-chip${on ? ' on' : ''}" data-topic="${l.id}" aria-pressed="${on}"${!on && fullT ? ' disabled' : ''}>${on ? ICON.check : ''}<span>${esc(l.title)}</span></button>`;
-      }).join('');
-      qa('[data-topic]').forEach(b => b.onclick = () => { topics = toggleTopic(topics, b.dataset.topic); paint(); q(`[data-topic="${b.dataset.topic}"]`)?.focus({ preventScroll: true }); });
-      q('.ag-count').textContent = topics.length ? `· ${topics.length} de ${TUTORIAS.maxTopics}` : `· hasta ${TUTORIAS.maxTopics}`;
-      qa('.ag-day').forEach(b => press(b, b.dataset.day === date));
-      q('.ag-daytxt').textContent = date ? `· ${dayLabel(date, now)}` : '';
-      q('.ag-slots').innerHTML = (days.find(d => d.date === date)?.slots || []).map(s =>
-        `<button class="ag-slot${s.time === time ? ' on' : ''}" data-time="${s.time}" aria-pressed="${s.time === time}"${s.free ? '' : ' disabled title="Ya tienes una asesoría a esa hora"'}>${hourLabel(s.time)}</button>`).join('');
-      qa('.ag-slot').forEach(b => b.onclick = () => { time = b.dataset.time; paint(); q(`[data-time="${time}"]`)?.focus({ preventScroll: true }); });
-      q('.ag-sum').textContent = !topics.length ? 'Elige al menos un tema.' : !time ? 'Elige una hora para continuar.'
-        : `${dayLabel(date, now)}, ${hourLabel(time)} · ${topics.length} ${topics.length === 1 ? 'tema' : 'temas'} de ${c.name}`;
-      q('[data-ok]').disabled = !time || !topics.length;
-    };
-    qa('[data-unit]').forEach(b => b.onclick = () => { unit = +b.dataset.unit; paint(); });
-    qa('.ag-day').forEach(b => b.onclick = () => { date = b.dataset.day; time = null; paint(); });
-    q('[data-ok]').onclick = async () => {
-      const n = Date.now(), r = bookTutoria(S.tutorias, { course: c.id, topics, date, time, note: q('#ag-note').value }, n, tutoriaCatalog(COURSES));
-      if (!r.ok) { toast(TU_ERRORS[r.error] || TU_ERRORS.slot); if (r.error === 'slot' || r.error === 'busy') { closeSheet(); renderTutorias(); } return; }
-      const srv = tuServidor(), ok = q('[data-ok]');
-      if (srv) {
-        if (ok.disabled) return;
-        ok.disabled = true; ok.textContent = 'Un momento…';
-        const x = await Cuenta.sb.rpc('separar_asesoria', { p: { curso: c.id, temas: topics, fecha: date, hora: time, nota: q('#ag-note').value } }).then(y => y, y => ({ error: y }));
-        await Promise.all([asesoriasCarga().catch(() => {}), tiendaMios().catch(() => {})]);
-        if (!q('.ag')) return;
-        if (x.error) { ok.disabled = false; ok.textContent = 'Separar asesoría'; return toast(TU_ERRORS[x.error.message] || 'No se pudo separar. Revisa tu conexión.'); }
-      } else { S.tutorias = r.list; save(); }
-      const b = r.booking, titles = tuTitles(b), wa = tutoriaLink(tutoriaText(b, S.name, c.name, titles, n), (typeof Cuenta !== 'undefined' && Cuenta.ajustes.whatsapp) || TUTORIAS.whatsapp);
-      q('.ag').innerHTML = `<div class="ag-done">${ICON.check}</div>
-        <h3 class="ag-done-title" tabindex="-1">¡Asesoría separada!</h3>
-        <div class="ag-done-when"><b>${esc(dayLabel(b.date, n))}, ${hourLabel(b.time)}</b><span>${esc(c.name)} · ${b.mins} min</span>
-          <ul>${titles.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
-        <p class="muted ag-done-next">${wa ? 'Avísale a coordinación por WhatsApp para confirmar tu cupo y recibir el enlace.'
-          : srv ? 'Te confirmamos y te enviamos el enlace. Lo verás en «Tus asesorías».' : 'Quedó guardada en este dispositivo, en «Tus asesorías». Todavía no le avisa a ningún tutor.'}</p>
-        ${wa ? `<a class="btn brand" href="${esc(wa)}" target="_blank" rel="noopener">Avisar por WhatsApp</a>` : ''}
-        <button class="btn ${wa ? 'ghost' : 'brand'}" data-close>Listo</button>`;
-      q('[data-close]').onclick = closeSheet;
-      q('.ag-done-title').focus({ preventScroll: true });
-      if (tab === 'tutorias') renderTutorias();
-    };
-    paint();
-    // La unidad elegida queda a la vista en la fila de unidades (se desplaza de lado).
-    const u0 = q('[data-unit].on');
-    if (u0) u0.parentNode.scrollLeft = u0.offsetLeft - 18;
-  });
+  const req = { course: c.id, topics: tuB.topics, date: tuB.date, time: tuB.time, note: tuB.note }, r = bookTutoria(S.tutorias, req, n, tutoriaCatalog(COURSES));
+  if (!r.ok) { toast(TU_ERRORS[r.error] || TU_ERRORS.slot); if (r.error === 'slot' || r.error === 'busy') { tuB.date = tuB.time = null; } return renderTutorias(); }
+  const srv = tuServidor(), uid = tuUid();
+  if (srv) {
+    tuOcupado = true; ok.disabled = true; ok.textContent = 'Un momento…';
+    const x = await Cuenta.sb.rpc('separar_asesoria', { p: { curso: req.course, temas: req.topics, fecha: req.date, hora: req.time, nota: req.note } }).then(y => y, y => ({ error: y }));
+    const [cargo] = await Promise.all([asesoriasCarga().catch(() => false), tiendaMios().catch(() => {})]);
+    tuOcupado = false;
+    if (uid !== tuUid()) { if (tab === 'tutorias') renderTutorias(); return; }   // cambió de cuenta mientras tanto
+    // Se separó pero no se pudo recargar: queda a la vista hasta la próxima carga.
+    if (!x.error && cargo !== true) { S.tutorias = r.list; save(); }
+    if (x.error) { toast(TU_ERRORS[x.error.message] || 'No se pudo separar. Revisa tu conexión.'); if (tab === 'tutorias') renderTutorias(); return; }
+  } else { S.tutorias = r.list; save(); }
+  const b = r.booking, wa = tutoriaLink(tutoriaText(b, S.name, c.name, tuTitles(b), n), (typeof Cuenta !== 'undefined' && Cuenta.ajustes.whatsapp) || TUTORIAS.whatsapp);
+  tuB = { ...tuB, hecha: { ...b, wa, srv }, topics: [], date: null, time: null, note: '' };
+  if (tab !== 'tutorias') return;
+  const y = view.scrollTop; renderTutorias(); view.scrollTop = y;
+  $('.tu-fin', view)?.focus(); $('.tu-boleto', view)?.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 }
 ;
 //#archivo js/conceptos.js
@@ -16792,13 +16847,6 @@ function dkAsesoriaHTML() {
     <p class="dk-note">${ICON.calendar}<span>${b ? `<b>${esc(dayLabel(b.date, now))}, ${hourLabel(b.time)}</b><br>${esc(tuCourse(b.course)?.name || 'Asesoría')}`
       : nx ? `Próximo cupo: <b>${esc(dayLabel(nx.date, now))}, ${hourLabel(nx.time)}</b>` : 'No quedan cupos esta semana.'}</span></p>
     <button class="btn ghost" type="button" data-dk="tutorias">${b ? 'Ver mis asesorías' : 'Separar asesoría'}</button></section>`;
-}
-// Tutorías: los próximos días con cupo y los pasos para separar una.
-function dkTutoriasHTML(mine) {
-  const now = Date.now(), days = tutoriaDays(now, mine).map(d => ({ date: d.date, n: d.slots.filter(s => s.free).length })).filter(d => d.n).slice(0, 5);
-  return `${mine.length ? '' : `<section class="dk dk-card"><h2>Tus asesorías</h2><p class="dk-sub">Aún no tienes ninguna. Cuando separes una, aquí verás el día, la hora y los temas.</p></section>`}
-    ${days.length && mine.length < TUTORIAS.max ? `<section class="dk dk-card"><h2>Próximos cupos</h2><ul class="dk-days">${days.map(d => `<li><b>${esc(dayLabel(d.date, now))}</b><span>${d.n} ${d.n === 1 ? 'hora' : 'horas'}</span></li>`).join('')}</ul></section>` : ''}
-    <section class="dk dk-card"><h2>Cómo funciona</h2><ol class="dk-steps"><li>Elige la materia y hasta ${TUTORIAS.maxTopics} temas.</li><li>Elige el día y la hora.</li><li>Cuenta qué te cuesta más, si quieres.</li></ol></section>`;
 }
 // Mis cursos: avance de un curso por componente o por mundos, dentro de su tarjeta.
 function dkCursoHTML(c) {

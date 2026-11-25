@@ -28,7 +28,7 @@ test('solo cambia desde 1000 px: el celular queda igual', () => {
   const css = read('css/escritorio.css');
   const fuera = css.replace(/@media \(min-width: 1000px\)[^]*$/, '');
   assert.match(fuera, /^[^{]*\.tb-logo-d, \.tb-admin, \.ls-sides, \.xp-riel, \.dk \{ display: none; \}/m);
-  assert.doesNotMatch(fuera.replace(/\.tb-logo-d, \.tb-admin, \.ls-sides, \.xp-riel, \.dk \{ display: none; \}/, '').replace('.tb-pie, .home-side, .tu-side, .pf-side, .pf-main, .cv-side, .cv-main { display: contents; }', ''), /\{/, 'fuera del bloque de escritorio no hay más reglas');
+  assert.doesNotMatch(fuera.replace(/\.tb-logo-d, \.tb-admin, \.ls-sides, \.xp-riel, \.dk \{ display: none; \}/, '').replace('.tb-pie, .home-side, .pf-side, .pf-main, .cv-side, .cv-main { display: contents; }', ''), /\{/, 'fuera del bloque de escritorio no hay más reglas');
   assert.match(read('js/escritorio.js'), /const ESCRITORIO_MIN = 1000;/);
 });
 
@@ -125,7 +125,6 @@ test('el avance va por componente o, sin componentes, por mundos completos', () 
 test('Inicio, Mis cursos, Tutorías y Tú llevan sus paneles de computador', () => {
   assert.match(read('js/inicio.js'), /dkSemanaHTML\(\)\}\$\{dkAsesoriaHTML\(\)/);
   assert.match(read('js/inicio.js'), /\$\{dkCursoHTML\(c\)\}/);
-  assert.match(read('js/tutorias.js'), /\$\{dkTutoriasHTML\(mine\)\}<\/aside>/);
   assert.match(read('js/app.js'), /\$\{dkMesHTML\(\)\}\$\{dkCursosHTML\(\)\}/);
 });
 
