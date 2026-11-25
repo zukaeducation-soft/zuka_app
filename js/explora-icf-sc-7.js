@@ -1,0 +1,96 @@
+// Preicfes · Sociales y Ciudadanas, mundo 7 «Historia del Mundo» (Explora, escena «hoja»).
+xpLec('icf-sc-mundo-1', [
+  ['Dos clases de revolución',
+    xpMira('hoja', 'Empecemos por la idea: unas revoluciones cambian **quién manda**; otra cambió **cómo se produce**.', { letras: ['1', '2', '3', '4'], paras: [['1776: trece colonias se independizan'], ['1789: Francia contra el poder absoluto'], ['1791–1804: Haití'], ['Inglaterra: vapor y fábricas']] }, [
+      ['Aquí se cambia de gobierno.', { luz: [0], nota: { 0: 'política' } }],
+      ['Aquí cae el poder absoluto.', { luz: [1], nota: { 1: 'política' } }],
+      ['Aquí se liberan los esclavizados.', { luz: [2], nota: { 2: 'política' } }],
+      ['Aquí cambia el trabajo.', { luz: [3], nota: { 3: 'industrial' } }],
+      ['Ocurrieron casi a la vez.', {}],
+    ], 'Políticas: quién manda. Industrial: cómo se produce.'),
+    xpHaz('hoja', 'Subraya la que cambió **cómo se produce**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['La de Haití'], ['La francesa'], ['La del vapor en Inglaterra']], pista: 'Busca máquinas.' }, 'El vapor movió telares, trenes y barcos.')],
+  ['¿Derechos para todos?',
+    xpMira('hoja', 'Segunda idea: la palabra era **«todos»**; la práctica, no.', { paras: [['«Todos nacen iguales»'], ['Mujeres: sin voto'], ['Indígenas: sin tierra'], ['Esclavizados: sin libertad'], ['Haití: los esclavizados lo toman en serio']] }, [
+      ['Así decían los papeles.', { luz: [0] }],
+      ['La mitad de la gente quedaba por fuera.', { luz: [1], nota: { 1: 'por fuera' } }],
+      ['Y otros pueblos también.', { luz: [2, 3], nota: { 2: 'por fuera', 3: 'por fuera' } }],
+      ['En Haití hicieron cumplir la palabra.', { luz: [4], nota: { 4: 'la cumplen' } }],
+      ['Pregunta siempre quién entra en «todos».', { luz: [0] }],
+    ], 'Compara lo que se proclama con quién queda por fuera.'),
+    xpHaz('hoja', 'Subraya por qué Haití preocupó a los dueños de esclavos.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Porque vendía azúcar'], ['Porque mostró que los esclavizados podían vencer'], ['Porque era una isla']], pista: '¿Qué podría repetirse en otras partes?' }, 'Era un ejemplo posible para los demás.')],
+  ['Fábricas y nuevas ideas',
+    xpMira('hoja', 'Tercera idea: la fábrica trajo **riqueza**, **obreros** y **nuevas ideas**.', { paras: [['Más productos y ciudades grandes'], ['Jornadas de doce horas, niños obreros'], ['Sindicatos y leyes'], ['Liberalismo y socialismo']] }, [
+      ['Se produce mucho más.', { luz: [0] }],
+      ['Pero quienes trabajan viven mal.', { luz: [1], nota: { 1: 'conflicto' } }],
+      ['Se organizan para pedir derechos.', { luz: [2], nota: { 2: 'respuesta' } }],
+      ['Y se discute cómo repartir.', { luz: [3], nota: { 3: 'ideas' } }],
+      ['El voto se amplía despacio.', {}],
+    ], 'Del conflicto salen sindicatos, leyes e ideas.'),
+    xpHaz('hoja', 'Pon al margen qué defendía cada idea.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['liberalismo', 'socialismo'], meta: [1, 0], paras: [['Que la riqueza se reparta'], ['Propiedad y libertades del individuo']], pista: 'Alguna no va ahí: ¿repartir o proteger al individuo?' }, 'Repartir, socialismo; individuo, liberalismo.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'En 1789 un panadero francés paga impuestos y un conde no. Subraya qué cuestionó la revolución.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Los privilegios de nacimiento'], ['El precio de los telares'], ['La esclavitud en Haití']], pista: '¿Por qué el conde no paga?' }, 'Los estamentos daban privilegios según el nacimiento.')],
+], 'Qué cambió, para quién y qué lucha quedó abierta.');
+
+xpLec('icf-sc-mundo-2', [
+  ['La chispa y la pólvora',
+    xpMira('hoja', 'Empecemos por la idea: en 1914 un disparo fue la **chispa**; la **pólvora** llevaba años.', { paras: [['Colonias y mercados en disputa'], ['Dos alianzas'], ['Nacionalismo y prestigio'], ['Sarajevo, 1914']] }, [
+      ['Las potencias competían por el mundo.', { luz: [0], nota: { 0: 'de fondo' } }],
+      ['Si una peleaba, arrastraba a las otras.', { luz: [1], nota: { 1: 'de fondo' } }],
+      ['Y cada una quería ser la primera.', { luz: [2], nota: { 2: 'de fondo' } }],
+      ['El atentado lo disparó todo.', { luz: [3], nota: { 3: 'detonante' } }],
+      ['Sin alianzas quizá habría sido un conflicto local.', { luz: [1] }],
+    ], 'Colonias, alianzas y nacionalismo; Sarajevo, la chispa.'),
+    xpHaz('hoja', 'Subraya lo que convirtió un atentado en una guerra de **muchos países**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['El arma usada'], ['El sistema de alianzas'], ['El mes de junio']], pista: '¿Qué obligaba a unos a entrar por otros?' }, 'Cada aliado arrastró a los demás.')],
+  ['De una guerra a otra',
+    xpMira('hoja', 'Segunda idea: la paz mal hecha y la **crisis** abonaron la segunda guerra.', { paras: [['1919: Versalles culpa a Alemania'], ['1929: crisis mundial'], ['1933: Hitler, por vías legales'], ['1939: invasión de Polonia'], ['Holocausto: unos seis millones de judíos']] }, [
+      ['Vienen pagos y humillación.', { luz: [0] }],
+      ['Después, desempleo y miedo.', { luz: [1] }],
+      ['Alguien ofrece orden y culpables.', { luz: [2], nota: { 2: 'acaba la democracia' } }],
+      ['Y empieza otra guerra.', { luz: [3] }],
+      ['El racismo se volvió política de Estado.', { luz: [4], nota: { 4: 'genocidio' } }],
+    ], 'Humillación, crisis, dictadura, guerra y genocidio.'),
+    xpHaz('hoja', 'Subraya lo que es **correcto** sobre la llegada de Hitler al poder.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Fue un golpe militar.'], ['Ocurrió antes de Versalles.'], ['Llegó por vías legales y luego acabó la democracia.']], pista: 'Las democracias también se pueden perder desde adentro.' }, 'Usó la ley para llegar y después la destruyó.')],
+  ['Una guerra fría… para ellas',
+    xpMira('hoja', 'Tercera idea: dos **bloques** no se atacan de frente y pelean en otros países.', { paras: [['1945: ONU; 1948: Derechos Humanos'], ['Estados Unidos, capitalista'], ['Unión Soviética, comunista'], ['Corea, Vietnam, Angola, Centroamérica'], ['1989: cae el Muro']] }, [
+      ['Después del horror, reglas para todos.', { luz: [0] }],
+      ['Pero los vencedores se dividen.', { luz: [1, 2] }],
+      ['Con bombas atómicas, pelear de frente sería el fin.', { luz: [1, 2], nota: { 1: 'no se atacan' } }],
+      ['La guerra ocurre en otras tierras.', { luz: [3], nota: { 3: 'muy caliente' } }],
+      ['El Muro cae y, dos años después, la Unión Soviética.', { luz: [4] }],
+    ], 'Fría entre potencias, caliente en otros países.'),
+    xpHaz('hoja', 'Subraya por qué las dos potencias **no** se atacaron directamente.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Podían destruirse mutuamente.'], ['Eran aliadas.'], ['Quedaban muy cerca.']], pista: 'Piensa en las armas que tenían.' }, 'El miedo a la destrucción las frenó.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'En 1973 un militar derroca a un presidente elegido y dice: «Evité el comunismo». Subraya el contexto que lo explica.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['La Primera Guerra Mundial'], ['La Guerra Fría en América Latina'], ['La Revolución Industrial']], pista: 'Mira la fecha y la palabra que usa para justificarse.' }, 'El miedo al comunismo justificó golpes.')],
+], 'Chispa y pólvora, crisis y dictadura, dos bloques.');
+
+xpLec('icf-sc-mundo-3', [
+  ['Dejar de ser colonia',
+    xpMira('hoja', 'Empecemos por la idea: en treinta años casi todas las **colonias** fueron países.', { paras: [['Europa, débil tras la guerra'], ['Pueblos que no esperan más'], ['India, 1947: sin violencia'], ['Argelia, 1962: con guerra']] }, [
+      ['Una causa: las potencias estaban débiles.', { luz: [0], nota: { 0: 'causa' } }],
+      ['Otra, más importante: la gente se organizó.', { luz: [1], nota: { 1: 'causa' } }],
+      ['Un camino: desobedecer sin violencia.', { luz: [2] }],
+      ['Otro camino fue la guerra.', { luz: [3] }],
+      ['Los dos tuvieron costos.', { luz: [2, 3] }],
+    ], 'Dos causas y dos caminos.'),
+    xpHaz('hoja', 'Subraya un ejemplo de **desobediencia civil** no violenta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Poner una bomba'], ['Fabricar sal aunque esté prohibido'], ['Cobrar un impuesto']], pista: 'Incumplir una norma injusta sin dañar a nadie.' }, 'Gandhi caminó hasta el mar para hacer sal.')],
+  ['Rayas y leyes',
+    xpMira('hoja', 'Segunda idea: quedaron **fronteras** ajenas y **leyes** que separaban.', { paras: [['Fronteras africanas trazadas en Europa'], ['Pueblos partidos, guerras después'], ['Sudáfrica: apartheid desde 1948'], ['1994: votan todos; Mandela, presidente']] }, [
+      ['Se trazaron con regla y sin preguntar.', { luz: [0] }],
+      ['Muchas guerras nacieron ahí.', { luz: [1], nota: { 1: 'herencia' } }],
+      ['El color decidía dónde vivir.', { luz: [2], nota: { 2: 'segregación' } }],
+      ['Se acabó tras una larga lucha.', { luz: [3], nota: { 3: 'cambio' } }],
+      ['Tener bandera no borra lo heredado.', { luz: [0, 1] }],
+    ], 'La independencia no borra las rayas ni las leyes.'),
+    xpHaz('hoja', 'Subraya lo que era el **apartheid**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Una alianza militar'], ['Un impuesto a la sal'], ['La separación por color hecha ley']], pista: 'Decidía dónde podía estar cada persona.' }, 'Era segregación legal.')],
+  ['Movimientos sociales',
+    xpMira('hoja', 'Tercera idea: un **movimiento social** es gente organizada para cambiar algo injusto.', { paras: [['No es un partido'], ['No es un ejército'], ['Marcha, boicot, huelga, arte, ley'], ['Casi nunca gana todo; a veces cambia lo posible']] }, [
+      ['No busca llegar a gobernar.', { luz: [0] }],
+      ['Ni usa las armas.', { luz: [1] }],
+      ['Estas son sus herramientas.', { luz: [2], nota: { 2: 'herramientas' } }],
+      ['Y así cambia leyes y costumbres.', { luz: [3] }],
+      ['Derechos civiles, mujeres, estudiantes, pueblos indígenas.', {}],
+    ], 'Organizarse, fuera de las instituciones, para cambiar algo.'),
+    xpHaz('hoja', 'Pon al margen la herramienta.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['huelga', 'boicot', 'ley'], meta: [1, 2, 0], paras: [['Nadie compra ese producto'], ['Se presenta un proyecto al Congreso'], ['Los trabajadores paran']], pista: 'Alguna no va ahí: ¿dejar de comprar, de trabajar o ir al Congreso?' }, 'Boicot, ley y huelga.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Unos vecinos dejan de usar un bus que cobra más a los del cerro, hasta que cambian la tarifa. Subraya qué es.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Un boicot de un movimiento social'], ['Un golpe de Estado'], ['Una descolonización']], pista: 'Dejan de usar algo para exigir un cambio.' }, 'Como el boicot de los buses de 1955.')],
+], 'Caminos, herencias y gente que se organiza.');

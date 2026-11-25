@@ -1,0 +1,96 @@
+// Preicfes · Lectura Crítica, mundo 7 «Evaluar un Texto» (Explora, escena «hoja»). Textos cortos propios.
+xpLec('icf-lc-evalua-1', [
+  ['Lo que se da por hecho',
+    xpMira('hoja', 'Empecemos por la idea: un **supuesto** no se escribe, pero la idea lo necesita.', { letras: ['idea', 'a', 'b', 'c'], paras: [['Hay que poner más buses para que la gente deje el carro.'], ['Si hay más buses, la gente los usará.'], ['Los buses son grandes.'], ['La gente deja el carro por gusto.']] }, [
+      ['Esta es la idea escrita.', { luz: [0], nota: { 0: 'lo dice' } }],
+      ['Si esto no fuera cierto, la idea se cae.', { luz: [1], nota: { 1: 'lo supone' } }],
+      ['Esto es cierto, pero la idea no lo necesita.', { luz: [2], tacha: [2] }],
+      ['Esto tampoco hace falta para que funcione.', { luz: [3], tacha: [3] }],
+      ['La prueba: niégalo y mira si la idea aguanta.', { luz: [0, 1] }],
+    ], 'Supuesto: si lo niegas, la idea se cae.'),
+    xpHaz('hoja', '«Regalen libros y los niños leerán más». Subraya el **supuesto**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Los libros son de papel.'], ['Los niños no leen porque no tienen libros.'], ['Los niños son pequeños.']], pista: 'Niega cada uno y mira cuál tumba la idea.' }, 'Si no leyeran por otra razón, regalar no bastaría.')],
+  ['Para qué escribe',
+    xpMira('hoja', 'Segunda idea: la **intención** es lo que el autor busca en ti.', { paras: [['«Vuelva a mirar su plato antes de botarlo».'], ['«En 2020 se botaron mil toneladas».'], ['«Ese plato lo sembró alguien como su abuelo».']] }, [
+      ['Aquí invita a hacer algo.', { luz: [0], nota: { 0: 'mover a actuar' } }],
+      ['Aquí informa con un dato.', { luz: [1], nota: { 1: 'informar' } }],
+      ['Aquí busca que sientas.', { luz: [2], nota: { 2: 'conmover' } }],
+      ['Todo junto: que no desperdicies comida.', { luz: [0, 1, 2] }],
+      ['La intención es del texto completo, no de una frase.', {}],
+    ], 'Pregunta qué haría un lector convencido.'),
+    xpHaz('hoja', 'Un texto cuenta tres accidentes y termina: «¿Y usted, se abrochó?». Subraya la intención.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Narrar historias tristes'], ['Vender carros'], ['Que el lector use el cinturón']], pista: 'Mira a quién va dirigida la última pregunta.' }, 'Los relatos sirven para mover al lector.')],
+  ['Recursos y honestidad',
+    xpMira('hoja', 'Tercera idea: mira **con qué** convence y si **reconoce límites**.', { paras: [['Una anécdota de su vecina'], ['Una ironía: «claro, la culpa es del perro»'], ['«No sé si fue por eso»']] }, [
+      ['La anécdota muestra un caso, no prueba todos.', { luz: [0], nota: { 0: 'muestra' } }],
+      ['La ironía critica diciendo lo contrario.', { luz: [1], nota: { 1: 'critica' } }],
+      ['Reconocer una duda da confianza.', { luz: [2], nota: { 2: 'honesto' } }],
+      ['Quien nunca duda merece más revisión.', {}],
+      ['El recurso no hace verdadera la idea.', { luz: [0, 1] }],
+    ], 'Caso, ironía, duda: cada recurso tiene su efecto.'),
+    xpHaz('hoja', 'Subraya la frase que **reconoce un límite**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Está probado sin discusión.'], ['Puede que influyera también el clima.'], ['Todos lo saben.']], pista: 'Busca la que deja una duda.' }, '«Puede que» admite otra explicación.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Desde que cerramos la ventana nadie se resfrió. La ventana era la culpable». Subraya el supuesto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Nada más cambió en ese tiempo.'], ['La ventana era de vidrio.'], ['Hacía calor.']], pista: 'Si otra cosa hubiera cambiado, ¿seguiría siendo la ventana?' }, 'Si cambió algo más, la ventana podría no ser la causa.')],
+], 'Busca lo que supone, para qué escribe y con qué convence.');
+
+xpLec('icf-lc-evalua-2', [
+  ['¿Alcanza para decir eso?',
+    xpMira('hoja', 'Empecemos por la idea: un enunciado es válido si su **respaldo alcanza**.', { letras: ['dato', 'a', 'b'], paras: [['12 personas tomaron té y 9 durmieron mejor.'], ['El té hace dormir a todo el mundo.'], ['En ese grupo, la mayoría durmió mejor.']] }, [
+      ['Este es el respaldo: doce personas.', { luz: [0] }],
+      ['«Todo el mundo» va mucho más allá.', { luz: [1], tacha: [1], nota: { 1: 'dice de más' } }],
+      ['Esto es justo lo que se vio.', { luz: [2], nota: { 2: 'alcanza' } }],
+      ['Y falta comparar con quien no tomó té.', { luz: [0] }],
+      ['Pregunta: ¿cuántos, quiénes y comparados con qué?', {}],
+    ], 'Cuántos, quiénes y comparados con qué.'),
+    xpHaz('hoja', 'Se probó un champú en 8 amigas del fabricante. Subraya lo que **sí** se puede decir.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Sirve para todas las mujeres.'], ['Es el mejor del mercado.'], ['Esas ocho personas dieron su opinión.']], pista: 'Busca lo que no va más allá de las ocho.' }, 'Pocas y elegidas: no alcanza para más.')],
+  ['Trampas con nombre',
+    xpMira('hoja', 'Segunda idea: hay **trampas** que parecen razones.', { paras: [['«Siempre se ha hecho así».'], ['«¿Qué va a saber ese muchacho?».'], ['«Si no es blanco, es negro».'], ['«Lo natural no daña».']] }, [
+      ['La costumbre no prueba que sea bueno.', { luz: [0], nota: { 0: 'costumbre' } }],
+      ['Atacar a quien habla no responde la idea.', { luz: [1], nota: { 1: 'ataque' } }],
+      ['Hay más de dos opciones.', { luz: [2], nota: { 2: 'falsa elección' } }],
+      ['El veneno de víbora es natural.', { luz: [3], nota: { 3: 'generaliza' } }],
+      ['Con nombre se reconocen más rápido.', {}],
+    ], 'Costumbre, ataque, falsa elección y generalización.'),
+    xpHaz('hoja', 'Pon al margen la trampa de cada frase.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['ataque', 'costumbre', 'falsa elección'], meta: [1, 2, 0], paras: [['Mi abuelo lo hacía y vivió noventa.'], ['O compras este celular o te quedas atrás.'], ['Usted ni siquiera terminó el colegio.']], pista: 'Alguna no va ahí: ¿mira al pasado, deja dos salidas o ataca a alguien?' }, 'Pasado, dos salidas y ataque.')],
+  ['¿Quién habla?',
+    xpMira('hoja', 'Tercera idea: revisa más a quien **tiene un interés**.', { letras: ['1', '2', '3'], paras: [['Vendedor: «Nuestro colchón cura la espalda».'], ['Estudio: «Se probó en 30; no se comparó».'], ['Letra gris: «Resultados pueden variar».']] }, [
+      ['Quien vende gana si le crees.', { luz: [0], nota: { 0: 'interés' } }],
+      ['Quien investiga dice sus límites.', { luz: [1], nota: { 1: 'límites' } }],
+      ['La letra gris confiesa lo que la grande calla.', { luz: [2], nota: { 2: 'confiesa' } }],
+      ['Tener interés no es mentir, pero exige revisar.', { luz: [0] }],
+      ['Busca otra voz sin ese interés.', {}],
+    ], 'Interés, límites y letra pequeña.'),
+    xpHaz('hoja', 'Subraya la fuente que conviene revisar con **más** cuidado sobre una bebida.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['La empresa que la fabrica'], ['Una nutricionista sin relación con ella'], ['Un estudio con grupo de comparación']], pista: '¿Quién gana si le creen?' }, 'La empresa tiene interés en que se venda.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Nadie ha probado que no funcione; entonces funciona». Subraya el error.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Ataca a una persona.'], ['Que no se haya refutado no lo prueba.'], ['Usa la costumbre.']], pista: 'No tener prueba en contra no es tener prueba a favor.' }, 'La falta de prueba no es una prueba.')],
+], 'Mide el respaldo, nombra la trampa y mira quién habla.');
+
+xpLec('icf-lc-evalua-3', [
+  ['Valores',
+    xpMira('hoja', 'Empecemos por la idea: detrás de una postura hay un **valor**.', { letras: ['1', '2', '3'], paras: [['«Primero los que llegaron primero».'], ['«Primero los que más lo necesitan».'], ['«Que cada uno decida».']] }, [
+      ['Aquí se valora el orden de llegada.', { luz: [0], nota: { 0: 'orden' } }],
+      ['Aquí se valora la necesidad.', { luz: [1], nota: { 1: 'solidaridad' } }],
+      ['Aquí, la libertad de cada quien.', { luz: [2], nota: { 2: 'libertad' } }],
+      ['Nadie dijo la palabra: se nota en lo que pide.', {}],
+      ['Dos personas pueden valorar cosas distintas sin mentir.', { luz: [0, 1] }],
+    ], 'Mira qué pone primero: ese es su valor.'),
+    xpHaz('hoja', '«Que paguen más los que más ganan». Subraya el valor.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Libertad individual'], ['Justicia en el reparto'], ['Respeto a la tradición']], pista: '¿Qué quiere igualar?' }, 'Busca que la carga se reparta según lo que se tiene.')],
+  ['Imágenes que delatan',
+    xpMira('hoja', 'Segunda idea: una **comparación** muestra cómo se ve el mundo.', { paras: [['«La escuela es una fábrica».'], ['«La escuela es un jardín».'], ['«La escuela es una cancha».']] }, [
+      ['Fábrica: produce cosas iguales.', { luz: [0], nota: { 0: 'resultados' } }],
+      ['Jardín: cada uno crece a su paso.', { luz: [1], nota: { 1: 'cuidado' } }],
+      ['Cancha: alguien gana y alguien pierde.', { luz: [2], nota: { 2: 'competencia' } }],
+      ['La misma escuela, tres miradas.', { luz: [0, 1, 2] }],
+      ['Pregunta qué destaca y qué esconde la imagen.', {}],
+    ], 'La imagen destaca algo y esconde lo demás.'),
+    xpHaz('hoja', '«El bosque es un banco de madera». Subraya lo que **esconde** esa imagen.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Que se puede vender'], ['Que tiene madera'], ['Que es hogar de seres vivos']], pista: 'Un banco guarda algo para gastar: ¿qué queda por fuera?' }, 'Lo muestra como dinero y calla la vida.')],
+  ['Acuerdos y choques',
+    xpMira('hoja', 'Tercera idea: dos textos pueden **coincidir** en un hecho y **chocar** en lo que proponen.', { paras: [['Uno: «Hubo injusticia. Pongan una placa».'], ['Otro: «Hubo injusticia. Quiten el busto».'], ['Coinciden en el hecho.'], ['Chocan en la salida.']] }, [
+      ['El primero reconoce algo y propone.', { luz: [0] }],
+      ['El segundo reconoce lo mismo.', { luz: [1] }],
+      ['Ninguno niega el hecho.', { luz: [2], nota: { 2: 'acuerdo' } }],
+      ['La diferencia está en qué hacer.', { luz: [3], nota: { 3: 'choque' } }],
+      ['Antes de decir que se oponen, busca en qué están de acuerdo.', {}],
+    ], 'Separa el hecho, el valor y la propuesta.'),
+    xpHaz('hoja', 'Uno: «Hay ruido; multen». Otro: «Hay ruido; eduquen». Subraya en qué **coinciden**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['En que hay un problema'], ['En multar'], ['En educar']], pista: 'Mira la primera parte de cada frase.' }, 'Los dos ven el ruido; difieren en la salida.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Esos edificios viejos son arrugas: se ven mal, pero cuentan quién eres». Subraya lo que valora.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Lo nuevo'], ['La memoria de la ciudad'], ['El ahorro']], pista: '¿Qué dice que cuentan las arrugas?' }, 'Compara lo viejo con lo que cuenta la propia historia.')],
+], 'Qué pone primero, qué imagen usa y en qué coincide con otros.');

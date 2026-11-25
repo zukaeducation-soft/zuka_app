@@ -9,7 +9,7 @@ GAMES['dibuja-intervalo'] = (() => {
     : { left: s.right, right: s.left, leftClosed: s.rightClosed, rightClosed: s.leftClosed });
 
   function grade(state, params) {
-    const s = norm(state);
+    const s = norm({ left: 0, right: 0, ...state });
     const ok = s.left === params.a && s.right === params.b && s.leftClosed === params.aClosed && s.rightClosed === params.bClosed;
     const br = (c, side) => (side === 'l' ? (c ? '[' : '(') : (c ? ']' : ')'));
     return { ok, solution: `$${br(params.aClosed, 'l')}${params.a},\\ ${params.b}${br(params.bClosed, 'r')}$` };

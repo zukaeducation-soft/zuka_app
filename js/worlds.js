@@ -472,6 +472,22 @@ const WORLDS = (() => {
     'icf-en-vocabulario': { name: 'Palabras en Contexto', art: plate('icf-en-vocabulario', TEAL, `
       ${L('M48 24h20M74 24h38M48 34h30', INK, 1)}${L('M84 30h20v9H84z', TEAL, 1.3)}${L('M108 34h6M48 48h12M66 48h46M48 58h34', INK, 1)}${A(94, 62, 94, 42, TEAL, 1.2)}${D(94, 64, 2, TEAL)}${L('M86 64h16', TEAL, 1)}
       ${T(28, 42, 'bore-dom', INK, 5.5)}${T(134, 42, 'un-, -ly', TEAL, 6)}`) },
+    // ---------- séptimos mundos ----------
+    'icf-ma-ecuaciones': { name: 'Ecuaciones en Contexto', art: plate('icf-ma-ecuaciones', TEAL, `
+      ${L('M50 30h60', INK, 1.3)}${L('M80 30v30M68 62h24', INK, 1.1)}${L('M44 30l6 14h-12z', INK, .9)}${L('M116 30l6 14h-12z', INK, .9)}${L('M56 18h10v10H56z', TEAL, 1.3)}${L('M94 18h10v10H94z', TEAL, 1.3)}${D(80, 30, 2.2, TEAL)}${T(61, 26, 'x', TEAL, 7)}
+      ${T(28, 42, '2x + 3', INK, 7)}${T(134, 42, '≤', TEAL, 10)}`) },
+    'icf-lc-evalua': { name: 'Evaluar un Texto', art: plate('icf-lc-evalua', TEAL, `
+      ${L('M52 14h42v52H52z', INK, 1.1)}${L('M59 24h28M59 32h28M59 40h18M59 48h24', INK, .8)}${C(98, 50, 12, TEAL, 1.4)}${L('M92 50l4 4 8-9', TEAL, 1.6)}${L('M59 56h12', INK, .8)}${D(55, 24, 1.1, TEAL)}${D(55, 40, 1.1, TEAL)}
+      ${T(28, 42, '¿válido?', INK, 6)}${T(134, 42, 'supone', TEAL, 6)}`) },
+    'icf-sc-mundo': { name: 'Historia del Mundo', art: plate('icf-sc-mundo', TEAL, `
+      ${C(80, 40, 24, INK, 1.1)}${L('M56 40h48M80 16v48', INK, .8)}${L('M80 16c-16 12-16 36 0 48M80 16c16 12 16 36 0 48', INK, .8)}${D(72, 30, 2, TEAL)}${D(92, 34, 2, TEAL)}${D(76, 52, 2, TEAL)}${Ld('M72 30L92 34L76 52')}
+      ${T(28, 42, '1789', INK, 7)}${T(134, 42, '1945', TEAL, 7)}`) },
+    'icf-cn-atomo': { name: 'Átomo y Enlaces', art: plate('icf-cn-atomo', TEAL, `
+      ${C(66, 40, 18, INK, 1)}${C(66, 40, 9, INK, .8)}${D(66, 40, 3, TEAL)}${C(96, 40, 18, TEAL, 1.2)}${D(96, 40, 3, INK)}${D(81, 36, 1.8, TEAL)}${D(81, 44, 1.8, TEAL)}${D(66, 31, 1.4)}${D(48, 40, 1.4)}${D(114, 40, 1.4)}
+      ${T(28, 42, 'Na⁺', INK, 7)}${T(134, 42, 'Cl⁻', TEAL, 7)}`) },
+    'icf-en-inferencia': { name: 'Inferir y Opinar', art: plate('icf-en-inferencia', TEAL, `
+      ${L('M48 20h34M48 30h26M48 40h34', INK, 1)}${L('M86 18h26v22H98l-6 7v-7h-6z', TEAL, 1.3)}${T(99, 33, 'so…', TEAL, 7)}${A(78, 30, 86, 30, TEAL, 1.1)}${D(52, 52, 2)}${D(66, 52, 2)}${A(70, 52, 92, 60, INK, 1)}${C(97, 61, 4, TEAL, 1.2)}
+      ${T(28, 42, 'fact', INK, 6.5)}${T(134, 52, 'must be', TEAL, 6)}`) },
   };
 })();
 

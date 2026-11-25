@@ -1,935 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/traza-progresion.js
-// Traza la progresión (Álgebra, progresiones aritméticas; juego dinámico de la lección alg-14): en una cuadrícula de
-// 3 × 3 hay puntos con números. Arriba se dan los dos primeros términos de una progresión aritmética («4, 7, …») y
-// hay que trazar el camino, sin levantar el dedo o por tramos, pasando por los términos en orden y rodeando los demás
-// puntos. Pasar por un punto que no es el siguiente quita una vida. No hay reloj: se puede levantar el dedo y pensar. Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, items: [{ a1, d, len, traps: [...] }] }], lives? }   state = { done: [n] }
-// Spec 2026-11-13-juegos-dinamicos-progresiones.
-
-GAMES['traza-progresion'] = (() => {
-  const termsOf = it => Array.from({ length: it.len }, (_, k) => it.a1 + k * it.d);
-  // Reparte los términos y las trampas en casillas distintas de la cuadrícula de 3 × 3 (siempre igual para una semilla).
-  function placeDots(it, seed) {
-    const values = [...termsOf(it), ...(it.traps || [])], order = shuffledOrder(9, `${seed}|${values.join()}`);
-    return values.map((value, i) => ({ value, cell: order[i] }));
-  }
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => r.items.map(it => termsOf(it).map(negTxt).join(', ')).join(' · ')).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, RAD = 21;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, grid = { x0: 0, y0: 0, cw: 0, ch: 0 }, queue = [], dots = [], path = [], burn = 0, press = false, over = -1, pause = 0, n = 0, finger = null;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); load(); },
-      lost(i) { st.done[i] = 0; press = false; },
-    });
-    const item = () => R[a.cur].items[queue[0] ?? 0];
-    const pos = d => ({ x: grid.x0 + ((d.cell % 3) + 0.5) * grid.cw, y: grid.y0 + (Math.floor(d.cell / 3) + 0.5) * grid.ch });
-    const seg = (i, j) => { const p = pos(dots[i]), q = pos(dots[j]); return Math.hypot(p.x - q.x, p.y - q.y); };
-
-    function layout(w, h) { W = w; H = h; grid = { x0: 14, y0: 112, cw: (w - 28) / 3, ch: (h - 112 - 40) / 3 }; }
-    // Carga la progresión: los puntos en sus casillas y el camino empezando en el primer término.
-    function load() {
-      const it = item();
-      dots = placeDots(it, `${a.cur}-${n++}`);
-      path = [0]; burn = 0; over = -1; pause = 0; finger = null;   // dots[0..len-1] son los términos, en orden
-    }
-    function touch(x, y) {
-      const i = dots.findIndex(d => { const p = pos(d); return Math.hypot(p.x - x, p.y - y) <= RAD; });
-      if (i === over) return;   // sigue sobre el mismo punto: no cuenta otra vez
-      over = i;
-      if (i < 0 || path.includes(i)) return;
-      const it = item();
-      if (i === path.length) {   // es el término siguiente
-        path.push(i); api.sfx?.tap?.();
-        if (path.length === it.len) { st.done[a.cur]++; a.hit(); a.say(termsOf(it).map(negTxt).join(', '), C.ok); pause = 1.2; press = false; }
-      } else { a.say(`${negTxt(dots[i].value)} no es el término que sigue`, C.bad); a.miss(); }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play') return;
-        if (pause > 0) { pause -= dt; if (pause <= 0) { queue.shift(); if (!queue.length) { a.win(); return; } load(); } return; }
-        if (path.length < 2) return;
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = R[a.cur], it = item(), terms = termsOf(it);
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        p.text(`${r.title} · sigue la progresión`, W / 2, 40);
-        if (a.phase === 'play') {
-          drawPill(p, C, `${negTxt(terms[0])}, ${negTxt(terms[1])}, …`, W / 2, 68, C.sun, 18);
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(`${path.length} de ${it.len} términos`, W / 2, 94);
-        }
-
-        if (a.phase !== 'idle' && dots.length) {
-          // El camino trazado, la parte ya quemada y el tramo hacia el dedo.
-          const pts = path.map(i => pos(dots[i]));
-          p.noFill(); p.stroke(C.sun); p.strokeWeight(7);
-          for (let k = 1; k < pts.length; k++) p.line(pts[k - 1].x, pts[k - 1].y, pts[k].x, pts[k].y);
-          if (press && finger && pause <= 0) { const e = pts[pts.length - 1]; p.stroke(C.sun); p.strokeWeight(3); p.line(e.x, e.y, finger.x, finger.y); }
-          let left = burn;
-          for (let k = 1; k < pts.length && left > 0; k++) {
-            const d = Math.hypot(pts[k].x - pts[k - 1].x, pts[k].y - pts[k - 1].y), q = Math.min(1, left / d);
-            p.stroke(C.coral); p.strokeWeight(7); p.line(pts[k - 1].x, pts[k - 1].y, pts[k - 1].x + (pts[k].x - pts[k - 1].x) * q, pts[k - 1].y + (pts[k].y - pts[k - 1].y) * q);
-            if (q < 1 || k === pts.length - 1) { p.noStroke(); p.fill(C.sun); p.circle(pts[k - 1].x + (pts[k].x - pts[k - 1].x) * q, pts[k - 1].y + (pts[k].y - pts[k - 1].y) * q, 12 + 3 * Math.sin(p.frameCount * 0.6)); }
-            left -= d;
-          }
-          // Los puntos.
-          dots.forEach((d, i) => {
-            const c = pos(d), on = path.includes(i), fill = on ? (pause > 0 ? C.ok : C.sun) : C.cream;
-            p.noStroke(); p.fill(shade(fill, 0.76)); p.circle(c.x, c.y + 3, RAD * 2);
-            p.fill(fill); p.circle(c.x, c.y, RAD * 2);
-            if (i === 0 && path.length === 1) { p.noFill(); p.stroke(C.sun); p.strokeWeight(3); p.circle(c.x, c.y, RAD * 2 + 10 + 3 * Math.sin(p.frameCount * 0.15)); }
-            p.noStroke(); p.fill(inkOn(fill, C.ink)); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD); fitText(p, negTxt(d.value), c.x, c.y + 1, RAD * 2 - 8, 16);
-          });
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 17, locked);
-        const mid = grid.y0 + grid.ch * 1.5;
-        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: termsOf(x).map(negTxt).join(', ') }))).slice(0, 7), mid);
-        else drawArcadeBanner(p, C, a, mid, { idle: 'Sin prisa: pasa el dedo por los términos, en orden', lost: 'Demasiados puntos equivocados' });
-        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(locked || a.phase === 'all' ? '¡Caminos completos! Ya puedes comprobar' : 'Rodea los puntos que no son de la progresión', W / 2, H - 16);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp === 'play' && pause <= 0) { press = true; over = -1; finger = { x: p.mouseX, y: p.mouseY }; touch(p.mouseX, p.mouseY); }
-        return false;
-      };
-      p.mouseDragged = () => { if (press && !locked && a.phase === 'play' && pause <= 0) { finger = { x: p.mouseX, y: p.mouseY }; touch(p.mouseX, p.mouseY); return false; } };
-      p.mouseReleased = () => { press = false; over = -1; finger = null; };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; press = false; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, grid, visited: path.length, len: item().len, dots: dots.map(d => ({ ...pos(d), cell: d.cell, value: d.value })) }),
-    };
-  }
-
-  return { grade, create, termsOf, placeDots };
-})();
-;
-//#archivo js/games/encesta-suma.js
-// Encesta la suma (Álgebra, suma de una progresión aritmética; juego dinámico de la lección alg-14b): arriba hay
-// tres canastas con números y una suma por calcular («2 + 4 + 6 + 8 + 10», «Los pares del 2 al 40»). Abajo hay un
-// balón: se desliza el dedo hacia arriba, en la dirección de la canasta, y al soltar el balón sale lanzado. Hay que
-// encestar en la que tiene la suma. Encestar en otra quita una vida; fallar el tiro no quita nada. No hay
-// reloj: se calcula con calma antes de lanzar. Sin vidas, la ronda empieza otra vez.
-// params = { rounds: [{ title, items: [{ ask, sum: [a1, d, n], options: [a, b, c], answer }] }], lives? }
-// state = { done: [n] }      Spec 2026-11-13-juegos-dinamicos-progresiones.
-
-GAMES['encesta-suma'] = (() => {
-  const SPEED = 560, HOOP = 30;
-  // Velocidad del balón al deslizar (dx, dy): solo si el deslizón va hacia arriba y mide al menos 14 px.
-  function flickVel(dx, dy, speed) {
-    const d = Math.hypot(dx, dy);
-    if (d < 14 || dy > -6) return null;
-    return { vx: (dx / d) * speed, vy: (dy / d) * speed };
-  }
-  // Canasta que tiene enfrente un balón en x (−1 si pasa entre dos).
-  function hoopAt(x, centers, r) {
-    let best = -1, bd = r;
-    centers.forEach((c, i) => { const d = Math.abs(x - c); if (d <= bd) { bd = d; best = i; } });
-    return best;
-  }
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.ask} = ${it.options[it.answer]}`).join(' · ')).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, hoopY = 0, home = { x: 0, y: 0 }, queue = [], perm = [0, 1, 2], ball = null, drag = null, aim = null, pause = 0, result = null, n = 0;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); load(); },
-      lost(i) { st.done[i] = 0; ball = null; drag = null; },
-    });
-    const item = () => R[a.cur].items[queue[0] ?? 0];
-    const centers = () => [1, 3, 5].map(k => (W * k) / 6);
-
-    function layout(w, h) { W = w; H = h; hoopY = 150; home = { x: w / 2, y: h - 84 }; }
-    function load() { perm = shuffledOrder(3, item().ask + (n++)); ball = null; drag = null; aim = null; pause = 0; result = null; }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play') return;
-        if (pause > 0) {
-          pause -= dt;
-          if (pause <= 0) { if (result.good) queue.shift(); else if (result.requeue) queue.push(queue.shift()); if (!queue.length) { a.win(); return; } if (result.good || result.requeue) load(); else { ball = null; result = null; } }
-          return;
-        }
-        if (!ball) return;
-        ball.x += ball.vx * dt; ball.y += ball.vy * dt;
-        if (ball.x < 14) { ball.x = 14; ball.vx = Math.abs(ball.vx); } else if (ball.x > W - 14) { ball.x = W - 14; ball.vx = -Math.abs(ball.vx); }
-        if (ball.y <= hoopY) {
-          const i = hoopAt(ball.x, centers(), HOOP), it = item();
-          if (i < 0) { result = { pick: -1 }; pause = 0.6; a.say('No entró en ninguna: otra vez', C.sun); }
-          else if (perm[i] === it.answer) { result = { good: true, pick: i }; pause = 1.1; st.done[a.cur]++; a.hit(); a.say(`${it.ask} = ${it.options[it.answer]}`, C.ok); }
-          else { result = { requeue: true, pick: i }; pause = 1.2; a.say(`${it.options[perm[i]]} no es la suma`, C.bad); a.miss(); }
-          ball = null;
-        }
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = R[a.cur], it = item(), cs = centers();
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        p.text(`${r.title} · encesta en la suma`, W / 2, 40);
-        if (a.phase === 'play') {
-          drawPill(p, C, it.ask, W / 2, 68, C.sun, 15);
-        }
-        // Las canastas: tablero con el número y aro.
-        if (a.phase !== 'idle' && !(locked || a.phase === 'all')) cs.forEach((cx, i) => {
-          const good = perm[i] === it.answer, fill = result && result.pick === i ? (good ? C.ok : C.bad) : C.cream;
-          drawTile(p, C, { x: cx - 36, y: hoopY - 46, w: 72, h: 36 }, it.options[perm[i]], { fill, size: 17, lift: 2 });
-          p.noFill(); p.stroke(C.coral); p.strokeWeight(5); p.ellipse(cx, hoopY, HOOP * 2 - 6, 14);
-          p.stroke(C.mute); p.strokeWeight(1.5); for (let k = -2; k <= 2; k++) p.line(cx + k * 9, hoopY + 6, cx + k * 6, hoopY + 24);
-        });
-        // El balón (en casa, mientras se apunta o en vuelo) y la guía del tiro.
-        if (a.phase === 'play' && pause <= 0) {
-          if (drag && aim) { p.stroke(C.mute); p.strokeWeight(2); p.drawingContext.setLineDash([4, 7]); p.line(home.x, home.y, home.x + aim.vx * 0.28, home.y + aim.vy * 0.28); p.drawingContext.setLineDash([]); }
-          const b = ball || home, d = ball ? 22 + (4 * (ball.y - hoopY)) / (home.y - hoopY) : 26;
-          p.noStroke(); p.fill(shade(C.sun, 0.76)); p.circle(b.x, b.y + 3, d);
-          p.fill(C.sun); p.circle(b.x, b.y, d);
-          p.noFill(); p.stroke(shade(C.sun, 0.6)); p.strokeWeight(1.5); p.arc(b.x, b.y, d, d * 0.5, 0, Math.PI); p.line(b.x, b.y - d / 2, b.x, b.y + d / 2);
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 17, locked);
-        const mid = (hoopY + home.y) / 2 + 10;
-        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: `${x.ask} = ${x.options[x.answer]}` }))).slice(0, 9), mid);
-        else drawArcadeBanner(p, C, a, mid, { idle: 'Sin prisa: calcula y luego lanza', lost: 'Demasiadas canastas equivocadas' });
-        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(locked || a.phase === 'all' ? '¡Puras canastas! Ya puedes comprobar' : 'Desliza hacia arriba, apuntando a la canasta', W / 2, H - 16);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp === 'play' && !ball && pause <= 0) { drag = { x: p.mouseX, y: p.mouseY }; aim = null; }
-        return false;
-      };
-      p.mouseDragged = () => { if (drag && !locked && a.phase === 'play') { aim = flickVel(p.mouseX - drag.x, p.mouseY - drag.y, SPEED); return false; } };
-      p.mouseReleased = () => {
-        if (drag && aim && !locked && a.phase === 'play' && !ball && pause <= 0) { ball = { x: home.x, y: home.y, ...aim }; api.sfx?.tap?.(); }
-        drag = null; aim = null;
-      };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; drag = null; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, home, hoopY, busy: !!ball || pause > 0, hoops: centers().map((x, i) => ({ x, good: perm[i] === item().answer })) }),
-    };
-  }
-
-  return { grade, create, flickVel, hoopAt };
-})();
-;
-//#archivo js/games/dobla-fichas.js
-// Dobla las fichas (Álgebra, progresiones geométricas; juego dinámico de la lección alg-14c): un tablero de 4 × 4
-// como el del 2048. Se desliza el dedo hacia un lado y todas las fichas se corren hacia allá; dos fichas iguales que
-// chocan se funden en una que vale el doble. Las fichas son los términos de una progresión geométrica de razón 2 que
-// empieza en a₁ (5, 10, 20, 40…): la meta de la ronda es armar un término dado. Arriba se van encendiendo los
-// términos alcanzados. Si el tablero se llena y no queda jugada, la ronda empieza otra vez.
-// params = { rounds: [{ title, base, n }] }   (meta: el término n, base · 2ⁿ⁻¹)   state = { done: [0 | 1] }
-// Spec 2026-11-13-juegos-dinamicos-progresiones.
-
-GAMES['dobla-fichas'] = (() => {
-  const N = 4, DIRS = { left: [0, 1], right: [3, -1], up: [0, 1], down: [3, -1] };
-  const goalOf = r => r.base * 2 ** (r.n - 1);
-  // Qué término de la progresión es `value` (1 para la base, 2 para el doble…).
-  const termIndex = (value, base) => Math.round(Math.log2(value / base)) + 1;
-  // Corre una fila hacia el inicio: los ceros son huecos y dos iguales seguidas se funden una sola vez.
-  function slide(line) {
-    const xs = line.filter(v => v), out = [];
-    let merged = 0;
-    for (let i = 0; i < xs.length; i++) {
-      if (xs[i] === xs[i + 1]) { out.push(xs[i] * 2); merged = Math.max(merged, xs[i] * 2); i++; } else out.push(xs[i]);
-    }
-    while (out.length < line.length) out.push(0);
-    return { line: out, moved: out.some((v, i) => v !== line[i]), merged };
-  }
-  // Mueve todo el tablero (arreglo de 16, por filas) hacia dir: 'left' | 'right' | 'up' | 'down'.
-  function move(grid, dir) {
-    const g = [...grid], [start, stepK] = DIRS[dir], vertical = dir === 'up' || dir === 'down';
-    let moved = false, merged = 0;
-    for (let k = 0; k < N; k++) {
-      const idx = Array.from({ length: N }, (_, j) => { const q = start + stepK * j; return vertical ? q * N + k : k * N + q; });
-      const res = slide(idx.map(i => g[i]));
-      res.line.forEach((v, j) => { g[idx[j]] = v; });
-      moved = moved || res.moved; merged = Math.max(merged, res.merged);
-    }
-    return { grid: g, moved, merged };
-  }
-  const canMove = grid => ['left', 'right', 'up', 'down'].some(d => move(grid, d).moved);
-
-  function grade(state, params) {
-    const ok = params.rounds.every((_, i) => (state.done?.[i] ?? 0) >= 1);
-    const solution = params.rounds.map(r => `${Array.from({ length: r.n }, (_, k) => r.base * 2 ** k).join(' → ')} (cada término es el doble)`).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, box = { x: 0, y: 0, s: 0 }, grid = new Array(16).fill(0), best = 0, pops = [], drag = null, used = false;
-    const a = makeArcade(R.length, 1, api, {
-      start(i) { st.done[i] = 0; grid = new Array(16).fill(0); best = R[i].base; pops = []; spawn(); spawn(); },
-      lost(i) { st.done[i] = 0; },
-    });
-
-    function layout(w, h) { W = w; H = h; const s = Math.min(w - 28, h - 150 - 44); box = { x: (w - s) / 2, y: 148, s }; }
-    function spawn() {
-      const free = grid.map((v, i) => (v ? -1 : i)).filter(i => i >= 0);
-      if (!free.length) return;
-      const i = free[Math.floor(Math.random() * free.length)];
-      grid[i] = R[a.cur].base * (Math.random() < 0.12 ? 2 : 1); best = Math.max(best, grid[i]); pops.push({ i, t: 1 });
-    }
-    function play(dir) {
-      const r = R[a.cur], res = move(grid, dir);
-      if (!res.moved) return;
-      grid = res.grid; api.sfx?.tap?.();
-      if (res.merged) { grid.forEach((v, i) => { if (v === res.merged) pops.push({ i, t: 1 }); }); if (res.merged > best) { best = res.merged; a.hit(); a.say(`${res.merged} = ${r.base} · 2${['⁰', '¹', '²', '³', '⁴', '⁵', '⁶'][termIndex(res.merged, r.base) - 1] || ''}`, C.ok); } }
-      if (grid.includes(goalOf(r))) { st.done[a.cur] = 1; a.win(); return; }
-      spawn();
-      if (!canMove(grid)) { a.say('Tablero lleno, sin jugadas', C.bad); a.miss(); }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) a.tick(dt);
-        pops = pops.filter(q => (q.t -= dt * 5) > 0);
-        const r = R[a.cur], cell = box.s / N, COLS = [C.cream, C.sun, C.mint, C.sky, C.coral, C.R, C.ok];
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, `Arma la ficha ${goalOf(r)}`, W / 2, 44, W - 24, 16);
-        p.fill(C.mute); p.textSize(11); p.text(`${r.title} · empieza en ${r.base} y cada término es el doble`, W / 2, 66);
-        // Los términos de la progresión: encendidos los que ya se armaron.
-        const tw = Math.min(52, (W - 28) / r.n - 4), x0 = W / 2 - (r.n * (tw + 4) - 4) / 2;
-        for (let k = 0; k < r.n; k++) {
-          const v = r.base * 2 ** k, on = v <= best && a.phase !== 'idle';
-          drawTile(p, C, { x: x0 + k * (tw + 4), y: 84, w: tw, h: 30 }, v, { fill: on ? COLS[k % COLS.length] : C.card, ink: on ? undefined : C.mute, size: 14, r: 8, lift: on ? 2 : 0, ring: k === r.n - 1 ? C.sun : null });
-        }
-
-        // El tablero.
-        p.noStroke(); p.fill(C.card); p.rect(box.x - 5, box.y - 5, box.s + 10, box.s + 10, 14);
-        for (let i = 0; i < 16; i++) {
-          const x = box.x + (i % N) * cell, y = box.y + Math.floor(i / N) * cell, v = grid[i];
-          p.noStroke(); p.fill(C.halo); p.rect(x + 3, y + 3, cell - 6, cell - 6, 9);
-          if (!v || a.phase === 'idle') continue;
-          const pop = pops.find(q => q.i === i), k = pop ? 1 + 0.16 * pop.t : 1;
-          drawTile(p, C, { x: x + 4, y: y + 4, w: cell - 8, h: cell - 11 }, v, { fill: COLS[(termIndex(v, r.base) - 1) % COLS.length], size: Math.min(22, cell * 0.36), r: 9, k });
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 17, locked);
-        const mid = box.y + box.s / 2;
-        if (locked || a.phase === 'all') {
-          p.noStroke(); p.fill(C.card); p.rect(box.x, mid - R.length * 13 - 8, box.s, R.length * 26 + 16, 10);
-          drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= 1, text: Array.from({ length: rr.n }, (_, k) => rr.base * 2 ** k).join(' → ') })), mid, box.s - 16);
-        } else drawArcadeBanner(p, C, a, mid, { idle: 'Sin prisa: iguales se funden en el doble', lost: 'Tablero lleno, sin jugadas', won: `¡Armaste ${goalOf(r)}!` });
-        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(locked || a.phase === 'all' ? '¡Progresiones armadas! Ya puedes comprobar' : 'Desliza hacia un lado para correr todas las fichas', W / 2, H - 16);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp === 'play') { drag = { x: p.mouseX, y: p.mouseY }; used = false; }
-        return false;
-      };
-      // La jugada sale en cuanto el dedo se desliza lo suficiente (una por gesto).
-      p.mouseDragged = () => {
-        if (!drag || used || locked || a.phase !== 'play') return;
-        const dx = p.mouseX - drag.x, dy = p.mouseY - drag.y;
-        if (Math.max(Math.abs(dx), Math.abs(dy)) < 26) return false;
-        used = true; play(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : dy > 0 ? 'down' : 'up');
-        return false;
-      };
-      p.mouseReleased = () => { drag = null; };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, grid: [...grid], goal: goalOf(R[a.cur]), box }),
-    };
-  }
-
-  return { grade, create, slide, move, canMove, termIndex, goalOf };
-})();
-;
-//#archivo js/games/rana-zenon.js
-// La rana que se achica (Álgebra, suma geométrica y suma infinita; juego dinámico de la lección alg-14d): una rana
-// salta sobre una recta numérica y cada salto es el anterior por una misma razón (8, 4, 2, 1…). Cada toque en el estanque
-// es un salto: se ve la suma que lleva. Hay tres banderas. En las preguntas cortas («da 3 saltos: ¿dónde cae?») se da
-// la cantidad de saltos y se toca la bandera donde quedó; en las infinitas hay que saltar varias veces, ver que cada
-// vez avanza menos y tocar la bandera a la que se acerca sin llegar nunca. No hay reloj: se salta las veces que haga falta. Tocar otra bandera quita una vida. Sin vidas, la ronda empieza
-// otra vez.
-// params = { rounds: [{ title, items: [{ a1, r: [num, den], n?, flags: [a, b, c], answer, max }] }], lives? }
-// state = { done: [n] }      Spec 2026-11-13-juegos-dinamicos-progresiones.
-
-GAMES['rana-zenon'] = (() => {
-  const MIN_INF = 5;   // saltos que hay que dar antes de responder una suma infinita
-  const ratio = it => it.r[0] / it.r[1];
-  // Suma de los k primeros saltos.
-  function partial(it, k) { let s = 0, t = it.a1; for (let i = 0; i < k; i++) { s += t; t *= ratio(it); } return +s.toFixed(9); }
-  const limitOf = it => +(it.a1 / (1 - ratio(it))).toFixed(9);
-  const answerOf = it => (it.n ? partial(it, it.n) : limitOf(it));
-  const fmt = v => String(+v.toFixed(3));
-  const rtxt = it => (it.r[1] === 1 ? `${it.r[0]} veces` : it.r[0] === 1 ? ({ 2: 'la mitad', 3: 'la tercera parte', 4: 'la cuarta parte', 5: 'la quinta parte' }[it.r[1]] || `1/${it.r[1]}`) : `${it.r[0]}/${it.r[1]}`);
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    const solution = params.rounds.map(r => r.items.map(it => (it.n ? `${it.n} saltos desde ${it.a1} (${rtxt(it)} cada vez): ${fmt(answerOf(it))}` : `saltos sin fin desde ${it.a1} (${rtxt(it)} cada vez): se acerca a ${fmt(answerOf(it))}`)).join(' · ')).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, lineY = 0, queue = [], perm = [0, 1, 2], jumps = 0, frog = 0, hop = 0, from = 0, pause = 0, result = null, n = 0;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); load(); },
-      lost(i) { st.done[i] = 0; },
-    });
-    const item = () => R[a.cur].items[queue[0] ?? 0];
-    const X = v => 22 + (v / item().max) * (W - 44);
-    const need = it => it.n || MIN_INF;
-
-    function layout(w, h) { W = w; H = h; lineY = h * 0.6; }
-    function load() { const it = item(); perm = shuffledOrder(3, `${it.a1}|${it.flags.join()}|${n++}`); jumps = 0; frog = 0; from = 0; hop = 0; pause = 0; result = null; }
-    function answer(i) {
-      const it = item(), good = perm[i] === it.answer;
-      result = { pick: i, good }; pause = good ? 1.3 : 1.4;
-      if (good) { st.done[a.cur]++; a.hit(); a.say(it.n ? `Después de ${it.n} saltos: ${it.flags[it.answer]}` : `Se acerca a ${it.flags[it.answer]} y nunca lo pasa`, C.ok); }
-      else { a.say(it.n ? `No cae en ${it.flags[perm[i]]}` : `No se acerca a ${it.flags[perm[i]]}`, C.bad); a.miss(); }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        if (a.phase !== 'play') return;
-        const it = item();
-        if (hop > 0) hop = Math.max(0, hop - dt / 0.28);
-        if (pause > 0) {
-          pause -= dt;
-          if (pause <= 0) { if (result.good) queue.shift(); else queue.push(queue.shift()); if (!queue.length) { a.win(); return; } load(); }
-          return;
-        }
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = R[a.cur], it = item(), fx = X(from + (frog - from) * (1 - hop)), up = Math.sin((1 - hop) * Math.PI) * (hop > 0 ? 26 : 0);
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, `${r.title} · primer salto ${it.a1}, luego ${rtxt(it)} cada vez`, W / 2, 40, W - 24, 11);
-        if (a.phase === 'play') {
-          drawPill(p, C, it.n ? `Da ${it.n} saltos: ¿dónde cae?` : 'Sin parar: ¿a cuál se acerca?', W / 2, 68, C.sun, 15);
-          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER);
-          p.text(jumps ? `saltos: ${jumps} · va en ${fmt(frog)}` : 'toca el estanque para saltar', W / 2, 96);
-        }
-
-        // El estanque, la recta y las banderas.
-        const water = p.color(C.sky); water.setAlpha(60);
-        p.noStroke(); p.fill(water); p.rect(8, lineY, W - 16, H - lineY - 36, 12);
-        p.stroke(C.ink); p.strokeWeight(3); p.line(14, lineY, W - 14, lineY);
-        const stepV = it.max > 12 ? 4 : 2;
-        p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER);
-        for (let v = 0; v <= it.max; v += stepV) { p.stroke(C.ink); p.strokeWeight(1.5); p.line(X(v), lineY - 5, X(v), lineY + 5); p.noStroke(); p.fill(C.mute); p.text(v, X(v), lineY + 16); }
-        if (a.phase !== 'idle' && !(locked || a.phase === 'all')) {
-          perm.forEach((k, i) => {
-            const x = X(+it.flags[k]), good = k === it.answer, col = result && result.pick === i ? (good ? C.ok : C.bad) : result && result.good && good ? C.ok : [C.coral, C.sky, C.mint][i];
-            const top = lineY - 44 - i * 26;   // cada bandera a una altura distinta: no se tapan si quedan juntas
-            p.stroke(C.ink); p.strokeWeight(2); p.line(x, lineY, x, top);
-            drawPill(p, C, it.flags[k], x + 20 > W - 26 ? x - 20 : x + 20, top + 2, col, 13);
-          });
-          // Los saltos ya dados (arcos) y el marcador que salta.
-          p.noFill(); p.stroke(C.mint); p.strokeWeight(2);
-          for (let k = 0; k < jumps - (hop > 0 ? 1 : 0); k++) { const x0 = X(partial(it, k)), x1 = X(partial(it, k + 1)); p.arc((x0 + x1) / 2, lineY, x1 - x0, Math.min(40, (x1 - x0) * 0.8), Math.PI, 0); }
-          const sh = p.color(C.mint); sh.setAlpha(60); p.noStroke(); p.fill(sh); p.ellipse(fx, lineY - 1, 18 - up * 0.2, 5);
-          drawDot(p, C, fx, lineY - 9 - up, 13, C.mint);
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 17, locked);
-        const mid = lineY + (H - lineY - 36) / 2;
-        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${Math.min(st.done[i], rr.items.length)} de ${rr.items.length}` })), 170);
-        else drawArcadeBanner(p, C, a, 170, { idle: 'Sin prisa: toca el estanque para saltar', lost: 'Demasiadas banderas equivocadas' });
-        if (a.phase === 'play' && pause <= 0) {
-          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER);
-          p.text(jumps < need(it) ? `Salta ${need(it) - jumps} ${need(it) - jumps === 1 ? 'vez' : 'veces'} más` : 'Ahora toca la bandera', W / 2, mid);
-        }
-        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(locked || a.phase === 'all' ? '¡Suma completa! Ya puedes comprobar' : 'Estanque: saltar · bandera: responder', W / 2, H - 16);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp !== 'play' || pause > 0) return false;
-        const it = item();
-        // ¿Tocó una bandera? (su píldora o su asta); si no, es un salto.
-        // Gana la píldora más cercana (están apiladas y pueden quedar casi una sobre otra); el asta solo si no hay píldora.
-        const geo = perm.map((k, i) => { const x = X(+it.flags[k]), top = lineY - 44 - i * 26; return { x, top, px: x + 20 > W - 26 ? x - 20 : x + 20, py: top + 2 }; });
-        let f = -1, bd = Infinity;
-        geo.forEach((g, i) => { const dx = Math.abs(p.mouseX - g.px), dy = Math.abs(p.mouseY - g.py); if (dx <= 30 && dy <= 13 && dx + dy * 3 < bd) { bd = dx + dy * 3; f = i; } });
-        if (f < 0) f = geo.findIndex(g => Math.abs(p.mouseX - g.x) < 12 && p.mouseY > g.top + 15 && p.mouseY < lineY - 12);
-        if (f >= 0 && p.mouseY < lineY - 10) {
-          if (jumps < need(it)) a.say(it.n ? `Primero da los ${it.n} saltos` : 'Salta más veces: mira cuánto avanza', C.sun);
-          else answer(f);
-          return false;
-        }
-        if (p.mouseY < lineY) return false;
-        if (it.n && jumps >= it.n) { a.say(`Ya diste los ${it.n} saltos: toca la bandera`, C.sun); return false; }
-        if (hop > 0 || jumps >= 14) return false;
-        from = frog; jumps++; frog = partial(it, jumps); hop = 1; api.sfx?.tap?.();
-        return false;
-      };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => { const it = item(); return { phase: a.phase, cur: a.cur, lives: a.lives, W, H, jumps, need: need(it), pause, hopping: hop > 0, pondY: lineY + 50, flags: perm.map((k, i) => { const x = X(+it.flags[k]); return { x: x + 20 > W - 26 ? x - 20 : x + 20, y: lineY - 42 - i * 26, good: k === it.answer }; }) }; },
-    };
-  }
-
-  return { grade, create, partial, limitOf, answerOf };
-})();
-;
-//#archivo js/games/maquina-sigma.js
-// La máquina sigma (Álgebra, sumatoria y productoria; juego dinámico de la lección alg-15): arriba está la orden
-// («Σ 3k, de k = 1 a 4») y en una bandeja hay fichas con números (quietas: no hay reloj). Abajo hay una máquina que pide el término
-// del k actual: hay que agarrar de la bandeja la ficha que vale ese término y soltarla en la máquina. La máquina la
-// suma (o la multiplica, si es una productoria) y pasa al k siguiente. Soltar otra ficha quita una vida. Sin vidas,
-// la ronda empieza otra vez.
-// params = { rounds: [{ title, kind: 'sum' | 'prod', items: [{ expr, lo, hi, f, traps: [...] }] }], lives? }
-// state = { done: [n] }      Spec 2026-11-13-juegos-dinamicos-progresiones.
-
-GAMES['maquina-sigma'] = (() => {
-  const TW = 46, TH = 40, GAP = 12;
-  const termsOf = it => Array.from({ length: it.hi - it.lo + 1 }, (_, j) => it.f(it.lo + j));
-  const totalOf = (it, kind) => termsOf(it).reduce((s, v) => (kind === 'prod' ? s * v : s + v), kind === 'prod' ? 1 : 0);
-  const sym = kind => (kind === 'prod' ? 'Π' : 'Σ');
-  const op = kind => (kind === 'prod' ? ' · ' : ' + ');
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
-    const solution = params.rounds.map(r => r.items.map(it => `${sym(r.kind)} ${it.expr} (k de ${it.lo} a ${it.hi}) = ${termsOf(it).join(op(r.kind))} = ${totalOf(it, r.kind)}`).join(' · ')).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, beltY = 0, mach = { x: 0, y: 0, w: 0, h: 0 }, queue = [], tiles = [], fed = 0, off = 0, drag = null, pause = 0, n = 0, gulp = 0;
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); load(); },
-      lost(i) { st.done[i] = 0; drag = null; },
-    });
-    const item = () => R[a.cur].items[queue[0] ?? 0];
-    // Posición de una ficha en la bandeja (quieta, en una o dos filas de cuatro) o bajo el dedo.
-    const posOf = t => (t === drag ? { x: drag.fx, y: drag.fy } : { x: (W * ((t.slot % 4) + 0.5)) / 4, y: tiles.length > 4 ? beltY - 24 + Math.floor(t.slot / 4) * 48 : beltY });
-    const want = () => termsOf(item())[fed];
-
-    function layout(w, h) { W = w; H = h; beltY = 192; mach = { x: w / 2 - 92, y: h - 150, w: 184, h: 96 }; }
-    function load() {
-      const it = item(), values = [...termsOf(it), ...it.traps], order = shuffledOrder(values.length, `${it.expr}|${n++}`);
-      tiles = values.map((value, i) => ({ value, slot: order[i], gone: false }));
-      fed = 0; off = 0; drag = null; pause = 0;
-    }
-    function drop(t) {
-      const r = R[a.cur], it = item();
-      if (t.value === want()) {
-        t.gone = true; fed++; gulp = 1; a.hit(); api.sfx?.tap?.();
-        if (fed === termsOf(it).length) { st.done[a.cur]++; pause = 1.5; a.say(`${termsOf(it).join(op(r.kind))} = ${totalOf(it, r.kind)}`, C.ok); }
-      } else { a.say(`${t.value} no es el término de k = ${it.lo + fed}`, C.bad); a.miss(); }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt);
-        gulp = Math.max(0, gulp - dt * 3);
-        if (a.phase !== 'play') return;
-        if (pause > 0) { pause -= dt; if (pause <= 0) { queue.shift(); if (!queue.length) { a.win(); return; } load(); } return; }
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = R[a.cur], it = item(), terms = termsOf(it), live = a.phase !== 'idle' && !(locked || a.phase === 'all');
-
-        drawArcadeHead(p, C, a, R.length);
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        p.text(`${r.title} · ${r.kind === 'prod' ? 'productoria: se multiplica' : 'sumatoria: se suma'}`, W / 2, 40);
-        if (live) {
-          // La orden: el símbolo con sus límites y la fórmula.
-          p.noStroke(); p.fill(C.N); p.textStyle(p.BOLD); p.textSize(40); p.textAlign(p.CENTER, p.CENTER);
-          p.text(sym(r.kind), W / 2 - 46, 96);
-          p.fill(C.ink); p.textSize(12); p.text(it.hi, W / 2 - 46, 66); p.text(`k = ${it.lo}`, W / 2 - 46, 126);
-          p.textSize(24); p.textAlign(p.LEFT, p.CENTER); p.text(it.expr, W / 2 - 20, 96);
-
-          // La cinta y sus fichas.
-          p.noStroke(); p.fill(C.card); p.rect(0, beltY - (tiles.length > 4 ? 52 : TH / 2 + 8), W, tiles.length > 4 ? 104 : TH + 16);
-          tiles.forEach(t => { if (t.gone || t === drag) return; const q = posOf(t); drawTile(p, C, { x: q.x - TW / 2, y: q.y - TH / 2, w: TW, h: TH - 3 }, t.value, { fill: C.cream, size: 18, r: 9 }); });
-
-          // La máquina: pide el término del k actual y muestra lo que lleva.
-          const k = 1 + 0.06 * gulp, mw = mach.w * k, mh = mach.h * k, mx = W / 2 - mw / 2, my = mach.y + mach.h / 2 - mh / 2;
-          p.noStroke(); p.fill(shade(C.sky, 0.72)); p.rect(mx, my + 5, mw, mh, 16);
-          p.fill(pause > 0 ? C.ok : C.sky); p.rect(mx, my, mw, mh, 16);
-          p.fill(shade(C.sky, 0.5)); p.rect(W / 2 - 34, my - 8, 68, 16, 8);
-          p.fill(inkOn(pause > 0 ? C.ok : C.sky, C.ink)); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-          if (pause > 0) { p.textSize(22); p.text(`= ${totalOf(it, r.kind)}`, W / 2, mach.y + 34); }
-          else { p.textSize(13); p.text('Échale el término de', W / 2, mach.y + 26); p.textSize(22); p.text(`k = ${it.lo + fed}`, W / 2, mach.y + 50); }
-          const got = terms.slice(0, fed).join(op(r.kind));
-          fitText(p, fed ? `${got}${fed < terms.length ? op(r.kind) + '…' : ''}` : 'vacía', W / 2, mach.y + 78, mach.w - 20, 13);
-
-          if (drag) drawTile(p, C, { x: drag.fx - TW / 2, y: drag.fy - TH / 2 - 6, w: TW, h: TH - 3 }, drag.value, { fill: C.sun, size: 18, r: 9, lift: 5 });
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 17, locked);
-        const mid = (beltY + mach.y) / 2 + 20;
-        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: `${sym(rr.kind)} ${x.expr}, k de ${x.lo} a ${x.hi}: ${totalOf(x, rr.kind)}` }))).slice(0, 9), H / 2);
-        else drawArcadeBanner(p, C, a, mid, { idle: 'Sin prisa: arrastra el término que pide la máquina', lost: 'Demasiadas fichas equivocadas' });
-        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(locked || a.phase === 'all' ? '¡Máquina llena! Ya puedes comprobar' : 'Reemplaza k en la fórmula y busca ese número en la bandeja', W / 2, H - 16);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp !== 'play' || pause > 0) return false;
-        const t = tiles.find(x => { if (x.gone) return false; const q = posOf(x); return Math.abs(p.mouseX - q.x) <= TW / 2 + 5 && Math.abs(p.mouseY - q.y) <= TH / 2 + 3; });
-        if (t) { drag = t; t.fx = p.mouseX; t.fy = p.mouseY; }
-        return false;
-      };
-      p.mouseDragged = () => { if (drag && !locked && a.phase === 'play') { drag.fx = p.mouseX; drag.fy = p.mouseY; return false; } };
-      p.mouseReleased = () => {
-        if (!drag) return;
-        const t = drag; drag = null;
-        if (locked || a.phase !== 'play' || pause > 0) return;
-        if (t.fx > mach.x - 10 && t.fx < mach.x + mach.w + 10 && t.fy > mach.y - 16) drop(t);
-      };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; drag = null; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, want: want(), machine: { x: mach.x + mach.w / 2, y: mach.y + mach.h / 2 }, tiles: tiles.filter(t => !t.gone).map(t => ({ ...posOf(t), value: t.value })) }),
-    };
-  }
-
-  return { grade, create, termsOf, totalOf };
-})();
-;
-//#archivo js/games/jefe-venn.js
-// El Guardián de la Pradera (Álgebra unidad 0, conjuntos; jefe final del mundo Pradera de Venn). Una batalla por
-// turnos, sin reloj: el Guardián da una orden escrita con conjuntos y hay que armar la respuesta en el diagrama de
-// Venn del prado (dos círculos A y B dentro del universo U, con números adentro). Cada fase usa lo de una lección:
-//   · 'pick' (pertenencia y notación; operaciones): se tocan los elementos que forman el conjunto pedido. Si el
-//     conjunto pedido es el vacío, se ataca sin elegir ninguno.
-//   · 'move' (tipos y relaciones): se arrastran los elementos de una zona a otra hasta que A y B cumplan lo pedido
-//     («A ⊆ B», «disjuntos», «A unitario»). Hay muchas respuestas buenas.
-// Con «¡Atacar!» se comprueba: si está bien, el conjunto sale volando y le quita vida al Guardián; si no, él golpea,
-// se pierde una vida y dice qué falló. Sin vidas, la fase empieza otra vez (y el Guardián recupera esa vida).
-// params = { rounds: [{ title, mode: 'pick' | 'move', zones: { a, ab, b, out }, orders: [
-//   { say, pick: (x, inA, inB) => bool, yes }                      (mode 'pick')
-//   { say, check: (A, B, U) => bool, sample: zones, no (texto o (A, B, U) => texto), yes } ] }], lives? }     (mode 'move')
-// state = { done: [n por fase] }      Spec 2026-11-14-jefe-final-pradera.
-
-GAMES['jefe-venn'] = (() => {
-  const ZONES = ['a', 'ab', 'b', 'out'];
-  const sorted = xs => [...xs].sort((p, q) => p - q);
-  // Los conjuntos que forma un reparto por zonas: A, B y el universo.
-  const setsOf = z => ({ A: sorted([...z.a, ...z.ab]), B: sorted([...z.b, ...z.ab]), U: sorted(ZONES.flatMap(k => z[k])) });
-  // Conjunto que pide una orden de tocar: los x del universo que cumplen la condición.
-  function wantOf(order, zones) { const { A, B, U } = setsOf(zones); return U.filter(x => order.pick(x, A.includes(x), B.includes(x))); }
-  const fmtSet = xs => (xs.length ? `{${sorted(xs).join(', ')}}` : '∅');
-  // ¿El conjunto elegido es el pedido? Si no, dice qué sobra o que falta algo (sin decir cuál falta).
-  function judgePick(order, zones, sel) {
-    const want = wantOf(order, zones), extra = sorted(sel).find(x => !want.includes(x));
-    if (extra !== undefined) return { ok: false, msg: `El ${extra} no cumple: sobra` };
-    if (want.some(x => !sel.includes(x))) return { ok: false, msg: sel.length ? 'Va bien, pero falta al menos uno' : 'No es el vacío: algún elemento cumple' };
-    return { ok: true, msg: order.yes || '' };
-  }
-  // ¿El reparto logrado cumple la relación pedida?
-  function judgeMove(order, zones) { const { A, B, U } = setsOf(zones), ok = !!order.check(A, B, U), no = typeof order.no === 'function' ? order.no(A, B, U) : order.no; return { ok, msg: ok ? order.yes || '' : no || 'Todavía no se cumple' }; }
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.orders.length);
-    const solution = params.rounds.map(r => r.orders.map(o => (r.mode === 'pick' ? `${o.say} = ${fmtSet(wantOf(o, r.zones))}` : `${o.say}: por ejemplo A = ${fmtSet(setsOf(o.sample).A)} y B = ${fmtSet(setsOf(o.sample).B)}`)).join(' · ')).join(' · ');
-    return { ok, solution };
-  }
-
-  // Sitios de cada zona, medidos desde el centro del diagrama (círculos de radio 72 con centros a ±40).
-  const RAD = 72, OFF = 40, DISC = 24;
-  const SLOTS = {
-    a: [[-62, 0], [-92, 0], [-62, -28], [-62, 28], [-92, -28], [-92, 28]],
-    b: [[62, 0], [92, 0], [62, -28], [62, 28], [92, -28], [92, 28]],
-    ab: [[0, -14], [0, 14], [0, -42], [0, 42], [-22, 0], [22, 0]],
-  };
-  // Los de afuera van en las esquinas del universo (medio ancho hw), lejos de los dos círculos: así nunca se duda si están adentro.
-  const outSlot = (i, hw) => [[-(hw - 16), -74], [hw - 16, -74], [-(hw - 16), 74], [hw - 16, 74], [-(hw - 42), -78], [hw - 42, -78]][Math.min(i, 5)];
-  // Zona del diagrama en la que cae un punto (dx, dy medidos desde el centro); null fuera del universo.
-  function zoneAt(dx, dy, halfW, halfH) {
-    if (Math.abs(dx) > halfW || Math.abs(dy) > halfH) return null;
-    const inA = Math.hypot(dx + OFF, dy) <= RAD, inB = Math.hypot(dx - OFF, dy) <= RAD;
-    return inA && inB ? 'ab' : inA ? 'a' : inB ? 'b' : 'out';
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, TOTAL = R.reduce((s, r) => s + r.orders.length, 0);
-    const st = { done: R.map(() => 0) };
-    let locked = false, W = 0, H = 0, cy = 0, els = [], ord = 0, drag = null, pause = 0, result = null, fly = [], hurt = 0, rage = 0, t = 0, btn = { x: 0, y: 0, w: 0, h: 0 };
-    const a = makeArcade(R.length, params.lives ?? 3, api, {
-      start(i) { st.done[i] = 0; load(); },
-      lost(i) { st.done[i] = 0; drag = null; },
-    });
-    const round = () => R[a.cur], order = () => round().orders[Math.min(st.done[a.cur], round().orders.length - 1)];
-    const shownOrder = () => (pause > 0 && result && result.ok ? round().orders[Math.max(0, st.done[a.cur] - 1)] : order());
-    const hp = () => TOTAL - st.done.reduce((s, v, i) => s + Math.min(v, R[i].orders.length), 0);
-    const zonesNow = () => { const z = { a: [], ab: [], b: [], out: [] }; [...els].sort((p, q) => p.ord - q.ord).forEach(e => z[e.zone].push(e.v)); return z; };
-    const home = e => { const list = els.filter(x => x.zone === e.zone).sort((p, q) => p.ord - q.ord), i = Math.min(list.indexOf(e), 5), s = e.zone === 'out' ? outSlot(i, halfW()) : SLOTS[e.zone][i]; return { x: W / 2 + s[0], y: cy + s[1] }; };
-    const halfW = () => Math.min(150, (W - 28) / 2), halfH = 92;
-
-    function layout(w, h) { W = w; H = h; cy = 312; btn = { x: w / 2 - 62, y: h - 64, w: 124, h: 32 }; els.forEach(e => { const q = home(e); e.x = q.x; e.y = q.y; }); }
-    // Pone los elementos de la fase en sus zonas de partida (también antes de cada orden de arrastrar).
-    function load() {
-      const z = round().zones; els = []; ord = 0; drag = null; pause = 0; result = null;
-      ZONES.forEach(k => z[k].forEach(v => els.push({ v, zone: k, ord: ord++, sel: false, x: 0, y: 0 })));
-      els.forEach(e => { const q = home(e); e.x = q.x; e.y = q.y; });
-    }
-    function attack() {
-      const r = round(), o = order(), sel = els.filter(e => e.sel).map(e => e.v);
-      const res = r.mode === 'pick' ? judgePick(o, zonesNow(), sel) : judgeMove(o, zonesNow());
-      result = res; pause = res.ok ? 1.5 : 1.1; drag = null;
-      if (res.ok) {
-        st.done[a.cur]++; a.hit(); hurt = 1;
-        const shots = r.mode === 'pick' ? els.filter(e => e.sel) : els.filter(e => e.zone !== 'out');
-        fly = (shots.length ? shots : [{ x: W / 2, y: cy, v: '∅' }]).map((e, i) => ({ x: e.x, y: e.y, v: e.v, t: -i * 0.06 }));
-        a.say(res.msg, C.ok);
-      } else {
-        rage = 1; a.say(res.msg, C.bad);
-        if (a.miss()) { result = null; pause = 0; a.say(`${res.msg} · el Guardián se recupera`, C.bad); }
-      }
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
-
-      function step(dt) {
-        a.tick(dt); t += dt;
-        hurt = Math.max(0, hurt - dt * 2); rage = Math.max(0, rage - dt * 1.6);
-        fly = fly.filter(f => (f.t += dt * 2.2) < 1);
-        els.forEach(e => { if (e !== drag) { const q = home(e); e.x += (q.x - e.x) * Math.min(1, dt * 12); e.y += (q.y - e.y) * Math.min(1, dt * 12); } });
-        if (a.phase !== 'play' || pause <= 0) return;
-        pause -= dt;
-        if (pause <= 0) {
-          const good = result && result.ok; result = null;
-          if (!good) return;
-          if (st.done[a.cur] >= round().orders.length) { a.win(); return; }
-          if (round().mode === 'move') load(); else els.forEach(e => { e.sel = false; });
-        }
-      }
-
-      // El Guardián: un monolito con tres anillos (A, B y el universo) que giran y un núcleo que late; tiembla al golpear y
-      // se apaga un instante al recibir.
-      function drawBoss(x, y) {
-        const k = 1 + Math.sin(t * 2.2) * 0.03 - hurt * 0.12, sx = rage > 0 ? Math.sin(rage * 50) * 6 * rage : hurt > 0 ? Math.sin(hurt * 40) * 4 * hurt : 0;
-        const body = hurt > 0.5 ? C.mute : [C.coral, C.Q, C.I][a.cur % 3], w = 92 * k, h = 70 * k;
-        p.push(); p.translate(x + sx, y);
-        p.noStroke(); const sh = p.color(C.night); sh.setAlpha(70); p.fill(sh); p.ellipse(0, 40, 84, 12);
-        p.fill(shade(C.card, 0.85)); p.quad(-w * 0.32, h / 2 + 4, w * 0.32, h / 2 + 4, w * 0.2, -h / 2, -w * 0.2, -h / 2);
-        p.stroke(body); p.strokeWeight(1.5); p.fill(C.card); p.quad(-w * 0.32, h / 2, w * 0.32, h / 2, w * 0.2, -h / 2 - 4, -w * 0.2, -h / 2 - 4);
-        p.noFill(); p.strokeWeight(2);
-        for (let i = 0; i < 3; i++) { p.stroke([C.sky, C.coral, C.mint][i]); p.push(); p.rotate(t * (0.4 + i * 0.2) * (i % 2 ? -1 : 1) + i); p.ellipse(0, 0, w * 1.15 - i * 10, 22 + i * 7); p.pop(); }
-        const glow = p.color(body); glow.setAlpha(hurt > 0.3 ? 30 : 90); p.noStroke(); p.fill(glow); p.circle(0, -2, 30 + Math.sin(t * 3) * 3);
-        p.fill(hurt > 0.3 ? C.mute : body); p.circle(0, -2, 14);
-        p.pop();
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const dt = frameDt(p);
-        if (!locked) step(dt * a.slow);
-        const r = round(), o = shownOrder(), live = a.phase === 'play', over = locked || a.phase === 'all';
-
-        // Encabezado, vida del Guardián y el Guardián.
-        drawArcadeHead(p, C, a, R.length);
-        const bw = W - 120, life = hp(), seg = bw / TOTAL;
-        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.LEFT, p.CENTER); p.text('GUARDIÁN', 14, 44);
-        for (let i = 0; i < TOTAL; i++) { p.fill(i < life ? C.coral : C.line); p.rect(80 + i * seg, 39, seg - 2, 10, 3); }
-        if (!over) drawBoss(W / 2, 112); else { p.noStroke(); p.fill(C.N); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(18); p.text('¡Venciste al Guardián!', W / 2, 100); }
-
-        // La orden: qué hay que hacer y con qué.
-        if (live) {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          fitText(p, `${r.title} · ${r.mode === 'pick' ? 'toca los elementos de' : 'arrastra hasta lograr que'}`, W / 2, 166, W - 24, 11);
-          p.fill(C.card); p.rect(14, 176, W - 28, 34, 10);
-          p.noFill(); p.stroke(C.sun); p.strokeWeight(2); p.rect(14, 176, W - 28, 34, 10);
-          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); fitText(p, o.say, W / 2, 193, W - 48, 17);
-        }
-
-        // El prado: universo U con los círculos A y B.
-        const hw = halfW();
-        p.noStroke(); p.fill(C.halo); p.rect(W / 2 - hw, cy - halfH, hw * 2, halfH * 2, 14);
-        p.noFill(); p.stroke(C.line); p.strokeWeight(2); p.rect(W / 2 - hw, cy - halfH, hw * 2, halfH * 2, 14);
-        const fa = p.color(C.sky), fb = p.color(C.mint); fa.setAlpha(60); fb.setAlpha(60);
-        p.stroke(C.sky); p.strokeWeight(3); p.fill(fa); p.circle(W / 2 - OFF, cy, RAD * 2);
-        p.stroke(C.mint); p.fill(fb); p.circle(W / 2 + OFF, cy, RAD * 2);
-        p.noStroke(); p.textStyle(p.BOLD); p.textSize(15); p.textAlign(p.CENTER, p.CENTER);
-        p.fill(C.sky); p.text('A', W / 2 - OFF - 22, cy - RAD + 19); p.fill(C.Q); p.text('B', W / 2 + OFF + 22, cy - RAD + 19);
-        p.fill(C.mute); p.textSize(12); p.text('U', W / 2, cy + halfH - 10);
-        if (a.phase !== 'idle') [...els].sort((x, y) => (x === drag) - (y === drag)).forEach(e => {
-          const fill = e.sel ? C.sun : C.cream, up = e === drag ? 4 : 0;
-          p.noStroke(); p.fill(shade(fill, 0.74)); p.circle(e.x, e.y + 3, DISC + up);
-          p.fill(fill); p.circle(e.x, e.y - up, DISC + up);
-          if (e.sel) { p.noFill(); p.stroke(C.ink); p.strokeWeight(2); p.circle(e.x, e.y, DISC + 6); }
-          p.noStroke(); p.fill(inkOn(fill, C.ink)); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER); p.text(e.v, e.x, e.y - up + 1);
-        });
-        // El conjunto lanzado vuela hacia el Guardián.
-        fly.forEach(f => { if (f.t < 0) return; const k = f.t * f.t, x = f.x + (W / 2 - f.x) * k, y = f.y + (112 - f.y) * k; p.noStroke(); p.fill(C.sun); p.circle(x, y, DISC); p.fill(C.night); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER); p.text(f.v, x, y + 1); });
-
-        // Lo que se lleva armado y el botón.
-        if (live) {
-          const z = zonesNow(), s = setsOf(z);
-          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-          fitText(p, r.mode === 'pick' ? `Tu conjunto: ${fmtSet(els.filter(e => e.sel).map(e => e.v))}` : `A = ${fmtSet(s.A)}   B = ${fmtSet(s.B)}`, W / 2, H - 74, W - 24, 14);
-          if (pause <= 0) drawTile(p, C, btn, '¡Atacar!', { fill: C.coral, size: 15, r: 10, lift: 2 });
-        }
-
-        arcadeToast(p, C, a, W / 2, H - 13, locked);
-        if (over) drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.orders.length, text: `${rr.title}: ${Math.min(st.done[i], rr.orders.length)} de ${rr.orders.length}` })), 168, W - 44);
-        else drawArcadeBanner(p, C, a, cy, { idle: 'Sin prisa: piensa cada ataque', lost: 'El Guardián resistió esta fase', won: '¡Fase superada!' });
-        if (!a.toast && (over || a.phase === 'idle')) {
-          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-          p.text(over ? 'El mundo es tuyo. Ya puedes comprobar' : 'Arma el conjunto que pide el Guardián y ataca', W / 2, H - 13);
-        }
-        arcadeStop(p, a, locked);
-      };
-
-      p.mousePressed = () => {
-        if (!inCanvas(p)) return;
-        const tp = a.tap(locked);
-        if (tp === 'off') return;
-        if (tp !== 'play' || pause > 0) return false;
-        const x = p.mouseX, y = p.mouseY;
-        if (x >= btn.x - 6 && x <= btn.x + btn.w + 6 && y >= btn.y - 6 && y <= btn.y + btn.h + 6) { attack(); return false; }
-        const e = els.find(q => Math.hypot(q.x - x, q.y - y) <= DISC / 2 + 6);
-        if (!e) return;   // nada agarrado: el toque puede desplazar la lección
-        if (round().mode === 'pick') { e.sel = !e.sel; api.sfx?.tap?.(); } else drag = e;
-        return false;
-      };
-      p.mouseDragged = () => { if (drag && !locked && a.phase === 'play') { drag.x = p.mouseX; drag.y = p.mouseY; return false; } };
-      p.mouseReleased = () => {
-        if (!drag) return;
-        const e = drag; drag = null;
-        if (locked || a.phase !== 'play') return;
-        const z = zoneAt(e.x - W / 2, e.y - cy, halfW(), halfH);
-        if (z && z !== e.zone) { e.zone = z; e.ord = ord++; api.sfx?.tap?.(); }
-      };
-    }, 1.5);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ done: [...st.done] }),
-      lock() { locked = true; drag = null; },
-      destroy: () => m.remove(),
-      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
-      peek: () => {
-        const r = round(), o = order(), drop = { a: [-78, 0], ab: [0, 0], b: [78, 0], out: outSlot(0, halfW()) };
-        return { phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, mode: r.mode, hp: hp(), ok: { x: btn.x + btn.w / 2, y: btn.y + btn.h / 2 },
-          want: r.mode === 'pick' ? wantOf(o, zonesNow()) : null, sample: r.mode === 'move' ? o.sample : null,
-          drop: Object.fromEntries(ZONES.map(k => [k, { x: W / 2 + drop[k][0], y: cy + drop[k][1] }])), els: els.map(e => ({ v: e.v, x: e.x, y: e.y, zone: e.zone, sel: e.sel })) };
-      },
-    };
-  }
-
-  return { grade, create, setsOf, wantOf, fmtSet, judgePick, judgeMove, zoneAt };
-})();
-;
 //#archivo js/games/arbol-potencia.js
 // El árbol de la potencia (Álgebra, potencias; lección alg-21a): un árbol en el que de cada nudo salen b ramas, nivel
 // tras nivel. Con e niveles tiene b · b · … · b = bᵉ hojas. Se eligen las ramas por nudo (la base) y los niveles (el
@@ -11429,6 +10499,36 @@ Object.assign(XG, (() => {
   });
   // Cuáles ternas cierran: se tocan.
   XG.frases('cierran-o-no');
+})();
+;
+//#archivo js/games/expresion-escena.js
+// Ejercicios de expresiones algebraicas (Preicfes, icf-ma-ecuaciones; spec 2026-11-25-preicfes-estructura): áreas con letras, términos
+// semejantes y factor común. Armazones en figura-kit y conteo-escena. La escena no dice el resultado mientras se responde.
+(() => {
+  // Rectángulo de lados x + a y x + b partido en cuatro.
+  XG.cuenta('area-letras', 150, (K, p) => { const x = 96, y = 24, u = 84, a = 50, b = 36; return K.r(x, y, u, u, 'fa', 0) + K.r(x + u, y, a, u, 'fg', 0) + K.r(x, y + u, u, b, 'fg', 0) + K.r(x + u, y + u, a, b, 'ff', 0) + K.t(x + u / 2, 16, 'x', 's tm') + K.t(x + u + a / 2, 16, p.a, 's tm') + K.t(x - 10, y + u / 2 + 4, 'x', 's tm', 'end') + K.t(x - 10, y + u + b / 2 + 4, p.b, 's tm', 'end'); });
+  // Términos en fila: los de la misma clase llevan el mismo color.
+  XG.cuenta('junta-terminos', 70, (K, p) => p.t.map((s, i) => { const w = 300 / p.t.length; return K.r(20 + i * w, 14, w - 6, 40, ['fa', 'fg', 'ff'][p.c[i]], 6) + K.t(20 + (i + 0.5) * w - 3, 39, s, 's'); }).join(''));
+  // Dos rectángulos pegados: cuál es el alto común más grande.
+  XG.figura('factor-comun', {
+    ini: () => ({ k: 1 }), alto: () => 190, ms: 1000, pie: 'Mueve el alto.',
+    manijas: p => [{ k: 'k', min: 1, max: p.max, paso: 1, et: 'alto común' }], ok: (v, p) => v.k === p.k, sol: p => ({ k: p.k }), texto: p => `${p.k}(${p.a / p.k}${p.x} + ${p.b / p.k})`,
+    dib(v, K, p, f) { const h = 24 + v.k * 5; return K.r(50, 20, 150, h, 'fa', 0) + K.r(200, 20, 90, h, 'fg', 0) + K.t(125, 26 + h / 2, `${p.a}${p.x}`, 'b') + K.t(245, 26 + h / 2, p.b, 'b') + K.t(42, 24 + h / 2, v.k, 's tm', 'end') + K.f(f, K.t(125, 38 + h, p.a % v.k ? 'no cabe justo' : `${p.a / v.k}${p.x}`, 's tm') + K.t(245, 38 + h, p.b % v.k ? 'no cabe justo' : p.b / v.k, 's tm')); },
+    aviso: (v, p) => (p.a % v.k || p.b % v.k ? `${v.k} no divide a los dos.` : `${v.k} divide a los dos, pero todavía se puede sacar más.`), bien: (v, p) => `${p.a}${p.x} + ${p.b} = ${p.k}(${p.a / p.k}${p.x} + ${p.b / p.k}).`,
+  });
+  // x² y dos tiras de a·x: cuántos cuadritos faltan en la esquina.
+  XG.figura('cuadrado-falta', {
+    ini: () => ({ c: 0 }), alto: () => 214, ms: 1000, pie: 'Mueve los cuadritos.',
+    manijas: p => [{ k: 'c', min: 0, max: p.max, paso: 1, et: 'cuadritos de la esquina' }], ok: (v, p) => v.c === p.a * p.a, sol: p => ({ c: p.a * p.a }), texto: p => `${p.a * p.a}: (x + ${p.a})²`,
+    dib(v, K, p, f) {
+      const u = 13, L = 84, x = 110, y = 16; let h = K.r(x, y, L, L, 'fa', 0) + K.t(x + L / 2, y + L / 2 + 5, 'x²', 'b');
+      for (let i = 0; i < p.a; i++) h += K.r(x + L + i * u, y, u - 1, L, 'fg', 0) + K.r(x, y + L + i * u, L, u - 1, 'fg', 0);
+      if (f) for (let i = 0; i < v.c; i++) { const r = Math.floor(i / p.a), c = i % p.a; h += K.f(Math.min(1, f * 2), K.r(x + L + c * u, y + L + r * u, u - 1, u - 1, r < p.a ? 'ff' : 'fF', 0)); }
+      return h + K.t(x - 12, y + L / 2 + 5, 'x', 's tm', 'end') + K.t(x - 12, y + L + p.a * u / 2 + 4, p.a, 's tm', 'end');
+    },
+    aviso: (v, p) => (v.c < p.a * p.a ? 'Queda un hueco en la esquina.' : 'Sobran cuadritos: se salen del cuadrado.'), bien: (v, p) => `x² + ${2 * p.a}x + ${p.a * p.a} = (x + ${p.a})².`,
+  });
+  XG.frases('equivalen-no');
 })();
 ;
 //#archivo js/games/conjuntos-escena.js
@@ -22962,5 +22062,816 @@ PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
     ['pu-ge-6', 'La superficie de un cubo son seis caras cuadradas iguales.',
       opc('La superficie total de un cubo mide 96 cm². El volumen del cubo, en cm³, es:', ['16', '512', '64', '384'], 2,
         'Cada cara mide $96 \\div 6 = 16$ cm²: la arista es 4 y el volumen $4^3 = 64$.', 'Reparte la superficie entre las caras para hallar la arista.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-orden.js
+// Preuniversitario · mundo 3 «Acertijos de orden y asignación»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+// Pistas de orden: orden-kit.js. Cada acertijo tiene una sola solución (lo comprueba tests/preuda-razonamiento.test.js).
+PU_JUEGOS.push(({ setLesson, setExam }) => {
+  const K = (t, a, b, say, x = {}) => ({ t, a, b, say, ...x });
+  const at = (a, i, say) => ({ t: 'at', a, i, say }), notAt = (a, i, say) => ({ t: 'notAt', a, i, say });
+
+  setExam('pu-orden', 'Acertijos de orden y asignación', [
+    ['pu-or-1', 'En una fila se ubican primero las pistas firmes y luego las parejas.',
+      play('fila-pistas', 'Acomoda la fila', { rounds: [{ names: ['Elio', 'Fina', 'Gabo', 'Hilda'], clues: [at('Gabo', 1, 'Gabo es el segundo'), K('justBefore', 'Hilda', 'Elio', 'Elio va justo después de Hilda'), notAt('Fina', 3, 'Fina no es la última')] }] }, 'Gabo 2.º; Hilda y Elio solo caben en 3.º y 4.º; Fina 1.ª.', { hint: 'Primero el puesto fijo.' })],
+    ['pu-or-1', 'Tacha cada caso con la pista que lo contradice.',
+      play('descarta-casos', 'Descarta', { rounds: [{ cands: [['A', 'B', 'C'], ['B', 'A', 'C'], ['C', 'A', 'B']], clues: [K('before', 'A', 'C', 'A va antes que C'), notAt('A', 0, 'A no es el primero')] }] }, 'Solo B, A, C cumple.', { hint: 'Una pista basta para tachar.' })],
+    ['pu-or-2', 'En una mesa redonda se fija a uno y se ubica a los demás.',
+      play('mesa-redonda', 'La mesa', { rounds: [{ names: ['Iris', 'Juan', 'Kira', 'Lalo'], clues: [K('right', 'Iris', 'Kira', 'Kira está justo a la derecha de Iris'), K('opp', 'Kira', 'Lalo', 'Lalo está frente a Kira')] }] }, 'Kira a la derecha de Iris, Lalo frente a Kira y Juan frente a Iris.', { hint: 'Con Iris fija.' })],
+    ['pu-or-2', 'En la ronda se cuenta en un sentido y se saca a cada k-ésimo.',
+      play('ronda-saltos', 'La ronda', { rounds: [{ n: 9, k: 2 }] }, 'Con 9 y de 2 en 2 queda el 3.', { hint: 'Tacha despacio.' })],
+    ['pu-or-3', 'Un solo ✓ por fila y por columna.',
+      play('tabla-cruces', 'La tabla', { rounds: [{ rows: ['Ana', 'Bea', 'Cami'], cols: ['bus', 'metro', 'bici'], clues: [{ t: 'not', a: 1, v: 0 }, { t: 'not', a: 1, v: 1 }, { t: 'not', a: 2, v: 0 }] }] }, 'Bea en bici, Cami en metro, Ana en bus.', { hint: 'La fila con un solo hueco.' })],
+    ['pu-or-3', 'Las pistas que unen dos listas tachan en las dos.',
+      play('casilleros', 'Casilleros', { rounds: [{ people: ['Leo', 'Mía', 'Nel'], names: ['flauta', 'violín', 'tambor'], clues: [at('tambor', 0, 'el tambor es de Leo'), notAt('flauta', 1, 'la flauta no es de Mía')] }] }, 'Leo tambor, Nel flauta, Mía violín.', { hint: 'Lo seguro primero.' })],
+    ['pu-or-4', 'Necesario: en todos los casos; posible: en alguno.',
+      play('tiene-podria', 'Tiene que o podría', { rounds: [{ names: ['P', 'Q', 'R'], k: 2, rules: [K('either', 'P', 'Q', 'va P o va Q')], claims: [{ t: 'in', a: 'R', say: 'R va' }, { t: 'both', a: 'P', b: 'Q', say: 'P y Q van' }] }] }, 'Casos PQ, PR, QR: R podría, P y Q juntos podrían.', { hint: 'Lista los tres casos.' })],
+    ['pu-or-4', '«A solo si B»: si A está, B tiene que estar.',
+      play('comite-reglas', 'Comité', { rounds: [{ names: ['U', 'V', 'W', 'X'], k: 2, need: ['U'], rules: [K('onlyIf', 'U', 'W', 'U va solo si W va')] }] }, 'Con U tiene que ir W.', { hint: 'Mira qué exige U.' })],
+  ]);
+});
+
+// Mundo 3 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/orden-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-or-1', [
+    play('fila-cine', 'Cinco amigos hacen fila para entrar a cine. Pon a cada uno en su puesto.', { fichas: ['Abel', 'Cleo', 'Dina', 'Igor', 'Nuria'], pistas: [
+      { t: 'Dina es la cuarta.', r: ['en', 'Dina', 3] }, { t: 'Igor está justo detrás de Abel.', r: ['sig', 'Abel', 'Igor'] }, { t: 'Cleo está antes que Abel.', r: ['antes', 'Cleo', 'Abel'] }] },
+      'Con Dina en el 4, el bloque Abel-Igor solo cabe en 1-2 o en 2-3. Como Cleo va antes que Abel, es 2-3: Cleo, Abel, Igor, Dina y Nuria.',
+      { hint: 'Empieza por la pista que dice un puesto exacto y busca dónde cabe entera la pareja que va pegada.' }),
+    play('pisos-edificio', 'Cinco familias viven en un edificio, una por piso. Ubícalas.', { fichas: ['Cano', 'Díaz', 'Ossa', 'Pinto', 'Ruiz'], pistas: [
+      { t: 'Los Ossa viven en el piso 2.', r: ['en', 'Ossa', 1] }, { t: 'Los Pinto viven justo encima de los Díaz.', r: ['sig', 'Díaz', 'Pinto'] }, { t: 'Los Ruiz viven más abajo que los Ossa.', r: ['antes', 'Ruiz', 'Ossa'] }, { t: 'Los Cano no viven en el piso 5.', r: ['noen', 'Cano', 4] }] },
+      'Ossa en el 2 y Ruiz debajo, en el 1. El bloque Díaz-Pinto cabe en 3-4 o en 4-5; como Cano no está en el 5, es 4-5 y Cano queda en el 3.',
+      { hint: 'El piso 1 está abajo: «encima» es un número mayor. Fija primero el piso 2.' }),
+    play('puestos-posibles', 'Seis personas hacen fila: Kim, Nilo, Rosa y tres más. ¿En qué puestos **podría** estar Kim? Tócalos todos.', { names: ['Kim', 'Nilo', 'Rosa', 'X', 'Y', 'Z'], quien: 'Kim', pistas: [
+      { t: 'Rosa es la tercera.', r: ['en', 'Rosa', 2] }, { t: 'Kim está justo detrás de Nilo.', r: ['sig', 'Nilo', 'Kim'] }, { t: 'Kim no es la última.', r: ['noen', 'Kim', 5] }] },
+      'El bloque Nilo-Kim cabe en 1-2, en 4-5 y en 5-6; el último se borra porque Kim no es la última. Kim puede estar en el 2 o en el 5.',
+      { hint: 'La pareja viaja junta. Prueba cada lugar donde quepa sin pisar a Rosa.' }),
+    play('tacha-filas', 'Uri, Vito, Wanda y Zoe se forman para una foto. Tacha **todas** las filas imposibles.', { filas: [['Uri', 'Zoe', 'Vito', 'Wanda'], ['Wanda', 'Vito', 'Zoe', 'Uri'], ['Vito', 'Zoe', 'Uri', 'Wanda'], ['Uri', 'Vito', 'Wanda', 'Zoe'], ['Uri', 'Zoe', 'Wanda', 'Vito'], ['Uri', 'Wanda', 'Zoe', 'Vito']], pistas: [
+      { t: 'Zoe no está en una punta.', r: ['noext', 'Zoe'] }, { t: 'Uri está antes que Wanda.', r: ['antes', 'Uri', 'Wanda'] }, { t: 'Vito y Zoe están uno al lado del otro.', r: ['junto', 'Vito', 'Zoe'] }] },
+      'La segunda tiene a Wanda antes que Uri, la cuarta deja a Zoe en una punta y la quinta separa a Vito de Zoe. Las otras tres cumplen todo.',
+      { hint: 'Toma una pista y recorre las seis filas; luego la siguiente. Basta romper una para tacharla.' }),
+    play('un-cambio', 'Estos árboles quedaron mal plantados. Cámbialos de puesto hasta cumplir todas las pistas, leídas de izquierda a derecha.', { fichas: ['pino', 'olmo', 'roble', 'cedro', 'sauce'], ini: ['pino', 'olmo', 'roble', 'cedro', 'sauce'], izq: 'izquierda', der: 'derecha', pistas: [
+      { t: 'El roble está en el centro.', r: ['en', 'roble', 2] }, { t: 'El olmo está justo antes del roble.', r: ['sig', 'olmo', 'roble'] }, { t: 'El cedro está antes que el olmo.', r: ['antes', 'cedro', 'olmo'] }, { t: 'El sauce está justo después del pino.', r: ['sig', 'pino', 'sauce'] }] },
+      'El roble y el olmo ya estaban bien. El cedro debe ir antes que el olmo, en el 1, y el pino pasa al 4, pegado al sauce: basta intercambiar el pino y el cedro.',
+      { hint: 'Mira primero qué pistas ya se cumplen y no las dañes. Busca quién está en el lugar de otro.' }),
+    play('pistas-justas', 'Rita, Saúl y Tere hacen fila. Escoge **dos** pistas que dejen **una sola** fila posible.', { names: ['Rita', 'Saúl', 'Tere'], k: 2, cartas: [
+      { t: 'Rita está antes que Saúl', r: ['antes', 'Rita', 'Saúl'] }, { t: 'Tere no es la última', r: ['noen', 'Tere', 2] }, { t: 'Saúl está justo detrás de Rita', r: ['sig', 'Rita', 'Saúl'] }, { t: 'Saúl no es el primero', r: ['noen', 'Saúl', 0] }, { t: 'Rita no está en el centro', r: ['noen', 'Rita', 1] }] },
+      'Dos pistas bastan si juntas tachan cinco de las seis filas. Por ejemplo, «Saúl está justo detrás de Rita» deja dos filas, y «Tere no es la última» tacha una: queda Tere, Rita, Saúl.',
+      { hint: 'Empieza por la pista que más filas tacha y busca otra que borre lo que quedó.' }),
+    play('llegada-carrera', 'Una lista tiene cinco canciones. Ordénalas como suenan.', { fichas: ['Faro', 'Gris', 'Isla', 'Luna', 'Mar'], pistas: [
+      { t: '«Gris» suena de tercera.', r: ['en', 'Gris', 2] }, { t: '«Luna» suena dos puestos antes que «Isla».', r: ['dist', 'Luna', 'Isla', 2] }, { t: '«Faro» suena justo después de «Isla».', r: ['sig', 'Isla', 'Faro'] }] },
+      'Con Gris en el 3, Luna e Isla, a dos puestos, solo pueden ser 2 y 4 (en 1 y 3, o en 3 y 5, pisarían a Gris). Faro sigue a Isla, en el 5, y Mar queda primera.',
+      { hint: 'Fija la tercera y prueba dónde caben Luna e Isla con un puesto entre las dos.' }),
+    play('corre-puesto', 'Manda la ficha al puesto que se pide. Puedes fallar **una** vez.', { n: 8, tiros: [
+      { q: 'Alba es la 3.ª y Cata está justo detrás. Dani está **dos puestos** detrás de Cata. ¿Puesto de Dani?', fijo: { 3: 'A' }, r: 6, c: 'Cata es la 4.ª y Dani, la 6.ª', e: { 5: 'Contaste desde Alba: los dos puestos salen de Cata.' } },
+      { q: 'Beto es el último de 8. Ema está justo delante, y Leo, justo delante de Ema. ¿Puesto de Leo?', fijo: { 8: 'B' }, r: 6, c: 'Ema es la 7.ª y Leo, el 6.º', e: { 7: 'Ese es el puesto de Ema.' } },
+      { q: 'Iris es la 2.ª y Teo, el 5.º. Sara está entre los dos, pero no al lado de Iris. ¿Puesto de Sara?', fijo: { 2: 'I', 5: 'T' }, r: 4, c: 'Entre 2 y 5 están el 3 y el 4; el 3 toca a Iris', e: { 3: 'Ese puesto está al lado de Iris.' } }] },
+      'Dani: 3, 4 y dos más, 6. Leo: 8, 7, 6. Sara: entre el 2 y el 5 están el 3 y el 4, y el 3 toca a Iris.',
+      { hint: 'Dibuja la fila y cuenta siempre desde la persona que nombra la pista.' }),
+    sol('En una carrera de cinco atletas no hubo empates. Paula llegó de segunda. Lucía llegó justo después de Marta. Nora llegó dos puestos antes que Olga. ¿Quién ganó la carrera?',
+      ['Paula ocupa el puesto [[2]]: quedan libres 1, 3, 4 y 5', 'Marta y Lucía van seguidas: solo caben en 3 y 4, o en 4 y 5', 'Nora y Olga quedan a dos puestos: tienen que ser 1 y [[3]]; entonces Marta y Lucía son [[4]] y [[5]]', 'La ganadora es [[Nora]]'],
+      ['Olga', 'Marta', '1'],
+      'Se empieza por el dato fijo (Paula, 2.ª). Si Marta y Lucía fueran 3.ª y 4.ª, a Nora y Olga les quedarían 1 y 5, que no están a dos puestos. El orden es Nora, Paula, Olga, Marta, Lucía.',
+      'Dibuja cinco casillas, pon primero a quien tiene puesto seguro y prueba dónde cabe la pareja que va seguida.'),
+    err('Cinco familias viven en un edificio de cinco pisos, una en cada piso. Los Vélez viven en el piso 1 y los García en el 5. Los López viven justo debajo de los Ríos. Los Mora viven más arriba que los Ríos. ¿En qué piso viven los López?',
+      ['Vélez en el piso 1 y García en el 5: quedan los pisos 2, 3 y 4', 'López vive justo debajo de Ríos: ocupan dos pisos seguidos, López abajo', 'Los Mora viven más arriba que los Ríos, así que los Mora van en el piso 2', 'Entonces Ríos y López ocupan los pisos 4 y 3'], 2,
+      ['Los Mora viven más arriba que los Ríos, así que los Mora van en el piso 4', 'Los Mora viven más arriba que los Ríos, así que los Mora van en el piso 3', 'Los Mora viven más arriba que los Ríos, así que los Mora van en el piso 5'],
+      '«Más arriba» es un piso de número mayor. Con López, Ríos y Mora en 2, 3 y 4, los Mora quedan en el 4, los Ríos en el 3 y los López en el 2.',
+      'Vuelve a leer cada pista contra el paso que la usa: ¿el piso que le dieron a esa familia cumple lo que dice?'),
+    opc('Sara, Tomás, Úrsula y Víctor hacen fila. Sara está antes que Tomás, Úrsula está antes que Sara y Víctor no es el último. De las siguientes afirmaciones, de la única que se tiene certeza es:',
+      ['Úrsula es la primera', 'Víctor está antes que Sara', 'Tomás es el último', 'Sara es la segunda'], 2,
+      'Úrsula, Sara y Tomás van en ese orden y Víctor puede ir en tres lugares, menos al final. En todos los casos el último es Tomás; las otras afirmaciones fallan en algún caso.',
+      'Escribe todas las filas posibles. «Certeza» es lo que se cumple en todas, no en una sola.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/orden-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-or-2', [
+    play('mesa-amigos', 'Olga ya está sentada. Sienta a los demás; «sigue» es en el sentido del reloj.', { fijas: { 0: 'Olga' }, fichas: ['Ciro', 'Elsa', 'Fito', 'Gina', 'Hilda'], pistas: [
+      { t: 'Ciro sigue a Olga.', r: ['sigc', 'Olga', 'Ciro'] }, { t: 'Elsa está frente a Ciro.', r: ['frente', 'Elsa', 'Ciro'] }, { t: 'Fito está entre Elsa y Gina.', r: ['entre', 'Fito', 'Elsa', 'Gina'] }] },
+      'Ciro va después de Olga y Elsa, a tres sillas de Ciro. Fito no puede ir al otro lado de Elsa, porque entonces Gina caería en la silla de Olga: va entre Elsa y Gina, y Hilda en la que queda.',
+      { hint: 'Frente a alguien, en seis sillas, es avanzar tres. Para Fito prueba los dos lados de Elsa.' }),
+    play('misma-mesa', 'Cinco personas se leen en el sentido del reloj. Toca **todas** las mesas que son la del modelo, girada.', { modelo: ['A', 'B', 'C', 'D', 'E'], mesas: [['C', 'D', 'E', 'A', 'B'], ['E', 'D', 'C', 'B', 'A'], ['A', 'C', 'B', 'D', 'E'], ['B', 'C', 'D', 'E', 'A']] },
+      'Al girar, cada uno conserva a quién sigue. La segunda va al revés y la tercera cambia de lugar a B y C: no son la misma.',
+      { hint: 'Busca a la A en cada mesa y lee desde ahí en el sentido del reloj.' }),
+    play('frente-silla', 'En una mesa de 12 sillas, numeradas en el sentido del reloj, ¿qué silla queda frente a cada una?', { n: 12, de: [4, 8, 11], fichas: ['10', '2', '5', '8', '14', '1'] },
+      'Media mesa son 6 sillas: $4 + 6 = 10$; $8 + 6 = 14$, que se pasa y es la 2; $11 + 6 = 17$, la 5.',
+      { hint: 'Avanza la mitad de las sillas. Si te pasas de la última, resta las 12.' }),
+    play('vuelta-silla', 'Hay 9 sillas en ronda. Desde la **4** se avanzan **25** pasos en el sentido del reloj. Lleva el señalador a la silla donde termina.', { n: 9, de: 4, pasos: 25 },
+      '$4 + 25 = 29$. Se restan vueltas de 9: $29 - 27 = 2$. Termina en la silla 2.',
+      { hint: 'Cada 9 pasos se vuelve al mismo lugar. Quita las vueltas completas y avanza solo lo que sobra.' }),
+    play('dos-lados', 'Nico está a **3** sillas de Ana, que ocupa la 7. La mesa tiene 8 sillas. Toca **todas** las sillas donde podría estar.', { n: 8, de: 7, d: 3, quien: 'Ana' },
+      'Hacia adelante: $7 + 3 = 10$, la 2. Hacia atrás: $7 - 3 = 4$. Son dos lugares posibles, la 2 y la 4.',
+      { hint: 'La pista no dice hacia qué lado. Cuenta tres pasos en cada sentido.' }),
+    play('collar-cerrado', 'El ámbar ya está en el collar, que se cierra. Ensarta las demás cuentas.', { fijas: { 0: 'ámbar' }, fichas: ['perla', 'jade', 'coral', 'ónix'], pistas: [
+      { t: 'El jade sigue al ámbar, en el sentido del reloj.', r: ['sigc', 'ámbar', 'jade'] }, { t: 'El coral es vecino del ámbar.', r: ['juntoc', 'coral', 'ámbar'] }, { t: 'La perla no es vecina del jade.', r: ['nojuntoc', 'perla', 'jade'] }] },
+      'El ámbar tiene dos vecinos: el jade y, del otro lado, el coral, porque el collar se cierra. La perla no toca al jade, así que va junto al coral, y el ónix junto al jade.',
+      { hint: 'El collar no tiene puntas: el ámbar tiene un vecino a cada lado.' }),
+    play('cambia-mesa', 'Ada no se mueve. Cambia de silla a las demás hasta que se cumplan las pistas.', { fijas: { 0: 'Ada' }, fichas: ['Bea', 'Cleo', 'Dora', 'Ema', 'Flor'], ini: ['Ada', 'Bea', 'Cleo', 'Dora', 'Ema', 'Flor'], pistas: [
+      { t: 'Dora está frente a Ada.', r: ['frente', 'Dora', 'Ada'] }, { t: 'Bea sigue a Ada en el sentido del reloj.', r: ['sigc', 'Ada', 'Bea'] }, { t: 'Ema está entre Bea y Dora.', r: ['entre', 'Ema', 'Bea', 'Dora'] }, { t: 'Flor sigue a Cleo en el sentido del reloj.', r: ['sigc', 'Cleo', 'Flor'] }] },
+      'Dora y Bea ya estaban bien. Entre ellas va Ema, no Cleo: se intercambian, y Flor queda justo después de Cleo.',
+      { hint: 'Revisa qué pistas ya se cumplen. ¿Quién ocupa la silla que está entre Bea y Dora?' }),
+    play('gira-ruleta', 'Da los pasos justos, en el sentido del reloj y sin vueltas de más. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Son 10 sillas. De la 8 a la que está **enfrente**', n: 10, de: 8, r: 5, c: 'La mitad de 10: 5 pasos, hasta la 3' },
+      { q: 'Son 11 sillas. De la 9 a la 2', n: 11, de: 9, r: 4, c: '$9 + 4 = 13$, y $13 - 11 = 2$', e: { 7: 'Esos son los pasos hacia atrás.' } },
+      { q: 'Son 8 sillas. De la 5 a la 3', n: 8, de: 5, r: 6, c: '$5 + 6 = 11$, y $11 - 8 = 3$', e: { 2: 'Esos son los pasos hacia atrás.' } }] },
+      'Enfrente: la mitad, 5 pasos. De 9 a 2 en una ronda de 11: 10, 11, 1, 2, cuatro pasos. De 5 a 3 en una de 8: seis.',
+      { hint: 'La ruleta no se devuelve: cuenta desde la silla siguiente y pasa por la última para volver a la 1.' }),
+    sol('Seis amigos se sientan en una mesa redonda con sillas numeradas del 1 al 6 en el sentido del reloj. Andrés está en la silla 1. Beatriz está frente a Andrés. Carlos ocupa la silla siguiente a la de Beatriz. Daniela está frente a Carlos. Emilio no está junto a Andrés. ¿En qué silla está Felipe?',
+      ['En una mesa de 6, la silla de enfrente está 3 puestos más allá: Beatriz está en la [[4]]', 'Carlos va en la siguiente, la [[5]], y Daniela frente a él, en la [[2]]', 'Quedan las sillas 3 y 6. Junto a Andrés están la 2 y la 6: Emilio va en la [[3]] y Felipe en la [[6]]'],
+      ['1', '7', '8'],
+      'Frente a la silla $n$ está la $n + 3$ (y se vuelve a empezar después de la 6). Las dos sillas libres se reparten con la última pista: Emilio no puede ir en la 6, que es vecina de la 1.',
+      'Dibuja el círculo con las seis sillas y pon primero a quien tiene silla fija. «Frente a» es media vuelta.'),
+    err('Ocho personas se sientan en una mesa redonda con sillas numeradas del 1 al 8. ¿Qué silla queda frente a la 3 y cuáles son las vecinas de la 8?',
+      ['En una mesa de 8, la silla de enfrente está 4 puestos más allá', 'Frente a la silla 3 está la $3 + 4 = 7$', 'Las vecinas de la silla 8 son la 7 y la 9'], 2,
+      ['Las vecinas de la silla 8 son la 7 y la 1', 'Las vecinas de la silla 8 son la 7 y la 4', 'Las vecinas de la silla 8 son la 6 y la 7'],
+      'La mesa se cierra: después de la silla 8 viene la 1. No existe la silla 9.',
+      'En un círculo no hay primero ni último: ¿qué silla sigue después de la más alta?'),
+    opc('Cinco niños forman una ronda en este orden, en el sentido del reloj: Ana, Beto, Caro, Dany y Eli. Empezando por Ana cuentan «uno, dos, tres» y sale el niño al que le toca el tres; se sigue contando desde el siguiente. El último niño que queda en la ronda es:',
+      ['Ana', 'Beto', 'Eli', 'Dany'], 3,
+      'Sale Caro; contando desde Dany sale Ana; desde Beto sale Eli; desde Beto otra vez (Beto, Dany, Beto) sale Beto. Queda Dany.',
+      'Hazlo paso a paso tachando nombres: después de cada salida la cuenta empieza en el siguiente.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/orden-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-or-3', [
+    play('tacha-cruz', 'Cuatro amigos y cuatro planes, uno para cada uno. Ya se sabe que Gala va al cine. Toca **todas** las casillas que ese ✓ tacha.', { filas: ['Fede', 'Gala', 'Hana', 'Isa'], cols: ['mar', 'lago', 'cine', 'feria'], si: [1, 2] },
+      'Gala ya no tiene otro plan: se tacha el resto de su fila. Y nadie más va al cine: se tacha el resto de la columna. Son 6 casillas.',
+      { hint: 'Piensa en dos cosas: qué ya no puede hacer Gala y quién ya no puede ir al cine.' }),
+    play('hueco-unico', 'Cuatro amigos y cuatro colores, uno distinto para cada uno. Con las ✗ que ya están, sin poner ninguna más, toca **todos** los ✓ que ya son seguros.', { filas: ['Ciro', 'Dana', 'Elio', 'Fina'], cols: ['rojo', 'azul', 'gris', 'lila'], x: [0, 1, 3, 7, 8, 11] },
+      'En la fila de Ciro queda un solo hueco: gris. En la columna lila queda un solo hueco: Fina. En las demás todavía hay dos o más.',
+      { hint: 'Busca filas con un solo hueco y también columnas con un solo hueco.' }),
+    play('tabla-oficios', 'Cada uno practica un deporte distinto. Marca los ✓.', { filas: ['Abril', 'Darío', 'Fabia', 'Omar'], cols: ['yudo', 'remo', 'golf', 'polo'], pistas: [
+      { t: 'Fabia practica remo.', r: ['es', 2, 1] }, { t: 'Abril no practica yudo.', r: ['no', 0, 0] }, { t: 'Abril tampoco practica polo.', r: ['no', 0, 3] }, { t: 'Omar no practica yudo.', r: ['no', 3, 0] }] },
+      'El remo es de Fabia. A Abril, sin yudo ni polo, le queda golf. Omar no practica yudo: polo. Y Darío, yudo.',
+      { hint: 'Empieza por la pista que afirma y tacha su fila y su columna. Después mira a Abril.' }),
+    play('tabla-ajena', 'Alguien llenó esta tabla sin mirar las pistas. Toca **todos** los ✓ que rompen alguna.', { filas: ['Rita', 'Saúl', 'Tere', 'Uri'], cols: ['cuento', 'novela', 'poema', 'cómic'], si: [2, 0, 3, 1], pistas: [
+      { t: 'Rita lee poema.', r: ['es', 0, 2] }, { t: 'Saúl no lee novela.', r: ['no', 1, 1] }, { t: 'Tere no lee cómic.', r: ['no', 2, 3] }, { t: 'Uri lee poema o cómic.', r: ['o', 3, 2, 3] }] },
+      'Tere no podía tener el cómic, y Uri debía tener poema o cómic, no novela. Rita y Saúl cumplen.',
+      { hint: 'Toma cada pista y busca la fila de esa persona: ¿su ✓ la cumple?' }),
+    play('pista-falta', 'Lis, Moy y Nía tienen cada uno una prenda distinta, y la gorra no es de Lis. ¿Qué pista **basta** para saberlo todo?', { gente: ['Lis', 'Moy', 'Nía'], names: ['gorra', 'saco', 'reloj'], k: 1, dadas: [{ t: 'La gorra no es de Lis', r: ['noen', 'gorra', 0] }], cartas: [
+      { t: 'La gorra es de Nía', r: ['en', 'gorra', 2] }, { t: 'El saco es de Moy', r: ['en', 'saco', 1] }, { t: 'El reloj no es de Nía', r: ['noen', 'reloj', 2] }, { t: 'El saco no es de Moy', r: ['noen', 'saco', 1] }] },
+      'Si el saco es de Moy, la gorra, que no es de Lis, es de Nía, y a Lis le queda el reloj. Con las otras pistas quedan dos o más repartos.',
+      { hint: 'Prueba cada pista: ¿cuántos de los repartos que siguen encendidos la cumplen?' }),
+    play('tabla-dos-datos', 'Tres amigos, cada uno en un lugar distinto y con una mascota distinta. Marca los ✓ de las dos tablas.', { filas: ['Cira', 'Elio', 'Toni'], cols: ['norte', 'sur', 'río', 'gato', 'pez', 'loro'], pistas: [
+      { t: 'Cira no vive en el norte.', r: ['no', 0, 0] }, { t: 'Cira no vive junto al río.', r: ['no', 0, 2] }, { t: 'Elio tiene el loro.', r: ['es', 1, 5] }, { t: 'Quien vive en el norte tiene el pez.', r: ['liga', 0, 4] }] },
+      'Cira vive en el sur. Elio tiene el loro, no el pez, así que no vive en el norte: vive junto al río. Toni, en el norte, con el pez; y Cira tiene el gato.',
+      { hint: 'La última pista une las dos tablas: si alguien no tiene el pez, tampoco vive en el norte.' }),
+    play('casas-datos', 'Tres casas en fila, de izquierda a derecha. Pon arriba la pared de cada una (azul, roja o gris) y abajo lo que toman.', { ocultas: [['grupo', 'azul', 0, 2], ['grupo', 'roja', 0, 2], ['grupo', 'gris', 0, 2]], avisoOculto: 'Las paredes van arriba y las bebidas abajo.', fichas: ['azul', 'roja', 'gris', 'té', 'jugo', 'agua'], pistas: [
+      { t: 'La casa azul es la del centro.', r: ['en', 'azul', 1] }, { t: 'En la casa roja toman té.', r: ['mismo', 'roja', 'té'] }, { t: 'Justo a la derecha de la azul toman agua.', r: ['rel', 'azul', 'agua', 1] }] },
+      'Con la azul en el centro, el agua está en la 3. En la roja toman té, así que la roja no es la 3: es la 1, y la gris la 3. El jugo queda en el centro.',
+      { hint: 'Une los datos que van en la misma casa: si en la 3 toman agua, ¿puede ser la roja?' }),
+    play('cae-caja', 'Suelta la bola en la caja que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Cuatro músicos, un instrumento distinto cada uno. Noa no toca tuba ni bajo. Pía toca piano. ¿Qué toca **Noa**?', cajas: ['tuba', 'piano', 'flauta', 'bajo'], r: 3, c: 'Sin tuba, ni bajo, ni el piano de Pía: flauta', e: { 1: 'Noa no toca tuba.', 2: 'El piano ya es de Pía.', 4: 'Noa no toca bajo.' } },
+      { q: 'Quien va en bus es médico. Raúl es juez. **Raúl** va en bus o en tren. ¿En cuál?', cajas: ['bus', 'tren', 'no se sabe'], r: 2, c: 'Raúl no es el médico: no va en bus', e: { 1: 'Quien va en bus es médico, y Raúl es juez.', 3: 'Sí se sabe: la pista une los dos datos.' } },
+      { q: 'Ari, Bo y Cam se reparten rojo, azul y gris, uno cada uno. Ari no tiene el rojo. Bo no tiene el rojo. ¿Cuál tiene **Cam**?', cajas: ['rojo', 'azul', 'gris', 'no se sabe'], r: 1, c: 'En la columna del rojo solo queda Cam', e: { 4: 'Mira la columna del rojo: solo queda una persona.' } }] },
+      'Noa: descartados tuba y bajo, y con el piano de Pía, flauta. Raúl no es médico, así que no va en bus. En la columna del rojo solo queda Cam.',
+      { hint: 'Tacha lo que no puede ser. A veces el único hueco está en la columna y no en la fila.' }),
+    sol('Laura, Mónica y Paola estudian Biología, Química y Música, una carrera cada una, y viven en Bello, Envigado e Itagüí, cada una en un municipio. Mónica vive en Itagüí. Laura no vive en Bello. La que vive en Envigado estudia Música. Mónica no estudia Química. ¿Qué estudia Paola?',
+      ['Mónica vive en Itagüí y Laura no vive en Bello: Laura vive en [[Envigado]]', 'La de Envigado estudia Música: Laura estudia [[Música]]', 'A Paola le queda vivir en [[Bello]]', 'Mónica no estudia Química: estudia [[Biología]], y Paola estudia [[Química]]'],
+      ['Itagüí', 'Derecho'],
+      'En una tabla de doble entrada cada dato tacha casillas. Los municipios quedan primero, y con ellos se resuelve la carrera de Laura; las otras dos se reparten con la última pista.',
+      'Haz dos tablas: una de personas y municipios y otra de personas y carreras. Empieza por el dato que da un ✓ directo.'),
+    err('Andrés, Bárbara, César y David pidieron cada uno una bebida distinta: café, té, jugo y agua. Bárbara pidió té. David no pidió café ni jugo. Andrés no toma café ni té. ¿Qué pidió César?',
+      ['Bárbara pidió té: nadie más lo pide', 'David no pidió café ni jugo, y el té ya está: David pidió agua', 'Andrés no toma café ni té, y el agua es de David: Andrés pidió jugo', 'A César le queda el agua'], 3,
+      ['A César le queda el café', 'A César le queda el jugo', 'A César le queda el té'],
+      'Cada bebida es de una sola persona: té de Bárbara, agua de David y jugo de Andrés. La única que queda es el café.',
+      'Al final de la tabla debe haber un solo ✓ en cada fila y en cada columna. ¿Qué bebida quedó repetida?'),
+    opc('Hugo, Iván y Julia practican cada uno un deporte distinto: natación, tenis y ajedrez. Hugo no practica natación. Julia no practica tenis ni natación. Entonces Iván practica:',
+      ['natación', 'tenis', 'ajedrez', 'no se puede determinar'], 0,
+      'Julia solo puede practicar ajedrez. A Hugo, que no nada, le queda el tenis. Iván practica natación.',
+      'Empieza por la persona que tiene más casillas tachadas.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/orden-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-or-4', [
+    play('casos-si', 'La regla dice: «si **no** va Quino, entonces va Rosa». Toca **todos** los casos que se pueden.', { a: 'Quino', b: 'Rosa', r: ['o', 'Quino', 'Rosa'] },
+      'La regla solo pide algo cuando Quino no va: ahí debe ir Rosa. Choca que no vaya ninguno; si Quino va, Rosa puede ir o no.',
+      { hint: 'Revisa los casos uno por uno y pregunta: ¿aquí falta Quino? Si no falta, la regla no pide nada.' }),
+    play('misma-regla', '«Vera viaja **solo si** lleva pasaporte.» Toca **todas** las frases que dicen lo mismo.', { frases: [{ t: 'Si Vera viaja, lleva pasaporte', ok: true }, { t: 'Si Vera lleva pasaporte, viaja', ok: false }, { t: 'Si Vera no lleva pasaporte, no viaja', ok: true }, { t: 'Si Vera no viaja, no lleva pasaporte', ok: false }] },
+      '«Solo si» señala el permiso: si viaja, lo lleva; y sin él no viaja. Llevarlo no la obliga a viajar.',
+      { hint: 'El pasaporte es el permiso. Pregúntate si tener un permiso obliga a usarlo.' }),
+    play('equipo-justo', 'Arma un equipo de **tres** que cumpla todas las reglas.', { gente: ['Ada', 'Bil', 'Cam', 'Dan', 'Eli', 'Fia'], cuantos: 3, pistas: [
+      { t: 'Va Cam.', r: ['va', 'Cam'] }, { t: 'Cam va solo si va Eli.', r: ['si', 'Cam', 'Eli'] }, { t: 'Si va Ada, va Dan.', r: ['si', 'Ada', 'Dan'] }, { t: 'Va Ada o va Bil.', r: ['o', 'Ada', 'Bil'] }] },
+      'Cam trae a Eli: queda un cupo. Con Ada harían falta dos, porque ella trae a Dan. El tercero es Bil.',
+      { hint: 'Sigue la cadena: quien va obliga a otros. Cuenta los cupos antes de escoger al último.' }),
+    play('quien-seguro', 'Se escogen **tres** de cinco. Toca a quien **tiene que** ir, sea cual sea el equipo.', { gente: ['Vito', 'Wil', 'Xime', 'Yan', 'Zoe'], son: 3, pistas: [
+      { t: 'Si va Vito, va Wil.', r: ['si', 'Vito', 'Wil'] }, { t: 'Si va Xime, va Wil.', r: ['si', 'Xime', 'Wil'] }, { t: 'Zoe va solo si va Xime.', r: ['si', 'Zoe', 'Xime'] }] },
+      'Sin Wil no van Vito ni Xime, y sin Xime no va Zoe: solo quedaría Yan. Por eso Wil está en todos los equipos; los demás faltan en alguno.',
+      { hint: 'Prueba a dejar por fuera a cada persona: si sin ella no se completan tres, tiene que ir.' }),
+    play('tres-zonas', 'Estos son **todos** los equipos posibles. Lleva cada afirmación a su zona.', { equipos: [['A', 'C', 'D'], ['A', 'B', 'D'], ['A', 'D', 'E']], dichos: [{ t: 'va B', van: ['B'] }, { t: 'van A y D', van: ['A', 'D'] }, { t: 'van B y C', van: ['B', 'C'] }, { t: 'van C y D', van: ['C', 'D'] }, { t: 'va E', van: ['E'] }] },
+      'A y D están en los tres: tiene que. B, E y la pareja C-D aparecen en alguno: podría. B con C no aparece en ninguno: no puede.',
+      { hint: 'Cuenta en cuántos equipos se cumple cada afirmación: en los tres, en alguno o en ninguno.' }),
+    play('rompe-regla', 'Arma un grupo de **tres** que **rompa** la primera regla y cumpla las otras dos.', { gente: ['Iva', 'Jon', 'Kai', 'Lea', 'Moe'], cuantos: 3, pistas: [
+      { t: 'Que se rompa: si va Iva, va Jon.', r: ['rompe', ['si', 'Iva', 'Jon']] }, { t: 'Kai va solo si va Lea.', r: ['si', 'Kai', 'Lea'] }, { t: 'Jon y Moe no van juntos.', r: ['nojuntos', 'Jon', 'Moe'] }] },
+      'Un «si va Iva, va Jon» solo se rompe con Iva adentro y Jon afuera. Kai necesita a Lea: sirven Iva, Kai y Lea, o Iva, Lea y Moe.',
+      { hint: 'Un «si…» prohíbe un solo caso. ¿Cuál es? Ese es el que hay que armar.' }),
+    play('maximo-grupo', 'Cumpliendo todas las reglas, arma el grupo **más grande** que se pueda.', { gente: ['Alan', 'Bea', 'Cruz', 'Dora', 'Efra', 'Flor'], pistas: [
+      { t: 'Alan y Bea no van juntos.', r: ['nojuntos', 'Alan', 'Bea'] }, { t: 'Cruz va solo si va Dora.', r: ['si', 'Cruz', 'Dora'] }, { t: 'Dora y Efra no van juntos.', r: ['nojuntos', 'Dora', 'Efra'] }, { t: 'Si va Flor, no va Alan.', r: ['nojuntos', 'Flor', 'Alan'] }] },
+      'Alan impide a Bea y a Flor: conviene dejarlo. Efra impide a Dora, y sin Dora no va Cruz: también sale. Quedan Bea, Cruz, Dora y Flor.',
+      { hint: 'Mira a quién deja por fuera cada uno. Conviene sacar al que impide a más personas.' }),
+    play('cae-zona', 'Suelta la bola en lo que se puede afirmar. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Si llueve, se cancela. **Se canceló.** ¿Llovió?', cajas: ['tiene que', 'podría', 'no puede'], r: 2, c: 'Pudo cancelarse por otra cosa: podría', e: { 1: 'La regla no dice que solo se cancele por lluvia.', 3: 'Si llovió, también se cancela: es posible.' } },
+      { q: 'Nía va solo si va Omar. **Omar no va.** ¿Va Nía?', cajas: ['tiene que', 'podría', 'no puede'], r: 3, c: 'Sin Omar no va Nía: no puede', e: { 1: 'Omar es el permiso de Nía, y no va.', 2: '«Solo si»: sin Omar no hay Nía.' } },
+      { q: 'Van dos de tres: P, Q y R. P y Q no van juntos. ¿Va **R**?', cajas: ['tiene que', 'podría', 'no puede'], r: 1, c: 'P-R o Q-R: R tiene que ir', e: { 2: 'Haz la lista de parejas: ¿en cuál falta R?' } }] },
+      'Un «si» no se puede leer al revés: podría. Sin el permiso no hay nada: no puede. Y en las dos parejas posibles está R: tiene que.',
+      { hint: 'Haz la lista de casos que cumplen: en todos, en alguno o en ninguno.' }),
+    sol('Para un torneo se deben escoger exactamente 3 jugadoras entre Ana, Bea, Clara, Dora y Eva. Eva tiene que ir. Si va Ana, no va Bea. Clara va solo si va Dora. ¿Cuántos equipos distintos se pueden armar y quién, además de Eva, está en todos?',
+      ['Eva va siempre: faltan [[2]] jugadoras entre las otras cuatro', 'Ana y Bea no pueden ir juntas, y Clara necesita que vaya [[Dora]]', 'Las parejas que sirven son Ana y Dora, Bea y Dora, y Clara y Dora: [[3]] equipos', 'En todos los equipos está [[Dora]]: ella también tiene que ir'],
+      ['Clara', '6', '4'],
+      'De las 6 parejas posibles, las reglas tachan tres: Ana con Bea, Ana con Clara y Bea con Clara (en estas dos, Clara iría sin Dora). Lo que aparece en todas las soluciones «tiene que» pasar.',
+      'Haz la lista de todas las parejas que acompañarían a Eva y tacha las que rompen alguna regla.'),
+    err('En un comité hay una regla: «si va Mario, entonces va Nubia». Se sabe que Nubia va. ¿Qué se puede concluir sobre Mario?',
+      ['La regla dice que Mario adentro obliga a Nubia adentro', 'La regla no dice nada sobre lo que pasa cuando Mario no va', 'Como Nubia va, Mario tiene que ir'], 2,
+      ['Como Nubia va, Mario podría ir o no ir: no se sabe', 'Como Nubia va, Mario no puede ir', 'Como Nubia va, la regla quedó incumplida'],
+      'La regla solo corre en un sentido. Nubia puede ir con Mario o sin él, y en los dos casos la regla se cumple: de que Nubia vaya no se deduce nada sobre Mario.',
+      'Prueba los dos casos, Mario adentro y Mario afuera, y mira si alguno rompe la regla.'),
+    opc('Para una exposición se eligen exactamente tres de cinco cuadros: P, Q, R, S y T. Si se elige P, no se elige Q. R se elige solo si se elige S. T no se elige. De las siguientes afirmaciones, la única que tiene que ser verdadera es:',
+      ['Se elige P', 'Se eligen R y S', 'Se elige Q', 'No se elige R'], 1,
+      'Sin T quedan P, Q, R y S, y hay que elegir tres. P y Q no van juntos, así que sale uno de ellos: las ternas posibles son P, R, S y Q, R, S. En las dos están R y S.',
+      'Escribe todas las ternas que cumplen las reglas y busca lo que se repite en todas.'),
+  ]);
+
+  addExam('pu-orden', [
+    ['pu-or-1', 'Un puesto contado desde adelante y desde atrás suma una persona de más.',
+      opc('En una fila de 7 personas, Rosa es la tercera contando desde adelante. Contando desde atrás, Rosa es la:', ['cuarta', 'quinta', 'tercera', 'sexta'], 1,
+        'Detrás de Rosa hay $7 - 3 = 4$ personas, así que desde atrás es la quinta.', 'Dibuja las siete casillas y cuenta desde el otro extremo.')],
+    ['pu-or-2', 'En una mesa redonda de n sillas, enfrente queda la silla que está a n/2 puestos.',
+      opc('En una mesa redonda hay 10 sillas numeradas en orden. La silla que queda frente a la 7 es la:', ['2', '3', '12', '5'], 0,
+        'Enfrente está 5 puestos más allá: $7 + 5 = 12$, y después de la 10 se vuelve a empezar: la 2.', 'Media vuelta en una mesa de 10 son 5 puestos; después de la 10 sigue la 1.')],
+    ['pu-or-3', 'En una tabla de doble entrada cada pista negativa tacha casillas hasta dejar un ✓ por fila.',
+      opc('Marta, Nelly y Olga tienen un perro, un gato y un loro, una mascota cada una. Marta no tiene el perro. Olga no tiene el perro ni el gato. La mascota de Marta es:', ['el perro', 'el loro', 'no se puede saber', 'el gato'], 3,
+        'Olga tiene el loro. A Marta, que no tiene el perro, le queda el gato, y a Nelly el perro.', 'Empieza por la persona con más casillas tachadas.')],
+    ['pu-or-4', '«A solo si B»: sin B no puede estar A.',
+      opc('Una regla dice: «Luis va al paseo solo si va Karen». Se sabe que Karen no va. Entonces:', ['Luis va al paseo', 'Luis podría ir o no ir', 'Luis no va al paseo', 'La regla no se cumple'], 2,
+        'Karen es condición necesaria para Luis: sin Karen, Luis no puede ir.', '«Solo si» señala lo que hace falta para que lo otro pase.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-proporcion.js
+// Preuniversitario · mundo 4 «Proporcionalidad y porcentajes»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+// Usa los juegos de razones y porcentajes de Álgebra con datos nuevos, más trabajo-conjunto, velocidad-media y persecucion.
+PU_JUEGOS.push(({ setExam }) => {
+  setExam('pu-proporcion', 'Proporcionalidad y porcentajes', [
+    ['pu-pr-1', 'Una razón p : q parte el total en p + q partes iguales.',
+      play('barra-razon', 'Parte la cinta', { rounds: [{ T: 32, p: 3, q: 5, A: 'azúcar', B: 'harina' }] }, '32 en 8 partes de 4: 12 y 20.', { hint: 'Suma la razón.' })],
+    ['pu-pr-1', 'En un mapa a escala, primero se halla cuánto vale 1 cm.',
+      play('mapa-escala', 'A escala', { rounds: [{ cm: 1, km: 6, real: 21 }] }, '21 ÷ 6 = 3.5 cm.', { hint: 'Valor de 1 cm.' })],
+    ['pu-pr-2', 'Directa: se mantiene el cociente; inversa: el producto.',
+      play('la-obra', 'Obreros justos', { workers: 6, days: 12, askDays: 9, max: 20 }, '6 · 12 = 72; en 9 días, 8 obreros.', { hint: 'Producto constante.' })],
+    ['pu-pr-2', 'En la compuesta se reduce a la unidad de cada magnitud.',
+      play('tabla-compuesta', 'Compuesta', { rounds: [{ who: 'impresoras', what: 'hojas', m1: 2, h1: 3, c1: 300, m2: 4, h2: 5, step: 10, max: 100 }] }, '50 por casilla: 1000 hojas.', { hint: 'Reparte en casillas.' })],
+    ['pu-pr-3', 'En el trabajo conjunto se suman las rapideces.',
+      play('trabajo-conjunto', 'Juntos', { rounds: [{ who: ['A', 'B'], a: 6, b: 12 }] }, '1/6 + 1/12 = 1/4: 4 h.', { hint: 'Fracción por hora.' })],
+    ['pu-pr-3', 'Velocidad media: distancia total entre tiempo total.',
+      play('velocidad-media', 'Media', { rounds: [{ legs: [[60, 20], [60, 60]] }] }, '120 km en 4 h: 30 km/h.', { hint: 'Suma los tiempos.' })],
+    ['pu-pr-4', 'p % de N es p/100 · N; el total es parte ÷ p · 100.',
+      play('estira-todo', 'El total', { rounds: [{ part: 18, p: 45, step: 5, max: 150 }] }, '18 ÷ 45 · 100 = 40.', { hint: 'Pasa por el 1 %.' })],
+    ['pu-pr-4', 'Un porcentaje es una fracción de 100.',
+      play('pinta-personas', 'Pinta', { rounds: [{ total: 30, pct: 40, what: 'trotan' }] }, '40 % de 30 = 12.', { hint: 'El 10 % es 3.' })],
+    ['pu-pr-5', 'Los cambios sucesivos se multiplican.',
+      play('cascada', 'Descuento único', { price: 50000, changes: [-10, -20], step: 1 }, '0.9 · 0.8 = 0.72: 28 %.', { hint: 'Multiplica factores.' })],
+    ['pu-pr-5', 'Para quitar el IVA se divide entre 1.19.',
+      play('precio-original', 'Sin IVA', { rounds: [{ r: 19, now: 238, step: 5, max: 300 }] }, '238 ÷ 1.19 = 200.', { hint: 'Divide, no restes.' })],
+  ]);
+});
+
+// Mundo 4 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/proporcion-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-pr-1', [
+    play('mismo-sabor', 'La limonada modelo lleva 6 de jugo y 8 de agua. Toca **todas** las jarras que saben **igual**.', { modelo: [6, 8], jarras: [[9, 12], [7, 9], [3, 4], [8, 6], [15, 20], [10, 12]] },
+      'Se simplifica $6 : 8$ a $3 : 4$. Saben igual $9 : 12$, $3 : 4$ y $15 : 20$. En $7 : 9$ y $10 : 12$ se sumó lo mismo a los dos, y $8 : 6$ está al revés.',
+      { hint: 'Dos razones son iguales si los dos números se multiplican o se dividen por lo mismo. Comprueba con los productos en cruz.' }),
+    play('mezcla-total', 'Un color lleva **5** tarros de rojo por cada **4** de blanco. Prepara **36** tarros en total.', { p: 5, q: 4, total: 36, ea: 'tarros de rojo', eb: 'tarros de blanco' },
+      'Cada grupo tiene $5 + 4 = 9$ tarros y $36 \\div 9 = 4$ grupos: 20 de rojo y 16 de blanco.',
+      { hint: 'Piensa en grupos de 5 y 4. ¿Cuántos tarros tiene un grupo y cuántos grupos caben?' }),
+    play('corta-reparto', 'Tres personas se reparten **96** horas de turno en razón **2 : 3 : 7**. Pon los dos cortes, en ese orden.', { r: [2, 3, 7], total: 96, paso: 4, que: 'horas' },
+      'Son $2 + 3 + 7 = 12$ partes de 8 horas: 16, 24 y 56.',
+      { hint: 'Suma las partes, mira cuánto vale una y multiplica por las de cada persona.' }),
+    play('una-parte', 'Ana, Beto y Cami ahorran en razón **2 : 5 : 4**. Beto tiene **60** mil. ¿Cuánto tienen las otras dos y cuánto hay en total, en miles?', { r: [2, 5, 4], k: 1, sabe: 60, nom: ['Ana', 'Beto', 'Cami'], fichas: ['24', '48', '132', '12', '30', '120'] },
+      'Las 5 partes de Beto son 60: cada parte vale 12. Ana tiene $2 \\cdot 12 = 24$, Cami $4 \\cdot 12 = 48$ y en total son $11 \\cdot 12 = 132$ mil.',
+      { hint: 'Sabes cuánto son cinco partes. Halla una sola y úsala para las demás.' }),
+    play('escala-real', 'En un mapa, dos pueblos están a 6 cm. Estira la distancia **real**.', { den: 40000, cm: 6 },
+      '$6 \\cdot 40\\,000 = 240\\,000$ cm, que son $2\\,400$ m: $2.4$ km.',
+      { hint: 'Halla cuántos metros vale un centímetro del mapa y multiplica. Un kilómetro son 1 000 m.' }),
+    play('escala-plano', 'Dos fincas están a **3 km**. Ubica la segunda en el mapa, a su medida en centímetros.', { den: 60000, km: 3 },
+      '3 km son $300\\,000$ cm. En el mapa, $300\\,000 \\div 60\\,000 = 5$ cm.',
+      { hint: 'Pasa los kilómetros a centímetros y mira cuántas veces cabe ahí lo que vale un centímetro del mapa.' }),
+    play('arregla-razon', 'Hay 6 vasos de jugo y 8 de agua. Agrega **solo jugo** hasta que la razón de jugo a agua sea **3 : 2**.', { a: 6, b: 8, p: 3, q: 2 },
+      'El agua no cambia: son 8, cuatro grupos de 2. El jugo debe ser $4 \\cdot 3 = 12$: se agregan 6.',
+      { hint: 'El agua se queda en 8. ¿Cuántos grupos de 2 son, y cuánto jugo pide cada grupo?' }),
+    play('sirve-partes', 'Sirve la cantidad justa que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Reparte 40 en razón $2 : 3$. ¿Cuánto es la parte **menor**?', r: 16, c: '2 \\cdot 8', e: { 20: 'Eso es repartir por igual.', 24: 'Esa es la parte mayor.', 8: 'Eso vale una sola parte.' } },
+      { q: 'Azul y blanco van en razón $3 : 7$. Con 21 de blanco, ¿cuánto **azul**?', r: 9, c: '3 \\cdot 3', e: { 17: 'Restaste lo mismo; en una razón se multiplica.' } },
+      { q: 'Plano $1 : 200$. Una pared mide 9 cm. ¿Cuántos **metros** son?', r: 18, c: '9 \\cdot 2', e: { 9: 'Un centímetro de este plano no es un metro.' } }] },
+      'De 40, cinco partes de 8: la menor es 16. De 7 a 21 es por 3: $3 \\cdot 3 = 9$. Cada centímetro son 2 m: 18 m.',
+      { hint: 'En el reparto, divide entre la suma de las partes. En las otras, busca por cuánto se multiplicó.' }),
+    sol('Tres socios aportaron capital en la razón $3 : 4 : 5$ y se reparten la ganancia del año en esa misma razón. El que más recibe obtiene 600 000 pesos más que el que menos recibe. ¿De cuánto fue la ganancia?',
+      ['La ganancia se parte en $3 + 4 + 5 =$ [[12]] partes iguales', 'Entre el que más recibe y el que menos hay $5 - 3 =$ [[2]] partes, que valen 600 000', 'Cada parte vale [[300 000]] pesos', 'Ganancia: $12 \\cdot 300\\,000 =$ [[3 600 000]] pesos'],
+      ['7 200 000', '200 000', '1 800 000'],
+      'La diferencia entre dos socios también se mide en partes: 2 partes son 600 000, así que una parte son 300 000 y las 12 partes, 3 600 000.',
+      'No conoces el total, pero sí una diferencia. ¿A cuántas partes de la razón equivale esa diferencia?'),
+    err('Una empresa reparte 720 000 pesos entre tres empleados, de manera proporcional a los años que llevan en ella: 2, 3 y 4 años. ¿Cuánto recibe el que lleva 4 años?',
+      ['Los años suman $2 + 3 + 4 = 9$ partes', 'Cada parte vale $720\\,000 \\div 3 = 240\\,000$ pesos', 'El de 4 años recibe $4 \\cdot 240\\,000 = 960\\,000$ pesos'], 1,
+      ['Cada parte vale $720\\,000 \\div 9 = 80\\,000$ pesos', 'Cada parte vale $720\\,000 \\div 4 = 180\\,000$ pesos', 'Cada parte vale $720\\,000 \\div 2 = 360\\,000$ pesos'],
+      'El total se divide entre el número de partes (9), no entre el número de personas (3). Cada parte vale 80 000 y el de 4 años recibe 320 000. Nadie puede recibir más de lo que se reparte.',
+      'Mira la respuesta final: ¿puede una sola persona recibir más dinero del que hay para repartir?'),
+    opc('En un mapa a escala $1 : 250\\,000$, la distancia entre dos ciudades es de 8 cm. La distancia real entre ellas es:',
+      ['2 km', '200 km', '20 km', '31.25 km'], 2,
+      '$8 \\cdot 250\\,000 = 2\\,000\\,000$ cm, que son 20 000 m: 20 km.',
+      'Multiplica por la escala y convierte: 100 cm son un metro y 1 000 m son un kilómetro.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/proporcion-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-pr-2', [
+    play('precio-unidad', '**6** kilos de mango cuestan 27 mil. Estira el precio de **10** kilos.', { x1: 6, y1: 27, x2: 10, ex: 'kilos', max: 60, paso: 1 },
+      'Un kilo vale $27 \\div 6 = 4.5$ mil y 10 kilos, $45$ mil.',
+      { hint: 'Es directa: el cociente no cambia. ¿Cuánto vale un solo kilo?' }),
+    play('crece-o-baja', 'Toca **todas** las parejas en que, si una se **duplica**, la otra queda a la **mitad**.', { casos: [{ t: 'velocidad y tiempo, en un mismo viaje', inv: true }, { t: 'kilos de arroz y precio que se paga', inv: false }, { t: 'obreros y días, en una misma obra', inv: true }, { t: 'litros de gasolina y distancia recorrida', inv: false }, { t: 'personas y porción de una misma torta', inv: true }] },
+      'Más velocidad, menos tiempo; más obreros, menos días; más personas, porciones más chicas. Kilos y precio, o litros y distancia, crecen a la vez.',
+      { hint: 'Imagina que la primera se vuelve el doble. ¿La otra crece o se achica?' }),
+    play('rectangulo-trabajo', '**8** grifos llenan una piscina en **12** horas. Con **6** grifos iguales, ¿cuántas horas tarda?', { a1: 8, b1: 12, a2: 6, ea: 'grifos', eb: 'horas', max: 18 },
+      'El trabajo no cambia: $8 \\cdot 12 = 6 \\cdot 16$. Con menos grifos tarda más, 16 horas.',
+      { hint: 'Con menos grifos, ¿tarda más o menos? Lo que se conserva es el producto.' }),
+    play('tabla-directa', 'Los cables se pagan por metro, siempre al mismo precio. Completa la tabla.', { k: 3.5, x: [4, 6, 10, 1], ex: 'metros', ey: 'precio (miles)', huecos: [['y', 1], ['x', 2], ['y', 3]], fichas: ['21', '10', '3.5', '16', '25', '4'] },
+      'Con 4 metros y 14 mil, cada metro vale 3.5 mil. Seis metros, 21 mil; y 35 mil alcanzan para 10 metros.',
+      { hint: 'Usa la columna completa para hallar cuánto vale uno. Ese cociente sirve para todas.' }),
+    play('cuadros-trabajo', '3 pintores en 4 horas cubren 60 m². ¿Cuántas horas necesitan **5** pintores para cubrir **150 m²**?', { a1: 3, b1: 4, c1: 60, fijo: 5, c: 150, max: 8, ea: 'pintores', que: 'm²' },
+      'Un pintor en una hora cubre $60 \\div 12 = 5$ m². Cinco pintores, 25 m² por hora: $150 \\div 25 = 6$ horas.',
+      { hint: 'Cuenta los cuadros del dibujo dorado: cada uno es un pintor trabajando una hora. ¿Cuánto cubre?' }),
+    play('maquinas-justas', '2 impresoras en 6 horas sacan 240 planos. ¿Cuántas impresoras hacen falta para sacar **480** planos en **4** horas?', { a1: 2, b1: 6, c1: 240, fijo: 4, c: 480, max: 9, ea: 'impresoras', que: 'planos' },
+      'Cada impresora saca $240 \\div 12 = 20$ planos por hora. En 4 horas, 80: hacen falta $480 \\div 80 = 6$.',
+      { hint: 'Halla qué saca una impresora en una hora y luego en las 4 horas disponibles.' }),
+    play('raciones-dias', 'Quince personas tienen comida para **10** días. Pasados **4** días llegan **5** más. ¿Para cuántos días **más** alcanza?', { g: 15, d: 10, pasan: 4, llegan: 5 },
+      'A los 4 días quedan $15 \\cdot 6 = 90$ raciones. Entre 20 personas duran $90 \\div 20 = 4.5$ días.',
+      { hint: 'Cuenta raciones, no días: ¿cuántas quedan cuando llegan los nuevos?' }),
+    play('lanza-regla', 'Sirve la cantidad justa que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '4 lápices cuestan 10 mil. ¿Cuántos **miles** cuestan 14?', r: 35, c: '14 \\cdot 2.5', e: { 20: 'Sumaste la diferencia; busca cuánto vale uno.' } },
+      { q: '6 obreros tardan 20 días. ¿Cuántos **días** tardan 8?', r: 15, c: '120 \\div 8', e: { 22: 'Con más obreros no puede tardar más.' } },
+      { q: '2 tornos en 3 horas hacen 12 piezas. ¿Cuántas **piezas** hacen 3 tornos en 5 horas?', r: 30, c: '15 \\cdot 2', e: { 18: 'Faltó contar las horas.', 20: 'Faltó contar los tornos.' } }] },
+      'Un lápiz vale 2.5 mil: 35. La obra son 120 jornadas: $120 \\div 8 = 15$. Cada torno hace 2 piezas por hora: $3 \\cdot 5 \\cdot 2 = 30$.',
+      { hint: 'Decide primero si es directa o inversa. Con tres datos, halla qué hace uno solo en una hora.' }),
+    sol('Seis impresoras iguales imprimen 1 800 folletos en 5 horas. ¿Cuántos folletos imprimen 4 de esas impresoras en 3 horas?',
+      ['Las seis trabajaron $6 \\cdot 5 =$ [[30]] horas de impresora', 'Cada hora de impresora produce $1\\,800 \\div 30 =$ [[60]] folletos', 'Ahora hay $4 \\cdot 3 =$ [[12]] horas de impresora', 'Producen $12 \\cdot 60 =$ [[720]] folletos'],
+      ['1 200', '900', '36'],
+      'En una regla de tres compuesta conviene reducir a la unidad: cuánto hace una máquina en una hora. Después se multiplica por las máquinas y las horas nuevas.',
+      'Junta máquinas y horas en una sola cantidad: horas de impresora. ¿Cuánto produce una de esas horas?'),
+    err('Con la comida que llevan, 12 excursionistas tienen para 10 días. Si al grupo se unen 3 personas más y todos comen lo mismo, ¿para cuántos días alcanza la comida?',
+      ['Hay comida para $12 \\cdot 10 = 120$ raciones diarias', 'Ahora son $12 + 3 = 15$ excursionistas', 'Más personas, más días: $10 \\cdot \\tfrac{15}{12} = 12.5$ días'], 2,
+      ['Más personas, menos días: $120 \\div 15 = 8$ días', 'La comida alcanza para $120 \\div 3 = 40$ días', 'La comida alcanza para $10 - 3 = 7$ días'],
+      'Personas y días son inversamente proporcionales: la misma comida se acaba antes si comen más. $120 \\div 15 = 8$ días.',
+      'Antes de operar, pregúntate: si llega más gente, ¿la comida debe durar más o menos?'),
+    opc('Una llave llena las dos terceras partes de un tanque en 40 minutos. Si el agua sigue saliendo al mismo ritmo, el tiempo que tarda en llenarse la parte que falta es:',
+      ['20 minutos', '60 minutos', '26 minutos', '13 minutos'], 0,
+      'Dos tercios tardan 40 minutos, así que cada tercio tarda 20. Falta un tercio: 20 minutos.',
+      'Halla cuánto tarda en llenarse una sola de las tres partes.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/proporcion-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-pr-3', [
+    play('tres-viajes', 'Completa el dato que falta en cada viaje.', { viajes: [{ n: 'tren', d: 200, v: 80, t: 2.5, falta: 'd' }, { n: 'moto', d: 135, v: 45, t: 3, falta: 't' }, { n: 'bus', d: 120, v: 80, t: 1.5, falta: 'v' }], fichas: ['200', '3', '80', '32', '90', '180'] },
+      '$80 \\cdot 2.5 = 200$ km; $135 \\div 45 = 3$ horas; $120 \\div 1.5 = 80$ km/h.',
+      { hint: 'La velocidad dice cuánto avanza en cada hora: distancia es velocidad por tiempo.' }),
+    play('reloj-encuentro', 'Dos carros salen al tiempo, uno hacia el otro. Pon el reloj en el momento en que se **encuentran**.', { D: 240, va: 80, vb: 40, max: 6 },
+      'Cada hora se acercan $80 + 40 = 120$ km: $240 \\div 120 = 2$ horas.',
+      { hint: 'Los dos avanzan a la vez. ¿Cuánto se acercan en una hora?' }),
+    play('reloj-caza', 'El carro de atrás persigue al de adelante, que le lleva **90 km**. ¿A las cuántas horas lo alcanza?', { D: 600, va: 65, vb: 95, vent: 90, max: 6 },
+      'Cada hora le descuenta $95 - 65 = 30$ km: $90 \\div 30 = 3$ horas.',
+      { hint: 'Mientras uno avanza, el otro también. Lo que cuenta es la diferencia de velocidades.' }),
+    play('sale-despues', 'Un camión sale a 50 km/h. **Dos horas después** sale un carro por la misma vía, a 75 km/h. ¿Cuántas horas tarda el **carro** en alcanzarlo?', { D: 600, va: 50, vb: 75, vent: 100, horas: 2, max: 7 },
+      'Cuando sale el carro, el camión lleva $50 \\cdot 2 = 100$ km. Se acercan $75 - 50 = 25$ km por hora: $100 \\div 25 = 4$ horas.',
+      { hint: 'Halla primero cuántos kilómetros de ventaja lleva el camión cuando arranca el carro.' }),
+    play('media-viaje', 'Un viaje tiene dos tramos **iguales** de 150 km: uno a 50 km/h y otro a 75 km/h. Pon su velocidad **media**.', { d: 150, v1: 50, v2: 75 },
+      'Tarda $3 + 2 = 5$ horas en 300 km: $300 \\div 5 = 60$ km/h. No es 62.5, porque pasa más horas yendo despacio.',
+      { hint: 'Toda la distancia entre todo el tiempo. ¿Cuántas horas gasta en cada tramo?' }),
+    play('juntos-llenan', 'Una llave sola llena el tanque en **20** horas y otra, en **30**. ¿En cuántas horas lo llenan **juntas**?', { A: 20, B: 30, max: 30 },
+      'En una hora llenan $\\tfrac{1}{20} + \\tfrac{1}{30} = \\tfrac{5}{60} = \\tfrac{1}{12}$: tardan 12 horas.',
+      { hint: 'Suma la fracción del tanque que llena cada una en una hora. Juntas tardan menos que la más rápida.' }),
+    play('segunda-llave', 'Dos llaves **juntas** llenan un tanque en **6** horas. La primera sola tarda **10**. ¿Cuánto tarda la **segunda** sola?', { j: 6, A: 10, max: 20 },
+      'En una hora, la segunda llena $\\tfrac16 - \\tfrac{1}{10} = \\tfrac{2}{30} = \\tfrac{1}{15}$: sola tarda 15 horas.',
+      { hint: 'De lo que llenan juntas en una hora, quita lo que llena la primera en esa hora.' }),
+    play('lanza-viaje', 'Da las horas justas que responden: el bus anda ese tiempo. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Dos trenes a 150 km, uno hacia el otro, a 30 y a 20 km/h. ¿En cuántas horas se encuentran?', r: 3, c: '150 \\div 50', e: { 5: 'El otro también avanza.', 15: 'Van uno hacia el otro: las velocidades se suman.' } },
+      { q: 'Uno lleva 60 km de ventaja a 65 km/h; otro lo sigue a 80 km/h. ¿En cuántas horas lo alcanza?', r: 4, c: '60 \\div 15' },
+      { q: 'Una llave llena en 9 horas y otra en 18. ¿En cuántas horas, juntas?', r: 6, c: '1 \\div \\left(\\tfrac19 + \\tfrac{1}{18}\\right)', e: { 13: 'Juntas tardan menos que la más rápida sola.', 14: 'Juntas tardan menos que la más rápida sola.', 9: 'Juntas tardan menos que la más rápida sola.' } }] },
+      'Se acercan 50 km por hora: 3 horas. Descuenta 15 km por hora: 4 horas. Juntas llenan un sexto por hora: 6 horas.',
+      { hint: 'Hacia el otro, las velocidades se suman; persiguiendo, se restan; trabajando juntos, se suma lo de una hora.' }),
+    sol('Dos atletas parten al mismo tiempo del mismo punto de una pista circular de 400 m y corren en el mismo sentido, uno a 5 m/s y el otro a 3 m/s. ¿Cuánto tarda el más rápido en alcanzar al otro por primera vez, y cuántas vueltas ha dado en ese momento?',
+      ['Cada segundo el rápido le saca $5 - 3 =$ [[2]] m de ventaja', 'Lo alcanza cuando la ventaja es una vuelta entera: [[400]] m', 'Tiempo: $400 \\div 2 =$ [[200]] s', 'En ese tiempo recorre $5 \\cdot 200 = 1\\,000$ m, que son [[2.5]] vueltas'],
+      ['50', '80', '8'],
+      'En el mismo sentido cuenta la diferencia de velocidades. Alcanzar por detrás en una pista circular es sacar una vuelta completa de ventaja.',
+      'Olvídate de la pista por un momento: ¿cuántos metros se aleja uno del otro cada segundo?'),
+    err('Un camión va de una ciudad a otra a 30 km/h y regresa por la misma vía a 60 km/h. ¿Cuál es su velocidad media en el viaje completo?',
+      ['Se toma una distancia cómoda entre las ciudades: 60 km', 'Ida: $60 \\div 30 = 2$ h; regreso: $60 \\div 60 = 1$ h', 'Velocidad media: $(30 + 60) \\div 2 = 45$ km/h'], 2,
+      ['Velocidad media: $120 \\div 3 = 40$ km/h', 'Velocidad media: $120 \\div 2 = 60$ km/h', 'Velocidad media: $60 \\div 3 = 20$ km/h'],
+      'La velocidad media es la distancia total entre el tiempo total: 120 km en 3 horas, 40 km/h. El camión pasa más tiempo yendo despacio, por eso queda por debajo de 45.',
+      'El camión no dura lo mismo en la ida que en el regreso. ¿Cuál velocidad pesa más?'),
+    opc('Un pintor pinta una casa en 6 días y otro pinta la misma casa en 3 días. Trabajando juntos, cada uno a su ritmo, la pintan en:',
+      ['4.5 días', '9 días', '1.5 días', '2 días'], 3,
+      'En un día pintan $\\tfrac16 + \\tfrac13 = \\tfrac12$ de la casa: tardan 2 días.',
+      'Suma lo que hace cada uno en un día, no los días que tarda.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/proporcion-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-pr-4', [
+    play('parte-barra', 'En un coro de **120** voces, el **45 %** son graves. Arrastra hasta esa cantidad.', { total: 120, pct: 45, paso: 3 },
+      'El 10 % son 12. Cuatro piezas son 48 y media pieza, 6: $54$. También $0.45 \\cdot 120 = 54$.',
+      { hint: 'Arma el porcentaje con piezas del 10 % y una del 5 %.' }),
+    play('piezas-diez', 'Toca las piezas que arman el **37 %** de 200.', { total: 200, pct: 37, piezas: [100, 20, 20, 20, 10, 5, 2, 2] },
+      'El 10 % son 20: tres piezas, 60. El 5 %, 10; y dos piezas del 1 %, 4. En total, $74$.',
+      { hint: 'Halla cuánto es el 10 %, el 5 % y el 1 % de 200 y descompón el 37.' }),
+    play('porcentaje-barra', 'De **60** llamadas, **45** fueron de ventas. Arrastra hasta el porcentaje.', { parte: 45, total: 60 },
+      '$\\tfrac{45}{60} = \\tfrac34 = 0.75$: el 75 %.',
+      { hint: 'La parte va arriba y el total abajo. Simplifica la fracción y mira cuánto es de cada 100.' }),
+    play('compara-porciento', 'Cada ficha dice cuántos aprobaron. Toca **todos** los grupos en que aprobó **más del 50 %**.', { mas: 50, grupos: [[12, 20], [18, 40], [21, 30], [25, 60], [9, 16], [30, 60]] },
+      '12 de 20 es el 60 %, 21 de 30 es el 70 % y 9 de 16 es el 56.25 %. En cambio, 30 de 60 es justo el 50 %: no es más.',
+      { hint: 'Compara cada parte con la mitad de su propio total, no con las otras partes.' }),
+    play('total-barra', 'Cincuenta y dos asistentes son el **65 %** del salón. Estira la barra hasta el **total**.', { parte: 52, pct: 65, min: 30, max: 120 },
+      'El 5 % son $52 \\div 13 = 4$, y el 100 % son $20 \\cdot 4 = 80$. También $52 \\div 0.65 = 80$.',
+      { hint: 'La parte ya es el 65 %. Baja hasta el 5 % y sube al 100 %.' }),
+    play('parte-de-la-parte', 'De **400** empleados, el **25 %** trabaja de noche. De esos, el **40 %** vive lejos. Completa.', { total: 400, p1: 25, p2: 40, et: ['de noche', 'viven lejos', '% de la empresa'], fichas: ['100', '40', '10 %', '160', '65 %', '15 %'] },
+      'De noche, $0.25 \\cdot 400 = 100$. De esos, $0.40 \\cdot 100 = 40$ viven lejos, que son $\\tfrac{40}{400} = 10\\,\\%$ de la empresa.',
+      { hint: 'El segundo porcentaje no se toma de los 400: mira de qué grupo habla.' }),
+    play('mezcla-agua', 'Hay **40** mL de jugo puro. Echa agua hasta que el jugo sea el **25 %** de la mezcla.', { jugo: 40, pct: 25, max: 180 },
+      'Si 40 es el 25 %, la mezcla completa tiene $40 \\div 0.25 = 160$ mL. Hay que echar $160 - 40 = 120$ de agua.',
+      { hint: 'Halla primero cuánto debe medir toda la mezcla; el jugo ya está adentro.' }),
+    play('tiro-porciento', 'Sirve la cantidad justa que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'El 30 % de 90', r: 27, c: '3 \\cdot 9', e: { 30: 'Ese es el porcentaje, no la cantidad.' } },
+      { q: '7 de 20, ¿qué **porcentaje** es?', r: 35, c: '7 \\div 20 \\cdot 100', e: { 7: 'Esa es la cantidad, no el porcentaje.' } },
+      { q: 'El 25 % de un total son 8. ¿Cuál es el **total**?', r: 32, c: '8 \\div 0.25', e: { 2: 'Le sacaste el 25 % a la parte.' } }] },
+      'El 10 % de 90 son 9: tres piezas, 27. 7 de 20 es lo mismo que 35 de 100. Si 8 es el 25 %, el total son cuatro veces 8, 32.',
+      { hint: 'Antes de calcular decide qué falta: la parte, el porcentaje o el total.' }),
+    sol('En un grupo, el 60 % de las personas son mujeres. Usan gafas el 20 % de las mujeres y el 15 % de los hombres. ¿Qué porcentaje del grupo usa gafas?',
+      ['Imagina un grupo de 100 personas: [[60]] mujeres y 40 hombres', 'Mujeres con gafas: 20 % de 60 = [[12]]', 'Hombres con gafas: 15 % de 40 = [[6]]', 'Usan gafas 18 de cada 100: el [[18 %]]'],
+      ['35 %', '17.5 %', '20'],
+      'Cada porcentaje tiene su propio total. Con 100 personas imaginarias todo se vuelve cantidades: $12 + 6 = 18$. Sumar $20 + 15$ no tiene sentido.',
+      'Cuando no dan el total, inventa uno cómodo: 100. Después calcula cada porcentaje sobre su propio grupo.'),
+    err('Un tanque está lleno hasta el 30 % de su capacidad. Después de agregarle 45 litros queda lleno hasta el 60 %. ¿Cuál es la capacidad del tanque?',
+      ['Los 45 litros hicieron subir el nivel del 30 % al 60 %', 'Entonces 45 litros son el 60 % de la capacidad', 'Capacidad: $45 \\div 0.60 = 75$ litros'], 1,
+      ['Entonces 45 litros son el $60 - 30 = 30\\,\\%$ de la capacidad', 'Entonces 45 litros son el 90 % de la capacidad', 'Entonces 45 litros son el 2 % de la capacidad'],
+      'Los 45 litros corresponden a lo que subió el nivel: 30 puntos. $45 \\div 0.30 = 150$ litros.',
+      'El 60 % incluye el agua que ya había. ¿Qué parte del tanque llenaron solo los 45 litros?'),
+    opc('El 35 % de los estudiantes de un colegio llega a pie, y son 140 estudiantes. La cantidad total de estudiantes del colegio es:',
+      ['490', '400', '175', '4 900'], 1,
+      'Si 140 es el 35 %, el total es $140 \\div 0.35 = 400$.',
+      'Se conoce la parte y se busca el todo: ¿se multiplica o se divide?'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/proporcion-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-pr-5', [
+    play('factor-cada', 'Pon el factor por el que se **multiplica** el precio en cada cambio.', { cambios: [5, -30, 25], fichas: ['× 1.05', '× 0.7', '× 1.25', '× 1.5', '× 0.3', '× 0.25'] },
+      'Subir 5 %: $1 + 0.05 = 1.05$. Bajar 30 %: $1 - 0.30 = 0.7$. Subir 25 %: $1.25$.',
+      { hint: 'Lo que ya había es 1. Suma o resta lo que cambia, escrito como decimal.' }),
+    play('precio-nuevo', 'Una matrícula de **120** mil **sube 15 %**. Estira la barra hasta el precio nuevo.', { a: 120, c: 15, max: 170, paso: 3 },
+      '$120 \\cdot 1.15 = 138$ mil: el 10 % son 12 y el 5 %, 6.',
+      { hint: 'Calcula el 10 % y el 5 % de 120 y agrégalos. No es sumar 15.' }),
+    play('dos-cambios', 'Un pasaje vale **200** mil. **Sube 25 %** y después **baja 40 %**. ¿En cuánto queda?', { a: 200, c: [25, -40], max: 270, paso: 5 },
+      '$200 \\cdot 1.25 = 250$ y $250 \\cdot 0.60 = 150$. El 40 % se toma de 250, no de 200.',
+      { hint: 'Aplica el primer cambio, y el segundo sobre lo que quedó.' }),
+    play('cambio-unico', 'Un precio **sube 20 %** y después **baja 25 %**. Pon el **único** cambio que hace lo mismo.', { c: [20, -25] },
+      '$1.20 \\cdot 0.75 = 0.90$: queda el 90 %, un solo descuento del 10 %.',
+      { hint: 'Multiplica los dos factores y mira cuánto le falta o le sobra para 1.' }),
+    play('mismo-final', 'Todos empiezan en **100**. Toca **todos** los caminos que terminan en **120**.', { meta: 120, caminos: [[-20, 50], [50, -20], [30, -10], [20], [10, 10]] },
+      '$0.8 \\cdot 1.5 = 1.2$ y $1.5 \\cdot 0.8 = 1.2$: el orden no importa. $1.3 \\cdot 0.9 = 1.17$ y $1.1 \\cdot 1.1 = 1.21$ no dan 1.2.',
+      { hint: 'No sumes los porcentajes: multiplica los factores de cada camino.' }),
+    play('vuelta-atras', 'Tras **bajar 30 %**, una lámpara quedó en **63** mil. Arrastra su precio de **antes**.', { q: 63, c: -30, min: 60, max: 110, paso: 2 },
+      '63 es el 70 %: $63 \\div 0.7 = 90$ mil. Subirle 30 % a 63 daría 81.9.',
+      { hint: '63 es lo que quedó. ¿Qué porcentaje del precio de antes es?' }),
+    play('sin-iva', 'Con **IVA del 19 %**, una silla vale **357** mil. Arrastra su precio **sin IVA**.', { q: 357, c: 19, min: 250, max: 370, paso: 10 },
+      '357 es el 119 %: $357 \\div 1.19 = 300$ mil. Quitarle el 19 % a 357 daría cerca de 289.',
+      { hint: 'El IVA se calculó sobre el precio sin IVA. Para volver, ¿se resta o se divide?' }),
+    play('tiro-precio', 'Dale al balde el precio justo. Puedes fallar **una** vez.', { tiros: [
+      { q: '80 mil, **sube 25 %**', r: 100, c: '80 \\cdot 1.25', e: { 105: 'Sumaste 25; es el 25 % de 80.', 20: 'Ese es solo el aumento.' } },
+      { q: '60 mil, **baja 25 %**', r: 45, c: '60 \\cdot 0.75', e: { 35: 'Restaste 25; es el 25 % de 60.', 15: 'Ese es solo el descuento.' } },
+      { q: 'Quedó en 56 mil después de **bajar 20 %**. ¿Cuánto valía **antes**?', r: 70, c: '56 \\div 0.8', e: { 45: 'Le volviste a bajar; hay que devolverse.', 65: 'Le subiste 20 % a 56; ese 20 % era del precio de antes.', 75: 'Sumaste 20; es un porcentaje.' } }] },
+      '$80 \\cdot 1.25 = 100$; $60 \\cdot 0.75 = 45$; y 56 es el 80 % de 70.',
+      { hint: 'Hacia adelante se multiplica por el factor; para volver al precio de antes, se divide.' }),
+    sol('Un comerciante compra un artículo en 60 000 pesos y le fija un precio de venta con el que ganaría el 40 % sobre el costo. A un cliente le hace un descuento del 25 % sobre ese precio. ¿Cuánto gana el comerciante en esa venta?',
+      ['Precio fijado: $60\\,000 \\cdot 1.40 =$ [[84 000]] pesos', 'Con el descuento se paga el 75 %: $84\\,000 \\cdot 0.75 =$ [[63 000]] pesos', 'Ganancia: $63\\,000 - 60\\,000 =$ [[3 000]] pesos', 'Sobre el costo, eso es apenas el [[5 %]]'],
+      ['15 %', '9 000', '69 000'],
+      'El 25 % de descuento se toma sobre el precio ya aumentado, no sobre el costo. Por eso $40\\,\\% - 25\\,\\%$ no da la ganancia: $1.40 \\cdot 0.75 = 1.05$.',
+      'Los dos porcentajes tienen totales distintos. Aplica cada cambio como un factor, uno después del otro.'),
+    err('El precio de un artículo aumentó un 20 % y, un mes después, el nuevo precio disminuyó un 20 %. ¿Cómo quedó el precio final con respecto al inicial?',
+      ['Se toma un precio inicial de 100', 'Con el aumento del 20 % queda en 120', 'El descuento del 20 % son 20: el precio vuelve a 100', 'El precio final es igual al inicial'], 2,
+      ['El descuento es el 20 % de 120, que son 24: el precio queda en 96', 'El descuento es el 20 % de 20, que son 4: el precio queda en 116', 'El descuento es el 40 % de 120, que son 48: el precio queda en 72'],
+      'El segundo 20 % se calcula sobre 120, no sobre 100: baja 24 y queda en 96. El precio final es un 4 % menor que el inicial: $1.20 \\cdot 0.80 = 0.96$.',
+      'Cada porcentaje se calcula sobre el precio que hay en ese momento. ¿Sobre cuál se calcula el descuento?'),
+    opc('Después de una rebaja del 15 %, una nevera quedó en 1 700 000 pesos. Antes de la rebaja, la nevera costaba:',
+      ['2 000 000 pesos', '1 955 000 pesos', '1 445 000 pesos', '1 715 000 pesos'], 0,
+      'El precio rebajado es el 85 % del original: $1\\,700\\,000 \\div 0.85 = 2\\,000\\,000$.',
+      'Sumarle el 15 % al precio rebajado no devuelve el original: ese 15 % era del precio de antes.'),
+  ]);
+
+  addExam('pu-proporcion', [
+    ['pu-pr-1', 'Una razón se mantiene si las dos cantidades se multiplican por lo mismo.',
+      opc('En una receta, por cada 3 tazas de harina se usan 2 de azúcar. Para 12 tazas de harina, las tazas de azúcar que se necesitan son:', ['6', '8', '18', '10'], 1,
+        'La harina se multiplicó por 4: el azúcar también, $2 \\cdot 4 = 8$.', 'Busca por cuánto se multiplicó la harina.')],
+    ['pu-pr-2', 'Obreros y días son inversamente proporcionales: su producto es constante.',
+      opc('Cinco obreros levantan un muro en 12 días. Trabajando al mismo ritmo, seis obreros lo levantan en:', ['14.4 días', '11 días', '10 días', '13 días'], 2,
+        'El muro son $5 \\cdot 12 = 60$ jornadas: $60 \\div 6 = 10$ días.', 'Más obreros, menos días: mide la obra en jornadas.')],
+    ['pu-pr-3', 'En una persecución cuenta la diferencia de velocidades.',
+      opc('Un tren sale a las 8:00 a 60 km/h. A las 9:00 sale otro tren por la misma vía y en el mismo sentido, a 90 km/h. El segundo tren alcanza al primero a las:', ['10:00', '10:30', '12:00', '11:00'], 3,
+        'A las 9:00 el primero lleva 60 km de ventaja. El segundo se acerca 30 km cada hora: tarda 2 horas, hasta las 11:00.', 'Mide la ventaja a la hora en que sale el segundo y cuánto se acorta cada hora.')],
+    ['pu-pr-4', 'Qué porcentaje es la parte del todo: parte ÷ todo × 100.',
+      opc('De las 80 preguntas de una prueba, un aspirante responde bien 52. El porcentaje de preguntas que respondió bien es:', ['65 %', '52 %', '28 %', '60 %'], 0,
+        '$52 \\div 80 = 0.65$: el 65 %.', 'Divide las correctas entre el total de preguntas.')],
+    ['pu-pr-5', 'Dos cambios seguidos se encadenan multiplicando sus factores.',
+      opc('Un artículo tiene un descuento del 20 % y, sobre el precio ya rebajado, se aplica otro descuento del 10 %. Los dos descuentos equivalen a un único descuento del:', ['30 %', '32 %', '28 %', '25 %'], 2,
+        '$0.80 \\cdot 0.90 = 0.72$: se paga el 72 %, un descuento del 28 %.', 'Empieza con un precio de 100 y aplica un descuento después del otro.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-conteo.js
+// Preuniversitario · mundo 5 «Conteo y combinatoria»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+PU_JUEGOS.push(({ setExam }) => {
+  setExam('pu-conteo', 'Conteo y combinatoria', [
+    ['pu-co-1', 'Decisiones sucesivas: se multiplican las opciones.',
+      play('arbol-opciones', 'El árbol', { rounds: [{ levels: [{ name: 'entradas', n: 2 }, { name: 'platos', n: 4 }], miss: 1, total: 8 }] }, '2 entradas por 4 platos: 2 · 4 = 8 menús.', { hint: 'Divide el total.' })],
+    ['pu-co-1', 'Cada casilla de un código aporta sus opciones.',
+      play('placas-codigo', 'Códigos', { rounds: [{ slots: ['letra', 'dígito'], rule: 'Una letra de 26 y un dígito.', want: [26, 10], tray: [26, 25, 10, 9] }] }, '26 · 10 = 260.', { hint: 'Opciones por casilla.' })],
+    ['pu-co-2', 'Letras repetidas: se divide entre k!.',
+      play('anagramas', 'Anagramas', { rounds: [{ word: 'TETE' }] }, '4!/(2!·2!) = 6.', { hint: 'Dos letras repetidas.' })],
+    ['pu-co-2', 'Ordenar n objetos: n!.',
+      play('factorial-cajas', 'Factorial', { rounds: [{ target: 120 }] }, '5! = 120.', { hint: 'Multiplica hacia abajo.' })],
+    ['pu-co-3', 'Si el orden no importa, se divide entre k!.',
+      play('elige-comite', 'Comité', { rounds: [{ n: 5, ways: 10 }] }, 'C(5, 2) = 10.', { hint: 'Fila 5 de Pascal.' })],
+    ['pu-co-3', 'Cada pareja sin orden se cuenta una vez.',
+      play('saludos', 'Saludos', { rounds: [{ n: 4 }] }, '6 saludos.', { hint: 'Sin repetir parejas.' })],
+    ['pu-co-4', 'Al menos uno: todos menos ninguno.',
+      play('complemento-conteo', 'Complemento', { rounds: [{ ask: 'Dos dígitos (00 a 99) con al menos un 0', slots: ['1.º', '2.º'], all: [10, 10], none: [9, 9], tray: [10, 9, 8] }] }, '100 − 81 = 19.', { hint: 'Prohíbe el 0 abajo.' })],
+    ['pu-co-4', 'Si los grupos se cruzan, el cruce se resta una vez.',
+      play('solapa-cardinal', 'Cruce', { rounds: [{ a: 10, b: 7, total: 14, A: 'cantan', B: 'bailan' }] }, '10 + 7 − 14 = 3.', { hint: 'Suma menos total.' })],
+    ['pu-co-5', 'Se cuenta por tamaños, sin repetir.',
+      play('cuenta-cuadrados', 'Cuadrados', { rounds: [{ n: 2 }] }, '4 + 1 = 5.', { hint: 'Por tamaños.' })],
+    ['pu-co-5', 'Diagonales: n(n − 3)/2.',
+      play('diagonales', 'Diagonales', { rounds: [{ n: 5 }] }, '5 diagonales.', { hint: 'n − 3 por vértice.' })],
+  ]);
+});
+
+// Mundo 5 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/conteo-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-co-1', [
+    play('arbol-ramas', 'Un plan de viaje se arma con **3** destinos, varios **hoteles** y **2** transportes. ¿Cuántos hoteles debe haber para que existan **18** planes?', { a: 3, c: 2, total: 18, max: 13, et: 'hoteles' },
+      '$3 \\cdot 3 \\cdot 2 = 18$: cada destino se abre en 3 hoteles y cada uno en 2 transportes.',
+      { hint: 'Las tres decisiones se toman juntas. ¿Qué número, multiplicado por 3 y por 2, da el total?' }),
+    play('se-multiplica', 'Hay 5 sopas, 6 jugos y 3 postres. Toca **todas** las situaciones en que los números se **multiplican**.', { casos: [{ t: 'llevar una sopa y un jugo', si: true }, { t: 'llevar un jugo o un postre, solo uno', si: false }, { t: 'llevar una sopa, un jugo y un postre', si: true }, { t: 'escoger una sola cosa de la carta', si: false }, { t: 'un postre para hoy y un jugo para mañana', si: true }],
+      no: 'En una de esas se escoge una sola cosa: ahí se suma.', falta: 'Falta otra en la que se hacen las dos cosas.', ok: 'Si se hace una cosa y además otra, se multiplica.' },
+      'Sopa y jugo, $5 \\cdot 6$; los tres, $5 \\cdot 6 \\cdot 3$; un postre hoy y un jugo mañana, $3 \\cdot 6$. Cuando se escoge una sola cosa, se suma.',
+      { hint: 'Pregunta en cada caso: ¿se hacen las dos cosas, o solo una de ellas?' }),
+    play('placa-casillas', 'Un código lleva **dos letras distintas** de la A a la F y después un **dígito impar**. ¿Cuántas opciones hay en cada casilla y cuántos códigos son?', { modelo: ['A', 'D', '7'], et: ['letra 1', 'letra 2', 'dígito', 'códigos'], ops: ['·', '·', '='], metas: ['6', '5', '5', '150'], fichas: ['6', '6', '5', '5', '150', '180', '10'],
+      mira: ['De la A a la F hay seis letras.', 'La segunda letra no puede ser la primera.', 'Los dígitos impares son 1, 3, 5, 7 y 9.', 'Se multiplican las opciones de las tres casillas.'], trampas: { '1:6': 'La segunda letra no puede repetir la primera.', '2:10': 'Solo sirven los dígitos impares.', '3:180': 'Así la segunda letra podría repetir la primera.' }, ok: 'Una casilla por decisión, y se multiplican.' },
+      'Seis letras para la primera, cinco para la segunda y cinco dígitos impares: $6 \\cdot 5 \\cdot 5 = 150$.',
+      { hint: 'Llena una casilla a la vez y mira qué quedó prohibido por la anterior.' }),
+    play('rejilla-permitida', 'Se combinan 3 camisetas con 4 pantalones, pero la **roja** no va con el **verde** ni con el **gris**. Toca **todas** las que se pueden.', { filas: 3, cols: 4, ef: ['roja', 'blanca', 'negra'], ec: ['azul', 'verde', 'gris', 'café'], veta: [[0, 1], [0, 2]] },
+      'Son $3 \\cdot 4 = 12$ parejas y se quitan las 2 prohibidas: 10.',
+      { hint: 'Cada casilla es una pareja. Recorre la fila de la roja con cuidado y las demás completas.' }),
+    play('tira-colores', 'Cuatro cuadros en fila se pintan con **3** colores; los **vecinos** no llevan el mismo. ¿Cuántas opciones tiene cada cuadro, de izquierda a derecha, y cuántas tiras hay?', { modelo: ['fa', 'fg', 'fa', 'ff'], et: ['1.º', '2.º', '3.º', '4.º', 'tiras'], ops: ['·', '·', '·', '='], metas: ['3', '2', '2', '2', '24'], fichas: ['3', '3', '2', '2', '2', '24', '1', '81'],
+      mira: ['El primero puede ser de cualquiera de los 3 colores.', 'El segundo solo debe ser distinto del primero.', 'El tercero solo cuida a su vecino: puede repetir el color del primero.', 'El cuarto solo cuida al tercero.', 'Se multiplican las opciones de los cuatro cuadros.'], trampas: { '1:3': 'El segundo no puede llevar el color de su vecino.', '2:1': 'El tercero puede repetir el color del primero: no son vecinos.', '4:81': 'Eso es sin cuidar a los vecinos.' }, ok: 'Cada cuadro solo cuida al que ya está a su lado.' },
+      '$3 \\cdot 2 \\cdot 2 \\cdot 2 = 24$: desde el segundo, cada cuadro evita un solo color, el de su vecino.',
+      { hint: 'Pinta de izquierda a derecha. ¿Cuántos colores le prohíbe el vecino a cada cuadro?' }),
+    play('interruptores', 'Un tablero con interruptores de **prender o apagar** puede quedar de **16** maneras. ¿Cuántos interruptores tiene?', { total: 16, max: 10 },
+      'Cada interruptor duplica: $2 \\cdot 2 \\cdot 2 \\cdot 2 = 2^4 = 16$.',
+      { hint: 'Con uno hay 2 maneras; con otro más, cada una se abre en 2. Sigue duplicando.' }),
+    play('rutas-tramos', 'De A a C se va **pasando por B** (3 caminos y luego 2) o **directo** (4 caminos). ¿Cuántas maneras hay por cada lado y en total?', { ab: 3, bz: 2, az: 4, et: ['por B', 'directo', 'en total'], ops: ['', '', ''], metas: ['6', '4', '10'], fichas: ['6', '4', '10', '5', '9', '24'],
+      mira: ['Por B se hacen los dos tramos: se multiplica.', 'Directo hay tantas maneras como caminos de abajo.', 'Se va por un lado o por el otro: se suma.'], trampas: { '0:5': 'Por B se hacen los dos tramos: se multiplica.', '2:24': 'Se va por un lado o por el otro, no por los dos.' }, ok: 'Tramos seguidos se multiplican; lados distintos se suman.' },
+      'Por B, $3 \\cdot 2 = 6$. Directo, 4. Se escoge un lado **o** el otro: $6 + 4 = 10$.',
+      { hint: 'Separa los dos lados. Dentro de uno hay dos tramos seguidos; entre los lados se escoge uno.' }),
+    play('sube-arbol', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '4 sombreros y 5 bufandas: un sombrero **y** una bufanda', r: 20, c: '4 \\cdot 5', e: { 9: 'Se llevan las dos cosas: se multiplica.' } },
+      { q: '7 buses **o** 5 trenes: un solo viaje', r: 12, c: '7 + 5', e: { 35: 'Se toma uno o el otro: se suma.' } },
+      { q: 'Dos dígitos **distintos** del 1 al 6, en orden', r: 30, c: '6 \\cdot 5', e: { 36: 'Los dos dígitos no pueden ser iguales.', 11: 'Son dos decisiones seguidas: se multiplica.' } }] },
+      '$4 \\cdot 5 = 20$; una cosa o la otra, $7 + 5 = 12$; y $6 \\cdot 5 = 30$, porque el segundo no repite.',
+      { hint: '«Y» multiplica, «o» suma. Y si no se repite, la segunda casilla tiene una opción menos.' }),
+    sol('Un restaurante ofrece 3 entradas, 4 platos fuertes y 2 postres. Un cliente puede pedir el menú completo (entrada, plato fuerte y postre) o el menú liviano (solo entrada y plato fuerte). ¿Cuántos pedidos distintos puede hacer?',
+      ['Menú completo: $3 \\cdot 4 \\cdot 2 =$ [[24]] pedidos', 'Menú liviano: $3 \\cdot 4 =$ [[12]] pedidos', 'Se pide uno u otro, así que los dos casos se [[suman]]', 'Total: $24 + 12 =$ [[36]] pedidos'],
+      ['multiplican', '288', '9'],
+      'Dentro de cada menú las elecciones se hacen juntas («y»): se multiplica. Entre los dos menús se escoge uno («o»): se suma.',
+      'Separa el problema en casos que no se cruzan, cuenta cada uno y decide cómo se juntan.'),
+    err('¿Cuántos números de tres cifras distintas se pueden formar con los dígitos 0, 1, 2, 3 y 4?',
+      ['Centenas: no puede ir el 0, así que hay 4 opciones', 'Decenas: puede ir cualquiera de los 5 dígitos, 5 opciones', 'Unidades: quedan 3 dígitos sin usar', 'Total: $4 \\cdot 5 \\cdot 3 = 60$ números'], 1,
+      ['Decenas: cualquiera menos el que ya se usó (el 0 ya puede ir), 4 opciones', 'Decenas: quedan 3 opciones', 'Decenas: solo puede ir el 0, 1 opción'],
+      'Las cifras son distintas: en las decenas ya no puede ir la cifra de las centenas, pero sí el 0. Son $4 \\cdot 4 \\cdot 3 = 48$ números. Si además se pidiera que fueran pares, el 0 jugaría dos papeles (puede ir al final, no al comienzo) y habría que partir en casos: con 0, 1, 2 y 3, los que terminan en 0 son $3 \\cdot 2 = 6$ y los que terminan en 2 son $2 \\cdot 2 = 4$ (al comienzo no van ni el 0 ni el 2): en total 10.',
+      'En cada casilla pregúntate dos cosas: qué dígitos están prohibidos ahí y cuáles ya se gastaron.'),
+    opc('De la casa al colegio hay 3 rutas y del colegio a la biblioteca hay 4. Una estudiante va de la casa a la biblioteca pasando por el colegio y regresa a la casa, también por el colegio, sin repetir ninguna de las rutas que usó a la ida. El número de recorridos distintos de ida y regreso es:',
+      ['144', '72', '24', '36'], 1,
+      'Ida: $3 \\cdot 4 = 12$. Regreso: quedan 3 rutas de la biblioteca al colegio y 2 del colegio a la casa, $3 \\cdot 2 = 6$. En total $12 \\cdot 6 = 72$.',
+      'Cuenta por tramos, en el orden en que se recorren, y en cada tramo mira cuántas rutas siguen disponibles.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/conteo-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-co-2', [
+    play('fila-factorial', 'Cinco revistas distintas van en fila. Pon cuántas opciones quedan en cada puesto y el total.', { et: ['1.º', '2.º', '3.º', '4.º', '5.º', 'filas'], ops: ['·', '·', '·', '·', '='], metas: ['5', '4', '3', '2', '1', '120'], fichas: ['5', '4', '3', '2', '1', '120', '15', '25'],
+      mira: ['Para el primer puesto sirven las cinco.', 'Ya se puso una: quedan cuatro.', 'Ya se pusieron dos.', 'Ya se pusieron tres.', 'Solo queda una.', 'Se multiplican las opciones de los puestos.'], trampas: { '5:15': 'Las opciones se multiplican, no se suman.' }, ok: 'Cada puesto gasta una: eso es 5!.' },
+      '$5! = 5 \\cdot 4 \\cdot 3 \\cdot 2 \\cdot 1 = 120$.',
+      { hint: 'Cada vez que pones una, queda una menos para el puesto siguiente.' }),
+    play('podio-puestos', 'Nueve nadadores compiten por **oro, plata y bronce**. Completa las opciones y el total de podios.', { n: 9, et: ['oro', 'plata', 'bronce', 'podios'], ops: ['·', '·', '='], metas: ['9', '8', '7', '504'], fichas: ['9', '8', '7', '504', '84', '24', '729'],
+      mira: ['Para el oro sirve cualquiera de los nueve.', 'Quien ganó el oro ya no puede ganar la plata.', 'Ya hay dos medallas entregadas.', 'Se multiplican las opciones de las tres medallas.'], trampas: { '3:729': 'Nadie gana dos medallas.', '3:84': 'Aquí el orden importa: no se divide.', '3:24': 'Las opciones se multiplican, no se suman.' }, ok: 'Tres puestos: se para de multiplicar ahí.' },
+      '$9 \\cdot 8 \\cdot 7 = 504$: hay tres puestos y ahí se deja de multiplicar.',
+      { hint: 'Son tres puestos distintos. Cada medalla entregada deja un nadador menos.' }),
+    play('cuantos-candidatos', 'Con los candidatos de un club se puede elegir **vocera y suplente** de **20** maneras. ¿Cuántos candidatos hay?', { total: 20, max: 12, cargos: ['vocera', 'suplente'] },
+      'Son dos cargos distintos: $5 \\cdot 4 = 20$. Hay 5 candidatos.',
+      { hint: 'Para el segundo cargo hay una opción menos. Busca dos números seguidos que multiplicados den el total.' }),
+    play('palabras-distintas', 'Toca **todas** las palabras distintas que se forman usando **todas** estas letras.', { letras: 'ESE', fichas: ['ESE', 'SES', 'EES', 'EEE', 'SEE', 'ESS'] },
+      'Con tres letras distintas habría 6 órdenes, pero cambiar una E por la otra no cambia la palabra: $6 \\div 2 = 3$. Son ESE, EES y SEE.',
+      { hint: 'Cada palabra debe llevar dos E y una S. ¿En qué lugares puede ir la S?' }),
+    play('repetidas-divide', '¿De cuántas maneras se ordenan las letras de **TATUAR**? Completa la cuenta.', { palabra: 'TATUAR', et: ['seis letras', 'se divide entre', 'órdenes'], ops: ['÷', '='], metas: ['720', '4', '180'], fichas: ['720', '4', '180', '360', '2', '120', '24'],
+      mira: ['Si las seis fueran distintas serían 6!.', 'La T está dos veces y la A también: 2! por 2!.', 'Divide los órdenes entre los que se ven iguales.'], trampas: { '1:2': 'Hay dos letras repetidas: la T y la A.', '2:360': 'Solo quitaste las repetidas de una letra.' }, ok: 'Cada orden se contó 2 · 2 veces.' },
+      '$\\tfrac{6!}{2! \\cdot 2!} = \\tfrac{720}{4} = 180$: se repiten la T y la A.',
+      { hint: 'Cuenta las letras y mira cuáles se repiten. Por cada grupo de iguales se divide.' }),
+    play('paquete-juntos', 'Seis fotos van en fila y las **tres** de la playa quedan **juntas**. Completa la cuenta.', { n: 6, k: 3, et: ['paquetes', 'adentro', 'filas'], ops: ['·', '='], metas: ['24', '6', '144'], fichas: ['24', '6', '144', '720', '30', '120', '3'],
+      mira: ['Las tres de la playa son un paquete: con las otras tres son 4 cosas, 4!.', 'Las tres de adentro se ordenan de 3! maneras.', 'Ordenar los paquetes y ordenar adentro: se multiplica.'], trampas: { '0:720': 'Así se ordenan las seis sueltas.', '0:6': 'Son 4 cosas: el paquete y las otras tres fotos.', '1:3': 'Adentro hay 3! órdenes, no 3.', '2:30': 'Se hacen las dos cosas: se multiplica.' }, ok: 'Paquetes por órdenes de adentro.' },
+      'El paquete y las otras tres son 4 cosas: $4! = 24$. Adentro, $3! = 6$. En total $24 \\cdot 6 = 144$.',
+      { hint: 'Ata las tres de la playa. ¿Cuántas cosas quedan por ordenar? No olvides el orden dentro del paquete.' }),
+    play('casilla-exigente', 'Con estas cifras, **sin repetir**, se forman números de 3 cifras **mayores que 500**. Completa las opciones.', { digitos: [1, 2, 4, 5, 7, 9], cifras: 3, et: ['centenas', 'decenas', 'unidades', 'números'], ops: ['·', '·', '='], metas: ['3', '5', '4', '60'], fichas: ['3', '5', '4', '60', '6', '120', '72'],
+      mira: ['Para pasar de 500, las centenas son 5, 7 o 9.', 'Queda cualquiera de las otras cinco cifras.', 'Ya se usaron dos cifras.', 'Se multiplican las tres casillas.'], trampas: { '0:6': 'Con 1, 2 o 4 en las centenas no pasa de 500.', '3:120': 'Eso cuenta todos, también los menores que 500.' }, ok: 'Primero la casilla que manda.' },
+      'La casilla exigente es la de las centenas: 5, 7 o 9. Después quedan 5 y 4: $3 \\cdot 5 \\cdot 4 = 60$.',
+      { hint: 'Empieza por la casilla que decide si el número pasa de 500.' }),
+    play('sube-orden', 'Sube al número de maneras. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Cuatro canciones en fila y cinco **maneras** de presentarlas', r: 120, c: '4! \\cdot 5', e: { 80: 'Cuatro canciones se ordenan de 4! maneras.', 25: 'Se hacen las dos cosas: se multiplica.' } },
+      { q: 'De 6 personas, **capitán y portero**', r: 30, c: '6 \\cdot 5', e: { 15: 'Los cargos son distintos: el orden importa.' } },
+      { q: 'Las letras de **ANANÁ**, sin contar la tilde', r: 10, c: '120 \\div 12', e: { 20: 'También se repite la N.', 60: 'También se repite la A, tres veces.', 120: 'La A y la N se repiten.' } }] },
+      'Las canciones, $4! = 24$ órdenes, y 5 presentaciones: $24 \\cdot 5 = 120$. Dos cargos: $6 \\cdot 5 = 30$. ANANA: $\\tfrac{5!}{3! \\cdot 2!} = 10$.',
+      { hint: 'Fija lo que está decidido, cuenta los puestos que quedan y divide si hay letras repetidas.' }),
+    sol('Ana, Beto, Carla, Diego y Elsa se van a sentar en una fila de cinco sillas. Ana y Beto quieren quedar juntos. ¿De cuántas maneras se pueden sentar los cinco?',
+      ['Ana y Beto se pegan en un solo bloque: quedan [[4]] cosas por ordenar', 'Esas se ordenan de $4! =$ [[24]] maneras', 'Dentro del bloque, Ana y Beto se pueden cambiar de puesto: [[2]] maneras', 'Total: $24 \\cdot 2 =$ [[48]] maneras'],
+      ['120', '60', '5'],
+      'Dos personas que van juntas se cuentan como una sola pieza, y al final se multiplica por las maneras de acomodarlas dentro del bloque.',
+      'Imagina que Ana y Beto están amarrados: ¿cuántas piezas hay que ordenar ahora?'),
+    err('¿De cuántas maneras se pueden ordenar las letras de la palabra CARRERA?',
+      ['La palabra tiene 7 letras: si fueran distintas habría $7! = 5\\,040$ ordenamientos', 'La R se repite 3 veces y la A, 2 veces', 'Se divide por las repeticiones: $5\\,040 \\div (3 + 2) = 1\\,008$'], 2,
+      ['Se divide por $3! \\cdot 2! = 12$: $5\\,040 \\div 12 = 420$', 'Se divide por $3 \\cdot 2 = 6$: $5\\,040 \\div 6 = 840$', 'Se restan las repeticiones: $5\\,040 - 3! - 2! = 5\\,032$'],
+      'Las tres R se pueden cambiar entre sí de $3! = 6$ maneras y las dos A de $2! = 2$ sin que la palabra cambie: cada ordenamiento se contó 12 veces. Son 420.',
+      'Si las tres R fueran de colores distintos, ¿de cuántas maneras podrías cambiarlas de lugar sin que cambie la palabra?'),
+    opc('Con los dígitos 1, 2, 3, 4 y 5, sin repetir ninguno, se forman números de cinco cifras. La cantidad de esos números que son pares es:',
+      ['120', '60', '24', '48'], 3,
+      'La última cifra debe ser 2 o 4: 2 opciones. Las otras cuatro cifras se ordenan de $4! = 24$ maneras: $2 \\cdot 24 = 48$.',
+      'Empieza por la casilla que tiene la condición: la de las unidades.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/conteo-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-co-3', [
+    play('mismo-grupo', 'Se eligió el grupo {B, D, E}. Toca **todas** las listas que son ese **mismo grupo**.', { grupo: 'BDE', fichas: ['DEB', 'BDF', 'EBD', 'BED', 'EDD', 'CDE'] },
+      'DEB, EBD y BED tienen a las mismas tres personas: en un grupo, el orden no importa.',
+      { hint: 'Un grupo es quiénes están, no en qué orden se nombran.' }),
+    play('orden-no-importa', 'Toca **todas** las situaciones en que el orden **no** importa.', { casos: [{ t: 'escoger 3 libros para llevar de viaje', si: true }, { t: 'elegir presidente y secretario', si: false }, { t: 'formar un equipo de 5 sin cargos', si: true }, { t: 'escribir una clave de 4 cifras', si: false }, { t: 'escoger 2 sabores para mezclar en un jugo', si: true }],
+      no: 'En una de esas, cambiar el orden cambia el resultado.', falta: 'Falta otra: si cambias el orden, queda lo mismo.', ok: 'Si al cambiar el orden queda lo mismo, es una combinación.' },
+      'Llevar libros, formar un equipo sin cargos y mezclar sabores dan lo mismo en cualquier orden. En los cargos y en la clave, cambiar el orden cambia el resultado.',
+      { hint: 'Toma dos elegidos e intercámbialos. ¿Cambió algo?' }),
+    play('divide-ordenes', 'De **9** personas se eligen **3** para un comité sin cargos. Completa la cuenta.', { n: 9, k: 3, et: ['con orden', 'órdenes', 'comités'], ops: ['÷', '='], metas: ['504', '6', '84'], fichas: ['504', '6', '84', '3', '168', '27', '729'],
+      mira: ['Con orden serían 9 · 8 · 7.', 'Tres personas se ordenan de 3! maneras.', 'Divide entre las veces que se repite cada comité.'], trampas: { '1:3': 'Tres personas se ordenan de 3 · 2 · 1 maneras, no de 3.', '2:168': 'Dividiste entre 3; cada comité se repite 6 veces.' }, ok: 'Cada comité se contó 6 veces.' },
+      '$\\tfrac{9 \\cdot 8 \\cdot 7}{3!} = \\tfrac{504}{6} = 84$.',
+      { hint: 'Cuenta primero como si el orden importara. ¿Cuántas veces sale el mismo comité?' }),
+    play('elige-deja', 'De **11** jugadoras viajan **9**. Cuenta a las que se quedan: ¿cuántas son y de cuántas maneras se escogen?', { n: 11, k: 9, et: ['se quedan', 'maneras'], ops: [''], metas: ['2', '55'], fichas: ['2', '55', '9', '110', '99', '20'],
+      mira: ['Viajan 9 de 11: se quedan las demás.', 'Escoger 2 de 11: once por diez, entre dos.'], trampas: { '1:110': 'La pareja que se queda no tiene orden: se divide entre 2.', '1:99': 'No es 11 por 9: cuenta la pareja que se queda.' }, ok: 'Elegir a las que van es elegir a las que se quedan.' },
+      'Se quedan 2: $\\tfrac{11 \\cdot 10}{2} = 55$ maneras, las mismas que de escoger a las 9.',
+      { hint: 'Por cada grupo que viaja hay un grupo que se queda. ¿Cuál es más fácil de contar?' }),
+    play('comite-mixto', 'De **6** médicas (arriba) y **5** médicos (abajo) se forma un turno con **2** y **2**. Completa la cuenta.', { a: 6, b: 5, et: ['médicas', 'médicos', 'turnos'], ops: ['·', '='], metas: ['15', '10', '150'], fichas: ['15', '10', '150', '25', '30', '20', '330'],
+      mira: ['Escoger 2 de 6, sin orden.', 'Escoger 2 de 5, sin orden.', 'Se escogen médicas y médicos: se multiplica.'], trampas: { '0:30': 'Sin orden: se divide entre 2.', '1:20': 'Sin orden: se divide entre 2.', '2:25': 'Se hacen las dos elecciones: se multiplica.', '2:330': 'Así se escogen 4 de los 11 sin cuidar cuántos hay de cada uno.' }, ok: 'Dos elecciones juntas: se multiplican.' },
+      '$\\tfrac{6 \\cdot 5}{2} = 15$ parejas de médicas y $\\tfrac{5 \\cdot 4}{2} = 10$ de médicos: $15 \\cdot 10 = 150$.',
+      { hint: 'Son dos elecciones sin orden que se hacen a la vez.' }),
+    play('con-o-sin', 'De 7 personas, Ana entre ellas, se eligen 3. ¿Cuántos grupos **tienen** a Ana, cuántos **no**, y cuántos hay en total?', { n: 7, et: ['con Ana', 'sin Ana', 'todos'], ops: ['+', '='], metas: ['15', '20', '35'], fichas: ['15', '20', '35', '21', '30', '210'],
+      mira: ['Con Ana adentro faltan 2 de las otras 6.', 'Sin Ana, los 3 salen de las otras 6.', 'Con Ana o sin Ana: se suma.'], trampas: { '0:30': 'Las dos que la acompañan no tienen orden: divide entre 2.', '0:21': 'Ana ya está: escoge entre las otras 6.', '2:210': 'Sin orden: hay que dividir entre 3!.' }, ok: 'Los grupos con Ana y sin Ana no se cruzan.' },
+      'Con Ana: 2 de 6, $\\tfrac{6 \\cdot 5}{2} = 15$. Sin Ana: 3 de 6, $\\tfrac{6 \\cdot 5 \\cdot 4}{6} = 20$. Juntos, $35 = \\tfrac{7 \\cdot 6 \\cdot 5}{6}$.',
+      { hint: 'Si Ana ya está, ¿cuántos cupos quedan y entre cuántas personas?' }),
+    play('cuantos-saludos', 'En una reunión todos se dieron la mano **una vez** y hubo **66** saludos. ¿Cuántas personas había?', { total: 66, max: 14 },
+      '$\\tfrac{12 \\cdot 11}{2} = 66$: había 12 personas.',
+      { hint: 'Cada persona saluda a todas menos a ella misma, y cada saludo es de dos.' }),
+    play('sube-grupo', 'Sube al número de grupos. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De 9 colores, escoger **2** para mezclar', r: 36, c: '\\tfrac{9 \\cdot 8}{2}', e: { 18: 'No es 9 por 2: cada uno va con cada otro.' } },
+      { q: 'De 7 libros, escoger **5**', r: 21, c: '\\tfrac{7 \\cdot 6}{2}', e: { 35: 'No es 7 por 5: escoger 5 es dejar 2.', 42: 'Sin orden: divide entre 2.' } },
+      { q: 'De 3 sopas y 4 jugos: **2** sopas y **2** jugos', r: 18, c: '3 \\cdot 6', e: { 9: 'Se hacen las dos elecciones: se multiplica.', 12: 'Cuenta de nuevo las parejas de jugos.' } }] },
+      '$\\tfrac{9 \\cdot 8}{2} = 36$; escoger 5 de 7 es dejar 2, $21$; y $3 \\cdot 6 = 18$.',
+      { hint: 'Sin orden se divide. Si son muchos los que van, cuenta los que se quedan.' }),
+    sol('De un grupo de 5 mujeres y 4 hombres se va a formar un comité de 3 personas que tenga exactamente 2 mujeres. ¿Cuántos comités distintos se pueden formar?',
+      ['Parejas de mujeres: $\\tfrac{5 \\cdot 4}{2} =$ [[10]]', 'El hombre se escoge de [[4]] maneras', 'Las dos elecciones se hacen a la vez: se [[multiplican]]', 'Comités: $10 \\cdot 4 =$ [[40]]'],
+      ['suman', '20', '14'],
+      'El comité se arma en dos etapas: primero las dos mujeres (sin orden, por eso se divide entre 2) y después el hombre. Etapas que van juntas se multiplican.',
+      'Separa el comité en dos elecciones: las mujeres y el hombre. En la primera, ¿importa el orden?'),
+    err('En un torneo de 8 equipos, cada equipo juega una sola vez contra cada uno de los demás. ¿Cuántos partidos se juegan en total?',
+      ['Cada equipo juega contra los otros 7', 'Contando equipo por equipo: $8 \\cdot 7 = 56$', 'Entonces se juegan 56 partidos'], 2,
+      ['Cada partido se contó dos veces: se juegan $56 \\div 2 = 28$ partidos', 'Faltan los partidos de vuelta: se juegan $56 + 8 = 64$', 'Se juegan $8 + 7 = 15$ partidos'],
+      'El partido de A contra B es el mismo que el de B contra A: al contar equipo por equipo, cada partido aparece dos veces. Son 28.',
+      'Piensa en un solo partido: ¿desde cuántos equipos se contó?'),
+    opc('Una pizzería ofrece 6 ingredientes adicionales. La cantidad de pizzas distintas que se pueden pedir con exactamente 2 de esos ingredientes es:',
+      ['15', '30', '12', '36'], 0,
+      'Da igual el orden en que se pidan: $\\tfrac{6 \\cdot 5}{2} = 15$.',
+      'Jamón con piña es la misma pizza que piña con jamón: el orden no cuenta.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/conteo-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-co-4', [
+    play('cruce-numeros', 'Toca **todos** los números que son múltiplos de **4** o de **6**.', { filas: 3, cols: 8, a: 4, b: 6, ambos: 12 },
+      'Múltiplos de 4: seis. De 6: cuatro. El 12 y el 24 están en los dos y se cuentan una vez: $6 + 4 - 2 = 8$.',
+      { hint: 'Pinta primero los de un número y luego los del otro. Algunos ya estarán pintados.' }),
+    play('suma-y-resta', 'Del **1 al 60**, ¿cuántos son múltiplos de 4, cuántos de 6, cuántos de **ambos** y cuántos de **alguno**?', { ea: 'de 4', eb: 'de 6', et: ['de 4', 'de 6', 'de ambos', 'de alguno'], ops: ['', '', ''], metas: ['15', '10', '5', '20'], fichas: ['15', '10', '5', '20', '25', '2', '30'],
+      mira: ['Cada 4 números hay uno: 60 entre 4.', 'Cada 6 números hay uno: 60 entre 6.', 'Los de ambos van de 12 en 12.', 'Suma los dos grupos y quita una vez los repetidos.'], trampas: { '2:2': 'Los de ambos son 12, 24, 36, 48 y 60.', '3:25': 'Los de ambos quedaron contados dos veces.', '3:30': 'Los repetidos se quitan, no se agregan.' }, ok: 'Los de ambos se cuentan una sola vez.' },
+      '$15 + 10 - 5 = 20$. Los de ambos son los múltiplos de 12: $60 \\div 12 = 5$.',
+      { hint: 'Un múltiplo de 4 y de 6 a la vez lo es de 12.' }),
+    play('cruce-barras', 'En un coro de **40**, **26** tocan guitarra y **21** piano, y todos tocan **alguno**. ¿Cuántos tocan los **dos**?', { a: 26, b: 21, total: 40, max: 20, ea: 'guitarra', eb: 'piano' },
+      '$26 + 21$ se pasa de 40 en 7: esos 7 se contaron dos veces, porque tocan los dos.',
+      { hint: 'Suma los dos grupos. Lo que se pasa del total quedó contado dos veces.' }),
+    play('ruletas-alguno', 'Dos ruletas tienen los números del 1 al 4. Toca **todos** los resultados en que sale **al menos un 3**.', { filas: 4, cols: 4, n: 3 },
+      'Los que no tienen 3 son $3 \\cdot 3 = 9$ de 16: los que sí, $16 - 9 = 7$. El 33 se cuenta una vez.',
+      { hint: 'El 3 puede salir en la primera, en la segunda o en las dos. ¿Cuántos resultados no tienen ninguno?' }),
+    play('lo-contrario', '«**Al menos una** lámpara está prendida.» Cada lámpara está prendida o apagada. Toca **todas** las frases que dicen lo **contrario**.', { casos: [{ t: 'ninguna lámpara está prendida', si: true }, { t: 'al menos una lámpara está apagada', si: false }, { t: 'todas las lámparas están apagadas', si: true }, { t: 'solo una lámpara está prendida', si: false }, { t: 'no todas están prendidas', si: false }],
+      no: 'Con una de esas todavía podría haber una lámpara prendida.', falta: 'Falta otra que tampoco deja ninguna prendida.', ok: 'Lo contrario de «al menos una» es «ninguna».' },
+      'Si no hay al menos una prendida, no hay ninguna: todas están apagadas. Las demás dejan que alguna esté prendida.',
+      { hint: 'Busca las frases que no dejan ni una sola prendida.' }),
+    play('todos-ninguno', 'Claves de **3 dígitos**, del 000 al 999. ¿Cuántas hay, cuántas **no** tienen ningún 4 y cuántas tienen **al menos un 4**?', { puestos: 3, et: ['todas', 'sin 4', 'con algún 4'], ops: ['−', '='], metas: ['1000', '729', '271'], fichas: ['1000', '729', '271', '300', '900', '27'],
+      mira: ['Diez opciones en cada uno de los tres puestos.', 'Sin el 4 quedan 9 opciones en cada puesto.', 'Todas menos las que no tienen.'], trampas: { '1:27': 'Se multiplica 9 · 9 · 9, no 9 · 3.', '2:300': 'Así las que tienen varios 4 se cuentan de más.' }, ok: 'Todas menos ninguna.' },
+      '$10^3 = 1000$, sin 4 hay $9^3 = 729$ y con alguno $1000 - 729 = 271$. No son 300: las que tienen dos o tres 4 se contarían varias veces.',
+      { hint: '«Al menos uno» se cuenta mejor al revés: cuenta las que no lo tienen.' }),
+    play('parte-casos', 'Con estas cifras se forman números de 2 cifras **distintas** que sean múltiplos de **5**. Cuenta los que terminan en 0, los que terminan en 5 y el total.', { digitos: [0, 1, 2, 5, 6], cifras: 2, et: ['en 0', 'en 5', 'total'], ops: ['+', '='], metas: ['4', '3', '7'], fichas: ['4', '4', '3', '7', '8', '12'],
+      mira: ['Si termina en 0, adelante va cualquiera de las otras cuatro.', 'Si termina en 5, adelante no van ni el 5 ni el 0.', 'Los casos no se cruzan: se suman.'], trampas: { '1:4': 'Adelante no puede ir el 0.', '2:12': 'Termina en 0 o en 5: se suma.', '2:8': 'Suma los dos casos que encontraste.' }, ok: 'Dos casos que no se cruzan: se suman.' },
+      'Hay que partir en dos casos. En 0: adelante 1, 2, 5 o 6, son 4. En 5: adelante 1, 2 o 6, son 3. En total 7.',
+      { hint: 'La última cifra decide qué queda prohibido adelante. Recuerda que un número no empieza en 0.' }),
+    play('sube-casos', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Cinco bombillos, cada uno prendido o apagado. ¿En cuántos estados hay **al menos uno** prendido?', r: 31, c: '32 - 1', e: { 32: 'En uno de ellos todos están apagados.', 5: 'Ese es el número de bombillos.' } },
+      { q: '20 leen, 15 escriben y 8 hacen las **dos** cosas. ¿Cuántos hacen **alguna**?', r: 27, c: '20 + 15 - 8', e: { 35: 'Los 8 se contaron dos veces.' } },
+      { q: 'Números de 2 cifras **iguales** o que **terminan en 0** (del 10 al 99)', r: 18, c: '9 + 9', e: { 19: 'El 00 no es un número de dos cifras.' } }] },
+      '$2^5 - 1 = 31$; $20 + 15 - 8 = 27$; y 9 de cifras iguales más 9 que terminan en 0, que no se cruzan: 18.',
+      { hint: '«Al menos uno» es todos menos ninguno. Al juntar grupos, mira si hay repetidos.' }),
+    sol('Con los dígitos 0, 1, 3, 5, 6 y 8, sin repetir ninguno, se forman números PARES de tres cifras. ¿Cuántos se pueden formar?',
+      ['Caso 1, termina en 0: centenas, [[5]] opciones (ya no hay 0 que prohibir); decenas, 4: $5 \\cdot 4 = 20$', 'Caso 2, termina en 6 o en 8: centenas sin el 0 ni la cifra final, [[4]] opciones; decenas, 4 (ahí el 0 sí puede ir)', 'Caso 2: $2 \\cdot 4 \\cdot 4 =$ [[32]] números', 'Los dos casos no se cruzan: se [[suman]], $20 + 32 =$ [[52]]'],
+      ['60', 'multiplican', '3'],
+      'El 0 es par y puede ir al final, pero nunca al comienzo. Si termina en 0, el 0 ya se gastó y al comienzo caben las otras 5 cifras; si termina en 6 o en 8, al comienzo hay que quitar el 0 y la cifra final. Por eso no sirve una sola cuenta como $3 \\cdot 5 \\cdot 4 = 60$: se parte en casos y se suman.',
+      'Pregúntate si la cifra final es el 0 o no: en cada caso cambia lo que queda prohibido para la primera cifra.'),
+    err('¿Cuántos números de tres cifras tienen al menos una cifra par?',
+      ['Números de tres cifras: $9 \\cdot 10 \\cdot 10 = 900$', 'Lo contrario de «al menos una par» es «todas pares»', 'Con todas las cifras pares hay $4 \\cdot 5 \\cdot 5 = 100$ números', 'Respuesta: $900 - 100 = 800$'], 1,
+      ['Lo contrario de «al menos una par» es «ninguna par»: todas impares', 'Lo contrario de «al menos una par» es «exactamente una par»', 'Lo contrario de «al menos una par» es «al menos una impar»'],
+      'El contrario de «al menos una» es «ninguna». Con todas impares hay $5 \\cdot 5 \\cdot 5 = 125$ números, y la respuesta es $900 - 125 = 775$.',
+      'Para negar «al menos una», piensa en qué números NO sirven: ¿cuántas cifras pares tienen?'),
+    opc('En un curso de 35 estudiantes, 20 practican fútbol, 15 practican baloncesto y 6 no practican ninguno de los dos deportes. La cantidad de estudiantes que practica los dos deportes es:',
+      ['0', '5', '6', '11'], 2,
+      'Practican algún deporte $35 - 6 = 29$. Como $20 + 15 = 35$, sobran $35 - 29 = 6$: los que se contaron dos veces.',
+      'Quita primero a los que no practican nada. Lo que sobra al sumar los dos grupos son los repetidos.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/conteo-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-co-5', [
+    play('cuadrados-tamano', 'En una cuadrícula de **3 por 5**, ¿cuántos cuadrados hay de cada tamaño y en total?', { f: 3, c: 5, et: ['lado 1', 'lado 2', 'lado 3', 'total'], ops: ['+', '+', '='], metas: ['15', '8', '3', '26'], fichas: ['15', '8', '3', '26', '15', '10', '6'],
+      mira: ['Cuenta las casillas.', 'Uno de lado 2 cabe en 2 lugares a lo alto y 4 a lo ancho.', 'Uno de lado 3 ocupa todo el alto: solo se corre a lo ancho.', 'Suma los tres tamaños.'], trampas: { '1:10': 'A lo ancho cabe en 4 lugares, no en 5.', '1:6': 'Se corre a lo alto y a lo ancho.', '3:15': 'Los de lado 2 y 3 también cuentan.' }, ok: 'Por tamaños: en cuántos lugares cabe cada uno.' },
+      'Lado 1: $3 \\cdot 5 = 15$. Lado 2: $2 \\cdot 4 = 8$. Lado 3: $1 \\cdot 3 = 3$. Total 26.',
+      { hint: 'Para cada tamaño, cuenta en cuántos lugares cabe a lo alto y en cuántos a lo ancho.' }),
+    play('donde-cabe', 'Un cuadrado de **2 por 2** se pone dentro de esta cuadrícula. Toca **todas** las casillas que pueden ser su esquina de **arriba a la izquierda**.', { filas: 3, cols: 4, s: 2 },
+      'A lo ancho cabe en 3 lugares y a lo alto en 2: $3 \\cdot 2 = 6$.',
+      { hint: 'Si la esquina está en la última fila o en la última columna, ¿cabe el cuadrado completo?' }),
+    play('lados-diagonales', 'Un polígono tiene **54** diagonales. ¿Cuántos **lados** tiene?', { total: 54, max: 14 },
+      'De cada vértice de un polígono de 12 lados salen 9 diagonales, y cada una se cuenta dos veces: $\\tfrac{12 \\cdot 9}{2} = 54$.',
+      { hint: 'Desde cada vértice salen tantas como lados menos tres, y cada diagonal tiene dos puntas.' }),
+    play('esquina-cerrada', 'Desde A solo se camina al **este** o al **norte**. La esquina **✗ está cerrada**. Pon los caminos que llegan a las que faltan.', { a: 3, b: 2, cierra: [1, 1], faltan: [[2, 1], [2, 2], [3, 2]], fichas: ['1', '2', '4', '3', '6', '10'] },
+      'Por la cerrada no llega nadie: aporta 0. Entonces $0 + 1 = 1$; después $1 + 1 = 2$; y arriba a la derecha, $2 + 2 = 4$.',
+      { hint: 'A cada esquina se llega desde la izquierda o desde abajo. ¿Cuánto aporta la que está cerrada?' }),
+    play('palabra-camino', 'De A a B hay 4 cuadras al **este** (E) y 2 al **norte** (N). Toca **todos** los recorridos que llegan.', { e: 4, n: 2, fichas: ['EENNEE', 'EENEEE', 'NNEEEE', 'NENENE', 'ENEENE', 'NNENEE'] },
+      'Un recorrido llega si tiene cuatro E y dos N, en cualquier orden: EENNEE, NNEEEE y ENEENE.',
+      { hint: 'Cuenta las letras de cada recorrido: ¿cuántas E y cuántas N tiene?' }),
+    play('tira-larga', 'Una tira tiene **6** cuadritos. ¿Cuántos rectángulos hay de largo 1, 2 y 3, y cuántos en **total**, de todos los largos?', { n: 6, et: ['largo 1', 'largo 2', 'largo 3', 'todos'], ops: ['', '', ''], metas: ['6', '5', '4', '21'], fichas: ['6', '5', '4', '21', '15', '3', '2'],
+      mira: ['Cuenta los cuadritos.', 'Uno de largo 2 puede empezar en 5 lugares.', 'Uno de largo 3 puede empezar en 4 lugares.', 'Faltan los de largo 4, 5 y 6: suma todos.'], trampas: { '3:15': 'Faltan los de largo 4, 5 y 6.', '1:3': 'Los rectángulos se pueden montar: se corren de a un cuadrito.', '2:2': 'Los rectángulos se pueden montar: se corren de a un cuadrito.' }, ok: 'Cada largo cabe en un lugar menos que el anterior.' },
+      '$6 + 5 + 4 + 3 + 2 + 1 = 21$ rectángulos.',
+      { hint: '¿En cuántos cuadritos puede empezar uno de cada largo? No pares en el 3.' }),
+    play('triangulos-abanico', 'Un triángulo se parte desde la punta en triángulos **pequeños**. Contando **todos**, chicos y grandes, hay **10**. ¿Cuántos pequeños son?', { total: 10, max: 10 },
+      'De un pedazo hay 4, de dos 3, de tres 2 y el grande: $4 + 3 + 2 + 1 = 10$. Son 4 pequeños.',
+      { hint: 'Cuenta por tamaños: los de un pedazo, los de dos, los de tres… Cada vez hay uno menos.' }),
+    play('sube-figuras', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Cuadrados en una cuadrícula de **2 por 6**', r: 17, c: '12 + 5', e: { 12: 'Faltan los de lado 2.', 18: 'Mira otra vez en cuántos lugares cabe el de lado 2.' } },
+      { q: 'Segmentos que unen **7** puntos de un círculo', r: 21, c: '\\tfrac{7 \\cdot 6}{2}', e: { 14: 'Esas son solo las diagonales: faltan los lados.', 42: 'Cada segmento tiene dos puntas: lo contaste dos veces.' } },
+      { q: 'Caminos con 4 cuadras al este y **1** al norte', r: 5, c: '1 + 4', e: { 4: 'También se puede subir al final.' } }] },
+      '$12 + 5 = 17$; $\\tfrac{7 \\cdot 6}{2} = 21$; y la cuadra al norte puede ir en 5 momentos.',
+      { hint: 'Cuenta por tamaños, no cuentes doble una pareja y piensa cuándo se puede subir.' }),
+    sol('En una cuadrícula de calles, una persona va de la esquina A a la esquina B, que queda 3 cuadras al este y 2 cuadras al norte, caminando solo hacia el este o hacia el norte. ¿Cuántos caminos distintos puede seguir?',
+      ['Cada camino tiene $3 + 2 =$ [[5]] cuadras', 'De esas 5, hay que escoger cuáles [[2]] se caminan hacia el norte', 'Maneras de escogerlas: $\\tfrac{5 \\cdot 4}{2} =$ [[10]] caminos'],
+      ['6', '20', '25'],
+      'Todos los caminos tienen las mismas 5 cuadras; solo cambia en qué momento se sube. Escoger 2 momentos de 5 es una combinación: 10.',
+      'Escribe un camino como una palabra con E y N. ¿Cuántas letras tiene y cuántas son N?'),
+    err('¿Cuántas diagonales tiene un polígono de 10 lados?',
+      ['Desde cada vértice salen diagonales hacia los otros 9 vértices', 'Con los 10 vértices: $10 \\cdot 9 = 90$', 'Cada diagonal se contó desde sus dos extremos: $90 \\div 2 = 45$ diagonales'], 0,
+      ['Desde cada vértice salen diagonales a todos menos a él mismo y a sus dos vecinos: $10 - 3 = 7$', 'Desde cada vértice salen diagonales a $10 - 2 = 8$ vértices', 'Desde cada vértice salen 9 diagonales y un lado'],
+      'Hacia los dos vértices vecinos salen lados, no diagonales. Desde cada vértice hay 7 diagonales: $\\tfrac{10 \\cdot 7}{2} = 35$.',
+      'Párate en un vértice y mira a sus dos vecinos: lo que los une contigo, ¿es una diagonal?'),
+    opc('La cantidad total de rectángulos (contando también los cuadrados) que hay en una cuadrícula de 2 filas y 3 columnas de cuadritos es:',
+      ['6', '12', '10', '18'], 3,
+      'Un rectángulo se arma escogiendo 2 de las 3 líneas horizontales (3 maneras) y 2 de las 4 verticales (6 maneras): $3 \\cdot 6 = 18$.',
+      'No cuentes de a uno: cada rectángulo queda definido por dos líneas horizontales y dos verticales.'),
+  ]);
+
+  addExam('pu-conteo', [
+    ['pu-co-1', 'Las opciones de cada casilla se multiplican.',
+      opc('Una clave está formada por una vocal seguida de dos dígitos, que pueden repetirse. La cantidad de claves distintas es:', ['500', '450', '25', '105'], 0,
+        '$5 \\cdot 10 \\cdot 10 = 500$.', 'Cuenta las opciones de cada casilla y multiplícalas.')],
+    ['pu-co-2', 'n objetos distintos se ordenan en fila de n! maneras.',
+      opc('Cuatro libros distintos se van a colocar en fila en una repisa. El número de maneras de hacerlo es:', ['16', '4', '24', '256'], 2,
+        '$4! = 4 \\cdot 3 \\cdot 2 \\cdot 1 = 24$.', 'Para el primer lugar hay 4 libros; para el segundo, uno menos.')],
+    ['pu-co-3', 'Cuando el orden no importa, se divide entre los ordenamientos del grupo.',
+      opc('De 7 candidatos se eligen 2 para representar al curso, sin cargos. El número de parejas distintas que se pueden elegir es:', ['42', '21', '14', '49'], 1,
+        '$\\tfrac{7 \\cdot 6}{2} = 21$.', 'Elegir a Ana y luego a Luis es la misma pareja que al revés.')],
+    ['pu-co-4', 'Al menos uno = todos menos ninguno.',
+      opc('Se lanza una moneda 4 veces. El número de resultados posibles en los que sale al menos una cara es:', ['15', '16', '8', '4'], 0,
+        'Hay $2^4 = 16$ resultados y solo uno sin caras: $16 - 1 = 15$.', 'Cuenta todos los resultados y quita los que no tienen ninguna cara.')],
+    ['pu-co-5', 'Cada pareja de puntos determina un segmento.',
+      opc('Se marcan 5 puntos sobre una circunferencia. La cantidad de segmentos que se pueden trazar uniendo esos puntos de a dos es:', ['20', '5', '10', '25'], 2,
+        '$\\tfrac{5 \\cdot 4}{2} = 10$.', 'El segmento de P a Q es el mismo que el de Q a P.')],
   ]);
 });

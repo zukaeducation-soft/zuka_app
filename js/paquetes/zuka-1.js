@@ -1499,6 +1499,22 @@ const WORLDS = (() => {
     'icf-en-vocabulario': { name: 'Palabras en Contexto', art: plate('icf-en-vocabulario', TEAL, `
       ${L('M48 24h20M74 24h38M48 34h30', INK, 1)}${L('M84 30h20v9H84z', TEAL, 1.3)}${L('M108 34h6M48 48h12M66 48h46M48 58h34', INK, 1)}${A(94, 62, 94, 42, TEAL, 1.2)}${D(94, 64, 2, TEAL)}${L('M86 64h16', TEAL, 1)}
       ${T(28, 42, 'bore-dom', INK, 5.5)}${T(134, 42, 'un-, -ly', TEAL, 6)}`) },
+    // ---------- séptimos mundos ----------
+    'icf-ma-ecuaciones': { name: 'Ecuaciones en Contexto', art: plate('icf-ma-ecuaciones', TEAL, `
+      ${L('M50 30h60', INK, 1.3)}${L('M80 30v30M68 62h24', INK, 1.1)}${L('M44 30l6 14h-12z', INK, .9)}${L('M116 30l6 14h-12z', INK, .9)}${L('M56 18h10v10H56z', TEAL, 1.3)}${L('M94 18h10v10H94z', TEAL, 1.3)}${D(80, 30, 2.2, TEAL)}${T(61, 26, 'x', TEAL, 7)}
+      ${T(28, 42, '2x + 3', INK, 7)}${T(134, 42, '≤', TEAL, 10)}`) },
+    'icf-lc-evalua': { name: 'Evaluar un Texto', art: plate('icf-lc-evalua', TEAL, `
+      ${L('M52 14h42v52H52z', INK, 1.1)}${L('M59 24h28M59 32h28M59 40h18M59 48h24', INK, .8)}${C(98, 50, 12, TEAL, 1.4)}${L('M92 50l4 4 8-9', TEAL, 1.6)}${L('M59 56h12', INK, .8)}${D(55, 24, 1.1, TEAL)}${D(55, 40, 1.1, TEAL)}
+      ${T(28, 42, '¿válido?', INK, 6)}${T(134, 42, 'supone', TEAL, 6)}`) },
+    'icf-sc-mundo': { name: 'Historia del Mundo', art: plate('icf-sc-mundo', TEAL, `
+      ${C(80, 40, 24, INK, 1.1)}${L('M56 40h48M80 16v48', INK, .8)}${L('M80 16c-16 12-16 36 0 48M80 16c16 12 16 36 0 48', INK, .8)}${D(72, 30, 2, TEAL)}${D(92, 34, 2, TEAL)}${D(76, 52, 2, TEAL)}${Ld('M72 30L92 34L76 52')}
+      ${T(28, 42, '1789', INK, 7)}${T(134, 42, '1945', TEAL, 7)}`) },
+    'icf-cn-atomo': { name: 'Átomo y Enlaces', art: plate('icf-cn-atomo', TEAL, `
+      ${C(66, 40, 18, INK, 1)}${C(66, 40, 9, INK, .8)}${D(66, 40, 3, TEAL)}${C(96, 40, 18, TEAL, 1.2)}${D(96, 40, 3, INK)}${D(81, 36, 1.8, TEAL)}${D(81, 44, 1.8, TEAL)}${D(66, 31, 1.4)}${D(48, 40, 1.4)}${D(114, 40, 1.4)}
+      ${T(28, 42, 'Na⁺', INK, 7)}${T(134, 42, 'Cl⁻', TEAL, 7)}`) },
+    'icf-en-inferencia': { name: 'Inferir y Opinar', art: plate('icf-en-inferencia', TEAL, `
+      ${L('M48 20h34M48 30h26M48 40h34', INK, 1)}${L('M86 18h26v22H98l-6 7v-7h-6z', TEAL, 1.3)}${T(99, 33, 'so…', TEAL, 7)}${A(78, 30, 86, 30, TEAL, 1.1)}${D(52, 52, 2)}${D(66, 52, 2)}${A(70, 52, 92, 60, INK, 1)}${C(97, 61, 4, TEAL, 1.2)}
+      ${T(28, 42, 'fact', INK, 6.5)}${T(134, 52, 'must be', TEAL, 6)}`) },
   };
 })();
 
@@ -4377,7 +4393,7 @@ GAMES['dibuja-intervalo'] = (() => {
     : { left: s.right, right: s.left, leftClosed: s.rightClosed, rightClosed: s.leftClosed });
 
   function grade(state, params) {
-    const s = norm(state);
+    const s = norm({ left: 0, right: 0, ...state });
     const ok = s.left === params.a && s.right === params.b && s.leftClosed === params.aClosed && s.rightClosed === params.bClosed;
     const br = (c, side) => (side === 'l' ? (c ? '[' : '(') : (c ? ']' : ')'));
     return { ok, solution: `$${br(params.aClosed, 'l')}${params.a},\\ ${params.b}${br(params.bClosed, 'r')}$` };
@@ -31819,4 +31835,934 @@ GAMES['rueda-cabinas'] = (() => {
     },
   }));
   return Object.assign(game, { nearestCabin, snapOf, startOf, wrap });
+})();
+;
+//#archivo js/games/traza-progresion.js
+// Traza la progresión (Álgebra, progresiones aritméticas; juego dinámico de la lección alg-14): en una cuadrícula de
+// 3 × 3 hay puntos con números. Arriba se dan los dos primeros términos de una progresión aritmética («4, 7, …») y
+// hay que trazar el camino, sin levantar el dedo o por tramos, pasando por los términos en orden y rodeando los demás
+// puntos. Pasar por un punto que no es el siguiente quita una vida. No hay reloj: se puede levantar el dedo y pensar. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, items: [{ a1, d, len, traps: [...] }] }], lives? }   state = { done: [n] }
+// Spec 2026-11-13-juegos-dinamicos-progresiones.
+
+GAMES['traza-progresion'] = (() => {
+  const termsOf = it => Array.from({ length: it.len }, (_, k) => it.a1 + k * it.d);
+  // Reparte los términos y las trampas en casillas distintas de la cuadrícula de 3 × 3 (siempre igual para una semilla).
+  function placeDots(it, seed) {
+    const values = [...termsOf(it), ...(it.traps || [])], order = shuffledOrder(9, `${seed}|${values.join()}`);
+    return values.map((value, i) => ({ value, cell: order[i] }));
+  }
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => termsOf(it).map(negTxt).join(', ')).join(' · ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, RAD = 21;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, grid = { x0: 0, y0: 0, cw: 0, ch: 0 }, queue = [], dots = [], path = [], burn = 0, press = false, over = -1, pause = 0, n = 0, finger = null;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); load(); },
+      lost(i) { st.done[i] = 0; press = false; },
+    });
+    const item = () => R[a.cur].items[queue[0] ?? 0];
+    const pos = d => ({ x: grid.x0 + ((d.cell % 3) + 0.5) * grid.cw, y: grid.y0 + (Math.floor(d.cell / 3) + 0.5) * grid.ch });
+    const seg = (i, j) => { const p = pos(dots[i]), q = pos(dots[j]); return Math.hypot(p.x - q.x, p.y - q.y); };
+
+    function layout(w, h) { W = w; H = h; grid = { x0: 14, y0: 112, cw: (w - 28) / 3, ch: (h - 112 - 40) / 3 }; }
+    // Carga la progresión: los puntos en sus casillas y el camino empezando en el primer término.
+    function load() {
+      const it = item();
+      dots = placeDots(it, `${a.cur}-${n++}`);
+      path = [0]; burn = 0; over = -1; pause = 0; finger = null;   // dots[0..len-1] son los términos, en orden
+    }
+    function touch(x, y) {
+      const i = dots.findIndex(d => { const p = pos(d); return Math.hypot(p.x - x, p.y - y) <= RAD; });
+      if (i === over) return;   // sigue sobre el mismo punto: no cuenta otra vez
+      over = i;
+      if (i < 0 || path.includes(i)) return;
+      const it = item();
+      if (i === path.length) {   // es el término siguiente
+        path.push(i); api.sfx?.tap?.();
+        if (path.length === it.len) { st.done[a.cur]++; a.hit(); a.say(termsOf(it).map(negTxt).join(', '), C.ok); pause = 1.2; press = false; }
+      } else { a.say(`${negTxt(dots[i].value)} no es el término que sigue`, C.bad); a.miss(); }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play') return;
+        if (pause > 0) { pause -= dt; if (pause <= 0) { queue.shift(); if (!queue.length) { a.win(); return; } load(); } return; }
+        if (path.length < 2) return;
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], it = item(), terms = termsOf(it);
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        p.text(`${r.title} · sigue la progresión`, W / 2, 40);
+        if (a.phase === 'play') {
+          drawPill(p, C, `${negTxt(terms[0])}, ${negTxt(terms[1])}, …`, W / 2, 68, C.sun, 18);
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(`${path.length} de ${it.len} términos`, W / 2, 94);
+        }
+
+        if (a.phase !== 'idle' && dots.length) {
+          // El camino trazado, la parte ya quemada y el tramo hacia el dedo.
+          const pts = path.map(i => pos(dots[i]));
+          p.noFill(); p.stroke(C.sun); p.strokeWeight(7);
+          for (let k = 1; k < pts.length; k++) p.line(pts[k - 1].x, pts[k - 1].y, pts[k].x, pts[k].y);
+          if (press && finger && pause <= 0) { const e = pts[pts.length - 1]; p.stroke(C.sun); p.strokeWeight(3); p.line(e.x, e.y, finger.x, finger.y); }
+          let left = burn;
+          for (let k = 1; k < pts.length && left > 0; k++) {
+            const d = Math.hypot(pts[k].x - pts[k - 1].x, pts[k].y - pts[k - 1].y), q = Math.min(1, left / d);
+            p.stroke(C.coral); p.strokeWeight(7); p.line(pts[k - 1].x, pts[k - 1].y, pts[k - 1].x + (pts[k].x - pts[k - 1].x) * q, pts[k - 1].y + (pts[k].y - pts[k - 1].y) * q);
+            if (q < 1 || k === pts.length - 1) { p.noStroke(); p.fill(C.sun); p.circle(pts[k - 1].x + (pts[k].x - pts[k - 1].x) * q, pts[k - 1].y + (pts[k].y - pts[k - 1].y) * q, 12 + 3 * Math.sin(p.frameCount * 0.6)); }
+            left -= d;
+          }
+          // Los puntos.
+          dots.forEach((d, i) => {
+            const c = pos(d), on = path.includes(i), fill = on ? (pause > 0 ? C.ok : C.sun) : C.cream;
+            p.noStroke(); p.fill(shade(fill, 0.76)); p.circle(c.x, c.y + 3, RAD * 2);
+            p.fill(fill); p.circle(c.x, c.y, RAD * 2);
+            if (i === 0 && path.length === 1) { p.noFill(); p.stroke(C.sun); p.strokeWeight(3); p.circle(c.x, c.y, RAD * 2 + 10 + 3 * Math.sin(p.frameCount * 0.15)); }
+            p.noStroke(); p.fill(inkOn(fill, C.ink)); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD); fitText(p, negTxt(d.value), c.x, c.y + 1, RAD * 2 - 8, 16);
+          });
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = grid.y0 + grid.ch * 1.5;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: termsOf(x).map(negTxt).join(', ') }))).slice(0, 7), mid);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Sin prisa: pasa el dedo por los términos, en orden', lost: 'Demasiados puntos equivocados' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Caminos completos! Ya puedes comprobar' : 'Rodea los puntos que no son de la progresión', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp === 'play' && pause <= 0) { press = true; over = -1; finger = { x: p.mouseX, y: p.mouseY }; touch(p.mouseX, p.mouseY); }
+        return false;
+      };
+      p.mouseDragged = () => { if (press && !locked && a.phase === 'play' && pause <= 0) { finger = { x: p.mouseX, y: p.mouseY }; touch(p.mouseX, p.mouseY); return false; } };
+      p.mouseReleased = () => { press = false; over = -1; finger = null; };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; press = false; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, grid, visited: path.length, len: item().len, dots: dots.map(d => ({ ...pos(d), cell: d.cell, value: d.value })) }),
+    };
+  }
+
+  return { grade, create, termsOf, placeDots };
+})();
+;
+//#archivo js/games/encesta-suma.js
+// Encesta la suma (Álgebra, suma de una progresión aritmética; juego dinámico de la lección alg-14b): arriba hay
+// tres canastas con números y una suma por calcular («2 + 4 + 6 + 8 + 10», «Los pares del 2 al 40»). Abajo hay un
+// balón: se desliza el dedo hacia arriba, en la dirección de la canasta, y al soltar el balón sale lanzado. Hay que
+// encestar en la que tiene la suma. Encestar en otra quita una vida; fallar el tiro no quita nada. No hay
+// reloj: se calcula con calma antes de lanzar. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, items: [{ ask, sum: [a1, d, n], options: [a, b, c], answer }] }], lives? }
+// state = { done: [n] }      Spec 2026-11-13-juegos-dinamicos-progresiones.
+
+GAMES['encesta-suma'] = (() => {
+  const SPEED = 560, HOOP = 30;
+  // Velocidad del balón al deslizar (dx, dy): solo si el deslizón va hacia arriba y mide al menos 14 px.
+  function flickVel(dx, dy, speed) {
+    const d = Math.hypot(dx, dy);
+    if (d < 14 || dy > -6) return null;
+    return { vx: (dx / d) * speed, vy: (dy / d) * speed };
+  }
+  // Canasta que tiene enfrente un balón en x (−1 si pasa entre dos).
+  function hoopAt(x, centers, r) {
+    let best = -1, bd = r;
+    centers.forEach((c, i) => { const d = Math.abs(x - c); if (d <= bd) { bd = d; best = i; } });
+    return best;
+  }
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.ask} = ${it.options[it.answer]}`).join(' · ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, hoopY = 0, home = { x: 0, y: 0 }, queue = [], perm = [0, 1, 2], ball = null, drag = null, aim = null, pause = 0, result = null, n = 0;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); load(); },
+      lost(i) { st.done[i] = 0; ball = null; drag = null; },
+    });
+    const item = () => R[a.cur].items[queue[0] ?? 0];
+    const centers = () => [1, 3, 5].map(k => (W * k) / 6);
+
+    function layout(w, h) { W = w; H = h; hoopY = 150; home = { x: w / 2, y: h - 84 }; }
+    function load() { perm = shuffledOrder(3, item().ask + (n++)); ball = null; drag = null; aim = null; pause = 0; result = null; }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play') return;
+        if (pause > 0) {
+          pause -= dt;
+          if (pause <= 0) { if (result.good) queue.shift(); else if (result.requeue) queue.push(queue.shift()); if (!queue.length) { a.win(); return; } if (result.good || result.requeue) load(); else { ball = null; result = null; } }
+          return;
+        }
+        if (!ball) return;
+        ball.x += ball.vx * dt; ball.y += ball.vy * dt;
+        if (ball.x < 14) { ball.x = 14; ball.vx = Math.abs(ball.vx); } else if (ball.x > W - 14) { ball.x = W - 14; ball.vx = -Math.abs(ball.vx); }
+        if (ball.y <= hoopY) {
+          const i = hoopAt(ball.x, centers(), HOOP), it = item();
+          if (i < 0) { result = { pick: -1 }; pause = 0.6; a.say('No entró en ninguna: otra vez', C.sun); }
+          else if (perm[i] === it.answer) { result = { good: true, pick: i }; pause = 1.1; st.done[a.cur]++; a.hit(); a.say(`${it.ask} = ${it.options[it.answer]}`, C.ok); }
+          else { result = { requeue: true, pick: i }; pause = 1.2; a.say(`${it.options[perm[i]]} no es la suma`, C.bad); a.miss(); }
+          ball = null;
+        }
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], it = item(), cs = centers();
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        p.text(`${r.title} · encesta en la suma`, W / 2, 40);
+        if (a.phase === 'play') {
+          drawPill(p, C, it.ask, W / 2, 68, C.sun, 15);
+        }
+        // Las canastas: tablero con el número y aro.
+        if (a.phase !== 'idle' && !(locked || a.phase === 'all')) cs.forEach((cx, i) => {
+          const good = perm[i] === it.answer, fill = result && result.pick === i ? (good ? C.ok : C.bad) : C.cream;
+          drawTile(p, C, { x: cx - 36, y: hoopY - 46, w: 72, h: 36 }, it.options[perm[i]], { fill, size: 17, lift: 2 });
+          p.noFill(); p.stroke(C.coral); p.strokeWeight(5); p.ellipse(cx, hoopY, HOOP * 2 - 6, 14);
+          p.stroke(C.mute); p.strokeWeight(1.5); for (let k = -2; k <= 2; k++) p.line(cx + k * 9, hoopY + 6, cx + k * 6, hoopY + 24);
+        });
+        // El balón (en casa, mientras se apunta o en vuelo) y la guía del tiro.
+        if (a.phase === 'play' && pause <= 0) {
+          if (drag && aim) { p.stroke(C.mute); p.strokeWeight(2); p.drawingContext.setLineDash([4, 7]); p.line(home.x, home.y, home.x + aim.vx * 0.28, home.y + aim.vy * 0.28); p.drawingContext.setLineDash([]); }
+          const b = ball || home, d = ball ? 22 + (4 * (ball.y - hoopY)) / (home.y - hoopY) : 26;
+          p.noStroke(); p.fill(shade(C.sun, 0.76)); p.circle(b.x, b.y + 3, d);
+          p.fill(C.sun); p.circle(b.x, b.y, d);
+          p.noFill(); p.stroke(shade(C.sun, 0.6)); p.strokeWeight(1.5); p.arc(b.x, b.y, d, d * 0.5, 0, Math.PI); p.line(b.x, b.y - d / 2, b.x, b.y + d / 2);
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = (hoopY + home.y) / 2 + 10;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: `${x.ask} = ${x.options[x.answer]}` }))).slice(0, 9), mid);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Sin prisa: calcula y luego lanza', lost: 'Demasiadas canastas equivocadas' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Puras canastas! Ya puedes comprobar' : 'Desliza hacia arriba, apuntando a la canasta', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp === 'play' && !ball && pause <= 0) { drag = { x: p.mouseX, y: p.mouseY }; aim = null; }
+        return false;
+      };
+      p.mouseDragged = () => { if (drag && !locked && a.phase === 'play') { aim = flickVel(p.mouseX - drag.x, p.mouseY - drag.y, SPEED); return false; } };
+      p.mouseReleased = () => {
+        if (drag && aim && !locked && a.phase === 'play' && !ball && pause <= 0) { ball = { x: home.x, y: home.y, ...aim }; api.sfx?.tap?.(); }
+        drag = null; aim = null;
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; drag = null; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, home, hoopY, busy: !!ball || pause > 0, hoops: centers().map((x, i) => ({ x, good: perm[i] === item().answer })) }),
+    };
+  }
+
+  return { grade, create, flickVel, hoopAt };
+})();
+;
+//#archivo js/games/dobla-fichas.js
+// Dobla las fichas (Álgebra, progresiones geométricas; juego dinámico de la lección alg-14c): un tablero de 4 × 4
+// como el del 2048. Se desliza el dedo hacia un lado y todas las fichas se corren hacia allá; dos fichas iguales que
+// chocan se funden en una que vale el doble. Las fichas son los términos de una progresión geométrica de razón 2 que
+// empieza en a₁ (5, 10, 20, 40…): la meta de la ronda es armar un término dado. Arriba se van encendiendo los
+// términos alcanzados. Si el tablero se llena y no queda jugada, la ronda empieza otra vez.
+// params = { rounds: [{ title, base, n }] }   (meta: el término n, base · 2ⁿ⁻¹)   state = { done: [0 | 1] }
+// Spec 2026-11-13-juegos-dinamicos-progresiones.
+
+GAMES['dobla-fichas'] = (() => {
+  const N = 4, DIRS = { left: [0, 1], right: [3, -1], up: [0, 1], down: [3, -1] };
+  const goalOf = r => r.base * 2 ** (r.n - 1);
+  // Qué término de la progresión es `value` (1 para la base, 2 para el doble…).
+  const termIndex = (value, base) => Math.round(Math.log2(value / base)) + 1;
+  // Corre una fila hacia el inicio: los ceros son huecos y dos iguales seguidas se funden una sola vez.
+  function slide(line) {
+    const xs = line.filter(v => v), out = [];
+    let merged = 0;
+    for (let i = 0; i < xs.length; i++) {
+      if (xs[i] === xs[i + 1]) { out.push(xs[i] * 2); merged = Math.max(merged, xs[i] * 2); i++; } else out.push(xs[i]);
+    }
+    while (out.length < line.length) out.push(0);
+    return { line: out, moved: out.some((v, i) => v !== line[i]), merged };
+  }
+  // Mueve todo el tablero (arreglo de 16, por filas) hacia dir: 'left' | 'right' | 'up' | 'down'.
+  function move(grid, dir) {
+    const g = [...grid], [start, stepK] = DIRS[dir], vertical = dir === 'up' || dir === 'down';
+    let moved = false, merged = 0;
+    for (let k = 0; k < N; k++) {
+      const idx = Array.from({ length: N }, (_, j) => { const q = start + stepK * j; return vertical ? q * N + k : k * N + q; });
+      const res = slide(idx.map(i => g[i]));
+      res.line.forEach((v, j) => { g[idx[j]] = v; });
+      moved = moved || res.moved; merged = Math.max(merged, res.merged);
+    }
+    return { grid: g, moved, merged };
+  }
+  const canMove = grid => ['left', 'right', 'up', 'down'].some(d => move(grid, d).moved);
+
+  function grade(state, params) {
+    const ok = params.rounds.every((_, i) => (state.done?.[i] ?? 0) >= 1);
+    const solution = params.rounds.map(r => `${Array.from({ length: r.n }, (_, k) => r.base * 2 ** k).join(' → ')} (cada término es el doble)`).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, box = { x: 0, y: 0, s: 0 }, grid = new Array(16).fill(0), best = 0, pops = [], drag = null, used = false;
+    const a = makeArcade(R.length, 1, api, {
+      start(i) { st.done[i] = 0; grid = new Array(16).fill(0); best = R[i].base; pops = []; spawn(); spawn(); },
+      lost(i) { st.done[i] = 0; },
+    });
+
+    function layout(w, h) { W = w; H = h; const s = Math.min(w - 28, h - 150 - 44); box = { x: (w - s) / 2, y: 148, s }; }
+    function spawn() {
+      const free = grid.map((v, i) => (v ? -1 : i)).filter(i => i >= 0);
+      if (!free.length) return;
+      const i = free[Math.floor(Math.random() * free.length)];
+      grid[i] = R[a.cur].base * (Math.random() < 0.12 ? 2 : 1); best = Math.max(best, grid[i]); pops.push({ i, t: 1 });
+    }
+    function play(dir) {
+      const r = R[a.cur], res = move(grid, dir);
+      if (!res.moved) return;
+      grid = res.grid; api.sfx?.tap?.();
+      if (res.merged) { grid.forEach((v, i) => { if (v === res.merged) pops.push({ i, t: 1 }); }); if (res.merged > best) { best = res.merged; a.hit(); a.say(`${res.merged} = ${r.base} · 2${['⁰', '¹', '²', '³', '⁴', '⁵', '⁶'][termIndex(res.merged, r.base) - 1] || ''}`, C.ok); } }
+      if (grid.includes(goalOf(r))) { st.done[a.cur] = 1; a.win(); return; }
+      spawn();
+      if (!canMove(grid)) { a.say('Tablero lleno, sin jugadas', C.bad); a.miss(); }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) a.tick(dt);
+        pops = pops.filter(q => (q.t -= dt * 5) > 0);
+        const r = R[a.cur], cell = box.s / N, COLS = [C.cream, C.sun, C.mint, C.sky, C.coral, C.R, C.ok];
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, `Arma la ficha ${goalOf(r)}`, W / 2, 44, W - 24, 16);
+        p.fill(C.mute); p.textSize(11); p.text(`${r.title} · empieza en ${r.base} y cada término es el doble`, W / 2, 66);
+        // Los términos de la progresión: encendidos los que ya se armaron.
+        const tw = Math.min(52, (W - 28) / r.n - 4), x0 = W / 2 - (r.n * (tw + 4) - 4) / 2;
+        for (let k = 0; k < r.n; k++) {
+          const v = r.base * 2 ** k, on = v <= best && a.phase !== 'idle';
+          drawTile(p, C, { x: x0 + k * (tw + 4), y: 84, w: tw, h: 30 }, v, { fill: on ? COLS[k % COLS.length] : C.card, ink: on ? undefined : C.mute, size: 14, r: 8, lift: on ? 2 : 0, ring: k === r.n - 1 ? C.sun : null });
+        }
+
+        // El tablero.
+        p.noStroke(); p.fill(C.card); p.rect(box.x - 5, box.y - 5, box.s + 10, box.s + 10, 14);
+        for (let i = 0; i < 16; i++) {
+          const x = box.x + (i % N) * cell, y = box.y + Math.floor(i / N) * cell, v = grid[i];
+          p.noStroke(); p.fill(C.halo); p.rect(x + 3, y + 3, cell - 6, cell - 6, 9);
+          if (!v || a.phase === 'idle') continue;
+          const pop = pops.find(q => q.i === i), k = pop ? 1 + 0.16 * pop.t : 1;
+          drawTile(p, C, { x: x + 4, y: y + 4, w: cell - 8, h: cell - 11 }, v, { fill: COLS[(termIndex(v, r.base) - 1) % COLS.length], size: Math.min(22, cell * 0.36), r: 9, k });
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = box.y + box.s / 2;
+        if (locked || a.phase === 'all') {
+          p.noStroke(); p.fill(C.card); p.rect(box.x, mid - R.length * 13 - 8, box.s, R.length * 26 + 16, 10);
+          drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= 1, text: Array.from({ length: rr.n }, (_, k) => rr.base * 2 ** k).join(' → ') })), mid, box.s - 16);
+        } else drawArcadeBanner(p, C, a, mid, { idle: 'Sin prisa: iguales se funden en el doble', lost: 'Tablero lleno, sin jugadas', won: `¡Armaste ${goalOf(r)}!` });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Progresiones armadas! Ya puedes comprobar' : 'Desliza hacia un lado para correr todas las fichas', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp === 'play') { drag = { x: p.mouseX, y: p.mouseY }; used = false; }
+        return false;
+      };
+      // La jugada sale en cuanto el dedo se desliza lo suficiente (una por gesto).
+      p.mouseDragged = () => {
+        if (!drag || used || locked || a.phase !== 'play') return;
+        const dx = p.mouseX - drag.x, dy = p.mouseY - drag.y;
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < 26) return false;
+        used = true; play(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : dy > 0 ? 'down' : 'up');
+        return false;
+      };
+      p.mouseReleased = () => { drag = null; };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, grid: [...grid], goal: goalOf(R[a.cur]), box }),
+    };
+  }
+
+  return { grade, create, slide, move, canMove, termIndex, goalOf };
+})();
+;
+//#archivo js/games/rana-zenon.js
+// La rana que se achica (Álgebra, suma geométrica y suma infinita; juego dinámico de la lección alg-14d): una rana
+// salta sobre una recta numérica y cada salto es el anterior por una misma razón (8, 4, 2, 1…). Cada toque en el estanque
+// es un salto: se ve la suma que lleva. Hay tres banderas. En las preguntas cortas («da 3 saltos: ¿dónde cae?») se da
+// la cantidad de saltos y se toca la bandera donde quedó; en las infinitas hay que saltar varias veces, ver que cada
+// vez avanza menos y tocar la bandera a la que se acerca sin llegar nunca. No hay reloj: se salta las veces que haga falta. Tocar otra bandera quita una vida. Sin vidas, la ronda empieza
+// otra vez.
+// params = { rounds: [{ title, items: [{ a1, r: [num, den], n?, flags: [a, b, c], answer, max }] }], lives? }
+// state = { done: [n] }      Spec 2026-11-13-juegos-dinamicos-progresiones.
+
+GAMES['rana-zenon'] = (() => {
+  const MIN_INF = 5;   // saltos que hay que dar antes de responder una suma infinita
+  const ratio = it => it.r[0] / it.r[1];
+  // Suma de los k primeros saltos.
+  function partial(it, k) { let s = 0, t = it.a1; for (let i = 0; i < k; i++) { s += t; t *= ratio(it); } return +s.toFixed(9); }
+  const limitOf = it => +(it.a1 / (1 - ratio(it))).toFixed(9);
+  const answerOf = it => (it.n ? partial(it, it.n) : limitOf(it));
+  const fmt = v => String(+v.toFixed(3));
+  const rtxt = it => (it.r[1] === 1 ? `${it.r[0]} veces` : it.r[0] === 1 ? ({ 2: 'la mitad', 3: 'la tercera parte', 4: 'la cuarta parte', 5: 'la quinta parte' }[it.r[1]] || `1/${it.r[1]}`) : `${it.r[0]}/${it.r[1]}`);
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    const solution = params.rounds.map(r => r.items.map(it => (it.n ? `${it.n} saltos desde ${it.a1} (${rtxt(it)} cada vez): ${fmt(answerOf(it))}` : `saltos sin fin desde ${it.a1} (${rtxt(it)} cada vez): se acerca a ${fmt(answerOf(it))}`)).join(' · ')).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, lineY = 0, queue = [], perm = [0, 1, 2], jumps = 0, frog = 0, hop = 0, from = 0, pause = 0, result = null, n = 0;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); load(); },
+      lost(i) { st.done[i] = 0; },
+    });
+    const item = () => R[a.cur].items[queue[0] ?? 0];
+    const X = v => 22 + (v / item().max) * (W - 44);
+    const need = it => it.n || MIN_INF;
+
+    function layout(w, h) { W = w; H = h; lineY = h * 0.6; }
+    function load() { const it = item(); perm = shuffledOrder(3, `${it.a1}|${it.flags.join()}|${n++}`); jumps = 0; frog = 0; from = 0; hop = 0; pause = 0; result = null; }
+    function answer(i) {
+      const it = item(), good = perm[i] === it.answer;
+      result = { pick: i, good }; pause = good ? 1.3 : 1.4;
+      if (good) { st.done[a.cur]++; a.hit(); a.say(it.n ? `Después de ${it.n} saltos: ${it.flags[it.answer]}` : `Se acerca a ${it.flags[it.answer]} y nunca lo pasa`, C.ok); }
+      else { a.say(it.n ? `No cae en ${it.flags[perm[i]]}` : `No se acerca a ${it.flags[perm[i]]}`, C.bad); a.miss(); }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play') return;
+        const it = item();
+        if (hop > 0) hop = Math.max(0, hop - dt / 0.28);
+        if (pause > 0) {
+          pause -= dt;
+          if (pause <= 0) { if (result.good) queue.shift(); else queue.push(queue.shift()); if (!queue.length) { a.win(); return; } load(); }
+          return;
+        }
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], it = item(), fx = X(from + (frog - from) * (1 - hop)), up = Math.sin((1 - hop) * Math.PI) * (hop > 0 ? 26 : 0);
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, `${r.title} · primer salto ${it.a1}, luego ${rtxt(it)} cada vez`, W / 2, 40, W - 24, 11);
+        if (a.phase === 'play') {
+          drawPill(p, C, it.n ? `Da ${it.n} saltos: ¿dónde cae?` : 'Sin parar: ¿a cuál se acerca?', W / 2, 68, C.sun, 15);
+          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER);
+          p.text(jumps ? `saltos: ${jumps} · va en ${fmt(frog)}` : 'toca el estanque para saltar', W / 2, 96);
+        }
+
+        // El estanque, la recta y las banderas.
+        const water = p.color(C.sky); water.setAlpha(60);
+        p.noStroke(); p.fill(water); p.rect(8, lineY, W - 16, H - lineY - 36, 12);
+        p.stroke(C.ink); p.strokeWeight(3); p.line(14, lineY, W - 14, lineY);
+        const stepV = it.max > 12 ? 4 : 2;
+        p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER);
+        for (let v = 0; v <= it.max; v += stepV) { p.stroke(C.ink); p.strokeWeight(1.5); p.line(X(v), lineY - 5, X(v), lineY + 5); p.noStroke(); p.fill(C.mute); p.text(v, X(v), lineY + 16); }
+        if (a.phase !== 'idle' && !(locked || a.phase === 'all')) {
+          perm.forEach((k, i) => {
+            const x = X(+it.flags[k]), good = k === it.answer, col = result && result.pick === i ? (good ? C.ok : C.bad) : result && result.good && good ? C.ok : [C.coral, C.sky, C.mint][i];
+            const top = lineY - 44 - i * 26;   // cada bandera a una altura distinta: no se tapan si quedan juntas
+            p.stroke(C.ink); p.strokeWeight(2); p.line(x, lineY, x, top);
+            drawPill(p, C, it.flags[k], x + 20 > W - 26 ? x - 20 : x + 20, top + 2, col, 13);
+          });
+          // Los saltos ya dados (arcos) y el marcador que salta.
+          p.noFill(); p.stroke(C.mint); p.strokeWeight(2);
+          for (let k = 0; k < jumps - (hop > 0 ? 1 : 0); k++) { const x0 = X(partial(it, k)), x1 = X(partial(it, k + 1)); p.arc((x0 + x1) / 2, lineY, x1 - x0, Math.min(40, (x1 - x0) * 0.8), Math.PI, 0); }
+          const sh = p.color(C.mint); sh.setAlpha(60); p.noStroke(); p.fill(sh); p.ellipse(fx, lineY - 1, 18 - up * 0.2, 5);
+          drawDot(p, C, fx, lineY - 9 - up, 13, C.mint);
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = lineY + (H - lineY - 36) / 2;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${Math.min(st.done[i], rr.items.length)} de ${rr.items.length}` })), 170);
+        else drawArcadeBanner(p, C, a, 170, { idle: 'Sin prisa: toca el estanque para saltar', lost: 'Demasiadas banderas equivocadas' });
+        if (a.phase === 'play' && pause <= 0) {
+          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER);
+          p.text(jumps < need(it) ? `Salta ${need(it) - jumps} ${need(it) - jumps === 1 ? 'vez' : 'veces'} más` : 'Ahora toca la bandera', W / 2, mid);
+        }
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Suma completa! Ya puedes comprobar' : 'Estanque: saltar · bandera: responder', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp !== 'play' || pause > 0) return false;
+        const it = item();
+        // ¿Tocó una bandera? (su píldora o su asta); si no, es un salto.
+        // Gana la píldora más cercana (están apiladas y pueden quedar casi una sobre otra); el asta solo si no hay píldora.
+        const geo = perm.map((k, i) => { const x = X(+it.flags[k]), top = lineY - 44 - i * 26; return { x, top, px: x + 20 > W - 26 ? x - 20 : x + 20, py: top + 2 }; });
+        let f = -1, bd = Infinity;
+        geo.forEach((g, i) => { const dx = Math.abs(p.mouseX - g.px), dy = Math.abs(p.mouseY - g.py); if (dx <= 30 && dy <= 13 && dx + dy * 3 < bd) { bd = dx + dy * 3; f = i; } });
+        if (f < 0) f = geo.findIndex(g => Math.abs(p.mouseX - g.x) < 12 && p.mouseY > g.top + 15 && p.mouseY < lineY - 12);
+        if (f >= 0 && p.mouseY < lineY - 10) {
+          if (jumps < need(it)) a.say(it.n ? `Primero da los ${it.n} saltos` : 'Salta más veces: mira cuánto avanza', C.sun);
+          else answer(f);
+          return false;
+        }
+        if (p.mouseY < lineY) return false;
+        if (it.n && jumps >= it.n) { a.say(`Ya diste los ${it.n} saltos: toca la bandera`, C.sun); return false; }
+        if (hop > 0 || jumps >= 14) return false;
+        from = frog; jumps++; frog = partial(it, jumps); hop = 1; api.sfx?.tap?.();
+        return false;
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => { const it = item(); return { phase: a.phase, cur: a.cur, lives: a.lives, W, H, jumps, need: need(it), pause, hopping: hop > 0, pondY: lineY + 50, flags: perm.map((k, i) => { const x = X(+it.flags[k]); return { x: x + 20 > W - 26 ? x - 20 : x + 20, y: lineY - 42 - i * 26, good: k === it.answer }; }) }; },
+    };
+  }
+
+  return { grade, create, partial, limitOf, answerOf };
+})();
+;
+//#archivo js/games/maquina-sigma.js
+// La máquina sigma (Álgebra, sumatoria y productoria; juego dinámico de la lección alg-15): arriba está la orden
+// («Σ 3k, de k = 1 a 4») y en una bandeja hay fichas con números (quietas: no hay reloj). Abajo hay una máquina que pide el término
+// del k actual: hay que agarrar de la bandeja la ficha que vale ese término y soltarla en la máquina. La máquina la
+// suma (o la multiplica, si es una productoria) y pasa al k siguiente. Soltar otra ficha quita una vida. Sin vidas,
+// la ronda empieza otra vez.
+// params = { rounds: [{ title, kind: 'sum' | 'prod', items: [{ expr, lo, hi, f, traps: [...] }] }], lives? }
+// state = { done: [n] }      Spec 2026-11-13-juegos-dinamicos-progresiones.
+
+GAMES['maquina-sigma'] = (() => {
+  const TW = 46, TH = 40, GAP = 12;
+  const termsOf = it => Array.from({ length: it.hi - it.lo + 1 }, (_, j) => it.f(it.lo + j));
+  const totalOf = (it, kind) => termsOf(it).reduce((s, v) => (kind === 'prod' ? s * v : s + v), kind === 'prod' ? 1 : 0);
+  const sym = kind => (kind === 'prod' ? 'Π' : 'Σ');
+  const op = kind => (kind === 'prod' ? ' · ' : ' + ');
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    const solution = params.rounds.map(r => r.items.map(it => `${sym(r.kind)} ${it.expr} (k de ${it.lo} a ${it.hi}) = ${termsOf(it).join(op(r.kind))} = ${totalOf(it, r.kind)}`).join(' · ')).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, beltY = 0, mach = { x: 0, y: 0, w: 0, h: 0 }, queue = [], tiles = [], fed = 0, off = 0, drag = null, pause = 0, n = 0, gulp = 0;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); load(); },
+      lost(i) { st.done[i] = 0; drag = null; },
+    });
+    const item = () => R[a.cur].items[queue[0] ?? 0];
+    // Posición de una ficha en la bandeja (quieta, en una o dos filas de cuatro) o bajo el dedo.
+    const posOf = t => (t === drag ? { x: drag.fx, y: drag.fy } : { x: (W * ((t.slot % 4) + 0.5)) / 4, y: tiles.length > 4 ? beltY - 24 + Math.floor(t.slot / 4) * 48 : beltY });
+    const want = () => termsOf(item())[fed];
+
+    function layout(w, h) { W = w; H = h; beltY = 192; mach = { x: w / 2 - 92, y: h - 150, w: 184, h: 96 }; }
+    function load() {
+      const it = item(), values = [...termsOf(it), ...it.traps], order = shuffledOrder(values.length, `${it.expr}|${n++}`);
+      tiles = values.map((value, i) => ({ value, slot: order[i], gone: false }));
+      fed = 0; off = 0; drag = null; pause = 0;
+    }
+    function drop(t) {
+      const r = R[a.cur], it = item();
+      if (t.value === want()) {
+        t.gone = true; fed++; gulp = 1; a.hit(); api.sfx?.tap?.();
+        if (fed === termsOf(it).length) { st.done[a.cur]++; pause = 1.5; a.say(`${termsOf(it).join(op(r.kind))} = ${totalOf(it, r.kind)}`, C.ok); }
+      } else { a.say(`${t.value} no es el término de k = ${it.lo + fed}`, C.bad); a.miss(); }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        gulp = Math.max(0, gulp - dt * 3);
+        if (a.phase !== 'play') return;
+        if (pause > 0) { pause -= dt; if (pause <= 0) { queue.shift(); if (!queue.length) { a.win(); return; } load(); } return; }
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], it = item(), terms = termsOf(it), live = a.phase !== 'idle' && !(locked || a.phase === 'all');
+
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        p.text(`${r.title} · ${r.kind === 'prod' ? 'productoria: se multiplica' : 'sumatoria: se suma'}`, W / 2, 40);
+        if (live) {
+          // La orden: el símbolo con sus límites y la fórmula.
+          p.noStroke(); p.fill(C.N); p.textStyle(p.BOLD); p.textSize(40); p.textAlign(p.CENTER, p.CENTER);
+          p.text(sym(r.kind), W / 2 - 46, 96);
+          p.fill(C.ink); p.textSize(12); p.text(it.hi, W / 2 - 46, 66); p.text(`k = ${it.lo}`, W / 2 - 46, 126);
+          p.textSize(24); p.textAlign(p.LEFT, p.CENTER); p.text(it.expr, W / 2 - 20, 96);
+
+          // La cinta y sus fichas.
+          p.noStroke(); p.fill(C.card); p.rect(0, beltY - (tiles.length > 4 ? 52 : TH / 2 + 8), W, tiles.length > 4 ? 104 : TH + 16);
+          tiles.forEach(t => { if (t.gone || t === drag) return; const q = posOf(t); drawTile(p, C, { x: q.x - TW / 2, y: q.y - TH / 2, w: TW, h: TH - 3 }, t.value, { fill: C.cream, size: 18, r: 9 }); });
+
+          // La máquina: pide el término del k actual y muestra lo que lleva.
+          const k = 1 + 0.06 * gulp, mw = mach.w * k, mh = mach.h * k, mx = W / 2 - mw / 2, my = mach.y + mach.h / 2 - mh / 2;
+          p.noStroke(); p.fill(shade(C.sky, 0.72)); p.rect(mx, my + 5, mw, mh, 16);
+          p.fill(pause > 0 ? C.ok : C.sky); p.rect(mx, my, mw, mh, 16);
+          p.fill(shade(C.sky, 0.5)); p.rect(W / 2 - 34, my - 8, 68, 16, 8);
+          p.fill(inkOn(pause > 0 ? C.ok : C.sky, C.ink)); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
+          if (pause > 0) { p.textSize(22); p.text(`= ${totalOf(it, r.kind)}`, W / 2, mach.y + 34); }
+          else { p.textSize(13); p.text('Échale el término de', W / 2, mach.y + 26); p.textSize(22); p.text(`k = ${it.lo + fed}`, W / 2, mach.y + 50); }
+          const got = terms.slice(0, fed).join(op(r.kind));
+          fitText(p, fed ? `${got}${fed < terms.length ? op(r.kind) + '…' : ''}` : 'vacía', W / 2, mach.y + 78, mach.w - 20, 13);
+
+          if (drag) drawTile(p, C, { x: drag.fx - TW / 2, y: drag.fy - TH / 2 - 6, w: TW, h: TH - 3 }, drag.value, { fill: C.sun, size: 18, r: 9, lift: 5 });
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = (beltY + mach.y) / 2 + 20;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.flatMap((rr, i) => rr.items.map(x => ({ ok: st.done[i] >= rr.items.length, text: `${sym(rr.kind)} ${x.expr}, k de ${x.lo} a ${x.hi}: ${totalOf(x, rr.kind)}` }))).slice(0, 9), H / 2);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Sin prisa: arrastra el término que pide la máquina', lost: 'Demasiadas fichas equivocadas' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Máquina llena! Ya puedes comprobar' : 'Reemplaza k en la fórmula y busca ese número en la bandeja', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp !== 'play' || pause > 0) return false;
+        const t = tiles.find(x => { if (x.gone) return false; const q = posOf(x); return Math.abs(p.mouseX - q.x) <= TW / 2 + 5 && Math.abs(p.mouseY - q.y) <= TH / 2 + 3; });
+        if (t) { drag = t; t.fx = p.mouseX; t.fy = p.mouseY; }
+        return false;
+      };
+      p.mouseDragged = () => { if (drag && !locked && a.phase === 'play') { drag.fx = p.mouseX; drag.fy = p.mouseY; return false; } };
+      p.mouseReleased = () => {
+        if (!drag) return;
+        const t = drag; drag = null;
+        if (locked || a.phase !== 'play' || pause > 0) return;
+        if (t.fx > mach.x - 10 && t.fx < mach.x + mach.w + 10 && t.fy > mach.y - 16) drop(t);
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; drag = null; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, want: want(), machine: { x: mach.x + mach.w / 2, y: mach.y + mach.h / 2 }, tiles: tiles.filter(t => !t.gone).map(t => ({ ...posOf(t), value: t.value })) }),
+    };
+  }
+
+  return { grade, create, termsOf, totalOf };
+})();
+;
+//#archivo js/games/jefe-venn.js
+// El Guardián de la Pradera (Álgebra unidad 0, conjuntos; jefe final del mundo Pradera de Venn). Una batalla por
+// turnos, sin reloj: el Guardián da una orden escrita con conjuntos y hay que armar la respuesta en el diagrama de
+// Venn del prado (dos círculos A y B dentro del universo U, con números adentro). Cada fase usa lo de una lección:
+//   · 'pick' (pertenencia y notación; operaciones): se tocan los elementos que forman el conjunto pedido. Si el
+//     conjunto pedido es el vacío, se ataca sin elegir ninguno.
+//   · 'move' (tipos y relaciones): se arrastran los elementos de una zona a otra hasta que A y B cumplan lo pedido
+//     («A ⊆ B», «disjuntos», «A unitario»). Hay muchas respuestas buenas.
+// Con «¡Atacar!» se comprueba: si está bien, el conjunto sale volando y le quita vida al Guardián; si no, él golpea,
+// se pierde una vida y dice qué falló. Sin vidas, la fase empieza otra vez (y el Guardián recupera esa vida).
+// params = { rounds: [{ title, mode: 'pick' | 'move', zones: { a, ab, b, out }, orders: [
+//   { say, pick: (x, inA, inB) => bool, yes }                      (mode 'pick')
+//   { say, check: (A, B, U) => bool, sample: zones, no (texto o (A, B, U) => texto), yes } ] }], lives? }     (mode 'move')
+// state = { done: [n por fase] }      Spec 2026-11-14-jefe-final-pradera.
+
+GAMES['jefe-venn'] = (() => {
+  const ZONES = ['a', 'ab', 'b', 'out'];
+  const sorted = xs => [...xs].sort((p, q) => p - q);
+  // Los conjuntos que forma un reparto por zonas: A, B y el universo.
+  const setsOf = z => ({ A: sorted([...z.a, ...z.ab]), B: sorted([...z.b, ...z.ab]), U: sorted(ZONES.flatMap(k => z[k])) });
+  // Conjunto que pide una orden de tocar: los x del universo que cumplen la condición.
+  function wantOf(order, zones) { const { A, B, U } = setsOf(zones); return U.filter(x => order.pick(x, A.includes(x), B.includes(x))); }
+  const fmtSet = xs => (xs.length ? `{${sorted(xs).join(', ')}}` : '∅');
+  // ¿El conjunto elegido es el pedido? Si no, dice qué sobra o que falta algo (sin decir cuál falta).
+  function judgePick(order, zones, sel) {
+    const want = wantOf(order, zones), extra = sorted(sel).find(x => !want.includes(x));
+    if (extra !== undefined) return { ok: false, msg: `El ${extra} no cumple: sobra` };
+    if (want.some(x => !sel.includes(x))) return { ok: false, msg: sel.length ? 'Va bien, pero falta al menos uno' : 'No es el vacío: algún elemento cumple' };
+    return { ok: true, msg: order.yes || '' };
+  }
+  // ¿El reparto logrado cumple la relación pedida?
+  function judgeMove(order, zones) { const { A, B, U } = setsOf(zones), ok = !!order.check(A, B, U), no = typeof order.no === 'function' ? order.no(A, B, U) : order.no; return { ok, msg: ok ? order.yes || '' : no || 'Todavía no se cumple' }; }
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.orders.length);
+    const solution = params.rounds.map(r => r.orders.map(o => (r.mode === 'pick' ? `${o.say} = ${fmtSet(wantOf(o, r.zones))}` : `${o.say}: por ejemplo A = ${fmtSet(setsOf(o.sample).A)} y B = ${fmtSet(setsOf(o.sample).B)}`)).join(' · ')).join(' · ');
+    return { ok, solution };
+  }
+
+  // Sitios de cada zona, medidos desde el centro del diagrama (círculos de radio 72 con centros a ±40).
+  const RAD = 72, OFF = 40, DISC = 24;
+  const SLOTS = {
+    a: [[-62, 0], [-92, 0], [-62, -28], [-62, 28], [-92, -28], [-92, 28]],
+    b: [[62, 0], [92, 0], [62, -28], [62, 28], [92, -28], [92, 28]],
+    ab: [[0, -14], [0, 14], [0, -42], [0, 42], [-22, 0], [22, 0]],
+  };
+  // Los de afuera van en las esquinas del universo (medio ancho hw), lejos de los dos círculos: así nunca se duda si están adentro.
+  const outSlot = (i, hw) => [[-(hw - 16), -74], [hw - 16, -74], [-(hw - 16), 74], [hw - 16, 74], [-(hw - 42), -78], [hw - 42, -78]][Math.min(i, 5)];
+  // Zona del diagrama en la que cae un punto (dx, dy medidos desde el centro); null fuera del universo.
+  function zoneAt(dx, dy, halfW, halfH) {
+    if (Math.abs(dx) > halfW || Math.abs(dy) > halfH) return null;
+    const inA = Math.hypot(dx + OFF, dy) <= RAD, inB = Math.hypot(dx - OFF, dy) <= RAD;
+    return inA && inB ? 'ab' : inA ? 'a' : inB ? 'b' : 'out';
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, TOTAL = R.reduce((s, r) => s + r.orders.length, 0);
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, cy = 0, els = [], ord = 0, drag = null, pause = 0, result = null, fly = [], hurt = 0, rage = 0, t = 0, btn = { x: 0, y: 0, w: 0, h: 0 };
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; load(); },
+      lost(i) { st.done[i] = 0; drag = null; },
+    });
+    const round = () => R[a.cur], order = () => round().orders[Math.min(st.done[a.cur], round().orders.length - 1)];
+    const shownOrder = () => (pause > 0 && result && result.ok ? round().orders[Math.max(0, st.done[a.cur] - 1)] : order());
+    const hp = () => TOTAL - st.done.reduce((s, v, i) => s + Math.min(v, R[i].orders.length), 0);
+    const zonesNow = () => { const z = { a: [], ab: [], b: [], out: [] }; [...els].sort((p, q) => p.ord - q.ord).forEach(e => z[e.zone].push(e.v)); return z; };
+    const home = e => { const list = els.filter(x => x.zone === e.zone).sort((p, q) => p.ord - q.ord), i = Math.min(list.indexOf(e), 5), s = e.zone === 'out' ? outSlot(i, halfW()) : SLOTS[e.zone][i]; return { x: W / 2 + s[0], y: cy + s[1] }; };
+    const halfW = () => Math.min(150, (W - 28) / 2), halfH = 92;
+
+    function layout(w, h) { W = w; H = h; cy = 312; btn = { x: w / 2 - 62, y: h - 64, w: 124, h: 32 }; els.forEach(e => { const q = home(e); e.x = q.x; e.y = q.y; }); }
+    // Pone los elementos de la fase en sus zonas de partida (también antes de cada orden de arrastrar).
+    function load() {
+      const z = round().zones; els = []; ord = 0; drag = null; pause = 0; result = null;
+      ZONES.forEach(k => z[k].forEach(v => els.push({ v, zone: k, ord: ord++, sel: false, x: 0, y: 0 })));
+      els.forEach(e => { const q = home(e); e.x = q.x; e.y = q.y; });
+    }
+    function attack() {
+      const r = round(), o = order(), sel = els.filter(e => e.sel).map(e => e.v);
+      const res = r.mode === 'pick' ? judgePick(o, zonesNow(), sel) : judgeMove(o, zonesNow());
+      result = res; pause = res.ok ? 1.5 : 1.1; drag = null;
+      if (res.ok) {
+        st.done[a.cur]++; a.hit(); hurt = 1;
+        const shots = r.mode === 'pick' ? els.filter(e => e.sel) : els.filter(e => e.zone !== 'out');
+        fly = (shots.length ? shots : [{ x: W / 2, y: cy, v: '∅' }]).map((e, i) => ({ x: e.x, y: e.y, v: e.v, t: -i * 0.06 }));
+        a.say(res.msg, C.ok);
+      } else {
+        rage = 1; a.say(res.msg, C.bad);
+        if (a.miss()) { result = null; pause = 0; a.say(`${res.msg} · el Guardián se recupera`, C.bad); }
+      }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt); t += dt;
+        hurt = Math.max(0, hurt - dt * 2); rage = Math.max(0, rage - dt * 1.6);
+        fly = fly.filter(f => (f.t += dt * 2.2) < 1);
+        els.forEach(e => { if (e !== drag) { const q = home(e); e.x += (q.x - e.x) * Math.min(1, dt * 12); e.y += (q.y - e.y) * Math.min(1, dt * 12); } });
+        if (a.phase !== 'play' || pause <= 0) return;
+        pause -= dt;
+        if (pause <= 0) {
+          const good = result && result.ok; result = null;
+          if (!good) return;
+          if (st.done[a.cur] >= round().orders.length) { a.win(); return; }
+          if (round().mode === 'move') load(); else els.forEach(e => { e.sel = false; });
+        }
+      }
+
+      // El Guardián: un monolito con tres anillos (A, B y el universo) que giran y un núcleo que late; tiembla al golpear y
+      // se apaga un instante al recibir.
+      function drawBoss(x, y) {
+        const k = 1 + Math.sin(t * 2.2) * 0.03 - hurt * 0.12, sx = rage > 0 ? Math.sin(rage * 50) * 6 * rage : hurt > 0 ? Math.sin(hurt * 40) * 4 * hurt : 0;
+        const body = hurt > 0.5 ? C.mute : [C.coral, C.Q, C.I][a.cur % 3], w = 92 * k, h = 70 * k;
+        p.push(); p.translate(x + sx, y);
+        p.noStroke(); const sh = p.color(C.night); sh.setAlpha(70); p.fill(sh); p.ellipse(0, 40, 84, 12);
+        p.fill(shade(C.card, 0.85)); p.quad(-w * 0.32, h / 2 + 4, w * 0.32, h / 2 + 4, w * 0.2, -h / 2, -w * 0.2, -h / 2);
+        p.stroke(body); p.strokeWeight(1.5); p.fill(C.card); p.quad(-w * 0.32, h / 2, w * 0.32, h / 2, w * 0.2, -h / 2 - 4, -w * 0.2, -h / 2 - 4);
+        p.noFill(); p.strokeWeight(2);
+        for (let i = 0; i < 3; i++) { p.stroke([C.sky, C.coral, C.mint][i]); p.push(); p.rotate(t * (0.4 + i * 0.2) * (i % 2 ? -1 : 1) + i); p.ellipse(0, 0, w * 1.15 - i * 10, 22 + i * 7); p.pop(); }
+        const glow = p.color(body); glow.setAlpha(hurt > 0.3 ? 30 : 90); p.noStroke(); p.fill(glow); p.circle(0, -2, 30 + Math.sin(t * 3) * 3);
+        p.fill(hurt > 0.3 ? C.mute : body); p.circle(0, -2, 14);
+        p.pop();
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = round(), o = shownOrder(), live = a.phase === 'play', over = locked || a.phase === 'all';
+
+        // Encabezado, vida del Guardián y el Guardián.
+        drawArcadeHead(p, C, a, R.length);
+        const bw = W - 120, life = hp(), seg = bw / TOTAL;
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.LEFT, p.CENTER); p.text('GUARDIÁN', 14, 44);
+        for (let i = 0; i < TOTAL; i++) { p.fill(i < life ? C.coral : C.line); p.rect(80 + i * seg, 39, seg - 2, 10, 3); }
+        if (!over) drawBoss(W / 2, 112); else { p.noStroke(); p.fill(C.N); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(18); p.text('¡Venciste al Guardián!', W / 2, 100); }
+
+        // La orden: qué hay que hacer y con qué.
+        if (live) {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          fitText(p, `${r.title} · ${r.mode === 'pick' ? 'toca los elementos de' : 'arrastra hasta lograr que'}`, W / 2, 166, W - 24, 11);
+          p.fill(C.card); p.rect(14, 176, W - 28, 34, 10);
+          p.noFill(); p.stroke(C.sun); p.strokeWeight(2); p.rect(14, 176, W - 28, 34, 10);
+          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); fitText(p, o.say, W / 2, 193, W - 48, 17);
+        }
+
+        // El prado: universo U con los círculos A y B.
+        const hw = halfW();
+        p.noStroke(); p.fill(C.halo); p.rect(W / 2 - hw, cy - halfH, hw * 2, halfH * 2, 14);
+        p.noFill(); p.stroke(C.line); p.strokeWeight(2); p.rect(W / 2 - hw, cy - halfH, hw * 2, halfH * 2, 14);
+        const fa = p.color(C.sky), fb = p.color(C.mint); fa.setAlpha(60); fb.setAlpha(60);
+        p.stroke(C.sky); p.strokeWeight(3); p.fill(fa); p.circle(W / 2 - OFF, cy, RAD * 2);
+        p.stroke(C.mint); p.fill(fb); p.circle(W / 2 + OFF, cy, RAD * 2);
+        p.noStroke(); p.textStyle(p.BOLD); p.textSize(15); p.textAlign(p.CENTER, p.CENTER);
+        p.fill(C.sky); p.text('A', W / 2 - OFF - 22, cy - RAD + 19); p.fill(C.Q); p.text('B', W / 2 + OFF + 22, cy - RAD + 19);
+        p.fill(C.mute); p.textSize(12); p.text('U', W / 2, cy + halfH - 10);
+        if (a.phase !== 'idle') [...els].sort((x, y) => (x === drag) - (y === drag)).forEach(e => {
+          const fill = e.sel ? C.sun : C.cream, up = e === drag ? 4 : 0;
+          p.noStroke(); p.fill(shade(fill, 0.74)); p.circle(e.x, e.y + 3, DISC + up);
+          p.fill(fill); p.circle(e.x, e.y - up, DISC + up);
+          if (e.sel) { p.noFill(); p.stroke(C.ink); p.strokeWeight(2); p.circle(e.x, e.y, DISC + 6); }
+          p.noStroke(); p.fill(inkOn(fill, C.ink)); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER); p.text(e.v, e.x, e.y - up + 1);
+        });
+        // El conjunto lanzado vuela hacia el Guardián.
+        fly.forEach(f => { if (f.t < 0) return; const k = f.t * f.t, x = f.x + (W / 2 - f.x) * k, y = f.y + (112 - f.y) * k; p.noStroke(); p.fill(C.sun); p.circle(x, y, DISC); p.fill(C.night); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.CENTER, p.CENTER); p.text(f.v, x, y + 1); });
+
+        // Lo que se lleva armado y el botón.
+        if (live) {
+          const z = zonesNow(), s = setsOf(z);
+          p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
+          fitText(p, r.mode === 'pick' ? `Tu conjunto: ${fmtSet(els.filter(e => e.sel).map(e => e.v))}` : `A = ${fmtSet(s.A)}   B = ${fmtSet(s.B)}`, W / 2, H - 74, W - 24, 14);
+          if (pause <= 0) drawTile(p, C, btn, '¡Atacar!', { fill: C.coral, size: 15, r: 10, lift: 2 });
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 13, locked);
+        if (over) drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.orders.length, text: `${rr.title}: ${Math.min(st.done[i], rr.orders.length)} de ${rr.orders.length}` })), 168, W - 44);
+        else drawArcadeBanner(p, C, a, cy, { idle: 'Sin prisa: piensa cada ataque', lost: 'El Guardián resistió esta fase', won: '¡Fase superada!' });
+        if (!a.toast && (over || a.phase === 'idle')) {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(over ? 'El mundo es tuyo. Ya puedes comprobar' : 'Arma el conjunto que pide el Guardián y ataca', W / 2, H - 13);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp !== 'play' || pause > 0) return false;
+        const x = p.mouseX, y = p.mouseY;
+        if (x >= btn.x - 6 && x <= btn.x + btn.w + 6 && y >= btn.y - 6 && y <= btn.y + btn.h + 6) { attack(); return false; }
+        const e = els.find(q => Math.hypot(q.x - x, q.y - y) <= DISC / 2 + 6);
+        if (!e) return;   // nada agarrado: el toque puede desplazar la lección
+        if (round().mode === 'pick') { e.sel = !e.sel; api.sfx?.tap?.(); } else drag = e;
+        return false;
+      };
+      p.mouseDragged = () => { if (drag && !locked && a.phase === 'play') { drag.x = p.mouseX; drag.y = p.mouseY; return false; } };
+      p.mouseReleased = () => {
+        if (!drag) return;
+        const e = drag; drag = null;
+        if (locked || a.phase !== 'play') return;
+        const z = zoneAt(e.x - W / 2, e.y - cy, halfW(), halfH);
+        if (z && z !== e.zone) { e.zone = z; e.ord = ord++; api.sfx?.tap?.(); }
+      };
+    }, 1.5);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; drag = null; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => {
+        const r = round(), o = order(), drop = { a: [-78, 0], ab: [0, 0], b: [78, 0], out: outSlot(0, halfW()) };
+        return { phase: a.phase, cur: a.cur, lives: a.lives, W, H, pause, mode: r.mode, hp: hp(), ok: { x: btn.x + btn.w / 2, y: btn.y + btn.h / 2 },
+          want: r.mode === 'pick' ? wantOf(o, zonesNow()) : null, sample: r.mode === 'move' ? o.sample : null,
+          drop: Object.fromEntries(ZONES.map(k => [k, { x: W / 2 + drop[k][0], y: cy + drop[k][1] }])), els: els.map(e => ({ v: e.v, x: e.x, y: e.y, zone: e.zone, sel: e.sel })) };
+      },
+    };
+  }
+
+  return { grade, create, setsOf, wantOf, fmtSet, judgePick, judgeMove, zoneAt };
 })();

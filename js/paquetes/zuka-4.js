@@ -5790,6 +5790,148 @@ xpLec('pu-vo-4', [
   ], 'Nombra los lados desde θ y escoge la razón.');
 }
 ;
+//#archivo js/explora-icf-ma-7.js
+// Preicfes · Matemáticas, mundo 7 «Ecuaciones en Contexto» (Explora, escenas «dibujo» y «fichas»). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  // Balanza: a y c cajas x, b y d pesas a cada lado.
+  const bal = (v, K) => { const cajas = (x, n, m) => Array.from({ length: Math.round(n) }, (_, i) => K.r(x + (i % 4) * 26, 92 - Math.floor(i / 4) * 26, 24, 24, 'fa', 3) + K.t(x + 12 + (i % 4) * 26, 108 - Math.floor(i / 4) * 26, 'x', 's')).join('') + (m > 0.5 ? K.t(x + 50, 136, `+ ${Math.round(m)}`, 'b tg') : ''); return K.l(30, 118, 310, 118, 'gr') + K.l(170, 118, 170, 160, 'lm') + K.l(140, 162, 200, 162, 'lm') + cajas(36, v.a, v.b) + cajas(196, v.c, v.d) + K.t(170, 30, v.t || '', 'ta'); };
+  // Rectángulo (x + a)(x + b).
+  const rec = (v, K) => { const x = 90, y = 30, u = 80; return K.r(x, y, u, u, 'fa', 0) + K.f(v.p, K.r(x + u, y, 60, u, 'fg', 0) + K.r(x, y + u, u, 40, 'fg', 0)) + K.f(v.q, K.r(x + u, y + u, 60, 40, 'ff', 0)) + K.t(x + u / 2, y - 8, 'x', 's tm') + K.t(x + u + 30, y - 8, '5', 's tm') + K.t(x - 8, y + u / 2, 'x', 's tm', 'end') + K.t(x - 8, y + u + 24, '2', 's tm', 'end') + K.t(x + u / 2, y + u / 2 + 5, 'x²', 'b') + K.f(v.p, K.t(x + u + 30, y + u / 2 + 5, '5x') + K.t(x + u / 2, y + u + 25, '2x')) + K.f(v.q, K.t(x + u + 30, y + u + 25, '10')) + K.t(170, 178, v.t || '', 'ta'); };
+  // Recta numérica con un rayo desde b hacia d; lleno si e.
+  const ray = (v, K) => { const X = n => 170 + n * 24; let s = K.l(20, 70, 320, 70, 'lm'); for (let i = -6; i <= 6; i++) s += K.l(X(i), 65, X(i), 75, 'lm') + K.t(X(i), 94, i, 's tm'); return s + (v.d > 0 ? K.r(X(v.b), 62, 320 - X(v.b), 16, 'fa', 0) : K.r(20, 62, X(v.b) - 20, 16, 'fa', 0)) + K.c(X(v.b), 70, 8, v.e > 0.5 ? 'fG' : 'fn') + K.t(170, 34, v.t || '', 'ta'); };
+  // Recibos: filas de cuadros y círculos con total.
+  const rbo = (v, K) => [[3, v.p, v.s], [3, v.q, v.r]].map(([a, b, t], k) => { const y = 34 + k * 56; return Array.from({ length: a }, (_, i) => K.r(30 + i * 32, y, 26, 26, 'fa', 3)).join('') + Array.from({ length: Math.round(b) }, (_, i) => K.c(142 + i * 30, y + 13, 12, 'fg')).join('') + K.t(316, y + 18, Math.round(t), 'b', 'end'); }).join('') + K.t(170, 168, v.t || '', 'ta');
+
+  xpLec('icf-ma-ecuaciones-1', [
+    ['La balanza',
+      xpMira('dibujo', 'Empecemos por la idea: una ecuación es una **balanza derecha**.', { dib: bal, v: { a: 4, b: 3, c: 2, d: 13, t: '4x + 3 = 2x + 13' }, alto: 176 }, [
+        ['Cuatro cajas y 3 pesan lo mismo que dos cajas y 13.', {}],
+        ['Se quitan dos cajas de cada lado.', { a: 2, c: 0, t: '2x + 3 = 13' }],
+        ['Se quitan tres de cada lado.', { b: 0, d: 10, t: '2x = 10' }],
+        ['Y se reparte en dos: cada caja pesa cinco.', { a: 1, d: 5, t: 'x = 5' }],
+        ['Siempre lo mismo en los dos lados.', {}],
+      ], 'Lo que haces en un lado lo haces en el otro.'),
+      xpHaz('fichas', '$6x + 2 = 4x + 14$. Pon lo que queda al quitar $4x$ y 2, y el valor de x.', { slots: fila('2x =', 'x ='), fichas: ['12', '6', '16', '8', '10'], meta: ['12', '6'], alto: 96, pista: 'Quita lo mismo de los dos lados.' }, '$2x = 12$ y $x = 6$.')],
+    ['De la frase a la letra',
+      xpMira('fichas', 'Segunda idea: se le pone **x** a lo que no se sabe y lo demás se escribe con ella.', { slots: fila('Ana', 'Beto', 'Caro'), fichas: ['x', 'x + 4', '2(x + 4)'], alto: 96 }, [
+        ['No sabemos cuánto tiene Ana: le decimos equis.', { pon: { 0: 'x' } }],
+        ['Beto tiene cuatro más que Ana.', { pon: { 1: 'x + 4' } }],
+        ['Caro tiene el doble de Beto, con los cuatro incluidos.', { pon: { 2: '2(x + 4)' } }],
+        ['Si juntos tienen 52, se suman las tres.', {}, '$4x + 12 = 52$'],
+        ['Cuarenta en cuatro partes: Ana tiene diez.', {}, '$x = 10$'],
+      ], 'Una sola letra, y todo escrito con ella.'),
+      xpHaz('fichas', 'Iris tiene x años; su tío, el triple menos 5. Pon la edad del tío y la suma de las dos.', { slots: fila('tío', 'suma'), fichas: ['3x − 5', '4x − 5', '5 − 3x', '3x − 4', '4x + 5'], meta: ['3x − 5', '4x − 5'], alto: 96, pista: 'Al triple se le quitan 5; después suma x.' }, '$x + 3x - 5 = 4x - 5$.')],
+    ['Comprobar',
+      xpMira('fichas', 'Tercera idea: el valor se **lleva al enunciado**.', { slots: fila('menor', 'mayor', 'suma'), fichas: ['14', '23', '37'], alto: 96 }, [
+        ['Dos números suman 37 y uno tiene 9 más.', {}, '$x + x + 9 = 37$'],
+        ['Sin los nueve quedan 28: el menor es catorce.', { pon: { 0: '14' } }, '$28 \\div 2 = 14$'],
+        ['El mayor tiene nueve más.', { pon: { 1: '23' } }],
+        ['Se comprueba: suman lo que dice el enunciado.', { pon: { 2: '37' } }, '$14 + 23 = 37$'],
+        ['Si no cuadra, se revisa la ecuación, no el enunciado.', {}],
+      ], 'Responde lo que preguntan y comprueba.'),
+      xpHaz('fichas', 'Tres números seguidos suman 63. Pon el menor y el mayor.', { slots: fila('menor', 'mayor'), fichas: ['20', '22', '21', '19', '23'], meta: ['20', '22'], alto: 96, pista: 'El del medio es el promedio.' }, '$63 \\div 3 = 21$: 20, 21 y 22.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'Un terreno es 8 m más largo que ancho y su cerca mide 76 m. Pon el ancho y el largo.', { slots: fila('ancho', 'largo'), fichas: ['15', '23', '30', '38', '19'], meta: ['15', '23'], alto: 96, pista: 'Medio borde es un ancho y un largo: 38.' }, '$2a + 8 = 38$: 15 y 23.')],
+  ], 'Nombra, plantea, equilibra y comprueba.');
+
+  xpLec('icf-ma-ecuaciones-2', [
+    ['Lo semejante se junta',
+      xpMira('fichas', 'Empecemos por la idea: se juntan los de la **misma clase**.', { slots: fila('x²', 'x', 'números'), fichas: ['3x²', '2x', '4'], alto: 96 }, [
+        ['Tenemos $3x^2 + 5x + 7 - 3x - 3$.', {}],
+        ['De equis cuadrado solo hay uno.', { pon: { 0: '3x²' } }],
+        ['Cinco equis menos tres equis.', { pon: { 1: '2x' } }, '$5x - 3x = 2x$'],
+        ['Y de números, siete menos tres.', { pon: { 2: '4' } }, '$7 - 3 = 4$'],
+        ['Equis y equis cuadrado no se juntan.', {}],
+      ], 'x con x, x² con x², números con números.'),
+      xpHaz('fichas', 'Junta $9x + 4 - 6x + 2$.', { slots: fila('de x', 'números'), fichas: ['3x', '6', '15x', '2', '9x'], meta: ['3x', '6'], alto: 96, pista: 'El signo va con su término.' }, '$3x + 6$.')],
+    ['Un producto es un rectángulo',
+      xpMira('dibujo', 'Segunda idea: $(x + 5)(x + 2)$ es un **rectángulo** con cuatro pedazos.', { dib: rec, v: { p: 0, q: 0, t: '' }, alto: 186 }, [
+        ['El cuadrado grande mide equis por equis.', {}],
+        ['Una franja mide cinco por equis y otra, dos por equis.', { p: 1 }],
+        ['La esquina mide cinco por dos.', { q: 1 }, '$5 \\cdot 2 = 10$'],
+        ['Las franjas se juntan: siete equis.', { t: 'x² + 7x + 10' }, '$5x + 2x = 7x$'],
+        ['Al revés: de la suma se vuelve al rectángulo.', {}],
+      ], 'Cuatro pedazos; las dos franjas se juntan.'),
+      xpHaz('fichas', '$(x + 3)(x + 8)$: pon las franjas juntas y la esquina.', { slots: fila('franjas', 'esquina'), fichas: ['11x', '24', '24x', '11', '5x'], meta: ['11x', '24'], alto: 96, pista: 'Las franjas se suman; la esquina se multiplica.' }, '$x^2 + 11x + 24$.')],
+    ['Sacar lo común',
+      xpMira('fichas', 'Tercera idea: el **factor común** es el alto que comparten.', { slots: fila('alto', 'ancho 1', 'ancho 2'), fichas: ['5', '2x', '3'], alto: 96 }, [
+        ['Tenemos diez equis más quince.', {}, '$10x + 15$'],
+        ['Cinco divide a los dos: es el alto.', { pon: { 0: '5' } }],
+        ['Diez equis entre cinco.', { pon: { 1: '2x' } }, '$10x \\div 5 = 2x$'],
+        ['Y quince repartido entre cinco.', { pon: { 2: '3' } }, '$15 \\div 5 = 3$'],
+        ['Queda cinco por todo el paréntesis.', {}, '$5(2x + 3)$'],
+      ], 'Saca lo que divide a todos y déjalo afuera.'),
+      xpHaz('fichas', '$14x + 21$. Pon el factor común y lo que queda adentro.', { slots: fila('factor', 'adentro'), fichas: ['7', '2x + 3', '14', '2x + 21', '3x + 2'], meta: ['7', '2x + 3'], alto: 96, pista: 'Busca el número más grande que divide a los dos.' }, '$7(2x + 3)$.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'Si $a + b = 12$, pon el valor de $5a + 5b$ y el de $5a + 5b - 8$.', { slots: fila('5a + 5b', 'menos 8'), fichas: ['60', '52', '17', '9', '68'], meta: ['60', '52'], alto: 96, pista: 'Saca el 5 y usa la suma.' }, '$5 \\cdot 12 = 60$ y $60 - 8 = 52$.')],
+  ], 'Junta, arma el rectángulo y saca lo común.');
+
+  xpLec('icf-ma-ecuaciones-3', [
+    ['Comparar recibos',
+      xpMira('dibujo', 'Empecemos por la idea: al **restar**, lo igual desaparece.', { dib: rbo, v: { p: 2, q: 5, s: 19, r: 25, t: '' }, alto: 178 }, [
+        ['Tres cuadros y dos círculos valen 19.', {}],
+        ['Tres cuadros y cinco círculos, 25.', {}],
+        ['Los cuadros son iguales: no cuentan en la diferencia.', { t: '5 − 2 = 3 círculos más' }],
+        ['Tres círculos más valen seis más: dos cada uno.', { t: '25 − 19 = 6' }, '$6 \\div 3 = 2$'],
+        ['Sin los círculos, tres cuadros valen quince.', { t: '19 − 4 = 15' }, '$15 \\div 3 = 5$'],
+      ], 'Resta los recibos: solo queda lo distinto.'),
+      xpHaz('fichas', 'Dos tintos y un pan valen 11; dos tintos y cuatro panes, 20. Pon un pan y un tinto.', { slots: fila('pan', 'tinto'), fichas: ['3', '4', '9', '5', '8'], meta: ['3', '4'], alto: 96, pista: 'Tres panes más valen 9 más.' }, '$9 \\div 3 = 3$ y $(11 - 3) \\div 2 = 4$.')],
+    ['Suponer que todos son iguales',
+      xpMira('fichas', 'Segunda idea: **supón** que todos son de una clase y corrige.', { slots: fila('todas gallinas', 'faltan', 'vacas').map(s => ({ ...s, w: 78 })), fichas: ['24', '10', '5'], alto: 96 }, [
+        ['Doce animales, entre gallinas y vacas, con 34 patas.', {}],
+        ['Si todas fueran gallinas habría 24 patas.', { pon: { 0: '24' } }, '$12 \\cdot 2 = 24$'],
+        ['Faltan diez patas para completar.', { pon: { 1: '10' } }, '$34 - 24 = 10$'],
+        ['Cambiar una gallina por una vaca suma dos.', {}, '$4 - 2 = 2$'],
+        ['Hay cinco vacas y siete gallinas.', { pon: { 2: '5' } }, '$10 \\div 2 = 5$'],
+      ], 'Supón, mira lo que falta y reparte entre lo que sube cada cambio.'),
+      xpHaz('fichas', 'Hay 16 boletas de 3 y de 8 que suman 78. Pon lo que sumarían todas de 3 y cuántas son de 8.', { slots: fila('todas de 3', 'de 8'), fichas: ['48', '6', '10', '30', '128'], meta: ['48', '6'], alto: 96, pista: 'Faltan 30 y cada cambio sube 5.' }, '$16 \\cdot 3 = 48$; $30 \\div 5 = 6$.')],
+    ['Suma y diferencia',
+      xpMira('fichas', 'Tercera idea: con la **suma** y la **diferencia** se hallan los dos.', { slots: fila('sin ventaja', 'menor', 'mayor'), fichas: ['30', '15', '21'], alto: 96 }, [
+        ['Dos números suman 36 y se llevan 6.', {}],
+        ['Se quita la ventaja.', { pon: { 0: '30' } }, '$36 - 6 = 30$'],
+        ['Quedan dos iguales: el menor.', { pon: { 1: '15' } }, '$30 \\div 2 = 15$'],
+        ['El mayor tiene seis más.', { pon: { 2: '21' } }, '$15 + 6 = 21$'],
+        ['En el plano es el punto donde se cruzan dos rectas.', {}],
+      ], 'Quita la ventaja, reparte y devuélvela.'),
+      xpHaz('fichas', 'Dos hermanos tienen juntos 47 años y se llevan 5. Pon la edad de cada uno.', { slots: fila('menor', 'mayor'), fichas: ['21', '26', '42', '24', '23'], meta: ['21', '26'], alto: 96, pista: 'Quita los 5 y parte en dos.' }, '$42 \\div 2 = 21$ y $21 + 5 = 26$.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'Se mezclan 4 L de jugo puro con agua hasta que el jugo sea el 20 % de todo. Pon el total de litros y el agua agregada.', { slots: fila('total', 'agua'), fichas: ['20', '16', '8', '24', '5'], meta: ['20', '16'], alto: 96, pista: '4 L son la quinta parte del total.' }, '$4 \\cdot 5 = 20$ y $20 - 4 = 16$.')],
+  ], 'Compara, supón o usa suma y diferencia.');
+
+  xpLec('icf-ma-ecuaciones-4', [
+    ['Muchas respuestas',
+      xpMira('dibujo', 'Empecemos por la idea: una desigualdad la cumplen **muchos** números.', { dib: ray, v: { b: 2, d: 1, e: 0, t: 'x > 2' }, alto: 110 }, [
+        ['Los mayores que dos se pintan hacia la derecha.', {}],
+        ['El dos no entra: el círculo queda vacío.', {}],
+        ['Con mayor o igual, sí entra: se llena.', { e: 1, t: 'x ≥ 2' }],
+        ['Menores que tres: hacia la izquierda.', { b: 3, d: -1, e: 0, t: 'x < 3' }],
+        ['Prueba un número pintado para comprobar.', { t: '1 < 3' }],
+      ], 'Pinta hacia donde se cumple y decide si el borde entra.'),
+      xpHaz('dibujo', 'Pinta $x \\le -1$: mueve el borde, el lado y si entra.', { dib: ray, v: { b: 0, d: 1, e: 0 }, metas: { b: -1, d: -1, e: 1 }, alto: 270, manijas: [{ k: 'b', min: -5, max: 5, paso: 1, et: 'borde' }, { k: 'd', min: -1, max: 1, paso: 2, et: 'lado' }, { k: 'e', min: 0, max: 1, paso: 1, et: 'entra' }], lee: v => `$x ${v.d > 0 ? (v.e ? '\\ge' : '>') : (v.e ? '\\le' : '<')} ${v.b}$`, dice: () => 'Menor o igual: hacia la izquierda y con el borde.' }, 'El borde −1 entra y se pinta a la izquierda.')],
+    ['El signo que se voltea',
+      xpMira('fichas', 'Segunda idea: multiplicar o dividir por un **negativo** voltea el signo.', { slots: fila('3 y 5', '+ 4', '· 2', '· (−1)').map(s => ({ ...s, w: 66 })), fichas: ['3 < 5', '7 < 9', '6 < 10', '−3 > −5'], alto: 96 }, [
+        ['Tres es menor que cinco.', { pon: { 0: '3 < 5' } }],
+        ['Si a los dos se les suma cuatro, sigue igual.', { pon: { 1: '7 < 9' } }],
+        ['Si los dos se doblan, también.', { pon: { 2: '6 < 10' } }],
+        ['Con menos uno quedan al otro lado del cero.', { pon: { 3: '−3 > −5' } }],
+        ['El más grande pasó a ser el más pequeño.', { marca: [3] }],
+      ], 'Solo un negativo que multiplica o divide lo voltea.'),
+      xpHaz('fichas', 'Resuelve $-3x < 12$ y $2x - 1 \\ge 9$.', { slots: fila('primera', 'segunda'), fichas: ['x > −4', 'x ≥ 5', 'x < −4', 'x ≥ 4', 'x ≤ 5'], meta: ['x > −4', 'x ≥ 5'], alto: 96, pista: 'En la primera se divide entre un negativo.' }, '$x > -4$ y $2x \\ge 10$.')],
+    ['Como máximo, al menos',
+      xpMira('fichas', 'Tercera idea: las palabras dicen **qué signo** va.', { slots: fila('como máximo', 'al menos', 'menos de', 'más de').map(s => ({ ...s, w: 66 })), fichas: ['≤', '≥', '<', '>'], alto: 96 }, [
+        ['«Como máximo 10» permite diez o menos.', { pon: { 0: '≤' } }],
+        ['«Al menos 10» permite diez o más.', { pon: { 1: '≥' } }],
+        ['«Menos de 10» no deja entrar al diez.', { pon: { 2: '<' } }],
+        ['Y «más de 10» tampoco.', { pon: { 3: '>' } }],
+        ['Si son personas o cajas, la respuesta es entera.', {}],
+      ], 'Máximo ≤, al menos ≥; con «de» el borde no entra.'),
+      xpHaz('fichas', 'Con 100 mil se pagan 28 de entrada y 9 por juego. Pon lo que queda para juegos y cuántos como máximo.', { slots: fila('queda', 'máximo'), fichas: ['72', '8', '11', '128', '9'], meta: ['72', '8'], alto: 96, pista: 'Quita la entrada y reparte.' }, '$100 - 28 = 72$ y $72 \\div 9 = 8$.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'Un ascensor aguanta 500 kg. Suben 2 personas de 70 y cajas de 25. Pon los kilos libres y las cajas como máximo.', { slots: fila('libres', 'cajas'), fichas: ['360', '14', '15', '430', '20'], meta: ['360', '14'], alto: 96, pista: 'Las cajas no se parten.' }, '$500 - 140 = 360$; $360 \\div 25 = 14.4$: 14.')],
+  ], 'Pinta, cuida el signo y lee bien las palabras.');
+}
+;
 //#archivo js/explora-icf-lc.js
 // Preicfes · Lectura Crítica, mundo 1 «Lo que Dice el Texto» (Explora, escena «hoja»). Textos cortos propios.
 xpLec('icf-lc-literal-1', [
@@ -6282,6 +6424,104 @@ xpLec('icf-lc-discontinuo-3', [
   ['Ahora sí, un problema',
     xpHaz('hoja', 'Titular: «Ciudad feliz». Gráfica: 6 de cada 10 se sienten bien. Foto: un parque lleno. Subraya la crítica **justa** al titular.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Es mentira: nadie está bien.'], ['Generaliza: 4 de cada 10 no se sienten bien.'], ['La foto debería ser más grande.']], pista: 'Compara la palabra del titular con el dato.' }, 'El titular dice de toda la ciudad lo que vale para seis de diez.')],
 ], 'Qué aporta cada pieza, quién falta y qué conclusión cabe en todas.');
+;
+//#archivo js/explora-icf-lc-7.js
+// Preicfes · Lectura Crítica, mundo 7 «Evaluar un Texto» (Explora, escena «hoja»). Textos cortos propios.
+xpLec('icf-lc-evalua-1', [
+  ['Lo que se da por hecho',
+    xpMira('hoja', 'Empecemos por la idea: un **supuesto** no se escribe, pero la idea lo necesita.', { letras: ['idea', 'a', 'b', 'c'], paras: [['Hay que poner más buses para que la gente deje el carro.'], ['Si hay más buses, la gente los usará.'], ['Los buses son grandes.'], ['La gente deja el carro por gusto.']] }, [
+      ['Esta es la idea escrita.', { luz: [0], nota: { 0: 'lo dice' } }],
+      ['Si esto no fuera cierto, la idea se cae.', { luz: [1], nota: { 1: 'lo supone' } }],
+      ['Esto es cierto, pero la idea no lo necesita.', { luz: [2], tacha: [2] }],
+      ['Esto tampoco hace falta para que funcione.', { luz: [3], tacha: [3] }],
+      ['La prueba: niégalo y mira si la idea aguanta.', { luz: [0, 1] }],
+    ], 'Supuesto: si lo niegas, la idea se cae.'),
+    xpHaz('hoja', '«Regalen libros y los niños leerán más». Subraya el **supuesto**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Los libros son de papel.'], ['Los niños no leen porque no tienen libros.'], ['Los niños son pequeños.']], pista: 'Niega cada uno y mira cuál tumba la idea.' }, 'Si no leyeran por otra razón, regalar no bastaría.')],
+  ['Para qué escribe',
+    xpMira('hoja', 'Segunda idea: la **intención** es lo que el autor busca en ti.', { paras: [['«Vuelva a mirar su plato antes de botarlo».'], ['«En 2020 se botaron mil toneladas».'], ['«Ese plato lo sembró alguien como su abuelo».']] }, [
+      ['Aquí invita a hacer algo.', { luz: [0], nota: { 0: 'mover a actuar' } }],
+      ['Aquí informa con un dato.', { luz: [1], nota: { 1: 'informar' } }],
+      ['Aquí busca que sientas.', { luz: [2], nota: { 2: 'conmover' } }],
+      ['Todo junto: que no desperdicies comida.', { luz: [0, 1, 2] }],
+      ['La intención es del texto completo, no de una frase.', {}],
+    ], 'Pregunta qué haría un lector convencido.'),
+    xpHaz('hoja', 'Un texto cuenta tres accidentes y termina: «¿Y usted, se abrochó?». Subraya la intención.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Narrar historias tristes'], ['Vender carros'], ['Que el lector use el cinturón']], pista: 'Mira a quién va dirigida la última pregunta.' }, 'Los relatos sirven para mover al lector.')],
+  ['Recursos y honestidad',
+    xpMira('hoja', 'Tercera idea: mira **con qué** convence y si **reconoce límites**.', { paras: [['Una anécdota de su vecina'], ['Una ironía: «claro, la culpa es del perro»'], ['«No sé si fue por eso»']] }, [
+      ['La anécdota muestra un caso, no prueba todos.', { luz: [0], nota: { 0: 'muestra' } }],
+      ['La ironía critica diciendo lo contrario.', { luz: [1], nota: { 1: 'critica' } }],
+      ['Reconocer una duda da confianza.', { luz: [2], nota: { 2: 'honesto' } }],
+      ['Quien nunca duda merece más revisión.', {}],
+      ['El recurso no hace verdadera la idea.', { luz: [0, 1] }],
+    ], 'Caso, ironía, duda: cada recurso tiene su efecto.'),
+    xpHaz('hoja', 'Subraya la frase que **reconoce un límite**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Está probado sin discusión.'], ['Puede que influyera también el clima.'], ['Todos lo saben.']], pista: 'Busca la que deja una duda.' }, '«Puede que» admite otra explicación.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Desde que cerramos la ventana nadie se resfrió. La ventana era la culpable». Subraya el supuesto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Nada más cambió en ese tiempo.'], ['La ventana era de vidrio.'], ['Hacía calor.']], pista: 'Si otra cosa hubiera cambiado, ¿seguiría siendo la ventana?' }, 'Si cambió algo más, la ventana podría no ser la causa.')],
+], 'Busca lo que supone, para qué escribe y con qué convence.');
+
+xpLec('icf-lc-evalua-2', [
+  ['¿Alcanza para decir eso?',
+    xpMira('hoja', 'Empecemos por la idea: un enunciado es válido si su **respaldo alcanza**.', { letras: ['dato', 'a', 'b'], paras: [['12 personas tomaron té y 9 durmieron mejor.'], ['El té hace dormir a todo el mundo.'], ['En ese grupo, la mayoría durmió mejor.']] }, [
+      ['Este es el respaldo: doce personas.', { luz: [0] }],
+      ['«Todo el mundo» va mucho más allá.', { luz: [1], tacha: [1], nota: { 1: 'dice de más' } }],
+      ['Esto es justo lo que se vio.', { luz: [2], nota: { 2: 'alcanza' } }],
+      ['Y falta comparar con quien no tomó té.', { luz: [0] }],
+      ['Pregunta: ¿cuántos, quiénes y comparados con qué?', {}],
+    ], 'Cuántos, quiénes y comparados con qué.'),
+    xpHaz('hoja', 'Se probó un champú en 8 amigas del fabricante. Subraya lo que **sí** se puede decir.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Sirve para todas las mujeres.'], ['Es el mejor del mercado.'], ['Esas ocho personas dieron su opinión.']], pista: 'Busca lo que no va más allá de las ocho.' }, 'Pocas y elegidas: no alcanza para más.')],
+  ['Trampas con nombre',
+    xpMira('hoja', 'Segunda idea: hay **trampas** que parecen razones.', { paras: [['«Siempre se ha hecho así».'], ['«¿Qué va a saber ese muchacho?».'], ['«Si no es blanco, es negro».'], ['«Lo natural no daña».']] }, [
+      ['La costumbre no prueba que sea bueno.', { luz: [0], nota: { 0: 'costumbre' } }],
+      ['Atacar a quien habla no responde la idea.', { luz: [1], nota: { 1: 'ataque' } }],
+      ['Hay más de dos opciones.', { luz: [2], nota: { 2: 'falsa elección' } }],
+      ['El veneno de víbora es natural.', { luz: [3], nota: { 3: 'generaliza' } }],
+      ['Con nombre se reconocen más rápido.', {}],
+    ], 'Costumbre, ataque, falsa elección y generalización.'),
+    xpHaz('hoja', 'Pon al margen la trampa de cada frase.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['ataque', 'costumbre', 'falsa elección'], meta: [1, 2, 0], paras: [['Mi abuelo lo hacía y vivió noventa.'], ['O compras este celular o te quedas atrás.'], ['Usted ni siquiera terminó el colegio.']], pista: 'Alguna no va ahí: ¿mira al pasado, deja dos salidas o ataca a alguien?' }, 'Pasado, dos salidas y ataque.')],
+  ['¿Quién habla?',
+    xpMira('hoja', 'Tercera idea: revisa más a quien **tiene un interés**.', { letras: ['1', '2', '3'], paras: [['Vendedor: «Nuestro colchón cura la espalda».'], ['Estudio: «Se probó en 30; no se comparó».'], ['Letra gris: «Resultados pueden variar».']] }, [
+      ['Quien vende gana si le crees.', { luz: [0], nota: { 0: 'interés' } }],
+      ['Quien investiga dice sus límites.', { luz: [1], nota: { 1: 'límites' } }],
+      ['La letra gris confiesa lo que la grande calla.', { luz: [2], nota: { 2: 'confiesa' } }],
+      ['Tener interés no es mentir, pero exige revisar.', { luz: [0] }],
+      ['Busca otra voz sin ese interés.', {}],
+    ], 'Interés, límites y letra pequeña.'),
+    xpHaz('hoja', 'Subraya la fuente que conviene revisar con **más** cuidado sobre una bebida.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['La empresa que la fabrica'], ['Una nutricionista sin relación con ella'], ['Un estudio con grupo de comparación']], pista: '¿Quién gana si le creen?' }, 'La empresa tiene interés en que se venda.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Nadie ha probado que no funcione; entonces funciona». Subraya el error.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Ataca a una persona.'], ['Que no se haya refutado no lo prueba.'], ['Usa la costumbre.']], pista: 'No tener prueba en contra no es tener prueba a favor.' }, 'La falta de prueba no es una prueba.')],
+], 'Mide el respaldo, nombra la trampa y mira quién habla.');
+
+xpLec('icf-lc-evalua-3', [
+  ['Valores',
+    xpMira('hoja', 'Empecemos por la idea: detrás de una postura hay un **valor**.', { letras: ['1', '2', '3'], paras: [['«Primero los que llegaron primero».'], ['«Primero los que más lo necesitan».'], ['«Que cada uno decida».']] }, [
+      ['Aquí se valora el orden de llegada.', { luz: [0], nota: { 0: 'orden' } }],
+      ['Aquí se valora la necesidad.', { luz: [1], nota: { 1: 'solidaridad' } }],
+      ['Aquí, la libertad de cada quien.', { luz: [2], nota: { 2: 'libertad' } }],
+      ['Nadie dijo la palabra: se nota en lo que pide.', {}],
+      ['Dos personas pueden valorar cosas distintas sin mentir.', { luz: [0, 1] }],
+    ], 'Mira qué pone primero: ese es su valor.'),
+    xpHaz('hoja', '«Que paguen más los que más ganan». Subraya el valor.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Libertad individual'], ['Justicia en el reparto'], ['Respeto a la tradición']], pista: '¿Qué quiere igualar?' }, 'Busca que la carga se reparta según lo que se tiene.')],
+  ['Imágenes que delatan',
+    xpMira('hoja', 'Segunda idea: una **comparación** muestra cómo se ve el mundo.', { paras: [['«La escuela es una fábrica».'], ['«La escuela es un jardín».'], ['«La escuela es una cancha».']] }, [
+      ['Fábrica: produce cosas iguales.', { luz: [0], nota: { 0: 'resultados' } }],
+      ['Jardín: cada uno crece a su paso.', { luz: [1], nota: { 1: 'cuidado' } }],
+      ['Cancha: alguien gana y alguien pierde.', { luz: [2], nota: { 2: 'competencia' } }],
+      ['La misma escuela, tres miradas.', { luz: [0, 1, 2] }],
+      ['Pregunta qué destaca y qué esconde la imagen.', {}],
+    ], 'La imagen destaca algo y esconde lo demás.'),
+    xpHaz('hoja', '«El bosque es un banco de madera». Subraya lo que **esconde** esa imagen.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Que se puede vender'], ['Que tiene madera'], ['Que es hogar de seres vivos']], pista: 'Un banco guarda algo para gastar: ¿qué queda por fuera?' }, 'Lo muestra como dinero y calla la vida.')],
+  ['Acuerdos y choques',
+    xpMira('hoja', 'Tercera idea: dos textos pueden **coincidir** en un hecho y **chocar** en lo que proponen.', { paras: [['Uno: «Hubo injusticia. Pongan una placa».'], ['Otro: «Hubo injusticia. Quiten el busto».'], ['Coinciden en el hecho.'], ['Chocan en la salida.']] }, [
+      ['El primero reconoce algo y propone.', { luz: [0] }],
+      ['El segundo reconoce lo mismo.', { luz: [1] }],
+      ['Ninguno niega el hecho.', { luz: [2], nota: { 2: 'acuerdo' } }],
+      ['La diferencia está en qué hacer.', { luz: [3], nota: { 3: 'choque' } }],
+      ['Antes de decir que se oponen, busca en qué están de acuerdo.', {}],
+    ], 'Separa el hecho, el valor y la propuesta.'),
+    xpHaz('hoja', 'Uno: «Hay ruido; multen». Otro: «Hay ruido; eduquen». Subraya en qué **coinciden**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['En que hay un problema'], ['En multar'], ['En educar']], pista: 'Mira la primera parte de cada frase.' }, 'Los dos ven el ruido; difieren en la salida.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Esos edificios viejos son arrugas: se ven mal, pero cuentan quién eres». Subraya lo que valora.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Lo nuevo'], ['La memoria de la ciudad'], ['El ahorro']], pista: '¿Qué dice que cuentan las arrugas?' }, 'Compara lo viejo con lo que cuenta la propia historia.')],
+], 'Qué pone primero, qué imagen usa y en qué coincide con otros.');
 ;
 //#archivo js/explora-icf-sc.js
 // Preicfes · Sociales y Ciudadanas, mundo 1 «Constitución y Estado» (Explora, escena «hoja»). Casos cortos propios.
@@ -6838,6 +7078,104 @@ xpLec('icf-sc-historia-3', [
   ['Ahora sí, un problema',
     xpHaz('hoja', 'Alguien dice: «El conflicto tuvo una sola causa y un solo culpable». Subraya la mejor respuesta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Sí, fue la Guerra Fría.'], ['No: se cruzaron tierra, exclusión, contexto mundial y narcotráfico.'], ['No tuvo causas.']], pista: 'Cuidado con «una sola».' }, 'Fue un proceso con varias causas y varios responsables.')],
 ], 'Varias causas, varios actores, víctimas civiles e intentos de paz.');
+;
+//#archivo js/explora-icf-sc-7.js
+// Preicfes · Sociales y Ciudadanas, mundo 7 «Historia del Mundo» (Explora, escena «hoja»).
+xpLec('icf-sc-mundo-1', [
+  ['Dos clases de revolución',
+    xpMira('hoja', 'Empecemos por la idea: unas revoluciones cambian **quién manda**; otra cambió **cómo se produce**.', { letras: ['1', '2', '3', '4'], paras: [['1776: trece colonias se independizan'], ['1789: Francia contra el poder absoluto'], ['1791–1804: Haití'], ['Inglaterra: vapor y fábricas']] }, [
+      ['Aquí se cambia de gobierno.', { luz: [0], nota: { 0: 'política' } }],
+      ['Aquí cae el poder absoluto.', { luz: [1], nota: { 1: 'política' } }],
+      ['Aquí se liberan los esclavizados.', { luz: [2], nota: { 2: 'política' } }],
+      ['Aquí cambia el trabajo.', { luz: [3], nota: { 3: 'industrial' } }],
+      ['Ocurrieron casi a la vez.', {}],
+    ], 'Políticas: quién manda. Industrial: cómo se produce.'),
+    xpHaz('hoja', 'Subraya la que cambió **cómo se produce**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['La de Haití'], ['La francesa'], ['La del vapor en Inglaterra']], pista: 'Busca máquinas.' }, 'El vapor movió telares, trenes y barcos.')],
+  ['¿Derechos para todos?',
+    xpMira('hoja', 'Segunda idea: la palabra era **«todos»**; la práctica, no.', { paras: [['«Todos nacen iguales»'], ['Mujeres: sin voto'], ['Indígenas: sin tierra'], ['Esclavizados: sin libertad'], ['Haití: los esclavizados lo toman en serio']] }, [
+      ['Así decían los papeles.', { luz: [0] }],
+      ['La mitad de la gente quedaba por fuera.', { luz: [1], nota: { 1: 'por fuera' } }],
+      ['Y otros pueblos también.', { luz: [2, 3], nota: { 2: 'por fuera', 3: 'por fuera' } }],
+      ['En Haití hicieron cumplir la palabra.', { luz: [4], nota: { 4: 'la cumplen' } }],
+      ['Pregunta siempre quién entra en «todos».', { luz: [0] }],
+    ], 'Compara lo que se proclama con quién queda por fuera.'),
+    xpHaz('hoja', 'Subraya por qué Haití preocupó a los dueños de esclavos.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Porque vendía azúcar'], ['Porque mostró que los esclavizados podían vencer'], ['Porque era una isla']], pista: '¿Qué podría repetirse en otras partes?' }, 'Era un ejemplo posible para los demás.')],
+  ['Fábricas y nuevas ideas',
+    xpMira('hoja', 'Tercera idea: la fábrica trajo **riqueza**, **obreros** y **nuevas ideas**.', { paras: [['Más productos y ciudades grandes'], ['Jornadas de doce horas, niños obreros'], ['Sindicatos y leyes'], ['Liberalismo y socialismo']] }, [
+      ['Se produce mucho más.', { luz: [0] }],
+      ['Pero quienes trabajan viven mal.', { luz: [1], nota: { 1: 'conflicto' } }],
+      ['Se organizan para pedir derechos.', { luz: [2], nota: { 2: 'respuesta' } }],
+      ['Y se discute cómo repartir.', { luz: [3], nota: { 3: 'ideas' } }],
+      ['El voto se amplía despacio.', {}],
+    ], 'Del conflicto salen sindicatos, leyes e ideas.'),
+    xpHaz('hoja', 'Pon al margen qué defendía cada idea.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['liberalismo', 'socialismo'], meta: [1, 0], paras: [['Que la riqueza se reparta'], ['Propiedad y libertades del individuo']], pista: 'Alguna no va ahí: ¿repartir o proteger al individuo?' }, 'Repartir, socialismo; individuo, liberalismo.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'En 1789 un panadero francés paga impuestos y un conde no. Subraya qué cuestionó la revolución.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Los privilegios de nacimiento'], ['El precio de los telares'], ['La esclavitud en Haití']], pista: '¿Por qué el conde no paga?' }, 'Los estamentos daban privilegios según el nacimiento.')],
+], 'Qué cambió, para quién y qué lucha quedó abierta.');
+
+xpLec('icf-sc-mundo-2', [
+  ['La chispa y la pólvora',
+    xpMira('hoja', 'Empecemos por la idea: en 1914 un disparo fue la **chispa**; la **pólvora** llevaba años.', { paras: [['Colonias y mercados en disputa'], ['Dos alianzas'], ['Nacionalismo y prestigio'], ['Sarajevo, 1914']] }, [
+      ['Las potencias competían por el mundo.', { luz: [0], nota: { 0: 'de fondo' } }],
+      ['Si una peleaba, arrastraba a las otras.', { luz: [1], nota: { 1: 'de fondo' } }],
+      ['Y cada una quería ser la primera.', { luz: [2], nota: { 2: 'de fondo' } }],
+      ['El atentado lo disparó todo.', { luz: [3], nota: { 3: 'detonante' } }],
+      ['Sin alianzas quizá habría sido un conflicto local.', { luz: [1] }],
+    ], 'Colonias, alianzas y nacionalismo; Sarajevo, la chispa.'),
+    xpHaz('hoja', 'Subraya lo que convirtió un atentado en una guerra de **muchos países**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['El arma usada'], ['El sistema de alianzas'], ['El mes de junio']], pista: '¿Qué obligaba a unos a entrar por otros?' }, 'Cada aliado arrastró a los demás.')],
+  ['De una guerra a otra',
+    xpMira('hoja', 'Segunda idea: la paz mal hecha y la **crisis** abonaron la segunda guerra.', { paras: [['1919: Versalles culpa a Alemania'], ['1929: crisis mundial'], ['1933: Hitler, por vías legales'], ['1939: invasión de Polonia'], ['Holocausto: unos seis millones de judíos']] }, [
+      ['Vienen pagos y humillación.', { luz: [0] }],
+      ['Después, desempleo y miedo.', { luz: [1] }],
+      ['Alguien ofrece orden y culpables.', { luz: [2], nota: { 2: 'acaba la democracia' } }],
+      ['Y empieza otra guerra.', { luz: [3] }],
+      ['El racismo se volvió política de Estado.', { luz: [4], nota: { 4: 'genocidio' } }],
+    ], 'Humillación, crisis, dictadura, guerra y genocidio.'),
+    xpHaz('hoja', 'Subraya lo que es **correcto** sobre la llegada de Hitler al poder.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Fue un golpe militar.'], ['Ocurrió antes de Versalles.'], ['Llegó por vías legales y luego acabó la democracia.']], pista: 'Las democracias también se pueden perder desde adentro.' }, 'Usó la ley para llegar y después la destruyó.')],
+  ['Una guerra fría… para ellas',
+    xpMira('hoja', 'Tercera idea: dos **bloques** no se atacan de frente y pelean en otros países.', { paras: [['1945: ONU; 1948: Derechos Humanos'], ['Estados Unidos, capitalista'], ['Unión Soviética, comunista'], ['Corea, Vietnam, Angola, Centroamérica'], ['1989: cae el Muro']] }, [
+      ['Después del horror, reglas para todos.', { luz: [0] }],
+      ['Pero los vencedores se dividen.', { luz: [1, 2] }],
+      ['Con bombas atómicas, pelear de frente sería el fin.', { luz: [1, 2], nota: { 1: 'no se atacan' } }],
+      ['La guerra ocurre en otras tierras.', { luz: [3], nota: { 3: 'muy caliente' } }],
+      ['El Muro cae y, dos años después, la Unión Soviética.', { luz: [4] }],
+    ], 'Fría entre potencias, caliente en otros países.'),
+    xpHaz('hoja', 'Subraya por qué las dos potencias **no** se atacaron directamente.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Podían destruirse mutuamente.'], ['Eran aliadas.'], ['Quedaban muy cerca.']], pista: 'Piensa en las armas que tenían.' }, 'El miedo a la destrucción las frenó.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'En 1973 un militar derroca a un presidente elegido y dice: «Evité el comunismo». Subraya el contexto que lo explica.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['La Primera Guerra Mundial'], ['La Guerra Fría en América Latina'], ['La Revolución Industrial']], pista: 'Mira la fecha y la palabra que usa para justificarse.' }, 'El miedo al comunismo justificó golpes.')],
+], 'Chispa y pólvora, crisis y dictadura, dos bloques.');
+
+xpLec('icf-sc-mundo-3', [
+  ['Dejar de ser colonia',
+    xpMira('hoja', 'Empecemos por la idea: en treinta años casi todas las **colonias** fueron países.', { paras: [['Europa, débil tras la guerra'], ['Pueblos que no esperan más'], ['India, 1947: sin violencia'], ['Argelia, 1962: con guerra']] }, [
+      ['Una causa: las potencias estaban débiles.', { luz: [0], nota: { 0: 'causa' } }],
+      ['Otra, más importante: la gente se organizó.', { luz: [1], nota: { 1: 'causa' } }],
+      ['Un camino: desobedecer sin violencia.', { luz: [2] }],
+      ['Otro camino fue la guerra.', { luz: [3] }],
+      ['Los dos tuvieron costos.', { luz: [2, 3] }],
+    ], 'Dos causas y dos caminos.'),
+    xpHaz('hoja', 'Subraya un ejemplo de **desobediencia civil** no violenta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Poner una bomba'], ['Fabricar sal aunque esté prohibido'], ['Cobrar un impuesto']], pista: 'Incumplir una norma injusta sin dañar a nadie.' }, 'Gandhi caminó hasta el mar para hacer sal.')],
+  ['Rayas y leyes',
+    xpMira('hoja', 'Segunda idea: quedaron **fronteras** ajenas y **leyes** que separaban.', { paras: [['Fronteras africanas trazadas en Europa'], ['Pueblos partidos, guerras después'], ['Sudáfrica: apartheid desde 1948'], ['1994: votan todos; Mandela, presidente']] }, [
+      ['Se trazaron con regla y sin preguntar.', { luz: [0] }],
+      ['Muchas guerras nacieron ahí.', { luz: [1], nota: { 1: 'herencia' } }],
+      ['El color decidía dónde vivir.', { luz: [2], nota: { 2: 'segregación' } }],
+      ['Se acabó tras una larga lucha.', { luz: [3], nota: { 3: 'cambio' } }],
+      ['Tener bandera no borra lo heredado.', { luz: [0, 1] }],
+    ], 'La independencia no borra las rayas ni las leyes.'),
+    xpHaz('hoja', 'Subraya lo que era el **apartheid**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Una alianza militar'], ['Un impuesto a la sal'], ['La separación por color hecha ley']], pista: 'Decidía dónde podía estar cada persona.' }, 'Era segregación legal.')],
+  ['Movimientos sociales',
+    xpMira('hoja', 'Tercera idea: un **movimiento social** es gente organizada para cambiar algo injusto.', { paras: [['No es un partido'], ['No es un ejército'], ['Marcha, boicot, huelga, arte, ley'], ['Casi nunca gana todo; a veces cambia lo posible']] }, [
+      ['No busca llegar a gobernar.', { luz: [0] }],
+      ['Ni usa las armas.', { luz: [1] }],
+      ['Estas son sus herramientas.', { luz: [2], nota: { 2: 'herramientas' } }],
+      ['Y así cambia leyes y costumbres.', { luz: [3] }],
+      ['Derechos civiles, mujeres, estudiantes, pueblos indígenas.', {}],
+    ], 'Organizarse, fuera de las instituciones, para cambiar algo.'),
+    xpHaz('hoja', 'Pon al margen la herramienta.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['huelga', 'boicot', 'ley'], meta: [1, 2, 0], paras: [['Nadie compra ese producto'], ['Se presenta un proyecto al Congreso'], ['Los trabajadores paran']], pista: 'Alguna no va ahí: ¿dejar de comprar, de trabajar o ir al Congreso?' }, 'Boicot, ley y huelga.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Unos vecinos dejan de usar un bus que cobra más a los del cerro, hasta que cambian la tarifa. Subraya qué es.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Un boicot de un movimiento social'], ['Un golpe de Estado'], ['Una descolonización']], pista: 'Dejan de usar algo para exigir un cambio.' }, 'Como el boicot de los buses de 1955.')],
+], 'Caminos, herencias y gente que se organiza.');
 ;
 //#archivo js/explora-icf-cn.js
 // Preicfes · Ciencias Naturales, mundo 1 «Indagación Científica» (Explora, escenas «hoja» y «dibujo»). Experimentos cortos propios.
@@ -7426,6 +7764,80 @@ xpLec('icf-sc-historia-3', [
   ], 'El calor pasa, por tres caminos, y unos se calientan más fácil.');
 }
 ;
+//#archivo js/explora-icf-cn-7.js
+// Preicfes · Ciencias Naturales, mundo 7 «Átomo y Enlaces» (Explora, escenas «dibujo», «fichas» y «hoja»). Ejemplos propios.
+{
+  const fila = (...et) => et.map((e, i) => ({ x: 340 * (i + 1) / (et.length + 1), y: 46, w: 84, et: e }));
+  // Átomo: p protones, n neutrones, e electrones repartidos en capas 2 y 8.
+  const atomo = (v, K) => { const e = Math.round(v.e), cap = [Math.min(2, e), Math.max(0, e - 2)], nuc = Math.round(v.p) + Math.round(v.n); return K.c(170, 92, 78, 'fn') + K.c(170, 92, 48, 'fn') + Array.from({ length: nuc }, (_, i) => K.c(170 + 5 * Math.sqrt(i) * Math.cos(i * 2.4), 92 + 5 * Math.sqrt(i) * Math.sin(i * 2.4), 5, i < Math.round(v.p) ? 'fF' : 'fk')).join('') + cap.map((m, k) => Array.from({ length: m }, (_, i) => { const [x, y] = K.at(170, 92, [48, 78][k], 90 + 360 * i / m); return K.c(x, y, 5, 'fA'); }).join('')).join('') + K.t(170, 194, v.t || '', 'ta'); };
+  // Dos átomos: electrón que pasa (t de 0 a 1), o se comparte (s).
+  const par = (v, K) => K.c(110, 90, 44, 'fn') + K.c(230, 90, 44, 'fn') + K.t(110, 95, v.a, 'b') + K.t(230, 95, v.b, 'b') + (v.mar > 0.5 ? Array.from({ length: 10 }, (_, i) => K.c(60 + i * 24, i % 2 ? 60 : 120, 4, 'fA')).join('') : v.s > 0.01 ? K.c(170 + v.k, 82, 5, 'fA') + K.c(170 + v.k, 98, 5, 'fG') : K.c(154 + v.x * 32, 90, 6, 'fA')) + K.t(170, 168, v.t || '', 'ta');
+
+  xpLec('icf-cn-atomo-1', [
+    ['Tres partículas',
+      xpMira('dibujo', 'Empecemos por la idea: el **núcleo** tiene protones y neutrones; alrededor, electrones.', { dib: atomo, v: { p: 6, n: 6, e: 6, t: '' }, alto: 202 }, [
+        ['Seis protones en el centro: es carbono.', { t: '6 protones' }],
+        ['Con los neutrones, la masa es doce.', { t: 'masa 12' }, '$6 + 6 = 12$'],
+        ['Seis electrones: está neutro.', { t: 'neutro' }],
+        ['Con siete protones ya sería nitrógeno.', { p: 7, e: 7, t: '7 protones' }],
+        ['Los protones mandan: deciden el elemento.', {}],
+      ], 'Protones: qué elemento es. Masa: protones más neutrones.'),
+      xpHaz('fichas', 'Un átomo neutro tiene 9 protones y masa 19. Pon sus neutrones y sus electrones.', { slots: fila('neutrones', 'electrones'), fichas: ['10', '9', '19', '28', '8'], meta: ['10', '9'], alto: 96, pista: 'Resta los protones a la masa; neutro tiene iguales cargas.' }, '$19 - 9 = 10$; neutro: 9.')],
+    ['Isótopos e iones',
+      xpMira('dibujo', 'Segunda idea: cambian **neutrones**, isótopo; cambian **electrones**, ion.', { dib: atomo, v: { p: 3, n: 4, e: 3, t: 'litio' }, alto: 202 }, [
+        ['Litio: tres protones, cuatro neutrones, tres electrones.', {}],
+        ['Con un neutrón menos, es un isótopo.', { n: 3, t: 'litio 6' }],
+        ['Sigue siendo litio: tiene tres protones.', {}],
+        ['Si pierde un electrón, es un ion.', { n: 4, e: 2, t: 'carga +1' }, '$3 - 2 = +1$'],
+        ['El núcleo no cambió.', {}],
+      ], 'Isótopo: otros neutrones. Ion: otros electrones.'),
+      xpHaz('hoja', 'Pon al margen qué es, comparado con oxígeno neutro (8 p, 8 n, 8 e).', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['ion', 'otro elemento', 'isótopo'], meta: [2, 0, 1], paras: [['8 p, 10 n, 8 e'], ['8 p, 8 n, 10 e'], ['9 p, 10 n, 9 e']], pista: 'Alguna no va ahí: mira qué número cambió.' }, 'Neutrones, electrones o protones.')],
+    ['La tabla',
+      xpMira('hoja', 'Tercera idea: la **tabla** ordena por protones y agrupa a los parecidos.', { paras: [['Grupo: columna, se parecen'], ['Periodo: fila'], ['Al bajar: más capas, más grande'], ['Al avanzar: más atracción, más pequeño'], ['Izquierda: metales. Derecha: no metales']] }, [
+        ['Los de una columna tienen iguales electrones externos.', { luz: [0], nota: { 0: 'se parecen' } }],
+        ['Cada fila es un periodo.', { luz: [1] }],
+        ['Al bajar, el átomo crece.', { luz: [2], nota: { 2: 'crece' } }],
+        ['Al avanzar, en general se encoge.', { luz: [3], nota: { 3: 'se encoge' } }],
+        ['Unos pierden electrones y otros los ganan.', { luz: [4] }],
+      ], 'Grupo: se parecen. Bajar: crece. Avanzar: se encoge.'),
+      xpHaz('hoja', 'Litio, sodio y potasio están en la misma columna, de arriba abajo. Subraya el más **grande**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Litio'], ['Sodio'], ['Potasio']], pista: 'Al bajar hay más capas.' }, 'El de más abajo tiene más capas.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'El ion de azufre tiene 16 protones y 18 electrones; su masa es 32. Pon la carga y los neutrones.', { slots: fila('carga', 'neutrones'), fichas: ['−2', '16', '+2', '14', '18'], meta: ['−2', '16'], alto: 96, pista: 'Compara protones con electrones; resta protones a la masa.' }, '$16 - 18 = -2$ y $32 - 16 = 16$.')],
+  ], 'Protones identifican; neutrones y electrones varían; la tabla ordena.');
+
+  xpLec('icf-cn-atomo-2', [
+    ['Entregar',
+      xpMira('dibujo', 'Empecemos por la idea: en el enlace **iónico** un metal entrega electrones.', { dib: par, v: { a: 'Na', b: 'Cl', x: 0, s: 0, k: 0, mar: 0, t: '' }, alto: 178 }, [
+        ['El sodio tiene un electrón suelto.', {}],
+        ['Se lo entrega al cloro.', { x: 1, t: 'pasa un electrón' }],
+        ['Quedan con cargas opuestas y se atraen.', { a: 'Na⁺', b: 'Cl⁻', t: '+1 y −1' }],
+        ['Forman una red dura que se funde muy caliente.', {}],
+        ['Disuelta, sus iones se mueven y conduce.', { t: 'disuelta conduce' }],
+      ], 'Iónico: metal con no metal, red dura, conduce disuelto.'),
+      xpHaz('hoja', 'Subraya la sustancia con enlace **iónico**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Oxígeno del aire (O₂)'], ['Bromuro de potasio (KBr)'], ['Cobre (Cu)']], pista: 'Busca un metal con un no metal.' }, 'El potasio es metal y el bromo, no metal.')],
+    ['Compartir',
+      xpMira('dibujo', 'Segunda idea: en el **covalente** dos no metales comparten.', { dib: par, v: { a: 'O', b: 'O', x: 0, s: 1, k: 0, mar: 0, t: '' }, alto: 178 }, [
+        ['Los dos jalan igual: están en el medio.', { t: 'apolar' }],
+        ['Si uno jala más, quedan más cerca de él.', { a: 'H', k: 22, t: 'polar' }],
+        ['Un lado queda un poco negativo.', {}],
+        ['Así es el agua: por eso disuelve la sal.', {}],
+        ['Muchas covalentes se funden fácil y no conducen.', { t: 'no conduce' }],
+      ], 'Covalente: comparten. Igual, apolar; desigual, polar.'),
+      xpHaz('hoja', 'Pon al margen el enlace.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['polar', 'apolar'], meta: [1, 0], paras: [['Dos átomos iguales comparten'], ['Uno atrae más los electrones']], pista: 'Alguna no va ahí: ¿jalan igual?' }, 'Igual, apolar; desigual, polar.')],
+    ['Un mar',
+      xpMira('dibujo', 'Tercera idea: en el **metálico** los electrones se mueven por toda la pieza.', { dib: par, v: { a: 'Cu', b: 'Cu', x: 0, s: 0, k: 0, mar: 1, t: '' }, alto: 178 }, [
+        ['Los electrones externos quedan sueltos.', { t: 'mar de electrones' }],
+        ['Por eso conduce electricidad y calor.', {}],
+        ['Y conduce aunque esté sólido.', { t: 'conduce sólido' }],
+        ['Y se dobla: las capas se deslizan.', {}],
+        ['La sal, en cambio, se parte.', {}],
+      ], 'Metálico: conduce sólido y se dobla.'),
+      xpHaz('hoja', 'Subraya la prueba que distingue un **metal** de una sal.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Si conduce estando sólido'], ['Si es brillante o blanco'], ['Si cabe en un frasco']], pista: 'La sal sólida no conduce.' }, 'Solo el metal conduce sólido.')],
+    ['Ahora sí, un problema',
+      xpHaz('fichas', 'El calcio pierde 2 electrones y el flúor gana 1. Pon la carga del calcio y cuántos flúor hacen falta.', { slots: fila('calcio', 'flúor'), fichas: ['+2', '2', '−2', '1', '+1'], meta: ['+2', '2'], alto: 96, pista: 'Las cargas deben sumar cero.' }, '$+2 - 1 - 1 = 0$: dos flúor.')],
+  ], 'Entregar, compartir o soltar: se nota en las propiedades.');
+}
+;
 //#archivo js/explora-icf-en.js
 // Preicfes · Inglés, mundo 1 «Avisos y Vocabulario» (Explora, escena «hoja»): se explica en español con ejemplos en inglés propios.
 xpLec('icf-en-avisos-1', [
@@ -7885,6 +8297,72 @@ xpLec('icf-en-vocabulario-2', [
   ['Ahora sí, un problema',
     xpHaz('hoja', '«Although it was ___, the soup was delicious.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['tasty'], ['taste'], ['cold']], pista: '«Although» pide algo que se oponga a «delicious».' }, 'Fría, y aun así deliciosa.')],
 ], 'El final, el prefijo y el conector te dicen qué va.');
+;
+//#archivo js/explora-icf-en-7.js
+// Preicfes · Inglés, mundo 7 «Inferir y Opinar» (Explora, escena «hoja»): se explica en español con ejemplos en inglés propios.
+xpLec('icf-en-inferencia-1', [
+  ['Unir dos datos',
+    xpMira('hoja', 'Empecemos por la idea: **inferir** es unir dos datos del texto.', { letras: ['1', '2', 'idea', 'no'], paras: [['Her umbrella is wet.'], ['She is taking off her coat.'], ['It is raining outside.'], ['She is late for work.']] }, [
+      ['Primer dato: la sombrilla está mojada.', { luz: [0] }],
+      ['Segundo: se quita el abrigo, acaba de llegar.', { luz: [1] }],
+      ['Juntos dicen que afuera llueve.', { luz: [0, 1, 2], nota: { 2: 'se deduce' } }],
+      ['Esto no tiene ningún dato.', { luz: [3], tacha: [3] }],
+      ['Si no puedes señalar el dato, es imaginación.', {}],
+    ], 'Dos datos señalados, una idea.'),
+    xpHaz('hoja', '«Tom\'s plate is empty and he is asking for more.» Subraya lo que se deduce.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['He cooked it.'], ['He is ill.'], ['He liked the food.']], pista: '¿Por qué pediría más?' }, 'Plato vacío y pedir más: le gustó.')],
+  ['Los gestos',
+    xpMira('hoja', 'Segunda idea: lo que alguien **hace** dice lo que siente.', { paras: [['She read the letter three times.'], ['He looked at the floor.'], ['They closed the door quietly.']] }, [
+      ['Leerla tres veces: le importa mucho.', { luz: [0], nota: { 0: 'it matters' } }],
+      ['Mirar al piso: siente pena o culpa.', { luz: [1], nota: { 1: 'ashamed' } }],
+      ['Cerrar sin ruido: no quieren molestar.', { luz: [2], nota: { 2: 'careful' } }],
+      ['Nadie escribió la emoción.', {}],
+      ['Pregúntate por qué harías tú ese gesto.', { luz: [0, 1, 2] }],
+    ], 'Gesto, razón, emoción.'),
+    xpHaz('hoja', '«He kept looking at his watch.» Subraya lo que muestra.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['He loves his watch.'], ['He is impatient.'], ['He is asleep.']], pista: '¿Por qué alguien mira la hora muchas veces?' }, 'Mirar la hora muestra impaciencia.')],
+  ['Must, might, can\'t',
+    xpMira('hoja', 'Tercera idea: **must** es casi seguro, **might** es quizá, **can\'t** es imposible.', { paras: [['The lights are off and the car isn\'t there.'], ['They must be out.'], ['They might be at the cinema.'], ['They can\'t be at home.']] }, [
+      ['Los datos: sin luz y sin carro.', { luz: [0] }],
+      ['«Must be out»: casi seguro que salieron.', { luz: [1], nota: { 1: 'casi seguro' } }],
+      ['«Might be at the cinema»: puede ser, no se sabe.', { luz: [2], nota: { 2: 'quizá' } }],
+      ['«Can\'t be at home»: no puede ser.', { luz: [3], nota: { 3: 'imposible' } }],
+      ['Escoge según la fuerza de la pista.', {}],
+    ], 'Must: casi seguro. Might: quizá. Can\'t: imposible.'),
+    xpHaz('hoja', '«He is eating a huge lunch. He ___ be hungry.» Subraya lo que completa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['must'], ['can\'t'], ['mustn\'t']], pista: 'La pista es fuerte: se come un almuerzo enorme.' }, 'Casi seguro: «must».')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Nina put the photo back in the drawer before her brother came in.» Subraya lo que se deduce.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Her brother took the photo.'], ['She didn\'t want him to see it.'], ['The drawer was broken.']], pista: '¿Por qué la guardó antes de que entrara?' }, 'La guarda a tiempo: no quería que la viera.')],
+], 'Señala los datos, mira los gestos y mide la fuerza.');
+
+xpLec('icf-en-inferencia-2', [
+  ['Fact or opinion',
+    xpMira('hoja', 'Empecemos por la idea: un **hecho** se comprueba; una **opinión** se discute.', { paras: [['The park has 300 trees.'], ['The park should be bigger.'], ['In my opinion, it is dirty.'], ['It opens at six.']] }, [
+      ['Los árboles se cuentan.', { luz: [0], nota: { 0: 'fact' } }],
+      ['«Should» dice lo que alguien cree mejor.', { luz: [1], nota: { 1: 'opinion' } }],
+      ['«In my opinion» lo anuncia.', { luz: [2], nota: { 2: 'opinion' } }],
+      ['La hora se comprueba.', { luz: [3], nota: { 3: 'fact' } }],
+      ['Busca should, I think, best, terrible.', {}],
+    ], 'Contar o comprobar: fact. Should, I think: opinion.'),
+    xpHaz('hoja', 'Subraya el **hecho**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['The bridge is 90 metres long.'], ['The bridge is ugly.'], ['They should paint it.']], pista: '¿Cuál se puede medir?' }, 'La longitud se mide.')],
+  ['Opinion + reason',
+    xpMira('hoja', 'Segunda idea: una opinión vale más con **razones**.', { letras: ['opinion', 'a', 'b', 'c'], paras: [['The library should open on Sundays.'], ['Many people only have free time then.'], ['The door is blue.'], ['In the next town, it is full on Sundays.']] }, [
+      ['Esto es lo que opina.', { luz: [0] }],
+      ['Esto responde por qué.', { luz: [1], nota: { 1: 'reason' } }],
+      ['Esto no responde nada.', { luz: [2], tacha: [2] }],
+      ['Esto es un hecho que la apoya.', { luz: [3], nota: { 3: 'evidence' } }],
+      ['Únelas con «because»: si suena, sirve.', { luz: [0, 1] }],
+    ], 'Opinion + because + reason.'),
+    xpHaz('hoja', 'Opinion: «We shouldn\'t use plastic bags». Subraya la **razón**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['They are white.'], ['I have two bags.'], ['They stay in the sea for years.']], pista: 'Une con «because».' }, 'Solo esa responde por qué.')],
+  ['Agree, disagree, change',
+    xpMira('hoja', 'Tercera idea: alguien puede **aceptar** una parte y **cambiar** de idea.', { paras: [['You are right about the noise.'], ['But I don\'t agree with closing the bar.'], ['After the meeting, I changed my mind.']] }, [
+      ['«You are right»: acepta una parte.', { luz: [0], nota: { 0: 'agrees' } }],
+      ['«But I don\'t agree»: rechaza otra.', { luz: [1], nota: { 1: 'disagrees' } }],
+      ['«Changed my mind»: ya piensa distinto.', { luz: [2], nota: { 2: 'change' } }],
+      ['Aceptar algo no es aceptar todo.', { luz: [0, 1] }],
+      ['Mira qué viene después de «but».', { luz: [1] }],
+    ], 'You are right… but… changed my mind.'),
+    xpHaz('hoja', '«I see your point, but I still think we need the road.» Subraya lo que piensa.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['He doesn\'t want the road.'], ['He wants the road.'], ['He has no opinion.']], pista: '«Still» dice que sigue pensando lo mismo.' }, 'Entiende al otro, pero mantiene su idea.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«The film lasts three hours. I enjoyed every minute, although my brother fell asleep.» Subraya la **opinión**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['It lasts three hours.'], ['It is enjoyable.'], ['Her brother fell asleep.']], pista: '¿En cuál podrían no estar de acuerdo?' }, 'La duración y el sueño son hechos.')],
+], 'Comprueba hechos, pide razones y mira qué cambia.');
 ;
 //#archivo js/explora-pu-ap.js
 // Preuniversitario · lectura, mundo 6 «Aplicación y analogía» (Explora): pu-ap-1 y pu-ap-2. Textos cortos propios.
@@ -9984,6 +10462,11 @@ const GUIDES = {
   'sube-tarifa': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
   'tercer-lado': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'cierran-o-no': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+  'area-letras': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'junta-terminos': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
+  'factor-comun': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'cuadrado-falta': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
+  'equivalen-no': [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
   'punto-comun': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'voltea-o-sigue': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'pinta-intervalo': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
@@ -14979,6 +15462,89 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['Word types', 'Mira el final.', 'pinta-tipos', 'Paint each word with its type.', { doc: PARK, plumas: ['adjective', 'adverb'], ...P(['ridiculous', 0, 'Look at the end of the word.'], ['surprisingly', 1, 'Look at the end of the word.'], ['happy', 0, 'Can a person be like this?']), bien: '-ous and -ly.' }, '«Ridiculous» y «happy» describen; «surprisingly» comenta la oración.', ['Fíjate en la que termina en -ly.', '«-ous» describe cosas.'], 'Ridiculous, happy: adjective. Surprisingly: adverb'],
     ['Links', 'Di qué hace la segunda idea.', 'bisagras', 'Put the word that joins. Sobran dos.', { doc: PARK, pares: [['The council is pleased.', 'some shops are not.'], ['Few umbrellas disappeared,', 'the council will do it with raincoats.']], ...F(['However,', 0, 'Two people feel differently.'], ['so', 1, 'The second idea is the result.'], ['For example,', null, 'No pair gives an example.'], ['because', null, 'No second idea gives the cause.']), bien: 'Contrast and result.' }, '«However» contrasta y «so» da el resultado.', ['En una pareja hay sentimientos opuestos.', 'En la otra, lo segundo sale de lo primero.'], 'However: contraste. So: resultado']],
     'Adjectives, an adverb, a contrast and a result.', 'Final de palabra y oficio del conector.');
+}
+;
+//#archivo js/gimnasio-icf-7.js
+// Gimnasio del Preicfes, séptimos mundos (spec 2026-11-25-preicfes-estructura): Fuerza y Élite por mundo. Va después de gimnasio-icf-6.js.
+{
+  const { F, T, P, S } = ICF;
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-i-${id}`, after, level, title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+  const D = (id, title, paras) => ({ id: `gym-icf-${id}`, title, paras });
+
+  reto('ecua-1', ['icf-ma-ecuaciones-1', 'icf-ma-ecuaciones-2'], 2, 'El marco y el cuadrado', 'Plantear y completar', 'Un taller hace un marco y completa un mosaico.', [
+    ['El marco', 'Medio borde es un ancho y un largo.', 'ancho-del-marco', 'El **largo** de un marco es **4 menos que el triple del ancho**, y su borde mide **48**. Mueve el ancho.', { k: 3, q: 4, P: 48, max: 12 }, '$4a - 4 = 24$: el ancho es 7 y el largo, 17.', ['Escribe el largo con la letra del ancho.', 'Suma los dos y compáralos con la mitad del borde.'], '24 + 4 = 28; 28 ÷ 4 = 7'],
+    ['El mosaico', 'La esquina es un cuadrado.', 'cuadrado-falta', 'Faltan cuadritos para completar el cuadrado: $x^2 + 8x + ?$', { a: 4, max: 20 }, 'Dos grupos de $4x$: la esquina es de 4 por 4, dieciséis.', ['Parte las tiras en dos grupos iguales.', 'La esquina mide lo mismo por los dos lados.'], '8 ÷ 2 = 4; 4 · 4 = 16']],
+    'Ancho 7; faltan 16 cuadritos.', 'Una letra para todo y una esquina cuadrada.');
+  reto('ecua-2', ['icf-ma-ecuaciones-3', 'icf-ma-ecuaciones-4'], 3, 'Recibos y bordes', 'Restar y decidir el borde', 'Compara dos recibos y pinta una desigualdad.', [
+    ['Los recibos', 'Lo igual desaparece.', 'resta-recibos', 'Los cuadros son **camisetas** y los círculos **gorras**. Compara los dos recibos.', { f: [[2, 2, 30], [2, 5, 48]], et: ['más gorras', 'más precio', 'una gorra', 'una camiseta'], metas: ['3', '18', '6', '9'], fichas: ['3', '18', '6', '9', '7', '78', '12'], mira: ['¿En cuántas gorras se diferencian?', '¿En cuánto se diferencian los totales?', 'Reparte lo que cuesta de más.', 'Quita las gorras y reparte entre las camisetas.'], trampas: { '1:78': 'Se restan los totales.' }, ok: '2 · 9 + 2 · 6 = 30 y 2 · 9 + 5 · 6 = 48.' }, 'Tres gorras más cuestan 18: 6 cada una; $30 - 12 = 18$, 9 por camiseta.', ['Las camisetas son iguales en los dos.', 'Con el precio de una gorra vuelve al primer recibo.'], '18 ÷ 3 = 6; (30 − 12) ÷ 2 = 9'],
+    ['El borde', 'Mira si se divide entre un negativo.', 'pinta-intervalo', 'Pinta todos los números que cumplen $7 - 2x \\le 1$.', { n: 7, m: -2, c: 1, b: 3, dir: 1, ab: 0, texto: 'x mayor o igual que 3' }, '$-2x \\le -6$: al dividir se voltea, $x \\ge 3$.', ['Quita primero el número que está solo.', 'Prueba el borde y un número de cada lado.'], '−2x ≤ −6; se voltea: x ≥ 3']],
+    'Gorra 6, camiseta 9; x mayor o igual que 3.', 'Resta lo igual y cuida el signo.');
+
+  const DETER = D('escaleras', 'Suba a pie', [
+    'Deberían apagar el ascensor de la alcaldía hasta el cuarto piso. Subir cuatro pisos al día mejora el corazón y ahorra energía.',
+    'Lo probé un mes: bajé dos kilos. También dejé de comer pan, así que no sé bien a qué se lo debo.',
+    'Me dirán que hay gente mayor o en silla de ruedas. Claro: para ellos habría llave. Los demás no tenemos excusa.']);
+  reto('evalua-1', ['icf-lc-evalua-1'], 2, 'Suba a pie', 'Supuesto y honestidad', 'Una propuesta corta. Busca lo que supone y lo que reconoce.', [
+    ['Dice o supone', 'Si puedes señalar la oración, lo dice.', 'genero-o-cita', '¿La autora lo **dice** o lo **supone**?', { doc: DETER, rot: ['lo dice', 'lo supone'], ...F(['Subir mejora el corazón', 0, '¿Encuentras la oración?'], ['Si apagan el ascensor, la gente subirá a pie en vez de no ir', 1, '¿Está escrito o hace falta?'], ['Bajó dos kilos', 0, '¿Encuentras la oración?']), bien: 'Lo supuesto no se escribe.' }, 'El corazón y los kilos están escritos; que la gente subirá se da por hecho.', ['Busca cada una en el texto.', 'Niega la que no encuentres: ¿se cae la idea?'], 'Corazón y kilos: dice. Que subirán: supone'],
+    ['El límite', 'Reconocer una duda da confianza.', 'comprueba-apuesta', 'Subraya la oración que **reconoce** que su prueba es débil.', { doc: DETER, nums: [2, 3], apuesta: 'No sabe a qué se debe.', ...S(['2.1'], { '2.0': 'Cuenta el resultado, sin dudar.', '3.0': 'Recoge una objeción de otros.', '3.1': 'Responde la objeción.', '3.2': 'Cierra con fuerza, sin dudar.' }), bien: 'El pan es otra causa posible.' }, 'Dejó el pan al mismo tiempo: no sabe a cuál se lo debe.', ['Busca la que duda de la causa.', 'Aparece un cambio en la comida.'], 'La del pan']],
+    'Supone que subirán; reconoce la duda del pan.', 'Niega el supuesto y busca la duda.');
+  const CREMA = D('crema', 'Crema milagrosa', [
+    'Anuncio: «El 95 % de las mujeres vio resultados. La usan las actrices. ¿Y usted qué espera?».',
+    'Letra gris: «Encuesta a 19 clientas, dos semanas. No se comparó con otra crema».',
+    'Una dermatóloga: «Casi cualquier crema humecta. Para decir que esta hace más, hay que compararla».']);
+  reto('evalua-2', ['icf-lc-evalua-2', 'icf-lc-evalua-3'], 3, 'Crema milagrosa', 'Alcance y quién habla', 'Un anuncio con letra gris. Mide lo que se puede creer.', [
+    ['Se sostiene o no', 'Cuántos, quiénes y comparados con qué.', 'genero-o-cita', '¿El enunciado **se sostiene** o **dice de más**?', { doc: CREMA, rot: ['se sostiene', 'dice de más'], ...F(['Casi todas las encuestadas dijeron ver resultados', 0, '¿Se preguntó justo eso?'], ['Es mejor que otras cremas', 1, '¿Se comparó con alguna?'], ['Sirve a todas las mujeres', 1, '¿A cuántas se les preguntó?']), bien: '19 clientas no son todas.' }, 'Las 19 respondieron; ni se comparó ni eran todas.', ['Lee con calma la letra gris.', 'Pregunta si se comparó con otra.'], 'Encuestadas: sí. Mejor y todas: de más'],
+    ['Quién lo dice', 'Mira qué gana cada uno.', 'voz-de-la-fuente', 'Ata cada dato a su voz.', { ayuda: 'Tira un hilo desde cada dato hasta su voz.', doc: CREMA, portadas: [['El anuncio', 'vende'], ['La letra gris', 'aclara'], ['La dermatóloga', 'explica']], ...T(['apela a la fama', 0, '¿Quién nombra actrices?'], ['dice a cuántas se preguntó', 1, '¿Dónde está el 19?'], ['pide una comparación', 2, '¿Quién dice qué haría falta?']), bien: 'Fama, número y método.' }, 'El anuncio usa la fama, la letra gris el número y la doctora pide comparar.', ['Busca a las actrices.', 'Una voz dice qué faltó hacer.'], 'Anuncio: fama. Gris: 19. Doctora: comparar']],
+    'Solo se sostiene lo de las 19; falta comparar.', 'Mide el alcance y mira quién habla.');
+
+  const MUNDO = D('mundo-linea', 'Cuatro fechas', [
+    'En 1789, los representantes del pueblo francés proclamaron derechos. La nobleza perdió sus privilegios.',
+    'En 1804, quienes habían sido esclavizados fundaron Haití.',
+    'En 1933 Hitler llegó al poder por vías legales, en medio del desempleo. En 1945 terminó la guerra y nació la ONU.',
+    'En 1989 cayó el Muro de Berlín.']);
+  reto('mundo-1', ['icf-sc-mundo-1', 'icf-sc-mundo-2'], 2, 'Cuatro fechas', 'Orden y deducción', 'Un resumen corto del mundo. Ordena y deduce.', [
+    ['El orden', 'Busca los años.', 'pasos-del-proceso', 'Ordena los hechos. El primero está en su puesto.', { doc: MUNDO, que: 'los hechos', de: 'De Francia a Berlín', fija: 1, ini: [0, 2, 3, 1], tiras: ['Derechos en Francia.', 'Se funda Haití.', 'Nace la ONU.', 'Cae el Muro.'], mira: ['', 'Ocurrió en 1804.', 'Ocurrió en 1945.', 'Ocurrió en 1989.'], bien: '1789, 1804, 1945 y 1989.' }, 'Francia, Haití, ONU y Muro.', ['Busca el año de cada uno.', 'La ONU nace al final de la guerra.'], 'Francia, Haití, ONU, Muro'],
+    ['Deducir', 'Une dos datos.', 'dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: MUNDO, nums: [1, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], ...F(['La nobleza perdió privilegios.', 0, 'Búscala en el párrafo 1.'], ['Una dictadura puede empezar sin golpe militar.', 1, '¿Por qué vías llegó Hitler?'], ['La ONU se fundó en Berlín.', 2, '¿Se dice dónde?']), luz: [[1, 'perdió sus privilegios'], [3, 'por vías legales']], bien: 'Legal no siempre es democrático.' }, 'La nobleza está escrita, la dictadura se deduce y el lugar no aparece.', ['Busca la oración exacta.', 'Piensa qué enseña lo de 1933.'], 'Nobleza: dice. Dictadura: se deduce']],
+    'Francia, Haití, ONU y Muro; una dictadura puede empezar con leyes.', 'Ordena por años y une datos.');
+  const BUS = D('bus', 'El puesto del bus', [
+    'En un pueblo, los del cerro debían subir al bus por la puerta de atrás. Una costurera se sentó adelante y la bajaron.',
+    'Los del cerro dejaron de usar el bus. Caminaron cuatro meses. La empresa casi quiebra y quitó la regla.',
+    'Un año después, el concejo prohibió esa clase de reglas en todo el municipio.']);
+  reto('mundo-2', ['icf-sc-mundo-3'], 3, 'El puesto del bus', 'Herramientas y efectos', 'Un caso corto. Di qué hicieron y qué lograron.', [
+    ['Qué fue', 'Nombra la herramienta.', 'pista-tipo', 'Ata cada nombre a su hecho.', { doc: BUS, lineas: ['subir por atrás', 'sentarse adelante', 'dejar de usar el bus', 'prohibir la regla'], ...T(['segregación', 0, '¿Cuál separa a un grupo?'], ['desobediencia', 1, '¿Cuál incumple una norma injusta?'], ['boicot', 2, '¿Cuál deja de usar un servicio?'], ['cambio legal', 3, '¿Cuál hace el concejo?']), bien: 'Cuatro nombres, cuatro hechos.' }, 'Subir atrás segrega, sentarse desobedece, dejar el bus boicotea y prohibir cambia la ley.', ['Mira quién hace cada cosa.', 'El concejo hace normas.'], 'Segregación, desobediencia, boicot, ley'],
+    ['Qué logró', 'El orden importa.', 'balanza-tesis', 'Tesis: «el boicot cambió la regla». ¿Qué hace cada dato?', { doc: BUS, tesis: 'El boicot cambió la regla', ...F(['La empresa casi quiebra y quitó la regla.', 0, '¿Qué pasó primero?'], ['La regla ya se había quitado antes del boicot.', 1, 'Si fuera cierto, ¿la cambió el boicot?'], ['La costurera cosía vestidos.', 2, '¿Habla de la regla?']), bien: 'Primero el boicot, después el cambio.' }, 'La quiebra la apoya; que fuera antes la debilitaría; los vestidos no pesan.', ['Mira qué pasó primero.', 'Un dato no tiene que ver.'], 'Quiebra: apoya. Antes: debilita']],
+    'Segregación, desobediencia, boicot y ley.', 'Nombra la herramienta y revisa el orden.');
+
+  const SALES = D('iones', 'Tres frascos', [
+    'Frasco 1: átomos con 12 protones, 12 neutrones y 10 electrones.',
+    'Frasco 2: átomos con 12 protones, 14 neutrones y 12 electrones.',
+    'Frasco 3: una sustancia que no conduce sólida, pero disuelta enciende un bombillo.']);
+  reto('atomo-1', ['icf-cn-atomo-1'], 2, 'Tres frascos', 'Qué cambia', 'Dos frascos de átomos. Compara sus partículas.', [
+    ['Ion o isótopo', 'Compara con el átomo de 12, 12 y 12.', 'genero-o-cita', 'Comparado con el átomo de 12 p, 12 n y 12 e, ¿qué es?', { doc: SALES, rot: ['un ion', 'un isótopo'], ...F(['El del frasco 1', 0, '¿Qué partícula cambió?'], ['El del frasco 2', 1, '¿Qué partícula cambió?']), bien: 'Electrones o neutrones.' }, 'En el 1 faltan electrones: ion. En el 2 hay más neutrones: isótopo.', ['Mira los electrones del frasco 1.', 'Mira los neutrones del frasco 2.'], '1: ion. 2: isótopo'],
+    ['Lo que se puede decir', 'Resta y compara.', 'ajusta-alcance', 'Mueve cada perilla hasta que diga lo que muestran los datos.', { doc: SALES, filas: [{ antes: 'Los frascos 1 y 2 tienen', topes: ['elementos distintos', 'el mismo elemento', 'gases'], va: 1 }, { antes: 'La carga del frasco 1 es', topes: ['−2', '0', '+2'], va: 2 }], mira: ['Compara los protones.', 'Hay más protones que electrones.'], luz: [[1, '12 protones'], [1, '10 electrones']], bien: 'Mismo elemento, carga +2.' }, 'Los dos tienen 12 protones; en el 1, 12 menos 10 da +2.', ['El elemento lo deciden los protones.', 'Resta electrones a protones.'], 'Mismo elemento; 12 − 10 = +2']],
+    'Un ion +2 y un isótopo del mismo elemento.', 'Protones: quién es. Electrones: carga. Neutrones: isótopo.');
+  reto('atomo-2', ['icf-cn-atomo-2'], 3, 'El tercer frasco', 'El enlace se nota', 'Una sustancia y sus propiedades. Deduce su enlace.', [
+    ['La hipótesis', 'Compara con una sal.', 'balanza-tesis', 'Hipótesis: «el frasco 3 tiene enlace iónico». ¿Qué hace cada dato?', { doc: SALES, tesis: 'El frasco 3 tiene enlace iónico', ...F(['Disuelto enciende el bombillo.', 0, '¿Hay iones que se muevan?'], ['No conduce sólido.', 0, '¿Están fijos los iones?'], ['Se funde a 40 °C.', 1, 'Si fuera cierto, ¿se parecería a una sal?']), bien: 'Fijo no conduce; suelto sí.' }, 'Conducir disuelto y no sólido la apoyan; fundirse a 40 la debilitaría.', ['Recuerda cuándo se mueven los iones.', 'Las sales se funden muy caliente.'], 'Bombillo y sólido: apoyan'],
+    ['Cada enlace', 'Entregar, compartir o soltar.', 'pinta-tipos', 'Pinta cada propiedad con su enlace.', { doc: SALES, plumas: ['iónico', 'metálico', 'covalente'], ...P(['Conduce sólido y se dobla.', 1, '¿Dónde hay un mar de electrones?'], ['Conduce disuelto, no sólido.', 0, '¿Dónde hay iones?'], ['No conduce ni disuelto.', 2, '¿Dónde no hay iones ni mar?']), bien: 'Mar, iones o nada.' }, 'El mar conduce sólido, los iones disueltos y lo compartido no.', ['El metal conduce siempre.', 'El azúcar no tiene iones.'], 'Metálico, iónico, covalente']],
+    'Enlace iónico: iones fijos en el sólido y libres al disolverse.', 'Electricidad y fusión delatan el enlace.');
+
+  const LIGHTS = D('lights', 'The house with no lights', [
+    'Every evening the lights of the old house come on at seven. Last Friday they didn\'t. Miss Rojas, who lives opposite, put on her coat and crossed the street with a pot of soup.',
+    'Mr Vega opened the door with a candle in his hand. "I am saving electricity," he said. He didn\'t look at her. On the table there were three unopened envelopes from the power company.',
+    'She put the soup on the table, on top of the envelopes. "I\'ve made too much again," she said. "And I need someone to help me eat it. Every Friday, if you can."']);
+  reto('infer-1', ['icf-en-inferencia-1'], 2, 'The house with no lights', 'Gestos y pistas', 'A short story. Read the actions.', [
+    ['Deduce', 'Une dos datos.', 'dice-deduce', 'Does it say it, can you deduce it, or is it not there?', { doc: LIGHTS, nums: [2, 3], rot: ['it says so', 'you can deduce it', 'it does not say'], ...F(['He opened the door with a candle.', 0, 'Búscala en el párrafo 2.'], ['He hasn\'t paid the electricity.', 1, '¿Qué hay sobre la mesa?'], ['She is his sister.', 2, '¿Se dice qué son?']), luz: [[2, 'a candle'], [2, 'three unopened envelopes']], bien: 'Envelopes tell the truth.' }, 'La vela está, la deuda se deduce por los sobres y el parentesco no.', ['Busca la oración de la vela.', 'Piensa de quién son los sobres.'], 'Candle: dice. Electricity: se deduce'],
+    ['Feelings', 'Pregunta por qué haría eso.', 'pista-tipo', 'Match each feeling with its action.', { doc: LIGHTS, lineas: ['He didn\'t look at her.', 'She crossed the street.', 'She said it was too much soup.'], ...T(['ashamed', 0, '¿Quién evita una mirada?'], ['worried', 1, '¿Quién fue a ver qué pasaba?'], ['kind, without hurting him', 2, '¿Cuál esconde una ayuda?']), bien: 'She helps without saying it.' }, 'No mirar es pena, cruzar es preocupación y la sopa, bondad con tacto.', ['Piensa por qué alguien no mira.', 'La excusa de la sopa esconde algo.'], 'Ashamed, worried, kind']],
+    'He hasn\'t paid; she helps without hurting him.', 'Señala la pista y lee el gesto.');
+  const FOUNT = D('fountain', 'Save the fountain?', [
+    'The fountain has been broken for ten years. I think the council should repair it, because children need a place to play.',
+    'Mr Cruz says that it would cost 30 million pesos. He is right. But last year the council spent 45 on fireworks that lasted nine minutes.',
+    'My neighbour used to disagree with me. Then she saw the photos of 1960, and she changed her mind.']);
+  reto('infer-2', ['icf-en-inferencia-2'], 3, 'Save the fountain?', 'Hechos, razones y cambios', 'A short opinion text. Separate facts and reasons.', [
+    ['Fact or opinion', '¿Se comprueba o se discute?', 'genero-o-cita', 'Is it a **fact** or an **opinion**?', { doc: FOUNT, rot: ['fact', 'opinion'], ...F(['The council should repair it', 1, '¿Se comprueba o se discute?'], ['The fireworks lasted nine minutes', 0, '¿Se comprueba o se discute?'], ['It has been broken for ten years', 0, '¿Se comprueba o se discute?']), bien: 'Should gives an opinion.' }, 'Los minutos y los años se comprueban; «should» opina.', ['Busca la palabra «should».', 'Los números se comprueban.'], 'Should: opinion. Números: fact'],
+    ['For or against', 'Supón cierto cada dato.', 'balanza-tesis', 'Opinion: "the council can pay for it". What does each fact do?', { doc: FOUNT, tesis: 'The council can pay for it', ...F(['It spent 45 million on fireworks.', 0, '¿Muestra que hay dinero?'], ['The fireworks were paid by a company.', 1, 'Si fuera cierto, ¿gastó el concejo?'], ['The photos are from 1960.', 2, '¿Habla de dinero?']), bien: 'For, against, nothing.' }, 'Los 45 la apoyan; que pagara otro la debilita; las fotos no pesan.', ['Compara los dos gastos del texto.', 'Un dato no habla de dinero.'], 'Fireworks: apoya. Company: debilita']],
+    'Facts have numbers; the money argument depends on who paid.', 'Comprueba, razona y mira quién pagó.');
 }
 ;
 //#archivo js/inicio.js
