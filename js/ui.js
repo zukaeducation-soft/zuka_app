@@ -25,6 +25,7 @@ function tex(s) {
 
 const svg = (d, fill) => `<svg class="i${fill ? ' f' : ''}" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
 const ICON = {
+  school: svg('<path d="M3 21h18M5 21V9l7-5 7 5v12M9.5 21v-6h5v6M9 11h.01M15 11h.01"/>'),
   learn: svg('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'),
   clips: svg('<rect x="5" y="2" width="14" height="20" rx="3"/><path d="M10 9l5 3-5 3z"/>'),
   calendar: svg('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M8 14h3M8 17h6"/>'),

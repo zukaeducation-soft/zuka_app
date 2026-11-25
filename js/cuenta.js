@@ -61,7 +61,7 @@ const cuentaEsAdmin = () => !!(Cuenta.user && Cuenta.perfil && Cuenta.perfil.rol
 // interruptor «Modo revisión» de Ajustes decide).
 function cuentaRol() {
   if (SIN_CANDADOS) return;
-  S.unlockAll = cuentaEsAdmin();
+  S.unlockAll = cuentaEsAdmin() || (Cuenta.perfil || {}).rol === 'gestor';   // quien enseña mira cualquier lección, sin vidas ni orden
   save();
 }
 
@@ -77,7 +77,7 @@ function authCerrar() {
   const el = $('#auth'), pz = $('#landing');   // también la presentación (js/presentacion.js), si seguía abierta
   if (!el && !pz) return;
   el?.remove(); if (pz) presentacionCerrar(); else if (typeof applyTheme === 'function') applyTheme();
-  if (!datosFaltan(Cuenta.perfil, Cuenta.accesos) && typeof tourShouldStart === 'function' && tourShouldStart(S)) startTour();   // el recorrido de bienvenida esperaba (los datos van antes)
+  if (!datosFaltan(Cuenta.perfil, Cuenta.accesos) && (Cuenta.perfil || {}).rol !== 'gestor' && typeof tourShouldStart === 'function' && tourShouldStart(S)) startTour();   // el recorrido de bienvenida esperaba (los datos van antes)
 }
 const waBoton = (texto, rotulo, cls = 'ghost') => {
   const u = waLink(Cuenta.ajustes.whatsapp, texto);
@@ -165,7 +165,7 @@ async function entrarConCodigo(codigo) {
 const CURSOS_LISTOS = ['algebra', 'trig'];
 try { Cuenta.cursos = JSON.parse(localStorage.getItem('zuka-cursos')) || null; } catch (e) { /* sin copia */ }
 const cursoBorrador = c => (Cuenta.cursos ? Cuenta.cursos[c.id] !== true : !CURSOS_LISTOS.includes(c.id));
-const cursoVisible = c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || (!cuentaDeColegio() && !cursoBorrador(c));
+const cursoVisible = c => (portalMios() ? c.id === 'preicfes' : SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || (!cuentaDeColegio() && !cursoBorrador(c)));
 // «Mis cursos», el perfil y las asesorías: solo lo comprado (pedido del 2026-11-24). La prueba se abre desde Inicio.
 const cursoComprado = (c, alDia = false) => SIN_CANDADOS || cuentaEsAdmin() || comprado(Cuenta.accesos, c.id, alDia);
 const accesoCursoFila = id => (Cuenta.accesos || []).find(a => a.curso === id);
@@ -255,7 +255,7 @@ async function cuentaSesion(ev, session) {
   uso.seg = 0; uso.lec = 0; uso.ans = S.answered; uso.ok = S.correct; uso.t = Date.now();
   if (await cuentaSyncProgreso(uidPrevio)) await estadoSync();
   await Promise.all([tiendaCarga().catch(() => {}), asesoriasCarga().catch(() => {})]);
-  cuentaRepinta();
+  cuentaRepinta(); portalAbre();
   datosPide();
 }
 // Si la primera sincronización falló (sin red), se vuelve a intentar.
@@ -291,11 +291,11 @@ async function cuentaPerfil() {
   if (Cuenta.perfil && Cuenta.perfil.id !== uid) Cuenta.inst = { nombres: [], metas: [] };   // otra cuenta
   const deInst = ins.data ? ins.data.accesos : (Cuenta.perfil?.id === uid ? Cuenta.accesos || [] : []).filter(a => a.institucion);
   if (acc.data) Cuenta.accesos = instJunta(acc.data, deInst);
-  if (ins.data) Cuenta.inst = { nombres: ins.data.instituciones || [], metas: ins.data.metas || [], simulacros: ins.data.simulacros || [], avisos: ins.data.avisos || [] };
+  if (ins.data) Cuenta.inst = { nombres: ins.data.instituciones || [], metas: ins.data.metas || [], simulacros: ins.data.simulacros || [], avisos: ins.data.avisos || [], equipo: ins.data.equipo || [] };
   if (!cod.error) Cuenta.codigo = cod.data || '';
   if (data) {
     Cuenta.perfil = data;
-    if (data.rol === 'gestor' && $('#auth')) location.href = 'instituciones/portal/';   // acaba de entrar con su código: va a su portal
+    if (data.rol === 'gestor' && $('#auth') && !datosAbierta && !Clave.vista) portalPend = true;   // acaba de entrar con su código: va a su portal (js/portal.js)
     if (!S.name) S.name = primerNombre(data);
     cuentaCache(); colegioMarca();
   }
@@ -538,7 +538,7 @@ function cuentaCard() {
   }
   const p = Cuenta.perfil || {}, admin = p.rol === 'admin', mios = Cuenta.accesos || [], gestor = p.rol === 'gestor', de = Cuenta.inst.nombres;
   return `<section class="card acct-card"><div class="acct-head"><h3>${admin ? 'Administración' : 'Mi plan'}</h3></div>
-    ${gestor ? '<p class="muted">Esta es una cuenta de gestión. En el portal registras a tus estudiantes y sigues su avance.</p><a class="btn brand" href="instituciones/portal/">Abrir el portal</a>' : de.length ? `<p class="acct-inst">Estudias con <b>${esc(de.join(' y '))}</b>. Sus docentes ven tu avance y tu tiempo de estudio.</p>` : ''}
+    ${gestor ? '<p class="muted">Esta es una cuenta de gestión. En el portal registras a tus estudiantes y sigues su avance.</p><button class="btn brand" type="button" data-acct="portal">Abrir el portal</button>' : de.length ? `<p class="acct-inst">Estudias con <b>${esc(de.join(' y '))}</b>. Sus docentes ven tu avance y tu tiempo de estudio.</p>` : ''}
     ${admin ? '<p class="muted">Tienes todo el contenido abierto. Entra directo a lo que necesites:</p>'
     : mios.length ? `<ul class="plan-cursos">${mios.map(x => {
       const a = accesoCurso(mios, x.curso);
@@ -555,11 +555,11 @@ async function cuentaSalir() {
   cuentaEnvia(); usoEnvia();
   await estadoEnvia().catch(() => {});   // nada de lo ganado se queda sin subir
   if (Cuenta.sb) await Cuenta.sb.auth.signOut({ scope: 'local' }).catch(() => {});
-  Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.inst = { nombres: [], metas: [] }; Cuenta.codigo = ''; tiendaFuera(); cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
+  portalVe(false); Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.inst = { nombres: [], metas: [] }; Cuenta.codigo = ''; tiendaFuera(); cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
   if (!SIN_CANDADOS) authScreen();
 }
 function cuentaBind(root) {
-  const acts = { entrar: openEntrar, tienda: () => openTienda(), canje: openCanje, datos: () => datosScreen(false),
+  const acts = { portal: () => go('portal'), entrar: openEntrar, tienda: () => openTienda(), canje: openCanje, datos: () => datosScreen(false),
     comprar: b => openComprar(b.dataset.curso),
     copia: () => navigator.clipboard?.writeText(muestraCodigo(Cuenta.codigo)).then(() => toast('Código copiado.'), () => toast(muestraCodigo(Cuenta.codigo))),
     salir: () => ask({ title: '¿Cerrar sesión?', text: Cuenta.codigo ? `Para volver necesitarás tu código: ${muestraCodigo(Cuenta.codigo)}. Guárdalo antes.` : 'Tu avance queda guardado en tu cuenta.', ok: 'Cerrar sesión', cancel: 'Quedarme' })

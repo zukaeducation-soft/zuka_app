@@ -13417,6 +13417,7 @@ function setupBack() {
     if (!e.state) { history.replaceState({ zuka: 'top' }, '', location.pathname + location.search); return; }
     if (typeof presentacionAtras === 'function' && presentacionAtras()) { cover(); return; }   // js/presentacion.js
     if (typeof tiendaAtras === 'function' && tiendaAtras()) { cover(); return; }   // js/tienda.js y js/lector.js
+    if (typeof portalAtras === 'function' && portalAtras()) { cover(); return; }   // js/portal.js
     const step = backStep({
       exitAsk, tab, dialog: dialogOpen(), tour: tourOpen(), guide: typeof guideOpen !== 'undefined' && !!guideOpen, sheet: $('#sheet').classList.contains('open'),
       lesson: !!lessonClose, world: (tab === 'learn' && (!!openWorld || !!openBlock)) || (tab === 'profile' && !!profileSub),   // Ajustes vuelve al Perfil por su [data-back]
@@ -14652,18 +14653,20 @@ function gymWarmup(c, ui, done, unlockAll, n = 0) {
     });
   }
   return {
-    id: `cal-${c.id}-${ui}`, level: 1, warm: true, ui, after: u.lessons.map(l => l.id), open: steps.length > 0,
+    id: gymCal(c, ui), level: 1, warm: true, ui, after: u.lessons.map(l => l.id), open: steps.length > 0,
     title: `Calentamiento · ${w.name}`, strategy: 'Recuerda la idea del video antes de mover nada.',
     problem: 'Tres juegos de las lecciones que ya hiciste en este mundo, para entrar en calor antes de los retos.',
     answer: '', wrap: 'Ya calentaste. Cuando quieras, sube a Fuerza: retos más largos con el entrenador a tu lado.', steps,
   };
 }
+// El número del mundo en el curso entero: un docente ve el curso recortado (js/portal.js) y la marca debe ser la misma.
+function gymCal(c, ui) { return `cal-${c.id}-${c.entero ? c.entero.units.indexOf(c.units[ui]) : ui}`; }
 // Un reto guiado o un calentamiento por su id.
 function gymFind(c, id, done, unlockAll, mine) {
   if (done === undefined && typeof S !== 'undefined') ({ done, unlockAll, gym: mine } = S);
   mine ||= {};
   const m = /^cal-.+-(\d+)$/.exec(id);
-  if (m) return c.units[+m[1]] ? gymWarmup(c, +m[1], done, unlockAll, mine[id]?.n || 0) : undefined;
+  if (m) { const ui = c.units.indexOf((c.entero || c).units[+m[1]]); return ui >= 0 ? gymWarmup(c, ui, done, unlockAll, mine[id]?.n || 0) : undefined; }
   return GYM_RETOS.find(r => r.id === id);
 }
 // Mundos del componente de ui hasta ui o hasta el último donde ya hizo alguna lección (si se adelantó), en orden.
@@ -14675,7 +14678,7 @@ function gymUpTo(c, ui, done = {}) {
 // Tu nivel: calentar el mundo, luego el primer reto de Fuerza sin superar, luego Élite; todo superado: calentar.
 function gymRecommend(c, ui, done, unlockAll, mine = {}) {
   const near = gymUpTo(c, ui, done || {}).reverse();
-  const warmOf = i => gymWarmup(c, i, done, unlockAll, mine[`cal-${c.id}-${i}`]?.n || 0);
+  const warmOf = i => gymWarmup(c, i, done, unlockAll, mine[gymCal(c, i)]?.n || 0);
   const mineW = warmOf(ui);
   // si su mundo aún no tiene lecciones hechas, el calentamiento abierto más cercano
   const warm = mineW.open ? mineW : near.map(warmOf).find(w => w.open) || mineW;
@@ -14713,7 +14716,7 @@ function renderGym() {
   gymFocus = { course: c.id, ui, lvl: gymFocus?.course === c.id && gymFocus.lvl ? gymFocus.lvl : rec.level, ver: (gymFocus?.course === c.id && gymFocus.ver) || 'todos' };
   const u = c.units[ui], blockName = c.blocks?.find(b => b.id === u.block)?.name;
   const worlds = gymUpTo(c, ui, S.done || {}), block = c.units.map((x, i) => i).filter(i => c.units[i].block === u.block);
-  const warms = worlds.map(i => gymWarmup(c, i, S.done, S.unlockAll, mine[`cal-${c.id}-${i}`]?.n || 0)).filter(w => w.open || w.ui === ui);
+  const warms = worlds.map(i => gymWarmup(c, i, S.done, S.unlockAll, mine[gymCal(c, i)]?.n || 0)).filter(w => w.open || w.ui === ui);
   const groups = gymRetos(c).filter(g => block.includes(g.ui));
   const byLevel = lv => (lv === 1 ? warms.slice().reverse() : groups.flatMap(g => g.retos).filter(r => r.level === lv));
   const isOpen = r => (r.warm ? r.open : gymOpen(r, S.done, S.unlockAll));
@@ -17499,7 +17502,7 @@ const cuentaEsAdmin = () => !!(Cuenta.user && Cuenta.perfil && Cuenta.perfil.rol
 // interruptor «Modo revisión» de Ajustes decide).
 function cuentaRol() {
   if (SIN_CANDADOS) return;
-  S.unlockAll = cuentaEsAdmin();
+  S.unlockAll = cuentaEsAdmin() || (Cuenta.perfil || {}).rol === 'gestor';   // quien enseña mira cualquier lección, sin vidas ni orden
   save();
 }
 
@@ -17515,7 +17518,7 @@ function authCerrar() {
   const el = $('#auth'), pz = $('#landing');   // también la presentación (js/presentacion.js), si seguía abierta
   if (!el && !pz) return;
   el?.remove(); if (pz) presentacionCerrar(); else if (typeof applyTheme === 'function') applyTheme();
-  if (!datosFaltan(Cuenta.perfil, Cuenta.accesos) && typeof tourShouldStart === 'function' && tourShouldStart(S)) startTour();   // el recorrido de bienvenida esperaba (los datos van antes)
+  if (!datosFaltan(Cuenta.perfil, Cuenta.accesos) && (Cuenta.perfil || {}).rol !== 'gestor' && typeof tourShouldStart === 'function' && tourShouldStart(S)) startTour();   // el recorrido de bienvenida esperaba (los datos van antes)
 }
 const waBoton = (texto, rotulo, cls = 'ghost') => {
   const u = waLink(Cuenta.ajustes.whatsapp, texto);
@@ -17603,7 +17606,7 @@ async function entrarConCodigo(codigo) {
 const CURSOS_LISTOS = ['algebra', 'trig'];
 try { Cuenta.cursos = JSON.parse(localStorage.getItem('zuka-cursos')) || null; } catch (e) { /* sin copia */ }
 const cursoBorrador = c => (Cuenta.cursos ? Cuenta.cursos[c.id] !== true : !CURSOS_LISTOS.includes(c.id));
-const cursoVisible = c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || (!cuentaDeColegio() && !cursoBorrador(c));
+const cursoVisible = c => (portalMios() ? c.id === 'preicfes' : SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || (!cuentaDeColegio() && !cursoBorrador(c)));
 // «Mis cursos», el perfil y las asesorías: solo lo comprado (pedido del 2026-11-24). La prueba se abre desde Inicio.
 const cursoComprado = (c, alDia = false) => SIN_CANDADOS || cuentaEsAdmin() || comprado(Cuenta.accesos, c.id, alDia);
 const accesoCursoFila = id => (Cuenta.accesos || []).find(a => a.curso === id);
@@ -17693,7 +17696,7 @@ async function cuentaSesion(ev, session) {
   uso.seg = 0; uso.lec = 0; uso.ans = S.answered; uso.ok = S.correct; uso.t = Date.now();
   if (await cuentaSyncProgreso(uidPrevio)) await estadoSync();
   await Promise.all([tiendaCarga().catch(() => {}), asesoriasCarga().catch(() => {})]);
-  cuentaRepinta();
+  cuentaRepinta(); portalAbre();
   datosPide();
 }
 // Si la primera sincronización falló (sin red), se vuelve a intentar.
@@ -17729,11 +17732,11 @@ async function cuentaPerfil() {
   if (Cuenta.perfil && Cuenta.perfil.id !== uid) Cuenta.inst = { nombres: [], metas: [] };   // otra cuenta
   const deInst = ins.data ? ins.data.accesos : (Cuenta.perfil?.id === uid ? Cuenta.accesos || [] : []).filter(a => a.institucion);
   if (acc.data) Cuenta.accesos = instJunta(acc.data, deInst);
-  if (ins.data) Cuenta.inst = { nombres: ins.data.instituciones || [], metas: ins.data.metas || [], simulacros: ins.data.simulacros || [], avisos: ins.data.avisos || [] };
+  if (ins.data) Cuenta.inst = { nombres: ins.data.instituciones || [], metas: ins.data.metas || [], simulacros: ins.data.simulacros || [], avisos: ins.data.avisos || [], equipo: ins.data.equipo || [] };
   if (!cod.error) Cuenta.codigo = cod.data || '';
   if (data) {
     Cuenta.perfil = data;
-    if (data.rol === 'gestor' && $('#auth')) location.href = 'instituciones/portal/';   // acaba de entrar con su código: va a su portal
+    if (data.rol === 'gestor' && $('#auth') && !datosAbierta && !Clave.vista) portalPend = true;   // acaba de entrar con su código: va a su portal (js/portal.js)
     if (!S.name) S.name = primerNombre(data);
     cuentaCache(); colegioMarca();
   }
@@ -17976,7 +17979,7 @@ function cuentaCard() {
   }
   const p = Cuenta.perfil || {}, admin = p.rol === 'admin', mios = Cuenta.accesos || [], gestor = p.rol === 'gestor', de = Cuenta.inst.nombres;
   return `<section class="card acct-card"><div class="acct-head"><h3>${admin ? 'Administración' : 'Mi plan'}</h3></div>
-    ${gestor ? '<p class="muted">Esta es una cuenta de gestión. En el portal registras a tus estudiantes y sigues su avance.</p><a class="btn brand" href="instituciones/portal/">Abrir el portal</a>' : de.length ? `<p class="acct-inst">Estudias con <b>${esc(de.join(' y '))}</b>. Sus docentes ven tu avance y tu tiempo de estudio.</p>` : ''}
+    ${gestor ? '<p class="muted">Esta es una cuenta de gestión. En el portal registras a tus estudiantes y sigues su avance.</p><button class="btn brand" type="button" data-acct="portal">Abrir el portal</button>' : de.length ? `<p class="acct-inst">Estudias con <b>${esc(de.join(' y '))}</b>. Sus docentes ven tu avance y tu tiempo de estudio.</p>` : ''}
     ${admin ? '<p class="muted">Tienes todo el contenido abierto. Entra directo a lo que necesites:</p>'
     : mios.length ? `<ul class="plan-cursos">${mios.map(x => {
       const a = accesoCurso(mios, x.curso);
@@ -17993,11 +17996,11 @@ async function cuentaSalir() {
   cuentaEnvia(); usoEnvia();
   await estadoEnvia().catch(() => {});   // nada de lo ganado se queda sin subir
   if (Cuenta.sb) await Cuenta.sb.auth.signOut({ scope: 'local' }).catch(() => {});
-  Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.inst = { nombres: [], metas: [] }; Cuenta.codigo = ''; tiendaFuera(); cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
+  portalVe(false); Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.inst = { nombres: [], metas: [] }; Cuenta.codigo = ''; tiendaFuera(); cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
   if (!SIN_CANDADOS) authScreen();
 }
 function cuentaBind(root) {
-  const acts = { entrar: openEntrar, tienda: () => openTienda(), canje: openCanje, datos: () => datosScreen(false),
+  const acts = { portal: () => go('portal'), entrar: openEntrar, tienda: () => openTienda(), canje: openCanje, datos: () => datosScreen(false),
     comprar: b => openComprar(b.dataset.curso),
     copia: () => navigator.clipboard?.writeText(muestraCodigo(Cuenta.codigo)).then(() => toast('Código copiado.'), () => toast(muestraCodigo(Cuenta.codigo))),
     salir: () => ask({ title: '¿Cerrar sesión?', text: Cuenta.codigo ? `Para volver necesitarás tu código: ${muestraCodigo(Cuenta.codigo)}. Guárdalo antes.` : 'Tu avance queda guardado en tu cuenta.', ok: 'Cerrar sesión', cancel: 'Quedarme' })
@@ -20063,6 +20066,76 @@ async function simRevisar(s, boton) {
   ov.querySelectorAll('[data-les]').forEach(b => { b.onclick = () => { const f = findLesson(b.dataset.les); cierra(); if (f && isUnlocked(f.c, f.l)) startLesson(f.c, f.l); else openCourse('preicfes'); }; });
 }
 ;
+//#archivo js/portal.js
+// El portal de la institución dentro de la app (spec 2026-11-25-portal-en-la-app): es una sección más del menú («Portal»). Se abre en un
+// marco propio, a pantalla completa, que trae el mismo menú con sus opciones; desde él se vuelve a Inicio, Mis cursos o Tú sin recargar.
+// También recorta, para un docente responsable, los componentes del Preicfes que no dirige.
+const enEquipo = () => Cuenta.inst.equipo || [];
+const portalPuede = () => !!Cuenta.user && ((Cuenta.perfil || {}).rol === 'gestor' || enEquipo().length > 0);
+// Componentes de un docente responsable; null: no se recorta (gestor, administración, estudiante o docente sin asignar). Pura.
+function portalComps(perfil, equipo) {
+  if (!perfil || perfil.rol !== 'gestor' || !equipo.length || equipo.some(e => e.papel !== 'docente')) return null;
+  const cs = [...new Set(equipo.flatMap(e => e.componentes || []))];
+  return cs.length ? cs : null;
+}
+const portalMios = () => (Cuenta.user ? portalComps(Cuenta.perfil, enEquipo()) : null);
+// Deja en el curso solo esos componentes (y lo devuelve entero si cambia la cuenta): así todas las pantallas lo respetan.
+let portalClave = '';
+function portalRecorta(cs = portalMios(), c = COURSES.find(x => x.id === 'preicfes')) {
+  const clave = cs ? [...cs].sort().join() : '';
+  if (!c || !c.blocks || clave === portalClave) return;
+  portalClave = clave;
+  if (!c.entero) c.entero = { blocks: c.blocks, units: c.units };
+  c.blocks = cs ? c.entero.blocks.filter(b => cs.includes(b.id)) : c.entero.blocks;
+  c.units = cs ? c.entero.units.filter(u => cs.includes(u.block)) : c.entero.units;
+  if (typeof openWorld !== 'undefined') { openWorld = null; openBlock = null; }
+  if (typeof gymFocus !== 'undefined') gymFocus = null;
+}
+function portalMarca() {
+  const b = document.querySelector('#tabbar [data-tab="portal"]'); if (b) b.hidden = !portalPuede();
+  portalRecorta();
+  const f = document.querySelector('#portal'); if (f && f.dataset.de !== (Cuenta.user || {}).id) f.remove();   // otra cuenta: nada de la anterior
+}
+// El marco solo tapa la app cuando el portal ya está listo: si no carga, la app y su menú siguen ahí.
+const portalListo = f => !!f && f.dataset.listo === '1';
+function portalVe(si) {
+  const f = document.querySelector('#portal'), ve = si && portalListo(f);
+  document.body.classList.toggle('en-portal', ve); $('#app').inert = ve;
+  if (f) f.hidden = portalListo(f) ? !si : false;
+  if (f && !si && !portalListo(f)) f.remove();   // se fue antes de que cargara
+}
+function portalDice(html) { view.innerHTML = `<div class="portal-espera">${html}</div>`; const b = $('[data-otra]', view); if (b) b.onclick = renderPortal; }
+function portalFalla(t) { document.querySelector('#portal')?.remove(); if (tab !== 'portal') return; portalVe(false); portalDice(`<p>${esc(t)}</p><button class="btn" type="button" data-otra>Reintentar</button>`); }
+function renderPortal() {
+  let f = document.querySelector('#portal');
+  if (f && !portalListo(f)) { f.remove(); f = null; }
+  if (f) { view.innerHTML = ''; portalVe(true); f.focus(); try { f.contentWindow.portalRefresca(); } catch (e) { /* sigue con lo que tiene */ } return; }
+  if (!navigator.onLine) return portalFalla('Para abrir el portal necesitas conexión.');
+  portalDice('<p>Abriendo tu portal…</p>');
+  f = document.createElement('iframe'); f.id = 'portal'; f.title = 'Portal de tu institución'; f.src = 'instituciones/portal/'; f.dataset.de = Cuenta.user.id;
+  document.documentElement.appendChild(f);   // fuera de <body>, que en computador lleva zoom: el portal trae el suyo
+  setTimeout(() => { if (f.isConnected && !portalListo(f)) portalFalla('El portal tarda en responder.'); }, 20000);
+}
+// Lo que el portal le pide a la app (mismo origen).
+if (typeof window !== 'undefined') {
+  window.zukaIr = t => { if (!['home', 'cursos', 'profile'].includes(t)) return; profileSub = null; go(t); document.querySelector(`#tabbar [data-tab="${t}"]`)?.focus({ preventScroll: true }); };
+  window.zukaListo = () => { const f = document.querySelector('#portal'); if (!f) return; f.dataset.listo = '1'; if (tab === 'portal') { view.innerHTML = ''; portalVe(true); f.focus(); } else f.hidden = true; };
+  window.zukaFalla = portalFalla;
+  try { localStorage.setItem('zuka-portal', '1'); } catch (e) { /* el portal se queda en su página */ }   // esta app ya lo trae dentro
+}
+// Atrás del celular con el portal abierto: lo consume el portal si tiene algo que cerrar o una vista anterior (js/back.js).
+function portalAtras() { const f = document.querySelector('#portal'); if (tab !== 'portal' || !portalListo(f)) return false; try { return f.contentWindow.portalVuelve(); } catch (e) { return false; } }
+// Al entrar con su código, o al llegar de /instituciones/portal, se abre el portal.
+let portalPend = typeof location !== 'undefined' && /[?&]portal\b/.test(location.search || '');
+function portalAbre() {
+  if (!portalPend || !portalPuede()) return;
+  // Nada se tapa: ni una lección, ni una hoja, ni los datos o la contraseña que se están escribiendo.
+  if (lessonClose || Clave.vista || datosAbierta || $('#auth') || $('#sheet').classList.contains('open') || document.querySelector('.dialog, .tour')) { setTimeout(portalAbre, 1500); return; }
+  portalPend = false;
+  try { history.replaceState(history.state, '', location.pathname); } catch (e) { /* da igual */ }
+  go('portal');
+}
+;
 //#archivo js/perfil.js
 // Tú (spec 2026-11-25-tu): carné que se voltea, nivel, meta que se arrastra, mapa de actividad y logros. Lo arma renderProfile
 // (js/app.js); aquí, las cuentas puras (tests/perfil.test.js) y cada pieza.
@@ -20349,20 +20422,22 @@ let tab = 'learn', cleanup = null;
 let lessonClose = null;
 function go(t) {
   if (['tienda', 'tutorias'].includes(t) && cuentaDeColegio()) t = 'home';   // un estudiante de colegio no compra ni separa asesorías
+  if (t === 'portal' && !portalPuede()) t = 'home';
+  if (t !== 'portal') portalVe(false);
   cleanup?.(); cleanup = null;
   tab = t;
   document.body.dataset.tab = t;
   // La vista de un curso ('learn') no tiene botón propio: se marca «Mis cursos» (spec 2026-11-19-inicio-mis-cursos).
   document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === (t === 'learn' || t === 'gym' ? 'cursos' : t)));
   renderTop();
-  ({ home: renderHome, cursos: renderMyCourses, learn: renderLearn, gym: renderGym, clips: renderClips, tienda: renderTienda, tutorias: renderTutorias, profile: renderProfile })[t]();
+  ({ home: renderHome, cursos: renderMyCourses, learn: renderLearn, gym: renderGym, clips: renderClips, tienda: renderTienda, portal: renderPortal, tutorias: renderTutorias, profile: renderProfile })[t]();
 }
 
 // Números largos de la barra de arriba: 12450 → «12.4 k», para que quepa el nombre del curso.
 const shortNum = n => (n >= 10000 ? `${Math.floor(n / 100) / 10} k` : String(n));
 function renderTop() {
   syncHearts();
-  document.body.classList.toggle('de-colegio', cuentaDeColegio());
+  document.body.classList.toggle('de-colegio', cuentaDeColegio()); portalMarca();
   // Solo racha y experiencia, más grandes; sin la marca ni las vidas (las vidas se ven dentro de la lección).
   // Pedido del 2026-11-19: la app ocupa la pantalla de arriba abajo (spec 2026-11-19-pantalla-completa).
   $('#topbar').innerHTML = `<button class="tb-logo-d" type="button" data-home aria-label="Ir al inicio">${zukaWord()}</button>
@@ -21126,7 +21201,7 @@ function renderSettings() {
 
 // ---- arranque ----
 document.querySelectorAll('#tabbar button').forEach(b => {
-  b.insertAdjacentHTML('afterbegin', ICON[{ home: 'learn', cursos: 'book', gym: 'gym', clips: 'clips', tienda: 'bag', tutorias: 'calendar' }[b.dataset.tab] || 'user']);
+  b.insertAdjacentHTML('afterbegin', ICON[{ home: 'learn', cursos: 'book', gym: 'gym', clips: 'clips', tienda: 'bag', tutorias: 'calendar', portal: 'school' }[b.dataset.tab] || 'user']);
   b.onclick = () => {
     if (lessonClose) return lessonClose(b.dataset.tab);
     if (tab === 'learn' && b.dataset.tab === 'learn') { if (openWorld) openWorld = null; else openBlock = null; }   // tocar Aprender otra vez: un paso arriba (mundo → mapa → componentes)

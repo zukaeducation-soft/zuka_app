@@ -43,17 +43,22 @@ async function cambia(a, p, dice) { const r = await api(a, p); await carga(); ma
 
 // ---------- entrada ----------
 async function entrar() {
+  if (!DEMO && !sb && MARCO) return falla('No se pudo cargar el portal. Revisa tu conexión.');
   if (!DEMO && !sb) { view.innerHTML = '<p class="pn-state bad">No se pudo cargar el portal. Revisa tu conexión y recarga.</p>'; return; }
-  if (!DEMO) { const { data: { session } } = await sb.auth.getSession(); if (!session) return login(); }
+  if (!DEMO) { const { data: { session } } = await sb.auth.getSession(); if (!session) return MARCO ? falla('Tu sesión se cerró. Vuelve a entrar desde Tú.') : login(); }
   try { await carga(); } catch (e) {
     const sin = e.code === '42501';
+    if (MARCO) return falla(sin ? 'Tu acceso al portal no está activo. Habla con tu institución.' : errT(e));
     view.innerHTML = `<div class="pn-state bad"><p>${sin ? 'Esta cuenta no administra una institución.' : esc(errT(e))}</p><button class="btn ghost" type="button">${sin ? 'Entrar con otro código' : 'Reintentar'}</button></div>`;
     $('button', view).onclick = async () => { if (sin) { await sb.auth.signOut({ scope: 'local' }); login(); } else entrar(); }; return;
   }
+  if (!MARCO && !DEMO && !INST && appNueva()) { location.replace('/?portal'); return; }   // vive dentro de la app
   document.body.classList.add('dentro'); marco();
-  removeEventListener('hashchange', ruta); addEventListener('hashchange', ruta); ruta();
+  removeEventListener('hashchange', ruta); addEventListener('hashchange', ruta); ruta(); anota();
+  if (MARCO) { try { parent.zukaListo(); } catch (e) { /* nada */ } }
 }
 function login() {
+  if (MARCO) return irApp('home');
   document.body.classList.remove('dentro'); $('.pn-nav').hidden = true; $('.pn-user').hidden = true;
   view.innerHTML = `<form class="pn-card pn-login acct-form po-login" novalidate><h1>Portal de instituciones</h1><p>Escribe tu código de gestor o docente.</p><label class="fld"><span>Código</span><input name="codigo" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="14" placeholder="ABCDE-FGHJK" required></label>
     <p class="form-msg bad" role="alert" hidden></p><button class="btn main" type="submit">Entrar</button><a class="btn ghost" href="?demo">Ver el portal de ejemplo</a></form>`;
@@ -75,15 +80,13 @@ function login() {
 $('[data-salir]').onclick = async () => { if (DEMO) return location.assign('/instituciones/'); await sb.auth.signOut({ scope: 'local' }); location.replace(location.pathname); };   // recarga: nada de una cuenta queda para la otra
 function marco() {
   $('[data-inst]').textContent = D.institucion.nombre; $('.pn-user').hidden = false; $('.pn-mail').textContent = `${D.yo.nombre}${gestor() ? '' : ` · ${X && X.asignaciones.length ? compsMios().map(c => c.nombre).join(', ') : 'Docente'}`}`;
-  const n = $('.pn-nav'); n.hidden = false;
-  n.innerHTML = NAV.filter(([k]) => vistaOk(k)).map(([k, t]) => `<a href="#${k}">${ico(k)}${k === 'componente' && gestor() ? 'Preicfes' : t}</a>`).join('');
-  const a = $('.pn-app'); if (!$('svg', a)) a.insertAdjacentHTML('afterbegin', ico('app'));
+  menu(); $('[data-salir]').hidden = MARCO;
 }
 function ruta(arriba) {
   const ini = vistaOk('resumen') ? 'resumen' : 'componente', [k, arg] = (location.hash.slice(1) || ini).split('/'), V = { resumen: vResumen, estudiantes: vEstudiantes, estudiante: () => vEstudiante(+arg), contenido: vContenido, metas: vMetas, equipo: vEquipo, contrato: vContrato, componente: vComponente, alumno: () => vAlumno(+arg), simulacros: vSimulacros, simulacro: () => vSimulacro(+arg), nuevo: vNuevo, avisos: vAvisos, responsables: vResponsables };
-  const va = V[k] && vistaOk(k) ? k : ini, menu = { estudiante: 'estudiantes', alumno: vistaOk('componente') ? 'componente' : 'estudiantes', simulacro: 'simulacros', nuevo: 'simulacros' }[va] || va; clearInterval(vivo);
-  $$('.pn-nav a').forEach(a => { const on = a.getAttribute('href') === `#${menu}`; a.classList.toggle('on', on); if (on && innerWidth < 900) a.scrollIntoView({ inline: 'center', block: 'nearest' }); on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'); });
+  const va = V[k] && vistaOk(k) ? k : ini, menuK = { estudiante: 'estudiantes', alumno: vistaOk('componente') ? 'componente' : 'estudiantes', simulacro: 'simulacros', nuevo: 'simulacros' }[va] || va; clearInterval(vivo);
   C = instCalcula(D, { dias: 28, grupo: '', curso: '' }); V[va]();
+  menuOn(menuK); if (arriba !== false) anima();
   if (arriba !== false) scrollTo(0, 0);
 }
 const avisos = () => `${DEMO ? `<p class="po-aviso">Portal de ejemplo: los datos son inventados y los cambios no se guardan. ${gestor() ? '<a href="?demo&rol=docente">Ver como docente</a>' : '<a href="?demo">Ver como gestor</a>'}</p>` : ''}${D.institucion.vigente ? '' : `<p class="po-aviso mal">El contrato no está vigente (${fecha(D.institucion.desde)} a ${larga(D.institucion.hasta)}${D.institucion.estado === 'pausa' ? ', en pausa' : ''}). Puedes consultar, pero los cursos están cerrados para los estudiantes.</p>`}`;
@@ -105,7 +108,7 @@ function vResumen() {
   $$('[data-f]', view).forEach(s => { s.onchange = () => { const k = s.dataset.f.toLowerCase(); F[k] = k === 'dias' ? +s.value : s.value; vResumen(); $(`[data-f="${s.dataset.f}"]`, view).focus(); }; });
   $$('[data-grupo]', view).forEach(b => { b.onclick = () => { F.grupo = F.grupo === b.dataset.grupo ? '' : b.dataset.grupo; vResumen(); $(`[data-grupo="${CSS.escape(b.dataset.grupo)}"]`, view)?.focus(); }; });
   $('[data-alta]', view)?.addEventListener('click', dlgAlta);
-  $('[data-verayuda]', view)?.addEventListener('click', () => { Object.assign(L, { q: '', grupo: F.grupo, estado: 'ayuda' }); location.hash = 'estudiantes'; });
+  $('[data-verayuda]', view)?.addEventListener('click', () => { Object.assign(L, { q: '', grupo: F.grupo, estado: 'ayuda' }); irA('estudiantes'); });
   ligaGrafica(c.serie);
 }
 // Minutos por día; al pasar el puntero (o con las flechas) se lee cada día.
@@ -139,7 +142,7 @@ function vEstudiantes() {
     const xs = ven(), el = puede(); $('.pn-count', view).textContent = plural(xs.length, 'estudiante', 'estudiantes');
     $('.pn-list', view).innerHTML = xs.length ? `<div class="pn-tabla"><table class="pn-table"><thead><tr>${el ? '<th class="pn-check"><input type="checkbox" data-todos aria-label="Elegir todos"></th>' : ''}<th>Estudiante</th><th>Grupo</th><th>Última vez</th><th>Avance</th><th class="pn-num">Minutos (28 días)</th><th class="pn-num">Aciertos</th>${gestor() ? '<th>Código</th>' : ''}</tr></thead><tbody>${xs.map(e => `<tr data-id="${e.id}">${el ? `<td data-l="Elegir" class="pn-check"><input type="checkbox" data-el="${e.id}" aria-label="Elegir a ${esc(e.nombre)}"${L.el.has(e.id) ? ' checked' : ''}></td>` : ''}<td class="pn-main"><span class="pn-per">${avatar(e.nombre)}<span><a href="#estudiante/${e.id}">${esc(e.nombre)}</a><span class="pn-sub">${e.alerta ? `<span class="po-al">${e.alerta.t}</span>` : esc(e.cursos.map(cNom).join(', '))}</span></span></span></td>
       <td data-l="Grupo">${esc(gNom(e.grupo))}</td><td data-l="Última vez">${ultima(e)}</td><td data-l="Avance"><span class="po-av">${barra(e.avance)}<b>${pc(e.avance)}</b></span></td><td data-l="Minutos" class="pn-num">${e.min}</td><td data-l="Aciertos" class="pn-num">${e.aciertos == null ? '—' : `${e.aciertos} %`}</td>${gestor() ? `<td data-l="Código">${e.codigo ? `<button class="po-cod" type="button" data-cod="${e.codigo}" aria-label="Copiar el código de ${esc(e.nombre)}">${muestraCodigo(e.codigo)}</button>` : '—'}</td>` : ''}</tr>`).join('')}</tbody></table></div>` : `<p class="pn-state">${D.estudiantes.length ? 'Nadie coincide con el filtro.' : 'Aún no hay estudiantes.'}</p>`;
-    $$('tr[data-id]', view).forEach(r => { r.onclick = e => { if (!e.target.closest('a, input, button')) location.hash = `estudiante/${r.dataset.id}`; }; });
+    $$('tr[data-id]', view).forEach(r => { r.onclick = e => { if (!e.target.closest('a, input, button')) irA(`estudiante/${r.dataset.id}`); }; });
     $$('[data-el]', view).forEach(c => { c.onchange = () => { c.checked ? L.el.add(+c.dataset.el) : L.el.delete(+c.dataset.el); lote(); }; });
     $$('[data-cod]', view).forEach(b => { b.onclick = () => copiar(muestraCodigo(b.dataset.cod)); });
     const t = $('[data-todos]', view); if (t) t.onchange = () => { xs.forEach(e => (t.checked ? L.el.add(e.id) : L.el.delete(e.id))); pinta(); $('[data-todos]', view).checked = t.checked; };

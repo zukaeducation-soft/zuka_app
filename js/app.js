@@ -145,20 +145,22 @@ let tab = 'learn', cleanup = null;
 let lessonClose = null;
 function go(t) {
   if (['tienda', 'tutorias'].includes(t) && cuentaDeColegio()) t = 'home';   // un estudiante de colegio no compra ni separa asesorías
+  if (t === 'portal' && !portalPuede()) t = 'home';
+  if (t !== 'portal') portalVe(false);
   cleanup?.(); cleanup = null;
   tab = t;
   document.body.dataset.tab = t;
   // La vista de un curso ('learn') no tiene botón propio: se marca «Mis cursos» (spec 2026-11-19-inicio-mis-cursos).
   document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === (t === 'learn' || t === 'gym' ? 'cursos' : t)));
   renderTop();
-  ({ home: renderHome, cursos: renderMyCourses, learn: renderLearn, gym: renderGym, clips: renderClips, tienda: renderTienda, tutorias: renderTutorias, profile: renderProfile })[t]();
+  ({ home: renderHome, cursos: renderMyCourses, learn: renderLearn, gym: renderGym, clips: renderClips, tienda: renderTienda, portal: renderPortal, tutorias: renderTutorias, profile: renderProfile })[t]();
 }
 
 // Números largos de la barra de arriba: 12450 → «12.4 k», para que quepa el nombre del curso.
 const shortNum = n => (n >= 10000 ? `${Math.floor(n / 100) / 10} k` : String(n));
 function renderTop() {
   syncHearts();
-  document.body.classList.toggle('de-colegio', cuentaDeColegio());
+  document.body.classList.toggle('de-colegio', cuentaDeColegio()); portalMarca();
   // Solo racha y experiencia, más grandes; sin la marca ni las vidas (las vidas se ven dentro de la lección).
   // Pedido del 2026-11-19: la app ocupa la pantalla de arriba abajo (spec 2026-11-19-pantalla-completa).
   $('#topbar').innerHTML = `<button class="tb-logo-d" type="button" data-home aria-label="Ir al inicio">${zukaWord()}</button>
@@ -922,7 +924,7 @@ function renderSettings() {
 
 // ---- arranque ----
 document.querySelectorAll('#tabbar button').forEach(b => {
-  b.insertAdjacentHTML('afterbegin', ICON[{ home: 'learn', cursos: 'book', gym: 'gym', clips: 'clips', tienda: 'bag', tutorias: 'calendar' }[b.dataset.tab] || 'user']);
+  b.insertAdjacentHTML('afterbegin', ICON[{ home: 'learn', cursos: 'book', gym: 'gym', clips: 'clips', tienda: 'bag', tutorias: 'calendar', portal: 'school' }[b.dataset.tab] || 'user']);
   b.onclick = () => {
     if (lessonClose) return lessonClose(b.dataset.tab);
     if (tab === 'learn' && b.dataset.tab === 'learn') { if (openWorld) openWorld = null; else openBlock = null; }   // tocar Aprender otra vez: un paso arriba (mundo → mapa → componentes)

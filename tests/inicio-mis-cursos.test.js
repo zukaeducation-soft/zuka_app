@@ -71,7 +71,7 @@ test('el botón flotante va en la portada, el mapa y los mundos del curso', () =
 });
 
 test('menú inferior: Inicio, Mis cursos, Tutorías y Perfil (el gimnasio flota en el curso); la app abre en Inicio', () => {
-  assert.match(html, /<button data-tab="home">Inicio<\/button>\s*<button data-tab="cursos">Mis cursos<\/button>\s*<button data-tab="tutorias">Tutorías<\/button>\s*<button data-tab="tienda">Tienda<\/button>\s*<button data-tab="profile">Tú<\/button>/);
+  assert.match(html, /<button data-tab="home">Inicio<\/button>\s*<button data-tab="cursos">Mis cursos<\/button>\s*<button data-tab="portal" hidden>Portal<\/button>\s*<button data-tab="tutorias">Tutorías<\/button>\s*<button data-tab="tienda">Tienda<\/button>\s*<button data-tab="profile">Tú<\/button>/);
   assert.doesNotMatch(html, /<button data-tab="gym">/);
   assert.match(app, /t === 'learn' \|\| t === 'gym' \? 'cursos' : t/, 'en el gimnasio se marca Mis cursos');
   assert.match(css, /#tabbar button \.i \{[^}]*width: 26px/, 'iconos más grandes');
