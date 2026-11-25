@@ -39,6 +39,6 @@ Ayudantes nuevos en `ICF`: `x` (ejercicio), `F`/`T`/`P` (fichas, tarjetas, líne
 
 ## Estado
 
-Hecho con el estándar: los **tres primeros mundos** de cada componente (42 lecciones con explicación, ejercicios, evaluación y dos retos de gimnasio por mundo; segundos mundos: Proporciones y Porcentajes, Cómo se Arma un Texto, Participación y Control, Célula y Organismos, Conversaciones Cortas, en `explora-icf-<área>-2.js` y `gimnasio-icf-2.js`; terceros: Conteo y Probabilidad, Tesis y Argumentos, Perspectivas e Intereses, Movimiento y Fuerzas, Gramática en Contexto, en `-3.js`).
-Pendientes: los otros 36 mundos del temario, en su orden; videos y voz; y la **revisión docente** antes de publicar
+Hecho con el estándar: los **cuatro primeros mundos** de cada componente (56 lecciones con explicación, ejercicios, evaluación y dos retos de gimnasio por mundo; segundos mundos: Proporciones y Porcentajes, Cómo se Arma un Texto, Participación y Control, Célula y Organismos, Conversaciones Cortas, en `explora-icf-<área>-2.js` y `gimnasio-icf-2.js`; terceros: Conteo y Probabilidad, Tesis y Argumentos, Perspectivas e Intereses, Movimiento y Fuerzas, Gramática en Contexto, en `-3.js`; cuartos: Áreas y Volúmenes, Textos Literarios, Fuentes y Argumentos, Materia y Mezclas, Textos Cortos, en `-4.js`).
+Pendientes: los otros 31 mundos del temario, en su orden; videos y voz; y la **revisión docente** antes de publicar
 (sigue en borrador). Los seis cuadernillos escaneados de 2024 y 2025 y los libros 1.1, 2 y 5 son imágenes: no se leyeron en esta vuelta.

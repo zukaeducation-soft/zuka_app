@@ -1,0 +1,96 @@
+// Preicfes · Lectura Crítica, mundo 4 «Textos Literarios» (Explora, escena «hoja»). Textos cortos propios.
+xpLec('icf-lc-literario-1', [
+  ['¿Quién cuenta?',
+    xpMira('hoja', 'Empecemos por la idea: el **narrador** es la voz que cuenta, no quien firma el libro.', { letras: ['A', 'B', 'C'], paras: [['Yo vi caer el árbol y corrí.'], ['Él vio caer el árbol y corrió.'], ['Ella temía, aunque nadie lo supo nunca.']] }, [
+      ['«Yo vi»: quien cuenta está dentro de la historia.', { luz: [0], nota: { 0: 'primera persona' } }],
+      ['«Él vio»: lo cuenta alguien desde afuera.', { luz: [1], nota: { 1: 'tercera persona' } }],
+      ['Si sabe lo que nadie supo, lo sabe todo.', { luz: [2], nota: { 2: 'sabe todo' } }],
+      ['Un narrador niño puede tener un autor de ochenta años.', {}],
+      ['Por eso no digas «el autor» cuando habla el narrador.', {}],
+    ], 'Yo: dentro. Él o ella: desde afuera. El autor inventa esa voz.'),
+    xpHaz('hoja', 'Subraya la que cuenta alguien **de adentro** de la historia.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Marta abrió la carta y lloró.'], ['El viejo pensaba en el mar.'], ['Mi hermana abrió la carta y no quiso leérmela.']], pista: 'Busca «mi», «me» o «yo».' }, '«Mi hermana» y «leérmela»: quien cuenta es un personaje.')],
+  ['Por lo que hacen',
+    xpMira('hoja', 'Segunda idea: un personaje se conoce por **sus actos**, más que por lo que le dicen.', { paras: [['Todos decían que Elías era tacaño.'], ['Cada mes dejaba pan en la puerta de la viuda.'], ['Golpeaba y se iba antes de que abriera.']] }, [
+      ['Esto es lo que otros dicen de él.', { luz: [0], nota: { 0: 'lo que dicen' } }],
+      ['Esto es lo que hace de verdad.', { luz: [1], nota: { 1: 'lo que hace' } }],
+      ['Y lo hace sin que lo vean: no busca aplausos.', { luz: [2], nota: { 2: 'sin ser visto' } }],
+      ['Conclusión: es generoso, aunque digan otra cosa.', { luz: [1, 2] }],
+      ['El texto nunca usó esa palabra: la dedujiste.', {}],
+    ], 'Mira lo que hace y di qué muestra: eso se deduce.'),
+    xpHaz('hoja', '«Revisó tres veces la cerradura, se acostó y volvió a levantarse». Subraya lo que muestra.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Tiene mucho sueño.'], ['Está intranquilo.'], ['Es cerrajero.']], pista: '¿Por qué alguien revisa tantas veces lo mismo?' }, 'Revisar y levantarse otra vez muestran inquietud.')],
+  ['Lo que cambia',
+    xpMira('hoja', 'Tercera idea: un cuento vive de **un cambio**.', { paras: [['Iris le temía al perro de la esquina.'], ['Una noche de lluvia lo oyó llorar.'], ['Salió con una toalla.'], ['Hoy duerme a los pies de su cama.']] }, [
+      ['Al comienzo hay una situación: le teme.', { luz: [0], nota: { 0: 'comienzo' } }],
+      ['Algo la rompe: lo oye llorar.', { luz: [1], nota: { 1: 'conflicto' } }],
+      ['El personaje decide y actúa.', { luz: [2], nota: { 2: 'decisión' } }],
+      ['Al final, algo ya no es igual.', { luz: [3], nota: { 3: 'final' } }],
+      ['Compara el principio con el final y tendrás el tema.', { luz: [0, 3] }],
+    ], 'Comienzo, conflicto, decisión y final: el tema está en el cambio.'),
+    xpHaz('hoja', 'Pon al margen qué es cada parte.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['final', 'comienzo', 'conflicto'], meta: [1, 2, 0], paras: [['Joel nunca cantaba en público.'], ['Un día enfermó el solista y nadie más sabía la letra.'], ['Ahora le piden otra.']], pista: 'Alguna no va ahí: busca «nunca», «un día» y «ahora».' }, '«Nunca» abre, «un día» rompe y «ahora» cierra.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Mi abuelo no sabía leer. Cada noche abría el periódico, pasaba las hojas despacio y me decía: “Hoy no hay nada”». Subraya lo que se deduce.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Al abuelo le aburrían las noticias.'], ['Al abuelo le daba pena no saber leer.'], ['El periódico venía en blanco.']], pista: 'Junta que no sabía leer con lo que hacía cada noche.' }, 'Finge leer ante su nieto: le daba pena no saber.')],
+], 'Di quién cuenta, mira lo que hacen y compara el comienzo con el final.');
+
+xpLec('icf-lc-literario-2', [
+  ['Como y es',
+    xpMira('hoja', 'Empecemos por la idea: una **imagen** dice una cosa con otra.', { paras: [['Sus manos eran ásperas.'], ['Sus manos eran como corteza.'], ['Sus manos, dos raíces viejas.']] }, [
+      ['Esto es literal: describe tal cual.', { luz: [0], nota: { 0: 'literal' } }],
+      ['Con «como» se comparan dos cosas.', { luz: [1], nota: { 1: 'símil' } }],
+      ['Sin «como», una cosa pasa a ser la otra.', { luz: [2], nota: { 2: 'metáfora' } }],
+      ['Las tres hablan de manos gastadas por el trabajo.', { luz: [0, 1, 2] }],
+      ['Pregunta siempre en qué se parecen las dos cosas.', {}],
+    ], 'Símil: con «como». Metáfora: una cosa es la otra.'),
+    xpHaz('hoja', 'Subraya la **metáfora**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['La noche es un pozo.'], ['La noche es como un pozo.'], ['La noche es oscura.']], pista: 'Una compara con «como» y otra es literal.' }, 'Dice que la noche **es** un pozo, sin «como».')],
+  ['Dar vida y exagerar',
+    xpMira('hoja', 'Segunda idea: se puede **dar vida** a las cosas o **exagerar** para que se sienta.', { paras: [['La puerta se quejó al abrir.'], ['Esperé mil años en esa fila.'], ['Qué puntual: llegaste dos horas tarde.']] }, [
+      ['Una puerta no se queja: le dieron rasgos de persona.', { luz: [0], nota: { 0: 'personificación' } }],
+      ['Nadie espera mil años: es una exageración.', { luz: [1], nota: { 1: 'hipérbole' } }],
+      ['Y aquí se dice lo contrario de lo que se piensa.', { luz: [2], nota: { 2: 'ironía' } }],
+      ['Ninguna quiere engañar: quieren que sientas algo.', {}],
+      ['Traduce: ¿qué pasó de verdad?', {}],
+    ], 'Dar vida, exagerar o decir lo contrario: traduce a lo que pasó.'),
+    xpHaz('hoja', 'Pon al margen la figura de cada frase.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['ironía', 'personificación', 'hipérbole'], meta: [1, 2, 0], paras: [['El viento leía los periódicos de la plaza.'], ['Tengo un millón de tareas.'], ['¡Qué silencio!, dijo en medio del ruido.']], pista: 'Alguna no va ahí: ¿da vida, exagera o dice lo contrario?' }, 'El viento lee, un millón exagera y el silencio es ironía.')],
+  ['Objetos que cargan algo',
+    xpMira('hoja', 'Tercera idea: un **símbolo** es un objeto que carga con algo más.', { paras: [['En la mesa siempre había un plato de más.'], ['Nadie lo usaba, nadie lo quitaba.'], ['El día que llegó la carta, mamá lo guardó.']] }, [
+      ['Un plato de más no es solo loza.', { luz: [0], nota: { 0: 'objeto' } }],
+      ['Que nadie lo quite muestra que alguien falta.', { luz: [1], nota: { 1: 'espera' } }],
+      ['Guardarlo es dejar de esperar.', { luz: [2], nota: { 2: 'cambio' } }],
+      ['El plato es la espera de esa familia.', { luz: [0, 2] }],
+      ['Un símbolo se nota porque vuelve y porque algo le pasa.', {}],
+    ], 'Símbolo: un objeto que vuelve y cambia con los personajes.'),
+    xpHaz('hoja', 'Al comienzo la ventana está clausurada; al final ella la abre y entra el sol. Subraya lo que representa abrirla.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Que hace calor.'], ['Que la ventana es nueva.'], ['Que vuelve a vivir hacia afuera.']], pista: '¿Qué cambió en ella, además de la ventana?' }, 'Pasa de encerrada a abierta: la ventana es ella.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«El reloj de la sala se murió el mismo día que el abuelo, y nadie quiso darle cuerda». Subraya lo que sugiere.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['El reloj era de mala calidad.'], ['La familia detuvo su vida por la pérdida.'], ['Nadie sabía darle cuerda.']], pista: 'Mira qué personifica y qué significa no querer darle cuerda.' }, 'El reloj detenido representa a la familia en duelo.')],
+], 'Reconoce la figura, tradúcela y pregunta qué carga el objeto.');
+
+xpLec('icf-lc-literario-3', [
+  ['La voz del poema',
+    xpMira('hoja', 'Empecemos por la idea: en un poema habla **una voz**, que no es el poeta.', { paras: [['Soy la silla del patio,'], ['guardo el peso de los que se fueron.'], ['Nadie me pregunta por mis piernas.']] }, [
+      ['¿Quién habla? Una silla, no una persona.', { luz: [0], nota: { 0: 'la voz' } }],
+      ['Nos cuenta lo que siente: guarda ausencias.', { luz: [1], nota: { 1: 'lo que siente' } }],
+      ['Y se queja con un poco de humor.', { luz: [2], nota: { 2: 'el tono' } }],
+      ['El poeta la inventó para decir algo suyo.', {}],
+      ['Pregunta primero quién habla y a quién.', {}],
+    ], 'La voz poética habla; el poeta la inventa.'),
+    xpHaz('hoja', '«Río, llévame la pena / que no la quiero contar». Subraya a quién le habla la voz.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Al río'], ['A la pena'], ['A los lectores']], pista: '¿A quién nombra antes de pedir algo?' }, 'Nombra al río y le pide que se lleve la pena.')],
+  ['Repetir y sonar',
+    xpMira('hoja', 'Segunda idea: en un poema se **repite** para que algo pese.', { paras: [['Vuelvo a la casa,'], ['vuelvo a la puerta,'], ['vuelvo a tu nombre.'], ['Y no estás.']] }, [
+      ['«Vuelvo» empieza tres versos: es una anáfora.', { luz: [0, 1, 2], nota: { 0: 'anáfora' } }],
+      ['Cada vuelta lo acerca más a alguien.', { luz: [2] }],
+      ['El cuarto verso rompe la repetición.', { luz: [3], nota: { 3: 'se rompe' } }],
+      ['Ahí está el golpe: la persona no está.', { luz: [3] }],
+      ['Donde se rompe el ritmo suele estar lo importante.', {}],
+    ], 'La repetición pesa; donde se rompe, está el golpe.'),
+    xpHaz('hoja', 'Subraya el verso que **rompe** la repetición.', { modo: 'toca', letras: ['1', '2', '3', '4'], meta: [3], paras: [['Nadie apagó la luz,'], ['nadie cerró la puerta,'], ['nadie lloró en la sala.'], ['Solo el perro lo supo.']], pista: 'Tres versos empiezan igual.' }, '«Solo el perro» rompe la serie de «nadie».')],
+  ['Tema y tono',
+    xpMira('hoja', 'Tercera idea: el **tema** es de qué habla en el fondo; el **tono**, con qué sentimiento.', { paras: [['Cosía mi abuela botones,'], ['cosía la tarde al mantel,'], ['y una noche, sin hilo,'], ['se nos descosió.']] }, [
+      ['En la superficie, una abuela que cose.', { luz: [0], nota: { 0: 'superficie' } }],
+      ['Coser la tarde: unía a la familia.', { luz: [1] }],
+      ['Sin hilo y descosida: murió.', { luz: [2, 3], nota: { 3: 'lo que pasó' } }],
+      ['Tema: la pérdida de quien une a una familia.', { luz: [1, 3] }],
+      ['Tono: tierno y triste, sin gritar.', {}],
+    ], 'Superficie, fondo y sentimiento: tema y tono.'),
+    xpHaz('hoja', '«Mi escuela tiene goteras, / tiene un balde por pupitre, / y aun así me sé de memoria / el color de su campana». Subraya el tono.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Furioso'], ['Cariñoso, a pesar de todo'], ['Indiferente']], pista: 'Mira qué viene después de «aun así».' }, '«Aun así» cambia la queja por cariño.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«El mar no tiene memoria, / por eso canta. / Yo, que sí tengo, / lo escucho». Subraya lo que sugiere.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['El mar olvida a los pescadores.'], ['La voz sabe cantar mejor.'], ['Recordar le impide a la voz estar alegre.']], pista: 'Compara por qué canta uno y por qué el otro solo escucha.' }, 'Quien recuerda no canta: escucha. La memoria pesa.')],
+], 'Quién habla, qué se repite, de qué trata y con qué sentimiento.');

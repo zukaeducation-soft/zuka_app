@@ -424,6 +424,22 @@ const WORLDS = (() => {
     'icf-en-gramatica': { name: 'Gramática en Contexto', art: plate('icf-en-gramatica', TEAL, `
       ${L('M48 40h64', INK, 1)}${[56, 80, 104].map((x, i) => D(x, 40, 2.4, i === 1 ? TEAL : INK)).join('')}${A(80, 40, 108, 40, TEAL, 1.1)}${C(80, 40, 7, TEAL, 1)}${L('M56 36v8M104 36v8', INK, .8)}
       ${T(56, 56, 'was', INK, 6)}${T(80, 30, 'is', TEAL, 7)}${T(104, 56, 'will be', INK, 6)}${T(28, 42, 'since', INK, 5.5)}${T(134, 42, 'than', TEAL, 5.5)}`) },
+    // ---------- cuartos mundos ----------
+    'icf-ma-medida': { name: 'Áreas y Volúmenes', art: plate('icf-ma-medida', TEAL, `
+      ${L('M50 34l12-8h22l-12 8z', INK, 1)}${L('M50 34h22v26H50z', INK, 1.1)}${L('M72 34l12-8v26l-12 8', INK, 1)}${C(102, 46, 13, TEAL, 1.3)}${L('M102 46h13', TEAL, 1)}${D(102, 46, 1.6, TEAL)}
+      ${T(28, 46, 'a · b · c', INK, 6.5)}${T(136, 46, 'πr²', TEAL, 8)}`) },
+    'icf-lc-literario': { name: 'Textos Literarios', art: plate('icf-lc-literario', TEAL, `
+      ${L('M80 24C70 18 58 18 48 22v36c10-4 22-4 32 2 10-6 22-6 32-2V22c-10-4-22-4-32 2z', INK, 1.1)}${L('M80 24v36', INK, .9)}${L('M98 14c8 4 12 12 8 24l-10 8c-2-12-2-22 2-32z', TEAL, 1.2)}${L('M96 46l8-26', TEAL, .8)}
+      ${L('M56 32h16M56 40h14', INK, .8)}${D(96, 48, 1.5, TEAL)}${T(28, 44, 'yo', INK, 7)}${T(134, 44, 'como', TEAL, 6.5)}`) },
+    'icf-sc-fuentes': { name: 'Fuentes y Argumentos', art: plate('icf-sc-fuentes', TEAL, `
+      ${L('M50 18h26v34H50z', INK, 1)}${L('M55 26h16M55 33h16M55 40h10', INK, .8)}${L('M68 28h26v34H68z', INK, 1)}${C(96, 40, 11, TEAL, 1.4)}${L('M104 48l10 10', TEAL, 1.6)}
+      ${T(28, 42, '¿quién?', INK, 6)}${T(134, 42, '¿prueba?', TEAL, 6)}${D(96, 40, 1.6, TEAL)}`) },
+    'icf-cn-materia': { name: 'Materia y Mezclas', art: plate('icf-cn-materia', TEAL, `
+      ${L('M72 14h16M75 14v18L56 62h48L85 32V14', INK, 1.2)}${L('M65 48h30', TEAL, 1.1)}${D(72, 54, 2, TEAL)}${D(82, 56, 2, TEAL)}${D(90, 53, 2, TEAL)}${C(78, 42, 2, INK, .8)}${C(84, 37, 1.5, INK, .8)}
+      ${T(30, 42, 'm / V', INK, 7)}${T(134, 42, 'g/cm³', TEAL, 6.5)}`) },
+    'icf-en-corto': { name: 'Textos Cortos', art: plate('icf-en-corto', TEAL, `
+      ${L('M48 22h44v30H48z', INK, 1.1)}${L('M48 22l22 16 22-16', INK, 1)}${L('M84 34h28v26H84z', TEAL, 1.2)}${L('M89 42h18M89 48h18M89 54h10', TEAL, .9)}${D(98, 34, 1.8, TEAL)}
+      ${T(28, 42, 'Dear…', INK, 6.5)}${T(134, 42, 'Love', TEAL, 6.5)}`) },
   };
 })();
 

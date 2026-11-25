@@ -8,12 +8,12 @@ const { loadScripts, get, ROOT } = require('./load');
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds/.test(f));
 const ctx = loadScripts(all), WORLDS = get(ctx, 'WORLDS'), COURSES = get(ctx, 'COURSES');
-const CHILDISH = /Pradera|Valle|Mercado|Torres|Escalera|Taller|Fuente|Cordillera|Río|Selva|Mar de|Faro|Galaxia|Sendero|Fábrica|Puente|Cumbre|Mirador|Cruce|Templo|Archipiélago|Forja|Puerto|Órbita|Pista|Rampa|Campos|Plano Transformado/;
+const CHILDISH = /Pradera|Valle|Mercado|Torres|Escalera|Taller|Fuente de|Cordillera|Río|Selva|Mar de|Faro|Galaxia|Sendero|Fábrica|Puente|Cumbre|Mirador|Cruce|Templo|Archipiélago|Forja|Puerto|Órbita|Pista|Rampa|Campos|Plano Transformado/;
 
 test('los mundos tienen nombres de capítulo, sin lugares de cuento', () => {
   const names = Object.values(WORLDS).map(w => w.name);
-  assert.equal(names.length, 71);
-  assert.equal(new Set(names).size, 71, 'nombres distintos');
+  assert.equal(names.length, 76);
+  assert.equal(new Set(names).size, 76, 'nombres distintos');
   for (const n of names) { assert.ok(!CHILDISH.test(n), n); assert.ok(n.length >= 8 && n.length <= 26, `${n}: largo`); }
   assert.equal(WORLDS.conjuntos.name, 'Teoría de Conjuntos');
   // Lo que dicen los jefes al ganar tampoco nombra lugares.
@@ -44,7 +44,7 @@ test('los jefes y sus escenas ya no nombran los lugares viejos', () => {
   for (const c of COURSES) for (const u of c.units || []) {
     if (!u.boss) continue;
     const txt = [u.boss.title, ...u.boss.clip.scenes.map(s => s.text), u.boss.ex[0].q, u.boss.ex[0].params.name || ''].join(' ');
-    assert.ok(!/Pradera|Valle|Mercado|Torres|Escalera|Taller|Fuente|Cordillera|Selva|Mar de las Ondas|Galaxia|pradera|fuente|cordillera|selva|taller|mercado/.test(txt), `${u.world}: ${txt.slice(0, 120)}`);
+    assert.ok(!/Pradera|Valle|Mercado|Torres|Escalera|Taller|Fuente de|Cordillera|Selva|Mar de las Ondas|Galaxia|pradera|fuente|cordillera|selva|taller|mercado/.test(txt), `${u.world}: ${txt.slice(0, 120)}`);
   }
 });
 

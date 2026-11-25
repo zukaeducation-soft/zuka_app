@@ -1451,6 +1451,22 @@ const WORLDS = (() => {
     'icf-en-gramatica': { name: 'Gramática en Contexto', art: plate('icf-en-gramatica', TEAL, `
       ${L('M48 40h64', INK, 1)}${[56, 80, 104].map((x, i) => D(x, 40, 2.4, i === 1 ? TEAL : INK)).join('')}${A(80, 40, 108, 40, TEAL, 1.1)}${C(80, 40, 7, TEAL, 1)}${L('M56 36v8M104 36v8', INK, .8)}
       ${T(56, 56, 'was', INK, 6)}${T(80, 30, 'is', TEAL, 7)}${T(104, 56, 'will be', INK, 6)}${T(28, 42, 'since', INK, 5.5)}${T(134, 42, 'than', TEAL, 5.5)}`) },
+    // ---------- cuartos mundos ----------
+    'icf-ma-medida': { name: 'Áreas y Volúmenes', art: plate('icf-ma-medida', TEAL, `
+      ${L('M50 34l12-8h22l-12 8z', INK, 1)}${L('M50 34h22v26H50z', INK, 1.1)}${L('M72 34l12-8v26l-12 8', INK, 1)}${C(102, 46, 13, TEAL, 1.3)}${L('M102 46h13', TEAL, 1)}${D(102, 46, 1.6, TEAL)}
+      ${T(28, 46, 'a · b · c', INK, 6.5)}${T(136, 46, 'πr²', TEAL, 8)}`) },
+    'icf-lc-literario': { name: 'Textos Literarios', art: plate('icf-lc-literario', TEAL, `
+      ${L('M80 24C70 18 58 18 48 22v36c10-4 22-4 32 2 10-6 22-6 32-2V22c-10-4-22-4-32 2z', INK, 1.1)}${L('M80 24v36', INK, .9)}${L('M98 14c8 4 12 12 8 24l-10 8c-2-12-2-22 2-32z', TEAL, 1.2)}${L('M96 46l8-26', TEAL, .8)}
+      ${L('M56 32h16M56 40h14', INK, .8)}${D(96, 48, 1.5, TEAL)}${T(28, 44, 'yo', INK, 7)}${T(134, 44, 'como', TEAL, 6.5)}`) },
+    'icf-sc-fuentes': { name: 'Fuentes y Argumentos', art: plate('icf-sc-fuentes', TEAL, `
+      ${L('M50 18h26v34H50z', INK, 1)}${L('M55 26h16M55 33h16M55 40h10', INK, .8)}${L('M68 28h26v34H68z', INK, 1)}${C(96, 40, 11, TEAL, 1.4)}${L('M104 48l10 10', TEAL, 1.6)}
+      ${T(28, 42, '¿quién?', INK, 6)}${T(134, 42, '¿prueba?', TEAL, 6)}${D(96, 40, 1.6, TEAL)}`) },
+    'icf-cn-materia': { name: 'Materia y Mezclas', art: plate('icf-cn-materia', TEAL, `
+      ${L('M72 14h16M75 14v18L56 62h48L85 32V14', INK, 1.2)}${L('M65 48h30', TEAL, 1.1)}${D(72, 54, 2, TEAL)}${D(82, 56, 2, TEAL)}${D(90, 53, 2, TEAL)}${C(78, 42, 2, INK, .8)}${C(84, 37, 1.5, INK, .8)}
+      ${T(30, 42, 'm / V', INK, 7)}${T(134, 42, 'g/cm³', TEAL, 6.5)}`) },
+    'icf-en-corto': { name: 'Textos Cortos', art: plate('icf-en-corto', TEAL, `
+      ${L('M48 22h44v30H48z', INK, 1.1)}${L('M48 22l22 16 22-16', INK, 1)}${L('M84 34h28v26H84z', TEAL, 1.2)}${L('M89 42h18M89 48h18M89 54h10', TEAL, .9)}${D(98, 34, 1.8, TEAL)}
+      ${T(28, 42, 'Dear…', INK, 6.5)}${T(134, 42, 'Love', TEAL, 6.5)}`) },
   };
 })();
 
@@ -29399,4 +29415,866 @@ GAMES['area-probabilidad'] = (() => {
     peek: G => ({ h: G.h }),
   });
   return Object.assign(game, { answer: r => ({ v: need(r) }) });
+})();
+;
+//#archivo js/games/buzo-enteros.js
+// El buzo de los enteros (Álgebra 1.1, naturales y enteros; juego dinámico de la lección alg-11): una recta vertical
+// de enteros con el nivel del mar en 0 (arriba el cielo, abajo el agua). El buzo sube y baja arrastrando el dedo.
+// Arriba sale una pregunta («Estás en 3 y bajas 5», «El opuesto de −2», «1 − 4») y vienen tres perlas a distintas
+// alturas. Las perlas esperan a que sueltes la sonda. Una perla equivocada quita una vida.
+// params = { min, max, rounds: [{ title, items: [{ text, value, traps: [a, b] }] }], lives? }   state = { done: [n] }
+// Spec 2026-11-13-juegos-dinamicos-valle.
+
+GAMES['buzo-enteros'] = (() => {
+  // Perla que toca el buzo estando en la altura `level` (número, puede ir entre dos enteros): la más cercana a medio
+  // nivel o menos; −1 si no toca ninguna.
+  function hitIndex(level, values) {
+    let best = -1, bd = 0.5;
+    values.forEach((v, i) => { const d = Math.abs(level - v); if (d <= bd) { bd = d; best = i; } });
+    return best;
+  }
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.text}: ${negTxt(it.value)}`).join(', ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, MIN = params.min, MAX = params.max;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, top = 96, bottom = 0, unit = 0, queue = [], wave = null, gap = 0, drag = false;
+    const diver = { x: 78, y: 0, ty: 0 };
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); wave = null; gap = 0.4; },
+      lost(i) { st.done[i] = 0; wave = null; },
+    });
+    const Y = v => top + (MAX + 0.5 - v) * unit, levelAt = y => MAX + 0.5 - (y - top) / unit;
+
+    function layout(w, h) {
+      W = w; H = h; bottom = h - 34; unit = (bottom - top) / (MAX - MIN + 1);
+      if (!diver.y) diver.y = diver.ty = Y(0);
+      diver.ty = Math.min(bottom - 6, Math.max(top + 6, diver.ty)); diver.y = Math.min(bottom - 6, Math.max(top + 6, diver.y));
+    }
+    function spawn() {
+      const it = R[a.cur].items[queue[0]], vals = shuffledOrder(3, it.text + queue.length + st.done[a.cur]).map(k => [it.value, ...it.traps][k]);
+      wave = { x: W - 32, vals, it, fired: false, done: false, pick: -1 };
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        diver.y += (diver.ty - diver.y) * Math.min(1, dt * 16);
+        if (a.phase !== 'play') return;
+        if (!wave) { gap -= dt; if (gap <= 0 && queue.length) spawn(); return; }
+        if (!wave.fired) { wave.x = W - 32; return; }
+        wave.x -= (W - diver.x) * (wave.done ? 3 : 1) * dt;
+        if (!wave.done && wave.x <= diver.x + 8) {
+          wave.done = true;
+          const i = hitIndex(levelAt(diver.ty), wave.vals), it = wave.it;
+          wave.pick = i;
+          if (i < 0) { a.say('Se fueron de largo: vuelven después', C.sun); queue.push(queue.shift()); }
+          else if (wave.vals[i] === it.value) {
+            st.done[a.cur]++; queue.shift(); a.hit(); a.say(`${it.text}: ${negTxt(it.value)}`, C.ok);
+            if (!queue.length) { a.win(); wave = null; return; }
+          } else {
+            a.say(`Esa perla estaba en ${negTxt(wave.vals[i])}`, C.bad); queue.push(queue.shift());
+            if (a.miss()) return;
+          }
+        }
+        if (wave.x < -30) { wave = null; gap = 0.45; }
+      }
+
+      function drawDiver() {
+        const x = diver.x, y = diver.y;
+        // La sonda: cápsula con borde fino, una franja de color y su luz al frente; una línea marca su altura.
+        p.stroke(C.coral); p.strokeWeight(1.5); p.fill(C.card); p.rect(x - 20, y - 8, 34, 16, 8);
+        p.noStroke(); p.fill(C.coral); p.rect(x - 14, y - 2, 14, 4, 2);
+        const lamp = p.color(C.sky); lamp.setAlpha(90); p.fill(lamp); p.circle(x + 12, y, 13); p.fill(C.sky); p.circle(x + 12, y, 6);
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], y0 = Y(0);
+
+        // El agua (del nivel 0 hacia abajo) y la recta de enteros a la izquierda.
+        const water = p.color(C.sky); water.setAlpha(70);
+        p.noStroke(); p.fill(water); p.rect(8, y0, W - 16, bottom - y0, 0, 0, 12, 12);
+        p.stroke(C.sky); p.strokeWeight(3); p.line(8, y0, W - 8, y0);
+        p.noStroke(); p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER);
+        for (let v = MIN; v <= MAX; v++) {
+          p.stroke(C.line); p.strokeWeight(1); p.line(40, Y(v), W - 10, Y(v));
+          p.noStroke(); p.fill(v === 0 ? C.N : v < 0 ? C.I : C.ink); p.text(negTxt(v), 24, Y(v));
+        }
+        p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(9); p.textAlign(p.RIGHT, p.BOTTOM); p.text('nivel del mar', W - 12, y0 - 3);
+
+        // Las tres perlas que vienen.
+        if (wave) {
+          const d = Math.min(unit * 0.92, 24);
+          wave.vals.forEach((v, i) => {
+            const col = !wave.done ? C.cream : v === wave.it.value ? (wave.pick === i ? C.ok : C.cream) : wave.pick === i ? C.bad : C.cream;
+            p.stroke(wave.done && wave.pick === i ? col : C.creamD); p.strokeWeight(2); p.fill(col); p.circle(wave.x, Y(v), d);
+            p.noStroke(); p.fill(255, 255, 255, 150); p.circle(wave.x - d * 0.18, Y(v) - d * 0.18, d * 0.26);
+          });
+        }
+        drawDiver();
+
+        // Encabezado: ronda, vidas y la pregunta.
+        p.noStroke(); p.fill(C.bg); p.rect(0, 0, W, top - 10);
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        p.text(r.title, W / 2, 40);
+        const it = wave ? wave.it : queue.length ? r.items[queue[0]] : null;
+        if (it && a.phase === 'play') drawPill(p, C, it.text, W / 2, 66, C.sun, 16);
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = (top + bottom) / 2;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${Math.min(st.done[i], rr.items.length)} de ${rr.items.length}` })), mid);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Arrastra la sonda y suelta', lost: 'Demasiadas perlas equivocadas' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Perlas recogidas! Ya puedes comprobar' : 'Alinea la sonda y suelta', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      const aim = () => { diver.ty = Math.min(bottom - 6, Math.max(top + 6, p.mouseY)); };
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const t = a.tap(locked);
+        if (t === 'off') return;
+        if (t === 'play' && wave && !wave.fired) { drag = true; aim(); }
+        return false;
+      };
+      p.mouseDragged = () => { if (drag && a.phase === 'play' && !locked) { aim(); return false; } };
+      p.mouseReleased = e => {
+        if (drag && wave && e?.type !== 'touchcancel') wave.fired = true;
+        drag = false;
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, diverX: diver.x, diverY: diver.y, wave: wave && { x: wave.x, done: wave.done, answerY: Y(wave.it.value), trapY: Y(wave.it.traps[0]) } }),
+    };
+  }
+
+  return { grade, create, hitIndex };
+})();
+;
+//#archivo js/games/carrera-fracciones.js
+// La carrera de las fracciones (Álgebra 1.1, racionales; juego dinámico de la lección alg-11b). La idea del video:
+// un mismo número racional tiene muchos nombres (1/4, 0.25, 2/8). Un corredor avanza por una pista de tres carriles;
+// arriba sale un número y llega una fila de tres puertas que SE DETIENE y espera: no hay prisa ni cuentas a
+// contrarreloj. Arriba hay dos reglas con la misma escala: la del número pedido (cortada en sus partes: 1/4 son 1 paso
+// de los 4 en que se parte la unidad) y la de la puerta que se toque. Tocar una puerta la compara; si las dos barras
+// miden lo mismo, son el mismo número. Tocarla otra vez hace pasar al corredor. Pasar por otra quita una vida y la
+// pregunta vuelve después con una ayuda. Tras la última puerta baja la meta. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, items: [{ ask, options: [a, b, c], answer }] }], lives? }   state = { done: [n] }
+// Specs 2026-11-13-juegos-dinamicos-valle, 2026-11-14-mejoras-carrera-y-aguja y 2026-11-14-juegos-conceptuales-valle.
+
+GAMES['carrera-fracciones'] = (() => {
+  const laneOf = (x, w) => Math.max(0, Math.min(2, Math.floor((x / w) * 3)));
+  // Valor de un texto: «1/4», «−6/3», «0.125», «4».
+  function valueOf(txt) {
+    const t = String(txt).replace(/−/g, '-'), fr = t.split('/');
+    return fr.length === 2 ? +fr[0] / +fr[1] : +t;
+  }
+  // En cuántas partes iguales corta la unidad ese nombre del número: el denominador, 10, 100 o 1000 para un decimal, 1 para un entero.
+  function partsOf(txt) {
+    const t = String(txt), fr = t.split('/');
+    if (fr.length === 2) return Math.abs(+fr[1]);
+    return t.includes('.') ? 10 ** t.split('.')[1].length : 1;
+  }
+  // Tramo de enteros que deben mostrar las reglas para que quepan el número pedido y las tres puertas.
+  function rangeOf(it) {
+    const vs = [it.ask, ...it.options].map(valueOf);
+    return [Math.min(0, Math.floor(Math.min(...vs))), Math.max(1, Math.ceil(Math.max(...vs)))];
+  }
+  // Ayuda para una pregunta fallada: dice qué hacer, no cuánto da.
+  function helpOf(it) {
+    const ask = String(it.ask), fr = ask.split('/');
+    if (fr.length === 2) {
+      if (String(it.options[it.answer]).includes('/')) return 'Divide o multiplica arriba y abajo por el mismo número';
+      if (+fr[0] === 0) return `${ask}: no hay nada que repartir entre ${fr[1]}`;
+      return `${ask} es ${fr[0]} ÷ ${fr[1]}`;
+    }
+    const dec = (ask.split('.')[1] || '').length;
+    if (!dec) return `${ask} es un entero: ${ask}/1`;
+    const whole = Math.round(Math.abs(valueOf(ask)) * 10 ** dec), place = ['décimas', 'centésimas', 'milésimas'][dec - 1] || 'partes';
+    // Si la respuesta es esa misma cuenta sin simplificar (0.9 = 9/10), decirla sería regalarla: solo el lugar.
+    if (String(it.options[it.answer]) === `${whole}/${10 ** dec}`) return `${ask} llega hasta las ${place}: ¿sobre qué número va?`;
+    return `${ask} son ${whole} ${place}`;
+  }
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.ask} = ${it.options[it.answer]}`).join(', ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, TOP = 150;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, runY = 0, stopY = 0, lane = 1, runX = 0, queue = [], row = null, finish = null, gap = 0, scroll = 0, n = 0;
+    let streak = 0, missed = new Set(), bits = [], shake = 0, run = 0, grow = 0;
+    const missedOf = R.map(() => new Set());   // las falladas de cada ronda: la ayuda sigue si la ronda se reintenta
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); row = null; finish = null; gap = 0.5; streak = 0; missed = missedOf[i]; bits = []; },
+      lost(i) { st.done[i] = 0; row = null; finish = null; streak = 0; },
+    });
+    const laneX = k => 14 + ((W - 28) / 3) * (k + 0.5), laneW = () => (W - 28) / 3;
+
+    function layout(w, h) { W = w; H = h; runY = h - 78; stopY = TOP + 46; if (!runX) runX = laneX(1); }
+    function spawn() {
+      const idx = queue[0], it = R[a.cur].items[idx];
+      // state: 'coming' (baja hasta la raya de espera) → 'waiting' (espera a que se elija) → 'going' (va hacia el corredor)
+      row = { y: TOP + 4, it, idx, perm: shuffledOrder(3, it.ask + (n++)), state: 'coming', sel: -1, done: false, pick: -1 };
+    }
+    // La puerta acertada estalla en pedazos.
+    function burst(x, y, col) {
+      for (let k = 0; k < 14; k++) { const ang = Math.random() * Math.PI * 2, v = 60 + Math.random() * 150; bits.push({ x, y, vx: Math.cos(ang) * v, vy: Math.sin(ang) * v - 60, t: 1, col: k % 3 ? col : C.sun, s: 4 + Math.random() * 5 }); }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); runX = laneX(lane); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        runX += (laneX(lane) - runX) * Math.min(1, dt * 14);
+        shake = Math.max(0, shake - dt * 3); grow = Math.min(1, grow + dt * 3.5);
+        bits = bits.filter(b => { b.t -= dt * 1.6; b.x += b.vx * dt; b.y += b.vy * dt; b.vy += 420 * dt; return b.t > 0; });
+        if (a.phase !== 'play') return;
+        const speed = (runY - TOP) / 1.5, waiting = row && row.state === 'waiting';
+        if (!waiting) { scroll = (scroll + speed * dt) % 40; run += dt * 10; }   // mientras la fila espera, todo se detiene
+        if (finish) {   // la meta: al cruzarla se gana la ronda
+          finish.y += speed * dt;
+          if (finish.y >= runY - 10) { finish = null; a.win(); }
+          return;
+        }
+        if (!row) { gap -= dt; if (gap <= 0 && queue.length) spawn(); return; }
+        if (row.state === 'coming') { row.y = Math.min(stopY, row.y + speed * dt); if (row.y >= stopY) row.state = row.go ? 'going' : 'waiting'; return; }
+        if (row.state === 'waiting') return;
+        row.y += speed * dt * (row.done ? 1.6 : 1);
+        if (!row.done && row.y >= runY - 22) {
+          row.done = true; row.pick = lane;
+          const it = row.it, good = row.perm[lane] === it.answer;
+          if (good) {
+            st.done[a.cur]++; queue.shift(); streak++; a.hit(); burst(laneX(lane), runY - 22, C.ok);
+            a.say(`${it.ask} y ${it.options[it.answer]} son el mismo número`, C.ok);
+          } else {
+            a.say(`${it.options[row.perm[lane]]} no mide lo mismo que ${it.ask}`, C.bad); queue.push(queue.shift()); missed.add(row.idx); streak = 0; shake = 1;
+            if (a.miss()) return;
+          }
+        }
+        if (row.y > H + 30) { row = null; if (queue.length) gap = 0.35; else finish = { y: TOP - 10 }; }
+      }
+
+      // Una regla: de lo a hi, cortada en `parts` partes por unidad, con una barra desde 0 hasta el valor.
+      function ruler(y, txt, col, lo, hi, k) {
+        const x0 = 62, x1 = W - 16, X = v => x0 + ((v - lo) / (hi - lo)) * (x1 - x0), v = valueOf(txt), h = 13;
+        let parts = partsOf(txt);
+        while (parts > 10 && parts % 10 === 0 && (x1 - x0) / ((hi - lo) * parts) < 5) parts /= 10;   // centésimas que no caben: décimas
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.RIGHT, p.CENTER); fitText(p, txt, x0 - 8, y + h / 2, 44, 13);
+        p.stroke(C.line); p.strokeWeight(1); p.fill(C.card); p.rect(x0, y, x1 - x0, h, 4); p.noStroke();
+        p.fill(col); const xa = X(0), xb = X(v * k); p.rect(Math.min(xa, xb), y, Math.abs(xb - xa), h, 3);
+        const cuts = (hi - lo) * parts;
+        if (parts > 1 && (x1 - x0) / cuts >= 5) { /* más juntos que 5 px se verían como una mancha */ p.stroke(C.mute); p.strokeWeight(1); for (let j = 1; j < cuts; j++) if (j % parts) { const x = X(lo + j / parts); p.line(x, y + 2, x, y + h - 2); } }
+        p.stroke(C.ink); p.strokeWeight(2); for (let u = lo; u <= hi; u++) p.line(X(u), y - 2, X(u), y + h + 2);
+        return X;
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], lw = laneW(), sx = shake > 0 ? Math.sin(shake * 40) * 5 * shake : 0;
+
+        p.push(); p.translate(sx, 0);
+        // La pista: tres carriles con rayas que corren hacia abajo.
+        for (let k = 0; k < 3; k++) {
+          p.noStroke(); p.fill(C.halo); p.rect(14 + k * lw + 3, TOP - 4, lw - 6, H - TOP - 30, 12);   // tono propio: las puertas crema se distinguen en los dos temas
+          p.stroke(C.line); p.strokeWeight(3);
+          for (let y = TOP + scroll - 40; y < H - 40; y += 40) if (y > TOP) p.line(laneX(k), y, laneX(k), Math.min(H - 40, y + 14));
+        }
+        // La meta a cuadros.
+        if (finish) {
+          const s = (W - 28) / 18;
+          p.noStroke(); p.fill(C.sun); p.rect(12, finish.y - 3, W - 24, s * 3 + 6, 4);
+          for (let k = 0; k < 18; k++) for (let j = 0; j < 3; j++) { p.fill((k + j) % 2 ? C.night : C.cream); p.rect(14 + k * s, finish.y + j * s, s + 0.5, s + 0.5); }
+        }
+        // La fila de puertas; la elegida lleva aro.
+        if (row) for (let k = 0; k < 3; k++) {
+          const opt = row.it.options[row.perm[k]], good = row.perm[k] === row.it.answer;
+          if (row.done && good && row.pick === k) continue;   // la acertada ya estalló
+          const fill = !row.done ? C.cream : good ? C.ok : row.pick === k ? C.bad : C.cream;
+          drawTile(p, C, { x: 14 + k * lw + 7, y: row.y - 20, w: lw - 14, h: 40 }, opt, { fill, size: 17, ring: !row.done && row.sel === k ? C.sky : null });
+        }
+        bits.forEach(b => { const c = p.color(b.col); c.setAlpha(255 * Math.min(1, b.t * 1.5)); p.noStroke(); p.fill(c); p.rect(b.x - b.s / 2, b.y - b.s / 2, b.s, b.s, 2); });
+
+        // El corredor: un bloque color sol con piernas; con racha deja estela.
+        const moving = a.phase === 'play' && !(row && row.state === 'waiting'), bob = moving ? Math.abs(Math.sin(run)) * 3 : 0, x = runX, y = runY - bob;
+        if (moving && streak >= 2) for (let k = 1; k <= 3; k++) { const c = p.color(k % 2 ? C.sun : C.coral); c.setAlpha(110 - k * 28); p.noStroke(); p.fill(c); p.rect(x - 11 + k, y + 14 + k * 11, 22 - k * 2, 8, 4); }
+        const g = p.color(C.night); g.setAlpha(60); p.noStroke(); p.fill(g); p.ellipse(x, runY + 21, 30 - bob * 2, 7);
+        const leg = moving ? Math.sin(run) * 5 : 0;
+        p.fill(shade(C.sun, 0.6)); p.rect(x - 10, y + 12, 7, 8 + leg, 3); p.rect(x + 3, y + 12, 7, 8 - leg, 3);
+        p.fill(shade(C.sun, 0.74)); p.rect(x - 15, y - 11, 30, 28, 9);
+        p.fill(C.sun); p.rect(x - 15, y - 15, 30, 28, 9);
+        p.fill(shade(C.sun, 0.74)); p.rect(x - 9, y - 6, 18, 3, 2);
+        if (a.phase === 'play' && streak >= 2) drawPill(p, C, `×${streak}`, x + (lane === 2 ? -30 : 30), y - 2, C.coral, 11);   // al lado: no tapa la puerta que llega
+        p.pop();
+
+        // Encabezado: ronda, vidas, el número pedido y las dos reglas para comparar.
+        p.noStroke(); p.fill(C.bg); p.rect(0, 0, W, TOP - 8);
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, `${r.title} · busca otro nombre para`, W / 2, 40, W - 24, 11);
+        const idx = row ? row.idx : queue.length ? queue[0] : -1, it = idx >= 0 ? r.items[idx] : null;
+        if (a.phase === 'play' && finish) drawPill(p, C, '¡A la meta!', W / 2, 84, C.mint, 18);
+        else if (it && a.phase === 'play') {
+          drawPill(p, C, it.ask, W / 2, 64, C.sun, 18);
+          const [lo, hi] = rangeOf(it);
+          const X = ruler(86, it.ask, C.sun, lo, hi, 1);
+          const sel = row && row.sel >= 0 ? row.it.options[row.perm[row.sel]] : null;
+          if (sel) ruler(107, sel, C.sky, lo, hi, grow);
+          else { p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER); p.text(missed.has(idx) ? helpOf(it) : 'toca una puerta para medirla aquí', (62 + W - 16) / 2, 114); }
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(9); p.textAlign(p.CENTER, p.CENTER);
+          for (let u = lo; u <= hi; u++) p.text(negTxt(u), X(u), 131);
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = (TOP + H) / 2 - 20;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${Math.min(st.done[i], rr.items.length)} de ${rr.items.length}` })), mid, W - 44);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Sin prisa: la fila de puertas te espera', lost: 'Demasiadas puertas equivocadas' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          const sel = row && !row.done && row.sel >= 0;
+          p.text(locked || a.phase === 'all' ? '¡Carrera terminada! Ya puedes comprobar' : sel ? '¿Miden lo mismo? Tócala otra vez para pasar' : 'Toca una puerta para compararla con el número', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const t = a.tap(locked);
+        if (t === 'off') return;
+        if (t !== 'play' || !row || row.done || row.state === 'going') return false;
+        if (p.mouseY < TOP - 10) return false;   // tocar las reglas no elige puerta
+        const k = laneOf(p.mouseX, W);
+        if (row.sel === k && row.state === 'waiting') { row.state = 'going'; api.sfx?.tap?.(); }   // segundo toque: pasar
+        else if (row.sel === k) row.go = true;   // segundo toque antes de que la fila llegue: pasa al llegar
+        else if (row.sel !== k) { row.sel = k; row.go = false; lane = k; grow = 0; api.sfx?.tap?.(); }              // primer toque: comparar
+        return false;
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, lane, streak, finish: !!finish, help: row && missed.has(row.idx) ? helpOf(row.it) : '', row: row && { y: row.y, done: row.done, state: row.state, sel: row.sel, good: row.perm.indexOf(row.it.answer) } }),
+    };
+  }
+
+  return { grade, create, laneOf, valueOf, partsOf, rangeOf, helpOf };
+})();
+;
+//#archivo js/games/frena-aguja.js
+// Construye el irracional (Álgebra 1.1, irracionales y reales; juego dinámico de la lección alg-11c; conserva el nombre
+// «frena-aguja» para no perder progreso). La idea del video: √2 es el lado de un cuadrado de área 2, no es ninguna
+// fracción, y aun así tiene un lugar exacto en la recta. Aquí no hay aguja que frenar ni prisa: se arrastra un punto
+// sobre la recta y con él crece un cuadrado apoyado en ella (su lado va del 0 al punto) que muestra su área; hay que
+// dejarlo en el área pedida (7 → el lado es √7). Para π se hace rodar una rueda de diámetro 1: una vuelta completa
+// mide π. Los negativos se construyen hacia la izquierda del 0. Con «¡Listo!» se comprueba: si está bien se abre una
+// lupa con las décimas y los decimales del número (que nunca terminan) y se ganan estrellas; si no, se pierde una
+// vida, se ilumina el tramo entre los dos enteros que lo encierran y sale una pista. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, min, max, tol, items: [{ label, value, why }] }], lives? }   state = { done: [n] }
+// Specs 2026-11-13-juegos-dinamicos-valle, 2026-11-14-mejoras-carrera-y-aguja y 2026-11-14-juegos-conceptuales-valle.
+
+GAMES['frena-aguja'] = (() => {
+  const FINE = 0.05;   // qué tan cerca debe quedar el punto (el área que se lee ya sale redonda con ±0.01)
+  const hits = (pos, value, tol) => Math.abs(pos - value) <= tol;
+  // Estrellas por puntería: dentro de un tercio de la tolerancia 3, de dos tercios 2, de la tolerancia 1.
+  const starsOf = (err, tol) => (err > tol ? 0 : err <= tol / 3 ? 3 : err <= (2 * tol) / 3 ? 2 : 1);
+  // Los dos enteros seguidos que encierran al número.
+  const bracket = value => [Math.floor(value), Math.floor(value) + 1];
+  // Cómo se construye: π con una rueda, las raíces con un cuadrado.
+  const kindOf = label => (String(label).includes('π') ? 'wheel' : 'square');
+  // Área del cuadrado cuyo lado es el número (7 para √7 y para −√7).
+  const areaOf = it => Math.round(it.value * it.value);
+  // Vueltas que da una rueda de diámetro 1 al rodar hasta pos.
+  const turnsOf = pos => Math.abs(pos) / Math.PI;
+  // El número con seis decimales (cortados, no redondeados): se muestra seguido de «…».
+  function digitsOf(it) {
+    const exact = (kindOf(it.label) === 'wheel' ? Math.PI : Math.sqrt(areaOf(it))) * Math.sign(it.value);
+    return negTxt((Math.trunc(exact * 1e6) / 1e6).toFixed(6));
+  }
+  const askOf = it => (kindOf(it.label) === 'wheel' ? (it.value < 0 ? 'Una vuelta hacia la izquierda' : 'Una vuelta completa de la rueda') : it.value < 0 ? `Área ${areaOf(it)}, a la izquierda del 0` : `Un cuadrado de área ${areaOf(it)}`);
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => `${it.label} ≈ ${negTxt(it.value.toFixed(2))}`).join(', ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const st = { done: R.map(() => 0) }, stars = R.map(() => 0);
+    let locked = false, W = 0, H = 0, lineY = 0, pos = 1, pause = 0, shown = null, why = '', lens = 0, drag = false, btn = {};
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; stars[i] = 0; pos = 1; pause = 0; shown = null; why = ''; drag = false; },
+      lost(i) { st.done[i] = 0; drag = false; },
+    });
+    const X = v => { const r = R[a.cur]; return 22 + ((v - r.min) / (r.max - r.min)) * (W - 44); };
+    const unit = () => (W - 44) / (R[a.cur].max - R[a.cur].min);
+    const item = () => R[a.cur].items[Math.min(st.done[a.cur], R[a.cur].items.length - 1)];
+    // El punto no sale de la recta ni deja que el cuadrado suba hasta el encabezado.
+    const clamp = v => { const r = R[a.cur], top = (lineY - 76) / unit(); return Math.max(r.min, -top, Math.min(r.max, top, Math.round(v * 100) / 100)); };
+    const inBox = (b, x, y) => x >= b.x - 4 && x <= b.x + b.w + 4 && y >= b.y - 6 && y <= b.y + b.h + 6;
+
+    function layout(w, h) {
+      W = w; H = h; lineY = h - 92;
+      btn = { minus: { x: w / 2 - 104, y: h - 60, w: 44, h: 30 }, ok: { x: w / 2 - 50, y: h - 60, w: 100, h: 30 }, plus: { x: w / 2 + 60, y: h - 60, w: 44, h: 30 } };
+    }
+    function check() {
+      const it = item(), fine = Math.min(R[a.cur].tol ?? FINE, FINE), ok = hits(pos, it.value, fine), s = starsOf(Math.abs(pos - it.value), fine);
+      shown = { pos, ok, it, stars: s }; pause = ok ? 2.6 : 0.9; drag = false;
+      if (ok) { st.done[a.cur]++; stars[a.cur] += s; why = ''; a.hit(); a.say(kindOf(it.label) === 'wheel' ? `Una vuelta mide ${it.label.replace('−', '')}` : `El lado de ese cuadrado es ${it.label.replace('−', '')}`, C.ok); }
+      else {
+        why = it.why;
+        const wheel = kindOf(it.label) === 'wheel', less = Math.abs(pos) < Math.abs(it.value);
+        a.say(pos === 0 ? (wheel ? 'La rueda aún no ha rodado' : 'Aún no hay cuadrado') : Math.sign(pos) !== Math.sign(it.value) ? 'Va hacia el otro lado del 0' : wheel ? (less ? 'Aún no completa la vuelta' : 'Dio más de una vuelta') : less ? 'Al cuadrado le falta área' : 'Al cuadrado le sobra área', C.bad);
+        if (a.miss()) { shown = null; pause = 0; why = ''; }
+      }
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        lens = shown && shown.ok ? Math.min(1, lens + dt * 5) : 0;
+        if (a.phase !== 'play' || pause <= 0) return;
+        // Pausa tras comprobar: se ve el resultado; luego sigue (con el siguiente número si acertó).
+        pause -= dt;
+        if (pause <= 0) {
+          const r = R[a.cur];
+          if (shown && shown.ok) { shown = null; why = ''; pos = 1; if (st.done[a.cur] >= r.items.length) a.win(); } else shown = null;
+        }
+      }
+
+      function star(cx, cy, rad, on) {
+        if (on) { p.noStroke(); p.fill(C.sun); } else { p.noFill(); p.stroke(C.mute); p.strokeWeight(1.5); }
+        p.beginShape();
+        for (let k = 0; k < 10; k++) { const ang = -Math.PI / 2 + (k * Math.PI) / 5, q = k % 2 ? rad * 0.45 : rad; p.vertex(cx + Math.cos(ang) * q, cy + Math.sin(ang) * q); }
+        p.endShape(p.CLOSE);
+      }
+
+      // El cuadrado apoyado en la recta: su lado va del 0 al punto. Dentro, la cuadrícula de unidades y su área.
+      function drawSquare(v, col) {
+        const u = unit(), s = Math.abs(v) * u, x0 = Math.min(X(0), X(v)), y0 = lineY - s, f = p.color(col); f.setAlpha(70);
+        p.stroke(col); p.strokeWeight(2.5); p.fill(f); p.rect(x0, y0, s, s, 3);
+        p.stroke(col); p.strokeWeight(1); p.drawingContext.setLineDash([3, 4]);
+        for (let k = 1; k < Math.abs(v); k++) { p.line(x0, lineY - k * u, x0 + s, lineY - k * u); const gx = v < 0 ? X(0) - k * u : X(0) + k * u; p.line(gx, y0, gx, lineY); }
+        p.drawingContext.setLineDash([]);
+        if (s > 34) { p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); p.textSize(s > 70 ? 15 : 11); p.text(`área ${(v * v).toFixed(1)}`, x0 + s / 2, y0 + s / 2); }
+      }
+      // La rueda de diámetro 1: rueda sin resbalar; lo que ya rodó queda pintado en la recta.
+      function drawWheel(v, col) {
+        const d = unit(), cx = X(v), cy = lineY - d / 2, ang = 2 * v;   // arco = radio · ángulo, radio = 1/2
+        p.stroke(C.coral); p.strokeWeight(10); p.line(X(0), lineY, cx, lineY);   // el borde ya desenrollado (la recta se dibuja encima)
+        const f = p.color(col); f.setAlpha(60);
+        p.stroke(C.ink); p.strokeWeight(2.5); p.fill(f); p.circle(cx, cy, d);
+        p.strokeWeight(1.2); for (let k = 0; k < 4; k++) { const t = ang + (k * Math.PI) / 2 + Math.PI / 2; p.line(cx, cy, cx + (Math.cos(t) * d) / 2, cy + (Math.sin(t) * d) / 2); }
+        const t = ang + Math.PI / 2;   // la marca empieza tocando el suelo
+        p.noStroke(); p.fill(C.coral); p.circle(cx + (Math.cos(t) * d) / 2, cy + (Math.sin(t) * d) / 2, 9);
+        p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER);
+        p.text(`${turnsOf(v).toFixed(2)} vueltas`, Math.max(60, Math.min(W - 60, cx)), cy - d / 2 - 14);
+      }
+
+      // La lupa: el tramo de una unidad alrededor del número, con sus décimas, el número y dónde quedó el punto.
+      function drawLens(it) {
+        const c = Math.round(it.value * 10) / 10, lo = c - 0.5, hi = c + 0.5, bx = 16, bw = W - 32, by = 94, bh = 126 * lens;
+        const LX = v => bx + 16 + ((v - lo) / (hi - lo)) * (bw - 32), ly = by + 68;
+        p.noStroke(); p.fill(C.card); p.rect(bx, by, bw, bh, 14);
+        p.noFill(); p.stroke(C.ok); p.strokeWeight(2); p.rect(bx, by, bw, bh, 14);
+        if (lens < 1) return;
+        for (let k = 0; k < 3; k++) star(W / 2 + (k - 1) * 26, by + 18, 10, k < shown.stars);
+        p.stroke(C.ink); p.strokeWeight(2.5); p.line(bx + 10, ly, bx + bw - 10, ly);
+        for (let k = 0; k <= 10; k++) {
+          const v = lo + k / 10, whole = Math.abs(v - Math.round(v)) < 1e-6;
+          p.stroke(C.ink); p.strokeWeight(whole ? 2.5 : 1.2); p.line(LX(v), ly - (whole ? 9 : 5), LX(v), ly + (whole ? 9 : 5));
+          // Se rotulan las décimas pares y siempre el entero (π queda «un poco después del 3»: el 3 debe verse).
+          if (whole || Math.abs(Math.round(v * 10)) % 2 === 0) { p.noStroke(); p.fill(whole ? C.ink : C.mute); p.textStyle(p.BOLD); p.textSize(whole ? 12 : 10); p.textAlign(p.CENTER, p.CENTER); p.text(whole ? negTxt(Math.round(v)) : negTxt(v.toFixed(1)), LX(v), ly + 20); }
+        }
+        p.stroke(C.ok); p.strokeWeight(3); p.line(LX(it.value), ly - 16, LX(it.value), ly + 10);
+        drawPill(p, C, `${it.label} = ${digitsOf(it)}…`, Math.max(bx + 74, Math.min(bx + bw - 74, LX(it.value))), ly - 28, C.ok, 12);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        p.text('sus decimales nunca terminan ni se repiten', W / 2, by + 108);
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], it = shown ? shown.it : item(), live = a.phase === 'play', v = shown ? shown.pos : pos;
+        const col = shown ? (shown.ok ? C.ok : C.bad) : C.sky;
+
+        // Tras fallar: el tramo entre los dos enteros que encierran al número.
+        if (why && live) {
+          const [b0, b1] = bracket(it.value), band = p.color(C.sun); band.setAlpha(110);
+          p.stroke(C.N); p.strokeWeight(2); p.fill(band); p.rect(X(b0), lineY - 15, X(b1) - X(b0), 30, 6);
+        }
+        // La figura que se construye.
+        if (live && Math.abs(v) > 0.005) (kindOf(it.label) === 'wheel' ? drawWheel : drawSquare)(v, col);
+        // La recta: enteros con número y décimas sin número.
+        p.stroke(C.ink); p.strokeWeight(3); p.line(14, lineY, W - 14, lineY);
+        for (let k = Math.round(r.min * 10); k <= Math.round(r.max * 10); k++) {
+          const t = k / 10, whole = k % 10 === 0, half = k % 5 === 0;
+          p.stroke(whole && t === 0 ? C.sun : C.ink); p.strokeWeight(whole ? 2.5 : 1); p.line(X(t), lineY - (whole ? 8 : half ? 5 : 3), X(t), lineY + (whole ? 8 : half ? 5 : 3));
+          if (whole) { p.noStroke(); p.fill(t === 0 ? C.N : t < 0 ? C.I : C.ink); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.CENTER); p.text(negTxt(t), X(t), lineY + 19); }
+        }
+        // El punto que se arrastra.
+        if (live) {
+          p.noStroke(); p.fill(shade(C.sun, 0.7)); p.circle(X(v), lineY + 2, 24);
+          p.fill(shown ? col : C.sun); p.circle(X(v), lineY, 24);
+          p.stroke(C.night); p.strokeWeight(2); p.line(X(v) - 4, lineY - 4, X(v) - 4, lineY + 4); p.line(X(v) + 4, lineY - 4, X(v) + 4, lineY + 4);
+        }
+
+        // Encabezado: ronda, vidas y lo que hay que construir.
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, live ? `${r.title} · ${kindOf(it.label) === 'wheel' ? 'una vuelta de la rueda mide' : 'el lado del cuadrado es'} ${it.label.replace('−', '')}${it.value < 0 ? ', a la izquierda del 0' : ''}` : r.title, W / 2, 40, W - 24, 11);
+        if (live) drawPill(p, C, askOf(it), W / 2, 64, C.sun, 15);
+        // La pista, después de un fallo (se quita al volver a mover el punto).
+        if (why && live && !shown) {
+          p.noStroke(); p.fill(C.card); p.rect(14, 84, W - 28, 52, 10);
+          p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(12); p.textAlign(p.CENTER, p.TOP); p.text(why, 22, 91, W - 44, 44);
+        }
+        if (shown && shown.ok && live) drawLens(it);
+
+        // Botones: afinar de a una centésima y comprobar.
+        if (live && !shown) {
+          drawTile(p, C, btn.minus, '−', { fill: C.cream, size: 18, r: 9, lift: 2 });
+          drawTile(p, C, btn.plus, '+', { fill: C.cream, size: 18, r: 9, lift: 2 });
+          drawTile(p, C, btn.ok, '¡Listo!', { fill: C.mint, size: 15, r: 9, lift: 2 });
+        }
+
+        arcadeToast(p, C, a, W / 2, H - 13, locked);
+        if (locked || a.phase === 'all') {
+          drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: rr.items.map(x => `${x.label} ≈ ${negTxt(x.value.toFixed(2))}`).join(' · ') })), H * 0.4);
+          const total = stars.reduce((s, t) => s + t, 0), max = R.reduce((s, rr) => s + rr.items.length * 3, 0);
+          if (total) { star(W / 2 - 62, H * 0.4 + 62, 9, true); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(13); p.textAlign(p.LEFT, p.CENTER); p.text(`${total} de ${max} estrellas`, W / 2 - 46, H * 0.4 + 63); }
+        } else drawArcadeBanner(p, C, a, H * 0.45, { idle: 'Sin prisa: arrastra el punto por la recta', lost: 'Varias construcciones quedaron lejos' });
+        if (!a.toast && (locked || a.phase === 'idle' || a.phase === 'all')) {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Irracionales construidos! Ya puedes comprobar' : 'Construye cada número y toca «¡Listo!»', W / 2, H - 13);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp !== 'play' || pause > 0) return false;
+        const x = p.mouseX, y = p.mouseY;
+        if (inBox(btn.ok, x, y)) { check(); return false; }
+        if (inBox(btn.minus, x, y)) { pos = clamp(pos - 0.01); why = ''; return false; }
+        if (inBox(btn.plus, x, y)) { pos = clamp(pos + 0.01); why = ''; return false; }
+        if (y > 84 && y < btn.ok.y - 8) { drag = true; why = ''; const r = R[a.cur]; pos = clamp(r.min + ((x - 22) / (W - 44)) * (r.max - r.min)); }
+        return false;
+      };
+      p.mouseDragged = () => {
+        if (!drag || locked || a.phase !== 'play' || pause > 0) return;
+        const r = R[a.cur]; pos = clamp(r.min + ((p.mouseX - 22) / (W - 44)) * (r.max - r.min));
+        return false;
+      };
+      p.mouseReleased = () => { drag = false; };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; drag = false; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, pos, pause, value: item().value, kind: kindOf(item().label), stars: [...stars], help: !!why, lineY, targetX: X(item().value), ok: { x: btn.ok.x + btn.ok.w / 2, y: btn.ok.y + btn.ok.h / 2 } }),
+    };
+  }
+
+  return { grade, create, hits, starsOf, bracket, kindOf, areaOf, turnsOf, digitsOf };
+})();
+;
+//#archivo js/games/dispara-inverso.js
+// Dispara al inverso (Álgebra 1.2, axiomas de campo; juego dinámico de la lección alg-12b): abajo hay un cañón
+// cargado con una ficha («7», «2/5», «9 + ?») y arriba flotan cuatro burbujas con números que se mueven de lado a
+// lado. Se toca hacia dónde disparar: la ficha vuela en esa dirección. Hay que pegarle a su pareja según la misión
+// de la ronda: su opuesto (suman 0), su recíproco (su producto es 1) o el neutro (la deja igual). Pegarle a otra
+// quita una vida; fallar el tiro no quita nada. Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ kind: 'sum'|'prod'|'neutro', title, mission, items: [{ ball, targets: [4], answer, say }] }], lives? }
+// state = { done: [n] }      Spec 2026-11-13-juegos-dinamicos-valle.
+
+GAMES['dispara-inverso'] = (() => {
+  const SPEED = 430, RAD = 23;
+  // Velocidad de la ficha para ir desde `from` hacia `to` a `speed` píxeles por segundo.
+  function aim(from, to, speed) {
+    const d = Math.hypot(to.x - from.x, to.y - from.y) || 1;
+    return { vx: ((to.x - from.x) / d) * speed, vy: ((to.y - from.y) / d) * speed };
+  }
+  const touches = (ball, target, r) => Math.hypot(ball.x - target.x, ball.y - target.y) <= r;
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    return { ok, solution: params.rounds.map(r => r.items.map(it => it.say).join(', ')).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, COLS = ['sky', 'coral', 'mint', 'cream'];
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, top = 104, cannon = { x: 0, y: 0 }, queue = [], targets = [], ball = null, gap = 0, n = 0, aimAt = null, good = false;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); ball = null; load(); },
+      lost(i) { st.done[i] = 0; ball = null; targets = []; },
+    });
+    const item = () => R[a.cur].items[queue[0]];
+
+    function layout(w, h) { W = w; H = h; cannon = { x: w / 2, y: h - 62 }; }
+    // Carga la pregunta: cuatro burbujas en una sola fila que pasa como una cinta (sale por un lado y entra por el
+    // otro). Así ninguna tapa a otra y un tiro nunca le pega a una burbuja que no se apuntó.
+    function load() {
+      const it = item(); if (!it) { targets = []; return; }
+      const order = shuffledOrder(4, it.ball + (n++));
+      const sep = (W + 2 * RAD) / 4, v = (n % 2 ? -1 : 1) * (32 + a.cur * 6);
+      targets = order.map((k, j) => ({ k, label: it.targets[k], ok: k === it.answer, x: sep * (j + 0.5) - RAD, y: top + 62, vx: v, col: COLS[j], hit: 0 }));
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function step(dt) {
+        a.tick(dt);
+        if (a.phase !== 'play') return;
+        const span = W + 2 * RAD;
+        for (const t of targets) { t.x += t.vx * dt; if (t.x > W + RAD) t.x -= span; if (t.x < -RAD) t.x += span; t.hit = Math.max(0, t.hit - dt * 2.5); }
+        if (gap > 0) { gap -= dt; if (gap <= 0) { if (!queue.length) { a.win(); targets = []; } else load(); } return; }
+        if (!ball) return;
+        ball.x += ball.vx * dt; ball.y += ball.vy * dt;
+        const t = targets.find(t => touches(ball, t, RAD + 9));
+        if (t) {
+          const it = item(); ball = null; t.hit = 1;
+          good = t.ok;
+          if (t.ok) { st.done[a.cur]++; queue.shift(); a.hit(); a.say(it.say, C.ok); gap = 0.9; }
+          else { a.say(`${it.ball} con ${t.label}: no es su pareja`, C.bad); queue.push(queue.shift()); if (!a.miss()) gap = 0.7; }
+        } else if (ball.y < top - 20 || ball.x < -20 || ball.x > W + 20) ball = null;
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur], it = item();
+
+        // Las burbujas.
+        for (const t of targets) {
+          const col = gap > 0 && good && t.ok ? C.ok : t.hit > 0 && !t.ok ? C.bad : C[t.col], d = RAD * 2 * (1 + 0.15 * t.hit);
+          p.noStroke(); p.fill(shade(col, 0.78)); p.circle(t.x, t.y + 3, d);
+          p.fill(col); p.circle(t.x, t.y, d);
+          p.fill(inkOn(col, C.ink)); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD); fitText(p, t.label, t.x, t.y + 1, RAD * 2 - 8, 16);
+        }
+        // El cañón y la ficha cargada; una línea punteada marca hacia dónde se apuntó la última vez.
+        if (aimAt && a.phase === 'play') { p.stroke(C.mute); p.strokeWeight(1.5); p.drawingContext.setLineDash([3, 7]); p.line(cannon.x, cannon.y, aimAt.x, aimAt.y); p.drawingContext.setLineDash([]); }
+        p.noStroke(); p.fill(C.mute); p.rect(cannon.x - 34, cannon.y + 22, 68, 10, 5);
+        p.fill(shade(C.sun, 0.74)); p.circle(cannon.x, cannon.y + 4, 46);
+        p.fill(C.sun); p.circle(cannon.x, cannon.y, 46);
+        if (it && a.phase === 'play' && !ball && gap <= 0) { p.fill(inkOn(C.sun, C.ink)); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD); fitText(p, it.ball, cannon.x, cannon.y + 1, 38, 16); }
+        if (ball) { p.stroke(shade(C.sun, 0.6)); p.strokeWeight(2.5); p.fill(C.sun); p.circle(ball.x, ball.y, 30); p.noStroke(); p.fill(inkOn(C.sun, C.ink)); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD); fitText(p, ball.label, ball.x, ball.y + 1, 26, 12); }
+
+        // Encabezado: ronda, vidas y la misión.
+        drawArcadeHead(p, C, a, R.length);
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, r.mission, W / 2, 46, W - 24, 15);
+        p.fill(C.mute); p.textSize(11); p.text(`${r.title}: ${Math.min(st.done[a.cur], r.items.length)} de ${r.items.length}`, W / 2, 70);
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = (top + cannon.y) / 2 + 30;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.flatMap((rr, i) => [{ ok: st.done[i] >= rr.items.length, text: rr.items.map(x => x.say).join(' · ') }]), (top + cannon.y) / 2);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Toca hacia dónde quieres disparar', lost: 'Demasiados tiros a la burbuja equivocada' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Todas las parejas! Ya puedes comprobar' : 'Las burbujas se mueven: apunta un poco adelante', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp !== 'play' || ball || gap > 0 || !item() || p.mouseY > cannon.y - 20) return false;
+        aimAt = { x: p.mouseX, y: p.mouseY };
+        ball = { x: cannon.x, y: cannon.y, label: item().ball, ...aim(cannon, aimAt, SPEED) };
+        api.sfx?.tap?.();
+        return false;
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, cannon, flying: !!ball, gap, speed: SPEED, targets: targets.map(t => ({ x: t.x, y: t.y, vx: t.vx, ok: t.ok })) }),
+    };
+  }
+
+  return { grade, create, aim, touches };
+})();
+;
+//#archivo js/games/salta-signos.js
+// Salta los signos (Álgebra 1.2, consecuencias de los axiomas; juego dinámico de la lección alg-12c): un corredor
+// avanza y por el suelo vienen fichas con operaciones («(−3)(−4)», «10 ÷ (−2)», «3 − 8»). La misión de la ronda dice
+// qué signo es peligroso («salta las que dan negativo»): esas se saltan tocando la pantalla; las demás se atrapan
+// corriendo, sin saltar. Chocar con una peligrosa quita una vida; saltar una buena no quita nada, pero vuelve después.
+// Sin vidas, la ronda empieza otra vez.
+// params = { rounds: [{ title, mission: 'neg'|'pos', items: [{ text, sign: 1|-1 }] }], lives? }   state = { done: [n] }
+// Spec 2026-11-13-juegos-dinamicos-valle.
+
+GAMES['salta-signos'] = (() => {
+  const VY = 520, GRAV = 1000, AIR = (2 * VY) / GRAV, CLEAR = 38;   // salto: velocidad, gravedad, tiempo en el aire y altura que libra una ficha
+  const mustJump = (item, mission) => (mission === 'neg' ? item.sign < 0 : item.sign > 0);
+  // Altura del corredor a los t segundos de saltar (0 en el suelo).
+  const jumpHeight = t => (t <= 0 || t >= AIR ? 0 : VY * t - (GRAV * t * t) / 2);
+  const SAY = { neg: 'Salta las que dan negativo', pos: 'Salta las que dan positivo' };
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => (state.done?.[i] ?? 0) >= r.items.length);
+    const solution = params.rounds.map(r => `${r.title}: ${r.items.filter(it => mustJump(it, r.mission)).map(it => it.text).join(', ')} dan ${r.mission === 'neg' ? 'negativo' : 'positivo'}`).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, RX = 64;
+    const st = { done: R.map(() => 0) };
+    let locked = false, W = 0, H = 0, ground = 0, queue = [], block = null, gap = 0, jumpT = -1, scroll = 0;
+    const a = makeArcade(R.length, params.lives ?? 3, api, {
+      start(i) { st.done[i] = 0; queue = R[i].items.map((_, k) => k); block = null; gap = 1.5; jumpT = -1; },
+      lost(i) { st.done[i] = 0; block = null; },
+    });
+
+    function layout(w, h) { W = w; H = h; ground = h - 92; }
+    // La ficha pasa rápido bajo un salto largo: queda como medio segundo de margen para saltar a tiempo. Para que
+    // alcance el tiempo de pensar el signo, la operación se anuncia antes de que la ficha entre.
+    const speedOf = () => 215 + a.cur * 8;
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => { layout(size.w, size.h); if (a.stopped) p.redraw(); };
+
+      function spawn() {
+        const it = R[a.cur].items[queue[0]];
+        p.textStyle(p.BOLD); p.textSize(14);
+        block = { it, x: W + 10, w: Math.min(72, Math.max(50, p.textWidth(it.text) + 16)), danger: mustJump(it, R[a.cur].mission), state: 'run' };
+      }
+      function step(dt) {
+        a.tick(dt);
+        if (jumpT >= 0) { jumpT += dt; if (jumpT >= AIR) jumpT = -1; }
+        if (a.phase !== 'play') return;
+        const speed = speedOf();
+        scroll = (scroll + speed * dt) % 36;
+        if (!block) { gap -= dt; if (gap <= 0 && queue.length) spawn(); return; }
+        block.x -= speed * dt;
+        // Mientras la ficha pasa por donde está el corredor: si va por el suelo la toca; si va en el aire, la libra.
+        if (block.state === 'run' && block.x < RX + 6 && block.x + block.w > RX - 6) {
+          const high = jumpHeight(jumpT) >= CLEAR, it = block.it;
+          if (!high) {
+            if (block.danger) { block.state = 'bad'; a.say(`${it.text} da ${it.sign < 0 ? 'negativo' : 'positivo'}: había que saltarla`, C.bad); queue.push(queue.shift()); if (a.miss()) return; }
+            else { block.state = 'got'; st.done[a.cur]++; queue.shift(); a.hit(); a.say(`${it.text} da ${it.sign < 0 ? 'negativo' : 'positivo'}: atrapada`, C.ok); }
+          }
+        }
+        if (block.state === 'run' && block.x + block.w < RX - 6) {
+          // Pasó por debajo del salto: bien si era peligrosa; si era buena, se fue y vuelve después.
+          if (block.danger) { block.state = 'ok'; st.done[a.cur]++; queue.shift(); a.hit(); a.say(`${block.it.text} da ${block.it.sign < 0 ? 'negativo' : 'positivo'}: bien saltada`, C.ok); }
+          else { block.state = 'gone'; queue.push(queue.shift()); a.say('Esa no era peligrosa: vuelve después', C.sun); }
+        }
+        if (block.x + block.w < -10 || block.state === 'got') { if (!queue.length) { a.win(); block = null; return; } block = null; gap = 1.3; }
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const dt = frameDt(p);
+        if (!locked) step(dt * a.slow);
+        const r = R[a.cur];
+
+        // El suelo, con rayas que corren.
+        p.stroke(C.mint); p.strokeWeight(4); p.line(8, ground, W - 8, ground);
+        p.stroke(C.line); p.strokeWeight(2);
+        for (let x = W - scroll; x > 8; x -= 36) p.line(x, ground + 10, x - 12, ground + 10);
+        // La ficha que viene.
+        if (block) {
+          const fill = block.state === 'bad' ? C.bad : block.state === 'ok' || block.state === 'got' ? C.ok : C.cream;
+          drawTile(p, C, { x: block.x, y: ground - 35, w: block.w, h: 32 }, block.it.text, { fill, size: 14, r: 9, lift: 3 });
+        }
+        // El aviso de la que viene, mientras todavía no entra.
+        if (!block && queue.length && a.phase === 'play') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(10); p.textAlign(p.CENTER, p.CENTER); p.text('VIENE', W - 58, ground - 96);
+          drawTile(p, C, { x: W - 104, y: ground - 86, w: 92, h: 36 }, r.items[queue[0]].text, { fill: C.card, ink: C.ink, size: 14, r: 9, lift: 0, ring: C.sun });
+        }
+        // El corredor.
+        const hgt = jumpHeight(jumpT), y = ground - 17 - hgt, bob = a.phase === 'play' && hgt === 0 ? Math.abs(Math.sin(p.frameCount * 0.3)) * 2 : 0;
+        p.noStroke(); p.fill(C.line); p.ellipse(RX, ground + 3, 26 - hgt * 0.12, 6);
+        p.fill(shade(C.coral, 0.74)); p.rect(RX - 14, y - 11 - bob, 28, 30, 9);
+        p.fill(C.coral); p.rect(RX - 14, y - 15 - bob, 28, 30, 9);
+        p.fill(shade(C.coral, 0.74)); p.rect(RX - 8, y - 6 - bob, 16, 3, 2);
+
+        // Encabezado: ronda, vidas y la misión.
+        drawArcadeHead(p, C, a, R.length);
+        drawPill(p, C, SAY[r.mission], W / 2, 50, r.mission === 'neg' ? C.coral : C.mint, 15);
+        p.noStroke(); p.fill(C.mute); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+        fitText(p, `${r.title} · las demás, atrápalas corriendo`, W / 2, 78, W - 20, 11);
+        p.text(`${Math.min(st.done[a.cur], r.items.length)} de ${r.items.length}`, W / 2, 96);
+
+        arcadeToast(p, C, a, W / 2, H - 17, locked);
+        const mid = (110 + ground) / 2;
+        if (locked || a.phase === 'all') drawArcadeSummary(p, C, R.map((rr, i) => ({ ok: st.done[i] >= rr.items.length, text: `${rr.title}: ${Math.min(st.done[i], rr.items.length)} de ${rr.items.length}` })), mid);
+        else drawArcadeBanner(p, C, a, mid, { idle: 'Toca la pantalla para saltar', lost: 'Demasiados choques' });
+        if (!a.toast || locked || a.phase === 'idle' || a.phase === 'all') {
+          p.noStroke(); p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(locked || a.phase === 'all' ? '¡Carrera sin tropiezos! Ya puedes comprobar' : 'Piensa el signo antes de que llegue la ficha', W / 2, H - 16);
+        }
+        arcadeStop(p, a, locked);
+      };
+
+      p.mousePressed = () => {
+        if (!inCanvas(p)) return;
+        const tp = a.tap(locked);
+        if (tp === 'off') return;
+        if (tp === 'play' && jumpT < 0) { jumpT = 0; api.sfx?.tap?.(); }
+        return false;
+      };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ done: [...st.done] }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+      // Para pruebas en el navegador: lo que hay en pantalla en este momento.
+      peek: () => ({ phase: a.phase, cur: a.cur, lives: a.lives, W, H, runX: RX, speed: speedOf(), onGround: jumpT < 0, block: block && { x: block.x, w: block.w, danger: block.danger, state: block.state } }),
+    };
+  }
+
+  return { grade, create, mustJump, jumpHeight, AIR };
 })();

@@ -7,7 +7,7 @@ const PI_TEMARIO = {
     ['icf-ma-datos', 'Datos y Gráficas', ['Leer tablas y gráficas', 'Promedio, mediana y moda', 'Muestras y conclusiones'], 'Estadística'],
     ['icf-ma-proporcion', 'Proporciones y Porcentajes', ['Razones y escalas', 'Porcentajes y cambios', 'Regla de tres directa e inversa', 'Tasas: velocidad, precio y moneda'], 'Álgebra y cálculo'],
     ['icf-ma-azar', 'Conteo y Probabilidad', ['Sumar o multiplicar casos', 'Permutaciones y combinaciones', 'Probabilidad simple', 'Tablas y eventos dependientes'], 'Estadística'],
-    ['icf-ma-medida', 'Perímetros, Áreas y Volúmenes', ['Perímetro y área', 'Figuras compuestas y círculos', 'Volumen y capacidad'], 'Geometría'],
+    ['icf-ma-medida', 'Áreas y Volúmenes', ['Perímetro y área', 'Figuras compuestas y círculos', 'Volumen y capacidad'], 'Geometría'],
     ['icf-ma-lineal', 'Funciones Lineales', ['Pendiente como razón de cambio', 'De la situación a la ecuación', 'Comparar planes'], 'Álgebra y cálculo'],
     ['icf-ma-forma', 'Triángulos y Semejanza', ['Ángulos y desigualdad triangular', 'Pitágoras', 'Tales y semejanza', 'Razones trigonométricas'], 'Geometría'],
     ['icf-ma-ecuaciones', 'Ecuaciones en Contexto', ['Plantear ecuaciones', 'Expresiones algebraicas', 'Sistemas', 'Desigualdades'], 'Álgebra y cálculo'],

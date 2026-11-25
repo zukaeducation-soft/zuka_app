@@ -6498,7 +6498,7 @@ const PI_TEMARIO = {
     ['icf-ma-datos', 'Datos y Gráficas', ['Leer tablas y gráficas', 'Promedio, mediana y moda', 'Muestras y conclusiones'], 'Estadística'],
     ['icf-ma-proporcion', 'Proporciones y Porcentajes', ['Razones y escalas', 'Porcentajes y cambios', 'Regla de tres directa e inversa', 'Tasas: velocidad, precio y moneda'], 'Álgebra y cálculo'],
     ['icf-ma-azar', 'Conteo y Probabilidad', ['Sumar o multiplicar casos', 'Permutaciones y combinaciones', 'Probabilidad simple', 'Tablas y eventos dependientes'], 'Estadística'],
-    ['icf-ma-medida', 'Perímetros, Áreas y Volúmenes', ['Perímetro y área', 'Figuras compuestas y círculos', 'Volumen y capacidad'], 'Geometría'],
+    ['icf-ma-medida', 'Áreas y Volúmenes', ['Perímetro y área', 'Figuras compuestas y círculos', 'Volumen y capacidad'], 'Geometría'],
     ['icf-ma-lineal', 'Funciones Lineales', ['Pendiente como razón de cambio', 'De la situación a la ecuación', 'Comparar planes'], 'Álgebra y cálculo'],
     ['icf-ma-forma', 'Triángulos y Semejanza', ['Ángulos y desigualdad triangular', 'Pitágoras', 'Tales y semejanza', 'Razones trigonométricas'], 'Geometría'],
     ['icf-ma-ecuaciones', 'Ecuaciones en Contexto', ['Plantear ecuaciones', 'Expresiones algebraicas', 'Sistemas', 'Desigualdades'], 'Álgebra y cálculo'],
@@ -7031,6 +7031,109 @@ PI_MUNDOS.push((() => {
   ]);
 })());
 ;
+//#archivo js/courses/preicfes-ma-medida.js
+// Preicfes · Matemáticas · mundo 4 «Áreas y Volúmenes» (spec 2026-11-25-preicfes-estructura). Números y contextos propios.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = ICF;
+
+  const l1 = leccion('icf-ma-medida-1', 'Perímetro y área', guion(
+    ['Borde y superficie', 'El perímetro es lo que mide el borde, en metros. El área es lo que se cubre, en metros cuadrados.'],
+    ['Medio rectángulo', 'Un triángulo ocupa la mitad del rectángulo de su base y su altura.'],
+    ['Promedio de bases', 'Un trapecio ocupa lo mismo que un rectángulo con el promedio de sus bases.'],
+    ['Mismo borde, otra área', 'Un marco que se inclina conserva el perímetro y pierde área.']), [
+    x('misma-area', 'Sube el vértice hasta que el triángulo ocupe **lo mismo** que el rectángulo.', { w: 9, H: 4, b: 12 },
+      'El rectángulo vale $9 \\cdot 4 = 36$. El triángulo, $\\tfrac{12 \\cdot h}{2} = 36$: la altura es 6.', 'Halla el área del rectángulo; el triángulo es la mitad de base por altura.'),
+    x('inclina-marco', 'Un marco de varillas de 8 y 5 se puede inclinar. Acuéstalo hasta que encierre un área de **32**.', { b: 8, l: 5, area: 32 },
+      'Base por altura: $32 \\div 8 = 4$ de altura. La varilla de 5 es la hipotenusa: se corre 3, porque $3^2 + 4^2 = 5^2$.', 'La base no cambia: ¿qué altura debe quedar para esa área?'),
+    x('trapecio-gemelo', 'Las dos figuras tienen la misma altura. Estira el rectángulo hasta que ocupe **lo mismo** que el trapecio.', { B: 13, b: 7 },
+      'El trapecio vale el promedio de sus bases por la altura: $\\tfrac{13 + 7}{2} = 10$.', 'Busca el número que está a mitad de camino entre las dos bases.'),
+    x('rombo-diagonales', 'Una cometa con forma de rombo tiene una diagonal de 6. Estira la otra hasta que el área sea **36**.', { d: 6, area: 36 },
+      'El rombo es la mitad de la caja: $\\tfrac{6 \\cdot D}{2} = 36$ da $D = 12$.', 'El rombo ocupa la mitad del rectángulo que forman sus diagonales.'),
+    x('vertice-lejos', 'La base está **parada** y mide 6. Mueve el vértice hasta que el triángulo tenga área **21**.', { base: 6, area: 21 },
+      '$\\tfrac{6 \\cdot h}{2} = 21$ da $h = 7$: el vértice debe alejarse 7 cuadros de la base.', 'La altura es la distancia del vértice a la base, aunque la base esté parada.'),
+    x('caja-torcida', 'El lote T está torcido. Pon el área de las tres esquinas que sobran en la caja y la de T.', { w: 8, h: 6, ya: 2, xc: 6, fichas: ['8', '6', '12', '22', '24', '16', '26'] },
+      'La caja vale $8 \\cdot 6 = 48$ y las esquinas, $8 + 6 + 12 = 26$: quedan 22.', 'Cada esquina es un triángulo rectángulo. Réstalas de la caja.'),
+    x('llena-lanza', 'Lanza la pintura justa para cubrir lo sombreado. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Un cuadrado de lado 5 con un hueco de 2 por 3', f: { w: 5, h: 5, hueco: [2, 3] }, r: 19, c: '25 - 6', e: { 25: 'Falta quitar el hueco.' } },
+      { q: 'Un triángulo de base 10 y altura 4 con un hueco de 2 por 1', f: { w: 10, h: 4, tri: true, hueco: [2, 1] }, r: 18, c: '20 - 2', e: { 20: 'Falta quitar el hueco.', 38: 'El triángulo vale la mitad de base por altura.' } },
+      { q: 'Un rectángulo de 9 por 4 sin dos esquinas de catetos 3 y 4', f: { w: 9, h: 4, esq: 3 }, r: 24, c: '36 - 6 - 6', e: { 12: 'Cada esquina es medio rectángulo.', 30: 'Son dos esquinas.' } }] },
+      '$25 - 6 = 19$; $\\tfrac{10 \\cdot 4}{2} - 2 = 18$; $36 - 2 \\cdot \\tfrac{3 \\cdot 4}{2} = 24$.', 'Halla la figura completa y quita lo que no se pinta.'),
+    sol('Una huerta rectangular mide 15 m de largo y 8 m de ancho. Se cerca con tres vueltas de alambre y cada metro vale 2 mil pesos. ¿Cuánto cuesta, en miles?', ['El perímetro es $2 \\cdot (15 + 8) =$ [[46]] m', 'Tres vueltas son $3 \\cdot 46 =$ [[138]] m', 'Cuesta $138 \\cdot 2 =$ [[276]] mil'], ['120', '23', '69'], 'Cercar usa el borde, no el área: 46 m por vuelta, 138 m en total.', '¿Se cubre la huerta o se rodea?'),
+    err('A un terreno cuadrado de 10 m de lado se le duplican los lados. ¿Qué pasa con su área?', ['El área era $10 \\cdot 10 = 100$', 'Los lados nuevos miden 20 m', 'El área se duplica: 200'], 2, ['El área se cuadruplica: 400', 'El área no cambia: 100', 'El área aumenta 20: 120'], '$20 \\cdot 20 = 400$, cuatro veces la de antes: al duplicar los lados, el área se multiplica por $2^2$.', 'Calcula el área con los lados nuevos.'),
+    opc('Dos rectángulos tienen el mismo perímetro, 24 m. Uno mide 11 por 1 y el otro, 6 por 6. Es correcto afirmar que:', ['Tienen la misma área, porque el borde es igual', 'El primero tiene mayor área por ser más largo', 'No se pueden comparar', 'El segundo tiene mayor área: 36 contra 11'], 3, '$11 \\cdot 1 = 11$ y $6 \\cdot 6 = 36$: con el mismo borde, el cuadrado encierra más.', 'Calcula las dos áreas: el perímetro no las decide.'),
+  ]);
+
+  const l2 = leccion('icf-ma-medida-2', 'Figuras compuestas y círculos', guion(
+    ['Cortar o quitar', 'Una figura rara se corta en piezas conocidas, o se completa y se quita lo que sobra.'],
+    ['El círculo', 'Borde: $2\\pi r$. Área: $\\pi r^2$. Una vuelta de rueda avanza su borde.'],
+    ['Partes del círculo', 'Un arco o un sector es la misma fracción que su ángulo de 360°.'],
+    ['Anillos y andenes', 'Son lo de afuera menos lo de adentro.']), [
+    x('radio-area', 'Una pista circular ocupa $49\\pi$ m². Arrastra el borde hasta su radio.', { area: 49 },
+      '$\\pi r^2 = 49\\pi$ da $r^2 = 49$: el radio es 7.', 'El área es π por el radio al cuadrado: ¿qué número al cuadrado sirve?'),
+    x('arco-justo', 'El radio mide 6. Abre el sector hasta que su **borde curvo** mida $4\\pi$.', { r: 6, arco: 4 },
+      'El borde entero mide $12\\pi$; $4\\pi$ es un tercio de la vuelta: 120°.', 'Compara el arco con el borde completo del círculo.'),
+    x('borde-mixto', 'Una ventana es un rectángulo de 4 por 9 con medio círculo encima. ¿Cuánto mide su **borde**?', { w: 4, h: 9, fichas: ['2π', '4π', '22', '26', '22 + 2π', '26 + 2π'] },
+      'Por fuera hay dos lados de 9 y uno de 4: 22. La curva es media circunferencia de radio 2: $2\\pi$.', 'Recorre el borde con el dedo: la unión del rectángulo con el arco no se cuenta.'),
+    x('marco-hueco', 'A una lámina de 10 por 8 se le abre un hueco **cuadrado**. Ajústalo hasta que queden **64** cuadros.', { w: 10, h: 8, area: 64 },
+      'La lámina vale 80; se quitan 16, un cuadrado de lado 4.', 'Resta lo que debe quedar del total: eso mide el hueco.'),
+    x('anillo-justo', 'A un disco de radio 6 se le abre un hueco redondo. Ajústalo hasta que el **área** del anillo sea $20\\pi$.', { R: 6, area: 20 },
+      '$36\\pi - 20\\pi = 16\\pi$: el radio del hueco es 4.', 'El anillo es lo que queda al restar áreas: no restes los radios.'),
+    x('techo-justo', 'La fachada, con techo y todo, debe medir **32** cuadros. Mueve la punta del techo.', { w: 8, h: 3, area: 32 },
+      'La pared vale 24; al techo le tocan 8. $\\tfrac{8 \\cdot h}{2} = 8$ da $h = 2$.', 'Quita la pared del total y mira qué triángulo falta.'),
+    x('anden-ancho', 'Una cancha de 5 por 4 lleva un andén parejo por todo el borde. Ensánchalo hasta que **el andén** mida **36**.', { w: 5, h: 4, area: 36 },
+      'Andén y cancha suman 56, un rectángulo de 8 por 7: creció 1.5 por cada lado.', 'Suma el andén a la cancha y busca el rectángulo grande.'),
+    x('rueda-lanza', 'Dale a la rueda las vueltas justas para parar en la bandera. Puedes fallar **una** vez.', { tiros: [
+      { q: 'La rueda tiene **radio** 3 y debe avanzar $24\\pi$', d: 'radio 3', m: '24π', r: 4, c: '24\\pi \\div 6\\pi', e: { 8: 'Usaste el radio: una vuelta mide dos radios por π.' } },
+      { q: 'La rueda tiene **diámetro** 4 y debe avanzar $20\\pi$', d: 'diámetro 4', m: '20π', r: 5, c: '20\\pi \\div 4\\pi' },
+      { q: 'La rueda tiene **radio** 1 y debe avanzar $12\\pi$', d: 'radio 1', m: '12π', r: 6, c: '12\\pi \\div 2\\pi', e: { 12: 'Usaste el radio: una vuelta mide dos radios por π.' } }] },
+      'Una vuelta avanza $2\\pi r$: $24 \\div 6 = 4$, $20 \\div 4 = 5$ y $12 \\div 2 = 6$.', 'Halla cuánto avanza en una vuelta y mira cuántas caben.'),
+    sol('Una piscina rectangular de 6 m por 4 m tiene en un extremo medio círculo cuyo diámetro es el lado de 4 m. ¿Cuál es su área?', ['El rectángulo mide $6 \\cdot 4 =$ [[24]] m²', 'El radio del medio círculo es [[2]] m', 'Medio círculo mide $\\tfrac{4\\pi}{2} =$ [[2π]]', 'En total: [[24 + 2π]] m²'], ['4', '4π', '28'], 'El diámetro es 4, así que el radio es 2: medio círculo vale $2\\pi$.', 'El lado de 4 es el diámetro, no el radio.'),
+    err('Una glorieta tiene radio 5 m y un jardín central de radio 3 m. ¿Cuánto mide la vía?', ['El círculo grande mide $25\\pi$', 'El jardín mide $9\\pi$', 'La vía mide $\\pi \\cdot (5 - 3)^2 = 4\\pi$'], 2, ['La vía mide $25\\pi - 9\\pi = 16\\pi$', 'La vía mide $25\\pi + 9\\pi = 34\\pi$', 'La vía mide $10\\pi - 6\\pi = 4\\pi$'], 'Se restan las áreas: $16\\pi$ m². Restar los radios y elevar al cuadrado no da lo mismo.', 'Ya están las dos áreas: ¿qué se hace con ellas?'),
+    opc('Una pizza de 20 cm de radio se corta en 8 porciones iguales. El área de una porción, en cm², es:', ['$5\\pi$', '$50\\pi$', '$400\\pi$', '$40\\pi$'], 1, 'La pizza mide $400\\pi$; la octava parte, $50\\pi$.', 'Halla el área completa y repártela en 8.'),
+  ]);
+
+  const l3 = leccion('icf-ma-medida-3', 'Volumen y capacidad', guion(
+    ['Capas', 'Un prisma o un cilindro es su base repetida: volumen = área de la base por altura.'],
+    ['Un tercio', 'Un cono o una pirámide llenan la tercera parte del cilindro o prisma de igual base y altura.'],
+    ['Piel', 'La superficie se suma cara por cara.'],
+    ['Litros', 'Un metro cúbico son 1 000 litros; un decímetro cúbico, uno.']), [
+    x('capas-caja', 'La base de la caja es de 3 por 5. Apila capas hasta tener **90** cubitos.', { a: 3, b: 5, vol: 90 },
+      'Cada capa tiene 15 cubitos: $90 \\div 15 = 6$ capas.', 'Cuenta los cubitos de una sola capa y mira cuántas hacen falta.'),
+    x('cilindro-altura', 'Un tarro cilíndrico de radio 3 debe contener $72\\pi$. Dale su altura.', { r: 3, vol: 72 },
+      'La base vale $9\\pi$ y $72 \\div 9 = 8$: el tarro mide 8 de alto.', 'Halla el área de la base redonda y mira cuántas veces cabe.'),
+    x('cono-agua', 'El **cono** lleno se vacía en el cilindro de igual base y altura. Marca hasta dónde sube el agua.', { conos: 1, h: 12 },
+      'Un cono llena un tercio del cilindro: $12 \\div 3 = 4$.', 'Recuerda cuántos conos caben en el cilindro.'),
+    x('piramide-altura', 'La base de la pirámide es un cuadrado de lado 3. Súbela hasta que su volumen sea **27**.', { a: 3, vol: 27 },
+      '$\\tfrac13 \\cdot 9 \\cdot h = 3h = 27$ da $h = 9$.', 'La pirámide es la tercera parte del prisma de igual base y altura.'),
+    x('caras-caja', 'Una caja de zapatos mide 5 por 4 de base y 2 de alto. Pon el área de cada cara y la de **toda** la piel.', { a: 5, b: 4, h: 2, fichas: ['20', '10', '8', '76', '38', '11'] },
+      'Tapa 20, frente 10, costado 8; cada una dos veces: $2 \\cdot 38 = 76$.', 'Hay tres clases de cara y de cada una, dos.'),
+    x('cubo-arista', 'Para forrar un cubo se usan **96** cm² de papel. Dale su arista.', { sup: 96 },
+      'Son seis caras: $96 \\div 6 = 16$, y la arista es 4 cm.', 'Reparte el papel entre las caras y busca el lado del cuadrado.'),
+    x('litros-nivel', 'Un tanque tiene fondo de 4 m por 2 m. Se le echan **12 000 litros**. ¿Hasta qué altura sube el agua?', { a: 4, b: 2, litros: 12000 },
+      'Son 12 m³; el fondo mide 8 m²: $12 \\div 8 = 1.5$ m.', 'Pasa los litros a metros cúbicos: cada uno tiene mil.'),
+    x('llena-tanque', 'Bombea el agua justa, contada en π, para llenar cada recipiente. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Un **cilindro** de radio 3 y altura 4', t: 'cil', rad: 3, h: 4, r: 36, c: '9\\pi \\cdot 4', e: { 12: 'La base es r por r, no r.' } },
+      { q: 'Un **cono** de radio 2 y altura 6', t: 'cono', rad: 2, h: 6, r: 8, c: '\\tfrac13 \\cdot 4\\pi \\cdot 6', e: { 24: 'Ese es el cilindro; el cono es la tercera parte.' } },
+      { q: 'Una **esfera** que cabe justa en un cilindro de $36\\pi$', t: 'esf', cilindro: 36, r: 24, c: '\\tfrac23 \\cdot 36\\pi', e: { 12: 'Un tercio es el cono; la esfera es el doble.' } }] },
+      '$9 \\cdot 4 = 36$; $\\tfrac13 \\cdot 24 = 8$; dos tercios de 36 son 24.', 'Cilindro: base por altura. Cono: un tercio. Esfera: dos tercios del cilindro justo.'),
+    sol('Una pecera mide 50 cm de largo, 30 cm de ancho y 40 cm de alto. Se llena hasta las tres cuartas partes. ¿Cuántos litros tiene?', ['El volumen es $50 \\cdot 30 \\cdot 40 =$ [[60 000]] cm³', 'Tres cuartas partes son [[45 000]] cm³', 'Cada litro son 1 000 cm³: tiene [[45]] litros'], ['20 000', '15', '450'], '$45\\,000 \\div 1\\,000 = 45$ litros.', 'Halla el volumen, saca las tres cuartas partes y pasa a litros.'),
+    err('Se duplica la arista de un cubo de 3 cm. ¿Qué pasa con su volumen?', ['El volumen era $3^3 = 27$', 'La arista nueva mide 6 cm', 'El volumen se duplica: 54'], 2, ['El volumen se multiplica por 8: 216', 'El volumen se multiplica por 4: 108', 'El volumen no cambia: 27'], '$6^3 = 216$, ocho veces 27: crecen las tres medidas.', 'Calcula el volumen con la arista nueva.'),
+    opc('Un vaso cilíndrico y un cono tienen la misma base y la misma altura. Si el cono se llena y se vacía en el vaso, ¿cuántas veces hay que hacerlo para llenarlo?', ['2', '1', '4', '3'], 3, 'El cono es la tercera parte del cilindro: tres veces.', 'Recuerda qué parte del cilindro llena el cono.'),
+  ]);
+
+  return mundo('icf-ma-medida', 'Áreas y Volúmenes', 'matematicas', [l1, l2, l3], [
+    ['icf-ma-medida-1', 'Un paralelogramo mide base por altura, no base por lado.', play('corta-paralelogramo', 'Dale al paralelogramo la base para que su área sea 24', { rounds: [{ h: 3, slant: 5, target: 24 }] }, '$24 \\div 3 = 8$: se usa la altura, no el lado inclinado.', { hint: 'Al cortar y mover una punta queda un rectángulo.' })],
+    ['icf-ma-medida-1', 'Un triángulo es la mitad de base por altura.', play('triangulo-cuadricula', 'Con base 6, mueve el vértice para que el área sea 12', { rounds: [{ b: 6, target: 12 }] }, '$\\tfrac{6 \\cdot h}{2} = 12$ da $h = 4$.', { hint: 'La altura es la distancia del vértice a la base.' })],
+    ['icf-ma-medida-1', 'Rodear usa el perímetro; cubrir, el área.', opc('Para embaldosar una sala de 6 m por 4 m con baldosas de medio metro de lado se necesitan:', ['24 baldosas', '48 baldosas', '96 baldosas', '20 baldosas'], 2, 'La sala mide 24 m² y cada baldosa 0.25 m²: $24 \\div 0.25 = 96$.', 'En cada metro cuadrado caben cuatro baldosas.')],
+    ['icf-ma-medida-2', 'El área del círculo es π por el radio al cuadrado.', play('mide-circulo', 'Ajusta el radio para que el área sea 16π', { rounds: [{ ask: 'A', target: 16 }] }, '$r^2 = 16$: el radio es 4.', { hint: 'Busca un número que al cuadrado dé 16.' })],
+    ['icf-ma-medida-2', 'Lo sombreado es lo de afuera menos lo de adentro.', play('sombreado-resta', 'Ajusta el cuadrado de adentro para que queden 33', { rounds: [{ s: 7, kind: 'sq', target: 33 }] }, '$49 - 33 = 16$: un cuadrado de lado 4.', { hint: 'Resta lo que debe quedar del cuadrado grande.' })],
+    ['icf-ma-medida-2', 'Una vuelta de rueda avanza su borde.', opc('Una rueda de 50 cm de diámetro da 10 vueltas. La distancia que avanza, en cm, es:', ['$500\\pi$', '$250\\pi$', '$1\\,000\\pi$', '$50\\pi$'], 0, 'Cada vuelta avanza $50\\pi$; diez, $500\\pi$.', 'El borde es π por el diámetro.')],
+    ['icf-ma-medida-3', 'Volumen: área de la base por altura.', play('prisma-capas', 'Apila capas en el cilindro de radio 2 hasta 20π', { rounds: [{ base: 'circ', dims: [2], target: 20 }] }, 'La base vale $4\\pi$: cinco capas.', { hint: 'Halla el área de la base redonda.' })],
+    ['icf-ma-medida-3', 'Pirámide y cono: la tercera parte.', play('cono-tercio', 'La base es de 3 por 5. Dale altura para que el volumen sea 20', { rounds: [{ base: 'rect', dims: [3, 5], target: 20 }] }, '$\\tfrac{15 \\cdot h}{3} = 5h = 20$ da 4.', { hint: 'Es la tercera parte de la caja de igual base y altura.' })],
+    ['icf-ma-medida-3', 'Un metro cúbico son mil litros.', opc('Una alberca de 2 m por 1.5 m de fondo tiene agua hasta 0.5 m de altura. ¿Cuántos litros hay?', ['150', '15 000', '3 000', '1 500'], 3, '$2 \\cdot 1.5 \\cdot 0.5 = 1.5$ m³, que son 1 500 litros.', 'Halla los metros cúbicos y multiplica por mil.')],
+  ]);
+})());
+;
 //#archivo js/courses/preicfes-lc-literal.js
 // Preicfes · Lectura Crítica · mundo 1 «Lo que Dice el Texto» (spec 2026-11-20-curso-preicfes): la primera competencia de la
 // prueba, identificar y entender los contenidos locales (datos, ideas de cada párrafo, palabras y referencias). Cada lección
@@ -7438,6 +7541,162 @@ PI_MUNDOS.push((() => {
     ['icf-lc-argumento-2', 'Un dato fortalece si hace más creíble la razón.', Q('¿Cuál dato fortalecería más la razón del párrafo 2?', ['Las tabletas pesan menos que las carpetas', 'La banda tiene treinta músicos', 'Después de una actualización, ningún músico recuperó sus anotaciones', 'El director estudió en otra ciudad'], 2, 'La razón es que las marcas se borran: confirmarlo la fortalece.', 'Recuerda de qué trata el párrafo 2: ¿qué se pierde?')],
     ['icf-lc-argumento-2', 'Debilita lo que muestra que la prueba no es confiable o que hay otra causa.', Q('¿Cuál dato debilitaría más la razón del párrafo 3?', ['El año anterior, con papel, hubo noventa interrupciones por hojas voladas o perdidas', 'Los ensayos eran los martes', 'El bombo es muy antiguo', 'Las tabletas son negras'], 0, 'Si con papel había más interrupciones, la lista de 41 ya no prueba que la tableta interrumpa más.', 'La razón compara interrupciones: ¿cuál dato cambia esa comparación?')],
     ['icf-lc-argumento-2', 'Una conclusión no puede decir más que el texto.', Q('Del texto se puede concluir que el autor estaría de acuerdo con:', ['Prohibir las tabletas en los desfiles y en los ensayos', 'Que cada quien bote lo viejo', 'Copiar las marcas de las carpetas antes de cambiar de herramienta', 'Cambiar de director'], 2, 'Le preocupa la memoria que se pierde: copiar las marcas la conserva.', 'Busca la opción que cuida lo que el autor no quiere perder.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-lc-literario.js
+// Preicfes · Lectura Crítica · mundo 4 «Textos Literarios» (spec 2026-11-25-preicfes-estructura). Cuentos y versos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const RELOJ = {
+    id: 'icf-relojero', title: 'El relojero que atrasaba',
+    ficha: { autor: 'Cuento de Mariela Quintana', fuente: 'Libro «Oficios de pueblo»', fecha: 'Primera edición, 2026' },
+    paras: [
+      'En el pueblo todos sabían que don Aurelio atrasaba los relojes. Uno le llevaba el suyo para que le cambiara la correa y, a la semana, descubría que había perdido cuatro minutos. Nadie se quejaba. Cobraba poco, hablaba menos, trabajaba todos los días del año, y el que necesitaba la hora exacta miraba la torre de la iglesia, que él mismo cuidaba.',
+      'Yo tenía once años y barría su taller los sábados. Creía que se equivocaba por viejo. Una tarde lo vi abrir el reloj de la señora Dominga, que iba perfecto, y correrle la aguja hacia atrás con una pinza. Se dio cuenta de que lo miraba. No se puso rojo. Solo dijo: «Pásame el trapo».',
+      'Desde entonces llevé la cuenta. Al boticario le quitó tres minutos; al alcalde, diez. A mi papá, que siempre andaba corriendo, le quitó un cuarto de hora, y en la casa notamos que se quedaba a terminar el café. A la señora Dominga, que esperaba cada tarde una carta de su hijo, le quitaba dos minutos cada mes, como quien no quiere la cosa.',
+      'Me demoré años en preguntarle. Él tenía ya las manos torpes y yo le sostenía las piezas. «La gente viene porque siente que el tiempo se le va», me dijo. «Yo no sé devolverlo. Pero puedo hacer que llegue un poquito después.» Luego se quedó mirando la lupa, como si se hubiera gastado todas las palabras del año.',
+      'El día de su entierro, la torre dio las cuatro. Vi a la gente levantar la muñeca para comprobar la hora y quedarse quieta, confundida: en cada reloj faltaba algo. Entonces la señora Dominga se rio. Después el boticario. Nos fuimos contagiando, al lado de la fosa, sin saber bien de qué nos reíamos, hasta que la campana calló.',
+      'Yo heredé la pinza. No arreglo relojes: soy maestra. Pero los viernes, cuando faltan cuatro minutos para la salida y los niños están callados leyendo, me subo en la silla y, despacio, corro hacia atrás la aguja del salón.',
+    ],
+  };
+  const l1 = leccion('icf-lc-literario-1', 'Narrador y personajes', guion(
+    ['¿Quién cuenta?', 'Un narrador en primera persona participa o mira: «yo barría». Uno en tercera cuenta desde afuera: «él barría».'],
+    ['El autor no es el narrador', 'Quien firma el libro inventa la voz que cuenta.'],
+    ['Conocer por lo que hacen', 'Un personaje se conoce por sus actos: correr una aguja puede ser un acto de cariño.'],
+    ['El cambio', 'Al final, algo o alguien ya no es como al comienzo.']), [
+    x('mapa-margen', 'Lleva al margen qué pasa en cada parte. Sobra una nota.', { doc: RELOJ,
+      ...F(['presenta al personaje y su rareza', 0, 'Busca lo que «todos sabían».'], ['la niña descubre que es a propósito', 1, 'Busca la pinza y el trapo.'], ['lleva la cuenta de los minutos', 2, 'Busca a quién le quitó cuánto.'], ['él explica su razón', 3, 'Busca la pregunta que tardó años.'], ['la despedida y la risa', 4, 'Busca la campana.'], ['ella continúa el gesto', 5, 'Busca qué heredó.'], ['el relojero pierde su taller', null, 'Nadie le quita el taller.']),
+      luz: [[1, 'todos sabían'], [2, 'correrle la aguja'], [3, 'llevé la cuenta'], [4, 'Yo no sé devolverlo'], [5, 'El día de su entierro'], [6, 'Yo heredé la pinza']], bien: 'Rareza, descubrimiento, cuenta, razón, despedida y herencia.' },
+      'El cuento va de la rareza a su secreto, de ahí a la razón y termina con quien hereda el gesto.', 'Di qué pasa en cada párrafo, no solo a quién nombra.'),
+    x('genero-o-cita', '¿Lo **vivió o vio** la narradora, o lo **supone**?', { doc: RELOJ, rot: ['lo vivió o vio', 'lo supone'],
+      ...F(['Barría el taller los sábados', 0, '¿Lo hizo ella misma?'], ['Se equivocaba por viejo', 1, '¿Lo comprobó o lo creía?'], ['Él corrió la aguja con una pinza', 0, '¿Lo presenció?'], ['Parecía haber gastado todas sus palabras', 1, '¿Es un hecho o lo que le parece?']), bien: '«Creía» y «como si» marcan lo supuesto.' },
+      'Barrer y ver la pinza son hechos vividos; «creía» y «como si» muestran lo que ella supone.', 'Busca verbos como «creía» o expresiones como «como si».'),
+    x('linea-vida', 'Lleva cada hecho al momento de la vida de la narradora.', { doc: RELOJ, rot: ['a los once años', 'de joven', 'ahora'],
+      ...F(['Cree que él se equivoca por viejo', 0, '¿Qué edad tenía cuando lo creía?'], ['Le sostiene las piezas y pregunta', 1, 'Busca «me demoré años».'], ['Corre la aguja del salón', 2, 'Busca a qué se dedica.'], ['Lo ve correr la aguja de Dominga', 0, '¿Cuándo barría el taller?']), luz: [[2, 'once años'], [4, 'Me demoré años'], [6, 'soy maestra']], bien: 'Niña, joven y maestra.' },
+      'A los once descubre, de joven pregunta y como maestra repite el gesto.', 'Busca edades y palabras como «años» o «ahora».'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: RELOJ, nums: [3, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Al alcalde le quitó diez minutos.', 0, 'Léela junto a la cuenta del párrafo 3.'], ['El padre empezó a vivir con menos prisa.', 1, '¿Qué notaron en la casa?'], ['La gente entendió el gesto en el entierro.', 1, '¿Qué pasó después de mirar los relojes?'], ['El hijo de Dominga nunca volvió.', 2, '¿Se dice qué pasó con él?']),
+      luz: [[3, 'al alcalde, diez'], [3, 'se quedaba a terminar el café'], [5, 'se rio']], bien: 'El café y la risa dicen sin decir.' },
+      'Los diez minutos están escritos; la calma del padre y la comprensión se deducen; del hijo no se sabe más.', 'Mira qué hace la gente: los gestos hablan.'),
+    x('pista-tipo', 'Ata cada rasgo de don Aurelio a lo que lo muestra.', { doc: RELOJ, lineas: ['Cobraba poco y hablaba menos.', 'No se puso rojo: «Pásame el trapo».', 'A Dominga le quitaba dos minutos cada mes.', 'Trabajaba todos los días del año.'],
+      ...T(['callado', 0, 'Busca la que habla de hablar.'], ['sin vergüenza de lo que hace', 1, 'Busca lo que hizo al ser descubierto.'], ['cuidadoso con quien espera', 2, 'Busca a quien aguarda una carta.'], ['constante', 3, 'Busca la que muestra que no descansaba.']), bien: 'Se conoce por lo que hace.' },
+      'Sus gestos lo muestran: calla, no se avergüenza, cuida a quien espera y sigue trabajando.', 'Pregunta qué diría de una persona cada acto.'),
+    x('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: RELOJ, texto: '|Don Aurelio| no sabe devolver |el tiempo| a |la gente|. Él puede, eso sí, hacer que lo sienta llegar un poquito después.',
+      ...T(['«Él»', 0, 'Pon en su lugar lo que ataste: ¿quién puede hacer algo?'], ['«lo»', 1, 'Pon en su lugar lo que ataste: ¿qué llega después?']), bien: 'El relojero y el tiempo.' },
+      '«Él» es don Aurelio; lo que llega un poquito después es el tiempo.', 'Comprueba quién actúa y qué es lo que llega.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 4 la oración que dice **qué puede hacer** él por la gente.', { doc: RELOJ, nums: [4], apuesta: 'No devuelve el tiempo, pero lo demora.', ...S(['4.4'], { '4.0': 'Cuenta cuándo se atrevió ella a preguntar.', '4.1': 'Cuenta cómo estaban sus manos.', '4.2': 'Dice por qué viene la gente.', '4.3': 'Dice lo que no sabe hacer.', '4.5': 'Cuenta cómo se quedó callado.' }), bien: '«Pero puedo» abre su razón.' },
+      'Después de «Yo no sé devolverlo», «Pero puedo» dice lo que sí hace: que llegue un poquito después.', 'Busca la oración que empieza con un contraste.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: RELOJ, lineas: ['Un relojero atrasa los relojes a propósito.', 'La correa cuesta poco.', 'Una niña lo descubre.', 'Él quiere que el tiempo llegue después.', 'La torre da las cuatro.', 'Ella, ya maestra, repite el gesto.'], ...S([1, 4], { 0: 'Es la rareza que mueve el cuento.', 2: 'Es quien cuenta y descubre.', 3: 'Es la razón del personaje.', 5: 'Es el final de la historia.' }), bien: 'Rareza, descubrimiento, razón y final.' },
+      'La correa y la hora ambientan; las demás son el hilo del cuento.', 'Quita cada oración y mira si la historia se entiende.'),
+  ]);
+
+  const RIO = {
+    id: 'icf-canoa', title: 'La canoa de los que no volvieron',
+    ficha: { autor: 'Relato de Ramiro Palacios', fuente: 'Antología de cuentos del Pacífico', fecha: 'Segunda edición, 2026' },
+    paras: [
+      'El río era un viejo que hablaba dormido. Eso decía mi abuela, y cuando la corriente rezongaba contra las piedras nos mandaba callar: «Déjenlo, que está contando». Nosotros nos reíamos. Pero de noche, con la casa a oscuras y el agua diciendo cosas debajo del piso, ninguno se reía.',
+      'Mi abuela tenía una canoa amarrada al muelle que nadie usaba y que nadie se atrevía a pedir prestada. Estaba pintada de azul, llevaba siempre un remo y, cada viernes, ella le ponía adentro una hogaza y una vela apagada. Era la canoa de los que no volvieron. No había una tumba para mi abuelo ni para los otros siete; había esa cáscara azul, esperando como un perro a la puerta de una tienda.',
+      'Un año llovió hasta cansar a la lluvia. El río se tragó la cancha, el corral y la mitad de la escuela. Los hombres gritaban órdenes que el agua borraba antes de que llegaran. Alguien dijo que había que soltar la canoa, porque golpeaba contra el muelle y lo iba a arrancar. Mi abuela no contestó. Se metió al agua hasta la cintura, con su vestido flotando alrededor como una flor oscura, y la desamarró ella misma.',
+      'Yo creí que iba a llorar. Le pasó la mano por el borde, como se despide a un hijo que viaja, y encendió la vela. Es mentira que una vela pueda arder bajo semejante aguacero; yo la vi arder. La canoa dio una vuelta, buscó la corriente y se fue, alumbrando poquito, hasta que dobló la curva.',
+      'A los tres días, río abajo, la encontró una familia que llevaba dos noches subida en un techo. En ella salieron los cinco. Nos la devolvieron en agosto, despintada y con olor a barro, con un banco nuevo que el papá le había clavado en agradecimiento.',
+      'Mi abuela la amarró en el mismo sitio. El viernes puso la hogaza, pero no puso la vela. «Ya volvieron», dijo. Esa noche el río habló como siempre, y por primera vez me pareció que no contaba, sino que escuchaba.',
+    ],
+  };
+  const l2 = leccion('icf-lc-literario-2', 'Figuras y sentido', guion(
+    ['Personificación', 'Dar a una cosa rasgos de persona: «el río hablaba dormido».'],
+    ['Símil y metáfora', 'El símil compara con «como»; la metáfora dice que una cosa es otra.'],
+    ['Hipérbole', 'Exagera para que se sienta: «llovió hasta cansar a la lluvia».'],
+    ['Símbolo', 'Un objeto que carga con algo más: la canoa, los que no volvieron.']), [
+    x('pinta-tipos', 'Pinta cada frase con la figura que usa.', { doc: RIO, plumas: ['personificación', 'símil', 'hipérbole'],
+      ...P(['El río hablaba dormido.', 0, '¿Da rasgos de persona, compara con «como» o exagera?'], ['Esperando como un perro a la puerta.', 1, '¿Da rasgos de persona, compara con «como» o exagera?'], ['Llovió hasta cansar a la lluvia.', 2, '¿Da rasgos de persona, compara con «como» o exagera?'], ['Su vestido flotaba como una flor oscura.', 1, '¿Da rasgos de persona, compara con «como» o exagera?'], ['El río se tragó la cancha.', 0, '¿Da rasgos de ser vivo, compara con «como» o exagera?']), bien: 'Hablar y tragar, «como» y exagerar.' },
+      'Hablar y tragar son de seres vivos, «como» introduce un símil y cansar a la lluvia exagera.', 'Busca primero la palabra «como»; después, acciones de persona o exageraciones.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 6 la oración que muestra que el narrador **siente distinto** al río.', { doc: RIO, nums: [6], apuesta: 'El río ya no cuenta: escucha.', ...S(['6.3'], { '6.0': 'Cuenta dónde quedó la canoa.', '6.1': 'Cuenta qué puso la abuela y qué no.', '6.2': 'Dice por qué no puso la vela.' }), bien: 'El cierre vuelve al comienzo del cuento.' },
+      'Al comienzo el río «está contando»; en la última oración «no contaba, sino que escuchaba».', 'Busca la oración que recuerda lo que decía la abuela al principio.'),
+    x('voz-de-la-fuente', 'Ata cada objeto a lo que representa en el cuento.', { ayuda: 'Tira un hilo desde cada significado hasta su objeto.', doc: RIO, portadas: [['La canoa', 'objeto'], ['La vela encendida', 'objeto'], ['El banco nuevo', 'objeto'], ['El río', 'elemento']],
+      ...T(['los que no volvieron', 0, '¿Qué cosa ocupa el lugar de una tumba?'], ['la despedida', 1, '¿Qué se enciende al soltar la canoa?'], ['la gratitud', 2, '¿Qué clavó el papá de la familia?'], ['la memoria que habla', 3, '¿Qué cuenta cosas de noche?']), bien: 'Objetos que cargan sentido.' },
+      'La canoa guarda a los ausentes, la vela despide, el banco agradece y el río cuenta.', 'Pregunta qué siente la gente con cada objeto.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo, sin la imagen. Sobran dos.', { doc: RIO, frases: [[1, 'cuando la corriente ', 'rezongaba', ' contra las piedras'], [3, 'órdenes que el agua ', 'borraba', ' antes de que llegaran'], [5, 'En ella ', 'salieron', ' los cinco']],
+      ...F(['sonaba ronca', 0, '¿Qué ruido hace el agua en las piedras?'], ['tapaba con su ruido', 1, '¿Qué les pasa a los gritos con tanta agua?'], ['se salvaron', 2, '¿Qué les pasó a los que estaban en el techo?'], ['escribía', null, 'El agua no deja nada por escrito.'], ['se ahogaron', null, 'Es lo contrario de lo que ocurrió.']), bien: 'Lo literal detrás de la imagen.' },
+      'Rezongar es sonar ronco, borrar las órdenes es taparlas y salir de allí es salvarse.', 'Piensa qué pasó de verdad en cada escena.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: RIO, nums: [2, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['La canoa estaba pintada de azul.', 0, 'Léela junto a la descripción de la canoa.'], ['El abuelo se perdió en el río.', 1, '¿Qué significa que no haya tumba y sí una canoa?'], ['La abuela cerró su duelo.', 1, '¿Por qué ya no puso la vela?'], ['El abuelo era pescador de camarones.', 2, '¿Se dice qué pescaba?']),
+      luz: [[2, 'pintada de azul'], [2, 'No había una tumba'], [6, 'Ya volvieron']], bien: 'El duelo se cierra sin nombrarlo.' },
+      'El color está escrito; la pérdida y el cierre del duelo se deducen; el oficio exacto no aparece.', 'Junta un objeto con lo que la abuela hace con él.'),
+    x('genero-o-cita', '¿La frase va en sentido **literal** o **figurado**?', { doc: RIO, rot: ['literal', 'figurado'],
+      ...F(['Llevaba dos noches subida en un techo', 0, '¿Pudo pasar tal como se dice?'], ['El río era un viejo', 1, '¿Pudo pasar tal como se dice?'], ['Le clavó un banco nuevo', 0, '¿Pudo pasar tal como se dice?'], ['Las órdenes se borraban', 1, '¿Pudo pasar tal como se dice?'], ['Se metió al agua hasta la cintura', 0, '¿Pudo pasar tal como se dice?']), bien: 'Si no puede pasar tal cual, es figurado.' },
+      'El techo, el banco y el agua a la cintura ocurrieron; el río viejo y las órdenes borradas son imágenes.', 'Pregunta si una cámara lo habría grabado así.'),
+    x('pasos-del-proceso', 'Ordena el viaje de la canoa. El primer paso está en su puesto.', { doc: RIO, que: 'el viaje', de: 'La canoa azul', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Espera amarrada en el muelle.', 'Golpea el muelle en la creciente.', 'La abuela la suelta con la vela.', 'Salva a una familia.', 'Vuelve despintada en agosto.'], mira: ['', 'Es lo que hace pedir que la suelten.', 'La suelta porque está dañando el muelle.', 'Pasa río abajo, después de soltarla.', 'La devuelven quienes la encontraron.'], bien: 'Esperar, golpear, soltar, salvar y volver.' },
+      'Espera, la creciente la hace golpear, la sueltan, salva y regresa.', 'Sigue el orden de las aguas: antes, durante y después.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: RIO, lineas: ['Una abuela guarda una canoa por los que no volvieron.', 'La canoa es azul.', 'En una creciente debe soltarla.', 'La canoa salva a una familia.', 'El banco tiene clavos.', 'La abuela siente que ya volvieron.'], ...S([1, 4], { 0: 'Es el símbolo del cuento.', 2: 'Es el conflicto.', 3: 'Es lo que cambia todo.', 5: 'Es el final de la historia.' }), bien: 'Símbolo, conflicto, giro y final.' },
+      'El color y los clavos son detalles; lo demás es el hilo del cuento.', 'Deja lo que hace falta para entender «ya volvieron».'),
+  ]);
+
+  const CANTO = {
+    id: 'icf-barrendera', title: 'Canto de la que barre la plaza',
+    ficha: { autor: 'Poema de Jacinta Mora', fuente: 'Libro «Oficios del alba»', fecha: 'Tercera edición, 2026' },
+    paras: [
+      'A las cuatro, cuando la ciudad es un animal que ronca, yo salgo con mi escoba a peinarle la espalda. Tengo un río de hojas, tengo un mar de papeles, tengo una luna vieja que me alumbra a medias. Nadie me ve llegar. Solo el perro sin dueño, que también trabaja de noche y no cobra, me saluda con la cola y camina a mi lado hasta la fuente.',
+      'Barro el beso que anoche se cayó de una banca. Barro el boleto roto del que perdió su tren. Barro la flor que un hombre compró para una puerta que no se abrió. Barro, y lo que barro pesa. La gente cree que la basura son cáscaras; yo digo que son cartas que nadie terminó, y que mi recogedor las lee antes de que el camión se las lleve.',
+      'Mi madre barrió esta plaza y la suya también. Me dejaron la escoba y un secreto: no se barre hacia afuera, se barre hacia el centro, como quien junta a los hijos para contarles algo. Por eso a las seis, en medio de la plaza, tengo un montón pequeño que parece un nido. Me siento junto a él. Respiro. Y por un minuto la ciudad es mía, limpia y callada como una iglesia sin misa.',
+      'Después llegan ellos. Llegan los zapatos con prisa, los carros con hambre, las palomas con su burocracia. El primer cigarrillo cae, siempre, a las seis y diez. No me enojo. Si la plaza amaneciera limpia para siempre, ¿quién sabría que existo? Mi oficio es como el de la luna: se borra cada día y cada noche vuelve a comenzar.',
+      'Un niño me preguntó si no me cansaba de barrer lo mismo. Le dije que nunca es lo mismo: que hoy había una pluma azul, ayer un botón, mañana quién sabe. Le di el botón. Se lo puso en el ojo como un monóculo y miró la plaza entera por el hueco. «Está linda», dijo. Y yo, que no lloro, barrí un rato el mismo sitio.',
+      'Cuando me muera, no me hagan estatua. Las estatuas no barren y las palomas no las respetan. Que alguien, a las cuatro, junte las hojas hacia el centro. Que se siente. Que respire. Y si un perro sin dueño se le acuesta al lado, sabrá que estoy ahí, peinándole la espalda a la ciudad dormida.',
+    ],
+  };
+  const l3 = leccion('icf-lc-literario-3', 'Poemas y canciones', guion(
+    ['La voz poética', 'En un poema habla una voz, que no es el poeta: aquí, una barrendera.'],
+    ['Repetir para decir', 'Repetir «barro» al comienzo de las frases da ritmo y peso: es una anáfora.'],
+    ['Imágenes', 'Una imagen hace ver o sentir: «la ciudad es un animal que ronca».'],
+    ['El tema y el tono', 'El tema es de qué habla en el fondo; el tono, con qué sentimiento.']), [
+    x('mapa-margen', 'Lleva al margen qué hace cada estrofa. Sobra una nota.', { doc: CANTO,
+      ...F(['la salida de madrugada', 0, 'Busca la hora y el perro.'], ['lo que de verdad barre', 1, 'Busca lo que se repite al empezar.'], ['el secreto heredado', 2, 'Busca a la madre.'], ['la llegada de los demás', 3, 'Busca los zapatos y los carros.'], ['el encuentro con un niño', 4, 'Busca el botón.'], ['lo que pide para después', 5, 'Busca «Cuando me muera».'], ['su jubilación', null, 'Nadie habla de jubilarse.']),
+      luz: [[1, 'A las cuatro'], [2, 'Barro el beso'], [3, 'un secreto'], [4, 'Después llegan ellos'], [5, 'Un niño'], [6, 'Cuando me muera']], bien: 'Salir, barrer, heredar, recibir, encontrar y pedir.' },
+      'El poema sigue un día de trabajo y termina con una petición para después de la vida.', 'Busca la imagen principal de cada estrofa.'),
+    x('pinta-tipos', 'Pinta cada frase con el recurso que usa.', { doc: CANTO, plumas: ['metáfora', 'símil', 'repetición'],
+      ...P(['La ciudad es un animal que ronca.', 0, '¿Dice que una cosa es otra, compara con «como» o repite?'], ['Como quien junta a los hijos.', 1, '¿Dice que una cosa es otra, compara con «como» o repite?'], ['Barro el beso. Barro el boleto. Barro la flor.', 2, '¿Dice que una cosa es otra, compara con «como» o repite?'], ['Callada como una iglesia sin misa.', 1, '¿Dice que una cosa es otra, compara con «como» o repite?'], ['Son cartas que nadie terminó.', 0, '¿Dice que una cosa es otra, compara con «como» o repite?']), bien: 'Es, como y otra vez.' },
+      '«Es» y «son» identifican, «como» compara y «Barro… Barro…» repite.', 'Busca «es», «como» o una palabra que vuelve.'),
+    x('genero-o-cita', '¿Se barre algo **material** o algo que **representa** una historia?', { doc: CANTO, rot: ['cosa material', 'historia o sentimiento'],
+      ...F(['Hojas secas', 0, '¿Se puede echar en una bolsa?'], ['El beso que se cayó de una banca', 1, '¿Se puede echar en una bolsa?'], ['Cáscaras', 0, '¿Se puede echar en una bolsa?'], ['La espera de una puerta que no se abrió', 1, '¿Se puede echar en una bolsa?'], ['Un botón', 0, '¿Se puede echar en una bolsa?']), bien: 'La basura cuenta historias.' },
+      'Hojas, cáscaras y botón son cosas; el beso y la espera son lo que la voz imagina en ellas.', 'Pregunta si eso se puede tocar y cabe en el recogedor.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CANTO, nums: [3, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Su madre también barrió la plaza.', 0, 'Léela junto al comienzo de la estrofa 3.'], ['La frase del niño la conmovió.', 1, '¿Por qué barre un rato el mismo sitio?'], ['Le enorgullece su oficio.', 1, '¿Cómo habla de su secreto y de su minuto?'], ['El niño es su nieto.', 2, '¿Se dice quién es el niño?']),
+      luz: [[3, 'Mi madre barrió esta plaza'], [5, 'barrí un rato el mismo sitio']], bien: 'Barrer el mismo sitio es llorar sin decirlo.' },
+      'Lo de la madre está escrito; la emoción y el orgullo se deducen; el parentesco no.', 'Mira lo que hace la voz después de oír al niño.'),
+    x('talla-idea', 'Tres interpretaciones de la estrofa 4: pon cada una en su talla.', { doc: CANTO, p: 4, rot: ['se queda en un detalle', 'justa', 'dice de más'],
+      ...F(['El primer cigarrillo cae a las seis y diez.', 0, 'Es cierto, pero ¿qué quiere decir con eso?'], ['Que su trabajo se deshaga cada día también le da sentido.', 1, 'Compárala con la pregunta y con la luna.'], ['Le gustaría que la gente ensuciara más.', 2, '¿Alguna oración pide más basura?']),
+      luz: [[4, '¿quién sabría que existo?'], [4, 'cada noche vuelve a comenzar']], bien: 'Como la luna, vuelve a empezar.' },
+      'La hora es un detalle; no pide más basura: acepta que su oficio recomienza y que eso la hace existir.', 'La idea justa explica la pregunta y la comparación con la luna.'),
+    x('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: CANTO, texto: 'Me dejaron un secreto|:| no se barre hacia afuera. |«|Está linda», dijo|.| Si amaneciera limpia, |¿|quién sabría que existo?',
+      ...T(['anuncia en qué consiste', 0, 'Busca el signo después de «secreto».'], ['trae la voz del niño', 1, 'Busca el signo antes de lo que él dijo.'], ['abre una pregunta sin respuesta', 3, 'Busca dónde la voz se pregunta algo.']), bien: 'Anunciar, citar y preguntar.' },
+      'Los dos puntos anuncian el secreto, las comillas traen al niño y la interrogación abre una pregunta retórica.', 'Mira qué viene justo después de cada signo.'),
+    x('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: CANTO, texto: '|Un niño| tomó |el botón| y miró |la plaza|. Se lo puso en el ojo y dijo que estaba linda, y ella le pareció nueva.',
+      ...T(['«lo»', 1, 'Pon en su lugar lo que ataste: ¿qué se puso en el ojo?'], ['«ella»', 2, 'Pon en su lugar lo que ataste: ¿qué le pareció nueva?']), bien: 'El botón y la plaza.' },
+      'Lo que cabe en el ojo es el botón; lo que le pareció nueva es la plaza.', 'Comprueba género y sentido en la oración.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran.', { doc: CANTO, lineas: ['Una barrendera canta su oficio de madrugada.', 'La pluma era azul.', 'Dice que barre historias, no solo basura.', 'Heredó un secreto: juntar hacia el centro.', 'Las palomas vuelan.', 'Pide que alguien siga su gesto.'], ...S([1, 4], { 0: 'Es la voz y su situación.', 2: 'Es la imagen central.', 3: 'Es lo que le da sentido a su oficio.', 5: 'Es el cierre.' }), bien: 'Voz, imagen, herencia y petición.' },
+      'La pluma y las palomas son detalles; lo demás es el sentido del poema.', 'Deja lo que dirías si te preguntan de qué trata.'),
+  ]);
+
+  const MUDANZA = {
+    id: 'icf-mudanza', title: 'Inventario',
+    paras: [
+      'El camión llegó a las siete, cuando la casa todavía olía a sueño. Papá había hecho una lista en un cuaderno cuadriculado: una nevera, dos camas, siete cajas de loza, un televisor que solo obedecía a golpes. Iba tachando a medida que los hombres subían las cosas. Le temblaba un poco el lápiz, pero era por el frío, dijo.',
+      'Yo tenía mi propia lista, en la cabeza. La mancha del techo con forma de caballo. El escalón que se quejaba. El clavo donde mamá colgaba el delantal y que nadie, en dos años, se había atrevido a quitar. Esas cosas no cabían en el camión. Las repasé una por una, como quien cuenta ovejas, hasta que me sonó la voz de papá: «¿Ya está todo?».',
+      'Le dije que sí. Entonces él caminó hasta la cocina, se quedó frente al clavo y levantó la mano. Pensé que iba a arrancarlo. Colgó la gorra un momento, la volvió a tomar, y apagó la luz aunque ya era de día.',
+      'En el camión íbamos los tres apretados: el conductor, papá y yo, con la jaula del canario en las piernas. El canario, que nunca cantaba en la casa nueva de nadie, empezó a cantar al pasar el puente. El conductor se rio. Papá miró por la ventana todo el camino, como si la carretera fuera un libro difícil.',
+      'La casa nueva era blanca, recta y sin historia. Las paredes daban eco. Mientras bajaban la nevera, papá sacó del bolsillo un martillo pequeño y una cosa envuelta en un pañuelo. Buscó un sitio al lado de la estufa, midió con los dedos, dudó. Después dio tres golpes cortos.',
+      'En el cuaderno, debajo del televisor, encontré años después un renglón sin tachar, escrito con otra letra o con la misma letra de otro día: «Un clavo».',
+    ],
+  };
+  const Q = preg(MUDANZA, 'lectura');
+  return mundo('icf-lc-literario', 'Textos Literarios', 'lectura', [l1, l2, l3], [
+    ['icf-lc-literario-1', 'El narrador en primera persona participa en lo que cuenta.', Q('El narrador del cuento es:', ['El conductor del camión', 'El padre', 'Un hijo o una hija que vivió la mudanza', 'Alguien que no conoció a la familia'], 2, '«Yo tenía mi propia lista»: cuenta en primera persona y llama «papá» al otro personaje.', 'Busca quién dice «yo» y cómo llama al hombre de la lista.')],
+    ['icf-lc-literario-1', 'A un personaje se le conoce por sus gestos.', Q('Cuando el padre dice que el lápiz le tiembla por el frío, el lector puede entender que:', ['Está enfermo', 'Quiere ocultar su emoción', 'La nevera estaba abierta', 'No sabe escribir'], 1, 'El gesto y la excusa («dijo») muestran que le cuesta dejar la casa.', 'Fíjate en la palabra «dijo» y en lo que está haciendo.')],
+    ['icf-lc-literario-2', 'Un símil compara con «como».', Q('En «como si la carretera fuera un libro difícil», la comparación sugiere que el padre:', ['Está concentrado y le cuesta entender lo que siente', 'Va leyendo un libro', 'No conoce la carretera', 'Está enojado con el conductor'], 0, 'Mira fijo, como quien se esfuerza por leer: está metido en sus pensamientos.', '¿Cómo se mira un libro difícil?')],
+    ['icf-lc-literario-2', 'Un símbolo es un objeto que carga con algo más.', Q('El clavo representa en el cuento:', ['El costo de la mudanza', 'La pereza de la familia', 'La fuerza del padre', 'La presencia de la madre, que la familia no quiere perder'], 3, 'Era donde ella colgaba el delantal y nadie se atrevía a quitarlo; el padre lo lleva a la casa nueva.', '¿Quién usaba el clavo y por qué nadie lo quitó?')],
+    ['icf-lc-literario-3', 'Lo que se siente en un texto literario casi nunca se nombra.', Q('La frase «La casa nueva era blanca, recta y sin historia» expresa:', ['Alegría por el cambio', 'Que a la casa le faltan recuerdos', 'Que la casa está mal construida', 'Que la casa es más barata'], 1, '«Sin historia» se opone a la casa vieja, llena de marcas y recuerdos.', 'Compárala con la lista que el narrador llevaba en la cabeza.')],
+    ['icf-lc-literario-3', 'El título puede tener más de un sentido.', Q('El título «Inventario» se refiere a:', ['Solo a los objetos del camión', 'A un almacén', 'A la lista de las cosas y, también, a lo que no se puede empacar', 'A los pasajeros del camión'], 2, 'Hay dos listas, la del cuaderno y la de la cabeza, y el último renglón las une: «Un clavo».', 'Cuenta cuántas listas hay en el cuento.')],
   ]);
 })());
 ;
@@ -7885,6 +8144,161 @@ PI_MUNDOS.push((() => {
   ]);
 })());
 ;
+//#archivo js/courses/preicfes-sc-fuentes.js
+// Preicfes · Sociales y Ciudadanas · mundo 4 «Fuentes y Argumentos» (spec 2026-11-25-preicfes-estructura). Fuentes inventadas para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const CARTA = {
+    id: 'icf-carta-tren', title: 'Una carta, un mapa y un recibo',
+    ficha: { autor: 'Taller de historia local', fuente: 'Cuaderno de una casa de la cultura', fecha: 'Marzo de 2026' },
+    paras: [
+      'En el desván de una casa de Puerto Sereno apareció una caja con tres papeles. El primero es una carta de 1926 en la que Clementina Rojas le cuenta a su hermana la llegada del tren: «Trajeron música y discursos. El gobernador dijo que desde hoy seremos ricos. Yo vi bajar a los peones por el lado donde no había música». El segundo es un mapa de la compañía del ferrocarril. El tercero, un recibo por la venta de un lote.',
+      'Los tres son fuentes primarias: se hicieron en la época de los hechos, por gente que los vivió. Un libro escrito hoy sobre ese tren sería una fuente secundaria, porque estudia el pasado a partir de otras fuentes. Que una fuente sea primaria no la vuelve verdadera; la vuelve cercana. Clementina estuvo allí, pero miró desde un lugar.',
+      'Para leerla hay que ponerla en su contexto. En aquellos años, el país recibió una indemnización por la pérdida de Panamá y muchos préstamos de bancos extranjeros. Con ese dinero se construyeron vías férreas y puertos para sacar el café. Los discursos de riqueza no eran una ocurrencia del gobernador: los repetían los periódicos de medio país.',
+      'También hay que preguntar quién escribe, para quién y con qué fin. Clementina le escribe a su hermana, en privado; no tiene que quedar bien con nadie. El mapa, en cambio, lo hizo la compañía para atraer compradores: dibuja calles que nunca existieron. El recibo no opina. Solo dice que un campesino vendió por doce pesos un lote que, según otro papel, la compañía revendió por noventa al año siguiente.',
+      'Ninguno de los tres cuenta la historia completa. La carta muestra que no todos celebraron; el mapa, lo que se prometía; el recibo, quién ganó. Juntos dicen más que cada uno por separado, y además se corrigen: lo que el mapa promete, el recibo lo desmiente.',
+      'La caja no tiene la voz de los peones. No sabían escribir o nadie guardó lo que escribieron. Ese silencio también es un dato. Un buen lector de fuentes no solo pregunta qué dicen los papeles, sino quién falta en ellos.',
+    ],
+  };
+  const l1 = leccion('icf-sc-fuentes-1', 'Leer una fuente en su contexto', guion(
+    ['Primaria o secundaria', 'Primaria: de la época, de quien lo vivió. Secundaria: un estudio posterior.'],
+    ['Quién, para quién, para qué', 'Una carta privada y un aviso comercial no se leen igual.'],
+    ['El contexto', 'Qué pasaba entonces en la economía, la política o la cultura.'],
+    ['El silencio', 'También importa quién no aparece.']), [
+    x('genero-o-cita', '¿Es fuente **primaria** o **secundaria** sobre el tren de 1926?', { doc: CARTA, rot: ['primaria', 'secundaria'],
+      ...F(['La carta de Clementina', 0, '¿Es de la época y de quien lo vivió?'], ['Un libro de historia escrito hoy', 1, '¿Es de la época o la estudia después?'], ['El mapa de la compañía', 0, '¿Es de la época?'], ['Un documental de este año', 1, '¿Es de la época o la estudia después?'], ['El recibo del lote', 0, '¿Es de la época?']), bien: 'De la época o sobre la época.' },
+      'La carta, el mapa y el recibo son de entonces; el libro y el documental estudian ese pasado.', 'Pregunta cuándo se hizo y si quien la hizo estuvo allí.'),
+    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: CARTA,
+      ...F(['presenta los tres papeles', 0, 'Busca la caja.'], ['define los tipos de fuente', 1, 'Busca «primarias» y «secundaria».'], ['da el contexto de la época', 2, 'Busca los préstamos.'], ['pregunta quién y para qué', 3, 'Busca con qué fin se hicieron.'], ['compara lo que aporta cada una', 4, 'Busca «juntos dicen más».'], ['señala quién falta', 5, 'Busca el silencio.'], ['describe un viaje en tren', null, 'Nadie cuenta un viaje.']),
+      luz: [[1, 'una caja con tres papeles'], [2, 'fuentes primarias'], [3, 'ponerla en su contexto'], [4, 'quién escribe'], [5, 'Juntos dicen más'], [6, 'Ese silencio']], bien: 'Papeles, tipos, contexto, propósito, comparación y silencio.' },
+      'El texto enseña a leer una fuente paso a paso, con tres papeles de ejemplo.', 'Lee el comienzo de cada párrafo y di qué pregunta responde.'),
+    x('voz-de-la-fuente', 'Ata cada propósito a su fuente.', { ayuda: 'Tira un hilo desde cada propósito hasta su fuente.', doc: CARTA, portadas: [['La carta', 'fuente'], ['El mapa', 'fuente'], ['El recibo', 'fuente'], ['Un libro actual', 'fuente']],
+      ...T(['contarle algo a alguien querido', 0, '¿Cuál es privada?'], ['atraer compradores', 1, '¿Cuál dibuja calles que no existieron?'], ['dejar constancia de una venta', 2, '¿Cuál no opina?'], ['explicar el pasado con otras fuentes', 3, '¿Cuál se hace mucho después?']), bien: 'Contar, vender, constar y explicar.' },
+      'La carta cuenta en privado, el mapa vende, el recibo deja constancia y el libro explica.', 'Pregunta qué ganaba cada autor con su documento.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CARTA, nums: [2, 4, 5], pregunta: 'Queda en pie', queda: 'Las fuentes se corrigen unas a otras.',
+      ...T(['Toda fuente primaria es verdadera.', 2, 'Busca qué la vuelve ser primaria.'], ['El mapa muestra las calles reales.', 6, 'Busca qué dibuja la compañía.'], ['Con la carta basta para saberlo todo.', 9, 'Busca si alguno cuenta la historia completa.']), bien: 'Cercana no es verdadera.' },
+      'Ser primaria la vuelve cercana, el mapa dibuja calles que no existieron y ninguno cuenta todo.', 'Saca la palabra clave: verdadera, calles, todo.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CARTA, nums: [1, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['El lote se vendió por doce pesos.', 0, 'Léela junto a lo que dice el recibo.'], ['La compañía ganó mucho con la reventa.', 1, 'Compara doce con noventa.'], ['Clementina desconfiaba de los discursos.', 1, '¿Qué vio ella mientras sonaba la música?'], ['Los peones hicieron una huelga.', 2, '¿Alguna oración la nombra?']),
+      luz: [[4, 'vendió por doce pesos'], [1, 'por el lado donde no había música']], bien: 'Una imagen puede ser una crítica.' },
+      'Los doce pesos están escritos; la ganancia y la desconfianza se deducen; la huelga no aparece.', 'Compara los números y piensa qué contrasta la carta.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 3 la oración que explica que esos discursos eran **propios de la época**, no solo del gobernador.', { doc: CARTA, nums: [3], apuesta: 'La idea de riqueza circulaba en todo el país.', ...S(['3.3'], { '3.0': 'Dice qué hay que hacer con la fuente.', '3.1': 'Da el origen del dinero.', '3.2': 'Dice en qué se gastó el dinero.' }), bien: 'Eso es poner una fuente en contexto.' },
+      'La última oración dice que los repetían los periódicos de medio país.', 'Busca la oración que compara al gobernador con otros.'),
+    x('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: CARTA, texto: '|La carta| se escribió en privado y |el mapa|, para vender. Este dibuja calles que no existieron; aquella no tiene que quedar bien con |nadie|.',
+      ...T(['«Este»', 1, 'Pon en su lugar lo que ataste: ¿qué dibuja calles?'], ['«aquella»', 0, 'Pon en su lugar lo que ataste: ¿cuál es privada?']), bien: 'Este, el cercano; aquella, la lejana.' },
+      'El que dibuja es el mapa; la que no tiene que quedar bien es la carta.', 'Comprueba con lo que cada documento hace.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: CARTA, lineas: ['Una fuente primaria es cercana, no siempre verdadera.', 'La caja estaba en un desván.', 'Hay que preguntar quién, para quién y para qué.', 'El contexto ayuda a entenderla.', 'La hermana recibió la carta.', 'También importa quién no aparece.'], ...S([1, 4], { 0: 'Es la idea sobre el tipo de fuente.', 2: 'Es la pregunta por el propósito.', 3: 'Es el contexto.', 5: 'Es el silencio.' }), bien: 'Tipo, propósito, contexto y silencio.' },
+      'El desván y la hermana son del caso; lo demás sirve para leer cualquier fuente.', 'Deja lo que usarías para leer otro documento.'),
+  ]);
+
+  const CIFRA = {
+    id: 'icf-cifras-colegio', title: '¿Subió o bajó la violencia?',
+    ficha: { autor: 'Equipo de periodismo de datos', fuente: 'Portal de verificación', fecha: 'Abril de 2026' },
+    paras: [
+      'Dos candidatos a la alcaldía de una misma ciudad publicaron, el mismo día, dos frases opuestas. «Los robos bajaron 20 %», dijo uno. «La inseguridad está peor que nunca», dijo la otra. Ambos citaron una fuente. Ninguno mintió en el dato que citó. ¿Cómo es posible?',
+      'El primero usó las denuncias que recibe la Policía: pasaron de 5 000 a 4 000 en un año. Es una fuente oficial, completa y fácil de comparar. Pero solo cuenta lo que se denuncia. Ese año cerraron dos estaciones y denunciar por internet exigía llenar once páginas. Puede que hubiera menos robos; puede que hubiera menos denuncias. Con esa fuente sola es imposible distinguir una cosa de la otra.',
+      'La segunda usó una encuesta: siete de cada diez personas dijeron sentirse inseguras. Las encuestas captan lo que no se denuncia, pero preguntan por una sensación, y la sensación cambia con las noticias. Además, esta se hizo por teléfono fijo, un aparato que ya casi solo conservan los mayores. Nadie preguntó a los jóvenes, que usan el transporte de noche, ni a quienes viven en arriendo.',
+      'Una tercera fuente, menos citada, ayuda a decidir: las atenciones por heridas en robos en los hospitales. No dependen de que alguien quiera denunciar ni de cómo se sienta. Subieron 4 %. No sirven para contar robos sin heridos, que son la mayoría, pero indican que una caída del 20 % es poco probable.',
+      'De esto no se concluye que las cifras no sirvan. Se concluye que cada fuente prueba unas cosas y no otras. Las denuncias prueban cuánto se denuncia; la encuesta, cómo se siente un grupo; los hospitales, los robos con heridos. Usar una para afirmar lo que no mide es un argumento débil, aunque el número sea exacto.',
+      'Lo honesto habría sido decir: «Se denuncia menos, la gente se siente insegura y los robos con heridos subieron un poco; no sabemos si hubo más o menos robos». No cabe en un afiche. Pero gobernar no es hacer afiches, y votar bien exige preguntar de dónde sale cada número.',
+    ],
+  };
+  const l2 = leccion('icf-sc-fuentes-2', 'Qué prueba y qué no una fuente', guion(
+    ['Cada fuente mide algo', 'Las denuncias miden lo denunciado; una encuesta, lo que la gente dice.'],
+    ['Límites', 'Toda fuente deja algo por fuera: hay que decirlo.'],
+    ['Comparar', 'Dos fuentes independientes que coinciden pesan más.'],
+    ['No decir de más', 'Un dato exacto puede sostener una conclusión equivocada.']), [
+    x('voz-de-la-fuente', 'Ata cada cosa a la fuente que la puede probar.', { ayuda: 'Tira un hilo desde cada cosa hasta su fuente.', doc: CIFRA, portadas: [['Denuncias', 'fuente'], ['Encuesta', 'fuente'], ['Hospitales', 'fuente']],
+      ...T(['Cuánta gente acudió a la Policía', 0, '¿Cuál cuenta lo que se reporta?'], ['Cuánta gente dice sentirse insegura', 1, '¿Cuál pregunta por una sensación?'], ['Cuántos robos dejaron heridos', 2, '¿Cuál atiende heridas?']), bien: 'Reportar, sentir y atender.' },
+      'La Policía cuenta denuncias, la encuesta sensaciones y los hospitales, heridos.', 'Pregunta qué cosas se cuentan en cada lugar.'),
+    x('genero-o-cita', '¿La conclusión **sale** de su fuente o **dice de más**?', { doc: CIFRA, rot: ['sale de la fuente', 'dice de más'],
+      ...F(['Se recibieron 1 000 denuncias menos', 0, '¿Es justo lo que se contó?'], ['Hubo 20 % menos robos', 1, '¿Las denuncias cuentan todos los robos?'], ['Siete de cada diez encuestados se sienten inseguros', 0, '¿Es justo lo que se preguntó?'], ['La ciudad es más peligrosa que nunca', 1, '¿La encuesta compara con todos los años?']), bien: 'Contar no es lo mismo que concluir.' },
+      'Las denuncias y las respuestas se contaron; los robos totales y el «nunca» van más allá.', 'Compara cada conclusión con lo que la fuente mide de verdad.'),
+    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: CIFRA,
+      ...F(['¿Por qué pudo bajar la cifra de denuncias?', 1, 'Busca el comienzo que nombra a la Policía.'], ['¿A quiénes se llamó en la encuesta?', 2, 'Busca el comienzo que nombra la encuesta.'], ['¿Qué habría sido honesto decir?', 5, 'Busca el comienzo que habla de honestidad.']),
+      luz: [[2, 'cerraron dos estaciones'], [3, 'por teléfono fijo'], [6, 'Lo honesto habría sido']], bien: 'Policía, encuesta y honestidad.' },
+      'Las denuncias están en el 2, la encuesta en el 3 y lo honesto en el 6.', 'Busca en los comienzos la fuente o la palabra clave.'),
+    x('balanza-tesis', 'Tesis: «los robos bajaron 20 %». ¿Qué hace cada dato?', { doc: CIFRA, tesis: 'Los robos bajaron 20 %',
+      ...F(['Las denuncias bajaron de 5 000 a 4 000.', 0, '¿La apoya o la pone en duda?'], ['Cerraron dos estaciones donde se denunciaba.', 1, '¿Podría explicar la baja de otra manera?'], ['Las heridas por robo subieron 4 %.', 1, '¿Va en la misma dirección que la tesis?'], ['El afiche era amarillo.', 2, '¿Eso mide cuántos robos hubo?']), bien: 'Otra explicación y otra fuente la debilitan.' },
+      'Las denuncias la apoyan; el cierre ofrece otra causa y los hospitales van al contrario; el afiche no pesa.', 'Supón cierto cada dato: ¿creerías más o menos en la caída?'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: CIFRA, filas: [{ antes: 'Los candidatos, en el dato que citaron,', topes: ['mintieron', 'no mintieron', 'copiaron mal'], va: 1 }, { antes: 'Los hospitales cuentan', topes: ['todos los robos', 'ningún robo', 'robos con heridos'], va: 2 }, { antes: 'De los robos totales', topes: ['no se sabe', 'bajaron', 'subieron'], va: 0 }], mira: ['Relee el final del párrafo 1.', 'Relee para qué no sirven en el párrafo 4.', 'Relee la frase honesta del párrafo 6.'], luz: [[1, 'Ninguno mintió'], [5, 'los robos con heridos'], [6, 'no sabemos si hubo más o menos robos']], bien: 'Dato exacto, conclusión dudosa.' },
+      'Ninguno mintió en el dato, los hospitales cuentan robos con heridos y del total no se sabe.', 'Busca la oración exacta que pone el límite.'),
+    x('pinta-tipos', 'Pinta cada límite con su fuente.', { doc: CIFRA, plumas: ['denuncias', 'encuesta', 'hospitales'],
+      ...P(['Deja por fuera lo que nadie reporta.', 0, '¿A cuál le falta lo que no se cuenta a la Policía?'], ['Depende de cómo se siente la gente.', 1, '¿A cuál la mueven las noticias?'], ['No ve los robos sin golpes.', 2, '¿A cuál llegan solo los lastimados?'], ['Llamó casi solo a personas mayores.', 1, '¿Cuál usó teléfono fijo?'], ['Baja si denunciar se vuelve difícil.', 0, '¿Cuál depende de un trámite?']), bien: 'Toda fuente tiene su límite.' },
+      'Lo no reportado y el trámite limitan las denuncias; la sensación y el teléfono, la encuesta; los golpes, los hospitales.', 'Pregunta qué casos se le escapan a cada fuente.'),
+    x('bisagras', 'Pon en cada hueco la palabra que une. Sobran dos.', { doc: CIFRA, pares: [['Es una fuente oficial y completa.', 'solo cuenta lo que se denuncia.'], ['No dependen de que alguien denuncie;', 'sirven para comparar.'], ['La sensación cambia', 'las noticias la mueven.']],
+      ...F(['Pero', 0, 'Limita: ¿dónde se reconoce algo y luego se le pone un tope?'], ['por eso', 1, 'Trae el resultado: ¿dónde lo segundo sale de lo primero?'], ['porque', 2, 'Trae la causa: ¿dónde lo segundo explica lo primero?'], ['Es decir,', null, 'Repetiría lo mismo: ninguna pareja repite.'], ['para que', null, 'Anunciaría un propósito: aquí nadie lo busca.']), bien: 'Tope, resultado y causa.' },
+      'A la fuente se le pone un tope, su independencia trae una utilidad y las noticias explican la sensación.', 'Di qué hace la segunda idea: limita, resulta o explica.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: CIFRA, lineas: ['Dos candidatos usan datos ciertos para decir lo contrario.', 'Había once páginas.', 'Cada fuente mide una cosa y deja otra por fuera.', 'Comparar fuentes ayuda a decidir.', 'El teléfono era fijo.', 'Concluir más de lo que se mide es un argumento débil.'], ...S([1, 4], { 0: 'Es el problema.', 2: 'Es la idea central.', 3: 'Es lo que hace la tercera fuente.', 5: 'Es la conclusión.' }), bien: 'Problema, idea, comparación y conclusión.' },
+      'Las páginas y el teléfono son detalles; lo demás sirve para evaluar cualquier cifra.', 'Deja lo que ayudaría a revisar otra noticia.'),
+  ]);
+
+  const DISCURSO = {
+    id: 'icf-dibujo', title: 'El dibujo del balcón',
+    ficha: { autor: 'Curso de medios y sociedad', fuente: 'Guía de lectura crítica de imágenes', fecha: 'Mayo de 2026' },
+    paras: [
+      'La caricatura apareció en un periódico regional el día en que el gobierno anunció que bajaría el precio de la gasolina. En ella, un funcionario sonriente lanza desde un balcón un billete diminuto atado a un globo. Abajo, una multitud salta para alcanzarlo. Detrás del balcón se ve una habitación llena de bolsas marcadas con la palabra «impuestos». Al pie dice: «¡Cójanlo entre todos!».',
+      'Una caricatura es un argumento con dibujos. No busca informar, sino hacer ver. Para eso exagera: el billete no es pequeño, es ridículo; la multitud no es grande, es inmensa. Con esa desproporción, el dibujante opina que el alivio es mínimo frente a lo que la gente paga.',
+      'También usa símbolos. El balcón es el poder, que está arriba y lejos. El globo recuerda las promesas, que se inflan y se van. La frase es irónica: suena generosa y dice lo contrario. Quien no conozca el anuncio sobre la gasolina verá una escena graciosa, pero no entenderá de qué se ríe: sin contexto no hay caricatura.',
+      'Ese mismo día, el funcionario pronunció un discurso. Dijo: «Hoy empieza una nueva era. Los que nos critican son los de siempre, los que nunca han hecho nada por este país. El pueblo sabe quién está con él». El discurso también es un argumento, aunque no tenga dibujos. Promete una era, divide el mundo entre «los de siempre» y «el pueblo», y en lugar de responder a una crítica descalifica a quienes la hacen.',
+      'Ni la caricatura ni el discurso son neutrales, y no tienen por qué serlo. La pregunta no es si opinan, sino cómo. El dibujante exagera un dato que se puede revisar: cuánto baja el precio y cuánto se paga en impuestos. El funcionario no da ninguno. Uno invita a comparar; el otro, a escoger un bando.',
+      'Leer imágenes y discursos exige las mismas preguntas: ¿qué muestra?, ¿qué exagera?, ¿a quién deja mal parado?, ¿qué tendría que ser cierto para que tenga razón? Quien las hace no deja de reírse ni de emocionarse. Solo lo hace sabiendo por qué.',
+    ],
+  };
+  const l3 = leccion('icf-sc-fuentes-3', 'Caricaturas y discursos', guion(
+    ['Exagerar para opinar', 'Una caricatura agranda o encoge lo que quiere criticar.'],
+    ['Símbolos', 'Un balcón puede ser el poder; un globo, una promesa.'],
+    ['Ironía', 'Dice una cosa para que se entienda la contraria.'],
+    ['Discursos', 'Mira qué promete, a quién divide y si responde con razones o ataca a la persona.']), [
+    x('voz-de-la-fuente', 'Ata cada idea al elemento que la representa.', { ayuda: 'Tira un hilo desde cada idea hasta el elemento del dibujo.', doc: DISCURSO, portadas: [['El balcón', 'elemento'], ['El globo', 'elemento'], ['El billete diminuto', 'elemento'], ['Las bolsas', 'elemento']],
+      ...T(['el poder, lejos de la gente', 0, '¿Qué está arriba?'], ['las promesas que se van', 1, '¿Qué se infla?'], ['un alivio mínimo', 2, '¿Qué es ridículamente pequeño?'], ['lo que la gente paga', 3, '¿Qué está detrás y marcado?']), bien: 'Cada objeto opina.' },
+      'El balcón es el poder, el globo la promesa, el billete el alivio y las bolsas, los impuestos.', 'Pregunta qué tiene de particular cada objeto: su lugar, su tamaño o su rótulo.'),
+    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: DISCURSO,
+      ...F(['describe el dibujo', 0, 'Busca lo que se ve.'], ['explica la exageración', 1, 'Busca la desproporción.'], ['explica símbolos e ironía', 2, 'Busca el globo y la frase.'], ['analiza un discurso', 3, 'Busca lo que dijo el funcionario.'], ['compara los dos', 4, 'Busca «Ni… ni…».'], ['deja preguntas para leer', 5, 'Busca los signos de interrogación.'], ['cuenta la vida del dibujante', null, 'No se cuenta su vida.']),
+      luz: [[1, 'un funcionario sonriente'], [2, 'exagera'], [3, 'usa símbolos'], [4, 'pronunció un discurso'], [5, 'Ni la caricatura ni el discurso'], [6, '¿qué exagera?']], bien: 'Describir, exagerar, simbolizar, analizar, comparar y preguntar.' },
+      'El texto describe el dibujo, explica sus recursos, analiza el discurso, los compara y deja preguntas.', 'Di qué hace cada párrafo con el dibujo o el discurso.'),
+    x('genero-o-cita', '¿El discurso **responde con razones** o **descalifica** a la persona?', { doc: DISCURSO, rot: ['da razones', 'descalifica'],
+      ...F(['Los que critican son los de siempre', 1, '¿Responde a la crítica o habla de quien la hace?'], ['El precio baja doscientos pesos por galón', 0, '¿Da un dato o habla de alguien?'], ['Nunca han hecho nada por el país', 1, '¿Responde a la crítica o habla de quien la hace?'], ['El costo se cubrirá con otro ahorro', 0, '¿Explica algo o habla de alguien?']), bien: 'Contestar la idea o atacar a quien la dice.' },
+      'El precio y el costo son razones; «los de siempre» y «nunca han hecho nada» atacan a las personas.', 'Pregunta si la frase habla del tema o de quien opina.'),
+    x('pinta-tipos', 'Pinta cada parte con el recurso que usa.', { doc: DISCURSO, plumas: ['exageración', 'símbolo', 'ironía'],
+      ...P(['Una multitud inmensa tras un billete.', 0, '¿Agranda, representa otra cosa o dice lo contrario?'], ['Un globo que se va por el aire.', 1, '¿Agranda, representa otra cosa o dice lo contrario?'], ['«¡Cójanlo entre todos!»', 2, '¿Agranda, representa otra cosa o dice lo contrario?'], ['Un balcón muy arriba.', 1, '¿Agranda, representa otra cosa o dice lo contrario?']), bien: 'Tamaño, objeto y frase.' },
+      'La multitud exagera, el globo y el balcón simbolizan y la frase generosa es irónica.', 'Mira si cambia el tamaño, si el objeto significa algo más o si la frase se burla.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: DISCURSO, nums: [3, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Sin contexto no se entiende la caricatura.', 0, 'Léela junto al final del párrafo 3.'], ['El discurso busca que la gente tome partido.', 1, '¿A qué invita, según la comparación?'], ['El dibujante fue despedido.', 2, '¿Se dice qué pasó con él?'], ['La caricatura se apoya en algo comprobable.', 1, '¿Qué se puede revisar de ella?']),
+      luz: [[3, 'sin contexto no hay caricatura'], [5, 'un dato que se puede revisar'], [5, 'a escoger un bando']], bien: 'Opinar con algo que se pueda revisar.' },
+      'El contexto está escrito; que busque bandos y que sea comprobable se deducen; el despido se inventa.', 'Junta lo que se dice de cada uno en el párrafo 5.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 2 la oración que dice **qué opina** el dibujante.', { doc: DISCURSO, nums: [2], apuesta: 'El alivio es muy poco frente a lo que se paga.', ...S(['2.3'], { '2.0': 'Define qué es una caricatura.', '2.1': 'Dice qué busca una caricatura.', '2.2': 'Muestra cómo exagera.' }), bien: 'La desproporción opina.' },
+      'La última oración une la desproporción con la opinión: el alivio es mínimo.', 'Busca la oración que pasa de lo que se ve a lo que piensa el autor.'),
+    x('balanza-tesis', 'Lo que opina la caricatura: el alivio es mínimo. ¿Qué hace cada dato?', { doc: DISCURSO, tesis: 'El alivio es mínimo frente a lo que se paga',
+      ...F(['La gasolina bajó 1 % y los impuestos son el 30 %.', 0, '¿Es poco o mucho?'], ['Con la baja, el pasaje de bus se redujo a la mitad.', 1, '¿El alivio fue pequeño?'], ['El dibujo es en blanco y negro.', 2, '¿Cambia el alivio?']), bien: 'Se revisa con datos.' },
+      'Un 1 % apoya; que el pasaje bajara a la mitad debilita; el color no pesa.', 'Compara el tamaño del alivio con lo que se paga.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: DISCURSO, lineas: ['Una caricatura opina exagerando y con símbolos.', 'El periódico era regional.', 'La ironía dice lo contrario.', 'Un discurso puede descalificar en vez de responder.', 'El funcionario sonríe.', 'Conviene preguntar qué tendría que ser cierto.'], ...S([1, 4], { 0: 'Es la idea sobre la caricatura.', 2: 'Es otro recurso.', 3: 'Es la idea sobre el discurso.', 5: 'Es la pregunta para leerlos.' }), bien: 'Recursos, discurso y pregunta.' },
+      'El periódico y la sonrisa son detalles; lo demás sirve para cualquier caricatura o discurso.', 'Deja lo que usarías para leer otra imagen.'),
+  ]);
+
+  const PLAZA = {
+    id: 'icf-fuentes-mina', title: 'Tres voces sobre una mina',
+    paras: [
+      'En 1974 abrió una mina de carbón en el municipio de Las Lajas y en 2001 cerró. Un grupo de estudiantes reunió fuentes para contar qué cambió en el pueblo. La primera fue un folleto de la empresa, impreso en 1975: «Llegó el progreso. Cada familia tendrá empleo, escuela y hospital». Lo acompañan fotos a color de niños con uniforme nuevo.',
+      'La segunda fue una entrevista a Hermelinda Ortiz, de ochenta y un años, hecha este año. Recuerda que hubo empleo para los hombres, que su marido murió de los pulmones a los cuarenta y cuatro y que el hospital «fue un consultorio con una cama». También dijo que nunca volvió a ver el pueblo tan alegre como en aquellos años.',
+      'La tercera fue un libro publicado en 2010 por una economista. Con archivos de la alcaldía muestra que los ingresos del municipio se multiplicaron por seis, que la mitad de los obreros venía de otras regiones y que, dos años después del cierre, la población se había reducido a la tercera parte.',
+      'Los estudiantes pegaron además una caricatura de 1980, sacada de un periódico sindical: un hombre gordo, con el casco de la empresa, sopla un pastel que dice «cinco años»; los invitados, de cara tiznada, tosen en lugar de cantar.',
+      'En clase discutieron cuál fuente era «la verdadera». Una estudiante sostuvo que el libro, porque trae cifras. Otro, que la entrevista, porque la señora lo vivió. La profesora preguntó qué podía probar cada una y qué no. Hicieron una tabla. El folleto probaba lo que la empresa quería que se creyera; la entrevista, cómo lo vivió una mujer; el libro, cómo cambiaron las cuentas y la población; la caricatura, qué reclamaban los obreros.',
+      'Al final escribieron un texto de una página. La última línea decía: «La mina trajo dinero y se llevó gente; según a quién se le pregunte, fue las dos cosas o solo una de ellas».',
+    ],
+  };
+  const Q = preg(PLAZA, 'sociales');
+  return mundo('icf-sc-fuentes', 'Fuentes y Argumentos', 'sociales', [l1, l2, l3], [
+    ['icf-sc-fuentes-1', 'Secundaria: estudia el pasado a partir de otras fuentes.', Q('De las fuentes reunidas, es secundaria:', ['El folleto de 1975', 'La caricatura de 1980', 'El libro de 2010', 'Ninguna de ellas'], 2, 'El libro estudia lo ocurrido con archivos; el folleto y la caricatura son de la época.', '¿Cuál se hizo después, a partir de otros documentos?')],
+    ['icf-sc-fuentes-1', 'Pregunta quién hizo la fuente y para qué.', Q('El folleto de la empresa debe leerse con cuidado principalmente porque:', ['Tiene fotos a color', 'Su propósito era mostrar el proyecto de forma favorable', 'Es muy antiguo', 'No habla de niños'], 1, 'La empresa quería que se creyera en el progreso que prometía.', 'Piensa qué ganaba la empresa con el folleto.')],
+    ['icf-sc-fuentes-2', 'Cada fuente prueba unas cosas y no otras.', Q('El libro de la economista NO permite saber:', ['Cómo cambiaron los ingresos del municipio', 'De dónde venían los obreros', 'Cuánto se redujo la población', 'Cómo se sintió una familia al perder a alguien'], 3, 'El libro trabaja con cuentas y población; lo vivido por una familia lo da la entrevista.', 'Busca la opción que no se puede contar con archivos.')],
+    ['icf-sc-fuentes-2', 'Un solo testimonio no permite generalizar.', Q('A partir de la entrevista, sería un error concluir que:', ['El marido de Hermelinda murió joven', 'Todas las familias del pueblo lo vivieron igual', 'Hermelinda recuerda alegría y pérdida', 'El hospital prometido fue pequeño, según ella'], 1, 'Es la voz de una persona: no prueba lo que vivieron todas.', 'Cuidado con la palabra «todas».')],
+    ['icf-sc-fuentes-3', 'La caricatura opina con contraste y exageración.', Q('En la caricatura, que los invitados tosan en lugar de cantar critica:', ['La falta de música en las fiestas', 'El daño a la salud de los obreros mientras la empresa celebra', 'El precio de los pasteles', 'La edad de los invitados'], 1, 'Las caras tiznadas y la tos señalan el daño de la mina; la empresa celebra su aniversario.', 'Une la tos, las caras tiznadas y el pastel.')],
+    ['icf-sc-fuentes-3', 'Un texto que reúne voces no las borra: las muestra.', Q('La última línea del texto de los estudiantes expresa que:', ['La mina fue mala para todos', 'La mina fue buena para todos', 'La valoración depende de la perspectiva de cada fuente', 'No se puede saber nada del pasado'], 2, '«Según a quién se le pregunte»: las fuentes miran desde lugares distintos.', 'Fíjate en la expresión «según a quién».')],
+  ]);
+})());
+;
 //#archivo js/courses/preicfes-cn-indaga.js
 // Preicfes · Ciencias Naturales · mundo 1 «Indagación Científica» (spec 2026-11-20-curso-preicfes): la competencia que más
 // pregunta la prueba de ciencias: la pregunta de un experimento, sus variables, el control, los datos y qué se puede concluir.
@@ -8321,6 +8735,152 @@ PI_MUNDOS.push((() => {
   ]);
 })());
 ;
+//#archivo js/courses/preicfes-cn-materia.js
+// Preicfes · Ciencias Naturales · mundo 4 «Materia y Mezclas» (spec 2026-11-25-preicfes-estructura). Experimentos y datos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, sol, err, opc, guion } = ICF;
+
+  const HIELO = {
+    id: 'icf-hielo', title: 'La olla que no pasaba de noventa y seis',
+    ficha: { autor: 'Curso de química de grado décimo', fuente: 'Bitácora de laboratorio', fecha: 'Febrero de 2026' },
+    paras: [
+      'Toda la materia está hecha de partículas que se mueven. En un sólido vibran en su sitio, muy juntas; en un líquido se deslizan unas sobre otras; en un gas se mueven libres y separadas. Al calentar, las partículas se mueven más; al enfriar, menos. Las partículas no cambian de tamaño: cambian su movimiento y la distancia entre ellas.',
+      'El curso puso 200 gramos de hielo en una olla y midió la temperatura cada minuto mientras la calentaba. Durante seis minutos el termómetro marcó 0 °C, aunque la llama estaba encendida. Después subió hasta 96 °C y allí se quedó, mientras el agua hervía.',
+      'En los tramos planos la energía no sube la temperatura: se usa en separar las partículas. Mientras quede hielo, la mezcla sigue a 0 °C; mientras quede agua líquida hirviendo, sigue a la misma temperatura. Por eso poner más fuego a una sopa que ya hierve no la calienta más: solo hace que se evapore más rápido.',
+      'Un estudiante creyó que el termómetro estaba dañado, porque el agua hierve a 100 °C. No lo estaba: el colegio queda a 1 200 metros de altura, donde el aire presiona menos y las partículas escapan con mayor facilidad. A nivel del mar habría marcado 100; en un páramo, menos de 90.',
+      'Al final pesaron lo que quedó. La olla tenía 170 gramos de agua: faltaban 30. No desaparecieron: se fueron al aire como vapor. Cuando pusieron una tapa fría encima, aparecieron gotas. El cambio de estado es físico: la sustancia sigue siendo agua.',
+      'También midieron la densidad, que es la masa que hay en cada unidad de volumen. Un cubo de hielo de 10 centímetros cúbicos tenía 9.2 gramos, y la misma cantidad de agua, 10. Por eso el hielo flota: en el agua, al congelarse, las partículas quedan más separadas. Con casi todas las demás sustancias ocurre lo contrario.',
+    ],
+  };
+  const l1 = leccion('icf-cn-materia-1', 'Estados y propiedades', guion(
+    ['Partículas', 'Sólido: juntas y vibrando. Líquido: se deslizan. Gas: libres y separadas.'],
+    ['El tramo plano', 'Mientras cambia de estado, la temperatura no sube.'],
+    ['Presión', 'Con menos presión del aire, el agua hierve a menor temperatura.'],
+    ['Densidad', 'Masa entre volumen: lo menos denso flota.']), [
+    x('comprueba-apuesta', 'Subraya en el párrafo 3 la oración que explica **por qué** la temperatura no sube en un tramo plano.', { doc: HIELO, nums: [3], apuesta: 'La energía se usa en separar partículas.', ...S(['3.0'], { '3.1': 'Dice cuánto dura cada tramo.', '3.2': 'Aplica la idea a una sopa.' }), bien: 'Energía que separa, no que calienta.' },
+      'La primera oración lo explica: la energía separa las partículas en lugar de subir la temperatura.', 'Busca la oración que dice en qué se usa la energía.'),
+    x('genero-o-cita', '¿Es un cambio **físico** o **químico**?', { doc: HIELO, rot: ['físico', 'químico'],
+      ...F(['El hielo se derrite', 0, '¿Aparece otra sustancia?'], ['Un papel se quema', 1, '¿Aparece otra sustancia?'], ['El vapor se vuelve gotas', 0, '¿Aparece otra sustancia?'], ['Una manzana se oxida', 1, '¿Aparece otra sustancia?'], ['Se corta un alambre', 0, '¿Aparece otra sustancia?']), bien: 'Si la sustancia es la misma, es físico.' },
+      'Derretir, condensar y cortar conservan la sustancia; quemar y oxidar forman otras.', 'Pregunta si al final sigue siendo la misma sustancia.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: HIELO, nums: [1, 4, 5], pregunta: 'Queda en pie', queda: 'A mayor altura, el agua hierve a menor temperatura.',
+      ...T(['Al calentar, las partículas crecen.', 3, 'Busca qué cambia y qué no en las partículas.'], ['El termómetro estaba dañado.', 5, 'Busca por qué marcaba 96.'], ['El agua que faltaba desapareció.', 9, 'Busca adónde se fue.']), bien: 'Movimiento, altura y vapor.' },
+      'Las partículas no cambian de tamaño, el termómetro servía y el agua se fue como vapor.', 'Busca la palabra clave de cada afirmación.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo que muestran los datos.', { doc: HIELO, filas: [{ antes: 'Mientras se derretía, la temperatura', topes: ['subió', 'no cambió', 'bajó'], va: 1 }, { antes: 'Comparado con el agua, el hielo es', topes: ['más denso', 'igual de denso', 'menos denso'], va: 2 }, { antes: 'Más fuego a una sopa que hierve la', topes: ['evapora más rápido', 'calienta más', 'enfría'], va: 0 }], mira: ['Relee los seis minutos del párrafo 2.', 'Compara 9.2 con 10 gramos.', 'Relee el final del párrafo 3.'], luz: [[2, 'marcó 0 °C'], [6, '9.2 gramos'], [3, 'se evapore más rápido']], bien: 'Plano, flota y evapora.' },
+      'La temperatura quedó en 0 °C, el hielo tiene menos masa en el mismo volumen y hervir más solo evapora.', 'Busca el dato de cada perilla antes de moverla.'),
+    x('pista-tipo', 'Ata cada estado a cómo están sus partículas.', { doc: HIELO, lineas: ['Juntas, vibran en su sitio.', 'Se deslizan unas sobre otras.', 'Libres y muy separadas.', 'Unas en su sitio y otras deslizándose.'],
+      ...T(['sólido', 0, '¿En cuál no cambian de lugar?'], ['líquido', 1, '¿En cuál toman la forma del vaso?'], ['gas', 2, '¿En cuál llenan todo el espacio?'], ['hielo derritiéndose', 3, '¿En cuál conviven dos estados?']), bien: 'Vibrar, deslizar y volar.' },
+      'El sólido vibra, el líquido desliza, el gas se separa y al derretirse conviven dos estados.', 'Piensa qué tanto se pueden mover en cada caso.'),
+    x('lee-escala', 'La gráfica muestra a qué temperatura hierve el agua en tres lugares (en °C). Pon cada una y la diferencia entre mar y páramo.', { vals: [100, 95, 85], rot: ['mar', 'pueblo', 'páramo'], hi: 100, st: 20, et: ['mar', 'pueblo', 'páramo', 'mar − páramo'], ops: ['', '', ''], metas: ['100', '95', '85', '15'], fichas: ['100', '95', '85', '15', '99', '81', '185'],
+      mira: ['Mira en qué línea termina.', 'Está a tres cuartos del camino entre 80 y 100.', 'Está a un cuarto del camino entre 80 y 100.', 'Resta la del páramo a la del mar.'], trampas: { '1:99': 'Cada línea vale 20: tres cuartos son 15.', '2:81': 'Cada línea vale 20: un cuarto son 5.', '3:185': 'Eso es la suma.' }, ok: 'Más arriba, hierve a menos.' },
+      'Las líneas van de 20 en 20: 100, 95 y 85. La diferencia es 15 °C.', 'Mira cuánto vale cada línea y qué parte alcanza la barra.'),
+    sol('Una piedra de 90 g ocupa 30 cm³. ¿Cuál es su densidad y qué pasa si se echa al agua (1 g/cm³)?', ['La densidad es $90 \\div 30 =$ [[3]] g/cm³', 'Es [[mayor]] que la del agua', 'Por eso la piedra se [[hunde]]'], ['2 700', 'menor', 'mantiene a flote'], 'Masa entre volumen: 3 g/cm³, más que el agua, así que se hunde.', 'Divide la masa entre el volumen y compara con 1.'),
+    err('Alguien explica por qué una botella con agua llena y tapada se rompe en el congelador.', ['El agua se congela', 'Al congelarse ocupa más volumen', 'Porque su masa aumenta'], 2, ['Porque sus partículas quedan más separadas', 'Porque se vuelve más densa', 'Porque entra aire por la tapa'], 'La masa no cambia; el hielo ocupa más porque sus partículas quedan más separadas.', '¿De dónde saldría más masa si está tapada?'),
+    opc('Se calientan 500 g de agua a nivel del mar hasta que hierve y se deja cinco minutos más con la llama al máximo. Al final, la temperatura del agua es:', ['Mayor de 100 °C, porque recibió más calor', '100 °C, y hay menos agua que al comienzo', '100 °C, y hay la misma cantidad de agua', 'Menor de 100 °C, porque se enfrió'], 1, 'Mientras hierve sigue a 100 °C; la energía extra la convierte en vapor, así que queda menos.', 'Recuerda en qué se usa la energía durante un cambio de estado.'),
+  ]);
+
+  const MEZCLA = {
+    id: 'icf-balde', title: 'El balde revuelto',
+    ficha: { autor: 'Profesor de química', fuente: 'Guía de laboratorio', fecha: 'Marzo de 2026' },
+    paras: [
+      'En un balde cayeron, por accidente, agua, sal, arena, virutas de hierro y un chorro de aceite. La profesora no dejó botarlo. «Separarlo es un rompecabezas», dijo, «y las piezas son las propiedades».',
+      'Una mezcla reúne sustancias que conservan sus propiedades. Si se ven partes distintas, como arena en agua, es heterogénea. Si se ve pareja, como agua con sal, es homogénea y se llama disolución: la sal es el soluto y el agua, el solvente. Un compuesto es otra cosa: en el agua, el hidrógeno y el oxígeno están unidos y no se separan con un colador.',
+      'Primero pasaron un imán envuelto en plástico y salió el hierro, porque es magnético. Después dejaron quieto el balde: el aceite, menos denso y que no se mezcla con el agua, quedó arriba. Lo retiraron con un embudo de decantación, que deja salir primero el líquido de abajo.',
+      'Luego vertieron el resto en un filtro de papel. La arena, que no se disuelve, quedó atrapada; el agua salada pasó, porque las partículas disueltas son mucho más pequeñas que los huecos del papel. Un estudiante propuso filtrar otra vez para sacar la sal. Filtraron tres veces: el agua siguió salada.',
+      'Para separar la sal calentaron el agua. Al evaporarse, la sal quedó en el fondo. Si además querían recuperar el agua, debían enfriar el vapor y recogerlo: eso es destilar. La destilación también separa dos líquidos que hierven a distinta temperatura, como el alcohol, que hierve a 78 °C, y el agua.',
+      'Pesaron todo al final. La suma de las partes dio casi lo mismo que el balde del comienzo; faltaban unos gramos, que se quedaron en el papel y en las paredes. Separar una mezcla no crea ni destruye nada: solo aprovecha que cada sustancia es distinta.',
+    ],
+  };
+  const l2 = leccion('icf-cn-materia-2', 'Mezclas y separación', guion(
+    ['Mezcla o compuesto', 'En una mezcla cada sustancia conserva sus propiedades; en un compuesto están unidas.'],
+    ['Homogénea o heterogénea', 'Pareja o con partes visibles.'],
+    ['La propiedad manda', 'Imán si es magnético, filtro si no se disuelve, decantar si flota, evaporar si hierve distinto.'],
+    ['Nada se pierde', 'La masa total se conserva.']), [
+    x('pasos-del-proceso', 'Ordena cómo separaron el balde. El primer paso está en su puesto.', { doc: MEZCLA, que: 'la separación', de: 'El balde revuelto', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Imán: sale el hierro.', 'Reposo y embudo: sale el aceite.', 'Filtro: queda la arena.', 'Calor: se evapora el agua.', 'La sal queda en el fondo.'], mira: ['', 'Se retira lo que flota antes de filtrar.', 'Se filtra cuando ya no hay aceite.', 'Se calienta lo que pasó por el papel.', 'Aparece cuando ya no hay agua.'], bien: 'Imán, embudo, filtro, calor y sal.' },
+      'Primero el hierro, luego el aceite, después la arena y al final se evapora el agua y queda la sal.', 'Busca «Primero», «Después», «Luego» y «Para separar».'),
+    x('voz-de-la-fuente', 'Ata cada método a la propiedad que aprovecha.', { ayuda: 'Tira un hilo desde cada propiedad hasta su método.', doc: MEZCLA, portadas: [['Imán', 'método'], ['Filtración', 'método'], ['Decantación', 'método'], ['Destilación', 'método']],
+      ...T(['ser atraído', 0, '¿Cuál sirve para el hierro?'], ['no disolverse y tener granos grandes', 1, '¿Cuál sirve para la arena?'], ['distinta densidad', 2, '¿Cuál sirve para lo que flota?'], ['hervir a distinta temperatura', 3, '¿Cuál sirve para alcohol y agua?']), bien: 'Cada método, su propiedad.' },
+      'El imán atrae, el filtro retiene granos, decantar usa la densidad y destilar, la ebullición.', 'Pregunta qué diferencia hay entre las dos sustancias.'),
+    x('genero-o-cita', '¿La mezcla es **homogénea** o **heterogénea**?', { doc: MEZCLA, rot: ['homogénea', 'heterogénea'],
+      ...F(['Agua con sal', 0, '¿Se ven partes distintas?'], ['Agua con arena', 1, '¿Se ven partes distintas?'], ['Aire limpio', 0, '¿Se ven partes distintas?'], ['Ensalada', 1, '¿Se ven partes distintas?'], ['Agua con aceite', 1, '¿Se ven partes distintas?']), bien: 'Pareja o con partes.' },
+      'El agua salada y el aire se ven parejos; arena, ensalada y aceite muestran partes.', 'Imagínala en un vaso: ¿se ve igual en todas partes?'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: MEZCLA, nums: [4, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Filtrar diez veces tampoco sacaría la sal.', 1, '¿Por qué pasó el agua salada las tres veces?'], ['El alcohol hierve a 78 °C.', 0, 'Léela junto a la destilación.'], ['Al destilar, el alcohol sale antes que el agua.', 1, 'Compara las temperaturas a las que hierven.'], ['La arena pesaba 200 gramos.', 2, '¿Se dice cuánto pesaba?']),
+      luz: [[4, 'el agua siguió salada'], [5, '78 °C']], bien: 'El tamaño y la temperatura deciden.' },
+      'Los 78 °C están escritos; la sal y el orden de salida se deducen; el peso de la arena no aparece.', 'Usa la explicación del texto para ir un paso más.'),
+    x('balanza-tesis', 'Afirmación: «la sal se destruye al disolverse». ¿Qué hace cada dato?', { doc: MEZCLA, tesis: 'La sal se destruye al disolverse',
+      ...F(['Al evaporar el agua reaparece la sal.', 1, '¿Se había destruido?'], ['El agua sigue salada después de filtrar.', 1, '¿La sal sigue ahí?'], ['La masa del agua con sal es menor que la suma.', 0, 'Si fuera cierto, ¿faltaría algo?'], ['La sal es blanca.', 2, '¿Dice si sigue ahí?']), bien: 'Reaparece: no se destruyó.' },
+      'Que reaparezca y que siga salada la debilitan; una masa menor la apoyaría; el color no pesa.', 'Piensa qué debería pasar si la sal dejara de existir.'),
+    x('mayor-tramo', 'La gráfica muestra los gramos de sal que van quedando al evaporar agua de mar, en cuatro momentos. Toca el tramo que más creció **en porcentaje**.', { v: [8, 10, 15, 21] },
+      'De 8 a 10 sube 25 %; de 10 a 15, 50 %; de 15 a 21, 40 %. El último sube más gramos, no más porcentaje.', 'Divide lo que subió cada tramo entre el valor con que empezó.'),
+    sol('Se mezclan 180 g de agua y 20 g de sal. ¿Cuánto pesa la disolución y qué porcentaje es sal?', ['La disolución pesa $180 + 20 =$ [[200]] g', 'La sal es $20 \\div 200 =$ [[0.1]]', 'Es el [[10]] % de la masa'], ['160', '11', '20 %'], 'El porcentaje se calcula sobre toda la disolución: 10 %.', 'El total incluye también la sal.'),
+    err('Se quiere separar una mezcla de arena, sal y agua y recuperar las tres.', ['Se filtra: la arena queda en el papel', 'Pasa el agua con sal', 'Se filtra otra vez con el mismo papel para sacar la sal', 'Se enfría el vapor para recuperar el agua'], 2, ['Se destila: se calienta para separar el agua de la sal', 'Se pasa un imán para sacar la sal', 'Se deja reposar hasta que la sal flote'], 'La sal disuelta pasa por el papel: hay que evaporar el agua y enfriar el vapor.', '¿Qué pasó cuando filtraron varias veces?'),
+    opc('Para separar una mezcla de dos líquidos que se disuelven entre sí y hierven a 56 °C y 100 °C, el método más adecuado es:', ['Filtración', 'Destilación', 'Imantación', 'Decantación'], 1, 'Como forman una mezcla pareja y hierven a distinta temperatura, se destila.', 'Busca la propiedad en que se diferencian.'),
+  ]);
+
+  const AZUCAR = {
+    id: 'icf-azucar', title: 'Cuánta azúcar cabe en un vaso',
+    ficha: { autor: 'Club de ciencias', fuente: 'Feria escolar', fecha: 'Abril de 2026' },
+    paras: [
+      'Disolver no es derretir. Cuando el azúcar se disuelve, las partículas de agua rodean a las de azúcar y las reparten por todo el vaso. La azúcar sigue ahí: el agua queda dulce y la masa es la suma de las dos. La solubilidad dice cuánto soluto se puede disolver, como máximo, en cierta cantidad de solvente a una temperatura dada.',
+      'El club midió la solubilidad del azúcar en 100 gramos de agua. A 20 °C se disolvieron 200 gramos; a 40 °C, 240; a 60 °C, 290; a 80 °C, 360. Con la sal de cocina repitieron la prueba: 36, 36.5, 37 y 38 gramos. La temperatura cambia mucho la solubilidad del azúcar y casi nada la de la sal.',
+      'Si a 20 °C se agregan 250 gramos de azúcar, se disuelven 200 y quedan 50 en el fondo. La disolución está saturada: no admite más. Con menos de 200 estaría insaturada. Agitar o moler el azúcar hace que se disuelva más rápido, pero no que quepa más; para que quepa más hay que calentar o agregar agua.',
+      'Calentaron la disolución con los 250 gramos hasta 60 °C: se disolvió todo. Luego la dejaron enfriar, quieta, hasta 20 °C. No apareció azúcar en el fondo. La disolución estaba sobresaturada, con más soluto del que corresponde. Bastó dejar caer un cristal para que el exceso se cristalizara en minutos.',
+      'Con los gases ocurre al revés. El oxígeno se disuelve menos en agua caliente: en 1 litro a 10 °C caben unos 11 miligramos; a 30 °C, 7.5. Por eso los peces de un estanque sufren en los días de calor, y por eso una gaseosa tibia pierde rápido su gas.',
+      'No todo se disuelve en todo. El agua, cuyas partículas tienen un lado positivo y otro negativo, disuelve bien la sal y el azúcar; el aceite, no. «Lo semejante disuelve a lo semejante», dicen los químicos. El jabón sirve porque tiene una punta que se lleva con el agua y otra que se lleva con la grasa.',
+    ],
+  };
+  const l3 = leccion('icf-cn-materia-3', 'Solubilidad', guion(
+    ['Disolver no es derretir', 'El soluto se reparte entre las partículas del solvente; la masa se conserva.'],
+    ['Hasta cuánto', 'Solubilidad: lo máximo que cabe en cierta cantidad de solvente a una temperatura.'],
+    ['Más rápido no es más', 'Agitar acelera; calentar (en muchos sólidos) aumenta lo que cabe.'],
+    ['Gases', 'Al revés: en agua caliente cabe menos gas.']), [
+    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: AZUCAR,
+      ...F(['¿Cuántos gramos se disolvieron a cada temperatura?', 1, 'Busca el comienzo que dice que se midió.'], ['¿Qué pasa con los gases?', 4, 'Busca el comienzo que los nombra.'], ['¿Por qué sirve el jabón?', 5, 'Busca el comienzo que dice que no todo se disuelve.']),
+      luz: [[2, '240'], [5, 'El oxígeno se disuelve menos'], [6, 'El jabón sirve']], bien: 'Medidas, gases y semejanza.' },
+      'Las medidas están en el 2, los gases en el 5 y el jabón en el 6.', 'Busca en los comienzos la palabra más cercana.'),
+    x('genero-o-cita', '¿Hace que se disuelva **más rápido** o que **quepa más**?', { doc: AZUCAR, rot: ['más rápido', 'cabe más'],
+      ...F(['Agitar con una cuchara', 0, '¿Cambia la cantidad máxima?'], ['Agregar más agua', 1, '¿Cambia la cantidad máxima?'], ['Moler el azúcar', 0, '¿Cambia la cantidad máxima?'], ['Pasar de 20 a 60 °C', 1, '¿Cambia la cantidad máxima?']), bien: 'Rapidez no es capacidad.' },
+      'Agitar y moler aceleran; más agua y más temperatura (en el azúcar) permiten que quepa más.', 'Mira si al final se disuelve más o solo antes.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: AZUCAR, nums: [1, 3, 5], pregunta: 'Queda en pie', queda: 'La temperatura casi no cambia la solubilidad de la sal.',
+      ...T(['Disolver es lo mismo que derretir.', 0, 'Busca la oración más corta del comienzo.'], ['Agitar hace que quepa más azúcar.', 7, 'Busca qué logra agitar.'], ['El oxígeno se disuelve mejor en agua caliente.', 9, 'Busca qué pasa con el oxígeno al calentar.']), bien: 'Tres oraciones, tres desmentidos.' },
+      'Disolver no es derretir, agitar solo acelera y el oxígeno se disuelve menos en agua caliente.', 'Saca la palabra clave: derretir, agitar, oxígeno.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo que muestran los datos.', { doc: AZUCAR, filas: [{ antes: 'De 20 a 80 °C, la solubilidad del azúcar', topes: ['baja', 'no cambia', 'sube mucho'], va: 2 }, { antes: 'La de la sal', topes: ['casi no cambia', 'se duplica', 'llega a cero'], va: 0 }, { antes: 'A 20 °C, con 250 g de azúcar quedan sin disolver', topes: ['0 g', '50 g', '200 g'], va: 1 }], mira: ['Compara 200 con 360.', 'Compara 36 con 38.', 'Relee cuántos se disuelven a 20 °C.'], luz: [[2, 'a 80 °C, 360'], [2, '36, 36.5, 37 y 38'], [3, 'quedan 50 en el fondo']], bien: 'Sube mucho, casi no y sobran.' },
+      'El azúcar pasa de 200 a 360; la sal, de 36 a 38; y a 20 °C sobran 50 gramos.', 'Compara el primer valor de cada serie con el último.'),
+    x('pista-tipo', 'Ata cada nombre a su vaso (100 g de agua a 20 °C).', { doc: AZUCAR, lineas: ['150 g de azúcar, todo disuelto', '200 g de azúcar, todo disuelto', '250 g disueltos tras enfriar quieta', '250 g con 50 en el fondo'],
+      ...T(['insaturada', 0, '¿En cuál todavía cabe más?'], ['justo saturada, sin sobrante', 1, '¿En cuál ya no cabe más y no sobra?'], ['sobresaturada', 2, '¿En cuál hay más de lo que corresponde, disuelto?'], ['saturada, con sobrante', 3, '¿En cuál sobra en el fondo?']), bien: 'El límite son 200 gramos.' },
+      'Con menos de 200 cabe más; con 200 está justa; 250 disueltos pasan del límite; y el fondo muestra lo que sobra.', 'Compara lo disuelto en cada vaso con lo máximo que cabe.'),
+    x('lee-escala', 'La gráfica muestra la solubilidad del azúcar a 20, 60 y 80 °C (en gramos). Pon cada valor y cuánto sube de 20 a 80 °C.', { vals: [200, 290, 360], rot: ['20 °C', '60 °C', '80 °C'], hi: 400, st: 80, et: ['20 °C', '60 °C', '80 °C', 'sube'], ops: ['', '', ''], metas: ['200', '290', '360', '160'], fichas: ['200', '290', '360', '160', '245', '325', '560'],
+      mira: ['Está a mitad de camino entre 160 y 240.', 'Está entre 240 y 320, un poco más de la mitad.', 'Está a mitad de camino entre 320 y 400.', 'Resta la de 20 a la de 80.'], trampas: { '1:245': 'Cada línea vale 80: 5 sería muy poquito.', '2:325': 'Cada línea vale 80: la mitad son 40.', '3:560': 'Eso es la suma.' }, ok: 'A más temperatura, cabe más azúcar.' },
+      'Las líneas van de 80 en 80: 200, 290 y 360. La diferencia es $360 - 200 = 160$ g.', 'Mira cuánto vale cada línea antes de leer.'),
+    sol('A 40 °C se disuelven hasta 240 g de azúcar en 100 g de agua. ¿Cuánto se disuelve en 50 g de agua, y cuánto queda en el fondo si se echan 150 g?', ['En la mitad del agua cabe la mitad: [[120]] g', 'Se echan 150 g: quedan $150 - 120 =$ [[30]] g en el fondo', 'La disolución está [[saturada]]'], ['240', '90', 'insaturada'], 'La solubilidad es proporcional al agua: 120 g; sobran 30.', 'Con la mitad del agua, ¿cuánto cabe?'),
+    err('Alguien explica por qué una gaseosa tibia pierde su gas.', ['El gas está disuelto en el líquido', 'Al calentarse cabe más gas disuelto', 'Por eso se escapa'], 1, ['Al calentarse cabe menos gas disuelto', 'Al calentarse el gas se vuelve azúcar', 'Al calentarse el líquido se vuelve más denso'], 'En agua tibia cabe menos gas: lo que sobra se escapa.', 'Recuerda qué pasa con el oxígeno al calentar.'),
+    opc('Un estudiante dice que 260 g de azúcar se disolverán por completo en 100 g de agua a 60 °C. Según los datos, su afirmación es:', ['Falsa, porque a 20 °C solo caben 200 g', 'Falsa, porque agitar no ayuda', 'Verdadera, porque la sal también se disuelve', 'Verdadera, porque a 60 °C caben hasta 290 g'], 3, 'A 60 °C caben hasta 290 g: 260 se disuelven todos.', 'Busca el límite a la temperatura que se pregunta.'),
+  ]);
+
+  const MAR = {
+    id: 'icf-salina', title: 'De dónde sale la sal',
+    paras: [
+      'En las salinas, el agua de mar entra a piscinas anchas y poco profundas. El sol y el viento evaporan el agua; la sal, que no se evapora, queda en el fondo.',
+      'Cien litros de agua de mar traen unos 3.5 kilogramos de sales, casi todas sal común. Una piscina de mil metros cuadrados recibe agua hasta una altura de veinte centímetros.',
+      'Antes de la última piscina, el agua pasa por otras en las que se asientan la arena y el barro. Después de varios días, la disolución se satura y empiezan a formarse cristales.',
+      'La sal cruda trae arcilla. Para limpiarla se disuelve otra vez, se filtra y se vuelve a evaporar.',
+      'Cuando llueve, se pierde la cosecha: el agua dulce vuelve a disolver los cristales. Por eso las salinas están en lugares secos y con viento.',
+    ],
+  };
+  const pl = (g, q, p, e, h) => play(g, q, { doc: MAR, ...p }, e, { hint: h });
+  return mundo('icf-cn-materia', 'Materia y Mezclas', 'ciencias', [l1, l2, l3], [
+    ['icf-cn-materia-1', 'Evaporar es un cambio físico: la sustancia es la misma.', pl('donde-buscar', '¿A qué párrafo vuelves para responder?', { cards: [['¿Qué evapora el agua?', [1]], ['¿Cuánta sal trae el agua de mar?', [2]], ['¿Qué daña la cosecha?', [5]]] }, 'El sol y el viento están en el 1, la cantidad en el 2 y la lluvia en el 5.', 'Busca la palabra clave de cada pregunta.')],
+    ['icf-cn-materia-1', 'El viento y el calor aceleran la evaporación.', pl('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { cards: [['La sal no se evapora.', 0], ['Una piscina ancha evapora más que una honda con la misma agua.', 1], ['Mil litros traen unos 35 kg de sales.', 1], ['La sal es más cara que el azúcar.', 2]] }, 'La sal está escrita; la piscina ancha y los 35 kg se deducen; el precio no aparece.', 'Usa el dato de cien litros para hallar el de mil.')],
+    ['icf-cn-materia-1', 'Al evaporarse, las partículas de agua se separan y pasan al aire.', opc('Cuando el agua de la piscina se evapora, sus partículas:', ['Se convierten en sal', 'Crecen hasta volverse gas', 'Se separan y pasan al aire, pero siguen siendo agua', 'Desaparecen'], 2, 'Es un cambio físico: la sustancia es la misma, con sus partículas separadas.', 'Recuerda qué cambia en un cambio de estado.')],
+    ['icf-cn-materia-2', 'Cada método aprovecha una propiedad.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'Lo que no se disuelve se separa dejando asentar o filtrando.', cards: [['Dejar reposar un río turbio en un tanque', true], ['Colar el café molido', true], ['Evaporar agua para obtener sal', false], ['Usar un imán para sacar clavos', false]] }, 'El barro y el café no se disuelven; evaporar y atraer usan otras propiedades.', 'Busca casos en que se separe algo sin disolver.')],
+    ['icf-cn-materia-2', 'Para limpiar la sal se disuelve, se filtra y se evapora.', pl('intruso-excepto', 'Pregunta EXCEPTO', { ask: 'Para limpiar la sal cruda se hace todo esto, EXCEPTO:', cards: [['Disolverla', [4]], ['Filtrarla', [4]], ['Evaporar el agua', [4]], ['Pasarle un imán', null]] }, 'Disolver, filtrar y evaporar están en el 4; el imán no aparece.', 'Busca cada paso en el párrafo de la limpieza.')],
+    ['icf-cn-materia-2', 'La arcilla no se disuelve: queda en el filtro.', opc('Al disolver la sal cruda y filtrarla, en el papel queda:', ['La arcilla', 'La sal', 'El agua', 'Nada, porque todo pasa'], 0, 'La arcilla no se disuelve y no pasa por el papel; la sal disuelta, sí.', '¿Cuál de las sustancias no se disuelve?')],
+    ['icf-cn-materia-3', 'Saturada: no admite más soluto.', pl('resume-parrafo', 'Cada párrafo en una frase', { paras: [3, 5], options: ['El agua se asienta, se satura y forma cristales.', 'La lluvia disuelve de nuevo la sal.', 'Los cristales se forman antes de que se evapore el agua.', 'La lluvia aumenta la cosecha.'], key: [0, 1] }, 'El 3 cuenta la saturación; el 5, el efecto de la lluvia. Las otras dicen lo contrario.', 'El resumen no puede contradecir el párrafo.')],
+    ['icf-cn-materia-3', 'Agregar agua a una disolución saturada hace que quepa más.', pl('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { labels: ['explica la idea general', 'da cantidades', 'cuenta el paso por varias piscinas', 'explica cómo se limpia', 'explica el efecto de la lluvia', 'cuenta la historia de un pueblo'], key: [0, 1, 2, 3, 4] }, 'Idea, cantidades, piscinas, limpieza y lluvia; no hay historia del pueblo.', 'Mira qué agrega cada párrafo.')],
+    ['icf-cn-materia-3', 'La solubilidad depende del agua que haya.', opc('Cuando llueve sobre los cristales, estos se disuelven de nuevo porque:', ['La lluvia está más caliente', 'El agua dulce que cae no está saturada y admite sal', 'La sal se evapora con la lluvia', 'La lluvia trae más sal'], 1, 'El agua nueva puede disolver sal: la disolución deja de estar saturada.', 'Piensa si al agua de lluvia le cabe sal.')],
+  ]);
+})());
+;
 //#archivo js/courses/preicfes-en-avisos.js
 // Preicfes · Inglés · mundo 1 «Avisos y Vocabulario» (spec 2026-11-20-curso-preicfes): las primeras partes de la prueba de inglés:
 // qué dice un aviso, dónde se vería y qué palabra corresponde a una descripción. Las instrucciones van en español, como en el
@@ -8753,6 +9313,115 @@ PI_MUNDOS.push((() => {
     ['icf-en-gramatica-2', '«Much» va con lo que no se cuenta: much space.', Q('Teresa needs a new house because:', ['The kitchen is too small now', 'The kitchen is too old', 'Her neighbours want the kitchen', 'She has a lot of money'], 0, '«There isn’t much space»: hay poco espacio para más de trescientas radios.', 'Busca lo que va después de «because».')],
     ['icf-en-gramatica-3', '«Smaller than» compara dos cosas.', Q('In the text, the nurse\'s radio is:', ['As big as a matchbox', 'Bigger than a matchbox', 'The biggest radio', 'Not as big as a matchbox'], 3, '«Smaller than a matchbox» es lo mismo que «not as big as a matchbox».', '«Not as… as» quiere decir menos.')],
     ['icf-en-gramatica-3', '«Better than most» no es lo mismo que «the best».', Q('According to the text, Teresa is:', ['A better technician than most in the city', 'The worst technician in the city', 'As good as her neighbours', 'The youngest technician'], 0, '«She is better than most of the technicians in the city».', 'Busca «better than» y mira con quién la comparan.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-en-corto.js
+// Preicfes · Inglés · mundo 4 «Textos Cortos» (spec 2026-11-25-preicfes-estructura): mensajes y textos de nivel básico, escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const MAILS = {
+    id: 'icf-en-mails', title: 'Messages on the fridge',
+    ficha: { autor: 'The Suárez family', fuente: 'Notes, emails and chats', fecha: 'One week in April 2026' },
+    paras: [
+      'NOTE ON THE FRIDGE. Monday, 6 a.m. Kids, I have an early meeting. There are eggs and bread. Lucas, please walk the dog before school, not after, because the neighbours don\'t like the noise at noon. Sofía, your blue shirt is in the washing machine, so wear the white one. Love, Mum.',
+      'CHAT. Monday, 3 p.m. Sofía: Mum, I have a problem. I left my project at home and it is for tomorrow morning. Can Grandpa bring it? Mum: He doesn\'t drive at night any more. Ask your teacher if you can send a photo today and bring it on Wednesday. Sofía: Good idea. She said yes!',
+      'EMAIL TO THE COACH. Tuesday. Dear Mr Ramos, Lucas hurt his foot this morning while he was walking the dog. The doctor says it isn\'t broken, but he can\'t run for two weeks. He would like to come to the training to watch and help with the water. Is that all right? Best wishes, Clara Suárez.',
+      'ANSWER. Wednesday. Dear Ms Suárez, I\'m sorry to hear that. Of course he can come. In fact, I need someone to write down the points on Saturday, and Lucas is very good at maths. Tell him to bring a pencil and a hat. Regards, Andrés Ramos.',
+      'NOTE ON THE FRIDGE. Saturday. Mum, Dad: we have gone to the game. Lucas is the new "assistant". He has told everybody. There is pizza in the oven for you; we made it, so don\'t worry if it looks strange. Back at six. Grandpa is coming with us, because it is in the afternoon. Sofía.',
+    ],
+  };
+  const l1 = leccion('icf-en-corto-1', 'Short messages', guion(
+    ['¿Quién a quién?', 'Mira quién firma y a quién saluda: Dear Mr Ramos… Best wishes, Clara.'],
+    ['¿Para qué?', 'Un mensaje pide, avisa, responde, invita o agradece.'],
+    ['Datos', 'Subraya día, hora, lugar y lo que hay que hacer.'],
+    ['Lo que no se dice', 'Si el abuelo no maneja de noche y va por la tarde, se entiende por qué puede ir.']), [
+    x('donde-mirar', 'Lleva cada pregunta al mensaje donde la buscarías.', { doc: MAILS,
+      ...F(['What should Sofía wear?', 0, 'Busca la nota de la mañana.'], ['Why can\'t Lucas run?', 2, 'Busca el mensaje al entrenador.'], ['What is there to eat on Saturday?', 4, 'Busca la nota del sábado.']),
+      luz: [[1, 'wear the white one'], [3, 'hurt his foot'], [5, 'There is pizza']], bien: 'Read the heading first.' },
+      'La ropa está en la nota del lunes, el pie en el correo y la comida en la nota del sábado.', 'Lee solo los encabezados y decide dónde está.'),
+    x('pinta-voces', 'Paint each message with its writer.', { doc: MAILS, plumas: ['Mum', 'Sofía', 'Mr Ramos'],
+      ...P(['Please walk the dog before school.', 0, 'Busca quién firma la nota del lunes.'], ['I left my project at home.', 1, 'Busca quién tiene un problema.'], ['Tell him to bring a pencil.', 2, 'Busca quién responde el correo.'], ['He would like to come and watch.', 0, 'Busca quién escribe al entrenador.'], ['We made it, so don\'t worry.', 1, 'Busca quién firma el sábado.']), bien: 'The name at the end tells you.' },
+      'Mum firma la nota del lunes y el correo (Clara), Sofía escribe el chat y la nota del sábado, y Mr Ramos responde.', 'Mira el nombre o la firma de cada mensaje.'),
+    x('voz-de-la-fuente', 'Match each purpose with its message.', { ayuda: 'Tira un hilo desde cada propósito hasta su mensaje.', doc: MAILS, portadas: [['Monday note', 'message'], ['The chat', 'message'], ['Email to the coach', 'message'], ['Saturday note', 'message']],
+      ...T(['to tell the kids what to do', 0, '¿Cuál da instrucciones?'], ['to ask for help with homework', 1, '¿Cuál empieza con un problema?'], ['to explain an injury and ask permission', 2, '¿Cuál le escribe a alguien de fuera?'], ['to say where they are', 3, '¿Cuál avisa que salieron?']), bien: 'Tell, ask, explain, inform.' },
+      'La nota del lunes da instrucciones, el chat pide ayuda, el correo explica y la del sábado avisa.', 'Pregunta qué quiere lograr quien escribe.'),
+    x('genero-o-cita', 'Is it **formal** or **informal**?', { doc: MAILS, rot: ['formal', 'informal'],
+      ...F(['Dear Mr Ramos', 0, '¿Se le escribe así a un amigo?'], ['Love, Mum', 1, '¿Se le escribe así a un jefe?'], ['Regards', 0, '¿Se usa con alguien que no es de la familia?'], ['Good idea. She said yes!', 1, '¿Suena a chat o a carta?']), bien: 'Dear and Regards; Love and chat.' },
+      '«Dear Mr» y «Regards» son formales; «Love, Mum» y la frase del chat, informales.', 'Piensa a quién le escribirías de esa manera.'),
+    x('dice-deduce', 'Does it say it, can you deduce it, or is it not there?', { doc: MAILS, nums: [3, 5], rot: ['it says so', 'you can deduce it', 'it does not say'],
+      ...F(['Lucas\'s foot is not broken.', 0, 'Léela junto a lo que dice el doctor.'], ['Grandpa drives them to the game.', 1, '¿Por qué importa que sea por la tarde?'], ['Lucas is proud of his new job.', 1, '¿A quién se lo ha contado?'], ['Lucas\'s team wins.', 2, '¿Se dice el resultado?']),
+      luz: [[3, 'it isn\'t broken'], [5, 'because it is in the afternoon'], [5, 'He has told everybody']], bien: 'He does not drive at night.' },
+      'El pie está escrito; que el abuelo maneje y que Lucas esté orgulloso se deducen; el resultado no.', 'Junta la nota del sábado con lo que se dijo en el chat.'),
+    x('pasos-del-proceso', 'Put the week in order. The first step is in its place.', { doc: MAILS, que: 'the week', de: 'The Suárez family', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Mum leaves a note.', 'Sofía forgets her project.', 'Lucas hurts his foot.', 'The coach answers.', 'They go to the game.'], mira: ['', 'It happens on Monday afternoon.', 'It happens on Tuesday morning.', 'It happens on Wednesday.', 'It happens on Saturday.'], bien: 'Monday, Monday, Tuesday, Wednesday, Saturday.' },
+      'La nota y el proyecto son del lunes, el pie del martes, la respuesta del miércoles y el juego del sábado.', 'Mira el día que aparece en cada encabezado.'),
+    x('descarta-prueba', 'These sentences are false. Ata cada una a la oración que la desmiente.', { doc: MAILS, nums: [1, 4], pregunta: 'It is true', queda: 'Lucas will write down the points.',
+      ...T(['Lucas must walk the dog after school.', 4, 'Busca cuándo debe pasear al perro.'], ['Sofía wears the blue shirt on Monday.', 5, 'Busca dónde está la camisa azul.'], ['Lucas is bad at maths.', 11, 'Busca en qué es muy bueno.']), bien: 'One sentence says no.' },
+      'El perro va antes del colegio, la camisa azul está lavándose y Lucas es muy bueno en matemáticas.', 'Busca en cada frase la palabra que cambia la verdad.'),
+    x('tacha-resumen', 'Cross out the **two** sentences that are only details.', { doc: MAILS, lineas: ['A family leaves messages for a week.', 'There are eggs and bread.', 'Sofía forgets a project and solves it.', 'Lucas hurts his foot and gets a new job.', 'The pizza is in the oven.', 'They all go to the game.'], ...S([1, 4], { 0: 'It says what the text is.', 2: 'It is the first problem.', 3: 'It is the second problem and its solution.', 5: 'It is the end.' }), bien: 'Problems and solutions stay.' },
+      'Los huevos y la pizza son detalles; los problemas y sus soluciones son la historia.', 'Deja lo que le pasa a cada hijo y cómo acaba.'),
+  ]);
+
+  const LIBRARY = {
+    id: 'icf-en-burro', title: 'The library with four legs',
+    ficha: { autor: 'Young readers\' magazine', fuente: 'Section «People like us»', fecha: 'May 2026' },
+    paras: [
+      'When Nelson Bravo was a young teacher, he noticed that many of his students had no books at home. The school was two hours from the nearest town, and there was no road. One morning he put forty books on his donkey and went from farm to farm. He thought that nobody would open the door. He came back with an empty bag.',
+      'Now he is fifty-three, and he has two donkeys, Comma and Period, and almost two thousand books. Every weekend he visits eight villages. Children wait for him under a tree. They can keep a book for two weeks and, if they tell the story to someone else, they get an extra week. "A book is not finished until you tell it," he says.',
+      'At first, some parents were not happy. They thought that reading was a waste of time when there was so much work on the farm. Nelson did not argue. He started to bring books about cows, corn and water. Soon the parents were asking for them, and two of them have learned to read with their children.',
+      'It isn\'t always easy. Once, thieves took his bag and found only fairy tales, so they gave it back. Another time, Period fell into the river. He was fine, but sixty books were wet. The children put them in the sun, page by page. Some of those books look terrible now. They are everybody\'s favourites.',
+      'People often ask Nelson why he does not use a motorbike. He says that a motorbike cannot cross the river, and that nobody runs out of the house to see a motorbike. When he arrives, the first thing that children do is hug the donkeys. The second is to ask: "What did you bring today?"',
+    ],
+  };
+  const l2 = leccion('icf-en-corto-2', 'What the text says', guion(
+    ['Idea principal', 'De qué trata todo el texto, no un párrafo.'],
+    ['Detalles', 'Quién, dónde, cuándo, cuánto: están escritos.'],
+    ['Palabra por el contexto', 'Si no conoces una palabra, mira lo que la rodea.'],
+    ['Correct, wrong, doesn’t say', 'Una opción puede sonar bien y no estar en el texto.']), [
+    x('antes-de-leer', 'The text is covered. Con sus bordes, completa la apuesta. Sobran fichas.', { doc: LIBRARY, frase: 'It is about [0], to [1]. It is [2].', rot: ['what topic?', 'what for?', 'what kind of text?'],
+      ...F(['an unusual library', 0, 'Read the title again: what has four legs there?'], ['tell a person\'s story', 1, 'Read the name of the section.'], ['a magazine article', 2, 'Look at the source.'], ['a horse race', null, 'The title names another thing with the legs.'], ['sell furniture', null, 'A magazine for young readers is not a shop.'], ['a letter to a friend', null, 'A magazine section is not a private message.']),
+      luz: [[1, 'forty books on his donkey'], [2, 'two thousand books']], bien: 'Title, author and section gave it away.' },
+      'El título habla de una biblioteca rara y la sección, de personas: un artículo que cuenta una historia.', 'Lee por separado el título, quién escribe y la sección.'),
+    x('mapa-margen', 'What does each paragraph do? Sobra una nota.', { doc: LIBRARY,
+      ...F(['tells how it started', 0, 'Look for a young teacher.'], ['tells how it works now', 1, 'Look for his age today.'], ['tells how parents changed', 2, 'Look for the parents.'], ['tells two difficult moments', 3, 'Look for thieves and a river.'], ['explains why donkeys', 4, 'Look for another kind of transport.'], ['explains how to build a road', null, 'Nobody builds a road here.']),
+      luz: [[1, 'a young teacher'], [2, 'Now he is fifty-three'], [3, 'some parents were not happy'], [4, 'It isn\'t always easy'], [5, 'a motorbike']], bien: 'Start, now, parents, problems and donkeys.' },
+      'El texto cuenta el comienzo, cómo funciona hoy, el cambio de los padres, dos problemas y por qué burros.', 'Lee la primera oración de cada párrafo y nómbrala.'),
+    x('genero-o-cita', 'Is it **correct** or does the text **not say** it?', { doc: LIBRARY, rot: ['correct', 'doesn\'t say'],
+      ...F(['Children can keep a book for two weeks.', 0, '¿Encuentras la oración que lo dice?'], ['Nelson is married.', 1, '¿Encuentras la oración que lo dice?'], ['He has two donkeys.', 0, '¿Encuentras la oración que lo dice?'], ['The government gives him money.', 1, '¿Encuentras la oración que lo dice?'], ['Thieves gave his bag back.', 0, '¿Encuentras la oración que lo dice?']), bien: 'If you can\'t find it, it doesn\'t say.' },
+      'Las dos semanas, los dos burros y los ladrones están escritos; el matrimonio y el dinero no aparecen.', 'Busca la oración; si no la encuentras, no lo dice.'),
+    x('cambia-palabra', 'Put the words that mean the same. Sobran dos.', { doc: LIBRARY, frases: [[1, 'he ', 'noticed', ' that many of his students had no books'], [3, 'reading was ', 'a waste of time', ''], [4, 'Some of those books ', 'look terrible', ' now']],
+      ...F(['saw', 0, 'He was their teacher: what did he do?'], ['not useful', 1, 'There was a lot of work: what did parents think?'], ['are in bad condition', 2, 'They were wet and dried in the sun.'], ['very important', null, 'Parents thought the opposite at first.'], ['are more expensive', null, 'Nobody talks about the price of the books.']), bien: 'The sentence gives the meaning.' },
+      '«Noticed» es vio, «a waste of time» es inútil y «look terrible» es que están en mal estado.', 'Mira lo que pasa antes y después de la palabra.'),
+    x('linea-vida', 'Put each fact in its moment.', { doc: LIBRARY, rot: ['when he was young', 'at first with parents', 'now'],
+      ...F(['He took forty books to the farms', 0, 'Busca «a young teacher».'], ['They thought reading was not useful', 1, 'Busca «At first».'], ['He visits eight villages', 2, 'Busca «Every weekend».'], ['He has almost two thousand books', 2, 'Busca la palabra «Now».']), luz: [[1, 'One morning'], [3, 'At first'], [2, 'Every weekend']], bien: 'Was, thought, visits.' },
+      'Los cuarenta libros son del comienzo, la duda de los padres vino al principio y lo demás es de hoy.', 'Mira el tiempo del verbo y las palabras de tiempo.'),
+    x('tira-referente', 'What do these words refer to?', { doc: LIBRARY, texto: '|Thieves| took |his bag| and found only |fairy tales|, so they gave it back.',
+      ...T(['«they»', 0, 'Put it in the sentence: who gave something back?'], ['«it»', 1, 'Put it in the sentence: what did they take?']), bien: 'People, and one thing.' },
+      '«They» son los ladrones y «it» es la bolsa, una sola cosa.', '«They» es para varios y «it» para una cosa.'),
+    x('descarta-prueba', 'These sentences are false. Ata cada una a la oración que la desmiente.', { doc: LIBRARY, nums: [1, 4, 5], pregunta: 'It is true', queda: 'Parents changed their minds.',
+      ...T(['There was a good road to the school.', 1, 'Busca cómo se llegaba a la escuela.'], ['The wet books were thrown away.', [9, 11], 'Busca qué hicieron con los libros mojados.'], ['A motorbike would be better, Nelson says.', 13, 'Busca por qué no la usa.']), bien: 'One sentence says no.' },
+      'No había carretera, los libros mojados se secaron y siguen siendo favoritos, y la moto no cruza el río.', 'Busca la palabra clave de cada frase en el texto.'),
+    x('tacha-resumen', 'Cross out the **two** sentences that are only details.', { doc: LIBRARY, lineas: ['A teacher takes books to farms on donkeys.', 'One donkey is called Comma.', 'Children borrow books and tell the stories.', 'Parents became interested too.', 'It takes two hours to get to town.', 'He does not change the donkeys for a motorbike.'], ...S([1, 4], { 0: 'It is the main idea.', 2: 'It is how it works.', 3: 'It is an important change.', 5: 'It is the end and the reason.' }), bien: 'Idea, system, change and reason.' },
+      'El nombre del burro y las dos horas son detalles; lo demás es la historia.', 'Deja lo que contarías en una frase a un amigo.'),
+  ]);
+
+  const PIANO = {
+    id: 'icf-en-piano', title: 'The piano at the station',
+    paras: [
+      'Last year, somebody left an old piano at the train station in our town. There was a note on it: "Play me. I am free." At first, people only looked at it. Then a cleaner called Marta sat down one night, after work, and played a song that she learned when she was six.',
+      'Someone made a video, and soon the station was full of music. Students played before class, and an old man came every day at five to play the same waltz. The trains were still late, but nobody complained as much as before.',
+      'In December, the company wanted to take the piano away because some passengers could not hear the announcements. People signed a letter, and the company had a better idea: now there is a small red light on the piano. When it turns on, you stop playing for a minute.',
+      'Marta still cleans the station. On Fridays she gives lessons there for free. Her oldest student is the man of the waltz. He is learning a second song.',
+    ],
+  };
+  const Q = preg(PIANO, 'ingles');
+  return mundo('icf-en-corto', 'Textos Cortos', 'ingles', [l1, l2], [
+    ['icf-en-corto-1', 'Un mensaje tiene un propósito: pedir, avisar, invitar.', Q('The note on the piano invited people to:', ['Buy the piano', 'Play the piano', 'Clean the piano', 'Move the piano'], 1, '«Play me. I am free» invita a tocarlo; «free» es que no cuesta.', 'Lee la nota que está entre comillas.')],
+    ['icf-en-corto-1', 'Busca qué hay que hacer y cuándo.', Q('When the red light turns on, people must:', ['Leave the station', 'Play louder', 'Wait for a minute without playing', 'Buy a ticket'], 2, '«You stop playing for a minute»: hay que parar un minuto.', 'Lee la última oración del párrafo 3.')],
+    ['icf-en-corto-2', 'La idea principal vale para todo el texto.', Q('What is the text mainly about?', ['A train company that loses money', 'An old man who can\'t play', 'A cleaner who leaves her job', 'How a piano changed life at a station'], 3, 'Todo el texto cuenta lo que pasó en la estación desde que apareció el piano.', 'Busca la opción que sirve para los cuatro párrafos.')],
+    ['icf-en-corto-2', 'La razón está junto a «because».', Q('The company wanted to take the piano away because:', ['Some passengers could not hear the announcements', 'The piano was too old', 'Marta played every night', 'The trains were late'], 0, '«Because some passengers could not hear the announcements».', 'Busca «because» en el párrafo 3.')],
+    ['icf-en-corto-2', 'Lo que no se puede señalar, el texto no lo dice.', Q('Which of these does the text NOT say?', ['Marta gives free lessons', 'The old man plays a waltz', 'Students played before class', 'The piano was made in France'], 3, 'Las clases, el vals y los estudiantes están; de dónde es el piano no se dice.', 'Busca cada opción: una no aparece.')],
   ]);
 })());
 ;
@@ -12855,3 +13524,53 @@ XPD.rejilla = (stage, p, s, api) => {
     salta(l) { for (const m of l) { antes(m); for (const [k, e] of pasos(m)) s = { c: s.c.map((x, j) => (j === k ? e : x)) }; } luz = []; draw(); },
   });
 };
+;
+//#archivo js/explora-mate.js
+// Explora · piezas de dibujo para las lecciones de Álgebra y Trigonometría (spec 2026-11-25-explora-algebra-trigonometria). Va
+// después de explora-escenas.js. Todo son funciones puras que devuelven SVG con las piezas de XPK (K).
+const XM = {
+  // Recta numérica de a a b en la altura y: { X(valor) → píxel, s: dibujo }. o = { p: cada cuánto hay marca, n: 0 sin números, f: rótulo }
+  linea(K, a, b, y = 100, o = {}) {
+    const X = x => 24 + (x - a) / (b - a) * 292; let s = K.ar(12, y, 330, y);
+    for (let x = a; x <= b + 1e-9; x += o.p || 1) s += K.l(X(x), y - 5, X(x), y + 5) + (o.n === 0 ? '' : K.t(X(x), y + 22, o.f ? o.f(x) : K.sig(x), 's tm'));
+    return { X, s };
+  },
+  // Plano cartesiano: { X, Y, s }. o = { H alto, g paso de la cuadrícula, ex, ey rótulos de los ejes, num: cada cuánto números }
+  plano(K, a, b, c, d, o = {}) {
+    const H = o.H || 210, X = x => 18 + (x - a) / (b - a) * 304, Y = y => 8 + (d - y) / (d - c) * (H - 16), g = o.g || 1; let s = '';
+    for (let x = Math.ceil(a / g) * g; x <= b; x += g) s += K.l(X(x), 8, X(x), H - 8, 'ls');
+    for (let y = Math.ceil(c / (o.gy || g)) * (o.gy || g); y <= d; y += o.gy || g) s += K.l(18, Y(y), 322, Y(y), 'ls');
+    if (c <= 0 && d >= 0) s += K.l(18, Y(0), 322, Y(0), 'lm'); if (a <= 0 && b >= 0) s += K.l(X(0), 8, X(0), H - 8, 'lm');
+    return { X, Y, s, a, b, c, d };
+  },
+  curva(K, P, f, cls = 'la gr', u = P.a, w = P.b, n = 120) {
+    let out = '', q = []; const cierra = () => { if (q.length > 1) out += K.pl(q, cls); q = []; };
+    for (let i = 0; i <= n; i++) { const x = u + (w - u) * i / n, y = f(x); if (Number.isFinite(y) && y >= P.c && y <= P.d) q.push([P.X(x), P.Y(y)]); else cierra(); }
+    cierra(); return out;
+  },
+  // Barra partida: segs = [[ancho, rótulo, clase]], anchos en partes de W.
+  barra(K, y, segs, o = {}) {
+    const x0 = o.x ?? 20, W = o.W || 300, h = o.h || 34, T = o.T || segs.reduce((a, s) => a + s[0], 0); let x = x0, s = '';
+    for (const [w, t, c] of segs) { const p = w / T * W; s += K.r(x, y, p, h, c || 'fa') + (t !== '' && t != null && p > 10 ? K.t(x + p / 2, y + h / 2 + 5, t, 's') : ''); x += p; }
+    return s;
+  },
+  // Renglones que van saliendo: se ven los primeros v.n.
+  pasos: (K, v, l, y = 40, d = 36, cls = 'b') => l.map((t, i) => K.f(v.n - i, K.t(170, y + i * d, t, cls))).join(''),
+  bolas: (K, x, y, n, cls = 'fa', u = 26, r = 10) => Array.from({ length: Math.round(n) }, (_, i) => K.c(x + i * u, y, r, cls)).join(''),
+  // Rejilla de a × b cuadros de lado u.
+  reja(K, x, y, a, b, u, cls = 'fa') { let s = ''; for (let i = 0; i < Math.round(a); i++) for (let j = 0; j < Math.round(b); j++) s += K.r(x + i * u, y + j * u, u - 2, u - 2, cls); return s; },
+  // Rueda de radio r con el radio a g grados y sus proyecciones.
+  rueda(K, x, y, r, g, o = {}) {
+    const [px, py] = K.at(x, y, r, g);
+    return K.l(x - r - 14, y, x + r + 14, y, 'lm') + K.l(x, y - r - 14, x, y + r + 14, 'lm') + K.arc(x, y, r, 0, 360, 'lm') + (o.arco === 0 ? '' : K.sec(x, y, 22, 0, g, 'fa'))
+      + (o.cs === 0 ? '' : K.l(x, y, px, y, 'lg gr') + K.l(px, y, px, py, 'lf gr')) + K.l(x, y, px, py, 'la gr') + K.c(px, py, 5, 'fA');
+  },
+};
+// Práctica de fichas en fila: rótulos de los casilleros, fichas buenas (en orden) y fichas que sobran.
+const xpFila = (texto, et, ok, sobra, pista, idea, o = {}) => {
+  const n = et.length, y = o.y || 58, W = Math.min(104, 340 / n - 12);
+  return xpHaz('fichas', texto, { slots: et.map((e, i) => ({ x: 340 * (i + 0.5) / n, y, w: W, et: e })), fichas: [...ok, ...sobra].sort((a, b) => (a < b ? 1 : -1)), meta: ok, alto: y + 48, pista, ...(o.fondo ? { fondo: o.fondo } : {}) }, idea);
+};
+// Práctica de dibujo que se mueve.
+const xpMueve = (texto, alto, v, manijas, metas, dib, idea, o = {}) => xpHaz('dibujo', texto, { alto, v, manijas, ...(typeof metas === 'function' ? { cumple: metas } : { metas }), dib, ...o }, idea);
+const xpRegla = (k, min, max, et, paso = 1) => ({ k, min, max, paso, et });

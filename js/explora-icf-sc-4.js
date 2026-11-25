@@ -1,0 +1,96 @@
+// Preicfes · Sociales y Ciudadanas, mundo 4 «Fuentes y Argumentos» (Explora, escena «hoja»). Casos propios.
+xpLec('icf-sc-fuentes-1', [
+  ['Primaria o secundaria',
+    xpMira('hoja', 'Empecemos por la idea: una fuente **primaria** es de la época; una **secundaria** la estudia después.', { letras: ['A', 'B', 'C', 'D'], paras: [['Un diario de 1948.'], ['Un libro de hoy sobre 1948.'], ['Una foto tomada ese día.'], ['Una película de este año.']] }, [
+      ['El diario lo escribió alguien que estaba allí.', { luz: [0], nota: { 0: 'primaria' } }],
+      ['El libro estudia esa época con otras fuentes.', { luz: [1], nota: { 1: 'secundaria' } }],
+      ['La foto también es de ese momento.', { luz: [2], nota: { 2: 'primaria' } }],
+      ['La película cuenta, pero se hizo mucho después.', { luz: [3], nota: { 3: 'secundaria' } }],
+      ['Ser primaria la hace cercana, no verdadera.', { luz: [0, 2] }],
+    ], 'Primaria: de la época. Secundaria: la estudia. Ninguna es verdad automática.'),
+    xpHaz('hoja', 'Se estudia una epidemia de 1918. Subraya la fuente **primaria**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Un documental de 2020'], ['El registro de un cementerio de 1918'], ['Un artículo de una historiadora actual']], pista: '¿Cuál se hizo mientras ocurría?' }, 'El registro se llenó en 1918.')],
+  ['Quién, para quién, para qué',
+    xpMira('hoja', 'Segunda idea: pregunta **quién** la hizo, **para quién** y **para qué**.', { paras: [['Aviso de 1930: «Compre tierra: aquí no llueve de más».'], ['Carta de 1930: «Otra vez se inundó la cosecha, hermana».'], ['Acta de 1930: «Se aprueban 300 pesos para un dique».']] }, [
+      ['El aviso quiere vender tierra.', { luz: [0], nota: { 0: 'vender' } }],
+      ['La carta le cuenta algo a una hermana.', { luz: [1], nota: { 1: 'contar' } }],
+      ['El acta deja constancia de un gasto.', { luz: [2], nota: { 2: 'constar' } }],
+      ['La carta y el acta desmienten el aviso.', { luz: [1, 2], tacha: [0] }],
+      ['Dos fuentes con fines distintos que coinciden pesan más.', { luz: [1, 2] }],
+    ], 'El propósito explica lo que una fuente muestra y lo que calla.'),
+    xpHaz('hoja', 'Una empresa publica: «Nuestro humo es vapor». Subraya la **mejor razón** para revisarlo.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['A la empresa le conviene que se crea.'], ['El aviso tiene letra pequeña.'], ['Las empresas siempre mienten.']], pista: 'Piensa en el propósito, sin exagerar.' }, 'Tiene interés en que se crea: hay que comparar. «Siempre» dice de más.')],
+  ['El contexto y el silencio',
+    xpMira('hoja', 'Tercera idea: ponla en **su contexto** y mira **quién falta**.', { paras: [['1957: las colombianas votan por primera vez.'], ['Periódico de 1954: «La política no es para damas».'], ['Falta: la voz de ellas.']] }, [
+      ['El dato de la época: aún no votaban.', { luz: [0], nota: { 0: 'contexto' } }],
+      ['La frase se entiende en su época.', { luz: [1] }],
+      ['Entenderla no es estar de acuerdo.', { luz: [1], nota: { 1: 'idea de su tiempo' } }],
+      ['Y falta una voz: la de las mujeres.', { luz: [2], nota: { 2: 'silencio' } }],
+      ['Busca una fuente que la traiga.', {}],
+    ], 'Contexto para entender; silencio para saber qué más buscar.'),
+    xpHaz('hoja', 'De una huelga solo se guardan el informe del patrón y el del alcalde. Subraya la voz que **falta**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['La del patrón'], ['La del gobierno local'], ['La de los huelguistas']], pista: '¿Quién hizo la huelga?' }, 'Nadie guardó lo que dijeron los trabajadores.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Un mapa de 1890 deja en blanco una selva donde vivían varios pueblos. Subraya lo que muestra ese blanco.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Que allí no vivía nadie.'], ['Lo que sus autores no conocían o no tenían en cuenta.'], ['Que el mapa es falso en todo.']], pista: 'El blanco habla de quien dibuja.' }, 'El silencio del mapa dice algo de quienes lo hicieron.')],
+], 'De cuándo es, para qué se hizo, qué pasaba entonces y quién falta.');
+
+xpLec('icf-sc-fuentes-2', [
+  ['Qué mide cada una',
+    xpMira('hoja', 'Empecemos por la idea: cada fuente **mide una cosa**.', { letras: ['A', 'B', 'C'], paras: [['Quejas en la alcaldía: 40.'], ['Encuesta: 6 de cada 10 oyen ruido.'], ['Medidor: 72 decibeles de noche.']] }, [
+      ['Las quejas cuentan a quienes se quejaron.', { luz: [0], nota: { 0: 'quejas' } }],
+      ['La encuesta cuenta lo que la gente dice.', { luz: [1], nota: { 1: 'percepción' } }],
+      ['El medidor cuenta el sonido en un lugar.', { luz: [2], nota: { 2: 'sonido' } }],
+      ['Pocas quejas no prueban que haya silencio.', { luz: [0] }],
+      ['Quizá quejarse sea difícil o inútil.', {}],
+    ], 'Pregunta qué se contó exactamente: solo eso queda probado.'),
+    xpHaz('hoja', '«Bajaron las quejas por basura». Subraya lo que queda **probado**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['La ciudad está más limpia.'], ['La gente está contenta.'], ['Se presentaron menos quejas.']], pista: '¿Qué se contó exactamente?' }, 'Se contaron quejas, no basura ni alegría.')],
+  ['Los límites',
+    xpMira('hoja', 'Segunda idea: toda fuente **deja algo por fuera**.', { paras: [['Encuesta por internet sobre el uso de internet.'], ['100 % dice que se conecta.'], ['Nadie sin conexión pudo responder.']] }, [
+      ['Mira cómo se hizo la encuesta.', { luz: [0], nota: { 0: 'por internet' } }],
+      ['El resultado parece perfecto: cien por ciento.', { luz: [1] }],
+      ['Pero quienes no tienen red no respondieron.', { luz: [2], nota: { 2: 'por fuera' } }],
+      ['El dato es exacto; la conclusión, falsa.', { luz: [1], tacha: [1] }],
+      ['Busca siempre a quién no se le preguntó.', {}],
+    ], 'Busca a quién deja por fuera la fuente.'),
+    xpHaz('hoja', 'Para saber cuánto lee la ciudad preguntaron a la salida de una librería. Subraya el **límite**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Allí hay más lectores que en el resto.'], ['La librería era pequeña.'], ['Preguntaron en la calle.']], pista: '¿Quiénes salen de una librería?' }, 'La muestra favorece a quienes ya leen.')],
+  ['Comparar y medir las palabras',
+    xpMira('hoja', 'Tercera idea: compara fuentes y **no digas de más**.', { paras: [['Fuente 1: bajaron las multas.'], ['Fuente 2: subieron los choques.'], ['«La gente maneja mejor».'], ['«Bajaron las multas y subieron los choques».']] }, [
+      ['Una fuente apunta a un lado.', { luz: [0] }],
+      ['La otra apunta al lado contrario.', { luz: [1] }],
+      ['Esta conclusión solo mira la primera.', { luz: [2], tacha: [2], nota: { 2: 'dice de más' } }],
+      ['Esta dice lo que se sabe.', { luz: [3], nota: { 3: 'justa' } }],
+      ['Quizá bajaron las multas porque hay menos control.', {}],
+    ], 'Compara, di lo que se sabe y busca otra explicación.'),
+    xpHaz('hoja', 'Un hospital reporta más casos de una enfermedad tras comprar un equipo para detectarla. Subraya la lectura **prudente**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['La enfermedad se disparó.'], ['Se detectan más casos, quizá por el equipo.'], ['El equipo causa la enfermedad.']], pista: '¿Qué más cambió además de los casos?' }, 'Detectar más no es lo mismo que haya más.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Un colegio dice: «Nuestro plan sirvió: las notas subieron». Ese año también cambiaron los exámenes. Subraya lo que haría falta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Más fotos del plan.'], ['Notas de otro colegio con esos exámenes y sin el plan.'], ['Saber quién lo propuso.']], pista: 'Hay que separar el plan del cambio de exámenes.' }, 'Comparar con quien no tuvo plan separa las dos causas.')],
+], 'Qué mide, a quién deja fuera y qué otra explicación cabe.');
+
+xpLec('icf-sc-fuentes-3', [
+  ['Leer una caricatura',
+    xpMira('hoja', 'Empecemos por la idea: una caricatura **opina** exagerando y con símbolos.', { paras: [['Un puente gigante cortado por la mitad.'], ['Un alcalde corta la cinta, sonriente.'], ['La gente cruza en canoa.']] }, [
+      ['Lo enorme llama la atención: la obra incompleta.', { luz: [0], nota: { 0: 'exageración' } }],
+      ['La cinta es símbolo de inaugurar.', { luz: [1], nota: { 1: 'símbolo' } }],
+      ['La canoa muestra que nada cambió.', { luz: [2], nota: { 2: 'contraste' } }],
+      ['Opina que se inauguran obras sin terminar.', { luz: [1, 2] }],
+      ['Para entenderla hay que saber de qué puente habla.', {}],
+    ], 'Qué agranda, qué simboliza y qué contrasta: ahí está la opinión.'),
+    xpHaz('hoja', 'Dibujo: un árbol pequeño con cien regaderas oficiales encima y la tierra seca. Subraya la opinión.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Los árboles necesitan sombra.'], ['Hay que comprar regaderas.'], ['Hay muchos anuncios y poca acción.']], pista: 'Hay regaderas, pero ¿cae agua?' }, 'Cien regaderas y tierra seca: mucho anuncio, nada de agua.')],
+  ['La ironía',
+    xpMira('hoja', 'Segunda idea: la **ironía** dice una cosa para que se entienda otra.', { paras: [['Dibujo: una fila que da la vuelta a la manzana.'], ['Letrero: «Trámite exprés».'], ['Lo que se entiende: es lentísimo.']] }, [
+      ['Esto es lo que se ve en el dibujo.', { luz: [0], nota: { 0: 'se ve' } }],
+      ['Esto es lo que dice el letrero.', { luz: [1], nota: { 1: 'se dice' } }],
+      ['No coinciden: ahí está la ironía.', { luz: [0, 1] }],
+      ['El lector entiende lo contrario.', { luz: [2], nota: { 2: 'se entiende' } }],
+      ['Busca el choque entre la frase y la escena.', {}],
+    ], 'Ironía: la frase choca con la escena.'),
+    xpHaz('hoja', 'Subraya la frase que sería **irónica** sobre un bus repleto.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['«El bus va lleno».'], ['«Viaje con toda comodidad».'], ['«Faltan buses».']], pista: 'Debe chocar con lo que se ve.' }, '«Comodidad» choca con un bus repleto.')],
+  ['Leer un discurso',
+    xpMira('hoja', 'Tercera idea: en un discurso, separa **razones** de **recursos**.', { paras: [['«Bajaremos la tarifa 5 %, con ahorro en energía».'], ['«Ellos odian esta ciudad».'], ['«O me apoyan, o se acaba todo».']] }, [
+      ['Aquí hay un dato y cómo se paga: razón.', { luz: [0], nota: { 0: 'razón' } }],
+      ['Aquí ataca a personas, no a ideas.', { luz: [1], nota: { 1: 'ataque' } }],
+      ['Aquí finge que solo hay dos salidas.', { luz: [2], nota: { 2: 'falsa elección' } }],
+      ['Quita los recursos: ¿qué queda?', { tacha: [1, 2] }],
+      ['Lo que queda es lo que se puede revisar.', { luz: [0], tacha: [1, 2] }],
+    ], 'Quita ataques y falsas elecciones: lo que queda se revisa.'),
+    xpHaz('hoja', 'Pon al margen qué es cada frase.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['falsa elección', 'razón', 'ataque'], meta: [2, 0, 1], paras: [['«Ese señor no sabe ni hablar».'], ['«O construimos la vía, o el pueblo muere».'], ['«La vía reduce el viaje de tres horas a una».']], pista: 'Alguna no va ahí: ¿habla de la persona, deja solo dos salidas o da un dato?' }, 'Ataca, obliga a elegir y, al final, da una razón.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Un cartel muestra un candado sobre una boca y dice: «Participa». Subraya lo que critica.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Que se invite a opinar sin dejar hablar.'], ['Que la gente hable demasiado.'], ['Que los candados sean caros.']], pista: 'Compara la imagen con la palabra.' }, 'La imagen calla y la palabra invita: ironía.')],
+], 'Qué exagera, con qué choca y qué queda cuando quitas los recursos.');
