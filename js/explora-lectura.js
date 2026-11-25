@@ -70,11 +70,11 @@ XPD.hoja = (stage, p, s, api) => {
       if (!dedo.g) {
         if (Math.hypot(e.clientX - dedo.x, e.clientY - dedo.y) < 7) return;
         const r = dedo.b.getBoundingClientRect();
-        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width}px`, left: `${r.left}px`, top: `${r.top}px` });
+        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width / zk()}px`, left: `${r.left / zk()}px`, top: `${r.top / zk()}px` });
         dedo.ox = e.clientX - r.left; dedo.oy = e.clientY - r.top; document.body.appendChild(dedo.g); dedo.b.classList.add('lift');
       }
       e.preventDefault();
-      dedo.g.style.left = `${e.clientX - dedo.ox}px`; dedo.g.style.top = `${e.clientY - dedo.oy}px`;
+      dedo.g.style.left = `${(e.clientX - dedo.ox) / zk()}px`; dedo.g.style.top = `${(e.clientY - dedo.oy) / zk()}px`;
       const q = document.elementFromPoint(e.clientX, e.clientY)?.closest('.hj-p');
       root.querySelectorAll('.over').forEach(o => o !== q && o.classList.remove('over'));
       if (q && root.contains(q)) q.classList.add('over');
@@ -113,7 +113,7 @@ XPD.hoja = (stage, p, s, api) => {
       if (m.tacha) XS.tick(-6); else if (m.luz || m.nota || m.sello) XS.pop();
       const q = m.luz?.length ? T(m.luz[0]) : m.nota ? P(Object.keys(m.nota)[0]) : null, st = root.closest('.xp-step');
       // En pantallas pequeñas la hoja puede ser más alta que el paso: lo que se nombra queda a la vista.
-      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: a.top - b.top - b.height * 0.45, behavior: xpStill() ? 'auto' : 'smooth' }); }
+      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: (a.top - b.top - b.height * 0.45) / zk(), behavior: xpStill() ? 'auto' : 'smooth' }); }
       t = setTimeout(done, xpStill() ? 0 : 750);
       return () => clearTimeout(t);
     },

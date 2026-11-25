@@ -1,85 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/contraejemplo.js
-// El contraejemplo (Preuniversitario, pu-lo-2 y pu-lo-4; spec 2026-11-18-preuda-razonamiento-completo): para tumbar «todos
-// cumplen» basta UNO que no cumpla; para tumbar «ninguno cumple», uno que sí. En una caja hay fichas; se toca la que tumba la
-// frase y el juego la pone a prueba.
-// params = { rounds: [{ claim, items: [fichas], bad(x) → bool (true si la ficha tumba la frase) }] }   state = { rounds: [{ pick }] }
-GAMES['contraejemplo'] = (() => {
-  const ok = (s, r) => s.pick >= 0 && !!r.bad(r.items[s.pick]);
-  const first = r => r.items.findIndex(x => r.bad(x));
-  const game = roundsGame({
-    aspect: 1.15,
-    init: () => ({ pick: -1 }),
-    answered: s => s.pick >= 0,
-    ok,
-    solution: r => `${r.items[first(r)]} tumba la frase`,
-    prompt: r => `«${r.claim}». Toca la ficha que la tumba`,
-    foot: () => 'Toca una ficha para ponerla a prueba',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) {},
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { pick: first(r) } : G.s, good = ok(s, r), n = r.items.length, per = Math.min(n, 4), cw = Math.min(70, (G.W - 40) / per), rows = Math.ceil(n / per);
-      p.stroke(C.line); p.strokeWeight(1); p.fill(RK.al(p, C.card, 160)); p.rect(16, 96, G.W - 32, rows * 56 + 24, 12);
-      G.cells = r.items.map((it, i) => {
-        const row = Math.floor(i / per), inRow = Math.min(per, n - row * per), x = (G.W - inRow * cw) / 2 + (i % per) * cw, y = 108 + row * 56, b = { x: x + 4, y, w: cw - 8, h: 46, i };
-        const on = s.pick === i;
-        RK.chip(p, C, b, String(it), { on, col: on ? (good ? C.ok : C.bad) : C.sky, size: 15 });
-        return b;
-      });
-      const it = s.pick >= 0 ? r.items[s.pick] : null;
-      RK.strip(p, C, G.fb, it === null ? '$\\text{elige una ficha}$' : good ? `$\\text{${it}: la frase cae}$` : `$\\text{${it}: la frase sigue en pie}$`, { col: G.locked || good ? C.ok : C.brand, size: 16 });
-    },
-    press(G, x, y) { const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false; G.s.pick = c.i; G.touch(); return true; },
-    demo: G => (G.cells ? { from: { x: G.cells[0].x + 20, y: G.cells[0].y + 20 }, to: { x: G.cells[0].x + 20, y: G.cells[0].y + 20 }, text: 'Toca una ficha', ty: G.cells.at(-1).y + 76 } : null),
-    peek: G => ({ cells: G.cells }),
-  });
-  return Object.assign(game, { answer: r => ({ pick: first(r) }) });
-})();
-;
-//#archivo js/games/niega-todos.js
-// Tumbar la frase con lo mínimo (Preuniversitario, pu-lo-2; spec 2026-11-18-preuda-razonamiento-completo): una fila de luces y
-// una frase que hoy es verdad («todas están prendidas», «ninguna está prendida», «alguna está prendida»). Se tocan luces para
-// cambiarlas hasta volver falsa la frase, cambiando lo menos posible. Así se ve que «todas» cae con una sola, y que «alguna»
-// solo cae si se apagan todas: su negación es «ninguna».
-// params = { rounds: [{ kind: 'todas' | 'ninguna' | 'alguna', on: [estado inicial] }] }   state = { rounds: [{ on: [...] }] }
-GAMES['niega-todos'] = (() => {
-  const SAY = { todas: 'Todas las luces están prendidas', ninguna: 'Ninguna luz está prendida', alguna: 'Alguna luz está prendida' };
-  const NEG = { todas: 'alguna está apagada', ninguna: 'alguna está prendida', alguna: 'ninguna está prendida' };
-  const truth = (k, on) => (k === 'todas' ? on.every(Boolean) : k === 'ninguna' ? !on.some(Boolean) : on.some(Boolean));
-  const changes = (s, r) => s.on.filter((v, i) => v !== r.on[i]).length;
-  const minCh = r => (r.kind === 'alguna' ? r.on.filter(Boolean).length : 1);
-  const ok = (s, r) => !truth(r.kind, s.on) && changes(s, r) === minCh(r);
-  const answer = r => { const on = r.on.slice(); if (r.kind === 'alguna') on.fill(false); else on[0] = !on[0]; return { on }; };
-  const game = roundsGame({
-    aspect: 1.05,
-    init: r => ({ on: r.on.slice() }),
-    answered: (s, r) => changes(s, r) > 0,
-    ok,
-    solution: r => `basta que ${NEG[r.kind]}: ${minCh(r)} cambio${minCh(r) > 1 ? 's' : ''}`,
-    prompt: r => `«${SAY[r.kind]}». Vuélvela falsa cambiando lo menos posible`,
-    foot: () => 'Toca una luz para prenderla o apagarla',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) {},
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, good = ok(s, r), n = s.on.length, w = (G.W - 30) / n, y = 180, d = Math.min(w * 0.7, 44);
-      G.bulbs = s.on.map((b, i) => {
-        const x = 15 + (i + 0.5) * w, ch = b !== r.on[i];
-        if (b) { p.noStroke(); p.fill(RK.al(p, C.sun, 70)); p.circle(x, y, d * 1.5); }
-        p.stroke(ch ? C.brand : C.ink); p.strokeWeight(ch ? 2.5 : 1.4); p.fill(b ? C.sun : RK.al(p, C.card, 200)); p.circle(x, y, d);
-        return { x, y, d, i };
-      });
-      const t = truth(r.kind, s.on), c = changes(s, r);
-      TK.label(p, C, `la frase es ${t ? 'verdad' : 'falsa'}`, G.W / 2, 246, t ? C.mute : C.coral, 12, G.W - 30);
-      RK.strip(p, C, G.fb, `$\\text{${c} cambio${c === 1 ? '' : 's'}}$`, { kicker: good ? `cae: ${NEG[r.kind]}` : t ? 'sigue siendo verdad' : 'falsa, pero ¿con menos cambios?', col: G.locked || good ? C.ok : C.brand, size: 16 });
-    },
-    press(G, x, y) { const i = (G.bulbs || []).findIndex(b => Math.hypot(x - b.x, y - b.y) < b.d / 2 + 8); if (i < 0) return false; G.s.on[i] = !G.s.on[i]; G.touch(); return true; },
-    demo: G => (G.bulbs ? { from: G.bulbs[0], to: G.bulbs[0], text: 'Toca una luz', ty: G.bulbs[0].y + 50 } : null),
-    peek: G => ({ bulbs: G.bulbs }),
-  });
-  return Object.assign(game, { answer });
-})();
-;
 //#archivo js/games/flecha-deduce.js
 // ¿Qué se puede concluir? (Preuniversitario, pu-lo-3; spec 2026-11-18-preuda-razonamiento-completo): una regla «si p, entonces
 // q» es una flecha entre dos focos. Un dato enciende o apaga uno de ellos; el otro foco se toca para ponerle «sí», «no» o «no se
@@ -9946,7 +9866,7 @@ const LEC = (() => {
           drag.el.classList.add('lifting');
         }
         if (drag.ghost) {
-          drag.ghost.style.left = `${e.clientX}px`; drag.ghost.style.top = `${e.clientY}px`;
+          drag.ghost.style.left = `${e.clientX / zk()}px`; drag.ghost.style.top = `${e.clientY / zk()}px`;
           play.querySelectorAll('.lec-zone.over').forEach(z => z.classList.remove('over'));
           drag.ghost.hidden = true;
           document.elementFromPoint(e.clientX, e.clientY)?.closest('.lec-zone')?.classList.add('over');
@@ -10203,9 +10123,10 @@ GAMES['hilo-referente'] = (() => {
       const wrap = play.querySelector('.lec-thread'), knob = play.querySelector('.lec-knob'), path = play.querySelector('.lec-line');
       if (!wrap || !knob || !path) return;
       const W = wrap.getBoundingClientRect(), K = knob.getBoundingClientRect();
-      const x0 = K.left + K.width / 2 - W.left, y0 = K.top + K.height / 2 - W.top;
+      const x0 = (K.left + K.width / 2 - W.left) / zk(), y0 = (K.top + K.height / 2 - W.top) / zk();
       let x1, y1;
       if (pt) { x1 = pt[0] - W.left; y1 = pt[1] - W.top; } else if (target) { const T = target.getBoundingClientRect(); x1 = T.left + T.width / 2 - W.left; y1 = T.bottom - W.top - 2; } else { path.setAttribute('d', ''); return; }
+      const z = zk(); x1 /= z; y1 /= z;
       const lift = Math.max(26, Math.abs(x1 - x0) * 0.25);
       path.setAttribute('d', `M${x0} ${y0} C ${x0} ${Math.max(y0, y1) + lift}, ${x1} ${Math.max(y0, y1) + lift}, ${x1} ${y1}`);
     }
@@ -10740,14 +10661,14 @@ const EXQ = (() => {
         const r = d.el.getBoundingClientRect();
         d.ghost = d.el.cloneNode(true);
         d.ghost.classList.add('exq-ghost');
-        Object.assign(d.ghost.style, { width: `${r.width}px`, left: `${r.left}px`, top: `${r.top}px` });
+        Object.assign(d.ghost.style, { width: `${r.width / zk()}px`, left: `${r.left / zk()}px`, top: `${r.top / zk()}px` });
         d.ox = e.clientX - r.left; d.oy = e.clientY - r.top;
         document.body.appendChild(d.ghost);
         d.el.classList.add('lift');
       }
       if (d.ghost) {
         e.preventDefault();
-        d.ghost.style.left = `${e.clientX - d.ox}px`; d.ghost.style.top = `${e.clientY - d.oy}px`;
+        d.ghost.style.left = `${(e.clientX - d.ox) / zk()}px`; d.ghost.style.top = `${(e.clientY - d.oy) / zk()}px`;
         const over = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-drop]');
         root.querySelectorAll('.over').forEach(o => o !== over && o.classList.remove('over'));
         if (over && root.contains(over)) over.classList.add('over');
@@ -10971,7 +10892,7 @@ const XG = (() => {
           const r = root.getBoundingClientRect(), f = fb.getBoundingClientRect();
           if (f.left >= r.right || f.right <= r.left) return;   // en computador el aviso va en otra columna
           const sobra = r.bottom - f.top, arriba = r.top - body.getBoundingClientRect().top;
-          if (sobra > 0) body.scrollBy({ top: Math.min(sobra, Math.max(0, arriba)), behavior: still() ? 'auto' : 'smooth' });
+          if (sobra > 0) body.scrollBy({ top: Math.min(sobra, Math.max(0, arriba)) / zk(), behavior: still() ? 'auto' : 'smooth' });
         };
         const fin = monta(stage, p, ui);
         return {
@@ -15682,7 +15603,7 @@ const HOJA = (() => {
     const s = root.isConnected && quienRueda(root); if (!s) return;
     const r = s.getBoundingClientRect(), y = m.getBoundingClientRect().top, fb = document.querySelector('.feedback.show')?.getBoundingClientRect();
     const abajo = fb && fb.left < r.right && fb.right > r.left ? Math.min(r.bottom, fb.top) : r.bottom;
-    if (y < r.top + 10 || y > abajo - 30) s.scrollBy({ top: y - r.top - (abajo - r.top) / 3, behavior: quieto() ? 'auto' : 'smooth' });
+    if (y < r.top + 10 || y > abajo - 30) s.scrollBy({ top: (y - r.top - (abajo - r.top) / 3) / zk(), behavior: quieto() ? 'auto' : 'smooth' });
   }, 700);
   const quieto = () => typeof xpStill === 'function' && xpStill();
   const tactil = () => { if (typeof xpTick === 'function') xpTick(); };
@@ -16016,7 +15937,7 @@ const HOJA = (() => {
           ui.s.o.forEach(i => ol.appendChild(li(i)));
           [...ol.children].forEach((x, n) => {
             x.classList.toggle('fija', n < fija);
-            const dy = antes.get(x) - x.getBoundingClientRect().top;
+            const dy = (antes.get(x) - x.getBoundingClientRect().top) / zk();
             if (!dy || x === menos || quieto() || !x.animate) return;
             x.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: ms, easing: 'cubic-bezier(.2,.8,.2,1)' });
           });

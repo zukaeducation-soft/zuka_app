@@ -311,7 +311,7 @@ function tuPinta(courses) {
     const marca = o => { if (sobre === o) return; sobre?.classList.remove('sobre'); sobre = o; sobre?.classList.add('sobre'); };
     const fin = e => { if (e.pointerId !== id) return; id = null; cop?.remove(); cop = null; f.classList.remove('fuera'); sem.classList.remove('espera'); const o = e.type === 'pointerup' ? sobre : null; marca(null); if (o) hora(o.dataset.d, o.dataset.t); };
     f.onpointerdown = e => { if (e.button) return; id = e.pointerId; f.setPointerCapture(id); cop = f.cloneNode(true); cop.classList.add('vuela'); document.body.append(cop); f.classList.add('fuera'); sem.classList.add('espera'); f.onpointermove(e); };
-    f.onpointermove = e => { if (e.pointerId !== id || !cop) return; if (!f.isConnected) { cop.remove(); cop = null; id = null; return; } cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; marca(document.elementFromPoint(e.clientX, e.clientY)?.closest('button.ts-c') || null); };
+    f.onpointermove = e => { if (e.pointerId !== id || !cop) return; if (!f.isConnected) { cop.remove(); cop = null; id = null; return; } cop.style.left = `${e.clientX / zk()}px`; cop.style.top = `${e.clientY / zk()}px`; marca(document.elementFromPoint(e.clientX, e.clientY)?.closest('button.ts-c') || null); };
     f.onpointerup = fin; f.onpointercancel = fin; f.onlostpointercapture = fin;
     f.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
   }

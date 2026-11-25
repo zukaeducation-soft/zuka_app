@@ -46,7 +46,7 @@ const XG = (() => {
           const r = root.getBoundingClientRect(), f = fb.getBoundingClientRect();
           if (f.left >= r.right || f.right <= r.left) return;   // en computador el aviso va en otra columna
           const sobra = r.bottom - f.top, arriba = r.top - body.getBoundingClientRect().top;
-          if (sobra > 0) body.scrollBy({ top: Math.min(sobra, Math.max(0, arriba)), behavior: still() ? 'auto' : 'smooth' });
+          if (sobra > 0) body.scrollBy({ top: Math.min(sobra, Math.max(0, arriba)) / zk(), behavior: still() ? 'auto' : 'smooth' });
         };
         const fin = monta(stage, p, ui);
         return {

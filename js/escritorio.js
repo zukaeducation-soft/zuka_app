@@ -32,21 +32,6 @@ function dkLeccionHTML(l) {
   const xp = typeof EXPLORA !== 'undefined' && EXPLORA[l.id];
   return `<span class="dk cv-meta">${xp ? 'Explicación interactiva' : `Video de ${esMin(clipSecs(l))}`} · ${l.ex.length} ejercicios</span>`;
 }
-// Tú: el mes en calendario y el avance de los cursos en que está inscrito.
-function dkMesHTML() {
-  const now = new Date();
-  return `<section class="dk dk-card dk-mes"><div class="dk-head"><h2>Actividad</h2><button class="dk-link" type="button" data-dk="streak">Ver más</button></div>
-    <p class="dk-month">${now.toLocaleDateString('es', { month: 'long', year: 'numeric' })}</p>
-    <ol class="act-grid" aria-label="Días con actividad">${[...'LMXJVSD'].map(l => `<li class="act-dow" aria-hidden="true">${l}</li>`).join('')}${
-      monthGrid(now.getFullYear(), now.getMonth(), dkActive(now), now).map(x => `<li class="${x.out ? 'out' : ''}${x.lit ? ' lit' : ''}${x.today ? ' today' : ''}"${x.lit ? ` aria-label="${x.d}, con actividad"` : x.today ? ` aria-label="${x.d}, hoy"` : ''}><span>${x.d}</span></li>`).join('')}</ol></section>`;
-}
-function dkCursosHTML() {
-  const mine = myCourses();
-  return `<section class="dk dk-card"><h2>Tus cursos</h2>${mine.length ? `<div class="dk-cursos">${mine.map(c => {
-    const ls = lessonsOf(c), d = ls.filter(isDone).length;
-    return `<button class="dk-curso" type="button" data-dk-open="${c.id}" style="--c:${c.color}">${courseArt(c, 'md')}<span><span class="dk-tr"><b>${esc(c.name)}</b><small>${d}/${ls.length}</small></span><span class="mini-bar"><i style="width:${(d / ls.length) * 100}%"></i></span></span></button>`;
-  }).join('')}</div>` : '<p class="dk-sub">Aún no has comprado ningún curso.</p><button class="btn ghost" type="button" data-dk="tienda">Ver la tienda</button>'}</section>`;
-}
 function dkBind(root) {
   root.querySelectorAll('[data-dk]').forEach(b => b.onclick = () => (b.dataset.dk === 'streak' ? openStreakSheet() : (go(b.dataset.dk), view.scrollTop = 0)));
   root.querySelectorAll('[data-dk-open]').forEach(b => b.onclick = () => openCourse(b.dataset.dkOpen));
@@ -133,7 +118,7 @@ function exploraRiel(root, d) {
   const stage = root.querySelector('.xp-stage');
   const ajusta = () => {
     const vb = stage.querySelector('.xp-svg')?.viewBox?.baseVal;
-    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight)}px`);
+    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight / zk())}px`);
   };
   ajusta();
   if (!root.dataset.ajusta) { root.dataset.ajusta = '1'; new ResizeObserver(ajusta).observe(root); }

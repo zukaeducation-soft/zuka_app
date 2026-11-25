@@ -16,6 +16,7 @@ const part = (from, to) => {
   return app.slice(i, j);
 };
 const profile = part('function renderProfile(', 'function renderSettings(');
+const perfil = read('js/perfil.js');
 const settings = part('function renderSettings(', '// ---- arranque');
 
 test('streakDays: los días de la racha viva, del más reciente al más viejo', () => {
@@ -76,10 +77,10 @@ test('la hoja de racha es un calendario del mes con flechas y tres fichas', () =
 });
 
 test('el Perfil tiene un piñón que abre Ajustes y ya no carga interruptores ni apariencia', () => {
-  assert.match(profile, /data-settings/);
-  assert.match(profile, /aria-label="Ajustes"/);
-  assert.match(profile, /profileSub = 'settings'/);
-  assert.doesNotMatch(profile, /data-theme-opt|data-set=|data-reset|install-card/);
+  assert.match(perfil, /data-settings/);
+  assert.match(perfil, /aria-label="Ajustes"/);
+  assert.match(perfil, /profileSub = 'settings'/);
+  assert.doesNotMatch(profile + perfil, /data-theme-opt|data-set=|data-reset|install-card/);
   assert.match(profile, /if \(profileSub === 'settings'\) return renderSettings\(\)/, 'al repintar (p. ej. tras iniciar sesión) sigue en Ajustes');
 });
 

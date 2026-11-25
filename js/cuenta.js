@@ -517,12 +517,12 @@ function cuentaCard() {
     ${admin ? '<p class="muted">Tienes todo el contenido abierto. Entra directo a lo que necesites:</p>'
     : mios.length ? `<ul class="plan-cursos">${mios.map(x => {
       const a = accesoCurso(mios, x.curso);
-      return `<li><div class="acct-head"><b>${esc(cursoNombre(x.curso))}</b>${accesoPill(a)}</div>
+      const cu = COURSES.find(k => k.id === x.curso);
+      return `<li style="--c:${cu?.color || 'var(--brand)'}">${cu ? aroHTML(pfQueda(x, a), courseArt(cu, 'md')) : ''}<div class="acct-head"><b>${esc(cursoNombre(x.curso))}</b>${accesoPill(a)}</div>
         <p class="muted">${a.estado === 'pago' ? `Del ${fechaCorta(a.desde)} al ${fechaCorta(a.hasta)} · <b class="${a.dias <= 7 ? 'warn' : ''}">${a.dias === 1 ? 'queda' : 'quedan'} ${diasTexto(a.dias)}</b>`
         : a.estado === 'prueba' ? `Primer mundo abierto${a.hasta ? ` hasta el ${fechaCorta(a.hasta)}` : ''}.` : `Terminó el ${fechaCorta(a.hasta)}. Tu avance sigue guardado.`}</p>
         <button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-acct="comprar" data-curso="${esc(x.curso)}">${x.tipo === 'pago' ? 'Renovar' : 'Comprar acceso'}</button></li>`;
     }).join('')}</ul>` : '<p class="muted">Aún no tienes cursos en tu cuenta.</p>'}
-    ${Cuenta.codigo ? `<button class="mi-codigo" type="button" data-acct="copia" aria-label="Copiar mi código ${muestraCodigo(Cuenta.codigo)}"><span><small>Mi código de acceso</small><b>${muestraCodigo(Cuenta.codigo)}</b></span><span class="mi-copia">Copiar</span></button>` : ''}
     ${admin ? `<nav class="adm-atajos" aria-label="Administración">${[['estudiantes', 'Estudiantes', 'user'], ['codigos', 'Códigos', 'lock'], ['solicitudes', 'Solicitudes', 'bag'], ['pedidos', 'Pedidos', 'doc'], ['asesorias', 'Asesorías', 'calendar'], ['ventas', 'Ventas', 'trophy']].map(([h, t, i]) => `<a href="admin/#${h}">${ICON[i]}<span>${t}</span></a>`).join('')}</nav><a class="btn brand" href="admin/">Panel de administración</a>` : `<div class="acct-actions"><button class="btn brand" data-acct="tienda">Tienda</button><button class="btn ghost" data-acct="canje">Añadir código</button></div>`}
     <div class="acct-foot">${admin ? '<span></span>' : '<button class="link-btn" data-acct="datos">Mis datos</button>'}<button class="link-btn" data-acct="salir">Cerrar sesión</button></div></section>`;
 }

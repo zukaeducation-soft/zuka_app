@@ -62,6 +62,11 @@ function mascotSVG(pose = 'think', cls = '') {
 //#archivo js/ui.js
 // Utilidades compartidas: escape HTML, render de TeX, íconos, toasts, sonido y confeti.
 
+// Interfaz compacta (css/styles.css, al final): solo donde el navegador mide bien con `zoom` (Chrome 128, Firefox 126…).
+if (typeof document !== 'undefined' && document.documentElement?.dataset && typeof Element !== 'undefined' && 'currentCSSZoom' in Element.prototype) document.documentElement.dataset.compacta = '';
+// Cuánto mide en pantalla un píxel de la interfaz. Lo que sale de clientX o getBoundingClientRect se divide por zk() antes de escribirlo en px.
+function zk() { return (typeof document !== 'undefined' && document.body?.currentCSSZoom) || 1; }
+
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
@@ -1979,6 +1984,8 @@ function mountSketch(host, sketch, aspect = 1.25, gesture) {
   const fit = size => {
     const cv = inst?.canvas, body = host.closest?.('.lesson-body'), ex = body?.firstElementChild;
     if (!cv?.style) return;
+    // p5 saca la escala del ratón de scrollWidth, que no cuenta el zoom de la interfaz: se le da el tamaño en pantalla.
+    if (cv.getBoundingClientRect && !Object.hasOwn(cv, 'scrollWidth')) for (const [k, d] of [['scrollWidth', 'width'], ['scrollHeight', 'height']]) Object.defineProperty(cv, k, { configurable: true, get: () => cv.getBoundingClientRect()[d] });
     let k = 1;
     if (body && ex && typeof getComputedStyle === 'function') {
       const cs = getComputedStyle(body), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
@@ -27632,3 +27639,83 @@ GAMES['arma-negacion'] = CODK.fillGame({
     TK.label(p, C, r.show, G.W / 2, 138, C.ink, 15, G.W - 56);
   },
 });
+;
+//#archivo js/games/contraejemplo.js
+// El contraejemplo (Preuniversitario, pu-lo-2 y pu-lo-4; spec 2026-11-18-preuda-razonamiento-completo): para tumbar «todos
+// cumplen» basta UNO que no cumpla; para tumbar «ninguno cumple», uno que sí. En una caja hay fichas; se toca la que tumba la
+// frase y el juego la pone a prueba.
+// params = { rounds: [{ claim, items: [fichas], bad(x) → bool (true si la ficha tumba la frase) }] }   state = { rounds: [{ pick }] }
+GAMES['contraejemplo'] = (() => {
+  const ok = (s, r) => s.pick >= 0 && !!r.bad(r.items[s.pick]);
+  const first = r => r.items.findIndex(x => r.bad(x));
+  const game = roundsGame({
+    aspect: 1.15,
+    init: () => ({ pick: -1 }),
+    answered: s => s.pick >= 0,
+    ok,
+    solution: r => `${r.items[first(r)]} tumba la frase`,
+    prompt: r => `«${r.claim}». Toca la ficha que la tumba`,
+    foot: () => 'Toca una ficha para ponerla a prueba',
+    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) {},
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { pick: first(r) } : G.s, good = ok(s, r), n = r.items.length, per = Math.min(n, 4), cw = Math.min(70, (G.W - 40) / per), rows = Math.ceil(n / per);
+      p.stroke(C.line); p.strokeWeight(1); p.fill(RK.al(p, C.card, 160)); p.rect(16, 96, G.W - 32, rows * 56 + 24, 12);
+      G.cells = r.items.map((it, i) => {
+        const row = Math.floor(i / per), inRow = Math.min(per, n - row * per), x = (G.W - inRow * cw) / 2 + (i % per) * cw, y = 108 + row * 56, b = { x: x + 4, y, w: cw - 8, h: 46, i };
+        const on = s.pick === i;
+        RK.chip(p, C, b, String(it), { on, col: on ? (good ? C.ok : C.bad) : C.sky, size: 15 });
+        return b;
+      });
+      const it = s.pick >= 0 ? r.items[s.pick] : null;
+      RK.strip(p, C, G.fb, it === null ? '$\\text{elige una ficha}$' : good ? `$\\text{${it}: la frase cae}$` : `$\\text{${it}: la frase sigue en pie}$`, { col: G.locked || good ? C.ok : C.brand, size: 16 });
+    },
+    press(G, x, y) { const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false; G.s.pick = c.i; G.touch(); return true; },
+    demo: G => (G.cells ? { from: { x: G.cells[0].x + 20, y: G.cells[0].y + 20 }, to: { x: G.cells[0].x + 20, y: G.cells[0].y + 20 }, text: 'Toca una ficha', ty: G.cells.at(-1).y + 76 } : null),
+    peek: G => ({ cells: G.cells }),
+  });
+  return Object.assign(game, { answer: r => ({ pick: first(r) }) });
+})();
+;
+//#archivo js/games/niega-todos.js
+// Tumbar la frase con lo mínimo (Preuniversitario, pu-lo-2; spec 2026-11-18-preuda-razonamiento-completo): una fila de luces y
+// una frase que hoy es verdad («todas están prendidas», «ninguna está prendida», «alguna está prendida»). Se tocan luces para
+// cambiarlas hasta volver falsa la frase, cambiando lo menos posible. Así se ve que «todas» cae con una sola, y que «alguna»
+// solo cae si se apagan todas: su negación es «ninguna».
+// params = { rounds: [{ kind: 'todas' | 'ninguna' | 'alguna', on: [estado inicial] }] }   state = { rounds: [{ on: [...] }] }
+GAMES['niega-todos'] = (() => {
+  const SAY = { todas: 'Todas las luces están prendidas', ninguna: 'Ninguna luz está prendida', alguna: 'Alguna luz está prendida' };
+  const NEG = { todas: 'alguna está apagada', ninguna: 'alguna está prendida', alguna: 'ninguna está prendida' };
+  const truth = (k, on) => (k === 'todas' ? on.every(Boolean) : k === 'ninguna' ? !on.some(Boolean) : on.some(Boolean));
+  const changes = (s, r) => s.on.filter((v, i) => v !== r.on[i]).length;
+  const minCh = r => (r.kind === 'alguna' ? r.on.filter(Boolean).length : 1);
+  const ok = (s, r) => !truth(r.kind, s.on) && changes(s, r) === minCh(r);
+  const answer = r => { const on = r.on.slice(); if (r.kind === 'alguna') on.fill(false); else on[0] = !on[0]; return { on }; };
+  const game = roundsGame({
+    aspect: 1.05,
+    init: r => ({ on: r.on.slice() }),
+    answered: (s, r) => changes(s, r) > 0,
+    ok,
+    solution: r => `basta que ${NEG[r.kind]}: ${minCh(r)} cambio${minCh(r) > 1 ? 's' : ''}`,
+    prompt: r => `«${SAY[r.kind]}». Vuélvela falsa cambiando lo menos posible`,
+    foot: () => 'Toca una luz para prenderla o apagarla',
+    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) {},
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, good = ok(s, r), n = s.on.length, w = (G.W - 30) / n, y = 180, d = Math.min(w * 0.7, 44);
+      G.bulbs = s.on.map((b, i) => {
+        const x = 15 + (i + 0.5) * w, ch = b !== r.on[i];
+        if (b) { p.noStroke(); p.fill(RK.al(p, C.sun, 70)); p.circle(x, y, d * 1.5); }
+        p.stroke(ch ? C.brand : C.ink); p.strokeWeight(ch ? 2.5 : 1.4); p.fill(b ? C.sun : RK.al(p, C.card, 200)); p.circle(x, y, d);
+        return { x, y, d, i };
+      });
+      const t = truth(r.kind, s.on), c = changes(s, r);
+      TK.label(p, C, `la frase es ${t ? 'verdad' : 'falsa'}`, G.W / 2, 246, t ? C.mute : C.coral, 12, G.W - 30);
+      RK.strip(p, C, G.fb, `$\\text{${c} cambio${c === 1 ? '' : 's'}}$`, { kicker: good ? `cae: ${NEG[r.kind]}` : t ? 'sigue siendo verdad' : 'falsa, pero ¿con menos cambios?', col: G.locked || good ? C.ok : C.brand, size: 16 });
+    },
+    press(G, x, y) { const i = (G.bulbs || []).findIndex(b => Math.hypot(x - b.x, y - b.y) < b.d / 2 + 8); if (i < 0) return false; G.s.on[i] = !G.s.on[i]; G.touch(); return true; },
+    demo: G => (G.bulbs ? { from: G.bulbs[0], to: G.bulbs[0], text: 'Toca una luz', ty: G.bulbs[0].y + 50 } : null),
+    peek: G => ({ bulbs: G.bulbs }),
+  });
+  return Object.assign(game, { answer });
+})();

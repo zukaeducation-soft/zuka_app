@@ -30,11 +30,6 @@
 .plan-cursos li { display: grid; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 .plan-cursos .btn { justify-self: start; width: auto; }
 .plan-cursos .warn { color: var(--fire); }
-.mi-codigo { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; text-align: left; border-radius: 14px; border: 1px dashed var(--line); background: var(--bg2); color: var(--ink); }
-.mi-codigo small { display: block; font-size: 12px; font-weight: 700; color: var(--mute); }
-.mi-codigo b { font-family: ui-monospace, 'SF Mono', Consolas, monospace; font-size: 18px; letter-spacing: .08em; }
-.mi-copia { color: var(--brand); font-size: 14px; font-weight: 700; }
-.mi-codigo:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
 /* horas de asesoría */
 .tu-ok { color: var(--ok) !important; font-weight: 700; }

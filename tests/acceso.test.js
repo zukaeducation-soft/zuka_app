@@ -163,7 +163,7 @@ test('los estudiantes ven los cursos de su cuenta y los publicados', () => {
   assert.match(cuenta, /from\('cursos'\)\.select\('id,publicado'\)/);
   assert.match(app, /const courseById = id => cursosVisibles\(\)\.find/, 'un curso oculto no queda como curso actual');
   assert.match(app, /<div class="course-list">\$\{cursosVisibles\(\)\.map/, 'el selector de cursos');
-  assert.match(app, /const all = cursosConAcceso\(\)\.flatMap\(lessonsOf\)/, 'el progreso del perfil');
+  assert.match(read('js/perfil.js'), /const all = cursosConAcceso\(\)\.flatMap\(lessonsOf\)/, 'el progreso del perfil');
   const sql = read('supabase/migrations/20261117000004_cursos_y_uso.sql');
   assert.match(sql, /grant update \(publicado\) on public\.cursos to authenticated/);
   assert.match(sql, /create policy cursos_editar[^;]*es_admin/);

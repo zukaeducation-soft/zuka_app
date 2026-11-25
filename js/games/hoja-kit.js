@@ -31,7 +31,7 @@ const HOJA = (() => {
     const s = root.isConnected && quienRueda(root); if (!s) return;
     const r = s.getBoundingClientRect(), y = m.getBoundingClientRect().top, fb = document.querySelector('.feedback.show')?.getBoundingClientRect();
     const abajo = fb && fb.left < r.right && fb.right > r.left ? Math.min(r.bottom, fb.top) : r.bottom;
-    if (y < r.top + 10 || y > abajo - 30) s.scrollBy({ top: y - r.top - (abajo - r.top) / 3, behavior: quieto() ? 'auto' : 'smooth' });
+    if (y < r.top + 10 || y > abajo - 30) s.scrollBy({ top: (y - r.top - (abajo - r.top) / 3) / zk(), behavior: quieto() ? 'auto' : 'smooth' });
   }, 700);
   const quieto = () => typeof xpStill === 'function' && xpStill();
   const tactil = () => { if (typeof xpTick === 'function') xpTick(); };
@@ -365,7 +365,7 @@ const HOJA = (() => {
           ui.s.o.forEach(i => ol.appendChild(li(i)));
           [...ol.children].forEach((x, n) => {
             x.classList.toggle('fija', n < fija);
-            const dy = antes.get(x) - x.getBoundingClientRect().top;
+            const dy = (antes.get(x) - x.getBoundingClientRect().top) / zk();
             if (!dy || x === menos || quieto() || !x.animate) return;
             x.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: ms, easing: 'cubic-bezier(.2,.8,.2,1)' });
           });

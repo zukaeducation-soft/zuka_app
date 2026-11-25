@@ -219,10 +219,10 @@ function tbLinea() {
     $('.v', cur).setAttribute('d', `M${X(en)} ${A}V${H - B}`);
     for (const [q, s] of [['.p', m.serie], ['.q', m.previa]]) { const e = $(q, cur), v = s?.[en]; e.style.display = v == null ? 'none' : ''; if (v != null) { e.setAttribute('cx', X(en)); e.setAttribute('cy', Y(v)); } }
     const r = svg.getBoundingClientRect();
-    tbTip(cx ?? r.left + X(en), cy ?? r.top + Y(m.serie[en] ?? 0), tbFecha(x.tramos[en], x.g, true), [['a', tbVal(m.serie[en], m.u), 'este periodo'], ...(m.previa ? [['b', tbVal(m.previa[en], m.u), 'antes']] : [])]);
+    tbTip(cx ?? r.left + X(en) * r.width / W, cy ?? r.top + Y(m.serie[en] ?? 0) * r.height / H, tbFecha(x.tramos[en], x.g, true), [['a', tbVal(m.serie[en], m.u), 'este periodo'], ...(m.previa ? [['b', tbVal(m.previa[en], m.u), 'antes']] : [])]);
   };
   const quita = () => { cur.setAttribute('hidden', ''); tbTip(); };
-  svg.onpointermove = svg.onpointerdown = e => { const r = svg.getBoundingClientRect(); pon(n === 1 ? 0 : Math.round((e.clientX - r.left - L) / (W - L - R) * (n - 1)), e.clientX, e.clientY); };
+  svg.onpointermove = svg.onpointerdown = e => { const r = svg.getBoundingClientRect(); pon(n === 1 ? 0 : Math.round(((e.clientX - r.left) * W / r.width - L) / (W - L - R) * (n - 1)), e.clientX, e.clientY); };
   svg.onpointerleave = e => { if (e.pointerType !== 'touch') quita(); }; svg.onblur = quita; svg.onfocus = () => { if (svg.matches(':focus-visible')) pon(en); };
   svg.onkeydown = e => { const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); pon(en + d); } };
 }
@@ -233,8 +233,8 @@ function tbTip(x, y, titulo, filasT) {
   t.replaceChildren(); const h = document.createElement('small'); h.textContent = titulo; t.append(h);
   (filasT || []).forEach(([c, v, n]) => { const p = document.createElement('p'), k = document.createElement('i'), b = document.createElement('b'), s = document.createElement('span'); k.className = c; b.textContent = v; s.textContent = n; p.append(k, b, s); t.append(p); });
   t.hidden = false;
-  const w = t.offsetWidth, hh = t.offsetHeight;
-  t.style.left = `${Math.max(8, Math.min(innerWidth - w - 8, x + 14 + w > innerWidth ? x - w - 14 : x + 14))}px`; t.style.top = `${Math.max(8, Math.min(innerHeight - hh - 8, y - hh - 10))}px`;
+  const z = document.body.currentCSSZoom || 1, W = innerWidth / z, H = innerHeight / z, w = t.offsetWidth, hh = t.offsetHeight; x /= z; y /= z;   // interfaz compacta
+  t.style.left = `${Math.max(8, Math.min(W - w - 8, x + 14 + w > W ? x - w - 14 : x + 14))}px`; t.style.top = `${Math.max(8, Math.min(H - hh - 8, y - hh - 10))}px`;
 }
 function tbTips() {
   $$('[data-tip]', view).forEach(e => { const [a, b] = e.dataset.tip.split('|'); e.onpointerenter = ev => tbTip(ev.clientX, ev.clientY, a, [['a', b, 'de estudio']]); e.onpointerleave = ev => { if (ev.pointerType !== 'touch') tbTip(); }; });

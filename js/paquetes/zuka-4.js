@@ -344,7 +344,7 @@ function xpChispas(stage) {
   for (let k = 0; k < 10; k++) {
     const d = document.createElement('i'), ang = (k / 10) * 2 * Math.PI + 0.3, far = 46 + 26 * (k % 3);
     d.className = 'xp-chispa';
-    d.style.left = r.left - h.left + r.width / 2 + 'px'; d.style.top = r.top - h.top + r.height / 2 + 'px';
+    d.style.left = (r.left - h.left + r.width / 2) / zk() + 'px'; d.style.top = (r.top - h.top + r.height / 2) / zk() + 'px';
     host.appendChild(d);
     d.animate([{ transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
       { transform: `translate(calc(-50% + ${Math.cos(ang) * far}px), calc(-50% + ${Math.sin(ang) * far}px)) scale(.2)`, opacity: 0 }],
@@ -713,7 +713,7 @@ XPD.conjunto = (stage, p, s, api) => {
   };
   box.onpointermove = e => {
     if (!arr) return;
-    const dx = e.clientX - arr.x0, dy = e.clientY - arr.y0;
+    const dx = (e.clientX - arr.x0) / zk(), dy = (e.clientY - arr.y0) / zk();
     if (Math.hypot(dx, dy) > 6) arr.mov = true;
     if (arr.mov) arr.el.style.transform = `translate(${arr.bx + dx}px, ${arr.by + dy}px) scale(1.08)`;
   };
@@ -3631,11 +3631,11 @@ XPD.hoja = (stage, p, s, api) => {
       if (!dedo.g) {
         if (Math.hypot(e.clientX - dedo.x, e.clientY - dedo.y) < 7) return;
         const r = dedo.b.getBoundingClientRect();
-        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width}px`, left: `${r.left}px`, top: `${r.top}px` });
+        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width / zk()}px`, left: `${r.left / zk()}px`, top: `${r.top / zk()}px` });
         dedo.ox = e.clientX - r.left; dedo.oy = e.clientY - r.top; document.body.appendChild(dedo.g); dedo.b.classList.add('lift');
       }
       e.preventDefault();
-      dedo.g.style.left = `${e.clientX - dedo.ox}px`; dedo.g.style.top = `${e.clientY - dedo.oy}px`;
+      dedo.g.style.left = `${(e.clientX - dedo.ox) / zk()}px`; dedo.g.style.top = `${(e.clientY - dedo.oy) / zk()}px`;
       const q = document.elementFromPoint(e.clientX, e.clientY)?.closest('.hj-p');
       root.querySelectorAll('.over').forEach(o => o !== q && o.classList.remove('over'));
       if (q && root.contains(q)) q.classList.add('over');
@@ -3674,7 +3674,7 @@ XPD.hoja = (stage, p, s, api) => {
       if (m.tacha) XS.tick(-6); else if (m.luz || m.nota || m.sello) XS.pop();
       const q = m.luz?.length ? T(m.luz[0]) : m.nota ? P(Object.keys(m.nota)[0]) : null, st = root.closest('.xp-step');
       // En pantallas pequeñas la hoja puede ser más alta que el paso: lo que se nombra queda a la vista.
-      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: a.top - b.top - b.height * 0.45, behavior: xpStill() ? 'auto' : 'smooth' }); }
+      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: (a.top - b.top - b.height * 0.45) / zk(), behavior: xpStill() ? 'auto' : 'smooth' }); }
       t = setTimeout(done, xpStill() ? 0 : 750);
       return () => clearTimeout(t);
     },
@@ -8701,7 +8701,7 @@ class YouTubeClip {
     // arriba y abajo (franjas donde YouTube pinta avatar, título y logo), que quedan fuera.
     this.layout = () => {
       const f = el.querySelector('.yt-crop iframe');
-      const { width: W, height: H } = el.getBoundingClientRect();
+      const { clientWidth: W, clientHeight: H } = el;
       if (!f || !W) return;
       const vw = Math.min(W, (H * 9) / 16), vh = (vw * 16) / 9;
       // El marco recortado mide justo lo que el video; el iframe sobresale 64 px por arriba y por abajo.
@@ -12122,7 +12122,7 @@ function tuPinta(courses) {
     const marca = o => { if (sobre === o) return; sobre?.classList.remove('sobre'); sobre = o; sobre?.classList.add('sobre'); };
     const fin = e => { if (e.pointerId !== id) return; id = null; cop?.remove(); cop = null; f.classList.remove('fuera'); sem.classList.remove('espera'); const o = e.type === 'pointerup' ? sobre : null; marca(null); if (o) hora(o.dataset.d, o.dataset.t); };
     f.onpointerdown = e => { if (e.button) return; id = e.pointerId; f.setPointerCapture(id); cop = f.cloneNode(true); cop.classList.add('vuela'); document.body.append(cop); f.classList.add('fuera'); sem.classList.add('espera'); f.onpointermove(e); };
-    f.onpointermove = e => { if (e.pointerId !== id || !cop) return; if (!f.isConnected) { cop.remove(); cop = null; id = null; return; } cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; marca(document.elementFromPoint(e.clientX, e.clientY)?.closest('button.ts-c') || null); };
+    f.onpointermove = e => { if (e.pointerId !== id || !cop) return; if (!f.isConnected) { cop.remove(); cop = null; id = null; return; } cop.style.left = `${e.clientX / zk()}px`; cop.style.top = `${e.clientY / zk()}px`; marca(document.elementFromPoint(e.clientX, e.clientY)?.closest('button.ts-c') || null); };
     f.onpointerup = fin; f.onpointercancel = fin; f.onlostpointercapture = fin;
     f.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
   }
@@ -12952,7 +12952,7 @@ function renderGym() {
         movio = true; b.setPointerCapture(id); hero.classList.add('espera');
         cop = b.querySelector('.gd').cloneNode(true); cop.className = `gd gd-vuela lv${b.dataset.lv}`; G.append(cop);
       }
-      if (cop) { cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; }
+      if (cop) { cop.style.left = `${e.clientX / zk()}px`; cop.style.top = `${e.clientY / zk()}px`; }
     };
     b.onpointerup = e => {
       if (e.pointerId !== id) return;
@@ -13050,7 +13050,7 @@ function startReto(c, r) {
     if (pos >= r.steps.length) return finish();
     const s = r.steps[pos];
     // Un solo contenedor: mountSketch (kit.js) mide el primer hijo de .lesson-body para achicar el juego si no cabe.
-    body.innerHTML = `<div class="gym-step"><div class="gym-lado"><details class="gym-reto"${esEscritorio() && innerHeight > 760 ? ' open' : ''}><summary><span>El reto</span><span class="gr-n">Paso ${pos + 1} de ${r.steps.length}</span></summary><div>${tex(r.problem)}</div></details>
+    body.innerHTML = `<div class="gym-step"><div class="gym-lado"><details class="gym-reto"${esEscritorio() && innerHeight / zk() > 760 ? ' open' : ''}><summary><span>El reto</span><span class="gr-n">Paso ${pos + 1} de ${r.steps.length}</span></summary><div>${tex(r.problem)}</div></details>
       <div class="coach" role="note"><span class="coach-av">${mascotSVG('think')}</span><div><small>Paso ${pos + 1} · ${esc(s.title)}</small><p></p>${conceptOf(s) ? `<button type="button" class="con-btn" data-concept>${ICON.bulb}Recordar el concepto</button>` : ''}</div></div>
       ${notebook()}</div><div class="gym-ex"></div></div>`;
     const cb = $('[data-concept]', body);
@@ -14441,7 +14441,7 @@ function mcRuta(c, cur) {
   };
   let id = null, x0 = 0, s0 = 0, movio = false;   // con ratón también se arrastra
   ruta.onpointerdown = e => { movio = false; if (e.pointerType !== 'mouse' || e.button) return; id = e.pointerId; x0 = e.clientX; s0 = ruta.scrollLeft; };
-  ruta.onpointermove = e => { if (e.pointerId !== id) return; if (!e.buttons) { id = null; ruta.classList.remove('mano'); return; } if (!movio && Math.abs(e.clientX - x0) > 6) { movio = true; ruta.setPointerCapture(id); ruta.classList.add('mano'); } if (movio) ruta.scrollLeft = s0 - (e.clientX - x0); };
+  ruta.onpointermove = e => { if (e.pointerId !== id) return; if (!e.buttons) { id = null; ruta.classList.remove('mano'); return; } if (!movio && Math.abs(e.clientX - x0) > 6) { movio = true; ruta.setPointerCapture(id); ruta.classList.add('mano'); } if (movio) ruta.scrollLeft = s0 - (e.clientX - x0) / zk(); };
   ruta.onpointerup = ruta.onpointercancel = e => { if (e.pointerId === id) { id = null; ruta.classList.remove('mano'); } };
   ruta.onclick = e => { if (movio) { movio = false; return; } const b = e.target.closest('[data-mu]'); if (b) pon(+b.dataset.mu); };
   ruta.onkeydown = e => { const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (!k) return; e.preventDefault(); const i = Math.max(0, Math.min(idx.length - 1, idx.indexOf(mcVe.u[clave]) + k)); pon(idx[i], true); };
@@ -14686,7 +14686,7 @@ const diasTexto = n => (n === 1 ? '1 día' : `${n} días`);
 
 const ESTADO_MAPAS = ['saved', 'likes', 'watched', 'guides'];
 const ESTADO_CAMPOS = ['reinicio', 'name', 'xp', 'correct', 'answered', 'streak', 'maxStreak', 'lastDay', 'goal', 'course', 'lastLesson', 'misCursos', 'libros',
-  'today', 'tourDone', 'days', 'exams', 'gym', ...ESTADO_MAPAS];
+  'today', 'tourDone', 'carne', 'days', 'exams', 'gym', ...ESTADO_MAPAS];
 
 const estadoToma = s => Object.fromEntries(ESTADO_CAMPOS.filter(k => s[k] !== undefined && s[k] !== null).map(k => [k, s[k]]));
 
@@ -14732,6 +14732,7 @@ function estadoMezcla(local, nube) {
   });
   if (a.misCursos || b.misCursos) r.misCursos = [...new Set([...(a.misCursos || []), ...(b.misCursos || [])])];
   if (!a.name && b.name) r.name = b.name;
+  if (((b.carne || {}).at || 0) > ((a.carne || {}).at || 0)) r.carne = b.carne;   // el carné, el que se cambió de último
   if (!a.answered && b.answered && b.goal) r.goal = b.goal;
   if (!a.lastLesson && b.lastLesson) { r.lastLesson = b.lastLesson; if (b.course) r.course = b.course; }
   r.tourDone = !!(a.tourDone || b.tourDone);
@@ -15322,12 +15323,12 @@ function cuentaCard() {
     ${admin ? '<p class="muted">Tienes todo el contenido abierto. Entra directo a lo que necesites:</p>'
     : mios.length ? `<ul class="plan-cursos">${mios.map(x => {
       const a = accesoCurso(mios, x.curso);
-      return `<li><div class="acct-head"><b>${esc(cursoNombre(x.curso))}</b>${accesoPill(a)}</div>
+      const cu = COURSES.find(k => k.id === x.curso);
+      return `<li style="--c:${cu?.color || 'var(--brand)'}">${cu ? aroHTML(pfQueda(x, a), courseArt(cu, 'md')) : ''}<div class="acct-head"><b>${esc(cursoNombre(x.curso))}</b>${accesoPill(a)}</div>
         <p class="muted">${a.estado === 'pago' ? `Del ${fechaCorta(a.desde)} al ${fechaCorta(a.hasta)} · <b class="${a.dias <= 7 ? 'warn' : ''}">${a.dias === 1 ? 'queda' : 'quedan'} ${diasTexto(a.dias)}</b>`
         : a.estado === 'prueba' ? `Primer mundo abierto${a.hasta ? ` hasta el ${fechaCorta(a.hasta)}` : ''}.` : `Terminó el ${fechaCorta(a.hasta)}. Tu avance sigue guardado.`}</p>
         <button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-acct="comprar" data-curso="${esc(x.curso)}">${x.tipo === 'pago' ? 'Renovar' : 'Comprar acceso'}</button></li>`;
     }).join('')}</ul>` : '<p class="muted">Aún no tienes cursos en tu cuenta.</p>'}
-    ${Cuenta.codigo ? `<button class="mi-codigo" type="button" data-acct="copia" aria-label="Copiar mi código ${muestraCodigo(Cuenta.codigo)}"><span><small>Mi código de acceso</small><b>${muestraCodigo(Cuenta.codigo)}</b></span><span class="mi-copia">Copiar</span></button>` : ''}
     ${admin ? `<nav class="adm-atajos" aria-label="Administración">${[['estudiantes', 'Estudiantes', 'user'], ['codigos', 'Códigos', 'lock'], ['solicitudes', 'Solicitudes', 'bag'], ['pedidos', 'Pedidos', 'doc'], ['asesorias', 'Asesorías', 'calendar'], ['ventas', 'Ventas', 'trophy']].map(([h, t, i]) => `<a href="admin/#${h}">${ICON[i]}<span>${t}</span></a>`).join('')}</nav><a class="btn brand" href="admin/">Panel de administración</a>` : `<div class="acct-actions"><button class="btn brand" data-acct="tienda">Tienda</button><button class="btn ghost" data-acct="canje">Añadir código</button></div>`}
     <div class="acct-foot">${admin ? '<span></span>' : '<button class="link-btn" data-acct="datos">Mis datos</button>'}<button class="link-btn" data-acct="salir">Cerrar sesión</button></div></section>`;
 }
@@ -15781,7 +15782,7 @@ function tiendaVitrinaViva(el) {
     if (e.pointerId !== id) return;
     if (!e.buttons) return suelta(e);
     if (!movio && Math.abs(e.clientX - x0) > 7) { movio = true; rueda.setPointerCapture(id); h.classList.add('mano'); cancelAnimationFrame(raf); raf = 0; }
-    if (movio) { p = meta = Math.max(-.35, Math.min(n - .65, p0 - (e.clientX - x0) / (its[0].offsetWidth * .72))); pinta(); }
+    if (movio) { p = meta = Math.max(-.35, Math.min(n - .65, p0 - (e.clientX - x0) / zk() / (its[0].offsetWidth * .72))); pinta(); }
   };
   const suelta = e => { if (e.pointerId !== id) return; id = null; h.classList.remove('mano'); if (movio) va(tiendaCerca(p + Math.max(-.35, Math.min(.35, (x0 - e.clientX) / 260)), n)); };
   rueda.onpointerup = suelta; rueda.onpointercancel = suelta;
@@ -15874,9 +15875,9 @@ function tiendaVuela(a, desde) {
   const dest = $('.td-bolsa', view);
   if (!desde || !dest || !dest.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const r = desde.getBoundingClientRect(), d = dest.getBoundingClientRect(), f = document.createElement('span');
-  f.className = 'td-vuela'; f.innerHTML = tiendaMini(a); f.style.left = `${r.left + r.width / 2}px`; f.style.top = `${r.top + r.height / 2}px`;
+  f.className = 'td-vuela'; f.innerHTML = tiendaMini(a); f.style.left = `${(r.left + r.width / 2) / zk()}px`; f.style.top = `${(r.top + r.height / 2) / zk()}px`;
   document.body.append(f);
-  const dx = d.left + d.width / 2 - r.left - r.width / 2, dy = d.top + d.height / 2 - r.top - r.height / 2;
+  const dx = (d.left + d.width / 2 - r.left - r.width / 2) / zk(), dy = (d.top + d.height / 2 - r.top - r.height / 2) / zk();
   f.animate([{ transform: 'translate(-50%, -50%) scale(1)' }, { transform: `translate(calc(-50% + ${dx * .45}px), calc(-50% + ${dy * .45 - 110}px)) scale(1.15) rotate(-8deg)`, offset: .45 }, { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.25) rotate(14deg)`, opacity: .6 }], { duration: 720, easing: 'cubic-bezier(.4, 0, .3, 1)' }).onfinish = () => f.remove();
   setTimeout(() => f.remove(), 1200);
 }
@@ -15890,7 +15891,7 @@ function tiendaArrastra(el) {
     s.onpointermove = e => {
       if (e.pointerId !== id) return;
       if (!f && Math.hypot(e.clientX - x0, e.clientY - y0) > 8) { f = document.createElement('span'); f.className = 'td-vuela mano'; f.innerHTML = $('.td-artes, .td-pila', s).outerHTML; document.body.append(f); view.classList.add('llevando'); }
-      if (f) { f.style.left = `${e.clientX}px`; f.style.top = `${e.clientY}px`; $('.td-carro', view)?.classList.toggle('sobre', sobre(e)); }
+      if (f) { f.style.left = `${e.clientX / zk()}px`; f.style.top = `${e.clientY / zk()}px`; $('.td-carro', view)?.classList.toggle('sobre', sobre(e)); }
     };
     const fin = e => { if (e.pointerId !== id) return; id = null; const dentro = f && e.type === 'pointerup' && sobre(e), de = f; if (dentro) tiendaCambia(art, 1, de); quita(); $('.td-carro', view)?.classList.remove('sobre'); };
     s.onpointerup = fin; s.onpointercancel = fin;
@@ -16182,7 +16183,7 @@ async function openLector(id) {
     es.forEach(e => { const n = +e.target.dataset.n; e.isIntersecting ? L.vis.add(n) : L.vis.delete(n); });
     if (!L.vis.size) return;
     // La página que ocupa el centro de la pantalla.
-    const medio = cont.getBoundingClientRect().top + cont.clientHeight / 2;
+    const b0 = cont.getBoundingClientRect(), medio = b0.top + b0.height / 2;
     L.pag = [...L.vis].sort((a, b) => { const c = n => { const r = hojas[n - 1].getBoundingClientRect(); return Math.abs((r.top + r.bottom) / 2 - medio); }; return c(a) - c(b); })[0];
     if (document.activeElement !== input) input.value = L.pag;
     if (mio) { S.libros = { ...S.libros, [id]: L.pag }; }
@@ -16961,21 +16962,6 @@ function dkLeccionHTML(l) {
   const xp = typeof EXPLORA !== 'undefined' && EXPLORA[l.id];
   return `<span class="dk cv-meta">${xp ? 'Explicación interactiva' : `Video de ${esMin(clipSecs(l))}`} · ${l.ex.length} ejercicios</span>`;
 }
-// Tú: el mes en calendario y el avance de los cursos en que está inscrito.
-function dkMesHTML() {
-  const now = new Date();
-  return `<section class="dk dk-card dk-mes"><div class="dk-head"><h2>Actividad</h2><button class="dk-link" type="button" data-dk="streak">Ver más</button></div>
-    <p class="dk-month">${now.toLocaleDateString('es', { month: 'long', year: 'numeric' })}</p>
-    <ol class="act-grid" aria-label="Días con actividad">${[...'LMXJVSD'].map(l => `<li class="act-dow" aria-hidden="true">${l}</li>`).join('')}${
-      monthGrid(now.getFullYear(), now.getMonth(), dkActive(now), now).map(x => `<li class="${x.out ? 'out' : ''}${x.lit ? ' lit' : ''}${x.today ? ' today' : ''}"${x.lit ? ` aria-label="${x.d}, con actividad"` : x.today ? ` aria-label="${x.d}, hoy"` : ''}><span>${x.d}</span></li>`).join('')}</ol></section>`;
-}
-function dkCursosHTML() {
-  const mine = myCourses();
-  return `<section class="dk dk-card"><h2>Tus cursos</h2>${mine.length ? `<div class="dk-cursos">${mine.map(c => {
-    const ls = lessonsOf(c), d = ls.filter(isDone).length;
-    return `<button class="dk-curso" type="button" data-dk-open="${c.id}" style="--c:${c.color}">${courseArt(c, 'md')}<span><span class="dk-tr"><b>${esc(c.name)}</b><small>${d}/${ls.length}</small></span><span class="mini-bar"><i style="width:${(d / ls.length) * 100}%"></i></span></span></button>`;
-  }).join('')}</div>` : '<p class="dk-sub">Aún no has comprado ningún curso.</p><button class="btn ghost" type="button" data-dk="tienda">Ver la tienda</button>'}</section>`;
-}
 function dkBind(root) {
   root.querySelectorAll('[data-dk]').forEach(b => b.onclick = () => (b.dataset.dk === 'streak' ? openStreakSheet() : (go(b.dataset.dk), view.scrollTop = 0)));
   root.querySelectorAll('[data-dk-open]').forEach(b => b.onclick = () => openCourse(b.dataset.dkOpen));
@@ -17062,10 +17048,148 @@ function exploraRiel(root, d) {
   const stage = root.querySelector('.xp-stage');
   const ajusta = () => {
     const vb = stage.querySelector('.xp-svg')?.viewBox?.baseVal;
-    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight)}px`);
+    if (vb?.height) stage.style.setProperty('--xp-w', `${exploraAncho(vb.width / vb.height, innerHeight / zk())}px`);
   };
   ajusta();
   if (!root.dataset.ajusta) { root.dataset.ajusta = '1'; new ResizeObserver(ajusta).observe(root); }
+}
+;
+//#archivo js/perfil.js
+// Tú (spec 2026-11-25-tu): carné que se voltea, nivel, meta que se arrastra, mapa de actividad y logros. Lo arma renderProfile
+// (js/app.js); aquí, las cuentas puras (tests/perfil.test.js) y cada pieza.
+
+// ---------- cuentas puras ----------
+// XP para llegar al nivel n: 0, 50, 150, 300, 500…
+const pfXpDe = n => 25 * n * (n - 1);
+const PF_TITULOS = ['Aprendiz', 'Explorador', 'Estratega', 'Analista', 'Maestro'];   // cambia cada tres niveles
+function pfNivel(xp) {
+  let n = 1; while (pfXpDe(n + 1) <= xp) n++;
+  const a = pfXpDe(n), b = pfXpDe(n + 1);
+  return { n, titulo: PF_TITULOS[Math.min(PF_TITULOS.length - 1, Math.floor((n - 1) / 3))], p: (xp - a) / (b - a), falta: b - xp };
+}
+// Últimas `semanas` semanas (lunes a domingo): [{ key, xp, hoy, futuro }]. `dias`: XP por día; `activos`: días con actividad sin XP anotado.
+function pfMapa(dias, activos, now, semanas = 18) {
+  const lead = (now.getDay() + 6) % 7, base = lead + (semanas - 1) * 7;
+  return Array.from({ length: semanas * 7 }, (_, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - base + i), key = dayKey(d);
+    return { key, d, xp: (dias || {})[key] || 0, lit: !!(dias || {})[key] || activos.has(key), hoy: i === base, futuro: i > base };
+  });
+}
+// De 0 a 4 según la meta del día.
+const pfFuerza = (x, meta) => (!x.lit ? 0 : x.xp >= meta * 2 ? 4 : x.xp >= meta ? 3 : x.xp >= meta / 2 ? 2 : 1);
+const PF_METAS = [10, 20, 30, 50];
+// Logros: cada uno con su avance. x: { hechas, mundos, racha, xp, retos, estrellas, examenes, respondidas, aciertos, clases }.
+const PF_LOGROS = [
+  ['primera', 'check', 'Primer paso', 'Termina tu primera lección', 1, x => x.hechas], ['diez', 'book', 'En marcha', 'Termina 10 lecciones', 10, x => x.hechas], ['cincuenta', 'book', 'Imparable', 'Termina 50 lecciones', 50, x => x.hechas],
+  ['mundo', 'star', 'Mundo completo', 'Termina todas las lecciones de un mundo', 1, x => x.mundos], ['cinco', 'star', 'Cinco mundos', 'Completa 5 mundos', 5, x => x.mundos],
+  ['racha3', 'flame', 'Tres seguidos', 'Estudia 3 días seguidos', 3, x => x.racha], ['racha7', 'flame', 'Semana entera', 'Estudia 7 días seguidos', 7, x => x.racha], ['racha30', 'flame', 'Mes de hierro', 'Estudia 30 días seguidos', 30, x => x.racha],
+  ['xp500', 'bolt', '500 XP', 'Junta 500 de experiencia', 500, x => x.xp], ['xp2000', 'bolt', '2.000 XP', 'Junta 2.000 de experiencia', 2000, x => x.xp],
+  ['reto', 'gym', 'Primer reto', 'Supera un reto del gimnasio', 1, x => x.retos], ['estrellas', 'gym', 'Treinta estrellas', 'Gana 30 estrellas en el gimnasio', 30, x => x.estrellas],
+  ['examen', 'trophy', 'A prueba', 'Saca 60 % o más en una evaluación', 1, x => x.examenes], ['punteria', 'target', 'Puntería', 'Responde bien 100 ejercicios', 100, x => x.aciertos],
+];
+const pfLogros = x => PF_LOGROS.map(([id, icono, t, p, meta, f]) => { const v = Math.max(0, f(x) || 0); return { id, icono, t, p, meta, v: Math.min(meta, v), ok: v >= meta }; });
+
+// ---------- piezas ----------
+const PF_COLORES = ['#6fd3ff', '#a3e635', '#b18cff', '#ff9d8c', '#ffd257', '#5eead4', '#f472b6', '#8fa8ff'];
+const PF_POSES = [['think', 'Pensando'], ['cheer', 'Celebrando'], ['letra', 'Tu inicial']];
+// Llega de la nube: solo se aceptan los colores y figuras de la lista.
+const pfCarne = (k = S.carne || {}) => ({ pose: PF_POSES.some(p => p[0] === k.pose) ? k.pose : 'think', color: PF_COLORES.includes(k.color) ? k.color : PF_COLORES[0] });
+// Parte del plan que queda (aro de «Mi plan»). x: acceso { desde, hasta }; a: accesoCurso.
+const pfQueda = (x, a) => { if (a.dias === 0) return 0; if (!x.hasta) return 1; const t = (new Date(x.hasta) - new Date(x.desde)) / 86400000; return t > 0 ? Math.min(1, a.dias / t) : 0; };
+// Antes de repintar: guarda foco, nombre a medias y desplazamientos; devuelve lo que los repone. Si no se veía Tú o cambió la cuenta, de cero.
+function pfGuarda() {
+  const uid = Cuenta.user?.id || '', f = document.activeElement, dentro = $('.pf', view) && view.contains(f);
+  if (!$('.pf', view) || pfVer.uid !== uid) { pfVer = { atras: false, edita: false, dia: null, uid }; return () => {}; }
+  const y = view.scrollTop, x = $('.pm-mapa', view).scrollLeft, nom = $('.name-input', view), en = dentro && f === nom, v = nom.value, cur = en ? [nom.selectionStart, nom.selectionEnd] : null;
+  const sel = !dentro || en ? '' : ['.pm-riel', '.pm-mapa', '[data-settings]'].find(s => f.matches(s)) || [...f.attributes].filter(t => t.name.startsWith('data-') && t.value).map(t => `[${t.name}="${CSS.escape(t.value)}"]`).join('');
+  const vueltos = [...view.querySelectorAll('[data-logro][aria-expanded="true"]')].map(b => b.dataset.logro);
+  return () => {
+    vueltos.forEach(id => $(`[data-logro="${id}"]`, view)?.setAttribute('aria-expanded', 'true'));
+    $('.pm-mapa', view).scrollLeft = x; view.scrollTop = y;
+    if (en) { const n = $('.name-input', view); n.value = v; n.focus({ preventScroll: true }); n.setSelectionRange(...cur); } else if (sel) $(sel, view)?.focus({ preventScroll: true });
+  };
+}
+let pfVer = { atras: false, edita: false, dia: null, uid: null };   // lo que se mira; no se guarda
+const pfCara = k => (k.pose === 'letra' ? `<span class="cn-letra">${esc(([...(S.name || 'Z')][0]).toUpperCase())}</span>` : mascotSVG(k.pose));
+function pfDatos() {
+  const all = cursosConAcceso().flatMap(lessonsOf), gym = Object.values(S.gym || {});
+  return { total: all.length, hechas: all.filter(isDone).length, mundos: cursosConAcceso().flatMap(c => c.units).filter(u => u.lessons.length && u.lessons.every(isDone)).length, racha: Math.max(S.maxStreak || 0, streakNow()), xp: S.xp,
+    retos: Object.keys(S.gym || {}).filter(id => !id.startsWith('cal-') && S.gym[id].best > 0).length, estrellas: gym.reduce((t, g) => t + (g.best || 0), 0), examenes: Object.values(S.exams || {}).filter(e => e.best >= 60).length, respondidas: S.answered, aciertos: S.correct };
+}
+function pfCarneHTML() {
+  const k = pfCarne(), v = pfNivel(S.xp), cod = typeof Cuenta !== 'undefined' && Cuenta.codigo, desde = typeof Cuenta !== 'undefined' && Cuenta.perfil?.creado_en;
+  return `<section class="cn-zona${pfVer.atras ? ' atras' : ''}${pfVer.edita ? ' edita' : ''}" style="--c:${esc(k.color)}"><div class="cn" data-inclina><div class="cn-in">
+      <div class="cn-f cn-frente"><span class="cn-marca" aria-hidden="true">ZUKA</span><div class="cn-foto">${pfCara(k)}</div><div class="cn-d"><label class="cn-nom"><span class="hm-sr">Tu nombre</span><input class="name-input" value="${esc(S.name)}" placeholder="Escribe tu nombre" maxlength="24" autocomplete="given-name"></label>
+        <p class="cn-niv"><b>Nivel ${v.n}</b> ${v.titulo}</p><span class="cn-barra" role="img" aria-label="Te faltan ${v.falta} XP para el nivel ${v.n + 1}"><i style="width:${(v.p * 100).toFixed(1)}%"></i></span><p class="cn-xp">${S.xp} XP · faltan ${v.falta}</p></div></div>
+      <div class="cn-f cn-dorso"><span class="cn-marca" aria-hidden="true">ZUKA</span>${cod ? `<p>Mi código de acceso</p><button class="cn-cod" type="button" data-acct="copia" aria-label="Copiar mi código ${muestraCodigo(cod)}"><b>${muestraCodigo(cod)}</b><span>Copiar</span></button><p class="cn-nota">Con este código entras siempre y conservas tu avance.</p>` : '<p>Tu carné de Zuka</p><p class="cn-nota">Cuando tengas un código de acceso, lo verás aquí.</p>'}${desde ? `<p class="cn-nota">En Zuka desde el ${fechaCorta(desde)}</p>` : ''}</div></div></div>
+    <div class="cn-acts"><button class="cn-b" type="button" data-cn="voltea">${ICON.right}<span>${pfVer.atras ? 'Ver el frente' : cod ? 'Ver mi código' : 'Voltear'}</span></button><button class="cn-b" type="button" data-cn="edita" aria-expanded="${pfVer.edita}">${ICON.star}<span>Personalizar</span></button><button class="cn-b prof-gear" type="button" data-settings aria-label="Ajustes">${ICON.gear}<span>Ajustes</span></button></div>
+    ${pfVer.edita ? `<div class="cn-edita"><div class="cn-op" role="group" aria-label="Figura">${PF_POSES.map(([p, t]) => `<button type="button" data-pose="${p}" aria-pressed="${p === k.pose}" aria-label="${t}">${pfCara({ pose: p })}</button>`).join('')}</div>
+      <div class="cn-op" role="group" aria-label="Color">${PF_COLORES.map((c, i) => `<button type="button" class="col" data-color="${c}" style="--k:${c}" aria-pressed="${c === k.color}" aria-label="Color ${i + 1}"></button>`).join('')}</div></div>` : ''}</section>`;
+}
+function pfMetaHTML() {
+  const hoy = todayXP(), i = Math.max(0, PF_METAS.indexOf(S.goal)), p = PF_METAS.includes(S.goal) ? i / (PF_METAS.length - 1) : 0;
+  return `<section class="pf-c pf-meta" style="--p:${p}"><div class="pf-cab"><h2>Meta diaria</h2><p>${hoy} de ${S.goal} XP hoy${hoy >= S.goal ? ' · <b>¡cumplida!</b>' : ''}</p></div>
+    <div class="pm-hoy">${aroHTML(hoy / S.goal, hoy >= S.goal ? ICON.check : ICON.bolt)}<p class="pm-n"><b>${S.goal}</b> XP <span>más o menos ${Math.ceil(S.goal / 10)} ${Math.ceil(S.goal / 10) === 1 ? 'lección' : 'lecciones'} al día</span></p></div>
+    <div class="pm-riel" role="slider" tabindex="0" aria-label="Meta diaria" aria-valuemin="${PF_METAS[0]}" aria-valuemax="${PF_METAS[PF_METAS.length - 1]}" aria-valuenow="${S.goal}" aria-valuetext="${S.goal} XP al día"><span class="pm-l"></span>${PF_METAS.map((g, k) => `<i style="left:${k / (PF_METAS.length - 1) * 100}%"></i>`).join('')}<span class="pm-k"></span></div>
+    <div class="pm-op" aria-hidden="true">${['Suave', 'Normal', 'Firme', 'Intensa'].map((t, k) => `<button type="button" style="left:${k / 3 * 100}%" tabindex="-1" data-meta="${PF_METAS[k]}">${t}</button>`).join('')}</div></section>`;
+}
+function pfMapaHTML() {
+  const now = new Date(), m = pfMapa(S.days, dkActive(now), now), n = streakNow(), dias = m.filter(x => x.lit).length;
+  const meses = Array.from({ length: 18 }, (_, s) => { const d = m[s * 7].d, a = s ? m[(s - 1) * 7].d : null; return !a || a.getMonth() !== d.getMonth() ? d.toLocaleDateString('es', { month: 'short' }).replace('.', '') : ''; });
+  return `<section class="pf-c pf-mapa"><div class="pf-cab"><h2>Actividad</h2><button class="dk-link pf-mas" type="button" data-dk="streak">Ver el mes</button></div>
+    <div class="pm-cifras"><p class="fuego">${ICON.flame}<b>${n}</b> ${n === 1 ? 'día' : 'días'} de racha</p><p>${ICON.trophy}<b>${Math.max(S.maxStreak || 0, n)}</b> la más larga</p><p>${ICON.calendar}<b>${dias}</b> ${dias === 1 ? 'día' : 'días'} en 18 semanas</p></div>
+    <div class="pm-mapa" tabindex="0" role="group" aria-label="Actividad por día. Usa las flechas."><div class="pm-meses" aria-hidden="true">${meses.map((t, s) => `<span style="grid-column:${s + 1}">${t}</span>`).join('')}</div><div class="pm-g">${m.map((x, i) => (x.futuro ? '<span class="no"></span>' : `<button type="button" tabindex="-1" data-dia="${i}" class="f${pfFuerza(x, S.goal)}${x.hoy ? ' hoy' : ''}" aria-label="${x.d.toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' })}: ${x.lit ? (x.xp ? `${x.xp} XP` : 'con actividad') : 'sin actividad'}"></button>`)).join('')}</div></div>
+    <p class="pm-dia" role="status">Toca un día para ver cuánto hiciste.</p></section>`;
+}
+function pfLogrosHTML() {
+  const xs = pfLogros(pfDatos()), ok = xs.filter(x => x.ok).length;
+  return `<section class="pf-c pf-logros"><div class="pf-cab"><h2>Logros</h2><p>${ok} de ${xs.length}</p></div><ul class="pf-lg">${xs.map(x => `<li><button type="button" class="lg-b${x.ok ? ' ok' : ''}" data-logro="${x.id}" aria-expanded="false"><span class="lg-in"><span class="lg-f">${aroHTML(x.v / x.meta, ICON[x.icono] || ICON.star)}<b>${x.t}</b><small>${x.ok ? 'Conseguido' : `${x.v} de ${x.meta}`}</small></span><span class="lg-a" aria-hidden="true">${x.p}${x.ok ? '' : `<i>Te ${x.meta - x.v === 1 ? 'falta' : 'faltan'} ${x.meta - x.v}</i>`}</span></span><span class="hm-sr">. ${x.p}</span></button></li>`).join('')}</ul></section>`;
+}
+function pfCursosHTML() {
+  const mine = myCourses();
+  return `<section class="pf-c pf-cursos"><div class="pf-cab"><h2>Tus cursos</h2></div>${mine.length ? `<div class="pc-l">${mine.map(c => { const ls = lessonsOf(c), d = ls.filter(isDone).length; return `<button type="button" data-dk-open="${c.id}" style="--c:${c.color}">${aroHTML(d / ls.length, courseArt(c, 'md'))}<span><b>${esc(c.name)}</b><small>${d} de ${ls.length} lecciones</small></span>${ICON.right}</button>`; }).join('')}</div>` : '<p class="pc-no">Aún no has comprado ningún curso.</p><button class="btn ghost" type="button" data-dk="tienda">Ver la tienda</button>'}</section>`;
+}
+// ---------- vida ----------
+function pfBind(root) {
+  const zona = () => $('.cn-zona', root), q = s => $(s, root);
+  const carne = foco => { const t = document.createElement('template'); t.innerHTML = pfCarneHTML().trim(); const f = t.content.firstElementChild; f.classList.add('quieta'); zona().replaceWith(f); ligaCarne(); if (foco) q(foco)?.focus({ preventScroll: true }); };
+  const ligaCarne = () => {
+    const z = zona(), nom = $('.name-input', z), dorso = () => { $('.cn-frente', z).inert = pfVer.atras; $('.cn-dorso', z).inert = !pfVer.atras; };
+    dorso(); inclina(z); cuentaBind(z);
+    nom.oninput = () => { S.name = nom.value.trim(); save(); };
+    nom.onchange = () => { S.name = nom.value = nom.value.trim(); save(); if (pfCarne().pose === 'letra') $('.cn-foto', z).innerHTML = pfCara(pfCarne()); };
+    nom.onkeydown = e => { if (e.key === 'Enter') nom.blur(); };
+    z.onclick = e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.cn === 'voltea') { pfVer.atras = !pfVer.atras; z.classList.toggle('atras', pfVer.atras); $('span', b).textContent = pfVer.atras ? 'Ver el frente' : Cuenta.codigo ? 'Ver mi código' : 'Voltear'; return dorso(); }
+      if (b.dataset.cn === 'edita') { pfVer.edita = !pfVer.edita; return carne('[data-cn="edita"]'); }
+      if (b.dataset.pose || b.dataset.color) { S.carne = { ...pfCarne(), ...(b.dataset.pose ? { pose: b.dataset.pose } : { color: b.dataset.color }), at: Date.now() }; save(); carne(b.dataset.pose ? `[data-pose="${b.dataset.pose}"]` : `[data-color="${b.dataset.color}"]`); }
+    };
+    $('[data-settings]', z).onclick = () => { profileSub = 'settings'; renderProfile(); view.scrollTop = 0; $('[data-back]', view).focus({ preventScroll: true }); };
+  };
+  ligaCarne();
+  // Meta: se arrastra, con flechas o tocando el nombre. La app entera usa S.goal.
+  const pon = (g, foco) => { if (g === S.goal) return pintaMeta(); S.goal = g; save(); const t = document.createElement('template'); t.innerHTML = pfMetaHTML().trim(); q('.pf-meta').replaceWith(t.content.firstElementChild); ligaMeta(); if (foco) q('.pm-riel').focus({ preventScroll: true }); pintaMapa(); };
+  const pintaMeta = () => q('.pf-meta').style.setProperty('--p', Math.max(0, PF_METAS.indexOf(S.goal)) / (PF_METAS.length - 1));
+  const ligaMeta = () => {
+    const r = q('.pm-riel'), cerca = e => { const b = r.getBoundingClientRect(), p = Math.max(0, Math.min(1, (e.clientX - b.left) / b.width)); return [p, PF_METAS[Math.round(p * (PF_METAS.length - 1))]]; };
+    let id = null;
+    r.onpointerdown = e => { if (e.button) return; id = e.pointerId; r.setPointerCapture(id); r.classList.add('mano'); r.onpointermove(e); };
+    r.onpointermove = e => { if (e.pointerId !== id) return; const [p, g] = cerca(e); q('.pf-meta').style.setProperty('--p', p.toFixed(3)); q('.pm-n b').textContent = g; };
+    const fin = e => { if (e.pointerId !== id) return; id = null; r.classList.remove('mano'); if (pfVer.pend) { pfVer.pend = false; setTimeout(() => { if (tab === 'profile' && !profileSub) renderProfile(); }); } if (e.type === 'pointerup') pon(cerca(e)[1], true); else { q('.pm-n b').textContent = S.goal; pintaMeta(); } };
+    r.onpointerup = fin; r.onpointercancel = fin;
+    r.onkeydown = e => { const k = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1, Home: -9, End: 9 }[e.key]; if (!k) return; e.preventDefault(); pon(PF_METAS[Math.max(0, Math.min(PF_METAS.length - 1, Math.max(0, PF_METAS.indexOf(S.goal)) + k))], true); };
+    root.querySelectorAll('[data-meta]').forEach(b => { b.onclick = () => pon(+b.dataset.meta, true); });
+  };
+  ligaMeta();
+  const m = pfMapa(S.days, dkActive(new Date()), new Date()), caja = q('.pm-mapa');
+  const pintaMapa = () => caja.querySelectorAll('[data-dia]').forEach(b => { const x = m[+b.dataset.dia]; b.className = `f${pfFuerza(x, S.goal)}${x.hoy ? ' hoy' : ''}${pfVer.dia === x.key ? ' on' : ''}`; });
+  const dia = i => { const x = m[i]; if (!x || x.futuro) return; pfVer.dia = x.key; pintaMapa(); $('.pm-dia', root).innerHTML = `<b>${esc(x.d.toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' }))}</b>: ${x.lit ? (x.xp ? `${x.xp} XP${x.xp >= S.goal ? ', meta cumplida' : ''}` : 'con actividad') : 'sin actividad'}`; caja.querySelector(`[data-dia="${i}"]`)?.scrollIntoView({ block: 'nearest', inline: 'nearest' }); };
+  caja.onclick = e => { const b = e.target.closest('[data-dia]'); if (b) dia(+b.dataset.dia); };
+  caja.onkeydown = e => { const k = { ArrowRight: 7, ArrowLeft: -7, ArrowDown: 1, ArrowUp: -1 }[e.key]; if (!k) return; e.preventDefault(); const i = m.findIndex(x => x.key === pfVer.dia); dia(i < 0 ? m.findIndex(x => x.hoy) : i + k); };
+  caja.scrollLeft = caja.scrollWidth;
+  const sel = m.findIndex(x => x.key === pfVer.dia); if (sel >= 0) dia(sel);
+  root.querySelectorAll('[data-logro]').forEach(b => { b.onclick = () => { const on = b.getAttribute('aria-expanded') !== 'true'; b.setAttribute('aria-expanded', on); }; });
 }
 ;
 //#archivo js/app.js
@@ -17895,42 +18019,21 @@ function startLesson(c, l) {
 
 // ---- pestaña Perfil ----
 // Lo que «Reiniciar progreso» no toca.
-const RESET_KEEP = ['tourDone', 'tutorias', 'cuenta', 'unlockAll', 'theme', 'name', 'goal', 'voice', 'sfx', 'videoQuality', 'videoMuted', 'videoSpeed', 'hideInstall', 'guides'];
+const RESET_KEEP = ['tourDone', 'carne', 'tutorias', 'cuenta', 'unlockAll', 'theme', 'name', 'goal', 'voice', 'sfx', 'videoQuality', 'videoMuted', 'videoSpeed', 'hideInstall', 'guides'];
 let profileSub = null;   // 'settings': pantalla de Ajustes dentro de la pestaña Perfil (null = el perfil)
 function renderProfile() {
   if (profileSub === 'settings') return renderSettings();
-  const all = cursosConAcceso().flatMap(lessonsOf), doneN = all.filter(isDone).length;
-  const acc = S.answered ? Math.round((100 * S.correct) / S.answered) : 0;
   const saved = Object.keys(S.saved).filter(id => S.saved[id]).map(id => findCurio(id) || findLesson(id)).filter(x => x && (x.l.fact || cursoVisible(x.c)));   // nada guardado de un curso oculto
-  view.innerHTML = `<div class="profile"><div class="pf-side">
-    <section class="me">
-      <div class="avatar">${esc((S.name || 'Z')[0].toUpperCase())}</div>
-      <div class="me-body">
-        <input class="name-input" value="${esc(S.name)}" placeholder="Tu nombre" maxlength="24" aria-label="Tu nombre">
-        <p class="muted">Fundamentos de ingeniería</p>
-      </div>
-      <button class="icon-btn prof-gear" data-settings aria-label="Ajustes">${ICON.gear}</button>
-    </section>
-    ${cuentaCard()}</div><div class="pf-main">
-    <section class="stats">
-      <div class="stat fire">${ICON.flame}<b>${streakNow()}</b><small>Días de racha</small></div>
-      <div class="stat gold">${ICON.bolt}<b>${S.xp}</b><small>XP total</small></div>
-      <div class="stat brand">${ICON.check}<b>${doneN}/${all.length}</b><small>Lecciones</small></div>
-      <div class="stat ok">${ICON.target}<b>${acc}%</b><small>Precisión</small></div>
-    </section>
-    <section class="card pf-goal">
-      <h3>Meta de hoy</h3>
-      <p class="muted">${todayXP()} de ${S.goal} XP</p>
-      <div class="bar"><i style="width:${Math.min(1, todayXP() / S.goal) * 100}%"></i></div>
-    </section>
-    ${librosHTML(true)}${dkMesHTML()}${dkCursosHTML()}
-    ${saved.length ? `<section class="card pf-saved"><h3>Clips guardados</h3>${saved.map(({ c, l }) =>
+  if ($('.pm-riel.mano', view)) { pfVer.pend = true; return; }   // se está arrastrando la meta: se repinta al soltar
+  const sigue = pfGuarda();   // un repintado desde afuera no mueve la página, ni el foco, ni borra el nombre a medias
+  view.innerHTML = `<div class="profile"><div class="pf">
+    ${pfCarneHTML()}${pfMetaHTML()}${pfMapaHTML()}${pfLogrosHTML()}${pfCursosHTML()}
+    <div class="pf-cuenta">${cuentaCard()}</div>${librosHTML(true)}
+    ${saved.length ? `<section class="pf-c pf-saved"><div class="pf-cab"><h2>Clips guardados</h2></div>${saved.map(({ c, l }) =>
       `<button class="saved-row" data-${l.fact ? 'curio' : 'lesson'}="${l.id}" style="--c:${c.color}">${ICON.bookmark}<span><b>${esc(l.title)}</b><small>${esc(c.name)}</small></span></button>`).join('')}</section>` : ''}
   </div></div>`;
-  const nameInp = $('.name-input', view);
-  nameInp.onchange = () => { S.name = nameInp.value = nameInp.value.trim(); save(); $('.avatar', view).textContent = (S.name || 'Z')[0].toUpperCase(); };
-  cuentaBind(view); dkBind(view); bindLibros(view);
-  $('[data-settings]', view).onclick = () => { profileSub = 'settings'; renderProfile(); view.scrollTop = 0; $('[data-back]', view).focus({ preventScroll: true }); };
+  cuentaBind(view); dkBind(view); bindLibros(view); pfBind(view);   // el piñón (aria-label="Ajustes", data-settings) pone profileSub = 'settings'
+  sigue();
   view.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => {
     const { c, l } = findLesson(b.dataset.lesson);
     if (isUnlocked(c, l)) startLesson(c, l); else toast(`Primero completa las lecciones anteriores de ${esc(c.name)}.`);
@@ -17959,8 +18062,7 @@ function renderSettings() {
     </section>
     <section class="set-group">
       <h3 class="eyebrow">Apariencia</h3>
-      <div class="set-row">${row('moon', 'Tema', themes.find(t => t[0] === S.theme)?.[1] || 'Según el sistema',
-        `<span class="theme-seg" role="group" aria-label="Tema">${themes.map(([v, l, ic]) => `<button data-theme-opt="${v}" aria-label="${l}" aria-pressed="${S.theme === v}">${ICON[ic]}</button>`).join('')}</span>`)}</div>
+      <div class="theme-cards" role="group" aria-label="Tema">${themes.map(([v, l, ic]) => `<button type="button" class="tc ${v}" data-theme-opt="${v}" aria-pressed="${S.theme === v}"><span class="tc-v" aria-hidden="true"><i></i><i></i><i></i></span><span class="tc-t">${ICON[ic]}${l}</span></button>`).join('')}</div>
     </section>
     ${SIN_CANDADOS ? `<section class="set-group">
       <h3 class="eyebrow">Administración</h3>
