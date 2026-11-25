@@ -303,7 +303,7 @@ cualquier `L(x) = R(x)`). Reutilizables:
 Spec `2026-11-25-instituciones`, pruebas `tests/instituciones.test.js`. `/instituciones/` (pública, cotizador), `/instituciones/portal/`
 (gestores y docentes; `?demo` = datos inventados), `/admin#instituciones`, sección `#pz-inst` de la landing; cuentas puras en
 `js/instituciones.js`, metas del estudiante en `js/metas.js`. La base es `supabase/migrations/20261125000001_instituciones.sql`
-(probada con pglite; **confirmar que esté aplicada en Supabase**). El acceso por contrato no se copia a `accesos`: lo mira `privado.puede`.
+(aplicada el 2026-11-25; se prueba antes con pglite). El acceso por contrato no se copia a `accesos`: lo mira `privado.puede`.
 
 ## Interfaz compacta en computador
 
