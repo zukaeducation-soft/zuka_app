@@ -1,91 +1,5 @@
 // Preuniversitario · mundo 15 «Teoría de números»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setLesson, setExam }) => {
-  const isP = n => { if (n < 2) return false; for (let d = 2; d * d <= n; d++) if (n % d === 0) return false; return true; };
-  const X = n => Math.floor(n / 10), Y = n => n % 10;
-  const pairs = (x, sep) => x.split(sep).map(Number);
-
-  setLesson('pu-nu-1', [
-    play('criba-primos', 'La criba de Eratóstenes', { rounds: [{ N: 40 }] },
-      'Basta cribar con 2, 3 y 5: como $7 \\cdot 7 = 49$ pasa de 40, todo compuesto hasta 40 ya cayó con un primo menor. Quedan 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31 y 37.',
-      { hint: 'Toca el número libre más pequeño: es primo. Sus múltiplos caen.' }),
-    play('arbol-factores', 'El árbol de factores', { rounds: [{ n: 84 }, { n: 150 }] },
-      '$84 = 2^2 \\cdot 3 \\cdot 7$ y $150 = 2 \\cdot 3 \\cdot 5^2$: sin importar por dónde empieces, las hojas son las mismas.',
-      { hint: 'Prueba primero con 2; cuando ya no se pueda, con 3, luego con 5…' }),
-    play('tabla-divisores', 'Contar divisores', { rounds: [{ p: [2, 3], e: [2, 2] }, { p: [3, 5], e: [1, 2] }] },
-      'Cada divisor elige cuántos de cada primo lleva: $36 = 2^2 \\cdot 3^2$ tiene $3 \\cdot 3 = 9$ divisores y $75 = 3 \\cdot 5^2$ tiene $2 \\cdot 3 = 6$.',
-      { hint: 'El exponente 0 también cuenta: con $5^3$ habría cuatro opciones, $5^0$, $5^1$, $5^2$ y $5^3$.' }),
-    play('cifra-faltante', 'La cifra que falta', { rounds: [{ tpl: '4_72', by: 9 }, { tpl: '31_6', by: 4 }, { tpl: '7_83', by: 11 }] },
-      'Por 9: $4 + x + 7 + 2 = 13 + x$ debe ser múltiplo de 9, $x = 5$. Por 4: el final $\\_6$ debe ser múltiplo de 4 (16, 36, 56…). Por 11: $7 - x + 8 - 3 = 12 - x$, $x = 1$.',
-      { hint: 'Usa el criterio que pide el divisor y mira qué cifra lo cumple.' }),
-    play('tablero-cifras', 'El primo escondido', { rounds: [{ conds: [{ say: 'es primo', f: isP }, { say: 'sus cifras suman 10', f: n => X(n) + Y(n) === 10 }, { say: 'es mayor que 50', f: n => n > 50 }] }] },
-      'Los de cifras que suman 10 son 19, 28, 37, 46, 55, 64, 73, 82 y 91; primos: 19, 37 y 73 (91 = 7 · 13). Mayor que 50: 73.',
-      { hint: 'Prueba los que suman 10 y descarta los pares y los múltiplos de 7.' }),
-    play('contraejemplo', '¿Por 2 y por 4 es por 8?', { rounds: [{ claim: 'Si un número es divisible por 2 y por 4, es divisible por 8', items: [8, 16, 24, 12, 40], bad: x => x % 4 === 0 && x % 8 !== 0 }] },
-      '12 es divisible por 2 y por 4, pero no por 8: 4 ya contiene al 2, no se multiplican.',
-      { hint: 'Busca un múltiplo de 4 que no sea múltiplo de 8.' }),
-    play('vuela-precios', 'Vuela al divisor', { rounds: [{ title: 'Primos', items: [
-      { ask: '¿Cuántos divisores tiene 2⁴?', options: ['5', '4', '8'], answer: 0 },
-      { ask: '¿2 346 es divisible por 3?', options: ['sí', 'no', 'no se sabe'], answer: 0 },
-      { ask: 'El único primo par', options: ['2', '1', '4'], answer: 0 },
-    ] }] }, '$2^4$: exponentes 0 a 4, cinco divisores. $2 + 3 + 4 + 6 = 15$, múltiplo de 3. El 2.',
-      { hint: 'Exponente + 1; suma de cifras; el 1 no es primo.' }),
-  ]);
-
-  setLesson('pu-nu-2', [
-    play('ritmos-mcm', 'Cuándo vuelven a coincidir', { rounds: [{ a: 6, b: 8, max: 30, labels: ['luz roja', 'luz verde'] }, { a: 10, b: 15, max: 40, labels: ['bus A', 'bus B'] }] },
-      'Las marcas de 6 y de 8 coinciden en 24 por primera vez: es el MCM. Las de 10 y 15, en 30.',
-      { hint: 'Ve marca por marca de la fila más espaciada y mira si la otra fila también tiene.' }),
-    play('corta-mcd', 'La baldosa más grande', { rounds: [{ a: 12, b: 18 }, { a: 20, b: 15 }] },
-      'La baldosa tiene que caber justo en los dos lados: su lado divide a 12 y a 18. La más grande es 6. En $20 \\times 15$, es 5.',
-      { hint: 'Prueba tamaños que dividan a los dos lados y quédate con el mayor.' }),
-    play('pares-primos', 'Los primos comunes', { rounds: [{ a: 60, b: 84 }, { a: 45, b: 75 }] },
-      '$60 = 2 \\cdot 2 \\cdot 3 \\cdot 5$ y $84 = 2 \\cdot 2 \\cdot 3 \\cdot 7$: comunes $2 \\cdot 2 \\cdot 3 = 12$ (MCD); con todos, $12 \\cdot 5 \\cdot 7 = 420$ (MCM). $45$ y $75$: MCD 15, MCM 225.',
-      { hint: 'Cada ficha solo puede tener una pareja.' }),
-    play('arbol-factores', 'Factoriza para el MCM', { rounds: [{ n: 96 }] },
-      '$96 = 2^5 \\cdot 3$: el 2 se repite cinco veces. Con las dos descomposiciones a la vista se arman el MCM y el MCD.',
-      { hint: 'Divide entre 2 mientras se pueda; lo que quede, pruébalo con 3.' }),
-    play('tablero-cifras', 'Múltiplo de dos a la vez', { rounds: [{ conds: [{ say: 'es múltiplo de 6', f: n => n % 6 === 0 }, { say: 'es múltiplo de 15', f: n => n % 15 === 0 }, { say: 'es mayor que 70', f: n => n > 70 }] }] },
-      'Múltiplo de 6 y de 15 es múltiplo de su MCM, 30: 30, 60, 90. Mayor que 70: 90.',
-      { hint: 'Ser múltiplo de los dos es ser múltiplo del MCM.' }),
-    play('bolsas-residuo', 'Repartir sin que sobre', { rounds: [{ N: 84, d: 12 }, { N: 60, d: 9 }] },
-      '84 en bolsas de 12 son 7 sin sobrar: 12 divide a 84. 60 en bolsas de 9: 6 bolsas y sobran 6.',
-      { hint: 'El residuo es 0 justo cuando el divisor divide al número.' }),
-    play('rompe-cambios', 'Manda la pelota al MCM o al MCD', { miss: 'MCM: coincidir; MCD: partir igual', rounds: [{ title: 'MCM y MCD', items: [
-      { ask: 'MCM de 4 y 6', options: ['12', '24', '2'], answer: 0 },
-      { ask: 'MCD de 18 y 24', options: ['6', '3', '72'], answer: 0 },
-      { ask: 'Alarmas cada 9 y 12 minutos: coinciden cada', options: ['36', '108', '3'], answer: 0 },
-    ] }] }, 'Los múltiplos de 4 y 6 se encuentran en 12. 18 y 24 comparten $2 \\cdot 3$. MCM de 9 y 12: 36.',
-      { hint: 'El MCM es múltiplo de los dos; el MCD, divisor de los dos.' }),
-  ]);
-
-  setLesson('pu-nu-3', [
-    play('ultima-cifra', 'El ciclo de la última cifra', { rounds: [{ a: 2, n: 35 }, { a: 4, n: 20 }] },
-      'Las de $2^n$ giran 2, 4, 8, 6: $35$ deja residuo 3, termina en 8. Las de $4^n$ alternan 4 y 6: exponente par, 6.',
-      { hint: 'Encuentra el ciclo y usa el residuo del exponente.' }),
-    play('bolsas-residuo', 'El residuo', { rounds: [{ N: 100, d: 7 }, { N: 53, d: 4 }] },
-      '$100 = 7 \\cdot 14 + 2$ y $53 = 4 \\cdot 13 + 1$.',
-      { hint: 'El residuo siempre es menor que el divisor.' }),
-    play('ciclo-colores', 'El residuo en un collar', { rounds: [{ cyc: ['sun', 'coral', 'sky', 'mint', 'brand'], N: 88 }] },
-      '$88 = 5 \\cdot 17 + 3$: es la tercera del grupo.',
-      { hint: 'Divide entre el largo del grupo.' }),
-    play('ciclo-reloj', 'El residuo de los días', { rounds: [{ start: 3, n: 250 }] },
-      '$250 = 7 \\cdot 35 + 5$: jueves más 5 días es martes.',
-      { hint: 'Solo cuentan los días que sobran de semanas completas.' }),
-    play('contraejemplo', 'Paridad: busca el que falla', { rounds: [
-      { claim: 'La suma de dos impares es impar', items: ['2 + 4', '6 + 1', '3 + 5', '8 + 2'], bad: x => { const [a, b] = pairs(x, ' + '); return a % 2 && b % 2 && (a + b) % 2 === 0; } },
-      { claim: 'Si un producto es par, los dos factores son pares', items: ['2 · 4', '6 · 8', '3 · 4', '10 · 2'], bad: x => { const [a, b] = pairs(x, ' · '); return (a * b) % 2 === 0 && (a % 2 || b % 2); } },
-    ] }, '$3 + 5 = 8$: impar + impar da par. $3 \\cdot 4 = 12$ es par con un factor impar: basta un factor par.',
-      { hint: 'Revisa la paridad de cada ejemplo.' }),
-    play('tablero-cifras', 'Dos residuos a la vez', { rounds: [{ conds: [{ say: 'entre 5 deja residuo 3', f: n => n % 5 === 3 }, { say: 'entre 4 deja residuo 1', f: n => n % 4 === 1 }, { say: 'es menor que 30', f: n => n < 30 }] }] },
-      'Los que dejan 3 entre 5: 13, 18, 23, 28; de esos, solo 13 deja 1 entre 4.',
-      { hint: 'Lista los que cumplen una condición y prueba la otra.' }),
-    play('vuela-precios', 'Vuela al residuo', { rounds: [{ title: 'Residuos', items: [
-      { ask: 'impar · impar es…', options: ['impar', 'par', 'depende'], answer: 0 },
-      { ask: 'Residuo de 17 · 23 entre 5', options: ['1', '2', '3'], answer: 0 },
-      { ask: 'Última cifra de 3²⁰', options: ['1', '3', '9'], answer: 0 },
-    ] }] }, 'Impar por impar es impar. Residuos 2 y 3: $2 \\cdot 3 = 6$, residuo 1. Las de $3^n$ giran 3, 9, 7, 1: exponente múltiplo de 4, 1.',
-      { hint: 'Trabaja con los residuos, no con los números grandes.' }),
-  ]);
+PU_JUEGOS.push(({ setExam }) => {
 
   setExam('pu-numeros', 'Teoría de números', [
     ['pu-nu-1', 'Todo número se escribe como producto de primos.',
@@ -104,16 +18,38 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 });
 
 // Mundo 15 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
-  diezLesson('pu-nu-1', [
-    ['criba-primos', 0, 'La criba de Eratóstenes: tacha los múltiplos y quédate con los primos hasta 40'],
-    ['arbol-factores', 0, 'Descompón el 84 en factores primos con el árbol', '$84 = 2 \\cdot 42 = 2 \\cdot 2 \\cdot 21 = 2^2 \\cdot 3 \\cdot 7$. No importa por dónde se empiece: los primos del final son los mismos.'],
-    ['tabla-divisores', 0, 'Cuenta los divisores de $2^2 \\cdot 3^2$ con la tabla', 'Cada divisor elige cuántos 2 lleva (0, 1 o 2) y cuántos 3 (0, 1 o 2): $3 \\cdot 3 = 9$ divisores.'],
-    ['cifra-faltante', 0, 'El recibo número 4_72 es divisible por 9, pero se borró una cifra. Encuéntrala', 'Las cifras deben sumar un múltiplo de 9: $4 + 7 + 2 = 13$, y con un 5 llega a 18.'],
-    ['tablero-cifras', 0, 'Un número primo de dos cifras, mayor que 50, cuyas cifras suman 10. Encuéntralo', 'Los que suman 10 y pasan de 50 son 55, 64, 73, 82 y 91. Solo el 73 es primo ($91 = 7 \\cdot 13$).'],
-    ['contraejemplo', 0, 'Alguien afirma: «si un número es divisible por 2 y por 4, es divisible por 8». Busca el que lo tumba', 'El 12 es divisible por 2 y por 4, pero no por 8. Ser divisible por 4 ya incluye serlo por 2: no se gana nada.'],
-    ['vuela-precios', 0, 'Vuela al divisor', '$2^4$ tiene 5 divisores: 1, 2, 4, 8 y 16. En 2 346 las cifras suman 15: es divisible por 3. El único primo par es el 2.'],
-  ], [
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/numeros-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-nu-1', [
+    play('toca-primos', '¿Cuáles son **primos**? Toca todos.', { nums: [1, 2, 29, 33, 49, 61], ok: 'Cada uno tiene exactamente dos divisores: 1 y él.' },
+      'El 2, el 29 y el 61 solo se acomodan en una fila. $33 = 3 \\cdot 11$, $49 = 7 \\cdot 7$ y el 1 tiene un solo divisor.',
+      { hint: 'Intenta acomodar cada cantidad en filas de 2, de 3, de 5 y de 7 sin que sobre.' }),
+    play('arbol-primos', 'Descompón el **132** dividiendo siempre entre el primo **más pequeño** que se pueda: a la izquierda el primo y a la derecha lo que queda.', { n: '132', metas: ['2', '66', '2', '33', '3', '11'], fichas: ['2', '66', '2', '33', '3', '11', '6', '44', '4'],
+      mira: ['132 es par.', 'Divide 132 entre el primo que pusiste.', 'Lo que queda vuelve a ser par.', 'Divide otra vez.', 'Ya no es par: prueba con el primo que sigue.', 'Divide por última vez: debe quedar un primo.'], trampas: { '0:3': 'El 3 divide, pero hay un primo más pequeño.', '0:4': 'El 4 no es primo.', '0:6': 'El 6 no es primo.', '1:44': 'Eso es 132 entre 3.', '2:6': 'El 6 no es primo.', '2:3': 'El 3 divide, pero hay un primo más pequeño.' }, ok: '132 = 2 · 2 · 3 · 11.' },
+      '$132 = 2 \\cdot 66$, $66 = 2 \\cdot 33$ y $33 = 3 \\cdot 11$: $132 = 2^2 \\cdot 3 \\cdot 11$.',
+      { hint: 'Prueba primero con 2; cuando ya no se pueda, sigue con 3, 5, 7…' }),
+    play('opciones-divisor', '$144 = 2^4 \\cdot 3^2$. ¿De cuántas maneras puede un divisor llevar el **2**, de cuántas el **3**, y cuántos divisores hay?', { s: '2⁴ · 3²', et: ['el 2', 'el 3', 'divisores'], ops: ['·', '='], metas: ['5', '3', '15'], fichas: ['5', '3', '15', '4', '2', '8', '6'],
+      mira: ['Cuenta desde ninguna vez hasta su exponente.', 'Cuenta desde ninguna vez hasta su exponente.', 'Cada manera del 2 va con cada manera del 3.'], trampas: { '0:4': 'También puede no llevar ningún 2.', '1:2': 'También puede no llevar ningún 3.', '2:8': 'Las opciones se multiplican, no se suman.' }, ok: 'Exponente más uno, y se multiplica.' },
+      'El 2: de 0 a 4 veces, 5 maneras. El 3: de 0 a 2 veces, 3 maneras. $5 \\cdot 3 = 15$ divisores.',
+      { hint: 'Un divisor puede llevar un primo cero veces: eso también es una manera.' }),
+    play('cifra-que-falta', 'Al número **27_** se le borró la última cifra. Se sabe que es divisible entre **6**. Toca todas las cifras que sirven.', { a: '2 7', by: 6, ok: 'Terminan en par y las cifras suman un múltiplo de 3.' },
+      'Debe ser par y sus cifras sumar un múltiplo de 3: $9 + x$ con $x$ par. Sirven 0 y 6.',
+      { hint: 'Entre 6 es cumplir con 2 y con 3 a la vez.' }),
+    play('tabla-criterios', 'Sin dividir: toca las casillas en las que la división es **exacta**.', { f: [648, 735, 1332], c: [3, 4, 5, 9], ok: 'Suma de cifras para 3 y 9; dos últimas para 4; última para 5.' },
+      '648: suma 18 y termina en 48: entre 3, 4 y 9. 735: suma 15 y termina en 5: entre 3 y 5. 1332: suma 9 y termina en 32: entre 3, 4 y 9.',
+      { hint: 'Para 3 y 9 suma las cifras; para 4 mira las dos últimas; para 5, la última.' }),
+    play('siempre-multiplo', 'Un número es múltiplo de **12**, pero no se sabe cuál. ¿Qué es cierto **siempre**? Toca todas.', { casos: [{ t: 'es múltiplo de 4', si: true }, { t: 'es múltiplo de 24', no: 'El 12 es múltiplo de 12 y no de 24.' }, { t: 'es múltiplo de 6', si: true }, { t: 'es múltiplo de 8', no: 'El 12 es múltiplo de 12 y no de 8.' }, { t: 'es divisible entre 3', si: true }], falta: 'Falta otra: los divisores de 12 dividen a todos sus múltiplos.', ok: 'Todo divisor de 12 divide también a sus múltiplos.' },
+      'Un múltiplo de 12 es $2 \\cdot 2 \\cdot 3$ por algo: lleva dentro el 3, el 4 y el 6. El 8 y el 24 piden otro 2 que puede no estar.',
+      { hint: 'Escribe 12 en primos. ¿Cuáles de esos números se arman con ellos?' }),
+    play('basta-con', '¿En cuáles **basta** revisar esos dos números para estar seguro de que la división es exacta? Toca todas.', { casos: [{ t: 'entre 15: con el 3 y el 5', si: true }, { t: 'entre 12: con el 2 y el 6', no: 'El 18 cumple con 2 y con 6, pero no es divisible entre 12.' }, { t: 'entre 12: con el 3 y el 4', si: true }, { t: 'entre 8: con el 2 y el 4', no: 'El 12 cumple con 2 y con 4, pero no es divisible entre 8.' }, { t: 'entre 18: con el 2 y el 9', si: true }], falta: 'Falta otra: sirve si los dos no comparten primos y, multiplicados, dan el número grande.', ok: 'No comparten primos y, multiplicados, dan el número grande.' },
+      '3 y 5, 3 y 4, 2 y 9 no comparten primos y, multiplicados, dan 15, 12 y 18. El 2 ya está dentro del 6 y del 4: no agrega nada.',
+      { hint: 'Busca un número que cumpla los dos y no cumpla el grande. Si lo hay, no basta.' }),
+    play('sube-divisores', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '$280 = 2^3 \\cdot 5 \\cdot 7$. ¿Cuántos divisores tiene?', r: 16, c: '4 \\cdot 2 \\cdot 2', e: { 3: 'Multiplicaste los exponentes: a cada uno se le suma 1.', 8: 'Las opciones se multiplican, no se suman.' } },
+      { q: '¿Cuál es el **mayor primo** que divide a **138**?', r: 23, c: '138 \\div 6', e: { 3: 'Divide, pero hay otro mayor.', 2: 'Divide, pero hay otro mayor.' } },
+      { q: '¿Cuál es el **mayor primo** menor que **40**?', r: 37, c: '1 \\cdot 37', e: { 39: 'El 39 es 3 · 13.' } }] },
+      '$4 \\cdot 2 \\cdot 2 = 16$. $138 = 2 \\cdot 3 \\cdot 23$. El 39 es $3 \\cdot 13$ y el 38 es par: 37.',
+      { hint: 'Descompón en primos, y para saber si uno lo es usa los criterios.' }),
     sol('¿Cuántos divisores positivos tiene el número 200?',
       ['$200 = 8 \\cdot 25 = 2^3 \\cdot 5^2$: el exponente del 2 es [[3]] y el del 5 es [[2]]', 'Un divisor puede llevar el 2 de [[4]] maneras (0, 1, 2 o 3 veces) y el 5 de 3 maneras', 'Divisores: $4 \\cdot 3 =$ [[12]]'],
       ['5', '6', '10'],
@@ -130,15 +66,40 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Revisa los candidatos en orden y aplica las reglas de divisibilidad: las cifras de 51 suman 6.'),
   ]);
 
-  diezLesson('pu-nu-2', [
-    ['ritmos-mcm', 1, 'El bus A pasa cada 10 minutos y el bus B cada 15. Salen juntos: ¿cuándo vuelven a coincidir?', 'Coinciden en los múltiplos comunes de 10 y 15; el primero es el MCM: 30 minutos.'],
-    ['corta-mcd', 0, 'Un piso de $12 \\times 18$ se quiere cubrir con baldosas cuadradas iguales, lo más grandes posible. Halla su lado', 'El lado debe dividir a 12 y a 18: el mayor divisor común es 6.'],
-    ['pares-primos', 0, 'Empareja los primos comunes de 60 y 84 para hallar su MCD', '$60 = 2^2 \\cdot 3 \\cdot 5$ y $84 = 2^2 \\cdot 3 \\cdot 7$: comparten $2^2 \\cdot 3 = 12$.'],
-    ['arbol-factores', 0, 'Para hallar un MCM primero se factoriza. Descompón el 96', '$96 = 2 \\cdot 48 = 2 \\cdot 2 \\cdot 24$, y así hasta $2^5 \\cdot 3$: cinco veces el 2 y una vez el 3.'],
-    ['tablero-cifras', 0, 'Un número de dos cifras, mayor que 70, que es múltiplo de 6 y de 15 a la vez. Encuéntralo', 'Los múltiplos de 6 y de 15 a la vez son los múltiplos de su MCM, 30: 30, 60, 90. El único mayor que 70 es 90.'],
-    ['bolsas-residuo', 0, 'Se reparten 84 dulces en bolsas de 12. Llena las bolsas', '$84 = 12 \\cdot 7$: salen 7 bolsas y no sobra nada. El 12 es divisor de 84.'],
-    ['rompe-cambios', 0, 'Manda la pelota al MCM o al MCD', 'MCM de 4 y 6: 12. MCD de 18 y 24: 6. Alarmas cada 9 y cada 12 minutos coinciden cada 36.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/numeros-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-nu-2', [
+    play('saltos-cada-una', 'Dos ranas salen juntas: una avanza **10** por salto y la otra **14**. Mueve los saltos de cada una hasta el **primer** lugar en que las dos coinciden.', { a: 10, b: 14, max: 14 },
+      'El primer múltiplo común de 10 y 14 es 70: 7 saltos de 10 y 5 de 14.',
+      { hint: 'El lugar debe ser múltiplo de 10 y de 14. ¿Cuál es el primero?' }),
+    play('paquetes-iguales', 'Hay **54** galletas y **72** dulces. Se arman bolsas **iguales**, sin que sobre nada y con la **mayor** cantidad posible de bolsas. ¿Cuántas bolsas, y qué lleva cada una?', { et: ['bolsas', 'galletas c/u', 'dulces c/u'], metas: ['18', '3', '4'], fichas: ['18', '3', '4', '9', '6', '216', '8'],
+      mira: ['El número de bolsas debe dividir a 54 y a 72, y ser el mayor.', 'Reparte las 54 galletas en las bolsas.', 'Reparte los 72 dulces en las bolsas.'], trampas: { '0:9': 'Reparte exacto, pero se pueden más bolsas.', '0:6': 'Reparte exacto, pero se pueden más bolsas.', '0:216': 'No puede haber más bolsas que galletas.' }, ok: '18 · 3 = 54 y 18 · 4 = 72.' },
+      '$54 = 2 \\cdot 3^3$ y $72 = 2^3 \\cdot 3^2$: el MCD es $2 \\cdot 3^2 = 18$. Van 3 galletas y 4 dulces en cada bolsa.',
+      { hint: 'Repartir sin que sobre es buscar divisores comunes.' }),
+    play('exponentes-mcd', 'Pon los exponentes del MCD y del MCM.', { n: ['2² · 3³ · 5', '2⁴ · 3 · 7'], r: '· 5 · 7', metas: ['2', '1', '4', '3'], fichas: ['2', '1', '4', '3', '6', '0', '2'],
+      mira: ['El MCD lleva solo los doses que tienen los dos.', 'El MCD lleva solo los treses que tienen los dos.', 'El MCM lleva los doses del que más tiene.', 'El MCM lleva los treses del que más tiene.'], trampas: { '0:4': 'El primero no tiene tantos doses.', '1:3': 'El segundo no tiene tantos treses.', '2:6': 'No se suman: basta con los del que más tiene.', '2:2': 'Con esos no alcanza para el segundo.' }, ok: 'MCD con el menor exponente; MCM con el mayor.' },
+      'MCD: $2^2 \\cdot 3$. MCM: $2^4 \\cdot 3^3 \\cdot 5 \\cdot 7$.',
+      { hint: 'El MCD cabe en los dos; en el MCM caben los dos.' }),
+    play('cual-de-los-dos', '¿Cada pregunta se resuelve con el **MCD** o con el **MCM**?', { et: ['baldosa más grande para 10 × 16', 'menor cuadrado, fichas de 10 × 16', 'cuándo suenan dos alarmas juntas', 'mayor número de grupos iguales'], metas: ['MCD', 'MCM', 'MCM', 'MCD'], fichas: ['MCD', 'MCD', 'MCD', 'MCM', 'MCM', 'MCM'],
+      mira: ['La baldosa es un pedazo del 10 y del 16.', 'El lado del cuadrado se arma juntando varias fichas.', 'Se buscan momentos que están en las dos listas, hacia adelante.', 'Se reparten cantidades en partes iguales.'], ok: 'Partir es MCD; juntar hasta coincidir es MCM.' },
+      'La baldosa divide a 10 y a 16: MCD. El cuadrado es múltiplo de 10 y de 16: MCM. Coincidir: MCM. Repartir: MCD.',
+      { hint: 'Pregúntate si la respuesta debe ser más pequeña que los datos o más grande.' }),
+    play('baldosa-mayor', 'Un piso de **30 × 42** se cubre con baldosas cuadradas iguales, sin cortar ninguna. Mueve el lado hasta la **más grande** posible.', { a: 30, b: 42, max: 15 },
+      'El lado debe dividir a 30 y a 42: sirven 1, 2, 3 y 6. La mayor es 6: $7 \\cdot 5 = 35$ baldosas.',
+      { hint: 'Busca los divisores que 30 y 42 tienen en común.' }),
+    play('producto-mcd', 'Dos números tienen **MCD 6** y **MCM 90**. Uno de ellos es **18**. Halla el producto de los dos y el otro número.', { s: 'MCD 6   MCM 90   uno: 18', et: ['el producto', 'el otro'], metas: ['540', '30'], fichas: ['540', '30', '96', '15', '108', '5'],
+      mira: ['El MCD por el MCM da lo mismo que multiplicar los dos números.', 'Divide el producto entre el número que conoces.'], trampas: { '0:96': 'Se multiplican, no se suman.', '0:108': 'Multiplicaste el 18 por el MCD.', '1:15': 'Eso es el MCM entre el MCD.', '1:5': 'Eso es el MCM entre 18.' }, ok: '18 · 30 = 6 · 90.' },
+      '$6 \\cdot 90 = 540$ y $540 \\div 18 = 30$.',
+      { hint: 'Recuerda el chequeo: el MCD por el MCM da el producto de los dos números.' }),
+    play('hora-del-cruce', 'Los buses de dos rutas salen juntos a las **8:00**: una ruta cada **15** minutos y la otra cada **25**. ¿Cada cuántos minutos coinciden, a qué hora vuelven a hacerlo y cuántos intervalos de 15 pasan?', { a: 'cada 15', b: 'cada 25', et: ['minutos', 'hora', 'intervalos'], metas: ['75', '9:15', '5'], fichas: ['75', '9:15', '5', '40', '8:40', '375', '3'],
+      mira: ['El primer múltiplo común de 15 y 25.', 'Pasa esos minutos a horas y súmalos a las 8:00.', '¿Cuántas veces cabe el 15?'], trampas: { '0:40': 'Se sumaron: 40 no es múltiplo de 25.', '0:375': 'Es múltiplo común, pero no el primero.', '2:3': 'Esos son los intervalos de 25.' }, ok: '5 · 15 = 75 y 3 · 25 = 75.' },
+      'MCM(15, 25) = 75 minutos, que es 1 hora y 15: a las 9:15. Pasan $75 \\div 15 = 5$ intervalos.',
+      { hint: 'Coincidir es mirar hacia adelante: múltiplos.' }),
+    play('sube-mcm', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '¿Cuál es el **MCM** de **16** y **40**?', r: 80, c: '2^4 \\cdot 5', e: { 8: 'Ese es el MCD.', 56: 'No se suman: 56 no es múltiplo de 40.' } },
+      { q: '¿Cuál es el **MCD** de **32** y **48**?', r: 16, c: '2^4', e: { 96: 'Ese es el MCM.', 8: 'Divide a los dos, pero hay uno mayor.', 4: 'Divide a los dos, pero hay uno mayor.' } },
+      { q: 'Tres luces titilan cada **4**, cada **6** y cada **10** segundos. Si titilan juntas, ¿en cuántos segundos vuelven a hacerlo?', r: 60, c: '2^2 \\cdot 3 \\cdot 5', e: { 120: 'Coinciden, pero ya lo habían hecho antes.', 20: 'La de 6 no titila en el 20.', 30: 'La de 4 no titila en el 30.' } }] },
+      '$16 = 2^4$ y $40 = 2^3 \\cdot 5$: 80. $32 = 2^5$ y $48 = 2^4 \\cdot 3$: 16. $2^2 \\cdot 3 \\cdot 5 = 60$.',
+      { hint: 'Descompón en primos: comunes para el MCD, todos para el MCM.' }),
     sol('Tres corredores dan vueltas a una pista y tardan 4, 6 y 9 minutos por vuelta. Si salen juntos de la meta, ¿a los cuántos minutos vuelven a coincidir los tres en la meta? ¿Cuántas vueltas habrá dado cada uno?',
       ['$4 = 2^2$, $6 = 2 \\cdot 3$ y $9 = 3^2$. El MCM toma cada primo con su mayor exponente: $2^2 \\cdot 3^2 =$ [[36]]', 'Vuelven a coincidir a los [[36]] minutos', 'El más rápido habrá dado $36 \\div 4 =$ [[9]] vueltas; el más lento, [[4]]'],
       ['216', '18', '6'],
@@ -155,15 +116,39 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Halla cada cuánto coinciden y haz la lista de esos momentos desde el segundo 0. ¿El 0 entra en la cuenta?'),
   ]);
 
-  diezLesson('pu-nu-3', [
-    ['ultima-cifra', 0, '¿En qué cifra termina $2^{35}$?', 'Las últimas cifras del 2 se repiten: 2, 4, 8, 6. Como $35 = 4 \\cdot 8 + 3$, es la tercera del ciclo: 8.'],
-    ['bolsas-residuo', 1, 'Se sientan 53 personas en mesas de 4. Llena las mesas y mira cuántas quedan sin mesa completa', '$53 = 4 \\cdot 13 + 1$: se llenan 13 mesas y sobra una persona.'],
-    ['ciclo-colores', 0, 'Una guirnalda repite cinco colores. ¿De qué color es el bombillo 88?', '$88 = 5 \\cdot 17 + 3$: después de 17 vueltas completas, es el tercer color del ciclo.'],
-    ['ciclo-reloj', 0, 'Gira la rueda de la semana: ¿qué día será dentro de 250 días?', '$250 = 7 \\cdot 35 + 5$: pasan 35 semanas completas y se avanzan 5 días.'],
-    ['contraejemplo', 1, 'Alguien afirma: «si un producto es par, los dos factores son pares». Busca el que lo tumba', '$3 \\cdot 4 = 12$ es par y el 3 es impar: basta un factor par para que el producto sea par.'],
-    ['tablero-cifras', 0, 'Un número menor que 30 que deja residuo 3 al dividirlo entre 5 y residuo 1 al dividirlo entre 4', 'Con residuo 3 entre 5: 3, 8, 13, 18, 23, 28. De esos, el que deja residuo 1 entre 4 es el 13.'],
-    ['vuela-precios', 0, 'Vuela al residuo', 'Impar por impar es impar. $17 \\cdot 23$ se comporta como $2 \\cdot 3 = 6$: residuo 1 entre 5. Y $3^{20}$ termina en 1, porque 20 es múltiplo de 4.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/numeros-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-nu-3', [
+    play('siempre-par', 'n es un número **impar** cualquiera. ¿Cuáles son **siempre** pares? Toca todas.', { casos: [{ t: 'n + 1', si: true }, { t: 'n · n', no: 'Impar por impar es impar: 3 · 3 = 9.' }, { t: '3n + 1', si: true }, { t: '2n + 1', no: '2n es par, y al sumarle 1 queda impar.' }, { t: 'n · (n + 1)', si: true }], falta: 'Falta otra: mira si cada pedazo es par o impar.', ok: 'Dos sueltos hacen pareja, y un factor par basta.' },
+      'n + 1 es par. 3n es impar, y más 1 es par. n + 1 es par, así que el producto también. n · n y 2n + 1 son impares.',
+      { hint: 'Reemplaza n por 1, por 3 y por 5 y mira qué pasa.' }),
+    play('dos-residuos', 'Busca el número entre 20 y 40 que deja residuo **1** entre **4** y residuo **3** entre **5**.', { min: 20, max: 40, c: [[4, 1], [5, 3]] },
+      'Con residuo 3 entre 5: 23, 28, 33 y 38. De esos, $33 = 4 \\cdot 8 + 1$.',
+      { hint: 'Escribe los que dejan residuo 3 entre 5 y revisa cada uno entre 4.' }),
+    play('opera-residuos', 'Sin hacer el producto: ¿qué residuo deja $52 \\cdot 39$ entre **7**?', { s: '52 · 39', et: ['de 52', 'de 39', 'del producto'], metas: ['3', '4', '5'], fichas: ['3', '4', '5', '12', '7', '1', '0'],
+      mira: ['Haz grupos de 7 con 52 y mira cuánto sobra.', 'Haz grupos de 7 con 39 y mira cuánto sobra.', 'Multiplica los dos residuos y saca el residuo otra vez.'], trampas: { '0:7': 'Un residuo entre 7 siempre es menor que 7.', '2:12': 'En 12 todavía cabe un grupo de 7.', '2:7': 'Un residuo entre 7 siempre es menor que 7.' }, ok: '3 · 4 = 12, y 12 deja 5.' },
+      '$52 = 7 \\cdot 7 + 3$ y $39 = 7 \\cdot 5 + 4$. $3 \\cdot 4 = 12 = 7 + 5$: residuo 5.',
+      { hint: 'Cambia cada número por su residuo antes de multiplicar.' }),
+    play('ciclo-ultima', 'Pon la **última cifra** de cada potencia de 2. Para la última, usa el ciclo.', { et: ['2¹', '2²', '2³', '2⁴', '2⁵', '2²²'], a: '2', metas: ['4', '8', '6', '2', '4'], fichas: ['4', '4', '8', '8', '6', '6', '2', '2'],
+      mira: ['Dobla la última cifra anterior.', 'Dobla la última cifra anterior.', 'Dobla la última cifra anterior y quédate con las unidades.', 'Dobla la última cifra anterior y quédate con las unidades.', 'El ciclo tiene cuatro pasos: ¿qué sobra al dividir 22 entre 4?'], trampas: { '4:2': 'Ese sería el primero del ciclo.', '4:8': 'Ese sería el tercero del ciclo.', '4:6': 'Ese saldría si no sobrara nada.' }, ok: '2, 4, 8, 6 y vuelve a empezar.' },
+      'Cada una dobla a la anterior: 2, 4, 8, 6, 2… Como $22 = 4 \\cdot 5 + 2$, es la segunda del ciclo: 4.',
+      { hint: 'Basta multiplicar por 2 la última cifra. Fíjate cuándo se repite.' }),
+    play('rueda-semana', 'Hoy es **miércoles**. Gira la aguja hasta el día que será dentro de **100** días.', { hoy: 2, n: 100 },
+      '$100 = 7 \\cdot 14 + 2$: pasan 14 semanas completas y se avanzan 2 días. Será viernes.',
+      { hint: 'Cada 7 días vuelve a ser miércoles. ¿Cuántos días sobran?' }),
+    play('ultima-por-partes', '¿En qué termina $238 \\cdot 57 + 64$? Pon la última cifra del producto, cuánto da al sumarle la última cifra de 64, y la respuesta.', { s: '238 · 57 + 64', et: ['el producto', 'más la de 64', 'termina en'], metas: ['6', '10', '0'], fichas: ['6', '10', '0', '56', '1', '8', '5'],
+      mira: ['Multiplica las dos últimas cifras y quédate con las unidades.', 'A eso súmale la última cifra de 64.', 'De lo que dio, mira solo las unidades.'], trampas: { '0:56': 'De 56 solo queda la última cifra.', '0:5': 'De 56 queda la última cifra, no la primera.', '2:1': 'Esa es la cifra de las decenas.' }, ok: '238 · 57 + 64 = 13 630.' },
+      '$8 \\cdot 7 = 56$ termina en 6; $6 + 4 = 10$ termina en 0.',
+      { hint: 'Las decenas y las centenas no tocan la última cifra.' }),
+    play('arma-dividendo', 'Al dividir un número entre **9** da cociente **14** y residuo **5**. Pon el número, el **residuo** si se le suma 6 y el **residuo** si se dobla.', { s: 'entre 9: cociente 14, residuo 5', et: ['el número', 'si se suma 6', 'si se dobla'], metas: ['131', '2', '1'], fichas: ['131', '2', '1', '11', '10', '126', '28'],
+      mira: ['Los grupos completos y lo que sobra.', 'Al residuo súmale 6 y saca el residuo otra vez.', 'Dobla el residuo y saca el residuo otra vez.'], trampas: { '0:126': 'Faltan los 5 que sobran.', '0:28': 'El 9 y el 14 se multiplican.', '1:11': 'En 11 todavía cabe un grupo de 9.', '2:10': 'En 10 todavía cabe un grupo de 9.' }, ok: 'Lo que sobra se opera aparte.' },
+      '$9 \\cdot 14 + 5 = 131$. $5 + 6 = 11 = 9 + 2$. $2 \\cdot 5 = 10 = 9 + 1$.',
+      { hint: 'Para los residuos basta trabajar con el 5.' }),
+    play('sube-sobrante', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '¿Qué **residuo** deja **200** entre **7**?', r: 4, c: '200 - 7 \\cdot 28', e: { 28: 'Ese es el cociente.' } },
+      { q: '¿En qué cifra termina $9^{13}$?', r: 9, c: '9^{13} \\to 9^1', e: { 1: 'Así terminan las de exponente par.' } },
+      { q: '¿Cuál es el menor número **mayor que 20** que deja residuo **3** entre **8**?', r: 27, c: '8 \\cdot 3 + 3', e: { 24: 'Ese no deja residuo.', 19: 'Deja residuo 3, pero no pasa de 20.', 23: 'El 23 deja residuo 7.' } }] },
+      '$200 = 7 \\cdot 28 + 4$. Las potencias de 9 terminan en 9 y 1, alternadas: con 13, en 9. $8 \\cdot 3 + 3 = 27$.',
+      { hint: 'Piensa en grupos completos y en lo que sobra.' }),
     sol('Un número entero deja residuo 3 cuando se divide entre 5. ¿Qué residuo deja su doble al dividirlo entre 5? ¿Y su cuadrado?',
       ['Para los residuos basta trabajar con el residuo: el número se comporta como un [[3]]', 'Su doble se comporta como 6, que al dividir entre 5 deja residuo [[1]]', 'Su cuadrado se comporta como [[9]], que al dividir entre 5 deja residuo [[4]]'],
       ['6', '0', '2'],

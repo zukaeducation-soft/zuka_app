@@ -34,6 +34,8 @@
         ['Entre 2, 5 y 10 se mira la última cifra. 1 no sirve para ninguno.', { a: 'última cifra: 1', b: 'ni 2, ni 5, ni 10' }],
         ['Entre 4 se miran las dos últimas: en 5 316, el 16 es de 4. Sí.', { t: '5 316', a: 'dos últimas: 16', b: 'entre 4: sí' }, '$16 = 4 \\cdot 4$'],
         ['Entre 6 debe cumplir con 2 y con 3: 5 316 es par y sus cifras suman 15. Sí.', { a: 'par, y 5 + 3 + 1 + 6 = 15', b: 'entre 6: sí' }],
+        ['Basta con 2 y 3: no comparten primos y su producto es 6.', { b: '2 · 3 = 6' }],
+        ['Con 2 y 4 no basta para 8: el 20 cumple los dos y no es de 8.', { t: '20', a: 'entre 2 y 4: sí', b: 'entre 8: no' }],
       ], '3 y 9: suma de cifras. 2, 5 y 10: última cifra. 4: dos últimas. 6: entre 2 y entre 3.'),
       xpHaz('fichas', 'El número 73_ debe ser divisible entre **4**. ¿Qué cifras pueden ir al final?', { slots: [{ x: 98, y: 66, w: 150, h: 72, n: 5, et: 'sirven', ey: -44 }, { x: 248, y: 66, w: 140, h: 72, n: 5, et: 'no sirven', ey: -44 }], fichas: ['0', '2', '4', '6', '8'], meta: [['2', '6'], ['0', '4', '8']], alto: 112, pista: 'Mira las dos últimas cifras: 30, 32, 34, 36 y 38.' }, '32 y 36 son múltiplos de 4; 30, 34 y 38 no.')],
     ['Ahora sí, un problema',

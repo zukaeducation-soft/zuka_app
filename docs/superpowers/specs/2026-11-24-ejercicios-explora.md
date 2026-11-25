@@ -102,6 +102,11 @@ recibos, el punto que cumple dos condiciones y la recta con borde, sentido y ext
 nombran, barras que se solapan y tres círculos que se llenan desde el centro (el aviso mira primero el centro). Pruebas
 `tests/ejercicios-conjuntos.test.js`.
 
+## Mundo 15, Teoría de números (pu-nu-1 a pu-nu-3)
+
+`js/games/numeros-escena.js`: primos, árbol, criterios en tabla, saltos que coinciden, baldosas, exponentes, residuos en grupos y la rueda
+de la semana (manija que gira: `de` devuelve el paso desde el ángulo). Pruebas `tests/ejercicios-numeros.test.js`.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |
