@@ -200,7 +200,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <span class="pz-bar-acts"><button class="pz-plat" type="button" data-pz="login"><span class="pz-larga">Plataforma virtual</span><span class="pz-corta">Entrar</span>${pzI('fl')}</button>
       <button class="pz-menu" type="button" aria-label="Menú" aria-expanded="false" aria-controls="pz-nav">${pzI('menu')}</button></span></div></header>
     <main class="pz-main">
-    <section class="pz-hero pz-tinta" aria-roledescription="carrusel" aria-label="Programas destacados"><canvas class="pz-campo" aria-hidden="true"></canvas>
+    <section class="pz-hero pz-tinta" aria-roledescription="carrusel" aria-label="Programas destacados">
       <div class="pz-pista">${laminas.join('')}</div>
       <button class="pz-fl pz-ant" type="button" aria-label="Lámina anterior">${pzI('fl')}</button><button class="pz-fl pz-sig" type="button" aria-label="Lámina siguiente">${pzI('fl')}</button>
       <div class="pz-puntos"><button class="pz-pausa" type="button" aria-label="Pausar el carrusel"></button>${laminas.map((x, i) => `<button type="button" class="pz-pto" aria-label="Lámina ${i + 1} de ${laminas.length}"${i ? '' : ' aria-current="true"'}></button>`).join('')}</div>
@@ -404,51 +404,6 @@ function pzPuntero(el) {
     d.classList.add('pz-luz');
     d.addEventListener('pointermove', e => { const [x, y] = rel(e, d); d.style.setProperty('--mx', `${((x + .5) * 100).toFixed(1)}%`); d.style.setProperty('--my', `${((y + .5) * 100).toFixed(1)}%`); });
   });
-}
-// Campo de flechas de la portada: cada una apunta al puntero (o al punto de la rueda si no hay ratón cerca).
-function pzCampoVivo(el, quieto) {
-  const hero = el.querySelector('.pz-hero'), cv = hero.querySelector('.pz-campo'), cx = cv.getContext('2d'), fin = el.querySelector('.pz-fin');
-  if (!cx) return;
-  let W = 0, H = 0, dpr = 1, raf = 0, t0 = 0, raton = null, fuerza = 0, col = ['#fff', '#fff'];
-  const p = { x: 0, y: 0, vx: 0, vy: 0 };
-  const bola = () => { const a = fin.getBoundingClientRect(), b = cv.getBoundingClientRect(); return [a.left + a.width / 2 - b.left, a.top + a.height / 2 - b.top]; };
-  const mide = () => {
-    W = cv.clientWidth; H = cv.clientHeight; dpr = Math.min(2, devicePixelRatio || 1);
-    cv.width = W * dpr; cv.height = H * dpr; const cs = getComputedStyle(hero); col = [cs.getPropertyValue('--brand').trim(), cs.getPropertyValue('--mute').trim()];
-    pinta();
-  };
-  const pinta = () => {
-    const paso = W < 700 ? 34 : 44, R = W < 700 ? 150 : 300;
-    cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H); cx.lineCap = 'round'; cx.lineWidth = 1.6;
-    for (let y = paso / 2; y < H; y += paso) for (let x = paso / 2 + (W % paso) / 2; x < W; x += paso) {
-      const dx = p.x - x, dy = p.y - y, d = Math.hypot(dx, dy) || 1, cerca = Math.max(0, 1 - d / R) * fuerza;
-      const l = 2 + 9 * cerca, ux = dx / d * l, uy = dy / d * l;
-      cx.globalAlpha = .12 + .5 * cerca * cerca; cx.strokeStyle = cerca > .04 ? col[0] : col[1];
-      cx.beginPath(); cx.moveTo(x - ux, y - uy); cx.lineTo(x + ux, y + uy); cx.stroke();
-    }
-  };
-  const bucle = t => {
-    raf = 0;
-    if (!el.isConnected) return;
-    const dt = t0 ? (t - t0) / 1000 : .016; t0 = t;
-    const [mx, my] = raton || [p.x, p.y], meta = raton ? 1 : 0;
-    [p.x, p.vx] = pzResorte(p.x, p.vx, mx, dt, 130, 20); [p.y, p.vy] = pzResorte(p.y, p.vy, my, dt, 130, 20);
-    fuerza += (meta - fuerza) * Math.min(1, dt * 7);
-    pinta();
-    if (Math.abs(mx - p.x) + Math.abs(my - p.y) > .3 || Math.abs(meta - fuerza) > .01) raf = requestAnimationFrame(bucle); else t0 = 0;
-  };
-  const ro = new ResizeObserver(() => (cv.isConnected ? mide() : ro.disconnect())); ro.observe(hero);
-  const mo = new MutationObserver(() => (cv.isConnected ? mide() : mo.disconnect())); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); mo.observe(hero, { attributes: true, attributeFilter: ['class'] });
-  [p.x, p.y] = bola(); mide();
-  if (quieto) return;
-  hero.addEventListener('pointermove', e => {
-    if (e.pointerType !== 'mouse') return;
-    const r = cv.getBoundingClientRect();
-    raton = [e.clientX - r.left, e.clientY - r.top];
-    if (fuerza < .02) { [p.x, p.y] = raton; p.vx = p.vy = 0; }
-    if (!raf) raf = requestAnimationFrame(bucle);
-  });
-  hero.addEventListener('pointerleave', () => { raton = null; if (!raf) raf = requestAnimationFrame(bucle); });
 }
 // El camino: el punto sigue al puntero (o al dedo) y se queda en la etapa elegida.
 function pzCaminoVivo(el, quieto) {
@@ -671,7 +626,7 @@ function presentacionAbrir() {
   // Precios: primero los guardados; después, los de la base.
   pzPrecios(el, Cuenta.productos, Tienda.arts);
   if (Cuenta.sb) Promise.all([cuentaTienda(), tiendaCarga()]).then(() => { if (el.isConnected) pzPrecios(el, Cuenta.productos, Tienda.arts); }, () => {});
-  pzCarrusel(el, quieto); pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el); pzCaminoVivo(el, quieto); pzCampoVivo(el, quieto);
+  pzCarrusel(el, quieto); pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el); pzCaminoVivo(el, quieto);
   const raton = matchMedia('(hover: hover) and (pointer: fine)').matches;
   pzQuejasVivas(el, raton);
   if (raton && !quieto) pzPuntero(el);
