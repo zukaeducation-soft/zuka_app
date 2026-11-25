@@ -90,7 +90,7 @@ function pfLogrosHTML() {
 }
 function pfCursosHTML() {
   const mine = myCourses();
-  return `<section class="pf-c pf-cursos"><div class="pf-cab"><h2>Tus cursos</h2></div>${mine.length ? `<div class="pc-l">${mine.map(c => { const ls = lessonsOf(c), d = ls.filter(isDone).length; return `<button type="button" data-dk-open="${c.id}" style="--c:${c.color}">${aroHTML(d / ls.length, courseArt(c, 'md'))}<span><b>${esc(c.name)}</b><small>${d} de ${ls.length} lecciones</small></span>${ICON.right}</button>`; }).join('')}</div>` : '<p class="pc-no">Aún no has comprado ningún curso.</p><button class="btn ghost" type="button" data-dk="tienda">Ver la tienda</button>'}</section>`;
+  return `<section class="pf-c pf-cursos"><div class="pf-cab"><h2>Tus cursos</h2></div>${mine.length ? `<div class="pc-l">${mine.map(c => { const ls = lessonsOf(c), d = ls.filter(isDone).length; return `<button type="button" data-dk-open="${c.id}" style="--c:${c.color}">${aroHTML(d / ls.length, courseArt(c, 'md'))}<span><b>${esc(c.name)}</b><small>${d} de ${ls.length} lecciones</small></span>${ICON.right}</button>`; }).join('')}</div>` : cuentaDeColegio() ? '<p class="pc-no">Tu institución aún no te asigna cursos.</p>' : '<p class="pc-no">Aún no has comprado ningún curso.</p><button class="btn ghost" type="button" data-dk="tienda">Ver la tienda</button>'}</section>`;
 }
 // ---------- vida ----------
 function pfBind(root) {

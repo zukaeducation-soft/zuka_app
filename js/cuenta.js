@@ -46,6 +46,14 @@ if (typeof COURSES !== 'undefined') {
 }
 
 // ---------- quién ve todo abierto ----------
+// Esconde lo que no es suyo (css/acceso.css, `.de-colegio`) y, si estaba en una de esas pestañas, lo lleva a Inicio.
+function colegioMarca() {
+  document.body.classList.toggle('de-colegio', cuentaDeColegio());
+  if (cuentaDeColegio() && typeof tab !== 'undefined' && ['tienda', 'tutorias'].includes(tab) && !lessonClose) go('home');
+}
+// Estudiante de un colegio (o su gestor): solo Inicio, Mis cursos y Tú; no compra (spec 2026-11-25-estudiante-colegio).
+const cuentaDeColegio = () => !!Cuenta.user && instManda({ perfil: Cuenta.perfil, accesos: Cuenta.accesos, inst: Cuenta.inst, horas: typeof Tienda === 'undefined' ? 0 : Tienda.saldo.general + Tienda.saldo.universidad });
+const colegioAvisa = () => toast('Tu institución maneja tus cursos. Si necesitas algo, pídelo a tu docente.');
 const cuentaEsAdmin = () => !!(Cuenta.user && Cuenta.perfil && Cuenta.perfil.rol === 'admin');
 // El administrador tiene siempre todo abierto (S.unlockAll: cursos, mundos, lecciones, jefes y
 // evaluaciones, sin perder vidas); no se puede apagar. A los demás las lecciones y los mundos se les
@@ -157,7 +165,7 @@ async function entrarConCodigo(codigo) {
 const CURSOS_LISTOS = ['algebra', 'trig'];
 try { Cuenta.cursos = JSON.parse(localStorage.getItem('zuka-cursos')) || null; } catch (e) { /* sin copia */ }
 const cursoBorrador = c => (Cuenta.cursos ? Cuenta.cursos[c.id] !== true : !CURSOS_LISTOS.includes(c.id));
-const cursoVisible = c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || !cursoBorrador(c);
+const cursoVisible = c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || (!cuentaDeColegio() && !cursoBorrador(c));
 // «Mis cursos», el perfil y las asesorías: solo lo comprado (pedido del 2026-11-24). La prueba se abre desde Inicio.
 const cursoComprado = (c, alDia = false) => SIN_CANDADOS || cuentaEsAdmin() || comprado(Cuenta.accesos, c.id, alDia);
 const accesoCursoFila = id => (Cuenta.accesos || []).find(a => a.curso === id);
@@ -289,7 +297,7 @@ async function cuentaPerfil() {
     Cuenta.perfil = data;
     if (data.rol === 'gestor' && $('#auth')) location.href = 'instituciones/portal/';   // acaba de entrar con su código: va a su portal
     if (!S.name) S.name = primerNombre(data);
-    cuentaCache();
+    cuentaCache(); colegioMarca();
   }
   return data;
 }
@@ -407,6 +415,7 @@ function openEntrar() { closeSheet(false); authScreen(); }
 
 // Otro código para esta misma cuenta: añade lo que trae (debe estar sin estrenar); el avance no cambia.
 function openCanje() {
+  if (cuentaDeColegio()) return colegioAvisa();
   if (!Cuenta.user) return openEntrar();
   hojaForm({
     title: 'Añadir un código',
@@ -453,6 +462,7 @@ async function cuentaTienda() {
 }
 async function openComprar(id, elegido) {
   if (!Cuenta.user) return openEntrar();
+  if (cuentaDeColegio()) return colegioAvisa();
   const a = accesoCurso(Cuenta.accesos, id), renueva = !accesoCursoFila(id)?.institucion && (a.estado === 'pago' || a.estado === 'vencido'), curso = cursoNombre(id);
   openSheet(`<div class="acct-form compra"><h3 class="sheet-title">${renueva ? 'Renovar' : 'Comprar'} ${esc(curso)}</h3>
     <p class="muted">${a.estado === 'pago' ? `Te quedan ${diasTexto(a.dias)}: los que compres se suman.` : 'Se activa en tu mismo código y sigues donde vas: no pierdes nada de tu avance.'}</p>
@@ -496,6 +506,7 @@ async function openComprar(id, elegido) {
 function openBloqueo(id) {
   const motivo = planMotivo(id), rec = Cuenta.recursos[id] || {}, t = textoBloqueo(motivo, cursoNombre(rec.curso));
   if (!t) return;
+  if (cuentaDeColegio() && motivo !== 'bloqueado' && motivo !== 'sesion') return openSheet(`<div class="acct-form lock-sheet"><span class="lock-ico">${ICON.lock}</span><h3 class="sheet-title">No está en tus cursos</h3><p class="muted">Tu institución elige los cursos que tienes. Si lo necesitas, pídelo a tu docente.</p><button class="btn main" type="button" data-a>Entendido</button></div>`, sh => { $('[data-a]', sh).onclick = () => closeSheet(); });
   const compra = rec.curso && ['ninguno', 'prueba', 'prueba_vencida', 'vencido'].includes(motivo);
   openSheet(`<div class="acct-form lock-sheet"><span class="lock-ico">${ICON.lock}</span>
     <h3 class="sheet-title">${esc(t.title)}</h3><p class="muted">${esc(t.text)}</p>

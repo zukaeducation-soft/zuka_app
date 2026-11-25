@@ -46,3 +46,7 @@
 .adm-atajos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .adm-atajos a { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--line); color: var(--ink); font-size: 15px; font-weight: 600; text-decoration: none; transition: border-color .15s ease; }
 .adm-atajos a:hover { border-color: var(--brand); } .adm-atajos .i { width: 20px; height: 20px; flex: none; color: var(--brand); }
+
+/* Estudiante de un colegio: solo Inicio, Mis cursos y Tú; sin compras ni asesorías (spec 2026-11-25-estudiante-colegio) */
+.de-colegio :is(#tabbar [data-tab="tienda"], #tabbar [data-tab="tutorias"], .hm-ase, .mc-more, [data-tut], [data-renueva], [data-comprar], [data-tienda], [data-dk="tienda"], [data-dk="tutorias"], [data-acct="tienda"], [data-acct="canje"], [data-acct="comprar"]) { display: none !important; }
+.de-colegio .hm-dos { grid-template-columns: minmax(0, 1fr) !important; } .de-colegio #tabbar { grid-template-columns: repeat(3, 1fr); }

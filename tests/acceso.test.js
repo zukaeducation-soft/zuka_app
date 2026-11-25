@@ -159,7 +159,7 @@ test('el panel no usa clases «ad-…»: los bloqueadores de anuncios las escond
 
 test('los estudiantes ven los cursos de su cuenta y los publicados', () => {
   const cuenta = read('js/cuenta.js'), app = read('js/app.js');
-  assert.match(cuenta, /const cursoVisible = c => SIN_CANDADOS \|\| cuentaEsAdmin\(\) \|\| \(Cuenta\.accesos \|\| \[\]\)\.some\(a => a\.curso === c\.id\) \|\| !cursoBorrador\(c\);/);
+  assert.match(cuenta, /const cursoVisible = c => SIN_CANDADOS \|\| cuentaEsAdmin\(\) \|\| \(Cuenta\.accesos \|\| \[\]\)\.some\(a => a\.curso === c\.id\) \|\| \(!cuentaDeColegio\(\) && !cursoBorrador\(c\)\);/);
   assert.match(cuenta, /from\('cursos'\)\.select\('id,publicado'\)/);
   assert.match(app, /const courseById = id => cursosVisibles\(\)\.find/, 'un curso oculto no queda como curso actual');
   assert.match(app, /<div class="course-list">\$\{cursosVisibles\(\)\.map/, 'el selector de cursos');

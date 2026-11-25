@@ -60,6 +60,7 @@ function tiendaAtras() {   // botón atrás (js/back.js): cierra el libro o el p
 function tiendaCerrar() { const el = $('#tienda'); if (!el) return; el.remove(); tiendaInerte(false); }
 function tiendaInerte(on) { ['#topbar', '#view', '#tabbar'].forEach(s => { const x = $(s); if (x) x.inert = on; }); }
 function openTienda(vista = 'todo') {
+  if (cuentaDeColegio()) return colegioAvisa();
   closeSheet(false); tiendaCerrar();
   Tienda.vista = vista;
   go('tienda'); view.scrollTop = 0;

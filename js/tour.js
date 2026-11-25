@@ -98,7 +98,7 @@ function tourView(v) {
 
 function startTour() {
   if (tourEnd || typeof lessonClose === 'function') return;
-  const n = TOUR_STEPS.length;
+  const PASOS = TOUR_STEPS.filter(p => p.id !== 'tutorias' || !cuentaDeColegio()), n = PASOS.length;   // sin asesorías si las maneja su institución
   const layer = document.createElement('div');
   layer.className = 'tour';
   layer.innerHTML = `<div class="tour-hole"></div>
@@ -107,7 +107,7 @@ function startTour() {
       <div class="tour-art"></div>
       <p class="eyebrow tour-count"></p>
       <h3 id="tour-title"></h3><p id="tour-text"></p>
-      <div class="tour-dots" aria-hidden="true">${TOUR_STEPS.map(() => '<i></i>').join('')}</div>
+      <div class="tour-dots" aria-hidden="true">${PASOS.map(() => '<i></i>').join('')}</div>
       <div class="tour-actions"><button class="btn ghost" type="button" data-prev></button><button class="btn" type="button" data-next></button></div>
       <i class="tour-arrow" aria-hidden="true"></i>
     </div>`;
@@ -122,7 +122,7 @@ function startTour() {
   // Coloca el hueco y la tarjeta según dónde está el elemento ahora (la app puede volver a pintarse
   // o cambiar de tamaño mientras el recorrido está abierto).
   function place() {
-    const el = targetOf(TOUR_STEPS[i]);
+    const el = targetOf(PASOS[i]);
     let r = el?.getBoundingClientRect();
     // Si la app se volvió a pintar o la pantalla giró y el elemento quedó fuera de la vista, se trae de vuelta.
     if (r && r.width && (r.bottom < 0 || r.top > innerHeight)) { el.scrollIntoView({ block: 'center', inline: 'nearest' }); r = el.getBoundingClientRect(); }
@@ -146,7 +146,7 @@ function startTour() {
 
   function show(k) {
     i = Math.max(0, Math.min(n - 1, k));
-    const step = TOUR_STEPS[i];
+    const step = PASOS[i];
     tourView(step.view);
     $('.tour-art', layer).innerHTML = step.art ? TOUR_ART[step.art]() : '';
     $('.tour-count', layer).textContent = `Paso ${i + 1} de ${n}`;
@@ -197,7 +197,7 @@ function startTour() {
     .forEach(t => layer.addEventListener(t, e => e.stopPropagation()));
   // En el último paso el hueco está sobre el primer nivel: tocarlo cierra el recorrido y abre ese nivel.
   hole.onclick = () => {
-    const el = i === n - 1 && targetOf(TOUR_STEPS[i]);
+    const el = i === n - 1 && targetOf(PASOS[i]);
     next();
     if (el) el.click();
   };

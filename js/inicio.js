@@ -165,12 +165,12 @@ function renderMyCourses() {
   if (va !== mcVe.va) Object.assign(mcVe, { c: null, b: {}, u: {}, va });
   if (!mine.some(c => c.id === mcVe.c)) mcVe.c = (mine.find(c => c.id === S.course) || mine[0])?.id || null;
   view.innerHTML = `<div class="mycourses"><div class="mc">
-    <header class="home-head mc-head"><div><h1>Mis cursos</h1><p>${mine.length ? 'Elige un curso y recorre sus mundos.' : 'Aún no has comprado ningún curso.'}</p></div><button class="btn ${mine.length ? 'ghost' : 'brand'} mc-more" data-home>${mine.length ? 'Comprar más cursos' : 'Ver la tienda'}</button></header>
+    <header class="home-head mc-head"><div><h1>Mis cursos</h1><p>${mine.length ? 'Elige un curso y recorre sus mundos.' : cuentaDeColegio() ? 'Tu institución aún no te asigna cursos.' : 'Aún no has comprado ningún curso.'}</p></div><button class="btn ${mine.length ? 'ghost' : 'brand'} mc-more" data-home>${mine.length ? 'Comprar más cursos' : 'Ver la tienda'}</button></header>
     ${mine.length ? `<div class="mc-list${mine.length > 1 ? '' : ' solo'}" role="group" aria-label="Tus cursos">${mine.map(c => {
       const ls = lessonsOf(c), d = ls.filter(isDone).length;
       return `<button class="mc-row" type="button" data-ve="${c.id}" style="--c:${c.color}">${aroHTML(d / ls.length, courseArt(c, 'lg'))}<span class="mc-body"><b>${esc(c.name)}</b><small>${d} de ${ls.length}</small></span></button>`;
     }).join('')}</div><section class="mc-esc" aria-live="off"></section>`
-    : `<div class="m-empty">${mascotSVG('think')}<p>${cursosConAcceso().length ? 'Tu prueba está en el Inicio. Cuando compres un curso, aparecerá aquí con todos sus mundos.' : 'Cuando compres un curso, aparecerá aquí con todos sus mundos.'}</p></div>`}
+    : `<div class="m-empty">${mascotSVG('think')}<p>${cuentaDeColegio() ? 'Cuando tu institución te asigne un curso, aparecerá aquí con todos sus mundos.' : cursosConAcceso().length ? 'Tu prueba está en el Inicio. Cuando compres un curso, aparecerá aquí con todos sus mundos.' : 'Cuando compres un curso, aparecerá aquí con todos sus mundos.'}</p></div>`}
   </div></div>`;
   $('[data-home]', view).onclick = () => openTienda('cursos');
   view.querySelectorAll('[data-ve]').forEach(b => b.onclick = () => { mcVe.c = b.dataset.ve; mcPinta(mine); });

@@ -114,3 +114,12 @@ test('el catálogo para Supabase trae todas las evaluaciones que la app muestra'
   const s = require('child_process').execFileSync(process.execPath, [path.join(ROOT, 'tools/sync-lecciones.js')], { encoding: 'utf8', maxBuffer: 1e7 });
   for (const c of ['preuda', 'algebra', 'preicfes']) assert.ok((s.match(new RegExp(`'evaluacion', '${c}'`, 'g')) || []).length >= 10, c);
 });
+test('un estudiante de colegio no compra; quien compró por su cuenta conserva la tienda', () => {
+  const m = g('instManda'), e = { rol: 'estudiante' }, inst = { nombres: ['Colegio X'] }, now = Date.parse('2026-11-25');
+  const c = [{ curso: 'algebra', tipo: 'pago', hasta: '2027-01-01', institucion: 'Colegio X' }], suyo = { curso: 'trig', tipo: 'pago', hasta: '2027-01-01' };
+  assert.equal(m({ perfil: e, accesos: c, inst }, now), true); assert.equal(m({ perfil: e, accesos: [...c, suyo], inst }, now), false);
+  assert.equal(m({ perfil: e, accesos: [...c, { ...suyo, hasta: '2026-01-01' }], inst }, now), true, 'lo vencido no cuenta'); assert.equal(m({ perfil: e, accesos: c, inst, horas: 2 }, now), false);
+  assert.equal(m({ perfil: e, accesos: [], inst: { nombres: [] } }, now), false); assert.equal(m({ perfil: null, inst }, now), false); assert.equal(m({ perfil: { rol: 'admin' }, inst }, now), false); assert.equal(m({ perfil: { rol: 'gestor' } }, now), true);
+  const css = read('css/acceso.css'); for (const s of ['[data-tab="tienda"]', '[data-tab="tutorias"]', '[data-acct="comprar"]', '.mc-more', '.hm-ase']) assert.ok(css.slice(css.indexOf('.de-colegio')).includes(s), s);
+  for (const [f, fn] of [['js/cuenta.js', 'function openComprar(id, elegido) {'], ['js/cuenta.js', 'function openCanje() {'], ['js/tienda.js', "function openTienda(vista = 'todo') {"], ['js/app.js', 'function go(t) {']]) { const s = read(f), i = s.indexOf(fn); assert.ok(i >= 0 && s.slice(i, i + 220).includes('cuentaDeColegio()'), fn); }
+});

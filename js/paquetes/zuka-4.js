@@ -13191,7 +13191,7 @@ function tourView(v) {
 
 function startTour() {
   if (tourEnd || typeof lessonClose === 'function') return;
-  const n = TOUR_STEPS.length;
+  const PASOS = TOUR_STEPS.filter(p => p.id !== 'tutorias' || !cuentaDeColegio()), n = PASOS.length;   // sin asesorías si las maneja su institución
   const layer = document.createElement('div');
   layer.className = 'tour';
   layer.innerHTML = `<div class="tour-hole"></div>
@@ -13200,7 +13200,7 @@ function startTour() {
       <div class="tour-art"></div>
       <p class="eyebrow tour-count"></p>
       <h3 id="tour-title"></h3><p id="tour-text"></p>
-      <div class="tour-dots" aria-hidden="true">${TOUR_STEPS.map(() => '<i></i>').join('')}</div>
+      <div class="tour-dots" aria-hidden="true">${PASOS.map(() => '<i></i>').join('')}</div>
       <div class="tour-actions"><button class="btn ghost" type="button" data-prev></button><button class="btn" type="button" data-next></button></div>
       <i class="tour-arrow" aria-hidden="true"></i>
     </div>`;
@@ -13215,7 +13215,7 @@ function startTour() {
   // Coloca el hueco y la tarjeta según dónde está el elemento ahora (la app puede volver a pintarse
   // o cambiar de tamaño mientras el recorrido está abierto).
   function place() {
-    const el = targetOf(TOUR_STEPS[i]);
+    const el = targetOf(PASOS[i]);
     let r = el?.getBoundingClientRect();
     // Si la app se volvió a pintar o la pantalla giró y el elemento quedó fuera de la vista, se trae de vuelta.
     if (r && r.width && (r.bottom < 0 || r.top > innerHeight)) { el.scrollIntoView({ block: 'center', inline: 'nearest' }); r = el.getBoundingClientRect(); }
@@ -13239,7 +13239,7 @@ function startTour() {
 
   function show(k) {
     i = Math.max(0, Math.min(n - 1, k));
-    const step = TOUR_STEPS[i];
+    const step = PASOS[i];
     tourView(step.view);
     $('.tour-art', layer).innerHTML = step.art ? TOUR_ART[step.art]() : '';
     $('.tour-count', layer).textContent = `Paso ${i + 1} de ${n}`;
@@ -13290,7 +13290,7 @@ function startTour() {
     .forEach(t => layer.addEventListener(t, e => e.stopPropagation()));
   // En el último paso el hueco está sobre el primer nivel: tocarlo cierra el recorrido y abre ese nivel.
   hole.onclick = () => {
-    const el = i === n - 1 && targetOf(TOUR_STEPS[i]);
+    const el = i === n - 1 && targetOf(PASOS[i]);
     next();
     if (el) el.click();
   };
@@ -16620,12 +16620,12 @@ function renderMyCourses() {
   if (va !== mcVe.va) Object.assign(mcVe, { c: null, b: {}, u: {}, va });
   if (!mine.some(c => c.id === mcVe.c)) mcVe.c = (mine.find(c => c.id === S.course) || mine[0])?.id || null;
   view.innerHTML = `<div class="mycourses"><div class="mc">
-    <header class="home-head mc-head"><div><h1>Mis cursos</h1><p>${mine.length ? 'Elige un curso y recorre sus mundos.' : 'Aún no has comprado ningún curso.'}</p></div><button class="btn ${mine.length ? 'ghost' : 'brand'} mc-more" data-home>${mine.length ? 'Comprar más cursos' : 'Ver la tienda'}</button></header>
+    <header class="home-head mc-head"><div><h1>Mis cursos</h1><p>${mine.length ? 'Elige un curso y recorre sus mundos.' : cuentaDeColegio() ? 'Tu institución aún no te asigna cursos.' : 'Aún no has comprado ningún curso.'}</p></div><button class="btn ${mine.length ? 'ghost' : 'brand'} mc-more" data-home>${mine.length ? 'Comprar más cursos' : 'Ver la tienda'}</button></header>
     ${mine.length ? `<div class="mc-list${mine.length > 1 ? '' : ' solo'}" role="group" aria-label="Tus cursos">${mine.map(c => {
       const ls = lessonsOf(c), d = ls.filter(isDone).length;
       return `<button class="mc-row" type="button" data-ve="${c.id}" style="--c:${c.color}">${aroHTML(d / ls.length, courseArt(c, 'lg'))}<span class="mc-body"><b>${esc(c.name)}</b><small>${d} de ${ls.length}</small></span></button>`;
     }).join('')}</div><section class="mc-esc" aria-live="off"></section>`
-    : `<div class="m-empty">${mascotSVG('think')}<p>${cursosConAcceso().length ? 'Tu prueba está en el Inicio. Cuando compres un curso, aparecerá aquí con todos sus mundos.' : 'Cuando compres un curso, aparecerá aquí con todos sus mundos.'}</p></div>`}
+    : `<div class="m-empty">${mascotSVG('think')}<p>${cuentaDeColegio() ? 'Cuando tu institución te asigne un curso, aparecerá aquí con todos sus mundos.' : cursosConAcceso().length ? 'Tu prueba está en el Inicio. Cuando compres un curso, aparecerá aquí con todos sus mundos.' : 'Cuando compres un curso, aparecerá aquí con todos sus mundos.'}</p></div>`}
   </div></div>`;
   $('[data-home]', view).onclick = () => openTienda('cursos');
   view.querySelectorAll('[data-ve]').forEach(b => b.onclick = () => { mcVe.c = b.dataset.ve; mcPinta(mine); });
@@ -17088,6 +17088,14 @@ if (typeof COURSES !== 'undefined') {
 }
 
 // ---------- quién ve todo abierto ----------
+// Esconde lo que no es suyo (css/acceso.css, `.de-colegio`) y, si estaba en una de esas pestañas, lo lleva a Inicio.
+function colegioMarca() {
+  document.body.classList.toggle('de-colegio', cuentaDeColegio());
+  if (cuentaDeColegio() && typeof tab !== 'undefined' && ['tienda', 'tutorias'].includes(tab) && !lessonClose) go('home');
+}
+// Estudiante de un colegio (o su gestor): solo Inicio, Mis cursos y Tú; no compra (spec 2026-11-25-estudiante-colegio).
+const cuentaDeColegio = () => !!Cuenta.user && instManda({ perfil: Cuenta.perfil, accesos: Cuenta.accesos, inst: Cuenta.inst, horas: typeof Tienda === 'undefined' ? 0 : Tienda.saldo.general + Tienda.saldo.universidad });
+const colegioAvisa = () => toast('Tu institución maneja tus cursos. Si necesitas algo, pídelo a tu docente.');
 const cuentaEsAdmin = () => !!(Cuenta.user && Cuenta.perfil && Cuenta.perfil.rol === 'admin');
 // El administrador tiene siempre todo abierto (S.unlockAll: cursos, mundos, lecciones, jefes y
 // evaluaciones, sin perder vidas); no se puede apagar. A los demás las lecciones y los mundos se les
@@ -17199,7 +17207,7 @@ async function entrarConCodigo(codigo) {
 const CURSOS_LISTOS = ['algebra', 'trig'];
 try { Cuenta.cursos = JSON.parse(localStorage.getItem('zuka-cursos')) || null; } catch (e) { /* sin copia */ }
 const cursoBorrador = c => (Cuenta.cursos ? Cuenta.cursos[c.id] !== true : !CURSOS_LISTOS.includes(c.id));
-const cursoVisible = c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || !cursoBorrador(c);
+const cursoVisible = c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || (!cuentaDeColegio() && !cursoBorrador(c));
 // «Mis cursos», el perfil y las asesorías: solo lo comprado (pedido del 2026-11-24). La prueba se abre desde Inicio.
 const cursoComprado = (c, alDia = false) => SIN_CANDADOS || cuentaEsAdmin() || comprado(Cuenta.accesos, c.id, alDia);
 const accesoCursoFila = id => (Cuenta.accesos || []).find(a => a.curso === id);
@@ -17331,7 +17339,7 @@ async function cuentaPerfil() {
     Cuenta.perfil = data;
     if (data.rol === 'gestor' && $('#auth')) location.href = 'instituciones/portal/';   // acaba de entrar con su código: va a su portal
     if (!S.name) S.name = primerNombre(data);
-    cuentaCache();
+    cuentaCache(); colegioMarca();
   }
   return data;
 }
@@ -17449,6 +17457,7 @@ function openEntrar() { closeSheet(false); authScreen(); }
 
 // Otro código para esta misma cuenta: añade lo que trae (debe estar sin estrenar); el avance no cambia.
 function openCanje() {
+  if (cuentaDeColegio()) return colegioAvisa();
   if (!Cuenta.user) return openEntrar();
   hojaForm({
     title: 'Añadir un código',
@@ -17495,6 +17504,7 @@ async function cuentaTienda() {
 }
 async function openComprar(id, elegido) {
   if (!Cuenta.user) return openEntrar();
+  if (cuentaDeColegio()) return colegioAvisa();
   const a = accesoCurso(Cuenta.accesos, id), renueva = !accesoCursoFila(id)?.institucion && (a.estado === 'pago' || a.estado === 'vencido'), curso = cursoNombre(id);
   openSheet(`<div class="acct-form compra"><h3 class="sheet-title">${renueva ? 'Renovar' : 'Comprar'} ${esc(curso)}</h3>
     <p class="muted">${a.estado === 'pago' ? `Te quedan ${diasTexto(a.dias)}: los que compres se suman.` : 'Se activa en tu mismo código y sigues donde vas: no pierdes nada de tu avance.'}</p>
@@ -17538,6 +17548,7 @@ async function openComprar(id, elegido) {
 function openBloqueo(id) {
   const motivo = planMotivo(id), rec = Cuenta.recursos[id] || {}, t = textoBloqueo(motivo, cursoNombre(rec.curso));
   if (!t) return;
+  if (cuentaDeColegio() && motivo !== 'bloqueado' && motivo !== 'sesion') return openSheet(`<div class="acct-form lock-sheet"><span class="lock-ico">${ICON.lock}</span><h3 class="sheet-title">No está en tus cursos</h3><p class="muted">Tu institución elige los cursos que tienes. Si lo necesitas, pídelo a tu docente.</p><button class="btn main" type="button" data-a>Entendido</button></div>`, sh => { $('[data-a]', sh).onclick = () => closeSheet(); });
   const compra = rec.curso && ['ninguno', 'prueba', 'prueba_vencida', 'vencido'].includes(motivo);
   openSheet(`<div class="acct-form lock-sheet"><span class="lock-ico">${ICON.lock}</span>
     <h3 class="sheet-title">${esc(t.title)}</h3><p class="muted">${esc(t.text)}</p>
@@ -17884,6 +17895,7 @@ function tiendaAtras() {   // botón atrás (js/back.js): cierra el libro o el p
 function tiendaCerrar() { const el = $('#tienda'); if (!el) return; el.remove(); tiendaInerte(false); }
 function tiendaInerte(on) { ['#topbar', '#view', '#tabbar'].forEach(s => { const x = $(s); if (x) x.inert = on; }); }
 function openTienda(vista = 'todo') {
+  if (cuentaDeColegio()) return colegioAvisa();
   closeSheet(false); tiendaCerrar();
   Tienda.vista = vista;
   go('tienda'); view.scrollTop = 0;
@@ -19470,6 +19482,13 @@ function instMeta(m, estudiantes, hechas, hoy) {
   const filas = xs.map(e => { const n = m.lecciones.filter(l => hechas.get(e.id)?.has(l)).length; return { e, n, ok: n === m.lecciones.length }; });
   return { filas, n: filas.length, ok: filas.filter(x => x.ok).length, p: filas.length ? filas.reduce((t, x) => t + x.n, 0) / (filas.length * m.lecciones.length) : 0, quedan: instEntre(hoy, m.hasta) };
 }
+// ¿Su institución le maneja los cursos? Entonces la app no le ofrece compras ni asesorías. Quien además compró algo por su cuenta
+// (un curso vigente u horas) conserva la tienda: es suyo.
+function instManda({ perfil, accesos = [], inst, horas = 0 }, now = Date.now()) {
+  if (!perfil || perfil.rol === 'admin') return false;
+  if (perfil.rol === 'gestor') return true;
+  return !!(inst && inst.nombres && inst.nombres.length) && !(horas > 0) && !accesos.some(a => !a.institucion && a.tipo === 'pago' && a.hasta && new Date(a.hasta) > now);
+}
 // Cursos de un estudiante con lo que le abre su institución: gana lo propio solo si está pago y dura más.
 function instJunta(propios, deInst) {
   const out = new Map((propios || []).map(a => [a.curso, a]));
@@ -19591,7 +19610,7 @@ function pfLogrosHTML() {
 }
 function pfCursosHTML() {
   const mine = myCourses();
-  return `<section class="pf-c pf-cursos"><div class="pf-cab"><h2>Tus cursos</h2></div>${mine.length ? `<div class="pc-l">${mine.map(c => { const ls = lessonsOf(c), d = ls.filter(isDone).length; return `<button type="button" data-dk-open="${c.id}" style="--c:${c.color}">${aroHTML(d / ls.length, courseArt(c, 'md'))}<span><b>${esc(c.name)}</b><small>${d} de ${ls.length} lecciones</small></span>${ICON.right}</button>`; }).join('')}</div>` : '<p class="pc-no">Aún no has comprado ningún curso.</p><button class="btn ghost" type="button" data-dk="tienda">Ver la tienda</button>'}</section>`;
+  return `<section class="pf-c pf-cursos"><div class="pf-cab"><h2>Tus cursos</h2></div>${mine.length ? `<div class="pc-l">${mine.map(c => { const ls = lessonsOf(c), d = ls.filter(isDone).length; return `<button type="button" data-dk-open="${c.id}" style="--c:${c.color}">${aroHTML(d / ls.length, courseArt(c, 'md'))}<span><b>${esc(c.name)}</b><small>${d} de ${ls.length} lecciones</small></span>${ICON.right}</button>`; }).join('')}</div>` : cuentaDeColegio() ? '<p class="pc-no">Tu institución aún no te asigna cursos.</p>' : '<p class="pc-no">Aún no has comprado ningún curso.</p><button class="btn ghost" type="button" data-dk="tienda">Ver la tienda</button>'}</section>`;
 }
 // ---------- vida ----------
 function pfBind(root) {
@@ -19783,6 +19802,7 @@ let tab = 'learn', cleanup = null;
 // Cierra la clase abierta (pide confirmación si hay progreso); null cuando no hay clase.
 let lessonClose = null;
 function go(t) {
+  if (['tienda', 'tutorias'].includes(t) && cuentaDeColegio()) t = 'home';   // un estudiante de colegio no compra ni separa asesorías
   cleanup?.(); cleanup = null;
   tab = t;
   document.body.dataset.tab = t;
@@ -19796,6 +19816,7 @@ function go(t) {
 const shortNum = n => (n >= 10000 ? `${Math.floor(n / 100) / 10} k` : String(n));
 function renderTop() {
   syncHearts();
+  document.body.classList.toggle('de-colegio', cuentaDeColegio());
   // Solo racha y experiencia, más grandes; sin la marca ni las vidas (las vidas se ven dentro de la lección).
   // Pedido del 2026-11-19: la app ocupa la pantalla de arriba abajo (spec 2026-11-19-pantalla-completa).
   $('#topbar').innerHTML = `<button class="tb-logo-d" type="button" data-home aria-label="Ir al inicio">${zukaWord()}</button>
@@ -19999,7 +20020,7 @@ function renderComponents(c) {
         <span class="comp-go" aria-hidden="true">${ICON.right}</span></button>`;
     }).join('')}</div>
     ${doneN === ls.length && !soonOf(c).length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
-    ${c.id === 'preuda' ? librosHTML() : ''}</div>
+    ${c.id === 'preuda' && !cuentaDeColegio() ? librosHTML() : ''}</div>
     ${gymFabHTML(c, courseLevelUi(c, null, { done: S.done, last: S.lastLesson }))}
   </div>`;
   view.querySelectorAll('[data-block]').forEach(b => b.onclick = () => {

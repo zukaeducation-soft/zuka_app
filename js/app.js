@@ -144,6 +144,7 @@ let tab = 'learn', cleanup = null;
 // Cierra la clase abierta (pide confirmación si hay progreso); null cuando no hay clase.
 let lessonClose = null;
 function go(t) {
+  if (['tienda', 'tutorias'].includes(t) && cuentaDeColegio()) t = 'home';   // un estudiante de colegio no compra ni separa asesorías
   cleanup?.(); cleanup = null;
   tab = t;
   document.body.dataset.tab = t;
@@ -157,6 +158,7 @@ function go(t) {
 const shortNum = n => (n >= 10000 ? `${Math.floor(n / 100) / 10} k` : String(n));
 function renderTop() {
   syncHearts();
+  document.body.classList.toggle('de-colegio', cuentaDeColegio());
   // Solo racha y experiencia, más grandes; sin la marca ni las vidas (las vidas se ven dentro de la lección).
   // Pedido del 2026-11-19: la app ocupa la pantalla de arriba abajo (spec 2026-11-19-pantalla-completa).
   $('#topbar').innerHTML = `<button class="tb-logo-d" type="button" data-home aria-label="Ir al inicio">${zukaWord()}</button>
@@ -360,7 +362,7 @@ function renderComponents(c) {
         <span class="comp-go" aria-hidden="true">${ICON.right}</span></button>`;
     }).join('')}</div>
     ${doneN === ls.length && !soonOf(c).length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
-    ${c.id === 'preuda' ? librosHTML() : ''}</div>
+    ${c.id === 'preuda' && !cuentaDeColegio() ? librosHTML() : ''}</div>
     ${gymFabHTML(c, courseLevelUi(c, null, { done: S.done, last: S.lastLesson }))}
   </div>`;
   view.querySelectorAll('[data-block]').forEach(b => b.onclick = () => {
