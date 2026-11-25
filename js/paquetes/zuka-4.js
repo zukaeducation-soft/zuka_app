@@ -7519,7 +7519,7 @@ xpLec('icf-sc-modelos-1', [
       ['Por eso no siempre coinciden.', { luz: [3] }],
       ['Si nadie manda sobre el Estado, es soberano.', { luz: [0] }],
     ], 'Organización, personas y sentimiento de grupo.'),
-    xpHaz('hoja', 'Pon al margen el concepto.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['nación', 'Estado', 'gobierno'], meta: [2, 0, 1], paras: [['El gabinete que termina en agosto'], ['El pueblo gitano, en muchos países'], ['Quien firma los tratados a nombre del país, gane quien gane']], pista: 'Alguna no va ahí: ¿cambia con las elecciones o se siente unida?' }, 'Cambia, se siente unido y continúa.')],
+    xpHaz('hoja', 'Pon al margen el concepto.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['nación', 'Estado', 'gobierno'], meta: [2, 0, 1], paras: [['El gabinete que termina en agosto'], ['El pueblo gitano, en muchos países'], ['El que sigue obligado por un tratado, gane quien gane']], pista: 'Alguna no va ahí: ¿cambia con las elecciones o se siente unida?' }, 'Cambia, se siente unido y continúa.')],
   ['Poder y legitimidad',
     xpMira('hoja', 'Segunda idea: se puede mandar por **fuerza** o con **legitimidad**.', { paras: [['Obedecen por miedo'], ['Obedecen porque lo reconocen'], ['Ley bien aprobada'], ['Ley que casi todos sienten injusta']] }, [
       ['Sin la amenaza, no obedecerían.', { luz: [0], nota: { 0: 'fuerza' } }],
@@ -8466,10 +8466,10 @@ xpLec('icf-sc-modelos-2', [
   xpLec('icf-cn-ondas-1', [
     ['Viaja la energía',
       xpMira('dibujo', 'Empecemos por la idea: la onda **viaja**; la materia **vibra** y se queda.', { dib: onda, v: { n: 3, A: 34, g: 0, k: 0, t: '' }, alto: 172 }, [
-        ['Una onda avanza por el agua.', { g: 0.5 }],
+        ['Una onda avanza por el agua.', { g: 1 }],
         ['Hay un corcho flotando.', { k: 1 }],
-        ['Cuando pasa la cresta, sube.', { g: 0.75, t: 'sube y baja' }],
-        ['Después baja, en el mismo sitio.', { g: 1.25 }],
+        ['Cuando pasa la cresta, sube.', { g: 1.25, t: 'sube y baja' }],
+        ['Después baja, en el mismo sitio.', { g: 1.75 }],
         ['Lo que avanzó fue la energía.', { t: 'viaja la energía' }],
       ], 'Viaja la energía, no la materia.'),
       xpHaz('hoja', 'En un estadio, la gente hace «la ola» sin moverse de su puesto. Subraya lo que viaja.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Las personas'], ['El movimiento que pasa de uno a otro'], ['Las sillas']], pista: '¿Alguien cambia de puesto?' }, 'La perturbación pasa; cada quien se queda.')],
