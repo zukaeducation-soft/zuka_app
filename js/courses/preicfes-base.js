@@ -18,10 +18,13 @@ const ICF = (() => {
   const opc = (q, options, answer, explain, hint) => play('opcion-examen', 'Así sale en el examen.', { q, options, answer }, explain, { hint });
   // Pregunta A–D sobre un texto (evaluaciones de Lectura, Sociales e Inglés).
   const preg = (doc, block) => (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc, q, options, answer }, explain, { hint, kind: KIND[block] });
-  // Juego en movimiento al final de una lección de lectura: tres preguntas cortas sobre el texto, tres opciones cada una.
-  const mueve = (game, q, title, items, explain, hint) => play(game, q, { rounds: [{ title, items: items.map(([ask, options, answer]) => ({ ask, options, answer })) }] }, explain, { hint });
-  // Lección: en los juegos de lienzo la guía va sobre el juego; el juego en movimiento lleva `motion`.
-  const leccion = (id, title, scenes, ex) => ({ id, title, clip: { scenes }, ex: ex.map(e => ({ ...e, canvasGuide: true, motion: /^(vuela-precios|rompe-cambios|tanque-porcentaje|resortera-tres|lirios-laguna|corta-proporciones)$/.test(e.game) })) });
+  // Ejercicios con escena (los del Preuniversitario, hoja-kit.js y graficas-escena.js): x(juego, enunciado, datos, explicación, pista).
+  const x = (game, q, params, explain, hint) => play(game, q, params, explain, { hint });
+  // Cada ficha, tarjeta o línea se escribe junto con su lugar y su aviso: [texto, va, aviso]. S: lo que se marca y el aviso de lo demás.
+  const lista = k => (...l) => ({ [k]: l.map(q => q[0]), va: l.map(q => q[1]), mira: l.map(q => q[2]) });
+  const F = lista('fichas'), T = lista('tarjetas'), P = lista('lineas');
+  const S = (va, mira) => ({ va, n: va.length, mira });
+  const leccion = (id, title, scenes, ex) => ({ id, title, clip: { scenes }, ex });
   // Mundo con su evaluación: items = [[lección, nota de repaso, ejercicio]]. Tiempo: 1.5 min por juego; 2.25 por pregunta de lectura.
   const mundo = (world, title, block, lessons, items) => {
     const order = lessons.map(l => l.id);
@@ -32,5 +35,5 @@ const ICF = (() => {
     PI_HECHOS.push(world);
     return { world, title, block, lessons, exam };
   };
-  return { sol, err, opc, preg, mueve, leccion, mundo, KIND };
+  return { sol, err, opc, preg, x, F, T, P, S, leccion, mundo, KIND };
 })();

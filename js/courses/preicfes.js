@@ -7,5 +7,6 @@ const COURSE_PREICFES = {
   tagline: 'Las cinco pruebas del examen de grado 11, una por una.',
   blocks: PI_BLOCKS,
   units: PI_BLOCKS.flatMap(b => PI_MUNDOS.filter(u => u.block === b.id)),
+  soon: piPendientes(PI_MUNDOS),
 };
 COURSES.splice(COURSES.findIndex(c => c.id === 'preuda') + 1, 0, COURSE_PREICFES);

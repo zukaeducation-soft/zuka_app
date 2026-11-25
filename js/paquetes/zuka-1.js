@@ -27348,3 +27348,287 @@ GAMES['muestra-sesgo'] = (() => {
   });
   return Object.assign(game, { answer: r => best(r) });
 })();
+;
+//#archivo js/games/eje-engano.js
+// El eje que engaña (Preuniversitario, pu-gr-3; spec 2026-11-18-preuda-razonamiento-completo): dos barras con el eje cortado
+// parecen muy distintas. A la izquierda hay una agarradera para bajar el piso del eje hasta 0 y ver la diferencia de verdad.
+// Abajo se desliza cuánto por ciento más tiene la barra alta que la baja: eso no depende de dónde empiece el eje.
+// params = { rounds: [{ a: [rótulo, valor], b: [rótulo, valor], floor }] }   state = { rounds: [{ p, fl }] }   (p de 0 a 100, de 5 en 5)
+GAMES['eje-engano'] = (() => {
+  const need = r => (r.a[1] - r.b[1]) / r.b[1] * 100;
+  const ok = (s, r) => s.p === need(r);
+  const game = roundsGame({
+    aspect: 1.3,
+    init: r => ({ p: need(r) === 50 ? 45 : 50, fl: r.floor }),
+    ok,
+    solution: r => `${r.a[0]} tiene ${need(r)} % más que ${r.b[0]}`,
+    prompt: r => `¿Cuánto por ciento más tiene ${r.a[0]} que ${r.b[0]}?`,
+    foot: () => 'Baja el piso del eje y desliza el porcentaje',
+    layout(G) { G.b = { x: 60, y: 96, w: G.W - 80, h: G.H - 276 }; G.tY = G.H - 104; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = null; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { p: need(r), fl: 0 } : G.s, good = ok(s, r), b = G.b, hi = r.a[1] * 1.08;
+      const Y = v => b.y + b.h - (v - s.fl) / (hi - s.fl) * b.h;
+      for (let k = 0; k <= 4; k++) { const v = s.fl + (hi - s.fl) * k / 4, y = Y(v); p.stroke(RK.al(p, C.line, 90)); p.strokeWeight(1); p.line(b.x, y, b.x + b.w, y); TK.label(p, C, String(Math.round(v)), b.x - 18, y, C.mute, 9, 30); }
+      [r.a, r.b].forEach(([lab, v], i) => { const x = b.x + b.w * (0.15 + i * 0.45), w = b.w * 0.3; p.noStroke(); p.fill(i ? C.sky : C.coral); p.rect(x, Y(v), w, Y(s.fl) - Y(v), 3, 3, 0, 0); TK.label(p, C, `${lab}: ${v}`, x + w / 2, b.y + b.h + 14, C.ink, 10, w + 30); });
+      G.hy = Y(s.fl); p.noStroke(); p.fill(C.brand); p.rect(b.x - 62, G.hy - 9, 24, 18, 5); TK.label(p, C, `piso ${s.fl}`, b.x - 50, G.hy - 18, C.brand, 8, 44); TK.label(p, C, '↓', b.x - 50, G.hy + 16, C.brand, 10, 20);
+      const look = (r.a[1] - s.fl) / (r.b[1] - s.fl);
+      TK.label(p, C, `a la vista: ${Math.round(look * 10) / 10} veces más alta`, b.x + b.w / 2, b.y - 6, s.fl > 0 ? C.coral : C.mute, 10, b.w);
+      G.X = RK.track(p, C, 30, G.W - 30, G.tY, 21, s.p / 5, k => (k % 4 === 0 ? `${k * 5}%` : null), good ? C.ok : C.brand);
+      RK.strip(p, C, G.fb, `$${r.b[1]} \\cdot ${(1 + s.p / 100).toFixed(2)} = ${Math.round(r.b[1] * (1 + s.p / 100) * 100) / 100}$`, { kicker: `${s.p} % más`, col: G.locked || good ? C.ok : C.brand, size: 17 });
+    },
+    press(G, x, y) {
+      if (Math.abs(y - G.tY) < 28) { G.grab = 'p'; game.move(G, x); return true; }
+      if (x < G.b.x && Math.abs(y - G.hy) < 22) { G.grab = 'fl'; G.y0 = y; G.f0 = G.s.fl; return true; }
+      return false;
+    },
+    drag(G, x, y) {
+      if (G.grab === 'p') { game.move(G, x); return true; }
+      if (G.grab === 'fl') { const r = G.r, b = G.b, f = Math.max(0, Math.min(r.floor, Math.round(G.f0 - (y - G.y0) / 80 * r.floor))); if (f !== G.s.fl) { G.s.fl = f; G.touch(); } return true; }
+      return false;
+    },
+    release(G) { G.grab = null; },
+    demo: G => ({ from: { x: G.b.x - 50, y: G.hy }, to: { x: G.b.x - 50, y: G.hy + 50 }, text: 'Baja el piso', ty: G.b.y + 20 }),
+    peek: G => ({ tY: G.tY, b: G.b }),
+  });
+  game.move = (G, x) => { const v = 5 * RK.pick(x, 30, G.W - 30, 21); if (v !== G.s.p || !G.touched[G.cur]) { G.s.p = v; G.touch(); } };
+  return Object.assign(game, { answer: r => ({ p: need(r), fl: 0 }) });
+})();
+;
+//#archivo js/games/tabla-doble.js
+// Comparar grupos de distinto tamaño (Preuniversitario, pu-gr-3; spec 2026-11-18-preuda-razonamiento-completo): una tabla de
+// dos grupos con cuántos dicen «sí» de cuántos. Más personas no es más proporción. Cada grupo tiene su barra de 100 %; se
+// arrastra la parte pintada de cada una hasta su porcentaje (de 5 en 5) y así se comparan de verdad.
+// params = { rounds: [{ rows: [[grupo, sí, total]], what }] }   state = { rounds: [{ p: [porcentaje por grupo] }] }
+GAMES['tabla-doble'] = (() => {
+  const need = r => r.rows.map(([, y, t]) => y / t * 100);
+  const ok = (s, r) => need(r).every((v, i) => s.p[i] === v);
+  const game = roundsGame({
+    aspect: 1.2,
+    init: r => ({ p: r.rows.map(() => 0) }),
+    ok,
+    solution: r => r.rows.map(([g, y, t], i) => `${g}: ${y} de ${t} = ${need(r)[i]} %`).join('; '),
+    prompt: r => `¿Qué porcentaje ${r.what} en cada grupo?`,
+    foot: () => 'Arrastra la parte pintada de cada barra',
+    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; G.x0 = 24; G.x1 = G.W - 24; },
+    enter(G) { G.grab = -1; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { p: need(r) } : G.s, good = ok(s, r), X = v => G.x0 + v / 100 * (G.x1 - G.x0);
+      G.rowsY = r.rows.map((_, i) => 140 + i * 92);
+      r.rows.forEach(([g, y, t], i) => {
+        const yy = G.rowsY[i];
+        TK.label(p, C, `${g}: ${y} de ${t}`, G.W / 2, yy - 28, C.ink, 13, G.W - 30);
+        p.stroke(C.line); p.strokeWeight(1); p.fill(RK.al(p, C.card, 200)); p.rect(G.x0, yy - 14, G.x1 - G.x0, 28, 6);
+        p.noStroke(); p.fill(s.p[i] === need(r)[i] && good ? C.ok : i ? C.sky : C.coral); p.rect(G.x0, yy - 14, X(s.p[i]) - G.x0, 28, 6);
+        for (let k = 1; k < 10; k++) { p.stroke(RK.al(p, C.line, 120)); p.line(X(k * 10), yy + 14, X(k * 10), yy + 20); }
+        RK.knob(p, C, X(s.p[i]), yy, C.brand);
+        TK.label(p, C, `${s.p[i]} %`, Math.min(Math.max(X(s.p[i]), 40), G.W - 40), yy + 30, C.brand, 11, 60);
+      });
+      const best = good ? r.rows[need(r).indexOf(Math.max(...need(r)))][0] : null;
+      RK.strip(p, C, G.fb, good ? `$\\text{mayor proporción: ${best}}$` : `$${s.p.map(v => v + '\\%').join('\\quad ')}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+    },
+    press(G, x, y) { const i = (G.rowsY || []).findIndex(yy => Math.abs(y - yy) < 24); if (i < 0) return false; G.grab = i; game.move(G, x); return true; },
+    drag(G, x) { if (G.grab < 0) return false; game.move(G, x); return true; },
+    release(G) { G.grab = -1; },
+    demo: G => (G.rowsY ? { from: { x: G.x0 + 4, y: G.rowsY[0] }, to: { x: G.x0 + 120, y: G.rowsY[0] }, text: 'Arrastra la barra', ty: G.rowsY[0] + 50 } : null),
+    peek: G => ({ rowsY: G.rowsY, x0: G.x0, x1: G.x1 }),
+  });
+  game.move = (G, x) => { const v = Math.max(0, Math.min(100, Math.round((x - G.x0) / (G.x1 - G.x0) * 20) * 5)); if (v !== G.s.p[G.grab] || !G.touched[G.cur]) { G.s.p[G.grab] = v; G.touch(); } };
+  return Object.assign(game, { answer: r => ({ p: need(r) }) });
+})();
+;
+//#archivo js/games/circuito-logico.js
+// El circuito lógico (Preuniversitario, pu-lo-1 a pu-lo-3; spec 2026-11-18-preuda-razonamiento-completo): dos interruptores p y
+// q. En serie el bombillo prende solo si los dos están cerrados (p ∧ q); en paralelo, si alguno lo está (p ∨ q). Un interruptor
+// marcado con ¬ funciona al revés (cerrado cuando su letra es falsa), y un inversor antes del bombillo niega todo. Se tocan los
+// interruptores hasta que el bombillo quede como se pide.
+// params = { rounds: [{ op: 'and' | 'or', neg?: [bool, bool], out?: bool, want: bool, fix?: { p?: bool, q?: bool } }] }
+// state = { rounds: [{ v: [p, q] }] }
+GAMES['circuito-logico'] = (() => {
+  const val = (r, v) => { const a = r.neg?.[0] ? !v[0] : v[0], b = r.neg?.[1] ? !v[1] : v[1], x = r.op === 'and' ? a && b : a || b; return r.out ? !x : x; };
+  const fixed = r => ['p', 'q'].map(k => r.fix?.[k]);
+  const ok = (s, r) => val(r, s.v) === r.want && fixed(r).every((f, i) => f === undefined || s.v[i] === f);
+  const sols = r => [[false, false], [false, true], [true, false], [true, true]].filter(v => ok({ v }, r));
+  const tex = r => { const a = r.neg?.[0] ? '\\neg p' : 'p', b = r.neg?.[1] ? '\\neg q' : 'q', x = `${a} ${r.op === 'and' ? '\\wedge' : '\\vee'} ${b}`; return r.out ? `\\neg(${x})` : x; };
+  const game = roundsGame({
+    aspect: 1.25,
+    init: r => { const f = fixed(r), v = [f[0] ?? false, f[1] ?? false]; if (ok({ v }, r)) { const i = f[1] === undefined ? 1 : 0; v[i] = !v[i]; } return { v }; },
+    ok,
+    solution: r => { const v = sols(r)[0]; return `p ${v[0] ? 'V' : 'F'}, q ${v[1] ? 'V' : 'F'}`; },
+    prompt: r => `${r.want ? 'Prende' : 'Apaga'} el bombillo: $${tex(r)}$`,
+    foot: () => 'Toca los interruptores para abrirlos o cerrarlos',
+    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) {},
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { v: sols(r)[0] } : G.s, good = ok(s, r), lit = val(r, s.v), W = G.W;
+      const x0 = 30, x1 = W - 30, yT = 120, yB = 290, mid = (yT + yB) / 2;
+      const wire = on => { p.stroke(on ? C.sun : C.line); p.strokeWeight(on ? 3 : 2); };
+      wire(lit); p.noFill();
+      p.line(x0, yT, x0, yB); p.line(x0, yB, x1, yB); p.line(x1, yB, x1, yT);
+      p.noStroke(); p.fill(C.mute); p.rect(x0 - 10, mid - 18, 20, 36, 4); TK.label(p, C, '+', x0, mid - 8, inkOn(C.mute), 10, 16);
+      const sw = (i, x, y) => {
+        const on = r.neg?.[i] ? !s.v[i] : s.v[i], fx = fixed(r)[i] !== undefined;
+        p.stroke(on ? C.sun : C.ink); p.strokeWeight(3); p.line(x - 22, y, x - 12, y); p.line(x + 12, y, x + 22, y);
+        if (on) p.line(x - 12, y, x + 12, y); else p.line(x - 12, y, x + 8, y - 16);
+        p.noStroke(); p.fill(C.ink); p.circle(x - 12, y, 6); p.circle(x + 12, y, 6);
+        TK.label(p, C, `$${r.neg?.[i] ? '\\neg ' : ''}${'pq'[i]}$`, x, y - 26, fx ? C.mute : C.brand, 13, 50);
+        TK.label(p, C, s.v[i] ? `${'pq'[i]} = V` : `${'pq'[i]} = F`, x, y + 20, fx ? C.mute : C.ink, 10, 60);
+        return { x, y, i, fx };
+      };
+      if (r.op === 'and') {
+        const xa = x0 + (x1 - x0) * 0.3, xb = x0 + (x1 - x0) * 0.62;
+        wire(lit); p.line(x0, yT, xa - 22, yT); p.line(xa + 22, yT, xb - 22, yT); p.line(xb + 22, yT, x1, yT);
+        G.sw = [sw(0, xa, yT), sw(1, xb, yT)];
+      } else {
+        const xs = x0 + (x1 - x0) * 0.42, ya = yT - 10, yb = yT + 60, xl = xs - 50, xr = xs + 50;
+        wire(lit); p.line(x0, yT, xl, yT); p.line(xl, ya, xl, yb); p.line(xr, ya, xr, yb); p.line(xr, yT, x1, yT);
+        p.line(xl, ya, xs - 22, ya); p.line(xs + 22, ya, xr, ya); p.line(xl, yb, xs - 22, yb); p.line(xs + 22, yb, xr, yb);
+        G.sw = [sw(0, xs, ya), sw(1, xs, yb)];
+      }
+      if (r.out) { const xi = x1 - 40; p.stroke(C.ink); p.strokeWeight(1.5); p.fill(C.card); p.rect(xi - 16, yT - 12, 32, 24, 5); TK.label(p, C, '$\\neg$', xi, yT, C.ink, 13, 30); }
+      const bx = (x0 + x1) / 2;
+      if (lit) { p.noStroke(); p.fill(RK.al(p, C.sun, 70)); p.circle(bx, yB, 64); }
+      p.stroke(C.ink); p.strokeWeight(1.5); p.fill(lit ? C.sun : C.card); p.circle(bx, yB, 34);
+      RK.strip(p, C, G.fb, `$${tex(r)} = ${lit ? 'V' : 'F'}$`, { kicker: lit ? 'el bombillo prende' : 'el bombillo está apagado', col: G.locked || good ? C.ok : C.brand, size: 17 });
+    },
+    press(G, x, y) { const w = (G.sw || []).find(o => Math.hypot(x - o.x, y - o.y) < 30); if (!w) return false; if (!w.fx) { G.s.v[w.i] = !G.s.v[w.i]; G.touch(); } return true; },
+    demo: G => { const w = G.sw?.find(o => !o.fx); return w ? { from: w, to: w, text: 'Toca el interruptor', ty: w.y + 42 } : null; },
+    peek: G => ({ sw: G.sw }),
+  });
+  return Object.assign(game, { answer: r => ({ v: sols(r)[0] }) });
+})();
+;
+//#archivo js/games/tabla-verdad.js
+// La tabla de verdad (Preuniversitario, pu-lo-1 a pu-lo-3; spec 2026-11-18-preuda-razonamiento-completo): todas las
+// combinaciones de p y q (o de p, q y r) en filas, y la columna de la fórmula vacía. Se toca cada casilla para ponerle V o F.
+// Si hay `given`, una columna ya hecha sirve de comparación (para ver que dos fórmulas son equivalentes).
+// params = { rounds: [{ tex, f(p, q, r) → bool, n: 2 | 3, given?: { tex, f } }] }   state = { rounds: [{ c: [null | true | false por fila] }] }
+GAMES['tabla-verdad'] = (() => {
+  const rows = r => Array.from({ length: 2 ** r.n }, (_, k) => Array.from({ length: r.n }, (_, j) => !((k >> (r.n - 1 - j)) & 1)));
+  const need = r => rows(r).map(v => !!r.f(...v));
+  const ok = (s, r) => need(r).every((v, i) => s.c[i] === v);
+  const game = roundsGame({
+    aspect: 1.35,
+    init: r => ({ c: rows(r).map(() => null) }),
+    answered: s => s.c.some(v => v !== null),
+    ok,
+    solution: r => need(r).map(v => (v ? 'V' : 'F')).join(' '),
+    prompt: r => `Llena la tabla de $${r.tex}$`,
+    foot: () => 'Toca cada casilla: V, F, V…',
+    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) {},
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { c: need(r) } : G.s, good = ok(s, r), R = rows(r), nc = r.n + (r.given ? 2 : 1);
+      const cw = Math.min(70, (G.W - 30) / nc), x0 = (G.W - nc * cw) / 2, rh = Math.min(34, (G.H - 220) / (R.length + 1)), y0 = 96;
+      const head = ['p', 'q', 'r'].slice(0, r.n).concat(r.given ? [r.given.tex] : [], [r.tex]);
+      head.forEach((h, j) => { const last = j === nc - 1; p.noStroke(); p.fill(RK.al(p, last ? C.brand : C.line, last ? 60 : 90)); p.rect(x0 + j * cw + 1, y0, cw - 2, rh - 2, 4); TK.label(p, C, `$${h}$`, x0 + (j + 0.5) * cw, y0 + rh / 2, C.ink, 12, cw - 4); });
+      G.cells = R.map((v, i) => {
+        const y = y0 + (i + 1) * rh;
+        v.forEach((b, j) => TK.label(p, C, b ? 'V' : 'F', x0 + (j + 0.5) * cw, y + rh / 2, b ? C.ok : C.bad, 12, cw));
+        if (r.given) { const g = !!r.given.f(...v); TK.label(p, C, g ? 'V' : 'F', x0 + (r.n + 0.5) * cw, y + rh / 2, C.mute, 12, cw); }
+        const x = x0 + (nc - 1) * cw, c = s.c[i];
+        p.stroke(C.line); p.strokeWeight(1); p.fill(c === null ? RK.al(p, C.card, 200) : RK.al(p, c ? C.ok : C.bad, 70)); p.rect(x + 3, y + 2, cw - 6, rh - 4, 6);
+        TK.label(p, C, c === null ? '?' : c ? 'V' : 'F', x + cw / 2, y + rh / 2, C.ink, 13, cw);
+        return { x: x + 3, y: y + 2, w: cw - 6, h: rh - 4, i };
+      });
+      const done = s.c.filter(v => v !== null).length;
+      RK.strip(p, C, G.fb, good ? '$\\text{tabla completa y correcta}$' : `$\\text{${done} de ${R.length} filas}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+    },
+    press(G, x, y) { const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false; const v = G.s.c[c.i]; G.s.c[c.i] = v === null ? true : v ? false : true; G.touch(); return true; },
+    demo: G => (G.cells ? { from: { x: G.cells[0].x + G.cells[0].w / 2, y: G.cells[0].y + 12 }, to: { x: G.cells[0].x + G.cells[0].w / 2, y: G.cells[0].y + 12 }, text: 'Toca la casilla', ty: G.cells.at(-1).y + 50 } : null),
+    peek: G => ({ cells: G.cells }),
+  });
+  return Object.assign(game, { answer: r => ({ c: need(r) }) });
+})();
+;
+//#archivo js/games/rompe-promesa.js
+// ¿Cuándo es falsa? (Preuniversitario, pu-lo-1 y pu-lo-3; spec 2026-11-18-preuda-razonamiento-completo): una frase con dos
+// partes («si llueve, llevo paraguas») y un tablero de 2 × 2 con los cuatro casos posibles. Se tocan las casillas donde la
+// frase queda falsa (o verdadera, según se pida). El condicional solo se rompe en un caso.
+// params = { rounds: [{ say, p, q, f(p, q) → bool, want: bool }] }   state = { rounds: [{ m: [4 marcas] }] }   (casillas: p V/F × q V/F)
+GAMES['rompe-promesa'] = (() => {
+  const CASES = [[true, true], [true, false], [false, true], [false, false]];
+  const need = r => CASES.map(([a, b]) => !!r.f(a, b) === r.want);
+  const ok = (s, r) => need(r).every((v, i) => s.m[i] === v);
+  const game = roundsGame({
+    aspect: 1.3,
+    init: () => ({ m: [false, false, false, false] }),
+    answered: s => s.m.some(Boolean),
+    ok,
+    solution: r => CASES.filter((_, i) => need(r)[i]).map(([a, b]) => `${a ? '' : 'no '}${r.p} y ${b ? '' : 'no '}${r.q}`).join('; '),
+    prompt: r => `«${r.say}». Marca los casos en que es ${r.want ? 'verdad' : 'falsa'}`,
+    foot: () => 'Toca las casillas para marcarlas',
+    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) {},
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { m: need(r) } : G.s, good = ok(s, r), lw = 76, cw = (G.W - 30 - lw) / 2, ch = 72, x0 = 15 + lw, y0 = 136;
+      TK.label(p, C, r.q, x0 + cw, y0 - 40, C.ink, 11, 2 * cw);
+      ['sí', 'no'].forEach((t, j) => TK.label(p, C, t, x0 + (j + 0.5) * cw, y0 - 18, C.mute, 10, cw));
+      ['sí', 'no'].forEach((t, i) => { const yy = y0 + (i + 0.5) * ch; TK.label(p, C, t, 15 + lw / 2, yy - 9, C.ink, 11, lw - 4); TK.label(p, C, r.p, 15 + lw / 2, yy + 8, C.mute, 9, lw - 4); });
+      G.cells = CASES.map((_, k) => {
+        const i = Math.floor(k / 2), j = k % 2, x = x0 + j * cw, y = y0 + i * ch, on = s.m[k];
+        p.stroke(C.line); p.strokeWeight(1); p.fill(on ? RK.al(p, r.want ? C.ok : C.coral, 110) : RK.al(p, C.card, 200)); p.rect(x + 3, y + 3, cw - 6, ch - 6, 8);
+        if (on) TK.label(p, C, r.want ? 'verdad' : 'falsa', x + cw / 2, y + ch / 2, C.ink, 12, cw - 10);
+        return { x: x + 3, y: y + 3, w: cw - 6, h: ch - 6, k };
+      });
+      const n = s.m.filter(Boolean).length;
+      RK.strip(p, C, G.fb, good ? `$\\text{${n === 1 ? 'un solo caso' : n + ' casos'}}$` : `$\\text{${n} marcadas}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+    },
+    press(G, x, y) { const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false; G.s.m[c.k] = !G.s.m[c.k]; G.touch(); return true; },
+    demo: G => (G.cells ? { from: { x: G.cells[0].x + 30, y: G.cells[0].y + 30 }, to: { x: G.cells[0].x + 30, y: G.cells[0].y + 30 }, text: 'Toca un caso', ty: G.cells[3].y + G.cells[3].h + 20 } : null),
+    peek: G => ({ cells: G.cells }),
+  });
+  return Object.assign(game, { answer: r => ({ m: need(r) }) });
+})();
+;
+//#archivo js/games/adivina-conectivo.js
+// ¿Qué conectivo es? (Preuniversitario, pu-lo-1; spec 2026-11-18-preuda-razonamiento-completo): una tabla de verdad con la
+// columna de resultados ya escrita. Se arrastra un conectivo (∧, ∨, →, ↔) a la casilla de «p ? q» y el juego escribe al lado,
+// en vivo, la columna que da ese conectivo: hay que dejar el que coincide fila por fila.
+// params = { rounds: [{ out: [4 valores: VV, VF, FV, FF] }] }   state = { rounds: [{ f: [conectivo | −1] }] }
+GAMES['adivina-conectivo'] = (() => {
+  const OPS = [['\\wedge', (a, b) => a && b], ['\\vee', (a, b) => a || b], ['\\to', (a, b) => !a || b], ['\\leftrightarrow', (a, b) => a === b]];
+  const CASES = [[true, true], [true, false], [false, true], [false, false]];
+  const need = r => OPS.findIndex(([, f]) => CASES.every(([a, b], i) => f(a, b) === r.out[i]));
+  return CODK.fillGame({
+    aspect: 1.3,
+    prompt: () => '¿Qué conectivo da esta columna?',
+    foot: 'Arrastra un conectivo a la casilla',
+    tray: () => OPS.map(o => `$${o[0]}$`),
+    need: r => [need(r)],
+    over: () => '$p \\;?\\; q$',
+    done: r => `es $p ${OPS[need(r)][0]} q$`,
+    decor(G) {
+      const { p, C, r, s } = G, cw = Math.min(64, (G.W - 30) / 4), x0 = (G.W - 4 * cw) / 2, rh = 22, y0 = 90, k = s.f[0];
+      ['p', 'q', 'pide', 'da'].forEach((h, j) => TK.label(p, C, h, x0 + (j + 0.5) * cw, y0 + rh / 2, j === 2 ? C.coral : j === 3 ? C.brand : C.mute, 11, cw));
+      CASES.forEach(([a, b], i) => {
+        const y = y0 + (i + 1) * rh + rh / 2, got = k >= 0 ? OPS[k][1](a, b) : null, hit = got === r.out[i];
+        [a, b, r.out[i]].forEach((v, j) => TK.label(p, C, v ? 'V' : 'F', x0 + (j + 0.5) * cw, y, j === 2 ? C.ink : C.mute, 12, cw));
+        TK.label(p, C, got === null ? '·' : got ? 'V' : 'F', x0 + 3.5 * cw, y, got === null ? C.mute : hit ? C.ok : C.bad, 12, cw);
+      });
+    },
+  });
+})();
+;
+//#archivo js/games/arma-negacion.js
+// Arma la frase (Preuniversitario, pu-lo-2 y pu-lo-3; spec 2026-11-18-preuda-razonamiento-completo): arriba está una frase o una
+// fórmula y lo que se pide de ella (su negación, su contrarrecíproco…). Se arrastran fichas a las casillas para escribirla; las
+// fichas pueden ser símbolos ($\neg p$, $\wedge$) o palabras («algún», «no»). Sobran fichas para que no se arme sola.
+// params = { rounds: [{ ask, show, tray: [fichas], need: [índice de ficha por casilla] }] }   state = { rounds: [{ f: [ficha | −1] }] }
+GAMES['arma-negacion'] = CODK.fillGame({
+  aspect: 1.5,
+  chipW: 66,
+  perRow: 4,
+  prompt: r => r.ask,
+  foot: 'Arrastra las fichas a las casillas',
+  tray: r => r.tray,
+  need: r => r.need,
+  alt: r => r.alt,
+  done: () => 'bien escrita',
+  col: C => C.mint,
+  decor(G) {
+    const { p, C, r } = G;
+    p.stroke(C.line); p.strokeWeight(1); p.fill(RK.al(p, C.card, 200)); p.rect(20, 110, G.W - 40, 56, 10);
+    TK.label(p, C, r.show, G.W / 2, 138, C.ink, 15, G.W - 56);
+  },
+});

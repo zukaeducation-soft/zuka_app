@@ -1,7 +1,7 @@
 // Curso Preicfes Saber 11 (spec 2026-11-20-curso-preicfes): cinco componentes que se eligen al entrar, el primer mundo de cada
-// uno jugable con su evaluación, y dos estándares de lección: el «de diez» en Matemáticas y Ciencias (9 a 11 juegos distintos de
-// una ronda, uno en movimiento y la zona de examen) y el de lectura en Lectura Crítica, Sociales e Inglés (un texto original, 7
-// juegos LEC distintos y un juego en movimiento al final). Nada dice de qué examen o año sale un problema.
+// uno jugable con su evaluación. Desde la spec 2026-11-25-preicfes-estructura cada lección tiene explicación interactiva, ocho
+// ejercicios dibujados (más la zona de examen en Matemáticas y Ciencias) y cada mundo, dos retos del gimnasio. Nada dice de qué
+// examen o año sale un problema.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
@@ -10,19 +10,16 @@ const { loadScripts, get, ROOT } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
 const html = read('index.html'), sw = require('./load').shell();
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
-const ctx = loadScripts(['js/art.js', ...all]);
-const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), LEC = get(ctx, 'LEC'), EXQ = get(ctx, 'EXQ'), WORLDS = get(ctx, 'WORLDS');
+const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso|conceptos|gimnasio/.test(f));
+const exp = [...html.matchAll(/src="(js\/explora[^"]*)"/g)].map(m => m[1]).filter(f => !/voces/.test(f));
+const ctx = loadScripts(['js/art.js', ...all, ...exp]);
+const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), HOJA = get(ctx, 'HOJA'), EXPLORA = get(ctx, 'EXPLORA'), EXQ = get(ctx, 'EXQ'), WORLDS = get(ctx, 'WORLDS');
 const COURSES = get(ctx, 'COURSES'), DONE = get(ctx, 'PI_HECHOS');
 const C = COURSES.find(c => c.id === 'preicfes');
 const BLOCKS = ['matematicas', 'lectura', 'sociales', 'ciencias', 'ingles'];
 const DIEZ = ['matematicas', 'ciencias'];
 const ZONA = ['completa-solucion', 'caza-error', 'opcion-examen'];
-const LEC_GAMES = ['anticipa-texto', 'mapa-del-texto', 'resume-parrafo', 'donde-buscar', 'lupa-evidencia', 'intruso-excepto',
-  'palabra-a-la-medida', 'hilo-referente', 'conector-bisagra', 'signos-que-hablan', 'quien-lo-dice', 'balanza-argumento',
-  'termometro-tono', 'caso-nuevo', 'puente-dos-textos'];
 const BORING = ['escala-solucion', 'arma-la-cuenta', 'une-parejas', 'clasifica-cartas', 'verdadero-falso', 'ordena-terminos', 'detective-pasos'];
-const MOVING = /MOVING = \[([\s\S]*?)\];/.exec(read('tests/preuda-razonamiento.test.js'))[1].match(/'[^']+'/g).map(s => s.slice(1, -1));
 const words = d => d.paras.join(' ').split(/\s+/).filter(Boolean).length;
 const docsOf = p => p.docs || (p.doc ? [p.doc] : []);
 const lessons = () => C.units.flatMap(u => u.lessons.map(l => [u, l]));
@@ -89,95 +86,87 @@ test('todo ejercicio usa un juego registrado, con guía, pista y explicación', 
   }
 });
 
-test('Matemáticas y Ciencias: 9 a 11 juegos distintos de una ronda, movimiento y zona de examen al final', () => {
-  for (const [u, l] of lessons().filter(([u]) => DIEZ.includes(u.block))) {
-    const games = l.ex.map(e => e.game);
-    assert.ok(l.ex.length >= 9 && l.ex.length <= 11, `${l.id}: ${l.ex.length} ejercicios`);
+test('cada lección tiene su explicación y sus ejercicios dibujados: 8 distintos, y zona de examen en Matemáticas y Ciencias', () => {
+  for (const [u, l] of lessons()) {
+    assert.ok(EXPLORA[l.id], `${l.id} sin explicación`);
+    const games = l.ex.map(e => e.game), diez = DIEZ.includes(u.block), base = diez ? l.ex.slice(0, -3) : l.ex;
     assert.equal(new Set(games).size, games.length, `${l.id}: juego repetido (${games})`);
-    assert.equal(games.slice(-3).join(), ZONA.join(), `${l.id}: termina en ${games.slice(-3)}`);
-    assert.ok(MOVING.includes(games.at(-4)), `${l.id}: ${games.at(-4)} no es de movimiento`);
-    assert.ok(!games.slice(0, -3).some(g => ZONA.includes(g) || g === 'pregunta-examen'), l.id);
-    for (const e of l.ex) {
-      const r = e.params.rounds;
-      if (Array.isArray(r)) {
-        assert.equal(r.length, 1, `${l.id}: ${e.game} tiene ${r.length} rondas`);
-        if (r[0].items?.[0]?.options || r[0].items?.[0]?.expr || r[0].items?.[0]?.sign) assert.ok(r[0].items.length <= 3, `${l.id}: ${e.game}`);
-      }
-      if (Array.isArray(e.params.problems)) assert.equal(e.params.problems.length, 1, `${l.id}: ${e.game}`);
+    if (diez) { assert.equal(games.slice(-3).join(), ZONA.join(), l.id); assert.ok(games.length >= 9 && games.length <= 11, l.id); } else assert.equal(games.length, 8, l.id);
+    for (const e of base) {
+      const g = GAMES[e.game], p = e.params, id = `${l.id} ${e.game}`, s = g.solve(p);
+      assert.equal(g.xp, true, id);
+      assert.ok(e.hint.length > 40 && e.explain.length > 40, `${id}: pista o explicación corta`);
+      assert.equal(g.listo(g.ini(p), p), false, `${id} nace listo`);
+      assert.equal(g.listo(s, p), true, id);
+      assert.equal(g.grade(s, p).ok, true, id);
+      assert.equal(g.grade(g.ini(p), p).ok, false, id);
+      assert.ok(!/undefined|NaN|\[object/.test(g.grade(s, p).solution), id);
     }
-    if (u.block === 'ciencias') assert.ok(l.ex.filter(e => LEC_GAMES.includes(e.game)).length >= 3, `${l.id}: el experimento se lee`);
-  }
-});
-
-test('Lectura, Sociales e Inglés: un texto original, 7 juegos LEC distintos y un juego en movimiento al final', () => {
-  const docIds = new Set();
-  for (const [u, l] of lessons().filter(([u]) => !DIEZ.includes(u.block))) {
-    const games = l.ex.map(e => e.game);
-    assert.equal(l.ex.length, 8, `${l.id}: ${l.ex.length}`);
-    assert.equal(new Set(games).size, 8, `${l.id}: repetido (${games})`);
-    assert.ok(games.slice(0, 7).every(g => LEC_GAMES.includes(g)), `${l.id}: ${games}`);
-    assert.ok(MOVING.includes(games[7]), `${l.id}: termina en ${games[7]}`);
-    const main = l.ex[0].params.doc;
-    assert.ok(main, `${l.id}: sin texto`);
-    assert.ok(l.ex.slice(0, 7).filter(e => e.params.doc?.id === main.id).length >= 6, `${l.id}: el texto no acompaña la lección`);
-    assert.ok(!docIds.has(main.id), `${main.id} repetido`);
-    docIds.add(main.id);
+    if (diez) continue;
+    const main = l.ex[0].params.doc; assert.ok(main, `${l.id}: empieza sin texto`);
     const n = words(main), [lo, hi] = u.block === 'ingles' ? [180, 420] : [330, 560];
     assert.ok(n >= lo && n <= hi, `${l.id}: ${n} palabras`);
-    assert.ok(main.paras.length >= 4 && main.paras.length <= 7, `${l.id}: ${main.paras.length} párrafos`);
-    const r = l.ex[7].params.rounds;
-    assert.equal(r.length, 1, l.id);
-    assert.equal(r[0].items.length, 3, `${l.id}: tres preguntas en movimiento`);
-    for (const it of r[0].items) {
-      assert.equal(it.options.length, 3, l.id);
-      assert.ok(it.ask.length <= 64, `${l.id}: pregunta larga para el lienzo «${it.ask}»`);
-      assert.ok(it.options.every(o => o.length <= 22), `${l.id}: opción larga en «${it.ask}»`);
-    }
+    assert.ok(main.paras.length >= 4 && main.paras.length <= 7, l.id);
+    assert.ok(l.ex.filter(e => e.params.doc?.id === main.id).length >= 7, `${l.id}: el texto no acompaña la lección`);
   }
 });
 
-test('las citas y referencias de los juegos LEC están en su párrafo', () => {
-  for (const [, l] of lessons()) for (const e of l.ex) {
-    const p = e.params, d = p.doc;
-    if (!LEC_GAMES.includes(e.game) || !d) continue;
-    const P = n => d.paras[n - 1];
-    const inRange = n => assert.ok(Number.isInteger(n) && n >= 1 && n <= d.paras.length, `${l.id} ${e.game}: párrafo ${n}`);
-    if (e.game === 'palabra-a-la-medida') for (const r of p.rounds) {
-      inRange(r.p);
-      assert.ok(P(r.p).includes(`${r.before}${r.word}${r.after}`), `${l.id}: «${r.before}${r.word}${r.after}» no está en ¶${r.p}`);
-      assert.ok(!r.options.includes(r.word));
-      assert.ok(!e.hint.toLowerCase().includes(`«${r.options[r.answer].toLowerCase()}»`), `${l.id}: la pista dice la respuesta`);
-    }
-    if (e.game === 'hilo-referente') for (const r of p.rounds) {
-      inRange(r.p);
-      assert.ok(P(r.p).includes(r.text.split('|').join('')), `${l.id}: hilo fuera de ¶${r.p}`);
-      assert.notEqual(r.from, r.answer);
-    }
-    if (e.game === 'signos-que-hablan') for (const r of p.rounds) if (r.p) assert.ok(P(r.p).includes(r.text.split('|').join('')), `${l.id}: signo fuera de ¶${r.p}`);
-    if (e.game === 'mapa-del-texto') assert.equal(p.key.length, d.paras.length, `${l.id}: una etiqueta por párrafo`);
-    if (e.game === 'resume-parrafo') p.paras.forEach(inRange);
-    if (['donde-buscar', 'intruso-excepto'].includes(e.game)) for (const [, ps] of p.cards) for (const n of ps || []) inRange(n);
+// Lo mismo se le pide a una lección y a un paso del gimnasio.
+function revisa(id, e) {
+  const g = GAMES[e.game], p = e.params, P = n => p.doc.paras[n - 1] || '';
+  for (const [n, t] of p.luz || []) assert.ok(P(n).includes(t), `${id}: «${t}» no está en ¶${n}`);
+  for (const [n, a, w, b] of p.frases || []) assert.ok(P(n).includes(a + w + b), `${id}: «${a}${w}${b}»`);
+  const k = p.fichas || p.tarjetas || p.lineas;
+  if (['zonas', 'hilos', 'pinta'].includes(g.tipo)) {
+    assert.equal(p.va.length, k.length, id); assert.equal(p.mira.length, k.length, id); assert.ok(p.mira.every(m => m.length > 12), id);
+    assert.equal(new Set(k).size, k.length, id);
   }
+  if (g.tipo === 'zonas') {
+    const en = p.va.filter(v => v != null).map(HOJA.base);
+    if (!g.varias) assert.equal(new Set(en).size, en.length, `${id}: dos fichas en un hueco`);
+    for (const z of en) assert.ok(g.rot(p, z), `${id}: zona ${z}`);
+  }
+  if (g.tipo === 'hilos') for (const d of p.va.flat()) assert.ok(d >= 0 && d < g.destinos(p), `${id}: destino ${d}`);
+  if (g.tipo === 'pinta') assert.equal(new Set(p.va).size, p.plumas.length, `${id}: pluma sin usar`);
+  if (g.tipo === 'toca') {
+    const c = [...g.claves(p)], va = p.va.map(String);
+    assert.ok(va.every(x => c.includes(x)), `${id}: ${va}`); assert.equal(p.n, va.length, id);
+    for (const x of c.filter(x => !va.includes(x))) assert.ok(p.mira[x]?.length > 12, `${id}: sin aviso en ${x}`);
+  }
+  if (g.tipo === 'ordena') { assert.equal([...p.ini].sort().join(), p.ini.map((_, i) => i).join(), id); assert.equal(p.mira.length, p.ini.length, id); assert.ok(p.ini.filter((x, i) => x !== i).length >= 2, id); }
+  if (g.tipo === 'regla') p.filas.forEach((r, i) => { assert.ok(r.topes.length >= 3, id); assert.notEqual(g.inicio(r), r.va, `${id}: fila ${i} nace resuelta`); });
+  if (p.metas && p.fichas) for (const m of p.metas) assert.ok(p.fichas.filter(f => f === m).length >= p.metas.filter(x => x === m).length, `${id}: falta la ficha ${m}`);
+}
+
+test('las piezas de los ejercicios están completas y lo que se enciende está en su párrafo', () => {
+  for (const [, l] of lessons()) for (const e of l.ex) revisa(`${l.id} ${e.game}`, e);
 });
 
-// Estado que pone cada ficha en su primera zona válida (o la deja en la bandeja si sobra).
-const solved = (name, params) => ({ rounds: LEC.rounds(name, params).map(r => ({ place: r.key.map(k => k == null ? -1 : [].concat(k)[0]) })) });
-const empty = (name, params) => ({ rounds: LEC.rounds(name, params).map(r => ({ place: r.chips.map(() => -1) })) });
-
-test('los juegos de fichas aciertan con su clave, fallan vacíos y no delatan la respuesta por la posición', () => {
-  const firstPos = [];
-  for (const [, l] of lessons()) for (const e of l.ex) {
-    if (!LEC_GAMES.includes(e.game) || e.game === 'hilo-referente' || e.game === 'termometro-tono') continue;
-    const g = GAMES[e.game];
-    assert.equal(g.grade(solved(e.game, e.params), e.params).ok, true, `${l.id} ${e.game}`);
-    assert.equal(g.grade(empty(e.game, e.params), e.params).ok, false, `${l.id} ${e.game} vacío`);
-    for (const rr of LEC.rounds(e.game, e.params)) {
-      assert.ok(rr.chips.length >= 2, `${l.id} ${e.game}`);
-      for (const k of rr.key) for (const z of [].concat(k ?? [])) assert.ok(z >= 0 && z < rr.zones.length, `${l.id} ${e.game}: zona ${z}`);
-      if (rr.zones.length === 1) firstPos.push(LEC.mix(rr.chips).indexOf(rr.key.findIndex(k => k != null)));
-    }
+test('temario: cinco componentes, sin repetir mundos, y lo hecho coincide con lo anunciado', () => {
+  const T = get(ctx, 'PI_TEMARIO'), todos = Object.values(T).flat();
+  assert.equal(Object.keys(T).join(), BLOCKS.join());
+  assert.equal(new Set(todos.map(t => t[0])).size, todos.length);
+  for (const [w, title, ls, area] of todos) { assert.match(w, /^icf-(ma|lc|sc|cn|en)-[a-z]+$/); assert.ok(title && area && ls.length >= 2, w); }
+  for (const u of C.units) {
+    const t = T[u.block].find(t => t[0] === u.world);
+    assert.ok(t, u.world); assert.equal(t[1], u.title); assert.equal(t[2].join(), u.lessons.map(l => l.title).join(), u.world);
   }
-  assert.ok(firstPos.filter(p => p === 0).length <= firstPos.length / 2, `la respuesta sale primera demasiadas veces (${firstPos})`);
+  assert.equal(C.soon.length + C.units.length, todos.length);
+  assert.match(read('js/app.js'), /soonHTML\(c, block\)/);
+});
+
+test('gimnasio: cada mundo hecho tiene un reto de Fuerza y uno de Élite, con escenas y sin repetir ejercicios', () => {
+  const R = get(ctx, 'gymRetos')(C).flatMap(g => g.retos), J = p => JSON.stringify(p), L = new Set(lessons().flatMap(([, l]) => l.ex.map(e => e.game + J(e.params))));
+  for (const u of C.units) {
+    const ids = u.lessons.map(l => l.id), lv = R.filter(r => r.after.some(a => ids.includes(a))).map(r => r.level);
+    assert.ok(lv.includes(2) && lv.includes(3), `${u.world}: ${lv}`);
+  }
+  for (const r of R) r.steps.forEach((s, i) => {
+    const id = `${r.id} paso ${i + 1}`, g = GAMES[s.ex.game], p = s.ex.params;
+    assert.equal(g?.xp, true, id); assert.equal(g.grade(g.solve(p), p).ok, true, id); assert.equal(g.grade(g.ini(p), p).ok, false, id);
+    assert.ok(!L.has(s.ex.game + J(p)), `${id} repite un ejercicio`);
+    revisa(id, s.ex);
+  });
 });
 
 test('zona de examen: completa, con una sola respuesta, y las claves A–D repartidas', () => {
@@ -256,12 +245,3 @@ test('ningún texto dice de qué examen o año sale', () => {
   for (const t of txt) assert.doesNotMatch(String(t), SOURCE, String(t).slice(0, 140));
 });
 
-test('los juegos de rejilla tienen una posición ganadora (la muestra que representa)', () => {
-  const exs = C.units.flatMap(u => [...u.lessons.flatMap(l => l.ex), ...u.exam.items.map(it => it.ex)]).filter(e => e.game === 'muestra-sesgo');
-  assert.ok(exs.length >= 1);
-  for (const e of exs) for (const r of e.params.rounds) {
-    let found = false;
-    for (let y = 0; y + r.h <= r.grid.length; y++) for (let x = 0; x + r.w <= r.grid[0].length; x++) if (GAMES['muestra-sesgo'].grade({ rounds: [{ x, y }] }, { rounds: [r] }).ok) found = true;
-    assert.ok(found, 'ninguna muestra se parece al pueblo');
-  }
-});

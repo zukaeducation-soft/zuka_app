@@ -332,6 +332,13 @@ function currentLesson(c, block) {
 }
 // Pantalla de entrada de un curso con componentes: la portada del curso y una tarjeta por componente, con sus mundos,
 // sus lecciones, el avance y la lección que sigue. Tocar una tarjeta abre los mundos de ese componente.
+// Mundos de un curso que aún no están escritos (c.soon): salen debajo del mapa de su componente con sus lecciones, sin abrirse.
+const soonOf = (c, block) => (c.soon || []).filter(u => !block || u.block === block.id);
+function soonHTML(c, block) {
+  const l = soonOf(c, block), n0 = c.units.filter(u => !block || u.block === block.id).length;
+  return !l.length ? '' : `<section class="soon"><h2>En preparación</h2><p>Los mundos que siguen en este componente.</p><ol>${l.map((u, i) =>
+    `<li><small>Mundo ${n0 + i + 1} · ${esc(u.area)}</small><b>${esc(u.title)}</b><span>${u.lessons.map(esc).join(' · ')}</span></li>`).join('')}</ol></section>`;
+}
 function renderComponents(c) {
   const ls = lessonsOf(c), doneN = ls.filter(isDone).length;
   const lastL = ls.find(l => l.id === S.lastLesson), last = lastL && blockOf(c, lastL), cur = currentLesson(c);
@@ -346,13 +353,13 @@ function renderComponents(c) {
         aria-label="Componente ${k + 1}: ${esc(b.name)}. ${nw} ${nw === 1 ? 'mundo' : 'mundos'}, ${d} de ${bl.length} lecciones${here ? ', aquí ibas' : ''}">
         ${blockArt(c, b) || `<span class="comp-n" aria-hidden="true">${k + 1}</span>`}
         <span class="comp-body"><small>Componente ${k + 1}${here ? ' · aquí ibas' : ''}</small><b>${esc(b.name)}</b><span class="comp-desc">${esc(b.desc)}</span>
-          <span class="comp-stats">${nw} ${nw === 1 ? 'mundo' : 'mundos'} · ${bl.length} lecciones</span>
+          <span class="comp-stats">${nw} ${nw === 1 ? 'mundo' : 'mundos'} · ${bl.length} lecciones${soonOf(c, b).length ? ` · ${soonOf(c, b).length} en preparación` : ''}</span>
           <span class="comp-prog"><span class="mini-bar"><i style="width:${(d / bl.length) * 100}%"></i></span><small>${d}/${bl.length}</small></span>
-          <span class="comp-next">${nxt ? `${d ? 'Sigue' : 'Empieza'}: ${esc(nxt.title)}` : 'Componente completado'}</span></span>
+          <span class="comp-next">${nxt ? `${d ? 'Sigue' : 'Empieza'}: ${esc(nxt.title)}` : soonOf(c, b).length ? 'Al día con lo publicado' : 'Componente completado'}</span></span>
         ${dkMundosHTML(c, b)}
         <span class="comp-go" aria-hidden="true">${ICON.right}</span></button>`;
     }).join('')}</div>
-    ${doneN === ls.length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
+    ${doneN === ls.length && !soonOf(c).length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
     ${c.id === 'preuda' ? librosHTML() : ''}</div>
     ${gymFabHTML(c, courseLevelUi(c, null, { done: S.done, last: S.lastLesson }))}
   </div>`;
@@ -401,7 +408,8 @@ function renderLearn() {
           <span class="dk mini-bar" aria-hidden="true"><i style="width:${(wDone / u.lessons.length) * 100}%"></i></span></div>`;
       }).join('')}
     </div>
-    ${cur ? '' : block ? `<div class="course-done">${ICON.star}<div><b>¡Componente completado!</b><p>Repasa cualquier lección o vuelve a los componentes.</p></div></div>`
+    ${soonHTML(c, block)}
+    ${cur ? '' : block ? `<div class="course-done">${ICON.star}<div><b>${soonOf(c, block).length ? 'Vas al día: terminaste los mundos publicados' : '¡Componente completado!'}</b><p>Repasa cualquier lección o vuelve a los componentes.</p></div></div>`
       : `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>`}</div>
     ${gymFabHTML(c, courseLevelUi(c, block, { done: S.done, last: S.lastLesson }))}
   </div>`;

@@ -1,0 +1,65 @@
+// Preicfes · Lectura Crítica, mundo 1 «Lo que Dice el Texto» (Explora, escena «hoja»). Textos cortos propios.
+xpLec('icf-lc-literal-1', [
+  ['Volver al texto',
+    xpMira('hoja', 'Empecemos por la idea: la respuesta casi siempre **está escrita**. Hay que volver a buscarla.', { paras: [['La feria abre los jueves.', 'Desde agosto, también los domingos.'], ['Los puestos de comida cierran a las seis.']] }, [
+      ['Te preguntan: ¿qué días abre la feria?', {}],
+      ['De memoria dirías «los jueves».', { luz: [0] }],
+      ['Pero el texto agrega algo: también los domingos.', { luz: [1], sello: { 1: 'dato' } }],
+      ['Con las dos oraciones la respuesta está completa.', { luz: [0, 1] }],
+      ['Recordar no es lo mismo que leer: vuelve y señala.', {}],
+    ], 'La respuesta se señala con el dedo en el texto, no se recuerda.'),
+    xpHaz('hoja', 'Subraya la oración que dice **por qué** cerró la biblioteca.', { modo: 'toca', meta: [2], paras: [['La biblioteca cerró el lunes.', 'Tenía doce mil libros.'], ['Una gotera dañó el techo de la sala.', 'Volverá a abrir en marzo.']], pista: 'Esa no dice la causa del cierre.' }, 'El dato que responde «por qué» es la causa.')],
+  ['Qué hace cada párrafo',
+    xpMira('hoja', 'Segunda idea: cada párrafo tiene un **oficio** dentro del texto.', { paras: [['Cada año se botan toneladas de ropa.'], ['Pasa porque sale muy barata y dura poco.'], ['En un barrio abrieron un taller para remendar.'], ['Reparar es la mejor manera de no comprar.']] }, [
+      ['El primero muestra un problema.', { luz: [0], nota: { 0: 'problema' } }],
+      ['El segundo dice por qué pasa.', { luz: [1], nota: { 1: 'causa' } }],
+      ['El tercero da un ejemplo de salida.', { luz: [2], nota: { 2: 'ejemplo' } }],
+      ['El último recoge todo en una idea.', { luz: [3], nota: { 3: 'conclusión' } }],
+      ['Con ese mapa sabes a qué párrafo volver.', {}],
+    ], 'No preguntes de qué habla un párrafo: pregunta qué hace.'),
+    xpHaz('hoja', 'Pon al margen qué hace cada párrafo.', { modo: 'margen', rotulos: ['propone', 'plantea el problema', 'da un ejemplo'], meta: [1, 2, 0], paras: [['El parque está oscuro de noche.'], ['El viernes, por ejemplo, un niño se cayó.'], ['La junta debería poner tres lámparas.']], pista: 'Alguno no va ahí. Busca «por ejemplo» y «debería».' }, 'Las palabras «por ejemplo» y «debería» delatan el oficio.')],
+  ['Dice, se deduce o no está',
+    xpMira('hoja', 'Tercera idea: una opción puede estar **escrita**, **deducirse** o ser **inventada**.', { letras: ['1', 'a', 'b', 'c'], paras: [['El tren salió a las ocho y llegó a las once.'], ['El tren salió a las ocho.'], ['El viaje duró tres horas.'], ['El tren iba lleno.']] }, [
+      ['Arriba está todo lo que sabemos.', { luz: [0] }],
+      ['Que salió a las ocho está escrito.', { luz: [0, 1], nota: { 1: 'lo dice' } }],
+      ['Que duró tres horas sale de juntar las dos horas.', { luz: [0, 2], nota: { 2: 'se deduce' } }],
+      ['Que iba lleno no sale de ninguna parte.', { luz: [3], nota: { 3: 'no está' } }],
+      ['Sonar posible no basta: hay que poder señalar de dónde sale.', {}],
+    ], 'Si no puedes señalar de dónde sale, la opción es inventada.'),
+    xpHaz('hoja', 'Texto: «Nora riega el jardín cada noche desde que no llueve». **Tacha** las dos inventadas.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['Nora riega de noche.'], ['Nora odia el verano.'], ['Cuando llovía no regaba todas las noches.'], ['El jardín es de su abuela.']], pista: 'Alguna de las tachadas sale de «desde que no llueve».' }, 'Lo del verano y la abuela suena posible, pero nadie lo escribió.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«La rana vive en el páramo, canta al amanecer y come mosquitos». De la rana se dice todo, **EXCEPTO**… Subráyala.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Dónde vive'], ['Cuándo canta'], ['Cuánto mide'], ['Qué come']], pista: 'Esa sí está en la oración. Busca la que se queda sin lugar.' }, 'En un EXCEPTO, la respuesta es la que no encuentras.')],
+], 'Vuelve al texto, usa el mapa de párrafos y pide siempre la prueba escrita.');
+
+xpLec('icf-lc-literal-2', [
+  ['La palabra en su lugar',
+    xpMira('hoja', 'Empecemos por la idea: una palabra vale lo que vale **en esa oración**.', { letras: ['A', 'B', 'C'], paras: [['El río', 'corre', 'hacia el sur.'], ['Ana', 'corre', 'con los gastos.'], ['El rumor', 'corre', 'por el barrio.']] }, [
+      ['Tres veces la misma palabra.', { luz: [1, 4, 7] }],
+      ['El río corre: fluye.', { luz: [0, 1, 2], nota: { 0: 'fluye' } }],
+      ['Ana corre con los gastos: los paga.', { luz: [3, 4, 5], nota: { 1: 'paga' } }],
+      ['El rumor corre: se extiende.', { luz: [6, 7, 8], nota: { 2: 'se extiende' } }],
+      ['La prueba: cambia la palabra y lee la oración completa.', {}],
+    ], 'Prueba cada opción en la oración: se queda la que no cambia el sentido.'),
+    xpHaz('hoja', 'Pon al margen lo que significa «levantar» en cada oración.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['construir', 'alzar', 'despertar'], meta: [1, 2, 0], paras: [['Levantar la caja del piso.'], ['Levantar al niño a las seis.'], ['Levantar una casa en un año.']], pista: 'Alguna no encaja: ponla en la oración y léela.' }, 'Caja, niño y casa dicen cuál es el sentido.')],
+  ['Hilos hacia atrás',
+    xpMira('hoja', 'Segunda idea: palabras como «ella», «lo» o «este» **apuntan** a algo ya dicho.', { paras: [['La jardinera', 'trasplantó', 'el rosal', 'en mayo.'], ['Ella', 'sabía que', 'este', 'no aguanta el sol.']] }, [
+      ['Alguien sabía algo: «Ella». ¿Quién es?', { luz: [4] }],
+      ['Femenino y sabe algo: es la jardinera.', { luz: [0, 4], sello: { 4: 'jardinera' } }],
+      ['Y algo no aguanta el sol: «este». ¿Qué es?', { luz: [6] }],
+      ['Masculino y es una planta: el rosal.', { luz: [2, 6], sello: { 6: 'rosal' } }],
+      ['Género, número y sentido: las tres pruebas.', {}],
+      ['Si al ponerlo en su lugar suena absurdo, no era ese.', {}],
+    ], 'Busca hacia atrás lo que concuerda en género, número y sentido.'),
+    xpHaz('hoja', 'Subraya a qué apunta **«las»** en «… y las guardó en el cajón».', { modo: 'toca', meta: [2], paras: [['Pedro abrió', 'el sobre,', 'contó las monedas', 'sobre la mesa', 'y las guardó en el cajón.']], pista: 'Debe ser femenino, plural y caber en un cajón.' }, '«Las» es femenino y plural: solo las monedas.')],
+  ['Bisagras y signos',
+    xpMira('hoja', 'Tercera idea: conectores y signos dicen **cómo se unen** las ideas.', { paras: [['Llovió toda la noche;', 'sin embargo,', 'el río no creció.'], ['Por eso', 'nadie evacuó.'], ['Hubo un solo «héroe»:', 'el que llegó tarde a todo.']] }, [
+      ['«Sin embargo» opone: se esperaba que creciera.', { luz: [1], nota: { 0: 'contraste' } }],
+      ['«Por eso» trae la consecuencia.', { luz: [3], nota: { 1: 'consecuencia' } }],
+      ['Las comillas de «héroe» no citan: se burlan.', { luz: [5], nota: { 2: 'ironía' } }],
+      ['Y los dos puntos anuncian la explicación.', { luz: [5, 6] }],
+      ['Tapa el conector y di tú qué pasa entre las dos ideas.', {}],
+    ], 'El conector dice si la idea choca, resulta o suma; el signo, cómo leerla.'),
+    xpHaz('hoja', 'Subraya el conector que anuncia una **consecuencia**.', { modo: 'toca', meta: [3], paras: [['Aunque', 'el bus llegó tarde,', 'nadie protestó;'], ['así que', 'salimos tranquilos', 'y además', 'cantando.']], pista: 'Ese no presenta un resultado. Busca el conector que lo anuncia.' }, '«Así que» trae lo que resulta.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«La ley buscaba frenar la tala; no obstante, esta aumentó». Subraya a qué apunta **«esta»**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['la ley'], ['la tala'], ['la búsqueda']], pista: 'Ponla en su lugar: ¿qué pudo aumentar, si la ley quería frenarlo?' }, '«Esta» recoge lo más cercano, y solo la tala aumenta.')],
+], 'Prueba la palabra en su oración, tira el hilo hacia atrás y lee los conectores.');
