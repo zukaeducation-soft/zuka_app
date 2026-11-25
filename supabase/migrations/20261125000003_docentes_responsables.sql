@@ -119,6 +119,7 @@ begin
     update public.inst_avisos set grupos = (select array_agg(distinct t) from unnest(array_replace(grupos, p ->> ''grupo'', left(btrim(p ->> ''nuevo''), 40))) t) where institucion = i.id and p ->> ''grupo'' = any (grupos);
     update public.inst_gestores set grupos = (select array_agg(distinct t) from unnest(array_replace(grupos, p ->> ''grupo'', left(btrim(p ->> ''nuevo''), 40))) t) where institucion = i.id and p ->> ''grupo'' = any (grupos);']
   ] loop
+    x := array[replace(x[1], chr(13), ''), replace(x[2], chr(13), '')];   -- el archivo puede traer saltos de Windows
     if position(x[1] in v_new) = 0 then raise exception 'privado.institucion: no se encontró %', x[1]; end if;
     v_new := replace(v_new, x[1], x[2]);
   end loop;
