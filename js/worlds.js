@@ -392,6 +392,22 @@ const WORLDS = (() => {
       ${L('M52 20h56v24H52z', INK, 1)}${T(80, 35, 'NO ENTRY', TEAL, 7)}${L('M80 44v18M70 62h20', INK, .9)}
       ${C(30, 34, 9, TEAL, 1.1)}${L('M24 40l12-12', TEAL, 1.3)}
       ${T(130, 30, 'word', INK, 6)}${A(130, 36, 130, 46, TEAL, .9)}${T(130, 56, 'meaning', INK, 5)}`) },
+    // ---------- segundos mundos (spec 2026-11-25-preicfes-estructura) ----------
+    'icf-ma-proporcion': { name: 'Proporciones y Porcentajes', art: plate('icf-ma-proporcion', TEAL, `
+      ${L('M50 24h60v12H50z', INK, 1)}${F('M50 24h24v12H50z', TEAL, .4)}${L('M74 24v12', TEAL, 1.3)}${L('M50 50h60v12H50z', INK, .8)}${F('M50 50h36v12H50z', TEAL, .25)}${L('M86 50v12', TEAL, 1)}
+      ${T(62, 45, '40 %', TEAL, 6)}${T(98, 45, '60 %', INK, 6)}${T(28, 42, '2 : 3', INK, 8)}${T(134, 42, '× 1.25', TEAL, 7)}`) },
+    'icf-lc-estructura': { name: 'Cómo se Arma un Texto', art: plate('icf-lc-estructura', TEAL, `
+      ${[16, 32, 48].map((y, i) => L(`M58 ${y}h44v12H58z`, i === 1 ? TEAL : INK, i === 1 ? 1.3 : .9) + L(`M64 ${y + 6}h${i === 1 ? 24 : 32}`, INK, .6)).join('')}
+      ${A(80, 28, 80, 32, TEAL, .9)}${A(80, 44, 80, 48, TEAL, .9)}${T(30, 40, 'pero', TEAL, 6.5)}${T(130, 40, 'por eso', INK, 6)}`) },
+    'icf-sc-participacion': { name: 'Participación y Control', art: plate('icf-sc-participacion', TEAL, `
+      ${L('M60 36h40v28H60z', INK, 1.1)}${L('M72 36h16', TEAL, 1.6)}${L('M74 18h12v16H74z', TEAL, 1.1)}${L('M77 25l2 3 5-6', TEAL, 1.2)}
+      ${C(116, 50, 6, INK, 1)}${D(116, 50, 2, TEAL)}${L('M104 50q12-12 24 0q-12 12-24 0', INK, .8)}${T(34, 46, 'voto', INK, 6.5)}`) },
+    'icf-cn-celula': { name: 'Célula y Organismos', art: plate('icf-cn-celula', TEAL, `
+      ${C(80, 40, 24, INK, 1.1)}${C(84, 38, 8, TEAL, 1.2)}${D(84, 38, 2, TEAL)}${D(68, 48, 1.4)}${D(72, 28, 1.4)}${D(94, 54, 1.4)}
+      ${A(44, 40, 54, 40, TEAL, 1)}${A(116, 40, 106, 40, TEAL, 1)}${T(30, 42, 'H₂O', TEAL, 7)}${T(134, 42, 'sal', INK, 6.5)}`) },
+    'icf-en-dialogos': { name: 'Conversaciones Cortas', art: plate('icf-en-dialogos', TEAL, `
+      ${L('M50 18h38v20H66l-6 7v-7H50z', INK, 1)}${T(69, 31, 'How?', INK, 7)}${L('M74 42h36v18H100l-6 7v-7H74z', TEAL, 1.2)}${T(92, 54, 'Sure!', TEAL, 7)}
+      ${D(54, 24, 1, INK)}${D(106, 48, 1, TEAL)}${D(54, 24, 1, INK)}${D(58, 24, 1, INK)}${D(106, 48, 1, TEAL)}${T(30, 60, 'ask', INK, 5.5)}${T(132, 32, 'reply', TEAL, 5.5)}`) },
   };
 })();
 

@@ -1,0 +1,96 @@
+// Preicfes · Lectura Crítica, mundo 2 «Cómo se Arma un Texto» (Explora, escena «hoja»). Textos cortos propios.
+xpLec('icf-lc-estructura-1', [
+  ['El oficio de un párrafo',
+    xpMira('hoja', 'Empecemos por la idea: un párrafo se entiende por lo que **hace** frente al anterior.', { paras: [['El semáforo dura doce segundos.'], ['Una persona mayor necesita veinte para cruzar.'], ['Se podría alargar solo de día.'], ['Quienes manejan dirán que habrá trancón.'], ['Pero un trancón se espera; una vida, no.']] }, [
+      ['El primero da un dato.', { luz: [0], nota: { 0: 'dato' } }],
+      ['El segundo muestra por qué es un problema.', { luz: [1], nota: { 1: 'problema' } }],
+      ['El tercero propone algo.', { luz: [2], nota: { 2: 'propuesta' } }],
+      ['El cuarto deja hablar a quien no está de acuerdo.', { luz: [3], nota: { 3: 'objeción' } }],
+      ['Y el último le responde.', { luz: [4], nota: { 4: 'respuesta' } }],
+    ], 'Dato, problema, propuesta, objeción, respuesta: cada uno trabaja para el otro.'),
+    xpHaz('hoja', 'Pon al margen el oficio de cada párrafo.', { modo: 'margen', rotulos: ['objeción', 'propuesta', 'problema'], meta: [2, 1, 0], paras: [['El patio se inunda cada mes.'], ['Conviene abrir un desagüe.'], ['Algunos creen que es muy costoso.']], pista: 'Alguno no va ahí: busca «conviene» y «algunos creen».' }, '«Conviene» propone y «algunos creen» objeta.')],
+  ['Las primeras palabras',
+    xpMira('hoja', 'Segunda idea: los **comienzos** anuncian lo que viene.', { paras: [['La primera causa', 'es el ruido.'], ['Por ejemplo,', 'un taladro a medianoche.'], ['En conclusión,', 'hay que fijar un horario.']] }, [
+      ['«La primera causa»: espera otra más.', { luz: [0], nota: { 0: 'vendrá otra' } }],
+      ['«Por ejemplo»: un caso de lo dicho.', { luz: [2], nota: { 1: 'ejemplo' } }],
+      ['«En conclusión»: lo que resulta de todo.', { luz: [4], nota: { 2: 'cierre' } }],
+      ['Con solo los comienzos ya tienes el mapa.', { luz: [0, 2, 4] }],
+      ['Si un comienzo no encaja con el anterior, el orden está mal.', {}],
+    ], 'Lee los comienzos: ahí está el mapa del texto.'),
+    xpHaz('hoja', 'Subraya el comienzo que anuncia una **segunda** razón.', { modo: 'toca', meta: [2], paras: [['Hay que sembrar árboles.', 'Dan sombra.'], ['Además,', 'sus raíces detienen la lluvia.'], ['Por eso', 'la plaza los necesita.']], pista: 'Ese no suma otra razón. Busca la palabra que agrega.' }, '«Además» suma otra razón a la anterior.')],
+  ['Sostener o adornar',
+    xpMira('hoja', 'Tercera idea: no todo **sostiene** la idea; algo solo la adorna.', { letras: ['idea', 'a', 'b', 'c'], paras: [['La feria ayuda al barrio.'], ['Da trabajo a cuarenta familias.'], ['Las carpas son azules.'], ['Los arriendos se pagan con sus ventas.']] }, [
+      ['Arriba está la idea.', { luz: [0] }],
+      ['El trabajo la sostiene.', { luz: [1], nota: { 1: 'sostiene' } }],
+      ['El color de las carpas no cambia nada.', { luz: [2], tacha: [2], nota: { 2: 'adorna' } }],
+      ['Pagar arriendos también la sostiene.', { luz: [3], nota: { 3: 'sostiene' } }],
+      ['La prueba: quítala y mira si la idea sigue igual de firme.', {}],
+    ], 'Si al quitarla la idea no pierde fuerza, era un adorno.'),
+    xpHaz('hoja', 'Idea: «La bicicleta ahorra dinero». **Tacha** las dos que no la sostienen.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['No usa gasolina.'], ['Es roja.'], ['Repararla cuesta poco.'], ['Se inventó hace dos siglos.']], pista: 'Alguna de las tachadas habla de gastar menos.' }, 'El color y la fecha no hablan de dinero.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Los peces mueren. Primero se pensó en un veneno. Sin embargo, el agua estaba limpia». Subraya la función de la última.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Da un ejemplo de veneno.'], ['Concluye que hubo veneno.'], ['Descarta lo que se pensó.']], pista: 'Mira qué hace «Sin embargo» con la idea anterior.' }, '«Sin embargo» tumba la explicación del veneno.')],
+], 'Oficio, comienzos y sostén: así se arma un texto.');
+
+xpLec('icf-lc-estructura-2', [
+  ['Oponer y limitar',
+    xpMira('hoja', 'Empecemos por la idea: hay conectores que **chocan** y otros que **ponen un tope**.', { paras: [['Estudió mucho;', 'sin embargo,', 'perdió.'], ['El carro es rápido;', 'ahora bien,', 'gasta demasiado.'], ['Aunque', 'llovía,', 'salimos.']] }, [
+      ['«Sin embargo»: pasó lo contrario de lo esperado.', { luz: [1], nota: { 0: 'choca' } }],
+      ['«Ahora bien»: no lo niega, le pone un tope.', { luz: [4], nota: { 1: 'limita' } }],
+      ['«Aunque»: hay un obstáculo que no bastó.', { luz: [6], nota: { 2: 'no bastó' } }],
+      ['También: pero, no obstante, en cambio.', {}],
+      ['Tapa el conector: ¿las ideas van al mismo lado o no?', {}],
+    ], 'Sin embargo opone, ahora bien limita y aunque reconoce un obstáculo.'),
+    xpHaz('hoja', 'Subraya la oración en la que dos ideas **chocan**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Además, trajo pan.'], ['Prometió venir, pero no llegó.'], ['Llegó, así que comimos.']], pista: 'En esa las ideas se suman o una resulta de la otra.' }, '«Pero» opone la promesa y lo que pasó.')],
+  ['Causa y consecuencia',
+    xpMira('hoja', 'Segunda idea: mira si el conector trae la **causa** o el **resultado**.', { paras: [['El río creció', 'ya que', 'llovió tres días.'], ['Llovió tres días;', 'por lo tanto,', 'el río creció.']] }, [
+      ['Los mismos dos hechos.', { luz: [0, 2] }],
+      ['Después de «ya que» viene la causa.', { luz: [1, 2], nota: { 0: 'trae la causa' } }],
+      ['Después de «por lo tanto», el resultado.', { luz: [4, 5], nota: { 1: 'trae el resultado' } }],
+      ['Con la causa: porque, puesto que, debido a.', {}],
+      ['Con el resultado: por eso, así que, de modo que.', {}],
+    ], 'Ya que y porque: causa. Por lo tanto y por eso: resultado.'),
+    xpHaz('hoja', 'Subraya la **causa**: «La tienda cerró puesto que nadie compraba».', { modo: 'toca', meta: [2], paras: [['La tienda cerró', 'puesto que', 'nadie compraba.']], pista: 'Pregunta por qué cerró. La respuesta es la causa.' }, 'Va después de «puesto que».')],
+  ['Sumar, ejemplificar, recoger',
+    xpMira('hoja', 'Tercera idea: otros conectores **agregan**, **muestran** o **resumen**.', { paras: [['Además,', 'da empleo.'], ['Por ejemplo,', 'a diez panaderos.'], ['Es decir,', 'mueve la economía.'], ['En resumen,', 'conviene cuidarlo.']] }, [
+      ['«Además» agrega otra idea del mismo lado.', { luz: [0], nota: { 0: 'suma' } }],
+      ['«Por ejemplo» muestra un caso.', { luz: [2], nota: { 1: 'caso' } }],
+      ['«Es decir» lo dice de otra manera.', { luz: [4], nota: { 2: 'repite distinto' } }],
+      ['«En resumen» recoge lo dicho.', { luz: [6], nota: { 3: 'recoge' } }],
+      ['Si cambias uno por otro de su familia, el sentido sigue.', {}],
+    ], 'Además suma, por ejemplo muestra, es decir aclara, en resumen recoge.'),
+    xpHaz('hoja', 'Pon al margen lo que hace cada conector.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['aclara', 'suma', 'muestra un caso'], meta: [1, 2, 0], paras: [['Incluso, …'], ['Así, en mi barrio, …'], ['O sea, …']], pista: 'Alguno no va ahí: prueba con una frase tuya.' }, '«Incluso» suma, «en mi barrio» es un caso y «o sea» aclara.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«La cosecha fue buena. ___, los precios bajaron y nadie ganó». Subraya el conector.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Por ejemplo'], ['Es decir'], ['No obstante'], ['Además de eso, por suerte']], pista: 'Con una buena cosecha se esperaba ganar. ¿Qué pasó?' }, 'Se esperaba lo contrario: hace falta oponer.')],
+], 'Choca, limita, causa, resultado, suma o recoge: di qué hace y escoge.');
+
+xpLec('icf-lc-estructura-3', [
+  ['¿Quién habla?',
+    xpMira('hoja', 'Empecemos por la idea: en un texto pueden sonar **varias voces**.', { paras: [['Llegué al muelle de noche.'], ['«Ese barco no vuelve»,', 'dijo el pescador.'], ['Según la capitanía,', 'había salido el martes.'], ['Pienso que', 'nadie quería preocuparse.']] }, [
+      ['«Llegué»: habla el narrador.', { luz: [0], nota: { 0: 'narrador' } }],
+      ['Las comillas traen la voz del pescador.', { luz: [1, 2], nota: { 1: 'pescador' } }],
+      ['«Según» trae la voz de la capitanía.', { luz: [3], nota: { 2: 'capitanía' } }],
+      ['«Pienso que» vuelve al narrador: es su opinión.', { luz: [5], nota: { 3: 'opina el narrador' } }],
+      ['Una idea sin marca es de quien escribe.', {}],
+    ], 'Comillas, «según» y «pienso» dicen de quién es cada idea.'),
+    xpHaz('hoja', 'Subraya la oración que **no** es del narrador.', { modo: 'toca', meta: [1], paras: [['El parque estaba vacío.', '«Aquí espantan», advirtió la niña.', 'Yo me senté en la banca.']], pista: 'Esa la cuenta quien narra. Busca las comillas.' }, 'Las comillas son de la niña.')],
+  ['Directa o indirecta',
+    xpMira('hoja', 'Segunda idea: se puede **citar** con las palabras exactas o **contar** lo que otro dijo.', { paras: [['«No tengo miedo»,', 'dijo Ana.'], ['Ana dijo que', 'no tenía miedo.'], ['Ana negó', 'tener miedo.']] }, [
+      ['Con comillas: sus palabras exactas.', { luz: [0], nota: { 0: 'directa' } }],
+      ['Con «dijo que»: las cuenta otro.', { luz: [2], nota: { 1: 'indirecta' } }],
+      ['El verbo cambia: «tengo» pasa a «tenía».', { luz: [0, 3] }],
+      ['«Negó» ya interpreta lo que dijo.', { luz: [4], nota: { 2: 'interpreta' } }],
+      ['El verbo de decir puede traer un juicio: confesó, insistió.', {}],
+    ], 'Comillas: exacta. «Que»: contada. Y el verbo puede juzgar.'),
+    xpHaz('hoja', 'Subraya la cita **indirecta**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['«Cierro a las ocho», avisó Leo.'], ['Leo avisó que cerraba a las ocho.'], ['Leo cierra a las ocho.']], pista: 'Esa trae las palabras exactas o no cita a nadie.' }, '«Avisó que» cuenta lo que Leo dijo.')],
+  ['Voces que no coinciden',
+    xpMira('hoja', 'Tercera idea: dos voces pueden contar **lo mismo** y sonar distinto.', { paras: [['El alcalde habla de una «reubicación».'], ['Los vendedores la llaman desalojo.'], ['El periódico dice que se movieron los puestos.']] }, [
+      ['Los tres hablan del mismo hecho.', { luz: [0, 1, 2] }],
+      ['El alcalde escoge una palabra suave.', { luz: [0], nota: { 0: 'la suaviza' } }],
+      ['Los vendedores, una dura.', { luz: [1], nota: { 1: 'la denuncia' } }],
+      ['El periódico intenta no juzgar.', { luz: [2], nota: { 2: 'neutral' } }],
+      ['La palabra escogida muestra el interés de cada uno.', {}],
+    ], 'Cada voz escoge sus palabras según lo que quiere mostrar.'),
+    xpHaz('hoja', 'Pon al margen cómo cuenta cada voz la misma multa.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['se queja', 'informa', 'la celebra'], meta: [1, 2, 0], paras: [['Le cobraron cien mil pesos.'], ['Por fin hicieron justicia.'], ['Me robaron cien mil pesos.']], pista: 'Alguno no va ahí: mira qué palabra juzga.' }, '«Por fin» celebra y «robaron» se queja.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Según la directora, el coro mejoró. A mí me sonó igual». Subraya quién cree que mejoró.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['La directora'], ['Quien escribe'], ['El coro']], pista: 'Busca de quién es la idea que va después de «según».' }, '«Según» le da la idea a la directora.')],
+], 'Marca de voz, manera de citar y palabra escogida.');

@@ -24,6 +24,8 @@ const ICF = (() => {
   const lista = k => (...l) => ({ [k]: l.map(q => q[0]), va: l.map(q => q[1]), mira: l.map(q => q[2]) });
   const F = lista('fichas'), T = lista('tarjetas'), P = lista('lineas');
   const S = (va, mira) => ({ va, n: va.length, mira });
+  // Escenas de respaldo por si la explicación no carga: [título, texto].
+  const guion = (...l) => l.map(([title, text]) => sc(7, text, { title }));
   const leccion = (id, title, scenes, ex) => ({ id, title, clip: { scenes }, ex });
   // Mundo con su evaluación: items = [[lección, nota de repaso, ejercicio]]. Tiempo: 1.5 min por juego; 2.25 por pregunta de lectura.
   const mundo = (world, title, block, lessons, items) => {
@@ -35,5 +37,5 @@ const ICF = (() => {
     PI_HECHOS.push(world);
     return { world, title, block, lessons, exam };
   };
-  return { sol, err, opc, preg, x, F, T, P, S, leccion, mundo, KIND };
+  return { guion, sol, err, opc, preg, x, F, T, P, S, leccion, mundo, KIND };
 })();

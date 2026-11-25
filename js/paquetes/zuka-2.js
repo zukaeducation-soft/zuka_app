@@ -1,763 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/neutro-buscador.js
-// El que no cambia nada (Preuniversitario, pu-op-1; spec 2026-11-18-preuda-razonamiento-completo): el elemento neutro e de un
-// operador cumple a ∘ e = a para TODO a. Se desliza un candidato e y el juego opera con él varios números: cada a es una barra
-// gris y a ∘ e una barra de color al lado. El neutro deja todas las parejas iguales.
-// params = { rounds: [{ sym, tex, f(a, b), lo, hi, as: [números a probar] }] }   state = { rounds: [{ e }] }
-GAMES['neutro-buscador'] = (() => {
-  const good = (r, e) => r.as.every(a => r.f(a, e) === a);
-  const need = r => { for (let e = r.lo; e <= r.hi; e++) if (good(r, e)) return e; return null; };
-  const ok = (s, r) => good(r, s.e);
-  const N = r => r.hi - r.lo + 1;
-  const game = roundsGame({
-    aspect: 1.2,
-    init: r => ({ e: need(r) === r.lo ? r.lo + 1 : r.lo }),
-    ok,
-    solution: r => `e = ${need(r)}`,
-    prompt: r => `Con $a ${r.sym} b = ${r.tex}$, busca $e$ con $a ${r.sym} e = a$ siempre`,
-    foot: () => 'Desliza el candidato e',
-    layout(G) { G.b = { x: 30, y: 104, w: G.W - 50, h: G.H - 270 }; G.tY = G.H - 104; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { e: need(r) } : G.s, g = ok(s, r), b = G.b, vals = r.as.map(a => r.f(a, s.e));
-      const top = Math.max(...r.as, ...vals, 1), bot = Math.min(0, ...vals), Y = v => b.y + b.h - (v - bot) / (top - bot) * b.h, w = b.w / r.as.length;
-      p.stroke(C.line); p.strokeWeight(1); p.line(b.x, Y(0), b.x + b.w, Y(0));
-      r.as.forEach((a, i) => {
-        const x = b.x + i * w, v = vals[i], same = v === a;
-        p.noStroke(); p.fill(RK.al(p, C.line, 200)); p.rect(x + w * 0.15, Math.min(Y(a), Y(0)), w * 0.3, Math.abs(Y(0) - Y(a)), 2);
-        p.fill(same ? C.ok : C.coral); p.rect(x + w * 0.5, Math.min(Y(v), Y(0)), w * 0.3, Math.abs(Y(0) - Y(v)), 2);
-        TK.label(p, C, `$${a} ${r.sym} ${s.e} = ${v}$`, x + w / 2, b.y + b.h + 14 + (i % 2) * 14, same ? C.ok : C.ink, 9, w * 1.6);
-      });
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, N(r), s.e - r.lo, k => ((r.lo + k) % 2 === 0 ? String(r.lo + k) : null), g ? C.ok : C.brand);
-      RK.strip(p, C, G.fb, `$e = ${s.e}$`, { kicker: g ? 'no cambia a nadie: es el neutro' : `${r.as.filter((a, i) => vals[i] !== a).length} cambian`, col: G.locked || g ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 28) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(G.s.e - G.r.lo), y: G.tY }, to: { x: G.X(G.s.e - G.r.lo) + 60, y: G.tY }, text: 'Desliza e', ty: G.b.y + 10 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const r = G.r, e = r.lo + RK.pick(x, 30, G.W - 30, N(r)); if (e !== G.s.e || !G.touched[G.cur]) { G.s.e = e; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ e: need(r) }) });
-})();
-;
-//#archivo js/games/adivina-operador.js
-// ¿Cuál es la regla del operador? (Preuniversitario, pu-op-1; spec 2026-11-18-preuda-razonamiento-completo): unos ejemplos de
-// a ★ b ya calculados. Se arrastra una regla (como 2a − b o a·b − 1) a la casilla y el juego la prueba con cada ejemplo, en
-// vivo; la buena sirve para todos.
-// params = { rounds: [{ sym, ex: [[a, b, resultado]], rules: [{ tex, f }], ok: índice de la regla buena }] }   state = { rounds: [{ f: [regla | −1] }] }
-GAMES['adivina-operador'] = CODK.fillGame({
-  aspect: 1.55,
-  chipW: 76,
-  perRow: 2,
-  prompt: () => 'Descubre la regla del operador',
-  foot: 'Arrastra una regla a la casilla',
-  tray: r => r.rules.map(x => `$${x.tex}$`),
-  need: r => [r.ok],
-  over: r => `$a ${r.sym} b =$`,
-  done: r => `$a ${r.sym} b = ${r.rules[r.ok].tex}$`,
-  decor(G) {
-    const { p, C, r, s } = G, k = s.f[0], cw = Math.min(80, (G.W - 30) / 3), x0 = (G.W - 3 * cw) / 2;
-    ['ejemplo', 'da', 'la regla da'].forEach((h, j) => TK.label(p, C, h, x0 + (j + 0.5) * cw, 96, C.mute, 9, cw));
-    r.ex.forEach(([a, b, c], i) => {
-      const y = 118 + i * 22, got = k >= 0 ? r.rules[k].f(a, b) : null;
-      TK.label(p, C, `$${a} ${r.sym} ${b}$`, x0 + 0.5 * cw, y, C.ink, 12, cw);
-      TK.label(p, C, String(c), x0 + 1.5 * cw, y, C.ink, 12, cw);
-      TK.label(p, C, got === null ? '·' : String(got), x0 + 2.5 * cw, y, got === null ? C.mute : got === c ? C.ok : C.bad, 12, cw);
-    });
-  },
-});
-;
-//#archivo js/games/anida-operador.js
-// Operador anidado (Preuniversitario, pu-op-2; spec 2026-11-18-preuda-razonamiento-completo): una operación anidada como
-// (3 ★ 1) ★ 4 se dibuja como cajas dentro de cajas. Se toca una caja para calcularla: solo se puede si adentro ya no quedan
-// cajas sin calcular; entonces se cierra y queda su resultado. Así se ve que se resuelve de adentro hacia afuera.
-// params = { rounds: [{ sym, tex, f(a, b), expr: número | [izq, der] }] }   state = { rounds: [{ done: [rutas calculadas] }] }
-GAMES['anida-operador'] = (() => {
-  const nodes = (e, path = '') => (Array.isArray(e) ? [...nodes(e[0], path + '0'), ...nodes(e[1], path + '1'), path] : []);
-  const ok = (s, r) => s.done.includes('');
-  const game = roundsGame({
-    aspect: 1.05,
-    init: () => ({ done: [] }),
-    answered: s => s.done.length > 0,
-    ok,
-    solution: r => { const out = []; const ev = e => { if (!Array.isArray(e)) return e; const a = ev(e[0]), b = ev(e[1]), v = r.f(a, b); out.push(`$${a} ${r.sym} ${b} = ${v}$`); return v; }; ev(r.expr); return out.join('; '); },
-    prompt: r => `Con $a ${r.sym} b = ${r.tex}$, calcula de adentro hacia afuera`,
-    foot: () => 'Toca la caja que ya se puede calcular',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.msg = 0; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { done: nodes(r.expr) } : G.s, good = ok(s, r), D = new Set(s.done);
-      const val = e => (Array.isArray(e) ? r.f(val(e[0]), val(e[1])) : e);
-      const closed = (e, path) => !Array.isArray(e) || D.has(path);
-      p.textSize(16); p.textFont('Jost');
-      const tw = t => p.textWidth(String(t)) + 14;
-      const meas = (e, path) => (closed(e, path) ? tw(val(e)) : 16 + meas(e[0], path + '0') + 26 + meas(e[1], path + '1'));
-      const cols = [C.sky, C.coral, C.mint, C.brand];
-      G.boxes = [];
-      const draw = (e, path, x, y, h, dep) => {
-        if (closed(e, path)) {
-          const w = tw(val(e)), fresh = Array.isArray(e);
-          p.noStroke(); p.fill(fresh ? RK.al(p, C.ok, 90) : RK.al(p, C.card, 220)); p.rect(x, y - 14, w, 28, 6);
-          TK.label(p, C, String(val(e)), x + w / 2, y, C.ink, 15, w);
-          return w;
-        }
-        const w = meas(e, path);
-        p.stroke(cols[dep % 4]); p.strokeWeight(2); p.fill(RK.al(p, cols[dep % 4], 30)); p.rect(x, y - h / 2, w, h, 10);
-        G.boxes.push({ x, y: y - h / 2, w, h, path, ready: closed(e[0], path + '0') && closed(e[1], path + '1') });
-        let cx = x + 8;
-        cx += draw(e[0], path + '0', cx, y, h - 14, dep + 1);
-        TK.label(p, C, `$${r.sym}$`, cx + 13, y, C.ink, 15, 24); cx += 26;
-        draw(e[1], path + '1', cx, y, h - 14, dep + 1);
-        return w;
-      };
-      const W0 = meas(r.expr, ''), depth = (e => { const d = x => (Array.isArray(x) ? 1 + Math.max(d(x[0]), d(x[1])) : 0); return d(e); })(r.expr);
-      draw(r.expr, '', Math.max(10, (G.W - W0) / 2), 190, 40 + depth * 14, 0);
-      if (G.msg > 0) { G.msg -= p.deltaTime || 16; TK.label(p, C, 'primero lo de adentro', G.W / 2, 270, C.bad, 12, G.W - 30); }
-      RK.strip(p, C, G.fb, good ? `$\\text{resultado: ${val(r.expr)}}$` : `$\\text{${s.done.length} de ${nodes(r.expr).length} cajas}$`, { col: G.locked || good ? C.ok : C.brand, size: 16 });
-    },
-    press(G, x, y) {
-      const hit = (G.boxes || []).filter(b => hitBox(b, x, y)).sort((a, b) => b.path.length - a.path.length)[0];
-      if (!hit) return false;
-      if (hit.ready) { G.s.done.push(hit.path); G.touch(); } else G.msg = 1400;
-      return true;
-    },
-    demo: G => { const b = (G.boxes || []).slice().sort((a, c) => c.path.length - a.path.length)[0]; return b ? { from: { x: b.x + 10, y: b.y + b.h / 2 }, to: { x: b.x + 10, y: b.y + b.h / 2 }, text: 'Toca la caja de adentro', ty: b.y + b.h + 40 } : null; },
-    peek: G => ({ boxes: G.boxes }),
-  });
-  return Object.assign(game, { answer: r => ({ done: nodes(r.expr) }) });
-})();
-;
-//#archivo js/games/busca-x-operador.js
-// La x dentro del operador (Preuniversitario, pu-op-2; spec 2026-11-18-preuda-razonamiento-completo): una ecuación como
-// x ⊕ 4 = 19 se resuelve reemplazando el operador por su regla. Se desliza x; el juego escribe la regla con x ya puesta, su
-// valor, y lo compara con el lado derecho en una balanza que se inclina hasta quedar pareja.
-// params = { rounds: [{ sym, tex, f(a, b), k, side: 'left' | 'right', target, lo, hi }] }   state = { rounds: [{ x }] }
-GAMES['busca-x-operador'] = (() => {
-  const val = (r, x) => (r.side === 'right' ? r.f(r.k, x) : r.f(x, r.k));
-  const need = r => { for (let x = r.lo; x <= r.hi; x++) if (val(r, x) === r.target) return x; return null; };
-  const ok = (s, r) => val(r, s.x) === r.target;
-  const N = r => r.hi - r.lo + 1;
-  const eq = r => (r.side === 'right' ? `${r.k} ${r.sym} x` : `x ${r.sym} ${r.k}`);
-  const sub = (r, a, b) => r.tex.replace(/(?<![\\a-zA-Z])a(?![a-zA-Z])/g, `(${a})`).replace(/(?<![\\a-zA-Z(])b(?![a-zA-Z])/g, `(${b})`).replace(/(\d)\(/g, '$1\\cdot(');
-  const show = (r, x) => (r.side === 'right' ? sub(r, r.k, x) : sub(r, x, r.k));
-  const game = roundsGame({
-    aspect: 1.2,
-    init: r => ({ x: need(r) === r.lo ? r.lo + 1 : r.lo }),
-    ok,
-    solution: r => `x = ${need(r)}`,
-    prompt: r => `Con $a ${r.sym} b = ${r.tex}$, halla $x$: $${eq(r)} = ${r.target}$`,
-    foot: () => 'Desliza x hasta que la balanza quede pareja',
-    layout(G) { G.tY = G.H - 104; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { x: need(r) } : G.s, good = ok(s, r), v = val(r, s.x), cx = G.W / 2, cy = 200;
-      const ang = Math.max(-0.3, Math.min(0.3, (r.target - v) * 0.03));
-      p.noStroke(); p.fill(C.ink); p.triangle(cx, cy, cx - 14, cy + 40, cx + 14, cy + 40);
-      p.push(); p.translate(cx, cy); p.rotate(ang);
-      p.stroke(C.ink); p.strokeWeight(3); p.line(-G.W * 0.38, 0, G.W * 0.38, 0);
-      [[-G.W * 0.28, `$${show(r, s.x)} = ${v}$`, good ? C.ok : C.brand], [G.W * 0.28, `$${r.target}$`, C.coral]].forEach(([x, t, col]) => {
-        p.stroke(C.line); p.strokeWeight(1); p.line(x, 0, x, 22); p.noStroke(); p.fill(RK.al(p, col, 60)); p.rect(x - 62, 22, 124, 34, 8);
-        TK.label(p, C, t, x, 39, C.ink, 12, 118);
-      });
-      p.pop();
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, N(r), s.x - r.lo, k => ((r.lo + k) % 2 === 0 ? String(r.lo + k) : null), good ? C.ok : C.brand);
-      RK.strip(p, C, G.fb, `$x = ${s.x}$`, { kicker: good ? 'la balanza queda pareja' : v < r.target ? 'falta peso a la izquierda' : 'sobra peso a la izquierda', col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 28) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(G.s.x - G.r.lo), y: G.tY }, to: { x: G.X(G.s.x - G.r.lo) + 60, y: G.tY }, text: 'Desliza x', ty: G.tY - 30 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const r = G.r, v = r.lo + RK.pick(x, 30, G.W - 30, N(r)); if (v !== G.s.x || !G.touched[G.cur]) { G.s.x = v; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ x: need(r) }) });
-})();
-;
-//#archivo js/games/corta-lo-que-queda.js
-// De lo que queda (Preuniversitario, pu-ar-1; spec 2026-11-18-preuda-razonamiento-completo): «gasta 1/3 y luego 1/4 de lo que
-// le queda». Cada compra es una fila: la barra de esa fila es el dinero que había ANTES de comprar (el total o lo que quedaba),
-// partida en partes iguales. Se arrastra el corte hasta las partes que se gastan; la fila de abajo empieza con lo que quedó.
-// params = { rounds: [{ total, steps: [[num, den, 'total' | 'resto']] }] }   state = { rounds: [{ j: [partes cortadas por fila] }] }
-GAMES['corta-lo-que-queda'] = (() => {
-  const run = (r, j) => { let rem = r.total; return r.steps.map(([, den, of], k) => { const base = of === 'total' ? r.total : rem, spent = base * j[k] / den; rem -= spent; return { base, spent, rem }; }); };
-  const ok = (s, r) => r.steps.every(([num], k) => s.j[k] === num);
-  const money = v => (Math.round(v) === v ? v.toLocaleString('es-CO') : v.toFixed(1));
-  const game = roundsGame({
-    aspect: 1.25,
-    init: r => ({ j: r.steps.map(() => 0) }),
-    ok,
-    solution: r => { const R = run(r, r.steps.map(s => s[0])); return R.map((x, k) => `gasta ${money(x.spent)}, quedan ${money(x.rem)}`).join('; '); },
-    prompt: r => `Hay ${money(r.total)}. Corta lo que gasta cada fila`,
-    foot: () => 'Arrastra el corte de cada fila',
-    layout(G) { G.x0 = 20; G.x1 = G.W - 20; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = -1; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { j: r.steps.map(x => x[0]) } : G.s, good = ok(s, r), R = run(r, s.j), Wt = G.x1 - G.x0;
-      G.rows = R.map((x, k) => {
-        const [, den] = r.steps[k], y = 124 + k * 72, bw = Wt * x.base / r.total, cut = G.x0 + bw * s.j[k] / den;
-        TK.label(p, C, `gasta $\\tfrac{${r.steps[k][0]}}{${den}}$ ${r.steps[k][2] === 'total' ? 'del total' : 'de lo que queda'} (había ${money(x.base)})`, G.x0 + Wt / 2, y - 14, C.ink, 10, Wt);
-        p.noStroke(); p.fill(RK.al(p, C.mint, 120)); p.rect(G.x0, y, bw, 30, 6);
-        p.fill(RK.al(p, C.coral, 200)); p.rect(G.x0, y, cut - G.x0, 30, 6, 0, 0, 6);
-        for (let t = 1; t < den; t++) { p.stroke(C.ink); p.strokeWeight(1); p.line(G.x0 + bw * t / den, y, G.x0 + bw * t / den, y + 30); }
-        RK.knob(p, C, cut, y + 15, C.brand);
-        TK.label(p, C, `gasta ${money(x.spent)} · quedan ${money(x.rem)}`, G.x0 + Wt / 2, y + 44, C.ink, 10, Wt);
-        return { y, bw, den };
-      });
-      const last = R.at(-1).rem;
-      RK.strip(p, C, G.fb, `$\\text{quedan ${money(last)}}$`, { kicker: good ? 'eso es lo que queda' : 'lo que va quedando', col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { const k = (G.rows || []).findIndex(rw => y > rw.y - 12 && y < rw.y + 42); if (k < 0) return false; G.grab = k; game.move(G, x); return true; },
-    drag(G, x) { if (G.grab < 0) return false; game.move(G, x); return true; },
-    release(G) { G.grab = -1; },
-    demo: G => { const rw = G.rows?.[0]; return rw ? { from: { x: G.x0 + 4, y: rw.y + 15 }, to: { x: G.x0 + rw.bw / rw.den, y: rw.y + 15 }, text: 'Arrastra el corte', ty: rw.y - 30 } : null; },
-    peek: G => ({ rows: G.rows }),
-  });
-  game.move = (G, x) => { const rw = G.rows[G.grab], j = Math.max(0, Math.min(rw.den, Math.round((x - G.x0) / (rw.bw / rw.den)))); if (j !== G.s.j[G.grab] || !G.touched[G.cur]) { G.s.j[G.grab] = j; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ j: r.steps.map(x => x[0]) }) });
-})();
-;
-//#archivo js/games/area-queda.js
-// Multiplicar lo que queda (Preuniversitario, pu-ar-1; spec 2026-11-18-preuda-razonamiento-completo): un rectángulo es todo el
-// dinero. La primera compra se parte en columnas y la segunda en filas. Se arrastran las dos agarraderas para dejar pintado
-// solo lo que QUEDA después de cada compra: el pedazo pintado es el producto de las dos fracciones que quedan.
-// params = { rounds: [{ a: [num, den] (primera compra), b: [num, den] (segunda, de lo que queda) }] }   state = { rounds: [{ c, f }] }
-GAMES['area-queda'] = (() => {
-  const need = r => ({ c: r.a[1] - r.a[0], f: r.b[1] - r.b[0] });
-  const ok = (s, r) => s.c === need(r).c && s.f === need(r).f;
-  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-  const game = roundsGame({
-    aspect: 1.2,
-    init: r => ({ c: r.a[1], f: r.b[1] }),
-    ok,
-    solution: r => { const n = need(r), N = n.c * n.f, D = r.a[1] * r.b[1], g = gcd(N, D); return `queda $\\tfrac{${n.c}}{${r.a[1]}} \\cdot \\tfrac{${n.f}}{${r.b[1]}} = \\tfrac{${N / g}}{${D / g}}$`; },
-    prompt: r => `Gasta $\\tfrac{${r.a[0]}}{${r.a[1]}}$ y luego $\\tfrac{${r.b[0]}}{${r.b[1]}}$ de lo que queda. ¿Qué parte queda?`,
-    foot: () => 'Deja pintado solo lo que queda: arrastra las dos agarraderas',
-    layout(G) { G.R = { x: 40, y: 110, w: G.W - 80, h: G.H - 240 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = null; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? need(r) : G.s, good = ok(s, r), R = G.R, cw = R.w / r.a[1], rh = R.h / r.b[1];
-      p.noStroke(); p.fill(RK.al(p, C.line, 70)); p.rect(R.x, R.y, R.w, R.h, 6);
-      p.fill(RK.al(p, good ? C.ok : C.sky, 200)); p.rect(R.x, R.y + R.h - s.f * rh, s.c * cw, s.f * rh, 4);
-      p.stroke(C.ink); p.strokeWeight(1); p.noFill(); p.rect(R.x, R.y, R.w, R.h, 6);
-      for (let i = 1; i < r.a[1]; i++) p.line(R.x + i * cw, R.y, R.x + i * cw, R.y + R.h);
-      p.stroke(RK.al(p, C.ink, 120)); for (let j = 1; j < r.b[1]; j++) p.line(R.x, R.y + j * rh, R.x + s.c * cw, R.y + j * rh);
-      G.hC = { x: R.x + s.c * cw, y: R.y + R.h + 16 }; G.hF = { x: R.x - 16, y: R.y + R.h - s.f * rh };
-      RK.knob(p, C, G.hC.x, G.hC.y, C.coral); RK.knob(p, C, G.hF.x, G.hF.y, C.mint);
-      TK.label(p, C, `$\\tfrac{${s.c}}{${r.a[1]}}$`, G.hC.x, G.hC.y + 18, C.coral, 12, 40);
-      TK.label(p, C, `$\\tfrac{${s.f}}{${r.b[1]}}$`, G.hF.x - 4, G.hF.y - 16, C.mint, 12, 40);
-      RK.strip(p, C, G.fb, `$\\tfrac{${s.c}}{${r.a[1]}} \\cdot \\tfrac{${s.f}}{${r.b[1]}} = \\tfrac{${s.c * s.f}}{${r.a[1] * r.b[1]}}$`, { kicker: good ? 'eso es lo que queda' : 'lo pintado', col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.hypot(x - G.hC.x, y - G.hC.y) < 24) G.grab = 'c'; else if (Math.hypot(x - G.hF.x, y - G.hF.y) < 24) G.grab = 'f'; else return false; return true; },
-    drag(G, x, y) {
-      if (!G.grab) return false; const r = G.r, R = G.R;
-      if (G.grab === 'c') { const c = Math.max(0, Math.min(r.a[1], Math.round((x - R.x) / (R.w / r.a[1])))); if (c !== G.s.c) { G.s.c = c; G.touch(); } }
-      else { const f = Math.max(0, Math.min(r.b[1], Math.round((R.y + R.h - y) / (R.h / r.b[1])))); if (f !== G.s.f) { G.s.f = f; G.touch(); } }
-      return true;
-    },
-    release(G) { G.grab = null; },
-    demo: G => ({ from: G.hC, to: { x: G.hC.x - G.R.w / G.r.a[1], y: G.hC.y }, text: 'Arrastra la agarradera', ty: G.R.y - 14 }),
-    peek: G => ({ hC: G.hC, hF: G.hF }),
-  });
-  return Object.assign(game, { answer: need });
-})();
-;
-//#archivo js/games/total-original.js
-// ¿Cuánto había al principio? (Preuniversitario, pu-ar-1; spec 2026-11-18-preuda-razonamiento-completo): se sabe lo que quedó
-// después de unas compras con fracciones, y se busca lo que había. Se desliza el total; el juego aplica las compras a ese total,
-// dibuja la barra de lo que queda y la compara con lo que se sabe que quedó.
-// params = { rounds: [{ steps: [[num, den, 'total' | 'resto']], left, step, max }] }   state = { rounds: [{ t }] }
-GAMES['total-original'] = (() => {
-  const rest = (r, t) => { let rem = t; r.steps.forEach(([n, d, of]) => { rem -= (of === 'total' ? t : rem) * n / d; }); return rem; };
-  const need = r => { for (let t = r.step; t <= r.max; t += r.step) if (Math.abs(rest(r, t) - r.left) < 1e-9) return t; return null; };
-  const ok = (s, r) => Math.abs(rest(r, s.t) - r.left) < 1e-9;
-  const N = r => Math.round(r.max / r.step);
-  const fmt = v => (Math.abs(v - Math.round(v)) < 1e-9 ? Math.round(v).toLocaleString('es-CO') : v.toFixed(1));
-  const game = roundsGame({
-    aspect: 1.15,
-    init: r => ({ t: need(r) === r.step ? 2 * r.step : r.step }),
-    ok,
-    solution: r => `había ${fmt(need(r))}`,
-    prompt: r => `Al final le quedan ${fmt(r.left)}. ¿Cuánto tenía?`,
-    foot: () => 'Desliza el total hasta que quede lo que se sabe',
-    layout(G) { G.tY = G.H - 104; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { t: need(r) } : G.s, good = ok(s, r), x0 = 20, Wt = G.W - 40, sc = Wt / r.max, rem = rest(r, s.t);
-      p.noStroke(); p.fill(RK.al(p, C.line, 80)); p.rect(x0, 130, s.t * sc, 34, 6);
-      p.fill(good ? C.ok : C.sky); p.rect(x0 + (s.t - rem) * sc, 130, rem * sc, 34, 6);
-      r.steps.forEach(([n, d, of], k) => TK.label(p, C, `${k ? 'luego ' : ''}gastó $\\tfrac{${n}}{${d}}$ ${of === 'total' ? 'del total' : 'de lo que quedaba'}`, G.W / 2, 92 + k * 18, C.ink, 11, G.W - 30));
-      TK.label(p, C, `total ${fmt(s.t)}`, x0 + 50, 122, C.mute, 10, 100);
-      p.stroke(C.coral); p.strokeWeight(2); p.drawingContext.setLineDash([5, 4]); p.noFill(); p.rect(x0 + (s.t - r.left) * sc, 182, r.left * sc, 26, 5); p.drawingContext.setLineDash([]);
-      TK.label(p, C, `debe quedar ${fmt(r.left)}`, G.W / 2, 226, C.coral, 10, G.W - 40);
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, N(r), s.t / r.step - 1, k => null, good ? C.ok : C.brand);
-      RK.strip(p, C, G.fb, `$\\text{con ${fmt(s.t)} quedan ${fmt(rem)}}$`, { kicker: good ? 'coincide' : rem < r.left ? 'queda poco: sube el total' : 'queda mucho: baja el total', col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 28) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(G.s.t / G.r.step - 1), y: G.tY }, to: { x: G.X(G.s.t / G.r.step - 1) + 70, y: G.tY }, text: 'Desliza el total', ty: G.tY - 30 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const r = G.r, t = (RK.pick(x, 30, G.W - 30, N(r)) + 1) * r.step; if (t !== G.s.t || !G.touched[G.cur]) { G.s.t = t; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ t: need(r) }) });
-})();
-;
-//#archivo js/games/nota-ponderada.js
-// La nota que falta (Preuniversitario, pu-ar-2; spec 2026-11-18-preuda-razonamiento-completo): en un promedio ponderado cada
-// nota pesa su porcentaje. Cada nota es una barra tan ancha como su peso y tan alta como la nota; la línea de la definitiva es
-// la altura que tendría todo parejo. Se sube la barra de la nota que falta hasta que la definitiva llegue a la meta.
-// params = { rounds: [{ items: [[rótulo, peso %, nota | null]], target }] }   state = { rounds: [{ g }] }   (de 0 a 5, de 0.1 en 0.1)
-GAMES['nota-ponderada'] = (() => {
-  const def = (r, g) => r.items.reduce((a, [, w, n]) => a + w / 100 * (n ?? g), 0);
-  const r2 = v => Math.round(v * 100) / 100;
-  const need = r => { for (let k = 0; k <= 50; k++) if (Math.abs(def(r, k / 10) - r.target) < 1e-9) return k / 10; return null; };
-  const ok = (s, r) => Math.abs(def(r, s.g) - r.target) < 1e-9;
-  const game = roundsGame({
-    aspect: 1.2,
-    init: r => ({ g: need(r) === 0 ? 1 : 0 }),
-    ok,
-    solution: r => `le falta un ${need(r)}`,
-    prompt: r => `¿Qué nota necesita para que la definitiva sea ${r.target}?`,
-    foot: () => 'Sube la barra de la nota que falta',
-    layout(G) { G.b = { x: 40, y: 104, w: G.W - 60, h: G.H - 250 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { g: need(r) } : G.s, good = ok(s, r), b = G.b, Y = v => b.y + b.h - v / 5 * b.h;
-      GRAF.axes(p, C, b, 0, 5, 1);
-      let x = b.x; G.miss = null;
-      r.items.forEach(([lab, w, n]) => {
-        const bw = b.w * w / 100, v = n ?? s.g, miss = n === null;
-        p.noStroke(); p.fill(miss ? (good ? C.ok : C.brand) : RK.al(p, C.sky, 170)); p.rect(x + 2, Y(v), bw - 4, Y(0) - Y(v), 3, 3, 0, 0);
-        TK.label(p, C, `${lab} · ${w} %`, x + bw / 2, b.y + b.h + 13, C.ink, 9, bw);
-        TK.label(p, C, String(v), x + bw / 2, Y(v) - 10, miss ? C.brand : C.ink, 11, bw);
-        if (miss) { G.miss = { x: x + bw / 2, x0: x, x1: x + bw }; RK.knob(p, C, x + bw / 2, Y(v), C.brand); }
-        x += bw;
-      });
-      const d = def(r, s.g), y = Y(d); p.stroke(C.coral); p.strokeWeight(2); p.drawingContext.setLineDash([6, 4]); p.line(b.x, y, b.x + b.w, y); p.drawingContext.setLineDash([]);
-      TK.label(p, C, `definitiva ${r2(d)}`, b.x + b.w - 50, y - 10, C.coral, 10, 100);
-      RK.strip(p, C, G.fb, `$${r.items.map(([, w, n]) => `${w / 100}\\cdot ${n ?? s.g}`).join(' + ')} = ${r2(d)}$`, { kicker: good ? 'llega justo a la meta' : `meta ${r.target}`, col: G.locked || good ? C.ok : C.brand, size: 14 });
-    },
-    // Arrastre relativo: 10 px por décima desde donde se tocó; un toque sin arrastrar sube o baja una décima.
-    press(G, x, y) { const m = G.miss; if (!m || x < m.x0 - 6 || x > m.x1 + 6 || y < G.b.y - 20 || y > G.b.y + G.b.h + 10) return false; G.grab = { y0: y, g0: G.s.g, moved: false }; return true; },
-    drag(G, x, y) { if (!G.grab) return false; if (Math.abs(y - G.grab.y0) > 4) G.grab.moved = true; game.set(G, G.grab.g0 * 10 + Math.round((G.grab.y0 - y) / 10)); return true; },
-    release(G, x, y) { if (G.grab && !G.grab.moved) { const b = G.b, top = b.y + b.h - G.s.g / 5 * b.h; game.set(G, G.s.g * 10 + (y < top ? 1 : -1)); } G.grab = null; },
-    demo: G => (G.miss ? { from: { x: G.miss.x, y: G.b.y + G.b.h - 10 }, to: { x: G.miss.x, y: G.b.y + G.b.h - 90 }, text: 'Sube la barra', ty: G.b.y + 10 } : null),
-    peek: G => ({ b: G.b, miss: G.miss }),
-  });
-  game.set = (G, tenths) => { const g = Math.max(0, Math.min(50, Math.round(tenths))) / 10; if (g !== G.s.g || !G.touched[G.cur]) { G.s.g = g; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ g: need(r) }) });
-})();
-;
-//#archivo js/games/cripto-letras.js
-// Criptoaritmética (Preuniversitario, pu-ar-3; spec 2026-11-18-preuda-razonamiento-completo): cada letra es una cifra y letras
-// distintas son cifras distintas. Cada letra tiene su rueda (se arrastra arriba o abajo para cambiar la cifra); la cuenta se
-// reescribe en vivo con las cifras puestas y dice si se cumple. Un número no puede empezar en 0.
-// params = { rounds: [{ letters: 'AB', show: 'AB + BA = 121', f(v) → bool, lead: 'A' }] }   (v: { letra: cifra })   state = { rounds: [{ d: [cifra por letra] }] }
-GAMES['cripto-letras'] = (() => {
-  const val = (r, d) => Object.fromEntries([...r.letters].map((l, i) => [l, d[i]]));
-  const valid = (r, d) => new Set(d).size === d.length && [...(r.lead || '')].every(l => val(r, d)[l] !== 0) && !!r.f(val(r, d));
-  const sols = r => { const n = r.letters.length, out = []; const rec = (d) => { if (d.length === n) { if (valid(r, d)) out.push(d.slice()); return; } for (let k = 0; k <= 9; k++) if (!d.includes(k)) { d.push(k); rec(d); d.pop(); } }; rec([]); return out; };
-  const ok = (s, r) => valid(r, s.d);
-  const game = roundsGame({
-    aspect: 1.2,
-    init: r => ({ d: [...r.letters].map((_, i) => (i + 1) % 10) }),
-    ok,
-    solution: r => { const d = sols(r)[0]; return [...r.letters].map((l, i) => `${l} = ${d[i]}`).join(', '); },
-    prompt: r => `Cada letra es una cifra distinta: ${r.show}`,
-    foot: () => 'Arrastra cada rueda arriba o abajo',
-    layout(G) { G.wy = 230; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = -1; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { d: sols(r)[0] } : G.s, good = ok(s, r), v = val(r, s.d), n = r.letters.length, w = Math.min(70, (G.W - 30) / n);
-      const shown = [...r.show].map(ch => (ch in v ? v[ch] : ch)).join('');
-      TK.label(p, C, r.show, G.W / 2, 104, C.mute, 15, G.W - 30);
-      TK.label(p, C, shown, G.W / 2, 140, good ? C.ok : C.ink, 22, G.W - 30);
-      const dup = s.d.filter((x, i) => s.d.indexOf(x) !== i);
-      G.wheels = [...r.letters].map((l, i) => {
-        const x = (G.W - n * w) / 2 + (i + 0.5) * w, y = G.wy, bad = dup.includes(s.d[i]) || ((r.lead || '').includes(l) && s.d[i] === 0);
-        p.stroke(bad ? C.bad : C.line); p.strokeWeight(bad ? 2 : 1); p.fill(RK.al(p, C.card, 220)); p.rect(x - w * 0.36, y - 46, w * 0.72, 92, 10);
-        TK.label(p, C, String((s.d[i] + 9) % 10), x, y - 28, C.mute, 11, w * 0.6);
-        TK.label(p, C, String(s.d[i]), x, y, C.ink, 22, w * 0.6);
-        TK.label(p, C, String((s.d[i] + 1) % 10), x, y + 28, C.mute, 11, w * 0.6);
-        TK.label(p, C, l, x, y - 62, C.brand, 15, w);
-        return { x, y, w };
-      });
-      const eqOk = !!r.f(v);
-      RK.strip(p, C, G.fb, good ? '$\\text{se cumple}$' : dup.length ? '$\\text{hay dos letras con la misma cifra}$' : eqOk ? '$\\text{revisa: ¿empieza en 0?}$' : '$\\text{la cuenta no se cumple}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) { const i = (G.wheels || []).findIndex(q => Math.abs(x - q.x) < q.w * 0.4 && Math.abs(y - q.y) < 52); if (i < 0) return false; G.grab = i; G.y0 = y; G.d0 = G.s.d[i]; return true; },
-    drag(G, x, y) { if (G.grab < 0) return false; const d = ((G.d0 + Math.round((G.y0 - y) / 22)) % 10 + 10) % 10; if (d !== G.s.d[G.grab]) { G.s.d[G.grab] = d; G.touch(); } return true; },
-    release(G, x, y) { if (G.grab >= 0 && Math.abs(y - G.y0) < 6) { const q = G.wheels[G.grab]; G.s.d[G.grab] = (G.s.d[G.grab] + (y < q.y ? 9 : 1)) % 10; G.touch(); } G.grab = -1; },
-    demo: G => { const q = G.wheels?.[0]; return q ? { from: { x: q.x, y: q.y + 20 }, to: { x: q.x, y: q.y - 30 }, text: 'Arrastra la rueda', ty: q.y + 66 } : null; },
-    peek: G => ({ wheels: G.wheels }),
-  });
-  return Object.assign(game, { answer: r => ({ d: sols(r)[0] }), solutions: r => sols(r) });
-})();
-;
-//#archivo js/games/tablero-cifras.js
-// El tablero de los números de dos cifras (Preuniversitario, pu-ar-3; spec 2026-11-18-preuda-razonamiento-completo): del 10 al
-// 99, cada fila es una cifra de las decenas y cada columna una de las unidades: el número XY vale 10X + Y. Se toca un número y
-// el juego revisa cada condición con él; hay que encontrar el único que las cumple todas.
-// params = { rounds: [{ conds: [{ say, f(n) → bool }] }] }   state = { rounds: [{ n }] }
-GAMES['tablero-cifras'] = (() => {
-  const all = r => Array.from({ length: 90 }, (_, k) => k + 10).filter(n => r.conds.every(c => c.f(n)));
-  const ok = (s, r) => s.n !== null && r.conds.every(c => c.f(s.n));
-  const game = roundsGame({
-    aspect: 1.6,
-    init: () => ({ n: null }),
-    answered: s => s.n !== null,
-    ok,
-    solution: r => `${all(r)[0]}`,
-    prompt: () => 'Busca el número de dos cifras que cumple todo',
-    foot: () => 'Toca un número para ponerlo a prueba',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) {},
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { n: all(r)[0] } : G.s, good = ok(s, r), cs = Math.min(28, (G.W - 40) / 10), x0 = (G.W - 10 * cs) / 2 + 6, y0 = 96 + r.conds.length * 18;
-      r.conds.forEach((c, i) => { const hit = s.n !== null && c.f(s.n); TK.label(p, C, `${s.n === null ? '·' : hit ? '✓' : '✗'} ${c.say}`, G.W / 2, 92 + i * 18, s.n === null ? C.ink : hit ? C.ok : C.bad, 11, G.W - 24); });
-      for (let u = 0; u < 10; u++) TK.label(p, C, String(u), x0 + (u + 0.5) * cs, y0 + 6, C.coral, 9, cs);
-      G.cells = [];
-      for (let t = 1; t <= 9; t++) {
-        TK.label(p, C, String(t), x0 - 10, y0 + 14 + (t - 0.5) * cs, C.sky, 9, 14);
-        for (let u = 0; u < 10; u++) {
-          const n = 10 * t + u, x = x0 + u * cs, y = y0 + 14 + (t - 1) * cs, on = s.n === n;
-          p.stroke(RK.al(p, C.line, 140)); p.strokeWeight(1); p.fill(on ? (good ? C.ok : C.brand) : RK.al(p, C.card, 200)); p.rect(x, y, cs, cs, 3);
-          TK.label(p, C, String(n), x + cs / 2, y + cs / 2, on ? inkOn(good ? C.ok : C.brand) : C.ink, 9, cs - 2);
-          G.cells.push({ x, y, w: cs, h: cs, n });
-        }
-      }
-      RK.strip(p, C, G.fb, s.n === null ? '$\\text{toca un número}$' : `$${s.n} = 10 \\cdot ${Math.floor(s.n / 10)} + ${s.n % 10}$`, { kicker: good ? 'cumple todas' : '', col: G.locked || good ? C.ok : C.brand, size: 16 });
-    },
-    press(G, x, y) { const c = (G.cells || []).find(b => hitBox(b, x, y)); if (!c) return false; G.s.n = c.n; G.touch(); return true; },
-    demo: G => { const c = G.cells?.[34]; return c ? { from: { x: c.x + c.w / 2, y: c.y + c.h / 2 }, to: { x: c.x + c.w / 2, y: c.y + c.h / 2 }, text: 'Toca un número', ty: G.cells.at(-1).y + 40 } : null; },
-    peek: G => ({ cells: G.cells }),
-  });
-  return Object.assign(game, { answer: r => ({ n: all(r)[0] }), solutions: r => all(r) });
-})();
-;
-//#archivo js/games/peor-caso-bolsa.js
-// El peor caso (Preuniversitario, pu-ar-4; spec 2026-11-18-preuda-razonamiento-completo): en una bolsa hay bolas de colores y se
-// sacan sin mirar. ¿Cuántas hay que sacar para estar SEGUROS de algo? Se desliza cuántas sacar y el juego las saca con la peor
-// suerte posible (la que más retrasa lo pedido). Hay que hallar el menor número con el que, aun con esa mala suerte, se cumple.
-// params = { rounds: [{ bag: [[color, cantidad]], kind: 'iguales' | 'color', k, color? }] }   state = { rounds: [{ n }] }
-GAMES['peor-caso-bolsa'] = (() => {
-  const total = r => r.bag.reduce((a, b) => a + b[1], 0);
-  const worst = r => {
-    const out = [];
-    if (r.kind === 'iguales') { const left = r.bag.map(b => Math.min(b[1], r.k - 1)); let more = true; while (more) { more = false; r.bag.forEach((b, i) => { if (left[i] > 0) { out.push(b[0]); left[i]--; more = true; } }); } r.bag.forEach(b => { for (let j = Math.min(b[1], r.k - 1); j < b[1]; j++) out.push(b[0]); }); }
-    else { r.bag.forEach(b => { if (b[0] !== r.color) for (let j = 0; j < b[1]; j++) out.push(b[0]); }); const c = r.bag.find(b => b[0] === r.color); for (let j = 0; j < c[1]; j++) out.push(r.color); }
-    return out;
-  };
-  const meets = (r, drawn) => { const cnt = {}; drawn.forEach(c => (cnt[c] = (cnt[c] || 0) + 1)); return r.kind === 'iguales' ? Object.values(cnt).some(v => v >= r.k) : (cnt[r.color] || 0) >= r.k; };
-  const need = r => { const w = worst(r); for (let n = 1; n <= w.length; n++) if (meets(r, w.slice(0, n))) return n; return null; };
-  const ok = (s, r) => s.n === need(r);
-  const NAME = { coral: 'rojas', sky: 'azules', mint: 'verdes', sun: 'amarillas', brand: 'moradas' };
-  const ask = r => (r.kind === 'iguales' ? `¿Cuántas sacar para tener seguro ${r.k} del mismo color?` : `¿Cuántas sacar para tener seguro ${r.k} ${NAME[r.color]}?`);
-  const game = roundsGame({
-    aspect: 1.25,
-    init: () => ({ n: 1 }),
-    ok,
-    solution: r => `${need(r)} bolas`,
-    prompt: ask,
-    foot: () => 'Desliza cuántas sacar; el juego saca con la peor suerte',
-    layout(G) { G.tY = G.H - 104; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { n: need(r) } : G.s, good = ok(s, r), w = worst(r), T = total(r), per = Math.min(T, 10), d = Math.min(24, (G.W - 40) / per);
-      TK.label(p, C, `En la bolsa: ${r.bag.map(([c, n]) => `${n} ${NAME[c]}`).join(', ')}`, G.W / 2, 96, C.ink, 11, G.W - 24);
-      w.forEach((c, i) => {
-        const x = (G.W - per * d) / 2 + (i % per + 0.5) * d, y = 130 + Math.floor(i / per) * d, out = i < s.n;
-        p.stroke(C.ink); p.strokeWeight(out ? 1.5 : 0.6); p.fill(out ? C[c] : RK.al(p, C[c], 50)); p.circle(x, y, d * 0.8);
-      });
-      const m = meets(r, w.slice(0, s.n)), prev = s.n > 1 && meets(r, w.slice(0, s.n - 1));
-      TK.label(p, C, m ? (prev ? 'se cumple, pero con menos también' : 'aun con la peor suerte, se cumple') : 'con mala suerte, todavía no', G.W / 2, 130 + Math.ceil(T / per) * d + 10, m ? (prev ? C.coral : C.ok) : C.bad, 11, G.W - 24);
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, T, s.n - 1, k => ((k + 1) % 5 === 0 || k === 0 ? String(k + 1) : null), good ? C.ok : C.brand);
-      RK.strip(p, C, G.fb, `$\\text{sacar ${s.n}}$`, { kicker: good ? 'el menor número seguro' : '', col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 28) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(G.s.n - 1), y: G.tY }, to: { x: G.X(G.s.n + 3), y: G.tY }, text: 'Desliza cuántas sacar', ty: G.tY - 30 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const n = RK.pick(x, 30, G.W - 30, total(G.r)) + 1; if (n !== G.s.n || !G.touched[G.cur]) { G.s.n = n; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ n: need(r) }) });
-})();
-;
-//#archivo js/games/rectangulo-max.js
-// La cerca más rendidora (Preuniversitario, pu-ar-4; spec 2026-11-18-preuda-razonamiento-completo): con una cerca de largo fijo
-// se encierra un rectángulo. Se arrastra la esquina: si el ancho crece, el largo se achica, porque la cerca no alcanza para más.
-// El área se ve en cuadritos y en un registro de las que se han probado; la mayor sale cuando el rectángulo es un cuadrado.
-// params = { rounds: [{ P, step }] }   state = { rounds: [{ w }] }
-GAMES['rectangulo-max'] = (() => {
-  const need = r => r.P / 4;
-  const ok = (s, r) => s.w === need(r);
-  const game = roundsGame({
-    aspect: 1.25,
-    init: r => ({ w: r.step }),
-    ok,
-    solution: r => `${need(r)} × ${need(r)}: área ${need(r) ** 2}`,
-    prompt: r => `Con ${r.P} m de cerca, ¿qué rectángulo encierra más área?`,
-    foot: () => 'Arrastra la esquina del rectángulo',
-    layout(G) { G.o = { x: 30, y: G.H - 150 }; G.u = G.r ? Math.min((G.W - 60) / (G.r.P / 2), (G.H - 300) / (G.r.P / 2) * 1.6, 22) : 14; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; G.u = Math.min((G.W - 60) / (G.r.P / 2), (G.H - 300) / (G.r.P / 2) * 1.6, 22); G.tried = []; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { w: need(r) } : G.s, good = ok(s, r), h = r.P / 2 - s.w, u = G.u, o = G.o;
-      p.noStroke(); p.fill(RK.al(p, good ? C.ok : C.sky, 90)); p.rect(o.x, o.y - h * u, s.w * u, h * u);
-      p.stroke(RK.al(p, C.line, 120)); p.strokeWeight(1);
-      for (let i = 1; i < s.w; i++) p.line(o.x + i * u, o.y, o.x + i * u, o.y - h * u);
-      for (let j = 1; j < h; j++) p.line(o.x, o.y - j * u, o.x + s.w * u, o.y - j * u);
-      p.noFill(); p.stroke(C.sun); p.strokeWeight(3); p.rect(o.x, o.y - h * u, s.w * u, h * u);
-      G.corner = { x: o.x + s.w * u, y: o.y - h * u }; RK.knob(p, C, G.corner.x, G.corner.y, C.brand);
-      TK.label(p, C, `${s.w}`, o.x + s.w * u / 2, o.y + 12, C.ink, 10, 40); TK.label(p, C, `${h}`, o.x - 12, o.y - h * u / 2, C.ink, 10, 20);
-      if (!G.tried.some(t => t[0] === s.w)) G.tried.push([s.w, s.w * h]);
-      const best = G.tried.reduce((a, t) => (t[1] > a[1] ? t : a), [0, -1]);
-      TK.label(p, C, `mejor probado: ${best[0]} × ${r.P / 2 - best[0]} = ${best[1]}`, G.W - 90, 104, C.mute, 9, 170);
-      RK.strip(p, C, G.fb, `$${s.w} \\cdot ${h} = ${s.w * h}$`, { kicker: good ? 'la mayor área: un cuadrado' : `cerca: 2 · (${s.w} + ${h}) = ${r.P}`, col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.hypot(x - G.corner.x, y - G.corner.y) > 30) return false; G.grab = true; return true; },
-    drag(G, x, y) { if (!G.grab) return false; const r = G.r, w = Math.max(r.step, Math.min(r.P / 2 - r.step, Math.round((x - G.o.x) / G.u / r.step) * r.step)); if (w !== G.s.w) { G.s.w = w; G.touch(); } return true; },
-    release(G) { G.grab = false; },
-    demo: G => (G.corner ? { from: G.corner, to: { x: G.corner.x + 3 * G.u, y: G.corner.y + 3 * G.u }, text: 'Arrastra la esquina', ty: G.o.y + 30 } : null),
-    peek: G => ({ corner: G.corner, o: G.o, u: G.u }),
-  });
-  return Object.assign(game, { answer: r => ({ w: need(r) }) });
-})();
-;
-//#archivo js/games/reparto-extremo.js
-// El reparto extremo (Preuniversitario, pu-ar-4; spec 2026-11-18-preuda-razonamiento-completo): se reparten dulces entre varios
-// niños, cada uno con una cantidad DISTINTA y al menos 1. Se sube o se baja la columna de cada niño; el juego cuenta el total.
-// Para el máximo de uno, los demás reciben lo mínimo posible; para el menor máximo, todo se reparte lo más parejo que se pueda.
-// params = { rounds: [{ n, total, ask: 'max' | 'minmax' }] }   state = { rounds: [{ h: [cantidad por niño] }] }
-GAMES['reparto-extremo'] = (() => {
-  const target = r => { const base = r.n * (r.n - 1) / 2; if (r.ask === 'max') return r.total - base; let m = r.n; while (m * (m + 1) / 2 - (m - r.n) * (m - r.n + 1) / 2 < r.total) m++; return m; };
-  const valid = (r, h) => h.every(v => v >= 1) && new Set(h).size === h.length && h.reduce((a, b) => a + b, 0) === r.total;
-  const ok = (s, r) => valid(r, s.h) && Math.max(...s.h) === target(r);
-  const answer = r => { const n = r.n; if (r.ask === 'max') return { h: [...Array.from({ length: n - 1 }, (_, i) => i + 1), target(r)] }; const m = target(r); const h = Array.from({ length: n }, (_, i) => m - i); let extra = h.reduce((a, b) => a + b, 0) - r.total; for (let i = n - 1; i >= 0 && extra > 0; i--) { const room = h[i] - (i === n - 1 ? 1 : h[i + 1] + 1); const t = Math.min(room, extra); h[i] -= t; extra -= t; } return { h }; };
-  const game = roundsGame({
-    aspect: 1.2,
-    init: r => ({ h: Array(r.n).fill(1) }),
-    ok,
-    solution: r => answer(r).h.join(', '),
-    prompt: r => (r.ask === 'max' ? `${r.total} dulces, ${r.n} niños, todos distintos: ¿lo máximo de uno?` : `${r.total} dulces, ${r.n} niños, todos distintos: ¿el menor máximo?`),
-    foot: () => 'Sube o baja la columna de cada niño',
-    layout(G) { G.b = { x: 30, y: 110, w: G.W - 50, h: G.H - 240 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = -1; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, good = ok(s, r), top = r.total, b = G.b;
-      const Y = GRAF.axes(p, C, b, 0, top, Math.max(1, Math.ceil(top / 6)));
-      const dup = s.h.filter((x, i) => s.h.indexOf(x) !== i);
-      G.cols = GRAF.bars(p, C, b, s.h, s.h.map((_, i) => `niño ${i + 1}`), Y, { col: i => (dup.includes(s.h[i]) ? C.bad : good ? C.ok : C.sky) });
-      G.cols.forEach((c, i) => { RK.knob(p, C, c.cx, c.top, C.brand); TK.label(p, C, String(s.h[i]), c.cx, c.top - 14, C.ink, 11, c.w); });
-      const sum = s.h.reduce((a, c) => a + c, 0);
-      RK.strip(p, C, G.fb, `$\\text{suma}\\ ${sum}\\ \\text{de}\\ ${r.total}\\ \\cdot\\ \\text{el mayor}\\ ${Math.max(...s.h)}$`, { kicker: dup.length ? 'hay dos iguales' : sum !== r.total ? (sum < r.total ? 'faltan dulces' : 'sobran dulces') : good ? (r.ask === 'max' ? 'lo máximo posible' : 'el menor máximo posible') : 'reparto válido, pero se puede mejorar', col: G.locked || good ? C.ok : C.brand, size: 14 });
-    },
-    press(G, x, y) { const i = GRAF.colAt(G.cols || [], x); if (i < 0 || y < G.b.y - 20 || y > G.b.y + G.b.h + 10) return false; G.grab = i; game.move(G, y); return true; },
-    drag(G, x, y) { if (G.grab < 0) return false; game.move(G, y); return true; },
-    release(G) { G.grab = -1; },
-    demo: G => (G.cols ? { from: { x: G.cols[0].cx, y: G.cols[0].top }, to: { x: G.cols[0].cx, y: G.cols[0].top - 60 }, text: 'Sube la columna', ty: G.b.y + 10 } : null),
-    peek: G => ({ b: G.b, cols: G.cols }),
-  });
-  game.move = (G, y) => { const r = G.r, b = G.b, v = Math.max(1, Math.min(r.total, Math.round((b.y + b.h - y) / b.h * r.total))); if (v !== G.s.h[G.grab] || !G.touched[G.cur]) { G.s.h[G.grab] = v; G.touch(); } };
-  return Object.assign(game, { answer });
-})();
-;
-//#archivo js/games/cinta-ecuacion.js
-// La cinta de la ecuación (Preuniversitario, pu-ec-1 y pu-ec-2; spec 2026-11-18-preuda-razonamiento-completo): un problema de
-// texto se dibuja como una cinta: cada cantidad es un tramo hecho de x y de un pedazo fijo («Sara tiene 4 más que su
-// hermano»: x y x + 4). Se desliza x y la cinta crece; hay que dejarla justo del largo del total.
-// params = { rounds: [{ parts: [[coef, constante, rótulo]], total, lo, hi }] }   state = { rounds: [{ x }] }
-GAMES['cinta-ecuacion'] = (() => {
-  const len = (r, x) => r.parts.reduce((a, [c, k]) => a + c * x + k, 0);
-  const need = r => { for (let x = r.lo; x <= r.hi; x++) if (len(r, x) === r.total) return x; return null; };
-  const ok = (s, r) => len(r, s.x) === r.total;
-  const N = r => r.hi - r.lo + 1;
-  const term = (c, k) => { if (c === -1 && k > 0) return `${k} - x`; const a = c === 1 ? 'x' : c === -1 ? '-x' : c === 0 ? '' : `${c}x`; return k ? (a ? `${a} ${k > 0 ? '+' : '-'} ${Math.abs(k)}` : `${k}`) : a; };
-  const game = roundsGame({
-    aspect: 1.15,
-    init: r => ({ x: need(r) === r.lo ? r.lo + 1 : r.lo }),
-    ok,
-    solution: r => `x = ${need(r)}`,
-    prompt: r => r.say || `${r.parts.map(p => p[2]).join(" + ")} = ${r.total}`,
-    foot: () => 'Desliza x hasta que la cinta llegue al total',
-    layout(G) { G.tY = G.H - 104; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { x: need(r) } : G.s, good = ok(s, r), x0 = 20, Wt = G.W - 40, top = r.total * 1.25, sc = Wt / top, cols = [C.sky, C.coral, C.mint, C.sun];
-      p.stroke(C.ink); p.strokeWeight(1.5); p.drawingContext.setLineDash([6, 4]); p.noFill(); p.rect(x0, 112, r.total * sc, 40, 6); p.drawingContext.setLineDash([]);
-      TK.label(p, C, `total ${r.total}`, x0 + r.total * sc / 2, 102, C.ink, 10, 120);
-      let x = x0;
-      const segs = r.parts.map(([c, k, lab], i) => {
-        const v = c * s.x + k, w = Math.max(0, Math.min(v * sc, x0 + Wt - x)), seg = { x, w, v, c, k, lab, i };
-        p.noStroke(); p.fill(RK.al(p, cols[i % 4], 200)); p.rect(x, 116, w, 32, 4);
-        x += w; return seg;
-      });
-      segs.forEach(({ x, w, v, c, k, lab, i }) => {
-        if (w > 34) TK.label(p, C, `$${term(c, k)}$`, x + w / 2, 132, inkOn(cols[i % 4]), 11, w - 4);
-        TK.label(p, C, `${lab}: ${v}`, x + w / 2, 166 + i * 15, C.mute, 9, Math.max(w, 70));
-      });
-      const L = len(r, s.x), cs = r.parts.reduce((a, p) => a + p[0], 0), ks = r.parts.reduce((a, p) => a + p[1], 0);
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, N(r), s.x - r.lo, k => ((r.lo + k) % 5 === 0 ? String(r.lo + k) : null), good ? C.ok : C.brand);
-      RK.strip(p, C, G.fb, `$${term(cs, ks)} = ${L}$`, { kicker: good ? `x = ${s.x}: llega justo` : L < r.total ? 'le falta' : 'se pasa', col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 28) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(G.s.x - G.r.lo), y: G.tY }, to: { x: G.X(G.s.x - G.r.lo) + 60, y: G.tY }, text: 'Desliza x', ty: G.tY - 30 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const r = G.r, v = r.lo + RK.pick(x, 30, G.W - 30, N(r)); if (v !== G.s.x || !G.touched[G.cur]) { G.s.x = v; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ x: need(r) }) });
-})();
-;
-//#archivo js/games/mezcla-precio.js
-// La mezcla (Preuniversitario, pu-ec-2; spec 2026-11-18-preuda-razonamiento-completo): se mezclan dos productos de precios
-// distintos para tener un total de kilos a un precio dado. Se desliza cuántos kilos van del primero (el resto es del segundo);
-// el juego suma lo que cuesta cada montón y da el precio por kilo de la mezcla en una aguja.
-// params = { rounds: [{ a: [nombre, precio], b: [nombre, precio], total, target, step }] }   state = { rounds: [{ ka }] }
-GAMES['mezcla-precio'] = (() => {
-  const price = (r, ka) => (ka * r.a[1] + (r.total - ka) * r.b[1]) / r.total;
-  const need = r => { for (let k = 0; k <= r.total; k += r.step) if (Math.abs(price(r, k) - r.target) < 1e-9) return k; return null; };
-  const ok = (s, r) => Math.abs(price(r, s.ka) - r.target) < 1e-9;
-  const N = r => Math.round(r.total / r.step) + 1;
-  const fm = v => Math.round(v).toLocaleString('es-CO');
-  const game = roundsGame({
-    aspect: 1.25,
-    init: r => ({ ka: need(r) === 0 ? r.step : 0 }),
-    ok,
-    solution: r => `${need(r)} kg de ${r.a[0]} y ${r.total - need(r)} kg de ${r.b[0]}`,
-    prompt: r => `${r.total} kg de mezcla a ${fm(r.target)} el kilo: ¿cuánto de cada uno?`,
-    foot: () => 'Desliza cuántos kilos van del primero',
-    layout(G) { G.tY = G.H - 104; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { ka: need(r) } : G.s, good = ok(s, r), kb = r.total - s.ka, cx = [G.W * 0.25, G.W * 0.75], base = 230, u = Math.min(14, 120 / r.total * 2);
-      [[r.a, s.ka, C.coral], [r.b, kb, C.sky]].forEach(([[name, pr], kg, col], i) => {
-        const per = 5;
-        for (let k = 0; k < kg; k++) { p.noStroke(); p.fill(col); p.rect(cx[i] - per * u / 2 + (k % per) * u, base - (Math.floor(k / per) + 1) * u, u - 1, u - 1, 2); }
-        TK.label(p, C, `${name}: ${kg} kg`, cx[i], base + 14, C.ink, 11, G.W * 0.45);
-        TK.label(p, C, `a ${fm(pr)} = ${fm(kg * pr)}`, cx[i], base + 30, C.mute, 9, G.W * 0.45);
-      });
-      const pm = price(r, s.ka), lo = Math.min(r.a[1], r.b[1]), hi = Math.max(r.a[1], r.b[1]), gx = x => 30 + (x - lo) / (hi - lo) * (G.W - 60), gy = 104;
-      p.stroke(C.line); p.strokeWeight(3); p.line(30, gy, G.W - 30, gy);
-      p.noStroke(); p.fill(C.coral); p.circle(gx(r.target), gy, 8);
-      TK.label(p, C, `meta ${fm(r.target)}`, gx(r.target), gy - 12, C.coral, 9, 80);
-      RK.knob(p, C, gx(pm), gy, good ? C.ok : C.brand);
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, N(r), s.ka / r.step, k => (k % 2 === 0 ? String(k * r.step) : null), good ? C.ok : C.brand);
-      RK.strip(p, C, G.fb, `$\\tfrac{${fm(s.ka * r.a[1])} + ${fm(kb * r.b[1])}}{${r.total}} = ${fm(pm)}$`, { kicker: good ? 'precio justo' : 'precio por kilo de la mezcla', col: G.locked || good ? C.ok : C.brand, size: 16 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 28) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(G.s.ka / G.r.step), y: G.tY }, to: { x: G.X(G.s.ka / G.r.step) + 60, y: G.tY }, text: 'Desliza los kilos', ty: G.tY - 30 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const r = G.r, v = RK.pick(x, 30, G.W - 30, N(r)) * r.step; if (v !== G.s.ka || !G.touched[G.cur]) { G.s.ka = v; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ ka: need(r) }) });
-})();
-;
-//#archivo js/games/alcancia-monedas.js
-// La alcancía (Preuniversitario, pu-ec-2; spec 2026-11-18-preuda-razonamiento-completo): hay N monedas de dos valores y se sabe
-// cuánto suman. Las monedas están en fila; se arrastra la divisoria: las de la izquierda son de un valor y las de la derecha
-// del otro. El juego cuenta cuánto suman y lo compara con el total.
-// params = { rounds: [{ n, v: [valor izq, valor der], total }] }   state = { rounds: [{ k }] }   (monedas del primer valor)
-GAMES['alcancia-monedas'] = (() => {
-  const sum = (r, k) => k * r.v[0] + (r.n - k) * r.v[1];
-  const need = r => { for (let k = 0; k <= r.n; k++) if (sum(r, k) === r.total) return k; return null; };
-  const ok = (s, r) => sum(r, s.k) === r.total;
-  const fm = v => v.toLocaleString('es-CO');
-  const game = roundsGame({
-    aspect: 1.05,
-    init: r => ({ k: need(r) === 0 ? 1 : 0 }),
-    ok,
-    solution: r => `${need(r)} de ${fm(r.v[0])} y ${r.n - need(r)} de ${fm(r.v[1])}`,
-    prompt: r => `${r.n} monedas de ${fm(r.v[0])} y ${fm(r.v[1])} suman ${fm(r.total)}. ¿Cuántas de cada una?`,
-    foot: () => 'Arrastra la divisoria entre las monedas',
-    layout(G) { G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { k: need(r) } : G.s, good = ok(s, r), per = Math.min(r.n, 10), d = Math.min(28, (G.W - 40) / per), rows = Math.ceil(r.n / per), x0 = (G.W - per * d) / 2, y0 = 120;
-      G.pos = [];
-      for (let i = 0; i < r.n; i++) {
-        const x = x0 + (i % per + 0.5) * d, y = y0 + Math.floor(i / per) * (d + 6), a = i < s.k, col = a ? C.sun : RK.al(p, C.line, 230);
-        p.stroke(C.ink); p.strokeWeight(1); p.fill(col); p.circle(x, y, d * 0.86);
-        TK.label(p, C, a ? String(r.v[0]) : String(r.v[1]), x, y, a ? inkOn(C.sun) : C.ink, 8, d * 0.8);
-        G.pos.push({ x, y });
-      }
-      const at = i => (i < r.n ? G.pos[i] : { x: G.pos[r.n - 1].x + d, y: G.pos[r.n - 1].y }), q = s.k < r.n ? at(s.k) : at(r.n);
-      G.div = { x: q.x - d / 2, y: q.y };
-      p.stroke(C.brand); p.strokeWeight(3); p.line(G.div.x, q.y - d * 0.6, G.div.x, q.y + d * 0.6); RK.knob(p, C, G.div.x, q.y + d * 0.6 + 4, C.brand);
-      const S = sum(r, s.k);
-      TK.label(p, C, `${s.k} · ${fm(r.v[0])} + ${r.n - s.k} · ${fm(r.v[1])}`, G.W / 2, y0 + rows * (d + 6) + 18, C.ink, 12, G.W - 30);
-      RK.strip(p, C, G.fb, `$\\text{suman ${fm(S)}}$`, { kicker: good ? 'justo el total' : S < r.total ? 'falta' : 'sobra', col: G.locked || good ? C.ok : C.brand, size: 17 });
-      G.d = d;
-    },
-    press(G, x, y) { if (!G.pos || y < G.pos[0].y - 30 || y > G.pos.at(-1).y + 40) return false; G.grab = true; game.move(G, x, y); return true; },
-    drag(G, x, y) { if (!G.grab) return false; game.move(G, x, y); return true; },
-    release(G) { G.grab = false; },
-    demo: G => (G.div ? { from: G.div, to: { x: G.div.x + 3 * G.d, y: G.div.y }, text: 'Arrastra la divisoria', ty: G.div.y - 34 } : null),
-    peek: G => ({ pos: G.pos }),
-  });
-  game.move = (G, x, y) => {
-    const r = G.r; let best = 0, bd = 1e9;
-    for (let k = 0; k <= r.n; k++) { const q = k < r.n ? G.pos[k] : { x: G.pos[r.n - 1].x + G.d, y: G.pos[r.n - 1].y }, dx = q.x - G.d / 2 - x, dy = q.y - y, dd = dx * dx + dy * dy * 4; if (dd < bd) { bd = dd; best = k; } }
-    if (best !== G.s.k || !G.touched[G.cur]) { G.s.k = best; G.touch(); }
-  };
-  return Object.assign(game, { answer: r => ({ k: need(r) }) });
-})();
-;
-//#archivo js/games/intervalo-solucion.js
-// La solución de una desigualdad (Preuniversitario, pu-ec-3; spec 2026-11-18-preuda-razonamiento-completo): en la recta se
-// arrastra el punto frontera, se toca el punto para dejarlo abierto o cerrado (si entra o no) y se toca un lado de la recta
-// para pintar hacia dónde van las soluciones. El juego prueba en vivo un número del lado pintado en la desigualdad original.
-// params = { rounds: [{ tex, f(x) → bool, lo, hi }] }   (la solución es un rayo con frontera entera)
-// state = { rounds: [{ b, closed, dir }] }   (dir: −1 izquierda, 1 derecha, 0 sin pintar)
-GAMES['intervalo-solucion'] = (() => {
-  const need = r => { for (let b = r.lo; b <= r.hi; b++) { const L = r.f(b - 0.5), R = r.f(b + 0.5); if (L !== R) return { b, closed: !!r.f(b), dir: R ? 1 : -1 }; } return null; };
-  const ok = (s, r) => { const n = need(r); return s.b === n.b && s.closed === n.closed && s.dir === n.dir; };
-  const sym = s => (s.dir > 0 ? (s.closed ? '\\ge' : '>') : (s.closed ? '\\le' : '<'));
-  const game = roundsGame({
-    aspect: 1.05,
-    init: r => ({ b: need(r).b === 0 ? 1 : 0, closed: false, dir: 0 }),
-    answered: s => s.dir !== 0,
-    ok,
-    solution: r => { const n = need(r); return `$x ${sym(n)} ${n.b}$`; },
-    prompt: r => `Pinta la solución de $${r.tex}$`,
-    foot: () => 'Arrastra la frontera, toca el punto y toca el lado que va',
-    layout(G) { G.ax = { x0: 24, x1: G.W - 24, y: 190 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? need(r) : G.s, good = ok(s, r), ax = G.ax, X = v => ax.x0 + (v - r.lo) / (r.hi - r.lo) * (ax.x1 - ax.x0);
-      G.X = X;
-      if (s.dir) { p.stroke(good ? C.ok : C.brand); p.strokeWeight(6); p.line(X(s.b), ax.y, s.dir > 0 ? ax.x1 : ax.x0, ax.y); }
-      p.stroke(C.ink); p.strokeWeight(1.5); p.line(ax.x0, ax.y, ax.x1, ax.y);
-      for (let v = r.lo; v <= r.hi; v++) { p.strokeWeight(1); p.line(X(v), ax.y - 4, X(v), ax.y + 4); TK.label(p, C, String(v), X(v), ax.y + 16, C.mute, 8, 20); }
-      p.stroke(good ? C.ok : C.brand); p.strokeWeight(2.5); p.fill(s.closed ? (good ? C.ok : C.brand) : C.bg); p.circle(X(s.b), ax.y, 16);
-      RK.knob(p, C, X(s.b), ax.y - 30, C.brand);
-      if (s.dir) {
-        const t = s.b + s.dir * 2, val = r.f(t);
-        TK.label(p, C, `prueba con x = ${t}: ${val ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 46, val ? C.ok : C.bad, 11, G.W - 30);
-        const e = r.f(s.b); TK.label(p, C, `y con x = ${s.b}: ${e ? 'cumple' : 'no cumple'}`, G.W / 2, ax.y + 64, e === s.closed ? C.ok : C.bad, 11, G.W - 30);
-      }
-      RK.strip(p, C, G.fb, s.dir ? `$x ${sym(s)} ${s.b}$` : '$\\text{toca un lado de la recta}$', { col: G.locked || good ? C.ok : C.brand, size: 18 });
-    },
-    press(G, x, y) {
-      const ax = G.ax, bx = G.X(G.s.b);
-      if (Math.hypot(x - bx, y - (ax.y - 30)) < 18) { G.grab = true; return true; }
-      if (Math.hypot(x - bx, y - ax.y) < 14) { G.s.closed = !G.s.closed; G.touch(); return true; }
-      if (Math.abs(y - ax.y) < 26 && x > ax.x0 - 10 && x < ax.x1 + 10) { G.s.dir = x > bx ? 1 : -1; G.touch(); return true; }
-      return false;
-    },
-    drag(G, x) { if (!G.grab) return false; const r = G.r, ax = G.ax, b = Math.max(r.lo, Math.min(r.hi, Math.round(r.lo + (x - ax.x0) / (ax.x1 - ax.x0) * (r.hi - r.lo)))); if (b !== G.s.b) { G.s.b = b; G.touch(); } return true; },
-    release(G) { G.grab = false; },
-    demo: G => { const bx = G.X ? G.X(G.s.b) : G.W / 2; return { from: { x: bx, y: G.ax.y - 30 }, to: { x: bx + 60, y: G.ax.y - 30 }, text: 'Arrastra la frontera', ty: G.ax.y - 60 }; },
-    peek: G => ({ ax: G.ax }),
-  });
-  return Object.assign(game, { answer: need });
-})();
-;
 //#archivo js/games/encuesta-tres.js
 // La encuesta de tres círculos (Preuniversitario, pu-cj-1 y pu-cj-2; spec 2026-11-18-preuda-razonamiento-completo): un Venn de
 // tres conjuntos con sus 8 zonas. Cada zona tiene su número: se arrastra arriba o abajo sobre la zona para cambiarlo. Al lado
@@ -23646,6 +22888,816 @@ const COURSE_TRIG = {
               { hint: 'Cada vez que multiplicas, el módulo se multiplica por el de w y el ángulo suma el de w. Busca el n que deja las dos cosas justo en la estrella.' }),
             num('Entre las raíces cúbicas de $8i$, ¿cuál es el argumento (en grados) de la de menor argumento positivo?', 30, '$8i = 8\\,\\mathrm{cis}\\,90^\\circ$: las raíces son $2\\,\\mathrm{cis}\\,30^\\circ$, $2\\,\\mathrm{cis}\\,150^\\circ$ y $2\\,\\mathrm{cis}\\,270^\\circ$.',
               { suffix: '°', hint: 'Escribe 8i en forma polar. Al elevar al cubo, el ángulo se multiplica por 3: aquí hay que deshacer eso. Las otras dos raíces quedan igual de separadas en la vuelta.' }),
+          ],
+        },
+      ],
+    },
+  ],
+};
+;
+//#archivo js/courses/trig-juegos.js
+// Trigonometría: los juegos nuevos de cada lección (spec 2026-11-22-trigonometria-juegos). Va después de trig.js y
+// añade al final de cada lección lo de TRIG_EXTRA: el último es siempre el juego propio de la lección.
+
+const TRIG_EXTRA = (() => {
+  const F3 = ['sen', 'cos', 'tan'];
+  return {
+    'trig-41a': [
+      play('quita-vueltas', 'Un ángulo muy grande o negativo termina en el mismo lado que otro más sencillo. Toca «− 1 vuelta» o «+ 1 vuelta» hasta dejarlo en el intervalo pedido y luego «Listo»', {
+        rounds: [
+          { title: 'Más de una vuelta', items: [{ deg: 765 }, { deg: -300 }] },
+          { title: 'Muy lejos y en otro intervalo', items: [{ deg: -1000 }, { deg: 500, lo: -180 }] },
+          { title: 'En radianes: una vuelta son 2π', items: [{ deg: 495, rad: true }, { deg: -510, rad: true }] },
+        ],
+      }, '$765^\\circ - 2 \\cdot 360^\\circ = 45^\\circ$; $-300^\\circ + 360^\\circ = 60^\\circ$; $-1000^\\circ + 3 \\cdot 360^\\circ = 80^\\circ$; $500^\\circ - 360^\\circ = 140^\\circ$, que ya está entre $-180^\\circ$ y $180^\\circ$. En radianes la vuelta es $2\\pi$: $\\tfrac{11\\pi}{4} - 2\\pi = \\tfrac{3\\pi}{4}$ y $-\\tfrac{17\\pi}{6} + 4\\pi = \\tfrac{7\\pi}{6}$.',
+        { hint: 'Sumar o restar una vuelta completa (360° o 2π) no mueve el lado terminal. Mira si el ángulo se pasa por arriba o se queda por debajo del intervalo: eso te dice si hay que quitar vueltas o ponerlas.' }),
+    ],
+    'trig-41b': [
+      play('rueda-rodante', 'La rueda debe parar justo en la bandera. Elige con − y + el ángulo que tiene que girar y toca «Rodar»', {
+        rounds: [
+          { title: 'Del arco al ángulo', items: [{ r: 2, n: 9 }, { r: 3, n: 4 }] },
+          { title: 'Otros radios', items: [{ r: 1, n: 15 }, { r: 4, n: 3 }] },
+          { title: 'Rueda grande y rueda pequeña', items: [{ r: 3, n: 10 }, { r: 0.5, n: 12 }] },
+        ],
+      }, 'La rueda avanza lo que mide el arco que apoya: $s = r\\theta$, así que $\\theta = \\tfrac{s}{r}$. $\\tfrac{3\\pi}{2}$, $\\tfrac{2\\pi}{3}$, $\\tfrac{5\\pi}{2}$ (una vuelta y cuarto), $\\tfrac{\\pi}{2}$, $\\tfrac{5\\pi}{3}$ y, con el radio de medio metro, $\\tfrac{\\pi}{0.5} = 2\\pi$: una vuelta entera para avanzar apenas $\\pi$ metros.',
+        { hint: 'La distancia que rueda es igual al arco, y el arco es radio por ángulo (en radianes). Despeja el ángulo: divide la distancia entre el radio. Una rueda pequeña tiene que girar más para avanzar lo mismo.' }),
+    ],
+    'trig-1': [
+      play('toca-lados', 'El triángulo sale girado o volteado. Mira desde θ y toca dos lados: primero el que va arriba de la fracción y luego el que va abajo', {
+        rounds: [
+          { title: 'Triángulo de pie', items: [{ fn: 'sen', t: 0, len: [3, 4, 5] }, { fn: 'cos', t: 1, len: [12, 5, 13] }] },
+          { title: 'Volteado', items: [{ fn: 'tan', t: 2, len: [8, 15, 17] }, { fn: 'sen', t: 5, len: [24, 7, 25] }] },
+          { title: 'De cabeza', items: [{ fn: 'cos', t: 6, len: [20, 21, 29] }, { fn: 'tan', t: 7, len: [35, 12, 37] }] },
+        ],
+      }, 'No importa cómo esté puesto el triángulo: el opuesto es el lado que no toca a θ, la hipotenusa está frente al ángulo recto y el adyacente es el otro lado que sale de θ. $\\operatorname{sen}\\theta = \\tfrac{\\text{op}}{\\text{hip}}$, $\\cos\\theta = \\tfrac{\\text{ady}}{\\text{hip}}$ y $\\tan\\theta = \\tfrac{\\text{op}}{\\text{ady}}$.',
+        { hint: 'Primero ubica la hipotenusa: es el lado frente al cuadradito del ángulo recto. De los otros dos, el que no toca a θ es el opuesto. Luego recuerda SOH CAH TOA.' }),
+    ],
+    'trig-2': [
+      play('figuras-notables', 'Las razones de 30°, 45° y 60° salen de dos figuras partidas por la mitad. Busca el ángulo y toca dos lados: el de arriba de la fracción y luego el de abajo', {
+        rounds: [
+          { title: 'Del medio equilátero', items: [{ fn: 'sen', deg: 30 }, { fn: 'cos', deg: 30 }] },
+          { title: 'Del medio cuadrado', items: [{ fn: 'tan', deg: 45 }, { fn: 'sen', deg: 45 }] },
+          { title: 'El otro ángulo del equilátero', items: [{ fn: 'tan', deg: 60 }, { fn: 'cos', deg: 60 }] },
+        ],
+      }, 'Medio equilátero de lado 2: catetos $1$ y $\\sqrt3$, hipotenusa $2$. Frente a $30^\\circ$ está el $1$: $\\operatorname{sen} 30^\\circ = \\tfrac12$ y $\\cos 30^\\circ = \\tfrac{\\sqrt3}{2}$; frente a $60^\\circ$ está $\\sqrt3$: $\\tan 60^\\circ = \\sqrt3$ y $\\cos 60^\\circ = \\tfrac12$. Medio cuadrado de lado 1: hipotenusa $\\sqrt2$, así que $\\tan 45^\\circ = 1$ y $\\operatorname{sen} 45^\\circ = \\tfrac{1}{\\sqrt2} = \\tfrac{\\sqrt2}{2}$.',
+        { hint: 'Primero decide en cuál figura vive el ángulo. Párate en ese ángulo: el lado que no lo toca es el opuesto. El lado más largo de cada triángulo es la hipotenusa.' }),
+    ],
+    'trig-42c': [
+      play('toca-lados', 'Ahora con las razones recíprocas: son las mismas fracciones dadas vuelta. Toca primero el lado de arriba de la fracción y luego el de abajo', {
+        rounds: [
+          { title: 'Cosecante y secante', items: [{ fn: 'csc', t: 3, len: [9, 40, 41] }, { fn: 'sec', t: 4, len: [60, 11, 61] }] },
+          { title: 'Cotangente y otra más', items: [{ fn: 'cot', t: 1, len: [28, 45, 53] }, { fn: 'csc', t: 6, len: [56, 33, 65] }] },
+        ],
+      }, 'La cosecante es el seno al revés: $\\csc\\theta = \\tfrac{\\text{hip}}{\\text{op}}$. La secante es el coseno al revés: $\\sec\\theta = \\tfrac{\\text{hip}}{\\text{ady}}$. La cotangente es la tangente al revés: $\\cot\\theta = \\tfrac{\\text{ady}}{\\text{op}}$. En la cosecante y la secante la hipotenusa va arriba, así que siempre valen más que 1.',
+        { hint: 'Piensa primero en la razón conocida (seno, coseno o tangente) y después dale la vuelta: lo que iba abajo pasa arriba. Cosecante va con seno; secante, con coseno.' }),
+      play('multiplica-razon', 'Medir sin alcanzar: en cada situación conoces un lado (azul) y buscas otro (rojo). Toca, entre las seis razones, la que multiplica al lado conocido para dar el buscado', {
+        rounds: [
+          { title: 'Alturas y distancias', items: [
+            { q: 'A 30 m de una torre, la cima se ve a 40°. ¿Qué razón da la altura?', known: 'ady', want: 'op', val: 30, deg: 40, unit: 'm' },
+            { q: 'Un árbol de 9 m se ve a 35° desde el suelo. ¿Qué razón da la distancia al árbol?', known: 'op', want: 'ady', val: 9, deg: 35, unit: 'm' }] },
+          { title: 'Cables y miradas', items: [
+            { q: 'Un globo a 150 m de altura se ve a 48°. ¿Qué razón da la distancia en línea recta?', known: 'op', want: 'hip', val: 150, deg: 48, unit: 'm' },
+            { q: 'Un cable sale del suelo a 65° hacia un poste que está a 7 m. ¿Qué razón da su largo?', known: 'ady', want: 'hip', val: 7, deg: 65, unit: 'm' }] },
+          { title: 'Desde arriba', items: [
+            { q: 'Desde un faro de 25 m se ve un bote con 15° de depresión. ¿Qué razón da la distancia al bote?', known: 'op', want: 'ady', val: 25, deg: 15, unit: 'm' },
+            { q: 'Un dron baja 80 m en línea recta con 30° de inclinación. ¿Qué razón da la altura que pierde?', known: 'hip', want: 'op', val: 80, deg: 30, unit: 'm' }] },
+        ],
+      }, 'Cada razón es «buscado entre conocido». Altura con la distancia: $30\\tan 40^\\circ \\approx 25.2$ m. Distancia con la altura: $9\\cot 35^\\circ \\approx 12.9$ m. Línea recta con la altura: $150\\csc 48^\\circ \\approx 201.8$ m. Cable con la distancia: $7\\sec 65^\\circ \\approx 16.6$ m. El ángulo de depresión es igual al de elevación desde el bote: $25\\cot 15^\\circ \\approx 93.3$ m. Y el dron: $80\\operatorname{sen} 30^\\circ = 40$ m.',
+        { hint: 'Nombra los dos lados desde el ángulo (opuesto, adyacente o hipotenusa) y forma la fracción «buscado sobre conocido». Si la hipotenusa queda arriba, es una recíproca: cosecante o secante.' }),
+    ],
+    'trig-3': [
+      play('quita-vueltas', 'En la circunferencia unitaria, después de una vuelta todo se repite. Quita o pon vueltas de $2\\pi$ hasta dejar el número entre $0$ y $2\\pi$, y toca «Listo»', {
+        rounds: [
+          { title: 'Se pasó de la vuelta', items: [{ deg: 390, rad: true }, { deg: 840, rad: true }] },
+          { title: 'Giros hacia atrás', items: [{ deg: -45, rad: true }, { deg: -780, rad: true }] },
+        ],
+      }, '$\\tfrac{13\\pi}{6} - 2\\pi = \\tfrac{\\pi}{6}$; $\\tfrac{14\\pi}{3} - 4\\pi = \\tfrac{2\\pi}{3}$; $-\\tfrac{\\pi}{4} + 2\\pi = \\tfrac{7\\pi}{4}$ y $-\\tfrac{13\\pi}{3} + 6\\pi = \\tfrac{5\\pi}{3}$. Como el punto terminal es el mismo, el seno y el coseno también: por eso son funciones periódicas, con periodo $2\\pi$.',
+        { hint: 'Escribe 2π con el mismo denominador del ángulo (por ejemplo, 2π = 12π/6) y resta o suma hasta caer entre 0 y 2π.' }),
+      play('proyecta-punto', 'Ahora en toda la circunferencia: el coseno puede ser negativo (a la izquierda) y el seno también (abajo). Elige los dos valores con su signo y toca «Proyectar»', {
+        rounds: [
+          { title: 'A la izquierda', items: [{ deg: 150 }, { deg: 225 }] },
+          { title: 'Abajo y sobre un eje', items: [{ deg: 300 }, { deg: 180 }] },
+          { title: 'En radianes', items: [{ deg: 240, rad: true }, { deg: 330, rad: true }] },
+        ],
+      }, '$150^\\circ \\to \\left(-\\tfrac{\\sqrt3}{2}, \\tfrac12\\right)$; $225^\\circ \\to \\left(-\\tfrac{\\sqrt2}{2}, -\\tfrac{\\sqrt2}{2}\\right)$; $300^\\circ \\to \\left(\\tfrac12, -\\tfrac{\\sqrt3}{2}\\right)$; $180^\\circ \\to (-1, 0)$; $\\tfrac{4\\pi}{3} \\to \\left(-\\tfrac12, -\\tfrac{\\sqrt3}{2}\\right)$ y $\\tfrac{11\\pi}{6} \\to \\left(\\tfrac{\\sqrt3}{2}, -\\tfrac12\\right)$. El tamaño sale del ángulo con el eje x; el signo, del lado donde está el punto.',
+        { hint: 'Decide primero los signos: ¿el punto está a la derecha o a la izquierda?, ¿arriba o abajo? Después mira qué tan lejos está de cada eje para elegir entre 1/2, √2/2 y √3/2.' }),
+    ],
+    'trig-43b': [
+      play('espejo-cuadrantes', 'Los espejos reflejan el punto: «↕» lo pasa al otro lado del eje x y «↔» al otro lado del eje y. Llévalo adonde se pide sin gastar espejos de más; cuando caiga en el cuadrante I, pon con − y + cuánto mide su ángulo de referencia y toca «Comprobar»', {
+        rounds: [
+          { title: 'Ángulo de referencia', items: [{ deg: 160, to: 1, max: 1 }, { deg: 250, to: 1 }] },
+          { title: 'Más referencias', items: [{ deg: 320, to: 1, max: 1 }, { deg: 195, to: 1 }] },
+          { title: 'Según los signos', items: [
+            { deg: 40, to: 3, cond: 'el seno y el coseno sean negativos' },
+            { deg: 70, to: 4, max: 1, cond: 'solo el coseno sea positivo' },
+            { deg: 25, to: 2, max: 1, cond: 'solo el seno sea positivo' }] },
+        ],
+      }, 'El reflejo que cae en el cuadrante I muestra el ángulo de referencia: $160^\\circ \\to 20^\\circ$, $250^\\circ \\to 70^\\circ$, $320^\\circ \\to 40^\\circ$ y $195^\\circ \\to 15^\\circ$. Cada espejo cambia un signo: «↕» el del seno y «↔» el del coseno; la tangente cambia con cualquiera de los dos. Seno y coseno negativos: cuadrante III ($220^\\circ$); solo coseno positivo: IV ($290^\\circ$); solo seno positivo: II ($155^\\circ$).',
+        { hint: 'Mira las tres etiquetas de signos: te dicen en qué cuadrante estás. El espejo «↕» cambia arriba por abajo (el seno) y el «↔» cambia derecha por izquierda (el coseno). El ángulo de referencia es lo que le falta o le sobra al ángulo para llegar a 180° o a 360°.' }),
+    ],
+    'trig-44a': [
+      play('ola-entre-lineas', 'La ola debe tocar justo el techo y el piso, sin pasarse. Elige la amplitud y la línea media con − y +, y toca «Lanzar ola» para verla', {
+        rounds: [
+          { title: 'Centrada en cero', items: [{ hi: 3, lo: -3 }, { hi: 1.5, lo: -1.5 }] },
+          { title: 'Subida o bajada', items: [{ hi: 3, lo: 1 }, { hi: 1, lo: -3 }] },
+          { title: 'Con medios', items: [{ hi: 4, lo: -1 }, { hi: -0.5, lo: -2.5 }] },
+        ],
+      }, 'La línea media queda en la mitad del techo y el piso, $d = \\tfrac{\\text{techo} + \\text{piso}}{2}$, y la amplitud es la mitad de la separación, $a = \\tfrac{\\text{techo} - \\text{piso}}{2}$. Por ejemplo, entre $1$ y $3$: $d = 2$ y $a = 1$; entre $-1$ y $4$: $d = 1.5$ y $a = 2.5$. El rango de $y = a\\operatorname{sen} x + d$ es $[d - a,\\, d + a]$.',
+        { hint: 'La línea media está justo en la mitad entre el techo y el piso. La amplitud es lo que hay de esa línea al techo, no del piso al techo.' }),
+    ],
+    'trig-44b': [
+      play('crestas-faroles', 'Cada cresta de la ola debe caer en un farol. Elige cuántas ondas caben en $2\\pi$ y cuánto se corre la ola, y toca «Soltar la ola»', {
+        rounds: [
+          { title: 'Solo el periodo', items: [{ b: 2, h: 0 }, { b: 3, h: 0 }, { b: 0, h: 0 }] },
+          { title: 'Solo la corrida', items: [{ b: 1, h: 2 }, { b: 1, h: 5 }] },
+          { title: 'Las dos cosas', items: [{ b: 2, h: 1 }, { b: 3, h: 1 }] },
+        ],
+      }, 'La distancia entre dos faroles es el periodo, $\\tfrac{2\\pi}{b}$: faroles cada $\\pi$ piden $b = 2$; cada $\\tfrac{\\pi}{2}$, $b = 4$; cada $4\\pi$, $b = \\tfrac12$. La ola $y = \\cos(b(x - h))$ tiene una cresta en $x = h$: se corre hasta el primer farol. Con $h = \\tfrac{\\pi}{2}$ y $b = 1$ sale $\\cos\\left(x - \\tfrac{\\pi}{2}\\right)$, que es el seno.',
+        { hint: 'Mide primero la distancia entre dos faroles vecinos: ese es el periodo. Abajo el juego te dice el periodo de tu ola. Después mira dónde está el primer farol: hasta ahí hay que correr la cresta.' }),
+    ],
+    'trig-45': [
+      play('ventana-inversa', 'Para poder «devolver» un ángulo, la función no puede repetir alturas. Mueve la ventana (dónde empieza y qué tan ancha es) y toca «Probar»', {
+        rounds: [
+          { title: 'Una ventana que sirva', items: [{ fn: 'sen' }, { fn: 'cos' }] },
+          { title: 'La ventana oficial', items: [{ fn: 'sen', std: true }, { fn: 'cos', std: true }] },
+          { title: 'La tangente', items: [{ fn: 'tan' }, { fn: 'tan', std: true }] },
+        ],
+      }, 'Un tramo sirve si recorre todas las alturas una sola vez: para el seno y el coseno, de un extremo (cresta o valle) al siguiente, con ancho $\\pi$; para la tangente, de una asíntota a la otra. Las oficiales contienen los ángulos agudos: $\\left[-\\tfrac{\\pi}{2}, \\tfrac{\\pi}{2}\\right]$ para $\\operatorname{sen}^{-1}$ y $\\tan^{-1}$ (abierto en la tangente), y $[0, \\pi]$ para $\\cos^{-1}$. Por eso cada inversa devuelve un solo ángulo.',
+        { hint: 'Si la ventana es muy ancha, la curva sube y vuelve a bajar: repite alturas. Si es muy angosta, no alcanza todas. Busca un tramo donde la curva solo suba o solo baje, de extremo a extremo.' }),
+    ],
+    'trig-4': [
+      play('escala-triangulo', 'El triángulo tiene lados cos θ, sen θ y 1. Divídelo entero entre cos θ o entre sen θ y toca el lado que queda valiendo lo que se pide', {
+        rounds: [
+          { title: 'Una de cada triángulo', items: [{ want: 'tan' }, { want: 'csc' }] },
+          { title: 'Las otras dos', items: [{ want: 'sec' }, { want: 'cot' }] },
+        ],
+      }, 'Al dividir los tres lados entre $\\cos\\theta$ quedan $1$, $\\tan\\theta$ y $\\sec\\theta$ (la hipotenusa): por Pitágoras, $1 + \\tan^2\\theta = \\sec^2\\theta$. Al dividir entre $\\operatorname{sen}\\theta$ quedan $\\cot\\theta$, $1$ y $\\csc\\theta$: $\\cot^2\\theta + 1 = \\csc^2\\theta$. Las tres identidades pitagóricas son el mismo triángulo en tres tamaños.',
+        { hint: 'Divide mentalmente cada lado: sen θ entre cos θ es la tangente; 1 entre cos θ es la secante. La hipotenusa era 1, así que la nueva hipotenusa es 1 dividido entre lo que elegiste.' }),
+    ],
+    'trig-47b': [
+      play('todo-en-senos', 'La estrategia para simplificar: todo a senos y cosenos. Toca una ficha amarilla y arma su fracción (qué va arriba y qué va abajo); luego toca una ficha de arriba y una igual de abajo para cancelarlas, y al final «Listo»', {
+        rounds: [
+          { title: 'Dos fichas', items: [{ f: ['cot', 'sen'] }, { f: ['sec', 'sen'] }] },
+          { title: 'Tres fichas', items: [{ f: ['tan', 'csc', 'cos'] }, { f: ['sec', 'cot', 'cos'] }] },
+          { title: 'Con una pitagórica', items: [{ f: ['ps', 'sec'] }, { f: ['pc', 'csc', 'cot'] }] },
+        ],
+      }, '$\\cot x \\operatorname{sen} x = \\tfrac{\\cos x}{\\operatorname{sen} x}\\operatorname{sen} x = \\cos x$; $\\sec x \\operatorname{sen} x = \\tfrac{\\operatorname{sen} x}{\\cos x} = \\tan x$; $\\tan x \\csc x \\cos x = 1$; $\\sec x \\cot x \\cos x = \\tfrac{\\cos x}{\\operatorname{sen} x} = \\cot x$. Con las pitagóricas: $1 - \\operatorname{sen}^2 x = \\cos^2 x$, y $\\cos^2 x \\sec x = \\cos x$; $1 - \\cos^2 x = \\operatorname{sen}^2 x$, y $\\operatorname{sen}^2 x \\csc x \\cot x = \\cos x$.',
+        { hint: 'Cada función se escribe con senos y cosenos: tan = sen/cos, cot = cos/sen, sec = 1/cos y csc = 1/sen. Solo se cancela un factor de arriba con uno igual de abajo; si no queda pareja, ya terminaste.' }),
+    ],
+    'trig-48a': [
+      play('rectangulo-suma', 'Un triángulo de hipotenusa 1 está inclinado dentro de un rectángulo, y sus catetos miden cos β y sen β. Toca cada tramo de color y luego la ficha con su medida: juntos dan el lado marcado con «?»', {
+        rounds: [
+          { title: 'Con letras', items: [{ ask: 'sen' }, { ask: 'cos' }] },
+          { title: 'Con un ángulo que ya conoces: 30° + 30°', items: [
+            { ask: 'sen', a: 30, b: 30, vals: ['\\tfrac34', '\\tfrac{\\sqrt3}{4}', '\\tfrac{\\sqrt3}{4}', '\\tfrac14'], res: '\\tfrac{\\sqrt3}{2}' },
+            { ask: 'cos', a: 30, b: 30, vals: ['\\tfrac34', '\\tfrac{\\sqrt3}{4}', '\\tfrac{\\sqrt3}{4}', '\\tfrac14'], res: '\\tfrac12' }] },
+        ],
+      }, 'Los lados opuestos de un rectángulo miden lo mismo. El izquierdo es $\\operatorname{sen}(\\alpha + \\beta)$ y el derecho tiene dos tramos: $\\operatorname{sen}\\alpha\\cos\\beta + \\cos\\alpha\\operatorname{sen}\\beta$. Arriba, $\\cos(\\alpha + \\beta)$ es el lado de abajo menos un pedazo: $\\cos\\alpha\\cos\\beta - \\operatorname{sen}\\alpha\\operatorname{sen}\\beta$. Con $30^\\circ + 30^\\circ$ se comprueba: $\\tfrac{\\sqrt3}{4} + \\tfrac{\\sqrt3}{4} = \\tfrac{\\sqrt3}{2} = \\operatorname{sen} 60^\\circ$ y $\\tfrac34 - \\tfrac14 = \\tfrac12 = \\cos 60^\\circ$.',
+        { hint: 'Cada tramo de color es cateto de un triángulo pequeño que tiene el ángulo α. Mira cuál es la hipotenusa de ese triángulo (cos β o sen β) y si el tramo queda frente a α (va con seno) o pegado a α (va con coseno).' }),
+    ],
+    'trig-48b': [
+      play('tira-doble', 'Una tira de largo 1 se parte en dos: lo azul es cos²θ y lo rojo es sen²θ. Mueve el corte con − y + para que azul menos rojo dé lo pedido, y toca «Restar»', {
+        rounds: [
+          { title: 'Azul contra rojo', items: [{ t: 2 }, { t: 0 }] },
+          { title: 'Más rojo que azul', items: [{ t: -2 }, { t: -4 }] },
+          { title: 'Cortes finos', items: [{ t: 1 }, { t: -3 }] },
+        ],
+      }, 'Como las dos partes suman 1, $\\cos 2\\theta = \\cos^2\\theta - \\operatorname{sen}^2\\theta = 2\\cos^2\\theta - 1$. Despejando, $\\cos^2\\theta = \\tfrac{1 + \\cos 2\\theta}{2}$: para $\\cos 2\\theta = \\tfrac12$ el corte va en $\\tfrac34$ ($\\theta = 30^\\circ$); para $0$, en $\\tfrac12$ ($45^\\circ$); para $-\\tfrac12$, en $\\tfrac14$ ($60^\\circ$); para $-1$, en $0$ ($90^\\circ$); para $\\tfrac14$, en $\\tfrac58$ y para $-\\tfrac34$, en $\\tfrac18$.',
+        { hint: 'Las dos partes siempre suman 1. Si quieres que la resta dé un número positivo, lo azul debe ser más de la mitad. Prueba a pensar: ¿qué dos números suman 1 y se diferencian en lo pedido?' }),
+    ],
+    'trig-49': [
+      play('red-periodica', 'Las soluciones se repiten sin fin: cada red atrapa una familia. Resuelve la ecuación, pon con − y + la primera solución y el salto de cada red, y toca «Lanzar»: ahí se ven los peces', {
+        rounds: [
+          { title: 'Una sola red', items: [{ eq: '\\tan x = 1', fams: [[3, 12]] }, { eq: '\\cos x = 0', fams: [[6, 12]] }] },
+          { title: 'Dos redes', items: [{ eq: '\\operatorname{sen} x = -\\tfrac12', fams: [[14, 24], [22, 24]] }, { eq: '2\\cos x = -\\sqrt3', fams: [[10, 24], [14, 24]] }] },
+          { title: 'Ángulos múltiples', items: [{ eq: '\\tan 2x = \\sqrt3', fams: [[2, 6]] }, { eq: '\\operatorname{sen} 3x = 1', fams: [[2, 8]] }] },
+        ],
+      }, 'La tangente se repite cada $\\pi$: $x = \\tfrac{\\pi}{4} + k\\pi$. Los ceros del coseno también van cada $\\pi$: $x = \\tfrac{\\pi}{2} + k\\pi$. El seno y el coseno dan dos soluciones por vuelta, cada una con salto $2\\pi$: $\\tfrac{7\\pi}{6}$ y $\\tfrac{11\\pi}{6}$; $\\tfrac{5\\pi}{6}$ y $\\tfrac{7\\pi}{6}$. Con ángulo múltiple el salto se divide: $2x = \\tfrac{\\pi}{3} + k\\pi$ da $x = \\tfrac{\\pi}{6} + \\tfrac{k\\pi}{2}$, y $3x = \\tfrac{\\pi}{2} + 2k\\pi$ da $x = \\tfrac{\\pi}{6} + \\tfrac{2k\\pi}{3}$.',
+        { hint: 'Despeja primero la función y busca los ángulos entre 0 y 2π que la cumplen. El salto es el periodo: 2π para seno y coseno, π para la tangente; si adentro va 2x o 3x, ese periodo se divide entre 2 o entre 3.' }),
+    ],
+    'trig-46a': [
+      play('pareja-opuesta', 'Lo azul ya se conoce. Toca, en orden, lo que ya se puede calcular hasta llegar a lo que se pide (en rojo): un ángulo sale de los otros dos, y la ley de senos necesita una pareja completa de lado y ángulo opuesto', {
+        rounds: [
+          { title: 'Con la pareja lista', items: [
+            { ang: [30, 105, 45], base: [0, 10], know: ['A', 'C', 'a'], want: 'c' },
+            { ang: [40, 60, 80], base: [1, 12], know: ['A', 'B', 'b'], want: 'a' }] },
+          { title: 'Primero falta algo', items: [
+            { ang: [50, 70, 60], base: [0, 9], know: ['A', 'B', 'a'], want: 'c' },
+            { ang: [35, 100, 45], base: [2, 20], know: ['A', 'B', 'c'], want: 'b' }] },
+          { title: 'Dos lados y un ángulo opuesto', items: [
+            { ang: [50, 37.8, 92.2], base: [0, 10], know: ['A', 'a', 'b'], want: 'B' },
+            { ang: [60, 40, 80], base: [0, 13], know: ['A', 'a', 'b'], want: 'c' }] },
+        ],
+      }, 'La ley de senos, $\\tfrac{a}{\\operatorname{sen} A} = \\tfrac{b}{\\operatorname{sen} B} = \\tfrac{c}{\\operatorname{sen} C}$, solo arranca con una pareja completa. Si el lado buscado no tiene su ángulo, primero se saca con $A + B + C = 180^\\circ$. Con dos lados y un ángulo opuesto (LLA) se despeja primero el seno del otro ángulo: $\\operatorname{sen} B = \\tfrac{b\\operatorname{sen} A}{a}$. En estos dos retos el lado $a$ es mayor que $b$, así que $B$ es agudo y solo hay un triángulo; si $a$ fuera menor, habría que revisar el caso ambiguo.',
+        { hint: 'Busca una pareja completa: un lado y el ángulo que tiene al frente, los dos en azul. Si a lo que buscas le falta su compañero del frente, calcula primero ese compañero.' }),
+    ],
+    'trig-46b': [
+      play('bisagra-area', 'El lado azul gira como una bisagra. El área solo depende de qué tan alto queda su punta: llévala hasta la línea punteada, toca «Marcar» y busca si hay otro ángulo que sirva. Al final, «Listo»', {
+        rounds: [
+          { title: 'Dos ángulos o uno', items: [{ a: 6, b: 10, area: 15 }, { a: 8, b: 8, area: 32 }] },
+          { title: 'Con raíces', items: [{ a: 4, b: 6, area: 8.49, atex: '6\\sqrt2' }, { a: 10, b: 6, area: 25.98, atex: '15\\sqrt3' }] },
+          { title: 'Otra pareja', items: [{ a: 8, b: 5, area: 17.32, atex: '10\\sqrt3' }, { a: 6, b: 6, area: 12.73, atex: '9\\sqrt2' }] },
+        ],
+      }, 'Área $= \\tfrac12 ab\\operatorname{sen} C$, y $\\operatorname{sen} C = \\operatorname{sen}(180^\\circ - C)$: un ángulo agudo y su suplemento dejan la punta a la misma altura. $\\operatorname{sen} C = \\tfrac12$: $30^\\circ$ y $150^\\circ$; $\\operatorname{sen} C = \\tfrac{\\sqrt2}{2}$: $45^\\circ$ y $135^\\circ$; $\\operatorname{sen} C = \\tfrac{\\sqrt3}{2}$: $60^\\circ$ y $120^\\circ$. Cuando el área es la mayor posible, $\\tfrac12 ab$, solo sirve $90^\\circ$.',
+        { hint: 'La punta sube mientras abres el ángulo hasta 90° y después vuelve a bajar: pasa dos veces por casi todas las alturas. Si ya encontraste un ángulo, busca su reflejo al otro lado de la vertical.' }),
+    ],
+    'trig-151': [
+      play('parientes-polares', 'El punto azul es z. Mueve el punto rojo w con las perillas de módulo y ángulo hasta el pariente de z que se pide, y toca «Fijar»', {
+        rounds: [
+          { title: 'Conjugado y opuesto', items: [{ r: 2, deg: 45, rel: 'conj' }, { r: 3, deg: 120, rel: 'op' }] },
+          { title: 'Girar con i', items: [{ r: 2, deg: 150, rel: 'i' }, { r: 4, deg: 300, rel: 'i' }] },
+          { title: 'El inverso y un repaso', items: [{ r: 2, deg: 60, rel: 'inv' }, { r: 0, deg: 210, rel: 'inv' }, { r: 1, deg: 135, rel: 'conj' }] },
+        ],
+      }, 'En forma polar todo se lee en el módulo y el ángulo. Conjugado: mismo módulo y ángulo opuesto ($45^\\circ \\to 315^\\circ$, $135^\\circ \\to 225^\\circ$). Opuesto: media vuelta ($120^\\circ \\to 300^\\circ$). Multiplicar por $i$: un cuarto de vuelta ($150^\\circ \\to 240^\\circ$, $300^\\circ \\to 30^\\circ$). Inverso: el módulo se invierte y el ángulo cambia de signo ($2\\,\\mathrm{cis}\\,60^\\circ \\to \\tfrac12\\,\\mathrm{cis}\\,300^\\circ$ y $\\tfrac12\\,\\mathrm{cis}\\,210^\\circ \\to 2\\,\\mathrm{cis}\\,150^\\circ$).',
+        { hint: 'Pregúntate dos cosas: ¿cambia la distancia al origen? ¿Y el ángulo: se refleja en el eje real, gira un cuarto de vuelta o media vuelta? Un ángulo negativo se escribe sumándole 360°.' }),
+    ],
+    'trig-152': [
+      play('multiplicador-oculto', 'La bandera gris se multiplicó por un número w y quedó en color. Mira cuánto giró y cuánto se estiró, y toca w en la telaraña', {
+        rounds: [
+          { title: 'Girar y estirar', items: [{ r: 2, deg: 90 }, { r: 1, deg: 150 }] },
+          { title: 'Achicar y girar hacia atrás', items: [{ r: 0.5, deg: 0 }, { r: 1.5, deg: 300 }] },
+          { title: 'Dos veces el mismo w', items: [{ r: 1, deg: 30, k: 2 }, { r: 1, deg: 90, k: 2 }] },
+        ],
+      }, 'Multiplicar por $w = r\\,\\mathrm{cis}\\,\\theta$ gira la figura $\\theta$ y la estira $r$ veces: $2\\,\\mathrm{cis}\\,90^\\circ$ la gira un cuarto de vuelta y la duplica; $\\tfrac12\\,\\mathrm{cis}\\,0^\\circ$ solo la achica; $1.5\\,\\mathrm{cis}\\,300^\\circ$ la gira $60^\\circ$ hacia el reloj. Multiplicar dos veces gira el doble ($w^2 = r^2\\,\\mathrm{cis}\\,2\\theta$), así que hay dos respuestas a media vuelta: $\\mathrm{cis}\\,30^\\circ$ o $\\mathrm{cis}\\,210^\\circ$, y $\\mathrm{cis}\\,90^\\circ$ o $\\mathrm{cis}\\,270^\\circ$.',
+        { hint: 'Compara las dos banderas: el ángulo que giró es el de w y las veces que creció es su módulo. Si se multiplicó dos veces, el giro total es el doble del de w: parte el giro a la mitad, y no olvides que media vuelta más también sirve.' }),
+    ],
+    'trig-153': [
+      play('hermanas-raiz', 'Ya tienes una raíz (el punto amarillo). Las demás tienen el mismo módulo y reparten la vuelta en partes iguales: toca sobre la circunferencia dónde están', {
+        rounds: [
+          { title: 'Tres y cuatro raíces', items: [{ n: 3, deg0: 45, step: 15 }, { n: 4, deg0: 15, step: 15 }] },
+          { title: 'Seis y cinco raíces', items: [{ n: 6, deg0: 30, step: 15 }, { n: 5, deg0: 12, step: 12 }] },
+          { title: 'Dos y ocho raíces', items: [{ n: 2, deg0: 255, step: 15 }, { n: 8, deg0: 15, step: 15 }] },
+        ],
+      }, 'Las $n$ raíces $n$-ésimas están separadas $\\tfrac{360^\\circ}{n}$: cúbicas cada $120^\\circ$ ($45^\\circ, 165^\\circ, 285^\\circ$), cuartas cada $90^\\circ$, sextas cada $60^\\circ$, quintas cada $72^\\circ$ ($12^\\circ, 84^\\circ, 156^\\circ, 228^\\circ, 300^\\circ$), cuadradas a media vuelta ($255^\\circ$ y $75^\\circ$) y octavas cada $45^\\circ$. Forman un polígono regular.',
+        { hint: 'Divide la vuelta completa, 360°, entre el número de raíces: ese es el salto de una raíz a la siguiente. Súmalo una y otra vez al ángulo de la raíz que ya tienes; si te pasas de 360°, resta una vuelta.' }),
+    ],
+  };
+})();
+
+for (const u of COURSE_TRIG.units) for (const l of u.lessons) l.ex.push(...(TRIG_EXTRA[l.id] || []));
+
+// ====================== Jefes finales (spec 2026-11-23-trig-jefes-y-movimiento) ======================
+// Un jefe por mundo, con el juego `jefe-rueda`: cada ataque se responde marcando nudos de la rueda de ángulos.
+// Ataque = [rótulo, nudos [[grados, anillo?]], por qué, opciones?].
+const TRIG_BOSS = {
+  ondas: { id: 'jefe-trig-ondas', title: 'El Guardián de las Ondas', name: 'el Guardián de las Ondas', kind: 'kraken',
+    intro: ['Al cierre del mundo espera el **Guardián de las Ondas**. Cada ataque es un reto de ángulos, triángulos y ondas.', 'Marca en la rueda los ángulos que responden cada reto y ataca. No hay reloj: gana el que piensa.'],
+    phases: [
+      ['Fase 1 · Ángulos y arcos', [
+        ['Marca el ángulo $\\tfrac{5\\pi}{4}$', [[225]], '$\\tfrac{5\\pi}{4} = 5 \\cdot 45^\\circ = 225^\\circ$'],
+        ['Marca el coterminal de $-420^\\circ$', [[300]], '$-420^\\circ + 2 \\cdot 360^\\circ = 300^\\circ$'],
+        ['Arco $s = 4\\pi$ con radio 3: marca el ángulo', [[240]], '$\\theta = \\tfrac{s}{r} = \\tfrac{4\\pi}{3}$, que son 240°', { rad: true }]]],
+      ['Fase 2 · Triángulos y circunferencia', [
+        ['$\\operatorname{sen}\\theta = \\tfrac12$: marca los dos ángulos', [[30], [150]], 'El seno es la altura del punto: vale ½ en 30° y en 150°'],
+        ['$\\cos\\theta = -\\tfrac{\\sqrt2}{2}$: marca los dos ángulos', [[135], [225]], 'Coseno negativo: a la izquierda, con referencia 45°'],
+        ['$\\tan\\theta = \\sqrt3$ con $\\operatorname{sen}\\theta < 0$', [[240]], 'Referencia 60° y seno negativo: cuadrante III']]],
+      ['Fase 3 · Signos y ondas', [
+        ['Referencia $60^\\circ$ en el cuadrante IV', [[300]], '$360^\\circ - 60^\\circ = 300^\\circ$'],
+        ['$y = 3\\operatorname{sen} x$: marca dónde está su cresta', [[90]], 'La cresta del seno está en 90°; el 3 solo la hace más alta'],
+        ['$y = \\cos 2x$ vale 1: marca todos los $x$', [[0], [180]], 'Su periodo es $\\pi$: se repite cada 180°'],
+        ['$\\tan x$ no existe: marca dónde', [[90], [270]], 'Donde el coseno vale 0 están las asíntotas']]],
+    ] },
+  inversas: { id: 'jefe-trig-inversas', title: 'El Vigía de los Ángulos', name: 'el Vigía de los Ángulos', kind: 'faro',
+    intro: ['Al cierre del mundo vigila el **Vigía de los Ángulos** desde su torre. Su luz esconde inversas, identidades, ecuaciones y triángulos.', 'Marca en la rueda todos los ángulos que responden cada reto, y solo esos. Luego ataca.'],
+    phases: [
+      ['Fase 1 · Inversas e identidades', [
+        ['Marca el lado terminal de $\\operatorname{sen}^{-1}\\left(-\\tfrac{\\sqrt3}{2}\\right)$', [[300]], 'Su valor es −60° (el rango va de −90° a 90°): ese lado es el de 300°'],
+        ['Marca el valor de $\\cos^{-1}\\left(-\\tfrac12\\right)$', [[120]], 'El coseno inverso responde entre 0° y 180°: 120°'],
+        ['$\\operatorname{sen}^2\\theta = \\tfrac34$: marca los cuatro ángulos', [[60], [120], [240], [300]], 'El seno vale más o menos $\\tfrac{\\sqrt3}{2}$: referencia 60° en los cuatro cuadrantes']]],
+      ['Fase 2 · Suma, doble y ecuaciones', [
+        ['$\\operatorname{sen} 2\\theta = -1$: marca los $\\theta$ de una vuelta', [[135], [315]], '$2\\theta$ es 270° o 630°: la mitad da 135° y 315°'],
+        ['Resuelve $2\\cos^2\\theta - \\cos\\theta - 1 = 0$', [[0], [120], [240]], 'Se factoriza: $(2\\cos\\theta + 1)(\\cos\\theta - 1) = 0$'],
+        ['Marca $\\theta$ si $\\operatorname{sen}(\\theta + 30^\\circ) = 1$', [[60]], 'El seno vale 1 en 90°: $\\theta + 30^\\circ = 90^\\circ$']]],
+      ['Fase 3 · Triángulos sin ángulo recto', [
+        ['En un triángulo, $\\operatorname{sen} B = \\tfrac{\\sqrt3}{2}$: marca los $B$ posibles', [[60], [120]], 'El caso ambiguo: un ángulo y su suplemento'],
+        ['En un triángulo, $\\cos C = -\\tfrac12$: marca $C$', [[120]], 'Un ángulo de triángulo no pasa de 180°: solo 120°'],
+        ['Área $\\tfrac12 \\cdot 4 \\cdot 6 \\operatorname{sen} C = 6$: marca los $C$', [[30], [150]], 'El seno de C vale ½: 30° y 150° dan la misma altura']]],
+    ] },
+  polar: { id: 'jefe-trig-polar', title: 'La Nebulosa Polar', name: 'la Nebulosa Polar', kind: 'nebulosa', rings: ['1', '2', '4', '8'],
+    intro: ['Al cierre del mundo gira la **Nebulosa Polar**. Solo la detienen los complejos puestos en su lugar exacto del plano.', 'Cada anillo es un módulo (1, 2, 4 y 8) y cada radio, un ángulo. Marca los puntos pedidos y ataca.'],
+    phases: [
+      ['Fase 1 · Forma polar', [
+        ['Marca $z = 2i$', [[90, 1]], 'Módulo 2 sobre el eje imaginario: ángulo de 90°'],
+        ['Marca $z = -1 - \\sqrt3\\,i$', [[240, 1]], 'Módulo 2 y tercer cuadrante: 180° + 60°'],
+        ['Marca el conjugado de $4\\,\\mathrm{cis}\\,330^\\circ$', [[30, 2]], 'El conjugado cambia el signo del ángulo: −330° es 30°']]],
+      ['Fase 2 · Producto, cociente y potencia', [
+        ['Marca el producto $(2\\,\\mathrm{cis}\\,60^\\circ)(4\\,\\mathrm{cis}\\,90^\\circ)$', [[150, 3]], 'Los módulos se multiplican (8) y los ángulos se suman (150°)'],
+        ['Marca el cociente $\\tfrac{8\\,\\mathrm{cis}\\,30^\\circ}{2\\,\\mathrm{cis}\\,120^\\circ}$', [[270, 2]], 'Módulos: 8 ÷ 2 = 4. Ángulos: 30° − 120° = −90°, que es 270°'],
+        ['Marca la potencia $(2\\,\\mathrm{cis}\\,150^\\circ)^3$', [[90, 3]], 'Módulo 2³ = 8 y ángulo 3 · 150° = 450°, que es 90°']]],
+      ['Fase 3 · Raíces', [
+        ['Raíces cuadradas de $4\\,\\mathrm{cis}\\,120^\\circ$', [[60, 1], [240, 1]], 'Módulo 2; ángulos 60° y media vuelta más'],
+        ['Raíces cúbicas de $-8$', [[60, 1], [180, 1], [300, 1]], '−8 está en 180°: módulo 2 y una raíz cada 120°'],
+        ['Raíces cuartas de $16$', [[0, 1], [90, 1], [180, 1], [270, 1]], 'Módulo 2 y una cada 90°: 2, 2i, −2 y −2i']]],
+    ] },
+};
+for (const u of COURSE_TRIG.units) {
+  const b = TRIG_BOSS[u.world];
+  if (!b) continue;
+  u.boss = { id: b.id, title: b.title,
+    clip: { scenes: [sc(5, b.intro[0], { title: 'Jefe final' }), sc(5, b.intro[1], { steps: b.phases.map(f => f[0]) })] },
+    ex: [play('jefe-rueda', `Vence ${('a ' + b.name).replace(/^a el /, 'al ')}: marca en la rueda los puntos que responden cada reto y toca «¡Atacar!»`,
+      { name: b.name, kind: b.kind, rounds: b.phases.map(([title, attacks]) => ({ title, items: attacks.map(([say, targets, why, o]) => ({ say, targets, why, ...(b.rings ? { rings: b.rings } : {}), ...o })) })) },
+      'Cada reto del jefe se responde con ángulos de la rueda. Algunos tienen una sola respuesta y otros varias: hay que marcarlas todas y solo esas.',
+      { hint: 'Resuelve el reto antes de tocar: decide cuántas respuestas tiene y en qué cuadrantes caen. Los nudos van de 15° en 15° (o de 30° en 30° cuando hay anillos); una marca mal puesta se quita tocándola otra vez.' })] };
+}
+;
+//#archivo js/courses/calculo.js
+// Curso de Cálculo Diferencial — sigue el cronograma 2026-2 de Cálculo diferencial (UdeA).
+// Las unidades 1 y 2 (clases 1 a 9) vienen del antiguo curso de Álgebra y conservan sus ids alg-*
+// para no perder el progreso guardado. Spec: docs/superpowers/specs/2026-11-07-cronograma-algebra-calculo-design.md
+
+const COURSE_CALC = {
+  id: 'calc', level: 'Semestre 1', name: 'Cálculo Diferencial', icon: 'dx', color: '#f472b6',
+  tagline: 'La matemática del cambio: qué tan rápido crece, cae o se mueve algo.',
+  units: [
+    {
+      world: 'intervalos', title: 'Desigualdades, valor absoluto y la recta',
+      lessons: [
+        {
+          id: 'alg-32', title: 'Orden, intervalos e inecuaciones',
+          // Cronograma de Cálculo 2026-2, clase 1 (Del Valle, módulo 1). Video: video/clase_calc_c1 (Cálculo · Clase C1).
+          // Spec: docs/superpowers/specs/2026-11-07-calculo-unidad-1-design.md
+          clip: { scenes: [
+            sc(6, 'Los reales están **ordenados**: entre dos números distintos siempre uno es mayor (tricotomía). Sumar lo mismo a los dos lados **conserva** la desigualdad; multiplicar por un **negativo la voltea**.', { steps: ['$2 < 5 \\Rightarrow 2 + 3 < 5 + 3$', '$2 < 5 \\Rightarrow -2 > -5$'] }),
+            sc(6, 'Un **intervalo** es un trozo de la recta: el paréntesis deja fuera el extremo y el corchete lo incluye. El infinito siempre va con paréntesis.', { steps: ['$(a, b] = \\{x : a < x \\le b\\}$', '$[a, \\infty) = \\{x : x \\ge a\\}$'] }),
+            sc(6, 'Una **inecuación lineal** se despeja como una ecuación, volteando el signo si se multiplica o divide por un negativo.', { steps: ['$3 - 2x \\le x + 9 \\Rightarrow -3x \\le 6$', '$x \\ge -2$: el intervalo $[-2, \\infty)$'] }),
+            sc(7, 'Con **productos o cocientes**: los ceros de cada factor parten la recta en tramos; en cada tramo el signo no cambia. Se arma una **tabla de signos**.', { steps: ['$(x - 2)(x + 1) \\ge 0$: tramos $+\\;|\\;-\\;|\\;+$', 'Solución $(-\\infty, -1] \\cup [2, \\infty)$'] }),
+            sc(6, 'En un **cociente**, el cero del denominador nunca entra en la solución: ahí la expresión no existe.', { steps: ['$\\dfrac{x + 3}{x - 1} < 0 \\Rightarrow (-3, 1)$'] }),
+          ] },
+          ex: [
+            play('sombra-equivalente', 'Despeja $x$ con las fichas. Vigila las **dos sombras**: tienen que coincidir', {
+              rounds: [
+                { start: { a: -3, b: 4, rel: '<', c: 2, d: -6 }, chips: [{ op: '+', k: -2, x: true }, { op: '+', k: -4 }, { op: '/', k: -5 }, { op: '+', k: 3, x: true }, { op: '/', k: 5 }] },
+                { start: { a: 2, b: 7, rel: '>=', c: 5, d: -2 }, chips: [{ op: '+', k: -5, x: true }, { op: '+', k: -7 }, { op: '/', k: -3 }, { op: '+', k: -2, x: true }, { op: '+', k: 2 }] },
+                { start: { a: -1, b: 6, rel: '<=', c: 3, d: -10 }, chips: [{ op: '+', k: -3, x: true }, { op: '+', k: -6 }, { op: '/', k: -4 }, { op: '+', k: 1, x: true }, { op: '*', k: -1 }] },
+              ],
+            }, '$4 - 3x < 2x - 6 \\Rightarrow -5x < -10 \\Rightarrow x > 2$. $2x + 7 \\ge 5x - 2 \\Rightarrow -3x \\ge -9 \\Rightarrow x \\le 3$. $6 - x \\le 3x - 10 \\Rightarrow -4x \\le -16 \\Rightarrow x \\ge 4$. En los tres, dividir entre un negativo voltea el signo.',
+            { hint: 'Primero junta las x en un lado y los números en el otro. Si al final divides entre un número negativo, toca el signo para voltearlo: la sombra de abajo te avisa si cambiaste la solución.' }),
+            play('semaforo-signos', 'Llena la **tabla de signos** y enciende los tramos de la solución', {
+              rounds: [
+                { txt: '(x − 4)(x + 2) < 0', factors: [{ txt: 'x − 4', root: 4, s: 1 }, { txt: 'x + 2', root: -2, s: 1 }], rel: '<' },
+                { txt: 'x(x − 3)(x + 1) ≥ 0', factors: [{ txt: 'x', root: 0, s: 1 }, { txt: 'x − 3', root: 3, s: 1 }, { txt: 'x + 1', root: -1, s: 1 }], rel: '>=' },
+              ],
+            }, 'En $(x - 4)(x + 2) < 0$ el producto es negativo solo entre los ceros: $(-2, 4)$, sin los extremos porque la desigualdad es estricta. En $x(x - 3)(x + 1) \\ge 0$ los signos son $-\\,|\\,+\\,|\\,-\\,|\\,+$: $[-1, 0] \\cup [3, \\infty)$.',
+            { hint: 'Para saber el signo de un factor en un tramo, prueba un número cualquiera de ese tramo. Un factor como x − a es negativo a la izquierda de a y positivo a la derecha.' }),
+            play('semaforo-signos', 'Ahora con un **cociente**. Ojo con el cero del denominador', {
+              rounds: [
+                { txt: '(x − 5)/(x + 1) ≤ 0', factors: [{ txt: 'x − 5', root: 5, s: 1 }, { txt: 'x + 1', root: -1, s: 1, den: true }], rel: '<=' },
+                { txt: '(3 − x)/(x + 2) ≥ 0', factors: [{ txt: '3 − x', root: 3, s: -1 }, { txt: 'x + 2', root: -2, s: 1, den: true }], rel: '>=' },
+              ],
+            }, 'Los signos del cociente siguen la misma regla que los del producto. $\\dfrac{x - 5}{x + 1} \\le 0$ da $(-1, 5]$ y $\\dfrac{3 - x}{x + 2} \\ge 0$ da $(-2, 3]$: el cero del numerador entra (el cociente vale 0) y el del denominador nunca.',
+            { hint: 'Un factor con −x va al revés que uno con +x: pruébalo con un número de cada tramo. El punto donde el denominador vale cero queda siempre vacío.' }),
+            play('dibuja-intervalo', 'Dibuja los números que cumplen $-5 < 3x + 1 \\le 10$', { min: -6, max: 6, a: -2, b: 3, aClosed: false, bClosed: true, set: '−5 < 3x + 1 ≤ 10' },
+              'Se hace lo mismo en las tres partes: restar 1 da $-6 < 3x \\le 9$ y dividir entre 3 (positivo) da $-2 < x \\le 3$, es decir $(-2, 3]$.',
+              { hint: 'Despeja x en las tres partes a la vez: lo que restes o dividas en el medio, hazlo también en los extremos. El signo estricto deja el extremo vacío.' }),
+            num('¿Cuál es el **mayor entero** que cumple $7 - 2x > 3x - 8$?', 2,
+              '$7 + 8 > 3x + 2x \\Rightarrow 15 > 5x \\Rightarrow x < 3$. El 3 no cumple (la desigualdad es estricta), así que el mayor entero es $2$.',
+              { hint: 'Despeja x juntando las x en un lado. Ten en cuenta que con un signo estricto el extremo no cuenta.' }),
+          ],
+        },
+        {
+          id: 'alg-26c', title: 'Desigualdades con valor absoluto',
+          // Cronograma de Cálculo 2026-2, clase 2 (Del Valle, módulo 1). Video: video/clase_calc_c2 (Cálculo · Clase C2).
+          clip: { scenes: [
+            sc(6, '$|x|$ es la **distancia** de $x$ al cero, y $|x - a|$ la distancia de $x$ a $a$. Por eso nunca es negativo.', { steps: ['$|-7| = 7 \\qquad |5 - 2| = |2 - 5| = 3$'] }),
+            sc(6, 'Un perro amarrado a un poste en $a$ con una correa de largo $r$ llega a los puntos con $|x - a| \\le r$: un intervalo centrado en el poste.', { title: '$|x - 2| \\le 3 \\iff -1 \\le x \\le 5$', viz: { type: 'numberline', range: [-4, 7], sets: [[-1, 5, true, true]], label: '[−1, 5]' } }),
+            sc(6, 'El gato está a salvo **fuera** del alcance: $|x - a| > r$ son dos semirrectas.', { title: '$|x - 2| > 3 \\iff x < -1 \\;\\text{ o }\\; x > 5$', viz: { type: 'numberline', range: [-4, 7], sets: [[-Infinity, -1, false, false], [5, Infinity, false, false]], label: '(−∞, −1) ∪ (5, ∞)' } }),
+            sc(6, 'Si hay un coeficiente, primero se saca: el centro y el radio aparecen solos.', { steps: ['$|2x - 6| \\le 4 \\iff 2|x - 3| \\le 4 \\iff |x - 3| \\le 2$', 'Solución $[1, 5]$'] }),
+            sc(5, '**Desigualdad triangular**: $|a + b| \\le |a| + |b|$. Juntar dos números nunca los aleja más que sumar sus tamaños.', { steps: ['$|3 + (-5)| = 2 \\le 3 + 5 = 8$'] }),
+          ] },
+          ex: [
+            play('correa-del-perro', 'Pon el **poste**, la **correa** y la **zona** de cada desigualdad', {
+              min: -8, max: 8,
+              rounds: [
+                { txt: '|x + 4| < 2', c: -4, r: 2, out: false, closed: false },
+                { txt: '|x − 1| ≥ 3', c: 1, r: 3, out: true, closed: true },
+                { txt: '|2x + 2| ≤ 6', c: -1, r: 3, out: false, closed: true },
+                { txt: '|5 − x| > 2', c: 5, r: 2, out: true, closed: false },
+              ],
+            }, '$|x + 4| < 2$: poste en $-4$, correa 2, adentro: $(-6, -2)$. $|x - 1| \\ge 3$: afuera con puntas: $(-\\infty, -2] \\cup [4, \\infty)$. $|2x + 2| \\le 6$ es $|x + 1| \\le 3$: $[-4, 2]$. $|5 - x| = |x - 5|$, así que $|5 - x| > 2$ es $(-\\infty, 3) \\cup (7, \\infty)$.',
+            { hint: 'En |x − c| el poste está en c; un + dentro de las barras deja el poste en un número negativo. «Menor que» es donde el perro alcanza; «mayor que», donde el gato está a salvo. Con ≤ o ≥ las puntas cuentan.' }),
+            play('candado-absoluto', 'Gira las ruedas para escribir la desigualdad del conjunto y **abre el candado**', {
+              min: -8, max: 8,
+              rounds: [{ c: 3, rel: '<', r: 4 }, { c: -1, rel: '>=', r: 2.5 }, { c: 0, rel: '<=', r: 3 }],
+            }, 'El centro es el punto medio de los extremos y el radio, la mitad de la distancia entre ellos. $(-1, 7)$ es $|x - 3| < 4$; $(-\\infty, -3.5] \\cup [1.5, \\infty)$ es $|x + 1| \\ge 2.5$; $[-3, 3]$ es $|x| \\le 3$.',
+            { hint: 'El centro está justo en la mitad entre los dos extremos dibujados y el radio es la distancia del centro a un extremo. Un trozo en el medio es «menor»; dos semirrectas, «mayor». Puntos llenos: con igual.' }),
+            play('distancia-justa', 'Coloca $x$ de modo que $|x + 2| = 6$', { min: -10, max: 6, a: -2, d: 6 },
+              '$|x + 2| = |x - (-2)|$ es la distancia de $x$ a $-2$. A 6 pasos de $-2$ hay dos puntos: $4$ y $-8$.',
+              { hint: 'Lee |x + 2| como la distancia de x al número −2 (no al 2). Desde ahí se puede caminar a la derecha o a la izquierda.' }),
+            num('Una pieza debe medir 75 mm con una tolerancia de 0.4 mm: se acepta si $|L - 75| \\le 0.4$. ¿Cuál es la longitud **mínima** aceptada?', 74.6,
+              '$|L - 75| \\le 0.4 \\iff 75 - 0.4 \\le L \\le 75 + 0.4$, es decir $74.6 \\le L \\le 75.4$. La mínima es $74.6$ mm.',
+              { suffix: 'mm', tol: 0.001, hint: 'La pieza puede alejarse de la medida ideal a lo sumo la tolerancia, hacia arriba o hacia abajo. La mínima está en el extremo de abajo.' }),
+            num('La ecuación $|2x - 5| = 9$ tiene dos soluciones. ¿Cuál es su **producto**?', -14,
+              '$2x - 5 = 9 \\Rightarrow x = 7$ y $2x - 5 = -9 \\Rightarrow x = -2$. El producto es $7 \\cdot (-2) = -14$.',
+              { hint: 'Lo de adentro de las barras puede valer el número de la derecha o su opuesto: resuelve las dos ecuaciones y multiplica las soluciones.' }),
+          ],
+        },
+        {
+          id: 'alg-51', title: 'Plano cartesiano, distancia y punto medio',
+          // Cronograma de Cálculo 2026-2, clase 3 (Del Valle, módulo 2). Video: video/clase_calc_c3 (Cálculo · Clase C3).
+          clip: { scenes: [
+            sc(6, 'El **plano cartesiano** es un mapa: dos ejes perpendiculares y cada punto es un par $(x, y)$. Los ejes lo parten en cuatro cuadrantes.', { steps: ['I: $(+, +)$ · II: $(-, +)$ · III: $(-, -)$ · IV: $(+, -)$'] }),
+            sc(7, 'La **distancia** entre dos puntos sale de Pitágoras: el segmento es la hipotenusa de un triángulo con catetos $\\Delta x$ y $\\Delta y$.', { title: '$d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$', steps: ['$A(-1, 2),\\ B(5, 10)$: $d = \\sqrt{36 + 64} = 10$'] }),
+            sc(6, 'El **punto medio** es el promedio de las coordenadas.', { title: '$M = \\left(\\dfrac{x_1 + x_2}{2}, \\dfrac{y_1 + y_2}{2}\\right)$', steps: ['Entre $A(-1, 2)$ y $B(5, 10)$: $M = (2, 6)$'] }),
+            sc(6, 'Con pesos distintos en las puntas, el balancín se equilibra más cerca del pesado: el punto que divide el segmento en una razón es un **promedio ponderado**.', { steps: ['$G = \\dfrac{2A + B}{3}$ con $A(1, 1),\\ B(7, 4)$: $G = (3, 2)$'] }),
+          ] },
+          ex: [
+            play('tirolesa', 'Suelta el cable justo para unir las dos torres de la **tirolesa**', {
+              rounds: [{ A: [1, 2], B: [4, 6] }, { A: [-3, 4], B: [2, -8] }, { A: [-1, -2], B: [3, 5] }, { A: [0, 3], B: [6, 1] }],
+            }, 'Con $d = \\sqrt{\\Delta x^2 + \\Delta y^2}$: $\\sqrt{9 + 16} = 5$, $\\sqrt{25 + 144} = 13$, $\\sqrt{16 + 49} = \\sqrt{65} \\approx 8.1$ y $\\sqrt{36 + 4} = \\sqrt{40} \\approx 6.3$.',
+            { hint: 'Cuenta en la cuadrícula cuánto hay que avanzar en horizontal y cuánto en vertical de una torre a la otra: son los catetos de un triángulo rectángulo y el cable es la hipotenusa.' }),
+            play('balancin', 'Mueve el **apoyo** hasta que el balancín quede en equilibrio', {
+              rounds: [{ A: [-3, 2], B: [5, -4], mA: 1, mB: 1 }, { A: [-2, 1], B: [4, 7], mA: 2, mB: 1 }, { A: [0, -3], B: [8, 1], mA: 1, mB: 3 }],
+            }, 'Con pesos iguales, el punto medio: $(1, -1)$. Con pesos 2 y 1, el apoyo va a un tercio del camino desde el pesado: $(0, 3)$. Con 1 y 3, a tres cuartos desde A: $(6, 0)$. En general $G = \\dfrac{m_A A + m_B B}{m_A + m_B}$.',
+            { hint: 'Con pesos iguales el apoyo va en la mitad. Si un lado pesa el doble, el apoyo se acerca a él: queda al doble de distancia del liviano que del pesado.' }),
+            play('cuerdas-iguales', 'Desliza el anillo por el riel hasta que las **dos cuerdas midan lo mismo**', {
+              rounds: [{ A: [2, 1], B: [4, 5], rail: 'y' }, { A: [-4, 1], B: [2, 5], rail: 'x' }, { A: [1, -3], B: [5, 1], rail: 'x' }],
+            }, 'Se igualan los cuadrados de las distancias. En el eje $y$, $P(0, y)$: $4 + (y - 1)^2 = 16 + (y - 5)^2 \\Rightarrow y = 4.5$. En el eje $x$: $(p + 4)^2 + 1 = (p - 2)^2 + 25 \\Rightarrow p = 1$ y $(p - 1)^2 + 9 = (p - 5)^2 + 1 \\Rightarrow p = 2$.',
+            { hint: 'Escribe las dos distancias desde un punto del riel (una coordenada es 0) y elévalas al cuadrado: al igualarlas, los cuadrados de la incógnita se cancelan y queda una ecuación lineal.' }),
+            num('¿Cuál es el **perímetro** del triángulo con vértices $(0, 0)$, $(6, 0)$ y $(6, 8)$?', 24,
+              'Los lados miden $6$, $8$ y $\\sqrt{36 + 64} = 10$: perímetro $6 + 8 + 10 = 24$.',
+              { hint: 'Dos lados son horizontales o verticales y se cuentan directo; el tercero se calcula con la fórmula de la distancia.' }),
+            num('El punto medio del segmento $AB$ es $M(3, -1)$ y $A = (-1, 4)$. ¿Cuál es la coordenada $y$ de $B$?', -6,
+              'Si $\\tfrac{4 + y_B}{2} = -1$, entonces $4 + y_B = -2$ y $y_B = -6$. (También: de $A$ a $M$ la $y$ baja 5, y de $M$ a $B$ baja otros 5.)',
+              { prefix: '$y_B =$', hint: 'El punto medio es el promedio: plantea la ecuación con las coordenadas y. O piensa que de A al punto medio hay el mismo salto que del punto medio a B.' }),
+          ],
+        },
+        {
+          id: 'calc-recta', title: 'La recta: pendiente, paralelas y perpendiculares',
+          // Cronograma de Cálculo 2026-2, clase 3 (Del Valle §2.3–2.5). Video: video/clase_calc_c4 (Cálculo · Clase C4).
+          clip: { scenes: [
+            sc(6, 'La **pendiente** dice cuánto sube una recta por cada paso que avanza, como una rampa: $m = \\dfrac{\\text{subida}}{\\text{avance}}$.', { title: '$m = \\dfrac{y_2 - y_1}{x_2 - x_1}$', steps: ['Por $(-1, 3)$ y $(2, -3)$: $m = \\dfrac{-6}{3} = -2$'] }),
+            sc(6, 'Formas de la ecuación: **pendiente-intercepto** $y = mx + b$, **punto-pendiente** $y - y_1 = m(x - x_1)$ y **general** $Ax + By + C = 0$.', { steps: ['$y - 3 = -2(x + 1) \\Rightarrow y = -2x + 1$', '$2x + y - 1 = 0$'] }),
+            sc(6, 'Rectas **paralelas**: la misma pendiente. **Perpendiculares**: pendientes de producto $-1$ (una es la recíproca opuesta de la otra).', { steps: ['Paralela a $y = -2x + 1$ por $(0, 4)$: $y = -2x + 4$', 'Perpendicular por $(0, 4)$: $y = \\tfrac12 x + 4$'] }),
+            sc(5, 'Una recta **horizontal** tiene pendiente 0; una **vertical** no tiene pendiente ($x = $ constante). Son perpendiculares entre sí.', { steps: ['$y = 2$ y $x = -1$ se cortan en ángulo recto'] }),
+          ] },
+          ex: [
+            play('laser-recta', 'Ajusta el láser para que atraviese **los dos cristales**', {
+              rounds: [{ P: [-3, -1], Q: [3, 3] }, { P: [1, 2], Q: [3, 6] }, { P: [-2, 4], Q: [4, 1] }],
+            }, 'La pendiente es $\\tfrac{\\Delta y}{\\Delta x}$ y el corte sale de despejar $b = y - mx$: $y = \\tfrac23 x + 1$, $y = 2x$ y $y = -\\tfrac12 x + 3$.',
+            { hint: 'Cuenta cuánto sube y cuánto avanza el rayo de un cristal al otro: esa es la pendiente. Después sube o baja el rayo con el corte b hasta que toque los cristales.' }),
+            play('rieles-paralelos', 'Gira el riel nuevo desde la estación', {
+              rounds: [
+                { base: { m: 2 / 3, b: -2 }, baseTxt: '2x − 3y = 6', through: [-1, 2], mode: 'par' },
+                { base: { m: -4, b: 1 }, baseTxt: 'y = −4x + 1', through: [2, 1], mode: 'perp' },
+                { base: { m: 0, b: 1 }, baseTxt: 'y = 1', through: [2, -1], mode: 'perp' },
+                { base: { m: -3 / 4, b: 2 }, baseTxt: '3x + 4y = 8', through: [0, -2], mode: 'perp' },
+              ],
+            }, '$2x - 3y = 6$ es $y = \\tfrac23 x - 2$: la paralela tiene pendiente $\\tfrac23$. La perpendicular a pendiente $-4$ tiene $\\tfrac14$; la perpendicular a una horizontal es vertical; y $3x + 4y = 8$ tiene pendiente $-\\tfrac34$, así que su perpendicular tiene $\\tfrac43$.',
+            { hint: 'Si la vía está en forma general, despeja y para ver su pendiente. Paralelo: la misma pendiente. Perpendicular: voltea la fracción y cámbiale el signo.' }),
+            play('ordena-terminos', 'Ordena los pasos para hallar la recta que pasa por $(2, -1)$ y $(5, 8)$', { tex: '(2, -1),\\ (5, 8)', chips: ['m = (8 − (−1))/(5 − 2) = 3', 'y − (−1) = 3(x − 2)', 'y + 1 = 3x − 6', 'y = 3x − 7', 'm = (5 − 2)/(8 + 1) = 1/3', 'y = 3x − 5'], order: [0, 1, 2, 3], sep: '⇒' },
+              'Primero la pendiente, con las $y$ arriba: $m = \\tfrac{9}{3} = 3$. Luego punto-pendiente con $(2, -1)$ y se despeja: $y = 3x - 7$. Comprobación: $3 \\cdot 5 - 7 = 8$. Poner las $x$ arriba da la recíproca, un error común.',
+              { hint: 'La pendiente es la diferencia de las y sobre la diferencia de las x (en el mismo orden). Luego usa la forma punto-pendiente con uno de los puntos y despeja y.' }),
+            num('¿En qué valor de $x$ corta la recta $3x - 2y = 12$ al eje $x$?', 4,
+              'En el eje $x$ se cumple $y = 0$: $3x = 12$ y $x = 4$.',
+              { prefix: '$x =$', hint: 'Sobre el eje horizontal la coordenada y vale cero: reemplaza y despeja x.' }),
+            num('Las rectas $y = (k - 1)x + 2$ y $y = -\\tfrac14 x + 3$ son perpendiculares. ¿Cuánto vale $k$?', 5,
+              'Perpendiculares: $(k - 1)\\left(-\\tfrac14\\right) = -1$, así que $k - 1 = 4$ y $k = 5$.',
+              { prefix: '$k =$', hint: 'El producto de las pendientes de dos rectas perpendiculares es −1. La pendiente de la primera es lo que multiplica a x.' }),
+          ],
+        },
+      ],
+    },
+    {
+      world: 'funciones', title: 'Funciones',
+      lessons: [
+        {
+          id: 'alg-52', title: 'Funciones: dominio, rango y simetría',
+          // Clase 4 del cronograma (C5). Spec 2026-11-08-calculo-unidad-2.
+          clip: { scenes: [
+            sc(6, 'Una **función** es una máquina: a cada entrada le da **exactamente una** salida. Se escribe $y = f(x)$.', { steps: ['Una curva es función si ninguna recta vertical la corta dos veces'] }),
+            sc(6, 'El **dominio natural** son las entradas que la máquina acepta: nada de dividir entre cero ni raíces pares de negativos.', { steps: ['$\\dfrac{1}{x - 2}$: dominio $\\mathbb{R} \\setminus \\{2\\}$', '$\\sqrt{x + 1}$: dominio $[-1, \\infty)$'] }),
+            sc(6, 'El **rango** es la sombra de la gráfica sobre el eje $y$; el dominio, su sombra sobre el eje $x$.', { title: '$f(x) = x^2 - 1$', viz: { type: 'graph', xr: [-3, 3], yr: [-2, 8], f: x => x * x - 1 }, steps: ['Rango: $[-1, \\infty)$'] }),
+            sc(6, '**Par**: $f(-x) = f(x)$, espejo en el eje $y$. **Impar**: $f(-x) = -f(x)$, media vuelta en el origen.', { steps: ['$x^2$ es par · $x^3$ es impar'] }),
+            sc(5, 'Una función **crece** si al avanzar a la derecha sube y **decrece** si baja.', { steps: ['$x^2$ decrece en $(-\\infty, 0]$ y crece en $[0, \\infty)$'] }),
+          ] },
+          ex: [
+            play('proyector-sombras', 'Proyecta las sombras: marca el **dominio** (eje $x$) y el **rango** (eje $y$) de cada gráfica', {
+              rounds: [
+                { f: x => Math.sqrt(x + 3), xr: [-5, 5], yr: [-2, 5], dom: [-3, null, true, false], ran: [0, null, true, false] },
+                { f: x => 4 - x * x, xr: [-4, 4], yr: [-6, 5], dom: [-2, 3, true, false], ran: [-5, 4, false, true] },
+                { f: x => 2 - Math.abs(x - 1), xr: [-5, 5], yr: [-5, 4], dom: [null, null, false, false], ran: [null, 2, false, true] },
+              ],
+            }, '1) $\\sqrt{x + 3}$ empieza en $x = -3$ con altura 0 y sigue sin fin: dominio $[-3, \\infty)$, rango $[0, \\infty)$. 2) El trozo de $4 - x^2$ va de $x = -2$ (lleno) a $x = 3$ (vacío); su punto más alto es 4 y el más bajo se acerca a $-5$ sin tocarlo: rango $(-5, 4]$. 3) $2 - |x - 1|$ existe para todo $x$ y su pico está en 2: rango $(-\\infty, 2]$.',
+              { hint: 'La sombra sobre el eje x es lo que la gráfica cubre de izquierda a derecha; sobre el eje y, de abajo arriba. Un punto vacío no proyecta su extremo, y si la gráfica sigue sin fin el corchete va al borde (∞).' }),
+            play('dibuja-intervalo', 'Dibuja el dominio de $h(x) = \\sqrt{5 - x} + \\sqrt{x + 2}$', { min: -5, max: 7, a: -2, b: 5, aClosed: true, bClosed: true, set: 'dominio de h' },
+              'Las dos raíces deben existir a la vez: $5 - x \\ge 0$ da $x \\le 5$ y $x + 2 \\ge 0$ da $x \\ge -2$. Juntas: $[-2, 5]$ (los extremos entran porque $\\sqrt0 = 0$).',
+              { hint: 'Cada raíz cuadrada pide que lo de adentro no sea negativo. Plantea las dos condiciones y quédate con los x que cumplen ambas.' }),
+            play('completa-simetria', 'Completa la mitad izquierda para que cada gráfica tenga la simetría pedida', {
+              rounds: [
+                { mode: 'par', pts: [[1, 3], [2, 1], [3, 2]], y0: 2, yr: [-4, 4] },
+                { mode: 'impar', pts: [[1, 2], [2, 3], [3, -1]], yr: [-4, 4] },
+              ],
+            }, 'Par: $f(-1) = 3$, $f(-2) = 1$, $f(-3) = 2$ (las mismas alturas). Impar: $f(-1) = -2$, $f(-2) = -3$, $f(-3) = 1$ (alturas con el signo cambiado).',
+              { hint: 'Par: el punto en −x queda a la misma altura que el de x. Impar: queda a la misma distancia del eje x, pero del otro lado.' }),
+            num('Si $f(x) = x^2 - 3x$, ¿cuánto vale $f(-2)$?', 10,
+              '$f(-2) = (-2)^2 - 3(-2) = 4 + 6 = 10$.',
+              { hint: 'Reemplaza cada x por (−2), con paréntesis: el cuadrado de un negativo es positivo y restar un negativo es sumar.' }),
+            num('La función $f(x) = x^2 - 6x + 2$ decrece en $(-\\infty, a]$ y crece en $[a, \\infty)$. ¿Cuánto vale $a$?', 3,
+              'Es una parábola que abre hacia arriba: baja hasta el vértice y luego sube. El vértice está en $x = -\\tfrac{-6}{2} = 3$.',
+              { hint: 'Una parábola que abre hacia arriba baja hasta su vértice y desde ahí sube. El vértice está en x = −b/(2a).' }),
+          ],
+        },
+        {
+          id: 'calc-tipos', title: 'Tipos de funciones',
+          // Clase 5 del cronograma (C6).
+          clip: { scenes: [
+            sc(5, '**Constante** $f(x) = c$: una recta horizontal. **Lineal** $f(x) = mx + b$: una recta inclinada.', { steps: ['$f(x) = 3$ · $f(x) = 2x - 1$'] }),
+            sc(5, '**Cuadrática** $ax^2 + bx + c$: una parábola. **Polinómica**: suma de potencias enteras de $x$.', { steps: ['$f(x) = (x + 1)(x - 2)^2$: corta en $-1$ y rebota en $2$'] }),
+            sc(5, 'Cada raíz $r$ aporta un factor $(x - r)$. Si la raíz va dos veces, la gráfica toca el eje y rebota.', { steps: ['El signo de $a$ decide hacia dónde se va la gráfica a la derecha'] }),
+            sc(5, '**Potencia** $f(x) = x^n$: con $n$ par es simétrica en el eje $y$; con $n$ impar, en el origen.', { steps: ['$x^{1/2} = \\sqrt{x}$ también es una potencia'] }),
+            sc(6, '**Racional**: cociente de polinomios. Donde el denominador se anula hay una asíntota vertical.', { steps: ['$\\dfrac{1}{x}$: asíntotas $x = 0$ y $y = 0$', '$\\dfrac{1}{x - 2} + 1$: asíntotas $x = 2$ y $y = 1$'] }),
+          ] },
+          ex: [
+            play('raices-imanes', 'Pon los imanes en las raíces y ajusta $a$ para calcar cada polinomio', {
+              rounds: [
+                { roots: [-1, 3], a: -1, xr: [-4, 5], yr: [-5, 6], mark: [0, 3] },
+                { roots: [-3, 0, 0], a: 1, xr: [-5, 3], yr: [-3, 7], mark: [-2, 4] },
+                { roots: [-2, 1, 3], a: 0.5, xr: [-4, 5], yr: [-6, 6], mark: [0, 3] },
+              ],
+            }, '1) $y = -(x + 1)(x - 3)$. 2) $y = x^2(x + 3)$: en 0 la curva rebota (raíz doble). 3) $y = \\tfrac12(x + 2)(x - 1)(x - 3)$, que en $x = 0$ vale $\\tfrac12 \\cdot 6 = 3$.',
+              { hint: 'Cada corte con el eje x es una raíz r y aporta el factor (x − r); si la curva solo toca el eje y rebota, esa raíz va dos veces. Luego cambia a hasta que la curva pase por el punto rotulado.' }),
+            play('cruz-asintotas', 'Lleva la cruz de asíntotas a su lugar en cada función racional', {
+              rounds: [
+                { p: 1, q: 2, h: -1, xr: [-6, 6], yr: [-6, 6] },
+                { p: -2, q: 5, h: 2, xr: [-6, 6], yr: [-6, 6] },
+                { p: 3, q: -3, h: -2, xr: [-6, 6], yr: [-6, 6] },
+              ],
+            }, 'La asíntota vertical está donde el denominador vale cero y la horizontal es el cociente de los coeficientes de $x$: 1) $x = -1$, $y = 1$. 2) $x = 2$, $y = -2$. 3) $x = -2$, $y = 3$.',
+              { hint: 'La vertical va donde el denominador se hace cero. Para la horizontal piensa en x enorme: los números sueltos ya no pesan y queda el cociente de los coeficientes de x.' }),
+            play('une-parejas', 'Une cada función con su tipo', {
+              left: ['f(x) = −7', 'f(x) = 4 − 3x', 'f(x) = 2x² + x', 'f(x) = x⁴ − x + 1', 'f(x) = ∛x', 'f(x) = (x + 1)/(x² − 4)'],
+              right: ['constante', 'lineal', 'cuadrática', 'polinómica de grado 4', 'potencia', 'racional', 'exponencial'],
+              pairs: [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5]],
+            }, 'Sin $x$: constante. Grado 1: lineal. Grado 2: cuadrática. Grado 4: polinómica. $\\sqrt[3]{x} = x^{1/3}$ es una potencia. Un polinomio entre otro es racional. Ninguna tiene la $x$ en el exponente: «exponencial» sobra.',
+              { hint: 'Mira el mayor exponente de x y si x aparece en un denominador. Una potencia es x elevado a un número fijo, que puede ser una fracción.' }),
+            num('Una función lineal cumple $f(1) = 5$ y $f(3) = 11$. ¿Cuánto vale $f(0)$?', 2,
+              'Pendiente: $\\tfrac{11 - 5}{3 - 1} = 3$. Desde $f(1) = 5$, un paso a la izquierda baja 3: $f(0) = 2$.',
+              { hint: 'Con los dos puntos sale la pendiente (subida entre avance); luego retrocede un paso desde x = 1.' }),
+            num('La función potencia $f(x) = k\\,x^3$ cumple $f(2) = 24$. ¿Cuánto vale $k$?', 3,
+              '$k \\cdot 2^3 = 24$, o sea $8k = 24$ y $k = 3$.',
+              { hint: 'Reemplaza x = 2, calcula la potencia y despeja k de la igualdad con 24.' }),
+          ],
+        },
+        {
+          id: 'alg-53', title: 'Operaciones y composición de funciones',
+          // Clase 6 del cronograma (C7).
+          clip: { scenes: [
+            sc(6, 'Las funciones se **suman, restan y multiplican punto a punto**: en cada $x$ se operan las alturas.', { steps: ['$(f + g)(x) = f(x) + g(x)$', 'Dominio: donde existen las dos (y $g \\ne 0$ si se divide)'] }),
+            sc(6, 'La **composición** encadena máquinas: $(g \\circ f)(x) = g(f(x))$, primero $f$ y luego $g$.', { steps: ['$f(x) = x + 1$, $g(x) = x^2$', '$g(f(3)) = g(4) = 16$', '$f(g(3)) = f(9) = 10$'] }),
+            sc(5, 'El orden importa: en general $g \\circ f \\ne f \\circ g$.', { steps: ['$(g \\circ f)(x) = (x + 1)^2$ · $(f \\circ g)(x) = x^2 + 1$'] }),
+            sc(5, 'Para **desarmar** una compuesta se busca la operación de adentro y la de afuera.', { steps: ['$(2x + 1)^3$: adentro $2x + 1$, afuera $u^3$'] }),
+          ] },
+          ex: [
+            play('apila-alturas', 'Lleva cada cuenta a la altura de la operación pedida', {
+              rounds: [
+                { mode: 'sum', f: x => x - 1, g: x => x * x / 2, fTxt: 'x − 1', gTxt: 'x²/2', xs: [-2, -1, 0, 1, 2], xr: [-3, 3], yr: [-4, 4] },
+                { mode: 'diff', f: x => Math.abs(x), g: () => 1, fTxt: '|x|', gTxt: '1', xs: [-2, -1, 0, 1, 2], xr: [-3, 3], yr: [-3, 3] },
+                { mode: 'prod', f: x => x, g: x => x - 1, fTxt: 'x', gTxt: 'x − 1', xs: [-1, 0, 1, 2], xr: [-3, 3], yr: [-3, 4] },
+              ],
+            }, '1) $f + g$: $-1, -1.5, -1, 0.5, 3$. 2) $|x| - 1$: $1, 0, -1, 0, 1$ (la V baja una unidad). 3) $x(x - 1)$: $2, 0, 0, 2$.',
+              { hint: 'Trabaja una x a la vez: lee la altura de f y la de g en esa x (contando cuadritos) y opéralas. La cuenta va a ese resultado.' }),
+            play('tuberia-maquinas', 'Arma cada función con las máquinas, en el orden correcto', {
+              chips: [
+                { tpl: '□ + 2', f: x => x + 2 }, { tpl: '(□)²', f: x => x * x }, { tpl: '3(□)', f: x => 3 * x },
+                { tpl: '√(□)', f: Math.sqrt }, { tpl: '□ − 5', f: x => x - 5 }, { tpl: '1/(□)', f: x => 1 / x },
+              ],
+              rounds: [
+                { n: 2, input: 1, goal: x => (x + 2) ** 2, goalTxt: 'h(x) = (x + 2)²', tests: [-3, -1, 0, 2, 4] },
+                { n: 2, input: 2, goal: x => 3 * x * x, goalTxt: 'h(x) = 3x²', tests: [-2, -1, 1, 3] },
+                { n: 3, input: 3, goal: x => Math.sqrt(3 * x - 5), goalTxt: 'h(x) = √(3x − 5)', tests: [2, 3, 7, 10] },
+              ],
+            }, '1) Primero $+2$ y luego el cuadrado. 2) Primero el cuadrado y luego $\\times 3$ (al revés daría $9x^2$). 3) $\\times 3$, luego $-5$ y al final la raíz.',
+              { hint: 'La máquina que va primero es la que toca la x directamente (la de más adentro); la de afuera va al final. Sigue la bolita para ver qué le pasa al número.' }),
+            play('tuberia-maquinas', 'Con $f(x) = 3x$, $g(x) = x + 2$ y $h(x) = \\tfrac1x$, arma cada composición', {
+              chips: [
+                { tpl: '□ + 2', f: x => x + 2 }, { tpl: '3(□)', f: x => 3 * x }, { tpl: '1/(□)', f: x => 1 / x }, { tpl: '□ − 5', f: x => x - 5 },
+              ],
+              rounds: [
+                { n: 2, input: 1, goal: x => 3 * (x + 2), goalTxt: '(f ∘ g)(x)', tests: [-1, 0, 2] },
+                { n: 2, input: 1, goal: x => 3 * x + 2, goalTxt: '(g ∘ f)(x)', tests: [-1, 0, 2] },
+                { n: 2, input: 7, goal: x => 1 / (x - 5), goalTxt: '(h ∘ k)(x), k(x) = x − 5', tests: [3, 6, 9] },
+              ],
+            }, '$(f \\circ g)(x) = f(x + 2) = 3(x + 2)$: primero $g$. $(g \\circ f)(x) = g(3x) = 3x + 2$: primero $f$. $(h \\circ k)(x) = \\tfrac{1}{x - 5}$: primero $k$.',
+              { hint: 'En (f ∘ g)(x) = f(g(x)) actúa primero la función de la derecha; la que está a la izquierda del círculo actúa de última.' }),
+            num('Con $f(x) = x^2 + 1$ y $g(x) = 3x - 2$, calcula $(f \\circ g)(1)$.', 2,
+              '$g(1) = 3 - 2 = 1$ y $f(1) = 1 + 1 = 2$.',
+              { hint: 'Primero calcula g(1); ese resultado es la entrada de f.' }),
+            num('Con las mismas funciones, calcula $(g \\circ f)(2)$.', 13,
+              '$f(2) = 4 + 1 = 5$ y $g(5) = 15 - 2 = 13$.',
+              { hint: 'Ahora el orden se invierte: primero actúa f y su salida entra a g.' }),
+          ],
+        },
+        {
+          id: 'calc-tramos', title: 'Funciones a tramos y valor absoluto',
+          // Clase 7 del cronograma (C8).
+          clip: { scenes: [
+            sc(6, 'Una función **a tramos** usa una fórmula distinta en cada parte del dominio, como la tarifa de un parqueadero.', { steps: ['Primero se mira en qué tramo cae $x$', 'Punto lleno: el corte pertenece a ese tramo · vacío: no'] }),
+            sc(6, 'El **valor absoluto** es una función a tramos: $|x| = x$ si $x \\ge 0$ y $|x| = -x$ si $x < 0$.', { steps: ['Su gráfica es una V con vértice en el origen'] }),
+            sc(6, 'Para graficar $|g(x)|$ se dobla hacia arriba lo que $g$ tiene bajo el eje $x$.', { title: '$|x^2 - 4|$', viz: { type: 'graph', xr: [-3, 3], yr: [-1, 5], f: x => Math.abs(x * x - 4) } }),
+            sc(5, 'Una función **algebraica** se arma con sumas, productos, cocientes y raíces de $x$.', { steps: ['$\\sqrt{x}$, $\\dfrac{x}{x + 1}$, $x\\sqrt{x + 3}$'] }),
+          ] },
+          ex: [
+            play('arma-tramos', 'Arma la gráfica de cada función a tramos', {
+              rounds: [
+                { c: 0, xr: [-3, 4], yr: [-6, 5], left: { m: 2, b: 1 }, right: { m: -1, b: 3 }, leftIncl: false, txt: ['2x + 1   si x < 0', '3 − x   si x ≥ 0'] },
+                { c: 2, xr: [-2, 5], yr: [-3, 4], left: { m: 0, b: 2 }, right: { m: 1, b: -3 }, leftIncl: true, txt: ['2   si x ≤ 2', 'x − 3   si x > 2'] },
+              ],
+            }, '1) El primer tramo va de $(-3, -5)$ a $(0, 1)$ vacío; el segundo, de $(0, 3)$ lleno a $(4, -1)$. 2) El primero es la recta horizontal $y = 2$ hasta $(2, 2)$ lleno; el segundo va de $(2, -1)$ vacío a $(5, 2)$.',
+              { hint: 'En cada tramo solo vale su fórmula: evalúala en los dos bordes de ese tramo. En el corte, el punto lleno es del tramo cuya condición trae ≤ o ≥.' }),
+            play('dobla-negativos', 'Dobla lo necesario para dibujar el valor absoluto de cada función', {
+              rounds: [
+                { f: x => x - 1, fTxt: 'x − 1', xr: [-3, 4], yr: [-4, 4], roots: [1] },
+                { f: x => x * x - 2 * x - 3, fTxt: 'x² − 2x − 3', xr: [-3, 5], yr: [-5, 6], roots: [-1, 3] },
+                { f: x => x ** 3 - 4 * x, fTxt: 'x³ − 4x', xr: [-3, 3], yr: [-4, 4], roots: [-2, 0, 2] },
+              ],
+            }, 'Se doblan solo los trozos bajo el eje: 1) $x < 1$. 2) Entre $-1$ y $3$. 3) $x < -2$ y $0 < x < 2$.',
+              { hint: 'El valor absoluto nunca es negativo: lo que ya está arriba del eje x se queda igual y solo se reflejan los trozos que bajan del eje.' }),
+            play('dibuja-intervalo', 'Dibuja el dominio de la función algebraica $f(x) = \\sqrt{9 - x^2}$', { min: -5, max: 5, a: -3, b: 3, aClosed: true, bClosed: true, set: 'dominio de f' },
+              'Se necesita $9 - x^2 \\ge 0$, es decir $x^2 \\le 9$: $-3 \\le x \\le 3$.',
+              { hint: 'Dentro de la raíz no puede quedar un negativo: busca los x cuyo cuadrado no supere al número que está al lado.' }),
+            num('Una carrera de taxi cuesta $f(x) = 6$ si $0 < x \\le 2$ y $f(x) = 6 + 1.5(x - 2)$ si $x > 2$ ($x$ en km, $f$ en miles de pesos). ¿Cuánto cuesta, en miles de pesos, un viaje de 6 km?', 12,
+              'Como $6 > 2$ se usa el segundo tramo: $6 + 1.5 \\cdot 4 = 12$, o sea 12 000 pesos.',
+              { hint: 'Primero decide en qué tramo cae x = 6; luego usa solo la fórmula de ese tramo.', suffix: 'mil pesos' }),
+            num('Si $f(x) = |2x - 7| - 3$, ¿cuánto vale $f(1)$?', 2,
+              '$|2 - 7| - 3 = |-5| - 3 = 5 - 3 = 2$.',
+              { hint: 'Calcula lo que está dentro de las barras; si sale negativo, el valor absoluto le quita el signo. Después resta.' }),
+          ],
+        },
+        {
+          id: 'alg-61', title: 'Transformaciones de funciones',
+          // Clase 8 del cronograma (C9).
+          clip: { scenes: [
+            sc(6, '**Subir y bajar**: $f(x) + k$ sube la gráfica $k$ unidades (si $k < 0$, baja).', { steps: ['$y = x^2 + 2$: la parábola, 2 arriba'] }),
+            sc(6, '**Correr**: $f(x - h)$ corre la gráfica $h$ a la **derecha**: va al revés de lo que parece el signo.', { steps: ['$y = (x - 3)^2$: vértice en $x = 3$'] }),
+            sc(5, '**Estirar**: $a\\,f(x)$ multiplica las alturas por $a$. **Reflejar**: $-f(x)$ en el eje $x$, $f(-x)$ en el eje $y$.', { steps: ['$y = 2x^2$ es más empinada · $y = -x^2$ abre hacia abajo'] }),
+            sc(6, 'El **orden importa**: estirar y luego subir no es lo mismo que subir y luego estirar.', { steps: ['$2\\sqrt{x} + 1 \\ne 2(\\sqrt{x} + 1) = 2\\sqrt{x} + 2$'] }),
+          ] },
+          ex: [
+            play('sellos-graficas', 'Usa los sellos para llevar la gráfica base hasta la fantasma', {
+              rounds: [
+                { base: 'sq', target: { A: 1, B: 1, C: -2, D: -3 }, xr: [-3, 5], yr: [-4, 6] },
+                { base: 'abs', target: { A: -1, B: 1, C: 1, D: 2 }, xr: [-5, 4], yr: [-4, 4] },
+                { base: 'sqrt', target: { A: 2, B: 1, C: -1, D: -1 }, xr: [-1, 7], yr: [-3, 6] },
+              ],
+            }, '1) $(x - 2)^2 - 3$: dos → y tres ↓. 2) $-|x + 1| + 2$: ←, reflejo en $x$ y dos ↑. 3) $2\\sqrt{x - 1} - 1$: →, ×2 y después ↓ (si bajas antes de estirar, la bajada también se duplica).',
+              { hint: 'Lo que va dentro con la x corre la gráfica de lado y al revés del signo; lo de afuera la sube, la baja o la estira. Estira antes de subir o bajar: un ×2 posterior también duplica la subida.' }),
+            play('sellos-graficas', 'Ahora con reflejos y encogimientos', {
+              rounds: [
+                { base: 'sqrt', target: { A: 1, B: -1, C: 0, D: 0 }, xr: [-6, 3], yr: [-2, 4] },
+                { base: 'cube', target: { A: -0.5, B: 1, C: 0, D: 0 }, xr: [-3, 3], yr: [-4, 4] },
+                { base: 'recip', target: { A: 1, B: 1, C: 2, D: -1 }, xr: [-6, 3], yr: [-4, 3] },
+              ],
+            }, '1) $\\sqrt{-x}$: reflejo en el eje $y$. 2) $-\\tfrac12 x^3$: ×½ y reflejo en el eje $x$. 3) $\\tfrac{1}{x + 2} - 1$: dos ← y uno ↓.',
+              { hint: 'Reflejar en el eje x cambia el signo de toda la función (afuera); reflejar en el eje y cambia el signo de la x (adentro).' }),
+            play('une-parejas', 'Une cada fórmula con lo que le hace a la gráfica de $f$', {
+              left: ['y = f(x) − 4', 'y = f(x + 4)', 'y = 4f(x)', 'y = f(4x)', 'y = −f(x)'],
+              right: ['baja 4', 'corre 4 a la izquierda', 'estira ×4 en vertical', 'encoge en horizontal', 'refleja en el eje x', 'corre 4 a la derecha'],
+              pairs: [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]],
+            }, 'Fuera de $f$ se actúa en vertical y tal como se lee; dentro, con la $x$, en horizontal y al revés: $f(x + 4)$ corre a la izquierda y $f(4x)$ encoge. Sobra «corre 4 a la derecha», que sería $f(x - 4)$.',
+              { hint: 'Si el cambio está fuera de f actúa en vertical, tal como se lee; si está dentro, junto a la x, actúa en horizontal y al revés de lo que parece.' }),
+            num('El punto $(2, 5)$ está en la gráfica de $f$. ¿Qué altura tiene el punto correspondiente de $y = 3f(x) - 4$?', 11,
+              'La $x$ no cambia y la altura pasa a $3 \\cdot 5 - 4 = 11$.',
+              { hint: 'La x se queda igual; a la altura de f primero se le aplica el estiramiento y luego la bajada.' }),
+            num('El punto $(1, 6)$ está en la gráfica de $f$. ¿En qué $x$ queda ese punto en la gráfica de $y = f(x + 3)$?', -2,
+              'Hace falta que $x + 3 = 1$, o sea $x = -2$: la gráfica se corrió 3 a la izquierda.',
+              { hint: 'Necesitas que lo de adentro, x + 3, valga lo mismo que la entrada original del punto.' }),
+          ],
+        },
+        {
+          id: 'alg-62', title: 'Función biyectiva e inversa',
+          // Clase 9 del cronograma (C10).
+          clip: { scenes: [
+            sc(6, '**Inyectiva**: ninguna recta horizontal corta la gráfica dos veces. **Biyectiva**: inyectiva y sobre.', { steps: ['$x^3$ es inyectiva; $x^2$ no: $f(2) = f(-2)$'] }),
+            sc(6, 'La **inversa** deshace: si $f$ lleva $a$ a $b$, $f^{-1}$ lleva $b$ a $a$. Se deshace en orden contrario, como quitarse los zapatos antes que las medias.', { steps: ['$f^{-1}(f(x)) = x$'] }),
+            sc(6, 'Para hallarla: escribe $y = f(x)$ y despeja $x$.', { steps: ['$y = 2x + 3 \\Rightarrow x = \\dfrac{y - 3}{2}$', '$f^{-1}(x) = \\dfrac{x - 3}{2}$'] }),
+            sc(6, 'Las gráficas de $f$ y $f^{-1}$ son reflejos en la recta $y = x$: $(a, b)$ pasa a $(b, a)$.', { steps: ['$(1, 5)$ en $f$ ⟹ $(5, 1)$ en $f^{-1}$'] }),
+            sc(5, 'Si no es inyectiva se **restringe** el dominio: $x^2$ con $x \\ge 0$ tiene inversa $\\sqrt{x}$.'),
+          ] },
+          ex: [
+            play('espejo-diagonal', 'Refleja los puntos de $f$ en el espejo $y = x$ para dibujar $f^{-1}$', {
+              rounds: [
+                { f: x => 2 * x - 1, fTxt: '2x − 1', pts: [[-1, -3], [0, -1], [2, 3]], t: [-2, 3], range: [-5, 5] },
+                { f: x => x ** 3 + 1, fTxt: 'x³ + 1', pts: [[-1, 0], [0, 1], [1, 2]], t: [-1.6, 1.5], range: [-5, 5] },
+                { f: x => 2 ** x, fTxt: '2ˣ', pts: [[0, 1], [1, 2], [2, 4]], t: [-4, 2.3], range: [-5, 5] },
+              ],
+            }, 'Se intercambian las coordenadas: 1) $(-3, -1)$, $(-1, 0)$, $(3, 2)$. 2) $(0, -1)$, $(1, 0)$, $(2, 1)$. 3) $(1, 0)$, $(2, 1)$, $(4, 2)$: la inversa de $2^x$ es $\\log_2 x$.',
+              { hint: 'Reflejar en la recta y = x es intercambiar las coordenadas: la entrada de f pasa a ser la salida de la inversa.' }),
+            play('cofre-candados', 'Abre cada cofre: escoge las llaves en el orden correcto', {
+              rounds: [
+                { fTxt: '3x + 4', probe: 2,
+                  locks: [{ txt: '× 3', f: x => 3 * x }, { txt: '+ 4', f: x => x + 4 }],
+                  keys: [{ txt: '÷ 3', tpl: '(□)/3', f: x => x / 3 }, { txt: '− 4', tpl: '□ − 4', f: x => x - 4 }, { txt: '+ 4', tpl: '□ + 4', f: x => x + 4 }, { txt: '× 3', tpl: '3(□)', f: x => 3 * x }],
+                  order: [1, 0] },
+                { fTxt: '(x − 1)³', probe: 3,
+                  locks: [{ txt: '− 1', f: x => x - 1 }, { txt: '³', f: x => x ** 3 }],
+                  keys: [{ txt: '∛', tpl: '∛(□)', f: Math.cbrt }, { txt: '+ 1', tpl: '□ + 1', f: x => x + 1 }, { txt: '− 1', tpl: '□ − 1', f: x => x - 1 }, { txt: '³', tpl: '(□)³', f: x => x ** 3 }],
+                  order: [0, 1] },
+                { fTxt: '2√x − 5', probe: 9,
+                  locks: [{ txt: '√', f: Math.sqrt }, { txt: '× 2', f: x => 2 * x }, { txt: '− 5', f: x => x - 5 }],
+                  keys: [{ txt: '+ 5', tpl: '□ + 5', f: x => x + 5 }, { txt: '÷ 2', tpl: '(□)/2', f: x => x / 2 }, { txt: '²', tpl: '(□)²', f: x => x * x }, { txt: '− 5', tpl: '□ − 5', f: x => x - 5 }, { txt: '√', tpl: '√(□)', f: Math.sqrt }],
+                  order: [0, 1, 2] },
+              ],
+            }, '1) $f^{-1}(x) = \\dfrac{x - 4}{3}$. 2) $f^{-1}(x) = \\sqrt[3]{x} + 1$. 3) $f^{-1}(x) = \\left(\\dfrac{x + 5}{2}\\right)^2$. Siempre se quita primero el último candado, con la operación contraria.',
+              { hint: 'Para deshacer se quita primero el último candado que se cerró, con la operación contraria. Mira qué le hace f a la x, en orden, y recórrelo al revés.' }),
+            play('dibuja-intervalo', '$f(x) = (x - 2)^2$ no es inyectiva en $[-3, 6]$. Dibuja el intervalo más grande dentro de $[-3, 6]$ que contiene a $x = 5$ y donde $f$ sí es inyectiva', { min: -3, max: 6, a: 2, b: 6, aClosed: true, bClosed: true, set: 'restricción' },
+              'La parábola baja hasta su vértice en $x = 2$ y luego sube; del lado derecho no repite valores. Con el 5 adentro: $[2, 6]$.',
+              { hint: 'Una parábola es inyectiva a cada lado de su vértice: busca el vértice, quédate con el lado donde está el 5 y llega hasta el borde.' }),
+            num('Si $f(x) = 4x - 7$, ¿cuánto vale $f^{-1}(13)$?', 5,
+              'Se busca la entrada que da 13: $4x - 7 = 13$, $4x = 20$, $x = 5$.',
+              { hint: 'Busca la entrada que f convierte en 13: plantea la ecuación f(x) = 13 y despeja.' }),
+            num('Si $f(x) = x^3 + 2$, ¿cuánto vale $f^{-1}(29)$?', 3,
+              '$x^3 + 2 = 29 \\Rightarrow x^3 = 27 \\Rightarrow x = 3$.',
+              { hint: 'Quita lo que f sumó y luego deshaz el cubo con la raíz cúbica.' }),
+          ],
+        },
+      ],
+    },
+    {
+      world: 'limites', title: 'Límites y continuidad',
+      lessons: [
+        {
+          id: 'calc-1', title: '¿Qué es un límite?',
+          clip: { scenes: [
+            sc(5, '¿Cuánto vale $f(x) = \\dfrac{x^2 - 1}{x - 1}$ en $x = 1$? ¡División entre cero!', { viz: { type: 'graph', xr: [-1, 3], yr: [-1, 4], f: x => (x * x - 1) / (x - 1), holes: [[1, 2]], draw: true } }),
+            sc(6, 'Pero podemos acercarnos tanto como queramos, por la izquierda y por la derecha.', { viz: { type: 'approach', f: x => (x * x - 1) / (x - 1), x0: 1, L: 2, xr: [-1, 3], yr: [-1, 4] } }),
+            sc(5, 'Factoriza y simplifica:', { title: '$\\lim_{x \\to 1} \\dfrac{x^2 - 1}{x - 1} = 2$', steps: ['$\\dfrac{x^2 - 1}{x - 1} = \\dfrac{(x - 1)(x + 1)}{x - 1}$', '$= x + 1 \\;\\to\\; 2$'] }),
+          ] },
+          ex: [
+            num('$\\lim_{x \\to 2} (3x + 1) = \\;?$', 7, 'Es continua: sustituye, $3(2) + 1 = 7$.'),
+            num('$\\lim_{x \\to 1} \\dfrac{x^2 - 1}{x - 1} = \\;?$', 2, 'Simplifica a $x + 1$ y evalúa en $x = 1$.'),
+            mc('$\\lim_{x \\to \\infty} \\dfrac{1}{x} = \\;?$', ['$0$', '$1$', '$\\infty$', 'No existe'], 0, 'Al crecer $x$, $1/x$ se hace tan pequeño como quieras.'),
+            mc('El límite describe…', ['A qué valor se acerca $f(x)$ cuando $x$ se acerca a un punto', 'El valor de $f$ exactamente en ese punto', 'La pendiente de una recta', 'El área bajo la curva'], 0, 'El límite no necesita que $f$ esté definida en el punto.'),
+          ],
+        },
+        {
+          id: 'calc-2', title: 'Límites al infinito',
+          clip: { scenes: [
+            sc(5, '¿Qué pasa con $f(x) = \\dfrac{2x + 1}{x}$ cuando $x$ crece sin parar?', { viz: { type: 'graph', xr: [0, 20], yr: [0, 6], fs: [{ f: x => (2 * x + 1) / x }, { f: () => 2, color: 'rgba(255,255,255,.4)', dash: true }], draw: true } }),
+            sc(5, 'Divide entre la mayor potencia de $x$:', { steps: ['$\\dfrac{2x + 1}{x} = 2 + \\dfrac{1}{x}$', '$\\dfrac{1}{x} \\to 0$', '$\\Rightarrow \\lim = 2$'] }),
+            sc(5, 'La recta $y = 2$ es una **asíntota horizontal**.', { title: '$y = 2$', viz: { type: 'graph', xr: [0, 20], yr: [0, 6], fs: [{ f: x => (2 * x + 1) / x }, { f: () => 2, color: '#facc15', dash: true }] } }),
+          ] },
+          ex: [
+            num('$\\lim_{x \\to \\infty} \\dfrac{3x^2 + 1}{x^2} = \\;?$', 3, '$3 + \\tfrac{1}{x^2} \\to 3$.'),
+            mc('$\\lim_{x \\to \\infty} \\dfrac{5x}{x^2 + 1} = \\;?$', ['$0$', '$5$', '$\\infty$', '$1$'], 0, 'El denominador crece más rápido (grado 2 > grado 1).'),
+            mc('Una asíntota horizontal $y = L$ significa que…', ['$f(x) \\to L$ cuando $x \\to \\pm\\infty$', '$f(L)$ no existe', '$f$ corta a $y = L$ exactamente una vez', '$f$ es constante'], 0, 'Describe el comportamiento de $f$ lejos del origen.'),
+          ],
+        },
+      ],
+    },
+    {
+      world: 'derivada', title: 'La derivada',
+      lessons: [
+        {
+          id: 'calc-3', title: 'La derivada como pendiente',
+          clip: { scenes: [
+            sc(5, '¿Cuál es la pendiente de una curva en un punto? Empezamos con una **secante**.', { viz: { type: 'tangent', f: sq, x0: 1, xr: [-1, 3], yr: [-1, 6], h0: 1.5, h1: 1.5 } }),
+            sc(6, 'Acerca el segundo punto: la secante se convierte en **tangente**.', { viz: { type: 'tangent', f: sq, x0: 1, xr: [-1, 3], yr: [-1, 6], h0: 1.5 } }),
+            sc(6, 'Esa pendiente límite es la derivada. Para $x^2$:', { title: "$f'(x) = \\lim_{h \\to 0} \\dfrac{f(x + h) - f(x)}{h}$", steps: ['$\\dfrac{(x + h)^2 - x^2}{h} = \\dfrac{2xh + h^2}{h}$', '$= 2x + h \\;\\to\\; 2x$'] }),
+          ] },
+          ex: [
+            sld('Mueve el punto hasta donde la tangente a $y = x^2$ tenga pendiente $4$', {
+              viz: { type: 'tangent', f: sq, xr: [-3, 3], yr: [-2, 9] }, min: -2.5, max: 2.5, step: 0.5, init: -1,
+              readout: v => `$x_0 = ${v}$`, check: v => near(v, 2), answerText: '$x_0 = 2$', explain: "$f'(x) = 2x = 4 \\Rightarrow x = 2$.",
+            }),
+            num('Pendiente de la tangente a $y = x^2$ en $x = 3$', 6, "$f'(x) = 2x$, así que $f'(3) = 6$."),
+            mc("La derivada $f'(a)$ representa…", ['La pendiente de la tangente en $x = a$', 'El área bajo $f$', 'El valor de $f$ en $a$', 'La pendiente de la secante entre 0 y $a$'], 0, 'Es la razón de cambio instantánea en $x = a$.'),
+          ],
+        },
+        {
+          id: 'calc-4', title: 'Reglas de derivación',
+          clip: { scenes: [
+            sc(5, 'No necesitas el límite cada vez. **Regla de la potencia**:', { title: '$\\dfrac{d}{dx} x^n = n\\,x^{n-1}$', steps: ['$\\dfrac{d}{dx} x^3 = 3x^2$', '$\\dfrac{d}{dx} x^5 = 5x^4$'] }),
+            sc(5, 'Las constantes salen y las sumas se derivan término a término.', { steps: ['$\\dfrac{d}{dx}(3x^2 + 2x) = 6x + 2$'] }),
+            sc(4, 'Seno y coseno:', { steps: ["$(\\sin x)' = \\cos x$", "$(\\cos x)' = -\\sin x$"] }),
+            sc(6, '**Regla de la cadena**: deriva por fuera y multiplica por la derivada de adentro.', { steps: ['$\\dfrac{d}{dx}(2x + 1)^3$', '$= 3(2x + 1)^2 \\cdot 2$', '$= 6(2x + 1)^2$'] }),
+          ] },
+          ex: [
+            mc('$\\dfrac{d}{dx} x^5$', ['$5x^4$', '$x^4$', '$5x^5$', '$4x^5$'], 0, 'Regla de la potencia: baja el exponente y réstale 1.'),
+            num("Si $f(x) = 3x^2 + 2x$, ¿cuánto vale $f'(1)$?", 8, "$f'(x) = 6x + 2 \\Rightarrow f'(1) = 8$."),
+            mc('$\\dfrac{d}{dx} \\sin x$', ['$\\cos x$', '$-\\cos x$', '$-\\sin x$', '$\\tan x$'], 0, 'La derivada del seno es el coseno.'),
+            mc('$\\dfrac{d}{dx}(2x + 1)^3$', ['$6(2x + 1)^2$', '$3(2x + 1)^2$', '$(2x + 1)^2$', '$6(2x + 1)^3$'], 0, 'Regla de la cadena: $3(2x + 1)^2 \\cdot 2$.'),
+          ],
+        },
+      ],
+    },
+    {
+      world: 'aplicaciones', title: 'Aplicaciones de la derivada',
+      lessons: [
+        {
+          id: 'calc-5', title: 'Máximos y mínimos',
+          clip: { scenes: [
+            sc(6, 'En la cima de una montaña, la tangente es **horizontal**.', { viz: { type: 'tangent', f: x => -x * x + 4 * x, x0anim: [0.2, 3.8], xr: [-1, 5], yr: [-2, 6] } }),
+            sc(5, 'Busca dónde la derivada vale cero:', { steps: ['$f(x) = -x^2 + 4x$', "$f'(x) = -2x + 4 = 0$", '$x = 2$'] }),
+            sc(5, 'Así se optimiza en ingeniería: máxima área, mínimo costo, máxima eficiencia.', { viz: { type: 'graph', f: x => -x * x + 4 * x, xr: [-1, 5], yr: [-2, 6], points: [[2, 4, 'máx (2, 4)']] } }),
+          ] },
+          ex: [
+            sld('Mueve el punto hasta donde la tangente sea horizontal (el máximo de $f(x) = -x^2 + 4x$)', {
+              viz: { type: 'tangent', f: x => -x * x + 4 * x, xr: [-1, 5], yr: [-2, 6] }, min: -0.5, max: 4.5, step: 0.5, init: 0.5,
+              readout: v => `$x_0 = ${v}$`, check: v => near(v, 2), answerText: '$x = 2$', explain: "$f'(x) = -2x + 4 = 0 \\Rightarrow x = 2$.",
+            }),
+            num('¿En qué $x$ tiene su mínimo $f(x) = x^2 - 6x + 1$?', 3, "$f'(x) = 2x - 6 = 0 \\Rightarrow x = 3$.", { prefix: '$x =$' }),
+            mc("Si $f'(a) = 0$ y $f''(a) < 0$, en $x = a$ hay…", ['Un máximo', 'Un mínimo', 'Siempre un punto de inflexión', 'Una discontinuidad'], 0, 'Concavidad hacia abajo con tangente horizontal → máximo.'),
           ],
         },
       ],

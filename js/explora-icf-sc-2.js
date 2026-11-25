@@ -1,0 +1,96 @@
+// Preicfes · Sociales, mundo 2 «Participación y Control» (Explora, escena «hoja»). Casos cortos propios.
+xpLec('icf-sc-participacion-1', [
+  ['Elegir y decidir',
+    xpMira('hoja', 'Empecemos por la idea: se puede **elegir a quien decide** o **decidir** directamente.', { paras: [['Votar por una gobernadora.'], ['Votar si se deroga una norma.'], ['El Congreso aprueba una ley.'], ['Firmar un proyecto ciudadano.']] }, [
+      ['Elegir a alguien: democracia representativa.', { luz: [0], nota: { 0: 'representativa' } }],
+      ['Decidir con el voto: participativa.', { luz: [1], nota: { 1: 'participativa' } }],
+      ['Si deciden los elegidos, es representativa.', { luz: [2], nota: { 2: 'representativa' } }],
+      ['Si actúan los ciudadanos, participativa.', { luz: [3], nota: { 3: 'participativa' } }],
+      ['Colombia reconoce las dos desde 1991.', {}],
+    ], 'Representativa: eligen y otros deciden. Participativa: deciden los ciudadanos.'),
+    xpHaz('hoja', 'Subraya los **dos** casos de democracia participativa.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [1, 2], paras: [['Elegir concejales.'], ['Responder una consulta popular.'], ['Votar un referendo.'], ['Un senador presenta un proyecto.']], pista: 'En alguna decide un elegido, no la gente.' }, 'En la consulta y el referendo decide la gente.')],
+  ['Cada mecanismo, su uso',
+    xpMira('hoja', 'Segunda idea: pregunta **qué se somete** a la gente.', { paras: [['¿Aprueba esta norma?'], ['¿Apoya esta decisión del presidente?'], ['¿Está de acuerdo con este proyecto del municipio?'], ['Hablemos del parque, sin votar.']] }, [
+      ['Si se vota una norma, es un referendo.', { luz: [0], nota: { 0: 'referendo' } }],
+      ['Una decisión del presidente: plebiscito.', { luz: [1], nota: { 1: 'plebiscito' } }],
+      ['Un asunto de interés público: consulta popular.', { luz: [2], nota: { 2: 'consulta' } }],
+      ['Conversar con el concejo: cabildo abierto.', { luz: [3], nota: { 3: 'cabildo' } }],
+      ['Presentar una norma con firmas: iniciativa.', {}],
+    ], 'Norma: referendo. Presidente: plebiscito. Asunto: consulta. Hablar: cabildo.'),
+    xpHaz('hoja', 'Pon al margen el mecanismo.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['cabildo abierto', 'referendo', 'plebiscito'], meta: [1, 2, 0], paras: [['Votar para derogar una ley.'], ['El presidente pide apoyo a su política.'], ['Discutir con el concejo un problema.']], pista: 'Alguno no va ahí: ¿norma, decisión o conversación?' }, 'Ley, decisión presidencial y conversación.')],
+  ['Retirar del cargo',
+    xpMira('hoja', 'Tercera idea: la **revocatoria** tiene condiciones.', { letras: ['A', 'B', 'C', 'D'], paras: [['Alcaldesa con dos años que no cumple su programa.'], ['Presidente.'], ['Senador.'], ['Gobernador con tres meses.']] }, [
+      ['A la alcaldesa sí se la puede revocar.', { luz: [0], nota: { 0: 'sí' } }],
+      ['Al presidente no se le puede revocar.', { luz: [1], tacha: [1], nota: { 1: 'no' } }],
+      ['A los congresistas tampoco.', { luz: [2], tacha: [2], nota: { 2: 'no' } }],
+      ['El gobernador aún no: falta que pase un año.', { luz: [3], nota: { 3: 'todavía no' } }],
+      ['Es por incumplir el programa de gobierno o por descontento ciudadano.', { luz: [0] }],
+    ], 'Solo alcaldes y gobernadores, y después de un año.'),
+    xpHaz('hoja', '**Tacha** a quienes **no** se les puede revocar el mandato.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['Una representante a la Cámara'], ['Un gobernador con dos años'], ['Una alcaldesa con quince meses'], ['La presidenta']], pista: 'Alguna de las tachadas es alcalde o gobernador con más de un año.' }, 'Ni congresistas ni presidentes.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Un pueblo quiere proponer un acuerdo al concejo reuniendo firmas. Subraya el mecanismo.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Plebiscito'], ['Revocatoria'], ['Iniciativa popular'], ['Tutela']], pista: 'No apoyan al presidente ni retiran a nadie: presentan una norma.' }, 'Presentar una norma con firmas es una iniciativa.')],
+], 'Quién decide, qué se somete y a quién se aplica.');
+
+xpLec('icf-sc-participacion-2', [
+  ['Dinero, conducta, delito',
+    xpMira('hoja', 'Empecemos por la idea: una misma falta abre **preguntas distintas**.', { paras: [['Pagaron un hospital que no se construyó.'], ['¿Cuánto dinero se perdió?'], ['¿El director incumplió su deber?'], ['¿Hubo un delito?']] }, [
+      ['Arriba está la falta.', { luz: [0] }],
+      ['Por el dinero pregunta la Contraloría.', { luz: [1], nota: { 1: 'Contraloría' } }],
+      ['Por la conducta, la Procuraduría.', { luz: [2], nota: { 2: 'Procuraduría' } }],
+      ['Por el delito, la Fiscalía.', { luz: [3], nota: { 3: 'Fiscalía' } }],
+      ['Una respuesta no reemplaza a las otras.', {}],
+    ], 'Contraloría: dinero. Procuraduría: conducta. Fiscalía: delito.'),
+    xpHaz('hoja', 'Pon al margen quién pregunta.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['Fiscalía', 'Contraloría', 'Procuraduría'], meta: [1, 2, 0], paras: [['¿Quién devuelve lo pagado de más?'], ['¿El inspector abusó de su cargo y debe ser sancionado?'], ['¿Hay que acusarlo ante un juez penal?']], pista: 'Busca dinero, sanción o acusación.' }, 'Devolver, sancionar y acusar.')],
+  ['¿Dónde están?',
+    xpMira('hoja', 'Segunda idea: no todos son **organismos de control**.', { paras: [['Contraloría'], ['Procuraduría'], ['Defensoría y personerías'], ['Fiscalía']] }, [
+      ['La Contraloría es de control: el fiscal, del dinero.', { luz: [0], nota: { 0: 'control' } }],
+      ['La Procuraduría dirige el Ministerio Público: control.', { luz: [1], nota: { 1: 'control' } }],
+      ['La Defensoría y las personerías también son Ministerio Público.', { luz: [2], nota: { 2: 'control' } }],
+      ['La Fiscalía no: es de la rama judicial.', { luz: [3], nota: { 3: 'rama judicial' } }],
+      ['Investigar delitos no es lo mismo que vigilar el gasto.', {}],
+    ], 'La Fiscalía investiga delitos, pero es de la rama judicial.'),
+    xpHaz('hoja', '**Tacha** lo que **no** es un organismo de control.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['Contraloría'], ['Fiscalía'], ['Procuraduría'], ['Congreso']], pista: 'Alguna de las tachadas vigila el dinero o la conducta.' }, 'La Fiscalía es judicial y el Congreso, legislativo.')],
+  ['Los ojos de la gente',
+    xpMira('hoja', 'Tercera idea: una **veeduría** vigila, pero no castiga.', { letras: ['A', 'B', 'C', 'D'], paras: [['Pedir copia del contrato.'], ['Visitar la obra.'], ['Multar al contratista.'], ['Denunciar ante la Contraloría.']] }, [
+      ['Pedir información: sí puede.', { luz: [0], nota: { 0: 'sí' } }],
+      ['Mirar y comparar: sí.', { luz: [1], nota: { 1: 'sí' } }],
+      ['Multar: no, eso es del Estado.', { luz: [2], tacha: [2], nota: { 2: 'no' } }],
+      ['Denunciar lo que encontró: sí.', { luz: [3], nota: { 3: 'sí' } }],
+      ['Es control social: lo hacen los ciudadanos.', {}],
+    ], 'La veeduría pide, mira y denuncia; sancionar es del Estado.'),
+    xpHaz('hoja', 'Subraya lo que **sí** puede hacer una veeduría.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Encarcelar al alcalde'], ['Revisar lo que se pagó'], ['Firmar el contrato']], pista: 'Esa es tarea de jueces o de la alcaldía.' }, 'Revisar es vigilar.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Una funcionaria atiende solo a sus amigos, sin que se pierda dinero. Subraya quién la investiga.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Contraloría'], ['Congreso'], ['Procuraduría']], pista: 'No se perdió dinero: se discute su conducta.' }, 'La conducta de un funcionario es de la Procuraduría.')],
+], 'Cada quien con su pregunta, y la gente con los ojos abiertos.');
+
+xpLec('icf-sc-participacion-3', [
+  ['La regla mayor',
+    xpMira('hoja', 'Empecemos por la idea: las normas tienen **escalones**.', { paras: [['Constitución'], ['Ley del Congreso'], ['Acuerdo de un concejo'], ['Regla de un colegio']] }, [
+      ['Arriba está la Constitución.', { luz: [0], nota: { 0: 'manda más' } }],
+      ['Debajo, las leyes del Congreso.', { luz: [1] }],
+      ['Debajo, lo que decide un concejo.', { luz: [2] }],
+      ['Y las reglas de cada institución.', { luz: [3], nota: { 3: 'manda menos' } }],
+      ['Si una de abajo contradice a la de arriba, no vale.', { luz: [0] }],
+    ], 'Ninguna norma puede contradecir a la Constitución.'),
+    xpHaz('hoja', 'La Constitución protege la libertad de cultos. Subraya la norma que **no** valdría.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Un acuerdo crea un parque.'], ['Una ley sube un impuesto.'], ['Un colegio público obliga a rezar.']], pista: 'Esa no choca con la libertad de cultos.' }, 'Obligar a rezar choca con la regla mayor.')],
+  ['Tres caminos',
+    xpMira('hoja', 'Segunda idea: para reformarla hay **tres caminos**.', { paras: [['El Congreso la discute en ocho debates.'], ['Los ciudadanos votan sí o no a un texto.'], ['El pueblo elige a quienes la van a reformar.']] }, [
+      ['En el Congreso: acto legislativo.', { luz: [0], nota: { 0: 'acto legislativo' } }],
+      ['Dos períodos seguidos: no es de un día para otro.', { luz: [0] }],
+      ['Con el voto sobre un texto: referendo.', { luz: [1], nota: { 1: 'referendo' } }],
+      ['Con miembros elegidos para eso: asamblea constituyente.', { luz: [2], nota: { 2: 'constituyente' } }],
+      ['Los tres son más difíciles que hacer una ley.', {}],
+    ], 'Acto legislativo, referendo o asamblea constituyente.'),
+    xpHaz('hoja', 'Pon al margen el camino.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['referendo', 'acto legislativo', 'constituyente'], meta: [2, 0, 1], paras: [['Se eligen setenta miembros para redactarla.'], ['La gente vota un artículo nuevo.'], ['Senado y Cámara la debaten ocho veces.']], pista: 'Mira quién discute o quién vota.' }, 'Miembros elegidos, voto y Congreso.')],
+  ['¿Por qué tan difícil?',
+    xpMira('hoja', 'Tercera idea: la **lentitud** tiene un para qué.', { paras: [['Una mayoría de un día quiere quitarle el voto a un grupo.'], ['Con ocho debates el país alcanza a enterarse.'], ['La Corte revisa el trámite.'], ['Y mira que no la reemplacen por otra.']] }, [
+      ['Las mayorías cambian; los derechos deben quedar.', { luz: [0], nota: { 0: 'riesgo' } }],
+      ['El tiempo permite discutir.', { luz: [1], nota: { 1: 'freno' } }],
+      ['La Corte Constitucional vigila el procedimiento.', { luz: [2], nota: { 2: 'vigila' } }],
+      ['Reformar es cambiar partes; sustituir es cambiarla por otra.', { luz: [3], nota: { 3: 'límite' } }],
+      ['Debe poder cambiarse, pero no por un impulso.', {}],
+    ], 'La dificultad protege a quien hoy es minoría.'),
+    xpHaz('hoja', 'Subraya la **mejor** razón para exigir varios debates.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Así el Congreso trabaja más.'], ['Así se discute antes de tocar derechos.'], ['Así nunca se cambia.']], pista: 'Esa no explica para qué sirve la demora.' }, 'Dar tiempo a la discusión protege derechos.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Un acuerdo municipal prohíbe un partido político. Subraya lo que se concluye.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Contradice la Constitución y no puede mantenerse.'], ['Reforma la Constitución en ese municipio.'], ['Vale si lo firma el alcalde.']], pista: 'Recuerda los escalones: ¿quién está arriba?' }, 'Una norma de abajo no cambia la de arriba.')],
+], 'Arriba la Constitución, tres caminos para cambiarla y buenas razones para que cueste.');

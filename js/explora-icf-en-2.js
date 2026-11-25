@@ -1,0 +1,96 @@
+// Preicfes · Inglés, mundo 2 «Conversaciones Cortas» (Explora, escena «hoja»): se explica en español con ejemplos en inglés propios.
+xpLec('icf-en-dialogos-1', [
+  ['La palabra que pregunta',
+    xpMira('hoja', 'Empecemos por la idea: la palabra del comienzo dice **qué dato** se pide.', { paras: [['Where', 'is my bag?'], ['When', 'is the party?'], ['Who', 'is that man?'], ['How long', 'is the film?']] }, [
+      ['«Where» pide un lugar: «under the table».', { luz: [0], nota: { 0: 'lugar' } }],
+      ['«When» pide un momento: «on Friday».', { luz: [2], nota: { 1: 'momento' } }],
+      ['«Who» pide una persona: «my uncle».', { luz: [4], nota: { 2: 'persona' } }],
+      ['«How long» pide duración: «two hours».', { luz: [6], nota: { 3: 'duración' } }],
+      ['Y «why» pide una razón: «because…».', {}],
+    ], 'Where lugar, when momento, who persona, how long duración, why razón.'),
+    xpHaz('hoja', '«Where did you buy it?» Subraya la respuesta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Yesterday morning.'], ['At the market.'], ['Because I like it.']], pista: 'Esa es un momento o una razón: se pide un lugar.' }, '«Where» pide un lugar.')],
+  ['El auxiliar se repite',
+    xpMira('hoja', 'Segunda idea: la respuesta corta usa el **mismo auxiliar** de la pregunta.', { paras: [['Do you like tea?', 'Yes, I do.'], ['Is she at home?', 'No, she isn\'t.'], ['Can they swim?', 'Yes, they can.'], ['Did he call?', 'No, he didn\'t.']] }, [
+      ['«Do» se responde con «do».', { luz: [0, 1], nota: { 0: 'do' } }],
+      ['«Is» se responde con «is».', { luz: [2, 3], nota: { 1: 'is' } }],
+      ['Si pregunta con «can», se responde con «can».', { luz: [4, 5], nota: { 2: 'can' } }],
+      ['Y si pregunta con «did», va «did».', { luz: [6, 7], nota: { 3: 'did' } }],
+      ['Cuidado: «you» se responde con «I».', { luz: [0, 1] }],
+    ], 'Do con do, is con is, can con can, did con did.'),
+    xpHaz('hoja', '«Does your sister work here?» Subraya la respuesta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Yes, she is.'], ['Yes, I do.'], ['No, she doesn\'t.']], pista: 'Debe llevar «does» y hablar de ella.' }, '«Does» y «she» vuelven en la respuesta.')],
+  ['La trampa de la palabra repetida',
+    xpMira('hoja', 'Tercera idea: repetir una palabra **no es** responder.', { letras: ['?', 'a', 'b', 'c'], paras: [['How much is the ticket?'], ['The ticket is blue.'], ['Five dollars.'], ['I have a ticket.']] }, [
+      ['«How much» pide un precio.', { luz: [0] }],
+      ['La a repite «ticket», pero dice un color.', { luz: [1], nota: { 1: 'trampa' } }],
+      ['La b no repite nada y sí responde.', { luz: [2], nota: { 2: 'responde' } }],
+      ['La c repite y cuenta otra cosa.', { luz: [3], nota: { 3: 'trampa' } }],
+      ['Primero piensa qué dato se pide; luego busca.', {}],
+    ], 'Busca el dato que se pide, no la palabra que se repite.'),
+    xpHaz('hoja', '«What time does the shop close?» Subraya la respuesta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['The shop is closed.'], ['At nine.'], ['It is close to the park.']], pista: 'Esa repite una palabra, pero no da una hora.' }, 'Se pide una hora.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Why don\'t we go to the cinema?» Subraya la mejor respuesta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Good idea!'], ['Because it is dark.'], ['It is in the cinema.']], pista: 'No pregunta la razón: invita.' }, '«Why don’t we» invita; se acepta o se rechaza.')],
+], 'Qué dato pide, qué auxiliar usa y sin caer en la palabra repetida.');
+
+xpLec('icf-en-dialogos-2', [
+  ['Pedir y ofrecer',
+    xpMira('hoja', 'Empecemos por la idea: la cortesía tiene **fórmulas** fijas.', { paras: [['Could you help me?', 'Of course.'], ['Would you like some juice?', 'Yes, please.'], ['May I come in?', 'Sure, go ahead.']] }, [
+      ['«Could you» pide un favor.', { luz: [0], nota: { 0: 'pide' } }],
+      ['Se acepta con «of course» o «sure».', { luz: [1] }],
+      ['«Would you like» ofrece: «yes, please» o «no, thanks».', { luz: [2, 3], nota: { 1: 'ofrece' } }],
+      ['«May I» pide permiso.', { luz: [4], nota: { 2: 'permiso' } }],
+      ['Y se da con «go ahead».', { luz: [5] }],
+    ], 'Could you pide, would you like ofrece, may I pide permiso.'),
+    xpHaz('hoja', '«Would you like some cake?» Subraya la respuesta cortés.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Yes, I would go.'], ['You\'re welcome.'], ['No, thanks. I\'m full.']], pista: 'Te ofrecen algo: se acepta o se agradece.' }, 'A una oferta: «yes, please» o «no, thanks».')],
+  ['Do you mind?',
+    xpMira('hoja', 'Segunda idea: «Do you mind…?» pregunta si **te molesta**.', { paras: [['Do you mind if I open the window?'], ['No, not at all.'], ['Yes, I do. It\'s cold.']] }, [
+      ['Significa: ¿te molesta que la abra?', { luz: [0] }],
+      ['«No, not at all»: no me molesta, ábrela.', { luz: [1], nota: { 1: 'da permiso' } }],
+      ['«Yes, I do»: sí me molesta.', { luz: [2], nota: { 2: 'lo niega' } }],
+      ['Es al revés de lo que parece.', { luz: [1, 2] }],
+      ['También sirven «of course not» y «go ahead».', {}],
+    ], 'Con «Do you mind», decir no es dar permiso.'),
+    xpHaz('hoja', '«Do you mind if I sit here?» Subraya la respuesta que **da permiso**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Yes, I mind.'], ['Of course not.'], ['Yes, it\'s my seat.']], pista: 'Esa dice que sí molesta.' }, '«Of course not»: claro que no me molesta.')],
+  ['Quejas, gracias y disculpas',
+    xpMira('hoja', 'Tercera idea: escoge según lo que la otra persona **siente**.', { paras: [['My soup is cold.', 'I\'m sorry. I\'ll bring another.'], ['Thanks a lot!', 'You\'re welcome.'], ['Come to my house!', 'I\'d love to, but I can\'t.'], ['I\'m sorry I\'m late.', 'That\'s all right.']] }, [
+      ['A una queja: disculpa y solución.', { luz: [0, 1], nota: { 0: 'queja' } }],
+      ['A las gracias: «you’re welcome».', { luz: [2, 3], nota: { 1: 'gracias' } }],
+      ['Para rechazar: «I’d love to, but…».', { luz: [4, 5], nota: { 2: 'rechazo amable' } }],
+      ['A una disculpa: «that’s all right».', { luz: [6, 7], nota: { 3: 'disculpa' } }],
+      ['Ponle nombre a la situación y la fórmula sale sola.', {}],
+    ], 'Queja, gracias, invitación o disculpa: cada una con su fórmula.'),
+    xpHaz('hoja', 'Pon al margen la respuesta de cada frase.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['That\'s all right', 'You\'re welcome', 'I\'m sorry'], meta: [1, 2, 0], paras: [['Thank you!'], ['This plate is dirty.'], ['Sorry, I broke your pen.']], pista: '¿Agradece, se queja o se disculpa?' }, 'Gracias, queja y disculpa.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Could you turn down the music? I\'m studying.» Subraya la mejor respuesta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Sure, I\'m sorry.'], ['Yes, please.'], ['No, I\'m not studying.']], pista: 'Pide un favor porque algo le molesta.' }, 'Se acepta el favor y se ofrece disculpa.')],
+], 'Nombra la situación, usa su fórmula y cuidado con «Do you mind».');
+
+xpLec('icf-en-dialogos-3', [
+  ['Cómo se siente',
+    xpMira('hoja', 'Empecemos por la idea: la reacción va con el **sentimiento**.', { paras: [['I failed the test.', 'Oh, I\'m sorry to hear that.'], ['I got a scholarship!', 'Congratulations!'], ['I\'m nervous about tomorrow.', 'Don\'t worry, you\'ll be fine.']] }, [
+      ['Una mala noticia: se lamenta.', { luz: [0, 1], nota: { 0: 'triste' } }],
+      ['Un logro: se felicita.', { luz: [2, 3], nota: { 1: 'logro' } }],
+      ['Un susto: se anima.', { luz: [4, 5], nota: { 2: 'nervios' } }],
+      ['«Sorry» no siempre es disculpa: también es lamento.', { luz: [1] }],
+      ['Busca primero el sentimiento.', {}],
+    ], 'Triste se lamenta, un logro se felicita, un susto se anima.'),
+    xpHaz('hoja', '«My grandmother is in hospital.» Subraya la reacción.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Congratulations!'], ['You\'re welcome.'], ['I\'m sorry to hear that.']], pista: 'Es una noticia triste.' }, 'Se lamenta la noticia.')],
+  ['Planes y promesas',
+    xpMira('hoja', 'Segunda idea: «going to» es un plan; «will», una promesa o un cálculo.', { paras: [['I\'m going to visit my aunt.'], ['Don\'t worry, I will help you.'], ['It will rain tonight.'], ['What if we sell juice?']] }, [
+      ['«Going to»: ya está decidido.', { luz: [0], nota: { 0: 'plan' } }],
+      ['«Will»: promesa del momento.', { luz: [1], nota: { 1: 'promesa' } }],
+      ['O lo que se calcula que pasará.', { luz: [2], nota: { 2: 'cálculo' } }],
+      ['«What if» y «what about» sugieren.', { luz: [3], nota: { 3: 'sugerencia' } }],
+      ['Una sugerencia se acepta: «sounds great».', {}],
+    ], 'Going to: plan. Will: promesa o cálculo. What if: sugerencia.'),
+    xpHaz('hoja', 'Pon al margen qué hace cada frase.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['promesa', 'sugerencia', 'plan'], meta: [1, 2, 0], paras: [['What about a pizza?'], ['We are going to paint the room.'], ['I will call you, I promise.']], pista: 'Mira «what about», «going to» y «will».' }, 'Sugerir, planear y prometer.')],
+  ['¿De acuerdo?',
+    xpMira('hoja', 'Tercera idea: aprende a ver si alguien **acepta** o **prefiere otra cosa**.', { paras: [['So do I.'], ['You\'re right.'], ['I don\'t think so.'], ['I\'d rather stay here.']] }, [
+      ['«So do I»: yo también.', { luz: [0], nota: { 0: 'de acuerdo' } }],
+      ['«You’re right»: tienes razón.', { luz: [1], nota: { 1: 'de acuerdo' } }],
+      ['«I don’t think so»: no lo creo.', { luz: [2], nota: { 2: 'en desacuerdo' } }],
+      ['«I’d rather»: prefiero otra cosa.', { luz: [3], nota: { 3: 'otra opción' } }],
+      ['«Neither do I» es «yo tampoco»: también está de acuerdo.', {}],
+    ], 'So do I y neither do I coinciden; I’d rather prefiere otra cosa.'),
+    xpHaz('hoja', '«I don\'t like horror films.» Subraya a quien piensa **igual**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['So do I.'], ['Neither do I.'], ['I\'d rather watch one.']], pista: 'La frase es negativa: yo tampoco.' }, 'A una negación se le responde «neither do I».')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«I\'m exhausted. I worked twelve hours.» Subraya la mejor respuesta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['You should get some rest.'], ['Congratulations on your work!'], ['At twelve o\'clock.']], pista: '«Exhausted» es muy cansado: ¿qué le aconsejas?' }, 'A alguien agotado se le aconseja descansar.')],
+], 'Sentimiento, plan y acuerdo: con eso se escoge la respuesta.');
