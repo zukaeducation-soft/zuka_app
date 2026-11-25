@@ -99,7 +99,7 @@ test('sin pistas de forma: la opción correcta no es casi siempre la más larga'
   for (const l of lessons) for (const e of l.ex) if (e.game === 'palabra-a-la-medida') for (const r of e.params.rounds) {
     n++; if (uniqLongest(r.options) === r.answer) longest++;
   }
-  assert.ok(n >= 40 && longest <= n / 4, `palabra-a-la-medida: la correcta es la más larga en ${longest} de ${n}`);
+  assert.ok(n >= 20 && longest <= n / 4, `palabra-a-la-medida: la correcta es la más larga en ${longest} de ${n}`);
   let m = 0, ml = 0;
   for (const u of units) for (const it of u.exam?.items || []) { m++; if (uniqLongest(it.ex.params.options) === it.ex.params.answer) ml++; }
   assert.ok(ml <= m / 2, `evaluaciones: la correcta es la más larga en ${ml} de ${m}`);

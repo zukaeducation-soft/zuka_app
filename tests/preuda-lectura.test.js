@@ -12,7 +12,7 @@ const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '
 const html = read('index.html'), sw = require('./load').shell(), css = read('css/styles.css');
 const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
 const ctx = loadScripts(all);
-const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), DONE = get(ctx, 'PU_LEC_HECHOS'), LEC = get(ctx, 'LEC');
+const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), EXPL = get(ctx, 'PU_LEC_EXPLORA'), TODOS = get(ctx, 'PU_LEC_HECHOS'), DONE = TODOS.filter(w => !EXPL.includes(w)), LEC = get(ctx, 'LEC');
 const units = get(ctx, 'COURSES').find(c => c.id === 'preuda').units.filter(u => u.block === 'lectura');
 const NEW = ['anticipa-texto', 'mapa-del-texto', 'resume-parrafo', 'donde-buscar', 'lupa-evidencia', 'intruso-excepto',
   'palabra-a-la-medida', 'hilo-referente', 'conector-bisagra', 'signos-que-hablan', 'quien-lo-dice', 'balanza-argumento',
@@ -92,7 +92,7 @@ test('hilo-referente, termometro-tono y pregunta-examen califican su respuesta e
 test('hay mundos de lectura terminados y siguen el orden del curso', () => {
   assert.ok(DONE.length >= 1);
   const order = units.map(u => u.world);
-  for (const w of DONE) assert.ok(order.includes(w), w);
+  for (const w of TODOS) assert.ok(order.includes(w), w);
 });
 
 test('mundos terminados: un texto por lección, 330–560 palabras y 4–7 párrafos, en sus 7 juegos distintos con pista', () => {
@@ -148,7 +148,7 @@ test('la pista no regala la respuesta en las preguntas de una sola respuesta', (
 });
 
 test('evaluación en formato real: pregunta-examen sobre un texto nuevo, dos o más por lección, opciones distintas', () => {
-  for (const u of units.filter(u => DONE.includes(u.world))) {
+  for (const u of units.filter(u => TODOS.includes(u.world))) {
     assert.ok(u.exam?.items?.length, u.world);
     const lessonDocs = new Set(u.lessons.flatMap(l => l.ex.flatMap(e => docsOf(e.params).map(d => d.id))));
     for (const l of u.lessons) assert.ok(u.exam.items.filter(it => it.lesson === l.id).length >= 2, `${u.world}: ${l.id}`);

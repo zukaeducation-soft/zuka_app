@@ -1,0 +1,37 @@
+// Preuniversitario · pu-el-2 «Idea central y mapa del texto» (Explora). Textos cortos propios.
+xpLec('pu-el-2', [
+  ['Una idea por párrafo',
+    xpMira('hoja', 'Empecemos por la idea: cada párrafo tiene **una idea** que reúne lo demás.', { paras: [['En el patio del colegio, el piso llega a cincuenta grados al mediodía.', 'Los niños se quedan en los pasillos y las canchas están vacías.', 'Un patio sin árboles es un patio que no se puede usar.']] }, [
+      ['Tres oraciones. ¿Cuál dice lo que dice todo el párrafo?', {}],
+      ['La primera es un dato: cuánto calienta el piso.', { luz: [0], sello: { 0: 'dato' } }],
+      ['La segunda es una consecuencia: las canchas vacías.', { luz: [1], sello: { 1: 'consecuencia' } }],
+      ['La última las reúne: sin árboles, el patio no sirve. Esa es la idea.', { luz: [2], sello: { 2: 'idea' } }],
+      ['La idea puede estar al final, al principio o en la mitad: no hay puesto fijo.', { luz: [2] }],
+      ['Quedarse en un detalle es poco; decir que no debería haber patios es de más.', {}],
+    ], 'La idea reúne lo que dicen las demás: ni un detalle suelto ni más de lo que dice el párrafo.'),
+    xpHaz('hoja', 'Subraya la oración que **reúne** a las demás.', { modo: 'toca', meta: [1], paras: [['La nueva línea de buses ahorra veinte minutos por viaje.', 'Pero llegar más rápido no sirve si nadie puede subirse.', 'A las seis de la mañana pasan llenos y la fila da la vuelta a la manzana.', 'Muchos terminan yéndose a pie.']], pista: 'Esa aporta un dato o un caso. Busca la que los demás datos, juntos, hacen ver.' }, 'Los datos y los casos apoyan; la idea es lo que todos juntos hacen ver.')],
+  ['El mapa del texto',
+    xpMira('hoja', 'Segunda idea: una nota al margen por párrafo arma **el mapa** del texto.', { paras: [['Las abejas polinizan buena parte de lo que comemos.'], ['Sin embargo, su número cae cada año.'], ['Además, cada vez hay menos flores silvestres.'], ['Por eso conviene dejar franjas de flores junto a los cultivos.']] }, [
+      ['Cuatro párrafos de los que solo vemos el comienzo.', {}],
+      ['El primero dice por qué importan las abejas.', { luz: [0], nota: { 0: 'dice por qué importa' } }],
+      ['«Sin embargo» opone: aquí aparece el problema.', { luz: [1], nota: { 1: 'plantea el problema' } }],
+      ['«Además» suma otra cosa en la misma dirección.', { luz: [2], nota: { 2: 'suma otro problema' } }],
+      ['«Por eso» saca una consecuencia: la propuesta.', { luz: [3], nota: { 3: 'propone algo' } }],
+      ['Las palabras que retoman, como «su número», van después de lo que retoman.', { luz: [1] }],
+      ['Lo que se defiende es la tesis; lo que otros discuten, una objeción; rematar es cerrar con la tesis.', {}],
+    ], '«Sin embargo» opone, «además» suma, «por eso» concluye: el comienzo dice qué hace el párrafo.'),
+    xpHaz('hoja', 'Pon al margen qué **hace** cada párrafo.', { modo: 'margen', rotulos: ['propone algo', 'responde a quien no está de acuerdo', 'da una razón', 'dice lo que defiende'], meta: [3, 2, 1, 0],
+      paras: [['El recreo del colegio debería durar más.'], ['La razón es sencilla: moverse ayuda a concentrarse.'], ['Algunos dicen que se pierde clase; pero una clase sin atención también se pierde.'], ['Por eso conviene probar un mes con diez minutos más.']], pista: 'Algún rótulo no va ahí. Mira cómo empieza cada párrafo: ¿afirma, explica, contesta o propone?' }, 'El mapa dice qué hace cada párrafo, no de qué habla.')],
+  ['Lo que sostiene y lo que adorna',
+    xpMira('hoja', 'Tercera idea: un resumen se queda con lo que **sostiene** la idea central y suelta lo demás.', { letras: ['A', 'B', 'C', 'D', 'E'], paras: [['Leer en voz alta mejora la lectura.'], ['Obliga a ir despacio y a no saltarse palabras.'], ['La maestra usaba un libro de tapas verdes.'], ['Al oírse, uno nota lo que no entendió.'], ['Eran las cuatro de la tarde.']] }, [
+      ['La primera es la idea central: leer en voz alta mejora la lectura.', { luz: [0], nota: { 0: 'idea central' } }],
+      ['Ir despacio la sostiene: es una razón.', { luz: [1], nota: { 1: 'apoyo' } }],
+      ['Oírse también la sostiene: otra razón.', { luz: [3], nota: { 3: 'apoyo' } }],
+      ['El color del libro y la hora son ciertos, pero si se quitan, nada se cae.', { luz: [2, 4] }],
+      ['Se tachan. Lo que queda es el resumen.', { tacha: [2, 4] }],
+      ['Y un buen título dice lo mismo en pocas palabras: «Leer en voz alta sirve».', { luz: [0] }],
+    ], 'La prueba: quita la oración. Si la idea central pierde apoyo, era importante; si no, era adorno.'),
+    xpHaz('hoja', 'Idea central: «Al mercado se puede ir en bicicleta». **Tacha** las dos oraciones que no la sostienen.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 2], paras: [['Hay una ciclorruta que llega hasta la puerta.'], ['El mercado se fundó hace ochenta años.'], ['Los domingos venden flores.'], ['Adentro hay dónde dejar la bicicleta con llave.']], pista: 'Alguna de las tachadas sí sostiene la idea. Quita cada una y mira si sigue siendo fácil llegar en bicicleta.' }, 'Lo cierto no siempre es importante: importa lo que sostiene.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya la oración que dice la **idea central** de todo el texto.', { modo: 'toca', meta: [4], paras: [['El museo abre hasta tarde los jueves.', 'Ese día entran más estudiantes que en toda la semana.'], ['Además, la mitad llega sin que nadie se lo haya pedido.', 'Una guía cuenta que algunos vuelven con sus abuelos.'], ['Cuando el horario se acomoda a la gente, la gente va al museo.']], pista: 'Esa vale para una parte. Busca la que explica por igual los dos primeros párrafos.' }, 'La idea central del texto reúne las ideas de sus párrafos.')],
+], 'Una idea por párrafo, una nota al margen que diga qué hace, y para el resumen solo lo que sostiene.');

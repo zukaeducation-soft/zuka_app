@@ -16,7 +16,8 @@ const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => 
 const ctx = loadScripts(all);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), LEC = get(ctx, 'LEC');
 const units = get(ctx, 'COURSES').find(c => c.id === 'preuda').units.filter(u => u.block === 'lectura');
-const lessons = units.flatMap(u => u.lessons);
+const EXPL = get(ctx, 'PU_LEC_EXPLORA');   // esos mundos siguen otro estándar (tests/lectura-explora.test.js)
+const lessons = units.filter(u => !EXPL.includes(u.world)).flatMap(u => u.lessons);
 const NUEVOS = ['ordena-parrafos', 'subraya-prueba', 'resumen-esencial', 'trampa-opcion', 'cadena-causas'];
 const uses = g => lessons.filter(l => l.ex.some(e => e.game === g));
 const exOf = g => lessons.flatMap(l => l.ex.filter(e => e.game === g).map(e => [l, e]));
@@ -26,13 +27,13 @@ const sorted = a => a.every((x, i) => i === 0 || a[i - 1] <= x);
 test('cuántas lecciones usa cada juego: mapa ≤ 8, donde-buscar ≤ 6 y ninguno en más de 13', () => {
   const count = {};
   for (const l of lessons) for (const g of new Set(l.ex.map(e => e.game))) count[g] = (count[g] || 0) + 1;
-  assert.equal(lessons.length, 33);
+  assert.equal(units.flatMap(u => u.lessons).length, 33);
   assert.ok(count['mapa-del-texto'] <= 8, `mapa-del-texto en ${count['mapa-del-texto']} lecciones`);
   assert.ok(count['donde-buscar'] <= 6, `donde-buscar en ${count['donde-buscar']} lecciones`);
   for (const [g, n] of Object.entries(count)) assert.ok(n <= 13, `${g} en ${n} lecciones`);
-  for (const g of NUEVOS) assert.ok(count[g] >= 10, `${g} solo en ${count[g] || 0} lecciones`);
+  for (const g of NUEVOS) assert.ok(count[g] >= lessons.length / 4, `${g} solo en ${count[g] || 0} lecciones`);
   // El tope de 10 que se pidió no cabe: lo deja escrito la aritmética.
-  assert.ok(lessons.length * 7 > Object.keys(count).length * 10);
+  assert.ok(33 * 7 > Object.keys(count).length * 10);
 });
 
 test('cada lección conserva 7 juegos distintos y los que ocultan el texto van primero', () => {

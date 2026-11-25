@@ -31,7 +31,9 @@ const EXQ = (() => {
     });
     const move = e => {
       if (!d || e.pointerId !== d.id) return;
-      if (!d.ghost && Math.hypot(e.clientX - d.x, e.clientY - d.y) > 7) {
+      // En una bandeja que se desliza de lado (touch-action: pan-x), el gesto horizontal es del navegador.
+      const lado = e.pointerType === 'touch' && Math.abs(e.clientX - d.x) > Math.abs(e.clientY - d.y) && getComputedStyle(d.el).touchAction === 'pan-x';
+      if (!d.ghost && !lado && Math.hypot(e.clientX - d.x, e.clientY - d.y) > 7) {
         const r = d.el.getBoundingClientRect();
         d.ghost = d.el.cloneNode(true);
         d.ghost.classList.add('exq-ghost');
@@ -55,7 +57,7 @@ const EXQ = (() => {
       root.querySelectorAll('.over').forEach(o => o.classList.remove('over'));
       if (!ghost) return;     // sin arrastre: el click normal hace de toque
       ghost.remove();
-      if (!live()) return;
+      if (!live() || e.type === 'pointercancel') return;
       const over = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-drop]');
       root.dataset.dragged = '1'; setTimeout(() => { delete root.dataset.dragged; }, 60);
       if (over && root.contains(over)) onDrop(el, over);

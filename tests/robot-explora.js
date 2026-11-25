@@ -70,6 +70,13 @@ window.__robot = async (id, curso) => {
         const svg = document.querySelector('.xre'), q = svgPt(svg, x0 + (k % p.c + 0.5) * cw, y0 + (Math.floor(k / p.c) + 0.5) * ch);
         await arrastra(svg, [q]);
       }
+    } else if (p.tipo === 'hoja') {
+      const R = document.querySelector('.xp-stage .hj');
+      if (p.modo === 'margen') for (let j = 0; j < p.meta.length; j++) {
+        const b = R.querySelector(`[data-r="${p.meta[j]}"]`), r = b.getBoundingClientRect();
+        for (const n of ['pointerdown', 'pointerup']) b.dispatchEvent(new PointerEvent(n, { bubbles: true, pointerId: 1, clientX: r.left + 5, clientY: r.top + 5 }));
+        await w(60); R.querySelector(`.hj-p[data-p="${j}"]`).click(); await w(60);
+      } else for (const k of p.meta) { R.querySelector(`.hj-t[data-k="${k}"]`).click(); await w(50); }
     } else if (p.tipo === 'casillas') {
       for (const f of p.filas) { [...document.querySelectorAll('.xp-chip')].find(b => b.dataset.f === f.r && !b.disabled).click(); await w(80); }
     }

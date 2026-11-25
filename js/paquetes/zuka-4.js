@@ -1,275 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-l-argumentacion.js
-// Preuniversitario · Comprensión lectora · mundo 9 «Argumentación, intención y tono» con textos de verdad (spec
-// 2026-11-19-preuda-lectura-textos): una columna que defiende la educación financiera con argumentos de datos, ejemplo y analogía y
-// una objeción respondida (tesis y argumentos), una columna irónica sobre los cursos para hacerse rico (intención y tono) y una
-// crónica de aniversario de una biblioteca que mezcla cifras y valoraciones (hechos y opiniones). La evaluación usa una columna
-// sobre los perros en el metrocable. Textos escritos para Zuka.
-PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
-  const FINANZAS = {
-    id: 'lec-educacion-financiera', title: 'Enseñar a no endeudarse',
-    ficha: { autor: 'Columna de un economista', fuente: 'Periódico nacional, página de opinión', fecha: 'Marzo de 2026' },
-    paras: [
-      'Casi todos los colombianos que terminan el bachillerato saben calcular el área de un trapecio, pero muy pocos saben qué es una tasa de interés efectiva anual o cuánto terminan pagando por un celular comprado a treinta y seis cuotas. Sostengo que esa ausencia no es un detalle del currículo: es una falla que les cuesta caro a millones de familias, y que el colegio debería corregir enseñando finanzas personales desde noveno grado.',
-      'El primer argumento es de datos. Según una encuesta nacional reciente, más de la mitad de los adultos no sabe calcular cuánto pagará en total por un crédito. No es extraño, entonces, que muchas familias acumulen deudas en tarjetas de crédito con intereses altísimos sin entender del todo lo que firmaron.',
-      'El segundo es de experiencia. En un colegio público de Pereira, un profesor de matemáticas dedicó un semestre a enseñar presupuestos, ahorro y créditos con ejemplos de la vida real: el recibo de la luz, la cuota de la moto, la natillera del barrio. Al final, varios estudiantes les explicaron a sus padres por qué no les convenía un préstamo «gota a gota» que pensaban pedir.',
-      'El tercero lo da una comparación. A nadie se le ocurriría entregarle a un joven las llaves de un carro sin enseñarle antes las señales de tránsito. Sin embargo, a los dieciocho años le entregamos una cédula con la que puede firmar créditos, sin haberle explicado nunca qué está firmando.',
-      'Se dirá que el currículo ya está lleno y que no hay espacio para una materia más. Es cierto. Pero la educación financiera no necesita una materia nueva: cabe en las clases de matemáticas, donde los porcentajes y las funciones exponenciales se enseñan casi siempre con ejemplos que no le importan a nadie. Enseñarlos con el interés de una tarjeta no le quita rigor a la matemática; le da un motivo.',
-      'Hay quien piensa que de plata se aprende en la casa, mirando a los papás. Algunas familias, sin duda, lo enseñan bien, y sus hijos llegan a adultos sabiendo ahorrar y desconfiando de las cuotas fáciles. Las filas que se forman cada diciembre en los almacenes que venden a crédito cuentan cómo les va a las demás.',
-      'Un país que enseña a sumar, pero no a endeudarse con cuidado, deja a sus jóvenes a merced de quien sí sabe hacer las cuentas.',
-    ],
-  };
-
-  const MILLON = {
-    id: 'lec-millonario-treinta-dias', title: 'Cómo hacerse millonario en treinta días (garantizado)',
-    ficha: { autor: 'Columna de humor y opinión', fuente: 'Periódico nacional, página de opinión', fecha: 'Octubre de 2025' },
-    paras: [
-      'Esta semana, mientras buscaba una receta de arepas, el celular me ofreció seis veces el mismo milagro: un muchacho de veintitrés años, recostado en un carro rojo que probablemente no es suyo, promete enseñarme a ganar diez millones de pesos al mes «sin jefe y sin horario». Solo tengo que pagar su curso, que hoy, por ser yo, cuesta apenas novecientos noventa mil pesos. El video, por supuesto, tiene música de fondo y un reloj que cuenta hacia atrás.',
-      'Decidí tomarme en serio su propuesta, por pura curiosidad científica. Vi completo el video gratuito, que dura cuarenta minutos y repite once veces la palabra «libertad». El método, por lo que alcancé a entender en el video gratuito, consiste en vender el mismo curso a otras personas, que a su vez lo venderán a otras, y así hasta el infinito. Es una idea brillante, con un solo inconveniente: en algún momento se acaban las personas.',
-      'Lo admirable es la seguridad con que lo dice. No hay en sus palabras ni un «quizás» ni un «depende». Tampoco hay cifras que se puedan revisar: solo capturas de pantalla de transferencias y testimonios de gente feliz que, curiosamente, también vende el curso. Si alguien pregunta por los riesgos, la respuesta es siempre la misma: «Los que dudan se quedan pobres». Es una frase cómoda: convierte cualquier pregunta razonable en un defecto de quien la hace.',
-      'No quiero burlarme de quienes caen. Muchos son jóvenes cansados de trabajos mal pagados, o padres que no ven otra salida, y la promesa de un dinero rápido es más tentadora cuanto más difícil está la vida. Conozco a una mujer que pagó el curso con la prima de diciembre y todavía no ha vendido el primero. Por eso mismo me indigna que alguien haga negocio con esa desesperación.',
-      'Si un día usted ve un anuncio así, haga una prueba sencilla: busque cómo gana dinero quien le habla. Si la respuesta es «vendiéndole a usted lo mismo que le promete», ya tiene la lección completa, y gratis. Esa, al menos, sí se la garantizo.',
-    ],
-  };
-
-  const CERRO = {
-    id: 'lec-biblioteca-cerro', title: 'Veinte años de la biblioteca del cerro',
-    ficha: { autor: 'Crónica de aniversario', fuente: 'Periódico comunitario de un barrio de Bello', fecha: 'Agosto de 2025' },
-    paras: [
-      'La biblioteca del barrio El Cerro abrió sus puertas el 12 de agosto de 2005, en una casa de dos pisos que antes había sido una bodega de cemento. Empezó con mil doscientos libros donados y un solo computador; las primeras estanterías las hicieron los vecinos con tablas de la bodega. Hoy tiene once mil libros, veinte computadores y un promedio de trescientos visitantes al día. Su colección es rica en historia local: guarda más de ochocientos títulos sobre Bello y sus veredas.',
-      'Es, sin exagerar, el lugar más importante del barrio. Ninguna otra obra pública ha cambiado tanto la vida de la gente: ni la cancha sintética, que se llena solo los fines de semana, ni el puesto de salud, que abre medio día y casi siempre tiene la fila hasta la esquina.',
-      'Las cifras de la propia biblioteca muestran lo que hacen sus usuarios: el año pasado se prestaron diecinueve mil libros, se dictaron ciento cuarenta talleres y cerca de dos mil personas usaron los computadores para hacer trámites, buscar empleo o inscribirse en la universidad. Una buena parte de los usuarios, casi la mitad según el registro de la entrada, son adultos. Los sábados, la fila para entrar empieza antes de que abran.',
-      'Su directora, Marleny Arias, lleva doce años en el cargo y llama a la biblioteca «la sala de estar del barrio»; tiene toda la razón. Dice que el mayor logro no son los préstamos, sino que los niños que llegaban a hacer tareas hoy vuelven como profesores de los talleres; tres de ellos estudian una licenciatura en una universidad pública. A mi juicio, ese es el mejor indicador que puede tener una biblioteca, mejor que cualquier cifra.',
-      'Sin embargo, el edificio ya no da abasto. En las tardes no hay sillas suficientes y los niños hacen las tareas en el piso, el techo del segundo piso se filtra cada vez que cae un aguacero fuerte y la alcaldía aún no ha asignado presupuesto para la ampliación que prometió en 2022. Es lamentable que una obra que funciona tan bien tenga que mendigar lo que a otras se les da sin pedirlo. Ya es hora de que la alcaldía cumpla su palabra.',
-      'Ojalá el próximo aniversario se celebre en un edificio a la altura de lo que la biblioteca ha hecho por el barrio durante estos veinte años y por los lectores que salieron de ella.',
-    ],
-  };
-
-  // ---------------- Lección 1 · Tesis y argumentos ----------------
-  setLesson('pu-ag-1', [
-    play('ordena-parrafos', 'Arma el argumento otra vez', { doc: FINANZAS },
-      'La tesis va primero. Los argumentos se anuncian en orden («El primer argumento», «El segundo», «El tercero»); después vienen las objeciones («Se dirá que…» y «Hay quien piensa…»), y la frase final vuelve a la tesis.',
-      { hint: 'Hay párrafos que se numeran solos. Lo que responde a una objeción va después de los argumentos.' }),
-    play('mapa-del-texto', 'El esqueleto del argumento', { doc: FINANZAS, labels: ['presenta la tesis', 'argumenta con datos', 'argumenta con un ejemplo', 'argumenta con una analogía', 'responde una objeción anunciada', 'concede un punto y lo relativiza', 'cierra reforzando la tesis', 'cita a una autoridad en economía'], key: [0, 1, 2, 3, 4, 5, 6] },
-      'La tesis va en el párrafo 1 («Sostengo que…»). Los párrafos 2, 3 y 4 anuncian sus argumentos: datos, experiencia y comparación. «Se dirá que…» abre una objeción; el párrafo 6 trae otra sin anunciarla («Hay quien piensa»), la concede en parte («sin duda») y le quita peso sin decir «pero». La última frase vuelve a la tesis. La encuesta es un dato, no la voz de un experto.',
-      { hint: 'Busca «Sostengo», «El primer argumento», «El segundo», «El tercero» y «Se dirá». En el párrafo 6 no hay «pero»: pregúntate qué acepta el autor y qué no.' }),
-    play('quien-lo-dice', 'Argumentos, objeciones y respuestas', { doc: FINANZAS, ask: 'Lleva cada parte del texto a lo que hace en el argumento.', voices: ['Argumento de datos', 'Argumento de ejemplo', 'Argumento por analogía', 'Objeción: lo que diría el otro lado', 'Concede: acepta una parte', 'Refuta: le quita la razón a la objeción'], cards: [
-      ['Más de la mitad de los adultos no sabe calcular cuánto pagará por un crédito.', 0],
-      ['Un profesor de Pereira enseñó presupuestos con el recibo de la luz.', 1],
-      ['Nadie entrega las llaves de un carro sin enseñar antes las señales de tránsito.', 2],
-      ['El currículo ya está lleno y no hay espacio para otra materia.', 3],
-      ['De plata se aprende en la casa, mirando a los papás.', 3],
-      ['Algunas familias, sin duda, lo enseñan bien.', 4],
-      ['La educación financiera cabe en las clases de matemáticas.', 5],
-      ['Las filas de diciembre en los almacenes que venden a crédito cuentan cómo les va a las demás.', 5],
-    ] }, 'La encuesta da cifras; Pereira es un caso; el carro y la cédula comparan dos situaciones. Hay dos objeciones: el currículo lleno, anunciada con «Se dirá», y lo que se aprende en casa, que llega sin aviso («Hay quien piensa»). «Sin duda» concede que algunas familias enseñan bien. Las respuestas refutan: la materia cabe en matemáticas, y las filas de diciembre muestran, sin decir «pero», que la mayoría no aprende en casa.',
-      { hint: 'Una objeción no siempre empieza con «Se dirá»: «Hay quien piensa» también la anuncia. Y una refutación puede ser un hecho que deja sin piso lo concedido.' }),
-    play('balanza-argumento', 'Lo que pesa sobre la tesis', { doc: FINANZAS, thesis: 'El colegio debería enseñar finanzas personales desde noveno grado.', cards: [
-      ['Más de la mitad de los adultos no sabe calcular cuánto pagará por un crédito.', 0],
-      ['Unos estudiantes de Pereira convencieron a sus padres de no pedir un préstamo gota a gota.', 0],
-      ['Un estudio muestra que los cursos de finanzas en el colegio no cambian cómo se endeudan los adultos.', 1],
-      ['Los jóvenes que reciben clases de finanzas se endeudan igual que los demás.', 1],
-      ['El área del trapecio se enseña en el colegio.', null],
-    ] }, 'La encuesta muestra la necesidad y Pereira muestra que enseñar funciona. Si los cursos no cambiaran nada, la propuesta perdería su razón. El trapecio solo aparece como contraste en la introducción.',
-      { hint: 'Para debilitar la tesis, hace falta mostrar que enseñar finanzas no sirve o no es necesario.' }),
-    play('conector-bisagra', 'Cómo se encadenan los argumentos', { doc: FINANZAS, rounds: [
-      { a: 'Más de la mitad de los adultos no sabe calcular cuánto pagará por un crédito.', b: 'muchas familias acumulan deudas sin entender lo que firmaron.', options: ['Por eso,', 'Aunque', 'En cambio,', 'Es decir,'], answer: 0 },
-      { a: 'Nadie entrega las llaves de un carro sin enseñar las señales de tránsito.', b: 'a los dieciocho años entregamos una cédula para firmar créditos sin explicar nada.', options: ['Sin embargo,', 'Por lo tanto,', 'Además,', 'Por ejemplo,'], answer: 0 },
-      { a: 'El currículo ya está lleno; es cierto.', b: 'la educación financiera cabe en las clases de matemáticas.', options: ['Pero', 'Por eso,', 'Además,', 'Es decir,'], answer: 0 },
-      { a: 'Algunas familias, sin duda, enseñan bien a manejar el dinero.', b: 'las filas de diciembre en los almacenes que venden a crédito muestran cómo les va a las demás.', options: ['Sin embargo,', 'Por eso,', 'Por ejemplo,', 'Es decir,'], answer: 0 },
-    ] }, 'No saber calcular lleva a endeudarse sin entender (consecuencia). La analogía funciona por contraste: con el carro sí enseñamos, con la cédula no. La objeción del currículo se acepta para luego responderla (contraste). Y en el párrafo 6 el texto no escribe ningún conector, pero la relación es la misma: concede y luego gira.',
-      { hint: 'En una objeción respondida, el autor reconoce algo y luego gira. A veces el giro no está escrito: pon el conector que se sobreentiende.' }),
-    play('trampa-opcion', 'Cada opción con su trampa', { doc: FINANZAS, q: 'En el párrafo 6, ¿qué hace el autor con la idea de que de plata se aprende en la casa?', options: [
-      ['La concede en parte y luego muestra, con un hecho, que no alcanza para la mayoría.', 0],
-      ['La acepta del todo: las familias enseñan bien a manejar la plata.', 2],
-      ['La refuta con una encuesta nacional sobre los créditos.', 4],
-      ['Dice que ninguna familia sabe enseñar a ahorrar.', 1],
-    ] }, 'A describe el párrafo 6: «sin duda» concede que algunas familias enseñan bien, y las filas de diciembre muestran que a las demás no les va así. B dice lo contrario de esa respuesta; C mezcla datos, porque la encuesta está en el párrafo 2 y sirve para otra cosa; D dice de más, porque el autor reconoce que algunas sí enseñan. Sobra el sello «El texto no lo dice».',
-      { hint: 'Una concesión acepta una parte y responde a la otra. Mira qué acepta el autor con «sin duda» y qué responde después.' }),
-    play('resume-parrafo', 'Cada argumento en una frase', { doc: FINANZAS, paras: [2, 3, 4, 5], options: [
-      'Los datos muestran que muchos adultos no entienden sus créditos.',
-      'Una experiencia en un colegio muestra que enseñar finanzas funciona.',
-      'Dejamos firmar créditos sin enseñar antes lo que se firma.',
-      'No hace falta una materia nueva: cabe en matemáticas.',
-      'Los bancos engañan a sus clientes.',
-      'Las matemáticas del colegio no sirven para nada.',
-    ], key: [0, 1, 2, 3] }, 'Cada resumen recoge un argumento o la respuesta a la objeción. El autor no acusa a los bancos ni desprecia las matemáticas: propone enseñarlas con otros ejemplos.',
-      { hint: 'Descarta los resúmenes que exageran: el autor critica los ejemplos de las clases, no las matemáticas.' }),
-  ]);
-
-  // ---------------- Lección 2 · Intención y tono ----------------
-  setLesson('pu-ag-2', [
-    play('anticipa-texto', 'Antes de leer: ¿para qué escribe?', { doc: MILLON, slots: [
-      ['Intención probable', ['criticar con humor un tipo de anuncio', 'enseñar a invertir', 'vender un curso'], 0],
-      ['Tono esperado', ['irónico', 'solemne', 'técnico'], 0],
-      ['Género', ['columna de opinión', 'manual de instrucciones', 'noticia'], 0],
-    ] }, 'Una «columna de humor y opinión» con un título que promete millones en treinta días «(garantizado)» anuncia ironía: el autor va a criticar ese tipo de promesas, no a hacerlas.',
-      { hint: 'El título promete algo imposible y lo publica una columna de humor. ¿Lo dice en serio?' }),
-    play('termometro-tono', 'Tono en adjetivos y en adverbios', { doc: MILLON, rounds: [
-      { frag: 'solo capturas de pantalla de transferencias y testimonios de gente feliz que, curiosamente, también vende el curso.', scale: ['suspicaz', 'sorprendido', 'admirado', 'neutral'], answer: 0 },
-      { frag: 'El video, por supuesto, tiene música de fondo y un reloj que cuenta hacia atrás.', scale: ['burlón', 'respetuoso', 'alarmado', 'nostálgico'], answer: 0 },
-      { frag: 'Es una idea brillante, con un solo inconveniente: en algún momento se acaban las personas.', scale: ['irónico', 'admirado', 'técnico', 'triste'], answer: 0 },
-      { frag: 'No quiero burlarme de quienes caen.', scale: ['comprensivo', 'despectivo', 'burlón', 'asustado'], answer: 0 },
-      { frag: 'Por eso mismo me indigna que alguien haga negocio con esa desesperación.', scale: ['indignado', 'burlón', 'indiferente', 'eufórico'], answer: 0 },
-    ] }, '«Curiosamente» no expresa una sorpresa de verdad: señala, con sospecha, que los testigos felices también ganan vendiendo el curso. «Por supuesto» se burla de lo previsible: todos esos videos tienen música y reloj. Llamar «brillante» a un método que se agota es ironía. Con quienes caen, el autor es comprensivo; con quien vende el curso, indignado. Un texto puede cambiar de tono según de quién hable.',
-      { hint: 'Los adverbios también tienen tono: quita «curiosamente» o «por supuesto» de la frase y mira qué se pierde. El dato sigue; lo que desaparece es la actitud del autor.' }),
-    play('subraya-prueba', 'La prueba de la ironía', { doc: MILLON, rounds: [
-      { claim: 'El autor no cree que el muchacho del video sea rico de verdad.', p: 1, answer: 0 },
-      { claim: 'El método del curso no puede funcionar para todos los que lo compran.', p: 2, answer: 3 },
-    ] }, 'La duda sobre la riqueza está en el carro rojo «que probablemente no es suyo». Y que el método no puede funcionar para todos lo dice la ironía del párrafo 2: una idea «brillante» con un solo inconveniente, que en algún momento se acaban las personas.',
-      { hint: 'La ironía esconde la crítica en un detalle o en un elogio. Busca la oración donde el elogio se vuelve problema.' }),
-    play('balanza-argumento', '¿Engaño o negocio?', { doc: MILLON, thesis: 'Los cursos para hacerse rico rápido son un engaño que se aprovecha de la desesperación.', cards: [
-      ['El método consiste en vender el mismo curso a otras personas.', 0],
-      ['No hay cifras que se puedan revisar, solo capturas y testimonios.', 0],
-      ['Los testimonios felices son de personas que también venden el curso.', 0],
-      ['Una auditoría independiente muestra que la mayoría de quienes compraron el curso ganan lo prometido.', 1],
-      ['El autor buscaba una receta de arepas.', null],
-    ] }, 'Un método que vive de venderse a sí mismo, sin cifras revisables y con testigos interesados, apoya la tesis. Una auditoría que confirmara las ganancias la debilitaría. La receta de arepas solo sitúa la escena.',
-      { hint: 'Pregúntate si cada oración muestra una señal de engaño, una prueba de que no lo es o nada.' }),
-    play('trampa-opcion', 'Cada opción con su trampa', { doc: MILLON, q: '¿Cuál es la intención principal del autor?', options: [
-      ['Burlarse de las personas que pagan esos cursos.', 2],
-      ['Advertir, con ironía, sobre los cursos que prometen dinero fácil y enseñar a reconocerlos.', 0],
-      ['Contar la historia de una mujer que se hizo rica con el curso.', 4],
-      ['Demostrar que ningún negocio por internet es honesto.', 1],
-    ] }, 'B recoge la ironía y la prueba final del párrafo 5. A dice lo contrario de «No quiero burlarme de quienes caen». C mezcla datos: la mujer existe, pero todavía no ha vendido el primer curso. D dice de más: el autor habla de un tipo de anuncio, no de todos los negocios por internet. Sobra el sello «El texto no lo dice».',
-      { hint: 'La intención está en lo que el autor le pide al lector al final. Revisa cada opción contra el párrafo 4 y el 5.' }),
-    play('mapa-del-texto', 'Cómo avanza la ironía', { doc: MILLON, labels: ['presenta el anuncio', 'explica el método con ironía', 'muestra las señales de engaño', 'aclara a quién no critica', 'da un consejo al lector', 'confiesa que él también compró el curso'], key: [0, 1, 2, 3, 4] },
-      'Del anuncio al consejo: el autor presenta la promesa, se burla del método, muestra las señales del engaño, aclara que no ataca a las víctimas y termina con una prueba para el lector. El autor no compró el curso: solo vio el video gratuito.',
-      { hint: 'El párrafo 4 cambia de tono: empieza con «No quiero burlarme». ¿Qué aclara ahí?' }),
-    play('signos-que-hablan', 'Comillas con intención', { doc: MILLON, rounds: [
-      { p: 1, text: 'ganar diez millones de pesos al mes |«|sin jefe y sin horario»', options: ['cita las palabras del anuncio, con distancia', 'marca el título de un libro', 'abre la voz del autor', 'señala una pregunta'], answer: 0 },
-      { p: 3, text: 'No hay en sus palabras ni un |«|quizás» ni un «depende».', options: ['presenta palabras como palabras: las que el vendedor nunca usa', 'cita a un experto', 'marca un título', 'indica una pregunta retórica'], answer: 0 },
-    ] }, 'Las primeras comillas copian la promesa del anuncio, y el autor se distancia de ella. Las segundas no citan a nadie: muestran palabras que faltan en el discurso del vendedor.',
-      { hint: 'Las comillas pueden citar a alguien, distanciarse de lo citado o mostrar una palabra como palabra. ¿Cuál es cada caso?' }),
-  ]);
-
-  // ---------------- Lección 3 · Hechos y opiniones ----------------
-  setLesson('pu-ag-3', [
-    play('anticipa-texto', 'Antes de leer', { doc: CERRO, slots: [
-      ['Tema', ['la historia y el presente de una biblioteca de barrio', 'cómo se construye una bodega de cemento', 'los libros más vendidos del año'], 0],
-      ['Propósito', ['celebrar un aniversario contando lo que se ha logrado', 'vender libros usados', 'explicar cómo se presta un libro'], 0],
-      ['Tipo de texto', ['crónica, que cuenta y también comenta', 'receta, con pasos', 'poema, en versos'], 0],
-    ] }, 'El título habla de «veinte años» de una biblioteca y la ficha dice que es una crónica de aniversario en un periódico comunitario: se espera un texto que cuente su historia y celebre lo que ha hecho por el barrio.',
-      { hint: 'El título trae una cifra y la ficha dice qué clase de texto es. Con eso se adivina el tema y el propósito.' }),
-    play('quien-lo-dice', '¿Se puede comprobar?', { doc: CERRO, ask: 'Lleva cada afirmación a «Hecho» si se puede verificar con un registro, una cuenta o una medida, o a «Opinión» si nadie podría comprobarla.', voices: ['Hecho comprobable', 'Opinión'], cards: [
-      ['La biblioteca abrió el 12 de agosto de 2005.', 0],
-      ['Su colección es rica en historia local: más de ochocientos títulos sobre Bello.', 0],
-      ['Una buena parte de los usuarios, casi la mitad, son adultos.', 0],
-      ['El techo se filtra cada vez que cae un aguacero fuerte.', 0],
-      ['Es el lugar más importante del barrio.', 1],
-      ['Ninguna otra obra pública ha cambiado tanto la vida de la gente.', 1],
-      ['La directora tiene toda la razón.', 1],
-      ['Ya es hora de que la alcaldía cumpla su palabra.', 1],
-    ] }, 'La fecha, los ochocientos títulos, el registro de la entrada y la gotera se pueden revisar, aunque digan «rica», «buena parte» o «fuerte»: ahí esas palabras describen una cantidad o una intensidad que se mide. En cambio, «ninguna otra obra ha cambiado tanto», «tiene toda la razón» y «ya es hora» no traen «mejor» ni «debería», y aun así son opiniones: una valoración, un juicio sobre otra persona y una exigencia. No hay registro que las compruebe.',
-      { hint: 'No te fíes solo de la lista de palabras. Pregúntate con qué registro, cuenta o medida comprobarías cada frase. Si no hay ninguna manera, es opinión, aunque no diga «mejor» ni «debería».' }),
-    play('palabra-a-la-medida', 'Palabras que valoran y palabras que miden', { doc: CERRO, rounds: [
-      { p: 1, before: 'Su colección es ', word: 'rica', after: ' en historia local', options: ['abundante', 'deliciosa', 'muy valiosa', 'lujosa'], answer: 0 },
-      { p: 5, before: 'el edificio ya no ', word: 'da abasto', after: '.', options: ['alcanza para todos', 'se abre', 'tiene libros', 'cobra la entrada a los visitantes'], answer: 0 },
-      { p: 5, before: 'tenga que ', word: 'mendigar', after: ' lo que a otras se les da', options: ['rogar como un favor', 'robar', 'comprar con su presupuesto', 'prestar'], answer: 0 },
-    ] }, '«Rica en» es «que tiene mucho de algo»: ochocientos títulos se pueden contar, así que ahí «rica» describe, no valora (en «el alimento más rico» sí valoraría). «No dar abasto» es no alcanzar para lo que se necesita: faltan sillas y espacio. Y «mendigar» carga una opinión: la biblioteca tiene que pedir como favor lo que debería recibir.',
-      { hint: 'Lee lo que sigue a cada expresión: una cifra de títulos; faltan sillas; a otras obras se les da «sin pedirlo». Una misma palabra puede medir en una frase y valorar en otra.' }),
-    play('lupa-evidencia', 'Lo que dice la crónica', { doc: CERRO, cards: [
-      ['La biblioteca empezó con un solo computador.', 0],
-      ['La directora lleva doce años en el cargo.', 0],
-      ['El número de libros se multiplicó por más de nueve.', 1],
-      ['La alcaldía no ha cumplido una promesa de 2022.', 0],
-      ['La cancha sintética nunca se usa.', 2],
-      ['La biblioteca recibe el mayor presupuesto del barrio.', 2],
-    ] }, 'El computador, la directora y la promesa sin presupuesto están escritos. De mil doscientos a once mil libros es más de nueve veces. La cancha se llena los fines de semana, y el texto dice que la biblioteca tiene que «mendigar».',
-      { hint: 'Para la tarjeta del número de libros, haz la cuenta con los dos datos del párrafo 1.' }),
-    play('resumen-esencial', 'El resumen en tres renglones', { doc: CERRO, ideas: [
-      ['La biblioteca del barrio creció mucho en veinte años.', true],
-      ['Niños y adultos la usan a diario, y ha cambiado vidas en el barrio.', true],
-      ['El edificio ya no da abasto y la alcaldía no ha cumplido la ampliación.', true],
-      ['Empezó con mil doscientos libros donados.', false],
-      ['Guarda más de ochocientos títulos sobre Bello y sus veredas.', false],
-      ['La directora lleva doce años en el cargo.', false],
-    ] }, 'La crónica cuenta cuánto creció la biblioteca, cuánto se usa y qué ha logrado, y el problema del edificio. Los libros donados, los títulos sobre Bello y los años de la directora son datos que apoyan esas ideas.',
-      { hint: 'Un resumen no copia cifras: dice qué muestran. Las ideas esenciales son las que siguen siendo ciertas sin el número.' }),
-    play('subraya-prueba', 'La prueba en la crónica', { doc: CERRO, rounds: [
-      { claim: 'La biblioteca no solo sirve para leer.', p: 3, answer: 0 },
-      { claim: 'La biblioteca formó a personas que hoy enseñan en ella.', p: 4, answer: 1 },
-    ] }, 'Que no solo sirve para leer lo prueban los talleres y los computadores que se usan para trámites, empleo y la universidad. Y lo de formar a quienes hoy enseñan, los niños que llegaban a hacer tareas y vuelven como profesores de los talleres.',
-      { hint: 'Busca la oración que trae el hecho concreto. Una opinión de la autora no prueba nada por sí sola.' }),
-    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: CERRO, ask: 'Según el texto, en la biblioteca se ha hecho todo lo siguiente, EXCEPTO:', cards: [
-      ['Prestar diecinueve mil libros en un año', [3]],
-      ['Dictar ciento cuarenta talleres', [3]],
-      ['Usar los computadores para buscar empleo', [3]],
-      ['Dictar clases de inglés para adultos', null],
-    ] }, 'Los préstamos, los talleres y los computadores están en el párrafo 3. Las clases de inglés no aparecen: que la mitad de los usuarios sean adultos no quiere decir que haya clases para ellos.',
-      { hint: 'Lleva cada opción a su párrafo. Cuidado con la que junta dos cosas que el texto dice por separado.' }),
-  ]);
-
-  // ---------------- Evaluación: formato real, texto nuevo ----------------
-  const PERROS = {
-    id: 'lec-perros-metrocable', title: 'Perros en el cable',
-    paras: [
-      'Desde enero, el metrocable permite subir con perros de cualquier tamaño, siempre que lleven bozal y correa. La medida ha dividido a los usuarios, y a mi juicio es una de las mejores decisiones que ha tomado la empresa en años.',
-      'Para muchas familias de las laderas, el perro no es un lujo sino parte de la casa, y llevarlo al veterinario más cercano, que queda en el plan, implicaba pagar un taxi que cuesta lo mismo que un mercado pequeño. Según la empresa, en los primeros tres meses viajaron más de cuatro mil perros y, por fortuna, no se registró ningún incidente. Muchas de esas familias viven en barrios adonde no sube ningún bus: solo llega el cable.',
-      'Hay quienes temen las mordidas o las alergias, y es razonable. Pero el bozal resuelve lo primero, y para lo segundo bastaría con reservar una de cada diez cabinas sin animales, como ya se hace en otras ciudades. Hace falta que la empresa lo pruebe cuanto antes.',
-      'Admito que a nadie le gusta compartir una cabina estrecha con un animal recién bañado por la lluvia. Tampoco nos gusta compartirla con el paraguas que gotea del vecino ni con el bulto de mercado que nos aplasta los pies, y a nadie se le ha ocurrido prohibir los paraguas ni el mercado.',
-      'Algunos concejales propusieron que los perros viajaran solo en las horas valle, de diez de la mañana a cuatro de la tarde; como era de esperarse, ninguno de ellos sube al cable con un perro. La idea suena prudente, aunque olvida un detalle: los veterinarios de los barrios altos atienden sobre todo temprano, y quien trabaja no puede pedir permiso cada vez que su perro se enferma.',
-      'Esta vez, la empresa entendió a quienes la usan. Que un perro viaje en cable no debería escandalizar a nadie. Lo verdaderamente escandaloso era que, durante años, quienes no tenían carro tuvieran que dejar solo a su animal enfermo.',
-    ],
-  };
-  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: PERROS, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
-  setExam('pu-argumentacion', 'Evaluación · Argumentación, intención y tono', [
-    ['pu-ag-1', 'La tesis es lo que el autor defiende; suele ir con «a mi juicio», «creo», «sostengo».',
-      Q('La tesis del autor es que:', ['los perros solo deberían subir al cable con bozal y con correa', 'las alergias son el problema más grave de llevar animales', 'permitir perros en el metrocable fue una buena decisión', 'el taxi al veterinario cuesta lo mismo que un mercado'], 2,
-        '«A mi juicio es una de las mejores decisiones»: eso es lo que el texto defiende. El bozal, las alergias y el taxi son condiciones, objeciones o argumentos.',
-        'Busca la frase con «a mi juicio».')],
-    ['pu-ag-1', 'Un argumento de datos se apoya en cifras que se pueden comprobar.',
-      Q('El dato de los cuatro mil perros que viajaron sin incidentes es un argumento:', ['de autoridad', 'de datos', 'por analogía', 'de experiencia personal'], 1,
-        'Usa una cifra para mostrar que la medida no trajo problemas.',
-        'Pregúntate si el argumento se apoya en un experto, en una cifra, en una comparación o en algo que vivió el autor.')],
-    ['pu-ag-1', 'Una concesión no siempre lleva «pero»: el autor acepta algo y responde con una comparación o un hecho (repasa «Conceder sin pero»).',
-      Q('En el párrafo 4, el autor:', ['concede una incomodidad y le quita peso con una comparación', 'propone prohibir también los paraguas y los bultos en el cable', 'se queja de los pasajeros que suben con mercado a la cabina', 'reconoce que los perros deberían viajar siempre en cabinas aparte'], 0,
-        '«Admito que» concede: compartir la cabina con un perro mojado incomoda. Luego, sin decir «pero», compara con molestias que nadie piensa prohibir (el paraguas, el mercado): así relativiza la objeción. No propone prohibir paraguas: eso es lo absurdo que señala.',
-        'Desconfía de la opción que repite las palabras del párrafo («paraguas», «mercado»). Pregúntate qué acepta el autor y qué hace después con eso.')],
-    ['pu-ag-1', 'Para refutar, el autor puede aceptar primero que una idea suena bien y luego mostrar lo que olvida.',
-      Q('La frase «La idea suena prudente, aunque olvida un detalle» (párrafo 5) sirve para:', ['conceder algo a la propuesta de los concejales y luego refutarla', 'apoyar sin reservas la propuesta de viajar solo en horas valle', 'ejemplificar con un caso cómo atienden los veterinarios de barrio', 'concluir el texto repitiendo con otras palabras la tesis del autor'], 0,
-        '«Suena prudente» le concede algo a la propuesta; «olvida un detalle» abre la refutación: los veterinarios atienden temprano y quien trabaja no puede pedir permiso.',
-        'Lee lo que viene después de «olvida un detalle»: ¿favorece o perjudica a la propuesta de las horas valle?')],
-    ['pu-ag-2', 'La intención es para qué se escribe: informar, persuadir, criticar, narrar.',
-      Q('La intención principal del texto es:', ['informar los horarios en que funciona el metrocable', 'narrar el primer viaje de un perro en el cable', 'explicar cómo se pone un bozal sin lastimar al perro', 'persuadir de que la medida es buena'], 3,
-        'El autor da su opinión, la apoya con razones y responde a varias objeciones: quiere convencer.',
-        'Fíjate en lo que hace el autor con las objeciones de los párrafos 3, 4 y 5.')],
-    ['pu-ag-2', 'El tono se nota en las palabras que elige el autor.',
-      Q('En el párrafo 6, el tono del autor es:', ['indignado ante una injusticia anterior', 'temeroso de lo que pueda pasar con los perros', 'burlón con los dueños de perros de las laderas', 'neutral, como el de un informe de la empresa'], 0,
-        '«Lo verdaderamente escandaloso» muestra indignación por lo que pasaba antes de la medida.',
-        'Busca la palabra que repite el autor en el párrafo 6.')],
-    ['pu-ag-2', 'El tono también vive en adverbios y expresiones de actitud («por fortuna», «curiosamente», «como era de esperarse»): no informan, muestran cómo se siente el autor.',
-      Q('Con la expresión «por fortuna» (párrafo 2), el autor:', ['informa que la empresa lleva un registro de los incidentes', 'deja ver que se alegra de un dato que favorece su postura', 'pone en duda las cifras que entrega la empresa del cable', 'reconoce que todo salió bien por suerte y no por el bozal'], 1,
-        '«Por fortuna» no añade ningún dato: muestra que al autor le alegra que no haya habido incidentes, porque eso apoya su tesis. El registro es de la empresa, no lo dice esa expresión; y el autor no atribuye el resultado a la suerte: defiende el bozal en el párrafo 3.',
-        'Quita la expresión de la frase: ¿cambia el dato o solo cambia lo que se nota del autor?')],
-    ['pu-ag-2', 'Una expresión de actitud puede ser irónica: «como era de esperarse» presenta algo como previsible para criticarlo.',
-      Q('En el párrafo 5, «como era de esperarse» sirve para:', ['mostrar con ironía que quienes proponen la regla no la van a sufrir', 'expresar sorpresa porque los concejales no usan el metrocable', 'anunciar que la propuesta de las horas valle ya fue aprobada', 'informar sin tomar partido sobre los horarios de los concejales'], 0,
-        'El autor presenta como previsible que ningún concejal suba con un perro: insinúa que proponen una regla que no los afecta. No hay sorpresa (lo contrario de «era de esperarse») ni un dato neutral.',
-        'Pregúntate si lo «esperado» le parece bien o mal al autor, y qué insinúa sobre quienes propusieron la regla.')],
-    ['pu-ag-3', 'Una opinión valora y no se puede comprobar; un hecho sí.',
-      Q('Es una opinión, y no un hecho:', ['Desde enero se permite subir perros con bozal y correa', 'En los primeros tres meses viajaron más de cuatro mil perros', 'Es una de las mejores decisiones de la empresa', 'Algunos concejales propusieron limitar el horario'], 2,
-        '«Una de las mejores» es una valoración del autor. Lo demás se puede verificar.',
-        'Pregúntate cuál de las cuatro no se podría comprobar con un registro o un documento.')],
-    ['pu-ag-3', 'Una opinión no siempre trae «mejor», «debería» o «lamentable»: la prueba es si se puede verificar.',
-      Q('Es una opinión del autor, aunque no use palabras como «mejor», «debería» o «lamentable»:', ['Muchas familias viven en barrios adonde no sube ningún bus', 'Esta vez, la empresa entendió a quienes la usan', 'En tres meses viajaron más de cuatro mil perros', 'Algunos concejales propusieron limitar el horario'], 1,
-        'Que la empresa «entendió» a sus usuarios es un juicio del autor: no hay registro que lo compruebe. Las rutas de bus, los viajes y la propuesta de los concejales se pueden revisar.',
-        'Toma cada opción y pregúntate dónde la comprobarías: un mapa de rutas, un registro, un acta. La que no tenga dónde comprobarse es la opinión.')],
-    ['pu-ag-3', 'Una palabra que suele valorar («más», «rico», «grande», «fuerte») también puede describir algo que se mide.',
-      Q('Es un hecho, aunque tenga una palabra que en otras frases sirve para valorar:', ['Es una de las mejores decisiones de la empresa', 'El veterinario más cercano queda en el plan', 'Lo verdaderamente escandaloso era dejar solo al animal', 'Esta vez, la empresa entendió a quienes la usan'], 1,
-        '«Más cercano» se comprueba con un mapa: ahí «más» mide una distancia, no valora. «Las mejores», «escandaloso» y «entendió» son juicios del autor.',
-        'No te guíes por la palabra «más»: pregúntate si podrías medir o revisar lo que dice cada opción.')],
-    ['pu-ag-3', 'Una exigencia es opinión aunque no diga «debería»: «hace falta», «es hora de», «no se puede seguir».',
-      Q('La oración «Hace falta que la empresa lo pruebe cuanto antes» (párrafo 3) es:', ['un hecho, porque no usa la palabra «debería»', 'un dato que la empresa publicó sobre las cabinas', 'una opinión: el autor exige algo sin decir «debería»', 'una cita de los usuarios que temen las alergias'], 2,
-        '«Hace falta que…» pide algo, igual que «debería»: es una exigencia del autor, no un dato. No viene de la empresa ni de los usuarios.',
-        'Pregúntate si la oración cuenta algo que pasó o pide que algo pase.')],
-    ['pu-ag-3', 'Un hecho atribuido a una fuente («según la empresa») se puede comprobar en esa fuente.',
-      Q('Es un hecho que se puede comprobar:', ['Según la empresa, no hubo incidentes en tres meses', 'La medida es razonable y prudente para la ciudad', 'Lo escandaloso era dejar solo al animal enfermo', 'Que un perro viaje en cable no debería escandalizar'], 0,
-        'Los registros de la empresa se pueden revisar. Las demás opciones valoran: «razonable», «escandaloso», «no debería».',
-        'Descarta las opciones con palabras como «razonable», «escandaloso» o «debería».')],
-  ]);
-});
-;
 //#archivo js/courses/preuda-l-dos-textos.js
 // Preuniversitario · Comprensión lectora · mundo 10 «Lectura de dos textos» con textos de verdad (spec
 // 2026-11-19-preuda-lectura-textos): dos parejas de textos sobre el mismo tema con posturas distintas, siempre a la vista los dos
@@ -845,6 +575,8 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 // mismo texto, y el mundo una evaluación en formato real (pregunta-examen). PU_LEC_HECHOS lista los mundos terminados: la prueba
 // tests/preuda-lectura.test.js les exige el estándar.
 const PU_LEC_HECHOS = [];
+// Mundos con explicación interactiva y ejercicios sobre la hoja (spec 2026-11-24-lectura-explora; tests/lectura-explora.test.js).
+const PU_LEC_EXPLORA = ['pu-estrategias'];
 (() => {
   const lessons = PU_LECTURA.flatMap(u => u.lessons);
   const L = id => { const l = lessons.find(l => l.id === id); if (!l) throw new Error(`no existe ${id}`); return l; };
@@ -5814,6 +5546,130 @@ XPD.rejilla = (stage, p, s, api) => {
   });
 };
 ;
+//#archivo js/explora-lectura.js
+// Explora · escena «hoja» para las lecciones de comprensión lectora (spec 2026-11-24-lectura-explora): el texto es la escena.
+//   { cab: [título, autor, fuente, fecha], paras: [[trozos…]…], tapa, unidos }   trozos: 't','a','f','d' los bordes; 0, 1, 2… el texto
+// En las explicaciones cada momento cambia la hoja (y lo demás se queda como estaba):
+//   luz [trozos] (solo ese momento) · tacha [trozos] · nota { párrafo: rótulo } · tapa true | false · sello { trozo: rótulo }
+// En la práctica: modo 'toca' (subrayar los que cumplen; meta [trozos]), 'tacha' (igual, pero se quitan) o 'margen'
+// (arrastrar o tocar rótulos al margen de cada párrafo; rotulos, meta [rótulo por párrafo]). Va después de explora-escenas.js.
+XP.hoja = {
+  ini: p => (p.modo === 'margen' ? { n: p.paras.map(() => -1) } : { m: [] }),
+  ok(s, p) {
+    if (p.modo === 'margen') return s.n.join() === p.meta.join();
+    return [...s.m].map(String).sort().join() === p.meta.map(String).sort().join();
+  },
+  sol: p => (p.modo === 'margen' ? { n: [...p.meta] } : { m: p.meta.map(String) }),
+  lee: () => '',
+  dice(s, p) {
+    if (p.modo === 'margen') { const f = s.n.filter(x => x < 0).length; return f === s.n.length ? 'Arrastra cada rótulo a su párrafo, o tócalo y luego toca el párrafo.' : f ? `${f === 1 ? 'Falta un párrafo' : `Faltan ${f} párrafos`}.` : XP.hoja.ok(s, p) ? 'Cada uno con su rótulo.' : 'Todos con rótulo: mira si cada uno corresponde.'; }
+    const n = s.m.length, v = p.modo === 'tacha' ? ['Toca lo que sobra para tacharlo.', 'tachada', 'tachadas'] : ['Toca un trozo para subrayarlo; otro toque lo suelta.', 'subrayada', 'subrayadas'];
+    return !n ? v[0] : `${n} de ${p.meta.length} ${n === 1 ? 'marca' : 'marcas'}.`;
+  },
+};
+
+XPD.hoja = (stage, p, s, api) => {
+  const mira = !!p.momentos, toca = !mira && p.modo !== 'margen';
+  let k = 0, v = { luz: [], tacha: [], nota: {}, sello: {}, tapa: !!p.tapa }, sel = null, timer = 0, dedo = null, tecla = null;
+  const tr = (id, t, cls = '') => `<span class="hj-t ${cls}" data-k="${id}"${toca && !p.quietos?.includes(id) ? ' role="button" tabindex="0"' : ''}>${HOJA.fmt(t)}</span>`;
+  const cab = p.cab ? `<header class="hj-cab"><h4>${tr('t', p.cab[0])}</h4><p>${['a', 'f', 'd'].map((id, i) => tr(id, p.cab[i + 1])).join('<i>·</i>')}</p></header>` : '';
+  stage.innerHTML = `<div class="hj hj-mira ${toca ? `hj-toca hj-${p.modo === 'tacha' ? 'tacha' : 'subraya'}` : ''}"><article class="hj-hoja">${cab}${p.paras.map((l, i) => `<div class="hj-p" data-p="${i}"><b class="hj-n">${p.letras?.[i] || i + 1}</b><span class="hj-marg"></span><p>${l.map(t => tr(k++, t)).join(p.unidos ? '' : ' ')}</p></div>`).join('')}</article>${p.modo === 'margen' ? '<div class="hj-band"></div>' : ''}</div>`;
+  const root = stage.firstChild, T = id => root.querySelector(`.hj-t[data-k="${id}"]`), P = i => root.querySelector(`.hj-p[data-p="${i}"]`);
+  const chip = (i, en) => `<button type="button" class="hj-f${sel === i ? ' hj-sel' : ''}" data-r="${i}" data-en="${en}">${HOJA.esc(p.rotulos[i])}</button>`;
+
+  function pintaMira() {
+    root.querySelectorAll('.hj-t').forEach(t => {
+      const id = t.dataset.k, en = l => l.map(String).includes(id);
+      t.classList.toggle('on', en(v.luz)); t.classList.toggle('tachado', en(v.tacha));
+      t.dataset.sello = v.sello[id] || ''; t.classList.toggle('con-sello', !!v.sello[id]);
+    });
+    root.classList.toggle('foco', v.luz.length > 0);
+    root.classList.toggle('tapada', v.tapa);
+    p.paras.forEach((_, i) => { const m = P(i).querySelector('.hj-marg'), t = v.nota[i] || ''; if (m.textContent !== t) m.innerHTML = t ? `<em class="hj-nota">${HOJA.esc(t)}</em>` : ''; });
+  }
+  function pinta() {
+    if (mira) return pintaMira();
+    if (toca) return root.querySelectorAll('.hj-t').forEach(t => { const on = s.m.includes(t.dataset.k); t.classList.toggle('on', on); if (t.getAttribute('role')) t.setAttribute('aria-pressed', on); });
+    root.querySelector('.hj-band').innerHTML = p.rotulos.map((_, i) => (s.n.includes(i) ? '' : chip(i, -1))).join('');
+    p.paras.forEach((_, i) => { P(i).querySelector('.hj-marg').innerHTML = s.n[i] >= 0 ? chip(s.n[i], i) : '<em class="hj-hueco">?</em>'; });
+    root.querySelectorAll('[data-r]').forEach(b => { b.onkeydown = tecla; });
+    root.classList.toggle('hj-lleva', sel != null);
+  }
+  // Al completar las marcas sin cumplir, se avisa (sin decir cuál).
+  const fin = lleno => { XS.pop(); xpTick(); api.nota(''); api.set(s); pinta(); if (lleno && !XP.hoja.ok(s, p)) { XS.nope(); api.nota(p.pista || 'Casi: algo no cumple. Vuelve a leer y cambia una marca.'); } };
+  if (toca) {
+    const pon = t => {
+      const id = t.dataset.k, l = s.m.includes(id) ? s.m.filter(x => x !== id) : s.m.length >= p.meta.length ? [...s.m.slice(1), id] : [...s.m, id];
+      s = { m: l }; fin(l.length === p.meta.length);
+    };
+    const cual = e => e.target.closest?.('.hj-t[role=button]');
+    root.onclick = e => { const t = cual(e); if (t) pon(t); };
+    root.querySelectorAll('.hj-t[role=button]').forEach(t => { t.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pon(t); } }; });
+  }
+  if (p.modo === 'margen' && !mira) {
+    const pon = (r, i) => {
+      const n = s.n.map(x => (x === r ? -1 : x)), de = s.n.indexOf(r);
+      if (i >= 0) { if (n[i] >= 0 && de >= 0) n[de] = n[i]; n[i] = r; }
+      sel = null; s = { n }; fin(n.every(x => x >= 0));
+    };
+    // Un toque elige el rótulo y otro en el párrafo lo pone; arrastrar hace lo mismo.
+    root.onpointerdown = e => { const b = e.target.closest('[data-r]'); if (!b || dedo) return; dedo = { id: e.pointerId, r: +b.dataset.r, en: +b.dataset.en, b, x: e.clientX, y: e.clientY, g: null }; };
+    const mueve = e => {
+      if (!dedo || e.pointerId !== dedo.id) return;
+      if (!dedo.g) {
+        if (Math.hypot(e.clientX - dedo.x, e.clientY - dedo.y) < 7) return;
+        const r = dedo.b.getBoundingClientRect();
+        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width}px`, left: `${r.left}px`, top: `${r.top}px` });
+        dedo.ox = e.clientX - r.left; dedo.oy = e.clientY - r.top; document.body.appendChild(dedo.g); dedo.b.classList.add('lift');
+      }
+      e.preventDefault();
+      dedo.g.style.left = `${e.clientX - dedo.ox}px`; dedo.g.style.top = `${e.clientY - dedo.oy}px`;
+      const q = document.elementFromPoint(e.clientX, e.clientY)?.closest('.hj-p');
+      root.querySelectorAll('.over').forEach(o => o !== q && o.classList.remove('over'));
+      if (q && root.contains(q)) q.classList.add('over');
+      const st = root.closest('.xp-step'), r = st?.getBoundingClientRect();
+      if (r) { if (e.clientY < r.top + 46) st.scrollTop -= 8; else if (e.clientY > r.bottom - 46) st.scrollTop += 8; }
+    };
+    const deja = e => {
+      if (!dedo || e.pointerId !== dedo.id) return;
+      const d = dedo; dedo = null; d.g?.remove(); d.b.classList.remove('lift');
+      root.querySelectorAll('.over').forEach(o => o.classList.remove('over'));
+      if (e.type === 'pointercancel') return;
+      const q = document.elementFromPoint(e.clientX, e.clientY)?.closest('.hj-p');
+      if (d.g) { if (q && root.contains(q)) pon(d.r, +q.dataset.p); else if (d.en >= 0) pon(d.r, -1); return; }
+      if (sel != null && d.en >= 0 && sel !== d.r) return pon(sel, d.en);
+      sel = sel === d.r ? null : d.r; XS.tick(2); pinta();
+    };
+    root.onclick = e => { const q = e.target.closest('.hj-p'); if (q && sel != null && !e.target.closest('[data-r]')) pon(sel, +q.dataset.p); };
+    tecla = e => {   // la explicación solo deja pasar las teclas al manejador del propio botón
+      const b = e.currentTarget; if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault(); const r = +b.dataset.r, en = +b.dataset.en;   // con teclado: de la bandeja al primer párrafo libre, y de vuelta
+      pon(r, en >= 0 ? -1 : Math.max(0, s.n.indexOf(-1)));
+      (root.querySelector('.hj-band [data-r]') || root.querySelector('[data-r]'))?.focus({ preventScroll: true });
+    };
+    window.addEventListener('pointermove', mueve, { passive: false }); window.addEventListener('pointerup', deja); window.addEventListener('pointercancel', deja);
+    timer = () => { window.removeEventListener('pointermove', mueve); window.removeEventListener('pointerup', deja); window.removeEventListener('pointercancel', deja); dedo?.g?.remove(); };
+  }
+  pinta();
+  const aplica = m => {
+    v = { luz: m.luz || [], tacha: [...v.tacha, ...(m.tacha || [])], nota: { ...v.nota, ...m.nota }, sello: { ...v.sello, ...m.sello }, tapa: m.tapa ?? v.tapa };
+    if (m.limpia) v = { ...v, tacha: m.tacha || [], nota: m.nota || {}, sello: m.sello || {} };
+  };
+  let t = 0;
+  return Object.assign(() => { clearTimeout(t); if (typeof timer === 'function') timer(); }, {
+    anima(m, done) {
+      aplica(m); pinta();
+      if (m.tacha) XS.tick(-6); else if (m.luz || m.nota || m.sello) XS.pop();
+      const q = m.luz?.length ? T(m.luz[0]) : m.nota ? P(Object.keys(m.nota)[0]) : null, st = root.closest('.xp-step');
+      // En pantallas pequeñas la hoja puede ser más alta que el paso: lo que se nombra queda a la vista.
+      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: a.top - b.top - b.height * 0.45, behavior: xpStill() ? 'auto' : 'smooth' }); }
+      t = setTimeout(done, xpStill() ? 0 : 750);
+      return () => clearTimeout(t);
+    },
+    salta(l) { l.forEach(aplica); v.luz = []; pinta(); },
+  });
+};
+;
 //#archivo js/explora-voces.js
 // GENERADO por tools/subir-voz.js: no editar a mano. Lecciones narradas → su lista de audios en Bunny (EXPLORA_VOZ).
 const EXPLORA_VOCES = {
@@ -9075,6 +8931,136 @@ EXPLORA['alg-0a'] = {
   ], 'El complemento completa 1, lo independiente se multiplica, y sin devolver cambia la bolsa.');
 }
 ;
+//#archivo js/explora-pu-el-1.js
+// Preuniversitario · pu-el-1 «Prelectura» (Explora). Textos cortos propios: no son los de los ejercicios.
+{
+  const HIELO = { cab: ['Lo que el hielo recuerda', 'Grupo de glaciología de una universidad', 'Revista de divulgación', 'Marzo de 2025'],
+    paras: [['Cada invierno, la nieve que cae sobre un nevado se aplasta y se vuelve una capa de hielo.', 'En esa capa quedan atrapados el polvo y el aire de aquel año.', 'Por eso, perforar un nevado es como leer un diario del clima.']] };
+
+  xpLec('pu-el-1', [
+    ['Los bordes del texto',
+      xpMira('hoja', 'Empecemos por la idea: antes de leer un texto se leen **sus bordes**.', { ...HIELO, tapa: true }, [
+        ['El texto está tapado. Solo se ven sus bordes: título, autor, fuente y fecha.', {}],
+        ['El título anuncia el tema: algo sobre lo que el hielo guarda.', { luz: ['t'] }],
+        ['El autor dice quién habla: científicos que estudian los glaciares.', { luz: ['a'] }],
+        ['La fuente dice para qué se escribió: una revista de divulgación explica.', { luz: ['f'] }],
+        ['La fecha dice de cuándo son los datos.', { luz: ['d'] }],
+        ['Con eso se apuesta: explicará qué guarda el hielo. Y al destaparlo, así es.', { luz: [2], tapa: false }],
+      ], 'El título anuncia el tema; el autor, quién habla; la fuente, para qué; la fecha, de cuándo es.'),
+      xpHaz('hoja', 'Subraya los **dos** bordes que anuncian que este texto va a **defender una postura**.', { modo: 'toca', meta: ['t', 'f'], cab: ['Prohibir los patines no arregla los andenes', 'Vecina del barrio', 'Columna de opinión', 'Mayo de 2025'], paras: [],
+        pista: 'Quién firma y cuándo no dicen si habrá postura. Busca dónde se toma partido y qué clase de texto es.' }, 'Un título que toma partido y una columna de opinión anuncian que se va a defender algo.')],
+    ['La fuente dice para qué',
+      xpMira('hoja', 'Segunda idea: el mismo tema cambia según **de dónde viene** el texto.', { letras: ['A', 'B', 'C'], paras: [['Informe técnico de la empresa de acueducto.'], ['Columna de opinión de un periódico.'], ['Testimonio en un libro de memorias.']] }, [
+        ['Tres textos sobre el mismo río. Todavía no hemos leído ninguno.', {}],
+        ['Un informe técnico registra: dirá cuánta agua lleva y qué tan limpia está.', { luz: [0], nota: { 0: 'registra datos' } }],
+        ['Una columna de opinión defiende: dirá qué se debería hacer con el río.', { luz: [1], nota: { 1: 'defiende una postura' } }],
+        ['Un testimonio cuenta: dirá cómo era crecer junto al río.', { luz: [2], nota: { 2: 'cuenta lo vivido' } }],
+        ['Al texto que explica se le llama expositivo; al que cuenta, narrativo.', {}],
+        ['¿Buscas un dato? Sirve más la fuente que mide y, entre esas, la más reciente.', { luz: [0] }],
+        ['Por eso la fuente dice qué buscar, y también qué no esperar.', {}],
+      ], 'Un informe registra, la divulgación explica, una columna defiende y un testimonio cuenta.'),
+      xpHaz('hoja', 'Pon al margen para qué se escribió cada texto.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['contar lo vivido', 'explicar algo', 'defender una postura'], meta: [1, 2, 0],
+        paras: [['«Por qué flotan los barcos de hierro», revista de ciencia para jóvenes.'], ['«El tren sí vale la pena», editorial de un diario.'], ['«Mis años en el faro», memorias de un farero.']], pista: 'Alguno no va ahí. Mira otra vez la fuente de cada uno, no solo el tema.' }, 'La fuente y el título, juntos, dicen para qué se escribió.')],
+    ['La vista rápida',
+      xpMira('hoja', 'Tercera idea: antes de leer todo, se pasa la vista por **el comienzo de cada párrafo**.', { paras: [['Los pulpos tienen tres corazones.', 'Dos llevan la sangre a las branquias y el otro, al resto del cuerpo.'], ['Su inteligencia también sorprende.', 'En los acuarios abren frascos y reconocen a quien los alimenta.'], ['Sin embargo, viven poco.', 'La mayoría no pasa de dos años.']] }, [
+        ['Este texto tiene tres párrafos. No hace falta leerlos completos todavía.', {}],
+        ['Se leen solo los comienzos: con eso se sabe de qué trata cada uno.', { luz: [0, 2, 4] }],
+        ['Quedan tres pistas al margen: el cuerpo, la inteligencia y la vida.', { nota: { 0: 'cuerpo', 1: 'inteligencia', 2: 'cuánto viven' } }],
+        ['Si preguntan qué hacen con los frascos, ya sabes a qué párrafo ir.', { luz: [3] }],
+        ['También ayudan las palabras que se repiten: muestran el tema.', {}],
+      ], 'El comienzo de cada párrafo y las palabras que se repiten dicen dónde está cada cosa.'),
+      xpHaz('hoja', 'Solo ves los comienzos. Subraya el párrafo al que irías para saber **cuánto cuesta** mantener un huerto.', { modo: 'toca', meta: [2], paras: [['Los huertos de azotea empezaron como un pasatiempo.'], ['Hoy alimentan comedores enteros.'], ['Sostenerlos, eso sí, exige dinero y tiempo.'], ['Por eso algunos edificios reparten las tareas.']], pista: 'Ese comienzo anuncia otra cosa. Busca el que habla de lo que hace falta para mantenerlos.' }, 'Un buen comienzo anuncia lo que sigue: allá se vuelve a buscar el dato.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', 'Antes de leer «Cinco mitos sobre el café», de una revista de salud, **tacha** las dos preguntas que el texto seguramente **no** va a responder.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['¿Qué creencias falsas hay sobre el café?'], ['¿Qué sintió la autora la primera vez que lo probó?'], ['¿Le hace daño al corazón?'], ['¿Cuál es la mejor cafetería de la ciudad?']], pista: 'Alguna de las tachadas sí cabe en un texto que corrige creencias sobre la salud. Busca las que pedirían otra clase de texto.' }, 'Los bordes dicen qué esperar del texto y también qué no.')],
+  ], 'Antes de leer: los bordes para apostar el tema y el propósito, y una vista rápida para saber dónde está cada cosa.');
+}
+;
+//#archivo js/explora-pu-el-2.js
+// Preuniversitario · pu-el-2 «Idea central y mapa del texto» (Explora). Textos cortos propios.
+xpLec('pu-el-2', [
+  ['Una idea por párrafo',
+    xpMira('hoja', 'Empecemos por la idea: cada párrafo tiene **una idea** que reúne lo demás.', { paras: [['En el patio del colegio, el piso llega a cincuenta grados al mediodía.', 'Los niños se quedan en los pasillos y las canchas están vacías.', 'Un patio sin árboles es un patio que no se puede usar.']] }, [
+      ['Tres oraciones. ¿Cuál dice lo que dice todo el párrafo?', {}],
+      ['La primera es un dato: cuánto calienta el piso.', { luz: [0], sello: { 0: 'dato' } }],
+      ['La segunda es una consecuencia: las canchas vacías.', { luz: [1], sello: { 1: 'consecuencia' } }],
+      ['La última las reúne: sin árboles, el patio no sirve. Esa es la idea.', { luz: [2], sello: { 2: 'idea' } }],
+      ['La idea puede estar al final, al principio o en la mitad: no hay puesto fijo.', { luz: [2] }],
+      ['Quedarse en un detalle es poco; decir que no debería haber patios es de más.', {}],
+    ], 'La idea reúne lo que dicen las demás: ni un detalle suelto ni más de lo que dice el párrafo.'),
+    xpHaz('hoja', 'Subraya la oración que **reúne** a las demás.', { modo: 'toca', meta: [1], paras: [['La nueva línea de buses ahorra veinte minutos por viaje.', 'Pero llegar más rápido no sirve si nadie puede subirse.', 'A las seis de la mañana pasan llenos y la fila da la vuelta a la manzana.', 'Muchos terminan yéndose a pie.']], pista: 'Esa aporta un dato o un caso. Busca la que los demás datos, juntos, hacen ver.' }, 'Los datos y los casos apoyan; la idea es lo que todos juntos hacen ver.')],
+  ['El mapa del texto',
+    xpMira('hoja', 'Segunda idea: una nota al margen por párrafo arma **el mapa** del texto.', { paras: [['Las abejas polinizan buena parte de lo que comemos.'], ['Sin embargo, su número cae cada año.'], ['Además, cada vez hay menos flores silvestres.'], ['Por eso conviene dejar franjas de flores junto a los cultivos.']] }, [
+      ['Cuatro párrafos de los que solo vemos el comienzo.', {}],
+      ['El primero dice por qué importan las abejas.', { luz: [0], nota: { 0: 'dice por qué importa' } }],
+      ['«Sin embargo» opone: aquí aparece el problema.', { luz: [1], nota: { 1: 'plantea el problema' } }],
+      ['«Además» suma otra cosa en la misma dirección.', { luz: [2], nota: { 2: 'suma otro problema' } }],
+      ['«Por eso» saca una consecuencia: la propuesta.', { luz: [3], nota: { 3: 'propone algo' } }],
+      ['Las palabras que retoman, como «su número», van después de lo que retoman.', { luz: [1] }],
+      ['Lo que se defiende es la tesis; lo que otros discuten, una objeción; rematar es cerrar con la tesis.', {}],
+    ], '«Sin embargo» opone, «además» suma, «por eso» concluye: el comienzo dice qué hace el párrafo.'),
+    xpHaz('hoja', 'Pon al margen qué **hace** cada párrafo.', { modo: 'margen', rotulos: ['propone algo', 'responde a quien no está de acuerdo', 'da una razón', 'dice lo que defiende'], meta: [3, 2, 1, 0],
+      paras: [['El recreo del colegio debería durar más.'], ['La razón es sencilla: moverse ayuda a concentrarse.'], ['Algunos dicen que se pierde clase; pero una clase sin atención también se pierde.'], ['Por eso conviene probar un mes con diez minutos más.']], pista: 'Algún rótulo no va ahí. Mira cómo empieza cada párrafo: ¿afirma, explica, contesta o propone?' }, 'El mapa dice qué hace cada párrafo, no de qué habla.')],
+  ['Lo que sostiene y lo que adorna',
+    xpMira('hoja', 'Tercera idea: un resumen se queda con lo que **sostiene** la idea central y suelta lo demás.', { letras: ['A', 'B', 'C', 'D', 'E'], paras: [['Leer en voz alta mejora la lectura.'], ['Obliga a ir despacio y a no saltarse palabras.'], ['La maestra usaba un libro de tapas verdes.'], ['Al oírse, uno nota lo que no entendió.'], ['Eran las cuatro de la tarde.']] }, [
+      ['La primera es la idea central: leer en voz alta mejora la lectura.', { luz: [0], nota: { 0: 'idea central' } }],
+      ['Ir despacio la sostiene: es una razón.', { luz: [1], nota: { 1: 'apoyo' } }],
+      ['Oírse también la sostiene: otra razón.', { luz: [3], nota: { 3: 'apoyo' } }],
+      ['El color del libro y la hora son ciertos, pero si se quitan, nada se cae.', { luz: [2, 4] }],
+      ['Se tachan. Lo que queda es el resumen.', { tacha: [2, 4] }],
+      ['Y un buen título dice lo mismo en pocas palabras: «Leer en voz alta sirve».', { luz: [0] }],
+    ], 'La prueba: quita la oración. Si la idea central pierde apoyo, era importante; si no, era adorno.'),
+    xpHaz('hoja', 'Idea central: «Al mercado se puede ir en bicicleta». **Tacha** las dos oraciones que no la sostienen.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 2], paras: [['Hay una ciclorruta que llega hasta la puerta.'], ['El mercado se fundó hace ochenta años.'], ['Los domingos venden flores.'], ['Adentro hay dónde dejar la bicicleta con llave.']], pista: 'Alguna de las tachadas sí sostiene la idea. Quita cada una y mira si sigue siendo fácil llegar en bicicleta.' }, 'Lo cierto no siempre es importante: importa lo que sostiene.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya la oración que dice la **idea central** de todo el texto.', { modo: 'toca', meta: [4], paras: [['El museo abre hasta tarde los jueves.', 'Ese día entran más estudiantes que en toda la semana.'], ['Además, la mitad llega sin que nadie se lo haya pedido.', 'Una guía cuenta que algunos vuelven con sus abuelos.'], ['Cuando el horario se acomoda a la gente, la gente va al museo.']], pista: 'Esa vale para una parte. Busca la que explica por igual los dos primeros párrafos.' }, 'La idea central del texto reúne las ideas de sus párrafos.')],
+], 'Una idea por párrafo, una nota al margen que diga qué hace, y para el resumen solo lo que sostiene.');
+;
+//#archivo js/explora-pu-el-3.js
+// Preuniversitario · pu-el-3 «Tiempo y preguntas EXCEPTO» (Explora). Textos cortos propios.
+{
+  // Barra de minutos: l lectura, q preguntas, r repaso; m: la pregunta difícil que se come el resto.
+  const barra = (v, K) => {
+    const T = v.t, X = x => 24 + 292 * x / T, tr = (a, b, cls, s) => (b - a > 0.1 ? K.r(X(a), 70, X(b) - X(a), 46, cls, 6) + (b - a > 1.6 ? K.t(X((a + b) / 2), 98, s, 's') : '') : '');
+    let h = K.r(24, 70, 292, 46, 'fn', 6) + tr(0, v.l, 'fa', 'leer') + tr(v.l, v.l + v.q, 'fg', 'responder') + tr(v.l + v.q, v.l + v.q + v.r, 'fA', 'repasar') + K.f(v.m, K.r(X(v.l), 70, (X(T) - X(v.l)) * v.m, 46, 'fF', 6) + K.t(X(v.l) + (X(T) - X(v.l)) / 2, 98, 'una sola pregunta', 's'));
+    for (let k = 0; k <= T; k += T > 12 ? 2 : 1) h += K.l(X(k), 120, X(k), 126, 'lm') + (k % (T > 12 ? 4 : 2) === 0 ? K.t(X(k), 142, k, 's tm') : '');
+    return h + K.t(170, 46, `${T} minutos`, 's ta');
+  };
+  xpLec('pu-el-3', [
+    ['El tiempo',
+      xpMira('dibujo', 'Empecemos por la idea: el tiempo se **reparte antes** de empezar.', { dib: barra, v: { t: 18, l: 0, q: 0, r: 0, m: 0 }, alto: 160 }, [
+        ['Un texto con ocho preguntas y 18 minutos para todo.', {}],
+        ['Primero, una lectura completa: cinco minutos.', { l: 5 }],
+        ['Después, las preguntas, volviendo siempre al texto: once minutos.', { q: 11 }],
+        ['Y dos minutos para repasar las que quedaron marcadas.', { r: 2 }],
+        ['El error es quedarse en una difícil: se come el tiempo de las demás.', { m: 1 }],
+        ['Mejor: marcarla, seguir y volver. Y responder todas, porque fallar no resta.', { m: 0 }],
+      ], 'Leer una vez, responder volviendo al texto, marcar la difícil y no dejar nada en blanco.'),
+      xpHaz('dibujo', 'Tienes **12** minutos. Deja **4** para leer y **1** para repasar; lo demás es para responder. Mueve los dos deslizadores.', { dib: (v, K) => barra({ t: 12, l: v.l, q: v.q, r: 12 - v.l - v.q, m: 0 }, K), v: { l: 1, q: 3 }, alto: 260, manijas: [{ k: 'l', min: 1, max: 6, paso: 1, et: 'minutos para leer' }, { k: 'q', min: 2, max: 8, paso: 1, et: 'minutos para responder', limita: v => v.l + v.q <= 12 }], metas: { l: 4, q: 7 }, limita: v => v.l + v.q <= 12 }, 'La mayor parte del tiempo es para responder con el texto a la vista.')],
+    ['Volver al párrafo',
+      xpMira('hoja', 'Segunda idea: en una pregunta **EXCEPTO**, tres opciones están en el texto y una no.', { letras: ['1', '2', 'a', 'b', 'c', 'd'], paras: [['El faro se encendía con aceite y lo cuidaba una familia.'], ['Hoy funciona con energía solar y se vigila a distancia.'], ['tenía cuidadores'], ['usaba aceite'], ['recibe turistas'], ['usa energía solar']] }, [
+        ['«Del faro se dice todo lo siguiente, EXCEPTO». Se subraya la palabra que manda.', {}],
+        ['Tenía cuidadores: está en el párrafo 1. Se descarta.', { luz: [0, 2], tacha: [2], nota: { 2: 'párrafo 1' } }],
+        ['Usaba aceite: también en el párrafo 1. Se descarta.', { luz: [0, 3], tacha: [3], nota: { 3: 'párrafo 1' } }],
+        ['Energía solar: está en el párrafo 2. Se descarta.', { luz: [1, 5], tacha: [5], nota: { 5: 'párrafo 2' } }],
+        ['Recibe turistas: puede ser cierto, pero el texto no lo dice.', { luz: [4], nota: { 4: 'en ninguno' } }],
+        ['La que se queda sin párrafo es la respuesta.', { luz: [4] }],
+      ], 'En EXCEPTO cada opción busca su párrafo. La que no lo encuentra es la respuesta.'),
+      xpHaz('hoja', '«Todo lo siguiente se dice de la laguna, EXCEPTO». **Tacha** las tres opciones que sí tienen párrafo.', { modo: 'tacha', letras: ['1', '2', 'a', 'b', 'c', 'd'], quietos: [0, 1], meta: [2, 4, 5], paras: [['La laguna se alimenta de tres quebradas y en ella anidan garzas.'], ['Desde hace un año está prohibido pescar.'], ['anidan aves'], ['se puede nadar'], ['recibe agua de quebradas'], ['no se puede pescar']], pista: 'Alguna de las tachadas no está en el texto. Vuelve a los párrafos 1 y 2 y busca cada una.' }, 'Que algo suene lógico no basta: tiene que estar escrito.')],
+    ['La intrusa disfrazada',
+      xpMira('hoja', 'Tercera idea: si la pregunta nombra **un párrafo**, solo vale lo que está ahí.', { letras: ['1', '2', 'a', 'b', 'c'], paras: [['El páramo guarda agua en su musgo y la suelta poco a poco.'], ['Las quemas y el ganado lo secan; por eso hay guardas.'], ['guarda agua'], ['hay guardas'], ['las quemas le hacen daño']] }, [
+        ['«Según el párrafo 2, se dice todo, EXCEPTO». La orden nombra un párrafo.', { luz: [1] }],
+        ['Que hay guardas y que las quemas dañan está ahí: se descartan.', { tacha: [3, 4], luz: [1] }],
+        ['Guarda agua sí está en el texto, pero en el párrafo 1.', { luz: [0, 2], nota: { 2: 'otro párrafo' } }],
+        ['Como la orden pide el 2, esa es la respuesta, aunque suene conocida.', { luz: [2] }],
+        ['Ojo: «lo dice» es estar escrito; «se deduce» es tener que pensarlo con lo escrito.', { limpia: true }],
+        ['Que da agua aun después de la lluvia no está escrito: se deduce de «poco a poco».', { luz: [0] }],
+        ['Y una opción falsa se desmiente con una oración que diga lo contrario.', {}],
+      ], 'Lo que está en otro párrafo no cuenta. Y deducir es sacar algo de lo escrito, sin inventar.'),
+      xpHaz('hoja', 'Marca al margen: ¿el texto lo dice, se deduce de él o no está? El texto: «La panadería abre a las cinco; a las siete ya no hay pan».', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['no está', 'se deduce', 'lo dice'], meta: [1, 2, 0], paras: [['El pan se vende rápido.'], ['La panadería abre a las cinco.'], ['El pan es barato.']], pista: 'Alguno no va ahí. Pregúntate: ¿está escrito, sale de lo escrito o habría que inventarlo?' }, 'Escrito, deducido o inventado: tres cosas distintas.')],
+    ['Ahora sí, un problema',
+      xpHaz('hoja', '«Según el **párrafo 1**, el taller hace todo lo siguiente, EXCEPTO». Subraya la respuesta.', { modo: 'toca', letras: ['1', '2', 'a', 'b', 'c'], quietos: [0, 1], meta: [3], paras: [['En el taller reparan radios viejos y enseñan a soldar.'], ['Los sábados regalan piezas sueltas a los colegios.'], ['dar clases de soldadura'], ['donar piezas'], ['arreglar aparatos']], pista: 'Esa sí está en el párrafo 1, quizá con otras palabras. Busca la que solo aparece en otro lado.' }, 'La orden manda: primero qué pide y dónde; después, las opciones.')],
+  ], 'Reparte el tiempo, lee la orden, lleva cada opción a su párrafo y no dejes nada en blanco.');
+}
+;
 //#archivo js/explora-trig-41a.js
 // Trigonometría · trig-41a «Grados y radianes»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva; motor en
 // js/explora.js, escena «angulo» en js/explora-angulo.js). Mismo formato que pu-cm-1 y alg-0a: cada capítulo abre con una
@@ -10704,6 +10690,29 @@ const GUIDES = {
   'devuelve-o-no': [['drag', 'Arrastra cada ficha a su lugar.', { tile: '7', slot: 'lugar' }]],
   'falla-cuadrado': [['slide', 'Mueve el punto hasta que se cumpla lo pedido.', { label: 'valor' }]],
   'sube-por-ciento': [['slide', 'Estira hasta tu respuesta y suelta: el ascensor sube.', { label: 'valor' }]],
+  'antes-de-leer': [['drag', 'Lleva cada ficha al hueco de la apuesta.', { tile: 'tema', slot: '¿qué?' }]],
+  'hilo-bordes': [['drag', 'Tira un hilo desde cada pregunta hasta el borde que la responde.', { tile: '¿quién?', slot: 'autor' }]],
+  'donde-mirar': [['drag', 'Lleva cada pregunta al margen del párrafo donde la buscarías.', { tile: '¿?', slot: 'párrafo' }]],
+  'portadas': [['drag', 'Pon en cada portada lo que va a hacer el texto.', { tile: 'explicar', slot: 'portada' }]],
+  'voz-de-la-fuente': [['drag', 'Tira un hilo desde cada frase hasta su fuente.', { tile: '«…»', slot: 'fuente' }]],
+  'comprueba-apuesta': [['tap', 'Toca la oración para subrayarla; otro toque la suelta.', {}]],
+  'preguntas-previas': [['tap', 'Toca una pregunta para tacharla; otro toque la devuelve.', {}]],
+  'orden-fuentes': [['drag', 'Arrastra cada tira de su asa hasta su puesto.', { tile: 'tira', slot: 'puesto' }]],
+  'ordena-texto': [['drag', 'Arrastra cada tira de su asa hasta su puesto.', { tile: 'tira', slot: 'puesto' }]],
+  'mapa-margen': [['drag', 'Lleva cada nota al margen de su párrafo.', { tile: 'nota', slot: 'margen' }]],
+  'talla-idea': [['drag', 'Pon cada resumen en su talla.', { tile: 'idea', slot: 'talla' }]],
+  'tacha-resumen': [['tap', 'Toca una oración para tacharla; otro toque la devuelve.', {}]],
+  'subraya-tesis': [['tap', 'Toca la oración para subrayarla; otro toque la suelta.', {}]],
+  'bisagras': [['drag', 'Lleva cada palabra al hueco que une las dos ideas.', { tile: 'pero', slot: '¿…?' }]],
+  'arma-titulo': [['drag', 'Lleva las fichas a los huecos del título.', { tile: 'ficha', slot: 'título' }]],
+  'pilares': [['drag', 'Lleva cada oración bajo el techo o al patio.', { tile: 'idea', slot: 'techo' }]],
+  'lee-la-orden': [['tap', 'Toca los trozos de la orden que mandan.', {}]],
+  'sella-parrafo': [['drag', 'Tira un hilo desde cada opción hasta el párrafo que la prueba.', { tile: 'opción', slot: 'párrafo' }]],
+  'dentro-fuera': [['drag', 'Lleva cada opción al lugar donde está.', { tile: 'opción', slot: 'lugar' }]],
+  'dice-deduce': [['drag', 'Lleva cada afirmación a su escalón.', { tile: 'frase', slot: 'escalón' }]],
+  'descarta-prueba': [['drag', 'Tira un hilo desde cada opción falsa hasta la oración que la desmiente.', { tile: 'falsa', slot: 'prueba' }]],
+  'reparte-tiempo': [['slide', 'Mueve las dos perillas para repartir los minutos.', { label: 'minutos' }]],
+  'ruta-preguntas': [['drag', 'Arrastra cada paso de su asa hasta su puesto.', { tile: 'paso', slot: 'puesto' }]],
   'globo-lastre': [['drag', 'Arrastra globos o sacos de arena: el canasto sube o baja y la cuenta se escribe sola.', { tile: 'saco', slot: 'canasto' }], ['tap', 'Déjalo a la altura de la bandera. «Reiniciar» lo devuelve al comienzo.', { items: ['Reiniciar'], pick: [0] }]],
   'voltea-flecha': [['slide', 'Arrastra el multiplicador: la flecha se repite y, a la izquierda del 0, se voltea.', {}]],
   'capas-operacion': [['drag', 'Arrastra un número sobre su vecino: el juego los opera y los funde en uno.', { tile: '5', slot: '8' }], ['drag', 'Para una potencia, junta la base con su exponente (la ficha pequeña de arriba).', { tile: '(−3)', slot: '²' }]],

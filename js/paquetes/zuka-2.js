@@ -1,196 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/comite-reglas.js
-// El comité con reglas (Preuniversitario, pu-or-4; spec 2026-11-18-preuda-razonamiento-completo): se elige un grupo de k
-// personas con condiciones como «si F está, G no», «H va solo si J va», «L tiene que ir». Se arrastran personas al comité
-// (y de vuelta) y cada regla se marca ✓ o ✗ en vivo. Hay que armar un comité válido que cumpla lo que pide la ronda.
-// params = { rounds: [{ names, k, rules: [{ t, a, b?, say }], need?: [nombres] }] }
-//   t: 'ifNot' (si a, no b) · 'onlyIf' (a solo si b) · 'must' (a va) · 'out' (a no va) · 'either' (va a o va b)
-// state = { rounds: [{ in: [nombres] }] }
-GAMES['comite-reglas'] = (() => {
-  const rule = (c, S) => { const A = S.includes(c.a), B = S.includes(c.b); switch (c.t) {
-    case 'ifNot': return !(A && B); case 'onlyIf': return !A || B; case 'must': return A; case 'out': return !A; case 'either': return A || B; default: return false; } };
-  const valid = (r, S) => S.length === r.k && r.rules.every(c => rule(c, S));
-  const ok = (s, r) => valid(r, s.in) && (r.need || []).every(n => s.in.includes(n));
-  const combos = (list, k) => (k === 0 ? [[]] : list.flatMap((x, i) => combos(list.slice(i + 1), k - 1).map(c => [x, ...c])));
-  const answer = r => ({ in: combos(r.names, r.k).find(S => ok({ in: S }, r)) });
-  const lay = G => { const n = G.r.names.length, w = Math.min(54, (G.W - 20) / n - 4); G.home = G.r.names.map((nm, i) => ({ nm, x: G.W / 2 - (n * (w + 4) - 4) / 2 + i * (w + 4), y: 108, w, h: 30 })); G.box = { x: 24, y: 152, w: G.W - 48, h: 54 }; };
-  const game = roundsGame({
-    aspect: 1.3,
-    init: () => ({ in: [] }),
-    ok,
-    answered: s => s.in.length > 0,
-    solution: r => answer(r).in.join(', '),
-    prompt: r => `Arma un comité de ${r.k}${r.need ? ` con ${r.need.join(' y ')}` : ''} que cumpla las reglas`,
-    foot: () => 'Arrastra personas al comité y de vuelta',
-    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.drag = null; lay(G); },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, good = ok(s, r);
-      G.home.forEach(b => { if (!s.in.includes(b.nm) && G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { size: 12, col: C.sky }); });
-      p.stroke(good ? C.ok : C.brand); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 20)); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 12);
-      TK.label(p, C, `comité (${s.in.length} de ${r.k})`, G.box.x + 60, G.box.y - 8, C.mute, 10, 120);
-      const w = G.home[0].w; G.inBoxes = s.in.map((nm, i) => ({ nm, x: G.box.x + 10 + i * (w + 6), y: G.box.y + 12, w, h: 30 }));
-      G.inBoxes.forEach(b => { if (G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { on: true, size: 12, col: good ? C.ok : C.mint }); });
-      r.rules.forEach((c, i) => { const v = rule(c, s.in); TK.label(p, C, `${v ? '✓' : '✗'} ${c.say}`, G.W / 2, 226 + i * 15, v ? C.ok : C.bad, 10, G.W - 30); });
-      if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 15, w, h: 30 }, G.drag.nm, { on: true, col: C.brand, size: 12 });
-      RK.strip(p, C, G.fb, good ? `$\\text{${s.in.join(', ')}}$` : `$\\text{faltan ${Math.max(0, r.k - s.in.length)}}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) {
-      const b = [...(G.inBoxes || []), ...G.home.filter(b => !G.s.in.includes(b.nm))].find(b => hitBox(b, x, y)); if (!b) return false;
-      G.drag = { nm: b.nm, x, y }; return true;
-    },
-    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
-    release(G, x, y) {
-      const d = G.drag; G.drag = null; if (!d) return; const S = G.s.in, inside = hitBox({ x: G.box.x - 6, y: G.box.y - 10, w: G.box.w + 12, h: G.box.h + 20 }, x, y);
-      if (inside && !S.includes(d.nm) && S.length < G.r.k) S.push(d.nm); else if (!inside && S.includes(d.nm)) S.splice(S.indexOf(d.nm), 1);
-      G.touch();
-    },
-    demo(G) { const b = G.home[G.home.length - 1]; return { from: { x: b.x + b.w / 2, y: b.y + 15 }, to: { x: G.box.x + 40, y: G.box.y + 27 }, text: 'Arrastra al comité', ty: G.box.y + G.box.h + 12 }; },
-    peek: G => ({ home: G.home, box: G.box }),
-  });
-  return Object.assign(game, { answer, rule, combos, valid });
-})();
-;
-//#archivo js/games/tiene-podria.js
-// Tiene que, podría o no puede (Preuniversitario, pu-or-4; spec 2026-11-18-preuda-razonamiento-completo): con varias
-// soluciones posibles, una afirmación es necesaria si pasa en todas, posible si pasa en alguna e imposible si no pasa en
-// ninguna. Arriba hay un banco de pruebas: se arrastran personas al comité y se ve si cumple las reglas (así se exploran
-// los casos). Abajo, cada afirmación se arrastra a su zona: «tiene que», «podría» o «no puede».
-// params = { rounds: [{ names, k, rules, claims: [{ t: 'in' | 'out' | 'both', a, b?, say }] }] }   (reglas como en comite-reglas)
-// state = { rounds: [{ in: [nombres], zone: [0 | 1 | 2 | null por afirmación] }] }   (0 tiene que · 1 podría · 2 no puede)
-GAMES['tiene-podria'] = (() => {
-  const CR = () => GAMES['comite-reglas'];
-  const cases = r => CR().combos(r.names, r.k).filter(S => CR().valid(r, S));
-  const holds = (c, S) => (c.t === 'in' ? S.includes(c.a) : c.t === 'out' ? !S.includes(c.a) : S.includes(c.a) && S.includes(c.b));
-  const kind = (r, c) => { const L = cases(r), n = L.filter(S => holds(c, S)).length; return n === L.length ? 0 : n > 0 ? 1 : 2; };
-  const ok = (s, r) => r.claims.every((c, i) => s.zone[i] === kind(r, c));
-  const answer = r => ({ in: [], zone: r.claims.map(c => kind(r, c)) });
-  const ZN = ['tiene que', 'podría', 'no puede'];
-  const lay = G => { const n = G.r.names.length, w = Math.min(50, (G.W - 20) / n - 4); const y0 = 106 + G.r.rules.length * 13; G.home = G.r.names.map((nm, i) => ({ nm, x: G.W / 2 - (n * (w + 4) - 4) / 2 + i * (w + 4), y: y0, w, h: 26 })); G.box = { x: 24, y: y0 + 34, w: G.W - 48, h: 40 }; const zw = (G.W - 32) / 3; G.zones = ZN.map((t, z) => ({ z, x: 16 + z * zw, y: G.H - 190, w: zw - 6, h: 76 })); };
-  const game = roundsGame({
-    aspect: 1.75,
-    init: r => ({ in: [], zone: r.claims.map(() => null) }),
-    ok,
-    answered: s => s.zone.some(z => z != null),
-    solution: r => r.claims.map(c => `${c.say}: ${ZN[kind(r, c)]}`).join('; '),
-    prompt: r => `Comités de ${r.k}: ¿tiene que pasar, podría o no puede?`,
-    foot: () => 'Prueba casos arriba; arrastra cada afirmación a su zona',
-    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.drag = null; lay(G); },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, w = G.home[0].w;
-      G.home.forEach(b => { if (!s.in.includes(b.nm) && G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { size: 11, col: C.sky }); });
-      const v = CR().valid(r, s.in);
-      p.stroke(s.in.length === r.k ? (v ? C.ok : C.bad) : C.line); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 16)); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 10);
-      G.inBoxes = s.in.map((nm, i) => ({ nm, x: G.box.x + 8 + i * (w + 4), y: G.box.y + 7, w, h: 26 }));
-      G.inBoxes.forEach(b => { if (G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { on: true, size: 11, col: C.mint }); });
-      TK.label(p, C, s.in.length < r.k ? `prueba un caso (${s.in.length} de ${r.k})` : v ? 'este caso cumple las reglas' : 'este caso no cumple', G.W / 2, G.box.y + G.box.h + 10, s.in.length < r.k ? C.mute : v ? C.ok : C.bad, 10, G.W - 30);
-      r.rules.forEach((c, i) => TK.label(p, C, c.say, G.W / 2, 100 + i * 13, C.ink, 10, G.W - 30));
-      G.zones.forEach(z => { p.stroke(C.line); p.strokeWeight(1.2); p.fill(RK.al(p, C.card, 170)); p.rect(z.x, z.y, z.w, z.h, 8); TK.label(p, C, ZN[z.z], z.x + z.w / 2, z.y + 10, C.ink, 10, z.w); });
-      const cw = G.W - 40, n = r.claims.length;
-      G.claimBoxes = r.claims.map((c, i) => { const zi = s.zone[i]; if (zi == null) return { i, x: 20, y: G.box.y + G.box.h + 24 + i * 25, w: cw, h: 22 }; const z = G.zones[zi], k = r.claims.slice(0, i).filter((_, j) => s.zone[j] === zi).length; return { i, x: z.x + 3, y: z.y + 20 + k * 18, w: z.w - 6, h: 16 }; });
-      G.claimBoxes.forEach(b => { if (G.drag?.ci !== b.i) RK.chip(p, C, b, r.claims[b.i].say, { on: s.zone[b.i] != null, size: s.zone[b.i] == null ? 10 : 8, col: G.locked ? (s.zone[b.i] === kind(r, r.claims[b.i]) ? C.ok : C.bad) : C.coral }); });
-      if (G.drag) RK.chip(p, C, { x: G.drag.x - 70, y: G.drag.y - 11, w: 140, h: 22 }, G.drag.nm ?? r.claims[G.drag.ci].say, { on: true, col: C.brand, size: 10 });
-      RK.strip(p, C, G.fb, `$\\text{${s.zone.filter(z => z != null).length} de ${n} afirmaciones ubicadas}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 14 });
-    },
-    press(G, x, y) {
-      const c = (G.claimBoxes || []).find(b => hitBox(b, x, y)); if (c) { G.drag = { ci: c.i, x, y }; return true; }
-      const b = [...(G.inBoxes || []), ...G.home.filter(b => !G.s.in.includes(b.nm))].find(b => hitBox(b, x, y)); if (b) { G.drag = { nm: b.nm, x, y }; return true; }
-      return false;
-    },
-    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
-    release(G, x, y) {
-      const d = G.drag; G.drag = null; if (!d) return;
-      if (d.ci != null) { const z = G.zones.find(z => hitBox(z, x, y)); G.s.zone[d.ci] = z ? z.z : null; G.touch(); return; }
-      const S = G.s.in, inside = hitBox({ x: G.box.x - 6, y: G.box.y - 10, w: G.box.w + 12, h: G.box.h + 20 }, x, y);
-      if (inside && !S.includes(d.nm) && S.length < G.r.k) S.push(d.nm); else if (!inside && S.includes(d.nm)) S.splice(S.indexOf(d.nm), 1);
-    },
-    demo(G) { const c = G.claimBoxes?.find(b => G.s.zone[b.i] == null); if (!c) return null; const z = G.zones[(kind(G.r, G.r.claims[c.i]) + 1) % 3]; return { from: { x: c.x + c.w / 2, y: c.y + 11 }, to: { x: z.x + z.w / 2, y: z.y + 40 }, text: 'Arrastra a una zona', ty: z.y - 10 }; },
-    peek: G => ({ zones: G.zones, claims: G.claimBoxes }),
-  });
-  return Object.assign(game, { answer, kind, cases });
-})();
-;
-//#archivo js/games/trabajo-conjunto.js
-// El trabajo conjunto (Preuniversitario, pu-pr-3; spec 2026-11-18-preuda-razonamiento-completo): si uno hace un trabajo en a
-// horas y otro en b, en cada hora hacen 1/a y 1/b: juntos se suman las rapideces, no los tiempos. Se arrastran las horas y el
-// tanque se llena con dos colores (lo que aporta cada uno). Hay que dejarlo lleno justo.
-// params = { rounds: [{ who: [a, b], a, b }] }   state = { rounds: [{ t }] }   (horas, de media en media)
-GAMES['trabajo-conjunto'] = (() => {
-  const need = r => r.a * r.b / (r.a + r.b);
-  const ok = (s, r) => Math.abs(s.t - need(r)) < 1e-9;
-  const max = r => Math.min(r.a, r.b);
-  const N = r => Math.round(max(r) * 2);
-  const game = roundsGame({
-    aspect: 1.15,
-    init: () => ({ t: 0.5 }),
-    ok,
-    solution: r => `${RK.num(need(r))} horas`,
-    prompt: r => `${r.who[0]} solo tarda ${r.a} h y ${r.who[1]} solo ${r.b} h. ¿Cuánto tardan juntos?`,
-    foot: () => 'Arrastra las horas que trabajan juntos',
-    layout(G) { G.tY = G.H - 108; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { t: need(r) } : G.s, fa = s.t / r.a, fb = s.t / r.b, tot = fa + fb, good = ok(s, r), x0 = G.W / 2 - 50, y0 = 110, h = G.tY - 180;
-      p.noFill(); p.stroke(C.ink); p.strokeWeight(1.6); p.rect(x0, y0, 100, h, 4);
-      const ha = Math.min(1, fa) * h, hb = Math.min(1 - Math.min(1, fa), fb) * h;
-      p.noStroke(); p.fill(good ? C.ok : C.sky); p.rect(x0 + 2, y0 + h - ha, 96, ha); p.fill(good ? C.ok : C.coral); p.rect(x0 + 2, y0 + h - ha - hb, 96, hb);
-      if (tot > 1) TK.label(p, C, 'se rebosa', G.W / 2, y0 - 10, C.bad, 11, 100);
-      TK.label(p, C, `${r.who[0]}: ${RK.num(Math.round(fa * 1000) / 1000)}`, x0 - 50, y0 + h - ha / 2, C.sky, 10, 90);
-      TK.label(p, C, `${r.who[1]}: ${RK.num(Math.round(fb * 1000) / 1000)}`, x0 + 150, y0 + h - ha - hb / 2, C.coral, 10, 90);
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, N(r), Math.round(s.t * 2) - 1, i => ((i + 1) % 2 === 0 ? String((i + 1) / 2) : null));
-      RK.strip(p, C, G.fb, `$\\tfrac{${RK.num(s.t)}}{${r.a}} + \\tfrac{${RK.num(s.t)}}{${r.b}} ${good ? '= 1' : tot > 1 ? '> 1' : '< 1'}$`, { kicker: 'Lo que hace cada uno se suma', col: G.locked || good ? C.ok : C.brand, size: 18 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(0), y: G.tY }, to: { x: G.X(1), y: G.tY }, text: 'Arrastra las horas', ty: G.tY - 28 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const v = (RK.pick(x, 30, G.W - 30, N(G.r)) + 1) / 2; if (v !== G.s.t || !G.touched[G.cur]) { G.s.t = v; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ t: need(r) }) });
-})();
-;
-//#archivo js/games/velocidad-media.js
-// La velocidad media (Preuniversitario, pu-pr-3; spec 2026-11-18-preuda-razonamiento-completo): la velocidad media es la
-// distancia total entre el tiempo total, no el promedio de las velocidades. Un viaje de dos tramos; arriba las barras del
-// tiempo de cada tramo. Se arrastra una velocidad constante y su barra de tiempo debe igualar la suma de las otras dos.
-// params = { rounds: [{ legs: [[km, km/h], [km, km/h]] }] }   state = { rounds: [{ v }] }   (km/h, de 5 en 5 hasta 120)
-GAMES['velocidad-media'] = (() => {
-  const D = r => r.legs[0][0] + r.legs[1][0], T = r => r.legs[0][0] / r.legs[0][1] + r.legs[1][0] / r.legs[1][1];
-  const need = r => D(r) / T(r);
-  const ok = (s, r) => Math.abs(s.v - need(r)) < 1e-9;
-  const game = roundsGame({
-    aspect: 1.15,
-    init: r => { const avg = (r.legs[0][1] + r.legs[1][1]) / 2; const a5 = Math.round(avg / 5) * 5; return { v: a5 === need(r) ? 10 : a5 }; },
-    ok,
-    solution: r => `${RK.num(need(r))} km/h`,
-    prompt: r => `${r.legs[0][0]} km a ${r.legs[0][1]} km/h y ${r.legs[1][0]} km a ${r.legs[1][1]} km/h. ¿Velocidad media?`,
-    foot: () => 'Arrastra la velocidad que hace el viaje en el mismo tiempo',
-    layout(G) { G.tY = G.H - 108; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.grab = false; },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { v: need(r) } : G.s, t1 = r.legs[0][0] / r.legs[0][1], t2 = r.legs[1][0] / r.legs[1][1], tv = D(r) / s.v, u = (G.W - 60) / Math.max(T(r), tv) / 1.1, good = ok(s, r);
-      TK.label(p, C, 'tiempo del viaje real', G.W / 2, 104, C.mute, 10, 200);
-      p.noStroke(); p.fill(C.sky); p.rect(30, 114, t1 * u, 24, 3); p.fill(C.coral); p.rect(30 + t1 * u, 114, t2 * u, 24, 3);
-      TK.label(p, C, `${RK.num(t1)} h + ${RK.num(t2)} h = ${RK.num(T(r))} h`, G.W / 2, 150, C.ink, 11, G.W - 30);
-      TK.label(p, C, `a ${s.v} km/h constante`, G.W / 2, 176, C.mute, 10, 200);
-      p.fill(good ? C.ok : C.mint); p.rect(30, 186, tv * u, 24, 3);
-      TK.label(p, C, `${D(r)} km ÷ ${s.v} = ${RK.num(Math.round(tv * 100) / 100)} h`, G.W / 2, 222, C.ink, 11, G.W - 30);
-      G.X = RK.track(p, C, 30, G.W - 30, G.tY, 24, s.v / 5 - 1, i => ((i + 1) % 4 === 0 ? String((i + 1) * 5) : null));
-      RK.strip(p, C, G.fb, `$v_m = \\dfrac{${D(r)}}{${RK.num(T(r))}} ${good ? '=' : '\\ne'} ${s.v}$`, { kicker: 'Distancia total ÷ tiempo total', col: G.locked || good ? C.ok : C.brand, size: 17 });
-    },
-    press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
-    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
-    release(G) { G.grab = false; },
-    demo: G => ({ from: { x: G.X(G.s.v / 5 - 1), y: G.tY }, to: { x: G.X(Math.min(23, G.s.v / 5 + 2)), y: G.tY }, text: 'Arrastra la velocidad', ty: G.tY - 28 }),
-    peek: G => ({ tY: G.tY }),
-  });
-  game.move = (G, x) => { const v = (RK.pick(x, 30, G.W - 30, 24) + 1) * 5; if (v !== G.s.v || !G.touched[G.cur]) { G.s.v = v; G.touch(); } };
-  return Object.assign(game, { answer: r => ({ v: need(r) }) });
-})();
-;
 //#archivo js/games/persecucion.js
 // La persecución (Preuniversitario, pu-pr-3; spec 2026-11-18-preuda-razonamiento-completo): si uno sale con ventaja y el de
 // atrás va más rápido, cada hora le descuenta la diferencia de velocidades: lo alcanza en ventaja ÷ (v₂ − v₁). Se arrastra
@@ -13322,7 +13131,9 @@ const EXQ = (() => {
     });
     const move = e => {
       if (!d || e.pointerId !== d.id) return;
-      if (!d.ghost && Math.hypot(e.clientX - d.x, e.clientY - d.y) > 7) {
+      // En una bandeja que se desliza de lado (touch-action: pan-x), el gesto horizontal es del navegador.
+      const lado = e.pointerType === 'touch' && Math.abs(e.clientX - d.x) > Math.abs(e.clientY - d.y) && getComputedStyle(d.el).touchAction === 'pan-x';
+      if (!d.ghost && !lado && Math.hypot(e.clientX - d.x, e.clientY - d.y) > 7) {
         const r = d.el.getBoundingClientRect();
         d.ghost = d.el.cloneNode(true);
         d.ghost.classList.add('exq-ghost');
@@ -13346,7 +13157,7 @@ const EXQ = (() => {
       root.querySelectorAll('.over').forEach(o => o.classList.remove('over'));
       if (!ghost) return;     // sin arrastre: el click normal hace de toque
       ghost.remove();
-      if (!live()) return;
+      if (!live() || e.type === 'pointercancel') return;
       const over = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-drop]');
       root.dataset.dragged = '1'; setTimeout(() => { delete root.dataset.dragged; }, 60);
       if (over && root.contains(over)) onDrop(el, over);
@@ -13535,7 +13346,7 @@ const XG = (() => {
         const stops = new Set();
         // Las teclas con que se maneja el juego no siguen a la lección (allá Enter comprueba y las flechas cambian de ejercicio).
         root.addEventListener('keydown', e => {
-          if (!locked && e.target.closest('button, [role=slider]') && /^(Enter| |Arrow.*)$/.test(e.key)) e.stopPropagation();
+          if (!locked && e.target.closest('button, summary, [role=button], [role=slider]') && /^(Enter| |Arrow.*)$/.test(e.key)) e.stopPropagation();
         });
         const ui = {
           root, stage, p, api,
@@ -18119,6 +17930,475 @@ Object.assign(XG, (() => {
   XG.ascensor('sube-por-ciento', 100, 2, neutro);
 })();
 ;
+//#archivo js/games/hoja-kit.js
+// Kit de los ejercicios de lectura en los que el texto es la escena (spec 2026-11-24-lectura-explora). Va después de
+// explora-kit.js y lectura-kit.js. Armazones sobre XG.juego (estado puro; nada dice si va bien hasta comprobar):
+//   HOJA.toca(nombre, d)    se tocan trozos del texto (subrayar, tachar).            estado { m: [claves] }
+//   HOJA.zonas(nombre, d)   fichas que van al margen o a huecos de la escena.        estado { en: [zona por ficha, −1 = bandeja] }
+//   HOJA.hilos(nombre, d)   se tira un hilo de cada tarjeta a un punto del texto.    estado { a: [destino por tarjeta, −1] }
+//   HOJA.ordena(nombre, d)  tiras que se mueven hasta que el orden tiene sentido.    estado { o: [índices], t: ya se movió }
+// `p.mira[i]` es el aviso de la ficha o tarjeta i cuando quedó mal: cierto en cualquier sitio equivocado y sin dar la respuesta.
+// `p.luz` = [[párrafo, trozo literal]]: las palabras que lo prueban, que se encienden al final.
+const HOJA = (() => {
+  const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
+  const fmt = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const luzDe = (t, n, luz = []) => luz.filter(l => l[0] === n).reduce((h, l) => h.replace(esc(l[1]), m => `<mark class="hj-luz">${m}</mark>`), fmt(t));
+  const oraciones = (p, n) => (p.trozos?.[n] ? p.trozos[n].split('|') : LEC.sentences(p.doc.paras[n - 1]));
+  const parr = (n, dentro, o = {}) => `<div class="hj-p ${o.cls || ''}" data-p="${n}" ${o.attr || ''}><b class="hj-n" aria-label="párrafo ${n}">${n}</b>${o.antes || ''}<p>${dentro}</p></div>`;
+  const cabeza = d => `<header class="hj-cab"><h4 data-b="titulo">${esc(d.title)}</h4>${d.ficha ? `<p>${['autor', 'fuente', 'fecha'].map(k => `<span data-b="${k}">${esc(d.ficha[k])}</span>`).join('<i>·</i>')}</p>` : ''}</header>`;
+  // La hoja: título y párrafos (todos, o los `nums`). `trozo(n, i, t)` envuelve cada oración.
+  function hoja(p, o = {}) {
+    const d = p.doc, nums = o.nums || d.paras.map((_, i) => i + 1);
+    return `<article class="hj-hoja ${o.cls || ''}" ${o.attr || ''}>${o.cab ?? cabeza(d)}${nums.map(n => parr(n, o.trozo
+      ? oraciones(p, n).map((t, i) => o.trozo(n, i, t)).join(p.trozos?.[n] ? '' : ' ') : luzDe(d.paras[n - 1], n, p.luz), o.parr?.(n))).join('')}</article>`;
+  }
+  // El texto entero, plegado: en el examen siempre se puede volver a él.
+  const completo = d => `<details class="hj-todo"><summary>Ver el texto completo</summary>${hoja({ doc: d })}</details>`;
+  // Lo tapado tampoco se lee con lector de pantalla hasta que se destapa.
+  const tapa = (root, si) => root.querySelectorAll('.hj-hoja.cortina .hj-p, .hj-velo, .hj-queda').forEach(x => (si ? x.setAttribute('aria-hidden', 'true') : x.removeAttribute('aria-hidden')));
+  const prende = root => tapa(root, false) || root.querySelectorAll('.hj-luz').forEach((m, i) => { m.style.setProperty('--d', `${i * 260}ms`); m.classList.add('on'); if (!i) aVer(root, m); });
+  // En un texto largo, lo primero que se enciende queda a la vista (el aviso tapa la mitad de abajo en el celular).
+  const aVer = (root, m) => setTimeout(() => {
+    const s = root.isConnected && quienRueda(root); if (!s) return;
+    const r = s.getBoundingClientRect(), y = m.getBoundingClientRect().top, fb = document.querySelector('.feedback.show')?.getBoundingClientRect();
+    const abajo = fb && fb.left < r.right && fb.right > r.left ? Math.min(r.bottom, fb.top) : r.bottom;
+    if (y < r.top + 10 || y > abajo - 30) s.scrollBy({ top: y - r.top - (abajo - r.top) / 3, behavior: quieto() ? 'auto' : 'smooth' });
+  }, 700);
+  const quieto = () => typeof xpStill === 'function' && xpStill();
+  const tactil = () => { if (typeof xpTick === 'function') xpTick(); };
+
+  // Se arrastra la ficha, o se toca la ficha y luego el sitio (dedo, ratón o teclado). Cerca del borde, la hoja se desplaza sola.
+  function manos(ui, root, pon) {
+    let sel = null;
+    const elige = el => { root.querySelectorAll('.hj-sel').forEach(x => x.classList.remove('hj-sel')); sel = el ? el.dataset.f : null; el?.classList.add('hj-sel'); root.querySelectorAll('[data-f]').forEach(x => x.setAttribute('aria-pressed', x === el)); root.classList.toggle('hj-lleva', !!el); };
+    XG.arrastra(ui, root, '[data-f]', {
+      onDrop: (el, z) => { elige(null); pon(+el.dataset.f, +z.dataset.drop); },
+      onTap: el => {
+        const z = el.closest('[data-drop]');
+        if (sel === el.dataset.f) { elige(null); return pon(+el.dataset.f, -1); }
+        if (sel != null && z && z.dataset.drop !== '-1') { const f = +sel; elige(null); return pon(f, +z.dataset.drop); }
+        elige(el); XS.tick(2);
+      },
+    });
+    root.addEventListener('click', e => {
+      if (ui.locked || root.dataset.dragged || sel == null || e.target.closest('[data-f]')) return;
+      const z = e.target.closest('[data-drop]');
+      if (z && root.contains(z)) { const f = +sel; elige(null); pon(f, +z.dataset.drop); }
+    });
+    root.addEventListener('keydown', e => {
+      if (ui.locked || e.target.dataset?.drop == null || (e.key !== 'Enter' && e.key !== ' ')) return;
+      e.stopPropagation(); e.preventDefault(); e.target.click();
+    });
+    desplaza(ui, root);
+  }
+  const quienRueda = root => { const h = root.querySelector('.hj-esc'); return h && h.scrollHeight > h.clientHeight + 6 && getComputedStyle(h).overflowY === 'auto' ? h : root.closest('.lesson-body'); };
+  function desplaza(ui, root, llevando = () => !!document.querySelector('.exq-ghost')) {
+    let y = 0, t = 0;
+    const paso = () => {
+      t = 0;
+      if (!llevando()) return;
+      const s = quienRueda(root); if (!s) return;
+      const r = s.getBoundingClientRect(), m = root.querySelector('.hj-mesa')?.getBoundingClientRect();
+      const abajo = m && m.top > r.top + 120 && m.left < r.left + 20 && m.top < r.bottom ? m.top : r.bottom;
+      const v = y < r.top + 54 ? -7 : y > abajo - 54 && y < abajo ? 7 : 0;
+      if (v) s.scrollTop += v;
+      t = requestAnimationFrame(paso);
+    };
+    const mueve = e => { y = e.clientY; if (!t && llevando()) t = requestAnimationFrame(paso); };
+    window.addEventListener('pointermove', mueve);
+    ui.limpia(() => { window.removeEventListener('pointermove', mueve); cancelAnimationFrame(t); });
+  }
+  // Se revisa marca por marca: `lista` = [[elemento, si va bien]].
+  function revisa(ui, lista, fin) {
+    let i = 0;
+    const cada = quieto() ? 0 : Math.max(160, Math.min(420, 2200 / Math.max(1, lista.length)));
+    (function sig() {
+      if (i >= lista.length) return ui.espera(quieto() ? 0 : 380, fin);
+      const [el, ok] = lista[i++];
+      if (el) { el.classList.add(ok ? 'hj-bien' : 'hj-mal'); if (ok) XS.pop(); else XS.nope(); }
+      ui.espera(cada, sig);
+    })();
+  }
+  // Lo que pasa al comprobar, igual en todos: revisar, decir, y si falló mostrar la buena.
+  function cierra(ui, ok, { lista, aviso, bien, buena, final }) {
+    ui.nota('');
+    revisa(ui, lista(), () => {
+      if (ok) { final(); return ui.nota(bien); }
+      ui.nota(aviso, true);
+      ui.espera(2400, () => { buena(); final(); ui.nota(bien); });
+    });
+  }
+  const igual = (c, z) => (c == null ? z === -1 : Array.isArray(c) ? c.includes(z) : c === z);
+  const base = c => (c == null ? -1 : Array.isArray(c) ? c[0] : c);
+
+  // ------------------------------------------------------------------------------------------------ fichas a zonas o huecos
+  // d: { escena(p) → html con HOJA.zona(i, rótulo); varias; minimo(p); vivo(root, p, s); final(root, p); rot(p, i) }
+  // p: { fichas, va: [zona | [zonas] | null por ficha], mira, bien, luz }
+  const zona = (i, rot = '', cls = '', nombre = '') => `<span class="hj-z ${cls}" data-drop="${i}" tabindex="0" role="button" data-nom="${esc(nombre || rot || `lugar ${i + 1}`)}" aria-label="${esc(nombre || rot || `lugar ${i + 1}`)}"><span class="hj-dentro" data-z="${i}" data-rot="${esc(rot)}"></span></span>`;
+  function zonas(nombre, d) {
+    XG.juego(nombre, {
+      tipo: 'zonas', varias: !!d.varias, ini: p => ({ en: p.fichas.map(() => -1) }), ok: (s, p) => p.va.every((c, f) => igual(c, s.en[f])),
+      listo: (s, p) => s.en.filter(z => z >= 0).length >= p.va.filter(c => c != null).length,
+      sol: p => ({ en: p.va.map(base) }), rot: (p, i) => d.rot(p, i),
+      texto: p => p.va.map((c, f) => (c == null ? '' : `${d.rot(p, base(c))} → ${p.fichas[f]}`)).filter(Boolean).join(' · '),
+      monta(stage, p, ui) {
+        stage.innerHTML = `<div class="hj hj-${nombre}"><div class="hj-esc">${d.escena(p)}</div><div class="hj-mesa"><div class="hj-band" data-drop="-1" aria-label="fichas"></div></div></div>`;
+        const root = stage.firstChild, band = root.querySelector('.hj-band'), orden = LEC.mix(p.fichas);
+        tapa(root, true);
+        const pinta = () => {
+          const s = ui.s, foco = document.activeElement?.dataset?.f;
+          const ficha = k => `<button type="button" class="hj-f" data-f="${k}">${esc(p.fichas[k])}</button>`;
+          band.innerHTML = orden.filter(k => s.en[k] < 0).map(ficha).join('');
+          root.classList.toggle('hj-vacia', !band.innerHTML);
+          root.querySelectorAll('[data-z]').forEach(z => {
+            const l = orden.filter(k => s.en[k] === +z.dataset.z);
+            z.innerHTML = l.map(ficha).join('') || (z.dataset.rot ? `<em>${esc(z.dataset.rot)}</em>` : '');
+            z.parentElement.classList.toggle('hj-llena', l.length > 0);
+            z.parentElement.setAttribute('aria-label', `${z.parentElement.dataset.nom}${l.length ? `: ${l.map(k => p.fichas[k]).join(', ')}` : ''}`);
+          });
+          if (foco != null) root.querySelector(`[data-f="${foco}"]`)?.focus({ preventScroll: true });
+          d.vivo?.(root, p, s);
+        };
+        pinta();
+        ui.nota(d.ayuda || 'Arrastra cada ficha, o tócala y luego toca su lugar.');
+        manos(ui, root, (f, z) => {
+          const en = [...ui.s.en], antes = en[f];
+          if (z >= 0 && !d.varias) { const otra = en.findIndex((q, k) => q === z && k !== f); if (otra >= 0) en[otra] = antes; }
+          en[f] = z; ui.set({ en }); XS.pop(); tactil(); pinta();
+        });
+        const el = f => root.querySelector(`[data-f="${f}"]`);
+        return okk => {
+          const s = ui.s; root.classList.add('hj-fin');
+          const malas = p.va.map((c, f) => (igual(c, s.en[f]) ? -1 : f)).filter(f => f >= 0);
+          cierra(ui, okk, {
+            lista: () => s.en.map((z, f) => [z, f]).filter(x => x[0] >= 0).sort((a, b) => a[0] - b[0]).map(([, f]) => [el(f), !malas.includes(f)]),
+            aviso: p.mira?.[malas.find(f => s.en[f] >= 0) ?? malas[0]] || '', bien: p.bien,
+            buena() { ui.muestra({ en: p.va.map(base) }); pinta(); p.va.forEach((c, f) => c != null && el(f)?.classList.add('hj-bien')); },
+            final() { prende(root); d.final?.(root, p, ui); },
+          });
+        };
+      },
+    });
+  }
+
+  // ------------------------------------------------------------------------------------------------------- tocar trozos
+  // d: { escena(p, T) con T(clave, texto) → trozo; claves(p); texto(p); modo: 'subraya' | 'tacha'; ayuda; final }
+  // p: { va: [claves], n, mira: { clave: aviso }, falta }
+  function toca(nombre, d) {
+    XG.juego(nombre, {
+      tipo: 'toca', ini: () => ({ m: [] }), claves: p => d.claves(p).map(String),
+      listo: (s, p) => (p.n ? s.m.length === p.n : s.m.length > 0),
+      ok: (s, p) => [...s.m].sort().join() === p.va.map(String).sort().join(),
+      sol: p => ({ m: p.va.map(String) }), texto: p => d.texto(p),
+      monta(stage, p, ui) {
+        stage.innerHTML = `<div class="hj hj-${nombre} hj-toca hj-${d.modo}"><div class="hj-esc">${d.escena(p, (k, t) => `<span class="hj-t" data-k="${k}" role="button" tabindex="0" aria-pressed="false">${fmt(t)}</span>`)}</div></div>`;
+        const root = stage.firstChild, q = k => root.querySelector(`.hj-t[data-k="${k}"]`), va = p.va.map(String);
+        const pinta = () => {
+          root.querySelectorAll('.hj-t').forEach(t => { const on = ui.s.m.includes(t.dataset.k); t.classList.toggle('on', on); t.setAttribute('aria-pressed', on); });
+          d.vivo?.(root, p, ui.s);
+        };
+        const pon = k => {
+          if (ui.locked) return;
+          const m = ui.s.m.includes(k) ? ui.s.m.filter(x => x !== k) : p.n && ui.s.m.length >= p.n ? [...ui.s.m.slice(1), k] : [...ui.s.m, k];
+          ui.set({ m }); XS.pop(); tactil(); pinta();
+        };
+        root.addEventListener('click', e => { const t = e.target.closest('.hj-t'); if (t) pon(t.dataset.k); });
+        root.addEventListener('keydown', e => { const t = e.target.closest?.('.hj-t'); if (t && !ui.locked && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); pon(t.dataset.k); } });
+        ui.nota((d.ayuda || 'Toca una oración para subrayarla; otro toque la suelta.') + (p.n > 1 ? ` Son ${p.n}.` : ''));
+        pinta();
+        return okk => {
+          const m = ui.s.m; root.classList.add('hj-fin');
+          const mala = m.find(k => !va.includes(k));
+          cierra(ui, okk, {
+            lista: () => [...root.querySelectorAll('.hj-t')].filter(t => m.includes(t.dataset.k)).map(t => [t, va.includes(t.dataset.k)]),
+            aviso: (mala != null && p.mira?.[mala]) || p.falta || '', bien: p.bien,
+            buena() { ui.muestra({ m: va }); pinta(); root.querySelectorAll('.hj-mal').forEach(t => t.classList.remove('hj-mal')); va.forEach(k => q(k)?.classList.add('hj-bien')); },
+            final() { prende(root); d.final?.(root, p, ui); },
+          });
+        };
+      },
+    });
+  }
+
+  // ------------------------------------------------------------------------------------------------------- tirar hilos
+  // d: { escena(p) con [data-t="i"] en los destinos; destinos(p) → cuántos; rot(p, i) }   p: { tarjetas, va: [destino | [destinos]], mira }
+  function hilos(nombre, d) {
+    XG.juego(nombre, {
+      tipo: 'hilos', ini: p => ({ a: p.tarjetas.map(() => -1) }), listo: s => s.a.every(x => x >= 0),
+      ok: (s, p) => p.va.every((c, i) => igual(c, s.a[i])), sol: p => ({ a: p.va.map(base) }), destinos: p => d.destinos(p),
+      texto: p => p.tarjetas.map((t, i) => `${t} → ${d.rot(p, base(p.va[i]))}`).join(' · '),
+      monta(stage, p, ui) {
+        const orden = LEC.mix(p.tarjetas);
+        stage.innerHTML = `<div class="hj hj-${nombre} hj-hilos"><div class="hj-esc">${d.escena(p)}</div><div class="hj-mesa"><div class="hj-orig">${orden.map((k, n) => `<button type="button" class="hj-o c${n % 4}" data-o="${k}"><i class="hj-nudo"></i><span>${esc(p.tarjetas[k])}</span></button>`).join('')}</div></div><svg class="hj-svg" aria-hidden="true"></svg></div>`;
+        const root = stage.firstChild, svg = root.lastElementChild, escena = root.firstChild, ver = {};
+        let dedo = null, sel = null, guia = null;
+        tapa(root, true);
+        const T = i => root.querySelector(`[data-t="${i}"]`), O = i => root.querySelector(`[data-o="${i}"]`), color = k => `c${orden.indexOf(k) % 4}`;
+        const curva = (a, b) => { const m = (a[1] + b[1]) / 2; return `M${a[0].toFixed(1)} ${a[1].toFixed(1)} C${a[0].toFixed(1)} ${m.toFixed(1)} ${b[0].toFixed(1)} ${m.toFixed(1)} ${b[0].toFixed(1)} ${b[1].toFixed(1)}`; };
+        function pinta() {
+          const b = root.getBoundingClientRect(), e = escena.getBoundingClientRect(), dentro = escena.scrollHeight > escena.clientHeight + 6;
+          const nudo = k => { const r = O(k).querySelector('.hj-nudo').getBoundingClientRect(); return [r.left + r.width / 2 - b.left, r.top + r.height / 2 - b.top]; };
+          svg.setAttribute('viewBox', `0 0 ${Math.max(1, b.width)} ${Math.max(1, b.height)}`);
+          let g = '';
+          p.tarjetas.forEach((_, k) => {
+            const t = ui.s.a[k];
+            O(k).classList.toggle('on', t >= 0);
+            O(k).setAttribute('aria-label', `${p.tarjetas[k]}${t >= 0 ? `, atada a ${d.rot(p, t)}` : ''}`);
+            if (t < 0 || !T(t)) return;
+            // El hilo llega a la primera línea del destino.
+            const r = (T(t).getClientRects()[0] || T(t).getBoundingClientRect()), bloque = getComputedStyle(T(t)).display !== 'inline', rango = orden.indexOf(k);
+            const w = bloque ? [r.right - 16 - rango * 18 - b.left, r.top + Math.min(r.height / 2, 16) - b.top] : [r.left + 4 - b.left, r.top + 3 - b.top];   // en los bloques, a la derecha y en abanico: no tapa las letras
+            if (dentro) w[1] = XG.clamp(w[1], e.top - b.top + 4, e.bottom - b.top - 4);
+            if (!bloque) w[0] += ui.s.a.slice(0, k).filter(x => x === t).length * 14;
+            g += `<path class="hj-hilo ${color(k)} ${ver[k] || ''}" d="${curva(nudo(k), w)}"/><circle class="hj-pin ${color(k)} ${ver[k] || ''}" cx="${w[0].toFixed(1)}" cy="${w[1].toFixed(1)}" r="5"/>`;
+          });
+          if (guia) g += `<path class="hj-hilo vivo" d="${curva(nudo(guia.k), guia.q)}"/>`;
+          svg.innerHTML = g;
+          root.querySelectorAll('[data-t]').forEach(t => t.classList.toggle('hj-atada', ui.s.a.includes(+t.dataset.t)));
+        }
+        const pon = (k, t) => { const a = [...ui.s.a]; a[k] = t; ui.set({ a }); XS.pop(); tactil(); pinta(); };
+        const elige = k => { sel = k; root.querySelectorAll('.hj-o').forEach(o => { const on = k != null && +o.dataset.o === k; o.classList.toggle('hj-sel', on); o.setAttribute('aria-pressed', on); }); root.classList.toggle('hj-lleva', k != null); };
+        const meta = e => { const t = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data-t]'); return t && root.contains(t) ? t : null; };
+        root.addEventListener('pointerdown', e => { const o = e.target.closest('.hj-o'); if (!o || ui.locked || dedo) return; dedo = { id: e.pointerId, k: +o.dataset.o, x: e.clientX, y: e.clientY, mov: false }; });
+        const mueve = e => {
+          if (!dedo || e.pointerId !== dedo.id) return;
+          if (!dedo.mov && Math.hypot(e.clientX - dedo.x, e.clientY - dedo.y) < 8) return;
+          dedo.mov = true; e.preventDefault();
+          const b = root.getBoundingClientRect(), t = meta(e);
+          guia = { k: dedo.k, q: [e.clientX - b.left, e.clientY - b.top] };
+          root.querySelectorAll('.over').forEach(o => o !== t && o.classList.remove('over'));
+          t?.classList.add('over');
+          pinta();
+        };
+        const deja = e => {
+          if (!dedo || e.pointerId !== dedo.id) return;
+          const g = dedo; dedo = null; guia = null;
+          root.querySelectorAll('.over').forEach(o => o.classList.remove('over'));
+          if (!g.mov) return;
+          root.dataset.dragged = '1'; setTimeout(() => { delete root.dataset.dragged; }, 60);
+          const t = e.type === 'pointerup' && !ui.locked && meta(e);
+          if (t) { elige(null); pon(g.k, +t.dataset.t); } else pinta();
+        };
+        const oye = [[window, 'pointermove', mueve, { passive: false }], [window, 'pointerup', deja], [window, 'pointercancel', deja], [window, 'resize', pinta], [document, 'scroll', pinta, true], [root, 'toggle', pinta, true]];
+        oye.forEach(([o, t, f, c]) => o.addEventListener(t, f, c));
+        ui.limpia(() => oye.forEach(([o, t, f, c]) => o.removeEventListener(t, f, c)));
+        desplaza(ui, root, () => !!dedo?.mov);
+        root.addEventListener('click', e => {
+          if (ui.locked || root.dataset.dragged) return;
+          const o = e.target.closest('.hj-o'), t = e.target.closest('[data-t]');
+          if (o) { XS.tick(2); return elige(sel === +o.dataset.o ? null : +o.dataset.o); }
+          if (t && sel != null) { const k = sel; elige(null); pon(k, +t.dataset.t); }
+        });
+        root.addEventListener('keydown', e => { if (ui.locked || e.target.dataset?.t == null || (e.key !== 'Enter' && e.key !== ' ')) return; e.preventDefault(); e.stopPropagation(); e.target.click(); });
+        ui.nota(d.ayuda || 'Tira un hilo desde cada tarjeta hasta el texto, o toca la tarjeta y luego el texto.');
+        ui.espera(60, pinta);
+        return okk => {
+          const s = ui.s; root.classList.add('hj-fin');
+          const malas = p.va.map((c, k) => (igual(c, s.a[k]) ? -1 : k)).filter(k => k >= 0);
+          let i = 0;
+          const marca = (k, bien) => { ver[k] = bien ? 'good' : 'bad'; O(k).classList.remove('hj-mal'); O(k).classList.add(bien ? 'hj-bien' : 'hj-mal'); };
+          const cierre = () => { prende(root); d.final?.(root, p, ui); ui.nota(p.bien); ui.espera(80, pinta); ui.espera(700, pinta); };
+          ui.nota('');
+          (function sig() {
+            if (i < orden.length) { const k = orden[i++], bien = !malas.includes(k); marca(k, bien); if (bien) XS.pop(); else XS.nope(); pinta(); return ui.espera(quieto() ? 0 : 420, sig); }
+            if (okk) return cierre();
+            ui.nota(p.mira?.[malas[0]] || '', true);
+            ui.espera(2400, () => { ui.muestra({ a: p.va.map(base) }); orden.forEach(k => marca(k, true)); pinta(); cierre(); });
+          })();
+        };
+      },
+    });
+  }
+
+  // -------------------------------------------------------------------------------------------------------- mover tiras
+  // d: { tiras(p) en el orden bueno; cabeza(p) }   p: { ini: permutación, fija: las primeras n no se mueven, mira, bien }
+  function ordena(nombre, d) {
+    XG.juego(nombre, {
+      tipo: 'ordena', ini: p => ({ o: [...p.ini], t: false }), listo: s => s.t, ok: (s, p) => s.o.join() === p.ini.map((_, i) => i).join(),
+      sol: p => ({ o: p.ini.map((_, i) => i), t: true }), tiras: p => d.tiras(p),
+      texto: p => d.tiras(p).map((t, i) => `${i + 1}. ${t.length > 60 ? `${t.split(' ').slice(0, 7).join(' ')}…` : t}`).join(' '),
+      monta(stage, p, ui) {
+        const tiras = d.tiras(p), fija = p.fija || 0;
+        stage.innerHTML = `<div class="hj hj-${nombre} hj-ordena"><div class="hj-esc">${d.cabeza?.(p) || ''}<ol class="hj-tiras"></ol></div></div>`;
+        const root = stage.firstChild, ol = root.querySelector('ol');
+        ol.innerHTML = tiras.map((t, i) => `<li class="hj-tira" data-i="${i}"><button type="button" class="hj-asa" aria-label="Mover: ${esc(t.split(' ').slice(0, 5).join(' '))}"><i></i></button><span>${luzDe(t, i + 1, p.luz)}</span></li>`).join('');
+        const li = i => ol.querySelector(`[data-i="${i}"]`);
+        // Cambia el orden y cada tira se desliza hasta su nuevo puesto.
+        const acomoda = (ms = 220, menos = null) => {
+          const antes = new Map([...ol.children].map(x => [x, x.getBoundingClientRect().top]));
+          ui.s.o.forEach(i => ol.appendChild(li(i)));
+          [...ol.children].forEach((x, n) => {
+            x.classList.toggle('fija', n < fija);
+            const dy = antes.get(x) - x.getBoundingClientRect().top;
+            if (!dy || x === menos || quieto() || !x.animate) return;
+            x.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: ms, easing: 'cubic-bezier(.2,.8,.2,1)' });
+          });
+        };
+        acomoda(0);
+        const lleva = (i, a) => { a = XG.clamp(a, fija, tiras.length - 1); const o = ui.s.o.filter(x => x !== i); o.splice(a, 0, i); if (o.join() === ui.s.o.join()) return false; ui.set({ o, t: true }); XS.tick(a); tactil(); return true; };
+        let dedo = null;
+        ol.addEventListener('pointerdown', e => {
+          const x = e.target.closest('.hj-tira'); if (!x || ui.locked || dedo || x.classList.contains('fija')) return;
+          if (e.pointerType !== 'mouse' && !e.target.closest('.hj-asa')) return;   // con el dedo, del asa: el resto deja desplazar
+          dedo = { id: e.pointerId, x, i: +x.dataset.i }; x.classList.add('lift'); e.preventDefault(); x.querySelector('.hj-asa').focus({ preventScroll: true });
+        });
+        const mueve = e => {
+          if (!dedo || e.pointerId !== dedo.id || ui.locked) return;
+          e.preventDefault();
+          const n = [...ol.children].filter(x => x !== dedo.x).filter(x => { const r = x.getBoundingClientRect(); return e.clientY > r.top + r.height / 2; }).length;
+          if (lleva(dedo.i, n)) acomoda();
+        };
+        const deja = e => { if (!dedo || e.pointerId !== dedo.id) return; dedo.x.classList.remove('lift'); dedo = null; };
+        window.addEventListener('pointermove', mueve, { passive: false }); window.addEventListener('pointerup', deja); window.addEventListener('pointercancel', deja);
+        ui.limpia(() => { window.removeEventListener('pointermove', mueve); window.removeEventListener('pointerup', deja); window.removeEventListener('pointercancel', deja); });
+        desplaza(ui, root, () => !!dedo);
+        ol.addEventListener('keydown', e => {
+          const x = e.target.closest('.hj-tira'); if (!x || ui.locked || !['ArrowUp', 'ArrowDown'].includes(e.key) || x.classList.contains('fija')) return;
+          e.preventDefault(); e.stopPropagation();
+          const i = +x.dataset.i;
+          if (lleva(i, ui.s.o.indexOf(i) + (e.key === 'ArrowUp' ? -1 : 1))) { acomoda(); x.querySelector('.hj-asa').focus({ preventScroll: true }); }
+        });
+        ui.nota(d.ayuda || 'Arrastra cada tira de su asa, o usa las flechas del teclado.');
+        return okk => {
+          root.classList.add('hj-fin');
+          const s = ui.s;
+          cierra(ui, okk, {
+            lista: () => s.o.map((i, n) => [li(i), i === n]).slice(fija),
+            aviso: p.mira?.[s.o.find((i, n) => i !== n)] || '', bien: p.bien,
+            buena() { ui.muestra({ o: p.ini.map((_, i) => i), t: true }); root.querySelectorAll('.hj-mal').forEach(x => x.classList.remove('hj-mal')); acomoda(700); },
+            final() { [...ol.children].forEach(x => x.classList.add('hj-bien')); prende(root); },
+          });
+        };
+      },
+    });
+  }
+
+  return { esc, fmt, hoja, completo, cabeza, parr, zona, zonas, toca, hilos, ordena, oraciones, prende, luzDe, igual, base };
+})();
+;
+//#archivo js/games/lectura-escena.js
+// Ejercicios de lectura en los que el texto es la escena (spec 2026-11-24-lectura-explora). Mundo 1, «Estrategias de lectura».
+// Van por datos: cada lección pone su texto (`doc`), así que sirven para los demás mundos. Piezas en hoja-kit.js.
+{
+  const { esc, fmt, hoja, completo, cabeza, zona, zonas, toca, hilos, ordena, oraciones } = HOJA;
+  const primera = (p, n) => oraciones(p, n)[0];
+  const hueco = (t, rot) => esc(t).replace(/\[(\d)\]/g, (_, i) => zona(+i, rot?.[+i] || '', 'en-linea'));
+  const tarjeta = (t, i, attr, dentro = '') => `<section class="hj-portada" ${attr}><h5>${esc(t[0])}</h5><p>${esc(t[1])}</p>${dentro}</section>`;
+
+  // --------------------------------------------------------------------------------------------------------- prelectura
+  // Se apuesta con los bordes; al comprobar se levanta la cortina y se enciende lo que lo prueba.
+  zonas('antes-de-leer', {
+    rot: (p, i) => p.rot[i],
+    escena: p => `${hoja({ ...p, trozos: null }, { cls: 'cortina' })}<p class="hj-frase">${hueco(p.frase, p.rot)}</p>`,
+    final: root => root.querySelector('.hj-hoja').classList.remove('cortina'),
+  });
+  // De cada pregunta, un hilo al borde que la responde.
+  hilos('hilo-bordes', {
+    destinos: () => 4, rot: (p, i) => ['título', 'autor', 'fuente', 'fecha'][i],
+    escena: p => `<article class="hj-hoja hj-bordes"><h4 data-t="0" tabindex="0" role="button">${esc(p.doc.title)}</h4>${['autor', 'fuente', 'fecha'].map((k, i) => `<p data-t="${i + 1}" tabindex="0" role="button"><small>${k}</small>${esc(p.doc.ficha[k])}</p>`).join('')}</article>`,
+    ayuda: 'Tira un hilo desde cada pregunta hasta el borde que la responde, o toca la pregunta y luego el borde.',
+  });
+  // Solo se ve el comienzo de cada párrafo; al comprobar se abren los párrafos.
+  zonas('donde-mirar', {
+    rot: (p, i) => `párrafo ${i + 1}`,
+    escena: p => `<article class="hj-hoja velada">${cabeza(p.doc)}${p.doc.paras.map((t, i) => { const a = primera(p, i + 1), l = p.luz.find(x => x[0] === i + 1); return HOJA.parr(i + 1, `${fmt(a)} <span class="hj-velo">${HOJA.luzDe(t.slice(a.length).trim(), i + 1, l ? [l] : [])}</span>`, { antes: `<span class="hj-marg">${zona(i, '', '', `párrafo ${i + 1}`)}</span>` }); }).join('')}</article>`,
+    ayuda: 'Solo se ven los comienzos. Lleva cada pregunta al margen del párrafo donde la buscarías.',
+    final: root => root.querySelector('.hj-hoja').classList.remove('velada'),
+  });
+  // Cuatro portadas sin abrir: para qué se escribió cada texto.
+  zonas('portadas', {
+    rot: (p, i) => p.portadas[i][0],
+    escena: p => `<div class="hj-estante">${p.portadas.map((t, i) => tarjeta(t, i, '', zona(i, 'va a…'))).join('')}</div>`,
+  });
+  // Una frase suelta de cada texto: de qué fuente salió.
+  hilos('voz-de-la-fuente', {
+    destinos: p => p.portadas.length, rot: (p, i) => p.portadas[i][0],
+    escena: p => `<div class="hj-estante">${p.portadas.map((t, i) => tarjeta(t, i, `data-t="${i}" tabindex="0" role="button"`)).join('')}</div>`,
+    ayuda: 'Tira un hilo desde cada frase hasta la fuente de donde salió, o toca la frase y luego la fuente.',
+  });
+  const suya = (p, n, T) => hoja(p, { nums: n, trozo: (k, i, t) => T(`${k}.${i}`, t) });
+  const claves = p => p.nums.flatMap(n => oraciones(p, n).map((_, i) => `${n}.${i}`));
+  const dicho = p => p.va.map(k => { const [n, i] = k.split('.'); return `«${oraciones(p, +n)[+i]}»`; }).join(' · ');
+  toca('comprueba-apuesta', { modo: 'subraya', claves, texto: dicho, escena: (p, T) => `<p class="hj-apuesta"><small>la apuesta</small>${esc(p.apuesta)}</p>${suya(p, p.nums, T)}${completo(p.doc)}` });
+  const lista = (p, T) => `<ul class="hj-lista">${p.lineas.map((t, i) => `<li>${T(i, t)}</li>`).join('')}</ul>`;
+  const encoge = root => { const l = root.querySelector('.hj-lista'); l.classList.add('corta'); };
+  toca('preguntas-previas', { modo: 'tacha', claves: p => p.lineas.map((_, i) => i), texto: p => `Se tachan: ${p.va.map(i => p.lineas[i]).join(' · ')}`, final: encoge,
+    ayuda: 'Toca una pregunta para tacharla; otro toque la devuelve.', escena: (p, T) => `<article class="hj-hoja">${cabeza(p.doc)}</article>${lista(p, T)}` });
+  ordena('orden-fuentes', { tiras: p => p.tiras, cabeza: p => `<p class="hj-apuesta"><small>lo que necesitas saber</small>${esc(p.busca)}</p>` });
+
+  // ---------------------------------------------------------------------------------------------- idea central y mapa
+  ordena('ordena-texto', { tiras: p => p.tiras, cabeza: p => `<article class="hj-hoja">${cabeza(p.doc)}</article>` });
+  zonas('mapa-margen', {
+    rot: (p, i) => `párrafo ${i + 1}`,
+    escena: p => hoja(p, { parr: n => ({ antes: `<span class="hj-marg">${zona(n - 1, '¿qué hace?')}</span>` }) }),
+    ayuda: 'Lleva cada nota al margen de su párrafo. Sobra una.',
+  });
+  zonas('talla-idea', {
+    rot: (p, i) => p.rot[i],
+    escena: p => `${hoja(p, { nums: [p.p] })}<div class="hj-tallas">${p.rot.map((t, i) => `<div class="t${i}"><small>${esc(t)}</small>${zona(i)}</div>`).join('')}</div>${completo(p.doc)}`,
+  });
+  toca('tacha-resumen', { modo: 'tacha', claves: p => p.lineas.map((_, i) => i), texto: p => `Queda: ${p.lineas.filter((_, i) => !p.va.includes(i)).join(' ')}`, final: encoge,
+    ayuda: 'Toca una oración para tacharla; otro toque la devuelve.', escena: (p, T) => `${lista(p, T)}${completo(p.doc)}` });
+  toca('subraya-tesis', { modo: 'subraya', claves, texto: dicho, escena: (p, T) => `${suya(p, p.nums, T)}${completo(p.doc)}` });
+  zonas('bisagras', {
+    rot: (p, i) => p.pares[i][1].slice(0, 28) + '…',
+    escena: p => `<div class="hj-pares">${p.pares.map(([a, b], i) => `<p>${esc(a)} ${zona(i, '¿…?', 'en-linea')} ${esc(b)}</p>`).join('')}</div>${completo(p.doc)}`,
+    ayuda: 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.',
+  });
+  zonas('arma-titulo', {
+    rot: (p, i) => p.rot[i],
+    escena: p => `<h4 class="hj-titulo">${p.rot.map((r, i) => zona(i, r, 'en-linea')).join(' ')}</h4>${hoja(p, { nums: [1, 2], cab: '' })}${completo(p.doc)}`,
+    ayuda: 'Arma el título que diga la idea central. Sobran fichas.',
+  });
+  // El techo es la idea central: lo que la sostiene son columnas; lo demás, adornos que se caen al final.
+  zonas('pilares', {
+    varias: true, rot: (p, i) => ['sostiene', 'adorna'][i],
+    escena: p => `<div class="hj-casa"><div class="hj-techo">${esc(p.idea)}</div><div class="hj-cols">${zona(0, 'lo que la sostiene')}</div></div><div class="hj-patio">${zona(1, 'lo que solo adorna')}</div>${completo(p.doc)}`,
+    vivo: (root, p, s) => root.querySelector('.hj-casa').style.setProperty('--falta', Math.max(0, 1 - s.en.filter(z => z === 0).length / p.va.filter(z => z === 0).length)),
+    final: root => root.querySelector('.hj-patio').classList.add('cae'),
+    ayuda: 'Lleva cada oración: ¿sostiene la idea o solo la adorna?',
+  });
+
+  // ------------------------------------------------------------------------------------------------- tiempo y EXCEPTO
+  toca('lee-la-orden', { modo: 'subraya', claves: p => p.orden.split('|').map((_, i) => i).filter(i => i % 2), texto: p => p.va.map(i => p.orden.split('|')[i]).join(' · '),
+    ayuda: 'Toca un trozo para subrayarlo; otro toque lo suelta.',
+    escena: (p, T) => `<article class="hj-hoja hj-orden"><p>${p.orden.split('|').map((t, i) => (i % 2 ? T(i, t) : esc(t))).join('')}</p></article>${completo(p.doc)}` });
+  // EXCEPTO: cada opción busca su párrafo; la que no lo encuentra va a «no está».
+  hilos('sella-parrafo', {
+    destinos: p => p.doc.paras.length + 1, rot: (p, i) => (i === p.doc.paras.length ? 'no está' : `párrafo ${i + 1}`),
+    escena: p => hoja(p, { parr: n => ({ attr: `data-t="${n - 1}" tabindex="0" role="button"` }) }) + `<p class="hj-no" data-t="${p.doc.paras.length}" tabindex="0" role="button">No está en el texto</p>`,
+    ayuda: 'Tira un hilo desde cada opción hasta el párrafo que la prueba, o hasta «No está en el texto».',
+  });
+  zonas('dentro-fuera', {
+    varias: true, rot: (p, i) => p.rot[i],
+    escena: p => `<div class="hj-marco"><small>${esc(p.rot[0])}</small>${hoja(p, { nums: [p.p], cab: '' })}${zona(0, 'sí está aquí')}</div><div class="hj-dos"><div><small>${esc(p.rot[1])}</small>${zona(1)}</div><div><small>${esc(p.rot[2])}</small>${zona(2)}</div></div>${completo(p.doc)}`,
+  });
+  zonas('dice-deduce', {
+    varias: true, rot: (p, i) => p.rot[i],
+    escena: p => `${hoja(p, { nums: p.nums })}<div class="hj-escalera">${p.rot.map((t, i) => `<div class="e${i}"><small>${esc(t)}</small>${zona(i)}</div>`).join('')}</div>${completo(p.doc)}`,
+  });
+  // Cada opción falsa cae cuando se ata a la oración que la desmiente; queda en pie la respuesta.
+  hilos('descarta-prueba', {
+    destinos: p => p.nums.reduce((n, k) => n + oraciones(p, k).length, 0), rot: (p, i) => `«${p.nums.flatMap(n => oraciones(p, n))[i].split(' ').slice(0, 7).join(' ')}…»`,
+    escena: p => { let k = 0; return `${hoja(p, { nums: p.nums, trozo: (n, i, t) => `<span class="hj-t2" data-t="${k++}" tabindex="0" role="button">${fmt(t)}</span>` })}<p class="hj-queda"><small>${esc(p.pregunta)}</small><span>${esc(p.queda)}</span></p>`; },
+    ayuda: 'Tira un hilo desde cada opción falsa hasta la oración que la desmiente.',
+    final: root => root.querySelector('.hj-queda').classList.add('on'),
+  });
+  XG.conPerillas('reparte-tiempo', {
+    campos: p => [{ k: 'l', et: 'leer', min: 0, max: 12, ini: 1, lee: v => `${v} min` }, { k: 'q', et: 'responder', min: 0, max: 18, ini: 4, lee: v => `${v} min` }],
+    listo: s => s.l !== 1 || s.q !== 4, ok: (s, p) => s.l >= p.leer && s.q >= p.resp && s.l + s.q <= p.total - p.rep,
+    sol: p => ({ l: p.leer, q: p.total - p.rep - p.leer }), texto: p => `leer ${p.leer}, responder ${p.total - p.rep - p.leer} y repasar ${p.rep} (minutos)`, alto: 150, ms: 1500,
+    quieta: p => XPK.r(24, 60, 292, 44, 'fn', 8) + XPK.t(170, 40, `${p.total} minutos`, 's ta') + Array.from({ length: p.total + 1 }, (_, k) => XPK.l(24 + 292 * k / p.total, 108, 24 + 292 * k / p.total, k % 5 ? 113 : 118, 'lm') + (k % 5 ? '' : XPK.t(24 + 292 * k / p.total, 134, k, 's tm'))).join(''),
+    cuadro(s, p, f) {
+      const X = m => 24 + 292 * Math.min(p.total * 1.06, m) / p.total, t = f * p.total, tr = (a, b, cls, et) => (t > a && b > a ? XPK.r(X(a), 60, X(Math.min(b, t)) - X(a), 44, cls, 6) + (t >= b && X(b) - X(a) > 46 ? XPK.t((X(a) + X(b)) / 2, 87, et, 's') : '') : '');
+      return GAMES['reparte-tiempo'].quieta(p) + tr(0, s.l, 'fa', 'leer') + tr(s.l, s.l + s.q, 'fg', 'responder') + tr(s.l + s.q, p.total, 'fA', 'repasar') + (s.l + s.q > p.total && f === 1 ? XPK.t(316, 50, 'no cabe', 's ta', 'end') : '');
+    },
+    aviso: (s, p) => (s.l + s.q > p.total - p.rep ? `Minutos que sobran para repasar: ${Math.max(0, p.total - s.l - s.q)}. No alcanza para volver a las marcadas.` : s.l < p.leer ? 'Con tan poca lectura tocaría releer en cada pregunta.' : 'A las preguntas les falta tiempo: se responderían sin volver al texto.'),
+    bien: (s, p) => `Quedan ${p.total - s.l - s.q} min para volver a las marcadas.`,
+  });
+  ordena('ruta-preguntas', { tiras: p => p.tiras });
+}
+;
 //#archivo js/games/marca-mueve.js
 // Lo que pasa en los ejercicios de tocar al comprobar (spec 2026-11-24-ejercicios-explora, «Al comprobar, la escena se mueve»). Se carga
 // después de las escenas y lo usa XG.marca (logica-kit.js):
@@ -21893,4 +22173,535 @@ const ALG_TALLER = (() => {
   }
   const structuredInitial = v => Array.isArray(v) ? v.slice() : v;
   return { modes, register, bound, step, eq, same, mix, point, gap, box, inside, center, normal, color, stroke, panel, txt, handle, line, dash, curve, chip };
+})();
+;
+//#archivo js/games/algebra-escenas.js
+(() => {
+  const A = ALG_TALLER;
+  const { modes, bound, step, eq, same, mix, point, gap, box, inside, center, normal, color, stroke, panel, txt, handle, line, dash, curve, chip } = A;
+  const band = G => center(G.b);
+  const ends = G => [G.b.x + 23, G.b.x + G.b.w - 23];
+  const at = (G, t, y = band(G).y) => point(mix(...ends(G), t), y);
+  const moveX = (G, q, set) => set(step(mix(G.r.lo, G.r.hi, bound(normal(q.x, ...ends(G)), 0, 1)), G.r.lo, G.r.hi, G.r.step));
+  const measures = (G, y) => {
+    const { p, C, r, b, s } = G;
+    const a = at(G, 0, y), z = at(G, 1, y);
+    line(p, a, z, C.line, 3);
+    const n = Math.min(10, Math.round((r.hi - r.lo) / (r.step || 1)));
+    for (let i = 0; i <= n; i++) {
+      const q = at(G, i / n, y);
+      line(p, point(q.x, y - 4), point(q.x, y + 4), C.mute);
+    }
+    txt(p, r.lo, a.x, y + 21, 41, C.mute, 11);
+    txt(p, r.hi, z.x, y + 21, 41, C.mute, 11);
+    handle(p, C, G.knob, G.held);
+    txt(p, r.input?.(s.v) ?? s.v, G.knob.x, y - 24, Math.min(100, b.w / 2), C.ink);
+  };
+  const linear = {
+    valid: (v, r) => eq(v, r.goal),
+    layout(G) {
+      G.y = G.b.y + G.b.h - 38;
+      G.knob = at(G, normal(G.s.v, G.r.lo, G.r.hi), G.y);
+    },
+    press(G, q, set) { if (Math.abs(q.y - G.y) > 19 || !inside(q, G.b)) return false; moveX(G, q, set); return true; },
+    drag: moveX,
+    key(G, dx, dy, set) {
+      const { lo, hi, step: d = 1 } = G.r;
+      if (dx || dy) set(step(G.s.v + (dx || -dy) * d, lo, hi, d));
+    },
+    demo: G => ({ from: G.knob, to: at(G, G.knob.x < band(G).x ? .59 : .38, G.y) }),
+    solve: G => [G.knob, at(G, normal(G.r.goal, G.r.lo, G.r.hi), G.y)],
+  };
+
+  // Comparte la escala de medida. Cada escena conserva el dibujo y la magnitud que se manipula.
+  modes.barra = {
+    ...linear,
+    instruction: 'Desliza la manija y compara las medidas',
+    draw(G) {
+      const { p, C, r, s, b } = G;
+      const a = at(G, 0), z = at(G, 1), w = z.x - a.x;
+      const entries = r.bars?.(s.v) ?? [[r.input?.(s.v) ?? s.v, s.v]];
+      entries.forEach(([label, value], i) => {
+        const y = b.y + 34 + i * 49, col = i ? C.sky : C.brand;
+        panel(p, box(a.x, y, w, 13), C.line, C.bg, 4);
+        const tail = a.x + w * bound(Math.abs(value) / (r.scale || r.hi), 0, 1);
+        if (tail > a.x) panel(p, box(a.x, y, tail - a.x, 13), col, color(p, col, 100), 4);
+        txt(p, label, band(G).x, y - 13, w, C.ink, 13);
+      });
+      measures(G, G.y);
+    },
+  };
+
+  modes.balanza = {
+    ...linear,
+    instruction: 'Desliza el contrapeso para mover la balanza',
+    draw(G) {
+      const { p, C, r, s, b } = G, c = point(band(G).x, b.y + b.h * .41), arm = b.w * .32;
+      const [a, z] = r.loads(s.v), difference = bound((z - a) / Math.max(1, Math.abs(a), Math.abs(z)), -1, 1);
+      const h = difference * 23, left = point(c.x - arm, c.y - h), right = point(c.x + arm, c.y + h);
+      p.noStroke(); p.fill(color(p, C.brand, 55)); p.triangle(c.x, c.y, c.x - 23, c.y + 44, c.x + 23, c.y + 44);
+      line(p, left, right, C.brand, 4);
+      for (const [i, q] of [left, right].entries()) {
+        const co = i ? C.sky : C.brand;
+        line(p, q, point(q.x, q.y + 24), co, 1.5);
+        p.fill(color(p, co, 80)); p.stroke(co); p.arc(q.x, q.y + 25, 52, 17, 0, Math.PI, p.CHORD);
+        txt(p, i ? z : a, q.x, q.y - 16, 60, C.ink, 16);
+      }
+      measures(G, G.y);
+    },
+  };
+
+  // Un punto y sus proyecciones comparten una escala con las curvas de cada problema.
+  function plotLayout(G) {
+    const { b, r } = G, [xl, xr, yl, yr] = r.bounds;
+    const a = box(b.x + 27, b.y + 17, b.w - 46, b.h - 37);
+    G.plot = {
+      a,
+      to: (x, y) => point(mix(a.x, a.x + a.w, normal(x, xl, xr)), mix(a.y + a.h, a.y, normal(y, yl, yr))),
+      from: q => [step(mix(xl, xr, normal(q.x, a.x, a.x + a.w)), xl, xr, r.dx),
+        step(mix(yl, yr, normal(q.y, a.y + a.h, a.y)), yl, yr, r.dy)],
+    };
+  }
+  function axes(G) {
+    const { p, C, r, plot } = G, { a, to } = plot, [xl, xr, yl, yr] = r.bounds;
+    for (let i = 0; i <= 6; i++) {
+      const x = a.x + i * a.w / 6, y = a.y + i * a.h / 6;
+      line(p, point(x, a.y), point(x, a.y + a.h), C.line);
+      line(p, point(a.x, y), point(a.x + a.w, y), C.line);
+    }
+    const x0 = bound(0, xl, xr), y0 = bound(0, yl, yr);
+    line(p, to(xl, y0), to(xr, y0), C.mute);
+    line(p, to(x0, yl), to(x0, yr), C.mute);
+    txt(p, xl, a.x + 2, a.y + a.h + 11, 28, C.mute, 10);
+    txt(p, xr, a.x + a.w - 2, a.y + a.h + 11, 28, C.mute, 10);
+    txt(p, yr, a.x - 12, a.y + 3, 25, C.mute, 10);
+    txt(p, yl, a.x - 12, a.y + a.h - 3, 25, C.mute, 10);
+    for (const [i, fn] of (r.curves || []).entries()) {
+      const pts = Array.from({ length: 89 }, (_, k) => {
+        const x = mix(xl, xr, k / 88), y = fn(x);
+        return Number.isFinite(y) && y >= yl && y <= yr ? to(x, y) : null;
+      });
+      curve(p, pts, i ? C.sky : C.brand);
+    }
+    for (const [x, y] of r.marks || []) {
+      const q = to(x, y);
+      stroke(p, C.mute, 1.5); p.circle(q.x, q.y, 11);
+    }
+    for (const [x, y] of r.holes || []) {
+      const q = to(x, y);
+      p.stroke(C.brand); p.strokeWeight(2); p.fill(C.card); p.circle(q.x, q.y, 10);
+    }
+  }
+  function marks(G, x, y) {
+    const { p, C, r, plot, held } = G, { to } = plot, [xl, xr, yl, yr] = r.bounds;
+    const q = to(x, y);
+    dash(p, q, to(x, bound(0, yl, yr)), C.mute);
+    dash(p, q, to(bound(0, xl, xr), y), C.mute);
+    handle(p, C, q, held);
+  }
+  const position = (G, q, set) => set(G.plot.from(q));
+  modes.plano = {
+    valid: (v, r) => v.every((n, i) => eq(n, r.goal[i])),
+    instruction: 'Arrastra el punto en el plano',
+    layout: plotLayout,
+    draw(G) { axes(G); marks(G, ...G.s.v); },
+    press(G, q, set) { if (!inside(q, G.b)) return false; position(G, q, set); return true; },
+    drag: position,
+    key(G, dx, dy, set) {
+      const { bounds: [xl, xr, yl, yr], dx: sx = 1, dy: sy = 1 } = G.r, [x, y] = G.s.v;
+      set([step(x + dx * sx, xl, xr, sx), step(y - dy * sy, yl, yr, sy)]);
+    },
+    demo: G => { const [xl, xr, yl, yr] = G.r.bounds; return { from: G.plot.to(...G.s.v), to: G.plot.to(mix(xl, xr, .39), mix(yl, yr, .34)) }; },
+    solve: G => [G.plot.to(...G.s.v), G.plot.to(...G.r.goal)],
+    route: G => [G.plot.to(G.r.start[0], G.r.start[1]), G.plot.to(...G.s.v)],
+  };
+
+  const scan = (G, q, set) => set(G.plot.from(q)[0]);
+  modes.sonda = {
+    ...linear,
+    instruction: 'Mueve la sonda y observa la altura de la curva',
+    layout: plotLayout,
+    draw(G) {
+      axes(G);
+      const { r, s, plot } = G, [,, lo, hi] = r.bounds;
+      const y = r.curves[0](s.v);
+      if (Number.isFinite(y)) marks(G, s.v, bound(y, lo, hi));
+      else {
+        const a = plot.to(s.v, lo), b = plot.to(s.v, hi);
+        dash(G.p, a, b, G.C.mute);
+        handle(G.p, G.C, plot.to(s.v, (lo + hi) / 2), G.held);
+      }
+    },
+    press(G, q, set) { if (!inside(q, G.b)) return false; scan(G, q, set); return true; },
+    drag: scan,
+    key(G, dx, dy, set) {
+      const [lo, hi] = G.r.bounds, d = G.r.dx || 1;
+      if (dx || dy) set(step(G.s.v + (dx || -dy) * d, lo, hi, d));
+    },
+    demo: G => {
+      const { r, s, plot } = G, [lo, hi, a, b] = r.bounds, n = step(mix(lo, hi, s.v <= (lo + hi) / 2 ? .63 : .35), lo, hi, r.dx);
+      return { from: plot.to(s.v, bound(r.curves[0](s.v), a, b)), to: plot.to(n, bound(r.curves[0](n), a, b)) };
+    },
+    solve: G => [G.plot.to(G.s.v, G.r.curves[0](G.s.v)), G.plot.to(G.r.goal, G.r.curves[0](G.r.goal))],
+    route(G) {
+      const { s, r, plot } = G, [,, lo, hi] = r.bounds;
+      return Array.from({ length: 33 }, (_, i) => {
+        const x = mix(r.start, s.v, i / 32);
+        return plot.to(x, bound(r.curves[0](x), lo, hi));
+      });
+    },
+  };
+
+  function areaMove(G, q, set) {
+    const { r, uv, f } = G, [xb, yb] = r.max;
+    set([step((q.x - f.x) / uv, 1, xb), step((f.y - q.y) / uv, 1, yb)]);
+  }
+  modes.area = {
+    valid: modes.plano.valid,
+    instruction: 'Tira de la esquina para construir el área',
+    layout(G) {
+      const { b, r, s } = G;
+      G.uv = Math.min((b.w - 71) / r.max[0], (b.h - 46) / r.max[1]);
+      G.f = point(b.x + 34, b.y + b.h - 30);
+      G.knob = point(G.f.x + G.uv * s.v[0], G.f.y - G.uv * s.v[1]);
+    },
+    draw(G) {
+      const { p, C, f, knob, uv, s } = G, [w, h] = s.v;
+      panel(p, box(f.x, knob.y, uv * w, uv * h), C.brand, color(p, C.brand, 75), 0);
+      for (let i = 1; i < w; i++) line(p, point(f.x + i * uv, knob.y), point(f.x + i * uv, f.y), C.line);
+      for (let j = 1; j < h; j++) line(p, point(f.x, f.y - j * uv), point(knob.x, f.y - j * uv), C.line);
+      txt(p, w, (f.x + knob.x) / 2, f.y + 14, 34, C.ink, 13);
+      txt(p, h, f.x - 14, (f.y + knob.y) / 2, 27, C.ink, 13);
+      handle(p, C, knob, G.held);
+    },
+    press(G, q, set) { if (gap(G.knob, q) > 23) return false; areaMove(G, q, set); return true; },
+    drag: areaMove,
+    key(G, dx, dy, set) {
+      const [a, b] = G.s.v, [x, y] = G.r.max;
+      set([bound(a + dx, 1, x), bound(b - dy, 1, y)]);
+    },
+    demo: G => ({ from: G.knob, to: point(G.f.x + G.uv * Math.min(3, G.r.max[0]), G.f.y - G.uv * Math.min(3, G.r.max[1])) }),
+    solve: G => [G.knob, point(G.f.x + G.uv * G.r.goal[0], G.f.y - G.uv * G.r.goal[1])],
+  };
+
+  const rot = (c, r, t) => point(c.x + r * Math.cos(t), c.y + r * Math.sin(t));
+  const angle = (G, i) => -Math.PI / 2 + (i / G.r.values.length) * 2 * Math.PI;
+  function turn(G, q, set) {
+    const t = Math.atan2(q.y - G.c.y, q.x - G.c.x) + Math.PI / 2, n = G.r.values.length;
+    set((Math.round(t * n / (2 * Math.PI)) + n) % n);
+  }
+  modes.giro = {
+    valid: (v, r) => v === r.goal,
+    instruction: 'Agarra el brazo y gíralo',
+    layout(G) { G.c = band(G); G.rad = Math.min(G.b.h / 2 - 31, G.b.w / 2 - 35); G.knob = rot(G.c, G.rad, angle(G, G.s.v)); },
+    draw(G) {
+      const { p, C, r, s, c, rad, knob } = G;
+      stroke(p, C.line); p.circle(c.x, c.y, rad * 2); p.circle(c.x, c.y, rad * 1.32);
+      for (let i = 0; i < r.values.length; i++) {
+        const t = angle(G, i), q = rot(c, rad + 19, t);
+        line(p, rot(c, rad - 4, t), rot(c, rad + 4, t), i === s.v ? C.brand : C.mute);
+        txt(p, r.values[i], q.x, q.y, 40, C.ink, 12);
+      }
+      line(p, c, knob, C.brand, 2);
+      handle(p, C, knob, G.held);
+    },
+    press(G, q, set) { if (gap(G.knob, q) > 22) return false; turn(G, q, set); return true; },
+    drag: turn,
+    key(G, dx, dy, set) {
+      const n = G.r.values.length;
+      set((G.s.v + (dx || -dy) + n) % n);
+    },
+    demo: G => ({ from: G.knob, to: rot(G.c, G.rad, angle(G, (G.s.v + 1) % G.r.values.length)) }),
+    solve: G => [G.knob, rot(G.c, G.rad, angle(G, G.r.goal))],
+    route(G) {
+      return Array.from({ length: 21 }, (_, i) => rot(G.c, G.rad, mix(angle(G, G.r.start), angle(G, G.s.v), i / 20)));
+    },
+  };
+
+  // Mosaicos. La línea pintada es la acción de seleccionar y también sirve para quitar celdas.
+  function paint(G, q, set, first) {
+    const i = G.cells.findIndex(b => inside(q, b));
+    if (i < 0 || (!first && i === G.input.lastCell)) return false;
+    const cells = G.s.v;
+    if (first) G.input.paintOn = !cells.includes(i);
+    G.input.lastCell = i;
+    set(G.input.paintOn ? [...new Set([...cells, i])].sort((a, b) => a - b) : cells.filter(j => i !== j));
+    return true;
+  }
+  modes.mosaico = {
+    valid: (v, r) => same(v, r.goal),
+    instruction: 'Pinta al pasar por las celdas; repasa para borrar',
+    layout(G) {
+      const { b, r } = G, n = r.cols, m = Math.ceil(r.tiles.length / n), c = band(G);
+      const u = Math.min((b.w - 28) / n, (b.h - 25) / m, 54);
+      G.cells = r.tiles.map((_, i) => box(c.x + (i % n - n / 2) * u + 2, c.y + (Math.floor(i / n) - m / 2) * u + 2, u - 4, u - 4));
+    },
+    draw(G) {
+      const { p, C, r, s } = G;
+      G.cells.forEach((b, i) => {
+        const on = s.v.includes(i), q = center(b);
+        panel(p, b, on ? C.brand : C.line, on ? color(p, C.brand, 110) : C.card, 5);
+        if (r.tiles[i]) txt(p, r.tiles[i], q.x, q.y, b.w - 4, C.ink, 14);
+      });
+    },
+    press: (G, q, set) => paint(G, q, set, true),
+    drag: paint,
+    demo: G => ({ from: center(G.cells[0]), to: center(G.cells[1]) }),
+    solve: G => G.r.goal.map(i => center(G.cells[i])),
+  };
+
+  // Las piezas se mueven entre compartimentos. Soltar fuera devuelve la pieza al punto de partida.
+  modes.membrana = {
+    valid: (v, r) => same(v, r.goal),
+    complete: v => v.every(i => i >= 0),
+    instruction: 'Arrastra cada pieza a su región',
+    layout(G) {
+      const { b, r, s } = G, n = r.regions.length, w = b.w / n - 10;
+      const rowY = b.y + b.h - 37, cap = Math.min(43, (b.w - 12) / r.tiles.length - 3);
+      const total = (cap + 3) * r.tiles.length;
+      G.regions = r.regions.map((_, i) => box(b.x + i * (w + 10) + 5, b.y + 9, w, b.h - 53));
+      G.homes = r.tiles.map((_, i) => box(band(G).x - total / 2 + i * (cap + 3), rowY, cap, 28));
+      const count = r.regions.map(() => 0);
+      G.tiles = s.v.map((j, i) => {
+        if (j < 0) return G.homes[i];
+        const a = G.regions[j], k = count[j]++;
+        return box(center(a).x - cap / 2, a.y + 36 + k * Math.min(26, (a.h - 49) / Math.max(1, s.v.filter(x => x === j).length)), cap, 24);
+      });
+    },
+    draw(G) {
+      const { p, C, r } = G;
+      const { grab } = G.input;
+      G.regions.forEach((b, i) => {
+        const c = i % 2 ? C.sky : C.brand;
+        panel(p, b, c, color(p, c, 20), 19);
+        txt(p, r.regions[i], center(b).x, b.y + 17, b.w - 6, C.ink, 13);
+      });
+      G.tiles.forEach((b, i) => { if (!grab || grab.i !== i) chip(p, C, b, r.tiles[i]); });
+      if (grab) chip(p, C, box(grab.q.x - 21, grab.q.y - 14, 42, 28), r.tiles[grab.i], C.brand);
+    },
+    press(G, q) {
+      const i = G.tiles.findIndex(b => inside(q, b));
+      if (i < 0) return false;
+      G.input.grab = { i, q }; return true;
+    },
+    drag(G, q) { if (G.input.grab) G.input.grab.q = q; },
+    release(G, q, set) {
+      const { grab } = G.input;
+      if (!grab) return;
+      const j = G.regions.findIndex(b => inside(q, b)), i = grab.i;
+      G.input.grab = null;
+      if (j < 0 && !G.homes.some(b => inside(q, b))) return;
+      set(G.s.v.map((v, k) => k === i ? j : v));
+    },
+    cancel(G) { G.input.grab = null; },
+    demo: G => ({ from: center(G.tiles[0]), to: center(G.regions[0]) }),
+    solve: G => G.tiles.flatMap((b, i) => [center(b), center(G.regions[G.r.goal[i]])]),
+  };
+
+  const gridPath = (G, q, set) => {
+    const i = G.nodes.findIndex(n => gap(n, q) < 21), route = G.s.v, last = route.at(-1);
+    if (i < 0 || i === last) return false;
+    if (i === route.at(-2)) { set(route.slice(0, -1)); return true; }
+    if (!G.r.edges.some(([a, b]) => a === last && b === i)) return false;
+    set([...route, i]); return true;
+  };
+  modes.trazo = {
+    valid: (v, r) => same(v, r.goal),
+    complete: (v, r) => GPathEnd(v, r),
+    instruction: 'Traza el camino desde el origen',
+    layout(G) {
+      const { b, r } = G;
+      G.nodes = r.nodes.map(([x, y]) => point(b.x + 31 + x * (b.w - 62), b.y + 25 + y * (b.h - 50)));
+    },
+    draw(G) {
+      const { p, C, r, s, nodes } = G;
+      r.edges.forEach(([a, b]) => line(p, nodes[a], nodes[b], C.line, 2));
+      for (let i = 1; i < s.v.length; i++) line(p, nodes[s.v[i - 1]], nodes[s.v[i]], C.brand, 3);
+      nodes.forEach((q, i) => {
+        p.stroke(s.v.includes(i) ? C.brand : C.line); p.strokeWeight(1.5); p.fill(C.card); p.circle(q.x, q.y, 36);
+        txt(p, r.nodes[i][2], q.x, q.y, 34, C.ink, 12);
+      });
+    },
+    press(G, q, set) { return gap(G.nodes[G.s.v.at(-1)], q) < 22 || gridPath(G, q, set); },
+    drag: gridPath,
+    demo: G => {
+      const i = G.s.v.at(-1), j = G.r.edges.find(([a]) => a === i)?.[1] ?? G.s.v.at(-2);
+      return { from: G.nodes[i], to: G.nodes[j] };
+    },
+    solve: G => G.r.goal.map(i => G.nodes[i]),
+    route: G => G.s.v.map(i => G.nodes[i]),
+  };
+  const GPathEnd = (v, r) => v.length >= r.minLength || v.at(-1) === r.goal.at(-1);
+
+  // Dos fracciones se amplían al construir el mismo denominador en ambas filas.
+  modes.puentes = {
+    valid: (v, r) => same(v, r.goal),
+    complete: v => v.every(i => i >= 0),
+    instruction: 'Lleva un factor a cada fracción',
+    layout(G) {
+      const { b, r } = G, m = r.tiles.length, w = Math.min(53, (b.w - 24) / m - 6);
+      G.tray = r.tiles.map((_, i) => box(band(G).x - (w + 6) * m / 2 + i * (w + 6), b.y + b.h - 46, w, 35));
+      G.slots = [0, 1].map(i => box(b.x + b.w * .58, b.y + 9 + i * (b.h - 58) / 2, b.w * .36, 44));
+    },
+    draw(G) {
+      const { p, C, r, s, b, input } = G;
+      for (const [i, slot] of G.slots.entries()) {
+        const q = center(slot), from = b.x + b.w * .26, v = s.v[i];
+        line(p, point(from + 24, q.y), point(slot.x - 6, q.y), v < 0 ? C.line : C.brand, 2);
+        txt(p, r.fractions[i], from, q.y, b.w * .48, C.ink, 22);
+        panel(p, slot, v < 0 ? C.line : C.brand, v < 0 ? C.bg : color(p, C.brand, 48), 8);
+        txt(p, v < 0 ? 'Factor' : r.tiles[v], q.x, q.y, slot.w - 8, v < 0 ? C.mute : C.ink, 16);
+      }
+      G.tray.forEach((a, i) => chip(p, C, a, r.tiles[i]));
+      if (input.grab) {
+        const { q, i } = input.grab;
+        chip(p, C, box(q.x - 23, q.y - 16, 46, 32), r.tiles[i], C.brand);
+      }
+    },
+    press(G, q) {
+      const i = G.tray.findIndex(a => inside(q, a));
+      if (i < 0) return false;
+      G.input.grab = { i, q }; return true;
+    },
+    drag: modes.membrana.drag,
+    cancel: modes.membrana.cancel,
+    release(G, q, set) {
+      const j = G.slots.findIndex(a => inside(q, a)), { grab } = G.input;
+      G.input.grab = null;
+      if (grab && j >= 0) set(G.s.v.map((i, k) => k === j ? grab.i : i));
+    },
+    demo: G => ({ from: center(G.tray[0]), to: center(G.slots[0]) }),
+    solve: G => G.r.goal.flatMap((i, j) => [center(G.tray[i]), center(G.slots[j])]),
+  };
+
+  // El límite de la banda mueve a la vez la fracción, la parte visible y la medida.
+  function ribbon(G, y, total, kept, title, draggable) {
+    const { p, C } = G, [a, b] = ends(G), w = b - a, u = w / total;
+    txt(p, title, (a + b) / 2, y - 28, w + 15, C.ink, 13);
+    panel(p, box(a, y - 13, w, 26), C.line, C.bg, 5);
+    if (kept > 0) panel(p, box(a, y - 13, kept * u, 26), C.brand, color(p, C.brand, 100), 5);
+    for (let i = 1; i < total; i++) line(p, point(a + i * u, y - 12), point(a + i * u, y + 12), C.line);
+    if (draggable) handle(p, C, point(a + kept * u, y), G.held);
+  }
+  modes.fraccion = {
+    ...linear,
+    instruction: 'Iguala la longitud de las dos fracciones',
+    layout(G) {
+      G.y = G.b.y + G.b.h * .69;
+      G.knob = at(G, G.s.v / G.r.hi, G.y);
+    },
+    draw(G) {
+      const { r, s, b } = G;
+      ribbon(G, b.y + b.h * .3, r.parts, r.filled, r.filled + ' de ' + r.parts, false);
+      ribbon(G, G.y, r.hi, s.v, s.v + ' de ' + r.hi, true);
+    },
+    route(G) { return [at(G, G.r.filled / G.r.parts, G.b.y + G.b.h * .3), G.knob]; },
+  };
+
+  modes.recibo = {
+    ...linear,
+    instruction: 'Tira del borde para recortar el precio',
+    layout(G) {
+      G.y = G.b.y + G.b.h * .55;
+      G.knob = at(G, 1 - G.s.v / G.r.hi, G.y);
+    },
+    draw(G) {
+      const { p, C, r, s, b, knob } = G, [a, z] = ends(G), y = G.y;
+      panel(p, box(a - 7, b.y + 19, z - a + 14, b.h - 38), C.line, C.card);
+      txt(p, 'Precio original · ' + r.price + ' mil', band(G).x, b.y + 42, b.w - 30, C.ink);
+      ribbon(G, y, r.hi, r.hi - s.v, 'Parte que se paga', true);
+      dash(p, point(knob.x, y - 37), point(knob.x, y + 33), C.brand);
+      txt(p, 'Una división vale ' + r.price / r.hi + ' mil', band(G).x, b.y + b.h - 26, b.w - 28, C.mute, 12);
+    },
+    press(G, q, set) {
+      if (gap(G.knob, q) > 25) return false;
+      this.drag(G, q, set); return true;
+    },
+    drag(G, q, set) {
+      set(step((1 - normal(q.x, ...ends(G))) * G.r.hi, 0, G.r.hi));
+    },
+    demo: G => ({ from: G.knob, to: at(G, .7, G.y) }),
+    solve: G => [G.knob, at(G, 1 - G.r.goal / G.r.hi, G.y)],
+    route(G) { return [at(G, 1, G.y), G.knob, point(G.knob.x, G.b.y + G.b.h - 25)]; },
+  };
+
+  modes.cascada = {
+    valid: (v, r) => same(v, r.goal),
+    complete: v => v.every(n => n !== 0),
+    instruction: 'Ajusta cada manija antes de aplicar los cambios',
+    layout(G) {
+      const { b, s } = G, [a, z] = ends(G);
+      G.tracks = [.34, .7].map((t, i) => {
+        const x = mix(a, z, t), y = b.y + 45, h = b.h - 91;
+        return { x, y, h, knob: point(x, y + h * (50 - s.v[i]) / 100) };
+      });
+    },
+    draw(G) {
+      const { p, C, b, tracks, r, s } = G;
+      const middle = r.price * (1 + s.v[0] / 100);
+      tracks.forEach(({ x, y, h, knob }, i) => {
+        line(p, point(x, y), point(x, y + h), C.line, 4);
+        line(p, point(x - 6, y + h / 2), point(x + 6, y + h / 2), C.mute);
+        handle(p, C, knob, G.held && G.input.stage === i);
+        txt(p, (i + 1) + ' · ' + s.v[i] + ' %', x, y - 23, b.w / 2 - 12, C.ink);
+      });
+      txt(p, r.price + ' → ' + +middle.toFixed(2) + ' → ' + +(middle * (1 + s.v[1] / 100)).toFixed(2),
+        band(G).x, b.y + b.h - 22, b.w - 25, C.ink);
+    },
+    press(G, q, set) {
+      const stage = G.tracks.findIndex(o => Math.abs(q.x - o.x) < 24 && inside(q, G.b));
+      if (stage < 0) return false;
+      G.input.stage = stage; this.drag(G, q, set); return true;
+    },
+    drag(G, q, set) {
+      const i = G.input.stage, { y, h } = G.tracks[i];
+      set(G.s.v.map((v, j) => i === j ? step(50 - (q.y - y) * 100 / h, -50, 50, 5) : v));
+    },
+    demo: G => ({ from: G.tracks[0].knob, to: point(G.tracks[0].x, G.tracks[0].y + G.tracks[0].h * .67) }),
+    solve: G => G.tracks.flatMap(({ x, y, h, knob }, i) => [knob, point(x, y + h * (50 - G.r.goal[i]) / 100)]),
+    route: G => [point(G.b.x + 17, band(G).y), ...G.tracks.map(t => t.knob), point(G.b.x + G.b.w - 17, band(G).y)],
+  };
+
+  modes.factores = {
+    valid: (v, r) => v === r.goal,
+    complete: (v, r) => v === r.bottom,
+    instruction: 'Arrastra los factores de abajo sobre los de arriba',
+    layout(G) {
+      const { b, r } = G, w = Math.min(42, (b.w - 22) / r.top - 5);
+      const row = (count, y) => Array.from({ length: count }, (_, i) => box(band(G).x - count * (w + 5) / 2 + i * (w + 5), y, w, 32));
+      G.top = row(r.top, b.y + b.h * .29 - 16);
+      G.bottom = row(r.bottom, b.y + b.h * .73 - 16);
+    },
+    draw(G) {
+      const { p, C, b, input, r, s } = G;
+      line(p, at(G, 0), at(G, 1), C.mute, 1.5);
+      for (const row of [G.top, G.bottom]) row.forEach((a, i) => {
+        const covered = i < s.v;
+        if (covered) {
+          panel(p, a, C.line, C.bg, 7);
+          line(p, point(a.x + 6, a.y + a.h - 6), point(a.x + a.w - 6, a.y + 6), C.mute);
+        } else chip(p, C, a, r.factor);
+      });
+      if (input.grab) chip(p, C, box(input.grab.q.x - 16, input.grab.q.y - 16, 32, 32), r.factor, C.brand);
+    },
+    press(G, q) {
+      if (!G.bottom.some((b, i) => i >= G.s.v && inside(q, b))) return false;
+      G.input.grab = { q }; return true;
+    },
+    drag: modes.membrana.drag,
+    cancel: modes.membrana.cancel,
+    release(G, q, set) {
+      const moved = G.input.grab && G.top.some((b, i) => i >= G.s.v && inside(q, b));
+      G.input.grab = null;
+      if (moved) set(G.s.v + 1);
+    },
+    demo: G => {
+      const i = Math.min(G.s.v, G.bottom.length - 1);
+      return { from: center(G.bottom[i]), to: center(G.top[i]) };
+    },
+    solve: G => G.bottom.flatMap((b, i) => [center(b), center(G.top[i])]),
+    route: G => [center(G.bottom.at(-1)), center(G.top[G.r.bottom - 1]), center(G.top.at(-1))],
+  };
+
+  for (const id of Object.keys(modes)) GAMES['taller-' + id] = A.register(id);
 })();

@@ -24,7 +24,7 @@ const XG = (() => {
         const stops = new Set();
         // Las teclas con que se maneja el juego no siguen a la lección (allá Enter comprueba y las flechas cambian de ejercicio).
         root.addEventListener('keydown', e => {
-          if (!locked && e.target.closest('button, [role=slider]') && /^(Enter| |Arrow.*)$/.test(e.key)) e.stopPropagation();
+          if (!locked && e.target.closest('button, summary, [role=button], [role=slider]') && /^(Enter| |Arrow.*)$/.test(e.key)) e.stopPropagation();
         });
         const ui = {
           root, stage, p, api,

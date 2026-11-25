@@ -1,536 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/algebra-escenas.js
-(() => {
-  const A = ALG_TALLER;
-  const { modes, bound, step, eq, same, mix, point, gap, box, inside, center, normal, color, stroke, panel, txt, handle, line, dash, curve, chip } = A;
-  const band = G => center(G.b);
-  const ends = G => [G.b.x + 23, G.b.x + G.b.w - 23];
-  const at = (G, t, y = band(G).y) => point(mix(...ends(G), t), y);
-  const moveX = (G, q, set) => set(step(mix(G.r.lo, G.r.hi, bound(normal(q.x, ...ends(G)), 0, 1)), G.r.lo, G.r.hi, G.r.step));
-  const measures = (G, y) => {
-    const { p, C, r, b, s } = G;
-    const a = at(G, 0, y), z = at(G, 1, y);
-    line(p, a, z, C.line, 3);
-    const n = Math.min(10, Math.round((r.hi - r.lo) / (r.step || 1)));
-    for (let i = 0; i <= n; i++) {
-      const q = at(G, i / n, y);
-      line(p, point(q.x, y - 4), point(q.x, y + 4), C.mute);
-    }
-    txt(p, r.lo, a.x, y + 21, 41, C.mute, 11);
-    txt(p, r.hi, z.x, y + 21, 41, C.mute, 11);
-    handle(p, C, G.knob, G.held);
-    txt(p, r.input?.(s.v) ?? s.v, G.knob.x, y - 24, Math.min(100, b.w / 2), C.ink);
-  };
-  const linear = {
-    valid: (v, r) => eq(v, r.goal),
-    layout(G) {
-      G.y = G.b.y + G.b.h - 38;
-      G.knob = at(G, normal(G.s.v, G.r.lo, G.r.hi), G.y);
-    },
-    press(G, q, set) { if (Math.abs(q.y - G.y) > 19 || !inside(q, G.b)) return false; moveX(G, q, set); return true; },
-    drag: moveX,
-    key(G, dx, dy, set) {
-      const { lo, hi, step: d = 1 } = G.r;
-      if (dx || dy) set(step(G.s.v + (dx || -dy) * d, lo, hi, d));
-    },
-    demo: G => ({ from: G.knob, to: at(G, G.knob.x < band(G).x ? .59 : .38, G.y) }),
-    solve: G => [G.knob, at(G, normal(G.r.goal, G.r.lo, G.r.hi), G.y)],
-  };
-
-  // Comparte la escala de medida. Cada escena conserva el dibujo y la magnitud que se manipula.
-  modes.barra = {
-    ...linear,
-    instruction: 'Desliza la manija y compara las medidas',
-    draw(G) {
-      const { p, C, r, s, b } = G;
-      const a = at(G, 0), z = at(G, 1), w = z.x - a.x;
-      const entries = r.bars?.(s.v) ?? [[r.input?.(s.v) ?? s.v, s.v]];
-      entries.forEach(([label, value], i) => {
-        const y = b.y + 34 + i * 49, col = i ? C.sky : C.brand;
-        panel(p, box(a.x, y, w, 13), C.line, C.bg, 4);
-        const tail = a.x + w * bound(Math.abs(value) / (r.scale || r.hi), 0, 1);
-        if (tail > a.x) panel(p, box(a.x, y, tail - a.x, 13), col, color(p, col, 100), 4);
-        txt(p, label, band(G).x, y - 13, w, C.ink, 13);
-      });
-      measures(G, G.y);
-    },
-  };
-
-  modes.balanza = {
-    ...linear,
-    instruction: 'Desliza el contrapeso para mover la balanza',
-    draw(G) {
-      const { p, C, r, s, b } = G, c = point(band(G).x, b.y + b.h * .41), arm = b.w * .32;
-      const [a, z] = r.loads(s.v), difference = bound((z - a) / Math.max(1, Math.abs(a), Math.abs(z)), -1, 1);
-      const h = difference * 23, left = point(c.x - arm, c.y - h), right = point(c.x + arm, c.y + h);
-      p.noStroke(); p.fill(color(p, C.brand, 55)); p.triangle(c.x, c.y, c.x - 23, c.y + 44, c.x + 23, c.y + 44);
-      line(p, left, right, C.brand, 4);
-      for (const [i, q] of [left, right].entries()) {
-        const co = i ? C.sky : C.brand;
-        line(p, q, point(q.x, q.y + 24), co, 1.5);
-        p.fill(color(p, co, 80)); p.stroke(co); p.arc(q.x, q.y + 25, 52, 17, 0, Math.PI, p.CHORD);
-        txt(p, i ? z : a, q.x, q.y - 16, 60, C.ink, 16);
-      }
-      measures(G, G.y);
-    },
-  };
-
-  // Un punto y sus proyecciones comparten una escala con las curvas de cada problema.
-  function plotLayout(G) {
-    const { b, r } = G, [xl, xr, yl, yr] = r.bounds;
-    const a = box(b.x + 27, b.y + 17, b.w - 46, b.h - 37);
-    G.plot = {
-      a,
-      to: (x, y) => point(mix(a.x, a.x + a.w, normal(x, xl, xr)), mix(a.y + a.h, a.y, normal(y, yl, yr))),
-      from: q => [step(mix(xl, xr, normal(q.x, a.x, a.x + a.w)), xl, xr, r.dx),
-        step(mix(yl, yr, normal(q.y, a.y + a.h, a.y)), yl, yr, r.dy)],
-    };
-  }
-  function axes(G) {
-    const { p, C, r, plot } = G, { a, to } = plot, [xl, xr, yl, yr] = r.bounds;
-    for (let i = 0; i <= 6; i++) {
-      const x = a.x + i * a.w / 6, y = a.y + i * a.h / 6;
-      line(p, point(x, a.y), point(x, a.y + a.h), C.line);
-      line(p, point(a.x, y), point(a.x + a.w, y), C.line);
-    }
-    const x0 = bound(0, xl, xr), y0 = bound(0, yl, yr);
-    line(p, to(xl, y0), to(xr, y0), C.mute);
-    line(p, to(x0, yl), to(x0, yr), C.mute);
-    txt(p, xl, a.x + 2, a.y + a.h + 11, 28, C.mute, 10);
-    txt(p, xr, a.x + a.w - 2, a.y + a.h + 11, 28, C.mute, 10);
-    txt(p, yr, a.x - 12, a.y + 3, 25, C.mute, 10);
-    txt(p, yl, a.x - 12, a.y + a.h - 3, 25, C.mute, 10);
-    for (const [i, fn] of (r.curves || []).entries()) {
-      const pts = Array.from({ length: 89 }, (_, k) => {
-        const x = mix(xl, xr, k / 88), y = fn(x);
-        return Number.isFinite(y) && y >= yl && y <= yr ? to(x, y) : null;
-      });
-      curve(p, pts, i ? C.sky : C.brand);
-    }
-    for (const [x, y] of r.marks || []) {
-      const q = to(x, y);
-      stroke(p, C.mute, 1.5); p.circle(q.x, q.y, 11);
-    }
-    for (const [x, y] of r.holes || []) {
-      const q = to(x, y);
-      p.stroke(C.brand); p.strokeWeight(2); p.fill(C.card); p.circle(q.x, q.y, 10);
-    }
-  }
-  function marks(G, x, y) {
-    const { p, C, r, plot, held } = G, { to } = plot, [xl, xr, yl, yr] = r.bounds;
-    const q = to(x, y);
-    dash(p, q, to(x, bound(0, yl, yr)), C.mute);
-    dash(p, q, to(bound(0, xl, xr), y), C.mute);
-    handle(p, C, q, held);
-  }
-  const position = (G, q, set) => set(G.plot.from(q));
-  modes.plano = {
-    valid: (v, r) => v.every((n, i) => eq(n, r.goal[i])),
-    instruction: 'Arrastra el punto en el plano',
-    layout: plotLayout,
-    draw(G) { axes(G); marks(G, ...G.s.v); },
-    press(G, q, set) { if (!inside(q, G.b)) return false; position(G, q, set); return true; },
-    drag: position,
-    key(G, dx, dy, set) {
-      const { bounds: [xl, xr, yl, yr], dx: sx = 1, dy: sy = 1 } = G.r, [x, y] = G.s.v;
-      set([step(x + dx * sx, xl, xr, sx), step(y - dy * sy, yl, yr, sy)]);
-    },
-    demo: G => { const [xl, xr, yl, yr] = G.r.bounds; return { from: G.plot.to(...G.s.v), to: G.plot.to(mix(xl, xr, .39), mix(yl, yr, .34)) }; },
-    solve: G => [G.plot.to(...G.s.v), G.plot.to(...G.r.goal)],
-    route: G => [G.plot.to(G.r.start[0], G.r.start[1]), G.plot.to(...G.s.v)],
-  };
-
-  const scan = (G, q, set) => set(G.plot.from(q)[0]);
-  modes.sonda = {
-    ...linear,
-    instruction: 'Mueve la sonda y observa la altura de la curva',
-    layout: plotLayout,
-    draw(G) {
-      axes(G);
-      const { r, s, plot } = G, [,, lo, hi] = r.bounds;
-      const y = r.curves[0](s.v);
-      if (Number.isFinite(y)) marks(G, s.v, bound(y, lo, hi));
-      else {
-        const a = plot.to(s.v, lo), b = plot.to(s.v, hi);
-        dash(G.p, a, b, G.C.mute);
-        handle(G.p, G.C, plot.to(s.v, (lo + hi) / 2), G.held);
-      }
-    },
-    press(G, q, set) { if (!inside(q, G.b)) return false; scan(G, q, set); return true; },
-    drag: scan,
-    key(G, dx, dy, set) {
-      const [lo, hi] = G.r.bounds, d = G.r.dx || 1;
-      if (dx || dy) set(step(G.s.v + (dx || -dy) * d, lo, hi, d));
-    },
-    demo: G => {
-      const { r, s, plot } = G, [lo, hi, a, b] = r.bounds, n = step(mix(lo, hi, s.v <= (lo + hi) / 2 ? .63 : .35), lo, hi, r.dx);
-      return { from: plot.to(s.v, bound(r.curves[0](s.v), a, b)), to: plot.to(n, bound(r.curves[0](n), a, b)) };
-    },
-    solve: G => [G.plot.to(G.s.v, G.r.curves[0](G.s.v)), G.plot.to(G.r.goal, G.r.curves[0](G.r.goal))],
-    route(G) {
-      const { s, r, plot } = G, [,, lo, hi] = r.bounds;
-      return Array.from({ length: 33 }, (_, i) => {
-        const x = mix(r.start, s.v, i / 32);
-        return plot.to(x, bound(r.curves[0](x), lo, hi));
-      });
-    },
-  };
-
-  function areaMove(G, q, set) {
-    const { r, uv, f } = G, [xb, yb] = r.max;
-    set([step((q.x - f.x) / uv, 1, xb), step((f.y - q.y) / uv, 1, yb)]);
-  }
-  modes.area = {
-    valid: modes.plano.valid,
-    instruction: 'Tira de la esquina para construir el área',
-    layout(G) {
-      const { b, r, s } = G;
-      G.uv = Math.min((b.w - 71) / r.max[0], (b.h - 46) / r.max[1]);
-      G.f = point(b.x + 34, b.y + b.h - 30);
-      G.knob = point(G.f.x + G.uv * s.v[0], G.f.y - G.uv * s.v[1]);
-    },
-    draw(G) {
-      const { p, C, f, knob, uv, s } = G, [w, h] = s.v;
-      panel(p, box(f.x, knob.y, uv * w, uv * h), C.brand, color(p, C.brand, 75), 0);
-      for (let i = 1; i < w; i++) line(p, point(f.x + i * uv, knob.y), point(f.x + i * uv, f.y), C.line);
-      for (let j = 1; j < h; j++) line(p, point(f.x, f.y - j * uv), point(knob.x, f.y - j * uv), C.line);
-      txt(p, w, (f.x + knob.x) / 2, f.y + 14, 34, C.ink, 13);
-      txt(p, h, f.x - 14, (f.y + knob.y) / 2, 27, C.ink, 13);
-      handle(p, C, knob, G.held);
-    },
-    press(G, q, set) { if (gap(G.knob, q) > 23) return false; areaMove(G, q, set); return true; },
-    drag: areaMove,
-    key(G, dx, dy, set) {
-      const [a, b] = G.s.v, [x, y] = G.r.max;
-      set([bound(a + dx, 1, x), bound(b - dy, 1, y)]);
-    },
-    demo: G => ({ from: G.knob, to: point(G.f.x + G.uv * Math.min(3, G.r.max[0]), G.f.y - G.uv * Math.min(3, G.r.max[1])) }),
-    solve: G => [G.knob, point(G.f.x + G.uv * G.r.goal[0], G.f.y - G.uv * G.r.goal[1])],
-  };
-
-  const rot = (c, r, t) => point(c.x + r * Math.cos(t), c.y + r * Math.sin(t));
-  const angle = (G, i) => -Math.PI / 2 + (i / G.r.values.length) * 2 * Math.PI;
-  function turn(G, q, set) {
-    const t = Math.atan2(q.y - G.c.y, q.x - G.c.x) + Math.PI / 2, n = G.r.values.length;
-    set((Math.round(t * n / (2 * Math.PI)) + n) % n);
-  }
-  modes.giro = {
-    valid: (v, r) => v === r.goal,
-    instruction: 'Agarra el brazo y gíralo',
-    layout(G) { G.c = band(G); G.rad = Math.min(G.b.h / 2 - 31, G.b.w / 2 - 35); G.knob = rot(G.c, G.rad, angle(G, G.s.v)); },
-    draw(G) {
-      const { p, C, r, s, c, rad, knob } = G;
-      stroke(p, C.line); p.circle(c.x, c.y, rad * 2); p.circle(c.x, c.y, rad * 1.32);
-      for (let i = 0; i < r.values.length; i++) {
-        const t = angle(G, i), q = rot(c, rad + 19, t);
-        line(p, rot(c, rad - 4, t), rot(c, rad + 4, t), i === s.v ? C.brand : C.mute);
-        txt(p, r.values[i], q.x, q.y, 40, C.ink, 12);
-      }
-      line(p, c, knob, C.brand, 2);
-      handle(p, C, knob, G.held);
-    },
-    press(G, q, set) { if (gap(G.knob, q) > 22) return false; turn(G, q, set); return true; },
-    drag: turn,
-    key(G, dx, dy, set) {
-      const n = G.r.values.length;
-      set((G.s.v + (dx || -dy) + n) % n);
-    },
-    demo: G => ({ from: G.knob, to: rot(G.c, G.rad, angle(G, (G.s.v + 1) % G.r.values.length)) }),
-    solve: G => [G.knob, rot(G.c, G.rad, angle(G, G.r.goal))],
-    route(G) {
-      return Array.from({ length: 21 }, (_, i) => rot(G.c, G.rad, mix(angle(G, G.r.start), angle(G, G.s.v), i / 20)));
-    },
-  };
-
-  // Mosaicos. La línea pintada es la acción de seleccionar y también sirve para quitar celdas.
-  function paint(G, q, set, first) {
-    const i = G.cells.findIndex(b => inside(q, b));
-    if (i < 0 || (!first && i === G.input.lastCell)) return false;
-    const cells = G.s.v;
-    if (first) G.input.paintOn = !cells.includes(i);
-    G.input.lastCell = i;
-    set(G.input.paintOn ? [...new Set([...cells, i])].sort((a, b) => a - b) : cells.filter(j => i !== j));
-    return true;
-  }
-  modes.mosaico = {
-    valid: (v, r) => same(v, r.goal),
-    instruction: 'Pinta al pasar por las celdas; repasa para borrar',
-    layout(G) {
-      const { b, r } = G, n = r.cols, m = Math.ceil(r.tiles.length / n), c = band(G);
-      const u = Math.min((b.w - 28) / n, (b.h - 25) / m, 54);
-      G.cells = r.tiles.map((_, i) => box(c.x + (i % n - n / 2) * u + 2, c.y + (Math.floor(i / n) - m / 2) * u + 2, u - 4, u - 4));
-    },
-    draw(G) {
-      const { p, C, r, s } = G;
-      G.cells.forEach((b, i) => {
-        const on = s.v.includes(i), q = center(b);
-        panel(p, b, on ? C.brand : C.line, on ? color(p, C.brand, 110) : C.card, 5);
-        if (r.tiles[i]) txt(p, r.tiles[i], q.x, q.y, b.w - 4, C.ink, 14);
-      });
-    },
-    press: (G, q, set) => paint(G, q, set, true),
-    drag: paint,
-    demo: G => ({ from: center(G.cells[0]), to: center(G.cells[1]) }),
-    solve: G => G.r.goal.map(i => center(G.cells[i])),
-  };
-
-  // Las piezas se mueven entre compartimentos. Soltar fuera devuelve la pieza al punto de partida.
-  modes.membrana = {
-    valid: (v, r) => same(v, r.goal),
-    complete: v => v.every(i => i >= 0),
-    instruction: 'Arrastra cada pieza a su región',
-    layout(G) {
-      const { b, r, s } = G, n = r.regions.length, w = b.w / n - 10;
-      const rowY = b.y + b.h - 37, cap = Math.min(43, (b.w - 12) / r.tiles.length - 3);
-      const total = (cap + 3) * r.tiles.length;
-      G.regions = r.regions.map((_, i) => box(b.x + i * (w + 10) + 5, b.y + 9, w, b.h - 53));
-      G.homes = r.tiles.map((_, i) => box(band(G).x - total / 2 + i * (cap + 3), rowY, cap, 28));
-      const count = r.regions.map(() => 0);
-      G.tiles = s.v.map((j, i) => {
-        if (j < 0) return G.homes[i];
-        const a = G.regions[j], k = count[j]++;
-        return box(center(a).x - cap / 2, a.y + 36 + k * Math.min(26, (a.h - 49) / Math.max(1, s.v.filter(x => x === j).length)), cap, 24);
-      });
-    },
-    draw(G) {
-      const { p, C, r } = G;
-      const { grab } = G.input;
-      G.regions.forEach((b, i) => {
-        const c = i % 2 ? C.sky : C.brand;
-        panel(p, b, c, color(p, c, 20), 19);
-        txt(p, r.regions[i], center(b).x, b.y + 17, b.w - 6, C.ink, 13);
-      });
-      G.tiles.forEach((b, i) => { if (!grab || grab.i !== i) chip(p, C, b, r.tiles[i]); });
-      if (grab) chip(p, C, box(grab.q.x - 21, grab.q.y - 14, 42, 28), r.tiles[grab.i], C.brand);
-    },
-    press(G, q) {
-      const i = G.tiles.findIndex(b => inside(q, b));
-      if (i < 0) return false;
-      G.input.grab = { i, q }; return true;
-    },
-    drag(G, q) { if (G.input.grab) G.input.grab.q = q; },
-    release(G, q, set) {
-      const { grab } = G.input;
-      if (!grab) return;
-      const j = G.regions.findIndex(b => inside(q, b)), i = grab.i;
-      G.input.grab = null;
-      if (j < 0 && !G.homes.some(b => inside(q, b))) return;
-      set(G.s.v.map((v, k) => k === i ? j : v));
-    },
-    cancel(G) { G.input.grab = null; },
-    demo: G => ({ from: center(G.tiles[0]), to: center(G.regions[0]) }),
-    solve: G => G.tiles.flatMap((b, i) => [center(b), center(G.regions[G.r.goal[i]])]),
-  };
-
-  const gridPath = (G, q, set) => {
-    const i = G.nodes.findIndex(n => gap(n, q) < 21), route = G.s.v, last = route.at(-1);
-    if (i < 0 || i === last) return false;
-    if (i === route.at(-2)) { set(route.slice(0, -1)); return true; }
-    if (!G.r.edges.some(([a, b]) => a === last && b === i)) return false;
-    set([...route, i]); return true;
-  };
-  modes.trazo = {
-    valid: (v, r) => same(v, r.goal),
-    complete: (v, r) => GPathEnd(v, r),
-    instruction: 'Traza el camino desde el origen',
-    layout(G) {
-      const { b, r } = G;
-      G.nodes = r.nodes.map(([x, y]) => point(b.x + 31 + x * (b.w - 62), b.y + 25 + y * (b.h - 50)));
-    },
-    draw(G) {
-      const { p, C, r, s, nodes } = G;
-      r.edges.forEach(([a, b]) => line(p, nodes[a], nodes[b], C.line, 2));
-      for (let i = 1; i < s.v.length; i++) line(p, nodes[s.v[i - 1]], nodes[s.v[i]], C.brand, 3);
-      nodes.forEach((q, i) => {
-        p.stroke(s.v.includes(i) ? C.brand : C.line); p.strokeWeight(1.5); p.fill(C.card); p.circle(q.x, q.y, 36);
-        txt(p, r.nodes[i][2], q.x, q.y, 34, C.ink, 12);
-      });
-    },
-    press(G, q, set) { return gap(G.nodes[G.s.v.at(-1)], q) < 22 || gridPath(G, q, set); },
-    drag: gridPath,
-    demo: G => {
-      const i = G.s.v.at(-1), j = G.r.edges.find(([a]) => a === i)?.[1] ?? G.s.v.at(-2);
-      return { from: G.nodes[i], to: G.nodes[j] };
-    },
-    solve: G => G.r.goal.map(i => G.nodes[i]),
-    route: G => G.s.v.map(i => G.nodes[i]),
-  };
-  const GPathEnd = (v, r) => v.length >= r.minLength || v.at(-1) === r.goal.at(-1);
-
-  // Dos fracciones se amplían al construir el mismo denominador en ambas filas.
-  modes.puentes = {
-    valid: (v, r) => same(v, r.goal),
-    complete: v => v.every(i => i >= 0),
-    instruction: 'Lleva un factor a cada fracción',
-    layout(G) {
-      const { b, r } = G, m = r.tiles.length, w = Math.min(53, (b.w - 24) / m - 6);
-      G.tray = r.tiles.map((_, i) => box(band(G).x - (w + 6) * m / 2 + i * (w + 6), b.y + b.h - 46, w, 35));
-      G.slots = [0, 1].map(i => box(b.x + b.w * .58, b.y + 9 + i * (b.h - 58) / 2, b.w * .36, 44));
-    },
-    draw(G) {
-      const { p, C, r, s, b, input } = G;
-      for (const [i, slot] of G.slots.entries()) {
-        const q = center(slot), from = b.x + b.w * .26, v = s.v[i];
-        line(p, point(from + 24, q.y), point(slot.x - 6, q.y), v < 0 ? C.line : C.brand, 2);
-        txt(p, r.fractions[i], from, q.y, b.w * .48, C.ink, 22);
-        panel(p, slot, v < 0 ? C.line : C.brand, v < 0 ? C.bg : color(p, C.brand, 48), 8);
-        txt(p, v < 0 ? 'Factor' : r.tiles[v], q.x, q.y, slot.w - 8, v < 0 ? C.mute : C.ink, 16);
-      }
-      G.tray.forEach((a, i) => chip(p, C, a, r.tiles[i]));
-      if (input.grab) {
-        const { q, i } = input.grab;
-        chip(p, C, box(q.x - 23, q.y - 16, 46, 32), r.tiles[i], C.brand);
-      }
-    },
-    press(G, q) {
-      const i = G.tray.findIndex(a => inside(q, a));
-      if (i < 0) return false;
-      G.input.grab = { i, q }; return true;
-    },
-    drag: modes.membrana.drag,
-    cancel: modes.membrana.cancel,
-    release(G, q, set) {
-      const j = G.slots.findIndex(a => inside(q, a)), { grab } = G.input;
-      G.input.grab = null;
-      if (grab && j >= 0) set(G.s.v.map((i, k) => k === j ? grab.i : i));
-    },
-    demo: G => ({ from: center(G.tray[0]), to: center(G.slots[0]) }),
-    solve: G => G.r.goal.flatMap((i, j) => [center(G.tray[i]), center(G.slots[j])]),
-  };
-
-  // El límite de la banda mueve a la vez la fracción, la parte visible y la medida.
-  function ribbon(G, y, total, kept, title, draggable) {
-    const { p, C } = G, [a, b] = ends(G), w = b - a, u = w / total;
-    txt(p, title, (a + b) / 2, y - 28, w + 15, C.ink, 13);
-    panel(p, box(a, y - 13, w, 26), C.line, C.bg, 5);
-    if (kept > 0) panel(p, box(a, y - 13, kept * u, 26), C.brand, color(p, C.brand, 100), 5);
-    for (let i = 1; i < total; i++) line(p, point(a + i * u, y - 12), point(a + i * u, y + 12), C.line);
-    if (draggable) handle(p, C, point(a + kept * u, y), G.held);
-  }
-  modes.fraccion = {
-    ...linear,
-    instruction: 'Iguala la longitud de las dos fracciones',
-    layout(G) {
-      G.y = G.b.y + G.b.h * .69;
-      G.knob = at(G, G.s.v / G.r.hi, G.y);
-    },
-    draw(G) {
-      const { r, s, b } = G;
-      ribbon(G, b.y + b.h * .3, r.parts, r.filled, r.filled + ' de ' + r.parts, false);
-      ribbon(G, G.y, r.hi, s.v, s.v + ' de ' + r.hi, true);
-    },
-    route(G) { return [at(G, G.r.filled / G.r.parts, G.b.y + G.b.h * .3), G.knob]; },
-  };
-
-  modes.recibo = {
-    ...linear,
-    instruction: 'Tira del borde para recortar el precio',
-    layout(G) {
-      G.y = G.b.y + G.b.h * .55;
-      G.knob = at(G, 1 - G.s.v / G.r.hi, G.y);
-    },
-    draw(G) {
-      const { p, C, r, s, b, knob } = G, [a, z] = ends(G), y = G.y;
-      panel(p, box(a - 7, b.y + 19, z - a + 14, b.h - 38), C.line, C.card);
-      txt(p, 'Precio original · ' + r.price + ' mil', band(G).x, b.y + 42, b.w - 30, C.ink);
-      ribbon(G, y, r.hi, r.hi - s.v, 'Parte que se paga', true);
-      dash(p, point(knob.x, y - 37), point(knob.x, y + 33), C.brand);
-      txt(p, 'Una división vale ' + r.price / r.hi + ' mil', band(G).x, b.y + b.h - 26, b.w - 28, C.mute, 12);
-    },
-    press(G, q, set) {
-      if (gap(G.knob, q) > 25) return false;
-      this.drag(G, q, set); return true;
-    },
-    drag(G, q, set) {
-      set(step((1 - normal(q.x, ...ends(G))) * G.r.hi, 0, G.r.hi));
-    },
-    demo: G => ({ from: G.knob, to: at(G, .7, G.y) }),
-    solve: G => [G.knob, at(G, 1 - G.r.goal / G.r.hi, G.y)],
-    route(G) { return [at(G, 1, G.y), G.knob, point(G.knob.x, G.b.y + G.b.h - 25)]; },
-  };
-
-  modes.cascada = {
-    valid: (v, r) => same(v, r.goal),
-    complete: v => v.every(n => n !== 0),
-    instruction: 'Ajusta cada manija antes de aplicar los cambios',
-    layout(G) {
-      const { b, s } = G, [a, z] = ends(G);
-      G.tracks = [.34, .7].map((t, i) => {
-        const x = mix(a, z, t), y = b.y + 45, h = b.h - 91;
-        return { x, y, h, knob: point(x, y + h * (50 - s.v[i]) / 100) };
-      });
-    },
-    draw(G) {
-      const { p, C, b, tracks, r, s } = G;
-      const middle = r.price * (1 + s.v[0] / 100);
-      tracks.forEach(({ x, y, h, knob }, i) => {
-        line(p, point(x, y), point(x, y + h), C.line, 4);
-        line(p, point(x - 6, y + h / 2), point(x + 6, y + h / 2), C.mute);
-        handle(p, C, knob, G.held && G.input.stage === i);
-        txt(p, (i + 1) + ' · ' + s.v[i] + ' %', x, y - 23, b.w / 2 - 12, C.ink);
-      });
-      txt(p, r.price + ' → ' + +middle.toFixed(2) + ' → ' + +(middle * (1 + s.v[1] / 100)).toFixed(2),
-        band(G).x, b.y + b.h - 22, b.w - 25, C.ink);
-    },
-    press(G, q, set) {
-      const stage = G.tracks.findIndex(o => Math.abs(q.x - o.x) < 24 && inside(q, G.b));
-      if (stage < 0) return false;
-      G.input.stage = stage; this.drag(G, q, set); return true;
-    },
-    drag(G, q, set) {
-      const i = G.input.stage, { y, h } = G.tracks[i];
-      set(G.s.v.map((v, j) => i === j ? step(50 - (q.y - y) * 100 / h, -50, 50, 5) : v));
-    },
-    demo: G => ({ from: G.tracks[0].knob, to: point(G.tracks[0].x, G.tracks[0].y + G.tracks[0].h * .67) }),
-    solve: G => G.tracks.flatMap(({ x, y, h, knob }, i) => [knob, point(x, y + h * (50 - G.r.goal[i]) / 100)]),
-    route: G => [point(G.b.x + 17, band(G).y), ...G.tracks.map(t => t.knob), point(G.b.x + G.b.w - 17, band(G).y)],
-  };
-
-  modes.factores = {
-    valid: (v, r) => v === r.goal,
-    complete: (v, r) => v === r.bottom,
-    instruction: 'Arrastra los factores de abajo sobre los de arriba',
-    layout(G) {
-      const { b, r } = G, w = Math.min(42, (b.w - 22) / r.top - 5);
-      const row = (count, y) => Array.from({ length: count }, (_, i) => box(band(G).x - count * (w + 5) / 2 + i * (w + 5), y, w, 32));
-      G.top = row(r.top, b.y + b.h * .29 - 16);
-      G.bottom = row(r.bottom, b.y + b.h * .73 - 16);
-    },
-    draw(G) {
-      const { p, C, b, input, r, s } = G;
-      line(p, at(G, 0), at(G, 1), C.mute, 1.5);
-      for (const row of [G.top, G.bottom]) row.forEach((a, i) => {
-        const covered = i < s.v;
-        if (covered) {
-          panel(p, a, C.line, C.bg, 7);
-          line(p, point(a.x + 6, a.y + a.h - 6), point(a.x + a.w - 6, a.y + 6), C.mute);
-        } else chip(p, C, a, r.factor);
-      });
-      if (input.grab) chip(p, C, box(input.grab.q.x - 16, input.grab.q.y - 16, 32, 32), r.factor, C.brand);
-    },
-    press(G, q) {
-      if (!G.bottom.some((b, i) => i >= G.s.v && inside(q, b))) return false;
-      G.input.grab = { q }; return true;
-    },
-    drag: modes.membrana.drag,
-    cancel: modes.membrana.cancel,
-    release(G, q, set) {
-      const moved = G.input.grab && G.top.some((b, i) => i >= G.s.v && inside(q, b));
-      G.input.grab = null;
-      if (moved) set(G.s.v + 1);
-    },
-    demo: G => {
-      const i = Math.min(G.s.v, G.bottom.length - 1);
-      return { from: center(G.bottom[i]), to: center(G.top[i]) };
-    },
-    solve: G => G.bottom.flatMap((b, i) => [center(b), center(G.top[i])]),
-    route: G => [center(G.bottom.at(-1)), center(G.top[G.r.bottom - 1]), center(G.top.at(-1))],
-  };
-
-  for (const id of Object.keys(modes)) GAMES['taller-' + id] = A.register(id);
-})();
-;
 //#archivo js/courses/algebra.js
 // Curso de Álgebra — sigue el orden de las clases 1 a 19 del cronograma 2026-2 de Álgebra y Trigonometría
 // (UdeA) con el contenido del Manual de Álgebra y Trigonometría (Instituto de Matemáticas, UdeA, 2024).
@@ -10617,7 +10086,7 @@ const PU_LEC_JUEGOS = [];
 ;
 //#archivo js/courses/preuda-l-estrategias.js
 // Preuniversitario · Comprensión lectora · mundo 1 «Estrategias de lectura» con textos de verdad (spec
-// 2026-11-19-preuda-lectura-textos). Cada lección trabaja un texto original en 7 juegos distintos; la evaluación usa otro texto
+// 2026-11-19-preuda-lectura-textos). Cada lección trabaja un texto original en 8 ejercicios sobre la hoja (spec 2026-11-24-lectura-explora); la evaluación usa otro texto
 // en el formato real del examen. Textos escritos para Zuka.
 PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
   const RUIDO = {
@@ -10661,144 +10130,127 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 
   // ---------------- Lección 1 · Prelectura ----------------
   setLesson('pu-el-1', [
-    play('anticipa-texto', 'Antes de leer', { doc: RUIDO, slots: [
-      ['Tema', ['el ruido de la ciudad y la salud', 'la historia de Medellín', 'el oído de los animales'], 0],
-      ['Propósito', ['explicar un problema con datos', 'contar una anécdota personal', 'vender un producto'], 0],
-      ['Tipo de texto', ['divulgativo, que expone', 'cuento, que narra', 'poema, que expresa'], 0],
-    ] }, 'El título pregunta por el ruido que aguanta una ciudad; lo firma un equipo universitario y sale en una revista de divulgación científica: se espera un texto que explique un problema con datos.',
-      { hint: 'Mira qué anuncia el título y qué clase de publicación es la fuente. Quien escribe también da una pista.' }),
-    play('subraya-prueba', 'La prueba en el texto', { doc: RUIDO, rounds: [
-      { claim: 'El ruido puede hacerle daño a alguien aunque esa persona no llegue a despertarse.', p: 2, answer: 2 },
-      { claim: 'Proteger las casas no resuelve el ruido que sufren los que están en la calle.', p: 4, answer: 3 },
-    ] }, 'La primera conclusión sale de la oración que dice que la persona no se despierta del todo, pero su corazón se acelera varias veces en la noche. La segunda, de la última oración del párrafo 4: las protecciones son más baratas, pero dejan intacto el problema en la calle.',
-      { hint: 'Varias oraciones hablan del mismo tema. Busca la que, si la borraras, dejaría la conclusión sin apoyo.' }),
-    play('donde-buscar', '¿A qué párrafo vuelvo?', { doc: RUIDO, cards: [
-      ['¿Qué soluciones protegen al que escucha?', [4]], ['¿Qué ruido produce una aspiradora?', [1]], ['¿Qué propone la ingeniera?', [6]],
-      ['¿Qué opina Restrepo de acostumbrarse?', [3]], ['¿Quiénes duermen con más ruido?', [5]], ['¿Por qué el ruido afecta aunque no despierte?', [2]],
-    ] }, 'Cada pregunta tiene su párrafo: el dato de la aspiradora en el 1, el sueño en el 2, la cita sobre acostumbrarse en el 3, los dos tipos de soluciones en el 4, la desigualdad en el 5 y los mapas en el 6.',
-      { hint: 'Usa el esqueleto: cada párrafo trata un asunto. Busca la palabra clave de la pregunta en el texto.' }),
-    play('resumen-esencial', 'El resumen en cuatro renglones', { doc: RUIDO, ideas: [
-      ['El ruido constante es un problema de salud, no una simple molestia.', true],
-      ['El cuerpo reacciona al ruido aun dormido, sobre todo cuando se repite cada noche.', true],
-      ['Los barrios con menos recursos son los que más ruido soportan.', true],
-      ['Medir el ruido barrio por barrio convertiría la queja en un dato que obliga a actuar.', true],
-      ['Una avenida produce 75 decibeles, como una aspiradora a un metro.', false],
-      ['Los buses eléctricos y ciertos pavimentos bajan el ruido en la fuente.', false],
-      ['La ingeniera Natalia Restrepo mide el ruido de la ciudad desde hace una década.', false],
-    ] }, 'El resumen recoge la tesis (el ruido es un problema de salud), por qué lo es (el cuerpo reacciona aun dormido), a quiénes golpea más y la propuesta de los mapas. Los 75 decibeles, los buses eléctricos y los años de la ingeniera son ciertos, pero son detalles que apoyan esas ideas.',
-      { hint: 'Una idea esencial resume un párrafo entero o el texto completo. Un dato, un ejemplo o un nombre es un detalle dentro de un párrafo.' }),
-    play('palabra-a-la-medida', 'La palabra en su oración', { doc: RUIDO, rounds: [
-      { p: 3, before: 'el compresor de una fábrica que funciona todas las noches ', word: 'desgasta', after: '.', options: ['agota', 'limpia', 'adelgaza', 'enfría'], answer: 0 },
-      { p: 4, before: 'pero dejan ', word: 'intacto', after: ' el problema en la calle', options: ['sin cambios', 'resuelto', 'pequeño', 'oculto a la vista'], answer: 0 },
-      { p: 6, before: 'en un dato que la ciudad ya no puede ', word: 'ignorar', after: '.', options: ['pasar por alto', 'aprender', 'medir', 'castigar con multas'], answer: 0 },
-    ] }, 'El compresor de todas las noches agota al cuerpo, no lo limpia ni lo enfría. Proteger al que escucha deja el problema de la calle sin cambios. Y un dato publicado ya no se puede pasar por alto.',
-      { hint: 'Lee la oración con cada palabra puesta: la buena dice lo mismo que la original en ese contexto, no en el diccionario.' }),
-    play('hilo-referente', '¿A quién apunta?', { doc: RUIDO, rounds: [
-      { p: 4, text: 'Las primeras| actúan sobre la fuente: pavimentos que reducen el roce de las llantas, buses eléctricos, horarios para el cargue y descargue de mercancías. |Las segundas| protegen al que escucha: ventanas de doble vidrio, barreras de árboles y muros, normas que impiden construir viviendas junto a las vías rápidas. |Estas últimas| son más baratas', from: 4, answer: 2 },
-      { p: 3, text: '«El daño no depende solo del volumen, sino de la hora y de la costumbre», explica |la ingeniera acústica Natalia Restrepo|, que mide |el ruido de la ciudad| desde hace una década. Según |ella|, una fiesta ocasional molesta', from: 5, answer: 1 },
-    ] }, '«Estas últimas» son las soluciones nombradas en último lugar: las segundas, las que protegen al que escucha. «Ella» es la ingeniera Natalia Restrepo, la única persona nombrada antes.',
-      { hint: 'El párrafo nombra dos grupos de soluciones; «estas últimas» apunta a uno de los dos grupos. «Ella» apunta a una persona en femenino nombrada antes.' }),
-    play('termometro-tono', 'El tono de la voz', { doc: RUIDO, rounds: [
-      { frag: '«Uno cree que se acostumbra. En realidad, el cuerpo solo deja de quejarse en voz alta».', scale: ['burlón', 'de advertencia', 'nostálgico', 'entusiasta'], answer: 1 },
-      { frag: 'Quien puede pagar un apartamento en una zona tranquila compra también silencio; quien no puede, duerme con el ruido de los demás.', scale: ['indiferente', 'alegre', 'crítico', 'nostálgico'], answer: 2 },
-    ] }, 'La cita de Restrepo advierte de un daño que no se nota. La oración del párrafo 5 critica una injusticia: el silencio también se compra.',
-      { hint: 'Pregúntate qué quiere provocar la frase en quien la lee: ¿risa, alarma, añoranza, rechazo a algo injusto?' }),
+    play('antes-de-leer', 'El texto está tapado. Con sus bordes, completa la apuesta. Sobran fichas.', { doc: RUIDO, frase: 'El texto va a hablar de [0], para [1]. Será [2].', rot: ['¿qué tema?', '¿para qué?', '¿qué clase de texto?'],
+      fichas: ['el ruido en la ciudad', 'explicar un problema con datos', 'un texto divulgativo', 'los conciertos de la ciudad', 'desahogarse de un vecino', 'un cuento'], va: [0, 1, 2, null, null, null],
+      mira: ['El título nombra el tema: «ruido» y «ciudad».', 'Lo firma un equipo universitario en una revista de divulgación: ¿para qué escribe esa clase de revista?', 'Mira la fuente: dice qué clase de texto es.', 'El título habla de ruido, no de música.', 'Un equipo universitario en una revista de divulgación no escribe para desahogarse.', 'Los cuentos no salen en una revista de divulgación científica.'],
+      luz: [[1, 'un ruido promedio de 75 decibeles'], [1, 'un problema de salud pública'], [6, 'mapas de ruido de cada barrio']], bien: 'La apuesta se cumple: hay datos y un problema explicado.' },
+      'El título nombra el ruido y la ciudad; lo firma un equipo de divulgación y sale en una revista científica: se espera un texto divulgativo que explique un problema con datos.',
+      { hint: 'Cada hueco se llena con un borde distinto: el tema, con el título; el para qué y la clase de texto, con el autor y la fuente.' }),
+    play('hilo-bordes', 'Antes de leer te haces estas preguntas. Ata cada una al borde que mejor la responde.', { doc: RUIDO, tarjetas: ['¿De qué va a tratar?', '¿Quién responde por lo que dice?', '¿Dónde se publicó: en un lugar para explicar o para opinar?', '¿Los datos siguen valiendo?'], va: [0, 1, 2, 3],
+      mira: ['Imagina que cambias ese borde: ¿cambiaría el tema?', 'Si un dato saliera falso, ¿a quién habría que reclamarle?', 'Según dónde se publique, un texto explica u opina.', 'Para saber si un dato envejeció hay que saber de cuándo es.'], bien: 'Cada borde responde una pregunta distinta.' },
+      'El título anuncia el tema; el autor es quien responde; la fuente (una revista de divulgación) dice que es para explicar; la fecha permite saber si los datos siguen valiendo.',
+      { hint: 'Piensa qué borde tendrías que cambiar para que cambiara la respuesta a cada pregunta.' }),
+    play('portadas', 'Cuatro textos sobre el mismo río, sin abrir. Pon qué va a hacer cada uno. Sobra una ficha.', { portadas: [['El río en cifras: caudal y calidad del agua', 'Informe técnico de una corporación ambiental'], ['Dejen de robarle espacio al río', 'Columna de opinión'], ['¿Por qué los ríos hacen curvas?', 'Revista de divulgación científica'], ['Cuando aprendí a nadar en el río', 'Testimonio, libro de memorias']],
+      fichas: ['registrar mediciones', 'defender una postura', 'explicar un fenómeno', 'contar lo vivido', 'vender un paseo'], va: [0, 1, 2, 3, null],
+      mira: ['Las cifras y las mediciones son de un texto técnico.', '¿Cuál título le pide algo a alguien? Ese toma partido.', 'Una pregunta con «por qué» en una revista de ciencia pide una explicación.', 'Las memorias hablan en primera persona de lo que pasó.', 'Ninguna de estas fuentes es un anuncio.'], bien: 'Mismo tema, cuatro propósitos distintos.' },
+      'El informe registra mediciones, la columna defiende una postura, la revista de divulgación explica un fenómeno y el testimonio cuenta lo vivido. Ninguno vende nada.',
+      { hint: 'No te fijes en el tema, que es el mismo. Mira la fuente y si el título pide, pregunta o recuerda.' }),
+    play('donde-mirar', 'De cada párrafo solo ves el comienzo. Lleva cada pregunta al párrafo donde la buscarías.', { doc: RUIDO, fichas: ['¿Qué se puede hacer para oír menos?', '¿Por qué unos barrios sufren más que otros?', '¿Por qué afecta también al dormir?'], va: [3, 4, 1],
+      mira: ['Busca el comienzo que anuncia qué se puede hacer.', 'Busca el comienzo que anuncia una diferencia entre unas personas y otras.', 'Busca el comienzo que tiene que ver con el descanso.'],
+      luz: [[2, 'Mientras dormimos'], [4, 'ventanas de doble vidrio'], [5, 'Los barrios con menos recursos']], bien: 'Con los comienzos bastó para saber adónde ir.' },
+      '«Las soluciones conocidas» anuncia qué se puede hacer; «una desigualdad», por qué unos barrios sufren más; y «no puede cerrarse para descansar», lo que pasa al dormir.',
+      { hint: 'Por cada pregunta, lee los seis comienzos y pregúntate cuál promete hablar de eso, aunque use otras palabras.' }),
+    play('comprueba-apuesta', 'Apostaste esto antes de leer. Subraya en el párrafo 1 la oración que mejor lo confirma.', { doc: RUIDO, nums: [1], n: 1, apuesta: 'El texto tratará el ruido como algo serio para la salud, no como una simple incomodidad.', va: ['1.3'],
+      mira: { '1.0': 'Da el dato de cuánto ruido hay, pero no dice que sea serio para la salud.', '1.1': 'Compara el tráfico con la aspiradora; todavía no habla de salud.', '1.2': 'Dice cuándo empieza y termina el ruido; no habla de salud.' }, bien: 'La apuesta quedó confirmada con una oración del texto.' },
+      'La última oración dice que los especialistas ya no lo ven como una simple molestia, sino como un problema de salud pública. Las demás dan el dato, la comparación y el horario.',
+      { hint: 'Confirmar es encontrar una oración que diga lo mismo con otras palabras. Busca las dos partes de la apuesta: lo que es y lo que no es.' }),
+    play('preguntas-previas', 'Con los bordes a la vista, tacha las tres preguntas que este texto seguramente no va a responder.', { doc: { title: RUIDO.title, ficha: RUIDO.ficha }, n: 3, lineas: ['¿Por qué puede hacer daño el ruido?', '¿Cómo termina la pelea de los dos vecinos?', '¿Cuánto ruido hay en una calle?', '¿En qué tienda es más barata una ventana?', '¿Qué se puede hacer para bajarlo?', '¿Qué soñó el autor la noche de la fiesta?'], va: [1, 3, 5],
+      mira: { 0: 'Esa es justo la clase de pregunta que responde la divulgación.', 2: 'Una revista de ciencia sí suele traer mediciones.', 4: 'Un texto que explica un problema suele hablar de cómo resolverlo.' }, bien: 'Quedan las preguntas que un texto de divulgación sí promete responder.' },
+      'La pelea de los vecinos pide un relato; el precio de una ventana, un anuncio o un catálogo; el sueño del autor, un testimonio. Las otras tres son de un texto que explica.',
+      { hint: 'Para cada pregunta imagina en qué clase de texto la encontrarías: ¿una revista de divulgación o un cuento, un catálogo, unas memorias?' }),
+    play('voz-de-la-fuente', 'Cada frase salió de una de estas fuentes. Átala a la suya.', { portadas: [['Mediciones de ruido en catorce puntos', 'Informe técnico'], ['Ya es hora de callar los motores', 'Columna de opinión'], ['¿Qué es un decibel?', 'Revista de divulgación'], ['La casa junto a la carrilera', 'Testimonio']],
+      tarjetas: ['«En el punto 7 se registraron 68 decibeles entre las 9 y las 10 p. m.»', '«El concejo debería prohibirlos de noche, y pronto.»', '«Imagina que el sonido es una ola que empuja el aire.»', '«Todavía me despierto a la hora en que pasaba el tren.»'], va: [0, 1, 2, 3],
+      mira: ['Un número, un punto y una hora, sin ninguna explicación ni recuerdo: ¿quién escribe así?', '«Debería» pide algo: ¿cuál de las fuentes toma partido?', 'La frase compara para que se entienda: ¿cuál fuente explica?', 'La frase recuerda algo propio: ¿cuál fuente cuenta lo vivido?'], bien: 'La manera de decir también delata la fuente.' },
+      'La medición con punto y hora es del informe; «debería», de la columna; la comparación con la ola, de la divulgación; y «todavía me despierto», del testimonio.',
+      { hint: 'Fíjate en qué hace cada frase: ¿anota un dato, pide algo, explica con una comparación o recuerda?' }),
+    play('orden-fuentes', 'Ordena las fuentes: arriba, la que mejor responde; abajo, la que menos.', { busca: '¿Cuántos decibeles hay hoy, de noche, en mi barrio?', ini: [2, 0, 3, 1], tiras: ['Informe de mediciones por barrio, de este año', 'Informe de mediciones por barrio, de hace doce años', 'Columna de este año: «Anoche tampoco pude dormir»', 'Cuento: «El hombre que coleccionaba silencios»'],
+      mira: ['Mide justo lo que se pregunta y es reciente: ¿hay alguna mejor?', 'Mide, pero hace doce años: ¿quedó debajo otra que también mida y sea más reciente?', 'Es reciente, pero no trae mediciones: ¿quedó debajo alguna que sí mida?', 'Es inventado: ¿quedó debajo alguna que hable de algo real?'], bien: 'Primero lo que mide y es reciente; después, lo que mide; al final, lo inventado.' },
+      'El informe de este año mide y es reciente. El de hace doce años mide, aunque pudo cambiar. La columna habla de un caso real sin medir, y el cuento es inventado.',
+      { hint: 'Se preguntan decibeles: primero mira si la fuente mide; entre las que miden, cuál es más reciente. Y entre las que no, cuál habla de algo real.' }),
   ]);
 
   // ---------------- Lección 2 · Idea central y mapa del texto ----------------
   setLesson('pu-el-2', [
-    play('ordena-parrafos', 'Arma el texto otra vez', { doc: TIENDA },
-      'El texto abre con la tesis. «La razón es económica» presenta el primer argumento y «Además» suma el segundo, el crédito del cuaderno. Después responde a «quienes celebran» las grandes cadenas, «Por eso» saca la propuesta y las dos frases cortas cierran.',
-      { hint: 'Mira cómo empieza cada párrafo: un «Además», un «Por eso» o una respuesta a otros solo pueden ir después de lo que suman, concluyen o responden.' }),
-    play('resume-parrafo', 'Una idea por párrafo', { doc: TIENDA, paras: [1, 2, 3, 4], options: [
-      'La tienda debe defenderse por razones prácticas, no sentimentales.',
-      'Comprar poco y cerca le sale más barato a quien vive del día a día.',
-      'El fiado es un préstamo basado en la confianza.',
-      'Los precios bajos del supermercado no benefician a todos por igual.',
-      'El tendero de antes fiaba y ponía la radio.',
-      'Los supermercados deberían desaparecer de los barrios.',
-    ], key: [0, 1, 2, 3] }, 'Cada resumen bueno dice lo que hace todo el párrafo. «El tendero fiaba» es un detalle del párrafo 1 y que los supermercados desaparezcan no lo dice nadie.',
-      { hint: 'Un buen resumen no se queda en un detalle ni dice más de lo que dice el párrafo. Pruébalo contra todo el párrafo.' }),
-    play('mapa-del-texto', 'Cómo avanza la columna', { doc: TIENDA, labels: ['plantea la tesis', 'da una razón económica', 'agrega otra razón', 'responde a una objeción', 'hace una propuesta', 'remata la tesis', 'narra un recuerdo de la autora'], key: [0, 1, 2, 3, 4, 5] },
-      'La columna plantea la tesis (la tienda es racional, no nostálgica), da una razón económica, agrega el fiado («Además»), responde a quienes defienden las cadenas, propone medidas («Por eso») y remata con una frase corta.',
-      { hint: 'Los conectores del comienzo de cada párrafo («La razón es», «Además», «Por eso») dicen qué hace cada uno.' }),
-    play('balanza-argumento', 'Pesa los argumentos', { doc: TIENDA, thesis: 'La tienda de barrio merece defenderse porque sigue siendo útil para muchas familias.', cards: [
-      ['La tienda vende por unidades pequeñas y queda cerca.', 0],
-      ['El cuaderno del fiado funciona como un crédito sin papeles.', 0],
-      ['Un estudio muestra que las familias del barrio ya hacen todo su mercado en el supermercado.', 1],
-      ['Las familias del barrio pagan menos en el supermercado, aun contando el bus y el tiempo.', 1],
-      ['El olor a panela recuerda la infancia.', null],
-    ] }, 'Las unidades pequeñas y el fiado son las razones de la autora. Si las familias ya no compraran en la tienda, o si el supermercado les saliera más barato aun contando el bus y el tiempo, su utilidad quedaría en duda. El olor a panela es nostalgia: no prueba que la tienda sea útil.',
-      { hint: 'La tesis habla de utilidad, no de recuerdos. Pregúntate si cada oración hace más creíble o menos creíble que la tienda sea útil.' }),
-    play('conector-bisagra', 'Las bisagras de la columna', { doc: TIENDA, rounds: [
-      { a: 'Esos textos son bonitos,', b: 'equivocan el diagnóstico.', options: ['pero', 'por eso', 'porque', 'además'], answer: 0 },
-      { a: 'La tienda vende por unidades pequeñas, abre temprano y queda a dos cuadras.', b: 'la tienda presta un servicio que ningún banco ofrece a esas familias: el crédito sin papeles.', options: ['Además,', 'Sin embargo,', 'Por ejemplo,', 'En cambio,'], answer: 0 },
-      { a: 'Los precios bajos no los aprovechan todos.', b: 'las políticas deberían preguntar a quién sirve cada forma de vender.', options: ['Por eso,', 'Aunque', 'Es decir,', 'Pero'], answer: 0 },
-    ] }, 'Lo bonito y lo equivocado se oponen: contraste. El fiado es una razón más que se suma a la anterior. Y preguntar a quién sirve cada forma de vender es la consecuencia de que no todos aprovechen los precios bajos.',
-      { hint: 'Mira qué relación hay entre las dos ideas: ¿se oponen, la segunda se suma, la segunda es resultado de la primera o la aclara?' }),
-    play('hilo-referente', '¿De qué textos habla?', { doc: TIENDA, rounds: [
-      { p: 1, text: 'Cada vez que cierra |una tienda de barrio|, alguien escribe |una despedida llena de nostalgia|: el tendero que fiaba, el olor a panela, la radio encendida. |Esos textos| son bonitos', from: 5, answer: 3 },
-    ] }, '«Esos textos» son las despedidas llenas de nostalgia que alguien escribe cuando cierra una tienda.',
-      { hint: 'Una expresión con «esos» apunta hacia atrás, a algo ya nombrado en la misma oración. Prueba cuál de los trozos encaja con «textos».' }),
-    play('cadena-causas', 'Lo que se pierde con la tienda', { doc: TIENDA, ask: 'Según el texto, ¿qué pasa cuando cierra la tienda del barrio? Arma la cadena.', chain: [
-      'La tienda del barrio cierra.',
-      'Desaparece el crédito del cuaderno del tendero.',
-      'Muchas familias quedan en manos de prestamistas informales.',
-    ], extra: ['El supermercado baja los precios.', 'Las familias compran el arroz por arrobas.'] },
-      'El párrafo 3 encadena tres hechos: la tienda cierra, el préstamo del cuaderno desaparece y los hogares quedan expuestos a prestamistas que cobran intereses abusivos. Que el supermercado baje precios es cierto, pero no sale del cierre; y comprar por arrobas es justo lo que esas familias no pueden hacer.',
-      { hint: 'Busca la oración que empieza «Cuando la tienda cierra…» y sigue lo que pasa después, paso por paso.' }),
+    play('ordena-texto', 'Se desordenó la columna. La primera tira está en su puesto: mueve las demás: primero lo que sostiene la idea, luego la respuesta a quienes piensan distinto, después lo que propone y el cierre.', { doc: { title: TIENDA.title, ficha: TIENDA.ficha }, fija: 1, ini: [0, 3, 5, 1, 4, 2], tiras: [
+      'La tienda de la esquina no merece defenderse por ser un recuerdo, sino porque sigue siendo, para millones de familias, la manera más racional de hacer mercado.',
+      'La razón es económica. Una familia que vive del día a día no puede comprar el arroz por arrobas para aprovechar el precio del supermercado.',
+      'Además, la tienda presta un servicio que ningún banco ofrece a esas familias: el crédito sin papeles.',
+      'Quienes celebran el avance de las grandes cadenas responden que los precios bajos benefician a todos. Es cierto que el supermercado baja precios; no es cierto que todos puedan aprovecharlos. Tampoco basta con abrir una sucursal en cada barrio: el supermercado no fía, no parte el paquete de lentejas y no espera hasta el viernes.',
+      'Por eso, las políticas que buscan modernizar el comercio deberían empezar por preguntar a quién sirve cada forma de vender.',
+      'La tienda no necesita que la lloren. Necesita que la entiendan.'],
+      mira: ['', '«La razón» tiene que ir justo después de lo que explica.', '«Además» suma: antes tiene que haber otra cosa a la cual sumarse.', 'Contesta a otros y menciona que no fía: antes faltan razones de la columna.', '«Por eso» concluye, y arriba de esta tira todavía falta algo de donde concluir.', 'No agrega nada nuevo y quedaron tiras debajo: ¿suena a mitad o a final?'], bien: 'Tesis, razón, otra razón, respuesta, propuesta y cierre.' },
+      'La tesis abre. «La razón» la explica, «Además» suma otra, «responden» trae a quienes no están de acuerdo, «Por eso» propone y las dos frases cortas cierran.',
+      { hint: 'Mira la primera palabra de cada tira: unas solo pueden ir después de lo que suman, contestan o concluyen.' }),
+    play('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: TIENDA, fichas: ['plantea la tesis', 'da una razón económica', 'agrega otra razón', 'responde a una objeción', 'hace una propuesta', 'remata la tesis', 'cuenta un recuerdo de la autora'], va: [0, 1, 2, 3, 4, 5, null],
+      mira: ['La tesis es lo que se va a defender: aparece antes de las razones.', 'Mira los comienzos: ¿cuál anuncia una razón y de qué clase?', 'Busca el párrafo que empieza sumando.', 'Busca dónde se nombra a quienes piensan distinto.', 'Busca el «deberían»: ahí se pide algo.', 'Rematar es cerrar repitiendo lo esencial, sin agregar razones.', 'La nostalgia que se menciona es de otros: la autora no cuenta ningún recuerdo suyo.'],
+      luz: [[1, 'La tienda de la esquina no merece defenderse por ser un recuerdo'], [2, 'La razón es económica'], [3, 'Además'], [4, 'Quienes celebran el avance de las grandes cadenas'], [5, 'deberían empezar'], [6, 'Necesita que la entiendan']], bien: 'Las primeras palabras de cada párrafo dibujan el mapa.' },
+      'Plantea la tesis, da la razón económica, agrega el fiado («Además»), responde a quienes celebran las cadenas, propone («Por eso… deberían») y remata.',
+      { hint: 'Antes de leer la nota, mira cómo empieza el párrafo: «La razón», «Además», «Quienes celebran», «Por eso».' }),
+    play('talla-idea', 'Tres resúmenes del párrafo 3: pon cada uno en su talla.', { doc: TIENDA, p: 3, rot: ['se queda en un detalle', 'justa', 'dice de más'], fichas: ['El tendero anota en un cuaderno.', 'La tienda da un crédito basado en la confianza, y si cierra se pierde.', 'Sin tiendas, nadie volvería a prestarles dinero a los pobres.'], va: [0, 1, 2],
+      mira: ['Es cierto, pero ¿dice lo que dice todo el párrafo?', 'Compárala con el principio y con el final del párrafo: ¿le falta o le sobra algo?', 'El párrafo dice que quedan otros que prestan, aunque cobren intereses abusivos.'],
+      luz: [[3, 'el crédito sin papeles'], [3, 'Cuando la tienda cierra, ese préstamo desaparece']], bien: 'La idea justa cubre el principio y el final del párrafo.' },
+      'El cuaderno es un detalle. «Nadie volvería a prestarles» exagera: el párrafo menciona a los prestamistas. La justa recoge el crédito de confianza y lo que pasa al cerrar.',
+      { hint: 'La justa cubre todo el párrafo. Si deja algo importante afuera, es corta; si afirma algo que no está, se pasa.' }),
+    play('subraya-tesis', 'Subraya la oración del párrafo 1 que dice lo que toda la columna va a defender.', { doc: TIENDA, nums: [1], n: 1, va: ['1.2'],
+      mira: { '1.0': 'Cuenta lo que hacen otros cuando cierra una tienda.', '1.1': 'Dice que esos textos se equivocan, pero todavía no dice qué defiende la columna.' }, bien: 'La tesis no siempre es la primera oración.' },
+      'La última oración del párrafo dice qué se defiende (la tienda es la manera más racional de hacer mercado) y por qué no (no por ser un recuerdo).',
+      { hint: 'Prueba cada una contra el resto del texto: ¿cuál explican y sostienen los párrafos 2 y 3?' }),
+    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: TIENDA, pares: [['Esos textos son bonitos,', 'equivocan el diagnóstico.'], ['La tienda vende por unidades pequeñas y queda a dos cuadras.', 'presta un servicio que ningún banco ofrece.'], ['Los precios bajos no los aprovechan todos.', 'las políticas deberían preguntar a quién sirve cada forma de vender.']],
+      fichas: ['pero', 'Además,', 'Por eso,', 'Sin embargo,', 'porque'], va: [0, 1, 2, null, null],
+      mira: ['Opone dos cosas y va en minúscula: ¿dónde hay dos ideas que chocan dentro de una oración?', 'Suma: ¿dónde la segunda idea va en la misma dirección que la primera?', 'Concluye: ¿dónde la segunda idea sale de la primera?', 'Opone con mayúscula: ninguna de las oraciones que empiezan se opone a la anterior.', 'Daría la causa de lo anterior, y ninguna de las segundas ideas es causa de la primera.'], bien: 'Se oponen, se suma y se concluye.' },
+      'Lo bonito y lo equivocado chocan: «pero». El servicio se agrega: «Además». Y la pregunta sale de que no todos aprovechan: «Por eso».',
+      { hint: 'Lee las dos ideas sin la palabra y pregúntate: ¿chocan, se suman o la segunda sale de la primera?' }),
+    play('pilares', 'El techo es la idea central. Lleva abajo lo que la sostiene y al patio lo que solo adorna.', { doc: TIENDA, idea: 'La tienda merece defenderse porque les sirve a muchas familias', fichas: ['Vende por unidades pequeñas.', 'Queda a dos cuadras y no hay que pagar bus.', 'Fía sin pedir papeles.', 'Huele a panela.', 'Tiene la radio encendida.'], va: [0, 0, 0, 1, 1],
+      mira: ['Quien vive del día a día puede comprar lo que le alcanza: ¿eso les sirve a las familias?', 'Ahorra dinero y tiempo: ¿eso les sirve a las familias?', 'Es el crédito del párrafo 3: ¿les sirve a las familias?', 'Si dejara de oler a panela, ¿les serviría menos a las familias?', 'Si apagaran la radio, ¿les serviría menos a las familias?'], bien: 'Se caen los adornos y el techo sigue arriba.' },
+      'Las unidades pequeñas, la cercanía y el fiado son utilidad: sostienen la idea. El olor y la radio son recuerdos: la columna misma dice que no son la razón.',
+      { hint: 'Quita la oración y mira el techo: ¿la tienda les sirve menos a las familias sin eso?' }),
+    play('tacha-resumen', 'Este resumen salió muy largo. Tacha las tres oraciones que no hacen falta para entender la columna.', { doc: TIENDA, n: 3, lineas: ['La tienda de barrio debe defenderse por útil, no por nostalgia.', 'Había olor a panela.', 'Comprar poco y cerca le sale mejor a quien vive del día a día.', 'El fiado es un crédito sin papeles que ningún banco ofrece.', 'El descuento era por doce rollos de papel.', 'Los precios bajos del supermercado no los aprovechan todos.', 'El tendero anota en un cuaderno.', 'Conviene apoyar a las tiendas en vez de hacerles homenajes.'], va: [1, 4, 6],
+      mira: { 0: 'Esa es la tesis: sin ella no se sabe qué defiende.', 2: 'Es la razón económica del párrafo 2.', 3: 'Es la segunda razón, la del párrafo 3.', 5: 'Es la respuesta a quienes no están de acuerdo.', 7: 'Es la propuesta del párrafo 5.' }, bien: 'Queda una idea por cada parte del mapa.' },
+      'El olor, los doce rollos y el cuaderno son detalles que apoyan otras ideas. Queda la tesis, dos razones, la respuesta a la objeción y la propuesta.',
+      { hint: 'Compara con el mapa: cada parte (tesis, razones, respuesta, propuesta) necesita una oración. Un detalle es un ejemplo dentro de una de ellas.' }),
+    play('arma-titulo', 'La columna perdió su título. Arma uno que diga la idea central. Sobran fichas.', { doc: TIENDA, rot: ['¿quién?', '¿qué pasa?', '¿para quién?'], fichas: ['La tienda de barrio', 'sigue siendo útil', 'para quien vive del día a día', 'El cuaderno del tendero', 'era más bonita antes', 'para los grandes bancos'], va: [0, 1, 2, null, null, null],
+      mira: ['El título nombra aquello de lo que hablan todos los párrafos.', 'Es lo que repite toda la columna: la utilidad de la tienda.', '¿A quién le conviene comprar poco y cerca?', 'El cuaderno solo aparece en un párrafo.', 'Eso es la nostalgia que la columna rechaza.', 'Los bancos se nombran para decir que no prestan ese servicio.'],
+      luz: [[1, 'sigue siendo, para millones de familias, la manera más racional de hacer mercado'], [2, 'Una familia que vive del día a día']], bien: 'Un buen título es la idea central en pocas palabras.' },
+      'La tienda de barrio sigue siendo útil para quien vive del día a día: es la tesis en pocas palabras. El cuaderno es un detalle y la belleza de antes, la nostalgia que se rechaza.',
+      { hint: 'El título debe servir para todos los párrafos. Prueba cada ficha contra los párrafos 1, 2 y 5.' }),
   ]);
 
   // ---------------- Lección 3 · Tiempo y preguntas EXCEPTO ----------------
   setLesson('pu-el-3', [
-    play('ordena-parrafos', 'Arma el texto otra vez', { doc: VOLCAN },
-      '«Para escuchar esos avisos» retoma los avisos del final del párrafo 1. El 3 advierte que ningún instrumento basta solo; «Con esa información», en el 4, usa lo que se mide; «Sin embargo», en el 5, pone el límite de la vigilancia, y el 6 cierra con la confianza.',
-      { hint: 'Las palabras que retoman algo, como «esos avisos» o «esa información», necesitan que ese algo ya se haya dicho.' }),
-    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: VOLCAN, ask: 'Los observatorios hacen todo lo siguiente, EXCEPTO:', cards: [
-      ['Medir los gases que salen del cráter', [2, 3]],
-      ['Detectar si la montaña se infla', [2, 3]],
-      ['Asignar a cada volcán un nivel de alerta', [4]],
-      ['Decidir quiénes deben salir de sus casas', null],
-    ] }, 'Medir gases y detectar si la montaña se infla está en el párrafo 2; los niveles de alerta, en el 4. Decidir quién evacúa no aparece: los observatorios comunican y hacen simulacros. Esa es la respuesta.',
-      { hint: 'No elijas por intuición: busca cada opción en el texto. La que no encuentre párrafo es la que no está.' }),
-    play('donde-buscar', 'Ubica sin releer todo', { doc: VOLCAN, cards: [
-      ['¿Por qué un solo síntoma no basta?', [3]], ['¿Qué falló en 1985 además del volcán?', [5]], ['¿Qué causó la tragedia de Armero?', [1]],
-      ['¿Qué significa la alerta naranja?', [4]], ['¿Dónde están los observatorios?', [2]],
-    ] }, 'Armero está en el párrafo 1; los observatorios y sus instrumentos, en el 2; la comparación con el paciente, en el 3; los colores, en el 4; los avisos que no llegaron, en el 5.',
-      { hint: 'Busca la palabra clave de cada pregunta (Armero, observatorios, síntoma, naranja, avisos) y mira en qué párrafo aparece.' }),
-    play('lupa-evidencia', 'Lo dice, se deduce o no lo dice', { doc: VOLCAN, cards: [
-      ['Los inclinómetros detectan si el volcán se infla.', 0],
-      ['En 1985 los avisos existieron, pero no llegaron bien a la gente.', 0],
-      ['Lo que destruyó Armero no fue la lava.', 1],
-      ['Una alerta roja es más grave que una amarilla.', 1],
-      ['Un aumento de temblores siempre anuncia una erupción.', 2],
-      ['El Galeras es el volcán más peligroso del país.', 2],
-    ] }, 'Los inclinómetros y los avisos de 1985 están escritos tal cual. Que no fue la lava se deduce de cómo se describe el agua con ceniza; que el rojo es más grave, del orden de los colores. Lo de los temblores contradice el párrafo 3 y el Galeras no se menciona.',
-      { hint: 'Busca cada afirmación en su párrafo. Si para aceptarla tienes que añadir algo que el texto no dice, no la pongas en «lo dice».' }),
-    play('quien-lo-dice', 'EXCEPTO con trampa: el párrafo que pide la pregunta', { doc: VOLCAN, ask: 'La pregunta dice: «Según el párrafo 4, sobre los niveles de alerta se afirma todo lo siguiente, EXCEPTO:». Lleva cada opción a donde la encuentras.', voices: ['Está en el párrafo 4: queda descartada', 'Está en el texto, pero en otro párrafo: no está donde pide la pregunta', 'No está en ninguna parte del texto'], cards: [
-      ['Los colores van del verde al rojo.', 0],
-      ['El naranja anuncia una erupción probable en días o semanas.', 0],
-      ['El color lo decide el equipo que compara todas las mediciones.', 0],
-      ['Se hacen simulacros en las escuelas.', 1],
-      ['Un síntoma aislado no dice mucho.', 1],
-      ['Las alertas llegan por mensaje de texto a cada celular.', 2],
-    ] }, 'Los colores, el naranja y el equipo están en el párrafo 4: esas opciones se descartan. Los simulacros (párrafo 5) y el síntoma aislado (párrafo 3) sí están en el texto, pero no donde la pregunta indica ni hablando de los niveles de alerta: en una pregunta limitada al párrafo 4, cualquiera de ellas sería la respuesta, aunque «suene» al texto. Los mensajes al celular no aparecen en ninguna parte. La intrusa de un EXCEPTO no siempre es una idea ajena: a veces es una idea del texto puesta en el lugar equivocado.',
-      { hint: 'Que una opción te suene conocida no basta. Vuelve al párrafo que nombra la pregunta; si la encuentras en otro párrafo, no está donde la pregunta pide.' }),
-    play('caso-nuevo', 'La idea del paciente, en otros casos', { doc: VOLCAN, principle: 'Un síntoma aislado no basta: lo que importa es que varias señales cambien al mismo tiempo.', cards: [
-      ['Un médico no diagnostica una infección por la fiebre sola, sino cuando también suben otros indicadores.', true],
-      ['Un meteorólogo anuncia tormenta solo cuando bajan la presión, sube la humedad y cambia el viento.', true],
-      ['Un banco bloquea una tarjeta cuando varias compras extrañas ocurren el mismo día en ciudades distintas.', true],
-      ['Un profesor reprueba a un estudiante por llegar tarde una vez.', false],
-      ['Un conductor frena en cuanto ve una luz roja.', false],
-    ] }, 'El médico, el meteorólogo y el banco esperan a que coincidan varias señales, como los vulcanólogos. El profesor decide por un solo hecho, y el conductor reacciona a una sola señal, que en su caso basta.',
-      { hint: 'Pregúntate en cada caso si la decisión se toma por una sola señal o porque varias coinciden.' }),
-    play('cadena-causas', 'Lo que pasó en Armero', { doc: VOLCAN, chain: [
-      'Una erupción pequeña derrite parte del glaciar.',
-      'El agua baja por los ríos mezclada con ceniza, rocas y troncos.',
-      'El lodo sepulta el pueblo de Armero.',
-    ], extra: ['La lava corre por las laderas hasta el pueblo.', 'Los inclinómetros detectan que la montaña se infla.'] },
-      'Según el párrafo 1 no fue la lava: el glaciar derretido se mezcló con ceniza, rocas y troncos, y esa avalancha sepultó Armero. Los inclinómetros son parte de la vigilancia de hoy, no de la tragedia.',
-      { hint: 'El texto avisa que el peligro de un volcán «no siempre es la lava». Sigue lo que hizo el agua del glaciar.' }),
+    play('reparte-tiempo', 'Tienes **20** minutos para un texto y sus preguntas. Lees en **4** o más, respondes en **12** o más y te sobran al menos **2** para repasar. Reparte.', { total: 20, leer: 4, resp: 12, rep: 2 },
+      'Con 4 a 6 minutos de lectura y 12 a 14 para responder, quedan 2 o más para volver a las marcadas. Si leer y responder llenan los 20, no hay repaso.',
+      { hint: 'Aparta primero lo del repaso: leer y responder tienen que caber en lo que queda.' }),
+    play('ruta-preguntas', 'Ordena la ruta de un buen lector en el examen. El primer paso está en su puesto.', { fija: 1, ini: [0, 3, 1, 5, 2, 4], tiras: ['Reparto los minutos.', 'Leo el texto completo una vez.', 'Leo la orden de la pregunta y subrayo qué pide.', 'Llevo cada opción al párrafo donde debería estar.', 'Si sigo con dudas, marco la pregunta y paso a la siguiente.', 'Al final vuelvo a las marcadas y no dejo nada en blanco.'],
+      mira: ['', 'Las preguntas se responden sobre un texto ya leído.', 'La orden se lee con el texto ya leído una vez.', 'Para llevar una opción a su párrafo hay que haber leído antes el texto y la orden.', 'Se duda después de haber buscado, no antes.', 'Lo que queda «al final» no puede ir antes.'], bien: 'Leer, entender la orden, buscar, marcar la dudosa y volver.' },
+      'Primero el tiempo y una lectura; luego, por cada pregunta, la orden y después las opciones en su párrafo; la dudosa se marca y al final se vuelve a ella.',
+      { hint: 'Busca qué necesita cada paso ya hecho: no se puede buscar una opción sin saber qué pide la orden.' }),
+    play('lee-la-orden', 'Antes de las opciones está la orden. Subraya las tres partes que dicen **dónde** buscar, **de qué** y **cuál** opción se pide.', { doc: VOLCAN, n: 3, orden: '|Lee con atención|: según |el párrafo 4|, de |los niveles de alerta| se dice |en el texto| todo |lo siguiente|, |EXCEPTO|:', va: [3, 5, 11],
+      mira: { 1: 'Eso vale para cualquier pregunta: no cambia lo que se busca.', 7: 'Todas las preguntas son sobre el texto; aquí se nombra un lugar más preciso.', 9: 'Anuncia las opciones, pero no dice cuál se pide.' }, bien: 'Dónde, de qué y cuál: con eso se busca.' },
+      '«El párrafo 4» dice dónde, «los niveles de alerta» de qué y «EXCEPTO» que se pide la que no está. Si se borra una de las tres, la respuesta puede cambiar.',
+      { hint: 'Borra cada trozo con la imaginación: si al quitarlo cambia la respuesta, es de los que mandan.' }),
+    play('donde-mirar', 'De cada párrafo solo ves el comienzo. Lleva cada pregunta al párrafo donde la buscarías.', { doc: VOLCAN, fichas: ['¿Basta con que cambie una sola medición?', '¿Qué significa el color naranja?', '¿De qué sirve vigilar si el aviso no llega?'], va: [2, 3, 4],
+      mira: ['Busca el comienzo que habla de un instrumento solo.', 'Busca el comienzo que anuncia una escala.', 'Busca el comienzo que habla de lo que no se escucha.'],
+      luz: [[3, 'Si solo cambia uno'], [4, 'el naranja, una erupción probable'], [5, 'los avisos no llegaron a tiempo']], bien: 'Volver al párrafo justo ahorra releerlo todo.' },
+      '«Ningún instrumento, por sí solo» responde la de una sola medición; «colores que van del verde al rojo», al naranja; y «sirve de poco si nadie la escucha», a los avisos que no llegaron.',
+      { hint: 'Lee los seis comienzos por cada pregunta: ¿cuál promete hablar de eso, aunque lo diga distinto?' }),
+    play('sella-parrafo', '«Los observatorios hacen todo lo siguiente, **EXCEPTO**:» Ata cada opción al párrafo que la prueba; la respuesta es la que no está.', { doc: VOLCAN, tarjetas: ['Medir los gases del cráter', 'Dar a cada volcán un nivel de alerta', 'Hacer simulacros en las escuelas', 'Decidir quiénes salen de sus casas'], va: [1, 3, 4, 6],
+      mira: ['Los gases aparecen con los instrumentos: ¿en qué párrafo se nombran los sensores?', 'Busca el párrafo de los colores.', 'Busca el párrafo que habla de la comunicación con la gente.', 'El texto habla de avisar y de rutas. ¿Dice que los observatorios decidan quién se va?'],
+      luz: [[2, 'miden cuánto dióxido de azufre sale por el cráter'], [4, 'asignan a cada volcán un nivel de alerta'], [5, 'simulacros en las escuelas']], bien: 'La opción sin párrafo es la respuesta.' },
+      'Los gases se miden en el párrafo 2, los niveles se asignan en el 4 y los simulacros están en el 5. Que los observatorios decidan quién evacúa no aparece: esa es la respuesta.',
+      { hint: 'No respondas de memoria: por cada opción busca la oración que la dice. Si no la encuentras, llévala a «No está».' }),
+    play('dentro-fuera', '«Según el **párrafo 4**…, EXCEPTO:» Lleva cada opción al lugar donde de verdad está.', { doc: VOLCAN, p: 4, rot: ['en el párrafo 4', 'en otro párrafo', 'en ninguno'], fichas: ['El amarillo pide seguir de cerca los cambios.', 'El color lo decide un equipo.', 'Se hacen simulacros en las escuelas.', 'Un síntoma aislado no dice mucho.', 'La alerta llega por mensaje al celular.'], va: [0, 0, 1, 1, 2],
+      mira: ['Busca el amarillo en el párrafo que está a la vista.', 'Lee la última oración del párrafo 4.', 'Los simulacros sí se nombran en el texto. Abre el texto completo y mira dónde.', 'Es la comparación con el paciente. Abre el texto completo y mira dónde está.', 'Puede sonar posible, pero búscalo: ¿algún párrafo habla de celulares?'], luz: [[4, 'el amarillo, cambios que hay que seguir de cerca'], [4, 'sino el equipo que compara todas las mediciones']], bien: 'Lo que está en otro párrafo también sería una intrusa.' },
+      'El amarillo y el equipo están en el 4. Los simulacros (párrafo 5) y el síntoma (párrafo 3) están en el texto, pero no donde la pregunta pide. Los mensajes no aparecen.',
+      { hint: 'Que suene conocida no basta. Si no está en el párrafo a la vista, abre el texto completo y búscala antes de decidir.' }),
+    play('dice-deduce', 'Lleva cada afirmación a su escalón: ¿el texto la dice, se deduce o habría que inventarla?', { doc: VOLCAN, nums: [1, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['La erupción del Ruiz derritió parte del glaciar.', 'Lo que sepultó Armero no fue lava.', 'El rojo es más grave que el amarillo.', 'En la alerta naranja se cierran las escuelas.', 'El verde indica actividad estable.'], va: [0, 1, 1, 2, 0],
+      mira: ['Léela junto a la primera oración del párrafo 1.', 'No está escrita así. ¿Qué bajó por los ríos, según el párrafo 1?', 'Ninguna oración los compara. ¿Se puede sacar de lo que significa cada color?', 'El párrafo 4 explica el naranja: ¿menciona escuelas?', 'Léela junto a lo que significa cada color en el párrafo 4.'],
+      luz: [[1, 'El agua bajó por los ríos mezclada con ceniza, rocas y troncos'], [4, 'El verde indica actividad estable'], [4, 'el rojo, una erupción en curso o inminente']], bien: 'Escrito, pensado con lo escrito o inventado.' },
+      'El glaciar y el verde están escritos. Que no fue lava se deduce de lo que bajó por los ríos, y que el rojo es más grave, de lo que significa cada color. Lo de las escuelas cerradas habría que inventarlo.',
+      { hint: 'Primero búscala tal cual. Si no está, pregúntate si con lo escrito basta para estar seguro o si tendrías que agregar algo.' }),
+    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: VOLCAN, nums: [3, 4], pregunta: 'Queda en pie', queda: 'El riesgo sube cuando varias señales cambian a la vez.', tarjetas: ['Un buen instrumento basta para predecir una erupción.', 'El color de la alerta lo escoge el científico más experto.', 'El amarillo avisa que la erupción ya empezó.'], va: [[0, 1, 3], 6, 5],
+      mira: ['Busca la oración que habla de lo que no puede un instrumento solo.', 'Busca la oración que dice quién decide el color.', 'Busca la oración que dice qué significa cada color.'], bien: 'Una opción se descarta con una oración del texto, no por intuición.' },
+      '«Ningún instrumento, por sí solo, predice» tumba la primera; «el color no lo decide un solo científico», la segunda; y el significado de los colores, la tercera. Queda en pie la de las varias señales.',
+      { hint: 'Desmentir es decir lo contrario. Busca, por cada opción, la oración que habla de lo mismo y mira si coincide.' }),
   ]);
 
   // ---------------- Evaluación: formato real, texto nuevo ----------------
@@ -12558,5 +12010,275 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       Q('Los dos puntos en «jagüeyes: depresiones en la tierra que recogen el agua…» sirven para:', ['introducir una definición de jagüey', 'citar las palabras de las comunidades wayuu', 'enumerar las escuelas que recogen la lluvia', 'marcar ironía frente a la palabra jagüey'], 0,
         'Lo que sigue a los dos puntos explica qué es un jagüey.',
         'Lee lo que viene después de los dos puntos: ¿qué te dice de la palabra anterior?')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-l-argumentacion.js
+// Preuniversitario · Comprensión lectora · mundo 9 «Argumentación, intención y tono» con textos de verdad (spec
+// 2026-11-19-preuda-lectura-textos): una columna que defiende la educación financiera con argumentos de datos, ejemplo y analogía y
+// una objeción respondida (tesis y argumentos), una columna irónica sobre los cursos para hacerse rico (intención y tono) y una
+// crónica de aniversario de una biblioteca que mezcla cifras y valoraciones (hechos y opiniones). La evaluación usa una columna
+// sobre los perros en el metrocable. Textos escritos para Zuka.
+PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
+  const FINANZAS = {
+    id: 'lec-educacion-financiera', title: 'Enseñar a no endeudarse',
+    ficha: { autor: 'Columna de un economista', fuente: 'Periódico nacional, página de opinión', fecha: 'Marzo de 2026' },
+    paras: [
+      'Casi todos los colombianos que terminan el bachillerato saben calcular el área de un trapecio, pero muy pocos saben qué es una tasa de interés efectiva anual o cuánto terminan pagando por un celular comprado a treinta y seis cuotas. Sostengo que esa ausencia no es un detalle del currículo: es una falla que les cuesta caro a millones de familias, y que el colegio debería corregir enseñando finanzas personales desde noveno grado.',
+      'El primer argumento es de datos. Según una encuesta nacional reciente, más de la mitad de los adultos no sabe calcular cuánto pagará en total por un crédito. No es extraño, entonces, que muchas familias acumulen deudas en tarjetas de crédito con intereses altísimos sin entender del todo lo que firmaron.',
+      'El segundo es de experiencia. En un colegio público de Pereira, un profesor de matemáticas dedicó un semestre a enseñar presupuestos, ahorro y créditos con ejemplos de la vida real: el recibo de la luz, la cuota de la moto, la natillera del barrio. Al final, varios estudiantes les explicaron a sus padres por qué no les convenía un préstamo «gota a gota» que pensaban pedir.',
+      'El tercero lo da una comparación. A nadie se le ocurriría entregarle a un joven las llaves de un carro sin enseñarle antes las señales de tránsito. Sin embargo, a los dieciocho años le entregamos una cédula con la que puede firmar créditos, sin haberle explicado nunca qué está firmando.',
+      'Se dirá que el currículo ya está lleno y que no hay espacio para una materia más. Es cierto. Pero la educación financiera no necesita una materia nueva: cabe en las clases de matemáticas, donde los porcentajes y las funciones exponenciales se enseñan casi siempre con ejemplos que no le importan a nadie. Enseñarlos con el interés de una tarjeta no le quita rigor a la matemática; le da un motivo.',
+      'Hay quien piensa que de plata se aprende en la casa, mirando a los papás. Algunas familias, sin duda, lo enseñan bien, y sus hijos llegan a adultos sabiendo ahorrar y desconfiando de las cuotas fáciles. Las filas que se forman cada diciembre en los almacenes que venden a crédito cuentan cómo les va a las demás.',
+      'Un país que enseña a sumar, pero no a endeudarse con cuidado, deja a sus jóvenes a merced de quien sí sabe hacer las cuentas.',
+    ],
+  };
+
+  const MILLON = {
+    id: 'lec-millonario-treinta-dias', title: 'Cómo hacerse millonario en treinta días (garantizado)',
+    ficha: { autor: 'Columna de humor y opinión', fuente: 'Periódico nacional, página de opinión', fecha: 'Octubre de 2025' },
+    paras: [
+      'Esta semana, mientras buscaba una receta de arepas, el celular me ofreció seis veces el mismo milagro: un muchacho de veintitrés años, recostado en un carro rojo que probablemente no es suyo, promete enseñarme a ganar diez millones de pesos al mes «sin jefe y sin horario». Solo tengo que pagar su curso, que hoy, por ser yo, cuesta apenas novecientos noventa mil pesos. El video, por supuesto, tiene música de fondo y un reloj que cuenta hacia atrás.',
+      'Decidí tomarme en serio su propuesta, por pura curiosidad científica. Vi completo el video gratuito, que dura cuarenta minutos y repite once veces la palabra «libertad». El método, por lo que alcancé a entender en el video gratuito, consiste en vender el mismo curso a otras personas, que a su vez lo venderán a otras, y así hasta el infinito. Es una idea brillante, con un solo inconveniente: en algún momento se acaban las personas.',
+      'Lo admirable es la seguridad con que lo dice. No hay en sus palabras ni un «quizás» ni un «depende». Tampoco hay cifras que se puedan revisar: solo capturas de pantalla de transferencias y testimonios de gente feliz que, curiosamente, también vende el curso. Si alguien pregunta por los riesgos, la respuesta es siempre la misma: «Los que dudan se quedan pobres». Es una frase cómoda: convierte cualquier pregunta razonable en un defecto de quien la hace.',
+      'No quiero burlarme de quienes caen. Muchos son jóvenes cansados de trabajos mal pagados, o padres que no ven otra salida, y la promesa de un dinero rápido es más tentadora cuanto más difícil está la vida. Conozco a una mujer que pagó el curso con la prima de diciembre y todavía no ha vendido el primero. Por eso mismo me indigna que alguien haga negocio con esa desesperación.',
+      'Si un día usted ve un anuncio así, haga una prueba sencilla: busque cómo gana dinero quien le habla. Si la respuesta es «vendiéndole a usted lo mismo que le promete», ya tiene la lección completa, y gratis. Esa, al menos, sí se la garantizo.',
+    ],
+  };
+
+  const CERRO = {
+    id: 'lec-biblioteca-cerro', title: 'Veinte años de la biblioteca del cerro',
+    ficha: { autor: 'Crónica de aniversario', fuente: 'Periódico comunitario de un barrio de Bello', fecha: 'Agosto de 2025' },
+    paras: [
+      'La biblioteca del barrio El Cerro abrió sus puertas el 12 de agosto de 2005, en una casa de dos pisos que antes había sido una bodega de cemento. Empezó con mil doscientos libros donados y un solo computador; las primeras estanterías las hicieron los vecinos con tablas de la bodega. Hoy tiene once mil libros, veinte computadores y un promedio de trescientos visitantes al día. Su colección es rica en historia local: guarda más de ochocientos títulos sobre Bello y sus veredas.',
+      'Es, sin exagerar, el lugar más importante del barrio. Ninguna otra obra pública ha cambiado tanto la vida de la gente: ni la cancha sintética, que se llena solo los fines de semana, ni el puesto de salud, que abre medio día y casi siempre tiene la fila hasta la esquina.',
+      'Las cifras de la propia biblioteca muestran lo que hacen sus usuarios: el año pasado se prestaron diecinueve mil libros, se dictaron ciento cuarenta talleres y cerca de dos mil personas usaron los computadores para hacer trámites, buscar empleo o inscribirse en la universidad. Una buena parte de los usuarios, casi la mitad según el registro de la entrada, son adultos. Los sábados, la fila para entrar empieza antes de que abran.',
+      'Su directora, Marleny Arias, lleva doce años en el cargo y llama a la biblioteca «la sala de estar del barrio»; tiene toda la razón. Dice que el mayor logro no son los préstamos, sino que los niños que llegaban a hacer tareas hoy vuelven como profesores de los talleres; tres de ellos estudian una licenciatura en una universidad pública. A mi juicio, ese es el mejor indicador que puede tener una biblioteca, mejor que cualquier cifra.',
+      'Sin embargo, el edificio ya no da abasto. En las tardes no hay sillas suficientes y los niños hacen las tareas en el piso, el techo del segundo piso se filtra cada vez que cae un aguacero fuerte y la alcaldía aún no ha asignado presupuesto para la ampliación que prometió en 2022. Es lamentable que una obra que funciona tan bien tenga que mendigar lo que a otras se les da sin pedirlo. Ya es hora de que la alcaldía cumpla su palabra.',
+      'Ojalá el próximo aniversario se celebre en un edificio a la altura de lo que la biblioteca ha hecho por el barrio durante estos veinte años y por los lectores que salieron de ella.',
+    ],
+  };
+
+  // ---------------- Lección 1 · Tesis y argumentos ----------------
+  setLesson('pu-ag-1', [
+    play('ordena-parrafos', 'Arma el argumento otra vez', { doc: FINANZAS },
+      'La tesis va primero. Los argumentos se anuncian en orden («El primer argumento», «El segundo», «El tercero»); después vienen las objeciones («Se dirá que…» y «Hay quien piensa…»), y la frase final vuelve a la tesis.',
+      { hint: 'Hay párrafos que se numeran solos. Lo que responde a una objeción va después de los argumentos.' }),
+    play('mapa-del-texto', 'El esqueleto del argumento', { doc: FINANZAS, labels: ['presenta la tesis', 'argumenta con datos', 'argumenta con un ejemplo', 'argumenta con una analogía', 'responde una objeción anunciada', 'concede un punto y lo relativiza', 'cierra reforzando la tesis', 'cita a una autoridad en economía'], key: [0, 1, 2, 3, 4, 5, 6] },
+      'La tesis va en el párrafo 1 («Sostengo que…»). Los párrafos 2, 3 y 4 anuncian sus argumentos: datos, experiencia y comparación. «Se dirá que…» abre una objeción; el párrafo 6 trae otra sin anunciarla («Hay quien piensa»), la concede en parte («sin duda») y le quita peso sin decir «pero». La última frase vuelve a la tesis. La encuesta es un dato, no la voz de un experto.',
+      { hint: 'Busca «Sostengo», «El primer argumento», «El segundo», «El tercero» y «Se dirá». En el párrafo 6 no hay «pero»: pregúntate qué acepta el autor y qué no.' }),
+    play('quien-lo-dice', 'Argumentos, objeciones y respuestas', { doc: FINANZAS, ask: 'Lleva cada parte del texto a lo que hace en el argumento.', voices: ['Argumento de datos', 'Argumento de ejemplo', 'Argumento por analogía', 'Objeción: lo que diría el otro lado', 'Concede: acepta una parte', 'Refuta: le quita la razón a la objeción'], cards: [
+      ['Más de la mitad de los adultos no sabe calcular cuánto pagará por un crédito.', 0],
+      ['Un profesor de Pereira enseñó presupuestos con el recibo de la luz.', 1],
+      ['Nadie entrega las llaves de un carro sin enseñar antes las señales de tránsito.', 2],
+      ['El currículo ya está lleno y no hay espacio para otra materia.', 3],
+      ['De plata se aprende en la casa, mirando a los papás.', 3],
+      ['Algunas familias, sin duda, lo enseñan bien.', 4],
+      ['La educación financiera cabe en las clases de matemáticas.', 5],
+      ['Las filas de diciembre en los almacenes que venden a crédito cuentan cómo les va a las demás.', 5],
+    ] }, 'La encuesta da cifras; Pereira es un caso; el carro y la cédula comparan dos situaciones. Hay dos objeciones: el currículo lleno, anunciada con «Se dirá», y lo que se aprende en casa, que llega sin aviso («Hay quien piensa»). «Sin duda» concede que algunas familias enseñan bien. Las respuestas refutan: la materia cabe en matemáticas, y las filas de diciembre muestran, sin decir «pero», que la mayoría no aprende en casa.',
+      { hint: 'Una objeción no siempre empieza con «Se dirá»: «Hay quien piensa» también la anuncia. Y una refutación puede ser un hecho que deja sin piso lo concedido.' }),
+    play('balanza-argumento', 'Lo que pesa sobre la tesis', { doc: FINANZAS, thesis: 'El colegio debería enseñar finanzas personales desde noveno grado.', cards: [
+      ['Más de la mitad de los adultos no sabe calcular cuánto pagará por un crédito.', 0],
+      ['Unos estudiantes de Pereira convencieron a sus padres de no pedir un préstamo gota a gota.', 0],
+      ['Un estudio muestra que los cursos de finanzas en el colegio no cambian cómo se endeudan los adultos.', 1],
+      ['Los jóvenes que reciben clases de finanzas se endeudan igual que los demás.', 1],
+      ['El área del trapecio se enseña en el colegio.', null],
+    ] }, 'La encuesta muestra la necesidad y Pereira muestra que enseñar funciona. Si los cursos no cambiaran nada, la propuesta perdería su razón. El trapecio solo aparece como contraste en la introducción.',
+      { hint: 'Para debilitar la tesis, hace falta mostrar que enseñar finanzas no sirve o no es necesario.' }),
+    play('conector-bisagra', 'Cómo se encadenan los argumentos', { doc: FINANZAS, rounds: [
+      { a: 'Más de la mitad de los adultos no sabe calcular cuánto pagará por un crédito.', b: 'muchas familias acumulan deudas sin entender lo que firmaron.', options: ['Por eso,', 'Aunque', 'En cambio,', 'Es decir,'], answer: 0 },
+      { a: 'Nadie entrega las llaves de un carro sin enseñar las señales de tránsito.', b: 'a los dieciocho años entregamos una cédula para firmar créditos sin explicar nada.', options: ['Sin embargo,', 'Por lo tanto,', 'Además,', 'Por ejemplo,'], answer: 0 },
+      { a: 'El currículo ya está lleno; es cierto.', b: 'la educación financiera cabe en las clases de matemáticas.', options: ['Pero', 'Por eso,', 'Además,', 'Es decir,'], answer: 0 },
+      { a: 'Algunas familias, sin duda, enseñan bien a manejar el dinero.', b: 'las filas de diciembre en los almacenes que venden a crédito muestran cómo les va a las demás.', options: ['Sin embargo,', 'Por eso,', 'Por ejemplo,', 'Es decir,'], answer: 0 },
+    ] }, 'No saber calcular lleva a endeudarse sin entender (consecuencia). La analogía funciona por contraste: con el carro sí enseñamos, con la cédula no. La objeción del currículo se acepta para luego responderla (contraste). Y en el párrafo 6 el texto no escribe ningún conector, pero la relación es la misma: concede y luego gira.',
+      { hint: 'En una objeción respondida, el autor reconoce algo y luego gira. A veces el giro no está escrito: pon el conector que se sobreentiende.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: FINANZAS, q: 'En el párrafo 6, ¿qué hace el autor con la idea de que de plata se aprende en la casa?', options: [
+      ['La concede en parte y luego muestra, con un hecho, que no alcanza para la mayoría.', 0],
+      ['La acepta del todo: las familias enseñan bien a manejar la plata.', 2],
+      ['La refuta con una encuesta nacional sobre los créditos.', 4],
+      ['Dice que ninguna familia sabe enseñar a ahorrar.', 1],
+    ] }, 'A describe el párrafo 6: «sin duda» concede que algunas familias enseñan bien, y las filas de diciembre muestran que a las demás no les va así. B dice lo contrario de esa respuesta; C mezcla datos, porque la encuesta está en el párrafo 2 y sirve para otra cosa; D dice de más, porque el autor reconoce que algunas sí enseñan. Sobra el sello «El texto no lo dice».',
+      { hint: 'Una concesión acepta una parte y responde a la otra. Mira qué acepta el autor con «sin duda» y qué responde después.' }),
+    play('resume-parrafo', 'Cada argumento en una frase', { doc: FINANZAS, paras: [2, 3, 4, 5], options: [
+      'Los datos muestran que muchos adultos no entienden sus créditos.',
+      'Una experiencia en un colegio muestra que enseñar finanzas funciona.',
+      'Dejamos firmar créditos sin enseñar antes lo que se firma.',
+      'No hace falta una materia nueva: cabe en matemáticas.',
+      'Los bancos engañan a sus clientes.',
+      'Las matemáticas del colegio no sirven para nada.',
+    ], key: [0, 1, 2, 3] }, 'Cada resumen recoge un argumento o la respuesta a la objeción. El autor no acusa a los bancos ni desprecia las matemáticas: propone enseñarlas con otros ejemplos.',
+      { hint: 'Descarta los resúmenes que exageran: el autor critica los ejemplos de las clases, no las matemáticas.' }),
+  ]);
+
+  // ---------------- Lección 2 · Intención y tono ----------------
+  setLesson('pu-ag-2', [
+    play('anticipa-texto', 'Antes de leer: ¿para qué escribe?', { doc: MILLON, slots: [
+      ['Intención probable', ['criticar con humor un tipo de anuncio', 'enseñar a invertir', 'vender un curso'], 0],
+      ['Tono esperado', ['irónico', 'solemne', 'técnico'], 0],
+      ['Género', ['columna de opinión', 'manual de instrucciones', 'noticia'], 0],
+    ] }, 'Una «columna de humor y opinión» con un título que promete millones en treinta días «(garantizado)» anuncia ironía: el autor va a criticar ese tipo de promesas, no a hacerlas.',
+      { hint: 'El título promete algo imposible y lo publica una columna de humor. ¿Lo dice en serio?' }),
+    play('termometro-tono', 'Tono en adjetivos y en adverbios', { doc: MILLON, rounds: [
+      { frag: 'solo capturas de pantalla de transferencias y testimonios de gente feliz que, curiosamente, también vende el curso.', scale: ['suspicaz', 'sorprendido', 'admirado', 'neutral'], answer: 0 },
+      { frag: 'El video, por supuesto, tiene música de fondo y un reloj que cuenta hacia atrás.', scale: ['burlón', 'respetuoso', 'alarmado', 'nostálgico'], answer: 0 },
+      { frag: 'Es una idea brillante, con un solo inconveniente: en algún momento se acaban las personas.', scale: ['irónico', 'admirado', 'técnico', 'triste'], answer: 0 },
+      { frag: 'No quiero burlarme de quienes caen.', scale: ['comprensivo', 'despectivo', 'burlón', 'asustado'], answer: 0 },
+      { frag: 'Por eso mismo me indigna que alguien haga negocio con esa desesperación.', scale: ['indignado', 'burlón', 'indiferente', 'eufórico'], answer: 0 },
+    ] }, '«Curiosamente» no expresa una sorpresa de verdad: señala, con sospecha, que los testigos felices también ganan vendiendo el curso. «Por supuesto» se burla de lo previsible: todos esos videos tienen música y reloj. Llamar «brillante» a un método que se agota es ironía. Con quienes caen, el autor es comprensivo; con quien vende el curso, indignado. Un texto puede cambiar de tono según de quién hable.',
+      { hint: 'Los adverbios también tienen tono: quita «curiosamente» o «por supuesto» de la frase y mira qué se pierde. El dato sigue; lo que desaparece es la actitud del autor.' }),
+    play('subraya-prueba', 'La prueba de la ironía', { doc: MILLON, rounds: [
+      { claim: 'El autor no cree que el muchacho del video sea rico de verdad.', p: 1, answer: 0 },
+      { claim: 'El método del curso no puede funcionar para todos los que lo compran.', p: 2, answer: 3 },
+    ] }, 'La duda sobre la riqueza está en el carro rojo «que probablemente no es suyo». Y que el método no puede funcionar para todos lo dice la ironía del párrafo 2: una idea «brillante» con un solo inconveniente, que en algún momento se acaban las personas.',
+      { hint: 'La ironía esconde la crítica en un detalle o en un elogio. Busca la oración donde el elogio se vuelve problema.' }),
+    play('balanza-argumento', '¿Engaño o negocio?', { doc: MILLON, thesis: 'Los cursos para hacerse rico rápido son un engaño que se aprovecha de la desesperación.', cards: [
+      ['El método consiste en vender el mismo curso a otras personas.', 0],
+      ['No hay cifras que se puedan revisar, solo capturas y testimonios.', 0],
+      ['Los testimonios felices son de personas que también venden el curso.', 0],
+      ['Una auditoría independiente muestra que la mayoría de quienes compraron el curso ganan lo prometido.', 1],
+      ['El autor buscaba una receta de arepas.', null],
+    ] }, 'Un método que vive de venderse a sí mismo, sin cifras revisables y con testigos interesados, apoya la tesis. Una auditoría que confirmara las ganancias la debilitaría. La receta de arepas solo sitúa la escena.',
+      { hint: 'Pregúntate si cada oración muestra una señal de engaño, una prueba de que no lo es o nada.' }),
+    play('trampa-opcion', 'Cada opción con su trampa', { doc: MILLON, q: '¿Cuál es la intención principal del autor?', options: [
+      ['Burlarse de las personas que pagan esos cursos.', 2],
+      ['Advertir, con ironía, sobre los cursos que prometen dinero fácil y enseñar a reconocerlos.', 0],
+      ['Contar la historia de una mujer que se hizo rica con el curso.', 4],
+      ['Demostrar que ningún negocio por internet es honesto.', 1],
+    ] }, 'B recoge la ironía y la prueba final del párrafo 5. A dice lo contrario de «No quiero burlarme de quienes caen». C mezcla datos: la mujer existe, pero todavía no ha vendido el primer curso. D dice de más: el autor habla de un tipo de anuncio, no de todos los negocios por internet. Sobra el sello «El texto no lo dice».',
+      { hint: 'La intención está en lo que el autor le pide al lector al final. Revisa cada opción contra el párrafo 4 y el 5.' }),
+    play('mapa-del-texto', 'Cómo avanza la ironía', { doc: MILLON, labels: ['presenta el anuncio', 'explica el método con ironía', 'muestra las señales de engaño', 'aclara a quién no critica', 'da un consejo al lector', 'confiesa que él también compró el curso'], key: [0, 1, 2, 3, 4] },
+      'Del anuncio al consejo: el autor presenta la promesa, se burla del método, muestra las señales del engaño, aclara que no ataca a las víctimas y termina con una prueba para el lector. El autor no compró el curso: solo vio el video gratuito.',
+      { hint: 'El párrafo 4 cambia de tono: empieza con «No quiero burlarme». ¿Qué aclara ahí?' }),
+    play('signos-que-hablan', 'Comillas con intención', { doc: MILLON, rounds: [
+      { p: 1, text: 'ganar diez millones de pesos al mes |«|sin jefe y sin horario»', options: ['cita las palabras del anuncio, con distancia', 'marca el título de un libro', 'abre la voz del autor', 'señala una pregunta'], answer: 0 },
+      { p: 3, text: 'No hay en sus palabras ni un |«|quizás» ni un «depende».', options: ['presenta palabras como palabras: las que el vendedor nunca usa', 'cita a un experto', 'marca un título', 'indica una pregunta retórica'], answer: 0 },
+    ] }, 'Las primeras comillas copian la promesa del anuncio, y el autor se distancia de ella. Las segundas no citan a nadie: muestran palabras que faltan en el discurso del vendedor.',
+      { hint: 'Las comillas pueden citar a alguien, distanciarse de lo citado o mostrar una palabra como palabra. ¿Cuál es cada caso?' }),
+  ]);
+
+  // ---------------- Lección 3 · Hechos y opiniones ----------------
+  setLesson('pu-ag-3', [
+    play('anticipa-texto', 'Antes de leer', { doc: CERRO, slots: [
+      ['Tema', ['la historia y el presente de una biblioteca de barrio', 'cómo se construye una bodega de cemento', 'los libros más vendidos del año'], 0],
+      ['Propósito', ['celebrar un aniversario contando lo que se ha logrado', 'vender libros usados', 'explicar cómo se presta un libro'], 0],
+      ['Tipo de texto', ['crónica, que cuenta y también comenta', 'receta, con pasos', 'poema, en versos'], 0],
+    ] }, 'El título habla de «veinte años» de una biblioteca y la ficha dice que es una crónica de aniversario en un periódico comunitario: se espera un texto que cuente su historia y celebre lo que ha hecho por el barrio.',
+      { hint: 'El título trae una cifra y la ficha dice qué clase de texto es. Con eso se adivina el tema y el propósito.' }),
+    play('quien-lo-dice', '¿Se puede comprobar?', { doc: CERRO, ask: 'Lleva cada afirmación a «Hecho» si se puede verificar con un registro, una cuenta o una medida, o a «Opinión» si nadie podría comprobarla.', voices: ['Hecho comprobable', 'Opinión'], cards: [
+      ['La biblioteca abrió el 12 de agosto de 2005.', 0],
+      ['Su colección es rica en historia local: más de ochocientos títulos sobre Bello.', 0],
+      ['Una buena parte de los usuarios, casi la mitad, son adultos.', 0],
+      ['El techo se filtra cada vez que cae un aguacero fuerte.', 0],
+      ['Es el lugar más importante del barrio.', 1],
+      ['Ninguna otra obra pública ha cambiado tanto la vida de la gente.', 1],
+      ['La directora tiene toda la razón.', 1],
+      ['Ya es hora de que la alcaldía cumpla su palabra.', 1],
+    ] }, 'La fecha, los ochocientos títulos, el registro de la entrada y la gotera se pueden revisar, aunque digan «rica», «buena parte» o «fuerte»: ahí esas palabras describen una cantidad o una intensidad que se mide. En cambio, «ninguna otra obra ha cambiado tanto», «tiene toda la razón» y «ya es hora» no traen «mejor» ni «debería», y aun así son opiniones: una valoración, un juicio sobre otra persona y una exigencia. No hay registro que las compruebe.',
+      { hint: 'No te fíes solo de la lista de palabras. Pregúntate con qué registro, cuenta o medida comprobarías cada frase. Si no hay ninguna manera, es opinión, aunque no diga «mejor» ni «debería».' }),
+    play('palabra-a-la-medida', 'Palabras que valoran y palabras que miden', { doc: CERRO, rounds: [
+      { p: 1, before: 'Su colección es ', word: 'rica', after: ' en historia local', options: ['abundante', 'deliciosa', 'muy valiosa', 'lujosa'], answer: 0 },
+      { p: 5, before: 'el edificio ya no ', word: 'da abasto', after: '.', options: ['alcanza para todos', 'se abre', 'tiene libros', 'cobra la entrada a los visitantes'], answer: 0 },
+      { p: 5, before: 'tenga que ', word: 'mendigar', after: ' lo que a otras se les da', options: ['rogar como un favor', 'robar', 'comprar con su presupuesto', 'prestar'], answer: 0 },
+    ] }, '«Rica en» es «que tiene mucho de algo»: ochocientos títulos se pueden contar, así que ahí «rica» describe, no valora (en «el alimento más rico» sí valoraría). «No dar abasto» es no alcanzar para lo que se necesita: faltan sillas y espacio. Y «mendigar» carga una opinión: la biblioteca tiene que pedir como favor lo que debería recibir.',
+      { hint: 'Lee lo que sigue a cada expresión: una cifra de títulos; faltan sillas; a otras obras se les da «sin pedirlo». Una misma palabra puede medir en una frase y valorar en otra.' }),
+    play('lupa-evidencia', 'Lo que dice la crónica', { doc: CERRO, cards: [
+      ['La biblioteca empezó con un solo computador.', 0],
+      ['La directora lleva doce años en el cargo.', 0],
+      ['El número de libros se multiplicó por más de nueve.', 1],
+      ['La alcaldía no ha cumplido una promesa de 2022.', 0],
+      ['La cancha sintética nunca se usa.', 2],
+      ['La biblioteca recibe el mayor presupuesto del barrio.', 2],
+    ] }, 'El computador, la directora y la promesa sin presupuesto están escritos. De mil doscientos a once mil libros es más de nueve veces. La cancha se llena los fines de semana, y el texto dice que la biblioteca tiene que «mendigar».',
+      { hint: 'Para la tarjeta del número de libros, haz la cuenta con los dos datos del párrafo 1.' }),
+    play('resumen-esencial', 'El resumen en tres renglones', { doc: CERRO, ideas: [
+      ['La biblioteca del barrio creció mucho en veinte años.', true],
+      ['Niños y adultos la usan a diario, y ha cambiado vidas en el barrio.', true],
+      ['El edificio ya no da abasto y la alcaldía no ha cumplido la ampliación.', true],
+      ['Empezó con mil doscientos libros donados.', false],
+      ['Guarda más de ochocientos títulos sobre Bello y sus veredas.', false],
+      ['La directora lleva doce años en el cargo.', false],
+    ] }, 'La crónica cuenta cuánto creció la biblioteca, cuánto se usa y qué ha logrado, y el problema del edificio. Los libros donados, los títulos sobre Bello y los años de la directora son datos que apoyan esas ideas.',
+      { hint: 'Un resumen no copia cifras: dice qué muestran. Las ideas esenciales son las que siguen siendo ciertas sin el número.' }),
+    play('subraya-prueba', 'La prueba en la crónica', { doc: CERRO, rounds: [
+      { claim: 'La biblioteca no solo sirve para leer.', p: 3, answer: 0 },
+      { claim: 'La biblioteca formó a personas que hoy enseñan en ella.', p: 4, answer: 1 },
+    ] }, 'Que no solo sirve para leer lo prueban los talleres y los computadores que se usan para trámites, empleo y la universidad. Y lo de formar a quienes hoy enseñan, los niños que llegaban a hacer tareas y vuelven como profesores de los talleres.',
+      { hint: 'Busca la oración que trae el hecho concreto. Una opinión de la autora no prueba nada por sí sola.' }),
+    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: CERRO, ask: 'Según el texto, en la biblioteca se ha hecho todo lo siguiente, EXCEPTO:', cards: [
+      ['Prestar diecinueve mil libros en un año', [3]],
+      ['Dictar ciento cuarenta talleres', [3]],
+      ['Usar los computadores para buscar empleo', [3]],
+      ['Dictar clases de inglés para adultos', null],
+    ] }, 'Los préstamos, los talleres y los computadores están en el párrafo 3. Las clases de inglés no aparecen: que la mitad de los usuarios sean adultos no quiere decir que haya clases para ellos.',
+      { hint: 'Lleva cada opción a su párrafo. Cuidado con la que junta dos cosas que el texto dice por separado.' }),
+  ]);
+
+  // ---------------- Evaluación: formato real, texto nuevo ----------------
+  const PERROS = {
+    id: 'lec-perros-metrocable', title: 'Perros en el cable',
+    paras: [
+      'Desde enero, el metrocable permite subir con perros de cualquier tamaño, siempre que lleven bozal y correa. La medida ha dividido a los usuarios, y a mi juicio es una de las mejores decisiones que ha tomado la empresa en años.',
+      'Para muchas familias de las laderas, el perro no es un lujo sino parte de la casa, y llevarlo al veterinario más cercano, que queda en el plan, implicaba pagar un taxi que cuesta lo mismo que un mercado pequeño. Según la empresa, en los primeros tres meses viajaron más de cuatro mil perros y, por fortuna, no se registró ningún incidente. Muchas de esas familias viven en barrios adonde no sube ningún bus: solo llega el cable.',
+      'Hay quienes temen las mordidas o las alergias, y es razonable. Pero el bozal resuelve lo primero, y para lo segundo bastaría con reservar una de cada diez cabinas sin animales, como ya se hace en otras ciudades. Hace falta que la empresa lo pruebe cuanto antes.',
+      'Admito que a nadie le gusta compartir una cabina estrecha con un animal recién bañado por la lluvia. Tampoco nos gusta compartirla con el paraguas que gotea del vecino ni con el bulto de mercado que nos aplasta los pies, y a nadie se le ha ocurrido prohibir los paraguas ni el mercado.',
+      'Algunos concejales propusieron que los perros viajaran solo en las horas valle, de diez de la mañana a cuatro de la tarde; como era de esperarse, ninguno de ellos sube al cable con un perro. La idea suena prudente, aunque olvida un detalle: los veterinarios de los barrios altos atienden sobre todo temprano, y quien trabaja no puede pedir permiso cada vez que su perro se enferma.',
+      'Esta vez, la empresa entendió a quienes la usan. Que un perro viaje en cable no debería escandalizar a nadie. Lo verdaderamente escandaloso era que, durante años, quienes no tenían carro tuvieran que dejar solo a su animal enfermo.',
+    ],
+  };
+  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: PERROS, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
+  setExam('pu-argumentacion', 'Evaluación · Argumentación, intención y tono', [
+    ['pu-ag-1', 'La tesis es lo que el autor defiende; suele ir con «a mi juicio», «creo», «sostengo».',
+      Q('La tesis del autor es que:', ['los perros solo deberían subir al cable con bozal y con correa', 'las alergias son el problema más grave de llevar animales', 'permitir perros en el metrocable fue una buena decisión', 'el taxi al veterinario cuesta lo mismo que un mercado'], 2,
+        '«A mi juicio es una de las mejores decisiones»: eso es lo que el texto defiende. El bozal, las alergias y el taxi son condiciones, objeciones o argumentos.',
+        'Busca la frase con «a mi juicio».')],
+    ['pu-ag-1', 'Un argumento de datos se apoya en cifras que se pueden comprobar.',
+      Q('El dato de los cuatro mil perros que viajaron sin incidentes es un argumento:', ['de autoridad', 'de datos', 'por analogía', 'de experiencia personal'], 1,
+        'Usa una cifra para mostrar que la medida no trajo problemas.',
+        'Pregúntate si el argumento se apoya en un experto, en una cifra, en una comparación o en algo que vivió el autor.')],
+    ['pu-ag-1', 'Una concesión no siempre lleva «pero»: el autor acepta algo y responde con una comparación o un hecho (repasa «Conceder sin pero»).',
+      Q('En el párrafo 4, el autor:', ['concede una incomodidad y le quita peso con una comparación', 'propone prohibir también los paraguas y los bultos en el cable', 'se queja de los pasajeros que suben con mercado a la cabina', 'reconoce que los perros deberían viajar siempre en cabinas aparte'], 0,
+        '«Admito que» concede: compartir la cabina con un perro mojado incomoda. Luego, sin decir «pero», compara con molestias que nadie piensa prohibir (el paraguas, el mercado): así relativiza la objeción. No propone prohibir paraguas: eso es lo absurdo que señala.',
+        'Desconfía de la opción que repite las palabras del párrafo («paraguas», «mercado»). Pregúntate qué acepta el autor y qué hace después con eso.')],
+    ['pu-ag-1', 'Para refutar, el autor puede aceptar primero que una idea suena bien y luego mostrar lo que olvida.',
+      Q('La frase «La idea suena prudente, aunque olvida un detalle» (párrafo 5) sirve para:', ['conceder algo a la propuesta de los concejales y luego refutarla', 'apoyar sin reservas la propuesta de viajar solo en horas valle', 'ejemplificar con un caso cómo atienden los veterinarios de barrio', 'concluir el texto repitiendo con otras palabras la tesis del autor'], 0,
+        '«Suena prudente» le concede algo a la propuesta; «olvida un detalle» abre la refutación: los veterinarios atienden temprano y quien trabaja no puede pedir permiso.',
+        'Lee lo que viene después de «olvida un detalle»: ¿favorece o perjudica a la propuesta de las horas valle?')],
+    ['pu-ag-2', 'La intención es para qué se escribe: informar, persuadir, criticar, narrar.',
+      Q('La intención principal del texto es:', ['informar los horarios en que funciona el metrocable', 'narrar el primer viaje de un perro en el cable', 'explicar cómo se pone un bozal sin lastimar al perro', 'persuadir de que la medida es buena'], 3,
+        'El autor da su opinión, la apoya con razones y responde a varias objeciones: quiere convencer.',
+        'Fíjate en lo que hace el autor con las objeciones de los párrafos 3, 4 y 5.')],
+    ['pu-ag-2', 'El tono se nota en las palabras que elige el autor.',
+      Q('En el párrafo 6, el tono del autor es:', ['indignado ante una injusticia anterior', 'temeroso de lo que pueda pasar con los perros', 'burlón con los dueños de perros de las laderas', 'neutral, como el de un informe de la empresa'], 0,
+        '«Lo verdaderamente escandaloso» muestra indignación por lo que pasaba antes de la medida.',
+        'Busca la palabra que repite el autor en el párrafo 6.')],
+    ['pu-ag-2', 'El tono también vive en adverbios y expresiones de actitud («por fortuna», «curiosamente», «como era de esperarse»): no informan, muestran cómo se siente el autor.',
+      Q('Con la expresión «por fortuna» (párrafo 2), el autor:', ['informa que la empresa lleva un registro de los incidentes', 'deja ver que se alegra de un dato que favorece su postura', 'pone en duda las cifras que entrega la empresa del cable', 'reconoce que todo salió bien por suerte y no por el bozal'], 1,
+        '«Por fortuna» no añade ningún dato: muestra que al autor le alegra que no haya habido incidentes, porque eso apoya su tesis. El registro es de la empresa, no lo dice esa expresión; y el autor no atribuye el resultado a la suerte: defiende el bozal en el párrafo 3.',
+        'Quita la expresión de la frase: ¿cambia el dato o solo cambia lo que se nota del autor?')],
+    ['pu-ag-2', 'Una expresión de actitud puede ser irónica: «como era de esperarse» presenta algo como previsible para criticarlo.',
+      Q('En el párrafo 5, «como era de esperarse» sirve para:', ['mostrar con ironía que quienes proponen la regla no la van a sufrir', 'expresar sorpresa porque los concejales no usan el metrocable', 'anunciar que la propuesta de las horas valle ya fue aprobada', 'informar sin tomar partido sobre los horarios de los concejales'], 0,
+        'El autor presenta como previsible que ningún concejal suba con un perro: insinúa que proponen una regla que no los afecta. No hay sorpresa (lo contrario de «era de esperarse») ni un dato neutral.',
+        'Pregúntate si lo «esperado» le parece bien o mal al autor, y qué insinúa sobre quienes propusieron la regla.')],
+    ['pu-ag-3', 'Una opinión valora y no se puede comprobar; un hecho sí.',
+      Q('Es una opinión, y no un hecho:', ['Desde enero se permite subir perros con bozal y correa', 'En los primeros tres meses viajaron más de cuatro mil perros', 'Es una de las mejores decisiones de la empresa', 'Algunos concejales propusieron limitar el horario'], 2,
+        '«Una de las mejores» es una valoración del autor. Lo demás se puede verificar.',
+        'Pregúntate cuál de las cuatro no se podría comprobar con un registro o un documento.')],
+    ['pu-ag-3', 'Una opinión no siempre trae «mejor», «debería» o «lamentable»: la prueba es si se puede verificar.',
+      Q('Es una opinión del autor, aunque no use palabras como «mejor», «debería» o «lamentable»:', ['Muchas familias viven en barrios adonde no sube ningún bus', 'Esta vez, la empresa entendió a quienes la usan', 'En tres meses viajaron más de cuatro mil perros', 'Algunos concejales propusieron limitar el horario'], 1,
+        'Que la empresa «entendió» a sus usuarios es un juicio del autor: no hay registro que lo compruebe. Las rutas de bus, los viajes y la propuesta de los concejales se pueden revisar.',
+        'Toma cada opción y pregúntate dónde la comprobarías: un mapa de rutas, un registro, un acta. La que no tenga dónde comprobarse es la opinión.')],
+    ['pu-ag-3', 'Una palabra que suele valorar («más», «rico», «grande», «fuerte») también puede describir algo que se mide.',
+      Q('Es un hecho, aunque tenga una palabra que en otras frases sirve para valorar:', ['Es una de las mejores decisiones de la empresa', 'El veterinario más cercano queda en el plan', 'Lo verdaderamente escandaloso era dejar solo al animal', 'Esta vez, la empresa entendió a quienes la usan'], 1,
+        '«Más cercano» se comprueba con un mapa: ahí «más» mide una distancia, no valora. «Las mejores», «escandaloso» y «entendió» son juicios del autor.',
+        'No te guíes por la palabra «más»: pregúntate si podrías medir o revisar lo que dice cada opción.')],
+    ['pu-ag-3', 'Una exigencia es opinión aunque no diga «debería»: «hace falta», «es hora de», «no se puede seguir».',
+      Q('La oración «Hace falta que la empresa lo pruebe cuanto antes» (párrafo 3) es:', ['un hecho, porque no usa la palabra «debería»', 'un dato que la empresa publicó sobre las cabinas', 'una opinión: el autor exige algo sin decir «debería»', 'una cita de los usuarios que temen las alergias'], 2,
+        '«Hace falta que…» pide algo, igual que «debería»: es una exigencia del autor, no un dato. No viene de la empresa ni de los usuarios.',
+        'Pregúntate si la oración cuenta algo que pasó o pide que algo pase.')],
+    ['pu-ag-3', 'Un hecho atribuido a una fuente («según la empresa») se puede comprobar en esa fuente.',
+      Q('Es un hecho que se puede comprobar:', ['Según la empresa, no hubo incidentes en tres meses', 'La medida es razonable y prudente para la ciudad', 'Lo escandaloso era dejar solo al animal enfermo', 'Que un perro viaje en cable no debería escandalizar'], 0,
+        'Los registros de la empresa se pueden revisar. Las demás opciones valoran: «razonable», «escandaloso», «no debería».',
+        'Descarta las opciones con palabras como «razonable», «escandaloso» o «debería».')],
   ]);
 });

@@ -25044,3 +25044,194 @@ GAMES['tres-listas'] = (() => {
   });
   return Object.assign(game, { answer, solutions });
 })();
+;
+//#archivo js/games/comite-reglas.js
+// El comité con reglas (Preuniversitario, pu-or-4; spec 2026-11-18-preuda-razonamiento-completo): se elige un grupo de k
+// personas con condiciones como «si F está, G no», «H va solo si J va», «L tiene que ir». Se arrastran personas al comité
+// (y de vuelta) y cada regla se marca ✓ o ✗ en vivo. Hay que armar un comité válido que cumpla lo que pide la ronda.
+// params = { rounds: [{ names, k, rules: [{ t, a, b?, say }], need?: [nombres] }] }
+//   t: 'ifNot' (si a, no b) · 'onlyIf' (a solo si b) · 'must' (a va) · 'out' (a no va) · 'either' (va a o va b)
+// state = { rounds: [{ in: [nombres] }] }
+GAMES['comite-reglas'] = (() => {
+  const rule = (c, S) => { const A = S.includes(c.a), B = S.includes(c.b); switch (c.t) {
+    case 'ifNot': return !(A && B); case 'onlyIf': return !A || B; case 'must': return A; case 'out': return !A; case 'either': return A || B; default: return false; } };
+  const valid = (r, S) => S.length === r.k && r.rules.every(c => rule(c, S));
+  const ok = (s, r) => valid(r, s.in) && (r.need || []).every(n => s.in.includes(n));
+  const combos = (list, k) => (k === 0 ? [[]] : list.flatMap((x, i) => combos(list.slice(i + 1), k - 1).map(c => [x, ...c])));
+  const answer = r => ({ in: combos(r.names, r.k).find(S => ok({ in: S }, r)) });
+  const lay = G => { const n = G.r.names.length, w = Math.min(54, (G.W - 20) / n - 4); G.home = G.r.names.map((nm, i) => ({ nm, x: G.W / 2 - (n * (w + 4) - 4) / 2 + i * (w + 4), y: 108, w, h: 30 })); G.box = { x: 24, y: 152, w: G.W - 48, h: 54 }; };
+  const game = roundsGame({
+    aspect: 1.3,
+    init: () => ({ in: [] }),
+    ok,
+    answered: s => s.in.length > 0,
+    solution: r => answer(r).in.join(', '),
+    prompt: r => `Arma un comité de ${r.k}${r.need ? ` con ${r.need.join(' y ')}` : ''} que cumpla las reglas`,
+    foot: () => 'Arrastra personas al comité y de vuelta',
+    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.drag = null; lay(G); },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, good = ok(s, r);
+      G.home.forEach(b => { if (!s.in.includes(b.nm) && G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { size: 12, col: C.sky }); });
+      p.stroke(good ? C.ok : C.brand); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 20)); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 12);
+      TK.label(p, C, `comité (${s.in.length} de ${r.k})`, G.box.x + 60, G.box.y - 8, C.mute, 10, 120);
+      const w = G.home[0].w; G.inBoxes = s.in.map((nm, i) => ({ nm, x: G.box.x + 10 + i * (w + 6), y: G.box.y + 12, w, h: 30 }));
+      G.inBoxes.forEach(b => { if (G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { on: true, size: 12, col: good ? C.ok : C.mint }); });
+      r.rules.forEach((c, i) => { const v = rule(c, s.in); TK.label(p, C, `${v ? '✓' : '✗'} ${c.say}`, G.W / 2, 226 + i * 15, v ? C.ok : C.bad, 10, G.W - 30); });
+      if (G.drag) RK.chip(p, C, { x: G.drag.x - w / 2, y: G.drag.y - 15, w, h: 30 }, G.drag.nm, { on: true, col: C.brand, size: 12 });
+      RK.strip(p, C, G.fb, good ? `$\\text{${s.in.join(', ')}}$` : `$\\text{faltan ${Math.max(0, r.k - s.in.length)}}$`, { col: G.locked || good ? C.ok : C.brand, size: 15 });
+    },
+    press(G, x, y) {
+      const b = [...(G.inBoxes || []), ...G.home.filter(b => !G.s.in.includes(b.nm))].find(b => hitBox(b, x, y)); if (!b) return false;
+      G.drag = { nm: b.nm, x, y }; return true;
+    },
+    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
+    release(G, x, y) {
+      const d = G.drag; G.drag = null; if (!d) return; const S = G.s.in, inside = hitBox({ x: G.box.x - 6, y: G.box.y - 10, w: G.box.w + 12, h: G.box.h + 20 }, x, y);
+      if (inside && !S.includes(d.nm) && S.length < G.r.k) S.push(d.nm); else if (!inside && S.includes(d.nm)) S.splice(S.indexOf(d.nm), 1);
+      G.touch();
+    },
+    demo(G) { const b = G.home[G.home.length - 1]; return { from: { x: b.x + b.w / 2, y: b.y + 15 }, to: { x: G.box.x + 40, y: G.box.y + 27 }, text: 'Arrastra al comité', ty: G.box.y + G.box.h + 12 }; },
+    peek: G => ({ home: G.home, box: G.box }),
+  });
+  return Object.assign(game, { answer, rule, combos, valid });
+})();
+;
+//#archivo js/games/tiene-podria.js
+// Tiene que, podría o no puede (Preuniversitario, pu-or-4; spec 2026-11-18-preuda-razonamiento-completo): con varias
+// soluciones posibles, una afirmación es necesaria si pasa en todas, posible si pasa en alguna e imposible si no pasa en
+// ninguna. Arriba hay un banco de pruebas: se arrastran personas al comité y se ve si cumple las reglas (así se exploran
+// los casos). Abajo, cada afirmación se arrastra a su zona: «tiene que», «podría» o «no puede».
+// params = { rounds: [{ names, k, rules, claims: [{ t: 'in' | 'out' | 'both', a, b?, say }] }] }   (reglas como en comite-reglas)
+// state = { rounds: [{ in: [nombres], zone: [0 | 1 | 2 | null por afirmación] }] }   (0 tiene que · 1 podría · 2 no puede)
+GAMES['tiene-podria'] = (() => {
+  const CR = () => GAMES['comite-reglas'];
+  const cases = r => CR().combos(r.names, r.k).filter(S => CR().valid(r, S));
+  const holds = (c, S) => (c.t === 'in' ? S.includes(c.a) : c.t === 'out' ? !S.includes(c.a) : S.includes(c.a) && S.includes(c.b));
+  const kind = (r, c) => { const L = cases(r), n = L.filter(S => holds(c, S)).length; return n === L.length ? 0 : n > 0 ? 1 : 2; };
+  const ok = (s, r) => r.claims.every((c, i) => s.zone[i] === kind(r, c));
+  const answer = r => ({ in: [], zone: r.claims.map(c => kind(r, c)) });
+  const ZN = ['tiene que', 'podría', 'no puede'];
+  const lay = G => { const n = G.r.names.length, w = Math.min(50, (G.W - 20) / n - 4); const y0 = 106 + G.r.rules.length * 13; G.home = G.r.names.map((nm, i) => ({ nm, x: G.W / 2 - (n * (w + 4) - 4) / 2 + i * (w + 4), y: y0, w, h: 26 })); G.box = { x: 24, y: y0 + 34, w: G.W - 48, h: 40 }; const zw = (G.W - 32) / 3; G.zones = ZN.map((t, z) => ({ z, x: 16 + z * zw, y: G.H - 190, w: zw - 6, h: 76 })); };
+  const game = roundsGame({
+    aspect: 1.75,
+    init: r => ({ in: [], zone: r.claims.map(() => null) }),
+    ok,
+    answered: s => s.zone.some(z => z != null),
+    solution: r => r.claims.map(c => `${c.say}: ${ZN[kind(r, c)]}`).join('; '),
+    prompt: r => `Comités de ${r.k}: ¿tiene que pasar, podría o no puede?`,
+    foot: () => 'Prueba casos arriba; arrastra cada afirmación a su zona',
+    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.drag = null; lay(G); },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, w = G.home[0].w;
+      G.home.forEach(b => { if (!s.in.includes(b.nm) && G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { size: 11, col: C.sky }); });
+      const v = CR().valid(r, s.in);
+      p.stroke(s.in.length === r.k ? (v ? C.ok : C.bad) : C.line); p.strokeWeight(1.4); p.fill(RK.al(p, C.brand, 16)); p.rect(G.box.x, G.box.y, G.box.w, G.box.h, 10);
+      G.inBoxes = s.in.map((nm, i) => ({ nm, x: G.box.x + 8 + i * (w + 4), y: G.box.y + 7, w, h: 26 }));
+      G.inBoxes.forEach(b => { if (G.drag?.nm !== b.nm) RK.chip(p, C, b, b.nm, { on: true, size: 11, col: C.mint }); });
+      TK.label(p, C, s.in.length < r.k ? `prueba un caso (${s.in.length} de ${r.k})` : v ? 'este caso cumple las reglas' : 'este caso no cumple', G.W / 2, G.box.y + G.box.h + 10, s.in.length < r.k ? C.mute : v ? C.ok : C.bad, 10, G.W - 30);
+      r.rules.forEach((c, i) => TK.label(p, C, c.say, G.W / 2, 100 + i * 13, C.ink, 10, G.W - 30));
+      G.zones.forEach(z => { p.stroke(C.line); p.strokeWeight(1.2); p.fill(RK.al(p, C.card, 170)); p.rect(z.x, z.y, z.w, z.h, 8); TK.label(p, C, ZN[z.z], z.x + z.w / 2, z.y + 10, C.ink, 10, z.w); });
+      const cw = G.W - 40, n = r.claims.length;
+      G.claimBoxes = r.claims.map((c, i) => { const zi = s.zone[i]; if (zi == null) return { i, x: 20, y: G.box.y + G.box.h + 24 + i * 25, w: cw, h: 22 }; const z = G.zones[zi], k = r.claims.slice(0, i).filter((_, j) => s.zone[j] === zi).length; return { i, x: z.x + 3, y: z.y + 20 + k * 18, w: z.w - 6, h: 16 }; });
+      G.claimBoxes.forEach(b => { if (G.drag?.ci !== b.i) RK.chip(p, C, b, r.claims[b.i].say, { on: s.zone[b.i] != null, size: s.zone[b.i] == null ? 10 : 8, col: G.locked ? (s.zone[b.i] === kind(r, r.claims[b.i]) ? C.ok : C.bad) : C.coral }); });
+      if (G.drag) RK.chip(p, C, { x: G.drag.x - 70, y: G.drag.y - 11, w: 140, h: 22 }, G.drag.nm ?? r.claims[G.drag.ci].say, { on: true, col: C.brand, size: 10 });
+      RK.strip(p, C, G.fb, `$\\text{${s.zone.filter(z => z != null).length} de ${n} afirmaciones ubicadas}$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 14 });
+    },
+    press(G, x, y) {
+      const c = (G.claimBoxes || []).find(b => hitBox(b, x, y)); if (c) { G.drag = { ci: c.i, x, y }; return true; }
+      const b = [...(G.inBoxes || []), ...G.home.filter(b => !G.s.in.includes(b.nm))].find(b => hitBox(b, x, y)); if (b) { G.drag = { nm: b.nm, x, y }; return true; }
+      return false;
+    },
+    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
+    release(G, x, y) {
+      const d = G.drag; G.drag = null; if (!d) return;
+      if (d.ci != null) { const z = G.zones.find(z => hitBox(z, x, y)); G.s.zone[d.ci] = z ? z.z : null; G.touch(); return; }
+      const S = G.s.in, inside = hitBox({ x: G.box.x - 6, y: G.box.y - 10, w: G.box.w + 12, h: G.box.h + 20 }, x, y);
+      if (inside && !S.includes(d.nm) && S.length < G.r.k) S.push(d.nm); else if (!inside && S.includes(d.nm)) S.splice(S.indexOf(d.nm), 1);
+    },
+    demo(G) { const c = G.claimBoxes?.find(b => G.s.zone[b.i] == null); if (!c) return null; const z = G.zones[(kind(G.r, G.r.claims[c.i]) + 1) % 3]; return { from: { x: c.x + c.w / 2, y: c.y + 11 }, to: { x: z.x + z.w / 2, y: z.y + 40 }, text: 'Arrastra a una zona', ty: z.y - 10 }; },
+    peek: G => ({ zones: G.zones, claims: G.claimBoxes }),
+  });
+  return Object.assign(game, { answer, kind, cases });
+})();
+;
+//#archivo js/games/trabajo-conjunto.js
+// El trabajo conjunto (Preuniversitario, pu-pr-3; spec 2026-11-18-preuda-razonamiento-completo): si uno hace un trabajo en a
+// horas y otro en b, en cada hora hacen 1/a y 1/b: juntos se suman las rapideces, no los tiempos. Se arrastran las horas y el
+// tanque se llena con dos colores (lo que aporta cada uno). Hay que dejarlo lleno justo.
+// params = { rounds: [{ who: [a, b], a, b }] }   state = { rounds: [{ t }] }   (horas, de media en media)
+GAMES['trabajo-conjunto'] = (() => {
+  const need = r => r.a * r.b / (r.a + r.b);
+  const ok = (s, r) => Math.abs(s.t - need(r)) < 1e-9;
+  const max = r => Math.min(r.a, r.b);
+  const N = r => Math.round(max(r) * 2);
+  const game = roundsGame({
+    aspect: 1.15,
+    init: () => ({ t: 0.5 }),
+    ok,
+    solution: r => `${RK.num(need(r))} horas`,
+    prompt: r => `${r.who[0]} solo tarda ${r.a} h y ${r.who[1]} solo ${r.b} h. ¿Cuánto tardan juntos?`,
+    foot: () => 'Arrastra las horas que trabajan juntos',
+    layout(G) { G.tY = G.H - 108; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = false; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { t: need(r) } : G.s, fa = s.t / r.a, fb = s.t / r.b, tot = fa + fb, good = ok(s, r), x0 = G.W / 2 - 50, y0 = 110, h = G.tY - 180;
+      p.noFill(); p.stroke(C.ink); p.strokeWeight(1.6); p.rect(x0, y0, 100, h, 4);
+      const ha = Math.min(1, fa) * h, hb = Math.min(1 - Math.min(1, fa), fb) * h;
+      p.noStroke(); p.fill(good ? C.ok : C.sky); p.rect(x0 + 2, y0 + h - ha, 96, ha); p.fill(good ? C.ok : C.coral); p.rect(x0 + 2, y0 + h - ha - hb, 96, hb);
+      if (tot > 1) TK.label(p, C, 'se rebosa', G.W / 2, y0 - 10, C.bad, 11, 100);
+      TK.label(p, C, `${r.who[0]}: ${RK.num(Math.round(fa * 1000) / 1000)}`, x0 - 50, y0 + h - ha / 2, C.sky, 10, 90);
+      TK.label(p, C, `${r.who[1]}: ${RK.num(Math.round(fb * 1000) / 1000)}`, x0 + 150, y0 + h - ha - hb / 2, C.coral, 10, 90);
+      G.X = RK.track(p, C, 30, G.W - 30, G.tY, N(r), Math.round(s.t * 2) - 1, i => ((i + 1) % 2 === 0 ? String((i + 1) / 2) : null));
+      RK.strip(p, C, G.fb, `$\\tfrac{${RK.num(s.t)}}{${r.a}} + \\tfrac{${RK.num(s.t)}}{${r.b}} ${good ? '= 1' : tot > 1 ? '> 1' : '< 1'}$`, { kicker: 'Lo que hace cada uno se suma', col: G.locked || good ? C.ok : C.brand, size: 18 });
+    },
+    press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
+    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
+    release(G) { G.grab = false; },
+    demo: G => ({ from: { x: G.X(0), y: G.tY }, to: { x: G.X(1), y: G.tY }, text: 'Arrastra las horas', ty: G.tY - 28 }),
+    peek: G => ({ tY: G.tY }),
+  });
+  game.move = (G, x) => { const v = (RK.pick(x, 30, G.W - 30, N(G.r)) + 1) / 2; if (v !== G.s.t || !G.touched[G.cur]) { G.s.t = v; G.touch(); } };
+  return Object.assign(game, { answer: r => ({ t: need(r) }) });
+})();
+;
+//#archivo js/games/velocidad-media.js
+// La velocidad media (Preuniversitario, pu-pr-3; spec 2026-11-18-preuda-razonamiento-completo): la velocidad media es la
+// distancia total entre el tiempo total, no el promedio de las velocidades. Un viaje de dos tramos; arriba las barras del
+// tiempo de cada tramo. Se arrastra una velocidad constante y su barra de tiempo debe igualar la suma de las otras dos.
+// params = { rounds: [{ legs: [[km, km/h], [km, km/h]] }] }   state = { rounds: [{ v }] }   (km/h, de 5 en 5 hasta 120)
+GAMES['velocidad-media'] = (() => {
+  const D = r => r.legs[0][0] + r.legs[1][0], T = r => r.legs[0][0] / r.legs[0][1] + r.legs[1][0] / r.legs[1][1];
+  const need = r => D(r) / T(r);
+  const ok = (s, r) => Math.abs(s.v - need(r)) < 1e-9;
+  const game = roundsGame({
+    aspect: 1.15,
+    init: r => { const avg = (r.legs[0][1] + r.legs[1][1]) / 2; const a5 = Math.round(avg / 5) * 5; return { v: a5 === need(r) ? 10 : a5 }; },
+    ok,
+    solution: r => `${RK.num(need(r))} km/h`,
+    prompt: r => `${r.legs[0][0]} km a ${r.legs[0][1]} km/h y ${r.legs[1][0]} km a ${r.legs[1][1]} km/h. ¿Velocidad media?`,
+    foot: () => 'Arrastra la velocidad que hace el viaje en el mismo tiempo',
+    layout(G) { G.tY = G.H - 108; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = false; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { v: need(r) } : G.s, t1 = r.legs[0][0] / r.legs[0][1], t2 = r.legs[1][0] / r.legs[1][1], tv = D(r) / s.v, u = (G.W - 60) / Math.max(T(r), tv) / 1.1, good = ok(s, r);
+      TK.label(p, C, 'tiempo del viaje real', G.W / 2, 104, C.mute, 10, 200);
+      p.noStroke(); p.fill(C.sky); p.rect(30, 114, t1 * u, 24, 3); p.fill(C.coral); p.rect(30 + t1 * u, 114, t2 * u, 24, 3);
+      TK.label(p, C, `${RK.num(t1)} h + ${RK.num(t2)} h = ${RK.num(T(r))} h`, G.W / 2, 150, C.ink, 11, G.W - 30);
+      TK.label(p, C, `a ${s.v} km/h constante`, G.W / 2, 176, C.mute, 10, 200);
+      p.fill(good ? C.ok : C.mint); p.rect(30, 186, tv * u, 24, 3);
+      TK.label(p, C, `${D(r)} km ÷ ${s.v} = ${RK.num(Math.round(tv * 100) / 100)} h`, G.W / 2, 222, C.ink, 11, G.W - 30);
+      G.X = RK.track(p, C, 30, G.W - 30, G.tY, 24, s.v / 5 - 1, i => ((i + 1) % 4 === 0 ? String((i + 1) * 5) : null));
+      RK.strip(p, C, G.fb, `$v_m = \\dfrac{${D(r)}}{${RK.num(T(r))}} ${good ? '=' : '\\ne'} ${s.v}$`, { kicker: 'Distancia total ÷ tiempo total', col: G.locked || good ? C.ok : C.brand, size: 17 });
+    },
+    press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
+    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
+    release(G) { G.grab = false; },
+    demo: G => ({ from: { x: G.X(G.s.v / 5 - 1), y: G.tY }, to: { x: G.X(Math.min(23, G.s.v / 5 + 2)), y: G.tY }, text: 'Arrastra la velocidad', ty: G.tY - 28 }),
+    peek: G => ({ tY: G.tY }),
+  });
+  game.move = (G, x) => { const v = (RK.pick(x, 30, G.W - 30, 24) + 1) * 5; if (v !== G.s.v || !G.touched[G.cur]) { G.s.v = v; G.touch(); } };
+  return Object.assign(game, { answer: r => ({ v: need(r) }) });
+})();

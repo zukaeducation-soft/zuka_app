@@ -78,8 +78,8 @@ test('Dos textos: una idea de un texto que encuentra explicación en el otro', (
 
 test('EXCEPTO: la intrusa puede estar en el texto, pero en otro párrafo', () => {
   assert.match(scenes('pu-el-3'), /otro párrafo/i);
-  const q = exOf('pu-el-3', 'quien-lo-dice')[0];
-  assert.ok(q && q.params.voices.some(v => /otro párrafo/.test(v)) && q.params.cards.some(c => c[1] === 1), 'práctica con una intrusa de otro párrafo');
+  const q = exOf('pu-el-3', 'dentro-fuera')[0];
+  assert.ok(q && q.params.rot.some(v => /otro párrafo/.test(v)) && q.params.va.includes(1), 'práctica con una intrusa de otro párrafo');
   const words = t => t.toLowerCase().match(/[a-záéíóúñ]{4,}/g) || [];
   const hit = examOf('pu-el-3').some(it => {
     const p = it.ex.params, m = p.q.match(/EXCEPTO/) && p.q.match(/párrafo (\d)/);
