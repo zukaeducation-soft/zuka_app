@@ -282,6 +282,18 @@
 .pz-mundos li .pz-lam { transition: scale .22s var(--sal); }
 @media (hover: hover) and (pointer: fine) { .pz-mundos li:hover .pz-lam { scale: 1.14; } }
 
+/* clips de la app */
+.pz-clips-caja { display: grid; gap: 18px; justify-items: center; min-width: 0; }
+.pz-clips { list-style: none; display: flex; gap: 16px; width: 100%; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; padding-bottom: 6px; } .pz-clips::-webkit-scrollbar { display: none; }
+.pz-clips li { flex: 0 0 min(64vw, 250px); scroll-snap-align: center; display: grid; gap: 4px; align-content: start; text-align: center; }
+.pz-clip { display: block; margin-bottom: 12px; padding: 7px; border-radius: 34px; background: #07080f; border: 2px solid #2a3150; box-shadow: 0 24px 44px -24px rgb(6 20 60 / .55); transition: translate .35s var(--sal); }
+.pz-clip img { display: block; width: 100%; height: auto; border-radius: 27px; background: #07080f; }
+.pz-clips h3 { font: 600 22px/1.15 var(--display); } .pz-clips p { color: var(--mute); font-size: 15.5px; line-height: 1.4; }
+.pz-clips-p { padding: 11px 20px; border-radius: 999px; border: 1px solid var(--line); font-weight: 600; font-size: 14.5px; color: var(--mute); } .pz-clips-p[hidden] { display: none; }
+.pz-prueba { font: 500 clamp(23px, 2.4vw, 31px)/1.2 var(--display); }
+@media (hover: hover) and (pointer: fine) { .pz-clips li:hover .pz-clip { translate: 0 -8px; } }
+@media (min-width: 900px) { .pz-clips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; overflow: visible; padding-top: 10px; } }
+
 /* cómo se aprende: cuatro piezas, dos se juegan */
 .pz-demos { display: grid; gap: 14px; }
 .pz-demo { display: grid; grid-template-rows: auto 1fr auto; gap: 14px; padding: 24px 20px; border-radius: 24px; background: var(--card); border: 1px solid var(--line); min-width: 0; }

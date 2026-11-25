@@ -15,6 +15,7 @@ El usuario pidió acomodar la portada como instruimos.com. Se toma su **estructu
    real en celular, computador y tablet (`brand/app/`).
 4. **Quiénes somos**: «Acá nadie se queda por fuera»: lenguaje cercano y colombiano, y tres afiches con símbolos de Phosphor Icons y la misión
    (educación de calidad accesible para entrar a la U, menos deserción y cumplir el sueño). Sin cifras inventadas.
+   «Cómo se aprende» abre con cuatro clips reales de la app (`brand/clips/`, webp animados hechos con los robots de prueba).
 5. Siguen: tu camino, ¿te ha pasado?, cómo se aprende, mundos, libros y preguntas.
 6. **¿Qué estás esperando?**, pie con columnas y WhatsApp flotante.
 
