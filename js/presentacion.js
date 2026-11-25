@@ -204,6 +204,8 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los cursos de ${PZ_FUND_N}">Quiero inscribirme</button><button class="btn ghost" type="button" data-pz-ir=".pz-prog-fund">Ver los cursos</button></div>`, `<div class="pz-mancha pz-foto pz-foto-ing" data-inclina="5">${foto}</div>`, 'pz-lam-fund')] : []),
     lamina('#f5e6c0', 'Libros de admisión', `<p class="pz-lam-k">Libros de admisión</p><h2>El examen, también en papel</h2><p class="pz-lead">Dos libros de razonamiento lógico y dos de comprensión lectora. Impresos a color, con envío.</p>
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los libros de admisión">Quiero los libros</button><button class="btn ghost" type="button" data-pz-ir="#pz-libros">Conocerlos</button></div>`, mancha(libros('pz-est-lam')), 'pz-lam-libros'),
+    lamina('#bfe3ff', 'Zuka para instituciones', `<p class="pz-lam-k">Colegios e instituciones</p><h2>Zuka para todo tu colegio</h2><p class="pz-lead">Cupos para tus estudiantes y un portal donde registras, acompañas y ves cómo va cada uno.</p>
+      <div class="pz-ctas"><a class="btn main brand" href="instituciones/">Cotizar</a><button class="btn ghost" type="button" data-pz-ir="#pz-inst">Ver precios</button></div>`, mancha(pzInstMini()), 'pz-lam-inst'),
   ];
   const mundo = u => {
     const w = worlds[u.world] || {};
@@ -215,7 +217,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
   const plates = n => (typeof gymPlates === 'function' ? gymPlates(n) : '');
   const demo = (cls, h, p, fig, pie = '') => `<article class="pz-demo ${cls} pz-rev" id="${cls}"><div class="pz-demo-txt"><h3>${h}</h3><p>${p}</p></div>
       <div class="pz-demo-fig">${fig}</div>${pie}</article>`;
-  const menu = [['#pz-programas', 'Programas'], ['#pz-somos', 'Quiénes somos'], ['#pz-ruta', 'Tu camino'], ['#pz-como', 'Cómo se aprende'], ['#pz-dudas', 'Preguntas']];
+  const menu = [['#pz-programas', 'Programas'], ['#pz-somos', 'Quiénes somos'], ['#pz-ruta', 'Tu camino'], ['#pz-como', 'Cómo se aprende'], ['#pz-inst', 'Instituciones'], ['#pz-dudas', 'Preguntas']];
   return `<header class="pz-bar"><div class="pz-in"><span class="pz-logo">${logo}</span>
       <nav class="pz-nav" id="pz-nav" aria-label="Secciones">${menu.map(([h, t]) => `<a href="${h}">${t}</a>`).join('')}</nav>
       <span class="pz-bar-acts"><button class="pz-plat" type="button" data-pz="login"><span class="pz-larga">Plataforma virtual</span><span class="pz-corta">Entrar</span>${pzI('fl')}</button>
@@ -274,6 +276,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
           ${(c.units || []).length > PZ_MUNDOS ? `<p class="pz-mas">y ${plural(c.units.length - PZ_MUNDOS, 'mundo más', 'mundos más')}</p>` : ''}</div>`).join('')}
       </div>
     </section>
+    ${pzInstHTML(cursos)}
     <section class="pz-sec pz-in pz-libros" id="pz-libros">
       <div class="pz-libros-txt pz-rev"><h2>También en papel</h2>
         <p>Cuatro libros para el examen de admisión: dos de razonamiento lógico y dos de comprensión lectora. Ejemplos resueltos, talleres con clave y la forma en que se pregunta cada tema. Impresos a color, con envío.</p></div>
@@ -298,6 +301,36 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-foot-c"><b>Escríbenos</b>${info('', 'con', 'WhatsApp')}<button type="button" data-pz="login">Entrar a la plataforma</button></div>
       <small class="pz-foot-c2">© 2026 Zuka</small></div></footer>
     ${info('', 'pz-flota')}`;
+}
+// ---- instituciones (spec 2026-11-25-instituciones): qué trae y cuánto cuesta, con el precio en vivo ----
+const PZ_INST = [['cupos', 'Tú registras', 'Pegas la lista de Excel y cada estudiante queda con su código.'], ['ve', 'Ves cómo van', 'Quién estudia, cuánto, qué domina y quién necesita una mano.'], ['meta', 'Pones metas', 'Un mundo o unas lecciones, con fecha, para cada grupo.'], ['docente', 'Invitas a tus docentes', 'Cada uno ve solo sus grupos.']];
+const PZ_INST_I = { cupos: '<path d="M4 7h10M4 12h7M4 17h5M16 13v8M12 17h8"/>', ve: '<path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/>', meta: '<circle cx="12" cy="12" r="8.500"/><circle cx="12" cy="12" r="3.500"/>', docente: '<circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c0-3.500 3-5.500 6.500-5.500s6.500 2 6.500 5.500M17 6v8M13.500 10H21"/>' };
+// Un portal en pequeño (datos de ejemplo).
+const pzInstMini = () => `<div class="pz-ip" role="img" aria-label="Ejemplo del portal: cupos usados, actividad de la semana y avance por grupo"><p class="pz-ip-t"><b>Tu institución</b><small>Ejemplo</small></p><div class="pz-ip-k"><span class="pz-ip-a"><b>84</b><small>de 100 cupos</small></span><div class="pz-ip-b">${[38, 62, 50, 88, 74, 30, 22].map((h, i) => `<i style="--h:${h}%;--i:${i}"></i>`).join('')}</div></div>${[['11A', 72], ['11B', 54], ['10A', 38]].map(([g, p]) => `<p class="pz-ip-g"><span>${g}</span><i style="--p:${p}%"></i><b>${p} %</b></p>`).join('')}</div>`;
+function pzInstHTML(cursos) {
+  return `<section class="pz-sec pz-in pz-inst" id="pz-inst"><header class="pz-head pz-rev"><h2>Para colegios e instituciones</h2><p>Compra cupos para tus estudiantes y administra todo desde un portal. Mueve la barra y mira el precio.</p></header>
+    <div class="pz-inst-g pz-rev"><div class="pz-inst-c"><p class="pz-inst-n"><output>60</output> estudiantes</p><input class="pz-inst-r" type="range" min="0" max="100" value="36" aria-label="Número de estudiantes">
+        <div class="pz-inst-cs" role="group" aria-label="Cursos">${cursos.map((c, i) => `<button type="button" data-ic="${c.id}" aria-pressed="${!i}" style="--c:${c.color}">${pzEsc(c.name)}</button>`).join('')}</div>
+        <div class="pz-inst-cs" role="group" aria-label="Duración"><button type="button" data-im="6" aria-pressed="true">6 meses</button><button type="button" data-im="12" aria-pressed="false">1 año</button></div>
+        <div class="pz-inst-p" aria-live="polite"></div><div class="pz-ctas"><a class="btn main brand pz-inst-go" href="instituciones/">Pedir cotización</a><a class="btn ghost" href="instituciones/portal/">Entrar al portal</a></div></div>
+      <div class="pz-inst-v">${pzInstMini()}<ul>${PZ_INST.map(([k, h, p]) => `<li><svg class="pz-i" viewBox="0 0 24 24" aria-hidden="true">${PZ_INST_I[k]}</svg><span><b>${h}</b>${p}</span></li>`).join('')}</ul></div></div></section>`;
+}
+// La barra va de 10 a 1000 estudiantes sin ser lineal: los números chicos tienen más sitio.
+const pzInstN = v => { const n = 10 * Math.pow(100, v / 100); return n < 50 ? Math.round(n) : n < 200 ? Math.round(n / 5) * 5 : Math.round(n / 10) * 10; };
+function pzInstVivo(el) {
+  const s = el.querySelector('.pz-inst'), r = s?.querySelector('.pz-inst-r');
+  if (!s) return;
+  s.pinta = () => {
+    const n = pzInstN(+r.value), cs = [...s.querySelectorAll('[data-ic][aria-pressed="true"]')].map(b => b.dataset.ic), meses = +s.querySelector('[data-im][aria-pressed="true"]').dataset.im, conf = instConf(Cuenta.ajustes.inst_precios);
+    const p = instPrecio({ n, meses, cursos: cs }, Cuenta.productos, conf), sig = instSiguiente(n, conf), nom = id => pzEsc((COURSES.find(c => c.id === id) || {}).name || id);
+    s.querySelector('output').textContent = n; r.setAttribute('aria-valuetext', `${n} estudiantes`);
+    s.querySelector('.pz-inst-p').innerHTML = !cs.length ? '<p>Elige al menos un curso.</p>' : `${p.unitario ? `<p class="pz-inst-u"><b>${cop(p.unitario)}</b> por estudiante${p.descuento ? ` <em class="pz-inst-d">−${p.descuento} %</em>` : ''}</p><p>${cop(p.total)} en total por ${meses === 12 ? 'un año' : '6 meses'}.</p>` : '<p class="pz-inst-u"><b>Se cotiza</b></p>'}${p.unitario && p.sinPrecio.length ? `<p>${p.sinPrecio.map(nom).join(', ')} se cotiza aparte.</p>` : ''}${p.unitario && sig ? `<p>Desde ${sig[0]} estudiantes, ${sig[1]} % de descuento.</p>` : ''}`;
+    s.querySelector('.pz-inst-go').href = `instituciones/?n=${n}&m=${meses}&c=${cs.join(',')}#cotizar`;
+  };
+  r.oninput = s.pinta;
+  s.querySelectorAll('[data-ic]').forEach(b => { b.onclick = () => { b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); s.pinta(); }; });
+  s.querySelectorAll('[data-im]').forEach(b => { b.onclick = () => { s.querySelectorAll('[data-im]').forEach(x => x.setAttribute('aria-pressed', x === b)); s.pinta(); }; });
+  s.pinta();
 }
 // Precios de la tienda: se escriben al llegar, sin volver a dibujar la página.
 function pzPrecios(el, productos, arts) {
@@ -695,8 +728,8 @@ function presentacionAbrir() {
   el.querySelectorAll('.pz-nav a, .pz-foot a').forEach(x => x.onclick = e => { e.preventDefault(); ir(x.getAttribute('href'), x.dataset.tab); });
   el.querySelectorAll('[data-pz-ir]').forEach(b => b.onclick = () => ir(b.dataset.pzIr, b.dataset.tab));
   // Precios: primero los guardados; después, los de la base.
-  pzPrecios(el, Cuenta.productos, Tienda.arts);
-  if (Cuenta.sb) Promise.all([cuentaTienda(), tiendaCarga()]).then(() => { if (el.isConnected) pzPrecios(el, Cuenta.productos, Tienda.arts); }, () => {});
+  pzPrecios(el, Cuenta.productos, Tienda.arts); pzInstVivo(el);
+  if (Cuenta.sb) Promise.all([cuentaTienda(), tiendaCarga()]).then(() => { if (el.isConnected) { pzPrecios(el, Cuenta.productos, Tienda.arts); el.querySelector('.pz-inst')?.pinta?.(); } }, () => {});
   pzCarrusel(el, quieto); pzMazoVivo(el); pzClips(el, quieto); pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el); pzCaminoVivo(el, quieto);
   const raton = matchMedia('(hover: hover) and (pointer: fine)').matches;
   pzQuejasVivas(el, raton);

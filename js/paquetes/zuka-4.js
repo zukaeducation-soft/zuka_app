@@ -12771,7 +12771,8 @@ function tuCalendario(b, titulo, detalle) {
 const tuNuevo = () => ({ c: '', unit: 0, topics: [], date: null, time: null, note: '', hecha: null });
 let tuB = tuNuevo(), tuDe = null, tuOcupado = false;   // tuDe: de qué cuenta es el borrador
 const tuUid = () => (typeof Cuenta !== 'undefined' && Cuenta.user?.id) || '';
-const tuCursos = () => cursosVisibles().filter(c => cursoComprado(c, true)).sort((a, b) => (b.id === S.course) - (a.id === S.course));
+const tuDeInst = c => !!accesoCursoFila(c.id)?.institucion;   // el contrato de una institución no trae asesorías
+const tuCursos = () => cursosVisibles().filter(c => cursoComprado(c, true) && !tuDeInst(c)).sort((a, b) => (b.id === S.course) - (a.id === S.course));
 function tuElige(c) {
   tuB = { ...tuB, c: c.id, topics: [], hecha: null, unit: Math.max(0, c.units.findIndex(u => u.lessons.some(l => !S.done[l.id]))) };
 }
@@ -12920,7 +12921,7 @@ function tuPinta(courses) {
 async function tuSepara() {
   const c = tuCourse(tuB.c), ok = $('.tu-boleto [data-ok]', view), n = Date.now();
   if (!c || !ok || ok.disabled || tuOcupado) return;
-  if (!cursoComprado(c, true)) return toast(TU_ERRORS.curso);
+  if (!cursoComprado(c, true) || tuDeInst(c)) return toast(TU_ERRORS.curso);
   if (typeof planMotivo === 'function' && planMotivo('tutorias')) return openBloqueo('tutorias');   // tutorías: con horas en el saldo
   const req = { course: c.id, topics: tuB.topics, date: tuB.date, time: tuB.time, note: tuB.note }, r = bookTutoria(S.tutorias, req, n, tutoriaCatalog(COURSES));
   if (!r.ok) { toast(TU_ERRORS[r.error] || TU_ERRORS.slot); if (r.error === 'slot' || r.error === 'busy') { tuB.date = tuB.time = null; } return renderTutorias(); }
@@ -15660,6 +15661,7 @@ function renderHome() {
       <button class="btn brand sm" data-install>Instalar</button>
       <button class="icon-btn" data-hide-install aria-label="Ocultar">${ICON.x}</button>
     </section>` : ''}
+    ${metasHTML()}
     <section class="hm-cursos"><div class="hm-fila"><h2 class="home-h2">Cursos</h2><div class="hm-filtros" role="group" aria-label="Filtrar cursos">${HM_FILTROS.filter(f => cursosVisibles().some(c => hmPasa(c, f[0]))).map(f => `<button type="button" data-hm="${f[0]}" aria-pressed="${f[0] === hmFiltro}">${f[1]}</button>`).join('')}</div></div>
       <div class="home-courses"></div></section>
     <div class="hm-dos"><section class="hm-jug"><div class="hm-jt"><p class="hm-k">Calienta la mente</p><h2></h2><p class="hm-jp"></p><p class="pz-cuenta"></p><button class="hm-otro" type="button">Otro juguete ${ICON.right}</button></div><div class="hm-fig"></div></section>
@@ -15667,6 +15669,7 @@ function renderHome() {
         <p>${b ? `<b>${esc(dayLabel(b.date, +now))}, ${hourLabel(b.time)}</b> · ${esc(tuCourse(b.course)?.name || 'Asesoría')}` : nx ? `Hay cupo con un profe: <b>${esc(dayLabel(nx.date, +now))}, ${hourLabel(nx.time)}</b>` : 'No quedan cupos esta semana.'}</p>
         <button class="btn ghost" type="button" data-dk="tutorias">${b ? 'Ver mi asesoría' : 'Separar asesoría'}</button></div></section></div>
   </div></div>`;
+  metasBind(view);
   const pintaCursos = () => {
     if (!cursosVisibles().some(c => hmPasa(c, hmFiltro))) hmFiltro = 'todos';
     $('.home-courses', view).innerHTML = cursosVisibles().filter(c => hmPasa(c, hmFiltro)).map(tarjeta).join('');
@@ -15970,7 +15973,7 @@ const DATOS = {
 };
 const datoTexto = (k, v) => ((DATOS[k] || []).find(x => x[0] === v) || [])[1] || v || '—';
 const esMenor = edad => ['menos_14', '14_15', '16_17'].includes(edad);
-const datosFaltan = (perfil, accesos, now = Date.now()) => !!perfil && perfil.rol !== 'admin' && !perfil.datos_en && tienePago(accesos, now);
+const datosFaltan = (perfil, accesos, now = Date.now()) => !!perfil && !['admin', 'gestor'].includes(perfil.rol) && !perfil.datos_en && tienePago((accesos || []).filter(a => !a.institucion), now);
 // El primer dato que falta o no es válido: { campo, texto }, o null.
 function datosError(d) {
   const falta = k => !String(d[k] || '').trim();
@@ -16141,7 +16144,8 @@ const Cuenta = {
   sb: null,        // cliente de Supabase (null sin conexión)
   user: null,      // usuario con sesión
   perfil: null,    // fila de `perfiles` (se guarda en S.cuenta para abrir sin conexión)
-  accesos: [],     // filas de `accesos`: los cursos de esta cuenta
+  accesos: [],     // filas de `accesos`: los cursos de esta cuenta (y los que abre su institución, con `institucion`)
+  inst: { nombres: [], metas: [] },   // institución del estudiante: quién ve su avance y sus metas
   codigo: '',      // el código con el que se entra
   productos: null, // planes a la venta (tabla `productos`)
   ajustes: {},     // tabla `ajustes`: whatsapp, pago_info…
@@ -16163,7 +16167,7 @@ function planMotivo(id) {
 
 function cuentaCache() {
   // uid = cuenta cuyo avance está en este celular; solo cambia cuando la sincronización termina bien.
-  S.cuenta = { uid: (S.cuenta || {}).uid || null, perfil: Cuenta.perfil, accesos: Cuenta.accesos, codigo: Cuenta.codigo, sesion: !!Cuenta.user };
+  S.cuenta = { uid: (S.cuenta || {}).uid || null, perfil: Cuenta.perfil, accesos: Cuenta.accesos, inst: Cuenta.inst, codigo: Cuenta.codigo, sesion: !!Cuenta.user };
   save();
 }
 // Repinta la pestaña abierta (no durante una lección ni sobre el feed de clips, que se reiniciaría).
@@ -16294,6 +16298,7 @@ const cursoBorrador = c => (Cuenta.cursos ? Cuenta.cursos[c.id] !== true : !CURS
 const cursoVisible = c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || !cursoBorrador(c);
 // «Mis cursos», el perfil y las asesorías: solo lo comprado (pedido del 2026-11-24). La prueba se abre desde Inicio.
 const cursoComprado = (c, alDia = false) => SIN_CANDADOS || cuentaEsAdmin() || comprado(Cuenta.accesos, c.id, alDia);
+const accesoCursoFila = id => (Cuenta.accesos || []).find(a => a.curso === id);
 const cursosConAcceso = () => cursosVisibles().filter(c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id));
 function cursosVisibles() {
   const v = COURSES.filter(cursoVisible);
@@ -16332,7 +16337,7 @@ function cuentaInit() {
   // Lo último que se supo de la cuenta: sirve para abrir sin conexión.
   if (S.cuenta && S.cuenta.sesion && S.cuenta.perfil) {
     Cuenta.user = { id: S.cuenta.perfil.id, offline: true }; Cuenta.perfil = S.cuenta.perfil;
-    Cuenta.accesos = S.cuenta.accesos || []; Cuenta.codigo = S.cuenta.codigo || '';
+    Cuenta.accesos = S.cuenta.accesos || []; Cuenta.inst = S.cuenta.inst || { nombres: [], metas: [] }; Cuenta.codigo = S.cuenta.codigo || '';
   }
   cuentaRol();
   if (!window.supabase || !window.supabase.createClient) return;
@@ -16355,7 +16360,7 @@ async function cuentaSesion(ev, session) {
   const antes = Cuenta.user && !Cuenta.user.offline ? Cuenta.user.id : null;
   if (!session) {
     if (ev === 'INITIAL_SESSION' && !navigator.onLine) return;   // sin red: vale lo guardado
-    Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; tiendaFuera(); Cuenta.bases.clear(); cuentaCola.clear();
+    Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.inst = { nombres: [], metas: [] }; Cuenta.codigo = ''; tiendaFuera(); Cuenta.bases.clear(); cuentaCola.clear();
     cuentaCache(); cuentaRol(); cuentaRepinta();
     if (!SIN_CANDADOS && !Clave.vista) { const tapa = datosAbierta; datosAbierta = false; if (tapa || (!$('#auth') && !$('#landing') && !lessonClose)) authScreen(); }
     return;
@@ -16382,7 +16387,7 @@ async function cuentaReintenta() {
   if (await cuentaSyncProgreso((S.cuenta || {}).uid || null)) { await estadoSync(); cuentaRepinta(); }
 }
 if (typeof document !== 'undefined') setInterval(() => { if (!document.hidden) cuentaReintenta().catch(() => {}); }, 60000);
-const cuentaHuella = () => JSON.stringify([Cuenta.perfil, Cuenta.accesos, Tienda.mios, Tienda.saldo]);
+const cuentaHuella = () => JSON.stringify([Cuenta.perfil, Cuenta.accesos, Cuenta.inst, Tienda.mios, Tienda.saldo]);
 // Al volver a la app se pregunta si cambió el acceso (el administrador acaba de confirmar un pago…).
 let cuentaVista = 0;
 async function cuentaRevisa() {
@@ -16403,13 +16408,17 @@ const primerNombre = p => ((p && p.nombre) || '').trim().split(/\s+/)[0].slice(0
 async function cuentaPerfil() {
   if (!Cuenta.sb || !Cuenta.user) return null;
   const uid = Cuenta.user.id;
-  const [{ data }, acc, cod] = await Promise.all([Cuenta.sb.from('perfiles').select('*').eq('id', uid).maybeSingle(),
-    Cuenta.sb.from('accesos').select('curso,tipo,desde,hasta').eq('usuario', uid), Cuenta.sb.rpc('mi_codigo')]);
+  const [{ data }, acc, cod, ins] = await Promise.all([Cuenta.sb.from('perfiles').select('*').eq('id', uid).maybeSingle(),
+    Cuenta.sb.from('accesos').select('curso,tipo,desde,hasta').eq('usuario', uid), Cuenta.sb.rpc('mi_codigo'), Cuenta.sb.rpc('mi_institucion')]);
   if (!Cuenta.user || Cuenta.user.id !== uid) return null;   // mientras tanto cambió de cuenta
-  if (acc.data) Cuenta.accesos = acc.data.sort((a, b) => a.curso.localeCompare(b.curso));
+  if (Cuenta.perfil && Cuenta.perfil.id !== uid) Cuenta.inst = { nombres: [], metas: [] };   // otra cuenta
+  const deInst = ins.data ? ins.data.accesos : (Cuenta.perfil?.id === uid ? Cuenta.accesos || [] : []).filter(a => a.institucion);
+  if (acc.data) Cuenta.accesos = instJunta(acc.data, deInst);
+  if (ins.data) Cuenta.inst = { nombres: ins.data.instituciones || [], metas: ins.data.metas || [] };
   if (!cod.error) Cuenta.codigo = cod.data || '';
   if (data) {
     Cuenta.perfil = data;
+    if (data.rol === 'gestor' && $('#auth')) location.href = 'instituciones/portal/';   // acaba de entrar con su código: va a su portal
     if (!S.name) S.name = primerNombre(data);
     cuentaCache();
   }
@@ -16575,7 +16584,7 @@ async function cuentaTienda() {
 }
 async function openComprar(id, elegido) {
   if (!Cuenta.user) return openEntrar();
-  const a = accesoCurso(Cuenta.accesos, id), renueva = a.estado === 'pago' || a.estado === 'vencido', curso = cursoNombre(id);
+  const a = accesoCurso(Cuenta.accesos, id), renueva = !accesoCursoFila(id)?.institucion && (a.estado === 'pago' || a.estado === 'vencido'), curso = cursoNombre(id);
   openSheet(`<div class="acct-form compra"><h3 class="sheet-title">${renueva ? 'Renovar' : 'Comprar'} ${esc(curso)}</h3>
     <p class="muted">${a.estado === 'pago' ? `Te quedan ${diasTexto(a.dias)}: los que compres se suman.` : 'Se activa en tu mismo código y sigues donde vas: no pierdes nada de tu avance.'}</p>
     <div class="compra-lista" role="radiogroup" aria-label="Duración"><p class="muted">Cargando…</p></div>
@@ -16629,7 +16638,7 @@ function openBloqueo(id) {
 }
 // Aviso dentro del curso (portada): prueba, plan por vencer o vencido, con su botón.
 function accesoAvisoHTML(c) {
-  if (SIN_CANDADOS || cuentaEsAdmin() || !Cuenta.user) return '';
+  if (SIN_CANDADOS || cuentaEsAdmin() || !Cuenta.user || accesoCursoFila(c.id)?.institucion) return '';   // renueva la institución, no el estudiante
   const a = accesoCurso(Cuenta.accesos, c.id);
   const t = {
     prueba: `Estás en la <b>prueba</b>: se abre el primer mundo${c.blocks ? ' de cada componente' : ''}${a.dias != null ? ` (${a.dias === 1 ? 'queda' : 'quedan'} ${diasTexto(a.dias)})` : ''}.`,
@@ -16647,8 +16656,9 @@ function cuentaCard() {
     return `<section class="card acct-card"><h3>Mi plan</h3><p class="muted">Entra con tu código de acceso para ver tus cursos y guardar tu avance.</p>
       <button class="btn brand" data-acct="entrar">Entrar con mi código</button></section>`;
   }
-  const p = Cuenta.perfil || {}, admin = p.rol === 'admin', mios = Cuenta.accesos || [];
+  const p = Cuenta.perfil || {}, admin = p.rol === 'admin', mios = Cuenta.accesos || [], gestor = p.rol === 'gestor', de = Cuenta.inst.nombres;
   return `<section class="card acct-card"><div class="acct-head"><h3>${admin ? 'Administración' : 'Mi plan'}</h3></div>
+    ${gestor ? '<p class="muted">Esta es una cuenta de gestión. En el portal registras a tus estudiantes y sigues su avance.</p><a class="btn brand" href="instituciones/portal/">Abrir el portal</a>' : de.length ? `<p class="acct-inst">Estudias con <b>${esc(de.join(' y '))}</b>. Sus docentes ven tu avance y tu tiempo de estudio.</p>` : ''}
     ${admin ? '<p class="muted">Tienes todo el contenido abierto. Entra directo a lo que necesites:</p>'
     : mios.length ? `<ul class="plan-cursos">${mios.map(x => {
       const a = accesoCurso(mios, x.curso);
@@ -16656,7 +16666,7 @@ function cuentaCard() {
       return `<li style="--c:${cu?.color || 'var(--brand)'}">${cu ? aroHTML(pfQueda(x, a), courseArt(cu, 'md')) : ''}<div class="acct-head"><b>${esc(cursoNombre(x.curso))}</b>${accesoPill(a)}</div>
         <p class="muted">${a.estado === 'pago' ? `Del ${fechaCorta(a.desde)} al ${fechaCorta(a.hasta)} · <b class="${a.dias <= 7 ? 'warn' : ''}">${a.dias === 1 ? 'queda' : 'quedan'} ${diasTexto(a.dias)}</b>`
         : a.estado === 'prueba' ? `Primer mundo abierto${a.hasta ? ` hasta el ${fechaCorta(a.hasta)}` : ''}.` : `Terminó el ${fechaCorta(a.hasta)}. Tu avance sigue guardado.`}</p>
-        <button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-acct="comprar" data-curso="${esc(x.curso)}">${x.tipo === 'pago' ? 'Renovar' : 'Comprar acceso'}</button></li>`;
+        ${x.institucion ? `<p class="muted">Con ${esc(x.institucion)}</p>` : `<button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-acct="comprar" data-curso="${esc(x.curso)}">${x.tipo === 'pago' ? 'Renovar' : 'Comprar acceso'}</button>`}</li>`;
     }).join('')}</ul>` : '<p class="muted">Aún no tienes cursos en tu cuenta.</p>'}
     ${admin ? `<nav class="adm-atajos" aria-label="Administración">${[['estudiantes', 'Estudiantes', 'user'], ['codigos', 'Códigos', 'lock'], ['solicitudes', 'Solicitudes', 'bag'], ['pedidos', 'Pedidos', 'doc'], ['asesorias', 'Asesorías', 'calendar'], ['ventas', 'Ventas', 'trophy']].map(([h, t, i]) => `<a href="admin/#${h}">${ICON[i]}<span>${t}</span></a>`).join('')}</nav><a class="btn brand" href="admin/">Panel de administración</a>` : `<div class="acct-actions"><button class="btn brand" data-acct="tienda">Tienda</button><button class="btn ghost" data-acct="canje">Añadir código</button></div>`}
     <div class="acct-foot">${admin ? '<span></span>' : '<button class="link-btn" data-acct="datos">Mis datos</button>'}<button class="link-btn" data-acct="salir">Cerrar sesión</button></div></section>`;
@@ -16665,7 +16675,7 @@ async function cuentaSalir() {
   cuentaEnvia(); usoEnvia();
   await estadoEnvia().catch(() => {});   // nada de lo ganado se queda sin subir
   if (Cuenta.sb) await Cuenta.sb.auth.signOut({ scope: 'local' }).catch(() => {});
-  Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; tiendaFuera(); cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
+  Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.inst = { nombres: [], metas: [] }; Cuenta.codigo = ''; tiendaFuera(); cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
   if (!SIN_CANDADOS) authScreen();
 }
 function cuentaBind(root) {
@@ -16948,7 +16958,7 @@ async function tiendaMios() {
 }
 const libroMio = id => cuentaEsAdmin() || Tienda.mios.some(x => x.libro === id);
 const libroListo = l => l.publicado && l.version > 0 && l.paginas > 0;
-const conPlan = () => tienePago(Cuenta.accesos);
+const conPlan = () => tienePago((Cuenta.accesos || []).filter(a => !a.institucion));   // lo que da una institución no es una compra
 const carroItems = () => Object.entries(Tienda.carro).filter(([id]) => Tienda.arts.some(a => a.id === id)).map(([id, cantidad]) => ({ id, cantidad }));
 
 // ---------- pestaña ----------
@@ -17028,7 +17038,7 @@ function tiendaPaqHTML(a) {
 // Curso: su figura en grande sobre su color, qué trae y el tiempo, que se elige en la misma tarjeta.
 function tiendaCursoHTML(c) {
   const a = accesoCurso(Cuenta.accesos, c.id), ps = productosDe(c.id), sel = ps.find(p => p.id === (Tienda.plan || {})[c.id]) || ps[ps.length - 1];
-  const ex = c.units.reduce((t, u) => t + u.lessons.reduce((n, l) => n + l.ex.length, 0), 0), tiene = a.estado === 'pago' || a.estado === 'vencido';
+  const ex = c.units.reduce((t, u) => t + u.lessons.reduce((n, l) => n + l.ex.length, 0), 0), tiene = !accesoCursoFila(c.id)?.institucion && (a.estado === 'pago' || a.estado === 'vencido');
   return `<article class="td-curso" data-curso="${esc(c.id)}" style="--c:${c.color};${tiendaColor(c.id)}"><div class="td-escena luz">${accesoPill(a)}<span class="td-artes">${courseArt(c, 'xl')}</span></div>
     <div class="td-cont"><h3>${esc(c.name)}</h3><p>${esc(c.tagline || '')}</p>
       <p class="td-datos"><span><b>${c.units.length}</b> ${c.units.length === 1 ? 'mundo' : 'mundos'}</span><span><b>${lessonsOf(c).length}</b> lecciones</span><span><b>${ex}</b> ejercicios</span></p>
@@ -17749,6 +17759,8 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los cursos de ${PZ_FUND_N}">Quiero inscribirme</button><button class="btn ghost" type="button" data-pz-ir=".pz-prog-fund">Ver los cursos</button></div>`, `<div class="pz-mancha pz-foto pz-foto-ing" data-inclina="5">${foto}</div>`, 'pz-lam-fund')] : []),
     lamina('#f5e6c0', 'Libros de admisión', `<p class="pz-lam-k">Libros de admisión</p><h2>El examen, también en papel</h2><p class="pz-lead">Dos libros de razonamiento lógico y dos de comprensión lectora. Impresos a color, con envío.</p>
       <div class="pz-ctas"><button class="btn main brand" type="button" data-pz="info" data-que="los libros de admisión">Quiero los libros</button><button class="btn ghost" type="button" data-pz-ir="#pz-libros">Conocerlos</button></div>`, mancha(libros('pz-est-lam')), 'pz-lam-libros'),
+    lamina('#bfe3ff', 'Zuka para instituciones', `<p class="pz-lam-k">Colegios e instituciones</p><h2>Zuka para todo tu colegio</h2><p class="pz-lead">Cupos para tus estudiantes y un portal donde registras, acompañas y ves cómo va cada uno.</p>
+      <div class="pz-ctas"><a class="btn main brand" href="instituciones/">Cotizar</a><button class="btn ghost" type="button" data-pz-ir="#pz-inst">Ver precios</button></div>`, mancha(pzInstMini()), 'pz-lam-inst'),
   ];
   const mundo = u => {
     const w = worlds[u.world] || {};
@@ -17760,7 +17772,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
   const plates = n => (typeof gymPlates === 'function' ? gymPlates(n) : '');
   const demo = (cls, h, p, fig, pie = '') => `<article class="pz-demo ${cls} pz-rev" id="${cls}"><div class="pz-demo-txt"><h3>${h}</h3><p>${p}</p></div>
       <div class="pz-demo-fig">${fig}</div>${pie}</article>`;
-  const menu = [['#pz-programas', 'Programas'], ['#pz-somos', 'Quiénes somos'], ['#pz-ruta', 'Tu camino'], ['#pz-como', 'Cómo se aprende'], ['#pz-dudas', 'Preguntas']];
+  const menu = [['#pz-programas', 'Programas'], ['#pz-somos', 'Quiénes somos'], ['#pz-ruta', 'Tu camino'], ['#pz-como', 'Cómo se aprende'], ['#pz-inst', 'Instituciones'], ['#pz-dudas', 'Preguntas']];
   return `<header class="pz-bar"><div class="pz-in"><span class="pz-logo">${logo}</span>
       <nav class="pz-nav" id="pz-nav" aria-label="Secciones">${menu.map(([h, t]) => `<a href="${h}">${t}</a>`).join('')}</nav>
       <span class="pz-bar-acts"><button class="pz-plat" type="button" data-pz="login"><span class="pz-larga">Plataforma virtual</span><span class="pz-corta">Entrar</span>${pzI('fl')}</button>
@@ -17819,6 +17831,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
           ${(c.units || []).length > PZ_MUNDOS ? `<p class="pz-mas">y ${plural(c.units.length - PZ_MUNDOS, 'mundo más', 'mundos más')}</p>` : ''}</div>`).join('')}
       </div>
     </section>
+    ${pzInstHTML(cursos)}
     <section class="pz-sec pz-in pz-libros" id="pz-libros">
       <div class="pz-libros-txt pz-rev"><h2>También en papel</h2>
         <p>Cuatro libros para el examen de admisión: dos de razonamiento lógico y dos de comprensión lectora. Ejemplos resueltos, talleres con clave y la forma en que se pregunta cada tema. Impresos a color, con envío.</p></div>
@@ -17843,6 +17856,36 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-foot-c"><b>Escríbenos</b>${info('', 'con', 'WhatsApp')}<button type="button" data-pz="login">Entrar a la plataforma</button></div>
       <small class="pz-foot-c2">© 2026 Zuka</small></div></footer>
     ${info('', 'pz-flota')}`;
+}
+// ---- instituciones (spec 2026-11-25-instituciones): qué trae y cuánto cuesta, con el precio en vivo ----
+const PZ_INST = [['cupos', 'Tú registras', 'Pegas la lista de Excel y cada estudiante queda con su código.'], ['ve', 'Ves cómo van', 'Quién estudia, cuánto, qué domina y quién necesita una mano.'], ['meta', 'Pones metas', 'Un mundo o unas lecciones, con fecha, para cada grupo.'], ['docente', 'Invitas a tus docentes', 'Cada uno ve solo sus grupos.']];
+const PZ_INST_I = { cupos: '<path d="M4 7h10M4 12h7M4 17h5M16 13v8M12 17h8"/>', ve: '<path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/>', meta: '<circle cx="12" cy="12" r="8.500"/><circle cx="12" cy="12" r="3.500"/>', docente: '<circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c0-3.500 3-5.500 6.500-5.500s6.500 2 6.500 5.500M17 6v8M13.500 10H21"/>' };
+// Un portal en pequeño (datos de ejemplo).
+const pzInstMini = () => `<div class="pz-ip" role="img" aria-label="Ejemplo del portal: cupos usados, actividad de la semana y avance por grupo"><p class="pz-ip-t"><b>Tu institución</b><small>Ejemplo</small></p><div class="pz-ip-k"><span class="pz-ip-a"><b>84</b><small>de 100 cupos</small></span><div class="pz-ip-b">${[38, 62, 50, 88, 74, 30, 22].map((h, i) => `<i style="--h:${h}%;--i:${i}"></i>`).join('')}</div></div>${[['11A', 72], ['11B', 54], ['10A', 38]].map(([g, p]) => `<p class="pz-ip-g"><span>${g}</span><i style="--p:${p}%"></i><b>${p} %</b></p>`).join('')}</div>`;
+function pzInstHTML(cursos) {
+  return `<section class="pz-sec pz-in pz-inst" id="pz-inst"><header class="pz-head pz-rev"><h2>Para colegios e instituciones</h2><p>Compra cupos para tus estudiantes y administra todo desde un portal. Mueve la barra y mira el precio.</p></header>
+    <div class="pz-inst-g pz-rev"><div class="pz-inst-c"><p class="pz-inst-n"><output>60</output> estudiantes</p><input class="pz-inst-r" type="range" min="0" max="100" value="36" aria-label="Número de estudiantes">
+        <div class="pz-inst-cs" role="group" aria-label="Cursos">${cursos.map((c, i) => `<button type="button" data-ic="${c.id}" aria-pressed="${!i}" style="--c:${c.color}">${pzEsc(c.name)}</button>`).join('')}</div>
+        <div class="pz-inst-cs" role="group" aria-label="Duración"><button type="button" data-im="6" aria-pressed="true">6 meses</button><button type="button" data-im="12" aria-pressed="false">1 año</button></div>
+        <div class="pz-inst-p" aria-live="polite"></div><div class="pz-ctas"><a class="btn main brand pz-inst-go" href="instituciones/">Pedir cotización</a><a class="btn ghost" href="instituciones/portal/">Entrar al portal</a></div></div>
+      <div class="pz-inst-v">${pzInstMini()}<ul>${PZ_INST.map(([k, h, p]) => `<li><svg class="pz-i" viewBox="0 0 24 24" aria-hidden="true">${PZ_INST_I[k]}</svg><span><b>${h}</b>${p}</span></li>`).join('')}</ul></div></div></section>`;
+}
+// La barra va de 10 a 1000 estudiantes sin ser lineal: los números chicos tienen más sitio.
+const pzInstN = v => { const n = 10 * Math.pow(100, v / 100); return n < 50 ? Math.round(n) : n < 200 ? Math.round(n / 5) * 5 : Math.round(n / 10) * 10; };
+function pzInstVivo(el) {
+  const s = el.querySelector('.pz-inst'), r = s?.querySelector('.pz-inst-r');
+  if (!s) return;
+  s.pinta = () => {
+    const n = pzInstN(+r.value), cs = [...s.querySelectorAll('[data-ic][aria-pressed="true"]')].map(b => b.dataset.ic), meses = +s.querySelector('[data-im][aria-pressed="true"]').dataset.im, conf = instConf(Cuenta.ajustes.inst_precios);
+    const p = instPrecio({ n, meses, cursos: cs }, Cuenta.productos, conf), sig = instSiguiente(n, conf), nom = id => pzEsc((COURSES.find(c => c.id === id) || {}).name || id);
+    s.querySelector('output').textContent = n; r.setAttribute('aria-valuetext', `${n} estudiantes`);
+    s.querySelector('.pz-inst-p').innerHTML = !cs.length ? '<p>Elige al menos un curso.</p>' : `${p.unitario ? `<p class="pz-inst-u"><b>${cop(p.unitario)}</b> por estudiante${p.descuento ? ` <em class="pz-inst-d">−${p.descuento} %</em>` : ''}</p><p>${cop(p.total)} en total por ${meses === 12 ? 'un año' : '6 meses'}.</p>` : '<p class="pz-inst-u"><b>Se cotiza</b></p>'}${p.unitario && p.sinPrecio.length ? `<p>${p.sinPrecio.map(nom).join(', ')} se cotiza aparte.</p>` : ''}${p.unitario && sig ? `<p>Desde ${sig[0]} estudiantes, ${sig[1]} % de descuento.</p>` : ''}`;
+    s.querySelector('.pz-inst-go').href = `instituciones/?n=${n}&m=${meses}&c=${cs.join(',')}#cotizar`;
+  };
+  r.oninput = s.pinta;
+  s.querySelectorAll('[data-ic]').forEach(b => { b.onclick = () => { b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); s.pinta(); }; });
+  s.querySelectorAll('[data-im]').forEach(b => { b.onclick = () => { s.querySelectorAll('[data-im]').forEach(x => x.setAttribute('aria-pressed', x === b)); s.pinta(); }; });
+  s.pinta();
 }
 // Precios de la tienda: se escriben al llegar, sin volver a dibujar la página.
 function pzPrecios(el, productos, arts) {
@@ -18240,8 +18283,8 @@ function presentacionAbrir() {
   el.querySelectorAll('.pz-nav a, .pz-foot a').forEach(x => x.onclick = e => { e.preventDefault(); ir(x.getAttribute('href'), x.dataset.tab); });
   el.querySelectorAll('[data-pz-ir]').forEach(b => b.onclick = () => ir(b.dataset.pzIr, b.dataset.tab));
   // Precios: primero los guardados; después, los de la base.
-  pzPrecios(el, Cuenta.productos, Tienda.arts);
-  if (Cuenta.sb) Promise.all([cuentaTienda(), tiendaCarga()]).then(() => { if (el.isConnected) pzPrecios(el, Cuenta.productos, Tienda.arts); }, () => {});
+  pzPrecios(el, Cuenta.productos, Tienda.arts); pzInstVivo(el);
+  if (Cuenta.sb) Promise.all([cuentaTienda(), tiendaCarga()]).then(() => { if (el.isConnected) { pzPrecios(el, Cuenta.productos, Tienda.arts); el.querySelector('.pz-inst')?.pinta?.(); } }, () => {});
   pzCarrusel(el, quieto); pzMazoVivo(el); pzClips(el, quieto); pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el); pzCaminoVivo(el, quieto);
   const raton = matchMedia('(hover: hover) and (pointer: fine)').matches;
   pzQuejasVivas(el, raton);
@@ -18381,6 +18424,116 @@ function exploraRiel(root, d) {
   };
   ajusta();
   if (!root.dataset.ajusta) { root.dataset.ajusta = '1'; new ResizeObserver(ajusta).observe(root); }
+}
+;
+//#archivo js/instituciones.js
+// Zuka para instituciones (spec 2026-11-25-instituciones): cuentas puras que comparten la landing, /instituciones, su portal y
+// el panel. Sin DOM ni red: se prueban en Node (tests/instituciones.test.js). La base repite el precio (privado.inst_estimado).
+
+const INST_PRECIOS = { tramos: [[1, 0], [30, 10], [100, 20], [300, 30]], anio: 10 };
+// Lo que el panel guardó en ajustes.inst_precios; si no se entiende, los de arriba.
+function instConf(texto) {
+  try {
+    const c = JSON.parse(texto), tr = (c.tramos || []).map(t => [Math.round(+t[0]), +t[1]]).filter(t => t[0] >= 1 && t[1] >= 0 && t[1] <= 90).sort((a, b) => a[0] - b[0]);
+    if (tr.length && +c.anio >= 0 && +c.anio <= 90) return { tramos: tr, anio: +c.anio };
+  } catch (e) { /* los de siempre */ }
+  return INST_PRECIOS;
+}
+const instDescuento = (n, conf = INST_PRECIOS) => conf.tramos.reduce((d, [desde, p]) => (n >= desde ? Math.max(d, p) : d), 0);
+// Precio por estudiante y total. productos: filas { curso, meses, precio, activo } de la tienda. Un año = dos periodos de 6 meses.
+function instPrecio({ n, meses, cursos }, productos, conf = INST_PRECIOS) {
+  const de = c => (productos || []).find(p => p.curso === c && p.meses === 6 && p.activo)?.precio ?? null;
+  const base = cursos.reduce((t, c) => t + (de(c) || 0), 0) * (meses === 12 ? 2 : 1), descuento = instDescuento(n, conf), anio = meses === 12 ? conf.anio : 0;
+  const unitario = Math.round(base * (100 - descuento) * (100 - anio) / 1e6) * 100;
+  return { base, descuento, anio, unitario, total: unitario * n, sinPrecio: cursos.filter(c => de(c) == null) };
+}
+// Cuánto falta para el siguiente descuento: [estudiantes, %] o null.
+const instSiguiente = (n, conf = INST_PRECIOS) => { const d = instDescuento(n, conf); return conf.tramos.find(t => t[0] > n && t[1] > d) || null; };
+
+// Lista pegada de Excel o de un CSV: una persona por renglón, «nombre, grupo, documento» con tabulador, punto y coma o coma.
+// Salta el renglón de títulos y avisa de lo que no sirve.
+function instLista(texto) {
+  const filas = String(texto || '').replace(/^﻿/, '').split(/\r?\n/).map(l => l.trim()).filter(Boolean), out = [], malas = [], vistos = new Set();
+  const sep = filas.some(l => l.includes('\t')) ? '\t' : filas.some(l => l.includes(';')) ? ';' : ',';
+  filas.forEach((l, i) => {
+    const c = l.split(sep).map(x => x.trim().replace(/^"|"$/g, '').replace(/\s+/g, ' ').trim());
+    if (!i && /^(nombres?( completos?| y apellidos)?|estudiantes?|alumnos?)$/i.test(c[0])) return;
+    const x = { nombre: (c[0] || '').slice(0, 80), grupo: (c[1] || '').slice(0, 40), identificador: (c[2] || '').slice(0, 40) };
+    if (x.nombre.length < 2 || !/\p{L}/u.test(x.nombre)) return malas.push({ linea: i + 1, texto: l, por: 'sin nombre' });
+    const k = x.identificador.toLowerCase() || `${x.nombre}|${x.grupo}`.toLowerCase();
+    if (vistos.has(k)) return malas.push({ linea: i + 1, texto: l, por: 'repetido en la lista' });
+    vistos.add(k); out.push(x);
+  });
+  return { lista: out, malas };
+}
+
+const instDia = (d, n) => new Date(Date.parse(`${d}T00:00:00Z`) + n * 86400000).toISOString().slice(0, 10);
+const instEntre = (a, b) => Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 86400000);
+const instBogota = iso => (iso ? new Date(iso).toLocaleDateString('en-CA', { timeZone: 'America/Bogota' }) : '');
+// Todo lo que muestra el portal, para unos filtros { dias, grupo, curso }. D: lo que devuelve institucion('panel').
+function instCalcula(D, f) {
+  const hoy = D.hoy, desde = instDia(hoy, 1 - f.dias), antes = instDia(hoy, 1 - 2 * f.dias), deCurso = new Map(D.lecciones.map(l => [l.id, l.curso]));
+  const porCurso = new Map(); D.lecciones.forEach(l => porCurso.set(l.curso, [...(porCurso.get(l.curso) || []), l]));
+  const contrato = new Set(D.cursos.map(c => c.id)), suyos = e => e.cursos.filter(c => contrato.has(c) && (!f.curso || c === f.curso));
+  const gente = D.estudiantes.filter(e => e.activo && (!f.grupo || e.grupo === (f.grupo === '(sin grupo)' ? '' : f.grupo)) && (!f.curso || e.cursos.includes(f.curso)));
+  const ids = new Set(gente.map(e => e.id)), uso = new Map(), hechas = new Map();
+  D.uso.forEach(u => { if (ids.has(u[0])) uso.set(u[0], [...(uso.get(u[0]) || []), u]); });
+  D.hechas.forEach(h => { if (ids.has(h[0])) { if (!hechas.has(h[0])) hechas.set(h[0], new Map()); hechas.get(h[0]).set(h[1], h[2]); } });
+  const filas = gente.map(e => {
+    const us = uso.get(e.id) || [], en = us.filter(u => u[1] >= desde), hs = hechas.get(e.id) || new Map(), cs = suyos(e);
+    const total = cs.reduce((t, c) => t + (porCurso.get(c) || []).length, 0), n = [...hs.keys()].filter(l => cs.includes(deCurso.get(l))).length;
+    const ej = en.reduce((t, u) => t + u[3], 0), ac = en.reduce((t, u) => t + u[4], 0), ult = [us.map(u => u[1]).sort().pop() || '', instBogota(e.ultima)].sort().pop();
+    return { ...e, min: Math.round(en.reduce((t, u) => t + u[2], 0) / 60), ejercicios: ej, aciertos: ej >= 10 ? Math.round(100 * ac / ej) : null, hechas: n, total, avance: total ? n / total : 0,
+      nuevas: [...hs].filter(([l, d]) => d && d >= desde && cs.includes(deCurso.get(l))).length, ult, sin: ult ? instEntre(ult, hoy) : null, dias: new Set(en.filter(u => u[2] > 0).map(u => u[1])).size };
+  });
+  const media = xs => (xs.length ? xs.reduce((t, x) => t + x, 0) / xs.length : 0), dentro = filas.filter(e => e.entro), prom = media(dentro.map(e => e.avance));
+  filas.forEach(e => { e.alerta = instAlerta(e, hoy, prom); });
+  const suma = (a, b) => [...uso.values()].flat().filter(u => u[1] >= a && u[1] <= b), activos = xs => new Set(xs.filter(u => u[2] > 0).map(u => u[0])).size, mins = xs => Math.round(xs.reduce((t, u) => t + u[2], 0) / 60);
+  const ahora = suma(desde, hoy), previo = suma(antes, instDia(desde, -1)), ej = ahora.reduce((t, u) => t + u[3], 0);
+  const serie = Array.from({ length: f.dias }, (_, i) => { const d = instDia(desde, i), xs = ahora.filter(u => u[1] === d); return { d, min: mins(xs), activos: activos(xs) }; });
+  const grupos = [...new Set(D.estudiantes.filter(e => e.activo).map(e => e.grupo))].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })).map(g => {
+    const xs = filas.filter(e => e.grupo === g); return { grupo: g, n: xs.length, entraron: xs.filter(e => e.entro).length, activos: xs.filter(e => e.dias).length, avance: media(xs.map(e => e.avance)), min: Math.round(media(xs.map(e => e.min))), alerta: xs.filter(e => e.alerta).length };
+  }).filter(g => g.n);
+  const cursos = D.cursos.filter(c => !f.curso || c.id === f.curso).map(c => {
+    const xs = gente.filter(e => e.cursos.includes(c.id)), ls = porCurso.get(c.id) || [], mapa = ls.map(l => ({ ...l, n: xs.filter(e => hechas.get(e.id)?.has(l.id)).length }));
+    return { ...c, n: xs.length, total: ls.length, mapa, avance: xs.length && ls.length ? mapa.reduce((t, l) => t + l.n, 0) / (xs.length * ls.length) : 0 };
+  });
+  return { filas, serie, grupos, cursos, prom, entraron: dentro.length, activos: activos(ahora), activosAntes: activos(previo), min: mins(ahora), minAntes: mins(previo), aciertos: ej ? Math.round(100 * ahora.reduce((t, u) => t + u[4], 0) / ej) : null,
+    nuevas: filas.reduce((t, e) => t + e.nuevas, 0), alertas: filas.filter(e => e.alerta).sort((a, b) => a.alerta.peso - b.alerta.peso), hechas };
+}
+// Quién necesita una mano y por qué (una sola razón, la más urgente). null: va bien.
+function instAlerta(e, hoy, prom) {
+  if (!e.entro) return instEntre(e.alta, hoy) >= 3 ? { k: 'nunca', t: 'Aún no ha entrado', peso: 1 } : null;
+  if (e.sin != null && e.sin >= 7) return { k: 'ausente', t: `Lleva ${e.sin} días sin entrar`, peso: 2 };
+  if (e.aciertos != null && e.aciertos < 50) return { k: 'aciertos', t: `Acierta el ${e.aciertos} % de los ejercicios`, peso: 3 };
+  if (prom >= .08 && e.avance < prom * .5) return { k: 'atras', t: 'Va muy atrás del promedio', peso: 4 };
+  return null;
+}
+// Una meta: cuántos la cumplieron de los que la tienen. hechas: Map(id → Map(lección → día)).
+function instMeta(m, estudiantes, hechas, hoy) {
+  const xs = estudiantes.filter(e => e.activo && (!m.grupo || e.grupo === m.grupo) && e.cursos.includes(m.curso));
+  const filas = xs.map(e => { const n = m.lecciones.filter(l => hechas.get(e.id)?.has(l)).length; return { e, n, ok: n === m.lecciones.length }; });
+  return { filas, n: filas.length, ok: filas.filter(x => x.ok).length, p: filas.length ? filas.reduce((t, x) => t + x.n, 0) / (filas.length * m.lecciones.length) : 0, quedan: instEntre(hoy, m.hasta) };
+}
+// Cursos de un estudiante con lo que le abre su institución: gana lo propio solo si está pago y dura más.
+function instJunta(propios, deInst) {
+  const out = new Map((propios || []).map(a => [a.curso, a]));
+  (deInst || []).forEach(x => { const a = out.get(x.curso); if (!(a && a.tipo === 'pago' && a.hasta && new Date(a.hasta) > new Date(x.hasta))) out.set(x.curso, x); });
+  return [...out.values()].sort((a, b) => a.curso.localeCompare(b.curso));
+}
+;
+//#archivo js/metas.js
+// Metas que pone la institución del estudiante (spec 2026-11-25-instituciones): tarjeta en Inicio. Va después de inicio.js.
+const metaEstado = (m, done) => { const n = m.lecciones.filter(l => done[l]).length; return { n, total: m.lecciones.length, sigue: m.lecciones.find(l => !done[l]) || null }; };
+const metaPlazo = (hasta, hoy) => { const d = Math.round((Date.parse(`${hasta}T00:00:00Z`) - Date.parse(`${hoy}T00:00:00Z`)) / 86400000); return d < 0 ? 'Ya pasó la fecha' : d === 0 ? 'Es para hoy' : d === 1 ? 'Es para mañana' : `Quedan ${d} días`; };
+function metasHTML() {
+  const ms = (Cuenta.inst.metas || []).map(m => ({ m, x: metaEstado(m, S.done), c: COURSES.find(c => c.id === m.curso) })).filter(x => x.c && (x.x.sigue || metaPlazo(x.m.hasta, today()) !== 'Ya pasó la fecha'));
+  if (!ms.length) return '';
+  return `<section class="hm-metas"><h2 class="home-h2">Metas de ${esc(Cuenta.inst.nombres[0] || 'tu institución')}</h2><div class="hm-mt">${ms.map(({ m, x, c }) => `<article style="--c:${c.color}">${aroHTML(x.n / x.total, courseArt(c, 'md'))}<div><b>${esc(m.titulo)}</b><small>${esc(c.name)} · ${x.n} de ${x.total} lecciones</small><small>${x.sigue ? metaPlazo(m.hasta, today()) : '¡Meta cumplida!'}</small></div>
+    ${x.sigue ? `<button class="btn ghost sm" type="button" data-meta-ir="${esc(x.sigue)}" data-meta-c="${c.id}">Seguir</button>` : ''}</article>`).join('')}</div></section>`;
+}
+function metasBind(root) {
+  root.querySelectorAll('[data-meta-ir]').forEach(b => { b.onclick = () => { const f = findLesson(b.dataset.metaIr); if (f && isUnlocked(f.c, f.l)) startLesson(f.c, f.l); else openCourse(b.dataset.metaC); }; });
 }
 ;
 //#archivo js/perfil.js

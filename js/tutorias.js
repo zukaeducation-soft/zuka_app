@@ -173,7 +173,8 @@ function tuCalendario(b, titulo, detalle) {
 const tuNuevo = () => ({ c: '', unit: 0, topics: [], date: null, time: null, note: '', hecha: null });
 let tuB = tuNuevo(), tuDe = null, tuOcupado = false;   // tuDe: de qué cuenta es el borrador
 const tuUid = () => (typeof Cuenta !== 'undefined' && Cuenta.user?.id) || '';
-const tuCursos = () => cursosVisibles().filter(c => cursoComprado(c, true)).sort((a, b) => (b.id === S.course) - (a.id === S.course));
+const tuDeInst = c => !!accesoCursoFila(c.id)?.institucion;   // el contrato de una institución no trae asesorías
+const tuCursos = () => cursosVisibles().filter(c => cursoComprado(c, true) && !tuDeInst(c)).sort((a, b) => (b.id === S.course) - (a.id === S.course));
 function tuElige(c) {
   tuB = { ...tuB, c: c.id, topics: [], hecha: null, unit: Math.max(0, c.units.findIndex(u => u.lessons.some(l => !S.done[l.id]))) };
 }
@@ -322,7 +323,7 @@ function tuPinta(courses) {
 async function tuSepara() {
   const c = tuCourse(tuB.c), ok = $('.tu-boleto [data-ok]', view), n = Date.now();
   if (!c || !ok || ok.disabled || tuOcupado) return;
-  if (!cursoComprado(c, true)) return toast(TU_ERRORS.curso);
+  if (!cursoComprado(c, true) || tuDeInst(c)) return toast(TU_ERRORS.curso);
   if (typeof planMotivo === 'function' && planMotivo('tutorias')) return openBloqueo('tutorias');   // tutorías: con horas en el saldo
   const req = { course: c.id, topics: tuB.topics, date: tuB.date, time: tuB.time, note: tuB.note }, r = bookTutoria(S.tutorias, req, n, tutoriaCatalog(COURSES));
   if (!r.ok) { toast(TU_ERRORS[r.error] || TU_ERRORS.slot); if (r.error === 'slot' || r.error === 'busy') { tuB.date = tuB.time = null; } return renderTutorias(); }

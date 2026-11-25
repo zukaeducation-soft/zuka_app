@@ -298,6 +298,13 @@ cualquier `L(x) = R(x)`). Reutilizables:
 - Juegos propios de las evaluaciones (no usarlos en lecciones; cada uno tiene `solve(params)`): `laberinto-valor`,
   `domino-equivalencias`, `piramide-numerica`, `detective-pasos`. Pruebas: `tests/evaluaciones.test.js`.
 
+## Instituciones (colegios)
+
+Spec `2026-11-25-instituciones`, pruebas `tests/instituciones.test.js`. `/instituciones/` (pública, cotizador), `/instituciones/portal/`
+(gestores y docentes; `?demo` = datos inventados), `/admin#instituciones`, sección `#pz-inst` de la landing; cuentas puras en
+`js/instituciones.js`, metas del estudiante en `js/metas.js`. La base es `supabase/migrations/20261125000001_instituciones.sql`
+(probada con pglite; **confirmar que esté aplicada en Supabase**). El acceso por contrato no se copia a `accesos`: lo mira `privado.puede`.
+
 ## Interfaz compacta en computador
 
 Desde 1000 px la app va con `zoom` en `body` (0.8 desde 1200 px; la landing no; spec `2026-11-25-interfaz-compacta`, pruebas

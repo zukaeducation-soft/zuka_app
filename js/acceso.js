@@ -117,7 +117,7 @@ const DATOS = {
 };
 const datoTexto = (k, v) => ((DATOS[k] || []).find(x => x[0] === v) || [])[1] || v || '—';
 const esMenor = edad => ['menos_14', '14_15', '16_17'].includes(edad);
-const datosFaltan = (perfil, accesos, now = Date.now()) => !!perfil && perfil.rol !== 'admin' && !perfil.datos_en && tienePago(accesos, now);
+const datosFaltan = (perfil, accesos, now = Date.now()) => !!perfil && !['admin', 'gestor'].includes(perfil.rol) && !perfil.datos_en && tienePago((accesos || []).filter(a => !a.institucion), now);
 // El primer dato que falta o no es válido: { campo, texto }, o null.
 function datosError(d) {
   const falta = k => !String(d[k] || '').trim();

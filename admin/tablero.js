@@ -105,7 +105,7 @@ async function tbCarga() {
   const L = new Map(lec.filter(l => l.tipo === 'leccion').map(l => [l.id, l])), deQuien = new Map();
   acc.forEach(a => (deQuien.get(a.usuario) || deQuien.set(a.usuario, []).get(a.usuario)).push(a));
   // Solo estudiantes: las cuentas administradoras no cuentan en ninguna cifra.
-  const personas = per.filter(p => p.rol !== 'admin').map(p => tbPersona(p, deQuien.get(p.id) || [], accesoCurso)), de = new Set(personas.map(p => p.id));
+  const personas = per.filter(p => p.rol === 'estudiante').map(p => tbPersona(p, deQuien.get(p.id) || [], accesoCurso)), de = new Set(personas.map(p => p.id));
   const prog = pro.filter(x => de.has(x.usuario) && L.has(x.leccion)).map(x => ({ u: x.usuario, l: x.leccion, curso: L.get(x.leccion).curso, hecha: x.completada, dia: tbDia(x.completada ? x.completada_en || x.actualizado_en : x.actualizado_en) }));
   const hoy = tbDia(new Date().toISOString());
   const D = { personas, hoy, L, uso: uso.filter(x => de.has(x.usuario)).map(x => ({ u: x.usuario, dia: x.dia, seg: x.segundos || 0, lec: x.lecciones || 0, ej: x.ejercicios || 0, ac: x.aciertos || 0 })),

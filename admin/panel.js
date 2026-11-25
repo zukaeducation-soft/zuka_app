@@ -83,6 +83,7 @@ const ICO = {
   codigos: '<circle cx="8" cy="15" r="4.500"/><path d="M11.500 11.500L20 3M17 6l3 3M14 9l2 2"/>', solicitudes: '<path d="M4 5h16v11H9l-5 4zM9 10h6"/>', pedidos: '<path d="M3.500 8L12 3.500 20.500 8v8L12 20.500 3.500 16zM3.500 8L12 12.500 20.500 8M12 12.500v8"/>',
   asesorias: '<rect x="4" y="5" width="16" height="15" rx="2.500"/><path d="M4 10h16M8 3v4M16 3v4"/>', ventas: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>', cursos: '<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11"/>',
   tienda: '<path d="M5 8h14l1 12H4zM8.500 11V7a3.500 3.500 0 0 1 7 0v4"/>', ajustes: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>', app: '<path d="M14 5h5v5M19 5l-8 8M11 6H5v13h13v-6"/>',
+  instituciones: '<path d="M3 20h18M5 20V9l7-5 7 5v11M9 20v-6h6v6M9 10.500h.01M15 10.500h.01"/>',
   plan: '<path d="M5 12l5 5 9-10"/>', prueba: '<circle cx="12" cy="12" r="8.500"/><path d="M12 7v5l3 2"/>', vence: '<path d="M12 4l9 16H3zM12 10v4M12 17v.01"/>', uso: '<path d="M3 12h4l3-7 4 14 3-7h4"/>',
 };
 const ico = k => `<svg class="pn-i" viewBox="0 0 24 24" aria-hidden="true">${ICO[k] || ''}</svg>`;
@@ -216,7 +217,7 @@ async function entrar() {
   $('.pn-nav').hidden = false;
   if (!ruta.lista) { ruta.lista = true; $$('[data-ico]').forEach(a => a.insertAdjacentHTML('afterbegin', ico(a.dataset.ico))); }
   addEventListener('hashchange', ruta);
-  ruta(); tiendaConteo();
+  ruta(); tiendaConteo(); instConteo();
 }
 function login() {
   document.body.classList.remove('dentro');
@@ -241,7 +242,7 @@ $('[data-salir]').onclick = async () => { await sb.auth.signOut({ scope: 'local'
 function ruta() {
   const [name, arg] = (location.hash.slice(1) || 'inicio').split('/');
   $$('.pn-nav a').forEach(a => { const on = a.getAttribute('href') === `#${name === 'estudiante' ? 'estudiantes' : name}`; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-  ({ inicio: vInicio, tablero: vTablero, estudiantes: vEstudiantes, estudiante: () => vEstudiante(arg), codigos: vCodigos, solicitudes: vSolicitudes, pedidos: vPedidos, asesorias: vAsesorias, tienda: vTienda, ventas: vVentas, cursos: vCursos, ajustes: vAjustes }[name] || vInicio)();
+  ({ inicio: vInicio, tablero: vTablero, estudiantes: vEstudiantes, estudiante: () => vEstudiante(arg), codigos: vCodigos, solicitudes: vSolicitudes, pedidos: vPedidos, asesorias: vAsesorias, tienda: vTienda, ventas: vVentas, instituciones: vInstituciones, cursos: vCursos, ajustes: vAjustes }[name] || vInicio)();
   scrollTo(0, 0);
 }
 function pendientes(n) { const x = $('.pn-nav [data-n="solicitudes"]'); x.textContent = n || ''; x.hidden = !n; }
@@ -271,11 +272,11 @@ const filas = () => $$('tr[data-id]', view).forEach(tr => { tr.onclick = e => { 
 // ---------- 2. estudiantes ----------
 const fil = { q: '', estado: '', curso: '', orden: 'reciente' };
 function vEstudiantes() {
-  carga(() => admin('usuarios'), us => {
+  carga(async () => { const [us, de] = await Promise.all([admin('usuarios'), instAdm('de_estudiantes').catch(() => ({}))]); us.forEach(u => { u.inst = de[u.id] || ''; }); return us; }, us => {
     us.forEach(u => { u.e = estadoDe(u); });
     const el = new Set();
     view.innerHTML = `<div class="pn-head"><h1>Estudiantes</h1><div class="pn-acc"><button class="btn ghost" type="button" data-csv>Descargar Excel</button><button class="btn main" type="button" data-gen>Crear código</button></div></div>
-      <div class="pn-chips" role="radiogroup" aria-label="Estado">${[['', 'Todos'], ...Object.entries(ESTADO).map(([k, v]) => [k, v[1]]), ['admin', 'Administradores']].map(([k, t]) => `<label><input type="radio" name="estado" value="${k}"${fil.estado === k ? ' checked' : ''}><span>${t} <b>${us.filter(u => (k === 'admin' ? u.rol === 'admin' : u.rol !== 'admin' && (!k || u.e === k))).length}</b></span></label>`).join('')}</div>
+      <div class="pn-chips" role="radiogroup" aria-label="Estado">${[['', 'Todos'], ...Object.entries(ESTADO).map(([k, v]) => [k, v[1]]), ['gestor', 'Gestores'], ['admin', 'Administradores']].map(([k, t]) => `<label><input type="radio" name="estado" value="${k}"${fil.estado === k ? ' checked' : ''}><span>${t} <b>${us.filter(u => (['admin', 'gestor'].includes(k) ? u.rol === k : u.rol === 'estudiante' && (!k || u.e === k))).length}</b></span></label>`).join('')}</div>
       <div class="pn-filters tres"><label class="fld"><span>Buscar</span><input type="search" name="q" placeholder="Nombre, celular, correo o código" value="${esc(fil.q)}"></label>
         <label class="fld"><span>Curso</span><select name="curso"><option value="">Todos</option>${CURSOS.map(c => `<option value="${c.id}"${fil.curso === c.id ? ' selected' : ''}>${esc(c.nombre)}</option>`).join('')}</select></label>
         <label class="fld"><span>Orden</span><select name="orden">${[['reciente', 'Más nuevos'], ['vence', 'Vence antes'], ['uso', 'Entró hace poco']].map(([k, t]) => `<option value="${k}"${fil.orden === k ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
@@ -284,7 +285,7 @@ function vEstudiantes() {
     const vence = u => Math.min(...u.accesos.filter(a => a.hasta && vigente(a.hasta, Date.now())).map(a => +new Date(a.hasta)), Infinity);
     const visibles = () => {
       const q = fil.q.trim().toLowerCase(), cod = limpiaCodigo(q);
-      return us.filter(u => (fil.estado === 'admin' ? u.rol === 'admin' : u.rol !== 'admin') && (!fil.estado || fil.estado === 'admin' || u.e === fil.estado) && (!fil.curso || u.accesos.some(a => a.curso === fil.curso))
+      return us.filter(u => (['admin', 'gestor'].includes(fil.estado) ? u.rol === fil.estado : u.rol === 'estudiante') && (!fil.estado || ['admin', 'gestor'].includes(fil.estado) || u.e === fil.estado) && (!fil.curso || u.accesos.some(a => a.curso === fil.curso))
         && (!q || `${u.nombre} ${u.correo} ${u.telefono} ${u.nota}`.toLowerCase().includes(q) || (cod.length >= 3 && (u.codigo || '').includes(cod))))
         .sort((a, b) => (fil.orden === 'vence' ? vence(a) - vence(b) || 0 : fil.orden === 'uso' ? (b.ultima_vez || '').localeCompare(a.ultima_vez || '') : b.creado_en.localeCompare(a.creado_en)));
     };
@@ -294,7 +295,7 @@ function vEstudiantes() {
       $('.pn-count', view).textContent = `${rows.length} ${rows.length === 1 ? 'resultado' : 'resultados'}`;
       $('.pn-list', view).innerHTML = tabla([{ t: '<input type="checkbox" data-todos aria-label="Elegir todos">' }, { t: 'Estudiante' }, { t: 'Código' }, { t: 'Estado' }, { t: 'Cursos' }, { t: 'Último ingreso' }, { t: 'Lecciones', n: 1 }], rows.map(u => `<tr data-id="${u.id}">
         ${td('Elegir', u.rol === 'admin' ? '' : `<input type="checkbox" data-el="${u.id}" aria-label="Elegir a ${esc(u.nombre || 'sin nombre')}"${el.has(u.id) ? ' checked' : ''}>`, 'pn-check')}
-        <td class="pn-main"><span class="pn-per">${avatar(u.nombre)}<span><a href="#estudiante/${u.id}">${esc(u.nombre || 'Sin nombre')}</a>${u.rol === 'admin' ? ' <span class="pill">Admin</span>' : ''}<span class="pn-sub">${esc([u.telefono, u.correo].filter(Boolean).join(' · ') || 'Sin datos de contacto')}</span></span></span></td>
+        <td class="pn-main"><span class="pn-per">${avatar(u.nombre)}<span><a href="#estudiante/${u.id}">${esc(u.nombre || 'Sin nombre')}</a>${u.rol === 'admin' ? ' <span class="pill">Admin</span>' : u.inst ? ` <span class="pill ok">${esc(u.inst)}</span>` : ''}<span class="pn-sub">${esc([u.telefono, u.correo].filter(Boolean).join(' · ') || 'Sin datos de contacto')}</span></span></span></td>
         ${td('Código', u.codigo ? `<span class="pn-code">${muestraCodigo(u.codigo)}</span>` : '—')}${td('Estado', u.rol === 'admin' ? '—' : pillEstado(u.e))}${td('Cursos', u.accesos.length ? `<span class="pn-pills">${u.accesos.slice(0, 3).map(a => pillAcceso(a)).join('')}${u.accesos.length > 3 ? `<span class="pill">+${u.accesos.length - 3}</span>` : ''}</span>` : '—')}
         ${td('Último ingreso', hace(u.ultima_vez))}${td('Lecciones', u.lecciones, 'pn-num')}</tr>`), us.length ? 'Nadie coincide con el filtro.' : 'Aún no hay estudiantes. Crea el primer código.');
       filas();
@@ -390,7 +391,7 @@ async function renovar(b, codigo, p, hecho) {
 }
 // Dos códigos de la misma persona: el avance y los cursos de esta cuenta pasan a la otra.
 async function dlgUnir(id, p) {
-  let us; try { us = (await admin('usuarios')).filter(u => u.rol !== 'admin' && u.id !== id); } catch (e) { return toast(errTexto(e), true); }
+  let us; try { us = (await admin('usuarios')).filter(u => u.rol === 'estudiante' && u.id !== id); } catch (e) { return toast(errTexto(e), true); }
   const rot = u => `${u.nombre || 'Sin nombre'}${u.codigo ? ` · ${muestraCodigo(u.codigo)}` : ''}${u.telefono ? ` · ${u.telefono}` : ''}`;
   ventana(`<form class="pn-form1"><h2>Unir con otra cuenta</h2><p>El avance, los cursos y el código de <b>${esc(p.nombre || 'esta cuenta')}</b> pasan a la cuenta que elijas, y esta se borra. Sirve si una persona terminó con dos códigos.</p>
     <label class="fld"><span>Cuenta que se conserva</span><select name="hacia" required><option value="">Elige…</option>${us.map(u => `<option value="${u.id}">${esc(rot(u))}</option>`).join('')}</select></label>

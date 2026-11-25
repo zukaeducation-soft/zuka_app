@@ -62,3 +62,6 @@
 
 .hm-jug { --sal: cubic-bezier(.23, 1, .32, 1); }
 :is(.mc-esc, .hm-ase) .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; } .mc-esc .btn .i { width: 18px; height: 18px; }
+
+/* metas de la institución (js/metas.js) */
+.hm-mt { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 12px; margin-top: 14px; } .hm-mt article { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 22px; border: 1px solid color-mix(in srgb, var(--c) 45%, var(--line)); background: color-mix(in srgb, var(--c) 8%, var(--card)); } .hm-mt article > div { flex: 1; min-width: 0; } .hm-mt b { display: block; font-weight: 600; font-size: 17px; overflow-wrap: anywhere; } .hm-mt small { display: block; color: var(--mute); font-size: 14px; } .hm-mt .btn { width: auto; } .acct-inst { padding: 12px 14px; border-radius: 16px; background: color-mix(in srgb, var(--brand) 10%, transparent); font-size: 15px; line-height: 1.45; }

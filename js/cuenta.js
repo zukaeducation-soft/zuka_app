@@ -6,7 +6,8 @@ const Cuenta = {
   sb: null,        // cliente de Supabase (null sin conexión)
   user: null,      // usuario con sesión
   perfil: null,    // fila de `perfiles` (se guarda en S.cuenta para abrir sin conexión)
-  accesos: [],     // filas de `accesos`: los cursos de esta cuenta
+  accesos: [],     // filas de `accesos`: los cursos de esta cuenta (y los que abre su institución, con `institucion`)
+  inst: { nombres: [], metas: [] },   // institución del estudiante: quién ve su avance y sus metas
   codigo: '',      // el código con el que se entra
   productos: null, // planes a la venta (tabla `productos`)
   ajustes: {},     // tabla `ajustes`: whatsapp, pago_info…
@@ -28,7 +29,7 @@ function planMotivo(id) {
 
 function cuentaCache() {
   // uid = cuenta cuyo avance está en este celular; solo cambia cuando la sincronización termina bien.
-  S.cuenta = { uid: (S.cuenta || {}).uid || null, perfil: Cuenta.perfil, accesos: Cuenta.accesos, codigo: Cuenta.codigo, sesion: !!Cuenta.user };
+  S.cuenta = { uid: (S.cuenta || {}).uid || null, perfil: Cuenta.perfil, accesos: Cuenta.accesos, inst: Cuenta.inst, codigo: Cuenta.codigo, sesion: !!Cuenta.user };
   save();
 }
 // Repinta la pestaña abierta (no durante una lección ni sobre el feed de clips, que se reiniciaría).
@@ -159,6 +160,7 @@ const cursoBorrador = c => (Cuenta.cursos ? Cuenta.cursos[c.id] !== true : !CURS
 const cursoVisible = c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id) || !cursoBorrador(c);
 // «Mis cursos», el perfil y las asesorías: solo lo comprado (pedido del 2026-11-24). La prueba se abre desde Inicio.
 const cursoComprado = (c, alDia = false) => SIN_CANDADOS || cuentaEsAdmin() || comprado(Cuenta.accesos, c.id, alDia);
+const accesoCursoFila = id => (Cuenta.accesos || []).find(a => a.curso === id);
 const cursosConAcceso = () => cursosVisibles().filter(c => SIN_CANDADOS || cuentaEsAdmin() || (Cuenta.accesos || []).some(a => a.curso === c.id));
 function cursosVisibles() {
   const v = COURSES.filter(cursoVisible);
@@ -197,7 +199,7 @@ function cuentaInit() {
   // Lo último que se supo de la cuenta: sirve para abrir sin conexión.
   if (S.cuenta && S.cuenta.sesion && S.cuenta.perfil) {
     Cuenta.user = { id: S.cuenta.perfil.id, offline: true }; Cuenta.perfil = S.cuenta.perfil;
-    Cuenta.accesos = S.cuenta.accesos || []; Cuenta.codigo = S.cuenta.codigo || '';
+    Cuenta.accesos = S.cuenta.accesos || []; Cuenta.inst = S.cuenta.inst || { nombres: [], metas: [] }; Cuenta.codigo = S.cuenta.codigo || '';
   }
   cuentaRol();
   if (!window.supabase || !window.supabase.createClient) return;
@@ -220,7 +222,7 @@ async function cuentaSesion(ev, session) {
   const antes = Cuenta.user && !Cuenta.user.offline ? Cuenta.user.id : null;
   if (!session) {
     if (ev === 'INITIAL_SESSION' && !navigator.onLine) return;   // sin red: vale lo guardado
-    Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; tiendaFuera(); Cuenta.bases.clear(); cuentaCola.clear();
+    Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.inst = { nombres: [], metas: [] }; Cuenta.codigo = ''; tiendaFuera(); Cuenta.bases.clear(); cuentaCola.clear();
     cuentaCache(); cuentaRol(); cuentaRepinta();
     if (!SIN_CANDADOS && !Clave.vista) { const tapa = datosAbierta; datosAbierta = false; if (tapa || (!$('#auth') && !$('#landing') && !lessonClose)) authScreen(); }
     return;
@@ -247,7 +249,7 @@ async function cuentaReintenta() {
   if (await cuentaSyncProgreso((S.cuenta || {}).uid || null)) { await estadoSync(); cuentaRepinta(); }
 }
 if (typeof document !== 'undefined') setInterval(() => { if (!document.hidden) cuentaReintenta().catch(() => {}); }, 60000);
-const cuentaHuella = () => JSON.stringify([Cuenta.perfil, Cuenta.accesos, Tienda.mios, Tienda.saldo]);
+const cuentaHuella = () => JSON.stringify([Cuenta.perfil, Cuenta.accesos, Cuenta.inst, Tienda.mios, Tienda.saldo]);
 // Al volver a la app se pregunta si cambió el acceso (el administrador acaba de confirmar un pago…).
 let cuentaVista = 0;
 async function cuentaRevisa() {
@@ -268,13 +270,17 @@ const primerNombre = p => ((p && p.nombre) || '').trim().split(/\s+/)[0].slice(0
 async function cuentaPerfil() {
   if (!Cuenta.sb || !Cuenta.user) return null;
   const uid = Cuenta.user.id;
-  const [{ data }, acc, cod] = await Promise.all([Cuenta.sb.from('perfiles').select('*').eq('id', uid).maybeSingle(),
-    Cuenta.sb.from('accesos').select('curso,tipo,desde,hasta').eq('usuario', uid), Cuenta.sb.rpc('mi_codigo')]);
+  const [{ data }, acc, cod, ins] = await Promise.all([Cuenta.sb.from('perfiles').select('*').eq('id', uid).maybeSingle(),
+    Cuenta.sb.from('accesos').select('curso,tipo,desde,hasta').eq('usuario', uid), Cuenta.sb.rpc('mi_codigo'), Cuenta.sb.rpc('mi_institucion')]);
   if (!Cuenta.user || Cuenta.user.id !== uid) return null;   // mientras tanto cambió de cuenta
-  if (acc.data) Cuenta.accesos = acc.data.sort((a, b) => a.curso.localeCompare(b.curso));
+  if (Cuenta.perfil && Cuenta.perfil.id !== uid) Cuenta.inst = { nombres: [], metas: [] };   // otra cuenta
+  const deInst = ins.data ? ins.data.accesos : (Cuenta.perfil?.id === uid ? Cuenta.accesos || [] : []).filter(a => a.institucion);
+  if (acc.data) Cuenta.accesos = instJunta(acc.data, deInst);
+  if (ins.data) Cuenta.inst = { nombres: ins.data.instituciones || [], metas: ins.data.metas || [] };
   if (!cod.error) Cuenta.codigo = cod.data || '';
   if (data) {
     Cuenta.perfil = data;
+    if (data.rol === 'gestor' && $('#auth')) location.href = 'instituciones/portal/';   // acaba de entrar con su código: va a su portal
     if (!S.name) S.name = primerNombre(data);
     cuentaCache();
   }
@@ -440,7 +446,7 @@ async function cuentaTienda() {
 }
 async function openComprar(id, elegido) {
   if (!Cuenta.user) return openEntrar();
-  const a = accesoCurso(Cuenta.accesos, id), renueva = a.estado === 'pago' || a.estado === 'vencido', curso = cursoNombre(id);
+  const a = accesoCurso(Cuenta.accesos, id), renueva = !accesoCursoFila(id)?.institucion && (a.estado === 'pago' || a.estado === 'vencido'), curso = cursoNombre(id);
   openSheet(`<div class="acct-form compra"><h3 class="sheet-title">${renueva ? 'Renovar' : 'Comprar'} ${esc(curso)}</h3>
     <p class="muted">${a.estado === 'pago' ? `Te quedan ${diasTexto(a.dias)}: los que compres se suman.` : 'Se activa en tu mismo código y sigues donde vas: no pierdes nada de tu avance.'}</p>
     <div class="compra-lista" role="radiogroup" aria-label="Duración"><p class="muted">Cargando…</p></div>
@@ -494,7 +500,7 @@ function openBloqueo(id) {
 }
 // Aviso dentro del curso (portada): prueba, plan por vencer o vencido, con su botón.
 function accesoAvisoHTML(c) {
-  if (SIN_CANDADOS || cuentaEsAdmin() || !Cuenta.user) return '';
+  if (SIN_CANDADOS || cuentaEsAdmin() || !Cuenta.user || accesoCursoFila(c.id)?.institucion) return '';   // renueva la institución, no el estudiante
   const a = accesoCurso(Cuenta.accesos, c.id);
   const t = {
     prueba: `Estás en la <b>prueba</b>: se abre el primer mundo${c.blocks ? ' de cada componente' : ''}${a.dias != null ? ` (${a.dias === 1 ? 'queda' : 'quedan'} ${diasTexto(a.dias)})` : ''}.`,
@@ -512,8 +518,9 @@ function cuentaCard() {
     return `<section class="card acct-card"><h3>Mi plan</h3><p class="muted">Entra con tu código de acceso para ver tus cursos y guardar tu avance.</p>
       <button class="btn brand" data-acct="entrar">Entrar con mi código</button></section>`;
   }
-  const p = Cuenta.perfil || {}, admin = p.rol === 'admin', mios = Cuenta.accesos || [];
+  const p = Cuenta.perfil || {}, admin = p.rol === 'admin', mios = Cuenta.accesos || [], gestor = p.rol === 'gestor', de = Cuenta.inst.nombres;
   return `<section class="card acct-card"><div class="acct-head"><h3>${admin ? 'Administración' : 'Mi plan'}</h3></div>
+    ${gestor ? '<p class="muted">Esta es una cuenta de gestión. En el portal registras a tus estudiantes y sigues su avance.</p><a class="btn brand" href="instituciones/portal/">Abrir el portal</a>' : de.length ? `<p class="acct-inst">Estudias con <b>${esc(de.join(' y '))}</b>. Sus docentes ven tu avance y tu tiempo de estudio.</p>` : ''}
     ${admin ? '<p class="muted">Tienes todo el contenido abierto. Entra directo a lo que necesites:</p>'
     : mios.length ? `<ul class="plan-cursos">${mios.map(x => {
       const a = accesoCurso(mios, x.curso);
@@ -521,7 +528,7 @@ function cuentaCard() {
       return `<li style="--c:${cu?.color || 'var(--brand)'}">${cu ? aroHTML(pfQueda(x, a), courseArt(cu, 'md')) : ''}<div class="acct-head"><b>${esc(cursoNombre(x.curso))}</b>${accesoPill(a)}</div>
         <p class="muted">${a.estado === 'pago' ? `Del ${fechaCorta(a.desde)} al ${fechaCorta(a.hasta)} · <b class="${a.dias <= 7 ? 'warn' : ''}">${a.dias === 1 ? 'queda' : 'quedan'} ${diasTexto(a.dias)}</b>`
         : a.estado === 'prueba' ? `Primer mundo abierto${a.hasta ? ` hasta el ${fechaCorta(a.hasta)}` : ''}.` : `Terminó el ${fechaCorta(a.hasta)}. Tu avance sigue guardado.`}</p>
-        <button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-acct="comprar" data-curso="${esc(x.curso)}">${x.tipo === 'pago' ? 'Renovar' : 'Comprar acceso'}</button></li>`;
+        ${x.institucion ? `<p class="muted">Con ${esc(x.institucion)}</p>` : `<button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-acct="comprar" data-curso="${esc(x.curso)}">${x.tipo === 'pago' ? 'Renovar' : 'Comprar acceso'}</button>`}</li>`;
     }).join('')}</ul>` : '<p class="muted">Aún no tienes cursos en tu cuenta.</p>'}
     ${admin ? `<nav class="adm-atajos" aria-label="Administración">${[['estudiantes', 'Estudiantes', 'user'], ['codigos', 'Códigos', 'lock'], ['solicitudes', 'Solicitudes', 'bag'], ['pedidos', 'Pedidos', 'doc'], ['asesorias', 'Asesorías', 'calendar'], ['ventas', 'Ventas', 'trophy']].map(([h, t, i]) => `<a href="admin/#${h}">${ICON[i]}<span>${t}</span></a>`).join('')}</nav><a class="btn brand" href="admin/">Panel de administración</a>` : `<div class="acct-actions"><button class="btn brand" data-acct="tienda">Tienda</button><button class="btn ghost" data-acct="canje">Añadir código</button></div>`}
     <div class="acct-foot">${admin ? '<span></span>' : '<button class="link-btn" data-acct="datos">Mis datos</button>'}<button class="link-btn" data-acct="salir">Cerrar sesión</button></div></section>`;
@@ -530,7 +537,7 @@ async function cuentaSalir() {
   cuentaEnvia(); usoEnvia();
   await estadoEnvia().catch(() => {});   // nada de lo ganado se queda sin subir
   if (Cuenta.sb) await Cuenta.sb.auth.signOut({ scope: 'local' }).catch(() => {});
-  Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.codigo = ''; tiendaFuera(); cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
+  Cuenta.user = null; Cuenta.perfil = null; Cuenta.accesos = []; Cuenta.inst = { nombres: [], metas: [] }; Cuenta.codigo = ''; tiendaFuera(); cuentaCache(); cuentaRol(); toast('Sesión cerrada.'); cuentaRepinta();
   if (!SIN_CANDADOS) authScreen();
 }
 function cuentaBind(root) {

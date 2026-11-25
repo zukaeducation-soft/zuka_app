@@ -45,7 +45,7 @@ async function tiendaMios() {
 }
 const libroMio = id => cuentaEsAdmin() || Tienda.mios.some(x => x.libro === id);
 const libroListo = l => l.publicado && l.version > 0 && l.paginas > 0;
-const conPlan = () => tienePago(Cuenta.accesos);
+const conPlan = () => tienePago((Cuenta.accesos || []).filter(a => !a.institucion));   // lo que da una institución no es una compra
 const carroItems = () => Object.entries(Tienda.carro).filter(([id]) => Tienda.arts.some(a => a.id === id)).map(([id, cantidad]) => ({ id, cantidad }));
 
 // ---------- pestaña ----------
@@ -125,7 +125,7 @@ function tiendaPaqHTML(a) {
 // Curso: su figura en grande sobre su color, qué trae y el tiempo, que se elige en la misma tarjeta.
 function tiendaCursoHTML(c) {
   const a = accesoCurso(Cuenta.accesos, c.id), ps = productosDe(c.id), sel = ps.find(p => p.id === (Tienda.plan || {})[c.id]) || ps[ps.length - 1];
-  const ex = c.units.reduce((t, u) => t + u.lessons.reduce((n, l) => n + l.ex.length, 0), 0), tiene = a.estado === 'pago' || a.estado === 'vencido';
+  const ex = c.units.reduce((t, u) => t + u.lessons.reduce((n, l) => n + l.ex.length, 0), 0), tiene = !accesoCursoFila(c.id)?.institucion && (a.estado === 'pago' || a.estado === 'vencido');
   return `<article class="td-curso" data-curso="${esc(c.id)}" style="--c:${c.color};${tiendaColor(c.id)}"><div class="td-escena luz">${accesoPill(a)}<span class="td-artes">${courseArt(c, 'xl')}</span></div>
     <div class="td-cont"><h3>${esc(c.name)}</h3><p>${esc(c.tagline || '')}</p>
       <p class="td-datos"><span><b>${c.units.length}</b> ${c.units.length === 1 ? 'mundo' : 'mundos'}</span><span><b>${lessonsOf(c).length}</b> lecciones</span><span><b>${ex}</b> ejercicios</span></p>

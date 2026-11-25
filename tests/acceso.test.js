@@ -244,6 +244,6 @@ test('Mis cursos, el perfil y las asesorías muestran solo lo comprado; la prueb
   assert.strictEqual(c([acc('pago', dias(-1))], 'preuda', false, NOW), true, 'vencido: sigue en Mis cursos para renovar');
   assert.strictEqual(c([acc('pago', dias(-1))], 'preuda', true, NOW), false, 'vencido: sin asesorías');
   assert.match(read('js/inicio.js'), /cursosVisibles\(\)\.filter\(c => cursoComprado\(c\)\)/);
-  assert.match(read('js/tutorias.js'), /cursosVisibles\(\)\.filter\(c => cursoComprado\(c, true\)\)/);
+  assert.match(read('js/tutorias.js'), /cursosVisibles\(\)\.filter\(c => cursoComprado\(c, true\) && !tuDeInst\(c\)\)/);
   assert.match(read('supabase/migrations/20261124000005_asesoria_curso.sql'), /tipo = ''pago'' and hasta > now\(\)/);
 });
