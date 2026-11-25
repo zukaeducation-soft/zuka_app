@@ -77,6 +77,7 @@ function csv(nombre, cab, filas) {
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
 }
 const ICO = {
+  tablero: '<path d="M4 4v16h16M8 15l4-5 3 3 5-7"/>',
   inicio: '<path d="M4 13h6V4H4zM14 20h6V4h-6zM4 20h6v-4H4z"/>', estudiantes: '<circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c0-3.500 3-5.500 6.500-5.500s6.500 2 6.500 5.500M16 5a3.500 3.500 0 0 1 0 6.500M18 15c2.200.7 3.500 2.500 3.500 5"/>',
   codigos: '<circle cx="8" cy="15" r="4.500"/><path d="M11.500 11.500L20 3M17 6l3 3M14 9l2 2"/>', solicitudes: '<path d="M4 5h16v11H9l-5 4zM9 10h6"/>', pedidos: '<path d="M3.500 8L12 3.500 20.500 8v8L12 20.500 3.500 16zM3.500 8L12 12.500 20.500 8M12 12.500v8"/>',
   asesorias: '<rect x="4" y="5" width="16" height="15" rx="2.500"/><path d="M4 10h16M8 3v4M16 3v4"/>', ventas: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>', cursos: '<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11"/>',
@@ -235,11 +236,11 @@ function login() {
     });
   };
 }
-$('[data-salir]').onclick = async () => { await sb.auth.signOut({ scope: 'local' }); removeEventListener('hashchange', ruta); login(); };
+$('[data-salir]').onclick = async () => { await sb.auth.signOut({ scope: 'local' }); Object.assign(TB, { D: null, x: null, f: { dias: 30 } }); removeEventListener('hashchange', ruta); login(); };
 function ruta() {
   const [name, arg] = (location.hash.slice(1) || 'inicio').split('/');
   $$('.pn-nav a').forEach(a => { const on = a.getAttribute('href') === `#${name === 'estudiante' ? 'estudiantes' : name}`; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-  ({ inicio: vInicio, estudiantes: vEstudiantes, estudiante: () => vEstudiante(arg), codigos: vCodigos, solicitudes: vSolicitudes, pedidos: vPedidos, asesorias: vAsesorias, tienda: vTienda, ventas: vVentas, cursos: vCursos, ajustes: vAjustes }[name] || vInicio)();
+  ({ inicio: vInicio, tablero: vTablero, estudiantes: vEstudiantes, estudiante: () => vEstudiante(arg), codigos: vCodigos, solicitudes: vSolicitudes, pedidos: vPedidos, asesorias: vAsesorias, tienda: vTienda, ventas: vVentas, cursos: vCursos, ajustes: vAjustes }[name] || vInicio)();
   scrollTo(0, 0);
 }
 function pendientes(n) { const x = $('.pn-nav [data-n="solicitudes"]'); x.textContent = n || ''; x.hidden = !n; }
@@ -251,7 +252,7 @@ function vInicio() {
     const falta = !waNumero(AJUSTES.whatsapp), hoy = new Date().toLocaleDateString('es-CO', { timeZone: 'America/Bogota', weekday: 'long', day: 'numeric', month: 'long' });
     const haz = [['solicitudes', r.solicitudes, 'solicitud de compra', 'solicitudes de compra'], ['pedidos', n?.pedidos, 'pedido por atender', 'pedidos por atender'], ['asesorias', n?.asesorias, 'asesoría por confirmar', 'asesorías por confirmar']].filter(x => x[1]);
     const tope = Math.max(1, ...r.por_curso.map(c => c.pago + c.prueba)), meses = r.ventas_mes || [];
-    view.innerHTML = `<div class="pn-head"><div><h1>Así va Zuka</h1><p class="pn-hoy">${hoy}</p></div><div class="pn-acc"><a class="btn ghost" href="#estudiantes">Ver estudiantes</a><button class="btn main" type="button" data-gen>Crear código</button></div></div>
+    view.innerHTML = `<div class="pn-head"><div><h1>Así va Zuka</h1><p class="pn-hoy">${hoy}</p></div><div class="pn-acc"><a class="btn ghost" href="#tablero">Ver tablero</a><button class="btn main" type="button" data-gen>Crear código</button></div></div>
       ${falta ? '<a class="pn-aviso" href="#ajustes">Falta el número de WhatsApp: sin él, la app no puede ofrecer pedir códigos ni comprar. Ponlo en Ajustes.</a>' : ''}
       <section class="pn-haz${haz.length || !n ? '' : ' ok'}" aria-label="Por atender">${haz.length ? haz.map(([k, c, uno, varios]) => `<a href="#${k}">${ico(k)}<span><b>${c}</b> ${c === 1 ? uno : varios}</span><em>Atender</em></a>`).join('') : !n ? `<p>${ico('vence')}<span>No se pudieron consultar los pedidos y las asesorías. Recarga para intentarlo de nuevo.</span></p>` : `<p>${ico('plan')}<span><b>Todo al día.</b> No hay solicitudes, pedidos ni asesorías por atender.</span></p>`}</section>
       <div class="pn-tiles pn-kpis">${kpi('plan', r.pago, 'Con plan activo', 'ok', '#estudiantes')}${kpi('prueba', r.prueba, 'En prueba')}${kpi('vence', r.vencidos, 'Con plan vencido', r.vencidos ? 'bad' : '')}${kpi('ventas', cop(r.ventas_30), `Ventas en 30 días (${r.pagos_30})`, '', '#ventas')}${kpi('codigos', r.codigos_libres, 'Códigos sin estrenar', '', '#codigos')}${kpi('uso', r.usan_hoy, `Entraron hoy · ${r.usan_7} en 7 días`)}</div>
