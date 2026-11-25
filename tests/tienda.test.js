@@ -79,3 +79,24 @@ test('el ahorro de un paquete es de verdad: suma lo que se vende suelto y, si al
   assert.equal(t({ id: 'x', da: { cursos: ['preuda'], dias: 90, libros: [1] } }, A, P), 0);
   assert.equal(t({ id: 'x', da: { fisicos: [1] } }, A, P), 0);
 });
+
+// ---- tienda viva (spec 2026-11-24-tienda-viva) ----
+test('el morral propone el juego solo si de verdad sale mejor que lo suelto', () => {
+  const m = f('tiendaMejora'), L = (id, n, p) => ({ id, tipo: 'fisico', precio: p, da: { fisicos: [n] } });
+  const arts = [L('a', 1, 60), L('b', 2, 50), { id: 'j', tipo: 'fisico', precio: 90, da: { fisicos: [1, 2], libros: [1, 2] } }, { id: 'p', tipo: 'paquete', precio: 10, da: { cursos: ['x'], fisicos: [1, 2] } }, { id: 'd', tipo: 'digital', precio: 5, da: { libros: [1] } }];
+  const it = (...ids) => ids.map(id => ({ id, cantidad: 1 }));
+  const r = m(it('a', 'b'), arts, false);
+  assert.equal(r.a.id, 'j'); assert.equal(r.quita.join(), 'a,b'); assert.equal(r.ahorro, 20);
+  assert.equal(m(it('a'), arts, false), null); assert.equal(m(it('a', 'b', 'j'), arts, false), null, 'ya lo lleva');
+  assert.equal(m(it('a', 'b'), arts.map(x => (x.id === 'j' ? { ...x, precio: 200 } : x)), false), null, 'más caro no se propone');
+});
+test('la rueda no se sale y el reloj cae en la opción más cercana', () => {
+  const c = f('tiendaCerca'), h = f('tiendaHoraCerca');
+  assert.equal([c(-.6, 5), c(1.6, 5), c(9, 5)].join(), '0,2,4');
+  assert.equal([h(.5, [1, 4, 8]), h(3, [1, 4, 8]), h(6.5, [1, 4, 8]), h(12, [1, 4, 8])].join(), '0,1,2,2');
+});
+test('añadir no redibuja la página y todo se puede hacer sin arrastrar', () => {
+  const s = read('js/tienda.js');
+  for (const k of ['data-ctl', 'tiendaRefresca', 'data-bolsa', 'ArrowRight', 'data-hora', 'aria-valuetext']) assert.ok(s.includes(k), k);
+  assert.match(read('css/tienda.css'), /prefers-reduced-motion: reduce\) \{ \.vt-fondo/);
+});

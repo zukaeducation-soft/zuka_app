@@ -6,7 +6,7 @@
 // La narración (Bunny Storage, o media/voz de respaldo) va en su propia caché, que no se borra al cambiar de versión.
 // Spec: docs/superpowers/specs/2026-11-24-configuracion-rapida-segura.md
 
-const VERSION = 'zuka-v366';
+const VERSION = 'zuka-v367';
 // Los scripts van en paquetes (js/paquetes, los arma tools/empaquetar.js con la lista de index.html): guardar cuatro
 // archivos en vez de 750 hace que la app se instale y abra mucho más rápido.
 const SHELL = [
