@@ -17,7 +17,7 @@
         ['Solo este muestra lo recesivo.', { luz: [3] }],
         ['Genotipo son las letras; fenotipo, lo que se ve.', {}],
       ], 'Letras: genotipo. Lo que se ve: fenotipo.'),
-      xpHaz('hoja', 'La nariz ancha (N) domina. Subraya el genotipo de una persona de nariz **angosta**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['NN'], ['Nn'], ['nn']], pista: 'Lo recesivo necesita dos iguales.' }, 'Sin ninguna N se ve lo recesivo.')],
+      xpHaz('hoja', 'En la arveja, la semilla lisa (R) domina a la rugosa. Subraya el genotipo de una planta de semilla **rugosa**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['RR'], ['Rr'], ['rr']], pista: 'Lo recesivo necesita dos iguales.' }, 'Sin ninguna R se ve lo recesivo.')],
     ['El cuadro',
       xpMira('dibujo', 'Segunda idea: el **cuadro** muestra las cuatro combinaciones.', { dib: cuadro, v: { p: ['B', 'b'], m: ['B', 'b'], n: 0, t: '' }, alto: 196 }, [
         ['El padre puede dar B o b; la madre también.', {}],
@@ -28,9 +28,9 @@
       ], 'Bb con Bb: tres a uno.'),
       xpHaz('fichas', 'Se cruza Rr con rr. Pon cuántas casillas de cuatro son Rr y cuántas rr.', { slots: fila('Rr', 'rr'), fichas: ['2', '2', '1', '3', '4'], meta: ['2', '2'], alto: 96, pista: 'Uno da R o r; el otro, solo r.' }, 'La mitad de cada una.')],
     ['Lo que se espera',
-      xpMira('fichas', 'Tercera idea: la probabilidad vale en **muchos** nacimientos, no en cada camada.', { slots: fila('esperado', 'en 4', 'en 400'), fichas: ['1 de 4', '0 ó 2', '98'], alto: 96 }, [
+      xpMira('fichas', 'Tercera idea: la probabilidad vale en **muchos** nacimientos, no en cada camada.', { slots: fila('esperado', 'en 4', 'en 400'), fichas: ['1 de 4', '0 o 2', '98'], alto: 96 }, [
         ['Se espera uno recesivo de cada cuatro.', { pon: { 0: '1 de 4' } }],
-        ['En una camada de cuatro puede salir otra cosa.', { pon: { 1: '0 ó 2' } }],
+        ['En una camada de cuatro puede salir otra cosa.', { pon: { 1: '0 o 2' } }],
         ['En cuatrocientas se acerca a cien.', { pon: { 2: '98' } }, '$400 \\div 4 = 100$'],
         ['También hay genes sin dominancia: flores rosadas.', {}],
         ['Y genes en el cromosoma X: más frecuentes en hombres.', {}],
@@ -56,7 +56,7 @@
         ['Por mitosis: dos iguales, con cuatro.', { n: 2, t: 'mitosis: 2 células, 4 cada una' }],
         ['Sirve para crecer y reparar.', {}],
         ['Por meiosis: cuatro, con la mitad.', { n: 4, c: 2, t: 'meiosis: 4 células, 2 cada una' }],
-        ['Sirve para formar gametos, y todos son distintos.', {}],
+        ['Sirve para formar gametos, y casi siempre son distintos.', {}],
       ], 'Mitosis: dos iguales. Meiosis: cuatro con la mitad.'),
       xpHaz('fichas', 'Una especie tiene 20 cromosomas. Pon los de sus gametos y los del cigoto.', { slots: fila('gameto', 'cigoto'), fichas: ['10', '20', '40', '5', '80'], meta: ['10', '20'], alto: 96, pista: 'El gameto lleva la mitad; dos gametos se juntan.' }, '$20 \\div 2 = 10$ y $10 + 10 = 20$.')],
     ['El seguro de la variedad',
@@ -67,7 +67,7 @@
         ['Entre distintas, alguna aguanta.', { luz: [3], nota: { 3: 'sobreviven' } }],
         ['Por eso se guardan semillas viejas.', {}],
       ], 'Variedad: el seguro de vida de una especie.'),
-      xpHaz('hoja', 'Subraya el cultivo con **menor** riesgo ante un hongo nuevo.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Mil matas de un mismo esqueje'], ['Mil matas de semillas de muchas plantas'], ['Mil matas de una sola bacteria']], pista: '¿Dónde hay plantas distintas?' }, 'La variedad aumenta la opción de que alguna resista.')],
+      xpHaz('hoja', 'Subraya el cultivo con **menor** riesgo ante un hongo nuevo.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Mil matas de un mismo esqueje'], ['Mil matas de semillas de muchas plantas'], ['Mil matas de estolones de una sola planta']], pista: '¿Dónde hay plantas distintas?' }, 'La variedad aumenta la opción de que alguna resista.')],
     ['Ahora sí, un problema',
       xpHaz('hoja', 'Una mula nace de yegua (64 cromosomas) y burro (62). Subraya cuántos tiene.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['126'], ['64'], ['63']], pista: 'Cada gameto lleva la mitad.' }, '$32 + 31 = 63$.')],
   ], 'Uno o dos, copiar o reducir, y variar.');
@@ -99,7 +99,7 @@
         ['Y lo vemos ocurrir hoy.', { luz: [3], nota: { 3: 'ahora' } }],
         ['Por eso el antibiótico se toma completo.', { luz: [3] }],
       ], 'Roca, huesos, ADN y lo que pasa hoy.'),
-      xpHaz('hoja', 'Subraya por qué no se debe suspender un antibiótico.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Quedan vivas las más resistentes.'], ['Las bacterias aprenden.'], ['El remedio se daña.']], pista: '¿Cuáles mueren primero?' }, 'Mueren las sensibles; las otras se multiplican.')],
+      xpHaz('hoja', 'La aleta de la ballena y el ala del murciélago tienen los mismos huesos. Subraya lo que sugiere.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Tienen un antepasado común.'], ['Viven en el mismo lugar.'], ['Comen lo mismo.']], pista: 'Una nada y el otro vuela: ¿de dónde viene el plan?' }, 'Un mismo plan heredado, acomodado distinto.')],
     ['Ahora sí, un problema',
       xpHaz('fichas', 'De 100 insectos, 5 resisten un veneno. Tras fumigar quedan 4 resistentes y 6 que no. Pon el porcentaje de resistentes antes y después.', { slots: fila('antes (%)', 'después (%)'), fichas: ['5', '40', '4', '10', '60'], meta: ['5', '40'], alto: 96, pista: 'Compara con el total de cada momento.' }, '5 de 100 y 4 de 10.')],
   ], 'Cambia la proporción, el ambiente escoge y hay pruebas.');
