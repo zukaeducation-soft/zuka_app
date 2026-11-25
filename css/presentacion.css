@@ -50,7 +50,7 @@
 }
 
 /* carrusel */
-.pz-hero { position: relative; overflow: hidden; background-color: #0b5ed7; transition: background-color .45s ease; }
+.pz-hero { position: relative; overflow: hidden; background-color: #a3e635; transition: background-color .45s ease; }
 .pz-pista { position: relative; display: flex; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .pz-pista::-webkit-scrollbar { display: none; }
 .pz-lamina { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; display: grid; }
@@ -59,7 +59,7 @@
 .pz-lam-fig { min-width: 0; display: grid; place-items: center; }
 .pz-lam-k { justify-self: start; padding: 7px 14px; border-radius: 999px; background: var(--ink); color: #f7f9ff; font-weight: 600; font-size: 15px; }
 #landing :is(.pz-hero h1, .pz-hero h2) { font-family: var(--display); font-weight: 600; font-size: clamp(34px, 9.6vw, 52px); line-height: 1.02; letter-spacing: -.028em; text-wrap: balance; color: var(--ink); }
-#landing .pz-hero em { color: inherit; text-decoration: underline; text-decoration-thickness: .09em; text-underline-offset: .12em; text-decoration-color: #7cc4ff; text-decoration-skip-ink: none; }
+#landing .pz-hero em { color: inherit; text-decoration: underline; text-decoration-thickness: .09em; text-underline-offset: .12em; text-decoration-color: #ffffff; text-decoration-skip-ink: none; }
 .pz-lead { color: var(--mute); font-size: 17px; line-height: 1.5; max-width: 34em; text-wrap: pretty; }
 .pz-ctas { display: flex; flex-wrap: wrap; gap: 10px; }
 .pz-ctas .btn { width: auto; flex: 1 1 auto; border-radius: 999px; padding: 15px 16px; font-size: 16px; white-space: nowrap; }
