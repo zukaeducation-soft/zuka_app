@@ -8383,7 +8383,7 @@ xpLec('icf-sc-modelos-2', [
         ['Se agregan dos, no tres.', { pon: { 2: '2 L' } }, '$3 - 1 = 2$'],
         ['Ojo: el volumen final no es lo agregado.', {}],
       ], 'Gramos iguales; resta lo que ya había.'),
-      xpHaz('fichas', '2 L a 9 g/L se llevan a 3 g/L. Pon el volumen final y el agua que se agrega.', { slots: fila('final (L)', 'agua (L)'), fichas: ['6', '4', '18', '3', '2'], meta: ['6', '4'], alto: 96, pista: 'Hay 18 g.' }, '$18 \\div 3 = 6$ y $6 - 2 = 4$.')],
+      xpHaz('fichas', '3 L a 8 g/L se llevan a 2 g/L. Pon el volumen final y el agua que se agrega.', { slots: fila('final (L)', 'agua (L)'), fichas: ['12', '9', '24', '8', '3'], meta: ['12', '9'], alto: 96, pista: 'Hay 24 g.' }, '$24 \\div 2 = 12$ y $12 - 3 = 9$.')],
     ['Otras cosas que se hacen',
       xpMira('hoja', 'Tercera idea: **evaporar** concentra; **sacar** un poco no cambia nada.', { paras: [['Evaporar agua'], ['Agregar soluto'], ['Servir un vaso'], ['1 ppm = 1 mg por kg']] }, [
         ['Menos agua, mismo soluto.', { luz: [0], nota: { 0: 'sube' } }],
@@ -8431,11 +8431,11 @@ xpLec('icf-sc-modelos-2', [
 
   xpLec('icf-cn-electrico-2', [
     ['Cargas',
-      xpMira('dibujo', 'Empecemos por la idea: iguales se **repelen**, distintas se **atraen**; y la **distancia** importa mucho.', { dib: cargas, v: { d: 160, s: -1, f: 20, t: '' }, alto: 158 }, [
+      xpMira('dibujo', 'Empecemos por la idea: iguales se **repelen**, distintas se **atraen**; y la **distancia** importa mucho.', { dib: cargas, v: { d: 160, s: -1, f: 9, t: '' }, alto: 158 }, [
         ['Dos cargas negativas se repelen.', { t: 'iguales: se repelen' }],
         ['Una positiva y una negativa se atraen.', { s: 1, t: 'distintas: se atraen' }],
         ['Al acercarse, la fuerza crece.', { d: 80, f: 36, t: 'a la mitad: 4 veces más' }],
-        ['Al alejarse, baja con el cuadrado.', { d: 200, f: 10, t: 'más lejos, menos' }],
+        ['Al alejarse, baja con el cuadrado.', { d: 200, f: 5.8, t: 'más lejos, menos' }],
         ['La carga no se crea: pasa de un cuerpo a otro.', {}],
       ], 'Al doble de lejos, la cuarta parte.'),
       xpHaz('fichas', 'Dos cargas se atraen con fuerza 100. Pon la fuerza al doble de distancia y con una carga tres veces mayor.', { slots: fila('doble distancia', 'carga · 3'), fichas: ['25', '300', '50', '900', '200'], meta: ['25', '300'], alto: 96, pista: 'La distancia, al cuadrado; la carga, no.' }, '$100 \\div 4 = 25$ y $100 \\cdot 3 = 300$.')],
@@ -16426,9 +16426,9 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     ['La pila', 'La más alta de cada columna.', 'vista-frente', 'Plano desde arriba con la altura de cada torre. Toca lo que se ve **de frente**.', { h: [[1, 3, 1], [2, 1, 1], [1, 2, 4]], alto: 4 }, 'Se ven 2, 3 y 4.', ['Mira columna por columna.', 'De cada columna se ve la torre más alta.'], '2, 3, 4']],
     'A queda en (−3, 2) y de frente se ven 2, 3 y 4.', 'Signos para el giro; la más alta para la vista.');
   reto('espa-2', ['icf-ma-espacio-3'], 3, 'El terreno', 'Restar y promediar', 'Un terreno con forma de paralelogramo y un pozo en su centro.', [
-    ['La esquina', 'Los lados opuestos van igual.', 'cuarto-vertice', 'A, B y C son esquinas **seguidas** del terreno. Arrastra **D**.', { A: [-5, 1], B: [-1, 4], C: [5, 2] }, 'De B a A: 4 a la izquierda y 3 abajo; desde C: $(1, -1)$.', ['D está junto a A y a C.', 'Repite desde C lo que se camina de B a A.'], '(1, −1)'],
-    ['El pozo', 'El centro es el medio de una diagonal.', 'punto-medio', 'El pozo está en el medio de la diagonal que va de **A** a **B**. Arrástralo.', { A: [-5, 1], B: [5, 3] }, '$\\tfrac{-5 + 5}{2} = 0$ y $\\tfrac{1 + 3}{2} = 2$.', ['Promedia las dos coordenadas de lado.', 'Promedia también las dos alturas.'], '(0, 2)']],
-    'D queda en (1, −1) y el pozo en (0, 2).', 'Restar para copiar un lado, promediar para el medio.');
+    ['La esquina', 'Los lados opuestos van igual.', 'cuarto-vertice', 'A, B y C son esquinas **seguidas** del terreno. Arrastra **D**.', { A: [-5, 1], B: [-1, 4], C: [5, 3] }, 'De B a A: 4 a la izquierda y 3 abajo; desde C: $(1, 0)$.', ['D está junto a A y a C.', 'Repite desde C lo que se camina de B a A.'], '(1, 0)'],
+    ['El pozo', 'El centro es el medio de una diagonal.', 'punto-medio', 'El pozo está en el medio de la diagonal que sale de **A**; su otro extremo, la esquina opuesta, aquí se llama **B**.', { A: [-5, 1], B: [5, 3] }, '$\\tfrac{-5 + 5}{2} = 0$ y $\\tfrac{1 + 3}{2} = 2$.', ['Promedia las dos coordenadas de lado.', 'Promedia también las dos alturas.'], '(0, 2)']],
+    'D queda en (1, 0) y el pozo en (0, 2).', 'Restar para copiar un lado, promediar para el medio.');
 
   reto('gas-1', ['icf-cn-gases-1'], 2, 'El pistón y el globo', 'Qué queda fijo', 'Un gas en dos situaciones. Mira qué no cambia.', [
     ['El pistón', 'El producto no cambia.', 'boyle-embolo', 'Un gas ocupa **8 L** a **3 atm**. Con la misma temperatura pasa a **4 atm**. Mueve el émbolo.', { P: 3, V: 8, P2: 4, max: 12, paso: 1 }, '$3 \\cdot 8 = 24$ y $24 \\div 4 = 6$ L.', ['Multiplica la presión por el volumen de antes.', 'Ese producto debe dar igual con la presión nueva.'], '24 ÷ 4 = 6 L'],
@@ -16440,9 +16440,9 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     'Se preparan 2.25 L y se agrega medio litro de agua.', 'El azúcar es la misma; cambia el volumen.');
 
   reto('elec-1', ['icf-cn-electrico-1'], 2, 'La linterna', 'Ohm y camino', 'Una linterna con una pila y dos resistencias.', [
-    ['La corriente', 'Voltaje entre resistencia.', 'corriente-resistor', 'La pila es de **9 V** y la resistencia, de **6 Ω**. Mueve la corriente.', { V: 9, R: 6, max: 4, paso: 0.25 }, '$9 \\div 6 = 1.5$ A.', ['La corriente por la resistencia da el voltaje.', 'Divide el voltaje entre la resistencia.'], '9 ÷ 6 = 1.5 A'],
+    ['La corriente', 'Voltaje entre resistencia.', 'corriente-resistor', 'La pila es de **9 V** y la resistencia, de **4 Ω**. Mueve la corriente.', { V: 9, R: 4, max: 4, paso: 0.25 }, '$9 \\div 4 = 2.25$ A.', ['La corriente por la resistencia da el voltaje.', 'Divide el voltaje entre la resistencia.'], '9 ÷ 4 = 2.25 A'],
     ['La otra', 'En serie se suman.', 'serie-resistencia', 'Con **30 V** pasan **3 A** por dos resistencias en serie. Una es de **6 Ω**. Mueve la otra.', { V: 30, I: 3, R1: 6, max: 12 }, '$30 \\div 3 = 10$ y $10 - 6 = 4$ Ω.', ['Halla la resistencia de todo el camino.', 'Quítale la que ya conoces.'], '10 − 6 = 4 Ω']],
-    'Pasan 1.5 A y la otra resistencia es de 4 Ω.', 'Ohm para todo el camino y después resta.');
+    'Pasan 2.25 A y la otra resistencia es de 4 Ω.', 'Ohm para todo el camino y después resta.');
   const CLIPS = D('clips', 'El clavo y los clips', [
     'Un grupo enrolló alambre en un clavo de hierro y lo conectó a una pila. Con 20 vueltas atrajo 4 clips; con 40, 8 clips; con 60, 12 clips. Sin pila no atrajo ninguno.',
     'Después usó una barra de madera con 60 vueltas: atrajo uno.']);

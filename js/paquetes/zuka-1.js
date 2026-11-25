@@ -5531,7 +5531,7 @@ GAMES['atrapa-punto'] = (() => {
   const POINTS = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330];
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => r.angles.includes(state.picks[i]));
+    const ok = params.rounds.every((r, i) => r.angles.includes(state.picks?.[i]));
     return { ok, solution: params.rounds.map(r => `${r.prompt} → ${r.angles.map(a => `${a}°`).join(' o ')}`).join(' · ') };
   }
 
@@ -6951,7 +6951,7 @@ GAMES['mapa-tesoro'] = (() => {
   const okOne = (w, r) => !!w && w.k === want(r).k && Math.abs(((w.deg - want(r).deg) % 360 + 360) % 360) < 1e-6;
 
   function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okOne(state.walks?.[i], r));
+    const ok = params.rounds.every((r, i) => okOne(state.walks[i], r));
     const solution = params.rounds.map(r => { const w = want(r); return `${r.label}: ${radTxt(w.k)} pasos a ${w.deg}°`; }).join(' · ');
     return { ok, solution };
   }
@@ -25973,7 +25973,7 @@ GAMES['torres-vistas'] = (() => {
     layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
     enter(G) { G.grab = null; lay(G); },
     draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { h: want(r) } : G.s, c = G.c, o = G.o, v = views(s.h), good = ok(s, r);
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { h: want(r) } : G.s, c = G.c, o = G.o, v = views(s.h), good = G.locked && ok(s, r);
       TK.label(p, C, 'desde arriba', o.x + r.front.length * c / 2, o.y - 34, C.mute, 10, 120);
       s.h.forEach((row, j) => row.forEach((hv, i) => { p.stroke(C.ink); p.strokeWeight(1.2); p.fill(RK.al(p, good ? C.ok : C.sky, 40 + hv * 50)); p.rect(o.x + i * c, o.y + j * c, c, c); TK.label(p, C, String(hv), o.x + i * c + c / 2, o.y + j * c + c / 2, C.ink, 13, c); }));
       r.front.forEach((fv, i) => { const vv = v.front[i]; TK.label(p, C, `${fv}`, o.x + i * c + c / 2, o.y - 14, vv === fv ? C.ok : C.coral, 11, c); });
@@ -26018,7 +26018,7 @@ GAMES['cubos-ocultos'] = (() => {
         p.fill(RK.al(p, C.sky, 170)); p.quad(x, y, x + c, y, x + c + dx, y - dy, x + dx, y - dy);
         p.fill(RK.al(p, C.sky, 120)); p.quad(x + c, y, x + c + dx, y - dy, x + c + dx, y - dy + c, x + c, y + c);
       }
-      const good = ok(s, r);
+      const good = G.locked && ok(s, r);
       G.X = RK.track(p, C, 30, G.W - 30, G.tY, 40, s.n - 1, i => ((i + 1) % 5 === 0 ? String(i + 1) : null));
       RK.strip(p, C, G.fb, `$\\text{${s.n} cubos}$`, { kicker: good ? 'Contaste también los de abajo' : 'Cuenta columna por columna', col: G.locked || good ? C.ok : C.brand, size: 17 });
     },
@@ -26220,7 +26220,7 @@ GAMES['espejo-figura'] = (() => {
     layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
     enter(G) { G.paint = null; lay(G); },
     draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { on: want(r) } : G.s, u = G.u, o = G.o, good = ok(s, r);
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { on: want(r) } : G.s, u = G.u, o = G.o, good = G.locked && ok(s, r);
       for (let x = 0; x < r.n; x++) for (let y = 0; y < r.n; y++) {
         const k = `${x},${y}`, fig = r.cells.some(c => c[0] === x && c[1] === y), on = s.on.includes(k);
         p.stroke(RK.al(p, C.line, 140)); p.strokeWeight(1); p.fill(fig ? C.sky : on ? (good ? C.ok : C.coral) : side(r, x, y) ? RK.al(p, C.card, 200) : RK.al(p, C.card, 90)); p.rect(o.x + x * u, o.y + y * u, u, u);
@@ -26257,7 +26257,7 @@ GAMES['gira-figura'] = (() => {
     layout(G) { G.cL = { x: G.W * 0.27, y: 190 }; G.cR = { x: G.W * 0.73, y: 190 }; G.u = Math.min(22, G.W * 0.06); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
     enter(G) { G.grab = false; },
     draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { q: r.k } : G.s, good = ok(s, r), u = G.u;
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { q: r.k } : G.s, good = G.locked && ok(s, r), u = G.u;
       const shape = (cells, c, col) => { const w = Math.max(...cells.map(q => q[0])) + 1, h = Math.max(...cells.map(q => q[1])) + 1; cells.forEach(([x, y]) => { p.stroke(C.bg); p.strokeWeight(1.5); p.fill(col); p.rect(c.x - w * u / 2 + x * u, c.y - h * u / 2 + y * u, u, u, 2); }); };
       shape(rot(r.cells, r.k), G.cL, C.sky);
       p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 4]); p.circle(G.cR.x, G.cR.y, 130); p.drawingContext.setLineDash([]);
