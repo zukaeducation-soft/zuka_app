@@ -30,7 +30,8 @@ const view = $('#view');
 // ---- tema claro / oscuro ----
 const darkQuery = matchMedia('(prefers-color-scheme: dark)');
 function applyTheme() {
-  const t = S.theme === 'system' ? (darkQuery.matches ? 'dark' : 'light') : S.theme;
+  // La portada abre en claro; solo va oscura si alguien eligió el tema oscuro.
+  const t = S.theme === 'system' ? (darkQuery.matches && !presentacionClara() ? 'dark' : 'light') : S.theme;
   document.documentElement.dataset.theme = t;
   // Mientras se ve la animación de entrada (data-intro), la barra del celular sigue oscura como la portada.
   $('meta[name="theme-color"]').content = document.documentElement.dataset.intro ? '#07080f' : t === 'dark' ? '#07080f' : '#f4f6fb';
