@@ -75,17 +75,12 @@ const hmSaludo = h => (h < 5 ? 'Buenas noches' : h < 12 ? 'Buenos días' : h < 1
 // Filtros del Inicio: para qué sirve cada curso. Pura.
 const HM_FILTROS = [['todos', 'Todos'], ['entrar', 'Entrar a la U', ['preuda', 'preicfes']], ['carrera', 'Para la carrera', ['algebra', 'trig', 'calc', 'geo', 'int', 'lin', 'fis']]];
 const hmPasa = (c, f) => { const x = HM_FILTROS.find(y => y[0] === f); return !x || !x[2] || x[2].includes(c.id); };
-let hmFiltro = 'todos', hmJuguete = null;
-// El juguete del día: un dibujo de la portada que se mueve con el dedo; cambia cada día. Pura: 0 o 1.
-const hmDeHoy = d => (d.getFullYear() * 372 + d.getMonth() * 31 + d.getDate()) % 2;
-const HM_JUGUETES = [
-  { t: '¿Dónde lo cortas?', p: 'Mueve el corte: el cuadrado siempre se arma con las mismas cuatro piezas.', fig: () => PZ_AREA, cls: 'pz-cuenta-area', vive: el => pzAreaViva(el) },
-  { t: '¿Dónde se equilibra?', p: 'Corre el peso hasta que la palanca quede quieta.', fig: () => PZ_PALANCA, cls: 'pz-cuenta-pal', vive: el => pzPalancaViva(el) },
-];
+let hmFiltro = 'todos';
 // Aro de avance alrededor de una figura.
 const aroHTML = (p, dentro, cls = '') => `<span class="aro ${cls}" style="--p:${Math.max(0, Math.min(1, p)).toFixed(3)}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="45" pathLength="1"/><circle class="v" cx="50" cy="50" r="45" pathLength="1"/></svg><span class="aro-in">${dentro}</span></span>`;
 
 function renderHome() {
+  if (rolEquipo()) return renderHomeEquipo();   // js/equipo.js: docentes y gestores
   const mine = cursosInscritos(), now = new Date(), hoy = todayXP(), goalP = Math.min(1, hoy / S.goal), name = (S.name || '').trim().split(/\s+/)[0], racha = streakNow();
   const y = $('.hm', view) ? view.scrollTop : 0, sem = dkSemana(dkActive(now), now), b = activeTutorias(S.tutorias, +now)[0], nx = b ? null : nextFree(+now, []);
   const tarjeta = c => {
@@ -113,10 +108,9 @@ function renderHome() {
     ${simulacrosHTML()}${metasHTML()}
     <section class="hm-cursos"><div class="hm-fila"><h2 class="home-h2">Cursos</h2><div class="hm-filtros" role="group" aria-label="Filtrar cursos">${HM_FILTROS.filter(f => cursosVisibles().some(c => hmPasa(c, f[0]))).map(f => `<button type="button" data-hm="${f[0]}" aria-pressed="${f[0] === hmFiltro}">${f[1]}</button>`).join('')}</div></div>
       <div class="home-courses"></div></section>
-    <div class="hm-dos"><section class="hm-jug"><div class="hm-jt"><p class="hm-k">Calienta la mente</p><h2></h2><p class="hm-jp"></p><p class="pz-cuenta"></p><button class="hm-otro" type="button">Otro juguete ${ICON.right}</button></div><div class="hm-fig"></div></section>
-      <section class="hm-ase"><span class="hm-cal" aria-hidden="true">${(() => { const d = b ? tuDate(b.date) : nx ? tuDate(nx.date) : now; return `<small>${TU_MON[d.getMonth()]}</small><b>${d.getDate()}</b>`; })()}</span><div><h2>${b ? 'Tu próxima asesoría' : '¿Te enredas con un tema?'}</h2>
+    <section class="hm-ase"><span class="hm-cal" aria-hidden="true">${(() => { const d = b ? tuDate(b.date) : nx ? tuDate(nx.date) : now; return `<small>${TU_MON[d.getMonth()]}</small><b>${d.getDate()}</b>`; })()}</span><div><h2>${b ? 'Tu próxima asesoría' : '¿Te enredas con un tema?'}</h2>
         <p>${b ? `<b>${esc(dayLabel(b.date, +now))}, ${hourLabel(b.time)}</b> · ${esc(tuCourse(b.course)?.name || 'Asesoría')}` : nx ? `Hay cupo con un profe: <b>${esc(dayLabel(nx.date, +now))}, ${hourLabel(nx.time)}</b>` : 'No quedan cupos esta semana.'}</p>
-        <button class="btn ghost" type="button" data-dk="tutorias">${b ? 'Ver mi asesoría' : 'Separar asesoría'}</button></div></section></div>
+        <button class="btn ghost" type="button" data-dk="tutorias">${b ? 'Ver mi asesoría' : 'Separar asesoría'}</button></div></section>
   </div></div>`;
   metasBind(view); simulacrosBind(view);
   const pintaCursos = () => {
@@ -127,13 +121,7 @@ function renderHome() {
     inclina($('.home-courses', view));
   };
   view.querySelectorAll('[data-hm]').forEach(k => k.onclick = () => { hmFiltro = k.dataset.hm; pintaCursos(); });
-  const jug = () => {
-    const j = HM_JUGUETES[hmJuguete ?? hmDeHoy(now)], s = $('.hm-jug', view);
-    $('h2', s).textContent = j.t; $('.hm-jp', s).textContent = j.p; $('.pz-cuenta', s).className = `pz-cuenta ${j.cls}`; $('.pz-cuenta', s).innerHTML = '';
-    $('.hm-fig', s).innerHTML = j.fig(); j.vive(s);
-  };
-  $('.hm-otro', view).onclick = () => { hmJuguete = ((hmJuguete ?? hmDeHoy(now)) + 1) % HM_JUGUETES.length; jug(); };
-  pintaCursos(); jug(); dkBind(view); inclina($('.hm-hero', view));
+  pintaCursos(); dkBind(view); inclina($('.hm-hero', view));
   $('[data-install]', view)?.addEventListener('click', promptInstall);
   $('[data-hide-install]', view)?.addEventListener('click', () => { S.hideInstall = true; save(); renderHome(); });
   view.scrollTop = y;

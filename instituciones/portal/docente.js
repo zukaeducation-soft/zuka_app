@@ -9,6 +9,12 @@ async function cargaDocencia() {
   if (!D.cursos.some(c => c.id === 'preicfes')) { X = null; return; }
   try { [X, B] = await Promise.all([doc('datos'), BANCO]); } catch (e) { if (!/PGRST202|42883/.test(e.code || '')) throw e; X = null; }
   if (!B) X = null;
+  // El docente responsable solo ve lo suyo: el Preicfes y las lecciones de sus componentes, en todas las vistas.
+  if (X && !gestor() && X.asignaciones.length) {
+    const pre = compsMios().map(c => c.prefijo), es = id => pre.some(p => id.startsWith(p));
+    D.cursos = D.cursos.filter(c => c.id === 'preicfes'); D.lecciones = D.lecciones.filter(l => l.curso === 'preicfes' && es(l.id)); D.metas = D.metas.filter(m => m.curso === 'preicfes' && m.lecciones.some(es)).map(m => ({ ...m, lecciones: m.lecciones.filter(es) }));
+    D.estudiantes = D.estudiantes.filter(e => e.cursos.includes('preicfes')).map(e => ({ ...e, cursos: ['preicfes'] }));
+  }
   det.clear();
 }
 async function cambiaD(a, p, dice) { const r = await doc(a, p); await carga(); marco(); ruta(false); if (dice) toast(dice); return r; }

@@ -42,7 +42,7 @@ const pfQueda = (x, a) => { if (a.dias === 0) return 0; if (!x.hasta) return 1; 
 // Antes de repintar: guarda foco, nombre a medias y desplazamientos; devuelve lo que los repone. Si no se veía Tú o cambió la cuenta, de cero.
 function pfGuarda() {
   const uid = Cuenta.user?.id || '', f = document.activeElement, dentro = $('.pf', view) && view.contains(f);
-  if (!$('.pf', view) || pfVer.uid !== uid) { pfVer = { atras: false, edita: false, dia: null, uid }; return () => {}; }
+  if (!$('.pm-mapa', view) || pfVer.uid !== uid) { pfVer = { atras: false, edita: false, dia: null, uid }; return () => {}; }
   const y = view.scrollTop, x = $('.pm-mapa', view).scrollLeft, nom = $('.name-input', view), en = dentro && f === nom, v = nom.value, cur = en ? [nom.selectionStart, nom.selectionEnd] : null;
   const sel = !dentro || en ? '' : ['.pm-riel', '.pm-mapa', '[data-settings]'].find(s => f.matches(s)) || [...f.attributes].filter(t => t.name.startsWith('data-') && t.value).map(t => `[${t.name}="${CSS.escape(t.value)}"]`).join('');
   const vueltos = [...view.querySelectorAll('[data-logro][aria-expanded="true"]')].map(b => b.dataset.logro);
@@ -62,7 +62,7 @@ function pfDatos() {
 function pfCarneHTML() {
   const k = pfCarne(), v = pfNivel(S.xp), cod = typeof Cuenta !== 'undefined' && Cuenta.codigo, desde = typeof Cuenta !== 'undefined' && Cuenta.perfil?.creado_en;
   return `<section class="cn-zona${pfVer.atras ? ' atras' : ''}${pfVer.edita ? ' edita' : ''}" style="--c:${esc(k.color)}"><div class="cn" data-inclina><div class="cn-in">
-      <div class="cn-f cn-frente"><span class="cn-marca" aria-hidden="true">ZUKA</span><div class="cn-foto">${pfCara(k)}</div><div class="cn-d"><label class="cn-nom"><span class="hm-sr">Tu nombre</span><input class="name-input" value="${esc(S.name)}" placeholder="Escribe tu nombre" maxlength="24" autocomplete="given-name"></label>
+      <div class="cn-f cn-frente"><span class="cn-marca" aria-hidden="true">ZUKA</span><div class="cn-foto">${pfCara(k)}</div><div class="cn-d"><label class="cn-nom"><span class="hm-sr">Tu nombre</span><input class="name-input" value="${esc(S.name)}" placeholder="Escribe tu nombre" maxlength="24" autocomplete="given-name"${cuentaFija() ? ' readonly title="Lo cambia tu institución"' : ''}></label>
         <p class="cn-niv"><b>Nivel ${v.n}</b> ${v.titulo}</p><span class="cn-barra" role="img" aria-label="Te faltan ${v.falta} XP para el nivel ${v.n + 1}"><i style="width:${(v.p * 100).toFixed(1)}%"></i></span><p class="cn-xp">${S.xp} XP · faltan ${v.falta}</p></div></div>
       <div class="cn-f cn-dorso"><span class="cn-marca" aria-hidden="true">ZUKA</span>${cod ? `<p>Mi código de acceso</p><button class="cn-cod" type="button" data-acct="copia" aria-label="Copiar mi código ${muestraCodigo(cod)}"><b>${muestraCodigo(cod)}</b><span>Copiar</span></button><p class="cn-nota">Con este código entras siempre y conservas tu avance.</p>` : '<p>Tu carné de Zuka</p><p class="cn-nota">Cuando tengas un código de acceso, lo verás aquí.</p>'}${desde ? `<p class="cn-nota">En Zuka desde el ${fechaCorta(desde)}</p>` : ''}</div></div></div>
     <div class="cn-acts"><button class="cn-b" type="button" data-cn="voltea">${ICON.right}<span>${pfVer.atras ? 'Ver el frente' : cod ? 'Ver mi código' : 'Voltear'}</span></button><button class="cn-b" type="button" data-cn="edita" aria-expanded="${pfVer.edita}">${ICON.star}<span>Personalizar</span></button><button class="cn-b prof-gear" type="button" data-settings aria-label="Ajustes">${ICON.gear}<span>Ajustes</span></button></div>
@@ -99,8 +99,8 @@ function pfBind(root) {
   const ligaCarne = () => {
     const z = zona(), nom = $('.name-input', z), dorso = () => { $('.cn-frente', z).inert = pfVer.atras; $('.cn-dorso', z).inert = !pfVer.atras; };
     dorso(); inclina(z); cuentaBind(z);
-    nom.oninput = () => { S.name = nom.value.trim(); save(); };
-    nom.onchange = () => { S.name = nom.value = nom.value.trim(); save(); if (pfCarne().pose === 'letra') $('.cn-foto', z).innerHTML = pfCara(pfCarne()); };
+    if (!nom.readOnly) nom.oninput = () => { S.name = nom.value.trim(); save(); };
+    if (!nom.readOnly) nom.onchange = () => { S.name = nom.value = nom.value.trim(); save(); if (pfCarne().pose === 'letra') $('.cn-foto', z).innerHTML = pfCara(pfCarne()); };
     nom.onkeydown = e => { if (e.key === 'Enter') nom.blur(); };
     z.onclick = e => {
       const b = e.target.closest('button'); if (!b) return;

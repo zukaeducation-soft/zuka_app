@@ -130,6 +130,40 @@ select pg_temp.soy('gA'); select is(jsonb_array_length(public.mi_institucion() -
 select pg_temp.soy('uAna'); select is(public.mi_institucion() -> 'equipo', '[]', 'un estudiante no es del equipo');
 select throws_ok('select * from privado.inst_cursos(auth.uid())', '42501', null, 'auxiliar cerrada');
 
+-- ---------- datos: solo el gestor o Zuka (migración 5) ----------
+reset role; insert into public.codigos (codigo, nombre, celular, concede) values ('QWERTYUPAS', 'Otro', '3110000000', '[{"curso":"algebra","tipo":"prueba","dias":3}]');
+select lives_ok(format('select set_config(''request.jwt.claim.sub'', %L, true); select privado.codigo_vincular(''QWERTYUPAS'', %L)', pg_temp.de('dM'), pg_temp.de('dM')), 'canjear un código con celular no se rompe');
+select is(coalesce(current_setting('zuka.equipo', true), ''), '', 'y no deja la puerta abierta');
+delete from public.codigos where codigo = 'QWERTYUPAS'; set local role authenticated;
+select pg_temp.soy('gA'); select pg_temp.inst('equipo_guardar', jsonb_build_object('id', pg_temp.de('r'), 'nombre', 'Mate A Nueva', 'papel', 'docente', 'grupos', '["11A","11B"]'::jsonb));
+reset role; select is((select nombre from public.perfiles where id = pg_temp.de('dM')::uuid), 'Mate A Nueva', 'el nombre del docente llega a su cuenta'); set local role authenticated;
+select pg_temp.soy('gA'); select pg_temp.inst('equipo_guardar', jsonb_build_object('id', pg_temp.de('r'), 'nombre', 'Mate A', 'papel', 'docente', 'grupos', '["11A","11B"]'::jsonb));
+select is(public.mi_institucion() ->> 'fija', 'true', 'la base dice que sus datos son fijos');
+select pg_temp.soy('uAna');
+select throws_ok('update public.perfiles set nombre = ''Otra'' where id = auth.uid()', '42501', null, 'el estudiante no cambia su nombre');
+select throws_ok('update public.perfiles set telefono = ''300'' where id = auth.uid()', '42501', null, 'ni su teléfono');
+select throws_ok('select public.guardar_datos(''{"nombre":"Otra Persona","correo":"a@b.co","telefono":"3001234567","ciudad":"Medellín","genero":"mujer","edad":"18-24","ocupacion":"bachillerato","acepta":true}'')', null, null, 'ni por Mis datos');
+select is(public.mi_institucion() -> 'persona' ->> 'grupo', '11A', 'sabe su grupo');
+select is(public.mi_institucion() -> 'equipo', '[]', 'sin datos del contrato');
+select pg_temp.soy('dM'); select throws_ok('update public.perfiles set nombre = ''Otro'' where id = auth.uid()', '42501', null, 'el docente tampoco');
+select ok(not (public.mi_institucion() -> 'equipo' -> 0 ? 'cupos') and not (public.mi_institucion() -> 'equipo' -> 0 ? 'nit'), 'ni ve el contrato');
+select throws_ok(format('select pg_temp.inst(''editar'', ''{"ids":[%s],"nombre":"Cambiada"}'')', pg_temp.de('Ana Uno')), '42501', null, 'ni edita estudiantes');
+select pg_temp.soy('gB'); select throws_ok(format('select pg_temp.inst(''editar'', ''{"ids":[%s],"nombre":"Cambiada"}'')', pg_temp.de('Ana Uno')), '22023', null, 'ni un gestor de otro colegio');
+select pg_temp.soy('gA'); select lives_ok(format('select pg_temp.inst(''editar'', ''{"ids":[%s],"nombre":"Ana Maria Uno"}'')', pg_temp.de('Ana Uno')), 'su gestor sí');
+select is((public.mi_institucion() -> 'equipo' -> 0 ->> 'usados')::int, 2, 'y ve su contrato');
+reset role; select is((select nombre from public.perfiles where id = pg_temp.de('uAna')::uuid), 'Ana Maria Uno', 'y llega a su cuenta');
+insert into quien select 'gid', id::text from public.inst_gestores where nombre = 'Gestora A'; set local role authenticated;
+select lives_ok(format('select pg_temp.inst(''equipo_guardar'', ''{"id":%s,"nombre":"Gestora A2","papel":"gestor","grupos":[]}'')', pg_temp.de('gid')), 'el gestor cambia su nombre en el portal');
+select throws_ok('update public.perfiles set nombre = ''X'' where id = auth.uid()', '42501', null, 'y no por fuera');
+select pg_temp.soy('zuka'); select lives_ok(format('select pg_temp.inst(''editar'', ''{"institucion":"%s","ids":[%s],"nombre":"Ana Uno"}'')', pg_temp.de('A'), pg_temp.de('Ana Uno')), 'Zuka también');
+reset role; insert into public.accesos (usuario, curso, tipo, desde, hasta) values (pg_temp.de('uAna')::uuid, 'algebra', 'pago', now(), now() + interval '9 days'); set local role authenticated;
+select pg_temp.soy('uAna'); select lives_ok('update public.perfiles set telefono = ''301'' where id = auth.uid()', 'quien compró por su cuenta maneja lo suyo');
+reset role; delete from public.accesos where usuario = pg_temp.de('uAna')::uuid; set local role authenticated;
+
+select pg_temp.soy('gA'); select pg_temp.inst('retirar', jsonb_build_object('ids', jsonb_build_array(pg_temp.de('Beto Dos')::bigint))); select pg_temp.inst('editar', jsonb_build_object('ids', jsonb_build_array(pg_temp.de('Beto Dos')::bigint), 'nombre', 'Beto Cambiado'));
+reset role; select is((select nombre from public.perfiles where id = pg_temp.de('uBeto')::uuid), 'Beto Dos', 'a un retirado ya no lo renombran'); set local role authenticated;
+select pg_temp.soy('gA'); select pg_temp.inst('editar', jsonb_build_object('ids', jsonb_build_array(pg_temp.de('Beto Dos')::bigint), 'nombre', 'Beto Dos')); select pg_temp.inst('reactivar', jsonb_build_object('ids', jsonb_build_array(pg_temp.de('Beto Dos')::bigint)));
+
 -- ---------- cambios de grupo y de equipo ----------
 select pg_temp.soy('dM'); insert into quien select 'sd', pg_temp.doc('simulacro_crear', pg_temp.nuevo('matematicas', '["11A","11B"]', '-1 hour', '1 day')::jsonb) ->> 'id';
 select pg_temp.soy('gA'); select pg_temp.doc('asignar', jsonb_build_object('componente', 'matematicas', 'grupos', '["11B"]'::jsonb, 'gestor', pg_temp.de('r2')));

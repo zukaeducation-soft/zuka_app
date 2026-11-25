@@ -117,6 +117,13 @@ function instMeta(m, estudiantes, hechas, hoy) {
   const filas = xs.map(e => { const n = m.lecciones.filter(l => hechas.get(e.id)?.has(l)).length; return { e, n, ok: n === m.lecciones.length }; });
   return { filas, n: filas.length, ok: filas.filter(x => x.ok).length, p: filas.length ? filas.reduce((t, x) => t + x.n, 0) / (filas.length * m.lecciones.length) : 0, quedan: instEntre(hoy, m.hasta) };
 }
+// ¿Sus datos (nombre, grupo, documento…) los maneja su institución? Solo los cambian el gestor, en el portal, o Zuka. Quien compró un curso por su
+// cuenta y lo tiene vigente maneja los suyos. La base repite la regla (privado.inst_fija).
+function instFija({ perfil, accesos = [], inst }, now = Date.now()) {
+  if (!perfil || perfil.rol === 'admin') return false;
+  if (perfil.rol === 'gestor') return true;
+  return !!(inst && inst.nombres && inst.nombres.length) && !accesos.some(a => !a.institucion && a.tipo === 'pago' && a.hasta && new Date(a.hasta) > now);
+}
 // ¿Su institución le maneja los cursos? Entonces la app no le ofrece compras ni asesorías. Quien además compró algo por su cuenta
 // (un curso vigente u horas) conserva la tienda: es suyo.
 function instManda({ perfil, accesos = [], inst, horas = 0 }, now = Date.now()) {

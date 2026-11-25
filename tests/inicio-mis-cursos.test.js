@@ -174,11 +174,11 @@ test('la pesa toma los colores del curso y la base los del tema; «Sigue aprendi
 });
 
 // ---- Inicio y Mis cursos vivos (spec 2026-11-25-inicio-y-mis-cursos) ----
-test('saludo, filtros y juguete del día', () => {
-  const s = get(ctx, 'hmSaludo'), p = get(ctx, 'hmPasa'), j = get(ctx, 'hmDeHoy');
+test('saludo y filtros; sin juguete (pedido del 2026-11-25)', () => {
+  const s = get(ctx, 'hmSaludo'), p = get(ctx, 'hmPasa');
   assert.equal([3, 8, 15, 21].map(s).join('|'), 'Buenas noches|Buenos días|Buenas tardes|Buenas noches');
   assert.equal(p({ id: 'preuda' }, 'entrar'), true); assert.equal(p({ id: 'preuda' }, 'carrera'), false); assert.equal(p({ id: 'x' }, 'todos'), true);
-  assert.notEqual(j(new Date(2026, 10, 25)), j(new Date(2026, 10, 26)), 'cambia de un día al otro');
+  assert.doesNotMatch(read('js/inicio.js'), /Calienta la mente|hm-jug|pzAreaViva/);
 });
 test('el sendero: un trazo que pasa por todos los mundos y se enciende hasta donde va', () => {
   const t = get(ctx, 'mcTrazo'), h = get(ctx, 'mcHasta');

@@ -38,6 +38,7 @@ function datosPide() {
   return true;
 }
 function datosScreen(fija) {
+  if (!fija && cuentaFija()) return toast('Tus datos los cambia el gestor de tu institución.');
   datosAbierta = true;
   const p = Cuenta.perfil || {};
   const d = { ...Object.fromEntries(DATOS_PASOS.flatMap(x => x.campos).map(k => [k, p[k] || ''])), acepta: !!p.datos_en, acepta_mensajes: !!p.acepta_mensajes };
@@ -80,7 +81,7 @@ function datosScreen(fija) {
       try { r = await Cuenta.sb.rpc('guardar_datos', { p: d }); } catch (x) { r = { error: x }; }
       if (!f.isConnected) return;
       b.disabled = false; b.textContent = 'Guardar';
-      if (r.error) return error({ campo: 'acepta', texto: /fetch|network/i.test(r.error.message || '') ? canjeError('red') : 'No se pudieron guardar. Inténtalo de nuevo.' });
+      if (r.error) return error({ campo: 'acepta', texto: /fetch|network/i.test(r.error.message || '') ? canjeError('red') : r.error.code === '42501' ? r.error.message : 'No se pudieron guardar. Inténtalo de nuevo.' });
       S.name = d.nombre.trim().split(/\s+/)[0].slice(0, 24); save();
       await cuentaPerfil();
       cierra(); toast('Datos guardados. ¡Gracias!'); cuentaRepinta();

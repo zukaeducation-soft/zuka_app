@@ -26,10 +26,10 @@
 .hm .hc-body { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 8px; padding: 18px 20px 20px; } .hm .hc-body b { font-size: 25px; } .hm .hc-stats { justify-content: flex-start; align-self: end; } .hm .hc-go { justify-self: start; border: 0; padding: 6px 0 0; font-size: 16px; } .hc-go .i { transition: translate .2s; } .hc-card:hover .hc-go .i { translate: 5px 0; }
 
 /* juguete y asesoría */
-.hm-dos { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
-.hm-jug { --b: #ff8a7a; display: grid; gap: 14px; padding: 22px 18px; border-radius: 26px; border: 1px solid var(--line); background: var(--card); } :root[data-theme="light"] .hm-jug { --b: #c93a24; --ok: #0a7a49; --gold: #8f6200; }
-.hm-jt { display: grid; gap: 8px; align-content: start; } .hm-k { color: var(--mute); font-weight: 600; font-size: 14.5px; } .hm-jug h2, .hm-ase h2 { font: 500 25px/1.15 var(--display); } .hm-jp { color: var(--mute); line-height: 1.45; font-size: 15.5px; } .hm-jug .pz-cuenta { margin-top: 4px; } .hm-fig { display: grid; place-items: center; min-width: 0; } .hm-fig svg { width: 100%; max-width: 380px; height: auto; overflow: visible; user-select: none; -webkit-user-select: none; } .hm-fig .pz-area { max-width: 300px; }
-.hm-otro { justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: color-mix(in srgb, var(--brand) 75%, var(--ink)); font-weight: 600; font-size: 15px; } .hm-otro .i { width: 17px; height: 17px; }
+
+ 
+       
+ 
 .hm-ase { display: flex; gap: 18px; align-items: center; padding: 22px 18px; border-radius: 26px; border: 1px solid var(--line); background: radial-gradient(100% 140% at 0 0, color-mix(in srgb, var(--ok) 14%, var(--card)), var(--card) 70%); } .hm-ase > div { display: grid; gap: 8px; min-width: 0; } .hm-ase p { color: var(--mute); line-height: 1.45; } .hm-ase p b { color: var(--ink); } .hm-ase .btn { width: auto; justify-self: start; margin-top: 4px; }
 .hm-cal { flex: none; display: grid; justify-items: center; width: 78px; border-radius: 18px; overflow: hidden; background: var(--bg); border: 1px solid var(--line); } .hm-cal small { width: 100%; padding: 4px 0; text-align: center; background: var(--bad); color: #190205; font-weight: 700; font-size: 14px; } .hm-cal b { font: 600 38px/1.5 var(--display); }
 
@@ -53,14 +53,14 @@
   .home, .mycourses { display: block; } .hm, .mc { gap: 36px; }
   .hm-hero { grid-template-columns: minmax(0, 1fr) auto; padding: 38px 44px; } .hm-hola { display: grid; gap: 16px; } .hm-hero .home-head p { font-size: 18px; } .hm-meta { font-size: 18px; } .hm-aro { grid-row: 1; } .hm-aro .aro { width: 232px; } .hm-xp { font-size: 17px; } .hm-xp b { font-size: 26px; }
   .hm .home-h2 { font-size: 29px; } .hm .home-courses { gap: 22px; } .hc-esc { height: 206px; } .hm .hc-art .cart.xl { width: 142px; height: 142px; }
-  .hm-dos { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 22px; } .hm-jug { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; padding: 30px 34px; } .hm-ase { display: grid; align-content: center; padding: 30px; }
+   .hm-ase { display: grid; align-content: center; padding: 30px; }
   .mc .mc-list { margin-inline: 0; padding-inline: 3px; flex-wrap: wrap; overflow: visible; } .mc-esc { padding: 36px 40px; gap: 26px; } .mc-cab { grid-template-columns: auto minmax(0, 1fr); gap: 36px; align-items: center; justify-items: start; text-align: left; } .mc-cifras, .mc-acts { justify-content: flex-start; } .mc-ruta { margin-inline: -40px; } .mc-det { grid-template-columns: 300px minmax(0, 1fr); gap: 26px; padding: 20px; }
 }
 @media (prefers-reduced-motion: reduce) { .aro .v, .hm-sem .lit > span, .hm .hc-card, .mc-lienzo > svg .v { animation: none !important; } .hm .hc-card, .hm-aro, .mc-arte, .mc-mundo, .mc .mc-row, .hc-laminas, .hm .hc-art .cart.xl { transition: none; } }
 
 @media (max-width: 359px) { .hm-hero .home-head h1 { font-size: 25px; } .hm-aro .aro { width: 84px; } .hm-hero { gap: 14px 8px; padding: 18px 14px; } }
 
-.hm-jug { --sal: cubic-bezier(.23, 1, .32, 1); }
+
 :is(.mc-esc, .hm-ase) .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; } .mc-esc .btn .i { width: 18px; height: 18px; }
 
 /* metas de la institución (js/metas.js) */
@@ -73,3 +73,10 @@
 @media (min-width: 900px) { .simu-nav { justify-content: safe center; } .simu-c.con { max-width: 1240px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; } .simu-c.con > .lec-doc { max-height: calc(100 * var(--dvh) - 240px); overflow: auto; } }
 .simu-rev { max-width: 760px; margin: 0 auto; display: grid; gap: 12px; } .simu-nota { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 18px; } .simu-nota > b { font: 600 72px/1 var(--display); } .simu-nota span { color: var(--mute); font-size: 18px; } .simu-nota small { display: block; font-size: 15px; } .simu-op2 { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 8px; } .simu-op2 li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; padding: 10px 12px; border-radius: 12px; background: var(--bg2); overflow-wrap: anywhere; } .simu-op2 .ok { background: color-mix(in srgb, var(--ok) 18%, var(--card)); } .simu-op2 .mal { background: color-mix(in srgb, var(--bad) 15%, var(--card)); } .simu-op2 small { display: block; color: var(--mute); } .simu-rev summary small { display: block; } .simu-rev .er-sec .btn { margin-top: 8px; }
 @media (min-width: 900px) { .simu .simu-c.con { max-width: 1240px !important; } .simu .lec-body { max-height: none; } .lesson.simu .simu-nav { margin: 0 32px; background: color-mix(in srgb, var(--card) 45%, var(--bg)); border-inline: 1px solid var(--line); } }
+
+/* Docentes y gestores (spec 2026-11-25-roles-de-institucion) */
+.eq-hola { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: clamp(24px, 4vw, 48px); border-radius: 32px; background: radial-gradient(circle at 85% 30%, color-mix(in srgb, var(--brand) 34%, transparent), transparent 55%), color-mix(in srgb, var(--brand) 12%, var(--card)); } .eq-hola > div { min-width: 0; } .eq-hola p { font-size: clamp(18px, 2vw, 24px); color: var(--mute); } .eq-hola h1 { font: 600 clamp(32px, 5vw, 64px)/1.05 var(--display); letter-spacing: -.02em; overflow-wrap: anywhere; } .eq-hola h1 span { color: color-mix(in srgb, var(--brand) 72%, var(--ink)); } .eq-arte { flex: none; width: clamp(96px, 18vw, 190px); } .eq-arte svg { width: 100%; height: auto; } .eq-nada { padding: 40px 20px; text-align: center; color: var(--mute); }
+.eq-comps { display: flex; flex-wrap: wrap; gap: 6px; } .eq-comps i { padding: 5px 12px; border-radius: 99px; background: color-mix(in srgb, var(--c, var(--brand)) 16%, var(--card)); color: var(--ink); font-style: normal; font-weight: 600; font-size: 14px; }
+.eq-yo { display: flex !important; align-items: center; gap: 18px; } .eq-yo > div { flex: 1; min-width: 0; } .eq-yo h1 { font: 600 clamp(26px, 3vw, 38px)/1.1 var(--display); overflow-wrap: anywhere; } .eq-yo p { color: var(--mute); } .eq-ini { display: grid; place-items: center; flex: none; width: 76px; height: 76px; border-radius: 26px; background: var(--brand); color: var(--on-brand); font: 600 28px var(--display); }
+.eq-dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px 22px; margin: 0; } .eq-dl dt { color: var(--mute); font-size: 14px; } .eq-dl dd { margin: 2px 0 0; font-size: 17px; font-weight: 600; overflow-wrap: anywhere; } .eq-nota { color: var(--mute); font-size: 14.5px; } .eq-cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px; } .eq-cifras p { display: flex; align-items: center; gap: 14px; } .eq-cifras .aro { width: 76px; flex: none; } .eq-cifras p > span:last-child { color: var(--mute); font-size: 14.5px; } .eq-cifras p > span:last-child b { display: block; color: var(--ink); font-size: 17px; } .eq-tu .btn { width: auto; justify-self: start; } .cn-nom input[readonly] { cursor: default; }
+.profile .pf.eq-tu { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; } .pf .eq-est { grid-column: 1 / -1; } @media (min-width: 1000px) { .profile .pf.eq-tu { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); align-items: start; } .eq-tu .eq-yo, .eq-tu .pf-cuenta { grid-column: 1 / -1; } .hm-ase { display: flex !important; align-items: center; gap: 24px; } .hm-ase > div { flex: 1; } }

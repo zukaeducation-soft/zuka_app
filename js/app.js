@@ -840,11 +840,12 @@ const RESET_KEEP = ['tourDone', 'carne', 'tutorias', 'cuenta', 'unlockAll', 'the
 let profileSub = null;   // 'settings': pantalla de Ajustes dentro de la pestaña Perfil (null = el perfil)
 function renderProfile() {
   if (profileSub === 'settings') return renderSettings();
+  if (rolEquipo()) return renderTuEquipo();   // js/equipo.js
   const saved = Object.keys(S.saved).filter(id => S.saved[id]).map(id => findCurio(id) || findLesson(id)).filter(x => x && (x.l.fact || cursoVisible(x.c)));   // nada guardado de un curso oculto
   if ($('.pm-riel.mano', view)) { pfVer.pend = true; return; }   // se está arrastrando la meta: se repinta al soltar
   const sigue = pfGuarda();   // un repintado desde afuera no mueve la página, ni el foco, ni borra el nombre a medias
   view.innerHTML = `<div class="profile"><div class="pf">
-    ${pfCarneHTML()}${pfMetaHTML()}${pfMapaHTML()}${pfLogrosHTML()}${pfCursosHTML()}
+    ${pfCarneHTML()}${tuInstHTML()}${pfMetaHTML()}${pfMapaHTML()}${pfLogrosHTML()}${pfCursosHTML()}
     <div class="pf-cuenta">${cuentaCard()}</div>${librosHTML(true)}
     ${saved.length ? `<section class="pf-c pf-saved"><div class="pf-cab"><h2>Clips guardados</h2></div>${saved.map(({ c, l }) =>
       `<button class="saved-row" data-${l.fact ? 'curio' : 'lesson'}="${l.id}" style="--c:${c.color}">${ICON.bookmark}<span><b>${esc(l.title)}</b><small>${esc(c.name)}</small></span></button>`).join('')}</section>` : ''}

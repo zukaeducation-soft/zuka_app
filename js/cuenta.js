@@ -53,6 +53,7 @@ function colegioMarca() {
 }
 // Estudiante de un colegio (o su gestor): solo Inicio, Mis cursos y Tú; no compra (spec 2026-11-25-estudiante-colegio).
 const cuentaDeColegio = () => !!Cuenta.user && instManda({ perfil: Cuenta.perfil, accesos: Cuenta.accesos, inst: Cuenta.inst, horas: typeof Tienda === 'undefined' ? 0 : Tienda.saldo.general + Tienda.saldo.universidad });
+const cuentaFija = () => !!Cuenta.user && (typeof Cuenta.inst.fija === 'boolean' && (Cuenta.perfil || {}).rol !== 'admin' ? Cuenta.inst.fija : instFija({ perfil: Cuenta.perfil, accesos: Cuenta.accesos, inst: Cuenta.inst }));   // lo dice la base; con una copia vieja, la misma regla
 const colegioAvisa = () => toast('Tu institución maneja tus cursos. Si necesitas algo, pídelo a tu docente.');
 const cuentaEsAdmin = () => !!(Cuenta.user && Cuenta.perfil && Cuenta.perfil.rol === 'admin');
 // El administrador tiene siempre todo abierto (S.unlockAll: cursos, mundos, lecciones, jefes y
@@ -281,6 +282,7 @@ async function cuentaRevisa() {
 }
 if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { if (!document.hidden) cuentaRevisa(); });
 
+const nombreFijo = () => { const n = ((Cuenta.inst.persona || (Cuenta.inst.equipo || [])[0] || {}).nombre || (Cuenta.perfil || {}).nombre || '').trim(); return n.split(/\s+/)[0].slice(0, 24); };
 const primerNombre = p => ((p && p.nombre) || '').trim().split(/\s+/)[0].slice(0, 24);
 async function cuentaPerfil() {
   if (!Cuenta.sb || !Cuenta.user) return null;
@@ -291,12 +293,13 @@ async function cuentaPerfil() {
   if (Cuenta.perfil && Cuenta.perfil.id !== uid) Cuenta.inst = { nombres: [], metas: [] };   // otra cuenta
   const deInst = ins.data ? ins.data.accesos : (Cuenta.perfil?.id === uid ? Cuenta.accesos || [] : []).filter(a => a.institucion);
   if (acc.data) Cuenta.accesos = instJunta(acc.data, deInst);
-  if (ins.data) Cuenta.inst = { nombres: ins.data.instituciones || [], metas: ins.data.metas || [], simulacros: ins.data.simulacros || [], avisos: ins.data.avisos || [], equipo: ins.data.equipo || [] };
+  if (ins.data) Cuenta.inst = { nombres: ins.data.instituciones || [], metas: ins.data.metas || [], simulacros: ins.data.simulacros || [], avisos: ins.data.avisos || [], equipo: ins.data.equipo || [], persona: ins.data.persona || null, fija: ins.data.fija };
   if (!cod.error) Cuenta.codigo = cod.data || '';
   if (data) {
     Cuenta.perfil = data;
     if (data.rol === 'gestor' && $('#auth') && !datosAbierta && !Clave.vista) portalPend = true;   // acaba de entrar con su código: va a su portal (js/portal.js)
     if (!S.name) S.name = primerNombre(data);
+    if (cuentaFija()) { const n = nombreFijo(); if (n && n !== S.name) { S.name = n; save(); } }   // el que puso su institución
     cuentaCache(); colegioMarca();
   }
   return data;
@@ -549,7 +552,7 @@ function cuentaCard() {
         ${x.institucion ? `<p class="muted">Con ${esc(x.institucion)}</p>` : `<button class="btn sm ${a.estado === 'pago' ? 'ghost' : 'main brand'}" type="button" data-acct="comprar" data-curso="${esc(x.curso)}">${x.tipo === 'pago' ? 'Renovar' : 'Comprar acceso'}</button>`}</li>`;
     }).join('')}</ul>` : '<p class="muted">Aún no tienes cursos en tu cuenta.</p>'}
     ${admin ? `<nav class="adm-atajos" aria-label="Administración">${[['estudiantes', 'Estudiantes', 'user'], ['codigos', 'Códigos', 'lock'], ['solicitudes', 'Solicitudes', 'bag'], ['pedidos', 'Pedidos', 'doc'], ['asesorias', 'Asesorías', 'calendar'], ['ventas', 'Ventas', 'trophy']].map(([h, t, i]) => `<a href="admin/#${h}">${ICON[i]}<span>${t}</span></a>`).join('')}</nav><a class="btn brand" href="admin/">Panel de administración</a>` : `<div class="acct-actions"><button class="btn brand" data-acct="tienda">Tienda</button><button class="btn ghost" data-acct="canje">Añadir código</button></div>`}
-    <div class="acct-foot">${admin ? '<span></span>' : '<button class="link-btn" data-acct="datos">Mis datos</button>'}<button class="link-btn" data-acct="salir">Cerrar sesión</button></div></section>`;
+    <div class="acct-foot">${admin || cuentaFija() ? '<span></span>' : '<button class="link-btn" data-acct="datos">Mis datos</button>'}<button class="link-btn" data-acct="salir">Cerrar sesión</button></div></section>`;
 }
 async function cuentaSalir() {
   cuentaEnvia(); usoEnvia();
