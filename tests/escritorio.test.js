@@ -27,16 +27,18 @@ test('los paneles dicen qué lección es, la parte del video y el recorrido', ()
 test('solo cambia desde 1000 px: el celular queda igual', () => {
   const css = read('css/escritorio.css');
   const fuera = css.replace(/@media \(min-width: 1000px\)[^]*$/, '');
-  assert.match(fuera, /^[^{]*\.tb-logo-d, \.ls-sides, \.xp-riel, \.dk \{ display: none; \}/m);
-  assert.doesNotMatch(fuera.replace(/\.tb-logo-d, \.ls-sides, \.xp-riel, \.dk \{ display: none; \}/, '').replace('.home-side, .tu-side, .pf-side, .pf-main, .cv-side, .cv-main { display: contents; }', ''), /\{/, 'fuera del bloque de escritorio no hay más reglas');
+  assert.match(fuera, /^[^{]*\.tb-logo-d, \.tb-admin, \.ls-sides, \.xp-riel, \.dk \{ display: none; \}/m);
+  assert.doesNotMatch(fuera.replace(/\.tb-logo-d, \.tb-admin, \.ls-sides, \.xp-riel, \.dk \{ display: none; \}/, '').replace('.tb-pie, .home-side, .tu-side, .pf-side, .pf-main, .cv-side, .cv-main { display: contents; }', ''), /\{/, 'fuera del bloque de escritorio no hay más reglas');
   assert.match(read('js/escritorio.js'), /const ESCRITORIO_MIN = 1000;/);
 });
 
-test('barra de escritorio con el logo y el menú arriba; el video con paneles a los lados', () => {
+test('menú de escritorio a la izquierda, con el logo y quien administra; el video con paneles a los lados', () => {
   const css = read('css/escritorio.css'), app = read('js/app.js');
-  assert.match(css, /#tabbar, body\[data-tab=clips\] #tabbar \{\s*position: fixed; top: 0;/);
+  assert.match(css, /#tabbar, body\[data-tab=clips\] #tabbar \{\s*position: fixed; left: 0; top: 92px; width: var\(--side\);/);
   assert.match(css, /--tabbar-h: 0px !important/);
   assert.match(css, /\.lesson\.clip-mode \{ --clipw: min\(calc\(\(100dvh - 120px\) \* 9 \/ 16\), calc\(100vw - 760px\)\)/);
+  assert.match(css, /#app \{[^}]*padding-left: var\(--side\)/);
+  assert.match(app, /cuentaEsAdmin\(\) \? `<a class="tb-admin" href="admin\/">/);
   assert.match(app, /class="tb-logo-d"[^`]*data-home/);
   assert.match(app, /<div class="ls-sides"><\/div>/);
   assert.match(app, /leccionLados\(root, c, l, queue, review >= 0 \? reviewPos : pos, n, clips\[n\]\);/);

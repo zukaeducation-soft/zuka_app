@@ -8,9 +8,11 @@ async function tiendaAdm(accion, p = {}) {
 }
 async function tiendaConteo() {
   try {
-    const r = await tiendaAdm('conteo');
-    [['pedidos', r.pedidos], ['asesorias', r.asesorias]].forEach(([k, n]) => { const x = $(`.pn-nav [data-n="${k}"]`); if (x) { x.textContent = n || ''; x.hidden = !n; } });
+    tiendaBadges(await tiendaAdm('conteo'));
   } catch (e) { /* el menú sigue sin número */ }
+}
+function tiendaBadges(r) {
+  [['pedidos', r.pedidos], ['asesorias', r.asesorias]].forEach(([k, n]) => { const x = $(`.pn-nav [data-n="${k}"]`); if (x) { x.textContent = n || ''; x.hidden = !n; } });
 }
 const PED = { pendiente: ['warn', 'Por pagar'], pagado: ['ok', 'Pagado: por preparar'], preparando: ['ok', 'En preparación'], enviado: ['ok', 'Enviado'], entregado: ['', 'Entregado'], cancelado: ['', 'Cancelado'] };
 const pedItems = p => p.items.map(x => `${x.cantidad > 1 ? `${x.cantidad} × ` : ''}${esc(x.nombre)}`).join('<br>');

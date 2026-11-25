@@ -65,7 +65,7 @@ function hace(iso) {
 const tile = (n, label, cls = '', ir = '') => (ir ? `<a class="pn-tile ${cls}" href="${ir}"><b>${n}</b><span>${label}</span></a>` : `<div class="pn-tile ${cls}"><b>${n}</b><span>${label}</span></div>`);
 function barras(serie, unidad) {
   const max = Math.max(1, ...serie.map(x => x.v));
-  return `<div class="pn-bars">${serie.map(x => `<div class="pn-bar" title="${x.t}: ${x.v} ${unidad}"><b>${x.v || ''}</b><i style="height:${Math.round((100 * x.v) / max)}%"></i><small>${x.c}</small><span class="pn-sr">${x.t}: ${x.v} ${unidad}</span></div>`).join('')}</div>`;
+  return `<div class="pn-bars">${serie.map(x => `<div class="pn-bar" title="${x.t}: ${x.v} ${unidad}"><b>${x.m ?? (x.v || '')}</b><i style="height:${Math.round((100 * x.v) / max)}%"></i><small>${x.c}</small><span class="pn-sr">${x.t}: ${x.v} ${unidad}</span></div>`).join('')}</div>`;
 }
 const tabla = (cols, filas, vacio) => (filas.length ? `<div class="pn-tabla"><table class="pn-table"><thead><tr>${cols.map(c => `<th${c.n ? ' class="pn-num"' : ''}>${c.t}</th>`).join('')}</tr></thead><tbody>${filas.join('')}</tbody></table></div>` : `<p class="pn-state">${vacio}</p>`);
 const td = (l, h, cls = '') => `<td data-l="${l}"${cls ? ` class="${cls}"` : ''}>${h}</td>`;
@@ -76,6 +76,18 @@ function csv(nombre, cab, filas) {
   const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `${nombre}-${fechaInput(new Date().toISOString())}.csv`; a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
 }
+const ICO = {
+  inicio: '<path d="M4 13h6V4H4zM14 20h6V4h-6zM4 20h6v-4H4z"/>', estudiantes: '<circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c0-3.500 3-5.500 6.500-5.500s6.500 2 6.500 5.500M16 5a3.500 3.500 0 0 1 0 6.500M18 15c2.200.7 3.500 2.500 3.500 5"/>',
+  codigos: '<circle cx="8" cy="15" r="4.500"/><path d="M11.500 11.500L20 3M17 6l3 3M14 9l2 2"/>', solicitudes: '<path d="M4 5h16v11H9l-5 4zM9 10h6"/>', pedidos: '<path d="M3.500 8L12 3.500 20.500 8v8L12 20.500 3.500 16zM3.500 8L12 12.500 20.500 8M12 12.500v8"/>',
+  asesorias: '<rect x="4" y="5" width="16" height="15" rx="2.500"/><path d="M4 10h16M8 3v4M16 3v4"/>', ventas: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>', cursos: '<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11"/>',
+  tienda: '<path d="M5 8h14l1 12H4zM8.500 11V7a3.500 3.500 0 0 1 7 0v4"/>', ajustes: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>', app: '<path d="M14 5h5v5M19 5l-8 8M11 6H5v13h13v-6"/>',
+  plan: '<path d="M5 12l5 5 9-10"/>', prueba: '<circle cx="12" cy="12" r="8.500"/><path d="M12 7v5l3 2"/>', vence: '<path d="M12 4l9 16H3zM12 10v4M12 17v.01"/>', uso: '<path d="M3 12h4l3-7 4 14 3-7h4"/>',
+};
+const ico = k => `<svg class="pn-i" viewBox="0 0 24 24" aria-hidden="true">${ICO[k] || ''}</svg>`;
+const kpi = (i, n, label, cls = '', ir = '') => `<${ir ? `a href="${ir}"` : 'div'} class="pn-tile pn-kpi ${cls}"><span class="pn-kpi-i">${ico(i)}</span><span><b>${n}</b><span>${label}</span></span></${ir ? 'a' : 'div'}>`;
+// Redondel con las iniciales; el color sale del nombre, siempre el mismo.
+const iniciales = n => (String(n || '').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(x => x[0]).join('') || '?').toUpperCase();
+const avatar = n => `<span class="pn-av" aria-hidden="true" style="--h:${[...String(n || '')].reduce((t, c) => (t * 31 + c.charCodeAt(0)) % 360, 7)}">${esc(iniciales(n))}</span>`;
 // Carga una vista: muestra «Cargando» solo si tarda y descarta la respuesta si ya se cambió de vista.
 async function carga(fn, pinta) {
   const t = ++token, lento = setTimeout(() => { if (t === token) view.innerHTML = '<p class="pn-state">Cargando…</p>'; }, 150);
@@ -200,6 +212,7 @@ async function entrar() {
   if (!es) { view.innerHTML = '<p class="pn-state bad">Esta cuenta no tiene permiso de administración.<br>Cierra sesión y entra con la cuenta administradora.</p>'; return; }
   document.body.classList.add('dentro');
   $('.pn-nav').hidden = false;
+  if (!ruta.lista) { ruta.lista = true; $$('[data-ico]').forEach(a => a.insertAdjacentHTML('afterbegin', ico(a.dataset.ico))); }
   addEventListener('hashchange', ruta);
   ruta(); tiendaConteo();
 }
@@ -233,22 +246,22 @@ function pendientes(n) { const x = $('.pn-nav [data-n="solicitudes"]'); x.textCo
 
 // ---------- 1. inicio ----------
 function vInicio() {
-  carga(() => admin('resumen'), r => {
-    pendientes(r.solicitudes);
-    const falta = !waNumero(AJUSTES.whatsapp);
-    view.innerHTML = `<div class="pn-head"><h1>Inicio</h1><button class="btn main" type="button" data-gen>Crear código</button></div>
+  carga(async () => { const [r, n] = await Promise.all([admin('resumen'), tiendaAdm('conteo').catch(() => null)]); return { r, n }; }, ({ r, n }) => {
+    pendientes(r.solicitudes); if (n) tiendaBadges(n);
+    const falta = !waNumero(AJUSTES.whatsapp), hoy = new Date().toLocaleDateString('es-CO', { timeZone: 'America/Bogota', weekday: 'long', day: 'numeric', month: 'long' });
+    const haz = [['solicitudes', r.solicitudes, 'solicitud de compra', 'solicitudes de compra'], ['pedidos', n?.pedidos, 'pedido por atender', 'pedidos por atender'], ['asesorias', n?.asesorias, 'asesoría por confirmar', 'asesorías por confirmar']].filter(x => x[1]);
+    const tope = Math.max(1, ...r.por_curso.map(c => c.pago + c.prueba)), meses = r.ventas_mes || [];
+    view.innerHTML = `<div class="pn-head"><div><h1>Así va Zuka</h1><p class="pn-hoy">${hoy}</p></div><div class="pn-acc"><a class="btn ghost" href="#estudiantes">Ver estudiantes</a><button class="btn main" type="button" data-gen>Crear código</button></div></div>
       ${falta ? '<a class="pn-aviso" href="#ajustes">Falta el número de WhatsApp: sin él, la app no puede ofrecer pedir códigos ni comprar. Ponlo en Ajustes.</a>' : ''}
-      <div class="pn-tiles">${tile(r.solicitudes, 'Solicitudes por atender', r.solicitudes ? 'warn' : '', '#solicitudes')}${tile(r.pago, 'Con plan activo', 'ok', '#estudiantes')}${tile(r.prueba, 'En prueba')}${tile(r.vencidos, 'Con plan vencido', r.vencidos ? 'bad' : '')}
-        ${tile(cop(r.ventas_30), `Ventas en 30 días (${r.pagos_30})`, '', '#ventas')}${tile(r.codigos_libres, 'Códigos sin estrenar', '', '#codigos')}</div>
-      <div class="pn-cols"><section class="pn-card"><h2>Vencen en 7 días</h2>${tabla([{ t: 'Estudiante' }, { t: 'Curso' }, { t: 'Vence' }, { t: '' }], r.vencen_7.map(u => `<tr data-id="${u.id}">
-          <td class="pn-main">${esc(u.nombre || 'Sin nombre')}</td>${td('Curso', esc(curso(u.curso).nombre))}${td('Vence', fechaCorta(u.hasta))}${td('', waA(u.telefono, WA.vence({ nombre: u.nombre, curso: curso(u.curso).nombre, hasta: u.hasta }), 'Recordar'), 'pn-num')}</tr>`), 'Ningún plan vence esta semana.')}</section>
-        <section class="pn-card"><h2>Uso de la app</h2><div class="pn-tiles chico">${tile(r.usan_hoy, 'Entraron hoy')}${tile(r.usan_7, 'En 7 días')}${tile(r.lecciones_7, 'Lecciones en 7 días')}${tile(pct(r.aciertos_7, r.ejercicios_7), 'Aciertos en 7 días')}</div>
-          ${r.serie.some(x => x.minutos) ? `<h3>Minutos de estudio por día</h3>${barras(r.serie.map(x => ({ t: diaCorto(x.dia), c: Number(x.dia.slice(8)), v: x.minutos })), 'min')}` : '<p class="pn-state">Aún no hay tiempo de estudio.</p>'}</section></div>
-      <section class="pn-card"><h2>Cursos</h2>${tabla([{ t: 'Curso' }, { t: 'En la tienda' }, { t: 'Con plan', n: 1 }, { t: 'En prueba', n: 1 }, { t: 'Lecciones completadas', n: 1 }], r.por_curso.map(c => `<tr><td class="pn-main">${esc(c.nombre)}</td>
-        ${td('En la tienda', c.publicado ? '<span class="pill ok">Publicado</span>' : '<span class="pill">Solo asignados</span>')}${td('Con plan', c.pago, 'pn-num')}${td('En prueba', c.prueba, 'pn-num')}${td('Lecciones', c.completadas, 'pn-num')}</tr>`), 'No hay cursos.')}</section>
+      <section class="pn-haz${haz.length || !n ? '' : ' ok'}" aria-label="Por atender">${haz.length ? haz.map(([k, c, uno, varios]) => `<a href="#${k}">${ico(k)}<span><b>${c}</b> ${c === 1 ? uno : varios}</span><em>Atender</em></a>`).join('') : !n ? `<p>${ico('vence')}<span>No se pudieron consultar los pedidos y las asesorías. Recarga para intentarlo de nuevo.</span></p>` : `<p>${ico('plan')}<span><b>Todo al día.</b> No hay solicitudes, pedidos ni asesorías por atender.</span></p>`}</section>
+      <div class="pn-tiles pn-kpis">${kpi('plan', r.pago, 'Con plan activo', 'ok', '#estudiantes')}${kpi('prueba', r.prueba, 'En prueba')}${kpi('vence', r.vencidos, 'Con plan vencido', r.vencidos ? 'bad' : '')}${kpi('ventas', cop(r.ventas_30), `Ventas en 30 días (${r.pagos_30})`, '', '#ventas')}${kpi('codigos', r.codigos_libres, 'Códigos sin estrenar', '', '#codigos')}${kpi('uso', r.usan_hoy, `Entraron hoy · ${r.usan_7} en 7 días`)}</div>
+      <div class="pn-dash"><section class="pn-card"><div class="pn-head"><h2>Minutos de estudio por día</h2><span class="pn-count">${r.lecciones_7} lecciones y ${pct(r.aciertos_7, r.ejercicios_7)} de aciertos en 7 días</span></div>
+          ${r.serie.some(x => x.minutos) ? barras(r.serie.map(x => ({ t: diaCorto(x.dia), c: Number(x.dia.slice(8)), v: x.minutos })), 'min') : '<p class="pn-state">Aún no hay tiempo de estudio.</p>'}</section>
+        <section class="pn-card"><h2>Vencen en 7 días</h2>${r.vencen_7.length ? `<ul class="pn-vence">${r.vencen_7.map(u => `<li>${avatar(u.nombre)}<span><a href="#estudiante/${u.id}">${esc(u.nombre || 'Sin nombre')}</a><small>${esc(curso(u.curso).nombre)} · ${fechaCorta(u.hasta)}</small></span>${waA(u.telefono, WA.vence({ nombre: u.nombre, curso: curso(u.curso).nombre, hasta: u.hasta }), 'Recordar')}</li>`).join('')}</ul>` : '<p class="pn-state">Ningún plan vence esta semana.</p>'}</section>
+        <section class="pn-card"><h2>Cursos</h2><ul class="pn-cbar">${r.por_curso.map(c => `<li><span class="pn-cb-t"><b>${esc(c.nombre)}</b>${c.publicado ? '<span class="pill ok">Publicado</span>' : '<span class="pill">Solo asignados</span>'}</span><span class="pn-cb-b" aria-hidden="true"><i style="width:${(100 * c.pago) / tope}%"></i><i class="p" style="width:${(100 * c.prueba) / tope}%"></i></span><small>${c.pago} con plan · ${c.prueba} en prueba · ${c.completadas} lecciones completadas</small></li>`).join('') || '<li class="pn-state">No hay cursos.</li>'}</ul></section>
+        <section class="pn-card"><div class="pn-head"><h2>Ventas por mes</h2><a class="pn-count" href="#ventas">Ver ventas</a></div>${meses.length ? barras(meses.map(x => ({ t: `${MESES[Number(x.mes.slice(5)) - 1]} ${x.mes.slice(0, 4)}`, c: MESES[Number(x.mes.slice(5)) - 1], v: x.valor, m: x.valor ? `${Math.round(x.valor / 1000)} k` : '' })), 'COP') : '<p class="pn-state">Aún no hay ventas.</p>'}</section></div>
       <p class="pn-count">Las cifras cuentan estudiantes, no cuentas administradoras.</p>`;
     $('[data-gen]', view).onclick = () => dlgCodigo();
-    filas();
   });
 }
 const filas = () => $$('tr[data-id]', view).forEach(tr => { tr.onclick = e => { if (!e.target.closest('a, button, input, label')) location.hash = `estudiante/${tr.dataset.id}`; }; });
@@ -260,8 +273,8 @@ function vEstudiantes() {
     us.forEach(u => { u.e = estadoDe(u); });
     const el = new Set();
     view.innerHTML = `<div class="pn-head"><h1>Estudiantes</h1><div class="pn-acc"><button class="btn ghost" type="button" data-csv>Descargar Excel</button><button class="btn main" type="button" data-gen>Crear código</button></div></div>
-      <div class="pn-filters"><label class="fld"><span>Buscar</span><input type="search" name="q" placeholder="Nombre, celular, correo o código" value="${esc(fil.q)}"></label>
-        <label class="fld"><span>Estado</span><select name="estado"><option value="">Todos</option>${Object.entries(ESTADO).map(([k, v]) => `<option value="${k}"${fil.estado === k ? ' selected' : ''}>${v[1]}</option>`).join('')}<option value="admin"${fil.estado === 'admin' ? ' selected' : ''}>Administradores</option></select></label>
+      <div class="pn-chips" role="radiogroup" aria-label="Estado">${[['', 'Todos'], ...Object.entries(ESTADO).map(([k, v]) => [k, v[1]]), ['admin', 'Administradores']].map(([k, t]) => `<label><input type="radio" name="estado" value="${k}"${fil.estado === k ? ' checked' : ''}><span>${t} <b>${us.filter(u => (k === 'admin' ? u.rol === 'admin' : u.rol !== 'admin' && (!k || u.e === k))).length}</b></span></label>`).join('')}</div>
+      <div class="pn-filters tres"><label class="fld"><span>Buscar</span><input type="search" name="q" placeholder="Nombre, celular, correo o código" value="${esc(fil.q)}"></label>
         <label class="fld"><span>Curso</span><select name="curso"><option value="">Todos</option>${CURSOS.map(c => `<option value="${c.id}"${fil.curso === c.id ? ' selected' : ''}>${esc(c.nombre)}</option>`).join('')}</select></label>
         <label class="fld"><span>Orden</span><select name="orden">${[['reciente', 'Más nuevos'], ['vence', 'Vence antes'], ['uso', 'Entró hace poco']].map(([k, t]) => `<option value="${k}"${fil.orden === k ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
       <div class="pn-lote" hidden><b></b><button class="btn small main" type="button" data-lote>Asignar cursos</button><button class="btn small ghost" type="button" data-nada>Quitar selección</button></div>
@@ -279,7 +292,7 @@ function vEstudiantes() {
       $('.pn-count', view).textContent = `${rows.length} ${rows.length === 1 ? 'resultado' : 'resultados'}`;
       $('.pn-list', view).innerHTML = tabla([{ t: '<input type="checkbox" data-todos aria-label="Elegir todos">' }, { t: 'Estudiante' }, { t: 'Código' }, { t: 'Estado' }, { t: 'Cursos' }, { t: 'Último ingreso' }, { t: 'Lecciones', n: 1 }], rows.map(u => `<tr data-id="${u.id}">
         ${td('Elegir', u.rol === 'admin' ? '' : `<input type="checkbox" data-el="${u.id}" aria-label="Elegir a ${esc(u.nombre || 'sin nombre')}"${el.has(u.id) ? ' checked' : ''}>`, 'pn-check')}
-        <td class="pn-main"><a href="#estudiante/${u.id}">${esc(u.nombre || 'Sin nombre')}</a>${u.rol === 'admin' ? ' <span class="pill">Admin</span>' : ''}<span class="pn-sub">${esc([u.telefono, u.correo].filter(Boolean).join(' · ') || 'Sin datos de contacto')}</span></td>
+        <td class="pn-main"><span class="pn-per">${avatar(u.nombre)}<span><a href="#estudiante/${u.id}">${esc(u.nombre || 'Sin nombre')}</a>${u.rol === 'admin' ? ' <span class="pill">Admin</span>' : ''}<span class="pn-sub">${esc([u.telefono, u.correo].filter(Boolean).join(' · ') || 'Sin datos de contacto')}</span></span></span></td>
         ${td('Código', u.codigo ? `<span class="pn-code">${muestraCodigo(u.codigo)}</span>` : '—')}${td('Estado', u.rol === 'admin' ? '—' : pillEstado(u.e))}${td('Cursos', u.accesos.length ? `<span class="pn-pills">${u.accesos.slice(0, 3).map(a => pillAcceso(a)).join('')}${u.accesos.length > 3 ? `<span class="pill">+${u.accesos.length - 3}</span>` : ''}</span>` : '—')}
         ${td('Último ingreso', hace(u.ultima_vez))}${td('Lecciones', u.lecciones, 'pn-num')}</tr>`), us.length ? 'Nadie coincide con el filtro.' : 'Aún no hay estudiantes. Crea el primer código.');
       filas();
@@ -287,7 +300,7 @@ function vEstudiantes() {
       const t = $('[data-todos]', view); if (t) t.onchange = () => { visibles().filter(u => u.rol !== 'admin').forEach(u => (t.checked ? el.add(u.id) : el.delete(u.id))); pinta(); $('[data-todos]', view).checked = t.checked; };
       lote();
     };
-    $$('.pn-filters [name]', view).forEach(x => { x.oninput = () => { fil[x.name] = x.value; pinta(); }; });
+    $$('.pn-filters [name], .pn-chips [name]', view).forEach(x => { x.oninput = () => { fil[x.name] = x.value; pinta(); }; });
     $('[data-gen]', view).onclick = () => dlgCodigo({}, vEstudiantes);
     $('[data-nada]', view).onclick = () => { el.clear(); pinta(); };
     $('[data-lote]', view).onclick = () => { const ids = [...el], u = us.find(x => x.id === ids[0]); dlgActivar({ usuarios: ids, nombre: u.nombre, celular: u.telefono, codigo: ids.length === 1 ? '' : '', titulo: 'Asignar cursos' }, vEstudiantes); };
@@ -317,7 +330,7 @@ function vEstudiante(id) {
     const dato = (l, v) => `<div><dt>${l}</dt><dd>${esc(v || '—')}</dd></div>`, dt = k => (p[k] ? datoTexto(k, p[k]) : '');
     const pend = d.solicitudes.filter(s => s.estado === 'pendiente');
     view.innerHTML = `<a class="pn-back" href="#estudiantes">← Estudiantes</a>
-      <div class="pn-head"><div class="pn-quien"><h1>${esc(p.nombre || 'Sin nombre')}</h1>${esA ? '<span class="pill">Administrador</span>' : pillEstado(estadoDe(u))}</div>
+      <div class="pn-head"><div class="pn-quien">${avatar(p.nombre)}<h1>${esc(p.nombre || 'Sin nombre')}</h1>${esA ? '<span class="pill">Administrador</span>' : pillEstado(estadoDe(u))}</div>
         <div class="pn-acc">${waA(p.telefono, `Hola${p.nombre ? ` ${p.nombre}` : ''},`)}${esA ? '' : '<button class="btn main" type="button" data-a="activar">Activar o renovar</button>'}</div></div>
       ${pend.map(s => `<div class="pn-aviso">Pidió comprar <b>${esc(curso(s.curso).nombre)}</b> por ${mesesTexto(s.meses)}. <button class="btn small main" type="button" data-sol="${s.id}">Confirmar pago</button></div>`).join('')}
       <div class="pn-cols"><section class="pn-card"><div class="pn-head"><h2>Cursos</h2>${esA ? '' : '<button class="btn small ghost" type="button" data-a="asignar">Asignar curso</button>'}</div>

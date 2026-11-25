@@ -23,25 +23,33 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Jost:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/acceso.css">
-  <link rel="stylesheet" href="admin.css?v=6">
-  <link rel="stylesheet" href="panel.css?v=2">
+  <link rel="stylesheet" href="admin.css?v=7">
+  <link rel="stylesheet" href="panel.css?v=3">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js?sri" integrity="sha384-0w2KAL2YHP6wKOkUDzkCDGgVvfmHnj02DHeQ6XcHOgTfFsGyonKOpShMH1x6nk9o" crossorigin="anonymous"></script>
   <script defer src="../js/acceso.js"></script>
-  <script defer src="tienda.js?v=1"></script>
-  <script defer src="panel.js?v=2"></script>
+  <script defer src="tienda.js?v=2"></script>
+  <script defer src="panel.js?v=3"></script>
 </head>
 <body class="admin">
-  <header class="pn-top">
-    <a class="pn-brand" href="../" aria-label="Volver a Zuka">
-      <img class="logo logo-light" src="../brand/logo-light.svg" alt="Zuka" width="76" height="28">
-      <img class="logo logo-dark" src="../brand/logo-dark.svg" alt="Zuka" width="76" height="28">
-      <span>Administración</span>
-    </a>
-    <div class="pn-user" hidden><span class="pn-mail"></span><button class="link-btn" type="button" data-salir>Salir</button></div>
-  </header>
-  <nav class="pn-nav" aria-label="Secciones" hidden>
-    <a href="#inicio">Inicio</a><a href="#estudiantes">Estudiantes</a><a href="#codigos">Códigos</a><a href="#solicitudes">Solicitudes<span data-pend data-n="solicitudes" hidden></span></a><a href="#pedidos">Pedidos<span data-pend data-n="pedidos" hidden></span></a><a href="#asesorias">Asesorías<span data-pend data-n="asesorias" hidden></span></a><a href="#ventas">Ventas</a><a href="#cursos">Cursos y precios</a><a href="#tienda">Tienda y libros</a><a href="#ajustes">Ajustes</a>
-  </nav>
+  <aside class="pn-side">
+    <header class="pn-top">
+      <a class="pn-brand" href="../" aria-label="Volver a Zuka">
+        <img class="logo logo-light" src="../brand/logo-light.svg" alt="Zuka" width="92" height="34">
+        <img class="logo logo-dark" src="../brand/logo-dark.svg" alt="Zuka" width="92" height="34">
+        <span>Administración</span>
+      </a>
+    </header>
+    <nav class="pn-nav" aria-label="Secciones" hidden>
+      <a href="#inicio" data-ico="inicio">Inicio</a>
+      <small>Personas</small>
+      <a href="#estudiantes" data-ico="estudiantes">Estudiantes</a><a href="#codigos" data-ico="codigos">Códigos</a>
+      <small>Ventas</small>
+      <a href="#solicitudes" data-ico="solicitudes">Solicitudes<span data-pend data-n="solicitudes" hidden></span></a><a href="#pedidos" data-ico="pedidos">Pedidos<span data-pend data-n="pedidos" hidden></span></a><a href="#asesorias" data-ico="asesorias">Asesorías<span data-pend data-n="asesorias" hidden></span></a><a href="#ventas" data-ico="ventas">Ventas</a>
+      <small>Contenido</small>
+      <a href="#cursos" data-ico="cursos">Cursos y precios</a><a href="#tienda" data-ico="tienda">Tienda y libros</a><a href="#ajustes" data-ico="ajustes">Ajustes</a>
+    </nav>
+    <div class="pn-user" hidden><a class="pn-app" href="../" data-ico="app">Ver la app</a><span class="pn-mail"></span><button class="link-btn" type="button" data-salir>Salir</button></div>
+  </aside>
   <main id="pn-view" class="pn-view" aria-live="polite"><p class="pn-state">Cargando…</p></main>
   <div id="pn-toast" class="pn-toast" role="status" hidden></div>
 </body>
