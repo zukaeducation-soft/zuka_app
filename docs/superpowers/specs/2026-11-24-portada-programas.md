@@ -13,7 +13,8 @@ El usuario pidió acomodar la portada como instruimos.com. Se toma su **estructu
    una lámina con la foto `brand/ingenieros.webp` y los logos, y una tarjeta ancha con cada curso, su precio o «Muy pronto».
    Lámina «Estudia desde cualquier lugar, a tu ritmo»: la estudiante recortada (`brand/dispositivos.webp`, sin fondo) y la app
    real en celular, computador y tablet (`brand/app/`).
-4. **Quiénes somos**: franja de color con tres tarjetas (qué, cómo, por qué). Reemplaza la sección anterior.
+4. **Quiénes somos**: «Acá nadie se queda por fuera»: lenguaje cercano y colombiano, y tres afiches con símbolos de Phosphor Icons y la misión
+   (educación de calidad accesible para entrar a la U, menos deserción y cumplir el sueño). Sin cifras inventadas.
 5. Siguen: tu camino, ¿te ha pasado?, cómo se aprende, mundos, libros y preguntas.
 6. **¿Qué estás esperando?**, pie con columnas y WhatsApp flotante.
 

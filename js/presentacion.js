@@ -125,11 +125,21 @@ function pzDesdeArt(arts, tipo) {
 const PZ_I = {
   dia: '<path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"/>', hoja: '<path d="M6 3h9l4 4v14H6zM15 3v4h4M9 12h7M9 16h7"/>', mas: '<path d="M3 5h18v12H3zM8 21h8M12 17v4"/>',
   meta: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>', precio: '<path d="M3 12V4h8l10 10-7 7zM7.5 8.5v.01"/>',
-  que: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>', como: '<path d="M9 4h6M10 4v6l-5 9h14l-5-9V4M8 15h8"/>', porque: '<path d="M9 18h6M10 21h4M8.5 15a6 6 0 1 1 7 0l-.5 3h-6z"/>',
   fl: '<path d="M9 5l7 7-7 7"/>', menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
 };
 const pzI = k => `<svg class="pz-i" viewBox="0 0 24 24" aria-hidden="true">${PZ_I[k]}</svg>`;
 const PZ_WA = '<svg class="pz-wa-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.600 15L2 22l5.100-1.300A10 10 0 1 0 12 2zm0 18.200a8.200 8.200 0 0 1-4.200-1.150l-.3-.18-3 .8.8-2.950-.2-.31A8.200 8.200 0 1 1 12 20.200zm4.700-6.100c-.26-.13-1.520-.75-1.760-.84-.23-.08-.4-.13-.57.13-.17.26-.66.84-.8 1-.15.17-.3.2-.55.07a6.900 6.900 0 0 1-3.450-3c-.26-.45.26-.42.75-1.390.08-.17.04-.31-.02-.44l-.8-1.900c-.2-.5-.42-.43-.57-.44h-.5c-.17 0-.44.06-.67.31-.23.26-.88.86-.88 2.100s.9 2.440 1.030 2.600c.13.17 1.780 2.720 4.310 3.810 1.600.69 2.230.75 3.030.63.49-.07 1.520-.62 1.730-1.220.21-.6.21-1.110.15-1.220-.06-.11-.23-.17-.49-.3z"/></svg>';
+
+// Quiénes somos: tres afiches (entrar, no soltarla, cumplir el sueño). Símbolos: Phosphor Icons 2.1.1, duotono (licencia MIT).
+const PZ_SUENOS = [
+  { c: '#a3e635', h: 'Que entrar a la U no sea un lujo', p: 'Educación de la buena, desde tu celu y a tu ritmo, vivas donde vivas. Y el primer mundo va por cuenta de la casa.',
+    d: '<path d="M200,40V224H168V32h24A8,8,0,0,1,200,40Z" opacity="0.2"/><path d="M232,216H208V40a16,16,0,0,0-16-16H64A16,16,0,0,0,48,40V216H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-40,0H176V40h16ZM64,40h96V216H64Zm80,92a12,12,0,1,1-12-12A12,12,0,0,1,144,132Z"/>' },
+  { c: '#ff9d8c', h: 'Que nadie tire la toalla', p: 'A muchos la carrera se les enreda por las mates del primer semestre. Nosotros te ayudamos a llegar bien parado, para que no te toque soltarla.',
+    d: '<path d="M200,152l-40,40L96,176,40,136,72.68,70.63,128,56l55.32,14.63L183.6,72H144L98.34,116.29a8,8,0,0,0,1.38,12.42C117.23,139.9,141,139.13,160,120Z" opacity="0.2"/><path d="M254.3,107.91,228.78,56.85a16,16,0,0,0-21.47-7.15L182.44,62.13,130.05,48.27a8.14,8.14,0,0,0-4.1,0L73.56,62.13,48.69,49.7a16,16,0,0,0-21.47,7.15L1.7,107.9a16,16,0,0,0,7.15,21.47l27,13.51,55.49,39.63a8.06,8.06,0,0,0,2.71,1.25l64,16a8,8,0,0,0,7.6-2.1l55.07-55.08,26.42-13.21a16,16,0,0,0,7.15-21.46Zm-54.89,33.37L165,113.72a8,8,0,0,0-10.68.61C136.51,132.27,116.66,130,104,122L147.24,80h31.81l27.21,54.41ZM41.53,64,62,74.22,36.43,125.27,16,115.06Zm116,119.13L99.42,168.61l-49.2-35.14,28-56L128,64.28l9.8,2.59-45,43.68-.08.09a16,16,0,0,0,2.72,24.81c20.56,13.13,45.37,11,64.91-5L188,152.66Zm62-57.87-25.52-51L214.47,64,240,115.06Zm-87.75,92.67a8,8,0,0,1-7.75,6.06,8.13,8.13,0,0,1-1.95-.24L80.41,213.33a7.89,7.89,0,0,1-2.71-1.25L51.35,193.26a8,8,0,0,1,9.3-13l25.11,17.94L126,208.24A8,8,0,0,1,131.82,217.94Z"/>' },
+  { c: '#ffd257', h: 'Que cumplas ese sueño', p: 'Ser la primera de la casa en graduarse, ingeniero, profe, doctora… El sueño lo pones tú. Nosotros le metemos la ficha contigo.',
+    d: '<path d="M216,113.07v53.22a8,8,0,0,1-2,5.31c-11.3,12.59-38.9,36.4-86,36.4s-74.68-23.81-86-36.4a8,8,0,0,1-2-5.31V113.07L128,160Z" opacity="0.2"/><path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V240a8,8,0,0,0,16,0V199.51a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM128,200c-43.27,0-68.72-21.14-80-33.71V126.4l76.24,40.66a8,8,0,0,0,7.52,0L176,143.47v46.34C163.4,195.69,147.52,200,128,200Zm80-33.75a97.83,97.83,0,0,1-16,14.25V134.93l16-8.53ZM188,118.94l-.22-.13-56-29.87a8,8,0,0,0-7.52,14.12L171,128l-43,22.93L25,96,128,41.07,231,96Z"/>' },
+];
+const PZ_COMO = ['Primero la idea, después la fórmula', 'Juegas en vez de memorizar', 'Pistas cuando te trabas', 'Sin cronómetro ni afán'];
 
 function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = {}) {
   const cursos = pzOrdena(lista);
@@ -210,13 +220,14 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-progs">${progs}</div>
       ${prontos.length ? `<p class="pz-prontos"><b>Muy pronto</b>${prontos.map(c => `<span style="--c:${c.color}">${pzEsc(c.name)}</span>`).join('')}</p>` : ''}
     </section>
-    <section class="pz-franja pz-azul" id="pz-somos"><div class="pz-in"><h2>Quiénes somos</h2>
-      <p class="pz-lead">Nadie es «malo para las matemáticas». Casi siempre faltó ver la idea.</p>
-      <div class="pz-tres">
-        <article>${pzI('que')}<h3>¿Qué es Zuka?</h3><p>Una app colombiana para aprender a tu ritmo, pensada para quienes terminan el colegio, se preparan para entrar a la universidad o cursan sus primeros semestres.</p></article>
-        <article>${pzI('como')}<h3>¿Cómo lo hacemos?</h3><p>Primero ves y mueves la idea; después llega la fórmula.</p><ul><li>Lecciones cortas, sin cronómetro</li><li>Ejercicios que se juegan, con pistas</li><li>Un gimnasio cerebral para repasar</li></ul></article>
-        <article>${pzI('porque')}<h3>¿Por qué lo hacemos?</h3><p>Para que entres a la universidad y sigas en ella. Los contenidos de Álgebra y Trigonometría siguen el programa de la Universidad de Antioquia.</p></article>
-      </div></div>
+    <section class="pz-franja pz-azul" id="pz-somos"><div class="pz-in">
+      <div class="pz-somos-top pz-rev"><div class="pz-somos-txt"><p class="pz-somos-k">Quiénes somos</p>
+        <h2>Acá nadie se queda <em>por fuera</em></h2>
+        <p class="pz-lead">Somos Zuka, una app hecha en Colombia. Creemos que estudiar con calidad no debería depender de la plata ni del barrio. Por eso te acompañamos a entrar a la U, a quedarte en ella y a salir con el cartón en la mano.</p></div>
+        <div class="pz-somos-m" data-inclina="10"><p class="pz-globo">¿Malo para las mates? <b>¡Qué va!</b> De pronto nadie te las había explicado bien.</p><span aria-hidden="true">${mascot('cheer')}</span></div></div>
+      <div class="pz-tres">${PZ_SUENOS.map(s => `<article class="pz-rev" style="--c:${s.c}"><svg viewBox="0 0 256 256" aria-hidden="true">${s.d}</svg><h3>${s.h}</h3><p>${s.p}</p></article>`).join('')}</div>
+      <div class="pz-somos-como pz-rev"><h3>¿Y cómo? Sin enredos:</h3><ul>${PZ_COMO.map(t => `<li>${t}</li>`).join('')}</ul></div>
+      </div>
     </section>
     <section class="pz-sec pz-in" id="pz-ruta">
       <header class="pz-head pz-rev"><h2>Contigo del colegio al grado</h2><p>Recorre el camino y mira qué tienes en cada etapa.</p></header>
@@ -394,7 +405,7 @@ function pzPuntero(el) {
   });
   // Piezas que se inclinan hacia el puntero en 3D (libros, mancuerna, personaje).
   el.querySelectorAll('[data-inclina]').forEach(d => {
-    const g = +d.dataset.inclina, zona = d.closest('.pz-demo, .pz-final, .pz-libros, .pz-prog, .pz-lamina') || d;
+    const g = +d.dataset.inclina, zona = d.closest('.pz-demo, .pz-final, .pz-libros, .pz-prog, .pz-lamina, .pz-somos-top') || d;
     const s = sigue((x, y) => { d.style.setProperty('--rx', `${y.toFixed(2)}deg`); d.style.setProperty('--ry', `${x.toFixed(2)}deg`); }, 120, 16);
     zona.addEventListener('pointermove', e => { const [x, y] = rel(e, zona); s.mx = x * 2 * g; s.my = -y * 2 * g; anda(); });
     zona.addEventListener('pointerleave', () => { s.mx = s.my = 0; anda(); });
