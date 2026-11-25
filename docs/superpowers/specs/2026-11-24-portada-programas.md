@@ -11,6 +11,8 @@ El usuario pidió acomodar la portada como instruimos.com. Se toma su **estructu
    bajo activo de `productos` / `articulos`; si no hay, la ficha no sale. Lo no publicado queda en «Muy pronto».
    Álgebra, Trigonometría y los demás cursos de carrera (`PZ_FUND`) van juntos como «Fundamentación en Ingeniería y Ciencias»:
    una lámina con la foto `brand/ingenieros.webp` y los logos, y una tarjeta ancha con cada curso, su precio o «Muy pronto».
+   Lámina «Estudia desde cualquier lugar, a tu ritmo»: la estudiante recortada (`brand/dispositivos.webp`, sin fondo) y la app
+   real en celular, computador y tablet (`brand/app/`).
 4. **Quiénes somos**: franja de color con tres tarjetas (qué, cómo, por qué). Reemplaza la sección anterior.
 5. Siguen: tu camino, ¿te ha pasado?, cómo se aprende, mundos, libros y preguntas.
 6. **¿Qué estás esperando?**, pie con columnas y WhatsApp flotante.
