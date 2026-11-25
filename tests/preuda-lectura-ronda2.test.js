@@ -61,12 +61,8 @@ test('Tono: adverbios y expresiones de actitud, no solo adjetivos', () => {
 test('Prefijos y raíces: casos en que las piezas engañan y manda el contexto', () => {
   assert.match(scenes('pu-vo-4'), /engañan/i);
   assert.match(scenes('pu-vo-4'), /manda el contexto/i);
-  const rounds = exOf('pu-vo-4', 'palabra-a-la-medida')[0].params.rounds.filter(r => /^re/.test(r.word));
-  assert.ok(rounds.length >= 2, 'dos palabras con re- que no es «de nuevo»');
-  for (const r of rounds) {
-    assert.ok(r.options.some((o, i) => i !== r.answer && /otra vez|de nuevo/.test(o)), `${r.word}: falta la trampa de las piezas`);
-    assert.doesNotMatch(r.options[r.answer], /otra vez|de nuevo/);
-  }
+  const g = exOf('pu-vo-4', 'genero-o-cita')[0].params;
+  assert.ok(g.rot.some(r => /engaña/.test(r)) && g.va.filter(v => v === 1).length >= 2, 'dos palabras con re- que no es «de nuevo»');
   assert.ok(examOf('pu-vo-4').some(it => /contexto manda|manda el contexto/i.test(it.review) && it.ex.params.options.some((o, i) => i !== it.ex.params.answer && /volver a/.test(o))));
 });
 

@@ -1,235 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-l-dos-textos.js
-// Preuniversitario · Comprensión lectora · mundo 10 «Lectura de dos textos» con textos de verdad (spec
-// 2026-11-19-preuda-lectura-textos): dos parejas de textos sobre el mismo tema con posturas distintas, siempre a la vista los dos
-// (Texto Uno y Texto Dos): videojuegos (coincidencias y diferencias) y trabajo remoto (qué diría el otro autor). El texto Uno es el
-// de la lección (330–560 palabras); el Dos es más corto, como en el examen. La evaluación usa otra pareja sobre el turismo.
-// Textos escritos para Zuka.
-PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
-  const JUEGOS = {
-    id: 'lec-videojuegos-ensenan', title: 'Los videojuegos también enseñan',
-    ficha: { autor: 'Columna de una psicóloga', fuente: 'Revista para padres de familia', fecha: 'Mayo de 2025' },
-    paras: [
-      'Durante años, los videojuegos cargaron con la fama de ser una pérdida de tiempo. Sin embargo, la investigación de las últimas dos décadas pinta un cuadro más interesante. Varios estudios han encontrado que ciertos juegos de acción mejoran la atención visual y la capacidad de seguir varios objetos a la vez, y que los juegos de estrategia exigen planear, equivocarse y volver a intentar. Otros obligan a leer instrucciones largas, a administrar recursos escasos o a resolver acertijos que no tienen una sola salida.',
-      'Además, muchos juegos son hoy espacios sociales. Los adolescentes no juegan solos: juegan con amigos, se organizan en equipos, se reparten tareas y discuten estrategias durante horas. Para algunos jóvenes tímidos, el juego en línea es el primer lugar donde se sienten parte de un grupo, y a veces es allí donde ensayan conversaciones que después se atreven a tener en el colegio.',
-      'Hay también juegos diseñados para aprender. En algunos colegios, los estudiantes construyen ciudades virtuales para entender la economía o recorren el cuerpo humano como si fuera un mapa. Los profesores que los usan dicen que los estudiantes se equivocan más que en un examen, pero que no les da miedo equivocarse, porque en el juego equivocarse es parte de avanzar. Un profesor de sociales cuenta que sus estudiantes discutieron una semana entera sobre cómo repartir el agua en su ciudad inventada.',
-      'Nada de esto quiere decir que todo juego sea bueno ni que no haya que poner límites. Un adolescente que deja de dormir por jugar tiene un problema, como lo tendría si dejara de dormir por leer novelas. Pero el problema está en el exceso y en lo que se deja de hacer, no en el videojuego en sí.',
-      'Por eso, más que prohibir, conviene acompañar: saber a qué juegan los hijos, jugar con ellos de vez en cuando y acordar horarios. Un padre que conoce el juego puede conversar sobre él; uno que solo lo prohíbe pierde la oportunidad de entender qué le gusta a su hijo y por qué.',
-    ],
-  };
-  const PANTALLAS = {
-    id: 'lec-pantallas-costo', title: 'Lo que las pantallas quitan',
-    ficha: { autor: 'Columna de un médico pediatra', fuente: 'Periódico nacional, sección Salud', fecha: 'Junio de 2025' },
-    paras: [
-      'Los defensores de los videojuegos suelen hablar de lo que los juegos dan: atención, estrategia, amigos. Rara vez hablan de lo que quitan. Y lo que quitan, sobre todo, es tiempo.',
-      'En mi consultorio lo veo cada semana. Llegan adolescentes que juegan cuatro horas diarias, con sueño, sin moverse y sin ganas de conversar con nadie. Cuando les pregunto a qué hora se duermen, la respuesta casi siempre tiene que ver con una partida que no podían dejar a medias. Esas horas se las quitan a dormir, a moverse, a conversar cara a cara y hasta a aburrirse, que también es necesario para imaginar.',
-      'Además, muchos juegos están diseñados para que sea difícil dejarlos: recompensas cada pocos minutos, cofres sorpresa que se pagan con dinero real, misiones que se pierden si uno no entra cada día. No es casualidad: de que el jugador vuelva depende el negocio. Esas recompensas tan seguidas hacen, además, que perder no duela: se pierde una partida y en segundos empieza otra.',
-      'No se trata de prohibir los videojuegos, sino de reconocer que no son una actividad neutra. Hace falta que las familias pongan límites claros de tiempo y que el Estado regule los cofres pagados, que se parecen demasiado a las apuestas.',
-    ],
-  };
-
-  const REMOTO = {
-    id: 'lec-trabajo-remoto', title: 'El trabajo remoto llegó para quedarse',
-    ficha: { autor: 'Columna de un consultor', fuente: 'Revista de negocios', fecha: 'Febrero de 2025' },
-    paras: [
-      'Hace cinco años, trabajar desde la casa era un privilegio de unos pocos. La pandemia lo convirtió, de un día para otro, en la norma para millones de personas, y muchas empresas descubrieron algo que antes se negaban a creer: que buena parte del trabajo de oficina se podía hacer igual de bien, o mejor, desde la mesa del comedor. Algunas lo descubrieron con alivio; otras, con un poco de vergüenza por haberlo negado tanto tiempo.',
-      'Las ventajas son evidentes para quien las ha vivido. Se ahorran las dos o tres horas diarias de trancón, el dinero del transporte y del almuerzo. Muchas personas, sobre todo madres y padres, ganaron tiempo para sus hijos, y en las horas pico hubo menos carros en las calles. Y las empresas descubrieron que podían contratar talento en cualquier ciudad, no solo en la capital, y ahorrarse además buena parte del arriendo de sus sedes.',
-      'Los críticos dicen que la productividad baja cuando nadie vigila. Pero esa crítica dice más de los jefes que de los trabajadores: si a alguien solo se le puede medir por las horas que pasa sentado frente a un escritorio, lo que falla es la manera de medir. Un buen trabajo se reconoce por sus resultados, no por la silla donde se hizo. Las empresas que lo entendieron cambiaron el control de horarios por metas claras y revisiones semanales.',
-      'Por supuesto, el trabajo remoto exige disciplina, una conexión estable y un lugar tranquilo, y no todos los tienen. Pero esos son problemas que se pueden resolver con apoyo de las empresas, por ejemplo con un auxilio para internet o espacios de trabajo compartidos cerca de la casa, no razones para volver a encerrar a todos en un edificio.',
-      'Muchas de las empresas que probaron el trabajo remoto no piensan volver atrás, y algunas de las que obligaron a regresar vieron irse a sus mejores empleados. Quien defiende el regreso obligatorio a la oficina defiende, en el fondo, una costumbre. Las costumbres cambian. Esta ya cambió.',
-    ],
-  };
-  const OFICINA = {
-    id: 'lec-oficina-ensena', title: 'La oficina también enseña',
-    ficha: { autor: 'Columna de un ingeniero con veinte años de experiencia', fuente: 'Revista de negocios', fecha: 'Marzo de 2025' },
-    paras: [
-      'No niego que trabajar desde la casa tiene ventajas. Pero quienes lo celebran suelen ser personas con experiencia, que ya aprendieron su oficio. Para los que empiezan, la oficina sigue siendo una escuela.',
-      'Lo que un practicante aprende al oír cómo su jefa resuelve una llamada difícil, o al preguntarle algo a un compañero en el pasillo, no está en ningún manual ni cabe en una videollamada programada. Ese aprendizaje casual, que nadie planea, es el que más se pierde cuando todos trabajan desde la casa.',
-      'Además, no todos tienen en su casa un lugar para trabajar. Para un joven que vive con cinco personas en un apartamento pequeño, la oficina no es una costumbre: es el único escritorio que tiene.',
-      'Por eso propongo un camino intermedio: dos o tres días presenciales a la semana, sobre todo en los equipos donde hay gente nueva.',
-    ],
-  };
-
-  const A = { doc: JUEGOS, docs: [JUEGOS, PANTALLAS] };
-  const B = { doc: REMOTO, docs: [REMOTO, OFICINA] };
-
-  // ---------------- Lección 1 · Coincidencias y diferencias ----------------
-  setLesson('pu-dt-1', [
-    play('puente-dos-textos', 'El puente entre los dos textos', { ...A, cards: [
-      ['Los juegos de estrategia exigen planear.', 0],
-      ['El juego en línea ayuda a jóvenes tímidos a sentirse en un grupo.', 0],
-      ['Hay que poner límites de tiempo.', 1],
-      ['No se trata de prohibir los videojuegos.', 1],
-      ['Se apoya en varios estudios.', 0],
-      ['Muchos juegos están diseñados para que sea difícil dejarlos.', 2],
-      ['El Estado debería regular los cofres pagados.', 2],
-      ['El autor cuenta lo que ve en su consultorio.', 2],
-    ] }, 'Los dos rechazan prohibir y piden límites de tiempo. El texto Uno se concentra en lo que los juegos dan (estrategia, amigos) y se apoya en estudios; el Dos, en lo que quitan y en cómo están diseñados para enganchar, y se apoya en lo que el médico ve en su consultorio.',
-      { hint: 'Una coincidencia tiene que estar en los dos textos. Antes de ponerla en el medio, búscala en cada uno.' }),
-    play('caso-nuevo', 'Un texto que explica al otro', { ...A, principle: 'Una idea de un texto «encuentra explicación» en el otro cuando el otro da la causa o el mecanismo de lo que el primero solo afirma. Repetir la idea o coincidir con ella no es explicarla.', ask: '¿En cuáles parejas el segundo fragmento explica por qué pasa lo que afirma el primero?', cards: [
-      ['Uno: a los estudiantes no les da miedo equivocarse en el juego. → Dos: las recompensas seguidas hacen que perder no duela, porque en segundos empieza otra partida.', true],
-      ['Uno: un adolescente que deja de dormir por jugar tiene un problema. → Dos: muchos juegos están diseñados para que sea difícil dejarlos.', true],
-      ['Uno: ciertos juegos de acción mejoran la atención visual. → Dos: los defensores de los videojuegos hablan de atención y estrategia.', false],
-      ['Uno: más que prohibir, conviene acompañar. → Dos: no se trata de prohibir los videojuegos.', false],
-      ['Dos: los cofres sorpresa se pagan con dinero real. → Uno: hay juegos diseñados para aprender.', false],
-    ] }, 'En las dos primeras parejas, el texto Dos da el mecanismo que el Uno solo afirma: si perder no duele, no da miedo equivocarse; y si el juego está hecho para que no se pueda dejar, se entiende al que deja de dormir. Las otras no explican: una solo repite la palabra «atención» (el Dos cuenta lo que dicen los defensores), otra es una coincidencia (los dos rechazan prohibir) y la última une ideas que no tienen que ver. Un texto puede explicar al otro aunque sus autores no estén de acuerdo: la psicóloga ve en el error sin miedo una ventaja; el médico, parte del enganche.',
-      { hint: 'No te guíes por la palabra que se repite. Pregúntate si el segundo fragmento responde «¿por qué pasa eso?» sobre el primero.' }),
-    play('resume-parrafo', 'El texto Uno, párrafo por párrafo', { ...A, paras: [1, 2, 3, 4], options: [
-      'La investigación muestra que algunos juegos entrenan la atención y la planeación.',
-      'Muchos juegos son espacios donde los jóvenes se relacionan con otros.',
-      'Hay juegos hechos para aprender, donde equivocarse es parte de avanzar.',
-      'El problema es el exceso, no el videojuego en sí.',
-      'Las recompensas seguidas hacen que perder no duela.',
-      'Todos los juegos en línea son buenos para los jóvenes tímidos.',
-    ], key: [0, 1, 2, 3] },
-      'Cada frase resume un párrafo del texto Uno. Lo de las recompensas que hacen que perder no duela es del texto Dos, y el Uno dice que el juego en línea ayuda a «algunos» tímidos, no que todos los juegos sean buenos.',
-      { hint: 'Trabaja solo con el texto Uno. Si una frase suena a lo que dice el Dos, sobra aquí.' }),
-    play('conector-bisagra', 'Cómo se relacionan los dos textos', { ...A, rounds: [
-      { a: 'El texto Uno destaca lo que los videojuegos dan.', b: 'el texto Dos insiste en lo que quitan.', options: ['En cambio,', 'Por eso,', 'Es decir,', 'Por ejemplo,'], answer: 0 },
-      { a: 'Los dos textos rechazan la prohibición.', b: 'los dos piden límites de tiempo.', options: ['Además,', 'Es decir,', 'Por ejemplo,', 'En cambio,'], answer: 0 },
-      { a: 'Según el texto Dos, de que el jugador vuelva depende el negocio.', b: 'pide que el Estado regule los cofres pagados.', options: ['Por eso,', 'Aunque', 'En cambio,', 'Es decir,'], answer: 0 },
-    ] }, 'Los enfoques se oponen (contraste); las coincidencias se suman (adición); y el diseño del negocio es la razón de la regulación que pide el Dos (consecuencia).',
-      { hint: 'Pregúntate si las dos ideas se oponen, se suman o una explica la otra.' }),
-    play('quien-lo-dice', '¿Con qué se sostiene cada uno?', { ...A, ask: 'Las preguntas del examen comparan cómo respalda cada texto lo que dice. Lleva cada fragmento al tipo de respaldo que usa.', voices: ['Estudios o investigaciones', 'Lo que cuentan otras personas', 'La experiencia del propio autor'], cards: [
-      ['Varios estudios han encontrado que ciertos juegos de acción mejoran la atención visual. (Uno)', 0],
-      ['Los profesores que los usan dicen que los estudiantes no tienen miedo de equivocarse. (Uno)', 1],
-      ['Un profesor de sociales cuenta que sus estudiantes discutieron una semana sobre el agua. (Uno)', 1],
-      ['En mi consultorio lo veo cada semana. (Dos)', 2],
-      ['Cuando les pregunto a qué hora se duermen, hablan de una partida que no podían dejar. (Dos)', 2],
-    ] }, 'El texto Uno expone con cautela: se apoya en estudios («varios», «ciertos juegos») y en lo que cuentan profesores, y casi no habla de sí misma. El Dos opina desde la experiencia: el médico habla en primera persona de lo que ve en su consultorio. Esa es una diferencia de respaldo, no de tema.',
-      { hint: 'Fíjate en quién habla en cada fragmento: un estudio, otra persona citada o el autor en primera persona («mi», «les pregunto»).' }),
-    play('trampa-opcion', 'Cada opción con su trampa', { ...A, q: '¿En qué coinciden los autores de los dos textos?', options: [
-      ['En que el Estado debe regular los cofres que se pagan con dinero real.', 4],
-      ['En que los videojuegos mejoran las notas del colegio.', 3],
-      ['En que no se trata de prohibir los videojuegos, sino de ponerles límites.', 0],
-      ['En que los videojuegos solo traen beneficios.', 2],
-    ] }, 'C está en los dos: el Uno pide «acompañar» y acordar horarios en vez de prohibir, y el Dos dice que no se trata de prohibir sino de poner límites. A mezcla los textos: los cofres son solo del Dos. B no lo dice ninguno, y D dice lo contrario de lo que sostiene el Dos. Sobra el sello «Dice de más».',
-      { hint: 'Una coincidencia tiene que estar en los dos textos. Busca cada opción en el Uno y luego en el Dos.' }),
-    play('palabra-a-la-medida', 'Palabras del texto Uno', { ...A, rounds: [
-      { p: 1, before: 'los videojuegos cargaron con la ', word: 'fama', after: ' de ser una pérdida de tiempo', options: ['reputación', 'fortuna', 'costumbre', 'celebridad'], answer: 0 },
-      { p: 4, before: 'Pero el problema está en el ', word: 'exceso', after: ' y en lo que se deja de hacer', options: ['abuso', 'juego', 'precio', 'gusto'], answer: 0 },
-    ] }, 'Aquí «fama» es la reputación, buena o mala, no la celebridad. Y el exceso es el abuso: jugar tanto que se deja de dormir.',
-      { hint: 'Una «fama de ser una pérdida de tiempo» no es algo que haga famoso a nadie. ¿Qué significa entonces?' }),
-  ]);
-
-  // ---------------- Lección 2 · Qué diría el otro autor ----------------
-  setLesson('pu-dt-2', [
-    play('quien-lo-dice', '¿Quién lo diría?', { ...B, ask: 'Lleva cada frase al autor que la diría, según su tesis, o a «Ninguno».', voices: ['Lo diría el autor Uno', 'Lo diría el autor Dos', 'No lo diría ninguno'], cards: [
-      ['«Contratemos a la diseñadora que vive en Pasto, aunque nunca venga a la sede».', 0],
-      ['«Midamos a cada empleado por lo que entrega, no por la hora en que llega».', 0],
-      ['«Al practicante nuevo conviene sentarlo al lado de alguien con experiencia».', 1],
-      ['«Para el joven que vive en un apartamento pequeño, la oficina es su escritorio».', 1],
-      ['«Volvamos todos a la oficina cinco días, como antes».', 2],
-    ] }, 'Contratar en cualquier ciudad y medir por resultados son ideas del Uno; el aprendizaje junto a alguien con experiencia y el escritorio que falta en casa, del Dos. Ninguno pide volver cinco días: el Dos propone dos o tres.',
-      { hint: 'Usa la tesis de cada autor como lente. Ojo: el autor Dos no está en contra del trabajo remoto del todo.' }),
-    play('puente-dos-textos', 'Lo que dice cada uno', { ...B, cards: [
-      ['Trabajar en casa ahorra horas de trancón.', 0],
-      ['La productividad se mide por resultados, no por horas.', 0],
-      ['Trabajar desde la casa tiene ventajas.', 1],
-      ['No todos tienen un lugar para trabajar en casa.', 1],
-      ['Los que empiezan aprenden mucho en la oficina.', 2],
-      ['Conviene ir dos o tres días a la oficina.', 2],
-    ] }, 'Los dos reconocen las ventajas y el problema del lugar para trabajar (el Uno en el párrafo 4, el Dos en el 3). El Uno defiende medir por resultados; el Dos, el aprendizaje en la oficina y un camino intermedio.',
-      { hint: 'Antes de dejar una idea en un solo lado, búscala en el otro texto.' }),
-    play('balanza-argumento', 'Ideas de los dos frente a la tesis del Uno', { ...B, ask: 'Pon en cada platillo las ideas, de cualquiera de los dos textos, que apoyan o debilitan la tesis del texto Uno.', thesis: 'El trabajo remoto debería ser la norma, no la excepción.', cards: [
-      ['Se ahorran horas de trancón y dinero.', 0],
-      ['Las empresas pueden contratar talento en cualquier ciudad.', 0],
-      ['El aprendizaje casual del pasillo se pierde en casa.', 1],
-      ['Muchos jóvenes no tienen en casa un lugar para trabajar.', 1],
-      ['La pandemia empezó hace cinco años.', null],
-    ] }, 'El ahorro y el talento de otras ciudades son argumentos del Uno. El aprendizaje perdido y la falta de lugar son objeciones del Dos. La fecha de la pandemia no pesa.',
-      { hint: 'La tesis es del texto Uno, pero las ideas pueden venir de cualquiera de los dos.' }),
-    play('termometro-tono', 'Dos maneras de discutir', { ...B, rounds: [
-      { frag: 'Las costumbres cambian. Esta ya cambió.', scale: ['tajante', 'dudoso', 'nostálgico', 'burlón'], answer: 0 },
-      { frag: 'No niego que trabajar desde la casa tiene ventajas.', scale: ['conciliador', 'agresivo', 'irónico', 'eufórico'], answer: 0 },
-    ] }, 'El texto Uno cierra con frases cortas y sin matices: es tajante (corta la discusión, no deja lugar a dudas). El Dos empieza concediéndole algo al otro: es conciliador.',
-      { hint: 'Compara: uno cierra la discusión de golpe; el otro empieza reconociendo algo de la postura contraria.' }),
-    play('trampa-opcion', 'Cada opción con su trampa', { ...B, q: '¿En qué coinciden los autores de los dos textos?', options: [
-      ['En que la oficina es indispensable para todos los trabajadores.', 1],
-      ['En que las empresas deben pagarles un auxilio de internet a los practicantes.', 4],
-      ['En que la productividad baja cuando nadie vigila.', 2],
-      ['En que trabajar desde la casa tiene ventajas.', 0],
-    ] }, 'D está en los dos: el Uno las enumera y el Dos empieza «No niego que trabajar desde la casa tiene ventajas». A dice de más: el Dos defiende la oficina para los que empiezan, no para todos. B mezcla el auxilio del Uno con los practicantes del Dos. C dice lo contrario de lo que sostiene el Uno, y el Dos no lo afirma. Sobra el sello «El texto no lo dice».',
-      { hint: 'Una concesión del autor Dos también cuenta como coincidencia. Lee con cuidado su primera oración.' }),
-    play('caso-nuevo', 'Un tercero en la discusión', { ...B, principle: 'Una gerente defiende el regreso a la oficina. Busca en los dos textos ideas que los autores sostengan, o concedan, y que le sirvan contra la tesis del texto Uno.', ask: '¿Cuáles ideas puede usar la gerente como argumento contra el texto Uno?', cards: [
-      ['El aprendizaje casual del pasillo se pierde cuando todos trabajan desde la casa. (Dos)', true],
-      ['Para un joven que vive con cinco personas, la oficina es el único escritorio que tiene. (Dos)', true],
-      ['El trabajo remoto exige disciplina, buena conexión y un lugar tranquilo, y no todos los tienen. (Uno)', true],
-      ['La productividad baja cuando nadie vigila, como sostiene el autor del texto Uno.', false],
-      ['Las empresas pueden contratar talento en cualquier ciudad. (Uno)', false],
-    ] }, 'Las dos ideas del texto Dos son argumentos de su autor contra el trabajo remoto como norma. La tercera es del texto Uno, pero su autor la concede («Por supuesto…»): un tercero puede usarla en su contra. La productividad que baja aparece en el Uno, pero es lo que dicen «los críticos», y el autor la rechaza: no se le puede atribuir. Y contratar en cualquier ciudad favorece al Uno.',
-      { hint: 'Que una frase aparezca en un texto no significa que su autor la defienda. Revisa quién la dice: el autor, «los críticos» o el autor cuando concede algo.' }),
-    play('hilo-referente', '¿A qué se refiere?', { ...B, rounds: [
-      { p: 5, text: 'Quien defiende |el regreso obligatorio a la oficina| defiende, en el fondo, |una costumbre|. |Las costumbres| cambian. |Esta| ya cambió.', from: 7, answer: 3 },
-      { p: 2, text: 'Muchas personas, sobre todo |madres y padres|, ganaron tiempo para |sus| hijos, y en las horas pico hubo menos carros en |las calles|', from: 3, answer: 1 },
-    ] }, '«Esta» es la costumbre de ir a la oficina, que ya cambió. Y los hijos son de las madres y los padres: las calles no tienen hijos.',
-      { hint: '«Esta» es femenino singular: ¿cuál de las opciones concuerda con ella?' }),
-  ]);
-
-  // ---------------- Evaluación: formato real, dos textos nuevos ----------------
-  // Dos textos de longitud de examen: el Uno expone con cifras y cautela; el Dos opina desde la experiencia de una vecina.
-  const TURISMO = {
-    id: 'lec-turismo-bendicion', title: 'Una ciudad abierta',
-    ficha: { autor: 'Columna de una economista', fuente: 'Revista de economía regional', fecha: 'Julio de 2025' },
-    paras: [
-      'El turismo dejó el año pasado más de un billón de pesos en la ciudad, según la cámara de comercio, y creó cerca de doce mil empleos directos en restaurantes, hoteles y transporte. Barrios que antes nadie visitaba hoy reciben extranjeros que pagan por conocer su historia, y muchos de esos recorridos los guían jóvenes del mismo barrio.',
-      'Las cifras, desde luego, no cuentan toda la historia. Una parte de ese dinero se queda en cadenas hoteleras y en plataformas que no tributan en la ciudad, y los empleos del sector suelen ser temporales. Aun así, los estudios disponibles indican que, por cada peso que gasta un visitante, la economía local mueve casi dos, porque el restaurante compra en la plaza y el guía paga arriendo en su barrio.',
-      'Es cierto que hay problemas. En algunos sectores los arriendos han subido, porque a un propietario le rinde más alquilar por noches a visitantes que por meses a una familia, y hay vecinos que se quejan del ruido. Pero esos problemas tienen nombre y se pueden resolver con regulación: límites al alquiler por noches, cobros a las plataformas y horarios para los bares. Cerrar la puerta, en cambio, no resuelve nada; solo cambia el problema por otro.',
-      'Una ciudad que se cierra al visitante se cierra también a sus ingresos. La pregunta útil no es si queremos turismo, sino qué reglas necesitamos para que deje más de lo que se lleva.',
-    ],
-  };
-  const DECORADO = {
-    id: 'lec-ciudad-decorado', title: 'La ciudad no es un decorado',
-    ficha: { autor: 'Columna de una vecina del barrio', fuente: 'Periódico comunitario', fecha: 'Agosto de 2025' },
-    paras: [
-      'Vivo hace treinta años en la misma cuadra. Aquí aprendí a montar en bicicleta, aquí nacieron mis hijos y aquí, hasta hace poco, conocía el nombre de cada vecino. Hoy, de las doce casas de la cuadra, siete se alquilan por noches. Los fines de semana veo pasar maletas de rueditas a todas horas, y los lunes la cuadra queda en silencio, como un teatro después de la función.',
-      'La señora de la tienda de la esquina cerró en marzo. No porque le faltaran clientes, sino porque el dueño del local le duplicó el arriendo: un turista paga en tres noches lo que ella pagaba en un mes. Mi hija, que trabaja como guía, me dice que el turismo le dio empleo. Le creo. Pero ella ya no puede pagar un apartamento en el barrio que muestra a los extranjeros.',
-      'No estoy en contra del turismo. Me gusta que vengan a ver los murales y que se interesen por lo que vivimos. Estoy en contra de un turismo que convierte la casa de unos en el hotel de otros, sin que nadie ponga reglas, y que trata al barrio como un decorado para la foto.',
-      'Cuando la alcaldía habla de los ingresos del turismo, yo pienso en la cuadra vacía de los lunes. Un barrio sin vecinos puede salir muy bonito en las postales, pero ya no es un barrio.',
-    ],
-  };
-  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { docs: [TURISMO, DECORADO], q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
-  setExam('pu-dos-textos', 'Evaluación · Lectura de dos textos', [
-    ['pu-dt-1', 'Una idea de un texto «encuentra explicación» en el otro cuando el otro da su causa o su mecanismo; repetir las mismas palabras no es explicar.',
-      Q('Que siete de las doce casas de la cuadra se alquilen por noches (texto Dos) encuentra explicación en el texto Uno, cuando este dice que:', ['hay que poner límites al alquiler por noches', 'a un propietario le rinde más alquilar por noches que por meses', 'barrios que antes nadie visitaba reciben hoy a extranjeros que pagan por su historia', 'por cada peso de un visitante, la economía local mueve casi dos'], 1,
-        'El Dos solo cuenta lo que ve: siete casas alquiladas por noches. El Uno da la causa: alquilar por noches le rinde más al propietario que alquilar por meses. La opción A repite las palabras «alquiler por noches», pero es una solución, no una explicación; C y D hablan de los beneficios del turismo.',
-        'No elijas la opción que repite las palabras del Dos. Busca en el Uno la que responde «¿por qué pasa eso?».')],
-    ['pu-dt-1', 'Una coincidencia debe estar en los dos textos.',
-      Q('Los dos textos coinciden en que:', ['el turismo debería prohibirse en los barrios residenciales', 'el turismo trae problemas que necesitan reglas', 'el arriendo se duplicó en todos los barrios de la ciudad', 'el turismo dejó más de un billón de pesos el año pasado'], 1,
-        'El Uno dice que los problemas se resuelven «con regulación»; el Dos critica que «nadie ponga reglas». Las cifras solo están en el Uno, y el arriendo duplicado es de un local del Dos.',
-        'Para cada opción, busca si aparece en el texto Uno y en el texto Dos.')],
-    ['pu-dt-1', 'Una diferencia de enfoque es lo que cada texto pone en primer plano.',
-      Q('Una diferencia entre los textos es que:', ['el Uno destaca los ingresos y el Dos la vida de los vecinos', 'el Uno está en contra del turismo y el Dos lo defiende sin reservas', 'el Uno habla solo de restaurantes y el Dos solo de murales', 'el Dos no menciona ningún beneficio del turismo para el barrio'], 0,
-        'El Uno habla de dinero, empleos y reglas; el Dos, de la cuadra que se vacía. Ninguno está en contra del turismo, y el Dos reconoce un beneficio: el empleo de su hija.',
-        'Pregúntate qué pone cada texto en primer plano. Y revisa si el Dos reconoce algo bueno del turismo.')],
-    ['pu-dt-1', 'También se compara cómo respalda cada texto lo que dice: cifras y estudios, o la experiencia de quien escribe.',
-      Q('Una diferencia en la manera de sostener lo que dicen es que:', ['el Uno se apoya en cifras y estudios, y el Dos en lo que su autora vive en la cuadra', 'el Uno cuenta su experiencia de vecina y el Dos presenta cifras de la cámara de comercio', 'los dos se apoyan sobre todo en la opinión de expertos en turismo', 'el Dos cita estudios sobre arriendos y el Uno cuenta la historia de una tienda'], 0,
-        'El Uno cita a la cámara de comercio y «los estudios disponibles», con cautela («no cuentan toda la historia»). El Dos habla en primera persona: «Vivo hace treinta años», la tienda de la esquina, su hija. La opción B intercambia los textos.',
-        'Busca las marcas: cifras y «según», o «yo», «mi hija», «vivo». Cuidado con la opción que cambia un texto por el otro.')],
-    ['pu-dt-1', '«Es interés del texto Dos más que del Uno» pide algo que el Dos trate a fondo y el Uno no.',
-      Q('Es interés del texto Dos más que del texto Uno:', ['el empleo que el turismo les da a los jóvenes de los barrios', 'los extranjeros que pagan por conocer la historia del barrio', 'que los vecinos de siempre puedan seguir viviendo en el barrio', 'los ingresos que el turismo le deja cada año a la ciudad entera'], 2,
-        'El Uno menciona los arriendos como un problema que se regula; el Dos gira entero alrededor de los vecinos que se van. El empleo, los extranjeros y los ingresos son temas del Uno.',
-        'Busca la opción que en el texto Uno solo aparece de paso y en el Dos ocupa todo el texto.')],
-    ['pu-dt-2', 'Para saber qué diría un autor, se usa su tesis como lente.',
-      Q('Ante el caso de la tienda de la esquina, la autora del texto Uno probablemente diría que:', ['hay que prohibir de una vez el alquiler por noches en toda la ciudad', 'el dueño del local tenía todo el derecho de duplicar el arriendo', 'la tienda cerró porque ya no tenía clientes en la cuadra', 'es un problema que se resuelve con límites al alquiler por noches'], 3,
-        'Su tesis es que los problemas «tienen nombre y se pueden resolver con regulación», y nombra los límites al alquiler por noches. No pediría prohibir, y el texto Dos dice que a la tienda no le faltaban clientes.',
-        'Relee el párrafo 3 del texto Uno: ¿qué soluciones propone?')],
-    ['pu-dt-2', 'La respuesta de un autor no puede contradecir lo que ya dijo en su texto.',
-      Q('La autora del texto Dos le respondería a la del Uno que:', ['el turismo no le deja ningún dinero a la ciudad ni a sus barrios', 'está de acuerdo con ella en todo, también en lo de las reglas', 'las cifras de ingresos no muestran lo que pierde un barrio sin vecinos', 'los extranjeros no deberían venir a visitar los murales del barrio nunca más'], 2,
-        'El Dos no niega los ingresos ni rechaza a los visitantes («Me gusta que vengan»), pero piensa en «la cuadra vacía de los lunes» cuando oye hablar de ingresos.',
-        'Recuerda el último párrafo del texto Dos: ¿en qué piensa la autora cuando le hablan de los ingresos?')],
-    ['pu-dt-2', 'Un tercero puede usar una idea de un texto contra el otro; sirve lo que el autor sostiene o concede, no lo que solo menciona para rechazarlo.',
-      Q('Un defensor de limitar el alquiler por noches tomaría del texto Uno, como argumento a favor de la autora del Dos, que:', ['parte del dinero se queda en plataformas y cadenas, y los empleos suelen ser temporales', 'por cada peso que gasta un visitante, la economía local mueve casi dos pesos, según los estudios', 'cerrar la puerta al turismo no resuelve nada: solo cambia un problema por otro', 'muchos de los recorridos turísticos los guían jóvenes que viven en el mismo barrio'], 0,
-        'La autora del Uno concede que «las cifras no cuentan toda la historia»: parte del dinero se va y los empleos son temporales. Eso sirve contra el entusiasmo por los ingresos. El efecto multiplicador, cerrar la puerta y los guías del barrio son argumentos a favor del turismo.',
-        'Busca en el texto Uno lo que su autora reconoce como limitación. Las demás opciones son argumentos que ella usa a favor del turismo.')],
-    ['pu-dt-2', 'Comparar el tono ayuda a ver la postura: quien concede algo al otro suele ser más conciliador.',
-      Q('Las frases «Mi hija… me dice que el turismo le dio empleo. Le creo» muestran que la autora del Dos:', ['reconoce un beneficio del turismo antes de mostrar su costo', 'cambia de opinión y termina defendiendo el turismo sin reservas', 'desconfía de lo que le cuenta su propia hija sobre el trabajo', 'piensa que su hija debería buscar otro empleo lejos del barrio'], 0,
-        '«Le creo» concede: el turismo da empleo. Enseguida viene el costo: la hija no puede vivir en el barrio que muestra. No cambia de postura ni desconfía de su hija.',
-        'Lee la oración que sigue a «Le creo»: ¿qué agrega la autora?')],
-  ]);
-});
-;
 //#archivo js/courses/preuda-l-referencia.js
 // Preuniversitario · Comprensión lectora · mundo 11 «Referencia y cohesión» con textos de verdad (spec
 // 2026-11-19-preuda-lectura-textos): un relato de dos guardianes de faro lleno de «este», «aquel», «esto último» y «lo cual»
@@ -576,7 +346,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 // tests/preuda-lectura.test.js les exige el estándar.
 const PU_LEC_HECHOS = [];
 // Mundos con explicación interactiva y ejercicios sobre la hoja (spec 2026-11-24-lectura-explora; tests/lectura-explora.test.js).
-const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos', 'pu-explicita', 'pu-inferencia'];
+const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos', 'pu-explicita', 'pu-inferencia', 'pu-vocabulario'];
 (() => {
   const lessons = PU_LECTURA.flatMap(u => u.lessons);
   const L = id => { const l = lessons.find(l => l.id === id); if (!l) throw new Error(`no existe ${id}`); return l; };
@@ -9365,7 +9135,7 @@ xpLec('pu-in-2', [
     ], 'Busca «por fin», «todavía», «ya no», «dejar de»… y también comparaciones, un «sí» que insiste o «saber».'),
     xpHaz('hoja', 'Subraya las **dos** oraciones que dan algo por hecho.', { modo: 'toca', meta: [1, 3], paras: [['El teatro tiene cien sillas.', 'Por fin le pusieron techo.'], ['La entrada cuesta cinco mil.', 'La obra volvió a empezar tarde.']], pista: 'Alguna de las subrayadas solo informa. Busca las palabras que cargan con algo de antes.' }, '«Por fin» y «volvió a» traen historia.')],
   ['Dar por hecho no es decir',
-    xpMira('hoja', 'Tercera idea: no confundas lo que **dice**, lo que **supone** y lo que no está.', { letras: ['1', 'a', 'b', 'c'], paras: [['La biblioteca dejó de cerrar los lunes.'], ['Antes cerraba los lunes.'], ['Ahora abre los lunes.'], ['Abre hasta la noche.']] }, [
+    xpMira('hoja', 'Tercera idea: no confundas lo que **dice**, lo que **supone** y lo que no está.', { letras: ['1', 'a', 'b', 'c'], paras: [['La ludoteca dejó de cerrar los lunes.'], ['Antes cerraba los lunes.'], ['Ahora abre los lunes.'], ['Abre hasta la noche.']] }, [
       ['Arriba está la frase.', { luz: [0] }],
       ['Que ahora abre los lunes es lo que dice.', { luz: [0, 2], nota: { 2: 'lo dice' } }],
       ['Que antes cerraba lo da por hecho.', { luz: [0, 1], nota: { 1: 'lo supone' } }],
@@ -9445,6 +9215,142 @@ xpLec('pu-in-4', [
   ['Ahora sí, un problema',
     xpHaz('hoja', 'Subraya la oración que deja ver que el padre está **orgulloso**.', { modo: 'toca', meta: [3], paras: [['Le entregaron el diploma a las seis.', 'El padre llegó tarde, con el uniforme puesto.'], ['«¿Y eso para qué sirve?», preguntó.', 'Esa noche lo colgó en la pared de la sala.']], pista: 'Esa cuenta lo que pasó o lo que dijo. Busca lo que hizo con el diploma.' }, 'Dijo una cosa; hizo otra. El gesto pesa más.')],
 ], 'Busca el gesto, señala la frase y no pongas lo que sentirías tú.');
+;
+//#archivo js/explora-pu-vo.js
+// Preuniversitario · lectura, mundo 5 «Vocabulario en contexto» (Explora): pu-vo-1 a pu-vo-4. Textos cortos propios.
+xpLec('pu-vo-1', [
+  ['La prueba del reemplazo',
+    xpMira('hoja', 'Empecemos por la idea: el sinónimo bueno es el que **encaja en la oración**.', { letras: ['1', 'a', 'b', 'c'], paras: [['Presentó una propuesta sólida y la aprobaron.'], ['Presentó una propuesta dura y la aprobaron.'], ['Presentó una propuesta pesada y la aprobaron.'], ['Presentó una propuesta bien fundada y la aprobaron.']] }, [
+      ['¿Qué quiere decir «sólida» aquí?', { luz: [0] }],
+      ['«Dura» es un sentido de sólida, pero la oración se vuelve rara.', { luz: [1], tacha: [1] }],
+      ['«Pesada»: tampoco es eso.', { luz: [2], tacha: [2] }],
+      ['«Bien fundada»: por eso la aprobaron. Encaja.', { luz: [0, 3], nota: { 3: 'encaja' } }],
+      ['Se reemplaza y se lee la oración entera, hasta el final.', {}],
+    ], 'Reemplaza, lee la oración completa y quédate con la que dice lo mismo.'),
+    xpHaz('hoja', '«Fue una respuesta **seca**: dijo no y colgó». Subraya la palabra que encaja.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['árida'], ['deshidratada'], ['cortante'], ['delgada']], pista: 'Ponla en la oración: ¿una respuesta puede ser así? Mira «dijo no y colgó».' }, 'Lo que sigue en la oración confirma el sentido.')],
+  ['Verbos concretos, ideas',
+    xpMira('hoja', 'Segunda idea: a veces un verbo de **cosas** se usa con **ideas**.', { paras: [['Con un dato desarmó la mentira.'], ['Tejieron un acuerdo durante meses.'], ['El rumor sembró dudas.']] }, [
+      ['Nadie tiene un destornillador aquí.', {}],
+      ['Desarmar una idea: mostrar que no se sostiene, refutarla.', { luz: [0], nota: { 0: 'refutar' } }],
+      ['Tejer un acuerdo: hacerlo hilo por hilo, poco a poco.', { luz: [1], nota: { 1: 'construir poco a poco' } }],
+      ['Sembrar dudas: hacerlas nacer.', { luz: [2], nota: { 2: 'provocar' } }],
+      ['Se aplica la misma prueba: reemplazar y leer.', {}],
+    ], 'Piensa qué hace el verbo con una cosa y busca lo parecido con una idea.'),
+    xpHaz('hoja', 'Pon al margen lo que quiere decir cada verbo.', { modo: 'margen', rotulos: ['aclarar', 'detener', 'aumentar'], meta: [1, 0, 2], paras: [['Frenó los rumores con un comunicado.'], ['Despejó las dudas de todos.'], ['La lluvia alimentó el río.']], pista: 'Alguno no va ahí. ¿Qué hace un freno, qué pasa cuando se despeja, qué hace un alimento?' }, 'De la cosa a la idea.')],
+  ['Ni al pie de la letra ni de más',
+    xpMira('hoja', 'Tercera idea: al entender una frase, cuida **hasta dónde** llega.', { letras: ['1', 'a', 'b', 'c'], paras: [['«El coro me enseñó a oír», dice Rita.'], ['Le curó los oídos.'], ['Aprendió a prestar atención a los demás.'], ['Ahora oye todo lo que pasa en el mundo.']] }, [
+      ['Rita no habla de sus oídos.', { luz: [0] }],
+      ['«Le curó»: al pie de la letra, se queda corta.', { luz: [1], nota: { 1: 'corta' } }],
+      ['«Todo lo que pasa en el mundo»: exagera.', { luz: [3], nota: { 3: 'de más' } }],
+      ['Prestar atención a los demás: en un coro se aprende eso.', { luz: [2], nota: { 2: 'justa' } }],
+      ['Y una bisagra como «porque» o «sin embargo» también ajusta lo dicho.', {}],
+      ['Lo que se dice con otras palabras sigue siendo el mismo hecho.', {}],
+    ], 'La justa recoge lo que el texto cuenta: ni literal ni exagerada.'),
+    xpHaz('hoja', '«La montaña le bajó los humos». Subraya la versión **justa**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Allá arriba no hay humo.'], ['Subirla lo volvió menos presumido.'], ['Nunca volvió a creer en sí mismo.']], pista: 'Esa la toma al pie de la letra o la exagera.' }, 'Ni el humo de verdad ni un cambio total.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Su explicación fue **clara** y hasta los más pequeños entendieron». Tacha las dos que **no** encajan.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['blanca'], ['sencilla'], ['fácil de seguir'], ['transparente como el agua del río']], pista: 'Alguna de las tachadas sí explica que los pequeños entendieran.' }, 'El final de la oración decide.')],
+], 'Reemplaza, lee hasta el final y cuida hasta dónde llega.');
+
+xpLec('pu-vo-2', [
+  ['Una palabra, varios sentidos',
+    xpMira('hoja', 'Empecemos por la idea: la misma palabra cambia de sentido; la **oración** elige.', { letras: ['A', 'B', 'C'], paras: [['Se le rompió la hoja del cuchillo.'], ['Cayó una hoja del árbol.'], ['Firmó la última hoja.']] }, [
+      ['Tres veces «hoja». Tres cosas distintas.', {}],
+      ['«Del cuchillo»: es la parte que corta.', { luz: [0], nota: { 0: 'filo' } }],
+      ['«Del árbol»: es parte de una planta.', { luz: [1], nota: { 1: 'de una planta' } }],
+      ['«Firmó»: es de papel.', { luz: [2], nota: { 2: 'de papel' } }],
+      ['Las palabras vecinas eligen el sentido. Eso se llama polisemia.', {}],
+    ], 'Mira las palabras vecinas: ellas eligen el sentido.'),
+    xpHaz('hoja', 'Pon al margen qué es «**cabo**» en cada oración.', { modo: 'margen', rotulos: ['militar', 'punta de tierra', 'extremo o final'], meta: [1, 2, 0], paras: [['El barco rodeó el cabo.'], ['Al cabo de un rato volvió.'], ['El cabo saludó al sargento.']], pista: 'Alguno no va ahí. ¿Quién saluda, qué se rodea y qué llega al final?' }, 'El verbo de cada oración decide.')],
+  ['La trampa del sentido común',
+    xpMira('hoja', 'Segunda idea: la opción trampa es el sentido **más común**, que no es el del texto.', { letras: ['1', 'a', 'b'], paras: [['El jurado falló a favor de la niña.'], ['El jurado se equivocó.'], ['El jurado decidió.']] }, [
+      ['«Falló»: lo primero que uno piensa es «se equivocó».', { luz: [0] }],
+      ['Pero «a favor de» no va con equivocarse.', { luz: [0, 1], tacha: [1] }],
+      ['Fallar, en un jurado, es decidir.', { luz: [0, 2], nota: { 2: 'encaja' } }],
+      ['El sentido común es la trampa favorita.', {}],
+      ['Desconfía de la primera que se te ocurra y haz la prueba.', {}],
+    ], 'El sentido más común suele ser la trampa: pruébalo en la oración.'),
+    xpHaz('hoja', '«El actor hizo un **papel** difícil». Subraya el sentido que tiene ahí.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [3], paras: [['hoja para escribir'], ['documento'], ['billete'], ['personaje']], pista: 'Esa es otra clase de papel. ¿Qué hace un actor?' }, 'Quién lo hace también elige el sentido.')],
+  ['Lo que retoma y lo que aclara',
+    xpMira('hoja', 'Tercera idea: para entender, mira también qué **retoma** cada palabra y qué hace cada **signo**.', { paras: [['El pueblo hizo una minga:', 'todos pusieron un día de trabajo.'], ['Con ese esfuerzo,', 'abrieron el camino.'], ['Los dueños de la finca,', 'que viven lejos,', 'no ayudaron; nadie contó con ellos.']] }, [
+      ['Los dos puntos aclaran qué es una minga.', { luz: [0, 1], nota: { 0: 'aclara' } }],
+      ['«Ese esfuerzo» retoma lo anterior: va después.', { luz: [2], nota: { 1: 'retoma' } }],
+      ['La coma abre una aclaración que se puede quitar.', { luz: [5], nota: { 2: 'aclaración' } }],
+      ['«Ellos»: los dueños, no el pueblo.', { luz: [4, 6] }],
+      ['«Al cabo de», «mientras tanto» ordenan en el tiempo.', {}],
+      ['Y un hecho trae otro: el esfuerzo abre el camino.', { luz: [2, 3] }],
+    ], '«Ese…» retoma, los dos puntos aclaran y la coma puede abrir algo que se quita.'),
+    xpHaz('hoja', 'Subraya la oración que **solo puede ir después** de otra.', { modo: 'toca', meta: [2], paras: [['Los vecinos pintaron la cancha.', 'La pintura costó poco.'], ['Con ese arreglo volvieron los torneos.', 'Vienen equipos de tres barrios.']], pista: 'Esa no retoma nada con «ese». Busca la que da algo por contado.' }, '«Ese arreglo» necesita un arreglo ya contado.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«La **corriente** se fue a las ocho y prendimos velas». Tacha los dos sentidos que **no** son.', { modo: 'tacha', letras: ['A', 'B', 'C'], meta: [0, 1], paras: [['agua que corre'], ['moda de pensamiento'], ['electricidad']], pista: 'Alguna de las tachadas es justo la que obliga a prender velas.' }, 'Las velas eligieron el sentido.')],
+], 'Mira las vecinas, desconfía del sentido común y sigue lo que se retoma.');
+
+xpLec('pu-vo-3', [
+  ['No es la suma de las palabras',
+    xpMira('hoja', 'Empecemos por la idea: en una **frase hecha**, el sentido no sale de sumar las palabras.', { paras: [['Pedro se durmió en los laureles.'], ['A Ana se le fueron las luces.'], ['Todos hicieron vaca para la pelota.']] }, [
+      ['Aquí no hay laureles, ni luces, ni vacas.', {}],
+      ['Dormirse en los laureles: confiarse y dejar de esforzarse.', { luz: [0], nota: { 0: 'se confió' } }],
+      ['Irse las luces: no poder pensar.', { luz: [1], nota: { 1: 'se bloqueó' } }],
+      ['Hacer vaca: juntar dinero entre varios.', { luz: [2], nota: { 2: 'juntaron dinero' } }],
+      ['El sentido está en la situación, no en las palabras sueltas.', {}],
+    ], 'No sumes las palabras: mira qué está pasando.'),
+    xpHaz('hoja', 'Pon al margen lo que quiere decir cada expresión.', { modo: 'margen', rotulos: ['sin dinero', 'equivocarse', 'descuidarse'], meta: [1, 2, 0], paras: [['Metió la pata: saludó al que no era.'], ['Dio papaya: dejó la bicicleta sin candado.'], ['Está en la olla: no tiene ni para el bus.']], pista: 'Alguno no va ahí. Lo que va después de los dos puntos lo explica.' }, 'Lo que sigue a los dos puntos da el sentido.')],
+  ['El contexto la explica',
+    xpMira('hoja', 'Segunda idea: si no conoces la expresión, **la situación** la explica.', { paras: [['Llegó tarde, perdió los apuntes', 'y contestó otra pregunta:', 'no dio pie con bola.'], ['Quería rendirse;', 'el entrenador le dijo: «no tire la toalla».']] }, [
+      ['«No dio pie con bola». ¿Qué será?', { luz: [2] }],
+      ['Todo lo que pasó antes salió mal.', { luz: [0, 1], nota: { 0: 'no acertó en nada' } }],
+      ['«No tire la toalla». Quería rendirse…', { luz: [3, 4] }],
+      ['…así que tirar la toalla es rendirse.', { luz: [4], nota: { 1: 'rendirse' } }],
+      ['Viene del boxeo, pero no hace falta saberlo.', {}],
+      ['Las comillas traen palabras exactas; sin ellas, es con otras palabras.', {}],
+    ], 'Busca antes o después la situación que la explica.'),
+    xpHaz('hoja', '«Sacó la mejor nota: **se lució**». Subraya lo que explica la expresión.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [1], paras: [['brilló en la oscuridad'], ['lo hizo muy bien'], ['se cansó'], ['apagó la luz']], pista: 'Esa la toma al pie de la letra o no va con la nota.' }, 'La nota explica el lucirse.')],
+  ['Exagerar para decir',
+    xpMira('hoja', 'Tercera idea: muchas expresiones **exageran**. No se leen al pie de la letra.', { letras: ['A', 'B', 'C'], paras: [['Es más viejo que el agua.'], ['Me lo dijo mil veces.'], ['Caminó dos horas hasta la escuela.']] }, [
+      ['Nadie es más viejo que el agua: exagera para decir «muy viejo».', { luz: [0], nota: { 0: 'exagera' } }],
+      ['Nadie contó mil veces: quiere decir «muchas».', { luz: [1], nota: { 1: 'exagera' } }],
+      ['Dos horas sí se caminan: al pie de la letra.', { luz: [2], nota: { 2: 'tal cual' } }],
+      ['Exagerar así se llama hipérbole.', {}],
+      ['La prueba: imagínalo tal cual. Si es imposible, es una manera de decir.', {}],
+      ['Y lo que alguien dice deja ver su ánimo: vergüenza, desánimo, conformidad.', {}],
+    ], 'Imagínalo tal cual: si es imposible, es una manera de decir.'),
+    xpHaz('hoja', '**Tacha** las dos que **no** se leen al pie de la letra.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 2], paras: [['Tengo un hambre de lobo.'], ['Comí a las doce.'], ['Se me vino el mundo encima.'], ['El plato estaba frío.']], pista: 'Alguna de las tachadas sí pudo pasar tal cual.' }, 'Ni lobo ni mundo: exageraciones.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Le dieron la noticia y **se quedó de una pieza**». Subraya lo que pasó.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['No se rompió.'], ['Se alegró mucho.'], ['Se sorprendió tanto que no pudo moverse.'], ['Siguió caminando.']], pista: 'Esa la toma al pie de la letra o no va con quedarse quieto.' }, 'De una pieza, como una estatua.')],
+], 'No sumes las palabras; mira la situación y prueba si es posible tal cual.');
+
+xpLec('pu-vo-4', [
+  ['Las piezas',
+    xpMira('hoja', 'Empecemos por la idea: muchas palabras están hechas de **piezas** con sentido.', { letras: ['A', 'B', 'C', 'D'], paras: [['bio', 'logía'], ['in', 'vis', 'ible'], ['sub', 'marino'], ['micro', 'scopio']] }, [
+      ['Bio- es vida y -logía, estudio: estudio de la vida.', { luz: [0, 1], nota: { 0: 'estudio de la vida' } }],
+      ['In- niega, vis- es ver, -ible es «que se puede».', { luz: [2, 3, 4], nota: { 1: 'que no se puede ver' } }],
+      ['Sub- quiere decir debajo.', { luz: [5, 6], nota: { 2: 'debajo del mar' } }],
+      ['Micro- es pequeño.', { luz: [7, 8], nota: { 3: 'para ver lo pequeño' } }],
+      ['Otras: anti- contra, foto- luz, -voro que come, -fobia rechazo, aud- oír.', {}],
+      ['Una palabra nueva se parte y se arma.', {}],
+    ], 'Parte la palabra: comienzo, raíz y final. Busca otras que tengan la misma pieza.'),
+    xpHaz('hoja', 'Pon al margen lo que significa cada palabra.', { modo: 'margen', rotulos: ['que come hierba', 'contra el robo', 'debajo del suelo'], meta: [1, 2, 0], paras: [['antirrobo'], ['subsuelo'], ['herbívoro']], pista: 'Alguno no va ahí. Anti- es contra, sub- es debajo y -voro es que come.' }, 'Con las piezas se deduce lo que nunca se ha visto.')],
+  ['Piezas que engañan',
+    xpMira('hoja', 'Segunda idea: a veces la pieza **engaña**, y manda el contexto.', { letras: ['A', 'B', 'C'], paras: [['Va a rehacer la tarea.'], ['Le gusta recordar a su abuela.'], ['El regalo es para ti.']] }, [
+      ['Rehacer: hacer otra vez. Aquí re- ayuda.', { luz: [0], nota: { 0: 'otra vez' } }],
+      ['Recordar no es «cordar» otra vez: es traer a la memoria.', { luz: [1], nota: { 1: 'engaña' } }],
+      ['Regalo no es «galo» otra vez.', { luz: [2], nota: { 2: 'engaña' } }],
+      ['La prueba: quita la pieza y agrega «otra vez». ¿Dice lo mismo?', {}],
+      ['Si no encaja en la oración, manda el contexto.', {}],
+    ], 'Prueba la lectura por piezas en la oración; si no encaja, manda el contexto.'),
+    xpHaz('hoja', '**Tacha** las dos palabras en que re- **no** es «otra vez».', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['reescribir'], ['resolver un problema'], ['rellenar el vaso'], ['respetar una regla']], pista: 'Alguna de las tachadas sí es hacer algo otra vez.' }, 'Escribir y llenar se repiten; resolver y respetar, no.')],
+  ['El texto también ayuda',
+    xpMira('hoja', 'Tercera idea: muchas veces el texto **traduce** la palabra difícil.', { paras: [['Es un animal nocturno:', 'sale cuando oscurece.'], ['Son insectívoros, es decir,', 'comen insectos.'], ['Podría servir de medicina;', 'en cambio, la raíz es venenosa.']] }, [
+      ['Los dos puntos traducen «nocturno».', { luz: [0, 1], nota: { 0: 'traduce' } }],
+      ['«Es decir» también traduce.', { luz: [2, 3], nota: { 1: 'traduce' } }],
+      ['«Podría» no es «ya sirve»: cuida el verbo.', { luz: [4] }],
+      ['«En cambio» compara dos cosas distintas.', { luz: [5], nota: { 2: 'compara' } }],
+      ['Nombrar algo para comparar no es decir que esté ahí.', {}],
+      ['Y un proceso se sigue paso a paso.', {}],
+    ], '«Es decir» y los dos puntos traducen; «podría» no asegura; «en cambio» compara.'),
+    xpHaz('hoja', 'Subraya el trozo que **traduce** «perenne».', { modo: 'toca', meta: [1], paras: [['Es un árbol perenne, es decir,', 'no pierde las hojas en todo el año.'], ['Crece junto al agua', 'y da una sombra fresca.']], pista: 'Ese no explica la palabra. Busca lo que va después de «es decir».' }, 'El propio texto suele dar la clave.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Una planta **fotófila** no crece bajo techo». Subraya lo que significa (foto-, luz; -fila, que ama).', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [3], paras: [['que sale en fotos'], ['que le teme a la luz'], ['que forma filas'], ['que necesita mucha luz']], pista: 'Esa suena parecido, pero no va con las piezas ni con «bajo techo».' }, 'Piezas y contexto dicen lo mismo: ahí no hay duda.')],
+], 'Parte la palabra, arma el sentido y pruébalo en la oración.');
 ;
 //#archivo js/explora-trig-41a.js
 // Trigonometría · trig-41a «Grados y radianes»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva; motor en
@@ -13460,86 +13366,147 @@ function gymRecommend(c, ui, done, unlockAll, mine = {}) {
   return { level: 1, item: warm };
 }
 
-// gymFocus: curso, mundo del nivel del estudiante y nivel elegido; lo pone el botón de las pesas.
+// Primer ejercicio de una lista: abierto y sin superar; si todos lo están, el que tiene menos estrellas. Pura.
+function gymSiguiente(items, mine = {}, isOpen = () => true) {
+  const ab = items.filter(isOpen);
+  return ab.find(r => !mine[r.id]) || ab.slice().sort((a, b) => (mine[a.id]?.best || 0) - (mine[b.id]?.best || 0))[0] || null;
+}
+// Pasa el filtro «Por hacer» o «Superados». Pura.
+const gymFiltra = (items, f, mine = {}) => items.filter(r => (f === 'hacer' ? !mine[r.id] : f === 'hechos' ? !!mine[r.id] : true));
+// La barra que sube el personaje: hasta tres discos por lado; los que no van con el nivel esperan afuera.
+const GYM_BARRA = `<svg class="gb-svg" viewBox="0 0 340 100" aria-hidden="true"><rect class="gb-rod" x="6" y="46" width="328" height="8" rx="4"/>${[0, 1, 2].map(i => {
+  const h = 88 - i * 20, w = 17, y = 50 - h / 2, xi = 74 - i * 20;
+  return [[xi, 'izq'], [340 - xi - w, 'der']].map(([x, l]) => `<g class="gb-p p${i + 1} ${l}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/><rect class="br" x="${x + 3}" y="${y + 7}" width="3.500" height="${h - 14}" rx="1.700"/></g>`).join('');
+}).join('')}<rect class="gb-tope" x="93" y="40" width="7" height="20" rx="2.500"/><rect class="gb-tope" x="240" y="40" width="7" height="20" rx="2.500"/></svg>`;
+const GYM_DADO = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9v.01M15 9v.01M12 12v.01M9 15v.01M15 15v.01"/></svg>';
+const gymDisco = n => `<svg viewBox="0 0 64 64" aria-hidden="true"><circle class="gd-a" cx="32" cy="32" r="29"/><circle class="gd-b" cx="32" cy="32" r="20"/><circle class="gd-c" cx="32" cy="32" r="11"/><text x="32" y="37">${n}</text></svg>`;
+
+// gymFocus: curso, mundo del nivel del estudiante, nivel elegido y filtro; lo pone el botón de las pesas.
 let gymFocus = null;
 
 function renderGym() {
   const c = courseById(S.course), mine = S.gym || {};
   const ui = gymFocus?.course === c.id && c.units[gymFocus.ui] ? gymFocus.ui : courseLevelUi(c, null, { done: S.done, last: S.lastLesson });
   const rec = gymRecommend(c, ui, S.done, S.unlockAll, mine);
-  const lvl = gymFocus?.course === c.id && gymFocus.lvl ? gymFocus.lvl : rec.level;
-  gymFocus = { course: c.id, ui, lvl };
+  gymFocus = { course: c.id, ui, lvl: gymFocus?.course === c.id && gymFocus.lvl ? gymFocus.lvl : rec.level, ver: (gymFocus?.course === c.id && gymFocus.ver) || 'todos' };
   const u = c.units[ui], blockName = c.blocks?.find(b => b.id === u.block)?.name;
   const worlds = gymUpTo(c, ui, S.done || {}), block = c.units.map((x, i) => i).filter(i => c.units[i].block === u.block);
   const warms = worlds.map(i => gymWarmup(c, i, S.done, S.unlockAll, mine[`cal-${c.id}-${i}`]?.n || 0)).filter(w => w.open || w.ui === ui);
   const groups = gymRetos(c).filter(g => block.includes(g.ui));
-  const byLevel = lv => (lv === 1 ? warms : groups.flatMap(g => g.retos).filter(r => r.level === lv));
+  const byLevel = lv => (lv === 1 ? warms.slice().reverse() : groups.flatMap(g => g.retos).filter(r => r.level === lv));
   const isOpen = r => (r.warm ? r.open : gymOpen(r, S.done, S.unlockAll));
   const all = [1, 2, 3].flatMap(byLevel), passed = all.filter(r => mine[r.id]).length;
   const stars = all.reduce((t, r) => t + (mine[r.id]?.best || 0), 0);
-  const wName = i => (WORLDS[c.units[i].world] || { name: c.units[i].title }).name;
+  const uiDe = r => (r.warm ? r.ui : groups.find(g => g.retos.includes(r))?.ui ?? ui);
+  const W = i => WORLDS[c.units[i].world] || { name: c.units[i].title };
+  const wName = i => W(i).name;
+  // Lo que toca en un nivel: en el recomendado, lo de hoy; en los otros, lo primero abierto y sin superar (de tu mundo hacia atrás).
+  const toca = lv => (lv === rec.level && isOpen(rec.item) ? rec.item : gymSiguiente(lv === 1 ? byLevel(1) : byLevel(lv).slice().sort((a, b) => (uiDe(a) > ui) - (uiDe(b) > ui) || Math.abs(uiDe(a) - ui) - Math.abs(uiDe(b) - ui)), mine, isOpen));
 
   const item = r => {
-    const open = isOpen(r), best = mine[r.id]?.best, key = !r.warm && lessonsOf(c).find(l => r.after.includes(l.id));
-    const sub = open ? (r.warm ? `${r.steps.length} juegos de tus lecciones` : `Estrategia: ${esc(r.strategy)}`)
+    const open = isOpen(r), best = mine[r.id]?.best, key = !r.warm && lessonsOf(c).find(l => r.after.includes(l.id)), i = uiDe(r);
+    const sub = open ? (r.warm ? `${r.steps.length} juegos de tus lecciones` : esc(r.strategy))
       : r.warm ? 'Haz una lección de este mundo para abrirlo' : `Termina «${esc(key?.title || 'la lección')}» para abrirlo`;
     return `<button class="gym-item lv${r.level}${open ? '' : ' locked'}${best ? ' done' : ''}" data-reto="${r.id}"${open ? '' : ' aria-disabled="true"'}>
-      <span class="gi-ic">${gymPlates(r.level)}</span>
-      <span class="gi-body"><b>${esc(r.warm ? wName(r.ui) : r.title)}</b><small>${open ? '' : ICON.lock}${sub}</small></span>
-      <span class="gi-end">${best ? gymStarsHTML(best) : open ? ICON.right : ''}</span></button>`;
+      <span class="gi-art world-art" aria-hidden="true">${W(i).art || ''}<span class="gi-lv">${open ? gymPlates(r.level) : ICON.lock}</span>${best ? `<span class="gi-ok">${ICON.check}</span>` : ''}</span>
+      <span class="gi-body"><b>${esc(r.warm ? wName(r.ui) : r.title)}</b><small>${sub}</small>
+      <span class="gi-end">${gymStarsHTML(best || 0)}<span>${r.steps.length} ${r.warm ? 'juegos' : 'pasos'}</span></span></span></button>`;
   };
-  const section = (i, items) => `<section class="gym-world"><h2><small>Mundo ${worldNo(c, i)}${i === ui ? '<span class="gw-here">Tu mundo</span>' : ''}</small>${esc(wName(i))}</h2>
-    <div class="gym-list">${items.map(item).join('')}</div></section>`;
-  const list = lvl === 1 ? `<div class="gym-list">${warms.slice().reverse().map(item).join('')}</div>`
-    : (() => {
-      const gs = groups.map(g => ({ ui: g.ui, retos: g.retos.filter(r => r.level === lvl) })).filter(g => g.retos.length);
-      return gs.length ? gs.map(g => section(g.ui, g.retos)).join('')
-        : `<div class="gym-soon lv${lvl}">${mascotSVG('think', 'm-soon')}<p><b>Pronto llegan retos de este nivel</b> a ${esc(blockName || c.name)}. Mientras tanto, calienta con los juegos de tus lecciones.</p>
-          <button class="btn ghost" data-lv="1">Ir al calentamiento</button></div>`;
-    })();
-  const t = rec.item, tOpen = isOpen(t), L = GYM_LEVELS[rec.level - 1];
+  const lista = lv => {
+    const ver = gymFocus.ver, its = gymFiltra(byLevel(lv), ver, mine);
+    if (!byLevel(lv).length) return `<div class="gym-soon lv${lv}">${mascotSVG('think', 'm-soon')}<p><b>Pronto llegan retos de este nivel</b> a ${esc(blockName || c.name)}. Mientras tanto, calienta con los juegos de tus lecciones.</p>
+      <button class="btn ghost" data-lv="1">Ir al calentamiento</button></div>`;
+    if (!its.length) return `<p class="gym-nada">${ver === 'hechos' ? 'Aún no has superado ninguno de este nivel.' : '¡Los superaste todos! Puedes repetirlos para ganar más estrellas.'}</p>`;
+    if (lv === 1) return `<div class="gym-list">${its.map(item).join('')}</div>`;
+    return groups.map(g => ({ ui: g.ui, rs: g.retos.filter(r => its.includes(r)) })).filter(g => g.rs.length)
+      .map(g => `<section class="gym-world"><h2><small>Mundo ${worldNo(c, g.ui)}${g.ui === ui ? '<span class="gw-here">Tu mundo</span>' : ''}</small>${esc(wName(g.ui))}</h2><div class="gym-list">${g.rs.map(item).join('')}</div></section>`).join('');
+  };
 
   view.innerHTML = `<div class="gym" style="${gymFabColors(c)}">
-    <button class="world-back" data-back-course>${ICON.back}<span>Volver al curso</span></button>
-    <header class="gym-hero">
-      <div class="gh-art">${GYM_3D}</div>
-      <p class="gh-eyebrow">${esc(c.name)}${blockName ? ` · ${esc(blockName)}` : ''}</p>
-      <h1>Gimnasio cerebral</h1>
-      <p class="gh-sub">Entrena tu mente por niveles. Aquí no pierdes vidas: el entrenador te ayuda si te equivocas.</p>
-      <div class="gh-stats">
-        <span><b>${passed}<small>/${all.length}</small></b>superados</span>
-        <span><b><i class="gh-star">★</i>${stars}</b>estrellas</span>
-        <span class="lv${rec.level}"><b>${gymPlates(rec.level)}</b>tu nivel: ${rec.level}</span>
-      </div>
+    <header class="gym-top">
+      <button class="world-back" data-back-course>${ICON.back}<span>Volver al curso</span></button>
+      <div class="gym-tit"><span class="gh-art">${GYM_3D}</span><div><h1>Gimnasio cerebral</h1><p>${esc(c.name)}${blockName ? ` · ${esc(blockName)}` : ''}</p></div></div>
+      <div class="gh-stats"><span><b>${passed}<small>/${all.length}</small></b>superados</span><span><b><i class="gh-star">★</i>${stars}</b>estrellas</span></div>
     </header>
-    <section class="gym-today lv${rec.level}">
-      <p class="gt-eyebrow">Tu entrenamiento de hoy · Nivel ${rec.level}, ${L.name}</p>
-      <div class="gt-row"><span class="gt-ic">${gymPlates(rec.level)}</span>
-        <div><h2>${esc(t.title)}</h2><p>${tOpen ? esc(t.warm ? t.problem : `Estrategia: ${t.strategy}`) : 'Haz la primera lección de este mundo y vuelve a calentar.'}</p></div></div>
-      ${tOpen ? `<button class="btn" data-reto="${t.id}">Entrenar ${ICON.right}</button>` : ''}
+    <section class="gym-hero" aria-label="Elige el peso y entrena">
+      <div class="gb-escena"><span class="gb-luz"></span><div class="gb-lev"><div class="gb-barra">${GYM_BARRA}</div><div class="gb-mono">${mascotSVG('cheer')}</div></div><span class="gb-piso"></span></div>
+      <div class="gym-today"><p class="gt-eyebrow"></p><h2></h2><p class="gt-sub"></p>
+        <div class="gt-acts"><button class="btn" type="button" data-ir></button><button class="gt-dado" type="button" data-dado aria-label="Sorpréndeme: un reto al azar">${GYM_DADO}</button></div>
+        <p class="gt-pista">También puedes levantar la barra con el dedo.</p></div>
+      <div class="gym-levels" role="group" aria-label="Niveles del gimnasio">${GYM_LEVELS.map(x => {
+        const its = byLevel(x.n), d = its.filter(r => mine[r.id]).length;
+        return `<button class="gym-lv lv${x.n}" type="button" data-lv="${x.n}" aria-pressed="false" style="--p:${its.length ? d / its.length : 0}">
+          <span class="gd">${gymDisco(x.n)}</span><b>${x.name}</b><small>${its.length ? `${d} de ${its.length}` : 'Pronto'}</small>${x.n === rec.level ? '<span class="glv-tag">Tu nivel</span>' : ''}</button>`;
+      }).join('')}</div>
     </section>
-    <h2 class="gym-h">Elige tu nivel</h2>
-    <div class="gym-levels" role="group" aria-label="Niveles del gimnasio">${GYM_LEVELS.map(x => {
-      const its = byLevel(x.n), d = its.filter(r => mine[r.id]).length;
-      return `<button class="gym-lv lv${x.n}${x.n === lvl ? ' on' : ''}" aria-pressed="${x.n === lvl}" data-lv="${x.n}">
-        ${x.n === rec.level ? '<span class="glv-tag">Tu nivel</span>' : ''}
-        ${gymPlates(x.n)}<b>${x.name}</b><small>Nivel ${x.n}</small>
-        <span class="glv-bar"><i style="width:${its.length ? (d / its.length) * 100 : 0}%"></i></span><small class="glv-n">${its.length ? `${d}/${its.length}` : 'Pronto'}</small></button>`;
-    }).join('')}</div>
-    <p class="gym-lv-desc">${GYM_LEVELS[lvl - 1].desc}</p>
-    ${list}
+    <div class="gym-barra2"><h2 class="gym-h"></h2><div class="gym-ver" role="group" aria-label="Qué retos ver">${[['todos', 'Todos'], ['hacer', 'Por hacer'], ['hechos', 'Superados']].map(([k, t]) => `<button type="button" data-ver="${k}">${t}</button>`).join('')}</div></div>
+    <div class="gym-lista"></div>
   </div>`;
-  $('[data-back-course]', view).onclick = () => go('learn');
-  view.querySelectorAll('[data-lv]').forEach(b => b.onclick = () => {
-    const lv = +b.dataset.lv, y = view.scrollTop, kbd = document.activeElement === b;
-    gymFocus.lvl = lv; renderGym(); view.scrollTop = y;
-    if (kbd) $(`.gym-lv[data-lv="${lv}"]`, view)?.focus();   // el foco del teclado sigue en el nivel
-  });
-  view.querySelectorAll('[data-reto]').forEach(b => b.onclick = () => {
-    const r = gymFind(c, b.dataset.reto);
-    if (!r || !isOpen(r)) return toast(r?.warm ? 'Haz una lección de este mundo para calentar aquí.' : 'Termina la lección de este tema para abrir el reto.');
+  const G = $('.gym', view), q = s => $(s, G), hero = q('.gym-hero'), lev = q('.gb-lev'), quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let actual = null;
+  const abre = (id, quien) => {
+    const r = id && gymFind(c, id);
+    if (!r || !isOpen(r)) {
+      if (quien) { quien.classList.remove('no'); void quien.offsetWidth; quien.classList.add('no'); }
+      return toast(r?.warm ? 'Haz una lección de este mundo para calentar aquí.' : r ? 'Termina la lección de este tema para abrir el reto.' : 'Haz una lección de este mundo y vuelve a calentar.');
+    }
     startReto(c, r);
+  };
+  const pintaLista = () => {
+    q('.gym-lista').innerHTML = lista(gymFocus.lvl);
+    G.querySelectorAll('[data-ver]').forEach(b => b.setAttribute('aria-pressed', b.dataset.ver === gymFocus.ver));
+    q('.gym-lista').querySelectorAll('[data-reto]').forEach(b => { b.onclick = () => abre(b.dataset.reto, b); });
+    const lv = $('[data-lv]', q('.gym-lista')); if (lv) lv.onclick = () => { pon(1, true); q('.gym-lv.lv1').focus({ preventScroll: true }); };
+  };
+  const pon = (lv, anima) => {
+    gymFocus.lvl = lv;
+    const L = GYM_LEVELS[lv - 1]; actual = toca(lv);
+    hero.className = `gym-hero lv${lv}`;
+    G.querySelectorAll('.gym-lv').forEach(b => { const on = +b.dataset.lv === lv; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+    q('.gt-eyebrow').textContent = lv === rec.level ? `Tu entrenamiento de hoy · ${L.name}` : `Nivel ${lv} · ${L.name}`;
+    q('.gym-today h2').textContent = actual ? actual.title : byLevel(lv).length ? 'Aún está cerrado' : 'Pronto llegan retos de este nivel';
+    q('.gt-sub').textContent = actual ? (actual.warm ? `${actual.steps.length} juegos de las lecciones que ya hiciste.` : `${actual.steps.length} pasos con tu entrenador. Estrategia: ${actual.strategy}`) : byLevel(lv).length ? 'Haz las lecciones de este mundo para abrir este nivel.' : 'Mientras tanto, calienta con los juegos de tus lecciones.';
+    const b = q('[data-ir]'); b.innerHTML = `Entrenar ${ICON.right}`; b.disabled = !actual;
+    q('[data-dado]').disabled = byLevel(lv).filter(isOpen).length < 2;
+    q('.gt-pista').hidden = !actual; hero.classList.toggle('cerrado', !actual);
+    q('.gym-h').textContent = lv === 1 ? 'Calienta por mundos' : `Retos de ${L.name}`;
+    pintaLista();
+    if (anima && !quieto) { lev.classList.remove('sube'); void lev.offsetWidth; lev.classList.add('sube'); }
+  };
+  $('[data-back-course]', view).onclick = () => go('learn');
+  q('[data-ir]').onclick = () => actual && abre(actual.id);
+  q('[data-dado]').onclick = () => { const ab = byLevel(gymFocus.lvl).filter(r => isOpen(r) && r.id !== actual?.id); if (ab.length) abre(ab[Math.floor(Math.random() * ab.length)].id); };
+  G.querySelectorAll('[data-ver]').forEach(b => { b.onclick = () => { gymFocus.ver = b.dataset.ver; pintaLista(); }; });
+  // Los discos: se tocan o se arrastran hasta la barra.
+  G.querySelectorAll('.gym-lv').forEach(b => {
+    let id = null, x0 = 0, y0 = 0, cop = null, movio = false;
+    const quita = () => { cop?.remove(); cop = null; hero.classList.remove('espera'); };
+    b.onpointerdown = e => { if (e.button) return; id = e.pointerId; x0 = e.clientX; y0 = e.clientY; movio = false; };
+    b.onpointermove = e => {
+      if (e.pointerId !== id) return;
+      if (!cop && Math.hypot(e.clientX - x0, e.clientY - y0) > 9) {
+        movio = true; b.setPointerCapture(id); hero.classList.add('espera');
+        cop = b.querySelector('.gd').cloneNode(true); cop.className = `gd gd-vuela lv${b.dataset.lv}`; G.append(cop);
+      }
+      if (cop) { cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; }
+    };
+    b.onpointerup = e => {
+      if (e.pointerId !== id) return;
+      id = null; if (!cop) return;
+      const r = q('.gb-escena').getBoundingClientRect(), dentro = e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom + 30;
+      quita(); if (dentro) pon(+b.dataset.lv, true);
+    };
+    b.onpointercancel = () => { id = null; movio = false; quita(); };
+    b.onclick = () => { if (movio) { movio = false; return; } pon(+b.dataset.lv, true); };
   });
+  // La barra se levanta con el dedo: arriba del todo, empieza el entrenamiento.
+  const barra = q('.gb-barra'); let bid = null, by = 0, sube = 0;
+  barra.onpointerdown = e => { if (e.button || !actual) return; bid = e.pointerId; by = e.clientY; sube = 0; barra.setPointerCapture(bid); lev.classList.remove('sube'); lev.classList.add('mano'); };
+  barra.onpointermove = e => { if (e.pointerId !== bid) return; sube = Math.max(0, Math.min(1, (by - e.clientY) / 70)); lev.style.setProperty('--sube', sube.toFixed(3)); hero.classList.toggle('arriba', sube >= 1); };
+  const suelta = e => { if (e.pointerId !== bid) return; bid = null; const ya = e.type === 'pointerup' && sube >= 1; lev.classList.remove('mano'); lev.style.setProperty('--sube', 0); hero.classList.remove('arriba'); if (ya) abre(actual.id); };
+  barra.onpointerup = suelta; barra.onpointercancel = suelta;
+  barra.addEventListener('touchstart', e => e.preventDefault(), { passive: false });   // subir la barra no desplaza la página
+  pon(gymFocus.lvl, true);
 }
 
 // ---- un reto guiado ----
@@ -13555,7 +13522,7 @@ function startReto(c, r) {
   ov.innerHTML = `<div class="lesson gym-run" style="${typeof gymFabColors === 'function' ? gymFabColors(c) : `--c:${c.color}`}">
     <div class="lesson-top">
       <button class="icon-btn" data-close aria-label="Salir">${ICON.x}</button>
-      <div class="pbar"><i></i></div>
+      <ol class="gym-seg" aria-label="Pasos del reto">${r.steps.map((s, i) => `<li><span class="pz-sr-gym">Paso ${i + 1}: ${esc(s.title)}</span></li>`).join('')}</ol>
       <span class="tb-stat gym-badge" title="Gimnasio">${ICON.gym}</span>
     </div>
     <div class="lesson-body"></div>
@@ -13564,7 +13531,8 @@ function startReto(c, r) {
   </div>`;
   ov.classList.add('open');
   document.body.classList.add('in-lesson');
-  const root = $('.lesson', ov), body = $('.lesson-body', ov), btn = $('.btn.main', ov), fb = $('.feedback', ov), bar = $('.pbar i', ov);
+  const root = $('.lesson', ov), body = $('.lesson-body', ov), btn = $('.btn.main', ov), fb = $('.feedback', ov), segs = [...ov.querySelectorAll('.gym-seg li')];
+  const avanza = n => segs.forEach((s, i) => { s.className = i < n ? (helps[i] ? 'ok ayuda' : 'ok') : i === n ? 'now' : ''; if (i === n) s.setAttribute('aria-current', 'step'); else s.removeAttribute('aria-current'); });
 
   let closeConcept = null;
   const conceptOf = s => (s.concept && typeof CONCEPTOS !== 'undefined' && CONCEPTOS[s.concept]) || null;
@@ -13593,10 +13561,9 @@ function startReto(c, r) {
     body.innerHTML = `<div class="gym-intro">
       <p class="gym-eyebrow lv${r.level}">${gymPlates(r.level)}${r.warm ? 'Calentamiento' : `Reto guiado · Nivel ${r.level}, ${GYM_LEVELS[r.level - 1].name}`}</p>
       <h2>${esc(r.title)}</h2>
-      <div class="gym-problem">${tex(r.problem)}</div>
-      ${strat()}
-      <h3>El plan</h3>${plan(-1)}
-      <p class="muted">El entrenador te acompaña en cada paso. Si te equivocas no pierdes vidas: te da una ayuda y lo vuelves a intentar.</p>
+      <div class="gym-cols"><div class="gym-problem">${tex(r.problem)}</div>
+      <div class="gym-ruta">${strat()}<h3>El plan</h3>${plan(-1)}</div></div>
+      <p class="gym-calma"><span>${mascotSVG('think')}</span>Voy contigo en cada paso. Si te equivocas no pierdes vidas: te doy una ayuda y lo intentas otra vez.</p>
     </div>`;
     btn.textContent = 'Empezar'; btn.disabled = false;
     btn.onclick = () => { pos = 0; step(); };
@@ -13615,14 +13582,13 @@ function startReto(c, r) {
     body.className = 'lesson-body';
     body.style.paddingBottom = '';
     body.scrollTop = 0;
-    bar.style.width = `${(pos / r.steps.length) * 100}%`;
+    avanza(pos);
     if (pos >= r.steps.length) return finish();
     const s = r.steps[pos];
-    const dots = `<span class="gym-dots" aria-label="Paso ${pos + 1} de ${r.steps.length}">${r.steps.map((_, i) => `<i class="${i < pos ? 'ok' : i === pos ? 'now' : ''}"></i>`).join('')}</span>`;
     // Un solo contenedor: mountSketch (kit.js) mide el primer hijo de .lesson-body para achicar el juego si no cabe.
-    body.innerHTML = `<div class="gym-step"><details class="gym-reto"><summary><span>El reto</span>${dots}</summary><div>${tex(r.problem)}</div></details>
+    body.innerHTML = `<div class="gym-step"><div class="gym-lado"><details class="gym-reto"${esEscritorio() && innerHeight > 760 ? ' open' : ''}><summary><span>El reto</span><span class="gr-n">Paso ${pos + 1} de ${r.steps.length}</span></summary><div>${tex(r.problem)}</div></details>
       <div class="coach" role="note"><span class="coach-av">${mascotSVG('think')}</span><div><small>Paso ${pos + 1} · ${esc(s.title)}</small><p></p>${conceptOf(s) ? `<button type="button" class="con-btn" data-concept>${ICON.bulb}Recordar el concepto</button>` : ''}</div></div>
-      <div class="gym-ex"></div>${notebook()}</div>`;
+      ${notebook()}</div><div class="gym-ex"></div></div>`;
     const cb = $('[data-concept]', body);
     if (cb) cb.onclick = () => { cb.classList.remove('pulse'); closeConcept?.(); closeConcept = CON.open(root, s.concept); };
     coach(s.coach, `Paso ${pos + 1} · ${s.title}`);
@@ -13676,9 +13642,9 @@ function startReto(c, r) {
     let newStreak = false;
     if (xp) { addXP(xp); newStreak = markStreak(); }
     save();
-    bar.style.width = '100%';
+    avanza(r.steps.length);
     body.innerHTML = `<div class="gym-done"><canvas class="confetti"></canvas>
-      ${mascotSVG('cheer', 'm-win')}
+      <div class="gb-lev gb-win lv${r.level} sube"><div class="gb-barra">${GYM_BARRA}</div><div class="gb-mono">${mascotSVG('cheer')}</div></div>
       <h2>${stars === 3 ? '¡Reto superado sin ayudas!' : '¡Reto superado!'}</h2>
       <p class="muted">${esc(r.title)}</p>
       <div class="gym-done-stats">${gymStarsHTML(stars)}${xp ? `<b>${ICON.bolt}+${xp} XP</b>` : ''}</div>

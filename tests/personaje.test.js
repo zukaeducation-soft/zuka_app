@@ -26,7 +26,7 @@ test('registrado y ubicado: inicio, Mis cursos vacÃ­o, gimnasio, final de lecciÃ
   assert.match(read('js/inicio.js'), /class="m-empty">\$\{mascotSVG\('think'\)\}/);
   const gym = read('js/gimnasio.js');
   assert.match(gym, /<span class="coach-av">\$\{mascotSVG\('think'\)\}<\/span>/);
-  assert.match(gym, /mascotSVG\('cheer', 'm-win'\)/);
+  assert.match(gym, /gb-win lv[^>]*sube">.*mascotSVG\('cheer'\)/);
   assert.match(gym, /mascotSVG\('think', 'm-soon'\)/);
   const app = read('js/app.js');
   assert.match(app, /mascotSVG\('cheer', 'm-win'\)/);

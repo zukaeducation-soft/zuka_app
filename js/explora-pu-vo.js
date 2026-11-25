@@ -104,8 +104,8 @@ xpLec('pu-vo-4', [
     xpMira('hoja', 'Empecemos por la idea: muchas palabras están hechas de **piezas** con sentido.', { letras: ['A', 'B', 'C', 'D'], paras: [['bio', 'logía'], ['in', 'vis', 'ible'], ['sub', 'marino'], ['micro', 'scopio']] }, [
       ['Bio- es vida y -logía, estudio: estudio de la vida.', { luz: [0, 1], nota: { 0: 'estudio de la vida' } }],
       ['In- niega, vis- es ver, -ible es «que se puede».', { luz: [2, 3, 4], nota: { 1: 'que no se puede ver' } }],
-      ['Sub- es debajo.', { luz: [5, 6], nota: { 2: 'debajo del mar' } }],
-      ['Micro- es pequeño.', { luz: [7, 8], nota: { 3: 'para ver lo pequeño' } }],
+      ['Sub- quiere decir debajo.', { luz: [5, 6], nota: { 2: 'debajo del mar' } }],
+      ['Micro- quiere decir pequeño.', { luz: [7, 8], nota: { 3: 'para ver lo pequeño' } }],
       ['Otras: anti- contra, foto- luz, -voro que come, -fobia rechazo, aud- oír.', {}],
       ['Una palabra nueva se parte y se arma.', {}],
     ], 'Parte la palabra: comienzo, raíz y final. Busca otras que tengan la misma pieza.'),

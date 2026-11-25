@@ -519,86 +519,147 @@ function gymRecommend(c, ui, done, unlockAll, mine = {}) {
   return { level: 1, item: warm };
 }
 
-// gymFocus: curso, mundo del nivel del estudiante y nivel elegido; lo pone el botón de las pesas.
+// Primer ejercicio de una lista: abierto y sin superar; si todos lo están, el que tiene menos estrellas. Pura.
+function gymSiguiente(items, mine = {}, isOpen = () => true) {
+  const ab = items.filter(isOpen);
+  return ab.find(r => !mine[r.id]) || ab.slice().sort((a, b) => (mine[a.id]?.best || 0) - (mine[b.id]?.best || 0))[0] || null;
+}
+// Pasa el filtro «Por hacer» o «Superados». Pura.
+const gymFiltra = (items, f, mine = {}) => items.filter(r => (f === 'hacer' ? !mine[r.id] : f === 'hechos' ? !!mine[r.id] : true));
+// La barra que sube el personaje: hasta tres discos por lado; los que no van con el nivel esperan afuera.
+const GYM_BARRA = `<svg class="gb-svg" viewBox="0 0 340 100" aria-hidden="true"><rect class="gb-rod" x="6" y="46" width="328" height="8" rx="4"/>${[0, 1, 2].map(i => {
+  const h = 88 - i * 20, w = 17, y = 50 - h / 2, xi = 74 - i * 20;
+  return [[xi, 'izq'], [340 - xi - w, 'der']].map(([x, l]) => `<g class="gb-p p${i + 1} ${l}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/><rect class="br" x="${x + 3}" y="${y + 7}" width="3.500" height="${h - 14}" rx="1.700"/></g>`).join('');
+}).join('')}<rect class="gb-tope" x="93" y="40" width="7" height="20" rx="2.500"/><rect class="gb-tope" x="240" y="40" width="7" height="20" rx="2.500"/></svg>`;
+const GYM_DADO = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9v.01M15 9v.01M12 12v.01M9 15v.01M15 15v.01"/></svg>';
+const gymDisco = n => `<svg viewBox="0 0 64 64" aria-hidden="true"><circle class="gd-a" cx="32" cy="32" r="29"/><circle class="gd-b" cx="32" cy="32" r="20"/><circle class="gd-c" cx="32" cy="32" r="11"/><text x="32" y="37">${n}</text></svg>`;
+
+// gymFocus: curso, mundo del nivel del estudiante, nivel elegido y filtro; lo pone el botón de las pesas.
 let gymFocus = null;
 
 function renderGym() {
   const c = courseById(S.course), mine = S.gym || {};
   const ui = gymFocus?.course === c.id && c.units[gymFocus.ui] ? gymFocus.ui : courseLevelUi(c, null, { done: S.done, last: S.lastLesson });
   const rec = gymRecommend(c, ui, S.done, S.unlockAll, mine);
-  const lvl = gymFocus?.course === c.id && gymFocus.lvl ? gymFocus.lvl : rec.level;
-  gymFocus = { course: c.id, ui, lvl };
+  gymFocus = { course: c.id, ui, lvl: gymFocus?.course === c.id && gymFocus.lvl ? gymFocus.lvl : rec.level, ver: (gymFocus?.course === c.id && gymFocus.ver) || 'todos' };
   const u = c.units[ui], blockName = c.blocks?.find(b => b.id === u.block)?.name;
   const worlds = gymUpTo(c, ui, S.done || {}), block = c.units.map((x, i) => i).filter(i => c.units[i].block === u.block);
   const warms = worlds.map(i => gymWarmup(c, i, S.done, S.unlockAll, mine[`cal-${c.id}-${i}`]?.n || 0)).filter(w => w.open || w.ui === ui);
   const groups = gymRetos(c).filter(g => block.includes(g.ui));
-  const byLevel = lv => (lv === 1 ? warms : groups.flatMap(g => g.retos).filter(r => r.level === lv));
+  const byLevel = lv => (lv === 1 ? warms.slice().reverse() : groups.flatMap(g => g.retos).filter(r => r.level === lv));
   const isOpen = r => (r.warm ? r.open : gymOpen(r, S.done, S.unlockAll));
   const all = [1, 2, 3].flatMap(byLevel), passed = all.filter(r => mine[r.id]).length;
   const stars = all.reduce((t, r) => t + (mine[r.id]?.best || 0), 0);
-  const wName = i => (WORLDS[c.units[i].world] || { name: c.units[i].title }).name;
+  const uiDe = r => (r.warm ? r.ui : groups.find(g => g.retos.includes(r))?.ui ?? ui);
+  const W = i => WORLDS[c.units[i].world] || { name: c.units[i].title };
+  const wName = i => W(i).name;
+  // Lo que toca en un nivel: en el recomendado, lo de hoy; en los otros, lo primero abierto y sin superar (de tu mundo hacia atrás).
+  const toca = lv => (lv === rec.level && isOpen(rec.item) ? rec.item : gymSiguiente(lv === 1 ? byLevel(1) : byLevel(lv).slice().sort((a, b) => (uiDe(a) > ui) - (uiDe(b) > ui) || Math.abs(uiDe(a) - ui) - Math.abs(uiDe(b) - ui)), mine, isOpen));
 
   const item = r => {
-    const open = isOpen(r), best = mine[r.id]?.best, key = !r.warm && lessonsOf(c).find(l => r.after.includes(l.id));
-    const sub = open ? (r.warm ? `${r.steps.length} juegos de tus lecciones` : `Estrategia: ${esc(r.strategy)}`)
+    const open = isOpen(r), best = mine[r.id]?.best, key = !r.warm && lessonsOf(c).find(l => r.after.includes(l.id)), i = uiDe(r);
+    const sub = open ? (r.warm ? `${r.steps.length} juegos de tus lecciones` : esc(r.strategy))
       : r.warm ? 'Haz una lección de este mundo para abrirlo' : `Termina «${esc(key?.title || 'la lección')}» para abrirlo`;
     return `<button class="gym-item lv${r.level}${open ? '' : ' locked'}${best ? ' done' : ''}" data-reto="${r.id}"${open ? '' : ' aria-disabled="true"'}>
-      <span class="gi-ic">${gymPlates(r.level)}</span>
-      <span class="gi-body"><b>${esc(r.warm ? wName(r.ui) : r.title)}</b><small>${open ? '' : ICON.lock}${sub}</small></span>
-      <span class="gi-end">${best ? gymStarsHTML(best) : open ? ICON.right : ''}</span></button>`;
+      <span class="gi-art world-art" aria-hidden="true">${W(i).art || ''}<span class="gi-lv">${open ? gymPlates(r.level) : ICON.lock}</span>${best ? `<span class="gi-ok">${ICON.check}</span>` : ''}</span>
+      <span class="gi-body"><b>${esc(r.warm ? wName(r.ui) : r.title)}</b><small>${sub}</small>
+      <span class="gi-end">${gymStarsHTML(best || 0)}<span>${r.steps.length} ${r.warm ? 'juegos' : 'pasos'}</span></span></span></button>`;
   };
-  const section = (i, items) => `<section class="gym-world"><h2><small>Mundo ${worldNo(c, i)}${i === ui ? '<span class="gw-here">Tu mundo</span>' : ''}</small>${esc(wName(i))}</h2>
-    <div class="gym-list">${items.map(item).join('')}</div></section>`;
-  const list = lvl === 1 ? `<div class="gym-list">${warms.slice().reverse().map(item).join('')}</div>`
-    : (() => {
-      const gs = groups.map(g => ({ ui: g.ui, retos: g.retos.filter(r => r.level === lvl) })).filter(g => g.retos.length);
-      return gs.length ? gs.map(g => section(g.ui, g.retos)).join('')
-        : `<div class="gym-soon lv${lvl}">${mascotSVG('think', 'm-soon')}<p><b>Pronto llegan retos de este nivel</b> a ${esc(blockName || c.name)}. Mientras tanto, calienta con los juegos de tus lecciones.</p>
-          <button class="btn ghost" data-lv="1">Ir al calentamiento</button></div>`;
-    })();
-  const t = rec.item, tOpen = isOpen(t), L = GYM_LEVELS[rec.level - 1];
+  const lista = lv => {
+    const ver = gymFocus.ver, its = gymFiltra(byLevel(lv), ver, mine);
+    if (!byLevel(lv).length) return `<div class="gym-soon lv${lv}">${mascotSVG('think', 'm-soon')}<p><b>Pronto llegan retos de este nivel</b> a ${esc(blockName || c.name)}. Mientras tanto, calienta con los juegos de tus lecciones.</p>
+      <button class="btn ghost" data-lv="1">Ir al calentamiento</button></div>`;
+    if (!its.length) return `<p class="gym-nada">${ver === 'hechos' ? 'Aún no has superado ninguno de este nivel.' : '¡Los superaste todos! Puedes repetirlos para ganar más estrellas.'}</p>`;
+    if (lv === 1) return `<div class="gym-list">${its.map(item).join('')}</div>`;
+    return groups.map(g => ({ ui: g.ui, rs: g.retos.filter(r => its.includes(r)) })).filter(g => g.rs.length)
+      .map(g => `<section class="gym-world"><h2><small>Mundo ${worldNo(c, g.ui)}${g.ui === ui ? '<span class="gw-here">Tu mundo</span>' : ''}</small>${esc(wName(g.ui))}</h2><div class="gym-list">${g.rs.map(item).join('')}</div></section>`).join('');
+  };
 
   view.innerHTML = `<div class="gym" style="${gymFabColors(c)}">
-    <button class="world-back" data-back-course>${ICON.back}<span>Volver al curso</span></button>
-    <header class="gym-hero">
-      <div class="gh-art">${GYM_3D}</div>
-      <p class="gh-eyebrow">${esc(c.name)}${blockName ? ` · ${esc(blockName)}` : ''}</p>
-      <h1>Gimnasio cerebral</h1>
-      <p class="gh-sub">Entrena tu mente por niveles. Aquí no pierdes vidas: el entrenador te ayuda si te equivocas.</p>
-      <div class="gh-stats">
-        <span><b>${passed}<small>/${all.length}</small></b>superados</span>
-        <span><b><i class="gh-star">★</i>${stars}</b>estrellas</span>
-        <span class="lv${rec.level}"><b>${gymPlates(rec.level)}</b>tu nivel: ${rec.level}</span>
-      </div>
+    <header class="gym-top">
+      <button class="world-back" data-back-course>${ICON.back}<span>Volver al curso</span></button>
+      <div class="gym-tit"><span class="gh-art">${GYM_3D}</span><div><h1>Gimnasio cerebral</h1><p>${esc(c.name)}${blockName ? ` · ${esc(blockName)}` : ''}</p></div></div>
+      <div class="gh-stats"><span><b>${passed}<small>/${all.length}</small></b>superados</span><span><b><i class="gh-star">★</i>${stars}</b>estrellas</span></div>
     </header>
-    <section class="gym-today lv${rec.level}">
-      <p class="gt-eyebrow">Tu entrenamiento de hoy · Nivel ${rec.level}, ${L.name}</p>
-      <div class="gt-row"><span class="gt-ic">${gymPlates(rec.level)}</span>
-        <div><h2>${esc(t.title)}</h2><p>${tOpen ? esc(t.warm ? t.problem : `Estrategia: ${t.strategy}`) : 'Haz la primera lección de este mundo y vuelve a calentar.'}</p></div></div>
-      ${tOpen ? `<button class="btn" data-reto="${t.id}">Entrenar ${ICON.right}</button>` : ''}
+    <section class="gym-hero" aria-label="Elige el peso y entrena">
+      <div class="gb-escena"><span class="gb-luz"></span><div class="gb-lev"><div class="gb-barra">${GYM_BARRA}</div><div class="gb-mono">${mascotSVG('cheer')}</div></div><span class="gb-piso"></span></div>
+      <div class="gym-today"><p class="gt-eyebrow"></p><h2></h2><p class="gt-sub"></p>
+        <div class="gt-acts"><button class="btn" type="button" data-ir></button><button class="gt-dado" type="button" data-dado aria-label="Sorpréndeme: un reto al azar">${GYM_DADO}</button></div>
+        <p class="gt-pista">También puedes levantar la barra con el dedo.</p></div>
+      <div class="gym-levels" role="group" aria-label="Niveles del gimnasio">${GYM_LEVELS.map(x => {
+        const its = byLevel(x.n), d = its.filter(r => mine[r.id]).length;
+        return `<button class="gym-lv lv${x.n}" type="button" data-lv="${x.n}" aria-pressed="false" style="--p:${its.length ? d / its.length : 0}">
+          <span class="gd">${gymDisco(x.n)}</span><b>${x.name}</b><small>${its.length ? `${d} de ${its.length}` : 'Pronto'}</small>${x.n === rec.level ? '<span class="glv-tag">Tu nivel</span>' : ''}</button>`;
+      }).join('')}</div>
     </section>
-    <h2 class="gym-h">Elige tu nivel</h2>
-    <div class="gym-levels" role="group" aria-label="Niveles del gimnasio">${GYM_LEVELS.map(x => {
-      const its = byLevel(x.n), d = its.filter(r => mine[r.id]).length;
-      return `<button class="gym-lv lv${x.n}${x.n === lvl ? ' on' : ''}" aria-pressed="${x.n === lvl}" data-lv="${x.n}">
-        ${x.n === rec.level ? '<span class="glv-tag">Tu nivel</span>' : ''}
-        ${gymPlates(x.n)}<b>${x.name}</b><small>Nivel ${x.n}</small>
-        <span class="glv-bar"><i style="width:${its.length ? (d / its.length) * 100 : 0}%"></i></span><small class="glv-n">${its.length ? `${d}/${its.length}` : 'Pronto'}</small></button>`;
-    }).join('')}</div>
-    <p class="gym-lv-desc">${GYM_LEVELS[lvl - 1].desc}</p>
-    ${list}
+    <div class="gym-barra2"><h2 class="gym-h"></h2><div class="gym-ver" role="group" aria-label="Qué retos ver">${[['todos', 'Todos'], ['hacer', 'Por hacer'], ['hechos', 'Superados']].map(([k, t]) => `<button type="button" data-ver="${k}">${t}</button>`).join('')}</div></div>
+    <div class="gym-lista"></div>
   </div>`;
-  $('[data-back-course]', view).onclick = () => go('learn');
-  view.querySelectorAll('[data-lv]').forEach(b => b.onclick = () => {
-    const lv = +b.dataset.lv, y = view.scrollTop, kbd = document.activeElement === b;
-    gymFocus.lvl = lv; renderGym(); view.scrollTop = y;
-    if (kbd) $(`.gym-lv[data-lv="${lv}"]`, view)?.focus();   // el foco del teclado sigue en el nivel
-  });
-  view.querySelectorAll('[data-reto]').forEach(b => b.onclick = () => {
-    const r = gymFind(c, b.dataset.reto);
-    if (!r || !isOpen(r)) return toast(r?.warm ? 'Haz una lección de este mundo para calentar aquí.' : 'Termina la lección de este tema para abrir el reto.');
+  const G = $('.gym', view), q = s => $(s, G), hero = q('.gym-hero'), lev = q('.gb-lev'), quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let actual = null;
+  const abre = (id, quien) => {
+    const r = id && gymFind(c, id);
+    if (!r || !isOpen(r)) {
+      if (quien) { quien.classList.remove('no'); void quien.offsetWidth; quien.classList.add('no'); }
+      return toast(r?.warm ? 'Haz una lección de este mundo para calentar aquí.' : r ? 'Termina la lección de este tema para abrir el reto.' : 'Haz una lección de este mundo y vuelve a calentar.');
+    }
     startReto(c, r);
+  };
+  const pintaLista = () => {
+    q('.gym-lista').innerHTML = lista(gymFocus.lvl);
+    G.querySelectorAll('[data-ver]').forEach(b => b.setAttribute('aria-pressed', b.dataset.ver === gymFocus.ver));
+    q('.gym-lista').querySelectorAll('[data-reto]').forEach(b => { b.onclick = () => abre(b.dataset.reto, b); });
+    const lv = $('[data-lv]', q('.gym-lista')); if (lv) lv.onclick = () => { pon(1, true); q('.gym-lv.lv1').focus({ preventScroll: true }); };
+  };
+  const pon = (lv, anima) => {
+    gymFocus.lvl = lv;
+    const L = GYM_LEVELS[lv - 1]; actual = toca(lv);
+    hero.className = `gym-hero lv${lv}`;
+    G.querySelectorAll('.gym-lv').forEach(b => { const on = +b.dataset.lv === lv; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+    q('.gt-eyebrow').textContent = lv === rec.level ? `Tu entrenamiento de hoy · ${L.name}` : `Nivel ${lv} · ${L.name}`;
+    q('.gym-today h2').textContent = actual ? actual.title : byLevel(lv).length ? 'Aún está cerrado' : 'Pronto llegan retos de este nivel';
+    q('.gt-sub').textContent = actual ? (actual.warm ? `${actual.steps.length} juegos de las lecciones que ya hiciste.` : `${actual.steps.length} pasos con tu entrenador. Estrategia: ${actual.strategy}`) : byLevel(lv).length ? 'Haz las lecciones de este mundo para abrir este nivel.' : 'Mientras tanto, calienta con los juegos de tus lecciones.';
+    const b = q('[data-ir]'); b.innerHTML = `Entrenar ${ICON.right}`; b.disabled = !actual;
+    q('[data-dado]').disabled = byLevel(lv).filter(isOpen).length < 2;
+    q('.gt-pista').hidden = !actual; hero.classList.toggle('cerrado', !actual);
+    q('.gym-h').textContent = lv === 1 ? 'Calienta por mundos' : `Retos de ${L.name}`;
+    pintaLista();
+    if (anima && !quieto) { lev.classList.remove('sube'); void lev.offsetWidth; lev.classList.add('sube'); }
+  };
+  $('[data-back-course]', view).onclick = () => go('learn');
+  q('[data-ir]').onclick = () => actual && abre(actual.id);
+  q('[data-dado]').onclick = () => { const ab = byLevel(gymFocus.lvl).filter(r => isOpen(r) && r.id !== actual?.id); if (ab.length) abre(ab[Math.floor(Math.random() * ab.length)].id); };
+  G.querySelectorAll('[data-ver]').forEach(b => { b.onclick = () => { gymFocus.ver = b.dataset.ver; pintaLista(); }; });
+  // Los discos: se tocan o se arrastran hasta la barra.
+  G.querySelectorAll('.gym-lv').forEach(b => {
+    let id = null, x0 = 0, y0 = 0, cop = null, movio = false;
+    const quita = () => { cop?.remove(); cop = null; hero.classList.remove('espera'); };
+    b.onpointerdown = e => { if (e.button) return; id = e.pointerId; x0 = e.clientX; y0 = e.clientY; movio = false; };
+    b.onpointermove = e => {
+      if (e.pointerId !== id) return;
+      if (!cop && Math.hypot(e.clientX - x0, e.clientY - y0) > 9) {
+        movio = true; b.setPointerCapture(id); hero.classList.add('espera');
+        cop = b.querySelector('.gd').cloneNode(true); cop.className = `gd gd-vuela lv${b.dataset.lv}`; G.append(cop);
+      }
+      if (cop) { cop.style.left = `${e.clientX}px`; cop.style.top = `${e.clientY}px`; }
+    };
+    b.onpointerup = e => {
+      if (e.pointerId !== id) return;
+      id = null; if (!cop) return;
+      const r = q('.gb-escena').getBoundingClientRect(), dentro = e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom + 30;
+      quita(); if (dentro) pon(+b.dataset.lv, true);
+    };
+    b.onpointercancel = () => { id = null; movio = false; quita(); };
+    b.onclick = () => { if (movio) { movio = false; return; } pon(+b.dataset.lv, true); };
   });
+  // La barra se levanta con el dedo: arriba del todo, empieza el entrenamiento.
+  const barra = q('.gb-barra'); let bid = null, by = 0, sube = 0;
+  barra.onpointerdown = e => { if (e.button || !actual) return; bid = e.pointerId; by = e.clientY; sube = 0; barra.setPointerCapture(bid); lev.classList.remove('sube'); lev.classList.add('mano'); };
+  barra.onpointermove = e => { if (e.pointerId !== bid) return; sube = Math.max(0, Math.min(1, (by - e.clientY) / 70)); lev.style.setProperty('--sube', sube.toFixed(3)); hero.classList.toggle('arriba', sube >= 1); };
+  const suelta = e => { if (e.pointerId !== bid) return; bid = null; const ya = e.type === 'pointerup' && sube >= 1; lev.classList.remove('mano'); lev.style.setProperty('--sube', 0); hero.classList.remove('arriba'); if (ya) abre(actual.id); };
+  barra.onpointerup = suelta; barra.onpointercancel = suelta;
+  barra.addEventListener('touchstart', e => e.preventDefault(), { passive: false });   // subir la barra no desplaza la página
+  pon(gymFocus.lvl, true);
 }
 
 // ---- un reto guiado ----
@@ -614,7 +675,7 @@ function startReto(c, r) {
   ov.innerHTML = `<div class="lesson gym-run" style="${typeof gymFabColors === 'function' ? gymFabColors(c) : `--c:${c.color}`}">
     <div class="lesson-top">
       <button class="icon-btn" data-close aria-label="Salir">${ICON.x}</button>
-      <div class="pbar"><i></i></div>
+      <ol class="gym-seg" aria-label="Pasos del reto">${r.steps.map((s, i) => `<li><span class="pz-sr-gym">Paso ${i + 1}: ${esc(s.title)}</span></li>`).join('')}</ol>
       <span class="tb-stat gym-badge" title="Gimnasio">${ICON.gym}</span>
     </div>
     <div class="lesson-body"></div>
@@ -623,7 +684,8 @@ function startReto(c, r) {
   </div>`;
   ov.classList.add('open');
   document.body.classList.add('in-lesson');
-  const root = $('.lesson', ov), body = $('.lesson-body', ov), btn = $('.btn.main', ov), fb = $('.feedback', ov), bar = $('.pbar i', ov);
+  const root = $('.lesson', ov), body = $('.lesson-body', ov), btn = $('.btn.main', ov), fb = $('.feedback', ov), segs = [...ov.querySelectorAll('.gym-seg li')];
+  const avanza = n => segs.forEach((s, i) => { s.className = i < n ? (helps[i] ? 'ok ayuda' : 'ok') : i === n ? 'now' : ''; if (i === n) s.setAttribute('aria-current', 'step'); else s.removeAttribute('aria-current'); });
 
   let closeConcept = null;
   const conceptOf = s => (s.concept && typeof CONCEPTOS !== 'undefined' && CONCEPTOS[s.concept]) || null;
@@ -652,10 +714,9 @@ function startReto(c, r) {
     body.innerHTML = `<div class="gym-intro">
       <p class="gym-eyebrow lv${r.level}">${gymPlates(r.level)}${r.warm ? 'Calentamiento' : `Reto guiado · Nivel ${r.level}, ${GYM_LEVELS[r.level - 1].name}`}</p>
       <h2>${esc(r.title)}</h2>
-      <div class="gym-problem">${tex(r.problem)}</div>
-      ${strat()}
-      <h3>El plan</h3>${plan(-1)}
-      <p class="muted">El entrenador te acompaña en cada paso. Si te equivocas no pierdes vidas: te da una ayuda y lo vuelves a intentar.</p>
+      <div class="gym-cols"><div class="gym-problem">${tex(r.problem)}</div>
+      <div class="gym-ruta">${strat()}<h3>El plan</h3>${plan(-1)}</div></div>
+      <p class="gym-calma"><span>${mascotSVG('think')}</span>Voy contigo en cada paso. Si te equivocas no pierdes vidas: te doy una ayuda y lo intentas otra vez.</p>
     </div>`;
     btn.textContent = 'Empezar'; btn.disabled = false;
     btn.onclick = () => { pos = 0; step(); };
@@ -674,14 +735,13 @@ function startReto(c, r) {
     body.className = 'lesson-body';
     body.style.paddingBottom = '';
     body.scrollTop = 0;
-    bar.style.width = `${(pos / r.steps.length) * 100}%`;
+    avanza(pos);
     if (pos >= r.steps.length) return finish();
     const s = r.steps[pos];
-    const dots = `<span class="gym-dots" aria-label="Paso ${pos + 1} de ${r.steps.length}">${r.steps.map((_, i) => `<i class="${i < pos ? 'ok' : i === pos ? 'now' : ''}"></i>`).join('')}</span>`;
     // Un solo contenedor: mountSketch (kit.js) mide el primer hijo de .lesson-body para achicar el juego si no cabe.
-    body.innerHTML = `<div class="gym-step"><details class="gym-reto"><summary><span>El reto</span>${dots}</summary><div>${tex(r.problem)}</div></details>
+    body.innerHTML = `<div class="gym-step"><div class="gym-lado"><details class="gym-reto"${esEscritorio() && innerHeight > 760 ? ' open' : ''}><summary><span>El reto</span><span class="gr-n">Paso ${pos + 1} de ${r.steps.length}</span></summary><div>${tex(r.problem)}</div></details>
       <div class="coach" role="note"><span class="coach-av">${mascotSVG('think')}</span><div><small>Paso ${pos + 1} · ${esc(s.title)}</small><p></p>${conceptOf(s) ? `<button type="button" class="con-btn" data-concept>${ICON.bulb}Recordar el concepto</button>` : ''}</div></div>
-      <div class="gym-ex"></div>${notebook()}</div>`;
+      ${notebook()}</div><div class="gym-ex"></div></div>`;
     const cb = $('[data-concept]', body);
     if (cb) cb.onclick = () => { cb.classList.remove('pulse'); closeConcept?.(); closeConcept = CON.open(root, s.concept); };
     coach(s.coach, `Paso ${pos + 1} · ${s.title}`);
@@ -735,9 +795,9 @@ function startReto(c, r) {
     let newStreak = false;
     if (xp) { addXP(xp); newStreak = markStreak(); }
     save();
-    bar.style.width = '100%';
+    avanza(r.steps.length);
     body.innerHTML = `<div class="gym-done"><canvas class="confetti"></canvas>
-      ${mascotSVG('cheer', 'm-win')}
+      <div class="gb-lev gb-win lv${r.level} sube"><div class="gb-barra">${GYM_BARRA}</div><div class="gb-mono">${mascotSVG('cheer')}</div></div>
       <h2>${stars === 3 ? '¡Reto superado sin ayudas!' : '¡Reto superado!'}</h2>
       <p class="muted">${esc(r.title)}</p>
       <div class="gym-done-stats">${gymStarsHTML(stars)}${xp ? `<b>${ICON.bolt}+${xp} XP</b>` : ''}</div>
