@@ -188,7 +188,7 @@ test('juegos nuevos: lógica pura', () => {
 });
 
 test('están registrados y no apuran: sin reloj', () => {
-  const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
+  const sw = require('./load').shell();
   for (const g of ['bloques-area', 'division-sintetica', 'cancela-factores', 'jefe-ruta']) {
     assert.ok(html.includes(`js/games/${g}.js`) && sw.includes(`js/games/${g}.js`), g);
     assert.ok(!/clock|timer|countdown/i.test(fs.readFileSync(path.join(ROOT, `js/games/${g}.js`), 'utf8')), `${g}: sin reloj`);

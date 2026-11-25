@@ -83,7 +83,7 @@ test('casos para pensar: lo que no es lo primero que se ocurre', () => {
 });
 
 test('los juegos nuevos están registrados, con guía y como juegos de vidas', () => {
-  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
+  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), sw = require('./load').shell();
   const guia = fs.readFileSync(path.join(ROOT, 'js/guia.js'), 'utf8');
   for (const f of [...FILES, 'js/courses/trig-juegos.js']) { assert.ok(html.includes(`src="${f}"`), f); assert.ok(sw.includes(`'${f}'`), f); }
   assert.ok(html.indexOf('js/courses/trig-juegos.js') > html.indexOf('js/courses/trig.js') && html.indexOf('js/courses/trig-juegos.js') < html.indexOf('js/courses/sin-escribir.js'));

@@ -7,7 +7,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
-const html = read('index.html'), sw = read('sw.js');
+const html = read('index.html'), sw = require('./load').shell();
 const ctx = loadScripts(['js/explora.js', 'js/explora-angulo.js', 'js/explora-trig-41a.js']);
 const XP = get(ctx, 'XP'), L = get(ctx, 'EXPLORA')['trig-41a'], rad = get(ctx, 'xpRad');
 const A = XP.angulo;

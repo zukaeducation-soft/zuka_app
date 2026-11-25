@@ -8,7 +8,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
-const html = read('index.html'), sw = read('sw.js');
+const html = read('index.html'), sw = require('./load').shell();
 const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
 const ctx = loadScripts(all);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES');

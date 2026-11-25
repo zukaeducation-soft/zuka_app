@@ -186,7 +186,7 @@ test('los títulos de unidades y lecciones son texto simple (la pestaña los mue
 });
 
 test('Tutorías está en el menú, en index.html, en el service worker y en el recorrido', () => {
-  const index = read('index.html'), sw = read('sw.js'), app = read('js/app.js');
+  const index = read('index.html'), sw = require('./load').shell(), app = read('js/app.js');
   assert.match(index, /<button data-tab="cursos">Mis cursos<\/button>\s*<button data-tab="tutorias">Tutorías<\/button>\s*<button data-tab="tienda">Tienda<\/button>\s*<button data-tab="profile">/);
   assert.ok(index.indexOf('js/tutorias.js') > 0 && index.indexOf('js/tutorias.js') < index.indexOf('js/app.js'));
   assert.match(sw, /'js\/tutorias\.js'/);

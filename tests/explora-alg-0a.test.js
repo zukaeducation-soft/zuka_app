@@ -7,7 +7,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
-const html = read('index.html'), sw = read('sw.js');
+const html = read('index.html'), sw = require('./load').shell();
 const ctx = loadScripts(['js/explora.js', 'js/explora-alg-0a.js']);
 const XP = get(ctx, 'XP'), L = get(ctx, 'EXPLORA')['alg-0a'];
 const K = XP.conjunto;

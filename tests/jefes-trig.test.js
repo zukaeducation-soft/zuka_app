@@ -60,7 +60,7 @@ test('la calificación cuenta los ataques de cada fase', () => {
 });
 
 test('el jefe está registrado, con guía y vidas; los juegos de cierre se mueven con las ayudas del kit', () => {
-  const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8'), guia = fs.readFileSync(path.join(ROOT, 'js/guia.js'), 'utf8');
+  const sw = require('./load').shell(), guia = fs.readFileSync(path.join(ROOT, 'js/guia.js'), 'utf8');
   assert.ok(html.includes('src="js/games/jefe-rueda.js"') && sw.includes("'js/games/jefe-rueda.js'"));
   assert.ok(guia.includes("'jefe-rueda': [[") && guia.slice(guia.indexOf('GUIDE_ARCADE'), guia.indexOf('const GUIDES')).includes("'jefe-rueda'"));
   const TK = get(ctx, 'TK');

@@ -132,7 +132,7 @@ test('fmtClock escribe minutos y segundos', () => {
 });
 
 test('la app carga exam.js y pone la evaluación al final del camino del mundo', () => {
-  const index = read('index.html'), sw = read('sw.js'), app = read('js/app.js');
+  const index = read('index.html'), sw = require('./load').shell(), app = read('js/app.js');
   assert.ok(index.includes('src="js/exam.js"'));
   assert.ok(sw.includes("'js/exam.js'"));
   assert.match(app, /u\.exam/);

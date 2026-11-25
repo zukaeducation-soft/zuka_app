@@ -140,7 +140,7 @@ test('tiros: tres por juego, se perdona un fallo, la respuesta cabe en la perill
 });
 
 test('cada archivo está registrado, en orden, y la explicación enseña el rombo', () => {
-  const sw = read('sw.js');
+  const sw = require('./load').shell();
   for (const f of ['figura-kit', 1, 2, 3, 4, 5, 6].map(x => (x === 'figura-kit' ? x : `geo-escena-${x}`))) { assert.ok(html.includes(`js/games/${f}.js`)); assert.ok(sw.includes(`js/games/${f}.js`)); }
   assert.ok(html.indexOf('explora-kit.js') < html.indexOf('figura-kit.js') && html.indexOf('figura-kit.js') < html.indexOf('geo-escena-1.js'));
   assert.match(read('js/explora-pu-ge-4.js'), /rombo/);

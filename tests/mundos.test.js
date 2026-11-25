@@ -54,7 +54,7 @@ test('worldTrail acepta el centro vertical del botón (mapa de mundos)', () => {
 
 test('js/worlds.js está en index.html y en el SHELL del service worker', () => {
   const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
+  const sw = require('./load').shell();
   assert.ok(index.includes('src="js/worlds.js"'));
   assert.ok(sw.includes("'js/worlds.js'"));
 });

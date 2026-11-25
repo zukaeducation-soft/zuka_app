@@ -45,7 +45,7 @@ test('la app lee de la misma zona a la que sube el script, y las listas cargan a
   assert.equal(src.match(/const EXPLORA_VOZ = '([^']+)'/)[1], CDN);
   const html = lee('index.html');
   assert.ok(html.indexOf('js/explora-voces.js') > 0 && html.indexOf('js/explora-voces.js') < html.indexOf('"js/player.js"'));
-  assert.ok(lee('sw.js').includes("'js/explora-voces.js'"));
+  assert.ok(require('./load').shell().includes("'js/explora-voces.js'"));
 });
 
 test('xpVozFuentes: Bunny y, si falla, la copia propia; una lección sin narración no pide nada en producción', () => {

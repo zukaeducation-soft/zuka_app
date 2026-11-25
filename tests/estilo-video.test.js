@@ -91,7 +91,7 @@ test('las pestañas son fichas: la respondida se rellena de su color y el númer
 });
 
 test('anime.js viene con la app: en index.html antes del kit y en el SHELL del service worker', () => {
-  const html = read('index.html'), sw = read('sw.js');
+  const html = read('index.html'), sw = require('./load').shell();
   assert.ok(fs.statSync(path.join(ROOT, 'js/vendor/anime.min.js')).size > 10000);
   const a = html.indexOf('js/vendor/anime.min.js'), k = html.indexOf('js/games/kit.js');
   assert.ok(a > 0 && a < k);

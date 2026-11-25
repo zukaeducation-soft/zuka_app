@@ -94,7 +94,7 @@ test('las respuestas de opción múltiple apuntan a una opción existente y los 
 test('js/courses/calculo.js se carga en index.html antes de data.js y está en el SHELL', () => {
   const fs = require('fs'), path = require('path'), { ROOT } = require('./load');
   const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
+  const sw = require('./load').shell();
   const at = index.indexOf('src="js/courses/calculo.js"');
   assert.ok(at > 0 && at < index.indexOf('src="js/data.js"'));
   assert.ok(sw.includes("'js/courses/calculo.js'"));

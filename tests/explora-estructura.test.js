@@ -11,7 +11,7 @@ const MOTOR = ['js/explora.js', 'js/explora-angulo.js', 'js/explora-numeros.js',
 const contenido = fs.readdirSync(path.join(ROOT, 'js')).filter(f => /^explora-.+\.js$/.test(f) && !MOTOR.includes(`js/${f}`)).map(f => `js/${f}`);
 const ctx = loadScripts([...MOTOR, ...contenido]);
 const XP = get(ctx, 'XP'), EXPLORA = get(ctx, 'EXPLORA');
-const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
+const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), sw = require('./load').shell();
 
 test('cada archivo de explicación y de escenas está en index.html (antes de player.js) y en el service worker', () => {
   for (const f of [...MOTOR, ...contenido]) {

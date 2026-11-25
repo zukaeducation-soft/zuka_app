@@ -90,7 +90,7 @@ test('la guía está conectada: botón junto a la pista, se abre sola la primera
   assert.match(app, /guides: \{\}, guideAuto: true/);
   for (const cls of ['.guide-card', '.guide-stage', '.guide-dots', '.guide-actions', '.ex-tools']) assert.ok(css.includes(cls), `falta el estilo ${cls}`);
   assert.ok(html.indexOf('js/guia.js') > 0 && html.indexOf('js/guia.js') < html.indexOf('js/exercises.js'));
-  assert.ok(read('sw.js').includes("'js/guia.js'"));
+  assert.ok(require('./load').shell().includes("'js/guia.js'"));
 });
 
 test('colores: el fondo claro de los juegos ya no es amarillento y el amarillo de relleno se distingue de él', () => {

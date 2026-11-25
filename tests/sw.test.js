@@ -29,7 +29,7 @@ test('install precachea p5.js junto con el shell', async () => {
   let pending;
   listeners.install({ waitUntil: p => { pending = p; } });
   await pending;
-  assert.ok(cached.includes('js/games/kit.js'));
+  assert.ok(cached.includes('js/paquetes/zuka-1.js'));
   assert.ok(cached.includes(P5_URL));
 });
 

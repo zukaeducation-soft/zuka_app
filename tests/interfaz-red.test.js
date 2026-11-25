@@ -6,7 +6,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
-const css = read('css/styles.css'), index = read('index.html'), app = read('js/app.js'), sw = read('sw.js');
+const css = read('css/styles.css'), index = read('index.html'), app = read('js/app.js'), sw = require('./load').shell();
 const manifest = JSON.parse(read('manifest.json'));
 const block = sel => (css.match(new RegExp(sel.replace(/[.#[\]=":*()]/g, '\\$&') + '\\s*\\{([^}]*)\\}')) || [])[1] || '';
 const dark = block(':root'), light = block(':root[data-theme="light"]');

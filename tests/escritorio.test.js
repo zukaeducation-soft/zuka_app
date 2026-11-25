@@ -48,7 +48,7 @@ test('en el computador la entrada es una ventana sobre la presentación', () => 
 });
 
 test('va registrado', () => {
-  const idx = read('index.html'), sw = read('sw.js');
+  const idx = read('index.html'), sw = require('./load').shell();
   assert.match(idx, /<link rel="stylesheet" href="css\/escritorio\.css">/);
   assert.ok(idx.indexOf('js/escritorio.js') > idx.indexOf('js/presentacion.js') && idx.indexOf('js/escritorio.js') < idx.indexOf('js/app.js'));
   assert.ok(sw.includes("'js/escritorio.js'") && sw.includes("'css/escritorio.css'"));

@@ -108,7 +108,7 @@ test('está conectado: fichas y textos de los juegos, guías y respuestas', () =
   assert.ok(read('js/app.js').includes('texify(r.solution)')); assert.ok(read('js/exam.js').includes('texify(examSolution(it.ex))'));
   const html = read('index.html');
   assert.ok(html.indexOf('js/games/formula.js') > html.indexOf('js/games/kit.js') && html.indexOf('js/games/formula.js') < html.indexOf('js/games/cajas-numericas.js'));
-  assert.ok(read('sw.js').includes("'js/games/formula.js'"));
+  assert.ok(require('./load').shell().includes("'js/games/formula.js'"));
 });
 
 test('lo que texify entrega lo entiende KaTeX: llaves parejas y solo órdenes conocidas', () => {

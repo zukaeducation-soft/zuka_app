@@ -38,7 +38,7 @@ test('cuenta quiénes somos, cómo se aprende, los cursos con sus mundos y cierr
 });
 
 test('va registrada, con su hoja de estilos, y el arranque la pide antes que la pantalla de entrada', () => {
-  const idx = read('index.html'), sw = read('sw.js'), app = read('js/app.js');
+  const idx = read('index.html'), sw = require('./load').shell(), app = read('js/app.js');
   assert.match(idx, /<link rel="stylesheet" href="css\/presentacion\.css">/);
   assert.ok(idx.indexOf('js/presentacion.js') > idx.indexOf('js/cuenta.js') && idx.indexOf('js/presentacion.js') < idx.indexOf('js/app.js'));
   assert.ok(sw.includes("'js/presentacion.js'") && sw.includes("'css/presentacion.css'"));

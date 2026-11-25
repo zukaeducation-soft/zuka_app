@@ -21,7 +21,7 @@ test('tres poses, SVG decorativo con colores en variables y borde para el tema o
 
 test('registrado y ubicado: inicio, Mis cursos vacío, gimnasio, final de lección y de reto, sin vidas y recorrido', () => {
   assert.match(read('index.html'), /<script defer src="js\/mascota.js"><\/script>/);
-  assert.match(read('sw.js'), /'js\/mascota.js'/);
+  assert.match(require('./load').shell(), /'js\/mascota.js'/);
   assert.match(read('js/inicio.js'), /mascotSVG\('think', 'm-hello'\)/);
   assert.match(read('js/inicio.js'), /class="m-empty">\$\{mascotSVG\('think'\)\}/);
   const gym = read('js/gimnasio.js');

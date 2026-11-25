@@ -10,7 +10,7 @@ const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const ctx = loadScripts(['js/back.js', 'js/tour.js']);
 const STEPS = get(ctx, 'TOUR_STEPS'), shouldStart = get(ctx, 'tourShouldStart');
 const hole = get(ctx, 'tourHole'), tipPos = get(ctx, 'tourTipPos'), backStep = get(ctx, 'backStep');
-const index = read('index.html'), sw = read('sw.js'), app = read('js/app.js'), css = read('css/styles.css');
+const index = read('index.html'), sw = require('./load').shell(), app = read('js/app.js'), css = read('css/styles.css');
 
 test('sale solo a quien abre la app por primera vez', () => {
   assert.equal(shouldStart({ xp: 0, done: {} }), true);

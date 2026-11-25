@@ -7,7 +7,7 @@ const path = require('path');
 const { ROOT } = require('./load');
 
 const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
+const sw = require('./load').shell();
 const games = fs.readdirSync(path.join(ROOT, 'js/games')).filter(f => f.endsWith('.js'));
 
 for (const f of games) {

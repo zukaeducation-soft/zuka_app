@@ -67,7 +67,7 @@ test('la pestaña Clips no pinta videos de lecciones ni el botón Practicar', ()
 });
 
 test('curiosidades.js está cargado en index.html y en el SHELL; el mp4 no se precachea', () => {
-  const index = read('index.html'), sw = read('sw.js');
+  const index = read('index.html'), sw = require('./load').shell();
   assert.ok(index.includes('src="js/curiosidades.js"'));
   assert.ok(index.indexOf('js/content.js') < index.indexOf('js/curiosidades.js') && index.indexOf('js/curiosidades.js') < index.indexOf('js/app.js'));
   assert.ok(sw.includes("'js/curiosidades.js'"));

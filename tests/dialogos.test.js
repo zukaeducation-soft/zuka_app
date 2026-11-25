@@ -73,5 +73,5 @@ test('atrás: recargar no apila bases nuevas y la pregunta de salir deja la app 
 test('la app arma el manejo de atrás y carga back.js', () => {
   assert.match(app, /setupBack\(\)/);
   assert.ok(read('index.html').includes('src="js/back.js"'));
-  assert.ok(read('sw.js').includes("'js/back.js'"));
+  assert.ok(require('./load').shell().includes("'js/back.js'"));
 });

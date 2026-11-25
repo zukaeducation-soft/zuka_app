@@ -111,7 +111,7 @@ test('catálogo: cada lección una vez; la prueba abre el primer mundo y, con co
 });
 
 test('la app carga acceso.js y cuenta.js antes de app.js, y el service worker los guarda', () => {
-  const html = read('index.html'), sw = read('sw.js');
+  const html = read('index.html'), sw = require('./load').shell();
   const at = s => html.indexOf(s);
   assert.ok(at('js/acceso.js') > 0 && at('js/acceso.js') < at('js/cuenta.js') && at('js/cuenta.js') < at('js/app.js'));
   assert.ok(at('js/data.js') < at('js/cuenta.js'), 'cuenta.js necesita los cursos ya cargados');

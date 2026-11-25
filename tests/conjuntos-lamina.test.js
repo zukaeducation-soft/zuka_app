@@ -134,7 +134,7 @@ test('descifra-zona (alg-0c): toda zona pedida tiene respuesta, no empieza resue
 });
 
 test('los juegos del mundo dibujan con las piezas de la lámina (SK) y están registrados', () => {
-  const sw = read('sw.js');
+  const sw = require('./load').shell();
   for (const f of ['conjuntos-kit', ...Object.values(NUEVOS), 'cubo-partes']) {
     assert.ok(html.includes(`src="js/games/${f}.js"`), `${f} en index.html`);
     assert.ok(sw.includes(`'js/games/${f}.js'`), `${f} en el service worker`);

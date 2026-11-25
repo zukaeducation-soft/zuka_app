@@ -46,7 +46,7 @@ test('la base pone precios, guarda las páginas en privado y nadie escribe pedid
   assert.match(sql, /bucket_id = 'libros' and privado\.puede_leer\(name\)/);
 });
 test('va registrada en la página, el service worker, el botón atrás y el panel', () => {
-  const idx = read('index.html'), sw = read('sw.js');
+  const idx = read('index.html'), sw = require('./load').shell();
   for (const x of ['js/tienda.js', 'js/lector.js', 'css/tienda.css']) assert.ok(idx.includes(x) && sw.includes(`'${x}'`), x);
   for (const n of [1, 2, 3, 4]) assert.ok(fs.existsSync(path.join(ROOT, `brand/libros/${n}.webp`)), `portada ${n}`);
   assert.match(read('js/back.js'), /tiendaAtras\(\)\) \{ cover\(\); return; \}/);
@@ -59,7 +59,7 @@ test('el QR de pago es el de Zuka y sale al comprar, al pedir y en los pedidos p
   assert.equal(h, '74fbf1fc117b08c2a3015a2fa61f2f487239088346ff5d346b77f0a91d0c376b');
   assert.equal((read('js/cuenta.js') + read('js/tienda.js')).match(/pagoHTML\((sel\.precio|total|p\.total)\)/g).length, 3);
   assert.match(read('js/tienda.js'), /data-pago=/);
-  assert.match(read('sw.js'), /'brand\/pago-breb\.png'/);
+  assert.match(require('./load').shell(), /'brand\/pago-breb\.png'/);
 });
 test('la tienda es una pestaña con cursos, paquetes, libros, asesorías y pedidos; el pedido va en su capa', () => {
   const s = read('js/tienda.js');

@@ -34,8 +34,8 @@ test('la vista no la tapa la presentación ni la cierra el aviso de sesión', ()
   assert.match(read('js/cuenta.js'), /if \(!Clave\.vista\) authCerrar\(\)/);
   const html = read('index.html');
   assert.ok(html.indexOf('js/clave.js') < html.indexOf('js/app.js') && html.includes('css/clave.css'));
-  assert.match(read('sw.js'), /'js\/clave\.js'/);
-  assert.match(read('sw.js'), /'css\/clave\.css'/);
+  assert.match(require('./load').shell(), /'js\/clave\.js'/);
+  assert.match(require('./load').shell(), /'css\/clave\.css'/);
 });
 test('el correo lleva el enlace de Supabase y ningún archivo externo', () => {
   const c = read('supabase/correos/restablecer-clave.html');
