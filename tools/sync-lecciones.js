@@ -4,12 +4,11 @@
 // de prueba. No borra filas.
 const { loadScripts, get } = require('../tests/load');
 
+// Los mismos archivos y en el mismo orden que carga la app: si falta uno, faltan sus lecciones o sus evaluaciones.
+const html = require('fs').readFileSync(require('path').join(__dirname, '../index.html'), 'utf8');
+const deIndex = [...html.matchAll(/src="(js\/[^"]+\.js)"/g)].map(m => m[1]);
 const ctx = loadScripts(['js/ui.js', 'js/worlds.js', 'js/content.js', 'js/curiosidades.js', 'js/acceso.js',
-  'js/courses/algebra.js', 'js/courses/trig.js', 'js/courses/trig-juegos.js',
-  'js/courses/calculo.js', 'js/courses/geometria.js', 'js/courses/preuda-razonamiento.js', 'js/courses/preuda-videos.js',
-  'js/courses/preuda-lectura.js', 'js/courses/preuda.js', 'js/courses/preicfes-base.js',
-  ...require('fs').readdirSync(require('path').join(__dirname, '../js/courses')).filter(f => /^preicfes-(?!base)/.test(f)).map(f => `js/courses/${f}`),
-  'js/data.js', 'js/courses/preicfes.js']);
+  ...deIndex.filter(f => /^js\/(games\/(kit|formula|arma-la-cuenta|escala-solucion)\.js$|courses\/|data\.js$)/.test(f) && !/sin-escribir/.test(f))]);
 const rows = get(ctx, 'catalogo(COURSES, CURIOS, summaryOf)');
 
 const q = s => `'${String(s).replace(/'/g, "''")}'`;

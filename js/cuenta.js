@@ -170,11 +170,17 @@ function cursosVisibles() {
 // ---------- uso diario ----------
 // Tiempo con la app abierta y a la vista, lecciones completadas y ejercicios respondidos: se envían
 // cada minuto (registrar_uso) y alimentan las estadísticas del panel. Solo con sesión.
-const uso = { seg: 0, t: Date.now(), lec: 0, ans: null, ok: null };
+// Cuenta mientras hay alguien: un toque o una tecla en los últimos tres minutos (lo que dura leer un texto), o algo que se mira o se oye
+// hasta el final (video, escenas, voz de Explora: usoVivo). Los clips en bucle no cuentan solos.
+// Sin eso, dejar la app abierta sumaba horas (se vio en los datos: 4 horas sin un solo ejercicio).
+const uso = { seg: 0, t: Date.now(), lec: 0, ans: null, ok: null, act: Date.now() };
+const USO_QUIETO = 180000;
+const usoHayAlguien = now => now - uso.act < USO_QUIETO || [...document.querySelectorAll('video')].some(v => !v.paused && !v.ended && !v.loop);
+function usoVivo(seg = 0) { uso.act = Math.max(uso.act, Date.now() + seg * 1000); }
 function usoTick(visible = !document.hidden) {
   const now = Date.now(), dt = (now - uso.t) / 1000;
   uso.t = now;
-  if (visible && dt > 0 && dt < 40 && Cuenta.user && !Cuenta.user.offline) uso.seg += dt;
+  if (visible && usoHayAlguien(now) && dt > 0 && dt < 40 && Cuenta.user && !Cuenta.user.offline) uso.seg += dt;
   if (uso.seg >= 60) usoEnvia();
 }
 function usoEnvia() {
@@ -187,10 +193,11 @@ function usoEnvia() {
     .then(() => {}, () => {});
 }
 if (typeof document !== 'undefined') {
-  setInterval(usoTick, 15000);
+  setInterval(() => usoTick(), 15000);
+  ['pointerdown', 'pointermove', 'keydown', 'wheel', 'touchmove'].forEach(k => addEventListener(k, () => { uso.act = Date.now(); }, { passive: true, capture: true }));
   // Al esconder la app se cuenta lo que iba y se envía; al volver, el reloj arranca de nuevo.
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { usoTick(true); usoEnvia(); } else uso.t = Date.now();
+    if (document.hidden) { usoTick(true); usoEnvia(); } else uso.t = uso.act = Date.now();
   });
 }
 

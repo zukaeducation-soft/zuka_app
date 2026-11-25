@@ -19,3 +19,6 @@
 #po-hoja { display: none; } @media print { body.portal { display: block !important; background: #fff; } body.portal > :not(#po-hoja) { display: none !important; } #po-hoja { display: grid !important; grid-template-columns: 1fr 1fr; gap: 10px; zoom: 1; } #po-hoja article { display: grid; gap: 5px; padding: 16px; border: 1px dashed #777; border-radius: 12px; break-inside: avoid; color: #000; } #po-hoja code { font: 700 22px ui-monospace, Consolas, monospace; letter-spacing: .08em; } #po-hoja small { color: #333; font-size: 12px; } }
 @media (max-width: 720px) { .po-kpis { grid-template-columns: 1fr 1fr; gap: 10px; } .po-cupos { grid-column: 1 / -1; } .portal .po-kpis .pn-card { padding: 16px; } .po-k > b { font-size: 34px; } .po-aro { width: 108px; } }
 .portal .pn-toast[popover] { inset: auto auto 20px 50%; margin: 0; border: 0; }
+
+/* contraste medido con axe (WCAG AA) */
+:root[data-theme="light"] body.portal { --bad: #b3213d; --ok: #0a6b41; } .portal .pn-av { background: hsl(var(--h) 55% 27%); } .portal .pill.ok { color: var(--ink); }

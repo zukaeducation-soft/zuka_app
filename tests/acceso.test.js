@@ -175,9 +175,9 @@ test('los estudiantes ven los cursos de su cuenta y los publicados', () => {
 test('el uso diario se envía solo con sesión y lo escribe únicamente registrar_uso', () => {
   const cuenta = read('js/cuenta.js'), sql = read('supabase/migrations/20261117000004_cursos_y_uso.sql');
   assert.match(cuenta, /rpc\('registrar_uso'/);
-  assert.match(cuenta, /if \(visible && dt > 0 && dt < 40 && Cuenta\.user && !Cuenta\.user\.offline\) uso\.seg \+= dt;/, 'solo cuenta con la app a la vista');
+  assert.match(cuenta, /if \(visible && usoHayAlguien\(now\) && dt > 0 && dt < 40 && Cuenta\.user && !Cuenta\.user\.offline\) uso\.seg \+= dt;/, 'solo cuenta con la app a la vista');
   assert.ok(!/grant[^;]*(insert|update)[^;]*on public\.uso_diario/.test(sql), 'un estudiante no puede escribir su uso a mano');
-  assert.match(cuenta, /if \(document\.hidden\) \{ usoTick\(true\); usoEnvia\(\); \} else uso\.t = Date\.now\(\);/, 'al esconder la app se envía lo que iba');
+  assert.match(cuenta, /if \(document\.hidden\) \{ usoTick\(true\); usoEnvia\(\); \} else uso.t = uso.act = Date\.now\(\);/, 'al esconder la app se envía lo que iba');
   assert.match(read('supabase/migrations/20261117000005_ajustes_uso.sql'), /least\(u\.ejercicios \+ excluded\.ejercicios, 5000\)/, 'topes diarios');
   assert.match(sql, /least\(greatest\(coalesce\(p_segundos, 0\), 0\), 300\)/, 'cada envío cuenta a lo sumo 5 minutos');
   const admin = read('admin/panel.js');

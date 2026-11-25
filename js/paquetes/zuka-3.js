@@ -12615,6 +12615,7 @@ const XS = (() => {
         lenta = false;
         src.onended = () => { if (!parar) { parar = true; clearTimeout(plazo); fin(true); } };
         src.start();
+        if (typeof usoVivo === 'function') usoVivo(buf.duration);   // oír la explicación cuenta como estudio
         // Si el sistema detiene el sonido (una llamada), la explicación no se queda esperando el final.
         plazo = setTimeout(() => { if (parar) return; parar = true; try { src.stop(); } catch (e) { /* ya paró */ } fin(false); }, buf.duration * 1000 + 2500);
       });

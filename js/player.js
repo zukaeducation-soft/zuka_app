@@ -83,6 +83,7 @@ class ClipPlayer {
   tick = now => {
     if (!this.playing) return;
     this.t += Math.min(0.1, (now - this.last) / 1000);
+    if (!this.opts.loop && typeof usoVivo === 'function') usoVivo();   // mirar la escena cuenta, aunque no se toque nada
     this.last = now;
     if (this.t >= this.total) {
       this.opts.onEnd?.();
@@ -470,7 +471,7 @@ class YouTubeClip {
     host.appendChild(el);
     this.seekUi = attachSeek(el, {
       duration: () => this.player?.getDuration?.() || 0,
-      time: () => this.player?.getCurrentTime?.() || 0,
+      time: () => { const s = this.player?.getCurrentTime?.() || 0; if (s !== this.vistoT && typeof usoVivo === 'function') usoVivo(); this.vistoT = s; return s; },
       seek: t => {
         this.player.seekTo(t, true);
         if (el.classList.contains('ended')) this.play();

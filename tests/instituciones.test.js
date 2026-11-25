@@ -70,3 +70,47 @@ test('las páginas están enlazadas, no pasan por la caché y cumplen la políti
   assert.match(read('js/presentacion.js'), /id="pz-inst"/); assert.match(read('admin/index.html'), /#instituciones/);
   assert.doesNotMatch(read('instituciones/portal/portal.js'), /sb\.from\(/, 'el portal no lee tablas');
 });
+test('listas como las que exporta un colegio: títulos, apellidos aparte, grado y grupo, tildes y comillas', () => {
+  const f = g('instLista'), v = x => x.lista.map(y => `${y.nombre}|${y.grupo}|${y.identificador}`).join(' / ');
+  assert.equal(v(f('DOC\tTIPODOC\tAPELLIDO1\tAPELLIDO2\tNOMBRE1\tNOMBRE2\tGRADO_COD\tGRUPO\n100200300\tTI\tMUÑOZ\tPEÑA\tÁNGELA\tMARÍA\t11\t1101\n100200301\tTI\tRÍOS\t\tJOSÉ\t\t10\tA')), 'ÁNGELA MARÍA MUÑOZ PEÑA|1101|100200300 / JOSÉ RÍOS|10-A|100200301');
+  assert.equal(v(f('Nombre;Apellido(s);Grupo;Número de identificación\nLuisa Fernanda;Güiza Ñáñez;9-2;55')), 'Luisa Fernanda Güiza Ñáñez|9-2|55');
+  assert.equal(v(f('Apellidos y nombres,Grado,Documento\n"Ríos Cano, Ana",11,7')), 'Ríos Cano, Ana|11|7');
+  assert.equal(v(f("O'Neill De la Cruz Jr.\t10A\t1")), "O'Neill De la Cruz Jr.|10A|1");
+  assert.equal(f('Ana\tRíos\nLuis\tMejía\nSara\tCano\nTomás\tGil\nEva\tRoa').raro, true, 'avisa si la segunda columna son apellidos');
+  assert.equal(f('Ana Ríos\t10A\nLuis Mejía\t10A\nSara Cano\t10B\nTomás Gil\t11A').raro, false);
+  assert.equal(f('').lista.length, 0); assert.equal(f('Ana Ríos').lista[0].grupo, '');
+});
+test('listas difíciles: celda vacía al comienzo, títulos raros o más abajo, columnas que no se usan', () => {
+  const f = g('instLista'), v = x => x.lista.map(y => `${y.nombre}|${y.grupo}|${y.identificador}`).join(' / ');
+  assert.equal(v(f('GRUPO\tAPELLIDOS\tNOMBRES\n\tRíos\tAna\n10A\tGil\tLuis')), 'Ana Ríos|| / Luis Gil|10A|');
+  assert.equal(v(f('Colegio San José\nN°;Apellidos y nombres del estudiante;Nro. de documento;Grado;Correo\n1;Ríos Ana;55;10;x@y.co')), 'Ríos Ana|10|55'); assert.equal(f('Nombre;Correo\nAna Ríos;x').ignora.join(), 'Correo');
+  for (const d of ['Documento de identidad', 'No. de documento', 'Cédula', 'T.I.', 'Número de identificación', 'Tarjeta de identidad']) assert.equal(v(f(`Nombres,Apellidos,${d}\nAna,Ríos,9`)), 'Ana Ríos||9', d);
+  assert.equal(v(f('Apellidos;Nombres del estudiante\nRíos;Ana')), 'Ana Ríos||'); assert.equal(v(f('"Ríos\nCano, Ana",10A')), 'Ríos Cano, Ana|10A|');
+  assert.equal(f('Ana Ríos;10A\n\n\n;10B').malas[0].linea, 4);
+});
+test('el portal carga sus propias cuentas, iguales a las de la app', () => {
+  const n = s => s.replace(/\r\n/g, '\n'); assert.equal(n(read('instituciones/cuentas.js')).split('\n').slice(1).join('\n'), n(read('js/instituciones.js')));
+});
+test('el uso compacto de la base se abre igual que el de antes', () => {
+  const a = g('instAbre')({ hoy: '2026-11-25', uso: { 7: '0,600,5,4;3,60,0,0' }, hechas: { 7: 'l1,2;l2,' } });
+  assert.equal(JSON.stringify(J(a.uso)), '[[7,"2026-11-25",600,5,4],[7,"2026-11-22",60,0,0]]'); assert.equal(JSON.stringify(J(a.hechas)), '[[7,"l1","2026-11-23"],[7,"l2",null]]');
+  assert.equal(g('instEstudio')([7, '', 60, 0, 0]), false, 'abrir y cerrar no es estudiar');
+});
+test('las alertas se pueden medir contra lo que dice el docente', () => {
+  const m = g('instMide')(new Set([1, 2, 3]), new Set([2, 3, 4]), [1, 2, 3, 4, 5]);
+  assert.equal(`${m.vp},${m.fp},${m.fn}`, '2,1,1'); assert.ok(m.icPrecision[0] < .7 && m.icPrecision[1] > .9, 'con tres avisos el intervalo es enorme');
+  assert.equal(g('instMide')(new Set(), new Set(), [1]).precision, null);
+});
+test('la app no cuenta como estudio la pantalla quieta', () => {
+  const src = read('js/cuenta.js'), i = src.indexOf('const uso = {'), vm = require('node:vm'), vids = [];
+  const x = vm.createContext({ Date: { now: () => x.ahora }, ahora: 1e6, document: { hidden: false, querySelectorAll: () => vids }, Cuenta: { user: { id: 1 } }, usoEnvia: () => {} });
+  vm.runInContext(src.slice(i, src.indexOf('function usoEnvia')) + ';this.uso=uso;this.tick=usoTick;this.vivo=usoVivo', x);
+  const corre = (seg) => { const a = x.uso.seg; for (let k = 0; k < seg / 15; k++) { x.ahora += 15000; x.tick(true); } const r = x.uso.seg - a; x.uso.seg = 0; return r; };
+  assert.equal(corre(120), 120, 'con actividad reciente cuenta'); const una = corre(3600); assert.ok(una <= 60, `una hora quieta suma ${una} s`);
+  vids.push({ paused: false, ended: false, loop: true }); assert.equal(corre(600), 0, 'un clip en bucle no'); vids[0].loop = false; assert.equal(corre(600), 600, 'un video sí'); vids.length = 0;
+  x.vivo(60); assert.ok(corre(300) >= 225, 'la voz de Explora sí');
+});
+test('el catálogo para Supabase trae todas las evaluaciones que la app muestra', () => {
+  const s = require('child_process').execFileSync(process.execPath, [path.join(ROOT, 'tools/sync-lecciones.js')], { encoding: 'utf8', maxBuffer: 1e7 });
+  for (const c of ['preuda', 'algebra', 'preicfes']) assert.ok((s.match(new RegExp(`'evaluacion', '${c}'`, 'g')) || []).length >= 10, c);
+});
