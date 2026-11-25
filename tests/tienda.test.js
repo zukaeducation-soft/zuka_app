@@ -99,3 +99,6 @@ test('añadir no redibuja la página y todo se puede hacer sin arrastrar', () =>
   for (const k of ['data-ctl', 'tiendaRefresca', 'data-bolsa', 'ArrowRight', 'data-hora', 'aria-valuetext']) assert.ok(s.includes(k), k);
   assert.match(read('css/tienda.css'), /prefers-reduced-motion: reduce\) \{ \.vt-fondo/);
 });
+test('el botón de la vitrina no queda blanco sobre blanco', () => {
+  assert.match(read('css/tienda.css'), /\.tienda \.vt \.vt-acc \.btn\.main\.brand \{ background: #f7f9ff; color: #0b1226; \}/);
+});

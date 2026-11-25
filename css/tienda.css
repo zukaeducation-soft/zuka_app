@@ -322,3 +322,5 @@
 
 /* Paquete de libros (spec 2026-11-25-paquete-libros) */
 .td-banda .td-pags { font-size: 15px; color: var(--mute); } .td-banda .td-pags b { font: 600 24px var(--display); color: var(--ink); }
+/* Vitrina: su botón es claro sobre el fondo oscuro, con letra oscura en los dos temas (en el claro quedaba blanco sobre blanco). */
+.tienda .vt .vt-acc .btn.main, .tienda .vt .vt-acc .btn.main.brand { background: #f7f9ff; color: #0b1226; } .tienda .vt .vt-acc .btn.ghost { color: #f7f9ff; border-color: rgb(247 249 255 / .6); } .tienda .vt .vt-acc :is(.td-cant, .td-plan) { color: #f7f9ff; } .tienda .vt .vt-txt > .td-ahorro { justify-self: center; align-self: center; }
