@@ -13,37 +13,37 @@
 
   xpLec('icf-ma-datos-1', [
     ['Primero, la escala',
-      xpMira('dibujo', 'Empecemos por la idea: una gráfica se lee por su **escala**, no a ojo.', { dib: barras, v: { vals: [50, 75, 25], hi: 100, st: 50, rot: ['lun', 'mar', 'mié'], on: -1, nota: '' }, alto: 195 }, [
-        ['Lluvia de tres días. Las rayas van de 50 en 50.', {}],
-        ['El lunes llega justo a una raya: 50.', { on: 0, nota: '50' }],
-        ['El martes queda a mitad entre 50 y 100: 75.', { on: 1, nota: '75' }, '$50 + 25 = 75$'],
-        ['El miércoles, a mitad entre 0 y 50: 25.', { on: 2, nota: '25' }],
-        ['Si creyeras que va de 10 en 10, todo saldría mal.', { on: -1, nota: '' }],
+      xpMira('dibujo', '¿Cómo se lee bien una gráfica? Mirando primero su **escala**, no a ojo.', { dib: barras, v: { vals: [50, 75, 25], hi: 100, st: 50, rot: ['lun', 'mar', 'mié'], on: -1, nota: '' }, alto: 195 }, [
+        ['Estas barras muestran la lluvia de tres días. Fíjate en las rayas: van de 50 en 50.', {}],
+        ['La barra del lunes llega justo a la primera raya, así que vale 50.', { on: 0, nota: '50' }],
+        ['Con el martes hay que pensar un poco más: queda en la mitad entre 50 y 100. Son 75.', { on: 1, nota: '75' }, '$50 + 25 = 75$'],
+        ['Y el miércoles está en la mitad entre 0 y 50. Entonces vale 25.', { on: 2, nota: '25' }],
+        ['Si hubiéramos pensado que las rayas iban de 10 en 10, todo saldría mal.', { on: -1, nota: '' }],
       ], 'Mira cuánto vale una raya y qué parte de ella alcanza la barra.'),
-      xpHaz('dibujo', 'Pasa la tabla a la gráfica: A = 30, B = 60, C = 90. Arrastra cada barra.', { dib: (v, K) => barras({ vals: [v.a, v.b, v.c], hi: 120, st: 60, rot: ['A', 'B', 'C'], on: -1 }, K), v: { a: 15, b: 15, c: 15 }, metas: { a: 30, b: 60, c: 90 }, alto: 195, manijas: ['a', 'b', 'c'].map((k, i) => manija(k, i, 3, 120, 15)),
+      xpHaz('dibujo', 'Ahora pasa esta tabla a la gráfica: A vale 30, B vale 60 y C vale 90. Arrastra cada barra.', { dib: (v, K) => barras({ vals: [v.a, v.b, v.c], hi: 120, st: 60, rot: ['A', 'B', 'C'], on: -1 }, K), v: { a: 15, b: 15, c: 15 }, metas: { a: 30, b: 60, c: 90 }, alto: 195, manijas: ['a', 'b', 'c'].map((k, i) => manija(k, i, 3, 120, 15)),
         lee: v => `$${v.a}, \\; ${v.b}, \\; ${v.c}$`, dice: () => 'Las rayas van de 60 en 60: la mitad de una raya son 30.' }, 'El 30 y el 90 caen a mitad de raya.')],
     ['Cambio y porcentaje',
-      xpMira('dibujo', 'Segunda idea: el cambio en porcentaje se mide sobre lo que había **antes**.', { dib: barras, v: { vals: [8, 8], hi: 16, st: 4, rot: ['antes', 'ahora'], on: 1, nota: '' }, alto: 195 }, [
-        ['Antes había 8 estudiantes en el coro.', {}],
-        ['Ahora hay 12: entraron 4.', { vals: [8, 12], nota: '+4' }, '$12 - 8 = 4$'],
-        ['Cuatro es la mitad de 8: subió el 50 %.', { nota: '+50 %' }, '$\\tfrac{4}{8} = 50\\,\\%$'],
-        ['Si de 12 vuelve a 8, pierde 4 de 12: un tercio.', { vals: [12, 8], nota: '−33 %' }, '$\\tfrac{4}{12} \\approx 33\\,\\%$'],
-        ['Mismo cambio, distinto porcentaje: se divide por lo de antes.', {}],
+      xpMira('dibujo', 'Cuando algo cambia, el porcentaje se calcula sobre lo que había **antes**.', { dib: barras, v: { vals: [8, 8], hi: 16, st: 4, rot: ['antes', 'ahora'], on: 1, nota: '' }, alto: 195 }, [
+        ['Imagina un coro que empezó con 8 estudiantes.', {}],
+        ['Hoy son 12, porque entraron 4 más.', { vals: [8, 12], nota: '+4' }, '$12 - 8 = 4$'],
+        ['Para saber cuánto creció, comparamos esos 4 con los 8 del comienzo: es la mitad, el 50 %.', { nota: '+50 %' }, '$\\tfrac{4}{8} = 50\\,\\%$'],
+        ['¿Y si después pasa de 12 a 8? Pierde 4 de 12, una tercera parte: cerca del 33 %.', { vals: [12, 8], nota: '−33 %' }, '$\\tfrac{4}{12} \\approx 33\\,\\%$'],
+        ['Fueron 4 estudiantes las dos veces, pero el porcentaje cambió, porque el punto de partida era otro.', {}],
       ], 'Cambio porcentual = lo que cambió ÷ lo que había antes.'),
-      xpHaz('dibujo', 'Antes: 40. Arrastra la barra de ahora hasta que el aumento sea del 25 %.', { dib: (v, K) => barras({ vals: [40, v.b], hi: 80, st: 20, rot: ['antes', 'ahora'], on: 1 }, K), v: { b: 70 }, metas: { b: 50 }, alto: 195, manijas: [manija('b', 1, 2, 80, 5, 10)],
+      xpHaz('dibujo', 'Antes había 40. Arrastra la barra de ahora hasta que el aumento sea del 25 %.', { dib: (v, K) => barras({ vals: [40, v.b], hi: 80, st: 20, rot: ['antes', 'ahora'], on: 1 }, K), v: { b: 70 }, metas: { b: 50 }, alto: 195, manijas: [manija('b', 1, 2, 80, 5, 10)],
         lee: v => `$\\tfrac{${v.b} - 40}{40} = ${N((v.b - 40) / 40 * 100)}\\,\\%$`, dice: v => (v.b >= 40 ? `Subió ${v.b - 40} sobre 40.` : `Bajó ${40 - v.b} sobre 40.`) }, 'El 25 % de 40 son 10: $40 + 10 = 50$.')],
     ['La torta',
-      xpMira('dibujo', 'Tercera idea: en la torta, el total es la **vuelta completa**.', { dib: torta, v: { g: 360, r: '100 %' }, alto: 200 }, [
-        ['El 100 % da toda la vuelta: 360°.', {}, '$100\\,\\% = 360^\\circ$'],
-        ['La mitad del total ocupa media vuelta.', { g: 180, r: '50 %' }, '$50\\,\\% = 180^\\circ$'],
-        ['El 10 % es la décima parte: 36°.', { g: 36, r: '10 %' }, '$360^\\circ \\div 10 = 36^\\circ$'],
-        ['El 30 % son tres veces eso: 108°.', { g: 108, r: '30 %' }, '$3 \\cdot 36^\\circ = 108^\\circ$'],
-        ['Del ángulo al porcentaje: divide entre 360.', { g: 90, r: '25 %' }, '$\\tfrac{90}{360} = 25\\,\\%$'],
+      xpMira('dibujo', 'Otra gráfica muy común es la torta. En ella, el total es la **vuelta completa**.', { dib: torta, v: { g: 360, r: '100 %' }, alto: 200 }, [
+        ['Todo el círculo es el 100 %, y una vuelta mide 360°.', {}, '$100\\,\\% = 360^\\circ$'],
+        ['Por eso la mitad del total, el 50 %, ocupa media vuelta: 180°.', { g: 180, r: '50 %' }, '$50\\,\\% = 180^\\circ$'],
+        ['Para el 10 % dividimos la vuelta entre 10, y quedan 36°.', { g: 36, r: '10 %' }, '$360^\\circ \\div 10 = 36^\\circ$'],
+        ['Con ese dato es fácil: el 30 % es tres veces 36°, o sea, 108°.', { g: 108, r: '30 %' }, '$3 \\cdot 36^\\circ = 108^\\circ$'],
+        ['También podemos ir al revés: un ángulo de 90°, dividido entre 360, es el 25 %.', { g: 90, r: '25 %' }, '$\\tfrac{90}{360} = 25\\,\\%$'],
       ], 'El sector es la misma fracción de 360° que la parte es del total.'),
-      xpHaz('dibujo', 'De 50 personas, 10 prefieren el té. Abre su sector.', { dib: (v, K) => torta({ g: v.g, r: 'té' }, K), v: { g: 144 }, metas: { g: 72 }, alto: 200, manijas: [{ k: 'g', min: 18, max: 342, paso: 18, r: 10, en: v => XPK.at(150, 100, 80, 90 - v.g), de: (x, y, v) => { const g = ((90 - Math.atan2(100 - y, x - 150) * 180 / Math.PI) % 360 + 360) % 360; return Math.abs(g - v.g) > 180 ? (v.g > 180 ? 342 : 18) : g; } }],
+      xpHaz('dibujo', 'De 50 personas, 10 prefieren el té. Arrastra el borde hasta abrir su sector.', { dib: (v, K) => torta({ g: v.g, r: 'té' }, K), v: { g: 144 }, metas: { g: 72 }, alto: 200, manijas: [{ k: 'g', min: 18, max: 342, paso: 18, r: 10, en: v => XPK.at(150, 100, 80, 90 - v.g), de: (x, y, v) => { const g = ((90 - Math.atan2(100 - y, x - 150) * 180 / Math.PI) % 360 + 360) % 360; return Math.abs(g - v.g) > 180 ? (v.g > 180 ? 342 : 18) : g; } }],
         lee: v => `$${N(v.g / 3.6)}\\,\\% \\text{ de } 50 = ${N(v.g / 360 * 50)}$`, dice: v => `${v.g}° son el ${N(v.g / 3.6)} % de la vuelta.` }, '10 de 50 son el 20 %: $2 \\cdot 36^\\circ = 72^\\circ$.')],
     ['Ahora sí, un problema',
-      xpHaz('hoja', 'Ventas: enero 10, febrero 20, marzo 15. Subraya la afirmación **correcta**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Siempre aumentaron.'], ['De enero a febrero subieron el 50 %.'], ['De enero a febrero se duplicaron.'], ['En marzo fueron las menores.']], pista: 'Esa no cuadra con los tres números. Revísala uno por uno.' }, 'De 10 a 20 es el doble: un aumento del 100 %.')],
+      xpHaz('hoja', 'Una tienda vendió 10 cajas en enero, 20 en febrero y 15 en marzo. Subraya la afirmación **correcta**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Siempre aumentaron.'], ['De enero a febrero subieron el 50 %.'], ['De enero a febrero se duplicaron.'], ['En marzo fueron las menores.']], pista: 'Esa no cuadra con los tres números. Revísala uno por uno.' }, 'De 10 a 20 es el doble: un aumento del 100 %.')],
   ], 'Escala primero, lo de antes para el porcentaje y 360° para la torta.');
 
   xpLec('icf-ma-datos-2', [

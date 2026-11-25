@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const { ROOT } = require('./load');
+const { archivoDe } = require('../tools/explora-frases');
 const { paquete, leeVoces, escribeVoces, CDN } = require('../tools/subir-voz');
 
 const lee = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
@@ -36,7 +37,7 @@ test('js/explora-voces.js se lee y se escribe igual, y apunta a listas con huell
   assert.deepEqual(leeVoces(escribeVoces(voces)), voces);
   for (const [id, f] of Object.entries(voces)) {
     assert.match(f, /^voz-[0-9a-f]{12}\.json$/, id);
-    assert.ok(fs.existsSync(path.join(ROOT, `js/explora-${id}.js`)), `${id} tiene explicación`);
+    assert.ok(archivoDe(id), `${id} tiene explicación`);
   }
   assert.ok(voces['pu-cm-1'], 'la lección 1 está publicada');
 });
