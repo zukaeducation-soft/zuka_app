@@ -3,7 +3,7 @@
 El usuario pidió acomodar la portada como instruimos.com. Se toma su **estructura**, no sus textos, fotos ni marca:
 
 1. **Barra** con menú y botón «Plataforma virtual» hasta el borde (celular: «Entrar» y menú desplegable).
-2. **Carrusel** a lo ancho con franja de color por programa: la promesa (con la rueda que se juega), un programa por lámina
+2. **Carrusel** a lo ancho con franja de color por programa: la promesa (con la foto de estudiantes, `brand/estudiantes.webp`; la rueda que se juega está en «Cómo se aprende»), un programa por lámina
    (pantalla real de la app en `brand/app/<curso>.webp`) y los libros. Se desliza, con flechas, puntos y pausa; pasa solo cada
    7 s hasta que se toca, y nunca con «reducir movimiento». La lámina que no se ve es `inert`.
 3. **Nuestros programas disponibles**: una tarjeta por curso publicado (`PZ_PROG`), libros y asesorías, con fichas (inicio,
