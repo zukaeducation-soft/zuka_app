@@ -1,10 +1,10 @@
 // Preicfes · Sociales y Ciudadanas, mundo 6 «Historia de Colombia» (Explora, escena «hoja»).
 xpLec('icf-sc-historia-1', [
   ['El orden colonial',
-    xpMira('hoja', 'Empecemos por la idea: en la Colonia, el **origen** decidía casi todo.', { letras: ['1', '2', '3', '4'], paras: [['Peninsulares: los altos cargos'], ['Criollos: tierras y estudios, poco poder'], ['Mestizos e indígenas: trabajo y tributos'], ['Africanos esclavizados: sin libertad']] }, [
+    xpMira('hoja', 'Empecemos por la idea: en la Colonia, el **origen** decidía casi todo.', { letras: ['1', '2', '3', '4'], paras: [['Peninsulares: los altos cargos'], ['Criollos: tierras y estudios, poco poder'], ['Indígenas: tributo y trabajo; mestizos: oficios y pocos derechos'], ['Africanos esclavizados: sin libertad']] }, [
       ['Arriba, los nacidos en España.', { luz: [0], nota: { 0: 'mandan' } }],
       ['Sus descendientes americanos tenían dinero, no mando.', { luz: [1] }],
-      ['Abajo se trabajaba y se pagaba tributo.', { luz: [2] }],
+      ['Abajo se trabajaba, y los indígenas pagaban tributo.', { luz: [2] }],
       ['Y en la base, personas tratadas como propiedad.', { luz: [3], nota: { 3: 'sin libertad' } }],
       ['El comercio también lo controlaba España.', {}],
     ], 'Cargos, comercio y vida según el origen.'),
@@ -17,18 +17,18 @@ xpLec('icf-sc-historia-1', [
       ['Conservar la cultura también es resistir.', { luz: [3] }],
       ['No toda resistencia lleva armas.', { luz: [1, 3] }],
     ], 'Palenques, pleitos, marchas y memoria.'),
-    xpHaz('hoja', 'Pon al margen quiénes lo hicieron.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['indígenas', 'comuneros', 'esclavizados'], meta: [2, 0, 1], paras: [['Fundar San Basilio'], ['Reclamar un resguardo'], ['Marchar a Santafé por los impuestos']], pista: 'Alguna no va ahí: palenque, tierra comunal o impuestos.' }, 'Palenque, resguardo e impuestos.')],
+    xpHaz('hoja', 'Pon al margen cómo resistían.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['con la ley', 'con la cultura', 'con la protesta'], meta: [2, 0, 1], paras: [['Romper un edicto en la plaza'], ['Presentar un pleito'], ['Cantar en la lengua de los abuelos']], pista: 'Alguna no va ahí: ¿usa la plaza, un tribunal o la memoria?' }, 'Protesta, ley y cultura.')],
   ['Cambios y permanencias',
     xpMira('hoja', 'Tercera idea: una época nueva trae **cambios** y **permanencias**.', { paras: [['Ya no manda el rey.'], ['Hay ciudadanos, no súbditos.'], ['Sigue la esclavitud hasta 1851.'], ['Votan solo algunos hombres.']] }, [
       ['Esto cambió: la autoridad.', { luz: [0], nota: { 0: 'cambio' } }],
       ['Esto también: la palabra ciudadano.', { luz: [1], nota: { 1: 'cambio' } }],
-      ['Esto siguió igual por treinta años.', { luz: [2], nota: { 2: 'permanencia' } }],
+      ['Esto duró más de treinta años todavía.', { luz: [2], nota: { 2: 'permanencia' } }],
       ['Y esto limitaba la ciudadanía.', { luz: [3], nota: { 3: 'permanencia' } }],
       ['Pregunta siempre: ¿cambió para quién?', { luz: [1, 3] }],
     ], 'Una fecha no cambia todo: mira qué siguió.'),
     xpHaz('hoja', 'Subraya la **permanencia** después de la independencia.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Se forma una república.'], ['Se escribe una constitución.'], ['Las haciendas siguen con esclavizados.']], pista: 'Busca lo que no cambió.' }, 'La esclavitud siguió hasta 1851.')],
   ['Ahora sí, un problema',
-    xpHaz('hoja', 'El 20 de julio se discutió por un florero y se formó una junta. Subraya la mejor explicación.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['El florero fue la chispa de un descontento largo.'], ['El florero causó la independencia.'], ['Todo fue una casualidad.']], pista: 'Separa lo que dispara de lo que prepara.' }, 'Cargos, impuestos e ideas venían de antes.')],
+    xpHaz('hoja', 'En 1808 Napoleón apresó al rey de España. Subraya por qué eso importó tanto en América.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Dejó en duda quién tenía derecho a gobernar.'], ['Acabó con la esclavitud.'], ['Subió el precio del tabaco.']], pista: 'Si no hay rey, ¿en nombre de quién se manda?' }, 'Sin rey, varias ciudades formaron juntas.')],
 ], 'Mira el orden, la resistencia y lo que cambió y siguió.');
 
 xpLec('icf-sc-historia-2', [
@@ -74,14 +74,14 @@ xpLec('icf-sc-historia-3', [
     ], 'La violencia venía de antes; el 9 de abril la multiplicó.'),
     xpHaz('hoja', 'Subraya lo que es **correcto** sobre el 9 de abril.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Creó de la nada la violencia.'], ['Agravó una violencia que ya existía.'], ['Terminó con la violencia.']], pista: 'Recuerda que ya había conflicto entre partidos.' }, 'Fue un agravante, no el origen.')],
   ['Un pacto con puerta cerrada',
-    xpMira('hoja', 'Segunda idea: el **Frente Nacional** redujo una guerra y dejó otra por fuera.', { paras: [['Liberales y conservadores se turnan el poder.'], ['Baja la guerra entre ellos.'], ['Otros grupos no pueden participar.'], ['Nacen guerrillas, en plena Guerra Fría.']] }, [
+    xpMira('hoja', 'Segunda idea: el **Frente Nacional** redujo una guerra y dejó otra por fuera.', { paras: [['Liberales y conservadores se turnan el poder.'], ['Baja la guerra entre ellos.'], ['Otros grupos casi no pueden participar.'], ['Nacen guerrillas, en plena Guerra Fría.']] }, [
       ['El pacto: turnarse dieciséis años.', { luz: [0], nota: { 0: 'pacto' } }],
       ['Lo buscado: menos guerra entre partidos.', { luz: [1], nota: { 1: 'buscado' } }],
       ['Lo no buscado: otros quedan por fuera.', { luz: [2], nota: { 2: 'no buscado' } }],
       ['Es una de las causas de lo que siguió.', { luz: [2, 3] }],
       ['El mundo también influyó.', { luz: [3] }],
     ], 'Menos guerra entre dos; menos espacio para los demás.'),
-    xpHaz('hoja', 'Subraya el efecto **no buscado** del Frente Nacional.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Terminar la dictadura'], ['Reducir la guerra entre partidos'], ['Dejar sin espacio a otras fuerzas']], pista: 'Los otros dos eran la meta.' }, 'La exclusión no era el propósito.')],
+    xpHaz('hoja', 'Un líder campesino, sin partido, quería ser alcalde en 1960. Subraya lo más probable.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Lo nombran por sus ideas.'], ['Gana porque hay muchos partidos.'], ['No puede: los cargos son de los dos partidos.']], pista: 'Recuerda entre quiénes se repartía el poder.' }, 'El pacto repartía los cargos entre dos.')],
   ['Víctimas y paz',
     xpMira('hoja', 'Tercera idea: las víctimas fueron sobre todo **civiles**, y la paz se ha **intentado** varias veces.', { paras: [['Guerrillas, paramilitares, narcotráfico y agentes del Estado'], ['La mayoría de las víctimas: civiles'], ['1990: el M-19 deja las armas'], ['1991: nueva Constitución'], ['2016: acuerdo con las FARC']] }, [
       ['Varios actores cometieron crímenes.', { luz: [0] }],

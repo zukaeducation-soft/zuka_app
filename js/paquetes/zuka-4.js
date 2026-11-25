@@ -5654,7 +5654,7 @@ xpLec('pu-vo-4', [
   // Cuadrados sobre los lados: 3, 4 y 5.
   const pit = (v, K) => { const u = v.u, x = 130, y = 130; return K.p([[x, y], [x + 4 * u, y], [x, y - 3 * u]], 'fn') + K.f(v.p, K.r(x - 3 * u, y - 3 * u, 3 * u, 3 * u, 'fa', 0) + K.t(x - 1.5 * u, y - 1.5 * u + 5, '9')) + K.f(v.q, K.r(x, y, 4 * u, 4 * u, 'fg', 0) + K.t(x + 2 * u, y + 2 * u + 5, '16')) + K.f(v.r, K.p([[x, y - 3 * u], [x + 4 * u, y], [x + 7 * u, y - 4 * u], [x + 3 * u, y - 7 * u]], 'ff') + K.t(x + 3.5 * u, y - 3.5 * u + 5, '25')) + K.t(170, 216, v.t || '', 'ta'); };
   // Dos triángulos semejantes: palo y árbol.
-  const som = (v, K) => K.l(20, 160, 320, 160, 'lm') + K.p([[50, 160], [50 + 2 * 14, 160], [50, 160 - 14 * 3]], 'fa') + K.t(40, 144, '3', 's tm', 'end') + K.t(64, 178, '2', 's tm') + K.p([[150, 160], [150 + 2 * 14 * v.k, 160], [150, 160 - 14 * 3 * v.k]], 'fg') + K.t(150 + 14 * v.k, 178, Math.round(2 * v.k), 's tm') + K.f(v.f, K.t(144, 160 - 21 * v.k, Math.round(3 * v.k), 's tg', 'end')) + K.t(250, 24, v.t || '', 'ta');
+  const som = (v, K) => K.l(20, 160, 320, 160, 'lm') + K.p([[50, 160], [50 + 2 * 9, 160], [50, 160 - 9 * 5]], 'fa') + K.t(40, 144, '5', 's tm', 'end') + K.t(60, 178, '2', 's tm') + K.p([[150, 160], [150 + 2 * 9 * v.k, 160], [150, 160 - 9 * 5 * v.k]], 'fg') + K.t(150 + 9 * v.k, 178, Math.round(2 * v.k), 's tm') + K.f(v.f, K.t(144, 160 - 22 * v.k, Math.round(5 * v.k), 's tg', 'end')) + K.t(250, 24, v.t || '', 'ta');
   // Cuadrado k × k.
   const cuad = (v, K) => { const n = Math.round(v.k), u = 24; let s = ''; for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) s += K.r(170 + (i - n / 2) * u, 24 + j * u, u - 1, u - 1, 'fa', 1); return s + K.t(170, 186, v.t || '', 'ta'); };
   // Triángulo rectángulo con θ a la izquierda.
@@ -5701,14 +5701,14 @@ xpLec('pu-vo-4', [
         ['Juntos llenan el de la hipotenusa: veinticinco.', { r: 1 }, '$9 + 16 = 25$'],
         ['Entonces la hipotenusa mide cinco.', { t: '3, 4 y 5' }, '$5^2 = 25$'],
       ], 'Hipotenusa al cuadrado = suma de los catetos al cuadrado.'),
-      xpHaz('fichas', 'Los catetos miden 5 y 12. Pon la suma de sus cuadrados y la hipotenusa.', { slots: fila('suma', 'hipotenusa'), fichas: ['169', '13', '17', '119', '84'], meta: ['169', '13'], alto: 96, pista: 'Eleva cada uno, suma y busca qué número al cuadrado da eso.' }, '$25 + 144 = 169 = 13^2$.')],
+      xpHaz('fichas', 'Los catetos miden 7 y 24. Pon la suma de sus cuadrados y la hipotenusa.', { slots: fila('suma', 'hipotenusa'), fichas: ['625', '25', '31', '527', '62'], meta: ['625', '25'], alto: 96, pista: 'Eleva cada uno, suma y busca qué número al cuadrado da eso.' }, '$49 + 576 = 625 = 25^2$.')],
     ['Falta un cateto',
-      xpMira('fichas', 'Segunda idea: para un **cateto** se resta.', { slots: fila('hipotenusa²', 'cateto²', 'otro²', 'otro').map(s => ({ ...s, w: 66 })), fichas: ['100', '36', '64', '8'], alto: 96 }, [
-        ['La hipotenusa mide diez y un cateto, seis.', {}],
-        ['El cuadrado grande tiene cien.', { pon: { 0: '100' } }, '$10^2 = 100$'],
-        ['El del cateto, treinta y seis.', { pon: { 1: '36' } }, '$6^2 = 36$'],
-        ['Lo que falta para llenar el grande.', { pon: { 2: '64' } }, '$100 - 36 = 64$'],
-        ['Y el cateto mide ocho.', { pon: { 3: '8' } }, '$8^2 = 64$'],
+      xpMira('fichas', 'Segunda idea: para un **cateto** se resta.', { slots: fila('hipotenusa²', 'cateto²', 'otro²', 'otro').map(s => ({ ...s, w: 66 })), fichas: ['400', '144', '256', '16'], alto: 96 }, [
+        ['La hipotenusa mide veinte y un cateto, doce.', {}],
+        ['El cuadrado grande tiene cuatrocientos.', { pon: { 0: '400' } }, '$20^2 = 400$'],
+        ['El del cateto, ciento cuarenta y cuatro.', { pon: { 1: '144' } }, '$12^2 = 144$'],
+        ['Lo que falta para llenar el grande.', { pon: { 2: '256' } }, '$400 - 144 = 256$'],
+        ['Y el cateto mide dieciséis.', { pon: { 3: '16' } }, '$16^2 = 256$'],
       ], 'Hipotenusa: suma. Cateto: resta.'),
       xpHaz('fichas', 'Hipotenusa 15 y cateto 9. Pon la resta de los cuadrados y el otro cateto.', { slots: fila('resta', 'cateto'), fichas: ['144', '12', '6', '306', '17'], meta: ['144', '12'], alto: 96, pista: 'Quita el cuadrado del cateto al de la hipotenusa.' }, '$225 - 81 = 144 = 12^2$.')],
     ['Familias y atajos',
@@ -5727,10 +5727,10 @@ xpLec('pu-vo-4', [
   xpLec('icf-ma-forma-3', [
     ['Misma forma',
       xpMira('dibujo', 'Empecemos por la idea: en figuras **semejantes** todo crece por el mismo número.', { dib: som, v: { k: 1, f: 0, t: '' }, alto: 190 }, [
-        ['Un palo de 3 da una sombra de 2.', {}],
+        ['Un palo de 5 da una sombra de 2.', {}],
         ['Un poste da una sombra de 6: el triple.', { k: 3, t: 'sombra × 3' }, '$6 \\div 2 = 3$'],
         ['El Sol llega igual: los ángulos no cambian.', {}],
-        ['Entonces la altura también es el triple.', { f: 1, t: 'altura × 3' }, '$3 \\cdot 3 = 9$'],
+        ['Entonces la altura también es el triple.', { f: 1, t: 'altura × 3' }, '$5 \\cdot 3 = 15$'],
         ['No se suma: se multiplica.', {}],
       ], 'Halla por cuánto creció un lado y úsalo en los demás.'),
       xpHaz('fichas', 'Dos triángulos son semejantes: 5, 7 y 9; y 20, ?, ?. Pon los otros dos.', { slots: fila('el de 7', 'el de 9'), fichas: ['28', '36', '22', '24', '35'], meta: ['28', '36'], alto: 96, pista: 'Mira por cuánto se multiplicó el 5.' }, 'Por 4: $7 \\cdot 4 = 28$ y $9 \\cdot 4 = 36$.')],
@@ -6262,20 +6262,20 @@ xpLec('icf-lc-discontinuo-3', [
     ], 'Pregunta qué se sabría solo con cada pieza.'),
     xpHaz('hoja', 'Subraya la pieza que dice **cuánto** cambió.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['«Nos cambió la vida», cuenta Rosa.'], ['La basura bajó de 40 a 12 toneladas.'], ['Foto: una cuadra limpia.']], pista: 'Busca números.' }, 'La voz y la foto no dicen cuánto.')],
   ['Completan o contradicen',
-    xpMira('hoja', 'Segunda idea: una pieza puede **completar** a otra o **contradecirla**.', { paras: [['Gráfica: suben las ventas de los locales que respondieron.'], ['Carta: «Yo cerré, por eso no respondí».'], ['Conclusión posible: les fue bien a todos.'], ['Conclusión justa: les fue bien a los que respondieron.']] }, [
-      ['La gráfica muestra una parte.', { luz: [0] }],
-      ['La carta trae a quien falta.', { luz: [1], nota: { 1: 'falta en la gráfica' } }],
-      ['Con la carta, «todos» ya no se sostiene.', { luz: [2], tacha: [2] }],
+    xpMira('hoja', 'Segunda idea: una pieza puede **completar** a otra o **contradecirla**.', { paras: [['Encuesta: 9 de cada 10 exalumnos que contestaron tienen empleo.'], ['Mensaje: «No contesté porque me dio pena no tener».'], ['Conclusión posible: casi todos tienen empleo.'], ['Conclusión justa: casi todos los que contestaron lo tienen.']] }, [
+      ['La encuesta muestra una parte.', { luz: [0] }],
+      ['El mensaje trae a quien falta.', { luz: [1], nota: { 1: 'falta en la encuesta' } }],
+      ['Con ese mensaje, la primera ya no se sostiene.', { luz: [2], tacha: [2] }],
       ['Esta conclusión usa las dos piezas.', { luz: [3], nota: { 3: 'justa' } }],
       ['Busca siempre quién no respondió.', { luz: [1] }],
     ], 'Una pieza puede mostrar lo que otra deja por fuera.'),
     xpHaz('hoja', 'Encuesta en la página web: el 95 % usa internet a diario. Nota: «Se respondió por internet». Subraya lo que falta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Un dibujo más grande'], ['El color de la página'], ['Quienes no tienen internet']], pista: '¿Quién no pudo responder?' }, 'Sin ellos, el 95 % dice de más.')],
   ['Concluir con todo',
-    xpMira('hoja', 'Tercera idea: la mejor conclusión **cabe en todas las piezas**.', { paras: [['Mapa: menos ruido en la calle cerrada, más en la vecina.'], ['Voz: «Duermo mejor», dice alguien de la calle cerrada.'], ['«El ruido se acabó».'], ['«El ruido bajó aquí y subió al lado».']] }, [
-      ['El mapa muestra las dos calles.', { luz: [0] }],
-      ['La voz habla de una sola.', { luz: [1], nota: { 1: 'una parte' } }],
-      ['Esta conclusión olvida la otra calle.', { luz: [2], tacha: [2] }],
-      ['Esta cabe en el mapa y en la voz.', { luz: [3], nota: { 3: 'cabe en las dos' } }],
+    xpMira('hoja', 'Tercera idea: la mejor conclusión **cabe en todas las piezas**.', { paras: [['Tabla: menos basura en el parque, más en el río.'], ['Voz: «Da gusto jugar aquí», dice un niño del parque.'], ['«La basura se acabó».'], ['«La basura bajó en el parque y subió en el río».']] }, [
+      ['La tabla muestra los dos lugares.', { luz: [0] }],
+      ['La voz habla de uno solo.', { luz: [1], nota: { 1: 'una parte' } }],
+      ['Esta conclusión se olvida del río.', { luz: [2], tacha: [2] }],
+      ['Esta cabe en la tabla y en la voz.', { luz: [3], nota: { 3: 'cabe en las dos' } }],
       ['Revisa tu conclusión con cada pieza.', {}],
     ], 'Si una pieza la contradice, la conclusión dice de más.'),
     xpHaz('hoja', 'Tabla: 8 de 10 pasaron. Voz: «A mí nadie me explicó». Subraya la conclusión que cabe en **las dos**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['La mayoría pasó, pero a alguien le faltó apoyo.'], ['A todos les fue bien.'], ['El curso fue un fracaso.']], pista: 'Prueba cada una con la tabla y con la voz.' }, 'Solo la primera respeta el dato y la voz.')],
@@ -6745,10 +6745,10 @@ xpLec('icf-sc-sistemico-3', [
 // Preicfes · Sociales y Ciudadanas, mundo 6 «Historia de Colombia» (Explora, escena «hoja»).
 xpLec('icf-sc-historia-1', [
   ['El orden colonial',
-    xpMira('hoja', 'Empecemos por la idea: en la Colonia, el **origen** decidía casi todo.', { letras: ['1', '2', '3', '4'], paras: [['Peninsulares: los altos cargos'], ['Criollos: tierras y estudios, poco poder'], ['Mestizos e indígenas: trabajo y tributos'], ['Africanos esclavizados: sin libertad']] }, [
+    xpMira('hoja', 'Empecemos por la idea: en la Colonia, el **origen** decidía casi todo.', { letras: ['1', '2', '3', '4'], paras: [['Peninsulares: los altos cargos'], ['Criollos: tierras y estudios, poco poder'], ['Indígenas: tributo y trabajo; mestizos: oficios y pocos derechos'], ['Africanos esclavizados: sin libertad']] }, [
       ['Arriba, los nacidos en España.', { luz: [0], nota: { 0: 'mandan' } }],
       ['Sus descendientes americanos tenían dinero, no mando.', { luz: [1] }],
-      ['Abajo se trabajaba y se pagaba tributo.', { luz: [2] }],
+      ['Abajo se trabajaba, y los indígenas pagaban tributo.', { luz: [2] }],
       ['Y en la base, personas tratadas como propiedad.', { luz: [3], nota: { 3: 'sin libertad' } }],
       ['El comercio también lo controlaba España.', {}],
     ], 'Cargos, comercio y vida según el origen.'),
@@ -6761,18 +6761,18 @@ xpLec('icf-sc-historia-1', [
       ['Conservar la cultura también es resistir.', { luz: [3] }],
       ['No toda resistencia lleva armas.', { luz: [1, 3] }],
     ], 'Palenques, pleitos, marchas y memoria.'),
-    xpHaz('hoja', 'Pon al margen quiénes lo hicieron.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['indígenas', 'comuneros', 'esclavizados'], meta: [2, 0, 1], paras: [['Fundar San Basilio'], ['Reclamar un resguardo'], ['Marchar a Santafé por los impuestos']], pista: 'Alguna no va ahí: palenque, tierra comunal o impuestos.' }, 'Palenque, resguardo e impuestos.')],
+    xpHaz('hoja', 'Pon al margen cómo resistían.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['con la ley', 'con la cultura', 'con la protesta'], meta: [2, 0, 1], paras: [['Romper un edicto en la plaza'], ['Presentar un pleito'], ['Cantar en la lengua de los abuelos']], pista: 'Alguna no va ahí: ¿usa la plaza, un tribunal o la memoria?' }, 'Protesta, ley y cultura.')],
   ['Cambios y permanencias',
     xpMira('hoja', 'Tercera idea: una época nueva trae **cambios** y **permanencias**.', { paras: [['Ya no manda el rey.'], ['Hay ciudadanos, no súbditos.'], ['Sigue la esclavitud hasta 1851.'], ['Votan solo algunos hombres.']] }, [
       ['Esto cambió: la autoridad.', { luz: [0], nota: { 0: 'cambio' } }],
       ['Esto también: la palabra ciudadano.', { luz: [1], nota: { 1: 'cambio' } }],
-      ['Esto siguió igual por treinta años.', { luz: [2], nota: { 2: 'permanencia' } }],
+      ['Esto duró más de treinta años todavía.', { luz: [2], nota: { 2: 'permanencia' } }],
       ['Y esto limitaba la ciudadanía.', { luz: [3], nota: { 3: 'permanencia' } }],
       ['Pregunta siempre: ¿cambió para quién?', { luz: [1, 3] }],
     ], 'Una fecha no cambia todo: mira qué siguió.'),
     xpHaz('hoja', 'Subraya la **permanencia** después de la independencia.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Se forma una república.'], ['Se escribe una constitución.'], ['Las haciendas siguen con esclavizados.']], pista: 'Busca lo que no cambió.' }, 'La esclavitud siguió hasta 1851.')],
   ['Ahora sí, un problema',
-    xpHaz('hoja', 'El 20 de julio se discutió por un florero y se formó una junta. Subraya la mejor explicación.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['El florero fue la chispa de un descontento largo.'], ['El florero causó la independencia.'], ['Todo fue una casualidad.']], pista: 'Separa lo que dispara de lo que prepara.' }, 'Cargos, impuestos e ideas venían de antes.')],
+    xpHaz('hoja', 'En 1808 Napoleón apresó al rey de España. Subraya por qué eso importó tanto en América.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Dejó en duda quién tenía derecho a gobernar.'], ['Acabó con la esclavitud.'], ['Subió el precio del tabaco.']], pista: 'Si no hay rey, ¿en nombre de quién se manda?' }, 'Sin rey, varias ciudades formaron juntas.')],
 ], 'Mira el orden, la resistencia y lo que cambió y siguió.');
 
 xpLec('icf-sc-historia-2', [
@@ -6818,14 +6818,14 @@ xpLec('icf-sc-historia-3', [
     ], 'La violencia venía de antes; el 9 de abril la multiplicó.'),
     xpHaz('hoja', 'Subraya lo que es **correcto** sobre el 9 de abril.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Creó de la nada la violencia.'], ['Agravó una violencia que ya existía.'], ['Terminó con la violencia.']], pista: 'Recuerda que ya había conflicto entre partidos.' }, 'Fue un agravante, no el origen.')],
   ['Un pacto con puerta cerrada',
-    xpMira('hoja', 'Segunda idea: el **Frente Nacional** redujo una guerra y dejó otra por fuera.', { paras: [['Liberales y conservadores se turnan el poder.'], ['Baja la guerra entre ellos.'], ['Otros grupos no pueden participar.'], ['Nacen guerrillas, en plena Guerra Fría.']] }, [
+    xpMira('hoja', 'Segunda idea: el **Frente Nacional** redujo una guerra y dejó otra por fuera.', { paras: [['Liberales y conservadores se turnan el poder.'], ['Baja la guerra entre ellos.'], ['Otros grupos casi no pueden participar.'], ['Nacen guerrillas, en plena Guerra Fría.']] }, [
       ['El pacto: turnarse dieciséis años.', { luz: [0], nota: { 0: 'pacto' } }],
       ['Lo buscado: menos guerra entre partidos.', { luz: [1], nota: { 1: 'buscado' } }],
       ['Lo no buscado: otros quedan por fuera.', { luz: [2], nota: { 2: 'no buscado' } }],
       ['Es una de las causas de lo que siguió.', { luz: [2, 3] }],
       ['El mundo también influyó.', { luz: [3] }],
     ], 'Menos guerra entre dos; menos espacio para los demás.'),
-    xpHaz('hoja', 'Subraya el efecto **no buscado** del Frente Nacional.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Terminar la dictadura'], ['Reducir la guerra entre partidos'], ['Dejar sin espacio a otras fuerzas']], pista: 'Los otros dos eran la meta.' }, 'La exclusión no era el propósito.')],
+    xpHaz('hoja', 'Un líder campesino, sin partido, quería ser alcalde en 1960. Subraya lo más probable.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Lo nombran por sus ideas.'], ['Gana porque hay muchos partidos.'], ['No puede: los cargos son de los dos partidos.']], pista: 'Recuerda entre quiénes se repartía el poder.' }, 'El pacto repartía los cargos entre dos.')],
   ['Víctimas y paz',
     xpMira('hoja', 'Tercera idea: las víctimas fueron sobre todo **civiles**, y la paz se ha **intentado** varias veces.', { paras: [['Guerrillas, paramilitares, narcotráfico y agentes del Estado'], ['La mayoría de las víctimas: civiles'], ['1990: el M-19 deja las armas'], ['1991: nueva Constitución'], ['2016: acuerdo con las FARC']] }, [
       ['Varios actores cometieron crímenes.', { luz: [0] }],
@@ -14946,7 +14946,7 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     'La guerra entre los dos bajó. Pero quien no era de esos partidos tenía muy difícil ser elegido.',
     'En esos años, con la Guerra Fría de fondo y la tierra en pocas manos, surgieron guerrillas.']);
   reto('hist-2', ['icf-sc-historia-3'], 3, 'El pacto', 'Buscado, no buscado y varias causas', 'Tres párrafos sobre el Frente Nacional. Evalúalos.', [
-    ['Efectos', 'Compara con el propósito.', 'genero-o-cita', '¿Es un efecto **buscado** o **no buscado** del pacto?', { doc: FRENTE, rot: ['buscado', 'no buscado'], ...F(['Salir de la dictadura', 0, '¿Para eso se hizo?'], ['Bajar la guerra entre los dos', 0, '¿Para eso se hizo?'], ['Dejar sin opción a otros', 1, '¿Para eso se hizo?']), bien: 'Dos metas y un costo.' }, 'Salir de la dictadura y de la guerra era la meta; la exclusión, no.', ['Relee la primera oración.', 'Una de las tres no aparece como meta.'], 'Dictadura y guerra: buscado. Exclusión: no'],
+    ['Efectos', 'Compara con el propósito.', 'genero-o-cita', 'Según el texto, ¿es un efecto **buscado** o **no buscado** del pacto?', { doc: FRENTE, rot: ['buscado', 'no buscado'], ...F(['Salir de la dictadura', 0, '¿Para eso se hizo?'], ['Bajar la guerra entre los dos', 0, '¿Para eso se hizo?'], ['Dejar sin opción a otros', 1, '¿Para eso se hizo?']), bien: 'Dos metas y un costo.' }, 'Salir de la dictadura y de la guerra era la meta; la exclusión, no.', ['Relee la primera oración.', 'Una de las tres no aparece como meta.'], 'Dictadura y guerra: buscado. Exclusión: no'],
     ['Las causas', 'Cuidado con «la única».', 'balanza-tesis', 'Afirmación: «la única causa de las guerrillas fue el pacto». ¿Qué hace cada dato?', { doc: FRENTE, tesis: 'La única causa fue el pacto', ...F(['La tierra estaba en pocas manos.', 1, '¿Hay otra causa?'], ['El mundo vivía la Guerra Fría.', 1, '¿Hay otra causa?'], ['Antes del pacto no había ningún otro problema.', 0, 'Si fuera cierto, ¿quedaría solo el pacto?']), bien: 'Varias causas debilitan «única».' }, 'Tierra y Guerra Fría son otras causas; que no hubiera más problemas la apoyaría.', ['Cuenta las causas del párrafo 3.', 'Otra causa debilita la palabra «única».'], 'Tierra y Guerra Fría: debilitan']],
     'La exclusión no se buscaba; hubo varias causas.', 'Propósito, efectos y más de una causa.');
 
@@ -14955,7 +14955,7 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     'Al otro lado sube solo 1.8 metros: allí tiene 900 julios. Las ruedas quedan tibias.',
     'Después engrasa las ruedas y repite desde la misma altura: sube 1.9 metros.']);
   reto('energia-1', ['icf-cn-energia-1'], 2, 'La pista en U', 'Se transforma y se conserva', 'Una patinadora y dos pruebas. Sigue la energía.', [
-    ['La energía que falta', 'Nada desaparece.', 'descarta-prueba', 'Estas dos opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: PATIN, nums: [1, 2, 3], pregunta: 'Queda en pie', queda: 'El roce convierte parte en calor.', ...T(['Subió a la misma altura de donde salió.', 2, 'Busca hasta dónde subió la primera vez.'], ['El roce no produjo calor.', 3, 'Busca cómo quedaron las ruedas.']), bien: 'Menos altura y ruedas tibias.' }, 'Subió 1.8 m, no 2, y las ruedas quedaron tibias.', ['Compara las dos alturas.', 'Busca algo que se calentó.'], 'Subió 1.8; ruedas tibias'],
+    ['La energía que falta', 'Nada desaparece.', 'descarta-prueba', 'Estas dos opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: PATIN, nums: [1, 2, 3], pregunta: 'Queda en pie', queda: 'El roce convierte parte en calor.', ...T(['La primera vez subió a la altura de donde salió.', 2, 'Busca hasta dónde subió la primera vez.'], ['El roce no produjo calor.', 3, 'Busca cómo quedaron las ruedas.']), bien: 'Menos altura y ruedas tibias.' }, 'Subió 1.8 m, no 2, y las ruedas quedaron tibias.', ['Compara las dos alturas.', 'Busca algo que se calentó.'], 'Subió 1.8; ruedas tibias'],
     ['El alcance', 'Lee los números.', 'ajusta-alcance', 'Mueve cada perilla hasta que diga lo que muestran los datos.', { doc: PATIN, filas: [{ antes: 'Con las ruedas engrasadas, se pierde', topes: ['más energía', 'la misma', 'menos energía'], va: 2 }, { antes: 'La energía total, contando el calor,', topes: ['disminuye', 'se conserva', 'aumenta'], va: 1 }], mira: ['Compara 1.8 con 1.9.', 'Nada se crea ni se destruye.'], luz: [[3, 'sube 1.9 metros'], [2, 'Las ruedas quedan tibias']], bien: 'Menos roce, menos calor.' }, 'Sube más: se pierde menos; y la total se conserva.', ['Mira en cuál prueba subió más.', 'Suma también lo que se volvió calor.'], 'Menos energía; se conserva']],
     'Se fue en calor; con grasa se pierde menos.', 'La total se conserva: busca el calor.');
   const TINTO = D('tinto', 'El termo y el pocillo', [
@@ -14972,11 +14972,11 @@ for (const r of GYM_RETOS) (GYM_CONCEPT_DE[r.id] || []).forEach((c, i) => { if (
     'At first people thought the idea was ridiculous. "They will get rid of them or sell them," they said. Surprisingly, only four umbrellas out of three hundred have disappeared.',
     'The council was so pleased that it is going to do the same with raincoats. However, some shops that sell umbrellas are not happy at all.']);
   reto('vocab-1', ['icf-en-vocabulario-1'], 2, 'The umbrella library', 'La palabra por el contexto', 'A short article. Work out the words.', [
-    ['Same meaning', 'Mira lo que la rodea.', 'cambia-palabra', 'Put the words that mean the same. Sobran dos.', { doc: PARK, frases: [[2, 'the idea was ', 'ridiculous', '. "They'], [2, 'They will ', 'get rid of', ' them or sell them']], ...F(['silly', 0, 'Did people like the idea at first?'], ['throw away', 1, 'What can you do with something, apart from selling it?'], ['excellent', null, 'People did not like it at first.'], ['borrow', null, 'That is what the council wants.']), bien: 'Context gives the meaning.' }, '«Ridiculous» es tonta y «get rid of», deshacerse de.', ['Piensa si a la gente le gustó la idea.', 'Las dos palabras son negativas.'], 'Silly; throw away'],
+    ['Same meaning', 'Mira lo que la rodea.', 'cambia-palabra', 'Put the words that mean the same. Sobran dos.', { doc: PARK, frases: [[2, 'the idea was ', 'ridiculous', '. "They'], [2, 'They will ', 'get rid of', ' them or sell them']], ...F(['silly', 0, 'Did people like the idea at first?'], ['lose', 1, 'Selling is one way of not having them any more: what is another?'], ['excellent', null, 'People did not like it at first.'], ['borrow', null, 'They think people will not give them back.']), bien: 'Context gives the meaning.' }, '«Ridiculous» es tonta y «get rid of», quedarse sin ellas.', ['Piensa si a la gente le gustó la idea.', 'Las dos palabras son negativas.'], 'Silly; lose'],
     ['Deduce', 'Une dos datos.', 'dice-deduce', 'Does it say it, can you deduce it, or is it not there?', { doc: PARK, nums: [2, 3], rot: ['it says so', 'you can deduce it', 'it does not say'], ...F(['Four umbrellas have disappeared.', 0, 'Busca el número.'], ['People were more honest than expected.', 1, '¿Qué pensaban al comienzo y qué pasó?'], ['The raincoats are yellow.', 2, '¿Se dice de qué color son?']), luz: [[2, 'only four umbrellas'], [2, 'Surprisingly']], bien: 'Surprisingly tells you.' }, 'El número está; la honestidad se deduce; el color no.', ['Busca el número en el texto.', '«Surprisingly» compara con lo que se esperaba.'], 'Four: dice. Honest: se deduce']],
-    'Silly and throw away; people were honest.', 'Contexto primero.');
+    'Silly and lose; people were honest.', 'Contexto primero.');
   reto('vocab-2', ['icf-en-vocabulario-2'], 3, 'However, some shops…', 'Familias y conectores', 'The same article: word types and links.', [
-    ['Word types', 'Mira el final.', 'pinta-tipos', 'Paint each word with its type.', { doc: PARK, plumas: ['adjective', 'adverb'], ...P(['ridiculous', 0, 'Look at the end of the word.'], ['surprisingly', 1, 'Look at the end of the word.'], ['happy', 0, 'Can a person be like this?']), bien: '-ous and -ly.' }, '«Ridiculous» y «happy» describen; «surprisingly» dice cómo.', ['Fíjate en la que termina en -ly.', '«-ous» describe cosas.'], 'Ridiculous, happy: adjective. Surprisingly: adverb'],
+    ['Word types', 'Mira el final.', 'pinta-tipos', 'Paint each word with its type.', { doc: PARK, plumas: ['adjective', 'adverb'], ...P(['ridiculous', 0, 'Look at the end of the word.'], ['surprisingly', 1, 'Look at the end of the word.'], ['happy', 0, 'Can a person be like this?']), bien: '-ous and -ly.' }, '«Ridiculous» y «happy» describen; «surprisingly» comenta la oración.', ['Fíjate en la que termina en -ly.', '«-ous» describe cosas.'], 'Ridiculous, happy: adjective. Surprisingly: adverb'],
     ['Links', 'Di qué hace la segunda idea.', 'bisagras', 'Put the word that joins. Sobran dos.', { doc: PARK, pares: [['The council is pleased.', 'some shops are not.'], ['Few umbrellas disappeared,', 'the council will do it with raincoats.']], ...F(['However,', 0, 'Two people feel differently.'], ['so', 1, 'The second idea is the result.'], ['For example,', null, 'No pair gives an example.'], ['because', null, 'No second idea gives the cause.']), bien: 'Contrast and result.' }, '«However» contrasta y «so» da el resultado.', ['En una pareja hay sentimientos opuestos.', 'En la otra, lo segundo sale de lo primero.'], 'However: contraste. So: resultado']],
     'Adjectives, an adverb, a contrast and a result.', 'Final de palabra y oficio del conector.');
 }

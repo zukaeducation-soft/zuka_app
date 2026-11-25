@@ -11424,7 +11424,7 @@ Object.assign(XG, (() => {
       const u = 250 / p.max, r = (y, n, cls, t) => K.r(45, y, n * u, 20, cls, 2) + K.t(38, y + 15, t, 's tm', 'end');
       return r(12, p.a, 'fa', p.a) + r(40, p.b, 'fg', p.b) + K.f(f, r(76, v.m, v.m === lo(p) ? 'fo' : 'ff', v.m) + r(104, v.n, v.n === hi(p) ? 'fo' : 'ff', v.n)) + (f ? '' : K.t(170, 104, 'la tercera varilla', 's tm'));
     },
-    aviso: (v, p) => (v.m !== lo(p) ? (v.m < lo(p) ? `Con ${v.m}, la corta y la de ${Math.min(p.a, p.b)} no alcanzan a la de ${Math.max(p.a, p.b)}.` : `Una más corta que ${v.m} también cierra.`) : v.n > hi(p) ? `Con ${v.n}, las otras dos juntas no la alcanzan.` : `Una más larga que ${v.n} también cierra.`),
+    aviso: (v, p) => (v.m !== lo(p) ? (v.m > hi(p) ? `Con ${v.m}, las otras dos no la alcanzan.` : v.m < lo(p) ? `Con ${v.m}, la corta y la de ${Math.min(p.a, p.b)} no pasan a la de ${Math.max(p.a, p.b)}.` : `Una más corta que ${v.m} también cierra.`) : v.n < lo(p) ? `Con ${v.n} todavía no cierra.` : v.n === hi(p) + 1 ? `Con ${v.n}, las otras dos apenas la igualan: queda una línea.` : v.n > hi(p) ? `Con ${v.n}, las otras dos juntas no la alcanzan.` : `Una más larga que ${v.n} también cierra.`),
     bien: (v, p) => `La tercera va entre la resta (${Math.abs(p.a - p.b)}) y la suma (${p.a + p.b}), sin tocarlas.`,
   });
   // Cuáles ternas cierran: se tocan.

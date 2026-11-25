@@ -10,7 +10,7 @@
   // Cuadrados sobre los lados: 3, 4 y 5.
   const pit = (v, K) => { const u = v.u, x = 130, y = 130; return K.p([[x, y], [x + 4 * u, y], [x, y - 3 * u]], 'fn') + K.f(v.p, K.r(x - 3 * u, y - 3 * u, 3 * u, 3 * u, 'fa', 0) + K.t(x - 1.5 * u, y - 1.5 * u + 5, '9')) + K.f(v.q, K.r(x, y, 4 * u, 4 * u, 'fg', 0) + K.t(x + 2 * u, y + 2 * u + 5, '16')) + K.f(v.r, K.p([[x, y - 3 * u], [x + 4 * u, y], [x + 7 * u, y - 4 * u], [x + 3 * u, y - 7 * u]], 'ff') + K.t(x + 3.5 * u, y - 3.5 * u + 5, '25')) + K.t(170, 216, v.t || '', 'ta'); };
   // Dos triángulos semejantes: palo y árbol.
-  const som = (v, K) => K.l(20, 160, 320, 160, 'lm') + K.p([[50, 160], [50 + 2 * 14, 160], [50, 160 - 14 * 3]], 'fa') + K.t(40, 144, '3', 's tm', 'end') + K.t(64, 178, '2', 's tm') + K.p([[150, 160], [150 + 2 * 14 * v.k, 160], [150, 160 - 14 * 3 * v.k]], 'fg') + K.t(150 + 14 * v.k, 178, Math.round(2 * v.k), 's tm') + K.f(v.f, K.t(144, 160 - 21 * v.k, Math.round(3 * v.k), 's tg', 'end')) + K.t(250, 24, v.t || '', 'ta');
+  const som = (v, K) => K.l(20, 160, 320, 160, 'lm') + K.p([[50, 160], [50 + 2 * 9, 160], [50, 160 - 9 * 5]], 'fa') + K.t(40, 144, '5', 's tm', 'end') + K.t(60, 178, '2', 's tm') + K.p([[150, 160], [150 + 2 * 9 * v.k, 160], [150, 160 - 9 * 5 * v.k]], 'fg') + K.t(150 + 9 * v.k, 178, Math.round(2 * v.k), 's tm') + K.f(v.f, K.t(144, 160 - 22 * v.k, Math.round(5 * v.k), 's tg', 'end')) + K.t(250, 24, v.t || '', 'ta');
   // Cuadrado k × k.
   const cuad = (v, K) => { const n = Math.round(v.k), u = 24; let s = ''; for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) s += K.r(170 + (i - n / 2) * u, 24 + j * u, u - 1, u - 1, 'fa', 1); return s + K.t(170, 186, v.t || '', 'ta'); };
   // Triángulo rectángulo con θ a la izquierda.
@@ -57,14 +57,14 @@
         ['Juntos llenan el de la hipotenusa: veinticinco.', { r: 1 }, '$9 + 16 = 25$'],
         ['Entonces la hipotenusa mide cinco.', { t: '3, 4 y 5' }, '$5^2 = 25$'],
       ], 'Hipotenusa al cuadrado = suma de los catetos al cuadrado.'),
-      xpHaz('fichas', 'Los catetos miden 5 y 12. Pon la suma de sus cuadrados y la hipotenusa.', { slots: fila('suma', 'hipotenusa'), fichas: ['169', '13', '17', '119', '84'], meta: ['169', '13'], alto: 96, pista: 'Eleva cada uno, suma y busca qué número al cuadrado da eso.' }, '$25 + 144 = 169 = 13^2$.')],
+      xpHaz('fichas', 'Los catetos miden 7 y 24. Pon la suma de sus cuadrados y la hipotenusa.', { slots: fila('suma', 'hipotenusa'), fichas: ['625', '25', '31', '527', '62'], meta: ['625', '25'], alto: 96, pista: 'Eleva cada uno, suma y busca qué número al cuadrado da eso.' }, '$49 + 576 = 625 = 25^2$.')],
     ['Falta un cateto',
-      xpMira('fichas', 'Segunda idea: para un **cateto** se resta.', { slots: fila('hipotenusa²', 'cateto²', 'otro²', 'otro').map(s => ({ ...s, w: 66 })), fichas: ['100', '36', '64', '8'], alto: 96 }, [
-        ['La hipotenusa mide diez y un cateto, seis.', {}],
-        ['El cuadrado grande tiene cien.', { pon: { 0: '100' } }, '$10^2 = 100$'],
-        ['El del cateto, treinta y seis.', { pon: { 1: '36' } }, '$6^2 = 36$'],
-        ['Lo que falta para llenar el grande.', { pon: { 2: '64' } }, '$100 - 36 = 64$'],
-        ['Y el cateto mide ocho.', { pon: { 3: '8' } }, '$8^2 = 64$'],
+      xpMira('fichas', 'Segunda idea: para un **cateto** se resta.', { slots: fila('hipotenusa²', 'cateto²', 'otro²', 'otro').map(s => ({ ...s, w: 66 })), fichas: ['400', '144', '256', '16'], alto: 96 }, [
+        ['La hipotenusa mide veinte y un cateto, doce.', {}],
+        ['El cuadrado grande tiene cuatrocientos.', { pon: { 0: '400' } }, '$20^2 = 400$'],
+        ['El del cateto, ciento cuarenta y cuatro.', { pon: { 1: '144' } }, '$12^2 = 144$'],
+        ['Lo que falta para llenar el grande.', { pon: { 2: '256' } }, '$400 - 144 = 256$'],
+        ['Y el cateto mide dieciséis.', { pon: { 3: '16' } }, '$16^2 = 256$'],
       ], 'Hipotenusa: suma. Cateto: resta.'),
       xpHaz('fichas', 'Hipotenusa 15 y cateto 9. Pon la resta de los cuadrados y el otro cateto.', { slots: fila('resta', 'cateto'), fichas: ['144', '12', '6', '306', '17'], meta: ['144', '12'], alto: 96, pista: 'Quita el cuadrado del cateto al de la hipotenusa.' }, '$225 - 81 = 144 = 12^2$.')],
     ['Familias y atajos',
@@ -83,10 +83,10 @@
   xpLec('icf-ma-forma-3', [
     ['Misma forma',
       xpMira('dibujo', 'Empecemos por la idea: en figuras **semejantes** todo crece por el mismo número.', { dib: som, v: { k: 1, f: 0, t: '' }, alto: 190 }, [
-        ['Un palo de 3 da una sombra de 2.', {}],
+        ['Un palo de 5 da una sombra de 2.', {}],
         ['Un poste da una sombra de 6: el triple.', { k: 3, t: 'sombra × 3' }, '$6 \\div 2 = 3$'],
         ['El Sol llega igual: los ángulos no cambian.', {}],
-        ['Entonces la altura también es el triple.', { f: 1, t: 'altura × 3' }, '$3 \\cdot 3 = 9$'],
+        ['Entonces la altura también es el triple.', { f: 1, t: 'altura × 3' }, '$5 \\cdot 3 = 15$'],
         ['No se suma: se multiplica.', {}],
       ], 'Halla por cuánto creció un lado y úsalo en los demás.'),
       xpHaz('fichas', 'Dos triángulos son semejantes: 5, 7 y 9; y 20, ?, ?. Pon los otros dos.', { slots: fila('el de 7', 'el de 9'), fichas: ['28', '36', '22', '24', '35'], meta: ['28', '36'], alto: 96, pista: 'Mira por cuánto se multiplicó el 5.' }, 'Por 4: $7 \\cdot 4 = 28$ y $9 \\cdot 4 = 36$.')],

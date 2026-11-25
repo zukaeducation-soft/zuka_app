@@ -38,8 +38,8 @@ PI_MUNDOS.push((() => {
       '$4^2 + 7^2 = 16 + 49 = 65$. También $1 + 64$, pero 1 es muy corto.', 'Haz la lista de los cuadrados y busca dos que sumen lo pedido.'),
     x('cateto-falta', 'Un cable de **17 m** baja de la punta de una torre hasta una estaca a **8 m** del pie. Dale a la torre su altura.', { c: 17, b: 8 },
       '$17^2 - 8^2 = 289 - 64 = 225$: la torre mide 15 m.', 'El cable es la hipotenusa: aquí se resta.'),
-    x('lados-familia', 'Cada triángulo es rectángulo y le falta un lado. Pon las medidas.', { tri: [{ a: 9, b: 12 }, { a: 10, h: 26 }, { a: 15, b: 20 }], fichas: ['15', '24', '25', '21', '16', '35'] },
-      '$9, 12 \\to 15$ (por 3); $10, 24, 26$ (por 2); $15, 20 \\to 25$ (por 5).', 'Divide cada pareja por un número y reconoce la familia.'),
+    x('lados-familia', 'Cada triángulo es rectángulo y le falta un lado. Pon las medidas.', { tri: [{ a: 9, b: 12 }, { a: 18, h: 30 }, { a: 15, b: 20 }], fichas: ['15', '24', '25', '21', '16', '35'] },
+      '$9, 12 \\to 15$ (por 3); $18, 24, 30$ (por 6); $15, 20 \\to 25$ (por 5).', 'Divide cada pareja por un número y reconoce la familia.'),
     x('a-diez-pasos', 'Pon la banderita exactamente a **5** cuadros de A en línea recta, pero en diagonal: ni en su fila ni en su columna.', { A: [2, 2], d: 5 },
       'Con 3 hacia un lado y 4 hacia otro, la diagonal mide 5.', 'Busca dos catetos enteros cuya hipotenusa sea la pedida.'),
     x('dos-pasos', 'De la punta de una antena bajan dos cables: uno de **13 m** hasta 5 m del pie. El otro llega a **16 m** del pie. ¿Cuánto mide?', { c1: 13, b1: 5, b2: 16 },
@@ -47,8 +47,8 @@ PI_MUNDOS.push((() => {
     x('diagonal-cuadrado', 'Un potrero cuadrado mide 12 m de lado. Corta la cinta que va de una esquina a la **opuesta**, lo más justa que puedas.', { lado: 12 },
       'La diagonal es $12\\sqrt2 \\approx 16.97$: casi 17 m.', 'La diagonal es hipotenusa de dos lados iguales.'),
     x('lanza-cuerda', 'Lanza la cuerda con el largo justo del lado que falta. Puedes fallar **una** vez.', { tiros: [
-      { q: 'Catetos 12 y 35: lanza la hipotenusa', a: 12, b: 35, r: 37 }, { q: 'Hipotenusa 25 y cateto 7: lanza el otro cateto', h: 25, b: 7, r: 24 }, { q: 'Hipotenusa 30 y cateto 18: lanza el otro cateto', h: 30, b: 18, r: 24 }] },
-      '$144 + 1225 = 37^2$; $625 - 49 = 24^2$; $900 - 324 = 24^2$.', 'Hipotenusa: se suman los cuadrados. Cateto: se restan.'),
+      { q: 'Catetos 12 y 35: lanza la hipotenusa', a: 12, b: 35, r: 37 }, { q: 'Hipotenusa 25 y cateto 7: lanza el otro cateto', h: 25, b: 7, r: 24 }, { q: 'Hipotenusa 34 y cateto 16: lanza el otro cateto', h: 34, b: 16, r: 30 }] },
+      '$144 + 1225 = 37^2$; $625 - 49 = 24^2$; $1156 - 256 = 30^2$.', 'Hipotenusa: se suman los cuadrados. Cateto: se restan.'),
     sol('Ana camina 9 cuadras al norte y 12 al oriente. ¿Cuánto ahorra si va en línea recta?', ['Por las calles camina [[21]] cuadras', 'En línea recta son [[15]]', 'Ahorra [[6]] cuadras'], ['225', '3', '25'], '$81 + 144 = 225 = 15^2$; $21 - 15 = 6$.', 'El atajo es la hipotenusa de los dos recorridos.'),
     err('Una escalera de 10 m se apoya con el pie a 6 m de la pared. ¿A qué altura llega?', ['La escalera es la hipotenusa', 'La altura es un cateto', 'Altura: $\\sqrt{100 + 36} \\approx 11.7$ m'], 2, ['Altura: $\\sqrt{100 - 36} = 8$ m', 'Altura: $10 - 6 = 4$ m', 'Altura: $10 + 6 = 16$ m'], 'Para un cateto se restan los cuadrados: 8 m. No puede llegar más alto que su largo.', '¿Puede la altura ser mayor que la escalera?'),
     opc('Un televisor de 80 cm de ancho y 60 cm de alto tiene una diagonal de:', ['140 cm', '20 cm', '70 cm', '100 cm'], 3, '$6\\,400 + 3\\,600 = 10\\,000 = 100^2$.', 'Reconoce la familia 3-4-5.'),
@@ -105,17 +105,17 @@ PI_MUNDOS.push((() => {
   ]);
 
   return mundo('icf-ma-forma', 'Triángulos y Semejanza', 'matematicas', [l1, l2, l3, l4], [
-    ['icf-ma-forma-1', 'Vecinos: media vuelta. Opuestos: iguales.', play('tijera-angulos', 'Deduce el ángulo que se pide', { rounds: [{ kind: 'comp', given: 35 }] }, 'Dos que completan un ángulo recto suman 90: el otro mide 55°.', { hint: 'Los dos juntos llenan un ángulo recto.' })],
+    ['icf-ma-forma-1', 'Vecinos: media vuelta. Opuestos: iguales.', play('tijera-angulos', 'Deduce el ángulo que se pide', { rounds: [{ kind: 'sup', given: 65 }] }, 'Los vecinos llenan media vuelta: el otro mide 115°.', { hint: 'Los dos juntos llenan media vuelta.' })],
     ['icf-ma-forma-1', 'Los tres ángulos de un triángulo suman 180°.', play('apice-triangulo', 'El ángulo que falta en el triángulo', { rounds: [{ mode: 'falta', A: 60, C: 75 }] }, 'B = 180° − 135° = 45°.', { hint: 'Los tres ángulos llenan media vuelta.' })],
     ['icf-ma-forma-1', 'Cada lado, menor que la suma de los otros dos.', opc('Dos lados de un triángulo miden 6 y 10. El tercero NO puede medir:', ['5', '9', '16', '15'], 2, '$6 + 10 = 16$: con 16 queda una línea.', 'El tercero debe ser menor que la suma.')],
-    ['icf-ma-forma-2', 'Pitágoras con escaleras: el largo es la hipotenusa.', play('escalera-pared', 'Apoya la escalera en la ventana', { rounds: [{ L: 13, h: 12 }] }, 'El pie queda a 5: 5-12-13.', { hint: 'Resta los cuadrados del largo y de la altura.' })],
-    ['icf-ma-forma-2', 'Familias: 3-4-5 y 5-12-13.', play('arma-triangulo', 'Arma un triángulo rectángulo con la razón pedida', { max: 12, rounds: [{ fn: 'sen', num: 3, den: 5 }] }, 'Opuesto 3 y adyacente 4 dan hipotenusa 5.', { hint: 'Si opuesto e hipotenusa son 3 y 5, ¿cuánto es el otro cateto?' })],
+    ['icf-ma-forma-2', 'Pitágoras con escaleras: el largo es la hipotenusa.', play('escalera-pared', 'Apoya la escalera en la ventana', { rounds: [{ L: 17, h: 15 }] }, 'El pie queda a 8: 8-15-17.', { hint: 'Resta los cuadrados del largo y de la altura.' })],
+    ['icf-ma-forma-2', 'Familias: 3-4-5 y 5-12-13.', play('cuadrados-pitagoras', 'Mueve los catetos hasta que la hipotenusa mida 10', { max: 12, rounds: [{ c2: 100 }] }, 'Los cuadrados de 6 y 8 suman 100: la hipotenusa mide 10.', { hint: 'Busca dos cuadrados que sumen el de la hipotenusa.' })],
     ['icf-ma-forma-2', 'La diagonal es la hipotenusa.', opc('La diagonal de un rectángulo mide 25 y su ancho 15. Su largo es:', ['10', '40', '20', '$\\sqrt{850}$'], 2, '$625 - 225 = 400 = 20^2$.', 'El largo es un cateto: se restan los cuadrados.')],
     ['icf-ma-forma-3', 'Paralelas: trozos proporcionales.', play('tales-rectas', 'Ubica el punto para que las rectas queden paralelas', { rounds: [{ a: 4, b: 6, c: 5 }] }, '$4/6 = 5/x$: $x = 7.5$.', { hint: 'La razón entre los trozos es la misma en las dos rectas.' })],
     ['icf-ma-forma-3', 'El volumen crece con el cubo del factor.', play('factor-area', 'Escala el cubo hasta el volumen pedido', { rounds: [{ kind: 'vol', side: 1, target: 27 }] }, 'De 1 a 27 cubitos: el factor es 3.', { hint: 'Busca un número que tres veces por sí mismo dé el volumen.' })],
     ['icf-ma-forma-3', 'Sombras a la misma hora: triángulos semejantes.', opc('Una persona de 1.8 m da 1.2 m de sombra. Un árbol da 6 m de sombra a la misma hora. El árbol mide:', ['4 m', '6.6 m', '9 m', '7.2 m'], 2, '$6 \\div 1.2 = 5$ y $1.8 \\cdot 5 = 9$.', 'Mira cuántas veces cabe una sombra en la otra.')],
     ['icf-ma-forma-4', 'Con un ángulo y una distancia se halla la altura.', play('mide-altura', 'Muévete hasta ver la cima con el ángulo pedido', { rounds: [{ kind: 'edificio', h: 25, angle: 45, maxD: 60 }] }, 'Con 45° la distancia es igual a la altura: 25 m.', { hint: 'La tangente de 45° vale uno.' })],
-    ['icf-ma-forma-4', 'Seno: opuesto sobre hipotenusa.', play('toca-lados', 'Toca los lados que pide cada razón', { rounds: [{ items: [{ fn: 'sen', t: 2, len: [8, 15, 17] }, { fn: 'cos', t: 5, len: [20, 21, 29] }] }] }, 'Seno usa el opuesto y la hipotenusa.', { hint: 'Mira qué lado queda frente al ángulo.' })],
+    ['icf-ma-forma-4', 'Seno: opuesto sobre hipotenusa.', play('toca-lados', 'Toca los lados que pide cada razón', { rounds: [{ items: [{ fn: 'sen', t: 2, len: [8, 15, 17] }, { fn: 'cos', t: 5, len: [20, 21, 29] }] }] }, 'Seno usa el opuesto y la hipotenusa; coseno, el adyacente y la hipotenusa.', { hint: 'Mira qué lado queda frente al ángulo.' })],
     ['icf-ma-forma-4', 'Coseno: adyacente sobre hipotenusa.', opc('En un triángulo rectángulo, desde θ: opuesto 12, adyacente 5. El coseno de θ es:', ['12/13', '5/12', '12/5', '5/13'], 3, 'La hipotenusa es 13: adyacente sobre hipotenusa, 5/13.', 'Primero halla la hipotenusa.')],
   ]);
 })());
