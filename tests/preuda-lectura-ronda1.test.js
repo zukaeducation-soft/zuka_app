@@ -31,7 +31,7 @@ test('verbos de función del examen: se enseñan en Función de párrafos y en T
 });
 
 test('Tesis y argumentos: el texto trae una concesión sin «pero» y la lección la trabaja', () => {
-  const l = L('pu-ag-1'), d = l.ex[0].params.doc;
+  const l = L('pu-ag-1'), d = l.ex.map(e => e.params.doc).find(d => d?.paras);
   const p = d.paras.findIndex(t => /sin duda|admito|no niego|es verdad que|concedo/i.test(t) && !/\bpero\b|sin embargo|no obstante/i.test(t));
   assert.ok(p >= 0, 'ningún párrafo concede sin un «pero» que lo anuncie');
   assert.match(sceneText(l), /sin .{0,10}«pero»/i, 'la escena explica la concesión sin «pero»');

@@ -1,169 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-l-referencia.js
-// Preuniversitario · Comprensión lectora · mundo 11 «Referencia y cohesión» con textos de verdad (spec
-// 2026-11-19-preuda-lectura-textos): un relato de dos guardianes de faro lleno de «este», «aquel», «esto último» y «lo cual»
-// (pronombres y referentes) y una crónica del aguacate que nombra lo mismo de muchas maneras y omite verbos con comas
-// (sustituciones y elipsis). La evaluación usa un texto sobre un constructor de canoas. Textos escritos para Zuka.
-PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
-  const FAROS = {
-    id: 'lec-guardianes-faro', title: 'Los guardianes de la bahía',
-    ficha: { autor: 'Relato de una escritora del Caribe', fuente: 'Antología de relatos del mar', fecha: '2024' },
-    paras: [
-      'En la bahía de Taganga hubo durante años dos guardianes de faro: don Eliécer, que cuidaba el faro del morro, y su sobrino Abel, que vigilaba la boya luminosa de la entrada. Este era joven y confiaba en los aparatos; aquel había aprendido el oficio de memoria y desconfiaba de todo lo que tuviera batería.',
-      'Cada noche, don Eliécer subía los ochenta escalones del faro con una linterna, aunque la luz ya se prendía sola desde 1990. Lo hacía por costumbre, decía, pero también porque desde arriba podía ver lo que ningún sensor veía: una lancha sin luces, un pescador que se demoraba demasiado, una nube que anunciaba tormenta. Esto último, según él, no lo enseñaba ningún manual.',
-      'Abel, en cambio, revisaba la boya desde su celular. Una aplicación le avisaba si la batería bajaba o si la luz dejaba de parpadear, lo cual le permitía dormir tranquilo. Su tío se burlaba de él: decía que un guardián que duerme no es guardián, sino inquilino. Abel se reía y le mostraba en la pantalla cuántas horas llevaba encendida la boya sin una sola falla.',
-      'Una noche de octubre, la aplicación dejó de funcionar porque se cayó la señal de todo el pueblo. Abel no se dio cuenta de que la boya se había apagado: dormía con el celular en la mano, esperando un aviso que nunca llegó. Quien sí lo notó fue don Eliécer, que desde lo alto del morro vio un barco de turistas acercarse a las rocas de la entrada. Bajó como pudo, despertó a su sobrino y entre los dos encendieron a mano una lámpara de emergencia que este había dejado olvidada en el bote.',
-      'Al día siguiente, el capitán del barco fue a darles las gracias. Le dijo a Abel que la aplicación era una maravilla, siempre que alguien siguiera mirando el mar. Abel no respondió nada, pero esa noche subió con su tío los ochenta escalones. Desde entonces lo acompaña los jueves, y don Eliécer, a cambio, aprendió a leer los avisos del celular, cosa que nunca pensó que haría.',
-    ],
-  };
-
-  const AGUACATE = {
-    id: 'lec-oro-verde', title: 'El oro verde',
-    ficha: { autor: 'Reportaje de una periodista agraria', fuente: 'Revista de un periódico de Antioquia', fecha: 'Julio de 2025' },
-    paras: [
-      'Hace veinte años, el aguacate hass era casi desconocido en las fincas del oriente antioqueño. Hoy, esta variedad de piel rugosa ocupa miles de hectáreas, y el llamado «oro verde» se exporta a Europa en contenedores refrigerados; cada semana salen de la región decenas de camiones rumbo al puerto. Los productores de papa, muchos de ellos, cambiaron de cultivo; los de leche, unos pocos.',
-      'El fruto tiene ventajas claras para el campesino: se vende en dólares, aguanta bien el viaje y los compradores extranjeros pagan por él más que el mercado local. Por eso muchas familias dejaron sus potreros y sembraron árboles; otras, sus huertas de pancoger. En algunas veredas, el paisaje cambió tanto que los mayores dicen no reconocer las lomas donde crecieron. Los jornaleros, en cambio, encontraron trabajo casi todo el año en la recolección.',
-      'Pero la bonanza tiene un costo. Cada árbol necesita mucha agua, y en algunas veredas los acueductos comunitarios ya han tenido que racionar el líquido en verano. Además, el monocultivo deja al productor en manos de unos pocos compradores: si el precio internacional cae, toda la región cae con él. Eso ya pasó con el café en otras épocas, cuando una caída del precio dejó endeudadas a muchas familias.',
-      'Algunos agrónomos recomiendan no apostarlo todo a la misma fruta. Doña Amparo Gómez, por ejemplo, tiene aguacates en la parte alta de su finca, café en la media y una huerta en la baja. Cuando el precio de los primeros bajó el año pasado, el segundo la salvó; y la tercera, como siempre, le dio la comida. Su finca no es la que más gana en la vereda, dice, pero es la única que nunca ha tenido que venderse.',
-      'El aguacate no es el villano de esta historia ni tampoco el héroe. Es un cultivo, y como todo cultivo conviene sembrarlo con las cuentas claras: cuánta agua hay, cuántos compradores, qué pasa si un año sale mal. Quien hace esas cuentas antes de sembrar no se arrepiente después de haber sembrado.',
-    ],
-  };
-
-  // ---------------- Lección 1 · Pronombres y referentes ----------------
-  setLesson('pu-rf-1', [
-    play('ordena-parrafos', 'Arma el relato otra vez', { doc: FAROS },
-      '«Este» y «aquel» del párrafo 1 presentan a los dos guardianes; el 2 describe al tío y «Abel, en cambio» del 3 se le opone; «Una noche de octubre» trae el apagón y «Al día siguiente», la visita del capitán.',
-      { hint: '«En cambio» opone dos cosas: la segunda tiene que venir después de la primera. Y «al día siguiente» necesita un día antes.' }),
-    play('hilo-referente', 'Tira del hilo hasta el referente', { doc: FAROS, rounds: [
-      { p: 1, text: '|don Eliécer|, que cuidaba |el faro del morro|, y su sobrino |Abel|, que vigilaba la boya luminosa de la entrada. |Este| era joven', from: 7, answer: 5 },
-      { p: 2, text: '|una lancha sin luces|, |un pescador que se demoraba demasiado|, |una nube que anunciaba tormenta|. |Esto último|', from: 7, answer: 5 },
-      { p: 4, text: 'Bajó como pudo, despertó a |su sobrino| y entre |los dos| encendieron a mano |una lámpara de emergencia| que |este| había dejado olvidada', from: 7, answer: 1 },
-    ] }, '«Este» señala al más cercano de los dos nombrados: Abel (y «aquel», al más lejano: don Eliécer). «Esto último» es lo último de la lista: la nube que anuncia tormenta. Y en el párrafo 4, «este» vuelve a ser el sobrino, el último hombre nombrado.',
-      { hint: '«Este» y «esto último» apuntan a lo más cercano, lo último que se nombró antes.' }),
-    play('termometro-tono', 'El tono del relato', { doc: FAROS, rounds: [
-      { frag: 'decía que un guardián que duerme no es guardián, sino inquilino.', scale: ['burlón', 'admirado', 'temeroso', 'triste'], answer: 0 },
-      { frag: 'Abel no respondió nada, pero esa noche subió con su tío los ochenta escalones.', scale: ['humilde', 'orgulloso', 'furioso', 'indiferente'], answer: 0 },
-    ] }, 'El tío se burla del sobrino con una comparación. Y Abel, sin decir nada, sube con él: reconoce su error con humildad.',
-      { hint: 'En el segundo fragmento, Abel no habla. ¿Qué dice su gesto?' }),
-    play('resume-parrafo', 'Cada párrafo en una frase', { doc: FAROS, paras: [2, 3, 4, 5], options: [
-      'Don Eliécer sube cada noche al faro porque desde arriba ve lo que ningún sensor ve.',
-      'Abel confía en una aplicación que le avisa de las fallas de la boya.',
-      'La noche del apagón, el tío ve el peligro y entre los dos encienden una lámpara.',
-      'Después de esa noche, cada uno aprende algo del método del otro.',
-      'Abel salva solo el barco gracias a su aplicación.',
-      'El faro del morro tiene ochenta escalones.',
-    ], key: [0, 1, 2, 3] },
-      'Cada resumen cubre su párrafo entero. Abel no salva solo el barco: dormía, y fue el tío quien vio el peligro. Y los ochenta escalones son un dato, no la idea de ningún párrafo.',
-      { hint: 'Un resumen no se queda en un número ni le cambia el papel a los personajes. Revisa quién hace qué en el párrafo 4.' }),
-    play('subraya-prueba', 'La prueba en el relato', { doc: FAROS, rounds: [
-      { claim: 'La aplicación dependía de algo que no estaba en manos de Abel.', p: 4, answer: 0 },
-      { claim: 'El capitán cree que la tecnología sirve, pero que no basta sola.', p: 5, answer: 1 },
-    ] }, 'La aplicación falló porque se cayó la señal de todo el pueblo, algo que Abel no controlaba. Y la idea del capitán está en su frase: la aplicación es una maravilla «siempre que alguien siga mirando el mar».',
-      { hint: 'Busca la oración que trae una causa o una condición: un «porque» o un «siempre que».' }),
-    play('caso-nuevo', 'La lección de los faros', { doc: FAROS, principle: 'La tecnología ayuda, pero no reemplaza la atención de una persona.', cards: [
-      ['Un piloto que, aunque vuela con piloto automático, sigue mirando los instrumentos.', true],
-      ['Una enfermera que revisa al paciente aunque la máquina diga que todo está bien.', true],
-      ['Un señor que compra un celular nuevo porque el viejo se dañó.', false],
-      ['Una niña que aprende a montar en bicicleta.', false],
-    ] }, 'El piloto y la enfermera usan la máquina sin dejar de mirar. Comprar un celular o aprender a montar en bicicleta no tiene que ver con la idea.',
-      { hint: 'Busca los casos en que alguien usa la tecnología y además sigue atento, como el capitán le pidió a Abel.' }),
-    play('cadena-causas', 'La noche del apagón', { doc: FAROS, chain: [
-      'Se cae la señal de todo el pueblo.',
-      'La aplicación de Abel deja de funcionar.',
-      'Abel no se entera de que la boya se apagó.',
-    ], extra: ['Se baja la batería de la boya.', 'Don Eliécer sube los ochenta escalones del faro.'] },
-      'El párrafo 4 encadena los hechos: sin señal, la aplicación deja de funcionar, y Abel, que esperaba el aviso, no se da cuenta de que la boya se apagó. El texto no dice que se bajara la batería, y la subida del tío es lo que salvó la noche, no una causa del apagón.',
-      { hint: 'Empieza por la oración que tiene un «porque» al comienzo del párrafo 4.' }),
-  ]);
-
-  // ---------------- Lección 2 · Sustituciones y elipsis ----------------
-  setLesson('pu-rf-2', [
-    play('ordena-parrafos', 'Arma el reportaje otra vez', { doc: AGUACATE },
-      'Primero el auge del aguacate; «El fruto tiene ventajas» explica por qué se sembró; «Pero la bonanza tiene un costo» se opone a esas ventajas; los agrónomos y doña Amparo proponen otra salida, y el 5 cierra con «ni el villano ni el héroe».',
-      { hint: '«El fruto» y «la bonanza» sustituyen algo que ya se nombró. Y un «Pero» se opone a lo que acaba de decirse.' }),
-    play('quien-lo-dice', 'Muchos nombres para lo mismo', { doc: AGUACATE, ask: 'Lleva cada expresión del texto a lo que nombra.', voices: ['el aguacate', 'el agua', 'el café'], cards: [
-      ['esta variedad de piel rugosa', 0],
-      ['el llamado «oro verde»', 0],
-      ['el fruto', 0],
-      ['la misma fruta', 0],
-      ['el líquido', 1],
-      ['el segundo', 2],
-    ] }, 'Para no repetir «aguacate», el texto dice «esta variedad», «oro verde», «el fruto» y «la misma fruta». «El líquido» es el agua que se raciona, y «el segundo» es el café, segundo cultivo de la lista de doña Amparo.',
-      { hint: 'Para cada expresión, busca hacia atrás de qué se venía hablando.' }),
-    play('hilo-referente', 'Lo que se sustituye', { doc: AGUACATE, rounds: [
-      { p: 3, text: 'Cada árbol necesita |mucha agua|, y en algunas veredas |los acueductos comunitarios| ya han tenido que racionar |el líquido|', from: 5, answer: 1 },
-      { p: 4, text: 'tiene |aguacates| en la parte alta de su finca, |café| en la media y |una huerta| en la baja. Cuando el precio de los primeros bajó el año pasado, |el segundo|', from: 7, answer: 3 },
-    ] }, '«El líquido» sustituye al agua. Y «el segundo» es el segundo cultivo nombrado: el café, que salvó a doña Amparo cuando bajó el aguacate.',
-      { hint: 'En una lista, «el primero», «el segundo» y «la tercera» siguen el orden en que se nombraron.' }),
-    play('signos-que-hablan', 'La coma de la elipsis', { doc: AGUACATE, rounds: [
-      { p: 1, text: 'cambiaron de cultivo; los de leche|,| unos pocos.', options: ['ocupa el lugar de «cambiaron de cultivo», que no se repite', 'separa los elementos de una lista', 'abre un inciso', 'marca el final de una cita'], answer: 0 },
-      { p: 2, text: 'dejaron sus potreros y sembraron árboles; otras|,| sus huertas de pancoger.', options: ['ocupa el lugar de «dejaron», que no se repite', 'separa dos adjetivos', 'abre una explicación', 'marca una pregunta'], answer: 0 },
-      { p: 1, text: 'el llamado |«|oro verde» se exporta a Europa', options: ['marca un apodo que se usa para el aguacate', 'cita a un agrónomo', 'marca la ironía de la autora', 'abre el título de un libro'], answer: 0 },
-    ] }, 'En «los de leche, unos pocos» y «otras, sus huertas», la coma ocupa el lugar del verbo que se omite para no repetirlo: es la elipsis. Las comillas de «oro verde» marcan un apodo («el llamado»).',
-      { hint: 'Lee la frase anterior y pregúntate qué verbo falta después de la coma.' }),
-    play('conector-bisagra', 'Bisagras del reportaje', { doc: AGUACATE, rounds: [
-      { a: 'El fruto se vende en dólares y aguanta bien el viaje.', b: 'muchas familias dejaron sus potreros y sembraron árboles.', options: ['Por eso,', 'Aunque', 'Es decir,', 'En cambio,'], answer: 0 },
-      { a: 'El aguacate trajo una bonanza.', b: 'la bonanza tiene un costo.', options: ['Pero', 'Por lo tanto,', 'Además,', 'Por ejemplo,'], answer: 0 },
-      { a: 'Algunos agrónomos recomiendan no apostarlo todo a la misma fruta.', b: 'doña Amparo tiene aguacates, café y una huerta.', options: ['Por ejemplo,', 'Sin embargo,', 'Por eso,', 'Aunque'], answer: 0 },
-    ] }, 'Las ventajas explican el cambio de cultivo (consecuencia); la bonanza tiene su contracara (contraste); y doña Amparo es un caso de lo que recomiendan los agrónomos (ejemplo).',
-      { hint: 'Pregúntate si la segunda idea resulta de la primera, se le opone o la ilustra con un caso.' }),
-    play('balanza-argumento', '¿Un solo cultivo?', { doc: AGUACATE, thesis: 'Conviene no depender de un solo cultivo.', cards: [
-      ['Si el precio internacional cae, toda la región cae con él.', 0],
-      ['A doña Amparo la salvó el café cuando bajó el aguacate.', 0],
-      ['Un estudio muestra que las fincas con un solo cultivo ganan más y resisten mejor las crisis.', 1],
-      ['El aguacate hass tiene la piel rugosa.', null],
-    ] }, 'El riesgo de la caída del precio y el caso de doña Amparo apoyan la tesis. Si las fincas de un solo cultivo resistieran mejor, la tesis se caería. La piel rugosa no tiene que ver.',
-      { hint: 'Imagina cada oración como cierta: ¿muestra el riesgo de depender de un cultivo o lo contrario?' }),
-    play('resumen-esencial', 'El resumen en tres renglones', { doc: AGUACATE, ideas: [
-      ['El aguacate se volvió en pocos años el gran cultivo de la región.', true],
-      ['Trae ventajas, pero gasta mucha agua y deja a la región en manos de pocos compradores.', true],
-      ['Conviene no depender de un solo cultivo y sembrar con las cuentas claras.', true],
-      ['Cada semana salen decenas de camiones rumbo al puerto.', false],
-      ['Doña Amparo tiene café en la parte media de su finca.', false],
-      ['Los mayores dicen no reconocer las lomas donde crecieron.', false],
-    ] }, 'El reportaje cuenta el auge, pesa sus ventajas y costos y cierra con una recomendación. Los camiones, el café de doña Amparo y las lomas que cambiaron son detalles que ilustran esas ideas.',
-      { hint: 'El último párrafo da la postura de la autora. Una idea esencial lleva hasta ella; un detalle solo la adorna.' }),
-  ]);
-
-  // ---------------- Evaluación: formato real, texto nuevo ----------------
-  const CANOA = {
-    id: 'lec-canoas-tumaco', title: 'Las canoas de don Pastor',
-    paras: [
-      'En el puerto de Tumaco, algunos constructores de canoas todavía trabajan con machete y azuela. Don Pastor Quiñones, el más viejo de ellos, aprendió de su padre, y este, de un abuelo que había llegado del Chocó. Sus canoas se reconocen en todo el puerto: la proa es más alta que la de las demás, lo cual las hace más seguras con oleaje.',
-      'Cada embarcación sale de un solo tronco. El árbol se escoge en el monte, se corta y se arrastra hasta el río; allí, el agua lo lleva hasta el taller. Tallarlo toma dos meses; pintarlo, una semana.',
-      'Los jóvenes prefieren las lanchas de fibra de vidrio, que son más rápidas y no se pudren. Don Pastor no los culpa. Solo les pide que, antes de comprar una, aprendan a hacer la otra.',
-    ],
-  };
-  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: CANOA, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
-  setExam('pu-referencia', 'Evaluación · Referencia y cohesión', [
-    ['pu-rf-1', '«Este» señala a lo más cercano de lo que se acaba de nombrar.',
-      Q('En «aprendió de su padre, y este, de un abuelo», la palabra «este» se refiere a:', ['don Pastor', 'el padre de don Pastor', 'el abuelo', 'el Chocó'], 1,
-        '«Este» es el último nombrado antes: el padre, que a su vez aprendió de un abuelo.',
-        'Busca el nombre más cercano antes de «este» y prueba reemplazándolo.')],
-    ['pu-rf-1', '«Lo cual» se refiere a toda una idea dicha antes, no a una sola palabra.',
-      Q('En el párrafo 1, «lo cual» se refiere a:', ['que la proa sea más alta que la de las demás', 'el puerto de Tumaco', 'las demás canoas', 'el oleaje'], 0,
-        'Lo que hace más seguras a las canoas es que su proa sea más alta: «lo cual» recoge esa idea entera.',
-        'Pregúntate qué hace más seguras las canoas con oleaje.')],
-    ['pu-rf-1', 'Un pronombre concuerda en género y número con su referente.',
-      Q('En «Don Pastor no los culpa», «los» se refiere a:', ['las lanchas', 'los troncos', 'los constructores', 'los jóvenes'], 3,
-        'Lo que don Pastor podría reprochar es que los jóvenes prefieran las lanchas: no los culpa a ellos.',
-        'Busca en la oración anterior un grupo, en masculino plural, al que se pueda culpar de algo.')],
-    ['pu-rf-2', 'En la elipsis, la coma ocupa el lugar de una palabra que no se repite.',
-      Q('En «Tallarlo toma dos meses; pintarlo, una semana», la coma después de «pintarlo» ocupa el lugar de:', ['tronco', 'semana', 'toma', 'dos meses'], 2,
-        'La frase completa sería «pintarlo toma una semana»; el verbo se omite para no repetirlo.',
-        'Reconstruye la segunda parte con la palabra que falta.')],
-    ['pu-rf-2', 'Un texto nombra lo mismo de varias maneras para no repetir.',
-      Q('La expresión «Cada embarcación» (párrafo 2) sustituye a:', ['las canoas', 'los troncos', 'las lanchas de fibra', 'los talleres'], 0,
-        'El párrafo 2 sigue hablando de las canoas de don Pastor: cada una sale de un solo tronco.',
-        'Las lanchas de fibra aparecen después. ¿De qué se hablaba al final del párrafo 1?')],
-    ['pu-rf-2', '«El otro» o «la otra» señalan el término de la pareja que no se acaba de mencionar.',
-      Q('En «aprendan a hacer la otra», «la otra» se refiere a:', ['la lancha de fibra de vidrio', 'la canoa de un solo tronco', 'la proa', 'la azuela'], 1,
-        'Frente a la lancha que van a comprar, «la otra» es la canoa tradicional que don Pastor les pide aprender a hacer.',
-        'En el párrafo 3 hay dos tipos de embarcación. Si una es la que se compra, ¿cuál es la otra?')],
-  ]);
-});
-;
 //#archivo js/courses/preuda-l-figurado.js
 // Preuniversitario · Comprensión lectora · mundo 12 «Lenguaje figurado» con textos de verdad (spec
 // 2026-11-19-preuda-lectura-textos): una crónica de Medellín de madrugada llena de metáforas, comparaciones, personificaciones e
@@ -346,7 +182,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
 // tests/preuda-lectura.test.js les exige el estándar.
 const PU_LEC_HECHOS = [];
 // Mundos con explicación interactiva y ejercicios sobre la hoja (spec 2026-11-24-lectura-explora; tests/lectura-explora.test.js).
-const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos', 'pu-explicita', 'pu-inferencia', 'pu-vocabulario', 'pu-aplicacion', 'pu-fuentes'];
+const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos', 'pu-explicita', 'pu-inferencia', 'pu-vocabulario', 'pu-aplicacion', 'pu-fuentes', 'pu-conectores', 'pu-argumentacion'];
 (() => {
   const lessons = PU_LECTURA.flatMap(u => u.lessons);
   const L = id => { const l = lessons.find(l => l.id === id); if (!l) throw new Error(`no existe ${id}`); return l; };
@@ -9491,6 +9327,179 @@ xpLec('pu-fu-2', [
   ['Ahora sí, un problema',
     xpHaz('hoja', 'Tesis: «Las visitas al faro **necesitan guía**». Tacha las dos citas que **no** la apoyan.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 2], paras: [['«El faro mide veinte metros.»'], ['«Sin guía, la mitad se pierde.»'], ['«Con o sin guía, todos llegan bien.»'], ['«Con guía, hay menos caídas.»']], pista: 'Alguna de las tachadas sí da una razón para llevar guía.' }, 'Una no pesa y la otra debilita.')],
 ], 'Ubica la postura, compara cada cita con la tesis y lee con cuidado los verbos.');
+;
+//#archivo js/explora-pu-cn.js
+// Preuniversitario · lectura, mundo 8 «Conectores y función de partes» (Explora): pu-cn-1 y pu-cn-2. Textos cortos propios.
+xpLec('pu-cn-1', [
+  ['Lo que anuncia un conector',
+    xpMira('hoja', 'Empecemos por la idea: un **conector** avisa qué viene.', { letras: ['A', 'B', 'C', 'D', 'E'], paras: [['Llovió; sin embargo, salimos.'], ['Llovió; por lo tanto, no salimos.'], ['Llovió. Además, hacía frío.'], ['Llevamos de todo; por ejemplo, botas.'], ['No salimos porque llovía.']] }, [
+      ['«Sin embargo»: viene algo contra lo esperado. Contraste.', { luz: [0], nota: { 0: 'contraste' } }],
+      ['«Por lo tanto»: viene lo que resulta. Consecuencia.', { luz: [1], nota: { 1: 'consecuencia' } }],
+      ['«Además», «por otra parte»: suman.', { luz: [2], nota: { 2: 'suma' } }],
+      ['«Por ejemplo»: viene un caso.', { luz: [3], nota: { 3: 'ejemplo' } }],
+      ['«Porque»: viene la causa.', { luz: [4], nota: { 4: 'causa' } }],
+      ['Y «en suma», «en conclusión» recogen lo dicho.', {}],
+    ], 'Contraste, consecuencia, suma, ejemplo, causa y conclusión: el conector dice qué esperar.'),
+    xpHaz('hoja', 'Pon al margen lo que anuncia cada conector.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['contraste', 'suma', 'consecuencia'], meta: [2, 0, 1], paras: [['Se fue la luz; por eso cerraron.'], ['Es pequeño; no obstante, cabe todo.'], ['Es barato. Asimismo, dura más.']], pista: 'Alguno no va ahí. ¿Resulta, choca o se agrega?' }, '«No obstante» contrasta y «asimismo» suma.')],
+  ['Oponer y rectificar',
+    xpMira('hoja', 'Segunda idea: después de un **no**, «al contrario» **rectifica**.', { letras: ['A', 'B', 'C'], paras: [['Es caro, pero dura.'], ['No es caro; al contrario, es regalado.'], ['El problema no es el ruido; es, más bien, la hora.']] }, [
+      ['«Pero»: las dos ideas siguen en pie. Es caro y dura.', { luz: [0], nota: { 0: 'opone' } }],
+      ['«No es caro; al contrario…»: la primera se cae.', { luz: [1] }],
+      ['Se niega una y se pone otra: rectifica.', { luz: [1], nota: { 1: 'rectifica' } }],
+      ['«Más bien», «antes bien» y «sino» hacen lo mismo.', { luz: [2], nota: { 2: 'rectifica' } }],
+      ['La pista es el «no» de la primera parte.', {}],
+      ['Por eso ahí no cabe «sin embargo»: no hay nada a qué oponerse.', {}],
+    ], 'Oponer deja dos ideas en pie; rectificar niega una y pone otra en su lugar.'),
+    xpHaz('hoja', 'Subraya la oración que **rectifica**.', { modo: 'toca', letras: ['A', 'B', 'C', 'D'], meta: [2], paras: [['Estudió, pero no pasó.'], ['Aunque llovía, jugaron.'], ['No fue un error, sino una broma.'], ['Llegó tarde; sin embargo, entró.']], pista: 'En esa siguen en pie las dos ideas. Busca la que niega una y pone otra.' }, '«No… sino…»: el rectificador más corto.')],
+  ['Lo que necesita un conector',
+    xpMira('hoja', 'Tercera idea: un conector **necesita** algo antes, y lo que sigue al contraste **pesa más**.', { paras: [['Dicen que el bus es lento.', 'Sin embargo, hoy llegó primero.'], ['Las razones son dos.'], ['En primer lugar, tiene carril propio.', 'Por otra parte, no busca parqueo.']] }, [
+      ['Lo que sigue a «sin embargo» suele ser lo que importa.', { luz: [1] }],
+      ['«Las razones» explican algo ya dicho.', { luz: [2], nota: { 1: 'explica lo anterior' } }],
+      ['«Por otra parte» solo va después de otra razón.', { luz: [3, 4], nota: { 2: 'razones' } }],
+      ['«Esto no quiere decir» frena algo que se acaba de decir.', {}],
+      ['Así se ordena un texto desordenado.', {}],
+      ['Y frenar no es negar: se le baja el volumen.', {}],
+    ], 'Cada conector pide algo antes. Después del contraste viene lo que más pesa.'),
+    xpHaz('hoja', 'Subraya la oración que el autor quiere que **más pese**.', { modo: 'toca', meta: [2], paras: [['El parque es bonito y tiene árboles.', 'Los domingos se llena.'], ['Sin embargo, no hay un solo baño.', 'Lo abrieron hace un año.']], pista: 'Esa prepara el terreno o agrega un dato. ¿Qué viene después del contraste?' }, 'El contraste señala lo importante.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Estaba cansado; ___ siguió». Tacha los dos conectores que **no** sirven.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['sin embargo,'], ['por lo tanto,'], ['no obstante,'], ['por ejemplo,']], pista: 'Alguno de los tachados sí marca que seguir va contra lo esperado.' }, 'Seguir cansado va contra lo esperado: contraste.')],
+], 'Pregunta qué anuncia, si opone o rectifica, y qué necesita antes.');
+
+xpLec('pu-cn-2', [
+  ['Lo que hace un párrafo',
+    xpMira('hoja', 'Empecemos por la idea: cada parte **hace** algo en el argumento, y eso tiene nombre.', { paras: [['Pongamos un caso: la calle del puerto.'], ['Es verdad que había baches.'], ['Pero los baches no se arreglan con semáforos.'], ['En suma, hacía falta pavimento.']] }, [
+      ['Un caso que muestra la idea: ejemplifica o ilustra.', { luz: [0], nota: { 0: 'ejemplifica' } }],
+      ['«Es verdad que»: acepta algo del otro lado. Concede.', { luz: [1], nota: { 1: 'concede' } }],
+      ['«Pero»: muestra que no se sostiene. Refuta o desmonta.', { luz: [2], nota: { 2: 'refuta' } }],
+      ['«En suma»: recoge lo dicho. Concluye.', { luz: [3], nota: { 3: 'concluye' } }],
+      ['«Es decir» traduce: dice de frente lo que quedó escondido.', {}],
+      ['Las primeras palabras suelen delatar la función.', {}],
+    ], 'Ejemplificar, conceder, refutar, concluir: busca la marca en el comienzo.'),
+    xpHaz('hoja', 'Pon al margen qué hace cada oración.', { modo: 'margen', rotulos: ['concluye', 'concede', 'ejemplifica'], meta: [1, 2, 0], paras: [['Con razón se dice que cuesta.'], ['Por ejemplo, un pueblo vecino ahorró la mitad.'], ['En definitiva, conviene.']], pista: 'Alguno no va ahí. ¿Acepta, muestra un caso o recoge?' }, '«Con razón» acepta algo del otro lado.')],
+  ['Matizar y relativizar',
+    xpMira('hoja', 'Segunda idea: se **matiza** lo propio y se **relativiza** lo ajeno.', { letras: ['A', 'B'], paras: [['No digo que la música sobre;', 'digo que tape las voces.'], ['Puede que vengan más turistas,', 'pero eso dice poco del barrio.']] }, [
+      ['«No digo que…»: le pone límite a su propia crítica.', { luz: [0] }],
+      ['Es lo suyo: matiza.', { luz: [0, 1], nota: { 0: 'matiza lo propio' } }],
+      ['«Puede que…»: acepta un dato del otro.', { luz: [2] }],
+      ['«Pero eso dice poco»: le quita peso. Relativiza.', { luz: [2, 3], nota: { 1: 'relativiza lo ajeno' } }],
+      ['La pregunta es: ¿de quién es la idea que se limita?', {}],
+    ], '¿De quién es la idea que se limita? Propia: matiza. Ajena: relativiza.'),
+    xpHaz('hoja', 'Subraya la oración que **matiza lo propio**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Tal vez suban las ventas, pero importa poco.'], ['No estoy en contra de los perros, sino de que anden sueltos.'], ['Es posible que guste; eso no lo hace útil.']], pista: 'En esa se acepta algo del otro y se le quita peso. Busca «no estoy en contra».' }, 'Quien matiza aclara hasta dónde llega lo suyo.')],
+  ['Los signos',
+    xpMira('hoja', 'Tercera idea: los **signos** también hacen cosas.', { unidos: true, paras: [['Llegó el ', '«gran»', ' cambio: un semáforo.'], ['Vende frutas ', '—mango, lulo, guama—', ' en la esquina.'], ['Cualquiera puede ir ', '(si paga antes)', '.']] }, [
+      ['Comillas sobre «gran»: el autor no lo cree. Son irónicas.', { luz: [1], nota: { 0: 'ironía' } }],
+      ['Rayas: meten una lista de ejemplos.', { luz: [4], nota: { 1: 'ejemplos' } }],
+      ['Paréntesis: guardan una condición o aclaración.', { luz: [7], nota: { 2: 'condición' } }],
+      ['A veces lo que va en el paréntesis es lo más importante.', { luz: [7] }],
+      ['La ironía dice bonito lo grave; la burla muestra lo ridículo.', {}],
+      ['Y otras frases reconocen lo cierto o señalan un daño.', {}],
+    ], 'Comillas irónicas, rayas que meten ejemplos, paréntesis que guardan condiciones.'),
+    xpHaz('hoja', 'Subraya el trozo en que el autor **no cree** lo que dice la palabra.', { modo: 'toca', unidos: true, quietos: [0, 2, 4], meta: [3], paras: [['Abrieron la sede ', '(a las seis)', '. La ', '«comodidad»', ' de dos sillas para cien personas.']], pista: 'Ese aclara la hora. Busca la palabra que se contradice con lo que sigue.' }, 'Dos sillas para cien: la palabra no se sostiene.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya la oración que **concede**.', { modo: 'toca', meta: [1], paras: [['El tranvía debe volver.', 'Sin duda, los rieles cuestan.'], ['Aun así, duran cincuenta años.', 'Por ejemplo, los de 1930 siguen ahí.']], pista: 'Esa defiende, responde o ilustra. Busca dónde se acepta algo en contra.' }, '«Sin duda» acepta antes de responder.')],
+], 'Nombra lo que hace cada parte, pregunta de quién es la idea y lee los signos.');
+;
+//#archivo js/explora-pu-ag.js
+// Preuniversitario · lectura, mundo 9 «Argumentación, intención y tono» (Explora): pu-ag-1 a pu-ag-3. Textos cortos propios.
+xpLec('pu-ag-1', [
+  ['Qué y por qué',
+    xpMira('hoja', 'Empecemos por la idea: la **tesis** dice **qué** se defiende; los argumentos, **por qué**.', { paras: [['Muchos llegan con hambre a clase.'], ['Sostengo que el colegio debe dar desayuno.'], ['Quien desayuna se concentra mejor.'], ['Además, cuesta menos que repetir un año.']] }, [
+      ['La primera prepara el terreno.', { luz: [0] }],
+      ['«Sostengo que»: ahí está lo que se defiende. La tesis.', { luz: [1], nota: { 1: 'tesis: qué' } }],
+      ['¿Por qué? Porque se concentra mejor. Argumento.', { luz: [2], nota: { 2: 'por qué' } }],
+      ['¿Por qué más? Porque cuesta menos. Otro argumento.', { luz: [3], nota: { 3: 'por qué' } }],
+      ['La prueba: responde «¿qué?» o responde «¿por qué?».', {}],
+    ], 'Tesis: ¿qué defiende? Argumento: ¿por qué?'),
+    xpHaz('hoja', 'Subraya la **tesis**.', { modo: 'toca', meta: [2], paras: [['El río pasa a dos cuadras.', 'Nadie lo mira.'], ['La ciudad debería abrir un paseo en la orilla.', 'Caminar baja el estrés.']], pista: 'Esa prepara el terreno o responde «¿por qué?».' }, 'Lo que se defiende, no las razones.')],
+  ['Tipos de argumento',
+    xpMira('hoja', 'Segunda idea: las razones pueden ser de **varias clases**.', { letras: ['A', 'B', 'C', 'D', 'E'], paras: [['Ocho de cada diez lo prefieren.'], ['En Tunja lo hicieron y bajó el ruido.'], ['Según la física Ana Gil, funciona.'], ['Quitar el freno no hace mejor un carro.'], ['Si hay sombra, la gente camina más.']] }, [
+      ['Cifras: argumento de datos.', { luz: [0], nota: { 0: 'datos' } }],
+      ['Un caso con nombre: ejemplo.', { luz: [1], nota: { 1: 'ejemplo' } }],
+      ['Un experto: autoridad.', { luz: [2], nota: { 2: 'autoridad' } }],
+      ['Una comparación con otra cosa: analogía.', { luz: [3], nota: { 3: 'analogía' } }],
+      ['Una cosa trae otra: causa.', { luz: [4], nota: { 4: 'causa' } }],
+    ], 'Datos, ejemplo, autoridad, analogía y causa.'),
+    xpHaz('hoja', 'Pon al margen el tipo de cada argumento.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['analogía', 'datos', 'autoridad'], meta: [2, 0, 1], paras: [['Lo recomienda la pediatra Luz Rey.'], ['Una ciudad sin parques es una casa sin ventanas.'], ['El 40 % no tiene carro.']], pista: 'Alguno no va ahí. Busca un experto, una comparación y una cifra.' }, 'Cada clase tiene su huella.')],
+  ['La objeción y su respuesta',
+    xpMira('hoja', 'Tercera idea: un buen texto nombra lo que diría **el otro lado** y le responde.', { paras: [['Hay quien piensa que el desayuno es tarea de la casa.'], ['Algunas casas, sin duda, pueden.'], ['Las loncheras vacías de los lunes cuentan el resto.']] }, [
+      ['«Se dirá que» o «Hay quien piensa»: la objeción.', { luz: [0], nota: { 0: 'objeción' } }],
+      ['«Sin duda», «admito que»: concede una parte.', { luz: [1], nota: { 1: 'concesión' } }],
+      ['Y responde con un hecho, sin decir «pero».', { luz: [2], nota: { 2: 'respuesta' } }],
+      ['La respuesta puede refutar o quitarle peso (relativizar).', {}],
+      ['Un dato apoya la tesis, la debilita o no pesa.', {}],
+      ['Al final, el texto suele volver a la tesis.', {}],
+    ], '«Hay quien piensa» objeta, «sin duda» concede y un hecho puede responder sin «pero».'),
+    xpHaz('hoja', 'Subraya la **concesión**.', { modo: 'toca', meta: [1], paras: [['Dirán que sale caro.', 'Admito que el primer año cuesta.'], ['Desde el segundo, se paga solo.', 'Por eso hay que empezar ya.']], pista: 'Esa objeta, responde o concluye. Busca dónde acepta una parte.' }, '«Admito que» acepta una parte.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Tesis: «Hay que **cerrar al tráfico** la calle los domingos». Tacha los dos datos que **no** la apoyan.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['En otra ciudad, las ventas subieron.'], ['La calle tiene doce cuadras.'], ['Los niños juegan sin peligro.'], ['El hospital quedaría sin acceso.']], pista: 'Alguna de las tachadas sí da una razón para cerrarla.' }, 'Uno no pesa y el otro la debilita.')],
+], 'Qué defiende, por qué, qué diría el otro lado y cómo se le responde.');
+
+xpLec('pu-ag-2', [
+  ['Para qué escribe',
+    xpMira('hoja', 'Empecemos por la idea: la **intención** es para qué se escribe.', { letras: ['A', 'B', 'C', 'D'], paras: [['El tren sale a las seis y cuesta tres mil.'], ['Súbase al tren: llegará antes y contaminará menos.'], ['Prometieron tren y entregaron un anuncio.'], ['¿Qué perdemos cuando dejamos de esperar un tren?']] }, [
+      ['Datos y ya: informar.', { luz: [0], nota: { 0: 'informar' } }],
+      ['Invita a hacer algo: persuadir.', { luz: [1], nota: { 1: 'persuadir' } }],
+      ['Señala un defecto: criticar.', { luz: [2], nota: { 2: 'criticar' } }],
+      ['Piensa en voz alta: reflexionar.', { luz: [3], nota: { 3: 'reflexionar' } }],
+      ['Los bordes ya dan una pista: una columna de humor no informa a secas.', {}],
+    ], 'Informar, persuadir, criticar o reflexionar: ¿qué quiere lograr en quien lee?'),
+    xpHaz('hoja', 'Pon al margen la intención de cada oración.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['criticar', 'informar', 'persuadir'], meta: [1, 2, 0], paras: [['El museo abre a las nueve.'], ['Venga: no se arrepentirá.'], ['Gastaron en la puerta lo que faltaba para los cuadros.']], pista: 'Alguno no va ahí. ¿Da un dato, invita o señala un defecto?' }, 'La misma puerta sirve para tres intenciones.')],
+  ['El tono',
+    xpMira('hoja', 'Segunda idea: el **tono** es la actitud, y se oye hasta en un adverbio.', { paras: [['El informe, curiosamente, se perdió.'], ['Por fortuna, había copia.'], ['Una oficina ejemplar: abre una hora al mes.'], ['Entiendo a quien se cansó de esperar.']] }, [
+      ['«Curiosamente» no agrega un dato: sospecha.', { luz: [0], nota: { 0: 'sospecha' } }],
+      ['«Por fortuna» muestra alivio.', { luz: [1], nota: { 1: 'alivio' } }],
+      ['«Ejemplar», pero abre una hora: dice lo contrario. Ironía.', { luz: [2], nota: { 2: 'ironía' } }],
+      ['Y aquí comprende: el tono cambia según de quién se habla.', { luz: [3], nota: { 3: 'comprensión' } }],
+      ['La prueba: quita la palabra. Si el dato queda, solo había actitud.', {}],
+    ], 'Quita el adverbio: si el dato sigue, lo que perdiste era la actitud del autor.'),
+    xpHaz('hoja', 'Subraya la palabra que **solo** muestra actitud.', { modo: 'toca', unidos: true, quietos: [0, 2, 4, 6], meta: [3], paras: [['El bus pasó ', 'dos veces', ' y, ', 'lamentablemente', ', las ', 'dos', ' iba lleno.']], pista: 'Si quitas esa, se pierde un dato. Busca la que solo dice lo que le parece.' }, 'Sin «lamentablemente», el hecho queda completo.')],
+  ['Comillas con intención',
+    xpMira('hoja', 'Tercera idea: las **comillas** también tienen intención, y cada párrafo, una función.', { paras: [['Ofrecen viajes «sin sorpresas».'], ['En su contrato no está la palabra «devolución».'], ['No me burlo de quien compra.'], ['Antes de pagar, pregunte quién responde.']] }, [
+      ['Copia la promesa y toma distancia.', { luz: [0], nota: { 0: 'con distancia' } }],
+      ['Aquí muestra una palabra que falta.', { luz: [1], nota: { 1: 'lo que no dicen' } }],
+      ['«No me burlo»: aclara a quién no critica.', { luz: [2], nota: { 2: 'aclara' } }],
+      ['Y termina con un consejo.', { luz: [3], nota: { 3: 'aconseja' } }],
+      ['Criticar un método no es burlarse de quien cae en él.', {}],
+      ['La ironía se prueba: debajo del elogio hay un problema.', {}],
+    ], 'Comillas que toman distancia o muestran lo que falta. Y criticar algo no es burlarse de las personas.'),
+    xpHaz('hoja', 'Subraya la oración **irónica**.', { modo: 'toca', meta: [1], paras: [['El ascensor lleva un mes dañado.', 'Excelente servicio: así hacemos ejercicio.'], ['Los vecinos firmaron una carta.', 'Nadie ha respondido.']], pista: 'Esa cuenta un hecho. Busca el elogio que no puede ser en serio.' }, 'Elogiar lo dañado: dice lo contrario.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', '«Por supuesto, el puente se cayó **otra vez**». Tacha los dos tonos que **no** tiene.', { modo: 'tacha', letras: ['A', 'B', 'C'], meta: [0, 2], paras: [['alegre'], ['crítico'], ['neutral']], pista: 'Alguno de los tachados sí se oye en «por supuesto» y «otra vez».' }, 'Se esperaba lo peor: eso es criticar.')],
+], 'Para qué escribe, con qué actitud, y de quién habla en cada frase.');
+
+xpLec('pu-ag-3', [
+  ['Comprobar o valorar',
+    xpMira('hoja', 'Empecemos por la idea: un **hecho** se puede **comprobar**; una **opinión** **valora**.', { letras: ['A', 'B', 'C'], paras: [['El puente mide 80 metros.'], ['El puente es horrible.'], ['El puente se abrió en 1960.']] }, [
+      ['Se mide: hecho.', { luz: [0], nota: { 0: 'hecho' } }],
+      ['¿Con qué se mide lo horrible? Opinión.', { luz: [1], nota: { 1: 'opinión' } }],
+      ['Hay registro: hecho.', { luz: [2], nota: { 2: 'hecho' } }],
+      ['«Mejor», «peor», «lamentable», «a mi juicio» suelen delatar opinión.', {}],
+      ['Pero la prueba es otra: ¿se puede verificar?', {}],
+    ], 'Pregunta: si alguien lo duda, ¿hay a dónde ir a mirar?'),
+    xpHaz('hoja', '**Tacha** las dos opiniones.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 2], paras: [['El mercado cierra a las dos.'], ['Cerrar a las dos es absurdo.'], ['Es el mercado más acogedor.'], ['Hay cuarenta puestos.']], pista: 'Alguna de las tachadas se puede ir a comprobar.' }, 'La hora y los puestos se verifican.')],
+  ['Opiniones escondidas',
+    xpMira('hoja', 'Segunda idea: hay opiniones **sin** palabra que las delate, y hechos con palabras que **parecen** valorar.', { letras: ['A', 'B', 'C', 'D'], paras: [['El plan es acertado y ya es hora de aplicarlo.'], ['Nada ha unido tanto al pueblo.'], ['Es un suelo rico en hierro.'], ['Buena parte, el 45 %, vive lejos.']] }, [
+      ['«Acertado», «ya es hora»: juzga y exige. Opinión.', { luz: [0], nota: { 0: 'opinión' } }],
+      ['«Tanto» no se puede medir: opinión.', { luz: [1], nota: { 1: 'opinión' } }],
+      ['«Rico en hierro» se mide en un laboratorio: hecho.', { luz: [2], nota: { 2: 'hecho' } }],
+      ['«Buena parte», con su cifra: hecho.', { luz: [3], nota: { 3: 'hecho' } }],
+      ['No mires la palabra sola: mira la oración.', {}],
+      ['Y hay palabras que opinan calladas, como «mendigar» por «pedir».', {}],
+    ], 'No basta la palabra: «rico en» describe y «ya es hora» opina.'),
+    xpHaz('hoja', 'Subraya la oración que es un **hecho**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Tienen toda la razón en protestar.'], ['Es el puesto de salud más cercano: está a dos kilómetros.'], ['Hace falta que alguien responda.']], pista: 'Esa juzga o exige. ¿Cuál se puede ir a medir?' }, '«Más cercano» se mide en kilómetros.')],
+  ['Hechos que apoyan opiniones',
+    xpMira('hoja', 'Tercera idea: los textos mezclan los dos, y un **hecho** es lo que **prueba**.', { paras: [['Prestó ocho mil juegos el año pasado.'], ['Es la ludoteca más querida.'], ['Quienes jugaban allí hoy la atienden.'], ['Ojalá la arreglen pronto.']] }, [
+      ['Un dato: se puede revisar.', { luz: [0], nota: { 0: 'hecho' } }],
+      ['Una valoración apoyada en ese dato.', { luz: [1], nota: { 1: 'opinión' } }],
+      ['Otro hecho: prueba que formó gente.', { luz: [2], nota: { 2: 'hecho' } }],
+      ['Un deseo: opinión.', { luz: [3], nota: { 3: 'opinión' } }],
+      ['Si comparas dos cifras, también deduces hechos.', {}],
+      ['Una crónica cuenta hechos y de paso opina.', {}],
+    ], 'Para probar hace falta un hecho; la opinión se apoya en él.'),
+    xpHaz('hoja', 'Subraya el hecho que **prueba** que el coro crece.', { modo: 'toca', meta: [2], paras: [['El coro canta precioso.', 'Todos lo admiran.'], ['Pasó de nueve a treinta voces en un año.', 'Merece una sala mejor.']], pista: 'Esa valora o desea. Busca lo que se puede contar.' }, 'Nueve y treinta: se cuentan.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Subraya la **opinión** que no usa «mejor», «peor» ni «debería».', { modo: 'toca', meta: [3], paras: [['La feria dura tres días.', 'Vienen artesanos de ocho pueblos.'], ['El año pasado llovió dos tardes.', 'Ninguna fiesta se le compara.']], pista: 'Esa se puede verificar. ¿Cuál no tiene con qué medirse?' }, 'No hay cómo medir «ninguna se le compara».')],
+], 'Verificar es la prueba. Y las palabras, solas, engañan.');
 ;
 //#archivo js/explora-trig-41a.js
 // Trigonometría · trig-41a «Grados y radianes»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva; motor en

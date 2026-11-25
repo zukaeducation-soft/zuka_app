@@ -26,11 +26,10 @@ test('Hechos y opiniones: el criterio es «¿se puede verificar?», no la lista 
   assert.match(s, /sin ninguna palabra|sin palabra/i, 'la escena enseña opiniones sin palabra pista');
   assert.match(s, /es hora de|hace falta/i, 'exigencias sin «debería»');
   assert.match(s, /rico en|rica en/i, 'una palabra que valora en una frase y describe en otra');
-  const q = exOf('pu-ag-3', 'quien-lo-dice')[0].params.cards;
-  const opin = q.filter(([t, v]) => v === 1 && !LISTA.test(t));
+  const q = exOf('pu-ag-3', 'pinta-voces')[0].params, opin = q.lineas.filter((x, i) => q.va[i] === 1 && !LISTA.test(x));
   assert.ok(opin.length >= 2, `opiniones sin palabra de la lista: ${opin.length}`);
-  assert.ok(opin.some(([t]) => /es hora de|hace falta|no puede seguir/i.test(t)), 'una exigencia sin «debería»');
-  assert.ok(q.some(([t, v]) => v === 0 && /rica|rico|buena parte|fuerte|grande/i.test(t)), 'un dato con una palabra que parece valorar');
+  assert.ok(opin.some(x => /es hora de|hace falta|no puede seguir/i.test(x)), 'una exigencia sin «debería»');
+  assert.ok(q.lineas.some((x, i) => q.va[i] === 0 && /rica|rico|buena parte|fuerte|grande/i.test(x)), 'un dato con una palabra que parece valorar');
   const ex = examOf('pu-ag-3');
   assert.ok(ex.length >= 4, `evaluación: ${ex.length} preguntas de hechos y opiniones`);
   const ans = it => it.ex.params.options[it.ex.params.answer];
@@ -42,18 +41,16 @@ test('Hechos y opiniones: el criterio es «¿se puede verificar?», no la lista 
 test('Conectores: «al contrario», «más bien» y «antes bien» rectifican tras una idea rechazada', () => {
   const s = scenes('pu-cn-1');
   for (const c of ['al contrario', 'más bien', 'antes bien', 'rectific', 'en cambio']) assert.match(s, new RegExp(c, 'i'), c);
-  const r = exOf('pu-cn-1', 'conector-bisagra')[0].params.rounds.find(r => /^al contrario/i.test(r.options[r.answer]));
-  assert.ok(r && /\bno\b/.test(r.a), 'un «al contrario» después de una negación');
-  const cards = JSON.stringify(exOf('pu-cn-1', 'quien-lo-dice')[0]?.params || {});
-  assert.match(cards, /más bien/); assert.match(cards, /antes bien/); assert.match(cards, /Rectific/);
+  const cards = JSON.stringify(L('pu-cn-1').ex.map(e => e.params));
+  for (const c of ['Al contrario:', 'más bien', 'antes bien', 'rectifica']) assert.ok(cards.includes(c), c);
   assert.ok(examOf('pu-cn-1').some(it => /al contrario/i.test(it.ex.params.q)), 'la evaluación pregunta por «al contrario»');
 });
 
 test('Tono: adverbios y expresiones de actitud, no solo adjetivos', () => {
   assert.match(scenes('pu-ag-2'), /adverbio/i);
   assert.match(scenes('pu-ag-2'), /curiosamente/i);
-  const frags = exOf('pu-ag-2', 'termometro-tono')[0].params.rounds.map(r => r.frag).join(' ');
-  assert.match(frags, /curiosamente/); assert.match(frags, /por supuesto/);
+  const frags = JSON.stringify(L('pu-ag-2').ex.map(e => e.params));
+  assert.match(frags, /curiosamente/); assert.match(frags, /por supuesto/i);
   const qs = examOf('pu-ag-2').map(it => it.ex.params.q).join(' ');
   assert.match(qs, /por fortuna/); assert.match(qs, /como era de esperarse/);
 });
@@ -97,8 +94,6 @@ test('Testimonio: género frente a cita testimonial dentro de otro texto', () =>
 
 test('Función de párrafos: «matizar» y «relativizar» son categorías distintas', () => {
   assert.match(scenes('pu-cn-2'), /se matiza lo propio|matizar.+relativizar/i);
-  const g = exOf('pu-cn-2', 'quien-lo-dice')[0].params;
-  const mi = g.voices.findIndex(v => /^Matiza/.test(v)), ri = g.voices.findIndex(v => /^Relativiza/.test(v));
-  assert.ok(mi >= 0 && ri >= 0 && mi !== ri, 'dos voces separadas');
-  assert.ok(g.cards.some(c => c[1] === mi) && g.cards.some(c => c[1] === ri), 'práctica de cada una');
+  const g = exOf('pu-cn-2', 'genero-o-cita')[0].params;
+  assert.ok(/matiza/.test(g.rot[0]) && /relativiza/.test(g.rot[1]) && g.va.includes(0) && g.va.includes(1));
 });
