@@ -107,6 +107,12 @@ nombran, barras que se solapan y tres círculos que se llenan desde el centro (e
 `js/games/numeros-escena.js`: primos, árbol, criterios en tabla, saltos que coinciden, baldosas, exponentes, residuos en grupos y la rueda
 de la semana (manija que gira: `de` devuelve el paso desde el ángulo). Pruebas `tests/ejercicios-numeros.test.js`.
 
+## Mundo 16, Probabilidad (pu-pb-1 y pu-pb-2)
+
+`js/games/probabilidad-escena.js`: ruleta, urnas que se igualan, tabla de dos dados, escala de 0 a 1, cuadro de casillas, árbol de la bolsa que
+cambia y el cuadrado de los dos fallos. Pruebas `tests/ejercicios-probabilidad.test.js`. Con él, los 16 mundos de Razonamiento lógico
+usan las escenas de la explicación.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |

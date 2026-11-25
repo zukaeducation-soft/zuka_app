@@ -60,7 +60,7 @@ for (const name of films) {
 
 test('los ejemplos de los videos no salen en los ejercicios de su lección', () => {
   for (const name of films) {
-    const D = data[name], ex = JSON.stringify(lesson(D.LESSON).ex), nums = new Set(ex.match(/\d+(?:\.\d+)?/g) || []);
+    const D = data[name], ex = JSON.stringify(lesson(D.LESSON).ex).replace(/"fichas":/g, ''), nums = new Set(ex.match(/\d+(?:\.\d+)?/g) || []);
     assert.ok(Array.isArray(D.KEYS) && D.KEYS.length >= 2, `${name}: KEYS`);
     for (const k of D.KEYS) assert.ok(/^\d+(\.\d+)?$/.test(k) ? !nums.has(k) : !ex.includes(k), `${name}: «${k}» sale en los ejercicios de ${D.LESSON}`);
   }

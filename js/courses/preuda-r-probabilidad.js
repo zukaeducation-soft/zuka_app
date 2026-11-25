@@ -1,65 +1,6 @@
 // Preuniversitario · mundo 16 «Probabilidad»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setLesson, setExam }) => {
+PU_JUEGOS.push(({ setExam }) => {
   const COIN = [['C', 1, 2], ['S', 1, 2]];
-  setLesson('pu-pb-1', [
-    play('tabla-dados', 'Los 36 resultados de dos dados', { rounds: [
-      { say: 'la suma es 8', f: (a, b) => a + b === 8 },
-      { say: 'salen dobles', f: (a, b) => a === b },
-      { say: 'el producto es par', f: (a, b) => (a * b) % 2 === 0 },
-    ] }, 'Suma 8: (2, 6), (3, 5), (4, 4), (5, 3), (6, 2), así que $\\tfrac{5}{36}$. Dobles: 6 de 36, $\\tfrac16$. Producto par: basta un dado par, 27 de 36, $\\tfrac34$.',
-      { hint: 'Recorre la tabla fila por fila: cada casilla es un resultado igual de probable.' }),
-    play('urna-fraccion', 'Arma la urna', { rounds: [{ color: 'coral', others: [['sky', 4]], target: [1, 3] }, { color: 'mint', others: [['sky', 3], ['sun', 3]], target: [2, 5] }] },
-      'Con 2 rojas y 4 azules, $P(\\text{roja}) = \\tfrac26 = \\tfrac13$. Con 4 verdes y 6 de otros colores, $\\tfrac{4}{10} = \\tfrac25$.',
-      { hint: 'Cada bola que echas suma a los favorables y también a los posibles.' }),
-    play('ruleta-sectores', 'Pinta la ruleta', { rounds: [{ n: 8, target: [3, 8] }, { n: 12, target: [1, 4] }] },
-      'Con 8 sectores iguales, $\\tfrac38$ son 3 sectores. Con 12, un cuarto son 3.',
-      { hint: 'Convierte la fracción a una con el número de sectores abajo.' }),
-    play('arbol-opciones', 'El espacio muestral', { rounds: [{ levels: [{ name: 'resultados de la moneda', n: 2 }, { name: 'resultados del dado', n: 6 }], miss: 1, total: 12 }] },
-      'Una moneda y un dado: $2 \\cdot 6 = 12$ resultados posibles, todos igual de probables.',
-      { hint: 'Cada resultado de la moneda se combina con cada uno del dado.' }),
-    play('rueda-porcentaje', 'La probabilidad como parte del todo', { rounds: [{ part: 9, whole: 36 }, { part: 12, whole: 48 }], tol: 1 },
-      '9 de 36 resultados son $\\tfrac14$, el 25 %. 12 de 48 también.',
-      { hint: 'Favorables entre posibles.' }),
-    play('cubo-pintado', 'Un cubito al azar', { rounds: [{ n: 3 }] },
-      'De los 27 cubitos, 8 tienen tres caras pintadas: $P = \\tfrac{8}{27}$; solo 1 no tiene ninguna: $\\tfrac{1}{27}$.',
-      { hint: 'Cuenta cuántos hay de cada tipo; la probabilidad es ese conteo entre 27.' }),
-    play('vuela-precios', 'Vuela a la probabilidad', { rounds: [{ title: 'Laplace', items: [
-      { ask: 'Un dado: P(sale un primo)', options: ['1/2', '1/3', '2/3'], answer: 0 },
-      { ask: 'Moneda y dado: resultados posibles', options: ['12', '8', '36'], answer: 0 },
-      { ask: '3 rojas y 5 azules: P(roja)', options: ['3/8', '3/5', '5/8'], answer: 0 },
-    ] }] }, 'Primos del dado: 2, 3 y 5: $\\tfrac36$. $2 \\cdot 6 = 12$. 3 de 8 bolas.',
-      { hint: 'Favorables sobre posibles.' }),
-  ]);
-
-  setLesson('pu-pb-2', [
-    play('arbol-caminos', 'El árbol de probabilidades', { rounds: [
-      { steps: [COIN, COIN, COIN], say: 'sale al menos una cara', f: pa => pa.some(i => i === 0) },
-      { steps: [[['R', 2, 5], ['A', 3, 5]], [['R', 2, 5], ['A', 3, 5]]], say: 'las dos son del mismo color', f: pa => pa[0] === pa[1] },
-    ] }, 'Al menos una cara son 7 de los 8 caminos: $1 - \\tfrac18 = \\tfrac78$. Mismo color: $\\tfrac{4}{25} + \\tfrac{9}{25} = \\tfrac{13}{25}$.',
-      { hint: 'Cada camino multiplica sus ramas; los caminos que sirven se suman.' }),
-    play('area-probabilidad', 'Independientes: el área', { rounds: [{ a: [1, 2], b: null, both: [1, 6], grid: 6 }, { a: null, b: [3, 4], both: [3, 8], grid: 8 }] },
-      '$\\tfrac12 \\cdot P(B) = \\tfrac16$ da $P(B) = \\tfrac13$. $P(A) \\cdot \\tfrac34 = \\tfrac38$ da $P(A) = \\tfrac12$.',
-      { hint: 'El área del rectángulo es ancho por alto.' }),
-    play('tabla-dados', 'Al menos un 6', { rounds: [{ say: 'sale al menos un 6', f: (a, b) => a === 6 || b === 6 }, { say: 'NO salen dobles', f: (a, b) => a !== b }] },
-      'Al menos un 6: 11 casillas (no 12: el (6, 6) se cuenta una vez). Es $1 - \\tfrac{25}{36}$. No dobles: $1 - \\tfrac16 = \\tfrac56$.',
-      { hint: 'Fíjate en la casilla que está en la fila y en la columna a la vez.' }),
-    play('complemento-conteo', 'Al menos una cara', { rounds: [{ ask: 'Resultados de 3 monedas con al menos una cara', slots: ['moneda 1', 'moneda 2', 'moneda 3'], all: [2, 2, 2], none: [1, 1, 1], tray: [2, 1, 3, 0] }] },
-      'Todos: $2^3 = 8$; ninguna cara: 1 (SSS). Al menos una: $8 - 1 = 7$, la probabilidad $\\tfrac78$.',
-      { hint: 'Cuenta los que NO sirven y réstalos.' }),
-    play('solapa-barras', 'Cuando se puede sumar y cuando no', { rounds: [{ labels: ['ven fútbol', 'ven tenis'], total: 40, a: 24, b: 18, none: 6 }] },
-      'No se puede sumar 24 + 18: los que ven los dos quedan contados dos veces. La unión es 34, así que 8 ven los dos.',
-      { hint: 'Si los dos sucesos pueden pasar a la vez, hay que restar la parte común.' }),
-    play('ruleta-sectores', 'El complemento en la ruleta', { rounds: [{ n: 10, target: [3, 10], not: true }] },
-      'Para que NO caer tenga $\\tfrac{3}{10}$, caer debe tener $\\tfrac{7}{10}$: 7 sectores pintados.',
-      { hint: '$P(\\text{no}) = 1 - P$.' }),
-    play('rompe-cambios', 'Manda la pelota a la probabilidad', { miss: 'complemento: 1 − P', rounds: [{ title: 'Probabilidades', items: [
-      { ask: 'P(lluvia) = 0.3: P(no lluvia)', options: ['0.7', '0.3', '1.3'], answer: 0 },
-      { ask: 'Dos caras seguidas', options: ['1/4', '1/2', '1'], answer: 0 },
-      { ask: 'Al menos un 6 en dos dados', options: ['11/36', '12/36', '1/6'], answer: 0 },
-    ] }] }, '$1 - 0.3 = 0.7$. $\\tfrac12 \\cdot \\tfrac12 = \\tfrac14$. $1 - \\tfrac{25}{36} = \\tfrac{11}{36}$.',
-      { hint: 'Complemento y producto.' }),
-  ]);
-
   setExam('pu-probabilidad', 'Probabilidad', [
     ['pu-pb-1', 'Con resultados igual de probables, P = favorables / posibles.',
       play('tabla-dados', 'Dados', { rounds: [{ say: 'la suma es 10', f: (a, b) => a + b === 10 }] }, '(4, 6), (5, 5), (6, 4): $\\tfrac{3}{36} = \\tfrac{1}{12}$.', { hint: 'Cuenta.' })],
@@ -73,16 +14,39 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 });
 
 // Mundo 16 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
-  diezLesson('pu-pb-1', [
-    ['tabla-dados', 0, 'En un juego de mesa se lanzan dos dados. Marca los resultados en que la suma es 8', 'Suma 8: (2, 6), (3, 5), (4, 4), (5, 3) y (6, 2). Son 5 de 36 resultados: $\\tfrac{5}{36}$.'],
-    ['urna-fraccion', 1, 'En la urna hay 3 bolas azules y 3 amarillas. Echa verdes hasta que la probabilidad de sacar verde sea $\\tfrac25$', 'Con 4 verdes hay 10 bolas: $\\tfrac{4}{10} = \\tfrac25$. Cada bola que se echa cuenta en los favorables y en los posibles.'],
-    ['ruleta-sectores', 0, 'Una ruleta de feria tiene 8 sectores iguales. Pinta los premiados para que ganar tenga probabilidad $\\tfrac38$', 'Con 8 sectores igual de probables, $\\tfrac38$ son 3 sectores.'],
-    ['arbol-opciones', 0, 'Se lanza una moneda y un dado. Completa el árbol del espacio muestral', 'Cada resultado de la moneda se combina con cada uno del dado: $2 \\cdot 6 = 12$ resultados igual de probables.'],
-    ['rueda-porcentaje', 0, 'En 9 de los 36 resultados de dos dados gana Ana. Gira hasta esa parte', '$\\tfrac{9}{36} = \\tfrac14$: gana con probabilidad del 25 %.'],
-    ['cubo-pintado', 0, 'Un cubo pintado se corta en 27 cubitos y se saca uno al azar. Clasifícalos para hallar las probabilidades', 'De 27 cubitos, 8 tienen tres caras pintadas ($\\tfrac{8}{27}$), 12 tienen dos, 6 tienen una y solo 1 no tiene ninguna.'],
-    ['vuela-precios', 0, 'Vuela a la probabilidad', 'Primos del dado: 2, 3 y 5, $\\tfrac36 = \\tfrac12$. Moneda y dado: 12 resultados. Tres rojas de 8 bolas: $\\tfrac38$.'],
-  ], [
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/probabilidad-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-pb-1', [
+    play('ruleta-favorables', 'Una ruleta tiene los números del 1 al 8, en partes iguales. Toca los favorables a «sale un **par** o un **menor que 4**» (basta una de las dos cosas).', { nums: [1, 2, 3, 4, 5, 6, 7, 8], f: n => n % 2 === 0 || n < 4, ok: 'Seis de ocho: tres cuartos. El 2 se cuenta una sola vez.' },
+      'Pares: 2, 4, 6 y 8. Menores que 4: 1, 2 y 3. El 2 está en las dos listas: son 6 de 8, $\\tfrac34$.',
+      { hint: 'Con «o» basta cumplir una de las dos cosas. Revisa los números uno por uno.' }),
+    play('iguala-urnas', 'La urna A tiene **4** naranjas de **10** bolas. La B tiene **6** naranjas: échale verdes hasta que sacar naranja sea **igual de probable** en las dos.', { a: 4, t: 10, b: 6, max: 14 },
+      '$\\tfrac{4}{10} = \\tfrac{2}{5} = \\tfrac{6}{15}$: en la B debe haber 15 bolas, así que 9 verdes.',
+      { hint: 'Simplifica la fracción de la urna A y busca otra igual que tenga 6 arriba.' }),
+    play('tabla-diferencia', 'Se lanzan dos dados. Toca las parejas en que la **diferencia** entre los dos es **4**.', { f: (a, b) => Math.abs(a - b) === 4, texto: '1 y 5, 2 y 6, 5 y 1, 6 y 2', ok: 'Cuatro de 36: un noveno.' },
+      '1 y 5, 2 y 6, y las mismas al revés: 4 de 36, $\\tfrac19$.',
+      { hint: 'Busca las parejas con un dado mayor y después con el otro mayor.' }),
+    play('cuantas-parejas', 'Se lanzan dos dados. Pon la probabilidad de cada cosa.', { et: ['la suma es 4', 'la suma es 9', 'los dos son 4', 'la suma es 11 o 12'], metas: ['3/36', '4/36', '1/36', '3/36'], fichas: ['3/36', '3/36', '4/36', '1/36', '2/36', '5/36', '1/11'],
+      mira: ['Cuenta las parejas ordenadas que suman 4.', 'Cuenta las parejas ordenadas que suman 9.', '¿Qué tiene que salir en el primer dado y qué en el segundo?', 'Suma las parejas de 11 y las de 12.'], trampas: { '0:1/11': 'Hay 11 sumas, pero no son igual de fáciles: se cuentan parejas.', '0:2/36': '1 + 3 y 3 + 1 son casos distintos.', '1:2/36': '4 + 5 y 5 + 4 son casos distintos.', '3:2/36': 'Cuenta las de 11 y también la de 12.' }, ok: 'Se cuentan las 36 parejas, no las 11 sumas.' },
+      'Suma 4: 1+3, 2+2, 3+1. Suma 9: 3+6, 4+5, 5+4, 6+3. Los dos 4: solo 4 y 4. Suma 11 o 12: 5+6, 6+5, 6+6.',
+      { hint: 'Escribe las parejas una por una, con el primer dado y el segundo.' }),
+    play('cero-a-uno', 'Se saca al azar una tarjeta numerada del **1 al 20**. Pon la probabilidad de cada cosa.', { et: ['mayor que 20', 'menor que 21', 'par', 'múltiplo de 5'], metas: ['0', '1', '1/2', '1/5'], fichas: ['0', '1', '1/2', '1/5', '4', '1/4', '20'],
+      mira: ['¿Hay alguna tarjeta que sirva?', '¿Hay alguna que no sirva?', '¿Cuántas de las 20 sirven?', 'Cuenta las que sirven y compáralas con las 20.'], trampas: { '1:20': 'Esas son las tarjetas que sirven: falta dividir entre 20.', '3:4': 'Esas son las que sirven: falta dividir entre 20.', '3:1/4': 'Son 4 tarjetas, pero de 20.' }, ok: '0 es imposible, 1 es seguro, y nada pasa de 1.' },
+      'Ninguna pasa de 20: 0. Todas son menores que 21: 1. Diez pares: $\\tfrac12$. 5, 10, 15 y 20: $\\tfrac{4}{20} = \\tfrac15$.',
+      { hint: 'Si tu respuesta pasa de 1, no es una probabilidad.' }),
+    play('punto-escala', 'En una bolsa hay **3** bolas naranjas y **12** verdes. Pon en la escala la probabilidad de sacar **naranja**.', { k: 3, n: 15 },
+      'Son 3 de 15: $\\tfrac15 = 0.2$, cerca de lo imposible.',
+      { hint: '¿Cuántas bolas hay en total? Simplifica la fracción y ubícala.' }),
+    play('grupo-gafas', 'En un grupo hay **18** mujeres y **12** hombres. Usan gafas **6** mujeres y **4** hombres. Se escoge a una persona al azar (la raya son las gafas). Pon la probabilidad de cada cosa.', { n: 30, m: 18, mg: 6, hg: 4, et: ['mujer', 'usa gafas', 'hombre sin gafas'], metas: ['3/5', '1/3', '4/15'], fichas: ['3/5', '1/3', '4/15', '3/2', '2/5', '2/3', '1/5'],
+      mira: ['Mujeres sobre todas las personas.', 'Junta a los que usan gafas, de los dos grupos.', 'Quita de los hombres los que usan gafas; abajo van todas las personas.'], trampas: { '0:3/2': 'Eso es mujeres sobre hombres: pasa de 1.', '0:2/5': 'Eso es hombres sobre todos.', '1:1/5': 'Esas son solo las mujeres con gafas.', '2:2/3': 'Eso es sobre los 12 hombres, y se escoge entre todos.', '2:2/5': 'Esos son todos los hombres.' }, ok: 'Siempre sobre las 30 personas.' },
+      '$\\tfrac{18}{30} = \\tfrac35$; $\\tfrac{10}{30} = \\tfrac13$; hombres sin gafas hay 8: $\\tfrac{8}{30} = \\tfrac{4}{15}$.',
+      { hint: 'Abajo va siempre el total de personas entre las que se escoge.' }),
+    play('sube-favorables', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De las 36 parejas de dos dados, ¿en cuántas el **producto** es menor que **5**?', r: 8, c: '4 + 2 + 1 + 1', e: { 5: 'Cuenta también las parejas al revés.' } },
+      { q: 'En una urna de **20** bolas, la probabilidad de sacar roja es $\\tfrac35$. ¿Cuántas **rojas** hay?', r: 12, c: '\\tfrac35 \\cdot 20', e: { 8: 'Esas son las que no son rojas.', 3: 'Son 3 de cada 5.' } },
+      { q: 'Hay **9** bolas verdes y la probabilidad de sacar verde es $\\tfrac38$. ¿Cuántas bolas hay **en total**?', r: 24, c: '9 \\cdot \\tfrac83', e: { 15: 'Esas son las que no son verdes.', 8: 'Son 3 de cada 8, y verdes hay 9.' } }] },
+      'Producto menor que 5: 1 con 1, 2, 3 y 4; 2 con 1 y 2; 3 con 1 y 4 con 1: 8. $\\tfrac35$ de 20 son 12. Y $\\tfrac38 = \\tfrac{9}{24}$.',
+      { hint: 'Favorables arriba, posibles abajo: busca una fracción igual.' }),
     sol('Se lanzan dos dados corrientes. ¿Cuál es la probabilidad de que la suma de los dos resultados sea mayor que 9?',
       ['Con dos dados hay $6 \\cdot 6 =$ [[36]] resultados igual de probables', 'Suma 10: tres parejas. Suma 11: [[2]] parejas. Suma 12: una sola', 'Favorables: $3 + 2 + 1 =$ [[6]]', 'Probabilidad: $\\tfrac{6}{36}$, que simplificada es [[$\\tfrac16$]]'],
       ['$\\tfrac14$', '11', '3'],
@@ -99,15 +63,39 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Escribe los números que sirven en cada condición y no cuentes dos veces el que se repite.'),
   ]);
 
-  diezLesson('pu-pb-2', [
-    ['arbol-caminos', 1, 'De una caja con 2 fichas rojas y 3 azules se saca una, se devuelve y se saca otra. Marca los caminos en que salen del mismo color', 'Roja y roja: $\\tfrac25 \\cdot \\tfrac25 = \\tfrac{4}{25}$. Azul y azul: $\\tfrac35 \\cdot \\tfrac35 = \\tfrac{9}{25}$. Los dos caminos se suman: $\\tfrac{13}{25}$. Aquí la ficha se devuelve, por eso la segunda rama vuelve a valer $\\tfrac25$. Si NO se devolviera, la caja cambiaría: después de una roja quedarían 1 roja y 3 azules, y la segunda rama valdría $\\tfrac14$.'],
-    ['area-probabilidad', 0, 'Dos sucesos independientes: $P(A) = \\tfrac12$ y $P(A \\text{ y } B) = \\tfrac16$. Halla $P(B)$ con el área', 'En independientes, $P(A \\text{ y } B) = P(A) \\cdot P(B)$: $\\tfrac12 \\cdot P(B) = \\tfrac16$ da $P(B) = \\tfrac13$.'],
-    ['tabla-dados', 0, 'Con dos dados, marca los resultados en que sale al menos un 6', 'Son 11 resultados, no 12: el (6, 6) está en la fila y en la columna a la vez. También se ve como $36 - 25$.'],
-    ['complemento-conteo', 0, 'Tres monedas: cuenta los resultados con al menos una cara', 'Todos: $2^3 = 8$. Sin ninguna cara: 1. Con al menos una: 7, y la probabilidad es $\\tfrac78$.'],
-    ['solapa-barras', 0, 'De 40 personas, 24 ven fútbol, 18 ven tenis y 6 no ven ninguno. Solapa las barras', 'Ven algo 34 personas. Como $24 + 18 = 42$, hay 8 que ven los dos: por eso no se pueden sumar las dos probabilidades sin restar.'],
-    ['ruleta-sectores', 0, 'En una ruleta de 10 sectores, NO ganar debe tener probabilidad $\\tfrac{3}{10}$. Pinta los que ganan', 'Si no ganar vale $\\tfrac{3}{10}$, ganar vale $1 - \\tfrac{3}{10} = \\tfrac{7}{10}$: 7 sectores.'],
-    ['rompe-cambios', 0, 'Manda la pelota a la probabilidad', '$1 - 0.3 = 0.7$. Dos caras seguidas: $\\tfrac12 \\cdot \\tfrac12 = \\tfrac14$. Al menos un 6 con dos dados: $1 - \\tfrac{25}{36} = \\tfrac{11}{36}$.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/probabilidad-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-pb-2', [
+    play('lo-que-falta', 'Pon en cada renglón la probabilidad que **completa** el total.', { et: ['a tiempo 3/8: tarde', 'falla el 8 %: no falla', 'ninguno 1/10: al menos uno', 'todos 1/4: alguno no'], metas: ['5/8', '92 %', '9/10', '3/4'], fichas: ['5/8', '92 %', '9/10', '3/4', '8/3', '2 %', '1/10'],
+      mira: ['Las dos juntas deben dar 8/8.', 'Las dos juntas deben dar 100 %.', 'Al menos uno es todo lo que no es «ninguno».', 'Si no son todos, hay alguno que no.'], trampas: { '0:8/3': 'Una probabilidad no pasa de 1.', '1:2 %': 'El total es 100 %, no 10 %.', '2:1/10': 'Esa es la de ninguno.' }, ok: 'Lo que pasa y lo que no pasa completan 1.' },
+      '$1 - \\tfrac38 = \\tfrac58$; $100 - 8 = 92\\,\\%$; $1 - \\tfrac{1}{10} = \\tfrac{9}{10}$; $1 - \\tfrac14 = \\tfrac34$.',
+      { hint: 'En cada renglón pregúntate qué es todo lo que no es eso, y cuánto le falta al total.' }),
+    play('cruce-sin-b', 'A pasa con probabilidad $\\tfrac35$ y B con $\\tfrac14$; son independientes. Toca «pasa **A** y **no** pasa B».', { c: 5, f: 4, a: 3, b: 1, texto: '9 de 20', ok: 'Nueve de veinte: 3/5 por 3/4.' },
+      'Las tres columnas de A y las tres filas de «no B»: $\\tfrac35 \\cdot \\tfrac34 = \\tfrac{9}{20}$.',
+      { hint: 'Quédate con las columnas de A y con las filas en que B no pasa.' }),
+    play('fallan-todos', 'Una alarma suena con probabilidad $\\tfrac14$ y otra con $\\tfrac15$, cada una por su lado. Completa.', { x: 'suena 1/4', y: 'suena 1/5', et: ['calla la 1.ª', 'calla la 2.ª', 'callan ambas', 'suena alguna'], metas: ['3/4', '4/5', '3/5', '2/5'], fichas: ['3/4', '4/5', '3/5', '2/5', '9/20', '1/20', '31/20'],
+      mira: ['Lo que le falta a 1/4 para 1.', 'Lo que le falta a 1/5 para 1.', 'Multiplica las dos probabilidades de callar y simplifica.', 'Todo lo que no es «callan ambas».'], trampas: { '2:31/20': 'Se multiplican; sumadas pasan de 1.', '2:1/20': 'Esa es la de que suenen las dos.', '3:9/20': 'Sumaste 1/4 y 1/5: el caso en que suenan las dos quedó dos veces.', '3:1/20': 'Esa es la de que suenen las dos.' }, ok: 'Alguna es 1 menos ninguna.' },
+      'Callan: $\\tfrac34$ y $\\tfrac45$. Las dos: $\\tfrac34 \\cdot \\tfrac45 = \\tfrac35$. Suena alguna: $1 - \\tfrac35 = \\tfrac25$.',
+      { hint: '«Alguna» es más fácil de contar al revés: ¿cuándo no suena ninguna?' }),
+    play('no-se-afectan', '¿En cuáles lo primero **no cambia** la probabilidad de lo segundo? Toca todas.', { casos: [{ t: 'lanzar un dado dos veces', si: true }, { t: 'sacar dos cartas sin devolver', no: 'Sin devolver hay una carta menos en la segunda.' }, { t: 'lanzar una moneda y un dado', si: true }, { t: 'sacar una bola, guardarla y sacar otra', no: 'Al sacar la segunda, la bolsa ya tiene una bola menos.' }, { t: 'sacar una bola, devolverla y sacar otra', si: true }], falta: 'Falta otra: mira si lo segundo tiene los mismos casos, pase lo que pase en lo primero.', ok: 'En esas se multiplica sin cambiar nada.' },
+      'El dado, la moneda y la bolsa repuesta quedan iguales para la segunda vez. Sin devolver, la segunda vez hay una menos.',
+      { hint: 'Imagina que lo primero ya pasó. ¿Lo segundo tiene los mismos casos?' }),
+    play('arbol-bolsa', 'Una bolsa tiene **4** naranjas y **2** verdes. Se sacan dos **sin devolver**. Pon la probabilidad de cada segunda rama.', { n: 4, v: 2, p1: ['4/6', '2/6'], metas: ['3/5', '2/5', '4/5', '1/5'], fichas: ['3/5', '2/5', '4/5', '1/5', '3/5', '4/6', '2/6', '3/6'],
+      mira: ['Salió naranja: ¿cuántas naranjas quedan, de cuántas bolas?', 'Salió naranja: ¿cuántas verdes quedan, de cuántas bolas?', 'Salió verde: ¿cuántas naranjas quedan, de cuántas bolas?', 'Salió verde: ¿cuántas verdes quedan, de cuántas bolas?'], trampas: { '0:4/6': 'Esa es la primera rama: ahora hay una bola menos.', '0:3/6': 'También hay una bola menos en total.', '0:4/5': 'La naranja que salió ya no está.', '1:2/6': 'En total hay una bola menos.', '2:4/6': 'En total hay una bola menos.', '2:3/5': 'La que salió fue verde: las naranjas siguen completas.', '3:2/6': 'La verde que salió ya no está.' }, ok: 'Las ramas que salen del mismo punto suman 1.' },
+      'Tras naranja quedan 3 y 2 de 5: $\\tfrac35$ y $\\tfrac25$. Tras verde quedan 4 y 1 de 5: $\\tfrac45$ y $\\tfrac15$.',
+      { hint: 'Dibuja la bolsa después de la primera bola y vuelve a contar.' }),
+    play('devuelve-o-no', 'Una bolsa tiene **3** azules y **4** blancas. Se sacan dos, una y luego otra. Pon la probabilidad de cada cosa.', { et: ['2.ª azul tras azul, devolviendo', '2.ª azul tras azul, sin devolver', 'dos azules, devolviendo', 'dos azules, sin devolver'], metas: ['3/7', '1/3', '9/49', '1/7'], fichas: ['3/7', '1/3', '9/49', '1/7', '2/7', '6/7', '6/49'],
+      mira: ['Si se devuelve, la bolsa queda igual que al comienzo.', 'Hay una azul menos y una bola menos: simplifica.', 'Multiplica dos veces la misma probabilidad.', 'Multiplica la primera por la segunda, que ya cambió, y simplifica.'], trampas: { '1:2/7': 'Quitaste la azul, pero no bajaste el total.', '2:6/7': 'Se multiplican, no se suman.', '2:6/49': 'Al devolver, la segunda vez hay otra vez 3 azules.', '3:6/49': 'En la segunda quedan 6 bolas, no 7.' }, ok: 'Sin devolver, la segunda fracción cambia arriba y abajo.' },
+      'Devolviendo: $\\tfrac37$ y $\\tfrac37 \\cdot \\tfrac37 = \\tfrac{9}{49}$. Sin devolver: $\\tfrac26 = \\tfrac13$ y $\\tfrac37 \\cdot \\tfrac13 = \\tfrac17$.',
+      { hint: 'Antes de cada cuenta pregúntate cuántas bolas hay en la bolsa en ese momento.' }),
+    play('falla-cuadrado', 'Dos tiros independientes fallan con la **misma** probabilidad. La de que **al menos uno acierte** es **0.84**. Mueve la probabilidad de fallar.', { al: 0.84 },
+      'Fallan los dos con $1 - 0.84 = 0.16$, y $0.4 \\cdot 0.4 = 0.16$: cada uno falla con 0.4.',
+      { hint: 'Si al menos uno acierta con 0.84, ¿con cuánto fallan los dos? Busca un número que, multiplicado por sí mismo, dé eso.' }),
+    play('sube-por-ciento', 'Sube al porcentaje que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Llueve con **30 %** y hay trancón con **40 %**, sin que uno afecte al otro. ¿Con qué porcentaje pasan **los dos**?', r: 12, c: '0.3 \\cdot 0.4 \\cdot 100', e: { 70: 'Se multiplican, no se suman.' } },
+      { q: 'Una máquina falla con **20 %** y otra con **30 %**, cada una por su lado. ¿Con qué porcentaje funciona **al menos una**?', r: 94, c: '100 - 0.2 \\cdot 0.3 \\cdot 100', e: { 56: 'Así funcionan las dos.', 50: 'Los fallos se multiplican.', 6: 'Así fallan las dos.' } },
+      { q: 'En una bolsa hay **4** rojas y **1** negra. Se sacan dos **sin devolver**. ¿Con qué porcentaje las dos son **rojas**?', r: 60, c: '\\tfrac45 \\cdot \\tfrac34 \\cdot 100', e: { 64: 'Así sería devolviendo la primera.', 80: 'Esa es solo la primera.' } }] },
+      '$0.3 \\cdot 0.4 = 0.12$. Fallan las dos con $0.06$: funciona al menos una con 94 %. $\\tfrac45 \\cdot \\tfrac34 = \\tfrac{12}{20}$: 60 %.',
+      { hint: 'Independientes se multiplican; «al menos una» es el total menos «ninguna»; sin devolver cambia la bolsa.' }),
     sol('Una bodega tiene tres alarmas que funcionan cada una por su lado. Cada alarma suena ante un intruso con probabilidad 0.7. Si entra un intruso, ¿cuál es la probabilidad de que suene al menos una alarma?',
       ['Lo contrario de «al menos una suena» es «[[ninguna suena]]»', 'Cada alarma se queda callada con probabilidad $1 - 0.7 =$ [[0.3]]', 'Se quedan calladas las tres: $0.3 \\cdot 0.3 \\cdot 0.3 =$ [[0.027]]', 'Suena al menos una: $1 - 0.027 =$ [[0.973]]'],
       ['todas suenan', '0.09', '0.343', '2.1'],
