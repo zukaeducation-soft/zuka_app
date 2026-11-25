@@ -114,14 +114,14 @@ Object.assign(XG, (() => {
       ok: (s, p) => bien(s, p).every(Boolean),
       sol: p => ({ q: d.metas(p).map(m => [m]) }),
       texto: p => d.texto(p),
-      rotula: true, slots: p => d.slots(p), fichas, metas: p => d.metas(p), aviso: (s, p) => d.aviso(s.q, p), fondo: (K, p, f) => d.fondo(K, p, f), alto: p => d.alto(p),
+      rotula: true, slots: p => d.slots(p), fichas, metas: p => d.metas(p), aviso: (s, p) => d.aviso(s.q, p), bien: p => d.bien(p), fondo: (K, p, f) => d.fondo(K, p, f), alto: p => d.alto(p),
       monta(stage, p, ui) {
         stage.innerHTML = '<div class="xg-lona xg-rot"></div>';
         const box = stage.firstChild, slots = d.slots(p);
-        let marca = null, esc = null, f = 0;
+        let esc = null, f = 0;
         const monta = s => {
           esc?.(); esc = XPD.fichas(box, { slots, fichas: fichas(p), alto: d.alto(p), cumple: () => true,
-            fondo: K => d.fondo(K, p, f) + (marca ? slots.map((sl, i) => K.r(sl.x - (sl.w || 56) / 2 - 4, sl.y - (sl.h || 42) / 2 - 4, (sl.w || 56) + 8, (sl.h || 42) + 8, marca[i] ? 'bien' : 'mal', 13)).join('') : '') },
+            fondo: K => d.fondo(K, p, f) },
           s, { set: n => { ui.set(n); ui.nota(''); }, nota() {} });
         };
         monta(ui.s); ui.limpia(() => esc?.());
@@ -129,15 +129,60 @@ Object.assign(XG, (() => {
         box.addEventListener('keydown', e => { if (!ui.locked && e.target.closest('.xfi-ch') && /^(Enter| |Arrow.*)$/.test(e.key)) e.stopPropagation(); });
         return ok => {
           box.inert = true;
-          const s = { q: ui.s.q.map(l => [...l]) };
-          marca = bien(s, p);
+          const s = { q: ui.s.q.map(l => [...l]) }, juicio = bien(s, p), MV = XG.ROTULA?.[name];
           monta(s); ui.nota('');
-          const anda = fin => ui.tween(0, 1, 1300, x => { f = x; esc.salta([{}]); }, fin);
-          anda(() => {
+          // Encima de las fichas: lo que ejecuta la escena, la lectura de cada lugar y sus marcas.
+          const capa = k => {
+            const svg = box.querySelector('.xfi');
+            if (!svg.querySelector('.xg-mv')) svg.insertAdjacentHTML('beforeend', '<g class="xg-mv" aria-hidden="true"><g class="es"></g><g class="le"></g><g class="an"></g></g>');
+            return svg.querySelector(`.xg-mv .${k}`);
+          };
+          const cambia = d.fondo(XPK, p, 0) !== d.fondo(XPK, p, 1);
+          const anda = fin => (cambia ? ui.tween(0, 1, 1300, x => { f = x; esc.salta([{}]); }, fin) : fin());
+          const corre = (q, fin) => { if (!MV) return fin(); const v = q.map(l => l[0]); ui.tween(0, 1, 1400, x => { try { capa('es').innerHTML = MV(XPK, p, v, x); } catch (e) { /* sin escena, sigue */ } }, () => ui.espera(250, fin)); };
+          const columna = p.et?.length === slots.length && slots.every(z => z.x === slots[0].x), x0 = p.tab ? 34 + 32 * p.letras.length : 8;
+          // Camino hasta el lugar i: un punto que salta desde el anterior (si hay una cuenta) o un renglón que se subraya.
+          const lee = (i, x) => {
+            const sl = slots[i], an = slots[i - 1], w = sl.w || 56, h = sl.h || 42;
+            if (an && an.y === sl.y && p.ops?.[i - 1]?.trim()) { const y = sl.y - h / 2 - 2; return XPK.c(an.x + (sl.x - an.x) * x, y - 22 * Math.sin(Math.PI * x), 5, 'fA'); }
+            if (columna) return XPK.l(x0, sl.y + h / 2 - 3, x0 + (sl.x - w / 2 - 6 - x0) * x, sl.y + h / 2 - 3, 'la');
+            return XPK.f(1 - x, XPK.r(sl.x - w / 2 - 4 - 10 * (1 - x), sl.y - h / 2 - 4 - 10 * (1 - x), w + 8 + 20 * (1 - x), h + 8 + 20 * (1 - x), 'fn', 16));
+          };
+          const sella = (i, si, nace) => {
+            const sl = slots[i], w = sl.w || 56, h = sl.h || 42, x = sl.x + w / 2 + 1, y = sl.y - h / 2 - 1;
+            capa('an').insertAdjacentHTML('beforeend', `${XPK.r(sl.x - w / 2 - 4, sl.y - h / 2 - 4, w + 8, h + 8, `${si ? 'bien' : 'mal'} xg-aro`, 13)}<g class="xg-sello">${XPK.c(Math.min(331, x), Math.max(9, y), 8, si ? 'fo' : 'ff')}<text class="xt s" x="${Math.min(331, x)}" y="${Math.max(9, y) + 4}" style="text-anchor:middle;font-size:11px">${si ? '✓' : '✗'}</text></g>`);
+            box.querySelectorAll(`.xfi-ch.in[data-slot="${i}"]`).forEach(g => g.classList.add(nace || si ? 'mv-bien' : 'mv-mal'));
+          };
+          const revisa = (lista, j, fin, nace) => {
+            let k = 0; const dura = Math.max(60, Math.min(260, 1500 / lista.length));
+            (function sig() {
+              if (k >= lista.length) { capa('le').innerHTML = ''; return ui.espera(300, fin); }
+              const i = lista[k++];
+              ui.tween(0, 1, dura, x => { capa('le').innerHTML = lee(i, x); }, () => { sella(i, j[i], nace); j[i] ? XS.tick(k * 2) : XS.nope(); ui.espera(dura * 0.6, sig); });
+            })();
+          };
+          // Lo que da la cuenta con las fichas puestas.
+          const cuenta = q => { const c = XG.cadena?.(p.ops, q.map(l => l[0])); if (c) ui.lee(c.tex); };
+          const todos = XG.ORDEN?.[name] || slots.map((_, i) => i);
+          anda(() => corre(s.q, () => revisa(todos, juicio, () => {
+            cuenta(s.q);
             if (ok) { XS.merge(); return ui.nota(d.bien(p)); }
             XS.nope(); ui.nota(d.aviso(s.q, p));
-            ui.espera(2800, () => { const b = { q: d.metas(p).map(m => [m]) }; ui.muestra(b); marca = marca.map(() => true); monta(b); XS.pop(); ui.nota(d.bien(p)); });
-          });
+            ui.espera(2800, () => corrige());
+          })));
+          // Las fichas buenas vuelan a su lugar y las otras vuelven a la bandeja.
+          function corrige() {
+            const b = { q: d.metas(p).map(m => [m]) }, lugar = g => (/translate\(([-\d.]+) ([-\d.]+)\)/.exec(g.getAttribute('transform')) || [0, 0, 0]).slice(1).map(Number);
+            const foto = () => [...box.querySelectorAll('.xfi-ch')].map(g => ({ g, t: g.textContent, z: lugar(g) }));
+            const antes = foto().map(x => ({ t: x.t, z: x.z }));
+            ui.muestra(b); monta(b); ui.nota(''); ui.lee('');
+            const van = [];
+            for (const x of foto()) { const i = antes.findIndex(y => y.t === x.t && y.z.join() === x.z.join()); if (i >= 0) antes.splice(i, 1); else van.push(x); }
+            for (const x of van) { const i = antes.findIndex(y => y.t === x.t); x.de = i >= 0 ? antes.splice(i, 1)[0].z : x.z; }
+            const mueve = k => van.forEach(x => x.g.setAttribute('transform', `translate(${XPK.n(x.de[0] + (x.z[0] - x.de[0]) * k)} ${XPK.n(x.de[1] + (x.z[1] - x.de[1]) * k)})`));
+            mueve(0); XS.pop();
+            ui.tween(0, 1, 900, mueve, () => { mueve(1); todos.filter(i => juicio[i]).forEach(i => sella(i, true, true)); corre(b.q, () => revisa(todos.filter(i => !juicio[i]), juicio.map(() => true), () => { cuenta(b.q); ui.nota(d.bien(p)); }, true)); });
+          }
         };
       },
     });
