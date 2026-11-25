@@ -203,13 +203,11 @@
 .pz-globo::after { content: ''; position: absolute; left: 50%; bottom: -13px; width: 28px; height: 28px; margin-left: -14px; background: inherit; border-radius: 6px; rotate: 45deg; z-index: -1; }
 .pz-tres { display: grid; gap: 18px; }
 .pz-tres article { --r: 0deg; display: grid; gap: 10px; align-content: start; padding: 18px 20px 26px; border-radius: 26px; background: var(--c); color: #07080f; rotate: var(--r); transition: opacity .6s var(--sal), translate .6s var(--sal), rotate .35s var(--sal), scale .35s var(--sal); }
-.pz-tres svg { display: block; width: 100%; height: auto; border-radius: 16px; background: rgb(255 255 255 / .34); overflow: hidden; }
+.pz-tres svg { display: block; width: clamp(96px, 9vw, 128px); height: auto; margin: 4px 0 0 -8px; fill: #07080f; transition: transform .4s var(--sal); transform-origin: 30% 90%; }
+.pz-tres svg [opacity] { fill: #ffffff; opacity: .75; }
 .pz-tres h3 { margin-top: 8px; font-family: var(--display); font-weight: 600; font-size: clamp(25px, 2.3vw, 31px); line-height: 1.08; letter-spacing: -.015em; }
 .pz-tres p { font-size: 16.5px; line-height: 1.5; color: #171b2a; }
-.pz-tres .t { fill: #0b2a5e; } .pz-tres .w { fill: #f7f9ff; } .pz-tres .y { fill: #ffe9a3; } .pz-tres .r { fill: #d8412a; } .pz-tres .o { opacity: .75; }
-.pz-tres .s, .pz-tres .l { fill: none; stroke: #0b2a5e; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; } .pz-tres .l { stroke-width: 7; } .pz-tres .r2 { stroke: #d8412a; stroke-width: 5; } .pz-tres .da { stroke-dasharray: 2 10; }
-.pz-tres .yo { transition: transform .4s var(--sal); }
-@media (hover: hover) and (pointer: fine) { .pz-tres article:hover { rotate: 0deg; scale: 1.025; } .pz-tres article:hover .yo { transform: translateY(-9px); } }
+@media (hover: hover) and (pointer: fine) { .pz-tres article:hover { rotate: 0deg; scale: 1.025; } .pz-tres article:hover svg { transform: rotate(-6deg) scale(1.08); } }
 .pz-somos-como { display: grid; gap: 14px; } .pz-somos-como h3 { font: 600 clamp(22px, 2.2vw, 28px)/1.2 var(--display); }
 .pz-somos-como ul { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
 .pz-somos-como li { padding: 11px 18px; border-radius: 999px; border: 1.5px solid rgb(255 255 255 / .7); font-weight: 600; font-size: 16px; }
