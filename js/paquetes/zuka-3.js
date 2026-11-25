@@ -10001,9 +10001,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       mira: ['Busca la estrategia en los dos textos: ¿quién dice que enseña a planear?', 'Busca «prohibir» en los dos textos.', 'Busca límites u horarios en los dos textos.', 'Busca los cofres en los dos textos.', 'Busca a los tímidos en los dos textos.'], bien: 'Coincidir es estar en los dos.' },
       'Los dos rechazan prohibir y piden límites. Planear y los tímidos son del Uno; los cofres, del Dos.',
       { hint: 'Abre los dos textos y busca cada idea en cada uno, aunque la digan con otras palabras.' }),
-    play('genero-o-cita', '¿El segundo fragmento **explica** por qué pasa lo primero, o no?', { ...A, rot: ['lo explica', 'no lo explica'], fichas: ['Uno: no les da miedo equivocarse. → Dos: perder no duele, enseguida empieza otra partida.', 'Uno: mejoran la atención. → Dos: los defensores hablan de atención.', 'Uno: hay quien deja de dormir. → Dos: están hechos para que sea difícil dejarlos.', 'Uno: conviene acompañar. → Dos: no se trata de prohibir.'], va: [0, 1, 0, 1],
-      mira: ['¿El segundo dice la causa o solo repite?', '¿El segundo dice la causa o solo repite?', '¿El segundo dice la causa o solo repite?', '¿El segundo dice la causa o dice algo parecido?'], bien: 'Explicar es dar la causa; repetir o coincidir, no.' },
-      'Si perder no duele, se entiende que no teman; si cuesta dejarlos, se entiende que no duerman. Repetir «atención» o coincidir en no prohibir no explica.',
+    play('genero-o-cita', '¿El segundo fragmento **explica** por qué pasa lo primero, o no?', { ...A, rot: ['lo explica', 'no lo explica'], fichas: ['Uno: no les da miedo equivocarse. → Dos: perder no duele, enseguida empieza otra partida.', 'Uno: mejoran la atención. → Dos: los defensores hablan de atención.', 'Uno: hay quien deja de dormir. → Dos: están hechos para que sea difícil dejarlos.', 'Uno: muchos juegan en equipo. → Dos: algunos juegan cuatro horas diarias.'], va: [0, 1, 0, 1],
+      mira: ['¿El segundo dice la causa o solo repite?', '¿El segundo dice la causa o solo repite?', '¿El segundo dice la causa o solo repite?', '¿El segundo dice la causa o cuenta otra cosa?'], bien: 'Explicar es dar la causa; repetir o contar otra cosa, no.' },
+      'Si perder no duele, se entiende que no teman; si cuesta dejarlos, se entiende que no duerman. Repetir «atención» o contar cuántas horas juegan no explica.',
       { hint: 'Pon «porque» entre los dos fragmentos: si la oración tiene sentido, lo explica.' }),
     play('pista-tipo', '¿Con qué se respalda cada uno? Ata cada respaldo a su fragmento.', { ...A, lineas: ['Varios estudios han encontrado que mejoran la atención.', 'Un profesor cuenta que discutieron una semana.', 'En mi consultorio lo veo cada semana.'], tarjetas: ['investigaciones', 'lo que vive el propio autor', 'lo que cuenta otra persona'], va: [0, 2, 1],
       mira: ['Busca la palabra que habla de ciencia.', 'Busca la primera persona.', 'Busca a alguien distinto del autor.'], bien: 'También se comparan los respaldos.' },
@@ -10013,7 +10013,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       mira: ['¿Es una ganancia o una pérdida?', '¿Es una ganancia o una pérdida?', '¿Es una ganancia o una pérdida?', '¿A quién le conviene que no lo dejen?', '¿Es una ganancia o una pérdida?'], bien: 'El mismo tema, dos enfoques.' },
       'Estrategia, grupo y equivocarse sin miedo son lo que dan (Uno). Las horas y el negocio de que vuelvan, lo que quitan (Dos).',
       { hint: 'Pregunta si la oración muestra algo que el joven gana o algo que pierde.' }),
-    play('bisagras', 'Pon en cada hueco cómo se relacionan los dos textos. Sobran dos.', { ...A, pares: [['El Uno destaca lo que dan;', 'el Dos, lo que quitan.'], ['El Uno pide horarios;', 'el Dos pide límites.'], ['Del regreso depende el negocio;', 'el Dos pide regular los cofres.']], fichas: ['en cambio,', 'del mismo modo,', 'por eso', 'es decir,', 'por ejemplo,'], va: [0, 1, 2, null, null],
+    play('bisagras', 'Pon en cada hueco cómo se relacionan los dos textos. Sobran dos.', { ...A, pares: [['El Uno destaca lo que dan;', 'el Dos, lo que quitan.'], ['El Uno pide horarios;', 'el Dos pide límites.'], ['Al negocio le conviene que el jugador no pare;', 'el Dos pide regular los cofres.']], fichas: ['en cambio,', 'del mismo modo,', 'por eso', 'es decir,', 'por ejemplo,'], va: [0, 1, 2, null, null],
       mira: ['¿Dónde se oponen?', '¿Dónde dicen algo parecido?', '¿Dónde lo segundo resulta?', 'Ninguna segunda parte aclara la primera.', 'Ninguna segunda parte es un caso.'], bien: 'Se oponen, coinciden y resulta.' },
       'Los enfoques se oponen («en cambio»), coinciden en los límites («del mismo modo») y la regulación resulta del negocio («por eso»).',
       { hint: 'Una pareja choca, otra se parece y en otra lo segundo es consecuencia.' }),
@@ -10166,7 +10166,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       mira: ['Es el más cercano de los dos guardianes nombrados.', 'Es el más lejano de los dos guardianes nombrados.'], bien: 'Este, el cercano; aquel, el lejano.' },
       '«Este» es Abel, el último guardián nombrado; «aquel», don Eliécer, el primero.',
       { hint: 'Cuenta hacia atrás: ¿cuál de los dos guardianes se nombró más cerca?' }),
-    play('pinta-voces', '¿A quién apunta la palabra en mayúscula?', { doc: FAROS, plumas: ['don Eliécer', 'Abel'], lineas: ['Don Eliécer despertó a su sobrino y buscó la lámpara que ESTE había dejado en el bote.', 'Abel revisaba el celular; su tío se burlaba de ÉL.', 'Don Eliécer miraba el mar mientras Abel dormía: fue ÉL quien vio el barco.', 'Abel subió los jueves con su tío, y ESTE aprendió a leer los avisos.'], va: [1, 1, 0, 0],
+    play('pinta-voces', '¿A quién apunta la palabra en mayúsculas?', { doc: FAROS, plumas: ['don Eliécer', 'Abel'], lineas: ['Don Eliécer despertó a su sobrino y buscó la lámpara que ESTE había dejado en el bote.', 'Abel revisaba el celular; su tío se burlaba de ÉL.', 'Don Eliécer miraba el mar mientras Abel dormía: fue ÉL quien vio el barco.', 'Abel subió los jueves con su tío, y ESTE aprendió a leer los avisos.'], va: [1, 1, 0, 0],
       mira: ['El más cercano de los dos nombrados.', '¿De quién se burla el tío?', '¿Quién estaba despierto?', 'El más cercano de los dos nombrados.'], bien: 'Lo cercano y el sentido deciden juntos.' },
       'La lámpara la dejó el más cercano, Abel; el tío se burla de Abel; el que miraba el mar era don Eliécer; y «este», en la última, es el tío, recién nombrado.',
       { hint: 'Reemplaza la palabra por cada nombre y lee la oración completa.' }),
@@ -10206,9 +10206,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       mira: ['Cuenta en orden y mira el plural.', 'Cuenta en orden.', 'Cuenta en orden y mira el femenino.'], bien: 'Se cuenta en el orden en que se nombró.' },
       'Aguacates, café y huerta: primeros, segundo y tercera, en el orden en que se nombraron.',
       { hint: 'Numera los tres cultivos en el orden de la primera oración.' }),
-    play('cambia-tipo', 'En «los de leche, unos pocos» se omitió algo. Escríbelo completo. Sobran fichas.', { de: 'con elipsis', antes: 'Los de papa, muchos, cambiaron de cultivo; los de leche, unos pocos.', frase: '[0] de leche, unos pocos, [1].', rot: ['¿quiénes?', '¿qué hicieron?'], fichas: ['Los productores', 'cambiaron de cultivo', 'Los camiones', 'vendieron leche'], va: [0, 1, null, null],
+    play('cambia-tipo', 'En «los de leche, unos pocos» se omitió algo. Escríbelo completo. Sobran fichas.', { de: 'con elipsis', antes: 'Los productores de papa, muchos de ellos, cambiaron de cultivo; los de leche, unos pocos.', frase: '[0] de leche, unos pocos, [1].', rot: ['¿quiénes?', '¿qué hicieron?'], fichas: ['Los productores', 'cambiaron de cultivo', 'Los camiones', 'vendieron leche'], va: [0, 1, null, null],
       mira: ['Es lo mismo que hay antes de «de papa».', 'Es lo que hicieron los de papa.', 'Van al puerto: ¿son «de leche»?', 'Eso no se dijo de los de papa.'], bien: 'La elipsis calla lo que ya se sabe.' },
-      'Se omitieron «los productores» y «cambiaron de cultivo», que ya se habían dicho de los de papa.',
+      'Se omitieron «productores» y «cambiaron de cultivo», que ya se habían dicho de los de papa.',
       { hint: 'Mira la primera mitad de la oración: lo que falta en la segunda está allí.' }),
     play('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: AGUACATE, texto: 'Muchas familias dejaron sus potreros; otras|,| sus huertas. El llamado |«oro verde»| se exporta a Europa. Pero la bonanza tiene un costo: |¿cuánta agua hay?|', tarjetas: ['ocupa el lugar de un verbo que no se repite', 'marca un apodo'], va: [0, 1],
       mira: ['Busca dónde falta «dejaron».', 'Busca un nombre puesto por la gente.'], bien: 'La coma también guarda silencio.' },
@@ -10281,7 +10281,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
     ficha: { autor: 'Crónica de un escritor de Medellín', fuente: 'Suplemento literario de un periódico', fecha: 'Enero de 2025' },
     paras: [
       'A las cinco de la mañana, Medellín todavía no se ha puesto los zapatos. Las montañas que la rodean son un abrazo oscuro, y las luces de las laderas parecen un pesebre que alguien se olvidó de recoger en enero. En el centro, los primeros buses bostezan en los paraderos con las puertas abiertas, y un perro callejero cruza la avenida vacía como si fuera el dueño de la ciudad.',
-      'Los que madrugan forman una ciudad aparte. Hay panaderos con los brazos blancos de harina, como estatuas que se movieran; vigilantes que llevan cien años sin dormir; vendedoras de tinto que empujan sus carritos cuesta arriba con una paciencia de piedra. Nadie habla mucho a esa hora: las palabras también están dormidas, y los saludos se hacen con la cabeza.',
+      'Los que madrugan forman una ciudad aparte. Hay panaderos con los brazos blancos de harina, como estatuas que se movieran; vigilantes que llevan cien años sin dormir; vendedoras de tinto que empujan sus carritos cuesta arriba con una paciencia de piedra. Nadie habla mucho a esa hora: las palabras también están dormidas, y los saludos se hacen con la cabeza, antes de que salga el sol.',
       'A las seis, el sol asoma por el oriente y la ciudad empieza a desperezarse. El río, que de noche era una cinta negra, se vuelve de plata por unos minutos. Las palomas del parque Berrío ocupan sus puestos como funcionarias puntuales, y el metro, ese gusano de acero, empieza a tragarse a la gente por montones. En los vagones, muchos dormitan de pie, agarrados de las barras, como si todavía estuvieran soñando con la cama.',
       'A las siete ya no queda nada de aquella ciudad en voz baja. Los pitos, los gritos de los vendedores y la música de los almacenes llenan cada rincón, y uno tiene la impresión de que todo el mundo llegó tarde a la misma cita. Los semáforos cambian de color sin que nadie los mire, y hasta los edificios parecen tener prisa. Nadie se acuerda ya del perro de las cinco ni de las palabras dormidas.',
       'Pero quien vio la ciudad a las cinco sabe que ella también tiene un rato de silencio, y que lo guarda solo para los que madrugan. Es un secreto pequeño, de una hora apenas, que no sale en las postales ni en los noticieros. Para conocerlo no hay que pagar nada: basta con poner el despertador un poco antes que el sol.',
@@ -10326,10 +10326,10 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       mira: ['Busca el signo después del cual se da una razón.', 'Busca el signo que abre una metáfora.'], bien: 'La coma abrió una metáfora.' },
       'Los dos puntos anuncian por qué nadie habla. La coma abre «ese gusano de acero», otro nombre del metro.',
       { hint: 'Mira qué viene después de cada signo: ¿una razón o un nombre?' }),
-    play('ordena-texto', 'Se desordenó la crónica. La primera tira está en su puesto: sigue el reloj.', { doc: { title: MADRUGADA.title, ficha: MADRUGADA.ficha }, fija: 1, ini: [0, 3, 2, 4, 1], tiras: ['A las cinco de la mañana, Medellín todavía no se ha puesto los zapatos.', 'Nadie habla mucho a esa hora: las palabras también están dormidas, y los saludos se hacen con la cabeza.', 'A las seis, el sol asoma por el oriente y la ciudad empieza a desperezarse.', 'A las siete ya no queda nada de aquella ciudad en voz baja.', 'Pero quien vio la ciudad a las cinco sabe que ella también tiene un rato de silencio, y que lo guarda solo para los que madrugan.'],
-      mira: ['', '«A esa hora» ¿a cuál?', '¿Qué hora va antes de las seis y se cuenta arriba?', '«Aquella ciudad» ya se describió.', 'Vuelve a las cinco después de contarlo todo.'], bien: 'Cinco, seis, siete y el secreto.' },
+    play('ordena-texto', 'Se desordenó la crónica. La primera tira está en su puesto: sigue el reloj.', { doc: { title: MADRUGADA.title, ficha: MADRUGADA.ficha }, fija: 1, ini: [0, 3, 2, 4, 1], tiras: ['A las cinco de la mañana, Medellín todavía no se ha puesto los zapatos.', 'Nadie habla mucho a esa hora: las palabras también están dormidas, y los saludos se hacen con la cabeza, antes de que salga el sol.', 'A las seis, el sol asoma por el oriente y la ciudad empieza a desperezarse.', 'A las siete ya no queda nada de aquella ciudad en voz baja.', 'Pero quien vio la ciudad a las cinco sabe que ella también tiene un rato de silencio, y que lo guarda solo para los que madrugan.'],
+      mira: ['', '«A esa hora» ¿a cuál?', 'Aquí el sol ya asoma: ¿qué se cuenta antes?', '«Aquella ciudad» ya se describió.', 'Vuelve a las cinco después de contarlo todo.'], bien: 'Cinco, seis, siete y el secreto.' },
       'Las cinco, lo que pasa «a esa hora», las seis, las siete y el cierre que vuelve a las cinco.',
-      { hint: 'Sigue las horas. «A esa hora» va pegado a la suya y el «Pero» cierra.' }),
+      { hint: 'Sigue las horas y mira si ya salió el sol. El «Pero» cierra.' }),
     play('tacha-resumen', 'Tacha las tres oraciones que no hacen falta para entender la crónica.', { doc: MADRUGADA, n: 3, lineas: ['A las cinco la ciudad calla y solo la recorren los que madrugan.', 'Un perro cruza la avenida.', 'Con el sol despierta y a las siete es puro ruido.', 'Las palomas ocupan sus puestos.', 'Ese silencio es un secreto de los madrugadores.', 'El río se ve de plata.'], va: [1, 3, 5],
       mira: { 0: 'Es el comienzo de todo.', 2: 'Es el cambio.', 4: 'Es lo que la crónica quiere decir.' }, bien: 'Silencio, ruido y secreto.' },
       'El perro, las palomas y el río pintan cada hora. Quedan el silencio, el ruido y el secreto.',
@@ -10350,9 +10350,9 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       mira: ['¿Cuál finge temer la prisa?', '¿Cuál llama bueno a algo que hace daño?', '¿Cuál alaba que algo malo se repita?', '¿Cuál se burla de los que protestan?'], bien: 'Debajo del elogio está lo que piensa.' },
       'Temer la prisa dice que tardan; el aire «fresco», que está sucio; lo puntual, que nunca falla; y «se lo pierden», que tienen razón.',
       { hint: 'Dale la vuelta a cada frase y mira qué crítica queda.' }),
-    play('genero-o-cita', '¿Ironía evidente (dice lo contrario de un hecho) o **sutil** (un tono que no va con el asunto)?', { rot: ['evidente', 'sutil'], doc: TRANCON, fichas: ['«Qué fresco», con cuarenta grados.', 'Anunció, con aire de gran noticia, otra reunión.', '«Excelente servicio», tras dos horas de fila.', 'Guardaba el recibo como quien guarda un amuleto.'], va: [0, 1, 0, 1],
+    play('genero-o-cita', '¿Ironía evidente (dice lo contrario de un hecho) o **sutil** (un tono que no va con el asunto)?', { rot: ['evidente', 'sutil'], doc: TRANCON, fichas: ['«Qué fresco», con cuarenta grados.', 'Inauguró, con discurso y cinta, una caneca.', '«Excelente servicio», tras dos horas de fila.', 'Firmó el recibo como quien firma la paz.'], va: [0, 1, 0, 1],
       mira: ['¿Hay un hecho que la contradice de frente?', '¿Hay un hecho en contra o un tono demasiado solemne?', '¿Hay un hecho que la contradice de frente?', '¿Hay un hecho en contra o una comparación burlona?'], bien: 'La sutil no miente: exagera el tono.' },
-      'El calor y la fila contradicen de frente. «Con aire de gran noticia» y el amuleto no dicen lo contrario de nada: ponen un tono que no va.',
+      'El calor y la fila contradicen de frente. La cinta para una caneca y el recibo firmado como la paz no dicen lo contrario de nada: ponen un tono que no va.',
       { hint: 'Busca si hay un hecho que desmienta la frase. Si no, mira el tono o la comparación.' }),
     play('balanza-tesis', 'La tesis **escondida**: el trancón es un problema que no han querido resolver. ¿Qué hace cada dato?', { doc: TRANCON, tesis: 'Es un problema que no han querido resolver', fichas: ['Llevan quince años estudiando la vía.', 'Pasan más tiempo en el carro que con sus hijos.', 'Ampliaron la vía y ya no hay trancón.', 'Hay una valla de colchones.'], va: [0, 0, 1, 2],
       mira: ['Si no la hacen, ¿la tesis gana o pierde?', 'Si hace daño, ¿la tesis gana o pierde?', 'Si lo resolvieron, ¿la tesis gana o pierde?', '¿La valla da o quita razones?'], bien: 'La tesis estaba detrás del elogio.' },
@@ -10363,7 +10363,7 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
       '«Llevan quince años… y es de esperar que la sigan estudiando quince más»: cuenta la demora y se burla.',
       { hint: 'Busca la oración con el tiempo que llevan.' }),
     play('cambia-palabra', 'Pon en cada hueco lo que significa la palabra. Sobran dos.', { doc: TRANCON, frases: [[1, 'que nos regala, cada día, hora y media de reflexión ', 'obligatoria', '.'], [4, 'Construirla de afán sería, como todo el mundo sabe, un error ', 'imperdonable', '.']], fichas: ['que no se puede evitar', 'muy grave', 'voluntaria', 'pequeño'], va: [0, 1, null, null],
-      mira: ['¿Alguien elige quedarse en un trancón?', '¿Qué clase de error no se perdona?', 'Es lo contrario.', 'Es lo contrario.'], bien: '«Regala» y «obligatoria» chocan: ahí está la ironía.' },
+      mira: ['¿Alguien elige quedarse en un trancón?', '¿Qué clase de error no se perdona?', 'Nadie eligió el trancón: ¿algo ahí es voluntario?', 'Un error pequeño sí se perdona.'], bien: '«Regala» y «obligatoria» chocan: ahí está la ironía.' },
       'Obligatoria es que no se puede evitar; imperdonable, muy grave. La ironía está en «regalar» algo obligatorio.',
       { hint: 'Primero el significado de la palabra; después nota con cuál otra choca.' }),
     play('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: TRANCON, texto: '|¿Qué más se le puede pedir a una vía?| Las autoridades|, sabias como siempre,| han decidido proteger esta tradición|.|', tarjetas: ['pregunta sin esperar respuesta', 'mete un elogio irónico'], va: [0, 1],
@@ -10423,3 +10423,659 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
         'Busca el hecho que contradice el agradecimiento del abuelo.')],
   ]);
 });
+;
+//#archivo js/courses/preuda-lectura-juegos.js
+// Preuniversitario UdeA · Comprensión lectora con textos de verdad (spec 2026-11-19-preuda-lectura-textos). Va después de
+// preuda-lectura.js y de los preuda-l-<mundo>.js: en cada mundo terminado, cada lección pasa a tener 7 juegos distintos sobre un
+// mismo texto, y el mundo una evaluación en formato real (pregunta-examen). PU_LEC_HECHOS lista los mundos terminados: la prueba
+// tests/preuda-lectura.test.js les exige el estándar.
+const PU_LEC_HECHOS = [];
+// Mundos con explicación interactiva y ejercicios sobre la hoja (spec 2026-11-24-lectura-explora; tests/lectura-explora.test.js).
+const PU_LEC_EXPLORA = ['pu-estrategias', 'pu-tipos', 'pu-explicita', 'pu-inferencia', 'pu-vocabulario', 'pu-aplicacion', 'pu-fuentes', 'pu-conectores', 'pu-argumentacion', 'pu-dos-textos', 'pu-referencia', 'pu-figurado'];
+(() => {
+  const lessons = PU_LECTURA.flatMap(u => u.lessons);
+  const L = id => { const l = lessons.find(l => l.id === id); if (!l) throw new Error(`no existe ${id}`); return l; };
+  // La guía se dibuja sobre el lienzo solo en los juegos de p5; estos son HTML y usan la tarjeta «Cómo se juega».
+  const setLesson = (id, list) => { L(id).ex = list; };
+  // Evaluación del mundo: [lección, nota de repaso, ejercicio]. Formato real: tiempo del examen (2 min 15 s por pregunta).
+  const setExam = (world, title, items) => {
+    const u = PU_LECTURA.find(u => u.world === world), order = u.lessons.map(l => l.id);
+    u.exam = { id: `exam-${world}`, title, minutes: 0, items: items.map(([lesson, review, ex]) => ({ lesson, review, ex: { ...ex, exam: true } })) };
+    u.exam.items.sort((a, b) => order.indexOf(a.lesson) - order.indexOf(b.lesson));
+    u.exam.minutes = Math.max(8, Math.ceil(u.exam.items.length * 2.25));
+    PU_LEC_HECHOS.push(world);
+  };
+  PU_LEC_JUEGOS.forEach(f => f({ L, setLesson, setExam }));
+})();
+;
+//#archivo js/courses/preuda.js
+// Curso Preuniversitario UdeA (spec 2026-11-18-curso-preuda): preuniversitario para el examen de admisión, con dos componentes que
+// se estudian por separado: Razonamiento lógico (js/courses/preuda-razonamiento.js) y Comprensión lectora
+// (js/courses/preuda-lectura.js). Cada unidad es un mundo con `block`; `blocks` da el nombre y la descripción de cada
+// componente, que el mapa muestra como encabezado. Nace en borrador (js/cuenta.js): se habilita tras revisión docente.
+
+const COURSE_PREUDA = {
+  id: 'preuda', level: 'Admisión', name: 'Preuniversitario UdeA', icon: 'pU', color: '#a3e635',
+  tagline: 'El examen de admisión: razonamiento lógico y comprensión lectora.',
+  blocks: [
+    { id: 'razonamiento', name: 'Razonamiento lógico', desc: '40 preguntas sin calculadora · la mitad del puntaje' },
+    { id: 'lectura', name: 'Comprensión lectora', desc: '40 preguntas sobre dos textos largos · la otra mitad' },
+  ],
+  units: [...PU_RAZONAMIENTO, ...PU_LECTURA],
+};
+;
+//#archivo js/courses/preicfes-base.js
+// Curso Preicfes Saber 11 (spec 2026-11-20-curso-preicfes): ayudantes comunes. Cada mundo vive en su archivo
+// js/courses/preicfes-<área>-<mundo>.js y hace PI_MUNDOS.push(ICF.mundo(…)); js/courses/preicfes.js (después de data.js) arma el
+// curso en el orden de los componentes. PI_HECHOS lista los mundos terminados (con el estándar de la spec y su evaluación).
+const PI_MUNDOS = [];
+const PI_HECHOS = [];
+const PI_BLOCKS = [
+  { id: 'matematicas', name: 'Matemáticas', desc: '50 preguntas · datos, geometría, álgebra y finanzas' },
+  { id: 'lectura', name: 'Lectura Crítica', desc: '41 preguntas · textos continuos y discontinuos' },
+  { id: 'sociales', name: 'Sociales y Ciudadanas', desc: '50 preguntas · Constitución, historia y ciudadanía' },
+  { id: 'ciencias', name: 'Ciencias Naturales', desc: '58 preguntas · biología, química, física e indagación' },
+  { id: 'ingles', name: 'Inglés', desc: '55 preguntas · siete partes, del nivel A1 al B1' },
+];
+const ICF = (() => {
+  const KIND = { matematicas: 'Matemáticas', lectura: 'Lectura Crítica', sociales: 'Sociales y Ciudadanas', ciencias: 'Ciencias Naturales', ingles: 'Inglés' };
+  // Zona de examen (js/games/examen-kit.js). En `err` la corrección buena va primero en `fixes`: el juego las revuelve.
+  const sol = (q, lines, extra, explain, hint) => play('completa-solucion', 'Completa la solución: arrastra cada ficha a su hueco.', { q, lines, extra }, explain, { hint });
+  const err = (q, steps, wrong, fixes, explain, hint) => play('caza-error', 'Encuentra el paso equivocado y corrígelo.', { q, steps, wrong, fixes, fix: 0 }, explain, { hint });
+  const opc = (q, options, answer, explain, hint) => play('opcion-examen', 'Así sale en el examen.', { q, options, answer }, explain, { hint });
+  // Pregunta A–D sobre un texto (evaluaciones de Lectura, Sociales e Inglés).
+  const preg = (doc, block) => (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc, q, options, answer }, explain, { hint, kind: KIND[block] });
+  // Juego en movimiento al final de una lección de lectura: tres preguntas cortas sobre el texto, tres opciones cada una.
+  const mueve = (game, q, title, items, explain, hint) => play(game, q, { rounds: [{ title, items: items.map(([ask, options, answer]) => ({ ask, options, answer })) }] }, explain, { hint });
+  // Lección: en los juegos de lienzo la guía va sobre el juego; el juego en movimiento lleva `motion`.
+  const leccion = (id, title, scenes, ex) => ({ id, title, clip: { scenes }, ex: ex.map(e => ({ ...e, canvasGuide: true, motion: /^(vuela-precios|rompe-cambios|tanque-porcentaje|resortera-tres|lirios-laguna|corta-proporciones)$/.test(e.game) })) });
+  // Mundo con su evaluación: items = [[lección, nota de repaso, ejercicio]]. Tiempo: 1.5 min por juego; 2.25 por pregunta de lectura.
+  const mundo = (world, title, block, lessons, items) => {
+    const order = lessons.map(l => l.id);
+    const exam = { id: `exam-${world}`, title: `Evaluación · ${title}`, minutes: 0, items: items.map(([lesson, review, ex]) => ({ lesson, review,
+      ex: { ...ex, kind: ex.kind || KIND[block], canvasGuide: true, exam: true, params: { ...ex.params, autoDemo: false } } })) };
+    exam.items.sort((a, b) => order.indexOf(a.lesson) - order.indexOf(b.lesson));
+    exam.minutes = Math.max(8, Math.ceil(exam.items.length * (exam.items.every(it => it.ex.game === 'pregunta-examen') ? 2.25 : 1.5)));
+    PI_HECHOS.push(world);
+    return { world, title, block, lessons, exam };
+  };
+  return { sol, err, opc, preg, mueve, leccion, mundo, KIND };
+})();
+;
+//#archivo js/courses/preicfes-ma-datos.js
+// Preicfes · Matemáticas · mundo 1 «Datos y Gráficas» (spec 2026-11-20-curso-preicfes). Es lo que más pregunta la prueba:
+// leer tablas y gráficas con su escala, promedios y qué se puede concluir de una muestra. Estándar de diez: juegos distintos de una
+// ronda, uno en movimiento y la zona de examen. Problemas con números y contextos propios.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, sol, err, opc } = ICF;
+
+  const l1 = leccion('icf-ma-datos-1', 'Leer tablas y gráficas', [
+    sc(6, 'Una gráfica es una tabla dibujada: cada barra, punto o porción guarda un número. Antes de mirar alturas hay que leer **la escala**: cuánto vale cada raya.', { title: 'Primero, la escala' }),
+    sc(7, 'Ejemplo: en una gráfica de lluvias, las rayas van de 25 en 25 mm. Una barra que llega a la mitad entre 50 y 75 vale 62.5 mm, no 60.', { title: 'Rayas de 25 en 25' }),
+    sc(7, 'Para comparar dos momentos se usa el **cambio** (cuánto subió) y el **cambio porcentual** (cuánto subió comparado con lo de antes). Pasar de 8 a 12 es subir 4, un 50 %; pasar de 40 a 46 es subir 6, solo un 15 %.', { title: 'Cambio y cambio porcentual' }),
+    sc(6, 'En una gráfica circular el todo es 360°: cada 1 % son 3.6°. Un sector de 90° es la cuarta parte, el 25 %.', { title: 'La torta: 360° = 100 %' }),
+    sc(6, 'La pregunta típica: «¿cuál afirmación es correcta según la gráfica?». Se revisa cada opción contra los números, una por una, sin suponer lo que la gráfica no muestra.', { title: 'Afirmación por afirmación' }),
+  ], [
+    play('lee-barras', 'La tienda del colegio anotó los jugos vendidos en una semana. ¿Cuántos más se vendieron de mora que de lulo?', { rounds: [
+      { bars: [['mora', 70], ['lulo', 45], ['mango', 60], ['maracuyá', 35]], hi: 80, step: 20, q: 'diff', a: 0, b: 1, max: 80, tstep: 5 }] },
+      'Las rayas van de 20 en 20: mora llega a 70 (entre 60 y 80) y lulo a 45 (un cuarto del camino entre 40 y 60). La diferencia es $70 - 45 = 25$.',
+      { hint: 'Mira cuánto vale cada raya del eje antes de leer las barras: aquí no van de 10 en 10.' }),
+    play('arma-barras', 'Una encuesta preguntó a 450 estudiantes cómo llegan al colegio. Pasa la tabla a la gráfica', { rounds: [
+      { rows: [['bus', 180], ['a pie', 120], ['bicicleta', 60], ['carro', 90]], hi: 200, step: 40, snap: 10 }] },
+      'Con rayas de 40 en 40, el 180 queda a un cuarto del camino entre 160 y 200, el 120 justo en una raya, el 60 en la mitad entre 40 y 80 y el 90 un poco arriba de 80.',
+      { hint: 'Cuenta cuánto vale cada raya y cuántas necesitas para llegar a cada dato; muchos quedan entre dos rayas.' }),
+    play('mayor-subida', 'Los seguidores de la emisora escolar crecen cada mes. ¿En qué tramo fue mayor el aumento **en porcentaje**?', { rounds: [
+      { pts: [['ene', 20], ['feb', 30], ['mar', 42], ['abr', 60]], hi: 70, step: 10, q: 'pct' }] },
+      'En seguidores, el salto más grande es el último (+18). En porcentaje gana el primero: de 20 a 30 es +50 %, de 30 a 42 es +40 % y de 42 a 60 es cerca de +43 %.',
+      { hint: 'Para cada tramo, divide lo que subió entre el valor con el que empezó ese tramo.' }),
+    play('variacion-barras', 'La selección de fútbol tenía 120 inscritos y este año tiene 150. Halla la variación porcentual', { rounds: [{ from: 120, to: 150, what: 'Inscritos' }] },
+      'Subió 30 sobre los 120 de antes: $\\tfrac{30}{120} = 0.25$, un aumento del 25 %. Sobre 150 daría 20 %, pero el cambio se mide sobre lo de antes.',
+      { hint: 'La barra de antes es el 100 %. ¿Qué fracción de ella hay que agregar para llegar a la nueva?' }),
+    play('rueda-porcentaje', 'De 180 personas encuestadas en una plaza, 63 prefieren el transporte en cable. Gira la aguja hasta esa porción', { rounds: [{ part: 63, whole: 180 }], tol: 1 },
+      '$\\tfrac{63}{180} = 0.35$: el 35 % del círculo, un sector de $0.35 \\cdot 360 = 126°$.',
+      { hint: 'Divide la parte entre el total; si te ayuda, simplifica primero la fracción.' }),
+    play('cruz-porcentaje', 'De la gráfica a la cantidad: arma la cruz', { problems: [
+      { text: 'De 250 hogares encuestados, el 36 % separa la basura. ¿Cuántos hogares son?', chips: [{ label: '36', cell: 'p' }, { label: '250', cell: 'C' }, { label: '?', cell: 'B' }, { label: '214', cell: null }] }] },
+      'El total va con el 100 % y la parte con su porcentaje: $\\tfrac{100}{250} = \\tfrac{36}{B}$, así que $B = 250 \\cdot 0.36 = 90$ hogares.',
+      { hint: 'El total de la encuesta es el 100 %; el número que se pregunta va enfrente del porcentaje que le corresponde.' }),
+    play('vuela-precios', 'Vuela al aro de la lectura correcta', { rounds: [{ title: 'Gráficas', items: [
+      { ask: 'En una torta, un sector de 72° es…', options: ['20 %', '72 %', '7.2 %'], answer: 0 },
+      { ask: 'De 80 a 100, el cambio es…', options: ['+25 %', '+20 %', '+100 %'], answer: 0 },
+      { ask: 'Barras de 35 y 60: la segunda tiene…', options: ['25 más', '95 más', '60 más'], answer: 0 },
+    ] }] }, '$\\tfrac{72}{360} = 0.2$, el 20 %. De 80 a 100 sube 20 sobre 80: +25 %. Y $60 - 35 = 25$.',
+      { hint: 'Torta: compara con 360°. Cambio porcentual: divide lo que cambió entre el valor de antes.' }),
+    sol('Un colegio tiene 140 estudiantes en sexto, 100 en séptimo, 80 en octavo y 80 en noveno. Se va a dibujar una gráfica circular. ¿Qué porcentaje del colegio es noveno y cuánto mide su sector?',
+      ['Total de estudiantes: $140 + 100 + 80 + 80 =$ [[400]]', 'Noveno es esa parte del total: el [[20]] % del colegio', 'Su sector es esa misma parte de 360°: [[72]]°'],
+      ['36', '288', '25'],
+      'Primero el total, después la fracción y al final los grados: $0.2 \\cdot 360 = 72°$. Quien divide 80 entre 360 confunde estudiantes con grados.',
+      'El círculo completo es el total de estudiantes y también los 360°: halla primero qué fracción del total es noveno.'),
+    err('Una papelería vendió 400 cuadernos en enero, 500 en febrero y 450 en marzo. ¿Cuál fue la variación porcentual de febrero a marzo?',
+      ['De febrero a marzo cambian $450 - 500 = -50$ cuadernos', 'La variación se mide sobre marzo: $\\tfrac{-50}{450}$', 'Es cerca de $-0.11$: bajó un 11 %'], 1,
+      ['La variación se mide sobre febrero: $\\tfrac{-50}{500}$', 'La variación se mide sobre enero: $\\tfrac{-50}{400}$', 'La variación se mide sobre el total: $\\tfrac{-50}{1350}$'],
+      'El cambio porcentual se compara con el valor de partida, el de febrero: $\\tfrac{-50}{500} = -0.1$, una caída del 10 %.',
+      'Pregúntate desde qué mes se está midiendo el cambio: ese valor es el 100 %.'),
+    opc('Una cooperativa registró su producción de café, en toneladas, por trimestre: primero 40, segundo 50, tercero 45 y cuarto 60. Según los datos, es correcto afirmar que:',
+      ['La producción aumentó en todos los trimestres', 'El mayor aumento porcentual se dio del tercero al cuarto trimestre', 'Del primero al segundo trimestre la producción creció un 10 %', 'En el cuarto trimestre se produjo el doble que en el primero'], 1,
+      'Del tercero al cuarto sube 15 sobre 45, cerca del 33 %; del primero al segundo sube 10 sobre 40, el 25 %. Del segundo al tercero bajó, y 60 no es el doble de 40.',
+      'Revisa cada afirmación con los números: calcula los cambios porcentuales sobre el valor de partida de cada tramo.'),
+  ]);
+
+  const l2 = leccion('icf-ma-datos-2', 'Promedio, mediana y moda', [
+    sc(6, 'El **promedio** (media) es lo que le tocaría a cada uno si se repartiera todo por igual: se suman los datos y se divide entre cuántos son.', { title: 'Repartir parejo' }),
+    sc(7, 'Ejemplo: tres amigas tienen 2, 5 y 11 láminas. Juntas tienen 18; repartidas por igual, 6 cada una. El 11 «presta» 5 a las otras.', { title: '$\\tfrac{2 + 5 + 11}{3} = 6$' }),
+    sc(7, 'La **mediana** es el dato del medio cuando se ordenan; con una cantidad par, el promedio de los dos del centro. La **moda** es el que más se repite.', { title: 'Ordenar y contar' }),
+    sc(7, 'Un dato muy grande jala la media, pero casi no mueve la mediana: en 1, 2, 2, 3, 22 la media es 6 y la mediana es 2. Por eso los salarios se describen con la mediana.', { title: 'El dato que jala' }),
+    sc(7, 'En un promedio **ponderado** cada dato pesa distinto: un examen del 40 % cuenta más que un taller del 20 %. Se multiplica cada nota por su peso y se suman.', { title: 'Notas con peso' }),
+  ], [
+    play('nivela-datos', 'Cinco salones recogieron 7, 3, 9, 5 y 6 kg de papel para reciclar. Nivela las barras para hallar el promedio', { rounds: [{ data: [7, 3, 9, 5, 6], hi: 10, step: 2 }] },
+      'Entre todos recogieron 30 kg: repartidos por igual, $30 \\div 5 = 6$ kg por salón. Lo que sobra arriba del 6 llena justo lo que falta abajo.',
+      { hint: 'Si lo que sobra por encima de la línea es más que lo que falta por debajo, la línea está muy baja.' }),
+    play('ordena-mediana', 'Siete familias de una cuadra pagan estos valores de internet (en miles de pesos). Ordénalos y halla la mediana', { rounds: [{ data: [64, 49, 82, 49, 77, 51, 90] }] },
+      'Ordenados: 49, 49, 51, **64**, 77, 82, 90. Con siete datos, la mediana es el cuarto: 64 mil pesos.',
+      { hint: 'Pon los datos de menor a mayor, incluido el que se repite, y busca el que queda en el centro.' }),
+    play('tres-centros', 'Siete estudiantes dicen cuántos hermanos tienen: 1, 2, 2, 2, 3, 4 y 7. Ubica la media, la mediana y la moda', { rounds: [{ data: [1, 2, 2, 2, 3, 4, 7], lo: 0, hi: 8 }] },
+      'Moda 2 (sale tres veces), mediana 2 (el cuarto dato) y media $\\tfrac{21}{7} = 3$: el 7 jala la media hacia la derecha.',
+      { hint: 'La moda es la pila más alta; la mediana, el dato del medio; la media, la suma entre la cantidad de datos.' }),
+    play('dato-faltante', 'Un ciclista lleva 42, 38 y 50 km en tres días. Quiere promediar 45 km en cuatro días. Halla lo que debe recorrer el cuarto', { rounds: [{ data: [42, 38, 50, null], mean: 45, hi: 70, step: 1 }] },
+      'Para promediar 45 en cuatro días necesita $45 \\cdot 4 = 180$ km. Lleva $42 + 38 + 50 = 130$: le faltan 50.',
+      { hint: 'Multiplica el promedio que quiere por la cantidad de días y resta lo que ya recorrió.' }),
+    play('balanza-promedio', 'En una prueba, 4 estudiantes de un grupo promediaron 6 y otros 2 promediaron 9. Ubica el promedio de los seis', { rounds: [
+      { groups: [{ lab: 'grupo 1', n: 4, mean: 6 }, { lab: 'grupo 2', n: 2, mean: 9 }], lo: 0, hi: 10 }] },
+      '$\\tfrac{4 \\cdot 6 + 2 \\cdot 9}{6} = \\tfrac{42}{6} = 7$. No es 7.5, el promedio de los dos promedios: el grupo más grande pesa más.',
+      { hint: 'El grupo con más personas jala el apoyo hacia su lado.' }),
+    play('nota-ponderada', 'Los talleres valen el 25 %, los quices el 25 % y el examen final el 50 %. Laura tiene 4.0 y 3.2. Halla la nota del final para sacar 3.6', { rounds: [
+      { items: [['talleres', 25, 4.0], ['quices', 25, 3.2], ['examen final', 50, null]], target: 3.6 }] },
+      'Ya tiene $0.25 \\cdot 4.0 + 0.25 \\cdot 3.2 = 1.8$. Le faltan $3.6 - 1.8 = 1.8$, y el final pesa 0.5: necesita $1.8 \\div 0.5 = 3.6$.',
+      { hint: 'Calcula cuánto aportan las notas que ya tiene, cada una por su peso, y mira cuánto falta para la meta.' }),
+    play('nivela-barras', 'Un ahorro crece lo mismo cada semana: 3, 7, 11, 15 y 19 mil pesos. Nivela la escalera', { rounds: [{ a1: 3, d: 4, n: 5 }] },
+      'En una escalera pareja el promedio es el dato del centro: 11. También es el promedio de los extremos: $\\tfrac{3 + 19}{2} = 11$.',
+      { hint: 'Lo que sobra en las barras más altas llena lo que falta en las más bajas.' }),
+    play('rompe-cambios', 'Manda la pelota al centro correcto', { miss: 'ordena los datos antes de buscar la mediana', rounds: [{ title: 'Centros', items: [
+      { ask: 'Promedio de 3, 8 y 10', options: ['7', '8', '21'], answer: 0 },
+      { ask: 'Mediana de 5, 1, 9, 4', options: ['4.5', '4', '5'], answer: 0 },
+      { ask: 'Moda de 2, 7, 7, 3, 2, 7', options: ['7', '2', '4.7'], answer: 0 },
+    ] }] }, '$\\tfrac{21}{3} = 7$. Ordenados 1, 4, 5, 9: la mediana es $\\tfrac{4 + 5}{2} = 4.5$. El 7 sale tres veces: es la moda.',
+      { hint: 'Promedio: suma y divide. Mediana: ordena primero. Moda: el que más se repite.' }),
+    sol('Las edades de los 8 integrantes de una banda de música son 18, 16, 24, 15, 16, 20, 16 y 19 años. Halla la media, la mediana y la moda.',
+      ['Ordenadas: 15, 16, 16, 16, 18, 19, 20, 24. La suma es [[144]]', 'Media: la suma entre 8, es decir, [[18]] años', 'Mediana: el promedio del 4.º y el 5.º dato, es decir, [[17]] años', 'Moda: [[16]] años, la que más se repite'],
+      ['16.5', '20', '8'],
+      'Con ocho datos la mediana está entre el cuarto (16) y el quinto (18). El 24 sube la media hasta 18, por encima de la mediana.',
+      'Ordena las edades primero; con una cantidad par de datos, la mediana queda entre dos.'),
+    err('Laura tiene 4.0 en talleres (30 %), 3.0 en el parcial (30 %) y 3.5 en el final (40 %). ¿Cuál es su nota definitiva?',
+      ['Talleres aportan $0.3 \\cdot 4.0 = 1.2$', 'El parcial aporta $0.3 \\cdot 3.0 = 0.9$', 'El final aporta $0.4 \\cdot 3.5 = 1.4$', 'Definitiva: $\\tfrac{1.2 + 0.9 + 1.4}{3} \\approx 1.17$'], 3,
+      ['Definitiva: $1.2 + 0.9 + 1.4 = 3.5$', 'Definitiva: $\\tfrac{4.0 + 3.0 + 3.5}{3} \\approx 3.33$', 'Definitiva: $1.2 + 0.9 + 1.4 = 3.6$'],
+      'Cada aporte ya está multiplicado por su peso, y los pesos suman 100 %: la definitiva es la suma, $3.5$. Dividir entre 3 cuenta los pesos dos veces.',
+      'Revisa los pasos uno por uno: ¿cuánto suman los pesos y qué se hace con los aportes ya multiplicados?'),
+    opc('El promedio de estatura de 5 jugadores de baloncesto es 1.80 m. Si entra al equipo un sexto jugador que mide 1.92 m, el nuevo promedio es:',
+      ['1.86 m', '1.81 m', '1.82 m', '1.92 m'], 2,
+      'Los cinco suman $5 \\cdot 1.80 = 9.00$ m; con el nuevo, $10.92$ m. Entre seis: $10.92 \\div 6 = 1.82$ m. No es el promedio entre 1.80 y 1.92, porque el grupo de cinco pesa más.',
+      'Recupera primero la suma de las estaturas a partir del promedio; luego agrega al nuevo y divide entre seis.'),
+  ]);
+
+  const G = ['1111000000', '1111100000', '1110000000', '1111000000', '1111000000', '1111100000', '1110000000', '1111000000', '1111000000', '1110000000'];
+  const l3 = leccion('icf-ma-datos-3', 'Muestras y conclusiones', [
+    sc(6, 'Casi nunca se le pregunta a todo el mundo: se toma una **muestra**. Sirve si se parece a la población entera, con la misma mezcla de personas.', { title: 'Una parte que represente al todo' }),
+    sc(7, 'Ejemplo: para saber cuánto leen los jóvenes de una ciudad no sirve preguntar solo en la biblioteca: ahí todos leen. Esa muestra está **sesgada**.', { title: 'El sesgo de la biblioteca' }),
+    sc(7, 'Para comparar grupos de distinto tamaño se usan porcentajes: 30 de 50 (60 %) es mejor resultado que 40 de 80 (50 %), aunque 40 sea más que 30.', { title: 'Más no es mejor' }),
+    sc(6, 'Una gráfica puede engañar si su eje no empieza en cero: una barra de 52 parece el doble de una de 50. Se leen los números, no el tamaño del dibujo.', { title: 'El eje cortado' }),
+    sc(7, 'La pregunta del examen: «¿la conclusión es válida?». Se revisa si la muestra representa a quien se nombra en la conclusión y si los números la respaldan.', { title: '¿Se puede concluir eso?' }),
+  ], [
+    play('muestra-sesgo', 'La alcaldía quiere saber qué parte del barrio apoya una ciclovía; quienes la apoyan viven más cerca del parque (izquierda). Ubica la muestra donde represente a todo el barrio', { rounds: [{ grid: G, w: 5, h: 4, tol: 5 }] },
+      'En todo el barrio apoya el 39 %. Un marco pegado al parque daría casi el 100 % y uno al otro lado, 0 %: la muestra representa cuando toma de las dos zonas en la proporción del barrio.',
+      { hint: 'Pon el marco donde queden personas de los dos lados de la frontera, no solo de un rincón.' }),
+    play('eje-engano', 'Un canal de televisión muestra su audiencia junto a la del canal B con el eje cortado. Baja el eje hasta 0 y mide la diferencia real', { rounds: [{ a: ['canal A', 46], b: ['canal B', 40], floor: 36 }] },
+      'Con el eje desde 36, la barra de A parece mucho más alta que la de B. Desde 0 se ve la verdad: $\\tfrac{46 - 40}{40} = 15\\,\\%$ más.',
+      { hint: 'Baja el piso a 0 para ver las barras completas; el porcentaje se calcula con los números del eje.' }),
+    play('tabla-doble', 'En la jornada de la mañana aprobaron 54 de 90 estudiantes y en la de la tarde, 42 de 60. ¿Dónde fue mayor la proporción?', { rounds: [
+      { rows: [['mañana', 54, 90], ['tarde', 42, 60]], what: 'aprobó' }] },
+      'En la mañana aprobaron más estudiantes, pero en proporción gana la tarde: $\\tfrac{54}{90} = 60\\,\\%$ contra $\\tfrac{42}{60} = 70\\,\\%$.',
+      { hint: 'Divide los que aprobaron de cada jornada entre el total de esa misma jornada.' }),
+    play('pinta-personas', 'En una muestra de 20 jóvenes, el 35 % se informa solo por redes sociales. Píntalos', { rounds: [{ total: 20, pct: 35, what: 'se informan por redes' }] },
+      'Cada joven es el 5 % de la muestra ($100 \\div 20$): el 35 % son $35 \\div 5 = 7$ jóvenes.',
+      { hint: 'Halla primero qué porcentaje vale una sola persona de la muestra.' }),
+    play('solapa-barras', 'De 45 estudiantes, 28 practican fútbol, 17 baloncesto y 8 ninguno de los dos. Solapa las barras', { rounds: [
+      { labels: ['fútbol', 'baloncesto'], total: 45, a: 28, b: 17, none: 8 }] },
+      'Practican algo $45 - 8 = 37$. Como $28 + 17 = 45$, sobran 8: esos practican los dos deportes y quedaron contados dos veces.',
+      { hint: 'Si sumas los dos grupos, los que practican ambos deportes quedan contados dos veces.' }),
+    play('cuadricula-cien', 'En un control de calidad salieron defectuosos 3 de cada 20 bombillos. Pinta esa parte en la cuadrícula de cien', { rounds: [{ ask: '3 de cada 20', count: 15 }] },
+      '$\\tfrac{3}{20} = \\tfrac{15}{100}$: el 15 %. Para pasar a cien se multiplica arriba y abajo por 5.',
+      { hint: '¿Por cuánto hay que multiplicar el 20 para llegar a 100? Haz lo mismo con el 3.' }),
+    play('contraejemplo', 'Alguien afirma: «si el promedio de un grupo es 3.5, nadie perdió la materia». La nota mínima para ganar es 3.0. Busca el grupo que lo desmiente', { rounds: [
+      { claim: 'Si el promedio de cuatro notas es 3.5, todas son de 3.0 o más', items: ['3.5, 3.5, 3.5, 3.5', '3.0, 3.5, 4.0, 3.5', '2.0, 4.0, 4.0, 4.0', '3.2, 3.8, 3.4, 3.6'], bad: x => x.split(', ').some(v => +v < 3) }] },
+      'Los cuatro grupos promedian 3.5, pero en «2.0, 4.0, 4.0, 4.0» alguien perdió. Un promedio no dice cómo están repartidos los datos.',
+      { hint: 'Calcula el promedio de cada grupo y luego mira las notas una por una: ¿alguno cumple el promedio y aun así contradice la frase?' }),
+    play('tanque-porcentaje', 'Una finca tiene dos tanques de distinto tamaño. Llena cada uno al porcentaje pedido', { rounds: [{ title: 'Litros', items: [{ cap: 80, pct: 35, step: 2 }, { cap: 150, pct: 12, step: 3 }] }] },
+      'El 10 % de 80 L son 8 L, así que el 35 % son $3.5 \\cdot 8 = 28$ L. El 10 % de 150 L son 15 L y el 2 % son 3 L: el 12 % son 18 L.',
+      { hint: 'Calcula primero el 10 % del tanque y arma con él el porcentaje pedido.' }),
+    sol('Para saber si los jóvenes de un municipio prefieren estudiar de día o de noche, se encuestó a 80 estudiantes de un colegio nocturno: 68 dijeron que prefieren la noche. ¿Qué porcentaje es y qué se puede concluir?',
+      ['$\\tfrac{68}{80}$ es [[0.85]], es decir, el [[85]] % de la muestra', 'La muestra salió solo de un colegio [[nocturno]]', 'Por eso [[no]] representa a todos los jóvenes del municipio'],
+      ['68', 'diurno', 'sí'],
+      'El 85 % es cierto para la muestra, pero quien estudia de noche ya eligió la noche: la muestra está sesgada y no sirve para hablar de todo el municipio.',
+      'Calcula el porcentaje y después pregúntate a quién se le preguntó: ¿se parece a todos los jóvenes del municipio?'),
+    err('En el colegio A aprobaron 45 de 60 estudiantes y en el colegio B, 52 de 80. Un estudiante quiere saber cuál colegio tuvo mejor resultado.',
+      ['En A aprobaron $\\tfrac{45}{60} = 75\\,\\%$', 'En B aprobaron $\\tfrac{52}{80} = 65\\,\\%$', 'Como 52 es mayor que 45, B tuvo mejor resultado'], 2,
+      ['Como 75 % es mayor que 65 %, A tuvo mejor resultado', 'Como 80 es mayor que 60, B tuvo mejor resultado', 'Los dos tuvieron el mismo resultado, porque la diferencia es 10'],
+      'Los porcentajes ya estaban bien calculados: para comparar grupos de distinto tamaño se comparan ellos, no las cantidades. Gana A, con 75 %.',
+      'Mira el último paso: ¿compara lo mismo que se calculó en los pasos anteriores?'),
+    opc('Una emisora preguntó por teléfono a sus oyentes si escuchan radio todos los días y el 92 % dijo que sí. La emisora concluye que el 92 % de los habitantes del país escucha radio a diario. Esta conclusión es:',
+      ['Válida, porque el porcentaje es muy alto', 'Válida, porque la encuesta se hizo por teléfono', 'No válida, porque el 8 % no respondió', 'No válida, porque solo se preguntó a quienes ya oyen esa emisora'], 3,
+      'Los oyentes de una emisora no se parecen a todo el país: casi todos escuchan radio. La muestra está sesgada, aunque el porcentaje sea alto. El 8 % sí respondió: dijo que no.',
+      'Antes de mirar el número, pregúntate a quién se le preguntó y a quién se refiere la conclusión.'),
+  ]);
+
+  return mundo('icf-ma-datos', 'Datos y Gráficas', 'matematicas', [l1, l2, l3], [
+    ['icf-ma-datos-1', 'Antes de leer una barra, mira cuánto vale cada raya de la escala.',
+      play('lee-barras', 'Las ventas de boletas de una rifa, por curso. ¿Cuánto suman?', { rounds: [{ bars: [['10A', 60], ['10B', 25], ['11A', 40]], hi: 80, step: 20, q: 'sum', max: 160, tstep: 5 }] },
+        '$60 + 25 + 40 = 125$ boletas. Con rayas de 20 en 20, el 25 queda un cuarto del camino entre 20 y 40.', { hint: 'Lee cada barra con la escala antes de sumar: las rayas no van de 10 en 10.' })],
+    ['icf-ma-datos-1', 'El cambio porcentual se mide sobre el valor de partida de cada tramo.',
+      play('mayor-subida', 'Las visitas a la página del colegio. ¿En qué tramo fue mayor el aumento en porcentaje?', { rounds: [{ pts: [['1', 5], ['2', 12], ['3', 25], ['4', 36]], hi: 40, step: 10, q: 'pct' }] },
+        'De 5 a 12 es +140 %, el mayor, aunque el salto de 12 a 25 sea de más visitas.', { hint: 'Divide lo que subió cada tramo entre el valor con el que empezó.' })],
+    ['icf-ma-datos-1', 'En una torta, el todo es 360°: la fracción del ángulo es la fracción del total.',
+      opc('En la gráfica circular de los gastos de una familia, el arriendo ocupa un sector de 108°. Si los gastos del mes suman 2 000 000 de pesos, el arriendo cuesta:',
+        ['600 000 pesos', '1 080 000 pesos', '540 000 pesos', '300 000 pesos'], 0,
+        '$\\tfrac{108}{360} = 0.3$: el arriendo es el 30 % de los gastos, $0.3 \\cdot 2\\,000\\,000 = 600\\,000$ pesos.', 'Compara el ángulo con el círculo completo para saber qué parte del total es.')],
+    ['icf-ma-datos-2', 'El promedio es el nivel donde lo que sobra arriba llena lo que falta abajo.',
+      play('nivela-datos', 'Cuatro amigos ahorraron 3, 10, 7 y 4 mil pesos. Nivela para hallar el promedio', { rounds: [{ data: [3, 10, 7, 4], hi: 12, step: 2 }] },
+        'Suman 24 mil: $24 \\div 4 = 6$ mil pesos cada uno.', { hint: 'Sube o baja la línea hasta que lo que sobra arriba sea igual a lo que falta abajo.' })],
+    ['icf-ma-datos-2', 'Con datos cargados a un lado, media, mediana y moda no coinciden.',
+      play('tres-centros', 'Los goles de seis jugadores en un torneo. Ubica los tres centros', { rounds: [{ data: [1, 2, 2, 2, 3, 8], lo: 0, hi: 8 }] },
+        'Media $\\tfrac{18}{6} = 3$, mediana 2 y moda 2: el 8 jala la media.', { hint: 'La moda es la pila más alta; la mediana queda entre los dos datos del centro.' })],
+    ['icf-ma-datos-2', 'La suma de los datos es el promedio por la cantidad de datos.',
+      opc('Las notas de Pedro en cuatro quices son 3.0, 4.5, 3.5 y 4.0. Para que su promedio en cinco quices sea 4.0, en el quinto necesita:',
+        ['4.0', '4.5', '5.0', 'No lo puede lograr'], 2,
+        'Para promediar 4.0 en cinco quices debe sumar 20. Ya suma 15: necesita 5.0, que es posible.', 'Multiplica el promedio que quiere por la cantidad de quices y compáralo con lo que ya suma.')],
+    ['icf-ma-datos-3', 'Para comparar grupos de distinto tamaño se usan porcentajes.',
+      play('tabla-doble', 'Dos barrios y su reciclaje. ¿Dónde es mayor la proporción?', { rounds: [{ rows: [['norte', 36, 48], ['sur', 39, 60]], what: 'recicla' }] },
+        'Norte: $\\tfrac{36}{48} = 75\\,\\%$. Sur: $\\tfrac{39}{60} = 65\\,\\%$, más gente pero menos proporción.', { hint: 'Divide cada «sí» entre el total de su propio barrio.' })],
+    ['icf-ma-datos-3', 'Un eje que no empieza en cero exagera las diferencias.',
+      play('eje-engano', 'Dos marcas de leche con el eje cortado. ¿Cuánto más vende A?', { rounds: [{ a: ['marca A', 63], b: ['marca B', 60], floor: 55 }] },
+        '$\\tfrac{63 - 60}{60} = 5\\,\\%$ más, aunque en el dibujo parezca el doble.', { hint: 'Baja el eje a cero y calcula con los números, no con el tamaño de las barras.' })],
+    ['icf-ma-datos-3', 'Una muestra sirve para la población a la que se parece.',
+      opc('De 200 personas encuestadas en un centro comercial, 150 dijeron que compran ropa por internet. El municipio tiene 40 000 habitantes. La afirmación más razonable es:',
+        ['Exactamente 30 000 habitantes compran ropa por internet', 'El 75 % de la muestra compra por internet, pero la muestra puede no representar al municipio', 'El 25 % de los habitantes nunca compra ropa', 'La encuesta no sirve porque 200 es menos del 1 % de la población'], 1,
+        'El 75 % es cierto para la muestra. Quien está en un centro comercial no representa necesariamente a todo el municipio, y el 25 % que no compra por internet sí compra ropa.', 'Separa lo que dicen los números de la muestra de lo que se puede decir de todo el municipio.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-lc-literal.js
+// Preicfes · Lectura Crítica · mundo 1 «Lo que Dice el Texto» (spec 2026-11-20-curso-preicfes): la primera competencia de la
+// prueba, identificar y entender los contenidos locales (datos, ideas de cada párrafo, palabras y referencias). Cada lección
+// trabaja un texto original en 7 juegos LEC distintos y cierra con un juego en movimiento; la evaluación usa otro texto con
+// preguntas A–D. Textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, mueve, preg } = ICF;
+
+  const AGUA = {
+    id: 'icf-agua', title: 'El agua que se pierde antes de llegar',
+    ficha: { autor: 'Redacción de medio ambiente', fuente: 'Periódico regional', fecha: 'Marzo de 2026' },
+    paras: [
+      'En muchas ciudades colombianas, de cada 100 litros de agua que una planta potabiliza, cerca de 40 nunca llegan a una casa. Se escapan por tubos rotos, conexiones ilegales y medidores que marcan menos de lo que pasa por ellos. Los ingenieros llaman a esa diferencia «agua no contabilizada», y es uno de los problemas más caros y menos visibles de los acueductos.',
+      'La mayor parte de esa agua no se pierde en grandes rupturas, que se ven y se reparan rápido, sino en fugas pequeñas y constantes. Un tubo con una grieta del tamaño de una lenteja puede botar más de mil litros al día durante años, enterrado bajo el pavimento, sin que nadie lo note. Como el agua se filtra hacia el suelo, la calle sigue seca y la fuga sigue abierta.',
+      'Encontrar esas fugas es un trabajo de oído. Por la noche, cuando casi nadie usa el agua y el tráfico disminuye, los técnicos recorren las calles con geófonos, unos audífonos conectados a un sensor que se apoya en el piso. El agua que escapa a presión produce un silbido característico. «Uno aprende a distinguir el sonido de una fuga del de un desagüe o un motor», cuenta Marcela Ortiz, técnica de un acueducto municipal que lleva doce años en ese oficio.',
+      'Reparar no basta si el agua circula a una presión mayor de la necesaria. Por eso algunas empresas dividieron sus redes en sectores y les instalaron válvulas que bajan la presión en la madrugada. Con menos presión, las fugas pierden menos agua y los tubos se rompen con menos frecuencia. En un municipio del Valle del Cauca, esa medida redujo las pérdidas en una cuarta parte en tres años.',
+      'El problema también tiene un lado social. Algunas familias que viven en barrios sin redes formales se conectan como pueden, con mangueras y uniones improvisadas que se rompen con facilidad. Para los acueductos, convertir esas conexiones en servicios legales, con medidor y tarifas diferenciales, recupera agua y, al mismo tiempo, garantiza un derecho.',
+      'Cada litro recuperado es un litro que no hay que sacar de un río ni tratar de nuevo. En temporadas secas, cuando los embalses bajan, esa diferencia puede decidir si una ciudad raciona o no. Cerrar las fugas, concluyen los expertos, es la fuente de agua más barata que existe.',
+    ],
+  };
+
+  const SUENO = {
+    id: 'icf-sueno', title: 'Dormir tarde no siempre es pereza',
+    ficha: { autor: 'Equipo de divulgación de una facultad de medicina', fuente: 'Revista para familias', fecha: 'Febrero de 2026' },
+    paras: [
+      'A las once de la noche, Daniela, de dieciséis años, no tiene sueño. Su mamá cree que es por el celular; sus profesores, que es desorden. Sin embargo, buena parte de la explicación está en su cuerpo: durante la adolescencia, el reloj interno que regula el sueño se corre más o menos dos horas hacia la noche.',
+      'Ese reloj depende, entre otras cosas, de la melatonina, una hormona que el cerebro libera cuando oscurece y que prepara al cuerpo para dormir. En los niños aparece temprano, hacia las ocho o nueve de la noche; en los adolescentes, en cambio, llega cerca de las once. Por eso un joven que se acuesta a las nueve suele quedarse mirando el techo: su cuerpo todavía no da la señal.',
+      'El problema es que el horario del colegio no se corre con él. Si la jornada empieza a las seis y media de la mañana, Daniela tiene que levantarse a las cinco, y con suerte habrá dormido seis horas, cuando los especialistas recomiendan entre ocho y diez a esa edad. La falta de sueño no se nota solo en los bostezos: afecta la memoria, el ánimo y la capacidad de concentrarse en clase.',
+      'Algunos colegios de otros países hicieron un experimento sencillo: retrasaron la entrada una hora. Los estudiantes no se acostaron más tarde, como temían los rectores; durmieron más. Las faltas de asistencia bajaron y las notas de las primeras clases mejoraron. Aun así, el cambio no es fácil: mover el horario afecta el transporte escolar, el trabajo de los padres y las actividades de la tarde.',
+      'Mientras tanto, hay hábitos que ayudan. La luz de las pantallas (sobre todo la azul) retrasa la melatonina todavía más, así que apagar el celular una hora antes de dormir sí sirve. También ayuda levantarse a la misma hora los fines de semana: dormir hasta el mediodía el domingo hace que el lunes se sienta como un viaje a otro país.',
+      'Entender el reloj de los adolescentes no significa justificarlo todo. Significa dejar de llamar «pereza» a lo que en parte es biología, y buscar soluciones que trabajen con ese reloj y no contra él.',
+    ],
+  };
+
+  const l1 = leccion('icf-lc-literal-1', 'Datos e ideas del texto', [
+    sc(6, 'Casi la mitad de la prueba se responde volviendo al texto. La primera habilidad es saber **qué dice**: sus datos, quién habla y cuál es la idea de cada párrafo.', { title: 'Volver al texto' }),
+    sc(7, 'Antes de leer, el título, el autor y la fuente anuncian el tema y el propósito. «Cómo funciona una vacuna», en una revista de ciencia, promete explicar; una columna de opinión promete defender una postura.', { title: 'La ficha avisa' }),
+    sc(7, 'Cada párrafo hace algo: presenta un problema, explica una causa, da un ejemplo, cita a alguien o concluye. Ponerle una etiqueta a cada uno arma el **esqueleto** del texto.', { title: 'El esqueleto' }),
+    sc(7, 'Ejemplo: «El café se cultiva entre 1 200 y 2 000 metros» es un dato que el texto **dice**. «En la costa no se cultiva café» **se deduce**. «El café colombiano es el mejor» **no lo dice**, aunque suene bien.', { title: 'Dice, se deduce, no lo dice' }),
+    sc(6, 'En una pregunta EXCEPTO, se busca cada opción en el texto. La que no aparece, o la que lo contradice, es la respuesta.', { title: 'La trampa del EXCEPTO' }),
+  ], [
+    play('anticipa-texto', 'Antes de leer, mira la ficha y anticipa', { doc: AGUA, slots: [
+      ['Tema', ['el agua que pierden los acueductos', 'la historia de los ríos del país', 'el precio de las tarifas de energía'], 0],
+      ['Propósito', ['informar sobre un problema y sus soluciones', 'contar la vida de una técnica', 'convencer de no pagar el servicio'], 0],
+      ['Tipo de texto', ['informativo', 'narrativo', 'poético'], 0],
+    ] }, 'El título habla del agua que se pierde y sale en la sección de medio ambiente de un periódico: se espera un texto informativo sobre un problema, con sus causas y soluciones.',
+      { hint: 'Fíjate en lo que anuncia el título y en la sección donde se publica: dicen de qué trata y para qué se escribió.' }),
+    play('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { doc: AGUA, labels: ['presenta el problema con un dato', 'explica dónde se pierde el agua', 'describe cómo se buscan las fugas', 'presenta una medida y su resultado', 'muestra el lado social del problema', 'concluye con el beneficio de cerrar fugas', 'cuenta la historia del primer acueducto'], key: [0, 1, 2, 3, 4, 5] },
+      'El texto abre con el dato de 40 de cada 100 litros, explica que las fugas pequeñas son las que más pierden, cuenta cómo se escuchan con geófonos, presenta las válvulas y su resultado, muestra las conexiones informales y cierra con el ahorro. Ningún párrafo cuenta la historia de un acueducto.',
+      { hint: 'Para cada párrafo pregúntate: ¿da un dato, explica, describe un método, presenta una medida o concluye?' }),
+    play('donde-buscar', '¿A qué párrafo vuelves para responder?', { doc: AGUA, cards: [
+      ['¿Qué es el «agua no contabilizada»?', [1]], ['¿Por qué una fuga pequeña puede durar años?', [2]], ['¿Qué instrumento usan los técnicos?', [3]],
+      ['¿Qué pasó en el municipio del Valle?', [4]], ['¿Qué ganan los acueductos al legalizar conexiones?', [5]], ['¿Por qué cerrar fugas ayuda en temporada seca?', [6]],
+    ] }, 'Cada pregunta tiene su párrafo: el nombre técnico está en el 1, las fugas que no se ven en el 2, los geófonos en el 3, el resultado de las válvulas en el 4, las conexiones informales en el 5 y los embalses en el 6.',
+      { hint: 'Usa el esqueleto del texto: busca en qué párrafo aparece la palabra clave de cada pregunta.' }),
+    play('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { doc: AGUA, cards: [
+      ['De cada 100 litros potabilizados, cerca de 40 no llegan a las casas.', 0],
+      ['Las fugas se buscan de noche, cuando hay menos tráfico.', 0],
+      ['Una fuga que no moja la calle puede pasar mucho tiempo sin repararse.', 1],
+      ['Con menos agua perdida, una ciudad tiene menos riesgo de racionar.', 1],
+      ['Los geófonos son un invento colombiano.', 2],
+      ['Las conexiones ilegales causan la mitad de las pérdidas.', 2],
+    ] }, 'Los dos primeros están en los párrafos 1 y 3. Que una fuga seca dure mucho se deduce del párrafo 2, y lo del racionamiento, del 6. El origen de los geófonos y la mitad de las pérdidas no aparecen.',
+      { hint: 'Busca cada afirmación: si está casi con esas palabras, «lo dice»; si sale de juntar lo que dice, «se deduce»; si no hay de dónde sacarla, «no lo dice».' }),
+    play('resume-parrafo', 'Cada párrafo en una frase', { doc: AGUA, paras: [2, 4, 6], options: [
+      'Las fugas pequeñas y ocultas son las que más agua pierden.',
+      'Bajar la presión en las redes reduce las pérdidas y las roturas.',
+      'Cerrar fugas es la manera más barata de tener más agua.',
+      'Las grandes rupturas son el principal problema de los acueductos.',
+      'Las válvulas suben la presión para que el agua llegue más lejos.',
+    ], key: [0, 1, 2] },
+      'El párrafo 2 dice que el agua se pierde sobre todo en fugas pequeñas, no en grandes rupturas; el 4, que bajar la presión reduce las pérdidas; el 6, que cerrar fugas es la fuente más barata. Las otras dos frases dicen lo contrario del texto.',
+      { hint: 'El resumen de un párrafo tiene que valer para todo el párrafo y no contradecirlo. Cuidado con las frases que invierten un dato.' }),
+    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: AGUA, ask: 'Según el texto, el agua se pierde por estas causas, EXCEPTO:', cards: [
+      ['Tubos rotos', [1, 2]], ['Conexiones ilegales', [1, 5]], ['Medidores que marcan menos', [1]], ['La evaporación en los embalses', null],
+    ] }, 'Los tubos rotos, las conexiones ilegales y los medidores aparecen en el párrafo 1 (y se amplían en el 2 y el 5). Los embalses se nombran en el 6, pero no como causa de pérdida: la evaporación no aparece.',
+      { hint: 'Lleva cada opción al párrafo que la respalda. La que no encuentra casa es la respuesta, aunque nombre algo que sí sale en el texto.' }),
+    play('quien-lo-dice', '¿Quién sostiene cada idea?', { doc: AGUA, voices: ['El autor del artículo', 'Marcela Ortiz', 'Los expertos'], cards: [
+      ['Distinguir el sonido de una fuga se aprende con la práctica.', 1],
+      ['Cerrar las fugas es la fuente de agua más barata que existe.', 2],
+      ['Cerca de 40 de cada 100 litros no llegan a una casa.', 0],
+      ['Las conexiones improvisadas se rompen con facilidad.', 0],
+    ] }, 'La técnica Marcela Ortiz habla del oído que se entrena (párrafo 3); «concluyen los expertos» introduce la idea de la fuente más barata (párrafo 6). Los datos y las conexiones los presenta el autor sin atribuirlos a nadie.',
+      { hint: 'Busca las comillas y verbos como «cuenta» o «concluyen»: señalan quién dice cada cosa. Lo que no tiene dueño lo dice el autor.' }),
+    mueve('rompe-cambios', 'Manda la pelota al dato que dice el texto', 'El texto dice', [
+      ['Una grieta pequeña puede botar al día…', ['más de mil litros', 'unos diez litros', 'un millón de litros'], 0],
+      ['Las fugas se escuchan de noche porque…', ['hay menos ruido', 'hace más frío', 'hay más presión'], 0],
+      ['En el Valle, bajar la presión redujo…', ['las pérdidas', 'las tarifas', 'los embalses'], 0],
+    ], 'El párrafo 2 habla de más de mil litros al día; el 3, de la noche, cuando hay menos uso y menos tráfico; el 4, de una reducción de las pérdidas en una cuarta parte.',
+      'Antes de lanzar, ubica el párrafo de cada pregunta: el dato está escrito ahí.'),
+  ]);
+
+  const l2 = leccion('icf-lc-literal-2', 'Palabras y referencias', [
+    sc(6, 'Muchas preguntas piden el sentido de una palabra **en esa oración**. El diccionario da varias; el texto escoge una.', { title: 'La palabra en su lugar' }),
+    sc(7, 'Ejemplo: «el río **arrastra** troncos» es llevar; «él **arrastra** una tristeza» es cargar con algo. Se prueba cada opción dentro de la oración y se queda la que no cambia el sentido.', { title: 'Probar en la oración' }),
+    sc(7, 'Palabras como «este», «ella», «lo», «las primeras» o «él» **apuntan** a algo dicho antes. Para saber a qué, se busca hacia atrás lo que concuerda en género, número y sentido.', { title: 'Hilos hacia atrás' }),
+    sc(7, 'Los conectores dicen cómo se unen dos ideas: «sin embargo» contrasta, «por eso» saca una consecuencia, «porque» da la causa y «por ejemplo» ilustra.', { title: 'Bisagras entre ideas' }),
+    sc(6, 'Los signos también hablan: las comillas citan o presentan un nombre, los paréntesis aclaran y los dos puntos anuncian una explicación.', { title: 'Lo que hacen los signos' }),
+  ], [
+    play('palabra-a-la-medida', 'La palabra que dice lo mismo en su oración', { doc: SUENO, rounds: [
+      { p: 1, before: 'el reloj interno que ', word: 'regula', after: ' el sueño', options: ['controla', 'prohíbe', 'mide', 'acorta'], answer: 0 },
+      { p: 2, before: 'una hormona que el cerebro ', word: 'libera', after: ' cuando oscurece', options: ['suelta', 'encierra', 'compra', 'borra'], answer: 0 },
+      { p: 6, before: 'no significa ', word: 'justificarlo', after: ' todo', options: ['darle la razón en', 'castigarlo por', 'olvidarlo en', 'medirlo en'], answer: 0 },
+    ] }, 'El reloj interno controla el sueño; el cerebro suelta la melatonina al oscurecer; y entender el reloj no es darle la razón en todo a quien se trasnocha.',
+      { hint: 'Lee la oración con cada opción puesta: la buena conserva el sentido del texto, aunque haya otras que también sean sinónimos en el diccionario.' }),
+    play('hilo-referente', '¿A qué apunta cada palabra?', { doc: SUENO, rounds: [
+      { p: 6, text: 'y buscar |soluciones| que trabajen con |ese reloj| y no contra |él|.', from: 5, answer: 3 },
+      { p: 2, text: 'Ese reloj depende, entre otras cosas, de |la melatonina|, una hormona que |el cerebro| libera cuando oscurece y que prepara al cuerpo para dormir. En |los niños| |aparece| temprano', from: 7, answer: 1, ask: '¿Qué es lo que «aparece» temprano en los niños? Tira el hilo desde el nudo.' },
+    ] }, 'En el párrafo 6, las soluciones deben trabajar con el reloj y no contra «él»: el mismo reloj. En el 2, lo que «aparece» temprano en los niños es la melatonina, la hormona de la que se viene hablando.',
+      { hint: 'Busca hacia atrás la palabra que concuerda con la referencia y prueba ponerla en su lugar: la oración debe seguir teniendo sentido.' }),
+    play('conector-bisagra', 'Las bisagras del texto', { doc: SUENO, rounds: [
+      { a: 'Su mamá cree que es por el celular.', b: 'buena parte de la explicación está en su cuerpo.', options: ['Sin embargo,', 'Por eso,', 'Además,', 'Por ejemplo,'], answer: 0 },
+      { a: 'En los adolescentes la melatonina llega cerca de las once.', b: 'un joven que se acuesta a las nueve suele quedarse despierto.', options: ['Por eso,', 'Aunque', 'Es decir,', 'En cambio,'], answer: 0 },
+      { a: 'Retrasar la entrada mejoró las notas.', b: 'el cambio no es fácil para el transporte y las familias.', options: ['Aun así,', 'Por lo tanto,', 'Además,', 'Es decir,'], answer: 0 },
+    ] }, 'La opinión de la mamá choca con la explicación biológica (contraste). La hora de la melatonina es la causa de que el joven no se duerma (consecuencia). Y los buenos resultados conviven con las dificultades (contraste).',
+      { hint: 'Mira qué pasa entre las dos ideas: ¿la segunda se opone a la primera, sale de ella o le suma algo?' }),
+    play('signos-que-hablan', 'Lo que hacen los signos', { doc: SUENO, rounds: [
+      { p: 5, text: 'La luz de las pantallas |(|sobre todo la azul) retrasa la melatonina', options: ['aclara de qué luz se trata', 'cita a un especialista', 'abre una lista de hábitos', 'marca ironía'], answer: 0 },
+      { p: 6, text: 'Significa dejar de llamar |«|pereza» a lo que en parte es biología', options: ['marca una palabra de la que el autor se distancia', 'cita una frase textual de Daniela', 'presenta un término científico', 'anuncia una explicación'], answer: 0 },
+    ] }, 'El paréntesis precisa cuál luz retrasa más la melatonina. Las comillas de «pereza» señalan la palabra que usan otros y que el autor no acepta del todo.',
+      { hint: 'Fíjate en lo que queda dentro del signo y en si el autor lo dice con su voz o con la de otros.' }),
+    play('donde-buscar', '¿Dónde está la respuesta?', { doc: SUENO, cards: [
+      ['¿A qué hora aparece la melatonina en los niños?', [2]], ['¿Cuántas horas recomiendan dormir a los adolescentes?', [3]],
+      ['¿Qué pasó cuando algunos colegios retrasaron la entrada?', [4]], ['¿Por qué conviene apagar el celular antes de dormir?', [5]],
+    ] }, 'La hora de la melatonina está en el 2; las horas recomendadas, en el 3; el experimento de los colegios, en el 4; y el consejo del celular, en el 5.',
+      { hint: 'Ubica la palabra clave de cada pregunta (melatonina, horas, colegios, celular) y el párrafo donde aparece.' }),
+    play('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { doc: SUENO, cards: [
+      ['En la adolescencia, el reloj del sueño se corre unas dos horas.', 0],
+      ['Un estudiante que entra a las seis y media puede dormir menos de lo recomendado.', 1],
+      ['Dormir hasta tarde el domingo empeora el lunes.', 1],
+      ['El celular es la principal causa del insomnio juvenil.', 2],
+      ['En Colombia ya se retrasó la entrada de los colegios.', 2],
+    ] }, 'Lo del reloj está en el párrafo 1. Que entrar temprano quite sueño y que el domingo largo cueste el lunes se deduce de los párrafos 3 y 5. El texto no dice que el celular sea la causa principal (dice lo contrario) ni que Colombia haya cambiado el horario: los colegios del experimento son de otros países.',
+      { hint: 'Cuidado con las afirmaciones que exageran o cambian el lugar: compáralas palabra por palabra con el párrafo.' }),
+    play('caso-nuevo', 'La idea del texto, en otros casos', { doc: SUENO, principle: 'Antes de juzgar una conducta como un defecto, conviene buscar si tiene una causa en el cuerpo y adaptar la solución a ella.', cards: [
+      ['Un profesor que, al ver que un niño con miopía no copia del tablero, lo sienta adelante en vez de regañarlo.', true],
+      ['Una empresa que programa las reuniones difíciles en las horas en que su equipo está más despierto.', true],
+      ['Un entrenador que castiga a un jugador cansado sin preguntar cuánto durmió.', false],
+      ['Una familia que culpa al niño de comer poco sin consultar si tiene una alergia.', false],
+    ] }, 'Sentar adelante al niño con miopía y mover las reuniones aplican la idea: buscan la causa y ajustan la solución. Castigar sin preguntar y culpar sin consultar hacen justo lo que el texto critica.',
+      { hint: 'Pregúntate en cada caso si alguien buscó primero la causa antes de llamar «defecto» a la conducta.' }),
+    mueve('vuela-precios', 'Vuela al sentido que tiene en el texto', 'En el texto', [
+      ['«Regula el sueño» quiere decir que lo…', ['controla', 'prohíbe', 'acorta'], 0],
+      ['En el párrafo 2, «aparece» se refiere a…', ['la melatonina', 'el cerebro', 'los niños'], 0],
+      ['«Sin embargo» en el párrafo 1 marca…', ['un contraste', 'una causa', 'un ejemplo'], 0],
+    ], 'Regular es controlar; lo que aparece temprano en los niños es la melatonina; y «sin embargo» opone la opinión de la mamá a la explicación del cuerpo.',
+      'Vuelve a la oración de cada pregunta y prueba cada opción en su lugar.'),
+  ]);
+
+  const MURALES = {
+    id: 'icf-murales', title: 'Las paredes que cuentan el barrio',
+    paras: [
+      'Hace diez años, la calle principal del barrio era una fila de muros grises con avisos de «se vende» y grafitis sin firma. Hoy, los buses turísticos se detienen allí para que los visitantes fotografíen más de cuarenta murales pintados por artistas del sector. Lo que empezó como una jornada de limpieza organizada por la junta de acción comunal se convirtió en uno de los recorridos más visitados de la ciudad.',
+      'Los murales no son decoración al azar. Cada uno cuenta un episodio de la historia del barrio: la llegada de las primeras familias desplazadas del campo, la construcción del acueducto comunitario con trabajo de los propios vecinos, los partidos de fútbol en el potrero que hoy es una cancha. «Pintar es nuestra manera de que no se olvide lo que costó levantar esto», explica Yeison Mosquera, uno de los artistas.',
+      'El recorrido trajo beneficios visibles. Abrieron cafeterías y tiendas de recuerdos, varios jóvenes trabajan como guías y algunos artistas reciben encargos de otras ciudades. La junta calcula que unas trescientas personas obtienen hoy algún ingreso relacionado con los visitantes, y que la calle es más segura porque siempre hay gente en ella.',
+      'Sin embargo, no todos están contentos. Algunos vecinos se quejan del ruido, de la basura y de los visitantes que toman fotos de sus casas sin pedir permiso. Otros temen que el éxito haga subir los arriendos y que las familias de siempre terminen yéndose, como ha ocurrido en barrios de otras ciudades que se pusieron de moda.',
+      'Para evitarlo, la junta propuso reglas: horarios para los recorridos, guías obligatorios del propio barrio y un aporte de cada visitante para mantener los murales y apoyar a las familias con arriendos más altos. La propuesta todavía se discute, pero deja clara una idea: un barrio puede abrir sus paredes al turismo sin dejar de pertenecer a quienes lo construyeron.',
+    ],
+  };
+  const Q = preg(MURALES, 'lectura');
+  return mundo('icf-lc-literal', 'Lo que Dice el Texto', 'lectura', [l1, l2], [
+    ['icf-lc-literal-1', 'La idea central reúne lo que dicen todos los párrafos, sin quedarse en un detalle.',
+      Q('¿Cuál de los siguientes enunciados resume mejor el texto?', ['Los murales atraen muchos turistas, pero la basura es el mayor problema del barrio', 'Un barrio convirtió sus muros en un recorrido turístico que trae beneficios y tensiones, y busca reglas para seguir siendo de sus vecinos', 'Los artistas del barrio reciben encargos de otras ciudades', 'Las juntas de acción comunal organizan jornadas de limpieza'], 1,
+        'El texto recorre el origen de los murales, su sentido, sus beneficios, las quejas y la propuesta de reglas. Las demás opciones toman un solo detalle de un párrafo.',
+        'El resumen tiene que valer para el principio y el final del texto, no solo para un párrafo.')],
+    ['icf-lc-literal-1', 'Para saber la función de un párrafo, mira qué hace frente al anterior.',
+      Q('El párrafo 4 cumple la función de:', ['Presentar las dificultades que trajo el éxito del recorrido', 'Explicar el significado de cada mural', 'Contar la historia de las primeras familias', 'Proponer las reglas para los recorridos'], 0,
+        '«Sin embargo, no todos están contentos» anuncia el giro: el párrafo enumera el ruido, la basura, las fotos sin permiso y el miedo a los arriendos.',
+        'Lee la primera oración del párrafo: indica qué viene después de los beneficios.')],
+    ['icf-lc-literal-1', 'En una pregunta EXCEPTO, cada opción se busca en el texto; la que no está es la respuesta.',
+      Q('Según el texto, son beneficios del recorrido, EXCEPTO:', ['Nuevas cafeterías y tiendas', 'Trabajo de guías para jóvenes', 'Encargos para los artistas', 'Arriendos más baratos para las familias'], 3,
+        'Las tres primeras están en el párrafo 3. Los arriendos aparecen en el párrafo 4, pero como un temor de que suban, no como un beneficio.',
+        'Vuelve al párrafo de los beneficios y marca cada opción que encuentres allí.')],
+    ['icf-lc-literal-2', 'Una referencia se entiende buscando hacia atrás lo que concuerda con ella.',
+      Q('En el párrafo 5, la expresión «para evitarlo» se refiere a evitar que:', ['Los buses turísticos dejen de llegar', 'Las familias de siempre tengan que irse del barrio', 'Los artistas pinten nuevos murales', 'La junta pierda el control de la cancha'], 1,
+        'El párrafo anterior termina con el temor de que suban los arriendos y las familias se vayan; las reglas buscan evitar eso.',
+        'Lee la última idea del párrafo 4: «lo» recoge lo que se acaba de decir.')],
+    ['icf-lc-literal-2', 'El sentido de una palabra se prueba dentro de su oración.',
+      Q('En el párrafo 2, la palabra «levantar» significa:', ['Construir con esfuerzo', 'Despertarse temprano', 'Subir un objeto pesado', 'Protestar contra algo'], 0,
+        '«Lo que costó levantar esto» se refiere al barrio: construirlo con el trabajo de las familias, como el acueducto comunitario.',
+        'Pregúntate qué es «esto» en la cita del artista y prueba cada opción en la oración.')],
+    ['icf-lc-literal-2', 'Las comillas con un nombre al lado citan las palabras de una persona.',
+      Q('En el párrafo 2, las comillas se usan para:', ['Destacar una palabra que el autor no acepta', 'Presentar el título de un mural', 'Reproducir lo que dice uno de los artistas', 'Indicar una frase en otro idioma'], 2,
+        'Después de la cita viene «explica Yeison Mosquera, uno de los artistas»: las comillas reproducen sus palabras.',
+        'Mira lo que viene justo después de las comillas: dice quién habla.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-sc-constitucion.js
+// Preicfes · Sociales y Ciudadanas · mundo 1 «Constitución y Estado» (spec 2026-11-20-curso-preicfes): lo que más pregunta la
+// prueba de ciudadanía: el Estado social de derecho, las ramas del poder y los órganos de control, y los mecanismos para proteger
+// los derechos. Cada lección es un caso original en 7 juegos LEC distintos y un juego en movimiento; la evaluación, otro caso con
+// preguntas A–D. Casos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, mueve, preg } = ICF;
+
+  const PUENTE = {
+    id: 'icf-puente', title: 'El puente que pidió la vereda',
+    ficha: { autor: 'Profesora de ciencias sociales', fuente: 'Guía de ciudadanía para grado once', fecha: 'Abril de 2026' },
+    paras: [
+      'Cada vez que llueve, los niños de la vereda La Esperanza dejan de ir a la escuela. Para llegar tienen que cruzar una quebrada que en invierno crece tanto que arrastra piedras y troncos. Los padres llevan años pidiendo un puente. Seguir su solicitud paso a paso es una buena manera de entender cómo funciona el Estado colombiano.',
+      'La Constitución de 1991 dice en su primer artículo que Colombia es un Estado social de derecho. «De derecho» significa que todas las autoridades, desde el presidente hasta el alcalde, deben actuar según las leyes y no según su voluntad. «Social» significa que el Estado no solo pone reglas: también tiene el deber de garantizar condiciones de vida dignas, como la educación de esos niños.',
+      'Para que nadie concentre todo el poder, este se divide en tres ramas. La legislativa hace las leyes: es el Congreso, formado por el Senado y la Cámara. La ejecutiva gobierna y ejecuta: el presidente a nivel nacional, los gobernadores en los departamentos y los alcaldes en los municipios. La judicial resuelve los conflictos y protege los derechos por medio de los jueces y las altas cortes. En el municipio, las normas locales y el presupuesto los aprueba el concejo, una corporación administrativa elegida por voto popular: no es parte del Congreso, pero cumple allí la tarea de decidir las normas.',
+      'En el caso del puente, la junta de acción comunal llevó la petición a la alcaldía. El alcalde incluyó la obra en su proyecto de presupuesto, pero no podía gastar el dinero por su cuenta: primero el concejo municipal tuvo que aprobarlo. Solo entonces la alcaldía pudo contratar a la empresa que construiría el puente.',
+      'Además de las tres ramas, existen órganos de control que vigilan a los demás. La Contraloría revisa que el dinero público se gaste bien; la Procuraduría investiga a los funcionarios que incumplen sus deberes; y la Defensoría del Pueblo y las personerías ayudan a los ciudadanos a defender sus derechos. Cuando la obra se retrasó, la Contraloría pidió explicaciones sobre los pagos que ya se habían hecho.',
+      'El puente se terminó dos años después de la primera solicitud. Para los habitantes de La Esperanza, la espera fue larga; para el Estado, la división del poder hizo más lento el proceso, pero también más difícil que el dinero se perdiera. Esa es la tensión de siempre: los controles cuestan tiempo, y sin ellos el poder no le rinde cuentas a nadie.',
+    ],
+  };
+
+  const TUTELA = {
+    id: 'icf-tutela', title: 'Las herramientas de Valentina',
+    ficha: { autor: 'Personería estudiantil de un colegio público', fuente: 'Cartilla de derechos', fecha: 'Mayo de 2026' },
+    paras: [
+      'Valentina tiene quince años y usa silla de ruedas. Cuando su familia se mudó, el colegio más cercano le negó el cupo con el argumento de que sus salones quedan en el segundo piso y no hay rampa. Su mamá no sabía qué hacer. La personera estudiantil le explicó que la Constitución no solo enumera derechos: también da herramientas concretas para reclamarlos.',
+      'La primera es el derecho de petición. Cualquier persona puede presentar una solicitud respetuosa ante una autoridad, de forma verbal o escrita, y esta debe responder de fondo, por regla general, en un plazo de quince días hábiles. La mamá de Valentina escribió a la secretaría de educación pidiendo una explicación y una solución. La respuesta llegó a tiempo, pero solo decía que el caso «se estaba estudiando».',
+      'Entonces acudieron a la acción de tutela, quizá el mecanismo más conocido de la Constitución de 1991. La tutela sirve para proteger los derechos fundamentales, como la vida, la igualdad o la educación de los niños, cuando una autoridad o un particular los vulnera o los amenaza. No necesita abogado y el juez debe decidir en un máximo de diez días. Sin embargo, por regla general procede solo cuando no existe otro medio eficaz para defender el derecho.',
+      'El juez le dio la razón a Valentina: negarle el cupo por la falta de una rampa era discriminarla. Ordenó al colegio recibirla y a la secretaría construir la rampa en un plazo de tres meses. La decisión no regaló nada: obligó al Estado a cumplir lo que la Constitución ya le exigía.',
+      'Existen otras herramientas para otros problemas. La acción popular protege derechos colectivos, que son de todos a la vez, como un ambiente sano o el espacio público: sirve, por ejemplo, si una fábrica contamina el río de un pueblo. La acción de cumplimiento se usa para exigir que una autoridad cumpla una ley o un decreto que está ignorando. Y el habeas corpus protege a quien ha sido privado de su libertad de manera ilegal.',
+      'Conocer estas herramientas cambia la relación de un ciudadano con el Estado. Quien sabe que puede reclamar deja de pedir favores y empieza a exigir derechos.',
+    ],
+  };
+
+  const l1 = leccion('icf-sc-constitucion-1', 'Estado social de derecho y ramas del poder', [
+    sc(6, 'La prueba de Sociales pregunta casi siempre por **casos**: una comunidad, una autoridad y una decisión. Para resolverlos hay que saber quién hace qué en el Estado.', { title: 'Casos, no fechas' }),
+    sc(7, 'Colombia es un **Estado social de derecho**: las autoridades obedecen las leyes, y además el Estado debe garantizar condiciones de vida dignas.', { title: 'De derecho y social' }),
+    sc(7, 'El poder se divide en **tres ramas**: la legislativa hace las normas, la ejecutiva gobierna y ejecuta, y la judicial resuelve conflictos. Es como un equipo en el que nadie es a la vez jugador, árbitro y dueño del reglamento.', { title: 'Tres ramas' }),
+    sc(7, 'Ejemplo en un municipio: el concejo (una corporación administrativa, no parte del Congreso) aprueba la norma que prohíbe parquear en el andén, la alcaldía pone las señales y multa, y un juez decide si una multa fue injusta.', { title: 'Concejo, alcaldía y juez' }),
+    sc(6, 'Los **órganos de control** vigilan: la Contraloría cuida el dinero público, la Procuraduría a los funcionarios y la Defensoría los derechos humanos.', { title: 'Quién vigila' }),
+  ], [
+    play('anticipa-texto', 'Antes de leer, anticipa con la ficha', { doc: PUENTE, slots: [
+      ['Tema', ['cómo funciona el Estado a partir de un caso', 'la geografía de las veredas', 'la historia de los puentes del país'], 0],
+      ['Propósito', ['explicar con un ejemplo cercano', 'denunciar a un alcalde', 'vender un proyecto de construcción'], 0],
+      ['Tipo de texto', ['expositivo, que explica', 'cuento, que narra por narrar', 'noticia de última hora'], 0],
+    ] }, 'Es una guía de ciudadanía escrita por una profesora: usa el caso del puente para explicar el Estado. Narra un caso, pero su propósito es explicar.',
+      { hint: 'La fuente es una guía escolar de ciudadanía: piensa para qué usaría una profesora la historia de un puente.' }),
+    play('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { doc: PUENTE, labels: ['presenta el caso', 'define el Estado social de derecho', 'explica las tres ramas del poder', 'sigue el caso por las ramas', 'presenta los órganos de control', 'concluye con una tensión', 'critica la Constitución'], key: [0, 1, 2, 3, 4, 5] },
+      'Empieza con el problema de la vereda, define el Estado social de derecho, explica las tres ramas, sigue la petición por la alcaldía y el concejo, presenta los órganos de control y cierra con la tensión entre controles y rapidez. No critica la Constitución.',
+      { hint: 'Pregúntate en cada párrafo si cuenta el caso, define, explica, aplica o concluye.' }),
+    play('quien-lo-dice', '¿A quién le toca cada tarea?', { doc: PUENTE, ask: 'Lleva cada tarea a la función del Estado que cumple, según el texto.', voices: ['Hace las normas', 'Ejecuta y gobierna', 'Juzga', 'Vigila'], cards: [
+      ['El concejo aprueba el presupuesto de la obra.', 0],
+      ['La alcaldía contrata a la empresa del puente.', 1],
+      ['Los jueces resuelven conflictos y protegen derechos.', 2],
+      ['La Contraloría pide explicaciones por los pagos.', 3],
+      ['El Congreso expide las leyes.', 0],
+      ['El gobernador gobierna el departamento.', 1],
+    ] }, 'El Congreso hace las leyes (rama legislativa) y el concejo las normas del municipio (es una corporación administrativa, no parte del Congreso); la alcaldía y el gobernador ejecutan (ejecutiva); los jueces deciden (judicial); la Contraloría vigila el dinero (control).',
+      { hint: 'Pregunta por el verbo de cada tarea: ¿hace normas, ejecuta, decide un conflicto o vigila a otros? Un mismo verbo puede estar en el país y en el municipio.' }),
+    play('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { doc: PUENTE, cards: [
+      ['El alcalde no podía gastar el dinero sin la aprobación del concejo.', 0],
+      ['La Procuraduría investiga a los funcionarios que incumplen sus deberes.', 0],
+      ['Sin puente, los niños de la vereda pierden días de clase.', 1],
+      ['Si el poder no estuviera dividido, la obra quizá se habría hecho más rápido.', 1],
+      ['La empresa constructora robó parte del dinero.', 2],
+      ['El alcalde pertenece a la rama legislativa.', 2],
+    ] }, 'Lo del concejo y la Procuraduría está escrito (párrafos 4 y 5). Que los niños pierdan clases y que la división del poder haga más lento el proceso se deducen de los párrafos 1 y 6. Nada dice que la empresa robara, y el alcalde es de la rama ejecutiva.',
+      { hint: 'Cuidado con lo que «suena» a noticia: si el texto no da ningún dato para afirmarlo, no lo dice.' }),
+    play('caso-nuevo', 'La idea del texto, en otros casos', { doc: PUENTE, principle: 'En un Estado de derecho cada autoridad actúa según la ley y dentro de su función, sin hacer lo que le corresponde a otra.', cards: [
+      ['Un alcalde espera a que el concejo apruebe el presupuesto antes de contratar una obra.', true],
+      ['Un juez decide si una multa de tránsito fue impuesta conforme a la norma.', true],
+      ['Un gobernador declara culpable de un delito a un comerciante y lo manda a la cárcel.', false],
+      ['Un concejal contrata por su cuenta a la empresa que pavimentará una calle.', false],
+    ] }, 'Esperar el presupuesto y decidir sobre una multa respetan las funciones. Condenar por un delito les corresponde a los jueces, no a un gobernador; y contratar es tarea de la administración, no de un concejal.',
+      { hint: 'En cada caso pregúntate si quien actúa está haciendo la tarea de su rama o la de otra.' }),
+    play('donde-buscar', '¿A qué párrafo vuelves?', { doc: PUENTE, cards: [
+      ['¿Qué significa «de derecho»?', [2]], ['¿Quién aprueba el presupuesto municipal?', [3, 4]], ['¿Qué hace la Contraloría?', [5]],
+      ['¿Cuánto tardó el puente?', [6]], ['¿Por qué los niños no van a la escuela cuando llueve?', [1]],
+    ] }, 'La definición está en el 2; el concejo aparece en el 3 y en el caso del 4; la Contraloría en el 5; el tiempo de la obra en el 6; y la quebrada en el 1.',
+      { hint: 'Algunas preguntas tienen respuesta en dos párrafos: en el que explica la idea y en el que la aplica al caso.' }),
+    play('balanza-argumento', '¿Qué apoya y qué debilita la idea?', { doc: PUENTE, thesis: 'Dividir el poder en ramas y vigilarlo protege a los ciudadanos.', cards: [
+      ['La Contraloría pidió cuentas cuando la obra se retrasó.', 0],
+      ['El alcalde no pudo gastar sin la aprobación del concejo.', 0],
+      ['Los controles hicieron que la obra tardara dos años.', 1],
+      ['La quebrada crece en invierno.', null],
+    ] }, 'Que alguien vigile los pagos y que el alcalde dependa del concejo apoyan la idea. La demora de dos años la debilita: es el costo de los controles. Que la quebrada crezca no tiene que ver con la división del poder.',
+      { hint: 'Una oración puede ser cierta y no tener nada que ver con la idea: esa se queda en la bandeja.' }),
+    mueve('rompe-cambios', 'Manda la pelota a quien le toca', 'Quién hace qué', [
+      ['Quien aprueba el presupuesto del municipio es…', ['el concejo', 'el alcalde', 'un juez'], 0],
+      ['Quien vigila que el dinero público se gaste bien…', ['la Contraloría', 'el Congreso', 'la alcaldía'], 0],
+      ['La rama que resuelve conflictos es la…', ['judicial', 'ejecutiva', 'legislativa'], 0],
+    ], 'El concejo, una corporación administrativa elegida por voto, aprueba las normas y el presupuesto del municipio; la Contraloría hace el control fiscal; y los jueces, de la rama judicial, resuelven los conflictos.',
+      'Pregúntate por el verbo: aprobar normas, vigilar el dinero o resolver conflictos.'),
+  ]);
+
+  const l2 = leccion('icf-sc-constitucion-2', 'Derechos y mecanismos de protección', [
+    sc(6, 'La Constitución no es solo una lista de derechos: trae **herramientas** para reclamarlos. La prueba pregunta cuál sirve en cada situación.', { title: 'Derechos con herramientas' }),
+    sc(7, 'El **derecho de petición** es pedir a una autoridad que responda; la **tutela**, pedirle a un juez que proteja ya un derecho fundamental vulnerado.', { title: 'Pedir y exigir' }),
+    sc(7, 'Ejemplo: si un hospital niega una cirugía urgente a un niño, sirve la tutela, porque está en juego su salud y su vida. Si se quiere saber por qué subió un impuesto, basta un derecho de petición.', { title: 'Dos casos, dos herramientas' }),
+    sc(7, 'Para lo que es de todos, como un río o un parque, está la **acción popular**; para que una autoridad cumpla una ley, la **acción de cumplimiento**; y para una detención ilegal, el **habeas corpus**.', { title: 'Lo colectivo y la libertad' }),
+    sc(6, 'Pregunta clave en cada caso: ¿el derecho es de una persona o de todos?, ¿es fundamental?, ¿se quiere información, protección o que se cumpla una norma?', { title: 'Tres preguntas' }),
+  ], [
+    play('quien-lo-dice', '¿Qué herramienta sirve en cada caso?', { doc: TUTELA, ask: 'Lleva cada situación a la herramienta que, según el texto, sirve para ella.', voices: ['Derecho de petición', 'Acción de tutela', 'Acción popular', 'Acción de cumplimiento'], cards: [
+      ['Un colegio le niega el cupo a una niña por su discapacidad.', 1],
+      ['Una fábrica vierte residuos en el río del pueblo.', 2],
+      ['Una familia quiere saber por qué no le han asignado el subsidio.', 0],
+      ['La alcaldía ignora una ley que la obliga a señalizar las vías.', 3],
+    ] }, 'Negar el cupo afecta un derecho fundamental de una persona: tutela. El río es de todos: acción popular. Pedir información a una autoridad: derecho de petición. Exigir que se cumpla una ley: acción de cumplimiento.',
+      { hint: 'Pregúntate si el derecho es de una persona o de todos, y si se pide información, protección inmediata o que se cumpla una norma.' }),
+    play('caso-nuevo', '¿Procede la tutela?', { doc: TUTELA, principle: 'La tutela protege derechos fundamentales vulnerados o amenazados cuando no hay otro medio eficaz para defenderlos.', cards: [
+      ['Una EPS niega a un niño un medicamento que necesita para vivir.', true],
+      ['Un estudiante es expulsado sin que lo escuchen ni le expliquen la razón.', true],
+      ['Un vecino quiere que la alcaldía le cambie el color de la fachada del parque.', false],
+      ['Un comerciante quiere cobrar una deuda a un cliente que no le pagó.', false],
+    ] }, 'La vida y la salud del niño, y el debido proceso del estudiante, son derechos fundamentales en riesgo. El color de una fachada no afecta un derecho fundamental, y cobrar una deuda tiene su propio proceso ante un juez.',
+      { hint: 'Busca en cada caso si hay un derecho fundamental en juego (vida, salud, educación, igualdad, debido proceso) y si existe otra vía para reclamar.' }),
+    play('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { doc: TUTELA, cards: [
+      ['La tutela no necesita abogado.', 0],
+      ['El juez debe decidir una tutela en un máximo de diez días.', 0],
+      ['La respuesta de la secretaría no resolvió el problema de Valentina.', 1],
+      ['Sin rampa, Valentina no podía llegar a los salones del segundo piso.', 1],
+      ['El colegio fue multado por discriminar a Valentina.', 2],
+      ['La tutela sirve para cualquier problema con el Estado.', 2],
+    ] }, 'Lo del abogado y los diez días está en el párrafo 3. Que la respuesta no resolvió nada y que la falta de rampa le impedía llegar se deducen de los párrafos 2 y 1. Nadie habla de una multa, y el texto dice que la tutela procede, por regla general, solo si no hay otro medio eficaz.',
+      { hint: 'Desconfía de las afirmaciones con «cualquier», «siempre» o «todos»: compáralas con lo que el texto limita.' }),
+    play('intruso-excepto', 'Pregunta EXCEPTO', { doc: TUTELA, ask: 'Según el texto, son características de la acción de tutela, EXCEPTO:', cards: [
+      ['Protege derechos fundamentales', [3]], ['No requiere abogado', [3]], ['El juez decide en máximo diez días', [3]], ['Protege los derechos colectivos como el ambiente', null],
+    ] }, 'Las tres primeras están en el párrafo 3. Los derechos colectivos aparecen en el párrafo 5, pero los protege la acción popular, no la tutela.',
+      { hint: 'Algunas opciones nombran algo que sí sale en el texto, pero atribuido a otra herramienta: revisa a cuál.' }),
+    play('resume-parrafo', 'Cada párrafo en una frase', { doc: TUTELA, paras: [2, 4, 5], options: [
+      'El derecho de petición obliga a responder, pero la respuesta puede no resolver el problema.',
+      'La decisión del juez obligó al Estado a cumplir lo que la Constitución ya exigía.',
+      'Hay otras herramientas para derechos colectivos, leyes incumplidas y detenciones ilegales.',
+      'El juez le regaló a Valentina un cupo que no le correspondía.',
+      'La tutela reemplaza a todas las demás acciones.',
+    ], key: [0, 1, 2] },
+      'El párrafo 2 muestra que la petición tuvo respuesta, aunque vacía; el 4, que el juez hizo cumplir la Constitución («no regaló nada»); el 5 presenta las otras acciones. Las dos frases que sobran contradicen el texto.',
+      { hint: 'Desconfía de los resúmenes que dicen lo contrario de una frase del párrafo: el 4 dice que la decisión «no regaló nada».' }),
+    play('hilo-referente', '¿A qué apunta cada expresión?', { doc: TUTELA, rounds: [
+      { p: 2, text: 'Cualquier persona puede presentar |una solicitud respetuosa| ante |una autoridad|, de forma verbal o escrita, y |esta| debe responder de fondo', from: 5, answer: 3 },
+      { p: 1, text: 'La personera estudiantil le explicó que |la Constitución| no solo enumera |derechos|: también da herramientas concretas para |reclamarlos|.', from: 5, answer: 3 },
+    ] }, '«Esta» es la autoridad, la que debe responder (no la solicitud). En «reclamarlos», «los» son los derechos que enumera la Constitución.',
+      { hint: 'Pregúntate quién puede responder una solicitud. Y «los» es masculino plural: busca qué cosa en plural se puede reclamar.' }),
+    play('palabra-a-la-medida', 'La palabra en su oración', { doc: TUTELA, rounds: [
+      { p: 3, before: 'cuando una autoridad o un particular los ', word: 'vulnera', after: ' o los amenaza', options: ['viola', 'consulta', 'protege', 'enumera'], answer: 0 },
+      { p: 6, before: 'Quien sabe que puede reclamar deja de pedir favores y empieza a ', word: 'exigir', after: ' derechos', options: ['reclamar con firmeza', 'regalar', 'imaginar', 'olvidar'], answer: 0 },
+    ] }, 'Vulnerar un derecho es violarlo, irrespetarlo. Y exigir derechos es reclamarlos con firmeza, porque se tienen, en lugar de pedirlos como un favor.',
+      { hint: 'Pon cada opción en la oración y fíjate cuál conserva el contraste entre pedir un favor y reclamar algo que se tiene.' }),
+    mueve('vuela-precios', 'Vuela a la herramienta que sirve', 'Mecanismos', [
+      ['Una EPS niega una cirugía urgente:', ['tutela', 'acción popular', 'habeas corpus'], 0],
+      ['Una mina contamina el agua de todo un pueblo:', ['acción popular', 'tutela', 'derecho de petición'], 0],
+      ['Detienen a alguien sin orden de un juez:', ['habeas corpus', 'acción de cumplimiento', 'acción popular'], 0],
+    ], 'La salud y la vida son derechos fundamentales: tutela. El agua de todo un pueblo es un derecho colectivo: acción popular. Una privación ilegal de la libertad: habeas corpus.',
+      'Pregúntate si el derecho es de una persona, de todos o si se trata de la libertad.'),
+  ]);
+
+  const PARQUE = {
+    id: 'icf-parque', title: 'El parque que la alcaldía quería vender',
+    paras: [
+      'En un municipio de la sabana, la alcaldía presentó al concejo un proyecto para vender el lote del parque El Recreo a una constructora. Con ese dinero, explicó el alcalde, se terminaría el hospital, cuya obra está detenida hace dos años por falta de recursos. El concejo debía decidir en tres semanas.',
+      'Los vecinos del parque reaccionaron de inmediato. Para ellos, El Recreo es el único espacio verde del barrio, el lugar donde juegan los niños y se reúnen los adultos mayores. «Nos están pidiendo escoger entre la salud y el aire», dijo la presidenta de la junta de acción comunal en una sesión abierta del concejo. Al día siguiente, más de dos mil vecinos firmaron una carta para pedir que el lote siguiera siendo un parque y que el hospital se financiara de otra manera.',
+      'Los comerciantes de la zona, en cambio, apoyaron la venta: el nuevo conjunto de vivienda traería clientes y empleo. Y los médicos del municipio recordaron que, mientras el hospital siga cerrado, los pacientes graves deben viajar dos horas hasta la capital del departamento, y que algunos no alcanzan a llegar a tiempo.',
+      'Un grupo de vecinos presentó una acción popular ante un juez. Argumentaron que el espacio público es un derecho colectivo y que la ley exige que un parque no pierda su destino sin ser reemplazado por otro de igual área en la misma zona. El juez ordenó suspender la venta mientras estudiaba el caso. La alcaldía respondió que respetaría la decisión, pero insistió en que el hospital no podía esperar mucho más.',
+      'Mientras tanto, varios concejales propusieron otra salida: buscar recursos del departamento para el hospital y declarar el parque como zona protegida. La discusión sigue abierta, pero el caso dejó una lección: en una democracia, los conflictos entre intereses legítimos se resuelven con reglas, y cada parte tiene herramientas para hacerse oír.',
+    ],
+  };
+  const Q = preg(PARQUE, 'sociales');
+  return mundo('icf-sc-constitucion', 'Constitución y Estado', 'sociales', [l1, l2], [
+    ['icf-sc-constitucion-1', 'El concejo hace las normas del municipio y aprueba lo que propone el alcalde.',
+      Q('En el caso, la decisión de vender o no el parque le corresponde, en primer lugar, al concejo municipal porque:', ['Es la autoridad judicial del municipio', 'Es el órgano que aprueba las normas y decisiones que presenta la alcaldía', 'Es el órgano de control que vigila al alcalde', 'Representa a los comerciantes de la zona'], 1,
+        'El concejo es la corporación administrativa del municipio, elegida por voto popular: aprueba o rechaza las normas y los proyectos del alcalde. No es un juez ni un órgano de control, y tampoco representa a un gremio.',
+        'Recuerda qué hace cada parte del Estado: hacer normas, ejecutar, juzgar o vigilar.')],
+    ['icf-sc-constitucion-1', 'Cada rama cumple su función: el juez decide sobre los conflictos y los derechos.',
+      Q('Cuando el juez ordena suspender la venta, actúa como parte de:', ['La rama ejecutiva, porque gobierna el municipio', 'La rama legislativa, porque cambia una norma', 'Los órganos de control, porque vigila el dinero', 'La rama judicial, porque resuelve un conflicto sobre derechos'], 3,
+        'El juez no gobierna ni hace leyes: decide un conflicto y protege un derecho colectivo. Eso es propio de la rama judicial.',
+        'Pregúntate qué está haciendo el juez: ¿gobierna, hace normas, vigila o decide un conflicto?')],
+    ['icf-sc-constitucion-1', 'En los casos de la prueba cada actor defiende un interés distinto, a veces legítimo.',
+      Q('De acuerdo con el texto, los comerciantes y los vecinos del parque tienen posiciones opuestas porque:', ['Los comerciantes valoran el empleo y los clientes que traería la venta, y los vecinos el espacio verde del barrio', 'Los vecinos quieren el hospital y los comerciantes no', 'Los comerciantes quieren vender el parque para hacer un hospital privado', 'Los vecinos son propietarios del lote y no lo quieren vender'], 0,
+        'El párrafo 3 dice que los comerciantes esperan clientes y empleo; el párrafo 2, que para los vecinos es el único espacio verde. Nadie dice que los vecinos sean dueños del lote.',
+        'Busca en el texto qué gana o pierde cada grupo con la venta.')],
+    ['icf-sc-constitucion-2', 'La acción popular protege derechos colectivos, como el espacio público.',
+      Q('Los vecinos usaron una acción popular, y no una tutela, porque:', ['La tutela solo la puede presentar un abogado', 'La acción popular es más rápida que cualquier otro mecanismo', 'El espacio público es un derecho colectivo, que pertenece a toda la comunidad', 'El concejo no puede ser demandado con una tutela'], 2,
+        'El parque es de todos: el espacio público es un derecho colectivo, y para eso está la acción popular. La tutela no exige abogado y protege derechos fundamentales.',
+        'Pregúntate de quién es el derecho en juego: de una persona o de la comunidad entera.')],
+    ['icf-sc-constitucion-2', 'Un derecho de petición obliga a la autoridad a responder.',
+      Q('Si la junta de acción comunal quisiera conocer el avalúo del lote y los estudios de la venta, la herramienta más adecuada sería:', ['Un derecho de petición ante la alcaldía', 'Un habeas corpus', 'Una acción de cumplimiento contra los comerciantes', 'Una tutela contra los médicos'], 0,
+        'Pedir información a una autoridad es un derecho de petición, que debe responderse de fondo. El habeas corpus es para detenciones ilegales y las otras opciones se dirigen a quien no tiene la información.',
+        'Lo que se quiere es información que tiene una autoridad: ¿qué herramienta obliga a responder?')],
+    ['icf-sc-constitucion-2', 'La ley y los mecanismos sirven para resolver conflictos entre intereses legítimos.',
+      Q('La idea con la que concluye el texto es que:', ['El hospital es más importante que el parque', 'Los conflictos entre intereses legítimos se resuelven con reglas y con herramientas para que cada parte se haga oír', 'Los jueces deben decidir todos los asuntos del municipio', 'Los concejales deben obedecer siempre a los vecinos'], 1,
+        'El último párrafo lo dice: en una democracia los conflictos se resuelven con reglas y cada parte tiene herramientas. El texto no decide entre el hospital y el parque.',
+        'Lee la última oración del texto y descarta las opciones que toman partido por uno de los grupos.')],
+  ]);
+})());

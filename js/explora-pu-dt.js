@@ -47,7 +47,7 @@ xpLec('pu-dt-2', [
       ['Lo que sostiene: es idea suya.', { luz: [0], nota: { 0: 'sostiene' } }],
       ['«Por supuesto», «no niego»: lo concede. También vale como idea suya.', { luz: [1], nota: { 1: 'concede' } }],
       ['«Los críticos dicen»: no es de él.', { luz: [2], nota: { 2: 'lo dicen otros' } }],
-      ['«Pero»: la rechaza.', { luz: [3], nota: { 3: 'la rechaza' } }],
+      ['«Pero» la rechaza: no está de acuerdo.', { luz: [3], nota: { 3: 'la rechaza' } }],
       ['«Propongo»: ofrece una salida.', { luz: [4], nota: { 4: 'propone' } }],
       ['Con eso se oye su tono: tajante, conciliador, propositivo…', {}],
     ], 'Lo que concede cuenta como suyo; lo que «los críticos dicen» y él rechaza, no.'),

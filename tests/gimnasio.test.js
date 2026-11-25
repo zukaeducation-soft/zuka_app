@@ -181,22 +181,22 @@ test('Clips ya no está en el menú y el gimnasio se abre desde el botón flotan
 test('Ecuaciones con contexto tiene retos en el Preuniversitario y en Álgebra', () => {
   const pu = COURSES.find(c => c.id === 'preuda'), alg = COURSES.find(c => c.id === 'algebra');
   const ids = c => gymRetos(c).flatMap(g => g.retos.map(r => r.id));
-  for (const id of ['gym-hermanas', 'gym-madre', 'gym-cafe', 'gym-recibos']) assert.ok(ids(pu).includes(id), `${id} en el Preuniversitario`);
+  for (const id of ['gym-z-edades', 'gym-z-recibos']) assert.ok(ids(pu).includes(id), `${id} en el Preuniversitario`);
   for (const id of ['gym-hermanas', 'gym-madre', 'gym-recibos']) assert.ok(ids(alg).includes(id), `${id} en Álgebra`);
 });
 
 test('Conteo y combinatoria tiene sus retos en el Preuniversitario', () => {
   const pu = COURSES.find(c => c.id === 'preuda');
   const ids = gymRetos(pu).flatMap(g => g.retos.map(r => r.id));
-  for (const id of ['gym-claves', 'gym-papaya', 'gym-comite']) assert.ok(ids.includes(id), id);
+  for (const id of ['gym-z-claves', 'gym-z-comite']) assert.ok(ids.includes(id), id);
 });
 
 test('Aritmética y promedios tiene sus retos en el Preuniversitario', () => {
   const ids = gymRetos(COURSES.find(c => c.id === 'preuda')).flatMap(g => g.retos.map(r => r.id));
-  for (const id of ['gym-prima', 'gym-examen', 'gym-peor']) assert.ok(ids.includes(id), id);
+  for (const id of ['gym-z-resto', 'gym-z-peor']) assert.ok(ids.includes(id), id);
 });
 
 test('Azar y probabilidad tiene sus retos en el Preuniversitario', () => {
   const ids = gymRetos(COURSES.find(c => c.id === 'preuda')).flatMap(g => g.retos.map(r => r.id));
-  for (const id of ['gym-dados', 'gym-urna', 'gym-adivina']) assert.ok(ids.includes(id), id);
+  for (const id of ['gym-z-dados', 'gym-z-urna']) assert.ok(ids.includes(id), id);
 });

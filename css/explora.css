@@ -746,6 +746,7 @@
 }
 @media (min-width: 1000px) {
   .lesson.xp-lesson:not(.clip-mode) .xg:has(.hj) { max-width: 1000px; }
+  .gym-run .gym-ex .xg:has(.hj) { width: 100%; max-width: 1000px; }
   .xg .hj { max-width: 660px; }
   .xg .hj:has(> .hj-mesa) { max-width: 960px; grid-template-columns: minmax(0, 1fr) 270px; gap: 22px; align-items: center; }
   .xg .hj:has(> .hj-mesa).hj-vacia, .xg .hj-antes-de-leer.hj-fin { grid-template-columns: minmax(0, 1fr) 0; gap: 0; }

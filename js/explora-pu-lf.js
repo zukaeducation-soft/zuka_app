@@ -26,7 +26,7 @@ xpLec('pu-lf-1', [
       ['El «Pero» cierra y vuelve al comienzo.', { luz: [3], nota: { 3: 'cierra' } }],
       ['Para resumir, las imágenes se quitan: queda lo que cambia.', {}],
     ], 'La coma puede abrir una metáfora; los dos puntos, su razón. En el resumen no van.'),
-    xpHaz('hoja', 'Subraya el trozo que es **otro nombre** del faro.', { modo: 'toca', meta: [1], paras: [['El faro,', 'ese dedo de luz,', 'señala el puerto.'], ['Abajo duermen los barcos.']], pista: 'Ese no nombra al faro. Busca entre las comas.' }, 'El inciso guardaba la metáfora.')],
+    xpHaz('hoja', 'Subraya el trozo que es **otro nombre** del faro.', { modo: 'toca', meta: [1], paras: [['El faro,', 'ese dedo de luz,', 'señala el puerto.'], ['Abajo duermen los barcos.']], pista: 'Ese no es otro nombre del faro. Busca entre las comas.' }, 'El inciso guardaba la metáfora.')],
   ['Ahora sí, un problema',
     xpHaz('hoja', '**Tacha** las dos frases que **no** tienen personificación.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [0, 3], paras: [['El camino es largo.'], ['El reloj nos regaña.'], ['La lluvia tocó a la puerta.'], ['Corre como el viento.']], pista: 'Alguna de las tachadas le da algo humano a una cosa.' }, 'Regañar y tocar la puerta son cosas de gente.')],
 ], 'Nombra la figura, tradúcela y no le agregues.');
@@ -51,13 +51,13 @@ xpLec('pu-lf-2', [
     ], 'La sutil no dice lo contrario de un hecho: pone un tono que no va con el asunto.'),
     xpHaz('hoja', 'Subraya la ironía **sutil**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['«Qué silencio», dijo entre los pitos.'], ['El bus pasó a las ocho.'], ['Estrenó, con la solemnidad de un presidente, su nuevo lápiz.']], pista: 'Esa dice lo contrario de un hecho o solo informa.' }, 'Demasiada solemnidad para un lápiz.')],
   ['Lo que de verdad piensa',
-    xpMira('hoja', 'Tercera idea: detrás del elogio hay una **tesis escondida**.', { paras: [['Qué sabio es nuestro comité:', 'lleva nueve años pensando.'], ['¿Para qué apurarse?', 'La calle ya aprendió a inundarse sola.']] }, [
-      ['«Sabio»: dale la vuelta.', { luz: [0] }],
-      ['Nueve años es un dato. Lo dice en serio.', { luz: [1], nota: { 0: 'elogio y dato' } }],
+    xpMira('hoja', 'Tercera idea: detrás del elogio hay una **tesis escondida**.', { paras: [['Qué veloz es nuestro correo:', 'la carta tardó nueve meses.'], ['¿Para qué apurarse?', 'Las noticias también saben esperar.']] }, [
+      ['«Veloz»: dale la vuelta.', { luz: [0] }],
+      ['Nueve meses es un dato. Lo dice en serio.', { luz: [1], nota: { 0: 'elogio y dato' } }],
       ['La pregunta no espera respuesta: es retórica.', { luz: [2], nota: { 1: 'pregunta retórica' } }],
-      ['Lo que piensa: el comité no hace nada.', { luz: [0, 1, 2, 3] }],
+      ['Lo que piensa: el correo es muy lento.', { luz: [0, 1, 2, 3] }],
       ['Los datos se pesan contra esa tesis, no contra el elogio.', {}],
-      ['Un inciso, como «sabios como son», también puede ser irónico.', {}],
+      ['Un inciso, como «veloces como son», también puede ser irónico.', {}],
     ], 'Dale la vuelta al elogio: ahí está la tesis. Los datos van en serio.'),
     xpHaz('hoja', '«Felicito al arquitecto: puso la puerta **a dos metros del suelo**». Subraya lo que **piensa** el autor.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['La puerta es hermosa.'], ['La puerta está mal puesta.'], ['El arquitecto ganó un premio.']], pista: 'Esa se queda en el elogio o agrega algo. Dale la vuelta.' }, 'El dato desarma el elogio.')],
   ['Ahora sí, un problema',

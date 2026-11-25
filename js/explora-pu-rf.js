@@ -8,7 +8,7 @@ xpLec('pu-rf-1', [
       ['La prueba: reemplaza y lee toda la oración.', {}],
       ['Género y número ayudan; el sentido decide.', { luz: [1, 3] }],
     ], 'Busca hacia atrás, reemplaza y lee: si tiene sentido, ese es.'),
-    xpHaz('hoja', 'Subraya el referente de «**ellos**».', { modo: 'toca', unidos: true, quietos: [0, 2, 4, 6], meta: [3], paras: [['Las maestras', ' invitaron a ', 'la alcaldesa', 'los abuelos del barrio', ', y ', 'cada uno de ellos', ' contó una historia.']], pista: 'Ese no concuerda: «ellos» es masculino y plural.' }, 'Masculino y plural: solo uno concuerda.')],
+    xpHaz('hoja', 'Subraya el referente de «**ellos**».', { modo: 'toca', unidos: true, quietos: [1, 3, 5], meta: [2], paras: [['Las maestras', ' recibieron a ', 'los abuelos del barrio', ' en ', 'la cancha', '; ellos contaron historias.']], pista: 'Ese no concuerda: «ellos» es masculino y plural.' }, 'Masculino y plural: solo uno concuerda.')],
   ['Este y aquel',
     xpMira('hoja', 'Segunda idea: «**este**» es lo más cercano y «**aquel**», lo más lejano.', { unidos: true, paras: [['Compró ', 'un violín', ' y ', 'un tambor', '; ', 'este', ' suena fuerte, ', 'aquel', ' suena dulce.']] }, [
       ['Dos cosas nombradas en orden.', { luz: [1, 3] }],
@@ -63,5 +63,5 @@ xpLec('pu-rf-2', [
     ], 'Cuenta en orden y confirma con el género y el número.'),
     xpHaz('hoja', '«Sembró maíz, papa y ají; **el último** picó y **la segunda** se heló». Pon al margen qué es cada uno.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['el ají', 'la papa'], meta: [0, 1], paras: [['el último'], ['la segunda']], pista: 'Alguno no va ahí. Cuenta en orden y mira el género.' }, 'Tercero y segunda: el orden manda.')],
   ['Ahora sí, un problema',
-    xpHaz('hoja', '**Tacha** las dos expresiones que **no** nombran al río.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['El río creció; la corriente rugía.'], ['El puente aguantó.'], ['El gigante marrón se llevó la cerca.'], ['Los vecinos miraban.']], pista: 'Alguna de las tachadas sí nombra al río con otras palabras.' }, '«Corriente» y «gigante marrón»: el mismo río.')],
+    xpHaz('hoja', '**Tacha** las dos oraciones que **no** nombran al río.', { modo: 'tacha', letras: ['A', 'B', 'C', 'D'], meta: [1, 3], paras: [['El río creció; la corriente rugía.'], ['El puente aguantó.'], ['El gigante marrón se llevó la cerca.'], ['Los vecinos miraban.']], pista: 'Alguna de las tachadas sí nombra al río con otras palabras.' }, '«Corriente» y «gigante marrón»: el mismo río.')],
 ], 'Otro nombre, un silencio o un número de orden: todos apuntan a algo ya dicho.');

@@ -25845,3 +25845,327 @@ GAMES['torres-vistas'] = (() => {
   });
   return Object.assign(game, { answer: r => ({ h: want(r) }) });
 })();
+;
+//#archivo js/games/cubos-ocultos.js
+// Los cubos que no se ven (Preuniversitario, pu-es-2; spec 2026-11-18-preuda-razonamiento-completo): en una construcción de
+// cubos, los que sostienen a los de arriba también cuentan aunque no se vean. Se ve la construcción en perspectiva y su
+// vista desde arriba con las alturas tapadas; se arrastra el total de cubos.
+// params = { rounds: [{ h: [[alturas por fila]] }] }   state = { rounds: [{ n }] }   (de 1 a 40)
+GAMES['cubos-ocultos'] = (() => {
+  const total = r => r.h.flat().reduce((a, b) => a + b, 0);
+  const ok = (s, r) => s.n === total(r);
+  const game = roundsGame({
+    aspect: 1.3,
+    init: () => ({ n: 1 }),
+    ok,
+    solution: r => `${total(r)} cubos`,
+    prompt: () => '¿Cuántos cubos tiene la construcción, contando los escondidos?',
+    foot: () => 'Arrastra el total de cubos',
+    layout(G) { G.tY = G.H - 108; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = false; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { n: total(r) } : G.s, rows = r.h.length, cols = r.h[0].length, c = Math.min(26, (G.W - 80) / (cols + rows * 0.6)), dx = c * 0.6, dy = c * 0.5, ox = 40, oy = G.tY - 70;
+      // Se dibuja de atrás (fila 0) hacia adelante y de abajo hacia arriba, para que lo de adelante tape lo de atrás.
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) for (let k = 0; k < r.h[j][i]; k++) {
+        const x = ox + i * c + (rows - 1 - j) * dx, y = oy - k * c - (rows - 1 - j) * dy;
+        p.stroke(C.bg); p.strokeWeight(1); p.fill(RK.al(p, C.sky, 230)); p.rect(x, y, c, c);
+        p.fill(RK.al(p, C.sky, 170)); p.quad(x, y, x + c, y, x + c + dx, y - dy, x + dx, y - dy);
+        p.fill(RK.al(p, C.sky, 120)); p.quad(x + c, y, x + c + dx, y - dy, x + c + dx, y - dy + c, x + c, y + c);
+      }
+      const good = ok(s, r);
+      G.X = RK.track(p, C, 30, G.W - 30, G.tY, 40, s.n - 1, i => ((i + 1) % 5 === 0 ? String(i + 1) : null));
+      RK.strip(p, C, G.fb, `$\\text{${s.n} cubos}$`, { kicker: good ? 'Contaste también los de abajo' : 'Cuenta columna por columna', col: G.locked || good ? C.ok : C.brand, size: 17 });
+    },
+    press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
+    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
+    release(G) { G.grab = false; },
+    demo: G => ({ from: { x: G.X(0), y: G.tY }, to: { x: G.X(4), y: G.tY }, text: 'Arrastra el total', ty: G.tY - 28 }),
+    peek: G => ({ tY: G.tY }),
+  });
+  game.move = (G, x) => { const v = RK.pick(x, 30, G.W - 30, 40) + 1; if (v !== G.s.n || !G.touched[G.cur]) { G.s.n = v; G.touch(); } };
+  return Object.assign(game, { answer: r => ({ n: total(r) }) });
+})();
+;
+//#archivo js/games/cubo-pintado.js
+// El cubo pintado (Preuniversitario, pu-es-2; spec 2026-11-18-preuda-razonamiento-completo): un cubo de n × n × n se pinta por
+// fuera y se corta en cubitos. Las 8 esquinas tienen 3 caras pintadas; los de las 12 aristas (sin esquinas), 2; los del
+// centro de cada cara, 1; y los de adentro, ninguna. Se arrastra cuántos cubitos hay de cada tipo; el juego resalta en el
+// dibujo dónde están los del tipo que se está moviendo.
+// params = { rounds: [{ n }] }   state = { rounds: [{ c: [c3, c2, c1, c0] }] }   (de 0 a 30)
+GAMES['cubo-pintado'] = (() => {
+  const want = r => { const m = r.n - 2; return [8, 12 * m, 6 * m * m, m * m * m]; };
+  const ok = (s, r) => s.c.join() === want(r).join();
+  const LAB = ['3 caras', '2 caras', '1 cara', 'ninguna'];
+  const game = roundsGame({
+    aspect: 1.55,
+    init: () => ({ c: [0, 0, 0, 0] }),
+    ok,
+    answered: s => s.c.some(v => v > 0),
+    solution: r => want(r).map((v, i) => `${LAB[i]}: ${v}`).join(', '),
+    prompt: r => `Cubo de ${r.n} × ${r.n} × ${r.n} pintado por fuera. ¿Cuántos cubitos de cada tipo?`,
+    foot: () => 'Arrastra cuántos cubitos tienen 3, 2, 1 y ninguna cara pintada',
+    layout(G) { G.tr = [0, 1, 2, 3].map(i => G.H - 196 + i * 34); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = -1; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { c: want(r) } : G.s, n = r.n, c = Math.min(26, 120 / n), dx = c * 0.5, dy = c * 0.5, ox = G.W / 2 - (n * c + n * dx) / 2, oy = 110 + n * dy, hi = G.grab;
+      const kind = (i, j, k) => [i, j, k].filter(v => v === 0 || v === n - 1).length;             // cuántas caras exteriores toca
+      const col = t => (hi >= 0 && 3 - hi === t ? C.coral : RK.al(p, C.sky, 180));
+      for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { p.stroke(C.bg); p.strokeWeight(1); p.fill(col(kind(i, j, n - 1))); p.rect(ox + i * c, oy + j * c, c, c); }
+      for (let i = 0; i < n; i++) for (let k = 0; k < n; k++) { const x = ox + i * c + k * dx, y = oy - k * dy; p.fill(col(kind(i, 0, n - 1 - k))); p.quad(x, y, x + c, y, x + c + dx, y - dy, x + dx, y - dy); }
+      for (let j = 0; j < n; j++) for (let k = 0; k < n; k++) { const x = ox + n * c + k * dx, y = oy + j * c - k * dy; p.fill(col(kind(n - 1, j, n - 1 - k))); p.quad(x, y, x + dx, y - dy, x + dx, y - dy + c, x, y + c); }
+      G.X = G.tr.map((ty, i) => { TK.label(p, C, `${LAB[i]}: ${s.c[i]}`, 54, ty - 14, C.ink, 10, 100); return RK.track(p, C, 110, G.W - 24, ty, 31, s.c[i], k => (k % 5 === 0 ? String(k) : null), C.sky); });
+      RK.strip(p, C, G.fb, `$${s.c.join(' + ')} = ${s.c.reduce((a, b) => a + b, 0)}\\ (\\text{de } ${n ** 3})$`, { col: G.locked || ok(G.s, r) ? C.ok : C.brand, size: 16 });
+    },
+    press(G, x, y) { const j = G.tr.findIndex(t => Math.abs(y - t) < 18); if (j < 0) return false; G.grab = j; game.move(G, x); return true; },
+    drag(G, x) { if (G.grab < 0) return false; game.move(G, x); return true; },
+    release(G) { G.grab = -1; },
+    demo: G => ({ from: { x: G.X[0](0), y: G.tr[0] }, to: { x: G.X[0](4), y: G.tr[0] }, text: 'Arrastra un conteo', ty: G.tr[0] - 30 }),
+    peek: G => ({ tr: G.tr }),
+  });
+  game.move = (G, x) => { const v = RK.pick(x, 110, G.W - 24, 31), j = G.grab; if (v !== G.s.c[j] || !G.touched[G.cur]) { G.s.c[j] = v; G.touch(); } };
+  return Object.assign(game, { answer: r => ({ c: want(r) }) });
+})();
+;
+//#archivo js/games/arma-desarrollo.js
+// Armar un desarrollo del cubo (Preuniversitario, pu-es-3; spec 2026-11-18-preuda-razonamiento-completo): un desarrollo son
+// seis cuadrados unidos por sus lados que al doblarlos cierran el cubo sin que dos caigan en la misma cara. Algunos cuadrados
+// ya están; se arrastran los que faltan a la cuadrícula hasta que el desarrollo cierre (el juego lo dobla y lo comprueba).
+// params = { rounds: [{ fixed: [[col, fila]], free: n }] }   (cuadrícula de 5 × 4)   state = { rounds: [{ cells: [[col, fila]] }] }
+GAMES['arma-desarrollo'] = (() => {
+  const all = (r, s) => [...r.fixed, ...s.cells];
+  const ok = (s, r) => s.cells.length === r.free && CUBO.fold(all(r, s)) !== null;
+  const answer = r => { const free = []; for (let x = 0; x < 5; x++) for (let y = 0; y < 4; y++) if (!r.fixed.some(c => c[0] === x && c[1] === y)) free.push([x, y]); for (let i = 0; i < free.length; i++) for (let j = i + 1; j < free.length; j++) { const s = { cells: r.free === 1 ? [free[i]] : [free[i], free[j]] }; if (ok(s, r)) return s; } return null; };
+  const game = roundsGame({
+    aspect: 1.25,
+    init: () => ({ cells: [] }),
+    ok,
+    answered: s => s.cells.length > 0,
+    solution: r => answer(r).cells.map(c => `(${c.join(', ')})`).join(' y '),
+    prompt: r => `Pon ${r.free === 1 ? 'el cuadrado que falta' : `los ${r.free} cuadrados que faltan`} para que el cubo cierre`,
+    foot: () => 'Arrastra cuadrados a la cuadrícula; sácalos para quitarlos',
+    layout(G) { G.u = Math.min(48, (G.W - 40) / 5); G.o = { x: (G.W - 5 * G.u) / 2, y: 104 }; G.src = { x: G.W / 2 - 24, y: 104 + 4 * G.u + 18, w: 48, h: 40 }; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.drag = null; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, u = G.u, o = G.o, good = ok(s, r);
+      p.stroke(RK.al(p, C.line, 120)); p.strokeWeight(1); for (let i = 0; i <= 5; i++) p.line(o.x + i * u, o.y, o.x + i * u, o.y + 4 * u); for (let j = 0; j <= 4; j++) p.line(o.x, o.y + j * u, o.x + 5 * u, o.y + j * u);
+      r.fixed.forEach(c => { p.stroke(C.ink); p.strokeWeight(1.4); p.fill(good ? C.ok : C.sky); p.rect(o.x + c[0] * u, o.y + c[1] * u, u, u); });
+      s.cells.forEach(c => { p.stroke(C.ink); p.strokeWeight(1.4); p.fill(good ? C.ok : C.coral); p.rect(o.x + c[0] * u, o.y + c[1] * u, u, u); });
+      if (s.cells.length < r.free) RK.chip(p, C, G.src, '+', { on: true, col: C.coral, size: 18 });
+      if (G.drag) { p.noStroke(); p.fill(RK.al(p, C.coral, 200)); p.rect(G.drag.x - u / 2, G.drag.y - u / 2, u, u); }
+      const n = all(r, s).length;
+      RK.strip(p, C, G.fb, n < 6 ? `$\\text{${n} de 6 cuadrados}$` : good ? '$\\text{cierra: es un desarrollo}$' : '$\\text{no cierra: dos caras chocan}$', { col: G.locked || good ? C.ok : C.brand, size: 16 });
+    },
+    press(G, x, y) {
+      if (G.s.cells.length < G.r.free && hitBox(G.src, x, y)) { G.drag = { from: -1, x, y }; return true; }
+      const k = G.s.cells.findIndex(c => hitBox({ x: G.o.x + c[0] * G.u, y: G.o.y + c[1] * G.u, w: G.u, h: G.u }, x, y)); if (k >= 0) { G.s.cells.splice(k, 1); G.drag = { from: k, x, y }; return true; }
+      return false;
+    },
+    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
+    release(G, x, y) {
+      const d = G.drag; G.drag = null; if (!d) return; const cx = Math.floor((x - G.o.x) / G.u), cy = Math.floor((y - G.o.y) / G.u);
+      if (cx >= 0 && cx < 5 && cy >= 0 && cy < 4 && ![...G.r.fixed, ...G.s.cells].some(c => c[0] === cx && c[1] === cy)) G.s.cells.push([cx, cy]);
+      G.touch();
+    },
+    demo: G => ({ from: { x: G.src.x + 24, y: G.src.y + 20 }, to: { x: G.o.x + 4.5 * G.u, y: G.o.y + 3.5 * G.u }, text: 'Arrastra un cuadrado', ty: G.src.y + 54 }),
+    peek: G => ({ o: G.o, u: G.u, src: G.src }),
+  });
+  return Object.assign(game, { answer });
+})();
+;
+//#archivo js/games/caras-opuestas.js
+// Caras opuestas del cubo (Preuniversitario, pu-es-3; spec 2026-11-18-preuda-razonamiento-completo): en un desarrollo, dos
+// cuadrados que se tocan nunca quedan opuestos; en una fila de tres, el primero y el tercero sí. Hay un desarrollo con letras;
+// junto a tres letras hay un hueco: se arrastra a cada hueco la letra que queda frente a ella al armar el cubo.
+// params = { rounds: [{ cells: [[col, fila]], letters: [..], ask: [índices] }] }   state = { rounds: [{ put: [letra | null] }] }
+GAMES['caras-opuestas'] = (() => {
+  const want = r => r.ask.map(i => r.letters[CUBO.opposite(r.cells, i)]);
+  const ok = (s, r) => s.put.join() === want(r).join();
+  const lay = G => { const r = G.r, W = Math.max(...r.cells.map(c => c[0])) + 1, H = Math.max(...r.cells.map(c => c[1])) + 1; G.u = Math.min(42, (G.W - 40) / W, 180 / H); G.o = { x: (G.W - W * G.u) / 2, y: 104 }; G.slots = r.ask.map((_, k) => ({ k, x: G.W / 2 - (r.ask.length * 96 - 8) / 2 + k * 96 + 46, y: 104 + H * G.u + 22, w: 40, h: 36 })); };
+  const game = roundsGame({
+    aspect: 1.5,
+    init: r => ({ put: r.ask.map(() => null) }),
+    ok,
+    answered: s => s.put.some(v => v != null),
+    solution: r => r.ask.map((i, k) => `${r.letters[i]} ↔ ${want(r)[k]}`).join(', '),
+    prompt: () => 'Al armar el cubo, ¿qué letra queda frente a cada una?',
+    foot: () => 'Arrastra a cada hueco la letra opuesta',
+    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.drag = null; lay(G); },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { put: want(r) } : G.s, good = ok(s, r), u = G.u, o = G.o;
+      r.cells.forEach((c, i) => { const b = { x: o.x + c[0] * u, y: o.y + c[1] * u, w: u, h: u }; p.stroke(C.ink); p.strokeWeight(1.4); p.fill(r.ask.includes(i) ? RK.al(p, C.sky, 120) : RK.al(p, C.card, 200)); p.rect(b.x, b.y, u, u); TK.label(p, C, r.letters[i], b.x + u / 2, b.y + u / 2, C.ink, 14, u); });
+      G.slots.forEach(b => { TK.label(p, C, `${r.letters[r.ask[b.k]]} ↔`, b.x - 26, b.y + 18, C.ink, 13, 40); const v = s.put[b.k]; if (v != null) RK.chip(p, C, b, v, { on: true, col: G.locked ? (v === want(r)[b.k] ? C.ok : C.bad) : good ? C.ok : C.mint, size: 13 }); else { p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 3]); p.rect(b.x, b.y, b.w, b.h, 8); p.drawingContext.setLineDash([]); } });
+      G.tray = r.letters.map((L, i) => ({ L, x: G.W / 2 - (r.letters.length * 40 - 6) / 2 + i * 40, y: G.H - 110, w: 34, h: 32 }));
+      G.tray.forEach(b => RK.chip(p, C, b, b.L, { size: 13, col: C.coral }));
+      if (G.drag) RK.chip(p, C, { x: G.drag.x - 17, y: G.drag.y - 16, w: 34, h: 32 }, G.drag.L, { on: true, col: C.brand, size: 13 });
+      RK.strip(p, C, G.fb, good ? '$\\text{bien doblado}$' : '$\\text{dobla el desarrollo en tu cabeza}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+    },
+    press(G, x, y) { const t = (G.tray || []).find(b => hitBox(b, x, y)); if (t) { G.drag = { L: t.L, x, y }; return true; } const b = G.slots.find(b => hitBox(b, x, y)); if (b && G.s.put[b.k] != null) { G.drag = { L: G.s.put[b.k], x, y }; G.s.put[b.k] = null; return true; } return false; },
+    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
+    release(G, x, y) { const d = G.drag; G.drag = null; if (!d) return; const b = G.slots.find(b => hitBox({ x: b.x - 6, y: b.y - 8, w: b.w + 12, h: b.h + 16 }, x, y)); if (b) G.s.put[b.k] = d.L; G.touch(); },
+    demo(G) { const t = G.tray?.find(b => b.L !== want(G.r)[0]), b = G.slots[0]; return t ? { from: { x: t.x + 17, y: t.y + 16 }, to: { x: b.x + 20, y: b.y + 18 }, text: 'Arrastra una letra', ty: t.y - 12 } : null; },
+    peek: G => ({ slots: G.slots, tray: G.tray }),
+  });
+  return Object.assign(game, { answer: r => ({ put: want(r) }), want });
+})();
+;
+//#archivo js/games/dado-siete.js
+// El dado: las caras opuestas suman 7 (Preuniversitario, pu-es-3; spec 2026-11-18-preuda-razonamiento-completo): en un dado
+// común 1 va frente a 6, 2 frente a 5 y 3 frente a 4. Se ven tres caras (arriba, frente y derecha); se arrastran los números
+// de las tres caras escondidas (abajo, atrás e izquierda) a su lugar en el desarrollo.
+// params = { rounds: [{ top, front, right }] }   state = { rounds: [{ bottom, back, left }] }
+GAMES['dado-siete'] = (() => {
+  const want = r => ({ bottom: 7 - r.top, back: 7 - r.front, left: 7 - r.right });
+  const ok = (s, r) => ['bottom', 'back', 'left'].every(k => s[k] === want(r)[k]);
+  const NAMES = { bottom: 'abajo', back: 'atrás', left: 'izquierda' };
+  const lay = G => { const u = 46, cx = G.W / 2; G.u = u; G.cells = { top: [cx - u / 2, 120], back: [cx - u / 2, 120 - u + u], left: [cx - 3 * u / 2, 120 + u], front: [cx - u / 2, 120 + u], right: [cx + u / 2, 120 + u], bottom: [cx - u / 2, 120 + 2 * u] }; G.cells.back = [cx - u / 2, 120 - 0]; G.cells.top = [cx - u / 2, 120 + u]; G.cells.front = [cx - u / 2, 120 + 2 * u]; G.cells.bottom = [cx - u / 2, 120 + 3 * u]; G.cells.left = [cx - 3 * u / 2, 120 + u]; G.cells.right = [cx + u / 2, 120 + u]; };
+  const game = roundsGame({
+    aspect: 1.35,
+    init: () => ({ bottom: null, back: null, left: null }),
+    ok,
+    answered: s => s.bottom != null || s.back != null || s.left != null,
+    solution: r => `abajo ${7 - r.top}, atrás ${7 - r.front}, izquierda ${7 - r.right}`,
+    prompt: r => `Se ven ${r.top} arriba, ${r.front} al frente y ${r.right} a la derecha. ¿Y las escondidas?`,
+    foot: () => 'Arrastra los números a las caras escondidas del desarrollo',
+    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.drag = null; lay(G); },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? want(r) : G.s, u = G.u, good = ok(s, r);
+      const known = { top: r.top, front: r.front, right: r.right };
+      Object.entries(G.cells).forEach(([k, [x, y]]) => {
+        const v = known[k] ?? s[k], hidden = !(k in known);
+        p.stroke(C.ink); p.strokeWeight(1.4); p.fill(hidden ? RK.al(p, good ? C.ok : C.mint, 90) : RK.al(p, C.card, 220)); p.rect(x, y, u, u, 4);
+        if (v != null) TK.label(p, C, String(v), x + u / 2, y + u / 2, C.ink, 18, u); else TK.label(p, C, NAMES[k], x + u / 2, y + u / 2, C.mute, 8, u - 4);
+      });
+      G.tray = [1, 2, 3, 4, 5, 6].map((n, i) => ({ n, x: G.W / 2 - (6 * 40 - 6) / 2 + i * 40, y: G.H - 110, w: 34, h: 34 }));
+      G.tray.forEach(b => RK.chip(p, C, b, String(b.n), { size: 14, col: C.sky }));
+      if (G.drag) RK.chip(p, C, { x: G.drag.x - 17, y: G.drag.y - 17, w: 34, h: 34 }, String(G.drag.n), { on: true, col: C.brand, size: 14 });
+      RK.strip(p, C, G.fb, good ? '$\\text{cada pareja suma 7}$' : '$\\text{opuestas: 1-6, 2-5, 3-4}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
+    },
+    press(G, x, y) { const t = (G.tray || []).find(b => hitBox(b, x, y)); if (t) { G.drag = { n: t.n, x, y }; return true; } for (const k of ['bottom', 'back', 'left']) { const [cx, cy] = G.cells[k]; if (G.s[k] != null && hitBox({ x: cx, y: cy, w: G.u, h: G.u }, x, y)) { G.drag = { n: G.s[k], x, y }; G.s[k] = null; return true; } } return false; },
+    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
+    release(G, x, y) { const d = G.drag; G.drag = null; if (!d) return; for (const k of ['bottom', 'back', 'left']) { const [cx, cy] = G.cells[k]; if (hitBox({ x: cx - 4, y: cy - 4, w: G.u + 8, h: G.u + 8 }, x, y)) G.s[k] = d.n; } G.touch(); },
+    demo(G) { const [cx, cy] = G.cells.left, t = G.tray?.find(b => b.n !== 7 - G.r.right); return t ? { from: { x: t.x + 17, y: t.y + 17 }, to: { x: cx + G.u / 2, y: cy + G.u / 2 }, text: 'Arrastra un número', ty: t.y - 12 } : null; },
+    peek: G => ({ cells: G.cells, tray: G.tray }),
+  });
+  return Object.assign(game, { answer: r => want(r) });
+})();
+;
+//#archivo js/games/espejo-figura.js
+// Reflejar una figura (Preuniversitario, pu-es-4; spec 2026-11-18-preuda-razonamiento-completo): en un espejo cada casilla queda
+// a la misma distancia del eje, del otro lado; un espejo vertical cambia izquierda por derecha pero no arriba por abajo. Se
+// pinta arrastrando el dedo por las casillas del otro lado del eje (arrastrar sobre una pintada la borra) hasta dibujar el reflejo.
+// params = { rounds: [{ n, axis: 'v' | 'h', cells: [[col, fila]] }] }   (eje en la mitad de una cuadrícula de n × n)
+// state = { rounds: [{ on: ['col,fila'] }] }
+GAMES['espejo-figura'] = (() => {
+  const mirror = (r, [x, y]) => (r.axis === 'v' ? [r.n - 1 - x, y] : [x, r.n - 1 - y]);
+  const want = r => r.cells.map(c => mirror(r, c).join(',')).sort();
+  const ok = (s, r) => [...s.on].sort().join('|') === want(r).join('|');
+  const lay = G => { const r = G.r; G.u = Math.min(38, (G.W - 40) / r.n); G.o = { x: (G.W - r.n * G.u) / 2, y: 106 }; };
+  const side = (r, x, y) => (r.axis === 'v' ? x >= r.n / 2 : y >= r.n / 2);
+  const game = roundsGame({
+    aspect: 1.45,
+    init: () => ({ on: [] }),
+    ok,
+    answered: s => s.on.length > 0,
+    solution: r => `${want(r).length} casillas reflejadas`,
+    prompt: r => `Dibuja el reflejo en el espejo ${r.axis === 'v' ? 'vertical' : 'horizontal'}`,
+    foot: () => 'Arrastra el dedo por las casillas del otro lado del espejo',
+    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.paint = null; lay(G); },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { on: want(r) } : G.s, u = G.u, o = G.o, good = ok(s, r);
+      for (let x = 0; x < r.n; x++) for (let y = 0; y < r.n; y++) {
+        const k = `${x},${y}`, fig = r.cells.some(c => c[0] === x && c[1] === y), on = s.on.includes(k);
+        p.stroke(RK.al(p, C.line, 140)); p.strokeWeight(1); p.fill(fig ? C.sky : on ? (good ? C.ok : C.coral) : side(r, x, y) ? RK.al(p, C.card, 200) : RK.al(p, C.card, 90)); p.rect(o.x + x * u, o.y + y * u, u, u);
+      }
+      p.stroke(C.brand); p.strokeWeight(3); if (r.axis === 'v') p.line(o.x + r.n * u / 2, o.y - 6, o.x + r.n * u / 2, o.y + r.n * u + 6); else p.line(o.x - 6, o.y + r.n * u / 2, o.x + r.n * u + 6, o.y + r.n * u / 2);
+      RK.strip(p, C, G.fb, good ? '$\\text{es su reflejo}$' : `$\\text{${s.on.length} casillas pintadas}$`, { col: G.locked || good ? C.ok : C.brand, size: 16 });
+    },
+    press(G, x, y) { const c = [Math.floor((x - G.o.x) / G.u), Math.floor((y - G.o.y) / G.u)]; if (c[0] < 0 || c[1] < 0 || c[0] >= G.r.n || c[1] >= G.r.n || !side(G.r, ...c)) return false; const k = c.join(','); G.paint = !G.s.on.includes(k); game.apply(G, k); return true; },
+    drag(G, x, y) { if (G.paint == null) return false; const c = [Math.floor((x - G.o.x) / G.u), Math.floor((y - G.o.y) / G.u)]; if (c[0] >= 0 && c[1] >= 0 && c[0] < G.r.n && c[1] < G.r.n && side(G.r, ...c)) game.apply(G, c.join(',')); return true; },
+    release(G) { G.paint = null; },
+    demo: G => { const r = G.r, a = r.axis === 'v' ? [r.n - 1, 0] : [0, r.n - 1], b = r.axis === 'v' ? [r.n - 1, 2] : [2, r.n - 1]; return { from: { x: G.o.x + (a[0] + 0.5) * G.u, y: G.o.y + (a[1] + 0.5) * G.u }, to: { x: G.o.x + (b[0] + 0.5) * G.u, y: G.o.y + (b[1] + 0.5) * G.u }, text: 'Pinta arrastrando', ty: G.o.y + r.n * G.u + 18 }; },
+    peek: G => ({ o: G.o, u: G.u }),
+  });
+  game.apply = (G, k) => { const on = G.s.on, i = on.indexOf(k); if (G.paint && i < 0) { on.push(k); G.touch(); } else if (!G.paint && i >= 0) { on.splice(i, 1); G.touch(); } };
+  return Object.assign(game, { answer: r => ({ on: want(r) }) });
+})();
+;
+//#archivo js/games/gira-figura.js
+// Girar una figura (Preuniversitario, pu-es-4; spec 2026-11-18-preuda-razonamiento-completo): girar no le cambia la «mano» a
+// una figura; solo cambia hacia dónde mira. A la izquierda está la figura pedida; a la derecha, la misma figura en otra
+// posición. Se arrastra alrededor de la de la derecha para girarla de cuarto en cuarto de vuelta hasta que coincidan.
+// params = { rounds: [{ cells: [[x, y]], k }] }   (la figura pedida es la de la derecha girada k cuartos)   state = { rounds: [{ q }] }
+GAMES['gira-figura'] = (() => {
+  const rot = (cells, q) => { let c = cells.map(p => [...p]); for (let i = 0; i < ((q % 4) + 4) % 4; i++) c = c.map(([x, y]) => [-y, x]); const mx = Math.min(...c.map(p => p[0])), my = Math.min(...c.map(p => p[1])); return c.map(([x, y]) => [x - mx, y - my]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); };
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const ok = (s, r) => same(rot(r.cells, s.q), rot(r.cells, r.k));
+  const game = roundsGame({
+    aspect: 1.3,
+    init: r => ({ q: same(rot(r.cells, 0), rot(r.cells, r.k)) ? 1 : 0 }),
+    ok,
+    solution: r => `${r.k} cuarto${r.k === 1 ? '' : 's'} de vuelta`,
+    prompt: () => 'Gira la figura de la derecha hasta que quede como la otra',
+    foot: () => 'Arrastra alrededor de la figura de la derecha para girarla',
+    layout(G) { G.cL = { x: G.W * 0.27, y: 190 }; G.cR = { x: G.W * 0.73, y: 190 }; G.u = Math.min(22, G.W * 0.06); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = false; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { q: r.k } : G.s, good = ok(s, r), u = G.u;
+      const shape = (cells, c, col) => { const w = Math.max(...cells.map(q => q[0])) + 1, h = Math.max(...cells.map(q => q[1])) + 1; cells.forEach(([x, y]) => { p.stroke(C.bg); p.strokeWeight(1.5); p.fill(col); p.rect(c.x - w * u / 2 + x * u, c.y - h * u / 2 + y * u, u, u, 2); }); };
+      shape(rot(r.cells, r.k), G.cL, C.sky);
+      p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 4]); p.circle(G.cR.x, G.cR.y, 130); p.drawingContext.setLineDash([]);
+      shape(rot(r.cells, s.q), G.cR, good ? C.ok : C.coral);
+      TK.label(p, C, 'así', G.cL.x, G.cL.y + 80, C.mute, 10, 40); TK.label(p, C, '↻ gírala', G.cR.x, G.cR.y + 80, C.mute, 10, 60);
+      RK.strip(p, C, G.fb, good ? '$\\text{coinciden}$' : `$\\text{girada ${((s.q % 4) + 4) % 4} cuartos}$`, { col: G.locked || good ? C.ok : C.brand, size: 16 });
+    },
+    press(G, x, y) { if (Math.hypot(x - G.cR.x, y - G.cR.y) > 90) return false; G.grab = true; G.a0 = Math.atan2(y - G.cR.y, x - G.cR.x); G.q0 = G.s.q; return true; },
+    drag(G, x, y) { if (!G.grab) return false; const a = Math.atan2(y - G.cR.y, x - G.cR.x), d = Math.round((a - G.a0) / (Math.PI / 2)), q = ((G.q0 + d) % 4 + 4) % 4; if (q !== G.s.q || !G.touched[G.cur]) { G.s.q = q; G.touch(); } return true; },
+    release(G) { G.grab = false; },
+    demo: G => ({ from: { x: G.cR.x + 60, y: G.cR.y }, to: { x: G.cR.x, y: G.cR.y + 60 }, text: 'Gira la figura', ty: G.cR.y + 100 }),
+    peek: G => ({ cR: G.cR }),
+  });
+  return Object.assign(game, { answer: r => ({ q: r.k }) });
+})();
+;
+//#archivo js/games/dobla-papel.js
+// Doblar y perforar (Preuniversitario, pu-es-4; spec 2026-11-18-preuda-razonamiento-completo): cada doblez duplica las capas
+// del papel, así que un agujero hecho con el papel doblado n veces atraviesa 2ⁿ capas y al abrir hay 2ⁿ agujeros (por cada
+// agujero que se hizo). Se ve el papel doblado; se arrastra cuántos agujeros habrá al desdoblarlo y el juego lo abre.
+// params = { rounds: [{ folds, holes }] }   state = { rounds: [{ n }] }   (de 1 a 32)
+GAMES['dobla-papel'] = (() => {
+  const total = r => 2 ** r.folds * r.holes;
+  const ok = (s, r) => s.n === total(r);
+  const game = roundsGame({
+    aspect: 1.2,
+    init: () => ({ n: 1 }),
+    ok,
+    solution: r => `${total(r)} agujeros`,
+    prompt: r => `Se dobla una hoja por la mitad ${r.folds} ${r.folds === 1 ? 'vez' : 'veces'} y se hace${r.holes > 1 ? 'n' : ''} ${r.holes} agujero${r.holes > 1 ? 's' : ''}. ¿Cuántos hay al abrirla?`,
+    foot: () => 'Arrastra cuántos agujeros quedan al abrir la hoja',
+    layout(G) { G.tY = G.H - 108; G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
+    enter(G) { G.grab = false; },
+    draw(G) {
+      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? { n: total(r) } : G.s, good = ok(s, r), x0 = 30, y0 = 110;
+      // Capas del papel doblado, una sobre otra.
+      const L = 2 ** r.folds, W = 90, H = 70;
+      for (let i = Math.min(L, 8) - 1; i >= 0; i--) { p.stroke(C.line); p.strokeWeight(1); p.fill(RK.al(p, C.card, 220 - i * 18)); p.rect(x0 + i * 3, y0 + i * 3, W, H, 3); }
+      for (let h = 0; h < r.holes; h++) { p.noStroke(); p.fill(C.ink); p.circle(x0 + 30 + h * 22, y0 + 34, 9); }
+      TK.label(p, C, `${L} capas`, x0 + W / 2, y0 + H + 30, C.mute, 10, 90);
+      if (G.locked || good) {        // la hoja abierta: la cuadrícula de capas, con un agujero por capa y por perforación
+        const cols = 2 ** Math.ceil(r.folds / 2), rows = 2 ** Math.floor(r.folds / 2), cw = Math.min(28, (G.W - 170) / cols), ch = Math.min(28, 120 / rows), ox = G.W - 30 - cols * cw;
+        for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) { p.stroke(C.line); p.fill(RK.al(p, C.card, 200)); p.rect(ox + i * cw, y0 + j * ch, cw, ch); for (let h = 0; h < r.holes; h++) { p.noStroke(); p.fill(C.ok); p.circle(ox + i * cw + (h + 1) * cw / (r.holes + 1), y0 + j * ch + ch / 2, 5); } }
+        TK.label(p, C, 'abierta', ox + cols * cw / 2, y0 + rows * ch + 14, C.mute, 10, 80);
+      }
+      G.X = RK.track(p, C, 30, G.W - 30, G.tY, 32, s.n - 1, i => ((i + 1) % 4 === 0 ? String(i + 1) : null));
+      RK.strip(p, C, G.fb, `$\\text{${s.n} agujeros}$`, { kicker: 'Cada doblez duplica las capas', col: G.locked || good ? C.ok : C.brand, size: 17 });
+    },
+    press(G, x, y) { if (Math.abs(y - G.tY) > 30) return false; G.grab = true; game.move(G, x); return true; },
+    drag(G, x) { if (!G.grab) return false; game.move(G, x); return true; },
+    release(G) { G.grab = false; },
+    demo: G => ({ from: { x: G.X(0), y: G.tY }, to: { x: G.X(2), y: G.tY }, text: 'Arrastra los agujeros', ty: G.tY - 28 }),
+    peek: G => ({ tY: G.tY }),
+  });
+  game.move = (G, x) => { const v = RK.pick(x, 30, G.W - 30, 32) + 1; if (v !== G.s.n || !G.touched[G.cur]) { G.s.n = v; G.touch(); } };
+  return Object.assign(game, { answer: r => ({ n: total(r) }) });
+})();

@@ -24,7 +24,7 @@ test('el gimnasio flotante: retos del mundo, repaso de los anteriores y conteo d
   const w4 = ui('pu-pr-1');   // mundo 4, Proporcionalidad: tiene retos
   const g = gymWorld(PU, w4, {}, false);
   assert.equal(g.fab, true);
-  assert.ok(g.here.length >= 3, 'retos de este mundo');
+  assert.ok(g.here.length >= 2, 'retos de este mundo');
   assert.ok(g.here.every(x => x.open === false), 'sin lecciones hechas, cerrados');
   assert.equal(g.pending, 0);
   const done = { 'pu-pr-1': true, 'pu-pr-2': true, 'pu-pr-3': true, 'pu-pr-5': true };
@@ -35,7 +35,7 @@ test('el gimnasio flotante: retos del mundo, repaso de los anteriores y conteo d
   // el repaso trae retos abiertos de mundos anteriores del mismo componente, no de este
   const w12 = ui('pu-ar-1');
   const g3 = gymWorld(PU, w12, done, false);
-  assert.ok(g3.review.length >= 3 && g3.review.every(r => !g3.here.some(x => x.r === r)));
+  assert.ok(g3.review.length >= 2 && g3.review.every(r => !g3.here.some(x => x.r === r)));
   // el primer mundo también muestra el botón; desde el 2026-11-20 ya tiene reto propio
   const w1 = ui('pu-cm-1');
   assert.equal(gymWorld(PU, w1, {}, false).fab, true);

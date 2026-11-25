@@ -18,7 +18,7 @@
   zonas('cambia-tipo', {
     rot: (p, i) => p.rot[i],
     escena: p => `<p class="hj-apuesta"><small>${esc(p.de)}</small>${esc(p.antes)}</p><p class="hj-frase">${esc(p.frase).replace(/\[(\d)\]/g, (_, i) => zona(+i, p.rot[+i], 'en-linea'))}</p>`,
-    ayuda: 'Llena los huecos para que la oración cambie de propósito. Sobran fichas.',
+    ayuda: 'Llena los huecos de la oración nueva. Sobran fichas.',
   });
   zonas('todo-o-parte', { varias: true, rot: (p, i) => p.rot[i], escena: p => cajas(p) + doc(p) });
   zonas('genero-o-cita', { varias: true, rot: (p, i) => p.rot[i], escena: p => cajas(p) + doc(p) });
@@ -35,7 +35,7 @@
   zonas('linea-vida', {
     varias: true, rot: (p, i) => p.rot[i],
     escena: p => `<div class="hj-vida">${p.rot.map((t, i) => `<div><i></i><small>${esc(t)}</small>${zona(i, '', '', t)}</div>`).join('')}</div>${doc(p)}`,
-    ayuda: 'Lleva cada hecho a su momento.',
+    ayuda: 'Lleva cada ficha a su lugar de la línea.',
   });
   const suya = (p, T) => hoja(p, { nums: p.nums, trozo: (k, i, t) => T(`${k}.${i}`, t) });
   toca('subraya-rasgo', { modo: 'subraya', claves: p => p.nums.flatMap(n => oraciones(p, n).map((_, i) => `${n}.${i}`)), texto: p => p.va.map(k => { const [n, i] = k.split('.'); return `«${oraciones(p, +n)[+i]}»`; }).join(' · '), escena: (p, T) => suya(p, T) + doc(p) });
