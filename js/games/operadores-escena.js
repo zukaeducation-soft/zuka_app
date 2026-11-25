@@ -54,7 +54,7 @@
     sol: p => p.nums.map((_, i) => i).filter(i => p.f(p.nums[i], p.nums[i]) === p.t), aviso(on, p) { const i = on.findIndex((x, k) => x && p.f(p.nums[k], p.nums[k]) !== p.t); return i < 0 ? 'Falta otro número que también cumple.' : `${P(p.nums[i])} ◆ ${P(p.nums[i])} da ${N(p.f(p.nums[i], p.nums[i]))}.`; }, bien: p => p.ok, texto: p => p.nums.filter(x => p.f(x, x) === p.t).map(N).join(' y '), pie: 'Toca todos los que cumplen.',
   });
   XG.rotula('deshace-operador', {
-    slots: () => [{ x: 44, y: 62, w: 64, h: 42 }, { x: 170, y: 62, w: 64, h: 42 }], fichas: p => p.fichas, metas: p => p.metas, texto: p => p.metas.join(' → '), alto: () => 112, aviso: (q, p) => { const i = q[1][0] !== p.metas[1] ? 1 : 0; return p.trampas?.[`${i}:${q[i][0]}`] || p.mira[i]; },   // se deshace desde el final bien: p => p.ok,
+    slots: () => [{ x: 44, y: 62, w: 64, h: 42 }, { x: 170, y: 62, w: 64, h: 42 }], fichas: p => p.fichas, metas: p => p.metas, texto: p => p.metas.join(' → '), alto: () => 112, aviso: (q, p) => { const i = q[1][0] !== p.metas[1] ? 1 : 0; return p.trampas?.[`${i}:${q[i][0]}`] || p.mira[i]; },   bien: p => p.ok,   // se deshace desde el final
     fondo: (K, p) => K.ar(82, 62, 132, 62, 'lm') + K.ar(208, 62, 260, 62, 'lm') + K.t(107, 46, p.s[0], 'b ta') + K.t(234, 46, p.s[1], 'b ta') + K.r(264, 41, 68, 42, 'fo', 10) + K.t(298, 68, p.sale, 'b') + K.t(44, 104, 'entra x', 's tm') + K.t(170, 104, 'en la mitad', 's tm') + K.t(298, 104, 'sale', 's tm'),
   });
   XG.ascensor('sube-anidado', 40, 1, neutro);

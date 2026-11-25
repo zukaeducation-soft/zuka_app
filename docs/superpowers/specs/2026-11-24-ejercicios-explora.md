@@ -122,6 +122,14 @@ camino se recorre…); (2) cada sitio marcado se revisa de a uno: salta si sirve
 tablas son puras (pruebas `tests/marca-mueve.test.js`); sin ellas queda el salto. Con «reducir movimiento» solo se ve el estado final. Lo que
 faltaba ya no se pinta antes del aviso.
 
+## Al comprobar, las fichas se mueven (ejercicios de arrastrar, 2026-11-24)
+
+Segunda parte del mismo pedido, para los 147 de `XG.rotula`: (1) si la escena tiene con qué, ejecuta lo que se puso (`XG.ROTULA[nombre]`, en
+`js/games/rotula-mueve.js`: el árbol se recorre, cada círculo suma lo suyo, se comprueba hacia adelante…); (2) los lugares se revisan de a
+uno, con un punto que salta de ficha en ficha si hay una cuenta, o el renglón que se subraya; la ficha salta o se sacude y queda con ✓ o ✗; si
+hay cuenta, aparece lo que da con las fichas puestas (`XG.cadena`); (3) si falló, tras el aviso las fichas vuelan: las equivocadas vuelven a
+la bandeja y las buenas van a su lugar. Pruebas `tests/rotula-mueve.test.js`.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |

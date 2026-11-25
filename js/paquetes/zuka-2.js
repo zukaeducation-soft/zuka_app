@@ -1,77 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/casilleros.js
-// Los casilleros (Preuniversitario, pu-or-3; spec 2026-11-18-preuda-razonamiento-completo): cada persona guarda una cosa
-// distinta en su casillero. Pistas: «la mochila no es de Ana», «el balón está en el casillero de Beto». Se arrastran las
-// cosas a los casilleros hasta cumplir todas las pistas (una cosa por casillero).
-// params = { rounds: [{ people, names, clues }] }   (names: cosas; pistas at / notAt con i = índice de la persona)
-// state = { rounds: [{ arr }] }
-GAMES['casilleros'] = ORD.slotGame({
-  aspect: 1.3,
-  prompt: () => '¿Qué guarda cada uno en su casillero?',
-  slots: G => { const n = G.r.people.length, w = Math.min(70, (G.W - 30) / n - 6); return G.r.people.map((_, i) => ({ x: G.W / 2 - (n * (w + 6) - 6) / 2 + i * (w + 6), y: 128, w, h: 50 })); },
-  label: (i, r) => r.people[i],
-  decor: G => { const { p, C, r } = G, n = r.people.length, w = Math.min(70, (G.W - 30) / n - 6); for (let i = 0; i < n; i++) { const x = G.W / 2 - (n * (w + 6) - 6) / 2 + i * (w + 6); p.stroke(C.line); p.strokeWeight(1.2); p.fill(RK.al(p, C.card, 200)); p.rect(x - 3, 106, w + 6, 82, 4); p.line(x + w - 8, 112, x + w - 8, 120); } },
-  clues: G => ({ x: 16, y: 206, w: G.W - 32 }),
-  color: C => C.coral,
-});
-;
-//#archivo js/games/tres-listas.js
-// Tres listas que se cruzan (Preuniversitario, pu-or-3; spec 2026-11-18-preuda-razonamiento-completo): cada persona tiene un
-// color y una mascota distintos. Las pistas mezclan las tres listas: «el del perro viste de rojo», «Ana no tiene gato», «la
-// persona de azul no es Beto». Cada persona tiene dos casillas (color y mascota); se arrastran las fichas hasta cumplir todo.
-// params = { rounds: [{ people, A: [colores], B: [mascotas], clues: [{ t, ... , say }] }] }
-//   t: 'isA' {p, v} · 'notA' {p, v} · 'isB' {p, v} · 'notB' {p, v} · 'link' {a, b} (el del color a tiene la mascota b) · 'unlink' {a, b}
-// state = { rounds: [{ a: [color | null por persona], b: [mascota | null por persona] }] }
-GAMES['tres-listas'] = (() => {
-  const holds = (c, a, b) => { const pa = a.indexOf(c.a), pb = b.indexOf(c.b); switch (c.t) {
-    case 'isA': return a[c.p] === c.v; case 'notA': return a[c.p] !== c.v; case 'isB': return b[c.p] === c.v; case 'notB': return b[c.p] !== c.v;
-    case 'link': return pa >= 0 && pa === pb; case 'unlink': return pa < 0 || pb < 0 || pa !== pb; default: return false; } };
-  const full = (s, r) => s.a.every(x => x != null) && s.b.every(x => x != null);
-  const ok = (s, r) => full(s, r) && r.clues.every(c => holds(c, s.a, s.b));
-  const solutions = r => { const out = []; for (const a of ORD.perms(r.A)) for (const b of ORD.perms(r.B)) if (r.clues.every(c => holds(c, a, b))) out.push({ a, b }); return out; };
-  const answer = r => solutions(r)[0];
-  const lay = G => { const n = G.r.people.length, w = Math.min(84, (G.W - 30) / n - 8); G.slotA = G.r.people.map((_, i) => ({ x: G.W / 2 - (n * (w + 8) - 8) / 2 + i * (w + 8), y: 122, w, h: 30 })); G.slotB = G.slotA.map(b => ({ ...b, y: 158 })); };
-  const game = roundsGame({
-    aspect: 1.4,
-    init: r => ({ a: r.people.map(() => null), b: r.people.map(() => null) }),
-    ok,
-    answered: s => s.a.some(x => x != null) || s.b.some(x => x != null),
-    solution: r => { const s = answer(r); return r.people.map((p, i) => `${p}: ${s.a[i]} y ${s.b[i]}`).join('; '); },
-    prompt: () => 'Color y mascota de cada persona',
-    foot: () => 'Arrastra los colores a la fila de arriba y las mascotas a la de abajo',
-    layout(G) { lay(G); G.fb = { x: 12, y: G.H - 66, w: G.W - 24, h: 44 }; },
-    enter(G) { G.drag = null; lay(G); },
-    draw(G) {
-      const { p, C, r } = G, s = G.locked && !ok(G.s, r) ? answer(r) : G.s, good = ok(s, r);
-      r.people.forEach((nm, i) => TK.label(p, C, nm, G.slotA[i].x + G.slotA[i].w / 2, 110, C.ink, 11, G.slotA[i].w));
-      [['a', G.slotA, C.coral], ['b', G.slotB, C.mint]].forEach(([k, boxes, col]) => boxes.forEach((b, i) => { const v = s[k][i]; if (v != null && !(G.drag && G.drag.k === k && G.drag.v === v)) RK.chip(p, C, b, v, { on: true, col: good ? C.ok : col, size: 11 }); else { p.noFill(); p.stroke(C.line); p.drawingContext.setLineDash([4, 3]); p.rect(b.x, b.y, b.w, b.h, 8); p.drawingContext.setLineDash([]); } }));
-      r.clues.forEach((c, i) => { const v = full(s, r) ? holds(c, s.a, s.b) : null; TK.label(p, C, `${v === true ? '✓' : v === false ? '✗' : '·'} ${c.say}`, G.W / 2, 206 + i * 15, v === true ? C.ok : v === false ? C.bad : C.mute, 10, G.W - 30); });
-      const ty = G.H - 110, all = [...r.A.filter(v => !s.a.includes(v)).map(v => ['a', v]), ...r.B.filter(v => !s.b.includes(v)).map(v => ['b', v])].filter(([k, v]) => !(G.drag && G.drag.k === k && G.drag.v === v)), w = Math.min(60, (G.W - 20) / Math.max(1, all.length) - 4);
-      G.tray = all.map(([k, v], i) => ({ k, v, x: G.W / 2 - (all.length * (w + 4) - 4) / 2 + i * (w + 4), y: ty, w, h: 28 }));
-      G.tray.forEach(b => RK.chip(p, C, b, b.v, { size: 10, col: b.k === 'a' ? C.coral : C.mint }));
-      if (G.drag) RK.chip(p, C, { x: G.drag.x - 30, y: G.drag.y - 14, w: 60, h: 28 }, G.drag.v, { on: true, col: C.brand, size: 10 });
-      RK.strip(p, C, G.fb, good ? '$\\text{todo encaja}$' : '$\\text{cumple todas las pistas}$', { col: G.locked || good ? C.ok : C.brand, size: 15 });
-    },
-    press(G, x, y) {
-      const t = (G.tray || []).find(b => hitBox(b, x, y)); if (t) { G.drag = { k: t.k, v: t.v, from: -1, x, y }; return true; }
-      for (const [k, boxes] of [['a', G.slotA], ['b', G.slotB]]) { const i = boxes.findIndex(b => hitBox(b, x, y)); if (i >= 0 && G.s[k][i] != null) { G.drag = { k, v: G.s[k][i], from: i, x, y }; return true; } }
-      return false;
-    },
-    drag(G, x, y) { if (!G.drag) return false; G.drag.x = x; G.drag.y = y; return true; },
-    release(G, x, y) {
-      const d = G.drag; G.drag = null; if (!d) return;
-      const boxes = d.k === 'a' ? G.slotA : G.slotB, row = G.s[d.k], i = boxes.findIndex(b => hitBox({ x: b.x - 4, y: b.y - 6, w: b.w + 8, h: b.h + 12 }, x, y));
-      if (d.from >= 0) row[d.from] = null;
-      if (i >= 0) { const prev = row[i]; row[i] = d.v; if (prev != null && d.from >= 0) row[d.from] = prev; }
-      G.touch();
-    },
-    demo(G) { const b = G.tray?.[0]; if (!b) return null; const sol = answer(G.r)[b.k], i = sol.findIndex(v => v !== b.v), t = (b.k === 'a' ? G.slotA : G.slotB)[i]; return { from: { x: b.x + b.w / 2, y: b.y + 14 }, to: { x: t.x + t.w / 2, y: t.y + 15 }, text: 'Arrastra a una casilla', ty: b.y - 12 }; },
-    peek: G => ({ slotA: G.slotA, slotB: G.slotB, tray: G.tray }),
-  });
-  return Object.assign(game, { answer, solutions });
-})();
-;
 //#archivo js/games/comite-reglas.js
 // El comité con reglas (Preuniversitario, pu-or-4; spec 2026-11-18-preuda-razonamiento-completo): se elige un grupo de k
 // personas con condiciones como «si F está, G no», «H va solo si J va», «L tiene que ir». Se arrastran personas al comité
@@ -15096,14 +15024,14 @@ Object.assign(XG, (() => {
       ok: (s, p) => bien(s, p).every(Boolean),
       sol: p => ({ q: d.metas(p).map(m => [m]) }),
       texto: p => d.texto(p),
-      rotula: true, slots: p => d.slots(p), fichas, metas: p => d.metas(p), aviso: (s, p) => d.aviso(s.q, p), fondo: (K, p, f) => d.fondo(K, p, f), alto: p => d.alto(p),
+      rotula: true, slots: p => d.slots(p), fichas, metas: p => d.metas(p), aviso: (s, p) => d.aviso(s.q, p), bien: p => d.bien(p), fondo: (K, p, f) => d.fondo(K, p, f), alto: p => d.alto(p),
       monta(stage, p, ui) {
         stage.innerHTML = '<div class="xg-lona xg-rot"></div>';
         const box = stage.firstChild, slots = d.slots(p);
-        let marca = null, esc = null, f = 0;
+        let esc = null, f = 0;
         const monta = s => {
           esc?.(); esc = XPD.fichas(box, { slots, fichas: fichas(p), alto: d.alto(p), cumple: () => true,
-            fondo: K => d.fondo(K, p, f) + (marca ? slots.map((sl, i) => K.r(sl.x - (sl.w || 56) / 2 - 4, sl.y - (sl.h || 42) / 2 - 4, (sl.w || 56) + 8, (sl.h || 42) + 8, marca[i] ? 'bien' : 'mal', 13)).join('') : '') },
+            fondo: K => d.fondo(K, p, f) },
           s, { set: n => { ui.set(n); ui.nota(''); }, nota() {} });
         };
         monta(ui.s); ui.limpia(() => esc?.());
@@ -15111,15 +15039,60 @@ Object.assign(XG, (() => {
         box.addEventListener('keydown', e => { if (!ui.locked && e.target.closest('.xfi-ch') && /^(Enter| |Arrow.*)$/.test(e.key)) e.stopPropagation(); });
         return ok => {
           box.inert = true;
-          const s = { q: ui.s.q.map(l => [...l]) };
-          marca = bien(s, p);
+          const s = { q: ui.s.q.map(l => [...l]) }, juicio = bien(s, p), MV = XG.ROTULA?.[name];
           monta(s); ui.nota('');
-          const anda = fin => ui.tween(0, 1, 1300, x => { f = x; esc.salta([{}]); }, fin);
-          anda(() => {
+          // Encima de las fichas: lo que ejecuta la escena, la lectura de cada lugar y sus marcas.
+          const capa = k => {
+            const svg = box.querySelector('.xfi');
+            if (!svg.querySelector('.xg-mv')) svg.insertAdjacentHTML('beforeend', '<g class="xg-mv" aria-hidden="true"><g class="es"></g><g class="le"></g><g class="an"></g></g>');
+            return svg.querySelector(`.xg-mv .${k}`);
+          };
+          const cambia = d.fondo(XPK, p, 0) !== d.fondo(XPK, p, 1);
+          const anda = fin => (cambia ? ui.tween(0, 1, 1300, x => { f = x; esc.salta([{}]); }, fin) : fin());
+          const corre = (q, fin) => { if (!MV) return fin(); const v = q.map(l => l[0]); ui.tween(0, 1, 1400, x => { try { capa('es').innerHTML = MV(XPK, p, v, x); } catch (e) { /* sin escena, sigue */ } }, () => ui.espera(250, fin)); };
+          const columna = p.et?.length === slots.length && slots.every(z => z.x === slots[0].x), x0 = p.tab ? 34 + 32 * p.letras.length : 8;
+          // Camino hasta el lugar i: un punto que salta desde el anterior (si hay una cuenta) o un renglón que se subraya.
+          const lee = (i, x) => {
+            const sl = slots[i], an = slots[i - 1], w = sl.w || 56, h = sl.h || 42;
+            if (an && an.y === sl.y && p.ops?.[i - 1]?.trim()) { const y = sl.y - h / 2 - 2; return XPK.c(an.x + (sl.x - an.x) * x, y - 22 * Math.sin(Math.PI * x), 5, 'fA'); }
+            if (columna) return XPK.l(x0, sl.y + h / 2 - 3, x0 + (sl.x - w / 2 - 6 - x0) * x, sl.y + h / 2 - 3, 'la');
+            return XPK.f(1 - x, XPK.r(sl.x - w / 2 - 4 - 10 * (1 - x), sl.y - h / 2 - 4 - 10 * (1 - x), w + 8 + 20 * (1 - x), h + 8 + 20 * (1 - x), 'fn', 16));
+          };
+          const sella = (i, si, nace) => {
+            const sl = slots[i], w = sl.w || 56, h = sl.h || 42, x = sl.x + w / 2 + 1, y = sl.y - h / 2 - 1;
+            capa('an').insertAdjacentHTML('beforeend', `${XPK.r(sl.x - w / 2 - 4, sl.y - h / 2 - 4, w + 8, h + 8, `${si ? 'bien' : 'mal'} xg-aro`, 13)}<g class="xg-sello">${XPK.c(Math.min(331, x), Math.max(9, y), 8, si ? 'fo' : 'ff')}<text class="xt s" x="${Math.min(331, x)}" y="${Math.max(9, y) + 4}" style="text-anchor:middle;font-size:11px">${si ? '✓' : '✗'}</text></g>`);
+            box.querySelectorAll(`.xfi-ch.in[data-slot="${i}"]`).forEach(g => g.classList.add(nace || si ? 'mv-bien' : 'mv-mal'));
+          };
+          const revisa = (lista, j, fin, nace) => {
+            let k = 0; const dura = Math.max(60, Math.min(260, 1500 / lista.length));
+            (function sig() {
+              if (k >= lista.length) { capa('le').innerHTML = ''; return ui.espera(300, fin); }
+              const i = lista[k++];
+              ui.tween(0, 1, dura, x => { capa('le').innerHTML = lee(i, x); }, () => { sella(i, j[i], nace); j[i] ? XS.tick(k * 2) : XS.nope(); ui.espera(dura * 0.6, sig); });
+            })();
+          };
+          // Lo que da la cuenta con las fichas puestas.
+          const cuenta = q => { const c = XG.cadena?.(p.ops, q.map(l => l[0])); if (c) ui.lee(c.tex); };
+          const todos = XG.ORDEN?.[name] || slots.map((_, i) => i);
+          anda(() => corre(s.q, () => revisa(todos, juicio, () => {
+            cuenta(s.q);
             if (ok) { XS.merge(); return ui.nota(d.bien(p)); }
             XS.nope(); ui.nota(d.aviso(s.q, p));
-            ui.espera(2800, () => { const b = { q: d.metas(p).map(m => [m]) }; ui.muestra(b); marca = marca.map(() => true); monta(b); XS.pop(); ui.nota(d.bien(p)); });
-          });
+            ui.espera(2800, () => corrige());
+          })));
+          // Las fichas buenas vuelan a su lugar y las otras vuelven a la bandeja.
+          function corrige() {
+            const b = { q: d.metas(p).map(m => [m]) }, lugar = g => (/translate\(([-\d.]+) ([-\d.]+)\)/.exec(g.getAttribute('transform')) || [0, 0, 0]).slice(1).map(Number);
+            const foto = () => [...box.querySelectorAll('.xfi-ch')].map(g => ({ g, t: g.textContent, z: lugar(g) }));
+            const antes = foto().map(x => ({ t: x.t, z: x.z }));
+            ui.muestra(b); monta(b); ui.nota(''); ui.lee('');
+            const van = [];
+            for (const x of foto()) { const i = antes.findIndex(y => y.t === x.t && y.z.join() === x.z.join()); if (i >= 0) antes.splice(i, 1); else van.push(x); }
+            for (const x of van) { const i = antes.findIndex(y => y.t === x.t); x.de = i >= 0 ? antes.splice(i, 1)[0].z : x.z; }
+            const mueve = k => van.forEach(x => x.g.setAttribute('transform', `translate(${XPK.n(x.de[0] + (x.z[0] - x.de[0]) * k)} ${XPK.n(x.de[1] + (x.z[1] - x.de[1]) * k)})`));
+            mueve(0); XS.pop();
+            ui.tween(0, 1, 900, mueve, () => { mueve(1); todos.filter(i => juicio[i]).forEach(i => sella(i, true, true)); corre(b.q, () => revisa(todos.filter(i => !juicio[i]), juicio.map(() => true), () => { cuenta(b.q); ui.nota(d.bien(p)); }, true)); });
+          }
         };
       },
     });
@@ -17750,7 +17723,7 @@ Object.assign(XG, (() => {
     sol: p => p.nums.map((_, i) => i).filter(i => p.f(p.nums[i], p.nums[i]) === p.t), aviso(on, p) { const i = on.findIndex((x, k) => x && p.f(p.nums[k], p.nums[k]) !== p.t); return i < 0 ? 'Falta otro número que también cumple.' : `${P(p.nums[i])} ◆ ${P(p.nums[i])} da ${N(p.f(p.nums[i], p.nums[i]))}.`; }, bien: p => p.ok, texto: p => p.nums.filter(x => p.f(x, x) === p.t).map(N).join(' y '), pie: 'Toca todos los que cumplen.',
   });
   XG.rotula('deshace-operador', {
-    slots: () => [{ x: 44, y: 62, w: 64, h: 42 }, { x: 170, y: 62, w: 64, h: 42 }], fichas: p => p.fichas, metas: p => p.metas, texto: p => p.metas.join(' → '), alto: () => 112, aviso: (q, p) => { const i = q[1][0] !== p.metas[1] ? 1 : 0; return p.trampas?.[`${i}:${q[i][0]}`] || p.mira[i]; },   // se deshace desde el final bien: p => p.ok,
+    slots: () => [{ x: 44, y: 62, w: 64, h: 42 }, { x: 170, y: 62, w: 64, h: 42 }], fichas: p => p.fichas, metas: p => p.metas, texto: p => p.metas.join(' → '), alto: () => 112, aviso: (q, p) => { const i = q[1][0] !== p.metas[1] ? 1 : 0; return p.trampas?.[`${i}:${q[i][0]}`] || p.mira[i]; },   bien: p => p.ok,   // se deshace desde el final
     fondo: (K, p) => K.ar(82, 62, 132, 62, 'lm') + K.ar(208, 62, 260, 62, 'lm') + K.t(107, 46, p.s[0], 'b ta') + K.t(234, 46, p.s[1], 'b ta') + K.r(264, 41, 68, 42, 'fo', 10) + K.t(298, 68, p.sale, 'b') + K.t(44, 104, 'entra x', 's tm') + K.t(170, 104, 'en la mitad', 's tm') + K.t(298, 104, 'sale', 's tm'),
   });
   XG.ascensor('sube-anidado', 40, 1, neutro);
@@ -18232,6 +18205,60 @@ Object.assign(XG, (() => {
     'palabras-distintas': (p, i) => orden(p.fichas[i]), 'mismo-grupo': (p, i) => orden(p.fichas[i]),
     'dato-exagerado': (p, i) => `${CAR[p.fichas[i]](p.d)} → ${CAR[p.fichas[i]](p.e)}`,
     'donde-pintura': (p, i) => String(1 + [Math.floor(i / p.n), i % p.n].filter(k => k === 0 || k === p.n - 1).length),
+  };
+})();
+;
+//#archivo js/games/rotula-mueve.js
+// Lo que pasa en los ejercicios de arrastrar fichas al comprobar (spec 2026-11-24-ejercicios-explora, «Al comprobar, las fichas se mueven»).
+// Lo usa XG.rotula (figura-kit.js):
+//   XG.ROTULA[nombre](K, p, v, f)   dibujo encima de la escena que ejecuta lo puesto; v: la ficha de cada lugar; f de 0 a 1
+//   XG.ORDEN[nombre]                en qué orden se revisan los lugares, si no es el de siempre
+//   XG.cadena(ops, v)               lo que da la cuenta con las fichas puestas («9», «·», «8», «=»), o null si no hay cuenta
+// Todo es puro.
+(() => {
+  const mcd = (a, b) => (b ? mcd(b, a % b) : Math.abs(a));
+  const num = s => { const m = /^(−?\d+(?:\.\d+)?)(?:\/(\d+))?$/.exec(String(s).replace('-', '−')); if (!m) return null; const a = +m[1].replace('−', '-'), b = +(m[2] || 1); return Number.isInteger(a) ? [a, b] : [Math.round(a * 1000), 1000 * b]; };
+  const red = ([a, b]) => { const g = mcd(a, b) || 1; return b / g < 0 ? [-a / g, -b / g] : [a / g, b / g]; };
+  const esc = r => { const [a, b] = red(r); return (b === 1 ? String(a) : `${a}/${b}`).replace('-', '−'); };
+  XG.cadena = (ops, v) => {
+    const k = ops?.indexOf('=') ?? -1; if (k < 1 || ops.slice(0, k).some(o => !['·', '+', '−', '÷'].includes(o)) || (ops.slice(0, k).some(o => '·÷'.includes(o)) && ops.slice(0, k).some(o => '+−'.includes(o)))) return null;
+    const n = v.slice(0, k + 1).map(num); if (n.some(x => !x)) return null;
+    let r = n[0];
+    for (let i = 0; i < k; i++) { const [a, b] = r, [c, d] = n[i + 1], o = ops[i]; if (o === '÷' && !c) return null; r = red(o === '·' ? [a * c, b * d] : o === '÷' ? [a * d, b * c] : o === '+' ? [a * d + c * b, b * d] : [a * d - c * b, b * d]); }
+    const tx = s => String(s).replace('−', '-').replace(/^(-?\d+)\/(\d+)$/, '\\tfrac{$1}{$2}'), par = s => (s.startsWith('-') ? `(${s})` : s);
+    return { en: k + 1, t: esc(r), tex: `$${v.slice(0, k + 1).map((x, i) => (i ? ` ${{ '·': '\\cdot', '÷': '\\div', '−': '-', '+': '+' }[ops[i - 1]]} ${par(tx(x))}` : tx(x))).join('')} = ${tx(esc(r))}$` };
+  };
+  const mezcla = (a, b, f) => a + (b - a) * f, paso = (f, k, n) => Math.max(0, Math.min(1, f * n - k));
+  const crece = (K, [a, b], [c, d], f, cls) => (f > 0 ? K.l(a, b, mezcla(a, c, f), mezcla(b, d, f), cls) : '');
+  const marco = (K, x, q) => (q > 0 && q < 1 ? K.r(x - 28, 38, 56, 138 * Math.min(1, q * 1.4), 'fn gr', 10) : '');
+  const N = x => String(Math.round(x * 100) / 100).replace('-', '−'), V = s => +String(s).replace('−', '-');
+
+  XG.ORDEN = { 'desde-el-final': [1, 0], 'deshace-operador': [1, 0], 'llena-encuesta': [1, 0, 2, 3], 'arbol-operador': [0, 1, 2], 'suma-con-letras': [0, 1, 2] };
+  XG.ROTULA = {
+    // Los resultados suben por el árbol.
+    'arbol-operador': (K, p, v, f) => [[90, 1], [250, 1]].map(([x]) => crece(K, [x - 32, 140], [x - 10, 116], paso(f, 0, 2), 'la gr') + crece(K, [x + 32, 140], [x + 10, 116], paso(f, 0, 2), 'la gr')).join('') + crece(K, [100, 76], [150, 48], paso(f, 1, 2), 'lg gr') + crece(K, [240, 76], [190, 48], paso(f, 1, 2), 'lg gr'),
+    'arbol-primos': (K, p, v, f) => { const l = [[131, 30, 58], [178, 76, 108], [226, 126, 158]], d = [+p.n, V(v[1]), V(v[3])]; return l.map(([x, a, y], i) => { const q = paso(f, i, 3), ok = V(v[2 * i]) * V(v[2 * i + 1]) === d[i]; return crece(K, [x - 8, a], [x - 38, y - 20], q, 'la gr') + crece(K, [x + 8, a], [x + 38, y - 20], q, 'la gr') + (q >= 1 ? K.t(i < 2 ? [215, 263][i] : 148, [62, 112, 162][i], `${v[2 * i]} · ${v[2 * i + 1]} ${ok ? '=' : '≠'} ${d[i]}`, ok ? 's to' : 's tf', i < 2 ? 'start' : 'end') : ''); }).join(''); },
+    'arbol-bolsa': (K, p, v, f) => crece(K, [82, 103], [126, 58], paso(f, 0, 2), 'lf gr') + crece(K, [82, 103], [126, 148], paso(f, 0, 2), 'la gr') + [[58, 36], [58, 80], [148, 126], [148, 170]].map(([a, b], i) => crece(K, [150, a], [206, b], paso(f, 1, 2), i % 2 ? 'la gr' : 'lf gr')).join(''),
+    // Cada círculo suma lo que tiene adentro.
+    'tres-circulos'(K, p, v, f) { const [ab, ac, bc, a, b, c] = v.map(V), z = V(p.c), s = [a + ab + ac + z, b + ab + bc + z, c + ac + bc + z]; return [[138, 66, 'la'], [202, 66, 'lg'], [170, 120, 'lf']].map(([x, y, l], i) => K.arc(x, y, 54, 90, 90 + 359 * paso(f, i, 3), `${l} gr`)).join('') + [[76, 40, 'end'], [264, 40, 'start'], [232, 178, 'start']].map(([x, y, q], i) => (paso(f, i, 3) >= 1 ? K.t(x, y, `suma ${s[i]}`, 's', q) : '')).join(''); },
+    'llena-encuesta': (K, p, v, f) => [1, 0, 2, 3].map((i, k) => { const q = paso(f, k, 4), [x, y] = [[98, 92], [170, 92], [242, 92], [46, 154]][i]; return q > 0 && q < 1 ? K.f(1 - q, K.c(x, y, 14 + 30 * q, 'fn gr')) : ''; }).join('') + K.t(316, 168, `van ${[1, 0, 2, 3].reduce((s, i, k) => s + (paso(f, k, 4) >= 1 ? V(v[i]) : 0), 0)}`, 's', 'end'),
+    // La fila del primero y la columna del segundo se cruzan.
+    'lee-operacion'(K, p, v, f) { const L = p.letras, par = [['q', 's'], ['s', 'q'], ['r', v[2]]], n = L.length; return par.map(([a, b], k) => { const q = paso(f, k, 3); if (q <= 0 || (q >= 1 && k < 2)) return ''; const x = 46 + L.indexOf(b) * 32, y = 46 + L.indexOf(a) * 34; return crece(K, [30, y], [x, y], Math.min(1, q * 2), 'lg gr') + crece(K, [x, 28], [x, y], Math.max(0, q * 2 - 1), 'la gr') + (q > 0.95 ? K.c(x, y, 13, 'fn gr') : ''); }).join(''); },
+    'cadena-en-tabla'(K, p, v, f) { const L = p.letras, o = (a, b) => p.tab[L.indexOf(a)][L.indexOf(b)], par = [['t', 'u'], [o('t', 'u'), 'v'], ['u', 'v'], ['t', o('u', 'v')], [v[2], 'u']]; return par.map(([a, b], k) => { const q = paso(f, k, 5); if (q <= 0 || (q >= 1 && k < 4)) return ''; const x = 46 + L.indexOf(b) * 32, y = 46 + L.indexOf(a) * 38; return crece(K, [30, y], [x, y], Math.min(1, q * 2), 'lg gr') + crece(K, [x, 28], [x, y], Math.max(0, q * 2 - 1), 'la gr') + (q > 0.9 ? K.c(x, y, 13, 'fn gr') : ''); }).join(''); },
+    // Las columnas se operan con las cifras puestas.
+    'suma-con-letras': (K, p, v, f) => marco(K, 206, paso(f, 0, 2)) + marco(K, 146, paso(f, 1, 2)) + (f >= 1 ? K.t(330, 158, `da ${10 * V(v[2]) + 8 + 40 + V(v[0])}`, 'b', 'end') : ''),
+    'resta-con-letras': (K, p, v, f) => marco(K, 206, paso(f, 0, 2)) + marco(K, 146, paso(f, 1, 2)) + (f >= 1 ? K.t(330, 158, `da ${N(70 + V(v[0]) - 10 * V(v[1]) - 8)}`, 'b', 'end') : ''),
+    'producto-con-letras': (K, p, v, f) => crece(K, [140, 80], [100, 80], paso(f, 0, 2), 'lg gr') + crece(K, [140, 72], [62, 72], paso(f, 1, 2), 'la gr') + (f >= 1 ? K.t(330, 64, `${v[1]}${p.u} × ${p.k} = ${(10 * V(v[1]) + V(p.u)) * p.k}`, 's', 'end') : ''),
+    // Se comprueba hacia adelante con lo que puso.
+    'desde-el-final'(K, p, v, f) { const g = p.s.map(t => { const [a, b] = t.match(/(\d+)\/(\d+)/).slice(1).map(Number); return (b - a) / b; }), r = [V(v[0]) * g[0], V(v[1]) * g[1]]; return [[46, 170], [170, 297]].map(([a, b], i) => { const q = paso(f, i, 2), x = mezcla(a, b, q); return q > 0 && q < 1 ? K.c(x, 70, 7, 'fA') : q >= 1 ? K.t((a + b) / 2, 92, `da ${N(r[i])}`, r[i] === (i ? V(p.queda) : V(v[1])) ? 's to' : 's tf') : ''; }).join(''); },
+    'deshace-operador'(K, p, v, f) { const k = p.s.map(t => +t.match(/\d+/)[0]), r = [V(v[0]) * k[0] + 3, V(v[1]) * k[1] + 3]; return [[44, 170], [170, 298]].map(([a, b], i) => { const q = paso(f, i, 2), x = mezcla(a, b, q); return q > 0 && q < 1 ? K.c(x, 62, 7, 'fA') : q >= 1 ? K.t((a + b) / 2, 86, `da ${N(r[i])}`, r[i] === (i ? V(p.sale) : V(v[1])) ? 's to' : 's tf') : ''; }).join(''); },
+    // Se tachan parejas desde los extremos hasta el del medio.
+    'ordena-centro'(K, p, v, f) { const n = p.d.length, m = (n - 1) / 2, X = i => 170 + (i - m) * 47; let h = ''; for (let k = 0; k < m; k++) { const q = paso(f, k, m); for (const i of [k, n - 1 - k]) h += crece(K, [X(i) - 17, 92], [X(i) + 17, 60], q, 'lf gr'); } return h + (f >= 1 ? K.c(X(m), 76, 25, 'fn gr') + K.l(170, 102, 170, 116, 'lo gr') : ''); },
+    'tabla-edades': (K, p, v, f) => [66, 120].map((y, i) => [196, 290].map((x, j) => crece(K, [130, y + 24], [x, y + 24], paso(f, i * 2 + j, 4), j ? 'lg' : 'la')).join('')).join(''),
+    'cadena-todos': (K, p, v, f) => [[148, 46, 'lf'], [126, 74, 'la'], [106, 100, 'lg']].map(([y, r, l], k) => K.arc(130, y, r, 90, 90 + 359 * paso(f, k, 3), `${l} gr`)).join(''),
+    'suma-letras'(K, p, v, f) { const n = p.w.length, s = v.slice(0, n).reduce((a, x, i) => a + (paso(f, i, n) >= 1 ? V(x) : 0), 0); return Array.from({ length: n }, (_, i) => { const q = paso(f, i, n); return q > 0 && q < 1 ? K.c(mezcla(40 + i * 62, 40 + n * 62 + 12, q), 60, 6, 'fA') : ''; }).join('') + K.t(40 + n * 62 + 12, 26, `van ${s}`, 's'); },
+    'pasos-despeje': (K, p, v, f) => [0, 1, 2].map(i => crece(K, [282, 30 + i * 50], [282, 66 + i * 50], paso(f, i, 3), 'la gr')).join(''),
+    'ciclo-ultima': (K, p, v, f) => [0, 1, 2, 3].map(i => { const q = paso(f, i, 4), a = 28 + i * 56; return q > 0 && q < 1 ? K.t(mezcla(a, a + 56, q), 58 - 14 * Math.sin(Math.PI * q), '× 2', 's ta') : ''; }).join(''),
   };
 })();
 ;
@@ -21866,535 +21893,4 @@ const ALG_TALLER = (() => {
   }
   const structuredInitial = v => Array.isArray(v) ? v.slice() : v;
   return { modes, register, bound, step, eq, same, mix, point, gap, box, inside, center, normal, color, stroke, panel, txt, handle, line, dash, curve, chip };
-})();
-;
-//#archivo js/games/algebra-escenas.js
-(() => {
-  const A = ALG_TALLER;
-  const { modes, bound, step, eq, same, mix, point, gap, box, inside, center, normal, color, stroke, panel, txt, handle, line, dash, curve, chip } = A;
-  const band = G => center(G.b);
-  const ends = G => [G.b.x + 23, G.b.x + G.b.w - 23];
-  const at = (G, t, y = band(G).y) => point(mix(...ends(G), t), y);
-  const moveX = (G, q, set) => set(step(mix(G.r.lo, G.r.hi, bound(normal(q.x, ...ends(G)), 0, 1)), G.r.lo, G.r.hi, G.r.step));
-  const measures = (G, y) => {
-    const { p, C, r, b, s } = G;
-    const a = at(G, 0, y), z = at(G, 1, y);
-    line(p, a, z, C.line, 3);
-    const n = Math.min(10, Math.round((r.hi - r.lo) / (r.step || 1)));
-    for (let i = 0; i <= n; i++) {
-      const q = at(G, i / n, y);
-      line(p, point(q.x, y - 4), point(q.x, y + 4), C.mute);
-    }
-    txt(p, r.lo, a.x, y + 21, 41, C.mute, 11);
-    txt(p, r.hi, z.x, y + 21, 41, C.mute, 11);
-    handle(p, C, G.knob, G.held);
-    txt(p, r.input?.(s.v) ?? s.v, G.knob.x, y - 24, Math.min(100, b.w / 2), C.ink);
-  };
-  const linear = {
-    valid: (v, r) => eq(v, r.goal),
-    layout(G) {
-      G.y = G.b.y + G.b.h - 38;
-      G.knob = at(G, normal(G.s.v, G.r.lo, G.r.hi), G.y);
-    },
-    press(G, q, set) { if (Math.abs(q.y - G.y) > 19 || !inside(q, G.b)) return false; moveX(G, q, set); return true; },
-    drag: moveX,
-    key(G, dx, dy, set) {
-      const { lo, hi, step: d = 1 } = G.r;
-      if (dx || dy) set(step(G.s.v + (dx || -dy) * d, lo, hi, d));
-    },
-    demo: G => ({ from: G.knob, to: at(G, G.knob.x < band(G).x ? .59 : .38, G.y) }),
-    solve: G => [G.knob, at(G, normal(G.r.goal, G.r.lo, G.r.hi), G.y)],
-  };
-
-  // Comparte la escala de medida. Cada escena conserva el dibujo y la magnitud que se manipula.
-  modes.barra = {
-    ...linear,
-    instruction: 'Desliza la manija y compara las medidas',
-    draw(G) {
-      const { p, C, r, s, b } = G;
-      const a = at(G, 0), z = at(G, 1), w = z.x - a.x;
-      const entries = r.bars?.(s.v) ?? [[r.input?.(s.v) ?? s.v, s.v]];
-      entries.forEach(([label, value], i) => {
-        const y = b.y + 34 + i * 49, col = i ? C.sky : C.brand;
-        panel(p, box(a.x, y, w, 13), C.line, C.bg, 4);
-        const tail = a.x + w * bound(Math.abs(value) / (r.scale || r.hi), 0, 1);
-        if (tail > a.x) panel(p, box(a.x, y, tail - a.x, 13), col, color(p, col, 100), 4);
-        txt(p, label, band(G).x, y - 13, w, C.ink, 13);
-      });
-      measures(G, G.y);
-    },
-  };
-
-  modes.balanza = {
-    ...linear,
-    instruction: 'Desliza el contrapeso para mover la balanza',
-    draw(G) {
-      const { p, C, r, s, b } = G, c = point(band(G).x, b.y + b.h * .41), arm = b.w * .32;
-      const [a, z] = r.loads(s.v), difference = bound((z - a) / Math.max(1, Math.abs(a), Math.abs(z)), -1, 1);
-      const h = difference * 23, left = point(c.x - arm, c.y - h), right = point(c.x + arm, c.y + h);
-      p.noStroke(); p.fill(color(p, C.brand, 55)); p.triangle(c.x, c.y, c.x - 23, c.y + 44, c.x + 23, c.y + 44);
-      line(p, left, right, C.brand, 4);
-      for (const [i, q] of [left, right].entries()) {
-        const co = i ? C.sky : C.brand;
-        line(p, q, point(q.x, q.y + 24), co, 1.5);
-        p.fill(color(p, co, 80)); p.stroke(co); p.arc(q.x, q.y + 25, 52, 17, 0, Math.PI, p.CHORD);
-        txt(p, i ? z : a, q.x, q.y - 16, 60, C.ink, 16);
-      }
-      measures(G, G.y);
-    },
-  };
-
-  // Un punto y sus proyecciones comparten una escala con las curvas de cada problema.
-  function plotLayout(G) {
-    const { b, r } = G, [xl, xr, yl, yr] = r.bounds;
-    const a = box(b.x + 27, b.y + 17, b.w - 46, b.h - 37);
-    G.plot = {
-      a,
-      to: (x, y) => point(mix(a.x, a.x + a.w, normal(x, xl, xr)), mix(a.y + a.h, a.y, normal(y, yl, yr))),
-      from: q => [step(mix(xl, xr, normal(q.x, a.x, a.x + a.w)), xl, xr, r.dx),
-        step(mix(yl, yr, normal(q.y, a.y + a.h, a.y)), yl, yr, r.dy)],
-    };
-  }
-  function axes(G) {
-    const { p, C, r, plot } = G, { a, to } = plot, [xl, xr, yl, yr] = r.bounds;
-    for (let i = 0; i <= 6; i++) {
-      const x = a.x + i * a.w / 6, y = a.y + i * a.h / 6;
-      line(p, point(x, a.y), point(x, a.y + a.h), C.line);
-      line(p, point(a.x, y), point(a.x + a.w, y), C.line);
-    }
-    const x0 = bound(0, xl, xr), y0 = bound(0, yl, yr);
-    line(p, to(xl, y0), to(xr, y0), C.mute);
-    line(p, to(x0, yl), to(x0, yr), C.mute);
-    txt(p, xl, a.x + 2, a.y + a.h + 11, 28, C.mute, 10);
-    txt(p, xr, a.x + a.w - 2, a.y + a.h + 11, 28, C.mute, 10);
-    txt(p, yr, a.x - 12, a.y + 3, 25, C.mute, 10);
-    txt(p, yl, a.x - 12, a.y + a.h - 3, 25, C.mute, 10);
-    for (const [i, fn] of (r.curves || []).entries()) {
-      const pts = Array.from({ length: 89 }, (_, k) => {
-        const x = mix(xl, xr, k / 88), y = fn(x);
-        return Number.isFinite(y) && y >= yl && y <= yr ? to(x, y) : null;
-      });
-      curve(p, pts, i ? C.sky : C.brand);
-    }
-    for (const [x, y] of r.marks || []) {
-      const q = to(x, y);
-      stroke(p, C.mute, 1.5); p.circle(q.x, q.y, 11);
-    }
-    for (const [x, y] of r.holes || []) {
-      const q = to(x, y);
-      p.stroke(C.brand); p.strokeWeight(2); p.fill(C.card); p.circle(q.x, q.y, 10);
-    }
-  }
-  function marks(G, x, y) {
-    const { p, C, r, plot, held } = G, { to } = plot, [xl, xr, yl, yr] = r.bounds;
-    const q = to(x, y);
-    dash(p, q, to(x, bound(0, yl, yr)), C.mute);
-    dash(p, q, to(bound(0, xl, xr), y), C.mute);
-    handle(p, C, q, held);
-  }
-  const position = (G, q, set) => set(G.plot.from(q));
-  modes.plano = {
-    valid: (v, r) => v.every((n, i) => eq(n, r.goal[i])),
-    instruction: 'Arrastra el punto en el plano',
-    layout: plotLayout,
-    draw(G) { axes(G); marks(G, ...G.s.v); },
-    press(G, q, set) { if (!inside(q, G.b)) return false; position(G, q, set); return true; },
-    drag: position,
-    key(G, dx, dy, set) {
-      const { bounds: [xl, xr, yl, yr], dx: sx = 1, dy: sy = 1 } = G.r, [x, y] = G.s.v;
-      set([step(x + dx * sx, xl, xr, sx), step(y - dy * sy, yl, yr, sy)]);
-    },
-    demo: G => { const [xl, xr, yl, yr] = G.r.bounds; return { from: G.plot.to(...G.s.v), to: G.plot.to(mix(xl, xr, .39), mix(yl, yr, .34)) }; },
-    solve: G => [G.plot.to(...G.s.v), G.plot.to(...G.r.goal)],
-    route: G => [G.plot.to(G.r.start[0], G.r.start[1]), G.plot.to(...G.s.v)],
-  };
-
-  const scan = (G, q, set) => set(G.plot.from(q)[0]);
-  modes.sonda = {
-    ...linear,
-    instruction: 'Mueve la sonda y observa la altura de la curva',
-    layout: plotLayout,
-    draw(G) {
-      axes(G);
-      const { r, s, plot } = G, [,, lo, hi] = r.bounds;
-      const y = r.curves[0](s.v);
-      if (Number.isFinite(y)) marks(G, s.v, bound(y, lo, hi));
-      else {
-        const a = plot.to(s.v, lo), b = plot.to(s.v, hi);
-        dash(G.p, a, b, G.C.mute);
-        handle(G.p, G.C, plot.to(s.v, (lo + hi) / 2), G.held);
-      }
-    },
-    press(G, q, set) { if (!inside(q, G.b)) return false; scan(G, q, set); return true; },
-    drag: scan,
-    key(G, dx, dy, set) {
-      const [lo, hi] = G.r.bounds, d = G.r.dx || 1;
-      if (dx || dy) set(step(G.s.v + (dx || -dy) * d, lo, hi, d));
-    },
-    demo: G => {
-      const { r, s, plot } = G, [lo, hi, a, b] = r.bounds, n = step(mix(lo, hi, s.v <= (lo + hi) / 2 ? .63 : .35), lo, hi, r.dx);
-      return { from: plot.to(s.v, bound(r.curves[0](s.v), a, b)), to: plot.to(n, bound(r.curves[0](n), a, b)) };
-    },
-    solve: G => [G.plot.to(G.s.v, G.r.curves[0](G.s.v)), G.plot.to(G.r.goal, G.r.curves[0](G.r.goal))],
-    route(G) {
-      const { s, r, plot } = G, [,, lo, hi] = r.bounds;
-      return Array.from({ length: 33 }, (_, i) => {
-        const x = mix(r.start, s.v, i / 32);
-        return plot.to(x, bound(r.curves[0](x), lo, hi));
-      });
-    },
-  };
-
-  function areaMove(G, q, set) {
-    const { r, uv, f } = G, [xb, yb] = r.max;
-    set([step((q.x - f.x) / uv, 1, xb), step((f.y - q.y) / uv, 1, yb)]);
-  }
-  modes.area = {
-    valid: modes.plano.valid,
-    instruction: 'Tira de la esquina para construir el área',
-    layout(G) {
-      const { b, r, s } = G;
-      G.uv = Math.min((b.w - 71) / r.max[0], (b.h - 46) / r.max[1]);
-      G.f = point(b.x + 34, b.y + b.h - 30);
-      G.knob = point(G.f.x + G.uv * s.v[0], G.f.y - G.uv * s.v[1]);
-    },
-    draw(G) {
-      const { p, C, f, knob, uv, s } = G, [w, h] = s.v;
-      panel(p, box(f.x, knob.y, uv * w, uv * h), C.brand, color(p, C.brand, 75), 0);
-      for (let i = 1; i < w; i++) line(p, point(f.x + i * uv, knob.y), point(f.x + i * uv, f.y), C.line);
-      for (let j = 1; j < h; j++) line(p, point(f.x, f.y - j * uv), point(knob.x, f.y - j * uv), C.line);
-      txt(p, w, (f.x + knob.x) / 2, f.y + 14, 34, C.ink, 13);
-      txt(p, h, f.x - 14, (f.y + knob.y) / 2, 27, C.ink, 13);
-      handle(p, C, knob, G.held);
-    },
-    press(G, q, set) { if (gap(G.knob, q) > 23) return false; areaMove(G, q, set); return true; },
-    drag: areaMove,
-    key(G, dx, dy, set) {
-      const [a, b] = G.s.v, [x, y] = G.r.max;
-      set([bound(a + dx, 1, x), bound(b - dy, 1, y)]);
-    },
-    demo: G => ({ from: G.knob, to: point(G.f.x + G.uv * Math.min(3, G.r.max[0]), G.f.y - G.uv * Math.min(3, G.r.max[1])) }),
-    solve: G => [G.knob, point(G.f.x + G.uv * G.r.goal[0], G.f.y - G.uv * G.r.goal[1])],
-  };
-
-  const rot = (c, r, t) => point(c.x + r * Math.cos(t), c.y + r * Math.sin(t));
-  const angle = (G, i) => -Math.PI / 2 + (i / G.r.values.length) * 2 * Math.PI;
-  function turn(G, q, set) {
-    const t = Math.atan2(q.y - G.c.y, q.x - G.c.x) + Math.PI / 2, n = G.r.values.length;
-    set((Math.round(t * n / (2 * Math.PI)) + n) % n);
-  }
-  modes.giro = {
-    valid: (v, r) => v === r.goal,
-    instruction: 'Agarra el brazo y gíralo',
-    layout(G) { G.c = band(G); G.rad = Math.min(G.b.h / 2 - 31, G.b.w / 2 - 35); G.knob = rot(G.c, G.rad, angle(G, G.s.v)); },
-    draw(G) {
-      const { p, C, r, s, c, rad, knob } = G;
-      stroke(p, C.line); p.circle(c.x, c.y, rad * 2); p.circle(c.x, c.y, rad * 1.32);
-      for (let i = 0; i < r.values.length; i++) {
-        const t = angle(G, i), q = rot(c, rad + 19, t);
-        line(p, rot(c, rad - 4, t), rot(c, rad + 4, t), i === s.v ? C.brand : C.mute);
-        txt(p, r.values[i], q.x, q.y, 40, C.ink, 12);
-      }
-      line(p, c, knob, C.brand, 2);
-      handle(p, C, knob, G.held);
-    },
-    press(G, q, set) { if (gap(G.knob, q) > 22) return false; turn(G, q, set); return true; },
-    drag: turn,
-    key(G, dx, dy, set) {
-      const n = G.r.values.length;
-      set((G.s.v + (dx || -dy) + n) % n);
-    },
-    demo: G => ({ from: G.knob, to: rot(G.c, G.rad, angle(G, (G.s.v + 1) % G.r.values.length)) }),
-    solve: G => [G.knob, rot(G.c, G.rad, angle(G, G.r.goal))],
-    route(G) {
-      return Array.from({ length: 21 }, (_, i) => rot(G.c, G.rad, mix(angle(G, G.r.start), angle(G, G.s.v), i / 20)));
-    },
-  };
-
-  // Mosaicos. La línea pintada es la acción de seleccionar y también sirve para quitar celdas.
-  function paint(G, q, set, first) {
-    const i = G.cells.findIndex(b => inside(q, b));
-    if (i < 0 || (!first && i === G.input.lastCell)) return false;
-    const cells = G.s.v;
-    if (first) G.input.paintOn = !cells.includes(i);
-    G.input.lastCell = i;
-    set(G.input.paintOn ? [...new Set([...cells, i])].sort((a, b) => a - b) : cells.filter(j => i !== j));
-    return true;
-  }
-  modes.mosaico = {
-    valid: (v, r) => same(v, r.goal),
-    instruction: 'Pinta al pasar por las celdas; repasa para borrar',
-    layout(G) {
-      const { b, r } = G, n = r.cols, m = Math.ceil(r.tiles.length / n), c = band(G);
-      const u = Math.min((b.w - 28) / n, (b.h - 25) / m, 54);
-      G.cells = r.tiles.map((_, i) => box(c.x + (i % n - n / 2) * u + 2, c.y + (Math.floor(i / n) - m / 2) * u + 2, u - 4, u - 4));
-    },
-    draw(G) {
-      const { p, C, r, s } = G;
-      G.cells.forEach((b, i) => {
-        const on = s.v.includes(i), q = center(b);
-        panel(p, b, on ? C.brand : C.line, on ? color(p, C.brand, 110) : C.card, 5);
-        if (r.tiles[i]) txt(p, r.tiles[i], q.x, q.y, b.w - 4, C.ink, 14);
-      });
-    },
-    press: (G, q, set) => paint(G, q, set, true),
-    drag: paint,
-    demo: G => ({ from: center(G.cells[0]), to: center(G.cells[1]) }),
-    solve: G => G.r.goal.map(i => center(G.cells[i])),
-  };
-
-  // Las piezas se mueven entre compartimentos. Soltar fuera devuelve la pieza al punto de partida.
-  modes.membrana = {
-    valid: (v, r) => same(v, r.goal),
-    complete: v => v.every(i => i >= 0),
-    instruction: 'Arrastra cada pieza a su región',
-    layout(G) {
-      const { b, r, s } = G, n = r.regions.length, w = b.w / n - 10;
-      const rowY = b.y + b.h - 37, cap = Math.min(43, (b.w - 12) / r.tiles.length - 3);
-      const total = (cap + 3) * r.tiles.length;
-      G.regions = r.regions.map((_, i) => box(b.x + i * (w + 10) + 5, b.y + 9, w, b.h - 53));
-      G.homes = r.tiles.map((_, i) => box(band(G).x - total / 2 + i * (cap + 3), rowY, cap, 28));
-      const count = r.regions.map(() => 0);
-      G.tiles = s.v.map((j, i) => {
-        if (j < 0) return G.homes[i];
-        const a = G.regions[j], k = count[j]++;
-        return box(center(a).x - cap / 2, a.y + 36 + k * Math.min(26, (a.h - 49) / Math.max(1, s.v.filter(x => x === j).length)), cap, 24);
-      });
-    },
-    draw(G) {
-      const { p, C, r } = G;
-      const { grab } = G.input;
-      G.regions.forEach((b, i) => {
-        const c = i % 2 ? C.sky : C.brand;
-        panel(p, b, c, color(p, c, 20), 19);
-        txt(p, r.regions[i], center(b).x, b.y + 17, b.w - 6, C.ink, 13);
-      });
-      G.tiles.forEach((b, i) => { if (!grab || grab.i !== i) chip(p, C, b, r.tiles[i]); });
-      if (grab) chip(p, C, box(grab.q.x - 21, grab.q.y - 14, 42, 28), r.tiles[grab.i], C.brand);
-    },
-    press(G, q) {
-      const i = G.tiles.findIndex(b => inside(q, b));
-      if (i < 0) return false;
-      G.input.grab = { i, q }; return true;
-    },
-    drag(G, q) { if (G.input.grab) G.input.grab.q = q; },
-    release(G, q, set) {
-      const { grab } = G.input;
-      if (!grab) return;
-      const j = G.regions.findIndex(b => inside(q, b)), i = grab.i;
-      G.input.grab = null;
-      if (j < 0 && !G.homes.some(b => inside(q, b))) return;
-      set(G.s.v.map((v, k) => k === i ? j : v));
-    },
-    cancel(G) { G.input.grab = null; },
-    demo: G => ({ from: center(G.tiles[0]), to: center(G.regions[0]) }),
-    solve: G => G.tiles.flatMap((b, i) => [center(b), center(G.regions[G.r.goal[i]])]),
-  };
-
-  const gridPath = (G, q, set) => {
-    const i = G.nodes.findIndex(n => gap(n, q) < 21), route = G.s.v, last = route.at(-1);
-    if (i < 0 || i === last) return false;
-    if (i === route.at(-2)) { set(route.slice(0, -1)); return true; }
-    if (!G.r.edges.some(([a, b]) => a === last && b === i)) return false;
-    set([...route, i]); return true;
-  };
-  modes.trazo = {
-    valid: (v, r) => same(v, r.goal),
-    complete: (v, r) => GPathEnd(v, r),
-    instruction: 'Traza el camino desde el origen',
-    layout(G) {
-      const { b, r } = G;
-      G.nodes = r.nodes.map(([x, y]) => point(b.x + 31 + x * (b.w - 62), b.y + 25 + y * (b.h - 50)));
-    },
-    draw(G) {
-      const { p, C, r, s, nodes } = G;
-      r.edges.forEach(([a, b]) => line(p, nodes[a], nodes[b], C.line, 2));
-      for (let i = 1; i < s.v.length; i++) line(p, nodes[s.v[i - 1]], nodes[s.v[i]], C.brand, 3);
-      nodes.forEach((q, i) => {
-        p.stroke(s.v.includes(i) ? C.brand : C.line); p.strokeWeight(1.5); p.fill(C.card); p.circle(q.x, q.y, 36);
-        txt(p, r.nodes[i][2], q.x, q.y, 34, C.ink, 12);
-      });
-    },
-    press(G, q, set) { return gap(G.nodes[G.s.v.at(-1)], q) < 22 || gridPath(G, q, set); },
-    drag: gridPath,
-    demo: G => {
-      const i = G.s.v.at(-1), j = G.r.edges.find(([a]) => a === i)?.[1] ?? G.s.v.at(-2);
-      return { from: G.nodes[i], to: G.nodes[j] };
-    },
-    solve: G => G.r.goal.map(i => G.nodes[i]),
-    route: G => G.s.v.map(i => G.nodes[i]),
-  };
-  const GPathEnd = (v, r) => v.length >= r.minLength || v.at(-1) === r.goal.at(-1);
-
-  // Dos fracciones se amplían al construir el mismo denominador en ambas filas.
-  modes.puentes = {
-    valid: (v, r) => same(v, r.goal),
-    complete: v => v.every(i => i >= 0),
-    instruction: 'Lleva un factor a cada fracción',
-    layout(G) {
-      const { b, r } = G, m = r.tiles.length, w = Math.min(53, (b.w - 24) / m - 6);
-      G.tray = r.tiles.map((_, i) => box(band(G).x - (w + 6) * m / 2 + i * (w + 6), b.y + b.h - 46, w, 35));
-      G.slots = [0, 1].map(i => box(b.x + b.w * .58, b.y + 9 + i * (b.h - 58) / 2, b.w * .36, 44));
-    },
-    draw(G) {
-      const { p, C, r, s, b, input } = G;
-      for (const [i, slot] of G.slots.entries()) {
-        const q = center(slot), from = b.x + b.w * .26, v = s.v[i];
-        line(p, point(from + 24, q.y), point(slot.x - 6, q.y), v < 0 ? C.line : C.brand, 2);
-        txt(p, r.fractions[i], from, q.y, b.w * .48, C.ink, 22);
-        panel(p, slot, v < 0 ? C.line : C.brand, v < 0 ? C.bg : color(p, C.brand, 48), 8);
-        txt(p, v < 0 ? 'Factor' : r.tiles[v], q.x, q.y, slot.w - 8, v < 0 ? C.mute : C.ink, 16);
-      }
-      G.tray.forEach((a, i) => chip(p, C, a, r.tiles[i]));
-      if (input.grab) {
-        const { q, i } = input.grab;
-        chip(p, C, box(q.x - 23, q.y - 16, 46, 32), r.tiles[i], C.brand);
-      }
-    },
-    press(G, q) {
-      const i = G.tray.findIndex(a => inside(q, a));
-      if (i < 0) return false;
-      G.input.grab = { i, q }; return true;
-    },
-    drag: modes.membrana.drag,
-    cancel: modes.membrana.cancel,
-    release(G, q, set) {
-      const j = G.slots.findIndex(a => inside(q, a)), { grab } = G.input;
-      G.input.grab = null;
-      if (grab && j >= 0) set(G.s.v.map((i, k) => k === j ? grab.i : i));
-    },
-    demo: G => ({ from: center(G.tray[0]), to: center(G.slots[0]) }),
-    solve: G => G.r.goal.flatMap((i, j) => [center(G.tray[i]), center(G.slots[j])]),
-  };
-
-  // El límite de la banda mueve a la vez la fracción, la parte visible y la medida.
-  function ribbon(G, y, total, kept, title, draggable) {
-    const { p, C } = G, [a, b] = ends(G), w = b - a, u = w / total;
-    txt(p, title, (a + b) / 2, y - 28, w + 15, C.ink, 13);
-    panel(p, box(a, y - 13, w, 26), C.line, C.bg, 5);
-    if (kept > 0) panel(p, box(a, y - 13, kept * u, 26), C.brand, color(p, C.brand, 100), 5);
-    for (let i = 1; i < total; i++) line(p, point(a + i * u, y - 12), point(a + i * u, y + 12), C.line);
-    if (draggable) handle(p, C, point(a + kept * u, y), G.held);
-  }
-  modes.fraccion = {
-    ...linear,
-    instruction: 'Iguala la longitud de las dos fracciones',
-    layout(G) {
-      G.y = G.b.y + G.b.h * .69;
-      G.knob = at(G, G.s.v / G.r.hi, G.y);
-    },
-    draw(G) {
-      const { r, s, b } = G;
-      ribbon(G, b.y + b.h * .3, r.parts, r.filled, r.filled + ' de ' + r.parts, false);
-      ribbon(G, G.y, r.hi, s.v, s.v + ' de ' + r.hi, true);
-    },
-    route(G) { return [at(G, G.r.filled / G.r.parts, G.b.y + G.b.h * .3), G.knob]; },
-  };
-
-  modes.recibo = {
-    ...linear,
-    instruction: 'Tira del borde para recortar el precio',
-    layout(G) {
-      G.y = G.b.y + G.b.h * .55;
-      G.knob = at(G, 1 - G.s.v / G.r.hi, G.y);
-    },
-    draw(G) {
-      const { p, C, r, s, b, knob } = G, [a, z] = ends(G), y = G.y;
-      panel(p, box(a - 7, b.y + 19, z - a + 14, b.h - 38), C.line, C.card);
-      txt(p, 'Precio original · ' + r.price + ' mil', band(G).x, b.y + 42, b.w - 30, C.ink);
-      ribbon(G, y, r.hi, r.hi - s.v, 'Parte que se paga', true);
-      dash(p, point(knob.x, y - 37), point(knob.x, y + 33), C.brand);
-      txt(p, 'Una división vale ' + r.price / r.hi + ' mil', band(G).x, b.y + b.h - 26, b.w - 28, C.mute, 12);
-    },
-    press(G, q, set) {
-      if (gap(G.knob, q) > 25) return false;
-      this.drag(G, q, set); return true;
-    },
-    drag(G, q, set) {
-      set(step((1 - normal(q.x, ...ends(G))) * G.r.hi, 0, G.r.hi));
-    },
-    demo: G => ({ from: G.knob, to: at(G, .7, G.y) }),
-    solve: G => [G.knob, at(G, 1 - G.r.goal / G.r.hi, G.y)],
-    route(G) { return [at(G, 1, G.y), G.knob, point(G.knob.x, G.b.y + G.b.h - 25)]; },
-  };
-
-  modes.cascada = {
-    valid: (v, r) => same(v, r.goal),
-    complete: v => v.every(n => n !== 0),
-    instruction: 'Ajusta cada manija antes de aplicar los cambios',
-    layout(G) {
-      const { b, s } = G, [a, z] = ends(G);
-      G.tracks = [.34, .7].map((t, i) => {
-        const x = mix(a, z, t), y = b.y + 45, h = b.h - 91;
-        return { x, y, h, knob: point(x, y + h * (50 - s.v[i]) / 100) };
-      });
-    },
-    draw(G) {
-      const { p, C, b, tracks, r, s } = G;
-      const middle = r.price * (1 + s.v[0] / 100);
-      tracks.forEach(({ x, y, h, knob }, i) => {
-        line(p, point(x, y), point(x, y + h), C.line, 4);
-        line(p, point(x - 6, y + h / 2), point(x + 6, y + h / 2), C.mute);
-        handle(p, C, knob, G.held && G.input.stage === i);
-        txt(p, (i + 1) + ' · ' + s.v[i] + ' %', x, y - 23, b.w / 2 - 12, C.ink);
-      });
-      txt(p, r.price + ' → ' + +middle.toFixed(2) + ' → ' + +(middle * (1 + s.v[1] / 100)).toFixed(2),
-        band(G).x, b.y + b.h - 22, b.w - 25, C.ink);
-    },
-    press(G, q, set) {
-      const stage = G.tracks.findIndex(o => Math.abs(q.x - o.x) < 24 && inside(q, G.b));
-      if (stage < 0) return false;
-      G.input.stage = stage; this.drag(G, q, set); return true;
-    },
-    drag(G, q, set) {
-      const i = G.input.stage, { y, h } = G.tracks[i];
-      set(G.s.v.map((v, j) => i === j ? step(50 - (q.y - y) * 100 / h, -50, 50, 5) : v));
-    },
-    demo: G => ({ from: G.tracks[0].knob, to: point(G.tracks[0].x, G.tracks[0].y + G.tracks[0].h * .67) }),
-    solve: G => G.tracks.flatMap(({ x, y, h, knob }, i) => [knob, point(x, y + h * (50 - G.r.goal[i]) / 100)]),
-    route: G => [point(G.b.x + 17, band(G).y), ...G.tracks.map(t => t.knob), point(G.b.x + G.b.w - 17, band(G).y)],
-  };
-
-  modes.factores = {
-    valid: (v, r) => v === r.goal,
-    complete: (v, r) => v === r.bottom,
-    instruction: 'Arrastra los factores de abajo sobre los de arriba',
-    layout(G) {
-      const { b, r } = G, w = Math.min(42, (b.w - 22) / r.top - 5);
-      const row = (count, y) => Array.from({ length: count }, (_, i) => box(band(G).x - count * (w + 5) / 2 + i * (w + 5), y, w, 32));
-      G.top = row(r.top, b.y + b.h * .29 - 16);
-      G.bottom = row(r.bottom, b.y + b.h * .73 - 16);
-    },
-    draw(G) {
-      const { p, C, b, input, r, s } = G;
-      line(p, at(G, 0), at(G, 1), C.mute, 1.5);
-      for (const row of [G.top, G.bottom]) row.forEach((a, i) => {
-        const covered = i < s.v;
-        if (covered) {
-          panel(p, a, C.line, C.bg, 7);
-          line(p, point(a.x + 6, a.y + a.h - 6), point(a.x + a.w - 6, a.y + 6), C.mute);
-        } else chip(p, C, a, r.factor);
-      });
-      if (input.grab) chip(p, C, box(input.grab.q.x - 16, input.grab.q.y - 16, 32, 32), r.factor, C.brand);
-    },
-    press(G, q) {
-      if (!G.bottom.some((b, i) => i >= G.s.v && inside(q, b))) return false;
-      G.input.grab = { q }; return true;
-    },
-    drag: modes.membrana.drag,
-    cancel: modes.membrana.cancel,
-    release(G, q, set) {
-      const moved = G.input.grab && G.top.some((b, i) => i >= G.s.v && inside(q, b));
-      G.input.grab = null;
-      if (moved) set(G.s.v + 1);
-    },
-    demo: G => {
-      const i = Math.min(G.s.v, G.bottom.length - 1);
-      return { from: center(G.bottom[i]), to: center(G.top[i]) };
-    },
-    solve: G => G.bottom.flatMap((b, i) => [center(b), center(G.top[i])]),
-    route: G => [center(G.bottom.at(-1)), center(G.top[G.r.bottom - 1]), center(G.top.at(-1))],
-  };
-
-  for (const id of Object.keys(modes)) GAMES['taller-' + id] = A.register(id);
 })();
