@@ -44,7 +44,7 @@ test('pu-ar-4: dos de un color dado se cuentan agotando los otros colores', () =
   assert.match(e.explain, new RegExp(`= ${negras + azules + 2}\\$ medias`));
   assert.doesNotMatch(e.explain, /Las cantidades de cada color no importan aquí/);
   assert.match(e.explain, /Con un color dado sí importan/);
-  assert.match(zona(L('pu-ar-4'), 'peor-caso-bolsa').explain, /color dado/);
+  assert.match(zona(L('pu-ar-4'), 'color-pedido').params.ok, /color dado/);
 });
 
 test('pu-cm-4: potencias y raíces de decimales, contando las cifras decimales', () => {

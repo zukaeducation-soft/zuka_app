@@ -1,134 +1,7 @@
 // Preuniversitario · mundo 12 «Aritmética y promedios»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
-PU_JUEGOS.push(({ setLesson, setExam }) => {
+PU_JUEGOS.push(({ setExam }) => {
   const N = (v, w) => [...w].reduce((a, c) => a * 10 + v[c], 0);
   const X = n => Math.floor(n / 10), Y = n => n % 10, REV = n => 10 * Y(n) + X(n);
-
-  setLesson('pu-ar-1', [
-    play('corta-lo-que-queda', 'Gastar de lo que queda', { rounds: [
-      { total: 90000, steps: [[1, 3, 'total'], [2, 3, 'resto']] },
-      { total: 80000, steps: [[1, 4, 'total'], [1, 2, 'resto'], [1, 3, 'resto']] },
-    ] }, 'Con 90 000: $\\tfrac13$ son 30 000 y quedan 60 000; $\\tfrac23$ de eso son 40 000 y quedan 20 000. Con 80 000: quedan 60 000, luego 30 000 y al final 20 000. Cada fila parte lo que había antes de esa compra.',
-      { hint: 'La barra de cada fila es lo que quedaba, no el total: pártela en las partes que dice la fracción.' }),
-    play('area-queda', 'Multiplicar lo que queda', { rounds: [{ a: [1, 4], b: [2, 3] }, { a: [2, 5], b: [1, 2] }] },
-      'Si se gasta $\\tfrac14$, queda $\\tfrac34$; luego se gasta $\\tfrac23$ de eso y queda $\\tfrac13$ de eso: $\\tfrac34 \\cdot \\tfrac13 = \\tfrac14$. En la otra, $\\tfrac35 \\cdot \\tfrac12 = \\tfrac{3}{10}$.',
-      { hint: 'Pinta lo que QUEDA, no lo que se gasta: si se gasta $\\tfrac14$, quedan tres de las cuatro columnas.' }),
-    play('total-original', '¿Cuánto había al principio?', { rounds: [
-      { steps: [[1, 3, 'total'], [1, 2, 'resto']], left: 40000, step: 10000, max: 200000 },
-      { steps: [[2, 5, 'total'], [1, 3, 'resto']], left: 24000, step: 5000, max: 100000 },
-    ] }, 'Queda $\\tfrac23 \\cdot \\tfrac12 = \\tfrac13$ del total: si eso es 40 000, el total es 120 000. En la otra queda $\\tfrac35 \\cdot \\tfrac23 = \\tfrac25$: 24 000 son $\\tfrac25$ de 60 000.',
-      { hint: 'Calcula qué fracción del total queda al final y piensa de qué número es esa fracción.' }),
-    play('rueda-porcentaje', 'La fracción como parte de un todo', { rounds: [{ part: 30, whole: 120 }, { part: 54, whole: 90 }], tol: 1 },
-      '30 de 120 es $\\tfrac14$, el 25 %. 54 de 90 es $\\tfrac35$, el 60 %.',
-      { hint: 'Simplifica la fracción parte / todo antes de pasarla a porcentaje.' }),
-    play('pinta-personas', 'Fracciones de un grupo', { rounds: [{ total: 24, pct: 75, what: 'llegaron temprano' }, { total: 30, pct: 40, what: 'trajeron almuerzo' }] },
-      'El 75 % es $\\tfrac34$: $\\tfrac34$ de 24 son 18. El 40 % es $\\tfrac25$: $\\tfrac25$ de 30 son 12.',
-      { hint: 'Pasa el porcentaje a fracción y parte el grupo en partes iguales.' }),
-    play('cruz-porcentaje', 'Porcentaje con regla de tres', { problems: [
-      { text: 'Gastó el 25 % de 80 000. ¿Cuánto gastó?', chips: [{ label: '25', cell: 'p' }, { label: '80 000', cell: 'C' }, { label: '?', cell: 'B' }, { label: '60 000', cell: null }] },
-      { text: '12 000 es qué porcentaje de 48 000', chips: [{ label: '?', cell: 'p' }, { label: '48 000', cell: 'C' }, { label: '12 000', cell: 'B' }, { label: '36 000', cell: null }] },
-    ] }, 'El total va con el 100 %: el 25 % de 80 000 es 20 000, y 12 000 de 48 000 es el 25 %.',
-      { hint: 'El total va enfrente del 100 %.' }),
-    play('vuela-precios', 'Vuela a lo que queda', { rounds: [{ title: 'Fracciones', items: [
-      { ask: 'Gasta 1/2 y luego 1/2 de lo que queda: queda…', options: ['1/4', '0', '1/2'], answer: 0 },
-      { ask: 'Gasta 1/5 y luego 1/4 de lo que queda: queda…', options: ['3/5', '11/20', '1/20'], answer: 0 },
-      { ask: 'Si queda 1/3 y son 50 000, había…', options: ['150 000', '100 000', '16 667'], answer: 0 },
-    ] }] }, '$\\tfrac12 \\cdot \\tfrac12 = \\tfrac14$. $\\tfrac45 \\cdot \\tfrac34 = \\tfrac35$. $3 \\cdot 50\\,000 = 150\\,000$.',
-      { hint: 'Multiplica lo que va quedando, no restes fracciones del total.' }),
-  ]);
-
-  setLesson('pu-ar-2', [
-    play('nivela-datos', 'Promedio = nivelar', { rounds: [{ data: [6, 2, 9, 7], hi: 10, step: 2 }, { data: [8, 3, 5, 10, 4], hi: 12, step: 2 }] },
-      '$\\tfrac{24}{4} = 6$ y $\\tfrac{30}{5} = 6$: lo que sobra arriba llena lo que falta abajo.',
-      { hint: 'Suma todo y divide entre la cantidad de datos.' }),
-    play('dato-faltante', 'Agregar un dato', { rounds: [{ data: [70, 85, null, 90], mean: 80, hi: 100, step: 5 }, { data: [4, 6, 8, null], mean: 7, hi: 12, step: 1 }] },
-      'Promedio por cantidad da la suma: $80 \\cdot 4 = 320$ y faltan $320 - 245 = 75$. $7 \\cdot 4 = 28$ y faltan 10.',
-      { hint: 'La llave: promedio × cantidad = suma total.' }),
-    play('balanza-promedio', 'Dos grupos juntos', { rounds: [{ groups: [{ lab: 'mujeres', n: 3, mean: 8 }, { lab: 'hombres', n: 5, mean: 4 }], lo: 0, hi: 10 }] },
-      '$\\tfrac{3 \\cdot 8 + 5 \\cdot 4}{8} = \\tfrac{44}{8} = 5.5$, más cerca de 4 porque los hombres son más.',
-      { hint: 'Cada grupo pesa según cuántas personas tiene.' }),
-    play('nota-ponderada', 'La nota que falta', { rounds: [
-      { items: [['parcial 1', 30, 3.0], ['parcial 2', 30, 4.0], ['final', 40, null]], target: 3.9 },
-      { items: [['quices', 20, 4.5], ['taller', 30, 3.0], ['examen', 50, null]], target: 3.5 },
-    ] }, 'Lo que ya tiene: $0.3 \\cdot 3 + 0.3 \\cdot 4 = 2.1$; faltan 1.8, y $1.8 \\div 0.4 = 4.5$. En la otra: $0.9 + 0.9 = 1.8$; faltan 1.7, y $1.7 \\div 0.5 = 3.4$.',
-      { hint: 'Calcula cuánto aportan las notas que ya tiene y reparte lo que falta entre el peso de la última.' }),
-    play('tres-centros', 'Media, mediana y moda', { rounds: [{ data: [2, 2, 2, 3, 5, 6, 8], lo: 0, hi: 8 }] },
-      'Media $\\tfrac{28}{7} = 4$, mediana 3 (el del medio) y moda 2 (el que más se repite).',
-      { hint: 'Cada medida responde una pregunta distinta.' }),
-    play('ordena-mediana', 'La mediana', { rounds: [{ data: [15, 9, 12, 9, 20, 11] }] },
-      'Ordenados: 9, 9, 11, 12, 15, 20. Hay dos en el medio: $\\tfrac{11 + 12}{2} = 11.5$.',
-      { hint: 'Con una cantidad par de datos se promedian los dos del medio.' }),
-    play('rompe-cambios', 'Manda la pelota al promedio', { miss: 'promedio × cantidad = suma', rounds: [{ title: 'Promedios', items: [
-      { ask: 'Promedio de 5 datos es 6. La suma es…', options: ['30', '11', '6'], answer: 0 },
-      { ask: 'Notas 3 y 4 con pesos 50 % y 50 %', options: ['3.5', '7', '3.4'], answer: 0 },
-      { ask: 'Tres datos promedian 4; se agrega un 8. Nuevo promedio', options: ['5', '6', '4'], answer: 0 },
-    ] }] }, '$5 \\cdot 6 = 30$. $\\tfrac{3 + 4}{2} = 3.5$. $\\tfrac{12 + 8}{4} = 5$.',
-      { hint: 'Siempre pasa por la suma total.' }),
-  ]);
-
-  setLesson('pu-ar-3', [
-    play('cripto-letras', 'Letras por cifras', { rounds: [
-      { letters: 'AB', show: 'A + A + A = BA', f: v => 3 * v.A === N(v, 'BA'), lead: 'AB' },
-      { letters: 'ABC', show: 'AB + BA = CAC', f: v => N(v, 'AB') + N(v, 'BA') === N(v, 'CAC'), lead: 'ABC' },
-      { letters: 'ABC', show: 'AA + BB = CBC', f: v => N(v, 'AA') + N(v, 'BB') === N(v, 'CBC'), lead: 'ABC' },
-      { letters: 'ABC', show: 'AB × A = CBB', f: v => N(v, 'AB') * v.A === N(v, 'CBB'), lead: 'ABC' },
-    ] }, '$5 + 5 + 5 = 15$. $29 + 92 = 121$. $99 + 22 = 121$. $95 \\cdot 9 = 855$. En las sumas de tres cifras la primera tiene que ser 1: dos números de dos cifras no llegan a 200.',
-      { hint: 'Empieza por la cifra que se lleva: una suma de dos números de dos cifras nunca pasa de 198.' }),
-    play('tablero-cifras', 'El número escondido', { rounds: [
-      { conds: [{ say: 'sus cifras suman 9', f: n => X(n) + Y(n) === 9 }, { say: 'al invertir sus cifras baja 45', f: n => n - REV(n) === 45 }] },
-      { conds: [{ say: 'es múltiplo de 7', f: n => n % 7 === 0 }, { say: 'las decenas son el doble de las unidades', f: n => X(n) === 2 * Y(n) }, { say: 'es impar', f: n => n % 2 === 1 }, { say: 'es mayor que 50', f: n => n > 50 }] },
-    ] }, 'Invertir XY cambia el número en $9(X - Y)$: baja 45 si $X - Y = 5$, y con $X + Y = 9$ queda 72. En la otra, de 21, 42, 63 y 84 solo 63 es impar y mayor que 50.',
-      { hint: 'Toca un número y mira qué condición falla: eso te dice hacia dónde moverte.' }),
-    play('maquina-regla', 'Reglas con las cifras', { rounds: [{ ex: [[37, 10], [52, 7], [81, 9]], ask: 64, op: 'dsum' }, { ex: [[23, 32], [58, 85], [71, 17]], ask: 40, op: 'rev' }] },
-      '$3 + 7 = 10$, $5 + 2 = 7$, $8 + 1 = 9$: se suman las cifras ($64 \\to 10$). En la otra se invierten: $40 \\to 4$.',
-      { hint: 'Mira qué pasa con cada cifra por separado.' }),
-    play('ultima-cifra', 'La cifra de las unidades', { rounds: [{ a: 7, n: 23 }, { a: 8, n: 14 }] },
-      'Las unidades de $7^n$ giran 7, 9, 3, 1: $23$ deja residuo 3, termina en 3. Las de $8^n$ giran 8, 4, 2, 6: $14$ deja residuo 2, termina en 4.',
-      { hint: 'Solo importa la cifra de las unidades: mira cada cuánto se repite.' }),
-    play('arma-negacion', 'El valor de un número de dos cifras', { rounds: [
-      { ask: 'Escribe el valor de AB', show: '$\\overline{AB}$', tray: ['$10A$', '$10B$', '$A$', '$B$', '$+$', '$\\cdot$'], need: [0, 4, 3], alt: [[3, 4, 0]] },
-      { ask: 'Escribe AB + BA', show: '$\\overline{AB} + \\overline{BA}$', tray: ['$11$', '$10$', '$(A + B)$', '$(A - B)$', '$\\cdot$', '$+$'], need: [0, 4, 2], alt: [[2, 4, 0]] },
-    ] }, 'La cifra de las decenas vale 10 veces: $\\overline{AB} = 10A + B$. Y $\\overline{AB} + \\overline{BA} = 11A + 11B = 11(A + B)$.',
-      { hint: 'Escribe cada número como decenas por 10 más unidades.' }),
-    play('binario-luces', 'Valor posicional en base 2', { rounds: [{ n: 19, bits: 5 }, { n: 26, bits: 5 }] },
-      'Cada lugar vale el doble del de su derecha, como en base 10 vale diez veces: $19 = 16 + 2 + 1$ y $26 = 16 + 8 + 2$.',
-      { hint: 'Empieza por el lugar más grande que quepa.' }),
-    play('vuela-precios', 'Vuela a la cifra', { rounds: [{ title: 'Cifras', items: [
-      { ask: 'AB + BA es siempre múltiplo de…', options: ['11', '10', '9'], answer: 0 },
-      { ask: 'AB − BA es siempre múltiplo de…', options: ['9', '11', '2'], answer: 0 },
-      { ask: 'A + A = 1B con A = 7, B es…', options: ['4', '7', '1'], answer: 0 },
-    ] }] }, '$\\overline{AB} + \\overline{BA} = 11(A + B)$ y $\\overline{AB} - \\overline{BA} = 9(A - B)$. $7 + 7 = 14$.',
-      { hint: 'Escribe AB como 10A + B.' }),
-  ]);
-
-  setLesson('pu-ar-4', [
-    play('peor-caso-bolsa', 'Para estar seguros', { rounds: [
-      { bag: [['coral', 5], ['sky', 5], ['mint', 5]], kind: 'iguales', k: 2 },
-      { bag: [['coral', 4], ['sky', 6], ['sun', 3]], kind: 'color', k: 2, color: 'coral' },
-      { bag: [['coral', 3], ['sky', 3], ['mint', 3], ['sun', 3]], kind: 'iguales', k: 3 },
-    ] }, 'Con 3 colores, en el peor caso salen tres distintas: con 4 seguro hay dos iguales. Para dos rojas, lo peor es sacar antes las 9 de otros colores y una roja: 11. Para tres iguales de cuatro colores: $2 \\cdot 4 + 1 = 9$.',
-      { hint: 'Piensa en la peor suerte: ¿cuántas puedes sacar SIN que se cumpla? Una más asegura.' }),
-    play('rectangulo-max', 'La cerca más rendidora', { rounds: [{ P: 24, step: 1 }, { P: 30, step: 0.5 }] },
-      'Con perímetro fijo el área crece al acercarse al cuadrado: $6 \\cdot 6 = 36$ con 24 m y $7.5 \\cdot 7.5 = 56.25$ con 30 m.',
-      { hint: 'Prueba rectángulos largos y otros casi cuadrados, y compara sus áreas.' }),
-    play('reparto-extremo', 'Repartos con extremos', { rounds: [{ n: 4, total: 20, ask: 'max' }, { n: 4, total: 15, ask: 'minmax' }] },
-      'Para que uno reciba lo máximo, los otros tres reciben lo mínimo distinto: 1, 2 y 3, y le quedan 14. Para el menor máximo, lo más parejo: con 6 como máximo alcanza (6, 5, 3, 1); con 5 no, porque $5 + 4 + 3 + 2 = 14 < 15$.',
-      { hint: 'Los demás tienen que ser distintos: ¿cuál es lo menos que pueden recibir?' }),
-    play('contraejemplo', '¿Seguro? Busca la peor sacada', { rounds: [{ claim: 'Si saco 3 bolas de una bolsa con rojas, azules y verdes, seguro hay dos del mismo color', items: ['roja, roja, azul', 'roja, azul, verde', 'azul, azul, verde', 'verde, verde, roja'], bad: x => new Set(x.split(', ')).size === 3 }] },
-      'Una sacada con los tres colores distintos tumba la frase: con 3 bolas no es seguro; con 4 sí.',
-      { hint: 'Busca la sacada con peor suerte.' }),
-    play('dato-faltante', 'Lo mínimo para el promedio', { rounds: [{ data: [5, 5, 5, null], mean: 4, hi: 5, step: 1 }] },
-      'Para que el promedio sea 4, la suma es 16. Si los otros tres sacaron lo máximo (5), el cuarto necesita lo mínimo: $16 - 15 = 1$.',
-      { hint: 'Para el mínimo de uno, los demás van al máximo.' }),
-    play('mayor-subida', 'El mayor cambio', { rounds: [{ pts: [['L', 12], ['M', 15], ['X', 9], ['J', 20], ['V', 22]], hi: 25, step: 5, q: 'up' }, { pts: [['L', 12], ['M', 15], ['X', 9], ['J', 20], ['V', 22]], hi: 25, step: 5, q: 'down' }] },
-      'La mayor subida es de 9 a 20 (+11); la mayor bajada, de 15 a 9 (−6).',
-      { hint: 'Compara todos los tramos, no solo los de las puntas.' }),
-    play('rompe-cambios', 'Manda la pelota al extremo', { miss: 'piensa en la peor suerte posible', rounds: [{ title: 'Extremos', items: [
-      { ask: 'Medias de 4 colores: ¿cuántas sacar para un par?', options: ['5', '4', '8'], answer: 0 },
-      { ask: 'Dos números suman 10: el mayor producto es…', options: ['25', '24', '100'], answer: 0 },
-      { ask: '12 dulces, 3 niños, distintos y al menos 1: lo máximo de uno', options: ['9', '10', '6'], answer: 0 },
-    ] }] }, 'Con 4 colores, la quinta media asegura el par. $5 \\cdot 5 = 25$. Los otros reciben 1 y 2: quedan 9.',
-      { hint: 'Peor caso más uno; para máximos, los demás al mínimo.' }),
-  ]);
 
   setExam('pu-aritmetica', 'Aritmética y promedios', [
     ['pu-ar-1', 'Cada fracción se toma de lo que quedaba antes de esa compra.',
@@ -151,16 +24,41 @@ PU_JUEGOS.push(({ setLesson, setExam }) => {
 });
 
 // Mundo 12 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
-PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
-  diezLesson('pu-ar-1', [
-    ['corta-lo-que-queda', 0, 'Lina recibe 90 000 pesos: gasta un tercio en transporte y dos tercios de lo que queda en libros. Corta la barra', 'Gasta 30 000 y quedan 60 000. Después gasta $\\tfrac23$ de 60 000, que son 40 000: le quedan 20 000.'],
-    ['area-queda', 0, 'De un terreno se vende $\\tfrac14$ y después se siembran $\\tfrac23$ de lo que queda. Halla lo que sobra', 'Después de la venta quedan $\\tfrac34$; de eso sobra un tercio: $\\tfrac34 \\cdot \\tfrac13 = \\tfrac14$ del terreno.'],
-    ['total-original', 1, 'Después de gastar $\\tfrac25$ de su sueldo y $\\tfrac13$ de lo que le quedaba, a Óscar le sobran 24 000. Halla el sueldo', 'Sobra $\\tfrac35 \\cdot \\tfrac23 = \\tfrac25$ del sueldo, que son 24 000: el sueldo era 60 000.'],
-    ['rueda-porcentaje', 1, 'De 90 invitados llegaron 54. Gira la aguja hasta esa parte del todo', '$54 \\div 90 = \\tfrac35$: el 60 %.'],
-    ['pinta-personas', 0, 'Tres cuartas partes de un grupo de 24 llegaron temprano. Píntalos', '$\\tfrac34$ de 24: un cuarto son 6, tres cuartos son 18.'],
-    ['cruz-porcentaje', { problems: [{ text: 'Gastó el 25 % de 80 000. ¿Cuánto gastó?', chips: [{ label: '25', cell: 'p' }, { label: '80 000', cell: 'C' }, { label: '?', cell: 'B' }] }] }, 'Una fracción también es un porcentaje. Arma la cruz', 'El 25 % es la cuarta parte: gastó 20 000.'],
-    ['vuela-precios', 0, 'Vuela a lo que queda', 'Mitad y mitad de lo que queda: sobra $\\tfrac14$. Un quinto y luego un cuarto del resto: $\\tfrac45 \\cdot \\tfrac34 = \\tfrac35$. Si $\\tfrac13$ son 50 000, había 150 000.'],
-  ], [
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/aritmetica-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ar-1', [
+    play('fraccion-de-que', 'De 120 mil pesos se gasta primero $\\tfrac16$. Llena cada renglón.', { et: ['el primer gasto', 'lo que queda', '2/5 de lo que queda', '2/5 del total'], metas: ['20', '100', '40', '48'], fichas: ['20', '100', '40', '48', '40', '60', '80'],
+      mira: ['Parte 120 en seis pedazos iguales y toma uno.', 'Al total se le quita el primer gasto.', 'Parte lo que queda en cinco y toma dos.', 'Ahora el todo vuelve a ser 120.'], trampas: { '2:48': 'Eso es 2/5 de 120: el todo ya no es ese.', '3:40': 'Eso es 2/5 de lo que queda.' }, ok: 'La misma fracción da distinto si cambia el todo.' },
+      'Un sexto de 120 son 20 y quedan 100. Dos quintos de 100 son 40, pero dos quintos de 120 son 48.',
+      { hint: 'Antes de partir, pregúntate: ¿de qué cantidad se está tomando la fracción?' }),
+    play('corta-barra', 'Una barra de **40** cuadros. Se gastan $\\tfrac38$ y después $\\tfrac25$ **de lo que queda**. Pon el corte de arriba donde termina el primer gasto y el de abajo donde termina el segundo.', { n: 40, a: 15, b: 25, f1: [3, 8] },
+      'Un octavo de 40 son 5: el primer gasto es 15. Quedan 25 y dos quintos de 25 son 10: el segundo corte va en 25.',
+      { hint: 'Halla el primer gasto. Después parte en cinco solo el pedazo que quedó.' }),
+    play('queda-producto', 'Se gastan $\\tfrac27$ del dinero y luego $\\tfrac15$ de lo que queda. ¿Qué fracción **queda** al final?', { n: 7, et: ['queda del total', 'queda de eso', 'queda al final'], ops: ['·', '='], metas: ['5/7', '4/5', '4/7'], fichas: ['5/7', '4/5', '4/7', '2/7', '1/5', '2/35', '18/35'],
+      mira: ['Si se gastan dos séptimos, ¿cuántos séptimos quedan?', 'De eso se gasta un quinto: ¿qué parte de eso queda?', 'Multiplica las dos partes que quedan y simplifica.'], trampas: { '0:2/7': 'Eso es lo que se gastó, no lo que queda.', '1:1/5': 'Eso es lo que se gastó, no lo que queda.', '2:2/35': 'Multiplicaste lo gastado.', '2:18/35': 'Restaste 1/5 del total, pero es de lo que queda.' }, ok: 'Se multiplica lo que va quedando.' },
+      'Quedan $\\tfrac57$ y de eso quedan $\\tfrac45$: $\\tfrac57 \\cdot \\tfrac45 = \\tfrac47$.',
+      { hint: 'No mires lo que se gasta: mira qué parte se conserva cada vez.' }),
+    play('desde-el-final', 'Alguien gasta $\\tfrac14$ de sus ahorros y después $\\tfrac25$ de lo que le queda. Al final quedan **36** mil. Camina hacia atrás.', { s: ['gasta 1/4', 'gasta 2/5'], queda: '36', metas: ['80', '60'], fichas: ['80', '60', '90', '75', '72', '240', '50'],
+      mira: ['Lo que había después del primer gasto es solo una parte del principio: ¿cuántos cuartos?', '36 es lo que quedó al gastar dos quintos: ¿cuántos quintos son?'], trampas: { '0:75': 'Sumarle 1/4 de 60 no sirve: el cuarto se tomó del principio.', '0:240': '60 no es un cuarto: es lo que quedó.', '1:90': '36 no son los dos quintos gastados: son los que quedaron.', '1:72': '36 no es la mitad de lo que había.' }, ok: '80 − 20 = 60 y 60 − 24 = 36.' },
+      '36 son tres quintos: un quinto son 12 y antes había 60. Y 60 son tres cuartos: un cuarto son 20 y al principio había 80.',
+      { hint: 'Empieza por el final: ¿qué fracción de lo que había antes son los 36?' }),
+    play('dejan-lo-mismo', 'Toca **todas** las maneras de gastar que dejan justo $\\tfrac35$ del total.', { casos: [{ t: '1/5 y luego 1/4 de lo que queda', si: true }, { t: '1/5 y luego 1/5 de lo que queda', no: '1/5 y luego 1/5 de lo que queda deja 4/5 de 4/5: son 16/25.' }, { t: '1/4 y luego 1/5 de lo que queda', si: true }, { t: '1/5 y luego 1/5 del total', si: true }, { t: '1/4 y luego 1/5 del total', no: '1/4 y 1/5 del total juntos son 9/20: quedan 11/20.' }], falta: 'Falta otra: con «del total» se restan; con «de lo que queda» se multiplica lo que queda.', ok: 'Al multiplicar lo que queda, el orden no importa.' },
+      '$\\tfrac45 \\cdot \\tfrac34 = \\tfrac35$ en los dos órdenes, y $1 - \\tfrac15 - \\tfrac15 = \\tfrac35$ cuando las dos son del total.',
+      { hint: 'Fíjate en las últimas palabras de cada una: ¿del total o de lo que queda?' }),
+    play('tres-tandas', 'Un tanque tiene **240** litros. Salen $\\tfrac16$, luego $\\tfrac14$ de lo que queda y luego $\\tfrac25$ de lo que queda. Pon lo que hay después de cada salida.', { s: ['sale 1/6', 'sale 1/4', 'sale 2/5'], et: ['después', 'después', 'después'], metas: ['200', '150', '90'], fichas: ['200', '150', '90', '40', '140', '54', '60'],
+      mira: ['Un sexto de 240 es lo que sale: réstalo.', 'Ahora la fracción se toma de los litros que hay.', 'La última fracción también se toma de los litros que hay.'], trampas: { '0:40': 'Eso es lo que salió.', '1:140': 'Quitaste un cuarto de 240, no de lo que había.', '2:54': 'Quitaste dos quintos de 240, no de lo que había.', '2:60': 'Eso es lo que salió.' }, ok: 'Cada salida estrena un todo.' },
+      'Sale 40 y quedan 200. Sale 50 y quedan 150. Sale 60 y quedan 90.',
+      { hint: 'Cada fracción se toma de lo que había justo antes de esa salida.' }),
+    play('porciento-resto', 'De un sueldo de **500** se ahorra el **20 %** y del resto se gasta el **75 %**. Completa.', { et: ['tras ahorrar', 'se gasta', 'queda'], metas: ['400', '300', '100'], fichas: ['400', '300', '100', '480', '375', '25', '125'],
+      mira: ['El 20 % es la quinta parte: quítala.', 'El 75 % se toma del resto.', 'Al resto quítale lo que se gasta.'], trampas: { '0:480': 'El 20 % de 500 no es 20.', '1:375': 'Eso es el 75 % de 500: se toma del resto.', '1:100': 'Eso es lo que queda, no lo que se gasta.' }, ok: 'Con porcentajes pasa igual: el todo cambia.' },
+      'El 20 % de 500 son 100 y quedan 400. El 75 % de 400 son 300 y quedan 100.',
+      { hint: 'El segundo porcentaje no es del sueldo completo.' }),
+    play('sube-resto', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De **140** hojas se usan $\\tfrac27$ y luego $\\tfrac14$ de lo que queda. ¿Cuántas quedan?', r: 75, c: '140 - 40 - 25', e: { 25: 'Esas son las que se usaron la segunda vez.', 65: 'El cuarto es de lo que queda.' } },
+      { q: 'Se gasta $\\tfrac16$ y luego $\\tfrac15$ de lo que queda. Sobran **80**. ¿Cuánto había al principio?', r: 120, c: '80 \\div \\tfrac23', e: { 100: 'Eso había después del primer gasto.' } },
+      { q: 'Regala la mitad y luego la mitad de lo que le queda. Le sobran **15**. ¿Cuánto tenía?', r: 60, c: '15 \\cdot 4', e: { 30: 'Eso tenía antes de la segunda vez.', 45: 'Las dos mitades no son iguales.' } }] },
+      '$140 - 40 = 100$ y $100 - 25 = 75$. $\\tfrac56 \\cdot \\tfrac45 = \\tfrac23$ son 80: había 120. Y 15 es la cuarta parte de 60.',
+      { hint: 'Mira qué fracción del principio es lo que queda.' }),
     sol('Camilo leyó un libro así: el lunes leyó la cuarta parte del libro; el martes, la tercera parte de lo que le faltaba; el miércoles leyó 60 páginas y terminó el libro. ¿Cuántas páginas tiene el libro?',
       ['Después del lunes le falta [[$\\tfrac34$]] del libro', 'El martes lee $\\tfrac13$ de $\\tfrac34$, que es [[$\\tfrac14$]] del libro', 'Le queda $\\tfrac34 - \\tfrac14 =$ [[$\\tfrac12$]] del libro, que son las 60 páginas', 'El libro tiene $60 \\cdot 2 =$ [[120]] páginas'],
       ['$\\tfrac{5}{12}$', '144', '$\\tfrac13$'],
@@ -177,15 +75,39 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Sigue lo que queda después de cada uno: cada fracción se toma de lo que queda, no de la pizza entera.'),
   ]);
 
-  diezLesson('pu-ar-2', [
-    ['nivela-datos', 1, 'Cinco cajas pesan 8, 3, 5, 10 y 4 kilos. Nivela las barras para hallar el promedio', 'Entre todas pesan 30 kilos: repartidos por igual, 6 kilos cada una.'],
-    ['dato-faltante', 0, 'Marta quiere promediar 80 en cuatro pruebas y lleva 70, 85 y 90. Halla la nota que falta', 'Para promediar 80 debe sumar 320. Lleva 245: le faltan 75.'],
-    ['balanza-promedio', 0, 'Tres mujeres promedian 8 y cinco hombres promedian 4. Ubica el promedio de todo el grupo', '$\\tfrac{3 \\cdot 8 + 5 \\cdot 4}{8} = \\tfrac{44}{8} = 5.5$: queda más cerca del promedio del grupo más grande.'],
-    ['nota-ponderada', 0, 'Dos parciales del 30 % con notas 3 y 4, y un final del 40 %. Halla la nota del final para una definitiva de 3.9', 'Los parciales aportan $0.9 + 1.2 = 2.1$. Faltan 1.8, y el final pesa 0.4: $1.8 \\div 0.4 = 4.5$.'],
-    ['tres-centros', 0, 'Los puntajes de siete jugadores: ubica la media, la mediana y la moda', 'Moda 2 (sale tres veces), mediana 3 (el del centro) y media $28 \\div 7 = 4$.'],
-    ['ordena-mediana', 0, 'Seis tiempos de carrera: ordénalos y halla la mediana', 'Ordenados: 9, 9, 11, 12, 15, 20. La mediana es el promedio de los dos del centro: 11.5.'],
-    ['rompe-cambios', 0, 'Manda la pelota al promedio', 'Promedio 6 con 5 datos: la suma es 30. Con pesos iguales, 3 y 4 dan 3.5. Tres datos que promedian 4 suman 12; con un 8 más, $20 \\div 4 = 5$.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/aritmetica-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ar-2', [
+    play('misma-suma', '**Cuatro** datos promedian **9**. Otros **seis** datos suman **lo mismo**. Pon el nivel en el promedio de los seis.', { n: 4, m: 9, k: 6 },
+      'Los cuatro suman $4 \\cdot 9 = 36$. Los seis también suman 36: promedian $36 \\div 6 = 6$.',
+      { hint: 'El área de cada rectángulo es la suma de sus datos.' }),
+    play('sube-baja-igual', 'Un grupo de datos promedia **12**. En cada caso, partiendo de ese grupo, ¿qué le pasa al promedio?', { et: ['entra un 20', 'entra un 12', 'sale un 5', 'sale un 20'], metas: ['sube', 'igual', 'sube', 'baja'], fichas: ['sube', 'sube', 'igual', 'igual', 'baja', 'baja'],
+      mira: ['Entra un dato mayor que el promedio.', 'Entra un dato idéntico al promedio.', 'Se va un dato que estaba por debajo: ¿hacia dónde jalaba?', 'Se va un dato que estaba por encima: ¿hacia dónde jalaba?'], ok: 'Importa si el dato está por encima o por debajo del promedio, y si entra o sale.' },
+      'El 20 que entra jala hacia arriba; el 12 no cambia nada. Al salir el 5 desaparece algo que jalaba hacia abajo: sube. Al salir el 20, baja.',
+      { hint: 'Cada dato jala el promedio hacia su lado. Si se va, deja de jalar.' }),
+    play('cambia-uno', '**Cinco** datos promedian **14**. Uno de ellos, un **8**, se cambia por un **23**. Halla el promedio nuevo.', { n: 5, c: '8 → 23', et: ['suma', 'suma nueva', 'promedio'], ops: ['→', '→'], metas: ['70', '85', '17'], fichas: ['70', '85', '17', '93', '78', '22', '29'],
+      mira: ['Promedio por cantidad.', 'Sale el 8 y entra el 23.', 'Sigue habiendo cinco datos.'], trampas: { '1:93': 'Faltó quitar el 8.', '1:78': 'Sumaste el 8: ese sale, y entra el 23.', '2:22': 'El promedio no sube 8.', '2:29': 'El promedio no sube 15: los 15 de más se reparten.' }, ok: 'La suma sube 15 y el promedio sube 15 ÷ 5 = 3.' },
+      '$5 \\cdot 14 = 70$; $70 - 8 + 23 = 85$; $85 \\div 5 = 17$.',
+      { hint: 'Pasa el promedio a suma, arregla la suma y vuelve a dividir.' }),
+    play('reparte-sobra', '**Nueve** datos promedian **20** y entra un **50**. Reparte lo que le sobra.', { n: 9, et: ['le sobran', 'entre', 'promedio'], metas: ['30', '10', '23'], fichas: ['30', '10', '23', '9', '35', '50', '25'],
+      mira: ['¿Cuánto tiene el 50 por encima del promedio?', '¿Entre cuántos datos se reparte, contando al que entra?', 'Al promedio viejo súmale lo que le toca a cada uno.'], trampas: { '0:50': 'Solo se reparte lo que tiene por encima de 20.', '1:9': 'El que entra también cuenta.', '2:35': 'Promediaste 20 y 50, pero detrás del 20 hay nueve datos.' }, ok: 'Cada uno recibe 3 y el promedio sube 3.' },
+      'Al 50 le sobran 30 sobre el 20. Entre los 10 datos toca de a 3: el promedio sube a 23.',
+      { hint: 'Imagina que todos tienen 20 y que el nuevo reparte lo que tiene de más.' }),
+    play('parte-pesos', 'Sacó **4.5** en el taller y **2.5** en el examen, y la definitiva fue **3.3**. Arrastra la división hasta el peso del **taller**.', { a: 4.5, b: 2.5, na: 'taller', nb: 'examen', w: 40, d: 3.3 },
+      '$0.4 \\cdot 4.5 + 0.6 \\cdot 2.5 = 1.8 + 1.5 = 3.3$: el taller pesa el 40 %.',
+      { hint: 'La definitiva queda más cerca de la nota que más pesa. ¿De cuál está más cerca 3.3?' }),
+    play('cuantos-llegan', '**Cuatro** personas promedian **30** años. Llegan otras que promedian **45** y entre todos promedian **40**. Mueve la cantidad de los que llegan.', { k: 4, a: 30, b: 45, m: 40, max: 12 },
+      'A los 4 les faltan 10 a cada uno: 40 años. A los que llegan les sobran 5 a cada uno: $40 \\div 5 = 8$ personas.',
+      { hint: 'Lo que les falta a unos para llegar a 40 lo cubre lo que les sobra a los otros.' }),
+    play('aportes-nota', 'Las notas pesan 20 %, 30 % y 50 %. Con 4.0 en la primera y 3.0 en la segunda, ¿qué nota hace falta en la tercera para una definitiva de **3.7**?', { et: ['aporta el 20 % de 4.0', 'aporta el 30 % de 3.0', 'aporte que falta', 'nota de la tercera'], metas: ['0.8', '0.9', '2.0', '4.0'], fichas: ['0.8', '0.9', '2.0', '2.0', '4.0', '1.7', '3.7'],
+      mira: ['La quinta parte de 4.0.', 'Tres veces la décima parte de 3.0.', 'De 3.7 quita los dos aportes.', 'Lo que falta es el 50 % de la nota.'], trampas: { '2:1.7': 'Eso es lo que ya aportan las dos primeras.', '3:2.0': 'Ese es el aporte, no la nota: pesa la mitad.', '3:3.7': 'Esa es la definitiva.' }, ok: '0.8 + 0.9 + 2.0 = 3.7.' },
+      'Aportan 0.8 y 0.9. Faltan 2.0, y como la tercera pesa la mitad, la nota es 4.0.',
+      { hint: 'El aporte de una nota es su valor por su peso en decimal.' }),
+    play('sube-promedio', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Ocho números promedian **11**. Se quitan dos que suman **28**. ¿Cuánto promedian los que quedan?', r: 10, c: '(88 - 28) \\div 6', e: { 11: 'Los dos que salen no promedian 11.' } },
+      { q: 'Seis números promedian **15** y cinco de ellos suman **67**. ¿Cuál es el otro?', r: 23, c: '90 - 67', e: { 8: 'Usaste 5 · 15: los números son seis.' } },
+      { q: 'Diez personas promedian **24** años y llegan **cinco** que promedian **36**. ¿Cuál es el promedio de todas?', r: 28, c: '(240 + 180) \\div 15', e: { 30: 'Los grupos no son iguales: son diez y cinco personas.' } }] },
+      '$88 - 28 = 60$ y $60 \\div 6 = 10$. $90 - 67 = 23$. $\\tfrac{240 + 180}{15} = 28$.',
+      { hint: 'Convierte cada promedio en la suma que esconde.' }),
     sol('El promedio de las edades de los 6 jugadores de un equipo es 20 años. Si se retira un jugador de 25 años, ¿cuál es el promedio de las edades de los que quedan?',
       ['Suma de las 6 edades: $6 \\cdot 20 =$ [[120]]', 'Sin el jugador que se retira: $120 - 25 =$ [[95]]', 'Quedan [[5]] jugadores', 'Nuevo promedio: $95 \\div 5 =$ [[19]] años'],
       ['15', '22.5', '20'],
@@ -202,15 +124,39 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Convierte el promedio en la suma de los cinco números.'),
   ]);
 
-  diezLesson('pu-ar-3', [
-    ['cripto-letras', 0, 'Cada letra es una cifra: $A + A + A = \\overline{BA}$. Descúbrelas', '$3A$ debe terminar en A: solo pasa con $A = 5$, porque $15$ termina en 5. Entonces $B = 1$.', 'Mira las unidades: tres veces A tiene que terminar en A. Lo que se lleva a las decenas es la cifra B.'],
-    ['tablero-cifras', 0, 'Un número de dos cifras: sus cifras suman 9 y al invertirlas baja 45. Encuéntralo en el tablero', 'Al invertir, el número cambia en 9 veces la diferencia de sus cifras: $45 \\div 9 = 5$. Cifras que suman 9 y difieren en 5: 7 y 2. Es el 72.'],
-    ['maquina-regla', 1, 'Una máquina cambia 23 por 32, 58 por 85 y 71 por 17. ¿Qué entrega con el 40?', 'La máquina invierte las cifras: con 40 entrega 04, que es el 4.'],
-    ['ultima-cifra', 1, '¿En qué cifra termina $8^{14}$?', 'Las últimas cifras del 8 se repiten: 8, 4, 2, 6. Como $14 = 4 \\cdot 3 + 2$, es la segunda: 4.'],
-    ['arma-negacion', 0, 'Escribe con fichas cuánto vale el número de dos cifras $\\overline{AB}$', 'La cifra de las decenas vale diez veces: $\\overline{AB} = 10A + B$.'],
-    ['binario-luces', 0, 'El valor de cada puesto en base 2: enciende los bombillos que forman el 19', '$19 = 16 + 2 + 1$: en binario, 10011.'],
-    ['vuela-precios', 0, 'Vuela a la cifra', '$\\overline{AB} + \\overline{BA} = 11(A + B)$: múltiplo de 11. $\\overline{AB} - \\overline{BA} = 9(A - B)$: múltiplo de 9. Y $7 + 7 = 14$: B es 4.'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/aritmetica-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ar-3', [
+    play('bloques-volteo', 'Arma un número de dos cifras: sus cifras suman **13** y, al voltearlas, el número **baja 45**.', { s: 13, d: 45 },
+      'Al voltear cambia 9 veces la diferencia: $45 \\div 9 = 5$. Suman 13 y se llevan 5: 9 y 4. Como baja, es el 94.',
+      { hint: 'Cada vez que una barra de diez se cambia por un cuadrito, el número pierde 9.' }),
+    play('valor-letras', 'A y B son cifras. Pon cuánto vale cada número.', { et: ['A3', '5A', 'AA', 'A0B'], metas: ['10A + 3', '50 + A', '11A', '100A + B'], fichas: ['10A + 3', '50 + A', '11A', '100A + B', '10A + B', 'A + 3', '5 · A'],
+      mira: ['A está en las decenas.', 'El 5 está en las decenas.', 'La misma letra está en las decenas y en las unidades.', 'A está en las centenas.'], trampas: { '0:A + 3': 'Aquí A vale diez veces: son decenas.', '1:5 · A': 'No es 5 por A: el 5 son decenas.', '3:10A + B': 'El 0 corre la A a las centenas.' }, ok: 'Cada puesto a la izquierda vale diez veces más.' },
+      '$10A + 3$, $50 + A$, $10A + A = 11A$ y $100A + B$.',
+      { hint: 'Prueba con una cifra, por ejemplo A = 2: ¿qué número queda y cómo se forma?' }),
+    play('suma-con-letras', 'Cada letra es una cifra: $\\overline{A8} + \\overline{4B} = 95$. Pon cada cifra y lo que se **lleva**.', { c: [[206, 60, '8'], [146, 100, '4'], [146, 158, '9'], [206, 158, '5']], rot: [[176, 22, 'se lleva'], [178, 66, ''], [238, 106, 'B'], [84, 66, 'A']], metas: ['7', '1', '4'], fichas: ['7', '1', '4', '5', '3', '0', '6'],
+      mira: ['8 más B debe terminar en 5.', '¿Cuánto dio la suma de las unidades?', 'Lo que se lleva, más A, más 4, da 9.'], trampas: { '0:3': '8 + 3 termina en 1.', '1:0': 'Las unidades pasaron de 9.', '2:5': 'Falta contar lo que se lleva.' }, ok: '48 + 47 = 95.' },
+      '$8 + 7 = 15$: B es 7 y se lleva 1. $1 + A + 4 = 9$: A es 4.',
+      { hint: 'Empieza por la columna de las unidades y mira si pasa de 9.' }),
+    play('resta-con-letras', 'Cada letra es una cifra: $\\overline{7A} - \\overline{B8} = 36$. Descúbrelas.', { c: [[146, 60, '7'], [206, 100, '8'], [146, 158, '3'], [206, 158, '6']], rot: [[238, 60, 'A'], [173, 106, 'B']], metas: ['4', '3'], fichas: ['4', '4', '3', '2', '5', '6'],
+      mira: ['Algo menos 8 termina en 6: puede hacer falta prestar una decena.', 'Si se prestó una decena, ya no quedan 7.'], trampas: { '0:2': 'Con 2 arriba sería 12 − 8 = 4, y debe terminar en 6.', '1:4': 'Se prestó una decena: quedan 6, no 7.' }, ok: '74 − 38 = 36.' },
+      '$6 + 8 = 14$: A es 4 y se presta una decena. Quedan 6 decenas: $6 - B = 3$ y B es 3.',
+      { hint: 'Puedes verla al revés: 36 más el de abajo da el de arriba.' }),
+    play('siempre-once', 'A y B son cifras distintas y ninguna es 0. ¿Cuáles son **siempre** múltiplos de 11? Toca todas.', { casos: [{ t: 'AA + BB', si: true }, { t: 'AB − BA', no: 'AB − BA es 9 veces A − B: por ejemplo, 21 − 12 = 9.' }, { t: 'AAA − A', si: true }, { t: 'A0A', no: 'A0A es 101 veces A: por ejemplo, 101 no es múltiplo de 11.' }, { t: 'ABBA', si: true }], falta: 'Falta otra: escríbela con 10 y 100, junta las letras y mira si sale un 11.', ok: '11(A + B), 11 · 10A y 11(91A + 10B).' },
+      '$11A + 11B$; $111A - A = 110A$; $1001A + 110B = 11(91A + 10B)$. En cambio $9(A - B)$ y $101A$ no tienen el factor 11.',
+      { hint: 'Escribe cada número según sus puestos: 1, 10, 100, 1000. Después junta las letras iguales.' }),
+    play('siete-veces', '¿Cuáles son iguales a **7 veces** la suma de sus cifras? Toca todos.', { k: 7, nums: [21, 35, 42, 56, 77, 84], ok: 'En todos, las decenas son el doble de las unidades.' },
+      '$21 = 7 \\cdot 3$, $42 = 7 \\cdot 6$ y $84 = 7 \\cdot 12$. Que sea múltiplo de 7 no basta.',
+      { hint: 'Suma las cifras de cada uno y multiplica por 7: ¿vuelve a salir el número?' }),
+    play('producto-con-letras', 'A y B son cifras distintas: $\\overline{A4} \\times 9 = \\overline{4B6}$. Completa.', { u: '4', k: 9, r: ['4', '6'], metas: ['3', '5', '8'], fichas: ['3', '5', '8', '4', '6', '9', '7'],
+      mira: ['4 por 9 es más que 9: escribe las unidades y lleva las decenas.', '9 · A más lo que se lleva debe dar cuarenta y algo.', 'Es la cifra de las unidades de 9 · A más lo que se lleva.'], trampas: { '0:6': 'El 6 se escribe; se lleva lo otro.', '1:4': '9 · 4 + 3 no llega a 40.', '1:6': '9 · 6 se pasa de 49.' }, ok: '54 × 9 = 486.' },
+      '$4 \\cdot 9 = 36$: se lleva 3. $9A + 3$ debe estar entre 40 y 49: solo $A = 5$, que da 48. Entonces B es 8.',
+      { hint: 'Multiplica primero las unidades y cuida lo que se lleva.' }),
+    play('sube-cifras', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: '$\\overline{AB} + \\overline{BA} = 121$. ¿Cuánto vale **A + B**?', r: 11, c: '121 \\div 11', e: { 12: 'Cada letra aporta 11 veces su valor, no 10.' } },
+      { q: '$\\overline{AA} + A = 96$. ¿Cuánto vale **A**?', r: 8, c: '96 \\div 12', e: { 32: 'AA no es A + A: son 11 veces A.', 9: 'AA + A son 12 veces A.' } },
+      { q: 'Las cifras de un número suman **8** y al voltearlo **sube 18**. ¿Cuál es el número?', r: 35, c: '53 - 18', e: { 53: 'Ese baja al voltearlo.', 26: 'El 26 sube 36.' } }] },
+      '$11(A + B) = 121$: suman 11. $12A = 96$: A es 8. Se llevan $18 \\div 9 = 2$ y suman 8: 35.',
+      { hint: 'Escribe cada número como diez veces las decenas más las unidades.' }),
     sol('La suma de las cifras de un número de dos cifras es 11. Si se invierte el orden de sus cifras, el número aumenta en 27. ¿Cuál es el número?',
       ['Al invertir las cifras, el número cambia en 9 veces su diferencia: aquí $27 \\div 9 =$ [[3]]', 'Las cifras suman 11 y se diferencian en 3: la menor es [[4]] y la mayor es [[7]]', 'El número aumenta al invertirlo, así que la cifra menor va en las decenas: es el [[47]]'],
       ['74', '38', '9'],
@@ -227,15 +173,39 @@ PU_JUEGOS.push(({ diezLesson, addExam, sol, err, opc }) => {
       'Mira primero las unidades: ¿qué cifra B hace que $7 - B$ termine en 8 (prestando una decena)?'),
   ]);
 
-  diezLesson('pu-ar-4', [
-    ['peor-caso-bolsa', 2, 'En una bolsa hay 3 bolas de cada uno de 4 colores. ¿Cuántas hay que sacar para tener, con seguridad, 3 del mismo color?', 'La peor suerte: 2 de cada color, 8 bolas, sin completar ningún trío. La novena completa uno con seguridad. Si se pidieran 3 de un color dado (por ejemplo, 3 verdes), las cantidades sí importarían: en el peor caso salen antes todas las de los otros tres colores, 9, y después las 3 verdes: 12.'],
-    ['rectangulo-max', 0, 'Con 24 m de cerca se quiere el corral rectangular de mayor área. Ajusta sus lados', 'Con el mismo perímetro, el rectángulo de mayor área es el cuadrado: lado 6 y área 36.'],
-    ['reparto-extremo', 0, 'Se reparten 20 dulces entre 4 niños, todos con cantidades distintas y al menos uno. ¿Cuánto puede recibir, como máximo, uno de ellos?', 'Para que uno reciba lo máximo, los otros tres reciben lo mínimo posible y distinto: 1, 2 y 3. Le quedan $20 - 6 = 14$.'],
-    ['contraejemplo', 0, 'Alguien afirma que con 3 bolas sacadas ya es seguro que hay dos del mismo color. Busca la sacada que lo desmiente', 'Con mala suerte salen una roja, una azul y una verde: tres bolas y ningún color repetido.'],
-    ['dato-faltante', 0, 'Un estudiante sacó 5, 5 y 5. ¿Cuál es la nota más baja que puede sacar en la cuarta para promediar 4?', 'Para promediar 4 en cuatro notas necesita sumar 16. Ya tiene 15: le basta un 1.'],
-    ['mayor-subida', 1, 'La gráfica muestra las ventas de una semana. Señala la mayor caída', 'La única bajada es de 15 a 9: cae 6. Los demás tramos suben.'],
-    ['rompe-cambios', 0, 'Manda la pelota al extremo'],
-  ], [
+  // Ocho juegos con las escenas de la explicación (js/games/aritmetica-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-ar-4', [
+    play('peor-suerte', 'Hay fichas de **5 colores**, seis de cada uno. ¿Cuántas hay que sacar sin mirar para tener **seguro 4 del mismo color**?', { g: [6, 6, 6, 6, 6], et: ['por color', 'colores', 'peor caso', 'seguro'], ops: ['·', '=', '→'], metas: ['3', '5', '15', '16'], fichas: ['3', '5', '15', '16', '4', '20', '6'],
+      mira: ['¿Cuántas de un color pueden salir sin completar las 4?', '¿Cuántos colores hay?', 'Multiplica: eso puede salir con la peor suerte.', 'Una más que el peor caso.'], trampas: { '0:4': 'Con 4 ya se completó.', '0:6': 'No importa cuántas hay de cada color.', '2:20': 'En el peor caso nadie llega a 4.', '3:20': 'Basta una más después del peor caso.' }, ok: 'La peor suerte deja tres de cada color.' },
+      'La peor suerte saca 3 de cada color: $3 \\cdot 5 = 15$. La siguiente completa cuatro de alguno: 16.',
+      { hint: 'Imagina que la suerte hace todo lo posible para que no completes cuatro.' }),
+    play('color-pedido', 'En una caja hay **7 naranjas, 5 amarillas y 4 verdes**. ¿Cuántas hay que sacar para tener **seguro 3 verdes**?', { g: [7, 5, 4], et: ['no sirven', 'más', 'seguro'], ops: ['+', '='], metas: ['12', '3', '15'], fichas: ['12', '3', '15', '2', '4', '16', '5'],
+      mira: ['Con la peor suerte salen antes todas las que no son verdes.', '¿Cuántas verdes se piden?', 'Suma las dos.'], trampas: { '0:2': 'De los otros colores pueden salir todas, no una de cada uno.', '0:5': 'Pueden salir todas las naranjas y también las amarillas.', '1:4': 'Se piden tres, no todas.' }, ok: 'Con un color dado sí importan las cantidades de los otros colores.' },
+      'Pueden salir primero las $7 + 5 = 12$ que no son verdes. Después salen 3 verdes: $12 + 3 = 15$.',
+      { hint: 'Antes de la primera verde, ¿cuántas fichas pueden salir con la peor suerte?' }),
+    play('seguro-o-suerte', 'En una caja hay **6 fichas de cada uno de 4 colores**. Toca lo que pasa **siempre**, sin depender de la suerte.', { casos: [{ t: 'con 5 hay dos del mismo color', si: true }, { t: 'con 4 hay dos del mismo color', no: 'Con 4 puede salir una de cada color.' }, { t: 'con 9 hay tres del mismo color', si: true }, { t: 'con 10 salen los 4 colores', no: 'Con 10 pueden salir seis de un color y cuatro de otro.' }, { t: 'con 19 salen los 4 colores', si: true }], falta: 'Falta otra: piensa en la peor suerte para cada una.', ok: '4 + 1, 2 · 4 + 1 y 3 · 6 + 1.' },
+      'Una de cada color son 4: la quinta repite. Dos de cada color son 8: la novena completa tres. Tres colores completos son 18: la 19 es del cuarto.',
+      { hint: 'Para tumbar una frase basta imaginar una sola sacada en la que no se cumpla.' }),
+    play('corral-pared', 'Con **20 m** de cerca se hace un corral contra una pared: solo se cercan **tres** lados. Mueve el ancho hasta la **mayor área**.', { T: 20 },
+      'Con ancho 5, el lado largo mide $20 - 10 = 10$: área 50. Con 4 o con 6 da 48. Aquí no gana el cuadrado, porque un lado sale gratis.',
+      { hint: 'Al subir el ancho 1 m, el largo pierde 2 m. Compara el área de anchos vecinos.' }),
+    play('menor-cerca', 'Un corral rectangular debe tener **64 m²**. Mueve el largo hasta gastar la **menor** cerca en los cuatro lados.', {},
+      '$8 \\cdot 8 = 64$ gasta 32 m; $4 \\cdot 16$ gasta 40 m; $1 \\cdot 64$ gasta 130 m. Con el área fija, también gana el cuadrado.',
+      { hint: 'Todos tienen la misma área. ¿Cómo se ve el que tiene menos borde?' }),
+    play('reparto-distinto', 'Se reparten **40** monedas entre **6** niños: todos reciben y las cantidades son **distintas**. Pon cuánto **suman** cinco de ellos, como mínimo; lo **máximo** que puede recibir uno; y lo **menos** que puede recibir el que más recibe.', { n: 6, et: ['suman cinco', 'máximo de uno', 'menos del mayor'], metas: ['15', '25', '10'], fichas: ['15', '25', '10', '7', '9', '35', '21'],
+      mira: ['Cinco cantidades distintas, lo más pequeñas posible: súmalas.', 'A las 40 réstales lo mínimo que reciben los otros.', 'Reparte lo más parejo posible, sin repetir, hasta gastar las 40.'], trampas: { '0:21': 'Esa es la suma de seis: aquí van solo cinco.', '1:35': 'Los otros cinco no pueden recibir todos 1: son distintas.', '2:7': 'Con 40 ÷ 6 se repetirían cantidades.', '2:9': 'Si el mayor recibe 9 y no se repite, no se alcanzan a repartir las 40.' }, ok: '1 + 2 + 3 + 4 + 5 + 25, y 4 + 5 + 6 + 7 + 8 + 10.' },
+      'Los otros cinco al mínimo: $1 + 2 + 3 + 4 + 5 = 15$, y uno recibe 25. Lo más parejo: $4 + 5 + 6 + 7 + 8 + 9 = 39$; la que falta la recibe el mayor: 10.',
+      { hint: 'Para el máximo de uno, los demás al mínimo. Para el mínimo del mayor, todos lo más parejo posible.' }),
+    play('techo-piso', 'Hay **75** latas y en cada caja caben **9**. Llena cada renglón.', { et: ['cajas para guardarlas todas', 'cajas que quedan llenas', 'latas de la caja sin llenar', 'latas que faltan para llenarla'], metas: ['9', '8', '3', '6'], fichas: ['9', '9', '8', '3', '3', '6', '10'],
+      mira: ['Que no quede ninguna por fuera.', 'Solo cuentan las cajas completas.', '¿Cuántas latas no caben en las cajas llenas?', '¿Cuánto les falta a esas para llegar a 9?'], trampas: { '0:8': 'Con 8 cajas caben 72: quedan latas por fuera.', '0:10': 'Sobraría una caja entera.', '1:9': 'La novena no se llena.', '3:3': 'Esas son las que ya están.' }, ok: 'Para guardar todo se sube; para contar las llenas se baja.' },
+      '$8 \\cdot 9 = 72$ y $9 \\cdot 9 = 81$. Hacen falta 9 cajas; 8 quedan llenas, la otra lleva 3 y le faltan 6.',
+      { hint: 'La misma división: a veces se redondea hacia arriba y a veces hacia abajo.' }),
+    play('sube-extremo', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Fichas de **6 colores**, muchas de cada uno. ¿Cuántas sacar para tener seguro **3 del mismo color**?', r: 13, c: '2 \\cdot 6 + 1', e: { 7: 'Con 7 solo es seguro tener dos iguales.', 12: 'Ese es el peor caso: falta una.', 19: 'Con menos ya es seguro.' } },
+      { q: 'Con **20 m** de cerca, ¿cuál es la **mayor área** de un corral rectangular cercado por los cuatro lados?', r: 25, c: '5 \\cdot 5', e: { 24: 'Ese es 4 por 6: hay otro mejor.' } },
+      { q: 'Cuatro enteros positivos **distintos** suman **22**. ¿Cuánto puede valer, como mucho, uno de ellos?', r: 16, c: '22 - (1 + 2 + 3)', e: { 19: 'Los otros tres no pueden ser todos 1.', 22: 'Los otros tres son positivos: no pueden ser 0.' } }] },
+      '$2 \\cdot 6 + 1 = 13$. El cuadrado de lado 5 tiene área 25. Con 1, 2 y 3 queda $22 - 6 = 16$.',
+      { hint: 'Peor suerte más uno; con la suma fija, parejos; para el máximo de uno, los demás al mínimo.' }),
     sol('Se reparten 50 fichas entre 7 niños, sin importar cómo. ¿Cuál es la mayor cantidad de fichas que, con seguridad, recibe por lo menos uno de ellos?',
       ['Si el reparto es lo más parejo posible, cada niño recibe [[7]] fichas y sobra [[1]]', 'La ficha que sobra le toca a alguno, que queda con [[8]]', 'En cualquier otro reparto alguien recibe todavía más: se puede asegurar que al menos uno recibe [[8]] fichas'],
       ['50', '6', '43'],

@@ -85,6 +85,12 @@ Pruebas `tests/ejercicios-logica.test.js`.
 `js/games/operadores-escena.js`: máquina de dos entradas, tabla de la operación, árbol de paréntesis y balanza. `XG.renglones` y `XG.frases`
 (de `proposiciones-escena.js`) quedan disponibles para los demás mundos. Pruebas `tests/ejercicios-operadores.test.js`.
 
+## Mundo 12, Aritmética y promedios (pu-ar-1 a pu-ar-4)
+
+`js/games/aritmetica-escena.js`: la barra que se corta, cadenas que se caminan desde el final (el aviso mira primero la última casilla),
+rectángulos de igual suma, pesos que se reparten, columnas con llevada, bloques que se voltean, la peor suerte y corrales. Pruebas
+`tests/ejercicios-aritmetica.test.js`.
+
 ## pu-cm-1
 
 | Juego | Concepto | Qué se hace | Error que detecta |
