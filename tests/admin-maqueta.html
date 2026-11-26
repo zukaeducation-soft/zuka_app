@@ -1,0 +1,60 @@
+<!doctype html>
+<!-- Maqueta del panel /admin con datos inventados: carga la página y los scripts reales del panel con un Supabase falso,
+     para revisar el diseño sin entrar con la cuenta. Abrir /tests/admin-maqueta.html#inicio (?light para tema claro). No se publica. -->
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zuka · Administración (maqueta)</title>
+  <script>
+    document.documentElement.dataset.theme = /light/.test(location.search) ? 'light' : 'dark';
+    const MQ_HOY = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' });
+    const mqDia = n => new Date(Date.parse(MQ_HOY + 'T00:00:00Z') - n * 864e5).toISOString().slice(0, 10);
+    const mqEn = n => new Date(Date.now() + n * 864e5).toISOString();
+    const MQ_CURSOS = [['preuda', 'Preuniversitario UdeA'], ['preicfes', 'Preicfes Saber 11'], ['algebra', 'Álgebra'], ['trig', 'Trigonometría'], ['calc', 'Cálculo Diferencial']].map(([id, nombre], orden) => ({ id, nombre, orden, publicado: orden < 4 }));
+    const MQ_RESUMEN = {
+      hoy: MQ_HOY, pago: 131, prueba: 58, vencidos: 23, ventas_30: 1270000, pagos_30: 29, codigos_libres: 64, usan_hoy: 38, usan_7: 112,
+      lecciones_7: 486, aciertos_7: 2210, ejercicios_7: 2874, solicitudes: 3,
+      serie: Array.from({ length: 30 }, (_, k) => ({ dia: mqDia(29 - k), minutos: Math.round(700 + 600 * Math.abs(Math.sin(k * 0.7)) + k * 18) })),
+      vencen_7: [['Valentina Ríos', 'preuda', 1], ['Daniela Ospina', 'algebra', 2], ['Samuel Ortiz', 'preuda', 3], ['Isabella Cárdenas', 'trig', 6]].map(([nombre, curso, d], i) => ({ id: 'u' + i, nombre, curso, hasta: mqEn(d), telefono: '3001234567' })),
+      ventas_mes: Array.from({ length: 6 }, (_, k) => ({ mes: new Date(Date.UTC(+MQ_HOY.slice(0, 4), +MQ_HOY.slice(5, 7) - 6 + k, 1)).toISOString().slice(0, 7), valor: [420000, 610000, 580000, 890000, 1120000, 760000][k] })),
+      por_curso: MQ_CURSOS.map((c, k) => ({ ...c, curso: c.id, pago: [72, 31, 18, 10, 0][k], prueba: [21, 19, 9, 6, 3][k], completadas: [3120, 840, 1844, 620, 12][k] })),
+    };
+    const MQ_INST = {
+      instituciones: [
+        { id: 'i1', nombre: 'Colegio San José', ciudad: 'Medellín', cursos: ['preicfes'], cupos: 120, usados: 96, entraron: 81, activos_7: 54, estado: 'activo', desde: mqDia(60), hasta: mqDia(-120), vigente: true },
+        { id: 'i2', nombre: 'Institución Educativa La Paz', ciudad: 'Envigado', cursos: ['preicfes', 'algebra'], cupos: 60, usados: 58, entraron: 31, activos_7: 12, estado: 'activo', desde: mqDia(30), hasta: mqDia(-20), vigente: true },
+        { id: 'i3', nombre: 'Liceo Antioqueño', ciudad: 'Bello', cursos: ['preuda'], cupos: 40, usados: 0, entraron: 0, activos_7: 0, estado: 'activo', desde: mqDia(-5), hasta: mqDia(-200), vigente: false },
+      ],
+      cotizaciones: [{ estado: 'nueva' }, { estado: 'ganada' }],
+    };
+    const MQ_RPC = {
+      es_admin: () => true,
+      admin: a => ({ resumen: MQ_RESUMEN }[a.p_accion] ?? []),
+      tienda_admin: a => ({ conteo: { pedidos: 2, asesorias: 0 } }[a.p_accion] ?? []),
+      institucion_admin: a => ({ lista: MQ_INST, conteo: { nuevas: 1 } }[a.p_accion] ?? {}),
+    };
+    const MQ_TABLAS = { cursos: MQ_CURSOS, productos: [], ajustes: [{ clave: 'whatsapp', valor: '573001234567' }] };
+    const consulta = t => { const q = { select: () => q, order: () => q, update: () => q, eq: () => q, then: ok => ok({ data: MQ_TABLAS[t] || [], error: null }) }; return q; };
+    window.supabase = { createClient: () => ({
+      auth: { getSession: async () => ({ data: { session: { user: { email: 'admin@zuka.co' } } } }), signOut: async () => {}, signInWithPassword: async () => ({}) },
+      rpc: async (fn, a) => ({ data: MQ_RPC[fn] ? MQ_RPC[fn](a || {}) : null, error: null }), from: consulta,
+    }) };
+  </script>
+</head>
+<body class="admin">
+  <script>
+    // Copia el cuerpo y las hojas de la página real y carga sus scripts en orden (menos supabase-js, que aquí es falso).
+    (async () => {
+      const doc = new DOMParser().parseFromString(await (await fetch('../admin/index.html', { cache: 'reload' })).text(), 'text/html');
+      const abs = u => new URL(u, new URL('../admin/', location.href)).href;
+      for (const l of doc.querySelectorAll('link[rel="stylesheet"]')) { const n = document.createElement('link'); n.rel = 'stylesheet'; n.href = abs(l.getAttribute('href')); document.head.appendChild(n); }
+      document.body.innerHTML = doc.body.innerHTML;
+      for (const s of doc.querySelectorAll('script[src]')) {
+        if (/supabase/.test(s.src)) continue;
+        await new Promise(ok => { const n = document.createElement('script'); n.src = abs(s.getAttribute('src')); n.onload = n.onerror = ok; document.head.appendChild(n); });
+      }
+    })();
+  </script>
+</body>
+</html>

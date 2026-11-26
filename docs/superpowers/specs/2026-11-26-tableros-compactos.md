@@ -12,3 +12,16 @@ tableros intuitivos y profesionales (referencia: tableros de tarjetas tipo «ben
 - **Resumen del gestor** (`vPanorama`, instituciones/portal/gestor.js): saludo y filtros en una línea; atajos; cupos; puesta en marcha; cuatro
   indicadores; actividad; «Para hablar hoy»; grupos en tabla que filtra; metas que vienen; avance por curso; los que más avanzaron.
 - El tablero completo de Zuka (`#tablero`) no cambió. Pruebas: `tests/portal-gestor.test.js`.
+
+## Inicio sobrio del panel (2026-11-26, segunda pasada)
+
+Pedido: compactar el inicio como en un tablero de referencia y que «no parezca hecho por IA». Cambios en `vInicio` (admin/panel.js) y al
+final de `admin/bento.css` (clases `ini-`, solo del panel; el portal de instituciones no cambia):
+
+- Un solo acento (`--brand`); el color queda para estados (vencidos en rojo, pendientes con punto dorado). Fuera los seis colores de los
+  indicadores y los cuadros de icono rellenos.
+- Las seis cifras en una franja partida por líneas finas (`ini-ks`, enlaces a su sección).
+- «Por atender» pasa de fila de tarjetas grandes a lista compacta junto a la gráfica (`ini-pend`).
+- Gráfica por día con eje y líneas de referencia; la barra de hoy resaltada (`iniBarras`). Ventas por mes con el total arriba (`iniMeses`).
+- Buscador de estudiantes en la cabecera (lleva a Estudiantes con el texto puesto). Saludo sin «así va Zuka».
+- Maqueta con datos inventados: `tests/admin-maqueta.html` (abre la página real con un Supabase falso). Pruebas: `tests/admin-inicio.test.js`.

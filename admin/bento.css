@@ -46,3 +46,68 @@ a.bx-k:hover { border-color: color-mix(in srgb, var(--kc, var(--brand)) 60%, var
 .bx-t td small + small { display: inline; } .bx-t td:has(.bx-aro) { white-space: nowrap; } .bx-t td:has(.bx-aro) .bx-aro { display: inline-grid; vertical-align: middle; margin-right: 6px; } .bx-t td:has(.bx-aro) small { display: inline; }
 @media (max-width: 719px) { .bx-k b { font-size: 20px; } .admin .bx-k { padding: 12px; gap: 2px 10px; grid-template-columns: 32px minmax(0, 1fr); } .bx-ki { width: 32px; height: 32px; } }
 :root:not([data-theme="dark"]) .bx-pill { color: color-mix(in srgb, var(--pc, var(--mute)) 55%, var(--ink)); }
+/* Inicio sobrio del panel (pedido del 2026-11-26: compacto y que no parezca hecho por IA). Un acento (--brand); color solo para estados.
+   Clases ini-, solo en admin/panel.js: el portal de instituciones sigue con sus bx-. */
+.admin .bx-c { box-shadow: none; border-radius: 18px; }
+.ini-buscar { position: relative; }
+.ini-buscar .pn-i { position: absolute; left: 12px; top: 50%; translate: 0 -50%; width: 17px; height: 17px; color: var(--mute); pointer-events: none; }
+.admin .ini-buscar input { width: 250px; padding: 10px 14px 10px 36px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; font-size: 14.5px; }
+.admin .ini-buscar input:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+/* franja de cifras: las líneas son el hueco de 1 px sobre el color de línea */
+.ini-ks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+@media (min-width: 720px) { .ini-ks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1180px) { .ini-ks { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.admin .ini-k { display: grid; gap: 3px; align-content: start; min-width: 0; padding: 15px 18px 16px; background: var(--card); color: var(--ink); text-decoration: none; transition: background-color .15s ease; }
+.admin .ini-k:hover { background: color-mix(in srgb, var(--brand) 6%, var(--card)); }
+.ini-k > span { font-size: 13px; font-weight: 600; color: var(--mute); }
+.ini-k b { font: 500 27px/1.15 var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ini-k small { font-size: 12.5px; color: var(--mute); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ini-k.mal b { color: var(--bad); }
+/* gráfica por día */
+.ini-graf { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: 170px auto; column-gap: 10px; row-gap: 6px; }
+.ini-eje { display: flex; flex-direction: column; justify-content: space-between; font-size: 11.5px; color: var(--mute); text-align: right; font-variant-numeric: tabular-nums; translate: 0 -.5em; padding-bottom: 0; }
+.ini-barras { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 3px; align-items: end; border-bottom: 1px solid var(--line);
+  background: linear-gradient(var(--line), var(--line)) 0 0 / 100% 1px no-repeat, linear-gradient(color-mix(in srgb, var(--line) 60%, transparent), color-mix(in srgb, var(--line) 60%, transparent)) 0 50% / 100% 1px no-repeat; }
+.ini-barras i { height: max(2px, var(--h)); border-radius: 3px 3px 0 0; background: color-mix(in srgb, var(--brand) 38%, var(--card)); }
+.ini-barras i:hover { background: color-mix(in srgb, var(--brand) 70%, var(--card)); }
+.ini-barras i.cero { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.ini-barras i.hoy { background: var(--brand); }
+.ini-dias { grid-column: 2; display: flex; justify-content: space-between; font-size: 12px; color: var(--mute); }
+/* por atender: lista compacta */
+.ini-pend ul { list-style: none; margin: 0; padding: 0; display: grid; }
+.ini-pend li + li { border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
+.ini-pend a { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 10px 6px; margin: 0 -6px; border-radius: 10px; color: var(--ink); text-decoration: none; }
+.ini-pend a:hover { background: color-mix(in srgb, var(--brand) 6%, transparent); }
+.ini-pi { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--line); color: var(--mute); }
+.ini-pi .pn-i { width: 18px; height: 18px; }
+.ini-pend b { display: block; font-weight: 600; font-size: 14.5px; }
+.ini-pend small { display: block; color: var(--mute); font-size: 12.5px; }
+.ini-pend em { font: 500 20px var(--display); font-style: normal; color: var(--mute); font-variant-numeric: tabular-nums; min-width: 24px; text-align: right; }
+.ini-pend a.urge em { color: var(--ink); }
+.ini-pend a.urge .ini-pi { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 50%, var(--line)); }
+.ini-pend a.urge b::after { content: ''; display: inline-block; width: 7px; height: 7px; margin-left: 8px; border-radius: 50%; background: var(--gold); vertical-align: 2px; }
+/* cursos y ventas */
+.ini-ley { display: flex; gap: 14px; font-size: 12.5px; color: var(--mute); }
+.ini-ley span::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 3px; background: var(--brand); vertical-align: -1px; }
+.ini-ley span.p::before { background: color-mix(in srgb, var(--brand) 32%, var(--card)); }
+.admin .bx-cursos .bx-dos { height: 6px; }
+.admin .bx-cursos .bx-dos i { background: var(--brand); }
+.admin .bx-cursos .bx-dos i.p { background: color-mix(in srgb, var(--brand) 32%, var(--card)); }
+.ini-mas { justify-self: start; color: var(--mute); font-size: 13px; font-weight: 600; text-decoration: none; } .ini-mas:hover { color: var(--brand); }
+.ini-total { font: 500 28px/1.1 var(--display); font-variant-numeric: tabular-nums; } .ini-total small { margin-left: 8px; font: 500 13px var(--font); color: var(--mute); }
+.ini-meses { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; height: 170px; align-items: end; border-bottom: 1px solid var(--line); padding-bottom: 0; }
+.ini-meses span { display: grid; grid-template-rows: 1fr auto; height: 100%; gap: 0; align-items: end; justify-items: center; }
+.ini-meses i { width: 100%; max-width: 38px; height: max(2px, var(--h)); border-radius: 4px 4px 0 0; background: color-mix(in srgb, var(--brand) 38%, var(--card)); }
+.ini-meses .hoy i { background: var(--brand); }
+.ini-meses small { position: relative; top: 22px; font-size: 12px; color: var(--mute); }
+.ini-meses .hoy small { color: var(--ink); font-weight: 600; }
+.ini-meses { margin-bottom: 22px; }
+/* la tabla de instituciones y los anillos sin colores propios */
+.admin .bx-aro { --ac: var(--brand); }
+@media (max-width: 719px) {
+  .bx-hola .pn-acc, .ini-buscar, .admin .ini-buscar input { width: 100%; }
+  .bx-hola .pn-acc .btn { flex: 1; }
+  .ini-k b { font-size: 22px; } .admin .ini-k { padding: 13px 14px; } .ini-k small { white-space: normal; }
+  .ini-graf { grid-template-rows: 140px auto; }
+}
+@media (prefers-reduced-motion: reduce) { .admin .ini-k { transition: none; } }
