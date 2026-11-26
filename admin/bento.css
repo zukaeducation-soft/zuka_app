@@ -95,7 +95,7 @@ a.bx-k:hover { border-color: color-mix(in srgb, var(--kc, var(--brand)) 60%, var
 .admin .bx-cursos .bx-dos i.p { background: color-mix(in srgb, var(--brand) 32%, var(--card)); }
 .ini-mas { justify-self: start; color: var(--mute); font-size: 13px; font-weight: 600; text-decoration: none; } .ini-mas:hover { color: var(--brand); }
 .ini-total { font: 500 28px/1.1 var(--display); font-variant-numeric: tabular-nums; } .ini-total small { margin-left: 8px; font: 500 13px var(--font); color: var(--mute); }
-.ini-meses { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; height: 170px; align-items: end; border-bottom: 1px solid var(--line); padding-bottom: 0; }
+.ini-meses { display: grid; grid-template-columns: repeat(var(--n, 6), minmax(0, 1fr)); gap: 10px; height: 170px; align-items: end; border-bottom: 1px solid var(--line); padding-bottom: 0; }
 .ini-meses span { display: grid; grid-template-rows: 1fr auto; height: 100%; gap: 0; align-items: end; justify-items: center; }
 .ini-meses i { width: 100%; max-width: 38px; height: max(2px, var(--h)); border-radius: 4px 4px 0 0; background: color-mix(in srgb, var(--brand) 38%, var(--card)); }
 .ini-meses .hoy i { background: var(--brand); }
@@ -111,3 +111,11 @@ a.bx-k:hover { border-color: color-mix(in srgb, var(--kc, var(--brand)) 60%, var
   .ini-graf { grid-template-rows: 140px auto; }
 }
 @media (prefers-reduced-motion: reduce) { .admin .ini-k { transition: none; } }
+/* Pulido unslop del panel completo (2026-11-26): un acento, color solo para estados, iniciales neutras, encabezados sin mayúsculas
+   y el código de acceso como firma (una tecla con borde fino). unslop: Damir Sokolovsky, CC BY 4.0. */
+.admin .pn-av { background: var(--card2); color: var(--ink); border: 1px solid var(--line); }
+.admin .bx-t th { text-transform: none; letter-spacing: 0; font-weight: 600; font-size: 12.5px; }
+.admin span.pn-code { display: inline-block; padding: 2px 8px; border: 1px solid var(--line); border-radius: 6px; background: color-mix(in srgb, var(--ink) 4%, transparent); font-size: .92em; font-weight: 600; letter-spacing: .04em; line-height: 1.5; }
+.admin .pill { font-weight: 600; }
+.admin .pn-tile.ok b { color: var(--ink); }
+@media (min-width: 720px) { .ini-ks.c4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }

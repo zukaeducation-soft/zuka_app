@@ -28,9 +28,16 @@
       ],
       cotizaciones: [{ estado: 'nueva' }, { estado: 'ganada' }],
     };
+    const MQ_NOM = ['Valentina Ríos', 'Samuel Ortiz', 'Mariana Gómez', 'Juan Esteban Mejía', 'Isabella Cárdenas', 'Tomás Restrepo', '', 'Laura Sofía Vélez', 'Andrés Felipe Zapata', 'Daniela Ospina'];
+    const MQ_US = MQ_NOM.map((nombre, i) => ({ id: 'u' + i, nombre, correo: i % 3 ? '' : `est${i}@correo.co`, telefono: i === 6 ? '' : `300 ${1200000 + i * 7919}`, rol: 'estudiante', bloqueado: i === 8, nota: '',
+      codigo: 'K7M2Q9XR' + 'ABCDEFGHJK'[i] + (i + 2), creado_en: mqEn(-i * 3), ultima_vez: i === 6 ? null : mqEn(-[0, 1, 3, 0, 9, 0, 0, 2, 15, 0][i]),
+      accesos: i === 6 ? [] : [{ curso: ['preuda', 'algebra', 'preicfes'][i % 3], tipo: i % 4 === 1 ? 'prueba' : 'pago', desde: mqEn(-30), hasta: mqEn([20, 3, -5, 60, 2, 120, 0, 40, -12, 9][i]) }].concat(i % 5 === 0 ? [{ curso: 'trig', tipo: 'pago', hasta: mqEn(90) }] : []), lecciones: [12, 4, 0, 33, 7, 51, 0, 18, 2, 26][i] }));
+    const MQ_COD = MQ_US.slice(0, 7).map((u, i) => ({ codigo: u.codigo, nombre: i < 4 ? '' : u.nombre, celular: u.telefono, nota: i === 2 ? 'Nequi' : '', usado_por: i < 4 ? u.id : null, usado_nombre: u.nombre, bloqueado: false, usado_bloqueado: false, accesos: u.accesos, concede: [{ curso: 'preuda', tipo: i % 2 ? 'prueba' : 'pago', dias: i % 2 ? 7 : 30 }], creado_en: mqEn(-i * 2) }));
+    const MQ_SOL = [0, 1, 4].map((k, i) => ({ id: i + 1, usuario: 'u' + k, nombre: MQ_NOM[k], telefono: '3001234567', codigo: MQ_US[k].codigo, curso: 'preuda', meses: [1, 6, 3][i], precio: [45000, 210000, 120000][i], estado: ['pendiente', 'pendiente', 'pagada'][i], creado_en: mqEn(-i) }));
+    const MQ_PAG = Array.from({ length: 8 }, (_, i) => ({ id: 'p' + i, usuario: 'u' + i, nombre: MQ_NOM[i] || 'Sin nombre', codigo: MQ_US[i].codigo, curso: ['preuda', 'algebra', 'preicfes'][i % 3], dias: 30, valor: [45000, 45000, 120000, 45000, 210000, 45000, 90000, 45000][i], metodo: ['Nequi', 'Bancolombia', 'Nequi', 'Efectivo'][i % 4], nota: '', creado_en: mqEn(-i * 4) }));
     const MQ_RPC = {
       es_admin: () => true,
-      admin: a => ({ resumen: MQ_RESUMEN }[a.p_accion] ?? []),
+      admin: a => ({ resumen: MQ_RESUMEN, usuarios: MQ_US, codigos: MQ_COD, solicitudes: MQ_SOL, pagos: MQ_PAG }[a.p_accion] ?? []),
       tienda_admin: a => ({ conteo: { pedidos: 2, asesorias: 0 } }[a.p_accion] ?? []),
       institucion_admin: a => ({ lista: MQ_INST, conteo: { nuevas: 1 } }[a.p_accion] ?? {}),
     };

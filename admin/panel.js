@@ -256,7 +256,7 @@ function bxBarras(serie, u) {
 }
 // Inicio sobrio (pedido del 2026-11-26: compacto y que no parezca hecho por IA): un solo acento (--brand), color solo para estados
 // (ok, bad, gold), cifras en una franja, «Por atender» como lista junto a la gráfica.
-const iniK = (ir, v, t, sub, cls = '') => `<a class="ini-k${cls ? ` ${cls}` : ''}" href="${ir}"><span>${t}</span><b>${v}</b><small>${sub}</small></a>`;
+const iniK = (ir, v, t, sub, cls = '') => `<${ir ? `a href="${ir}"` : 'div'} class="ini-k${cls ? ` ${cls}` : ''}"><span>${t}</span><b>${v}</b><small>${sub}</small></${ir ? 'a' : 'div'}>`;
 // Barras por día con líneas de referencia; la última barra es hoy.
 function iniBarras(serie, u) {
   const m = Math.max(1, ...serie.map(x => x.v)), p = 10 ** Math.floor(Math.log10(m)), tope = Math.ceil(m / p) * p, medio = serie[Math.floor(serie.length / 2)];
@@ -267,13 +267,13 @@ function iniBarras(serie, u) {
 function vInicio() {
   carga(async () => { const [r, n, s] = await Promise.all([admin('resumen'), tiendaAdm('conteo').catch(() => null), instAdm('lista').catch(() => null)]); return { r, n, s }; }, ({ r, n, s }) => {
     pendientes(r.solicitudes); if (n) tiendaBadges(n);
-    const falta = !waNumero(AJUSTES.whatsapp), hoy = new Date().toLocaleDateString('es-CO', { timeZone: 'America/Bogota', weekday: 'long', day: 'numeric', month: 'long' }), hora = +new Date().toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: 'America/Bogota' }) % 24;
+    const falta = !waNumero(AJUSTES.whatsapp), hoy = new Date().toLocaleDateString('es-CO', { timeZone: 'America/Bogota', weekday: 'long', day: 'numeric', month: 'long' });
     const is = s ? s.instituciones : [], cots = s ? s.cotizaciones.filter(c => c.estado === 'nueva').length : null, vig = is.filter(i => i.vigente), hoyD = r.hoy || new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' });
     const atender = [['solicitudes', r.solicitudes, 'Solicitudes de compra', 'Pagos por confirmar'], ['pedidos', n?.pedidos, 'Pedidos de la tienda', 'Libros por preparar o enviar'], ['asesorias', n?.asesorias, 'Asesorías', 'Horas por confirmar'], ['instituciones', cots, 'Cotizaciones', 'Instituciones que pidieron precio']];
     const urgen = atender.filter(x => x[1]).length, conAcceso = r.pago + r.prueba + r.vencidos;
     const tope = Math.max(1, ...r.por_curso.map(c => c.pago + c.prueba)), mesHoy = hoyD.slice(0, 7), meses = Array.from({ length: 6 }, (_, k) => { const d = new Date(Date.UTC(+mesHoy.slice(0, 4), +mesHoy.slice(5) - 6 + k, 1)).toISOString().slice(0, 7); return { mes: d, valor: ((r.ventas_mes || []).find(x => x.mes === d) || {}).valor || 0 }; }), hayVentas = meses.some(x => x.valor), queda = i => Math.max(0, Math.round((Date.parse(`${i.hasta}T00:00:00Z`) - Date.parse(`${hoyD}T00:00:00Z`)) / 864e5));
     const plata = v => (v >= 1e6 ? `$ ${(v / 1e6).toLocaleString('es-CO', { maximumFractionDigits: 1 })} M` : cop(v));
-    view.innerHTML = `<div class="bx-hola"><div><p>${hoy}</p><h1>${hora < 12 ? 'Buenos días' : hora < 19 ? 'Buenas tardes' : 'Buenas noches'}</h1></div>
+    view.innerHTML = `<div class="bx-hola"><div><p>${hoy}</p><h1>Inicio</h1></div>
         <div class="pn-acc"><form class="ini-buscar" data-buscar role="search"><svg class="pn-i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.500"/><path d="m20 20-4.200-4.200"/></svg><input type="search" placeholder="Buscar estudiante" aria-label="Buscar estudiante"></form>
           <a class="btn ghost" href="#tablero">Tablero completo</a><button class="btn main" type="button" data-gen>Crear código</button></div></div>
       ${falta ? '<a class="pn-aviso" href="#ajustes">Falta el número de WhatsApp: sin él, la app no puede ofrecer pedir códigos ni comprar. Ponlo en Ajustes.</a>' : ''}
@@ -302,7 +302,7 @@ function vInicio() {
 // Ventas de los últimos seis meses: columnas con su mes; el mes en curso resaltado.
 function iniMeses(meses) {
   const m = Math.max(1, ...meses.map(x => x.valor));
-  return `<div class="ini-meses" role="img" aria-label="${meses.map(x => `${MESES[Number(x.mes.slice(5)) - 1]}: ${cop(x.valor)}`).join('; ')}">${meses.map((x, k) => `<span${k === meses.length - 1 ? ' class="hoy"' : ''} title="${cop(x.valor)}"><i style="--h:${((100 * x.valor) / m).toFixed(1)}%"></i><small>${MESES[Number(x.mes.slice(5)) - 1]}</small></span>`).join('')}</div>`;
+  return `<div class="ini-meses" style="--n:${meses.length}" role="img" aria-label="${meses.map(x => `${MESES[Number(x.mes.slice(5)) - 1]}: ${cop(x.valor)}`).join('; ')}">${meses.map((x, k) => `<span${k === meses.length - 1 ? ' class="hoy"' : ''} title="${cop(x.valor)}"><i style="--h:${((100 * x.valor) / m).toFixed(1)}%"></i><small>${MESES[Number(x.mes.slice(5)) - 1]}</small></span>`).join('')}</div>`;
 }
 const filas = () => $$('tr[data-id]', view).forEach(tr => { tr.onclick = e => { if (!e.target.closest('a, button, input, label')) location.hash = `estudiante/${tr.dataset.id}`; }; });
 
@@ -479,9 +479,9 @@ function vCodigos() {
     const pinta = () => {
       const q = filC.q.trim().toLowerCase(), c = limpiaCodigo(q);
       const rows = ks.filter(k => (!filC.estado || est(k) === filC.estado) && (!q || `${k.nombre} ${k.usado_nombre || ''} ${k.celular} ${k.nota}`.toLowerCase().includes(q) || (c.length >= 3 && k.codigo.includes(c))));
-      $('.pn-list', view).innerHTML = tabla([{ t: 'Código' }, { t: 'Estado' }, { t: 'Para' }, { t: 'Cursos' }, { t: 'Creado' }, { t: '' }], rows.map(k => `<tr><td class="pn-main pn-code">${muestraCodigo(k.codigo)}</td>${td('Estado', `<span class="pill ${E[est(k)][0]}">${E[est(k)][1]}</span>`)}
+      $('.pn-list', view).innerHTML = tabla([{ t: 'Código' }, { t: 'Estado' }, { t: 'Para' }, { t: 'Cursos' }, { t: 'Creado' }, { t: '' }], rows.map(k => `<tr><td class="pn-main"><span class="pn-code">${muestraCodigo(k.codigo)}</span></td>${td('Estado', `<span class="pill ${E[est(k)][0]}">${E[est(k)][1]}</span>`)}
         ${td('Para', `${k.usado_por ? `<a href="#estudiante/${k.usado_por}">${esc(k.usado_nombre || 'Sin nombre')}</a>` : esc(k.nombre || '—')}${k.celular || k.nota ? `<span class="pn-sub">${esc([k.celular, k.nota].filter(Boolean).join(' · '))}</span>` : ''}`)}${td('Cursos', `<span class="pn-pills">${conc(k) || '—'}</span>`)}${td('Creado', fechaCorta(k.creado_en))}
-        ${td('', `<span class="pn-acc"><button class="btn small main" type="button" data-act="${k.codigo}">Activar</button><button class="btn small ghost" type="button" data-copy="${k.codigo}">Copiar</button>${k.usado_por ? '' : waA(k.celular, WA.envio({ nombre: k.nombre, codigo: k.codigo, cursos: nombres(k.concede.map(x => x.curso)), prueba: k.concede.every(x => x.tipo === 'prueba'), dias: (k.concede[0] || {}).dias, url: APP }), 'Enviar')}<button class="btn small ghost" type="button" data-mas="${k.codigo}" aria-label="Más opciones de ${muestraCodigo(k.codigo)}">Más</button></span>`, 'pn-num')}</tr>`), ks.length ? 'Ningún código coincide.' : 'Aún no hay códigos. Crea el primero.');
+        ${td('', `<span class="pn-acc"><button class="btn small ghost" type="button" data-act="${k.codigo}">Activar</button><button class="btn small ghost" type="button" data-copy="${k.codigo}">Copiar</button>${k.usado_por ? '' : waA(k.celular, WA.envio({ nombre: k.nombre, codigo: k.codigo, cursos: nombres(k.concede.map(x => x.curso)), prueba: k.concede.every(x => x.tipo === 'prueba'), dias: (k.concede[0] || {}).dias, url: APP }), 'Enviar')}<button class="btn small ghost" type="button" data-mas="${k.codigo}" aria-label="Más opciones de ${muestraCodigo(k.codigo)}">Más</button></span>`, 'pn-num')}</tr>`), ks.length ? 'Ningún código coincide.' : 'Aún no hay códigos. Crea el primero.');
       const de = c2 => ks.find(k => k.codigo === c2);
       $$('[data-copy]', view).forEach(b => { b.onclick = () => copiar(muestraCodigo(b.dataset.copy)); });
       $$('[data-act]', view).forEach(b => { b.onclick = () => { const k = de(b.dataset.act); dlgActivar({ codigo: k.usado_por ? '' : k.codigo, usuarios: k.usado_por ? [k.usado_por] : [], nombre: k.usado_nombre || k.nombre, celular: k.celular, sel: k.concede.map(x => x.curso).slice(0, 1), titulo: 'Activar en este código' }, vCodigos); }; });
@@ -522,8 +522,8 @@ function vVentas() {
   carga(async () => { const [g, r] = await Promise.all([admin('pagos'), admin('resumen')]); return { g, r }; }, ({ g, r }) => {
     const mes = fechaInput(new Date().toISOString()).slice(0, 7), tot = r.ventas_mes.find(x => x.mes === mes);
     view.innerHTML = `<div class="pn-head"><h1>Ventas</h1><button class="btn ghost" type="button" data-csv>Descargar Excel</button></div>
-      <div class="pn-tiles">${tile(cop(tot ? tot.valor : 0), 'Este mes', 'ok')}${tile(cop(r.ventas_30), 'Últimos 30 días')}${tile(cop(g.reduce((t, x) => t + x.valor, 0)), 'En total')}${tile(g.filter(x => x.valor > 0).length, 'Pagos')}</div>
-      ${r.ventas_mes.length > 1 ? `<section class="pn-card"><h2>Por mes</h2>${barras(r.ventas_mes.map(x => ({ t: `${MESES[Number(x.mes.slice(5)) - 1]} ${x.mes.slice(0, 4)}`, c: MESES[Number(x.mes.slice(5)) - 1], v: x.valor })), 'COP')}</section>` : ''}
+      <div class="ini-ks c4" role="group" aria-label="Cifras de ventas">${iniK('', cop(tot ? tot.valor : 0), 'Este mes', `${g.filter(x => x.valor > 0 && fechaInput(x.creado_en).slice(0, 7) === mes).length} pagos`)}${iniK('', cop(r.ventas_30), 'Últimos 30 días', `${r.pagos_30} pagos`)}${iniK('', cop(g.reduce((t, x) => t + x.valor, 0)), 'En total', 'Desde el primer pago')}${iniK('', g.filter(x => x.valor > 0).length.toLocaleString('es-CO'), 'Pagos', 'Registrados')}</div>
+      ${r.ventas_mes.length > 1 ? `<section class="bx-c"><header><h2>Por mes</h2><small>Últimos ${Math.min(12, r.ventas_mes.length)} meses</small></header>${iniMeses(r.ventas_mes.slice(-12))}</section>` : ''}
       ${tabla([{ t: 'Fecha' }, { t: 'Estudiante' }, { t: 'Curso' }, { t: 'Medio' }, { t: 'Valor', n: 1 }, { t: '' }], g.map(x => `<tr${x.usuario ? ` data-id="${x.usuario}"` : ''}>${td('Fecha', fechaCorta(x.creado_en))}<td class="pn-main">${esc(x.nombre || 'Sin nombre')}<span class="pn-sub">${x.codigo ? muestraCodigo(x.codigo) : ''}${x.nota ? ` · ${esc(x.nota)}` : ''}</span></td>${td('Curso', `${esc(curso(x.curso).nombre)}${x.dias ? ` · ${diasTexto(x.dias)}` : ''}`)}${td('Medio', esc(x.metodo || '—'))}${td('Valor', cop(x.valor), 'pn-num')}${td('', `<button class="btn small ghost" type="button" data-b="${x.id}">Borrar</button>`, 'pn-num')}</tr>`), 'Aún no hay pagos. Se anotan al activar un curso como pagado.')}`;
     filas();
     $('[data-csv]', view).onclick = () => csv('zuka-ventas', ['Fecha', 'Estudiante', 'Código', 'Curso', 'Días', 'Valor', 'Medio', 'Nota'], g.map(x => [fechaCorta(x.creado_en), x.nombre, x.codigo, curso(x.curso).nombre, x.dias, x.valor, x.metodo, x.nota]));
