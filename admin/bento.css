@@ -168,3 +168,21 @@ a.bx-k:hover { border-color: color-mix(in srgb, var(--kc, var(--brand)) 60%, var
   .ini-hero .pn-acc .btn { flex: 1 1 40%; }
   .admin :is(.bx-c, .pn-card) { padding: 18px; border-radius: 22px; }
 }
+/* Silueta de carga (pendiente de la auditoría Hallmark): bloques del tono de las tarjetas que laten con opacidad. */
+.pn-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.sk { display: grid; gap: 16px; }
+.sk i { display: block; border-radius: 10px; background: color-mix(in srgb, var(--ink) 7%, transparent); animation: sk-late 1.4s ease-in-out infinite; }
+.sk-hero, .sk-c { display: grid; gap: 14px; align-content: start; border: 1px solid var(--line); background: var(--card); border-radius: 26px; padding: 22px 24px; }
+.sk-hero { border-radius: 28px; padding: 30px 36px; min-height: 180px; align-content: center; }
+.sk .sk-t { height: 14px; width: min(320px, 60%); }
+.sk .sk-chico { width: min(200px, 40%); } .sk .sk-grande { height: 34px; width: min(380px, 70%); }
+.sk .sk-fila { height: 40px; }
+.sk-c { min-height: 300px; } .sk-c.sk-lista { min-height: 0; }
+.sk-ks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--line); border-radius: 26px; overflow: hidden; background: var(--line); }
+.sk .sk-k { height: 92px; border-radius: 0; background: var(--card); animation: none; }
+@media (min-width: 720px) { .sk-ks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1180px) { .sk-ks { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.sk-head { padding: 4px 0; }
+@keyframes sk-late { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+@media (max-width: 719px) { .sk-hero { padding: 22px 18px; min-height: 150px; } .sk .sk-k { height: 72px; } .sk-c { padding: 18px; border-radius: 22px; } }
+@media (prefers-reduced-motion: reduce) { .sk i { animation: none; } }

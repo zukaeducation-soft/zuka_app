@@ -91,9 +91,18 @@ const kpi = (i, n, label, cls = '', ir = '') => `<${ir ? `a href="${ir}"` : 'div
 // Redondel con las iniciales; el color sale del nombre, siempre el mismo.
 const iniciales = n => (String(n || '').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(x => x[0]).join('') || '?').toUpperCase();
 const avatar = n => `<span class="pn-av" aria-hidden="true" style="--h:${[...String(n || '')].reduce((t, c) => (t * 31 + c.charCodeAt(0)) % 360, 7)}">${esc(iniciales(n))}</span>`;
-// Carga una vista: muestra «Cargando» solo si tarda y descarta la respuesta si ya se cambió de vista.
+// Silueta de carga: la forma de la vista que viene (portada, cifras y tarjetas en el inicio; encabezado y filas en las listas).
+function silueta(name = (location.hash.slice(1).split(/[?/]/)[0] || 'inicio')) {
+  const r = (cls, n) => Array.from({ length: n }, () => `<i class="${cls}"></i>`).join('');
+  const tarjeta = (cls, filas) => `<div class="sk-c ${cls}"><i class="sk-t"></i>${r('sk-fila', filas)}</div>`;
+  const cuerpo = ['inicio', 'tablero'].includes(name)
+    ? `<div class="sk-hero"><i class="sk-t sk-chico"></i><i class="sk-t sk-grande"></i><i class="sk-t"></i></div><div class="sk-ks">${r('sk-k', 6)}</div><div class="bx">${tarjeta('s8', 5)}${tarjeta('s4', 5)}</div>`
+    : `<div class="sk-head"><i class="sk-t sk-grande"></i></div>${tarjeta('sk-lista', 8)}`;
+  return `<div class="sk" aria-busy="true"><span class="pn-oculto">Cargando…</span>${cuerpo}</div>`;
+}
+// Carga una vista: muestra la silueta solo si tarda y descarta la respuesta si ya se cambió de vista.
 async function carga(fn, pinta) {
-  const t = ++token, lento = setTimeout(() => { if (t === token) view.innerHTML = '<p class="pn-state">Cargando…</p>'; }, 150);
+  const t = ++token, lento = setTimeout(() => { if (t === token) view.innerHTML = silueta(); }, 150);
   try {
     const d = await fn();
     clearTimeout(lento);
