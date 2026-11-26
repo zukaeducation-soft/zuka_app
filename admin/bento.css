@@ -119,3 +119,49 @@ a.bx-k:hover { border-color: color-mix(in srgb, var(--kc, var(--brand)) 60%, var
 .admin .pill { font-weight: 600; }
 .admin .pn-tile.ok b { color: var(--ink); }
 @media (min-width: 720px) { .ini-ks.c4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+/* El panel con el diseño de la plataforma de estudio (pedido del 2026-11-26). Medidas de css/escritorio.css (menú lateral: 244 px, filas de
+   13 × 14 px en 16,5 px, esquinas de 14, el elegido en azul al 16 %) y de css/inicio.css (portada .hm-hero, tarjetas de curso de 26 px,
+   títulos en Jost 500, filtros .hm-filtros). Prueba: tests/admin-estilo-app.test.js. */
+@media (min-width: 900px) {
+  body.admin.dentro { grid-template-columns: 244px minmax(0, 1fr); }
+  .dentro .pn-side { padding: 22px 16px 18px; gap: 16px; }
+  .dentro .pn-top { padding: 0; }
+  .dentro .pn-brand { padding: 6px 10px; }
+  .dentro .pn-nav { padding: 4px 0 14px; gap: 4px; }
+  .admin.dentro .pn-nav a { gap: 14px; padding: 13px 14px; font-size: 16.5px; font-weight: 500; border-radius: 14px; }
+  .admin.dentro .pn-nav a .pn-i { width: 22px; height: 22px; }
+  .dentro .pn-nav small { padding: 18px 14px 6px; font-size: 13px; }
+  .dentro .pn-user { margin: 0; padding: 14px 6px 0; }
+  .dentro .pn-view { padding-top: 30px; gap: 22px; }
+}
+/* tarjetas: las de los cursos */
+.admin :is(.bx-c, .pn-card, .ini-ks) { border-radius: 26px; border: 1px solid var(--line); background: var(--card); box-shadow: none; }
+.admin :is(.bx-c, .pn-card) { padding: 22px 24px; gap: 14px; }
+.admin .ini-ks { background: var(--line); }
+.admin :is(.bx-c, .pn-card) h2 { font: 500 20px/1.2 var(--display); letter-spacing: 0; }
+.admin .pn-view h1 { font: 500 clamp(28px, 3vw, 38px)/1.1 var(--display); letter-spacing: -.01em; }
+@media (min-width: 721px) { .admin .pn-view > .pn-tabla, .admin .pn-list > .pn-tabla { border-radius: 26px; padding: 8px 14px; } }
+/* portada del inicio: la .hm-hero de la app */
+.ini-hero {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 24px; padding: 30px 36px; border-radius: 28px;
+  border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--line));
+  background: radial-gradient(90% 130% at 100% 0, color-mix(in srgb, var(--brand) 24%, var(--card)), transparent 70%), radial-gradient(70% 120% at 0 100%, color-mix(in srgb, #ff8a7a 14%, var(--card)), var(--card) 75%);
+}
+.ini-hola { display: grid; gap: 8px; min-width: 0; }
+.ini-hola > p:first-child { color: var(--mute); font-size: 15.5px; } .ini-hola > p:first-child::first-letter { text-transform: uppercase; }
+.admin .ini-hero h1 { font: 500 clamp(30px, 3.6vw, 46px)/1.06 var(--display); letter-spacing: -.015em; }
+.ini-meta { font-size: 16px; line-height: 1.45; color: var(--mute); } .ini-meta b { color: var(--ink); font-weight: 600; }
+.ini-hero .pn-acc { gap: 10px; }
+.admin .ini-hero .ini-buscar input { background: color-mix(in srgb, var(--card) 70%, transparent); border-radius: 14px; }
+.admin .ini-hero .btn { border-radius: 14px; }
+/* filtros: las píldoras de la app */
+.admin .pn-chips { gap: 4px; }
+.admin .pn-chips span { display: flex; align-items: center; min-height: 42px; padding: 0 14px; border: 0; border-radius: 999px; font-size: 14.5px; font-weight: 600; color: var(--mute); }
+.admin .pn-chips label:hover span { color: var(--ink); }
+.admin .pn-chips input:checked + span { color: var(--ink); background: color-mix(in srgb, var(--brand) 18%, transparent); }
+@media (max-width: 719px) {
+  .ini-hero { padding: 22px 18px; }
+  .ini-hero .pn-acc { width: 100%; display: flex; flex-wrap: wrap; }
+  .ini-hero .pn-acc .btn { flex: 1 1 40%; }
+  .admin :is(.bx-c, .pn-card) { padding: 18px; border-radius: 22px; }
+}

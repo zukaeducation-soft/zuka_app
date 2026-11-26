@@ -39,3 +39,15 @@ el azul hielo de Zuka; los momentos son las gráficas de minutos y de ventas; fi
 - Códigos: «Activar» deja de ser botón principal en cada fila.
 - Ventas: cifras en la franja `ini-ks c4` (sin verde de adorno) y meses con el mes en curso resaltado (`iniMeses`, hasta 12).
 - Pruebas: `tests/admin-unslop.test.js`.
+
+## El panel con el diseño de la plataforma de estudio (2026-11-26, cuarta pasada)
+
+Pedido: que las interfaces de administración sigan el mismo diseño de la plataforma de estudio (cursos, rutas, gimnasio). Al final de
+`admin/bento.css`, con las medidas de `css/escritorio.css` y `css/inicio.css`:
+
+- Menú lateral igual al de la app: 244 px, filas de 13 × 14 px en 16,5 px, esquinas de 14, iconos de 22 y el elegido en azul al 16 %.
+- Tarjetas con las esquinas de las tarjetas de curso (26 px) y títulos en Jost 500 de 20 px; títulos de página en Jost 500.
+- Portada del inicio = la `.hm-hero` de la app (fondo azul y coral, esquinas de 28): saludo pequeño con la fecha, «Así va Zuka hoy» y una
+  línea con quiénes entraron y cuántos frentes hay por atender (reemplaza el «sin saludo» de la pasada anterior).
+- Filtros como las píldoras `.hm-filtros`: sin borde, la elegida en azul al 18 %.
+- Pruebas: `tests/admin-estilo-app.test.js`.

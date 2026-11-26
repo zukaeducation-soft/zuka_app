@@ -8,10 +8,11 @@ const read = f => fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
 const panel = read('admin/panel.js'), css = read('admin/bento.css');
 const parte = (desde, hasta) => panel.slice(panel.indexOf(desde), panel.indexOf(hasta, panel.indexOf(desde) + 1));
 
-test('inicio: el título nombra el lugar, no saluda', () => {
+// El 2026-11-26 el usuario pidió que el panel siga el diseño de la plataforma de estudio, que saluda en pequeño sobre su título:
+// el saludo vuelve como antetítulo y el título dice qué se ve.
+test('inicio: portada como la de la app, con el saludo pequeño y el título del día', () => {
   const ini = parte('function vInicio', 'const filas = () =>');
-  assert.doesNotMatch(ini, /Buenos días|Buenas tardes|Buenas noches/);
-  assert.match(ini, /<h1>Inicio<\/h1>/);
+  assert.match(ini, /<p>\$\{saludo\} · \$\{hoy\}<\/p><h1>Así va Zuka hoy<\/h1>/);
 });
 
 test('iniciales neutras: el color no sale del nombre', () => {

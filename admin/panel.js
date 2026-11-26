@@ -270,12 +270,13 @@ function vInicio() {
     const falta = !waNumero(AJUSTES.whatsapp), hoy = new Date().toLocaleDateString('es-CO', { timeZone: 'America/Bogota', weekday: 'long', day: 'numeric', month: 'long' });
     const is = s ? s.instituciones : [], cots = s ? s.cotizaciones.filter(c => c.estado === 'nueva').length : null, vig = is.filter(i => i.vigente), hoyD = r.hoy || new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' });
     const atender = [['solicitudes', r.solicitudes, 'Solicitudes de compra', 'Pagos por confirmar'], ['pedidos', n?.pedidos, 'Pedidos de la tienda', 'Libros por preparar o enviar'], ['asesorias', n?.asesorias, 'Asesorías', 'Horas por confirmar'], ['instituciones', cots, 'Cotizaciones', 'Instituciones que pidieron precio']];
+    const hora = +new Date().toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: 'America/Bogota' }) % 24, saludo = hora < 12 ? 'Buenos días' : hora < 19 ? 'Buenas tardes' : 'Buenas noches';
     const urgen = atender.filter(x => x[1]).length, conAcceso = r.pago + r.prueba + r.vencidos;
     const tope = Math.max(1, ...r.por_curso.map(c => c.pago + c.prueba)), mesHoy = hoyD.slice(0, 7), meses = Array.from({ length: 6 }, (_, k) => { const d = new Date(Date.UTC(+mesHoy.slice(0, 4), +mesHoy.slice(5) - 6 + k, 1)).toISOString().slice(0, 7); return { mes: d, valor: ((r.ventas_mes || []).find(x => x.mes === d) || {}).valor || 0 }; }), hayVentas = meses.some(x => x.valor), queda = i => Math.max(0, Math.round((Date.parse(`${i.hasta}T00:00:00Z`) - Date.parse(`${hoyD}T00:00:00Z`)) / 864e5));
     const plata = v => (v >= 1e6 ? `$ ${(v / 1e6).toLocaleString('es-CO', { maximumFractionDigits: 1 })} M` : cop(v));
-    view.innerHTML = `<div class="bx-hola"><div><p>${hoy}</p><h1>Inicio</h1></div>
+    view.innerHTML = `<section class="ini-hero"><div class="ini-hola"><p>${saludo} · ${hoy}</p><h1>Así va Zuka hoy</h1><p class="ini-meta"><b>${r.usan_hoy}</b> ${r.usan_hoy === 1 ? 'estudiante entró' : 'estudiantes entraron'} hoy · ${urgen ? `<b>${urgen}</b> ${urgen === 1 ? 'frente' : 'frentes'} por atender` : 'nada por atender'}</p></div>
         <div class="pn-acc"><form class="ini-buscar" data-buscar role="search"><svg class="pn-i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.500"/><path d="m20 20-4.200-4.200"/></svg><input type="search" placeholder="Buscar estudiante" aria-label="Buscar estudiante"></form>
-          <a class="btn ghost" href="#tablero">Tablero completo</a><button class="btn main" type="button" data-gen>Crear código</button></div></div>
+          <a class="btn ghost" href="#tablero">Tablero completo</a><button class="btn main" type="button" data-gen>Crear código</button></div></section>
       ${falta ? '<a class="pn-aviso" href="#ajustes">Falta el número de WhatsApp: sin él, la app no puede ofrecer pedir códigos ni comprar. Ponlo en Ajustes.</a>' : ''}
       <div class="bx">
         <nav class="ini-ks s12" aria-label="Cifras principales">
