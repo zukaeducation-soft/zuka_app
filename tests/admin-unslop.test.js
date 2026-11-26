@@ -12,7 +12,7 @@ const parte = (desde, hasta) => panel.slice(panel.indexOf(desde), panel.indexOf(
 // el saludo vuelve como antetítulo y el título dice qué se ve.
 test('inicio: portada como la de la app, con el saludo pequeño y el título del día', () => {
   const ini = parte('function vInicio', 'const filas = () =>');
-  assert.match(ini, /<p>\$\{saludo\} · \$\{hoy\}<\/p><h1>Así va Zuka hoy<\/h1>/);
+  assert.match(ini, /<p>\$\{saludo\}, \$\{hoy\}<\/p><h1>Así va Zuka hoy<\/h1>/);
 });
 
 test('iniciales neutras: el color no sale del nombre', () => {

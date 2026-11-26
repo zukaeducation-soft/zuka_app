@@ -51,3 +51,18 @@ Pedido: que las interfaces de administración sigan el mismo diseño de la plata
   línea con quiénes entraron y cuántos frentes hay por atender (reemplaza el «sin saludo» de la pasada anterior).
 - Filtros como las píldoras `.hm-filtros`: sin borde, la elegida en azul al 18 %.
 - Pruebas: `tests/admin-estilo-app.test.js`.
+
+## Fallos de la auditoría Hallmark, corregidos (2026-11-26, quinta pasada)
+
+Auditoría con la skill Hallmark (`/hallmark audit`, gates «Floor» del panel). Corregido:
+
+- 63: ningún dato unido con «·» (21 líneas en panel.js, tienda.js, instituciones.js y tablero.js): comas, «y», «por», «de», «hasta el».
+- 48: los colores escritos a mano pasan a variables `--pn-*` en un bloque `:root` al inicio de `admin/bento.css` (coral de la portada,
+  aviso, tintas sobre oro y sobre color, velo de los diálogos, sombras).
+- 10a: las barras del Tablero crecen con `transform: scaleX(var(--s))` (y `--s` desde tablero.js) en lugar de animar `width`.
+- 67: el código de acceso a .03em; los encabezados de `.bx-t` sin mayúsculas en la regla base (también en el portal de instituciones).
+- Pantallas de trabajo: los filtros de Estudiantes y Códigos viven en la dirección (`#estudiantes?estado=pago&q=ana`, `filtrosDeUrl`,
+  `filtrosAUrl` con `history.replaceState`). F3: títulos con `text-wrap: balance`.
+- Queda el aviso 56 (dos menús fijos), falso: uno es del celular y otro del computador. La silueta de carga y el espaciado de 4 px
+  no se tocaron (el espaciado copia las medidas de la plataforma de estudio).
+- Pruebas: `tests/admin-hallmark.test.js`.

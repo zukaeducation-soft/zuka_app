@@ -1,10 +1,12 @@
 /* Tableros compactos (spec 2026-11-26-tableros-compactos): una rejilla de tarjetas que en computador usa 12 columnas, en tableta 2 y en
    celular 1. Lo comparten el inicio del panel de Zuka y el resumen del portal de instituciones. Clases bx-. */
+/* Colores propios del panel (auditoría Hallmark, gate 48): todo color sale de una variable. El coral es el de la portada de la app. */
+:root { --pn-coral: #ff8a7a; --pn-aviso: #c77700; --pn-tinta-oro: #0b0d1a; --pn-tinta-color: #fff; --pn-tinta-av: #f7f9ff; --pn-velo: rgba(4, 6, 14, .6); --pn-sombra-1: rgb(10 18 48 / .04); --pn-sombra-2: rgb(10 18 48 / .35); --pn-sombra-tip: rgb(0 0 0 / .3); }
 .bx { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); align-items: stretch; }
 .bx > * { min-width: 0; }
 @media (min-width: 720px) { .bx { grid-template-columns: repeat(2, minmax(0, 1fr)); } .bx > .s8, .bx > .s12, .bx > .ancho { grid-column: 1 / -1; } }
 @media (min-width: 1180px) { .bx { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; } .bx > .s3 { grid-column: span 3; } .bx > .s4 { grid-column: span 4; } .bx > .s5 { grid-column: span 5; } .bx > .s6 { grid-column: span 6; } .bx > .s7 { grid-column: span 7; } .bx > .s8 { grid-column: span 8; } .bx > .s12 { grid-column: 1 / -1; } }
-.admin .bx-c { display: grid; gap: 12px; align-content: start; padding: 18px; border-radius: 22px; border: 1px solid var(--line); background: var(--card); box-shadow: 0 1px 2px rgb(10 18 48 / .04), 0 12px 32px -28px rgb(10 18 48 / .35); }
+.admin .bx-c { display: grid; gap: 12px; align-content: start; padding: 18px; border-radius: 22px; border: 1px solid var(--line); background: var(--card); box-shadow: 0 1px 2px var(--pn-sombra-1), 0 12px 32px -28px var(--pn-sombra-2); }
 .bx-c > header { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 26px; } .admin .bx-c h2 { font: 600 16px/1.2 var(--display); letter-spacing: .01em; } .bx-c > header small, .bx-c > header a { color: var(--mute); font-size: 13px; font-weight: 600; text-decoration: none; } .bx-c > header a:hover { color: var(--brand); }
 .bx-vacio { color: var(--mute); font-size: 14px; padding: 6px 0; }
 /* indicadores en fila */
@@ -22,15 +24,15 @@ a.bx-k:hover { border-color: color-mix(in srgb, var(--kc, var(--brand)) 60%, var
 .bx-v { font: 600 15px var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .bx-scroll { max-height: 320px; overflow: auto; scrollbar-width: thin; margin: 0 -6px; padding: 0 6px; }
 /* tabla compacta */
-.bx-t { width: 100%; border-collapse: collapse; font-size: 14px; } .bx-t th { text-align: left; font-size: 12px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--mute); padding: 0 8px 8px; } .bx-t td { padding: 9px 8px; border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent); vertical-align: middle; } .bx-t td:first-child, .bx-t th:first-child { padding-left: 0; } .bx-t td:last-child, .bx-t th:last-child { padding-right: 0; text-align: right; }
+.bx-t { width: 100%; border-collapse: collapse; font-size: 14px; } .bx-t th { text-align: left; font-size: 12.5px; font-weight: 600; color: var(--mute); padding: 0 8px 8px; } .bx-t td { padding: 9px 8px; border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent); vertical-align: middle; } .bx-t td:first-child, .bx-t th:first-child { padding-left: 0; } .bx-t td:last-child, .bx-t th:last-child { padding-right: 0; text-align: right; }
 .bx-t b { font-weight: 600; } .bx-t small { display: block; color: var(--mute); font-size: 12.5px; } .bx-t a { color: var(--ink); } .bx-t .bx-bar { min-width: 70px; } .bx-t tr[data-ir] { cursor: pointer; } .bx-t tr[data-ir]:hover td { background: color-mix(in srgb, var(--brand) 6%, transparent); }
 @media (max-width: 719px) { .bx-t thead { display: none; } .bx-t, .bx-t tbody, .bx-t tr, .bx-t td { display: block; width: 100%; } .bx-t tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; padding: 10px 0; border-top: 1px solid var(--line); } .bx-t td { border: 0; padding: 0; text-align: left !important; } .bx-t td[data-l]::before { content: attr(data-l) ' '; color: var(--mute); font-size: 12px; } .bx-t td.bx-w { grid-column: 1 / -1; } }
 /* mini anillo */
 .bx-aro { --p: 0; position: relative; display: grid; place-items: center; width: 44px; height: 44px; flex: none; border-radius: 50%; background: conic-gradient(var(--ac, var(--brand)) calc(var(--p) * 360deg), color-mix(in srgb, var(--ink) 10%, transparent) 0); } .bx-aro::before { content: ''; position: absolute; inset: 5px; border-radius: 50%; background: var(--card); } .bx-aro b { position: relative; font: 600 12px var(--display); }
-.bx-pill { display: inline-block; padding: 3px 9px; border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; background: color-mix(in srgb, var(--pc, var(--mute)) 15%, transparent); color: color-mix(in srgb, var(--pc, var(--mute)) 78%, var(--ink)); } .bx-pill.ok { --pc: var(--ok); } .bx-pill.mal { --pc: var(--bad); } .bx-pill.aviso { --pc: #c77700; }
+.bx-pill { display: inline-block; padding: 3px 9px; border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; background: color-mix(in srgb, var(--pc, var(--mute)) 15%, transparent); color: color-mix(in srgb, var(--pc, var(--mute)) 78%, var(--ink)); } .bx-pill.ok { --pc: var(--ok); } .bx-pill.mal { --pc: var(--bad); } .bx-pill.aviso { --pc: var(--pn-aviso); }
 /* atajos: tarjetas para hacer algo */
 .bx-atajos { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
-.admin .bx-a { display: grid; gap: 8px; align-content: start; padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: var(--card); color: var(--ink); text-align: left; text-decoration: none; font: inherit; font-weight: 600; font-size: 14px; line-height: 1.3; transition: border-color .15s, translate .15s; } .bx-a:hover { border-color: var(--ac, var(--brand)); translate: 0 -2px; } .bx-a i { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 13px; background: var(--ac, var(--brand)); color: #fff; } .bx-a i .pn-i { width: 21px; height: 21px; } .bx-a small { color: var(--mute); font-weight: 500; font-size: 12.5px; } .bx-a b { font: 600 22px var(--display); }
+.admin .bx-a { display: grid; gap: 8px; align-content: start; padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: var(--card); color: var(--ink); text-align: left; text-decoration: none; font: inherit; font-weight: 600; font-size: 14px; line-height: 1.3; transition: border-color .15s, translate .15s; } .bx-a:hover { border-color: var(--ac, var(--brand)); translate: 0 -2px; } .bx-a i { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 13px; background: var(--ac, var(--brand)); color: var(--pn-tinta-color); } .bx-a i .pn-i { width: 21px; height: 21px; } .bx-a small { color: var(--mute); font-weight: 500; font-size: 12.5px; } .bx-a b { font: 600 22px var(--display); }
 .bx-a.urge { border-color: color-mix(in srgb, var(--ac) 55%, var(--line)); background: color-mix(in srgb, var(--ac) 8%, var(--card)); }
 /* saludo */
 .bx-hola { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 20px; } .admin .bx-hola h1 { font: 600 clamp(26px, 3vw, 38px)/1.1 var(--display); letter-spacing: -.01em; } .bx-hola p { color: var(--mute); font-size: 15px; margin-top: 4px; } .bx-hola p::first-letter { text-transform: uppercase; }
@@ -115,7 +117,7 @@ a.bx-k:hover { border-color: color-mix(in srgb, var(--kc, var(--brand)) 60%, var
    y el código de acceso como firma (una tecla con borde fino). unslop: Damir Sokolovsky, CC BY 4.0. */
 .admin .pn-av { background: var(--card2); color: var(--ink); border: 1px solid var(--line); }
 .admin .bx-t th { text-transform: none; letter-spacing: 0; font-weight: 600; font-size: 12.5px; }
-.admin span.pn-code { display: inline-block; padding: 2px 8px; border: 1px solid var(--line); border-radius: 6px; background: color-mix(in srgb, var(--ink) 4%, transparent); font-size: .92em; font-weight: 600; letter-spacing: .04em; line-height: 1.5; }
+.admin span.pn-code { display: inline-block; padding: 2px 8px; border: 1px solid var(--line); border-radius: 6px; background: color-mix(in srgb, var(--ink) 4%, transparent); font-size: .92em; font-weight: 600; letter-spacing: .03em; line-height: 1.5; }
 .admin .pill { font-weight: 600; }
 .admin .pn-tile.ok b { color: var(--ink); }
 @media (min-width: 720px) { .ini-ks.c4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
@@ -140,12 +142,13 @@ a.bx-k:hover { border-color: color-mix(in srgb, var(--kc, var(--brand)) 60%, var
 .admin .ini-ks { background: var(--line); }
 .admin :is(.bx-c, .pn-card) h2 { font: 500 20px/1.2 var(--display); letter-spacing: 0; }
 .admin .pn-view h1 { font: 500 clamp(28px, 3vw, 38px)/1.1 var(--display); letter-spacing: -.01em; }
+.admin :is(.pn-view h1, .pn-view h2) { text-wrap: balance; }
 @media (min-width: 721px) { .admin .pn-view > .pn-tabla, .admin .pn-list > .pn-tabla { border-radius: 26px; padding: 8px 14px; } }
 /* portada del inicio: la .hm-hero de la app */
 .ini-hero {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 24px; padding: 30px 36px; border-radius: 28px;
   border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--line));
-  background: radial-gradient(90% 130% at 100% 0, color-mix(in srgb, var(--brand) 24%, var(--card)), transparent 70%), radial-gradient(70% 120% at 0 100%, color-mix(in srgb, #ff8a7a 14%, var(--card)), var(--card) 75%);
+  background: radial-gradient(90% 130% at 100% 0, color-mix(in srgb, var(--brand) 24%, var(--card)), transparent 70%), radial-gradient(70% 120% at 0 100%, color-mix(in srgb, var(--pn-coral) 14%, var(--card)), var(--card) 75%);
 }
 .ini-hola { display: grid; gap: 8px; min-width: 0; }
 .ini-hola > p:first-child { color: var(--mute); font-size: 15.5px; } .ini-hola > p:first-child::first-letter { text-transform: uppercase; }
