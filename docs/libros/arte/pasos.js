@@ -76,7 +76,10 @@ for (const id of lecciones(N)) {
   });
   const ej = (X.e || []).map((e, k) => {
     const mm = e.m.map(([dice, , q]) => ({ dice, cuenta: q })), hoja = e.escena === 'hoja' || (e.de != null && (L.pasos[e.de].escena === 'hoja'));
-    return `\\zejemplo{${tex(e.t)}}{${tex(e.q)}}\n${tira(`${id}/e${k}`, mm, hoja)}\\zrespuesta{${tex(e.r)}}\n`;
+    // reserva el alto del primer dibujo, para que el enunciado no quede solo al pie de la página
+    const k0 = `${id}/e${k}`, z0 = hoja ? (M[`${k0}-z`] || M[`${k0}-${e.m.length - 1}`]) : M[`${k0}-0`];
+    const hq = z0 ? Math.min(200, Math.max(95, Math.round(alto(z0, 78) + 55))) : 95;
+    return `\\zejemplo[${hq}]{${tex(e.t)}}{${tex(e.q)}}\n${tira(`${id}/e${k}`, mm, hoja)}\\zrespuesta{${tex(e.r)}}\n`;
   }).join('\n');
   fs.writeFileSync(path.join(P, `${id}.tex`), cm ? '' : todo.join('\n\n') + '\n');
   if (cm) L.caps.forEach((_, c) => fs.writeFileSync(path.join(P, `${id}-${c + 1}.tex`), solo[c] || '%\n'));

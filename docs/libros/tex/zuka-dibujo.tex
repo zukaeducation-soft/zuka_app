@@ -22,9 +22,9 @@
   \begin{minipage}[c]{80mm}\hfill\setlength{\fboxsep}{1.2mm}\tikz\node[fill=white,rounded corners=1.4mm,inner sep=1.4mm]{#3};\end{minipage}\end{tcolorbox}}
 % ---------- ejemplos resueltos con dibujos ----------
 \newcounter{zejd}
-\newcommand{\zejemplo}[2]{\Needspace*{95mm}\stepcounter{zejd}\par\vspace{9pt}\noindent{\color{zline}\rule{\linewidth}{.5pt}}\par\vspace{4pt}%
+\newcommand{\zejemplo}[3][95]{\Needspace*{#1mm}\stepcounter{zejd}\par\vspace{9pt}\noindent{\color{zline}\rule{\linewidth}{.5pt}}\par\vspace{4pt}%
   \begin{tcolorbox}[zbase,breakable=false,colback=zsoft,before skip=2pt,after skip=4pt]\zuka@cab{zolive}{ejemplo}{Ejemplo resuelto con dibujos}%
-  {\sffamily\footnotesize\color{zmute}\quad #1}\par\vspace{3pt}#2\end{tcolorbox}\nopagebreak
+  {\sffamily\footnotesize\color{zmute}\quad #2}\par\vspace{3pt}#3\end{tcolorbox}\nopagebreak
   {\sffamily\footnotesize\bfseries\color{zmute}Solución, paso a paso\par}\nopagebreak}
 \newcommand{\zrespuesta}[1]{\par\vspace{2pt}\noindent{\sffamily\footnotesize\bfseries\color{zmoss}Respuesta\quad}#1\par\vspace{4pt}}
 % ---------- dónde salen: después de la analogía ----------

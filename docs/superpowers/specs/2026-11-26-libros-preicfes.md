@@ -32,6 +32,13 @@ Ciencias) se quedan solo en la app.
 
 `sh docs/libros/build.sh 5 6 7 8 9` deja `docs/libros/pdf/Zuka_Preicfes_Libro_N.pdf` (N de 1 a 5).
 
+## Ejemplos dibujados propios del libro
+
+Cada lección lleva, después de su explicación, un **ejemplo resuelto con dibujos** escrito solo para el libro (no sale en la app
+ni repite sus ejercicios): `arte/ejemplos/icf-ma.js`, `icf-lc.js`, `icf-sc.js`, `icf-cn.js`, `icf-en.js`, con el mismo formato de
+los del Preuniversitario (`EJ[id]`: reutiliza la escena de un paso de la explicación con otros valores, o una hoja con texto
+original marcada con el ayudante `H`). `escenas.mjs` los dibuja y `pasos.js` los escribe en `salida/pasos/<id>-e.tex`.
+
 ## Pendiente
 
-Ejemplos resueltos con dibujos propios del libro (como los del Preuniversitario) y revisión de una persona antes de vender.
+Revisión de una persona antes de vender.
