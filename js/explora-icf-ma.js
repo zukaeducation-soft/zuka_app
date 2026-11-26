@@ -48,35 +48,35 @@
 
   xpLec('icf-ma-datos-2', [
     ['Repartir parejo',
-      xpMira('dibujo', 'Empecemos por la idea: el **promedio** es lo que tocaría si se repartiera todo por igual.', { dib: barras, v: { vals: [2, 11, 5], hi: 12, st: 3, rot: ['Ana', 'Bea', 'Ciro'], on: -1, nota: '', lin: 0 }, alto: 195 }, [
-        ['Ana tiene 2 láminas, Bea 11 y Ciro 5.', {}],
-        ['Juntan todas: son 18.', { nota: '18' }, '$2 + 11 + 5 = 18$'],
-        ['Entre tres, a cada uno le tocan 6.', { lin: 6 }, '$18 \\div 3 = 6$'],
-        ['Bea cede lo que le sobra y llena a los demás.', { vals: [6, 6, 6], nota: 'promedio 6' }],
-        ['Lo que sobra arriba llena justo lo que falta abajo.', {}],
+      xpMira('dibujo', '¿Qué es el **promedio**? Es lo que le tocaría a cada uno si repartiéramos todo por igual.', { dib: barras, v: { vals: [2, 11, 5], hi: 12, st: 3, rot: ['Ana', 'Bea', 'Ciro'], on: -1, nota: '', lin: 0 }, alto: 195 }, [
+        ['Tres amigos coleccionan láminas: Ana tiene 2, Bea tiene 11 y Ciro tiene 5.', {}],
+        ['Si las juntan todas, reúnen 18.', { nota: '18' }, '$2 + 11 + 5 = 18$'],
+        ['Al repartir esas 18 entre los tres, a cada uno le tocan 6.', { lin: 6 }, '$18 \\div 3 = 6$'],
+        ['Mira lo que pasa: Bea le pasa a los otros lo que le sobra, y todos quedan iguales.', { vals: [6, 6, 6], nota: 'promedio 6' }],
+        ['Lo que sobra arriba de la línea llena justo lo que falta abajo. Ese nivel es el promedio.', {}],
       ], 'Promedio: suma todo y reparte entre cuántos son.'),
-      xpHaz('dibujo', 'Los datos son 4, 9 y uno más. Muévelo hasta que el promedio sea 8.', { dib: (v, K) => barras({ vals: [4, 9, v.c], hi: 15, st: 5, rot: ['4', '9', '?'], on: 2, lin: (13 + v.c) / 3 }, K), v: { c: 5 }, metas: { c: 11 }, alto: 195, manijas: [manija('c', 2, 3, 15, 1)],
+      xpHaz('dibujo', 'Hay tres datos: 4, 9 y uno que falta. Muévelo hasta que el promedio sea 8.', { dib: (v, K) => barras({ vals: [4, 9, v.c], hi: 15, st: 5, rot: ['4', '9', '?'], on: 2, lin: (13 + v.c) / 3 }, K), v: { c: 5 }, metas: { c: 11 }, alto: 195, manijas: [manija('c', 2, 3, 15, 1)],
         lee: v => `$\\tfrac{4 + 9 + ${v.c}}{3} = ${N((13 + v.c) / 3)}$`, dice: () => 'Tres datos con promedio 8 deben sumar 24.' }, 'Deben sumar 24 y ya hay 13: faltan 11.')],
     ['El del centro y el que más sale',
-      xpMira('fichas', 'Segunda idea: la **mediana** es el del centro, con los datos **en orden**.', { slots: [0, 1, 2, 3, 4].map(i => ({ x: 50 + i * 60, y: 60, w: 50 })), fichas: ['9', '3', '7', '3', '4'], alto: 110 }, [
-        ['Cinco datos en desorden.', {}],
-        ['Primero se ordenan de menor a mayor.', { pon: { 0: '3', 1: '3', 2: '4', 3: '7', 4: '9' } }],
-        ['La mediana es el del centro: 4. Deja dos a cada lado.', { marca: [2] }, '$\\text{mediana} = 4$'],
-        ['La moda es el que más se repite: 3.', { marca: [0, 1] }, '$\\text{moda} = 3$'],
-        ['Con una cantidad par hay dos en el centro: se promedian.', { marca: [] }],
+      xpMira('fichas', 'Hay otra forma de resumir datos: la **mediana**, que es el dato del centro cuando están **en orden**.', { slots: [0, 1, 2, 3, 4].map(i => ({ x: 50 + i * 60, y: 60, w: 50 })), fichas: ['9', '3', '7', '3', '4'], alto: 110 }, [
+        ['Aquí tenemos cinco datos, todos revueltos.', {}],
+        ['Lo primero es ordenarlos de menor a mayor.', { pon: { 0: '3', 1: '3', 2: '4', 3: '7', 4: '9' } }],
+        ['El del centro es el 4, con dos datos a cada lado. Esa es la mediana.', { marca: [2] }, '$\\text{mediana} = 4$'],
+        ['Y la moda es el dato que más se repite. Aquí es el 3, que aparece dos veces.', { marca: [0, 1] }, '$\\text{moda} = 3$'],
+        ['Cuando la cantidad de datos es par, quedan dos en el centro, y la mediana es el promedio de esos dos.', { marca: [] }],
       ], 'Mediana: ordena y busca el centro. Moda: el que más se repite.'),
-      xpHaz('fichas', 'Datos: 8, 2, 6, 2, 10, 5. Pon la mediana y la moda.', { slots: [{ x: 110, y: 46, w: 90, et: 'mediana' }, { x: 230, y: 46, w: 90, et: 'moda' }], fichas: ['5.5', '2', '6', '4', '10'], meta: ['5.5', '2'], alto: 96, pista: 'Ordena: 2, 2, 5, 6, 8, 10. Con seis datos hay dos en el centro.' }, 'Los del centro son 5 y 6: $\\tfrac{5 + 6}{2} = 5.5$. El 2 se repite.')],
+      xpHaz('fichas', 'Con estos datos, 8, 2, 6, 2, 10 y 5, pon la mediana y la moda.', { slots: [{ x: 110, y: 46, w: 90, et: 'mediana' }, { x: 230, y: 46, w: 90, et: 'moda' }], fichas: ['5.5', '2', '6', '4', '10'], meta: ['5.5', '2'], alto: 96, pista: 'Ordena: 2, 2, 5, 6, 8, 10. Con seis datos hay dos en el centro.' }, 'Los del centro son 5 y 6: $\\tfrac{5 + 6}{2} = 5.5$. El 2 se repite.')],
     ['El dato que jala y el que pesa',
-      xpMira('dibujo', 'Tercera idea: un dato muy grande **jala** el promedio, pero no la mediana.', { dib: barras, v: { vals: [1, 2, 2, 3, 2], hi: 24, st: 6, rot: ['1', '2', '2', '3', '2'], on: -1, nota: '', lin: 0 }, alto: 195 }, [
-        ['Cinco sueldos parecidos: el promedio y la mediana son 2.', { lin: 2 }],
-        ['El último se va a 22.', { vals: [1, 2, 2, 3, 22], rot: ['1', '2', '2', '3', '22'], on: 4 }],
-        ['El promedio salta a 6: nadie gana eso.', { lin: 6, nota: 'promedio 6' }, '$30 \\div 5 = 6$'],
-        ['La mediana sigue en 2: describe mejor al grupo.', { lin: 2, nota: 'mediana 2' }],
-        ['En notas con peso, cada una jala según su porcentaje.', { nota: '' }, '$0.4 \\cdot 5 + 0.6 \\cdot 3 = 3.8$'],
+      xpMira('dibujo', 'Ojo con algo: un dato muy grande **jala** el promedio, pero a la mediana casi no la mueve.', { dib: barras, v: { vals: [1, 2, 2, 3, 2], hi: 24, st: 6, rot: ['1', '2', '2', '3', '2'], on: -1, nota: '', lin: 0 }, alto: 195 }, [
+        ['Piensa en cinco sueldos parecidos, en millones. Aquí el promedio y la mediana valen 2.', { lin: 2 }],
+        ['De pronto, uno de ellos sube a 22.', { vals: [1, 2, 2, 3, 22], rot: ['1', '2', '2', '3', '22'], on: 4 }],
+        ['El promedio salta a 6, aunque nadie en el grupo gana eso.', { lin: 6, nota: 'promedio 6' }, '$30 \\div 5 = 6$'],
+        ['La mediana, en cambio, sigue en 2. Por eso describe mejor a este grupo.', { lin: 2, nota: 'mediana 2' }],
+        ['Algo parecido pasa con las notas que tienen peso: cada una cuenta según su porcentaje.', { nota: '' }, '$0.4 \\cdot 5 + 0.6 \\cdot 3 = 3.8$'],
       ], 'Un dato extremo mueve el promedio y casi nunca la mediana.'),
-      xpHaz('fichas', 'El taller vale 30 % y sacó 5.0; el examen, 70 % y sacó 3.0. Pon los aportes y la nota.', { slots: [{ x: 66, y: 46, w: 80, et: 'taller' }, { x: 170, y: 46, w: 80, et: 'examen' }, { x: 274, y: 46, w: 80, et: 'nota' }], fichas: ['1.5', '2.1', '3.6', '4.0', '3.0'], meta: ['1.5', '2.1', '3.6'], alto: 96, pista: 'Multiplica cada nota por su peso y después suma los aportes.' }, '$0.3 \\cdot 5 = 1.5$, $0.7 \\cdot 3 = 2.1$ y $1.5 + 2.1 = 3.6$.')],
+      xpHaz('fichas', 'En el taller, que vale el 30 %, sacaste 5; en el examen, que vale el 70 %, sacaste 3. Pon los aportes y la nota final.', { slots: [{ x: 66, y: 46, w: 80, et: 'taller' }, { x: 170, y: 46, w: 80, et: 'examen' }, { x: 274, y: 46, w: 80, et: 'nota' }], fichas: ['1.5', '2.1', '3.6', '4.0', '3.0'], meta: ['1.5', '2.1', '3.6'], alto: 96, pista: 'Multiplica cada nota por su peso y después suma los aportes.' }, '$0.3 \\cdot 5 = 1.5$, $0.7 \\cdot 3 = 2.1$ y $1.5 + 2.1 = 3.6$.')],
     ['Ahora sí, un problema',
-      xpHaz('dibujo', 'Cuatro amigos promedian 10 años. Llega uno más y promedian 11. Mueve su edad.', { dib: (v, K) => barras({ vals: [10, 10, 10, 10, v.e], hi: 20, st: 5, rot: ['10', '10', '10', '10', '?'], on: 4, lin: (40 + v.e) / 5 }, K), v: { e: 12 }, metas: { e: 15 }, alto: 195, manijas: [manija('e', 4, 5, 20, 1)],
+      xpHaz('dibujo', 'Cuatro amigos tienen en promedio 10 años. Llega uno más, y ahora el promedio es 11. Mueve su edad.', { dib: (v, K) => barras({ vals: [10, 10, 10, 10, v.e], hi: 20, st: 5, rot: ['10', '10', '10', '10', '?'], on: 4, lin: (40 + v.e) / 5 }, K), v: { e: 12 }, metas: { e: 15 }, alto: 195, manijas: [manija('e', 4, 5, 20, 1)],
         lee: v => `$\\tfrac{40 + ${v.e}}{5} = ${N((40 + v.e) / 5)}$`, dice: () => 'Cinco personas con promedio 11 suman 55.' }, 'Antes sumaban 40; ahora deben sumar 55: tiene 15.')],
   ], 'Promedio reparte, mediana parte en dos, moda repite; y los extremos jalan.');
 
