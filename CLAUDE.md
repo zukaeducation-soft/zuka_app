@@ -313,6 +313,8 @@ Desde 1000 px la app va con `zoom` en `body` (0.8 desde 1200 px; la landing no; 
 
 - **Sin avisos en vivo en las evaluaciones** (`tests/velo-examen.test.js`): `velo(ok)` y `VELO.on` (kit.js) callan la comprobación mientras se dibuja con `data-examen`; un juego nuevo por rondas pone `ok = velo(ok);` antes de `roundsGame`, y su texto neutro no debe decir que está mal (`VELO.on ? …`).
 
+- **Simulacros del Preicfes del estudiante** (spec `2026-11-26-simulacros-preicfes`, pruebas `tests/simulacros-icf.test.js`): en la pantalla del curso, cinco pruebas de 24 preguntas A–D nuevas por simulacro, reloj de 48 min por prueba, revisión explicada y global de 0 a 500. Motor `js/simulacros-icf.js`, datos `js/simulacro-icf-N.js`. Distintos de los que asigna el docente (`js/simulacros.js`).
+
 ## Interfaz de la lección
 
 - Al fallar: «Incorrecto» + «La respuesta correcta es:»; la lección deja espacio abajo para ver el juego.

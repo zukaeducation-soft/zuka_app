@@ -35477,3 +35477,279 @@ GAMES['pisa-huellas'] = (() => {
 
   return { grade, create, termAt };
 })();
+;
+//#archivo js/games/dos-escaleras.js
+// Dos escaleras (Álgebra, suma de una progresión aritmética). Una escalera de n columnas mide a₁, a₁ + d, …, aₙ y
+// una copia volteada cuelga de una tapa. Se sube o baja la tapa (− / + o arrastre) hasta que las dos escaleras
+// encajen sin huecos ni encimarse: el rectángulo mide n × (a₁ + aₙ) y cada escalera es la mitad. Es el truco de
+// Gauss hecho con bloques: Sₙ = n(a₁ + aₙ)/2.
+// params = { rounds: [{ a1, d, n }], max }   state = { hs: [altura de la tapa | null por ronda] }
+
+GAMES['dos-escaleras'] = (() => {
+  const terms = r => Array.from({ length: r.n }, (_, k) => r.a1 + k * r.d);
+  const fit = r => 2 * r.a1 + (r.n - 1) * r.d;
+  const okRound = (h, r) => h === fit(r);
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => okRound(state.hs?.[i], r));
+    const solution = params.rounds.map(r => `tapa a ${fit(r)}: ${r.n} · ${fit(r)} = ${r.n * fit(r)}, la suma es ${(r.n * fit(r)) / 2}`).join(' · ');
+    return { ok, solution };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, MAX = params.max || 20;
+    const hs = R.map(r => terms(r)[r.n - 1]), touched = R.map(() => false);
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {}, G = null, drag = false;
+
+    function layout(w, h) {
+      W = w; H = h; tabs = roundTabs(R.length, w);
+      B = { minus: { x: 12, y: h - 46, w: 44, h: 36 }, plus: { x: w - 56, y: h - 46, w: 44, h: 36 } };
+    }
+    const geo = () => {
+      const r = R[cur], base = H - 92, top = 108;
+      // Ancho de columna y alto de cada unidad por separado: las columnas no quedan finas como palillos.
+      const uw = Math.min(36, (W - 60) / r.n), u = (base - top) / MAX;
+      return { u, uw, base, x0: (W - r.n * uw) / 2 };
+    };
+    function setH(v) {
+      if (locked) return;
+      hs[cur] = Math.min(MAX, Math.max(1, Math.round(v))); touched[cur] = true; api.ready(touched.every(Boolean));
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], good = okRound(hs[cur], r), h = locked && !good ? fit(r) : hs[cur], t = terms(r);
+        G = geo();
+        const { u, uw, base, x0 } = G, lidY = base - h * u, fits = h === fit(r);
+        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(hs[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Q : C.line));
+        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
+        fitText(p, `${t.join(' + ')} = ?`, W / 2, 56, W - 24, 15);
+        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'Mueve la tapa hasta que las dos escaleras encajen', W / 2, 78, W - 24, 12);
+        // Escalera original (desde el suelo) y copia volteada (desde la tapa), translúcidas: donde se enciman se ve más oscuro
+        for (let k = 0; k < r.n; k++) {
+          const x = x0 + k * uw;
+          p.stroke(C.bg); p.strokeWeight(1); p.fill(p.color(C.mint + 'CC')); p.rect(x, base - t[k] * u, uw, t[k] * u);
+          p.fill(p.color(C.sky + '99')); p.rect(x, lidY, uw, t[r.n - 1 - k] * u);
+          p.noStroke(); p.fill(C.mute); p.textSize(10); p.text(t[k], x + uw / 2, base + 10);
+          p.fill(C.Z); p.text(t[r.n - 1 - k], x + uw / 2, lidY - 9);
+        }
+        p.stroke(C.mute); p.strokeWeight(2); p.line(x0 - 8, base, x0 + r.n * uw + 8, base);
+        p.stroke(locked ? C.ok : C.sun); p.strokeWeight(4); p.line(x0 - 8, lidY, x0 + r.n * uw + 8, lidY);
+        if (fits) { p.noFill(); p.stroke(C.ok); p.strokeWeight(2.5); p.rect(x0, lidY, r.n * uw, h * u); }
+        // Lectura y botones
+        p.noStroke(); p.textAlign(p.CENTER, p.CENTER);
+        const msg = fits ? `${r.n} × ${h} = ${r.n * h}, la mitad: ${(r.n * h) / 2}` : `tapa a ${h}`;
+        p.fill(fits || locked ? C.ok : C.ink); p.textStyle(p.BOLD); fitText(p, msg, W / 2, H - 28, W - 132, 13);
+        for (const [b, s] of [[B.minus, '−'], [B.plus, '+']]) {
+          drawTile(p, C, b, s, { fill: C.sky, r: 9, lift: 2, size: 20 });
+        }
+      };
+
+      p.mousePressed = () => {
+        const x = p.mouseX, y = p.mouseY;
+        const tb = tabs.findIndex(b => hitBox(b, x, y));
+        if (tb >= 0) { cur = tb; drag = false; api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        if (hitBox(B.minus, x, y)) { setH(hs[cur] - 1); api.sfx?.tap?.(); return false; }
+        if (hitBox(B.plus, x, y)) { setH(hs[cur] + 1); api.sfx?.tap?.(); return false; }
+        if (G && Math.abs(y - (G.base - hs[cur] * G.u)) < 30) { drag = true; return false; }
+      };
+      p.mouseDragged = () => { if (drag && G) { setH((G.base - p.mouseY) / G.u); return false; } };
+      p.mouseReleased = () => { drag = false; };
+    }, 1.25, () => {
+      if (locked || !G) return null;
+      const x = W / 2, y = G.base - hs[cur] * G.u;
+      return { from: { x, y }, to: { x, y: Math.max(103, y - 25) } };
+    });
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ hs: hs.map((h, i) => (touched[i] ? h : null)) }),
+      lock() { locked = true; drag = false; },
+      destroy: () => m.remove(),
+      demo: m.demo,
+    };
+  }
+
+  return { grade, create, demo: true };
+})();
+;
+//#archivo js/games/rebota-pelota.js
+// La pelota que rebota (Álgebra, progresiones geométricas). Una pelota cae desde h₀ y cada rebote sube la fracción r
+// del rebote anterior: h₁ = h₀ r, h₂ = h₁ r, … Se ajusta la altura de los tres primeros rebotes arrastrando la pelota o
+// con − / +. Restar siempre lo mismo no sirve: la pelota pierde cada vez menos altura.
+// params = { rounds: [{ h0, r, rTex }], max }   state = { hs: [[h1, h2, h3] | null por ronda] }
+
+GAMES['rebota-pelota'] = (() => {
+  const want = r => [1, 2, 3].map(k => Math.round(r.h0 * r.r ** k * 1e6) / 1e6);
+  const okRound = (h, r) => Array.isArray(h) && want(r).every((v, k) => h[k] === v);
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => okRound(state.hs?.[i], r));
+    return { ok, solution: params.rounds.map(r => `desde ${r.h0}: ${want(r).join(', ')}`).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds, MAX = params.max || 140;
+    const S = R.map(r => ({ h: [1, 2, 3].map(() => Math.round(r.h0 / 2)), touched: false }));
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [], G = null, drag = null;
+
+    function layout(w, h) { W = w; H = h; tabs = roundTabs(R.length, w); }
+    const geo = () => {
+      const ground = H - 70, v = (ground - 116) / MAX, L = [0, 1, 2, 3].map(k => 46 + (k * (W - 62)) / 3);
+      const peaks = [0, 1, 2].map(k => (L[k] + L[k + 1]) / 2);
+      const btn = peaks.map(x => ({ m: { x: x - 29, y: H - 52, w: 26, h: 34 }, p: { x: x + 3, y: H - 52, w: 26, h: 34 } }));
+      return { ground, v, L, peaks, btn };
+    };
+    function set(k, val) {
+      if (locked) return;
+      const s = S[cur]; s.h[k] = Math.min(MAX, Math.max(0, Math.round(val))); s.touched = true;
+      api.ready(S.every(x => x.touched));
+    }
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      function dashed(pts) {
+        for (let i = 0; i + 1 < pts.length; i += 2) p.line(pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1]);
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], s = S[cur], good = okRound(s.h, r), hv = locked && !good ? want(r) : s.h;
+        G = geo();
+        const { ground, v, L, peaks, btn } = G;
+        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(S[i].h, R[i]) ? C.ok : C.bad) : i === cur ? C.brand : S[i].touched ? C.Q : C.line));
+        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(W < 300 ? 13 : 14); p.textAlign(p.CENTER, p.TOP); p.textLeading(17);
+        p.text(`Cae desde ${r.h0} cm y cada rebote sube ${r.rTex} de la altura anterior`, 14, 44, W - 28, 54);
+        p.textAlign(p.CENTER, p.CENTER);
+        // Suelo y caída inicial
+        p.stroke(C.mint); p.strokeWeight(4); p.line(8, ground, W - 8, ground);
+        p.stroke(C.line); p.strokeWeight(1.5); dashed(Array.from({ length: 12 }, (_, i) => [L[0], ground - (r.h0 * v * i) / 11]));
+        p.noStroke(); p.fill(C.coral); p.circle(L[0], ground - r.h0 * v, 16);
+        p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.RIGHT, p.CENTER); p.text(`${r.h0}`, L[0] - 10, ground - r.h0 * v);
+        p.textAlign(p.CENTER, p.CENTER);
+        // Rebotes: parábolas punteadas entre los puntos de bote
+        for (let k = 0; k < 3; k++) {
+          const hk = hv[k] * v, a = L[k], b = L[k + 1], pts = [];
+          for (let i = 0; i <= 24; i++) { const t = i / 24; pts.push([a + (b - a) * t, ground - 4 * hk * t * (1 - t)]); }
+          p.stroke(locked ? C.ok : C.sky); p.strokeWeight(2); dashed(pts);
+          p.noStroke(); p.fill(locked ? C.ok : C.coral); p.circle(peaks[k], ground - hk, 16);
+          p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(12); p.text(String(hv[k]), peaks[k], ground - hk - 16);
+          p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(10); p.text(`rebote ${k + 1}`, peaks[k], ground + 10);
+          for (const [bb, t] of [[btn[k].m, '−'], [btn[k].p, '+']]) {
+            drawTile(p, C, bb, t, { fill: C.sky, r: 8, lift: 2, size: 17 });
+          }
+        }
+        if (locked && !good) { p.noStroke(); p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, `Eran ${want(r).join(', ')}`, W / 2, 106, W - 24, 12); }
+      };
+
+      p.mousePressed = () => {
+        const x = p.mouseX, y = p.mouseY;
+        const tb = tabs.findIndex(b => hitBox(b, x, y));
+        if (tb >= 0) { cur = tb; drag = null; api.sfx?.tap?.(); return false; }
+        if (locked || !G) return;
+        for (let k = 0; k < 3; k++) {
+          if (hitBox(G.btn[k].m, x, y)) { set(k, S[cur].h[k] - 1); api.sfx?.tap?.(); return false; }
+          if (hitBox(G.btn[k].p, x, y)) { set(k, S[cur].h[k] + 1); api.sfx?.tap?.(); return false; }
+        }
+        const k = G.peaks.findIndex(px => Math.abs(x - px) < 26);
+        if (k >= 0 && y < G.ground + 4 && y > 90) { drag = k; set(k, (G.ground - y) / G.v); return false; }
+      };
+      p.mouseDragged = () => { if (drag != null && G) { set(drag, (G.ground - p.mouseY) / G.v); return false; } };
+      p.mouseReleased = () => { drag = null; };
+    }, 1.3);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ hs: S.map(s => (s.touched ? [...s.h] : null)) }),
+      lock() { locked = true; drag = null; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create };
+})();
+;
+//#archivo js/games/pinta-personas.js
+// Pinta a las personas (Álgebra, porcentajes). Un grupo de personitas que no son 100 (20, 25, 40, 8): se tocan para
+// pintarlas hasta tener el porcentaje pedido. El porcentaje es «de cada 100», así que hay que pasarlo a este total:
+// parte = total · p / 100. Tocar una pintada la despinta.
+// params = { rounds: [{ total, pct, what }] }   state = { painted: [número | null por ronda] }
+
+GAMES['pinta-personas'] = (() => {
+  const want = r => (r.total * r.pct) / 100;
+  const okRound = (k, r) => k === want(r);
+
+  function grade(state, params) {
+    const ok = params.rounds.every((r, i) => okRound(state.painted?.[i], r));
+    return { ok, solution: params.rounds.map(r => `${want(r)} de ${r.total}`).join(' · ') };
+  }
+
+  function create(host, params, api) {
+    const C = api.palette, R = params.rounds;
+    const P = R.map(r => Array(r.total).fill(false)), touched = R.map(() => false);
+    let locked = false, W = 0, H = 0, cur = 0, tabs = [];
+
+    function layout(w, h) { W = w; H = h; tabs = roundTabs(R.length, w); }
+    // Cuadrícula de la ronda actual (se calcula igual al dibujar y al tocar, aunque aún no se haya redibujado).
+    function grid() {
+      const r = R[cur], cols = r.total <= 8 ? 4 : r.total <= 25 ? 5 : 8, rows = Math.ceil(r.total / cols);
+      const top = 98, bot = H - 52, cw = (W - 24) / cols, ch = (bot - top) / rows;
+      return { cols, cw, ch, s: Math.min(cw, ch) * 0.82,
+        cells: Array.from({ length: r.total }, (_, i) => ({ x: 12 + (i % cols) * cw, y: top + Math.floor(i / cols) * ch, w: cw, h: ch })) };
+    }
+    const count = i => P[i].filter(Boolean).length;
+
+    const m = mountSketch(host, (p, size) => {
+      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
+      p.onResize = () => layout(size.w, size.h);
+
+      function person(x, y, s, col) {
+        p.noStroke(); p.fill(col);
+        p.circle(x, y - s * 0.28, s * 0.38);
+        p.rect(x - s * 0.24, y - s * 0.06, s * 0.48, s * 0.46, s * 0.2, s * 0.2, s * 0.06, s * 0.06);
+      }
+
+      p.draw = () => {
+        p.background(C.bg);
+        const r = R[cur], k = count(cur), good = okRound(k, r);
+        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(count(i), R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Q : C.line));
+        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
+        fitText(p, `Pinta al ${String(r.pct)} % del grupo`, W / 2, 56, W - 24, 15);
+        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, `${r.total} personas · ${r.what}`, W / 2, 78, W - 24, 12);
+        // Personas en una cuadrícula que llena el espacio
+        const { s, cells } = grid(), shown = locked && !good ? want(r) : null;
+        cells.forEach((c, i) => {
+          const on = shown == null ? P[cur][i] : i < shown;
+          person(c.x + c.w / 2, c.y + c.h / 2, s, on ? (locked ? C.ok : C.sun) : C.mute);
+        });
+        const msg = locked && !good ? `Eran ${want(r)} de ${r.total}` : `pintadas: ${k} de ${r.total}`;
+        p.fill(locked ? C.ok : C.ink); p.textStyle(p.BOLD); fitText(p, msg, W / 2, H - 26, W - 24, 15);
+      };
+
+      p.mousePressed = () => {
+        const x = p.mouseX, y = p.mouseY;
+        const tb = tabs.findIndex(b => hitBox(b, x, y));
+        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
+        if (locked) return;
+        const i = grid().cells.findIndex(c => hitBox(c, x, y));
+        if (i >= 0) { P[cur][i] = !P[cur][i]; touched[cur] = true; api.ready(touched.every(Boolean)); api.sfx?.tap?.(); return false; }
+      };
+    }, 1.35);
+
+    return {
+      loaded: m.ready,
+      getState: () => ({ painted: P.map((row, i) => (touched[i] ? row.filter(Boolean).length : null)) }),
+      lock() { locked = true; },
+      destroy: () => m.remove(),
+    };
+  }
+
+  return { grade, create };
+})();

@@ -1,281 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/dos-escaleras.js
-// Dos escaleras (Álgebra, suma de una progresión aritmética). Una escalera de n columnas mide a₁, a₁ + d, …, aₙ y
-// una copia volteada cuelga de una tapa. Se sube o baja la tapa (− / + o arrastre) hasta que las dos escaleras
-// encajen sin huecos ni encimarse: el rectángulo mide n × (a₁ + aₙ) y cada escalera es la mitad. Es el truco de
-// Gauss hecho con bloques: Sₙ = n(a₁ + aₙ)/2.
-// params = { rounds: [{ a1, d, n }], max }   state = { hs: [altura de la tapa | null por ronda] }
-
-GAMES['dos-escaleras'] = (() => {
-  const terms = r => Array.from({ length: r.n }, (_, k) => r.a1 + k * r.d);
-  const fit = r => 2 * r.a1 + (r.n - 1) * r.d;
-  const okRound = (h, r) => h === fit(r);
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okRound(state.hs?.[i], r));
-    const solution = params.rounds.map(r => `tapa a ${fit(r)}: ${r.n} · ${fit(r)} = ${r.n * fit(r)}, la suma es ${(r.n * fit(r)) / 2}`).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, MAX = params.max || 20;
-    const hs = R.map(r => terms(r)[r.n - 1]), touched = R.map(() => false);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = {}, G = null, drag = false;
-
-    function layout(w, h) {
-      W = w; H = h; tabs = roundTabs(R.length, w);
-      B = { minus: { x: 12, y: h - 46, w: 44, h: 36 }, plus: { x: w - 56, y: h - 46, w: 44, h: 36 } };
-    }
-    const geo = () => {
-      const r = R[cur], base = H - 92, top = 108;
-      // Ancho de columna y alto de cada unidad por separado: las columnas no quedan finas como palillos.
-      const uw = Math.min(36, (W - 60) / r.n), u = (base - top) / MAX;
-      return { u, uw, base, x0: (W - r.n * uw) / 2 };
-    };
-    function setH(v) {
-      if (locked) return;
-      hs[cur] = Math.min(MAX, Math.max(1, Math.round(v))); touched[cur] = true; api.ready(touched.every(Boolean));
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], good = okRound(hs[cur], r), h = locked && !good ? fit(r) : hs[cur], t = terms(r);
-        G = geo();
-        const { u, uw, base, x0 } = G, lidY = base - h * u, fits = h === fit(r);
-        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(hs[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Q : C.line));
-        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
-        fitText(p, `${t.join(' + ')} = ?`, W / 2, 56, W - 24, 15);
-        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, 'Mueve la tapa hasta que las dos escaleras encajen', W / 2, 78, W - 24, 12);
-        // Escalera original (desde el suelo) y copia volteada (desde la tapa), translúcidas: donde se enciman se ve más oscuro
-        for (let k = 0; k < r.n; k++) {
-          const x = x0 + k * uw;
-          p.stroke(C.bg); p.strokeWeight(1); p.fill(p.color(C.mint + 'CC')); p.rect(x, base - t[k] * u, uw, t[k] * u);
-          p.fill(p.color(C.sky + '99')); p.rect(x, lidY, uw, t[r.n - 1 - k] * u);
-          p.noStroke(); p.fill(C.mute); p.textSize(10); p.text(t[k], x + uw / 2, base + 10);
-          p.fill(C.Z); p.text(t[r.n - 1 - k], x + uw / 2, lidY - 9);
-        }
-        p.stroke(C.mute); p.strokeWeight(2); p.line(x0 - 8, base, x0 + r.n * uw + 8, base);
-        p.stroke(locked ? C.ok : C.sun); p.strokeWeight(4); p.line(x0 - 8, lidY, x0 + r.n * uw + 8, lidY);
-        if (fits) { p.noFill(); p.stroke(C.ok); p.strokeWeight(2.5); p.rect(x0, lidY, r.n * uw, h * u); }
-        // Lectura y botones
-        p.noStroke(); p.textAlign(p.CENTER, p.CENTER);
-        const msg = fits ? `${r.n} × ${h} = ${r.n * h}, la mitad: ${(r.n * h) / 2}` : `tapa a ${h}`;
-        p.fill(fits || locked ? C.ok : C.ink); p.textStyle(p.BOLD); fitText(p, msg, W / 2, H - 28, W - 132, 13);
-        for (const [b, s] of [[B.minus, '−'], [B.plus, '+']]) {
-          drawTile(p, C, b, s, { fill: C.sky, r: 9, lift: 2, size: 20 });
-        }
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; drag = false; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        if (hitBox(B.minus, x, y)) { setH(hs[cur] - 1); api.sfx?.tap?.(); return false; }
-        if (hitBox(B.plus, x, y)) { setH(hs[cur] + 1); api.sfx?.tap?.(); return false; }
-        if (G && Math.abs(y - (G.base - hs[cur] * G.u)) < 30) { drag = true; return false; }
-      };
-      p.mouseDragged = () => { if (drag && G) { setH((G.base - p.mouseY) / G.u); return false; } };
-      p.mouseReleased = () => { drag = false; };
-    }, 1.25, () => {
-      if (locked || !G) return null;
-      const x = W / 2, y = G.base - hs[cur] * G.u;
-      return { from: { x, y }, to: { x, y: Math.max(103, y - 25) } };
-    });
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ hs: hs.map((h, i) => (touched[i] ? h : null)) }),
-      lock() { locked = true; drag = false; },
-      destroy: () => m.remove(),
-      demo: m.demo,
-    };
-  }
-
-  return { grade, create, demo: true };
-})();
-;
-//#archivo js/games/rebota-pelota.js
-// La pelota que rebota (Álgebra, progresiones geométricas). Una pelota cae desde h₀ y cada rebote sube la fracción r
-// del rebote anterior: h₁ = h₀ r, h₂ = h₁ r, … Se ajusta la altura de los tres primeros rebotes arrastrando la pelota o
-// con − / +. Restar siempre lo mismo no sirve: la pelota pierde cada vez menos altura.
-// params = { rounds: [{ h0, r, rTex }], max }   state = { hs: [[h1, h2, h3] | null por ronda] }
-
-GAMES['rebota-pelota'] = (() => {
-  const want = r => [1, 2, 3].map(k => Math.round(r.h0 * r.r ** k * 1e6) / 1e6);
-  const okRound = (h, r) => Array.isArray(h) && want(r).every((v, k) => h[k] === v);
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okRound(state.hs?.[i], r));
-    return { ok, solution: params.rounds.map(r => `desde ${r.h0}: ${want(r).join(', ')}`).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, MAX = params.max || 140;
-    const S = R.map(r => ({ h: [1, 2, 3].map(() => Math.round(r.h0 / 2)), touched: false }));
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], G = null, drag = null;
-
-    function layout(w, h) { W = w; H = h; tabs = roundTabs(R.length, w); }
-    const geo = () => {
-      const ground = H - 70, v = (ground - 116) / MAX, L = [0, 1, 2, 3].map(k => 46 + (k * (W - 62)) / 3);
-      const peaks = [0, 1, 2].map(k => (L[k] + L[k + 1]) / 2);
-      const btn = peaks.map(x => ({ m: { x: x - 29, y: H - 52, w: 26, h: 34 }, p: { x: x + 3, y: H - 52, w: 26, h: 34 } }));
-      return { ground, v, L, peaks, btn };
-    };
-    function set(k, val) {
-      if (locked) return;
-      const s = S[cur]; s.h[k] = Math.min(MAX, Math.max(0, Math.round(val))); s.touched = true;
-      api.ready(S.every(x => x.touched));
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      function dashed(pts) {
-        for (let i = 0; i + 1 < pts.length; i += 2) p.line(pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1]);
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], s = S[cur], good = okRound(s.h, r), hv = locked && !good ? want(r) : s.h;
-        G = geo();
-        const { ground, v, L, peaks, btn } = G;
-        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(S[i].h, R[i]) ? C.ok : C.bad) : i === cur ? C.brand : S[i].touched ? C.Q : C.line));
-        p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(W < 300 ? 13 : 14); p.textAlign(p.CENTER, p.TOP); p.textLeading(17);
-        p.text(`Cae desde ${r.h0} cm y cada rebote sube ${r.rTex} de la altura anterior`, 14, 44, W - 28, 54);
-        p.textAlign(p.CENTER, p.CENTER);
-        // Suelo y caída inicial
-        p.stroke(C.mint); p.strokeWeight(4); p.line(8, ground, W - 8, ground);
-        p.stroke(C.line); p.strokeWeight(1.5); dashed(Array.from({ length: 12 }, (_, i) => [L[0], ground - (r.h0 * v * i) / 11]));
-        p.noStroke(); p.fill(C.coral); p.circle(L[0], ground - r.h0 * v, 16);
-        p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(11); p.textAlign(p.RIGHT, p.CENTER); p.text(`${r.h0}`, L[0] - 10, ground - r.h0 * v);
-        p.textAlign(p.CENTER, p.CENTER);
-        // Rebotes: parábolas punteadas entre los puntos de bote
-        for (let k = 0; k < 3; k++) {
-          const hk = hv[k] * v, a = L[k], b = L[k + 1], pts = [];
-          for (let i = 0; i <= 24; i++) { const t = i / 24; pts.push([a + (b - a) * t, ground - 4 * hk * t * (1 - t)]); }
-          p.stroke(locked ? C.ok : C.sky); p.strokeWeight(2); dashed(pts);
-          p.noStroke(); p.fill(locked ? C.ok : C.coral); p.circle(peaks[k], ground - hk, 16);
-          p.fill(C.ink); p.textStyle(p.BOLD); p.textSize(12); p.text(String(hv[k]), peaks[k], ground - hk - 16);
-          p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(10); p.text(`rebote ${k + 1}`, peaks[k], ground + 10);
-          for (const [bb, t] of [[btn[k].m, '−'], [btn[k].p, '+']]) {
-            drawTile(p, C, bb, t, { fill: C.sky, r: 8, lift: 2, size: 17 });
-          }
-        }
-        if (locked && !good) { p.noStroke(); p.fill(C.ok); p.textStyle(p.BOLD); fitText(p, `Eran ${want(r).join(', ')}`, W / 2, 106, W - 24, 12); }
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; drag = null; api.sfx?.tap?.(); return false; }
-        if (locked || !G) return;
-        for (let k = 0; k < 3; k++) {
-          if (hitBox(G.btn[k].m, x, y)) { set(k, S[cur].h[k] - 1); api.sfx?.tap?.(); return false; }
-          if (hitBox(G.btn[k].p, x, y)) { set(k, S[cur].h[k] + 1); api.sfx?.tap?.(); return false; }
-        }
-        const k = G.peaks.findIndex(px => Math.abs(x - px) < 26);
-        if (k >= 0 && y < G.ground + 4 && y > 90) { drag = k; set(k, (G.ground - y) / G.v); return false; }
-      };
-      p.mouseDragged = () => { if (drag != null && G) { set(drag, (G.ground - p.mouseY) / G.v); return false; } };
-      p.mouseReleased = () => { drag = null; };
-    }, 1.3);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ hs: S.map(s => (s.touched ? [...s.h] : null)) }),
-      lock() { locked = true; drag = null; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create };
-})();
-;
-//#archivo js/games/pinta-personas.js
-// Pinta a las personas (Álgebra, porcentajes). Un grupo de personitas que no son 100 (20, 25, 40, 8): se tocan para
-// pintarlas hasta tener el porcentaje pedido. El porcentaje es «de cada 100», así que hay que pasarlo a este total:
-// parte = total · p / 100. Tocar una pintada la despinta.
-// params = { rounds: [{ total, pct, what }] }   state = { painted: [número | null por ronda] }
-
-GAMES['pinta-personas'] = (() => {
-  const want = r => (r.total * r.pct) / 100;
-  const okRound = (k, r) => k === want(r);
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okRound(state.painted?.[i], r));
-    return { ok, solution: params.rounds.map(r => `${want(r)} de ${r.total}`).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const P = R.map(r => Array(r.total).fill(false)), touched = R.map(() => false);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [];
-
-    function layout(w, h) { W = w; H = h; tabs = roundTabs(R.length, w); }
-    // Cuadrícula de la ronda actual (se calcula igual al dibujar y al tocar, aunque aún no se haya redibujado).
-    function grid() {
-      const r = R[cur], cols = r.total <= 8 ? 4 : r.total <= 25 ? 5 : 8, rows = Math.ceil(r.total / cols);
-      const top = 98, bot = H - 52, cw = (W - 24) / cols, ch = (bot - top) / rows;
-      return { cols, cw, ch, s: Math.min(cw, ch) * 0.82,
-        cells: Array.from({ length: r.total }, (_, i) => ({ x: 12 + (i % cols) * cw, y: top + Math.floor(i / cols) * ch, w: cw, h: ch })) };
-    }
-    const count = i => P[i].filter(Boolean).length;
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      function person(x, y, s, col) {
-        p.noStroke(); p.fill(col);
-        p.circle(x, y - s * 0.28, s * 0.38);
-        p.rect(x - s * 0.24, y - s * 0.06, s * 0.48, s * 0.46, s * 0.2, s * 0.2, s * 0.06, s * 0.06);
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], k = count(cur), good = okRound(k, r);
-        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(count(i), R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Q : C.line));
-        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
-        fitText(p, `Pinta al ${String(r.pct)} % del grupo`, W / 2, 56, W - 24, 15);
-        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, `${r.total} personas · ${r.what}`, W / 2, 78, W - 24, 12);
-        // Personas en una cuadrícula que llena el espacio
-        const { s, cells } = grid(), shown = locked && !good ? want(r) : null;
-        cells.forEach((c, i) => {
-          const on = shown == null ? P[cur][i] : i < shown;
-          person(c.x + c.w / 2, c.y + c.h / 2, s, on ? (locked ? C.ok : C.sun) : C.mute);
-        });
-        const msg = locked && !good ? `Eran ${want(r)} de ${r.total}` : `pintadas: ${k} de ${r.total}`;
-        p.fill(locked ? C.ok : C.ink); p.textStyle(p.BOLD); fitText(p, msg, W / 2, H - 26, W - 24, 15);
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        const i = grid().cells.findIndex(c => hitBox(c, x, y));
-        if (i >= 0) { P[cur][i] = !P[cur][i]; touched[cur] = true; api.ready(touched.every(Boolean)); api.sfx?.tap?.(); return false; }
-      };
-    }, 1.35);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ painted: P.map((row, i) => (touched[i] ? row.filter(Boolean).length : null)) }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create };
-})();
-;
 //#archivo js/games/porcentaje-cambio.js
 // El porcentaje de cambio (Álgebra, aumentos y descuentos). Una cantidad pasa de un valor viejo a uno nuevo (dos barras).
 // Con −10, −1, +1, +10 se fija cuánto cambió en porcentaje: (nuevo − viejo) / viejo · 100. Una regla marca cada 10 %
@@ -22764,5 +22488,130 @@ PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
     ['pu-nu-3', 'Dividendo = divisor · cociente + residuo.',
       opc('El residuo de dividir 1 000 entre 7 es:', ['6', '1', '3', '0'], 0,
         '$7 \\cdot 142 = 994$ y $1\\,000 - 994 = 6$.', 'Busca el múltiplo de 7 más cercano por debajo de 1 000.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-r-probabilidad.js
+// Preuniversitario · mundo 16 «Probabilidad»: lecciones y evaluación (spec 2026-11-18-preuda-razonamiento-completo).
+PU_JUEGOS.push(({ setExam }) => {
+  const COIN = [['C', 1, 2], ['S', 1, 2]];
+  setExam('pu-probabilidad', 'Probabilidad', [
+    ['pu-pb-1', 'Con resultados igual de probables, P = favorables / posibles.',
+      play('tabla-dados', 'Dados', { rounds: [{ say: 'la suma es 10', f: (a, b) => a + b === 10 }] }, '(4, 6), (5, 5), (6, 4): $\\tfrac{3}{36} = \\tfrac{1}{12}$.', { hint: 'Cuenta.' })],
+    ['pu-pb-1', 'Cada bola cuenta en los posibles.',
+      play('urna-fraccion', 'Urna', { rounds: [{ color: 'sun', others: [['coral', 6]], target: [1, 4] }] }, '2 amarillas y 6 rojas: $\\tfrac28$.', { hint: 'Posibles.' })],
+    ['pu-pb-2', 'Para independientes se multiplica a lo largo del camino.',
+      play('arbol-caminos', 'Árbol', { rounds: [{ steps: [COIN, COIN], say: 'salen dos sellos', f: pa => pa[0] === 1 && pa[1] === 1 }] }, '$\\tfrac12 \\cdot \\tfrac12 = \\tfrac14$.', { hint: 'Producto.' })],
+    ['pu-pb-2', 'P(A y B) = P(A) · P(B) si son independientes.',
+      play('area-probabilidad', 'Área', { rounds: [{ a: [2, 3], b: null, both: [1, 3], grid: 6 }] }, '$\\tfrac23 \\cdot P(B) = \\tfrac13$: $P(B) = \\tfrac12$.', { hint: 'Área.' })],
+  ]);
+});
+
+// Mundo 16 con el estándar de diez (spec 2026-11-20-preuda-razonamiento-diez): una ronda por juego, contexto y zona de examen.
+PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
+  // Ocho juegos con las escenas de la explicación (js/games/probabilidad-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-pb-1', [
+    play('ruleta-favorables', 'Una ruleta tiene los números del 1 al 8, en partes iguales. Toca los favorables a «sale un **par** o un **menor que 4**» (basta una de las dos cosas).', { nums: [1, 2, 3, 4, 5, 6, 7, 8], f: n => n % 2 === 0 || n < 4, ok: 'Seis de ocho: tres cuartos. El 2 se cuenta una sola vez.' },
+      'Pares: 2, 4, 6 y 8. Menores que 4: 1, 2 y 3. El 2 está en las dos listas: son 6 de 8, $\\tfrac34$.',
+      { hint: 'Con «o» basta cumplir una de las dos cosas. Revisa los números uno por uno.' }),
+    play('iguala-urnas', 'La urna A tiene **4** naranjas de **10** bolas. La B tiene **6** naranjas: échale verdes hasta que sacar naranja sea **igual de probable** en las dos.', { a: 4, t: 10, b: 6, max: 14 },
+      '$\\tfrac{4}{10} = \\tfrac{2}{5} = \\tfrac{6}{15}$: en la B debe haber 15 bolas, así que 9 verdes.',
+      { hint: 'Simplifica la fracción de la urna A y busca otra igual que tenga 6 arriba.' }),
+    play('tabla-diferencia', 'Se lanzan dos dados. Toca las parejas en que la **diferencia** entre los dos es **4**.', { f: (a, b) => Math.abs(a - b) === 4, texto: '1 y 5, 2 y 6, 5 y 1, 6 y 2', ok: 'Cuatro de 36: un noveno.' },
+      '1 y 5, 2 y 6, y las mismas al revés: 4 de 36, $\\tfrac19$.',
+      { hint: 'Busca las parejas con un dado mayor y después con el otro mayor.' }),
+    play('cuantas-parejas', 'Se lanzan dos dados. Pon la probabilidad de cada cosa.', { et: ['la suma es 4', 'la suma es 9', 'los dos son 4', 'la suma es 11 o 12'], metas: ['3/36', '4/36', '1/36', '3/36'], fichas: ['3/36', '3/36', '4/36', '1/36', '2/36', '5/36', '1/11'],
+      mira: ['Cuenta las parejas ordenadas que suman 4.', 'Cuenta las parejas ordenadas que suman 9.', '¿Qué tiene que salir en el primer dado y qué en el segundo?', 'Suma las parejas de 11 y las de 12.'], trampas: { '0:1/11': 'Hay 11 sumas, pero no son igual de fáciles: se cuentan parejas.', '0:2/36': '1 + 3 y 3 + 1 son casos distintos.', '1:2/36': '4 + 5 y 5 + 4 son casos distintos.', '3:2/36': 'Cuenta las de 11 y también la de 12.' }, ok: 'Se cuentan las 36 parejas, no las 11 sumas.' },
+      'Suma 4: 1+3, 2+2, 3+1. Suma 9: 3+6, 4+5, 5+4, 6+3. Los dos 4: solo 4 y 4. Suma 11 o 12: 5+6, 6+5, 6+6.',
+      { hint: 'Escribe las parejas una por una, con el primer dado y el segundo.' }),
+    play('cero-a-uno', 'Se saca al azar una tarjeta numerada del **1 al 20**. Pon la probabilidad de cada cosa.', { et: ['mayor que 20', 'menor que 21', 'par', 'múltiplo de 5'], metas: ['0', '1', '1/2', '1/5'], fichas: ['0', '1', '1/2', '1/5', '4', '1/4', '20'],
+      mira: ['¿Hay alguna tarjeta que sirva?', '¿Hay alguna que no sirva?', '¿Cuántas de las 20 sirven?', 'Cuenta las que sirven y compáralas con las 20.'], trampas: { '1:20': 'Esas son las tarjetas que sirven: falta dividir entre 20.', '3:4': 'Esas son las que sirven: falta dividir entre 20.', '3:1/4': 'Son 4 tarjetas, pero de 20.' }, ok: '0 es imposible, 1 es seguro, y nada pasa de 1.' },
+      'Ninguna pasa de 20: 0. Todas son menores que 21: 1. Diez pares: $\\tfrac12$. 5, 10, 15 y 20: $\\tfrac{4}{20} = \\tfrac15$.',
+      { hint: 'Si tu respuesta pasa de 1, no es una probabilidad.' }),
+    play('punto-escala', 'En una bolsa hay **3** bolas naranjas y **12** verdes. Pon en la escala la probabilidad de sacar **naranja**.', { k: 3, n: 15 },
+      'Son 3 de 15: $\\tfrac15 = 0.2$, cerca de lo imposible.',
+      { hint: '¿Cuántas bolas hay en total? Simplifica la fracción y ubícala.' }),
+    play('grupo-gafas', 'En un grupo hay **18** mujeres y **12** hombres. Usan gafas **6** mujeres y **4** hombres. Se escoge a una persona al azar (la raya son las gafas). Pon la probabilidad de cada cosa.', { n: 30, m: 18, mg: 6, hg: 4, et: ['mujer', 'usa gafas', 'hombre sin gafas'], metas: ['3/5', '1/3', '4/15'], fichas: ['3/5', '1/3', '4/15', '3/2', '2/5', '2/3', '1/5'],
+      mira: ['Mujeres sobre todas las personas.', 'Junta a los que usan gafas, de los dos grupos.', 'Quita de los hombres los que usan gafas; abajo van todas las personas.'], trampas: { '0:3/2': 'Eso es mujeres sobre hombres: pasa de 1.', '0:2/5': 'Eso es hombres sobre todos.', '1:1/5': 'Esas son solo las mujeres con gafas.', '2:2/3': 'Eso es sobre los 12 hombres, y se escoge entre todos.', '2:2/5': 'Esos son todos los hombres.' }, ok: 'Siempre sobre las 30 personas.' },
+      '$\\tfrac{18}{30} = \\tfrac35$; $\\tfrac{10}{30} = \\tfrac13$; hombres sin gafas hay 8: $\\tfrac{8}{30} = \\tfrac{4}{15}$.',
+      { hint: 'Abajo va siempre el total de personas entre las que se escoge.' }),
+    play('sube-favorables', 'Sube al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De las 36 parejas de dos dados, ¿en cuántas el **producto** es menor que **5**?', r: 8, c: '4 + 2 + 1 + 1', e: { 5: 'Cuenta también las parejas al revés.' } },
+      { q: 'En una urna de **20** bolas, la probabilidad de sacar roja es $\\tfrac35$. ¿Cuántas **rojas** hay?', r: 12, c: '\\tfrac35 \\cdot 20', e: { 8: 'Esas son las que no son rojas.', 3: 'Son 3 de cada 5.' } },
+      { q: 'Hay **9** bolas verdes y la probabilidad de sacar verde es $\\tfrac38$. ¿Cuántas bolas hay **en total**?', r: 24, c: '9 \\cdot \\tfrac83', e: { 15: 'Esas son las que no son verdes.', 8: 'Son 3 de cada 8, y verdes hay 9.' } }] },
+      'Producto menor que 5: 1 con 1, 2, 3 y 4; 2 con 1 y 2; 3 con 1 y 4 con 1: 8. $\\tfrac35$ de 20 son 12. Y $\\tfrac38 = \\tfrac{9}{24}$.',
+      { hint: 'Favorables arriba, posibles abajo: busca una fracción igual.' }),
+    sol('Se lanzan dos dados corrientes. ¿Cuál es la probabilidad de que la suma de los dos resultados sea mayor que 9?',
+      ['Con dos dados hay $6 \\cdot 6 =$ [[36]] resultados igual de probables', 'Suma 10: tres parejas. Suma 11: [[2]] parejas. Suma 12: una sola', 'Favorables: $3 + 2 + 1 =$ [[6]]', 'Probabilidad: $\\tfrac{6}{36}$, que simplificada es [[$\\tfrac16$]]'],
+      ['$\\tfrac14$', '11', '3'],
+      'Los 36 pares son igual de probables; las sumas no. Por eso se cuentan pares: (4, 6), (5, 5), (6, 4), (5, 6), (6, 5) y (6, 6).',
+      'Haz la lista de las parejas, no de las sumas: (4, 6) y (6, 4) son resultados distintos.'),
+    err('En una bolsa hay 4 bolas rojas, 6 azules y 5 verdes. Se saca una bola al azar. ¿Cuál es la probabilidad de que NO sea azul?',
+      ['En total hay $4 + 6 + 5 = 15$ bolas', 'No son azules las rojas y las verdes: $4 + 5 = 9$', 'Probabilidad: $\\tfrac{9}{6} = \\tfrac32$'], 2,
+      ['Probabilidad: $\\tfrac{9}{15} = \\tfrac35$', 'Probabilidad: $\\tfrac{6}{15} = \\tfrac25$', 'Probabilidad: $\\tfrac{9}{24} = \\tfrac38$'],
+      'Los casos posibles son todas las bolas (15), no las azules. Además, una probabilidad nunca pasa de 1: $\\tfrac32$ avisa del error.',
+      'Toda probabilidad está entre 0 y 1. ¿Lo cumple la respuesta?'),
+    opc('Se tienen diez tarjetas numeradas del 1 al 10 y se saca una al azar. La probabilidad de que el número de la tarjeta sea múltiplo de 3 o mayor que 7 es:',
+      ['$\\tfrac35$', '$\\tfrac12$', '$\\tfrac{3}{10}$', '$\\tfrac25$'], 1,
+      'Múltiplos de 3: 3, 6 y 9. Mayores que 7: 8, 9 y 10. El 9 está en las dos listas: sirven 5 tarjetas de 10.',
+      'Escribe los números que sirven en cada condición y no cuentes dos veces el que se repite.'),
+  ]);
+
+  // Ocho juegos con las escenas de la explicación (js/games/probabilidad-escena.js, spec 2026-11-24-ejercicios-explora) y la zona de examen.
+  setLesson('pu-pb-2', [
+    play('lo-que-falta', 'Pon en cada renglón la probabilidad que **completa** el total.', { et: ['a tiempo 3/8: tarde', 'falla el 8 %: no falla', 'ninguno 1/10: al menos uno', 'todos 1/4: alguno no'], metas: ['5/8', '92 %', '9/10', '3/4'], fichas: ['5/8', '92 %', '9/10', '3/4', '8/3', '2 %', '1/10'],
+      mira: ['Las dos juntas deben dar 8/8.', 'Las dos juntas deben dar 100 %.', 'Al menos uno es todo lo que no es «ninguno».', 'Si no son todos, hay alguno que no.'], trampas: { '0:8/3': 'Una probabilidad no pasa de 1.', '1:2 %': 'El total es 100 %, no 10 %.', '2:1/10': 'Esa es la de ninguno.' }, ok: 'Lo que pasa y lo que no pasa completan 1.' },
+      '$1 - \\tfrac38 = \\tfrac58$; $100 - 8 = 92\\,\\%$; $1 - \\tfrac{1}{10} = \\tfrac{9}{10}$; $1 - \\tfrac14 = \\tfrac34$.',
+      { hint: 'En cada renglón pregúntate qué es todo lo que no es eso, y cuánto le falta al total.' }),
+    play('cruce-sin-b', 'A pasa con probabilidad $\\tfrac35$ y B con $\\tfrac14$; son independientes. Toca «pasa **A** y **no** pasa B».', { c: 5, f: 4, a: 3, b: 1, texto: '9 de 20', ok: 'Nueve de veinte: 3/5 por 3/4.' },
+      'Las tres columnas de A y las tres filas de «no B»: $\\tfrac35 \\cdot \\tfrac34 = \\tfrac{9}{20}$.',
+      { hint: 'Quédate con las columnas de A y con las filas en que B no pasa.' }),
+    play('fallan-todos', 'Una alarma suena con probabilidad $\\tfrac14$ y otra con $\\tfrac15$, cada una por su lado. Completa.', { x: 'suena 1/4', y: 'suena 1/5', et: ['calla la 1.ª', 'calla la 2.ª', 'callan ambas', 'suena alguna'], metas: ['3/4', '4/5', '3/5', '2/5'], fichas: ['3/4', '4/5', '3/5', '2/5', '9/20', '1/20', '31/20'],
+      mira: ['Lo que le falta a 1/4 para 1.', 'Lo que le falta a 1/5 para 1.', 'Multiplica las dos probabilidades de callar y simplifica.', 'Todo lo que no es «callan ambas».'], trampas: { '2:31/20': 'Se multiplican; sumadas pasan de 1.', '2:1/20': 'Esa es la de que suenen las dos.', '3:9/20': 'Sumaste 1/4 y 1/5: el caso en que suenan las dos quedó dos veces.', '3:1/20': 'Esa es la de que suenen las dos.' }, ok: 'Alguna es 1 menos ninguna.' },
+      'Callan: $\\tfrac34$ y $\\tfrac45$. Las dos: $\\tfrac34 \\cdot \\tfrac45 = \\tfrac35$. Suena alguna: $1 - \\tfrac35 = \\tfrac25$.',
+      { hint: '«Alguna» es más fácil de contar al revés: ¿cuándo no suena ninguna?' }),
+    play('no-se-afectan', '¿En cuáles lo primero **no cambia** la probabilidad de lo segundo? Toca todas.', { casos: [{ t: 'lanzar un dado dos veces', si: true }, { t: 'sacar dos cartas sin devolver', no: 'Sin devolver hay una carta menos en la segunda.' }, { t: 'lanzar una moneda y un dado', si: true }, { t: 'sacar una bola, guardarla y sacar otra', no: 'Al sacar la segunda, la bolsa ya tiene una bola menos.' }, { t: 'sacar una bola, devolverla y sacar otra', si: true }], falta: 'Falta otra: mira si lo segundo tiene los mismos casos, pase lo que pase en lo primero.', ok: 'En esas se multiplica sin cambiar nada.' },
+      'El dado, la moneda y la bolsa repuesta quedan iguales para la segunda vez. Sin devolver, la segunda vez hay una menos.',
+      { hint: 'Imagina que lo primero ya pasó. ¿Lo segundo tiene los mismos casos?' }),
+    play('arbol-bolsa', 'Una bolsa tiene **4** naranjas y **2** verdes. Se sacan dos **sin devolver**. Pon la probabilidad de cada segunda rama.', { n: 4, v: 2, p1: ['4/6', '2/6'], metas: ['3/5', '2/5', '4/5', '1/5'], fichas: ['3/5', '2/5', '4/5', '1/5', '3/5', '4/6', '2/6', '3/6'],
+      mira: ['Salió naranja: ¿cuántas naranjas quedan, de cuántas bolas?', 'Salió naranja: ¿cuántas verdes quedan, de cuántas bolas?', 'Salió verde: ¿cuántas naranjas quedan, de cuántas bolas?', 'Salió verde: ¿cuántas verdes quedan, de cuántas bolas?'], trampas: { '0:4/6': 'Esa es la primera rama: ahora hay una bola menos.', '0:3/6': 'También hay una bola menos en total.', '0:4/5': 'La naranja que salió ya no está.', '1:2/6': 'En total hay una bola menos.', '2:4/6': 'En total hay una bola menos.', '2:3/5': 'La que salió fue verde: las naranjas siguen completas.', '3:2/6': 'La verde que salió ya no está.' }, ok: 'Las ramas que salen del mismo punto suman 1.' },
+      'Tras naranja quedan 3 y 2 de 5: $\\tfrac35$ y $\\tfrac25$. Tras verde quedan 4 y 1 de 5: $\\tfrac45$ y $\\tfrac15$.',
+      { hint: 'Dibuja la bolsa después de la primera bola y vuelve a contar.' }),
+    play('devuelve-o-no', 'Una bolsa tiene **3** azules y **4** blancas. Se sacan dos, una y luego otra. Pon la probabilidad de cada cosa.', { et: ['2.ª azul tras azul, devolviendo', '2.ª azul tras azul, sin devolver', 'dos azules, devolviendo', 'dos azules, sin devolver'], metas: ['3/7', '1/3', '9/49', '1/7'], fichas: ['3/7', '1/3', '9/49', '1/7', '2/7', '6/7', '6/49'],
+      mira: ['Si se devuelve, la bolsa queda igual que al comienzo.', 'Hay una azul menos y una bola menos: simplifica.', 'Multiplica dos veces la misma probabilidad.', 'Multiplica la primera por la segunda, que ya cambió, y simplifica.'], trampas: { '1:2/7': 'Quitaste la azul, pero no bajaste el total.', '2:6/7': 'Se multiplican, no se suman.', '2:6/49': 'Al devolver, la segunda vez hay otra vez 3 azules.', '3:6/49': 'En la segunda quedan 6 bolas, no 7.' }, ok: 'Sin devolver, la segunda fracción cambia arriba y abajo.' },
+      'Devolviendo: $\\tfrac37$ y $\\tfrac37 \\cdot \\tfrac37 = \\tfrac{9}{49}$. Sin devolver: $\\tfrac26 = \\tfrac13$ y $\\tfrac37 \\cdot \\tfrac13 = \\tfrac17$.',
+      { hint: 'Antes de cada cuenta pregúntate cuántas bolas hay en la bolsa en ese momento.' }),
+    play('falla-cuadrado', 'Dos tiros independientes fallan con la **misma** probabilidad. La de que **al menos uno acierte** es **0.84**. Mueve la probabilidad de fallar.', { al: 0.84 },
+      'Fallan los dos con $1 - 0.84 = 0.16$, y $0.4 \\cdot 0.4 = 0.16$: cada uno falla con 0.4.',
+      { hint: 'Si al menos uno acierta con 0.84, ¿con cuánto fallan los dos? Busca un número que, multiplicado por sí mismo, dé eso.' }),
+    play('sube-por-ciento', 'Sube al porcentaje que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Llueve con **30 %** y hay trancón con **40 %**, sin que uno afecte al otro. ¿Con qué porcentaje pasan **los dos**?', r: 12, c: '0.3 \\cdot 0.4 \\cdot 100', e: { 70: 'Se multiplican, no se suman.' } },
+      { q: 'Una máquina falla con **20 %** y otra con **30 %**, cada una por su lado. ¿Con qué porcentaje funciona **al menos una**?', r: 94, c: '100 - 0.2 \\cdot 0.3 \\cdot 100', e: { 56: 'Así funcionan las dos.', 50: 'Los fallos se multiplican.', 6: 'Así fallan las dos.' } },
+      { q: 'En una bolsa hay **4** rojas y **1** negra. Se sacan dos **sin devolver**. ¿Con qué porcentaje las dos son **rojas**?', r: 60, c: '\\tfrac45 \\cdot \\tfrac34 \\cdot 100', e: { 64: 'Así sería devolviendo la primera.', 80: 'Esa es solo la primera.' } }] },
+      '$0.3 \\cdot 0.4 = 0.12$. Fallan las dos con $0.06$: funciona al menos una con 94 %. $\\tfrac45 \\cdot \\tfrac34 = \\tfrac{12}{20}$: 60 %.',
+      { hint: 'Independientes se multiplican; «al menos una» es el total menos «ninguna»; sin devolver cambia la bolsa.' }),
+    sol('Una bodega tiene tres alarmas que funcionan cada una por su lado. Cada alarma suena ante un intruso con probabilidad 0.7. Si entra un intruso, ¿cuál es la probabilidad de que suene al menos una alarma?',
+      ['Lo contrario de «al menos una suena» es «[[ninguna suena]]»', 'Cada alarma se queda callada con probabilidad $1 - 0.7 =$ [[0.3]]', 'Se quedan calladas las tres: $0.3 \\cdot 0.3 \\cdot 0.3 =$ [[0.027]]', 'Suena al menos una: $1 - 0.027 =$ [[0.973]]'],
+      ['todas suenan', '0.09', '0.343', '2.1'],
+      'Con tres intentos solo cambia el caso contrario: que fallen los tres, un factor por intento. En $0.3^3$ se multiplica $3 \\cdot 3 \\cdot 3 = 27$ y, como hay tres factores con una cifra decimal, el resultado lleva tres: $0.027$. Con dos factores ($0.09$) faltaría una alarma; $0.7^3 = 0.343$ es que suenen las tres, y sumar $0.7 + 0.7 + 0.7 = 2.1$ no puede ser una probabilidad.',
+      '«Al menos una» reúne muchos casos. ¿Cuál es el único que queda por fuera? Multiplica una vez por cada alarma.'),
+    err('En una bolsa hay 4 bolas rojas y 6 azules. Se sacan dos bolas, una después de la otra y sin devolver la primera. ¿Cuál es la probabilidad de que las dos sean rojas?',
+      ['La primera es roja con probabilidad $\\tfrac{4}{10}$', 'La segunda es roja con probabilidad $\\tfrac{4}{10}$, porque la bolsa es la misma', 'Las dos cosas pasan a la vez: $\\tfrac{4}{10} \\cdot \\tfrac{4}{10} = \\tfrac{16}{100}$'], 1,
+      ['Si la primera fue roja, quedan 3 rojas entre 9 bolas: la segunda es roja con probabilidad $\\tfrac{3}{9}$', 'Si la primera fue roja, quedan 3 rojas entre 10 bolas: $\\tfrac{3}{10}$', 'Si la primera fue roja, quedan 4 rojas entre 9 bolas: $\\tfrac{4}{9}$'],
+      'Sacar sin devolver cambia la bolsa: hay una bola menos en total y una roja menos. La segunda probabilidad se calcula con lo que quedó: $\\tfrac{4}{10} \\cdot \\tfrac{3}{9} = \\tfrac{12}{90} = \\tfrac{2}{15}$. Solo si la bola se devuelve se repite $\\tfrac{4}{10}$ (y entonces el producto de dos sucesos independientes sí sería $\\tfrac{4}{10} \\cdot \\tfrac{4}{10}$).',
+      'Imagina que ya sacaste una roja y la dejaste afuera. ¿Cuántas bolas hay ahora en la bolsa y cuántas son rojas?'),
+    opc('En una caja hay 3 bombillos defectuosos y 7 buenos. Se sacan dos bombillos al azar, uno después del otro y sin devolver el primero. La probabilidad de que los dos sean buenos es:',
+      ['$\\tfrac{49}{100}$', '$\\tfrac{7}{10}$', '$\\tfrac{7}{15}$', '$\\tfrac{21}{50}$'], 2,
+      'El primero es bueno con probabilidad $\\tfrac{7}{10}$; para el segundo quedan 6 buenos de 9: $\\tfrac{7}{10} \\cdot \\tfrac{6}{9} = \\tfrac{42}{90} = \\tfrac{7}{15}$.',
+      'Al no devolver el primer bombillo, la caja cambia: cuenta cuántos buenos y cuántos en total quedan.'),
+  ]);
+
+  addExam('pu-probabilidad', [
+    ['pu-pb-1', 'Con resultados igual de probables, P = favorables / posibles.',
+      opc('Se lanza un dado corriente. La probabilidad de obtener un número mayor que 4 es:', ['$\\tfrac12$', '$\\tfrac23$', '$\\tfrac16$', '$\\tfrac13$'], 3,
+        'Sirven el 5 y el 6: $\\tfrac26 = \\tfrac13$.', 'Cuenta cuáles caras del dado sirven.')],
+    ['pu-pb-2', 'P(no A) = 1 − P(A).',
+      opc('La probabilidad de que llueva mañana es 0.35. La probabilidad de que no llueva es:', ['0.65', '0.35', '1.35', '0.5'], 0,
+        '$1 - 0.35 = 0.65$.', 'Llover y no llover completan el total, que es 1.')],
   ]);
 });

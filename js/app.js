@@ -364,14 +364,14 @@ function renderComponents(c) {
         <span class="comp-go" aria-hidden="true">${ICON.right}</span></button>`;
     }).join('')}</div>
     ${doneN === ls.length && !soonOf(c).length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
-    ${c.id === 'preuda' && !cuentaDeColegio() ? librosHTML() : ''}</div>
+    ${simIcfHTML(c)}${c.id === 'preuda' && !cuentaDeColegio() ? librosHTML() : ''}</div>
     ${gymFabHTML(c, courseLevelUi(c, null, { done: S.done, last: S.lastLesson }))}
   </div>`;
   view.querySelectorAll('[data-block]').forEach(b => b.onclick = () => {
     openBlock = { course: c.id, id: b.dataset.block }; renderLearn(); $('[data-back]', view)?.focus({ preventScroll: true });
   });
   $('[data-continue]', view)?.addEventListener('click', () => startLesson(c, cur));
-  bindCourseHead(); bindAccesoAviso(); bindGymFab(c); bindLibros(view);
+  bindCourseHead(); bindAccesoAviso(); bindGymFab(c); bindLibros(view); simIcfBind(view);
   view.scrollTop = 0;
 }
 function renderLearn() {

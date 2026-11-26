@@ -19626,6 +19626,317 @@ async function simRevisar(s, boton) {
   ov.querySelectorAll('[data-les]').forEach(b => { b.onclick = () => { const f = findLesson(b.dataset.les); cierra(); if (f && isUnlocked(f.c, f.l)) startLesson(f.c, f.l); else openCourse('preicfes'); }; });
 }
 ;
+//#archivo js/simulacros-icf.js
+// Simulacros del Preicfes que el estudiante presenta por su cuenta (spec 2026-11-26-simulacros-preicfes). Cada simulacro tiene las
+// cinco pruebas, de 24 preguntas A–D nuevas; cada prueba se presenta aparte, con reloj, y se revisa con explicaciones. Con las cinco
+// presentadas sale el puntaje global de 0 a 500 (Lectura, Matemáticas, Sociales y Ciencias pesan 3; Inglés, 1). Los datos van en
+// js/simulacro-icf-N.js (PI_SIMULACROS.push(…)); este archivo va después de simulacros.js (usa simTexto, simMate y SIM_L).
+const PI_SIMULACROS = [];
+const SIM_PRUEBAS = [['lectura', 'Lectura Crítica'], ['matematicas', 'Matemáticas'], ['sociales', 'Sociales y Ciudadanas'], ['ciencias', 'Ciencias Naturales'], ['ingles', 'Inglés']];
+const SIM_MIN = 48;   // minutos por prueba: dos por pregunta
+
+// ---------------------------------------------------------------- lógica pura (se prueba en Node)
+const simPuntaje = (aciertos, n) => Math.round(100 * aciertos / n);
+function simGlobal(p) {
+  if (!SIM_PRUEBAS.every(([k]) => p[k] != null)) return null;
+  return Math.round(5 * (3 * (p.lectura + p.matematicas + p.sociales + p.ciencias) + p.ingles) / 13);
+}
+// Mundos para repasar: los que más errores tuvieron, en orden.
+function simRepaso(items, resp) {
+  const n = new Map();
+  items.forEach((it, i) => { if (resp[i] !== it.r) n.set(it.m, (n.get(it.m) || 0) + 1); });
+  return [...n].sort((a, b) => b[1] - a[1]).map(x => x[0]);
+}
+// Ayudantes para escribir los datos: P(mundo, enunciado, opciones, índice correcto, explicación, texto?) y T(título, párrafos, tabla?).
+const simP = (m, q, o, r, e, d) => ({ m, q, o, r, e, d: d ?? null });
+const simT = (title, paras, tabla) => ({ title, paras, tabla });
+
+// ---------------------------------------------------------------- pantalla
+const simRes = id => (S.simIcf ||= {})[id] ||= {};
+const simNotas = s => Object.fromEntries(SIM_PRUEBAS.map(([k]) => [k, simRes(s.id)[k]?.best ?? null]));
+const simLlave = () => C_PREICFES()?.units.find(u => u.exam)?.exam.id;
+const C_PREICFES = () => COURSES.find(c => c.id === 'preicfes');
+function simTextoIcf(t, abierto) {
+  const tabla = t.tabla ? `<table class="simi-tabla">${t.tabla.map((f, i) => `<tr>${f.map(c => (i ? `<td>${simMate(c)}</td>` : `<th>${simMate(c)}</th>`)).join('')}</tr>`).join('')}</table>` : '';
+  return simTexto(t, abierto).replace('</div></details>', `${tabla}</div></details>`);
+}
+
+function simIcfHTML(c) {
+  if (c.id !== 'preicfes' || !PI_SIMULACROS.length) return '';
+  const llave = simLlave(), cerrado = typeof planMotivo === 'function' && llave && planMotivo(llave);
+  return `<section class="simi" aria-label="Simulacros"><h2 class="comp-title">Simulacros</h2><p class="simi-p">Las cinco pruebas, con preguntas nuevas y reloj: ${SIM_MIN} minutos por prueba. Presenta cada una cuando quieras; con las cinco sale tu puntaje global.</p>
+    ${PI_SIMULACROS.map(s => { const nt = simNotas(s), gl = simGlobal(nt), hechas = SIM_PRUEBAS.filter(([k]) => nt[k] != null).length;
+      return `<article class="simi-card"><header><b>${esc(s.titulo)}</b><span>${gl != null ? `<strong>${gl}</strong> de 500` : `${hechas} de 5 pruebas`}</span></header>
+      <div class="simi-pr">${SIM_PRUEBAS.map(([k, nom]) => `<button type="button" data-simi="${s.id}" data-pr="${k}"${cerrado ? ' data-lock="1"' : ''}><span>${esc(nom)}</span><small>${cerrado ? ICON.lock : nt[k] != null ? `${nt[k]} de 100` : 'Presentar'}</small></button>`).join('')}</div></article>`; }).join('')}</section>`;
+}
+function simIcfBind(root) {
+  root.querySelectorAll('[data-simi]').forEach(b => { b.onclick = () => {
+    if (b.dataset.lock) return openBloqueo(simLlave());
+    const s = PI_SIMULACROS.find(x => x.id === b.dataset.simi); if (s) simIcfAbre(s, b.dataset.pr);
+  }; });
+}
+
+function simIcfAbre(s, pr) {
+  const nom = SIM_PRUEBAS.find(x => x[0] === pr)[1], r = simRes(s.id)[pr], cur = S.simIcfCurso;
+  const sigue = cur && cur.id === s.id && cur.pr === pr && cur.fin > Date.now();
+  openSheet(`<div class="ls exam-sheet"><p class="eyebrow">${esc(s.titulo)}</p><h3>${esc(nom)}</h3><p class="ls-meta"><span>${ICON.clock} ${SIM_MIN} min</span><span>${ICON.target} ${s.pruebas[pr].length} preguntas</span></p>
+    <ul class="exam-rules"><li>Preguntas de selección múltiple con una sola respuesta: A, B, C o D.</li><li>El reloj no se detiene si sales; puedes volver mientras quede tiempo.</li><li>Puedes ir y volver entre preguntas. Al entregar verás cada respuesta explicada.</li>${r ? `<li>Tu mejor resultado: ${r.best} de 100. Puedes volver a presentarla.</li>` : ''}</ul>
+    <button class="btn main" type="button" data-go>${sigue ? 'Seguir' : 'Empezar'}</button>${r?.last ? '<button class="btn ghost" type="button" data-rev>Ver mis respuestas</button>' : ''}</div>`, sh => {
+    sh.querySelector('[data-go]').onclick = () => { closeSheet(false); simIcfPresenta(s, pr, sigue ? cur : null); };
+    const rv = sh.querySelector('[data-rev]'); if (rv) rv.onclick = () => { closeSheet(false); simIcfRevisa(s, pr, r.last.resp, r.last.pct); };
+  });
+}
+
+function simIcfPresenta(s, pr, cur) {
+  if (typeof cleanup === 'function') { cleanup(); cleanup = null; }
+  const L = s.pruebas[pr], n = L.length, nom = SIM_PRUEBAS.find(x => x[0] === pr)[1];
+  const resp = cur ? cur.resp.slice() : L.map(() => -1), fin = cur ? cur.fin : Date.now() + SIM_MIN * 60000;
+  let k = 0, listo = false, timer = 0;
+  const guarda = () => { S.simIcfCurso = { id: s.id, pr, resp, fin }; save(); };
+  guarda();
+  const ov = $('#overlay');
+  ov.innerHTML = `<div class="lesson exam simu"><div class="lesson-top"><button class="icon-btn" data-close aria-label="Salir">${ICON.x}</button><b class="simu-t">${esc(nom)} · ${esc(s.titulo)}</b><span class="exam-clock" role="timer" aria-label="Tiempo restante">${ICON.clock}<b></b></span></div>
+    <div class="lesson-body" tabindex="-1"></div><nav class="simu-nav" aria-label="Preguntas"></nav><div class="lesson-foot exam-foot"><button class="btn ghost skip" type="button">Anterior</button><button class="btn main" type="button">Siguiente</button></div></div>`;
+  ov.classList.add('open'); document.body.classList.add('in-lesson');
+  const body = $('.lesson-body', ov), nav = $('.simu-nav', ov), clock = $('.exam-clock', ov), ant = $('.skip', ov), sig = $('.btn.main', ov);
+  const marca = j => { resp[k] = resp[k] === j ? -1 : j; guarda(); };
+  function pinta(foco) {
+    const p = L[k], t = p.d != null ? s.textos[p.d] : null;
+    body.innerHTML = `<div class="simu-c${t ? ' con' : ''}">${t ? simTextoIcf(t, k === 0 || L[k - 1].d !== p.d || innerWidth >= 900) : ''}<div class="simu-q"><p class="ex-kind">Pregunta ${k + 1} de ${n}</p><p class="simu-e" id="simu-e">${simMate(p.q)}</p><div class="simu-ops" role="radiogroup" aria-labelledby="simu-e">${p.o.map((o, j) => `<button type="button" role="radio" aria-checked="${resp[k] === j}" tabindex="${(resp[k] < 0 ? 0 : resp[k]) === j ? 0 : -1}" data-o="${j}"><b>${SIM_L[j]}</b><span>${simMate(o)}</span></button>`).join('')}</div></div></div>`;
+    body.querySelectorAll('[data-o]').forEach(b => { b.onclick = () => { marca(+b.dataset.o); Sfx.tap(); ops(+b.dataset.o); }; });
+    ant.disabled = !k; sig.textContent = k === n - 1 ? 'Entregar' : 'Siguiente'; puntos(); body.scrollTop = 0; if (foco) body.focus({ preventScroll: true });
+  }
+  function ops(f) { body.querySelectorAll('[data-o]').forEach((b, j) => { b.setAttribute('aria-checked', resp[k] === j); b.tabIndex = (resp[k] < 0 ? 0 : resp[k]) === j ? 0 : -1; if (j === f) b.focus({ preventScroll: true }); }); puntos(); }
+  function puntos() { nav.innerHTML = L.map((p, i) => `<button type="button" class="${i === k ? 'cur' : ''}${resp[i] >= 0 ? ' hecha' : ''}" data-i="${i}" aria-label="Pregunta ${i + 1}${resp[i] >= 0 ? ', respondida' : ''}"${i === k ? ' aria-current="true"' : ''}>${i + 1}</button>`).join(''); nav.querySelectorAll('[data-i]').forEach(b => { b.onclick = () => { k = +b.dataset.i; pinta(true); }; }); nav.querySelector('.cur')?.scrollIntoView({ block: 'nearest', inline: 'center' }); }
+  ant.onclick = () => { if (k) { k--; pinta(true); } };
+  sig.onclick = async () => {
+    if (k < n - 1) { k++; return pinta(true); }
+    const f = resp.filter(o => o < 0).length;
+    if (await ask({ title: '¿Entregar la prueba?', text: f ? `Te ${f === 1 ? 'falta 1 pregunta' : `faltan ${f} preguntas`} por responder.` : 'Respondiste todas.', ok: 'Entregar', cancel: 'Seguir' })) entrega();
+  };
+  const tick = () => { const q = Math.max(0, (fin - Date.now()) / 1000); $('b', clock).textContent = fmtClock(q); clock.classList.toggle('low', q <= 60); if (q <= 0 && !listo) entrega(); };
+  function entrega() {
+    if (listo) return; listo = true; quita();
+    const ok = resp.filter((o, i) => o === L[i].r).length, pct = simPuntaje(ok, n), r = simRes(s.id);
+    r[pr] = { best: Math.max(r[pr]?.best ?? 0, pct), last: { pct, resp: resp.slice(), at: Date.now() } };
+    delete S.simIcfCurso; save();
+    cierra(); simIcfRevisa(s, pr, resp, pct, true);
+  }
+  function tecla(e) { if (listo || document.querySelector('dialog[open], .dialog')) return; const b = e.target.closest?.('[data-o]'); if (b && ['ArrowDown', 'ArrowUp'].includes(e.key)) { e.preventDefault(); const j = (+b.dataset.o + (e.key === 'ArrowDown' ? 1 : 3)) % 4; resp[k] = -1; marca(j); ops(j); } else if (/^[a-d]$/i.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) { const j = SIM_L.indexOf(e.key.toUpperCase()); resp[k] = -1; marca(j); ops(j); } }
+  const quita = () => { clearInterval(timer); document.removeEventListener('keydown', tecla); };
+  function cierra() { quita(); ov.classList.remove('open'); ov.innerHTML = ''; document.body.classList.remove('in-lesson'); lessonClose = null; }
+  lessonClose = async () => { if (listo) return cierra(); if (await ask({ title: '¿Salir de la prueba?', text: 'El reloj sigue corriendo. Puedes volver desde el curso mientras te quede tiempo.', ok: 'Salir', cancel: 'Seguir', danger: true })) { if (listo) return; cierra(); go('learn'); } };
+  $('[data-close]', ov).onclick = () => lessonClose();
+  document.addEventListener('keydown', tecla);
+  timer = setInterval(tick, 500); pinta(); tick();
+}
+
+function simIcfRevisa(s, pr, resp, pct, recien) {
+  const L = s.pruebas[pr], nom = SIM_PRUEBAS.find(x => x[0] === pr)[1], ok = resp.filter((o, i) => o === L[i].r).length;
+  const nt = simNotas(s), gl = simGlobal(nt), rep = simRepaso(L, resp).slice(0, 4).map(w => ({ w, u: C_PREICFES().units.find(u => u.world === w) })).filter(x => x.u);
+  const ov = $('#overlay');
+  ov.innerHTML = `<div class="lesson exam simu"><div class="lesson-top"><button class="icon-btn" data-close aria-label="Salir">${ICON.x}</button><b class="simu-t">${esc(nom)} · ${esc(s.titulo)}</b></div><div class="lesson-body"><div class="simu-rev">
+    <div class="simu-nota"><b>${pct}</b><span>de 100<small>${ok} de ${L.length} preguntas${recien ? '' : ' · último intento'}</small></span></div>
+    ${gl != null ? `<p class="simi-gl">Con las cinco pruebas, tu puntaje global en este simulacro es <b>${gl}</b> de 500.</p>` : `<p class="simi-gl">Te ${5 - SIM_PRUEBAS.filter(([k]) => nt[k] != null).length === 1 ? 'falta 1 prueba' : `faltan ${5 - SIM_PRUEBAS.filter(([k]) => nt[k] != null).length} pruebas`} para tener el puntaje global.</p>`}
+    ${rep.length ? `<section class="er-sec er-rev"><h3>${ICON.bulb} Para repasar</h3>${rep.map(x => `<button class="btn ghost sm" type="button" data-w="${x.w}">${esc(x.u.title)} ${ICON.right}</button>`).join('')}</section>` : ''}
+    ${L.map((p, i) => { const o = resp[i], bien = o === p.r; return `<details class="er-q ${bien ? 'ok' : 'bad'}"><summary><span class="er-ic">${bien ? ICON.check : o < 0 ? '–' : ICON.x}</span><span><small>Pregunta ${i + 1} · ${bien ? 'Correcta' : o < 0 ? 'Sin responder' : 'Incorrecta'}</small>${simMate(p.q)}</span></summary><div class="er-q-body">${p.d != null ? simTextoIcf(s.textos[p.d], false) : ''}<ol class="simu-op2">${p.o.map((x, j) => `<li class="${j === p.r ? 'ok' : j === o ? 'mal' : ''}"><b>${SIM_L[j]}</b><span>${simMate(x)}${j === p.r ? '<small>Correcta</small>' : j === o ? '<small>La que marcaste</small>' : ''}</span></li>`).join('')}</ol><p class="fb-exp">${simMate(p.e)}</p></div></details>`; }).join('')}
+    </div></div><div class="lesson-foot"><button class="btn main" type="button">Continuar</button></div></div>`;
+  ov.classList.add('open'); document.body.classList.add('in-lesson');
+  const cierra = () => { ov.classList.remove('open'); ov.innerHTML = ''; document.body.classList.remove('in-lesson'); lessonClose = null; go('learn'); };
+  lessonClose = cierra; $('[data-close]', ov).onclick = cierra; $('.lesson-foot .btn', ov).onclick = cierra;
+  ov.querySelectorAll('[data-w]').forEach(b => { b.onclick = () => {
+    const c = C_PREICFES(), i = c.units.findIndex(u => u.world === b.dataset.w); cierra();
+    S.course = c.id; openBlock = { course: c.id, id: c.units[i].block }; openWorld = { course: c.id, i }; save(); go('learn');
+  }; });
+}
+;
+//#archivo js/simulacro-icf-1.js
+// Preicfes · Simulacro 1 (spec 2026-11-26-simulacros-preicfes): cinco pruebas de 24 preguntas A–D escritas para Zuka.
+PI_SIMULACROS.push((() => {
+  const P = simP, T = simT;
+  const textos = {
+    tren: T('El último tren de la tarde', [
+      'Desde que cerraron la estación, don Aurelio seguía subiendo cada tarde al andén. Llevaba el mismo saco de paño, ya brillante en los codos, y se sentaba en la banca de hierro que nadie había querido llevarse. A las cinco y diez, la hora en que durante cuarenta años pasó el tren hacia el río, sacaba su reloj de bolsillo, lo miraba, lo cerraba con un chasquido y volvía a guardarlo.',
+      'Los muchachos del pueblo se burlaban al principio. Después dejaron de verlo, como se deja de ver un árbol. Solo Marina, la nieta de la señora que vendía tintos, se atrevió un día a preguntarle a quién esperaba.',
+      '—A nadie —dijo él—. Me espera a mí la costumbre. Si un día no subo, ella se queda sola en la banca.',
+      'Marina no entendió, pero empezó a acompañarlo. Él le contaba qué pueblos había después del puente, cuánto pesaba un bulto de café mojado, por qué el maquinista tocaba tres veces el pito antes de la curva. Ella anotaba todo en un cuaderno de cuadros.',
+      'El invierno en que don Aurelio no volvió a subir, Marina se sentó en la banca a las cinco y diez. No tenía reloj, así que contó despacio hasta tres, como el pito antes de la curva. Luego abrió el cuaderno y empezó a leer en voz alta, para que la costumbre no se quedara sola.',
+    ]),
+    biblio: T('Bibliotecas abiertas hasta la medianoche', [
+      'En muchas ciudades del país, las bibliotecas públicas cierran a las seis de la tarde, justo cuando la mayoría de los estudiantes y trabajadores sale de sus jornadas. Es como abrir un comedor a la hora en que nadie tiene hambre.',
+      'Propongo que al menos una biblioteca por localidad abra hasta la medianoche. No se trata de un lujo. Para quien comparte una habitación con cuatro hermanos, una mesa iluminada y silenciosa es la diferencia entre estudiar y no hacerlo. Para quien no tiene internet en casa, es la única puerta a los trámites que hoy solo se hacen en línea.',
+      'Se dirá que no hay presupuesto. Pero el costo de mantener las luces y dos funcionarios de turno es pequeño frente a lo que una ciudad gasta en reparar lo que la falta de oportunidades rompe. Además, la experiencia de algunos municipios muestra que, cuando una biblioteca abre de noche, la calle que la rodea se vuelve más transitada y, por eso mismo, más segura.',
+      'Otros dirán que de noche nadie lee. Es posible que los primeros meses las salas estén medio vacías: los hábitos tardan en cambiar. Por eso la apertura debe evaluarse al año, no a la semana, y con cifras públicas de visitantes.',
+      'Una ciudad que apaga sus bibliotecas a las seis les dice a muchos de sus habitantes que el conocimiento tiene horario de oficina. Es hora de cambiar ese mensaje.',
+    ]),
+    verdad: T('¿Hay que decir siempre la verdad?', [
+      'Imagina que un amigo se esconde en tu casa porque alguien lo persigue para hacerle daño. El perseguidor toca la puerta y te pregunta si tu amigo está adentro. ¿Debes decir la verdad? Esta pregunta, que parece de película, ha ocupado a los filósofos durante siglos.',
+      'Una respuesta sostiene que mentir está mal siempre, sin excepción. Quien la defiende no niega que la mentira pueda traer buenas consecuencias en un caso; afirma que una regla moral que se rompe cuando conviene deja de ser una regla. Si cada uno decidiera cuándo mentir, nadie podría confiar en la palabra de nadie.',
+      'Otra respuesta mira los resultados. Para ella, lo correcto es lo que produce el mayor bien o el menor daño. Mentir al perseguidor salva una vida y no perjudica a ningún inocente; por eso, en ese caso, mentir no solo está permitido, sino que es lo que se debe hacer.',
+      'Entre las dos hay posiciones intermedias. Algunos distinguen entre mentir y callar: podrías negarte a responder sin decir nada falso. Otros señalan que quien amenaza a un inocente pierde el derecho a que se le diga la verdad.',
+      'Ninguna de estas respuestas cierra la discusión. Pero pensar en el caso extremo sirve para algo: obliga a preguntarnos si nuestras reglas valen por sí mismas o por lo que logran.',
+    ]),
+    agua: T('¿En qué se nos va el agua?', [
+      'En un hogar de la ciudad, cada persona usa en promedio 150 litros de agua al día. La tabla de abajo muestra en qué se van esos litros. La mayor parte no se usa para beber ni para cocinar, sino para limpiar y para llevarse lo que ya no sirve.',
+      'Consejo 1: una ducha de 5 minutos gasta la mitad que una de 10. Consejo 2: una botella llena de arena dentro del tanque del sanitario ahorra cerca de un litro en cada descarga. Consejo 3: lavar la ropa solo cuando la carga esté completa reduce el número de lavadas a la semana.',
+      'Una familia de cuatro personas que siga los tres consejos puede bajar su consumo hasta en una quinta parte, según los cálculos de la empresa de acueducto de la ciudad. Eso no solo reduce la factura: en temporada seca, cada litro que no se usa sigue guardado en el embalse.',
+      'Ojo: el agua que se gasta en la casa no es la única que cuenta. Producir una camiseta de algodón puede requerir más de dos mil litros entre el cultivo, el tinte y la fábrica, y esos litros no aparecen en ningún recibo.',
+    ], [['Uso', 'Litros por persona al día'], ['Ducha (10 minutos)', '45'], ['Sanitario', '35'], ['Lavar ropa', '25'], ['Otros', '20'], ['Lavar platos', '15'], ['Cocinar y beber', '10'], ['Total', '150']]),
+    jardin: T('My grandmother\'s garden', [
+      'My grandmother __(1)__ in a small house near the river. Every Saturday I visit her and we work in her garden. Last week we __(2)__ tomatoes and beans. She says that plants are __(3)__ than people because they never complain. For me, her garden is the __(4)__ beautiful place in the town.',
+    ]),
+    mensaje: T('A message from Sara', [
+      'Hi Lucas! I can\'t go to the football match tomorrow because I have to take my little sister to the doctor. Can we watch the next game together on Saturday at my house? My mum will make pizza. Text me! — Sara',
+    ]),
+    bus: T('The library on wheels', [
+      'In some small towns there is no library. Ten years ago, a teacher named Rosa decided to change that. She bought an old bus, painted it yellow and filled it with books. Every week the bus visits five villages in the mountains.',
+      'At first, only a few children came. Many of them had never held a book of their own. Rosa did not give up. She started reading stories aloud under the trees, and soon parents began to come too. Some adults asked for books about farming and health.',
+      'Today the bus carries more than two thousand books, and people can borrow them for a month. Volunteers from the city help Rosa on weekends. The biggest problem is the road: in the rainy season it is sometimes impossible to drive, so the villages wait for weeks.',
+      'Rosa says the bus is not only about books. "It is about feeling that someone remembers you," she explains.',
+    ]),
+  };
+
+  const lectura = [
+    P('icf-lc-literal', 'Según el texto, don Aurelio subía al andén a las cinco y diez porque', ['esperaba a un familiar que llegaba en tren', 'a esa hora pasó el tren durante cuarenta años', 'los muchachos le pedían que vigilara la estación', 'a esa hora vendían tinto en la estación'], 1, 'El párrafo 1 dice que a las cinco y diez «durante cuarenta años pasó el tren»; él mismo aclara después que no espera a nadie.', 'tren'),
+    P('icf-lc-literario', 'La frase «Me espera a mí la costumbre» sugiere que don Aurelio', ['cree que el tren volverá a pasar', 'no quiere hablar con Marina', 'tiene miedo de quedarse solo en su casa', 'sigue un hábito que le da sentido a sus tardes, aunque ya no haya tren'], 3, 'No espera a una persona: lo que lo lleva al andén es el hábito, que él trata casi como a un ser vivo que «se queda solo».', 'tren'),
+    P('icf-lc-literal', 'En el párrafo 2, la expresión «como se deja de ver un árbol» indica que los muchachos', ['se acostumbraron tanto a su presencia que ya no lo notaban', 'dejaron de ir a la estación', 'talaron los árboles del andén', 'lo respetaban por su edad'], 0, 'Un árbol que siempre está ahí deja de llamar la atención: con don Aurelio pasó lo mismo.', 'tren'),
+    P('icf-lc-estructura', '¿Qué función cumple el párrafo 4 dentro del relato?', ['Presenta un conflicto entre Marina y los muchachos', 'Describe cómo era la estación antes del cierre', 'Muestra cómo se forma el vínculo entre Marina y don Aurelio', 'Explica por qué cerraron la estación'], 2, 'En ese párrafo Marina empieza a acompañarlo, él le cuenta historias y ella las anota: nace la relación que el final retoma.', 'tren'),
+    P('icf-lc-literario', 'Al final, Marina cuenta despacio hasta tres porque', ['repite el pito del tren antes de la curva, como una manera de continuar lo que aprendió', 'está esperando que llegue un tren', 'no sabe leer la hora', 'quiere asustar a los muchachos del pueblo'], 0, 'Contar hasta tres «como el pito antes de la curva» repite un detalle que le contó don Aurelio: ella toma su lugar en la costumbre.', 'tren'),
+    P('icf-lc-evalua', '¿Cuál enunciado expresa mejor una idea central del cuento?', ['Las estaciones de tren deberían volver a abrirse', 'Los recuerdos y las costumbres pueden pasar de una persona a otra', 'Los jóvenes no respetan a los mayores', 'Los relojes de bolsillo son más confiables que los de pulsera'], 1, 'El cuento termina con Marina heredando la costumbre y las historias de don Aurelio.', 'tren'),
+
+    P('icf-lc-argumento', 'La tesis del autor es que', ['las bibliotecas deberían cerrar más temprano para ahorrar', 'los estudiantes deberían estudiar solo en su casa', 'al menos una biblioteca por localidad debería abrir hasta la medianoche', 'las bibliotecas deberían cobrar la entrada en la noche'], 2, 'Lo dice en el párrafo 2 («Propongo que…») y todo el texto lo defiende.', 'biblio'),
+    P('icf-lc-estructura', 'En el párrafo 3, el autor', ['responde a una posible objeción sobre el costo de su propuesta', 'cuenta la historia de una biblioteca famosa', 'reconoce que su propuesta es imposible', 'critica el trabajo de los funcionarios'], 0, '«Se dirá que no hay presupuesto» anuncia una objeción, y el resto del párrafo la responde.', 'biblio'),
+    P('icf-lc-argumento', '¿Cuál de estos datos fortalecería más el argumento del autor?', ['Muchas personas prefieren leer libros digitales', 'Algunas bibliotecas tienen goteras en el techo', 'El horario de los bancos también es corto', 'En una localidad que amplió el horario, las visitas nocturnas se triplicaron en un año'], 3, 'Mostraría que, con tiempo, la gente sí usa la biblioteca de noche: justo lo que el autor espera.', 'biblio'),
+    P('icf-lc-literal', 'La comparación «como abrir un comedor a la hora en que nadie tiene hambre» busca mostrar que', ['las bibliotecas deberían vender comida', 'el horario actual no coincide con el momento en que la gente puede ir', 'los estudiantes pasan hambre', 'las bibliotecas están lejos de las casas'], 1, 'Un servicio abierto cuando nadie puede usarlo pierde su sentido: eso critica el autor del horario.', 'biblio'),
+    P('icf-lc-evalua', 'Para defender su propuesta, el autor supone que', ['nadie lee de noche', 'todas las personas tienen internet en su casa', 'las bibliotecas tienen demasiados funcionarios', 'muchas personas no tienen en su casa condiciones adecuadas para estudiar'], 3, 'Su argumento se apoya en quienes comparten habitación o no tienen internet: si todos estudiaran bien en casa, perdería fuerza.', 'biblio'),
+    P('icf-lc-estructura', 'En el párrafo 4, el autor pide evaluar la medida al año y no a la semana porque', ['un año es lo que dura el presupuesto', 'así lo exige la ley', 'los hábitos de las personas tardan en cambiar', 'las cifras de la primera semana fueron malas'], 2, 'Él mismo lo explica: al comienzo las salas pueden estar medio vacías porque «los hábitos tardan en cambiar».', 'biblio'),
+
+    P('icf-lc-filosofico', 'La pregunta principal que discute el texto es', ['si está bien mentir en algún caso', 'cómo se debe esconder a un amigo', 'por qué las personas mienten', 'qué castigo merece un perseguidor'], 0, 'El caso del perseguidor sirve para preguntar si la verdad obliga siempre o si mentir puede estar justificado.', 'verdad'),
+    P('icf-lc-filosofico', 'Para la posición del párrafo 2, el problema de mentir «cuando conviene» es que', ['siempre trae malas consecuencias', 'está prohibido por las leyes', 'acabaría con la confianza en la palabra de los demás', 'solo los filósofos pueden decidir cuándo hacerlo'], 2, 'Esa posición no niega que una mentira pueda salir bien; dice que si cada uno decide cuándo mentir, nadie podría confiar en nadie.', 'verdad'),
+    P('icf-lc-filosofico', 'La diferencia entre las posiciones de los párrafos 2 y 3 es que', ['la primera acepta la mentira y la segunda la rechaza', 'la primera juzga por la regla y la segunda por las consecuencias', 'las dos piensan exactamente lo mismo', 'la segunda solo habla de lo que dicen las leyes'], 1, 'Una mira si se cumple la regla de no mentir; la otra, si el resultado produce el mayor bien o el menor daño.', 'verdad'),
+    P('icf-lc-evalua', '¿Cuál respuesta al perseguidor se ajusta a la idea de «callar sin mentir» del párrafo 4?', ['«Se fue hace rato hacia el río»', 'Abrirle la puerta para que busque', 'Pedir ayuda a los vecinos y luego decir que no hay nadie', '«No voy a contestar esa pregunta»'], 3, 'Negarse a responder no dice nada falso; las otras opciones mienten o entregan al amigo.', 'verdad'),
+    P('icf-lc-literal', 'Según el párrafo 5, pensar en un caso extremo sirve para', ['demostrar que mentir es bueno', 'terminar la discusión de una vez', 'preguntarse si las reglas valen por sí mismas o por lo que logran', 'entender las razones de los perseguidores'], 2, 'El texto lo dice casi con esas palabras en su última oración.', 'verdad'),
+    P('icf-lc-estructura', 'A lo largo de todo el texto, el autor', ['presenta varias posiciones sin declarar cuál es la correcta', 'defiende que siempre se debe decir la verdad', 'se burla de los filósofos', 'cuenta algo que le pasó en su casa'], 0, 'Expone tres caminos y cierra diciendo que «ninguna de estas respuestas cierra la discusión».', 'verdad'),
+
+    P('icf-lc-discontinuo', 'Según la tabla, el uso que más agua consume cada día es', ['el sanitario', 'lavar la ropa', 'cocinar y beber', 'la ducha'], 3, 'La ducha de 10 minutos gasta 45 litros, más que cualquier otro uso.', 'agua'),
+    P('icf-lc-discontinuo', 'La ducha y el sanitario juntos representan, del total diario de una persona,', ['cerca de una cuarta parte', 'más de la mitad', 'cerca de una décima parte', 'todo el consumo'], 1, '$45 + 35 = 80$ litros de 150: un poco más de la mitad.', 'agua'),
+    P('icf-lc-discontinuo', 'Si una persona pasa de ducharse 10 minutos a 5 y sigue el consejo 1, su consumo diario queda en', ['75 litros', '105 litros', 'unos 128 litros', '150 litros'], 2, 'La ducha baja a la mitad: de 45 a 22.5 litros. $150 - 22.5 = 127.5$, unos 128.', 'agua'),
+    P('icf-lc-discontinuo', 'El último párrafo, que empieza con «Ojo», busca', ['mostrar que también se gasta agua en lo que compramos, aunque no aparezca en el recibo', 'invitar a no volver a comprar ropa', 'corregir un error de la tabla', 'explicar cómo se cultiva el algodón'], 0, 'El ejemplo de la camiseta muestra un gasto de agua que el recibo del hogar no cuenta.', 'agua'),
+    P('icf-lc-evalua', '¿Cuál conclusión NO se puede sacar de la infografía?', ['Cocinar y beber está entre los usos que menos agua gastan', 'Todos los hogares del país usan exactamente 150 litros por persona', 'Lavar la ropa con la carga completa ayuda a ahorrar', 'Hay agua que se gasta fuera de la casa'], 1, 'Los 150 litros son un promedio de los hogares de la ciudad: no se puede decir que todos usen exactamente eso.', 'agua'),
+    P('icf-lc-literal', 'La botella con arena ahorra agua porque', ['la arena limpia el agua del tanque', 'hace que el sanitario descargue con más fuerza', 'evita que el tanque se llene', 'ocupa espacio dentro del tanque y así cada descarga usa menos agua'], 3, 'Al ocupar parte del tanque, entra menos agua en cada llenado: cerca de un litro menos por descarga.', 'agua'),
+  ];
+
+  const matematicas = [
+    P('icf-ma-datos', 'Una tienda vendió en cuatro semanas 120, 150, 90 y 140 jugos. El promedio de jugos vendidos por semana fue', ['125', '130', '120', '140'], 0, '$120 + 150 + 90 + 140 = 500$ y $500 \\div 4 = 125$.'),
+    P('icf-ma-proporcion', 'En un mapa a escala $1 : 250\\,000$, dos pueblos están a 6 cm. La distancia real entre ellos es', ['1.5 km', '150 km', '15 km', '25 km'], 2, '$6 \\cdot 250\\,000 = 1\\,500\\,000$ cm, que son 15 000 m: 15 km.'),
+    P('icf-ma-finanzas', 'Un celular de 800 mil pesos tiene 15 % de descuento y, sobre el precio rebajado, se cobra el IVA del 19 %. El precio final es', ['832 mil', '809.2 mil', '784 mil', '952 mil'], 1, '$800 \\cdot 0.85 = 680$ y $680 \\cdot 1.19 = 809.2$ mil. Los porcentajes no se restan: se aplican uno tras otro.'),
+    P('icf-ma-azar', 'Julián tiene 4 camisetas y 3 pantalones. ¿Cuántas combinaciones distintas de una camiseta y un pantalón puede armar?', ['7', '24', '64', '12'], 3, 'Por cada camiseta hay 3 pantalones: $4 \\cdot 3 = 12$.'),
+    P('icf-ma-azar', 'En una bolsa hay 5 bolas rojas, 3 azules y 2 verdes. Si se saca una al azar, la probabilidad de que NO sea roja es', ['$\\tfrac{3}{10}$', '$\\tfrac{1}{2}$', '$\\tfrac{1}{5}$', '$\\tfrac{2}{5}$'], 1, 'No rojas hay $3 + 2 = 5$ de 10: $\\tfrac{5}{10} = \\tfrac12$.'),
+    P('icf-ma-medida', 'Un terreno rectangular de 24 m por 15 m se va a rodear con 3 vueltas de alambre. ¿Cuántos metros de alambre se necesitan?', ['234 m', '78 m', '360 m', '1 080 m'], 0, 'El perímetro es $2(24 + 15) = 78$ m y tres vueltas son $3 \\cdot 78 = 234$ m.'),
+    P('icf-ma-medida', 'Un tanque cilíndrico tiene 1 m de radio y 2 m de altura. Con $\\pi \\approx 3.14$, le caben', ['628 litros', '3 140 litros', '12 560 litros', '6 280 litros'], 3, '$V = \\pi r^2 h = 3.14 \\cdot 1 \\cdot 2 = 6.28$ m³, y cada m³ son 1 000 litros.'),
+    P('icf-ma-lineal', 'Un parqueadero cobra 3 000 pesos fijos más 2 000 por cada hora. ¿Cuánto paga quien deja el carro 5 horas?', ['10 000', '15 000', '13 000', '25 000'], 2, '$3\\,000 + 5 \\cdot 2\\,000 = 13\\,000$ pesos.'),
+    P('icf-ma-lineal', 'Una vela mide 30 cm y se consume 2 cm cada hora. Su altura $h$ después de $t$ horas es', ['$h = 2t + 30$', '$h = 30t - 2$', '$h = 30 - 2t$', '$h = 2 - 30t$'], 2, 'Empieza en 30 y pierde 2 por cada hora: $h = 30 - 2t$.'),
+    P('icf-ma-forma', 'Una escalera de 10 m se apoya en una pared con el pie a 6 m de ella. ¿A qué altura toca la pared?', ['4 m', '8 m', '16 m', '12 m'], 1, '$10^2 - 6^2 = 64$ y $\\sqrt{64} = 8$ m.'),
+    P('icf-ma-forma', 'Un poste proyecta una sombra de 9 m al mismo tiempo que una persona de 1.6 m proyecta una sombra de 1.2 m. La altura del poste es', ['12 m', '6.75 m', '10.8 m', '14.4 m'], 0, 'Los triángulos son semejantes: $\\tfrac{h}{9} = \\tfrac{1.6}{1.2}$, así que $h = 12$ m.'),
+    P('icf-ma-ecuaciones', 'En un curso hay 38 estudiantes y hay 6 mujeres más que hombres. ¿Cuántos hombres hay?', ['22', '19', '17', '16'], 3, 'Si hay $h$ hombres, hay $h + 6$ mujeres: $2h + 6 = 38$ y $h = 16$.'),
+    P('icf-ma-ecuaciones', 'Una función de teatro cobra 12 mil por adulto y 7 mil por niño. Se vendieron 50 entradas por 460 mil. ¿Cuántas entradas de niño se vendieron?', ['22', '30', '20', '28'], 3, '$12(50 - n) + 7n = 460$: $600 - 5n = 460$ y $n = 28$.'),
+    P('icf-ma-argumenta', '¿Cuál número muestra que es falsa la afirmación «todo número divisible entre 4 es divisible entre 8»?', ['12', '16', '24', '7'], 0, '12 es divisible entre 4 pero no entre 8. El 7 no sirve: ni siquiera es divisible entre 4.'),
+    P('icf-ma-finanzas', 'Se ahorran 2 000 000 de pesos al 10 % anual con interés compuesto. Al cabo de 2 años hay', ['2 400 000', '2 200 000', '2 420 000', '2 440 000'], 2, '$2\\,000\\,000 \\cdot 1.1 = 2\\,200\\,000$ y $2\\,200\\,000 \\cdot 1.1 = 2\\,420\\,000$.'),
+    P('icf-ma-curvas', 'La altura de un balón es $h(t) = -5t^2 + 20t$ (metros y segundos). Su altura máxima es', ['10 m', '20 m', '40 m', '15 m'], 1, 'Vale 0 en $t = 0$ y en $t = 4$: el máximo está en $t = 2$, con $h = -20 + 40 = 20$ m.'),
+    P('icf-ma-curvas', 'Un cultivo empieza con 500 bacterias y se duplica cada 3 horas. ¿Cuántas hay a las 12 horas?', ['2 000', '8 000', '4 000', '6 000'], 1, 'En 12 horas hay 4 duplicaciones: $500 \\cdot 2^4 = 8\\,000$.'),
+    P('icf-ma-espacio', 'El punto $(2, -5)$ se refleja respecto al eje x. Su imagen es', ['$(-2, -5)$', '$(-2, 5)$', '$(5, 2)$', '$(2, 5)$'], 3, 'Al reflejar en el eje x se conserva la x y cambia el signo de la y.'),
+    P('icf-ma-dispersion', 'Las notas del grupo A son 3.0, 3.0, 3.0 y 3.0; las del grupo B, 1.0, 2.0, 4.0 y 5.0. Es correcto afirmar que', ['tienen el mismo promedio y B está más disperso', 'A tiene mayor promedio', 'B tiene mayor promedio', 'tienen la misma dispersión'], 0, 'Los dos promedian 3.0; las notas de B se apartan más de ese promedio.'),
+    P('icf-ma-dispersion', 'Los salarios, en millones, de una empresa pequeña son 1.3, 1.3, 1.5, 1.6 y 9.0. ¿Qué medida representa mejor el salario típico?', ['El promedio, porque usa todos los datos', 'El salario mayor', 'La mediana, porque el 9.0 no la altera', 'El rango'], 2, 'El 9.0 sube el promedio a casi 3 millones; la mediana, 1.5, refleja lo que gana la mayoría.'),
+    P('icf-ma-numeros', 'La distancia de la Tierra al Sol es de unos 150 000 000 km. En notación científica es', ['$1.5 \\cdot 10^8$ km', '$15 \\cdot 10^9$ km', '$1.5 \\cdot 10^7$ km', '$150 \\cdot 10^5$ km'], 0, 'La coma corre 8 lugares para dejar 1.5 entre 1 y 10.'),
+    P('icf-ma-numeros', 'De 60 estudiantes, 35 juegan fútbol, 28 juegan baloncesto y 10 juegan los dos. ¿Cuántos no juegan ninguno?', ['17', '7', '3', '13'], 1, 'Juegan alguno $35 + 28 - 10 = 53$; no juegan $60 - 53 = 7$.'),
+    P('icf-ma-azar', '¿Cuántos comités distintos de 2 personas se pueden formar con 6 candidatos?', ['12', '30', '36', '15'], 3, 'En un comité no importa el orden: $\\tfrac{6 \\cdot 5}{2} = 15$.'),
+    P('icf-ma-datos', 'Una panadería pasó de vender 400 a 500 panes diarios. El aumento porcentual fue', ['20 %', '100 %', '25 %', '50 %'], 2, 'Subió 100 sobre los 400 de antes: $\\tfrac{100}{400} = 25\\,\\%$.'),
+  ];
+
+  const sociales = [
+    P('icf-sc-constitucion', 'En Colombia, la rama del poder público encargada de hacer las leyes es', ['la ejecutiva, que encabeza el presidente', 'la judicial', 'la legislativa, que es el Congreso', 'la Registraduría'], 2, 'El Congreso, con Senado y Cámara, forma la rama legislativa.'),
+    P('icf-sc-constitucion', 'A una persona le niegan en un hospital una cirugía urgente sin la cual corre peligro su vida. Para proteger su derecho de inmediato puede acudir a', ['la acción de tutela', 'un referendo', 'la revocatoria del mandato', 'un cabildo abierto'], 0, 'La tutela protege de forma rápida los derechos fundamentales cuando están amenazados, como la vida y la salud.'),
+    P('icf-sc-participacion', 'Los habitantes de un municipio quieren sacar al alcalde antes de terminar su periodo porque no cumple el programa por el que votaron. El mecanismo adecuado es', ['el plebiscito', 'el cabildo abierto', 'la consulta popular', 'la revocatoria del mandato'], 3, 'La revocatoria permite a los votantes quitarle el mandato a un alcalde o gobernador que incumple su programa.'),
+    P('icf-sc-participacion', 'La entidad que vigila cómo se gastan los recursos públicos es', ['la Fiscalía', 'la Contraloría', 'la Defensoría del Pueblo', 'el Senado'], 1, 'La Contraloría hace el control fiscal: revisa el uso de los dineros públicos.'),
+    P('icf-sc-perspectivas', 'En un barrio se quiere construir un parque en un lote que hoy usan unos jóvenes como cancha y unos taxistas como parqueadero. ¿Qué afirmación reconoce mejor los intereses en juego?', ['Solo cuenta la opinión de quienes pagan impuestos', 'Jóvenes y taxistas usan el lote de forma distinta y los dos pueden perder algo con el parque', 'Los taxistas no tienen ningún interés en el lote', 'Un parque beneficia a todos por igual'], 1, 'Reconocer a cada actor y lo que perdería es el primer paso para buscar una solución que no excluya a nadie.'),
+    P('icf-sc-perspectivas', '«Los muchachos que llegan del campo no saben usar un computador». Esta afirmación es', ['un dato comprobado', 'el resultado de una encuesta', 'una generalización que puede ser un prejuicio', 'una norma de la Constitución'], 2, 'Atribuye a todo un grupo una característica sin pruebas: es una generalización que puede llevar a discriminar.'),
+    P('icf-sc-fuentes', 'Un historiador quiere saber cómo vivían los obreros de una fábrica en los años treinta. ¿Qué fuente le da información más directa?', ['Cartas escritas por obreros de esa fábrica en esos años', 'Una película reciente sobre la época', 'Un libro escolar de hoy', 'La opinión de un turista que pasó por el pueblo'], 0, 'Las cartas son fuentes primarias: las escribieron quienes vivieron lo que se estudia.'),
+    P('icf-sc-fuentes', 'Un periódico de mediados del siglo XX publicó que «el pueblo apoya masivamente al gobierno». Antes de usarlo como prueba de ese apoyo, conviene', ['aceptarlo, porque es un periódico', 'contar cuántas palabras tiene la noticia', 'averiguar el nombre del impresor', 'saber quién era el dueño del periódico y si había censura en ese momento'], 3, 'Una fuente se lee en su contexto: quién habla, con qué interés y con qué libertad.'),
+    P('icf-sc-sistemico', 'Un municipio prohibió la pesca durante seis meses para que el río recuperara sus peces. ¿Qué consecuencia no buscada debería prever?', ['Que aumenten los peces', 'Que el río se vea más limpio', 'Que lleguen más turistas', 'Que las familias que viven de la pesca se queden sin ingresos'], 3, 'Una medida ambiental puede golpear la economía de quienes dependen de ese recurso: hay que prever cómo apoyarlos.'),
+    P('icf-sc-sistemico', 'Una carretera por una reserva natural acortaría el viaje a la ciudad, pero partiría el bosque en dos. El caso enfrenta, sobre todo, las dimensiones', ['religiosa y deportiva', 'económica y ambiental', 'familiar y artística', 'militar y educativa'], 1, 'Ganar tiempo y comercio choca con la conservación del bosque.'),
+    P('icf-sc-historia', 'Durante la Colonia, la encomienda consistía en', ['una carta que se enviaba al rey de España', 'un impuesto a los productos importados', 'la asignación de un grupo indígena a un español, que les cobraba tributo y debía evangelizarlos', 'una fiesta religiosa del calendario'], 2, 'La encomienda entregaba indígenas a un encomendero a cambio de «protegerlos» y evangelizarlos; en la práctica permitió muchos abusos.'),
+    P('icf-sc-historia', 'En el siglo XIX, muchas guerras enfrentaron a centralistas y federalistas. La Constitución de 1863, conocida como de Rionegro, se recuerda porque', ['organizó el país como una federación de estados soberanos', 'creó el Frente Nacional', 'abolió por primera vez la esclavitud', 'dio el voto a las mujeres'], 0, 'Fue la cumbre del federalismo: los Estados Unidos de Colombia. La esclavitud se abolió en 1851 y el voto femenino llegó en el siglo XX.'),
+    P('icf-sc-historia', 'El Frente Nacional (1958-1974) fue un acuerdo según el cual', ['liberales y conservadores se alternaban la presidencia y se repartían los cargos públicos', 'se prohibieron todos los partidos', 'Colombia se unió con Venezuela', 'las guerrillas llegaron al gobierno'], 0, 'Buscó terminar la violencia entre los dos partidos, pero cerró el paso a otras fuerzas políticas.'),
+    P('icf-sc-mundo', 'La Revolución francesa difundió la idea de que', ['el rey recibe su poder directamente de Dios', 'solo los nobles deben votar', 'la Iglesia debe elegir a los gobernantes', 'el poder viene del pueblo y las personas nacen libres e iguales en derechos'], 3, 'La Declaración de los Derechos del Hombre y del Ciudadano puso la soberanía en la nación y la igualdad ante la ley.'),
+    P('icf-sc-mundo', 'La Guerra Fría recibe ese nombre porque', ['se libró en países de clima frío', 'Estados Unidos y la Unión Soviética compitieron sin enfrentarse directamente en una guerra entre ellos', 'duró un solo invierno', 'nadie tenía armas'], 1, 'Hubo carrera armamentista y guerras en otros países, pero las dos potencias no se atacaron directamente.'),
+    P('icf-sc-geografia', 'Cerca del ecuador, al subir de la costa a una ciudad a 2 600 metros de altura, la temperatura', ['sube porque se está más cerca del Sol', 'no cambia', 'baja, porque disminuye con la altura', 'depende solo de la estación del año'], 2, 'En Colombia el clima depende sobre todo de la altura: unos 6 °C menos por cada 1 000 m.'),
+    P('icf-sc-geografia', '¿Qué se puede ver mejor en un mapa a escala $1 : 50\\,000$ que en uno a $1 : 5\\,000\\,000$?', ['Todo el continente', 'Las fronteras de todos los países', 'Detalles de un municipio, como calles o quebradas', 'Los océanos'], 2, 'Una escala más grande reduce menos la realidad: muestra menos territorio con más detalle.'),
+    P('icf-sc-economia', 'Una helada destruye buena parte de la cosecha de papa y la demanda sigue igual. Lo más probable es que el precio de la papa', ['suba', 'baje', 'se quede igual por ley', 'llegue a cero'], 0, 'Hay menos papa para las mismas ganas de comprarla: el precio sube.'),
+    P('icf-sc-economia', 'El salario de una persona sube 4 % en un año y los precios suben 9 %. Su salario real', ['subió 13 %', 'subió 4 %', 'no cambió', 'bajó, porque puede comprar menos con lo que gana'], 3, 'El salario real mide lo que alcanza a comprar: si los precios suben más que el sueldo, baja.'),
+    P('icf-sc-economia', 'Un tratado de libre comercio baja los aranceles a la leche importada. ¿Quiénes es más probable que enfrenten más competencia?', ['Los consumidores de leche', 'Los pequeños productores de leche del país', 'Los exportadores de café', 'Los bancos'], 1, 'La leche de afuera entra más barata y compite con la que producen los campesinos del país.'),
+    P('icf-sc-modelos', 'Un gobierno que cobra más impuestos a quienes más ganan para ofrecer salud y educación gratuitas sigue, sobre todo, una lógica', ['de libre mercado sin intervención', 'de Estado de bienestar', 'monárquica', 'comunitaria basada en asambleas'], 1, 'El Estado de bienestar mantiene el mercado y reparte parte de la riqueza con servicios para todos.'),
+    P('icf-sc-modelos', 'Una norma aprobada con todos los procedimientos, pero que la mayoría de la población rechaza por injusta, es', ['ilegal e ilegítima', 'ilegal, pero legítima', 'inválida de forma automática', 'legal, pero con poca legitimidad'], 3, 'Cumplir los procedimientos la hace legal; que la gente no la acepte afecta su legitimidad.'),
+    P('icf-sc-constitucion', 'Que Colombia sea un «Estado social de derecho» significa, entre otras cosas, que', ['el presidente puede cambiar las leyes cuando quiera', 'solo importa el derecho a la propiedad', 'el Estado debe buscar condiciones de vida digna para las personas y no solo mantener el orden', 'no existen tribunales'], 2, 'Además de someterse a la ley, el Estado se compromete con la dignidad y los derechos sociales.'),
+    P('icf-sc-participacion', 'Antes de aprobar una mina en el territorio de una comunidad indígena, el Estado debe', ['hacer una consulta previa con la comunidad', 'pedir permiso a otro país', 'convocar un plebiscito nacional', 'esperar a que la empresa decida'], 0, 'La consulta previa es un derecho de los pueblos étnicos frente a decisiones que afectan su territorio.'),
+  ];
+
+  const ciencias = [
+    P('icf-cn-indaga', 'Un estudiante quiere saber si la luz afecta el crecimiento de una planta de frijol. ¿Cuál montaje es el más adecuado?', ['Una planta a la luz regada cada día y otra a la sombra sin regar', 'Una sola planta a la luz', 'Dos plantas a la sombra con distinta cantidad de agua', 'Dos plantas iguales, con la misma agua y la misma tierra, una a la luz y otra a la sombra'], 3, 'Solo debe cambiar la luz: si también cambia el agua, no se sabría qué causó la diferencia.'),
+    P('icf-cn-indaga', 'En un experimento, al pasar el agua de 20 °C a 50 °C, el azúcar que se disuelve en ella pasa de 204 g a 260 g. Se puede concluir que, en ese rango,', ['la temperatura no influye', 'a mayor temperatura se disuelve más azúcar', 'el azúcar se evapora', 'a mayor temperatura se disuelve menos azúcar'], 1, 'Al subir la temperatura subió la cantidad disuelta.'),
+    P('icf-cn-celula', 'En una célula animal, la mayor parte de la energía (ATP) se produce en', ['la mitocondria', 'el cloroplasto', 'la pared celular', 'el núcleo'], 0, 'La respiración celular ocurre en las mitocondrias; las células animales no tienen cloroplastos ni pared.'),
+    P('icf-cn-celula', 'Un trozo de papa que se deja en agua muy salada se arruga porque', ['la sal entra y la infla', 'absorbe la sal y crece', 'el agua sale de sus células hacia el lado donde hay más sal', 'el agua salada la cocina'], 2, 'Es ósmosis: el agua pasa por la membrana hacia donde hay más sal disuelta.'),
+    P('icf-cn-celula', 'A partir de la hebra de ADN ATG CCA se transcribe el ARN mensajero complementario. Su secuencia es', ['ATG CCA', 'TAC GGT', 'UAC GGU', 'AUG CCA'], 2, 'A se une con U en el ARN, T con A, G con C y C con G: UAC GGU.'),
+    P('icf-cn-movimiento', 'Un ciclista recorre 30 km en 1.5 horas. Su rapidez media es', ['45 km/h', '15 km/h', '31.5 km/h', '20 km/h'], 3, 'Se divide la distancia entre el tiempo: $30 \\div 1.5 = 20$ km/h.'),
+    P('icf-cn-movimiento', 'Una caja está en reposo sobre una mesa. La fuerza que equilibra su peso es', ['la fricción', 'la fuerza normal que ejerce la mesa', 'una fuerza magnética', 'la tensión de una cuerda'], 1, 'La mesa empuja hacia arriba con la fuerza normal, igual al peso.'),
+    P('icf-cn-movimiento', 'Si en un lugar sin aire se sueltan al tiempo, desde la misma altura, una pluma y un martillo,', ['llegan al suelo al mismo tiempo', 'el martillo llega primero', 'la pluma llega primero', 'la pluma se queda flotando'], 0, 'Sin aire no hay resistencia: la gravedad acelera igual a los dos.'),
+    P('icf-cn-materia', 'Para separar una mezcla de agua y aceite, el método más sencillo es', ['dejarla reposar y separar las capas (decantación)', 'evaporar todo el líquido', 'pasarle un imán', 'tamizarla'], 0, 'El aceite, menos denso, queda arriba: basta separar las dos capas.'),
+    P('icf-cn-ecosistemas', 'En la cadena pasto → conejo → zorro desaparecen los zorros. Lo más probable a corto plazo es que', ['disminuyan los conejos', 'aumente el pasto', 'aumenten los conejos y disminuya el pasto', 'el pasto desaparezca de inmediato'], 2, 'Sin depredador, los conejos se multiplican y comen más pasto.'),
+    P('icf-cn-ecosistemas', 'En el ciclo del carbono, las plantas toman CO₂ del aire mediante', ['la respiración', 'la combustión', 'la descomposición', 'la fotosíntesis'], 3, 'En la fotosíntesis usan CO₂, agua y luz para formar azúcares.'),
+    P('icf-cn-energia', 'Una pelota de 0.5 kg se deja caer desde 10 m, sin rozamiento ($g = 10$ m/s²). Justo antes de tocar el suelo, su energía cinética es', ['5 J', '50 J', '100 J', '500 J'], 1, 'Toda la energía potencial se vuelve cinética: $mgh = 0.5 \\cdot 10 \\cdot 10 = 50$ J.'),
+    P('icf-cn-energia', 'Una baranda de metal y una de madera están a la misma temperatura, pero la de metal se siente más fría porque', ['está a menor temperatura', 'conduce el calor más rápido y le quita calor a la mano', 'la madera produce calor', 'el metal no tiene temperatura'], 1, 'El metal es buen conductor: saca calor de la piel más rápido, y eso se siente como frío.'),
+    P('icf-cn-atomo', 'Un átomo neutro de sodio tiene 11 protones. ¿Cuántos electrones tiene?', ['11', '12', '23', '10'], 0, 'Si es neutro, tiene tantos electrones como protones.'),
+    P('icf-cn-atomo', 'La sal de cocina (NaCl) tiene enlace iónico porque', ['sus átomos comparten electrones por igual', 'los dos elementos son metales', 'el sodio cede un electrón al cloro y quedan iones de carga opuesta que se atraen', 'no tiene electrones'], 2, 'Un metal y un no metal: uno cede y otro gana electrones.'),
+    P('icf-cn-herencia', 'En una planta, la semilla lisa (R) domina sobre la rugosa (r). Al cruzar dos plantas Rr, la proporción esperada de semillas rugosas es', ['$\\tfrac12$', '$\\tfrac34$', '0', '$\\tfrac14$'], 3, 'Las combinaciones son RR, Rr, rR y rr: una de cuatro es rugosa.'),
+    P('icf-cn-herencia', 'Las bacterias que sobreviven a un antibiótico y se multiplican son un ejemplo de', ['que las bacterias aprenden a defenderse', 'herencia de lo que se gana con esfuerzo', 'generación espontánea', 'selección natural'], 3, 'Las que ya eran resistentes sobreviven y dejan descendencia: la población cambia.'),
+    P('icf-cn-reacciones', 'En la reacción $2H_2 + O_2 \\to 2H_2O$ reaccionan por completo 4 g de hidrógeno con 32 g de oxígeno. Se forman', ['32 g de agua', '36 g de agua', '28 g de agua', '4 g de agua'], 1, 'La masa se conserva: $4 + 32 = 36$ g.'),
+    P('icf-cn-reacciones', 'Una sustancia con pH 3 es', ['ácida', 'neutra', 'básica', 'una sal pura'], 0, 'Un pH menor que 7 indica una sustancia ácida; 7 es neutro.'),
+    P('icf-cn-ondas', 'Un sonido viaja a 340 m/s con una frecuencia de 170 Hz. Su longitud de onda es', ['0.5 m', '510 m', '2 m', '57 800 m'], 2, '$\\lambda = \\tfrac{v}{f} = \\tfrac{340}{170} = 2$ m.'),
+    P('icf-cn-gases', 'Un gas está en un recipiente cerrado y rígido. Si se calienta, su presión', ['disminuye', 'no cambia', 'aumenta', 'se vuelve cero'], 2, 'Con volumen fijo, las partículas se mueven más rápido y chocan con más fuerza: la presión sube.'),
+    P('icf-cn-electrico', 'Una resistencia de 6 Ω se conecta a una pila de 12 V. La corriente que pasa es', ['2 A', '72 A', '0.5 A', '18 A'], 0, 'Por la ley de Ohm, $I = \\tfrac{V}{R} = \\tfrac{12}{6} = 2$ A.'),
+    P('icf-cn-cts', 'Para saber si una vacuna funciona, lo más adecuado es comparar', ['a quienes la pidieron con quienes no la pidieron', 'un grupo vacunado y otro que recibe un placebo, escogidos al azar', 'los testimonios de personas famosas', 'el precio de varias vacunas'], 1, 'Con grupos al azar y un placebo, lo único distinto entre los grupos es la vacuna.'),
+    P('icf-cn-gases', 'Se disuelven 20 g de sal en agua hasta completar 500 mL de disolución. Su concentración es', ['10 g/L', '4 g/L', '25 g/L', '40 g/L'], 3, '500 mL son 0.5 L: $20 \\div 0.5 = 40$ g/L.'),
+  ];
+
+  const ingles = [
+    P('icf-en-avisos', 'Where can you see this sign? "Please keep your phone silent during the film."', ['In a cinema', 'In a bank', 'In a park', 'In a swimming pool'], 0, '«The film» (la película) indica que el aviso está en un cine.'),
+    P('icf-en-avisos', 'What does this sign mean? "No parking: emergency exit."', ['You can leave your car here in an emergency.', 'Cars must go faster here.', 'The exit is closed.', 'Do not leave your car here; this door must stay free.'], 3, '«No parking» prohíbe estacionar porque la salida de emergencia debe quedar libre.'),
+    P('icf-en-avisos', 'A door says: "Staff only beyond this point." Who can go past this door?', ['Every visitor', 'Children with their parents', 'People who work there', 'Nobody at all'], 2, '«Staff» es el personal: solo quienes trabajan allí pueden pasar.'),
+    P('icf-en-avisos', 'A sign says: "Fresh bread every morning — open from 6 a.m." This sign is probably in a', ['pharmacy', 'bakery', 'library', 'garage'], 1, 'Pan fresco cada mañana: es una panadería, «bakery».'),
+    P('icf-en-avisos', 'You use this object to cut paper. It is a', ['spoon', 'pillow', 'ladder', 'pair of scissors'], 3, '«Scissors» son las tijeras; las otras palabras son cuchara, almohada y escalera.'),
+    P('icf-en-avisos', 'A person who takes care of sick people in a hospital is a', ['pilot', 'nurse', 'farmer', 'judge'], 1, '«Nurse» es enfermero o enfermera.'),
+    P('icf-en-avisos', 'You put your clothes in this when you travel. It is a', ['fridge', 'wallet', 'suitcase', 'mirror'], 2, '«Suitcase» es la maleta; «wallet» es la billetera.'),
+    P('icf-en-dialogos', 'Complete the conversation. "Would you like some more juice?" —', ['No, thanks. I\'m fine.', 'Yes, I would like it yesterday.', 'It\'s on Tuesday.', 'I am seventeen years old.'], 0, 'A un ofrecimiento se responde aceptando o rechazando con cortesía.'),
+    P('icf-en-dialogos', 'Complete the conversation. "Sorry I\'m late." —', ['Yes, it\'s late.', 'Don\'t worry. We haven\'t started yet.', 'I\'m late too, thank you.', 'At eight o\'clock.'], 1, 'Ante una disculpa, lo natural es tranquilizar a la otra persona.'),
+    P('icf-en-dialogos', 'Complete the conversation. "How long have you lived here?" —', ['For about five years.', 'It\'s very long.', 'Next month.', 'By bus.'], 0, '«How long» pregunta por cuánto tiempo: «for about five years».'),
+    P('icf-en-dialogos', 'Complete the conversation. "Can you help me carry these boxes?" —', ['Yes, I can\'t.', 'They are heavy, aren\'t you?', 'No, it\'s mine.', 'Sure. Where do you want them?'], 3, 'Acepta la petición y pregunta algo que tiene sentido para ayudar.'),
+    P('icf-en-gramatica', 'Choose the word for gap (1).', ['live', 'living', 'lives', 'is live'], 2, 'Con «my grandmother» (ella) el presente simple lleva -s: «lives».', 'jardin'),
+    P('icf-en-gramatica', 'Choose the word for gap (2).', ['plant', 'plants', 'planted', 'planting'], 2, '«Last week» pide pasado: «planted».', 'jardin'),
+    P('icf-en-gramatica', 'Choose the word for gap (3).', ['easy', 'easier', 'easiest', 'more easy'], 1, 'Compara dos cosas con «than»: «easier than».', 'jardin'),
+    P('icf-en-gramatica', 'Choose the word for gap (4).', ['most', 'more', 'much', 'very'], 0, '«The most beautiful»: superlativo de un adjetivo largo.', 'jardin'),
+    P('icf-en-corto', 'Why can\'t Sara go to the match?', ['She is sick.', 'She doesn\'t like football.', 'She has to work.', 'She has to take her sister to the doctor.'], 3, 'Lo dice al comienzo: «I have to take my little sister to the doctor».', 'mensaje'),
+    P('icf-en-corto', 'In her message, what does Sara suggest?', ['Watching the next game together at her house', 'Going to the doctor with Lucas', 'Making pizza at Lucas\'s house', 'Playing football tomorrow'], 0, 'Propone ver el siguiente partido el sábado en su casa.', 'mensaje'),
+    P('icf-en-corto', 'In the message, "Text me!" means', ['Write a book.', 'Call the doctor.', 'Send me a message.', 'Read my text.'], 2, '«Text» como verbo es enviar un mensaje de texto.', 'mensaje'),
+    P('icf-en-corto', 'According to the message, who will make pizza?', ['Lucas', 'Sara\'s mother', 'Sara\'s sister', 'The doctor'], 1, '«My mum will make pizza»: la mamá de Sara.', 'mensaje'),
+    P('icf-en-largo', 'What is the text mainly about?', ['How to repair an old bus', 'Why roads in the mountains are bad', 'The life of volunteers in the city', 'A teacher who takes books to villages without a library'], 3, 'Todo el texto cuenta el proyecto de Rosa y su bus de libros.', 'bus'),
+    P('icf-en-largo', 'Why did more people start coming to the bus?', ['Rosa gave them money.', 'The bus was new.', 'The children were forced to come.', 'Rosa read stories aloud and parents joined.'], 3, 'El párrafo 2: empezó a leer en voz alta bajo los árboles y llegaron los padres.', 'bus'),
+    P('icf-en-largo', 'What is the biggest problem for the project?', ['There are no books.', 'Nobody wants to read.', 'The road in the rainy season', 'The volunteers from the city'], 2, '«The biggest problem is the road» en temporada de lluvias.', 'bus'),
+    P('icf-en-inferencia', 'What does Rosa mean in her last sentence?', ['The bus also shows people that they are not forgotten.', 'She wants to stop the project.', 'She needs more books.', 'People forget to return the books.'], 0, '«Feeling that someone remembers you»: el bus muestra a los pueblos que alguien piensa en ellos.', 'bus'),
+    P('icf-en-largo', 'The word "borrow" in paragraph 3 means', ['to buy', 'to take something and give it back later', 'to write', 'to throw away'], 1, 'Se pueden llevar los libros por un mes y devolverlos: «borrow» es tomar prestado.', 'bus'),
+  ];
+
+  return { id: 'icf-sim-1', titulo: 'Simulacro 1', textos, pruebas: { lectura, matematicas, sociales, ciencias, ingles } };
+})());
+;
 //#archivo js/portal.js
 // El portal de la institución dentro de la app (spec 2026-11-25-portal-en-la-app): es una sección más del menú («Portal»). Se abre en un
 // marco propio, a pantalla completa, que trae el mismo menú con sus opciones; desde él se vuelve a Inicio, Mis cursos o Tú sin recargar.
@@ -20240,14 +20551,14 @@ function renderComponents(c) {
         <span class="comp-go" aria-hidden="true">${ICON.right}</span></button>`;
     }).join('')}</div>
     ${doneN === ls.length && !soonOf(c).length ? `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>` : ''}
-    ${c.id === 'preuda' && !cuentaDeColegio() ? librosHTML() : ''}</div>
+    ${simIcfHTML(c)}${c.id === 'preuda' && !cuentaDeColegio() ? librosHTML() : ''}</div>
     ${gymFabHTML(c, courseLevelUi(c, null, { done: S.done, last: S.lastLesson }))}
   </div>`;
   view.querySelectorAll('[data-block]').forEach(b => b.onclick = () => {
     openBlock = { course: c.id, id: b.dataset.block }; renderLearn(); $('[data-back]', view)?.focus({ preventScroll: true });
   });
   $('[data-continue]', view)?.addEventListener('click', () => startLesson(c, cur));
-  bindCourseHead(); bindAccesoAviso(); bindGymFab(c); bindLibros(view);
+  bindCourseHead(); bindAccesoAviso(); bindGymFab(c); bindLibros(view); simIcfBind(view);
   view.scrollTop = 0;
 }
 function renderLearn() {
