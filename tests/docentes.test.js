@@ -41,3 +41,9 @@ test('piezas en su sitio', () => {
   const sql = read('supabase/migrations/20261125000003_docentes_responsables.sql'); for (const f of ['privado.docencia', 'privado.simulacro']) assert.ok(new RegExp(`function ${f.replace('.', '\\.')}\\(p_accion text, p jsonb\\)[^$]*security definer set search_path = ''`).test(sql), f);
   assert.match(read('js/inicio.js'), /simulacrosHTML\(\)/);
 });
+
+test('al armar un simulacro, el portal avisa que las preguntas del banco salen en las lecciones', () => {
+  const src = read('instituciones/portal/docente.js'), i = src.indexOf('data-visto');
+  assert.ok(i > src.indexOf('1. Qué vas a evaluar') && i < src.indexOf('2. Revisa las preguntas'));
+  assert.match(src.slice(i, i + 220), /también salen en las lecciones.+agrega preguntas tuyas/);
+});
