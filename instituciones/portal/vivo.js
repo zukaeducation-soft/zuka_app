@@ -25,7 +25,7 @@ const globo = k => (navPend(k) ? `<i class="pv-gl" aria-label="${navPend(k)} abi
 function menu() {
   const ops = NAV.filter(([k]) => vistaOk(k)), n = $('.pn-nav'), app = (k, t) => `<button class="pv-app" type="button" data-app="${k}">${aico(k)}<span>${t}</span></button>`;
   n.hidden = false; n.setAttribute('aria-label', 'Menú');
-  n.innerHTML = `${app('home', 'Inicio')}${app('cursos', 'Mis cursos')}<p class="pv-portal">${aico('portal')}<span>Portal</span></p><div class="pv-sub" role="group" aria-label="Portal">${ops.map(([k, t]) => `<a href="#${k}" style="--nc1:${NAV_C[k]}">${ico(k)}<span>${navT(k, t)}</span>${globo(k)}</a>`).join('')}</div>${app('profile', 'Tú')}`;
+  n.innerHTML = `${app('home', 'Inicio')}${app('cursos', 'Mis cursos')}<p class="pv-portal">${aico('portal')}<span>Portal</span></p><div class="pv-sub" role="group" aria-label="Portal">${secciones(ops).map(([s, xs]) => `${s ? `<small class="pv-sec">${s}</small>` : ''}${xs.map(([k, t]) => `<a href="#${k}" style="--nc1:${NAV_C[k]}">${ico(k)}<span>${navT(k, t)}</span>${globo(k)}</a>`).join('')}`).join('')}</div>${app('profile', 'Tú')}`;
   // Celular: abajo, lo que más se usa; el resto (y la app) en «Más».
   const pri = (gestor() ? ['resumen', 'estudiantes', 'simulacros'] : ['componente', 'estudiantes', 'simulacros', 'resumen', 'metas']).filter(k => vistaOk(k)).slice(0, 3);
   let b = $('.pv-tab'); if (!b) { b = document.createElement('nav'); b.className = 'pv-tab'; b.setAttribute('aria-label', 'Menú del portal'); document.body.appendChild(b); }
@@ -35,7 +35,7 @@ function menu() {
   $$('[data-app]').forEach(x => { x.onclick = () => irApp(x.dataset.app); });
 }
 function hojaMas(ops) {
-  const d = ventana(`<div class="pv-hoja"><h2>Portal</h2><div class="pv-grid">${ops.map(([k, t], i) => `<a href="#${k}" style="--nc1:${NAV_C[k]};--i:${i}"><i>${ico(k)}</i><span>${navT(k, t)}</span>${globo(k)}</a>`).join('')}</div><h2>Zuka</h2><div class="pv-grid">${[['home', 'Inicio'], ['cursos', 'Mis cursos'], ['profile', 'Tú']].map(([k, t], i) => `<button type="button" data-app="${k}" style="--i:${ops.length + i}"><i>${aico(k)}</i><span>${t}</span></button>`).join('')}</div>${MARCO ? '' : '<button class="link-btn" type="button" data-fuera>Salir</button>'}</div>`, w => {
+  const d = ventana(`<div class="pv-hoja">${secciones(ops).map(([s, xs], j) => `<h2>${s || 'Portal'}</h2><div class="pv-grid">${xs.map(([k, t], i) => `<a href="#${k}" style="--nc1:${NAV_C[k]};--i:${i + j * 2}"><i>${ico(k)}</i><span>${navT(k, t)}</span>${globo(k)}</a>`).join('')}</div>`).join('')}<h2>Zuka</h2><div class="pv-grid">${[['home', 'Inicio'], ['cursos', 'Mis cursos'], ['profile', 'Tú']].map(([k, t], i) => `<button type="button" data-app="${k}" style="--i:${ops.length + i}"><i>${aico(k)}</i><span>${t}</span></button>`).join('')}</div>${MARCO ? '' : '<button class="link-btn" type="button" data-fuera>Salir</button>'}</div>`, w => {
     $$('a', w).forEach(a => { a.onclick = () => w.close(); }); $$('[data-app]', w).forEach(x => { x.onclick = () => { w.close(); irApp(x.dataset.app); }; });
     const s = $('[data-fuera]', w); if (s) s.onclick = () => $('[data-salir]').click();
   });
@@ -51,7 +51,7 @@ function menuOn(k) {
 function anima() {
   if (QUIETO()) return;
   view.classList.remove('entra'); void view.offsetWidth; view.classList.add('entra'); clearTimeout(anima.t); anima.t = setTimeout(() => view.classList.remove('entra'), 1100);
-  $$('.po-k > b, .pv-hero [data-num]', view).forEach(b => {
+  $$('.po-k > b, .gs-k > b, .pv-hero [data-num]', view).forEach(b => {
     const n = b.firstChild; if (!n || n.nodeType !== 3 || !/^\d+$/.test(n.data.trim())) return; const fin = +n.data, t0 = performance.now(); if (fin < 2) return;
     const paso = t => { const p = Math.min(1, (t - t0) / 700); n.data = String(Math.round(fin * (1 - (1 - p) ** 3))); if (p < 1 && b.isConnected) requestAnimationFrame(paso); }; requestAnimationFrame(paso);
   });

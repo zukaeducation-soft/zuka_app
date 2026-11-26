@@ -83,7 +83,7 @@ function marco() {
   menu(); $('[data-salir]').hidden = MARCO;
 }
 function ruta(arriba) {
-  const ini = vistaOk('resumen') ? 'resumen' : 'componente', [k, arg] = (location.hash.slice(1) || ini).split('/'), V = { resumen: vResumen, estudiantes: vEstudiantes, estudiante: () => vEstudiante(+arg), contenido: vContenido, metas: vMetas, equipo: vEquipo, contrato: vContrato, componente: vComponente, alumno: () => vAlumno(+arg), simulacros: vSimulacros, simulacro: () => vSimulacro(+arg), nuevo: vNuevo, avisos: vAvisos, responsables: vResponsables };
+  const ini = vistaOk('resumen') ? 'resumen' : 'componente', [k, arg] = (location.hash.slice(1) || ini).split('/'), V = { resumen: vPanorama, estudiantes: vEstudiantes, estudiante: () => vEstudiante(+arg), contenido: vContenido, metas: vMetas, equipo: vEquipo, contrato: vContrato, componente: vComponente, alumno: () => vAlumno(+arg), simulacros: vSimulacros, simulacro: () => vSimulacro(+arg), nuevo: vNuevo, avisos: vAvisos, responsables: vResponsables };
   const va = V[k] && vistaOk(k) ? k : ini, menuK = { estudiante: 'estudiantes', alumno: vistaOk('componente') ? 'componente' : 'estudiantes', simulacro: 'simulacros', nuevo: 'simulacros' }[va] || va; clearInterval(vivo);
   C = instCalcula(D, { dias: 28, grupo: '', curso: '' }); V[va]();
   menuOn(menuK); if (arriba !== false) anima();
@@ -92,25 +92,6 @@ function ruta(arriba) {
 const avisos = () => `${DEMO ? `<p class="po-aviso">Portal de ejemplo: los datos son inventados y los cambios no se guardan. ${gestor() ? '<a href="?demo&rol=docente">Ver como docente</a>' : '<a href="?demo">Ver como gestor</a>'}</p>` : ''}${D.institucion.vigente ? '' : `<p class="po-aviso mal">El contrato no está vigente (${fecha(D.institucion.desde)} a ${larga(D.institucion.hasta)}${D.institucion.estado === 'pausa' ? ', en pausa' : ''}). Puedes consultar, pero los cursos están cerrados para los estudiantes.</p>`}`;
 
 // ---------- resumen ----------
-function vResumen() {
-  const c = C = instCalcula(D, F), i = D.institucion, quedan = instEntre(D.hoy, i.hasta), dif = (a, b) => (b ? `<em class="${a >= b ? 'up' : 'dn'}">${a >= b ? '+' : '−'}${Math.abs(Math.round(100 * (a - b) / b))} % frente al periodo anterior</em>` : '');
-  const opc = (n, xs) => `<label class="fld"><span>${n}</span><select data-f="${n}">${xs.map(([v, t]) => `<option value="${esc(v)}"${String(F[n.toLowerCase()] ?? F.dias) === String(v) ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></label>`;
-  view.innerHTML = `${avisos()}<div class="pn-head"><div><h1>Así va ${esc(gestor() ? i.nombre : 'tu clase')}</h1><p class="pn-hoy">${new Date(`${D.hoy}T12:00:00Z`).toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })}</p></div>
-      <div class="po-filtros">${opc('Grupo', [['', 'Todos'], ...grupos().map(g => [g || SIN, gNom(g)])])}${opc('Curso', [['', 'Todos'], ...D.cursos.map(x => [x.id, x.nombre])])}<label class="fld"><span>Periodo</span><select data-f="Dias">${[[7, '7 días'], [28, '28 días'], [90, '90 días']].map(([v, t]) => `<option value="${v}"${F.dias === v ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div></div>
-    ${!D.estudiantes.some(e => e.activo) ? `<section class="po-vacio">${ico('estudiantes')}<h2>Empieza por registrar a tus estudiantes</h2><p>Pega la lista desde Excel y cada uno queda con su código.</p>${puede() ? '<button class="btn main" type="button" data-alta>Registrar estudiantes</button>' : ''}</section>` : `
-    <div class="po-kpis">${gestor() ? `<section class="pn-card po-cupos">${aro(i.usados / i.cupos, i.usados, `de ${i.cupos} cupos`)}<div><p><b>${c.entraron}</b> ya entraron</p><p><b>${Math.max(0, i.cupos - i.usados)}</b> cupos libres</p><p><b>${Math.max(0, quedan)}</b> ${quedan === 1 ? 'día' : 'días'} de contrato</p></div></section>` : ''}
-      <section class="pn-card po-k"><span>Estudiaron</span><b>${c.activos}<small> de ${c.filas.length}</small></b>${dif(c.activos, c.activosAntes)}</section><section class="pn-card po-k"><span>Minutos por estudiante</span><b>${c.filas.length ? Math.round(c.min / c.filas.length) : 0}</b>${dif(c.min, c.minAntes)}</section>
-      <section class="pn-card po-k"><span>Lecciones nuevas</span><b>${c.nuevas}</b><em>en ${F.dias} días</em></section></div>
-    <div class="pn-dash"><section class="pn-card"><div class="pn-head"><h2>Actividad por día</h2><p class="po-lee" aria-live="polite"></p></div>${grafica(c.serie)}</section>
-      <section class="pn-card po-ayuda"><div class="pn-head"><h2>Necesitan una mano</h2><span class="pn-count">${c.alertas.length}</span></div>${c.alertas.length ? `<ul>${c.alertas.slice(0, 7).map(e => `<li>${avatar(e.nombre)}<span><a href="#estudiante/${e.id}">${esc(e.nombre)}</a><small>${esc(gNom(e.grupo))} · ${e.alerta.t}</small></span></li>`).join('')}</ul>${c.alertas.length > 7 ? '<button class="link-btn" type="button" data-verayuda>Ver todos</button>' : ''}` : '<p class="pn-count">Todos van bien.</p>'}</section></div>
-    <div class="pn-dash"><section class="pn-card"><h2>Grupos</h2><ul class="po-grupos">${c.grupos.map(g => `<li><button type="button" data-grupo="${esc(g.grupo || SIN)}" aria-pressed="${F.grupo === (g.grupo || SIN)}"><span><b>${esc(gNom(g.grupo))}</b><small>${plural(g.n, 'estudiante', 'estudiantes')} · ${g.activos} activos · ${g.min} min</small></span>${barra(g.avance)}<b>${pc(g.avance)}</b></button></li>`).join('')}</ul></section>
-      <section class="pn-card"><h2>Avance por curso</h2><ul class="po-grupos">${c.cursos.map(x => `<li><a href="#contenido"><span><b>${esc(x.nombre)}</b><small>${plural(x.n, 'estudiante', 'estudiantes')} · ${x.total} lecciones</small></span>${barra(x.avance)}<b>${pc(x.avance)}</b></a></li>`).join('')}</ul><h2>Los que más avanzaron</h2><ol class="po-top">${[...c.filas].sort((a, b) => b.nuevas - a.nuevas || b.min - a.min).filter(e => e.nuevas).slice(0, 5).map(e => `<li>${avatar(e.nombre)}<a href="#estudiante/${e.id}">${esc(e.nombre)}</a><b>${plural(e.nuevas, 'lección', 'lecciones')}</b></li>`).join('') || '<li class="pn-count">Todavía nadie en este periodo.</li>'}</ol></section></div>`}`;
-  $$('[data-f]', view).forEach(s => { s.onchange = () => { const k = s.dataset.f.toLowerCase(); F[k] = k === 'dias' ? +s.value : s.value; vResumen(); $(`[data-f="${s.dataset.f}"]`, view).focus(); }; });
-  $$('[data-grupo]', view).forEach(b => { b.onclick = () => { F.grupo = F.grupo === b.dataset.grupo ? '' : b.dataset.grupo; vResumen(); $(`[data-grupo="${CSS.escape(b.dataset.grupo)}"]`, view)?.focus(); }; });
-  $('[data-alta]', view)?.addEventListener('click', dlgAlta);
-  $('[data-verayuda]', view)?.addEventListener('click', () => { Object.assign(L, { q: '', grupo: F.grupo, estado: 'ayuda' }); irA('estudiantes'); });
-  ligaGrafica(c.serie);
-}
 // Minutos por día; al pasar el puntero (o con las flechas) se lee cada día.
 function grafica(s) {
   const m = Math.max(1, ...s.map(x => x.min));
@@ -267,12 +248,8 @@ function dlgMeta(pre = {}) {
 }
 
 // ---------- equipo ----------
-function vEquipo() {
-  view.innerHTML = `${avisos()}<div class="pn-head"><div><h1>Equipo</h1><p class="pn-hoy">Los gestores administran todo. Los docentes ven sus grupos y ponen metas. No gastan cupo.</p></div>${puede() ? '<div class="pn-acc"><button class="btn ghost" type="button" data-im>Imprimir códigos</button><button class="btn main" type="button" data-n>Crear código</button></div>' : ''}</div>
-    <ul class="po-equipo">${D.equipo.map(x => `<li class="pn-card${x.activo ? '' : ' off'}">${avatar(x.nombre)}<div><b>${esc(x.nombre)}${x.yo ? ' (tú)' : ''}</b><p class="pn-count">${x.papel === 'gestor' ? 'Gestor' : `Docente · ${esc(x.grupos.join(', ') || 'sin grupos')}`}${deQuien(x.id)} · ${x.activo ? (x.entro ? (x.ultima ? `última vez ${fecha(instBogota(x.ultima))}` : 'ya entró') : 'aún no entra') : 'sin acceso'}</p>${x.codigo && x.activo ? `<p><button class="po-cod" type="button" data-cod="${x.codigo}">${muestraCodigo(x.codigo)}</button></p>` : ''}</div>
-      ${puede() ? `<div class="pn-acc"><button class="btn small ghost" type="button" data-e="${x.id}">Editar</button>${x.activo ? `<button class="btn small ghost" type="button" data-c="${x.id}">Código nuevo</button>` : ''}${x.yo ? '' : `<button class="btn small ghost${x.activo ? ' danger' : ''}" type="button" data-a="${x.id}">${x.activo ? 'Quitar acceso' : 'Devolver acceso'}</button>`}</div>` : ''}</li>`).join('')}</ul>
-    <section class="pn-card"><h2>Grupos</h2><ul class="po-grupos">${grupos().map(g => `<li><div><span><b>${esc(gNom(g))}</b><small>${plural(D.estudiantes.filter(e => e.activo && e.grupo === g).length, 'estudiante', 'estudiantes')}</small></span>${puede() && g ? `<button class="btn small ghost" type="button" data-g="${esc(g)}">Cambiar nombre</button>` : ''}</div></li>`).join('') || '<li class="pn-count">Los grupos salen de la lista de estudiantes.</li>'}</ul></section>
-    <section class="pn-card"><h2>Últimos cambios</h2><ul class="po-reg">${D.registro.map(r => `<li><span>${esc(r.quien)} ${ACC[r.accion] || esc(r.accion)}${r.detalle?.cuantos ? ` (${r.detalle.cuantos})` : r.detalle?.nombre ? `: ${esc(r.detalle.nombre)}` : ''}</span><small>${new Date(r.en).toLocaleString('es-CO', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Bogota' })}</small></li>`).join('') || '<li class="pn-count">Sin cambios todavía.</li>'}</ul></section>`;
+// Botones de la vista Equipo (la pinta gestor.js).
+function ligaEquipo() {
   const de = id => D.equipo.find(x => x.id === +id);
   $('[data-im]', view)?.addEventListener('click', () => tarjetasEquipo(D.equipo.filter(x => x.activo && x.codigo)));
   $('[data-n]', view)?.addEventListener('click', () => dlgEquipo());
@@ -296,10 +273,4 @@ function dlgEquipo(x) {
 }
 
 // ---------- contrato ----------
-function vContrato() {
-  const i = D.institucion, tot = Math.max(1, instEntre(i.desde, i.hasta)), van = Math.max(0, Math.min(tot, instEntre(i.desde, D.hoy)));
-  view.innerHTML = `${avisos()}<h1>Contrato</h1><div class="pn-cols"><section class="pn-card"><div class="pn-head"><h2>${esc(i.nombre)}</h2><span class="pill ${i.vigente ? 'ok' : 'bad'}">${i.vigente ? 'Vigente' : 'No vigente'}</span></div><p>Del ${larga(i.desde)} al ${larga(i.hasta)}</p>${barra(van / tot)}<p class="pn-count">${Math.max(0, instEntre(D.hoy, i.hasta))} días por delante</p><h2>Cupos</h2>${barra(i.usados / i.cupos)}<p class="pn-count">${i.usados} en uso de ${i.cupos}</p><h2>Cursos contratados</h2><ul class="po-cur">${D.cursos.map(c => `<li>${esc(c.nombre)}</li>`).join('')}</ul></section>
-    <section class="pn-card"><h2>Pedir más cupos o renovar</h2><p>Nos llega la solicitud y te escribimos con la propuesta.</p><form data-p novalidate><div class="pn-dos"><label class="fld"><span>Cupos</span><input name="estudiantes" type="number" min="1" max="20000" value="10" inputmode="numeric"></label><label class="fld"><span>Duración</span><select name="meses"><option value="6">6 meses</option><option value="12">1 año</option></select></label></div><label class="fld"><span>Mensaje (opcional)</span><textarea name="mensaje" rows="3" maxlength="800"></textarea></label><div class="pn-pie"><button class="btn main" type="submit"${puede() ? '' : ' disabled'}>Enviar solicitud</button></div></form></section></div>`;
-  const f = $('[data-p]', view); f.onsubmit = e => { e.preventDefault(); const n = +f.estudiantes.value; if (!(n >= 1)) return toast('Escribe cuántos cupos', true); ocupado($('button', f), async () => { await api('pedir_cupos', { estudiantes: n, meses: +f.meses.value, mensaje: f.mensaje.value }); f.reset(); toast('Solicitud enviada: te escribimos pronto'); }); };
-}
 entrar();
