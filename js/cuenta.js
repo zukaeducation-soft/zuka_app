@@ -390,7 +390,7 @@ function cuentaVideoBase(id, reintento = false) {
 
 // ---------- formularios (hojas inferiores) ----------
 const campo = (name, label, type = 'text', extra = '') =>
-  `<label class="fld"><span>${label}</span><input name="${name}" type="${type}" ${extra}></label>`;
+  `<label class="fld"><span>${label}</span><input name="${name}" type="${type}" aria-label="${label}" ${extra}></label>`;
 const CAMPO_CODIGO = campo('codigo', 'Código de acceso', 'text', 'autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="14" placeholder="ABCDE-FGH23" required');
 
 // Hoja con un formulario: `enviar(datos)` devuelve un texto de error o nada si salió bien.

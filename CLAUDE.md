@@ -686,3 +686,12 @@ Videos hechos y entregados que esperan su ID de Bunny (`clip.bunny` + `duration`
 - Cálculo: faltan lecciones de su cronograma (ver spec `2026-11-07-cronograma-algebra-calculo`).
 - El resto de Álgebra aún tiene ejercicios de opción múltiple y
   sin pistas.
+
+## Auditoría del 2026-11-26
+
+Informe y estado de cada hallazgo en `docs/auditoria-2026-11-26.md` (pruebas `tests/auditoria-arreglos.test.js` y `tests/auditoria-6-20.test.js`). Lo que deja para sesiones nuevas:
+- **Pantallas completas** (`js/tapa.js`): lo que se abre en `#overlay` o `#auth` deja inerte lo de atrás y recibe el foco solo; una pantalla nueva ahí no tiene que hacer nada. Una capa completa nueva con otro id debe tapar lo suyo y, si convive con esas, añadirse a `otra` en `tapaSync`.
+- **Colores de estado como letra**: `--ok-ink`, `--bad-ink`, `--gold-ink`, `--fire-ink` (nunca `--ok`/`--bad` como color de texto). **Letra mínima 12 px** en `css/styles.css` y zona táctil de 44 px con `::after` en `.icon-btn`, `.hint-btn` y `button.tb-stat`.
+- **Errores de producción**: `js/errores.js` los manda a la tabla `errores_app` de Supabase (solo la lee el administrador; se mira en el editor de tablas). En `localhost` no manda nada.
+- `tools/servir.js` solo atiende a este computador (`--red` para probar desde el celular). Los informes de la skill `threat-model` van en `threat-model/`, fuera de git y de Vercel.
+- El banco de simulacros (`instituciones/banco.json`) son los mismos ejercicios de las lecciones: sus respuestas son públicas por diseño; lo que no se filtra son las preguntas que escribe el docente.

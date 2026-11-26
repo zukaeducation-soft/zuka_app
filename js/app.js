@@ -22,7 +22,12 @@ let S = (() => {
   try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) { /* almacenamiento no disponible */ }
   return Object.assign(DEFAULTS(), s || {});
 })();
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* idem */ } }
+// Si el almacenamiento está lleno o cerrado (modo privado), el avance de la sesión no queda: se avisa una vez.
+let saveFallo = false;
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch (e) { if (!saveFallo) { saveFallo = true; if (typeof toast === 'function') toast('No se pudo guardar tu avance en este dispositivo. Libera espacio o sal del modo privado.'); } }
+}
 
 const $ = (s, r = document) => r.querySelector(s);
 const view = $('#view');
@@ -65,7 +70,7 @@ function installHelp() {
 }
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   addEventListener('load', () => navigator.serviceWorker.register('sw.js')
-    .then(reg => watchUpdates(reg, navigator.serviceWorker, showUpdateBar))
+    .then(reg => { watchUpdates(reg, navigator.serviceWorker, showUpdateBar); checkOnReturn(reg); })
     .catch(() => {}));
 }
 // Barra encima del menú inferior: «Actualizar» recarga con la versión nueva; «Más tarde» la
@@ -762,16 +767,18 @@ function startLesson(c, l) {
     save(); updateBar();
     fb.className = `feedback show ${r.ok ? 'ok' : 'bad'}`;
     fb.innerHTML = `<div class="fb-in">
-      <div class="fb-head"><span class="fb-icon">${r.ok ? ICON.check : ICON.x}</span><h4>${r.ok ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : 'Incorrecto'}</h4></div>
-      ${r.ok ? '' : `<p class="fb-label">La respuesta correcta es:</p><div class="fb-sol">${tex(window.katex && typeof texify === 'function' ? texify(r.solution) : r.solution)}</div>`}
+      <div class="fb-head" id="fb-que"><span class="fb-icon">${r.ok ? ICON.check : ICON.x}</span><h4>${r.ok ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : 'Incorrecto'}</h4></div>
+      ${r.ok ? '' : `<p class="fb-label">La respuesta correcta es:</p><div class="fb-sol" id="fb-sol">${tex(window.katex && typeof texify === 'function' ? texify(r.solution) : r.solution)}</div>`}
       ${ex.explain ? `<p class="fb-exp">${conExplora ? xpPalabras(ex.explain, 14) : tex(ex.explain)}</p>` : ''}
-      <button class="btn">${r.ok ? 'Continuar' : 'Entendido'}</button></div>`;
+      <button class="btn" aria-describedby="fb-que fb-sol">${r.ok ? 'Continuar' : 'Entendido'}</button></div>`;
     root.classList.add('fb-open');
+    $('.btn', fb).focus({ preventScroll: true });   // con teclado o lector, lo que sigue es «Continuar», no el «Comprobar» que quedó tapado
     // La retroalimentación tapa la parte de abajo: se deja ese espacio para poder desplazar el
     // ejercicio y verlo completo (en un juego largo, lo que quedó mal puede estar abajo).
     body.style.paddingBottom = `${Math.max(0, fb.offsetHeight - $('.lesson-foot', ov).offsetHeight) + 24}px`;
     $('.btn', fb).onclick = () => {
       fb.classList.remove('show');
+      ov.tabIndex = -1; ov.focus({ preventScroll: true });   // el botón se esconde: el foco vuelve a la lección, no al aire
       if (S.hearts <= 0 && !S.unlockAll) return outOfHearts();
       pos++; step();
     };
@@ -810,8 +817,10 @@ function startLesson(c, l) {
     body.innerHTML = `<div class="done-screen">
       ${mascotSVG('sad', 'm-win')}
       <h2>Te quedaste sin vidas</h2>
-      <p class="muted">Recuperas una vida cada 20 minutos. Mientras tanto, entrena con el botón del gimnasio de tu curso: allí no se pierden vidas.</p></div>`;
+      <p class="muted">Recuperas una vida cada 20 minutos. Mientras tanto, entrena con el botón del gimnasio de tu curso: allí no se pierden vidas.</p>
+      <button class="btn ghost" type="button" data-gym>Ir al gimnasio</button></div>`;
     root.classList.remove('fb-open');
+    $('[data-gym]', body).onclick = () => close('gym');
     btn.textContent = 'Salir'; btn.disabled = false; btn.onclick = close;
   }
 

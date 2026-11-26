@@ -22,3 +22,14 @@ function watchUpdates(reg, sw, show, reload = () => location.reload()) {
     });
   });
 }
+
+// Una app que vive en «recientes» no vuelve a cargar la página: al volver a primer plano se busca versión nueva, a lo
+// sumo una vez por hora. Si la hay, el aviso de arriba la ofrece.
+function checkOnReturn(reg, doc = document, now = Date.now, cada = 3600000) {
+  let ultima = now();
+  doc.addEventListener('visibilitychange', () => {
+    if (doc.visibilityState !== 'visible' || now() - ultima < cada) return;
+    ultima = now();
+    try { Promise.resolve(reg.update()).catch(() => {}); } catch (e) { /* sin red no pasa nada */ }
+  });
+}

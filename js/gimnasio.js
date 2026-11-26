@@ -756,6 +756,7 @@ function startReto(c, r) {
     fb.className = `feedback show ${kind}`;
     fb.innerHTML = `<div class="fb-in">${html}<button class="btn">${label}</button></div>`;
     root.classList.add('fb-open');
+    $('.btn', fb).focus({ preventScroll: true });
     body.style.paddingBottom = `${Math.max(0, fb.offsetHeight - $('.lesson-foot', ov).offsetHeight) + 24}px`;
     const t0 = Date.now();   // un doble toque en «Comprobar» no cierra la ayuda sin leerla
     $('.btn', fb).onclick = () => { if (Date.now() - t0 < 350) return; fb.classList.remove('show'); root.classList.remove('fb-open'); body.style.paddingBottom = ''; then(); };

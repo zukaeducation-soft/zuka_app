@@ -127,6 +127,11 @@ const EX = {
   },
 };
 
+// El enunciado sin TeX, para el nombre accesible del lienzo: las fracciones se leen «a sobre b».
+function texLeido(q) {
+  return String(q || '').replace(/\\[dt]?frac\{([^{}]*)\}\{([^{}]*)\}/g, '$1 sobre $2').replace(/\\[,;:! ]/g, ' ').replace(/\$|\\[a-zA-Z]+|[{}]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 // Minijuego de p5.js: adapta GAMES[ex.game] (js/games/) al contrato de los demás ejercicios.
 EX.play = (area, ex, ready) => {
   const game = GAMES[ex.game];
@@ -147,6 +152,7 @@ EX.play = (area, ex, ready) => {
     if (ex.exam || box.closest('.exam')) stage.dataset.examen = '1'; else delete stage.dataset.examen;
     // En una lección con explicación Explora, los juegos suenan como ella.
     const sfx = typeof XP_SFX !== 'undefined' && box.closest('.xp-lesson') ? XP_SFX : Sfx;
+    stage.dataset.label = `Juego: ${texLeido(ex.q).slice(0, 200)}`;
     const next = inst = game.create(stage, ex.params, { ready, sfx, palette: PALETTE, tex, guideAuto });
     Promise.resolve(next.loaded).then(() => {
       if (!disposed && inst === next) stage.removeAttribute('aria-busy');

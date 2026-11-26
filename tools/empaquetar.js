@@ -52,7 +52,8 @@ if (require.main === module) {
 module.exports = { fuentes, empaqueta, PARTES, DIR, nombre };
 
 // El portal de instituciones no pasa por la caché de la app: carga su propia copia (si no, portal nuevo con cuentas viejas).
-{
+// Solo al correr la herramienta: importarla (las pruebas lo hacen) no escribe nada.
+if (require.main === module) {
   const f = require('fs'), q = require('path'), de = f.readFileSync(q.join(__dirname, '../js/instituciones.js'), 'utf8').replace(/\r\n/g, '\n');
   f.writeFileSync(q.join(__dirname, '../instituciones/cuentas.js'), `// Copia de js/instituciones.js (tools/empaquetar.js): no editar.\n${de}`);
   f.writeFileSync(q.join(__dirname, '../instituciones/banco.json'), require('./banco').banco());   // preguntas de los simulacros

@@ -437,7 +437,7 @@ function vEstudiante(id) {
     $$('[data-quita]', view).forEach(b => { b.onclick = async () => { if (await confirma({ titulo: `¿Quitar ${esc(curso(b.dataset.quita).nombre)}?`, texto: 'Deja de tener ese curso y se pierden los días que le quedan. Su avance se conserva.', ok: 'Quitar', peligro: true })) hace1(b, () => admin('acceso_quitar', { usuario: id, curso: b.dataset.quita }), 'Curso quitado'); }; });
     $$('[data-copy]', view).forEach(b => { b.onclick = () => copiar(muestraCodigo(b.dataset.copy)); });
     $$('[data-renueva]', view).forEach(b => { b.onclick = () => renovar(b, b.dataset.renueva, p, otra); });
-    $$('[data-disp]', view).forEach(b => { b.onclick = () => hace1(b, () => admin('dispositivos_borrar', { usuario: id, id: b.dataset.disp }), 'Dispositivo liberado: los demás volverán a pedir el código'); });
+    $$('[data-disp]', view).forEach(b => { b.onclick = async () => { if (await confirma({ titulo: '¿Liberar este dispositivo?', texto: 'Ese equipo deja de contar en el límite del código.', ok: 'Liberar' })) hace1(b, () => admin('dispositivos_borrar', { usuario: id, id: b.dataset.disp }), 'Dispositivo liberado: los demás volverán a pedir el código'); }; });
   });
 }
 async function renovar(b, codigo, p, hecho) {
@@ -535,7 +535,7 @@ function vSolicitudes() {
         ${td('', s.estado === 'pendiente' ? `<span class="pn-acc"><button class="btn small main" type="button" data-ok="${s.id}">Confirmar pago</button>${waA(s.telefono, `Hola${s.nombre ? ` ${s.nombre}` : ''}, vimos que quieres ${curso(s.curso).nombre} por ${mesesTexto(s.meses)}.`)}<button class="btn small ghost" type="button" data-no="${s.id}">Descartar</button></span>` : '', 'pn-num')}</tr>`), 'No hay solicitudes.')}`;
     filas();
     $$('[data-ok]', view).forEach(b => { b.onclick = () => { const s = ss.find(x => String(x.id) === b.dataset.ok); dlgActivar({ usuarios: [s.usuario], nombre: s.nombre, celular: s.telefono, sel: [s.curso], meses: s.meses, precio: s.precio, titulo: 'Confirmar pago' }, vSolicitudes); }; });
-    $$('[data-no]', view).forEach(b => { b.onclick = () => ocupado(b, async () => { await admin('solicitud_estado', { id: b.dataset.no, estado: 'descartada' }); toast('Solicitud descartada'); vSolicitudes(); }); });
+    $$('[data-no]', view).forEach(b => { b.onclick = async () => { if (await confirma({ titulo: '¿Descartar la solicitud?', texto: 'Sale de la lista de pendientes. Si era una compra real, nadie la va a atender.', ok: 'Descartar', peligro: true })) ocupado(b, async () => { await admin('solicitud_estado', { id: b.dataset.no, estado: 'descartada' }); toast('Solicitud descartada'); vSolicitudes(); }); }; });
   });
 }
 
@@ -564,7 +564,8 @@ function vCursos() {
     $$('[data-c]', view).forEach(s => {
       const c = s.dataset.c;
       $('[data-pub]', s).onchange = async e => {
-        const i = e.target, r = await sb.from('cursos').update({ publicado: i.checked }).eq('id', c).select();
+        const i = e.target; if (i.checked && !await confirma({ titulo: `¿Publicar ${esc(curso(c).nombre)}?`, texto: 'Lo verán todos en la app, para comprarlo.', ok: 'Publicar' })) { i.checked = false; return; }
+        const r = await sb.from('cursos').update({ publicado: i.checked }).eq('id', c).select();
         if (r.error || !r.data.length) { i.checked = !i.checked; return toast('No se pudo cambiar el curso', true); }
         curso(c).publicado = i.checked; toast(i.checked ? 'Publicado: ya lo ven todos' : 'Ahora solo lo ve quien lo tiene asignado');
       };

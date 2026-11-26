@@ -36,7 +36,7 @@ function setupBack() {
     if (typeof tiendaAtras === 'function' && tiendaAtras()) { cover(); return; }   // js/tienda.js y js/lector.js
     if (typeof portalAtras === 'function' && portalAtras()) { cover(); return; }   // js/portal.js
     const step = backStep({
-      exitAsk, tab, dialog: dialogOpen(), tour: tourOpen(), guide: typeof guideOpen !== 'undefined' && !!guideOpen, sheet: $('#sheet').classList.contains('open'),
+      exitAsk, tab, dialog: dialogOpen(), tour: tourOpen(), guide: typeof guideOpen !== 'undefined' && !!guideOpen, sheet: sheetIsOpen,
       lesson: !!lessonClose, world: (tab === 'learn' && (!!openWorld || !!openBlock)) || (tab === 'profile' && !!profileSub),   // Ajustes vuelve al Perfil por su [data-back]
     });
     if (step === 'exit') { exitAsk = false; dismissDialog(); history.back(); return; }

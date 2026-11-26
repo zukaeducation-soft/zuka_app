@@ -304,6 +304,8 @@ function mountSketch(host, sketch, aspect = 1.25, gesture) {
   const fit = size => {
     const cv = inst?.canvas, body = host.closest?.('.lesson-body'), ex = body?.firstElementChild;
     if (!cv?.style) return;
+    // Para el lector de pantalla el lienzo es una imagen con el enunciado; los juegos con teclado ponen su propio nombre.
+    if (cv.setAttribute && !cv.hasAttribute('role')) { cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', host.dataset?.label || 'Juego interactivo: se juega tocando o arrastrando'); }
     // p5 saca la escala del ratón de scrollWidth, que no cuenta el zoom de la interfaz: se le da el tamaño en pantalla.
     if (cv.getBoundingClientRect && !Object.hasOwn(cv, 'scrollWidth')) for (const [k, d] of [['scrollWidth', 'width'], ['scrollHeight', 'height']]) Object.defineProperty(cv, k, { configurable: true, get: () => cv.getBoundingClientRect()[d] });
     let k = 1;
@@ -821,7 +823,7 @@ function roundsGame(def) {
         p.createCanvas(size.w, size.h); p.textFont('system-ui'); lay(); def.enter?.(G);
         if (def.key && p.canvas) {
           p.canvas.tabIndex = 0;
-          p.canvas.setAttribute('aria-label', def.keyboard);
+          p.canvas.setAttribute('role', 'application'); p.canvas.setAttribute('aria-label', def.keyboard);
           p.canvas.addEventListener('keydown', e => {
             if (G.locked || !def.key(G, e.key)) return;
             e.preventDefault(); e.stopPropagation();

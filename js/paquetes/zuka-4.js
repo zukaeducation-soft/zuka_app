@@ -8778,7 +8778,7 @@ class ClipPlayer {
 // Controles compartidos de los videos: barra que se toca o arrastra para adelantar,
 // tiempo y botones de ±10 s (visibles en pausa).
 const VIDEO_UI = `
-  <div class="seek" role="slider" aria-label="Posición del video"><div class="seek-track"><b></b></div></div>
+  <div class="seek" role="slider" tabindex="0" aria-label="Posición del video" aria-valuemin="0"><div class="seek-track"><b></b></div></div>
   <span class="seek-time"></span>
   <div class="seek-skip">
     <button type="button" data-skip="-10" aria-label="Retroceder 10 segundos">−10 s</button>
@@ -8829,6 +8829,13 @@ function attachSpeed(el, apply) {
   apply(S.videoSpeed || 1);
 }
 
+// Teclado de la barra: flechas de 5 en 5 segundos, Inicio y Fin. null = esa tecla no es de la barra.
+function seekKey(key, t, d) {
+  if (!d) return null;
+  const a = { ArrowRight: t + 5, ArrowUp: t + 5, ArrowLeft: t - 5, ArrowDown: t - 5, Home: 0, End: d }[key];
+  return a == null ? null : Math.min(d, Math.max(0, a));
+}
+
 function attachSeek(el, api) {
   const zone = el.querySelector('.seek'), bar = zone.querySelector('b'), label = el.querySelector('.seek-time');
   const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
@@ -8837,6 +8844,7 @@ function attachSeek(el, api) {
     if (!d) return;
     bar.style.width = (100 * t) / d + '%';
     label.textContent = `${mmss(t)} / ${mmss(d)}`;
+    zone.setAttribute('aria-valuemax', Math.round(d)); zone.setAttribute('aria-valuenow', Math.round(t)); zone.setAttribute('aria-valuetext', label.textContent);
   };
   const timeAt = e => {
     const r = zone.getBoundingClientRect();
@@ -8859,6 +8867,12 @@ function attachSeek(el, api) {
     api.seek(timeAt(e));
   });
   zone.addEventListener('click', e => e.stopPropagation());
+  zone.addEventListener('keydown', e => {
+    const t = seekKey(e.key, api.time(), api.duration());
+    if (t == null) return;
+    e.preventDefault(); e.stopPropagation();   // la flecha mueve el video, no cambia de ejercicio
+    api.seek(t); show(t);
+  });
   el.querySelectorAll('[data-skip]').forEach(b => b.addEventListener('click', e => {
     e.stopPropagation();
     const t = Math.min(api.duration(), Math.max(0, api.time() + Number(b.dataset.skip)));
@@ -11751,6 +11765,11 @@ const EX = {
   },
 };
 
+// El enunciado sin TeX, para el nombre accesible del lienzo: las fracciones se leen «a sobre b».
+function texLeido(q) {
+  return String(q || '').replace(/\\[dt]?frac\{([^{}]*)\}\{([^{}]*)\}/g, '$1 sobre $2').replace(/\\[,;:! ]/g, ' ').replace(/\$|\\[a-zA-Z]+|[{}]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 // Minijuego de p5.js: adapta GAMES[ex.game] (js/games/) al contrato de los demás ejercicios.
 EX.play = (area, ex, ready) => {
   const game = GAMES[ex.game];
@@ -11771,6 +11790,7 @@ EX.play = (area, ex, ready) => {
     if (ex.exam || box.closest('.exam')) stage.dataset.examen = '1'; else delete stage.dataset.examen;
     // En una lección con explicación Explora, los juegos suenan como ella.
     const sfx = typeof XP_SFX !== 'undefined' && box.closest('.xp-lesson') ? XP_SFX : Sfx;
+    stage.dataset.label = `Juego: ${texLeido(ex.q).slice(0, 200)}`;
     const next = inst = game.create(stage, ex.params, { ready, sfx, palette: PALETTE, tex, guideAuto });
     Promise.resolve(next.loaded).then(() => {
       if (!disposed && inst === next) stage.removeAttribute('aria-busy');
@@ -11882,7 +11902,7 @@ function openExamSheet(c, u) {
     </ul>
     ${open ? `<button class="btn" data-go>${best != null ? 'Repetir evaluación' : 'Empezar evaluación'}</button>`
       : '<p class="muted">Completa todas las lecciones del mundo para abrir la evaluación.</p><button class="btn" disabled>Bloqueada</button>'}
-  </div>`, sh => sh.querySelector('[data-go]')?.addEventListener('click', () => { closeSheet(); startExam(c, u); }));
+  </div>`, sh => sh.querySelector('[data-go]')?.addEventListener('click', () => { closeSheet(false); startExam(c, u); }));
 }
 
 function startExam(c, u) {
@@ -12060,6 +12080,17 @@ function watchUpdates(reg, sw, show, reload = () => location.reload()) {
     });
   });
 }
+
+// Una app que vive en «recientes» no vuelve a cargar la página: al volver a primer plano se busca versión nueva, a lo
+// sumo una vez por hora. Si la hay, el aviso de arriba la ofrece.
+function checkOnReturn(reg, doc = document, now = Date.now, cada = 3600000) {
+  let ultima = now();
+  doc.addEventListener('visibilitychange', () => {
+    if (doc.visibilityState !== 'visible' || now() - ultima < cada) return;
+    ultima = now();
+    try { Promise.resolve(reg.update()).catch(() => {}); } catch (e) { /* sin red no pasa nada */ }
+  });
+}
 ;
 //#archivo js/pwa.js
 // Piezas de PWA que no son el service worker (spec 2026-11-13-revision-pwa; pruebas tests/pwa.test.js).
@@ -12136,7 +12167,7 @@ function setupBack() {
     if (typeof tiendaAtras === 'function' && tiendaAtras()) { cover(); return; }   // js/tienda.js y js/lector.js
     if (typeof portalAtras === 'function' && portalAtras()) { cover(); return; }   // js/portal.js
     const step = backStep({
-      exitAsk, tab, dialog: dialogOpen(), tour: tourOpen(), guide: typeof guideOpen !== 'undefined' && !!guideOpen, sheet: $('#sheet').classList.contains('open'),
+      exitAsk, tab, dialog: dialogOpen(), tour: tourOpen(), guide: typeof guideOpen !== 'undefined' && !!guideOpen, sheet: sheetIsOpen,
       lesson: !!lessonClose, world: (tab === 'learn' && (!!openWorld || !!openBlock)) || (tab === 'profile' && !!profileSub),   // Ajustes vuelve al Perfil por su [data-back]
     });
     if (step === 'exit') { exitAsk = false; dismissDialog(); history.back(); return; }
@@ -12250,7 +12281,7 @@ function endTour() { tourEnd?.(); }
 
 // Deja detrás la vista que el paso necesita: el mapa de mundos o el mundo donde va el estudiante.
 function tourView(v) {
-  if ($('#sheet').classList.contains('open')) closeSheet();
+  if (sheetIsOpen) closeSheet();
   const c = courseById(S.course), cur = currentLesson(c);
   // Con componentes (c.blocks) el mapa vive dentro de un componente: se abre el de la lección que toca.
   const needBlock = !!c.blocks && openBlock?.course !== c.id;
@@ -13643,6 +13674,7 @@ function startReto(c, r) {
     fb.className = `feedback show ${kind}`;
     fb.innerHTML = `<div class="fb-in">${html}<button class="btn">${label}</button></div>`;
     root.classList.add('fb-open');
+    $('.btn', fb).focus({ preventScroll: true });
     body.style.paddingBottom = `${Math.max(0, fb.offsetHeight - $('.lesson-foot', ov).offsetHeight) + 24}px`;
     const t0 = Date.now();   // un doble toque en «Comprobar» no cierra la ayuda sin leerla
     $('.btn', fb).onclick = () => { if (Date.now() - t0 < 350) return; fb.classList.remove('show'); root.classList.remove('fb-open'); body.style.paddingBottom = ''; then(); };
@@ -16562,7 +16594,7 @@ function cuentaVideoBase(id, reintento = false) {
 
 // ---------- formularios (hojas inferiores) ----------
 const campo = (name, label, type = 'text', extra = '') =>
-  `<label class="fld"><span>${label}</span><input name="${name}" type="${type}" ${extra}></label>`;
+  `<label class="fld"><span>${label}</span><input name="${name}" type="${type}" aria-label="${label}" ${extra}></label>`;
 const CAMPO_CODIGO = campo('codigo', 'Código de acceso', 'text', 'autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="14" placeholder="ABCDE-FGH23" required');
 
 // Hoja con un formulario: `enviar(datos)` devuelve un texto de error o nada si salió bien.
@@ -19791,7 +19823,12 @@ let S = (() => {
   try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) { /* almacenamiento no disponible */ }
   return Object.assign(DEFAULTS(), s || {});
 })();
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* idem */ } }
+// Si el almacenamiento está lleno o cerrado (modo privado), el avance de la sesión no queda: se avisa una vez.
+let saveFallo = false;
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch (e) { if (!saveFallo) { saveFallo = true; if (typeof toast === 'function') toast('No se pudo guardar tu avance en este dispositivo. Libera espacio o sal del modo privado.'); } }
+}
 
 const $ = (s, r = document) => r.querySelector(s);
 const view = $('#view');
@@ -19834,7 +19871,7 @@ function installHelp() {
 }
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   addEventListener('load', () => navigator.serviceWorker.register('sw.js')
-    .then(reg => watchUpdates(reg, navigator.serviceWorker, showUpdateBar))
+    .then(reg => { watchUpdates(reg, navigator.serviceWorker, showUpdateBar); checkOnReturn(reg); })
     .catch(() => {}));
 }
 // Barra encima del menú inferior: «Actualizar» recarga con la versión nueva; «Más tarde» la
@@ -20531,16 +20568,18 @@ function startLesson(c, l) {
     save(); updateBar();
     fb.className = `feedback show ${r.ok ? 'ok' : 'bad'}`;
     fb.innerHTML = `<div class="fb-in">
-      <div class="fb-head"><span class="fb-icon">${r.ok ? ICON.check : ICON.x}</span><h4>${r.ok ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : 'Incorrecto'}</h4></div>
-      ${r.ok ? '' : `<p class="fb-label">La respuesta correcta es:</p><div class="fb-sol">${tex(window.katex && typeof texify === 'function' ? texify(r.solution) : r.solution)}</div>`}
+      <div class="fb-head" id="fb-que"><span class="fb-icon">${r.ok ? ICON.check : ICON.x}</span><h4>${r.ok ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : 'Incorrecto'}</h4></div>
+      ${r.ok ? '' : `<p class="fb-label">La respuesta correcta es:</p><div class="fb-sol" id="fb-sol">${tex(window.katex && typeof texify === 'function' ? texify(r.solution) : r.solution)}</div>`}
       ${ex.explain ? `<p class="fb-exp">${conExplora ? xpPalabras(ex.explain, 14) : tex(ex.explain)}</p>` : ''}
-      <button class="btn">${r.ok ? 'Continuar' : 'Entendido'}</button></div>`;
+      <button class="btn" aria-describedby="fb-que fb-sol">${r.ok ? 'Continuar' : 'Entendido'}</button></div>`;
     root.classList.add('fb-open');
+    $('.btn', fb).focus({ preventScroll: true });   // con teclado o lector, lo que sigue es «Continuar», no el «Comprobar» que quedó tapado
     // La retroalimentación tapa la parte de abajo: se deja ese espacio para poder desplazar el
     // ejercicio y verlo completo (en un juego largo, lo que quedó mal puede estar abajo).
     body.style.paddingBottom = `${Math.max(0, fb.offsetHeight - $('.lesson-foot', ov).offsetHeight) + 24}px`;
     $('.btn', fb).onclick = () => {
       fb.classList.remove('show');
+      ov.tabIndex = -1; ov.focus({ preventScroll: true });   // el botón se esconde: el foco vuelve a la lección, no al aire
       if (S.hearts <= 0 && !S.unlockAll) return outOfHearts();
       pos++; step();
     };
@@ -20579,8 +20618,10 @@ function startLesson(c, l) {
     body.innerHTML = `<div class="done-screen">
       ${mascotSVG('sad', 'm-win')}
       <h2>Te quedaste sin vidas</h2>
-      <p class="muted">Recuperas una vida cada 20 minutos. Mientras tanto, entrena con el botón del gimnasio de tu curso: allí no se pierden vidas.</p></div>`;
+      <p class="muted">Recuperas una vida cada 20 minutos. Mientras tanto, entrena con el botón del gimnasio de tu curso: allí no se pierden vidas.</p>
+      <button class="btn ghost" type="button" data-gym>Ir al gimnasio</button></div>`;
     root.classList.remove('fb-open');
+    $('[data-gym]', body).onclick = () => close('gym');
     btn.textContent = 'Salir'; btn.disabled = false; btn.onclick = close;
   }
 
@@ -20732,3 +20773,39 @@ setupBack();   // botón «atrás» del celular (js/back.js)
 // En la web sin instalar y sin sesión sale primero la presentación (js/presentacion.js); si no, sin sesión, la pantalla
 // de entrada. El recorrido empieza al cerrarlas.
 if (!presentacionPide() && !cuentaPideEntrar() && tourShouldStart(S)) startTour();
+;
+//#archivo js/tapa.js
+// Pantallas completas (auditoría 2026-11-26, hallazgo 6): la lección, la evaluación, el simulacro y el gimnasio se
+// abren en #overlay, y la entrada en #auth. Mientras una está abierta, lo de atrás queda inerte (ni Tab ni el lector de
+// pantalla lo alcanzan) y el foco entra a ella. Se vigila la página en vez de tocar cada sitio que abre o cierra una:
+// así una pantalla nueva queda cubierta sin acordarse de nada. Las hojas, el recorrido y la presentación tapan lo suyo
+// por su cuenta; aquí solo se suelta lo que aquí se tapó.
+const TAPA_APP = ['#topbar', '#view', '#tabbar'];
+
+// Pura: qué queda detrás según lo que está abierto.
+function tapaDetras(leccion, entrada) {
+  return [...(leccion || entrada ? TAPA_APP : []), ...(entrada ? ['#overlay'] : [])];
+}
+
+let tapaPuestos = new Set(), tapaCima = null;
+function tapaSync(doc = document) {
+  const ov = doc.querySelector('#overlay'), auth = doc.querySelector('#auth'), abierta = !!ov && ov.classList.contains('open');
+  const quiere = tapaDetras(abierta, !!auth).map(s => doc.querySelector(s)).filter(Boolean);
+  // Si al soltar hay otra capa completa encima (la presentación o la tienda, que tapan lo mismo por su cuenta), lo de
+  // atrás sigue siendo suyo: solo se olvida. Caso: de la entrada se vuelve a «Conocer Zuka».
+  const otra = doc.querySelector('#landing') || doc.querySelector('#tienda');
+  for (const el of [...tapaPuestos]) if (!quiere.includes(el)) { if (!otra) el.inert = false; tapaPuestos.delete(el); }
+  for (const el of quiere) if (!el.inert) { el.inert = true; tapaPuestos.add(el); }
+  // El foco entra al abrirse, y también si una pantalla reemplazó a otra y el foco quedó en el aire (el botón que lo
+  // tenía se borró). Con una hoja encima (pantalla inerte) se queda en la hoja.
+  const cima = auth || (abierta ? ov : null), act = doc.activeElement;
+  if (cima && !cima.inert && !cima.contains(act) && (cima !== tapaCima || !act || act === doc.body)) { cima.tabIndex = -1; cima.focus({ preventScroll: true }); }
+  tapaCima = cima;
+}
+
+if (typeof MutationObserver !== 'undefined' && typeof document !== 'undefined' && document.body) {
+  const mo = new MutationObserver(() => tapaSync());
+  mo.observe(document.body, { childList: true });   // #auth entra y sale de <body>
+  ['#overlay', ...TAPA_APP].forEach(s => { const el = document.querySelector(s); if (el) mo.observe(el, { attributes: true, attributeFilter: ['class', 'inert'] }); });
+  tapaSync();
+}

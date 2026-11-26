@@ -148,7 +148,7 @@ class ClipPlayer {
 // Controles compartidos de los videos: barra que se toca o arrastra para adelantar,
 // tiempo y botones de ±10 s (visibles en pausa).
 const VIDEO_UI = `
-  <div class="seek" role="slider" aria-label="Posición del video"><div class="seek-track"><b></b></div></div>
+  <div class="seek" role="slider" tabindex="0" aria-label="Posición del video" aria-valuemin="0"><div class="seek-track"><b></b></div></div>
   <span class="seek-time"></span>
   <div class="seek-skip">
     <button type="button" data-skip="-10" aria-label="Retroceder 10 segundos">−10 s</button>
@@ -199,6 +199,13 @@ function attachSpeed(el, apply) {
   apply(S.videoSpeed || 1);
 }
 
+// Teclado de la barra: flechas de 5 en 5 segundos, Inicio y Fin. null = esa tecla no es de la barra.
+function seekKey(key, t, d) {
+  if (!d) return null;
+  const a = { ArrowRight: t + 5, ArrowUp: t + 5, ArrowLeft: t - 5, ArrowDown: t - 5, Home: 0, End: d }[key];
+  return a == null ? null : Math.min(d, Math.max(0, a));
+}
+
 function attachSeek(el, api) {
   const zone = el.querySelector('.seek'), bar = zone.querySelector('b'), label = el.querySelector('.seek-time');
   const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
@@ -207,6 +214,7 @@ function attachSeek(el, api) {
     if (!d) return;
     bar.style.width = (100 * t) / d + '%';
     label.textContent = `${mmss(t)} / ${mmss(d)}`;
+    zone.setAttribute('aria-valuemax', Math.round(d)); zone.setAttribute('aria-valuenow', Math.round(t)); zone.setAttribute('aria-valuetext', label.textContent);
   };
   const timeAt = e => {
     const r = zone.getBoundingClientRect();
@@ -229,6 +237,12 @@ function attachSeek(el, api) {
     api.seek(timeAt(e));
   });
   zone.addEventListener('click', e => e.stopPropagation());
+  zone.addEventListener('keydown', e => {
+    const t = seekKey(e.key, api.time(), api.duration());
+    if (t == null) return;
+    e.preventDefault(); e.stopPropagation();   // la flecha mueve el video, no cambia de ejercicio
+    api.seek(t); show(t);
+  });
   el.querySelectorAll('[data-skip]').forEach(b => b.addEventListener('click', e => {
     e.stopPropagation();
     const t = Math.min(api.duration(), Math.max(0, api.time() + Number(b.dataset.skip)));
