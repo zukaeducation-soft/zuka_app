@@ -27,6 +27,20 @@ const simRes = id => (S.simIcf ||= {})[id] ||= {};
 const simNotas = s => Object.fromEntries(SIM_PRUEBAS.map(([k]) => [k, simRes(s.id)[k]?.best ?? null]));
 const simLlave = () => C_PREICFES()?.units.find(u => u.exam)?.exam.id;
 const C_PREICFES = () => COURSES.find(c => c.id === 'preicfes');
+// Califica y guarda una prueba (al entregar, o si el tiempo se acabó con el estudiante fuera).
+function simIcfCalifica(s, pr, resp) {
+  const L = s.pruebas[pr], pct = simPuntaje(resp.filter((o, i) => o === L[i].r).length, L.length), r = simRes(s.id);
+  r[pr] = { best: Math.max(r[pr]?.best ?? 0, pct), last: { pct, resp: resp.slice(), at: Date.now() } };
+  delete S.simIcfCurso; save();
+  return pct;
+}
+// Una prueba que se venció mientras el estudiante estaba fuera queda calificada con lo que alcanzó a marcar.
+function simIcfVence() {
+  const c = S.simIcfCurso, s = c && PI_SIMULACROS.find(x => x.id === c.id);
+  if (!c || c.fin > Date.now()) return null;
+  if (!s) { delete S.simIcfCurso; save(); return null; }
+  return { s, pr: c.pr, resp: c.resp, pct: simIcfCalifica(s, c.pr, c.resp) };
+}
 function simTextoIcf(t, abierto) {
   const tabla = t.tabla ? `<table class="simi-tabla">${t.tabla.map((f, i) => `<tr>${f.map(c => (i ? `<td>${simMate(c)}</td>` : `<th>${simMate(c)}</th>`)).join('')}</tr>`).join('')}</table>` : '';
   return simTexto(t, abierto).replace('</div></details>', `${tabla}</div></details>`);
@@ -34,11 +48,12 @@ function simTextoIcf(t, abierto) {
 
 function simIcfHTML(c) {
   if (c.id !== 'preicfes' || !PI_SIMULACROS.length) return '';
+  simIcfVence();
   const llave = simLlave(), cerrado = typeof planMotivo === 'function' && llave && planMotivo(llave);
   return `<section class="simi" aria-label="Simulacros"><h2 class="comp-title">Simulacros</h2><p class="simi-p">Las cinco pruebas, con preguntas nuevas y reloj: ${SIM_MIN} minutos por prueba. Presenta cada una cuando quieras; con las cinco sale tu puntaje global.</p>
     ${PI_SIMULACROS.map(s => { const nt = simNotas(s), gl = simGlobal(nt), hechas = SIM_PRUEBAS.filter(([k]) => nt[k] != null).length;
       return `<article class="simi-card"><header><b>${esc(s.titulo)}</b><span>${gl != null ? `<strong>${gl}</strong> de 500` : `${hechas} de 5 pruebas`}</span></header>
-      <div class="simi-pr">${SIM_PRUEBAS.map(([k, nom]) => `<button type="button" data-simi="${s.id}" data-pr="${k}"${cerrado ? ' data-lock="1"' : ''}><span>${esc(nom)}</span><small>${cerrado ? ICON.lock : nt[k] != null ? `${nt[k]} de 100` : 'Presentar'}</small></button>`).join('')}</div></article>`; }).join('')}</section>`;
+      <div class="simi-pr">${SIM_PRUEBAS.map(([k, nom]) => `<button type="button" data-simi="${s.id}" data-pr="${k}"${cerrado ? ' data-lock="1"' : ''}><span>${esc(nom)}</span><small>${cerrado ? ICON.lock : S.simIcfCurso?.id === s.id && S.simIcfCurso.pr === k ? 'En curso: sigue' : nt[k] != null ? `${nt[k]} de 100` : 'Presentar'}</small></button>`).join('')}</div></article>`; }).join('')}</section>`;
 }
 function simIcfBind(root) {
   root.querySelectorAll('[data-simi]').forEach(b => { b.onclick = () => {
@@ -48,6 +63,15 @@ function simIcfBind(root) {
 }
 
 function simIcfAbre(s, pr) {
+  const v = simIcfVence();
+  if (v && v.s.id === s.id && v.pr === pr) return simIcfRevisa(s, pr, v.resp, v.pct, true);
+  const otra = S.simIcfCurso;
+  if (otra && !(otra.id === s.id && otra.pr === pr)) {
+    const os = PI_SIMULACROS.find(x => x.id === otra.id), on = SIM_PRUEBAS.find(x => x[0] === otra.pr)[1];
+    return openSheet(`<div class="ls exam-sheet"><p class="eyebrow">Prueba en curso</p><h3>Termina primero ${esc(on)}</h3><p>Tienes ${esc(on)} de ${esc(os.titulo)} en curso y su reloj sigue corriendo. Termínala antes de empezar otra prueba.</p><button class="btn main" type="button" data-go>Seguir con ${esc(on)}</button></div>`, sh => {
+      sh.querySelector('[data-go]').onclick = () => { closeSheet(false); simIcfPresenta(os, otra.pr, otra); };
+    });
+  }
   const nom = SIM_PRUEBAS.find(x => x[0] === pr)[1], r = simRes(s.id)[pr], cur = S.simIcfCurso;
   const sigue = cur && cur.id === s.id && cur.pr === pr && cur.fin > Date.now();
   openSheet(`<div class="ls exam-sheet"><p class="eyebrow">${esc(s.titulo)}</p><h3>${esc(nom)}</h3><p class="ls-meta"><span>${ICON.clock} ${SIM_MIN} min</span><span>${ICON.target} ${s.pruebas[pr].length} preguntas</span></p>
@@ -87,10 +111,8 @@ function simIcfPresenta(s, pr, cur) {
   };
   const tick = () => { const q = Math.max(0, (fin - Date.now()) / 1000); $('b', clock).textContent = fmtClock(q); clock.classList.toggle('low', q <= 60); if (q <= 0 && !listo) entrega(); };
   function entrega() {
-    if (listo) return; listo = true; quita();
-    const ok = resp.filter((o, i) => o === L[i].r).length, pct = simPuntaje(ok, n), r = simRes(s.id);
-    r[pr] = { best: Math.max(r[pr]?.best ?? 0, pct), last: { pct, resp: resp.slice(), at: Date.now() } };
-    delete S.simIcfCurso; save();
+    if (listo) return; listo = true; quita(); if (typeof dismissDialog === 'function') dismissDialog();
+    const pct = simIcfCalifica(s, pr, resp);
     cierra(); simIcfRevisa(s, pr, resp, pct, true);
   }
   function tecla(e) { if (listo || document.querySelector('dialog[open], .dialog')) return; const b = e.target.closest?.('[data-o]'); if (b && ['ArrowDown', 'ArrowUp'].includes(e.key)) { e.preventDefault(); const j = (+b.dataset.o + (e.key === 'ArrowDown' ? 1 : 3)) % 4; resp[k] = -1; marca(j); ops(j); } else if (/^[a-d]$/i.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) { const j = SIM_L.indexOf(e.key.toUpperCase()); resp[k] = -1; marca(j); ops(j); } }

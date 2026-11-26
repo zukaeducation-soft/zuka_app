@@ -27,6 +27,11 @@ test('puntajes: cada prueba de 0 a 100 y el global de 0 a 500, con Inglés pesan
   assert.equal(gl({ lectura: 50, matematicas: 50 }), null, 'sin las cinco pruebas no hay global');
 });
 
+test('una prueba vencida fuera de la pantalla se califica con lo marcado', () => {
+  const src = read('js/simulacros-icf.js');
+  assert.match(src, /function simIcfVence\(/); assert.match(src, /simIcfVence\(\);/); assert.match(src, /dismissDialog\(\)/);
+});
+
 test('repaso: los mundos con más errores primero, sin contar los acertados', () => {
   const rep = g('simRepaso'), items = [{ m: 'a', r: 0 }, { m: 'b', r: 1 }, { m: 'b', r: 2 }, { m: 'c', r: 3 }];
   assert.deepEqual([...rep(items, [1, 0, 0, 3])].join(), 'b,a');
@@ -53,6 +58,8 @@ test('hay simulacros completos: cinco pruebas de 24 preguntas A–D bien armadas
         if (it.d != null) assert.ok(s.textos[it.d], `${id}: texto ${it.d}`);
       });
       assert.ok(letras.every(n => n >= 3 && n <= 9), `${s.id} ${pr}: claves ${letras}`);
+      const larga = L.filter(it => { const l = it.o.map(o => o.length), m = Math.max(...l); return l[it.r] === m && l.filter(x => x === m).length === 1; }).length;
+      assert.ok(larga <= 7, `${s.id} ${pr}: la correcta es la más larga en ${larga} preguntas`);
     }
     for (const [k, t] of Object.entries(s.textos)) {
       const usado = PRUEBAS.flatMap(p => s.pruebas[p]).filter(it => it.d === k).length;
