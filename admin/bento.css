@@ -1,0 +1,48 @@
+/* Tableros compactos (spec 2026-11-26-tableros-compactos): una rejilla de tarjetas que en computador usa 12 columnas, en tableta 2 y en
+   celular 1. Lo comparten el inicio del panel de Zuka y el resumen del portal de instituciones. Clases bx-. */
+.bx { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); align-items: stretch; }
+.bx > * { min-width: 0; }
+@media (min-width: 720px) { .bx { grid-template-columns: repeat(2, minmax(0, 1fr)); } .bx > .s8, .bx > .s12, .bx > .ancho { grid-column: 1 / -1; } }
+@media (min-width: 1180px) { .bx { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; } .bx > .s3 { grid-column: span 3; } .bx > .s4 { grid-column: span 4; } .bx > .s5 { grid-column: span 5; } .bx > .s6 { grid-column: span 6; } .bx > .s7 { grid-column: span 7; } .bx > .s8 { grid-column: span 8; } .bx > .s12 { grid-column: 1 / -1; } }
+.admin .bx-c { display: grid; gap: 12px; align-content: start; padding: 18px; border-radius: 22px; border: 1px solid var(--line); background: var(--card); box-shadow: 0 1px 2px rgb(10 18 48 / .04), 0 12px 32px -28px rgb(10 18 48 / .35); }
+.bx-c > header { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 26px; } .admin .bx-c h2 { font: 600 16px/1.2 var(--display); letter-spacing: .01em; } .bx-c > header small, .bx-c > header a { color: var(--mute); font-size: 13px; font-weight: 600; text-decoration: none; } .bx-c > header a:hover { color: var(--brand); }
+.bx-vacio { color: var(--mute); font-size: 14px; padding: 6px 0; }
+/* indicadores en fila */
+.bx-ks { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); } @media (min-width: 720px) { .bx-ks { grid-template-columns: repeat(3, minmax(0, 1fr)); } } @media (min-width: 1180px) { .bx-ks { grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); } }
+.admin .bx-k { position: relative; display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 2px 12px; align-items: center; padding: 14px 16px; border-radius: 20px; border: 1px solid var(--line); background: var(--card); color: var(--ink); text-decoration: none; overflow: hidden; }
+a.bx-k:hover { border-color: color-mix(in srgb, var(--kc, var(--brand)) 60%, var(--line)); }
+.bx-ki { grid-row: span 2; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: color-mix(in srgb, var(--kc, var(--brand)) 15%, transparent); color: var(--kc, var(--brand)); } .bx-ki .pn-i { width: 20px; height: 20px; }
+.bx-k b { font: 600 24px/1.1 var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .bx-k b small { font: 500 14px var(--display); color: var(--mute); }
+.bx-k > span:last-of-type { font-size: 13px; color: var(--mute); line-height: 1.3; } .bx-k em { grid-column: 2; font-style: normal; font-size: 12px; font-weight: 700; } .bx-k em.up { color: var(--ok); } .bx-k em.dn { color: var(--bad); }
+.bx-k.mal { --kc: var(--bad); } .bx-k.bien { --kc: var(--ok); }
+/* filas compactas: nombre, barra, valor */
+.bx-filas { list-style: none; margin: 0; padding: 0; display: grid; } .bx-filas > li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 12px; padding: 9px 0; border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent); } .bx-filas > li:first-child { border-top: 0; }
+.bx-filas b { font-weight: 600; font-size: 14.5px; overflow-wrap: anywhere; } .bx-filas small { display: block; color: var(--mute); font-size: 12.5px; } .bx-filas a { color: var(--ink); text-decoration: none; } .bx-filas a:hover { text-decoration: underline; } .bx-filas .po-bar, .bx-filas .bx-bar { grid-column: 1 / -1; }
+.bx-bar { display: block; height: 7px; border-radius: 99px; background: color-mix(in srgb, var(--ink) 9%, transparent); overflow: hidden; } .bx-bar i { display: block; height: 100%; border-radius: inherit; background: var(--bc, var(--brand)); }
+.bx-v { font: 600 15px var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bx-scroll { max-height: 320px; overflow: auto; scrollbar-width: thin; margin: 0 -6px; padding: 0 6px; }
+/* tabla compacta */
+.bx-t { width: 100%; border-collapse: collapse; font-size: 14px; } .bx-t th { text-align: left; font-size: 12px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--mute); padding: 0 8px 8px; } .bx-t td { padding: 9px 8px; border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent); vertical-align: middle; } .bx-t td:first-child, .bx-t th:first-child { padding-left: 0; } .bx-t td:last-child, .bx-t th:last-child { padding-right: 0; text-align: right; }
+.bx-t b { font-weight: 600; } .bx-t small { display: block; color: var(--mute); font-size: 12.5px; } .bx-t a { color: var(--ink); } .bx-t .bx-bar { min-width: 70px; } .bx-t tr[data-ir] { cursor: pointer; } .bx-t tr[data-ir]:hover td { background: color-mix(in srgb, var(--brand) 6%, transparent); }
+@media (max-width: 719px) { .bx-t thead { display: none; } .bx-t, .bx-t tbody, .bx-t tr, .bx-t td { display: block; width: 100%; } .bx-t tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; padding: 10px 0; border-top: 1px solid var(--line); } .bx-t td { border: 0; padding: 0; text-align: left !important; } .bx-t td[data-l]::before { content: attr(data-l) ' '; color: var(--mute); font-size: 12px; } .bx-t td.bx-w { grid-column: 1 / -1; } }
+/* mini anillo */
+.bx-aro { --p: 0; position: relative; display: grid; place-items: center; width: 44px; height: 44px; flex: none; border-radius: 50%; background: conic-gradient(var(--ac, var(--brand)) calc(var(--p) * 360deg), color-mix(in srgb, var(--ink) 10%, transparent) 0); } .bx-aro::before { content: ''; position: absolute; inset: 5px; border-radius: 50%; background: var(--card); } .bx-aro b { position: relative; font: 600 12px var(--display); }
+.bx-pill { display: inline-block; padding: 3px 9px; border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; background: color-mix(in srgb, var(--pc, var(--mute)) 15%, transparent); color: color-mix(in srgb, var(--pc, var(--mute)) 78%, var(--ink)); } .bx-pill.ok { --pc: var(--ok); } .bx-pill.mal { --pc: var(--bad); } .bx-pill.aviso { --pc: #c77700; }
+/* atajos: tarjetas para hacer algo */
+.bx-atajos { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
+.admin .bx-a { display: grid; gap: 8px; align-content: start; padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: var(--card); color: var(--ink); text-align: left; text-decoration: none; font: inherit; font-weight: 600; font-size: 14px; line-height: 1.3; transition: border-color .15s, translate .15s; } .bx-a:hover { border-color: var(--ac, var(--brand)); translate: 0 -2px; } .bx-a i { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 13px; background: var(--ac, var(--brand)); color: #fff; } .bx-a i .pn-i { width: 21px; height: 21px; } .bx-a small { color: var(--mute); font-weight: 500; font-size: 12.5px; } .bx-a b { font: 600 22px var(--display); }
+.bx-a.urge { border-color: color-mix(in srgb, var(--ac) 55%, var(--line)); background: color-mix(in srgb, var(--ac) 8%, var(--card)); }
+/* saludo */
+.bx-hola { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 20px; } .admin .bx-hola h1 { font: 600 clamp(26px, 3vw, 38px)/1.1 var(--display); letter-spacing: -.01em; } .bx-hola p { color: var(--mute); font-size: 15px; margin-top: 4px; } .bx-hola p::first-letter { text-transform: uppercase; }
+/* gráfica de barras compacta */
+.bx-barras { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 3px; align-items: end; height: 150px; } .bx-barras i { height: max(3px, var(--h)); border-radius: 5px 5px 2px 2px; background: color-mix(in srgb, var(--brand) 70%, var(--card)); } .bx-barras i.cero { background: color-mix(in srgb, var(--ink) 10%, transparent); } .bx-barras i:hover, .bx-barras i.on { background: var(--brand); }
+.bx-eje { display: flex; justify-content: space-between; color: var(--mute); font-size: 12px; }
+@media (prefers-reduced-motion: reduce) { .bx-a { transition: none; } }
+@media (max-width: 719px) { .bx-atajos { grid-template-columns: 1fr 1fr; gap: 8px; } .admin .bx-a, .portal .bx-a { min-height: 0; padding: 12px; font-size: 13.5px; } .bx-a i { width: 34px; height: 34px; border-radius: 11px; } .admin .bx-c { padding: 16px; border-radius: 20px; } }
+/* inicio del panel */
+.bx-cursos > li { grid-template-columns: minmax(0, 1fr) auto; } .bx-dos { grid-column: 1 / -1; display: flex; height: 8px; border-radius: 99px; overflow: hidden; background: color-mix(in srgb, var(--ink) 8%, transparent); } .bx-dos i { background: var(--ok); } .bx-dos i.p { background: color-mix(in srgb, var(--brand) 70%, var(--card)); }
+.admin .bx-hola .pn-acc .btn { width: auto; } .bx-c .bx-v small { font: 500 13px var(--sans, inherit); }
+.admin .gs-per { display: flex; align-items: center; gap: 10px; min-width: 0; } .admin .gs-per > span { min-width: 0; } .admin .gs-per .pn-av { width: 32px; height: 32px; font-size: 12px; flex: none; }
+.bx-t td small + small { display: inline; } .bx-t td:has(.bx-aro) { white-space: nowrap; } .bx-t td:has(.bx-aro) .bx-aro { display: inline-grid; vertical-align: middle; margin-right: 6px; } .bx-t td:has(.bx-aro) small { display: inline; }
+@media (max-width: 719px) { .bx-k b { font-size: 20px; } .admin .bx-k { padding: 12px; gap: 2px 10px; grid-template-columns: 32px minmax(0, 1fr); } .bx-ki { width: 32px; height: 32px; } }
+:root:not([data-theme="dark"]) .bx-pill { color: color-mix(in srgb, var(--pc, var(--mute)) 55%, var(--ink)); }

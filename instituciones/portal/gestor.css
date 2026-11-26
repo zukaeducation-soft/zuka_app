@@ -38,3 +38,14 @@
 @media (prefers-reduced-motion: reduce) { .gs-pasos button, .gs-g { transition: none; } }
 @media (max-width: 560px) { .gs-kpis { grid-template-columns: 1fr 1fr; gap: 10px; } .portal .gs-k { padding: 16px; } .gs-k > b { font-size: 30px; } .gs-chispa { display: none; } }
 :root[data-theme="dark"] .gs-pasos li.ok .gs-n { color: #04120b; }
+
+/* tablero compacto (spec 2026-11-26-tableros-compactos) */
+.portal .bx-c .po-gra { height: 150px; } .portal .bx-c .po-eje { font-size: 12px; } .portal .bx-c .po-lee { font-size: 13px; }
+.gs-cupo-in { display: flex; align-items: center; gap: 16px; } .gs-cupo-in .po-aro { width: 104px; } .gs-cupo-in .po-aro b { font-size: 24px; } .gs-cupo-in .bx-filas { flex: 1; } .gs-cupo-in .bx-filas span:first-child { color: var(--mute); font-size: 14px; }
+.gs-per { display: flex; align-items: center; gap: 10px; min-width: 0; } .gs-per > span { min-width: 0; } .gs-per .pn-av { width: 32px; height: 32px; font-size: 12px; flex: none; }
+.bx-t tr.on td { background: color-mix(in srgb, var(--brand) 9%, transparent); } .bx-t tr[data-ir]:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+.bx-filas > li:has(.gs-fecha) { grid-template-columns: 46px minmax(0, 1fr); } .gs-fecha { display: grid; place-items: center; width: 46px; height: 50px; border-radius: 14px; background: color-mix(in srgb, #0891b2 13%, var(--card)); line-height: 1.05; } .gs-fecha b { font: 600 19px var(--display); } .gs-fecha small { font-size: 11px; text-transform: uppercase; }
+.portal .bx-c.gs-pasos { gap: 12px; } .bx-c.gs-pasos .gs-pt .po-aro { width: 64px; } .bx-c.gs-pasos .gs-pt .po-aro b { font-size: 16px; } .bx-c.gs-pasos ol { grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); } .portal .bx-c.gs-pasos button { padding: 10px 12px; } .bx-c.gs-pasos b { font-size: 14px; }
+.bx-hola .gs-herr { margin-left: auto; } @media (max-width: 719px) { .bx-hola .gs-herr { margin-left: 0; } .gs-seg { flex: 1 1 100%; } .gs-seg label { flex: 1; text-align: center; } .gs-sel { flex: 1; } .gs-sel select { width: 100%; } }
+.portal .bx-a { min-height: 112px; }
+.portal .gs-gb { padding: 0; border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; } .gs-gb:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; } .portal .bx-c .po-gra { height: 150px !important; }

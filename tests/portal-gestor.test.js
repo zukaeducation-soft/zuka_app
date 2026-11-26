@@ -8,3 +8,8 @@ test('menú por secciones, resumen nuevo y vistas del gestor en su archivo', () 
   assert.match(read('instituciones/portal/vivo.js'), /secciones\(ops\)/); assert.ok(h.indexOf('portal/gestor.js') < h.indexOf('portal/portal.js'));
   assert.match(g, /function pasosGestor\(c\)/);
 });
+test('tableros compactos: una rejilla para Zuka y para el gestor', () => {
+  for (const f of ['admin/index.html', 'instituciones/portal/index.html']) assert.match(read(f), /bento\.css/, f);
+  assert.match(read('admin/panel.js'), /class="bx-c s8"><header><h2>Instituciones<\/h2>/); assert.match(read('instituciones/portal/gestor.js'), /<div class="bx">/);
+  assert.match(read('admin/bento.css'), /@media \(min-width: 1180px\) \{ \.bx \{ grid-template-columns: repeat\(12/);
+});
