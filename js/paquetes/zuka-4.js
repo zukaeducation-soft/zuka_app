@@ -1,279 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/explora-alg-0a.js
-// Álgebra · alg-0a «¿Qué es un conjunto? Notación y pertenencia»: explicación interactiva que reemplaza el video
-// (spec 2026-11-23-explora-leccion-interactiva; motor en js/explora.js, escena «conjunto»). Mismo formato que pu-cm-1:
-// cada capítulo abre con una explicación que corre sola (`muestra`), sigue «tu turno» y el problema va al final.
-// Los ejemplos (bandera, semáforo, vocales, dado, pares, COLOMBIA, TOMATE, heladería) no salen en los ejercicios.
-EXPLORA['alg-0a'] = {
-  caps: ['¿Qué es un conjunto?', 'Pertenecer', 'Dos formas de escribirlo', 'Sin repetidos ni orden', 'Ahora sí, un problema'],
-  pasos: [
-    // ---- ¿Qué es un conjunto? ----
-    { cap: 0, tipo: 'muestra', escena: 'conjunto', en: { nombre: 'B', items: ['verde', 'amarillo', 'negro', 'azul', 'blanco', 'rojo'] },
-      texto: 'Empecemos por la idea más básica del álgebra: **qué es un conjunto**.',
-      momentos: [
-        { dice: 'Un conjunto es una colección de objetos. A cada objeto que está en él se le llama **elemento**.' },
-        { pon: ['amarillo', 'azul', 'rojo'], cuenta: '$B = \\{\\text{amarillo}, \\text{azul}, \\text{rojo}\\}$',
-          dice: 'B: los colores de la bandera de Colombia. Entran el amarillo, el azul y el rojo.' },
-        { marca: 'verde', cuenta: '$B = \\{\\text{amarillo}, \\text{azul}, \\text{rojo}\\}$',
-          dice: '¿Y el verde? No está en la bandera, así que se queda afuera. Nadie lo discute.' },
-        { cuenta: '$B = \\{\\text{amarillo}, \\text{azul}, \\text{rojo}\\}$',
-          dice: 'Eso es estar **bien definido**: ante cualquier objeto se sabe, sin discutir, si entra o no.' },
-        { cuenta: '$B = \\{\\text{amarillo}, \\text{azul}, \\text{rojo}\\}$',
-          dice: '«Los colores más bonitos» no sería un conjunto: cada persona elegiría distinto.' },
-      ],
-      idea: 'Un conjunto es una colección **bien definida** de objetos; cada objeto es un **elemento**.' },
-    { cap: 0, tipo: 'conjunto', nombre: 'S', items: ['azul', 'rojo', 'negro', 'verde', 'blanco', 'amarillo'], meta: ['rojo', 'amarillo', 'verde'],
-      texto: '**Tu turno.** Arma S, el conjunto de las luces de un semáforo: arrastra adentro cada color que le corresponde.',
-      idea: 'Una regla clara decide qué entra: $S = \\{\\text{rojo}, \\text{amarillo}, \\text{verde}\\}$.' },
-
-    // ---- Pertenecer ----
-    { cap: 1, tipo: 'muestra', escena: 'conjunto', en: { nombre: 'V', items: ['m', 'a', 'e', 's', 'i', 'o', 'u', 'r'] },
-      texto: 'Segunda idea: **pertenecer**. Para decir si algo está o no en un conjunto hay un símbolo.',
-      momentos: [
-        { pon: ['a', 'e', 'i', 'o', 'u'], cuenta: '$V = \\{a, e, i, o, u\\}$', dice: 'V es el conjunto de las vocales. Sus cinco elementos entran uno por uno.' },
-        { marca: 'e', cuenta: '$e \\in V$', dice: 'La e está adentro. Se escribe e ∈ V y se lee «e pertenece a V».' },
-        { marca: 'm', cuenta: '$m \\notin V$', dice: 'La m se queda afuera: m ∉ V, «m no pertenece a V». Es el mismo símbolo, tachado.' },
-        { cuenta: '$e \\in V, \\quad m \\notin V$', dice: 'Costumbre: los conjuntos se nombran con mayúscula y sus elementos, casi siempre, con minúscula.' },
-      ],
-      idea: '$\\in$ se lee «pertenece a» y $\\notin$, «no pertenece a». Los conjuntos se nombran con mayúscula.' },
-    { cap: 1, tipo: 'conjunto', nombre: 'D', items: ['1', '2', '3', '4', '5', '6'], meta: ['5', '6'],
-      texto: '**Tu turno.** D es el conjunto de las caras de un dado mayores que 4. Arrastra adentro solo las que pertenecen.',
-      idea: '$5 \\in D$ y $6 \\in D$, pero $4 \\notin D$.' },
-
-    // ---- Dos formas de escribirlo ----
-    { cap: 2, tipo: 'muestra', escena: 'conjunto', en: { nombre: 'P', items: ['1', '2', '3', '4', '5', '6', '7', '8', '9'] },
-      texto: 'Tercera idea: un conjunto se puede escribir **de dos formas**.',
-      momentos: [
-        { dice: 'La primera forma es la más directa: nombrar todos sus elementos, uno por uno.' },
-        { pon: ['2', '4', '6', '8'], cuenta: '$P = \\{2, 4, 6, 8\\}$', dice: 'Por **extensión**: los elementos entre llaves y separados por comas.' },
-        { cuenta: '$P = \\{x : x \\text{ es par},\\ 0 < x < 10\\}$', dice: 'Por **comprensión**: se escribe la regla que cumplen. Los dos puntos se leen «tal que».' },
-        { marca: '6', cuenta: '$6 \\in P$', dice: 'Se lee: «los x tales que x es par y está entre 0 y 10». El 6 cumple: está adentro.' },
-        { marca: '7', cuenta: '$7 \\notin P$', dice: 'El 7 no es par: no cumple la regla, así que se queda afuera.' },
-        { cuenta: '$\\{x : x \\text{ es par}\\}$', dice: 'Si quitamos el tope de 10 es otro conjunto, con infinitos pares: solo se puede escribir por comprensión.' },
-      ],
-      idea: 'Por **extensión** se nombran los elementos; por **comprensión** se da la regla. «:» se lee «tal que».' },
-    { cap: 2, tipo: 'conjunto', nombre: 'T', items: ['1', '2', '3', '4', '5', '6', '7', '8', '9'], meta: ['3', '6', '9'],
-      texto: '**Tu turno.** Escribe por extensión $T = \\{x : x \\text{ es múltiplo de } 3,\\ 0 < x < 10\\}$ arrastrando adentro sus elementos.',
-      idea: 'Por extensión, $T = \\{3, 6, 9\\}$.' },
-
-    // ---- Sin repetidos ni orden ----
-    { cap: 3, tipo: 'muestra', escena: 'conjunto', en: { nombre: 'K', items: ['c', 'o', 'l', 'o', 'm', 'b', 'i', 'a'] },
-      texto: 'Cuarta idea: en un conjunto **nada se repite** y **el orden no importa**.',
-      momentos: [
-        { dice: 'K es el conjunto de las letras de la palabra COLOMBIA. Metamos las letras una por una.' },
-        { pon: ['c', 'o', 'l'], cuenta: '$K = \\{c, o, l\\}$', dice: 'Entran la c, la o y la l…' },
-        { pon: ['o'], cuenta: '$K = \\{c, o, l\\}$', dice: '¡Otra o! Ya estaba adentro, así que se funde con la primera: en un conjunto nada se repite.' },
-        { pon: ['m', 'b', 'i', 'a'], cuenta: '$K = \\{c, o, l, m, b, i, a\\}$', dice: 'Entran las demás. La palabra tiene ocho letras, pero el conjunto tiene siete elementos.' },
-        { mezcla: true, cuenta: '$\\{c, o, l, m, b, i, a\\} = \\{a, b, c, i, l, m, o\\}$', dice: 'Si los ordenamos de otra forma, sigue siendo el mismo conjunto: el orden no importa.' },
-        { cuenta: '$n(K) = 7$', dice: 'El número de elementos se llama **cardinal** y se escribe n(K). Aquí, n(K) = 7.' },
-      ],
-      idea: 'En un conjunto no hay repetidos ni importa el orden. El **cardinal** $n(A)$ es cuántos elementos tiene.' },
-    { cap: 3, tipo: 'conjunto', nombre: 'R', items: ['t', 'o', 'u', 'm', 'a', 't', 'p', 'e'], meta: ['t', 'o', 'm', 'a', 'e'], cardinal: true,
-      texto: '**Tu turno.** Arma R, el conjunto de las letras de TOMATE. Mete las dos t y mira qué pasa; deja afuera lo que no está en la palabra.',
-      idea: '$R = \\{t, o, m, a, e\\}$ y $n(R) = 5$, aunque TOMATE tenga seis letras.' },
-    { cap: 3, tipo: 'casillas', filas: [{ tex: '$n(\\{1, 1, 2\\})$', r: '2' }, { tex: '$n(\\{x, y, z, x\\})$', r: '3' }], fichas: ['3', '2', '4', '1'],
-      pista: 'Cuenta los elementos distintos: lo repetido cuenta una sola vez.',
-      texto: 'El cardinal no cuenta repetidos. Toca la ficha con el cardinal de cada conjunto.',
-      idea: 'Lo repetido cuenta una sola vez: $n(\\{1, 1, 2\\}) = 2$.' },
-
-    // ---- Ahora sí, un problema ----
-    { cap: 4, tipo: 'conjunto', nombre: 'H', items: ['fresa', 'vainilla', 'coco', 'fresa', 'mora', 'vainilla', 'limón', 'fresa', 'mora'], meta: ['fresa', 'vainilla', 'mora'], cardinal: true,
-      texto: 'Pedidos de hoy en una heladería: fresa, vainilla, fresa, mora, vainilla, fresa, mora. Arma H, el conjunto de sabores vendidos. ¿Cuántos son?',
-      idea: 'Siete pedidos, pero $H = \\{\\text{fresa}, \\text{vainilla}, \\text{mora}\\}$ y $n(H) = 3$.' },
-    { cap: 4, tipo: 'cierre', clave: 'alg-0a', real: '',
-      texto: 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.',
-      idea: 'Conjunto y elemento, $\\in$ y $\\notin$, extensión y comprensión, sin repetidos ni orden, y el cardinal.' },
-  ],
-};
-;
-//#archivo js/explora-pu-ge-1.js
-// Preuniversitario · pu-ge-1 «Ángulos y paralelas» (Explora, escena «dibujo»). Los ejemplos no son los de los ejercicios.
-{
-  const O = [170, 150];
-  // Media vuelta partida por un rayo en el ángulo a.
-  const media = (v, K) => {
-    const R = K.at(...O, 115, v.a), D = [300, O[1]], I = [40, O[1]];
-    return K.ang(O, D, R, 42, `${Math.round(v.a)}°`, 'fa', 'ta') + K.f(v.ver ?? 1, K.ang(O, R, I, 34, v.ver === 0 ? '' : `${180 - Math.round(v.a)}°`, 'fg', 'tg'))
-      + K.l(...I, ...D) + K.l(...O, ...R, 'la gr') + K.c(...O, 4, 'fk');
-  };
-  // Dos rectas que se cruzan.
-  const cruce = (v, K) => {
-    const C = [170, 100], P = g => K.at(...C, 92, g), r = v.rot ?? 0, a = v.a;
-    const A = P(r), B = P(r + a), A2 = P(r + 180), B2 = P(r + 180 + a), n = Math.round(a);
-    return K.f(v.f1 ?? 1, K.ang(C, A, B, 40, `${n}°`, 'fa', 'ta')) + K.f(v.f2 ?? 0, K.ang(C, A2, B2, 40, `${n}°`, 'fa', 'ta'))
-      + K.f(v.f3 ?? 0, K.ang(C, B, A2, 30, `${180 - n}°`, 'fg', 'tg')) + K.f(v.f4 ?? 0, K.ang(C, B2, A, 30, `${180 - n}°`, 'fg', 'tg'))
-      + K.l(...A, ...A2) + K.l(...B, ...B2) + K.c(...C, 4, 'fk');
-  };
-  // Complemento: un cuarto de vuelta partido en dos.
-  const recto = (v, K) => {
-    const V = [110, 170], R = K.at(...V, 135, v.a), D = [265, 170], U = [110, 20], n = Math.round(v.a);
-    return K.ang(V, D, R, 46, `${n}°`, 'fa', 'ta') + K.ang(V, R, U, 38, `${90 - n}°`, 'fg', 'tg') + K.l(...V, ...D) + K.l(...V, ...U) + K.l(...V, ...R, 'la gr') + K.c(...V, 4, 'fk');
-  };
-  // Paralelas en y = 60 e y = 150 con una transversal de ángulo a.
-  const Y1 = 62, Y2 = 152;
-  const par = (v, K) => {
-    const t = Math.tan(v.a * Math.PI / 180), X = y => 170 + (107 - y) / t, P = [X(Y1), Y1], Q = [X(Y2), Y2], n = Math.round(v.a);
-    const d = (W, s) => [W[0] + s * 100, W[1]], up = [X(Y1 - 40), Y1 - 40], dn = [X(Y2 + 40), Y2 + 40];
-    return K.f(v.cor ?? 0, K.ang(P, d(P, 1), up, 26, `${n}°`, 'fa', 'ta') + K.ang(Q, d(Q, 1), P, 26, `${n}°`, 'fa', 'ta'))
-      + K.f(v.alt ?? 0, K.ang(P, d(P, -1), Q, 26, `${n}°`, 'fa', 'ta') + K.ang(Q, d(Q, 1), P, 26, `${n}°`, 'fa', 'ta'))
-      + K.f(v.con ?? 0, K.ang(P, d(P, 1), Q, 26, v.oculta ? '?' : `${180 - n}°`, 'fg', 'tg') + K.ang(Q, d(Q, 1), P, 26, `${n}°`, 'fa', 'ta'))
-      + K.l(20, Y1, 320, Y1) + K.l(20, Y2, 320, Y2) + K.l(...up, ...dn, 'la gr') + K.t(312, Y1 - 8, 'ℓ₁', 'tm') + K.t(312, Y2 - 8, 'ℓ₂', 'tm');
-  };
-  const TX = v => { // triángulo de base 70..270 con ángulos a y b
-    const A = [85, 170], B = [255, 170], ta = Math.tan(v.a * Math.PI / 180), tb = Math.tan(v.b * Math.PI / 180), x = 170 * tb / (ta + tb);
-    return [A, B, [85 + x, 170 - x * ta]];
-  };
-  const tri = (v, K) => {
-    const [A, B, C] = TX(v), a = Math.round(v.a), b = Math.round(v.b);
-    const cA = v.une ?? 0, L = [C[0] - 120, C[1]], R = [C[0] + 120, C[1]];
-    return K.ang(A, B, C, 32, `${a}°`, 'fa', 'ta') + K.ang(B, C, A, 32, `${b}°`, 'fg', 'tg') + (v.ext == null || v.ext < 0.5 ? K.ang(C, A, B, 26, v.oc ? '?' : `${180 - a - b}°`, 'ff', 'tf') : '')
-      + K.f(cA, K.l(Math.max(6, L[0]), L[1], Math.min(334, R[0]), R[1], 'lm d') + K.ang(C, L, A, 20, '', 'fa') + K.ang(C, B, R, 20, '', 'fg'))
-      + K.f(v.ext ?? 0, K.l(B[0], B[1], 330, 170, 'lm') + K.ang(B, [330, 170], C, 24, `${a + (180 - a - b)}°`, 'fo', 'to') + K.ang(C, A, B, 26, `${180 - a - b}°`, 'ff', 'tf'))
-      + K.pl([A, B, C, A]);
-  };
-  const pol = (v, K) => {
-    const n = Math.round(v.n), P = Array.from({ length: n }, (_, i) => K.at(170, 100, 88, 90 + i * 360 / n));
-    let h = '';
-    for (let i = 1; i < n - 1; i++) h += K.f(v.f ?? 1, K.p([P[0], P[i], P[i + 1]], ['fa', 'fg', 'ff', 'fo'][i % 4]));
-    return h + K.p(P, 'fn') + K.t(40, 190, `${n} lados`, 'tm');
-  };
-
-  xpLec('pu-ge-1', [
-    ['Ángulos que se completan',
-      xpMira('dibujo', 'Empecemos por lo básico: ángulos que **juntos** forman algo conocido.', { dib: (v, K) => (v.cual < 0.5 ? media(v, K) : v.cual < 1.5 ? recto(v, K) : cruce(v, K)), v: { cual: 0, a: 60, ver: 1, rot: 12, f1: 1, f2: 0, f3: 0, f4: 0 }, alto: 200 }, [
-        ['Un rayo parte la media vuelta en dos ángulos. Juntos siempre dan 180°: son suplementarios.', {}, '$60^\\circ + 120^\\circ = 180^\\circ$'],
-        ['Si uno crece, el otro se achica lo mismo. La suma no cambia.', { a: 140 }, '$140^\\circ + 40^\\circ = 180^\\circ$'],
-        ['En una esquina recta pasa igual, pero juntos dan 90°: son complementarios.', { cual: 1, a: 35 }, '$35^\\circ + 55^\\circ = 90^\\circ$'],
-        ['Ahora dos rectas que se cruzan, como una tijera abierta.', { cual: 2, a: 80 }],
-        ['Los ángulos de enfrente abren lo mismo: son opuestos por el vértice, y son iguales.', { f2: 1 }],
-        ['Y los de al lado completan la media vuelta: 100° cada uno.', { f3: 1, f4: 1 }, '$80^\\circ + 100^\\circ = 180^\\circ$'],
-      ], 'Vecinos sobre una recta suman 180°; en una esquina recta, 90°; los opuestos por el vértice son iguales.'),
-      xpHaz('dibujo', 'Arrastra el rayo hasta que el ángulo dorado, el vecino, mida 115°.', { dib: media, v: { a: 120 }, metas: { a: 65 }, alto: 190,
-        manijas: [{ k: 'a', min: 15, max: 165, paso: 5, en: v => XPK.at(...O, 115, v.a), de: (x, y) => (y > O[1] ? (x < O[0] ? 180 : 0) : Math.atan2(O[1] - y, x - O[0]) * 180 / Math.PI) }],
-        lee: v => `$${v.a}^\\circ + ${180 - v.a}^\\circ = 180^\\circ$`, dice: v => `El tuyo mide ${v.a}° y al dorado le queda lo que falta para 180°.` }, 'Al vecino le toca lo que falta: $180^\\circ - 115^\\circ = 65^\\circ$.')],
-    ['Paralelas y transversal',
-      xpMira('dibujo', 'Segunda idea: una recta que corta a **dos paralelas** repite sus ángulos.', { dib: par, v: { a: 60, cor: 0, alt: 0, con: 0 }, alto: 200 }, [
-        ['Dos paralelas y una recta que las atraviesa: la transversal. Se forman dos cruces idénticos.', {}],
-        ['Los que están en la misma esquina de cada cruce son iguales: se llaman correspondientes.', { cor: 1 }, '$60^\\circ = 60^\\circ$'],
-        ['Entre las paralelas, a lados distintos de la transversal, forman una Z: alternos internos, iguales.', { cor: 0, alt: 1 }, '$60^\\circ = 60^\\circ$'],
-        ['Entre las paralelas y del mismo lado están los conjugados: esos suman 180°.', { alt: 0, con: 1 }, '$120^\\circ + 60^\\circ = 180^\\circ$'],
-        ['Si la transversal se inclina cambian los números, pero no las relaciones.', { a: 105 }, '$75^\\circ + 105^\\circ = 180^\\circ$'],
-      ], 'Con paralelas: correspondientes y alternos internos son iguales; conjugados internos suman 180°.'),
-      xpHaz('dibujo', 'Inclina la transversal hasta que el conjugado dorado, el que no se ve, mida 125°.', { dib: par, v: { a: 90, con: 1, oculta: 1 }, metas: { a: 55 }, alto: 200,
-        manijas: [{ k: 'a', min: 40, max: 140, paso: 5, en: v => [170 + 85 / Math.tan(v.a * Math.PI / 180), 22], de: x => Math.atan2(85, x - 170) * 180 / Math.PI }],
-        lee: v => `$? + ${v.a}^\\circ = 180^\\circ$`, dice: v => `El ángulo de abajo mide ${v.a}°. El dorado es su conjugado.` }, 'Conjugados suman 180°: $180^\\circ - 125^\\circ = 55^\\circ$.')],
-    ['Los ángulos de un triángulo',
-      xpMira('dibujo', 'Tercera idea: por qué los ángulos de **cualquier** triángulo suman 180°.', { dib: tri, v: { a: 55, b: 65, une: 0, ext: 0 }, alto: 200 }, [
-        ['Este triángulo tiene tres ángulos distintos. ¿Cuánto suman?', {}],
-        ['Trazamos arriba una paralela a la base. Los ángulos de abajo reaparecen arriba: son alternos internos.', { une: 1 }],
-        ['Arriba, los tres juntos forman media vuelta. Por eso suman 180°.', {}, '$55^\\circ + 60^\\circ + 65^\\circ = 180^\\circ$'],
-        ['Cambia el triángulo y la suma sigue igual.', { a: 80, b: 35 }, '$80^\\circ + 65^\\circ + 35^\\circ = 180^\\circ$'],
-        ['Si alargamos un lado aparece un ángulo exterior: mide lo mismo que los otros dos interiores juntos.', { une: 0, ext: 1 }, '$80^\\circ + 65^\\circ = 145^\\circ$'],
-      ], 'Los tres ángulos de un triángulo suman 180°, y un exterior es la suma de los dos interiores lejanos.'),
-      xpHaz('dibujo', 'El ángulo dorado mide 45°. Mueve el de la izquierda hasta que el de arriba, oculto, mida 70°.', { dib: tri, v: { a: 40, b: 45, oc: 1 }, metas: { a: 65 }, alto: 200,
-        manijas: [{ k: 'a', min: 25, max: 75, paso: 5, en: v => TX(v)[2], de: (x, y) => Math.atan2(170 - y, x - 85) * 180 / Math.PI }],
-        lee: v => `$${v.a}^\\circ + 45^\\circ + ? = 180^\\circ$`, dice: v => `Los dos de abajo suman ${v.a + 45}°. Arriba queda lo que falta para 180°.` }, 'Falta lo que queda de 180°: $180^\\circ - 45^\\circ - 70^\\circ = 65^\\circ$.')],
-    ['Polígonos: cortar en triángulos',
-      xpMira('dibujo', 'Cuarta idea: cualquier polígono se **corta en triángulos**.', { dib: pol, v: { n: 4, f: 0 }, alto: 200 }, [
-        ['Un cuadrilátero no es un triángulo, pero podemos cortarlo desde una esquina.', {}],
-        ['Salen dos triángulos, cada uno con 180°: los cuatro ángulos suman 360°.', { f: 1 }, '$2 \\cdot 180^\\circ = 360^\\circ$'],
-        ['Con cinco lados salen tres triángulos: 540°.', { n: 5 }, '$3 \\cdot 180^\\circ = 540^\\circ$'],
-        ['Siempre salen dos triángulos menos que lados: con ocho lados, seis triángulos.', { n: 8 }, '$(n - 2) \\cdot 180^\\circ$'],
-        ['Si el polígono es regular, la suma se reparte por igual entre sus ángulos: 1 080 entre 8 son 135°.', {}, '$1080^\\circ \\div 8 = 135^\\circ$'],
-      ], 'Un polígono de n lados se corta en n − 2 triángulos: sus ángulos suman $(n - 2) \\cdot 180^\\circ$.'),
-      xpHaz('dibujo', 'Arrastra el número de lados hasta que los ángulos sumen 720°.', { dib: pol, v: { n: 3, f: 1 }, metas: { n: 6 }, alto: 250, manijas: [{ k: 'n', min: 3, max: 10, paso: 1 }],
-        lee: v => `$${v.n - 2} \\cdot 180^\\circ = ${(v.n - 2) * 180}^\\circ$`, dice: v => `${v.n} lados: ${v.n - 2} ${v.n === 3 ? 'triángulo' : 'triángulos'}.` }, 'Cuatro triángulos, seis lados: $4 \\cdot 180^\\circ = 720^\\circ$.')],
-    ['Ahora sí, un problema',
-      xpHaz('dibujo', 'Una escalera de tijera tiene dos patas iguales y arriba debe abrir 40°. Inclínala: ¿qué ángulo hace cada pata con el piso?', {
-        dib: (v, K) => { const h = 130, d = h / Math.tan(v.a * Math.PI / 180), A = [170 - d, 170], B = [170 + d, 170], C = [170, 40]; return K.ang(A, B, C, 28, `${v.a}°`, 'fa', 'ta') + K.ang(B, C, A, 28, `${v.a}°`, 'fa', 'ta') + K.ang(C, A, B, 26, '?', 'ff', 'tf') + K.l(20, 170, 320, 170, 'lm') + K.pl([A, C, B], 'gr'); },
-        v: { a: 50 }, metas: { a: 70 }, alto: 200, manijas: [{ k: 'a', min: 45, max: 85, paso: 5, en: v => [170 + 130 / Math.tan(v.a * Math.PI / 180), 170], de: x => Math.atan2(130, Math.max(1, x - 170)) * 180 / Math.PI }],
-        lee: v => `$${v.a}^\\circ + ${v.a}^\\circ + ? = 180^\\circ$`, dice: v => `Las patas iguales hacen ángulos iguales con el piso: ${v.a}° cada una.` }, 'Los dos de abajo son iguales y suman $180^\\circ - 40^\\circ = 140^\\circ$: 70° cada uno.')],
-  ], 'Vecinos que completan 180°, paralelas que repiten ángulos, triángulos de 180° y polígonos hechos de triángulos.');
-}
-;
-//#archivo js/explora-pu-ge-2.js
-// Preuniversitario · pu-ge-2 «Triángulos y Pitágoras» (Explora, escena «dibujo»). Los ejemplos no son los de los ejercicios.
-{
-  const U = 6.5, OX = 92, OY = 168;
-  let Z = U;
-  const P = (x, y) => [OX + x * Z, OY - y * Z];
-  const sq = x => Math.round(x * x * 10) / 10;
-  // Triángulo rectángulo con los tres cuadrados; los catetos son a (hacia arriba) y b (hacia la derecha).
-  const cuad = (v, K) => {
-    Z = v.u ?? U;
-    const { a, b } = v, m = v.f ?? 1, fc = v.fc ?? m;
-    const rej = (x0, y0, n) => { let h = ''; for (let i = 1; i < n; i++) h += K.l(...P(x0 + i, y0), ...P(x0 + i, y0 + n), 'ls') + K.l(...P(x0, y0 + i), ...P(x0 + n, y0 + i), 'ls'); return h; };
-    const ent = Number.isInteger(a) && Number.isInteger(b);
-    return K.f(m, K.p([P(0, 0), P(b, 0), P(b, -b), P(0, -b)], 'fa') + K.p([P(0, 0), P(0, a), P(-a, a), P(-a, 0)], 'fg') + (ent ? rej(0, -b, b) + rej(-a, 0, a) : '')
-      + K.t(...P(b / 2, -b / 2 - 0.7), sq(b), 'ta') + K.t(...P(-a / 2, a / 2 - 0.7), sq(a), 'tg'))
-      + K.f(fc, K.p([P(b, 0), P(0, a), P(a, a + b), P(a + b, b)], 'ff') + K.t(...P((a + b) / 2, (a + b) / 2 - 0.7), v.oc ? '?' : sq(Math.hypot(a, b)), 'tf'))
-      + K.p([P(0, 0), P(b, 0), P(0, a)], 'fc') + K.pl([P(0, 1), P(1, 1), P(1, 0)], 'lm') + K.pl([P(0, 0), P(b, 0), P(0, a), P(0, 0)]);
-  };
-  const K1 = x => String(Math.round(x * 100) / 100);
-  // Triángulo rectángulo con rótulos, a escala u.
-  const tri = (v, K) => {
-    const u = v.u ?? 11, A = [60, 185], B = [60 + v.b * u, 185], C = [60, 185 - v.a * u];
-    return K.p([A, B, C], 'fa') + K.pl([[60, 175], [70, 175], [70, 185]], 'lm') + K.t((A[0] + B[0]) / 2, 203, v.lb ?? K1(v.b), 'ta') + K.t(50, (A[1] + C[1]) / 2 + 5, v.la ?? K1(v.a), 'tg', 'end')
-      + K.t((B[0] + C[0]) / 2 + 10, (B[1] + C[1]) / 2 - 8, v.lc ?? K1(Math.hypot(v.a, v.b)), 'tf', 'start');
-  };
-  // Los dos especiales: medio cuadrado (m = 0) y medio equilátero (m = 1).
-  const esp = (v, K) => {
-    if (v.m < 0.5) {
-      const S = 130, x = 105, y = 30, Q = [[x, y], [x + S, y], [x + S, y + S], [x, y + S]];
-      return K.p(Q, 'fc') + K.f(v.f, K.p([Q[0], Q[2], Q[3]], 'fa') + K.l(...Q[0], ...Q[2], 'lf gr') + K.ang(Q[2], Q[3], Q[0], 28, '45°', 'fg', 's') + K.t(x + S / 2 + 12, y + S / 2 - 10, 'x√2', 'tf', 'start'))
-        + K.t(x + S / 2, y + S + 20, 'x') + K.t(x - 12, y + S / 2 + 5, 'x');
-    }
-    const A = [90, 175], B = [250, 175], C = [170, 175 - 138.6], M = [170, 175];
-    return K.p([A, B, C], 'fc') + K.f(v.f, K.p([A, M, C], 'fa') + K.l(...C, ...M, 'lf gr') + K.ang(A, M, C, 26, '60°', 'fg', 's') + K.ang(C, A, M, 34, '30°', 'fg', 's') + K.t(181, 120, 'x√3', 'tf', 'start') + K.t(128, 194, 'x'))
-      + K.t(118, 104, '2x', '', 'end') + K.t(222, 104, '2x', '', 'start');
-  };
-  const V35 = (v, K) => {
-    const u = v.u ?? 4.2, k = v.k, A = [90, 190], B = [90 + 4 * k * u, 190], C = [90, 190 - 3 * k * u];
-    return K.p([A, B, C], 'fa') + K.t((A[0] + B[0]) / 2, 207, `4 · ${k} = ${4 * k}`, 'ta') + K.t(82, (A[1] + C[1]) / 2 + 5, `3 · ${k} = ${3 * k}`, 'tg', 'end') + K.t((B[0] + C[0]) / 2 + 8, (B[1] + C[1]) / 2 - 6, `5 · ${k} = ${5 * k}`, 'tf', 'start');
-  };
-
-  xpLec('pu-ge-2', [
-    ['Tres cuadrados',
-      xpMira('dibujo', 'Empecemos por la idea: Pitágoras habla de **áreas de cuadrados**.', { dib: cuad, v: { a: 3, b: 4, f: 0, fc: 0, u: 8 }, alto: 225 }, [
-        ['Un triángulo rectángulo: sus dos lados cortos, los catetos, forman una esquina recta.', {}],
-        ['Sobre cada cateto armamos un cuadrado: uno tiene 9 casillas y el otro 16.', { f: 1 }, '$3^2 = 9 \\quad 4^2 = 16$'],
-        ['Sobre el lado largo, la hipotenusa, otro cuadrado. Su área es justo la de los dos juntos: 25.', { fc: 1 }, '$9 + 16 = 25$'],
-        ['Si un cuadrado tiene área 25, su lado mide 5: esa es la hipotenusa.', {}, '$c = \\sqrt{25} = 5$'],
-        ['Con otros catetos pasa lo mismo: 9 más 36 son 45, y la hipotenusa es la raíz de 45.', { a: 3, b: 6 }, '$c = \\sqrt{45} \\approx 6.7$'],
-      ], 'En un triángulo rectángulo, el cuadrado de la hipotenusa vale lo que los dos de los catetos: $c^2 = a^2 + b^2$.'),
-      xpHaz('dibujo', 'Arrastra las puntas de los catetos hasta que el cuadrado de la hipotenusa valga 113.', { dib: cuad, v: { a: 4, b: 4 }, alto: 260, cumple: v => v.a * v.a + v.b * v.b === 113, sol: { a: 7, b: 8 },
-        manijas: [{ k: 'a', min: 1, max: 12, paso: 1, r: 9, en: v => P(0, v.a), de: (x, y) => (OY - y) / U }, { k: 'b', min: 1, max: 12, paso: 1, r: 9, en: v => P(v.b, 0), de: x => (x - OX) / U }],
-        lee: v => `$${v.a}^2 + ${v.b}^2 = ${v.a * v.a} + ${v.b * v.b} = ${v.a * v.a + v.b * v.b}$`, dice: v => (v.a * v.a + v.b * v.b > 113 ? 'Te pasaste: el cuadrado grande es mayor que 113.' : 'Busca dos cuadrados que juntos hagan 113.') }, '$49 + 64 = 113$: catetos 7 y 8, y la hipotenusa mide $\\sqrt{113} \\approx 10.6$.')],
-    ['El lado que falta',
-      xpMira('dibujo', 'Segunda idea: si falta un **cateto**, los cuadrados se restan.', { dib: tri, v: { a: 20, b: 21, lc: '29', la: '?', u: 8 }, alto: 215 }, [
-        ['Aquí conocemos la hipotenusa, 29, y un cateto, 21. Falta el otro.', {}],
-        ['El cuadrado grande vale 841: es lo que suman los dos chicos. Uno de ellos es 441.', {}, '$29^2 = 841 \\quad 21^2 = 441$'],
-        ['Lo que sobra es el cuadrado que buscamos: 841 menos 441 son 400.', {}, '$841 - 441 = 400$'],
-        ['Su lado es la raíz de 400. El cateto mide 20.', { la: '20' }, '$a = \\sqrt{400} = 20$'],
-        ['Cuidado: no se restan los lados. 29 menos 21 son 8, y eso no es el cateto.', {}, '$29 - 21 \\neq 20$'],
-      ], 'Hipotenusa: se suman los cuadrados. Cateto: se restan. Al final, la raíz.'),
-      xpHaz('dibujo', 'La base mide 9 y la hipotenusa debe medir 15. Estira el otro cateto.', { dib: tri, v: { a: 5, b: 9, u: 12 }, metas: { a: 12 }, alto: 215,
-        manijas: [{ k: 'a', min: 2, max: 14, paso: 1, en: v => [60, 185 - v.a * 12], de: (x, y) => (185 - y) / 12 }],
-        lee: v => `$${v.a}^2 + 9^2 = ${v.a * v.a + 81} \\quad c \\approx ${K1(Math.hypot(v.a, 9))}$`, dice: v => `El cuadrado de la hipotenusa va en ${v.a * v.a + 81}. Debe ser 15 · 15 = 225.` }, '$225 - 81 = 144$ y $\\sqrt{144} = 12$.')],
-    ['Triángulos que conviene reconocer',
-      xpMira('dibujo', 'Tercera idea: hay triángulos que se **reconocen** y ahorran la cuenta.', { dib: (v, K) => (v.t < 0.5 ? V35({ k: Math.max(1, Math.round(v.k)), u: v.u }, K) : esp(v, K)), v: { t: 0, k: 1, m: 0, f: 0, u: 24 }, alto: 215 }, [
-        ['El 3, 4, 5 es el más famoso: 9 más 16 son 25.', {}, '$3^2 + 4^2 = 5^2$'],
-        ['Si todos los lados se multiplican por lo mismo, sigue siendo rectángulo: 18, 24 y 30.', { k: 6, u: 6 }, '$3k, \\; 4k, \\; 5k$'],
-        ['Otro: cortamos un cuadrado por su diagonal. Quedan dos ángulos de 45° y dos catetos iguales.', { t: 1, m: 0, f: 1 }, '$x^2 + x^2 = 2x^2$'],
-        ['La diagonal es siempre el lado por raíz de 2, un poco menos de una vez y media.', {}, '$d = x\\sqrt{2} \\approx 1.41x$'],
-        ['Y medio triángulo equilátero tiene ángulos de 30°, 60° y 90°: el cateto corto es la mitad de la hipotenusa.', { m: 1 }, '$x, \\; x\\sqrt{3}, \\; 2x$'],
-      ], 'Reconoce 3-4-5 y sus múltiplos, el medio cuadrado $x, x, x\\sqrt2$ y el medio equilátero $x, x\\sqrt3, 2x$.'),
-      xpHaz('dibujo', 'Agranda el triángulo 3-4-5 hasta que su hipotenusa mida 35.', { dib: V35, v: { k: 1 }, metas: { k: 7 }, alto: 260, manijas: [{ k: 'k', min: 1, max: 10, paso: 1, et: 'factor' }],
-        lee: v => `$${3 * v.k}, \\; ${4 * v.k}, \\; ${5 * v.k}$`, dice: v => `Todos los lados por ${v.k}: el triángulo no cambia de forma.` }, 'El factor es 7: lados 21, 28 y 35.')],
-    ['Ahora sí, un problema',
-      xpHaz('dibujo', 'Un parque rectangular mide 24 m por 18 m. Se cruza por la diagonal. Estira la cinta desde una esquina hasta la opuesta: ¿cuánto mide?', {
-        dib: (v, K) => { const A = [58, 190], n = v.c / 30; return K.r(58, 22, 224, 168, 'fc') + K.cota(58, 196, 282, 196, '24 m') + K.t(48, 110, '18 m', 'tm', 'end') + K.l(...A, 58 + n * 224, 190 - n * 168, 'la gr'); },
-        v: { c: 5 }, metas: { c: 30 }, alto: 225, manijas: [{ k: 'c', min: 2, max: 32, paso: 1, rot: v => String(v.c), en: v => [58 + v.c / 30 * 224, 190 - v.c / 30 * 168], de: (x, y) => ((x - 58) * 0.8 + (190 - y) * 0.6) / 280 * 30 }],
-        lee: v => `$${v.c}^2 = ${v.c * v.c} \\qquad 24^2 + 18^2 = 900$`, dice: v => (v.c < 30 ? 'La cinta aún no llega a la esquina.' : v.c > 30 ? 'La cinta se pasó de la esquina.' : 'Justo hasta la esquina: es un 3-4-5 por 6.') }, 'Es un 3-4-5 por 6: la diagonal mide 30 m, frente a 42 m por el borde.')],
-  ], 'Cuadrados que se suman para la hipotenusa, se restan para un cateto, y triángulos que se reconocen de una mirada.');
-}
-;
 //#archivo js/explora-pu-ge-3.js
 // Preuniversitario · pu-ge-3 «Semejanza y escala» (Explora, escena «dibujo»). Los ejemplos no son los de los ejercicios.
 {
@@ -19632,6 +19358,203 @@ PI_SIMULACROS.push((() => {
   ], 20);
 
   return { id: 'icf-sim-2', titulo: 'Simulacro 2', textos, pruebas: { lectura, matematicas, sociales, ciencias, ingles } };
+})());
+;
+//#archivo js/simulacro-icf-3.js
+// Preicfes · Simulacro 3 (spec 2026-11-26-simulacros-preicfes): cinco pruebas de 24 preguntas A–D escritas para Zuka.
+// Cada pregunta se escribe con la opción correcta primero; `pon` la cambia de puesto según un patrón con seis claves por letra.
+PI_SIMULACROS.push((() => {
+  const T = simT, Q = (m, q, o, e, d) => simP(m, q, o, 0, e, d);
+  const BASE = [2, 0, 3, 1, 3, 0, 1, 2, 0, 3, 2, 1, 0, 2, 1, 3, 1, 0, 2, 3, 0, 1, 3, 2];
+  const pon = (L, giro) => L.map((it, i) => {
+    const k = BASE[(i + giro) % BASE.length], o = [...it.o];
+    [o[0], o[k]] = [o[k], o[0]];
+    return { ...it, o, r: k };
+  });
+
+  const textos = {
+    afinador: T('El afinador', [
+      'Cada marzo, cuando empezaban las lluvias, don Esteban llegaba al colegio con su maletín de cuero y pedía que lo dejaran solo en el salón de música. Afinaba el piano viejo durante toda la mañana: golpeaba una tecla, escuchaba, giraba una clavija apenas un poco y volvía a golpear. Los estudiantes que pasaban por el pasillo solo oían la misma nota repetida, una y otra vez, como una gota que no termina de caer.',
+      'Un año, la rectora le preguntó si no sería mejor cambiar ese piano por un teclado eléctrico, que nunca se desafina. Don Esteban se quedó callado un momento y luego le pidió que se sentara.',
+      '—Toque cualquier cosa —le dijo.',
+      'La rectora tocó las primeras notas de una canción infantil. El piano sonó grave y un poco ronco, como una voz que ha hablado mucho.',
+      '—Este piano tiene setenta años —explicó él—. La madera se hincha con la humedad y se encoge con el sol. Por eso se desafina. Pero también por eso suena así: está vivo. Un teclado eléctrico no se equivoca nunca, y por eso mismo nunca le va a contar nada.',
+      'La rectora no cambió el piano. Ese año, por primera vez, pidió que abrieran la puerta del salón mientras don Esteban trabajaba, y algunos estudiantes se quedaron en el pasillo, escuchando cómo una sola nota, después de muchos intentos, encontraba por fin su lugar.',
+    ]),
+    esquina: T('La comida de la calle también es patrimonio', [
+      'En casi todas nuestras ciudades hay una esquina donde alguien vende arepas, empanadas, mazorcas o salpicón desde muy temprano. Esos puestos alimentan a miles de personas que no tienen tiempo ni dinero para sentarse en un restaurante. Sin embargo, muchas alcaldías los tratan solo como un problema de espacio público que hay que despejar.',
+      'Creo que es un error. La comida callejera es una parte viva de nuestra cultura. Las recetas que se venden en esas esquinas se han pasado de generación en generación, y en ellas se reconoce de dónde venimos: el maíz, la panela, las frutas de cada región. Un turista que quiere conocer una ciudad no busca los restaurantes de cadena que encuentra en cualquier lugar del mundo; busca lo que solo se come allí.',
+      'No niego que existan problemas. Algunos puestos bloquean los andenes y otros no cumplen normas mínimas de higiene. Pero la solución no es sacarlos, sino organizarlos: zonas señaladas, capacitación en manipulación de alimentos y un registro sencillo que no les cueste más de lo que ganan.',
+      'Hay ciudades que ya lo hicieron. Allí, los vendedores pagan un permiso bajo, reciben un carrito con agua limpia y aparecen en los mapas turísticos de la ciudad. El espacio público quedó más ordenado y los vendedores, en lugar de esconderse, empezaron a cuidar la calle como algo propio.',
+      'Despejar una esquina es fácil. Lo difícil, y lo valioso, es reconocer que en ella también se cocina la historia de una ciudad.',
+    ]),
+    maquina: T('La máquina de las experiencias', [
+      'Un filósofo propuso un experimento mental. Imagina que existe una máquina capaz de darte cualquier experiencia que desees: escribir una gran novela, ganar un campeonato, tener muchos amigos que te admiran. Mientras estás conectado, flotas en un tanque con electrodos en el cerebro, pero no lo sabes: todo te parece real. Antes de conectarte eliges la vida que quieres vivir, y nunca más sientes dolor ni aburrimiento. ¿Te conectarías para siempre?',
+      'Si lo único que importara en la vida fuera sentirse bien, la respuesta sería obvia: sí. Sin embargo, la mayoría de las personas a quienes se les plantea la pregunta dice que no. ¿Por qué?',
+      'Una explicación es que no solo queremos tener la experiencia de hacer algo, sino hacerlo de verdad. No queremos sentir que escribimos una novela; queremos haberla escrito. Otra explicación es que queremos ser cierto tipo de persona —valiente, generosa, honesta—, y quien flota en un tanque no es nada de eso: solo cree serlo. Una tercera razón es que queremos tener contacto con una realidad que no hemos inventado nosotros mismos.',
+      'Los defensores de que el placer es el único bien responden que esas razones son prejuicios: si dentro del tanque no notaríamos la diferencia, ¿qué nos importa?',
+      'El experimento no resuelve la discusión, pero hace visible algo: cuando pensamos en una buena vida, casi nunca pensamos solo en cómo nos sentimos.',
+    ]),
+    residuos: T('¿Qué botamos en el colegio?', [
+      'Durante una semana, el grupo ecológico de un colegio pesó todos los residuos que salieron de las canecas. En total se recogieron 250 kilogramos, sin contar los de la cafetería, que tiene su propio contrato de recolección. La tabla muestra cómo se repartieron.',
+      'Lo primero que llamó la atención fue que casi la mitad de lo que se bota es orgánico: cáscaras de fruta, restos de almuerzo y hojas del patio. Ese material, que hoy termina en el relleno sanitario, podría convertirse en abono para la huerta del colegio.',
+      'El grupo también encontró que la mayor parte del papel y el cartón llega mezclada con restos de comida y ya no se puede reciclar. Por eso propone poner canecas de tres colores en cada piso y hacer una campaña de un mes para enseñar a separar.',
+      'El coordinador de servicios generales advirtió que las canecas de colores no sirven de nada si al final el camión de la basura mezcla todo. Antes de comprarlas, dijo, hay que conseguir que una asociación de recicladores del barrio recoja el material separado.',
+      'El grupo presentará los resultados en la próxima reunión de padres de familia y volverá a pesar los residuos dentro de seis meses para comparar.',
+    ], [['Tipo de residuo', 'Kilogramos en la semana'], ['Orgánicos', '115'], ['Papel y cartón', '55'], ['Plástico', '45'], ['Icopor y empaques', '20'], ['Vidrio y metal', '15'], ['Total', '250']]),
+    max: T('Our dog Max', [
+      'Our dog, Max, __(1)__ with us for six years. Every morning my sister __(2)__ him to the park before school. Max is __(3)__ dog in the neighborhood, but he is afraid of cats! Yesterday he __(4)__ under the bed when he saw one in the garden.',
+    ]),
+    paseo: T('School trip', [
+      'SCHOOL TRIP TO THE SCIENCE MUSEUM. Date: Friday, May 12. The bus leaves at 7:30 a.m. from the main gate, so please arrive fifteen minutes early. Bring a packed lunch and a bottle of water; there is no cafeteria at the museum. Students must return the permission form signed by their parents before Wednesday. The trip costs 15 dollars. Questions? Talk to Mr. Rivera in room 204.',
+    ]),
+    astro: T('The boy who watched the sky', [
+      'Tomás grew up in a small town in the mountains, where the nights are very dark. When he was twelve, his grandfather gave him an old pair of binoculars, and Tomás started to look at the sky every night. He made drawings of the Moon and wrote down the position of the brightest planets in a notebook.',
+      'At school, nobody shared his interest. His classmates thought astronomy was boring, and his town had no library with science books. So Tomás used the internet at the town hall to read about stars and to write messages to an astronomy club in the capital.',
+      'One night in July, he noticed a small bright point that was not in any of his maps. He took notes for five nights and sent them to the club. The members checked his observations: it was a comet that professional astronomers had discovered only a few days before. Tomás had not discovered it first, but his notes were so careful that the club invited him to give a talk.',
+      'Today Tomás studies physics at university. "I did not have a telescope," he says, "but I had patience. In science, that is half of the equipment."',
+    ]),
+  };
+
+  const lectura = pon([
+    Q('icf-lc-literal', 'Según el texto, don Esteban iba al colegio cada año', ['cuando empezaban las lluvias de marzo', 'al terminar las clases de diciembre', 'cuando la rectora lo llamaba por teléfono', 'el día del concierto de fin de año'], 'La primera frase dice: «Cada marzo, cuando empezaban las lluvias».', 'afinador'),
+    Q('icf-lc-literario', 'La comparación «como una gota que no termina de caer» (párrafo 1) sugiere', ['la paciencia y la lentitud del trabajo de afinar', 'que el techo del salón de música tenía goteras', 'que el piano estaba dañado y ya no tenía arreglo', 'el miedo que los estudiantes le tenían al afinador'], 'La nota repetida una y otra vez, como una gota que tarda, muestra un trabajo lento y paciente.', 'afinador'),
+    Q('icf-lc-literal', 'La rectora propuso cambiar el piano porque', ['un teclado eléctrico nunca se desafina', 'el piano ocupaba mucho espacio en el salón', 'don Esteban cobraba demasiado por afinarlo', 'los estudiantes ya no querían aprender piano'], 'Lo dice el párrafo 2: el teclado eléctrico «nunca se desafina».', 'afinador'),
+    Q('icf-lc-literario', 'Cuando don Esteban dice que el piano «está vivo», quiere decir que', ['cambia con el clima y por eso tiene un sonido propio', 'tiene un mecanismo que funciona solo, sin ayuda', 'fue fabricado con árboles que todavía crecen', 'los estudiantes lo cuidan como a una mascota'], 'La madera se hincha y se encoge: por eso se desafina, pero también por eso suena como suena.', 'afinador'),
+    Q('icf-lc-estructura', '¿Qué función cumple el último párrafo del cuento?', ['Muestra que la rectora cambió su manera de ver el piano', 'Explica paso a paso cómo se fabrica un piano de madera', 'Presenta un conflicto nuevo entre los estudiantes', 'Describe el viaje de regreso de don Esteban a su casa'], 'La rectora no cambia el piano y además abre la puerta para que otros escuchen: ahora valora lo que antes quería reemplazar.', 'afinador'),
+    Q('icf-lc-evalua', '¿Cuál de estas ideas defiende don Esteban?', ['Lo imperfecto puede tener un valor que lo perfecto no tiene', 'Los instrumentos modernos son siempre mejores que los viejos', 'La música solo debe tocarse en salones con la puerta cerrada', 'Los colegios deben gastar menos dinero en clases de música'], 'Dice que el teclado «no se equivoca nunca» y por eso «nunca le va a contar nada»: valora lo que cambia y se desafina.', 'afinador'),
+
+    Q('icf-lc-argumento', 'La tesis del autor es que la comida callejera', ['debe organizarse y reconocerse como parte de la cultura', 'debe desaparecer de las calles para liberar los andenes', 'es menos atractiva para los turistas que la de cadena', 'debe venderse solo dentro de restaurantes con permiso'], 'Dice que tratarla solo como problema es un error y propone organizarla, porque es «una parte viva de nuestra cultura».', 'esquina'),
+    Q('icf-lc-estructura', 'En el párrafo 3, el autor', ['admite algunos problemas y propone organizar los puestos', 'cuenta la historia de un vendedor de arepas de su barrio', 'reconoce que su propuesta no tiene cómo funcionar en la práctica', 'describe las recetas más antiguas que se venden en el país'], '«No niego que existan problemas» anuncia una concesión; enseguida propone organizar en vez de sacar.', 'esquina'),
+    Q('icf-lc-argumento', '¿Qué argumento usa el autor en el párrafo 2?', ['Las recetas callejeras guardan la memoria de una región', 'La comida callejera es más barata que la del supermercado', 'Los vendedores callejeros pagan muchos impuestos al año', 'La comida de la calle es más saludable que la de restaurante'], 'Dice que las recetas se pasan de generación en generación y que en ellas «se reconoce de dónde venimos».', 'esquina'),
+    Q('icf-lc-literal', 'Según el párrafo 4, en las ciudades que organizaron los puestos', ['los vendedores empezaron a cuidar la calle como algo propio', 'los turistas dejaron de visitar los puestos de las esquinas', 'los permisos se volvieron demasiado costosos para vender', 'se prohibió vender comida en las esquinas del centro'], 'El texto dice que los vendedores, «en lugar de esconderse, empezaron a cuidar la calle como algo propio».', 'esquina'),
+    Q('icf-lc-evalua', '¿Cuál dato, de ser cierto, debilitaría más el argumento del párrafo 4?', ['Que en esas ciudades el desorden volvió a los pocos meses', 'Que en esas ciudades también hay restaurantes de cadena', 'Que en esas ciudades los permisos se cobran cada año', 'Que a algunos turistas no les gustan las empanadas'], 'El párrafo 4 usa esas ciudades como prueba de que organizar funciona; si el desorden volvió, la prueba se cae.', 'esquina'),
+    Q('icf-lc-comparar', 'Un funcionario afirma: «Los andenes son de los peatones, no de los negocios». ¿Qué parte del texto responde mejor a esa preocupación?', ['La propuesta de zonas señaladas para los vendedores', 'La lista de comidas que se venden en las esquinas', 'La mención de los turistas que buscan lo que es local', 'La frase final sobre la historia que guarda la ciudad'], 'Las zonas señaladas ordenan los puestos sin bloquear el paso: responden a quien defiende el andén para los peatones.', 'esquina'),
+
+    Q('icf-lc-filosofico', '¿Qué busca mostrar el experimento de la máquina?', ['Que una buena vida no parece depender solo de sentirse bien', 'Que la tecnología podrá curar algún día todas las enfermedades', 'Que los filósofos preferirían vivir conectados en un tanque', 'Que escribir una novela es más difícil que ganar un campeonato'], 'Si casi todos rechazan una vida que se siente perfecta, sentirse bien no parece ser lo único que importa.', 'maquina'),
+    Q('icf-lc-filosofico', 'Según el párrafo 2, si lo único importante fuera sentirse bien,', ['lo obvio sería aceptar conectarse a la máquina', 'nadie querría conectarse a la máquina nunca', 'la máquina no podría funcionar de verdad', 'las personas preferirían el dolor al aburrimiento'], 'El texto dice que en ese caso «la respuesta sería obvia: sí».', 'maquina'),
+    Q('icf-lc-filosofico', 'La segunda explicación del párrafo 3 sostiene que queremos', ['ser de verdad cierto tipo de persona', 'tener más experiencias agradables cada día', 'inventar nuestra propia realidad a nuestro gusto', 'evitar el dolor a cualquier costo y para siempre'], 'Queremos ser valientes, generosos u honestos, y quien flota en el tanque «solo cree serlo».', 'maquina'),
+    Q('icf-lc-estructura', '¿Qué función cumple el párrafo 4?', ['Presenta la respuesta de quienes ven el placer como único bien', 'Resume las tres explicaciones que aparecen en el párrafo anterior', 'Describe con detalle cómo se construiría la máquina del tanque', 'Da la opinión definitiva del autor sobre si conectarse o no'], 'Después de las tres razones para no conectarse, el párrafo 4 da la réplica de los defensores del placer.', 'maquina'),
+    Q('icf-lc-filosofico', '¿Cuál de estas personas razona como los defensores del párrafo 4?', ['«Si no noto la diferencia, me da igual que mi vida sea real»', '«Prefiero un logro verdadero a una alegría que sea falsa»', '«Quiero conocer el mundo tal como es, aunque me duela»', '«Me importa ser honesto aunque nadie me esté viendo»'], 'Ellos dicen que, si dentro del tanque no notaríamos la diferencia, no debería importarnos.', 'maquina'),
+    Q('icf-lc-evalua', 'La frase final del texto expresa', ['una conclusión del autor sobre lo que revela el experimento', 'una regla que todos los filósofos aceptan sin discutir', 'un dato comprobado por una encuesta a muchas personas', 'una crítica contra quienes aceptarían conectarse'], 'El autor cierra diciendo qué hace visible el experimento, sin pretender que la discusión quede resuelta.', 'maquina'),
+
+    Q('icf-lc-discontinuo', 'Según la tabla, ¿qué porcentaje de los residuos fue plástico?', ['18 %', '45 %', '25 %', '4.5 %'], 'Son 45 de 250 kilogramos: 45 ÷ 250 = 0.18, es decir, 18 %.', 'residuos'),
+    Q('icf-lc-discontinuo', '¿Cuántos kilogramos más de orgánicos que de papel y cartón se recogieron en la semana?', ['60', '115', '170', '55'], 'Se restan las dos filas de la tabla: 115 − 55 = 60 kilogramos.', 'residuos'),
+    Q('icf-lc-literal', 'Según el texto, buena parte del papel y el cartón no se puede reciclar porque', ['llega mezclada con restos de comida', 'pesa menos que el plástico y el vidrio', 'la cafetería tiene su propio contrato', 'las hojas del patio caen encima y lo dañan'], 'Lo dice el párrafo 3: llega «mezclada con restos de comida».', 'residuos'),
+    Q('icf-lc-discontinuo', '¿Cuántos kilogramos de residuos NO orgánicos se recogieron en la semana?', ['135', '115', '150', '100'], 'Del total se restan los orgánicos: 250 − 115 = 135 kilogramos.', 'residuos'),
+    Q('icf-lc-argumento', 'La advertencia del coordinador (párrafo 4) señala que', ['separar no sirve si después el material se vuelve a mezclar', 'las canecas de colores son demasiado caras para el colegio', 'el grupo ecológico pesó mal los residuos de esa semana', 'los recicladores del barrio no quieren trabajar con colegios'], 'Si el camión mezcla todo, la separación se pierde: por eso pide antes un acuerdo con los recicladores.', 'residuos'),
+    Q('icf-lc-evalua', '¿Cuál conclusión NO se apoya en la información del texto?', ['Los estudiantes botan más residuos que los profesores', 'Los orgánicos son el tipo de residuo que más pesa', 'La cafetería no se tuvo en cuenta en la medición', 'Habrá una nueva medición dentro de seis meses'], 'El texto no separa los residuos por quién los bota; las otras tres conclusiones sí salen del texto o de la tabla.', 'residuos'),
+  ], 3);
+
+  const matematicas = pon([
+    Q('icf-ma-datos', 'Las edades de cinco hermanos son 4, 7, 7, 10 y 12 años. La moda de las edades es', ['7', '8', '10', '4'], 'La moda es el dato que más se repite: el 7 aparece dos veces.'),
+    Q('icf-ma-datos', 'Una gráfica de barras muestra las ventas de un kiosco: lunes 30, martes 45 y miércoles 25. ¿Cuántas ventas más hubo el martes que el miércoles?', ['20', '15', '45', '70'], 'Se restan las alturas de las barras: 45 − 25 = 20.'),
+    Q('icf-ma-proporcion', 'Un carro gasta 6 galones de gasolina en 180 km. Al mismo ritmo, ¿cuántos galones gasta en 300 km?', ['10', '12', '8', '9'], 'Recorre 180 ÷ 6 = 30 km por galón; para 300 km necesita 300 ÷ 30 = 10 galones.'),
+    Q('icf-ma-proporcion', 'En un curso, la razón entre hombres y mujeres es 2 : 3. Si hay 30 estudiantes, ¿cuántas mujeres hay?', ['18', '12', '20', '15'], 'El curso se reparte en 2 + 3 = 5 partes de 6 estudiantes; las mujeres son 3 · 6 = 18.'),
+    Q('icf-ma-proporcion', 'El 35 % de los 240 estudiantes de un colegio usa lentes. ¿Cuántos estudiantes usan lentes?', ['84', '35', '96', '72'], 'El 35 % es 0.35 de cada unidad: 0.35 · 240 = 84 estudiantes.'),
+    Q('icf-ma-azar', 'En una rifa se venden 200 boletas y solo una gana. Si alguien compra 5 boletas, la probabilidad de que gane es', ['1/40', '1/5', '5/100', '1/200'], 'Tiene 5 casos favorables de 200: 5/200 = 1/40.'),
+    Q('icf-ma-azar', 'Un restaurante ofrece 3 sopas, 4 platos fuertes y 2 postres. ¿Cuántos almuerzos distintos de sopa, plato fuerte y postre se pueden armar?', ['24', '9', '12', '18'], 'Por el principio de multiplicación: 3 · 4 · 2 = 24. Sumar (9) sería contar las opciones sueltas.'),
+    Q('icf-ma-numeros', 'Un bus pasa por un paradero cada 6 minutos y otro cada 8 minutos. Si pasan juntos a las 7:00, ¿a qué hora vuelven a coincidir?', ['7:24', '7:48', '7:14', '7:12'], 'Coinciden en el mínimo común múltiplo de 6 y 8, que es 24: a las 7:24.'),
+    Q('icf-ma-medida', 'Un salón rectangular mide 8 m por 6 m. ¿Cuántas baldosas cuadradas de 50 cm de lado se necesitan para cubrir el piso?', ['192', '48', '96', '384'], 'El piso mide 8 · 6 = 48 m² y cada baldosa 0.5 · 0.5 = 0.25 m²: 48 ÷ 0.25 = 192.'),
+    Q('icf-ma-medida', 'Un cubo tiene aristas de 4 cm. Su volumen es', ['64 cm³', '16 cm³', '48 cm³', '96 cm³'], 'V = 4 · 4 · 4 = 64 cm³. El 96 es el área de sus seis caras.'),
+    Q('icf-ma-lineal', 'Un tanque tiene 500 litros de agua y pierde 25 litros por hora. ¿Después de cuántas horas queda vacío?', ['20', '25', '475', '12.5'], 'Se vacía cuando 500 − 25t = 0, es decir, t = 500 ÷ 25 = 20 horas.'),
+    Q('icf-ma-lineal', '¿Cuál ecuación representa una recta que pasa por el origen y tiene pendiente −3?', ['y = −3x', 'y = x − 3', 'y = 3x', 'y = −3'], 'Una recta por el origen es y = mx; con m = −3 queda y = −3x. La de y = −3 es horizontal.'),
+    Q('icf-ma-forma', 'Un rectángulo mide 6 cm por 8 cm. Su diagonal mide', ['10 cm', '14 cm', '12 cm', '7 cm'], 'Por Pitágoras, d² = 6² + 8² = 36 + 64 = 100, así que d = 10 cm.'),
+    Q('icf-ma-forma', 'Los ángulos internos de un hexágono suman', ['720°', '540°', '360°', '1 080°'], 'Un polígono de n lados se divide en n − 2 triángulos: (6 − 2) · 180° = 720°.'),
+    Q('icf-ma-ecuaciones', 'Laura tiene el triple de la edad de su hijo. Dentro de 12 años tendrá el doble. ¿Cuántos años tiene hoy el hijo?', ['12', '24', '6', '36'], 'Si el hijo tiene h, Laura tiene 3h: 3h + 12 = 2(h + 12), de donde h = 12.'),
+    Q('icf-ma-ecuaciones', 'En una granja hay gallinas y vacas: en total 20 cabezas y 56 patas. ¿Cuántas vacas hay?', ['8', '12', '14', '6'], 'g + v = 20 y 2g + 4v = 56. Si todas fueran gallinas habría 40 patas; las 16 que sobran son 2 por vaca: 8 vacas.'),
+    Q('icf-ma-argumenta', 'Sofía resuelve $2x + 6 = 14$ así: «2x = 14 + 6 = 20, entonces x = 10». ¿Cuál es su error?', ['Debió restar 6 en los dos lados, no sumarlo', 'Debió dividir 14 entre 2 antes que nada', 'Debió multiplicar por 2 en vez de dividir', 'No hay error: x = 10 es la solución'], 'Para despejar se resta 6: 2x = 8 y x = 4. Comprobación: 2 · 10 + 6 = 26, no 14.'),
+    Q('icf-ma-argumenta', '¿Cuál ejemplo muestra que es falsa la afirmación «la suma de dos números irracionales siempre es irracional»?', ['√2 + (−√2) = 0', '√2 + √2 = 2√2', 'π + 1', '√3 + √5'], 'Son dos irracionales cuya suma, 0, es racional. π + 1 no sirve porque 1 no es irracional.'),
+    Q('icf-ma-finanzas', 'Una cuenta de ahorros paga 1 % mensual de interés compuesto. Si se depositan 500 000 pesos, al cabo de 2 meses hay', ['510 050 pesos', '510 000 pesos', '505 000 pesos', '501 000 pesos'], '500 000 · 1.01 · 1.01 = 510 050. Con interés simple serían 510 000.'),
+    Q('icf-ma-finanzas', 'Un trabajador gana 2 000 000 de pesos al mes y le descuentan 4 % para salud y 4 % para pensión. ¿Cuánto recibe?', ['1 840 000 pesos', '1 920 000 pesos', '1 600 000 pesos', '1 960 000 pesos'], 'Le descuentan 8 % en total: 0.08 · 2 000 000 = 160 000, y recibe 1 840 000.'),
+    Q('icf-ma-curvas', 'La función $f(x) = 2^x$ en $x = 5$ vale', ['32', '10', '25', '64'], '2⁵ = 2 · 2 · 2 · 2 · 2 = 32. El 10 sale de multiplicar 2 · 5, que es un error común.'),
+    Q('icf-ma-curvas', 'Una población de peces se reduce a la mitad cada año. Si hoy hay 8 000, ¿cuántos habrá en 3 años?', ['1 000', '2 000', '4 000', '2 667'], '8 000 → 4 000 → 2 000 → 1 000: se divide entre 2 tres veces.'),
+    Q('icf-ma-espacio', 'El punto $(3, 0)$ se gira 90° alrededor del origen, en sentido contrario a las manecillas del reloj. Su imagen es', ['(0, 3)', '(0, −3)', '(−3, 0)', '(3, 3)'], 'Un cuarto de vuelta antihorario lleva el eje x positivo al eje y positivo: (3, 0) pasa a (0, 3).'),
+    Q('icf-ma-dispersion', 'Los datos 2, 4, 6, 8 y 10 tienen un rango de', ['8', '10', '6', '30'], 'El rango es el mayor menos el menor: 10 − 2 = 8.'),
+  ], 8);
+
+  const sociales = pon([
+    Q('icf-sc-constitucion', 'Las tres ramas del poder público en Colombia son', ['legislativa, ejecutiva y judicial', 'nacional, departamental y municipal', 'civil, militar y religiosa', 'electoral, fiscal y de control'], 'La Constitución divide el poder en tres ramas para que se controlen entre sí; la electoral y los órganos de control son entidades aparte.'),
+    Q('icf-sc-constitucion', 'La acción popular sirve para proteger', ['derechos colectivos, como un ambiente sano o el espacio público', 'el derecho de una sola persona a recibir un medicamento que necesita', 'la elección de los representantes de un curso escolar', 'la propiedad privada de una empresa extranjera'], 'La acción popular defiende derechos e intereses de toda la comunidad; el caso individual urgente es para la tutela.'),
+    Q('icf-sc-constitucion', 'Hoy, el presidente de la República en Colombia es elegido para un periodo de', ['cuatro años, sin reelección', 'seis años, con una reelección', 'cuatro años, con reelección inmediata', 'ocho años, sin reelección'], 'El periodo presidencial es de cuatro años y una reforma constitucional eliminó la reelección.'),
+    Q('icf-sc-participacion', 'Según la Constitución, el voto en Colombia es', ['un derecho y un deber ciudadano', 'una obligación que se castiga con multa', 'un privilegio de quienes pagan impuestos', 'exclusivo de quienes saben leer y escribir'], 'La Constitución dice que el voto es un derecho y un deber, pero no lo hace obligatorio.'),
+    Q('icf-sc-participacion', 'Las juntas de acción comunal son', ['organizaciones de vecinos que trabajan por su barrio o vereda', 'oficinas del gobierno nacional que hay en cada uno de los municipios', 'tribunales que juzgan los delitos menores', 'empresas privadas de servicios públicos'], 'Son organizaciones de la comunidad que gestionan obras y proyectos para su barrio o vereda.'),
+    Q('icf-sc-participacion', 'Una veeduría ciudadana sirve para', ['vigilar cómo se ejecuta una obra o un programa público', 'elegir por votación al rector de un colegio oficial del municipio', 'cobrar los impuestos atrasados de un municipio', 'aprobar el presupuesto de la Nación cada año'], 'Las veedurías son grupos de ciudadanos que hacen control a la gestión pública.'),
+    Q('icf-sc-perspectivas', 'En un municipio se discute si permitir la minería de oro. ¿Qué actor es más probable que dé prioridad al empleo inmediato?', ['Los trabajadores desempleados de la región', 'Una organización que protege las fuentes de agua', 'Una comunidad que vive del turismo ecológico', 'Los pescadores del río que pasa junto a la mina'], 'Quien no tiene trabajo ve en la mina una fuente de ingresos; los demás temen por el agua, el paisaje o la pesca.'),
+    Q('icf-sc-perspectivas', 'Para resolver un conflicto entre vecinos por el ruido de una fiesta, la opción que mejor respeta a las dos partes es', ['dialogar y acordar un horario para la música', 'llamar a la policía sin hablar antes con nadie', 'subir el volumen de la música propia en respuesta', 'dejar de saludar a esos vecinos para siempre'], 'El diálogo permite que unos sigan celebrando y los otros descansen: los dos intereses quedan atendidos.'),
+    Q('icf-sc-fuentes', 'Un estudiante quiere saber cuántas personas viven hoy en su municipio. La fuente más confiable es', ['las cifras del censo y las proyecciones de población del DANE', 'un comentario que circula en una red social', 'lo que recuerda un vecino que vive allí hace años', 'un afiche de una campaña política del municipio'], 'El censo es una medición oficial y sistemática; las demás son opiniones o fuentes con intereses.'),
+    Q('icf-sc-fuentes', 'Un artículo afirma que una bebida «cura la gripa en un día» y cita solo al dueño de la empresa que la vende. El principal problema de esa fuente es que', ['tiene un interés económico en lo que afirma', 'conoce mejor que nadie la bebida que fabrica y vende', 'la gripa es una enfermedad muy común', 'el artículo es demasiado corto para leer'], 'Quien gana dinero con la venta no es una fuente imparcial; harían falta estudios independientes.'),
+    Q('icf-sc-sistemico', 'Una fábrica grande cierra en un pueblo pequeño. ¿Qué consecuencia es más probable?', ['Bajan las ventas del comercio local porque hay menos salarios', 'Suben los salarios de todos los habitantes del pueblo y sus veredas', 'Llegan muchas más familias a vivir en el pueblo', 'Mejora de inmediato la economía de toda la región'], 'Los trabajadores despedidos gastan menos, y las tiendas, restaurantes y transportes del pueblo venden menos.'),
+    Q('icf-sc-sistemico', 'Un país paga una parte del precio de la gasolina para que sea barata. Un efecto no buscado puede ser que', ['aumente el uso del carro y la contaminación del aire', 'la gente compre menos carros particulares y más bicicletas', 'el Estado reciba más dinero por impuestos', 'bajen los precios de los paneles solares'], 'Con gasolina barata manejar sale más económico; más carros en la calle significan más contaminación y un gasto grande para el Estado.'),
+    Q('icf-sc-historia', 'El 20 de julio de 1810, en Santafé, ocurrió', ['un levantamiento que formó una junta de gobierno', 'la batalla final contra el ejército español en el puente', 'la firma de la Constitución de Rionegro', 'la separación de Panamá de Colombia'], 'Ese día, tras el incidente del florero, se formó una junta que inició el proceso de independencia.'),
+    Q('icf-sc-historia', 'En 1903, Colombia perdió el territorio de', ['Panamá', 'Venezuela', 'Ecuador', 'La Guajira'], 'Panamá se separó de Colombia en 1903 con apoyo de Estados Unidos, que quería construir el canal.'),
+    Q('icf-sc-historia', 'La ley que abolió la esclavitud en Colombia se expidió en', ['1851', '1810', '1991', '1903'], 'La ley de 1851, durante el gobierno de José Hilario López, abolió la esclavitud a partir del 1 de enero de 1852.'),
+    Q('icf-sc-mundo', 'La Primera Guerra Mundial (1914 a 1918) se caracterizó por', ['la guerra de trincheras y el uso de armas industriales', 'el lanzamiento de las primeras bombas atómicas sobre ciudades', 'la llegada de los europeos a América', 'la caída del muro que dividía Berlín'], 'Fue una guerra de desgaste en trincheras, con ametralladoras, artillería y gases. Las bombas atómicas fueron en la Segunda.'),
+    Q('icf-sc-mundo', 'El apartheid en Sudáfrica fue', ['un sistema legal de segregación contra la población negra', 'una guerra entre Sudáfrica y sus países vecinos', 'un tratado de comercio entre Sudáfrica y Europa', 'un movimiento pacífico que unió a todas las razas del país'], 'Entre 1948 y comienzos de los noventa, las leyes separaban a la población por raza y negaban derechos a la mayoría negra.'),
+    Q('icf-sc-mundo', 'Para los pueblos indígenas, la conquista española de América en el siglo XVI trajo', ['una gran caída de su población por guerras y enfermedades', 'un crecimiento rápido de su población en pocos años', 'la independencia de sus territorios frente a Europa', 'el fin de toda forma de trabajo forzado en América'], 'La guerra, el trabajo forzado y enfermedades como la viruela causaron una caída enorme de la población indígena.'),
+    Q('icf-sc-geografia', 'En Colombia, la cordillera de los Andes se divide en', ['tres ramales: occidental, central y oriental', 'dos ramales: uno que va al norte y otro que va al sur', 'cuatro ramales del mismo tamaño', 'un solo ramal que cruza el país'], 'Al sur del país, en el nudo de los Pastos, los Andes se dividen en dos; más al norte, en el macizo colombiano, de la cordillera central nace la oriental: quedan tres cordilleras.'),
+    Q('icf-sc-geografia', 'Un páramo es importante para las ciudades cercanas porque', ['retiene y regula el agua que alimenta los ríos', 'produce la mayor parte de la energía del país', 'es la zona más cálida de toda la montaña', 'tiene los mejores suelos para criar ganado'], 'La vegetación del páramo, como los frailejones y los musgos, guarda agua y la va soltando poco a poco a los ríos.'),
+    Q('icf-sc-economia', 'Cuando el Banco de la República sube las tasas de interés, busca sobre todo', ['frenar la inflación al encarecer el crédito', 'que la gente pida muchos más préstamos', 'que los bancos presten más dinero a las familias', 'estimular el consumo para que la economía crezca más rápido'], 'Si pedir prestado cuesta más, se gasta menos y los precios suben más despacio.'),
+    Q('icf-sc-economia', 'El producto interno bruto (PIB) de un país mide', ['el valor de los bienes y servicios finales que produce en un periodo', 'la cantidad de billetes que imprime el banco central cada año', 'el número de habitantes que tiene el país en un año dado', 'el total de las deudas que el gobierno tiene con los bancos de otros países'], 'El PIB suma el valor de lo que se produce para uso final dentro del país en un tiempo dado, por lo general un año.'),
+    Q('icf-sc-modelos', 'En un modelo de libre mercado, el precio de un producto lo fijan principalmente', ['la oferta y la demanda', 'las órdenes del gobierno', 'las decisiones de un sindicato', 'los costos de la publicidad'], 'Sin intervención del Estado, el precio sube cuando hay mucha demanda o poca oferta, y baja en el caso contrario.'),
+    Q('icf-sc-modelos', 'Un gobierno quiere reducir los accidentes de moto. ¿Qué medida ataca una causa y no solo las consecuencias?', ['Mejorar la formación y el examen para la licencia', 'Construir más hospitales para atender a los heridos', 'Comprar más ambulancias para todas las ciudades', 'Pagar seguros más altos a las víctimas de choques'], 'Formar mejor a quienes manejan previene accidentes; las otras medidas atienden el daño después de que ocurre.'),
+  ], 13);
+
+  const ciencias = pon([
+    Q('icf-cn-indaga', 'Un estudiante mide cuánto tarda en hervir el agua cuando cambia la cantidad de agua en la olla. ¿Qué debe mantener igual para que la comparación sea justa?', ['la estufa, la llama y el tipo de olla', 'la cantidad de agua en cada prueba', 'el tiempo que tarda el agua en hervir', 'el número de ollas que usa a la vez'], 'Solo debe cambiar la cantidad de agua (lo que se prueba) y medirse el tiempo; lo demás debe quedar igual.'),
+    Q('icf-cn-indaga', 'En ciencias, una hipótesis es', ['una explicación posible que se puede poner a prueba', 'un dato que ya fue comprobado muchas veces', 'una opinión personal que no se puede discutir con nadie', 'el resultado final que arroja un experimento'], 'La hipótesis se propone antes del experimento y este sirve para apoyarla o descartarla.'),
+    Q('icf-cn-celula', 'La membrana celular cumple la función de', ['controlar qué sustancias entran y salen de la célula', 'fabricar casi toda la energía que usa la célula', 'guardar y copiar toda la información genética de la célula', 'hacer la fotosíntesis en las células de las hojas'], 'La membrana es una barrera selectiva: deja pasar unas sustancias y otras no.'),
+    Q('icf-cn-celula', 'Las bacterias se diferencian de las células animales en que', ['no tienen un núcleo definido', 'no tienen material genético', 'son siempre más grandes', 'no se pueden reproducir'], 'Las bacterias son procariotas: su ADN está suelto en el citoplasma, sin núcleo.'),
+    Q('icf-cn-celula', 'En el cuerpo humano, la función principal de los riñones es', ['filtrar la sangre y eliminar desechos en la orina', 'producir los glóbulos rojos y blancos de la sangre', 'digerir las grasas de los alimentos', 'bombear la sangre a todo el cuerpo'], 'Los riñones filtran la sangre, quitan los desechos y el exceso de agua y forman la orina.'),
+    Q('icf-cn-movimiento', 'Un objeto se mueve con velocidad constante de 15 m/s durante 4 s. La distancia que recorre es', ['60 m', '19 m', '3.75 m', '11 m'], 'Con velocidad constante, d = v · t = 15 · 4 = 60 m.'),
+    Q('icf-cn-movimiento', 'Un pasajero va de pie en un bus que frena de golpe. El pasajero se va hacia adelante porque', ['por inercia tiende a seguir en movimiento', 'el bus lo empuja con fuerza hacia adelante', 'la gravedad aumenta cuando el bus frena', 'el aire de adentro lo empuja hacia adelante'], 'Por la primera ley de Newton, el cuerpo del pasajero conserva su movimiento mientras el bus se detiene.'),
+    Q('icf-cn-materia', 'El agua de mar filtrada, sin arena ni algas, es', ['una mezcla homogénea', 'una sustancia pura', 'un elemento químico', 'una mezcla heterogénea'], 'Tiene sales disueltas de manera uniforme: es una solución, es decir, una mezcla homogénea.'),
+    Q('icf-cn-materia', 'Cuando una sustancia pasa de líquido a gas, sus partículas', ['se separan y se mueven con más libertad', 'se juntan más y se ordenan en filas', 'dejan de moverse por completo', 'se convierten en otro elemento'], 'En el gas las partículas están muy separadas y se mueven más rápido y libremente que en el líquido.'),
+    Q('icf-cn-ecosistemas', 'En un ecosistema, los hongos y bacterias que descomponen la materia muerta', ['devuelven nutrientes al suelo', 'producen oxígeno por fotosíntesis', 'son los consumidores primarios', 'solo pueden vivir en el agua'], 'Los descomponedores transforman los restos en nutrientes que las plantas vuelven a usar.'),
+    Q('icf-cn-ecosistemas', 'Si en un lago se introduce una especie invasora que no tiene depredadores, lo más probable es que', ['su población crezca y compita con las especies nativas', 'desaparezca del lago en unos pocos días por falta de comida', 'mejore el equilibrio del lago con el tiempo', 'su población se mantenga pequeña porque no conoce el lago'], 'Sin depredadores que la controlen, se multiplica y le quita alimento y espacio a las especies propias del lago.'),
+    Q('icf-cn-energia', 'Un panel solar transforma', ['energía luminosa en energía eléctrica', 'energía eléctrica en energía química', 'energía térmica en energía nuclear', 'energía sonora en energía luminosa'], 'Las celdas del panel convierten la luz del Sol en corriente eléctrica.'),
+    Q('icf-cn-energia', 'Un carro de 1 000 kg va a 10 m/s. Su energía cinética es', ['50 000 J', '10 000 J', '100 000 J', '5 000 J'], 'Ec = ½ · m · v² = ½ · 1 000 · 100 = 50 000 J.'),
+    Q('icf-cn-atomo', 'En la tabla periódica, los elementos de una misma columna (grupo)', ['tienen propiedades químicas parecidas', 'tienen exactamente la misma masa', 'son todos gases a temperatura ambiente', 'tienen el mismo número de protones'], 'En general tienen el mismo número de electrones en su última capa, y por eso reaccionan de forma parecida.'),
+    Q('icf-cn-atomo', 'Un ion con carga +2 se forma cuando un átomo', ['pierde dos electrones', 'gana dos electrones', 'gana dos protones', 'pierde dos neutrones'], 'Al perder dos electrones (negativos) quedan dos protones sin compensar: carga +2.'),
+    Q('icf-cn-herencia', 'Se cruza una planta de flor roja (RR) con una de flor blanca (rr). Si el rojo es dominante, las plantas hijas serán', ['todas de flor roja', 'todas de flor blanca', 'mitad rojas y mitad blancas', 'tres rojas por cada blanca'], 'Todas reciben R de un padre y r del otro: son Rr y muestran el rojo dominante.'),
+    Q('icf-cn-herencia', 'En distintas islas, unas aves de la misma familia tienen picos diferentes según el alimento de cada isla. Esto se explica por', ['la selección natural', 'el uso y desuso de los órganos', 'la generación espontánea', 'la falta de comida en todas las islas'], 'En cada isla sobrevivieron y se reprodujeron más las aves con el pico adecuado para su alimento.'),
+    Q('icf-cn-reacciones', 'Si H = 1 g/mol y O = 16 g/mol, la masa molar del agua ($H_2O$) es', ['18 g/mol', '17 g/mol', '32 g/mol', '34 g/mol'], 'Dos hidrógenos y un oxígeno: 2 · 1 + 16 = 18 g/mol.'),
+    Q('icf-cn-reacciones', 'Para corregir un suelo muy ácido, un agricultor puede agregar', ['cal, que es una sustancia básica', 'vinagre, que es una sustancia ácida', 'agua destilada en gran cantidad', 'sal de cocina en pequeñas dosis'], 'Una base neutraliza el ácido y sube el pH del suelo; el vinagre lo haría aún más ácido.'),
+    Q('icf-cn-ondas', 'Un trueno se oye 3 segundos después de ver el rayo. Si el sonido viaja a 340 m/s, la tormenta está a unos', ['1 020 m', '340 m', '113 m', '3 000 m'], 'La luz llega casi al instante; el sonido tarda 3 s: d = 340 · 3 = 1 020 m.'),
+    Q('icf-cn-ondas', 'Bajo la luz blanca, un objeto se ve rojo porque', ['refleja la luz roja y absorbe los otros colores', 'absorbe toda la luz roja que le llega', 'produce su propia luz roja todo el tiempo, como un bombillo', 'convierte la luz blanca en calor rojo'], 'El color que vemos es el de la luz que el objeto refleja hacia nuestros ojos.'),
+    Q('icf-cn-gases', 'Si se disuelve más azúcar en la misma cantidad de agua, la concentración de la solución', ['aumenta', 'disminuye', 'no cambia', 'disminuye, porque el azúcar ocupa espacio'], 'Hay más soluto en el mismo solvente: la solución queda más concentrada.'),
+    Q('icf-cn-electrico', 'Dos imanes se acercan por sus polos norte. Lo que ocurre es que', ['se repelen', 'se atraen', 'se atraen solo si están muy cerca', 'no pasa nada'], 'Polos iguales se repelen y polos opuestos se atraen.'),
+    Q('icf-cn-cts', 'Una empresa anuncia un plástico «biodegradable» que solo se degrada en plantas industriales a 60 °C. ¿Qué pregunta conviene hacer antes de decir que ayuda al ambiente?', ['¿Hay plantas así en la ciudad donde se va a botar?', '¿De qué color viene el plástico de cada bolsa?', '¿Cuánto pesa cada bolsa de ese plástico nuevo?', '¿Qué marca fabrica el plástico y en qué tiendas se vende?'], 'Si no hay plantas industriales cerca, el plástico termina en un relleno o en un río y no se degrada.'),
+  ], 18);
+
+  const ingles = pon([
+    Q('icf-en-avisos', 'Where can you see this sign? "Please do not feed the animals."', ['In a zoo', 'In a bank', 'In a library', 'In a cinema'], '«Do not feed the animals» es «no alimente a los animales»: el aviso está en un zoológico.'),
+    Q('icf-en-avisos', 'A sign on a door says: "Closed for lunch. Back at 2 p.m." What does it mean?', ['The place will open again at two.', 'The place is closed all day today.', 'Lunch is served here at two.', 'You can eat your lunch here now.'], '«Back at 2 p.m.» quiere decir que vuelven a abrir a las dos.'),
+    Q('icf-en-avisos', 'What does this sign mean? "Silence, please: test in progress."', ['Be quiet because people are taking a test.', 'Speak loudly so that the teacher can hear you.', 'The test has already finished.', 'You must take a test right now.'], '«In progress» es «en curso»: hay personas presentando una prueba y piden silencio.'),
+    Q('icf-en-avisos', 'A sign in a shop says: "Buy two, get one free." If you buy two shirts,', ['you get a third shirt without paying', 'you must pay the full price for three shirts', 'you get two shirts free', 'the shirts are not for sale'], '«Get one free» es «lleva una gratis»: por dos camisas pagadas recibes una tercera.'),
+    Q('icf-en-vocabulario', 'A person who flies a plane is a', ['pilot', 'baker', 'plumber', 'teacher'], '«Pilot» es piloto; baker, plumber y teacher son panadero, plomero y profesor.'),
+    Q('icf-en-vocabulario', 'You use this small object to open a door. It is a', ['key', 'fork', 'towel', 'pencil'], '«Key» es la llave; fork, towel y pencil son tenedor, toalla y lápiz.'),
+    Q('icf-en-vocabulario', 'The opposite of "cheap" is', ['expensive', 'small', 'happy', 'early'], '«Cheap» es barato y su contrario es «expensive», caro.'),
+    Q('icf-en-dialogos', 'Complete the conversation. "How much is this jacket?" —', ["It's forty dollars.", "It's blue and black.", "I'm fine, thanks.", "It's in my bag."], '«How much» pregunta el precio: «it\'s forty dollars».'),
+    Q('icf-en-dialogos', 'Complete the conversation. "Where is the nearest bank?" —', ['Go straight and turn left.', 'It opens at nine o\'clock.', 'I have an account there.', 'Yes, it is very near.'], '«Where» pregunta por un lugar: la respuesta da indicaciones para llegar.'),
+    Q('icf-en-dialogos', 'Complete the conversation. "Would you like to come to my party on Saturday?" —', ["I'd love to. What time?", 'Yes, I came last week.', "No, it's on Saturday.", 'I liked parties yesterday.'], 'A una invitación se responde aceptando o rechazando; «I\'d love to» es aceptarla con gusto.'),
+    Q('icf-en-dialogos', 'Complete the conversation. "Excuse me, is this seat free?" —', ['Yes, please sit down.', 'I am free on Monday.', 'Yes, I am a student.', 'No, it is a chair.'], '«Is this seat free?» pregunta si el puesto está libre; se responde invitando a sentarse.'),
+    Q('icf-en-gramatica', 'Choose the word or words for gap (1).', ['has lived', 'live', 'is live', 'living'], 'Algo que empezó hace seis años y sigue hoy se dice en presente perfecto: «has lived … for six years».', 'max'),
+    Q('icf-en-gramatica', 'Choose the word for gap (2).', ['takes', 'take', 'taking', 'taken'], 'Es una rutina («every morning») y el sujeto es «my sister» (ella): presente simple con -s, «takes».', 'max'),
+    Q('icf-en-gramatica', 'Choose the word or words for gap (3).', ['the biggest', 'bigger', 'the most big', 'big'], 'Compara a Max con todos los perros del barrio: superlativo de un adjetivo corto, «the biggest».', 'max'),
+    Q('icf-en-gramatica', 'Choose the word for gap (4).', ['hid', 'hides', 'hide', 'hiding'], '«Yesterday» pide pasado simple: «hid», pasado irregular de «hide».', 'max'),
+    Q('icf-en-corto', 'What time should students arrive at the main gate?', ['At 7:15 a.m.', 'At 7:30 a.m.', 'At 7:45 a.m.', 'At 7:00 a.m.'], 'El bus sale a las 7:30 y piden llegar quince minutos antes: a las 7:15.', 'paseo'),
+    Q('icf-en-corto', 'Why do students need to bring lunch?', ['There is no cafeteria at the museum.', 'The food at the museum is expensive.', 'The trip is very short.', 'Mr. Rivera wants them to share food.'], 'El aviso dice «there is no cafeteria at the museum».', 'paseo'),
+    Q('icf-en-corto', 'What must students do before Wednesday?', ['Return the form signed by their parents.', 'Visit the science museum with Mr. Rivera.', 'Buy a bottle of water for the trip.', 'Go to room 204 to ask questions.'], '«Students must return the permission form signed by their parents before Wednesday».', 'paseo'),
+    Q('icf-en-inferencia', 'Where would you probably find this text?', ['On a school notice board', 'In a science book', 'In a letter from a friend', 'On a restaurant menu'], 'Da fecha, hora, costo y requisitos de una salida escolar: es un aviso para estudiantes y familias.', 'paseo'),
+    Q('icf-en-largo', 'What is the text mainly about?', ['A boy whose interest in the sky grew into a career', 'The history of an old astronomy club in the capital city', 'How to build a cheap telescope at home', 'Why comets can be dangerous for the Earth'], 'Cuenta cómo Tomás, con unos binoculares y paciencia, llegó a estudiar física.', 'astro'),
+    Q('icf-en-largo', 'How did Tomás learn more about the stars?', ['He read on the internet at the town hall.', 'He borrowed books from the school library.', 'His classmates at school taught him.', 'He studied with professional astronomers.'], 'El párrafo 2 dice que su pueblo no tenía biblioteca y que usó internet en la alcaldía («town hall»).', 'astro'),
+    Q('icf-en-largo', 'Why did the club invite Tomás to give a talk?', ['His notes about the comet were very careful.', 'He was the first person to discover the comet.', 'He had the biggest telescope in his town.', 'His grandfather was a member of the club.'], 'No lo descubrió primero, pero «his notes were so careful» que lo invitaron.', 'astro'),
+    Q('icf-en-vocabulario', 'In paragraph 2, "nobody shared his interest" means that', ['no one else at school liked astronomy', 'everybody at school liked astronomy', 'Tomás himself did not really like astronomy', 'his friends gave him binoculars'], 'Sus compañeros pensaban que la astronomía era aburrida: nadie compartía su interés.', 'astro'),
+    Q('icf-en-inferencia', 'What does Tomás mean by his last sentence?', ['Patience is as important as tools in science.', 'Telescopes are much too expensive for young students.', 'Half of all scientists have no equipment.', 'He wants to sell his old binoculars.'], 'Dice que la paciencia es «la mitad del equipo»: vale tanto como los instrumentos.', 'astro'),
+  ], 23);
+
+  return { id: 'icf-sim-3', titulo: 'Simulacro 3', textos, pruebas: { lectura, matematicas, sociales, ciencias, ingles } };
 })());
 ;
 //#archivo js/portal.js

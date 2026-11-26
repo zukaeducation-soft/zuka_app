@@ -1,659 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-r-movimiento.js
-// Preuniversitario UdeA · razonamiento lógico: el juego en movimiento de cada lección (spec 2026-11-20-preuda-movimiento).
-// Casi todas las lecciones terminaban en vuela-precios o rompe-cambios. Aquí se cambia ese ejercicio (el que va antes de
-// la zona de examen) por uno de los seis juegos del kit MV (js/games/mueve-kit.js), que reciben las mismas preguntas:
-// se conservan las preguntas, la explicación y la pista; cambia el juego y su enunciado. Ningún juego en movimiento sale
-// en más de seis lecciones del componente ni en dos lecciones seguidas del mismo mundo (tests/preuda-movimiento.test.js).
-// Va después de los archivos preuda-r-<mundo>.js y antes de preuda-razonamiento-juegos.js.
-PU_JUEGOS.push(({ L }) => {
-  const FROM = ['vuela-precios', 'rompe-cambios'];
-  // lección → [juego, enunciado]
-  const MOVIMIENTO = {
-    'pu-ge-2': ['aro-lanza', 'Lanza el aro a la estaca del cateto que falta'],
-    'pu-ge-4': ['grua-carga', 'Baja la caja en el camión de la medida correcta'],
-    'pu-ge-5': ['rueda-cabinas', 'Gira la rueda hasta el área sombreada'],
-    'pu-or-1': ['tren-aguja', 'Lleva el tren a la estación de la respuesta'],
-    'pu-or-2': ['rueda-cabinas', 'Gira la rueda hasta la silla que piden'],
-    'pu-or-4': ['barco-muelle', 'Atraca el barco en lo que se puede afirmar'],
-    'pu-co-1': ['canica-tablero', 'Deja caer la canica en el número de casos'],
-    'pu-co-2': ['barco-muelle', 'Atraca el barco en el número de ordenamientos'],
-    'pu-co-4': ['tren-aguja', 'Lleva el tren a la estación del conteo correcto'],
-    'pu-es-2': ['grua-carga', 'Baja la caja en el camión de la respuesta'],
-    'pu-es-3': ['aro-lanza', 'Lanza el aro a la cara correcta'],
-    'pu-se-2': ['tren-aguja', 'Lleva el tren a la estación de lo que sigue'],
-    'pu-se-3': ['rueda-cabinas', 'Gira la rueda hasta el resultado del ciclo'],
-    'pu-cd-1': ['barco-muelle', 'Atraca el barco en el código correcto'],
-    'pu-cd-2': ['canica-tablero', 'Deja caer la canica en lo que sigue la regla'],
-    'pu-gr-1': ['grua-carga', 'Baja la caja en el camión de la lectura correcta'],
-    'pu-lo-1': ['rueda-cabinas', 'Gira la rueda hasta el valor de verdad'],
-    'pu-lo-2': ['aro-lanza', 'Lanza el aro a la negación correcta'],
-    'pu-lo-5': ['canica-tablero', 'Deja caer la canica en la respuesta'],
-    'pu-op-1': ['tren-aguja', 'Lleva el tren al resultado del operador'],
-    'pu-ar-1': ['barco-muelle', 'Atraca el barco en lo que queda'],
-    'pu-ar-2': ['grua-carga', 'Baja la caja en el camión del promedio'],
-    'pu-ar-3': ['aro-lanza', 'Lanza el aro a la cifra correcta'],
-    'pu-ec-2': ['canica-tablero', 'Deja caer la canica en la respuesta del problema'],
-    'pu-cj-2': ['rueda-cabinas', 'Gira la rueda hasta la cuenta de la encuesta'],
-    'pu-nu-1': ['tren-aguja', 'Lleva el tren a la estación correcta'],
-    'pu-nu-3': ['grua-carga', 'Baja la caja en el camión del residuo'],
-    'pu-pb-1': ['aro-lanza', 'Lanza el aro a la probabilidad correcta'],
-    'pu-pb-2': ['barco-muelle', 'Atraca el barco en la probabilidad correcta'],
-  };
-  for (const [id, [game, q]] of Object.entries(MOVIMIENTO)) {
-    const ex = L(id).ex, i = ex.length - 4, e = ex[i];
-    // Si la lección cambió (otro juego en ese lugar), no se toca: la prueba tests/preuda-movimiento.test.js avisa.
-    if (!e || !FROM.includes(e.game)) continue;
-    // Las pistas viejas decían «antes de volar» o «antes de lanzar»: ahora el gesto es otro.
-    ex[i] = { ...e, game, q, hint: e.hint.replace(/(antes de) (volar|lanzar)/gi, '$1 jugar') };
-  }
-});
-;
-//#archivo js/courses/preuda-razonamiento-juegos.js
-// Preuniversitario UdeA · componente Razonamiento lógico: juegos, ejercicios y evaluaciones de todas las lecciones (spec
-// 2026-11-18-preuda-razonamiento-completo). Va después de preuda-razonamiento.js: reemplaza los ejercicios de cada lección
-// (7 u 8 juegos distintos, el último en movimiento) y le pone a cada mundo su evaluación. PU_HECHOS lista los mundos
-// terminados: la prueba tests/preuda-razonamiento.test.js les exige el estándar.
-const PU_HECHOS = [];
-// Mundos rehechos con el estándar de diez ejercicios distintos y zona de examen (spec 2026-11-20-preuda-razonamiento-diez).
-const PU_DIEZ = [];
-(() => {
-  const lessons = PU_RAZONAMIENTO.flatMap(u => u.lessons);
-  const L = id => { const l = lessons.find(l => l.id === id); if (!l) throw new Error(`no existe ${id}`); return l; };
-  // Zona de examen (js/games/examen-kit.js). En `err` la corrección buena va primero en `fixes`: el juego las revuelve.
-  const sol = (q, lines, extra, explain, hint) => play('completa-solucion', 'Completa la solución: arrastra cada ficha a su hueco.', { q, lines, extra }, explain, { hint });
-  const err = (q, steps, wrong, fixes, explain, hint) => play('caza-error', 'Encuentra el paso equivocado y corrígelo.', { q, steps, wrong, fixes, fix: 0 }, explain, { hint });
-  const opc = (q, options, answer, explain, hint) => play('opcion-examen', 'Así sale en el examen.', { q, options, answer }, explain, { hint });
-  const diez = world => { if (!PU_DIEZ.includes(world)) PU_DIEZ.push(world); };
-  const setLesson = (id, list) => { L(id).ex = list.map((e, i) => ({ ...e, canvasGuide: true, motion: i === list.length - 1 })); };
-  // Evaluación del mundo: [lección, nota de repaso, ejercicio]. La pista corta se completa con la nota de repaso.
-  const setExam = (world, title, items) => {
-    const u = PU_RAZONAMIENTO.find(u => u.world === world), order = u.lessons.map(l => l.id);
-    u.exam = { id: `exam-${world}`, title, minutes: 0, items: items.map(([lesson, review, ex]) => ({ lesson, review, ex: { ...ex, hint: ex.hint.length >= 30 ? ex.hint : `${ex.hint} ${review}`, explain: ex.explain.length > 30 ? ex.explain : `${review} ${ex.explain}`, canvasGuide: true, exam: true, params: { ...ex.params, autoDemo: false } } })) };
-    u.exam.items.sort((a, b) => order.indexOf(a.lesson) - order.indexOf(b.lesson));
-    u.exam.minutes = Math.max(12, Math.round(u.exam.items.length * 1.5));
-    PU_HECHOS.push(world);
-  };
-  // Estándar de diez (spec 2026-11-20-preuda-razonamiento-diez) sobre una lección que ya tiene sus juegos: de cada juego
-  // elegido queda UNA ronda, con enunciado de contexto, y al final va la zona de examen. picks = [[juego, ronda, enunciado,
-  // explicación, pista]]: `ronda` es el índice de la ronda que se conserva, o un objeto (la ronda nueva; en los juegos sin
-  // rondas, los parámetros que cambian). En los arcades quedan las tres primeras preguntas de la ronda.
-  const QUIZ = it => it && (it.options || it.expr || it.sign);
-  const diezLesson = (id, picks, zona) => {
-    const l = L(id), by = Object.fromEntries(l.ex.map(e => [e.game, e]));
-    setLesson(id, [...picks.map(([game, round, q, explain, hint]) => {
-      const e = by[game];
-      if (!e) throw new Error(`${id}: la lección no tiene ${game}`);
-      let params = { ...e.params };
-      if (Array.isArray(params.rounds)) {
-        let r = typeof round === 'number' ? params.rounds[round] : round;
-        if (!r) throw new Error(`${id}: ${game} no tiene la ronda ${round}`);
-        if (QUIZ(r.items?.[0])) r = { ...r, items: r.items.slice(0, 3) };
-        params.rounds = [r];
-      } else if (round && typeof round === 'object') params = { ...params, ...round };
-      return { ...e, q: q || e.q, params, explain: explain || e.explain, hint: hint || e.hint };
-    }), ...zona]);
-  };
-  // Evaluación: se añaden preguntas (las de formato real) a la que ya tiene el mundo y se deja una ronda por juego.
-  const addExam = (world, items) => {
-    const u = PU_RAZONAMIENTO.find(u => u.world === world), order = u.lessons.map(l => l.id);
-    for (const [lesson, review, ex] of items) u.exam.items.push({ lesson, review, ex: { ...ex, canvasGuide: true, exam: true, params: { ...ex.params, autoDemo: false } } });
-    for (const it of u.exam.items) if (Array.isArray(it.ex.params.rounds) && it.ex.params.rounds.length > 1) it.ex.params = { ...it.ex.params, rounds: [it.ex.params.rounds[0]] };
-    u.exam.items.sort((a, b) => order.indexOf(a.lesson) - order.indexOf(b.lesson));
-    u.exam.minutes = Math.max(12, Math.round(u.exam.items.length * 1.5));
-    diez(world);
-  };
-  PU_JUEGOS.forEach(f => f({ L, setLesson, setExam, sol, err, opc, diez, diezLesson, addExam }));
-})();
-;
-//#archivo js/courses/preuda-lectura.js
-// preUDA · Componente 2: Comprensión lectora (spec 2026-11-18-curso-preuda). Un mundo por tema del temario, en orden
-// de prioridad. Los fragmentos son textos breves originales (el temario pide textos originales o de dominio público y
-// revisión docente antes de publicar). El juego principal es subraya-texto: la respuesta está en el texto y hay que
-// encontrarla. Usa las ayudas PU_* de preuda-razonamiento.js.
-
-const PU_LECTURA = [
-  // ---------------- 17 · Estrategias de lectura ----------------
-  { world: 'pu-estrategias', title: 'Estrategias de lectura', block: 'lectura', lessons: [
-    PU_L('pu-el-1', 'Prelectura', [
-      sc(6, 'Antes de leer el texto se leen sus bordes: **título, autor, fuente y fecha**. Ahí se anuncian el tema y el propósito.', { title: 'Leer los bordes' }),
-      sc(7, 'Un texto titulado «Leer en pantalla: lo que dice la evidencia», de una revista de divulgación de 2025, va a explicar con datos, no a contar una historia.', { title: 'Anticipar' }),
-      sc(6, 'La fuente dice mucho: una columna de opinión defiende una postura; un informe técnico describe; un testimonio cuenta lo vivido.', { title: 'La fuente orienta' }),
-    ], [
-      PU_SUB('Lee la ficha del texto antes de leerlo', [
-        { text: 'Título: «El celular en el aula: prohibir no basta»|Autora: profesora de un colegio público de Medellín|Fuente: columna de opinión de un periódico regional|Fecha: marzo de 2026', ask: 'Toca los datos que anuncian que el texto defenderá una postura', answer: [0, 2] },
-      ], 'El título ya toma partido («prohibir no basta») y una columna de opinión es un género para defender posturas. Autora y fecha no dicen si habrá postura.',
-        'Busca los datos que muestran una opinión o un género donde se opina; quién escribe y cuándo no lo dicen por sí solos.'),
-      PU_ES('Antes de leer: «Cinco mitos sobre el agua potable», publicado en el sitio de una empresa de acueducto', [['tema: el agua potable', 'tema: la empresa'], ['propósito: corregir creencias erradas', 'propósito: contar una historia'], ['tipo: expositivo', 'tipo: narrativo']],
-        'El título anuncia el tema (el agua) y el propósito (desmentir mitos): un texto que explica, expositivo.',
-        'La palabra «mitos» del título dice qué va a hacer el texto con esas ideas.'),
-    ]),
-    PU_L('pu-el-2', 'Idea central y mapa del texto', [
-      sc(6, 'Cada párrafo tiene una idea que se puede decir en pocas palabras. Escribirla al margen evita releer todo después.', { title: 'Una idea por párrafo' }),
-      sc(7, 'Con esas notas se arma el **mapa del texto**: problema, causas, ejemplo, propuesta… Así se ve cómo avanza el razonamiento de principio a fin.', { title: 'El mapa' }),
-      sc(6, 'La idea central no siempre está en la primera frase: muchas veces está en la última, como conclusión.', { title: 'No siempre al principio' }),
-    ], [
-      PU_SUB('Encuentra la idea central del párrafo', [
-        { text: 'Medellín tiene cada vez más ciclorrutas.|Sin embargo, muchos ciclistas siguen usando la calzada.|La razón es que las rutas se cortan sin aviso y obligan a bajarse.|Una red que no conecta no sirve como red.', ask: 'Toca la frase que resume mejor la idea central', answer: [3] },
-      ], 'Las primeras frases dan el dato, el problema y la causa; la última los resume: la red no sirve porque no conecta.',
-        'Busca la frase que reúne lo que dicen las demás, no la que solo aporta un dato.'),
-      PU_ORD('Texto sobre las abejas. P1: polinizan lo que comemos. P2: su número cae. P3: una finca perdió su cosecha. P4: hay que regular los pesticidas. Ordena la función de cada párrafo', '\\text{Párrafos 1, 2, 3 y 4}', ['importancia', 'problema', 'ejemplo', 'propuesta', 'conclusión opuesta'], [0, 1, 2, 3], '→',
-        'El texto avanza de la importancia de las abejas al problema, lo ilustra con un caso y termina con una propuesta.',
-        'Para cada párrafo, pregúntate qué hace: si explica por qué importa algo, si plantea un problema, si da un caso o si propone.'),
-    ]),
-    PU_L('pu-el-3', 'Tiempo y preguntas EXCEPTO', [
-      sc(6, 'La parte de lectura del examen trae dos textos largos y unas 30 preguntas (de la 31 a la 60): unos **15 minutos de lectura por texto** y el resto para responder. Las preguntas se pueden leer antes, para saber qué buscar.', { title: 'Manejar el tiempo' }),
-      sc(7, 'En una pregunta «EXCEPTO», tres opciones sí están en el texto y una no. Se verifica cada opción contra el texto y se marca la que no aparece.', { title: 'Preguntas EXCEPTO' }),
-      sc(7, 'Cuidado cuando la pregunta nombra un párrafo («según el párrafo 4…»): la intrusa puede estar **en el texto, pero en otro párrafo**, o con el papel contrario (una ventaja puesta entre los problemas). Lo que cuenta no es si «suena» al texto, sino si está **donde la pregunta indica**.', { title: 'La intrusa que sí está en el texto' }),
-      sc(6, 'Las respuestas malas no restan: ninguna pregunta se deja en blanco.', { title: 'Nada en blanco' }),
-    ], [
-      PU_SUB('Pregunta EXCEPTO: «La biblioteca ofrece todo lo siguiente, EXCEPTO: a) préstamo de computadores, b) talleres para jóvenes, c) una sala infantil, d) cursos de inglés»', [
-        { text: 'La biblioteca del barrio abrió en 2019.|Presta libros, computadores y juegos de mesa.|Los sábados ofrece talleres de escritura para jóvenes.|Su sala infantil fue pintada por los vecinos.', ask: 'Toca los trozos que respaldan las opciones a, b y c', answer: [1, 2, 3] },
-      ], 'Las opciones a, b y c tienen respaldo en el texto; los cursos de inglés no aparecen: la respuesta es d.',
-        'Toma cada opción y busca en qué frase del texto aparece. La que no encuentres es la respuesta.'),
-      PU_ES('Tienes dos textos y unas 30 preguntas de lectura. ¿Cuál es el mejor plan?', [['unos 15 minutos de lectura por texto', 'leer cada texto tres veces con calma'], ['marcar la difícil y volver a ella', 'quedarse hasta resolverla'], ['no dejar nada en blanco', 'dejar en blanco si hay duda']],
-        'Leer con un tiempo fijo, saltar lo difícil para volver después y responder todo, porque las malas no restan.',
-        'Recuerda que en este examen las respuestas malas no anulan las buenas.'),
-    ]),
-  ] },
-
-  // ---------------- 18 · Tipos de texto ----------------
-  { world: 'pu-tipos', title: 'Tipos de texto y géneros', block: 'lectura', lessons: [
-    PU_L('pu-tt-1', 'Tipologías', [
-      sc(6, '**Narrativo**: cuenta hechos en el tiempo. **Descriptivo**: muestra cómo es algo. **Expositivo**: explica. **Argumentativo**: defiende una tesis.', { title: 'Cuatro tipologías' }),
-      sc(6, 'Pistas: verbos en pasado y personajes (narrativo); adjetivos y sensaciones (descriptivo); datos y definiciones (expositivo); «creo que», «por eso», «debería» (argumentativo).', { title: 'Pistas en las palabras' }),
-      sc(6, 'Un mismo texto mezcla tipologías: una crónica narra y describe; un ensayo expone para argumentar.', { title: 'Se mezclan' }),
-    ], [
-      PU_SUB('Un mismo tema, cuatro tipologías', [
-        { text: 'El río Medellín atraviesa la ciudad de sur a norte.|Aquella mañana el agua bajó turbia y nadie supo por qué.|Sus orillas tienen guaduales, garzas y un olor a lluvia vieja.|Por eso, recuperar el río debería ser la prioridad del próximo alcalde.', ask: 'Toca el fragmento argumentativo', answer: [3] },
-        { text: 'El río Medellín atraviesa la ciudad de sur a norte.|Aquella mañana el agua bajó turbia y nadie supo por qué.|Sus orillas tienen guaduales, garzas y un olor a lluvia vieja.|Por eso, recuperar el río debería ser la prioridad del próximo alcalde.', ask: 'Toca el fragmento narrativo', answer: [1] },
-      ], 'El argumentativo propone qué «debería» hacerse; el narrativo cuenta un hecho en el tiempo («aquella mañana»). El primero informa y el tercero describe.',
-        'Busca una palabra que pida algo y otra que ubique un hecho en el pasado.'),
-      PU_SUB('Otro texto, otras tipologías', [
-        { text: 'El fique se siembra en las laderas de Nariño y Santander.|Mi abuela tejía costales con él cada tarde, sin mirarse las manos.|Hoy compite con el plástico, y a mi juicio merece una ley que lo proteja.', ask: 'Toca el fragmento argumentativo', answer: [2] },
-        { text: 'El fique se siembra en las laderas de Nariño y Santander.|Mi abuela tejía costales con él cada tarde, sin mirarse las manos.|Hoy compite con el plástico, y a mi juicio merece una ley que lo proteja.', ask: 'Toca el fragmento narrativo', answer: [1] },
-      ], '«A mi juicio merece una ley» es una postura; «mi abuela tejía cada tarde» cuenta lo que pasaba. El primero es expositivo.',
-        'Busca la frase que da una opinión y la que cuenta algo que pasó.'),
-    ]),
-    PU_L('pu-tt-2', 'Géneros del examen', [
-      sc(6, '**Ensayo**: reflexión con tesis. **Artículo de opinión**: postura sobre un tema de actualidad, firmada. **Texto divulgativo**: explica ciencia a no expertos.', { title: 'Ensayo, opinión, divulgación' }),
-      sc(6, '**Testimonio**: la voz en primera persona de quien vivió algo. **Entrevista**: preguntas y respuestas. **Crónica**: relato periodístico con detalles de lugar y tiempo.', { title: 'Testimonio, entrevista, crónica' }),
-      sc(6, 'Reconocer el género ayuda a anticipar qué preguntan: en un testimonio, sentimientos; en una opinión, la tesis.', { title: 'El género anticipa' }),
-    ], [
-      PU_SUB('Cada fragmento viene de un género distinto', [
-        { text: '«—¿Cuándo empezó a escribir? —A los doce, en los cuadernos de mi hermano.»|«Yo tenía nueve años cuando nos tocó salir de la vereda; mi mamá cargaba la olla y nosotros, el miedo.»|«El cerebro adulto sigue formando conexiones nuevas toda la vida.»', ask: 'Toca el testimonio', answer: [1] },
-        { text: '«—¿Cuándo empezó a escribir? —A los doce, en los cuadernos de mi hermano.»|«Yo tenía nueve años cuando nos tocó salir de la vereda; mi mamá cargaba la olla y nosotros, el miedo.»|«El cerebro adulto sigue formando conexiones nuevas toda la vida.»', ask: 'Toca el fragmento divulgativo', answer: [2] },
-      ], 'El testimonio cuenta en primera persona algo vivido; el divulgativo explica un dato científico. El primero, con rayas de diálogo, es una entrevista.',
-        'Busca la voz que cuenta su propia vida y la que explica un hecho de la ciencia.'),
-      PU_ES('Un texto firmado por un columnista sobre una reforma reciente dice: «esta reforma es un error». ¿Qué género es?', [['tiene postura y es de actualidad', 'solo informa datos'], ['artículo de opinión', 'crónica']],
-        'Firma, tema de actualidad y una postura explícita: es un artículo de opinión.',
-        'Fíjate si el autor solo cuenta o informa, o si toma partido.'),
-    ]),
-    PU_L('pu-tt-3', 'Estructura y testimonio', [
-      sc(6, 'Casi todo texto tiene introducción, desarrollo y cierre. En uno argumentativo: **tesis**, **argumentos** y, a veces, un **contraargumento** respondido.', { title: 'Tesis y argumentos' }),
-      sc(7, 'El testimonio tiene rasgos propios: primera persona, marcas de oralidad («pues», «uno», «sí me entiende») y un contexto histórico que explica lo vivido.', { title: 'Rasgos del testimonio' }),
-      sc(7, 'La palabra **testimonio** tiene dos usos. Como **género**, es un texto entero en que alguien cuenta su propia vida. Como **cita testimonial**, es un fragmento dentro de otro texto (una crónica, una columna) donde el autor deja hablar en primera persona a alguien que vive lo que se discute. Una columna con una cita testimonial sigue siendo una columna.', { title: 'Género o cita' }),
-      sc(6, 'En un testimonio las preguntas del examen suelen ir a los sentimientos y a las causas de lo que se cuenta.', { title: 'Qué preguntan' }),
-      sc(6, 'Quien da un testimonio a veces lanza una pregunta que no espera respuesta: es una **pregunta retórica**. No pide un dato; señala algo que para quien habla es obvio, como quien pregunta quién lo va a ayudar sabiendo que nadie lo hará.', { title: 'La pregunta retórica' }),
-    ], [
-      PU_SUB('Un fragmento de testimonio', [
-        { text: 'Mire, o sea, uno no sabía nada de leyes.|Yo llegué a Bogotá en 2002 con dos bolsas y una dirección escrita en un papel.|Allá en el pueblo la guerra ya no dejaba sembrar.', ask: 'Toca la marca de oralidad', answer: [0] },
-        { text: 'Mire, o sea, uno no sabía nada de leyes.|Yo llegué a Bogotá en 2002 con dos bolsas y una dirección escrita en un papel.|Allá en el pueblo la guerra ya no dejaba sembrar.', ask: 'Toca el trozo que explica por qué se fue', answer: [2] },
-      ], '«Mire, o sea» es habla oral; la causa de la salida es que la guerra no dejaba sembrar.',
-        'La oralidad suena a conversación; la causa responde al «por qué» de la llegada a Bogotá.'),
-      PU_ORD('Ordena las partes de un artículo de opinión', '\\text{Artículo sobre la jornada única}', ['La jornada debe ampliarse', 'Más horas, más lectura', 'Y menos tiempo solos', 'Por eso, jornada única', 'Hay que bajar impuestos'], [0, 1, 2, 3], '→',
-        'Primero la tesis, luego dos argumentos y al final la conclusión que retoma la tesis. Lo de los impuestos no pertenece a este texto.',
-        'Empieza por lo que el autor defiende y termina con la frase que lo retoma.'),
-    ]),
-  ] },
-
-  // ---------------- 19 · Información explícita ----------------
-  { world: 'pu-explicita', title: 'Información explícita', block: 'lectura', lessons: [
-    PU_L('pu-ie-1', 'Ubicar datos', [
-      sc(6, '«Según el texto…» pide un dato que está **escrito**. Se vuelve al texto a buscarlo: la memoria engaña.', { title: 'Volver al texto' }),
-      sc(6, 'Para buscar rápido se usa una palabra clave de la pregunta: un nombre, una cifra, una fecha.', { title: 'Palabras clave' }),
-      sc(6, 'A veces la respuesta necesita dos datos de frases distintas que se combinan.', { title: 'Datos que se juntan' }),
-    ], [
-      PU_SUB('Lee y ubica los datos', [
-        { text: 'El páramo de Santurbán abastece de agua a más de dos millones de personas.|Se extiende por Santander y Norte de Santander.|Sus frailejones crecen apenas un centímetro al año.|Por eso, una zona dañada tarda décadas en recuperarse.', ask: 'Toca el dato de cuántas personas dependen del páramo', answer: [0] },
-        { text: 'El páramo de Santurbán abastece de agua a más de dos millones de personas.|Se extiende por Santander y Norte de Santander.|Sus frailejones crecen apenas un centímetro al año.|Por eso, una zona dañada tarda décadas en recuperarse.', ask: 'Toca el dato que explica por qué se recupera tan despacio', answer: [2] },
-      ], 'La cifra de personas está en la primera frase; la lentitud se explica porque el frailejón crece un centímetro al año.',
-        'Busca las palabras clave de cada consigna: «personas» y «despacio».'),
-      PU_SUB('Datos que se combinan', [
-        { text: 'En 2025 la biblioteca prestó 12 000 libros.|De ellos, la mitad fueron infantiles.|El libro más pedido fue una novela gráfica.|El año anterior había prestado 9 000.', ask: 'Toca los datos que permiten saber cuántos libros infantiles se prestaron en 2025', answer: [0, 1] },
-        { text: 'En 2025 la biblioteca prestó 12 000 libros.|De ellos, la mitad fueron infantiles.|El libro más pedido fue una novela gráfica.|El año anterior había prestado 9 000.', ask: 'Toca los datos que muestran que los préstamos aumentaron', answer: [0, 3] },
-      ], 'Infantiles: la mitad de 12 000. Aumento: de 9 000 a 12 000. Cada respuesta necesita dos frases.',
-        'Una sola frase no basta: busca los dos datos que juntos responden.'),
-    ]),
-    PU_L('pu-ie-2', 'Paráfrasis', [
-      sc(6, 'Parafrasear es decir lo mismo con otras palabras, **sin agregar ni quitar**.', { title: 'Lo mismo, con otras palabras' }),
-      sc(7, 'Las opciones trampa cambian el alcance: «algunos» por «todos», «puede» por «siempre», «reduce» por «elimina».', { title: 'Cuidado con el alcance' }),
-      sc(6, 'Si la frase original es «Muchos jóvenes prefieren el podcast», «A varios jóvenes les gusta más el podcast» es fiel; «Los jóvenes ya no leen» no lo es.', { title: 'Fiel y no fiel' }),
-    ], [
-      PU_SUB('Original: «Algunos estudios sugieren que dormir menos de seis horas puede afectar la memoria.» Un compañero lo resumió así', [
-        { text: 'Según el texto, hay investigaciones que indican que dormir menos de seis horas podría perjudicar la memoria,|y eso le pasa siempre a todo el mundo.|Además, todos los estudios lo prueban sin excepción.', ask: 'Toca la parte del resumen que es fiel al original', answer: [0] },
-        { text: 'Según el texto, hay investigaciones que indican que dormir menos de seis horas podría perjudicar la memoria,|y eso le pasa siempre a todo el mundo.|Además, todos los estudios lo prueban sin excepción.', ask: 'Toca las partes que exageran lo que dice el original', answer: [1, 2] },
-      ], 'La fiel conserva «algunos» (hay investigaciones) y «puede» (podría). Las demás vuelven absoluto lo que era posible.',
-        'Compara palabras como «algunos», «puede», «siempre» y «todos» con las de la frase original.'),
-      PU_SUB('Original: «La ciudad no prohibió los carros: restringió su paso por el centro en las horas pico.» Una compañera lo resumió así', [
-        { text: 'La ciudad puso restricciones al paso de carros por el centro en las horas pico,|aunque al final terminó prohibiéndolos,|y de paso subió el precio de los parqueaderos.', ask: 'Toca la parte del resumen que el original respalda', answer: [0] },
-      ], 'Solo la primera parte conserva «restricciones», «centro» y «horas pico». El original niega la prohibición y no habla de parqueaderos.',
-        'Fíjate en los límites que pone la frase: dónde y cuándo.'),
-    ]),
-    PU_L('pu-ie-3', 'Lo que dice y lo que no', [
-      sc(6, 'Una opción puede ser verdad en el mundo y aun así **no estar en el texto**. La pregunta clave es dónde lo dice.', { title: 'Verdadero no es «dicho»' }),
-      sc(6, 'Si para aceptarla hay que usar lo que uno sabe, y no lo que leyó, no está en el texto.', { title: 'Solo lo leído' }),
-      sc(6, 'Es el error más frecuente del examen: elegir lo que suena bien en lugar de lo que el texto afirma.', { title: 'El error más común' }),
-    ], [
-      PU_SUB('Texto: «El café llegó a Colombia en el siglo XVIII y hoy se cultiva en más de 20 departamentos. La mayoría de los cafeteros tiene fincas de menos de cinco hectáreas.» Un compañero escribió este resumen', [
-        { text: 'El café se cultiva en más de 20 departamentos,|Colombia es el mayor productor de café del mundo|y muchos cafeteros tienen fincas pequeñas,|así que el café colombiano es el más suave.', ask: 'Toca solo lo que el texto original afirma', answer: [0, 2] },
-      ], 'El texto da los departamentos y el tamaño de las fincas. Lo del mayor productor (que además no es cierto) y lo del sabor no aparecen.',
-        'Para cada afirmación, señala la palabra del texto que la respalda. Si no hay, no la toques.'),
-      PU_SUB('Texto: «La encuesta se hizo a 500 jóvenes de Cali; el 70 % dijo leer noticias solo en redes sociales.» Una periodista escribió esto', [
-        { text: 'El 70 % de los encuestados lee noticias solo en redes;|los jóvenes de Colombia ya no leen periódicos.|La encuesta se hizo en Cali|y demuestra que las redes informan mal.', ask: 'Toca solo lo que el texto original afirma', answer: [0, 2] },
-      ], 'El texto habla de 500 jóvenes de Cali, no de todo el país, y no juzga a las redes.',
-        'Revisa de quiénes habla la encuesta y si el texto valora o solo informa.'),
-    ]),
-    PU_L('pu-ie-4', 'Quién dice qué', [
-      sc(6, 'En un texto hablan varias voces: el autor y las personas citadas. Verbos como «afirma», «según», «sostiene» marcan de quién es cada idea.', { title: 'Atribuir' }),
-      sc(6, 'Una pregunta puede poner en boca del autor lo que dijo un citado, o al revés.', { title: 'La trampa de la voz' }),
-      sc(6, 'Para la secuencia de hechos, sirven las fechas y los marcadores: primero, luego, al año siguiente.', { title: 'La secuencia' }),
-    ], [
-      PU_SUB('Varias voces sobre un programa de computadores', [
-        { text: 'La ministra aseguró que el programa llegará a 300 colegios.|El rector Pérez, en cambio, dijo que su colegio aún no recibe los equipos.|Para la investigadora Gómez, el problema no son los equipos sino la formación docente.|El periódico consultó a diez colegios.', ask: 'Toca lo que piensa la investigadora', answer: [2] },
-        { text: 'La ministra aseguró que el programa llegará a 300 colegios.|El rector Pérez, en cambio, dijo que su colegio aún no recibe los equipos.|Para la investigadora Gómez, el problema no son los equipos sino la formación docente.|El periódico consultó a diez colegios.', ask: 'Toca quién pone en duda que el programa ya funcione', answer: [1] },
-      ], 'La investigadora habla de la formación docente; el rector muestra que los equipos aún no llegan.',
-        'Busca el nombre de cada persona y el verbo que introduce lo que dice.'),
-      PU_ORD('Ordena los hechos: «La sala de lectura se inauguró en 2025. Antes, los vecinos la pintaron con recursos que la alcaldía había aprobado al año siguiente de la asamblea de 2023 donde surgió la idea.»', '\\text{La sala de lectura del barrio}', ['asamblea (2023)', 'recursos aprobados', 'los vecinos pintan', 'inauguración (2025)'], [0, 1, 2, 3], '→',
-        'Asamblea en 2023, recursos en 2024, la pintura con esos recursos y la inauguración en 2025.',
-        'Fíjate en las fechas y en «con esos recursos» y «antes de inaugurarla».'),
-    ]),
-  ] },
-
-  // ---------------- 20 · Inferencia ----------------
-  { world: 'pu-inferencia', title: 'Inferencia', block: 'lectura', lessons: [
-    PU_L('pu-in-1', 'Ideas implícitas', [
-      sc(6, '**Inferir** es sacar lo que el texto no dice pero lleva a pensar. Una inferencia válida se apoya en **pistas del texto**.', { title: 'Leer entre líneas' }),
-      sc(6, 'Si para sostenerla hace falta una opinión propia o un dato externo, ya no es inferencia: es suposición.', { title: 'Inferencia o suposición' }),
-      sc(7, 'Ejemplo: «Cerró el paraguas y se quitó las gafas empañadas» permite inferir que venía de la lluvia, aunque el texto no lo diga.', { title: 'Un ejemplo' }),
-    ], [
-      PU_SUB('Lee la escena', [
-        { text: 'Marta revisó tres veces el reloj del bus.|Cuando por fin llegó a la oficina, la reunión ya había empezado.|Se sentó en la última silla, sin saludar.', ask: 'Toca la pista de que estaba preocupada por la hora', answer: [0] },
-        { text: 'Marta revisó tres veces el reloj del bus.|Cuando por fin llegó a la oficina, la reunión ya había empezado.|Se sentó en la última silla, sin saludar.', ask: 'Toca la pista de que no quería llamar la atención', answer: [2] },
-      ], 'Mirar el reloj tres veces muestra preocupación; sentarse atrás y sin saludar, que no quería hacerse notar.',
-        'Los sentimientos no se nombran: se muestran en lo que hace la persona.'),
-      PU_ES('Texto: «Desde que instalaron las cámaras, los robos en el parque bajaron, aunque también llegaron más policías.» ¿Qué se puede concluir?', [['los robos bajaron', 'las cámaras acabaron con el delito'], ['hubo dos cambios a la vez', 'solo cambiaron las cámaras'], ['no se sabe cuál causó la baja', 'las cámaras causaron la baja']],
-        'El texto da dos cambios al mismo tiempo; no permite decir cuál de los dos explica la baja.',
-        'Cuenta cuántas cosas cambiaron en el parque según el texto.'),
-    ]),
-    PU_L('pu-in-2', 'Presupuestos', [
-      sc(6, 'Un **presupuesto** es lo que el autor da por hecho sin decirlo. «Dejó de fumar» presupone que fumaba.', { title: 'Lo que se da por hecho' }),
-      sc(6, '«Ya es hora de que el gobierno cumpla» presupone que no ha cumplido.', { title: 'Un presupuesto en opinión' }),
-      sc(6, 'Palabras que suelen cargar presupuestos: «otra vez», «todavía», «ya no», «por fin», «dejar de».', { title: 'Palabras delatoras' }),
-      sc(7, 'Pero muchas veces no hay ninguna palabra de la lista. «La paciencia de los vecinos es más corta de lo que creen en la alcaldía» da por sentado que en la alcaldía la creen larga: el presupuesto sale de una **comparación**. «El barrio ya sabe lo que vale una promesa» da por sentado que las promesas se han incumplido.', { title: 'Sin palabra pista' }),
-      sc(6, 'El examen lo pregunta de varias formas: «el autor **da por sentado** que…», «da por hecho», «supone», «presupone». Es la misma pregunta: qué tiene que ser cierto para que la frase tenga sentido.', { title: 'Cómo lo pregunta el examen' }),
-    ], [
-      PU_SUB('Frase de una noticia', [
-        { text: 'Otra vez|el metro|se detuvo|en hora pico.', ask: 'Toca las palabras que dan por hecho que ya había pasado antes', answer: [0] },
-      ], '«Otra vez» presupone que el metro ya se había detenido antes; el resto solo informa.',
-        'Busca la expresión que habla de una repetición.'),
-      PU_SUB('Frase: «Cuando por fin reabran el puente, los campesinos volverán a vender en el pueblo.»', [
-        { text: 'Cuando por fin|reabran|el puente,|los campesinos|volverán a vender|en el pueblo.', ask: 'Toca la palabra que da por hecho que el puente está cerrado', answer: [1] },
-        { text: 'Cuando por fin|reabran|el puente,|los campesinos|volverán a vender|en el pueblo.', ask: 'Toca lo que da por hecho que antes vendían allí', answer: [4] },
-      ], '«Reabran» presupone que está cerrado y «volverán a vender», que antes vendían. No se dice cuándo abre.',
-        'Busca las palabras que hablan de algo que ya pasó antes y que se repetirá.'),
-    ]),
-    PU_L('pu-in-3', 'Causa y efecto', [
-      sc(6, 'A veces la causa no se dice con «porque»: se deduce del orden de los hechos y de lo que se sabe de ellos.', { title: 'Causas implícitas' }),
-      sc(6, 'Pero que algo pase **después** no significa que pase **por** lo anterior.', { title: 'Después no es por' }),
-      sc(6, 'Una buena inferencia de causa encadena hechos del propio texto, sin agregar nada.', { title: 'Encadenar hechos' }),
-    ], [
-      PU_ES('Texto: «La sequía redujo el caudal del embalse. En marzo la ciudad empezó a racionar el agua.»', [['la causa es la sequía', 'la causa es marzo'], ['el efecto es el racionamiento', 'el efecto es el embalse']],
-        'La sequía baja el embalse y, por eso, se raciona el agua. Marzo solo dice cuándo.',
-        'Pregúntate qué hecho provoca al otro; una fecha no causa nada.'),
-      PU_SUB('Una cadena de causas', [
-        { text: 'La cosecha de mango fue enorme este año.|Por eso, el precio del kilo cayó a la mitad.|Muchos campesinos prefirieron regalarlo antes que perderlo.', ask: 'Toca la causa de la caída del precio', answer: [0] },
-        { text: 'La cosecha de mango fue enorme este año.|Por eso, el precio del kilo cayó a la mitad.|Muchos campesinos prefirieron regalarlo antes que perderlo.', ask: 'Toca la consecuencia de que el precio cayera', answer: [2] },
-      ], 'Mucho mango hizo bajar el precio, y el precio tan bajo llevó a regalarlo.',
-        'Sigue las flechas: cosecha → precio → lo que hacen los campesinos.'),
-    ]),
-    PU_L('pu-in-4', 'Actitudes y motivos', [
-      sc(6, 'En los testimonios, los sentimientos casi nunca se nombran: se ven en los gestos, en lo que se guarda o se calla.', { title: 'Mostrar, no nombrar' }),
-      sc(6, 'Nostalgia, miedo, orgullo, resignación: cada uno deja huellas en lo que la persona hace o recuerda.', { title: 'Huellas de cada emoción' }),
-      sc(6, 'La pregunta «qué siente el autor» se responde con una frase del texto, no con lo que uno sentiría.', { title: 'Con pruebas del texto' }),
-    ], [
-      PU_SUB('Fragmento de un testimonio', [
-        { text: 'Todavía guardo la llave de la casa de la finca,|aunque la casa ya no existe.|A veces la saco del cajón y la miro un rato.', ask: 'Toca el trozo que explica por qué la llave ya no abre nada', answer: [1] },
-        { text: 'Todavía guardo la llave de la casa de la finca,|aunque la casa ya no existe.|A veces la saco del cajón y la miro un rato.', ask: 'Toca el gesto que muestra que la recuerda con cariño', answer: [2] },
-      ], 'La casa ya no existe; sacar la llave para mirarla es un gesto de nostalgia.',
-        'La emoción está en lo que hace con la llave, no en un adjetivo.'),
-      PU_ES('«Le pregunté si tenía miedo y se rió: "Miedo tuve cuando no sabía leer".» ¿Qué actitud muestra?', [['su miedo de antes era no saber leer', 'hoy tiene mucho miedo'], ['orgullo por haber aprendido', 'vergüenza por haber aprendido']],
-        'Se ríe del miedo actual porque el verdadero miedo era no saber leer: muestra orgullo de haberlo superado.',
-        'Fíjate en la risa y en el tiempo del verbo «tuve».'),
-    ]),
-  ] },
-
-  // ---------------- 21 · Vocabulario en contexto ----------------
-  { world: 'pu-vocabulario', title: 'Vocabulario en contexto', block: 'lectura', lessons: [
-    PU_L('pu-vo-1', 'Sinónimos según el contexto', [
-      sc(6, 'El sinónimo correcto es el que **encaja en la frase**, no el primero del diccionario.', { title: 'El contexto manda' }),
-      sc(6, 'En «una propuesta sólida», sólida significa bien fundamentada, no dura ni pesada.', { title: '«Sólida»' }),
-      sc(6, 'La prueba: reemplazar la palabra por la opción y leer la frase completa. Si cambia el sentido, no sirve.', { title: 'La prueba del reemplazo' }),
-      sc(7, 'Los textos de opinión usan verbos concretos con sentido abstracto: **desarmar** una idea es refutarla, mostrar que no se sostiene; **tejer** acuerdos es construirlos poco a poco; **sembrar** dudas es provocarlas. Se aplica la misma prueba del reemplazo.', { title: 'Verbos concretos, ideas abstractas' }),
-    ], [
-      PU_SUB('Un informe sobre el río', [
-        { text: 'El informe fue|contundente:|el río está contaminado|y los datos no dejan lugar a otra lectura.', ask: 'Toca la palabra que significa «terminante, que no deja dudas»', answer: [1] },
-      ], '«Contundente» es terminante; la última frase lo confirma: los datos no dejan otra lectura.',
-        'Busca un adjetivo que califique al informe; el final de la frase te ayuda a confirmarlo.'),
-      PU_SUB('Una consulta polémica', [
-        { text: 'La comunidad rechazó el proyecto minero.|Los líderes dijeron que la consulta había sido apresurada|y que nadie les explicó los riesgos.', ask: 'Toca el trozo con la palabra que significa «hecha sin el tiempo necesario»', answer: [1] },
-      ], '«Apresurada» es hecha con prisa, sin el tiempo que hacía falta.',
-        'Busca un adjetivo que tenga que ver con la prisa.'),
-    ]),
-    PU_L('pu-vo-2', 'Palabras con varios sentidos', [
-      sc(6, 'Muchas palabras tienen varios significados (**polisemia**): «banco» es un asiento o una entidad; «salvar» una materia es aprobarla.', { title: 'Polisemia' }),
-      sc(6, 'El contexto elige el sentido: «cerraron el banco a las tres» habla de la entidad.', { title: 'El contexto elige' }),
-      sc(6, 'En el examen, la opción trampa suele ser el sentido más común de la palabra, que no es el del texto.', { title: 'La trampa' }),
-    ], [
-      PU_SUB('Una noticia sobre la gasolina', [
-        { text: 'El gobierno congeló|los precios de la gasolina|por seis meses:|en ese tiempo no subirán ni bajarán.', ask: 'Toca el trozo que explica qué significa «congeló» aquí', answer: [3] },
-      ], 'El propio texto lo aclara después de los dos puntos: congelar un precio es dejarlo quieto.',
-        'Los dos puntos suelen anunciar una explicación de lo que se acaba de decir.'),
-      PU_SUB('Una ley nueva', [
-        { text: 'La nueva ley quiere tejer puentes entre el campo y la ciudad:|que los campesinos vendan directo en los barrios|y que los jóvenes de la ciudad conozcan las veredas.', ask: 'Toca los trozos que muestran qué significa «tejer puentes»', answer: [1, 2] },
-      ], 'No se trata de hilos ni de cemento: los ejemplos muestran que «tejer puentes» es crear lazos entre las dos partes.',
-        'La ley no construye nada físico: mira los ejemplos que siguen a los dos puntos.'),
-    ]),
-    PU_L('pu-vo-3', 'Expresiones y frases hechas', [
-      sc(6, 'En una frase hecha el sentido no es la suma de las palabras: «meter la pata» no tiene que ver con patas.', { title: 'Frases hechas' }),
-      sc(6, 'El examen usa coloquialismos colombianos: «dar papaya», «echar los perros», «estar en la olla», «hacer vaca».', { title: 'Colombianismos' }),
-      sc(6, '«Hacer vaca» es juntar dinero entre varios para algo común.', { title: '«Hacer vaca»' }),
-      sc(6, 'Muchas expresiones populares exageran: «más viejo que el agua», «tener más vidas que un gato». No se leen al pie de la letra: la exageración (**hipérbole**) dice algo con fuerza. Se estudia a fondo en Lenguaje figurado.', { title: 'Exagerar para decir' }),
-    ], [
-      PU_SUB('Una final', [
-        { text: 'Después de perder tres partidos seguidos,|el equipo no tiró la toalla:|entrenó el doble|y llegó a la final.', ask: 'Toca lo que muestra qué significa «no tiró la toalla»', answer: [2] },
-      ], '«Tirar la toalla» es rendirse; entrenar el doble muestra que el equipo siguió luchando.',
-        'Busca lo que hizo el equipo justo después de la expresión.'),
-      PU_SUB('En el salón', [
-        { text: 'Ana mamaba gallo con que se iba a vivir a la Luna;|todos se rieron|porque sabían que era una broma.', ask: 'Toca el trozo que revela qué significa «mamar gallo»', answer: [2] },
-      ], '«Mamar gallo» es tomar del pelo, bromear; el final lo dice: era una broma.',
-        'Busca la explicación de por qué todos se rieron.'),
-    ]),
-    PU_L('pu-vo-4', 'Prefijos y raíces', [
-      sc(6, 'Muchas palabras se entienden por sus piezas griegas y latinas: **anti-** contra, **sub-** debajo, **poli-** muchos, **bio-** vida.', { title: 'Prefijos' }),
-      sc(6, 'Y por sus finales: **-logía** estudio, **-cida** que mata, **-fobia** miedo. Un insecticida mata insectos.', { title: 'Sufijos y raíces' }),
-      sc(6, 'Con esas piezas se deduce una palabra que nunca se ha visto: un «hidrófobo» teme al agua (hidro-, agua).', { title: 'Deducir' }),
-      sc(7, 'Pero las piezas **a veces engañan**. Re- no siempre es «de nuevo»: recorrer un camino no es correrlo otra vez, y restaurar un mueble es repararlo. Por eso la lectura por piezas se pone a prueba en la frase: si no encaja con lo que dice el resto del párrafo, **manda el contexto**.', { title: 'Cuando el contexto corrige' }),
-    ], [
-      PU_SUB('Raíces que significan «vida»', [
-        { text: 'biodiversidad|biografía|bisabuelo|antibiótico', ask: 'Toca las palabras que tienen la raíz «bio», vida', answer: [0, 1, 3] },
-      ], 'Biodiversidad, biografía y antibiótico llevan «bio». En bisabuelo, «bis» significa dos veces.',
-        'Ojo: que empiece por «bi» no basta; tiene que estar la raíz completa con el sentido de vida.'),
-      PU_ES('¿Qué significa «políglota»?', [['poli: muchos', 'poli: ciudad'], ['glota: lengua', 'glota: globo'], ['habla muchas lenguas', 'viaja por muchas ciudades']],
-        '«Poli» es muchos y «glota» viene de lengua: políglota es quien habla muchas lenguas.',
-        'Piensa en «glotis», una parte de la garganta.'),
-    ]),
-  ] },
-
-  // ---------------- 22 · Aplicación y analogía ----------------
-  { world: 'pu-aplicacion', title: 'Aplicación y analogía', block: 'lectura', lessons: [
-    PU_L('pu-ap-1', 'Aplicar a un caso nuevo', [
-      sc(6, 'Estas preguntas piden llevar una idea del texto a una situación distinta. Primero se saca el **principio general**.', { title: 'Sacar el principio' }),
-      sc(6, 'Luego se busca el caso que cumple ese principio aunque el tema sea otro: lo que importa es la estructura, no el tema.', { title: 'La estructura, no el tema' }),
-      sc(6, 'Ejemplo: «lo que se mide, mejora» se aplica a quien anota sus gastos para gastar menos.', { title: 'Un ejemplo' }),
-    ], [
-      PU_SUB('Texto: «Los hábitos se forman cuando una acción pequeña se repite en el mismo lugar y a la misma hora.»', [
-        { title: 'Camilo quiso volverse lector.', text: 'Primero compró diez libros de una vez.|Luego leyó un libro entero un domingo.|Después leía cuando le quedaba tiempo.|Al final se puso a leer diez minutos cada noche, en la cama.', ask: 'Toca el intento que sigue la idea del texto', answer: [3] },
-      ], 'Solo el último es pequeño, repetido, en el mismo lugar y a la misma hora.',
-        'El principio tiene tres condiciones: pequeño, repetido y siempre igual. Busca el caso que cumpla las tres.'),
-      PU_SUB('Texto: «Una regla se respeta más cuando quienes deben cumplirla ayudaron a crearla.»', [
-        { title: 'Un colegio quiso bajar el ruido en los descansos.', text: 'El rector impuso multas.|Luego pegaron carteles con normas que nadie consultó.|Por último, cada curso redactó sus propias normas de convivencia.', ask: 'Toca la medida que aplica la idea del texto', answer: [2] },
-      ], 'En la última, quienes cumplirán las reglas las escriben.',
-        'Busca el caso en que los que obedecen son los mismos que crean la regla.'),
-    ]),
-    PU_L('pu-ap-2', 'Analogías', [
-      sc(6, 'Una analogía dice que **A es a B como C es a D**: la relación entre A y B es la misma que entre C y D.', { title: 'Misma relación' }),
-      sc(6, 'Relaciones frecuentes: herramienta y quien la usa, parte y todo, causa y efecto, etapa y lo que llega a ser.', { title: 'Tipos de relación' }),
-      sc(6, 'Ejemplo: «página es a libro como ladrillo es a muro»: parte y todo.', { title: 'Parte y todo' }),
-    ], [
-      PU_ES('Pincel es a pintor como…', [['relación: herramienta y quien la usa', 'relación: parte y todo'], ['bisturí es a cirujano', 'hoja es a árbol']],
-        'El pintor usa el pincel; el cirujano, el bisturí. La hoja es parte del árbol: otra relación.',
-        'Describe primero con una frase qué relación hay entre el pincel y el pintor.'),
-      PU_ES('Semilla es a árbol como…', [['relación: lo que llega a ser', 'relación: lo que lo destruye'], ['niño es a adulto', 'hacha es a árbol']],
-        'La semilla llega a ser árbol como el niño llega a ser adulto.',
-        'Piensa en qué se convierte la semilla con el tiempo.'),
-    ]),
-  ] },
-
-  // ---------------- 23 · Fuentes y voces ----------------
-  { world: 'pu-fuentes', title: 'Fuentes y voces', block: 'lectura', lessons: [
-    PU_L('pu-fu-1', 'Citas y voces', [
-      sc(6, 'Una **cita directa** copia las palabras exactas, entre comillas. Una **indirecta** las cuenta: «dijo que…».', { title: 'Directa e indirecta' }),
-      sc(6, 'Hay que separar la voz del autor de la de los expertos que cita: no siempre piensan lo mismo.', { title: 'Autor y citados' }),
-      sc(6, 'Marcas de la voz del autor: «yo», «a mi modo de ver», «creo», «me parece».', { title: 'La voz del autor' }),
-    ], [
-      PU_SUB('Un texto con citas', [
-        { text: 'Según el biólogo Ruiz, «los colibríes visitan hasta mil flores al día».|Yo, que no sé de biología, me sorprendí.|Ruiz añadió que su memoria para las flores es asombrosa.|Desde entonces miro distinto el jardín.', ask: 'Toca la cita directa', answer: [0] },
-        { text: 'Según el biólogo Ruiz, «los colibríes visitan hasta mil flores al día».|Yo, que no sé de biología, me sorprendí.|Ruiz añadió que su memoria para las flores es asombrosa.|Desde entonces miro distinto el jardín.', ask: 'Toca la cita indirecta', answer: [2] },
-      ], 'La directa está entre comillas; la indirecta cuenta lo que dijo Ruiz con «añadió que».',
-        'Busca las comillas y el verbo seguido de «que».'),
-      PU_SUB('Tres voces sobre el teletrabajo', [
-        { text: 'La economista Díaz sostiene que el teletrabajo aumenta la productividad.|Su colega Mejía responde que eso depende del tipo de empleo.|A mi modo de ver, ambos olvidan a quienes no tienen internet en casa.', ask: 'Toca lo que piensa el autor del texto', answer: [2] },
-        { text: 'La economista Díaz sostiene que el teletrabajo aumenta la productividad.|Su colega Mejía responde que eso depende del tipo de empleo.|A mi modo de ver, ambos olvidan a quienes no tienen internet en casa.', ask: 'Toca la postura matizada', answer: [1] },
-      ], 'El autor habla en primera persona («a mi modo de ver»). Mejía matiza: «depende».',
-        'La voz del autor se reconoce por la primera persona; una postura matizada pone condiciones.'),
-    ]),
-    PU_L('pu-fu-2', 'Posturas y citas externas', [
-      sc(6, 'Cada fuente toma una postura: **a favor**, **en contra** o **matizada** (sí, pero con condiciones).', { title: 'Tres posturas' }),
-      sc(6, 'Una pregunta frecuente trae una cita que no está en el texto y pide decidir si apoya o contradice la tesis.', { title: 'La cita externa' }),
-      sc(6, 'Para decidir, se compara lo que afirma la cita con la tesis, no con un detalle del texto.', { title: 'Comparar con la tesis' }),
-    ], [
-      PU_ES('Tesis del texto: «las tareas largas no mejoran el aprendizaje». Cita externa: «Enseña más practicar poco y a menudo».', [['la cita apoya la tesis', 'la cita contradice la tesis'], ['ambas: práctica corta y frecuente', 'la cita pide más horas seguidas']],
-        'La cita prefiere práctica corta y frecuente, lo mismo que dice la tesis contra las tareas largas.',
-        'Resume la cita con tus palabras y compárala con la tesis.'),
-      PU_SUB('Tres expertos sobre la jornada única', [
-        { text: 'El experto A dice que la jornada única mejora los resultados.|La experta B afirma que no tiene ningún efecto.|El experto C cree que sirve solo si se acompaña de alimentación escolar.', ask: 'Toca la postura en contra', answer: [1] },
-        { text: 'El experto A dice que la jornada única mejora los resultados.|La experta B afirma que no tiene ningún efecto.|El experto C cree que sirve solo si se acompaña de alimentación escolar.', ask: 'Toca la postura matizada', answer: [2] },
-      ], 'B niega que sirva; C dice que sí, pero con una condición.',
-        'La postura matizada acepta, pero con condiciones.'),
-    ]),
-  ] },
-
-  // ---------------- 24 · Conectores ----------------
-  { world: 'pu-conectores', title: 'Conectores y función de partes', block: 'lectura', lessons: [
-    PU_L('pu-cn-1', 'Conectores', [
-      sc(6, 'Los conectores dicen cómo se relacionan las ideas: **adición** (además), **contraste** (sin embargo, en cambio, no obstante), **causa** (porque), **consecuencia** (por lo tanto).', { title: 'Tipos de conectores' }),
-      sc(7, 'Después de una idea que el autor **rechaza** («No digo que…», «Esto no quiere decir que…»), **al contrario**, **más bien**, **antes bien** y **sino** no oponen dos ideas que siguen en pie: **rectifican**. Niegan lo anterior y ponen en su lugar lo que el autor sí sostiene. «No pido cerrar el parque. Al contrario: quiero que abra más horas.»', { title: 'Conectores que rectifican' }),
-      sc(6, 'También hay de **ejemplificación** (por ejemplo, como) y de **conclusión** (en suma, en conclusión).', { title: 'Más conectores' }),
-      sc(6, 'Un conector de contraste anuncia que viene lo importante: lo que sigue a «sin embargo» suele pesar más.', { title: 'El peso del contraste' }),
-    ], [
-      PU_SUB('Encuentra los conectores', [
-        { text: 'El parque es pequeño;|sin embargo,|recibe más visitantes que el zoológico,|porque|la entrada es gratis.', ask: 'Toca el conector de contraste', answer: [1] },
-        { text: 'El parque es pequeño;|sin embargo,|recibe más visitantes que el zoológico,|porque|la entrada es gratis.', ask: 'Toca el conector de causa', answer: [3] },
-      ], '«Sin embargo» contrapone el tamaño con los visitantes; «porque» introduce la causa.',
-        'Un conector une dos ideas: busca las palabras que hacen de puente.'),
-      PU_SUB('Otra serie de conectores', [
-        { text: 'La lluvia arrasó los cultivos;|por lo tanto,|el precio de la papa subió.|Además,|faltó transporte para sacar la cosecha.', ask: 'Toca el conector de consecuencia', answer: [1] },
-        { text: 'La lluvia arrasó los cultivos;|por lo tanto,|el precio de la papa subió.|Además,|faltó transporte para sacar la cosecha.', ask: 'Toca el conector de adición', answer: [3] },
-      ], '«Por lo tanto» introduce el efecto; «además» suma otro problema.',
-        'Pregúntate si el conector anuncia un resultado o simplemente agrega algo.'),
-    ]),
-    PU_L('pu-cn-2', 'Función de párrafos y signos', [
-      sc(6, 'Cada párrafo cumple una función: **introducir**, **ejemplificar**, **contraargumentar** o **concluir**.', { title: 'Funciones de un párrafo' }),
-      sc(8, 'Las opciones del examen usan verbos más finos. **Ejemplificar** o **ilustrar**: mostrar la idea en un caso. **Conceder**: aceptar una parte de la postura contraria. **Refutar**: mostrar que una idea no se sostiene (también se dice desmontarla o rebatirla). **Matizar**: precisar hasta dónde llega lo que se dijo. **Relativizar**: mostrar que algo no es tan absoluto o tan grave como parece.', { title: 'Verbos de función' }),
-      sc(7, 'Los signos también: las **comillas** citan o marcan ironía; los **paréntesis** aclaran; las **rayas** abren un inciso; los **dos puntos** anuncian una explicación o una lista.', { title: 'Funciones de los signos' }),
-      sc(6, 'Ejemplo: «Llegó el "gran" cambio: un semáforo nuevo.» Las comillas de «gran» son irónicas.', { title: 'Comillas irónicas' }),
-      sc(7, '**Matizar** y **relativizar** no son lo mismo. Se matiza lo propio: «No digo que todo sea malo» precisa hasta dónde llega la crítica del autor. Se relativiza lo del otro: «Puede ser que haya más visitantes, pero eso dice poco» acepta un dato contrario y le quita peso. Pregúntate de quién es la idea que se limita.', { title: 'Matizar o relativizar' }),
-    ], [
-      PU_SUB('Signos con función', [
-        { text: 'El gobierno anunció un «generoso» aumento:|apenas 2 % (menos que la inflación).|Los maestros —que esperaban un 8 %— protestaron.', ask: 'Toca el trozo con comillas irónicas', answer: [0] },
-        { text: 'El gobierno anunció un «generoso» aumento:|apenas 2 % (menos que la inflación).|Los maestros —que esperaban un 8 %— protestaron.', ask: 'Toca la aclaración entre paréntesis', answer: [1] },
-      ], 'Las comillas de «generoso» dicen lo contrario de lo que significa la palabra; el paréntesis aclara por qué el 2 % es poco.',
-        'Fíjate en qué signo encierra a cada trozo.'),
-      PU_ORD('Un texto sobre el ruido: P1 presenta el problema, P2 cuenta el caso de un barrio, P3 responde a quienes dicen que es exageración y P4 propone una norma. Ordena las funciones', '\\text{Párrafos 1, 2, 3 y 4}', ['introducir', 'ejemplificar', 'contraargumentar', 'concluir'], [0, 1, 2, 3], '→',
-        'Presentar es introducir; el caso del barrio, ejemplificar; responder a los críticos, contraargumentar; y proponer al final, concluir.',
-        'Para cada párrafo, piensa qué hace con la idea principal: la presenta, la ilustra, la defiende o la cierra.'),
-    ]),
-  ] },
-
-  // ---------------- 25 · Argumentación ----------------
-  { world: 'pu-argumentacion', title: 'Argumentación, intención y tono', block: 'lectura', lessons: [
-    PU_L('pu-ag-1', 'Tesis y argumentos', [
-      sc(6, 'La **tesis** es lo que el autor defiende. Los **argumentos** la sostienen; el **contraargumento** es la objeción que el autor responde.', { title: 'Tesis, argumentos, objeción' }),
-      sc(6, 'Tipos de argumento: de **autoridad** (un experto), de **ejemplo** (un caso), de **datos** (cifras), de **causa** y por **analogía**.', { title: 'Tipos de argumento' }),
-      sc(6, 'La tesis responde a «qué defiende»; un argumento, a «por qué».', { title: 'Qué y por qué' }),
-      sc(7, 'La objeción no siempre se anuncia con «Se dirá…» ni se responde con un «pero». «Hay quien piensa que…» la presenta; «sin duda», «admito que», «no niego que» **conceden** una parte; y la respuesta puede llegar sin «pero», con un dato o una frase irónica que **refuta** o **relativiza** lo concedido.', { title: 'Conceder sin «pero»' }),
-    ], [
-      PU_SUB('Un texto sobre el parqueo en la calle', [
-        { text: 'Las ciudades deberían cobrar por parquear en la calle.|Un cupo en la calle ocupa un espacio que vale millones.|Además, el cobro reduce las vueltas buscando dónde parquear.|Algunos dicen que es un impuesto más, pero el dinero puede ir al transporte público.', ask: 'Toca la tesis', answer: [0] },
-        { text: 'Las ciudades deberían cobrar por parquear en la calle.|Un cupo en la calle ocupa un espacio que vale millones.|Además, el cobro reduce las vueltas buscando dónde parquear.|Algunos dicen que es un impuesto más, pero el dinero puede ir al transporte público.', ask: 'Toca el contraargumento y su respuesta', answer: [3] },
-      ], 'La tesis es lo que «deberían» hacer las ciudades; la última frase presenta una objeción y la responde.',
-        'La tesis es lo que el autor pide o defiende; el contraargumento presenta lo que dicen quienes no están de acuerdo.'),
-      PU_SUB('Tres argumentos a favor de caminar', [
-        { text: 'Según la Organización Mundial de la Salud, caminar a diario reduce el riesgo de enfermedades del corazón.|Mi abuelo caminó toda la vida y llegó a los 95.|Caminar es para el cuerpo lo que leer es para la mente.', ask: 'Toca el argumento de autoridad', answer: [0] },
-        { text: 'Según la Organización Mundial de la Salud, caminar a diario reduce el riesgo de enfermedades del corazón.|Mi abuelo caminó toda la vida y llegó a los 95.|Caminar es para el cuerpo lo que leer es para la mente.', ask: 'Toca el argumento por analogía', answer: [2] },
-      ], 'La autoridad es la OMS; la analogía compara caminar con leer. El abuelo es un ejemplo.',
-        'Uno cita una institución, otro cuenta un caso y otro compara dos cosas distintas.'),
-    ]),
-    PU_L('pu-ag-2', 'Intención y tono', [
-      sc(6, 'La **intención** es para qué escribe el autor: informar, persuadir, criticar o reflexionar.', { title: 'Intención' }),
-      sc(6, 'El **tono** es la actitud: crítico, irónico, nostálgico, preocupado, optimista. Se nota en los adjetivos y en lo que se elige contar.', { title: 'Tono' }),
-      sc(6, 'Un texto puede informar con datos y, aun así, tener un tono preocupado si elige los datos más alarmantes.', { title: 'Datos y tono' }),
-      sc(7, 'El tono no vive solo en los adjetivos. Los **adverbios y expresiones de actitud** («curiosamente», «por fortuna», «lamentablemente», «por supuesto», «como era de esperarse») no añaden ningún dato: muestran qué piensa el autor de lo que cuenta. Si se quitan, el dato queda y la actitud desaparece. «Curiosamente», junto a algo sospechoso, no es sorpresa: es ironía.', { title: 'Adverbios con actitud' }),
-    ], [
-      PU_ES('«Qué maravilla: otro puente nuevo que se inunda con la primera lluvia.» ¿Cuál es el tono?', [['dice lo contrario de lo que piensa', 'elogia el puente'], ['irónico', 'optimista']],
-        '«Qué maravilla» choca con un puente que se inunda: el autor critica diciendo lo contrario, con ironía.',
-        'Compara el elogio del comienzo con el hecho que se cuenta.'),
-      PU_SUB('Un recuerdo del barrio', [
-        { text: 'Aún recuerdo el olor del pan de la panadería de la esquina,|que cerró hace veinte años.|Hoy hay un parqueadero.', ask: 'Toca el trozo que da el tono nostálgico', answer: [0] },
-        { text: 'Aún recuerdo el olor del pan de la panadería de la esquina,|que cerró hace veinte años.|Hoy hay un parqueadero.', ask: 'Toca el trozo que muestra lo que hay ahora', answer: [2] },
-      ], 'El recuerdo del olor del pan da la nostalgia; el parqueadero marca el contraste con el presente.',
-        'La nostalgia vive en un recuerdo de los sentidos; el presente aparece al final.'),
-    ]),
-    PU_L('pu-ag-3', 'Hechos y opiniones', [
-      sc(6, 'Un **hecho** se puede comprobar: una fecha, una cifra, un suceso. Una **opinión** es una valoración.', { title: 'Comprobar o valorar' }),
-      sc(6, 'Algunas palabras suelen delatar opinión: «mejor», «peor», «debería», «lamentable», «excelente», «a mi juicio». Ayudan, pero no deciden: la prueba es **si se puede verificar**', { title: 'Palabras de opinión' }),
-      sc(7, 'Hay opiniones **sin ninguna palabra de la lista**: «el plan es acertado», «tiene toda la razón», «ninguna obra ha cambiado tanto la vida del barrio». Y hay exigencias sin «debería»: «es hora de», «hace falta que», «no se puede seguir esperando». Si no hay registro, cuenta ni medida que lo compruebe, es opinión.', { title: 'Opiniones sin palabra pista' }),
-      sc(7, 'Al revés, una palabra que valora en una frase **describe** en otra. «El alimento más rico» valora; «un suelo rico en hierro» es un dato que se mide. Igual pasa con «buena parte», «grande», «fuerte» o «el más cercano»: no mires la palabra sola, mira si lo que dice la frase se puede comprobar.', { title: 'La misma palabra, dos usos' }),
-      sc(6, 'Un texto mezcla los dos: los hechos sirven de apoyo a las opiniones.', { title: 'Hechos al servicio de opiniones' }),
-    ], [
-      PU_SUB('Sobre el metro de Medellín', [
-        { text: 'El metro de Medellín se inauguró en 1995.|Es el mejor sistema de transporte del país.|Moviliza cerca de un millón de viajes en un día hábil.|Debería extenderse a todos los municipios del valle.', ask: 'Toca los hechos', answer: [0, 2] },
-      ], 'La fecha y la cifra de viajes se pueden comprobar; «el mejor» y «debería» son opiniones.',
-        'Pregúntate si cada frase se podría verificar con un registro o un dato.'),
-      PU_SUB('Sobre la papa', [
-        { text: 'La papa llegó a Europa desde los Andes.|Es el alimento más rico que existe.|Hay miles de variedades nativas.|Sería un error dejar que se pierdan.', ask: 'Toca las opiniones', answer: [1, 3] },
-      ], '«El más rico» y «sería un error» son valoraciones; el origen y las variedades se pueden comprobar.',
-        'Pregúntate si cada frase se puede verificar o si valora.'),
-    ]),
-  ] },
-
-  // ---------------- 26 · Dos textos ----------------
-  { world: 'pu-dos-textos', title: 'Lectura de dos textos', block: 'lectura', lessons: [
-    PU_L('pu-dt-1', 'Coincidencias y diferencias', [
-      sc(6, 'Las últimas preguntas del examen comparan los dos textos. Conviene una tabla: tema, postura y argumentos de cada uno.', { title: 'Una tabla de comparación' }),
-      sc(6, 'Dos textos pueden tratar el mismo tema con **enfoques** distintos: económico, ambiental, ético, personal.', { title: 'Mismo tema, otro enfoque' }),
-      sc(6, 'Una coincidencia debe estar en los dos textos; si solo está en uno, no es coincidencia.', { title: 'En los dos' }),
-      sc(7, 'Otra pregunta: «esta idea del Texto Dos **encuentra explicación** en el Texto Uno». Se busca en el otro texto la **causa** o el **mecanismo** de lo que el primero solo afirma: uno cuenta que algo pasa; el otro dice por qué. No basta con que repita la misma palabra, y los autores no tienen que estar de acuerdo.', { title: 'Un texto explica al otro' }),
-      sc(7, 'También se compara **cómo respalda** cada texto lo que dice: uno puede exponer con estudios y cautela («varios estudios», «ciertos juegos», «puede»); otro, opinar desde la **experiencia personal** del autor («en mi consultorio veo…»). Las marcas son la primera persona, las cifras y las palabras que suavizan.', { title: 'Cómo se sostiene cada uno' }),
-    ], [
-      PU_SUB('Texto A: «La inteligencia artificial puede ayudar a los profesores a corregir más rápido.» Texto B: «Si una máquina corrige, el estudiante pierde la conversación con su profesor.»', [
-        { title: 'Un estudiante comparó los dos textos así:', text: 'Los dos hablan de la IA en la educación;|los dos la rechazan;|A destaca una ventaja y B, un riesgo;|y B propone prohibirla.', ask: 'Toca lo que es cierto de la comparación', answer: [0, 2] },
-      ], 'Comparten tema; A ve una ventaja y B un riesgo. A no rechaza la IA y B no habla de prohibirla.',
-        'Para cada afirmación, revisa si se cumple en A y en B por separado.'),
-      PU_ES('El texto A habla del páramo por el agua que da a las ciudades; el B, por los campesinos que viven allí', [['mismo tema, distinto enfoque', 'temas distintos'], ['A: ambiental; B: social', 'A: social; B: económico']],
-        'Los dos tratan el páramo; A lo mira por el agua (ambiental) y B por la gente (social).',
-        'Pregúntate sobre qué escriben los dos y desde qué punto de vista lo mira cada uno.'),
-    ]),
-    PU_L('pu-dt-2', 'Qué diría el otro autor', [
-      sc(6, 'Otra pregunta común: qué opinaría el autor de un texto sobre lo que dice el otro.', { title: 'Ponerse en sus zapatos' }),
-      sc(6, 'Se responde usando la **tesis** de ese autor como lente para juzgar la idea del otro.', { title: 'Su tesis como lente' }),
-      sc(6, 'La respuesta no puede contradecir lo que ese autor ya dijo en su propio texto.', { title: 'Coherencia' }),
-      sc(7, 'Otra variante: «Un **defensor** de X tomaría del texto Uno, como argumento contra el Dos…». Sirve una idea que el autor del Uno **sostiene** (o que concede) y que choca con la tesis del Dos. Cuidado con lo que el Uno solo menciona para rechazarlo: «los críticos dicen…» no es una idea del autor.', { title: 'Un tercero en la discusión' }),
-    ], [
-      PU_SUB('Autor A: «Leer en papel ayuda a concentrarse.» Autor B: «Lo importante no es el soporte sino el hábito.»', [
-        { title: 'Una estudiante imaginó la respuesta de B:', text: 'B le diría a A que el papel no basta si no hay hábito,|que hay que prohibir las pantallas|y que leer, en el fondo, no importa.', ask: 'Toca lo que B sí diría según su tesis', answer: [0] },
-      ], 'Para B lo decisivo es el hábito, así que el papel solo no alcanza.',
-        'Usa la tesis de B («no es el soporte sino el hábito») para juzgar la idea de A.'),
-      PU_SUB('A: «Las redes sociales acercan a las familias que viven lejos.» B: «Las redes nos alejan de quienes tenemos al lado.»', [
-        { title: 'Así imaginó un estudiante el diálogo:', text: 'B le respondería a A que olvida a los que están cerca,|que está de acuerdo en todo con él|y que los dos hablan de temas distintos.', ask: 'Toca lo que B sí respondería según su tesis', answer: [0] },
-      ], 'A mira a los que están lejos; B, a los que están cerca: le reprocharía ese olvido.',
-        'Fíjate en a quiénes mira cada autor: a los de lejos o a los de cerca.'),
-    ]),
-  ] },
-
-  // ---------------- 27 · Referencia y cohesión ----------------
-  { world: 'pu-referencia', title: 'Referencia y cohesión', block: 'lectura', lessons: [
-    PU_L('pu-rf-1', 'Pronombres y referentes', [
-      sc(6, 'Pronombres como «él», «esto», «aquello» o «lo cual» reemplazan algo dicho antes: su **referente**.', { title: 'El referente' }),
-      sc(6, 'Para hallarlo se busca hacia atrás y se prueba reemplazando: si la frase conserva el sentido, ese es.', { title: 'Probar reemplazando' }),
-      sc(6, '«Este» señala lo más cercano y «aquel» lo más lejano: «Vinieron Ana y Luis; este se quedó, aquella se fue.»', { title: 'Este y aquel' }),
-    ], [
-      PU_SUB('Encuentra los referentes', [
-        { text: 'Los estudiantes sembraron una huerta en el patio,|lo cual|redujo la basura orgánica del colegio.', ask: 'Toca a qué se refiere «lo cual»', answer: [0] },
-        { text: 'Laura|le prestó el libro|a su hermana|porque ella quería leerlo.', ask: 'Toca a quién se refiere «ella»', answer: [2] },
-      ], '«Lo cual» retoma toda la acción de sembrar la huerta. «Ella» es la hermana: quien quería leerlo es quien recibe el libro, no la dueña.',
-        'Reemplaza el pronombre por cada candidato y lee la frase: solo uno tiene sentido.'),
-      PU_SUB('Este y aquel', [
-        { text: 'El alcalde|y el gobernador|se reunieron ayer.|Este anunció recursos;|aquel, solo promesas.', ask: 'Toca a quién se refiere «este»', answer: [1] },
-        { text: 'El alcalde|y el gobernador|se reunieron ayer.|Este anunció recursos;|aquel, solo promesas.', ask: 'Toca a quién se refiere «aquel»', answer: [0] },
-      ], '«Este» señala al más cercano en el texto (el gobernador) y «aquel», al más lejano (el alcalde).',
-        'Mira cuál de los dos nombres quedó más cerca del pronombre.'),
-    ]),
-    PU_L('pu-rf-2', 'Sustituciones y elipsis', [
-      sc(6, 'Para no repetir, se nombra lo mismo con otra palabra: «el gato… el felino». Es una **sustitución léxica**.', { title: 'Otra palabra, lo mismo' }),
-      sc(6, 'La **elipsis** omite lo que ya se dijo: «Ana estudia Medicina; Juan, Derecho» (se omite «estudia»).', { title: 'Elipsis' }),
-      sc(6, 'En la escritura, la coma suele marcar el lugar de lo omitido.', { title: 'La coma de la elipsis' }),
-    ], [
-      PU_SUB('Una noticia sobre el cóndor', [
-        { text: 'El cóndor|volvió a verse en Boyacá.|El ave|había desaparecido de la zona hace décadas.', ask: 'Toca el trozo que nombra de otro modo al cóndor', answer: [2] },
-      ], '«El ave» retoma al cóndor sin repetir su nombre.',
-        'Busca otro sustantivo que se refiera al mismo animal.'),
-      PU_SUB('Dos preferencias', [
-        { text: 'Mi hermana prefiere el mar;|yo,|la montaña.', ask: 'Toca el trozo donde se omitió una palabra ya dicha', answer: [1] },
-      ], 'En «yo, la montaña» se omite «prefiero»: la coma marca el hueco.',
-        'Lee la segunda parte y piensa qué verbo falta.'),
-    ]),
-  ] },
-
-  // ---------------- 28 · Lenguaje figurado ----------------
-  { world: 'pu-figurado', title: 'Lenguaje figurado', block: 'lectura', lessons: [
-    PU_L('pu-lf-1', 'Figuras literarias', [
-      sc(6, '**Metáfora**: decir que A es B («sus ojos eran dos faroles»). **Comparación**: con «como» («ojos como faroles»).', { title: 'Metáfora y comparación' }),
-      sc(6, '**Personificación**: dar acciones humanas a cosas («el viento susurraba»). **Hipérbole**: exagerar («te lo dije un millón de veces»).', { title: 'Personificación e hipérbole' }),
-      sc(6, 'La pregunta del examen suele ser qué **significa** la figura en el texto, más que su nombre.', { title: 'Qué quiere decir' }),
-    ], [
-      PU_SUB('Una mañana en la ciudad', [
-        { text: 'La ciudad despertó con hambre de sol.|Sus calles eran ríos de gente.|El tráfico avanzaba como una tortuga cansada.|Esperé mil años el bus.', ask: 'Toca la comparación', answer: [2] },
-        { text: 'La ciudad despertó con hambre de sol.|Sus calles eran ríos de gente.|El tráfico avanzaba como una tortuga cansada.|Esperé mil años el bus.', ask: 'Toca la hipérbole', answer: [3] },
-      ], 'La comparación usa «como»; esperar «mil años» es una exageración.',
-        'La comparación tiene una palabra que la delata; la hipérbole, una cifra imposible.'),
-      PU_ES('«Ese examen fue una montaña.» ¿Qué figura es y qué significa?', [['metáfora', 'comparación'], ['fue muy difícil', 'fue largo de leer']],
-        'Dice que el examen «fue» una montaña sin usar «como»: metáfora. Una montaña cuesta subirla: fue difícil.',
-        'Fíjate si aparece la palabra «como» y piensa qué cuesta de una montaña.'),
-    ]),
-    PU_L('pu-lf-2', 'Ironía', [
-      sc(6, 'La **ironía** dice lo contrario de lo que se piensa. El contexto la delata: lo que se dice choca con lo que pasa.', { title: 'Decir lo contrario' }),
-      sc(6, '«Qué puntual», dicho a quien llega una hora tarde, es ironía.', { title: 'Un ejemplo' }),
-      sc(6, 'Para reconocerla se compara el tono de la frase con los hechos que la rodean.', { title: 'Tono contra hechos' }),
-      sc(7, 'En un texto serio la ironía suele ser **sutil**: ninguna palabra dice lo contrario de un hecho. Se nota en el registro: un tono solemne para algo pequeño («anunció, con aire de gran noticia, una reunión más»), una comparación con la fe o con un amuleto, unas comillas. La clave es ver si el autor toma distancia de lo que cuenta.', { title: 'Ironía sutil' }),
-    ], [
-      PU_SUB('Un mal comienzo', [
-        { text: 'Llegué empapado, sin paraguas y con el bus perdido.|«Qué día tan perfecto», le dije al portero.', ask: 'Toca la frase irónica', answer: [1] },
-      ], 'Llamar «perfecto» a un día de lluvia y bus perdido es decir lo contrario de lo que se piensa.',
-        'Compara lo que le pasó con lo que dice del día.'),
-      PU_ES('«Excelente servicio: solo esperé tres horas.» ¿Qué hace el autor?', [['el dato contradice el elogio', 'el dato confirma el elogio'], ['critica el servicio', 'agradece el servicio']],
-        'Tres horas de espera no son un buen servicio: el elogio es irónico y la frase critica.',
-        'Fíjate si tres horas de espera encajan con la palabra «excelente».'),
-    ]),
-  ] },
-];
-
-// Mundos de lectura rehechos con textos de verdad (spec 2026-11-19-preuda-lectura-textos): cada js/courses/preuda-l-<mundo>.js
-// empuja aquí su función; preuda-lectura-juegos.js las aplica.
-const PU_LEC_JUEGOS = [];
-;
 //#archivo js/courses/preuda-l-estrategias.js
 // Preuniversitario · Comprensión lectora · mundo 1 «Estrategias de lectura» con textos de verdad (spec
 // 2026-11-19-preuda-lectura-textos). Cada lección trabaja un texto original en 8 ejercicios sobre la hoja (spec 2026-11-24-lectura-explora); la evaluación usa otro texto
@@ -16215,3 +15561,277 @@ EXPLORA['pu-cm-1'] = {
       idea: 'Enteros en la recta, opuestos, distancia, sumar y restar, signos y capas.' },
   ],
 };
+;
+//#archivo js/explora-alg-0a.js
+// Álgebra · alg-0a «¿Qué es un conjunto? Notación y pertenencia»: explicación interactiva que reemplaza el video
+// (spec 2026-11-23-explora-leccion-interactiva; motor en js/explora.js, escena «conjunto»). Mismo formato que pu-cm-1:
+// cada capítulo abre con una explicación que corre sola (`muestra`), sigue «tu turno» y el problema va al final.
+// Los ejemplos (bandera, semáforo, vocales, dado, pares, COLOMBIA, TOMATE, heladería) no salen en los ejercicios.
+EXPLORA['alg-0a'] = {
+  caps: ['¿Qué es un conjunto?', 'Pertenecer', 'Dos formas de escribirlo', 'Sin repetidos ni orden', 'Ahora sí, un problema'],
+  pasos: [
+    // ---- ¿Qué es un conjunto? ----
+    { cap: 0, tipo: 'muestra', escena: 'conjunto', en: { nombre: 'B', items: ['verde', 'amarillo', 'negro', 'azul', 'blanco', 'rojo'] },
+      texto: 'Empecemos por la idea más básica del álgebra: **qué es un conjunto**.',
+      momentos: [
+        { dice: 'Un conjunto es una colección de objetos. A cada objeto que está en él se le llama **elemento**.' },
+        { pon: ['amarillo', 'azul', 'rojo'], cuenta: '$B = \\{\\text{amarillo}, \\text{azul}, \\text{rojo}\\}$',
+          dice: 'B: los colores de la bandera de Colombia. Entran el amarillo, el azul y el rojo.' },
+        { marca: 'verde', cuenta: '$B = \\{\\text{amarillo}, \\text{azul}, \\text{rojo}\\}$',
+          dice: '¿Y el verde? No está en la bandera, así que se queda afuera. Nadie lo discute.' },
+        { cuenta: '$B = \\{\\text{amarillo}, \\text{azul}, \\text{rojo}\\}$',
+          dice: 'Eso es estar **bien definido**: ante cualquier objeto se sabe, sin discutir, si entra o no.' },
+        { cuenta: '$B = \\{\\text{amarillo}, \\text{azul}, \\text{rojo}\\}$',
+          dice: '«Los colores más bonitos» no sería un conjunto: cada persona elegiría distinto.' },
+      ],
+      idea: 'Un conjunto es una colección **bien definida** de objetos; cada objeto es un **elemento**.' },
+    { cap: 0, tipo: 'conjunto', nombre: 'S', items: ['azul', 'rojo', 'negro', 'verde', 'blanco', 'amarillo'], meta: ['rojo', 'amarillo', 'verde'],
+      texto: '**Tu turno.** Arma S, el conjunto de las luces de un semáforo: arrastra adentro cada color que le corresponde.',
+      idea: 'Una regla clara decide qué entra: $S = \\{\\text{rojo}, \\text{amarillo}, \\text{verde}\\}$.' },
+
+    // ---- Pertenecer ----
+    { cap: 1, tipo: 'muestra', escena: 'conjunto', en: { nombre: 'V', items: ['m', 'a', 'e', 's', 'i', 'o', 'u', 'r'] },
+      texto: 'Segunda idea: **pertenecer**. Para decir si algo está o no en un conjunto hay un símbolo.',
+      momentos: [
+        { pon: ['a', 'e', 'i', 'o', 'u'], cuenta: '$V = \\{a, e, i, o, u\\}$', dice: 'V es el conjunto de las vocales. Sus cinco elementos entran uno por uno.' },
+        { marca: 'e', cuenta: '$e \\in V$', dice: 'La e está adentro. Se escribe e ∈ V y se lee «e pertenece a V».' },
+        { marca: 'm', cuenta: '$m \\notin V$', dice: 'La m se queda afuera: m ∉ V, «m no pertenece a V». Es el mismo símbolo, tachado.' },
+        { cuenta: '$e \\in V, \\quad m \\notin V$', dice: 'Costumbre: los conjuntos se nombran con mayúscula y sus elementos, casi siempre, con minúscula.' },
+      ],
+      idea: '$\\in$ se lee «pertenece a» y $\\notin$, «no pertenece a». Los conjuntos se nombran con mayúscula.' },
+    { cap: 1, tipo: 'conjunto', nombre: 'D', items: ['1', '2', '3', '4', '5', '6'], meta: ['5', '6'],
+      texto: '**Tu turno.** D es el conjunto de las caras de un dado mayores que 4. Arrastra adentro solo las que pertenecen.',
+      idea: '$5 \\in D$ y $6 \\in D$, pero $4 \\notin D$.' },
+
+    // ---- Dos formas de escribirlo ----
+    { cap: 2, tipo: 'muestra', escena: 'conjunto', en: { nombre: 'P', items: ['1', '2', '3', '4', '5', '6', '7', '8', '9'] },
+      texto: 'Tercera idea: un conjunto se puede escribir **de dos formas**.',
+      momentos: [
+        { dice: 'La primera forma es la más directa: nombrar todos sus elementos, uno por uno.' },
+        { pon: ['2', '4', '6', '8'], cuenta: '$P = \\{2, 4, 6, 8\\}$', dice: 'Por **extensión**: los elementos entre llaves y separados por comas.' },
+        { cuenta: '$P = \\{x : x \\text{ es par},\\ 0 < x < 10\\}$', dice: 'Por **comprensión**: se escribe la regla que cumplen. Los dos puntos se leen «tal que».' },
+        { marca: '6', cuenta: '$6 \\in P$', dice: 'Se lee: «los x tales que x es par y está entre 0 y 10». El 6 cumple: está adentro.' },
+        { marca: '7', cuenta: '$7 \\notin P$', dice: 'El 7 no es par: no cumple la regla, así que se queda afuera.' },
+        { cuenta: '$\\{x : x \\text{ es par}\\}$', dice: 'Si quitamos el tope de 10 es otro conjunto, con infinitos pares: solo se puede escribir por comprensión.' },
+      ],
+      idea: 'Por **extensión** se nombran los elementos; por **comprensión** se da la regla. «:» se lee «tal que».' },
+    { cap: 2, tipo: 'conjunto', nombre: 'T', items: ['1', '2', '3', '4', '5', '6', '7', '8', '9'], meta: ['3', '6', '9'],
+      texto: '**Tu turno.** Escribe por extensión $T = \\{x : x \\text{ es múltiplo de } 3,\\ 0 < x < 10\\}$ arrastrando adentro sus elementos.',
+      idea: 'Por extensión, $T = \\{3, 6, 9\\}$.' },
+
+    // ---- Sin repetidos ni orden ----
+    { cap: 3, tipo: 'muestra', escena: 'conjunto', en: { nombre: 'K', items: ['c', 'o', 'l', 'o', 'm', 'b', 'i', 'a'] },
+      texto: 'Cuarta idea: en un conjunto **nada se repite** y **el orden no importa**.',
+      momentos: [
+        { dice: 'K es el conjunto de las letras de la palabra COLOMBIA. Metamos las letras una por una.' },
+        { pon: ['c', 'o', 'l'], cuenta: '$K = \\{c, o, l\\}$', dice: 'Entran la c, la o y la l…' },
+        { pon: ['o'], cuenta: '$K = \\{c, o, l\\}$', dice: '¡Otra o! Ya estaba adentro, así que se funde con la primera: en un conjunto nada se repite.' },
+        { pon: ['m', 'b', 'i', 'a'], cuenta: '$K = \\{c, o, l, m, b, i, a\\}$', dice: 'Entran las demás. La palabra tiene ocho letras, pero el conjunto tiene siete elementos.' },
+        { mezcla: true, cuenta: '$\\{c, o, l, m, b, i, a\\} = \\{a, b, c, i, l, m, o\\}$', dice: 'Si los ordenamos de otra forma, sigue siendo el mismo conjunto: el orden no importa.' },
+        { cuenta: '$n(K) = 7$', dice: 'El número de elementos se llama **cardinal** y se escribe n(K). Aquí, n(K) = 7.' },
+      ],
+      idea: 'En un conjunto no hay repetidos ni importa el orden. El **cardinal** $n(A)$ es cuántos elementos tiene.' },
+    { cap: 3, tipo: 'conjunto', nombre: 'R', items: ['t', 'o', 'u', 'm', 'a', 't', 'p', 'e'], meta: ['t', 'o', 'm', 'a', 'e'], cardinal: true,
+      texto: '**Tu turno.** Arma R, el conjunto de las letras de TOMATE. Mete las dos t y mira qué pasa; deja afuera lo que no está en la palabra.',
+      idea: '$R = \\{t, o, m, a, e\\}$ y $n(R) = 5$, aunque TOMATE tenga seis letras.' },
+    { cap: 3, tipo: 'casillas', filas: [{ tex: '$n(\\{1, 1, 2\\})$', r: '2' }, { tex: '$n(\\{x, y, z, x\\})$', r: '3' }], fichas: ['3', '2', '4', '1'],
+      pista: 'Cuenta los elementos distintos: lo repetido cuenta una sola vez.',
+      texto: 'El cardinal no cuenta repetidos. Toca la ficha con el cardinal de cada conjunto.',
+      idea: 'Lo repetido cuenta una sola vez: $n(\\{1, 1, 2\\}) = 2$.' },
+
+    // ---- Ahora sí, un problema ----
+    { cap: 4, tipo: 'conjunto', nombre: 'H', items: ['fresa', 'vainilla', 'coco', 'fresa', 'mora', 'vainilla', 'limón', 'fresa', 'mora'], meta: ['fresa', 'vainilla', 'mora'], cardinal: true,
+      texto: 'Pedidos de hoy en una heladería: fresa, vainilla, fresa, mora, vainilla, fresa, mora. Arma H, el conjunto de sabores vendidos. ¿Cuántos son?',
+      idea: 'Siete pedidos, pero $H = \\{\\text{fresa}, \\text{vainilla}, \\text{mora}\\}$ y $n(H) = 3$.' },
+    { cap: 4, tipo: 'cierre', clave: 'alg-0a', real: '',
+      texto: 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.',
+      idea: 'Conjunto y elemento, $\\in$ y $\\notin$, extensión y comprensión, sin repetidos ni orden, y el cardinal.' },
+  ],
+};
+;
+//#archivo js/explora-pu-ge-1.js
+// Preuniversitario · pu-ge-1 «Ángulos y paralelas» (Explora, escena «dibujo»). Los ejemplos no son los de los ejercicios.
+{
+  const O = [170, 150];
+  // Media vuelta partida por un rayo en el ángulo a.
+  const media = (v, K) => {
+    const R = K.at(...O, 115, v.a), D = [300, O[1]], I = [40, O[1]];
+    return K.ang(O, D, R, 42, `${Math.round(v.a)}°`, 'fa', 'ta') + K.f(v.ver ?? 1, K.ang(O, R, I, 34, v.ver === 0 ? '' : `${180 - Math.round(v.a)}°`, 'fg', 'tg'))
+      + K.l(...I, ...D) + K.l(...O, ...R, 'la gr') + K.c(...O, 4, 'fk');
+  };
+  // Dos rectas que se cruzan.
+  const cruce = (v, K) => {
+    const C = [170, 100], P = g => K.at(...C, 92, g), r = v.rot ?? 0, a = v.a;
+    const A = P(r), B = P(r + a), A2 = P(r + 180), B2 = P(r + 180 + a), n = Math.round(a);
+    return K.f(v.f1 ?? 1, K.ang(C, A, B, 40, `${n}°`, 'fa', 'ta')) + K.f(v.f2 ?? 0, K.ang(C, A2, B2, 40, `${n}°`, 'fa', 'ta'))
+      + K.f(v.f3 ?? 0, K.ang(C, B, A2, 30, `${180 - n}°`, 'fg', 'tg')) + K.f(v.f4 ?? 0, K.ang(C, B2, A, 30, `${180 - n}°`, 'fg', 'tg'))
+      + K.l(...A, ...A2) + K.l(...B, ...B2) + K.c(...C, 4, 'fk');
+  };
+  // Complemento: un cuarto de vuelta partido en dos.
+  const recto = (v, K) => {
+    const V = [110, 170], R = K.at(...V, 135, v.a), D = [265, 170], U = [110, 20], n = Math.round(v.a);
+    return K.ang(V, D, R, 46, `${n}°`, 'fa', 'ta') + K.ang(V, R, U, 38, `${90 - n}°`, 'fg', 'tg') + K.l(...V, ...D) + K.l(...V, ...U) + K.l(...V, ...R, 'la gr') + K.c(...V, 4, 'fk');
+  };
+  // Paralelas en y = 60 e y = 150 con una transversal de ángulo a.
+  const Y1 = 62, Y2 = 152;
+  const par = (v, K) => {
+    const t = Math.tan(v.a * Math.PI / 180), X = y => 170 + (107 - y) / t, P = [X(Y1), Y1], Q = [X(Y2), Y2], n = Math.round(v.a);
+    const d = (W, s) => [W[0] + s * 100, W[1]], up = [X(Y1 - 40), Y1 - 40], dn = [X(Y2 + 40), Y2 + 40];
+    return K.f(v.cor ?? 0, K.ang(P, d(P, 1), up, 26, `${n}°`, 'fa', 'ta') + K.ang(Q, d(Q, 1), P, 26, `${n}°`, 'fa', 'ta'))
+      + K.f(v.alt ?? 0, K.ang(P, d(P, -1), Q, 26, `${n}°`, 'fa', 'ta') + K.ang(Q, d(Q, 1), P, 26, `${n}°`, 'fa', 'ta'))
+      + K.f(v.con ?? 0, K.ang(P, d(P, 1), Q, 26, v.oculta ? '?' : `${180 - n}°`, 'fg', 'tg') + K.ang(Q, d(Q, 1), P, 26, `${n}°`, 'fa', 'ta'))
+      + K.l(20, Y1, 320, Y1) + K.l(20, Y2, 320, Y2) + K.l(...up, ...dn, 'la gr') + K.t(312, Y1 - 8, 'ℓ₁', 'tm') + K.t(312, Y2 - 8, 'ℓ₂', 'tm');
+  };
+  const TX = v => { // triángulo de base 70..270 con ángulos a y b
+    const A = [85, 170], B = [255, 170], ta = Math.tan(v.a * Math.PI / 180), tb = Math.tan(v.b * Math.PI / 180), x = 170 * tb / (ta + tb);
+    return [A, B, [85 + x, 170 - x * ta]];
+  };
+  const tri = (v, K) => {
+    const [A, B, C] = TX(v), a = Math.round(v.a), b = Math.round(v.b);
+    const cA = v.une ?? 0, L = [C[0] - 120, C[1]], R = [C[0] + 120, C[1]];
+    return K.ang(A, B, C, 32, `${a}°`, 'fa', 'ta') + K.ang(B, C, A, 32, `${b}°`, 'fg', 'tg') + (v.ext == null || v.ext < 0.5 ? K.ang(C, A, B, 26, v.oc ? '?' : `${180 - a - b}°`, 'ff', 'tf') : '')
+      + K.f(cA, K.l(Math.max(6, L[0]), L[1], Math.min(334, R[0]), R[1], 'lm d') + K.ang(C, L, A, 20, '', 'fa') + K.ang(C, B, R, 20, '', 'fg'))
+      + K.f(v.ext ?? 0, K.l(B[0], B[1], 330, 170, 'lm') + K.ang(B, [330, 170], C, 24, `${a + (180 - a - b)}°`, 'fo', 'to') + K.ang(C, A, B, 26, `${180 - a - b}°`, 'ff', 'tf'))
+      + K.pl([A, B, C, A]);
+  };
+  const pol = (v, K) => {
+    const n = Math.round(v.n), P = Array.from({ length: n }, (_, i) => K.at(170, 100, 88, 90 + i * 360 / n));
+    let h = '';
+    for (let i = 1; i < n - 1; i++) h += K.f(v.f ?? 1, K.p([P[0], P[i], P[i + 1]], ['fa', 'fg', 'ff', 'fo'][i % 4]));
+    return h + K.p(P, 'fn') + K.t(40, 190, `${n} lados`, 'tm');
+  };
+
+  xpLec('pu-ge-1', [
+    ['Ángulos que se completan',
+      xpMira('dibujo', 'Empecemos por lo básico: ángulos que **juntos** forman algo conocido.', { dib: (v, K) => (v.cual < 0.5 ? media(v, K) : v.cual < 1.5 ? recto(v, K) : cruce(v, K)), v: { cual: 0, a: 60, ver: 1, rot: 12, f1: 1, f2: 0, f3: 0, f4: 0 }, alto: 200 }, [
+        ['Un rayo parte la media vuelta en dos ángulos. Juntos siempre dan 180°: son suplementarios.', {}, '$60^\\circ + 120^\\circ = 180^\\circ$'],
+        ['Si uno crece, el otro se achica lo mismo. La suma no cambia.', { a: 140 }, '$140^\\circ + 40^\\circ = 180^\\circ$'],
+        ['En una esquina recta pasa igual, pero juntos dan 90°: son complementarios.', { cual: 1, a: 35 }, '$35^\\circ + 55^\\circ = 90^\\circ$'],
+        ['Ahora dos rectas que se cruzan, como una tijera abierta.', { cual: 2, a: 80 }],
+        ['Los ángulos de enfrente abren lo mismo: son opuestos por el vértice, y son iguales.', { f2: 1 }],
+        ['Y los de al lado completan la media vuelta: 100° cada uno.', { f3: 1, f4: 1 }, '$80^\\circ + 100^\\circ = 180^\\circ$'],
+      ], 'Vecinos sobre una recta suman 180°; en una esquina recta, 90°; los opuestos por el vértice son iguales.'),
+      xpHaz('dibujo', 'Arrastra el rayo hasta que el ángulo dorado, el vecino, mida 115°.', { dib: media, v: { a: 120 }, metas: { a: 65 }, alto: 190,
+        manijas: [{ k: 'a', min: 15, max: 165, paso: 5, en: v => XPK.at(...O, 115, v.a), de: (x, y) => (y > O[1] ? (x < O[0] ? 180 : 0) : Math.atan2(O[1] - y, x - O[0]) * 180 / Math.PI) }],
+        lee: v => `$${v.a}^\\circ + ${180 - v.a}^\\circ = 180^\\circ$`, dice: v => `El tuyo mide ${v.a}° y al dorado le queda lo que falta para 180°.` }, 'Al vecino le toca lo que falta: $180^\\circ - 115^\\circ = 65^\\circ$.')],
+    ['Paralelas y transversal',
+      xpMira('dibujo', 'Segunda idea: una recta que corta a **dos paralelas** repite sus ángulos.', { dib: par, v: { a: 60, cor: 0, alt: 0, con: 0 }, alto: 200 }, [
+        ['Dos paralelas y una recta que las atraviesa: la transversal. Se forman dos cruces idénticos.', {}],
+        ['Los que están en la misma esquina de cada cruce son iguales: se llaman correspondientes.', { cor: 1 }, '$60^\\circ = 60^\\circ$'],
+        ['Entre las paralelas, a lados distintos de la transversal, forman una Z: alternos internos, iguales.', { cor: 0, alt: 1 }, '$60^\\circ = 60^\\circ$'],
+        ['Entre las paralelas y del mismo lado están los conjugados: esos suman 180°.', { alt: 0, con: 1 }, '$120^\\circ + 60^\\circ = 180^\\circ$'],
+        ['Si la transversal se inclina cambian los números, pero no las relaciones.', { a: 105 }, '$75^\\circ + 105^\\circ = 180^\\circ$'],
+      ], 'Con paralelas: correspondientes y alternos internos son iguales; conjugados internos suman 180°.'),
+      xpHaz('dibujo', 'Inclina la transversal hasta que el conjugado dorado, el que no se ve, mida 125°.', { dib: par, v: { a: 90, con: 1, oculta: 1 }, metas: { a: 55 }, alto: 200,
+        manijas: [{ k: 'a', min: 40, max: 140, paso: 5, en: v => [170 + 85 / Math.tan(v.a * Math.PI / 180), 22], de: x => Math.atan2(85, x - 170) * 180 / Math.PI }],
+        lee: v => `$? + ${v.a}^\\circ = 180^\\circ$`, dice: v => `El ángulo de abajo mide ${v.a}°. El dorado es su conjugado.` }, 'Conjugados suman 180°: $180^\\circ - 125^\\circ = 55^\\circ$.')],
+    ['Los ángulos de un triángulo',
+      xpMira('dibujo', 'Tercera idea: por qué los ángulos de **cualquier** triángulo suman 180°.', { dib: tri, v: { a: 55, b: 65, une: 0, ext: 0 }, alto: 200 }, [
+        ['Este triángulo tiene tres ángulos distintos. ¿Cuánto suman?', {}],
+        ['Trazamos arriba una paralela a la base. Los ángulos de abajo reaparecen arriba: son alternos internos.', { une: 1 }],
+        ['Arriba, los tres juntos forman media vuelta. Por eso suman 180°.', {}, '$55^\\circ + 60^\\circ + 65^\\circ = 180^\\circ$'],
+        ['Cambia el triángulo y la suma sigue igual.', { a: 80, b: 35 }, '$80^\\circ + 65^\\circ + 35^\\circ = 180^\\circ$'],
+        ['Si alargamos un lado aparece un ángulo exterior: mide lo mismo que los otros dos interiores juntos.', { une: 0, ext: 1 }, '$80^\\circ + 65^\\circ = 145^\\circ$'],
+      ], 'Los tres ángulos de un triángulo suman 180°, y un exterior es la suma de los dos interiores lejanos.'),
+      xpHaz('dibujo', 'El ángulo dorado mide 45°. Mueve el de la izquierda hasta que el de arriba, oculto, mida 70°.', { dib: tri, v: { a: 40, b: 45, oc: 1 }, metas: { a: 65 }, alto: 200,
+        manijas: [{ k: 'a', min: 25, max: 75, paso: 5, en: v => TX(v)[2], de: (x, y) => Math.atan2(170 - y, x - 85) * 180 / Math.PI }],
+        lee: v => `$${v.a}^\\circ + 45^\\circ + ? = 180^\\circ$`, dice: v => `Los dos de abajo suman ${v.a + 45}°. Arriba queda lo que falta para 180°.` }, 'Falta lo que queda de 180°: $180^\\circ - 45^\\circ - 70^\\circ = 65^\\circ$.')],
+    ['Polígonos: cortar en triángulos',
+      xpMira('dibujo', 'Cuarta idea: cualquier polígono se **corta en triángulos**.', { dib: pol, v: { n: 4, f: 0 }, alto: 200 }, [
+        ['Un cuadrilátero no es un triángulo, pero podemos cortarlo desde una esquina.', {}],
+        ['Salen dos triángulos, cada uno con 180°: los cuatro ángulos suman 360°.', { f: 1 }, '$2 \\cdot 180^\\circ = 360^\\circ$'],
+        ['Con cinco lados salen tres triángulos: 540°.', { n: 5 }, '$3 \\cdot 180^\\circ = 540^\\circ$'],
+        ['Siempre salen dos triángulos menos que lados: con ocho lados, seis triángulos.', { n: 8 }, '$(n - 2) \\cdot 180^\\circ$'],
+        ['Si el polígono es regular, la suma se reparte por igual entre sus ángulos: 1 080 entre 8 son 135°.', {}, '$1080^\\circ \\div 8 = 135^\\circ$'],
+      ], 'Un polígono de n lados se corta en n − 2 triángulos: sus ángulos suman $(n - 2) \\cdot 180^\\circ$.'),
+      xpHaz('dibujo', 'Arrastra el número de lados hasta que los ángulos sumen 720°.', { dib: pol, v: { n: 3, f: 1 }, metas: { n: 6 }, alto: 250, manijas: [{ k: 'n', min: 3, max: 10, paso: 1 }],
+        lee: v => `$${v.n - 2} \\cdot 180^\\circ = ${(v.n - 2) * 180}^\\circ$`, dice: v => `${v.n} lados: ${v.n - 2} ${v.n === 3 ? 'triángulo' : 'triángulos'}.` }, 'Cuatro triángulos, seis lados: $4 \\cdot 180^\\circ = 720^\\circ$.')],
+    ['Ahora sí, un problema',
+      xpHaz('dibujo', 'Una escalera de tijera tiene dos patas iguales y arriba debe abrir 40°. Inclínala: ¿qué ángulo hace cada pata con el piso?', {
+        dib: (v, K) => { const h = 130, d = h / Math.tan(v.a * Math.PI / 180), A = [170 - d, 170], B = [170 + d, 170], C = [170, 40]; return K.ang(A, B, C, 28, `${v.a}°`, 'fa', 'ta') + K.ang(B, C, A, 28, `${v.a}°`, 'fa', 'ta') + K.ang(C, A, B, 26, '?', 'ff', 'tf') + K.l(20, 170, 320, 170, 'lm') + K.pl([A, C, B], 'gr'); },
+        v: { a: 50 }, metas: { a: 70 }, alto: 200, manijas: [{ k: 'a', min: 45, max: 85, paso: 5, en: v => [170 + 130 / Math.tan(v.a * Math.PI / 180), 170], de: x => Math.atan2(130, Math.max(1, x - 170)) * 180 / Math.PI }],
+        lee: v => `$${v.a}^\\circ + ${v.a}^\\circ + ? = 180^\\circ$`, dice: v => `Las patas iguales hacen ángulos iguales con el piso: ${v.a}° cada una.` }, 'Los dos de abajo son iguales y suman $180^\\circ - 40^\\circ = 140^\\circ$: 70° cada uno.')],
+  ], 'Vecinos que completan 180°, paralelas que repiten ángulos, triángulos de 180° y polígonos hechos de triángulos.');
+}
+;
+//#archivo js/explora-pu-ge-2.js
+// Preuniversitario · pu-ge-2 «Triángulos y Pitágoras» (Explora, escena «dibujo»). Los ejemplos no son los de los ejercicios.
+{
+  const U = 6.5, OX = 92, OY = 168;
+  let Z = U;
+  const P = (x, y) => [OX + x * Z, OY - y * Z];
+  const sq = x => Math.round(x * x * 10) / 10;
+  // Triángulo rectángulo con los tres cuadrados; los catetos son a (hacia arriba) y b (hacia la derecha).
+  const cuad = (v, K) => {
+    Z = v.u ?? U;
+    const { a, b } = v, m = v.f ?? 1, fc = v.fc ?? m;
+    const rej = (x0, y0, n) => { let h = ''; for (let i = 1; i < n; i++) h += K.l(...P(x0 + i, y0), ...P(x0 + i, y0 + n), 'ls') + K.l(...P(x0, y0 + i), ...P(x0 + n, y0 + i), 'ls'); return h; };
+    const ent = Number.isInteger(a) && Number.isInteger(b);
+    return K.f(m, K.p([P(0, 0), P(b, 0), P(b, -b), P(0, -b)], 'fa') + K.p([P(0, 0), P(0, a), P(-a, a), P(-a, 0)], 'fg') + (ent ? rej(0, -b, b) + rej(-a, 0, a) : '')
+      + K.t(...P(b / 2, -b / 2 - 0.7), sq(b), 'ta') + K.t(...P(-a / 2, a / 2 - 0.7), sq(a), 'tg'))
+      + K.f(fc, K.p([P(b, 0), P(0, a), P(a, a + b), P(a + b, b)], 'ff') + K.t(...P((a + b) / 2, (a + b) / 2 - 0.7), v.oc ? '?' : sq(Math.hypot(a, b)), 'tf'))
+      + K.p([P(0, 0), P(b, 0), P(0, a)], 'fc') + K.pl([P(0, 1), P(1, 1), P(1, 0)], 'lm') + K.pl([P(0, 0), P(b, 0), P(0, a), P(0, 0)]);
+  };
+  const K1 = x => String(Math.round(x * 100) / 100);
+  // Triángulo rectángulo con rótulos, a escala u.
+  const tri = (v, K) => {
+    const u = v.u ?? 11, A = [60, 185], B = [60 + v.b * u, 185], C = [60, 185 - v.a * u];
+    return K.p([A, B, C], 'fa') + K.pl([[60, 175], [70, 175], [70, 185]], 'lm') + K.t((A[0] + B[0]) / 2, 203, v.lb ?? K1(v.b), 'ta') + K.t(50, (A[1] + C[1]) / 2 + 5, v.la ?? K1(v.a), 'tg', 'end')
+      + K.t((B[0] + C[0]) / 2 + 10, (B[1] + C[1]) / 2 - 8, v.lc ?? K1(Math.hypot(v.a, v.b)), 'tf', 'start');
+  };
+  // Los dos especiales: medio cuadrado (m = 0) y medio equilátero (m = 1).
+  const esp = (v, K) => {
+    if (v.m < 0.5) {
+      const S = 130, x = 105, y = 30, Q = [[x, y], [x + S, y], [x + S, y + S], [x, y + S]];
+      return K.p(Q, 'fc') + K.f(v.f, K.p([Q[0], Q[2], Q[3]], 'fa') + K.l(...Q[0], ...Q[2], 'lf gr') + K.ang(Q[2], Q[3], Q[0], 28, '45°', 'fg', 's') + K.t(x + S / 2 + 12, y + S / 2 - 10, 'x√2', 'tf', 'start'))
+        + K.t(x + S / 2, y + S + 20, 'x') + K.t(x - 12, y + S / 2 + 5, 'x');
+    }
+    const A = [90, 175], B = [250, 175], C = [170, 175 - 138.6], M = [170, 175];
+    return K.p([A, B, C], 'fc') + K.f(v.f, K.p([A, M, C], 'fa') + K.l(...C, ...M, 'lf gr') + K.ang(A, M, C, 26, '60°', 'fg', 's') + K.ang(C, A, M, 34, '30°', 'fg', 's') + K.t(181, 120, 'x√3', 'tf', 'start') + K.t(128, 194, 'x'))
+      + K.t(118, 104, '2x', '', 'end') + K.t(222, 104, '2x', '', 'start');
+  };
+  const V35 = (v, K) => {
+    const u = v.u ?? 4.2, k = v.k, A = [90, 190], B = [90 + 4 * k * u, 190], C = [90, 190 - 3 * k * u];
+    return K.p([A, B, C], 'fa') + K.t((A[0] + B[0]) / 2, 207, `4 · ${k} = ${4 * k}`, 'ta') + K.t(82, (A[1] + C[1]) / 2 + 5, `3 · ${k} = ${3 * k}`, 'tg', 'end') + K.t((B[0] + C[0]) / 2 + 8, (B[1] + C[1]) / 2 - 6, `5 · ${k} = ${5 * k}`, 'tf', 'start');
+  };
+
+  xpLec('pu-ge-2', [
+    ['Tres cuadrados',
+      xpMira('dibujo', 'Empecemos por la idea: Pitágoras habla de **áreas de cuadrados**.', { dib: cuad, v: { a: 3, b: 4, f: 0, fc: 0, u: 8 }, alto: 225 }, [
+        ['Un triángulo rectángulo: sus dos lados cortos, los catetos, forman una esquina recta.', {}],
+        ['Sobre cada cateto armamos un cuadrado: uno tiene 9 casillas y el otro 16.', { f: 1 }, '$3^2 = 9 \\quad 4^2 = 16$'],
+        ['Sobre el lado largo, la hipotenusa, otro cuadrado. Su área es justo la de los dos juntos: 25.', { fc: 1 }, '$9 + 16 = 25$'],
+        ['Si un cuadrado tiene área 25, su lado mide 5: esa es la hipotenusa.', {}, '$c = \\sqrt{25} = 5$'],
+        ['Con otros catetos pasa lo mismo: 9 más 36 son 45, y la hipotenusa es la raíz de 45.', { a: 3, b: 6 }, '$c = \\sqrt{45} \\approx 6.7$'],
+      ], 'En un triángulo rectángulo, el cuadrado de la hipotenusa vale lo que los dos de los catetos: $c^2 = a^2 + b^2$.'),
+      xpHaz('dibujo', 'Arrastra las puntas de los catetos hasta que el cuadrado de la hipotenusa valga 113.', { dib: cuad, v: { a: 4, b: 4 }, alto: 260, cumple: v => v.a * v.a + v.b * v.b === 113, sol: { a: 7, b: 8 },
+        manijas: [{ k: 'a', min: 1, max: 12, paso: 1, r: 9, en: v => P(0, v.a), de: (x, y) => (OY - y) / U }, { k: 'b', min: 1, max: 12, paso: 1, r: 9, en: v => P(v.b, 0), de: x => (x - OX) / U }],
+        lee: v => `$${v.a}^2 + ${v.b}^2 = ${v.a * v.a} + ${v.b * v.b} = ${v.a * v.a + v.b * v.b}$`, dice: v => (v.a * v.a + v.b * v.b > 113 ? 'Te pasaste: el cuadrado grande es mayor que 113.' : 'Busca dos cuadrados que juntos hagan 113.') }, '$49 + 64 = 113$: catetos 7 y 8, y la hipotenusa mide $\\sqrt{113} \\approx 10.6$.')],
+    ['El lado que falta',
+      xpMira('dibujo', 'Segunda idea: si falta un **cateto**, los cuadrados se restan.', { dib: tri, v: { a: 20, b: 21, lc: '29', la: '?', u: 8 }, alto: 215 }, [
+        ['Aquí conocemos la hipotenusa, 29, y un cateto, 21. Falta el otro.', {}],
+        ['El cuadrado grande vale 841: es lo que suman los dos chicos. Uno de ellos es 441.', {}, '$29^2 = 841 \\quad 21^2 = 441$'],
+        ['Lo que sobra es el cuadrado que buscamos: 841 menos 441 son 400.', {}, '$841 - 441 = 400$'],
+        ['Su lado es la raíz de 400. El cateto mide 20.', { la: '20' }, '$a = \\sqrt{400} = 20$'],
+        ['Cuidado: no se restan los lados. 29 menos 21 son 8, y eso no es el cateto.', {}, '$29 - 21 \\neq 20$'],
+      ], 'Hipotenusa: se suman los cuadrados. Cateto: se restan. Al final, la raíz.'),
+      xpHaz('dibujo', 'La base mide 9 y la hipotenusa debe medir 15. Estira el otro cateto.', { dib: tri, v: { a: 5, b: 9, u: 12 }, metas: { a: 12 }, alto: 215,
+        manijas: [{ k: 'a', min: 2, max: 14, paso: 1, en: v => [60, 185 - v.a * 12], de: (x, y) => (185 - y) / 12 }],
+        lee: v => `$${v.a}^2 + 9^2 = ${v.a * v.a + 81} \\quad c \\approx ${K1(Math.hypot(v.a, 9))}$`, dice: v => `El cuadrado de la hipotenusa va en ${v.a * v.a + 81}. Debe ser 15 · 15 = 225.` }, '$225 - 81 = 144$ y $\\sqrt{144} = 12$.')],
+    ['Triángulos que conviene reconocer',
+      xpMira('dibujo', 'Tercera idea: hay triángulos que se **reconocen** y ahorran la cuenta.', { dib: (v, K) => (v.t < 0.5 ? V35({ k: Math.max(1, Math.round(v.k)), u: v.u }, K) : esp(v, K)), v: { t: 0, k: 1, m: 0, f: 0, u: 24 }, alto: 215 }, [
+        ['El 3, 4, 5 es el más famoso: 9 más 16 son 25.', {}, '$3^2 + 4^2 = 5^2$'],
+        ['Si todos los lados se multiplican por lo mismo, sigue siendo rectángulo: 18, 24 y 30.', { k: 6, u: 6 }, '$3k, \\; 4k, \\; 5k$'],
+        ['Otro: cortamos un cuadrado por su diagonal. Quedan dos ángulos de 45° y dos catetos iguales.', { t: 1, m: 0, f: 1 }, '$x^2 + x^2 = 2x^2$'],
+        ['La diagonal es siempre el lado por raíz de 2, un poco menos de una vez y media.', {}, '$d = x\\sqrt{2} \\approx 1.41x$'],
+        ['Y medio triángulo equilátero tiene ángulos de 30°, 60° y 90°: el cateto corto es la mitad de la hipotenusa.', { m: 1 }, '$x, \\; x\\sqrt{3}, \\; 2x$'],
+      ], 'Reconoce 3-4-5 y sus múltiplos, el medio cuadrado $x, x, x\\sqrt2$ y el medio equilátero $x, x\\sqrt3, 2x$.'),
+      xpHaz('dibujo', 'Agranda el triángulo 3-4-5 hasta que su hipotenusa mida 35.', { dib: V35, v: { k: 1 }, metas: { k: 7 }, alto: 260, manijas: [{ k: 'k', min: 1, max: 10, paso: 1, et: 'factor' }],
+        lee: v => `$${3 * v.k}, \\; ${4 * v.k}, \\; ${5 * v.k}$`, dice: v => `Todos los lados por ${v.k}: el triángulo no cambia de forma.` }, 'El factor es 7: lados 21, 28 y 35.')],
+    ['Ahora sí, un problema',
+      xpHaz('dibujo', 'Un parque rectangular mide 24 m por 18 m. Se cruza por la diagonal. Estira la cinta desde una esquina hasta la opuesta: ¿cuánto mide?', {
+        dib: (v, K) => { const A = [58, 190], n = v.c / 30; return K.r(58, 22, 224, 168, 'fc') + K.cota(58, 196, 282, 196, '24 m') + K.t(48, 110, '18 m', 'tm', 'end') + K.l(...A, 58 + n * 224, 190 - n * 168, 'la gr'); },
+        v: { c: 5 }, metas: { c: 30 }, alto: 225, manijas: [{ k: 'c', min: 2, max: 32, paso: 1, rot: v => String(v.c), en: v => [58 + v.c / 30 * 224, 190 - v.c / 30 * 168], de: (x, y) => ((x - 58) * 0.8 + (190 - y) * 0.6) / 280 * 30 }],
+        lee: v => `$${v.c}^2 = ${v.c * v.c} \\qquad 24^2 + 18^2 = 900$`, dice: v => (v.c < 30 ? 'La cinta aún no llega a la esquina.' : v.c > 30 ? 'La cinta se pasó de la esquina.' : 'Justo hasta la esquina: es un 3-4-5 por 6.') }, 'Es un 3-4-5 por 6: la diagonal mide 30 m, frente a 42 m por el borde.')],
+  ], 'Cuadrados que se suman para la hipotenusa, se restan para un cateto, y triángulos que se reconocen de una mirada.');
+}
