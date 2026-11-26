@@ -50,6 +50,28 @@ test('los textos de acierto, error y plan usan la tinta y no el color de relleno
   for (const [f, sel, k] of casos) assert.match(color(f, sel) || '', new RegExp(`var\\(--${k}-ink\\)`), `${f}: ${sel}`);
 });
 
+// ---------- Seguridad (threat model 2026-11-26) ----------
+test('el servidor local solo atiende a este computador y nunca entrega archivos de llaves', () => {
+  const src = read('tools/servir.js');
+  assert.match(src, /process\.argv\.includes\('--red'\) \? '0\.0\.0\.0' : '127\.0\.0\.1'/);
+  assert.match(src, /\.listen\(PORT, HOST,/);
+  assert.match(src, /startsWith\(ROOT \+ path\.sep\)/);
+  const secreto = new RegExp(src.match(/const SECRETO = \/(.+)\/i;/)[1], 'i');
+  for (const r of ['/gemini api keys.txt', '/.env', '/x/api-key.txt', '/secretos.json']) assert.ok(secreto.test(r), r);
+  for (const r of ['/index.html', '/js/paquetes/zuka-1.js', '/css/styles.css', '/js/clave.js']) assert.ok(!secreto.test(r), r);
+});
+
+test('los informes de amenazas no van al repositorio ni a la web', () => {
+  assert.match(read('.gitignore'), /^threat-model\/$/m);
+  assert.match(read('.vercelignore'), /^\/threat-model$/m);
+});
+
+test('las funciones viejas que cualquier sesión podía llamar se borran en una migración', () => {
+  const sql = fs.readdirSync(path.join(ROOT, 'supabase/migrations')).map(f => read('supabase/migrations/' + f)).join('\n');
+  for (const f of ['add_xp(integer)', 'merge_xp(integer)', 'delete_account()', 'reset_progress()', 'handle_new_user()']) assert.ok(sql.includes('drop function if exists public.' + f), f);
+  assert.match(sql, /drop trigger if exists on_auth_user_created on auth\.users/);
+});
+
 // ---------- 3. Service worker: lo del CDN no se pierde al cambiar de versión ----------
 function loadSW(guardado = {}, add = async () => {}) {
   const listeners = {}, borradas = [], pedidos = [];

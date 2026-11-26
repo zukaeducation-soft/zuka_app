@@ -6,4 +6,5 @@
 /tools
 /supabase
 /.impeccable
+/threat-model
 /*.md

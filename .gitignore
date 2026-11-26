@@ -287,6 +287,9 @@ media/voz/*/voz.json
 !media/voz/pu-cm-1/voz.json
 !media/voz/pu-cm-1/*.m4a
 
+# Informes de amenazas (skill threat-model): describen rutas de ataque, no se publican
+threat-model/
+
 # Llaves de API: nunca al repositorio
 gemini api keys.txt
 *api*key*.txt
