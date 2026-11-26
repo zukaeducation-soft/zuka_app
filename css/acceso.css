@@ -29,10 +29,10 @@
 .plan-cursos { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
 .plan-cursos li { display: grid; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 .plan-cursos .btn { justify-self: start; width: auto; }
-.plan-cursos .warn { color: var(--fire); }
+.plan-cursos .warn { color: var(--fire-ink); }
 
 /* horas de asesoría */
-.tu-ok { color: var(--ok) !important; font-weight: 700; }
+.tu-ok { color: var(--ok-ink) !important; font-weight: 700; }
 
 /* aviso dentro del curso */
 .acc-aviso { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; margin-top: 14px; padding: 14px 16px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--gold) 55%, var(--line)); background: color-mix(in srgb, var(--gold) 9%, var(--card)); }

@@ -17,7 +17,7 @@ function loadSW({ fetch, match, timer = setTimeout } = {}) {
   const cached = [];
   const cache = {
     addAll: async list => cached.push(...list),
-    add: async url => cached.push(url),
+    add: async url => cached.push(url), match: async () => undefined,
     put: async () => {},
   };
   const self = { addEventListener: (t, fn) => { listeners[t] = fn; }, location: { origin: 'http://localhost' } };
@@ -55,7 +55,7 @@ test('install guarda KaTeX y hls.js para que las fórmulas y el reproductor ande
 
 test('install no falla si un CDN no responde', async () => {
   const { listeners, ctx } = loadSW();
-  ctx.caches.open = async () => ({ addAll: async () => {}, add: async () => { throw new Error('CDN caído'); } });
+  ctx.caches.open = async () => ({ addAll: async () => {}, match: async () => undefined, add: async () => { throw new Error('CDN caído'); } });
   let pending;
   listeners.install({ waitUntil: p => { pending = p; } });
   await assert.doesNotReject(pending);
@@ -157,7 +157,7 @@ test('la red sigue actualizando la copia aunque responda la caché', async () =>
 
 test('install no se queda colgado si un CDN nunca contesta', async () => {
   const { listeners, ctx } = loadSW({ timer: (fn, ms) => setTimeout(fn, ms > 1000 ? 5 : ms) });
-  ctx.caches.open = async () => ({ addAll: async () => {}, add: () => new Promise(() => {}) });
+  ctx.caches.open = async () => ({ addAll: async () => {}, match: async () => undefined, add: () => new Promise(() => {}) });
   let pending;
   listeners.install({ waitUntil: p => { pending = p; } });
   await pending;   // si no hubiera plazo, esta prueba nunca terminaría

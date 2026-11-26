@@ -8878,7 +8878,7 @@ function loadHls() {
     s.integrity = 'sha384-w6Gb3fXHb5e1LUYa/hYA5Q41bEDglN5ZPCG7Jvnoo8/X90oGnlPqBlBJCe38mEMm';   // la misma copia verificada que carga index.html
     s.crossOrigin = 'anonymous';
     s.onload = () => resolve(window.Hls);
-    s.onerror = reject;
+    s.onerror = e => { hlsLib = null; reject(e); };   // sin red: la próxima vez se pide de nuevo
     document.head.appendChild(s);
   });
   return hlsLib;
@@ -16130,6 +16130,32 @@ function estadoRecupera(uid) {
     Object.assign(S, estadoMezcla(estadoToma(S), x.estado));
     localStorage.removeItem(`zuka-pend-${uid}`); save();
   } catch (e) { /* sin copia */ }
+}
+// Otra pestaña de la misma cuenta guardó (`otro` es lo que dejó en el disco): se junta con lo de esta, para que el
+// próximo save() de aquí no borre lo que se hizo allá. Pura, salvo que cambia `s`; false si no había nada que juntar.
+function estadoJunta(s, otro) {
+  if (!otro || ((otro.cuenta || {}).uid || '') !== ((s.cuenta || {}).uid || '')) return false;
+  const ra = s.reinicio || 0, rb = otro.reinicio || 0;
+  // Reinició allá: lo que allá ya no existe (gimnasio, última lección…) tampoco se queda aquí.
+  if (rb > ra) { s.done = { ...otro.done }; s.secs = { ...otro.secs }; ESTADO_CAMPOS.forEach(k => { if (otro[k] === undefined) delete s[k]; }); }
+  else if (rb === ra) {
+    s.done = Object.assign(s.done || {}, otro.done);
+    s.secs = s.secs || {};
+    Object.entries(otro.secs || {}).forEach(([k, n]) => { s.secs[k] = Math.max(s.secs[k] || 0, n); });
+  }
+  Object.assign(s, estadoMezcla(estadoToma(s), otro));
+  return true;
+}
+if (typeof window !== 'undefined' && window.addEventListener) {
+  window.addEventListener('storage', e => {
+    if (e.key !== KEY || !e.newValue) return;
+    try {
+      const ans = S.answered || 0, cor = S.correct || 0;
+      estadoJunta(S, JSON.parse(e.newValue));
+      // Lo respondido en la otra pestaña ya lo reporta ella: aquí no cuenta como uso de esta (igual que en estadoSync).
+      if (typeof uso !== 'undefined' && uso.ans != null) { uso.ans += (S.answered || 0) - ans; uso.ok += (S.correct || 0) - cor; }
+    } catch (err) { /* copia ilegible: se deja lo de esta pestaña */ }
+  });
 }
 // Otra cuenta entra en este dispositivo: lo ganado por la anterior no se le pasa.
 function estadoLimpia() {

@@ -248,7 +248,7 @@ function loadHls() {
     s.integrity = 'sha384-w6Gb3fXHb5e1LUYa/hYA5Q41bEDglN5ZPCG7Jvnoo8/X90oGnlPqBlBJCe38mEMm';   // la misma copia verificada que carga index.html
     s.crossOrigin = 'anonymous';
     s.onload = () => resolve(window.Hls);
-    s.onerror = reject;
+    s.onerror = e => { hlsLib = null; reject(e); };   // sin red: la próxima vez se pide de nuevo
     document.head.appendChild(s);
   });
   return hlsLib;

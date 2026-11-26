@@ -12,14 +12,14 @@ const P5_URL = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js?sri
 function installSW() {
   const listeners = {};
   const cached = [];
-  const cache = { addAll: async list => cached.push(...list), add: async url => cached.push(url) };
+  const cache = { addAll: async list => cached.push(...list), add: async url => cached.push(url), match: async () => undefined };
   let skipped = 0;
   const self = {
     addEventListener: (type, fn) => { listeners[type] = fn; },
     skipWaiting: async () => { skipped++; },
     location: { origin: 'http://localhost' },
   };
-  const ctx = vm.createContext({ self, caches: { open: async () => cache }, URL, console });
+  const ctx = vm.createContext({ self, caches: { open: async () => cache, match: async () => undefined }, URL, console });
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8'), ctx, { filename: 'sw.js' });
   return { listeners, cached, skipped: () => skipped };
 }

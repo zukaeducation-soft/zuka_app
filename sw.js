@@ -4,9 +4,11 @@
 // js/update.js, o al volver a abrir la app). En localhost: red primero, para ver los cambios al programar
 // (registrar «sw.js?cache» prueba ahí el modo de producción). Recursos externos (KaTeX, fuentes): caché primero.
 // La narración (Bunny Storage, o media/voz de respaldo) va en su propia caché, que no se borra al cambiar de versión.
+// Las librerías de CDN también (CDN_CACHE): sus direcciones llevan la versión, así que no cambian, y si el CDN falla
+// justo al instalar una versión nueva la app no se queda sin juegos ni fórmulas.
 // Spec: docs/superpowers/specs/2026-11-24-configuracion-rapida-segura.md
 
-const VERSION = 'zuka-v409';
+const VERSION = 'zuka-v410';
 // Los scripts van en paquetes (js/paquetes, los arma tools/empaquetar.js con la lista de index.html): guardar cuatro
 // archivos en vez de 750 hace que la app se instale y abra mucho más rápido.
 const SHELL = [
@@ -19,6 +21,7 @@ const SHELL = [
 // Librerías de CDN (minijuegos, fórmulas, reproductor) se precachean aparte: si el CDN falla no
 // bloquean la instalación. Sin esto la primera visita no las guarda (el SW aún no controla la página).
 const VOZ = 'zuka-voz-v2';
+const CDN_CACHE = 'zuka-cdn-v1';
 const VOZ_CDN = 'https://zukavoz.b-cdn.net';   // la misma dirección de EXPLORA_VOZ (js/explora.js)
 const DEV = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|$)/.test(self.location.origin) && !/[?&]cache\b/.test(self.location.search || '');
 // «?sri»: dirección distinta de la que guardaron las versiones viejas, que pudieron guardar una copia opaca (sin CORS)
@@ -42,9 +45,10 @@ const CDN_TIMEOUT = 8000;
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VERSION)
-    .then(c => c.addAll(SHELL).then(() => Promise.all(CDN.map(u =>
-      Promise.race([c.add(u), wait(CDN_TIMEOUT)]).catch(() => {}))))));
+  // Del CDN solo se pide lo que falta: lo guardado sirve, también lo que dejó una versión anterior en su propia caché.
+  e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => caches.open(CDN_CACHE)).then(c => Promise.all(CDN.map(u =>
+    Promise.resolve().then(() => c.match(u)).then(hit => hit || caches.match(u).then(vieja => (vieja && vieja.type !== 'opaque' ? c.put(u, vieja)
+      : Promise.race([c.add(u), wait(CDN_TIMEOUT)])))).catch(() => {})))));
 });
 
 // Páginas que se abrieron desde la caché (por red lenta): sus scripts también salen de la caché,
@@ -58,7 +62,7 @@ self.addEventListener('message', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys()
-    .then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== VOZ).map(k => caches.delete(k))))
+    .then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== VOZ && k !== CDN_CACHE).map(k => caches.delete(k))))
     .then(() => self.clients.claim()));
 });
 
@@ -144,7 +148,10 @@ self.addEventListener('fetch', e => {
   }
 
   e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(res => {
-    if (res.ok || res.type === 'opaque') { const copy = res.clone(); caches.open(VERSION).then(c => c.put(req, copy)); }
+    // En la caché del CDN, que no se vacía sola, solo entran copias comprobables (no las opacas). Si la lista CDN cambia
+    // de versiones, subir CDN_CACHE para soltar las viejas.
+    const cdn = CDN.includes(req.url);
+    if (res.ok || (res.type === 'opaque' && !cdn)) { const copy = res.clone(); caches.open(cdn ? CDN_CACHE : VERSION).then(c => c.put(req, copy)); }
     return res;
   })));
 });
