@@ -82,34 +82,34 @@
 
   xpLec('icf-ma-datos-3', [
     ['El eje que engaña',
-      xpMira('dibujo', 'Empecemos por la idea: si el eje **no empieza en cero**, el dibujo exagera.', { dib: barras, v: { vals: [52, 54], lo: 50, hi: 55, st: 1, rot: ['A: 52', 'B: 54'], on: 1, nota: '' }, alto: 195 }, [
-        ['B parece el doble de A.', {}],
-        ['Pero mira el eje: empieza en 50.', { nota: 'desde 50' }],
-        ['Desde cero, casi no hay diferencia.', { lo: 0, hi: 60, st: 20, nota: 'desde 0' }],
-        ['En números: 2 más que 52, cerca del 4 %.', { nota: '+4 %' }, '$\\tfrac{2}{52} \\approx 4\\,\\%$'],
-        ['Se comparan los números, no las alturas.', { nota: '' }],
+      xpMira('dibujo', 'Una gráfica también puede engañar: si el eje **no empieza en cero**, la diferencia se ve mucho más grande de lo que es.', { dib: barras, v: { vals: [52, 54], lo: 50, hi: 55, st: 1, rot: ['A: 52', 'B: 54'], on: 1, nota: '' }, alto: 195 }, [
+        ['Mira estas dos barras: la segunda parece el doble de la primera.', {}],
+        ['Pero fíjate dónde arranca el eje: en 50, no en cero.', { nota: 'desde 50' }],
+        ['Si lo dibujamos desde cero, las dos barras casi miden lo mismo.', { lo: 0, hi: 60, st: 20, nota: 'desde 0' }],
+        ['Con los números se ve claro: B tiene apenas 2 más que 52, cerca de un 4 %.', { nota: '+4 %' }, '$\\tfrac{2}{52} \\approx 4\\,\\%$'],
+        ['Así que no te dejes llevar por las alturas: fíjate en los números.', { nota: '' }],
       ], 'Antes de comparar barras, mira dónde empieza el eje.'),
-      xpHaz('dibujo', 'A vendió 30 y B 36. Baja el piso del eje hasta que el dibujo no engañe.', { dib: (v, K) => barras({ vals: [30, 36], lo: v.p, hi: 40, st: (40 - v.p) / 4, rot: ['A: 30', 'B: 36'], on: 1 }, K), v: { p: 24 }, metas: { p: 0 }, alto: 240, manijas: [{ k: 'p', min: 0, max: 24, paso: 4, et: 'piso del eje' }],
+      xpHaz('dibujo', 'La tienda A vendió 30 y la B, 36. Baja el piso del eje hasta que el dibujo deje de engañar.', { dib: (v, K) => barras({ vals: [30, 36], lo: v.p, hi: 40, st: (40 - v.p) / 4, rot: ['A: 30', 'B: 36'], on: 1 }, K), v: { p: 24 }, metas: { p: 0 }, alto: 240, manijas: [{ k: 'p', min: 0, max: 24, paso: 4, et: 'piso del eje' }],
         lee: v => `$\\text{B parece } ${N((36 - v.p) / (30 - v.p))} \\text{ veces A}$`, dice: v => (v.p ? 'Todavía se corta la parte de abajo de las barras.' : 'Ahora se ven completas.') }, 'Desde 0, B es 1.2 veces A: un 20 % más.')],
     ['Grupos de distinto tamaño',
-      xpMira('dibujo', 'Segunda idea: para comparar grupos distintos, usa **porcentajes**.', { dib: barras, v: { vals: [30, 40], hi: 100, st: 25, rot: ['A: 30', 'B: 40'], on: -1, nota: '' }, alto: 195 }, [
-        ['En A aprobaron 30 y en B, 40. ¿Gana B?', {}],
-        ['A tiene 50 estudiantes; B tiene 80.', { vals: [50, 80], rot: ['A: 50', 'B: 80'] }],
-        ['En A aprobó el 60 %.', { vals: [60, 80], rot: ['A: 60 %', 'B: 80'], on: 0 }, '$\\tfrac{30}{50} = 60\\,\\%$'],
-        ['En B aprobó el 50 %. Gana A.', { vals: [60, 50], rot: ['A: 60 %', 'B: 50 %'], on: 1 }, '$\\tfrac{40}{80} = 50\\,\\%$'],
-        ['Más personas no es mayor proporción.', { on: -1 }],
+      xpMira('dibujo', 'Cuando los grupos tienen distinto tamaño, contar no basta: hay que comparar **porcentajes**.', { dib: barras, v: { vals: [30, 40], hi: 100, st: 25, rot: ['A: 30', 'B: 40'], on: -1, nota: '' }, alto: 195 }, [
+        ['En el curso A aprobaron 30 y en el B, 40. A primera vista, parece que gana el segundo.', {}],
+        ['Pero el curso A tiene 50 estudiantes, y el B tiene 80.', { vals: [50, 80], rot: ['A: 50', 'B: 80'] }],
+        ['De los 50 de A aprobaron 30, o sea, el 60 %.', { vals: [60, 80], rot: ['A: 60 %', 'B: 80'], on: 0 }, '$\\tfrac{30}{50} = 60\\,\\%$'],
+        ['En el otro curso aprobaron 40 de 80, que es el 50 %. Al final gana el curso más pequeño.', { vals: [60, 50], rot: ['A: 60 %', 'B: 50 %'], on: 1 }, '$\\tfrac{40}{80} = 50\\,\\%$'],
+        ['Tener más personas no significa tener una mayor proporción.', { on: -1 }],
       ], 'Cada cantidad se divide entre el total de su propio grupo.'),
-      xpHaz('fichas', 'Ganaron 12 de 20 en el equipo rojo y 15 de 30 en el azul. Pon cada porcentaje.', { slots: [{ x: 110, y: 46, w: 90, et: 'rojo' }, { x: 230, y: 46, w: 90, et: 'azul' }], fichas: ['60 %', '50 %', '12 %', '15 %', '24 %'], meta: ['60 %', '50 %'], alto: 96, pista: 'Divide 12 entre 20 y 15 entre 30.' }, 'El rojo tiene menos triunfos, pero mayor proporción.')],
+      xpHaz('fichas', 'El equipo rojo ganó 12 de sus 20 partidos y el azul, 15 de 30. Pon el porcentaje de cada uno.', { slots: [{ x: 110, y: 46, w: 90, et: 'rojo' }, { x: 230, y: 46, w: 90, et: 'azul' }], fichas: ['60 %', '50 %', '12 %', '15 %', '24 %'], meta: ['60 %', '50 %'], alto: 96, pista: 'Divide 12 entre 20 y 15 entre 30.' }, 'El rojo tiene menos triunfos, pero mayor proporción.')],
     ['La muestra',
-      xpMira('hoja', 'Tercera idea: una **muestra** sirve si se parece a todos.', { paras: [['Se quiere saber cuánto deporte hace la gente de un pueblo.'], ['Preguntar en el gimnasio.'], ['Sortear personas de todos los barrios.'], ['Preguntar a quien quiera llamar.']] }, [
-        ['La población es todo el pueblo.', { luz: [0] }],
-        ['En el gimnasio todos hacen deporte: sale cargada.', { luz: [1], nota: { 1: 'sesgada' } }],
-        ['Con un sorteo, cualquiera puede salir.', { luz: [2], nota: { 2: 'sirve' } }],
-        ['Solo llaman los interesados: también sale cargada.', { luz: [3], nota: { 3: 'sesgada' } }],
-        ['Y la conclusión habla solo de quienes podían salir.', { luz: [2] }],
+      xpMira('hoja', 'Casi nunca se le pregunta a todo el mundo: se toma una **muestra**, y esa muestra sirve si se parece a todos.', { paras: [['Se quiere saber cuánto deporte hace la gente de un pueblo.'], ['Preguntar en el gimnasio.'], ['Sortear personas de todos los barrios.'], ['Preguntar a quien quiera llamar.']] }, [
+        ['Aquí la población, es decir, todos los que nos interesan, es el pueblo entero.', { luz: [0] }],
+        ['Si preguntamos en el gimnasio, todos hacen deporte. La respuesta sale cargada.', { luz: [1], nota: { 1: 'sesgada' } }],
+        ['Con un sorteo en todos los barrios, cualquiera del pueblo puede salir. Esa sí sirve.', { luz: [2], nota: { 2: 'sirve' } }],
+        ['Y cuando responde solo quien quiere llamar, llaman los interesados, y otra vez se carga.', { luz: [3], nota: { 3: 'sesgada' } }],
+        ['Y recuerda: lo que concluyas solo vale para el grupo del que salió la muestra.', { luz: [2] }],
       ], 'Sirve si cualquiera de la población podía salir.'),
-      xpHaz('hoja', '¿Qué música prefieren los estudiantes de un colegio? Subraya la muestra que sirve.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Los de la banda de rock.'], ['Cinco de cada curso, por sorteo.'], ['Los que fueron al concierto.']], pista: 'En esa algunos estudiantes nunca podrían salir.' }, 'Con sorteo en cada curso, todos pueden salir.')],
+      xpHaz('hoja', 'Un colegio quiere saber qué música prefieren sus estudiantes. Subraya la muestra que sirve.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Los de la banda de rock.'], ['Cinco de cada curso, por sorteo.'], ['Los que fueron al concierto.']], pista: 'En esa algunos estudiantes nunca podrían salir.' }, 'Con sorteo en cada curso, todos pueden salir.')],
     ['Ahora sí, un problema',
-      xpHaz('hoja', 'De 100 clientes de una panadería, 70 comen pan a diario. **Tacha** las dos conclusiones que no valen.', { modo: 'tacha', letras: ['A', 'B', 'C'], meta: [0, 2], paras: [['El 70 % del país come pan a diario.'], ['30 de los encuestados no comen pan a diario.'], ['Comen pan porque es barato.']], pista: 'Alguna de las tachadas sale directo de los números.' }, 'Los clientes no son el país, y nadie preguntó por qué.')],
+      xpHaz('hoja', 'Una panadería encuestó a 100 de sus clientes, y 70 dijeron que comen pan a diario. **Tacha** las dos conclusiones que no valen.', { modo: 'tacha', letras: ['A', 'B', 'C'], meta: [0, 2], paras: [['El 70 % del país come pan a diario.'], ['30 de los encuestados no comen pan a diario.'], ['Comen pan porque es barato.']], pista: 'Alguna de las tachadas sale directo de los números.' }, 'Los clientes no son el país, y nadie preguntó por qué.')],
   ], 'Eje desde cero, porcentajes para comparar y muestras donde cualquiera pueda salir.');
 }
