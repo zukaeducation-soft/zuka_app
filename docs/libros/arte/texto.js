@@ -5,7 +5,8 @@ const MAT = { '×': R`\times`, '÷': R`\div`, '∧': R`\land`, '∨': R`\lor`, '
   '²': '{}^2', '³': '{}^3', '½': R`\tfrac12`, '·': R`\cdot`, '⋆': R`\star`, '⊕': R`\oplus`, '⊙': R`\odot`, '⊗': R`\otimes`, '⋄': R`\diamond`, '△': R`\triangle`,
   '★': R`\star`, '✱': R`\ast`, '■': R`\blacksquare`, '▲': R`\blacktriangle`, '●': R`\bullet`, '∞': R`\infty`, '□': R`\square`, '○': R`\circ`,
   '←': R`\leftarrow`, '↑': R`\uparrow`, '↓': R`\downarrow`, 'ℓ': R`\ell`, 'α': R`\alpha`, 'β': R`\beta`, 'θ': R`\theta`,
-  '₁': '{}_1', '₂': '{}_2', '₃': '{}_3', 'ⁿ': '{}^n', '⁴': '{}^4', '⁵': '{}^5', '⁰': '{}^0', '¹': '{}^1', '⁶': '{}^6', '⁷': '{}^7', '⁸': '{}^8', '⁹': '{}^9' };
+  '₁': '{}_1', '₂': '{}_2', '₃': '{}_3', 'ⁿ': '{}^n', '⁴': '{}^4', '⁵': '{}^5', '⁰': '{}^0', '¹': '{}^1', '⁶': '{}^6', '⁷': '{}^7', '⁸': '{}^8', '⁹': '{}^9', 'Ω': R`\Omega`,
+  '⁺': '{}^+', '⁻': '{}^-', '₄': '{}_4', '₀': '{}_0', 'ˣ': '{}^x' };
 const DING = { '◆': '117', '✗': '55', '✓': '51' };
 const plain = s => s.replace(/\\%/g, '%').replace(/%/g, R`\%`).replace(/&/g, R`\&`).replace(/#/g, R`\#`).replace(/_/g, R`\_`).replace(/\$/g, () => R`\$`)
   .replace(/[^\x00-\x7F]/g, c => (c === '°' ? R`\textdegree{}` : MAT[c] ? R`\ensuremath{` + MAT[c] + '}' : DING[c] ? R`\ding{` + DING[c] + '}' : c));

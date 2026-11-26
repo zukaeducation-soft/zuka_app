@@ -96,7 +96,7 @@
 \newcommand{\zuka@poneandamio}{\ifcsname zand@\zuka@lid\endcsname\csname zand@\zuka@lid\endcsname
   \expandafter\global\expandafter\let\csname zand@\zuka@lid\endcsname\relax\fi}
 \let\zuka@notaappvieja\notaapp
-\renewcommand{\notaapp}[1]{\ifnum\zuka@num<9 \zuka@poneruta
+\renewcommand{\notaapp}[1]{\ifnum\zuka@num<10 \zuka@poneruta
     {\sffamily\footnotesize\color{zmute}\textbf{\color{zolive}En la app:} la misma ruta, para construirla con el dedo, y después los ejercicios.\par}%
   \else\zuka@notaappvieja{#1}\fi}
 \InputIfFileExists{explora-rl}{}{}
@@ -202,7 +202,7 @@
   \vspace{7mm}
   \noindent{\sffamily\fontsize{14}{17}\selectfont\fontseries{sb}\selectfont\color{zink}Cómo vas a trabajar}\par\vspace{2pt}
   {\color{zline}\rule{\linewidth}{.5pt}}\par\vspace{2pt}
-  {\small\ifnum\zuka@num<9
+  {\small\ifnum\zuka@num<10
     Cada lección es una \textbf{ruta}: los mismos pasos que construyes en la app. En cada paso \textbf{primero entiendes la
     idea} y \textbf{después la usas}; cuadro por cuadro y con el mismo dibujo para marcar.
     Siguen los ejemplos resueltos con dibujos, el reto, «Lo que construiste» y el taller. Las soluciones dibujadas y las

@@ -177,7 +177,16 @@ def arbol():
 
 
 if __name__ == '__main__':
-    todo = sys.argv[1:] or ['1', '2', '3', '4']
+    todo = sys.argv[1:] or ['1', '2', '3', '4', '5', '6', '7', '8', '9']
     for n, f in (('1', mandelbrot), ('2', clifford), ('3', libro), ('4', arbol)):
         if n in todo:
+            save(f(), n)
+    # Preicfes (5 a 9): los mismos motivos en el fucsia del curso (papel, fucsia, morado, azul tinta)
+    STOPS[:] = [(0.00, (250, 250, 244)), (0.18, (247, 222, 250)), (0.38, (232, 121, 249)), (0.58, (162, 28, 175)),
+                (0.78, (76, 29, 149)), (1.00, (18, 42, 92))]
+    OLIVE, LIME, TEAL = (162, 28, 175), (232, 121, 249), (76, 29, 149)
+    for n, f in (('5', mandelbrot), ('6', libro), ('7', arbol), ('8', clifford), ('9', libro)):
+        if n in todo:
+            if n == '9':
+                LETRAS = 'abcdefghijklmnopqrstuvwxyz?!;,:\'"'
             save(f(), n)

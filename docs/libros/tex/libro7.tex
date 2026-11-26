@@ -1,0 +1,19 @@
+% Zuka Preicfes Saber 11 · Libro 3 de 5 · Sociales y Ciudadanas (spec 2026-11-26-libros-preicfes)
+% Compilar: sh docs/libros/build.sh 7   (el contenido lo genera docs/libros/arte/icfes.js)
+\documentclass[11pt,twoside,openany]{book}
+\usepackage{zuka-libro}
+\input{zuka-icfes}
+\libro{7}{Sociales y Ciudadanas}{Pensar el país y el mundo}{Constitución y Estado, participación, perspectivas, fuentes, problemas complejos, historia de Colombia y del mundo, territorio y economía.}{\InputIfFileExists{salida/icf/mundos-7}{}{}}
+\begin{document}
+\frontmatter
+\portada
+\creditos
+\input{comun-icfes}
+\indice
+\mainmatter
+\input{salida/icf/partes-7}
+\backmatter
+\solucionesdibujadas
+\claves
+\contraportada
+\end{document}
