@@ -29,7 +29,7 @@ await pg.setContent(`<!doctype html><html data-theme="light"><head><meta charset
 <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=block" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script><link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/lectura.css"><link rel="stylesheet" href="css/explora.css"><style>
-:root[data-theme="light"]{--c:#a3e635;--c-on:#0b1424;--c-ink:#1b5aa8;--ink:#0b1424;--mute:#56637a;--line:#c3ccd9;--card:#fff;--card2:#f1f5fa;--bg:#fff;--bg2:#fff;--ok:#128a52;--fire:#d9541e;--gold:#b7791f;--bad:#c92a45;--halo:0%;--font:'Fira Sans',sans-serif;--display:'Fira Sans',sans-serif}
+:root[data-theme="light"]{--c:${+N > 4 ? '#e879f9' : '#a3e635'};--c-on:#0b1424;--c-ink:#1b5aa8;--ink:#0b1424;--mute:#56637a;--line:#c3ccd9;--card:#fff;--card2:#f1f5fa;--bg:#fff;--bg2:#fff;--ok:#128a52;--fire:#d9541e;--gold:#b7791f;--bad:#c92a45;--halo:0%;--font:'Fira Sans',sans-serif;--display:'Fira Sans',sans-serif}
 *{transition:none!important;animation:none!important;-webkit-print-color-adjust:exact;box-shadow:none!important;filter:none!important}
 html,body{background:#fff!important;overflow:visible!important;height:auto!important;min-height:0!important;display:block!important;padding:0!important;margin:0!important;position:static!important;width:auto!important;max-width:none!important}
 body>*{display:none} body>.pn{display:block}
@@ -39,7 +39,8 @@ body>*{display:none} body>.pn{display:block}
 .pn .explora{display:block;height:auto;min-height:0;overflow:visible;width:340px;font-family:var(--font);color:var(--ink)}
 .pn .xp-stage{margin:0;min-height:0;width:340px}
 </style></head><body></body></html>`);
-const orden = [...js('index.html').matchAll(/src="(js\/[^"]*)"/g)].map(m => m[1]).filter(f => /explora(-numeros|-escenas|-mate|-lectura)?\.js$|\/(lectura|hoja)-kit\.js$/.test(f));
+// todas las escenas de Explora (y sus kits), en el orden de la app
+const orden = [...js('index.html').matchAll(/src="(js\/[^"]*)"/g)].map(m => m[1]).filter(f => (/\/explora[^/]*\.js$/.test(f) && !/voces/.test(f)) || /\/(lectura|hoja)-kit\.js$/.test(f));
 const tex = (s => s.slice(s.indexOf('function tex('), s.indexOf('const svg = ')))(js('js/ui.js'));
 const errs = await pg.evaluate(({ src, ejs, tex }) => {
   const out = [], add = t => { const s = document.createElement('script'); s.textContent = t; document.head.append(s); };
@@ -49,7 +50,7 @@ const errs = await pg.evaluate(({ src, ejs, tex }) => {
   add(`window.__X=EXPLORA;window.__D=XPD;window.__P=XP;window.xpTween=(a,b,m,f,d)=>{f(b);d&&d();return()=>{}};window.xpStill=()=>true;
    for(const k in XS) if(typeof XS[k]==='function') XS[k]=()=>{};window.xpTick=()=>{};`);
   return out;
-}, { tex, src: [...orden, ...pu].map(f => `;${js(f)}\n`), ejs });
+}, { tex, src: [...orden, ...pu.filter(f => !orden.includes(f))].map(f => `;${js(f)}\n`), ejs });
 if (errs.length) console.log(errs.slice(0, 5));
 
 await pg.emulateMedia({ media: 'print', reducedMotion: 'reduce' });

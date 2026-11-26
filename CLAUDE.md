@@ -432,6 +432,7 @@ lima, líneas finas, logo nuevo) y, en razonamiento, la **ruta de la app**: `art
 `js/explora-pu-*.js` la ruta y «Lo que construiste» de las 57 lecciones. El mundo 1 ya va por pasos (`\capitulo`, `	urno`, `rmar`);
 faltan los mundos 2 a 16. Lo que sigue describe la base; donde se contradiga, manda la spec nueva.
 
+**Libros del Preicfes Saber 11** (2026-11-26, spec `2026-11-26-libros-preicfes`): uno por componente (`libro5.tex` a `libro9.tex`, «Libro 1 de 5» a «5 de 5»), generados de los datos del curso por `arte/icfes.js` (capa `tex/zuka-icfes.tex`, fucsia); `sh docs/libros/build.sh 5 6 7 8 9` deja `docs/libros/pdf/Zuka_Preicfes_Libro_N.pdf`; entrega en `Downloads/Zuka_Libros_Preicfes`.
 **Versión que se publica en la app: libros dibujados** (2026-11-25, spec `2026-11-25-libros-dibujados`): cada explicación de Explora
 sale cuadro por cuadro en vectorial (`arte/escenas.mjs` + `arte/pasos.js`, capa `tex/zuka-dibujo.tex`), «Tu turno» con su dibujo,
 ejemplos resueltos con dibujos en `arte/ejemplos/*.js` y «Soluciones dibujadas» al final; `SIN_ESCENAS=1` compila sin redibujar.

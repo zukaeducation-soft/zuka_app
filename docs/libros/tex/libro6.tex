@@ -1,0 +1,19 @@
+% Zuka Preicfes Saber 11 · Libro 2 de 5 · Lectura Crítica (spec 2026-11-26-libros-preicfes)
+% Compilar: sh docs/libros/build.sh 6   (el contenido lo genera docs/libros/arte/icfes.js)
+\documentclass[11pt,twoside,openany]{book}
+\usepackage{zuka-libro}
+\input{zuka-icfes}
+\libro{6}{Lectura Crítica}{Leer, entender y evaluar}{Lo que dice un texto, cómo está armado, sus tesis y argumentos; textos literarios, filosóficos y discontinuos, y cómo evaluar y comparar textos.}{\InputIfFileExists{salida/icf/mundos-6}{}{}}
+\begin{document}
+\frontmatter
+\portada
+\creditos
+\input{comun-icfes}
+\indice
+\mainmatter
+\input{salida/icf/partes-6}
+\backmatter
+\solucionesdibujadas
+\claves
+\contraportada
+\end{document}

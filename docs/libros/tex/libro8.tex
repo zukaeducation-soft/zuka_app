@@ -1,0 +1,19 @@
+% Zuka Preicfes Saber 11 · Libro 4 de 5 · Ciencias Naturales (spec 2026-11-26-libros-preicfes)
+% Compilar: sh docs/libros/build.sh 8   (el contenido lo genera docs/libros/arte/icfes.js)
+\documentclass[11pt,twoside,openany]{book}
+\usepackage{zuka-libro}
+\input{zuka-icfes}
+\libro{8}{Ciencias Naturales}{Mirar como científico}{Indagación, célula, movimiento, materia, ecosistemas, energía, átomo, herencia, reacciones, ondas, gases, electricidad, ciencia y sociedad.}{\InputIfFileExists{salida/icf/mundos-8}{}{}}
+\begin{document}
+\frontmatter
+\portada
+\creditos
+\input{comun-icfes}
+\indice
+\mainmatter
+\input{salida/icf/partes-8}
+\backmatter
+\solucionesdibujadas
+\claves
+\contraportada
+\end{document}

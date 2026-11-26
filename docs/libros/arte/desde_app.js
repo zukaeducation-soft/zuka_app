@@ -33,14 +33,18 @@ const logo = `% GENERADO por docs/libros/arte/desde_app.js: no editar a mano.
 fs.writeFileSync(path.join(TEX, 'zuka-logo.tex'), logo);
 
 // ---- rutas e ideas ----
-const files = fs.readdirSync(path.join(ROOT, 'js')).filter(f => /^explora-pu-/.test(f)).map(f => 'js/' + f);
-const X = get(loadScripts(['js/explora.js', 'js/explora-numeros.js', 'js/explora-escenas.js', ...files]), 'EXPLORA');
+// todas las explicaciones de la app, en su orden (Preuniversitario y Preicfes)
+const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const exp = [...html.matchAll(/src="(js\/explora[^"]*)"/g)].map(m => m[1]).filter(f => !/voces/.test(f));
+const pu = fs.readdirSync(path.join(ROOT, 'js')).filter(f => /^explora-pu-/.test(f)).map(f => 'js/' + f).filter(f => !exp.includes(f));
+const X = get(loadScripts([...exp, ...pu]), 'EXPLORA');
 const { tex } = require('./texto');
-const out = ['% GENERADO por docs/libros/arte/desde_app.js desde js/explora-pu-*.js: no editar a mano.'];
-for (const id of Object.keys(X)) {
+const ids = Object.keys(X).filter(i => /^(pu|icf)-/.test(i));
+const out = ['% GENERADO por docs/libros/arte/desde_app.js desde js/explora-*.js: no editar a mano.'];
+for (const id of ids) {
   const l = X[id];
   out.push(`\\rutade{${id}}{${l.caps.map(c => `{${tex(c)}}`).join(',')}}`);
   out.push(`\\andamiode{${id}}{${l.pasos.filter(p => p.tipo === 'muestra').map(p => `\\item ${tex(p.idea)}`).join('\n  ')}}`);
 }
 fs.writeFileSync(path.join(TEX, 'explora-rl.tex'), out.join('\n') + '\n');
-console.log(`zuka-logo.tex y explora-rl.tex (${Object.keys(X).length} lecciones)`);
+console.log(`zuka-logo.tex y explora-rl.tex (${ids.length} lecciones)`);

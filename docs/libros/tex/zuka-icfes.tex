@@ -1,0 +1,108 @@
+% zuka-icfes.tex — capa de los libros del Preicfes Saber 11 (spec 2026-11-26-libros-preicfes). Va después de zuka-libro.sty.
+% Libros 5 a 9 (uno por componente); se muestran como «Libro 1 de 5» … «Libro 5 de 5». El color del curso es el fucsia de la app.
+\makeatletter
+\definecolor{zlime}{HTML}{E879F9}
+\definecolor{zmoss}{HTML}{A21CAF}
+\newcommand{\zuka@numvis}{\the\numexpr\zuka@num-4\relax}
+\fancyhead[R]{\sffamily\footnotesize\color{zmute}\zuka@comp\enspace·\enspace Libro \zuka@numvis}
+\fancyfoot[L]{\raisebox{-.6mm}{\zukahor[zolive]{4.6mm}}\sffamily\footnotesize\color{zmute}\enspace Preicfes Saber 11}
+
+% ---------- piezas de la lección ----------
+\newcommand{\zintromundo}[1]{Este mundo tiene #1 lecciones. Cada una empieza con la explicación dibujada, la misma ruta que
+  construyes en la app, sigue con ejercicios para hacer con lápiz y termina con preguntas como las del examen. Al final del
+  mundo está su evaluación.}
+\newcommand{\zhueco}[1]{\tikz[baseline=(h.base)]\node[fill=zlime!22,draw=zmoss,line width=.5pt,rounded corners=1mm,inner xsep=1.3mm,inner ysep=.6mm,font=\bfseries\color{zink}](h){#1};}
+\newenvironment{zopc}{\par\nopagebreak\begin{itemize}[leftmargin=7mm,labelsep=2mm,itemsep=1pt,topsep=2pt]\small}{\end{itemize}}
+% \zresuelto{enunciado}{\item paso…}{por qué}
+\newcommand{\zresuelto}[3]{\zuka@titulo{Problema resuelto, paso a paso}%
+  \begin{tcolorbox}[zbase,colback=zsoft]\zuka@cab{zolive}{ejemplo}{El problema}\par\vspace{3pt}#1\end{tcolorbox}\nopagebreak
+  {\sffamily\footnotesize\bfseries\color{zmute}Solución\par}\nopagebreak
+  {#2\par}\vspace{4pt}
+  \begin{tcolorbox}[zbase,breakable=false,colback=white,borderline west={1.1mm}{0pt}{zlime},left=4mm,top=1.2mm,bottom=1.4mm]
+  {\sffamily\footnotesize\bfseries\color{zmoss}Por qué funciona}\quad #3\end{tcolorbox}}
+% \zerror{enunciado}{\item paso…}{clave}
+\newcounter{zerr}
+\newcommand{\zerror}[3]{\stepcounter{zerr}\zuka@titulo{¿Dónde está el error?}%
+  {\small\color{zmute}Alguien resolvió este problema y se equivocó en un paso. Encuéntralo, explica qué falló y corrígelo.\par}
+  \begin{tcolorbox}[zbase,colback=zfire!5]#1\par\vspace{3pt}
+  \par\vspace{3pt}{#2\par}
+  \vspace{2pt}{\sffamily\small\color{zolive}\textbf{El paso equivocado es el}} \rule[-1pt]{10mm}{.4pt}
+  {\sffamily\small\color{zolive}\textbf{porque}} \rule[-1pt]{60mm}{.4pt}\end{tcolorbox}%
+  \immediate\write\zuka@sol{\noexpand\solitem{Error}{\unexpanded{#3}}}}
+\newcommand{\zasisale}{\zuka@titulo{Así sale en el examen}%
+  {\small\color{zmute}Marca una opción, escribe por qué y después mira las claves.\par}}
+\newcommand{\zcomentadatitulo}{\zuka@titulo{Una pregunta del examen, comentada}%
+  {\small\color{zmute}Lee el texto, responde y solo después mira el análisis.\par}}
+% \zcomentada{pregunta}{\item[..] opciones}{cómo pensarla}{respuesta}{lo que se repasa}
+\newcommand{\zcomentada}[5]{\begin{tcolorbox}[zmarco]{\sffamily\small\bfseries\color{zink}#1}\par\vspace{3pt}
+  {\small\begin{itemize}[leftmargin=12mm,labelsep=2mm,itemsep=2pt]#2\end{itemize}}\end{tcolorbox}
+  \zuka@tapa{Tapa desde aquí hasta tener tu respuesta}%
+  \begin{tcolorbox}[zbase,colback=zsoft]\zuka@cab{zmoss}{listo}{Así se resuelve}\par\vspace{3pt}
+  \if\relax\detokenize{#3}\relax\else\textbf{Cómo pensarla.} #3\par\vspace{3pt}\fi #4
+  \if\relax\detokenize{#5}\relax\else\par\vspace{3pt}{\small\color{zmute}\textbf{Para llevarte:} #5}\fi\end{tcolorbox}}
+\newcommand{\loqueconstruiste}{\zuka@poneandamio}
+
+% ---------- evaluación ----------
+\renewcommand{\evaluacion}{%
+  \clearpage\setcounter{ej}{0}%
+  \immediate\write\zuka@sol{\noexpand\solcab{Evaluación del mundo \themundo}}%
+  \cabecera{EVALUACIÓN DEL MUNDO \themundo}{\zuka@mundoactual}{Como en el Saber 11\\cerca de 2 minutos por pregunta}
+  \vspace{4pt}
+  {\small\color{zmute}Responde todas antes de mirar las claves. Puntaje: \rule[-1pt]{8mm}{.4pt} de
+   \rule[-1pt]{8mm}{.4pt}. Si fallas una, la clave te dice qué lección repasar, en el libro y en la app.\par}}
+
+% ---------- portada, créditos y contraportada ----------
+\renewcommand{\portada}{%
+  \thispagestyle{vacia}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[white] (current page.south west) rectangle (current page.north east);
+    \begin{scope}
+      \clip ([yshift=34mm]current page.south west) rectangle ([yshift=-138mm]current page.north east);
+      \node[inner sep=0] at ([yshift=-22mm]current page.center) {\includegraphics[width=\paperwidth]{arte/portada\zuka@num.jpg}};
+    \end{scope}
+    \node[anchor=north west,inner sep=0] at ([xshift=20mm,yshift=-18mm]current page.north west) {\zukahor[zink]{15mm}};
+    \node[anchor=north east,inner sep=0,align=right,font=\sffamily\small,text=zmute] at ([xshift=-20mm,yshift=-21mm]current page.north east)
+      {Preicfes Saber 11\\\textbf{\color{zolive}Libro \zuka@numvis\ de 5}};
+    \fill[zlime] ([xshift=20mm,yshift=-50mm]current page.north west) rectangle ++(26mm,-2mm);
+    \node[anchor=north west,inner sep=0,text width=170mm,align=flush left]
+      at ([xshift=20mm,yshift=-60mm]current page.north west)
+      {{\sffamily\fontsize{20}{24}\selectfont\firalight\color{zolive}\zuka@comp\par}\vspace{4mm}%
+       {\sffamily\fontsize{40}{44}\selectfont\fontseries{sb}\selectfont\color{zink}\zuka@tit\par}\vspace{6mm}%
+       \parbox{122mm}{\raggedright\sffamily\small\color{zmute}\zuka@sub}};
+    \node[anchor=north west,inner sep=0,text width=170mm,align=flush left,font=\sffamily\footnotesize,text=zmute]
+      at ([xshift=20mm,yshift=27mm]current page.south west) {\zuka@mundos};
+  \end{tikzpicture}%
+  \null\clearpage}
+\renewcommand{\creditos}{%
+  \thispagestyle{vacia}\null\vfill
+  {\small\sffamily
+  \textbf{Zuka Preicfes Saber 11 · Libro \zuka@numvis\ de 5}\\
+  \zuka@comp: \zuka@tit\par\vspace{6pt}
+  \color{zmute}Una publicación de Zuka Educación para acompañar el curso Preicfes Saber 11 de la aplicación Zuka. Las
+  explicaciones, los dibujos, los textos y los problemas son originales y siguen el estilo y los temas de la prueba; ninguno
+  está copiado de un examen ni de otro libro.\par\vspace{6pt}
+  Primera edición, Medellín, noviembre de 2026.\par\vspace{6pt}
+  Prohibida la reproducción total o parcial sin permiso escrito de Zuka Educación.\par}
+  \clearpage}
+\renewcommand{\contraportada}{%
+  \cleardoublepage\thispagestyle{vacia}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[white] (current page.south west) rectangle (current page.north east);
+    \begin{scope}
+      \clip (current page.north west) rectangle ([yshift=-96mm]current page.north east);
+      \node[anchor=north,inner sep=0] at ([yshift=62mm]current page.north) {\includegraphics[width=\paperwidth]{arte/portada\zuka@num.jpg}};
+    \end{scope}
+    \fill[zlime] ([xshift=20mm,yshift=-114mm]current page.north west) rectangle ++(26mm,-2mm);
+    \node[anchor=north west,inner sep=0,text width=150mm,align=flush left,font=\sffamily\fontsize{24}{29}\selectfont\fontseries{sb}\selectfont,text=zink]
+      at ([xshift=20mm,yshift=-122mm]current page.north west) {Primero la idea.\\Después, úsala.};
+    \node[anchor=north west,inner sep=0,text width=140mm,align=flush left,text=zink]
+      at ([xshift=20mm,yshift=-152mm]current page.north west)
+      {Cinco libros y una aplicación para preparar el examen Saber 11, uno por cada prueba. Cada lección del libro sigue
+      el mismo camino que su lección en Zuka: la idea explicada en dibujos, cuadro por cuadro; ejercicios para hacer con
+      lápiz; problemas resueltos paso a paso; errores para cazar y preguntas como las del examen, con sus claves.};
+    \foreach \n/\t in {1/Matemáticas,2/Lectura Crítica,3/Sociales y Ciudadanas,4/Ciencias Naturales,5/Inglés}{%
+      \node[anchor=west,inner sep=0,font=\sffamily\small,text=zink] at ([xshift=20mm,yshift=61mm-\n*7mm]current page.south west)
+        {{\color{zolive}\bfseries Libro \n}\quad \t};}
+    \node[anchor=south east,inner sep=0] at ([xshift=-20mm,yshift=24mm]current page.south east) {\zukaver[zink]{34mm}};
+  \end{tikzpicture}}
+\makeatother

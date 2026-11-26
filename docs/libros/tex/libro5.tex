@@ -1,0 +1,19 @@
+% Zuka Preicfes Saber 11 · Libro 1 de 5 · Matemáticas (spec 2026-11-26-libros-preicfes)
+% Compilar: sh docs/libros/build.sh 5   (el contenido lo genera docs/libros/arte/icfes.js)
+\documentclass[11pt,twoside,openany]{book}
+\usepackage{zuka-libro}
+\input{zuka-icfes}
+\libro{5}{Matemáticas}{Pensar con números}{Datos, proporciones, conteo y probabilidad, áreas, funciones, triángulos, ecuaciones, finanzas y estadística, explicados en dibujos y practicados como en el examen.}{\InputIfFileExists{salida/icf/mundos-5}{}{}}
+\begin{document}
+\frontmatter
+\portada
+\creditos
+\input{comun-icfes}
+\indice
+\mainmatter
+\input{salida/icf/partes-5}
+\backmatter
+\solucionesdibujadas
+\claves
+\contraportada
+\end{document}
