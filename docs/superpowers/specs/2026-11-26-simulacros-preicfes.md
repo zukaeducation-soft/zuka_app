@@ -14,4 +14,4 @@ Pedido del usuario (2026-11-26): «Construye los simulacros del Preicfes».
 - Archivos: motor `js/simulacros-icf.js`; datos `js/simulacro-icf-N.js` con `PI_SIMULACROS.push(…)` y los ayudantes `simP`, `simT`.
   Pruebas `tests/simulacros-icf.test.js` (claves de 3 a 9 por letra en cada prueba, explicaciones, textos, nada sobre el origen).
 
-Estado: Simulacro 1. Pendiente: los simulacros 2 y siguientes.
+Estado: simulacros 1 y 2 (`js/simulacro-icf-1.js`, `js/simulacro-icf-2.js`). El 2 se escribe con la correcta primero y `pon` la cambia de puesto con un patrón de seis claves por letra; sirve de molde para los siguientes. Pendiente: los simulacros 3 y siguientes.

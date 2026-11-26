@@ -1,459 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/games/porcentaje-cambio.js
-// El porcentaje de cambio (Álgebra, aumentos y descuentos). Una cantidad pasa de un valor viejo a uno nuevo (dos barras).
-// Con −10, −1, +1, +10 se fija cuánto cambió en porcentaje: (nuevo − viejo) / viejo · 100. Una regla marca cada 10 %
-// de la cantidad vieja, que es el 100 %. Enseña que el cambio se mide sobre el valor de antes y que subir y bajar no son
-// simétricos (de 40 a 50 es +25 %, pero de 50 a 40 es −20 %).
-// params = { rounds: [{ from, to, unit }] }   state = { pcts: [número | null por ronda] }
-
-GAMES['porcentaje-cambio'] = (() => {
-  const changeOf = r => Math.round(((r.to - r.from) / r.from) * 100 * 1e6) / 1e6;
-  const okRound = (v, r) => v === changeOf(r);
-  const sign = v => (v > 0 ? `+${v}` : String(v).replace('-', '−'));
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => okRound(state.pcts?.[i], r));
-    return { ok, solution: params.rounds.map(r => `${r.from} → ${r.to}: ${sign(changeOf(r))} %`).join(' · ') };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds;
-    const V = R.map(() => 0), touched = R.map(() => false);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], B = [];
-
-    function layout(w, h) {
-      W = w; H = h; tabs = roundTabs(R.length, w);
-      const bw = (w - 24 - 18) / 4;
-      B = [-10, -1, 1, 10].map((d, k) => ({ d, x: 12 + k * (bw + 6), y: h - 48, w: bw, h: 36 }));
-    }
-    function step(d) {
-      if (locked) return;
-      V[cur] = Math.max(-100, Math.min(300, V[cur] + d)); touched[cur] = true;
-      api.ready(touched.every(Boolean)); api.sfx?.tap?.();
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], good = okRound(V[cur], r), v = locked && !good ? changeOf(r) : V[cur];
-        drawTabs(p, C, tabs, cur, i => (locked ? (okRound(V[i], R[i]) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Q : C.line));
-        p.textAlign(p.CENTER, p.CENTER); p.noStroke(); p.fill(C.ink); p.textStyle(p.BOLD);
-        fitText(p, `Pasó de ${r.from} a ${r.to}${r.unit ? ' ' + r.unit : ''}`, W / 2, 56, W - 24, 15);
-        p.fill(C.mute); p.textStyle(p.NORMAL); fitText(p, '¿En qué porcentaje cambió?', W / 2, 78, W - 24, 12);
-        // Barras: antes (el 100 %) y después
-        const base = H - 112, top = 100, mx = Math.max(r.from, r.to) * 1.08;
-        const hh = val => ((base - top) * Math.max(0, val)) / mx, bw = Math.min(64, (W - 60) / 2);
-        const xa = W / 2 - bw - 12, xb = W / 2 + 12;
-        // Regla de porcentajes de «antes»: una raya cada 10 % (más marcada cada 50 %), para medir sin dar la respuesta.
-        for (let k = 1; r.from * k / 10 <= mx; k++) {
-          const y = base - hh(r.from * k / 10), big = k % 5 === 0;
-          p.stroke(C.line); p.strokeWeight(big ? 1.5 : 0.8); p.line(xa - (big ? 10 : 5), y, xb + bw, y);
-          if (big) { p.noStroke(); p.fill(C.mute); p.textSize(9); p.textAlign(p.RIGHT, p.CENTER); p.text(`${k * 10} %`, xa - 12, y); p.textAlign(p.CENTER, p.CENTER); }
-        }
-        p.noStroke(); p.fill(C.sky); p.rect(xa, base - hh(r.from), bw, hh(r.from), 6, 6, 0, 0);
-        p.fill(C.sun); p.rect(xb, base - hh(r.to), bw, hh(r.to), 6, 6, 0, 0);
-        if (locked && !good) {   // al fallar: lo elegido (rojo) y lo correcto (verde) aplicados a «antes»
-          const mine = r.from * (1 + V[cur] / 100);
-          p.drawingContext.setLineDash([5, 4]); p.noFill(); p.strokeWeight(2);
-          p.stroke(C.bad); p.rect(xb - 4, base - hh(mine), bw + 8, hh(mine));
-          p.stroke(C.ok); p.rect(xb - 7, base - hh(r.to), bw + 14, hh(r.to));
-          p.drawingContext.setLineDash([]);
-        }
-        p.stroke(C.mute); p.strokeWeight(2); p.line(16, base, W - 16, base);
-        // Los valores van dentro de las barras: arriba de ellas cruzaría la regla.
-        p.noStroke(); p.fill(C.bg); p.textStyle(p.BOLD); p.textSize(13);
-        p.fill(inkOn(C.sky, C.bg)); p.text(String(r.from), xa + bw / 2, base - hh(r.from) + 12); p.fill(inkOn(C.sun, C.bg)); p.text(String(r.to), xb + bw / 2, base - hh(r.to) + 12);
-        p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(11);
-        p.text('antes (100 %)', xa + bw / 2, base + 12); p.text('después', xb + bw / 2, base + 12);
-        // Lectura del cambio elegido
-        p.fill(locked ? C.ok : C.brand); p.textStyle(p.BOLD);
-        drawPill(p, C, `cambio: ${sign(v)} %`, W / 2, base + 38, locked ? C.ok : C.sun, 16);
-        for (const b of B) {
-          drawTile(p, C, b, b.d > 0 ? `+${b.d}` : `−${-b.d}`, { fill: b.d > 0 ? C.mint : C.coral, r: 9, lift: 2, size: 15 });
-        }
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(b => hitBox(b, x, y));
-        if (tb >= 0) { cur = tb; api.sfx?.tap?.(); return false; }
-        const b = B.find(b => hitBox(b, x, y));
-        if (b) { step(b.d); return false; }
-      };
-    }, 1.35);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ pcts: V.map((v, i) => (touched[i] ? v : null)) }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, changeOf };
-})();
-;
-//#archivo js/games/arma-conjunto.js
-// Arma el conjunto (Álgebra 0, tipos y relaciones): arriba están A y B escritos por extensión y abajo una bandeja
-// de fichas. Cada ronda pide armar, dentro de las llaves, un conjunto con ciertas condiciones: vacío, unitario,
-// subconjunto de A, igual a B, disjunto de A… Muchas veces vale más de una respuesta. Tocar una ficha la mete o la
-// saca; «∅ Vaciar» deja las llaves vacías (también cuenta como respuesta).
-// params = { pool, sets: { A: [...], B: [...] }, rounds: [{ text, rule: { size, minSize, subsetOf, equal,
-//            disjointFrom, contains }, example }] }   state = { picks: [[etiquetas]] }
-
-GAMES['arma-conjunto'] = (() => {
-  function check(pk, rule) {
-    if (!pk) return false;
-    const s = new Set(pk);
-    if (s.size !== pk.length) return false;
-    if (rule.size != null && pk.length !== rule.size) return false;
-    if (rule.minSize != null && pk.length < rule.minSize) return false;
-    if (rule.subsetOf && !pk.every(x => rule.subsetOf.includes(x))) return false;
-    if (rule.equal && !(pk.length === rule.equal.length && rule.equal.every(x => s.has(x)))) return false;
-    if (rule.disjointFrom && pk.some(x => rule.disjointFrom.includes(x))) return false;
-    if (rule.contains && !rule.contains.every(x => s.has(x))) return false;
-    return true;
-  }
-  const listText = xs => (xs.length ? `{${xs.join(', ')}}` : '∅');
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => check(state.picks?.[i], r.rule));
-    const solution = params.rounds.map(r => `${r.text}: por ejemplo ${listText(r.example || [])}`).join(' · ');
-    return { ok, solution };
-  }
-
-  function create(host, params, api) {
-    const C = api.palette, R = params.rounds, pool = params.pool, sets = params.sets || {};
-    const st = { picks: R.map(() => []) };
-    const touched = R.map(() => false);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], tray = [], bag = null, clear = null, pop = { i: -1, t: 0 };
-
-    function layout(w, h) {
-      W = w; H = h;
-      tabs = roundTabs(R.length, w);
-      const setLines = Object.keys(sets).length;
-      bag = { x: 12, y: 104 + setLines * 20, w: w - 24, h: 78 };
-      clear = { x: w - 12 - 98, y: bag.y + bag.h + 9, w: 98, h: 30 };
-      const cols = 3, tw = (w - 24 - 2 * 7) / cols, y0 = clear.y + 44;
-      tray = pool.map((_, i) => ({ x: 12 + (i % cols) * (tw + 7), y: y0 + Math.floor(i / cols) * 43, w: tw, h: 34 }));
-    }
-    const ready = () => api.ready(touched.every(Boolean));
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); layout(size.w, size.h); };
-      p.onResize = () => layout(size.w, size.h);
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = R[cur], pk = st.picks[cur], ok = check(pk, r.rule), S = SK.sets(C);
-        drawTabs(p, C, tabs, cur, i => (locked ? (check(st.picks[i], R[i].rule) ? C.ok : C.bad) : i === cur ? C.brand : touched[i] ? C.Z : C.line));
-        p.noStroke(); p.textAlign(p.LEFT, p.CENTER); p.textStyle(p.BOLD);
-        Object.entries(sets).forEach(([k, v], j) => { p.fill(S[j % 3].ink); fitText(p, `${k} = ${listText(v)}`, 14, 56 + j * 20, W - 28, 13); });
-        p.fill(C.ink); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, r.text, W / 2, bag.y - 17, W - 28, 14);
-        // Las llaves: el conjunto que se está armando.
-        const col = locked ? (ok ? C.ok : C.bad) : S[2].line, ink = locked ? col : S[2].ink;
-        SK.panel(p, C, bag, { col: locked ? col : null });
-        SK.serif(p, '{', bag.x + 18, bag.y + bag.h / 2 - 4, 42, ink); SK.serif(p, '}', bag.x + bag.w - 18, bag.y + bag.h / 2 - 4, 42, ink);
-        const inside = pool.filter(x => pk.includes(x));
-        p.fill(inside.length ? C.ink : C.mute); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER);
-        fitText(p, inside.length ? inside.join(', ') : (touched[cur] ? '∅' : 'vacía'), W / 2, bag.y + bag.h / 2, bag.w - 76, 18);
-        // Vaciar, y el cardinal de lo armado
-        SK.chip(p, C, clear, '∅ Vaciar', { size: 13, r: 10 });
-        SK.serif(p, `n = ${inside.length}`, 36, clear.y + clear.h / 2, 14, C.mute);
-        // Elementos disponibles
-        pop.t = Math.max(0, pop.t - 0.08);
-        tray.forEach((b, i) => {
-          const on = pk.includes(pool[i]);
-          SK.chip(p, C, b, pool[i], { state: on ? (locked ? (ok ? 'ok' : 'bad') : 'on') : 'idle', col: S[2].line, size: 14, k: pop.i === i ? 1 + 0.12 * pop.t : 1 });
-        });
-        if (locked && !ok) { p.noStroke(); p.fill(C.ok); p.textStyle(p.BOLD); p.textAlign(p.CENTER, p.CENTER); fitText(p, `Por ejemplo: ${listText(r.example || [])}`, W / 2, H - 12, W - 24, 12); }
-      };
-
-      p.mousePressed = () => {
-        const t = tabs.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
-        if (t >= 0) { cur = t; api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        if (hitBox(clear, p.mouseX, p.mouseY)) { st.picks[cur] = []; touched[cur] = true; ready(); api.sfx?.tap?.(); return false; }
-        const i = tray.findIndex(b => hitBox(b, p.mouseX, p.mouseY));
-        if (i >= 0) {
-          const pk = st.picks[cur], k = pk.indexOf(pool[i]);
-          if (k >= 0) pk.splice(k, 1); else pk.push(pool[i]);
-          touched[cur] = true; pop = { i, t: 1 }; ready(); api.sfx?.tap?.(); return false;
-        }
-      };
-    }, 1.22);
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ picks: st.picks.map(pk => [...pk]) }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, check };
-})();
-;
-//#archivo js/games/fila-a-fila.js
-// Fila a fila (geometría vectorial, eliminación de Gauss y Gauss-Jordan): una matriz, aumentada o no, se
-// transforma con las tres operaciones elementales de fila — intercambiar dos filas, multiplicar una por
-// k ≠ 0 y sumarle a una k veces otra —. Se toca la fila que cambia (y la otra, si hace falta), se elige k
-// con dos perillas (numerador y denominador) y se aplica; se puede deshacer. La meta de cada ronda es
-// dejar el bloque izquierdo en forma escalonada o escalonada reducida (así sirve para sistemas sin
-// solución y para [A | I] → [I | A⁻¹]). Con det: true se lleva la cuenta det A = factor · det(actual).
-// params = { rounds: [{ M: [[números]], aug: columnas tras la barra, goal: 'escalonada' | 'reducida', det }] }
-// state = { ops: [[{ t: 'swap', i, j } | { t: 'scale', i, k: [n, d] } | { t: 'add', i, j, k: [n, d] }]] }
-
-GAMES['fila-a-fila'] = (() => {
-  // ---------- Fracciones exactas [n, d] con d > 0 ----------
-  const gcd = (a, b) => (b ? gcd(b, a % b) : Math.abs(a));
-  const F = {
-    of(n, d = 1) {
-      if (Array.isArray(n)) return F.of(n[0], n[1]);
-      if (!Number.isInteger(n)) { let q = 1; while (!Number.isInteger(+(n * q).toFixed(9)) && q < 1e6) q *= 10; return F.of(Math.round(n * q), d * q); }
-      if (d < 0) { n = -n; d = -d; }
-      const g = gcd(n, d) || 1;
-      return [n / g || 0, d / g];
-    },
-    add: (a, b) => F.of(a[0] * b[1] + b[0] * a[1], a[1] * b[1]),
-    mul: (a, b) => F.of(a[0] * b[0], a[1] * b[1]),
-    div: (a, b) => F.of(a[0] * b[1], a[1] * b[0]),
-    neg: a => [-a[0] || 0, a[1]],
-    zero: a => a[0] === 0,
-    one: a => a[0] === 1 && a[1] === 1,
-    txt: a => (a[0] < 0 ? '−' : '') + Math.abs(a[0]) + (a[1] === 1 ? '' : '/' + a[1]),
-  };
-
-  const toF = M => M.map(r => r.map(v => (Array.isArray(v) ? F.of(v) : F.of(v))));
-  const validK = k => Array.isArray(k) && k[1] !== 0 && Number.isInteger(k[0]) && Number.isInteger(k[1]);
-
-  // Aplica las operaciones a una copia; una operación inválida (k = 0, misma fila) se ignora.
-  function apply(M, ops) {
-    const A = toF(M);
-    for (const o of ops || []) {
-      if (o.t === 'swap' && o.i !== o.j) [A[o.i], A[o.j]] = [A[o.j], A[o.i]];
-      else if (o.t === 'scale' && validK(o.k) && o.k[0] !== 0) { const k = F.of(o.k); A[o.i] = A[o.i].map(v => F.mul(v, k)); }
-      else if (o.t === 'add' && o.i !== o.j && validK(o.k)) { const k = F.of(o.k); A[o.i] = A[o.i].map((v, c) => F.add(v, F.mul(k, A[o.j][c]))); }
-    }
-    return A;
-  }
-  const isNull = (o) => (o.t !== 'swap' && (!validK(o.k) || o.k[0] === 0)) || (o.t !== 'scale' && o.i === o.j);
-
-  const lead = (row, n) => { for (let c = 0; c < n; c++) if (!F.zero(row[c])) return c; return -1; };
-  // Escalonada en las n primeras columnas: cada pivote a la derecha del de arriba y filas nulas abajo.
-  function isEchelon(A, n) {
-    let last = -1, zeroSeen = false;
-    for (const row of A) {
-      const l = lead(row, n);
-      if (l < 0) { zeroSeen = true; continue; }
-      if (zeroSeen || l <= last) return false;
-      last = l;
-    }
-    return true;
-  }
-  // Reducida: además cada pivote vale 1 y es lo único distinto de cero en su columna.
-  function isReduced(A, n) {
-    if (!isEchelon(A, n)) return false;
-    return A.every((row, i) => {
-      const l = lead(row, n);
-      if (l < 0) return true;
-      return F.one(row[l]) && A.every((r2, j) => j === i || F.zero(r2[l]));
-    });
-  }
-
-  // Forma escalonada reducida (Gauss-Jordan sobre las n primeras columnas), para mostrar la solución.
-  function rref(M, n) {
-    const A = toF(M);
-    let r = 0;
-    for (let c = 0; c < n && r < A.length; c++) {
-      const p = A.findIndex((row, i) => i >= r && !F.zero(row[c]));
-      if (p < 0) continue;
-      [A[r], A[p]] = [A[p], A[r]];
-      const inv = F.div([1, 1], A[r][c]);
-      A[r] = A[r].map(v => F.mul(v, inv));
-      A.forEach((row, i) => { if (i !== r && !F.zero(row[c])) { const k = F.neg(row[c]); A[i] = row.map((v, cc) => F.add(v, F.mul(k, A[r][cc]))); } });
-      r++;
-    }
-    return A;
-  }
-
-  // det A = factor · det(matriz actual): intercambiar cambia el signo y multiplicar por k lo divide entre k.
-  function detFactor(ops) {
-    let f = [1, 1];
-    for (const o of ops || []) {
-      if (isNull(o)) continue;
-      if (o.t === 'swap') f = F.neg(f);
-      else if (o.t === 'scale') f = F.div(f, F.of(o.k));
-    }
-    return f;
-  }
-  function det(M) {
-    const A = toF(M), n = A.length;
-    let f = [1, 1];
-    for (let c = 0; c < n; c++) {
-      const p = A.findIndex((row, i) => i >= c && !F.zero(row[c]));
-      if (p < 0) return [0, 1];
-      if (p !== c) { [A[c], A[p]] = [A[p], A[c]]; f = F.neg(f); }
-      f = F.mul(f, A[c][c]);
-      for (let i = c + 1; i < n; i++) { const k = F.neg(F.div(A[i][c], A[c][c])); A[i] = A[i].map((v, cc) => F.add(v, F.mul(k, A[c][cc]))); }
-    }
-    return f;
-  }
-
-  const cols = r => r.M[0].length - (r.aug || 0);
-  const meets = (A, r) => (r.goal === 'reducida' ? isReduced(A, cols(r)) : isEchelon(A, cols(r)));
-  const matTxt = (A, r) => '[' + A.map(row => row.map((v, c) => (c === cols(r) ? '| ' : '') + F.txt(v)).join(' ')).join('; ') + ']';
-
-  function grade(state, params) {
-    const ok = params.rounds.every((r, i) => (state.ops[i] || []).every(o => !isNull(o)) && meets(apply(r.M, state.ops[i]), r));
-    return { ok, solution: params.rounds.map(r => `${r.goal === 'reducida' ? 'reducida' : 'por ejemplo'} ${matTxt(rref(r.M, cols(r)), r)}`).join(' · ') };
-  }
-
-  const MODES = [{ t: 'swap', name: 'Ri ↔ Rj' }, { t: 'scale', name: 'Ri ← k·Ri' }, { t: 'add', name: 'Ri ← Ri + k·Rj' }];
-
-  function create(host, params, api) {
-    const C = api.palette;
-    const ops = params.rounds.map(() => []);
-    let locked = false, W = 0, H = 0, cur = 0, tabs = [], mode = 2, selI = null, selJ = null, kn = 1, kd = 1;
-    let L = {};
-
-    function layout() {
-      tabs = roundTabs(params.rounds.length);
-      const r = params.rounds[cur], m = r.M.length;
-      const top = 48, rowH = 38, gridW = W - 24 - 44;
-      L.top = top; L.rowH = rowH; L.gx = 12 + 44; L.cw = gridW / r.M[0].length;
-      L.rows = r.M.map((_, i) => ({ x: 12, y: top + i * rowH, w: 40, h: rowH - 6 }));
-      let y = top + m * rowH + 26;
-      L.info = y - 10;
-      const bw = (W - 24 - 12) / 3;
-      L.modes = MODES.map((_, i) => ({ x: 12 + i * (bw + 6), y: y + 6, w: bw, h: 38 }));
-      y += 54;
-      L.preview = y + 10;
-      y += 28;
-      const half = (W - 24) / 2;
-      L.kn = { minus: { x: 12, y, w: 38, h: 34 }, plus: { x: 12 + half - 50, y, w: 38, h: 34 }, mid: 12 + half / 2 - 6, y };
-      L.kd = { minus: { x: 12 + half, y, w: 38, h: 34 }, plus: { x: W - 50, y, w: 38, h: 34 }, mid: 12 + half + half / 2 - 6, y };
-      y += 46;
-      L.undo = { x: 12, y, w: (W - 30) / 2, h: 40 };
-      L.go = { x: 18 + (W - 30) / 2, y, w: (W - 30) / 2, h: 40 };
-    }
-
-    const curOp = () => {
-      const t = MODES[mode].t;
-      if (selI == null) return null;
-      if (t === 'scale') return { t, i: selI, k: [kn, kd] };
-      if (selJ == null) return null;
-      return t === 'swap' ? { t, i: selI, j: selJ } : { t, i: selI, j: selJ, k: [kn, kd] };
-    };
-    function opTxt(o) {
-      if (!o) return selI == null ? 'Toca la fila que cambia' : 'Ahora toca la otra fila';
-      const k = F.of(o.k || [1, 1]), kt = k[1] === 1 && k[0] >= 0 ? F.txt(k) : `(${F.txt(k)})`;
-      if (o.t === 'swap') return `R${o.i + 1} ↔ R${o.j + 1}`;
-      if (o.t === 'scale') return `R${o.i + 1} ← ${kt}·R${o.i + 1}`;
-      return `R${o.i + 1} ← R${o.i + 1} + ${kt}·R${o.j + 1}`;
-    }
-
-    const m = mountSketch(host, (p, size) => {
-      p.setup = () => { p.createCanvas(size.w, size.h); p.textFont('system-ui'); W = size.w; H = size.h; layout(); };
-      p.onResize = () => { W = size.w; H = size.h; layout(); };
-
-      function button(b, label, on, active) {
-        p.stroke(active ? C.brand : on ? C.Z : C.line); p.strokeWeight(active ? 2.5 : 1.5); p.fill(C.card); p.rect(b.x, b.y, b.w, b.h, 9);
-        p.noStroke(); p.fill(on ? C.ink : C.mute); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD);
-        fitText(p, label, b.x + b.w / 2, b.y + b.h / 2, b.w - 8, 14);
-      }
-
-      p.draw = () => {
-        p.background(C.bg);
-        const r = params.rounds[cur], A = apply(r.M, ops[cur]), n = cols(r), done = meets(A, r);
-        drawTabs(p, C, tabs, cur, i => {
-          const g = meets(apply(params.rounds[i].M, ops[i]), params.rounds[i]);
-          return locked ? (g ? C.ok : C.bad) : i === cur ? C.brand : ops[i].length ? C.Z : C.line;
-        });
-        p.noStroke(); p.fill(C.mute); p.textAlign(p.RIGHT, p.CENTER); p.textStyle(p.BOLD); p.textSize(12);
-        p.text(r.goal === 'reducida' ? 'meta: reducida' : 'meta: escalonada', W - 12, 23);
-        // Matriz.
-        const show = locked && !done ? rref(r.M, n) : A;
-        const gx = L.gx, gw = L.cw * r.M[0].length, top = L.top, hgt = r.M.length * L.rowH - 6;
-        p.stroke(locked ? (done ? C.ok : C.bad) : done ? C.ok : C.line); p.strokeWeight(1.5); p.fill(C.card); p.rect(gx - 4, top - 4, gw + 8, hgt + 8, 10);
-        if (r.aug) { p.stroke(C.mute); p.strokeWeight(1.5); p.line(gx + n * L.cw, top, gx + n * L.cw, top + hgt); }
-        L.rows.forEach((b, i) => {
-          const s = i === selI ? C.brand : i === selJ ? C.Z : C.line;
-          p.stroke(s); p.strokeWeight(i === selI || i === selJ ? 2.5 : 1.5); p.fill(C.card); p.rect(b.x, b.y, b.w, b.h, 8);
-          p.noStroke(); p.fill(C.ink); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD); p.textSize(13); p.text(`R${i + 1}`, b.x + b.w / 2, b.y + b.h / 2);
-          show[i].forEach((v, c) => {
-            const pivot = c < n && c === lead(show[i], n);
-            p.fill(locked && !done ? C.ok : pivot ? C.brand : F.zero(v) ? C.mute : C.ink);
-            p.textStyle(pivot ? p.BOLD : p.NORMAL);
-            fitText(p, F.txt(v), gx + (c + 0.5) * L.cw, b.y + b.h / 2, L.cw - 4, 16);
-          });
-        });
-        // Determinante.
-        p.noStroke(); p.textAlign(p.CENTER, p.CENTER); p.textStyle(p.BOLD); p.textSize(13);
-        if (r.det) {
-          const f = detFactor(ops[cur]);
-          p.fill(done ? C.ok : C.N);
-          fitText(p, F.one(f) ? 'det A = det(actual)' : `det A = ${F.txt(f)} · det(actual)`, W / 2, L.info, W - 24, 13);
-        } else { p.fill(done ? C.ok : C.mute); p.text(done ? '¡Meta cumplida!' : `${ops[cur].length} ${ops[cur].length === 1 ? 'operación' : 'operaciones'}`, W / 2, L.info); }
-        // Operación.
-        L.modes.forEach((b, i) => button(b, MODES[i].name, !locked, i === mode));
-        const o = curOp();
-        p.noStroke(); p.fill(o ? C.ink : C.mute); p.textStyle(p.BOLD); fitText(p, opTxt(o), W / 2, L.preview, W - 24, 16);
-        const needK = MODES[mode].t !== 'swap';
-        [['k arriba', kn, L.kn], ['k abajo', kd, L.kd]].forEach(([lab, val, K]) => {
-          button(K.minus, '−', needK && !locked); button(K.plus, '+', needK && !locked);
-          p.noStroke(); p.fill(needK ? C.ink : C.mute); p.textStyle(p.BOLD); p.textSize(17); p.text(String(val).replace('-', '−'), K.minus.x + (K.plus.x + K.plus.w - K.minus.x) / 2, K.y + 13);
-          p.fill(C.mute); p.textStyle(p.NORMAL); p.textSize(10); p.text(lab, K.minus.x + (K.plus.x + K.plus.w - K.minus.x) / 2, K.y + 30);
-        });
-        button(L.undo, 'Deshacer', !locked && ops[cur].length > 0);
-        button(L.go, 'Aplicar', !locked && !!o && !isNull(o));
-      };
-
-      p.mousePressed = () => {
-        const x = p.mouseX, y = p.mouseY;
-        const tb = tabs.findIndex(t => hitBox(t, x, y));
-        if (tb >= 0) { cur = tb; selI = selJ = null; layout(); api.sfx?.tap?.(); return false; }
-        if (locked) return;
-        const mi = L.modes.findIndex(b => hitBox(b, x, y));
-        if (mi >= 0) { mode = mi; selJ = MODES[mi].t === 'scale' ? null : selJ; api.sfx?.tap?.(); return false; }
-        const ri = L.rows.findIndex(b => hitBox({ x: b.x, y: b.y, w: W - 24, h: b.h }, x, y));
-        if (ri >= 0) {
-          if (selI == null || MODES[mode].t === 'scale') selI = ri;
-          else if (ri === selI) { selI = null; selJ = null; }
-          else selJ = ri;
-          api.sfx?.tap?.(); return false;
-        }
-        const step = (K, d, get, set) => { if (hitBox(K.minus, x, y)) { set(get() - 1); return true; } if (hitBox(K.plus, x, y)) { set(get() + 1); return true; } return false; };
-        if (MODES[mode].t !== 'swap') {
-          if (step(L.kn, 1, () => kn, v => { kn = Math.max(-12, Math.min(12, v)); })) { api.sfx?.tap?.(); return false; }
-          if (step(L.kd, 1, () => kd, v => { kd = Math.max(1, Math.min(12, v)); })) { api.sfx?.tap?.(); return false; }
-        }
-        if (hitBox(L.undo, x, y) && ops[cur].length) { ops[cur].pop(); api.sfx?.tap?.(); api.ready(ops.every(o => o.length)); return false; }
-        if (hitBox(L.go, x, y)) {
-          const o = curOp();
-          if (!o || isNull(o)) return false;
-          ops[cur].push(o); selI = selJ = null; api.sfx?.tap?.(); api.ready(ops.every(o2 => o2.length));
-          return false;
-        }
-      };
-    }, Math.max(...params.rounds.map(r => (264 + 38 * r.M.length) / 256))); // cabe entero aun con 256 px de ancho
-
-    return {
-      loaded: m.ready,
-      getState: () => ({ ops: ops.map(o => o.map(x => ({ ...x }))) }),
-      lock() { locked = true; },
-      destroy: () => m.remove(),
-    };
-  }
-
-  return { grade, create, F, apply, isEchelon, isReduced, rref, detFactor, det };
-})();
-;
 //#archivo js/games/afina-sistema.js
 // Afina el sistema (geometría vectorial, sistemas 2×2 y su interpretación geométrica): cada ecuación
 // ax + by = c es una recta del plano. Uno o dos coeficientes tienen manijas; al moverlas se ve cómo
@@ -22614,4 +22160,214 @@ PU_JUEGOS.push(({ setLesson, addExam, sol, err, opc }) => {
       opc('La probabilidad de que llueva mañana es 0.35. La probabilidad de que no llueva es:', ['0.65', '0.35', '1.35', '0.5'], 0,
         '$1 - 0.35 = 0.65$.', 'Llover y no llover completan el total, que es 1.')],
   ]);
+});
+;
+//#archivo js/courses/preuda-r-calculo.js
+// Preuniversitario · mundo 1 «Cálculo mental»: lecciones y evaluación con el estándar de diez ejercicios distintos
+// (spec 2026-11-20-preuda-razonamiento-diez): seis o siete juegos del concepto de una sola ronda, uno en movimiento y la zona
+// de examen (completar la solución, cazar el error y la pregunta en formato real).
+PU_JUEGOS.push(({ setLesson, setExam, sol, err, opc, diez }) => {
+  setLesson('pu-cm-1', [
+    play('recta-muda', 'En esta recta solo quedaron escritos el 0 y el 2. Cuelga cada ficha en el lugar donde vive.', { min: -9, max: 9, rotulos: [0, 2], fichas: [
+      { t: '-(-7)', v: 7 }, { t: '-|{-5}|', v: -5 }, { t: '|2 - 6|', v: 4 }, { t: '-|3|', v: -3 }] },
+      '$-|{-5}|$: las barras dan 5 y el menos de afuera lo refleja, $-5$. Por eso va a la izquierda de $-|3| = -3$. La distancia $|2 - 6|$ es $4$ y el reflejo de $-7$ es $7$.',
+      { hint: 'Primero resuelve lo que hay entre las barras: es una distancia. Después mira si afuera queda un menos, que refleja en el 0.' }),
+    play('dos-radares', 'Dos radares de la costa detectan el mismo barco. Cada uno sabe a qué **distancia** está. ¿Dónde está el barco?', { min: -9, max: 9, desde: 0, radares: [{ v: -2, d: 5 }, { v: 6, d: 3 }] },
+      'A 5 pasos de $-2$ están $-7$ y $3$; a 3 pasos de $6$, $3$ y $9$. Solo el $3$ está en las dos parejas.',
+      { hint: 'Una distancia se cuenta hacia los dos lados: halla los dos lugares que permite cada radar y busca el que se repite.' }),
+    play('arma-viaje', 'La ficha debe ir de $-6$ a $5$ en **dos** movimientos. ¿Qué cartas la llevan?', { min: -8, max: 8, desde: -6, meta: 5, cartas: [
+      { t: '+ (-8)', d: -8 }, { t: '- (-8)', d: 8 }, { t: '- 3', d: -3 }, { t: '- (-5)', d: 5 }, { t: '+ 3', d: 3 }, { t: '+ (-5)', d: -5 }] },
+      'De $-6$ a $5$ hay 11 pasos a la derecha. Restar $-8$ es avanzar 8 y sumar 3 completa los 11: $-6 - (-8) + 3 = 5$.',
+      { hint: 'Cuenta cuántos pasos y hacia dónde hay que ir en total. Luego piensa hacia dónde mueve cada carta: restar camina al revés de sumar.' }),
+    play('taller-saltos', 'Ajusta el salto y las veces para caer en **15**, pero con la cadena **dando la vuelta** en el 0.', { min: -18, max: 18, cada: 3, tope: 6, meta: 15 },
+      'La cadena da la vuelta si las veces son negativas. Para caer del lado positivo, el salto también debe ser negativo: $(-3) \\cdot (-5) = 15$ o $(-5) \\cdot (-3) = 15$.',
+      { hint: 'Lo que hace dar la vuelta es el signo de las veces. Piensa de qué lado debe estar la cadena antes de voltearse.' }),
+    play('signos-condiciones', 'Cambia los signos para que el **producto** sea positivo y la **suma** negativa, dejando **al menos uno** positivo.', { factores: [2, 3, 4, 5] },
+      'Para el producto solo importa cuántos menos hay: par. Para la suma importa cuáles: los negativos deben pesar más. Con todos negativos se cumple, pero había que dejar uno positivo. Con $-3$ y $-5$, por ejemplo, el producto es $120$ y la suma $-2$.',
+      { hint: 'El producto mira cuántos signos menos hay; la suma mira cuánto pesan. Empieza por decidir cuántos menos necesitas.' }),
+    play('potencia-signo', 'Arma una potencia que valga $-16$ y que lleve un menos **dentro** del paréntesis.', { base: 2, max: 6, meta: -16 },
+      'Cuatro factores $-2$ se emparejan y dan $16$, positivo. El menos que lo vuelve $-16$ tiene que estar afuera: $-(-2)^4 = -16$.',
+      { hint: 'Piensa cuántos factores de 2 hacen 16 y qué signo queda al emparejar los menos de adentro.' }),
+    play('parentesis-justo', 'A esta cuenta se le borró el paréntesis y ya no da lo que debía. Vuelve a ponerlo.', { expr: '5 - 8 * 3 - 1', meta: -18 },
+      '$5 - (8 \\cdot 3 - 1) = 5 - 23 = -18$. Sin paréntesis da $-20$: el menos de afuera le cambia el signo también al $-1$.',
+      { hint: 'Sin paréntesis la cuenta da −20. Busca qué tendrías que agrupar para que el menos de afuera le cambie el signo a otro término más.' }),
+    play('lanza-ficha', 'Lanza la ficha al resultado de cada operación: decide hacia dónde y cuántos pasos. Puedes fallar **una** vez.', { min: -8, max: 8, tope: 9, tiros: [
+      { t: '-5 - (-9)', desde: -5, d: 9 }, { t: '3 + (-8)', desde: 3, d: -8 }, { t: '-1 - 6', desde: -1, d: -6 }] },
+      '$-5 - (-9) = -5 + 9 = 4$, $3 + (-8) = -5$ y $-1 - 6 = -7$. Restar un negativo lleva a la derecha.',
+      { hint: 'Mira la operación: sumar un negativo o restar un positivo lleva a la izquierda; restar un negativo, a la derecha.' }),
+    sol('A las 6 de la mañana, un termómetro en el páramo marca $-4\\,°\\text{C}$. Hasta el mediodía la temperatura sube $11\\,°\\text{C}$ y de ahí a la noche baja $9\\,°\\text{C}$. ¿Cuál es la temperatura en la noche y cuántos grados separan la más alta de la más baja del día?',
+      ['Al mediodía: $-4 + 11 =$ [[7]] °C', 'En la noche: $7 - 9 =$ [[−2]] °C', 'La más baja del día fue [[−4]] °C y la más alta, 7 °C', 'Las separan $7 - (-4) =$ [[11]] grados'],
+      ['3', '15', '2'],
+      'Restar un negativo es sumar: de $-4$ a $7$ hay 4 grados hasta el cero y 7 más, 11 en total. Quien resta $7 - 4$ olvida el tramo bajo cero.',
+      'Ubica las tres temperaturas en una recta vertical, como un termómetro, y cuenta los grados pasando por el 0.'),
+    err('Para saber cuánto debe consignar, un tesorero calcula $20 - 4 \\cdot (3 - 5)^2 + 6 \\div 2$. ¿Cuál es el resultado?',
+      ['Paréntesis: $3 - 5 = -2$', 'Potencia: $(-2)^2 = -4$', 'Producto y cociente: $4 \\cdot (-4) = -16$ y $6 \\div 2 = 3$', 'Sumas y restas: $20 - (-16) + 3 = 39$'], 1,
+      ['Potencia: $(-2)^2 = 4$', 'Potencia: $(-2)^2 = -2$', 'Potencia: $(-2)^2 = 0$'],
+      'Un negativo al cuadrado es positivo: $(-2)^2 = 4$. Entonces $20 - 4 \\cdot 4 + 3 = 20 - 16 + 3 = 7$. Los pasos siguientes arrastraban el error.',
+      'Revisa el orden: paréntesis, potencias, productos y cocientes, y al final sumas. En cada paso comprueba también el signo.'),
+    opc('Un submarino está a 120 m bajo el nivel del mar. Sube 45 m y después baja tres veces seguidas 20 m cada vez. Con respecto al nivel del mar, su posición final es:',
+      ['$-95$ m', '$-15$ m', '$-135$ m', '$135$ m'], 2,
+      '$-120 + 45 = -75$ y luego $-75 - 3 \\cdot 20 = -75 - 60 = -135$. Bajo el nivel del mar la posición es negativa.',
+      'Escribe la profundidad con signo menos; subir suma y bajar resta. Las tres bajadas iguales son un producto.'),
+  ]);
+
+  setLesson('pu-cm-2', [
+    play('corta-iguales', 'Un carpintero marcó mal una tabla de 20 cm: las partes salieron disparejas. Corrige los cortes y toma **tres quintos**.', { ticks: 20, n: 5, toma: 3, ini: [3, 5, 11, 16] },
+      'Un quinto solo existe si las cinco partes miden lo mismo: 4 cm cada una. Tres de ellas son $\\tfrac35$.',
+      { hint: 'La tabla mide 20 cm y debe quedar en 5 partes iguales. ¿Cuántos centímetros le tocan a cada una?' }),
+    play('fraccion-gemela', 'Arma una fracción que mida **lo mismo** que $\\tfrac69$, pero con **más** de 9 partes.', { a: [6, 9], max: 15 },
+      '$\\tfrac69 = \\tfrac23$. Con más partes: $\\tfrac{8}{12}$ o $\\tfrac{10}{15}$. Arriba y abajo se multiplicó por lo mismo.',
+      { hint: 'Simplifica primero la fracción. Después busca por cuánto multiplicar arriba y abajo para pasar de 9 partes.' }),
+    play('entre-fracciones', 'Arma una fracción que caiga **entre** $\\tfrac12$ y $\\tfrac35$.', { lo: [1, 2], hi: [3, 5], max: 12 },
+      'Con el mismo denominador, $\\tfrac{10}{20}$ y $\\tfrac{12}{20}$: en medio está $\\tfrac{11}{20}$. Con números más pequeños sirven $\\tfrac59$, $\\tfrac{6}{11}$ o $\\tfrac{7}{12}$.',
+      { hint: 'Debe pasar de la mitad por muy poco: piensa en un numerador apenas mayor que la mitad del denominador.' }),
+    play('piezas-exactas', 'Escoge los **tres** pedazos que juntos llenan justo $\\tfrac{11}{12}$ de la barra.', { meta: [11, 12], den: 24, k: 3, piezas: [[1, 3], [1, 8], [1, 2], [1, 6], [1, 4]] },
+      'En doceavos: $\\tfrac{6}{12} + \\tfrac{3}{12} + \\tfrac{2}{12} = \\tfrac{11}{12}$, o sea $\\tfrac12 + \\tfrac14 + \\tfrac16$. El octavo no cabe en un número entero de doceavos.',
+      { hint: 'Pasa cada pedazo a doceavos. Uno de los cinco no da un número entero de doceavos: descártalo.' }),
+    play('resta-falta', 'Un tanque estaba lleno hasta $\\tfrac78$ y ahora marca $\\tfrac12$. ¿Qué fracción del tanque se gastó?', { de: [7, 8], queda: [1, 2], max: 12 },
+      'En octavos: $\\tfrac78 - \\tfrac48 = \\tfrac38$. Restar arriba con arriba y abajo con abajo daría $\\tfrac66$, ¡un tanque entero!',
+      { hint: 'Escribe las dos marcas con partes del mismo tamaño y mira cuántas partes hay de una a la otra.' }),
+    play('parte-de-parte', 'Se siembran $\\tfrac34$ de este terreno y **un tercio de lo sembrado** es maíz. Marca el maíz.', { cols: 8, filas: 3, de: [3, 4], parte: [1, 3] },
+      'De 24 lotes se siembran 18, y un tercio de 18 son 6. «Un tercio de» es multiplicar: $\\tfrac13 \\cdot \\tfrac34 = \\tfrac14$ del terreno.',
+      { hint: 'Imagina primero lo sembrado y después parte eso, no el terreno entero.' }),
+    play('total-escondido', 'En una rifa ya se vendieron 21 boletas, que son $\\tfrac35$ del total. Reconstruye el total.', { frac: [3, 5], vale: 21 },
+      'Tres partes son 21, así que cada una vale 7. El total son 5 partes: $5 \\cdot 7 = 35$ boletas.',
+      { hint: 'Las 21 boletas ocupan solo las partes que dice el numerador. Halla cuánto vale una.' }),
+    play('lanza-fraccion', 'Cada marca es **un doceavo**. Lanza la ficha al resultado de cada operación. Puedes fallar **una** vez.', { min: 0, max: 18, tope: 10, den: 12, unidad: ['doceavo', 'doceavos'], tiros: [
+      { t: '\\tfrac14 + \\tfrac23', desde: 3, d: 8 }, { t: '\\tfrac34 - \\tfrac13', desde: 9, d: -4 }, { t: '\\tfrac12 + \\tfrac56', desde: 6, d: 10 }] },
+      'En doceavos: $\\tfrac{3}{12} + \\tfrac{8}{12} = \\tfrac{11}{12}$, $\\tfrac{9}{12} - \\tfrac{4}{12} = \\tfrac{5}{12}$ y $\\tfrac{6}{12} + \\tfrac{10}{12} = \\tfrac{16}{12} = \\tfrac43$.',
+      { hint: 'Convierte la segunda fracción a doceavos: ese es el número de marcas que debe saltar la ficha.' }),
+    sol('En un torneo, $\\tfrac35$ de los inscritos vienen de colegios públicos. Llevan uniforme propio $\\tfrac23$ de los de colegios públicos y $\\tfrac12$ de los demás. ¿Qué fracción del total de inscritos lleva uniforme propio?',
+      ['Públicos con uniforme: $\\tfrac23$ de $\\tfrac35$ es [[$\\tfrac25$]] del total', 'Los demás son $1 - \\tfrac35 =$ [[$\\tfrac25$]] del total, y la mitad de ellos es [[$\\tfrac15$]]', 'Con uniforme: $\\tfrac25 + \\tfrac15 =$ [[$\\tfrac35$]] del total'],
+      ['$\\tfrac76$', '$\\tfrac13$', '$\\tfrac{4}{15}$'],
+      '«De» es multiplicar: $\\tfrac23 \\cdot \\tfrac35 = \\tfrac25$ y $\\tfrac12 \\cdot \\tfrac25 = \\tfrac15$. Sumar $\\tfrac23 + \\tfrac12 = \\tfrac76$ no sirve: son fracciones de grupos distintos.',
+      'Cada fracción habla de un grupo diferente. Pásalas todas a fracción del total antes de sumar.'),
+    err('Dos mangueras llenan un tanque: en una hora, la primera llena $\\tfrac14$ del tanque y la segunda $\\tfrac16$. ¿Qué fracción del tanque falta por llenar después de una hora con las dos abiertas?',
+      ['En una hora llenan $\\tfrac14 + \\tfrac16$ del tanque', '$\\tfrac14 + \\tfrac16 = \\tfrac{2}{10}$', 'Falta $1 - \\tfrac{2}{10} = \\tfrac{8}{10}$', 'Simplificando, falta $\\tfrac45$ del tanque'], 1,
+      ['$\\tfrac{3}{12} + \\tfrac{2}{12} = \\tfrac{5}{12}$', '$\\tfrac14 + \\tfrac16 = \\tfrac{1}{10}$', '$\\tfrac14 + \\tfrac16 = \\tfrac{1}{24}$'],
+      'No se suman los de arriba y los de abajo: se llevan a doceavos, $\\tfrac{3}{12} + \\tfrac{2}{12} = \\tfrac{5}{12}$. Falta $\\tfrac{7}{12}$ del tanque.',
+      'Un cuarto y un sexto son pedazos de distinto tamaño. ¿Qué se necesita para poder sumarlos?'),
+    opc('El resultado del producto $\\dfrac12 \\cdot \\dfrac23 \\cdot \\dfrac34 \\cdot \\dfrac45 \\cdot \\dfrac56$ es:',
+      ['$\\tfrac56$', '$\\tfrac16$', '$\\tfrac12$', '$\\tfrac{1}{30}$'], 1,
+      'Cada numerador se cancela con el denominador de la fracción anterior: solo quedan el 1 de arriba y el 6 de abajo, $\\tfrac16$.',
+      'No multipliques todo: antes de operar, mira qué números de arriba se repiten abajo.'),
+  ]);
+
+  setLesson('pu-cm-3', [
+    play('rejilla-otra', 'En una sala hay 40 sillas y el **45 %** está ocupado. Pinta las sillas ocupadas.', { cols: 8, filas: 5, pct: 45 },
+      'El 10 % de 40 son 4 sillas y el 5 % son 2. El 45 % son cuatro veces 4 más 2: 18 sillas.',
+      { hint: 'Aquí no hay 100 sillas. Halla primero cuántas son el 10 % y arma el resto con eso.' }),
+    play('cuelga-porcientos', 'La recta va de 0 % a 100 %. Cuelga cada número en el **porcentaje** que vale.', { min: 0, max: 20, den: 20, rotulos: [0, 20], pie: 'De una marca a la siguiente hay 5 %.', fichas: [
+      { t: '\\tfrac{7}{20}', v: 7 }, { t: '0.6', v: 12 }, { t: '\\tfrac34', v: 15 }, { t: '0.05', v: 1 }] },
+      '$\\tfrac{7}{20} = \\tfrac{35}{100} = 35\\,\\%$, $0.6 = 60\\,\\%$, $\\tfrac34 = 75\\,\\%$ y $0.05 = 5\\,\\%$ (no el 50 %).',
+      { hint: 'Pasa cada ficha a centésimas: el número de arriba es el porcentaje. Mira bien cuántos ceros hay después del punto.' }),
+    play('que-porcentaje', 'De 75 mensajes recibidos, 30 eran publicidad. ¿Qué **porcentaje** de los mensajes fue publicidad?', { parte: 30, todo: 75 },
+      '$30 \\div 75 = 0.4$: el 40 %. La parte se divide entre el todo; 30 es la cantidad.',
+      { hint: 'El 20 % de 75 son 15 mensajes. ¿Cuántas veces cabe el 15 en 30?' }),
+    play('pedazos-porciento', 'El total es 200. Escoge las **tres** cartas que juntas son el **36 %**.', { total: 200, pct: 36, k: 3, cartas: [100, 20, 50, 2, 10, 6] },
+      'El 36 % se arma con 25 % + 10 % + 1 %: $50 + 20 + 2 = 72$.',
+      { hint: 'Mira qué porcentaje de 200 es cada carta. Después busca tres que sumen 36.' }),
+    play('etiqueta-vieja', 'Una chaqueta bajó el **20 %** y ahora cuesta 72 mil pesos. ¿Cuánto costaba **antes**?', { baja: 20, queda: 72 },
+      'Lo que quedó es el 80 % del precio de antes: $72 \\div 0.8 = 90$ mil. Sumarle el 20 % a 72 no sirve: ese 20 % era del precio viejo.',
+      { hint: 'Los 72 mil no son el 100 %. ¿Qué porcentaje del precio de antes son?' }),
+    play('vuelta-al-precio', 'Un pasaje **subió el 25 %**. ¿Qué descuento lo devuelve **exactamente** al precio de antes?', { sube: 25 },
+      'Si costaba 100, ahora cuesta 125. Para volver hay que quitar 25 de 125, que es la quinta parte: el 20 %.',
+      { hint: 'Imagina que costaba 100. El descuento se toma del precio que ya subió, no de los 100.' }),
+    play('factor-final', 'Una acción baja el **30 %** y después sube el **10 %**. De cada 100 pesos, ¿cuántos quedan?', { cambios: [-30, 10], min: 70, max: 90, ini: 70 },
+      '$0.7 \\cdot 1.1 = 0.77$: quedan 77. El 10 % que sube se toma de 70, no de 100.',
+      { hint: 'Haz primero la bajada. El segundo porcentaje se calcula sobre lo que quedó.' }),
+    play('lanza-porciento', 'De una marca a la siguiente hay **5 %**. Lanza la ficha al porcentaje que vale lo mismo. Puedes fallar **una** vez.', { pie: 'Estira el impulso y suelta.', min: 0, max: 20, tope: 18, piso: 0, den: 20, unidad: ['marca', 'marcas'], marcas: { 0: '0 %', 10: '50 %', 20: '100 %' }, tiros: [
+      { t: '\\tfrac45', desde: 0, d: 16, res: '80\\,\\%' }, { t: '\\tfrac{18}{40}', desde: 0, d: 9, res: '45\\,\\%' }, { t: '0.3', desde: 0, d: 6, res: '30\\,\\%' }] },
+      '$\\tfrac45 = 80\\,\\%$, $\\tfrac{18}{40} = \\tfrac{45}{100} = 45\\,\\%$ y $0.3 = 30\\,\\%$.',
+      { hint: 'Convierte cada número a porcentaje y divide entre 5 para saber cuántas marcas son.' }),
+    sol('En una elección votó el 80 % de las 5 000 personas habilitadas. La candidata ganadora obtuvo el 45 % de los votos. ¿Cuántos votos obtuvo y qué porcentaje de las personas habilitadas votó por ella?',
+      ['Votaron: 80 % de 5 000 = [[4 000]] personas', 'Votos de la ganadora: 45 % de 4 000 = [[1 800]]', 'De los habilitados: $1\\,800 \\div 5\\,000 =$ [[0.36]], es decir, el [[36 %]]'],
+      ['2 250', '45 %', '125 %'],
+      'El 45 % se toma sobre los que votaron, no sobre los habilitados: $0.45 \\cdot 4\\,000 = 1\\,800$. Y $0.8 \\cdot 0.45 = 0.36$: el 36 % de los habilitados.',
+      'Cada porcentaje tiene su propio total. Pregúntate siempre: ¿el 45 % de qué?'),
+    err('Del tanque de una moto se ha gastado el 30 % de la gasolina y todavía quedan 14 litros. ¿Cuál es la capacidad del tanque?',
+      ['Si se gastó el 30 %, queda el 70 % del tanque', 'Entonces el 70 % de la capacidad son 14 litros', 'Capacidad: $14 \\cdot 0.70 = 9.8$ litros'], 2,
+      ['Capacidad: $14 \\div 0.70 = 20$ litros', 'Capacidad: $14 \\div 0.30 \\approx 46.7$ litros', 'Capacidad: $14 + 30 = 44$ litros'],
+      'Se conoce la parte y se busca el todo: se divide. $14 \\div 0.70 = 20$ litros. Una capacidad menor que lo que queda no tiene sentido.',
+      'Comprueba si la respuesta es razonable: ¿puede el tanque completo tener menos litros que los que quedan?'),
+    opc('En una biblioteca, el 25 % de los libros está en inglés y el resto en español. De los libros en español, el 30 % son novelas. Si hay exactamente 450 novelas en español, la cantidad total de libros de la biblioteca es:',
+      ['1 500', '1 800', '6 000', '2 000'], 3,
+      'En español está el 75 %, y las novelas son el 30 % de eso: $0.75 \\cdot 0.30 = 0.225$ del total. $450 \\div 0.225 = 2\\,000$.',
+      'El 30 % no es del total sino de los libros en español. Encadena los dos porcentajes multiplicando.'),
+  ]);
+
+  setLesson('pu-cm-4', [
+    play('crece-factor', '**Una** persona sabe un secreto. En cada ronda, quien se acaba de enterar se lo cuenta a **3** personas más. ¿En qué ronda se enteran **243**?', { base: 3, meta: 243, max: 7 },
+      '$3 \\cdot 3 \\cdot 3 \\cdot 3 \\cdot 3 = 3^5 = 243$: cinco rondas, cinco factores.',
+      { hint: 'Empieza en 1 y multiplica por 3 en cada ronda. No es lo mismo que sumar 3.' }),
+    play('cuadrado-justo', 'Un jardín cuadrado de lado 2 m se cambia por otro cuadrado con **16 veces** el área. ¿Cuánto mide el lado nuevo?', { lado: 2, veces: 16, max: 18 },
+      'El lado se multiplica por $\\sqrt{16} = 4$: mide 8 m. Su área es $8^2 = 64 = 16 \\cdot 4$.',
+      { hint: 'Si el lado se duplica, el área se multiplica por 4. ¿Por cuánto debe crecer el lado para que el área crezca 16 veces?' }),
+    play('exponentes-justos', 'Pon tres números distintos en los exponentes para que la igualdad sea **cierta**.', { base: 2, meta: 13, cartas: [2, 3, 4, 5, 7] },
+      'Los grupos se multiplican y lo demás se suma. Sirven, por ejemplo, $2 \\cdot 3 + 7$, $2 \\cdot 4 + 5$ o $2 \\cdot 5 + 3$, que dan 13.',
+      { hint: 'Cuenta factores: en el paréntesis hay grupos iguales, y la otra potencia se junta a ellos. En total deben ser 13.' }),
+    play('misma-potencia', 'Escribe **64** como potencia de 4 y como potencia de 2.', { bases: [4, 2], meta: 64, max: 8 },
+      '$64 = 4 \\cdot 4 \\cdot 4 = 4^3$. Cada 4 son dos doses, así que $64 = 2^6$.',
+      { hint: 'Cada 4 se puede partir en dos factores 2: con la base más pequeña hacen falta más factores.' }),
+    play('raiz-bandera', 'Un lote cuadrado tiene **130 m²**. Estima su lado en metros. Se acepta una diferencia de unas 2 décimas.', { n: 130, min: 9, max: 13, tol: 0.21 },
+      '$11^2 = 121$ y $12^2 = 144$. El 130 está más cerca de 121: el lado mide unos 11.4 m.',
+      { hint: 'Busca los dos cuadrados exactos que dejan al 130 en medio y mira de cuál está más cerca.' }),
+    play('cuelga-decimales', 'Potencias y raíces de decimales. Cuelga cada ficha donde vive.', { min: 0, max: 20, den: 20, rotulos: [0, 10, 20], pie: 'De una marca a la siguiente hay 0.05.', fichas: [
+      { t: '0.5^2', v: 5 }, { t: '\\sqrt{0.49}', v: 14 }, { t: '\\sqrt{0.16}', v: 8 }, { t: '\\sqrt{0.81}', v: 18 }] },
+      '$0.5^2 = 0.25$, porque una cifra decimal por factor son dos en total. Al revés, la raíz de dos cifras decimales tiene una: $\\sqrt{0.49} = 0.7$, $\\sqrt{0.16} = 0.4$ y $\\sqrt{0.81} = 0.9$.',
+      { hint: 'Multiplica sin el punto y cuenta las cifras decimales. En la raíz, busca qué decimal por sí mismo da ese número.' }),
+    play('estima-diez', 'Estima $612 \\times 48$ redondeando **cada número a una cifra**. Escribe el resultado como una cifra seguida de ceros.', { x: 612, y: 48, redondo: [600, 50], a: 3, e: 4 },
+      '$600 \\cdot 50 = 30\\,000 = 3 \\cdot 10^4$. El valor exacto es $29\\,376$: muy cerca.',
+      { hint: 'Redondea 612 a centenas y 48 a decenas. Multiplica las cifras y cuenta los ceros, incluido el que salga al multiplicar.' }),
+    play('lanza-potencia', 'Sale una potencia o una raíz. Lanza la ficha, que espera en el 6, hasta su valor. Puedes fallar **una** vez.', { min: 0, max: 20, cada: 2, tope: 14, pie: 'Estira hacia el lado donde está el valor y suelta.', tiros: [
+      { t: '2^4', desde: 6, d: 10 }, { t: '7^0', desde: 6, d: -5 }, { t: '\\sqrt{144}', desde: 6, d: 6 }] },
+      '$2^4 = 16$ (no 8), $7^0 = 1$ (no 0) y $\\sqrt{144} = 12$, porque $12 \\cdot 12 = 144$.',
+      { hint: 'La potencia repite multiplicaciones; con exponente 0 queda 1. La raíz busca el lado del cuadrado.' }),
+    sol('¿Cuántas cifras tiene el número $2^{9} \\cdot 5^{6}$?',
+      ['Cada 2 se junta con un 5 para formar un 10. Hay seis 5, así que sobran [[3]] factores 2', 'Lo que sobra vale $2^3 =$ [[8]], y $(2 \\cdot 5)^6 = 10^6$ es un 1 seguido de [[6]] ceros', 'El número es 8 000 000: tiene [[7]] cifras'],
+      ['15', '9', '54'],
+      '$2^9 \\cdot 5^6 = 2^3 \\cdot 10^6 = 8\\,000\\,000$. No hace falta calcular $2^9$ ni $5^6$: juntar los 2 con los 5 deja potencias de 10.',
+      'Un 2 y un 5 juntos hacen un 10. ¿Cuántas parejas completas puedes armar?'),
+    err('¿Cuál es el valor de $\\dfrac{3^4 \\cdot 3^2}{(3^2)^3}$?',
+      ['Arriba se suman los exponentes: $3^4 \\cdot 3^2 = 3^6$', 'Abajo: $(3^2)^3 = 3^{2+3} = 3^5$', 'Se restan los exponentes: $3^6 \\div 3^5 = 3^1$', 'El resultado es 3'], 1,
+      ['Abajo se multiplican: $(3^2)^3 = 3^{2 \\cdot 3} = 3^6$', 'Abajo: $(3^2)^3 = 3^{2^3} = 3^8$', 'Abajo: $(3^2)^3 = 9^6$'],
+      'Potencia de una potencia: el grupo $3^2$ se repite tres veces, $3^2 \\cdot 3^2 \\cdot 3^2 = 3^6$. Queda $3^6 \\div 3^6 = 1$.',
+      'Escribe $(3^2)^3$ como un producto repetido y cuenta cuántos 3 hay en total.'),
+    opc('Un vitral cuadrado tiene 90 cm² de área. De las siguientes medidas, la que más se aproxima a su perímetro, en centímetros, es:',
+      ['38', '36', '40', '45'], 0,
+      'El lado es $\\sqrt{90}$, entre 9 y 10 y cerca de 9.5 porque $9.5^2 = 90.25$. El perímetro es $4 \\cdot 9.5 = 38$.',
+      'Primero estima el lado: ¿entre qué dos cuadrados conocidos está el 90? Después recuerda cuántos lados tiene.'),
+  ]);
+
+  setExam('pu-calculo', 'Cálculo mental', [
+    ['pu-cm-1', 'Multiplicar por un negativo refleja la flecha en el 0.',
+      play('voltea-flecha', 'Signos', { rounds: [{ a: -3, target: 12 }] }, '$(-3)(-4) = 12$: dos negativos dan positivo.', { hint: 'Voltea.' })],
+    ['pu-cm-1', 'Primero paréntesis, luego potencias, luego × y ÷, al final + y −.',
+      play('capas-operacion', 'Capas', { rounds: [{ title: 'Jerarquía', items: [{ expr: '8 - 3 * ( 2 - 5 )' }] }] }, '$8 - 3(-3) = 8 + 9 = 17$.', { hint: 'Paréntesis primero.' })],
+    ['pu-cm-1', 'El menos fuera de la potencia no se eleva; un negativo elevado a un impar sigue negativo.',
+      opc('El resultado de $-2^2 - (-3)^2 + (-1)^5 \\cdot 4$ es:', ['$1$', '$-17$', '$9$', '$-9$'], 1,
+        '$-2^2 = -4$, $(-3)^2 = 9$ y $(-1)^5 = -1$: queda $-4 - 9 - 4 = -17$.', 'Mira en cada potencia si el signo menos está dentro del paréntesis.')],
+    ['pu-cm-2', 'Solo se suman pedazos del mismo tamaño.',
+      play('corta-igual', 'Fracciones', { rounds: [{ a: [2, 5], b: [1, 2] }] }, '$\\tfrac{4}{10} + \\tfrac{5}{10} = \\tfrac{9}{10}$.', { hint: 'Denominador común.' })],
+    ['pu-cm-2', 'Entre dos números distintos siempre cabe otro.',
+      play('lupa-densidad', 'Densidad', { rounds: [{ a: { label: '2/5', value: 0.4 }, b: { label: '0.42', value: 0.42 }, view: [0, 1] }] }, 'Entre 0.40 y 0.42 está, por ejemplo, 0.41.', { hint: 'Pasa a decimal.' })],
+    ['pu-cm-2', 'Para comparar fracciones se multiplica en cruz o se pasan a decimal.',
+      opc('Cuatro recipientes iguales están llenos hasta $\\tfrac58$, $\\tfrac{7}{12}$, $\\tfrac23$ y $\\tfrac35$ de su capacidad. El que tiene más líquido es el que está lleno hasta:', ['$\\tfrac58$', '$\\tfrac{7}{12}$', '$\\tfrac23$', '$\\tfrac35$'], 2,
+        'En decimal: $0.625$, $0.583$, $0.667$ y $0.6$. El mayor es $\\tfrac23$.', 'Pásalas a decimal con tres cifras o compáralas de a dos en cruz.')],
+    ['pu-cm-3', 'Un porcentaje es una parte de cien.',
+      play('cuadricula-cien', 'Cuadrícula', { rounds: [{ ask: '3/4', count: 75 }] }, '$\\tfrac34 = \\tfrac{75}{100}$: 75 casillas.', { hint: 'De cien.' })],
+    ['pu-cm-3', 'Qué porcentaje es A de B: A ÷ B × 100.',
+      play('rueda-porcentaje', 'Rueda', { rounds: [{ part: 27, whole: 90 }], tol: 1 }, '$\\tfrac{27}{90} = 0.3$: el 30 %.', { hint: 'Parte entre todo.' })],
+    ['pu-cm-3', 'La parte entre el todo, por cien.',
+      opc('En un grupo de 40 estudiantes, 14 llegan al colegio en bicicleta. El porcentaje de estudiantes del grupo que llega en bicicleta es:', ['14 %', '26 %', '40 %', '35 %'], 3,
+        '$14 \\div 40 = 0.35$: el 35 %.', 'Divide la parte entre el total; 14 no es el porcentaje sino la cantidad.')],
+    ['pu-cm-4', 'Una potencia repite la base tantas veces como dice el exponente.',
+      play('arbol-potencia', 'Potencia', { rounds: [{ target: 125 }] }, '$125 = 5^3$.', { hint: 'Ramas y niveles.' })],
+    ['pu-cm-4', 'La raíz cuadrada es el lado del cuadrado de esa área.',
+      play('lado-del-cuadrado', 'Raíz', { rounds: [{ area: 36 }], max: 10, step: 0.05, tol: 0.05 }, '$\\sqrt{36} = 6$.', { hint: 'Lado por lado.' })],
+    ['pu-cm-4', 'Una raíz no exacta se acorrala entre dos cuadrados conocidos.',
+      opc('El número $\\sqrt{72}$ está entre:', ['8 y 9', '7 y 8', '9 y 10', '35 y 37'], 0,
+        '$8^2 = 64$ y $9^2 = 81$: como $64 < 72 < 81$, la raíz está entre 8 y 9.', 'Busca los dos cuadrados perfectos que encierran al 72; la raíz no es la mitad.')],
+  ]);
+  diez('pu-calculo');
 });

@@ -1,526 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/explora-lectura.js
-// Explora · escena «hoja» para las lecciones de comprensión lectora (spec 2026-11-24-lectura-explora): el texto es la escena.
-//   { cab: [título, autor, fuente, fecha], paras: [[trozos…]…], tapa, unidos }   trozos: 't','a','f','d' los bordes; 0, 1, 2… el texto
-// En las explicaciones cada momento cambia la hoja (y lo demás se queda como estaba):
-//   luz [trozos] (solo ese momento) · tacha [trozos] · nota { párrafo: rótulo } · tapa true | false · sello { trozo: rótulo }
-// En la práctica: modo 'toca' (subrayar los que cumplen; meta [trozos]), 'tacha' (igual, pero se quitan) o 'margen'
-// (arrastrar o tocar rótulos al margen de cada párrafo; rotulos, meta [rótulo por párrafo]). Va después de explora-escenas.js.
-XP.hoja = {
-  ini: p => (p.modo === 'margen' ? { n: p.paras.map(() => -1) } : { m: [] }),
-  ok(s, p) {
-    if (p.modo === 'margen') return s.n.join() === p.meta.join();
-    return [...s.m].map(String).sort().join() === p.meta.map(String).sort().join();
-  },
-  sol: p => (p.modo === 'margen' ? { n: [...p.meta] } : { m: p.meta.map(String) }),
-  lee: () => '',
-  dice(s, p) {
-    if (p.modo === 'margen') { const f = s.n.filter(x => x < 0).length; return f === s.n.length ? 'Arrastra cada rótulo a su párrafo, o tócalo y luego toca el párrafo.' : f ? `${f === 1 ? 'Falta un párrafo' : `Faltan ${f} párrafos`}.` : XP.hoja.ok(s, p) ? 'Cada uno con su rótulo.' : 'Todos con rótulo: mira si cada uno corresponde.'; }
-    const n = s.m.length, v = p.modo === 'tacha' ? ['Toca lo que sobra para tacharlo.', 'tachada', 'tachadas'] : ['Toca un trozo para subrayarlo; otro toque lo suelta.', 'subrayada', 'subrayadas'];
-    return !n ? v[0] : `${n} de ${p.meta.length} ${n === 1 ? 'marca' : 'marcas'}.`;
-  },
-};
-
-XPD.hoja = (stage, p, s, api) => {
-  const mira = !!p.momentos, toca = !mira && p.modo !== 'margen';
-  let k = 0, v = { luz: [], tacha: [], nota: {}, sello: {}, tapa: !!p.tapa }, sel = null, timer = 0, dedo = null, tecla = null;
-  const tr = (id, t, cls = '') => `<span class="hj-t ${cls}" data-k="${id}"${toca && !p.quietos?.includes(id) ? ' role="button" tabindex="0"' : ''}>${HOJA.fmt(t)}</span>`;
-  const cab = p.cab ? `<header class="hj-cab"><h4>${tr('t', p.cab[0])}</h4><p>${['a', 'f', 'd'].map((id, i) => tr(id, p.cab[i + 1])).join('<i>·</i>')}</p></header>` : '';
-  stage.innerHTML = `<div class="hj hj-mira ${toca ? `hj-toca hj-${p.modo === 'tacha' ? 'tacha' : 'subraya'}` : ''}"><article class="hj-hoja">${cab}${p.paras.map((l, i) => `<div class="hj-p" data-p="${i}"><b class="hj-n">${p.letras?.[i] || i + 1}</b><span class="hj-marg"></span><p>${l.map(t => tr(k++, t)).join(p.unidos ? '' : ' ')}</p></div>`).join('')}</article>${p.modo === 'margen' ? '<div class="hj-band"></div>' : ''}</div>`;
-  const root = stage.firstChild, T = id => root.querySelector(`.hj-t[data-k="${id}"]`), P = i => root.querySelector(`.hj-p[data-p="${i}"]`);
-  const chip = (i, en) => `<button type="button" class="hj-f${sel === i ? ' hj-sel' : ''}" data-r="${i}" data-en="${en}">${HOJA.esc(p.rotulos[i])}</button>`;
-
-  function pintaMira() {
-    root.querySelectorAll('.hj-t').forEach(t => {
-      const id = t.dataset.k, en = l => l.map(String).includes(id);
-      t.classList.toggle('on', en(v.luz)); t.classList.toggle('tachado', en(v.tacha));
-      t.dataset.sello = v.sello[id] || ''; t.classList.toggle('con-sello', !!v.sello[id]);
-    });
-    root.classList.toggle('foco', v.luz.length > 0);
-    root.classList.toggle('tapada', v.tapa);
-    p.paras.forEach((_, i) => { const m = P(i).querySelector('.hj-marg'), t = v.nota[i] || ''; if (m.textContent !== t) m.innerHTML = t ? `<em class="hj-nota">${HOJA.esc(t)}</em>` : ''; });
-  }
-  function pinta() {
-    if (mira) return pintaMira();
-    if (toca) return root.querySelectorAll('.hj-t').forEach(t => { const on = s.m.includes(t.dataset.k); t.classList.toggle('on', on); if (t.getAttribute('role')) t.setAttribute('aria-pressed', on); });
-    root.querySelector('.hj-band').innerHTML = p.rotulos.map((_, i) => (s.n.includes(i) ? '' : chip(i, -1))).join('');
-    p.paras.forEach((_, i) => { P(i).querySelector('.hj-marg').innerHTML = s.n[i] >= 0 ? chip(s.n[i], i) : '<em class="hj-hueco">?</em>'; });
-    root.querySelectorAll('[data-r]').forEach(b => { b.onkeydown = tecla; });
-    root.classList.toggle('hj-lleva', sel != null);
-  }
-  // Al completar las marcas sin cumplir, se avisa (sin decir cuál).
-  const fin = lleno => { XS.pop(); xpTick(); api.nota(''); api.set(s); pinta(); if (lleno && !XP.hoja.ok(s, p)) { XS.nope(); api.nota(p.pista || 'Casi: algo no cumple. Vuelve a leer y cambia una marca.'); } };
-  if (toca) {
-    const pon = t => {
-      const id = t.dataset.k, l = s.m.includes(id) ? s.m.filter(x => x !== id) : s.m.length >= p.meta.length ? [...s.m.slice(1), id] : [...s.m, id];
-      s = { m: l }; fin(l.length === p.meta.length);
-    };
-    const cual = e => e.target.closest?.('.hj-t[role=button]');
-    root.onclick = e => { const t = cual(e); if (t) pon(t); };
-    root.querySelectorAll('.hj-t[role=button]').forEach(t => { t.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pon(t); } }; });
-  }
-  if (p.modo === 'margen' && !mira) {
-    const pon = (r, i) => {
-      const n = s.n.map(x => (x === r ? -1 : x)), de = s.n.indexOf(r);
-      if (i >= 0) { if (n[i] >= 0 && de >= 0) n[de] = n[i]; n[i] = r; }
-      sel = null; s = { n }; fin(n.every(x => x >= 0));
-    };
-    // Un toque elige el rótulo y otro en el párrafo lo pone; arrastrar hace lo mismo.
-    root.onpointerdown = e => { const b = e.target.closest('[data-r]'); if (!b || dedo) return; dedo = { id: e.pointerId, r: +b.dataset.r, en: +b.dataset.en, b, x: e.clientX, y: e.clientY, g: null }; };
-    const mueve = e => {
-      if (!dedo || e.pointerId !== dedo.id) return;
-      if (!dedo.g) {
-        if (Math.hypot(e.clientX - dedo.x, e.clientY - dedo.y) < 7) return;
-        const r = dedo.b.getBoundingClientRect();
-        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width / zk()}px`, left: `${r.left / zk()}px`, top: `${r.top / zk()}px` });
-        dedo.ox = e.clientX - r.left; dedo.oy = e.clientY - r.top; document.body.appendChild(dedo.g); dedo.b.classList.add('lift');
-      }
-      e.preventDefault();
-      dedo.g.style.left = `${(e.clientX - dedo.ox) / zk()}px`; dedo.g.style.top = `${(e.clientY - dedo.oy) / zk()}px`;
-      const q = document.elementFromPoint(e.clientX, e.clientY)?.closest('.hj-p');
-      root.querySelectorAll('.over').forEach(o => o !== q && o.classList.remove('over'));
-      if (q && root.contains(q)) q.classList.add('over');
-      const st = root.closest('.xp-step'), r = st?.getBoundingClientRect();
-      if (r) { if (e.clientY < r.top + 46) st.scrollTop -= 8; else if (e.clientY > r.bottom - 46) st.scrollTop += 8; }
-    };
-    const deja = e => {
-      if (!dedo || e.pointerId !== dedo.id) return;
-      const d = dedo; dedo = null; d.g?.remove(); d.b.classList.remove('lift');
-      root.querySelectorAll('.over').forEach(o => o.classList.remove('over'));
-      if (e.type === 'pointercancel') return;
-      const q = document.elementFromPoint(e.clientX, e.clientY)?.closest('.hj-p');
-      if (d.g) { if (q && root.contains(q)) pon(d.r, +q.dataset.p); else if (d.en >= 0) pon(d.r, -1); return; }
-      if (sel != null && d.en >= 0 && sel !== d.r) return pon(sel, d.en);
-      sel = sel === d.r ? null : d.r; XS.tick(2); pinta();
-    };
-    root.onclick = e => { const q = e.target.closest('.hj-p'); if (q && sel != null && !e.target.closest('[data-r]')) pon(sel, +q.dataset.p); };
-    tecla = e => {   // la explicación solo deja pasar las teclas al manejador del propio botón
-      const b = e.currentTarget; if (e.key !== 'Enter' && e.key !== ' ') return;
-      e.preventDefault(); const r = +b.dataset.r, en = +b.dataset.en;   // con teclado: de la bandeja al primer párrafo libre, y de vuelta
-      pon(r, en >= 0 ? -1 : Math.max(0, s.n.indexOf(-1)));
-      (root.querySelector('.hj-band [data-r]') || root.querySelector('[data-r]'))?.focus({ preventScroll: true });
-    };
-    window.addEventListener('pointermove', mueve, { passive: false }); window.addEventListener('pointerup', deja); window.addEventListener('pointercancel', deja);
-    timer = () => { window.removeEventListener('pointermove', mueve); window.removeEventListener('pointerup', deja); window.removeEventListener('pointercancel', deja); dedo?.g?.remove(); };
-  }
-  pinta();
-  const aplica = m => {
-    v = { luz: m.luz || [], tacha: [...v.tacha, ...(m.tacha || [])], nota: { ...v.nota, ...m.nota }, sello: { ...v.sello, ...m.sello }, tapa: m.tapa ?? v.tapa };
-    if (m.limpia) v = { ...v, tacha: m.tacha || [], nota: m.nota || {}, sello: m.sello || {} };
-  };
-  let t = 0;
-  return Object.assign(() => { clearTimeout(t); if (typeof timer === 'function') timer(); }, {
-    anima(m, done) {
-      aplica(m); pinta();
-      if (m.tacha) XS.tick(-6); else if (m.luz || m.nota || m.sello) XS.pop();
-      const q = m.luz?.length ? T(m.luz[0]) : m.nota ? P(Object.keys(m.nota)[0]) : null, st = root.closest('.xp-step');
-      // En pantallas pequeñas la hoja puede ser más alta que el paso: lo que se nombra queda a la vista.
-      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: (a.top - b.top - b.height * 0.45) / zk(), behavior: xpStill() ? 'auto' : 'smooth' }); }
-      t = setTimeout(done, xpStill() ? 0 : 750);
-      return () => clearTimeout(t);
-    },
-    salta(l) { l.forEach(aplica); v.luz = []; pinta(); },
-  });
-};
-;
-//#archivo js/explora-voces.js
-// GENERADO por tools/subir-voz.js: no editar a mano. Lecciones narradas → su lista de audios en Bunny (EXPLORA_VOZ).
-const EXPLORA_VOCES = {
-  "icf-ma-datos-1": "voz-731e1dfbbf53.json",
-  "pu-cm-1": "voz-05c26a14b48f.json",
-  "pu-cm-2": "voz-d32f237d2c4f.json",
-  "pu-cm-3": "voz-a5cfb42918fa.json",
-  "pu-cm-4": "voz-cd3065d83bd1.json"
-};
-;
-//#archivo js/explora-pu-cm-2.js
-// Preuniversitario · pu-cm-2 «Fracciones»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva; escena «barras»
-// en js/explora-numeros.js). Cada capítulo abre explicando, sigue «tu turno» y el problema va al final. Los ejemplos no son los
-// de los ejercicios de la lección (tabla de quintos, 6/9, entre 1/2 y 3/5, 11/12, 7/8 − 1/2, 1/3 de 3/4, 3/5 = 21, 1/4 + 2/3…).
-EXPLORA['pu-cm-2'] = {
-  caps: ['Partes iguales', 'Fracciones equivalentes', 'Comparar y sumar', 'La fracción de una cantidad', 'Ahora sí, un problema'],
-  pasos: [
-    // ---- Partes iguales ----
-    { cap: 0, tipo: 'muestra', escena: 'barras', en: {},
-      texto: 'Mira esta barra: con ella vas a descubrir **qué es una fracción**.',
-      momentos: [
-        { barras: [{ n: 0, d: 1 }], dice: 'Está entera, todavía sin cortar. Una fracción aparece cuando la partimos en pedazos iguales.' },
-        { barras: [{ n: 0, d: 8 }], dice: 'Aquí la cortamos en 8. Ese número se escribe abajo y se llama **denominador**.' },
-        { barras: [{ n: 3, d: 8 }], cuenta: '$\\tfrac38$', dice: 'Si tomamos 3 pedazos, el 3 va arriba: es el **numerador**. Tenemos tres octavos.' },
-        { barras: [{ n: 8, d: 8 }], cuenta: '$\\tfrac88 = 1$', dice: '¿Y si los tomamos todos? Volvemos a la barra completa: ocho octavos son 1.' },
-        { barras: [{ n: 3, d: 8 }], cuenta: '$\\tfrac38$', dice: 'Eso sí, los pedazos deben ser iguales; con uno más grande, no sabríamos cuánto es tres octavos.' },
-      ],
-      idea: 'El denominador dice en cuántas partes **iguales** se corta; el numerador, cuántas se toman.' },
-    { cap: 0, tipo: 'barras', meta: [4, 7], d: 7,
-      texto: '**Tu turno.** Esta barra viene cortada en séptimos. Arrastra sobre ella hasta tomar cuatro.',
-      idea: 'Cuatro de siete partes iguales: $\\tfrac47$.' },
-
-    // ---- Fracciones equivalentes ----
-    { cap: 1, tipo: 'muestra', escena: 'barras', en: {},
-      texto: 'Dos fracciones pueden verse muy distintas y valer **la misma cantidad**. Fíjate.',
-      momentos: [
-        { barras: [{ n: 1, d: 2, label: '1/2' }], cuenta: '$\\tfrac12$', dice: 'Aquí tenemos media barra, o sea, un medio.' },
-        { barras: [{ n: 1, d: 2, label: '1/2' }, { n: 2, d: 4, label: '2/4' }], cuenta: '$\\tfrac12 = \\tfrac24$',
-          dice: 'Cortamos cada mitad en dos. Ahora son dos cuartos, pero ¡mide exactamente lo mismo!' },
-        { barras: [{ n: 1, d: 2, label: '1/2' }, { n: 2, d: 4, label: '2/4' }, { n: 4, d: 8, label: '4/8' }], cuenta: '$\\tfrac12 = \\tfrac24 = \\tfrac48$',
-          dice: 'Otro corte más y quedan cuatro octavos. Multiplicar arriba y abajo por lo mismo no cambia el valor.' },
-        { barras: [{ n: 10, d: 12, label: '10/12' }, { n: 5, d: 6, label: '5/6' }], cuenta: '$\\tfrac{10}{12} = \\tfrac56$',
-          dice: 'Simplificar es devolverse: si dividimos arriba y abajo entre 2, diez doceavos se vuelven cinco sextos.' },
-      ],
-      idea: 'Multiplicar o dividir arriba y abajo por el mismo número da una fracción **equivalente**: la misma cantidad.' },
-    { cap: 1, tipo: 'barras', meta: [1, 3], d: 3, cortar: true, dpide: 12,
-      texto: '**Tu turno.** ¿Cómo se vería un tercio en una barra de 12 pedazos? Córtala con la regla de abajo y llénala.',
-      idea: 'Un tercio son cuatro doceavos: $\\tfrac13 = \\tfrac{4}{12}$.' },
-
-    // ---- Comparar y sumar ----
-    { cap: 2, tipo: 'muestra', escena: 'barras', en: {},
-      texto: 'Para comparar o sumar fracciones hay un truco: usar **partes del mismo tamaño**.',
-      momentos: [
-        { barras: [{ n: 5, d: 6, label: '5/6' }, { n: 4, d: 5, label: '4/5' }], dice: '¿Cuál es mayor, 5/6 o 4/5? A simple vista cuesta decidir, porque los pedazos no miden igual.' },
-        { barras: [{ n: 25, d: 30, label: '25/30' }, { n: 24, d: 30, label: '24/30' }], cuenta: '$\\tfrac56 = \\tfrac{25}{30} \\quad \\tfrac45 = \\tfrac{24}{30}$',
-          dice: 'Cortemos las dos barras en treinta partes iguales. Ahora basta con contar: 25 contra 24.' },
-        { barras: [{ n: 25, d: 30, label: '25/30' }, { n: 24, d: 30, label: '24/30' }], cuenta: '$\\tfrac56 > \\tfrac45$',
-          dice: 'Gana 5/6, por muy poquito. Un atajo es multiplicar en cruz: 5 por 5 da 25, y 4 por 6 da 24.' },
-        { barras: [{ n: 1, d: 2, label: '1/2' }, { n: 1, d: 3, label: '1/3' }], cuenta: '$\\tfrac12 + \\tfrac13$',
-          dice: 'Con la suma ocurre igual: un medio y un tercio no se pueden juntar así, porque son pedazos distintos.' },
-        { barras: [{ n: 3, d: 6, label: '3/6' }, { n: 2, d: 6, label: '2/6' }, { n: 5, d: 6, label: '5/6' }], cuenta: '$\\tfrac36 + \\tfrac26 = \\tfrac56$',
-          dice: 'En sextos sale fácil: tres más dos, cinco sextos. Sumar arriba y abajo daría 2/5, y eso está mal.' },
-      ],
-      idea: 'Para comparar o sumar, primero partes del mismo tamaño (el mismo denominador); luego se cuentan.' },
-    { cap: 2, tipo: 'barras', meta: [7, 10], d: 2, cortar: true,
-      texto: '**Tu turno.** Suma un medio y un quinto. Busca un corte en el que quepan los dos y llena el resultado.',
-      idea: 'En décimos: $\\tfrac12 + \\tfrac15 = \\tfrac{5}{10} + \\tfrac{2}{10} = \\tfrac{7}{10}$.' },
-
-    // ---- La fracción de una cantidad ----
-    { cap: 3, tipo: 'muestra', escena: 'barras', en: {},
-      texto: 'Ahora la barra va a valer algo. Así se calcula **la fracción de una cantidad**.',
-      momentos: [
-        { barras: [{ n: 0, d: 1, total: 20 }], dice: 'Imagina que son 20 dulces y quieres tres cuartos. ¿Cuántos te tocan?' },
-        { barras: [{ n: 0, d: 4, total: 20 }], cuenta: '$20 \\div 4 = 5$', dice: 'Los repartimos en 4 grupos iguales: quedan 5 en cada uno.' },
-        { barras: [{ n: 3, d: 4, total: 20 }], cuenta: '$\\tfrac34 \\text{ de } 20 = 3 \\cdot 5 = 15$',
-          dice: 'Tomas 3 grupos: son 15 dulces. Dividimos entre el de abajo y multiplicamos por el de arriba.' },
-        { barras: [{ n: 3, d: 4, total: 20 }], cuenta: '$\\tfrac34 \\cdot 20 = \\tfrac{60}{4} = 15$',
-          dice: 'Si prefieres, multiplica primero y divide después: llegas al mismo resultado.' },
-      ],
-      idea: 'La fracción de una cantidad: se divide entre el denominador y se multiplica por el numerador.' },
-    { cap: 3, tipo: 'barras', meta: [5, 6], d: 6, total: 42,
-      texto: '**Tu turno.** En un viaje de 42 km ya recorriste cinco sextos. Marca esa parte y descubre cuántos kilómetros llevas.',
-      idea: 'Cada sexto son 7 km: $\\tfrac56 \\text{ de } 42 = 35$.' },
-
-    // ---- Ahora sí, un problema ----
-    { cap: 4, tipo: 'barras', meta: [2, 3], d: 1, cortar: true, total: 24,
-      texto: 'Ana se lleva dos tercios de una cinta de 24 m. Corta la cinta y toma su parte: ¿cuántos metros le tocan?',
-      idea: 'Cada tercio son 8 m: Ana se lleva $\\tfrac23 \\text{ de } 24 = 16$ m.' },
-    { cap: 4, tipo: 'cierre', clave: 'pu-cm-2', real: '',
-      texto: 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.',
-      idea: 'Partes iguales, fracciones equivalentes, comparar y sumar con el mismo denominador, y la fracción de una cantidad.' },
-  ],
-};
-;
-//#archivo js/explora-pu-cm-3.js
-// Preuniversitario · pu-cm-3 «Decimales y porcentajes»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva;
-// escena «cien» en js/explora-numeros.js). Los ejemplos no son los de los ejercicios de la lección (2/5, 0.625, 5/6, 21 de 60,
-// 75 % de 16, 15 % de 40, 25 % de 120, 3/5, el 80 % y el 45 % de una elección, el tanque con 14 litros…).
-EXPLORA['pu-cm-3'] = {
-  caps: ['De cada 100', 'Fracción, decimal y porcentaje', 'El porcentaje de una cantidad', 'Subir y bajar', 'Ahora sí, un problema'],
-  pasos: [
-    // ---- De cada 100 ----
-    { cap: 0, tipo: 'muestra', escena: 'cien', en: {},
-      texto: '¿Qué significa **por ciento**? Significa «de cada 100», y aquí lo vas a ver.',
-      momentos: [
-        { k: 0, dice: 'Esta cuadrícula tiene 100 casillas y todas juntas forman el total.' },
-        { k: 30, cuenta: '$30\\,\\%$', dice: 'Si pintamos 30, tenemos el 30 por ciento. Así de simple.' },
-        { k: 100, cuenta: '$100\\,\\% = 1$', dice: 'Cuando se pintan todas llegamos al 100 %, que es el total completo.' },
-        { k: 50, cuenta: '$50\\,\\% = \\tfrac12$', dice: 'Y con 50 casillas pintadas queda justo la mitad: el 50 %.' },
-      ],
-      idea: 'Por ciento es «de cada 100»: el $100\\,\\%$ es el total.' },
-    { cap: 0, tipo: 'cien', meta: 45,
-      texto: '**Tu turno.** Ahora pinta el 45 %, arrastrando sobre la cuadrícula.',
-      idea: '45 de cada 100 casillas: $45\\,\\%$.' },
-
-    // ---- Fracción, decimal y porcentaje ----
-    { cap: 1, tipo: 'muestra', escena: 'cien', en: {},
-      texto: 'Lo curioso es que una misma cantidad se puede escribir de **tres formas**.',
-      momentos: [
-        { k: 20, cuenta: '$\\tfrac15 = \\tfrac{20}{100} = 20\\,\\%$', dice: 'Un quinto de la cuadrícula ocupa 20 casillas, o sea, el 20 %.' },
-        { k: 20, cuenta: '$20\\,\\% = 0.20$', dice: 'También son 20 centésimas. Con decimales se escribe 0.20, que es lo mismo que 0.2.' },
-        { k: 36, cuenta: '$\\tfrac{9}{25} = \\tfrac{36}{100} = 36\\,\\%$', dice: '¿Y si son 9 de cada 25? Multiplicamos los dos números por 4 y quedan 36 de cada 100: el 36 %.' },
-        { k: 36, cuenta: '$9 \\div 25 = 0.36$', dice: 'Dividir también sirve: 9 entre 25 da 0.36. Corremos el punto dos lugares y sale 36 %.' },
-      ],
-      idea: 'Fracción, decimal y porcentaje son tres formas de lo mismo: $\\tfrac15 = 0.2 = 20\\,\\%$.' },
-    { cap: 1, tipo: 'cien', meta: 65,
-      texto: '**Tu turno.** Intenta pintar 13 de cada 20 casillas de la cuadrícula. ¿Qué porcentaje es?',
-      idea: '$\\tfrac{13}{20} = \\tfrac{65}{100} = 65\\,\\%$.' },
-
-    // ---- El porcentaje de una cantidad ----
-    { cap: 2, tipo: 'muestra', escena: 'cien', en: {},
-      texto: 'Veamos cómo sacar **el porcentaje de una cantidad**. Digamos que la cuadrícula vale 50 000 pesos.',
-      momentos: [
-        { k: 100, cuenta: '$50\\,000 \\div 100 = 500$', dice: 'Repartimos ese dinero entre las 100 casillas, y a cada una le tocan 500 pesos.' },
-        { k: 10, cuenta: '$10\\,\\% \\text{ de } 50\\,000 = 5\\,000$', dice: 'Para el 10 % tomamos 10 casillas: 5 000 pesos. Es la décima parte del total.' },
-        { k: 15, cuenta: '$15\\,\\% = 5\\,000 + 2\\,500 = 7\\,500$', dice: 'Con eso armamos el 15 %: al 10 % le sumamos su mitad, el 5 %. Son 7 500 pesos.' },
-        { k: 15, cuenta: '$0.15 \\cdot 50\\,000 = 7\\,500$', dice: 'Hay un camino directo: escribir el porcentaje como decimal y multiplicarlo por la cantidad.' },
-        { k: 25, cuenta: '$12 \\div 48 = 0.25 = 25\\,\\%$', dice: 'Al revés también funciona. ¿Qué porcentaje es 12 de 48? Dividimos 12 entre 48: da 0.25, el 25 %.' },
-      ],
-      idea: 'El porcentaje de una cantidad: el porcentaje en decimal por la cantidad. El $10\\,\\%$ corre el punto.' },
-    { cap: 2, tipo: 'cien', meta: 30, total: 240,
-      texto: '**Tu turno.** Esta vez la cuadrícula vale 240. Pinta el 30 % y mira cuánto es.',
-      idea: '$0.30 \\cdot 240 = 72$.' },
-
-    // ---- Subir y bajar ----
-    { cap: 3, tipo: 'muestra', escena: 'cien', en: {},
-      texto: 'Los precios suben y bajan todo el tiempo. Vas a ver que **subir y bajar** un porcentaje es multiplicar.',
-      momentos: [
-        { k: 100, dice: 'Unos tenis cuestan 200 000 pesos y les hacen un descuento del 20 %.' },
-        { k: 100, quita: 20, cuenta: '$200\\,000 \\cdot 0.8 = 160\\,000$', dice: 'Quitamos 20 casillas y queda el 80 %. Por eso, bajar un 20 % es multiplicar por 0.8.' },
-        { k: 80, cuenta: '$\\times 1.1$', dice: 'Después, el precio sube un 10 %. Ojo: ese 10 % sale del precio rebajado, no del original.' },
-        { k: 88, cuenta: '$0.8 \\cdot 1.1 = 0.88$', dice: 'El 10 % de 80 son 8 casillas, y quedamos en 88 %. ¡No es lo mismo que bajar 10!' },
-        { k: 80, cuenta: '$160\\,000 \\div 0.8 = 200\\,000$', dice: '¿Cómo volver al precio original? Si 160 000 es el 80 %, dividimos entre 0.8.' },
-        { k: 100, cuenta: '$80 \\cdot 1.25 = 100$', dice: 'Y para volver de 80 a 100 se suben 20, la cuarta parte de 80: un 25 %, ¡no un 20 %!' },
-      ],
-      idea: 'Bajar un porcentaje es multiplicar por menos de 1; subir, por más de 1. Los cambios seguidos se multiplican.' },
-    { cap: 3, tipo: 'cien', meta: 60, k: 100,
-      texto: '**Tu turno.** Una batería llena pierde el 40 % de su carga. Deja pintado solo lo que queda.',
-      idea: 'Perder el $40\\,\\%$ deja el $60\\,\\%$: se multiplica por $0.6$.' },
-
-    // ---- Ahora sí, un problema ----
-    { cap: 4, tipo: 'cien', meta: 55, total: 600,
-      texto: 'De 600 hinchas en el estadio, el 55 % llevaba la camiseta local. La cuadrícula representa a los 600: pinta ese porcentaje. ¿Cuántos son?',
-      idea: 'Cada casilla son 6 hinchas: $0.55 \\cdot 600 = 330$.' },
-    { cap: 4, tipo: 'cierre', clave: 'pu-cm-3', real: '',
-      texto: 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.',
-      idea: 'De cada 100, las tres formas de escribirlo, el porcentaje de una cantidad y subir o bajar multiplicando.' },
-  ],
-};
-;
-//#archivo js/explora-pu-cm-4.js
-// Preuniversitario · pu-cm-4 «Potencias, raíces y estimación»: explicación interactiva (spec
-// 2026-11-23-explora-leccion-interactiva; escena «potencia» en js/explora-numeros.js). Los ejemplos no son los de los
-// ejercicios de la lección (81 por reenvíos, la torre del 2 con 2⁶, 3⁵/3³, 0.36 m², 20, √30, 25 y −27, 2⁹·5⁶, 3⁴·3²/(3²)³, 90 cm²…).
-EXPLORA['pu-cm-4'] = {
-  caps: ['Multiplicar repetido', 'Al cuadrado: un área', 'Contar factores', 'Raíces', 'Ahora sí, un problema'],
-  pasos: [
-    // ---- Multiplicar repetido ----
-    { cap: 0, tipo: 'muestra', escena: 'potencia', en: { base: 2 },
-      texto: '¿Qué es una potencia? Es **multiplicar repetido**: el mismo número, varias veces.',
-      momentos: [
-        { base: 2, e: 1, cuenta: '$2^1 = 2$', dice: 'Tomemos el 2. Uno solo son dos puntos.' },
-        { base: 2, e: 3, cuenta: '$2^3 = 2 \\cdot 2 \\cdot 2 = 8$', dice: 'Si multiplicamos 2 por 2 por 2, los puntos se van duplicando y llegan a 8. Eso es 2 a la 3.' },
-        { base: 2, e: 5, cuenta: '$2^5 = 32$', dice: 'Cada 2 que se agrega duplica todo lo anterior. Con cinco, ya vamos en 32.' },
-        { base: 2, e: 3, cuenta: '$2^3 \\neq 2 \\cdot 3$', dice: 'Ojo: 2 a la 3 no es lo mismo que 2 por 3. Da 8, no 6.' },
-        { base: 5, e: 0, cuenta: '$5^0 = 1$', dice: 'Y si el exponente es cero, todavía no hemos multiplicado nada: queda el 1 del que partimos.' },
-      ],
-      idea: 'Una potencia es multiplicar repetido: $b^n$ son $n$ factores iguales a $b$. Y $b^0 = 1$.' },
-    { cap: 0, tipo: 'potencia', base: 3, meta: 3, max: 5,
-      texto: '**Tu turno.** Ahora arrastra el exponente hasta que el 3 llegue a 27.',
-      idea: 'Tres treses: $3^3 = 27$.' },
-
-    // ---- Al cuadrado: un área ----
-    { cap: 1, tipo: 'muestra', escena: 'potencia', en: { modo: 'lado' },
-      texto: 'La expresión **al cuadrado** viene de una figura: el área de un cuadrado con ese lado.',
-      momentos: [
-        { s: 3, cuenta: '$3^2 = 9$', dice: 'Este tiene lado 3: son 3 filas de 3 casillas, 9 en total. Por eso 3 al cuadrado es 9.' },
-        { s: 6, cuenta: '$6^2 = 36$', dice: 'Al duplicar el lado, de 3 a 6, uno esperaría el doble de casillas. Pero son 36, ¡el cuádruple!' },
-        { s: 10, cuenta: '$10^2 = 100$', dice: 'Con lado 10 llegamos a 100 casillas. El área siempre es lado por lado.' },
-        { s: 9, cuenta: '$(3 \\cdot 3)^2 = 9 \\cdot 9 = 81$', dice: '¿Y al triplicar el lado, de 3 a 9? Pasamos de 9 casillas a 81: nueve veces más área.' },
-        { s: 3, cuenta: '$0.3^2 = 0.09$', dice: 'También sirve con decimales. Si las 100 casillas valen 1, un lado de 0.3 cubre 9: el área es 0.09.' },
-      ],
-      idea: 'Elevar al cuadrado es el área de un cuadrado: $n^2 = n \\cdot n$.' },
-    { cap: 1, tipo: 'potencia', modo: 'lado', meta: 7, max: 10,
-      texto: '**Tu turno.** Mueve el lado hasta que el cuadrado tenga 49 casillas.',
-      idea: 'Lado 7: $7^2 = 49$.' },
-
-    // ---- Contar factores ----
-    { cap: 2, tipo: 'muestra', escena: 'potencia', en: { base: 2 },
-      texto: 'Las leyes de las potencias no hay que memorizarlas: **salen de contar**.',
-      momentos: [
-        { base: 2, grupos: [3, 4], cuenta: '$2^3 \\cdot 2^4$', dice: 'Mira estos dos grupos: en uno el 2 está tres veces; en el otro, cuatro.' },
-        { base: 2, grupos: [3, 4], junta: true, cuenta: '$2^3 \\cdot 2^4 = 2^7$', dice: 'Cuando los multiplicamos se juntan, y el 2 queda siete veces. Por eso se suman los exponentes.' },
-        { base: 5, grupos: [2, 2, 2], cuenta: '$(5^2)^3$', dice: 'Veamos otro caso: tres grupos iguales, y en cada uno el 5 está dos veces.' },
-        { base: 5, grupos: [2, 2, 2], junta: true, cuenta: '$(5^2)^3 = 5^6$', dice: 'Tres grupos de dos son seis. Al elevar una potencia, los exponentes se multiplican.' },
-      ],
-      idea: 'Con la misma base, al multiplicar potencias los exponentes se suman; al elevar una potencia, se multiplican.' },
-    { cap: 2, tipo: 'casillas', filas: [{ tex: '$3^2 \\cdot 3^5$', r: '3⁷' }, { tex: '$(7^2)^4$', r: '7⁸' }], fichas: ['3¹⁰', '7⁸', '3⁷', '7⁶'],
-      pista: 'Cuenta los factores: en el primero se juntan, en el segundo hay grupos iguales.',
-      texto: '**Tu turno.** Toca la ficha de cada resultado. Basta con contar los factores, sin calcular nada.',
-      idea: '$3^2 \\cdot 3^5 = 3^7$ y $(7^2)^4 = 7^8$.' },
-
-    // ---- Raíces ----
-    { cap: 3, tipo: 'muestra', escena: 'potencia', en: { modo: 'lado' },
-      texto: 'Hagamos la pregunta al revés: eso es la **raíz cuadrada**.',
-      momentos: [
-        { s: 1, dice: 'Esta vez conocemos el área, 81 casillas, y queremos saber cuánto mide el lado.' },
-        { s: 9, ms: 1800, cuenta: '$\\sqrt{81} = 9$', dice: 'Hacemos crecer el cuadrado hasta las 81 casillas, y el lado mide 9. Esa es la raíz de 81.' },
-        { s: 8, cuenta: '$8^2 = 64 < 70$', dice: 'Probemos con la raíz de 70. Un lado de 8 da 64 casillas: todavía no alcanza.' },
-        { s: 9, cuenta: '$64 < 70 < 81$', dice: 'Uno de 9 da 81 y se pasa. Entonces la raíz de 70 está entre 8 y 9, más cerca del 8.' },
-        { s: 6, cuenta: '$\\sqrt{0.36} = 0.6$', dice: 'Para la raíz de 0.36 pintamos 36 casillas de 100. El lado mide 6 décimas: la raíz es 0.6.' },
-        { s: 10, cuenta: '$71 \\cdot 19 \\approx 70 \\cdot 20 = 1\\,400$', dice: 'Estimar también ayuda. En vez de 71 por 19, pensamos en 70 por 20: da cerca de 1 400.' },
-      ],
-      idea: 'La raíz cuadrada busca el lado: $\\sqrt{81} = 9$ porque $9^2 = 81$. Si no es exacta, se acorrala entre dos cuadrados.' },
-    { cap: 3, tipo: 'potencia', modo: 'lado', meta: 8, max: 10,
-      texto: '**Tu turno.** Encuentra la raíz de 64: mueve el lado hasta que el cuadrado tenga 64 casillas.',
-      idea: '$\\sqrt{64} = 8$ porque $8^2 = 64$.' },
-
-    // ---- Ahora sí, un problema ----
-    { cap: 4, tipo: 'potencia', base: 10, meta: 5, max: 7,
-      texto: 'En un juego, cada nivel multiplica los puntos por 10 y se empieza con 1. ¿Cuántos niveles hay que pasar para llegar a 100 000? Arrastra.',
-      idea: 'Cinco veces por 10: $10^5 = 100\\,000$, un 1 con cinco ceros.' },
-    { cap: 4, tipo: 'cierre', clave: 'pu-cm-4', real: '',
-      texto: 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.',
-      idea: 'Multiplicar repetido, el cuadrado como área, contar factores y la raíz como la pregunta al revés.' },
-  ],
-};
-;
-//#archivo js/explora-pu-cm-1.js
-// Preuniversitario · pu-cm-1 «Enteros, signos y jerarquía»: explicación interactiva que reemplaza el video
-// (spec 2026-11-23-explora-leccion-interactiva; tipos de paso en js/explora.js). Primero se explica y después se pide:
-// cada capítulo abre con una explicación animada (`muestra`), sigue «tu turno» con la misma escena, y el problema va
-// al final. Los ejemplos no repiten los de los ejercicios de la lección (js/courses/preuda-r-calculo.js).
-EXPLORA['pu-cm-1'] = {
-  caps: ['La recta', 'Sumar y restar', 'El menos da la vuelta', 'Las capas', 'Ahora sí, un problema'],
-  pasos: [
-    // ---- La recta ----
-    { cap: 0, tipo: 'muestra', escena: 'recta', en: { modo: 'llegar', min: -8, max: 8, desde: 0 },
-      texto: 'Empecemos por la idea: **dónde viven los enteros**. Piensa en un termómetro acostado.',
-      momentos: [
-        { de: 0, a: 0, marcas: [0], dice: 'El 0 es como el punto donde el agua se congela: la frontera entre dos lados.' },
-        { de: 0, a: 5, ms: 1800, zona: 'pos', dice: 'Si la temperatura sube, avanzamos a la derecha: 1, 2, 3… Son los **positivos**.' },
-        { de: 5, a: -5, ms: 2600, zona: 'ambas', dice: 'Si baja del 0, seguimos a la izquierda: −1, −2, −3… Son los **negativos**.' },
-        { de: -5, a: -5, zona: 'ambas', marcas: [-5, -2], cuenta: '$-5 < -2$', dice: '¿Qué es más frío, −5 o −2? −5: está más lejos del 0, hacia la izquierda.' },
-        { de: -5, a: -5, zona: 'ambas', cuenta: '$-5 < -2 < 0 < 3$', dice: 'Regla de oro: en la recta, el **menor** es siempre el que está más a la izquierda.' },
-      ],
-      idea: 'A la izquierda del 0 están los negativos; a la derecha, los positivos. Es menor el que está más a la izquierda.' },
-    { cap: 0, tipo: 'recta', modo: 'llegar', min: -8, max: 8, desde: 3, meta: -2,
-      texto: '**Tu turno.** Arrastra la ficha hasta $-2$.',
-      idea: 'Cada entero tiene su lugar: $-2$ está dos pasos a la izquierda del 0.' },
-    { cap: 0, tipo: 'muestra', escena: 'recta', en: { modo: 'espejo', min: -8, max: 8, desde: 1 },
-      texto: 'Segunda idea: **el opuesto**. Imagina que en el 0 hay un espejo.',
-      momentos: [
-        { de: 1, a: 4, ms: 1400, cuenta: '$-(4) = -4$', dice: 'Cada número tiene un reflejo al otro lado del espejo. El reflejo del 4 es −4.' },
-        { de: 4, a: 4, marcas: [4, -4], cuenta: '$-(4) = -4$', dice: '4 y −4 están a 4 pasos del 0, uno a cada lado. Se llaman **opuestos**.' },
-        { de: 4, a: -6, ms: 2400, cuenta: '$-(-6) = 6$', dice: 'El reflejo de −6 es 6. Por eso −(−6) = 6: el reflejo de un reflejo vuelve al original.' },
-        { de: -6, a: 0, ms: 1600, cuenta: '$-(0) = 0$', dice: '¿Y el 0? Está justo sobre el espejo: es su propio opuesto.' },
-        { de: 0, a: 3, ms: 1300, cuenta: '$3 + (-3) = 0$', dice: 'Un número más su opuesto siempre da 0: ir 3 pasos y volver 3 deja en el mismo sitio.' },
-      ],
-      idea: 'Un número y su opuesto están igual de lejos del 0 y suman 0. Dos menos se cancelan: $-(-6) = 6$.' },
-    { cap: 0, tipo: 'recta', modo: 'espejo', min: -8, max: 8, desde: 2, meta: 5,
-      texto: '**Tu turno.** Mueve la ficha y déjala donde su reflejo caiga en $5$.',
-      idea: 'El opuesto de $-5$ es $5$: $-(-5) = 5$.' },
-    { cap: 0, tipo: 'muestra', escena: 'recta', en: { modo: 'distancia', min: -8, max: 8, ancla: -2, desde: -2 },
-      texto: 'Tercera idea: **la distancia**. Cuántos pasos hay que caminar de un número a otro.',
-      momentos: [
-        { de: -2, a: 3, ms: 2000, cuenta: '$|3 - (-2)| = 5$', dice: 'Caminemos de −2 a 3 y contemos cada paso que da la ficha.' },
-        { de: 3, a: 3, marcas: [0], cuenta: '$|3 - (-2)| = 5$', dice: 'Son 2 pasos hasta el 0 y 3 más del otro lado: 5 en total. Cruzar el 0 no cuesta nada extra.' },
-        { de: 3, a: 3, cuenta: '$|3 - (-2)| = 5$', dice: 'Se escribe con barras, |3 − (−2)|. Las barras dicen: «cuenta los pasos, sin importar el sentido».' },
-        { de: 3, a: -6, ms: 2400, cuenta: '$|{-6} - (-2)| = 4$', dice: 'Hacia la izquierda también se cuentan pasos: de −2 a −6 hay 4.' },
-        { de: -6, a: -6, cuenta: '$|{-6} - (-2)| = 4$', dice: 'Por eso una distancia **nunca es negativa**: los pasos se cuentan, no se deben.' },
-      ],
-      idea: 'La distancia es cuántos pasos separan dos números. Se escribe con barras y nunca es negativa.' },
-    { cap: 0, tipo: 'recta', modo: 'distancia', min: -8, max: 8, ancla: -3, desde: -3, meta: 4,
-      texto: '**Tu turno.** Arrastra la ficha desde $-3$ hasta $4$ y mira cuántos pasos recorre.',
-      idea: 'De $-3$ a $4$ hay 7 pasos: $|4 - (-3)| = 7$.' },
-    { cap: 0, tipo: 'recta', modo: 'dos', min: -8, max: 8, ancla: 1, dist: 4, metas: [-3, 5],
-      texto: 'Como la distancia se cuenta hacia los dos lados, a 4 pasos del $1$ hay **dos** lugares. Toca los dos.',
-      idea: 'A una misma distancia hay dos lugares: $1 - 4$ y $1 + 4$, uno a cada lado del 1.' },
-
-    // ---- Sumar y restar ----
-    { cap: 1, tipo: 'muestra', escena: 'recta', en: { modo: 'salto', min: -8, max: 8, desde: -4 },
-      texto: 'Ahora las operaciones. **Sumar es caminar** por la recta.',
-      momentos: [
-        { de: -4, a: -4, cuenta: '$-4$', dice: 'Salimos de −4. El número que sumamos dice hacia dónde y cuánto caminar.' },
-        { de: -4, a: 1, ms: 1800, cuenta: '$-4 + 5 = 1$', dice: 'Sumar 5, un positivo, es dar 5 pasos a la **derecha**: llegamos a 1.' },
-        { de: 1, a: -4, ms: 1000, cuenta: '$-4$', dice: 'Volvamos al punto de partida, el −4.' },
-        { de: -4, a: -7, ms: 1500, cuenta: '$-4 + (-3) = -7$', dice: 'Sumar −3, un negativo, es dar 3 pasos a la **izquierda**: llegamos a −7.' },
-        { de: -7, a: -7, cuenta: '$-4 + (-3) = -7$', dice: 'El signo dice el sentido y el número, cuántos pasos. Como ganar o gastar dinero.' },
-      ],
-      idea: 'Sumar es moverse: un positivo lleva a la derecha y un negativo, a la izquierda.' },
-    { cap: 1, tipo: 'recta', modo: 'salto', min: -8, max: 8, desde: -4, suma: 6, meta: 2,
-      texto: '**Tu turno.** Sales de $-4$: arrastra la ficha para sumar $6$.',
-      idea: 'Seis pasos a la derecha: $-4 + 6 = 2$.' },
-    { cap: 1, tipo: 'recta', modo: 'salto', min: -8, max: 8, desde: 2, suma: -5, meta: -3,
-      texto: 'Ahora suma $-5$ saliendo de $2$.',
-      idea: 'Cinco pasos a la izquierda: $2 + (-5) = -3$.' },
-    { cap: 1, tipo: 'muestra', escena: 'recta', en: { modo: 'salto', min: -8, max: 8, desde: 3 },
-      texto: '¿Y restar? **Restar es caminar al revés** de lo que harías al sumar.',
-      momentos: [
-        { de: 3, a: 3, cuenta: '$3$', dice: 'Partimos de 3. Sumar 5 nos llevaría 5 pasos a la derecha…' },
-        { de: 3, a: -2, ms: 1800, cuenta: '$3 - 5 = -2$', dice: '…así que restar 5 es ir 5 pasos al revés, a la izquierda: llegamos a −2.' },
-        { de: -2, a: 3, ms: 1000, cuenta: '$3$', dice: 'Volvamos al 3. Ahora la pregunta difícil: ¿qué es restar −4?' },
-        { de: 3, a: 7, ms: 1700, cuenta: '$3 - (-4) = 7$', dice: 'Sumar −4 iría a la izquierda. Restarlo es al revés: 4 pasos a la **derecha**.' },
-        { de: 7, a: 7, marcas: [7], cuenta: '$3 - (-4) = 7$', dice: 'Piénsalo como dinero: si te perdonan una deuda de 4, tu saldo **sube** 4.' },
-        { de: 7, a: 7, cuenta: '$3 - (-4) = 3 + 4 = 7$', dice: 'La regla: restar es sumar el opuesto. Dos menos seguidos se vuelven un más.' },
-      ],
-      idea: 'Restar es sumar el opuesto. Restar un negativo sube: $3 - (-4) = 3 + 4 = 7$.' },
-    { cap: 1, tipo: 'recta', modo: 'salto', min: -8, max: 8, desde: 3, resta: 7, meta: -4,
-      texto: '**Tu turno.** Haz $3 - 7$ con la ficha.',
-      idea: 'Siete pasos a la izquierda: $3 - 7 = 3 + (-7) = -4$.' },
-    { cap: 1, tipo: 'recta', modo: 'salto', min: -8, max: 8, desde: -2, resta: -6, meta: 4,
-      texto: 'Y ahora $-2 - (-6)$: sal de $-2$ y camina al revés de sumar $-6$.',
-      idea: 'Quitar seis deudas es ganar seis: $-2 - (-6) = -2 + 6 = 4$.' },
-
-    // ---- El menos da la vuelta ----
-    { cap: 2, tipo: 'muestra', escena: 'saltos', en: { a: -3, min: -15, max: 15, meta: 12, desde: 1 },
-      texto: 'Multiplicar. La idea: **repetir saltos iguales**, como una rana que siempre salta lo mismo.',
-      momentos: [
-        { de: -3, a: -3, cuenta: '$(-3) \\cdot 1 = -3$', dice: 'Este salto mide −3: tres pasos hacia la izquierda.' },
-        { de: -3, a: -12, ms: 2200, cuenta: '$(-3) \\cdot 4 = -12$', dice: 'Multiplicar por 4 es repetir el mismo salto 4 veces. Mira cada salto.' },
-        { de: -12, a: -12, cuenta: '$(-3) \\cdot 4 = -12$', dice: 'Es como deber 3 a cuatro amigos: en total debes 12.' },
-        { de: -12, a: 12, ms: 3000, cuenta: '$(-3) \\cdot (-4) = 12$', dice: 'Ahora las veces son −4. El menos de las veces hace que toda la cadena **dé la vuelta** en el 0.' },
-        { de: 12, a: 12, cuenta: '$(-3) \\cdot (-4) = 12$', dice: 'Dar la vuelta a algo negativo lo vuelve positivo: menos por menos da más.' },
-      ],
-      idea: 'Multiplicar es repetir saltos. Multiplicar por un negativo **da la vuelta** en el 0: $(-3)(-4) = 12$.' },
-    { cap: 2, tipo: 'saltos', a: 2, min: -12, max: 12, meta: -8,
-      texto: '**Tu turno.** Cada salto mide $2$. Lleva la punta hasta el aro.',
-      idea: 'Cuatro saltos de $2$ y una vuelta: $2 \\cdot (-4) = -8$.' },
-    { cap: 2, tipo: 'saltos', a: -4, min: -16, max: 16, meta: 12,
-      texto: 'Ahora los saltos miden $-4$. Lleva la punta hasta el aro.',
-      idea: 'Tres saltos de $-4$ y una vuelta: $(-4)(-3) = 12$.' },
-    { cap: 2, tipo: 'muestra', escena: 'signos', en: { factores: [2, 3, 2], menos: 9 },
-      texto: 'Con varios factores, **cada signo menos es una vuelta**. Mira cómo cambia el resultado.',
-      momentos: [
-        { dice: 'Multiplicamos 2 · 3 · 2. Sin signos menos nadie da la vuelta: el producto es positivo.' },
-        { i: 0, dice: 'Un menos: el producto da una vuelta y queda mirando al lado negativo.' },
-        { i: 1, dice: 'Dos menos: dos vueltas. Una deshace la otra y vuelve a ser positivo.' },
-        { i: 2, dice: 'Tres menos: otra vuelta más. Negativo otra vez.' },
-        { dice: 'No importa **cuál** factor sea negativo, sino **cuántos**: par da positivo, impar da negativo.' },
-      ],
-      idea: 'Número **par** de signos menos: positivo. Número **impar**: negativo.' },
-    { cap: 2, tipo: 'signos', factores: [2, 3, 1, 2], menos: 3,
-      texto: '**Tu turno.** Toca los factores para volverlos negativos y deja **tres** signos menos.',
-      idea: 'Tres signos menos, impar: el producto es negativo.' },
-
-    // ---- Las capas ----
-    { cap: 3, tipo: 'muestra', escena: 'capas', en: { expr: '5 + 3 * ( 2 - 6 ) ^ 2' },
-      texto: 'Última idea: en una cuenta larga **el orden importa**. Se resuelve por capas, como pelar una cebolla.',
-      momentos: [
-        { cuenta: '$2 - 6 = -4$', dice: 'Primero, lo que está dentro del paréntesis: es una caja que se abre antes que todo.' },
-        { cuenta: '$(-4)^2 = 16$', dice: 'Luego, la potencia. El menos está dentro del paréntesis, así que también se eleva.' },
-        { cuenta: '$3 \\cdot 16 = 48$', dice: 'Después, multiplicaciones y divisiones: 3 por 16 da 48.' },
-        { cuenta: '$5 + 48 = 53$', dice: 'Al final, sumas y restas. Si hubieras sumado 5 + 3 primero, saldría otro número.' },
-      ],
-      idea: 'Primero paréntesis, luego potencias, después × y ÷, y al final + y −.' },
-    { cap: 3, tipo: 'capas', expr: '6 + 2 * ( 1 - 4 ) ^ 2',
-      texto: '**Tu turno.** Toca la operación que va primero; el resultado se funde solo. Sigue hasta que quede un número.',
-      idea: 'Capa por capa: $6 + 2 \\cdot (1 - 4)^2 = 6 + 2 \\cdot 9 = 24$.' },
-    { cap: 3, tipo: 'capas', expr: '18 / 3 * 2 - 7',
-      texto: '× y ÷ están en la **misma** capa: entre ellas va primero la que está más a la izquierda. Toca en orden.',
-      idea: 'En $18 \\div 3 \\cdot 2$ va primero la división, por estar a la izquierda: da $12$, no $3$.' },
-    { cap: 3, tipo: 'casillas', filas: [{ tex: '$-3^2$', r: '−9' }, { tex: '$(-3)^2$', r: '9' }], fichas: ['9', '−6', '−9', '6'],
-      pista: 'Mira si el menos está dentro del paréntesis: solo entonces se eleva.',
-      texto: 'Un detalle: en $-3^2$ la potencia va antes que el menos, que está **afuera**. En $(-3)^2$ se eleva todo. Toca cada resultado.',
-      idea: 'En $(-3)^2$ el menos está adentro y se eleva: $9$. En $-3^2$ se queda afuera: $-9$.' },
-
-    // ---- Ahora sí, un problema ----
-    { cap: 4, tipo: 'recta', modo: 'distancia', min: -8, max: 8, ancla: -2, desde: -2, meta: 6,
-      texto: 'Un equipo empezó el torneo con diferencia de gol $-2$ y lo terminó con $+6$. ¿En cuánto mejoró? Mídelo con la ficha.',
-      idea: 'De $-2$ a $6$ hay $|6 - (-2)| = 8$: el equipo mejoró en 8 goles.' },
-    { cap: 4, tipo: 'cierre', clave: 'gol', real: '8',
-      texto: 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.',
-      idea: 'Enteros en la recta, opuestos, distancia, sumar y restar, signos y capas.' },
-  ],
-};
-;
 //#archivo js/explora-alg-0a.js
 // Álgebra · alg-0a «¿Qué es un conjunto? Notación y pertenencia»: explicación interactiva que reemplaza el video
 // (spec 2026-11-23-explora-leccion-interactiva; motor en js/explora.js, escena «conjunto»). Mismo formato que pu-cm-1:
@@ -19957,6 +19436,202 @@ PI_SIMULACROS.push((() => {
   ];
 
   return { id: 'icf-sim-1', titulo: 'Simulacro 1', textos, pruebas: { lectura, matematicas, sociales, ciencias, ingles } };
+})());
+;
+//#archivo js/simulacro-icf-2.js
+// Preicfes · Simulacro 2 (spec 2026-11-26-simulacros-preicfes): cinco pruebas de 24 preguntas A–D escritas para Zuka.
+// Cada pregunta se escribe con la opción correcta primero; `pon` la cambia de puesto según un patrón con seis claves por letra.
+PI_SIMULACROS.push((() => {
+  const T = simT, Q = (m, q, o, e, d) => simP(m, q, o, 0, e, d);
+  const BASE = [1, 3, 0, 2, 0, 2, 3, 0, 1, 2, 1, 3, 2, 0, 3, 1, 3, 2, 0, 1, 3, 1, 0, 2];
+  const pon = (L, giro) => L.map((it, i) => {
+    const k = BASE[(i + giro) % BASE.length], o = [...it.o];
+    [o[0], o[k]] = [o[k], o[0]];
+    return { ...it, o, r: k };
+  });
+
+  const textos = {
+    cartera: T('La cartera de Santa Inés', [
+      'Durante veintidós años, Clemencia repartió el correo de Santa Inés a pie. Conocía cada puerta por el sonido de su bisagra y cada perro por su manera de ladrar. Sabía quién esperaba una carta del hijo que se fue a la capital y quién temblaba al ver un sobre con el sello del banco.',
+      'Cuando llegaron los teléfonos, las cartas empezaron a escasear. Primero dejaron de llegar las de amor, después las de los hijos, y al final solo quedaron los recibos. Clemencia seguía haciendo el mismo recorrido, aunque su bolso pesaba cada vez menos.',
+      'Una mañana encontró en la oficina un sobre sin remitente, dirigido a «quien todavía espere una carta». El jefe le dijo que lo botara: no había a quién entregarlo. Ella lo guardó en el bolsillo del delantal.',
+      'Esa tarde, en lugar de volver a casa, recorrió el pueblo despacio. Vio a don Rufino regar sus matas mirando de reojo el camino, a la señora Elvira asomarse a la ventana cada vez que pasaba una moto, a un niño sentado en el andén con una cometa rota entre las manos.',
+      'Al anochecer, Clemencia se sentó a escribir. Escribió una carta para don Rufino, otra para la señora Elvira y una más, con letra grande y redonda, para el niño. No las firmó. Al día siguiente las repartió como siempre, haciendo sonar las bisagras, y por primera vez en mucho tiempo el bolso le pareció pesado.',
+    ]),
+    celular: T('Que el colegio no le tema al celular', [
+      'Cada cierto tiempo vuelve la misma propuesta: prohibir los celulares en los colegios. La idea suena sensata. Los teléfonos distraen, facilitan la copia en las evaluaciones y, a veces, sirven para burlarse de un compañero frente a todos. Nadie que haya dado una clase niega estos problemas.',
+      'Sin embargo, creo que la prohibición total es una salida fácil a un problema difícil. Cuando un estudiante salga del colegio, nadie le va a quitar el teléfono en la puerta de la universidad o del trabajo. Si el colegio no le enseña a usarlo con criterio, ¿quién lo hará?',
+      'Hay, además, un asunto de justicia. Para muchos jóvenes, el celular es el único aparato con internet que tienen. Prohibirlo en el aula significa negarles la posibilidad de consultar un diccionario, grabar una explicación o revisar una fuente durante la clase, algo que otros compañeros sí pueden hacer en sus computadores al llegar a casa.',
+      'Propongo, en cambio, acuerdos claros: teléfonos guardados durante las evaluaciones y en los primeros minutos de cada clase, uso permitido cuando el docente lo indique para una tarea, y sanciones firmes para quien lo use para acosar. Estas reglas son más difíciles de cumplir que una prohibición, pero enseñan algo que la prohibición no enseña.',
+      'Un colegio no prepara para un mundo sin pantallas, porque ese mundo no existe. Prepara, o debería preparar, para vivir bien entre ellas.',
+    ]),
+    teseo: T('El barco que cambió todas sus tablas', [
+      'Cuenta una vieja historia que los atenienses conservaron durante siglos el barco en que el héroe Teseo había regresado de Creta. Cada vez que una tabla se pudría, la cambiaban por una nueva. Con los años llegó el día en que no quedaba ni una sola de las tablas originales. ¿Seguía siendo el barco de Teseo?',
+      'Hay quien responde que sí: lo que hace que algo sea lo mismo no es su material, sino su forma, su historia y la función que cumple. El barco nunca dejó de navegar ni de ser cuidado como el barco de Teseo; los cambios fueron graduales y ninguno, por sí solo, lo convirtió en otro.',
+      'Otros responden que no. Si alguien hubiera guardado las tablas viejas y con ellas armado de nuevo un barco, ¿cuál sería el verdadero? Parece difícil negar que el armado con las piezas originales tiene algún derecho al nombre.',
+      'La pregunta no se queda en los barcos. Las células de nuestro cuerpo se renuevan; nuestras opiniones, gustos y recuerdos cambian. Sin embargo, decimos que la persona de cuarenta años es la misma que fue un niño de cinco. Algunos filósofos piensan que lo que nos mantiene es la memoria, el hilo que une lo que fuimos con lo que somos.',
+      'Tal vez la pregunta no tenga una única respuesta. Pero obliga a aclarar qué entendemos cuando decimos que algo, o alguien, «sigue siendo el mismo».',
+    ]),
+    colegio: T('¿Cómo llegamos al colegio?', [
+      'El consejo estudiantil de un colegio preguntó a sus 400 estudiantes cómo llegan cada mañana y cuánto tardan en promedio desde su casa. La tabla de abajo resume las respuestas de todos los grados.',
+      'Los resultados sorprendieron a muchos: más de la mitad de los estudiantes llega sin usar ningún motor, a pie o en bicicleta. Quienes usan bicicleta son, en promedio, los que menos tardan, porque no esperan en los paraderos ni se detienen en los trancones de la avenida principal.',
+      'Con estos datos, el consejo propuso pintar una ciclorruta en las tres cuadras que rodean el colegio y construir un parqueadero cubierto para cuarenta bicicletas más. Según sus cálculos, si una parte de quienes hoy usan transporte público se pasara a la bicicleta, cada uno ahorraría cerca de media hora cada mañana.',
+      'La rectoría respondió que apoya la idea, pero pidió antes un estudio de seguridad: la avenida principal tiene mucho tráfico pesado, y ninguna cifra de minutos ahorrados compensa el riesgo de un accidente.',
+      'La propuesta se discutirá en la próxima asamblea del colegio, con la participación de los padres de familia, los vecinos del barrio y la secretaría de movilidad del municipio.',
+    ], [['Medio', 'Estudiantes', 'Tiempo promedio (min)'], ['A pie', '150', '15'], ['Bicicleta', '60', '12'], ['Bus escolar', '90', '25'], ['Transporte público', '80', '40'], ['Carro particular', '20', '20'], ['Total', '400', '']]),
+    playa: T('The first time at the sea', [
+      'Last December my family and I __(1)__ to the coast for the first time. My little brother __(2)__ never seen the sea before, so he was very excited. The trip by bus was __(3)__ than we expected: almost twelve hours! But when we arrived, the water was __(4)__ beautiful that he started to cry.',
+    ]),
+    nota: T('An email to Ms. Parker', [
+      'Dear Ms. Parker, I am sorry, but I cannot come to class tomorrow. My family is moving to a new apartment and my parents need my help with the boxes. I have finished the history homework, so I will send it to you by email tonight. Could you tell me which pages we have to read for Friday? I don\'t want to miss anything before the exam. Thank you, Daniel.',
+    ]),
+    radio: T('A radio for the village', [
+      'When Camila was fifteen, the only way to know what was happening in her village was to wait for the Sunday market. News travelled slowly, and sometimes it was wrong when it arrived. One day, a storm destroyed the bridge over the river, and many farmers drove to it the next morning because nobody had told them.',
+      'Camila decided to do something. With an old computer, a microphone that her uncle gave her and the help of two friends, she started a small radio program from the school library. At first it was only fifteen minutes a week: the weather, the prices at the market and the dates of the vaccination days.',
+      'Little by little, people began to call the program. A farmer explained how he protected his coffee from a pest, and a grandmother told old stories that the children had never heard. Today the program is on every day, and the mayor\'s office uses it to share important messages.',
+      'Camila is now studying communication at a university in the city, but she still records a segment every Friday. "The radio did not make the village bigger," she says, "but it made the people closer."',
+    ]),
+  };
+
+  const lectura = pon([
+    Q('icf-lc-literal', 'Según el primer párrafo, Clemencia reconocía cada casa del pueblo por', ['el sonido que hacía la bisagra de su puerta', 'el color de la fachada y el número de la casa', 'el nombre de la familia escrito en el buzón', 'la cantidad de cartas que recibía cada mes'], 'El texto dice que «conocía cada puerta por el sonido de su bisagra».', 'cartera'),
+    Q('icf-lc-literario', 'La frase «su bolso pesaba cada vez menos» (párrafo 2) expresa que', ['la gente del pueblo ya casi no se escribía cartas', 'Clemencia iba perdiendo las fuerzas con el paso de los años', 'el jefe le daba menos trabajo como castigo', 'los recibos del banco eran cada vez más livianos'], 'Con los teléfonos dejaron de llegar cartas: el bolso más liviano muestra que el oficio se iba quedando sin sentido.', 'cartera'),
+    Q('icf-lc-literal', 'El sobre que Clemencia encontró en la oficina estaba dirigido a', ['quien todavía esperara una carta', 'don Rufino, que miraba el camino', 'la oficina de correos de la capital', 'Clemencia, de parte de alguien sin nombre'], 'El sobre decía «quien todavía espere una carta» y no tenía remitente.', 'cartera'),
+    Q('icf-lc-estructura', '¿Qué función cumple el párrafo 4 dentro del relato?', ['Muestra a quiénes del pueblo les hace falta recibir algo', 'Explica por qué llegaron los teléfonos al pueblo de Santa Inés', 'Describe el recorrido de Clemencia en su juventud', 'Presenta una discusión entre Clemencia y su jefe'], 'Clemencia observa a don Rufino, a la señora Elvira y al niño, que esperan algo: son quienes después reciben sus cartas.', 'cartera'),
+    Q('icf-lc-literario', 'Al final, el bolso «le pareció pesado» a Clemencia porque', ['llevaba cartas que ella escribió para quienes esperaban', 'el jefe le cargó en el bolso los recibos atrasados de todo el mes', 'estaba cansada de caminar por el pueblo de noche', 'el sobre sin remitente traía un paquete muy grande'], 'El peso vuelve con las cartas que ella misma escribió: su oficio recupera sentido.', 'cartera'),
+    Q('icf-lc-evalua', '¿Cuál enunciado expresa mejor una idea central del cuento?', ['Un gesto de atención puede devolverle sentido a un oficio', 'La tecnología acabó con todos los oficios de los pueblos pequeños', 'Esperar noticias de alguien es una pérdida de tiempo', 'Los carteros deben abrir las cartas que no tienen dueño'], 'Clemencia mira a quienes esperan y les escribe: su atención convierte un recorrido vacío en algo valioso.', 'cartera'),
+
+    Q('icf-lc-argumento', 'La tesis del autor es que', ['el colegio debe enseñar a usar el celular con reglas claras', 'los celulares deben prohibirse en todos los colegios sin excepción', 'los docentes deben usar más pantallas en sus clases', 'cada estudiante debe tener un computador para estudiar'], 'Rechaza la prohibición total y propone acuerdos de uso: el colegio debe enseñar a usarlo con criterio.', 'celular'),
+    Q('icf-lc-argumento', 'En el párrafo 1, el autor', ['reconoce los problemas que trae el celular en clase', 'afirma que el celular nunca distrae a los estudiantes', 'cuenta cómo acosaron a un compañero en su colegio', 'propone castigos para quienes copien en las pruebas'], 'Antes de dar su opinión admite que los teléfonos distraen, facilitan la copia y sirven para burlarse: concede lo que dirían los contrarios.', 'celular'),
+    Q('icf-lc-estructura', 'El párrafo 3 aporta un argumento basado en', ['la desigualdad en el acceso a internet', 'la experiencia del autor como docente', 'las cifras de copia en las evaluaciones', 'la opinión de los padres de familia'], 'Habla de «un asunto de justicia»: para muchos, el celular es el único acceso a internet.', 'celular'),
+    Q('icf-lc-literal', 'Según el autor, las reglas que propone', ['son más difíciles de cumplir, pero enseñan algo', 'son más fáciles de cumplir que una prohibición', 'acaban por completo con el acoso entre compañeros', 'solo sirven para los estudiantes de grado once'], 'El párrafo 4 dice que son «más difíciles de cumplir que una prohibición, pero enseñan algo».', 'celular'),
+    Q('icf-lc-evalua', '¿Cuál dato, de ser cierto, fortalecería más el argumento del párrafo 3?', ['Que en una encuesta seis de cada diez estudiantes dijeron no tener computador', 'Que la mitad de los docentes usa el celular en clase', 'Que los celulares nuevos tienen pantallas más grandes', 'Que en otros países también se discute la prohibición'], 'El párrafo 3 se apoya en que, para muchos, el celular es el único aparato con internet; quien no tiene computador depende de él, y el dato lo confirma con cifras.', 'celular'),
+    Q('icf-lc-comparar', 'Una rectora escribe: «Desde que prohibimos los celulares, los recreos volvieron a tener conversación». Frente al texto, esta afirmación', ['apoya una medida que el autor considera una salida fácil', 'repite la propuesta del autor con otras palabras', 'demuestra que el autor tiene la razón en su argumento sobre la justicia', 'trata un tema que no tiene relación con el texto'], 'La rectora defiende la prohibición; el autor la llama «una salida fácil a un problema difícil».', 'celular'),
+
+    Q('icf-lc-filosofico', '¿Qué problema plantea el texto?', ['Qué hace que algo siga siendo lo mismo cuando cambia', 'Cómo se construían y reparaban los barcos en la antigua Atenas', 'Por qué Teseo regresó de Creta en un barco viejo', 'Cuánto tiempo dura una tabla de madera en el mar'], 'El barco sirve de ejemplo para una pregunta general: qué hace que algo, o alguien, siga siendo el mismo.', 'teseo'),
+    Q('icf-lc-filosofico', 'Según la posición del párrafo 2, el barco sigue siendo el de Teseo porque', ['conserva su forma, su historia y su función', 'todavía tiene algunas de sus tablas originales', 'los atenienses así lo decidieron en una votación', 'nadie notó que le iban cambiando las tablas'], 'Esa posición dice que la identidad no está en el material, sino en la forma, la historia y la función.', 'teseo'),
+    Q('icf-lc-estructura', 'En el párrafo 3, el caso del barco armado con las tablas viejas sirve para', ['poner en duda la respuesta del párrafo 2', 'mostrar cómo se reparaban los barcos', 'probar que el barco de Teseo nunca existió', 'contar el final de la historia de Teseo'], 'Si las tablas viejas forman otro barco, este también reclama el nombre: es un contraejemplo a la primera respuesta.', 'teseo'),
+    Q('icf-lc-filosofico', 'El párrafo 4 relaciona el problema del barco con', ['la identidad de las personas a lo largo de su vida', 'la manera de construir casas que duren siglos', 'las reglas de la navegación en el mar Egeo', 'la historia de la larga guerra que enfrentó a Atenas y Creta'], 'Pasa de los barcos a las personas: cambiamos de células, gustos y recuerdos y decimos que seguimos siendo los mismos.', 'teseo'),
+    Q('icf-lc-filosofico', 'Para los filósofos que se mencionan al final del párrafo 4, una persona adulta es la misma que fue de niña porque', ['sus recuerdos unen lo que fue con lo que es', 'su cuerpo es el mismo, sin cambio alguno', 'conserva los mismos gustos y opiniones que tenía de niña', 'lleva el mismo nombre desde que nació'], 'Ellos dicen que lo que nos mantiene es la memoria, «el hilo que une lo que fuimos con lo que somos».', 'teseo'),
+    Q('icf-lc-evalua', '¿Cuál de estas frases expresa una opinión del propio autor y no una de las posiciones que expone?', ['«Tal vez la pregunta no tenga una única respuesta»', '«Lo que hace que algo sea lo mismo no es su material»', '«El armado con las piezas originales tiene algún derecho al nombre»', '«Lo que nos mantiene es la memoria»'], 'Las otras tres resumen lo que piensan distintos grupos; en el último párrafo el autor da su propia valoración.', 'teseo'),
+
+    Q('icf-lc-discontinuo', 'Según la tabla, ¿qué porcentaje de los estudiantes llega en bus escolar?', ['22.5 %', '25 %', '90 %', '9 %'], 'Son 90 de 400 estudiantes: 90 ÷ 400 = 0.225, es decir, 22.5 %.', 'colegio'),
+    Q('icf-lc-discontinuo', 'La afirmación «más de la mitad de los estudiantes llega sin usar ningún motor» se apoya en que', ['150 + 60 = 210 estudiantes llegan a pie o en bicicleta', 'solo 20 estudiantes llegan en carro particular', '90 estudiantes usan el bus escolar cada mañana', 'el transporte público es el que tarda 40 minutos'], 'A pie y en bicicleta llegan 150 + 60 = 210 estudiantes, más que la mitad de 400.', 'colegio'),
+    Q('icf-lc-literal', 'Según el texto, quienes llegan en bicicleta tardan menos porque', ['no esperan en paraderos ni quedan en los trancones', 'viven más cerca del colegio que los demás', 'salen de su casa más temprano que el resto', 'usan la ciclorruta que rodea las cuadras del colegio'], 'Lo dice el párrafo 2. La ciclorruta todavía no existe: es la propuesta del consejo.', 'colegio'),
+    Q('icf-lc-discontinuo', 'Si un estudiante que hoy usa transporte público se pasa a la bicicleta y tarda lo que tardan los ciclistas, ¿cuántos minutos ahorra cada mañana?', ['28', '12', '40', '52'], 'En transporte público tarda 40 minutos y en bicicleta 12: ahorra 40 − 12 = 28, casi media hora.', 'colegio'),
+    Q('icf-lc-estructura', 'Dentro del texto, el párrafo 4 introduce', ['una condición antes de aplicar la propuesta', 'el rechazo total de la rectoría a la idea', 'cifras nuevas sobre los tiempos de viaje de cada medio', 'la opinión de los vecinos del colegio'], 'La rectoría apoya la idea, pero pide primero un estudio de seguridad: es una condición, no un rechazo.', 'colegio'),
+    Q('icf-lc-evalua', '¿Cuál conclusión NO se puede sacar de la información?', ['Los que viven más lejos son los que usan bicicleta', 'Llegan más estudiantes a pie que en cualquier otro medio', 'El transporte público es el más lento en promedio', 'Llegan menos estudiantes en carro que en bicicleta'], 'La encuesta no preguntó la distancia de la casa; las otras tres conclusiones salen directamente de la tabla.', 'colegio'),
+  ], 0);
+
+  const matematicas = pon([
+    Q('icf-ma-datos', 'En cinco partidos, un equipo marcó 2, 0, 3, 1 y 4 goles. La mediana de los goles es', ['2', '1', '2.5', '3'], 'Ordenados quedan 0, 1, 2, 3, 4: el dato del medio es 2.'),
+    Q('icf-ma-datos', 'En un diagrama circular sobre cómo viaja un grupo, el sector «bicicleta» mide 90°. ¿Qué parte del grupo viaja en bicicleta?', ['25 %', '9 %', '90 %', '50 %'], 'La circunferencia completa son 360°; 90° es la cuarta parte, el 25 %.'),
+    Q('icf-ma-proporcion', 'Cuatro pintores, trabajando al mismo ritmo, pintan una casa en 6 días. ¿Cuántos días tardarían tres pintores?', ['8 días', '4.5 días', '7 días', '9 días'], 'Menos pintores tardan más (proporción inversa): 4 · 6 = 24 días de trabajo; 24 ÷ 3 = 8 días.'),
+    Q('icf-ma-proporcion', 'Una receta de arepas para 6 personas lleva 450 g de harina. Para 10 personas se necesitan', ['750 g', '600 g', '900 g', '4 500 g'], 'Son 450 ÷ 6 = 75 g por persona; para 10 personas, 75 · 10 = 750 g.'),
+    Q('icf-ma-azar', 'Se lanza un dado normal de seis caras. La probabilidad de que salga un número mayor que 4 es', ['1/3', '1/6', '2/3', '1/2'], 'Solo el 5 y el 6 son mayores que 4: 2 casos de 6, es decir, 1/3.'),
+    Q('icf-ma-azar', '¿De cuántas maneras distintas se pueden ordenar 4 libros diferentes en un estante?', ['24', '16', '12', '8'], 'Hay 4 opciones para el primer puesto, 3 para el segundo, 2 para el tercero y 1 para el último: 4 · 3 · 2 · 1 = 24.'),
+    Q('icf-ma-azar', 'Se lanzan dos monedas al aire. La probabilidad de obtener al menos una cara es', ['3/4', '1/2', '1/4', '2/3'], 'Los casos son CC, CS, SC y SS. Solo SS no tiene cara: 3 de 4.'),
+    Q('icf-ma-medida', 'Una caja mide 30 cm de largo, 20 cm de ancho y 10 cm de alto. ¿Cuántos litros le caben? (1 litro = 1 000 cm³)', ['6 litros', '60 litros', '0.6 litros', '600 litros'], 'Su volumen es 30 · 20 · 10 = 6 000 cm³, que son 6 litros.'),
+    Q('icf-ma-medida', 'Un jardín circular tiene 3 m de radio. Con $\\pi \\approx 3.14$, su área es', ['28.26 m²', '18.84 m²', '9.42 m²', '113.04 m²'], 'A = πr² = 3.14 · 9 = 28.26 m². El 18.84 es el perímetro, 2πr.'),
+    Q('icf-ma-lineal', 'Una recta pasa por los puntos $(0, 2)$ y $(3, 8)$. Su pendiente es', ['2', '3', '6', '1/2'], 'La pendiente es el cambio en y sobre el cambio en x: (8 − 2) ÷ (3 − 0) = 6 ÷ 3 = 2.'),
+    Q('icf-ma-lineal', 'El plan A de telefonía cobra 20 000 pesos fijos más 500 por minuto; el plan B, 35 000 fijos más 200 por minuto. El plan B resulta más barato cuando se hablan', ['más de 50 minutos', 'menos de 50 minutos', 'más de 30 minutos', 'exactamente 50 minutos'], 'Cuestan igual cuando 20 000 + 500m = 35 000 + 200m, es decir, m = 50. Desde ahí el B sube más despacio y queda más barato.'),
+    Q('icf-ma-forma', 'Dos ángulos de un triángulo miden 40° y 75°. El tercer ángulo mide', ['65°', '115°', '35°', '55°'], 'Los ángulos internos de un triángulo suman 180°: 180 − 40 − 75 = 65°.'),
+    Q('icf-ma-forma', 'Una foto de 10 cm por 15 cm se amplía sin deformarla, de modo que el lado de 10 cm pasa a medir 25 cm. El otro lado mide', ['37.5 cm', '30 cm', '40 cm', '22.5 cm'], 'El factor de ampliación es 25 ÷ 10 = 2.5, así que 15 · 2.5 = 37.5 cm. Sumar 15 cm a cada lado deformaría la foto.'),
+    Q('icf-ma-ecuaciones', 'Tres números enteros consecutivos suman 72. El mayor de ellos es', ['25', '24', '23', '26'], 'n + (n + 1) + (n + 2) = 72, entonces 3n + 3 = 72 y n = 23. Los números son 23, 24 y 25.'),
+    Q('icf-ma-ecuaciones', 'Una camisa y un pantalón cuestan juntos 150 mil pesos, y el pantalón cuesta el doble que la camisa. El pantalón cuesta', ['100 mil', '75 mil', '50 mil', '120 mil'], 'Si la camisa vale c, el pantalón vale 2c: 3c = 150, c = 50 y el pantalón vale 100 mil.'),
+    Q('icf-ma-argumenta', 'Ana afirma que el cuadrado de todo número impar es impar. ¿Cuál razonamiento lo demuestra?', ['Todo impar es 2k + 1 y (2k + 1)² = 2(2k² + 2k) + 1, que es impar', 'Como 3² = 9 y 5² = 25 son impares, la regla vale para todos', 'El cuadrado de un número siempre es mayor que el número', 'Al multiplicar dos números iguales siempre resulta un par'], 'Unos cuantos ejemplos no demuestran una regla general; escribir el impar como 2k + 1 cubre todos los casos a la vez.'),
+    Q('icf-ma-argumenta', 'Pedro dice que un descuento del 20 % seguido de otro del 20 % equivale a un descuento del 40 %. Su error es que', ['el segundo descuento se aplica sobre un precio ya rebajado', 'no se pueden hacer dos descuentos al mismo producto', 'el descuento total es en realidad mayor que el 40 %', 'el 20 % de cualquier precio es siempre el mismo valor'], 'Queda 0.8 · 0.8 = 0.64 del precio: el descuento total es del 36 %, no del 40 %.'),
+    Q('icf-ma-finanzas', 'Un préstamo de 1 000 000 de pesos cobra 2 % de interés simple mensual. ¿Cuánto se paga de intereses en 6 meses?', ['120 000 pesos', '20 000 pesos', '12 000 pesos', '126 162 pesos'], 'El 2 % de 1 000 000 es 20 000 cada mes; en 6 meses, 6 · 20 000 = 120 000. Con interés compuesto saldría 126 162.'),
+    Q('icf-ma-finanzas', 'Un televisor cuesta 1 200 000 pesos de contado o 12 cuotas de 115 000. ¿Cuánto más se paga si se compra a cuotas?', ['180 000 pesos', '115 000 pesos', '85 000 pesos', '1 380 000 pesos'], 'A cuotas se pagan 12 · 115 000 = 1 380 000; la diferencia es 1 380 000 − 1 200 000 = 180 000.'),
+    Q('icf-ma-curvas', 'La parábola $y = x^2 - 6x + 5$ corta el eje x en', ['x = 1 y x = 5', 'x = −1 y x = −5', 'x = 2 y x = 3', 'x = 0 y x = 6'], 'x² − 6x + 5 = (x − 1)(x − 5) = 0, entonces x = 1 o x = 5.'),
+    Q('icf-ma-curvas', 'Un carro pierde cada año el 20 % de su valor. Si hoy vale 50 millones, dentro de 2 años valdrá', ['32 millones', '30 millones', '40 millones', '36 millones'], 'Cada año conserva el 80 %: 50 · 0.8 · 0.8 = 32 millones. Restar dos veces el 20 % de 50 daría 30, que es un error.'),
+    Q('icf-ma-espacio', 'El punto $(3, 1)$ se traslada 4 unidades a la izquierda y 2 unidades hacia arriba. Su nueva posición es', ['(−1, 3)', '(7, 3)', '(−1, −1)', '(5, −3)'], 'Ir a la izquierda resta en x: 3 − 4 = −1. Subir suma en y: 1 + 2 = 3.'),
+    Q('icf-ma-dispersion', 'Dos cursos tienen la misma nota promedio, 3.5. La desviación estándar del curso X es 0.2 y la del curso Y es 1.1. Es correcto afirmar que', ['en general, las notas de X están más cerca del promedio que las de Y', 'el curso Y tiene mejores estudiantes que el curso X', 'en X todos los estudiantes sacaron exactamente 3.5', 'en el curso Y hay más estudiantes que en el curso X'], 'Una desviación pequeña indica datos concentrados cerca de la media. No dice nada del tamaño del curso ni de quién es mejor.'),
+    Q('icf-ma-numeros', 'En la sucesión 3, 7, 11, 15, … el término número 20 es', ['79', '83', '80', '75'], 'Se suma 4 cada vez: el término 20 es 3 + 19 · 4 = 79.'),
+  ], 5);
+
+  const sociales = pon([
+    Q('icf-sc-constitucion', 'En Colombia, la entidad que decide si una ley va en contra de la Constitución es', ['la Corte Constitucional', 'la Procuraduría General', 'el Congreso de la República', 'la Registraduría Nacional'], 'La Corte Constitucional guarda la integridad de la Constitución y puede declarar que una ley no vale por contradecirla.'),
+    Q('icf-sc-constitucion', 'El derecho de petición le permite a una persona', ['presentar solicitudes a las autoridades y recibir una respuesta', 'elegir directamente a los magistrados de las altas cortes del país', 'dejar de pagar los impuestos que le parezcan injustos', 'exigir que un juez la proteja en pocos días en cualquier caso'], 'Es el derecho a pedir algo respetuosamente a una autoridad y obtener una respuesta pronta y de fondo. La protección rápida de un juez es la tutela.'),
+    Q('icf-sc-constitucion', 'Un colegio sanciona a una estudiante sin dejarla explicar lo ocurrido ni presentar pruebas. El derecho que más claramente se vulnera es el', ['debido proceso', 'derecho al trabajo', 'derecho de reunión', 'derecho a la libertad de cultos'], 'El debido proceso exige escuchar a la persona y permitirle defenderse antes de sancionarla.'),
+    Q('icf-sc-participacion', 'Un grupo de ciudadanos recoge firmas para presentar al concejo un proyecto de acuerdo sobre el reciclaje. Este mecanismo se llama', ['iniciativa popular normativa', 'revocatoria del mandato', 'acción de tutela', 'plebiscito'], 'La iniciativa popular permite a los ciudadanos presentar proyectos de norma ante el concejo, la asamblea o el Congreso.'),
+    Q('icf-sc-participacion', 'En el gobierno escolar, el personero o la personera estudiantil tiene como función principal', ['promover los derechos y deberes de los estudiantes', 'calificar a los docentes y directivos al final de cada año escolar', 'administrar el dinero de la cafetería escolar', 'decidir qué materias se dictan cada año'], 'El personero promueve el ejercicio de los derechos y deberes de los estudiantes y recibe sus quejas.'),
+    Q('icf-sc-participacion', 'En una consulta popular, la ciudadanía', ['responde sí o no a una pregunta de interés general', 'elige a los concejales y diputados de su región', 'demanda ante los jueces una ley que considera injusta', 'revisa las cuentas de los contratos del municipio'], 'La consulta popular somete a la decisión del pueblo una pregunta de carácter general que formula el gobernante.'),
+    Q('icf-sc-perspectivas', 'Una empresa quiere construir una represa en un río. ¿Cuál preocupación es más probable que tengan los campesinos que viven río abajo?', ['Que baje el caudal y les falte agua para sus cultivos', 'Que la represa no produzca energía suficiente para vender', 'Que la empresa no encuentre inversionistas para la obra', 'Que suba el precio de la energía en la capital del país'], 'Quienes dependen del agua río abajo se preocupan por el caudal que les llega, no por las ganancias de la obra.'),
+    Q('icf-sc-perspectivas', 'Un colegio propone un uniforme único. Un padre dice que así ahorra dinero; un estudiante, que limita su forma de expresarse. Estas posiciones', ['parten de valores distintos: lo económico y la identidad', 'demuestran que el padre de familia es quien tiene la razón', 'coinciden en que el uniforme único es una mala idea', 'se refieren a temas que no tienen relación entre sí'], 'Las dos opiniones tratan la misma propuesta, pero cada una da prioridad a un valor diferente.'),
+    Q('icf-sc-fuentes', '¿Cuál de estas es una fuente primaria para estudiar la Campaña Libertadora de 1819?', ['Una carta escrita por un soldado que participó en ella', 'Un libro de historia publicado en el año 2000', 'Una película reciente sobre la vida de Bolívar', 'Un resumen hecho por un estudiante para presentar en su clase de historia'], 'Una fuente primaria la produce alguien que vivió los hechos, en su época.'),
+    Q('icf-sc-fuentes', '«La ciudad es muy insegura: a mi vecino le robaron el celular la semana pasada». La principal debilidad de este argumento es que', ['saca una conclusión general a partir de un solo caso', 'usa un ejemplo que ocurrió hace muy poco tiempo', 'menciona a una persona que el autor conoce bien desde hace años', 'habla de un objeto que tiene mucho valor'], 'Un caso aislado no basta para hablar de toda la ciudad: harían falta datos más amplios.'),
+    Q('icf-sc-sistemico', 'Si sube mucho el precio del combustible, ¿qué efecto en cadena es más probable?', ['Sube el costo del transporte y con él el de los alimentos', 'Bajan los pasajes del transporte público en todas las ciudades del país', 'Aumenta el número de carros particulares en las calles', 'Los alimentos se vuelven más baratos en los mercados'], 'Los alimentos viajan en camiones: si el combustible sube, el costo de llevarlos se traslada al precio.'),
+    Q('icf-sc-sistemico', 'Para acabar con los trancones, una ciudad amplió sus avenidas, pero años después los trancones eran iguales. Una explicación posible es que', ['las vías nuevas animaron a más personas a usar el carro', 'las avenidas anchas son más difíciles de cruzar para quienes van a pie', 'los semáforos se dañaron durante la construcción', 'el clima de la ciudad cambió durante esos años'], 'Más espacio para los carros hace más cómodo usarlos, y el tráfico crece hasta volver a llenar las vías.'),
+    Q('icf-sc-historia', 'La Constitución de 1991 reemplazó a la Constitución de', ['1886', '1863', '1821', '1957'], 'La Constitución de 1886, de la Regeneración, rigió hasta que la Asamblea Constituyente expidió la de 1991.'),
+    Q('icf-sc-historia', 'El 9 de abril de 1948 ocurrió en Bogotá el llamado «Bogotazo», que fue', ['una ola de disturbios tras el asesinato de Jorge Eliécer Gaitán', 'la firma de un acuerdo de paz entre los partidos liberal y conservador', 'la inauguración del primer ferrocarril que tuvo el país', 'el primer día en que las mujeres votaron en Colombia'], 'El asesinato del líder liberal Gaitán desató disturbios en Bogotá y agravó la violencia entre los partidos.'),
+    Q('icf-sc-historia', 'La Regeneración, liderada por Rafael Núñez a finales del siglo XIX, buscó', ['centralizar el poder y dar un papel fuerte a la Iglesia', 'crear un país federal con estados casi independientes', 'separar a Panamá de Colombia de manera pacífica', 'repartir las tierras de las grandes haciendas entre los campesinos'], 'Con la Constitución de 1886, la Regeneración acabó con el federalismo de Rionegro y se alió con la Iglesia católica.'),
+    Q('icf-sc-mundo', 'La Revolución Industrial comenzó en el siglo XVIII en', ['Gran Bretaña', 'Estados Unidos', 'Japón', 'Rusia'], 'Gran Bretaña tuvo primero las máquinas de vapor, el carbón y las fábricas textiles con que empezó.'),
+    Q('icf-sc-mundo', 'Al terminar la Segunda Guerra Mundial se creó la Organización de las Naciones Unidas (ONU) con el propósito principal de', ['mantener la paz y la seguridad entre las naciones', 'unir a todos los países del mundo bajo un solo gobierno', 'administrar las colonias de los países vencidos', 'organizar torneos deportivos entre los países'], 'La Carta de la ONU, de 1945, pone como primer propósito mantener la paz y la seguridad internacionales.'),
+    Q('icf-sc-mundo', 'La caída del muro de Berlín, en 1989, simboliza', ['el fin de la división de Europa en dos bloques', 'el comienzo de la Primera Guerra Mundial', 'la independencia de las colonias africanas', 'la creación del primer parlamento alemán'], 'El muro separaba la parte de Berlín del bloque soviético de la del bloque occidental; su caída anunció el fin de la Guerra Fría.'),
+    Q('icf-sc-geografia', 'La tala de la selva amazónica puede reducir las lluvias en regiones lejanas porque', ['los árboles devuelven al aire humedad que luego llueve', 'los troncos cortados tapan los ríos de esas regiones', 'sin árboles el Sol calienta menos la superficie', 'la madera se lleva en camiones hasta esas regiones'], 'La selva transpira enormes cantidades de agua; ese vapor viaja con el viento y cae como lluvia en otras zonas.'),
+    Q('icf-sc-geografia', 'Colombia es el único país de Suramérica con costas en', ['el océano Pacífico y el mar Caribe', 'el océano Índico y el océano Pacífico', 'el mar Mediterráneo y el mar Caribe', 'el océano Atlántico sur y el Ártico'], 'Colombia tiene costa en el Pacífico y en el Caribe, que hace parte del océano Atlántico.'),
+    Q('icf-sc-economia', 'En economía, se llama inflación a', ['la subida general y sostenida de los precios', 'la disminución del número de desempleados', 'la deuda que un país tiene con otro país', 'el impuesto que pagan los productos importados'], 'Inflación es la subida generalizada y continua de los precios, que le hace perder poder de compra al dinero.'),
+    Q('icf-sc-economia', 'Si el peso colombiano pierde valor frente al dólar, lo más probable es que', ['los productos importados se vuelvan más caros', 'los viajes al exterior se vuelvan más baratos', 'los exportadores reciban menos pesos por venta', 'bajen los precios de los computadores importados'], 'Con un dólar más caro se necesitan más pesos para comprar lo que viene de afuera; los exportadores, en cambio, reciben más pesos.'),
+    Q('icf-sc-modelos', 'Un modelo económico en el que el Estado es dueño de las empresas y fija los precios se llama', ['economía planificada', 'economía de libre mercado', 'economía de subsistencia', 'economía mixta de mercado'], 'En la economía planificada el Estado decide qué se produce y a qué precio; en el libre mercado lo deciden la oferta y la demanda.'),
+    Q('icf-sc-modelos', 'Un municipio con poco presupuesto debe escoger entre un estadio nuevo y un acueducto para veredas sin agua potable. Un criterio basado en los derechos fundamentales llevaría a escoger', ['el acueducto, porque el agua potable protege la salud y la vida', 'el estadio, porque atraerá muchos más turistas y visitantes al municipio', 'el estadio, porque el deporte también es un derecho de la comunidad', 'ninguno de los dos, para guardar el dinero del año'], 'El acceso al agua potable afecta la salud y la vida; un criterio de derechos lo pone por delante del entretenimiento.'),
+  ], 10);
+
+  const ciencias = pon([
+    Q('icf-cn-indaga', 'Para saber si un abono aumenta la cosecha de maíz, se siembran dos parcelas iguales y solo a una se le pone abono. La variable independiente es', ['el uso o no del abono', 'la cantidad de maíz cosechado', 'el tamaño de las parcelas', 'el tipo de semilla de maíz'], 'La variable independiente es la que el investigador cambia a propósito; la cosecha es la que se mide (dependiente).'),
+    Q('icf-cn-indaga', 'Un resorte se estira 2 cm con 100 g, 4 cm con 200 g y 6 cm con 300 g. Si el patrón se mantiene, con 250 g se estirará', ['5 cm', '4.5 cm', '6 cm', '2.5 cm'], 'Se estira 2 cm por cada 100 g, es decir, 0.02 cm por gramo: 250 · 0.02 = 5 cm.'),
+    Q('icf-cn-celula', 'La función principal de los cloroplastos en una célula vegetal es', ['hacer la fotosíntesis', 'almacenar el ADN', 'fabricar proteínas', 'eliminar los desechos'], 'Los cloroplastos tienen clorofila y transforman la energía de la luz en glucosa.'),
+    Q('icf-cn-celula', 'Los glóbulos rojos de la sangre transportan sobre todo', ['oxígeno, unido a la hemoglobina', 'anticuerpos contra las bacterias', 'azúcares de reserva para el hígado', 'hormonas del crecimiento'], 'La hemoglobina de los glóbulos rojos se une al oxígeno en los pulmones y lo lleva a los tejidos.'),
+    Q('icf-cn-celula', 'Al terminar la mitosis, una célula ha producido', ['dos células con la misma información genética que ella', 'cuatro células, cada una con la mitad de los cromosomas', 'una sola célula con el doble de cromosomas', 'dos células con información genética distinta'], 'La mitosis reparte copias idénticas del ADN. La meiosis es la que produce cuatro células con la mitad de los cromosomas.'),
+    Q('icf-cn-movimiento', 'Un carro pasa de 0 a 20 m/s en 5 segundos. Su aceleración media es', ['4 m/s²', '100 m/s²', '25 m/s²', '15 m/s²'], 'a = cambio de velocidad ÷ tiempo = 20 ÷ 5 = 4 m/s².'),
+    Q('icf-cn-movimiento', 'Una persona empuja una pared con una fuerza de 50 N y la pared no se mueve. La pared ejerce sobre la persona una fuerza', ['de 50 N en sentido contrario', 'nula, porque la pared no se mueve', 'de 100 N en el mismo sentido', 'menor que 50 N hacia la pared'], 'Por la tercera ley de Newton, las fuerzas de acción y reacción son iguales y opuestas, aunque nada se mueva.'),
+    Q('icf-cn-materia', 'Para recuperar la sal disuelta en un vaso de agua, el método más adecuado es', ['la evaporación', 'la filtración', 'la decantación', 'la imantación'], 'La sal disuelta atraviesa cualquier filtro; al evaporar el agua, la sal queda en el recipiente.'),
+    Q('icf-cn-materia', '¿Cuál de estos es un cambio químico?', ['Un clavo que se oxida con la humedad', 'Un cubo de hielo que se derrite', 'Una hoja de papel que se rasga', 'El azúcar que se disuelve en el café'], 'En la oxidación se forma una sustancia nueva, el óxido de hierro; en los demás casos la sustancia sigue siendo la misma.'),
+    Q('icf-cn-ecosistemas', 'En una cadena alimentaria, la energía disponible disminuye de un nivel al siguiente porque', ['gran parte se gasta en vivir y se pierde como calor', 'los consumidores comen menos de lo que necesitan', 'las plantas guardan toda su energía para ellas', 'la energía se convierte en materia que no se usa'], 'Cada organismo usa la mayor parte de la energía en moverse, respirar y mantenerse; solo una fracción pasa al siguiente nivel.'),
+    Q('icf-cn-ecosistemas', 'Las abejas toman néctar de las flores y, al hacerlo, transportan su polen. Esta relación es un ejemplo de', ['mutualismo', 'parasitismo', 'depredación', 'competencia'], 'Las dos especies se benefician: la abeja se alimenta y la flor queda polinizada.'),
+    Q('icf-cn-energia', 'Un bombillo de 60 W permanece encendido 10 horas. La energía que consume es', ['0.6 kWh', '6 kWh', '60 kWh', '600 kWh'], 'E = P · t = 60 W · 10 h = 600 Wh, que son 0.6 kWh.'),
+    Q('icf-cn-energia', 'Se sirve café caliente en una taza fría. ¿Qué ocurre con el calor?', ['Pasa del café a la taza hasta que igualan su temperatura', 'Pasa de la taza al café, porque la taza es la que está más fría', 'No pasa calor, porque la taza es de cerámica', 'El frío de la taza pasa al café y lo enfría'], 'El calor fluye del cuerpo más caliente al más frío hasta el equilibrio térmico; el «frío» no es algo que se transmita.'),
+    Q('icf-cn-atomo', 'Dos isótopos de un mismo elemento se diferencian en su número de', ['neutrones', 'protones', 'electrones del átomo neutro', 'capas de electrones'], 'Los isótopos tienen los mismos protones, por eso son el mismo elemento, y distinto número de neutrones.'),
+    Q('icf-cn-atomo', 'En una molécula de agua ($H_2O$), los átomos de hidrógeno y oxígeno se unen mediante enlaces', ['covalentes, porque comparten electrones', 'iónicos, porque se ceden electrones', 'metálicos, porque forman una red de iones', 'de hidrógeno, dentro de la misma molécula'], 'El hidrógeno y el oxígeno son no metales y comparten pares de electrones: enlace covalente. Los puentes de hidrógeno unen moléculas distintas.'),
+    Q('icf-cn-herencia', 'El daltonismo es recesivo y su gen está en el cromosoma X. Una mujer portadora y un hombre de visión normal tienen un hijo varón. La probabilidad de que sea daltónico es', ['1/2', '1/4', '0', '1'], 'El hijo recibe el Y del padre y uno de los dos X de la madre; la mitad de las veces recibe el X con el gen.'),
+    Q('icf-cn-herencia', 'Las mutaciones son importantes para la evolución porque', ['producen la variación sobre la que actúa la selección', 'siempre hacen más fuertes a los organismos', 'aparecen solo cuando el organismo las necesita para sobrevivir', 'impiden que las especies cambien con el tiempo'], 'Las mutaciones ocurren al azar; algunas dan ventaja y la selección natural hace que esas se vuelvan más comunes.'),
+    Q('icf-cn-reacciones', 'En la combustión del metano, $CH_4 + 2O_2 \\to CO_2 + 2H_2O$. ¿Cuántas moléculas de oxígeno se necesitan para quemar 3 moléculas de metano?', ['6', '2', '3', '5'], 'Por cada molécula de metano se necesitan 2 de oxígeno: 3 · 2 = 6.'),
+    Q('icf-cn-reacciones', 'Al mezclar vinagre con bicarbonato de sodio aparecen burbujas. Esto indica que', ['se forma un gas nuevo, el dióxido de carbono', 'el vinagre empieza a hervir por el calor', 'el bicarbonato se disuelve sin reaccionar', 'el aire del vaso se mezcla con el vinagre'], 'El ácido del vinagre reacciona con el bicarbonato y produce CO₂, que escapa en burbujas: es una reacción química.'),
+    Q('icf-cn-ondas', 'El sonido no se propaga en el vacío porque', ['necesita un medio material que vibre', 'viaja más rápido que la luz', 'solo viaja por el aire caliente', 'se convierte en luz al salir de la atmósfera'], 'El sonido es una onda mecánica: sin partículas que vibren no hay cómo transmitirlo.'),
+    Q('icf-cn-ondas', 'Un lápiz metido en un vaso con agua parece quebrado. Este efecto se debe a la', ['refracción de la luz al pasar del agua al aire', 'reflexión de la luz en el borde del vaso', 'absorción de la luz por parte del agua', 'difracción del sonido dentro del vaso'], 'La luz cambia de rapidez y de dirección al pasar de un medio a otro: eso es la refracción.'),
+    Q('icf-cn-gases', 'Un globo inflado se mete en el congelador y, después de un rato, se ve más pequeño. A presión constante, esto ocurre porque', ['al bajar la temperatura, baja el volumen del gas', 'el aire se escapa del globo a causa del frío', 'el frío aumenta la cantidad de gas en el globo', 'el caucho del globo se vuelve más grueso'], 'A presión constante, el volumen de un gas es proporcional a su temperatura absoluta (ley de Charles).'),
+    Q('icf-cn-electrico', 'Dos resistencias de 6 Ω se conectan en serie a una batería de 12 V. La corriente que circula es', ['1 A', '2 A', '4 A', '0.5 A'], 'En serie las resistencias se suman: 12 Ω. Por la ley de Ohm, I = V ÷ R = 12 ÷ 12 = 1 A.'),
+    Q('icf-cn-cts', 'Una ciudad quiere cambiar sus buses diésel por buses eléctricos para reducir la contaminación del aire. ¿Qué pregunta es más importante responder para evaluar el beneficio ambiental total?', ['¿De qué fuentes sale la electricidad con que se cargarán?', '¿Cuántos pasajeros caben sentados en cada bus nuevo?', '¿Cuánto cuesta hoy el pasaje en los buses diésel que circulan?', '¿Qué rutas tienen más pasajeros por la mañana?'], 'Si la electricidad sale de quemar carbón, parte de la contaminación solo cambia de lugar: hay que mirar todo el ciclo.'),
+  ], 15);
+
+  const ingles = pon([
+    Q('icf-en-avisos', 'Where can you see this sign? "Please return your tray after eating."', ['In a cafeteria', 'In a hospital room', 'In a bus station', 'In a clothes shop'], '«Tray» es la bandeja en la que se lleva la comida: el aviso está en una cafetería.'),
+    Q('icf-en-avisos', 'What does this sign mean? "Caution: wet floor."', ['Walk carefully because you can slip.', 'Please clean the floor right now.', 'Never walk on this floor again.', 'The floor is new and very expensive.'], '«Caution» pide cuidado y «wet floor» es piso mojado: hay que caminar con cuidado.'),
+    Q('icf-en-avisos', 'A sign says: "Lift out of order. Please use the stairs." This means that', ['the lift is not working', 'the stairs are closed today', 'the lift is only for workers', 'you must wait in line for it'], '«Out of order» significa dañado, que no funciona; por eso piden usar las escaleras.'),
+    Q('icf-en-avisos', 'A sign at a swimming pool says: "Children under 12 must be with an adult." Which sentence is true?', ['A 10-year-old girl cannot swim there alone.', 'Adults cannot swim in this pool at all.', 'Only children can use this swimming pool.', 'A 15-year-old boy needs to come with his parents.'], '«Under 12» son los menores de 12 años: una niña de 10 necesita estar con un adulto.'),
+    Q('icf-en-vocabulario', 'A person who repairs cars is a', ['mechanic', 'lawyer', 'waiter', 'dentist'], '«Mechanic» es mecánico; los otros son abogado, mesero y dentista.'),
+    Q('icf-en-vocabulario', 'You wear this on your wrist to know the time. It is a', ['watch', 'ring', 'scarf', 'belt'], '«Watch» es el reloj de pulsera; ring, scarf y belt son anillo, bufanda y cinturón.'),
+    Q('icf-en-vocabulario', 'You go to this place to buy medicine. It is a', ['pharmacy', 'bakery', 'stadium', 'museum'], '«Pharmacy» es la farmacia o droguería.'),
+    Q('icf-en-dialogos', 'Complete the conversation. "What time does the bus leave?" —', ['At half past seven.', 'For two hours.', 'It\'s a red bus.', 'Yes, it leaves.'], '«What time» pregunta la hora: «at half past seven», a las siete y media.'),
+    Q('icf-en-dialogos', 'Complete the conversation. "Could you pass me the salt, please?" —', ['Here you are.', 'I\'m not hungry.', 'I could yesterday.', 'It\'s too salty.'], '«Here you are» se dice al entregar algo que alguien pide.'),
+    Q('icf-en-dialogos', 'Complete the conversation. "I passed my driving test!" —', ['Congratulations! You must be happy.', 'Don\'t worry, you can try again.', 'I\'m sorry to hear that.', 'Yes, the test is next Monday at nine.'], 'Ante una buena noticia se felicita; «I\'m sorry to hear that» y «try again» responden a una mala.'),
+    Q('icf-en-dialogos', 'Complete the conversation. "Do you mind if I open the window?" —', ['Not at all. It\'s really hot.', 'Yes, it is a very big window.', 'I don\'t have any windows.', 'No, I mind it very much.'], '«Do you mind…?» pregunta si molesta; «not at all» quiere decir que no molesta, que puede abrirla.'),
+    Q('icf-en-gramatica', 'Choose the word for gap (1).', ['went', 'go', 'goes', 'going'], '«Last December» pide pasado simple: «went».', 'playa'),
+    Q('icf-en-gramatica', 'Choose the word for gap (2).', ['had', 'has', 'have', 'having'], 'Antes de ese viaje él no había visto el mar: pasado perfecto, «had never seen».', 'playa'),
+    Q('icf-en-gramatica', 'Choose the word for gap (3).', ['longer', 'long', 'longest', 'more long'], 'Se compara con «than»: comparativo de un adjetivo corto, «longer».', 'playa'),
+    Q('icf-en-gramatica', 'Choose the word for gap (4).', ['so', 'such', 'too', 'very'], '«So + adjetivo + that» expresa una consecuencia: tan hermosa que lloró.', 'playa'),
+    Q('icf-en-corto', 'Why can\'t Daniel go to class tomorrow?', ['He has to help his family move.', 'He is sick in bed at home.', 'He has not finished his homework.', 'He has an exam at another school.'], 'Dice que su familia se muda y que sus papás necesitan su ayuda con las cajas.', 'nota'),
+    Q('icf-en-corto', 'What will Daniel do tonight?', ['Send his history homework by email.', 'Read the pages for Friday\'s class.', 'Visit Ms. Parker at the school early.', 'Buy boxes for the new apartment.'], '«I will send it to you by email tonight»: esa noche enviará la tarea de historia.', 'nota'),
+    Q('icf-en-corto', 'What does Daniel ask Ms. Parker for?', ['The pages to read for Friday.', 'More time for the homework.', 'Help with the moving boxes.', 'A new date for the exam.'], 'Pregunta qué páginas hay que leer para el viernes.', 'nota'),
+    Q('icf-en-inferencia', 'From the email, we can say that Daniel', ['cares about not falling behind', 'does not like his history class', 'wants to change to a new school', 'is angry with his parents'], 'Ya hizo la tarea y pregunta qué leer para no perderse nada antes del examen: le importa estar al día.', 'nota'),
+    Q('icf-en-largo', 'What is the text mainly about?', ['A girl who started a radio program for her village', 'A storm that destroyed a bridge over a river', 'How farmers protect their coffee from pests', 'The history of the radio stations in the big cities'], 'Todo el texto cuenta cómo Camila creó un programa de radio que unió a su pueblo.', 'radio'),
+    Q('icf-en-largo', 'Why did Camila decide to start the program?', ['News arrived late and sometimes wrong.', 'Her uncle asked her to work at a radio.', 'The school library needed more visitors.', 'She wanted to become famous in the city.'], 'El párrafo 1 cuenta que las noticias llegaban despacio y a veces mal, como pasó con el puente.', 'radio'),
+    Q('icf-en-largo', 'At the beginning, the program talked about', ['the weather, market prices and vaccinations', 'old stories told by the grandmothers', 'messages from the mayor\'s office', 'the courses that Camila takes at the university'], 'Lo dice el párrafo 2; las historias y los mensajes de la alcaldía llegaron después.', 'radio'),
+    Q('icf-en-vocabulario', 'In paragraph 3, the expression "little by little" means', ['slowly, over time', 'very fast', 'only once', 'never again'], '«Little by little» es poco a poco: la gente empezó a llamar con el tiempo.', 'radio'),
+    Q('icf-en-inferencia', 'What does Camila mean when she says the radio "made the people closer"?', ['People got to know and help each other more.', 'The village moved nearer to the big city.', 'People sat close to the radio to hear it.', 'The radio paid for a new bridge in the village.'], 'No habla de distancia física: la radio unió a la gente, que compartió saberes e historias.', 'radio'),
+  ], 20);
+
+  return { id: 'icf-sim-2', titulo: 'Simulacro 2', textos, pruebas: { lectura, matematicas, sociales, ciencias, ingles } };
 })());
 ;
 //#archivo js/portal.js

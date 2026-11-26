@@ -1,215 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-r-calculo.js
-// Preuniversitario · mundo 1 «Cálculo mental»: lecciones y evaluación con el estándar de diez ejercicios distintos
-// (spec 2026-11-20-preuda-razonamiento-diez): seis o siete juegos del concepto de una sola ronda, uno en movimiento y la zona
-// de examen (completar la solución, cazar el error y la pregunta en formato real).
-PU_JUEGOS.push(({ setLesson, setExam, sol, err, opc, diez }) => {
-  setLesson('pu-cm-1', [
-    play('recta-muda', 'En esta recta solo quedaron escritos el 0 y el 2. Cuelga cada ficha en el lugar donde vive.', { min: -9, max: 9, rotulos: [0, 2], fichas: [
-      { t: '-(-7)', v: 7 }, { t: '-|{-5}|', v: -5 }, { t: '|2 - 6|', v: 4 }, { t: '-|3|', v: -3 }] },
-      '$-|{-5}|$: las barras dan 5 y el menos de afuera lo refleja, $-5$. Por eso va a la izquierda de $-|3| = -3$. La distancia $|2 - 6|$ es $4$ y el reflejo de $-7$ es $7$.',
-      { hint: 'Primero resuelve lo que hay entre las barras: es una distancia. Después mira si afuera queda un menos, que refleja en el 0.' }),
-    play('dos-radares', 'Dos radares de la costa detectan el mismo barco. Cada uno sabe a qué **distancia** está. ¿Dónde está el barco?', { min: -9, max: 9, desde: 0, radares: [{ v: -2, d: 5 }, { v: 6, d: 3 }] },
-      'A 5 pasos de $-2$ están $-7$ y $3$; a 3 pasos de $6$, $3$ y $9$. Solo el $3$ está en las dos parejas.',
-      { hint: 'Una distancia se cuenta hacia los dos lados: halla los dos lugares que permite cada radar y busca el que se repite.' }),
-    play('arma-viaje', 'La ficha debe ir de $-6$ a $5$ en **dos** movimientos. ¿Qué cartas la llevan?', { min: -8, max: 8, desde: -6, meta: 5, cartas: [
-      { t: '+ (-8)', d: -8 }, { t: '- (-8)', d: 8 }, { t: '- 3', d: -3 }, { t: '- (-5)', d: 5 }, { t: '+ 3', d: 3 }, { t: '+ (-5)', d: -5 }] },
-      'De $-6$ a $5$ hay 11 pasos a la derecha. Restar $-8$ es avanzar 8 y sumar 3 completa los 11: $-6 - (-8) + 3 = 5$.',
-      { hint: 'Cuenta cuántos pasos y hacia dónde hay que ir en total. Luego piensa hacia dónde mueve cada carta: restar camina al revés de sumar.' }),
-    play('taller-saltos', 'Ajusta el salto y las veces para caer en **15**, pero con la cadena **dando la vuelta** en el 0.', { min: -18, max: 18, cada: 3, tope: 6, meta: 15 },
-      'La cadena da la vuelta si las veces son negativas. Para caer del lado positivo, el salto también debe ser negativo: $(-3) \\cdot (-5) = 15$ o $(-5) \\cdot (-3) = 15$.',
-      { hint: 'Lo que hace dar la vuelta es el signo de las veces. Piensa de qué lado debe estar la cadena antes de voltearse.' }),
-    play('signos-condiciones', 'Cambia los signos para que el **producto** sea positivo y la **suma** negativa, dejando **al menos uno** positivo.', { factores: [2, 3, 4, 5] },
-      'Para el producto solo importa cuántos menos hay: par. Para la suma importa cuáles: los negativos deben pesar más. Con todos negativos se cumple, pero había que dejar uno positivo. Con $-3$ y $-5$, por ejemplo, el producto es $120$ y la suma $-2$.',
-      { hint: 'El producto mira cuántos signos menos hay; la suma mira cuánto pesan. Empieza por decidir cuántos menos necesitas.' }),
-    play('potencia-signo', 'Arma una potencia que valga $-16$ y que lleve un menos **dentro** del paréntesis.', { base: 2, max: 6, meta: -16 },
-      'Cuatro factores $-2$ se emparejan y dan $16$, positivo. El menos que lo vuelve $-16$ tiene que estar afuera: $-(-2)^4 = -16$.',
-      { hint: 'Piensa cuántos factores de 2 hacen 16 y qué signo queda al emparejar los menos de adentro.' }),
-    play('parentesis-justo', 'A esta cuenta se le borró el paréntesis y ya no da lo que debía. Vuelve a ponerlo.', { expr: '5 - 8 * 3 - 1', meta: -18 },
-      '$5 - (8 \\cdot 3 - 1) = 5 - 23 = -18$. Sin paréntesis da $-20$: el menos de afuera le cambia el signo también al $-1$.',
-      { hint: 'Sin paréntesis la cuenta da −20. Busca qué tendrías que agrupar para que el menos de afuera le cambie el signo a otro término más.' }),
-    play('lanza-ficha', 'Lanza la ficha al resultado de cada operación: decide hacia dónde y cuántos pasos. Puedes fallar **una** vez.', { min: -8, max: 8, tope: 9, tiros: [
-      { t: '-5 - (-9)', desde: -5, d: 9 }, { t: '3 + (-8)', desde: 3, d: -8 }, { t: '-1 - 6', desde: -1, d: -6 }] },
-      '$-5 - (-9) = -5 + 9 = 4$, $3 + (-8) = -5$ y $-1 - 6 = -7$. Restar un negativo lleva a la derecha.',
-      { hint: 'Mira la operación: sumar un negativo o restar un positivo lleva a la izquierda; restar un negativo, a la derecha.' }),
-    sol('A las 6 de la mañana, un termómetro en el páramo marca $-4\\,°\\text{C}$. Hasta el mediodía la temperatura sube $11\\,°\\text{C}$ y de ahí a la noche baja $9\\,°\\text{C}$. ¿Cuál es la temperatura en la noche y cuántos grados separan la más alta de la más baja del día?',
-      ['Al mediodía: $-4 + 11 =$ [[7]] °C', 'En la noche: $7 - 9 =$ [[−2]] °C', 'La más baja del día fue [[−4]] °C y la más alta, 7 °C', 'Las separan $7 - (-4) =$ [[11]] grados'],
-      ['3', '15', '2'],
-      'Restar un negativo es sumar: de $-4$ a $7$ hay 4 grados hasta el cero y 7 más, 11 en total. Quien resta $7 - 4$ olvida el tramo bajo cero.',
-      'Ubica las tres temperaturas en una recta vertical, como un termómetro, y cuenta los grados pasando por el 0.'),
-    err('Para saber cuánto debe consignar, un tesorero calcula $20 - 4 \\cdot (3 - 5)^2 + 6 \\div 2$. ¿Cuál es el resultado?',
-      ['Paréntesis: $3 - 5 = -2$', 'Potencia: $(-2)^2 = -4$', 'Producto y cociente: $4 \\cdot (-4) = -16$ y $6 \\div 2 = 3$', 'Sumas y restas: $20 - (-16) + 3 = 39$'], 1,
-      ['Potencia: $(-2)^2 = 4$', 'Potencia: $(-2)^2 = -2$', 'Potencia: $(-2)^2 = 0$'],
-      'Un negativo al cuadrado es positivo: $(-2)^2 = 4$. Entonces $20 - 4 \\cdot 4 + 3 = 20 - 16 + 3 = 7$. Los pasos siguientes arrastraban el error.',
-      'Revisa el orden: paréntesis, potencias, productos y cocientes, y al final sumas. En cada paso comprueba también el signo.'),
-    opc('Un submarino está a 120 m bajo el nivel del mar. Sube 45 m y después baja tres veces seguidas 20 m cada vez. Con respecto al nivel del mar, su posición final es:',
-      ['$-95$ m', '$-15$ m', '$-135$ m', '$135$ m'], 2,
-      '$-120 + 45 = -75$ y luego $-75 - 3 \\cdot 20 = -75 - 60 = -135$. Bajo el nivel del mar la posición es negativa.',
-      'Escribe la profundidad con signo menos; subir suma y bajar resta. Las tres bajadas iguales son un producto.'),
-  ]);
-
-  setLesson('pu-cm-2', [
-    play('corta-iguales', 'Un carpintero marcó mal una tabla de 20 cm: las partes salieron disparejas. Corrige los cortes y toma **tres quintos**.', { ticks: 20, n: 5, toma: 3, ini: [3, 5, 11, 16] },
-      'Un quinto solo existe si las cinco partes miden lo mismo: 4 cm cada una. Tres de ellas son $\\tfrac35$.',
-      { hint: 'La tabla mide 20 cm y debe quedar en 5 partes iguales. ¿Cuántos centímetros le tocan a cada una?' }),
-    play('fraccion-gemela', 'Arma una fracción que mida **lo mismo** que $\\tfrac69$, pero con **más** de 9 partes.', { a: [6, 9], max: 15 },
-      '$\\tfrac69 = \\tfrac23$. Con más partes: $\\tfrac{8}{12}$ o $\\tfrac{10}{15}$. Arriba y abajo se multiplicó por lo mismo.',
-      { hint: 'Simplifica primero la fracción. Después busca por cuánto multiplicar arriba y abajo para pasar de 9 partes.' }),
-    play('entre-fracciones', 'Arma una fracción que caiga **entre** $\\tfrac12$ y $\\tfrac35$.', { lo: [1, 2], hi: [3, 5], max: 12 },
-      'Con el mismo denominador, $\\tfrac{10}{20}$ y $\\tfrac{12}{20}$: en medio está $\\tfrac{11}{20}$. Con números más pequeños sirven $\\tfrac59$, $\\tfrac{6}{11}$ o $\\tfrac{7}{12}$.',
-      { hint: 'Debe pasar de la mitad por muy poco: piensa en un numerador apenas mayor que la mitad del denominador.' }),
-    play('piezas-exactas', 'Escoge los **tres** pedazos que juntos llenan justo $\\tfrac{11}{12}$ de la barra.', { meta: [11, 12], den: 24, k: 3, piezas: [[1, 3], [1, 8], [1, 2], [1, 6], [1, 4]] },
-      'En doceavos: $\\tfrac{6}{12} + \\tfrac{3}{12} + \\tfrac{2}{12} = \\tfrac{11}{12}$, o sea $\\tfrac12 + \\tfrac14 + \\tfrac16$. El octavo no cabe en un número entero de doceavos.',
-      { hint: 'Pasa cada pedazo a doceavos. Uno de los cinco no da un número entero de doceavos: descártalo.' }),
-    play('resta-falta', 'Un tanque estaba lleno hasta $\\tfrac78$ y ahora marca $\\tfrac12$. ¿Qué fracción del tanque se gastó?', { de: [7, 8], queda: [1, 2], max: 12 },
-      'En octavos: $\\tfrac78 - \\tfrac48 = \\tfrac38$. Restar arriba con arriba y abajo con abajo daría $\\tfrac66$, ¡un tanque entero!',
-      { hint: 'Escribe las dos marcas con partes del mismo tamaño y mira cuántas partes hay de una a la otra.' }),
-    play('parte-de-parte', 'Se siembran $\\tfrac34$ de este terreno y **un tercio de lo sembrado** es maíz. Marca el maíz.', { cols: 8, filas: 3, de: [3, 4], parte: [1, 3] },
-      'De 24 lotes se siembran 18, y un tercio de 18 son 6. «Un tercio de» es multiplicar: $\\tfrac13 \\cdot \\tfrac34 = \\tfrac14$ del terreno.',
-      { hint: 'Imagina primero lo sembrado y después parte eso, no el terreno entero.' }),
-    play('total-escondido', 'En una rifa ya se vendieron 21 boletas, que son $\\tfrac35$ del total. Reconstruye el total.', { frac: [3, 5], vale: 21 },
-      'Tres partes son 21, así que cada una vale 7. El total son 5 partes: $5 \\cdot 7 = 35$ boletas.',
-      { hint: 'Las 21 boletas ocupan solo las partes que dice el numerador. Halla cuánto vale una.' }),
-    play('lanza-fraccion', 'Cada marca es **un doceavo**. Lanza la ficha al resultado de cada operación. Puedes fallar **una** vez.', { min: 0, max: 18, tope: 10, den: 12, unidad: ['doceavo', 'doceavos'], tiros: [
-      { t: '\\tfrac14 + \\tfrac23', desde: 3, d: 8 }, { t: '\\tfrac34 - \\tfrac13', desde: 9, d: -4 }, { t: '\\tfrac12 + \\tfrac56', desde: 6, d: 10 }] },
-      'En doceavos: $\\tfrac{3}{12} + \\tfrac{8}{12} = \\tfrac{11}{12}$, $\\tfrac{9}{12} - \\tfrac{4}{12} = \\tfrac{5}{12}$ y $\\tfrac{6}{12} + \\tfrac{10}{12} = \\tfrac{16}{12} = \\tfrac43$.',
-      { hint: 'Convierte la segunda fracción a doceavos: ese es el número de marcas que debe saltar la ficha.' }),
-    sol('En un torneo, $\\tfrac35$ de los inscritos vienen de colegios públicos. Llevan uniforme propio $\\tfrac23$ de los de colegios públicos y $\\tfrac12$ de los demás. ¿Qué fracción del total de inscritos lleva uniforme propio?',
-      ['Públicos con uniforme: $\\tfrac23$ de $\\tfrac35$ es [[$\\tfrac25$]] del total', 'Los demás son $1 - \\tfrac35 =$ [[$\\tfrac25$]] del total, y la mitad de ellos es [[$\\tfrac15$]]', 'Con uniforme: $\\tfrac25 + \\tfrac15 =$ [[$\\tfrac35$]] del total'],
-      ['$\\tfrac76$', '$\\tfrac13$', '$\\tfrac{4}{15}$'],
-      '«De» es multiplicar: $\\tfrac23 \\cdot \\tfrac35 = \\tfrac25$ y $\\tfrac12 \\cdot \\tfrac25 = \\tfrac15$. Sumar $\\tfrac23 + \\tfrac12 = \\tfrac76$ no sirve: son fracciones de grupos distintos.',
-      'Cada fracción habla de un grupo diferente. Pásalas todas a fracción del total antes de sumar.'),
-    err('Dos mangueras llenan un tanque: en una hora, la primera llena $\\tfrac14$ del tanque y la segunda $\\tfrac16$. ¿Qué fracción del tanque falta por llenar después de una hora con las dos abiertas?',
-      ['En una hora llenan $\\tfrac14 + \\tfrac16$ del tanque', '$\\tfrac14 + \\tfrac16 = \\tfrac{2}{10}$', 'Falta $1 - \\tfrac{2}{10} = \\tfrac{8}{10}$', 'Simplificando, falta $\\tfrac45$ del tanque'], 1,
-      ['$\\tfrac{3}{12} + \\tfrac{2}{12} = \\tfrac{5}{12}$', '$\\tfrac14 + \\tfrac16 = \\tfrac{1}{10}$', '$\\tfrac14 + \\tfrac16 = \\tfrac{1}{24}$'],
-      'No se suman los de arriba y los de abajo: se llevan a doceavos, $\\tfrac{3}{12} + \\tfrac{2}{12} = \\tfrac{5}{12}$. Falta $\\tfrac{7}{12}$ del tanque.',
-      'Un cuarto y un sexto son pedazos de distinto tamaño. ¿Qué se necesita para poder sumarlos?'),
-    opc('El resultado del producto $\\dfrac12 \\cdot \\dfrac23 \\cdot \\dfrac34 \\cdot \\dfrac45 \\cdot \\dfrac56$ es:',
-      ['$\\tfrac56$', '$\\tfrac16$', '$\\tfrac12$', '$\\tfrac{1}{30}$'], 1,
-      'Cada numerador se cancela con el denominador de la fracción anterior: solo quedan el 1 de arriba y el 6 de abajo, $\\tfrac16$.',
-      'No multipliques todo: antes de operar, mira qué números de arriba se repiten abajo.'),
-  ]);
-
-  setLesson('pu-cm-3', [
-    play('rejilla-otra', 'En una sala hay 40 sillas y el **45 %** está ocupado. Pinta las sillas ocupadas.', { cols: 8, filas: 5, pct: 45 },
-      'El 10 % de 40 son 4 sillas y el 5 % son 2. El 45 % son cuatro veces 4 más 2: 18 sillas.',
-      { hint: 'Aquí no hay 100 sillas. Halla primero cuántas son el 10 % y arma el resto con eso.' }),
-    play('cuelga-porcientos', 'La recta va de 0 % a 100 %. Cuelga cada número en el **porcentaje** que vale.', { min: 0, max: 20, den: 20, rotulos: [0, 20], pie: 'De una marca a la siguiente hay 5 %.', fichas: [
-      { t: '\\tfrac{7}{20}', v: 7 }, { t: '0.6', v: 12 }, { t: '\\tfrac34', v: 15 }, { t: '0.05', v: 1 }] },
-      '$\\tfrac{7}{20} = \\tfrac{35}{100} = 35\\,\\%$, $0.6 = 60\\,\\%$, $\\tfrac34 = 75\\,\\%$ y $0.05 = 5\\,\\%$ (no el 50 %).',
-      { hint: 'Pasa cada ficha a centésimas: el número de arriba es el porcentaje. Mira bien cuántos ceros hay después del punto.' }),
-    play('que-porcentaje', 'De 75 mensajes recibidos, 30 eran publicidad. ¿Qué **porcentaje** de los mensajes fue publicidad?', { parte: 30, todo: 75 },
-      '$30 \\div 75 = 0.4$: el 40 %. La parte se divide entre el todo; 30 es la cantidad.',
-      { hint: 'El 20 % de 75 son 15 mensajes. ¿Cuántas veces cabe el 15 en 30?' }),
-    play('pedazos-porciento', 'El total es 200. Escoge las **tres** cartas que juntas son el **36 %**.', { total: 200, pct: 36, k: 3, cartas: [100, 20, 50, 2, 10, 6] },
-      'El 36 % se arma con 25 % + 10 % + 1 %: $50 + 20 + 2 = 72$.',
-      { hint: 'Mira qué porcentaje de 200 es cada carta. Después busca tres que sumen 36.' }),
-    play('etiqueta-vieja', 'Una chaqueta bajó el **20 %** y ahora cuesta 72 mil pesos. ¿Cuánto costaba **antes**?', { baja: 20, queda: 72 },
-      'Lo que quedó es el 80 % del precio de antes: $72 \\div 0.8 = 90$ mil. Sumarle el 20 % a 72 no sirve: ese 20 % era del precio viejo.',
-      { hint: 'Los 72 mil no son el 100 %. ¿Qué porcentaje del precio de antes son?' }),
-    play('vuelta-al-precio', 'Un pasaje **subió el 25 %**. ¿Qué descuento lo devuelve **exactamente** al precio de antes?', { sube: 25 },
-      'Si costaba 100, ahora cuesta 125. Para volver hay que quitar 25 de 125, que es la quinta parte: el 20 %.',
-      { hint: 'Imagina que costaba 100. El descuento se toma del precio que ya subió, no de los 100.' }),
-    play('factor-final', 'Una acción baja el **30 %** y después sube el **10 %**. De cada 100 pesos, ¿cuántos quedan?', { cambios: [-30, 10], min: 70, max: 90, ini: 70 },
-      '$0.7 \\cdot 1.1 = 0.77$: quedan 77. El 10 % que sube se toma de 70, no de 100.',
-      { hint: 'Haz primero la bajada. El segundo porcentaje se calcula sobre lo que quedó.' }),
-    play('lanza-porciento', 'De una marca a la siguiente hay **5 %**. Lanza la ficha al porcentaje que vale lo mismo. Puedes fallar **una** vez.', { pie: 'Estira el impulso y suelta.', min: 0, max: 20, tope: 18, piso: 0, den: 20, unidad: ['marca', 'marcas'], marcas: { 0: '0 %', 10: '50 %', 20: '100 %' }, tiros: [
-      { t: '\\tfrac45', desde: 0, d: 16, res: '80\\,\\%' }, { t: '\\tfrac{18}{40}', desde: 0, d: 9, res: '45\\,\\%' }, { t: '0.3', desde: 0, d: 6, res: '30\\,\\%' }] },
-      '$\\tfrac45 = 80\\,\\%$, $\\tfrac{18}{40} = \\tfrac{45}{100} = 45\\,\\%$ y $0.3 = 30\\,\\%$.',
-      { hint: 'Convierte cada número a porcentaje y divide entre 5 para saber cuántas marcas son.' }),
-    sol('En una elección votó el 80 % de las 5 000 personas habilitadas. La candidata ganadora obtuvo el 45 % de los votos. ¿Cuántos votos obtuvo y qué porcentaje de las personas habilitadas votó por ella?',
-      ['Votaron: 80 % de 5 000 = [[4 000]] personas', 'Votos de la ganadora: 45 % de 4 000 = [[1 800]]', 'De los habilitados: $1\\,800 \\div 5\\,000 =$ [[0.36]], es decir, el [[36 %]]'],
-      ['2 250', '45 %', '125 %'],
-      'El 45 % se toma sobre los que votaron, no sobre los habilitados: $0.45 \\cdot 4\\,000 = 1\\,800$. Y $0.8 \\cdot 0.45 = 0.36$: el 36 % de los habilitados.',
-      'Cada porcentaje tiene su propio total. Pregúntate siempre: ¿el 45 % de qué?'),
-    err('Del tanque de una moto se ha gastado el 30 % de la gasolina y todavía quedan 14 litros. ¿Cuál es la capacidad del tanque?',
-      ['Si se gastó el 30 %, queda el 70 % del tanque', 'Entonces el 70 % de la capacidad son 14 litros', 'Capacidad: $14 \\cdot 0.70 = 9.8$ litros'], 2,
-      ['Capacidad: $14 \\div 0.70 = 20$ litros', 'Capacidad: $14 \\div 0.30 \\approx 46.7$ litros', 'Capacidad: $14 + 30 = 44$ litros'],
-      'Se conoce la parte y se busca el todo: se divide. $14 \\div 0.70 = 20$ litros. Una capacidad menor que lo que queda no tiene sentido.',
-      'Comprueba si la respuesta es razonable: ¿puede el tanque completo tener menos litros que los que quedan?'),
-    opc('En una biblioteca, el 25 % de los libros está en inglés y el resto en español. De los libros en español, el 30 % son novelas. Si hay exactamente 450 novelas en español, la cantidad total de libros de la biblioteca es:',
-      ['1 500', '1 800', '6 000', '2 000'], 3,
-      'En español está el 75 %, y las novelas son el 30 % de eso: $0.75 \\cdot 0.30 = 0.225$ del total. $450 \\div 0.225 = 2\\,000$.',
-      'El 30 % no es del total sino de los libros en español. Encadena los dos porcentajes multiplicando.'),
-  ]);
-
-  setLesson('pu-cm-4', [
-    play('crece-factor', '**Una** persona sabe un secreto. En cada ronda, quien se acaba de enterar se lo cuenta a **3** personas más. ¿En qué ronda se enteran **243**?', { base: 3, meta: 243, max: 7 },
-      '$3 \\cdot 3 \\cdot 3 \\cdot 3 \\cdot 3 = 3^5 = 243$: cinco rondas, cinco factores.',
-      { hint: 'Empieza en 1 y multiplica por 3 en cada ronda. No es lo mismo que sumar 3.' }),
-    play('cuadrado-justo', 'Un jardín cuadrado de lado 2 m se cambia por otro cuadrado con **16 veces** el área. ¿Cuánto mide el lado nuevo?', { lado: 2, veces: 16, max: 18 },
-      'El lado se multiplica por $\\sqrt{16} = 4$: mide 8 m. Su área es $8^2 = 64 = 16 \\cdot 4$.',
-      { hint: 'Si el lado se duplica, el área se multiplica por 4. ¿Por cuánto debe crecer el lado para que el área crezca 16 veces?' }),
-    play('exponentes-justos', 'Pon tres números distintos en los exponentes para que la igualdad sea **cierta**.', { base: 2, meta: 13, cartas: [2, 3, 4, 5, 7] },
-      'Los grupos se multiplican y lo demás se suma. Sirven, por ejemplo, $2 \\cdot 3 + 7$, $2 \\cdot 4 + 5$ o $2 \\cdot 5 + 3$, que dan 13.',
-      { hint: 'Cuenta factores: en el paréntesis hay grupos iguales, y la otra potencia se junta a ellos. En total deben ser 13.' }),
-    play('misma-potencia', 'Escribe **64** como potencia de 4 y como potencia de 2.', { bases: [4, 2], meta: 64, max: 8 },
-      '$64 = 4 \\cdot 4 \\cdot 4 = 4^3$. Cada 4 son dos doses, así que $64 = 2^6$.',
-      { hint: 'Cada 4 se puede partir en dos factores 2: con la base más pequeña hacen falta más factores.' }),
-    play('raiz-bandera', 'Un lote cuadrado tiene **130 m²**. Estima su lado en metros. Se acepta una diferencia de unas 2 décimas.', { n: 130, min: 9, max: 13, tol: 0.21 },
-      '$11^2 = 121$ y $12^2 = 144$. El 130 está más cerca de 121: el lado mide unos 11.4 m.',
-      { hint: 'Busca los dos cuadrados exactos que dejan al 130 en medio y mira de cuál está más cerca.' }),
-    play('cuelga-decimales', 'Potencias y raíces de decimales. Cuelga cada ficha donde vive.', { min: 0, max: 20, den: 20, rotulos: [0, 10, 20], pie: 'De una marca a la siguiente hay 0.05.', fichas: [
-      { t: '0.5^2', v: 5 }, { t: '\\sqrt{0.49}', v: 14 }, { t: '\\sqrt{0.16}', v: 8 }, { t: '\\sqrt{0.81}', v: 18 }] },
-      '$0.5^2 = 0.25$, porque una cifra decimal por factor son dos en total. Al revés, la raíz de dos cifras decimales tiene una: $\\sqrt{0.49} = 0.7$, $\\sqrt{0.16} = 0.4$ y $\\sqrt{0.81} = 0.9$.',
-      { hint: 'Multiplica sin el punto y cuenta las cifras decimales. En la raíz, busca qué decimal por sí mismo da ese número.' }),
-    play('estima-diez', 'Estima $612 \\times 48$ redondeando **cada número a una cifra**. Escribe el resultado como una cifra seguida de ceros.', { x: 612, y: 48, redondo: [600, 50], a: 3, e: 4 },
-      '$600 \\cdot 50 = 30\\,000 = 3 \\cdot 10^4$. El valor exacto es $29\\,376$: muy cerca.',
-      { hint: 'Redondea 612 a centenas y 48 a decenas. Multiplica las cifras y cuenta los ceros, incluido el que salga al multiplicar.' }),
-    play('lanza-potencia', 'Sale una potencia o una raíz. Lanza la ficha, que espera en el 6, hasta su valor. Puedes fallar **una** vez.', { min: 0, max: 20, cada: 2, tope: 14, pie: 'Estira hacia el lado donde está el valor y suelta.', tiros: [
-      { t: '2^4', desde: 6, d: 10 }, { t: '7^0', desde: 6, d: -5 }, { t: '\\sqrt{144}', desde: 6, d: 6 }] },
-      '$2^4 = 16$ (no 8), $7^0 = 1$ (no 0) y $\\sqrt{144} = 12$, porque $12 \\cdot 12 = 144$.',
-      { hint: 'La potencia repite multiplicaciones; con exponente 0 queda 1. La raíz busca el lado del cuadrado.' }),
-    sol('¿Cuántas cifras tiene el número $2^{9} \\cdot 5^{6}$?',
-      ['Cada 2 se junta con un 5 para formar un 10. Hay seis 5, así que sobran [[3]] factores 2', 'Lo que sobra vale $2^3 =$ [[8]], y $(2 \\cdot 5)^6 = 10^6$ es un 1 seguido de [[6]] ceros', 'El número es 8 000 000: tiene [[7]] cifras'],
-      ['15', '9', '54'],
-      '$2^9 \\cdot 5^6 = 2^3 \\cdot 10^6 = 8\\,000\\,000$. No hace falta calcular $2^9$ ni $5^6$: juntar los 2 con los 5 deja potencias de 10.',
-      'Un 2 y un 5 juntos hacen un 10. ¿Cuántas parejas completas puedes armar?'),
-    err('¿Cuál es el valor de $\\dfrac{3^4 \\cdot 3^2}{(3^2)^3}$?',
-      ['Arriba se suman los exponentes: $3^4 \\cdot 3^2 = 3^6$', 'Abajo: $(3^2)^3 = 3^{2+3} = 3^5$', 'Se restan los exponentes: $3^6 \\div 3^5 = 3^1$', 'El resultado es 3'], 1,
-      ['Abajo se multiplican: $(3^2)^3 = 3^{2 \\cdot 3} = 3^6$', 'Abajo: $(3^2)^3 = 3^{2^3} = 3^8$', 'Abajo: $(3^2)^3 = 9^6$'],
-      'Potencia de una potencia: el grupo $3^2$ se repite tres veces, $3^2 \\cdot 3^2 \\cdot 3^2 = 3^6$. Queda $3^6 \\div 3^6 = 1$.',
-      'Escribe $(3^2)^3$ como un producto repetido y cuenta cuántos 3 hay en total.'),
-    opc('Un vitral cuadrado tiene 90 cm² de área. De las siguientes medidas, la que más se aproxima a su perímetro, en centímetros, es:',
-      ['38', '36', '40', '45'], 0,
-      'El lado es $\\sqrt{90}$, entre 9 y 10 y cerca de 9.5 porque $9.5^2 = 90.25$. El perímetro es $4 \\cdot 9.5 = 38$.',
-      'Primero estima el lado: ¿entre qué dos cuadrados conocidos está el 90? Después recuerda cuántos lados tiene.'),
-  ]);
-
-  setExam('pu-calculo', 'Cálculo mental', [
-    ['pu-cm-1', 'Multiplicar por un negativo refleja la flecha en el 0.',
-      play('voltea-flecha', 'Signos', { rounds: [{ a: -3, target: 12 }] }, '$(-3)(-4) = 12$: dos negativos dan positivo.', { hint: 'Voltea.' })],
-    ['pu-cm-1', 'Primero paréntesis, luego potencias, luego × y ÷, al final + y −.',
-      play('capas-operacion', 'Capas', { rounds: [{ title: 'Jerarquía', items: [{ expr: '8 - 3 * ( 2 - 5 )' }] }] }, '$8 - 3(-3) = 8 + 9 = 17$.', { hint: 'Paréntesis primero.' })],
-    ['pu-cm-1', 'El menos fuera de la potencia no se eleva; un negativo elevado a un impar sigue negativo.',
-      opc('El resultado de $-2^2 - (-3)^2 + (-1)^5 \\cdot 4$ es:', ['$1$', '$-17$', '$9$', '$-9$'], 1,
-        '$-2^2 = -4$, $(-3)^2 = 9$ y $(-1)^5 = -1$: queda $-4 - 9 - 4 = -17$.', 'Mira en cada potencia si el signo menos está dentro del paréntesis.')],
-    ['pu-cm-2', 'Solo se suman pedazos del mismo tamaño.',
-      play('corta-igual', 'Fracciones', { rounds: [{ a: [2, 5], b: [1, 2] }] }, '$\\tfrac{4}{10} + \\tfrac{5}{10} = \\tfrac{9}{10}$.', { hint: 'Denominador común.' })],
-    ['pu-cm-2', 'Entre dos números distintos siempre cabe otro.',
-      play('lupa-densidad', 'Densidad', { rounds: [{ a: { label: '2/5', value: 0.4 }, b: { label: '0.42', value: 0.42 }, view: [0, 1] }] }, 'Entre 0.40 y 0.42 está, por ejemplo, 0.41.', { hint: 'Pasa a decimal.' })],
-    ['pu-cm-2', 'Para comparar fracciones se multiplica en cruz o se pasan a decimal.',
-      opc('Cuatro recipientes iguales están llenos hasta $\\tfrac58$, $\\tfrac{7}{12}$, $\\tfrac23$ y $\\tfrac35$ de su capacidad. El que tiene más líquido es el que está lleno hasta:', ['$\\tfrac58$', '$\\tfrac{7}{12}$', '$\\tfrac23$', '$\\tfrac35$'], 2,
-        'En decimal: $0.625$, $0.583$, $0.667$ y $0.6$. El mayor es $\\tfrac23$.', 'Pásalas a decimal con tres cifras o compáralas de a dos en cruz.')],
-    ['pu-cm-3', 'Un porcentaje es una parte de cien.',
-      play('cuadricula-cien', 'Cuadrícula', { rounds: [{ ask: '3/4', count: 75 }] }, '$\\tfrac34 = \\tfrac{75}{100}$: 75 casillas.', { hint: 'De cien.' })],
-    ['pu-cm-3', 'Qué porcentaje es A de B: A ÷ B × 100.',
-      play('rueda-porcentaje', 'Rueda', { rounds: [{ part: 27, whole: 90 }], tol: 1 }, '$\\tfrac{27}{90} = 0.3$: el 30 %.', { hint: 'Parte entre todo.' })],
-    ['pu-cm-3', 'La parte entre el todo, por cien.',
-      opc('En un grupo de 40 estudiantes, 14 llegan al colegio en bicicleta. El porcentaje de estudiantes del grupo que llega en bicicleta es:', ['14 %', '26 %', '40 %', '35 %'], 3,
-        '$14 \\div 40 = 0.35$: el 35 %.', 'Divide la parte entre el total; 14 no es el porcentaje sino la cantidad.')],
-    ['pu-cm-4', 'Una potencia repite la base tantas veces como dice el exponente.',
-      play('arbol-potencia', 'Potencia', { rounds: [{ target: 125 }] }, '$125 = 5^3$.', { hint: 'Ramas y niveles.' })],
-    ['pu-cm-4', 'La raíz cuadrada es el lado del cuadrado de esa área.',
-      play('lado-del-cuadrado', 'Raíz', { rounds: [{ area: 36 }], max: 10, step: 0.05, tol: 0.05 }, '$\\sqrt{36} = 6$.', { hint: 'Lado por lado.' })],
-    ['pu-cm-4', 'Una raíz no exacta se acorrala entre dos cuadrados conocidos.',
-      opc('El número $\\sqrt{72}$ está entre:', ['8 y 9', '7 y 8', '9 y 10', '35 y 37'], 0,
-        '$8^2 = 64$ y $9^2 = 81$: como $64 < 72 < 81$, la raíz está entre 8 y 9.', 'Busca los dos cuadrados perfectos que encierran al 72; la raíz no es la mitad.')],
-  ]);
-  diez('pu-calculo');
-});
-;
 //#archivo js/courses/preuda-r-movimiento.js
 // Preuniversitario UdeA · razonamiento lógico: el juego en movimiento de cada lección (spec 2026-11-20-preuda-movimiento).
 // Casi todas las lecciones terminaban en vuela-precios o rompe-cambios. Aquí se cambia ese ejercicio (el que va antes de
@@ -15903,3 +15693,524 @@ const xpRegla = (k, min, max, et, paso = 1) => ({ k, min, max, paso, et });
     ['Ahora sí, un problema', xpFila('Un taller paga 4k + 1 miles el día k, durante 6 días. Pon $\\sum k$, la suma de los 1 y el pago total.', ['Σ k', 'los 1', 'total'], ['21', '6', '90'], ['25', '85', '24'], 'De 1 a 6 la suma es 21.', '$4 \\cdot 21 + 6 = 90$.')],
   ], 'Sigma ordena sumar: se parte, se saca el número y a veces se cancela.');
 }
+;
+//#archivo js/explora-lectura.js
+// Explora · escena «hoja» para las lecciones de comprensión lectora (spec 2026-11-24-lectura-explora): el texto es la escena.
+//   { cab: [título, autor, fuente, fecha], paras: [[trozos…]…], tapa, unidos }   trozos: 't','a','f','d' los bordes; 0, 1, 2… el texto
+// En las explicaciones cada momento cambia la hoja (y lo demás se queda como estaba):
+//   luz [trozos] (solo ese momento) · tacha [trozos] · nota { párrafo: rótulo } · tapa true | false · sello { trozo: rótulo }
+// En la práctica: modo 'toca' (subrayar los que cumplen; meta [trozos]), 'tacha' (igual, pero se quitan) o 'margen'
+// (arrastrar o tocar rótulos al margen de cada párrafo; rotulos, meta [rótulo por párrafo]). Va después de explora-escenas.js.
+XP.hoja = {
+  ini: p => (p.modo === 'margen' ? { n: p.paras.map(() => -1) } : { m: [] }),
+  ok(s, p) {
+    if (p.modo === 'margen') return s.n.join() === p.meta.join();
+    return [...s.m].map(String).sort().join() === p.meta.map(String).sort().join();
+  },
+  sol: p => (p.modo === 'margen' ? { n: [...p.meta] } : { m: p.meta.map(String) }),
+  lee: () => '',
+  dice(s, p) {
+    if (p.modo === 'margen') { const f = s.n.filter(x => x < 0).length; return f === s.n.length ? 'Arrastra cada rótulo a su párrafo, o tócalo y luego toca el párrafo.' : f ? `${f === 1 ? 'Falta un párrafo' : `Faltan ${f} párrafos`}.` : XP.hoja.ok(s, p) ? 'Cada uno con su rótulo.' : 'Todos con rótulo: mira si cada uno corresponde.'; }
+    const n = s.m.length, v = p.modo === 'tacha' ? ['Toca lo que sobra para tacharlo.', 'tachada', 'tachadas'] : ['Toca un trozo para subrayarlo; otro toque lo suelta.', 'subrayada', 'subrayadas'];
+    return !n ? v[0] : `${n} de ${p.meta.length} ${n === 1 ? 'marca' : 'marcas'}.`;
+  },
+};
+
+XPD.hoja = (stage, p, s, api) => {
+  const mira = !!p.momentos, toca = !mira && p.modo !== 'margen';
+  let k = 0, v = { luz: [], tacha: [], nota: {}, sello: {}, tapa: !!p.tapa }, sel = null, timer = 0, dedo = null, tecla = null;
+  const tr = (id, t, cls = '') => `<span class="hj-t ${cls}" data-k="${id}"${toca && !p.quietos?.includes(id) ? ' role="button" tabindex="0"' : ''}>${HOJA.fmt(t)}</span>`;
+  const cab = p.cab ? `<header class="hj-cab"><h4>${tr('t', p.cab[0])}</h4><p>${['a', 'f', 'd'].map((id, i) => tr(id, p.cab[i + 1])).join('<i>·</i>')}</p></header>` : '';
+  stage.innerHTML = `<div class="hj hj-mira ${toca ? `hj-toca hj-${p.modo === 'tacha' ? 'tacha' : 'subraya'}` : ''}"><article class="hj-hoja">${cab}${p.paras.map((l, i) => `<div class="hj-p" data-p="${i}"><b class="hj-n">${p.letras?.[i] || i + 1}</b><span class="hj-marg"></span><p>${l.map(t => tr(k++, t)).join(p.unidos ? '' : ' ')}</p></div>`).join('')}</article>${p.modo === 'margen' ? '<div class="hj-band"></div>' : ''}</div>`;
+  const root = stage.firstChild, T = id => root.querySelector(`.hj-t[data-k="${id}"]`), P = i => root.querySelector(`.hj-p[data-p="${i}"]`);
+  const chip = (i, en) => `<button type="button" class="hj-f${sel === i ? ' hj-sel' : ''}" data-r="${i}" data-en="${en}">${HOJA.esc(p.rotulos[i])}</button>`;
+
+  function pintaMira() {
+    root.querySelectorAll('.hj-t').forEach(t => {
+      const id = t.dataset.k, en = l => l.map(String).includes(id);
+      t.classList.toggle('on', en(v.luz)); t.classList.toggle('tachado', en(v.tacha));
+      t.dataset.sello = v.sello[id] || ''; t.classList.toggle('con-sello', !!v.sello[id]);
+    });
+    root.classList.toggle('foco', v.luz.length > 0);
+    root.classList.toggle('tapada', v.tapa);
+    p.paras.forEach((_, i) => { const m = P(i).querySelector('.hj-marg'), t = v.nota[i] || ''; if (m.textContent !== t) m.innerHTML = t ? `<em class="hj-nota">${HOJA.esc(t)}</em>` : ''; });
+  }
+  function pinta() {
+    if (mira) return pintaMira();
+    if (toca) return root.querySelectorAll('.hj-t').forEach(t => { const on = s.m.includes(t.dataset.k); t.classList.toggle('on', on); if (t.getAttribute('role')) t.setAttribute('aria-pressed', on); });
+    root.querySelector('.hj-band').innerHTML = p.rotulos.map((_, i) => (s.n.includes(i) ? '' : chip(i, -1))).join('');
+    p.paras.forEach((_, i) => { P(i).querySelector('.hj-marg').innerHTML = s.n[i] >= 0 ? chip(s.n[i], i) : '<em class="hj-hueco">?</em>'; });
+    root.querySelectorAll('[data-r]').forEach(b => { b.onkeydown = tecla; });
+    root.classList.toggle('hj-lleva', sel != null);
+  }
+  // Al completar las marcas sin cumplir, se avisa (sin decir cuál).
+  const fin = lleno => { XS.pop(); xpTick(); api.nota(''); api.set(s); pinta(); if (lleno && !XP.hoja.ok(s, p)) { XS.nope(); api.nota(p.pista || 'Casi: algo no cumple. Vuelve a leer y cambia una marca.'); } };
+  if (toca) {
+    const pon = t => {
+      const id = t.dataset.k, l = s.m.includes(id) ? s.m.filter(x => x !== id) : s.m.length >= p.meta.length ? [...s.m.slice(1), id] : [...s.m, id];
+      s = { m: l }; fin(l.length === p.meta.length);
+    };
+    const cual = e => e.target.closest?.('.hj-t[role=button]');
+    root.onclick = e => { const t = cual(e); if (t) pon(t); };
+    root.querySelectorAll('.hj-t[role=button]').forEach(t => { t.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pon(t); } }; });
+  }
+  if (p.modo === 'margen' && !mira) {
+    const pon = (r, i) => {
+      const n = s.n.map(x => (x === r ? -1 : x)), de = s.n.indexOf(r);
+      if (i >= 0) { if (n[i] >= 0 && de >= 0) n[de] = n[i]; n[i] = r; }
+      sel = null; s = { n }; fin(n.every(x => x >= 0));
+    };
+    // Un toque elige el rótulo y otro en el párrafo lo pone; arrastrar hace lo mismo.
+    root.onpointerdown = e => { const b = e.target.closest('[data-r]'); if (!b || dedo) return; dedo = { id: e.pointerId, r: +b.dataset.r, en: +b.dataset.en, b, x: e.clientX, y: e.clientY, g: null }; };
+    const mueve = e => {
+      if (!dedo || e.pointerId !== dedo.id) return;
+      if (!dedo.g) {
+        if (Math.hypot(e.clientX - dedo.x, e.clientY - dedo.y) < 7) return;
+        const r = dedo.b.getBoundingClientRect();
+        dedo.g = dedo.b.cloneNode(true); dedo.g.classList.add('exq-ghost'); Object.assign(dedo.g.style, { width: `${r.width / zk()}px`, left: `${r.left / zk()}px`, top: `${r.top / zk()}px` });
+        dedo.ox = e.clientX - r.left; dedo.oy = e.clientY - r.top; document.body.appendChild(dedo.g); dedo.b.classList.add('lift');
+      }
+      e.preventDefault();
+      dedo.g.style.left = `${(e.clientX - dedo.ox) / zk()}px`; dedo.g.style.top = `${(e.clientY - dedo.oy) / zk()}px`;
+      const q = document.elementFromPoint(e.clientX, e.clientY)?.closest('.hj-p');
+      root.querySelectorAll('.over').forEach(o => o !== q && o.classList.remove('over'));
+      if (q && root.contains(q)) q.classList.add('over');
+      const st = root.closest('.xp-step'), r = st?.getBoundingClientRect();
+      if (r) { if (e.clientY < r.top + 46) st.scrollTop -= 8; else if (e.clientY > r.bottom - 46) st.scrollTop += 8; }
+    };
+    const deja = e => {
+      if (!dedo || e.pointerId !== dedo.id) return;
+      const d = dedo; dedo = null; d.g?.remove(); d.b.classList.remove('lift');
+      root.querySelectorAll('.over').forEach(o => o.classList.remove('over'));
+      if (e.type === 'pointercancel') return;
+      const q = document.elementFromPoint(e.clientX, e.clientY)?.closest('.hj-p');
+      if (d.g) { if (q && root.contains(q)) pon(d.r, +q.dataset.p); else if (d.en >= 0) pon(d.r, -1); return; }
+      if (sel != null && d.en >= 0 && sel !== d.r) return pon(sel, d.en);
+      sel = sel === d.r ? null : d.r; XS.tick(2); pinta();
+    };
+    root.onclick = e => { const q = e.target.closest('.hj-p'); if (q && sel != null && !e.target.closest('[data-r]')) pon(sel, +q.dataset.p); };
+    tecla = e => {   // la explicación solo deja pasar las teclas al manejador del propio botón
+      const b = e.currentTarget; if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault(); const r = +b.dataset.r, en = +b.dataset.en;   // con teclado: de la bandeja al primer párrafo libre, y de vuelta
+      pon(r, en >= 0 ? -1 : Math.max(0, s.n.indexOf(-1)));
+      (root.querySelector('.hj-band [data-r]') || root.querySelector('[data-r]'))?.focus({ preventScroll: true });
+    };
+    window.addEventListener('pointermove', mueve, { passive: false }); window.addEventListener('pointerup', deja); window.addEventListener('pointercancel', deja);
+    timer = () => { window.removeEventListener('pointermove', mueve); window.removeEventListener('pointerup', deja); window.removeEventListener('pointercancel', deja); dedo?.g?.remove(); };
+  }
+  pinta();
+  const aplica = m => {
+    v = { luz: m.luz || [], tacha: [...v.tacha, ...(m.tacha || [])], nota: { ...v.nota, ...m.nota }, sello: { ...v.sello, ...m.sello }, tapa: m.tapa ?? v.tapa };
+    if (m.limpia) v = { ...v, tacha: m.tacha || [], nota: m.nota || {}, sello: m.sello || {} };
+  };
+  let t = 0;
+  return Object.assign(() => { clearTimeout(t); if (typeof timer === 'function') timer(); }, {
+    anima(m, done) {
+      aplica(m); pinta();
+      if (m.tacha) XS.tick(-6); else if (m.luz || m.nota || m.sello) XS.pop();
+      const q = m.luz?.length ? T(m.luz[0]) : m.nota ? P(Object.keys(m.nota)[0]) : null, st = root.closest('.xp-step');
+      // En pantallas pequeñas la hoja puede ser más alta que el paso: lo que se nombra queda a la vista.
+      if (q && st && st.scrollHeight > st.clientHeight + 4) { const a = q.getBoundingClientRect(), b = st.getBoundingClientRect(); if (a.bottom > b.bottom - 10 || a.top < b.top + 10) st.scrollBy({ top: (a.top - b.top - b.height * 0.45) / zk(), behavior: xpStill() ? 'auto' : 'smooth' }); }
+      t = setTimeout(done, xpStill() ? 0 : 750);
+      return () => clearTimeout(t);
+    },
+    salta(l) { l.forEach(aplica); v.luz = []; pinta(); },
+  });
+};
+;
+//#archivo js/explora-voces.js
+// GENERADO por tools/subir-voz.js: no editar a mano. Lecciones narradas → su lista de audios en Bunny (EXPLORA_VOZ).
+const EXPLORA_VOCES = {
+  "icf-ma-datos-1": "voz-731e1dfbbf53.json",
+  "pu-cm-1": "voz-05c26a14b48f.json",
+  "pu-cm-2": "voz-d32f237d2c4f.json",
+  "pu-cm-3": "voz-a5cfb42918fa.json",
+  "pu-cm-4": "voz-cd3065d83bd1.json"
+};
+;
+//#archivo js/explora-pu-cm-2.js
+// Preuniversitario · pu-cm-2 «Fracciones»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva; escena «barras»
+// en js/explora-numeros.js). Cada capítulo abre explicando, sigue «tu turno» y el problema va al final. Los ejemplos no son los
+// de los ejercicios de la lección (tabla de quintos, 6/9, entre 1/2 y 3/5, 11/12, 7/8 − 1/2, 1/3 de 3/4, 3/5 = 21, 1/4 + 2/3…).
+EXPLORA['pu-cm-2'] = {
+  caps: ['Partes iguales', 'Fracciones equivalentes', 'Comparar y sumar', 'La fracción de una cantidad', 'Ahora sí, un problema'],
+  pasos: [
+    // ---- Partes iguales ----
+    { cap: 0, tipo: 'muestra', escena: 'barras', en: {},
+      texto: 'Mira esta barra: con ella vas a descubrir **qué es una fracción**.',
+      momentos: [
+        { barras: [{ n: 0, d: 1 }], dice: 'Está entera, todavía sin cortar. Una fracción aparece cuando la partimos en pedazos iguales.' },
+        { barras: [{ n: 0, d: 8 }], dice: 'Aquí la cortamos en 8. Ese número se escribe abajo y se llama **denominador**.' },
+        { barras: [{ n: 3, d: 8 }], cuenta: '$\\tfrac38$', dice: 'Si tomamos 3 pedazos, el 3 va arriba: es el **numerador**. Tenemos tres octavos.' },
+        { barras: [{ n: 8, d: 8 }], cuenta: '$\\tfrac88 = 1$', dice: '¿Y si los tomamos todos? Volvemos a la barra completa: ocho octavos son 1.' },
+        { barras: [{ n: 3, d: 8 }], cuenta: '$\\tfrac38$', dice: 'Eso sí, los pedazos deben ser iguales; con uno más grande, no sabríamos cuánto es tres octavos.' },
+      ],
+      idea: 'El denominador dice en cuántas partes **iguales** se corta; el numerador, cuántas se toman.' },
+    { cap: 0, tipo: 'barras', meta: [4, 7], d: 7,
+      texto: '**Tu turno.** Esta barra viene cortada en séptimos. Arrastra sobre ella hasta tomar cuatro.',
+      idea: 'Cuatro de siete partes iguales: $\\tfrac47$.' },
+
+    // ---- Fracciones equivalentes ----
+    { cap: 1, tipo: 'muestra', escena: 'barras', en: {},
+      texto: 'Dos fracciones pueden verse muy distintas y valer **la misma cantidad**. Fíjate.',
+      momentos: [
+        { barras: [{ n: 1, d: 2, label: '1/2' }], cuenta: '$\\tfrac12$', dice: 'Aquí tenemos media barra, o sea, un medio.' },
+        { barras: [{ n: 1, d: 2, label: '1/2' }, { n: 2, d: 4, label: '2/4' }], cuenta: '$\\tfrac12 = \\tfrac24$',
+          dice: 'Cortamos cada mitad en dos. Ahora son dos cuartos, pero ¡mide exactamente lo mismo!' },
+        { barras: [{ n: 1, d: 2, label: '1/2' }, { n: 2, d: 4, label: '2/4' }, { n: 4, d: 8, label: '4/8' }], cuenta: '$\\tfrac12 = \\tfrac24 = \\tfrac48$',
+          dice: 'Otro corte más y quedan cuatro octavos. Multiplicar arriba y abajo por lo mismo no cambia el valor.' },
+        { barras: [{ n: 10, d: 12, label: '10/12' }, { n: 5, d: 6, label: '5/6' }], cuenta: '$\\tfrac{10}{12} = \\tfrac56$',
+          dice: 'Simplificar es devolverse: si dividimos arriba y abajo entre 2, diez doceavos se vuelven cinco sextos.' },
+      ],
+      idea: 'Multiplicar o dividir arriba y abajo por el mismo número da una fracción **equivalente**: la misma cantidad.' },
+    { cap: 1, tipo: 'barras', meta: [1, 3], d: 3, cortar: true, dpide: 12,
+      texto: '**Tu turno.** ¿Cómo se vería un tercio en una barra de 12 pedazos? Córtala con la regla de abajo y llénala.',
+      idea: 'Un tercio son cuatro doceavos: $\\tfrac13 = \\tfrac{4}{12}$.' },
+
+    // ---- Comparar y sumar ----
+    { cap: 2, tipo: 'muestra', escena: 'barras', en: {},
+      texto: 'Para comparar o sumar fracciones hay un truco: usar **partes del mismo tamaño**.',
+      momentos: [
+        { barras: [{ n: 5, d: 6, label: '5/6' }, { n: 4, d: 5, label: '4/5' }], dice: '¿Cuál es mayor, 5/6 o 4/5? A simple vista cuesta decidir, porque los pedazos no miden igual.' },
+        { barras: [{ n: 25, d: 30, label: '25/30' }, { n: 24, d: 30, label: '24/30' }], cuenta: '$\\tfrac56 = \\tfrac{25}{30} \\quad \\tfrac45 = \\tfrac{24}{30}$',
+          dice: 'Cortemos las dos barras en treinta partes iguales. Ahora basta con contar: 25 contra 24.' },
+        { barras: [{ n: 25, d: 30, label: '25/30' }, { n: 24, d: 30, label: '24/30' }], cuenta: '$\\tfrac56 > \\tfrac45$',
+          dice: 'Gana 5/6, por muy poquito. Un atajo es multiplicar en cruz: 5 por 5 da 25, y 4 por 6 da 24.' },
+        { barras: [{ n: 1, d: 2, label: '1/2' }, { n: 1, d: 3, label: '1/3' }], cuenta: '$\\tfrac12 + \\tfrac13$',
+          dice: 'Con la suma ocurre igual: un medio y un tercio no se pueden juntar así, porque son pedazos distintos.' },
+        { barras: [{ n: 3, d: 6, label: '3/6' }, { n: 2, d: 6, label: '2/6' }, { n: 5, d: 6, label: '5/6' }], cuenta: '$\\tfrac36 + \\tfrac26 = \\tfrac56$',
+          dice: 'En sextos sale fácil: tres más dos, cinco sextos. Sumar arriba y abajo daría 2/5, y eso está mal.' },
+      ],
+      idea: 'Para comparar o sumar, primero partes del mismo tamaño (el mismo denominador); luego se cuentan.' },
+    { cap: 2, tipo: 'barras', meta: [7, 10], d: 2, cortar: true,
+      texto: '**Tu turno.** Suma un medio y un quinto. Busca un corte en el que quepan los dos y llena el resultado.',
+      idea: 'En décimos: $\\tfrac12 + \\tfrac15 = \\tfrac{5}{10} + \\tfrac{2}{10} = \\tfrac{7}{10}$.' },
+
+    // ---- La fracción de una cantidad ----
+    { cap: 3, tipo: 'muestra', escena: 'barras', en: {},
+      texto: 'Ahora la barra va a valer algo. Así se calcula **la fracción de una cantidad**.',
+      momentos: [
+        { barras: [{ n: 0, d: 1, total: 20 }], dice: 'Imagina que son 20 dulces y quieres tres cuartos. ¿Cuántos te tocan?' },
+        { barras: [{ n: 0, d: 4, total: 20 }], cuenta: '$20 \\div 4 = 5$', dice: 'Los repartimos en 4 grupos iguales: quedan 5 en cada uno.' },
+        { barras: [{ n: 3, d: 4, total: 20 }], cuenta: '$\\tfrac34 \\text{ de } 20 = 3 \\cdot 5 = 15$',
+          dice: 'Tomas 3 grupos: son 15 dulces. Dividimos entre el de abajo y multiplicamos por el de arriba.' },
+        { barras: [{ n: 3, d: 4, total: 20 }], cuenta: '$\\tfrac34 \\cdot 20 = \\tfrac{60}{4} = 15$',
+          dice: 'Si prefieres, multiplica primero y divide después: llegas al mismo resultado.' },
+      ],
+      idea: 'La fracción de una cantidad: se divide entre el denominador y se multiplica por el numerador.' },
+    { cap: 3, tipo: 'barras', meta: [5, 6], d: 6, total: 42,
+      texto: '**Tu turno.** En un viaje de 42 km ya recorriste cinco sextos. Marca esa parte y descubre cuántos kilómetros llevas.',
+      idea: 'Cada sexto son 7 km: $\\tfrac56 \\text{ de } 42 = 35$.' },
+
+    // ---- Ahora sí, un problema ----
+    { cap: 4, tipo: 'barras', meta: [2, 3], d: 1, cortar: true, total: 24,
+      texto: 'Ana se lleva dos tercios de una cinta de 24 m. Corta la cinta y toma su parte: ¿cuántos metros le tocan?',
+      idea: 'Cada tercio son 8 m: Ana se lleva $\\tfrac23 \\text{ de } 24 = 16$ m.' },
+    { cap: 4, tipo: 'cierre', clave: 'pu-cm-2', real: '',
+      texto: 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.',
+      idea: 'Partes iguales, fracciones equivalentes, comparar y sumar con el mismo denominador, y la fracción de una cantidad.' },
+  ],
+};
+;
+//#archivo js/explora-pu-cm-3.js
+// Preuniversitario · pu-cm-3 «Decimales y porcentajes»: explicación interactiva (spec 2026-11-23-explora-leccion-interactiva;
+// escena «cien» en js/explora-numeros.js). Los ejemplos no son los de los ejercicios de la lección (2/5, 0.625, 5/6, 21 de 60,
+// 75 % de 16, 15 % de 40, 25 % de 120, 3/5, el 80 % y el 45 % de una elección, el tanque con 14 litros…).
+EXPLORA['pu-cm-3'] = {
+  caps: ['De cada 100', 'Fracción, decimal y porcentaje', 'El porcentaje de una cantidad', 'Subir y bajar', 'Ahora sí, un problema'],
+  pasos: [
+    // ---- De cada 100 ----
+    { cap: 0, tipo: 'muestra', escena: 'cien', en: {},
+      texto: '¿Qué significa **por ciento**? Significa «de cada 100», y aquí lo vas a ver.',
+      momentos: [
+        { k: 0, dice: 'Esta cuadrícula tiene 100 casillas y todas juntas forman el total.' },
+        { k: 30, cuenta: '$30\\,\\%$', dice: 'Si pintamos 30, tenemos el 30 por ciento. Así de simple.' },
+        { k: 100, cuenta: '$100\\,\\% = 1$', dice: 'Cuando se pintan todas llegamos al 100 %, que es el total completo.' },
+        { k: 50, cuenta: '$50\\,\\% = \\tfrac12$', dice: 'Y con 50 casillas pintadas queda justo la mitad: el 50 %.' },
+      ],
+      idea: 'Por ciento es «de cada 100»: el $100\\,\\%$ es el total.' },
+    { cap: 0, tipo: 'cien', meta: 45,
+      texto: '**Tu turno.** Ahora pinta el 45 %, arrastrando sobre la cuadrícula.',
+      idea: '45 de cada 100 casillas: $45\\,\\%$.' },
+
+    // ---- Fracción, decimal y porcentaje ----
+    { cap: 1, tipo: 'muestra', escena: 'cien', en: {},
+      texto: 'Lo curioso es que una misma cantidad se puede escribir de **tres formas**.',
+      momentos: [
+        { k: 20, cuenta: '$\\tfrac15 = \\tfrac{20}{100} = 20\\,\\%$', dice: 'Un quinto de la cuadrícula ocupa 20 casillas, o sea, el 20 %.' },
+        { k: 20, cuenta: '$20\\,\\% = 0.20$', dice: 'También son 20 centésimas. Con decimales se escribe 0.20, que es lo mismo que 0.2.' },
+        { k: 36, cuenta: '$\\tfrac{9}{25} = \\tfrac{36}{100} = 36\\,\\%$', dice: '¿Y si son 9 de cada 25? Multiplicamos los dos números por 4 y quedan 36 de cada 100: el 36 %.' },
+        { k: 36, cuenta: '$9 \\div 25 = 0.36$', dice: 'Dividir también sirve: 9 entre 25 da 0.36. Corremos el punto dos lugares y sale 36 %.' },
+      ],
+      idea: 'Fracción, decimal y porcentaje son tres formas de lo mismo: $\\tfrac15 = 0.2 = 20\\,\\%$.' },
+    { cap: 1, tipo: 'cien', meta: 65,
+      texto: '**Tu turno.** Intenta pintar 13 de cada 20 casillas de la cuadrícula. ¿Qué porcentaje es?',
+      idea: '$\\tfrac{13}{20} = \\tfrac{65}{100} = 65\\,\\%$.' },
+
+    // ---- El porcentaje de una cantidad ----
+    { cap: 2, tipo: 'muestra', escena: 'cien', en: {},
+      texto: 'Veamos cómo sacar **el porcentaje de una cantidad**. Digamos que la cuadrícula vale 50 000 pesos.',
+      momentos: [
+        { k: 100, cuenta: '$50\\,000 \\div 100 = 500$', dice: 'Repartimos ese dinero entre las 100 casillas, y a cada una le tocan 500 pesos.' },
+        { k: 10, cuenta: '$10\\,\\% \\text{ de } 50\\,000 = 5\\,000$', dice: 'Para el 10 % tomamos 10 casillas: 5 000 pesos. Es la décima parte del total.' },
+        { k: 15, cuenta: '$15\\,\\% = 5\\,000 + 2\\,500 = 7\\,500$', dice: 'Con eso armamos el 15 %: al 10 % le sumamos su mitad, el 5 %. Son 7 500 pesos.' },
+        { k: 15, cuenta: '$0.15 \\cdot 50\\,000 = 7\\,500$', dice: 'Hay un camino directo: escribir el porcentaje como decimal y multiplicarlo por la cantidad.' },
+        { k: 25, cuenta: '$12 \\div 48 = 0.25 = 25\\,\\%$', dice: 'Al revés también funciona. ¿Qué porcentaje es 12 de 48? Dividimos 12 entre 48: da 0.25, el 25 %.' },
+      ],
+      idea: 'El porcentaje de una cantidad: el porcentaje en decimal por la cantidad. El $10\\,\\%$ corre el punto.' },
+    { cap: 2, tipo: 'cien', meta: 30, total: 240,
+      texto: '**Tu turno.** Esta vez la cuadrícula vale 240. Pinta el 30 % y mira cuánto es.',
+      idea: '$0.30 \\cdot 240 = 72$.' },
+
+    // ---- Subir y bajar ----
+    { cap: 3, tipo: 'muestra', escena: 'cien', en: {},
+      texto: 'Los precios suben y bajan todo el tiempo. Vas a ver que **subir y bajar** un porcentaje es multiplicar.',
+      momentos: [
+        { k: 100, dice: 'Unos tenis cuestan 200 000 pesos y les hacen un descuento del 20 %.' },
+        { k: 100, quita: 20, cuenta: '$200\\,000 \\cdot 0.8 = 160\\,000$', dice: 'Quitamos 20 casillas y queda el 80 %. Por eso, bajar un 20 % es multiplicar por 0.8.' },
+        { k: 80, cuenta: '$\\times 1.1$', dice: 'Después, el precio sube un 10 %. Ojo: ese 10 % sale del precio rebajado, no del original.' },
+        { k: 88, cuenta: '$0.8 \\cdot 1.1 = 0.88$', dice: 'El 10 % de 80 son 8 casillas, y quedamos en 88 %. ¡No es lo mismo que bajar 10!' },
+        { k: 80, cuenta: '$160\\,000 \\div 0.8 = 200\\,000$', dice: '¿Cómo volver al precio original? Si 160 000 es el 80 %, dividimos entre 0.8.' },
+        { k: 100, cuenta: '$80 \\cdot 1.25 = 100$', dice: 'Y para volver de 80 a 100 se suben 20, la cuarta parte de 80: un 25 %, ¡no un 20 %!' },
+      ],
+      idea: 'Bajar un porcentaje es multiplicar por menos de 1; subir, por más de 1. Los cambios seguidos se multiplican.' },
+    { cap: 3, tipo: 'cien', meta: 60, k: 100,
+      texto: '**Tu turno.** Una batería llena pierde el 40 % de su carga. Deja pintado solo lo que queda.',
+      idea: 'Perder el $40\\,\\%$ deja el $60\\,\\%$: se multiplica por $0.6$.' },
+
+    // ---- Ahora sí, un problema ----
+    { cap: 4, tipo: 'cien', meta: 55, total: 600,
+      texto: 'De 600 hinchas en el estadio, el 55 % llevaba la camiseta local. La cuadrícula representa a los 600: pinta ese porcentaje. ¿Cuántos son?',
+      idea: 'Cada casilla son 6 hinchas: $0.55 \\cdot 600 = 330$.' },
+    { cap: 4, tipo: 'cierre', clave: 'pu-cm-3', real: '',
+      texto: 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.',
+      idea: 'De cada 100, las tres formas de escribirlo, el porcentaje de una cantidad y subir o bajar multiplicando.' },
+  ],
+};
+;
+//#archivo js/explora-pu-cm-4.js
+// Preuniversitario · pu-cm-4 «Potencias, raíces y estimación»: explicación interactiva (spec
+// 2026-11-23-explora-leccion-interactiva; escena «potencia» en js/explora-numeros.js). Los ejemplos no son los de los
+// ejercicios de la lección (81 por reenvíos, la torre del 2 con 2⁶, 3⁵/3³, 0.36 m², 20, √30, 25 y −27, 2⁹·5⁶, 3⁴·3²/(3²)³, 90 cm²…).
+EXPLORA['pu-cm-4'] = {
+  caps: ['Multiplicar repetido', 'Al cuadrado: un área', 'Contar factores', 'Raíces', 'Ahora sí, un problema'],
+  pasos: [
+    // ---- Multiplicar repetido ----
+    { cap: 0, tipo: 'muestra', escena: 'potencia', en: { base: 2 },
+      texto: '¿Qué es una potencia? Es **multiplicar repetido**: el mismo número, varias veces.',
+      momentos: [
+        { base: 2, e: 1, cuenta: '$2^1 = 2$', dice: 'Tomemos el 2. Uno solo son dos puntos.' },
+        { base: 2, e: 3, cuenta: '$2^3 = 2 \\cdot 2 \\cdot 2 = 8$', dice: 'Si multiplicamos 2 por 2 por 2, los puntos se van duplicando y llegan a 8. Eso es 2 a la 3.' },
+        { base: 2, e: 5, cuenta: '$2^5 = 32$', dice: 'Cada 2 que se agrega duplica todo lo anterior. Con cinco, ya vamos en 32.' },
+        { base: 2, e: 3, cuenta: '$2^3 \\neq 2 \\cdot 3$', dice: 'Ojo: 2 a la 3 no es lo mismo que 2 por 3. Da 8, no 6.' },
+        { base: 5, e: 0, cuenta: '$5^0 = 1$', dice: 'Y si el exponente es cero, todavía no hemos multiplicado nada: queda el 1 del que partimos.' },
+      ],
+      idea: 'Una potencia es multiplicar repetido: $b^n$ son $n$ factores iguales a $b$. Y $b^0 = 1$.' },
+    { cap: 0, tipo: 'potencia', base: 3, meta: 3, max: 5,
+      texto: '**Tu turno.** Ahora arrastra el exponente hasta que el 3 llegue a 27.',
+      idea: 'Tres treses: $3^3 = 27$.' },
+
+    // ---- Al cuadrado: un área ----
+    { cap: 1, tipo: 'muestra', escena: 'potencia', en: { modo: 'lado' },
+      texto: 'La expresión **al cuadrado** viene de una figura: el área de un cuadrado con ese lado.',
+      momentos: [
+        { s: 3, cuenta: '$3^2 = 9$', dice: 'Este tiene lado 3: son 3 filas de 3 casillas, 9 en total. Por eso 3 al cuadrado es 9.' },
+        { s: 6, cuenta: '$6^2 = 36$', dice: 'Al duplicar el lado, de 3 a 6, uno esperaría el doble de casillas. Pero son 36, ¡el cuádruple!' },
+        { s: 10, cuenta: '$10^2 = 100$', dice: 'Con lado 10 llegamos a 100 casillas. El área siempre es lado por lado.' },
+        { s: 9, cuenta: '$(3 \\cdot 3)^2 = 9 \\cdot 9 = 81$', dice: '¿Y al triplicar el lado, de 3 a 9? Pasamos de 9 casillas a 81: nueve veces más área.' },
+        { s: 3, cuenta: '$0.3^2 = 0.09$', dice: 'También sirve con decimales. Si las 100 casillas valen 1, un lado de 0.3 cubre 9: el área es 0.09.' },
+      ],
+      idea: 'Elevar al cuadrado es el área de un cuadrado: $n^2 = n \\cdot n$.' },
+    { cap: 1, tipo: 'potencia', modo: 'lado', meta: 7, max: 10,
+      texto: '**Tu turno.** Mueve el lado hasta que el cuadrado tenga 49 casillas.',
+      idea: 'Lado 7: $7^2 = 49$.' },
+
+    // ---- Contar factores ----
+    { cap: 2, tipo: 'muestra', escena: 'potencia', en: { base: 2 },
+      texto: 'Las leyes de las potencias no hay que memorizarlas: **salen de contar**.',
+      momentos: [
+        { base: 2, grupos: [3, 4], cuenta: '$2^3 \\cdot 2^4$', dice: 'Mira estos dos grupos: en uno el 2 está tres veces; en el otro, cuatro.' },
+        { base: 2, grupos: [3, 4], junta: true, cuenta: '$2^3 \\cdot 2^4 = 2^7$', dice: 'Cuando los multiplicamos se juntan, y el 2 queda siete veces. Por eso se suman los exponentes.' },
+        { base: 5, grupos: [2, 2, 2], cuenta: '$(5^2)^3$', dice: 'Veamos otro caso: tres grupos iguales, y en cada uno el 5 está dos veces.' },
+        { base: 5, grupos: [2, 2, 2], junta: true, cuenta: '$(5^2)^3 = 5^6$', dice: 'Tres grupos de dos son seis. Al elevar una potencia, los exponentes se multiplican.' },
+      ],
+      idea: 'Con la misma base, al multiplicar potencias los exponentes se suman; al elevar una potencia, se multiplican.' },
+    { cap: 2, tipo: 'casillas', filas: [{ tex: '$3^2 \\cdot 3^5$', r: '3⁷' }, { tex: '$(7^2)^4$', r: '7⁸' }], fichas: ['3¹⁰', '7⁸', '3⁷', '7⁶'],
+      pista: 'Cuenta los factores: en el primero se juntan, en el segundo hay grupos iguales.',
+      texto: '**Tu turno.** Toca la ficha de cada resultado. Basta con contar los factores, sin calcular nada.',
+      idea: '$3^2 \\cdot 3^5 = 3^7$ y $(7^2)^4 = 7^8$.' },
+
+    // ---- Raíces ----
+    { cap: 3, tipo: 'muestra', escena: 'potencia', en: { modo: 'lado' },
+      texto: 'Hagamos la pregunta al revés: eso es la **raíz cuadrada**.',
+      momentos: [
+        { s: 1, dice: 'Esta vez conocemos el área, 81 casillas, y queremos saber cuánto mide el lado.' },
+        { s: 9, ms: 1800, cuenta: '$\\sqrt{81} = 9$', dice: 'Hacemos crecer el cuadrado hasta las 81 casillas, y el lado mide 9. Esa es la raíz de 81.' },
+        { s: 8, cuenta: '$8^2 = 64 < 70$', dice: 'Probemos con la raíz de 70. Un lado de 8 da 64 casillas: todavía no alcanza.' },
+        { s: 9, cuenta: '$64 < 70 < 81$', dice: 'Uno de 9 da 81 y se pasa. Entonces la raíz de 70 está entre 8 y 9, más cerca del 8.' },
+        { s: 6, cuenta: '$\\sqrt{0.36} = 0.6$', dice: 'Para la raíz de 0.36 pintamos 36 casillas de 100. El lado mide 6 décimas: la raíz es 0.6.' },
+        { s: 10, cuenta: '$71 \\cdot 19 \\approx 70 \\cdot 20 = 1\\,400$', dice: 'Estimar también ayuda. En vez de 71 por 19, pensamos en 70 por 20: da cerca de 1 400.' },
+      ],
+      idea: 'La raíz cuadrada busca el lado: $\\sqrt{81} = 9$ porque $9^2 = 81$. Si no es exacta, se acorrala entre dos cuadrados.' },
+    { cap: 3, tipo: 'potencia', modo: 'lado', meta: 8, max: 10,
+      texto: '**Tu turno.** Encuentra la raíz de 64: mueve el lado hasta que el cuadrado tenga 64 casillas.',
+      idea: '$\\sqrt{64} = 8$ porque $8^2 = 64$.' },
+
+    // ---- Ahora sí, un problema ----
+    { cap: 4, tipo: 'potencia', base: 10, meta: 5, max: 7,
+      texto: 'En un juego, cada nivel multiplica los puntos por 10 y se empieza con 1. ¿Cuántos niveles hay que pasar para llegar a 100 000? Arrastra.',
+      idea: 'Cinco veces por 10: $10^5 = 100\\,000$, un 1 con cinco ceros.' },
+    { cap: 4, tipo: 'cierre', clave: 'pu-cm-4', real: '',
+      texto: 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.',
+      idea: 'Multiplicar repetido, el cuadrado como área, contar factores y la raíz como la pregunta al revés.' },
+  ],
+};
+;
+//#archivo js/explora-pu-cm-1.js
+// Preuniversitario · pu-cm-1 «Enteros, signos y jerarquía»: explicación interactiva que reemplaza el video
+// (spec 2026-11-23-explora-leccion-interactiva; tipos de paso en js/explora.js). Primero se explica y después se pide:
+// cada capítulo abre con una explicación animada (`muestra`), sigue «tu turno» con la misma escena, y el problema va
+// al final. Los ejemplos no repiten los de los ejercicios de la lección (js/courses/preuda-r-calculo.js).
+EXPLORA['pu-cm-1'] = {
+  caps: ['La recta', 'Sumar y restar', 'El menos da la vuelta', 'Las capas', 'Ahora sí, un problema'],
+  pasos: [
+    // ---- La recta ----
+    { cap: 0, tipo: 'muestra', escena: 'recta', en: { modo: 'llegar', min: -8, max: 8, desde: 0 },
+      texto: 'Empecemos por la idea: **dónde viven los enteros**. Piensa en un termómetro acostado.',
+      momentos: [
+        { de: 0, a: 0, marcas: [0], dice: 'El 0 es como el punto donde el agua se congela: la frontera entre dos lados.' },
+        { de: 0, a: 5, ms: 1800, zona: 'pos', dice: 'Si la temperatura sube, avanzamos a la derecha: 1, 2, 3… Son los **positivos**.' },
+        { de: 5, a: -5, ms: 2600, zona: 'ambas', dice: 'Si baja del 0, seguimos a la izquierda: −1, −2, −3… Son los **negativos**.' },
+        { de: -5, a: -5, zona: 'ambas', marcas: [-5, -2], cuenta: '$-5 < -2$', dice: '¿Qué es más frío, −5 o −2? −5: está más lejos del 0, hacia la izquierda.' },
+        { de: -5, a: -5, zona: 'ambas', cuenta: '$-5 < -2 < 0 < 3$', dice: 'Regla de oro: en la recta, el **menor** es siempre el que está más a la izquierda.' },
+      ],
+      idea: 'A la izquierda del 0 están los negativos; a la derecha, los positivos. Es menor el que está más a la izquierda.' },
+    { cap: 0, tipo: 'recta', modo: 'llegar', min: -8, max: 8, desde: 3, meta: -2,
+      texto: '**Tu turno.** Arrastra la ficha hasta $-2$.',
+      idea: 'Cada entero tiene su lugar: $-2$ está dos pasos a la izquierda del 0.' },
+    { cap: 0, tipo: 'muestra', escena: 'recta', en: { modo: 'espejo', min: -8, max: 8, desde: 1 },
+      texto: 'Segunda idea: **el opuesto**. Imagina que en el 0 hay un espejo.',
+      momentos: [
+        { de: 1, a: 4, ms: 1400, cuenta: '$-(4) = -4$', dice: 'Cada número tiene un reflejo al otro lado del espejo. El reflejo del 4 es −4.' },
+        { de: 4, a: 4, marcas: [4, -4], cuenta: '$-(4) = -4$', dice: '4 y −4 están a 4 pasos del 0, uno a cada lado. Se llaman **opuestos**.' },
+        { de: 4, a: -6, ms: 2400, cuenta: '$-(-6) = 6$', dice: 'El reflejo de −6 es 6. Por eso −(−6) = 6: el reflejo de un reflejo vuelve al original.' },
+        { de: -6, a: 0, ms: 1600, cuenta: '$-(0) = 0$', dice: '¿Y el 0? Está justo sobre el espejo: es su propio opuesto.' },
+        { de: 0, a: 3, ms: 1300, cuenta: '$3 + (-3) = 0$', dice: 'Un número más su opuesto siempre da 0: ir 3 pasos y volver 3 deja en el mismo sitio.' },
+      ],
+      idea: 'Un número y su opuesto están igual de lejos del 0 y suman 0. Dos menos se cancelan: $-(-6) = 6$.' },
+    { cap: 0, tipo: 'recta', modo: 'espejo', min: -8, max: 8, desde: 2, meta: 5,
+      texto: '**Tu turno.** Mueve la ficha y déjala donde su reflejo caiga en $5$.',
+      idea: 'El opuesto de $-5$ es $5$: $-(-5) = 5$.' },
+    { cap: 0, tipo: 'muestra', escena: 'recta', en: { modo: 'distancia', min: -8, max: 8, ancla: -2, desde: -2 },
+      texto: 'Tercera idea: **la distancia**. Cuántos pasos hay que caminar de un número a otro.',
+      momentos: [
+        { de: -2, a: 3, ms: 2000, cuenta: '$|3 - (-2)| = 5$', dice: 'Caminemos de −2 a 3 y contemos cada paso que da la ficha.' },
+        { de: 3, a: 3, marcas: [0], cuenta: '$|3 - (-2)| = 5$', dice: 'Son 2 pasos hasta el 0 y 3 más del otro lado: 5 en total. Cruzar el 0 no cuesta nada extra.' },
+        { de: 3, a: 3, cuenta: '$|3 - (-2)| = 5$', dice: 'Se escribe con barras, |3 − (−2)|. Las barras dicen: «cuenta los pasos, sin importar el sentido».' },
+        { de: 3, a: -6, ms: 2400, cuenta: '$|{-6} - (-2)| = 4$', dice: 'Hacia la izquierda también se cuentan pasos: de −2 a −6 hay 4.' },
+        { de: -6, a: -6, cuenta: '$|{-6} - (-2)| = 4$', dice: 'Por eso una distancia **nunca es negativa**: los pasos se cuentan, no se deben.' },
+      ],
+      idea: 'La distancia es cuántos pasos separan dos números. Se escribe con barras y nunca es negativa.' },
+    { cap: 0, tipo: 'recta', modo: 'distancia', min: -8, max: 8, ancla: -3, desde: -3, meta: 4,
+      texto: '**Tu turno.** Arrastra la ficha desde $-3$ hasta $4$ y mira cuántos pasos recorre.',
+      idea: 'De $-3$ a $4$ hay 7 pasos: $|4 - (-3)| = 7$.' },
+    { cap: 0, tipo: 'recta', modo: 'dos', min: -8, max: 8, ancla: 1, dist: 4, metas: [-3, 5],
+      texto: 'Como la distancia se cuenta hacia los dos lados, a 4 pasos del $1$ hay **dos** lugares. Toca los dos.',
+      idea: 'A una misma distancia hay dos lugares: $1 - 4$ y $1 + 4$, uno a cada lado del 1.' },
+
+    // ---- Sumar y restar ----
+    { cap: 1, tipo: 'muestra', escena: 'recta', en: { modo: 'salto', min: -8, max: 8, desde: -4 },
+      texto: 'Ahora las operaciones. **Sumar es caminar** por la recta.',
+      momentos: [
+        { de: -4, a: -4, cuenta: '$-4$', dice: 'Salimos de −4. El número que sumamos dice hacia dónde y cuánto caminar.' },
+        { de: -4, a: 1, ms: 1800, cuenta: '$-4 + 5 = 1$', dice: 'Sumar 5, un positivo, es dar 5 pasos a la **derecha**: llegamos a 1.' },
+        { de: 1, a: -4, ms: 1000, cuenta: '$-4$', dice: 'Volvamos al punto de partida, el −4.' },
+        { de: -4, a: -7, ms: 1500, cuenta: '$-4 + (-3) = -7$', dice: 'Sumar −3, un negativo, es dar 3 pasos a la **izquierda**: llegamos a −7.' },
+        { de: -7, a: -7, cuenta: '$-4 + (-3) = -7$', dice: 'El signo dice el sentido y el número, cuántos pasos. Como ganar o gastar dinero.' },
+      ],
+      idea: 'Sumar es moverse: un positivo lleva a la derecha y un negativo, a la izquierda.' },
+    { cap: 1, tipo: 'recta', modo: 'salto', min: -8, max: 8, desde: -4, suma: 6, meta: 2,
+      texto: '**Tu turno.** Sales de $-4$: arrastra la ficha para sumar $6$.',
+      idea: 'Seis pasos a la derecha: $-4 + 6 = 2$.' },
+    { cap: 1, tipo: 'recta', modo: 'salto', min: -8, max: 8, desde: 2, suma: -5, meta: -3,
+      texto: 'Ahora suma $-5$ saliendo de $2$.',
+      idea: 'Cinco pasos a la izquierda: $2 + (-5) = -3$.' },
+    { cap: 1, tipo: 'muestra', escena: 'recta', en: { modo: 'salto', min: -8, max: 8, desde: 3 },
+      texto: '¿Y restar? **Restar es caminar al revés** de lo que harías al sumar.',
+      momentos: [
+        { de: 3, a: 3, cuenta: '$3$', dice: 'Partimos de 3. Sumar 5 nos llevaría 5 pasos a la derecha…' },
+        { de: 3, a: -2, ms: 1800, cuenta: '$3 - 5 = -2$', dice: '…así que restar 5 es ir 5 pasos al revés, a la izquierda: llegamos a −2.' },
+        { de: -2, a: 3, ms: 1000, cuenta: '$3$', dice: 'Volvamos al 3. Ahora la pregunta difícil: ¿qué es restar −4?' },
+        { de: 3, a: 7, ms: 1700, cuenta: '$3 - (-4) = 7$', dice: 'Sumar −4 iría a la izquierda. Restarlo es al revés: 4 pasos a la **derecha**.' },
+        { de: 7, a: 7, marcas: [7], cuenta: '$3 - (-4) = 7$', dice: 'Piénsalo como dinero: si te perdonan una deuda de 4, tu saldo **sube** 4.' },
+        { de: 7, a: 7, cuenta: '$3 - (-4) = 3 + 4 = 7$', dice: 'La regla: restar es sumar el opuesto. Dos menos seguidos se vuelven un más.' },
+      ],
+      idea: 'Restar es sumar el opuesto. Restar un negativo sube: $3 - (-4) = 3 + 4 = 7$.' },
+    { cap: 1, tipo: 'recta', modo: 'salto', min: -8, max: 8, desde: 3, resta: 7, meta: -4,
+      texto: '**Tu turno.** Haz $3 - 7$ con la ficha.',
+      idea: 'Siete pasos a la izquierda: $3 - 7 = 3 + (-7) = -4$.' },
+    { cap: 1, tipo: 'recta', modo: 'salto', min: -8, max: 8, desde: -2, resta: -6, meta: 4,
+      texto: 'Y ahora $-2 - (-6)$: sal de $-2$ y camina al revés de sumar $-6$.',
+      idea: 'Quitar seis deudas es ganar seis: $-2 - (-6) = -2 + 6 = 4$.' },
+
+    // ---- El menos da la vuelta ----
+    { cap: 2, tipo: 'muestra', escena: 'saltos', en: { a: -3, min: -15, max: 15, meta: 12, desde: 1 },
+      texto: 'Multiplicar. La idea: **repetir saltos iguales**, como una rana que siempre salta lo mismo.',
+      momentos: [
+        { de: -3, a: -3, cuenta: '$(-3) \\cdot 1 = -3$', dice: 'Este salto mide −3: tres pasos hacia la izquierda.' },
+        { de: -3, a: -12, ms: 2200, cuenta: '$(-3) \\cdot 4 = -12$', dice: 'Multiplicar por 4 es repetir el mismo salto 4 veces. Mira cada salto.' },
+        { de: -12, a: -12, cuenta: '$(-3) \\cdot 4 = -12$', dice: 'Es como deber 3 a cuatro amigos: en total debes 12.' },
+        { de: -12, a: 12, ms: 3000, cuenta: '$(-3) \\cdot (-4) = 12$', dice: 'Ahora las veces son −4. El menos de las veces hace que toda la cadena **dé la vuelta** en el 0.' },
+        { de: 12, a: 12, cuenta: '$(-3) \\cdot (-4) = 12$', dice: 'Dar la vuelta a algo negativo lo vuelve positivo: menos por menos da más.' },
+      ],
+      idea: 'Multiplicar es repetir saltos. Multiplicar por un negativo **da la vuelta** en el 0: $(-3)(-4) = 12$.' },
+    { cap: 2, tipo: 'saltos', a: 2, min: -12, max: 12, meta: -8,
+      texto: '**Tu turno.** Cada salto mide $2$. Lleva la punta hasta el aro.',
+      idea: 'Cuatro saltos de $2$ y una vuelta: $2 \\cdot (-4) = -8$.' },
+    { cap: 2, tipo: 'saltos', a: -4, min: -16, max: 16, meta: 12,
+      texto: 'Ahora los saltos miden $-4$. Lleva la punta hasta el aro.',
+      idea: 'Tres saltos de $-4$ y una vuelta: $(-4)(-3) = 12$.' },
+    { cap: 2, tipo: 'muestra', escena: 'signos', en: { factores: [2, 3, 2], menos: 9 },
+      texto: 'Con varios factores, **cada signo menos es una vuelta**. Mira cómo cambia el resultado.',
+      momentos: [
+        { dice: 'Multiplicamos 2 · 3 · 2. Sin signos menos nadie da la vuelta: el producto es positivo.' },
+        { i: 0, dice: 'Un menos: el producto da una vuelta y queda mirando al lado negativo.' },
+        { i: 1, dice: 'Dos menos: dos vueltas. Una deshace la otra y vuelve a ser positivo.' },
+        { i: 2, dice: 'Tres menos: otra vuelta más. Negativo otra vez.' },
+        { dice: 'No importa **cuál** factor sea negativo, sino **cuántos**: par da positivo, impar da negativo.' },
+      ],
+      idea: 'Número **par** de signos menos: positivo. Número **impar**: negativo.' },
+    { cap: 2, tipo: 'signos', factores: [2, 3, 1, 2], menos: 3,
+      texto: '**Tu turno.** Toca los factores para volverlos negativos y deja **tres** signos menos.',
+      idea: 'Tres signos menos, impar: el producto es negativo.' },
+
+    // ---- Las capas ----
+    { cap: 3, tipo: 'muestra', escena: 'capas', en: { expr: '5 + 3 * ( 2 - 6 ) ^ 2' },
+      texto: 'Última idea: en una cuenta larga **el orden importa**. Se resuelve por capas, como pelar una cebolla.',
+      momentos: [
+        { cuenta: '$2 - 6 = -4$', dice: 'Primero, lo que está dentro del paréntesis: es una caja que se abre antes que todo.' },
+        { cuenta: '$(-4)^2 = 16$', dice: 'Luego, la potencia. El menos está dentro del paréntesis, así que también se eleva.' },
+        { cuenta: '$3 \\cdot 16 = 48$', dice: 'Después, multiplicaciones y divisiones: 3 por 16 da 48.' },
+        { cuenta: '$5 + 48 = 53$', dice: 'Al final, sumas y restas. Si hubieras sumado 5 + 3 primero, saldría otro número.' },
+      ],
+      idea: 'Primero paréntesis, luego potencias, después × y ÷, y al final + y −.' },
+    { cap: 3, tipo: 'capas', expr: '6 + 2 * ( 1 - 4 ) ^ 2',
+      texto: '**Tu turno.** Toca la operación que va primero; el resultado se funde solo. Sigue hasta que quede un número.',
+      idea: 'Capa por capa: $6 + 2 \\cdot (1 - 4)^2 = 6 + 2 \\cdot 9 = 24$.' },
+    { cap: 3, tipo: 'capas', expr: '18 / 3 * 2 - 7',
+      texto: '× y ÷ están en la **misma** capa: entre ellas va primero la que está más a la izquierda. Toca en orden.',
+      idea: 'En $18 \\div 3 \\cdot 2$ va primero la división, por estar a la izquierda: da $12$, no $3$.' },
+    { cap: 3, tipo: 'casillas', filas: [{ tex: '$-3^2$', r: '−9' }, { tex: '$(-3)^2$', r: '9' }], fichas: ['9', '−6', '−9', '6'],
+      pista: 'Mira si el menos está dentro del paréntesis: solo entonces se eleva.',
+      texto: 'Un detalle: en $-3^2$ la potencia va antes que el menos, que está **afuera**. En $(-3)^2$ se eleva todo. Toca cada resultado.',
+      idea: 'En $(-3)^2$ el menos está adentro y se eleva: $9$. En $-3^2$ se queda afuera: $-9$.' },
+
+    // ---- Ahora sí, un problema ----
+    { cap: 4, tipo: 'recta', modo: 'distancia', min: -8, max: 8, ancla: -2, desde: -2, meta: 6,
+      texto: 'Un equipo empezó el torneo con diferencia de gol $-2$ y lo terminó con $+6$. ¿En cuánto mejoró? Mídelo con la ficha.',
+      idea: 'De $-2$ a $6$ hay $|6 - (-2)| = 8$: el equipo mejoró en 8 goles.' },
+    { cap: 4, tipo: 'cierre', clave: 'gol', real: '8',
+      texto: 'Eso es todo lo que construiste. Con estas ideas ya puedes con los ejercicios.',
+      idea: 'Enteros en la recta, opuestos, distancia, sumar y restar, signos y capas.' },
+  ],
+};
