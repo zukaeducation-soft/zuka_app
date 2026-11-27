@@ -186,3 +186,4 @@ a.bx-k:hover { border-color: color-mix(in srgb, var(--kc, var(--brand)) 60%, var
 @keyframes sk-late { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
 @media (max-width: 719px) { .sk-hero { padding: 22px 18px; min-height: 150px; } .sk .sk-k { height: 72px; } .sk-c { padding: 18px; border-radius: 22px; } }
 @media (prefers-reduced-motion: reduce) { .sk i { animation: none; } }
+.sk.sk-mini { gap: 8px; } .sk-mini .sk-fila { height: 32px; }
