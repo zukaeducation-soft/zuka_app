@@ -338,7 +338,7 @@ const tiendaConfiaHTML = () => `<ul class="td-confia">${TIENDA_CONFIA.map(([i, t
 
 function tiendaVistaHTML() {
   if (Tienda.vista === 'todo') {
-    return `${tiendaHeroHTML()}${tiendaConfiaHTML()}${Tienda.cargada ? '' : '<p class="td-vacio">Cargando…</p>'}`
+    return `${tiendaHeroHTML()}${tiendaConfiaHTML()}${Tienda.cargada ? '' : silueta('tarjetas', 3)}`
       + tiendaSec('Paquetes', tiendaLista('td-paqs', tiendaDe('paquete').map(tiendaPaqHTML).join('')), '', 'Todo junto sale mejor.')
       + tiendaSec('Cursos', tiendaCursosHTML(), 'cursos', 'Elige el tiempo y empieza hoy.')
       + tiendaSec('Libros', tiendaBandas(), 'libros', 'Los cuatro en un paquete: impresos en tu casa o digitales en la app.')

@@ -1590,3 +1590,13 @@ body:not([data-tab=learn]):not([data-tab=gym]) #view { padding-top: env(safe-are
   :root[data-compacta] :is(#boot, #landing, .tour, body:has(#landing) > #auth, body:has(#landing) > .toast) { zoom: calc(1 / var(--z)); --dvh: 1dvh; --dvw: 1vw; }
 }
 @media (min-width: 1200px) { :root[data-compacta] { --z: .8; } }
+/* Silueta de carga (2026-11-26; la misma del panel y el portal): bloques del tono de las tarjetas que laten con opacidad. */
+.sk-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.sk { display: grid; gap: 10px; }
+.sk i { display: block; background: color-mix(in srgb, var(--ink) 7%, transparent); animation: sk-late 1.4s ease-in-out infinite; }
+.sk .sk-op { height: 64px; border-radius: 16px; }
+.sk-tarjetas { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; margin-top: 8px; }
+.sk .sk-tarjeta { height: 300px; border-radius: 26px; border: 1px solid var(--line); background: color-mix(in srgb, var(--ink) 4%, var(--card)); }
+@media (max-width: 719px) { .sk-tarjetas { display: flex; overflow: hidden; gap: 14px; } .sk .sk-tarjeta { flex: 0 0 min(292px, 84%); height: 260px; } }
+@keyframes sk-late { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .sk i { animation: none; } }

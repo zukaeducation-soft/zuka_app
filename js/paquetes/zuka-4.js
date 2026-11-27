@@ -14275,7 +14275,7 @@ async function openComprar(id, elegido) {
   const a = accesoCurso(Cuenta.accesos, id), renueva = !accesoCursoFila(id)?.institucion && (a.estado === 'pago' || a.estado === 'vencido'), curso = cursoNombre(id);
   openSheet(`<div class="acct-form compra"><h3 class="sheet-title">${renueva ? 'Renovar' : 'Comprar'} ${esc(curso)}</h3>
     <p class="muted">${a.estado === 'pago' ? `Te quedan ${diasTexto(a.dias)}: los que compres se suman.` : 'Se activa en tu mismo código y sigues donde vas: no pierdes nada de tu avance.'}</p>
-    <div class="compra-lista" role="radiogroup" aria-label="Duración"><p class="muted">Cargando…</p></div>
+    <div class="compra-lista" role="radiogroup" aria-label="Duración">${silueta('opciones', 3)}</div>
     <p class="form-msg" role="alert" hidden></p></div>`);
   if (!Cuenta.productos) await cuentaTienda().catch(() => {});
   const box = $('#sheet .compra'), lista = $('#sheet .compra-lista');
@@ -14941,7 +14941,7 @@ const tiendaConfiaHTML = () => `<ul class="td-confia">${TIENDA_CONFIA.map(([i, t
 
 function tiendaVistaHTML() {
   if (Tienda.vista === 'todo') {
-    return `${tiendaHeroHTML()}${tiendaConfiaHTML()}${Tienda.cargada ? '' : '<p class="td-vacio">Cargando…</p>'}`
+    return `${tiendaHeroHTML()}${tiendaConfiaHTML()}${Tienda.cargada ? '' : silueta('tarjetas', 3)}`
       + tiendaSec('Paquetes', tiendaLista('td-paqs', tiendaDe('paquete').map(tiendaPaqHTML).join('')), '', 'Todo junto sale mejor.')
       + tiendaSec('Cursos', tiendaCursosHTML(), 'cursos', 'Elige el tiempo y empieza hoy.')
       + tiendaSec('Libros', tiendaBandas(), 'libros', 'Los cuatro en un paquete: impresos en tu casa o digitales en la app.')

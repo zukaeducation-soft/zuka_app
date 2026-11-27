@@ -8,7 +8,7 @@
 // justo al instalar una versión nueva la app no se queda sin juegos ni fórmulas.
 // Spec: docs/superpowers/specs/2026-11-24-configuracion-rapida-segura.md
 
-const VERSION = 'zuka-v412';
+const VERSION = 'zuka-v413';
 // Los scripts van en paquetes (js/paquetes, los arma tools/empaquetar.js con la lista de index.html): guardar cuatro
 // archivos en vez de 750 hace que la app se instale y abra mucho más rápido.
 const SHELL = [
