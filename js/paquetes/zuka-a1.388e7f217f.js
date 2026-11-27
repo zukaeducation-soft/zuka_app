@@ -277,6 +277,13 @@ function trapIndex(shift, i, n) {
 }
 const FOCUSABLE = ['a[href]', 'button:not([disabled])', 'input:not([disabled]):not([type=hidden])', 'select:not([disabled])', 'textarea:not([disabled])', '[tabindex]']
   .map(s => `${s}:not([tabindex="-1"])`).join(', ');
+
+// Silueta de carga (como en el panel y el portal): la forma de lo que viene, que late; «Cargando…» queda para los lectores de pantalla.
+// tipo: 'tarjetas' (las de la Tienda) u 'opciones' (las filas de la hoja de compra).
+function silueta(tipo, n = 3) {
+  const pieza = tipo === 'tarjetas' ? '<i class="sk-tarjeta"></i>' : '<i class="sk-op"></i>';
+  return `<div class="sk sk-${tipo}" aria-busy="true"><span class="sk-oculto">Cargando…</span>${pieza.repeat(n)}</div>`;
+}
 ;
 //#archivo js/errores.js
 // Errores en producción (auditoría 2026-11-26, hallazgo 15): lo que falla en el celular de un estudiante llega a la

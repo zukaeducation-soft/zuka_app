@@ -469,7 +469,7 @@ async function openComprar(id, elegido) {
   const a = accesoCurso(Cuenta.accesos, id), renueva = !accesoCursoFila(id)?.institucion && (a.estado === 'pago' || a.estado === 'vencido'), curso = cursoNombre(id);
   openSheet(`<div class="acct-form compra"><h3 class="sheet-title">${renueva ? 'Renovar' : 'Comprar'} ${esc(curso)}</h3>
     <p class="muted">${a.estado === 'pago' ? `Te quedan ${diasTexto(a.dias)}: los que compres se suman.` : 'Se activa en tu mismo código y sigues donde vas: no pierdes nada de tu avance.'}</p>
-    <div class="compra-lista" role="radiogroup" aria-label="Duración"><p class="muted">Cargando…</p></div>
+    <div class="compra-lista" role="radiogroup" aria-label="Duración">${silueta('opciones', 3)}</div>
     <p class="form-msg" role="alert" hidden></p></div>`);
   if (!Cuenta.productos) await cuentaTienda().catch(() => {});
   const box = $('#sheet .compra'), lista = $('#sheet .compra-lista');
