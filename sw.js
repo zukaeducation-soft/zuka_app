@@ -8,12 +8,21 @@
 // justo al instalar una versión nueva la app no se queda sin juegos ni fórmulas.
 // Spec: docs/superpowers/specs/2026-11-24-configuracion-rapida-segura.md
 
-const VERSION = 'zuka-v412';
-// Los scripts van en paquetes (js/paquetes, los arma tools/empaquetar.js con la lista de index.html): guardar cuatro
-// archivos en vez de 750 hace que la app se instale y abra mucho más rápido.
+const VERSION = 'zuka-v413';
+// Los scripts van en paquetes (js/paquetes, los arma tools/empaquetar.js con la lista de index.html). El nombre de cada
+// uno lleva la huella de su contenido, así que nunca cambia: se guardan en su propia caché (PAQUETES), que no se borra
+// al cambiar de versión, y una versión nueva solo baja los que no estaban. ARRANQUE es lo que la página pide al abrir;
+// DIFERIDOS, los juegos y explicaciones de cada curso (js/carga.js los pide al abrir una lección): se guardan también al
+// instalar, para que todo funcione sin conexión, pero si uno falla no detiene la instalación.
+// <paquetes> Generado por tools/empaquetar.js: no editar a mano.
+const ARRANQUE = ["js/paquetes/zuka-a1.30e839e252.js","js/paquetes/zuka-a2.51d7d68c49.js","js/paquetes/zuka-a3.42cd6a848f.js","js/paquetes/zuka-a4.94705b7ad2.js","js/paquetes/zuka-a5.07fc83ada2.js","js/paquetes/zuka-a6.ce7f76d6fa.js"];
+const DIFERIDOS = ["js/paquetes/zuka-comun.124ea9d9d1.js","js/paquetes/zuka-algebra.e79a197add.js","js/paquetes/zuka-trig.ef6189aba1.js","js/paquetes/zuka-calc.9c117ef5fd.js","js/paquetes/zuka-geo.f8e61ed0aa.js","js/paquetes/zuka-preuda.77ed07d12d.js","js/paquetes/zuka-preicfes.240043dff2.js"];
+// </paquetes>
+const PAQUETES = 'zuka-paquetes-v1';
+const esPaquete = ruta => /\/js\/paquetes\/zuka-[\w-]+\.[0-9a-f]{10}\.js$/.test(ruta);
 const SHELL = [
   './', 'index.html', 'manifest.json', 'css/styles.css', 'css/examen.css', 'css/explora.css', 'css/presentacion.css', 'css/clave.css', 'css/acceso.css', 'css/tienda.css', 'css/escritorio.css', 'css/tutorias.css', 'css/inicio.css', 'css/perfil.css',
-  'js/paquetes/zuka-1.js', 'js/paquetes/zuka-2.js', 'js/paquetes/zuka-3.js', 'js/paquetes/zuka-4.js',
+  'js/paquetes/lista.js',
   'icons/zuka-claro-192.png', 'icons/zuka-claro-512.png', 'icons/zuka-claro-maskable-512.png', 'icons/zuka-claro-apple-180.png', 'icons/zuka-claro-favicon-48.png', 'icons/zuka-claro-favicon.svg',
   'brand/pago-breb.png', 'brand/libros/1.webp', 'brand/libros/2.webp', 'brand/libros/3.webp', 'brand/libros/4.webp', 'brand/logo-light.svg', 'brand/logo-dark.svg', 'brand/cerebro.svg',
 ];
@@ -46,7 +55,11 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 
 self.addEventListener('install', e => {
   // Del CDN solo se pide lo que falta: lo guardado sirve, también lo que dejó una versión anterior en su propia caché.
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => caches.open(CDN_CACHE)).then(c => Promise.all(CDN.map(u =>
+  // De los paquetes solo se baja el que no esté ya guardado (su nombre dice su contenido).
+  const guarda = (c, u) => Promise.resolve(c.match(u)).then(hit => hit || c.add(u));
+  const paquetes = caches.open(PAQUETES).then(c => Promise.all(ARRANQUE.map(u => guarda(c, u)))
+    .then(() => Promise.all(DIFERIDOS.map(u => guarda(c, u).catch(() => {})))));
+  e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => paquetes).then(() => caches.open(CDN_CACHE)).then(c => Promise.all(CDN.map(u =>
     Promise.resolve().then(() => c.match(u)).then(hit => hit || caches.match(u).then(vieja => (vieja && vieja.type !== 'opaque' ? c.put(u, vieja)
       : Promise.race([c.add(u), wait(CDN_TIMEOUT)])))).catch(() => {})))));
 });
@@ -62,7 +75,12 @@ self.addEventListener('message', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys()
-    .then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== VOZ && k !== CDN_CACHE).map(k => caches.delete(k))))
+    .then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== VOZ && k !== CDN_CACHE && k !== PAQUETES).map(k => caches.delete(k))))
+    // Los paquetes de versiones anteriores que esta ya no usa se sueltan; los que no cambiaron se quedan.
+    .then(() => caches.open(PAQUETES)).then(c => Promise.resolve(c.keys()).then(ks => {
+      const vivos = new Set(ARRANQUE.concat(DIFERIDOS).map(u => new URL(u, self.location.origin + '/').pathname));
+      return Promise.all((ks || []).filter(k => !vivos.has(new URL(k.url).pathname)).map(k => c.delete(k)));
+    })).catch(() => {})
     .then(() => self.clients.claim()));
 });
 
@@ -108,7 +126,7 @@ self.addEventListener('fetch', e => {
   // Producción: la copia de esta versión, sin tocar la red. Solo lo que no esté guardado se pide (y se guarda).
   if (sameOrigin && !DEV) {
     const navigate = req.mode === 'navigate';
-    e.respondWith(caches.open(VERSION).then(c => c.match(req, { ignoreSearch: true })
+    e.respondWith(caches.open(esPaquete(new URL(req.url).pathname) ? PAQUETES : VERSION).then(c => c.match(req, { ignoreSearch: true })
       .then(hit => hit || (navigate ? c.match('index.html') : null))
       .then(hit => hit || fetch(req).then(res => { if (res.ok) c.put(req, res.clone()); return res; }))
       .catch(() => Response.error())));

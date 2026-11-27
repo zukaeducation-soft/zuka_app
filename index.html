@@ -14,6 +14,8 @@
   <link rel="icon" href="icons/zuka-claro-favicon-48.png" type="image/png" sizes="48x48">
   <link rel="icon" href="icons/zuka-claro-favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/zuka-claro-apple-180.png">
+  <!-- La lista de paquetes (ZUKA_PAQUETES): la escribe «node tools/empaquetar.js», con la huella de cada uno en su nombre. -->
+  <script src="js/paquetes/lista.js"></script>
   <script>
     // Aplica el tema guardado antes de pintar, para evitar un parpadeo.
     (function () {
@@ -21,11 +23,12 @@
       try { t = (JSON.parse(localStorage.getItem('zuka-v1')) || {}).theme || 'system'; } catch (e) {}
       if (t === 'system') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
       document.documentElement.dataset.theme = t;
-      // Arranque rápido. Publicada, la app carga sus scripts en paquetes (ver la plantilla «fuentes» al final) y se
-      // piden desde ya, sin esperar a las hojas de estilo; en localhost van sueltos («?paquetes» prueba lo publicado).
+      // Arranque rápido. Publicada, la app carga sus scripts en paquetes (ver la plantilla «fuentes» al final): los del
+      // arranque se piden desde ya, sin esperar a las hojas de estilo; los juegos de cada curso, al abrir una lección
+      // (js/carga.js). En localhost van sueltos («?paquetes» prueba lo publicado).
       // La letra de Google se pide sin frenar el primer pintado: si Google tarda o falla, la app abre igual.
       var suelto = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) && !/[?&]paquetes([&=]|$)/.test(location.search);
-      window.zukaPaquetes = suelto ? null : ['js/paquetes/zuka-1.js', 'js/paquetes/zuka-2.js', 'js/paquetes/zuka-3.js', 'js/paquetes/zuka-4.js'];
+      window.zukaPaquetes = suelto ? null : (window.ZUKA_PAQUETES || {}).arranque || [];
       function enlace(rel, href, as) {
         var l = document.createElement('link');
         l.rel = rel; if (as) l.as = as; l.href = href;
@@ -760,6 +763,7 @@
   <script defer src="js/perfil.js"></script>
   <script defer src="js/app.js"></script>
   <script defer src="js/tapa.js"></script>
+  <script defer src="js/carga.js"></script>
   </template>
   <script>
     (function () {
@@ -788,6 +792,8 @@
         d.appendChild(b);
         document.body.appendChild(d);
       }
+      // Sin la lista de paquetes (js/paquetes/lista.js no llegó) no hay app que armar.
+      if (window.zukaPaquetes && !window.zukaPaquetes.length) falla();
       lista.forEach(function (d) {
         var s = document.createElement('script');
         s.async = false;   // se ejecutan en el orden de la lista

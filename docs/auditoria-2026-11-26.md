@@ -162,12 +162,13 @@ Quedaron fuera 9 hallazgos menores: sincronización de `estado_app` sin control 
 |---|---|
 | 1 a 5 | Hechos (`zuka-v410`, pruebas `tests/auditoria-arreglos.test.js`) |
 | 6 | Hecho: `js/tapa.js` deja inerte lo de atrás y mete el foco; tras «Comprobar» el foco va a «Continuar» |
-| 7, 8 | Pendientes: partir los paquetes por curso y sacar los juegos sin uso. Es un trabajo aparte, con el robot del navegador |
+| 7 | Hecho (spec `2026-11-26-arranque-liviano`, pruebas `tests/paquetes.test.js`): el arranque baja de 9.75 MB a 5.03 MB (de 2.81 a 1.58 MB con gzip); juegos y explicaciones van en un paquete por curso y uno común, que `js/carga.js` pide al abrir la primera lección. Queda en el arranque el contenido de los cursos (3.3 MB): partirlo por curso es otro trabajo |
+| 8 | Hecho: 243 juegos sin uso (1.15 MB) fuera de la app; siguen en el repositorio. `node tools/juegos-en-uso.js` los lista y `tests/registro.test.js` vigila que no vuelvan |
 | 9, 12 | Pendientes del dueño: MFA y contraseñas filtradas en Supabase Auth; Token Authentication en Bunny |
 | 10 | Funciones y disparador viejos borrados; las 11 tablas viejas se dejaron (no se tocan) |
 | 11 | Pendiente: hace falta un volcado del esquema con la contraseña de la base |
 | 13 | Sin cambio: quitar `rol` de la copia sin red no protege nada (el contenido va en los paquetes) y dejaría al docente sin modo revisión sin conexión |
-| 14 | Mitad hecha: la app abierta busca versión nueva al volver a primer plano (una vez por hora). Falta la huella por paquete (va con el 7) |
+| 14 | Hecho: la app abierta busca versión nueva al volver a primer plano (una vez por hora), y cada paquete lleva la huella de su contenido en el nombre: el service worker los guarda en una caché que no se borra al cambiar de versión y una versión nueva solo baja los que cambiaron |
 | 15 | Hecho: `js/errores.js` → tabla `errores_app`; aviso único si no se puede guardar el avance |
 | 16 | Parte hecha: el lienzo lleva el enunciado como nombre y la barra del video responde al teclado. Falta jugar con teclado en los juegos de lienzo |
 | 17 | Hecho en `css/styles.css`: letra mínima de 12 px y zona táctil de 44 px en salir, pista y racha |

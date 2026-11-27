@@ -55,7 +55,7 @@ test('install guarda KaTeX y hls.js para que las fórmulas y el reproductor ande
 
 test('install no falla si un CDN no responde', async () => {
   const { listeners, ctx } = loadSW();
-  ctx.caches.open = async () => ({ addAll: async () => {}, match: async () => undefined, add: async () => { throw new Error('CDN caído'); } });
+  ctx.caches.open = async () => ({ addAll: async () => {}, match: async () => undefined, add: async u => { if (/^https:/.test(u)) throw new Error('CDN caído'); } });   // los paquetes propios sí llegan
   let pending;
   listeners.install({ waitUntil: p => { pending = p; } });
   await assert.doesNotReject(pending);
@@ -157,7 +157,7 @@ test('la red sigue actualizando la copia aunque responda la caché', async () =>
 
 test('install no se queda colgado si un CDN nunca contesta', async () => {
   const { listeners, ctx } = loadSW({ timer: (fn, ms) => setTimeout(fn, ms > 1000 ? 5 : ms) });
-  ctx.caches.open = async () => ({ addAll: async () => {}, match: async () => undefined, add: () => new Promise(() => {}) });
+  ctx.caches.open = async () => ({ addAll: async () => {}, match: async () => undefined, add: u => (/^https:/.test(u) ? new Promise(() => {}) : Promise.resolve()) });   // los paquetes propios sí llegan
   let pending;
   listeners.install({ waitUntil: p => { pending = p; } });
   await pending;   // si no hubiera plazo, esta prueba nunca terminaría

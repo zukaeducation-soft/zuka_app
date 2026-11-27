@@ -37,7 +37,7 @@ function comodin() {
 }
 
 // Carga la lista y devuelve { ctx, registra: { archivo: [juegos que añadió a GAMES] }, fallos }.
-function carga(lista) {
+function carga(lista, mide = f => f.startsWith('js/games/')) {
   const c = comodin();
   const ctx = vm.createContext({
     console: { log() {}, warn() {}, error() {}, info() {} }, Math, JSON, Date, setTimeout: () => 0, clearTimeout() {}, setInterval: () => 0, clearInterval() {},
@@ -64,7 +64,7 @@ function carga(lista) {
     const antes = new Set(llaves());
     try { vm.runInContext(lee(f), ctx, { filename: f }); } catch (e) { fallos.push(`${f}: ${e.message}`); }
     registra[f] = llaves().filter(k => !antes.has(k));
-    if (f.startsWith('js/games/')) {
+    if (mide(f)) {
       const ahora = foto();
       aporta[f] = [...ahora].flatMap(([n, ks]) => (antesObj.has(n) ? [...ks].filter(k => !antesObj.get(n).has(k)).map(k => `${n}.${k}`) : []));
       antesObj = ahora;

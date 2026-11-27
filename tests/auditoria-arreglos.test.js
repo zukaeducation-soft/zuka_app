@@ -81,7 +81,8 @@ function loadSW(guardado = {}, add = async () => {}) {
     const m = tiendas.get(name);
     return {
       match: async u => m.get(u), put: async (u, r) => { m.set(u, r); }, addAll: async l => l.forEach(u => m.set(u, 'RED')),
-      add: async u => { pedidos.push(u); await add(u); m.set(u, 'RED'); },
+      // `add` y `pedidos` son del CDN: los paquetes propios (js/paquetes) llegan siempre.
+      add: async u => { if (u.startsWith('https:')) { pedidos.push(u); await add(u); } m.set(u, 'RED'); },
     };
   };
   const ctx = vm.createContext({

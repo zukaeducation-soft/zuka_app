@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'sha256-Q2v1lfOIupBXT+Kw+RBfOqds80kGJb7HZU1YBymdypI=' 'sha256-WCh/4iL/EXNwsKQ9kAdCU3wABUYtQg+clElGqbfYoZs=' 'sha256-PPoAOEMrAOWeCfQzCMkktlZQqe2tgZLS6o7UVgVKGjs=' 'sha256-sKfImUZFKCQ4/AuzbctaGQv1LuPnE+ORYaxVkBRO/fA=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob: https://*.b-cdn.net https://*.mediadelivery.net; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.b-cdn.net https://*.mediadelivery.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+          "value": "default-src 'self'; script-src 'self' 'sha256-8bIZGgSLnf3AwhnoR1MzOweEw51k+eew5k7wXThm2cI=' 'sha256-WCh/4iL/EXNwsKQ9kAdCU3wABUYtQg+clElGqbfYoZs=' 'sha256-NLv1NYNA8HNlRJeFC2Ia/O3lQGfMxrnPZeJKn+DyXbY=' 'sha256-sKfImUZFKCQ4/AuzbctaGQv1LuPnE+ORYaxVkBRO/fA=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob: https://*.b-cdn.net https://*.mediadelivery.net; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.b-cdn.net https://*.mediadelivery.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
         },
         {
           "key": "X-Content-Type-Options",
@@ -31,6 +31,15 @@
     },
     {
       "source": "/media/voz/(.*).m4a",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/js/paquetes/zuka-(.*)",
       "headers": [
         {
           "key": "Cache-Control",
